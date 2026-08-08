@@ -13,15 +13,15 @@ export default function Page() {
           <nav className="external-links" aria-label="外部链接">
             {externalLinks.map((link) => (
               <a
-                aria-label={`${link.label}（在新窗口打开）`}
+                aria-label={link.ariaLabel}
                 className="external-link"
                 href={link.href}
                 key={link.label}
-                rel="noopener noreferrer"
-                target="_blank"
+                rel={link.newWindow ? "noopener noreferrer" : undefined}
+                target={link.newWindow ? "_blank" : undefined}
               >
                 {link.label}
-                <span aria-hidden="true">↗</span>
+                <span aria-hidden="true">{link.newWindow ? "↗" : "→"}</span>
               </a>
             ))}
           </nav>
