@@ -4,6 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node build.mjs"
+    "dev": "vinext dev",
+    "build": "vinext build && node copy-hosting.mjs",
+    "start": "vinext start"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-server-dom-webpack": "19.2.8",
+    "vinext": "1.0.0-beta.5"
+  },
+  "devDependencies": {
+    "@mdx-js/rollup": "3.1.1",
+    "@vitejs/plugin-react": "6.0.5",
+    "@vitejs/plugin-rsc": "0.5.34",
+    "vite": "8.2.1"
   }
 }
