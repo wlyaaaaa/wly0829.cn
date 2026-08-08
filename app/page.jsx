@@ -1,4 +1,4 @@
-import SignalField from "./signal";
+import SignalField from "./signal.jsx";
 
 const shelves = [
   {
@@ -25,7 +25,7 @@ export default function Page() {
   return (
     <main className="site-shell">
       <header className="topbar">
-        <a className="wordmark" href="/" aria-label="wly0829.cn home">
+        <a className="wordmark" href="./" aria-label="wly0829.cn home">
           <span className="wordmark-dot" aria-hidden="true" />
           <span>wly0829.cn</span>
         </a>
