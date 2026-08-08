@@ -2,6 +2,7 @@ node_modules/
 .next/
 dist/
 .vinext/
+.wrangler/
 next-env.d.ts
 .env*
 npm-debug.log*
