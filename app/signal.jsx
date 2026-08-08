@@ -30,13 +30,13 @@ export default function SignalField() {
   return (
     <div className="signal-wrap">
       <div className="signal-caption" aria-hidden="true">
-        <span>Signal field / 9×9</span>
-        <span>{pulse ? "Pulse / on" : "Pulse / off"}</span>
+        <span>信号场 / 01</span>
+        <span>{pulse ? "脉冲 / 开" : "脉冲 / 关"}</span>
       </div>
       <button
         className="signal-field"
         type="button"
-        aria-label="Interactive signal field. Move the pointer to bend the field and press to toggle its pulse."
+        aria-label="交互式信号场。移动指针可以改变点阵，按下可以切换脉冲。"
         aria-pressed={pulse}
         data-pulse={pulse}
         style={{
@@ -60,7 +60,7 @@ export default function SignalField() {
           );
         })}
         <span className="signal-hint" aria-hidden="true">
-          Move / press
+          移动 / 按下
         </span>
       </button>
     </div>
