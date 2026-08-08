@@ -185,7 +185,7 @@ select {
 .hero h1 {
   max-width: 920px;
   margin: clamp(24px, 5vw, 62px) 0 0;
-  font-size: clamp(58px, 7.5vw, 126px);
+  font-size: clamp(54px, 5.3vw, 92px);
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: -0.065em;
@@ -504,7 +504,7 @@ select {
   }
 
   .signal-wrap {
-    width: min(100%, 680px);
+    width: min(100%, 600px);
     justify-self: start;
   }
 
@@ -550,7 +550,7 @@ select {
   }
 
   .hero-copy {
-    min-height: 480px;
+    min-height: 420px;
   }
 
   .hero h1 {
