@@ -239,37 +239,6 @@ select {
   color: var(--blue);
 }
 
-.hero-status {
-  display: flex;
-  gap: 18px 26px;
-  flex-wrap: wrap;
-  margin-top: auto;
-  padding-top: clamp(42px, 6vw, 78px);
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-}
-
-.hero-status span {
-  position: relative;
-  padding-left: 13px;
-}
-
-.hero-status span::before {
-  position: absolute;
-  top: 0.34em;
-  left: 0;
-  width: 5px;
-  height: 5px;
-  background: var(--ink);
-  content: "";
-}
-
-.hero-status strong {
-  color: var(--blue);
-  font-weight: 500;
-}
-
 .signal-wrap {
   position: relative;
   width: min(100%, 620px);
@@ -359,7 +328,6 @@ select {
   pointer-events: none;
 }
 
-.thinking,
 .projects,
 .contact {
   padding: clamp(82px, 10vw, 150px) 0;
@@ -391,60 +359,11 @@ select {
   line-height: 1.8;
 }
 
-.principle-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.principle-card {
-  display: flex;
-  min-height: 330px;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 60px;
-  padding: 22px clamp(20px, 2.4vw, 36px) 30px;
-  border-right: 1px solid var(--line);
-  transition: background-color 220ms ease, color 220ms ease;
-}
-
-.principle-card:last-child {
-  border-right: 0;
-}
-
-.principle-card:hover {
-  background: var(--blue);
-  color: #fff;
-}
-
-.card-index,
 .project-topline {
   font-family: var(--mono);
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.principle-card h3 {
-  max-width: 330px;
-  margin: 0;
-  font-size: clamp(28px, 2.6vw, 42px);
-  line-height: 1.12;
-  letter-spacing: -0.045em;
-}
-
-.principle-card p {
-  max-width: 390px;
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.75;
-  transition: color 220ms ease;
-}
-
-.principle-card:hover p {
-  color: rgba(255, 255, 255, 0.78);
 }
 
 .project-grid {
@@ -686,19 +605,8 @@ select {
 }
 
 @media (max-width: 760px) {
-  .principle-grid,
   .project-grid {
     grid-template-columns: 1fr;
-  }
-
-  .principle-card {
-    min-height: 280px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .principle-card:last-child {
-    border-bottom: 0;
   }
 
   .project-card {
@@ -752,18 +660,11 @@ select {
     line-height: 1.8;
   }
 
-  .hero-status {
-    align-items: flex-start;
-    flex-direction: column;
-    padding-top: 48px;
-  }
-
   .signal-field {
     gap: 8px;
     padding: 28px;
   }
 
-  .thinking,
   .projects,
   .contact {
     padding: 76px 0;
@@ -782,7 +683,6 @@ select {
     display: none;
   }
 
-  .principle-card,
   .project-card {
     padding-inline: 20px;
   }

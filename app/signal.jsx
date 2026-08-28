@@ -41,13 +41,13 @@ export default function SignalField() {
   return (
     <div className="signal-wrap">
       <div className="signal-caption" aria-hidden="true">
-        <span>判断场 / 01</span>
-        <span>{pulse ? "模式 / 实现" : "模式 / 判断"}</span>
+        <span>信号场 / 01</span>
+        <span>{pulse ? "脉冲 / 开" : "脉冲 / 关"}</span>
       </div>
       <button
         className="signal-field"
         type="button"
-        aria-label="交互式判断场。移动指针可以改变点阵，按下可以在产品判断与应用实现之间切换。"
+        aria-label="交互式信号场。移动指针可以改变点阵，按下可以切换脉冲。"
         aria-pressed={pulse}
         data-pulse={pulse}
         style={{
