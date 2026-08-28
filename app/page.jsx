@@ -1,5 +1,5 @@
 import SignalField from "./signal.jsx";
-import { navLinks, projects, socialLinks } from "./site-content.js";
+import { navLinks, privateIdeas, projects, socialLinks } from "./site-content.js";
 
 export default function Page() {
   return (
@@ -32,13 +32,10 @@ export default function Page() {
           <div className="hero-copy">
             <p className="eyebrow">WLY / 00</p>
             <h1 id="site-title">
-              写点工具，
-              <br />
-              也记录一些想法<span className="accent-dot">。</span>
+              吴乐阳<span className="accent-dot">。</span>
             </h1>
             <p className="intro">
-              这里放我自己做的项目和偶尔想清楚的东西。主要是 AI、Windows，
-              还有一些为了解决实际问题写的小工具。
+              公开仓库可以直接点开，没公开的只放介绍。
             </p>
             <div className="hero-actions">
               <a className="primary-action" href="#projects">
@@ -57,9 +54,9 @@ export default function Page() {
           <div className="section-heading-wide">
             <div>
               <p className="eyebrow">Projects / 01</p>
-              <h2 id="projects-title">最近做的东西</h2>
+              <h2 id="projects-title">做过的东西</h2>
             </div>
-            <p>下面这些都来自公开仓库，也都是我自己实际做过、用过的项目。</p>
+            <p>有些已经做出来了，有些还在继续折腾。</p>
           </div>
 
           <div className="project-grid">
@@ -78,7 +75,8 @@ export default function Page() {
                 </div>
                 <div className="project-copy">
                   <h3>{project.title}</h3>
-                  <p>{project.summary}</p>
+                  <p className="project-question">{project.question}</p>
+                  <p className="project-outcome">{project.outcome}</p>
                 </div>
                 <ul className="tag-list" aria-label={`${project.title} 技术关键词`}>
                   {project.stack.map((tag) => <li key={tag}>{tag}</li>)}
@@ -89,10 +87,44 @@ export default function Page() {
           </div>
         </section>
 
+        <section className="private-work" id="private" aria-labelledby="private-title">
+          <div className="section-heading-wide">
+            <div>
+              <p className="eyebrow">Private / 02</p>
+              <h2 id="private-title">没公开的东西</h2>
+            </div>
+            <p>这里只写它们在做什么，不放源码和私下内容。</p>
+          </div>
+
+          <div className="idea-grid">
+            {privateIdeas.map((idea) => (
+              <article className={`idea-card idea-card-${idea.shape}`} key={idea.number}>
+                <div className="idea-topline">
+                  <span>{idea.number}</span>
+                  <span>{idea.status}</span>
+                </div>
+                <div className="idea-copy">
+                  <h3>{idea.title}</h3>
+                  <p className="idea-question">{idea.question}</p>
+                  <p className="idea-outcome">{idea.outcome}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <aside className="learning-note" aria-label="我怎么用 AI 学习">
+            <p className="eyebrow">Learning note</p>
+            <p>
+              我用 AI 学习时，会先让它准备一份终稿，再自己用语音讲一遍；
+              下一次只补没讲清的地方。
+            </p>
+          </aside>
+        </section>
+
         <section className="contact" id="contact" aria-labelledby="contact-title">
           <div className="contact-panel">
             <div>
-              <p className="eyebrow">Contact / 02</p>
+              <p className="eyebrow">Contact / 03</p>
               <h2 id="contact-title">有想法、有问题，或者只是想聊聊，都可以发邮件。</h2>
             </div>
             <div className="contact-actions">
