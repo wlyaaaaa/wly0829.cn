@@ -59,6 +59,20 @@ read-only operating panel; public presentation is secondary.
 - `/rules` is one rules workbench. It shows the active generation and exactly
   five current rules through an in-page selector; do not create rule detail
   routes.
+
+## MVP expansion gate
+
+- The MVP contains exactly one project: `.agents`, plus the one-page Rules
+  workbench and the current public-safe Skills catalog.
+- Finish content before breadth. `.agents` overview and all six modules, all
+  five current rules, and every displayed Skill must let the owner reconstruct
+  the subject, its current state, technical design, operating flow, boundaries,
+  failures and verification without another conversation.
+- Do not add a second project, placeholder project, future-project card or
+  project-navigation category until the owner has reviewed and accepted those
+  three MVP content areas.
+- UI completion, route existence and concise summaries do not satisfy the MVP
+  content gate.
 - Before changing public project selection or copy, read
   `docs/design/private-content-rules.md` when that local-only file exists. It
   may add stricter exclusions and must never be staged.
