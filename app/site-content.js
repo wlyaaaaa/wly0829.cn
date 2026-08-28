@@ -8,8 +8,8 @@ export const site = {
 
 export const primaryNav = [
   { label: "项目", href: "/" },
-  { label: "Skills", href: "/skills" },
-  { label: "想法", href: "/ideas" }
+  { label: "规则", href: "/rules" },
+  { label: "Skills", href: "/skills" }
 ];
 
 export const socialLinks = [
@@ -59,6 +59,173 @@ export const project = {
     href: "https://github.com/wlyaaaaa/.agents",
     note: "仓库需要相应 GitHub 权限；未登录或无权限时可能显示 404。"
   }
+};
+
+export const rulesSnapshot = {
+  generation: 79,
+  generationId: "pp-00000000000000000079-d90de53b7bd18470c23fdedd4e098b4cb548c41dbfe33a5e5f2712247ecff329",
+  status: "active_verified",
+  statusLabel: "已验证并生效",
+  policyEpoch: 79,
+  productionActivation: true,
+  requiredRulesVerified: true,
+  candidatePending: false,
+  integrityIncident: false,
+  summary:
+    "当前运行使用第 79 代规则。五份必需规则的内容、签名、锚点和活动路径均已核验，重大动作执行链已启用；没有等待发布的候选，也没有完整性事故。",
+  facts: [
+    { label: "活动代际", value: "第 79 代" },
+    { label: "运行状态", value: "active_verified" },
+    { label: "必需规则", value: "5 / 5 已验证" },
+    { label: "重大动作执行", value: "已启用" },
+    { label: "等待发布候选", value: "无" },
+    { label: "完整性事故", value: "无" }
+  ],
+  rules: [
+    {
+      order: "01",
+      title: "根规则",
+      logicalId: "agents_root_rules",
+      file: "agents-root-rules.md",
+      sha256: "de3ff6c32c45d07dda589395ba84ee14fa6b86fed4525c22e60a70d83408104d",
+      purpose:
+        "所有任务首先遵守的共同底线。它定义指令优先级、事实由谁维护、AI 可以自主做到什么程度、什么动作需要授权、Git 怎样收口，以及私人领域走哪些独立入口。",
+      trigger: "每个任务都会先使用；只有具体问题触发专项语义时，才继续读取后面的合同。",
+      responsibilities: [
+        "明确优先级：上位约束和本轮用户指令优先，项目最近的规则负责项目语义，根规则负责跨项目共同边界。",
+        "划分事实 Owner：.agents 管行为与能力，GitHub 总索引管仓库与发布事实，PCConfig 管机器和运行时事实，具体项目管自己的产品与领域语义。",
+        "要求 AI 在安全、可逆、已授权范围内主动完成工作，不把本可独立判断的问题反复推回用户。",
+        "规定外部写入、公开、付费、不可逆迁移、信任和权限变化的授权边界。",
+        "规定 Git 定向提交、正常推送、默认分支可达性和远端回读才构成完整收口。",
+        "规定健康、私人材料、消息、录音和扫描件等个人问题使用彼此独立的窄入口，不恢复统一个人数据库。"
+      ],
+      decides: [
+        "发生规则冲突时听谁的。",
+        "一个动作能否直接推进，还是需要用户或更高权限确认。",
+        "动态事实应该去哪个 Owner 核对。",
+        "什么才算真正完成，而不是只有测试或内部回执。"
+      ],
+      relation: "它是其余四份合同的共同入口，不替代专项合同，也不接管项目自己的业务语义。"
+    },
+    {
+      order: "02",
+      title: "受保护重大动作",
+      logicalId: "protected_major_actions_contract",
+      file: "contracts/agents.protected-major-actions.md",
+      sha256: "03180bd48e469df07d27bf2cd9732b5571a0782fd7184dd185aadc7c12adfa19",
+      purpose:
+        "保证保护重大动作的规则本身不能被普通工作区文件悄悄替换。它把候选规则、受保护发布、活动代际、运行时验证和恢复链分开。",
+      trigger:
+        "任务涉及受保护重大动作、活动规则发布、完整性异常、人类最高权限因子或保护链恢复时读取。",
+      responsibilities: [
+        "区分工作区候选和生产活动规则；文件更新不代表规则已经生效。",
+        "验证活动 generation 的规范内容、签名、锚点、发布记录、规则映射和执行入口。",
+        "只有活动状态属于允许集合且五份规则全部验证通过，才把该 generation 当成当前权威。",
+        "在真正执行重大动作前再次核对目标、前置条件、可见性、回滚方法和正式回读。",
+        "完整性异常时只冻结受影响的重大动作，普通低风险工作不会被误判成攻击。",
+        "规定最高权限人类因子的类型、取消和失败语义，禁止用管理员权限冒充用户授权。"
+      ],
+      decides: [
+        "当前哪一代规则真正生效。",
+        "活动规则是否完整可信。",
+        "候选等待发布或候选不可用时能否继续使用现行活动代际。",
+        "重大动作何时必须失败关闭，以及怎样恢复。"
+      ],
+      relation: "它证明规则和执行链可信；具体是否授权、由谁施工，仍由授权与委派合同负责。"
+    },
+    {
+      order: "03",
+      title: "授权与委派",
+      logicalId: "authorization_delegation_contract",
+      file: "contracts/agents.authorization-delegation.md",
+      sha256: "8fb6e082174501be53eb921b56cd9d2e1afc7c43121cc6d996a14c5cef7add94",
+      purpose:
+        "把‘用户允许做什么’‘当前谁负责施工’和‘哪个来源拥有事实’分开，避免并发任务互相覆盖，也避免任务中断后责任丢失。",
+      trigger:
+        "任务涉及外部影响、授权判断、执行 Owner、任务交接、归档任务接续、共享维护、提交或发布收口时读取。",
+      responsibilities: [
+        "低风险、本机可逆且范围内的工作直接推进；消息、远端修改、发布、付费等外部影响需要明确授权。",
+        "同一目标内的实现、验证、正常重试、发布和回读可以连续完成；目标扩大或出现新的不可逆边界才重新确认。",
+        "执行任务以最小 scope 登记 Owner；追加、缩小、转移和释放都通过可回读的版本比较完成。",
+        "归档任务接续必须确认旧任务真实终止，并把检查点和残留义务一起转移。",
+        "共享维护只允许机械、可回退、可独立验证的小修，不能借此接管业务语义或权限。",
+        "区分可信目标、目标可见性和写入授权；私有目标并不自动产生写权限。"
+      ],
+      decides: [
+        "当前提示是否已经授权精确动作。",
+        "哪个任务拥有哪个施工范围。",
+        "任务中断后应该恢复、转移还是阻断。",
+        "业务完成后 Git 和外部发布是否已经真正收口。"
+      ],
+      relation: "能力路由给出怎么做，本合同确认能不能做以及由谁做；保护合同再保证重大动作使用可信规则。"
+    },
+    {
+      order: "04",
+      title: "控制面决策上下文",
+      logicalId: "four_base_decision_context_contract",
+      file: "contracts/agents.four-base-decision-context.md",
+      sha256: "8a1995d73ed93f47f8e992baaa64bf32a74bb6081a13d9984f0fa8ab1c44d35a",
+      purpose:
+        "规定什么时候需要跨控制面取证，以及每个控制面只能回答什么问题，防止普通任务周期性扫描所有系统或让一个项目接管其他 Owner。",
+      trigger:
+        "一个决策同时依赖行为规则、Git 仓库事实和机器运行事实，或者需要判断跨项目影响时读取。",
+      responsibilities: [
+        ".agents 只回答行为、授权、能力路由和跨项目协作规则。",
+        "GitHub 总索引只回答仓库身份、可见性、远端、分支、worktree、同步和发布事实。",
+        "PCConfig 只回答本机路径、任务、端口、运行时、数据源、迁移和恢复事实。",
+        "具体项目继续拥有产品目标、领域数据、命令、测试、兼容和发布边界。",
+        "先读会改变决策的最小元数据，再逐步展开；不做周期性全扫，也不恢复已退役的统一个人上下文入口。"
+      ],
+      decides: [
+        "当前问题是否真的需要跨控制面。",
+        "应该向哪个 Owner 取哪一类事实。",
+        "一项跨项目变化会放大到哪些依赖和消费者。",
+        "什么时候应该停止扩展上下文，回到当前项目继续工作。"
+      ],
+      relation: "它只路由事实来源，不替代根规则、项目规则或任何控制面的业务语义。"
+    },
+    {
+      order: "05",
+      title: "能力路由",
+      logicalId: "capability_routing_contract",
+      file: "contracts/agents.capability-routing.md",
+      sha256: "f73d398715402352089c5d5466247ee592e1e1c09912354ef519df44b2730f96",
+      purpose:
+        "决定面对一个目标时采用什么方法：直接回答、读取哪份上下文、调用什么工具或 Skill、是否并行委派，以及怎样控制复杂度。",
+      trigger:
+        "任务需要选择能力、读取专项上下文、创建或调用 Skill/Plugin、使用原生代理、设计动态配置或治理长任务复杂度时读取。",
+      responsibilities: [
+        "按目标、风险、信息增益、延迟、耦合、可逆性和预期净收益选择方法，不把工具列表当成固定能力上限。",
+        "使用渐进披露：先读最小权威入口，只在一份材料会改变答案时继续展开。",
+        "长任务保存目标、硬边界、关键决定、实现和验证状态，使上下文压缩后仍可重建。",
+        "只为真实重复、稳定变化轴和 Owner 边界建立抽象，不为想象中的未来搭建框架。",
+        "动态配置从静态重启、原子 watcher、单机状态服务到专项配置服务逐级准入，不提前安装复杂基础设施。",
+        "原生代理路由先验证模型、思考等级、角色和活动合同，再判断是否需要 0–10 个直属代理；0 是合法结果。",
+        "根任务始终负责目标、战略、范围、风险、依赖、集成和最终验收，不能把战略责任委派出去。"
+      ],
+      decides: [
+        "当前应该使用哪种能力和上下文。",
+        "是否值得并行，以及使用什么层级的代理。",
+        "什么时候需要建立耐久状态或专项配置。",
+        "一项抽象、文档或工具是否真的降低总复杂度。"
+      ],
+      relation: "它决定怎么做；授权合同决定能不能做，根规则和项目规则继续提供目标与硬边界。"
+    }
+  ],
+  priority: [
+    "上位系统与平台约束",
+    "本轮用户的明确指令",
+    "当前项目最近且适用的项目规则",
+    "跨项目根规则和按需读取的专项合同",
+    "Skill、模板、清单和历史记录等建议性材料"
+  ],
+  lifecycle: [
+    { title: "候选", text: "规则先在工作区编辑和测试，此时只是候选，不能替代当前活动规则。" },
+    { title: "受保护发布", text: "候选通过正式发布入口，生成规范内容、签名、锚点和发布记录。" },
+    { title: "活动代际", text: "发布成功后成为新的活动 generation；旧代际仍可用于回退和审计。" },
+    { title: "运行时核验", text: "任务开始时从固定状态入口验证活动代际和五份规则，确认后才按其执行。" },
+    { title: "结果回读", text: "重大动作既要有执行成功，也要有目标系统的正式回读；两者不能互相替代。" }
+  ]
 };
 
 export const modules = [
@@ -410,10 +577,9 @@ export const skills = [
 
 export const routePaths = [
   "/",
+  "/rules",
   "/projects/agents",
   ...modules.map((item) => `/projects/agents/${item.slug}`),
-  "/ideas",
-  ...ideas.map((item) => `/ideas/${item.slug}`),
   "/skills",
   ...skills.map((item) => `/skills/${item.slug}`)
 ];
@@ -427,15 +593,11 @@ export function normalizePath(pathname = "/") {
 export function routeMeta(pathname) {
   const path = normalizePath(pathname);
   if (path === "/") return { title: "项目｜吴乐阳", description: "吴乐阳的项目入口：从 .agents 理解个人 AI 工作流的规则、能力、授权与验证。" };
+  if (path === "/rules") return { title: "当前生效规则｜吴乐阳", description: "第 79 代活动规则、五份全局规则的职责、关系、验证状态与生效流程。" };
   if (path === "/projects/agents") return { title: ".agents 项目总览｜吴乐阳", description: ".agents 的六个模块、公开边界、源码入口与验证方法。" };
   if (path.startsWith("/projects/agents/")) {
     const module = modules.find((item) => path.endsWith(`/${item.slug}`));
     if (module) return { title: `${module.title}｜.agents｜吴乐阳`, description: module.problem };
-  }
-  if (path === "/ideas") return { title: "想法｜吴乐阳", description: "关于 AI 工作、验证、上下文、长期任务和可演进设计的公开想法。" };
-  if (path.startsWith("/ideas/")) {
-    const idea = ideas.find((item) => path.endsWith(`/${item.slug}`));
-    if (idea) return { title: `${idea.title}｜想法｜吴乐阳`, description: idea.summary };
   }
   if (path === "/skills") return { title: "Skills｜吴乐阳", description: "个人 Skills 的只读目录、用途、触发方式与边界。" };
   if (path.startsWith("/skills/")) {

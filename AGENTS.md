@@ -1,17 +1,25 @@
 # wly0829.cn project rules
 
 This repository is public. Every tracked file must be suitable for an unknown
-visitor to read, clone and quote.
+visitor to read, clone and quote. The website itself is primarily the owner's
+read-only operating panel; public presentation is secondary.
 
 ## Product boundary
 
-- This is a read-only personal project introduction website. It is not a
-  resume, activity feed, admin console or repository browser.
+- This is a read-only personal project, rules and capabilities panel. It is not
+  a resume, marketing landing page, activity feed, admin console or repository
+  browser.
 - The website source project is infrastructure for the presentation layer and
   never appears as one of the projects being presented.
 - Public copy stays vendor-neutral. Describe reusable AI workflow and harness
   concepts without naming one assistant product or compatibility harness as
   the site's identity.
+- Accuracy and owner usefulness outrank persuasion. Do not hide current rules,
+  generations, limitations, evidence gaps or implementation state merely to
+  make the site look cleaner or stronger.
+- Do not impose word targets or maximum lengths on reference pages. Content is
+  complete only when the owner can reconstruct the subject without another
+  conversation or private memory.
 - Project index pages start with real content. Do not repeat the active top
   navigation as a large page title and explanatory paragraph.
 - A project card is one clickable unit. Show its public/private status at the
@@ -23,8 +31,9 @@ visitor to read, clone and quote.
   links. Do not approximate brand logos with generic UI icons.
 - Do not add a decorative footer that only repeats the owner's name or domain.
 - The white background may use a fixed canvas of slowly moving parallel
-  hairlines. Curves stay smooth and low-contrast; no particles, radial bursts,
-  pointer dents, sharp peaks, glows or decorative technology wallpaper.
+  hairlines. Motion must be visible within a short observation while remaining
+  readable. Curves stay smooth; no particles, radial bursts, pointer dents,
+  sharp peaks, glows or decorative technology wallpaper.
 - Respect reduced-motion preferences and keep page content independently
   scrollable above the background.
 
@@ -42,7 +51,14 @@ visitor to read, clone and quote.
   architecture, important decisions, boundaries, failure handling and
   verification in professional plain language.
 - A reasonable design that has not been implemented may be documented as a
-  design, but must not be presented as a verified production result.
+  design, but must not be presented as a verified production result. Never
+  package an unfinished fact as completed.
+- There is no standalone Ideas directory in the current information
+  architecture. Project-specific judgments live with the project/module that
+  gives them context.
+- `/rules` is one rules workbench. It shows the active generation and exactly
+  five current rules through an in-page selector; do not create rule detail
+  routes.
 - Before changing public project selection or copy, read
   `docs/design/private-content-rules.md` when that local-only file exists. It
   may add stricter exclusions and must never be staged.

@@ -3,14 +3,13 @@ import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { ideas, modules, project, routeMeta, routePaths, skills } from "../app/site-content.js";
+import { ideas, modules, project, rulesSnapshot, routeMeta, routePaths, skills } from "../app/site-content.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
 const forbiddenPublicTerms = [
   "Q29kZXg=",
   "Q29kZXhIYXJuZXNz",
-  "UENDb25maWc=",
   "UGVyc29uYWxPUw==",
   "UGVyc29uYWxLbm93bGVkZ2VCYXNl",
   "cGVyc29uYWwtbGl0aWdhdGlvbg==",
@@ -48,14 +47,41 @@ test("the .agents project has exactly the six product-defined modules", () => {
   }
 });
 
-test("all seven public ideas have complete, human-readable detail pages", () => {
+test("project design decisions remain complete without standalone idea routes", () => {
   assert.equal(ideas.length, 7);
+  assert.ok(!routePaths.includes("/ideas"));
+  assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
   for (const idea of ideas) {
     assert.ok(idea.definition.length > 50);
     assert.ok(idea.problem.length > 50);
     assert.ok(idea.use.length >= 3);
     assert.ok(idea.basis.length > 50);
     assert.ok(idea.boundary.length > 30);
+  }
+});
+
+test("the rules workbench exposes exactly five verified generation-79 rules", () => {
+  assert.equal(rulesSnapshot.generation, 79);
+  assert.equal(rulesSnapshot.status, "active_verified");
+  assert.equal(rulesSnapshot.requiredRulesVerified, true);
+  assert.equal(rulesSnapshot.rules.length, 5);
+  assert.deepEqual(
+    rulesSnapshot.rules.map((rule) => rule.logicalId),
+    [
+      "agents_root_rules",
+      "protected_major_actions_contract",
+      "authorization_delegation_contract",
+      "four_base_decision_context_contract",
+      "capability_routing_contract"
+    ]
+  );
+  for (const rule of rulesSnapshot.rules) {
+    assert.match(rule.sha256, /^[a-f0-9]{64}$/);
+    assert.ok(rule.purpose.length > 50);
+    assert.ok(rule.trigger.length > 30);
+    assert.ok(rule.responsibilities.length >= 5);
+    assert.ok(rule.decides.length >= 4);
+    assert.ok(rule.relation.length > 30);
   }
 });
 
@@ -107,12 +133,12 @@ test("every public route is unique and has useful SEO metadata", () => {
 });
 
 test("public content does not expose Markdown backticks", () => {
-  assert.doesNotMatch(JSON.stringify({ project, modules, ideas, skills }), /`/);
+  assert.doesNotMatch(JSON.stringify({ project, modules, ideas, rulesSnapshot, skills }), /`/);
 });
 
 test("public content stays harness-neutral and omits excluded personal projects", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  const publicText = `${pageSource}\n${JSON.stringify({ project, modules, ideas, skills })}`;
+  const publicText = `${pageSource}\n${JSON.stringify({ project, modules, ideas, rulesSnapshot, skills })}`;
   assertPublicTermsAreExcluded(publicText);
   assert.doesNotMatch(pageSource, /进入项目|site-footer/);
 });

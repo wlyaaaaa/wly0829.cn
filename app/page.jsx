@@ -4,7 +4,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpenText,
-  CaretRight,
   CheckCircle,
   EnvelopeSimple,
   House,
@@ -19,6 +18,7 @@ import {
   normalizePath,
   primaryNav,
   project,
+  rulesSnapshot,
   routeMeta,
   routePaths,
   site,
@@ -83,7 +83,7 @@ function SocialIcon({ name }) {
   return <EnvelopeSimple size={19} weight="regular" aria-hidden="true" />;
 }
 
-function FlowField({ prominent = false }) {
+function FlowField() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -129,22 +129,25 @@ function FlowField({ prominent = false }) {
       context.clearRect(0, 0, width, height);
 
       const time = reducedMotion ? 0 : now / 1000;
-      const scrollPhase = reducedMotion ? 0 : scrollOffset * 0.00042;
-      const lineCount = width < 700 ? 20 : 34;
+      const scrollPhase = reducedMotion ? 0 : scrollOffset * 0.0008;
+      const lineCount = width < 700 ? 18 : 28;
       const step = width < 700 ? 8 : 10;
+      const fieldHeight = height + 160;
+      const verticalDrift = reducedMotion ? 0 : time * 18 + scrollOffset * 0.14;
 
       for (let lineIndex = 0; lineIndex < lineCount; lineIndex += 1) {
-        const baseY = -80 + ((height + 160) * lineIndex) / Math.max(lineCount - 1, 1);
-        const phase = time * 0.032 + scrollPhase;
+        const initialY = (fieldHeight * lineIndex) / Math.max(lineCount - 1, 1);
+        const baseY = -80 + ((initialY + verticalDrift) % fieldHeight);
+        const phase = time * 0.24 + scrollPhase;
         context.beginPath();
         for (let x = -40; x <= width + 40; x += step) {
           const y = calculateLineY(x, baseY, phase);
           if (x === -40) context.moveTo(x, y);
           else context.lineTo(x, y);
         }
-        const accent = lineIndex % 9 === 4;
-        context.strokeStyle = accent ? "rgba(22, 163, 74, 0.17)" : "rgba(73, 82, 75, 0.062)";
-        context.lineWidth = accent ? 0.95 : 0.65;
+        const accent = lineIndex % 7 === 3;
+        context.strokeStyle = accent ? "rgba(22, 163, 74, 0.25)" : "rgba(73, 82, 75, 0.11)";
+        context.lineWidth = accent ? 1.05 : 0.72;
         context.stroke();
       }
 
@@ -175,7 +178,7 @@ function FlowField({ prominent = false }) {
     };
   }, []);
 
-  return <canvas className={`flow-field${prominent ? " is-prominent" : ""}`} ref={canvasRef} aria-hidden="true" />;
+  return <canvas className="flow-field" ref={canvasRef} aria-hidden="true" />;
 }
 
 function navIsActive(href, path) {
@@ -308,7 +311,7 @@ function HomePage() {
             </div>
 
             <div className="preview-row">
-              <p className="preview-label">相关想法</p>
+              <p className="preview-label">设计判断</p>
               <div className="preview-links">
                 {previewIdeas.map((item) => (
                   <span key={item.slug}>{item.title}</span>
@@ -402,26 +405,6 @@ function ProjectNavigation({ currentSlug }) {
   );
 }
 
-function RelatedIdeas({ slugs = ideas.slice(0, 4).map((item) => item.slug) }) {
-  const entries = slugs.map((slug) => ideas.find((idea) => idea.slug === slug)).filter(Boolean);
-  return (
-    <aside className="related-panel" aria-labelledby="related-ideas-title">
-      <h2 id="related-ideas-title">相关想法</h2>
-      <div className="related-links">
-        {entries.map((item) => (
-          <SiteLink href={`/ideas/${item.slug}`} key={item.slug}>
-            <span>{item.title}</span>
-            <CaretRight size={17} aria-hidden="true" />
-          </SiteLink>
-        ))}
-      </div>
-      <SiteLink className="all-link" href="/ideas">
-        查看全部想法 <ArrowRight size={17} aria-hidden="true" />
-      </SiteLink>
-    </aside>
-  );
-}
-
 function ProjectOverview() {
   return (
     <article className="document-content overview-content">
@@ -470,7 +453,7 @@ function ProjectOverview() {
       <section className="document-section boundary-section">
         <h2>公开边界</h2>
         <p>
-          本站详细介绍模块、合同、源码入口、工具职责和测试方式，但不发布密码、访问令牌、密钥、私人聊天与个人证据，也不展示没有长期阅读价值的内部运行标识与回执细节。
+          本站会展示当前代际、活动状态、规则校验、模块、合同、工具、配置和测试，使本人可以还原系统全貌；只排除密码、访问令牌、密钥、私人聊天与个人原始证据。
         </p>
         <div className="boundary-note">
           <LockKey size={20} aria-hidden="true" />
@@ -571,62 +554,146 @@ function ProjectPage({ module }) {
       <div className="project-layout">
         <ProjectNavigation currentSlug={module?.slug} />
         {module ? <ModuleDetail module={module} /> : <ProjectOverview />}
-        <RelatedIdeas slugs={module?.ideaSlugs} />
       </div>
     </div>
   );
 }
 
-function IdeasPage() {
+function RulesPage() {
+  const [selectedRuleId, setSelectedRuleId] = useState(rulesSnapshot.rules[0].logicalId);
+  const selectedRule = rulesSnapshot.rules.find((rule) => rule.logicalId === selectedRuleId) || rulesSnapshot.rules[0];
+
   return (
-    <div className="page-frame directory-page">
-      <h1 className="visually-hidden">想法</h1>
-      <div className="directory-list idea-directory">
-        {ideas.map((idea, index) => (
-          <SiteLink href={`/ideas/${idea.slug}`} key={idea.slug}>
-            <span className="directory-index">{String(index + 1).padStart(2, "0")}</span>
-            <span className="directory-copy">
-              <strong>{idea.title}</strong>
-              <span>{idea.summary}</span>
-            </span>
-            <ArrowRight size={20} aria-hidden="true" />
-          </SiteLink>
+    <div className="page-frame rules-page">
+      <header className="rules-hero">
+        <div className="rules-hero-copy">
+          <p className="section-kicker">当前活动规则</p>
+          <h1>
+            <span>第 {rulesSnapshot.generation} 代</span>
+            <span>· {rulesSnapshot.statusLabel}</span>
+          </h1>
+          <p>{rulesSnapshot.summary}</p>
+        </div>
+        <div className="generation-identity" aria-label="完整活动代际标识">
+          <span>generation</span>
+          <code>{rulesSnapshot.generationId}</code>
+        </div>
+      </header>
+
+      <section className="rules-facts" aria-label="当前规则状态">
+        {rulesSnapshot.facts.map((fact) => (
+          <div key={fact.label}>
+            <span>{fact.label}</span>
+            <strong>{fact.value}</strong>
+          </div>
         ))}
-      </div>
-    </div>
-  );
-}
+      </section>
 
-function IdeaDetailPage({ idea }) {
-  const related = idea.relatedModules.map((slug) => modules.find((item) => item.slug === slug)).filter(Boolean);
-  return (
-    <div className="page-frame detail-page">
-      <Breadcrumbs items={[{ label: "想法", href: "/ideas" }, { label: idea.title }]} />
-      <article className="standalone-document idea-document">
-        <header>
-          <p className="eyebrow">Idea</p>
-          <h1>{idea.title}</h1>
-          <p className="standfirst">{idea.summary}</p>
-        </header>
-        <section><h2>定义</h2><p>{idea.definition}</p></section>
-        <section><h2>解决的问题</h2><p>{idea.problem}</p></section>
-        <section><h2>实际用途</h2><SimpleList items={idea.use} /></section>
-        <section><h2>设计依据</h2><p>{idea.basis}</p></section>
-        <section><h2>边界</h2><p>{idea.boundary}</p></section>
-        <section className="related-modules-section">
-          <h2>在 .agents 中对应</h2>
-          <div className="inline-links">
-            {related.map((module) => (
-              <SiteLink href={`/projects/agents/${module.slug}`} key={module.slug}>
-                {module.title} <ArrowRight size={16} aria-hidden="true" />
-              </SiteLink>
+      <section className="rules-workbench" aria-labelledby="rules-workbench-title">
+        <aside className="rule-selector-panel">
+          <div className="rule-selector-heading">
+            <p className="section-kicker">规则选择</p>
+            <h2 id="rules-workbench-title">五份活动规则</h2>
+            <p>选择一份规则，右侧会完整说明它为什么存在、何时使用、具体负责什么，以及和其他规则怎样配合。</p>
+          </div>
+
+          <label className="rule-mobile-select">
+            <span>当前查看</span>
+            <select value={selectedRuleId} onChange={(event) => setSelectedRuleId(event.target.value)}>
+              {rulesSnapshot.rules.map((rule) => (
+                <option value={rule.logicalId} key={rule.logicalId}>{rule.order} · {rule.title}</option>
+              ))}
+            </select>
+          </label>
+
+          <div className="rule-selector-list" role="list">
+            {rulesSnapshot.rules.map((rule) => (
+              <button
+                type="button"
+                className={selectedRuleId === rule.logicalId ? "is-selected" : undefined}
+                aria-pressed={selectedRuleId === rule.logicalId}
+                onClick={() => setSelectedRuleId(rule.logicalId)}
+                key={rule.logicalId}
+              >
+                <span>{rule.order}</span>
+                <span><strong>{rule.title}</strong><small>{rule.logicalId}</small></span>
+              </button>
             ))}
           </div>
-        </section>
-        <SiteLink className="back-link" href="/projects/agents">
-          <ArrowLeft size={17} aria-hidden="true" /> 返回 .agents 项目
-        </SiteLink>
-      </article>
+        </aside>
+
+        <article className="rule-detail" id="active-rule-detail" aria-live="polite">
+          <header className="rule-detail-heading">
+            <span className="rule-order">{selectedRule.order}</span>
+            <div>
+              <p className="section-kicker">当前查看</p>
+              <h2>{selectedRule.title}</h2>
+            </div>
+          </header>
+
+          <dl className="rule-identity-grid">
+            <div><dt>logical id</dt><dd><code>{selectedRule.logicalId}</code></dd></div>
+            <div><dt>活动文件</dt><dd><code>{selectedRule.file}</code></dd></div>
+            <div className="rule-hash"><dt>SHA-256</dt><dd><code>{selectedRule.sha256}</code></dd></div>
+          </dl>
+
+          <section>
+            <h3>先用人话说明</h3>
+            <p>{selectedRule.purpose}</p>
+          </section>
+
+          <section>
+            <h3>什么时候会读取它</h3>
+            <p>{selectedRule.trigger}</p>
+          </section>
+
+          <section>
+            <h3>具体负责什么</h3>
+            <ol className="rule-responsibility-list">
+              {selectedRule.responsibilities.map((item, index) => (
+                <li key={item}><span>{String(index + 1).padStart(2, "0")}</span><p>{item}</p></li>
+              ))}
+            </ol>
+          </section>
+
+          <section>
+            <h3>它会作出哪些决定</h3>
+            <ul className="rule-decision-list">
+              {selectedRule.decides.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </section>
+
+          <section>
+            <h3>与其他规则的关系</h3>
+            <p>{selectedRule.relation}</p>
+          </section>
+        </article>
+      </section>
+
+      <section className="rules-reference-grid">
+        <article>
+          <p className="section-kicker">发生冲突时</p>
+          <h2>规则优先级</h2>
+          <ol>
+            {rulesSnapshot.priority.map((item, index) => (
+              <li key={item}><span>{index + 1}</span><p>{item}</p></li>
+            ))}
+          </ol>
+        </article>
+
+        <article>
+          <p className="section-kicker">规则怎样真正生效</p>
+          <h2>从候选到活动代际</h2>
+          <ol>
+            {rulesSnapshot.lifecycle.map((item, index) => (
+              <li key={item.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div><strong>{item.title}</strong><p>{item.text}</p></div>
+              </li>
+            ))}
+          </ol>
+        </article>
+      </section>
     </div>
   );
 }
@@ -693,15 +760,11 @@ function NotFoundPage() {
 
 function resolveRoute(path) {
   if (path === "/") return <HomePage />;
+  if (path === "/rules") return <RulesPage />;
   if (path === "/projects/agents") return <ProjectPage />;
   if (path.startsWith("/projects/agents/")) {
     const module = modules.find((item) => path === `/projects/agents/${item.slug}`);
     if (module) return <ProjectPage module={module} />;
-  }
-  if (path === "/ideas") return <IdeasPage />;
-  if (path.startsWith("/ideas/")) {
-    const idea = ideas.find((item) => path === `/ideas/${item.slug}`);
-    if (idea) return <IdeaDetailPage idea={idea} />;
   }
   if (path === "/skills") return <SkillsPage />;
   if (path.startsWith("/skills/")) {
@@ -740,7 +803,7 @@ export default function Page() {
 
   return (
     <div className="site-shell" data-route-known={routePaths.includes(path)}>
-      <FlowField prominent={path === "/"} />
+      <FlowField />
       <Header path={path} />
       <main id="main-content">{resolveRoute(path)}</main>
     </div>
