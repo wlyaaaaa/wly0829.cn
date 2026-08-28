@@ -84,6 +84,20 @@ read-only operating panel; public presentation is secondary.
 - Product Design QA may update those local files, but public commits contain
   only the resulting product and public-safe documentation.
 
+## Refresh model
+
+- This is a continuously maintainable panel with manual, user-requested
+  refreshes. It is neither an immutable one-time snapshot nor an automatically
+  synchronized monitoring service.
+- The published site represents the last explicitly refreshed and released
+  state. Generation identity is the version boundary; do not claim background
+  freshness, watchers or scheduled synchronization.
+- Content construction should provide one fast local refresh path that reads
+  the current owners, regenerates public-safe structured content, validates it,
+  and uses the existing normal publication chain only when the user asks.
+- Do not add a daemon, watcher, scheduled task, polling service or public live
+  dependency merely to keep the panel current.
+
 ## Verification and publication
 
 - Preserve the existing React, Vite and GitHub Pages route-generation chain.
