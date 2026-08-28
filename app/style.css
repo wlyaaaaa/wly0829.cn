@@ -938,6 +938,7 @@ button:focus-visible {
   font-weight: 710;
   line-height: 1.13;
   letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .skill-document h1 {
@@ -1092,7 +1093,7 @@ button:focus-visible {
 .site-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 24px;
   min-height: 84px;
   border-top: 1px solid var(--line);
@@ -1104,23 +1105,6 @@ button:focus-visible {
 
 .site-footer p {
   margin: 0;
-}
-
-.footer-links {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.footer-links a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  text-decoration: none;
-}
-
-.footer-links a:hover {
-  color: var(--green-dark);
 }
 
 .noscript {
@@ -1221,7 +1205,11 @@ button:focus-visible {
     overflow-x: auto;
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+
+  .project-navigation::-webkit-scrollbar {
+    display: none;
   }
 
   .project-navigation a {
@@ -1252,8 +1240,7 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .breadcrumbs a,
-  .footer-links a {
+  .breadcrumbs a {
     min-height: 44px;
   }
 }
@@ -1507,6 +1494,13 @@ button:focus-visible {
 
   .standalone-document h1 {
     font-size: 42px;
+  }
+
+  .idea-document h1 {
+    font-size: clamp(32px, 9.2vw, 38px);
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
   }
 
   .skill-document h1 {

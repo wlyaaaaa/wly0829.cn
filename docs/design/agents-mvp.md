@@ -72,7 +72,7 @@ MVP 的成功标准：
 
 ### `/skills` 与 `/skills/:slug`
 
-Skills 是独立 Codex Skills 目录。数据依据 `personal-skill-supply.json` 中 `install: true` 的条目，以及对应 `SKILL.md` front matter 的公开安全描述。目录不提供分类器、筛选器、等级、日期或数量 KPI；每一项有真实详情路由，详情页说明用途、触发方式、为什么单独存在和边界。
+Skills 是独立 Codex Skills 目录。数据依据 `personal-skill-supply.json` 中 `install: true` 的条目，以及对应 `SKILL.md` front matter 的公开安全描述；再按本站边界排除 Codex Local Remote，并把机器事实 owner 改写成普通读者可理解的用途说明。目录不提供分类器、筛选器、等级、日期或数量 KPI；每一项有真实详情路由，详情页说明用途、触发方式、为什么单独存在和边界。
 
 ## 4. 视觉系统
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -163,11 +163,6 @@ function Footer() {
   return (
     <footer className="site-footer">
       <p>吴乐阳 / WLY0829.CN</p>
-      <div className="footer-links">
-        <SiteLink href="/projects/agents">.agents</SiteLink>
-        <SiteLink href="/skills">Skills</SiteLink>
-        <SiteLink href="/ideas">想法</SiteLink>
-      </div>
     </footer>
   );
 }
@@ -211,7 +206,7 @@ function HomePage() {
 
         <div className="project-summary">
           {project.summary.map((line) => (
-            <p key={line}>{line.replaceAll("`", "")}</p>
+            <p key={line}>{line}</p>
           ))}
         </div>
 
@@ -257,7 +252,7 @@ function ProjectHeader() {
           </h1>
           <div className="project-hero-summary">
             {project.detailSummary.map((line) => (
-              <p key={line}>{line.replaceAll("`", "")}</p>
+              <p key={line}>{line}</p>
             ))}
           </div>
         </div>
@@ -281,8 +276,29 @@ function ProjectHeader() {
 }
 
 function ProjectNavigation({ currentSlug }) {
+  const navigationRef = useRef(null);
+
+  useLayoutEffect(() => {
+    function revealCurrentModule() {
+      const navigation = navigationRef.current;
+      const currentLink = navigation?.querySelector('[aria-current="page"]');
+      if (!navigation || !currentLink) return;
+      if (window.innerWidth > 900) {
+        navigation.scrollLeft = 0;
+        return;
+      }
+
+      const targetLeft = currentLink.offsetLeft - (navigation.clientWidth - currentLink.offsetWidth) / 2;
+      navigation.scrollLeft = Math.max(0, targetLeft);
+    }
+
+    revealCurrentModule();
+    window.addEventListener("resize", revealCurrentModule);
+    return () => window.removeEventListener("resize", revealCurrentModule);
+  }, [currentSlug]);
+
   return (
-    <nav className="project-navigation" aria-label=".agents 模块导航">
+    <nav className="project-navigation" aria-label=".agents 模块导航" ref={navigationRef}>
       <SiteLink
         className={!currentSlug ? "is-current" : undefined}
         href="/projects/agents"
@@ -331,17 +347,17 @@ function ProjectOverview() {
         <p className="section-kicker">这个项目解决什么</p>
         <h2>让个人 AI 工作长期保持可控，而不是每次重新约定。</h2>
         <p>
-          `.agents` 负责跨项目都需要的行为规则、能力选择、授权边界和完成方法。它不替具体项目做产品决定，也不储存个人材料；它提供的是一套稳定的工作方式，让不同任务知道从哪里读事实、怎样安全推进、什么证据才算完成。
+          .agents 负责跨项目都需要的行为规则、能力选择、授权边界和完成方法。它不替具体项目做产品决定，也不储存个人材料；它提供的是一套稳定的工作方式，让不同任务知道从哪里读事实、怎样安全推进、什么证据才算完成。
         </p>
       </section>
 
       <section className="document-section">
         <h2>整体怎么工作</h2>
         <ol className="number-list">
-          <li><span>1</span><div><strong>先确定目标与规则。</strong><p>从当前项目最近的规则开始，确认用户目标、硬边界和真正的事实 owner。</p></div></li>
+          <li><span>1</span><div><strong>先确定目标与规则。</strong><p>从当前项目最近的规则开始，确认用户目标、硬边界和真正负责这些事实的来源。</p></div></li>
           <li><span>2</span><div><strong>选择能力与执行方式。</strong><p>根据风险、可逆性和净收益决定直接处理、读取 Skill、调用工具或委派原生代理。</p></div></li>
-          <li><span>3</span><div><strong>绑定授权与责任。</strong><p>外部 effect 使用精确授权，写入 scope 由执行 Owner 认领；并发只串行真正冲突的部分。</p></div></li>
-          <li><span>4</span><div><strong>用独立证据收口。</strong><p>源码、测试、安装、发布、fresh task 与用户可见路径分别验证，缺一层就保留真实缺口。</p></div></li>
+          <li><span>3</span><div><strong>绑定授权与责任。</strong><p>会影响外部系统的动作先确认授权，写入范围由明确的执行责任人认领；并发只串行真正冲突的部分。</p></div></li>
+          <li><span>4</span><div><strong>用独立证据收口。</strong><p>源码、测试、安装、发布、全新任务可用性与用户可见路径分别验证，缺一层就保留真实缺口。</p></div></li>
         </ol>
       </section>
 
@@ -364,7 +380,7 @@ function ProjectOverview() {
       <section className="document-section">
         <h2>模块关系</h2>
         <p>
-          规则与合同先给出共同边界；能力路由选择方法；授权与执行 Owner 把方法绑定到允许的动作和施工责任；受保护策略为重大动作提供可信活动规则；Skills / Plugins 供应窄能力；上下文与证据模块最后判断用户可见结果是否成立。
+          规则与合同先给出共同边界；能力路由选择方法；授权与执行 Owner 把方法绑定到允许的动作和施工责任；受保护策略保证重大动作使用的是已经核验并正式生效的规则；Skills / Plugins 供应窄能力；上下文与证据模块最后判断用户可见结果是否成立。
         </p>
         <p>这是一条责任链，不是一条必须逐项执行的流水线。简单、低风险任务可以直接完成；只有当前问题真正触发某个模块时才进入它。</p>
       </section>
@@ -372,7 +388,7 @@ function ProjectOverview() {
       <section className="document-section boundary-section">
         <h2>公开边界</h2>
         <p>
-          本站详细介绍模块、合同、源码入口、工具职责和测试方式，但不发布密码、Token、密钥、私人聊天与个人证据，也不展示没有稳定阅读价值的动态代际、hash、ledger 或 nonce。
+          本站详细介绍模块、合同、源码入口、工具职责和测试方式，但不发布密码、访问令牌、密钥、私人聊天与个人证据，也不展示没有长期阅读价值的内部运行标识与回执细节。
         </p>
         <div className="boundary-note">
           <LockKey size={20} aria-hidden="true" />
@@ -506,7 +522,7 @@ function IdeaDetailPage({ idea }) {
   return (
     <div className="page-frame detail-page">
       <Breadcrumbs items={[{ label: "想法", href: "/ideas" }, { label: idea.title }]} />
-      <article className="standalone-document">
+      <article className="standalone-document idea-document">
         <header>
           <p className="eyebrow">Idea</p>
           <h1>{idea.title}</h1>

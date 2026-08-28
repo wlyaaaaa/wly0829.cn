@@ -75,7 +75,7 @@ The following visible differences are intentional product constraints rather tha
 
 - Home contains exactly one real project. There are no future placeholders, project counts, dates, activity feeds, categories, progress indicators or invented screenshots.
 - Every `.agents` module uses professional plain language and answers: what it solves, what it does, why the design exists, its boundary, source entries, verification and module relationships.
-- Seven ideas have complete detail routes. Twenty-two installed Skills from the current supply manifest have independent detail routes and public-safe descriptions.
+- Seven ideas have complete detail routes. Twenty-one in-scope Skills derived from the current supply manifest have independent detail routes and public-safe descriptions; the Codex Local Remote entry is excluded by the site boundary.
 - No credentials, private personal evidence, machine paths or dynamic protection identifiers are rendered into the site.
 
 ### Interaction, responsiveness and accessibility
@@ -88,8 +88,10 @@ The following visible differences are intentional product constraints rather tha
   - `docs/design/qa/project-rules-768x1024-final.png`
   - `docs/design/qa/home-390x844-final.png`
   - `docs/design/qa/project-rules-390x844-final.png`
+  - `docs/design/qa/project-context-390x844-final.png`
   - `docs/design/qa/mobile-menu-390x844-final.png`
   - `docs/design/qa/skills-390x844-final.png`
+  - `docs/design/qa/idea-professional-390x844-final.png`
 - All interactive mobile elements have at least a 44 px target on one axis; menu controls are 44 × 44. Reduced-motion rules are present.
 - Console warning/error check returned an empty list after the final interaction run.
 
@@ -103,21 +105,43 @@ The following visible differences are intentional product constraints rather tha
 - [P2] The sixth module preview wrapped to a second line on desktop, unlike the single-row source treatment.
   - Fix: reduced the preview label track and separator margins, then adjusted preview link type by 0.5 px.
 
-### Final pass — passed
+### Pass 2 — passed before independent review
 
 - Post-fix evidence: all four final combined comparison files listed above.
 - The project grid begins within 21 px of the source reference at the normalized desktop size; title/card positions and home card height now follow the same rhythm.
 - All six module preview links share the same top coordinate in the final browser measurement.
 - No P0/P1/P2 differences remain after accounting for the explicit product constraints.
 
+### Independent review — blocked, then fixed
+
+- [P1] Direct mobile routes for the last three project modules selected an off-screen item while the horizontal navigator remained at its initial position.
+  - Fix: the module navigator now centers the active item on route entry and viewport changes, or scrolls to the maximum edge when centering is impossible.
+  - Post-fix evidence: direct 390 px routes for “保护策略”“Skills / Plugins”“上下文与证据” all returned `fullyVisible: true`; the last item remained fully visible at the maximum scroll position. `docs/design/qa/project-context-390x844-final.png` records that state.
+- [P2] The long “AI 承担专业判断，但服从目标和硬边界” mobile title left an orphaned character.
+  - Fix: balanced heading wrapping plus a dedicated mobile idea-title size and letter-spacing rule.
+  - Post-fix evidence: `docs/design/qa/idea-professional-390x844-final.png`; measured lines contain 10 and 9 characters, with no line shorter than three characters.
+- [P2] Markdown backticks were visible in home and Skills prose.
+  - Fix: public copy now contains plain `.agents` text; browser checks on `/` and `/skills` returned `markdownBacktickVisible: false`.
+- [P1] Public Skills included an out-of-scope Codex Local Remote entry and named the machine-fact owner in the credential description.
+  - Fix: removed that Skill and route; rewrote the credential entry as a normal managed credential-center description. Browser readback reports 21 entries and no visible `Codex Local Remote` or `PCConfig` text.
+- [P1] Project overview, authorization and protection copy exposed implementation protocol instead of explaining the product.
+  - Fix: visible body copy now explains permission, responsibility, candidate rules, activation and evidence in professional Chinese; exact protocol names remain only under “关键入口 / 如何验证”.
+- [P2] The global footer repeated `.agents / Skills / 想法` navigation.
+  - Fix: the footer now contains only the site signature; browser readback reports zero footer links.
+
+### Final post-review pass — passed
+
+- Re-ran visual, direct-route, keyboard, console, static-output and content checks after all six review fixes.
+- No actionable P0/P1/P2 findings remain.
+
 ## Browser and build acceptance
 
-- Vite production build generated 39 direct GitHub Pages route documents plus `sitemap.xml`.
-- Automated content/route contract tests: 5 passed, 0 failed.
-- Static-file server readback: 39/39 routes returned HTTP 200; an unknown path returned HTTP 404.
+- Vite production build generated 38 direct GitHub Pages route documents plus `sitemap.xml`.
+- Automated content/route contract tests: 6 passed, 0 failed.
+- Static-file server readback: 38/38 routes returned HTTP 200; an unknown path returned HTTP 404.
 - Static direct route `/projects/agents/rules-contracts` returned the correct route title, canonical URL and rendered module heading.
 - Custom `404.html` displayed the expected title, heading and real recovery links.
-- Primary interactions tested: project entry, all module-navigation structure, idea directory/detail, Skill directory/detail, mobile menu, keyboard activation, history back/forward, direct reload and 404 recovery.
+- Primary interactions tested: project entry, all module-navigation structure, the last three modules by direct mobile route, idea directory/detail, Skill directory/detail, mobile menu, keyboard activation, history back/forward, direct reload and 404 recovery.
 - Browser console errors/warnings: none.
 
 ## Implementation checklist

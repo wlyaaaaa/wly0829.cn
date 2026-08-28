@@ -3,7 +3,7 @@ import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { ideas, modules, routeMeta, routePaths, skills } from "../app/site-content.js";
+import { ideas, modules, project, routeMeta, routePaths, skills } from "../app/site-content.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
@@ -40,7 +40,7 @@ test("all seven public ideas have complete, human-readable detail pages", () => 
   }
 });
 
-test("the Skills directory matches the current installed supply names", () => {
+test("the Skills directory matches the in-scope public catalog derived from supply", () => {
   assert.deepEqual(
     skills.map((item) => item.slug),
     [
@@ -48,7 +48,6 @@ test("the Skills directory matches the current installed supply names", () => {
       "chinese-asr",
       "media-person-self",
       "native-economy-routing",
-      "codex-local-remote-control",
       "file-intake-router",
       "google-workspace-direct",
       "local-secret-broker",
@@ -73,6 +72,9 @@ test("the Skills directory matches the current installed supply names", () => {
       assert.ok(skill[key].length > 20, `${skill.slug}.${key} is incomplete`);
     }
   }
+
+  const publicSkillText = JSON.stringify(skills);
+  assert.doesNotMatch(publicSkillText, /Codex Local Remote|PCConfig|`/);
 });
 
 test("every public route is unique and has useful SEO metadata", () => {
@@ -83,6 +85,10 @@ test("every public route is unique and has useful SEO metadata", () => {
     assert.ok(meta.description.length >= 20, `${route} description is too short`);
     assert.ok(meta.description.length <= 220, `${route} description is too long`);
   }
+});
+
+test("public content does not expose Markdown backticks", () => {
+  assert.doesNotMatch(JSON.stringify({ project, modules, ideas, skills }), /`/);
 });
 
 test("production build contains direct GitHub Pages entry files for every route", async () => {
