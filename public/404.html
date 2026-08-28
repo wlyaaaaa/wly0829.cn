@@ -4,26 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, follow" />
-    <meta name="theme-color" content="#f1efe8" />
+    <meta name="theme-color" content="#ffffff" />
     <title>页面不存在｜吴乐阳</title>
     <style>
-      :root { color: #171816; background: #f1efe8; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+      :root {
+        color: #101210;
+        background: #fff;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      }
       * { box-sizing: border-box; }
-      body { min-height: 100svh; margin: 0; display: grid; place-items: center; padding: 24px; }
-      main { width: min(100%, 760px); border-top: 1px solid #171816; border-bottom: 1px solid rgba(23, 24, 22, 0.3); padding: 56px 0; }
-      p { margin: 0; color: #5b5d57; font: 11px/1.5 Consolas, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
-      h1 { margin: 24px 0 18px; font-size: clamp(44px, 10vw, 88px); line-height: 0.95; letter-spacing: -0.06em; }
-      a { display: inline-flex; margin-top: 28px; padding: 13px 18px; background: #171816; color: #f1efe8; font: 11px Consolas, monospace; letter-spacing: 0.08em; text-decoration: none; }
-      a:hover { background: #3157f6; }
-      a:focus-visible { outline: 2px solid #171816; outline-offset: 4px; box-shadow: 0 0 0 7px #ff5e36; }
+      body { min-width: 320px; min-height: 100svh; margin: 0; }
+      header { min-height: 72px; border-bottom: 1px solid #e1e4e1; }
+      header a { display: flex; width: min(100%, 1360px); min-height: 72px; align-items: center; margin: 0 auto; padding: 0 44px; color: #101210; font-weight: 700; text-decoration: none; }
+      main { display: flex; width: min(100%, 1360px); min-height: calc(100svh - 156px); flex-direction: column; justify-content: center; margin: 0 auto; padding: 70px 44px 90px; }
+      .eyebrow { margin: 0; color: #107c38; font: 600 12px/1.5 Consolas, monospace; letter-spacing: .045em; text-transform: uppercase; }
+      h1 { margin: 18px 0 16px; font-size: clamp(50px, 8vw, 96px); line-height: 1; letter-spacing: -.065em; }
+      p { max-width: 620px; margin: 0; color: #626762; font-size: 16px; line-height: 1.75; }
+      nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+      nav a { display: inline-flex; min-height: 46px; align-items: center; padding: 0 17px; border: 1px solid #cfd3cf; border-radius: 4px; color: #101210; font-size: 14px; font-weight: 600; text-decoration: none; }
+      nav a:first-child { background: #101210; color: #fff; }
+      nav a:hover { border-color: #16a34a; color: #107c38; }
+      nav a:first-child:hover { background: #107c38; color: #fff; }
+      a:focus-visible { outline: 2px solid #16a34a; outline-offset: 4px; }
+      footer { width: min(100%, 1360px); min-height: 84px; margin: 0 auto; padding: 24px 44px; border-top: 1px solid #e1e4e1; color: #626762; font: 11px/1.5 Consolas, monospace; }
+      @media (max-width: 680px) {
+        header a, main, footer { padding-right: 18px; padding-left: 18px; }
+        header, header a { min-height: 64px; }
+        main { min-height: calc(100svh - 148px); }
+      }
     </style>
   </head>
   <body>
+    <header><a href="/">吴乐阳</a></header>
     <main>
-      <p>Error / 404</p>
+      <p class="eyebrow">Error / 404</p>
       <h1>这里没有这页。</h1>
-      <p>链接可能已经变化，也可能从未存在。</p>
-      <a href="/">返回首页 →</a>
+      <p>地址可能已经变化，也可能从未存在。可以回到首页，或直接进入唯一项目。</p>
+      <nav aria-label="404 页面导航">
+        <a href="/">返回首页</a>
+        <a href="/projects/agents">查看 .agents</a>
+      </nav>
     </main>
+    <footer>吴乐阳 / WLY0829.CN</footer>
   </body>
 </html>
