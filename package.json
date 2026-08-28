@@ -4,22 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vinext dev",
-    "build": "vinext build && node copy-hosting.mjs",
-    "build:pages": "vite build --config vite.pages.config.js",
-    "start": "vinext start"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "react-server-dom-webpack": "19.2.8",
-    "vinext": "1.0.0-beta.5"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.51.1",
-    "@mdx-js/rollup": "3.1.1",
     "@vitejs/plugin-react": "6.0.5",
-    "@vitejs/plugin-rsc": "0.5.34",
     "vite": "8.2.1"
   }
 }

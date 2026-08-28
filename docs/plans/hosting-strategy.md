@@ -102,7 +102,7 @@ GitHub Pages 是当前默认选择。只有在真实大陆网络验收持续失�
 ## 当前状态
 
 - 阶段一已于 2026-08-08 实施，公开 GitHub 仓库的 `main` 分支是源码事实源。
-- GitHub Actions 会为每次批准并推送到 `main` 的变更生成独立静态产物并发布到 GitHub Pages；原托管平台构建保持可用，但不再承载正式域名。
+- GitHub Actions 会为每次批准并推送到 `main` 的变更生成独立静态产物并发布到 GitHub Pages；已失效且不承载正式域名的 Sites/vinext 构建入口已退役，仓库只保留一条生产构建链。
 - `wly0829.cn` 使用 GitHub Pages 官方的四条 A 记录，`www.wly0829.cn` 使用指向 `wlyaaaaa.github.io` 的 CNAME。
 - GitHub Pages 已为根域和 `www` 签发证书并启用 HTTPS；`www` 自动跳转到根域。
 - 企业邮箱的 SPF、三条 MX 以及 `mail`、`smtp`、`imap`、`pop3` 记录在迁移后保持原值。

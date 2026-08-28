@@ -1,10 +1,5 @@
 node_modules/
-.next/
 dist/
-dist-pages/
-.vinext/
-.wrangler/
-next-env.d.ts
 .env*
 npm-debug.log*
 .DS_Store

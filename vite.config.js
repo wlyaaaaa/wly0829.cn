@@ -1,15 +1,13 @@
 import { defineConfig } from "vite";
-import vinext from "vinext";
-import { cloudflare } from "@cloudflare/vite-plugin";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [
-    vinext(),
-    cloudflare({
-      viteEnvironment: {
-        name: "rsc",
-        childEnvironments: ["ssr"]
-      }
-    })
-  ]
+  root: "static-site",
+  base: "./",
+  publicDir: "../public",
+  plugins: [react()],
+  build: {
+    outDir: "../dist",
+    emptyOutDir: true
+  }
 });

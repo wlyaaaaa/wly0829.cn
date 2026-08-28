@@ -27,23 +27,35 @@ export default function SignalField() {
     setPointer({ x: 4, y: 4 });
   }
 
+  function togglePulse() {
+    setPulse((current) => !current);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      togglePulse();
+    }
+  }
+
   return (
     <div className="signal-wrap">
       <div className="signal-caption" aria-hidden="true">
-        <span>信号场 / 01</span>
-        <span>{pulse ? "脉冲 / 开" : "脉冲 / 关"}</span>
+        <span>判断场 / 01</span>
+        <span>{pulse ? "模式 / 实现" : "模式 / 判断"}</span>
       </div>
       <button
         className="signal-field"
         type="button"
-        aria-label="交互式信号场。移动指针可以改变点阵，按下可以切换脉冲。"
+        aria-label="交互式判断场。移动指针可以改变点阵，按下可以在产品判断与应用实现之间切换。"
         aria-pressed={pulse}
         data-pulse={pulse}
         style={{
           "--pointer-x": `${(pointer.x / (GRID_SIZE - 1)) * 100}%`,
           "--pointer-y": `${(pointer.y / (GRID_SIZE - 1)) * 100}%`
         }}
-        onClick={() => setPulse((current) => !current)}
+        onClick={togglePulse}
+        onKeyDown={handleKeyDown}
         onPointerMove={trackPointer}
         onPointerLeave={resetPointer}
       >
@@ -60,7 +72,7 @@ export default function SignalField() {
           );
         })}
         <span className="signal-hint" aria-hidden="true">
-          移动 / 按下
+          移动 / 切换
         </span>
       </button>
     </div>
