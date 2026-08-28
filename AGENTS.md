@@ -64,6 +64,15 @@ read-only operating panel; public presentation is secondary.
 
 - The MVP contains exactly one project: `.agents`, plus the one-page Rules
   workbench and the current public-safe Skills catalog.
+- “Skills” means the owner's personal usable capability catalog, not a catalog
+  owned by one assistant product. It may include both personally maintained
+  Skills and high-value externally supplied Skills that are genuinely available
+  to the owner.
+- Inclusion never implies authorship. Use public-safe provenance such as
+  “personally maintained” or “integrated capability” when provenance matters,
+  while keeping product-facing names and explanations vendor-neutral.
+- Display an integrated Skill only when it is currently usable, materially
+  valuable, sufficiently understood, non-duplicative and safe to publish.
 - Finish content before breadth. `.agents` overview and all six modules, all
   five current rules, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
