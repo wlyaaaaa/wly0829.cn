@@ -7,6 +7,25 @@ import { ideas, modules, project, routeMeta, routePaths, skills } from "../app/s
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
+const forbiddenPublicTerms = [
+  "Q29kZXg=",
+  "Q29kZXhIYXJuZXNz",
+  "UENDb25maWc=",
+  "UGVyc29uYWxPUw==",
+  "UGVyc29uYWxLbm93bGVkZ2VCYXNl",
+  "cGVyc29uYWwtbGl0aWdhdGlvbg==",
+  "6K+J6K68",
+  "QUkg5aSn5qih5Z6L",
+  "QUnlpKfmqKHlnos=",
+  "QUkg5pWZ57uD",
+  "QUnmlZnnu4M="
+].map((value) => Buffer.from(value, "base64").toString("utf8"));
+
+function assertPublicTermsAreExcluded(text) {
+  for (const term of forbiddenPublicTerms) {
+    assert.ok(!text.toLowerCase().includes(term.toLowerCase()), "public content contains a private exclusion");
+  }
+}
 
 test("the .agents project has exactly the six product-defined modules", () => {
   assert.deepEqual(
@@ -54,7 +73,6 @@ test("the Skills directory matches the in-scope public catalog derived from supp
       "localocr",
       "llm-backend-toolkit",
       "personal-health",
-      "personal-litigation",
       "personal-materials",
       "project-entry-gate",
       "wechat-direct",
@@ -74,7 +92,8 @@ test("the Skills directory matches the in-scope public catalog derived from supp
   }
 
   const publicSkillText = JSON.stringify(skills);
-  assert.doesNotMatch(publicSkillText, /Codex Local Remote|PCConfig|`/);
+  assert.doesNotMatch(publicSkillText, /`/);
+  assertPublicTermsAreExcluded(publicSkillText);
 });
 
 test("every public route is unique and has useful SEO metadata", () => {
@@ -89,6 +108,13 @@ test("every public route is unique and has useful SEO metadata", () => {
 
 test("public content does not expose Markdown backticks", () => {
   assert.doesNotMatch(JSON.stringify({ project, modules, ideas, skills }), /`/);
+});
+
+test("public content stays harness-neutral and omits excluded personal projects", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const publicText = `${pageSource}\n${JSON.stringify({ project, modules, ideas, skills })}`;
+  assertPublicTermsAreExcluded(publicText);
+  assert.doesNotMatch(pageSource, /进入项目|site-footer/);
 });
 
 test("production build contains direct GitHub Pages entry files for every route", async () => {

@@ -7,14 +7,12 @@ import {
   CaretRight,
   CheckCircle,
   EnvelopeSimple,
-  GithubLogo,
   House,
   List,
   LockKey,
-  TelevisionSimple,
-  X,
-  XLogo
+  X
 } from "@phosphor-icons/react";
+import { SiBilibili, SiGithub, SiX } from "@icons-pack/react-simple-icons";
 import {
   ideas,
   modules,
@@ -78,11 +76,106 @@ function SiteLink({ href, onNavigate, children, ...props }) {
 }
 
 function SocialIcon({ name }) {
-  const iconProps = { size: 19, weight: "regular", "aria-hidden": true };
-  if (name === "github") return <GithubLogo {...iconProps} />;
-  if (name === "bilibili") return <TelevisionSimple {...iconProps} />;
-  if (name === "x") return <XLogo {...iconProps} />;
-  return <EnvelopeSimple {...iconProps} />;
+  const brandIconProps = { size: 18, color: "currentColor", "aria-hidden": true };
+  if (name === "github") return <SiGithub {...brandIconProps} />;
+  if (name === "bilibili") return <SiBilibili {...brandIconProps} />;
+  if (name === "x") return <SiX {...brandIconProps} />;
+  return <EnvelopeSimple size={19} weight="regular" aria-hidden="true" />;
+}
+
+function FlowField({ prominent = false }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d", { alpha: true });
+    if (!canvas || !context) return undefined;
+
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reducedMotion = motionQuery.matches;
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
+    let scrollOffset = window.scrollY;
+    let animationFrame = 0;
+    let previousFrame = 0;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      if (reducedMotion) draw(performance.now(), true);
+    }
+
+    function calculateLineY(x, baseY, phase) {
+      return (
+        baseY +
+        Math.sin(x * 0.0022 + phase) * (width < 700 ? 16 : 24) +
+        Math.sin(x * 0.00085 - phase * 0.62) * (width < 700 ? 8 : 13)
+      );
+    }
+
+    function draw(now, force = false) {
+      if (!force && now - previousFrame < 40) {
+        animationFrame = window.requestAnimationFrame(draw);
+        return;
+      }
+      previousFrame = now;
+      context.clearRect(0, 0, width, height);
+
+      const time = reducedMotion ? 0 : now / 1000;
+      const scrollPhase = reducedMotion ? 0 : scrollOffset * 0.00042;
+      const lineCount = width < 700 ? 20 : 34;
+      const step = width < 700 ? 8 : 10;
+
+      for (let lineIndex = 0; lineIndex < lineCount; lineIndex += 1) {
+        const baseY = -80 + ((height + 160) * lineIndex) / Math.max(lineCount - 1, 1);
+        const phase = time * 0.032 + scrollPhase;
+        context.beginPath();
+        for (let x = -40; x <= width + 40; x += step) {
+          const y = calculateLineY(x, baseY, phase);
+          if (x === -40) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
+        const accent = lineIndex % 9 === 4;
+        context.strokeStyle = accent ? "rgba(22, 163, 74, 0.17)" : "rgba(73, 82, 75, 0.062)";
+        context.lineWidth = accent ? 0.95 : 0.65;
+        context.stroke();
+      }
+
+      if (!reducedMotion) animationFrame = window.requestAnimationFrame(draw);
+    }
+
+    function handleScroll() {
+      scrollOffset = window.scrollY;
+    }
+
+    function handleMotionChange(event) {
+      reducedMotion = event.matches;
+      window.cancelAnimationFrame(animationFrame);
+      draw(performance.now(), true);
+    }
+
+    resize();
+    if (!reducedMotion) animationFrame = window.requestAnimationFrame(draw);
+    window.addEventListener("resize", resize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    motionQuery.addEventListener?.("change", handleMotionChange);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", handleScroll);
+      motionQuery.removeEventListener?.("change", handleMotionChange);
+    };
+  }, []);
+
+  return <canvas className={`flow-field${prominent ? " is-prominent" : ""}`} ref={canvasRef} aria-hidden="true" />;
 }
 
 function navIsActive(href, path) {
@@ -159,14 +252,6 @@ function Header({ path }) {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="site-footer">
-      <p>吴乐阳 / WLY0829.CN</p>
-    </footer>
-  );
-}
-
 function Breadcrumbs({ items }) {
   return (
     <nav className="breadcrumbs" aria-label="面包屑导航">
@@ -180,62 +265,59 @@ function Breadcrumbs({ items }) {
   );
 }
 
-function PageLead({ eyebrow, title, children }) {
-  return (
-    <section className="page-lead" aria-labelledby="page-title">
-      {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-      <h1 id="page-title">{title}</h1>
-      {children ? <div className="page-intro">{children}</div> : null}
-    </section>
-  );
-}
-
 function HomePage() {
   const previewIdeas = ideas.slice(0, 3);
   return (
     <div className="page-frame home-page">
-      <PageLead title="项目">
-        <p>这里记录已经形成稳定方法、并且值得长期查阅的产品与工具。</p>
-      </PageLead>
+      <h1 className="visually-hidden">个人项目</h1>
 
-      <article className="featured-project" aria-labelledby="featured-project-title">
-        <div className="project-title-row">
-          <span className="project-mark" aria-hidden="true" />
-          <h2 id="featured-project-title">{project.title}</h2>
-        </div>
+      <div className="project-grid">
+        <SiteLink
+          className="featured-project"
+          href="/projects/agents"
+          aria-labelledby="featured-project-title"
+        >
+          <span className="project-index" aria-hidden="true">
+            <strong>01</strong>
+            <span />
+          </span>
 
-        <div className="project-summary">
-          {project.summary.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-        </div>
+          <div className="project-card-body">
+            <div className="project-card-header">
+              <div className="project-title-row">
+                <span className="project-mark" aria-hidden="true" />
+                <h2 id="featured-project-title">{project.title}</h2>
+              </div>
+              <span className="project-visibility">
+                <LockKey size={15} aria-hidden="true" />
+                {project.visibility}
+              </span>
+            </div>
 
-        <div className="preview-row">
-          <p className="preview-label">模块</p>
-          <div className="preview-links module-preview-links">
-            {modules.map((item) => (
-              <SiteLink href={`/projects/agents/${item.slug}`} key={item.slug}>
-                {item.shortTitle}
-              </SiteLink>
-            ))}
+            <div className="project-summary">
+              <p>{project.summary.join("")}</p>
+            </div>
+
+            <div className="preview-row">
+              <p className="preview-label">模块</p>
+              <div className="preview-links module-preview-links">
+                {modules.map((item) => (
+                  <span key={item.slug}>{item.shortTitle}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="preview-row">
+              <p className="preview-label">相关想法</p>
+              <div className="preview-links">
+                {previewIdeas.map((item) => (
+                  <span key={item.slug}>{item.title}</span>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="preview-row">
-          <p className="preview-label">相关想法</p>
-          <div className="preview-links">
-            {previewIdeas.map((item) => (
-              <SiteLink href={`/ideas/${item.slug}`} key={item.slug}>
-                {item.title}
-              </SiteLink>
-            ))}
-          </div>
-        </div>
-
-        <SiteLink className="enter-link" href="/projects/agents">
-          进入项目 <ArrowRight size={18} aria-hidden="true" />
         </SiteLink>
-      </article>
+      </div>
     </div>
   );
 }
@@ -498,9 +580,7 @@ function ProjectPage({ module }) {
 function IdeasPage() {
   return (
     <div className="page-frame directory-page">
-      <PageLead eyebrow="Notes" title="想法">
-        <p>这些不是口号，而是从长期 AI 工作中抽出的设计判断。每一条都说明它解决什么、怎样使用，以及不适用在哪里。</p>
-      </PageLead>
+      <h1 className="visually-hidden">想法</h1>
       <div className="directory-list idea-directory">
         {ideas.map((idea, index) => (
           <SiteLink href={`/ideas/${idea.slug}`} key={idea.slug}>
@@ -554,11 +634,7 @@ function IdeaDetailPage({ idea }) {
 function SkillsPage() {
   return (
     <div className="page-frame directory-page skills-page">
-      <PageLead eyebrow="Codex Skills" title="Skills">
-        <p>
-          这是现行个人 Codex Skills 的只读目录。Skill 是处理特定需求的窄入口，不是项目、等级或能力排名；只有触发条件成立时才进入对应方法。
-        </p>
-      </PageLead>
+      <h1 className="visually-hidden">Skills</h1>
       <div className="skill-directory">
         {skills.map((skill) => (
           <SiteLink href={`/skills/${skill.slug}`} key={skill.slug}>
@@ -581,7 +657,7 @@ function SkillDetailPage({ skill }) {
       <Breadcrumbs items={[{ label: "Skills", href: "/skills" }, { label: skill.title }]} />
       <article className="standalone-document skill-document">
         <header>
-          <p className="eyebrow">Codex Skill</p>
+          <p className="eyebrow">Skill</p>
           <h1>{skill.title}</h1>
           <p className="standfirst">{skill.summary}</p>
         </header>
@@ -664,9 +740,9 @@ export default function Page() {
 
   return (
     <div className="site-shell" data-route-known={routePaths.includes(path)}>
+      <FlowField prominent={path === "/"} />
       <Header path={path} />
       <main id="main-content">{resolveRoute(path)}</main>
-      <Footer />
     </div>
   );
 }

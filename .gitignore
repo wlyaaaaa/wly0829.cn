@@ -4,23 +4,7 @@ dist/
 npm-debug.log*
 .DS_Store
 
-# Product Design QA keeps only the accepted comparisons, one pre-fix pair,
-# and the final responsive evidence in Git. Local iteration captures remain
-# available during the task without inflating the published repository.
-docs/design/qa/*
-!docs/design/qa/compare-home-full-final.png
-!docs/design/qa/compare-home-focus-final.png
-!docs/design/qa/compare-project-full-final.png
-!docs/design/qa/compare-project-focus-final.png
-!docs/design/qa/home-1536x1024-pass1.png
-!docs/design/qa/project-rules-1536x1024-viewport-pass1.png
-!docs/design/qa/implementation-home-1487x1058-final.png
-!docs/design/qa/implementation-project-1487x1058-final.png
-!docs/design/qa/home-1440x900-final2.png
-!docs/design/qa/project-rules-768x1024-final.png
-!docs/design/qa/home-390x844-final.png
-!docs/design/qa/project-rules-390x844-final.png
-!docs/design/qa/project-context-390x844-final.png
-!docs/design/qa/mobile-menu-390x844-final.png
-!docs/design/qa/skills-390x844-final.png
-!docs/design/qa/idea-professional-390x844-final.png
+# Product strategy, visual comparisons and review evidence belong to this
+# website project, but the repository is public. Keep those local-only.
+design-qa.md
+docs/design/

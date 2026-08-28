@@ -1,8 +1,8 @@
 export const site = {
   name: "吴乐阳",
-  title: "吴乐阳｜.agents 与 Codex Skills",
+  title: "吴乐阳｜.agents 与 Skills",
   description:
-    "吴乐阳的公开知识站：用专业人话介绍 .agents 的规则、能力路由、授权、保护策略、Skills 供应与验证方法。",
+    "吴乐阳的个人项目站：用专业人话介绍 .agents 的规则、能力路由、授权、保护策略、Skills 供应与验证方法。",
   url: "https://wly0829.cn"
 };
 
@@ -43,6 +43,7 @@ export const socialLinks = [
 export const project = {
   slug: "agents",
   title: ".agents",
+  visibility: "私有",
   eyebrow: "个人 AI 工作流的规则与能力中枢",
   summary: [
     ".agents 处理的不是某一次回答，而是个人 AI 工作如何长期保持可控。",
@@ -118,13 +119,13 @@ export const modules = [
     sources: [
       { path: "docs/contracts/agents.capability-routing.md", role: "能力选择、上下文读取和原生经济路由语义" },
       { path: "skills/native-economy-routing/SKILL.md", role: "把现行原生路由门禁放回任务注意力" },
-      { path: "tools/codex_native_economy_gate.py", role: "验证身份、策略与委派参数" },
-      { path: "tools/codex_native_economy_runtime.py", role: "门禁的版本化运行实现" }
+      { path: "tools/*native_economy_gate.py", role: "验证身份、策略与委派参数" },
+      { path: "tools/*native_economy_runtime.py", role: "门禁的版本化运行实现" }
     ],
     tests: [
       "Test-NativeEconomyRoutingGate.ps1：覆盖身份先于决策、家族与 effort 上限。",
-      "test_codex_native_economy_gate.py：覆盖运行时输入、拒绝路径与兼容行为。",
-      "Test-CodexNativeEconomyThreadBinding.ps1：覆盖旧 root 对话的耐久绑定与回读。"
+      "test_*native_economy_gate.py：覆盖运行时输入、拒绝路径与兼容行为。",
+      "Test-*NativeEconomyThreadBinding.ps1：覆盖既有根任务的耐久绑定与回读。"
     ],
     relation:
       "它从规则内核取得方法边界，再把准备执行的动作和影响范围交给授权模块；需要 Skill 时读取供应模块，最终把运行结果交给证据模块验收。",
@@ -206,7 +207,7 @@ export const modules = [
     problem:
       "当专项方法散落在提示词和个人目录中，能力会重复、失效或悄悄漂移。这个模块解决哪些 Skill/Plugin 是现行供应、源码在哪里、怎样安装到发现目录，以及如何证明新任务真的能看到它。",
     actions: [
-      "唯一供应清单记录权威源码、类型、是否安装和退役项；用户目录只负责让 Codex 发现能力，不承担源码事实。",
+      "唯一供应清单记录权威源码、类型、是否安装和退役项；运行环境的发现目录只负责暴露能力，不承担源码事实。",
       "事务安装器先验证目标、来源和已有占用，再切换并回读，避免普通复制形成多个真相。",
       "Skill 只描述精确触发条件和安全入口；Plugin 可以把 Skills、工具服务与 App 组合在一起，但不会因此获得额外权限。",
       "验证明确区分源码是否正确、是否安装、当前任务能否看见、全新任务能否使用和真实端到端结果；一层通过不能替代另一层。"
@@ -248,7 +249,7 @@ export const modules = [
     rationale:
       "上下文的价值来自注意力分配，不来自体积。独立证据层让结论可以被推翻：如果公开页面打不开，部署日志再漂亮也不能证明产品完成；如果任务能重建，长时间工作也不必依赖一段无限增长的对话。",
     boundaries: [
-      "不恢复中央个人知识库、跨领域画像或后台全量同步；专项私有问题留在独立、按需的能力中。",
+      "不建立跨领域个人数据中心、统一画像或后台全量同步；专项私有问题留在独立、按需的能力中。",
       "没有某层证据不等于失败，但也不能写成已经通过；历史记录不能冒充当前现场。",
       "健康检查只回答证据是否足够，不拥有产品语义，也不能替代用户可见的自然语言路径验收。"
     ],
@@ -387,7 +388,6 @@ export const skills = [
   ["localocr", "处理批量或精确 OCR、扫描 PDF、表格、公式、坐标与印章。", "优先在本地保留版面与坐标，必要时再用原生视觉交叉判断识别失败。", "扫描件、复杂排版、批量图片或 LocalOCR 故障需要可复验读取时使用。", "OCR 的“没读出来”和“没有文字”不是同一结论，复杂文档还需要版面证据。", "一两张普通截图由原生视觉直接读取，不为简单输入启动批处理。"],
   ["llm-backend-toolkit", "在原生代理之外，为封闭、独立可验的任务调用登记的模型后端。", "提供可追踪 run id、状态与续跑能力，用于确有净收益的独立后端工作。", "任务能严格验证、允许较慢执行，且实时 registry 后端优于原生委派时使用。", "第三方或本地模型需要独立身份、运行记录和连续性，不应伪装成原生代理。", "不用于普通委派或模型选择，也不作为原生代理失败后的无条件 fallback。"],
   ["personal-health", "回答用户自己的健康、药物、检查、睡眠、活动与目标问题。", "从当前健康项目和必要的新报告中取得会改变答案的个人上下文。", "问题明确与用户本人健康有关，或需要纳入新报告、修正和设备刷新时使用。", "个人健康建议依赖最新原始证据和个体背景，不能从通用知识或旧画像推断。", "不用于与用户无关的一般健康问题，不把私密健康正文带入其他项目。"],
-  ["personal-litigation", "处理用户本人的诉讼、提交、证据、期限、听证和平台状态。", "从唯一案件现状卡和 legal-filing-kit 区分材料构建、签名、提交、平台回执与法院状态。", "问题涉及用户本人的案件事实或法律文件时使用。", "法律状态的语义必须来自案件 owner，不能把缺回执误写成未提交或把平台状态当法院结论。", "不用于一般法律知识或他人案件，也不自动重复提交任何材料。"],
   ["personal-materials", "在原件路径未知或既有定位失效时，寻找少量可验证的私人非媒体原件。", "跨已获准位置返回少数候选，并核对文件身份与路径。", "用户要找具体原件，但路径未知、跨位置或 owner locator 失败时使用。", "寻找原件需要范围控制与候选验证，不能扩展成中央私人资料库。", "不处理媒体、不回答一般领域问题；已有可靠定位器时直接使用。"],
   ["project-entry-gate", "在 Git 决策前核对仓库身份、可见性、远端、分支、worktree 与同步事实。", "从 Git owner 取得会改变提交、恢复或发布路径的结构化事实。", "仓库身份、公开范围、远端、默认分支、同步、恢复或发布状态会影响决策时使用。", "目录名和当前 checkout 不能证明仓库身份，更不能证明远端与公开状态。", "准入记录是证据，不是写入或发布授权；普通可逆编辑不需要机械门禁。"],
   ["wechat-direct", "读取本地微信主/副库的点名消息、回复上下文和媒体。", "围绕一个明确联系人、群聊、朋友圈缓存或保存包完成有界读取与归档。", "用户明确点名微信对象、时间段或保存目标时使用。", "聊天上下文应当按对象与任务读取，不需要整账号同步或中央画像。", "不做全账号扫描，不猜联系人身份，不把私聊内容公开或跨领域复用。"],
@@ -437,10 +437,10 @@ export function routeMeta(pathname) {
     const idea = ideas.find((item) => path.endsWith(`/${item.slug}`));
     if (idea) return { title: `${idea.title}｜想法｜吴乐阳`, description: idea.summary };
   }
-  if (path === "/skills") return { title: "Codex Skills｜吴乐阳", description: "现行个人 Codex Skills 的只读目录、用途、触发方式与边界。" };
+  if (path === "/skills") return { title: "Skills｜吴乐阳", description: "个人 Skills 的只读目录、用途、触发方式与边界。" };
   if (path.startsWith("/skills/")) {
     const skill = skills.find((item) => path.endsWith(`/${item.slug}`));
-    if (skill) return { title: `${skill.title}｜Codex Skills｜吴乐阳`, description: skill.summary };
+    if (skill) return { title: `${skill.title}｜Skills｜吴乐阳`, description: skill.summary };
   }
   return { title: "页面不存在｜吴乐阳", description: "这个地址没有对应页面。" };
 }
