@@ -31,8 +31,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
+      - name: Build and verify public content
         run: npm run build
+
+      - name: Test source and generated routes
+        run: npm test
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

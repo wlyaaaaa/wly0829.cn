@@ -5,8 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-routes.mjs",
+    "build:site": "vite build && node scripts/generate-routes.mjs",
+    "build": "npm run verify:snapshot && npm run build:site && npm run verify:public",
+    "impact": "node scripts/assess-panel-impact.mjs",
     "preview": "vite preview",
+    "refresh:snapshot": "node scripts/refresh-panel-snapshot.mjs",
+    "verify:snapshot": "node scripts/verify-panel-snapshot.mjs",
+    "verify:public": "node scripts/verify-public-content.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

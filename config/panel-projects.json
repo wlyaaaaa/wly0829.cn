@@ -1,0 +1,118 @@
+{
+  "schema": "wly.personal-panel-project-registry.v1",
+  "refresh_policy": {
+    "mode": "event_driven_fresh_project_task",
+    "trigger": "displayed_fact_or_explanation_changed",
+    "non_trigger": "implementation_change_that_does_not_change_any_displayed_fact",
+    "website_repo": "wlyaaaaa/wly0829.cn",
+    "website_project_type": "project",
+    "website_task_rule": "create one fresh independent website task for one refresh goal; never reuse a completed task",
+    "publication_boundary": "source project publication completes first; website refresh is a separate post-publication task and cannot block or roll back the source transaction",
+    "task_creation_threshold": "create a website task only when the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
+    "small_change_policy": "do not create an asynchronous task for formatting, refactors, timestamps, hash-only drift, blocked candidates already shown accurately, or other changes that do not alter a user decision",
+    "allowed_presentation_modes": [
+      "real_dashboard",
+      "curated_packaging"
+    ],
+    "default_presentation_mode": "real_dashboard",
+    "only_private_document": "docs/design/private-content-rules.md"
+  },
+  "projects": [
+    {
+      "id": "agents",
+      "order": 1,
+      "title": ".agents",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/agents",
+      "source": {
+        "repo": "wlyaaaaa/.agents",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "local_root": "E:\\.agents"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "six_modules",
+        "active_rules",
+        "skills_catalog",
+        "validation_matrix",
+        "evolution_and_operating_entries"
+      ],
+      "impact_sources": [
+        {
+          "kind": "active_generation",
+          "owner": "AuthorityHost",
+          "entry": "C:\\ProgramData\\PCConfig\\AuthorityHost\\policy\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1",
+          "fields": [
+            "status",
+            "active_generation_id",
+            "policy_epoch",
+            "required_rule_descriptors",
+            "candidate_pending",
+            "candidate_unavailable",
+            "production_activation",
+            "integrity_incident"
+          ]
+        },
+        {
+          "kind": "rule_semantics",
+          "paths": [
+            "AGENTS.md",
+            "docs/contracts/agents.protected-major-actions.md",
+            "docs/contracts/agents.authorization-delegation.md",
+            "docs/contracts/agents.four-base-decision-context.md",
+            "docs/contracts/agents.capability-routing.md"
+          ]
+        },
+        {
+          "kind": "project_architecture",
+          "paths": [
+            "README.md",
+            "docs/contracts/README.md",
+            "config/control-plane-contract-catalog.json",
+            "config/repository-bloat-budget.json",
+            "tools/Invoke-ExecutionOwnerRegistry.ps1",
+            "tools/Get-FourBaseDecisionContext.ps1",
+            "tools/Get-ProtectedMajorActionPolicyStatus.ps1"
+          ]
+        },
+        {
+          "kind": "skills_catalog",
+          "paths": [
+            "config/personal-skill-supply.json",
+            "skills/**/SKILL.md",
+            "plugins/*/skills/**/SKILL.md",
+            "docs/personal-skill-supply-recovery.md"
+          ]
+        },
+        {
+          "kind": "displayed_validation",
+          "paths": [
+            "tests/test-registry.json",
+            "tests/Invoke-AllTests.ps1",
+            "tests/Test-AllTestsRunner.ps1",
+            "tools/Test-ControlPlaneContractCoverage.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed rule changes meaning",
+          "a module responsibility or boundary changes",
+          "a Skill is added, removed, retired, renamed, or changes its trigger, flow, boundary, dependency, failure, or maturity",
+          "a displayed validation result changes interpretation rather than only timestamp"
+        ],
+        "snapshot_only_when": [
+          "generation, hash, commit, observation time, candidate state, production state, or validation count changes without semantic change"
+        ],
+        "ignore_when": [
+          "comments, formatting, refactors, or tests change without changing a displayed fact",
+          "an internal file outside impact_sources changes",
+          "a temporary or blocked candidate exists but the website already states the exact candidate status and no displayed explanation changes",
+          "only a timestamp, source commit, generation hash, formatting, comment, or implementation detail changed and the last published page remains a truthful historical snapshot"
+        ]
+      }
+    }
+  ]
+}

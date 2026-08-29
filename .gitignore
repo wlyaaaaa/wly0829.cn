@@ -4,7 +4,8 @@ dist/
 npm-debug.log*
 .DS_Store
 
-# Product strategy, visual comparisons and review evidence belong to this
-# website project, but the repository is public. Keep those local-only.
-design-qa.md
-docs/design/
+# The only private document is the explicit packaging/exclusion rule.
+docs/design/private-content-rules.md
+
+# Screenshot iterations are reproducible QA artifacts, not maintained docs.
+docs/design/qa/

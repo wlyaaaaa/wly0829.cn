@@ -9,6 +9,16 @@ read-only operating panel; public presentation is secondary.
 - This is a read-only personal project, rules and capabilities panel. It is not
   a resume, marketing landing page, activity feed, admin console or repository
   browser.
+- The owner is the primary reader. Do not optimize information density, wording
+  or project selection for recruiters, salary negotiation or external
+  persuasion. A public visitor may read the same material, but the panel must
+  first let the owner recover the complete operating picture.
+- Project entries are maintained in `config/panel-projects.json`. The current
+  MVP has one entry, but the registry is designed for many projects. `.agents`
+  always has order 1.
+- A registry entry defaults to `real_dashboard`: publish dense, current facts,
+  architecture, failures and evidence. Only a project explicitly designated by
+  the owner as `curated_packaging` may use packaging copy or exclusions.
 - The website source project is infrastructure for the presentation layer and
   never appears as one of the projects being presented.
 - Public copy stays vendor-neutral. Describe reusable AI workflow and harness
@@ -39,8 +49,15 @@ read-only operating panel; public presentation is secondary.
 
 ## Public-content gate
 
-- Never track credentials, tokens, private evidence, personal case material,
-  machine-specific paths, private conversations or internal career packaging.
+- Never track credential values: passwords, private keys, access tokens,
+  recovery secrets, authentication codes or equivalent reusable secret
+  material. Detecting one must fail the public build instead of merely hiding
+  it in the interface.
+- Do not remove technical paths, identifiers, hashes, generation facts,
+  implementation details, failure evidence or operating limitations merely
+  because the repository is public. This panel is allowed to be technically
+  complete. Unrelated sensitive personal domains such as litigation are
+  outside this MVP rather than silently generalized into public content.
 - Do not expose project-retirement bookkeeping. A selected older project may
   describe its enduring product idea and what was actually built, without
   publishing internal lifecycle labels or implying untrue current operation.
@@ -85,13 +102,17 @@ read-only operating panel; public presentation is secondary.
 - Before changing public project selection or copy, read
   `docs/design/private-content-rules.md` when that local-only file exists. It
   may add stricter exclusions and must never be staged.
+- `docs/design/private-content-rules.md` is the only project document that stays
+  outside Git. Product specifications, content principles, maintenance policy,
+  the project registry and the current `design-qa.md` are maintained in Git.
 
 ## Project-local evidence
 
-- Design briefs, comparison screenshots, review notes and machine-path evidence
-  stay in `docs/design/` or root `design-qa.md`; both are ignored local files.
-- Product Design QA may update those local files, but public commits contain
-  only the resulting product and public-safe documentation.
+- Design briefs, current content principles and `design-qa.md` are maintained
+  project documentation and are tracked. Reproducible comparison screenshots
+  remain ignored under `docs/design/qa/` to avoid binary history bloat.
+- Product Design QA updates `design-qa.md` with current evidence references and
+  final status; stale prior QA is replaced rather than accumulated.
 
 ## Refresh model
 
@@ -104,13 +125,41 @@ read-only operating panel; public presentation is secondary.
 - Content construction should provide one fast local refresh path that reads
   the current owners, regenerates public-safe structured content, validates it,
   and uses the existing normal publication chain only when the user asks.
+- Snapshot generation always performs a live source fetch, requires the exact
+  canonical `.agents` root to be clean and equal to `origin/main`, and writes a
+  payload commitment. Build verifies that commitment plus the generation,
+  five-rule and selected-Skill bindings before producing public files; there is
+  no offline or alternate-source write mode.
 - Do not add a daemon, watcher, scheduled task, polling service or public live
   dependency merely to keep the panel current.
+- Cross-project refresh is event-driven and thresholded. A matching changed path
+  is only an impact candidate; create a fresh independent website task only when
+  the source task has determined that a displayed fact, explanation, boundary,
+  maturity or user decision would otherwise become materially wrong. Small
+  refactors, timestamps, formatting, blocked candidates and hash-only drift may
+  wait for the next material refresh.
+- Before publishing a refreshed snapshot, inspect the current source owners for
+  contradictions and broken validation paths. Repair safe, in-scope defects
+  through their real owner when possible; publish the repaired state. Defects
+  that cannot be repaired in the same goal remain visible as named gaps.
+
+## Subagent discipline
+
+- A subagent receives exactly one bounded goal. Never reuse a completed,
+  interrupted or failed subagent for a second goal.
+- Create a fresh subagent when another independent goal has positive parallel
+  value. Subagents remain read-only unless their single goal explicitly owns a
+  named implementation scope; the root agent integrates the website and runs
+  the final audit.
 
 ## Verification and publication
 
 - Preserve the existing React, Vite and GitHub Pages route-generation chain.
 - Verify build, direct routes, custom 404, keyboard navigation, desktop/mobile
   overflow and browser console before normal-pushing `main`.
+- The public-content gate scans every tracked/unignored source file and every
+  production artifact regardless of extension. Directory-route canonical,
+  Open Graph and sitemap URLs use the trailing-slash URL that Pages serves as
+  `200`, not the redirecting form.
 - Public completion requires local HEAD, remote `main` and the Pages deployment
   commit to match.

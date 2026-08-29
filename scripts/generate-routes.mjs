@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { routeMeta, routePaths, site } from "../app/site-content.js";
+import { canonicalUrl, routeMeta, routePaths } from "../app/site-content.js";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
@@ -26,7 +26,7 @@ function replaceMeta(html, matcher, replacement) {
 
 function htmlForRoute(route) {
   const meta = routeMeta(route);
-  const canonical = `${site.url}${route === "/" ? "/" : route}`;
+  const canonical = canonicalUrl(route);
   let html = rootHtml;
   html = replaceMeta(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
   html = replaceMeta(
@@ -74,7 +74,7 @@ for (const route of routePaths) {
 }
 
 const sitemapEntries = routePaths
-  .map((route) => `  <url>\n    <loc>${site.url}${route === "/" ? "/" : route}</loc>\n  </url>`)
+  .map((route) => `  <url>\n    <loc>${canonicalUrl(route)}</loc>\n  </url>`)
   .join("\n");
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;
 await writeFile(path.join(distRoot, "sitemap.xml"), sitemap, "utf8");
