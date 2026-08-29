@@ -1,15 +1,27 @@
 {
   "schema": "wly.personal-panel-project-registry.v1",
   "refresh_policy": {
-    "mode": "event_driven_fresh_project_task",
+    "mode": "ai_managed_on_demand",
+    "semantic_writer": "website_ai_task_only",
+    "targeted_refresh_prompt": "刷新个人看板中的<project-id>",
+    "full_refresh_prompt": "全部更新一下",
     "trigger": "displayed_fact_or_explanation_changed",
     "non_trigger": "implementation_change_that_does_not_change_any_displayed_fact",
     "website_repo": "wlyaaaaa/wly0829.cn",
     "website_project_type": "project",
     "website_task_rule": "create one fresh independent website task for one refresh goal; never reuse a completed task",
+    "full_refresh_rule": "the current website AI task iterates enabled projects in registry order; unchanged projects remain byte-identical",
+    "fact_collector_boundary": "scripts and providers collect evidence and verify contracts; they never write narrative content or decide materiality",
     "publication_boundary": "source project publication completes first; website refresh is a separate post-publication task and cannot block or roll back the source transaction",
     "task_creation_threshold": "create a website task only when the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
     "small_change_policy": "do not create an asynchronous task for formatting, refactors, timestamps, hash-only drift, blocked candidates already shown accurately, or other changes that do not alter a user decision",
+    "default_change_policy": "no website change unless the existing page would make a material user judgment wrong",
+    "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
+    "evolution_policy": "record only important product stages; one entry may cover a date or date range and may merge multiple related changes",
+    "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
+    "initial_bundle_gzip_budget_kib": 256,
+    "lazy_detail_required_at_project_count": 8,
+    "bundle_scaling_policy": "before enabling the eighth project, project details must lazy-load and search must use a derived lightweight index",
     "allowed_presentation_modes": [
       "real_dashboard",
       "curated_packaging"
@@ -25,6 +37,18 @@
       "enabled": true,
       "presentation_mode": "real_dashboard",
       "route": "/projects/agents",
+      "ai_refresh": {
+        "content_path": "app/content-core.js",
+        "semantic_revision": 3,
+        "scope": "project overview, six modules, current E release Rules and Skills evidence",
+        "collectors": [
+          "git -C E:\\.agents status --porcelain=v2 --branch",
+          "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
+          "E:\\.agents\\tools\\Test-PersonalSkillSupply.ps1 -RequireInstalled -NoExternalEvidence -Json",
+          "E:\\.agents\\tests\\Invoke-AllTests.ps1 -Scope Local -Parallel -Json",
+          "E:\\.agents\\tools\\Test-ControlPlaneContractCoverage.ps1 -Json"
+        ]
+      },
       "source": {
         "repo": "wlyaaaaa/.agents",
         "visibility": "PRIVATE",
@@ -41,18 +65,22 @@
       ],
       "impact_sources": [
         {
-          "kind": "active_generation",
-          "owner": "AuthorityHost",
-          "entry": "C:\\ProgramData\\PCConfig\\AuthorityHost\\policy\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1",
+          "kind": "e_rules_release",
+          "owner": "E:\\.agents",
+          "entry": "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
           "fields": [
             "status",
-            "active_generation_id",
-            "policy_epoch",
-            "required_rule_descriptors",
-            "candidate_pending",
-            "candidate_unavailable",
-            "production_activation",
-            "integrity_incident"
+            "reason",
+            "pointer.current.release_id",
+            "pointer.current.git_commit",
+            "pointer.current.ruleset_sha256",
+            "pointer.current.release_record_sha256",
+            "pointer.previous",
+            "pointer.pointer_revision",
+            "pointer_sha256",
+            "pointer.activated_at_utc",
+            "verified_current.required_rule_paths",
+            "verified_current.files"
           ]
         },
         {
@@ -71,17 +99,27 @@
             "README.md",
             "docs/contracts/README.md",
             "config/control-plane-contract-catalog.json",
+            "config/e-rules-bootstrap.json",
+            "config/e81-retirement-dispositions.json",
+            "config/on-demand-plugin-catalog.json",
             "config/repository-bloat-budget.json",
+            "releases/current-rules.json",
+            "releases/*/release.json",
+            "releases/*/AGENTS.md",
+            "releases/*/docs/contracts/*.md",
             "tools/Invoke-ExecutionOwnerRegistry.ps1",
             "tools/Get-FourBaseDecisionContext.ps1",
-            "tools/Get-ProtectedMajorActionPolicyStatus.ps1"
+            "tools/Invoke-EAgentRulesRelease.ps1",
+            "tools/Invoke-EAgentRulesFastRelease.ps1"
           ]
         },
         {
           "kind": "skills_catalog",
           "paths": [
             "config/personal-skill-supply.json",
+            "skills",
             "skills/**/SKILL.md",
+            "plugins",
             "plugins/*/skills/**/SKILL.md",
             "docs/personal-skill-supply-recovery.md"
           ]
@@ -92,6 +130,8 @@
             "tests/test-registry.json",
             "tests/Invoke-AllTests.ps1",
             "tests/Test-AllTestsRunner.ps1",
+            "tests/Test-EAgentRulesRelease.ps1",
+            "tests/Test-ExecutionOwnerRegistry.ps1",
             "tools/Test-ControlPlaneContractCoverage.ps1"
           ]
         }
@@ -104,13 +144,305 @@
           "a displayed validation result changes interpretation rather than only timestamp"
         ],
         "snapshot_only_when": [
-          "generation, hash, commit, observation time, candidate state, production state, or validation count changes without semantic change"
+          "E release id, pointer, hash, commit, observation time, source checkout state, or validation count changes without semantic change"
         ],
         "ignore_when": [
           "comments, formatting, refactors, or tests change without changing a displayed fact",
           "an internal file outside impact_sources changes",
-          "a temporary or blocked candidate exists but the website already states the exact candidate status and no displayed explanation changes",
-          "only a timestamp, source commit, generation hash, formatting, comment, or implementation detail changed and the last published page remains a truthful historical snapshot"
+          "dirty or unreleased source exists but the website already states its exact non-active status and no displayed explanation changes",
+          "only a timestamp, source commit, release hash, formatting, comment, or implementation detail changed and the last published page remains a truthful historical snapshot"
+        ]
+      }
+    },
+    {
+      "id": "pcconfig",
+      "order": 2,
+      "title": "PCConfig",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/pcconfig",
+      "ai_refresh": {
+        "content_path": "app/content-pcconfig.js",
+        "semantic_revision": 2,
+        "scope": "project overview and six modules",
+        "collectors": [
+          "git -C E:\\PCConfig status --porcelain=v2 --branch",
+          "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json",
+          "E:\\PCConfig\\tools\\Get-DevStorageHealth.ps1 -Json",
+          "E:\\PCConfig\\tools\\Install-CoreRecoveryTasks.ps1 -Mode Inspect -Json",
+          "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json",
+          "E:\\PCConfig\\tools\\Invoke-PCConfigAcceptance.ps1 -NoWrite -Area core_recovery -Json",
+          "E:\\PCConfig\\tools\\Get-RuntimeInventory.ps1 -Json",
+          "E:\\PCConfig\\tools\\Get-StartupInventory.ps1 -Json",
+          "E:\\PCConfig\\tools\\Invoke-StableMachineProjection.ps1 -Action Read -Json",
+          "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action Status -Json",
+          "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1 -Action Status -Json",
+          "E:\\PCConfig\\tools\\Get-GoogleWorkspaceProviderBinding.ps1 -Json",
+          "E:\\PCConfig\\tools\\Install-ProtectedDataSafeSwitch.ps1 -Mode Inspect -Json",
+          "read C:\\ProgramData\\PCConfig\\ProtectedDataSafeSwitch\\v1\\public\\status.json and boot-latest.json",
+          "read E:\\PCConfig\\registries\\protected_data_vault_v2_formal.json and protected_data_p5_p7_delivery_v3.json"
+        ],
+        "conditional_collectors": [
+          "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json when displayed protected-policy retirement state may change",
+          "owner-specific protected installers/tests only when their displayed implementation or evidence changed"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/PCConfig",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "local_root": "E:\\PCConfig"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "six_modules",
+        "current_machine_and_recovery_state",
+        "evidence_layers",
+        "evolution_and_operating_entries"
+      ],
+      "impact_sources": [
+        {
+          "kind": "machine_and_recovery_facts",
+          "paths": [
+            "registries/*.json",
+            "docs/contracts/pcconfig.*.md",
+            "docs/governance/*.md",
+            "docs/recovery/*.md",
+            "tests/*.ps1",
+            "tools/Test-PCConfigDrift.ps1",
+            "tools/scan_tasks.ps1",
+            "tools/Get-DevStorageHealth.ps1",
+            "tools/Get-RuntimeInventory.ps1",
+            "tools/Install-CoreRecoveryTasks.ps1"
+          ]
+        },
+        {
+          "kind": "protected_runtime_and_data",
+          "paths": [
+            "docs/contracts/pcconfig.core-goal-v2.md",
+            "docs/contracts/pcconfig.protected-data-*.md",
+            "tools/Invoke-CoreGoalV2.ps1",
+            "tools/Invoke-ProtectedPCConfigMajorAction.ps1",
+            "tools/Install-ProtectedDataSafeSwitch.ps1",
+            "tools/Get-ProtectedPolicyAuthorityStatus.ps1",
+            "tools/Test-ProtectedPolicyRetirement.ps1",
+            "tools/ProtectedDataVault*/**",
+            "registries/protected_policy_retirement.json"
+          ]
+        },
+        {
+          "kind": "secrets_and_providers",
+          "paths": [
+            "registries/secret_broker.json",
+            "tools/secret_broker.py",
+            "tools/Invoke-SecretBroker.ps1",
+            "tools/Invoke-GoogleWorkspaceProvider.ps1",
+            "docs/contracts/pcconfig.google-workspace-*.md"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed machine, recovery, provider, protected-action or protected-data fact changes meaning",
+          "a displayed module boundary, failure state or verification interpretation changes"
+        ],
+        "snapshot_only_when": [
+          "an observation time, count, commit, revision, hash or named status changes without semantic change"
+        ],
+        "ignore_when": [
+          "internal refactors, tests or candidate-only code do not change any displayed fact",
+          "a blocked or uninstalled candidate remains accurately described by the current page"
+        ]
+      }
+    },
+    {
+      "id": "github-index",
+      "order": 3,
+      "title": "GitHub 总索引",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/github-index",
+      "ai_refresh": {
+        "content_path": "app/content-github-index.js",
+        "semantic_revision": 2,
+        "scope": "project overview and six modules",
+        "collectors": [
+          "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
+          "E:\\GitHub总索引\\tools\\Get-ProjectCognitionSource.ps1 -Json",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/github-local-index -ForPublication -Json",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/wly0829.cn -ForPublication -Json",
+          "E:\\GitHub总索引\\tools\\Test-GitHubLocalIndexConsistency.ps1 -SkipFetch"
+        ],
+        "conditional_collectors": [
+          "E:\\GitHub总索引\\tests\\Test-ProjectAdmission.ps1 when admission or public-exposure implementation changed",
+          "E:\\GitHub总索引\\tests\\Test-ProtectedGitHubMajorAction.ps1 when major-action source or displayed evidence changed",
+          "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json only when displayed E rules compatibility or major-action contract evidence may change"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/github-local-index",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\GitHub总索引"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "six_modules",
+        "repository_identity_and_worktree_state",
+        "publication_and_major_action_boundaries",
+        "snapshot_recovery_and_evidence"
+      ],
+      "impact_sources": [
+        {
+          "kind": "repository_identity_and_admission",
+          "paths": [
+            "AGENTS.md",
+            "docs/contracts/git.*.md",
+            "tests/*.ps1",
+            "tools/Get-GitOwnerStatus.ps1",
+            "tools/Get-ProjectAdmission.ps1",
+            "tools/Get-ProjectCognitionSource.ps1",
+            "tools/GitHubIndex*.psm1",
+            "tools/Install-GitHook.ps1",
+            "config/git-artifact-governance.json"
+          ]
+        },
+        {
+          "kind": "publication_and_major_actions",
+          "paths": [
+            "05_规则与模板/推送放行与否决规则.md",
+            "docs/contracts/git.push-publication.md",
+            "docs/contracts/git.protected-major-actions.md",
+            "tools/Invoke-ProtectedGitHubMajorAction.ps1",
+            "tools/PublicExposurePolicy.psd1"
+          ]
+        },
+        {
+          "kind": "snapshot_and_recovery",
+          "paths": [
+            "00_总览/current-generation.json",
+            "docs/contracts/git.refresh-consistency.md",
+            "tools/Update-GitHubIndex.ps1",
+            "tools/Refresh-GitHubLocalIndex.ps1",
+            "tools/Test-GitHubLocalIndexConsistency.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed repository identity, admission, worktree, publication, major-action or recovery rule changes meaning",
+          "a displayed module boundary, failure state or verification interpretation changes"
+        ],
+        "snapshot_only_when": [
+          "an aggregate count, observation time, generation, commit, hash or drift count changes without semantic change"
+        ],
+        "ignore_when": [
+          "ordinary repository commits do not change any displayed governance fact",
+          "private repository names or paths change while the public aggregate remains truthful"
+        ]
+      }
+    },
+    {
+      "id": "chinese-asr",
+      "order": 4,
+      "title": "ChineseASR",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/chinese-asr",
+      "ai_refresh": {
+        "content_path": "app/content-chinese-asr.js",
+        "semantic_revision": 1,
+        "scope": "project overview and six modules",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ChineseASR -RefreshRefs -Json",
+          "E:\\Projects\\Tools\\ChineseASR\\scripts\\doctor.ps1",
+          "E:\\Projects\\Tools\\ChineseASR\\.venv\\Scripts\\python.exe -m unittest discover -s tests -q"
+        ],
+        "conditional_collectors": [
+          "E:\\Projects\\Tools\\ChineseASR\\scripts\\smoke-asr-smart.ps1 -Json when runtime, default strict routing or user-visible output changed",
+          "E:\\Projects\\Tools\\ChineseASR\\scripts\\smoke-evidence-asr.ps1 -Audio <explicit-important-audio> -Json when the evidence route changed and an authorized sample is available",
+          "E:\\Projects\\Tools\\ChineseASR\\scripts\\benchmark.ps1 only when a model, normalization or accuracy decision needs a fixed truth corpus"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/ChineseASR",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\ChineseASR"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "six_modules",
+        "model_and_mode_routing",
+        "task_long_audio_and_evidence_state",
+        "speaker_and_privacy_boundaries",
+        "verification_and_evolution"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_and_model_contract",
+          "paths": [
+            "README.md",
+            "docs/architecture.md",
+            "docs/public-release.md",
+            "configs/models.yaml",
+            "src/zh_asr/config.py",
+            "src/zh_asr/qwen_identity.py"
+          ]
+        },
+        {
+          "kind": "task_runtime_and_routing",
+          "paths": [
+            "scripts/asr-smart.ps1",
+            "scripts/transcribe-folder.ps1",
+            "src/zh_asr/service.py",
+            "src/zh_asr/process_control.py",
+            "src/zh_asr/pipeline.py",
+            "src/zh_asr/adapters/*.py"
+          ]
+        },
+        {
+          "kind": "long_audio_audit_and_speaker_evidence",
+          "paths": [
+            "src/zh_asr/long_audio.py",
+            "src/zh_asr/arbitration.py",
+            "src/zh_asr/batch.py",
+            "src/zh_asr/audit.py",
+            "src/zh_asr/risk_rules.py",
+            "src/zh_asr/audio_outcome.py",
+            "src/zh_asr/result_writer.py",
+            "src/zh_asr/metadata.py",
+            "src/zh_asr/speaker_evidence.py",
+            "src/zh_asr/speaker_attribution.py"
+          ]
+        },
+        {
+          "kind": "resource_privacy_and_validation",
+          "paths": [
+            "src/zh_asr/gpu_broker.py",
+            "src/zh_asr/proxy_guard.py",
+            "scripts/asr-professional-cloud.ps1",
+            "scripts/qwen_audio3_broker_worker.py",
+            "scripts/smoke-*.ps1",
+            "tests/*.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed mode, model role, task lifecycle, long-audio, evidence, speaker or privacy boundary changes meaning",
+          "a displayed module, failure state, real entrypoint or verification interpretation changes",
+          "a real runtime or benchmark result changes what the owner should trust or do"
+        ],
+        "snapshot_only_when": [
+          "an observation time, clean commit, test count, Doctor result or repository identity changes without semantic change"
+        ],
+        "ignore_when": [
+          "internal refactors or test additions leave every displayed capability and boundary unchanged",
+          "a new model is merely installed or registered but does not replace a displayed default or gain fresh evidence",
+          "ignored outputs, model caches or private recordings change without altering public-safe product facts"
         ]
       }
     }

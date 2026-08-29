@@ -1,21 +1,23 @@
 # wly0829.cn MVP rebuild
 
-status: active
+status: single_project_accepted_three_project_integration_active
 
 ## Goal
 
-Rebuild the website from current owner sources so it is the owner's detailed,
-plain-language, professional, read-only operating panel for `.agents`, the five
-active rules and the current usable Skills catalog.
+Build the website from current owner sources so it is the owner's detailed,
+plain-language, professional, read-only operating panel for `.agents`, PCConfig,
+GitHub 总索引, ChineseASR, the five current rules and the usable Skills catalog.
 
 The prior website copy is not an input. Existing code may be reused only as UI
 infrastructure after its content is removed.
 
 ## Hard boundaries
 
-- MVP contains exactly one project: `.agents`.
-- MVP is not the long-term project-count limit. Future projects are added to
-  `config/panel-projects.json`; `.agents` keeps order 1.
+- The accepted content MVP contained exactly one project: `.agents`.
+- The owner first authorized PCConfig and GitHub 总索引 as the audited 1/2/3
+  expansion, then explicitly accepted that local result and authorized exactly
+  one more project: ChineseASR at order 4. No fifth project follows from that
+  authorization.
 - Top-level information areas are Project, Rules and Skills.
 - No Ideas area, website-self project, future placeholders, career marketing or
   salary-oriented copy.
@@ -24,14 +26,15 @@ infrastructure after its content is removed.
 - Passwords, keys, tokens, recovery secrets and other credential values never
   enter generated data, source, bundles or HTML.
 - Litigation and other unrelated sensitive personal projects are out of scope.
-- One fresh subagent has one goal. Never reuse it for another goal.
+- One subagent has one durable goal. Follow-ups may refine or expand only that
+  same goal; an unrelated objective always needs a fresh subagent.
 - All product and maintenance documents are tracked except
   `docs/design/private-content-rules.md`, the sole packaging/exclusion document.
 
 ## Source hierarchy
 
-1. Current AuthorityHost status and the five files from one verified active
-   generation for live rule state.
+1. Current E release, PRIVATE main commit, current/previous pointer and the five
+   verified files from one ruleset for live rule state.
 2. Canonical `.agents` source on its real default branch for product design,
    Skills supply, tools and tests.
 3. GitHub live repository metadata for repository identity and remote state.
@@ -66,3 +69,8 @@ change is only an impact candidate. A fresh independent website task is created
 only when the source Owner confirms that a displayed fact, explanation,
 boundary, maturity or user decision would materially become wrong. Small or
 already-accurately-disclosed changes wait for the next material refresh.
+
+The owner accepted the one-project content MVP. The audited PCConfig and GitHub
+总索引 packages now enter the local registry, route set, navigation and homepage.
+They remain uncommitted and unpublished until the owner reviews the complete
+current four-project local preview.

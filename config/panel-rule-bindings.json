@@ -1,0 +1,27 @@
+{
+  "schema": "wly.panel-rule-bindings.v2",
+  "semantic_release_id": "E88",
+  "ruleset_sha256": "b1a6e0977afe537f785245ebc9d72ab6ed3128f15197e731539ca81afd894eed",
+  "rules": [
+    {
+      "logicalId": "agents_root_rules",
+      "sourcePath": "E:\\.agents\\AGENTS.md"
+    },
+    {
+      "logicalId": "protected_major_actions_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.protected-major-actions.md"
+    },
+    {
+      "logicalId": "authorization_delegation_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md"
+    },
+    {
+      "logicalId": "four_base_decision_context_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.four-base-decision-context.md"
+    },
+    {
+      "logicalId": "capability_routing_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.capability-routing.md"
+    }
+  ]
+}

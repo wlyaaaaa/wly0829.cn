@@ -1,10 +1,9 @@
-import { modules, project, rulesSnapshot } from "./content-core.js";
 import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
-import { skills } from "./content-skills.js";
+import { projectCatalog, rulesSnapshot, skills } from "./site-content.js";
 
 const ruleSearchAliases = {
-  protected_major_actions_contract: ["candidate 不能冒充 active", "草稿规则不能冒充当前规则", "候选待发布时继续旧活动规则", "候选规则是不是已经生效了", "候选规则是否生效"],
+  protected_major_actions_contract: ["dirty source 不能冒充 current release", "current E rules 怎么验证", "C盘规则为什么不能阻塞spawn", "旧Publisher为什么退役", "五份规则的 ruleset 是什么", "candidate 不能冒充 active"],
   authorization_delegation_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "谁可以修改这个项目"],
   four_base_decision_context_contract: ["这个事实应该去哪里查", "仓库事实和机器事实分别谁负责"],
   capability_routing_contract: ["什么时候开子代理", "应该用哪个工具或 Skill", "模型怎么选择能力"]
@@ -17,17 +16,25 @@ const skillSearchAliases = {
   "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
 };
 
-export const globalSearchEntries = [
+const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
   {
     type: "项目",
-    title: ".agents 总览",
+    title: `${project.title} · 总览`,
     detail: project.summary,
-    href: "/projects/agents",
+    href: project.route,
     search: [
       project.summary,
+      project.status || "",
+      project.why,
+      project.plainExample,
+      project.result,
+      ...Object.values(project.readerStates || {}),
       ...project.responsibilities,
       ...project.exclusions,
       ...project.glossary.flatMap((item) => [item.term, item.meaning]),
+      ...(project.currentState?.facts || []),
+      ...(project.currentState?.gaps || []),
+      project.currentState?.label || "",
       ...project.components.flatMap((item) => [item.name, item.responsibility, item.implementation]),
       ...project.usageExamples.flatMap((item) => [item.ask, item.effect]),
       ...project.evidenceLayers.flatMap((item) => [item.layer, item.proves, item.doesNotProve]),
@@ -38,19 +45,31 @@ export const globalSearchEntries = [
   ...modules.map((module) => ({
     type: "项目模块",
     title: module.title,
-    detail: module.teaser,
-    href: `/projects/agents/${module.slug}`,
+    detail: `${project.title}｜${module.teaser}`,
+    href: `${project.route}/${module.slug}`,
     search: [
+      project.title,
+      module.status,
       module.problem,
+      module.why,
+      module.example,
+      module.result,
+      ...Object.values(module.readerStates || {}),
+      ...module.decisionImpact,
       ...module.implementation,
       ...module.flow,
       ...module.boundaries,
       ...module.concepts.flatMap((item) => [item.term, item.explanation]),
       ...module.failures.flatMap((item) => [item.condition, item.response]),
       ...module.sources.flatMap((item) => [item.path, item.role]),
-      ...module.verification
+      ...module.verification,
+      module.relation
     ].join(" ")
-  })),
+  }))
+]);
+
+export const globalSearchEntries = [
+  ...projectSearchEntries,
   ...rulesSnapshot.rules.map((rule) => {
     const guide = ruleGuides[rule.logicalId];
     return {
@@ -62,6 +81,9 @@ export const globalSearchEntries = [
         rule.logicalId,
         rule.purpose,
         rule.plainLanguage,
+        rule.why,
+        rule.example,
+        rule.result,
         ...rule.decisions,
         ...rule.allowed,
         ...rule.forbidden,
@@ -86,6 +108,9 @@ export const globalSearchEntries = [
         item.maturity,
         item.summary,
         outcome.value,
+        outcome.why,
+        outcome.example,
+        outcome.result,
         ...outcome.changes,
         ...item.useWhen,
         ...item.avoidWhen,
@@ -94,10 +119,13 @@ export const globalSearchEntries = [
         ...item.flow,
         item.sourceState,
         item.installState,
+        item.transactionState,
         item.currentTaskState,
         item.freshTaskState,
         item.endToEndState,
         item.tests,
+        item.evidenceSourceCommit,
+        item.supplyEvidenceCommand,
         ...(skillSearchAliases[item.slug] || []),
         ...guide.glossary.flat(),
         ...guide.failures.flat()

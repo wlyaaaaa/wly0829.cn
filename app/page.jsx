@@ -10,7 +10,6 @@ import {
   List,
   LockKey,
   MagnifyingGlass,
-  ShieldCheck,
   Warning,
   Wrench,
   X
@@ -19,11 +18,11 @@ import { SiBilibili, SiGithub, SiX } from "@icons-pack/react-simple-icons";
 import {
   excludedSkills,
   canonicalUrl,
-  modules,
   normalizePath,
   panelSnapshot,
   primaryNav,
-  project,
+  projectCatalog,
+  projectEntryForPath,
   routeMeta,
   rulesSnapshot,
   site,
@@ -33,6 +32,7 @@ import {
 import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { searchPanel } from "./search.js";
+import { createTermAnnotator } from "./term-annotator.js";
 
 function useLocationState() {
   const [location, setLocation] = useState(() => ({
@@ -101,7 +101,7 @@ function GlobalSearch() {
     >
       <label>
         <MagnifyingGlass size={18} aria-hidden="true" />
-        <span className="visually-hidden">搜索项目、规则和 Skills</span>
+        <span className="visually-hidden">搜索项目、规则和 Skills（能力）</span>
         <input
           value={query}
           onChange={(event) => { setQuery(event.target.value); setOpen(true); }}
@@ -313,68 +313,204 @@ function StatusPill({ status, children }) {
   return <span className={`status-pill status-${status}`}>{children}</span>;
 }
 
-function skillStatusTone(status) {
-  const value = String(status);
-  if (/受阻|不可用|失败|BLOCK|未验证|未知/i.test(value)) return "repair";
-  if (/通过|在线|已安装|已配置|受保护/i.test(value)) return "pass";
+function moduleStatusTone(module) {
+  if (module.statusTone === "problem" || module.statusTone === "mixed") return "repair";
+  if (module.statusTone === "unknown") return "unknown";
+  if (module.statusTone === "pass") return "pass";
   return "unknown";
 }
 
+function ThreeStateSummary({ pass, problem, unavailable }) {
+  return (
+    <div className="outcome-state-grid">
+      <article><h3>正常时</h3><p>{annotateTerms(pass)}</p></article>
+      <article><h3>发现问题时</h3><p>{annotateTerms(problem)}</p></article>
+      <article><h3>入口不可用或证据不足时</h3><p>{annotateTerms(unavailable)}</p></article>
+    </div>
+  );
+}
+
+function skillStatusTone(item) {
+  if (item.statusTone === "problem") return "repair";
+  if (["pass", "mixed", "unknown"].includes(item.statusTone)) return item.statusTone;
+  return "unknown";
+}
+
+function authorityStatusText(status) {
+  if (status === "e_rules_active_verified") return "e_rules_active_verified（E 规则已验证）";
+  if (status === "candidate_pending") return "candidate_pending（候选规则待发布）";
+  if (status === "active_verified") return "active_verified（活动规则已验证）";
+  if (status === "candidate_unavailable") return "candidate_unavailable（候选规则暂不可取得）";
+  return annotateTerms(status);
+}
+
+function observedTimeText(value) {
+  if (!/^\d{4}-\d{2}-\d{2}T/.test(String(value))) return String(value);
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  const parts = new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day} ${values.hour}:${values.minute}（中国时间）`;
+}
+
+function ObservedTime({ value }) {
+  const iso = /^\d{4}-\d{2}-\d{2}T/.test(String(value));
+  return <span className="observed-time" title={iso ? String(value) : undefined}>{iso ? <time dateTime={value}>{observedTimeText(value)}</time> : observedTimeText(value)}</span>;
+}
+
+function projectCardMetrics(entry, moduleCount) {
+  if (entry.kind === "agents") {
+    return [
+      ["E 规则代号", panelSnapshot.authority.releaseId],
+      ["现行规则", rulesSnapshot.rules.length],
+      ["Skills（能力入口）", skills.length],
+      ["模块（含总览）", moduleCount]
+    ];
+  }
+  return [
+    ["已确认事实", entry.project.currentState?.facts?.length || 0],
+    ["当前缺口", entry.project.currentState?.gaps?.length || 0],
+    ["证据层", entry.project.evidenceLayers.length],
+    ["模块（含总览）", moduleCount]
+  ];
+}
+
+function publicRepositoryUrl(entry) {
+  return entry.registration.source.visibility === "PUBLIC"
+    ? `https://github.com/${entry.registration.source.repo}`
+    : null;
+}
+
+function projectCardState(entry) {
+  if (entry.kind === "agents") {
+    const unresolved = panelSnapshot.validation.rows.filter((item) => item.status !== "pass").length;
+    return {
+      tone: unresolved ? "repair" : "pass",
+      label: unresolved ? `基础验证还有 ${unresolved} 项未闭合` : panelSnapshot.authority.statusLabel,
+      observedAt: panelSnapshot.observedAt
+    };
+  }
+  const gapCount = entry.project.currentState?.gaps?.length || 0;
+  return {
+    tone: moduleStatusTone(entry.project),
+    label: gapCount ? `${gapCount} 项当前缺口，详见总览` : "当前状态已核对",
+    observedAt: entry.project.currentState?.observedAt || "当前内容包"
+  };
+}
+
+function ProjectCard({ entry }) {
+  const { project: currentProject, modules: currentModules } = entry;
+  const moduleOptions = [
+    { label: "总览", href: currentProject.route },
+    ...currentModules.map((item) => ({ label: item.shortTitle, href: `${currentProject.route}/${item.slug}` }))
+  ];
+  const moduleRows = Array.from(
+    { length: Math.ceil(moduleOptions.length / 7) },
+    (_, index) => moduleOptions.slice(index * 7, index * 7 + 7)
+  );
+  const metrics = projectCardMetrics(entry, moduleOptions.length);
+  const state = projectCardState(entry);
+  const headingId = `${currentProject.slug}-card-title`;
+  const repositoryUrl = publicRepositoryUrl(entry);
+
+  return (
+    <article className="project-card-shell">
+      {repositoryUrl ? (
+        <a className="project-visibility project-repository-button" href={repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={`打开 ${currentProject.title} 的公开 GitHub 仓库`}>
+          <SiGithub size={15} aria-hidden="true" /><span>GitHub 仓库</span>
+        </a>
+      ) : (
+        <span className="project-visibility project-private-status"><LockKey size={15} aria-hidden="true" />{currentProject.visibility}</span>
+      )}
+      <SiteLink className="featured-project" href={currentProject.route} aria-labelledby={headingId}>
+        <span className="project-index" aria-hidden="true"><strong>{String(currentProject.order).padStart(2, "0")}</strong><span /></span>
+        <div className="project-card-body">
+          <div className="project-card-header">
+            <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id={headingId}>{currentProject.title}</h2></div>
+          </div>
+          <p className="project-summary">{annotateTerms(currentProject.summary)}</p>
+          <dl className="project-metrics">
+            {metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+          </dl>
+          <div className="project-card-foot">
+            <StatusPill status={state.tone}>{annotateTerms(state.label)}</StatusPill>
+            <ObservedTime value={state.observedAt} />
+            <ArrowRight size={18} aria-hidden="true" />
+          </div>
+        </div>
+      </SiteLink>
+      <nav className="project-module-links" aria-label={`${currentProject.title} 模块入口`}>
+        <span>模块</span>
+        <div className="project-module-link-rows">{moduleRows.map((row, rowIndex) => (
+          <div className="project-module-link-row" style={{ "--module-count": row.length }} key={`${currentProject.slug}-module-row-${rowIndex}`}>
+            {row.map((item) => <SiteLink className={item.href === currentProject.route ? "is-default" : undefined} href={item.href} key={item.href}>{annotateTerms(item.label)}</SiteLink>)}
+          </div>
+        ))}</div>
+      </nav>
+    </article>
+  );
+}
+
 function HomePage() {
-  const unresolved = panelSnapshot.validation.rows.filter((item) => item.status !== "pass").length;
   return (
     <div className="page-frame home-page">
       <h1 className="visually-hidden">个人项目</h1>
       <div className="project-grid">
-        <SiteLink className="featured-project" href={project.route} aria-labelledby="agents-card-title">
-          <span className="project-index" aria-hidden="true"><strong>01</strong><span /></span>
-          <div className="project-card-body">
-            <div className="project-card-header">
-              <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id="agents-card-title">{project.title}</h2></div>
-              <span className="project-visibility"><LockKey size={15} aria-hidden="true" />{project.visibility}</span>
-            </div>
-            <p className="project-summary">{project.summary}</p>
-            <dl className="project-metrics">
-              <div><dt>活动代际</dt><dd>{panelSnapshot.authority.generation}</dd></div>
-              <div><dt>现行规则</dt><dd>{rulesSnapshot.rules.length}</dd></div>
-              <div><dt>面板收录 Skills</dt><dd>{skills.length}</dd></div>
-              <div><dt>基础矩阵待闭合</dt><dd>{unresolved}</dd></div>
-            </dl>
-            <div className="project-card-foot">
-              <StatusPill status="pass">{panelSnapshot.authority.statusLabel}</StatusPill>
-              <span>{panelSnapshot.observedAt}</span>
-              <ArrowRight size={18} aria-hidden="true" />
-            </div>
-          </div>
-        </SiteLink>
+        {projectCatalog.map((entry) => <ProjectCard entry={entry} key={entry.project.slug} />)}
       </div>
     </div>
   );
 }
 
-function ProjectHero() {
+function projectKicker(kind) {
+  if (kind === "agents") return "个人 AI（人工智能）工作控制项目";
+  if (kind === "pcconfig") return "电脑配置、运行与恢复控制面";
+  if (kind === "github-index") return "Git 与 GitHub 仓库事实控制面";
+  if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
+  return "个人项目";
+}
+
+function ProjectHero({ entry }) {
+  const { project: currentProject } = entry;
+  const isAgents = entry.kind === "agents";
+  const repositoryUrl = publicRepositoryUrl(entry);
   return (
     <>
-      <Breadcrumbs items={[{ label: "项目", href: "/" }, { label: ".agents" }]} />
+      <Breadcrumbs items={[{ label: "项目", href: "/" }, { label: currentProject.title }]} />
       <section className="project-hero">
         <div>
-          <p className="section-kicker">个人智能体控制面</p>
-          <h1><span className="title-accent" aria-hidden="true" />.agents</h1>
-          <p className="project-lead">{project.summary}</p>
+          <p className="section-kicker">{projectKicker(entry.kind)}</p>
+          <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
+          <p className="project-lead">{annotateTerms(currentProject.summary)}</p>
+          {currentProject.heroFacts?.length ? (
+            <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
+              {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{annotateTerms(fact.label)}</dt><dd>{annotateTerms(fact.value)}</dd></div>)}
+            </dl>
+          ) : null}
         </div>
         <aside className="snapshot-card" aria-label="当前快照">
           <span className="snapshot-label">当前快照</span>
-          <strong>Generation {panelSnapshot.authority.generation}</strong>
-          <span>{panelSnapshot.authority.statusLabel}</span>
-          <span>{panelSnapshot.observedAt}</span>
-          <span>{project.repositoryNote}</span>
+          <strong>{isAgents ? `E rules（E 规则） ${panelSnapshot.authority.releaseId}` : annotateTerms(currentProject.currentState.label)}</strong>
+          {isAgents ? <span>{panelSnapshot.authority.statusLabel} · previous={panelSnapshot.authority.previous?.release_id || "无"}</span> : <span>已确认事实 {currentProject.currentState.facts.length} / 当前缺口 {currentProject.currentState.gaps.length}</span>}
+          <ObservedTime value={isAgents ? panelSnapshot.observedAt : currentProject.currentState.observedAt} />
+          <span>{currentProject.repositoryNote}</span>
+          {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
       </section>
     </>
   );
 }
 
-function ProjectNav({ current }) {
+function ProjectNav({ entry, current }) {
+  const { project: currentProject, modules: currentModules } = entry;
   const navigationRef = useRef(null);
 
   useEffect(() => {
@@ -386,18 +522,18 @@ function ProjectNav({ current }) {
     } else {
       navigation.scrollTop = Math.max(0, selected.offsetTop - 8);
     }
-  }, [current]);
+  }, [current, currentProject.route]);
 
   return (
-    <nav className="project-navigation" aria-label=".agents 模块导航" ref={navigationRef}>
-      <SiteLink className={!current ? "is-current" : undefined} href="/projects/agents" aria-current={!current ? "page" : undefined}>总览</SiteLink>
-      {modules.map((item) => (
+    <nav className="project-navigation" aria-label={`${currentProject.title} 模块导航`} ref={navigationRef}>
+      <SiteLink className={!current ? "is-current" : undefined} href={currentProject.route} aria-current={!current ? "page" : undefined}>总览</SiteLink>
+      {currentModules.map((item) => (
         <SiteLink
           className={current === item.slug ? "is-current" : undefined}
-          href={`/projects/agents/${item.slug}`}
+          href={`${currentProject.route}/${item.slug}`}
           key={item.slug}
           aria-current={current === item.slug ? "page" : undefined}
-        >{item.shortTitle}</SiteLink>
+        >{annotateTerms(item.shortTitle)}</SiteLink>
       ))}
     </nav>
   );
@@ -435,114 +571,86 @@ function ValidationMatrix({ compact = false }) {
   );
 }
 
-function ProjectOverview() {
+function ProjectCurrentState({ entry }) {
+  if (entry.kind === "agents") {
+    return (
+      <dl className="fact-grid">
+        <div><dt>仓库</dt><dd>{panelSnapshot.repositoryVisibility} / {annotateTerms(panelSnapshot.sourceBranch)}<small>来自项目 Registry 登记；GitHub 实时可见性仍需 Git Owner 单独回读</small></dd></div>
+        <div><dt>源提交</dt><dd><code>{panelSnapshot.sourceCommit.slice(0, 12)}</code></dd></div>
+        <div><dt>同步状态</dt><dd>{annotateTerms(panelSnapshot.sourceSync)}</dd></div>
+        <div><dt>活动 E 规则</dt><dd>{authorityStatusText(panelSnapshot.authority.status)} / {panelSnapshot.authority.releaseId} / pointer revision {panelSnapshot.authority.pointerRevision}</dd></div>
+        <div><dt>规则身份</dt><dd><code>{panelSnapshot.authority.gitCommit.slice(0, 12)}</code><small>ruleset {panelSnapshot.authority.rulesetSha256}</small></dd></div>
+        <div><dt>前一代</dt><dd>{panelSnapshot.authority.previous?.release_id || "无"}<small>{panelSnapshot.authority.previous?.git_commit?.slice(0, 12) || "无 previous commit"}</small></dd></div>
+        <div><dt>源码与 release</dt><dd>{panelSnapshot.authority.sourceMatchesRelease ? "五份 canonical source 与活动 release 一致" : `当前 source 有 ${panelSnapshot.sourceDirtyCount || 0} 项未激活施工；活动规则仍是 frozen ${panelSnapshot.authority.releaseId}`}</dd></div>
+        <div><dt>Skills（能力入口）</dt><dd>面板收录 {skills.length} / 当前供应 {panelSnapshot.skills.activeInstallIntent}</dd></div>
+      </dl>
+    );
+  }
+  const state = entry.project.currentState;
+  return (
+    <>
+      <div className="project-state-heading"><StatusPill status={moduleStatusTone(entry.project)}>{annotateTerms(state.label)}</StatusPill><ObservedTime value={state.observedAt} /></div>
+      <div className="split-section project-state-split">
+        <div><h3>已确认事实</h3><ul className="plain-list">{state.facts.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
+        <div><h3>当前缺口</h3><ul className="plain-list">{state.gaps.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
+      </div>
+    </>
+  );
+}
+
+function ProjectOverview({ entry }) {
+  const { project: currentProject, modules: currentModules } = entry;
   return (
     <article className="document-content overview-content">
       <section className="document-section document-section-first">
-        <p className="section-kicker">现实定位</p>
-        <h2>不是 Prompt 集合，而是个人 AI 工作的规则、授权和能力控制面。</h2>
-        <p>它把“模型能不能做”进一步拆成：答案去哪里取真相、谁可以写、什么动作已经获得授权、失败后怎样恢复、哪一层证据才算完成。</p>
+        <p className="section-kicker">先说人话</p>
+        {entry.kind === "agents" ? <><h2>它负责让个人 AI（人工智能）工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI（人工智能）查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : <><h2>这个项目实际解决什么</h2><p>{annotateTerms(currentProject.summary)}</p></>}
+        <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{annotateTerms(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(currentProject.result)}</p></article></div>
+        <ThreeStateSummary {...currentProject.readerStates} />
       </section>
 
       <section className="document-section split-section">
-        <div><h2>它负责</h2><ul className="plain-list">{project.responsibilities.map((item) => <li key={item}>{item}</li>)}</ul></div>
-        <div><h2>它不负责</h2><ul className="plain-list">{project.exclusions.map((item) => <li key={item}>{item}</li>)}</ul></div>
+        <div><h2>它负责</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
+        <div><h2>它不负责</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
       </section>
 
-      <section className="document-section">
-        <h2>当前状态</h2>
-        <dl className="fact-grid">
-          <div><dt>仓库</dt><dd>{panelSnapshot.repositoryVisibility} / {panelSnapshot.sourceBranch}</dd></div>
-          <div><dt>源提交</dt><dd><code>{panelSnapshot.sourceCommit.slice(0, 12)}</code></dd></div>
-          <div><dt>活动规则</dt><dd>{panelSnapshot.authority.status} / {panelSnapshot.authority.statusLabel} / 第 {panelSnapshot.authority.generation} 代</dd></div>
-          <div><dt>Candidate</dt><dd>{panelSnapshot.authority.candidate}</dd></div>
-          <div><dt>生产适配器</dt><dd>{panelSnapshot.authority.productionActivation ? "已激活" : "未激活"}</dd></div>
-          <div><dt>Skills</dt><dd>面板收录 {skills.length} / 当前供应 {panelSnapshot.skills.activeInstallIntent}</dd></div>
-        </dl>
-      </section>
+      <section className="document-section"><h2>当前状态</h2><ProjectCurrentState entry={entry} /></section>
 
-      <section className="document-section">
-        <h2>先把项目里的词讲清楚</h2>
-        <p>看板后面会直接使用这些英文技术词；这里先给出中文含义。相同术语在规则和 Skill 页面保持同一解释。</p>
-        <dl className="project-glossary-grid">
-          {project.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}
-        </dl>
+      <section className="document-section compact-terms">
+        <h2>本页用到的名词</h2>
+        <p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} 项目里的准确含义。</p>
+        <dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl>
       </section>
 
       <section className="document-section">
         <h2>一条真实工作流</h2>
-        <ol className="number-list">
-          {project.operatingFlow.map((step, index) => (
-            <li key={step.title}><span>{index + 1}</span><div><strong>{step.title}</strong><p>{step.detail}</p></div></li>
-          ))}
-        </ol>
+        <ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{annotateTerms(step.title)}</strong><p>{annotateTerms(step.detail)}</p></div></li>)}</ol>
       </section>
 
       <section className="document-section">
         <h2>系统里实际有什么</h2>
         <p>下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。</p>
-        <div className="component-table" role="table" aria-label=".agents 当前组件">
-          {project.components.map((item, index) => (
-            <article role="row" key={item.name}>
-              <span role="cell">{String(index + 1).padStart(2, "0")}</span>
-              <div role="cell"><strong>{item.name}</strong><p>{item.responsibility}</p></div>
-              <p role="cell">{item.implementation}</p>
-            </article>
-          ))}
+        <div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>
+          {currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{annotateTerms(item.name)}</strong><p>{annotateTerms(item.responsibility)}</p></div><p role="cell">{annotateTerms(item.implementation)}</p></article>)}
         </div>
       </section>
 
-      <section className="document-section">
-        <h2>我平时怎样使用它</h2>
-        <div className="usage-table">
-          {project.usageExamples.map((item) => <article key={item.ask}><blockquote>{item.ask}</blockquote><p>{item.effect}</p></article>)}
-        </div>
-      </section>
+      <section className="document-section"><h2>我平时怎样使用它</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{item.ask}</blockquote><p>{annotateTerms(item.effect)}</p></article>)}</div></section>
 
       <section className="document-section">
-        <h2>六个模块</h2>
-        <div className="module-index">
-          {modules.map((item, index) => (
-            <SiteLink href={`/projects/agents/${item.slug}`} key={item.slug}>
-              <span className="module-number">{String(index + 1).padStart(2, "0")}</span>
-              <span className="module-index-copy"><strong>{item.title}</strong><span>{item.teaser}</span></span>
-              <ArrowRight size={18} aria-hidden="true" />
-            </SiteLink>
-          ))}
-        </div>
+        <h2>项目模块</h2>
+        <div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{annotateTerms(item.title)}</strong><span>{annotateTerms(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div>
       </section>
 
-      <section className="document-section">
-        <h2>验证不是一盏总绿灯</h2>
-        <p>{panelSnapshot.validation.summary}</p>
-        <ValidationMatrix />
-      </section>
+      {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
 
-      <section className="document-section">
-        <h2>七层证据分别证明什么</h2>
-        <div className="evidence-table">
-          {project.evidenceLayers.map((item) => <article key={item.layer}><strong>{item.layer}</strong><p><span>能证明：</span>{item.proves}</p><p><span>不能证明：</span>{item.doesNotProve}</p></article>)}
-        </div>
-      </section>
+      <section className="document-section"><h2>{currentProject.evidenceLayers.length} 层证据分别证明什么</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{annotateTerms(item.layer)}</strong><p><span>能证明：</span>{annotateTerms(item.proves)}</p><p><span>不能证明：</span>{annotateTerms(item.doesNotProve)}</p></article>)}</div></section>
 
-      <section className="document-section">
-        <h2>维护入口</h2>
-        <div className="source-list">
-          {project.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{item.name}</strong>：{item.purpose}</p></div>)}
-        </div>
-      </section>
+      <section className="document-section"><h2>维护入口</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{annotateTerms(item.name)}</strong>：{annotateTerms(item.purpose)}</p></div>)}</div></section>
 
-      <section className="document-section">
-        <h2>项目怎样演化到现在</h2>
-        <div className="evolution-timeline">
-          {project.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{item.result}</p></article>)}
-        </div>
-      </section>
+      <section className="document-section"><h2>项目怎样演化到现在</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{annotateTerms(item.result)}</p></article>)}</div></section>
 
-      <section className="document-section source-note">
-        <h2>快照怎样更新</h2>
-        <p>页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority、真实默认分支、Skill registry 和测试结果；扫描到可自动修复的问题先交给真实 Owner 修复，再生成新快照。</p>
-      </section>
+      <section className="document-section source-note"><h2>快照怎样更新</h2><p>{entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
     </article>
   );
 }
@@ -593,33 +701,192 @@ function displayTerm(term) {
 }
 
 const inlineTermTranslations = [
-  ["Production activation", "生产执行状态"],
-  ["Active generation", "活动代际"],
-  ["Candidate pending", "候选待发布"],
-  ["CoreGoalStepCapability", "单步能力"],
+  ["CoreGoalStepCapability", "单步执行能力"],
   ["CoreGoalCommitment", "目标承诺"],
+  ["Production activation", "生产执行状态"],
+  ["saved local Git project", "已保存的本地 Git 项目"],
+  ["Authorization", "用户授权"],
+  ["AuthorityHost", "活动规则权威服务"],
+  ["Active generation", "活动规则代际"],
+  ["Candidate fingerprint", "候选规则指纹"],
+  ["Candidate pending", "候选规则待发布"],
   ["Execution Owner", "施工责任"],
-  ["Registered target", "已登记目标"],
   ["External effect", "外部现实动作"],
-  ["Read-back", "正式回读"],
-  ["Fresh task", "全新任务验证"],
+  ["Recovery capsule", "恢复胶囊"],
+  ["Password Center", "密码中心"],
+  ["LocalGpuBroker", "本地 GPU 调度器"],
+  ["Speech Activity Detection", "语音活动检测"],
+  ["Windows Subsystem for Linux", "Windows 的 Linux 子系统"],
+  ["Google Workspace", "Google 办公套件"],
+  ["Health Owner", "健康资料责任源"],
+  ["VerifyRemote", "远端核验"],
+  ["Source hash", "源文件指纹"],
+  ["objective sidecar", "客观结果侧车文件"],
+  ["contact sheet", "页面总览图"],
+  ["Registered target", "已登记目标"],
+  ["User acceptance", "用户验收"],
+  ["Policy epoch", "策略代际号"],
+  ["CoreGoal", "长期目标授权"],
+  ["effect authority", "动作授权"],
+  ["highest authority", "最高权限身份"],
+  ["Secret authority", "秘密权限来源"],
+  ["authority locator", "权威原件定位记录"],
+  ["Authority descriptor", "活动权威描述符"],
+  ["fixed Authority", "固定活动规则权威"],
+  ["C Authority", "C 盘活动规则权威"],
+  ["活动 Authority", "活动规则权威"],
+  ["执行 Owner", "施工责任"],
+  ["Fact Owner", "事实责任源"],
+  ["事实 Owner", "事实责任源"],
+  ["任务 Owner", "任务责任方"],
+  ["项目 Owner", "项目责任方"],
+  ["Owner registry", "施工责任登记表"],
+  ["Git Owner", "Git 事实责任方"],
+  ["Provider Owner", "服务责任方"],
+  ["Account provider", "账号验证提供方"],
+  ["Google Workspace Provider", "Google Workspace 固定服务入口"],
+  ["Workspace Provider", "Workspace 固定服务入口"],
+  ["OAuth Provider", "OAuth 账号服务入口"],
+  ["C Provider", "C 盘固定服务入口"],
+  ["Owner Provider", "Owner 现场提供器"],
+  ["控制面 Provider", "控制面现场读取器"],
+  ["dynamic Provider", "动态现场读取器"],
+  ["Provider runtime", "服务运行环境"],
+  ["Provider config", "服务配置"],
+  ["Coordination Owner", "协调责任方"],
+  ["active generation root", "活动代际根目录"],
+  ["generation root", "代际根目录"],
+  ["repository root", "仓库根目录"],
+  ["source root", "源码根目录"],
+  ["root/child role", "根代理/子代理角色"],
+  ["root/child", "根代理/子代理"],
+  ["root agent", "根代理"],
+  ["child agent", "子代理"],
+  ["child identity", "子代理身份"],
+  ["successor", "后继目标或任务"],
+  ["residual", "未完成义务"],
+  ["checkpoint", "续作检查点"],
+  ["ahead/behind", "领先/落后提交数"],
+  ["identity baseline", "身份基线"],
+  ["partial projection failure", "部分投影失败"],
+  ["NUL-delimited", "以空字符分隔"],
+  ["git status", "Git 状态命令"],
+  ["node id", "稳定节点编号"],
+  ["diverged", "本地与远端双向分叉"],
+  ["detached", "分离提交状态"],
+  ["ignored", "已被版本控制忽略"],
+  ["provenance", "来源说明"],
+  ["nullable", "可为空"],
+  ["origin", "默认远端名称"],
+  ["main", "默认主分支"],
+  ["commit", "提交"],
+  ["refresh", "刷新"],
+  ["fetch", "拉取远端引用"],
+  ["bytes", "字节数"],
+  ["Hook", "提交前钩子"],
+  ["execution limit", "执行时限"],
+  ["access token", "访问令牌"],
+  ["refresh token", "刷新令牌"],
+  ["GitHub token", "GitHub 访问令牌"],
+  ["admin token", "管理员权限令牌"],
+  ["Medium token", "中等完整性权限令牌"],
+  ["OS token", "操作系统权限令牌"],
+  ["material refresh", "实质变化触发的刷新"],
+  ["material event", "会让看板失真的实质变化事件"],
+  ["projectless", "无项目任务"],
+  ["system/developer/platform", "系统指令、开发者指令和平台规则"],
+  ["system/developer", "系统指令和开发者指令"],
+  ["PreToolUse", "工具执行前复核"],
+  ["TOCTOU", "检查到执行之间的状态漂移"],
+  ["nonce", "一次性随机凭据"],
+  ["principal", "受验证的执行主体"],
+  ["runtime", "运行环境"],
+  ["StepCapability", "单步执行能力"],
+  ["Install intent", "安装意图"],
+  ["Canonical source", "唯一维护源"],
   ["Source Owner", "来源项目责任人"],
   ["Material change", "实质变化"],
   ["Impact candidate", "影响候选"],
-  ["saved local Git project", "已保存本地 Git 项目"],
-  ["live evidence", "实时证据"],
-  ["current task", "当前任务"],
-  ["recovery capsule", "恢复胶囊"],
-  ["canonical source", "唯一维护源"],
-  ["install intent", "安装意图"],
-  ["objective sidecar", "客观结果侧车"],
-  ["held-out attribution", "留出样本归属"],
-  ["blind fill", "盲填"],
+  ["Evidence layer", "证据层"],
+  ["Durable state", "耐久状态"],
+  ["Fresh task", "全新任务验证"],
+  ["Read-back", "正式回读"],
+  ["Fail closed", "失败关闭"],
+  ["Attestation", "证明声明"],
+  ["Manifest", "清单"],
+  ["Junction", "目录联接"],
+  ["Backend", "模型后端"],
+  ["Broker", "代理服务"],
+  ["Vault", "加密保险库"],
+  ["consumer", "使用方"],
+  ["NDJSON", "逐行 JSON 数据格式"],
+  ["WSL", "Windows 的 Linux 子系统"],
+  ["VAD", "语音活动检测"],
+  ["CLI", "命令行工具"],
+  ["TDD", "测试驱动开发"],
+  ["shim", "受保护入口垫片"],
+  ["Adapter", "执行适配器"],
+  ["Ledger", "追加式账本"],
+  ["Anchor", "活动锚点"],
+  ["Catalog", "目录"],
+  ["Validator", "校验器"],
+  ["validation", "验证"],
+  ["tokenizer", "分词器"],
+  ["encoding", "分词编码"],
+  ["hardlink", "硬链接"],
+  ["locator", "原件定位记录"],
+  ["sidecar", "侧车文件"],
+  ["WhatIf", "只读预演"],
+  ["Doctor", "环境体检"],
+  ["Plan", "执行计划"],
+  ["Apply", "执行修复"],
+  ["Verify", "验证"],
+  ["Markdown", "轻量标记文本"],
+  ["PDF", "便携文档格式"],
+  ["DPI", "图像分辨率"],
+  ["OAuth", "账号授权协议"],
+  ["API", "程序接口"],
+  ["CURRENT", "当前状态"],
+  ["transaction", "事务"],
+  ["visibility", "公开或私有属性"],
+  ["metadata", "元数据"],
+  ["registry", "登记清单"],
+  ["candidate-only", "仅候选"],
+  ["generation", "代际"],
+  ["admission", "仓库准入检查"],
+  ["dirty work", "未提交改动"],
   ["fast-forward", "快进推送"],
   ["worktree", "Git 工作树"],
   ["upstream", "上游分支"],
+  ["checkout", "本地检出目录"],
+  ["remote", "远端仓库"],
+  ["branch", "分支"],
+  ["freshness", "证据新鲜度"],
+  ["current task", "当前任务"],
+  ["live evidence", "实时证据"],
+  ["install", "安装"],
+  ["publish", "发布"],
+  ["effect", "外部现实动作"],
+  ["receipt", "执行回执"],
+  ["schema", "数据结构"],
+  ["usage", "真实用量"],
+  ["backup", "备份"],
+  ["hash", "内容指纹"],
+  ["Agent", "智能体"],
+  ["Skills", "能力入口"],
+  ["Plugins", "插件包"],
+  ["Skill", "能力入口"],
+  ["Plugin", "插件包"],
+  ["Prompt", "提示词"],
+  ["Git", "版本管理系统"],
+  ["PCConfig", "本机配置控制面"],
+  ["MVP", "最小可用版本"],
+  ["AI", "人工智能"],
+  ["PUBLIC", "公开"],
+  ["PRIVATE", "私有"],
+  ["held-out attribution", "留出样本归属"],
+  ["blind fill", "盲填"],
   ["fallback", "后备路线"],
-  ["contact sheet", "页面总览图"],
   ["raw bytes", "原始字节"],
   ["repair plan", "修复计划"],
   ["cache miss", "缓存未命中"],
@@ -629,39 +896,16 @@ const inlineTermTranslations = [
   ["Timeout", "等待超时"],
   ["objective", "客观状态"],
   ["containment", "隔离处置"],
-  ["candidate-only", "仅候选"],
-  ["candidate", "候选规则"],
-  ["generation", "代际"],
-  ["projection", "规则投影"],
-  ["Provider", "固定服务入口"],
-  ["admission", "仓库准入结果"],
-  ["dirty work", "未提交改动"],
-  ["metadata", "元数据"],
-  ["registry", "登记清单"],
-  ["receipt", "执行回执"],
   ["route", "处理路线"],
   ["job", "任务记录"],
-  ["scope", "范围"],
   ["effort", "思考等级"],
   ["spawn", "创建子代理"],
-  ["Root", "根代理"],
-  ["Child", "子代理"],
   ["E2E", "端到端验证"],
   ["ASR", "自动语音识别"],
   ["OCR", "光学字符识别"]
 ].sort((left, right) => right[0].length - left[0].length);
 
-function annotateTerms(text) {
-  let result = String(text);
-  for (const [term, translation] of inlineTermTranslations) {
-    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const startsWithLatin = /^[A-Za-z0-9]/.test(term);
-    const endsWithLatin = /[A-Za-z0-9]$/.test(term);
-    const expression = new RegExp(`${startsWithLatin ? "(?<![A-Za-z0-9_-])" : ""}${escaped}${endsWithLatin ? "(?![A-Za-z0-9_-]|（)" : "(?!（)"}`, "gi");
-    result = result.replace(expression, (match) => `${match}（${translation}）`);
-  }
-  return result;
-}
+const annotateTerms = createTermAnnotator(inlineTermTranslations);
 
 function maturityMeaning(value) {
   if (value === "A") return "稳定";
@@ -670,40 +914,42 @@ function maturityMeaning(value) {
   return "按详情判断";
 }
 
-function ModuleDetail({ module }) {
-  const index = modules.findIndex((item) => item.slug === module.slug);
-  const previous = modules[index - 1];
-  const next = modules[index + 1];
+function ModuleDetail({ entry, module }) {
+  const { project: currentProject, modules: currentModules } = entry;
+  const index = currentModules.findIndex((item) => item.slug === module.slug);
+  const previous = currentModules[index - 1];
+  const next = currentModules[index + 1];
   return (
     <article className="document-content module-detail">
       <header className="module-heading">
         <p className="section-kicker">模块 {String(index + 1).padStart(2, "0")}</p>
-        <h2>{module.title}</h2>
-        <p>{annotateTerms(module.teaser)}</p>
-        <StatusPill status={module.status.includes("修复") ? "repair" : "pass"}>{module.status}</StatusPill>
+        <h2>{annotateTerms(module.title)}</h2>
+        <p>{annotateTerms(module.value)}</p>
+        <StatusPill status={moduleStatusTone(module)}>{annotateTerms(module.status)}</StatusPill>
       </header>
-      <section className="module-outcome"><p className="section-kicker">这个模块有什么意义</p><h2>它会改变哪些实际操作</h2><p>{annotateTerms(module.value)}</p><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{annotateTerms(change)}</p></article>)}</div></section>
+      <section className="module-outcome"><p className="section-kicker">先说人话</p><h2>为什么需要、怎样使用、最后得到什么</h2><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(module.why)}</p></article><article><h3>举个实际例子</h3><p>{annotateTerms(module.example)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(module.result)}</p></article></div><ThreeStateSummary {...module.readerStates} /><h3>用上以后，实际会这样处理</h3><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{annotateTerms(change)}</p></article>)}</div></section>
+      <section className="document-section compact-terms"><h2>本模块用到的名词</h2><dl className="definition-list">{module.concepts.map((item) => <div key={item.term}><dt>{displayTerm(item.term)}</dt><dd>{annotateTerms(item.explanation)}</dd></div>)}</dl></section>
+      <section className="document-section"><h2>专业定义</h2><p>{annotateTerms(module.teaser)}</p></section>
       <section className="problem-callout"><p className="section-kicker">解决什么</p><p>{annotateTerms(module.problem)}</p></section>
       <section className="document-section"><h2>当前怎样实现</h2><StringList items={module.implementation.map(annotateTerms)} /></section>
       <section className="document-section"><h2>执行流程</h2><ol className="number-list compact-list">{module.flow.map((item, flowIndex) => <li key={item}><span>{flowIndex + 1}</span><div><p>{annotateTerms(item)}</p></div></li>)}</ol></section>
-      <section className="document-section"><h2>关键概念</h2><dl className="definition-list">{module.concepts.map((item) => <div key={item.term}><dt>{displayTerm(item.term)}</dt><dd>{item.explanation}</dd></div>)}</dl></section>
-      <section className="document-section split-section"><div><h2>边界</h2><StringList items={module.boundaries} /></div><div><h2>失败与恢复</h2><dl className="failure-list">{module.failures.map((item) => <div key={item.condition}><dt>{item.condition}</dt><dd>{item.response}</dd></div>)}</dl></div></section>
-      <section className="document-section"><h2>真实入口</h2><div className="source-list">{module.sources.map((source) => <div key={source.path}><code>{source.path}</code><p>{source.role}</p></div>)}</div></section>
-      <section className="document-section"><h2>如何验证</h2><StringList items={module.verification} /></section>
-      <section className="document-section"><h2>与其他模块的关系</h2><p>{module.relation}</p></section>
+      <section className="document-section split-section"><div><h2>边界</h2><StringList items={module.boundaries.map(annotateTerms)} /></div><div><h2>失败与恢复</h2><dl className="failure-list">{module.failures.map((item) => <div key={item.condition}><dt>{annotateTerms(item.condition)}</dt><dd>{annotateTerms(item.response)}</dd></div>)}</dl></div></section>
+      <section className="document-section"><h2>真实入口</h2><div className="source-list">{module.sources.map((source) => <div key={source.path}><code>{source.path}</code><p>{annotateTerms(source.role)}</p></div>)}</div></section>
+      <section className="document-section"><h2>如何验证</h2><StringList items={module.verification.map(annotateTerms)} /></section>
+      <section className="document-section"><h2>与其他模块的关系</h2><p>{annotateTerms(module.relation)}</p></section>
       <nav className="document-pagination" aria-label="模块前后导航">
-        {previous ? <SiteLink href={`/projects/agents/${previous.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span><small>上一个模块</small>{previous.shortTitle}</span></SiteLink> : <span />}
-        {next ? <SiteLink href={`/projects/agents/${next.slug}`}><span><small>下一个模块</small>{next.shortTitle}</span><ArrowRight size={18} aria-hidden="true" /></SiteLink> : null}
+        {previous ? <SiteLink href={`${currentProject.route}/${previous.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span><small>上一个模块</small>{previous.shortTitle}</span></SiteLink> : <span />}
+        {next ? <SiteLink href={`${currentProject.route}/${next.slug}`}><span><small>下一个模块</small>{next.shortTitle}</span><ArrowRight size={18} aria-hidden="true" /></SiteLink> : null}
       </nav>
     </article>
   );
 }
 
-function ProjectPage({ module }) {
+function ProjectPage({ entry, module }) {
   return (
     <div className="page-frame project-page">
-      <ProjectHero />
-      <div className="project-layout"><ProjectNav current={module?.slug} />{module ? <ModuleDetail module={module} /> : <ProjectOverview />}</div>
+      <ProjectHero entry={entry} />
+      <div className="project-layout"><ProjectNav entry={entry} current={module?.slug} />{module ? <ModuleDetail entry={entry} module={module} /> : <ProjectOverview entry={entry} />}</div>
     </div>
   );
 }
@@ -726,7 +972,7 @@ function RuleSelector({ selectedId, onSelect }) {
 
   return (
     <aside className="rule-selector-panel">
-      <div className="rule-selector-heading"><span>5 份现行规则</span><small>同一活动代际</small></div>
+      <div className="rule-selector-heading"><span>5 份现行规则</span><small>同一 {rulesSnapshot.releaseId} release（发布版本）</small></div>
       <label className="rule-mobile-select">
         <span>选择规则</span>
         <select value={selectedId} onChange={(event) => onSelect(event.target.value)}>
@@ -760,49 +1006,46 @@ function RuleDetail({ rule }) {
   const index = rulesSnapshot.rules.findIndex((item) => item.logicalId === rule.logicalId);
   const guide = ruleGuides[rule.logicalId];
   const sourceBinding = panelSnapshot.ruleBinding.find((item) => item.logicalId === rule.logicalId);
-  const candidateSourceDescription = rulesSnapshot.candidateUnavailable
-    ? "Canonical candidate source（候选源码）当前不可取得；活动投影仍可正常读取。"
-    : sourceBinding?.candidateMatchesActive
-      ? "Canonical candidate source（候选源码）：这一份当前与活动投影逐字节一致；全局仍可因其他规则不同而处于 candidate pending。"
-      : rulesSnapshot.candidatePending
-        ? "Canonical candidate source（候选源码）：这一份当前与活动投影不同，属于待发布候选；本页没有把候选冒充成现行规则。"
-        : "Canonical candidate source（候选源码）与活动投影的逐文件关系尚未验证。";
+  const sourceDescription = sourceBinding?.sourceMatchesRelease
+    ? `Canonical source（规范源码）当前与 ${rulesSnapshot.releaseId} release 逐字节一致。`
+    : `Canonical source（规范源码）当前属于未激活施工；活动正文仍固定为 ${rulesSnapshot.releaseId} release。`;
   return (
     <article className="rule-detail" role="tabpanel" id="rule-panel" aria-labelledby={`rule-tab-${rule.logicalId}`}>
       <header className="rule-detail-heading"><span className="rule-order">{String(index + 1).padStart(2, "0")}</span><div><p className="section-kicker">{rule.logicalId}</p><h2>{rule.title}</h2><p>{rule.question}</p></div></header>
-      <section className="rule-plain-language"><p className="section-kicker">先看懂</p><p>{rule.plainLanguage}</p></section>
+      <section className="rule-plain-language"><p className="section-kicker">先说人话</p><h3>这条规则到底管什么</h3><p>{annotateTerms(rule.plainLanguage)}</p><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(rule.why)}</p></article><article><h3>举个实际例子</h3><p>{annotateTerms(rule.example)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(rule.result)}</p></article></div></section>
+      <ThreeStateSummary {...rule.readerStates} />
+      <section className="rule-glossary compact-terms"><h3>这条规则用到的名词</h3><dl className="definition-list">{guide.glossary.map(([term, explanation]) => <div key={term}><dt>{displayTerm(term)}</dt><dd>{annotateTerms(explanation)}</dd></div>)}</dl></section>
       <section className="rule-overview-grid">
-        <div><h3>它解决什么</h3><p>{rule.purpose}</p></div>
-        <div><h3>适用范围</h3><StringList items={rule.scope} /></div>
-        <div><h3>它负责判断什么</h3><StringList items={rule.decisions} /></div>
+        <div><h3>它解决什么</h3><p>{annotateTerms(rule.purpose)}</p></div>
+        <div><h3>适用范围</h3><StringList items={rule.scope.map(annotateTerms)} /></div>
+        <div><h3>它负责判断什么</h3><StringList items={rule.decisions.map(annotateTerms)} /></div>
       </section>
-      <section className="rule-glossary"><h3>先把术语讲清楚</h3><dl className="definition-list">{guide.glossary.map(([term, explanation]) => <div key={term}><dt>{displayTerm(term)}</dt><dd>{explanation}</dd></div>)}</dl></section>
       <section className="rule-complete-guide">
         <div className="complete-guide-heading"><p className="section-kicker">完整语义清单</p><h3>这份规则逐条写了什么</h3><p>下面不是摘要，而是按原规则结构逐项解释。每一项都说明真实约束；带“例子”的内容只是帮助理解，不会反过来创造新规则。</p></div>
         {guide.sections.map((section) => (
           <div className="guide-section" key={section.title}>
-            <header><h4>{section.title}</h4><p>{section.intro}</p></header>
+            <header><h4>{annotateTerms(section.title)}</h4><p>{annotateTerms(section.intro)}</p></header>
             <div className="guide-item-grid">
               {section.items.map((entry, entryIndex) => (
                 <article className="guide-item" key={`${section.title}-${entry.title}`}>
                   <span>{String(entryIndex + 1).padStart(2, "0")}</span>
-                  <div><h5>{entry.title}</h5><p>{entry.detail}</p>{entry.example ? <p className="guide-example"><strong>例子：</strong>{entry.example}</p> : null}</div>
+                  <div><h5>{annotateTerms(entry.title)}</h5><p>{annotateTerms(entry.detail)}</p>{entry.example ? <p className="guide-example"><strong>例子：</strong>{annotateTerms(entry.example)}</p> : null}</div>
                 </article>
               ))}
             </div>
           </div>
         ))}
       </section>
-      <section className="rule-dual-column"><div><h3>允许</h3><StringList items={rule.allowed} /></div><div><h3>禁止</h3><StringList items={rule.forbidden} /></div></section>
-      <section><h3>典型执行顺序</h3><ol className="number-list compact-list">{rule.process.map((item, processIndex) => <li key={item}><span>{processIndex + 1}</span><div><p>{item}</p></div></li>)}</ol></section>
-      <section><h3>失败关闭与恢复</h3><StringList items={rule.failure} /></section>
+      <section className="rule-dual-column"><div><h3>允许</h3><StringList items={rule.allowed.map(annotateTerms)} /></div><div><h3>禁止</h3><StringList items={rule.forbidden.map(annotateTerms)} /></div></section>
+      <section><h3>典型执行顺序</h3><ol className="number-list compact-list">{rule.process.map((item, processIndex) => <li key={item}><span>{processIndex + 1}</span><div><p>{annotateTerms(item)}</p></div></li>)}</ol></section>
+      <section><h3>失败关闭与恢复</h3><StringList items={rule.failure.map(annotateTerms)} /></section>
       <section><h3>来源、版本与关系</h3><dl className="rule-identity-grid">
-        <div><dt>Owner（责任源）</dt><dd>{rule.owner}</dd></div><div><dt>Generation（活动代际）</dt><dd>{rulesSnapshot.generation}</dd></div>
-        <div><dt>Size（大小）</dt><dd>{rule.bytes} bytes / {rule.lines} 行</dd></div><div className="rule-hash"><dt>SHA-256（内容指纹）</dt><dd><code>{rule.sha256}</code></dd></div>
+        <div><dt>Owner（责任源）</dt><dd>{rule.owner}</dd></div><div><dt>E release（活动规则代号）</dt><dd>{rulesSnapshot.releaseId}</dd></div>
+        <div><dt>Size（大小）</dt><dd>{rule.bytes} 字节 / {rule.lines} 行</dd></div><div className="rule-hash"><dt>SHA-256（内容指纹）</dt><dd><code>{rule.sha256}</code></dd></div>
       </dl><div className="source-list">
-        <div><code>{`C:\\ProgramData\\PCConfig\\AuthorityHost\\policy\\generations\\${rulesSnapshot.generationId}\\projection\\${rule.projectionRelpath}`}</code><p>Active projection（活动规则投影）：本页规则语义和 SHA 以这里为准。</p></div>
-        <div><code>{rule.sourcePath}</code><p>{candidateSourceDescription}</p>{sourceBinding ? <p><strong>Candidate fingerprint（候选指纹）：</strong><code>{sourceBinding.candidateSha256}</code> / {sourceBinding.candidateBytes} bytes。</p> : null}</div>
-      </div><p>{rule.relation}</p></section>
+        <div><code>{sourceBinding?.releasePath || `E:\\.agents\\releases\\${rulesSnapshot.releaseId}\\${rule.releaseRelativePath}`}</code><p>Active release（活动规则副本）：本页规则语义、SHA 和字节数以这里为准。</p></div>
+        <div><code>{rule.sourcePath}</code><p>{sourceDescription}</p>{sourceBinding ? <p><strong>Source fingerprint（源码指纹）：</strong><code>{sourceBinding.sourceSha256}</code> / {sourceBinding.sourceBytes} bytes（字节）。</p> : null}</div>
+      </div><p>{annotateTerms(rule.relation)}</p></section>
     </article>
   );
 }
@@ -823,18 +1066,18 @@ function RulesPage({ search }) {
   return (
     <div className="page-frame rules-page">
       <section className="rules-dashboard-bar">
-        <div><p className="section-kicker">当前生效规则</p><h1>Generation {rulesSnapshot.generation}</h1><span>{rulesSnapshot.observedAt}</span></div>
+        <div><p className="section-kicker">当前活动规则</p><h1>E rules（E 规则） {rulesSnapshot.releaseId}</h1><span>{rulesSnapshot.observedAt}</span></div>
         <dl>
-          <div><dt>Authority（活动权威）</dt><dd>{rulesSnapshot.status} · {panelSnapshot.authority.statusLabel}</dd></div>
-          <div><dt>Rule closure（规则闭包）</dt><dd>{rulesSnapshot.rules.length} / 5</dd></div>
-          <div><dt>Production（生产执行）</dt><dd>{rulesSnapshot.productionActivation ? "已激活" : "未激活"}</dd></div>
-          <div><dt>Candidate（候选规则）</dt><dd>{rulesSnapshot.candidate}</dd></div>
-          <div><dt>Source（源码）</dt><dd>{rulesSnapshot.candidatePending ? "候选与活动规则不同" : rulesSnapshot.candidateUnavailable ? "候选不可取得" : "五份逐字节一致"}</dd></div>
+          <div><dt>Authority（规则权威）</dt><dd>{authorityStatusText(rulesSnapshot.status)} · PRIVATE main <code>{rulesSnapshot.gitCommit.slice(0, 12)}</code></dd></div>
+          <div><dt>Rule closure（规则闭包）</dt><dd>{rulesSnapshot.rules.length} / 5 · ruleset <code>{rulesSnapshot.rulesetSha256}</code></dd></div>
+          <div><dt>Current pointer（当前指针）</dt><dd>revision {rulesSnapshot.pointerRevision} · activated {observedTimeText(rulesSnapshot.activatedAtUtc)}</dd></div>
+          <div><dt>Previous（上一代）</dt><dd>{rulesSnapshot.previous?.release_id || "无"} · <code>{rulesSnapshot.previous?.git_commit?.slice(0, 12) || "无"}</code></dd></div>
+          <div><dt>Source（规范源码）</dt><dd>{rulesSnapshot.sourceMatchesRelease ? "五份与活动 release 一致" : `存在 ${panelSnapshot.sourceDirtyCount || 0} 项未激活施工；不覆盖 ${rulesSnapshot.releaseId}`}</dd></div>
         </dl>
       </section>
       <div className="rules-workbench"><RuleSelector selectedId={selected.logicalId} onSelect={selectRule} /><RuleDetail rule={selected} /></div>
       <section className="rules-validation">
-        <div><p className="section-kicker">验证矩阵</p><h2>活动规则有效，不代表所有消费者和跨 Owner 检查都已通过。</h2><p>{panelSnapshot.validation.summary}</p></div>
+        <div><p className="section-kicker">验证矩阵</p><h2>E release 有效，不代表当前 dirty source、Skills 场景或所有消费者都已通过。</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p></div>
         <ValidationMatrix />
       </section>
     </div>
@@ -844,13 +1087,13 @@ function RulesPage({ search }) {
 function SkillsPage() {
   return (
     <div className="page-frame directory-page skills-page">
-      <h1 className="visually-hidden">Skills</h1>
-      <p className="directory-status-line"><strong>公开 MVP 收录 {skills.length} 个 Skills</strong><span>当前供应清单有 {panelSnapshot.skills.activeInstallIntent} 个 active install intent（活动安装意图）；{panelSnapshot.skills.activeInstallIntent - skills.length} 个因明确公开边界未进入页面。收录项按使用频率、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <h1 className="visually-hidden">Skills（能力）</h1>
+      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力）</strong><span>当前供应清单登记了 {panelSnapshot.skills.activeInstallIntent} 个需要安装的能力；另外 {panelSnapshot.skills.activeInstallIntent - skills.length} 项属于不进入公开面板的私人或冻结能力，页面不列名称与详情。收录项按使用频率、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-directory">
           {skills.map((item, index) => (
             <SiteLink href={`/skills/${item.slug}`} key={item.slug}>
               <span className="directory-index">{String(index + 1).padStart(2, "0")}</span>
-              <span className="directory-copy"><span className="skill-card-top"><strong>{item.name}</strong><StatusPill status={skillStatusTone(item.status)}>{item.status}</StatusPill></span><span className="skill-plain-title">{item.title}</span><span>{annotateTerms(skillOutcomes[item.slug].value)}</span><small>{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</small></span>
+              <span className="directory-copy"><span className="skill-card-top"><strong>{item.name}</strong><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></span><span className="skill-plain-title">{annotateTerms(item.title)}</span><span>{annotateTerms(skillOutcomes[item.slug].value)}</span><small>{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</small></span>
               <ArrowRight size={18} aria-hidden="true" />
             </SiteLink>
           ))}
@@ -862,11 +1105,14 @@ function SkillsPage() {
 
 function EvidenceGrid({ skill: item }) {
   return (
-    <dl className="evidence-grid">
-      <div><dt>Source（源码）</dt><dd>{item.sourceState}</dd></div><div><dt>Install（安装）</dt><dd>{item.installState}</dd></div>
-      <div><dt>Current task（当前任务）</dt><dd>{item.currentTaskState}</dd></div><div><dt>Fresh task（全新任务）</dt><dd>{item.freshTaskState}</dd></div>
-      <div><dt>End to end（端到端）</dt><dd>{item.endToEndState}</dd></div><div><dt>Regression（回归）</dt><dd>{item.tests}</dd></div>
-    </dl>
+    <>
+      <dl className="evidence-grid">
+        <div><dt>Source（源码）</dt><dd>{annotateTerms(item.sourceState)}</dd></div><div><dt>Install（安装）</dt><dd>{annotateTerms(item.installState)}</dd></div>
+        <div><dt>Transaction（供应事务）</dt><dd>{annotateTerms(item.transactionState)}</dd></div><div><dt>Current task（当前任务）</dt><dd>{annotateTerms(item.currentTaskState)}</dd></div>
+        <div><dt>Fresh task（全新任务）</dt><dd>{annotateTerms(item.freshTaskState)}</dd></div><div><dt>End to end（端到端）</dt><dd>{annotateTerms(item.endToEndState)}</dd></div>
+      </dl>
+      <div className="skill-regression-evidence"><strong>Regression（回归证据）</strong><p>{annotateTerms(item.tests)}</p></div>
+    </>
   );
 }
 
@@ -878,16 +1124,23 @@ function SkillDetail({ item, search }) {
     <div className="page-frame detail-page">
       <article className="standalone-document skill-document">
         <Breadcrumbs items={[{ label: "Skills", href: back }, { label: item.name }]} />
-        <header><p className="section-kicker">{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</p><h1>{item.name}</h1><p className="skill-human-title">{item.title}</p><p className="standfirst">{annotateTerms(item.summary)}</p><StatusPill status={skillStatusTone(item.status)}>{item.status}</StatusPill></header>
+        <header><p className="section-kicker">{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</p><h1>{item.name}</h1><p className="skill-human-title">{annotateTerms(item.title)}</p><p className="standfirst">{annotateTerms(outcome.value)}</p><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></header>
         <section className="skill-outcome">
-          <p className="section-kicker">这个 Skill 有什么意义</p>
-          <h2>它解决的不是“核对信息”，而是改变下一步该怎么做</h2>
-          <p>{annotateTerms(outcome.value)}</p>
+          <p className="section-kicker">先说人话</p>
+          <h2>为什么需要、怎样使用、最后得到什么</h2>
+          <div className="plain-language-grid">
+            <article><h3>为什么需要它</h3><p>{annotateTerms(outcome.why)}</p></article>
+            <article><h3>举个实际例子</h3><p>{annotateTerms(outcome.example)}</p></article>
+            <article><h3>最后我会得到什么</h3><p>{annotateTerms(outcome.result)}</p></article>
+          </div>
+          <ThreeStateSummary {...outcome.readerStates} />
+          <h3>用上以后，实际会这样处理</h3>
           <div className="skill-decision-list">
             {outcome.changes.map((change, index) => <article key={change}><span>{index + 1}</span><p>{annotateTerms(change)}</p></article>)}
           </div>
         </section>
-        <section><h2>先把术语翻译成人话</h2><dl className="definition-list">{guide.glossary.map(([term, meaning]) => <div key={term}><dt>{term}</dt><dd>{meaning}</dd></div>)}</dl></section>
+        <section className="compact-terms"><h2>这个 Skill 用到的名词</h2><dl className="definition-list">{guide.glossary.map(([term, meaning]) => <div key={term}><dt>{term}</dt><dd>{annotateTerms(meaning)}</dd></div>)}</dl></section>
+        <section><h2>专业定义</h2><p>{annotateTerms(item.summary)}</p></section>
         <section className="skill-current-rule">
           <p className="section-kicker">当前规则</p>
           <h2>系统现在会怎样使用这个 Skill</h2>
@@ -905,17 +1158,17 @@ function SkillDetail({ item, search }) {
           <section><h2>输出</h2><StringList items={item.outputs.map(annotateTerms)} /></section>
         </div>
         <section><h2>依赖</h2><StringList items={item.dependencies.map(annotateTerms)} /></section>
-        <section><h2>验证状态</h2><p>六层证据分开显示。source 和 install 不会自动提升 current task、fresh task 或真实 E2E。</p><EvidenceGrid skill={item} /></section>
-        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{item.evidenceBasis}</dd></div><div><dt>Snapshot（快照）</dt><dd>这表示本次核验事实；以后状态改变时由 material refresh 更新。</dd></div></dl></section>
-        <section><h2>Canonical source</h2><div className="source-list"><div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div></div></section>
-        <SiteLink className="back-link" href={back}><ArrowLeft size={18} aria-hidden="true" />返回 Skills</SiteLink>
+        <section><h2>验证状态</h2><p>六层状态分开显示，Regression（回归证据）另列。Source（源码）、Install（安装）和 Transaction（供应事务）不会自动提升 Current task（当前任务）、Fresh task（全新任务验证）或真实 E2E（端到端验证）。</p><EvidenceGrid skill={item} /></section>
+        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd><code>{item.evidenceSourceCommit}</code></dd></div><div><dt>Supply command（供应验证命令）</dt><dd><code>{item.supplyEvidenceCommand}</code></dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
+        <section><h2>Canonical source（唯一维护源）</h2><div className="source-list"><div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div></div></section>
+        <SiteLink className="back-link" href={back}><ArrowLeft size={18} aria-hidden="true" />返回 Skills（能力）</SiteLink>
       </article>
     </div>
   );
 }
 
 function NotFound() {
-  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前 MVP 只包含一个 .agents 项目、五份规则和已纳入的 Skills。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板包含 .agents、PCConfig、GitHub 总索引、ChineseASR 四个项目，以及五份规则和已纳入的 Skills（能力）。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
 }
 
 export default function Page() {
@@ -929,16 +1182,20 @@ export default function Page() {
   }, [path]);
 
   let content;
+  const currentProjectEntry = projectEntryForPath(path);
   if (path === "/") content = <HomePage />;
-  else if (path === "/projects/agents") content = <ProjectPage />;
-  else if (path.startsWith("/projects/agents/")) {
-    const module = modules.find((item) => item.slug === path.split("/").at(-1));
-    content = module ? <ProjectPage module={module} /> : <NotFound />;
+  else if (currentProjectEntry) {
+    if (path === currentProjectEntry.project.route) content = <ProjectPage entry={currentProjectEntry} />;
+    else {
+      const moduleSlug = path.slice(currentProjectEntry.project.route.length + 1);
+      const module = currentProjectEntry.modules.find((item) => item.slug === moduleSlug);
+      content = module ? <ProjectPage entry={currentProjectEntry} module={module} /> : <NotFound />;
+    }
   } else if (path === "/rules") content = <RulesPage search={location.search} />;
   else if (path === "/skills") content = <SkillsPage search={location.search} />;
   else if (path.startsWith("/skills/")) {
     const item = skills.find((candidate) => candidate.slug === path.split("/").at(-1));
-    content = item ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
+    content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
   return <><FlowField /><Header path={path} /><main id="main-content">{content}</main></>;

@@ -17,15 +17,16 @@ export const ruleGuides = {
         title: "一、先判断听谁的",
         intro: "根规则先解决指令和事实来源冲突，避免模型从错误材料出发。",
         items: [
-          item("固定优先级", "发生冲突时依次服从 system/developer、本轮用户、最近项目规则、全局根规则，最后才是 shim 或记忆。历史计划、报告和生成物不在这条指令链上。", "用户本轮说只本地，就覆盖项目默认的提交推送；一份旧计划写着自动发布不能反过来覆盖用户。"),
+          item("固定优先级", "发生冲突时依次服从 system（系统指令）、developer（开发者指令）、本轮用户、最近项目规则、全局根规则，最后才是 shim（受保护入口垫片）或记忆。历史计划、报告和生成物不在这条指令链上。", "用户本轮说只本地，就覆盖项目默认的提交推送；一份旧计划写着自动发布不能反过来覆盖用户。"),
           item("只读当前目录链上的规则", "从项目根到当前工作目录逐级寻找适用 AGENTS，只读取仍处于现行路径上的规则。历史备份和已经移出的规则不参与。"),
+          item("E rules authority（E 规则权威）", "活动规则只由 E:\\.agents PRIVATE main commit、递增 E 代号和五文件 bytes/SHA 定义；dirty 不是活动规则，C 盘旧材料只作恢复。"),
           item(".agents 拥有什么", ".agents 负责 Agent 行为、授权、能力路由、个人 Skills/Plugins 和跨项目协作。它不拥有 Git 或机器的动态事实。"),
           item("Git 控制面拥有什么", "仓库身份、visibility、remote、默认分支、worktree、同步和发布事实由 Git 控制面现场提供。"),
           item("PCConfig 拥有什么", "本机路径、磁盘、端口、计划任务、运行时、模型、数据源、迁移、备份和恢复事实由 PCConfig 提供。"),
           item("具体项目拥有什么", "业务语义、领域数据、源码、启动和测试方式归具体项目。全局规则不能替项目决定业务。"),
           item("项目规则不能被全局覆盖", "全局规则和机械门只能与项目规则取交集或进一步收紧身份、授权和并发边界，不能改写项目命令、兼容或产品语义。", "项目写明必须用它自己的 acceptance.ps1，全局不能因为偏好 pytest 就替换。"),
           item("三个控制面按需进入", "只有相关事实会改变当前决定时才读取对应控制面，不进行周期性全扫，也不要求每个任务依次经过三个仓库。"),
-          item("路径分工", "运行安装态留在用户配置目录；仓库和 worktree 放在 V 盘指定根；Z 盘只允许可重建 cache 和 scratch，禁止唯一副本。")
+          item("路径分工", "AI 工作台运行根和本地数据库只有一份，位于 E 数据盘；C 盘只留兼容 junction。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
         ]
       },
       {
@@ -36,6 +37,7 @@ export const ruleGuides = {
           item("先说现实结果", "面向用户时先讲结果、使用方式、边界和是否需要用户动作；代码、测试、回执只在会改变完成判断时说明。"),
           item("测试不能冒充产品", "PASS、字段、协议和脚本返回只能证明对应证据层，不能替代真实用户路径。", "构建成功不等于公网已经部署；部署成功不等于页面能打开。"),
           item("用户要求人话时立即重述", "不复读内部验证过程，而是回到用户真实问题，用普通语言说清楚。没有固定回复模板、字数或评分器。"),
+          item("非常见英文首现附中文", "面向用户的进度和结果里，非常见英文自然词第一次出现时附简短中文括注；代码、命令、路径、字段、哈希、模型和产品名保持精确，不机械翻译。"),
           item("该并行时必须重判", "出现两条以上互不依赖、独立可验、并行净收益为正的支路时重新判断 0 到 10 个直属代理。单写者只串行真正冲突的写临界区。"),
           item("委派身份先于数量", "只有宿主 verified 身份，或旧 root 经用户明确声明并回读的对话绑定，才能做 0 到 10 决策。无身份时只关闭 spawn，主任务继续。"),
           item("优先现有原生能力", "先查 owner adapter、固定 CLI/API 和 metadata；工具初始列表不是能力上限。实证入口缺失或失败后才降级。"),
@@ -44,6 +46,8 @@ export const ruleGuides = {
           item("长任务必须可重建", "目标、硬边界、授权、关键决定、当前实现和验证状态要能从正确 Owner、项目产物或宿主持久状态恢复；简单任务不机械建文档。"),
           item("代码只为真实变化抽象", "只在已有重复、稳定变化轴或 Owner 边界能降低总成本时抽象；没有真实 consumer 的适配器和安装态应退出。"),
           item("控制仓库膨胀", "保护产品语义和必要安全恢复结果，不保护文件、状态机或报告形态。完成计划和旧复盘交给 Git 历史，不留活动副本。"),
+          item("系统级反膨胀", "任何项目按改动规模审查源码、运行节点、依赖/状态、人工步骤、上下文和墙钟；等价方案取小、快、少点击，但不得削弱需求、好用、正确、安全或恢复。"),
+          item("压缩不能删义", "字符预算和反膨胀不得弱化范围、强制程度、例外、停止条件、优先级或 Owner；先删重复，仍无法无损表达时按实测缺口最小增额。"),
           item("版本 pin 有退出条件", "只有复现、安全、合规、已证不兼容或上游硬约束才 pin；最新且不确定的技术事实联网核验并优先官方来源。")
         ]
       },
@@ -56,15 +60,16 @@ export const ruleGuides = {
           item("已登记目标继续收敛", "同一 active 目标的验证、发布、激活、read-back、修复、重试和 Git 收口默认继续，除非用户明确要求只本地。"),
           item("新边界仍要精确门禁", "首次登记、新公开目标、付费、force-push、不可逆迁移、信任根或授权边界变化不能从旧授权推导。"),
           item("服务不足也是问题", "AI 应最大化用户净收益并把事情办成；无理由少做、反复索权、把可自动解决的问题甩回用户，同样需要纠正。"),
-          item("最高权限身份不能复制", "当前最高权限角色只有独立登记的 root。名称、提示词、同一 Windows 用户、管理员 token 或复制密钥都不能让其他代理继承。"),
-          item("紧急对话授权只限当前对话", "一次可靠因子可让当前准确对话在 24 小时内临时优先于受保护规则，但不传播给子代理，不覆盖 system/developer/platform，也不伪造外部事实。"),
+          item("最高权限身份不能复制", "当前最高权限角色只有独立登记的 root（根代理）。名称、提示词、同一 Windows 用户、管理员权限令牌或复制密钥都不能让其他代理继承。"),
+          item("紧急对话授权只限当前对话", "一次可靠因子可让当前准确对话在 24 小时内临时优先于受保护规则，但不传播给子代理，不覆盖 system（系统指令）、developer（开发者指令）或 platform（平台规则），也不伪造外部事实。"),
           item("CoreGoal 冻结目标而非实现", "一次可靠因子固定目标、范围、禁止项和停止条件；计划、Schema、代码、executor 和后续 epoch 变化只重派生步骤。"),
           item("每个 effect 使用单次步骤能力", "步骤能力短时、单次、防重放，绑定目标、参数、影响上限、pre/post、回滚、executor 和 nonce。"),
-          item("Execution Owner 认领最小 scope", "第一次写入前用 CAS Claim 最小施工范围；同一项目 scope 不重叠，扩缩、改派和恢复都走正式 transition。"),
+          item("Execution Owner 认领最小 scope（施工范围）", "第一次写入前用 CAS Claim（比较后认领）最小施工范围；同一项目 scope（施工范围）不重叠，扩缩、改派和恢复都走正式 transition（状态转换）。"),
+          item("AI 创建顶层任务默认无项目", "只有 fresh Owner route 真实准入后才创建；默认 projectless（无项目），不能因涉及仓库自动挂 saved project，除非用户明确指定或上位平台强制。"),
           item("跨项目机械维护是窄例外", "只允许同类、确定、可回退、可独立验证的中低风险小修；业务语义、Schema、权限、依赖大升级和发布不属于该例外。"),
           item("可信、私密和授权分开", "本机、BitLocker 磁盘、私人云和 PRIVATE GitHub 可以是 trusted target，但不自动授予写入，也不自动等于公开。"),
-          item("人类因子只有四类", "Passkey、TOTP、Recovery、Account。Google 和 Microsoft 只是 Account provider。取消、超时或失败只暂停，不自动重试或改变设备信任。"),
-          item("UAC 只解决 OS token", "按需管理员能力默认可用；用户明确禁止提权时停用。UAC 不产生业务授权、Agent 身份或人类确认。")
+          item("人类因子只有四类", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）。Google 和 Microsoft 只是 Account provider（账号验证提供方）。取消、超时或失败只暂停，不自动重试或改变设备信任。"),
+          item("UAC 只解决操作系统权限", "按需管理员能力默认可用；用户明确禁止提权时停用。UAC（Windows 管理员确认）不产生业务授权、Agent（智能体）身份或人类确认。")
         ]
       },
       {
@@ -76,7 +81,7 @@ export const ruleGuides = {
           item("实现默认包含正常 Git 收口", "用户授权仓库实施后，验证、定向 commit 和 normal push 到已有 upstream 默认成立；force-push 从不默认授权。"),
           item("个人仓库完成必须到默认分支", "目标提交要从实际 default branch 可达，normal push 后远端 read-back 仍包含它。只存在于 AI branch 或 worktree 不算完成。"),
           item("Worktree 只是短期隔离", "最终必须整合后删除、证明冗余后删除，或有真实用途和退出条件地保留；不能当任务台账。"),
-          item("证据层独立", "source、test、install、publish、fresh task、E2E 互不代替。缺失、陈旧或 unknown 不能升为 PASS。"),
+          item("证据层独立", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）、E2E（端到端验证）互不代替。缺失、陈旧或 unknown（证据不足）不能升为 PASS（通过）。"),
           item("Windows 文件规范", "优先 PowerShell 7；Markdown、JSON、YAML 和 Skill 使用 UTF-8 无 BOM；含中文常量的 PowerShell 使用 UTF-8 BOM；非交互进程不能弹可见控制台。"),
           item("下载、临时物和 GPU", "下载进入 E 盘下载目录；临时物进入当前任务独立临时目录；只清理自己的命名空间；GPU 重载通过 Broker 串行。"),
           item("安装环境不能越过边界", "官方稳定运行时可在兼容、可回退且净收益为正时安装；付费、账号、重启、重装、运行 Owner 和信任边界仍单独处理。")
@@ -99,66 +104,63 @@ export const ruleGuides = {
   },
   protected_major_actions_contract: {
     glossary: [
-      ["Candidate", "E 盘可编辑规则源码。它可以与活动规则不同，但不同只表示待发布。"],
-      ["Active generation", "C 盘中不可变、已签名并通过固定 Authority 验证的现行规则集合。"],
-      ["Policy epoch", "活动规则的单调代际编号，当前是 79。"],
-      ["Anchor", "写在受保护机器位置的活动 generation 承诺，用来防止回滚和替换。"],
-      ["Containment", "确认活动权威被破坏后冻结重大动作并进入恢复，不由普通失败触发。"],
-      ["Adapter", "负责执行一种受保护现实 effect 的登记执行入口。"]
+      ["E release", "同一 PRIVATE main commit 的五份规则、递增 E 代号、文件 SHA 和 ruleset SHA 组成的活动规则版本。"],
+      ["Current pointer", "受保护的 current-rules.json，原子指向当前和上一 E release；只有完整回读后才切换。"],
+      ["Ruleset SHA", "按固定 logical-id 顺序绑定五份规范文件描述符的总指纹。"],
+      ["Expected-preimage CAS", "只有 current pointer 仍与变更前指纹一致时才允许切换，避免并发覆盖。"],
+      ["Production-equivalent rehearsal", "真人因子弹窗前，对四类因子之后的完整生产链做隔离但等价的预演。"],
+      ["Recovery-only C history", "C 盘旧 generation、Publisher、签名、anchor、manifest、ledger 和回执只供历史恢复，不参与当前准入。"]
     ],
     sections: [
       {
         title: "一、谁判断重大动作",
         intro: "保护合同把语义判断和机械验证分开。",
         items: [
-          item("最高权限智能体作语义判断", "它结合真实意图、精确目标、范围、可恢复性和异常证据，选择 allow、step up、deny、needs evidence 或 suspected tamper。"),
-          item("机械层不能靠关键词判断", "机械层只检查登记、签名、nonce、目标、事实、完整性和 effect 边界，不能看到敏感词就自行要求人类。"),
-          item("其他代理不能继承最高权限", "必须独立证明 principal、runtime 或公钥绑定；名称、提示词、同一 Windows 用户和管理员 token 都不够。"),
-          item("四类人类因子", "Passkey、TOTP、Recovery、Account 任一已登记因子都充分；Account 还要指定已登记 provider。原始秘密不保存。"),
+          item("最高权限智能体作语义判断", "它结合真实意图、精确目标、范围、可恢复性和异常证据，选择 allow（允许继续）、step up（补充人类验证）、deny（拒绝）、needs evidence（先补证据）或 suspected tamper（疑似完整性异常）。"),
+          item("机械层不能靠关键词判断", "机械层只检查登记、签名、nonce（一次性随机凭据）、目标、事实、完整性和 effect（外部现实动作）边界，不能看到敏感词就自行要求人类。"),
+          item("其他代理不能继承最高权限", "必须独立证明 principal（受验证的执行主体）、runtime（运行环境）或公钥绑定；名称、提示词、同一 Windows 用户和管理员权限令牌都不够。"),
+          item("四类人类因子", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）任一已登记因子都充分；Account 还要指定已登记 provider（账号验证提供方）。原始秘密不保存。"),
           item("目标不清先补证据", "只有目标无法唯一解析时先 needs evidence；授权或安全边界明确不成立才 deny。"),
+          item("现实影响而非词表", "信任根、秘密、唯一数据删除、BitLocker、公开面、不可逆迁移和系统恢复锚是强信号；普通编辑、测试、定向 commit/normal push 和 E release activation 不会仅因位置变成重大动作。"),
           item("同一目标内持续无人值守", "CoreGoal 已成立后，准备、执行、回读、修复、崩溃恢复和必要回滚都可继续，每个 effect 仍消费单次步骤能力。")
         ]
       },
       {
-        title: "二、Candidate、Active 和完整性事件",
-        intro: "最重要的区别是：源码变化不等于活动规则被篡改。",
+        title: "二、E 规则唯一活动权威",
+        intro: "最重要的区别是：可编辑 source、已提交 main 和当前 E release 是三层不同事实。",
         items: [
-          item("正常发布链", "E canonical candidate 先生成受保护候选，经 Publisher 事务变成 C 盘 immutable active generation。"),
-          item("Candidate pending", "候选与活动代际不同只报告 policy candidate pending，活动旧代继续有效，不进入不可信状态。"),
-          item("Candidate unavailable", "候选读不到时继续验证既有 active；禁止发布、猜测或恢复 candidate。"),
-          item("受保护 whole-file 集合", "保护合同、授权合同、Owner adapter registry 和全局 shim 属于 whole-file 关键面。"),
-          item("根规则关键承诺", "External effect、既有目标收敛、无人值守授权、人类因子、管理员能力和保护合同指针必须唯一完整。"),
-          item("什么才是完整性事件", "只有活动包、签名、HKLM anchor、epoch、AuthorityHost、Owner 身份、恢复水位或 ledger 在合法事务外被替换、删除、回滚、伪造、重放或旁路，才是确定性事件。"),
-          item("先排除普通原因", "进入 containment 前必须排除 candidate 差异、Git dirty、合法 journal、封存 preimage 和一次读取故障。"),
-          item("普通失败不会改变设备信任", "用户拒绝、因子缺失、step-up 失败或一次读取失败只暂停相关交易。")
+          item("Canonical source", "规则源码位于 PRIVATE Git 仓库 E:\\.agents；dirty 工作区可编辑但不是活动规则。"),
+          item("Release 固定五文件", "根 AGENTS 和保护、授权、三控制面、能力路由四合同必须来自同一 main commit，并绑定 bytes/SHA。"),
+          item("代号不可复用", "E80 是不可变 bootstrap；E81 及后续必须新 commit、新 E 代号，不能覆盖旧代。"),
+          item("Current 与 previous", "每次激活保留当前和上一已安装 release；失败保持原指针，回退只交换两个已验证 reference。"),
+          item("普通编辑器不能改活动 release", "每代目录和 current pointer 关闭继承并由 SYSTEM 拥有；普通用户和 Administrators 只有 ReadAndExecute，Activator 临时写入后恢复 ACL。"),
+          item("内核攻击不在承诺内", "ACL 保护承诺不声称抵抗已取得内核或离线磁盘控制权的攻击者。")
         ]
       },
       {
-        title: "三、固定活动 Authority 怎样验证",
-        intro: "项目启动只认一个固定 C 入口，任何 E 盘或临时 JSON 都不能替代。",
+        title: "三、E release 怎样激活和验证",
+        intro: "唯一 Activator 执行一条小而可回退的本地事务链，不再运行旧 Publisher 平台。",
         items: [
-          item("允许读取规则的三个状态", "active verified、candidate pending、candidate unavailable。其他状态的受保护重大动作全部关闭。"),
-          item("Generation root 必须精确", "active generation root 必须指向固定 generations 目录下当前 ID，不能接受环境变量或调用者路径覆盖。"),
-          item("五份规则必须闭合", "required rule paths 恰好映射根规则、保护、授权、三控制面和能力路由，并全部位于同一 projection。"),
-          item("不仅检查文件 hash", "还要验证 projection manifest、bundle 和 attestation 签名、generation chain、HKLM anchor、publish/consume/issuance/termination ledgers、shim、Provider 绑定和 adapter registry。"),
-          item("默认只完整读根规则", "保护、授权、三控制面和能力合同只有在当前任务确实触发时才从同一 generation 展开。"),
-          item("Production activation 独立", "只有 production activation true 才允许登记 adapter。唯一可继续读规则的 false reason 是 publisher authorization pending，但重大 effect 仍关闭。"),
-          item("E wrapper 只是消费者", "它固定调用 C Provider 并验证父链、ACL 和入口 hash，自身不是 Authority，也不能接受任意 RepoRoot 或路径 override。")
+          item("固定产品流程", "测试 → PRIVATE main commit/remote readback → 五文件 hash → UAC 原子切 current/previous → Inspect 回读。"),
+          item("FastRelease 不是降级发布", "普通规则文本、非最高权限合同、目录、预算及对应测试可只运行变更闭集关键回归，但仍复用同一 Git、五哈希、pointer CAS、UAC Activator 和 fresh Inspect；触及保护合同、Activator、ACL、Hook、Owner Registry、身份/授权或其他代码时返回 standard_lane_required（必须走标准路径）。"),
+          item("记录分阶段墙钟", "机器侧 Git 收口、激活与回读目标 180 秒内；回执分别记录 focused tests、commit、push/readback、UAC activation，外部网络或用户处理 UAC 等待不伪造进承诺。"),
+          item("Expected pointer CAS", "Activator 先绑定当前 pointer SHA；若期间发生另一次激活，stale 请求失败关闭而不是覆盖。"),
+          item("UAC 不扩权", "UAC 只提供短时 Windows 写权限，不产生用户授权，也不替代 Passkey/TOTP/Recovery/Account。"),
+          item("激活不调用其他平台", "不使用服务、队列、数据库、计划任务、P2、CoreGoal、SecretBroker 或真人因子，也不保存 token。"),
+          item("失败保留可用版本", "任一测试、Git、哈希、ACL 或回读失败都保留原 current/previous；不会构造半个 release。"),
+          item("验收分层", "source、test、PRIVATE main readback、release install、ACL 拒绝、rollback、fresh root、fresh child、真实 spawn 和压缩恢复分别证明。")
         ]
       },
       {
-        title: "四、发布、Shim 与回读",
-        intro: "活动规则发布是一个受保护事务，不是复制几个 Markdown。",
+        title: "四、C 盘退役、升级连续性与产品隔离",
+        intro: "退役旧规则平台不等于删除历史，也不能让旧平台继续控制新工作。",
         items: [
-          item("Generation 绑定的内容", "至少包含五份规则、shim 模板、adapter registry、bundle、attestation、projection manifest、publish receipt、前代 generation、epoch、anchor 和各 ledger head。"),
-          item("步骤能力绑定全部关键事实", "单次能力绑定 active goal、候选 manifest、当前 generation/epoch/anchor、Publisher 与 Authority hash、effect、critical surfaces、用户意图、principal、pre/post 和 nonce。"),
-          item("Staging 后再次验新鲜度", "Publisher 在全局锁中重验旧活动链和候选字节，写 staging 后再次核对，避免发布期间事实漂移。"),
-          item("消费后不可重放", "能力一经消费就写 ledger，提升 token 或重新运行命令不能产生第二次授权。"),
-          item("每一层单独证明", "Publisher 返回、源码测试、签名包、安装和 read-back 任一单层都不能冒充其他层。"),
-          item("Shim 的写权限", "Shim 叶子只允许 SYSTEM 和 Administrators 写，普通用户和受限运行身份只读执行；守护进程持有防写删句柄并定期回读。"),
-          item("发布必须处理守护与 preimage", "停止守护、保存内容寻址 preimage、事务替换、read-back 并重启，ACL、任务和现场运行都要验证。"),
-          item("生产 adapter 只有三个", "规则 Publisher、Git 重大动作和 PCConfig 重大动作。退役系统不再拥有 adapter。"),
-          item("安全承诺有边界", "系统承诺受管路径检测越权、失败关闭和恢复证据，但不承诺抵抗已取得管理员、SYSTEM、内核或离线磁盘控制权的攻击者。")
+          item("C 历史只读保留", "旧 generation、Publisher、签名、anchor、manifest、ledger 和回执是恢复证据，不是 authority、admission、fallback、Owner 证明或 runtime dependency。"),
+          item("禁止继续调用旧平台", "不得创建新 C generation、调用 Publisher、读取 policy epoch，或因 C unavailable 阻塞普通任务、Hook、spawn、Skill、project admission、CoreGoal/BitLocker 退役或 Owner CAS。"),
+          item("官方 App 更新不破坏能力", "桌面 AI 应用的 version/build、versioned path、update epoch 和 optional host metadata 不是准入；稳定身份只看 package family、signer/principal、bridge key、schema/event/capability。"),
+          item("缺能力只局部降级", "同主体更新继续工作；只有真正缺失的 capability 变 unknown/unavailable，用户 model/effort 仍保留。"),
+          item("真人因子前必须四路线 rehearsal", "Passkey/TOTP/Recovery/Account 只可替换因子本身；因子后的 adapter、installer、child、capability、状态、readback、rollback 和 response-loss 必须与生产相同。"),
+          item("其他产品独立", "SecretBroker、Password Center、四类因子、CoreGoal、BitLocker 与 P0–P7 由各自 Owner 负责；E 规则异常不得触发锁盘、重启、读秘密或创建 CoreGoal。")
         ]
       }
     ]
@@ -168,7 +170,7 @@ export const ruleGuides = {
       ["Authorization", "用户对现实动作的许可，和 Windows 管理员权限不是一回事。"],
       ["CoreGoalCommitment", "一次可靠人类确认冻结的长期目标、范围、禁止项和停止条件。"],
       ["CoreGoalStepCapability", "允许一次精确 effect 的短时、防重放步骤能力。"],
-      ["Execution Owner", "协调谁在修改哪个最小 scope，不产生授权或业务事实。"],
+      ["Execution Owner（施工责任）", "协调谁在修改哪个最小 scope（施工范围），不产生授权或业务事实。"],
       ["Registered target", "持久 reference 说明目标是谁，现场 resolution 说明现在允许做什么。"],
       ["Residual", "任务结束前仍未完成、必须带 checkpoint 移交的现实义务。"]
     ],
@@ -179,8 +181,8 @@ export const ruleGuides = {
         items: [
           item("本机低风险工作直接推进", "范围内读取、编辑、测试和验证不需要额外人类确认。"),
           item("External effect 的授权边界", "本轮请求明确对象、内容和动作就构成授权，但不扩到首次创建目标、额外账号、新公开面或其他任务。"),
-          item("管理员能力默认按需可用", "当前进程是 Medium token 不代表无法管理员执行；只有用户或项目明确禁止才停用 UAC。"),
-          item("UAC 不产生授权", "它只提升 OS token，不产生项目写权、最高权限身份或人类因子。"),
+          item("管理员能力默认按需可用", "当前进程是 Medium integrity（中等完整性权限）不代表无法管理员执行；只有用户或项目明确禁止才停用 UAC（Windows 管理员确认）。"),
+          item("UAC 不产生授权", "它只提升操作系统进程权限，不产生项目写权、最高权限身份或人类因子。"),
           item("Child 只能收窄", "后代的 scope、authorization、sandbox、model 和 effort 取用户、父级、活动规则和宿主可用集的交集。"),
           item("项目规则不被取消", "授权合同只能收紧项目规则；无法同时满足时失败关闭并报告精确冲突。")
         ]
@@ -210,7 +212,7 @@ export const ruleGuides = {
           item("不重复询问", "对象、账号和能力范围已明确后，同一范围的实现、重试、验证、安装、发布和回读不再询问。"),
           item("Target reference 与 resolution", "Reference 固定原先登记目标的身份和 resolver；resolution 现场给出 active/retired、visibility、允许动作、adapter、preconditions、rollback 和授权要求。"),
           item("副作用边界必须重验", "实际 external effect 前重新解析目标和未过期 resolution；缺失、过期或漂移时停止，不能事后登记追认。"),
-          item("完成必须有 receipt 加 read-back", "文档、标题、截图、缓存或 candidate path 都不能证明 effect 已发生。")
+          item("完成必须有 receipt（执行回执）加 read-back（正式回读）", "文档、标题、截图、缓存或 candidate path（候选路径）都不能证明 effect（外部现实动作）已发生。")
         ]
       },
       {
@@ -221,16 +223,19 @@ export const ruleGuides = {
           item("纯只读不用 Claim", "首次专属写入、决定、受保护 proposal 或交接前才读取 binding 并认领。"),
           item("不能从标题或 cwd 推断", "只有 registry 的 expected revision CAS 绑定成立。"),
           item("一个任务最多一个项目", "同项目 scope 不重叠；首次 Claim，同 holder 追加独立 scope 用 Add，扩缩改派用正式 transition。"),
+          item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
           item("写前 AuthorizeAction", "每次写入核对 action、task、scope、binding 和 revision，防止拿旧 claim 改新范围。"),
           item("已有 Owner 时怎么办", "不借 shell、plugin、child、worktree 或 UAC 绕过。只发送一次有界请求；非硬依赖继续不冲突工作。"),
+          item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无 Owner、当前任务不能 Claim 且平台准入时才创建；默认无项目，不能因仓库工作自动选择 saved project。"),
           item("等待只有一轮", "关键路径只剩 Owner 结果时，作一次 terminal 或 needs-attention 事件等待，不持续轮询 commentary。"),
           item("Cross-thread delivery 不等于完成", "只证明宿主接受了发送；失败时不循环重试，改给可转发 prompt。"),
           item("Coordination Owner 不获得成员项目写权", "跨项目编排只拥有关系和最终集成。"),
+          item("Coordination Owner 的唯一写权例外", "只有用户明确冻结的跨项目目标，才允许同一 coordination_id 逐个取得成员项目精确 scope；它仍不合并授权、effect、验收或 Release。"),
           item("Shared maintenance 的窄边界", "每次只 Claim 一个项目，限机械、确定、可回退的小修；业务语义、Schema、权限、依赖大升级、API 和发布全部禁止。"),
           item("Release 前处理 residual", "普通 Release 只允许无残余；有残余必须随 checkpoint 原子 Transfer 给真实 successor。"),
           item("恢复孤儿 Owner 的证据", "只接受固定宿主 adapter 的 terminal 或 task-not-found，并核对 project、scope、revision、workspace、checkpoint 和 pending transaction。timeout 和自制 JSON 不成立。"),
           item("归档 predecessor 不唤醒", "用户要求 successor 接续已归档任务时，旧任务保持归档；先验证规范 rollout、无 queued work 和 active duplicate，再原子 RecoverReleaseClaim。"),
-          item("规则发布 scope 不能自报", "由五份活动 descriptor 与 source SHA 的封闭映射推导真实改变范围，未知、重复或漂移时失败关闭。")
+          item("E release scope（施工范围）不能自报", "由同一目标 commit 的五份 descriptor（规则描述符）与 canonical source blob SHA（源码指纹）的封闭映射推导；source/test/Git 后仍须 UAC activation、ACL/hash readback 和 fresh/spawn 验收。")
         ]
       },
       {
@@ -250,7 +255,7 @@ export const ruleGuides = {
         intro: "目标私密不等于已经授权，也不等于应该删减内容。",
         items: [
           item("Visibility 与 trust 分开", "本机、workspace、BitLocker 磁盘、Google 私人空间、PRIVATE GitHub 和已证私有云可成为 trusted target；未知远端保持 UNKNOWN。"),
-          item("Trusted target 内按需保真", "环境文件、token、密码、私钥和 OAuth JSON 在真正私密备份任务中按任务需要原样保留，不能静默换占位符。"),
+          item("Trusted target 内按需保真", "环境文件、访问令牌、密码、私钥和 OAuth JSON（账号授权配置）在真正私密备份任务中按任务需要原样保留，不能静默换占位符。"),
           item("保真不扩大发送授权", "可信、可见性和 external effect authorization 仍是三个独立判断。"),
           item("PRIVATE 仓库应完整收敛", "只可因秘密边界、可重建 cache、活数据库、大制品、格式许可或用户 local-only 排除，并明确说明。"),
           item("不完整副本不能叫完整备份", "PRIVATE GitHub、本机热备、私有云备和人工冷备是不同层。")
@@ -281,13 +286,13 @@ export const ruleGuides = {
       },
       {
         title: "二、怎样取得跨控制面证据",
-        intro: "只在跨 Owner 事实会改变架构、运行治理或长期演化时使用。",
+        intro: "只在跨 Owner（责任源）事实会改变架构、运行治理或长期演化时使用。",
         items: [
           item("只有两个视图", "operations governance 用于运行治理；global evolution 用于整体演化。"),
-          item("入口只返回 metadata", "Owner、活动和候选路径、权威角色、SHA、字节和 token 估算；不复制正文。"),
+          item("入口只返回 metadata", "Owner（责任源）、活动和候选路径、权威角色、SHA（内容指纹）、字节和 Token（模型计数单位）估算；不复制正文。"),
           item("不运行动态 Provider", "上下文入口本身不读取 GitHub、机器状态或业务数据，也不建立共享数据库。"),
           item("先 metadata 后正文", "模型根据当前影响再读取 primary 或 conditional 文档，避免把所有控制面一次灌入上下文。"),
-          item("活动规则仍来自固定 Authority", "Catalog 只保存 logical id 和 E candidate source，不能把候选路径当活动正文。"),
+          item("活动规则来自同一 E release", "Catalog（目录）只保存 logical id（逻辑标识）和 source 指针；current E 代号、PRIVATE main commit、五文件 path/SHA 与 ruleset 由 Invoke-EAgentRulesRelease Inspect 回读。dirty source 不能冒充 current。"),
           item("四类结论分开验证", "合同设计、Git commit/default branch/remote、机器 runtime/备份/恢复、外部 adapter receipt/read-back。任一层不能证明其他层。"),
           item("闭包失败时停止", "Catalog、schema 或 logical id 闭包无效，必需 Owner 缺失，或 primary 不可读时失败关闭。"),
           item("默认排除大体积和私人正文", "旧私人数据库、媒体、恢复载荷、.git、cache、temp、报告、preimage 和巨大机器快照都不进入默认上下文。"),
@@ -312,6 +317,7 @@ export const ruleGuides = {
         items: [
           item("选择方法的七个维度", "目标、风险、信息增益、延迟、耦合、可逆性和 expected net value。"),
           item("保留用户模型选择", "用户指定 model/reasoning 时不因为高风险自动降级。"),
+          item("非常见英文附中文括注", "用户可见进度和结果中的非常见英文自然词首现后附简短中文；AI/Git/Windows/JSON/API 及代码、命令、路径、字段、哈希、模型和产品名保持精确。"),
           item("Metadata 不强制正文", "metadata 只提升候选注意力，是否读 Skill、Plugin、模板、计划或文档仍由当前净收益决定。"),
           item("Skill 中的 MUST 不是平台门", "只有上位指令、活动规则、项目硬边界或宿主机械门能成为不可越过的 gate。"),
           item("先查现有能力", "优先 owner adapter、固定 CLI/API、当前 metadata 和原生 tools；工具初始列表不是上限。"),
@@ -329,7 +335,7 @@ export const ruleGuides = {
           item("原件未知才用定位能力", "非媒体原件走 personal materials；媒体走 personal media；录音和扫描件分别走 ASR/OCR。"),
           item("照片视频只在明确任务中处理", "不建立后台媒体扫描和统一人物服务。"),
           item("没有独立项目就用最小原件", "只在稳定持续需求和净收益成立并由用户明确启动时建新项目。"),
-          item("Workspace 固定一个 Provider", "Gmail、Drive 和 Calendar 通过 PCConfig 固定 OAuth Provider，默认读取。"),
+          item("Workspace 固定一个 Provider（服务入口）", "Gmail、Drive 和 Calendar 通过 PCConfig 固定 OAuth Provider（账号授权服务入口），默认读取。"),
           item("写入只用已暴露 operation", "不落库、不自动同步、不换账号，不静默走浏览器、raw provider 或 rclone。"),
           item("Provider 不可用就如实受限", "不制造第二 Provider。删除、公开分享、发送和邀请还要精确 external effect 授权。"),
           item("读取和写入分别验收", "三项读取全通过后才成为默认自然语言能力；每个写 operation 仍独立验收。")
@@ -344,7 +350,10 @@ export const ruleGuides = {
           item("可演化代码的优先级", "内聚、单一事实源、显式接口、确定行为和版本化迁移。没有真实变化轴不建框架。"),
           item("模型和厂商变化用窄 adapter", "Provider config 归 Owner，Consumer 只依赖最小稳定接口，不镜像内部源码和文件清单。"),
           item("路径和 hash 记录要有退出条件", "必须有 Owner、Consumer 和 exit condition，不能永久复制动态事实。"),
-          item("仓库膨胀治理", "活动 HEAD 只留现行 source、contract、config 和行为回归；计划、复盘和旧设计由 Git 留史。"),
+          item("仓库膨胀治理", "活动 HEAD（当前提交）只留现行 source（源码）、contract（合同）、config（配置）和行为回归；计划、复盘和旧设计由 Git 留史。"),
+          item("Change-surface validation", "验证强度由现实风险和当前 diff 的已知影响面决定；小而已知的改动跑直接语义/合同/预算和生效回读，未知映射、运行时/权限/身份边界或失败漂移自动转标准路径。"),
+          item("系统反膨胀按改动规模执行", "大设计审查源码、服务/任务/进程、队列/数据库、状态机、Owner/worktree、用户点击、上下文和墙钟；普通小改只做轻量判断，不新增治理层。"),
+          item("语义优先于压缩", "预算和瘦身不得删掉范围、强度、例外、停止条件、优先级或 Owner；实在无法无损表达时按实测缺口最小提高预算。"),
           item("动态配置逐级准入", "从静态重启、原子 watcher、单机多进程 SQLite/loopback、真 kill switch 到跨实例服务，只有真实需求才升级。"),
           item("不预装配置平台", "不为想象中的未来引入 Nacos、Consul 或 etcd。"),
           item("动态配置必须可恢复", "定义 Owner、Consumer、认证网络、原子应用、last-known-good、离线 bootstrap、备份、审计、回滚和移除路径。"),
@@ -367,11 +376,11 @@ export const ruleGuides = {
         title: "五、原生经济路由的 11 条规则",
         intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。",
         items: [
-          item("1. 身份先于决策", "宿主从真实 turn context 验证 model、effective effort、root/child role、turn hash、generation 和合同 SHA；旧 root 只能用用户明确绑定恢复。"),
-          item("2. 压缩或代际变化要重读", "同一 task 同一 generation/hash 可以复用；压缩、hash 变化或加载不确定时完整重读本节。Child 不借父绑定。"),
+          item("1. 身份先于决策", "宿主从真实 turn context（本轮上下文）验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA；旧 root 只能用用户明确绑定恢复。"),
+          item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
           item("3. 七类事件重判", "任务开始、新独立支路、阻塞、重大 steer、压缩、child terminal、槽位释放。普通工具步骤不填表。"),
           item("4. 每个父代理 0 到 10", "0 合法但不能惯性。Luna 适合封闭可验读重任务，Terra 适合强耦合实现和深调试，Sol 适合最高风险、战略和终审。"),
-          item("5. 家族和 effort 只能向下", "Luna 只能派 Luna，Terra 可派 Luna/Terra，Sol 可派三家族；child 最强 Sol Max，不得高于父级。"),
+          item("5. 家族和 effort 只能向下", "只有 gpt-5.6-luna/terra/sol 属于现行三家族；其他宿主 verified 模型归更强的未来模型家族。Luna 只能派 Luna，Terra 可派 Luna/Terra，Sol 可派三家族，未来模型还可派未来模型；Sol 与未来模型可到 Ultra，任何 child 都不得高于父级或超过 Ultra。"),
           item("6. 本地慢速路线", "local-default 是本地 AICLI alias，只用于封闭、严格可验、允许较慢且总成本更低的非阻塞工作；不是 native child 或 fallback。"),
           item("7. 递归不扩权", "Child 也可派后代，但所有 scope、授权、sandbox、家族和 effort 继续取交集，缺身份只关闭递归。"),
           item("8. Fork 与命名", "跨模型或 effort 用 none 或有限 turns；只有同身份完整继承才用 all。任务名不证明身份。"),

@@ -9,3 +9,7 @@ docs/design/private-content-rules.md
 
 # Screenshot iterations are reproducible QA artifacts, not maintained docs.
 docs/design/qa/
+
+# AI refresh evidence bundles are task-local, public-safe projections; current
+# narrative truth stays in tracked content and Registry files.
+.panel-refresh/

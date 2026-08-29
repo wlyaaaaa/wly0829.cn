@@ -4,14 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "npm run generate:project-index",
     "dev": "vite",
-    "build:site": "vite build && node scripts/generate-routes.mjs",
+    "generate:project-index": "node scripts/generate-project-content-index.mjs",
+    "build:site": "npm run generate:project-index && vite build && node scripts/generate-routes.mjs",
     "build": "npm run verify:snapshot && npm run build:site && npm run verify:public",
     "impact": "node scripts/assess-panel-impact.mjs",
+    "refresh:ai": "node scripts/prepare-ai-panel-refresh.mjs",
     "preview": "vite preview",
-    "refresh:snapshot": "node scripts/refresh-panel-snapshot.mjs",
+    "refresh:agents-snapshot": "node scripts/refresh-panel-snapshot.mjs",
+    "refresh:snapshot": "npm run refresh:agents-snapshot",
     "verify:snapshot": "node scripts/verify-panel-snapshot.mjs",
+    "verify:ai-refresh": "node scripts/verify-ai-panel-refresh.mjs",
     "verify:public": "node scripts/verify-public-content.mjs",
+    "pretest": "npm run build:site",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

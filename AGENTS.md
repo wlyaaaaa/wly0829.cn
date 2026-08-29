@@ -14,31 +14,114 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  MVP has one entry, but the registry is designed for many projects. `.agents`
-  always has order 1.
+  local panel has exactly four enabled entries: `.agents`, PCConfig, GitHub
+  总索引 and ChineseASR in order 1/2/3/4. The registry remains extensible, and
+  `.agents` always has order 1.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
   the owner as `curated_packaging` may use packaging copy or exclusions.
 - The website source project is infrastructure for the presentation layer and
   never appears as one of the projects being presented.
-- Public copy stays vendor-neutral. Describe reusable AI workflow and harness
-  concepts without naming one assistant product or compatibility harness as
-  the site's identity.
+- Public copy stays vendor-neutral. Describe reusable AI workflows, rules and
+  capabilities without naming or implying one dedicated assistant product,
+  runtime wrapper or compatibility layer as the site's identity.
+- If an otherwise public-safe exact path or identifier contains the prohibited
+  platform identity, describe its drive, role, ownership, migration and
+  read-back semantics without reproducing that branded path segment. This is a
+  deliberate public-copy exception, not permission to hide the underlying
+  technical state.
+- Accuracy remains the primary product requirement. Public-copy restrictions
+  apply only to the prohibited literal or private value; they must never change
+  the factual status, omit the component, soften a failure, invent a generic
+  substitute, or make the owner infer that the underlying system does not
+  exist. Always retain the public-safe state, role, drive/location class,
+  selected configuration, migration relation, evidence and decision impact.
 - Accuracy and owner usefulness outrank persuasion. Do not hide current rules,
   generations, limitations, evidence gaps or implementation state merely to
   make the site look cleaner or stronger.
+- `professional_detailed_plain_language` means professional depth and plain
+  language must exist together; it never means removing technical detail or
+  replacing it with a short marketing summary. Every project, module, rule and
+  Skill page must begin with a reader layer that a person unfamiliar with the
+  system can understand before the technical reference layer starts.
+- The reader layer must answer, in this order: what this thing actually does for
+  the owner; what concrete problem or accident it prevents; one realistic
+  example using an ordinary request; what the owner receives at the end; and
+  what happens when the check passes, finds a problem, or cannot run. Only
+  after those answers may the page present triggers, inputs, outputs,
+  architecture, commands, schemas, hashes, evidence and recovery details.
+- For every selected project, the public panel is technically complete by
+  default. Except for private sensitive payloads and reusable secrets, retain
+  the details needed to reconstruct the current product: exact models,
+  providers, profiles, versions, modes, paths, ports, components, data flow,
+  commits, hashes, candidates, installed/runtime state, failures, tests, E2E
+  evidence and named gaps. “Public”, “too technical”, “too much text” and
+  recruiter readability are not valid reasons to remove these facts.
+- Public visibility is never a reason to suppress a non-secret fact that would
+  change the owner's understanding of the current project.
+- The first project viewport must disclose 4–6 decision-critical current facts:
+  what is actually selected or active, which important alternative is only
+  optional, and which evidence layer is still missing. The concrete fields
+  depend on the project. A model-driven project must name its exact current
+  model stack; a machine project must name current recovery/runtime versions;
+  a Git project must name repository and worktree facts. The owner must not
+  reconstruct current choices from later architecture prose.
+- If a detail contains private sensitive payload or a reusable secret, omit the
+  payload/value but keep the public-safe identity, state, boundary and effect on
+  current decisions. Unknown stays explicit Unknown. Never replace exact facts
+  with a vague “configured / available / verified” label.
+- A page is still a riddle when a first-time reader can only tell that it is
+  “related to Git / AI / files” but cannot explain what useful task it performs.
+  Field completeness, a glossary, translated labels, tests and correct terms do
+  not make that page understandable by themselves.
+- The first occurrence of a technical English term must either follow an
+  immediately visible explanation or use `English（中文含义）`. A glossary later
+  on the page cannot excuse unexplained English used earlier. Repeated terms may
+  use the shorter form after the first explanation.
+- Automatic term annotation is a single-pass, longest-phrase safety net. It
+  must never rewrite text that it already inserted or nest translations inside
+  one another. Context-dependent words such as token, source, candidate,
+  projection, limit, profile, Owner, Provider, Authority and root must be
+  disambiguated in the owning content instead of receiving one global
+  translation that changes their meaning.
+- Preserve the professional reference content after the reader layer. Do not
+  delete boundaries, failure behavior, implementation detail or verification
+  evidence merely to make the opening easier to read.
+- Project evolution is a milestone timeline, not a commit log. Group related
+  changes into one important product stage that explains the resulting change
+  in capability, boundary or user experience. A stage may use one date or a
+  date range. Small fixes, tests, refactors, copy changes and individual commits
+  never create evolution entries; AI refreshes merge, rewrite or remove old
+  stages before considering a new one.
 - Do not impose word targets or maximum lengths on reference pages. Content is
   complete only when the owner can reconstruct the subject without another
   conversation or private memory.
 - Project index pages start with real content. Do not repeat the active top
   navigation as a large page title and explanatory paragraph.
-- A project card is one clickable unit. Show its public/private status at the
-  top right; do not add a separate “enter project” button.
+- The project summary area opens that project's Overview module. The same card
+  directly exposes Overview and every project-owned module as visible links;
+  do not hide a small module list in a dropdown or add a redundant “enter
+  project” button. Module lists belong to each project, so future projects do
+  not inherit `.agents` modules. Use a single row while entries fit at readable
+  widths; when a future project has more modules, wrap the visible links into
+  additional rows with the same separators and active state. Never shrink text
+  below readability merely to force one row.
 - The desktop project index uses a two-column grid sized for four cards in the
   first viewport and continues vertically. Mobile uses one column sized for
-  roughly two cards in the first viewport.
+  roughly two cards in the first viewport. When the registry contains only one
+  project, that single card spans both desktop columns instead of occupying an
+  empty half-grid; two-column placement begins only when a second project exists.
 - Use official brand marks from a maintained icon library for external social
   links. Do not approximate brand logos with generic UI icons.
+- A project whose Registry visibility is PUBLIC exposes one explicit GitHub
+  repository button on its card and detail header, using the official GitHub
+  mark and opening the registered repository. PRIVATE projects show status only
+  and never receive a guessed or inaccessible repository link.
+- ChineseASR is a real dashboard entry, not a model showcase. Keep source,
+  unit-test, dependency, runtime-smoke, benchmark and human-review evidence
+  separate. Never publish private recordings, transcripts, voice vectors,
+  model weights, cloud requests or secret values, and never present anonymous
+  speaker clustering or a local `person:self` clue as identity proof.
 - Do not add a decorative footer that only repeats the owner's name or domain.
 - The white background may use a fixed canvas of slowly moving parallel
   hairlines. Motion must be visible within a short observation while remaining
@@ -73,14 +156,19 @@ read-only operating panel; public presentation is secondary.
 - There is no standalone Ideas directory in the current information
   architecture. Project-specific judgments live with the project/module that
   gives them context.
-- `/rules` is one rules workbench. It shows the active generation and exactly
+- `/rules` is one rules workbench. It shows the verified current E release,
+  current/previous pointer, PRIVATE main commit, five-file ruleset and exactly
   five current rules through an in-page selector; do not create rule detail
-  routes.
+  routes. Historical C material may appear only as recovery-only history.
 
-## MVP expansion gate
+## Project expansion gate
 
-- The MVP contains exactly one project: `.agents`, plus the one-page Rules
-  workbench and the current public-safe Skills catalog.
+- The owner accepted the one-project MVP and then the three-project local panel
+  on 2026-08-29. The owner has now authorized exactly one additional local
+  integration: ChineseASR. The current panel therefore contains exactly four
+  projects, plus the one-page Rules workbench and current public-safe Skills
+  catalog. Do not preselect or add a fifth project before the owner reviews
+  ChineseASR.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
   owned by one assistant product. It may include both personally maintained
   Skills and high-value externally supplied Skills that are genuinely available
@@ -90,13 +178,15 @@ read-only operating panel; public presentation is secondary.
   while keeping product-facing names and explanations vendor-neutral.
 - Display an integrated Skill only when it is currently usable, materially
   valuable, sufficiently understood, non-duplicative and safe to publish.
-- Finish content before breadth. `.agents` overview and all six modules, all
+- Finish content before breadth. `.agents` Overview and all six project modules, all
   five current rules, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
-- Do not add a second project, placeholder project, future-project card or
-  project-navigation category until the owner has reviewed and accepted those
-  three MVP content areas.
+- PCConfig, GitHub 总索引 and ChineseASR may enter the local registry, routes and
+  navigation. Their source, install, runtime and evidence gaps remain visible;
+  local integration must not upgrade them to production PASS. The owner has now
+  explicitly authorized publication after the verified current E release and current project facts are
+  refreshed, verified and read back from Pages.
 - UI completion, route existence and concise summaries do not satisfy the MVP
   content gate.
 - Before changing public project selection or copy, read
@@ -114,22 +204,32 @@ read-only operating panel; public presentation is secondary.
 - Product Design QA updates `design-qa.md` with current evidence references and
   final status; stale prior QA is replaced rather than accumulated.
 
-## Refresh model
+## AI refresh model
 
-- This is a continuously maintainable panel with manual, user-requested
-  refreshes. It is neither an immutable one-time snapshot nor an automatically
-  synchronized monitoring service.
+- The website's semantic updater is AI. The owner asks naturally to refresh one
+  project or says “全部更新一下”; the website task reads the Registry, collects
+  current Owner evidence, repairs safe in-scope defects, edits the owning
+  content in professional plain language, validates it and presents a preview.
+  Deterministic scripts may collect facts and verify contracts, but never write
+  narrative content or decide materiality.
+- A targeted refresh touches only the named project. A full refresh iterates all
+  enabled projects but may leave most or all files byte-identical. It is a
+  revalidation request, not permission to rewrite every page.
+- This is a continuously maintainable panel with on-demand AI refreshes. It is
+  neither an immutable one-time snapshot nor an automatically synchronized
+  monitoring service.
 - The published site represents the last explicitly refreshed and released
-  state. Generation identity is the version boundary; do not claim background
-  freshness, watchers or scheduled synchronization.
-- Content construction should provide one fast local refresh path that reads
-  the current owners, regenerates public-safe structured content, validates it,
-  and uses the existing normal publication chain only when the user asks.
-- Snapshot generation always performs a live source fetch, requires the exact
-  canonical `.agents` root to be clean and equal to `origin/main`, and writes a
-  payload commitment. Build verifies that commitment plus the generation,
-  five-rule and selected-Skill bindings before producing public files; there is
-  no offline or alternate-source write mode.
+  state. E release identity is the rule-version boundary; do not claim
+  background freshness, watchers or scheduled synchronization.
+- The fast project function must provide `targeted` and `all` AI refresh plans
+  from `config/panel-projects.json`, including the current content path, source
+  identity, evidence collectors and existing snapshot fingerprint. Plans are
+  context for AI, not a second writer.
+- `scripts/refresh-panel-snapshot.mjs` owns only the `.agents` current E-release,
+  source-checkout and Skill evidence payload. Rules always bind to the frozen,
+  verified current E release. A dirty or newer source checkout is shown as
+  non-active candidate work; it cannot overwrite the release and does not block
+  an otherwise truthful snapshot or unrelated project refresh.
 - Do not add a daemon, watcher, scheduled task, polling service or public live
   dependency merely to keep the panel current.
 - Cross-project refresh is event-driven and thresholded. A matching changed path
@@ -138,6 +238,14 @@ read-only operating panel; public presentation is secondary.
   maturity or user decision would otherwise become materially wrong. Small
   refactors, timestamps, formatting, blocked candidates and hash-only drift may
   wait for the next material refresh.
+- Default is no website change. AI updates a project only when leaving the page
+  unchanged would make a displayed capability, boundary, current state, usage
+  or user decision materially wrong. Small source updates never trigger a
+  website task.
+- Refreshes replace, merge or remove existing content in place. They do not add
+  update logs, duplicate evidence sections, new cards or timeline entries merely
+  because another refresh occurred. A 40+ project panel must remain readable;
+  unchanged projects and unchanged sections stay byte-identical.
 - Before publishing a refreshed snapshot, inspect the current source owners for
   contradictions and broken validation paths. Repair safe, in-scope defects
   through their real owner when possible; publish the repaired state. Defects
@@ -145,18 +253,35 @@ read-only operating panel; public presentation is secondary.
 
 ## Subagent discipline
 
-- A subagent receives exactly one bounded goal. Never reuse a completed,
-  interrupted or failed subagent for a second goal.
-- Create a fresh subagent when another independent goal has positive parallel
-  value. Subagents remain read-only unless their single goal explicitly owns a
-  named implementation scope; the root agent integrates the website and runs
-  the final audit.
+- When this website task benefits from native delegation and all upper gates
+  allow it, the project default is `gpt-5.6-sol` with `max` effort.
+- One subagent owns one durable goal. A follow-up may clarify, narrow or expand
+  the scope, evidence or acceptance criteria of that same goal, including
+  continuing it after interruption. It must never replace that goal with an
+  unrelated objective.
+- Create a fresh subagent for every unrelated new goal. Do not use an old child
+  merely because it is idle or already has context.
+- Subagents remain read-only unless their one goal explicitly owns a named
+  implementation scope; the root agent integrates the website and runs the
+  final audit.
 
 ## Verification and publication
 
 - Preserve the existing React, Vite and GitHub Pages route-generation chain.
 - Verify build, direct routes, custom 404, keyboard navigation, desktop/mobile
   overflow and browser console before normal-pushing `main`.
+- Content acceptance is a real reading test, not a schema check: for a sample
+  from every content type and every displayed Skill, a first-time reader must
+  be able to restate its practical use, concrete risk, example and final result
+  without opening the source Skill or asking a follow-up question. Automated
+  field checks are supporting evidence only.
+- `owner_preview_checkpoint`: after the new content structure, terminology and
+  information density are coherent, but before bulk finalization, commit or
+  publication, open a local browser preview and explicitly notify the owner in
+  the progress summary. The preview set must include the project index,
+  Overview, one representative module, one rule and one Skill. Pause for owner
+  feedback at that checkpoint; do not treat internal audits as owner acceptance
+  or continue to public release merely because automated checks pass.
 - The public-content gate scans every tracked/unignored source file and every
   production artifact regardless of extension. Directory-route canonical,
   Open Graph and sitemap URLs use the trailing-slash URL that Pages serves as
