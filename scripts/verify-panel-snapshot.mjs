@@ -4,6 +4,7 @@ import path from "node:path";
 import { generatedPanelFacts } from "../app/panel-facts.generated.js";
 import { rulesSnapshot } from "../app/content-core.js";
 import { skills } from "../app/content-skills.js";
+import documentedRuleBindings from "../config/panel-rule-bindings.json" with { type: "json" };
 
 const failures = [];
 function requireFact(condition, code, detail) {
@@ -15,18 +16,23 @@ const integrity = payload.integrity;
 delete payload.integrity;
 const actualPayloadSha256 = createHash("sha256").update(JSON.stringify(payload), "utf8").digest("hex");
 
-const liveReleaseResult = spawnSync(
-  "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
-  ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1", "-Mode", "Inspect", "-Json"],
-  { encoding: "utf8", windowsHide: true, maxBuffer: 8 * 1024 * 1024 }
-);
+const shouldReadLiveRelease = process.platform === "win32";
+const liveReleaseResult = shouldReadLiveRelease
+  ? spawnSync(
+    "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1", "-Mode", "Inspect", "-Json"],
+    { encoding: "utf8", windowsHide: true, maxBuffer: 8 * 1024 * 1024 }
+  )
+  : null;
 let liveRelease = null;
-try {
-  const start = liveReleaseResult.stdout.indexOf("{");
-  const end = liveReleaseResult.stdout.lastIndexOf("}");
-  liveRelease = JSON.parse(liveReleaseResult.stdout.slice(start, end + 1));
-} catch {
-  failures.push({ code: "live_e_release_read_failed", detail: liveReleaseResult.stderr?.trim() || "no JSON" });
+if (shouldReadLiveRelease) {
+  try {
+    const start = liveReleaseResult.stdout.indexOf("{");
+    const end = liveReleaseResult.stdout.lastIndexOf("}");
+    liveRelease = JSON.parse(liveReleaseResult.stdout.slice(start, end + 1));
+  } catch {
+    failures.push({ code: "live_e_release_read_failed", detail: liveReleaseResult.stderr?.trim() || "no JSON" });
+  }
 }
 
 requireFact(payload.schema === "wly.panel-facts.v2", "snapshot_schema_invalid", payload.schema);
@@ -52,11 +58,16 @@ requireFact(Number.isInteger(authority.pointerRevision) && authority.pointerRevi
 requireFact(authority.activationVerified === true && authority.requiredRulesVerified === true, "snapshot_e_release_not_verified", `${authority.activationVerified}/${authority.requiredRulesVerified}`);
 requireFact(authority.legacyCState === "retired_recovery_only", "snapshot_legacy_c_state_invalid", authority.legacyCState);
 requireFact(authority.previous === null || /^E\d+$/.test(authority.previous?.release_id || ""), "snapshot_previous_release_invalid", authority.previous?.release_id);
-requireFact(liveReleaseResult.status === 0 && liveRelease?.status === "pass" && liveRelease?.reason === "e_rules_active_verified", "live_e_release_not_verified", `${liveReleaseResult.status}/${liveRelease?.status}/${liveRelease?.reason}`);
-requireFact(liveRelease?.verified_current?.release_id === authority.releaseId, "snapshot_live_release_id_drift", `${authority.releaseId}/${liveRelease?.verified_current?.release_id}`);
-requireFact(liveRelease?.verified_current?.git_commit === authority.gitCommit, "snapshot_live_release_commit_drift", `${authority.gitCommit}/${liveRelease?.verified_current?.git_commit}`);
-requireFact(liveRelease?.verified_current?.ruleset_sha256 === authority.rulesetSha256, "snapshot_live_ruleset_drift", `${authority.rulesetSha256}/${liveRelease?.verified_current?.ruleset_sha256}`);
-requireFact(liveRelease?.pointer_sha256 === authority.pointerSha256, "snapshot_live_pointer_drift", `${authority.pointerSha256}/${liveRelease?.pointer_sha256}`);
+requireFact(documentedRuleBindings.schema === "wly.panel-rule-bindings.v2", "documented_rule_binding_schema_invalid", documentedRuleBindings.schema);
+requireFact(documentedRuleBindings.semantic_release_id === authority.releaseId, "documented_release_id_drift", `${documentedRuleBindings.semantic_release_id}/${authority.releaseId}`);
+requireFact(documentedRuleBindings.ruleset_sha256 === authority.rulesetSha256, "documented_ruleset_drift", `${documentedRuleBindings.ruleset_sha256}/${authority.rulesetSha256}`);
+if (shouldReadLiveRelease) {
+  requireFact(liveReleaseResult.status === 0 && liveRelease?.status === "pass" && liveRelease?.reason === "e_rules_active_verified", "live_e_release_not_verified", `${liveReleaseResult.status}/${liveRelease?.status}/${liveRelease?.reason}`);
+  requireFact(liveRelease?.verified_current?.release_id === authority.releaseId, "snapshot_live_release_id_drift", `${authority.releaseId}/${liveRelease?.verified_current?.release_id}`);
+  requireFact(liveRelease?.verified_current?.git_commit === authority.gitCommit, "snapshot_live_release_commit_drift", `${authority.gitCommit}/${liveRelease?.verified_current?.git_commit}`);
+  requireFact(liveRelease?.verified_current?.ruleset_sha256 === authority.rulesetSha256, "snapshot_live_ruleset_drift", `${authority.rulesetSha256}/${liveRelease?.verified_current?.ruleset_sha256}`);
+  requireFact(liveRelease?.pointer_sha256 === authority.pointerSha256, "snapshot_live_pointer_drift", `${authority.pointerSha256}/${liveRelease?.pointer_sha256}`);
+}
 
 const documentedRules = new Map(rulesSnapshot.rules.map((rule) => [rule.logicalId, rule]));
 const boundRules = new Map((payload.ruleBinding || []).map((rule) => [rule.logicalId, rule]));
@@ -69,8 +80,12 @@ for (const [logicalId, rule] of documentedRules) {
   requireFact(typeof bound?.sourceMatchesRelease === "boolean", "snapshot_source_relation_missing", logicalId);
   const expectedRoot = path.win32.join("E:\\.agents\\releases", authority.releaseId).toLowerCase() + "\\";
   requireFact(path.win32.resolve(bound?.releasePath || "").toLowerCase().startsWith(expectedRoot), "snapshot_release_path_outside_current", `${logicalId}:${bound?.releasePath}`);
-  const liveDescriptor = liveRelease?.verified_current?.files?.find((item) => item.logical_id === logicalId);
-  requireFact(liveDescriptor?.sha256 === bound?.sha256 && Number(liveDescriptor?.bytes) === Number(bound?.bytes), "snapshot_live_rule_descriptor_drift", logicalId);
+  const documentedDescriptor = documentedRuleBindings.rules.find((item) => item.logicalId === logicalId);
+  requireFact(Boolean(documentedDescriptor?.sourcePath), "documented_rule_source_missing", logicalId);
+  if (shouldReadLiveRelease) {
+    const liveDescriptor = liveRelease?.verified_current?.files?.find((item) => item.logical_id === logicalId);
+    requireFact(liveDescriptor?.sha256 === bound?.sha256 && Number(liveDescriptor?.bytes) === Number(bound?.bytes), "snapshot_live_rule_descriptor_drift", logicalId);
+  }
 }
 requireFact(authority.releaseId === rulesSnapshot.releaseId, "snapshot_release_id_mismatch", `${authority.releaseId}/${rulesSnapshot.releaseId}`);
 requireFact(authority.rulesetSha256 === rulesSnapshot.rulesetSha256, "snapshot_ruleset_mismatch", `${authority.rulesetSha256}/${rulesSnapshot.rulesetSha256}`);
@@ -97,6 +112,7 @@ const report = {
   selected_skill_count: payload.skills.selectedPublicCount,
   active_install_intent_count: payload.skills.activeInstallIntent,
   payload_sha256: actualPayloadSha256,
+  live_release_checked: shouldReadLiveRelease,
   finding_count: failures.length,
   findings: failures
 };

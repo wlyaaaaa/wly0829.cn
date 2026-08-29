@@ -91,15 +91,17 @@ ChineseASR 的本地 owner preview（用户预览）验收；上一轮截图早�
 - AI 刷新支持定向项目和“全部更新一下”，默认 no-op；小更新不改网页，内容原位合并而不追加日志或演化卡。
 
 当前 24 项网站合同测试、53 条直接路由、本地生产构建和 103 个源码/产物公开内容扫描对象
-全部通过；首屏 JavaScript gzip 为 245.46 KiB，仍低于 256 KiB 预算。ChineseASR Source main
+全部通过；首屏 JavaScript gzip 为 245.56 KiB，仍低于 256 KiB 预算。ChineseASR Source main
 与远端 0/0、工作树干净，Doctor 通过，344/344 单元测试通过；本次没有把这些证据冒充
 真实录音 E2E。
 
-Rules 已重新绑定 verified current E88：source commit 与活动 release 同为
-`e86288fdfe948e389136415d95dc4dc9598ed17a`，五文件 ruleset 为
-`b1a6e0977afe537f785245ebc9d72ab6ed3128f15197e731539ca81afd894eed`，live snapshot verifier
-零 finding。快速结构化刷新用时约 27 秒，专用 release validator、Skill 供应和合同覆盖通过；
-当前源码全量回归没有在快速刷新中重跑，因此页面明确显示 Unknown，不沿用旧 PASS。
+Rules 已重新绑定 verified current E89：活动 release commit 为
+`6a272ca361919bd377975c4574f6ab4372483ade`，五文件 ruleset 为
+`e58ca597501ff20306d384e841623e39373eca8d715034856c63b9ebe59b0ce4`。Source main 当前为
+`96aea6972130887cd4d74d92e2d500aa5b2b1463`、工作树干净；它只比 E89 多一个 FastRelease 回执
+修复提交，五份 canonical source 仍与 E89 release 一致。live snapshot verifier 零 finding。
+快速结构化刷新用时约 28 秒，专用 release validator、Skill 供应和合同覆盖通过；当前源码全量
+回归没有在快速刷新中重跑，因此页面明确显示 Unknown，不沿用旧 PASS。
 
 生产预览在 1440×900 与 390×844 复核首页、Rules、四个项目总览、ChineseASR 模型模块和
 project-entry-gate Skill；所有页面 `scrollWidth` 与 viewport 一致，控制台没有 warning/error。

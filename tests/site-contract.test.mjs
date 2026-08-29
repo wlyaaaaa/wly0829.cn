@@ -638,6 +638,8 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(refresher, /e_rules_active_verified/);
   assert.doesNotMatch(refresher, /Get-ProtectedPolicyAuthorityStatus|policy_epoch|production_activation|candidate_pending/);
   assert.match(snapshotVerifier, /Invoke-EAgentRulesRelease\.ps1/);
+  assert.match(snapshotVerifier, /process\.platform === "win32"/);
+  assert.match(snapshotVerifier, /documentedRuleBindings\.semantic_release_id/);
   assert.match(snapshotVerifier, /snapshot_live_release_id_drift/);
   assert.match(snapshotVerifier, /snapshot_live_rule_descriptor_drift/);
   assert.doesNotMatch(refresher, /--source-root|--skip-tests|--offline/);
