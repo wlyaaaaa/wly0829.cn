@@ -41,11 +41,10 @@ async function listDistFiles(root) {
   return files;
 }
 
-const sourceFiles = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], {
+const sourceFiles = execFileSync("git", ["-c", "core.quotepath=false", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], {
   cwd: projectRoot,
-  encoding: "utf8",
   windowsHide: true
-}).split(/\r?\n/).filter(Boolean).map((relative) => path.join(projectRoot, relative));
+}).toString("utf8").split("\0").filter(Boolean).map((relative) => path.join(projectRoot, relative));
 const findings = [];
 let distFiles = [];
 try {

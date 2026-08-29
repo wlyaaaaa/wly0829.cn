@@ -235,6 +235,9 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /production_javascript_missing/);
   assert.match(verifier, /GitHub fine-grained token/);
   assert.doesNotMatch(verifier, /textExtensions/);
+  assert.match(verifier, /core\.quotepath=false/);
+  assert.match(verifier, /"-z"/);
+  assert.match(verifier, /split\("\\0"\)/);
   assert.match(refresher, /const sourceRoot = "E:\\\\.agents"/);
   assert.doesNotMatch(refresher, /--source-root|--skip-tests|--offline/);
 });
