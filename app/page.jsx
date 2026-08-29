@@ -85,7 +85,7 @@ function SocialIcon({ name }) {
   return <EnvelopeSimple size={19} aria-hidden="true" />;
 }
 
-function GlobalSearch() {
+function GlobalSearch({ autoFocus = false, className = "", resultId = "global-search-results" }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const normalized = query.trim().toLowerCase();
@@ -96,24 +96,25 @@ function GlobalSearch() {
 
   return (
     <div
-      className="global-search"
+      className={`global-search${className ? ` ${className}` : ""}`}
       onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
     >
       <label>
         <MagnifyingGlass size={18} aria-hidden="true" />
         <span className="visually-hidden">搜索项目、规则和 Skills（能力）</span>
         <input
+          autoFocus={autoFocus}
           value={query}
           onChange={(event) => { setQuery(event.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); event.currentTarget.blur(); } }}
           aria-expanded={Boolean(open && normalized)}
-          aria-controls="global-search-results"
+          aria-controls={resultId}
           placeholder="搜索项目、规则或 Skill"
         />
       </label>
       {open && normalized ? (
-        <div className="global-search-results" id="global-search-results" aria-label="全站搜索结果">
+        <div className="global-search-results" id={resultId} aria-label="全站搜索结果">
           <p aria-live="polite">{results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`}</p>
           {results.length ? results.slice(0, 9).map((entry) => (
             <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
@@ -232,48 +233,62 @@ function navActive(href, path) {
 
 function Header({ path }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuButtonRef = useRef(null);
-  useEffect(() => setMenuOpen(false), [path]);
+  const searchButtonRef = useRef(null);
+  useEffect(() => { setMenuOpen(false); setSearchOpen(false); }, [path]);
   useEffect(() => {
-    if (!menuOpen) return undefined;
+    if (!menuOpen && !searchOpen) return undefined;
     function closeOnEscape(event) {
       if (event.key === "Escape") {
         setMenuOpen(false);
-        menuButtonRef.current?.focus();
+        setSearchOpen(false);
+        (searchOpen ? searchButtonRef : menuButtonRef).current?.focus();
       }
     }
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [menuOpen]);
+  }, [menuOpen, searchOpen]);
   return (
     <>
       <header className="site-header">
         <a className="skip-link" href="#main-content">跳到主要内容</a>
         <div className="header-inner">
-        <SiteLink className="brand" href="/" aria-label="返回吴乐阳首页">吴乐阳</SiteLink>
-        <GlobalSearch />
+        <a className="brand" href="https://github.com/wlyaaaaa" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开吴乐阳的 GitHub 主页">吴乐阳</a>
+        <nav className="primary-nav" aria-label="主要导航">
+          {primaryNav.map((item) => (
+            <SiteLink
+              className={navActive(item.href, path) ? "is-active" : undefined}
+              href={item.href}
+              key={item.href}
+              aria-current={navActive(item.href, path) ? "page" : undefined}
+            >{item.label}</SiteLink>
+          ))}
+        </nav>
+        <GlobalSearch className="desktop-search" resultId="desktop-global-search-results" />
+        <button
+          ref={searchButtonRef}
+          className="mobile-search-button"
+          type="button"
+          aria-label={searchOpen ? "关闭搜索" : "打开搜索"}
+          aria-controls="mobile-site-search"
+          aria-expanded={searchOpen}
+          onClick={() => { setMenuOpen(false); setSearchOpen((value) => !value); }}
+        >
+          {searchOpen ? <X size={22} aria-hidden="true" /> : <MagnifyingGlass size={21} aria-hidden="true" />}
+        </button>
         <button
           ref={menuButtonRef}
           className="menu-button"
           type="button"
-          aria-label={menuOpen ? "关闭导航" : "打开导航"}
+          aria-label={menuOpen ? "关闭外部链接" : "打开外部链接"}
           aria-controls="site-navigation"
           aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((value) => !value)}
+          onClick={() => { setSearchOpen(false); setMenuOpen((value) => !value); }}
         >
           {menuOpen ? <X size={23} aria-hidden="true" /> : <List size={23} aria-hidden="true" />}
         </button>
         <div className={`header-navigation${menuOpen ? " is-open" : ""}`} id="site-navigation">
-          <nav className="primary-nav" aria-label="主要导航">
-            {primaryNav.map((item) => (
-              <SiteLink
-                className={navActive(item.href, path) ? "is-active" : undefined}
-                href={item.href}
-                key={item.href}
-                aria-current={navActive(item.href, path) ? "page" : undefined}
-              >{item.label}</SiteLink>
-            ))}
-          </nav>
           <nav className="social-nav" aria-label="外部链接">
             {socialLinks.map((item) => (
               <a
@@ -289,9 +304,10 @@ function Header({ path }) {
             ))}
           </nav>
         </div>
+        {searchOpen ? <div className="mobile-search-panel is-open" id="mobile-site-search"><GlobalSearch autoFocus className="mobile-search-control" resultId="mobile-global-search-results" /></div> : null}
         </div>
       </header>
-      {menuOpen ? <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭导航菜单背景" onClick={() => setMenuOpen(false)} /> : null}
+      {menuOpen || searchOpen ? <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭顶部浮层背景" onClick={() => { setMenuOpen(false); setSearchOpen(false); }} /> : null}
     </>
   );
 }
@@ -450,8 +466,8 @@ function ProjectCard({ entry }) {
       <nav className="project-module-links" aria-label={`${currentProject.title} 模块入口`}>
         <span>模块</span>
         <div className="project-module-link-rows">{moduleRows.map((row, rowIndex) => (
-          <div className="project-module-link-row" style={{ "--module-count": row.length }} key={`${currentProject.slug}-module-row-${rowIndex}`}>
-            {row.map((item) => <SiteLink className={item.href === currentProject.route ? "is-default" : undefined} href={item.href} key={item.href}>{annotateTerms(item.label)}</SiteLink>)}
+          <div className="project-module-link-row" style={{ "--module-count": row.length, "--mobile-last-span": row.length % 4 === 0 ? 1 : 5 - (row.length % 4) }} key={`${currentProject.slug}-module-row-${rowIndex}`}>
+            {row.map((item) => <SiteLink className={item.href === currentProject.route ? "is-default" : undefined} href={item.href} key={item.href}>{item.label === "Skills / Plugins" ? item.label : annotateTerms(item.label)}</SiteLink>)}
           </div>
         ))}</div>
       </nav>

@@ -17,7 +17,7 @@ export const socialLinks = [
 export const primaryNav = [
   { label: "项目", href: "/" },
   { label: "规则", href: "/rules" },
-  { label: "Skills（能力）", href: "/skills" }
+  { label: "Skills", href: "/skills" }
 ];
 
 if (

@@ -79,20 +79,39 @@ test("the accepted panel has exactly four projects and three navigation areas", 
   assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr"]);
   assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4]);
   assert.equal(project.slug, "agents");
-  assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills（能力）"]);
+  assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
   assert.ok(!routePaths.includes("/ideas"));
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
+});
+
+test("the mobile header keeps primary navigation outside and uses a dedicated search icon", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  const primaryNavigationIndex = pageSource.indexOf('<nav className="primary-nav"');
+  const menuIndex = pageSource.indexOf('<div className={`header-navigation');
+  assert.ok(primaryNavigationIndex >= 0 && menuIndex > primaryNavigationIndex, "primary navigation must stay outside the mobile menu");
+  assert.match(pageSource, /GlobalSearch className="desktop-search"/);
+  assert.match(pageSource, /className="brand" href="https:\/\/github\.com\/wlyaaaaa" target="_blank"/);
+  assert.match(pageSource, /className="mobile-search-button"/);
+  assert.match(pageSource, /className="mobile-search-panel is-open"/);
+  assert.match(styleSource, /\.desktop-search\s*\{\s*display:\s*none;/);
+  assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?display:\s*inline-flex;/);
+  assert.match(styleSource, /\.mobile-search-panel\.is-open,[\s\S]*?display:\s*block;/);
+  assert.match(styleSource, /\.header-navigation\.is-open\s*\{\s*display:\s*block;/);
 });
 
 test("the project card exposes visible module links instead of a dropdown", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /project-module-link-row/);
   assert.match(pageSource, /moduleOptions\.slice\(index \* 7, index \* 7 \+ 7\)/);
+  assert.match(pageSource, /"--mobile-last-span": row\.length % 4 === 0 \? 1 : 5 - \(row\.length % 4\)/);
+  assert.match(await readFile(path.join(projectRoot, "app", "style.css"), "utf8"), /grid-column:\s*span var\(--mobile-last-span, 1\)/);
   assert.match(pageSource, /projectCatalog\.map\(\(entry\) => <ProjectCard/);
   assert.match(pageSource, /currentProject\.route/);
   assert.match(pageSource, /project-repository-button/);
   assert.match(pageSource, /project-hero-repository-link/);
   assert.match(pageSource, /https:\/\/github\.com\/\$\{entry\.registration\.source\.repo\}/);
+  assert.match(pageSource, /item\.label === "Skills \/ Plugins" \? item\.label : annotateTerms\(item\.label\)/);
   assert.doesNotMatch(pageSource, /project-module-selector|选择 \.agents 模块/);
   assert.doesNotMatch(pageSource, /href=\{`\/projects\/agents\//);
 });
