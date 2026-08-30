@@ -513,8 +513,6 @@ function projectKicker(kind) {
 
 function ProjectHero({ entry }) {
   const { project: currentProject } = entry;
-  const isAgents = entry.kind === "agents";
-  const isLearning = entry.kind === "learning";
   const repositoryUrl = publicRepositoryUrl(entry);
   return (
     <>
@@ -526,17 +524,10 @@ function ProjectHero({ entry }) {
             <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
             <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
           </div>
-          {currentProject.heroFacts?.length ? (
-            <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
-              {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}
-            </dl>
-          ) : null}
         </div>
-        <aside className="snapshot-card" aria-label={isLearning ? "方法快照" : "当前快照"}>
-          <span className="snapshot-label">{isLearning ? "方法快照" : "当前快照"}</span>
-          <strong>{isAgents ? `E rules（E 规则） ${panelSnapshot.authority.releaseId}` : displayCopy(currentProject.currentState.label, entry.kind)}</strong>
-          {isAgents ? <span>{panelSnapshot.authority.statusLabel} · previous={panelSnapshot.authority.previous?.release_id || "无"}</span> : isLearning ? <span>公开范围：方法与边界，不含主题或进度</span> : <span>已确认事实 {currentProject.currentState.facts.length} / 当前缺口 {currentProject.currentState.gaps.length}</span>}
-          <ObservedTime value={isAgents ? panelSnapshot.observedAt : currentProject.currentState.observedAt} />
+        <aside className="snapshot-card project-entry-card" aria-label="项目入口">
+          <span className="snapshot-label">项目入口</span>
+          <strong>{currentProject.visibility}</strong>
           <span>{displayCopy(currentProject.repositoryNote, entry.kind)}</span>
           {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
@@ -887,8 +878,8 @@ function MethodCanvas({ canvas, kind }) {
 
 const projectReadingLayers = [
   { id: "quick", label: "速览" },
-  { id: "product", label: "项目怎么用" },
-  { id: "technical", label: "技术参考" }
+  { id: "product", label: "产品" },
+  { id: "technical", label: "技术" }
 ];
 
 function ProjectReadingNav() {
@@ -947,6 +938,7 @@ function ProjectOverview({ entry }) {
 
       <ProjectReadingPanel id="technical">
         <section className="document-section document-section-first"><h2>{isLearning ? "方法状态与证据边界" : "完整项目状态与证据边界"}</h2><ProjectCurrentState entry={entry} /></section>
+        {currentProject.heroFacts?.length ? <section className="document-section"><h2>当前关键技术事实</h2><dl className="project-headline-facts project-headline-facts-technical" aria-label={`${currentProject.title} 当前关键技术事实`}>{currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}</dl></section> : null}
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
         <section className="document-section"><h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2><p>模块是可直达的技术深入章节，不是另一套产品介绍。</p><div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div></section>

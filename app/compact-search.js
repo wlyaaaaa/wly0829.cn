@@ -7,10 +7,10 @@ export function compactSearchScore(entry, query) {
   const searchable = `${entry.type} ${title} ${detail} ${aliases.join(" ")}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !searchable.includes(token))) return 0;
-  if (title.includes(normalized)) return 140;
-  if (aliases.some((alias) => alias.includes(normalized))) return 160;
-  if (detail.includes(normalized)) return 110;
-  if (searchable.includes(normalized)) return 90;
+  if (title.includes(normalized)) return 14000;
+  if (aliases.some((alias) => alias.includes(normalized))) return 16000;
+  if (detail.includes(normalized)) return 11000;
+  if (searchable.includes(normalized)) return 9000;
 
   const compact = normalized.replace(/[a-z0-9_.:/-]+/gi, "").replace(/[^\p{Script=Han}]/gu, "");
   const grams = compact.length >= 3
@@ -28,6 +28,6 @@ export function searchCompactEntries(entries, query, scope = "all") {
   return entries
     .map((entry, index) => ({ entry, index, score: compactSearchScore(entry, query) }))
     .filter((result) => result.score > 0 && (scope === "all" || (result.entry.scopes || []).includes(scope)))
-    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .sort((left, right) => right.score - left.score || (left.entry.type === "项目内容" ? 0 : 1) - (right.entry.type === "项目内容" ? 0 : 1) || left.index - right.index)
     .map((result) => result.entry);
 }

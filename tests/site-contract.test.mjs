@@ -18,7 +18,7 @@ import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
-import { searchPanel } from "../app/search.js";
+import { searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { searchCompactEntries } from "../app/compact-search.js";
 import {
@@ -82,13 +82,15 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly ten projects and three navigation areas", async () => {
+test("the accepted panel has exactly ten projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
   assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   assert.equal(project.slug, "agents");
-  assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
+  assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "系统", "规则", "Skills"]);
+  assert.ok(routePaths.includes("/system"));
+  assert.ok(routePaths.includes("/search"));
   assert.ok(!routePaths.includes("/ideas"));
   assert.match(pageSource, /共 \{projectCatalog\.length\} 个项目/);
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
@@ -102,7 +104,7 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   const primaryNavigationIndex = pageSource.indexOf('<nav className="primary-nav"');
   const menuIndex = pageSource.indexOf('<div className={`header-navigation');
   assert.ok(primaryNavigationIndex >= 0 && menuIndex > primaryNavigationIndex, "primary navigation must stay outside the mobile menu");
-  assert.match(pageSource, /GlobalSearch className="desktop-search"/);
+  assert.match(pageSource, /GlobalSearch path=\{path\} search=\{search\} className="desktop-search"/);
   assert.match(pageSource, /className="brand" href="https:\/\/github\.com\/wlyaaaaa" target="_blank"/);
   assert.match(pageSource, /className="mobile-search-button"/);
   assert.match(pageSource, /className=\{`mobile-search-panel\$\{searchOpen \? " is-open" : ""\}`\}[\s\S]*?hidden=\{!searchOpen\}/);
@@ -118,19 +120,16 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
 });
 
-test("project hero facts stay adjacent to the project copy and technical prose wraps on mobile", async () => {
+test("project hero stays product-first and technical prose wraps on mobile", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   const heroMainIndex = pageSource.indexOf('className="project-hero-main"');
   const heroCopyIndex = pageSource.indexOf('className="project-hero-copy"', heroMainIndex);
-  const factsIndex = pageSource.indexOf('className="project-headline-facts"', heroCopyIndex);
-  const snapshotIndex = pageSource.indexOf('<aside className="snapshot-card"', factsIndex);
-  assert.ok(heroMainIndex >= 0 && heroCopyIndex > heroMainIndex && factsIndex > heroCopyIndex && snapshotIndex > factsIndex, "headline facts must follow project copy inside the left hero column before the independent snapshot card");
+  const entryIndex = pageSource.indexOf('<aside className="snapshot-card project-entry-card"', heroCopyIndex);
+  const heroEnd = pageSource.indexOf("function ProjectNav", heroMainIndex);
+  assert.ok(heroMainIndex >= 0 && heroCopyIndex > heroMainIndex && entryIndex > heroCopyIndex, "project hero must contain product copy followed by the project entry");
+  assert.doesNotMatch(pageSource.slice(heroMainIndex, heroEnd), /project-headline-facts|currentProject\.heroFacts/, "technical facts still occupy the hero");
   assert.match(styleSource, /\.project-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) minmax\(230px, 300px\);[\s\S]*?align-items:\s*start;/);
-  assert.match(styleSource, /\.project-hero-main\s*\{[\s\S]*?display:\s*grid;[\s\S]*?align-content:\s*start;[\s\S]*?gap:\s*22px;/);
-  assert.doesNotMatch(styleSource, /grid-template-areas:[\s\S]{0,120}"facts facts"/);
-  assert.match(styleSource, /\.project-headline-facts\s*\{[\s\S]*?max-width:\s*none;[\s\S]*?margin:\s*0;/);
-  assert.match(styleSource, /\.project-headline-facts > div:last-child:nth-child\(odd\)\s*\{\s*grid-column:\s*1 \/ -1;/);
   assert.match(styleSource, /\.plain-list li,[\s\S]*?overflow-wrap:\s*anywhere;/);
   assert.match(styleSource, /\.failure-list dt,[\s\S]*?overflow-wrap:\s*anywhere;/);
 });
@@ -178,20 +177,23 @@ test("reader outcomes appear before technical decision lists", async () => {
   assert.match(pageSource, /outcome\.result[\s\S]{0,700}<ThreeStateSummary \{\.\.\.outcome\.readerStates\} \/>[\s\S]{0,400}outcome\.changes/);
 });
 
-test("every project first viewport exposes current decision-critical choices", async () => {
+test("project technical facts remain complete without taking over the first viewport", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const heroSource = pageSource.slice(pageSource.indexOf("function ProjectHero"), pageSource.indexOf("function ProjectNav"));
+  assert.doesNotMatch(heroSource, /currentProject\.heroFacts|project-headline-facts/, "technical facts still render before the reading layers");
   assert.match(pageSource, /currentProject\.heroFacts/);
   assert.match(pageSource, /project-headline-facts/);
+  assert.ok(pageSource.indexOf('ProjectReadingPanel id="technical"') < pageSource.lastIndexOf("currentProject.heroFacts"), "hero facts are not inside the technical layer");
   for (const entry of projectCatalog) {
-    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length >= 4 && entry.project.heroFacts.length <= 6, `${entry.project.slug} must expose 4–6 current choices in the first viewport`);
+    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length >= 4 && entry.project.heroFacts.length <= 6, `${entry.project.slug} must retain 4–6 technical facts`);
     for (const fact of entry.project.heroFacts) {
-      assert.ok(fact.label?.length >= 2, `${entry.project.slug} has an unnamed first-viewport fact`);
+      assert.ok(fact.label?.length >= 2, `${entry.project.slug} has an unnamed technical fact`);
       assert.ok(fact.value?.length >= 18, `${entry.project.slug}/${fact.label} is too vague`);
     }
   }
   const asrFacts = chineseAsrProject.heroFacts.map((fact) => fact.value).join("\n");
   for (const model of ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "Paraformer", "CAM++", "Qwen Audio 3.0 ASR Flash", "Fun-ASR-Nano-2512", "Whisper Large V3"]) {
-    assert.ok(asrFacts.includes(model), `ChineseASR first viewport hides model: ${model}`);
+    assert.ok(asrFacts.includes(model), `ChineseASR technical reference hides model: ${model}`);
   }
   const pcconfigFacts = pcconfigProject.heroFacts.map((fact) => fact.value).join("\n");
   assert.match(pcconfigFacts, /88.*88/);
@@ -206,7 +208,7 @@ test("every project first viewport exposes current decision-critical choices", a
   assert.match(agentsFacts, /25.*23/);
   const timeAuditFacts = timeAuditProject.heroFacts.map((fact) => fact.value).join("\n");
   for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "53000", "6 张仪表盘", "78 个面板"]) {
-    assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit first viewport hides: ${currentFact}`);
+    assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit technical reference hides: ${currentFact}`);
   }
   assert.match(timeAuditFacts, /本机/);
   assert.doesNotMatch(pageSource, /C:\\\\ProgramData\\\\PCConfig\\\\AuthorityHost\\\\policy\\\\generations/);
@@ -249,7 +251,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /positive L3\+ evidence/);
   assert.doesNotMatch(projectRules, /prohibited platform identity/);
   assert.match(projectRules, /what this thing actually does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic\s+example[\s\S]{0,500}owner receives/);
-  assert.match(projectRules, /three reading layers: `速览`, `项目怎么用`\s+and `技术参考`/);
+  assert.match(projectRules, /three reading layers: `速览`, `产品`\s+and `技术`/);
   assert.match(projectRules, /product principles and design highlights/);
   assert.match(projectRules, /release id, commit, test count,[\s\S]{0,160}not the\s+product's identity/);
   assert.match(projectRules, /Public pages never expose internal presentation or maintenance labels/);
@@ -333,7 +335,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
   assert.match(runtimeSource, /image\.addEventListener\("dblclick",[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
-  assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules must expose all five static panels when JavaScript is disabled");
+  assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
   for (const { project: currentProject } of projectCatalog) {
     assert.ok(!clientGraph.includes(currentProject.summary.slice(0, 80)), `${currentProject.slug} narrative leaked into client JavaScript`);
   }
@@ -346,7 +348,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.ok(gzipSync(indexMatch[1]).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "compact search index exceeds registry budget");
   assert.ok(compactIndex.length >= routePaths.length);
   for (const entry of compactIndex) {
-    assert.deepEqual(Object.keys(entry), ["type", "title", "detail", "href", "aliases"]);
+    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
   }
   const compactAliasCases = [
@@ -902,11 +904,11 @@ test("the learning method canvas stays human-readable, static and responsive", a
   assert.match(pageSource, /你、AI与刻意不建设的边界/);
   assert.match(pageSource, /问题不计分，也不会形成掌握记录/);
   assert.match(pageSource, /entry\.kind === "learning"/);
-  assert.match(pageSource, /公开范围：方法与边界，不含主题或进度/);
+  assert.doesNotMatch(pageSource, /公开范围：方法与边界，不含主题或进度/);
   assert.match(pageSource, /source\.href \? <a className="source-reference-link"/);
   assert.match(styleSource, /\.method-step-flow\s*\{[\s\S]*?grid-template-columns:\s*repeat\(6,/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.method-step-flow,[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/);
-  assert.match(styleSource, /@media \(max-width: 440px\)[\s\S]*?\.learning-project-card \.project-metrics/);
+  assert.match(styleSource, /\.project-quick-state\s*\{[\s\S]*?grid-template-columns:\s*repeat\(3,/);
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "index.html"), "utf8");
   assert.match(overviewHtml, /data-static-route="\/projects\/learning"/);
@@ -1070,7 +1072,9 @@ test("personal-health publishes the evidence product without personal health pay
 
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /currentProject\.kicker \|\| projectKicker/);
-  assert.match(pageSource, /Array\.isArray\(entry\.project\.cardMetrics\)/);
+  assert.match(pageSource, /function projectCardPresentation\(entry\)/);
+  assert.match(pageSource, /entry\.project\.snapshotBoundary \|\| state\.gaps\?\.\[0\]/);
+  assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(pageSource, /labels=\{currentProject\.stateLabels\}/);
   assert.match(pageSource, /canvas\.columns \|\|/);
   assert.match(pageSource, /canvas\.description \|\|/);
@@ -1599,6 +1603,39 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.ok(searchPanel("的").length > 9, "broad search should retain the true total before UI truncation");
 });
 
+test("shared search scopes, project reading layers, Skills categories and System stay coherent", async () => {
+  assert.equal(searchScopeForPath("/").id, "project");
+  assert.equal(searchScopeForPath("/system").id, "system");
+  assert.equal(searchScopeForPath("/rules").id, "rules");
+  assert.equal(searchScopeForPath("/skills").id, "skills");
+  assert.equal(searchScopeForPath("/projects/timeaudit/hardware-performance").id, "project:timeaudit");
+  assert.ok(searchPanel("卡顿", "project").every((entry) => entry.type === "项目"), "project-index search must land on project entities");
+  assert.ok(searchPanel("FPS", "project:timeaudit").every((entry) => entry.projectSlug === "timeaudit"), "project search escaped the current project");
+  assert.ok(searchPanel("授权", "rules").every((entry) => entry.group === "规则"), "rule search leaked another surface");
+  assert.ok(searchPanel("照片", "skills").every((entry) => entry.group === "Skills"), "Skills search leaked another surface");
+  assert.ok(searchPanel("昨晚电脑为什么卡", "system").some((entry) => entry.href.startsWith("/system/")), "system search misses a real relationship journey");
+
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  for (const text of ["速览", "产品", "技术"]) assert.ok(pageSource.includes(text), `project reading layer is missing: ${text}`);
+  assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
+  assert.match(runtimeSource, /function initializeProjectReadingLayers\(\)/);
+  assert.match(runtimeSource, /function initializeSkillCategories\(\)/);
+  assert.match(runtimeSource, /查看全部 \$\{results\.length\} 条结果/);
+  assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
+  assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
+
+  const systemHtml = await readFile(path.join(projectRoot, "dist", "system", "index.html"), "utf8");
+  assert.match(systemHtml, /class="page-frame system-page"/);
+  for (const text of ["三个责任源分别解决什么", "事实怎样进入项目", "三条典型使用链", "这张图不表示什么"]) assert.ok(systemHtml.includes(text), `System page omits: ${text}`);
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "timeaudit", "index.html"), "utf8");
+  for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `Overview omits reading layer: ${id}`);
+  assert.match(overviewHtml, /<h2>项目模块<\/h2>/);
+  const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "index.html"), "utf8");
+  assert.match(skillsHtml, /data-skill-category="all"[^>]*aria-pressed="true"|aria-pressed="true"[^>]*data-skill-category="all"/);
+});
+
 test("route links use native directory documents and preserve module scroll without intercepting navigation", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
@@ -1791,8 +1828,15 @@ test("public content allows public-safe product names and excludes credential va
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
   assert.doesNotMatch(publicText, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
   assert.doesNotMatch(publicText, /AIza[0-9A-Za-z_-]{30,}/);
-  assert.match(pageSource, /搜索项目、规则或 Skill/);
+  assert.match(pageSource, /按当前范围搜索/);
+  assert.match(pageSource, /查看全部 \{results\.length\} 条结果/);
   assert.doesNotMatch(pageSource, /addEventListener\("scroll"/);
+  const publicMaintenanceLabels = /curated_packaging|manual_owner_only|manual-only|策展快照|策展展示|包装内容|手动维护/i;
+  for (const route of routePaths) {
+    const routeIndex = route === "/" ? path.join(projectRoot, "dist", "index.html") : path.join(projectRoot, "dist", ...route.slice(1).split("/"), "index.html");
+    const html = await readFile(routeIndex, "utf8");
+    assert.doesNotMatch(html, publicMaintenanceLabels, `${route} exposes website-maintenance language`);
+  }
 });
 
 test("the public gate allows ordinary labels and blocks a constructed credential", async () => {
@@ -1827,7 +1871,7 @@ test("the public gate allows ordinary labels and blocks a constructed credential
 
 test("every public route is unique and has useful metadata", () => {
   assert.equal(new Set(routePaths).size, routePaths.length);
-  assert.equal(routePaths.length, 3 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
+  assert.equal(routePaths.length, 5 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
   for (const route of routePaths) {
     const meta = routeMeta(route);
     assert.match(meta.title, /吴乐阳/);
@@ -1877,6 +1921,11 @@ test("production build has direct entry files for every route", async () => {
       } else if (route === "/rules") {
         assert.match(rootHtml, /class="rules-workbench"/);
         for (const rule of rulesSnapshot.rules) assert.ok(rootHtml.includes(`data-rule-panel="${rule.logicalId}"`), `rules HTML omits ${rule.logicalId}`);
+      } else if (route === "/system") {
+        assert.match(rootHtml, /class="page-frame system-page"/);
+        assert.match(rootHtml, /class="system-relation-table"/);
+      } else if (route === "/search") {
+        assert.match(rootHtml, /class="page-frame search-results-page"/);
       } else if (route === "/skills") {
         assert.match(rootHtml, /class="skill-directory"/);
         assert.ok(rootHtml.includes(skills[0].name) && rootHtml.includes(skills.at(-1).name), "Skills directory is incomplete");

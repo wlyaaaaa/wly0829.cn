@@ -38,11 +38,13 @@ for (const alias of compactSearchCandidateAliases) {
   const owner = searchPanel(alias)[0];
   if (!owner) continue;
   const ownerHref = canonicalDocumentHref(owner.href);
-  projectedAliases.set(ownerHref, [...(projectedAliases.get(ownerHref) || []), alias]);
+  const ownerKey = `${owner.type}|${owner.title}|${ownerHref}`;
+  projectedAliases.set(ownerKey, [...(projectedAliases.get(ownerKey) || []), alias]);
 }
 
 const compactSearchIndex = globalSearchEntries.map((entry) => {
   const href = canonicalDocumentHref(entry.href);
+  const projectionKey = `${entry.type}|${entry.title}|${href}`;
   return {
     type: entry.type,
     group: entry.group,
@@ -51,7 +53,7 @@ const compactSearchIndex = globalSearchEntries.map((entry) => {
     title: entry.title,
     detail: entry.detail.slice(0, 240),
     href,
-    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(href) || [])])]
+    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(projectionKey) || [])])]
   };
 });
 

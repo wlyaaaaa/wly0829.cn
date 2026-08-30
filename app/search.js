@@ -18,6 +18,10 @@ const skillSearchAliases = {
   "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
 };
 
+const projectModuleSearchAliases = {
+  "agents/context-evidence": ["本地构建通过为什么还不能说网站完成"]
+};
+
 const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
   {
     type: "项目",
@@ -66,7 +70,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     title: module.title,
     detail: `${project.title}｜${module.teaser}`,
     href: `${project.route}/${module.slug}`,
-    aliases: module.searchAliases || [],
+    aliases: [...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])],
     search: [
       project.title,
       module.status,
@@ -83,7 +87,8 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       ...module.failures.flatMap((item) => [item.condition, item.response]),
       ...module.sources.flatMap((item) => [item.path, item.role]),
       ...module.verification,
-      module.relation
+      module.relation,
+      ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])
     ].join(" ")
   }))
 ]);
@@ -170,10 +175,10 @@ export function searchScore(entry, query) {
   const all = `${entry.type} ${title} ${detail} ${entry.search} ${aliases.join(" ")}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !all.includes(token))) return 0;
-  if (title.includes(normalized)) return 140;
-  if (aliases.some((alias) => alias.includes(normalized))) return 160;
-  if (detail.includes(normalized)) return 110;
-  if (all.includes(normalized)) return 90;
+  if (title.includes(normalized)) return 14000;
+  if (aliases.some((alias) => alias.includes(normalized))) return 16000;
+  if (detail.includes(normalized)) return 11000;
+  if (all.includes(normalized)) return 9000;
 
   const compact = normalized.replace(/[a-z0-9_.:/-]+/gi, "").replace(/[^\p{Script=Han}]/gu, "");
   const grams = compact.length >= 3
@@ -192,11 +197,17 @@ function entryMatchesScope(entry, scope) {
   return (entry.scopes || []).includes(scope);
 }
 
+function searchTiePriority(entry) {
+  if (entry.type === "项目内容") return 0;
+  if (entry.type === "项目") return 1;
+  return 2;
+}
+
 export function searchPanel(query, scope = "all") {
   return globalSearchEntries
     .map((entry, index) => ({ entry, index, score: searchScore(entry, query) }))
     .filter((result) => result.score > 0 && entryMatchesScope(result.entry, scope))
-    .sort((left, right) => right.score - left.score || left.index - right.index)
+    .sort((left, right) => right.score - left.score || searchTiePriority(left.entry) - searchTiePriority(right.entry) || left.index - right.index)
     .map((result) => result.entry);
 }
 
