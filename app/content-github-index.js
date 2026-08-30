@@ -171,9 +171,9 @@ export const githubIndexModules = [
     teaser: "回答“我到底有哪些仓库、它们现在是谁、总账是否落后于 GitHub（远端托管）现场”。",
     status: "仓库总账可用；当前基线有 1 个私有身份待复核",
     statusTone: "mixed",
-    value: "把散落在不同磁盘、公开与私有仓库中的身份事实收成一个可审计总账，同时不把私有名称和路径发布出去。",
+    value: "把散落在不同磁盘、公开与私有仓库中的身份事实收成一个可审计总账；公开页面按事实是否有用和实际值风险决定展示明细或聚合，不因 PRIVATE 标签整类隐藏。",
     why: "公开 Markdown（面向人阅读的文本投影）只能安全展示一部分仓库，而且会随时间过期；直接扫描所有磁盘又会漏范围、扩大隐私和把目录名错当身份。总账需要 GitHub 全量身份、已验证 clone（本地副本）和明确 registry（结构化治理登记表）各司其职。",
-    example: "例如 GitHub 新增一个仓库，但公开快照仍是旧 generation（索引代际）。零写 Owner status（责任源状态）会返回 review_needed（需要复核）和一个 identity delta（身份差异），而不是继续显示 current（当前一致），也不会把新增仓库名称泄露给公开页面。",
+    example: "例如 GitHub 新增一个仓库，但公开快照仍是旧 generation（索引代际）。零写 Owner status（责任源状态）会返回 review_needed（需要复核）和一个 identity delta（身份差异），而不是继续显示 current（当前一致）；名称或路径是否展示取决于它是否改变当前判断，以及实际值是否含 L3+ 内容或凭据。",
     result: "得到稳定的 current（当前一致）、review_needed（需要复核）、blocked（证据无效）或 unknown（证据不足）结论、差异数量、问题代码、历史连续性和公开安全 fingerprint（指纹）；需要详情时再到正确 Owner 展开。",
     readerStates: {
       pass: "GitHub 全量身份、已验证本地副本和结构化登记表一致时，返回 current（当前一致）以及可安全公开的汇总证据。",
@@ -185,9 +185,9 @@ export const githubIndexModules = [
       "出现新增、删除、visibility 或默认分支差异时进入 review_needed，不自动改 baseline。",
       "总索引自身 origin identity 不符时先 blocked，且不读取 baseline、registry、GitHub 或本地 root。",
       "GitHub CLI 或远端元数据执行失败属于 execution error，不伪造 domain conclusion（领域结论）。",
-      "PUBLIC 页面只使用公开仓库明细和聚合计数；PRIVATE identity 只在受管本机来源中消费。"
+      "PUBLIC 页面按决策价值选择仓库明细或聚合计数；PUBLIC/PRIVATE 都按具体值判断，只省略真实 L3+ 内容、凭据和不影响判断的噪声。"
     ],
-    problem: "人类需要全局总账，机器需要结构化完整身份，而公开仓库又不能展开私有 identity 或精确路径。若把公开 Markdown 当完整权威，新仓库会被漏掉；若把本机目录当仓库身份，旧 clone、重命名和 origin 错配会制造假事实。",
+    problem: "人类需要可读总账，机器需要结构化完整身份，而页面不应为了完整性把所有动态路径和低价值明细全部铺开。若把公开 Markdown 当完整权威，新仓库会被漏掉；若把本机目录当仓库身份，旧 clone、重命名和 origin 错配会制造假事实。",
     implementation: [
       "GitHub 全量 inventory 由现场 API 分页闭合；每项保留稳定 node id、visibility、默认分支 OID 和公开安全元数据。",
       "ignored 私有导航 v2 保存 repo 到本机 clone 的定位，但只有 `.git` origin 回读一致才建立 clone occurrence。",
@@ -402,7 +402,7 @@ export const githubIndexModules = [
     statusTone: "pass",
     value: "避免把私有材料推到公开仓库，也避免因为仓库是 PRIVATE（私有）就错误破坏恢复所需的精确内容。",
     why: "Git transport 只关心引用能否传输，不理解聊天、数据库、密钥或机器快照是否该公开；简单 secret scanner（秘密扫描器）也无法证明语义安全和用户授权。",
-    example: "wly0829.cn 的本地 main（默认主分支）与远端 main 为 0/0，但当前有并发未提交修改，所以 transport 尚需显式限定候选。即使清理后 push_decision=proceed（传输可继续），仍要复审新页面文件、确认无私有仓库身份或路径，并获得本轮发布授权。",
+    example: "wly0829.cn 的本地 main（默认主分支）与远端 main 为 0/0，但当前有并发未提交修改，所以 transport 尚需显式限定候选。即使清理后 push_decision=proceed（传输可继续），仍要逐值复审新页面，阻断凭据和真实 L3+ 内容，并确认本轮发布授权。",
     result: "得到三个独立答案：Git 目标和分支是否 transport ready（传输就绪）、实际候选是否 publication safe（发布安全）、当前请求是否 authorization present（已有授权）；只有三者都成立才执行并回读。",
     readerStates: {
       pass: "传输目标与分支正确、实际发布候选适合公开且本轮已有明确发布授权时，才正常推送并从公开远端回读。",
