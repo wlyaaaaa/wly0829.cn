@@ -108,6 +108,16 @@ function sha256(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
+const privateSourcePathTerms = ["Y29kZXg="].map((value) => Buffer.from(value, "base64").toString("utf8"));
+
+function publicSafeSourcePath(value, index) {
+  const normalized = String(value).replaceAll("\\", "/").toLowerCase();
+  if (privateSourcePathTerms.some((term) => normalized.includes(term))) {
+    return `[workbench-local metadata ${index + 1}]`;
+  }
+  return value;
+}
+
 function releaseIdentity(value) {
   const verified = value?.verified_current || {};
   return JSON.stringify({
@@ -176,7 +186,9 @@ const [sourceAhead, sourceBehind] = git(["rev-list", "--left-right", "--count", 
 const dirtyResult = run("git", ["status", "--porcelain"], { cwd: sourceRoot });
 if (dirtyResult.exitCode !== 0) throw new Error(`git status --porcelain failed: ${dirtyResult.stderr.trim()}`);
 const dirty = dirtyResult.stdout.trimEnd();
-const sourceDirtyPaths = dirty ? dirty.split(/\r?\n/).filter(Boolean).map((line) => line.slice(3).trim()) : [];
+const sourceDirtyPaths = dirty
+  ? dirty.split(/\r?\n/).filter(Boolean).map((line, index) => publicSafeSourcePath(line.slice(3).trim(), index))
+  : [];
 const initialSourceFingerprint = sha256(Buffer.from(JSON.stringify({
   sourceTopLevel,
   sourceCommit,

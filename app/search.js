@@ -11,7 +11,7 @@ const ruleSearchAliases = {
 
 const skillSearchAliases = {
   "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件"],
-  "personal-panel-refresh": ["fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
+  "personal-panel-refresh": ["刷新看板", "fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
   "project-entry-gate": ["提交前为什么要检查仓库", "会不会推错远端", "公开仓库泄露"],
   "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
 };
@@ -101,6 +101,7 @@ export const globalSearchEntries = [
       title: item.name,
       detail: `${item.title}：${outcome.value}`,
       href: `/skills/${item.slug}`,
+      aliases: skillSearchAliases[item.slug] || [],
       search: [
         item.title,
         item.status,
@@ -140,9 +141,11 @@ export function searchScore(entry, query) {
   const title = entry.title.toLowerCase();
   const detail = entry.detail.toLowerCase();
   const all = `${entry.type} ${title} ${detail} ${entry.search}`.toLowerCase();
+  const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !all.includes(token))) return 0;
   if (title.includes(normalized)) return 140;
+  if (aliases.some((alias) => alias.includes(normalized))) return 130;
   if (detail.includes(normalized)) return 110;
   if (all.includes(normalized)) return 90;
 

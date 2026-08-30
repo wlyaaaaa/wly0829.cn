@@ -53,6 +53,7 @@ for (const registration of selected) {
       ? panelSnapshot.validation.rows.filter((row) => row.status !== "pass").length
       : entry.project.currentState?.gaps?.length || 0,
     collectors: registration.ai_refresh.collectors,
+    collector_requirements: registration.ai_refresh.collector_requirements || [],
     conditional_collectors: registration.ai_refresh.conditional_collectors || [],
     impact_sources: registration.impact_sources.map((source) => ({ kind: source.kind, paths: source.paths || [] }))
   });

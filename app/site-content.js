@@ -65,8 +65,12 @@ export function normalizePath(pathname) {
 }
 
 export function canonicalUrl(pathname) {
+  return `${site.url}${canonicalPath(pathname)}`;
+}
+
+export function canonicalPath(pathname) {
   const path = normalizePath(pathname);
-  return `${site.url}${path === "/" ? "/" : `${path}/`}`;
+  return path === "/" ? "/" : `${path}/`;
 }
 
 export function projectEntryBySlug(slug) {

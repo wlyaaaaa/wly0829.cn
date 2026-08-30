@@ -37,6 +37,9 @@ jobs:
       - name: Test source and generated routes
         run: npm test
 
+      - name: Reverify final generated artifact
+        run: npm run verify:public
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

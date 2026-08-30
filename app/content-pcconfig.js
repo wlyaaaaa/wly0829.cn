@@ -6,7 +6,7 @@ export const pcconfigProject = {
   visibility: "私有仓库",
   statusTone: "mixed",
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页只公开机器配置产品的结构、入口、边界和无秘密验证事实，不公开凭据值、账号身份、原始任务参数或私人数据。",
-  summary: "PCConfig（电脑配置与恢复中心）的旧 C 盘规则运行链已经退役，只读保留历史；核心恢复当前 ready（可进入恢复），漂移检查为 5 pass（通过）/ 2 warn（需关注）/ 0 block（阻断）。计划任务 Registry（登记表）有 85 项、普通权限可见 81 项；P0 第 68 版 normal（正常）/LKG（最后确认可用版本）已证明在线恢复，下一次自然启动的 deadline（时限）验收仍待完成。",
+  summary: "PCConfig（电脑配置与恢复中心）的旧 C 盘规则运行链已经退役，只读保留历史。2026-08-30 的 SYSTEM/elevated task-scan 已发布 88 项任务定义并完成 88/88 比较，complete_visibility=true；随后 live drift 为 4 pass（通过）/ 3 warn（需关注）/ 0 block（阻断）。CoreRecovery 当前 ready_with_warnings；P0 第 68 版 normal（正常）/LKG（最后确认可用版本）已证明在线恢复，下一次自然启动的 deadline（时限）验收仍待完成。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
   plainExample: "例如我说“重装 Windows（微软操作系统）后，把开发环境、计划任务和必要配置恢复回来”。PCConfig 会先确认磁盘与恢复来源，再按运行时、项目、启动链和私密配置分层恢复；每一层都从现场 Provider（现场读取器）取证。最后我得到的不是一句“软件装完了”，而是一份分层结果：哪些已恢复并回读、哪些需要重新登录、哪些仍是 unknown（证据不足），以及每个失败项的安全停止点。",
   result: "我最终会得到一份可执行、可回读的机器状态与恢复结果：当前配置真正在哪里、准备修改什么、变更前状态怎样保存、每一层是否通过、哪些只完成源码或安装、哪些仍需登录或自然重启，以及失败后从哪个检查点恢复。",
@@ -16,12 +16,12 @@ export const pcconfigProject = {
     unavailable: "磁盘、Provider（现场读取器）或受保护入口不可用时，把对应结论标为 Unknown（证据不足），不猜默认路径、不整包覆盖，也不把部分复制或安装称为整机恢复。"
   },
   heroFacts: [
-    { label: "当前源码", value: "PRIVATE main 7776fb3，与 origin/main 为 0/0，工作树干净；8ff001e 退役 policy runtime，7776fb3 修正 P0 历史失败分类" },
-    { label: "C 盘 policy 退役", value: "E 盘 PCConfig 退役 Owner 返回 status=retired、production_activation=false；36 个依赖已分类、6 个退役任务缺席。旧 C 盘历史入口仍返回 active_integrity_failure / global-shim-invalid，但它不是当前规则权威或任务阻断" },
-    { label: "核心恢复", value: "CoreRecovery ready；两项当前任务存在，9 个核心备份任务 Ready/last_result=0，本次未证明 H 冷备介质在线" },
-    { label: "计划任务可见性", value: "Registry 登记 85 项；普通权限可见 81 项，另外 4 项 visibility unknown，需要 elevated scan 才能判断 drift" },
+    { label: "当前源码", value: "PRIVATE main 6922bdb，与 origin/main 为 0/0；当前 checkout 有 12 项任务/CoreRecovery/会话备份 Owner 候选施工，尚未提交，不冒充 main" },
+    { label: "C 盘 policy 退役", value: "E 盘 PCConfig 退役 Owner 返回 status=retired、production_activation=false；36 个依赖已分类、6 个退役任务缺席。Secret Broker、BitLocker、Vault V2 与 P5–P7 未被退役；旧 C 盘历史入口的 integrity failure 不是当前规则权威或任务阻断" },
+    { label: "核心恢复", value: "CoreRecovery ready_with_warnings；新增会话备份已进入恢复清单，最近完整 receipt 保留其任务结果 warning；本次未证明 H 冷备介质在线" },
+    { label: "SYSTEM 任务快照", value: "task scan generation 20260830t011100879-3ff5ec92330242fc：Registry 88 / observed 88，added=0、removed=0、changed=0、complete_visibility=true" },
     { label: "P0 当前版本", value: "current 第 68 版 normal、active=LKG、trusted control=true；结果 4 已证明在线恢复，下一次自然 boot deadline 仍待验收" },
-    { label: "保留与未完成", value: "Secret Broker、Password Center、BitLocker、P0–P7 未因 policy 退役删除；CoreGoal 仅历史兼容，Vault V2 / P5–P7 正式数据仍未闭合" }
+    { label: "桌面恢复入口", value: "adb0c4b–6922bdb 已补齐一个现有桌面恢复 launcher 的 source/test 与快捷方式回读；本看板未重新执行真实桌面故障 E2E，不能称所有桌面场景已验" }
   ],
   responsibilities: [
     "维护本机路径、磁盘、目录用途、固定端口、运行时和本地数据源等机器事实",
@@ -63,18 +63,19 @@ export const pcconfigProject = {
     { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
   ],
   currentState: {
-    observedAt: "2026-08-29T20:08:57Z",
-    label: "C 盘 policy runtime 已退役；核心恢复可用，任务可见性和自然重启验收仍需关注",
+    observedAt: "2026-08-30T01:14:38Z",
+    label: "C 盘 policy runtime 已退役；SYSTEM 任务定义已闭合，核心恢复 warning 与自然重启验收仍需关注",
     facts: [
-      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 7776fb3117a698a8d51ed5be240168dbe972a493，工作树干净。8ff001e 退役 protected-policy runtime，7776fb3 把 P0 最近结果 4 修正为已在线恢复的历史失败。",
-      "开发存储现场检查 5 项通过、0 警告、0 阻断；只证明 V/Z 存储骨架和恢复锚点，不证明所有消费者业务已验收。",
-      "CoreRecovery（核心恢复）定向区域验收 3/3 通过；只证明被选区域，不代表整机恢复全绿。",
+      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 6922bdb664d1e56a06b5a3ca0b604cac85a5ff93。当前 checkout 有 12 项由现役 Owner 持有的任务、CoreRecovery 和会话备份候选施工，未提交内容不是 main。",
+      "SYSTEM/elevated task scan current pointer 于 2026-08-30T01:11:01Z 指向 generation 20260830t011100879-3ff5ec92330242fc；任务定义 Registry=88、observed=88、added/removed/changed=0、complete_visibility=true。",
+      "随后 live drift 返回 4 项通过、3 项警告、0 项阻断；CoreRecovery 为 ready_with_warnings。警告保持为项目现场事实，不会被 MAP 包装成全绿。",
       "Secret Broker（秘密代理）状态通过、无关键失败并保留 1 个可选缺口；回执不包含秘密明文。",
       "E 盘 PCConfig 退役 Owner 当前返回 retired、production_activation=false、reason=protected_policy_retired、historical_state_preserved=true、replacement_provider=e-immutable-rules-release。退役验收 36 个依赖已分类、6 个退役任务缺席，Secret Broker 保留、BitLocker 配置未变。",
-      "旧 C 盘历史 Provider 的原入口当前返回 active_integrity_failure，incident code=global-shim-invalid。这个结果只说明旧入口自身已经不具备完整性；它不能否定 E rules current，也不能阻断普通项目、Skill、原生委派或 E release。"
+      "旧 C 盘历史 Provider 的原入口当前返回 active_integrity_failure，incident code=global-shim-invalid。这个结果只说明旧入口自身已经不具备完整性；它不能否定 E rules current，也不能阻断普通项目、Skill、原生委派或 E release。",
+      "adb0c4b–6922bdb 为一个现有桌面 AI 工作台恢复入口补齐 launcher 源码、聚焦测试和快捷方式回读；这不是本轮真实桌面故障 E2E。"
     ],
     gaps: [
-      "计划任务 Registry 当前登记 85 项，Medium（普通权限）现场读取 81 项；AMDInstallUEP、natpierce、QihooGetWordSearchFatch 和 ToDesk PreLogin Watchdog 因 partial visibility 只能标 unknown，需要 elevated scan 才能判断真实 drift。",
+      "SYSTEM 任务定义快照已经闭合；运行态仍有 CoreRecovery/会话备份 warning，需要对应 Owner 的后续 receipt 才能升级，不影响 MAP 如实展示。",
       "PCConfig Protected Data Safe Switch Boot Recovery 的 LastTaskResult=4 已由正式在线恢复回执证明为 historical_failure_recovered_online：current 第 68 版 normal、active=LKG、trusted control=true。最新自然 boot receipt 仍 deadline_met=false，因此下一次自然启动验收不能省略。",
       "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
       "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
@@ -134,7 +135,7 @@ export const pcconfigProject = {
     { date: "2026-08-18—08-23", commit: "1a4d030–f879e5f", result: "建立受保护数据连续性目标、无人值守目标授权基础、P0 安全换挡器和最高权限因子保险库；明确源码通过、安装、真实重启与正式数据恢复是四种不同证据。" },
     { date: "2026-08-24—08-27", commit: "8753374–d3d8d00", result: "CoreGoal V2 进入耐久目标与单步能力模型，Workspace Provider 增加固定类型化读写和原生文档导出，受保护数据推进到 P3/P4 候选；同时补齐受管软件、备份介质结构和恢复 read-back。" },
     { date: "2026-08-28", commit: "0fffc15–c63d804", result: "把 P0–P4 后续实现收敛为更小的 RecoveryKernel（恢复内核）、AuthorityVault（因子保险库）、GoalJournal（目标账本）和 VaultApp（加密文件应用）四角色；改善日常预览/排序，补完 P5–P7 设计与任务投影。" },
-    { date: "2026-08-29", commit: "ec98fb1–7776fb3", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史 tree/gen79/ledgers 和独立产品；再把 P0 结果 4 正确分类为已在线恢复的历史失败。当前 PRIVATE main 与远端一致且工作树干净。" }
+    { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。当前 PRIVATE main 与远端一致，真实桌面故障 E2E 仍需独立验收。" }
   ],
   operationalEntrypoints: [
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
@@ -272,7 +273,7 @@ export const pcconfigModules = [
       "环境变量索引当前记录 90 个变量元数据和 64 个 PATH（可执行搜索路径）条目；Probe-EnvVar 只返回存在性、作用域和差异，不返回任何值。",
       "启动快照只覆盖当前用户/机器 Run 与用户/公共 Startup 文件夹五个 surface，不复制 Task Scheduler，也不覆盖服务、驱动和 packaged app。",
       "2026-08-29 live startup 有 20 项：19 enabled、1 disabled；相对快照新增 3 项，Inspect 明确 classification=informational_only、无需用户确认。",
-      "tasks Registry 当前有 85 项；Medium live provider（普通权限现场读取器）只观察到 81 项，另外 4 条只能标 partial visibility（可见性不完整）。用途目录和重建计划继续保存受管任务用途与签名；旧 protected-policy 六任务已按退役 Registry 从当前清单删除并现场证明 absent。",
+      "tasks Registry 当前有 88 项；SYSTEM/elevated task-scan generation 已回读 88/88 且 complete_visibility=true。用途目录和重建计划继续保存受管任务用途与签名，运行态 warning 仍与定义闭合分开。",
       "governance check 只调用登记的 zero-write Provider 和稳定 publisher；同一非 current fingerprint 只有首次或变化时产生 attention。"
     ],
     flow: [
@@ -301,7 +302,7 @@ export const pcconfigModules = [
       "具体任务为何成功仍由所属项目定义"
     ],
     failures: [
-      { condition: "当前 tasks.live_match warning", response: "Registry 登记 85 项，Medium（普通权限）观察 81 项；4 项可见性 unknown，等待 elevated 只读扫描，不按删除、重命名或恢复缺口处置。" },
+      { condition: "SYSTEM 定义快照与运行态结论不同", response: "任务定义 88/88 已闭合；live drift 的 3 个 warning 继续由对应运行 Owner 解释，不把定义 PASS 冒充运行全绿，也不把 warning 反推成定义漂移。" },
       { condition: "P0 历史 LastTaskResult=4", response: "正式回执已证明在线恢复到第 68 版 normal/LKG，因此分类为 historical_failure_recovered_online；下一次自然 boot deadline 仍须单独验收。" },
       { condition: "启动快照比现场少 3 项", response: "当前归类为 informational_only；无需自动刷新、关闭应用或要求用户确认，下次真实维护可吸收为新基线。" },
       { condition: "环境变量 registry/process 读取失败", response: "对应项 exists=null、diff_status=unknown；不把读取失败写成 absent。" },
@@ -320,8 +321,8 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.scheduled-tasks.md", role: "Scheduler 权威、无窗口和事务回滚合同" }
     ],
     verification: [
-      "Test-PCConfigDrift.ps1 -NoWrite -Json 于 2026-08-29T20:08:57Z 返回 pass=5、warn=2、block=0；evidence pass=6、fail=0、unknown=1",
-      "tasks.live_match 当前 registry_count=85、observed_count=81、removed_count=4、changed_count=0、complete_visibility=false；它是 warning/unknown，不证明 4 项删除",
+      "task scan current generation 20260830t011100879-3ff5ec92330242fc 于 2026-08-30T01:11:01Z 发布并回读；registry_count=88、observed_count=88、added/removed/changed=0、complete_visibility=true",
+      "2026-08-30T01:13Z 随后 live drift 为 pass=4、warn=3、block=0；SYSTEM 定义闭合与运行态 warning 分层保留",
       "tasks.runtime_health 评估 27 个 managed-core 任务；P0 结果 4 已分类为 historical_failure_recovered_online，另两项非零只是 Scheduler status；receipt failure=0",
       "正式 boot-deadline-recovery operation（开机时限恢复动作）6a723aa1-3749-4d80-90ea-f18fcf75b3b3 已 applied（执行完成），把 current 恢复到第 68 版 normal、active=LKG；它按合同不会改写历史 boot receipt（开机回执）或 Task Scheduler LastTaskResult",
       "Get-StartupInventory.ps1 -Json 当前返回 20 项、19 enabled、1 disabled、0 unknown",
@@ -579,7 +580,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig main 当前 7776fb3 与 origin/main 0/0、工作树干净；8ff001e 完成 runtime 退役，7776fb3 修复 P0 历史失败分类"
+      "PCConfig main 当前 6922bdb 与 origin/main 0/0、工作树干净；8ff001e 完成 runtime 退役，adb0c4b–6922bdb 补齐现有桌面恢复 launcher 的 source/test 和快捷方式回读"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

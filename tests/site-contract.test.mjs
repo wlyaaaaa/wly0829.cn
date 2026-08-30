@@ -98,6 +98,18 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?display:\s*inline-flex;/);
   assert.match(styleSource, /\.mobile-search-panel\.is-open,[\s\S]*?display:\s*block;/);
   assert.match(styleSource, /\.header-navigation\.is-open\s*\{\s*display:\s*block;/);
+  assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
+});
+
+test("project hero facts use the full desktop width and technical prose wraps on mobile", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(pageSource, /className="project-hero-copy"[\s\S]*?<aside className="snapshot-card"[\s\S]*?<dl className="project-headline-facts"/);
+  assert.match(styleSource, /\.project-hero\s*\{[\s\S]*?grid-template-areas:[\s\S]*?"facts facts";/);
+  assert.match(styleSource, /\.project-headline-facts\s*\{[\s\S]*?grid-area:\s*facts;[\s\S]*?max-width:\s*none;/);
+  assert.match(styleSource, /\.project-headline-facts > div:last-child:nth-child\(odd\)\s*\{\s*grid-column:\s*1 \/ -1;/);
+  assert.match(styleSource, /\.plain-list li,[\s\S]*?overflow-wrap:\s*anywhere;/);
+  assert.match(styleSource, /\.failure-list dt,[\s\S]*?overflow-wrap:\s*anywhere;/);
 });
 
 test("the project card exposes visible module links instead of a dropdown", async () => {
@@ -146,7 +158,7 @@ test("every project first viewport exposes current decision-critical choices", a
   assert.match(pageSource, /currentProject\.heroFacts/);
   assert.match(pageSource, /project-headline-facts/);
   for (const entry of projectCatalog) {
-    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length >= 4, `${entry.project.slug} hides current choices from the first viewport`);
+    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length >= 4 && entry.project.heroFacts.length <= 6, `${entry.project.slug} must expose 4–6 current choices in the first viewport`);
     for (const fact of entry.project.heroFacts) {
       assert.ok(fact.label?.length >= 2, `${entry.project.slug} has an unnamed first-viewport fact`);
       assert.ok(fact.value?.length >= 18, `${entry.project.slug}/${fact.label} is too vague`);
@@ -157,7 +169,7 @@ test("every project first viewport exposes current decision-critical choices", a
     assert.ok(asrFacts.includes(model), `ChineseASR first viewport hides model: ${model}`);
   }
   const pcconfigFacts = pcconfigProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(pcconfigFacts, /85.*81/);
+  assert.match(pcconfigFacts, /88.*88/);
   assert.match(pcconfigFacts, /第 68 版 normal/);
   assert.match(pcconfigFacts, /Vault V2/);
   const gitFacts = githubIndexProject.heroFacts.map((fact) => fact.value).join("\n");
@@ -214,6 +226,9 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /first project viewport must disclose 4–6 decision-critical current facts/);
   assert.match(projectRules, /Public visibility is never a reason to suppress a non-secret fact/);
   assert.match(projectRules, /project default is `gpt-5\.6-sol` with `max` effort/);
+  assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
+  assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
+  assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
   assert.match(projectRules, /One subagent owns one durable goal/);
   assert.match(projectRules, /clarify, narrow or expand[\s\S]{0,200}same goal/);
   assert.match(projectRules, /never replace that goal with an\s+unrelated objective/);
@@ -406,6 +421,10 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targeted.status, "ready_for_ai");
   assert.equal(targeted.mode, "targeted");
   assert.deepEqual(targeted.selected_projects.map((item) => item.id), ["pcconfig"]);
+  assert.ok(targeted.selected_projects[0].collectors.some((item) => /SYSTEM\/Administrator[\s\S]*complete_visibility=true/.test(item)));
+  assert.deepEqual(targeted.selected_projects[0].collector_requirements.map((item) => item.id), ["pcconfig-task-definitions"]);
+  assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
+  assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targeted.selected_projects[0].semantic_revision, 2);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
@@ -444,7 +463,18 @@ test("AI refresh planner supports targeted and full refresh without writing narr
         semantic_change: false,
         reason: "fresh evidence did not change a material user judgment",
         observed_at: "2026-08-29T00:00:00Z",
-        collectors: item.collectors.map((command) => ({ command, status: "pass", duration_seconds: 0.1 }))
+        collectors: item.collectors.map((command) => ({ command, status: "pass", duration_seconds: 0.1 })),
+        collector_receipts: (item.collector_requirements || []).map((requirement) => ({
+          id: requirement.id,
+          principal: requirement.required_principals[0],
+          schema: requirement.expected_schema,
+          pointer_path: requirement.pointer_path,
+          complete_visibility: requirement.required_evidence.complete_visibility,
+          generation_id: "taskscan-20260830t011100879-3ff5ec92330242fc",
+          manifest_sha256: "c7142da1c440b1fda250c44fb7c0e60029e5f5e2e653140b7a025868921e98d8",
+          artifact_sha256: "1b1e2da533baed1eb73dfc81aad70a9f43ebf904e28e2a54b4defd4b2fa3456f",
+          observed_at: "2026-08-30T01:11:01.278Z"
+        }))
       })),
       auto_repairs: [],
       blockers: []
@@ -453,6 +483,12 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
     assert.deepEqual(verification.counts, { changed: 0, unchanged: 4, blocked: 0 });
+    const invalid = structuredClone(bundle);
+    invalid.projects.find((item) => item.id === "pcconfig").collector_receipts[0].principal = "ordinary-user";
+    await writeFile(bundlePath, JSON.stringify(invalid, null, 2), "utf8");
+    const rejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(rejected.status, 0);
+    assert.match(rejected.stdout, /bundle_collector_principal_invalid/);
   } finally {
     await rm(tempRoot, { recursive: true, force: true });
   }
@@ -598,8 +634,17 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("PCConfig")[0]?.title, "PCConfig · 总览");
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");
   assert.equal(searchPanel("ChineseASR")[0]?.title, "ChineseASR · 总览");
+  assert.equal(searchPanel("刷新看板")[0]?.title, "personal-panel-refresh");
   assert.equal(searchPanel("长音频断点续跑")[0]?.title, "连续时间线、长音频断点续跑与文件夹批量");
   assert.ok(searchPanel("的").length > 9, "broad search should retain the true total before UI truncation");
+});
+
+test("SPA links keep canonical directory URLs and move focus to main content", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.match(pageSource, /const targetHref = internal[\s\S]*?canonicalPath\(target\.pathname\)/);
+  assert.match(pageSource, /next\.pathname = "\/rules\/";/);
+  assert.match(pageSource, /const setMainRef = useCallback[\s\S]*?node\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(pageSource, /<main id="main-content" ref=\{setMainRef\} tabIndex=\{-1\}>/);
 });
 
 test("dynamic snapshot facts are separated from partial validation", () => {
@@ -643,6 +688,8 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(packageJson.scripts.build, /verify:public/);
   assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("run: npm test"));
   assert.ok(workflow.indexOf("run: npm test") < workflow.indexOf("actions\/upload-pages-artifact"));
+  assert.ok(workflow.lastIndexOf("run: npm run verify:public") > workflow.indexOf("run: npm test"));
+  assert.ok(workflow.lastIndexOf("run: npm run verify:public") < workflow.indexOf("actions\/upload-pages-artifact"));
   assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("actions\/upload-pages-artifact"));
   assert.match(verifier, /production_artifact_missing/);
   assert.match(verifier, /production_html_missing/);
@@ -653,6 +700,8 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /"-z"/);
   assert.match(verifier, /split\("\\0"\)/);
   assert.match(refresher, /const sourceRoot = "E:\\\\.agents"/);
+  assert.match(refresher, /function publicSafeSourcePath/);
+  assert.match(refresher, /Y29kZXg=/);
   assert.match(refresher, /Invoke-EAgentRulesRelease\.ps1/);
   assert.match(refresher, /e_rules_active_verified/);
   assert.doesNotMatch(refresher, /Get-ProtectedPolicyAuthorityStatus|policy_epoch|production_activation|candidate_pending/);
@@ -731,6 +780,12 @@ test("SEO, sitemap, robots and custom 404 match the current route set", async ()
   assert.equal((sitemap.match(/<url>/g) || []).length, routePaths.length);
   for (const route of routePaths) assert.ok(sitemap.includes(`<loc>${canonicalUrl(route)}</loc>`));
   const robots = await readFile(path.join(projectRoot, "public", "robots.txt"), "utf8");
+  const favicon = await readFile(path.join(projectRoot, "public", "favicon.svg"), "utf8");
+  const rootHtml = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
+  const notFoundHtml = await readFile(path.join(projectRoot, "public", "404.html"), "utf8");
+  assert.match(rootHtml, /<link rel="icon" href="\/favicon\.svg" type="image\/svg\+xml" \/>/);
+  assert.match(notFoundHtml, /<link rel="icon" href="\/favicon\.svg" type="image\/svg\+xml" \/>/);
+  assert.match(favicon, /viewBox="0 0 64 64"/);
   assert.match(robots, /User-agent: \*/);
   assert.match(robots, /Sitemap: https:\/\/wly0829\.cn\/sitemap\.xml/);
   const notFound = await readFile(path.join(projectRoot, "public", "404.html"), "utf8");

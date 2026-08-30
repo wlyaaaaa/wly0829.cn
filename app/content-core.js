@@ -51,7 +51,7 @@ export const project = {
   route: agentsRegistration.route,
   visibility: agentsRegistration.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库",
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
-  summary: `当前活动规则为 ${panelSnapshot.authority.releaseId}：绑定 PRIVATE main 提交 ${panelSnapshot.authority.gitCommit.slice(0, 7)}、五文件 ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…，前代为 ${panelSnapshot.authority.previous?.release_id || "无"}。C 盘 generation、Publisher、anchor 和 ledger 只作恢复材料，不再参与准入。项目同时管理 24 个 active Skill 安装意图（公开看板收录 22 个）与三个控制面协作。`,
+  summary: `当前活动规则为 ${panelSnapshot.authority.releaseId}：绑定 PRIVATE main 提交 ${panelSnapshot.authority.gitCommit.slice(0, 7)}、五文件 ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…，前代为 ${panelSnapshot.authority.previous?.release_id || "无"}。C 盘 generation、Publisher、anchor 和 ledger 只作恢复材料，不再参与准入。项目同时管理 24 个 active Skill 安装意图（公开看板收录 22 个）、三个控制面协作，以及尚未完成的工作台运行根迁移。`,
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
   result: "我最终会得到一条可以追溯的工作链：每个事实来自正确项目，每个写入有人负责，每个外部动作有明确授权，失败时知道从哪里恢复，结束时能区分本地完成、远端完成和用户真正可用。",
@@ -65,9 +65,8 @@ export const project = {
     { label: "规则与模块", value: `同一 ${panelSnapshot.authority.releaseId} release 的 5 份规则；项目总览加 6 个模块；Rules 与 Skills 是独立全局入口` },
     { label: "个人能力供应", value: "供应清单 24 个 active install intent；公开看板收录 22 个，2 个私人或冻结项不列名称" },
     { label: "三控制面", value: ".agents 管行为、授权和能力；GitHub 总索引管仓库与发布事实；PCConfig 管机器事实与恢复" },
-    { label: "运行与临时目录", value: "AI 工作台运行根和本地数据库已迁到 E 数据盘，C 盘只留兼容 junction、没有第二副本；任务 temp 统一进入 E 缓存盘的独立 task 目录" },
-    { label: "本轮模型与委派", value: `根任务使用 gpt-5.6-sol / max；四条审计支路分别使用 2 个 Luna Max、1 个 Terra Max、1 个 Sol Max。模型身份、${panelSnapshot.authority.releaseId} 规则身份和每条审计结论分别回读，不用名称冒充验证` },
-    { label: "C 盘旧链", value: "旧 generation、Publisher、签名、anchor、manifest、ledger 和回执全部只读保留；不是权威、fallback、Owner 证明或运行依赖" }
+    { label: "运行与临时目录", value: "迁移目标是 E 数据盘与 E 缓存盘；当前运行根仍由 C 盘实际目录承载，E 盘只有迁移 staging，尚未完成 junction、停写增量与运行时回读，不能称已切换" },
+    { label: "模型与委派", value: `当前规则要求先验证宿主 model、effort、root/child 与 ${panelSnapshot.authority.releaseId} 身份，再按任务语义选择 0–10 条支路；网页不把某次任务的 child 数量当成持续能力` }
   ],
   responsibilities: [
     "定义跨项目适用的 Agent 行为与指令优先级",
@@ -127,7 +126,7 @@ export const project = {
     { name: "三控制面上下文", responsibility: "跨 .agents、Git 和 PCConfig 时提供最小 metadata 视图。", implementation: "两个零正文视图，先返回路径、SHA、大小和 Owner，再按影响展开。" },
     { name: "E rules activator", responsibility: "证明并激活 current/previous E release。", implementation: "测试、PRIVATE main commit/remote readback、五哈希、UAC expected-pointer CAS、ACL 和正式回读；不创建后台组件。" },
     { name: "E release store", responsibility: `保存 immutable E80–${panelSnapshot.authority.releaseId} 规则版本、release record 和 current pointer。`, implementation: "SYSTEM-owned 封闭 ACL；普通用户和 Administrators 只读执行。" },
-    { name: "运行与临时目录", responsibility: "把 AI 工作台运行根、数据库和任务临时文件从系统盘移到 E 数据/缓存盘。", implementation: "运行根只有一份，C 盘仅兼容 junction；每个任务使用独立 E 缓存目录，结束只清自己的命名空间。" },
+    { name: "运行与临时目录", responsibility: "把 AI 工作台运行根、数据库和任务临时文件从系统盘移到 E 数据/缓存盘。", implementation: "当前仍处迁移阶段：C 盘实际目录继续承载运行根，E 盘只保留 staging；完成条件是停写增量、唯一副本、junction、ACL、bytes 和新运行时回读全部成立。" },
     { name: "CoreGoal 授权", responsibility: "把一次人类确认固定为长期目标，同时允许实现、修复和恢复继续推进。", implementation: "CoreGoalCommitment 加每个现实 effect 的短时单次 StepCapability。" },
     { name: "Execution Owner Registry", responsibility: "协调多个任务对项目最小 scope 的 Claim、Add、Transfer、Release 和恢复。", implementation: "Expected revision CAS 加 append-only transition journal。" },
     { name: "原生代理路由门", responsibility: "验证 model（模型）、effort、root/child 身份、E release/commit/ruleset 和合同 SHA 后才允许 spawn。", implementation: "宿主事件注入身份，创建前再检查 TOCTOU；它不替模型选择 0–10、家族或 scope。" },
@@ -163,7 +162,7 @@ export const project = {
     { date: "2026-08-22", commit: "9498615", result: "清理活动面并建立仓库膨胀治理。" },
     { date: "2026-08-25", commit: "325d6a7", result: "补全归档任务的 Owner 恢复。" },
     { date: "2026-08-26", commit: "472ab3a", result: "CoreGoal 授权进入保护消费者，四类人类因子统一。" },
-    { date: "2026-08-29", commit: "157060f–2940443", result: "退役 C 盘规则 Publisher/Authority 生产链，建立 E release、跨项目 coordination、差异驱动快速验证和分阶段墙钟回执；随后把 AI 工作台运行根、数据库与任务 temp 迁到 E 数据/缓存盘，C 盘只留兼容 junction。" }
+    { date: "2026-08-29", commit: "157060f–31009aa", result: "退役 C 盘规则 Publisher/Authority 生产链，建立 E release、跨项目 coordination、差异驱动快速验证和分阶段墙钟回执；运行根迁移已进入 staging 与兼容修复阶段，但尚未完成 junction、唯一副本和新运行时回读。" }
   ],
   operationalEntrypoints: [
     { name: "活动 E 规则", command: "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json", purpose: "唯一证明 current/previous E release、commit、ruleset、五文件路径和 pointer。" },
@@ -418,7 +417,7 @@ export const modules = [
       "五份 release 文件路径、bytes 和 SHA 与 current descriptor 闭合",
       currentValidationDetail("E release validator"),
       currentValidationDetail("Full local tests"),
-      `本轮根任务为 gpt-5.6-sol / max，实际创建 2 个 Luna Max、1 个 Terra Max 和 1 个 Sol Max 审计支路；四条支路只读审计同一网站目标，写入仍由根任务统一集成`
+      "原生路由先验证宿主 model、effort、root/child 与同一 E release identity，再按任务语义选择 0–10 条支路；某次任务的代理数量只属于该次回执，不是持续项目状态"
     ],
     relation: "本模块拥有 E release 与重大动作保护；用户授权、CoreGoal、Execution Owner 和 Git/Pages 收口由授权合同拥有，能力家族/数量由能力合同拥有。"
   },
@@ -638,7 +637,7 @@ export const rulesSnapshot = {
       purpose: "唯一拥有用户授权、CoreGoal、委派收窄、Execution Owner、跨项目 coordination_id、可信目标、E rules 精确 scope release 与 Git 收口的合同。",
       plainLanguage: "把一句用户目标拆成授权、目标身份、施工范围、单次步骤和正式回读；E release、Owner CAS、UAC 和人类因子各自证明不同事情，C 盘历史不能参与 Owner 恢复。",
       why: "用户同意完成一个目标，不代表任意代理都能扩大到其他仓库；多个任务同时修改同一范围，也会覆盖彼此工作或丢失未完成事项。",
-      example: "例如用户要求刷新并发布网站。本轮对象、内容和发布动作已经明确，因此可完成编辑、定向提交、normal push、Pages 部署和公网回读；effect 边界仍要实时重验 PUBLIC 目标与默认分支。",
+      example: "例如用户明确要求刷新并发布网站时，只有当对象、内容和发布动作都已明确，任务才可继续编辑、定向提交、normal push、Pages 部署和公网回读；effect 边界仍要实时重验 PUBLIC 目标与默认分支。",
       result: "每一步都能回答谁获得了什么授权、谁正在修改哪一块、远端是否真的收到结果；未完成事项必须移交或继续持有，不能直接消失。",
       readerStates: { pass: "授权、目标和施工范围都明确时，同一目标内继续实施、验证、正常推送和正式回读。", problem: "Owner 冲突、目标扩大或步骤事实变化时，停止对应写入并重新协调或取得新确认。", unavailable: "授权事实或施工登记不可验证时，外部写入停止；不会用管理员权限、子代理或超时猜测替代授权。" },
       scope: ["本机工作与 external effect（外部现实动作）", "root（根代理）和 child（子代理）委派", "长期无人值守目标", "多任务施工与 Git 收口", "PRIVATE（私有）、PUBLIC（公开）和未知目标"],
@@ -699,7 +698,7 @@ export const rulesSnapshot = {
       purpose: "唯一拥有方法选择、上下文路由、复杂度治理、动态配置准入、reader routing、原生经济委派和按需插件语义的合同。",
       plainLanguage: "不机械套 Skill（能力入口），不因工具列表短就宣布做不了；先找已有 Owner 和原生入口。原生委派先验证 model/effort/root 与同一 E release identity，再按任务语义选择 0–10 个 Luna/Terra/Sol 后代。",
       why: "不同任务需要的工具和并行程度不同。机械套同一流程会用错能力、重复安装工具，或开出很多代理却没有人负责最终结果。",
-      example: `例如本次刷新网页时，${panelSnapshot.authority.releaseId} 内容、快速刷新、移动端和发布准备四条只读审计支路分别交给 2 个 Luna Max、1 个 Terra Max 和 1 个 Sol Max；gpt-5.6-sol / max 根任务同时重建快照并统一写入，避免冲突。`,
+      example: `例如刷新网页时，${panelSnapshot.authority.releaseId} 内容、响应式界面、刷新链和复杂度可以在独立可验时交给不同家族的只读支路；根任务继续重建快照、处理依赖并统一写入，避免冲突。`,
       result: "任务会在可信 E identity 下选择真正有收益的工具、上下文、代理家族和数量；C Authority unavailable 不再影响委派，root 始终负责方向、合并和最终验收。",
       readerStates: { pass: "能力身份、授权和净收益明确时，选择对应工具或代理并继续，主任务保留最终责任。", problem: "出现写冲突、资源争用、结果不可独立验收或收益不足时，减少并发、改为串行或由主任务直接完成。", unavailable: "委派身份或目标能力不可用时，只关闭该次委派或能力路线；主任务继续安全工作并报告真实缺口。" },
       scope: ["所有能力选择", "长任务状态重建", "README 与项目规则路由", "动态配置设计", "原生委派和插件缺口"],

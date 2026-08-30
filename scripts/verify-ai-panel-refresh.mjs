@@ -54,6 +54,22 @@ for (const result of projectResults) {
   requireFact(typeof result.semantic_change === "boolean", "bundle_semantic_change_missing", result.id);
   requireFact(typeof result.reason === "string" && result.reason.trim().length >= 8, "bundle_reason_missing", result.id);
   requireFact(Array.isArray(result.collectors) && result.collectors.length >= 1, "bundle_collectors_missing", result.id);
+  const requirements = registration.ai_refresh.collector_requirements || [];
+  const receipts = Array.isArray(result.collector_receipts) ? result.collector_receipts : [];
+  requireFact(receipts.length === requirements.length, "bundle_collector_receipt_closure_invalid", result.id);
+  for (const requirement of requirements) {
+    const matches = receipts.filter((receipt) => receipt?.id === requirement.id);
+    requireFact(matches.length === 1, "bundle_collector_receipt_missing", `${result.id}:${requirement.id}`);
+    if (matches.length !== 1) continue;
+    const receipt = matches[0];
+    requireFact(requirement.required_principals.includes(receipt.principal), "bundle_collector_principal_invalid", `${result.id}:${requirement.id}:${receipt.principal}`);
+    requireFact(receipt.schema === requirement.expected_schema, "bundle_collector_schema_invalid", `${result.id}:${requirement.id}:${receipt.schema}`);
+    requireFact(receipt.pointer_path === requirement.pointer_path, "bundle_collector_pointer_invalid", `${result.id}:${requirement.id}`);
+    requireFact(receipt.complete_visibility === requirement.required_evidence.complete_visibility, "bundle_collector_visibility_invalid", `${result.id}:${requirement.id}`);
+    requireFact(typeof receipt.generation_id === "string" && receipt.generation_id.length >= 16, "bundle_collector_generation_invalid", `${result.id}:${requirement.id}`);
+    requireFact(validSha(receipt.manifest_sha256) && validSha(receipt.artifact_sha256), "bundle_collector_commitment_invalid", `${result.id}:${requirement.id}`);
+    requireFact(typeof receipt.observed_at === "string" && receipt.observed_at.length >= 10, "bundle_collector_observed_at_invalid", `${result.id}:${requirement.id}`);
+  }
   requireFact(typeof result.observed_at === "string" && result.observed_at.length >= 10, "bundle_observed_at_missing", result.id);
 
   const contentPath = path.resolve(projectRoot, registration.ai_refresh.content_path);

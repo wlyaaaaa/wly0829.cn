@@ -230,6 +230,16 @@ read-only operating panel; public presentation is secondary.
   verified current E release. A dirty or newer source checkout is shown as
   non-active candidate work; it cannot overwrite the release and does not block
   an otherwise truthful snapshot or unrelated project refresh.
+- A refresh collector that needs full Windows visibility is explicitly allowed
+  to run as Administrator or SYSTEM for this read-only snapshot. It must return
+  a bounded public-safe receipt and leave no persistent task, service, queue or
+  secret. The website task must not downgrade to a partial ordinary-user view
+  or describe the product gap as "insufficient permissions". If the registered
+  SYSTEM route cannot actually run, mark only the affected live fields Unknown
+  with the last verified evidence time and record a refresh-route defect. That
+  defect blocks only a claim that requires fresh full visibility; it does not
+  turn an accurately disclosed source-project gap into a blanket MAP release
+  blocker or justify another website service/state layer.
 - Do not add a daemon, watcher, scheduled task, polling service or public live
   dependency merely to keep the panel current.
 - Cross-project refresh is event-driven and thresholded. A matching changed path

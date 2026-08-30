@@ -2,15 +2,17 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-08-30 06:06（中国时间）",
-  "sourceCommit": "96aea6972130887cd4d74d92e2d500aa5b2b1463",
+  "observedAt": "2026-08-30 09:25（中国时间）",
+  "sourceCommit": "31009aa57c8451e49e4e6c2bef0cb9ca5235df98",
   "sourceBranch": "main",
-  "sourceWorktreeClean": true,
-  "sourceDirtyCount": 0,
-  "sourceDirtyPaths": [],
+  "sourceWorktreeClean": false,
+  "sourceDirtyCount": 1,
+  "sourceDirtyPaths": [
+    "[workbench-local metadata 1]"
+  ],
   "sourceAhead": 0,
   "sourceBehind": 0,
-  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树干净",
+  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树有 1 项未激活修改",
   "repositoryVisibility": "私有",
   "repositoryVisibilityEvidence": "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   "ruleBinding": [
@@ -120,8 +122,8 @@ export const generatedPanelFacts = {
       {
         "layer": "Source checkout（候选源码工作树）",
         "status": "repair",
-        "label": "main 已进入下一候选提交",
-        "detail": "source HEAD=96aea6972130，origin/main=96aea6972130，active release commit=6a272ca36191。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E89。"
+        "label": "1 项未激活施工",
+        "detail": "source HEAD=31009aa57c84，origin/main=31009aa57c84，active release commit=6a272ca36191。未提交路径：[workbench-local metadata 1]。 Source 不等于 active release 时只作候选施工，不会覆盖 E89。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -153,6 +155,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "98afd025eea66554f61aa15ec56671ab3f724b9883e55a883a005a5e1240fafb"
+    "payloadSha256": "80931f4813ee8489433e73735cf0f444f95224bb45e76552069655da67c863dd"
   }
 };

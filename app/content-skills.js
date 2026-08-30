@@ -12,7 +12,7 @@ function skill(definition) {
     currentTaskState: "本轮宿主回执未知",
     freshTaskState: "新任务回执未知",
     endToEndState: "按场景验收",
-    evidenceObservedAt: "供应链现场：2026-08-30 03:27（中国时间）；项目场景按各项记录",
+    evidenceObservedAt: "供应链现场：2026-08-30 08:40（中国时间）；项目场景按各项记录",
     evidenceBasis: `.agents ${currentERules.releaseId} release ${currentERules.gitCommit.slice(0, 7)}、当前 Personal Skill supply（个人能力供应链），以及本页明确标注的既有项目/Provider（固定服务入口）证据；source/install/transaction 通过不冒充 current/fresh/E2E`,
     evidenceSourceCommit: currentERules.gitCommit,
     supplyEvidenceCommand: "E:\\.agents\\tools\\Test-PersonalSkillSupply.ps1 -RequireInstalled -NoExternalEvidence -Json",
@@ -317,9 +317,9 @@ export const skills = [
     slug: "personal-panel-refresh",
     name: "personal-panel-refresh",
     title: "个人项目看板刷新判断",
-    status: "已安装 / 影响判断通过 / 新任务创建受阻",
+    status: "已安装 / 影响判断通过 / 正向任务创建本轮未验",
     maturity: "A-",
-    summary: "某个已登记项目发布后，它判断这次变化会不会让 wly0829.cn 的项目说明、规则、Skill、状态或用户判断变成错误；小改动只记录，真正会让看板失真时才要求一个全新的独立网站任务。当前网站尚未保存为桌面 AI 工作台的本地 Git 项目，因此真正创建任务会精确停止。",
+    summary: "某个已登记项目发布并正式回读后，它判断这次变化会不会让 wly0829.cn 的事实、边界、成熟度或用户判断变错；格式、时间戳、hash-only 和已准确披露的 blocked candidate 不触发。当前没有取得 saved-project lookup 的正向回执，因此任务创建保持 Unknown，不推断项目不存在。",
     useWhen: ["来源项目已经完成发布和正式 read-back（回读）", "changed path（变化路径）命中项目清单中的影响来源", "项目的事实、解释、边界、成熟度或用户决策可能因此变错"],
     avoidWhen: ["来源还只是草稿、candidate（候选）或未验证状态", "只有格式、注释、内部重构、时间戳或 hash-only 变化", "当前页面已经准确写出 blocked candidate，没有新的实质失真", "试图让来源任务直接修改或发布网站"],
     inputs: ["项目清单中的 project id", "来源仓库与正式 read-back commit", "所有 repository-relative changed paths（仓库相对变化路径）", "Source Owner 对 materiality（实质影响）的理由"],
@@ -330,7 +330,7 @@ export const skills = [
     tests: "Source、quick validation、autonomy、semantic、bloat、Git gate、junction installer 和 supply 全部通过；Fresh task 自然发现 Skill，并真实验证 candidate-only 不建任务、material change 要求新任务、缺少 wly0829.cn saved local Git project 时精确失败关闭且未误建任务。",
     sourcePath: "E:\\.agents\\skills\\personal-panel-refresh\\SKILL.md",
     freshTaskState: "Fresh task 已自然发现并按正文执行",
-    endToEndState: "Impact assessor 与 saved-project fail-closed 路径已验；正向任务创建当前不可用"
+    endToEndState: "Impact assessor 与 fail-closed 分支已验；saved-project lookup 和正向创建本轮未验"
   }),
   skill({
     slug: "control-plane-doctor",
@@ -401,28 +401,28 @@ export const skills = [
     dependencies: [`${currentERules.releaseId} current release ${currentERules.gitCommit.slice(0, 7)} / ruleset ${currentERules.rulesetSha256.slice(0, 8)}…`, "当前 E capability contract", "宿主原生 child identity（子代理身份）与 slots"],
     tests: `${currentERules.releaseId} 当前指针、聚焦 Gate 和 change-surface validation 已通过；能力是否可用仍取决于每个任务的宿主身份、E identity、授权和 slots。`,
     sourcePath: "E:\\.agents\\skills\\native-economy-routing\\SKILL.md",
-    currentTaskState: "本次 root 初始身份已验证；current E release 多次前进后均完整重读当时的路由合同",
-    freshTaskState: "本轮没有把当前 root 证据冒充 future fresh root",
-    endToEndState: "本次真实创建 4 个 Luna/Terra/Sol Max child；仅证明本轮宿主路径"
+    currentTaskState: "按当前宿主身份与 E release 现场判断；不沿用其他任务的 child 数量或回执",
+    freshTaskState: "Fresh task 必须重新取得自己的宿主身份；child 不继承父任务绑定",
+    endToEndState: "创建成功只证明该次宿主路径；每个任务仍需独立验证模型、effort、E identity 与结果"
   }),
   skill({
     slug: "token-budget-advisor",
     name: "token-budget-advisor",
-    title: "可见文本 Token 预算",
+    title: "工作台配额与 GPT-5.6 Sol Token 计数",
     status: "已安装 / 上次 Fresh task E2E 已验",
     maturity: "A",
-    summary: "只有用户明确问“这段文字多少 Token（模型计数单位）、两个 Prompt（提示词）谁更大、会不会超过某个上下文或成本上限”时，它才计算可见文本并说明算法和没有计入的部分；不会因为对话很长就自动触发，也不猜隐藏上下文。",
-    useWhen: ["用户明确要求统计可见文本 Token（模型计数单位）", "比较两个 Prompt（提示词）或文件的大小", "有明确 context（上下文）或成本上限", "接近数值边界，需要指定 tokenizer（分词器）精算"],
+    summary: "仅在用户明确询问当前工作台配额或 reset（重置）状态，或要求按 GPT-5.6 Sol 的权威口径计算、比较可见文本 Token（模型计数单位）时触发。配额走只读账号用量入口；Token 优先使用完成响应 usage 或官方 input_tokens，不能取得时返回 Unknown。",
+    useWhen: ["用户明确询问当前工作台 quota（配额）或 reset（重置）状态", "用户明确要求按 GPT-5.6 Sol 统计可见文本 Token（模型计数单位）", "比较两个 Prompt（提示词）或文件的 Token 数", "接近明确 Token 边界，需要官方计数"],
     avoidWhen: ["仅仅因为任务长或可能压缩就自动触发", "推断隐藏 prompt、tools 或 reasoning", "把估算当成正式账单", "为了报告数字而回显用户正文"],
-    inputs: ["一段可见文本或明确文件", "可选的 tokenizer/model encoding（模型分词编码）", "可选的数值预算"],
-    outputs: ["精确计数或保守区间", "使用的方法和没有计入的内容", "安全低于、接近或超过预算的判断"],
-    flow: ["已有权威 usage（用量）时优先使用", "否则先给保守区间", "接近边界时选择明确编码精算", "只报告数字、方法、排除项和预算判断"],
-    boundaries: ["不猜隐藏上下文", "不回显正文", "不替代正式账单", "没有数值上限时不制造预算门"],
-    dependencies: ["本地 tokenizer helper 或权威 usage telemetry（用量遥测）"],
+    inputs: ["明确的 quota/reset 问题，或一段可见文本/明确文件", "GPT-5.6 Sol 计数口径", "可选的明确 Token 数值预算"],
+    outputs: ["只读配额/reset 状态，或 GPT-5.6 Sol 权威 Token 数", "使用的 usage/input_tokens 来源和没有计入的内容", "安全低于、接近、超过预算或 Unknown 的判断"],
+    flow: ["配额问题读取只读 account/rateLimits 状态", "Token 问题优先使用响应 usage 或官方 input_tokens", "官方计数不可用时返回 Unknown", "只报告数字、方法、排除项和边界判断"],
+    boundaries: ["不猜隐藏上下文", "不回显正文或账号标识", "不计算 API 价格或美元成本", "不把字符、字节或其他模型计数冒充 GPT-5.6 Sol"],
+    dependencies: ["工作台只读 usage 状态入口或官方 input_tokens 计数"],
     tests: "Source、quick validation、autonomy、semantic、junction installer 和 supply contract 全部通过；Fresh 0.150.1 root 已发现并实际调用 Skill，o200k_base exact=3，预算 10 时返回 safely_below。",
     sourcePath: "E:\\.agents\\skills\\token-budget-advisor\\SKILL.md",
     freshTaskState: "Fresh root（全新根任务）已发现并实际使用",
-    endToEndState: "真实 Token（模型计数单位）计数与预算判断已验"
+    endToEndState: "Token 计数路径已有历史验收；当前配额/reset 只在用户明确请求时现场读取"
   })
 ];
 

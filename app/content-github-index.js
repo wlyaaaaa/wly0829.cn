@@ -5,7 +5,7 @@ export const githubIndexProject = {
   route: "/projects/github-index",
   visibility: "公开仓库",
   repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。公开页面可以列出公开项目的来源路径；PRIVATE（私有）仓库身份、精确 clone（本地副本）路径与恢复材料只保留在被 Git（版本控制）忽略的本机登记区。",
-  status: "现役；核心 Provider（结构化事实提供器）可用，但 2026-08-29 的 Owner status（责任源状态）为 review_needed（需要复核），不能包装成全绿。",
+  status: "现役；公开 generation 已更新并完成内部闭合。2026-08-30 最新网络可用 Owner receipt 为 completed / review_needed：baseline 44、observed 45、delta 1，不能包装成全绿。",
   statusTone: "mixed",
   summary: "当前索引 45 个 GitHub 仓库（26 个 PUBLIC、19 个 PRIVATE）和 43 个已验证本地 clone occurrence。它先确认仓库、公开性、远端、默认分支、工作树、脏改动和同步，再给出继续或阻断证据；Admission 不会授予 push，发布仍要定向候选、授权和远端 main 回读。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
@@ -18,9 +18,9 @@ export const githubIndexProject = {
   },
   heroFacts: [
     { label: "仓库总数", value: "当前索引 45 个 GitHub 仓库：26 个 PUBLIC、19 个 PRIVATE" },
-    { label: "相对基线", value: "已确认 baseline 44，加 1 个 PRIVATE delta；当前 issue 计数为 0" },
+    { label: "公开 generation", value: "current=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29 21:01Z；8 份文档闭合，previous=1af2630…" },
     { label: "本地 clone 覆盖", value: "已验证 43 个 clone occurrence（检出实例），索引覆盖完整；一个仓库可以有多个 worktree" },
-    { label: "索引仓库自身", value: "PUBLIC main 62a5548，与 origin/main 0/0，当前主工作树干净；Owner status 仍因 1 个新增 PRIVATE 身份为 review_needed" },
+    { label: "索引仓库自身", value: "PUBLIC main e01433e，与 origin/main 0/0，当前主工作树干净；最新网络可用 Owner receipt=completed / review_needed，baseline 44、observed 45、delta 1" },
     { label: "Admission 会做什么", value: "确认仓库、公开性、默认分支、远端、目标 worktree、同步与脏改动后给出继续或阻断证据；它不会授予 push 权限" },
     { label: "发布完成口径", value: "只有目标提交从真实默认分支可达、normal push 完成且远端 main 回读一致，才算 Git 交付收口" }
   ],
@@ -65,22 +65,18 @@ export const githubIndexProject = {
     { term: "Commit-pinned snapshot（固定提交快照）", meaning: "干净、受限且固定在已知提交的审计工作树；它不同于普通无 upstream 或含独有工作的临时工作树。" }
   ],
   currentState: {
-    observedAt: "2026-08-29T20:08:02Z",
-    label: "核心能力可用，Owner 总账基线待复核",
+    observedAt: "2026-08-30T01:14:38Z",
+    label: "公开 generation 已更新；最新 live Owner 状态为 review_needed",
     facts: [
-      "wlyaaaaa/github-local-index 当前 PUBLIC main=62a5548bcb408b8a9fe12c2fe1f5f55a2c7e329b，与 origin/main 为 0/0，主工作树干净。wlyaaaaa/wly0829.cn 仍有本任务未提交候选，所以发布 Admission 保持 dirty warning。",
-      "截至 2026-08-29，现场共有 45 个仓库，其中 26 个 PUBLIC（公开）、19 个 PRIVATE（私有）；旧公开快照仍是 44/26/18。差异来自 1 个新增私有仓库身份，网页只公开类别与聚合数量，不公开名称。issue（问题项）为 0、history（历史链）连续、registry（登记表）有效，因此 domain_status=review_needed（需要复核），不是 execution error（执行失败）。",
+      "wlyaaaaa/github-local-index 当前 PUBLIC main=e01433ea4eff300538d8e3cb533c7953aac0cd69，与 origin/main 为 0/0，主工作树干净。",
+      "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29T21:01:41Z，8 份文档完整闭合并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
       "聚合来源覆盖 45 个仓库身份和 43 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整），PRIVATE 名称与路径不进入页面。",
-      "当前公开 generation 观察于 2026-08-25，指针声明 authoritative=false、decision_authority=false，只对该 generation 的完整性负责，并保留 current+previous。",
-      "2026-08-29 只读 consistency check（一致性检查）比较 8 份公开文档，8 份均为 stable drift（稳定漂移），退出码为 1；临时生成目录已清理。"
+      "最新网络可用 Get-GitOwnerStatus receipt 返回 execution_status=completed、domain_status=review_needed：baseline 44、observed 45、delta=1。generation 完整与 live baseline 差异分层保留。"
     ],
     gaps: [
-      "新出现的仓库身份尚未进入下一份受管 Owner 基线；页面不得公开其身份，也不得把旧 44 项投影称为当前全量事实。",
-      "当前八份公开 Markdown 投影全部落后于现场重建结果；在成功完整 refresh、generation 回读和指针切换前，只能把它们称为 2026-08-25 快照。",
-      "Owner status 当前仍是 review_needed：baseline 44、observed 45、delta=1、issue=0、attention=0；新增 PRIVATE 身份尚未进入下一份受管 baseline，页面只公开聚合计数。",
+      "live inventory 比受管 baseline 多 1 个 PRIVATE identity；页面只公开聚合差异，不公开身份。由 Git Owner 审查并迁移 baseline 前保持 review_needed。",
       "重大 Git/GitHub 动作源码曾在 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从旧源码回归外推。",
-      "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。",
-      "GitHub 总索引已经接入 wly0829.cn 四项目看板；用户已明确要求本轮 current E release 快照验证后发布，但 commit、Pages deployment 和公网回读尚未发生。"
+      "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。"
     ]
   },
   operatingFlow: [
@@ -138,7 +134,7 @@ export const githubIndexProject = {
     { date: "2026-08-21–2026-08-22", commit: "4283c05 / d00220d / b9a8cd6", result: "支持精确 target worktree/ref，修复远端默认 ref 测试，并退役无消费者的历史投影。" },
     { date: "2026-08-23", commit: "6bfa180", result: "恢复包含 PUBLIC 与 PRIVATE 身份的完整 Owner 基线；私有 local root 继续与 identity 分离。" },
     { date: "2026-08-25–2026-08-28", commit: "8749025 / b454cd9", result: "刷新公开 generation，并让精确目标工作树可以绕过陈旧导航提示后再做 .git identity 回读。" },
-    { date: "2026-08-29", commit: "6afc858–62a5548", result: "先把重大动作源码对齐四类因子、Account provider 独立与 step_up 语义，再加入有界里程碑记录并压缩 refresh consistency 合同。当前 PUBLIC main 与远端一致且工作树干净；current E release consumer 安装与真实重大动作 E2E 仍独立未验。" }
+    { date: "2026-08-29", commit: "6afc858–e01433e", result: "先把重大动作源码对齐四类因子、Account provider 独立与 step_up 语义，再发布 8 文档闭合的 generation 3c6487c… 并更新公开投影。当前 PUBLIC main 与远端一致；最新 live Owner status 为 review_needed、delta 1，重大动作安装与真实 E2E 仍独立未验。" }
   ],
   operationalEntrypoints: [
     { name: "单仓库现场元数据", command: "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo <owner/name> -LiveMetadata -Json", purpose: "读取 GitHub visibility 与默认分支，不 fetch refs。" },
@@ -225,7 +221,7 @@ export const githubIndexModules = [
     verification: [
       "2026-08-29 Test-GitOwnerStatus.ps1 通过：identity gate、zero write、全量 PUBLIC/PRIVATE 基线、history、registry、远端失败和无路径泄露。",
       "2026-08-29 Test-ProjectCognitionSource.ps1 通过：分页闭合、稳定 node id、origin 验证 clone、compare 上限、partial gaps 和无凭据输出。",
-      "2026-08-29 现场 Owner Provider 为 execution_status=completed、domain_status=review_needed、delta=1、issue=0、history=continuous、registry valid。",
+      "2026-08-30T01:14:38Z 最新网络可用 Owner receipt 为 execution_status=completed、domain_status=review_needed、baseline=44、observed=45、delta=1。",
       "当前公开 pointer 明确声明 authoritative=false 与 decision_authority=false，避免投影冒充动态事实。"
     ],
     relation: "它回答整个仓库集合是否可信和是否需要复核；单仓库 Admission 再回答某个精确目录、工作树和分支现在能否安全继续。"
@@ -493,7 +489,7 @@ export const githubIndexModules = [
       "最高权限智能体拥有 allow（允许）、step up（补充人类验证）、deny（拒绝）和 needs evidence（先补证据）的语义判断。",
       "机械适配器只能验证登记、签名、nonce（一次性随机凭据）、目标、事实、完整性、执行器和动作边界，不能按 effect 名称推导 human_required。",
       "Owner 仓库已经原位升级合同与适配器：非执行判断 deny（拒绝）、needs_evidence（先补证据）、suspected_tamper（疑似完整性异常）在 proposal（动作提案）前失败关闭，allow（允许继续）可走 runtime_allowed（运行时允许），step_up（补充人类验证）才产生 human_required（需要人类验证）。",
-      "提交 6afc858 已 normal push 到公开 main 并远端回读；当前仓库 main 已前进到 62a5548。证据未包含 current E consumer 安装或真实重大动作，因此生产层保持未闭合。",
+      "提交 6afc858 已 normal push 到公开 main 并远端回读；当前仓库 main 已前进到 e01433e。证据未包含 current E consumer 安装或真实重大动作，因此生产层保持未闭合。",
       "网页只展示公开安全的动作类别、规则差异和证据层，不公开因子秘密、账号身份、内部请求材料或可重放参数。"
     ],
     flow: [
@@ -546,7 +542,7 @@ export const githubIndexModules = [
     shortTitle: "快照与恢复",
     title: "Refresh（刷新）、原子 Generation（索引代际）与中断恢复",
     teaser: "总账变化时生成一个完整新版本；失败时保住旧版本，绝不留下半新半旧的 current（当前指针）。",
-    status: "旧公开索引内部完整，但 8/8 兼容投影已经过期",
+    status: "generation 3c6487c… 的 8 份公开投影已闭合；live Owner baseline 仍有 1 个 identity delta",
     statusTone: "problem",
     value: "让公开索引可重建、可判断 stale（过期），并在写到一半、投影失败或进程中断后继续从最后一个完整版本恢复。",
     why: "八份公开文档若逐个覆盖，任何中断都会让看板混合两个观察时间。顶层 Markdown（文本投影）又容易被误当动态权威，所以必须把完整文档集合、hash（哈希）、pointer（指针）和投影关系一起管理。",
@@ -615,8 +611,8 @@ export const githubIndexModules = [
       "current-generation.json 声明 schema v1、generation root、manifest SHA-256、八份 documents、current+previous 和 pointer-after-readback。",
       "单元测试注入 projection 中途失败，验证旧 pointer 保持有效；下一次完整 publish 修复 mixed projections 后才切换。",
       "测试拒绝越界 projection、额外文件、unknown/case-variant schema 字段和 reparse-point 父目录。",
-      "2026-08-29 Test-GitHubLocalIndexConsistency.ps1 -SkipFetch 比较 8 份文档并报告 stable drift=8、volatile drift=0、exit 1；生成临时目录已清理。",
-      "Owner status 的 delta 与 2026-08-25 generation integrity 同时保留：前者说明事实待刷新，后者仍证明旧快照内部完整。"
+      "generation 3c6487c23da245f8a8be94e7ab5c7436 已发布并回读 8 份文档闭包，previous=1af2630…；指针仍声明 authoritative=false、decision_authority=false。",
+      "generation integrity 与 live Owner status 分开：前者证明当前投影内部完整，后者最新为 review_needed、baseline 44 / observed 45 / delta 1。"
     ],
     relation: "它把总账和诊断保存成可重建快照，但不替 Admission 判断单仓库现场，也不替 Publication Gate 批准外部发布。"
   }

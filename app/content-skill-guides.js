@@ -241,13 +241,13 @@ export const skillGuides = {
   ]),
   "token-budget-advisor": guide([
     ["Token（模型计数单位）", "模型读取文本时使用的计量单位，不等同于汉字数、单词数或最终账单。"],
-    ["Tokenizer / encoding（分词器 / 编码）", "把同一段文本切成 token 的具体算法；不同模型编码可能得到不同数字。"],
+    ["GPT-5.6 Sol baseline（权威计数基线）", "只有该模型完成响应的 usage 或官方 input_tokens 才能给出对应精确 Token 数。"],
     ["Visible text（可见文本）", "用户明确提供并允许读取的正文或文件，不包含隐藏 system、tools、reasoning 和运行时上下文。"],
-    ["Conservative envelope（保守区间）", "没有精确模型编码时给出的安全上下界，避免假装精确。"],
+    ["Unknown（当前不可得）", "权威配额或 GPT-5.6 Sol 计数入口不可用时的诚实结果；不使用字符、字节或其他模型猜。"],
     ["Usage telemetry（真实用量遥测）", "平台或运行回执给出的实际 token 用量，优先级高于离线估算。"]
   ], [
     ["没有明确 token 问题或数值上限", "Skill 不触发。", "继续原任务，不制造预算门或建议删上下文。"],
-    ["缺少精确模型编码", "不输出伪精确单值。", "给保守区间并写明方法；只有临界决策时再选明确 encoding 精算。"],
+    ["缺少 GPT-5.6 Sol 权威计数", "不输出伪精确单值。", "返回 Unknown，并说明缺少的是响应 usage 还是官方 input_tokens。"],
     ["输入包含隐藏或不可见上下文", "只统计已知可见部分。", "明确列出排除项，不猜 system、tools、reasoning 或账单。"]
   ])
 };
@@ -386,7 +386,7 @@ export const skillOutcomes = {
     why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站又会产生大量无意义任务。",
     example: "例如 .agents 新增或退役一个真实 Skill。来源项目发布并回读后，它检查这次变化是否会让看板内容变错。",
     result: "只有看板会实质失真时，才创建一个新的独立网站任务；格式变化或页面已经准确说明的候选状态不会触发。",
-    readerStates: { pass: "来源已经发布回读且页面会实质失真时，创建一个新的独立网站刷新任务。", problem: "只命中路径但不改变事实时记录候选，不开任务；同一提交已经交接时不重复创建。", unavailable: "找不到准确的已保存网站项目或任务创建入口时失败关闭，不误建成无项目任务，也不误建到 .agents 或其他项目。" },
+    readerStates: { pass: "来源已经发布回读且页面会实质失真、saved-project lookup 也取得准确正向回执时，创建一个新的独立网站刷新任务。", problem: "只命中路径但不改变事实时记录候选，不开任务；同一提交已经交接时不重复创建。", unavailable: "saved-project lookup 或任务创建入口不可用时保持 Unknown，不推断项目不存在，也不误建成无项目任务、.agents 或其他项目。" },
     changes: ["来源没有正式 publish/read-back（发布/回读）时不评估网站。", "Changed path（变化路径）命中只记为 impact candidate（影响候选），不会自动开任务。", "Source Owner 确认看板会实质失真后，task_required 才变成 true。", "达到阈值后只创建一个 fresh independent website task（全新独立网站任务）。", "wly0829.cn 没有准确 saved local Git project 时失败关闭，不误建 projectless 或 .agents 任务。"]
   },
   "control-plane-doctor": {
@@ -416,17 +416,17 @@ export const skillOutcomes = {
   "native-economy-routing": {
     value: "它决定什么时候开原生子代理可以提高质量或缩短时间，并保证子代理不超出当前模型、授权和任务范围；同时避免主代理开完子代理后原地空等。",
     why: "复杂任务可以并行，但乱开代理会造成重复工作、写入冲突、权限扩大或主任务无人负责。简单任务开代理反而更慢。",
-    example: "例如本次网站更新先在一个 verified E release 阶段派出四条审计支路；current 后续多次前进，root 每次都重读当时的 current 路由合同再继续集成，不拿旧 identity 直接派新 child。",
+    example: "例如网站更新同时需要内容、界面和刷新链审计；只有这些支路独立可验且不会写冲突时才并行，root 每次都按当时的 current E release 和宿主身份决定数量，不拿旧 identity 或上次代理数直接复用。",
     result: "独立工作可以并行完成，子代理只拿到必要范围；主任务继续负责方向、合并和最终验收，不会把责任交出去。",
     readerStates: { pass: "身份、授权和并行收益成立时创建有界子代理，主任务继续集成。", problem: "任务耦合、写冲突、槽位或资源不足时减少代理数量、改成串行或保持 0。", unavailable: "可信模型/思考等级/角色身份不可验证时不创建子代理；主任务的普通调查和实施继续。" },
     changes: ["身份、E release/commit/ruleset 和能力合同 SHA 可信后才做 0–10 判断。", "C Authority unavailable 不影响 E rules 原生路由。", "有独立可验且净收益为正的支路时可以 spawn（创建子代理）。", "gpt-5.6-luna/terra/sol 按任务语义选择，不设固定默认；其他宿主 verified 模型归未来模型家族。", "Child（子代理）只能收窄 scope、家族和 effort；Sol/未来模型可在父级允许时到 Ultra，绝对不能超过父级或 Ultra。", "Root 派出 child 后继续战略、集成和其他不冲突工作。"]
   },
   "token-budget-advisor": {
-    value: "让我在真正存在上下文或成本数字限制时知道一段可见文本大约占多少 Token（模型计数单位）、是否安全低于上限；同时避免因为对话看起来很长就乱删上下文，或假装知道隐藏提示和正式账单。",
-    why: "字符数不等于 Token（模型计数单位）数，不同模型的分词也不同。随口估一个精确数字，可能让提示词超过上限，或者为了不存在的压力删掉重要信息。",
-    example: "例如我问“这份提示词放进 128k 上下文是否安全”。它先按可见文本给保守区间，接近边界时再用明确分词器精算。",
-    result: "我会得到计算范围、采用的方法、未计入的内容，以及低于、接近还是超过预算的判断；不会回显整段敏感正文。",
-    readerStates: { pass: "已有权威用量或明确分词编码时，按同一范围计算并给出预算结论。", problem: "结果落在预算边界附近时改用明确 tokenizer（分词器）精算，并报告仍未计入的部分。", unavailable: "模型编码或权威用量不可得时只给保守区间，不伪造精确值，也不猜隐藏的系统指令、工具定义和推理过程。" },
-    changes: ["已有平台 usage（真实用量）时直接使用，不重复估算。", "没有精确编码时给保守区间，不伪造单一数字。", "接近上限时才用明确 tokenizer/encoding 精算。", "只统计可见文本，并列出 system、tools、reasoning 等未计入项。", "没有明确计数、比较或数值预算问题时不触发。"]
+    value: "让我在明确询问时读取当前工作台配额/reset 状态，或按 GPT-5.6 Sol 的权威口径计算、比较可见文本 Token；不会因为对话看起来很长就自动触发。",
+    why: "配额是账号现场状态，Token 又取决于指定模型。用字符、字节、其他模型或旧回执猜，会同时误导剩余额度和上下文判断。",
+    example: "例如我问“当前配额何时重置”时，它读取只读账号用量；问“两份提示词按 GPT-5.6 Sol 各多少 Token”时，它使用响应 usage 或官方 input_tokens。",
+    result: "我会得到当前配额/reset 或 GPT-5.6 Sol Token 数、证据时间和未计入边界；不会回显正文、账号标识，也不换算 API 价格。",
+    readerStates: { pass: "只读配额入口或官方 Token 计数可用时，按同一现场和范围给出结果。", problem: "现场状态或输入范围矛盾时先说明差异，不拿旧配额或不同模型计数拼接。", unavailable: "官方状态或计数不可得时返回 Unknown，不用字符、字节、其他模型、隐藏提示或推理过程猜。" },
+    changes: ["只在用户明确询问配额/reset 或 GPT-5.6 Sol Token 时触发。", "配额走只读 account/rateLimits。", "Token 优先使用响应 usage 或官方 input_tokens。", "不计算 API 价格，不回显正文或账号标识。", "官方入口不可用时返回 Unknown。"]
   }
 };

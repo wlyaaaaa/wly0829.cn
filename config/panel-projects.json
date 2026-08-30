@@ -167,7 +167,7 @@
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
-          "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json",
+          "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
           "E:\\PCConfig\\tools\\Get-DevStorageHealth.ps1 -Json",
           "E:\\PCConfig\\tools\\Install-CoreRecoveryTasks.ps1 -Mode Inspect -Json",
           "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json",
@@ -181,6 +181,18 @@
           "E:\\PCConfig\\tools\\Install-ProtectedDataSafeSwitch.ps1 -Mode Inspect -Json",
           "read C:\\ProgramData\\PCConfig\\ProtectedDataSafeSwitch\\v1\\public\\status.json and boot-latest.json",
           "read E:\\PCConfig\\registries\\protected_data_vault_v2_formal.json and protected_data_p5_p7_delivery_v3.json"
+        ],
+        "collector_requirements": [
+          {
+            "id": "pcconfig-task-definitions",
+            "owner": "PCConfig",
+            "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -Write -Json through the canonical task-scan publication pipeline",
+            "required_principals": ["SYSTEM", "Administrator"],
+            "expected_schema": "pcconfig.tasks.v1",
+            "pointer_path": "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
+            "required_evidence": { "complete_visibility": true },
+            "failure_semantics": "mark only affected task fields Unknown; never downgrade to a partial ordinary-user snapshot"
+          }
         ],
         "conditional_collectors": [
           "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json when displayed protected-policy retirement state may change",

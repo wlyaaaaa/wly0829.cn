@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,6 +17,7 @@ import {
 import { SiBilibili, SiGithub, SiX } from "@icons-pack/react-simple-icons";
 import {
   excludedSkills,
+  canonicalPath,
   canonicalUrl,
   normalizePath,
   panelSnapshot,
@@ -58,12 +59,16 @@ function isModifiedClick(event) {
 
 function SiteLink({ href, onNavigate, children, ...props }) {
   const internal = href.startsWith("/");
+  const targetHref = internal ? (() => {
+    const target = new URL(href, "https://local.invalid");
+    return `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
+  })() : href;
 
   function handleClick(event) {
     props.onClick?.(event);
     if (event.defaultPrevented || !internal || event.button !== 0 || isModifiedClick(event) || props.target) return;
     event.preventDefault();
-    const target = new URL(href, window.location.origin);
+    const target = new URL(targetHref, window.location.origin);
     const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const next = `${target.pathname}${target.search}${target.hash}`;
     if (current === next) window.scrollTo({ top: 0, behavior: "instant" });
@@ -74,7 +79,7 @@ function SiteLink({ href, onNavigate, children, ...props }) {
     onNavigate?.();
   }
 
-  return <a href={href} {...props} onClick={handleClick}>{children}</a>;
+  return <a href={targetHref} {...props} onClick={handleClick}>{children}</a>;
 }
 
 function SocialIcon({ name }) {
@@ -275,7 +280,7 @@ function Header({ path }) {
           aria-expanded={searchOpen}
           onClick={() => { setMenuOpen(false); setSearchOpen((value) => !value); }}
         >
-          {searchOpen ? <X size={22} aria-hidden="true" /> : <MagnifyingGlass size={21} aria-hidden="true" />}
+          {searchOpen ? <X size={20} aria-hidden="true" /> : <MagnifyingGlass size={20} aria-hidden="true" />}
         </button>
         <button
           ref={menuButtonRef}
@@ -286,7 +291,7 @@ function Header({ path }) {
           aria-expanded={menuOpen}
           onClick={() => { setSearchOpen(false); setMenuOpen((value) => !value); }}
         >
-          {menuOpen ? <X size={23} aria-hidden="true" /> : <List size={23} aria-hidden="true" />}
+          {menuOpen ? <X size={20} aria-hidden="true" /> : <List size={20} aria-hidden="true" />}
         </button>
         <div className={`header-navigation${menuOpen ? " is-open" : ""}`} id="site-navigation">
           <nav className="social-nav" aria-label="外部链接">
@@ -502,15 +507,10 @@ function ProjectHero({ entry }) {
     <>
       <Breadcrumbs items={[{ label: "项目", href: "/" }, { label: currentProject.title }]} />
       <section className="project-hero">
-        <div>
+        <div className="project-hero-copy">
           <p className="section-kicker">{projectKicker(entry.kind)}</p>
           <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
           <p className="project-lead">{annotateTerms(currentProject.summary)}</p>
-          {currentProject.heroFacts?.length ? (
-            <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
-              {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{annotateTerms(fact.label)}</dt><dd>{annotateTerms(fact.value)}</dd></div>)}
-            </dl>
-          ) : null}
         </div>
         <aside className="snapshot-card" aria-label="当前快照">
           <span className="snapshot-label">当前快照</span>
@@ -520,6 +520,11 @@ function ProjectHero({ entry }) {
           <span>{currentProject.repositoryNote}</span>
           {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
+        {currentProject.heroFacts?.length ? (
+          <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
+            {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{annotateTerms(fact.label)}</dt><dd>{annotateTerms(fact.value)}</dd></div>)}
+          </dl>
+        ) : null}
       </section>
     </>
   );
@@ -1073,7 +1078,7 @@ function RulesPage({ search }) {
 
   function selectRule(logicalId) {
     const next = new URL(window.location.href);
-    next.pathname = "/rules";
+    next.pathname = "/rules/";
     next.searchParams.set("rule", logicalId);
     window.history.pushState({}, "", `${next.pathname}${next.search}`);
     window.dispatchEvent(new PopStateEvent("popstate"));
@@ -1190,6 +1195,15 @@ function NotFound() {
 export default function Page() {
   const location = useLocationState();
   const path = location.pathname;
+  const mainHasMountedRef = useRef(false);
+  const setMainRef = useCallback((node) => {
+    if (!node) return;
+    if (!mainHasMountedRef.current) {
+      mainHasMountedRef.current = true;
+      return;
+    }
+    node.focus({ preventScroll: true });
+  }, [path]);
   useEffect(() => {
     const meta = routeMeta(path);
     document.title = meta.title;
@@ -1214,5 +1228,5 @@ export default function Page() {
     content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
-  return <><FlowField /><Header path={path} /><main id="main-content">{content}</main></>;
+  return <><FlowField /><Header path={path} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main></>;
 }

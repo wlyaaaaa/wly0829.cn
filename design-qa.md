@@ -6,9 +6,9 @@
 PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块、规则工作台、Skills 目录与详情页，
 以及全局导航、搜索、移动端菜单和动态背景。
 
-当前本地预览由 `http://127.0.0.1:4173/` 的同一开发服务提供，源码修改会直接进入
-用户正在查看的页面。下列截图清单仍是最终验收要求，但现有图片早于本轮内容和尺度
-重构，已经失效；在用户确认 MVP 方向前不把旧截图冒充当前证据。
+当前本地预览由 `http://127.0.0.1:5173/` 的同一开发服务提供，源码修改会直接进入
+用户正在查看的页面。下列截图清单已按当前生产 dist 重新生成；27 张规范图是本轮证据，
+非规范旧变体已移入 Windows 回收站，不再拿旧截图冒充当前验收。
 
 网站首先是吴乐阳本人使用的只读面板。判断界面是否合格，不看它像不像营销页，
 而看本人能否在有限屏幕里快速找到项目、规则和能力，并继续读到足够完整的细节。
@@ -52,7 +52,9 @@ PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块
 浏览器截图保存在被忽略的 `docs/design/qa/`，不进入公开提交历史。最终验收至少保留：
 
 - `home-1440x900.png`：桌面项目首页。
+- `home-1800x900.png`：宽屏项目首页，确认四张卡片仍完整进入首屏。
 - `home-390x844.png`：移动端项目首页。
+- `agents-overview-1800x900.png`：复核用户截图中的宽屏关键事实留白。
 - `rules-1440x900.png`：桌面规则工作台。
 - `rules-390x844.png`：移动端规则工作台。
 - `skills-1440x900.png`：Skills 目录。
@@ -60,14 +62,16 @@ PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块
 - `skill-project-entry-1440x900.png`：代表性能力详情页。
 - `skill-detail-390x844.png`：移动端能力详情页。
 - `pcconfig-overview-1440x900.png` 与 `pcconfig-overview-390x844.png`：PCConfig 总览。
+- `pcconfig-current-state-360x800.png`：移动端长任务状态、hash 与下划线文本换行。
 - `pcconfig-module-1440x900.png`：PCConfig 代表模块与本项目导航。
 - `github-index-overview-1440x900.png` 与 `github-index-overview-390x844.png`：GitHub 总索引总览。
 - `github-index-module-1440x900.png`：GitHub 总索引代表模块与本项目导航。
 - `chinese-asr-overview-1440x900.png` 与 `chinese-asr-overview-390x844.png`：ChineseASR 总览。
 - `chinese-asr-module-1440x900.png`：ChineseASR 代表模块、证据层与本项目导航。
-- `search-1440x900.png`：全站搜索“刷新看板”的唯一命中结果。
+- `search-1440x900.png`：全站搜索“刷新看板”时，刷新 Skill 作为首项并保留相关结果。
 - `project-scroll-nav-1440x900.png`：长页面滚动后的固定模块导航。
 - `mobile-menu-390x844.png`：移动端菜单展开状态。
+- `mobile-header-search-360x800.png` 与 `mobile-header-menu-360x800.png`：移动搜索和菜单按钮的对齐、互斥与展开状态。
 - `background-a-1440x900.png` 与 `background-b-1440x900.png`：同一位置不同时刻的
   背景帧，用于确认缓慢运动真实存在。
 
@@ -76,38 +80,42 @@ PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块
 
 ## 当前结论
 
-单项目 `.agents` 内容 MVP 和三项目本地版已通过用户预览。当前正在进行唯一新增项目
-ChineseASR 的本地 owner preview（用户预览）验收；上一轮截图早于以下结构变化，已经
-失效，不能继续作为通过证据：
+2026-08-30 的用户截图重新打开了 owner preview。旧截图和旧“无溢出”结论均已失效，
+尤其不能再用 `document.scrollWidth === viewport` 证明子元素没有被 `hidden/clip` 裁切。
 
-- 项目卡改为直接展示总览和六个模块，并重做连续分隔线与多行规则；
-- 桌面端 100% 缩放使用新的全站正式设计尺度；
-- 项目、模块、规则和 Skill 增加用途、必要性、真实例子、最终结果和本页名词；
-- 项目、模块、规则和 Skill 分别增加正常、发现问题和证据不足三种实际处理结果；
-- 状态、证据格和规则专业层中的英文术语改为首次出现即解释中文；
-- 项目演化按日期阶段合并，不再把同一天的提交拆成多张卡片。
-- PCConfig、GitHub 总索引与 ChineseASR 已进入本地 Registry、首页、搜索、总览和各六模块路由；规则与 Skills 没有复制给其他项目。
-- AI 刷新支持定向项目和“全部更新一下”，默认 no-op；小更新不改网页，内容原位合并而不追加日志或演化卡。
+当前本地候选已经原位修复并取得关键真实浏览器证据：
 
-当前 24 项网站合同测试、53 条直接路由、本地生产构建和 103 个源码/产物公开内容扫描对象
-全部通过；首屏 JavaScript gzip 为 245.56 KiB，仍低于 256 KiB 预算。ChineseASR Source main
-与远端 0/0、工作树干净，Doctor 通过，344/344 单元测试通过；本次没有把这些证据冒充
-真实录音 E2E。
+- `.agents` 关键事实跨越 hero 两列，奇数末项占满整行；1440×900 下事实区域宽度与 hero 一致，不再留下截图中的大块死区。
+- PCConfig 的长哈希和下划线状态值可在列表项内换行；390×844 下逐项检查没有超出内容容器。
+- 移动搜索与菜单按钮保留 40×40 触摸区域、去掉笨重边框并共同垂直居中。
+- 桌面首页缩短卡片摘要和内部留白；1440×900 的四张卡 bottom=680.6，全部进入首屏。
+- SPA 内部链接使用 canonical trailing slash，路径变化后把焦点移到可聚焦的 main；显式 favicon 消除默认资源 404。
+- GitHub 总索引、PCConfig、`.agents` 与相关 Skills 的耐久文案已按当前 Owner 证据原位刷新；ChineseASR 本轮事实未发生实质变化。
 
-Rules 已重新绑定 verified current E89：活动 release commit 为
-`6a272ca361919bd377975c4574f6ab4372483ade`，五文件 ruleset 为
-`e58ca597501ff20306d384e841623e39373eca8d715034856c63b9ebe59b0ce4`。Source main 当前为
-`96aea6972130887cd4d74d92e2d500aa5b2b1463`、工作树干净；它只比 E89 多一个 FastRelease 回执
-修复提交，五份 canonical source 仍与 E89 release 一致。live snapshot verifier 零 finding。
-快速结构化刷新用时约 28 秒，专用 release validator、Skill 供应和合同覆盖通过；当前源码全量
-回归没有在快速刷新中重跑，因此页面明确显示 Unknown，不沿用旧 PASS。
+当前结构化 `.agents` 快照仍绑定 verified E89：活动 release commit 为
+`6a272ca361919bd377975c4574f6ab4372483ade`，ruleset 为
+`e58ca597501ff20306d384e841623e39373eca8d715034856c63b9ebe59b0ce4`。Canonical source main
+已前进到 `31009aa57c8451e49e4e6c2bef0cb9ca5235df98`；它是未激活 source candidate。当前另有 1 项
+公开安全地标为 workbench-local metadata 的未激活本地状态；它不会覆盖 E89。快速刷新
+明确保留“全量本地测试本轮未重跑”的 Unknown。
 
-生产预览在 1440×900 与 390×844 复核首页、Rules、四个项目总览、ChineseASR 模型模块和
-project-entry-gate Skill；所有页面 `scrollWidth` 与 viewport 一致，控制台没有 warning/error。
-手机首页前两张项目卡完整落在首个 844 px 视口内；Rules 长 SHA 和 Skills 长状态均已换行，
-没有页面级横向溢出。
+四项目 `--all` refresh result 已通过现有 verifier：`.agents`、PCConfig、GitHub 总索引 3 个内容包
+material changed，ChineseASR byte-identical；PCConfig receipt 绑定 canonical task-scan generation
+`20260830t011100879-3ff5ec92330242fc` task scan generation、Administrator/SYSTEM principal 合同、88/88 任务定义、
+`complete_visibility=true`、manifest/artifact SHA。结果包保存在被忽略的 `.panel-refresh/runs/`，不成为
+第二叙事源或 build 常驻状态。
 
-用户已经完成本地预览并明确表示当前没有看见问题，随后要求在 E 规则重要更新完成后更新
-快照并发布公网。本轮只发布已经验收的四项目 MVP，不预选第五个项目。
+真实浏览器已覆盖 320/360/390/768/1440/1800 关键视口：首页四卡、`.agents` 宽屏事实区、
+PCConfig 长文本、移动顶栏、项目模块、Rules、Skill、搜索排序、canonical URL、SPA 焦点和 favicon；
+代表页面无控制台 warning/error，逐项长文本没有超出所属容器。27 项合同测试、E89 snapshot、
+生产构建与公开内容门均通过。Owner 已于 2026-08-30 查看本地项目首页、`.agents` 总览、PCConfig
+总览、代表模块、Rules 和代表 Skill，并明确通过预览、授权继续发布。
+
+发布前公网仍是 `1b9fb6f`，最终 public PASS 必须等待新提交、Pages deployment 与公网 bundle/页面
+回读后才能成立。当前 27 张规范 QA 图完整，61 个非规范旧变体共 17,024,171 bytes 已移入 Windows
+回收站；生产 JavaScript 仍接近 256 KiB 预算，CSS 也保留历史重复 selector，但两者不阻断当前四项目发布。
+
+第五项目 gate 继续关闭：先完成当前四项目公网 read-back；之后只有用户提出真实、反复发生的阅读或
+决策需求，且候选 build 实测仍低于 bundle 预算时，才评估一个新项目，不预列或预建装饰卡。
 
 final result: owner_preview_accepted_publication_authorized
