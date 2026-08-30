@@ -155,11 +155,12 @@ Ignored QA：
 - 本轮没有启动、关闭、重启、查询或访问 Codex Remote runtime；页面只说明真实做成、
   跑通过的产品与版本证据，不宣称当前在线。
 - v0.1.5 测试和历史真实截图不能自动覆盖当前 Desktop、Codex、网络或浏览器版本。
-- 第九项目与 E92 实现提交
-  `1278c272c569f294a2a1348cc6b509da80a51fb2` 已从本地 `main` normal-push 到
-  远端 `main`。GitHub Pages run `33316572576`、deployment `6167590993` 均 success，
-  deployment SHA 与该提交一致。
-- 公网首页、Codex Remote Overview、`same-task-control` 模块、E92 Rules 与
+- 第九项目与 E92 主体实现提交为 `1278c272c569f294a2a1348cc6b509da80a51fb2`；
+  E93 快照、规则正文与公开策略最终提交为
+  `6385491211f1cf876add2a9240e47e4064e715c4`，已从本地 `main` normal-push 到
+  远端 `main` 并由 GitHub API 双回读。GitHub Pages run `33328304602`、deployment
+  `6169868470` 均 success，deployment SHA 与最终提交一致。
+- 公网首页、Codex Remote Overview、`same-task-control` 模块、E93 Rules 与
   `personal-panel-refresh` Skill 均为 200 且回读到代表性正文；完整图
   `08-real-task-runtime.jpg` 为 `image/jpeg`、267,332 bytes。
 - `/projects/codex-remote` 以 301 收敛到 trailing-slash canonical；真实未知路由为
