@@ -1,6 +1,6 @@
 # 六项目 MAP 设计与产品验收
 
-状态：`six_project_local_pass_pending_public_readback`
+状态：`six_project_public_pass`
 
 观察时间：2026-08-30
 
@@ -95,6 +95,22 @@ Source / Tests / Runtime / Demo / Protocol / Owner observation 留在总览证�
 
 ## 发布边界
 
-本地产品、内容、媒体、测试、构建、公开门与浏览器 QA 已 PASS。现有公网仍是
-五项目基线；只有网站候选定向提交、normal push、Pages deployment 与公网路由/
-交互回读指向同一新提交后，状态才可升级为 `six_project_public_pass`。
+六项目内容提交 `b674b1f7a73ae48c8031f6f7f28ddfc9e6de272f` 已 normal push 到
+PUBLIC `main`。Pages run `33295308893` 的 build 与 deploy 均为 success，远端
+`refs/heads/main` 回读同一提交。
+
+公网回读结果：
+
+- 首页、PC Panel Hub 总览与 5 个模块路由均为 200，canonical URL 正确。
+- 公网 JavaScript `index-BDhxgj0W.js`：838,203 bytes，SHA-256
+  `58b9c1cfa88906c753a13514198d8d8630742af5f0712046a493fe553f29b8e3`。
+- 公网 CSS `index-C8gSuhdS.css`：68,947 bytes，SHA-256
+  `ad0ffbcf07359157977c90a98c9eeb8001ca33076807f0ebc0e3f8df9329f9ac`。
+- 实际动态壁纸 JPG 与 WebP 预览均为 200、MIME 正确，bytes/SHA 与本地 dist
+  完全一致。
+- 公网 Edge 真实交互 QA 在 1440、390、768 宽度再次 PASS：模块滚动 delta=0、
+  点击切换新增请求=0、画廊 WebP→当前 JPG、1/6↔2/6、焦点圈、Escape、portal、
+  viewport 覆盖与 console 0 问题全部闭合。
+
+因此当前结果为 `six_project_public_pass`；不再以本地预览、CI 或截图单独冒充
+公网完成。
