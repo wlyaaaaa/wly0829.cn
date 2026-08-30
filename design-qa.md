@@ -1,6 +1,6 @@
 # 八项目 MAP 设计与产品验收
 
-状态：`eight_project_local_pass_pending_public_readback`
+状态：`eight_project_public_pass`
 
 观察时间：2026-08-30
 
@@ -90,6 +90,11 @@ AI 协助学习的方法本质：搜索权威资料、讲人话、搜索后继�
 - Browser Skill 版本错位是宿主工具证据缺口，不是网页已知功能失败；本地最新预览已向
   owner 打开。按四项目 MVP 后的项目规则，该缺口对选定新项目发布为 non-blocking，
   但必须保留在当前 QA。
-- 当前公网仍为 7 项提交 `1cc5ecf`。只有第 8 项候选定向提交、normal push、Pages
-  deployment 与公网 commit/路由回读指向同一新提交后，状态才升级为
-  `eight_project_public_pass`。
+- 第 8 项产品提交 `b0adcc91da0d19725163ae555e3a47441a9c82a2` 已 normal-push
+  到 PUBLIC `main`。Pages workflow `33308431463` 的 build 与 deploy 均 success，
+  github-pages deployment `6166022936` 绑定同一提交。
+- 公网首页、learning 总览、authoritative-research 和 human-control-simple 均返回
+  HTTP 200，route marker 与代表正文完整，职业/进度禁用词 0 命中。公网共享脚本
+  `index--yTxmrqe.js` 为 13,957 bytes，SHA-256
+  `1F1E7A3AD1EBE35FEC0B8B6B04D91791AED37BDBBBA7C783565E783066F3880D`，
+  与本地产物逐字节一致。因此八项目状态升级为 `eight_project_public_pass`。

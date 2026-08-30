@@ -76,7 +76,7 @@ already-accurately-disclosed changes wait for the next material refresh.
 The owner accepted the one-project, three-project local and four-project public
 MVP stages. TimeAudit and PC Panel Hub then completed the fifth- and sixth-project
 publications and Pages read-back. CACB completed the seventh curated/manual-only
-publication and public acceptance at `1cc5ecf`. The learning method is the current
-eighth curated/manual-only candidate; completion requires its content, manual
-boundary, tests, eight-project preview, PUBLIC main, Pages deployment and public
-read-back to converge on one commit.
+publication and public acceptance at `1cc5ecf`. The learning method completed the
+eighth curated/manual-only publication at `b0adcc9`: its content, manual boundary,
+tests, eight-project preview, PUBLIC main, Pages deployment and representative
+public routes were read back against the same product commit.
