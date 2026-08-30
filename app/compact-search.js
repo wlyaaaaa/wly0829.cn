@@ -4,7 +4,7 @@ export function compactSearchScore(entry, query) {
   const title = entry.title.toLowerCase();
   const detail = entry.detail.toLowerCase();
   const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
-  const searchable = `${entry.type} ${title} ${detail} ${aliases.join(" ")}`.toLowerCase();
+  const searchable = `${entry.type} ${title} ${detail} ${aliases.join(" ")} ${entry.search || ""}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !searchable.includes(token))) return 0;
   if (title.includes(normalized)) return 14000;

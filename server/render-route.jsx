@@ -53,7 +53,8 @@ const compactSearchIndex = globalSearchEntries.map((entry) => {
     title: entry.title,
     detail: entry.detail.slice(0, 240),
     href,
-    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(projectionKey) || [])])]
+    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(projectionKey) || [])])],
+    search: entry.type === "项目" ? entry.compactSearch || "" : ""
   };
 });
 

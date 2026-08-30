@@ -14,10 +14,21 @@ export function createTermAnnotator(translations) {
     "gi"
   );
 
-  const annotateSegment = (segment) => segment.replace(expression, (match) => {
-      const translation = lookup.get(match.toLowerCase());
-      return translation ? `${match}（${translation}）` : match;
-    });
+  const annotatePlain = (segment) => segment.replace(expression, (match) => {
+    const translation = lookup.get(match.toLowerCase());
+    return translation ? `${match}（${translation}）` : match;
+  });
+  const protectedExpression = /(?:https?:\/\/[^\s<>"']+|(?:[A-Za-z]:\\|\\\\)[^\s<>"']+|\/(?:[A-Za-z0-9._-]+\/)+[A-Za-z0-9._-]+|--[A-Za-z0-9][A-Za-z0-9_-]*)/gi;
+  const annotateSegment = (segment) => {
+    let result = "";
+    let cursor = 0;
+    for (const match of segment.matchAll(protectedExpression)) {
+      result += annotatePlain(segment.slice(cursor, match.index));
+      result += match[0];
+      cursor = match.index + match[0].length;
+    }
+    return result + annotatePlain(segment.slice(cursor));
+  };
   const trailingKnownTermLength = (segment) => {
     const lower = segment.toLowerCase();
     for (const [term] of ordered) {

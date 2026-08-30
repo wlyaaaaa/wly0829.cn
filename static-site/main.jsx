@@ -11,7 +11,6 @@ function restorePreservedScroll() {
   let record = null;
   try {
     record = JSON.parse(window.sessionStorage.getItem(preservedScrollKey) || "null");
-    window.sessionStorage.removeItem(preservedScrollKey);
   } catch {
     return;
   }
@@ -19,11 +18,42 @@ function restorePreservedScroll() {
   if (!record || record.target !== currentTarget || !Number.isFinite(record.scrollY) || !Number.isFinite(record.createdAt) || Date.now() - record.createdAt > 15000) return;
   const priorScrollRestoration = window.history.scrollRestoration;
   window.history.scrollRestoration = "manual";
-  window.scrollTo({ top: record.scrollY, behavior: "instant" });
-  window.requestAnimationFrame(() => {
-    window.scrollTo({ top: record.scrollY, behavior: "instant" });
-    window.requestAnimationFrame(() => { window.history.scrollRestoration = priorScrollRestoration; });
-  });
+  let complete = false;
+  let frameCount = 0;
+  let timeoutId = null;
+  const restore = () => {
+    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    window.scrollTo({ top: Math.min(record.scrollY, maxY), behavior: "instant" });
+  };
+  const finish = () => {
+    if (complete) return;
+    complete = true;
+    if (timeoutId) window.clearTimeout(timeoutId);
+    restore();
+    try { window.sessionStorage.removeItem(preservedScrollKey); } catch { /* Navigation remains correct without storage cleanup. */ }
+    window.history.scrollRestoration = priorScrollRestoration;
+  };
+  const stabilize = () => {
+    if (complete) return;
+    restore();
+    frameCount += 1;
+    if (frameCount < 12) window.requestAnimationFrame(stabilize);
+    else if (document.readyState === "complete") finish();
+  };
+  const restoreAfterLoad = () => {
+    if (complete) return;
+    restore();
+    window.requestAnimationFrame(() => {
+      restore();
+      window.requestAnimationFrame(finish);
+    });
+  };
+  restore();
+  window.requestAnimationFrame(stabilize);
+  if (document.readyState === "complete") window.requestAnimationFrame(restoreAfterLoad);
+  else window.addEventListener("load", restoreAfterLoad, { once: true });
+  document.fonts?.ready?.then(() => { if (!complete) window.requestAnimationFrame(restore); });
+  timeoutId = window.setTimeout(finish, 750);
 }
 
 function initializePreservedScrollNavigation() {
@@ -51,6 +81,13 @@ function initializeSearch(container) {
   const scopeSelect = container.querySelector(".search-scope-select");
   if (!input) return;
   const resultId = input.getAttribute("aria-controls") || `search-results-${Math.random().toString(36).slice(2)}`;
+  let suppressNextFocusOpen = false;
+  const liveStatus = document.createElement("span");
+  liveStatus.className = "visually-hidden search-live-status";
+  liveStatus.setAttribute("role", "status");
+  liveStatus.setAttribute("aria-live", "polite");
+  liveStatus.setAttribute("aria-atomic", "true");
+  container.append(liveStatus);
 
   function closeResults() {
     container.querySelector(".global-search-results")?.remove();
@@ -75,6 +112,7 @@ function initializeSearch(container) {
       if (event.key === "Escape") {
         event.preventDefault();
         closeResults();
+        suppressNextFocusOpen = true;
         input.focus();
         return;
       }
@@ -94,6 +132,7 @@ function initializeSearch(container) {
     const query = input.value.trim();
     const scope = scopeInfo();
     input.placeholder = scope.placeholder;
+    input.setAttribute("aria-label", `在${scope.label}范围搜索关键词`);
     const results = query ? searchCompactEntries(searchEntries, query, scope.id) : [];
     const panel = document.createElement("div");
     panel.className = "global-search-results";
@@ -112,12 +151,13 @@ function initializeSearch(container) {
       addResultKeyboardNavigation(panel);
       container.append(panel);
       input.setAttribute("aria-expanded", "true");
+      liveStatus.textContent = `${scope.label}搜索提示已展开`;
       return;
     }
 
     const status = document.createElement("p");
-    status.setAttribute("aria-live", "polite");
     status.textContent = results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`;
+    liveStatus.textContent = status.textContent;
     panel.append(status);
 
     if (!results.length) {
@@ -157,12 +197,22 @@ function initializeSearch(container) {
   }
 
   input.addEventListener("input", renderResults);
-  input.addEventListener("focus", renderResults);
+  input.addEventListener("focus", () => {
+    if (suppressNextFocusOpen) {
+      suppressNextFocusOpen = false;
+      return;
+    }
+    renderResults();
+  });
   scopeSelect?.addEventListener("change", renderResults);
   input.addEventListener("keydown", (event) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       container.querySelector(".global-search-results a[href]")?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const links = container.querySelectorAll(".global-search-results a[href]");
+      links[links.length - 1]?.focus();
     } else if (event.key === "Escape") {
       closeResults();
       input.blur();
@@ -173,6 +223,102 @@ function initializeSearch(container) {
       if (!container.contains(document.activeElement)) closeResults();
     }, 0);
   });
+}
+
+function searchScopePresentation(scope) {
+  if (scope === "project") return { label: "项目", placeholder: "搜索项目名、用途、模块或直接描述问题", help: "结果只落到项目" };
+  if (scope === "system") return { label: "系统", placeholder: "搜索责任、关系或使用入口", help: "搜索系统责任与真实关系" };
+  if (scope === "rules") return { label: "规则", placeholder: "搜索规则或直接描述约束问题", help: "搜索全部现行规则" };
+  if (scope === "skills") return { label: "Skills", placeholder: "搜索 Skill 名称或直接描述要解决的问题", help: "搜索全部 Skills" };
+  if (scope.startsWith("project:")) {
+    const slug = scope.slice("project:".length);
+    const projectEntry = searchEntries.find((entry) => entry.type === "项目" && entry.projectSlug === slug);
+    const label = projectEntry?.title?.replace(/\s*·\s*总览$/, "") || slug;
+    return { label, placeholder: `搜索 ${label} 的总览、模块或问题`, help: `只搜索 ${label}` };
+  }
+  return { label: "全站", placeholder: "搜索项目、系统、规则或 Skills", help: "搜索全部公开内容" };
+}
+
+function createFullResultLink(entry) {
+  const link = document.createElement("a");
+  link.href = entry.href;
+  const type = document.createElement("span");
+  type.textContent = entry.type;
+  const copy = document.createElement("span");
+  const title = document.createElement("strong");
+  title.textContent = entry.title;
+  const detail = document.createElement("small");
+  detail.textContent = entry.detail;
+  copy.append(title, detail);
+  const arrow = document.createElement("span");
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = "→";
+  link.append(type, copy, arrow);
+  return link;
+}
+
+function initializeSearchResultsPage() {
+  const page = document.querySelector(".search-results-page");
+  if (!page) return;
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("q")?.trim() || "";
+  const scope = params.get("scope") || "all";
+  const presentation = searchScopePresentation(scope);
+  const results = query ? searchCompactEntries(searchEntries, query, scope) : [];
+
+  const heading = page.querySelector("header h1");
+  const intro = page.querySelector("header p:last-child");
+  if (heading) heading.textContent = query ? `“${query}”` : "输入一个名称或问题";
+  if (intro) intro.textContent = `当前范围：${presentation.label}。修改查询或范围请直接使用页头唯一的搜索框。`;
+  if (query) document.title = `${query}｜搜索｜吴乐阳`;
+
+  page.querySelectorAll(":scope > .search-results-empty, :scope > .search-result-group").forEach((node) => node.remove());
+  if (!query || !results.length) {
+    const empty = document.createElement("div");
+    empty.className = "search-results-empty";
+    const strong = document.createElement("strong");
+    strong.textContent = query ? "没有匹配结果" : presentation.help;
+    const detail = document.createElement("p");
+    detail.textContent = query ? "可以换成项目用途、现实问题或更短的关键词。" : "请直接使用页头搜索框。";
+    empty.append(strong, detail);
+    page.append(empty);
+  } else {
+    const order = ["项目", "系统", "规则", "Skills"];
+    const grouped = new Map();
+    for (const entry of results) grouped.set(entry.group || entry.type, [...(grouped.get(entry.group || entry.type) || []), entry]);
+    for (const [group, entries] of [...grouped.entries()].sort((left, right) => order.indexOf(left[0]) - order.indexOf(right[0]))) {
+      const section = document.createElement("section");
+      section.className = "search-result-group";
+      const header = document.createElement("div");
+      const title = document.createElement("h2");
+      title.textContent = group;
+      const count = document.createElement("span");
+      count.textContent = `${entries.length} 项`;
+      header.append(title, count);
+      section.append(header, ...entries.map(createFullResultLink));
+      page.append(section);
+    }
+  }
+
+  for (const container of document.querySelectorAll(".global-search")) {
+    const input = container.querySelector("input[name='q']");
+    const select = container.querySelector("select[name='scope']");
+    if (!input || !select) continue;
+    let option = Array.from(select.options).find((candidate) => candidate.value === scope);
+    if (!option) {
+      option = document.createElement("option");
+      option.value = scope;
+      option.textContent = presentation.label;
+      option.dataset.searchPlaceholder = presentation.placeholder;
+      option.dataset.searchHelp = presentation.help;
+      select.append(option);
+    }
+    select.value = scope;
+    input.value = query;
+    input.placeholder = presentation.placeholder;
+    input.setAttribute("aria-label", `在${presentation.label}范围搜索关键词`);
+    container.dataset.searchScope = scope;
+  }
 }
 
 function initializeHeader() {
@@ -292,7 +438,19 @@ function initializeProjectReadingLayers() {
   if (!nav || !panels.length) return;
   const tabs = Array.from(nav.querySelectorAll("[data-project-reading-tab]"));
   const ids = tabs.map((tab) => tab.dataset.projectReadingTab);
+  const idFromHash = () => window.location.hash.replace(/^#(?:project-reading-panel-)?/, "");
+  function restoreReadingScroll(previousY) {
+    let remainingFrames = 3;
+    const restore = () => {
+      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo({ top: Math.min(previousY, maxY), behavior: "instant" });
+      remainingFrames -= 1;
+      if (remainingFrames > 0) window.requestAnimationFrame(restore);
+    };
+    restore();
+  }
   function activate(id, { updateUrl = false, focus = false } = {}) {
+    const previousY = window.scrollY;
     const selected = ids.includes(id) ? id : "quick";
     for (const tab of tabs) {
       const active = tab.dataset.projectReadingTab === selected;
@@ -304,9 +462,10 @@ function initializeProjectReadingLayers() {
     for (const panel of panels) panel.hidden = panel.dataset.projectReadingPanel !== selected;
     if (updateUrl) {
       const next = new URL(window.location.href);
-      next.hash = selected;
+      next.hash = `project-reading-panel-${selected}`;
       window.history.pushState({ preserveScroll: true }, "", `${next.pathname}${next.search}${next.hash}`);
     }
+    restoreReadingScroll(previousY);
   }
   tabs.forEach((tab, index) => {
     tab.addEventListener("click", (event) => {
@@ -324,8 +483,8 @@ function initializeProjectReadingLayers() {
       activate(tabs[nextIndex].dataset.projectReadingTab, { updateUrl: true, focus: true });
     });
   });
-  window.addEventListener("popstate", () => activate(window.location.hash.slice(1)));
-  activate(window.location.hash.slice(1));
+  window.addEventListener("popstate", () => activate(idFromHash()));
+  activate(idFromHash());
 }
 
 function createButton(className, label, text) {
@@ -664,6 +823,7 @@ function centerCurrentProjectNavigation() {
 
 document.documentElement.dataset.enhanced = "true";
 document.querySelectorAll(".global-search").forEach(initializeSearch);
+initializeSearchResultsPage();
 document.querySelectorAll(".project-gallery").forEach(initializeGallery);
 initializeHeader();
 initializeRulesWorkbench();

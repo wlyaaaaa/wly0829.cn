@@ -22,6 +22,22 @@ const projectModuleSearchAliases = {
   "agents/context-evidence": ["本地构建通过为什么还不能说网站完成"]
 };
 
+const projectCompactExtraAliases = {
+  pcconfig: ["Vault V2", "银行卡盲填", "waiting_for_codex_exit"],
+  timeaudit: ["卡顿", "电脑卡顿", "游戏卡顿"]
+};
+
+function projectCompactSearchText(project, modules) {
+  return [...new Set([
+    project.cardStatus,
+    project.snapshotBoundary,
+    ...(project.usageExamples || []).map((item) => item.ask),
+    ...(project.heroFacts || []).map((item) => item.label),
+    ...(projectCompactExtraAliases[project.slug] || []),
+    ...modules.flatMap((module) => [module.title, module.shortTitle, ...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])])
+  ].filter(Boolean))].join(" ");
+}
+
 const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
   {
     type: "项目",
@@ -32,6 +48,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     detail: project.summary,
     href: project.route,
     aliases: project.searchAliases || [],
+    compactSearch: projectCompactSearchText(project, modules),
     search: [
       project.summary,
       project.status || "",

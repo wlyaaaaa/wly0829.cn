@@ -18,7 +18,7 @@ import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
-import { searchPanel, searchScopeForPath } from "../app/search.js";
+import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { searchCompactEntries } from "../app/compact-search.js";
 import {
@@ -169,6 +169,10 @@ test("term annotation is longest-match and never annotates its own translation",
     const once = annotate(value);
     assert.equal(annotate(once), once, `${value} annotation is not idempotent`);
   }
+  const protectPaths = createTermAnnotator([["skills", "能力入口"], ["public", "公开"]]);
+  for (const exact of ["E:\\.agents\\skills", "C:\\ProgramData\\PCConfig\\public\\status.json", "https://example.com/public/status.json", "/opt/public/skills/config.json", "--public-mode"]) {
+    assert.equal(protectPaths(exact), exact, `identifier/path was rewritten: ${exact}`);
+  }
 });
 
 test("reader outcomes appear before technical decision lists", async () => {
@@ -196,9 +200,12 @@ test("project technical facts remain complete without taking over the first view
     assert.ok(asrFacts.includes(model), `ChineseASR technical reference hides model: ${model}`);
   }
   const pcconfigFacts = pcconfigProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(pcconfigFacts, /88.*88/);
-  assert.match(pcconfigFacts, /第 68 版 normal/);
-  assert.match(pcconfigFacts, /Vault V2/);
+  assert.match(pcconfigFacts, /d13ac199/);
+  assert.match(pcconfigFacts, /银行卡/);
+  assert.match(pcconfigFacts, /Recovery Set/);
+  assert.match(pcconfigFacts, /waiting_for_codex_exit/);
+  const pcconfigTechnical = JSON.stringify({ project: pcconfigProject, modules: pcconfigModules });
+  for (const retainedFact of ["Password Center", "88/88", "第 68 版 normal", "Vault V2"]) assert.ok(pcconfigTechnical.includes(retainedFact), `PCConfig technical reference lost: ${retainedFact}`);
   const gitFacts = githubIndexProject.heroFacts.map((fact) => fact.value).join("\n");
   assert.match(gitFacts, /45.*26.*19/);
   assert.match(gitFacts, /43 个 clone occurrence/);
@@ -251,7 +258,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /positive L3\+ evidence/);
   assert.doesNotMatch(projectRules, /prohibited platform identity/);
   assert.match(projectRules, /what this thing actually does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic\s+example[\s\S]{0,500}owner receives/);
-  assert.match(projectRules, /three reading layers: `速览`, `产品`\s+and `技术`/);
+  assert.match(projectRules, /three reading layers: `速览`, `产品`\s+and\s+`技术`/);
   assert.match(projectRules, /product principles and design highlights/);
   assert.match(projectRules, /release id, commit, test count,[\s\S]{0,160}not the\s+product's identity/);
   assert.match(projectRules, /Public pages never expose internal presentation or maintenance labels/);
@@ -262,7 +269,8 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Field completeness,[\s\S]{0,200}correct terms do\s+not make that page understandable/);
   assert.match(projectRules, /Except for reviewed L3\+ values[\s\S]{0,180}requires withholding and reusable secrets/);
   assert.match(projectRules, /exact models,[\s\S]{0,260}providers,[\s\S]{0,260}versions,[\s\S]{0,400}E2E/);
-  assert.match(projectRules, /first project viewport must disclose 4–6 decision-critical current facts/);
+  assert.match(projectRules, /first project viewport stays product-first/);
+  assert.match(projectRules, /Exact model stacks,[\s\S]{0,220}remain complete in `技术`/);
   assert.match(projectRules, /Public visibility is never a reason to suppress a non-secret fact/);
   assert.match(projectRules, /Sensitivity is decided from the actual value, not the field name/);
   assert.match(projectRules, /Process\s+names, executable paths, command lines, window titles/);
@@ -348,7 +356,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.ok(gzipSync(indexMatch[1]).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "compact search index exceeds registry budget");
   assert.ok(compactIndex.length >= routePaths.length);
   for (const entry of compactIndex) {
-    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases"]);
+    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
   }
   const compactAliasCases = [
@@ -838,7 +846,7 @@ test("CACB explains the product without publishing tested-configuration output",
   assert.equal(cacbModules.length, 5);
   assert.match(publicText, /完整 928 项测试集合当前没有闭合/);
   assert.match(publicText, /11 个.*162 项.*全部通过/);
-  assert.match(publicText, /不发布受测配置结果/);
+  assert.match(publicText, /不发布(?:任何)?受测配置(?:比较)?结论/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "cacb");
@@ -1622,18 +1630,38 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(runtimeSource, /function initializeProjectReadingLayers\(\)/);
   assert.match(runtimeSource, /function initializeSkillCategories\(\)/);
+  assert.match(runtimeSource, /function initializeSearchResultsPage\(\)/);
+  assert.match(runtimeSource, /new URLSearchParams\(window\.location\.search\)/);
+  assert.match(runtimeSource, /searchCompactEntries\(searchEntries, query, scope\)/);
+  assert.match(runtimeSource, /input\.value = query/);
   assert.match(runtimeSource, /查看全部 \$\{results\.length\} 条结果/);
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
 
   const systemHtml = await readFile(path.join(projectRoot, "dist", "system", "index.html"), "utf8");
   assert.match(systemHtml, /class="page-frame system-page"/);
+  assert.doesNotMatch(systemHtml, /class="system-project-links"/, "System must not duplicate the full project directory");
   for (const text of ["三个责任源分别解决什么", "事实怎样进入项目", "三条典型使用链", "这张图不表示什么"]) assert.ok(systemHtml.includes(text), `System page omits: ${text}`);
-  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "timeaudit", "index.html"), "utf8");
-  for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `Overview omits reading layer: ${id}`);
-  assert.match(overviewHtml, /<h2>项目模块<\/h2>/);
+  for (const entry of projectCatalog) {
+    const overviewHtml = await readFile(path.join(projectRoot, "dist", ...entry.project.route.slice(1).split("/"), "index.html"), "utf8");
+    for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
+    assert.match(overviewHtml, /class="module-index"/);
+    assert.ok(overviewHtml.includes(entry.project.productPrinciples[0].title), `${entry.project.slug} omits its first product principle`);
+  }
   const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "index.html"), "utf8");
   assert.match(skillsHtml, /data-skill-category="all"[^>]*aria-pressed="true"|aria-pressed="true"[^>]*data-skill-category="all"/);
+  const homeHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  assert.equal((homeHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
+  assert.equal((homeHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
+
+  const indexMatch = homeHtml.match(/<script id="search-index" type="application\/json">([\s\S]*?)<\/script>/);
+  const compactIndex = JSON.parse(indexMatch[1]);
+  for (const moduleEntry of globalSearchEntries.filter((entry) => entry.type === "项目内容" && entry.aliases.length)) {
+    for (const alias of moduleEntry.aliases) assert.equal(searchCompactEntries(compactIndex, alias, "project")[0]?.projectSlug, moduleEntry.projectSlug, `project compact search loses: ${alias}`);
+  }
+  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["完整 928 项测试集合", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E94", "agents"]]) {
+    assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
+  }
 });
 
 test("route links use native directory documents and preserve module scroll without intercepting navigation", async () => {
@@ -1651,8 +1679,13 @@ test("route links use native directory documents and preserve module scroll with
   assert.match(runtimeSource, /record\.target !== currentTarget/);
   assert.match(runtimeSource, /Date\.now\(\) - record\.createdAt > 15000/);
   assert.match(runtimeSource, /window\.sessionStorage\.removeItem\(preservedScrollKey\)/);
+  assert.match(runtimeSource, /frameCount < 12/);
+  assert.match(runtimeSource, /window\.addEventListener\("load", restoreAfterLoad/);
+  assert.match(runtimeSource, /document\.fonts\?\.ready/);
   assert.match(runtimeSource, /target: `\$\{target\.pathname\}\$\{target\.search\}`,[\s\S]*?scrollY: window\.scrollY/);
   assert.match(runtimeSource, /document\.addEventListener\("click"[\s\S]*?\{ capture: true \}/);
+  assert.match(runtimeSource, /const previousY = window\.scrollY[\s\S]*?restoreReadingScroll\(previousY\)/);
+  assert.match(pageSource, /href=\{`#project-reading-panel-\$\{layer\.id\}`\}/);
   const navCenterSource = runtimeSource.slice(runtimeSource.indexOf("function centerCurrentProjectNavigation"), runtimeSource.indexOf("document.documentElement.dataset.enhanced"));
   assert.match(navCenterSource, /querySelector\("\.project-navigation"\)/);
   assert.match(navCenterSource, /navigation\.scrollLeft = Math\.max/);
@@ -1828,7 +1861,9 @@ test("public content allows public-safe product names and excludes credential va
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
   assert.doesNotMatch(publicText, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
   assert.doesNotMatch(publicText, /AIza[0-9A-Za-z_-]{30,}/);
-  assert.match(pageSource, /按当前范围搜索/);
+  assert.match(pageSource, /<form className="global-search-form" role="search" action="\/search\/" method="get">/);
+  assert.match(pageSource, /className="search-scope-select" name="scope"/);
+  assert.match(pageSource, /name="q"[\s\S]{0,100}aria-label=\{`在\$\{selectedScope\.label\}范围搜索关键词`\}/);
   assert.match(pageSource, /查看全部 \{results\.length\} 条结果/);
   assert.doesNotMatch(pageSource, /addEventListener\("scroll"/);
   const publicMaintenanceLabels = /curated_packaging|manual_owner_only|manual-only|策展快照|策展展示|包装内容|手动维护/i;

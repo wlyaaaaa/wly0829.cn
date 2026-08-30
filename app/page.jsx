@@ -115,13 +115,14 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
       data-search-path={path}
       onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
     >
-      <label>
+      <form className="global-search-form" role="search" action="/search/" method="get">
         <MagnifyingGlass size={18} aria-hidden="true" />
-        <span className="visually-hidden">按当前范围搜索</span>
-        <select className="search-scope-select" aria-label="搜索范围" value={scope} onChange={(event) => { setScope(event.target.value); setOpen(true); }}>
+        <select className="search-scope-select" name="scope" aria-label="搜索范围" value={scope} onChange={(event) => { setScope(event.target.value); setOpen(true); }}>
           {scopeOptions.map((option) => <option value={option.id} data-search-placeholder={option.placeholder || searchScopeById(option.id)?.placeholder} data-search-help={option.help || searchScopeById(option.id)?.help} data-search-examples={(option.examples || searchScopeById(option.id)?.examples || []).join(" · ")} key={option.id}>{option.label}</option>)}
         </select>
         <input
+          name="q"
+          aria-label={`在${selectedScope.label}范围搜索关键词`}
           autoFocus={autoFocus}
           value={query}
           onChange={(event) => { setQuery(event.target.value); setOpen(true); }}
@@ -131,7 +132,7 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
           aria-controls={resultId}
           placeholder={selectedScope.placeholder}
         />
-      </label>
+      </form>
       {open ? (
         <div className="global-search-results" id={resultId} aria-label={`${selectedScope.label}搜索结果`}>
           {!normalized ? <div className="global-search-help"><strong>{selectedScope.help}</strong><span>{selectedScope.examples?.length ? `试试：${selectedScope.examples.join(" · ")}` : "输入名称或直接描述问题"}</span></div> : null}
@@ -417,15 +418,6 @@ function publicRepositoryUrl(entry) {
 }
 
 function projectCardPresentation(entry) {
-  if (entry.kind === "agents") {
-    const unresolved = panelSnapshot.validation.rows.filter((item) => item.status !== "pass").length;
-    return {
-      tone: panelSnapshot.authority.status === "e_rules_active_verified" ? "pass" : "mixed",
-      status: `${panelSnapshot.authority.releaseId} 活动规则已验证`,
-      boundary: unresolved ? `基础验证本次还有 ${unresolved} 项未闭合` : "本页不承诺后台实时同步",
-      observedAt: panelSnapshot.observedAt
-    };
-  }
   const state = entry.project.currentState || {};
   return {
     tone: entry.project.cardStatusTone || moduleStatusTone(entry.project),
@@ -466,7 +458,7 @@ function ProjectCard({ entry }) {
           </div>
           <p className="project-summary">{displayCopy(currentProject.summary, entry.kind)}</p>
           <dl className="project-card-state">
-            <div><dt>项目状态</dt><dd><StatusPill status={presentation.tone}>{displayCopy(presentation.status, entry.kind)}</StatusPill></dd></div>
+            <div><dt>项目状态</dt><dd><span className={`project-card-status-text status-${presentation.tone}`}>{displayCopy(presentation.status, entry.kind)}</span></dd></div>
             <div className="project-card-snapshot-boundary"><dt>快照边界</dt><dd>{displayCopy(presentation.boundary, entry.kind)}</dd></div>
           </dl>
           <div className="project-card-foot">
@@ -528,7 +520,7 @@ function ProjectHero({ entry }) {
         <aside className="snapshot-card project-entry-card" aria-label="项目入口">
           <span className="snapshot-label">项目入口</span>
           <strong>{currentProject.visibility}</strong>
-          <span>{displayCopy(currentProject.repositoryNote, entry.kind)}</span>
+          {!repositoryUrl ? <span>不提供匿名跳转</span> : null}
           {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
       </section>
@@ -885,7 +877,7 @@ const projectReadingLayers = [
 function ProjectReadingNav() {
   return (
     <nav className="project-reading-nav" aria-label="项目阅读层" role="tablist">
-      {projectReadingLayers.map((layer, index) => <a role="tab" id={`project-reading-tab-${layer.id}`} aria-controls={`project-reading-panel-${layer.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-project-reading-tab={layer.id} className={index === 0 ? "is-current" : undefined} href={`#${layer.id}`} key={layer.id}>{layer.label}</a>)}
+      {projectReadingLayers.map((layer, index) => <a role="tab" id={`project-reading-tab-${layer.id}`} aria-controls={`project-reading-panel-${layer.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-project-reading-tab={layer.id} className={index === 0 ? "is-current" : undefined} href={`#project-reading-panel-${layer.id}`} key={layer.id}>{layer.label}</a>)}
     </nav>
   );
 }
@@ -898,7 +890,7 @@ function ProjectQuickState({ entry }) {
   const presentation = projectCardPresentation(entry);
   return (
     <dl className="project-quick-state">
-      <div><dt>项目状态</dt><dd><StatusPill status={presentation.tone}>{displayCopy(presentation.status, entry.kind)}</StatusPill></dd></div>
+      <div><dt>项目状态</dt><dd><span className={`project-card-status-text status-${presentation.tone}`}>{displayCopy(presentation.status, entry.kind)}</span></dd></div>
       <div><dt>快照边界</dt><dd>{displayCopy(presentation.boundary, entry.kind)}</dd></div>
       <div><dt>观察时间</dt><dd><ObservedTime value={presentation.observedAt} /></dd></div>
     </dl>
@@ -916,7 +908,7 @@ function ProjectOverview({ entry }) {
       <ProjectReadingPanel id="quick" selected>
         <section className="document-section document-section-first">
           <p className="section-kicker">先说人话</p>
-          {entry.kind === "agents" ? <><h2>它负责让个人 AI 工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI 查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
+          <h2>最快了解这个项目</h2>
           <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>怎样开始使用</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
           <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
         </section>
@@ -925,7 +917,6 @@ function ProjectOverview({ entry }) {
 
       <ProjectReadingPanel id="product">
         <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
-        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
         {currentProject.productPrinciples?.length ? <section className="document-section"><h2>产品思想与设计核心</h2><div className="product-principle-grid">{currentProject.productPrinciples.map((principle, index) => <article key={principle.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{copy(principle.title)}</h3><p>{copy(principle.detail)}</p></article>)}</div></section> : null}
         <section className="document-section split-section">
           <div><h2>{isLearning ? "AI协助" : "它负责"}</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
@@ -933,11 +924,12 @@ function ProjectOverview({ entry }) {
         </section>
         <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
         <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
-        <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
+        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="technical">
         <section className="document-section document-section-first"><h2>{isLearning ? "方法状态与证据边界" : "完整项目状态与证据边界"}</h2><ProjectCurrentState entry={entry} /></section>
+        <section className="document-section"><h2>来源与公开边界</h2><p>{displayCopy(currentProject.repositoryNote, entry.kind)}</p></section>
         {currentProject.heroFacts?.length ? <section className="document-section"><h2>当前关键技术事实</h2><dl className="project-headline-facts project-headline-facts-technical" aria-label={`${currentProject.title} 当前关键技术事实`}>{currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}</dl></section> : null}
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
@@ -945,6 +937,7 @@ function ProjectOverview({ entry }) {
         {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
         <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
         <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
         <section className="document-section source-note"><h2>快照怎样更新</h2><p>{copy(currentProject.snapshotUpdateNote || "本页代表最后一次明确核对并发布的项目状态，不承诺后台实时同步。再次更新时会重新读取该项目当前事实、边界和验证结果；无法确认的内容继续明确标成网页快照边界，不用旧记录猜成当前状态。")}</p></section>
       </ProjectReadingPanel>
     </article>
@@ -1427,11 +1420,6 @@ function SystemPage() {
             <SiteLink role="cell" href={relation.entryHref}><strong>{relation.entry}</strong><span>{relation.entryRole}</span></SiteLink>
           </article>)}
         </div>
-      </section>
-
-      <section className="system-project-section" aria-labelledby="system-project-title">
-        <div className="system-section-heading"><h2 id="system-project-title">当前项目都可以从这里进入</h2><p>系统页只补充跨项目关系，不替代项目自己的总览、模块和快照。</p></div>
-        <div className="system-project-links">{projectCatalog.map((entry) => <SiteLink href={entry.project.route} key={entry.project.slug}><span>{String(entry.project.order).padStart(2, "0")}</span><strong>{entry.project.title}</strong><ArrowRight size={16} aria-hidden="true" /></SiteLink>)}</div>
       </section>
 
       <section className="system-explanation-grid">
