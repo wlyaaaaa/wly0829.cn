@@ -23,7 +23,7 @@
     "initial_bundle_gzip_budget_kib": 320,
     "bundle_budget_semantics": "the number is the current anti-bloat review threshold, not a permanent content ceiling; when measured smoothness and semantic fidelity cannot be preserved below it, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
     "detail_loading_mode": "eager_instant_navigation",
-    "bundle_scaling_policy": "keep project navigation free of click-time loading; at tens of projects move narrative content to build-time route-specific static HTML, keep shared interaction JavaScript small, and prefetch likely routes before interaction; never delete required content or shift latency to clicks",
+    "bundle_scaling_policy": "keep project navigation free of click-time loading; when measured eager bundle growth approaches the review threshold, even before ten projects, move narrative content to build-time route-specific static HTML, keep shared interaction JavaScript small, and prefetch likely routes before interaction; never delete required content or shift latency to clicks",
     "allowed_presentation_modes": [
       "real_dashboard",
       "curated_packaging"
@@ -590,6 +590,139 @@
           "postgres_data, grafana_data, log, heartbeat, buffer, backup payload, cache or other ignored local runtime artifacts change without altering a displayed public-safe fact",
           "internal refactors, dashboard formatting or additional tests leave every displayed capability, boundary and verification interpretation unchanged",
           "a blocked or unavailable live collector remains accurately disclosed as Unknown with its last verified observation time"
+        ]
+      }
+    },
+    {
+      "id": "pc-panel-hub",
+      "order": 6,
+      "title": "PC Panel Hub",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/pc-panel-hub",
+      "ai_refresh": {
+        "content_path": "app/content-pc-panel-hub.js",
+        "semantic_revision": 1,
+        "scope": "project overview with layered physical/visual evidence, plus project-defined modules covering the case-panel data/render/transport path, HS2 event overlay, and power/recovery ownership",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
+          "pwsh -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\check-runtime.ps1 -AsJson; consume only ready and named missing categories, not local paths",
+          "read the newest E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\out\\stream\\stream-heartbeat*.json and reduce it to age, status, transport mode, frame, failures, cadence and recovery-baseline fields; never publish local payload files or infer physical pixels from the heartbeat",
+          "read exact wallpaper, 2288x1048 HS2 display and HS2.CrystalOverlay process presence without reading private window/notification payloads or starting, stopping, installing or repairing any component"
+        ],
+        "conditional_collectors": [
+          "python E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\test_metrics_agent.py; powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\TestRenderer.ps1; powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\TestRuntimeReliability.ps1 when metrics, rendering, transport, watchdog or recovery semantics changed",
+          "dotnet test E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\tests\\HS2.CrystalOverlay.Tests\\HS2.CrystalOverlay.Tests.csproj when HS2 event, lifetime, layout, source, notification or display-selection semantics changed",
+          "run scripts\\test.ps1 -SkipStreamWhenRunning only after a fresh production heartbeat proves the live stream is already running and the command will skip TestVideoStream.ps1; otherwise run the pure software checks individually and leave COM/device acceptance Unknown"
+        ],
+        "collector_requirements": [
+          {
+            "id": "pc-panel-hub-task-definitions",
+            "owner": "PCConfig",
+            "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -Write -Json through the canonical task-scan publication pipeline; website consumes only the exact PC Panel Hub task state/result and bounded identity fields",
+            "required_principals": ["SYSTEM", "Administrator"],
+            "expected_schema": "pcconfig.tasks.v1",
+            "pointer_path": "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
+            "required_evidence": { "complete_visibility": true },
+            "failure_semantics": "mark only the scheduled-task fields Unknown with the last verified evidence time; never substitute a partial ordinary-user task view or call the project unavailable"
+          }
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/PC-Panel-Hub",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\TURZX-SideScreen"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "project_modules",
+        "case_panel_metrics_render_and_transport",
+        "hs2_event_overlay_and_display_safety",
+        "power_startup_watchdog_and_recovery",
+        "physical_acceptance_and_visual_evidence",
+        "verification_gaps_and_evolution"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_and_public_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "docs/architecture.md",
+            "docs/startup.md",
+            "docs/hs2-crystal-overlay.md",
+            "docs/release.md"
+          ]
+        },
+        {
+          "kind": "case_panel_metrics_render_and_transport",
+          "paths": [
+            "tools/turzx_side_screen/metrics_agent.py",
+            "tools/turzx_side_screen/top_processes_helper.py",
+            "tools/turzx_side_screen/TURZX.SideScreen*.cs",
+            "tools/turzx_side_screen/SnapshotModels.cs",
+            "tools/turzx_side_screen/config.json",
+            "tools/turzx_side_screen/config.example.json",
+            "tools/turzx_side_screen/StartSideScreenStack.ps1",
+            "tools/turzx_side_screen/StartSideScreenWatchdog.ps1",
+            "tools/turzx_side_screen/README_protocol.md",
+            "tools/turzx_side_screen/design/*.svg",
+            "tools/turzx_weather_shim/*.py",
+            "tools/turzx_weather_shim/*.ps1",
+            "tools/turzx_weather_shim/*.cmd"
+          ]
+        },
+        {
+          "kind": "hs2_overlay_and_display_recovery",
+          "paths": [
+            "tools/hs2_crystal_overlay/src/**",
+            "tools/hs2_crystal_overlay/tests/**",
+            "tools/hs2_crystal_overlay/scripts/**",
+            "tools/hs2_crystal_overlay/Publish-HS2Task.ps1",
+            "tools/hs2_crystal_overlay/Install-HS2NeteasePlaybackBridge.ps1",
+            "tools/hs2_crystal_overlay/Uninstall-HS2NeteasePlaybackBridge.ps1",
+            "docs/hs2-crystal-overlay.md"
+          ]
+        },
+        {
+          "kind": "startup_power_repair_and_validation",
+          "paths": [
+            "scripts/check-runtime.ps1",
+            "scripts/start.ps1",
+            "scripts/repair-panel.ps1",
+            "scripts/install-startup-admin.ps1",
+            "scripts/build-release.ps1",
+            "scripts/Test*.ps1",
+            "scripts/test.ps1",
+            "scripts/test-public-release.ps1",
+            "tools/turzx_side_screen/SideScreenWatchdogPolicy.ps1",
+            "tools/turzx_side_screen/SideScreenDisplayPowerPolicy.ps1",
+            "tools/turzx_side_screen/HS2ActiveRecoveryPolicy.ps1",
+            "tools/turzx_side_screen/HS2OverlayWatchdogPolicy.ps1",
+            "tools/turzx_side_screen/WindowsDisplayWindowPolicy.ps1",
+            "tools/turzx_side_screen/InstallStartupTask-Admin.ps1",
+            "tools/turzx_side_screen/Test*.ps1",
+            "tools/turzx_side_screen/test_*.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed metric source, trust rule, cadence, renderer, command-200/204 transport boundary or physical-acceptance interpretation changes",
+          "a displayed HS2 event source, priority, lifetime, layout, display-selection, mode-preservation or window-protection behavior changes what the owner should trust or do",
+          "a startup, sleep, shutdown, one-writer, watchdog, circuit-breaker, COM identity or recovery boundary changes",
+          "a source/runtime/test/physical mismatch or newly verified device result changes the current maturity or named gap"
+        ],
+        "snapshot_only_when": [
+          "the public source commit, clean state, test count, heartbeat frame/age, task state, process presence or observation time changes without semantic change"
+        ],
+        "ignore_when": [
+          "generated previews, logs, heartbeat slots, local device bindings, build output and other ignored runtime artifacts change without altering a displayed decision",
+          "raw telemetry values, weather, process ranking or notification payload churn alone does not trigger a website task; useful non-secret technical values may still enter after actual-value review",
+          "internal refactors or additional tests leave every displayed capability, boundary and verification interpretation unchanged",
+          "a host-side heartbeat remains accurately disclosed as not proving device acknowledgement or physical pixels"
         ]
       }
     }

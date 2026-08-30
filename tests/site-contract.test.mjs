@@ -11,6 +11,7 @@ import { ruleGuides } from "../app/content-rule-guides.js";
 import { chineseAsrModules, chineseAsrProject } from "../app/content-chinese-asr.js";
 import { githubIndexModules, githubIndexProject } from "../app/content-github-index.js";
 import { pcconfigModules, pcconfigProject } from "../app/content-pcconfig.js";
+import { pcPanelHubModules, pcPanelHubProject } from "../app/content-pc-panel-hub.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
 import { searchPanel } from "../app/search.js";
@@ -76,14 +77,14 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly five projects and three navigation areas", async () => {
+test("the accepted panel has exactly six projects and three navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
   assert.ok(!routePaths.includes("/ideas"));
-  assert.match(pageSource, /ChineseASR、TimeAudit 五个项目/);
+  assert.match(pageSource, /共 \{projectCatalog\.length\} 个项目/);
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
 });
 
@@ -248,7 +249,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /must never change\s+the factual status, omit the component, soften a failure/);
   assert.match(projectRules, /independent product judgment/);
   assert.match(projectRules, /Do not copy a README section by section/);
-  assert.match(projectRules, /Each project owns its real module count/);
+  assert.match(projectRules, /Each project owns its\s+real module count/);
   assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
   assert.match(projectRules, /returned task id\s+is the creation receipt/);
   assert.match(projectRules, /standing-authorized to commit, normal-push existing PUBLIC `main`/);
@@ -277,7 +278,7 @@ test("the eager project bundle stays bounded and keeps route changes instant", a
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not a permanent content ceiling/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
   assert.equal(registry.refresh_policy.detail_loading_mode, "eager_instant_navigation");
-  assert.equal(enabledProjectCount, 5);
+  assert.equal(enabledProjectCount, 6);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.equal(javascript.length, 1, "initial app currently expects one bounded eager chunk");
@@ -292,7 +293,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.deepEqual(Object.keys(packageJson.dependencies).sort(), ["@icons-pack/react-simple-icons", "@phosphor-icons/react", "react", "react-dom"].sort());
   assert.deepEqual(Object.keys(packageJson.devDependencies).sort(), ["@vitejs/plugin-react", "vite"].sort());
   const forbiddenRuntimeScripts = Object.keys(packageJson.scripts).filter((name) => /^(?:server|serve|daemon|watch|poll|sync|database|db)(?::|$)/i.test(name));
-  assert.deepEqual(forbiddenRuntimeScripts, [], "the fifth project must not add a website service, watcher, poller, sync job or database");
+  assert.deepEqual(forbiddenRuntimeScripts, [], "visual project additions must not add a website service, watcher, poller, sync job or database");
   const timeAuditAppFiles = (await readdir(path.join(projectRoot, "app"))).filter((name) => /timeaudit/i.test(name)).sort();
   assert.deepEqual(timeAuditAppFiles, ["content-timeaudit.js"], "TimeAudit must have one narrative package instead of duplicate app state");
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
@@ -301,7 +302,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the five accepted project packages", async () => {
+test("the maintenance registry drives exactly the six accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v1");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -317,9 +318,9 @@ test("the maintenance registry drives exactly the five accepted project packages
   assert.equal(registry.refresh_policy.trigger, "displayed_fact_or_explanation_changed");
   assert.equal(registry.refresh_policy.only_private_document, "docs/design/private-content-rules.md");
   assert.equal(registry.refresh_policy.default_presentation_mode, "real_dashboard");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -332,7 +333,7 @@ test("the maintenance registry drives exactly the five accepted project packages
     assert.ok(item.impact_sources.length >= 3);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -436,6 +437,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "timeaudit",
       expectedOrder: 5,
       expectedModules: null
+    },
+    {
+      project: pcPanelHubProject,
+      modules: pcPanelHubModules,
+      expectedSlug: "pc-panel-hub",
+      expectedOrder: 6,
+      expectedModules: ["telemetry-trust", "case-panel-rendering", "serial-transport", "hs2-overlay", "power-recovery"]
     }
   ];
   for (const entry of packages) {
@@ -554,6 +562,107 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
   }
 });
 
+test("PC Panel Hub keeps software demos, full images and previews bounded and evidence-labelled", async () => {
+  const publicText = JSON.stringify({ project: pcPanelHubProject, modules: pcPanelHubModules });
+  assertForbiddenTermsAreAbsent(publicText);
+  for (const key of ["responsibilities", "exclusions", "glossary", "operatingFlow", "components", "usageExamples", "evidenceLayers", "evolution", "operationalEntrypoints"]) {
+    assert.ok(Array.isArray(pcPanelHubProject[key]) && pcPanelHubProject[key].length >= 3, `PC Panel Hub overview ${key} is incomplete`);
+  }
+  const heroText = pcPanelHubProject.heroFacts.map((item) => item.value).join("\n");
+  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "2717ecb4"]) {
+    assert.ok(heroText.includes(fact), `PC Panel Hub first viewport hides ${fact}`);
+  }
+  assert.match(publicText, /软件(?:设计|演示)|demo/);
+  assert.match(publicText, /不是实体屏|不证明实体|不能代替实体|Physical/);
+  assert.match(publicText, /具体值实际含|按字段类别自动隐藏/);
+  assert.match(publicText, /% Processor Utility/);
+  assert.match(publicText, /等待游戏帧/);
+  assert.match(publicText, /动态壁纸已经生效/);
+  assert.match(publicText, /wallpaper64/);
+  assert.ok(!pcPanelHubModules.some((item) => item.slug === "acceptance-evidence"));
+
+  const expectedGalleryFiles = [
+    "hs2-live-wallpaper-current.jpg",
+    "turzx-active-design.png",
+    "turzx-idle-design.png",
+    "hs2-max-six-demo.png",
+    "hs2-hardware-alert-demo.png",
+    "hs2-placement-recovery-design.png"
+  ];
+  assert.equal(pcPanelHubProject.gallery.length, expectedGalleryFiles.length);
+  assert.deepEqual(pcPanelHubProject.gallery.map((item) => path.posix.basename(item.src)), expectedGalleryFiles);
+  for (const item of pcPanelHubProject.gallery) {
+    assert.match(item.src, /^\/media\/pc-panel-hub\/[a-z0-9-]+\.(?:png|jpg)$/);
+    const stem = path.posix.basename(item.src, path.posix.extname(item.src));
+    assert.equal(item.thumbnail, `/media/pc-panel-hub/thumbs/${stem}.webp`);
+    assert.ok(item.alt?.trim().length >= 8, `${item.src} alt is missing`);
+    assert.ok(item.caption?.trim().length >= 20, `${item.src} caption is missing`);
+    assert.match(item.caption, /软件|设计|demo|不是|不证明/, `${item.src} does not disclose its evidence level`);
+    assert.match(item.evidenceLevel, /^E\d$/);
+    assert.ok(item.evidenceLabel?.length >= 4);
+    assert.ok(item.proves?.length >= 20);
+    assert.ok(item.doesNotProve?.length >= 20);
+    assert.match(item.sourceCommit, /^[a-f0-9]{40}$/);
+  }
+
+  const mediaRoot = path.join(projectRoot, "public", "media", "pc-panel-hub");
+  const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  assert.deepEqual(mediaFiles, [...expectedGalleryFiles].sort(), "PC Panel Hub media directory must contain only registered PNGs");
+  let totalBytes = 0;
+  for (const file of mediaFiles) {
+    const bytes = (await stat(path.join(mediaRoot, file))).size;
+    assert.ok(bytes < 1.5 * 1024 * 1024, `${file} exceeds the 1.5 MiB per-image review threshold`);
+    totalBytes += bytes;
+  }
+  assert.ok(totalBytes <= 3.5 * 1024 * 1024, `PC Panel Hub full images ${totalBytes} bytes exceed the 3.5 MiB review threshold`);
+
+  const thumbnailRoot = path.join(mediaRoot, "thumbs");
+  const thumbnailFiles = (await readdir(thumbnailRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  assert.deepEqual(thumbnailFiles, expectedGalleryFiles.map((file) => file.replace(/\.(?:png|jpg)$/, ".webp")).sort(), "each PC Panel Hub image must have one WebP preview");
+  let thumbnailBytes = 0;
+  for (const file of thumbnailFiles) {
+    const bytes = (await stat(path.join(thumbnailRoot, file))).size;
+    assert.ok(bytes < 100 * 1024, `${file} exceeds the 100 KiB preview threshold`);
+    thumbnailBytes += bytes;
+  }
+  assert.ok(thumbnailBytes <= 512 * 1024, `PC Panel Hub previews ${thumbnailBytes} bytes exceed the 512 KiB review threshold`);
+  assert.ok(totalBytes + thumbnailBytes <= 4 * 1024 * 1024, "PC Panel Hub full images and previews exceed the 4 MiB media review threshold");
+
+  const distMediaRoot = path.join(projectRoot, "dist", "media", "pc-panel-hub");
+  const distMediaFiles = (await readdir(distMediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  assert.deepEqual(distMediaFiles, mediaFiles, "production PC Panel Hub media must match source media");
+  for (const file of mediaFiles) assert.equal((await stat(path.join(distMediaRoot, file))).size, (await stat(path.join(mediaRoot, file))).size, `${file} changed during build`);
+  const distThumbnailFiles = (await readdir(path.join(distMediaRoot, "thumbs"))).sort();
+  assert.deepEqual(distThumbnailFiles, thumbnailFiles, "production PC Panel Hub previews must match source previews");
+  for (const file of thumbnailFiles) assert.equal((await stat(path.join(distMediaRoot, "thumbs", file))).size, (await stat(path.join(thumbnailRoot, file))).size, `${file} preview changed during build`);
+
+  const assetsRoot = path.join(projectRoot, "dist", "assets");
+  for (const javascript of (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"))) {
+    assert.doesNotMatch(await readFile(path.join(assetsRoot, javascript), "utf8"), /data:image\/(?:png|jpeg);base64/i, `${javascript} inlines PC Panel Hub full images`);
+  }
+});
+
+test("PC Panel Hub registry binds future material refreshes without device-side collectors", async () => {
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "pc-panel-hub");
+  assert.ok(registration);
+  assert.equal(registration.order, 6);
+  assert.equal(registration.route, "/projects/pc-panel-hub");
+  assert.equal(registration.ai_refresh.content_path, "app/content-pc-panel-hub.js");
+  assert.equal(registration.source.repo, "wlyaaaaa/PC-Panel-Hub");
+  assert.equal(registration.source.visibility, "PUBLIC");
+  const routineCollectors = registration.ai_refresh.collectors.join("\n");
+  assert.match(routineCollectors, /Get-ProjectAdmission\.ps1[\s\S]*PC-Panel-Hub/);
+  assert.match(routineCollectors, /check-runtime\.ps1/);
+  assert.match(routineCollectors, /stream-heartbeat/);
+  assert.doesNotMatch(routineCollectors, /repair-panel|install-startup|StartSideScreen|TestVideoStream|SetSecondaryScreen|Restart-Service/i, "routine website collectors must stay read-only and device-free");
+  assert.deepEqual(registration.ai_refresh.collector_requirements.map((item) => item.id), ["pc-panel-hub-task-definitions"]);
+  assert.deepEqual(registration.ai_refresh.collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
+  assert.equal(registration.ai_refresh.collector_requirements[0].required_evidence.complete_visibility, true);
+  assert.match(JSON.stringify(registration.refresh_rules.semantic_review_required_when), /transport|physical|display|recovery|verification/i);
+  assert.match(JSON.stringify(registration.refresh_rules.ignore_when), /preview|log|heartbeat|runtime artifacts/i);
+});
+
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /function\s+(?:ProjectGallery|Gallery)\s*\(/);
@@ -561,6 +670,13 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /(?:gallery|images)\.map\([\s\S]{0,1400}onClick=/, "gallery images must open on click");
   assert.match(pageSource, /loading="lazy"/);
   assert.match(pageSource, /image\.thumbnail \|\| image\.src/, "gallery cards must use light previews while the dialog keeps the full image");
+  assert.match(pageSource, /可视化证据/);
+  assert.match(pageSource, /image\.evidenceLevel/);
+  assert.match(pageSource, /activeImage\.proves/);
+  assert.match(pageSource, /activeImage\.doesNotProve/);
+  assert.match(pageSource, /const hasStructuredEvidence = images\.every/);
+  assert.ok(timeAuditProject.gallery.some((item) => !item.proves), "TimeAudit must exercise the real-interface gallery fallback");
+  assert.ok(pcPanelHubProject.gallery.every((item) => item.proves && item.doesNotProve), "PC Panel Hub must exercise structured visual evidence");
   assert.match(pageSource, /role="dialog"/);
   assert.match(pageSource, /aria-modal="true"/);
   assert.match(pageSource, /createPortal\([\s\S]*?document\.body\)/, "lightbox must escape the main stacking context and cover the fixed header");
@@ -605,6 +721,9 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const timeAuditMainMaterial = run(["--project", "timeaudit", "--path", "main.py", "--material-change"]);
   const timeAuditHeartbeat = run(["--project", "timeaudit", "--path", "log/telemetry_heartbeat", "--material-change"]);
   const timeAuditDashboard = run(["--project", "timeaudit", "--path", "grafana_dashboards/main.json"]);
+  const pcPanelCandidate = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/TURZX.SideScreen.Stream.cs"]);
+  const pcPanelMaterial = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/TURZX.SideScreen.Stream.cs", "--material-change"]);
+  const pcPanelHeartbeat = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/out/stream/stream-heartbeat.json", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -635,15 +754,22 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(timeAuditHeartbeat.action, "no_website_task");
   assert.equal(timeAuditDashboard.impact_candidate, true);
   assert.equal(timeAuditDashboard.task_required, false);
+  assert.equal(pcPanelCandidate.impact_candidate, true);
+  assert.equal(pcPanelCandidate.task_required, false);
+  assert.equal(pcPanelMaterial.task_required, true);
+  assert.equal(pcPanelMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
+  assert.equal(pcPanelHeartbeat.impact_candidate, false);
+  assert.equal(pcPanelHeartbeat.task_required, false);
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
   const targetedTimeAudit = run(["--project", "timeaudit"]);
+  const targetedPcPanelHub = run(["--project", "pc-panel-hub"]);
   const full = run(["--all"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
 
@@ -663,8 +789,12 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
   assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 1);
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
+  assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 1);
+  assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(full.mode, "all");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -719,7 +849,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf8");
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
-    assert.deepEqual(verification.counts, { changed: 0, unchanged: 5, blocked: 0 });
+    assert.deepEqual(verification.counts, { changed: 0, unchanged: 6, blocked: 0 });
     const invalid = structuredClone(bundle);
     invalid.projects.find((item) => item.id === "pcconfig").collector_receipts[0].principal = "ordinary-user";
     await writeFile(bundlePath, JSON.stringify(invalid, null, 2), "utf8");
@@ -873,10 +1003,14 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");
   assert.equal(searchPanel("ChineseASR")[0]?.title, "ChineseASR · 总览");
   assert.equal(searchPanel("TimeAudit")[0]?.title, "TimeAudit · 总览");
+  assert.equal(searchPanel("PC Panel Hub")[0]?.title, "PC Panel Hub · 总览");
   assert.equal(searchPanel("过去一小时为什么卡")[0]?.title, "timeaudit-diagnostics");
   assert.ok(searchPanel("没有游戏帧是不是掉帧").some((item) => item.href === "/skills/timeaudit-diagnostics"));
   for (const query of ["1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开"]) {
     assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/timeaudit")), `TimeAudit search misses: ${query}`);
+  }
+  for (const query of ["机箱屏冻结", "command 204", "HS2 六卡", "实体像素验收"]) {
+    assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/pc-panel-hub")), `PC Panel Hub search misses: ${query}`);
   }
   const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
   assert.doesNotMatch(searchSource, /\/projects\/timeaudit|TimeAudit · 总览/, "project routes and titles must derive from projectCatalog; Skill aliases may still name TimeAudit");
@@ -977,9 +1111,10 @@ test("public content excludes forbidden projects and obvious credential values",
   const contentGithubIndex = await readFile(path.join(projectRoot, "app", "content-github-index.js"), "utf8");
   const contentChineseAsr = await readFile(path.join(projectRoot, "app", "content-chinese-asr.js"), "utf8");
   const contentTimeAudit = await readFile(path.join(projectRoot, "app", "content-timeaudit.js"), "utf8");
+  const contentPcPanelHub = await readFile(path.join(projectRoot, "app", "content-pc-panel-hub.js"), "utf8");
   const siteContent = await readFile(path.join(projectRoot, "app", "site-content.js"), "utf8");
   const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
-  const publicText = `${pageSource}\n${contentCore}\n${contentSkills}\n${contentRuleGuides}\n${contentPcconfig}\n${contentGithubIndex}\n${contentChineseAsr}\n${contentTimeAudit}\n${siteContent}\n${searchSource}`;
+  const publicText = `${pageSource}\n${contentCore}\n${contentSkills}\n${contentRuleGuides}\n${contentPcconfig}\n${contentGithubIndex}\n${contentChineseAsr}\n${contentTimeAudit}\n${contentPcPanelHub}\n${siteContent}\n${searchSource}`;
   assertForbiddenTermsAreAbsent(publicText);
   assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}/);
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
@@ -1002,6 +1137,7 @@ test("every public route is unique and has useful metadata", () => {
   assert.match(routeMeta("/skills/nope/personal-media").title, /页面不存在/);
   assert.match(routeMeta("/projects/pcconfig/nope/machine-facts").title, /页面不存在/);
   assert.match(routeMeta("/projects/timeaudit/nope/collection-pipeline").title, /页面不存在/);
+  assert.match(routeMeta("/projects/pc-panel-hub/nope/serial-transport").title, /页面不存在/);
 });
 
 test("production build has direct entry files for every route", async () => {

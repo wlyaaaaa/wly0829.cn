@@ -4527,6 +4527,17 @@ main {
   font-family: var(--mono);
 }
 
+.project-gallery-card > span > span {
+  display: grid;
+  gap: 4px;
+}
+
+.project-gallery-card > span > span b {
+  color: var(--green-dark);
+  font-size: 11px;
+  letter-spacing: 0.035em;
+}
+
 .project-lightbox {
   position: fixed;
   z-index: 200;
@@ -4647,15 +4658,31 @@ main {
 }
 
 .project-lightbox-caption {
-  max-height: min(22svh, 150px);
+  display: grid;
+  max-height: min(28svh, 220px);
+  gap: 4px;
   margin: 0;
   padding: 2px 8px 6px;
   overflow: auto;
   color: #eef7f0;
   font-size: 13px;
   line-height: 1.55;
-  text-align: center;
+  text-align: left;
   overflow-wrap: anywhere;
+}
+
+.project-lightbox-caption > strong {
+  color: #8ff0b5;
+  font-family: var(--mono);
+}
+
+.project-lightbox-caption > small {
+  color: #c8d8cd;
+  font-size: 12px;
+}
+
+.project-lightbox-caption > small b {
+  color: #fff;
 }
 
 @media (min-width: 768px) {

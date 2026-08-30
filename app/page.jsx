@@ -507,6 +507,7 @@ function projectKicker(kind) {
   if (kind === "github-index") return "Git 与 GitHub 仓库事实控制面";
   if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
   if (kind === "timeaudit") return "Windows 工作站时间、性能与故障回放项目";
+  if (kind === "pc-panel-hub") return "Windows 双副屏显示、事件与恢复项目";
   return "个人项目";
 }
 
@@ -636,6 +637,7 @@ function ProjectGallery({ title, images }) {
   const closeButtonRef = useRef(null);
   const returnFocusRef = useRef(null);
   const isOpen = activeIndex !== null;
+  const hasStructuredEvidence = images.every((image) => image.evidenceLevel && image.evidenceLabel && image.proves && image.doesNotProve);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -676,14 +678,14 @@ function ProjectGallery({ title, images }) {
   return (
     <section className="document-section project-gallery" aria-labelledby="project-gallery-title">
       <div className="project-gallery-heading">
-        <div><p className="section-kicker">真实界面</p><h2 id="project-gallery-title">{title} 的可视化结果</h2></div>
-        <p>单击图片查看完整大图；打开后可关闭，或切换上一张、下一张。</p>
+        <div><p className="section-kicker">{hasStructuredEvidence ? "可视化证据" : "真实界面"}</p><h2 id="project-gallery-title">{title} 的{hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}</h2></div>
+        <p>{hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。"}打开后可关闭，或切换上一张、下一张。</p>
       </div>
       <div className="project-gallery-grid">
         {images.map((image, index) => (
           <button className="project-gallery-card" type="button" onClick={(event) => openImage(index, event)} key={image.src} aria-label={`打开大图：${image.alt}`}>
             <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" />
-            <span><strong>{String(index + 1).padStart(2, "0")}</strong>{image.caption}</span>
+            <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : null}{image.caption}</span></span>
           </button>
         ))}
       </div>
@@ -698,7 +700,12 @@ function ProjectGallery({ title, images }) {
               <button className="project-lightbox-previous" type="button" onClick={() => setActiveIndex((index) => (index - 1 + images.length) % images.length)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
               <figure>
                 <img className="project-lightbox-image" src={activeImage.src} alt={activeImage.alt} />
-                <figcaption className="project-lightbox-caption" id="project-lightbox-caption">{activeImage.caption}</figcaption>
+                <figcaption className="project-lightbox-caption" id="project-lightbox-caption">
+                  {activeImage.evidenceLevel ? <strong>{activeImage.evidenceLevel} · {activeImage.evidenceLabel}</strong> : null}
+                  <span>{activeImage.caption}</span>
+                  {activeImage.proves ? <small><b>能证明：</b>{activeImage.proves}</small> : null}
+                  {activeImage.doesNotProve ? <small><b>不能证明：</b>{activeImage.doesNotProve}</small> : null}
+                </figcaption>
               </figure>
               <button className="project-lightbox-next" type="button" onClick={() => setActiveIndex((index) => (index + 1) % images.length)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
             </div>
@@ -1281,7 +1288,7 @@ function SkillDetail({ item, search }) {
 }
 
 function NotFound() {
-  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板包含 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit 五个项目，以及五份规则和已纳入的 Skills（能力）。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
 }
 
 export default function Page() {

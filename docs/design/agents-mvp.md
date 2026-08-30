@@ -1,4 +1,4 @@
-# 个人项目看板 MVP 与五项目扩展规格
+# 个人项目看板 MVP 与六项目扩展规格
 
 ## 产品定位
 
@@ -19,7 +19,7 @@
 
 项目注册表是 `config/panel-projects.json`。
 
-- 四项目 PUBLIC MVP 已完成用户验收；当前新增 TimeAudit，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit（1/2/3/4/5）。
+- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit 与 PC Panel Hub 已依次扩展为第 5、6 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub（1/2/3/4/5/6）。
 - 注册表支持未来增加几十个项目，不以 MVP 数量作为长期上限。
 - 网站源项目本身不进入项目清单，避免自我套娃。
 - 项目默认 `presentation_mode=real_dashboard`：真实、详细地展示架构、状态、缺口和证据。
@@ -47,6 +47,8 @@
 /projects/chinese-asr/:module 六个真实模块
 /projects/timeaudit       TimeAudit 总览与可视化画廊
 /projects/timeaudit/:module 按真实产品边界划分的模块
+/projects/pc-panel-hub    PC Panel Hub 总览与软件演示画廊
+/projects/pc-panel-hub/:module 遥测、机箱屏、串口、HS2、恢复与证据模块
 /rules                    五份规则，一个页面内切换
 /skills                   按价值排序的 Skill 清单
 /skills/:skill            Skill 完整详情
@@ -160,4 +162,4 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 - 搜索、导航、规则切换、项目侧栏和响应式布局可用；
 - 自动化测试、构建、直接路由、自定义 404 和本地用户预览通过。
 
-单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 已由用户明确授权为第五项目。规则权威由 verified current E release 动态提供；第五项目最终完成仍要求内容、刷新合同、可视化交互、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。
+单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 已完成第五项目扩展，PC Panel Hub 已由用户明确授权为第六项目。规则权威由 verified current E release 动态提供；第六项目最终完成仍要求源项目修复与发布回读、完整内容、刷新合同、软件演示与实体证据分层、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。

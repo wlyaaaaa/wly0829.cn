@@ -14,11 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has five enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR and TimeAudit in order 1/2/3/4/5. The registry remains extensible,
-  and `.agents` always has order 1. Each project owns its real module count and
-  module boundaries; visual symmetry is never a reason to force every project
-  into the same number of modules.
+  target has six enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR, TimeAudit and PC Panel Hub in order 1/2/3/4/5/6. The registry
+  remains extensible, and `.agents` always has order 1. Each project owns its
+  real module count and module boundaries; visual symmetry is never a reason to
+  force every project into the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
   the owner as `curated_packaging` may use packaging copy or exclusions.
@@ -125,8 +125,9 @@ read-only operating panel; public presentation is secondary.
   project, that single card spans both desktop columns instead of occupying an
   empty half-grid; two-column placement begins only when a second project exists.
 - Project navigation must not introduce click-time lazy loading or a visible
-  loading pause. The current panel keeps detail code eager. If future scale
-  reaches tens of projects, generate route-specific static HTML/content at
+  loading pause. The current panel keeps detail code eager. When measured eager
+  bundle growth approaches its review threshold—even if this happens before
+  the project count reaches ten—generate route-specific static HTML/content at
   build time, keep shared interaction JavaScript small, and prefetch likely
   next routes before interaction. Direct routes must expose complete content
   before enhancement; clicks must not show a spinner, skeleton, blank state or
@@ -194,10 +195,11 @@ read-only operating panel; public presentation is secondary.
 
 ## Project expansion gate
 
-- The owner accepted the four-project public MVP on 2026-08-30 and then
-  explicitly authorized TimeAudit as project 5. The current target therefore
-  contains `.agents`, PCConfig, GitHub 总索引, ChineseASR and TimeAudit, plus the
-  one-page Rules workbench and current public-safe Skills catalog.
+- The owner accepted the four-project public MVP on 2026-08-30, then explicitly
+  authorized TimeAudit as project 5 and PC Panel Hub as project 6. The current
+  target therefore contains `.agents`, PCConfig, GitHub 总索引, ChineseASR,
+  TimeAudit and PC Panel Hub, plus the one-page Rules workbench and current
+  public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
@@ -303,12 +305,12 @@ read-only operating panel; public presentation is secondary.
   through their real owner when possible; publish the repaired state. Defects
   that cannot be repaired in the same goal remain visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
-  Subsequent registered project and Skill refreshes, including TimeAudit, are
-  standing-authorized to commit, normal-push existing PUBLIC `main`, wait for
-  Pages and read back the deployed commit automatically after all content,
-  test, build and public gates pass. Do not ask for another publication
-  approval. A new public destination, paid effect, secret exposure, force-push
-  or explicit owner hold remains outside this authorization.
+  Subsequent registered project and Skill refreshes, including the selected
+  TimeAudit and PC Panel Hub additions, are standing-authorized to commit, normal-push existing PUBLIC `main`, wait for Pages and read back the deployed
+  commit automatically after all content, test, build and public gates pass.
+  Do not ask for another publication approval. A new public destination, paid
+  effect, secret exposure, force-push or explicit owner hold remains outside
+  this authorization.
 
 ## Subagent discipline
 

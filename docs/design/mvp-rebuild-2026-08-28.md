@@ -72,6 +72,8 @@ boundary, maturity or user decision would materially become wrong. Small or
 already-accurately-disclosed changes wait for the next material refresh.
 
 The owner accepted the one-project, three-project local and four-project public
-MVP stages. TimeAudit is now the explicitly selected fifth project; it remains
-unpublished until its product-defined modules, public-safe refresh evidence,
-reusable real-image gallery, five-project preview and Pages read-back pass.
+MVP stages. TimeAudit then completed the fifth-project publication and Pages
+read-back. PC Panel Hub is the explicitly selected sixth project; it remains
+unpublished until its source repairs, product-defined modules, public-safe
+refresh evidence, software-demo gallery, six-project preview and Pages
+read-back pass.
