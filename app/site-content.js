@@ -42,6 +42,8 @@ export const githubIndexProject = contentPackages.get("github-index").project;
 export const githubIndexModules = contentPackages.get("github-index").modules;
 export const chineseAsrProject = contentPackages.get("chinese-asr").project;
 export const chineseAsrModules = contentPackages.get("chinese-asr").modules;
+export const timeAuditProject = contentPackages.get("timeaudit").project;
+export const timeAuditModules = contentPackages.get("timeaudit").modules;
 
 // Rules and Skills remain global surfaces owned by the accepted .agents
 // project. These aliases preserve that contract while project pages become
@@ -98,7 +100,7 @@ export function routeMeta(pathname) {
   if (path === "/") {
     return {
       title: `项目｜${site.name}`,
-      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、现行规则、Skills 与真实缺口。"
+      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、现行规则、Skills 与真实缺口。"
     };
   }
 

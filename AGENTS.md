@@ -14,9 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  local panel has exactly four enabled entries: `.agents`, PCConfig, GitHub
-  总索引 and ChineseASR in order 1/2/3/4. The registry remains extensible, and
-  `.agents` always has order 1.
+  target has five enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR and TimeAudit in order 1/2/3/4/5. The registry remains extensible,
+  and `.agents` always has order 1. Each project owns its real module count and
+  module boundaries; visual symmetry is never a reason to force every project
+  into the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
   the owner as `curated_packaging` may use packaging copy or exclusions.
@@ -70,6 +72,13 @@ read-only operating panel; public presentation is secondary.
   payload/value but keep the public-safe identity, state, boundary and effect on
   current decisions. Unknown stays explicit Unknown. Never replace exact facts
   with a vague “configured / available / verified” label.
+- Sensitivity is decided from the actual value, not the field name. Process
+  names, executable paths, command lines, window titles, timestamps, usage
+  durations, telemetry, network metrics, hardware identifiers and screenshots
+  are not blanket-sensitive and may be public when useful. Redact only actual
+  private personal content or reusable credential values. Bulk raw data may be
+  omitted for boundedness, noise or product value, but never mislabeled as
+  forbidden merely because of its schema.
 - A page is still a riddle when a first-time reader can only tell that it is
   “related to Git / AI / files” but cannot explain what useful task it performs.
   Field completeness, a glossary, translated labels, tests and correct terms do
@@ -87,6 +96,10 @@ read-only operating panel; public presentation is secondary.
 - Preserve the professional reference content after the reader layer. Do not
   delete boundaries, failure behavior, implementation detail or verification
   evidence merely to make the opening easier to read.
+- AI content must make an independent product judgment from current Owner
+  evidence. Do not copy a README section by section, paraphrase one source as
+  if that were analysis, or repeat fashionable conclusions without explaining
+  the project's own trade-offs, evidence, failure modes and decision impact.
 - Project evolution is a milestone timeline, not a commit log. Group related
   changes into one important product stage that explains the resulting change
   in capability, boundary or user experience. A stage may use one date or a
@@ -111,6 +124,19 @@ read-only operating panel; public presentation is secondary.
   roughly two cards in the first viewport. When the registry contains only one
   project, that single card spans both desktop columns instead of occupying an
   empty half-grid; two-column placement begins only when a second project exists.
+- Project navigation must not introduce click-time lazy loading or a visible
+  loading pause. The current panel keeps detail code eager. If future scale
+  reaches tens of projects, generate route-specific static HTML/content at
+  build time, keep shared interaction JavaScript small, and prefetch likely
+  next routes before interaction. Direct routes must expose complete content
+  before enhancement; clicks must not show a spinner, skeleton, blank state or
+  network wait. Verify both first load and transitions on the public site, and
+  never meet a size budget by deleting required professional content.
+- Registered byte budgets are anti-bloat review thresholds, not permanent
+  content ceilings. If current facts and professional detail cannot fit without
+  semantic loss, first audit real duplication, dependencies and public
+  wall-clock behavior, then record and apply only the smallest justified budget
+  increase. Never enlarge a budget merely to hide an avoidable regression.
 - Use official brand marks from a maintained icon library for external social
   links. Do not approximate brand logos with generic UI icons.
 - A project whose Registry visibility is PUBLIC exposes one explicit GitHub
@@ -150,6 +176,11 @@ read-only operating panel; public presentation is secondary.
   They should explain product intent, real scenarios, information flow,
   architecture, important decisions, boundaries, failure handling and
   verification in professional plain language.
+- Projects with real visual output may expose one reusable gallery:
+  lazy-loaded previews open the complete image on one click and provide close,
+  previous and next controls. Reuse the same component for later visual
+  projects; do not add a gallery dependency, duplicate thumbnail files, infer
+  missing labels, or alter the meaning of the supplied evidence image.
 - A reasonable design that has not been implemented may be documented as a
   design, but must not be presented as a verified production result. Never
   package an unfinished fact as completed.
@@ -163,12 +194,14 @@ read-only operating panel; public presentation is secondary.
 
 ## Project expansion gate
 
-- The owner accepted the one-project MVP and then the three-project local panel
-  on 2026-08-29. The owner has now authorized exactly one additional local
-  integration: ChineseASR. The current panel therefore contains exactly four
-  projects, plus the one-page Rules workbench and current public-safe Skills
-  catalog. Do not preselect or add a fifth project before the owner reviews
-  ChineseASR.
+- The owner accepted the four-project public MVP on 2026-08-30 and then
+  explicitly authorized TimeAudit as project 5. The current target therefore
+  contains `.agents`, PCConfig, GitHub 总索引, ChineseASR and TimeAudit, plus the
+  one-page Rules workbench and current public-safe Skills catalog.
+- Most real projects may eventually enter the panel. Add them in owner-selected
+  value order, one completed project at a time; do not create placeholder cards
+  or delay a selected project's construction by making agents vote on the
+  entire future backlog.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
   owned by one assistant product. It may include both personally maintained
   Skills and high-value externally supplied Skills that are genuinely available
@@ -182,11 +215,11 @@ read-only operating panel; public presentation is secondary.
   five current rules, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
-- PCConfig, GitHub 总索引 and ChineseASR may enter the local registry, routes and
-  navigation. Their source, install, runtime and evidence gaps remain visible;
-  local integration must not upgrade them to production PASS. The owner has now
-  explicitly authorized publication after the verified current E release and current project facts are
-  refreshed, verified and read back from Pages.
+- Every enabled Registry project may enter routes and navigation only within
+  its own content, evidence and public-safety boundary. Source, install,
+  runtime and evidence gaps remain visible; local integration must not upgrade
+  them to production PASS. Publication follows only after current project facts
+  are refreshed, verified and read back from Pages.
 - UI completion, route existence and concise summaries do not satisfy the MVP
   content gate.
 - Before changing public project selection or copy, read
@@ -248,6 +281,15 @@ read-only operating panel; public presentation is secondary.
   maturity or user decision would otherwise become materially wrong. Small
   refactors, timestamps, formatting, blocked candidates and hash-only drift may
   wait for the next material refresh.
+- The owner has standing-authorized that one necessary fresh website task for
+  registered rule, Skill and project sources. Once the material threshold and
+  duplicate check pass, do not ask again whether a new conversation may be
+  opened. This authorization does not cover non-material changes, duplicate
+  tasks, unregistered sources or broader website work.
+- That handoff follows the active global default and is projectless unless the
+  owner explicitly selected a project. It is asynchronous: a returned task id
+  is the creation receipt, a creation error is reported to the owner, and the
+  source conversation never waits for or polls website-task progress.
 - Default is no website change. AI updates a project only when leaving the page
   unchanged would make a displayed capability, boundary, current state, usage
   or user decision materially wrong. Small source updates never trigger a
@@ -260,6 +302,13 @@ read-only operating panel; public presentation is secondary.
   contradictions and broken validation paths. Repair safe, in-scope defects
   through their real owner when possible; publish the repaired state. Defects
   that cannot be repaired in the same goal remain visible as named gaps.
+- The four-project MVP and the existing PUBLIC destination are owner-accepted.
+  Subsequent registered project and Skill refreshes, including TimeAudit, are
+  standing-authorized to commit, normal-push existing PUBLIC `main`, wait for
+  Pages and read back the deployed commit automatically after all content,
+  test, build and public gates pass. Do not ask for another publication
+  approval. A new public destination, paid effect, secret exposure, force-push
+  or explicit owner hold remains outside this authorization.
 
 ## Subagent discipline
 
@@ -285,13 +334,12 @@ read-only operating panel; public presentation is secondary.
   be able to restate its practical use, concrete risk, example and final result
   without opening the source Skill or asking a follow-up question. Automated
   field checks are supporting evidence only.
-- `owner_preview_checkpoint`: after the new content structure, terminology and
-  information density are coherent, but before bulk finalization, commit or
-  publication, open a local browser preview and explicitly notify the owner in
-  the progress summary. The preview set must include the project index,
-  Overview, one representative module, one rule and one Skill. Pause for owner
-  feedback at that checkpoint; do not treat internal audits as owner acceptance
-  or continue to public release merely because automated checks pass.
+- After the accepted MVP, local preview remains required product evidence but
+  is non-blocking for ordinary registered refreshes and selected new projects:
+  open the project index, Overview and representative detail, notify the owner,
+  then continue to the already authorized PUBLIC release unless the owner says
+  to hold. Preview never substitutes for content reading, tests, Pages or
+  public read-back.
 - The public-content gate scans every tracked/unignored source file and every
   production artifact regardless of extension. Directory-route canonical,
   Open Graph and sitemap URLs use the trailing-slash URL that Pages serves as

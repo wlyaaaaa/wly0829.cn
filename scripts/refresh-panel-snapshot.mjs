@@ -277,7 +277,7 @@ const rows = [
   validationRow("Source checkout（候选源码工作树）", dirty || sourceCommit !== trackedMain || sourceCommit !== current.git_commit ? "repair" : "pass", dirty ? `${sourceDirtyPaths.length} 项未激活施工` : sourceCommit !== trackedMain ? `HEAD/origin 为 ${sourceAhead}/${sourceBehind}` : sourceCommit !== current.git_commit ? `main 已进入下一候选提交` : "与 release 一致", `source HEAD=${sourceCommit.slice(0, 12)}，origin/main=${trackedMain.slice(0, 12)}，active release commit=${current.git_commit.slice(0, 12)}。${dirty ? `未提交路径：${sourceDirtyPaths.join("、")}。` : "工作树干净。"} Source 不等于 active release 时只作候选施工，不会覆盖 ${current.release_id}。`),
   validationRow("E release validator（活动版本验证器）", releaseValidationPassed ? "pass" : "repair", releaseValidationPassed ? "通过" : "失败", releaseValidationPassed ? `Test-EAgentRulesRelease.ps1 已重新验证 ${current.release_id} 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。` : `活动版本验证器退出码 ${releaseValidation.exitCode}：${failedTests[0].reason}`),
   validationRow("Full local tests（当前源码全量回归）", "unknown", "快速刷新未重跑", `网页刷新没有再次运行整个 .agents 本地测试集。它只证明 ${current.release_id} 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。`),
-  validationRow("Skill supply（能力供应）", supplyPassed ? "pass" : "repair", supplyPassed ? "通过" : "未闭合", supplyPassed ? `24 个 active install intent；source/install/transaction 通过，${skillSupply.data.transaction.campaign_count} 个事务 campaign 全部 terminal。Current/Fresh/E2E 因本次未请求外部证据保持 unknown。` : `source=${skillSupply.data.source?.status} install=${skillSupply.data.install?.status} transaction=${skillSupply.data.transaction?.status}`),
+  validationRow("Skill supply（能力供应）", supplyPassed ? "pass" : "repair", supplyPassed ? "通过" : "未闭合", supplyPassed ? `${activeInstallIntentCount} 个 active install intent；source/install/transaction 通过，${skillSupply.data.transaction.campaign_count} 个事务 campaign 全部 terminal。Current/Fresh/E2E 因本次未请求外部证据保持 unknown。` : `source=${skillSupply.data.source?.status} install=${skillSupply.data.install?.status} transaction=${skillSupply.data.transaction?.status}`),
   validationRow("Contract coverage（跨控制面合同覆盖）", coveragePassed ? "pass" : "repair", coveragePassed ? "通过" : "BLOCK", coveragePassed ? "现行三个控制面的合同 catalog 与入口覆盖通过；任何入口不得再读取 C 盘规则 authority、Publisher 或 policy epoch。" : `coverage 状态 ${coverage.data.status}，finding ${coverage.data.finding_count ?? "unknown"} 项。`)
 ];
 
@@ -320,7 +320,7 @@ const generated = {
   repositoryVisibility: sourceRegistration.source.visibility === "PRIVATE" ? "私有" : sourceRegistration.source.visibility === "PUBLIC" ? "公开" : "未知",
   repositoryVisibilityEvidence: "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   ruleBinding,
-  skills: { activeInstallIntent: activeInstallIntentCount, selectedPublicCount: skills.length },
+  skills: { activeInstallIntent: activeInstallIntentCount, selectedPublicCount: skills.length, transactionCampaignCount: skillSupply.data.transaction.campaign_count },
   authority: {
     status: "e_rules_active_verified",
     statusLabel: `${current.release_id} 活动规则已验证`,

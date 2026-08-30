@@ -2,13 +2,14 @@
 
 ## 验收对象
 
-本文件只记录当前实现，不累积旧版设计过程。验收范围包括项目首页、`.agents`、
-PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块、规则工作台、Skills 目录与详情页，
-以及全局导航、搜索、移动端菜单和动态背景。
+本文件只记录当前实现，不累积旧版设计过程。当前验收范围包括项目首页、`.agents`、
+PCConfig、GitHub 总索引、ChineseASR、TimeAudit 五个项目的总览与各自真实模块、规则工作台、Skills
+目录与详情页，以及全局导航、搜索、移动端菜单、动态背景和可选项目画廊。
 
-当前本地预览由 `http://127.0.0.1:5173/` 的同一开发服务提供，源码修改会直接进入
-用户正在查看的页面。下列截图清单已按当前生产 dist 重新生成；27 张规范图是本轮证据，
-非规范旧变体已移入 Windows 回收站，不再拿旧截图冒充当前验收。
+当前五项目生产 `dist` 通过本地静态预览复核。原 27 张规范图保留四项目 PUBLIC PASS 基线，本轮已
+重建首页，新增 5 张 TimeAudit 总览、模块、画廊和移动灯箱图，以及 1 张 timeaudit-diagnostics Skill
+详情图；当前 QA 集共 33 张、3,335,161 bytes。
+非规范旧变体已移入 Windows 回收站，不能拿旧图冒充第五项目验收。
 
 网站首先是吴乐阳本人使用的只读面板。判断界面是否合格，不看它像不像营销页，
 而看本人能否在有限屏幕里快速找到项目、规则和能力，并继续读到足够完整的细节。
@@ -23,14 +24,17 @@ PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块
 - 项目、规则和 Skills 目录直接进入内容，不重复堆放大标题和空泛介绍。
 - 全页面背景使用固定的缓慢平行曲线；正文滚动不会重启动画，也不会让曲线在区块
   交界处断裂。
-- 不使用粒子、尖峰、鼠标吸附凹陷、发光、渐变玻璃或伪造的项目预览图。
+- 不使用粒子、尖峰、鼠标吸附凹陷、发光、渐变玻璃或伪造的项目预览图。真实产品截图正常进入
+  通用画廊；预览可裁切，但打开后必须保留完整原图和真实语义。截图中的进程、路径、时间和技术值
+  不按字段类别视为敏感，只有具体值真正包含个人敏感正文或凭据时才隐藏。
 - 图标使用维护中的品牌与界面图标库，不手绘近似标志。
 - PUBLIC 项目卡和详情页提供带官方 GitHub 图标的仓库按钮；PRIVATE 项目只显示状态，不生成链接。
 
 ## 当前信息架构
 
-顶层导航只有三个入口：项目、规则、Skills。项目按 `.agents`、PCConfig、GitHub 总索引、ChineseASR
-固定为 1/2/3/4；每个项目只使用自己的总览与六模块。规则页和 Skills 仍由 `.agents`
+顶层导航只有三个入口：项目、规则、Skills。项目按 `.agents`、PCConfig、GitHub 总索引、ChineseASR、
+TimeAudit 固定为 1/2/3/4/5；每个项目只使用自己的总览与按真实边界划分的模块，模块数量不固定。
+规则页和 Skills 仍由 `.agents`
 拥有：规则在同一页面内切换五份当前规则，不创建五条详情路由；Skills 目录按实际使用
 价值排列，每项都有独立详情页。网站工程自身不作为项目卡出现。
 
@@ -95,9 +99,10 @@ PCConfig、GitHub 总索引、ChineseASR 四个项目的总览与各六个模块
 当前结构化 `.agents` 快照仍绑定 verified E89：活动 release commit 为
 `6a272ca361919bd377975c4574f6ab4372483ade`，ruleset 为
 `e58ca597501ff20306d384e841623e39373eca8d715034856c63b9ebe59b0ce4`。Canonical source main
-已前进到 `31009aa57c8451e49e4e6c2bef0cb9ca5235df98`；它是未激活 source candidate。当前另有 1 项
+已前进到 `eede561691e672e3b372bbe30e599ec1d075a904`；它是未激活 source candidate。当前另有 1 项
 公开安全地标为 workbench-local metadata 的未激活本地状态；它不会覆盖 E89。快速刷新
-明确保留“全量本地测试本轮未重跑”的 Unknown。
+明确保留“全量本地测试本轮未重跑”的 Unknown。Skill supply 为 25 个 active install intent，
+公开看板收录 23 个；新增 `timeaudit-diagnostics`。
 
 四项目 `--all` refresh result 已通过现有 verifier：`.agents`、PCConfig、GitHub 总索引 3 个内容包
 material changed，ChineseASR byte-identical；PCConfig receipt 绑定 canonical task-scan generation
@@ -111,11 +116,34 @@ PCConfig 长文本、移动顶栏、项目模块、Rules、Skill、搜索排序�
 生产构建与公开内容门均通过。Owner 已于 2026-08-30 查看本地项目首页、`.agents` 总览、PCConfig
 总览、代表模块、Rules 和代表 Skill，并明确通过预览、授权继续发布。
 
-发布前公网仍是 `1b9fb6f`，最终 public PASS 必须等待新提交、Pages deployment 与公网 bundle/页面
-回读后才能成立。当前 27 张规范 QA 图完整，61 个非规范旧变体共 17,024,171 bytes 已移入 Windows
-回收站；生产 JavaScript 仍接近 256 KiB 预算，CSS 也保留历史重复 selector，但两者不阻断当前四项目发布。
+四项目版本已以 `a357299` 完成 PUBLIC main、Pages deployment 和公网 bundle/页面回读；移动端项目
+模块切换随后由 `717e5ec` 修复并再次部署，390×844 公网真实点击的“总览 → 能力路由 → 总览”两向
+`scrollY` delta 均为 0。当前 27 张四项目规范 QA 图完整，61 个非规范旧变体共 17,024,171 bytes 已
+移入 Windows 回收站。
 
-第五项目 gate 继续关闭：先完成当前四项目公网 read-back；之后只有用户提出真实、反复发生的阅读或
-决策需求，且候选 build 实测仍低于 bundle 预算时，才评估一个新项目，不预列或预建装饰卡。
+用户已在四项目 PASS 后明确打开第五项目并选择 TimeAudit。当前建设包含第五张项目卡、Owner 驱动
+刷新登记、公开安全聚合状态，以及一个可由后续可视化项目复用的截图画廊；画廊预览懒加载，单击打开
+完整图并支持关闭、上一张和下一张。TimeAudit 只有在新的五项目测试、浏览器 QA、bundle 预算、
+PUBLIC main、Pages deployment 与公网 read-back 全部闭合后才升级为 PASS。
 
-final result: owner_preview_accepted_publication_authorized
+画廊保留 11 张用户原图的 byte-exact PNG，共 8,213,369 bytes；列表使用 11 张由原图生成且实际被
+消费的 960 px WebP 预览，共 372,582 bytes。浏览器回读确认列表 11/11 使用 WebP，打开灯箱后只加载
+当前选中的完整 PNG，避免同时解码 11 张 4K 原图造成真实内存与滚动卡顿。
+
+TimeAudit 与 `.agents` 两个定向 AI refresh result 均通过 verifier：各 1 changed、0 blocked；合计
+5 项 auto-repair、0 finding。五项目合同测试 31/31；共 61 条直接路由；E89 snapshot 与 PUBLIC gate
+均 PASS。TimeAudit PUBLIC main 已前进到 `a5a34d61360e52c1d019833eaa424f82ba06abcb`，新增
+diagnostic summary provider 与 `timeaudit-diagnostics` Skill；一小时真实查询 coverage=fresh、3590
+个样本、no_game_frames 和 9 次 packet-loss occurrence。
+当前 eager JavaScript gzip 约 271 KiB，低于五项目当前 320 KiB 防膨胀审查阈值；该阈值可按实测与
+语义完整性做最小有据增额，不是永久内容上限。站内模块切换不使用点击后 lazy-load。
+
+真实浏览器已复核 1440×900 首页、TimeAudit 总览、硬件与流畅度模块、11 图画廊，以及 390×844
+首页、TimeAudit 总览和移动灯箱。桌面/移动均无水平溢出或 console warning/error；灯箱通过 body
+portal 覆盖固定页头，关闭/上一张/下一张、Escape、左右键和焦点回收可用。390×844 的
+“TimeAudit 总览 → 硬件与流畅度 → 总览”两向 `scrollY 520 → 520`，delta=0。
+
+本地五项目预览与产品阅读审计已 PASS；现有 PUBLIC 目标已获自动发布授权。最终状态仍等待本任务
+定向 commit、Pages deployment 和公网 bundle/路由/交互 read-back。
+
+current result: five_project_local_preview_pass_publication_pending

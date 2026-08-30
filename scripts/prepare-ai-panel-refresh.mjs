@@ -80,7 +80,7 @@ const result = {
     rule_refresh: registry.refresh_policy.rule_refresh_boundary,
     fact_collectors: registry.refresh_policy.fact_collector_boundary,
     background_sync: "forbidden",
-    publication: "local AI refresh ends at validated preview unless the user separately authorizes publication"
+    publication: registry.refresh_policy.publication_mode
   },
   ai_workflow: [
     "Read this plan and the current project content before collecting evidence.",
@@ -89,7 +89,7 @@ const result = {
     "Repair safe, reversible, in-scope source defects through their real Owner when independently verifiable.",
     "When material drift exists, replace, merge or remove owning content in professional detailed plain language; never append refresh logs.",
     "Validate content contracts, build, public-content boundaries and a local owner preview.",
-    "Report changed and unchanged projects separately; do not publish without separate authorization."
+    "Report changed and unchanged projects separately; after all gates pass, automatically commit, normal-push the existing PUBLIC main, wait for Pages and read back the deployed commit unless the owner explicitly holds publication or a new public/secret/paid/force-push boundary appears."
   ],
   expected_result: {
     changed_projects: "only materially stale projects",

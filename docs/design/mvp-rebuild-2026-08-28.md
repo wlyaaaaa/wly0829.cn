@@ -1,12 +1,13 @@
 # wly0829.cn MVP rebuild
 
-status: single_project_accepted_three_project_integration_active
+status: four_project_public_pass_timeaudit_integration_active
 
 ## Goal
 
 Build the website from current owner sources so it is the owner's detailed,
 plain-language, professional, read-only operating panel for `.agents`, PCConfig,
-GitHub 总索引, ChineseASR, the five current rules and the usable Skills catalog.
+GitHub 总索引, ChineseASR, TimeAudit, the five current rules and the usable
+Skills catalog.
 
 The prior website copy is not an input. Existing code may be reused only as UI
 infrastructure after its content is removed.
@@ -15,9 +16,9 @@ infrastructure after its content is removed.
 
 - The accepted content MVP contained exactly one project: `.agents`.
 - The owner first authorized PCConfig and GitHub 总索引 as the audited 1/2/3
-  expansion, then explicitly accepted that local result and authorized exactly
-  one more project: ChineseASR at order 4. No fifth project follows from that
-  authorization.
+  expansion, then ChineseASR at order 4. The resulting four-project MVP passed
+  PUBLIC deployment and read-back on 2026-08-30; the owner then explicitly
+  authorized TimeAudit at order 5 with a reusable screenshot gallery.
 - Top-level information areas are Project, Rules and Skills.
 - No Ideas area, website-self project, future placeholders, career marketing or
   salary-oriented copy.
@@ -70,7 +71,7 @@ only when the source Owner confirms that a displayed fact, explanation,
 boundary, maturity or user decision would materially become wrong. Small or
 already-accurately-disclosed changes wait for the next material refresh.
 
-The owner accepted the one-project content MVP. The audited PCConfig and GitHub
-总索引 packages now enter the local registry, route set, navigation and homepage.
-They remain uncommitted and unpublished until the owner reviews the complete
-current four-project local preview.
+The owner accepted the one-project, three-project local and four-project public
+MVP stages. TimeAudit is now the explicitly selected fifth project; it remains
+unpublished until its product-defined modules, public-safe refresh evidence,
+reusable real-image gallery, five-project preview and Pages read-back pass.

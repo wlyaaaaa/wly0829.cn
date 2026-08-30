@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { access, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { access, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { gzipSync } from "node:zlib";
 import path from "node:path";
@@ -11,6 +11,7 @@ import { ruleGuides } from "../app/content-rule-guides.js";
 import { chineseAsrModules, chineseAsrProject } from "../app/content-chinese-asr.js";
 import { githubIndexModules, githubIndexProject } from "../app/content-github-index.js";
 import { pcconfigModules, pcconfigProject } from "../app/content-pcconfig.js";
+import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
 import { searchPanel } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
@@ -75,12 +76,14 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly four projects and three navigation areas", () => {
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4]);
+test("the accepted panel has exactly five projects and three navigation areas", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
   assert.ok(!routePaths.includes("/ideas"));
+  assert.match(pageSource, /ChineseASR、TimeAudit 五个项目/);
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
 });
 
@@ -178,7 +181,12 @@ test("every project first viewport exposes current decision-critical choices", a
   const agentsFacts = project.heroFacts.map((fact) => fact.value).join("\n");
   assert.ok(agentsFacts.includes(panelSnapshot.authority.releaseId));
   assert.ok(agentsFacts.includes(panelSnapshot.authority.previous.release_id));
-  assert.match(agentsFacts, /24.*22/);
+  assert.match(agentsFacts, /25.*23/);
+  const timeAuditFacts = timeAuditProject.heroFacts.map((fact) => fact.value).join("\n");
+  for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "53000", "6 张仪表盘", "78 个面板"]) {
+    assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit first viewport hides: ${currentFact}`);
+  }
+  assert.match(timeAuditFacts, /本机/);
   assert.doesNotMatch(pageSource, /C:\\\\ProgramData\\\\PCConfig\\\\AuthorityHost\\\\policy\\\\generations/);
 });
 
@@ -225,6 +233,9 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /exact models,[\s\S]{0,260}providers,[\s\S]{0,260}versions,[\s\S]{0,400}E2E/);
   assert.match(projectRules, /first project viewport must disclose 4–6 decision-critical current facts/);
   assert.match(projectRules, /Public visibility is never a reason to suppress a non-secret fact/);
+  assert.match(projectRules, /Sensitivity is decided from the actual value, not the field name/);
+  assert.match(projectRules, /Process\s+names, executable paths, command lines, window titles/);
+  assert.match(projectRules, /not blanket-sensitive and may be public when useful/);
   assert.match(projectRules, /project default is `gpt-5\.6-sol` with `max` effort/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
@@ -235,6 +246,14 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Accuracy remains the primary product requirement/);
   assert.match(projectRules, /restrictions\s+apply only to the prohibited literal or private value/);
   assert.match(projectRules, /must never change\s+the factual status, omit the component, soften a failure/);
+  assert.match(projectRules, /independent product judgment/);
+  assert.match(projectRules, /Do not copy a README section by section/);
+  assert.match(projectRules, /Each project owns its real module count/);
+  assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
+  assert.match(projectRules, /returned task id\s+is the creation receipt/);
+  assert.match(projectRules, /standing-authorized to commit, normal-push existing PUBLIC `main`/);
+  assert.match(projectRules, /route-specific static HTML\/content at\s+build time/);
+  assert.match(projectRules, /clicks must not show a spinner, skeleton, blank state or\s+network wait/);
   assert.ok(!projectRules.toLowerCase().includes(forbiddenPublicTerms[0].toLowerCase()));
   assert.ok(!projectRules.toLowerCase().includes(forbiddenPublicTerms[1].toLowerCase()));
 });
@@ -250,24 +269,47 @@ test("the authoritative desktop scale is last in the cascade", async () => {
   assert.match(scaleBlock, /body\s*\{\s*font-size:\s*18px/);
 });
 
-test("the initial bundle stays bounded before the lazy-load project threshold", async () => {
+test("the eager project bundle stays bounded and keeps route changes instant", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
+  assert.ok(Number.isInteger(registry.refresh_policy.initial_bundle_gzip_budget_kib) && registry.refresh_policy.initial_bundle_gzip_budget_kib > 0);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /not a permanent content ceiling/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
+  assert.equal(registry.refresh_policy.detail_loading_mode, "eager_instant_navigation");
+  assert.equal(enabledProjectCount, 5);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.equal(javascript.length, 1, "initial app currently expects one bounded eager chunk");
   const gzipBytes = gzipSync(await readFile(path.join(assetsRoot, javascript[0]))).length;
   assert.ok(gzipBytes <= registry.refresh_policy.initial_bundle_gzip_budget_kib * 1024, `initial JavaScript gzip ${gzipBytes} exceeds budget`);
-  if (registry.projects.filter((item) => item.enabled).length >= registry.refresh_policy.lazy_detail_required_at_project_count) {
-    const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
-    assert.match(generatedIndex, /=>\s*import\(/, "project details must lazy-load before the configured project threshold");
-  }
+  const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
+  assert.doesNotMatch(generatedIndex, /=>\s*import\(/, "project details must not wait for a click-time dynamic import");
 });
 
-test("the maintenance registry drives exactly the four accepted project packages", async () => {
+test("TimeAudit reuses the existing website runtime without services, databases or duplicate state", async () => {
+  const packageJson = JSON.parse(await readFile(path.join(projectRoot, "package.json"), "utf8"));
+  assert.deepEqual(Object.keys(packageJson.dependencies).sort(), ["@icons-pack/react-simple-icons", "@phosphor-icons/react", "react", "react-dom"].sort());
+  assert.deepEqual(Object.keys(packageJson.devDependencies).sort(), ["@vitejs/plugin-react", "vite"].sort());
+  const forbiddenRuntimeScripts = Object.keys(packageJson.scripts).filter((name) => /^(?:server|serve|daemon|watch|poll|sync|database|db)(?::|$)/i.test(name));
+  assert.deepEqual(forbiddenRuntimeScripts, [], "the fifth project must not add a website service, watcher, poller, sync job or database");
+  const timeAuditAppFiles = (await readdir(path.join(projectRoot, "app"))).filter((name) => /timeaudit/i.test(name)).sort();
+  assert.deepEqual(timeAuditAppFiles, ["content-timeaudit.js"], "TimeAudit must have one narrative package instead of duplicate app state");
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
+  assert.match(registry.refresh_policy.fact_collector_boundary, /never write narrative content/);
+  assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
+});
+
+test("the maintenance registry drives exactly the five accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v1");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
   assert.equal(registry.refresh_policy.semantic_writer, "website_ai_task_only");
+  assert.equal(registry.refresh_policy.website_project_type, "projectless");
+  assert.match(registry.refresh_policy.website_task_rule, /asynchronous projectless/);
+  assert.match(registry.refresh_policy.website_task_rule, /task-id return is the dispatch receipt/);
+  assert.match(registry.refresh_policy.publication_mode, /automatically commit, normal-push existing PUBLIC main/);
   assert.match(registry.refresh_policy.full_refresh_rule, /unchanged projects remain byte-identical/);
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
   assert.match(registry.refresh_policy.evolution_policy, /date or date range/);
@@ -275,9 +317,9 @@ test("the maintenance registry drives exactly the four accepted project packages
   assert.equal(registry.refresh_policy.trigger, "displayed_fact_or_explanation_changed");
   assert.equal(registry.refresh_policy.only_private_document, "docs/design/private-content-rules.md");
   assert.equal(registry.refresh_policy.default_presentation_mode, "real_dashboard");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -290,7 +332,7 @@ test("the maintenance registry drives exactly the four accepted project packages
     assert.ok(item.impact_sources.length >= 3);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -310,6 +352,59 @@ test("the maintenance registry drives exactly the four accepted project packages
       }
     }
   }
+});
+
+test("TimeAudit registry binds public-safe aggregate refresh evidence and impact sources", async () => {
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "timeaudit");
+  assert.ok(registration, "TimeAudit registry entry is missing");
+  assert.equal(registration.order, 5);
+  assert.equal(registration.route, "/projects/timeaudit");
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.ai_refresh.content_path, "app/content-timeaudit.js");
+  assert.equal(registration.ai_refresh.semantic_revision, 1);
+  assert.equal(registration.source.repo, "wlyaaaaa/TimeAudit");
+  assert.equal(registration.source.visibility, "PUBLIC");
+  assert.equal(registration.source.default_branch, "main");
+  assert.match(registration.source.local_root, /TimeAudit$/);
+
+  const collectors = registration.ai_refresh.collectors.join("\n");
+  assert.match(collectors, /Get-ProjectAdmission\.ps1[\s\S]*wlyaaaaa\/TimeAudit/);
+  assert.match(collectors, /test_pcconfig_anomaly_digest\.py/);
+  assert.match(collectors, /pcconfig_anomaly_digest\.py[\s\S]*--after-utc[\s\S]*--until-utc/);
+  assert.match(collectors, /test_timeaudit_diagnostic_summary\.py/);
+  assert.match(collectors, /timeaudit_diagnostic_summary\.py[\s\S]*--hours 1/);
+  assert.doesNotMatch(collectors, /test_telemetry_health|db_audit|SELECT\s|psql\b/i, "live refresh must consume only the bounded aggregate digest");
+
+  const receiptBoundary = registration.ai_refresh.public_receipt_boundary;
+  assert.ok(receiptBoundary && typeof receiptBoundary === "object", "TimeAudit public receipt boundary is missing");
+  assert.match(JSON.stringify(receiptBoundary.allowed || []), /aggregate|聚合|schema|count|coverage|health/i);
+  assert.match(JSON.stringify(receiptBoundary.provider_omits || []), /raw|window|process|machine|窗口|进程|机器/i);
+  assert.match(String(receiptBoundary.provider_omits || ""), /not blanket public-content bans/i);
+  assert.equal(receiptBoundary.diagnostic_schema, "timeaudit.diagnostic-summary.v1");
+  assert.equal(receiptBoundary.diagnostic_owner, "timeaudit:diagnostic-history");
+  assert.equal(receiptBoundary.diagnostic_maximum_window_hours, 168);
+  assert.match(String(receiptBoundary.unknown_semantics || ""), /unknown|未知/i);
+
+  assert.ok(registration.impact_sources.length >= 4);
+  const impactPaths = registration.impact_sources.flatMap((source) => source.paths || []);
+  for (const requiredPath of [
+    "pcconfig_anomaly_digest.py",
+    "test_pcconfig_anomaly_digest.py",
+    "timeaudit_diagnostic_summary.py",
+    "test_timeaudit_diagnostic_summary.py",
+    "test_presentmon_fps_selection.py",
+    "test_lifecycle_unknown_path.py",
+    "test_activity_collection_state_lock.py",
+    "check_telemetry_status.py",
+    "test_telemetry_health.py",
+    "test_backup_all_script.py",
+    "test_restore_grafana.py"
+  ]) {
+    assert.ok(impactPaths.some((pattern) => impactPatternMatches(pattern, requiredPath)), `TimeAudit impact_sources miss ${requiredPath}`);
+  }
+  assert.match(JSON.stringify(registration.refresh_rules.semantic_review_required_when), /architecture|sampling|data model|actual-value|sensitivity|recovery|verification|架构|采样|数据模型|敏感|恢复|验证/i);
+  assert.match(JSON.stringify(registration.refresh_rules.ignore_when), /raw|window|process|machine|cache|volume|log|原始|窗口|进程|机器|缓存|日志/i);
 });
 
 test("non-rule project packages preserve the content contract and enter only their own routes", () => {
@@ -334,6 +429,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "chinese-asr",
       expectedOrder: 4,
       expectedModules: ["task-routing", "models-modes", "long-batch", "audit-evidence", "speaker-attribution", "runtime-privacy"]
+    },
+    {
+      project: timeAuditProject,
+      modules: timeAuditModules,
+      expectedSlug: "timeaudit",
+      expectedOrder: 5,
+      expectedModules: null
     }
   ];
   for (const entry of packages) {
@@ -347,7 +449,7 @@ test("non-rule project packages preserve the content contract and enter only the
     }
     assertReaderStates(candidate.readerStates, `${candidate.slug} overview`);
     assert.ok(candidateModules.length >= 1, `${candidate.slug} has no modules`);
-    assert.deepEqual(candidateModules.map((item) => item.slug), entry.expectedModules, `${candidate.slug} module contract drifted`);
+    if (entry.expectedModules) assert.deepEqual(candidateModules.map((item) => item.slug), entry.expectedModules, `${candidate.slug} module contract drifted`);
     assert.equal(new Set(candidateModules.map((item) => item.slug)).size, candidateModules.length, `${candidate.slug} module slugs are not unique`);
     for (const module of candidateModules) {
       assert.ok(["pass", "problem", "unknown", "mixed"].includes(module.statusTone), `${candidate.slug}/${module.slug}.statusTone is invalid`);
@@ -363,6 +465,112 @@ test("non-rule project packages preserve the content contract and enter only the
     assert.ok(routePaths.includes(candidate.route), `${candidate.slug} overview route is missing`);
     for (const module of candidateModules) assert.ok(routePaths.includes(`${candidate.route}/${module.slug}`), `${candidate.slug}/${module.slug} route is missing`);
   }
+});
+
+test("TimeAudit keeps collectors bounded without blanket-banning useful technical facts", async () => {
+  const publicText = JSON.stringify({ project: timeAuditProject, modules: timeAuditModules });
+  assertForbiddenTermsAreAbsent(publicText);
+  assert.ok(timeAuditModules.length >= 1, "the gallery must not replace the project module reference package");
+  for (const key of ["responsibilities", "exclusions", "glossary", "operatingFlow", "components", "usageExamples", "evidenceLayers", "evolution", "operationalEntrypoints"]) {
+    assert.ok(Array.isArray(timeAuditProject[key]) && timeAuditProject[key].length >= 3, `TimeAudit overview ${key} is incomplete`);
+  }
+  assert.match(publicText, /聚合/);
+  assert.match(publicText, /字段类型不自动保密|字段类型不构成 blanket ban/);
+  assert.match(publicText, /实际包含个人敏感正文|真正敏感的具体内容/);
+  assert.doesNotMatch(publicText, /postgres(?:ql)?:\/\/[^\s"']+|grafana[_-]?(?:password|token)|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/i);
+
+  const expectedGalleryFiles = [
+    "dashboard-catalog.png",
+    "screen-time-focus.png",
+    "power-cost.png",
+    "hardware-long-term.png",
+    "fps-stutter.png",
+    "foreground-stutter-analysis.png",
+    "foreground-timeline.png",
+    "system-pressure.png",
+    "resource-usage.png",
+    "process-forensics.png",
+    "storage-scale.png"
+  ];
+  assert.ok(Array.isArray(timeAuditProject.gallery));
+  assert.equal(timeAuditProject.gallery.length, expectedGalleryFiles.length);
+  assert.deepEqual(timeAuditProject.gallery.map((item) => path.posix.basename(item.src)), expectedGalleryFiles);
+  for (const item of timeAuditProject.gallery) {
+    assert.match(item.src, /^\/media\/timeaudit\/[a-z0-9-]+\.png$/);
+    assert.equal(item.thumbnail, `/media/timeaudit/thumbs/${path.posix.basename(item.src, ".png")}.webp`);
+    assert.ok(item.alt?.trim().length >= 8, `${item.src} alt is missing`);
+    assert.ok(item.caption?.trim().length >= 12, `${item.src} caption is missing`);
+  }
+
+  const mediaRoot = path.join(projectRoot, "public", "media", "timeaudit");
+  const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(mediaFiles, [...expectedGalleryFiles].sort(), "TimeAudit media directory must contain only the registered PNGs");
+  let totalBytes = 0;
+  for (const file of mediaFiles) {
+    const bytes = (await stat(path.join(mediaRoot, file))).size;
+    assert.ok(bytes < 2 * 1024 * 1024, `${file} exceeds the 2 MiB per-image budget`);
+    totalBytes += bytes;
+  }
+  assert.ok(totalBytes <= 8 * 1024 * 1024, `TimeAudit gallery ${totalBytes} bytes exceeds the 8 MiB budget`);
+
+  const thumbnailRoot = path.join(mediaRoot, "thumbs");
+  const thumbnailFiles = (await readdir(thumbnailRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(thumbnailFiles, expectedGalleryFiles.map((file) => file.replace(/\.png$/, ".webp")).sort(), "each full image must have one derived preview");
+  let thumbnailBytes = 0;
+  for (const file of thumbnailFiles) {
+    const bytes = (await stat(path.join(thumbnailRoot, file))).size;
+    assert.ok(bytes < 100 * 1024, `${file} exceeds the 100 KiB preview budget`);
+    thumbnailBytes += bytes;
+  }
+  assert.ok(thumbnailBytes <= 512 * 1024, `TimeAudit previews ${thumbnailBytes} bytes exceed the 512 KiB budget`);
+  assert.ok(totalBytes + thumbnailBytes <= 9 * 1024 * 1024, "full images and their consumed previews exceed the 9 MiB media budget");
+
+  const distMediaRoot = path.join(projectRoot, "dist", "media", "timeaudit");
+  const distMediaFiles = (await readdir(distMediaRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(distMediaFiles, mediaFiles, "production media must be the same bounded gallery without generated duplicates");
+  for (const file of mediaFiles) {
+    assert.equal((await stat(path.join(distMediaRoot, file))).size, (await stat(path.join(mediaRoot, file))).size, `${file} was rewritten or duplicated during build`);
+  }
+  const distThumbnailRoot = path.join(distMediaRoot, "thumbs");
+  const distThumbnailFiles = (await readdir(distThumbnailRoot)).sort();
+  assert.deepEqual(distThumbnailFiles, thumbnailFiles, "production previews must match the source preview set");
+  for (const file of thumbnailFiles) {
+    assert.equal((await stat(path.join(distThumbnailRoot, file))).size, (await stat(path.join(thumbnailRoot, file))).size, `${file} preview changed during build`);
+  }
+
+  const assetsRoot = path.join(projectRoot, "dist", "assets");
+  for (const javascript of (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"))) {
+    const source = await readFile(path.join(assetsRoot, javascript), "utf8");
+    assert.doesNotMatch(source, /data:image\/png;base64/i, `${javascript} inlines TimeAudit PNGs into JavaScript`);
+  }
+});
+
+test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.match(pageSource, /function\s+(?:ProjectGallery|Gallery)\s*\(/);
+  assert.match(pageSource, /(?:currentProject|project)\.gallery/);
+  assert.match(pageSource, /(?:gallery|images)\.map\([\s\S]{0,1400}onClick=/, "gallery images must open on click");
+  assert.match(pageSource, /loading="lazy"/);
+  assert.match(pageSource, /image\.thumbnail \|\| image\.src/, "gallery cards must use light previews while the dialog keeps the full image");
+  assert.match(pageSource, /role="dialog"/);
+  assert.match(pageSource, /aria-modal="true"/);
+  assert.match(pageSource, /createPortal\([\s\S]*?document\.body\)/, "lightbox must escape the main stacking context and cover the fixed header");
+  assert.match(pageSource, /project-lightbox-close[\s\S]{0,240}关闭<\/button>/);
+  assert.match(pageSource, /aria-label="上一张[^"]*"/);
+  assert.match(pageSource, /aria-label="下一张[^"]*"/);
+  for (const key of ["Escape", "ArrowLeft", "ArrowRight"]) assert.ok(pageSource.includes(`"${key}"`), `gallery keyboard handling misses ${key}`);
+  assert.match(pageSource, /event\.key === "Tab"[\s\S]*?event\.shiftKey[\s\S]*?last\?\.focus\(\)/, "lightbox must keep keyboard focus inside the dialog");
+  assert.match(pageSource, /addEventListener\("keydown"/);
+  assert.match(pageSource, /removeEventListener\("keydown"/);
 });
 
 test("project evolution records important dated stages instead of append-only update logs", () => {
@@ -390,6 +598,13 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const githubMaterial = run(["--project", "github-index", "--path", "docs/contracts/git.protected-major-actions.md", "--material-change"]);
   const asrCandidate = run(["--project", "chinese-asr", "--path", "src/zh_asr/pipeline.py"]);
   const asrMaterial = run(["--project", "chinese-asr", "--path", "src/zh_asr/pipeline.py", "--material-change"]);
+  const timeAuditCandidate = run(["--project", "timeaudit", "--path", "pcconfig_anomaly_digest.py"]);
+  const timeAuditMaterial = run(["--project", "timeaudit", "--path", "pcconfig_anomaly_digest.py", "--material-change"]);
+  const timeAuditPrivateData = run(["--project", "timeaudit", "--path", "data/raw-telemetry.json", "--material-change"]);
+  const timeAuditMainCandidate = run(["--project", "timeaudit", "--path", "main.py"]);
+  const timeAuditMainMaterial = run(["--project", "timeaudit", "--path", "main.py", "--material-change"]);
+  const timeAuditHeartbeat = run(["--project", "timeaudit", "--path", "log/telemetry_heartbeat", "--material-change"]);
+  const timeAuditDashboard = run(["--project", "timeaudit", "--path", "grafana_dashboards/main.json"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -406,14 +621,29 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(asrCandidate.impact_candidate, true);
   assert.equal(asrCandidate.task_required, false);
   assert.equal(asrMaterial.task_required, true);
+  assert.equal(timeAuditCandidate.impact_candidate, true);
+  assert.equal(timeAuditCandidate.task_required, false);
+  assert.equal(timeAuditMaterial.task_required, true);
+  assert.equal(timeAuditMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
+  assert.equal(timeAuditPrivateData.impact_candidate, false);
+  assert.equal(timeAuditPrivateData.task_required, false);
+  assert.equal(timeAuditMainCandidate.impact_candidate, true);
+  assert.equal(timeAuditMainCandidate.task_required, false);
+  assert.equal(timeAuditMainMaterial.task_required, true);
+  assert.equal(timeAuditHeartbeat.impact_candidate, false);
+  assert.equal(timeAuditHeartbeat.task_required, false);
+  assert.equal(timeAuditHeartbeat.action, "no_website_task");
+  assert.equal(timeAuditDashboard.impact_candidate, true);
+  assert.equal(timeAuditDashboard.task_required, false);
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
+  const targetedTimeAudit = run(["--project", "timeaudit"]);
   const full = run(["--all"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
 
@@ -429,11 +659,18 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targeted.selected_projects[0].semantic_revision, 2);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
+  assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
+  assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
+  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 1);
+  assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(full.mode, "all");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
+  assert.match(full.boundaries.publication, /automatically commit, normal-push existing PUBLIC main/i);
+  assert.ok(full.ai_workflow.some((item) => /automatically commit, normal-push the existing PUBLIC main/i.test(item)));
+  assert.ok(!full.ai_workflow.some((item) => /separate authorization|do not publish/i.test(item)));
   assert.deepEqual(after, before, "refresh planning changed narrative content");
   const missing = spawnSync(process.execPath, [script, "--project", "missing"], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
   assert.notEqual(missing.status, 0);
@@ -482,7 +719,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf8");
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
-    assert.deepEqual(verification.counts, { changed: 0, unchanged: 4, blocked: 0 });
+    assert.deepEqual(verification.counts, { changed: 0, unchanged: 5, blocked: 0 });
     const invalid = structuredClone(bundle);
     invalid.projects.find((item) => item.id === "pcconfig").collector_receipts[0].principal = "ordinary-user";
     await writeFile(bundlePath, JSON.stringify(invalid, null, 2), "utf8");
@@ -573,13 +810,14 @@ test("the rules workbench exposes exactly five verified current E-release rules"
 });
 
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
-  assert.equal(skills.length, 22);
+  assert.equal(skills.length, 23);
   assert.deepEqual(skills.map((item) => item.slug), [
     "personal-media",
     "personal-materials",
     "wechat-direct",
     "google-workspace-direct",
     "chinese-asr",
+    "timeaudit-diagnostics",
     "localocr",
     "personal-health",
     "md-to-pdf",
@@ -622,7 +860,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(excludedSkills.length, 0);
 });
 
-test("global search handles natural rewrites, mixed Latin terms and bounded broad results", () => {
+test("global search handles natural rewrites, mixed Latin terms and bounded broad results", async () => {
   assert.equal(searchPanel("哪个 Skill 可以找照片")[0]?.title, "personal-media");
   assert.equal(searchPanel("fresh task 为什么受阻")[0]?.title, "personal-panel-refresh");
   assert.equal(searchPanel("改了项目怎么没有自动刷新面板")[0]?.title, "personal-panel-refresh");
@@ -634,6 +872,14 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("PCConfig")[0]?.title, "PCConfig · 总览");
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");
   assert.equal(searchPanel("ChineseASR")[0]?.title, "ChineseASR · 总览");
+  assert.equal(searchPanel("TimeAudit")[0]?.title, "TimeAudit · 总览");
+  assert.equal(searchPanel("过去一小时为什么卡")[0]?.title, "timeaudit-diagnostics");
+  assert.ok(searchPanel("没有游戏帧是不是掉帧").some((item) => item.href === "/skills/timeaudit-diagnostics"));
+  for (const query of ["1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开"]) {
+    assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/timeaudit")), `TimeAudit search misses: ${query}`);
+  }
+  const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
+  assert.doesNotMatch(searchSource, /\/projects\/timeaudit|TimeAudit · 总览/, "project routes and titles must derive from projectCatalog; Skill aliases may still name TimeAudit");
   assert.equal(searchPanel("刷新看板")[0]?.title, "personal-panel-refresh");
   assert.equal(searchPanel("长音频断点续跑")[0]?.title, "连续时间线、长音频断点续跑与文件夹批量");
   assert.ok(searchPanel("的").length > 9, "broad search should retain the true total before UI truncation");
@@ -674,6 +920,9 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.equal(panelSnapshot.sourceDirtyCount, panelSnapshot.sourceDirtyPaths.length);
   assert.equal(panelSnapshot.skills.selectedPublicCount, skills.length);
   assert.ok(panelSnapshot.skills.activeInstallIntent >= panelSnapshot.skills.selectedPublicCount);
+  assert.ok(Number.isInteger(panelSnapshot.skills.transactionCampaignCount) && panelSnapshot.skills.transactionCampaignCount >= panelSnapshot.skills.activeInstallIntent);
+  assert.ok(skills.every((item) => item.transactionState.includes(`${panelSnapshot.skills.transactionCampaignCount} 个供应事务`)));
+  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`${panelSnapshot.skills.activeInstallIntent} 个 active install intent`)));
   assert.equal(panelSnapshot.ruleBinding.length, 5);
   for (const binding of panelSnapshot.ruleBinding) {
     assert.match(binding.sourceSha256, /^[a-f0-9]{64}$/);
@@ -727,9 +976,10 @@ test("public content excludes forbidden projects and obvious credential values",
   const contentPcconfig = await readFile(path.join(projectRoot, "app", "content-pcconfig.js"), "utf8");
   const contentGithubIndex = await readFile(path.join(projectRoot, "app", "content-github-index.js"), "utf8");
   const contentChineseAsr = await readFile(path.join(projectRoot, "app", "content-chinese-asr.js"), "utf8");
+  const contentTimeAudit = await readFile(path.join(projectRoot, "app", "content-timeaudit.js"), "utf8");
   const siteContent = await readFile(path.join(projectRoot, "app", "site-content.js"), "utf8");
   const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
-  const publicText = `${pageSource}\n${contentCore}\n${contentSkills}\n${contentRuleGuides}\n${contentPcconfig}\n${contentGithubIndex}\n${contentChineseAsr}\n${siteContent}\n${searchSource}`;
+  const publicText = `${pageSource}\n${contentCore}\n${contentSkills}\n${contentRuleGuides}\n${contentPcconfig}\n${contentGithubIndex}\n${contentChineseAsr}\n${contentTimeAudit}\n${siteContent}\n${searchSource}`;
   assertForbiddenTermsAreAbsent(publicText);
   assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}/);
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
@@ -741,7 +991,6 @@ test("public content excludes forbidden projects and obvious credential values",
 
 test("every public route is unique and has useful metadata", () => {
   assert.equal(new Set(routePaths).size, routePaths.length);
-  assert.equal(routePaths.length, 53);
   assert.equal(routePaths.length, 3 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
   for (const route of routePaths) {
     const meta = routeMeta(route);
@@ -752,6 +1001,7 @@ test("every public route is unique and has useful metadata", () => {
   assert.ok(!routePaths.includes("/skills/nope/personal-media"));
   assert.match(routeMeta("/skills/nope/personal-media").title, /页面不存在/);
   assert.match(routeMeta("/projects/pcconfig/nope/machine-facts").title, /页面不存在/);
+  assert.match(routeMeta("/projects/timeaudit/nope/collection-pipeline").title, /页面不存在/);
 });
 
 test("production build has direct entry files for every route", async () => {

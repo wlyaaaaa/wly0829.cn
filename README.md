@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR（1/2/3/4）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit（1/2/3/4/5）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目内容 MVP 和三项目本地版已经验收；当前新增且仅新增 ChineseASR，由项目清单驱动，`.agents` 固定 `order=1`。规则页始终读取 verified current E release；本轮用户已授权在 current E release、PCConfig、GitHub 总索引和 ChineseASR 快照刷新并验证后发布公网。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit 是当前选定的第 5 项，项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -33,13 +33,14 @@ npm run verify:public
 
 ## AI 快速刷新
 
-网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、判断实质变化、自动修复安全问题、原位更新内容并给出本地预览。小改默认不更新，全量复核也允许全部项目保持字节不变。
+网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复安全问题并原位更新内容。小改默认不更新，全量复核也允许全部项目保持字节不变。来源发布造成实质快照漂移时，`personal-panel-refresh` 异步创建一个 projectless 网站任务；任务 ID 是派发成功回执，来源对话不等待。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
 
 AI 内部可先取得定向或全量刷新计划：
 
 ```powershell
 npm run refresh:ai -- --project pcconfig
 npm run refresh:ai -- --project chinese-asr
+npm run refresh:ai -- --project timeaudit
 npm run refresh:ai -- --all
 npm run verify:ai-refresh -- --bundle <ai-result.json>
 ```

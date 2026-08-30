@@ -29,6 +29,7 @@ if (
   || !Array.isArray(generatedPanelFacts?.validation?.rows)
   || !Array.isArray(generatedPanelFacts?.validation?.failures)
   || !Number.isInteger(generatedPanelFacts?.skills?.activeInstallIntent)
+  || !Number.isInteger(generatedPanelFacts?.skills?.transactionCampaignCount)
   || !generatedPanelFacts?.integrity?.payloadSha256
 ) {
   throw new Error("panel facts are missing or invalid; run npm run refresh:snapshot before build");
@@ -51,7 +52,7 @@ export const project = {
   route: agentsRegistration.route,
   visibility: agentsRegistration.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库",
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
-  summary: `当前活动规则为 ${panelSnapshot.authority.releaseId}：绑定 PRIVATE main 提交 ${panelSnapshot.authority.gitCommit.slice(0, 7)}、五文件 ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…，前代为 ${panelSnapshot.authority.previous?.release_id || "无"}。C 盘 generation、Publisher、anchor 和 ledger 只作恢复材料，不再参与准入。项目同时管理 24 个 active Skill 安装意图（公开看板收录 22 个）、三个控制面协作，以及尚未完成的工作台运行根迁移。`,
+  summary: `当前活动规则为 ${panelSnapshot.authority.releaseId}：绑定 PRIVATE main 提交 ${panelSnapshot.authority.gitCommit.slice(0, 7)}、五文件 ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…，前代为 ${panelSnapshot.authority.previous?.release_id || "无"}。C 盘 generation、Publisher、anchor 和 ledger 只作恢复材料，不再参与准入。项目同时管理 ${panelSnapshot.skills.activeInstallIntent} 个 active Skill 安装意图（公开看板收录 ${panelSnapshot.skills.selectedPublicCount} 个）、三个控制面协作，以及尚未完成的工作台运行根迁移。`,
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
   result: "我最终会得到一条可以追溯的工作链：每个事实来自正确项目，每个写入有人负责，每个外部动作有明确授权，失败时知道从哪里恢复，结束时能区分本地完成、远端完成和用户真正可用。",
@@ -63,7 +64,7 @@ export const project = {
   heroFacts: [
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
     { label: "规则与模块", value: `同一 ${panelSnapshot.authority.releaseId} release 的 5 份规则；项目总览加 6 个模块；Rules 与 Skills 是独立全局入口` },
-    { label: "个人能力供应", value: "供应清单 24 个 active install intent；公开看板收录 22 个，2 个私人或冻结项不列名称" },
+    { label: "个人能力供应", value: `供应清单 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent；公开看板收录 ${panelSnapshot.skills.selectedPublicCount} 个，其余私人或冻结项不列名称` },
     { label: "三控制面", value: ".agents 管行为、授权和能力；GitHub 总索引管仓库与发布事实；PCConfig 管机器事实与恢复" },
     { label: "运行与临时目录", value: "迁移目标是 E 数据盘与 E 缓存盘；当前运行根仍由 C 盘实际目录承载，E 盘只有迁移 staging，尚未完成 junction、停写增量与运行时回读，不能称已切换" },
     { label: "模型与委派", value: `当前规则要求先验证宿主 model、effort、root/child 与 ${panelSnapshot.authority.releaseId} 身份，再按任务语义选择 0–10 条支路；网页不把某次任务的 child 数量当成持续能力` }

@@ -1,4 +1,4 @@
-# 个人项目看板 MVP 与四项目扩展规格
+# 个人项目看板 MVP 与五项目扩展规格
 
 ## 产品定位
 
@@ -19,7 +19,7 @@
 
 项目注册表是 `config/panel-projects.json`。
 
-- 单项目内容 MVP 和三项目本地版已完成用户验收；当前只新增 ChineseASR，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR（1/2/3/4）。
+- 四项目 PUBLIC MVP 已完成用户验收；当前新增 TimeAudit，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit（1/2/3/4/5）。
 - 注册表支持未来增加几十个项目，不以 MVP 数量作为长期上限。
 - 网站源项目本身不进入项目清单，避免自我套娃。
 - 项目默认 `presentation_mode=real_dashboard`：真实、详细地展示架构、状态、缺口和证据。
@@ -45,6 +45,8 @@
 /projects/github-index/:module 六个真实模块
 /projects/chinese-asr     ChineseASR 总览
 /projects/chinese-asr/:module 六个真实模块
+/projects/timeaudit       TimeAudit 总览与可视化画廊
+/projects/timeaudit/:module 按真实产品边界划分的模块
 /rules                    五份规则，一个页面内切换
 /skills                   按价值排序的 Skill 清单
 /skills/:skill            Skill 完整详情
@@ -93,7 +95,7 @@
 Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 
 页面必须同时区分“供应清单 active install intent”和“公开 MVP 收录”。当前快照为
-24 个 active install intent、公开收录 22 个；未公开的 2 个有明确内容边界，不能把
+25 个 active install intent、公开收录 23 个；未公开的 2 个有明确内容边界，不能把
 22 写成完整供应总数，也不能因为未展示就声称它们不可用。
 
 每个 Skill 详情维护：
@@ -158,4 +160,4 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 - 搜索、导航、规则切换、项目侧栏和响应式布局可用；
 - 自动化测试、构建、直接路由、自定义 404 和本地用户预览通过。
 
-单项目内容 MVP 和三项目本地版已通过；当前四项目内容已经完成建设且不增加第五个项目。规则权威由 verified current E release 动态提供；用户已明确要求本轮快照验证后发布。最终完成仍要求浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。
+单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 已由用户明确授权为第五项目。规则权威由 verified current E release 动态提供；第五项目最终完成仍要求内容、刷新合同、可视化交互、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。

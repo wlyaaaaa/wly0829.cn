@@ -12,6 +12,7 @@ const ruleSearchAliases = {
 const skillSearchAliases = {
   "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件"],
   "personal-panel-refresh": ["刷新看板", "fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
+  "timeaudit-diagnostics": ["过去一小时为什么卡", "没有游戏帧是不是掉帧", "电脑昨天为什么发热", "睡眠还是采集断档", "TimeAudit 历史证据"],
   "project-entry-gate": ["提交前为什么要检查仓库", "会不会推错远端", "公开仓库泄露"],
   "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
 };

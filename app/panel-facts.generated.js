@@ -2,8 +2,8 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-08-30 09:25（中国时间）",
-  "sourceCommit": "31009aa57c8451e49e4e6c2bef0cb9ca5235df98",
+  "observedAt": "2026-08-30 11:26（中国时间）",
+  "sourceCommit": "eede561691e672e3b372bbe30e599ec1d075a904",
   "sourceBranch": "main",
   "sourceWorktreeClean": false,
   "sourceDirtyCount": 1,
@@ -73,8 +73,9 @@ export const generatedPanelFacts = {
     }
   ],
   "skills": {
-    "activeInstallIntent": 24,
-    "selectedPublicCount": 22
+    "activeInstallIntent": 25,
+    "selectedPublicCount": 23,
+    "transactionCampaignCount": 37
   },
   "authority": {
     "status": "e_rules_active_verified",
@@ -123,7 +124,7 @@ export const generatedPanelFacts = {
         "layer": "Source checkout（候选源码工作树）",
         "status": "repair",
         "label": "1 项未激活施工",
-        "detail": "source HEAD=31009aa57c84，origin/main=31009aa57c84，active release commit=6a272ca36191。未提交路径：[workbench-local metadata 1]。 Source 不等于 active release 时只作候选施工，不会覆盖 E89。"
+        "detail": "source HEAD=eede561691e6，origin/main=eede561691e6，active release commit=6a272ca36191。未提交路径：[workbench-local metadata 1]。 Source 不等于 active release 时只作候选施工，不会覆盖 E89。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -141,7 +142,7 @@ export const generatedPanelFacts = {
         "layer": "Skill supply（能力供应）",
         "status": "pass",
         "label": "通过",
-        "detail": "24 个 active install intent；source/install/transaction 通过，36 个事务 campaign 全部 terminal。Current/Fresh/E2E 因本次未请求外部证据保持 unknown。"
+        "detail": "25 个 active install intent；source/install/transaction 通过，37 个事务 campaign 全部 terminal。Current/Fresh/E2E 因本次未请求外部证据保持 unknown。"
       },
       {
         "layer": "Contract coverage（跨控制面合同覆盖）",
@@ -155,6 +156,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "80931f4813ee8489433e73735cf0f444f95224bb45e76552069655da67c863dd"
+    "payloadSha256": "0675f2d5f7c1dc6efd30ddb6a508d5a5faeb5ad6a4505889ee3bdc9c8e52cf17"
   }
 };

@@ -8,20 +8,22 @@
     "trigger": "displayed_fact_or_explanation_changed",
     "non_trigger": "implementation_change_that_does_not_change_any_displayed_fact",
     "website_repo": "wlyaaaaa/wly0829.cn",
-    "website_project_type": "project",
-    "website_task_rule": "create one fresh independent website task for one refresh goal; never reuse a completed task",
+    "website_project_type": "projectless",
+    "website_task_rule": "create one asynchronous projectless website task for one material refresh goal; task-id return is the dispatch receipt; never block the source conversation or reuse a completed task",
     "full_refresh_rule": "the current website AI task iterates enabled projects in registry order; unchanged projects remain byte-identical",
     "fact_collector_boundary": "scripts and providers collect evidence and verify contracts; they never write narrative content or decide materiality",
-    "publication_boundary": "source project publication completes first; website refresh is a separate post-publication task and cannot block or roll back the source transaction",
+    "publication_boundary": "source project publication completes first; website refresh is a separate asynchronous post-publication task and cannot block or roll back the source transaction",
+    "publication_mode": "after the accepted four-project MVP, verified registered refreshes automatically commit, normal-push existing PUBLIC main, wait for Pages and read back the deployed commit unless the owner explicitly holds publication",
     "task_creation_threshold": "create a website task only when the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
     "small_change_policy": "do not create an asynchronous task for formatting, refactors, timestamps, hash-only drift, blocked candidates already shown accurately, or other changes that do not alter a user decision",
     "default_change_policy": "no website change unless the existing page would make a material user judgment wrong",
     "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
     "evolution_policy": "record only important product stages; one entry may cover a date or date range and may merge multiple related changes",
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
-    "initial_bundle_gzip_budget_kib": 256,
-    "lazy_detail_required_at_project_count": 8,
-    "bundle_scaling_policy": "before enabling the eighth project, project details must lazy-load and search must use a derived lightweight index",
+    "initial_bundle_gzip_budget_kib": 320,
+    "bundle_budget_semantics": "the number is the current anti-bloat review threshold, not a permanent content ceiling; when measured smoothness and semantic fidelity cannot be preserved below it, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
+    "detail_loading_mode": "eager_instant_navigation",
+    "bundle_scaling_policy": "keep project navigation free of click-time loading; at tens of projects move narrative content to build-time route-specific static HTML, keep shared interaction JavaScript small, and prefetch likely routes before interaction; never delete required content or shift latency to clicks",
     "allowed_presentation_modes": [
       "real_dashboard",
       "curated_packaging"
@@ -39,7 +41,7 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "project overview, six modules, current E release Rules and Skills evidence",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
@@ -455,6 +457,139 @@
           "internal refactors or test additions leave every displayed capability and boundary unchanged",
           "a new model is merely installed or registered but does not replace a displayed default or gain fresh evidence",
           "ignored outputs, model caches or private recordings change without altering public-safe product facts"
+        ]
+      }
+    },
+    {
+      "id": "timeaudit",
+      "order": 5,
+      "title": "TimeAudit",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/timeaudit",
+      "ai_refresh": {
+        "content_path": "app/content-timeaudit.js",
+        "semantic_revision": 1,
+        "scope": "project overview and product-defined modules covering collection, analysis, visualization, runtime reliability, actual-value sensitivity, and recovery",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
+          "python E:\\Projects\\Tools\\TimeAudit\\test_pcconfig_anomaly_digest.py",
+          "python E:\\Projects\\Tools\\TimeAudit\\pcconfig_anomaly_digest.py --after-utc <exclusive-utc-cursor> --until-utc <inclusive-utc-bound-no-more-than-168h>; accept only timeaudit.pcconfig-anomaly-digest.v1 aggregate output",
+          "python -m unittest -v E:\\Projects\\Tools\\TimeAudit\\test_timeaudit_diagnostic_summary.py",
+          "python -B E:\\Projects\\Tools\\TimeAudit\\timeaudit_diagnostic_summary.py --hours 1; accept only timeaudit.diagnostic-summary.v1 owner timeaudit:diagnostic-history with status and coverage checks"
+        ],
+        "conditional_collectors": [
+          "python -m pytest -q E:\\Projects\\Tools\\TimeAudit\\test_main_cadence.py E:\\Projects\\Tools\\TimeAudit\\test_runtime_hardening.py E:\\Projects\\Tools\\TimeAudit\\test_ingest_resilience.py when sampling cadence, watchdog or recovery semantics changed",
+          "python E:\\Projects\\Tools\\TimeAudit\\test_grafana_dashboard_contract.py and python E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py when dashboard, SQL partitioning or datasource recovery semantics changed",
+          "run the bounded anomaly digest again for a fresh <=168-hour window when displayed runtime coverage or aggregate anomaly state may have changed; never substitute test_telemetry_health.py, db_audit.py or direct database rows as public receipts"
+        ],
+        "public_receipt_boundary": {
+          "live_schema": "timeaudit.pcconfig-anomaly-digest.v1",
+          "diagnostic_schema": "timeaudit.diagnostic-summary.v1",
+          "diagnostic_owner": "timeaudit:diagnostic-history",
+          "diagnostic_maximum_window_hours": 168,
+          "allowed": "owner/profile identity, bounded time window, sample count, coverage freshness, aggregate anomaly id/severity/count/first-last time, threshold reference, recheck recommendation and explicit payload-omission flags (named privacy flags by the provider schema)",
+          "provider_omits": "raw telemetry rows and series, window titles, process names/paths/command lines, per-process activity, network identifiers, credentials, database rows and machine identifiers so this collector stays bounded and fast; these field classes are not blanket public-content bans, and only actual personal-sensitive or credential values require redaction",
+          "unknown_semantics": "missing Docker/PostgreSQL, invalid digest, stale coverage or unavailable Owner evidence makes only the affected live fields Unknown with the last verified observation time; it never authorizes a direct raw-data fallback or a claim of live synchronization"
+        }
+      },
+      "source": {
+        "repo": "wlyaaaaa/TimeAudit",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\TimeAudit"
+      },
+      "displayed_areas": [
+        "project_overview",
+        "project_modules",
+        "collection_and_storage_architecture",
+        "hardware_process_usage_and_energy_boundaries",
+        "runtime_reliability_and_actual_value_boundary",
+        "verification_recovery_and_evolution"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_and_public_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "快速部署.md",
+            "使用手册.md",
+            "PCCONFIG_ANOMALY_DIGEST_CONTRACT.md",
+            "TIMEAUDIT_DIAGNOSTIC_SUMMARY_CONTRACT.md",
+            "requirements.txt"
+          ]
+        },
+        {
+          "kind": "collection_runtime_and_recovery",
+          "paths": [
+            "main.py",
+            "context_worker.py",
+            "activity_worker.py",
+            "hardware_worker.py",
+            "lifecycle_worker.py",
+            "TimeAudit.ahk",
+            "ingest.py",
+            "telemetry_watchdog.ps1",
+            "runtime_health.py",
+            "check_telemetry_status.py",
+            "start_all.bat"
+          ]
+        },
+        {
+          "kind": "storage_dashboard_and_backup",
+          "paths": [
+            "docker-compose.yml",
+            "schema.sql",
+            "grafana_dashboard_contract.py",
+            "grafana_dashboards/*.json",
+            "grafana_provisioning/**",
+            "backup_all.ps1",
+            "backup_db.ps1",
+            "backup_grafana.py",
+            "restore_grafana.py"
+          ]
+        },
+        {
+          "kind": "public_safe_aggregate_and_validation",
+          "paths": [
+            "pcconfig_anomaly_digest.py",
+            "test_pcconfig_anomaly_digest.py",
+            "timeaudit_diagnostic_summary.py",
+            "test_timeaudit_diagnostic_summary.py",
+            "test_main_cadence.py",
+            "test_runtime_hardening.py",
+            "test_ingest_resilience.py",
+            "test_grafana_dashboard_contract.py",
+            "test_dashboard_time_alignment.py",
+            "test_presentmon_fps_selection.py",
+            "test_lifecycle_unknown_path.py",
+            "test_activity_collection_state_lock.py",
+            "test_telemetry_health.py",
+            "test_backup_all_script.py",
+            "test_restore_grafana.py",
+            "test_sql_partition_explain.py",
+            "telemetry_test_suite.py",
+            "test_optimizations.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed sampling cadence, collector responsibility, data pipeline, table or partition model, dashboard role or retention boundary changes meaning",
+          "a displayed hardware, FPS, process-forensics, usage, energy, actual-value sensitivity, watchdog, backup or recovery capability changes what the owner should trust or do",
+          "the timeaudit-diagnostics Skill or diagnostic-summary schema, coverage, game-frame validity, activity-state union or interpretation limits change",
+          "a public-safe aggregate anomaly, coverage gap, test failure or source/runtime mismatch changes the interpretation of current reliability"
+        ],
+        "snapshot_only_when": [
+          "the public source commit, repository state, test count, observation time, bounded aggregate coverage, anomaly count or first-last time changes without semantic change"
+        ],
+        "ignore_when": [
+          "raw row or time-series churn alone does not trigger a website task; decision-relevant process, path, title, network, telemetry or machine facts may enter when useful and their actual values are not personal-sensitive or credentials",
+          "postgres_data, grafana_data, log, heartbeat, buffer, backup payload, cache or other ignored local runtime artifacts change without altering a displayed public-safe fact",
+          "internal refactors, dashboard formatting or additional tests leave every displayed capability, boundary and verification interpretation unchanged",
+          "a blocked or unavailable live collector remains accurately disclosed as Unknown with its last verified observation time"
         ]
       }
     }

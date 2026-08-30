@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   ArrowRight,
@@ -505,6 +506,7 @@ function projectKicker(kind) {
   if (kind === "pcconfig") return "电脑配置、运行与恢复控制面";
   if (kind === "github-index") return "Git 与 GitHub 仓库事实控制面";
   if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
+  if (kind === "timeaudit") return "Windows 工作站时间、性能与故障回放项目";
   return "个人项目";
 }
 
@@ -629,6 +631,84 @@ function ProjectCurrentState({ entry }) {
   );
 }
 
+function ProjectGallery({ title, images }) {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const closeButtonRef = useRef(null);
+  const returnFocusRef = useRef(null);
+  const isOpen = activeIndex !== null;
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function handleKeyDown(event) {
+      if (event.key === "Tab") {
+        const controls = Array.from(document.querySelectorAll(".project-lightbox button:not([disabled])"));
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      } else if (event.key === "Escape") setActiveIndex(null);
+      else if (event.key === "ArrowLeft") setActiveIndex((index) => (index - 1 + images.length) % images.length);
+      else if (event.key === "ArrowRight") setActiveIndex((index) => (index + 1) % images.length);
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    closeButtonRef.current?.focus();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+      window.requestAnimationFrame(() => returnFocusRef.current?.focus());
+    };
+  }, [isOpen, images.length]);
+
+  if (!images.length) return null;
+  const activeImage = activeIndex === null ? null : images[activeIndex];
+  function openImage(index, event) {
+    returnFocusRef.current = event.currentTarget;
+    setActiveIndex(index);
+  }
+
+  return (
+    <section className="document-section project-gallery" aria-labelledby="project-gallery-title">
+      <div className="project-gallery-heading">
+        <div><p className="section-kicker">真实界面</p><h2 id="project-gallery-title">{title} 的可视化结果</h2></div>
+        <p>单击图片查看完整大图；打开后可关闭，或切换上一张、下一张。</p>
+      </div>
+      <div className="project-gallery-grid">
+        {images.map((image, index) => (
+          <button className="project-gallery-card" type="button" onClick={(event) => openImage(index, event)} key={image.src} aria-label={`打开大图：${image.alt}`}>
+            <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" />
+            <span><strong>{String(index + 1).padStart(2, "0")}</strong>{image.caption}</span>
+          </button>
+        ))}
+      </div>
+      {activeImage ? createPortal((
+        <div className="project-lightbox" role="dialog" aria-modal="true" aria-labelledby="project-lightbox-caption" onMouseDown={(event) => { if (event.target === event.currentTarget) setActiveIndex(null); }}>
+          <div className="project-lightbox-dialog">
+            <div className="project-lightbox-toolbar">
+              <span aria-live="polite">{activeIndex + 1} / {images.length}</span>
+              <button className="project-lightbox-close" type="button" onClick={() => setActiveIndex(null)} ref={closeButtonRef} aria-label="关闭大图"><X size={22} aria-hidden="true" />关闭</button>
+            </div>
+            <div className="project-lightbox-stage">
+              <button className="project-lightbox-previous" type="button" onClick={() => setActiveIndex((index) => (index - 1 + images.length) % images.length)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
+              <figure>
+                <img className="project-lightbox-image" src={activeImage.src} alt={activeImage.alt} />
+                <figcaption className="project-lightbox-caption" id="project-lightbox-caption">{activeImage.caption}</figcaption>
+              </figure>
+              <button className="project-lightbox-next" type="button" onClick={() => setActiveIndex((index) => (index + 1) % images.length)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
+            </div>
+          </div>
+        </div>
+      ), document.body) : null}
+    </section>
+  );
+}
+
 function ProjectOverview({ entry }) {
   const { project: currentProject, modules: currentModules } = entry;
   return (
@@ -639,6 +719,8 @@ function ProjectOverview({ entry }) {
         <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{annotateTerms(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(currentProject.result)}</p></article></div>
         <ThreeStateSummary {...currentProject.readerStates} />
       </section>
+
+      {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
 
       <section className="document-section split-section">
         <div><h2>它负责</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
@@ -1199,7 +1281,7 @@ function SkillDetail({ item, search }) {
 }
 
 function NotFound() {
-  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板包含 .agents、PCConfig、GitHub 总索引、ChineseASR 四个项目，以及五份规则和已纳入的 Skills（能力）。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板包含 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit 五个项目，以及五份规则和已纳入的 Skills（能力）。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
 }
 
 export default function Page() {
