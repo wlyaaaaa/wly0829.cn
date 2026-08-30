@@ -170,4 +170,4 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 - 搜索、导航、规则切换、项目侧栏和响应式布局可用；
 - 自动化测试、构建、直接路由、自定义 404 和本地用户预览通过。
 
-单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 与 PC Panel Hub 已完成第五、第六项目扩展，CACB 与学习方法已完成第七、第八个 curated/manual-only 项目，Codex Remote 是第九个 curated/manual-only 项目。规则权威由 verified current E release 动态提供；每个后续项目仍须完成自己的内容、更新合同、测试边界、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back。
+单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 与 PC Panel Hub 已完成第五、第六项目扩展，CACB、学习方法与 Codex Remote 已完成第七、第八、第九个 curated/manual-only 项目。Codex Remote 的实现提交 `1278c27` 已通过 E92 快照、39/39 合同、浏览器 QA、PUBLIC main、Pages deployment 和公网项目/模块/Rules/Skill/图片/404 回读。规则权威由 verified current E release 动态提供；每个后续项目仍须独立完成同样的交付闭环。

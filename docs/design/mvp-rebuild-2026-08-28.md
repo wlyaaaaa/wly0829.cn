@@ -1,6 +1,6 @@
 # wly0829.cn MVP rebuild
 
-status: nine_project_codex_remote_integration_active
+status: nine_project_codex_remote_public_pass
 
 ## Goal
 
@@ -80,6 +80,7 @@ publication and public acceptance at `1cc5ecf`. The learning method completed th
 eighth curated/manual-only publication at `b0adcc9`: its content, manual boundary,
 tests, eight-project preview, PUBLIC main, Pages deployment and representative
 public routes were read back against the same product commit. Codex Remote is the
-selected ninth curated/manual-only project; it must complete its PUBLIC-source
-evidence, safe gallery, six modules, tests, preview, Pages deployment and public
-read-back before any tenth project begins.
+completed ninth curated/manual-only project: PUBLIC-source evidence, the safe
+20-image gallery, six modules, 39/39 tests, responsive preview, Pages deployment
+and public route/404 read-back all closed at implementation commit `1278c27`.
+No tenth project was started.

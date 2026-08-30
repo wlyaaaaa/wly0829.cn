@@ -1,6 +1,6 @@
 # 九项目 MAP 设计与产品验收
 
-状态：`nine_project_local_pass_pending_public_readback`
+状态：`nine_project_public_pass`
 
 观察时间：2026-08-30
 
@@ -143,15 +143,21 @@ Ignored QA：
 - `docs/design/qa/codex-remote/12-overview-compact-1440x900.png`
 - `docs/design/qa/codex-remote/13-timeaudit-compact-1440x900.png`
 
-## 当前缺口与发布边界
+## 当前缺口与 PUBLIC 收口
 
 - 本轮没有启动、关闭、重启、查询或访问 Codex Remote runtime；页面只说明真实做成、
   跑通过的产品与版本证据，不宣称当前在线。
 - v0.1.5 测试和历史真实截图不能自动覆盖当前 Desktop、Codex、网络或浏览器版本。
-- 当前 PUBLIC 仍是八项目提交 `85ca73d`。本地 `main` 以 E91 快照提交 `9c1f72d`
-  为基线，当前 E92 + 第九项目 checkpoint 已通过最终本地门；只有定向提交、normal
-  push、Pages deployment 和公网 commit/路由/图片/404 回读完成后，状态才升级为
-  `nine_project_public_pass`。
+- 第九项目与 E92 实现提交
+  `1278c272c569f294a2a1348cc6b509da80a51fb2` 已从本地 `main` normal-push 到
+  远端 `main`。GitHub Pages run `33316572576`、deployment `6167590993` 均 success，
+  deployment SHA 与该提交一致。
+- 公网首页、Codex Remote Overview、`same-task-control` 模块、E92 Rules 与
+  `personal-panel-refresh` Skill 均为 200 且回读到代表性正文；完整图
+  `08-real-task-runtime.jpg` 为 `image/jpeg`、267,332 bytes。
+- `/projects/codex-remote` 以 301 收敛到 trailing-slash canonical；真实未知路由为
+  404 并显示“这里没有这页”。公网 1440×900 与 390×844 再验无页面级横向溢出，
+  模块原生导航、20 张画廊入口和控制台零 warning/error 通过。
 
 ## E92 合并快照
 
