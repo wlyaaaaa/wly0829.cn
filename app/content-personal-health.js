@@ -7,6 +7,9 @@ export const personalHealthProject = {
   route: "/projects/personal-health",
   visibility: "私有仓库",
   statusTone: "mixed",
+  cardStatus: "健康决策方法、证据分层和安全更新链已经实现",
+  cardStatusTone: "pass",
+  snapshotBoundary: "源码与合成回归已核对；本页没有调用当前账号、设备或个人健康数据，也不提供个体诊断和处方",
   kicker: "让健康选择更安全、更自主，也更容易复查",
   searchAliases: [
     "健康信息怎么判断能不能用",

@@ -54,14 +54,14 @@ read-only operating panel; public presentation is secondary.
   what happens when the check passes, finds a problem, or cannot run. Only
   after those answers may the page present triggers, inputs, outputs,
   architecture, commands, schemas, hashes, evidence and recovery details.
-- Every project detail page uses three reading layers: `速览`, `项目怎么用`
-  and `技术参考`. They are a content priority and reading order, not three
+- Every project detail page uses three reading layers: `速览`, `产品` and
+  `技术`. They are a content priority and reading order, not three
   copies of the same prose, three network loads or a fixed module count.
   `速览` owns the product essence, the problem, one ordinary example, the
   result, the project's deliberate choices and its most important boundary.
-  `项目怎么用` owns natural requests, realistic flows, success/problem/
+  `产品` owns natural requests, realistic flows, success/problem/
   unavailable behavior, product principles and visual results when they help.
-  `技术参考` owns current snapshots, exact models and versions, architecture,
+  `技术` owns current snapshots, exact models and versions, architecture,
   commands, schemas, hashes, source/test/runtime/publish evidence, failures,
   recovery and evolution. Existing module routes remain the deep technical
   reference instead of becoming a second product introduction.
@@ -72,7 +72,7 @@ read-only operating panel; public presentation is secondary.
   follows the real project; do not force symmetry or pad a quota.
 - The product layers must not open with a release id, commit, test count,
   schema, process name, port, model stack or internal component. Those facts
-  remain complete in `技术参考`; they are evidence for the product, not the
+  remain complete in `技术`; they are evidence for the product, not the
   product's identity. A first-time reader must understand the value and use
   without reading the reference layer.
 - Public pages never expose internal presentation or maintenance labels such
@@ -89,13 +89,13 @@ read-only operating panel; public presentation is secondary.
   recruiter readability are not valid reasons to remove these facts.
 - Public visibility is never a reason to suppress a non-secret fact that would
   change the owner's understanding of the current project.
-- The first project viewport must disclose 4–6 decision-critical current facts:
-  what is actually selected or active, which important alternative is only
-  optional, and which evidence layer is still missing. The concrete fields
-  depend on the project. A model-driven project must name its exact current
-  model stack; a machine project must name current recovery/runtime versions;
-  a Git project must name repository and worktree facts. The owner must not
-  reconstruct current choices from later architecture prose.
+- The first project viewport stays product-first and discloses a short project
+  status, the most important snapshot boundary and its observation time in
+  plain language. Exact model stacks, recovery/runtime versions, repository and
+  worktree facts, commits and test matrices remain complete in `技术`; they
+  must not displace the product's purpose and use from `速览`. A boundary may
+  name one decision-changing gap, but it must distinguish what the project can
+  do from what this webpage did not re-verify.
 - If a reviewed L3+ value must be withheld, or a reusable secret is present,
   omit only that payload/value while keeping the public-safe identity, state,
   boundary and effect on current decisions. Unknown stays explicit Unknown.

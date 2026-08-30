@@ -5,6 +5,9 @@ export const pcconfigProject = {
   route: "/projects/pcconfig",
   visibility: "私有仓库",
   statusTone: "mixed",
+  cardStatus: "Password Center 已独立运行，机器配置、秘密盲用和恢复入口可用",
+  cardStatusTone: "mixed",
+  snapshotBoundary: "Codex 对话热备已运行；H 冷备本次跳过，Codex Home 仍等待正式切换窗口，银行卡与新机恢复缺真实用户端到端验收",
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
@@ -16,12 +19,12 @@ export const pcconfigProject = {
     unavailable: "磁盘、Provider（现场读取器）或受保护入口不可用时，把对应结论标为 Unknown（证据不足），不猜默认路径、不整包覆盖，也不把部分复制或安装称为整机恢复。"
   },
   heroFacts: [
-    { label: "当前源码", value: "PRIVATE main 6922bdb，与 origin/main 为 0/0；当前 checkout 有 12 项任务/CoreRecovery/会话备份 Owner 候选施工，尚未提交，不冒充 main" },
-    { label: "C 盘 policy 退役", value: "E 盘 PCConfig 退役 Owner 返回 status=retired、production_activation=false；36 个依赖已分类、6 个退役任务缺席。Secret Broker、BitLocker、Vault V2 与 P5–P7 未被退役；旧 C 盘历史入口的 integrity failure 不是当前规则权威或任务阻断" },
-    { label: "核心恢复", value: "CoreRecovery ready_with_warnings；新增会话备份已进入恢复清单，最近完整 receipt 保留其任务结果 warning；本次未证明 H 冷备介质在线" },
-    { label: "SYSTEM 任务快照", value: "task scan generation 20260830t011100879-3ff5ec92330242fc：Registry 88 / observed 88，added=0、removed=0、changed=0、complete_visibility=true" },
-    { label: "P0 当前版本", value: "current 第 68 版 normal、active=LKG、trusted control=true；结果 4 已证明在线恢复，下一次自然 boot deadline 仍待验收" },
-    { label: "桌面恢复入口", value: "adb0c4b–6922bdb 已补齐一个现有桌面恢复 launcher 的 source/test 与快捷方式回读；本看板未重新执行真实桌面故障 E2E，不能称所有桌面场景已验" }
+    { label: "当前源码", value: "PRIVATE main d13ac199dad117a3cabe38771a428dfa771fe1a3 与 origin/main 对齐；观察时 checkout 另有 8 项受管软件/任务候选修改，均不属于已发布 main" },
+    { label: "Password Center", value: "已脱离退役 C Policy 独立运行；9/9 安装文件与锚点一致，Secret Broker 安全核心和产品闭环均 pass，plaintext_returned=false" },
+    { label: "银行卡与浏览器", value: "银行卡作为卡号/有效期/CVV 一条原子凭据保存；AgentCardFill 对唯一 HTTPS 支付表单一次盲填、不提交页面，浏览器桥 1.4.0 为 launcher-verified" },
+    { label: "跨设备恢复", value: "PRIVATE Git 加密 Recovery Set 可作为独立载体，一个可靠因子可在新设备生成新密钥并恢复；不导出旧运行时私钥，G 只是额外热副本" },
+    { label: "Codex 对话恢复", value: "每日热备任务启用、Ready 且最近自然结果 0；恢复点按内容寻址和逐对象 SHA-256 回读，原始对话不进入 GitHub" },
+    { label: "Codex Home 迁移", value: "迁移事务、E 盘 staging、ACL/内容/链接校验和回滚链已就绪；当前 source=true、staging=true、final=false，状态 waiting_for_codex_exit，尚未正式切换" }
   ],
   productPrinciples: [
     { title: "先读现场，再改变机器", detail: "登记表负责导航，不能冒充当前状态；真正要改什么，先由 Windows、安装根、任务或项目配置现场证明。" },
@@ -45,7 +48,7 @@ export const pcconfigProject = {
     "不拥有具体项目的业务语义、源码设计、启动方式和项目验收；这些继续由项目自己负责",
     "不拥有 Git（版本控制）仓库身份、可见性、远端、默认分支和发布事实；这些由 Git 控制面负责",
     "不拥有跨项目智能体行为、能力路由和活动规则正文；这些由规则控制面负责",
-    "不保存密码、令牌、私钥、恢复码、完整环境文件、浏览器登录态、聊天数据库或私人正文",
+    "不把明文密码、令牌、私钥或恢复码写入 Registry、聊天、日志或普通文件；秘密值留在受保护存储中，并只按精确引用盲用或经用户明确验证后受控显示",
     "不把 Registry、测试、安装或任务存在单独包装成整机恢复完成",
     "不因为目录看起来不整齐就自动搬移，也不通过 watcher（后台监听器）或轮询持续扫描整台电脑"
   ],
@@ -73,19 +76,24 @@ export const pcconfigProject = {
     { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
   ],
   currentState: {
-    observedAt: "2026-08-30T01:14:38Z",
-    label: "C 盘 policy runtime 已退役；SYSTEM 任务定义已闭合，核心恢复 warning 与自然重启验收仍需关注",
+    observedAt: "2026-08-30T19:52:59Z",
+    label: "Password Center 独立运行、Codex 对话热备已闭合；Codex Home 等待正式切换，H 冷备与真实支付/新机恢复验收仍有缺口",
     facts: [
-      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 6922bdb664d1e56a06b5a3ca0b604cac85a5ff93。当前 checkout 有 12 项由现役 Owner 持有的任务、CoreRecovery 和会话备份候选施工，未提交内容不是 main。",
-      "SYSTEM/elevated task scan current pointer 于 2026-08-30T01:11:01Z 指向 generation 20260830t011100879-3ff5ec92330242fc；任务定义 Registry=88、observed=88、added/removed/changed=0、complete_visibility=true。",
-      "随后 live drift 返回 4 项通过、3 项警告、0 项阻断；CoreRecovery 为 ready_with_warnings。警告保持为项目现场事实，不会被 MAP 包装成全绿。",
-      "Secret Broker（秘密代理）状态通过、无关键失败并保留 1 个可选缺口；回执不包含秘密明文。",
-      "E 盘 PCConfig 退役 Owner 当前返回 retired、production_activation=false、reason=protected_policy_retired、historical_state_preserved=true、replacement_provider=e-immutable-rules-release。退役验收 36 个依赖已分类、6 个退役任务缺席，Secret Broker 保留、BitLocker 配置未变。",
-      "旧 C 盘历史 Provider 的原入口当前返回 active_integrity_failure，incident code=global-shim-invalid。这个结果只说明旧入口自身已经不具备完整性；它不能否定 E rules current，也不能阻断普通项目、Skill、原生委派或 E release。",
-      "adb0c4b–6922bdb 为一个现有桌面 AI 工作台恢复入口补齐 launcher 源码、聚焦测试和快捷方式回读；这不是本轮真实桌面故障 E2E。"
+      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 d13ac199dad117a3cabe38771a428dfa771fe1a3。观察时 checkout 另有 8 项受管软件和计划任务候选修改；这些未提交内容不是 main。",
+      "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。Secret Broker 安全核心与产品闭环均 pass，所有公开回执保持 plaintext_returned=false。",
+      "PRIVATE Git 的完整加密 Recovery Set 可独立承担跨设备恢复；当前 cross_device_recovery_allowed=true、one_week_recovery_ready=true。新设备生成自己的设备/运行时密钥，不导出旧运行时私钥。",
+      "银行卡的卡号、有效期和 CVV 作为一条原子凭据保存、备份和恢复；AgentCardFill 使用一次性、目标绑定能力盲填唯一 HTTPS 支付表单，不自动提交，也不把值交给模型。",
+      "中文输出严格按 UTF-8、再按 GB18030 解码，仍失败就关闭；Google 官方完整 CSV 导入保留重复登录的稳定身份，并在主库、G 热备和 PRIVATE Git 副本全部回读后才删除明文导出。",
+      "CodexConversationBackup-Hot-Daily 已启用、Ready，最近自然 LastTaskResult=0；恢复点使用 VSS、内容寻址、逐对象 SHA-256 和 pointer-last，原始对话不进入 GitHub。",
+      "Codex Home 迁移已具备停写等待、最终增量镜像、内容/ACL/链接清单核对、原子切换、C 兼容联接与回滚副本；当前 waiting_for_codex_exit，尚未执行正式 cutover。"
     ],
     gaps: [
-      "SYSTEM 任务定义快照已经闭合；运行态仍有 CoreRecovery/会话备份 warning，需要对应 Owner 的后续 receipt 才能升级，不影响 MAP 如实展示。",
+      "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
+      "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
+      "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
+      "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
+      "Codex Home 当前 source=true、staging=true、final=false，仍为 waiting_for_codex_exit；正式切换和新运行时回读没有发生。",
+      "观察时 checkout 的 8 项受管软件/任务修改均未提交，不属于 d13ac19 main，也不能写成已发布能力。",
       "PCConfig Protected Data Safe Switch Boot Recovery 的 LastTaskResult=4 已由正式在线恢复回执证明为 historical_failure_recovered_online：current 第 68 版 normal、active=LKG、trusted control=true。最新自然 boot receipt 仍 deadline_met=false，因此下一次自然启动验收不能省略。",
       "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
       "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
@@ -112,6 +120,9 @@ export const pcconfigProject = {
     { name: "受管软件路由", responsibility: "把组件别名解析到自己的状态与更新 Adapter。", implementation: "当前目录登记 11 个组件；behind 才更新，equal 不重装，ahead 不降级，unknown 直接停止。" },
     { name: "CoreRecovery（核心恢复）", responsibility: "组织重装或换机时的恢复顺序、热备/冷备衔接、任务重建和选择性验收。", implementation: "Inspect 零正文读取；Hot 原子发布小型上下文；Cold 只消费已验证 Hot，不用镜像删除。" },
     { name: "Secret Broker（秘密代理）", responsibility: "集中管理秘密的发现、盲用、恢复集和设备信任，不把明文交给调用者。", implementation: "运行库在仓库外加密保存；公开 Registry 只保存 SecretRef、策略和无秘密入口。" },
+    { name: "Password Center（密码中心）", responsibility: "让用户查找、查看、导入、盲填和恢复凭据，同时把真实秘密留在受保护运行库。", implementation: "独立于退役 C Policy；银行卡三字段原子保存，查看窗口白底纯绿、可逐字段复制，剪贴板历史与云同步关闭并在 60 秒或关窗后按值清理。" },
+    { name: "Browser Bridge（浏览器桥）", responsibility: "把网站登录和银行卡填充限定到用户当前确认的精确网页目标。", implementation: "1.4.0 launcher-verified；AgentCardFill 只对唯一 HTTPS 支付表单使用一次性能力，同时填入卡号、有效期和 CVV，不提交页面。" },
+    { name: "Codex 恢复与迁移", responsibility: "把对话恢复点和 Codex Home 迁移分别做成内容可验证、可以回退的事务。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；Home 迁移等待写入退出后完成最终增量、ACL/链接清单、原子切换、C 兼容联接和回滚。" },
     { name: "固定 Google Workspace Provider", responsibility: "通过一个固定账号绑定提供邮件、云盘和日历的类型化动作。", implementation: "凭据用 DPAPI 保存；入口没有通用网址、方法或请求体透传，状态检查可做到 zero-network（零网络）。" },
     { name: "Protected-policy retirement", responsibility: "证明旧 C 盘规则运行面、Publisher consumer、worker 与任务已经退役，同时保留历史恢复材料和独立产品。", implementation: "Retirement Registry、固定 retired 状态入口、36 依赖分类、6 任务缺席和机器收敛回执。" },
     { name: "受保护数据连续性", responsibility: "提供版本换挡、最高权限因子、加密保险库、恢复载体和隔离恢复设计。", implementation: "P0–P7（八个严格串行阶段）各有独立完成证据；源码、安装、真实数据迁移和重启验收不能互相冒充。" },
@@ -124,6 +135,9 @@ export const pcconfigProject = {
     { ask: "为什么某个计划任务没有按预期工作？", effect: "比较 Scheduler 现场、稳定任务签名、LastTaskResult（最近运行结果）和 Owner 回执；不输出完整 Action 或 XML，也不凭任务存在认定业务成功。" },
     { ask: "重装系统后恢复主要日常环境。", effect: "按磁盘与网络、三个控制面、运行时、项目、任务、启动、私密配置和最终验收分层恢复；需要重新登录的部分明确留给用户。" },
     { ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
+    { ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
+    { ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
+    { ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先准备 staging、最终增量、ACL/链接清单和回滚副本；状态保持 waiting_for_codex_exit，只有 Codex 完全退出后才按需启动正式切换。" },
     { ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
   ],
   evidenceLayers: [
@@ -145,7 +159,8 @@ export const pcconfigProject = {
     { date: "2026-08-18—08-23", commit: "1a4d030–f879e5f", result: "建立受保护数据连续性目标、无人值守目标授权基础、P0 安全换挡器和最高权限因子保险库；明确源码通过、安装、真实重启与正式数据恢复是四种不同证据。" },
     { date: "2026-08-24—08-27", commit: "8753374–d3d8d00", result: "CoreGoal V2 进入耐久目标与单步能力模型，Workspace Provider 增加固定类型化读写和原生文档导出，受保护数据推进到 P3/P4 候选；同时补齐受管软件、备份介质结构和恢复 read-back。" },
     { date: "2026-08-28", commit: "0fffc15–c63d804", result: "把 P0–P4 后续实现收敛为更小的 RecoveryKernel（恢复内核）、AuthorityVault（因子保险库）、GoalJournal（目标账本）和 VaultApp（加密文件应用）四角色；改善日常预览/排序，补完 P5–P7 设计与任务投影。" },
-    { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。当前 PRIVATE main 与远端一致，真实桌面故障 E2E 仍需独立验收。" }
+    { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。" },
+    { date: "2026-08-30", commit: "9449bad–d13ac19", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；中文与 Google 导入改为严格解码、保留重复项和事务回滚；Codex 对话进入内容寻址的 G→H 恢复链；Codex Home 形成可预演、可回滚、等待退出后按需启动的迁移事务。" }
   ],
   operationalEntrypoints: [
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
@@ -590,7 +605,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 已发布 main 仍为 6922bdb 并与 origin/main 对齐；观察时当前 checkout 另有 12 项由现役 Owner 持有的候选施工，因此不能写成工作树干净或把候选冒充 main。8ff001e 完成 runtime 退役，adb0c4b–6922bdb 补齐现有桌面恢复 launcher 的 source/test 和快捷方式回读"
+      "PCConfig 已发布 main 为 d13ac19 并与 origin/main 对齐；观察时 checkout 另有 8 项受管软件/任务候选修改，因此不能写成工作树干净或把候选冒充 main。9449bad–d13ac19 已把 Codex 对话恢复、Password Center 独立链和可按需启动的 Codex Home 迁移事务纳入 main"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

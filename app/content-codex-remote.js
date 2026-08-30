@@ -5,6 +5,9 @@ export const codexRemoteProject = {
   route: "/projects/codex-remote",
   visibility: "公开仓库",
   statusTone: "mixed",
+  cardStatus: "手机继续同一 Codex Desktop 任务的产品、界面和真实多端证据已形成",
+  cardStatusTone: "pass",
+  snapshotBoundary: "公开版本、历史实机使用和界面证据已核对；本轮没有调用运行时，因此不代表当前在线",
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这个页面直接展示 Codex Remote 的真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
   summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令和文件改动，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；也能在明确确认下浏览和操作自己的文件。它不传输桌面画面，也不另开一份聊天。",
@@ -12,9 +15,9 @@ export const codexRemoteProject = {
   plainExample: "例如电脑上的任务正在改项目并等待一条命令审批。我在手机上先看命令会影响什么、刚改了哪些文件，再选择这次真实提供的审批选项并补充一个条件；如果当前回复已经快结束，就把下一件事放进可编辑队列。网络中断时先回读状态，不会自动重复发送。",
   result: "我得到一个移动优先但仍以 Desktop 为同一任务事实面的控制台：任务、轮次、公开进展、工具、文件、审批、子智能体、模型、上下文和额度保持可核对；文件工作台另行提供有确认边界的所有者文件操作。无法确认 Desktop 订阅、权限或请求身份时，产品明确拒绝，不猜造成功。",
   readerStates: {
-    pass: "Desktop 与 Sidecar 连接同一个回环 Broker、任务订阅屏障完成且请求身份匹配时，手机和 Desktop 继续同一个任务与轮次。",
+    pass: "手机和电脑确认指向同一个任务、同一轮进展和同一份持久记录时，可以继续查看、审批、补充要求或排队下一件事。",
     problem: "网络抖动、审批缺少可提交选项、队列状态不确定或文件目标冲突时，保留草稿和真实状态，给出精确可恢复动作，不重复提交。",
-    unavailable: "Desktop、Broker、Sidecar、会话或文件授权证据不足时，仅拒绝受影响操作；不启动第二个任务、不公开底层接口，也不把历史截图冒充当前在线。"
+    unavailable: "无法确认电脑连接、登录会话、任务身份或文件授权时，只拒绝受影响操作；不启动第二个任务，也不把历史画面冒充当前在线。"
   },
   heroFacts: [
     { label: "它实际是什么", value: "手机浏览器继续同一个 Codex Desktop 任务；不是远程桌面、屏幕串流或公网 Shell" },
@@ -347,14 +350,13 @@ export const codexRemoteProject = {
     { name: "PUBLIC demo fixtures（公开演示材料）", responsibility: "用合成任务展示界面而不复制真实主机、对话、路径或凭据。", implementation: "静态 demo.ts 与浏览器验收共享类型合同；截图不接触 Remote runtime。" }
   ],
   usageExamples: [
-    { ask: "电脑上的任务还在做什么？", effect: "打开同一 thread，查看当前回复、公开 Work Log、工具、文件修改、计划和子智能体状态。" },
-    { ask: "这个命令能不能在手机批准？", effect: "只显示 app-server 为本次请求提供的真实选项；没有选项时说明阻塞，不猜按钮。" },
-    { ask: "给正在生成的回复补一句要求", effect: "使用当前轮 steer；若这轮不再接受引导，保留文本并建议放到下一轮。" },
+    { ask: "电脑上的任务还在做什么？", effect: "打开电脑上的同一任务，查看当前回复、工作记录、工具、文件修改、计划和子智能体状态。" },
+    { ask: "这个命令能不能在手机批准？", effect: "只显示这次审批真正可选的决定；没有可提交选项时说明阻塞，不猜按钮。" },
+    { ask: "给正在生成的回复补一句要求", effect: "把补充要求发给正在生成的回复；若这轮已不再接受引导，就保留文本并建议放到下一轮。" },
     { ask: "下一轮换模型并继续", effect: "先把要求加入队列，再选择运行时当前提供的模型、思考等级和速度；不改当前轮。" },
     { ask: "手机查看刚才改了哪些文件", effect: "从工作记录或文件变更打开 diff、最新文件和有界预览，必要时下载。" },
     { ask: "从手机给任务添加电脑里的文件", effect: "使用对话工具选择所有者文件引用；绝对路径换成短时授权，不形成公网裸链接。" },
-    { ask: "网页断线后会不会重复发送", effect: "草稿与队列保持稳定 id 和 revision；状态不清时标记 ambiguous，先回读再决定，不自动重发。" },
-    { ask: "这20张图能否证明现在在线", effect: "不能。真实图证明产品曾在手机上工作，合成图证明 UI；当前在线需要另一次明确运行验收。" }
+    { ask: "网页断线后会不会重复发送", effect: "草稿与队列保留稳定身份；状态不清时先回读真实任务再决定，不自动重发。" }
   ],
   evidenceLayers: [
     { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动或在线。" },

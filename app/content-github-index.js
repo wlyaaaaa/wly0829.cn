@@ -7,6 +7,9 @@ export const githubIndexProject = {
   repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。公开页面可以列出公开项目的来源路径；PRIVATE（私有）仓库身份、精确 clone（本地副本）路径与恢复材料只保留在被 Git（版本控制）忽略的本机登记区。",
   status: "现役；公开 generation 已更新并完成内部闭合。2026-08-30 最新网络可用 Owner receipt 为 completed / review_needed：baseline 44、observed 45、delta 1，不能包装成全绿。",
   statusTone: "mixed",
+  cardStatus: "仓库总账与单仓库入场判断可用，发布和清理仍按现场逐项收口",
+  cardStatusTone: "mixed",
+  snapshotBoundary: "仓库数量与 clone 覆盖来自带观察时间的 generation；公开 main 已更新，受管基线仍有 1 项私有身份待复核",
   summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
   plainExample: "2026-08-29 为 wly0829.cn 准备本页时，现场回读确认它对应公开远端 wlyaaaaa/wly0829.cn，本地 main（默认主分支）与远端 main 的领先/落后提交数都是 0；但工作区已有其他任务的未提交修改，所以结论仍是“只改明确分配的新文件，不能发布”。这正说明 0/0 只证明已提交引用同步，不能证明工作区内容已交付。",
@@ -121,7 +124,7 @@ export const githubIndexProject = {
     { ask: "这个 feature 分支已经 push 了，能算完成吗？", effect: "除了 upstream 0/0，还比较它的 HEAD 是否已被远端默认分支吸收；没进 main 就仍是行动项。" },
     { ask: "这个临时 worktree 可以删了吗？", effect: "检查 dirty、独有提交、默认分支可达性、locked/prunable、必要保留和活动依赖；unknown 不作为长期结论。" },
     { ask: "准备把这批内容推到公开仓库。", effect: "先取得当前 visibility 和 refs，再审查实际 commits、paths、content 与项目规则；transport proceed 仍不等于 publication safe。" },
-    { ask: "总索引现在还是最新的吗？", effect: "零写 Owner status 比较受管基线与现场；出现 delta 就标记 review_needed，再决定是否重建公开 generation。" }
+    { ask: "总索引现在还是最新的吗？", effect: "把登记的仓库清单与当前现场比较；发现新增、删除或关键身份变化时明确标为需要复核，确认后才更新公开索引。" }
   ],
   evidenceLayers: [
     { layer: "Local identity（本地身份）", proves: "当前目录的 origin、Git common directory、HEAD、branch 和 worktree inventory。", doesNotProve: "GitHub 端当前 visibility、默认分支或远端引用。" },

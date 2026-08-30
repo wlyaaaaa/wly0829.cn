@@ -52,6 +52,9 @@ export const project = {
   route: agentsRegistration.route,
   visibility: agentsRegistration.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库",
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
+  cardStatus: "规则、授权、能力和多任务协作中枢已生效",
+  cardStatusTone: "pass",
+  snapshotBoundary: `本页绑定已验证的 ${panelSnapshot.authority.releaseId}；更晚源码、某次工具可用性和单个项目结果仍按各自现场证据判断`,
   summary: ".agents 是我和 AI 协作时的总规则与能力中枢。我只需用自然语言说清目标和不能越过的边界，它会让任务找对事实来源、在已有授权内行动、保护并发施工、选择合适能力，并把本地完成、远端发布和真正可用分开验证。最后我拿到的是办成的结果、真实缺口，以及是否还需要我作决定。",
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
@@ -84,7 +87,7 @@ export const project = {
     "管理用户授权、委派收窄和执行 Owner",
     "选择工具、Skills、插件与原生代理的使用边界",
     "维护重大动作的活动规则、发布链和恢复语义",
-    "用固定 lifecycle resolver 收敛 terminal/archived Owner，并在无后续义务时支持来源任务可逆归档",
+    "在任务真正结束且没有后续义务时安全归档；仍有未交付内容时保留接手人与恢复线索",
     "维护个人 Skills 的 canonical source、安装清单与验证分层"
   ],
   exclusions: [
