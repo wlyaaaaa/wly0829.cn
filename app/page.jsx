@@ -338,12 +338,15 @@ function moduleStatusTone(module) {
   return "unknown";
 }
 
-function ThreeStateSummary({ pass, problem, unavailable }) {
+function ThreeStateSummary({ pass, problem, unavailable, kind }) {
+  const labels = kind === "learning"
+    ? ["证据足够时", "遇到冲突时", "暂时无法判断时"]
+    : ["正常时", "发现问题时", "入口不可用或证据不足时"];
   return (
     <div className="outcome-state-grid">
-      <article><h3>正常时</h3><p>{annotateTerms(pass)}</p></article>
-      <article><h3>发现问题时</h3><p>{annotateTerms(problem)}</p></article>
-      <article><h3>入口不可用或证据不足时</h3><p>{annotateTerms(unavailable)}</p></article>
+      <article><h3>{labels[0]}</h3><p>{displayCopy(pass, kind)}</p></article>
+      <article><h3>{labels[1]}</h3><p>{displayCopy(problem, kind)}</p></article>
+      <article><h3>{labels[2]}</h3><p>{displayCopy(unavailable, kind)}</p></article>
     </div>
   );
 }
@@ -393,6 +396,14 @@ function projectCardMetrics(entry, moduleCount) {
       ["模块（含总览）", moduleCount]
     ];
   }
+  if (entry.kind === "learning") {
+    return [
+      ["决定权", "人做主"],
+      ["资料", "一手优先"],
+      ["练习", "问题不计分"],
+      ["方式", "无监督"]
+    ];
+  }
   return [
     ["已确认事实", entry.project.currentState?.facts?.length || 0],
     ["当前缺口", entry.project.currentState?.gaps?.length || 0],
@@ -414,6 +425,13 @@ function projectCardState(entry) {
       tone: unresolved ? "repair" : "pass",
       label: unresolved ? `基础验证还有 ${unresolved} 项未闭合` : panelSnapshot.authority.statusLabel,
       observedAt: panelSnapshot.observedAt
+    };
+  }
+  if (entry.kind === "learning") {
+    return {
+      tone: moduleStatusTone(entry.project),
+      label: "人做主，AI协助",
+      observedAt: entry.project.currentState?.observedAt || "当前方法包"
     };
   }
   const gapCount = entry.project.currentState?.gaps?.length || 0;
@@ -440,7 +458,7 @@ function ProjectCard({ entry }) {
   const repositoryUrl = publicRepositoryUrl(entry);
 
   return (
-    <article className="project-card-shell">
+    <article className={`project-card-shell${entry.kind === "learning" ? " learning-project-card" : ""}`}>
       {repositoryUrl ? (
         <a className="project-visibility project-repository-button" href={repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={`打开 ${currentProject.title} 的公开 GitHub 仓库`}>
           <SiGithub size={15} aria-hidden="true" /><span>GitHub 仓库</span>
@@ -454,12 +472,12 @@ function ProjectCard({ entry }) {
           <div className="project-card-header">
             <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id={headingId}>{currentProject.title}</h2></div>
           </div>
-          <p className="project-summary">{annotateTerms(currentProject.summary)}</p>
+          <p className="project-summary">{displayCopy(currentProject.summary, entry.kind)}</p>
           <dl className="project-metrics">
             {metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
           </dl>
           <div className="project-card-foot">
-            <StatusPill status={state.tone}>{annotateTerms(state.label)}</StatusPill>
+            <StatusPill status={state.tone}>{entry.kind === "learning" ? state.label : annotateTerms(state.label)}</StatusPill>
             <ObservedTime value={state.observedAt} />
             <ArrowRight size={18} aria-hidden="true" />
           </div>
@@ -496,12 +514,14 @@ function projectKicker(kind) {
   if (kind === "timeaudit") return "Windows 工作站时间、性能与故障回放项目";
   if (kind === "pc-panel-hub") return "Windows 双副屏显示、事件与恢复项目";
   if (kind === "cacb") return "可复现 Agent 评测产品与证据框架";
+  if (kind === "learning") return "人做主、AI协助的学习方法";
   return "个人项目";
 }
 
 function ProjectHero({ entry }) {
   const { project: currentProject } = entry;
   const isAgents = entry.kind === "agents";
+  const isLearning = entry.kind === "learning";
   const repositoryUrl = publicRepositoryUrl(entry);
   return (
     <>
@@ -510,19 +530,19 @@ function ProjectHero({ entry }) {
         <div className="project-hero-copy">
           <p className="section-kicker">{projectKicker(entry.kind)}</p>
           <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
-          <p className="project-lead">{annotateTerms(currentProject.summary)}</p>
+          <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
         </div>
-        <aside className="snapshot-card" aria-label="当前快照">
-          <span className="snapshot-label">当前快照</span>
-          <strong>{isAgents ? `E rules（E 规则） ${panelSnapshot.authority.releaseId}` : annotateTerms(currentProject.currentState.label)}</strong>
-          {isAgents ? <span>{panelSnapshot.authority.statusLabel} · previous={panelSnapshot.authority.previous?.release_id || "无"}</span> : <span>已确认事实 {currentProject.currentState.facts.length} / 当前缺口 {currentProject.currentState.gaps.length}</span>}
+        <aside className="snapshot-card" aria-label={isLearning ? "方法快照" : "当前快照"}>
+          <span className="snapshot-label">{isLearning ? "方法快照" : "当前快照"}</span>
+          <strong>{isAgents ? `E rules（E 规则） ${panelSnapshot.authority.releaseId}` : displayCopy(currentProject.currentState.label, entry.kind)}</strong>
+          {isAgents ? <span>{panelSnapshot.authority.statusLabel} · previous={panelSnapshot.authority.previous?.release_id || "无"}</span> : isLearning ? <span>公开范围：方法与边界，不含主题或进度</span> : <span>已确认事实 {currentProject.currentState.facts.length} / 当前缺口 {currentProject.currentState.gaps.length}</span>}
           <ObservedTime value={isAgents ? panelSnapshot.observedAt : currentProject.currentState.observedAt} />
-          <span>{currentProject.repositoryNote}</span>
+          <span>{displayCopy(currentProject.repositoryNote, entry.kind)}</span>
           {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
         {currentProject.heroFacts?.length ? (
           <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
-            {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{annotateTerms(fact.label)}</dt><dd>{annotateTerms(fact.value)}</dd></div>)}
+            {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}
           </dl>
         ) : null}
       </section>
@@ -609,6 +629,17 @@ function ProjectCurrentState({ entry }) {
     );
   }
   const state = entry.project.currentState;
+  if (entry.kind === "learning") {
+    return (
+      <>
+        <div className="project-state-heading learning-method-state"><StatusPill status={moduleStatusTone(entry.project)}>{displayCopy(state.label, "learning")}</StatusPill><ObservedTime value={state.observedAt} /></div>
+        <div className="split-section project-state-split learning-method-state-grid">
+          <div><h3>已经明确的做法</h3><ul className="plain-list">{state.facts.map((item) => <li key={item}>{displayCopy(item, "learning")}</li>)}</ul></div>
+          <div><h3>不能据此推断</h3><ul className="plain-list">{state.gaps.map((item) => <li key={item}>{displayCopy(item, "learning")}</li>)}</ul></div>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="project-state-heading"><StatusPill status={moduleStatusTone(entry.project)}>{annotateTerms(state.label)}</StatusPill><ObservedTime value={state.observedAt} /></div>
@@ -808,61 +839,113 @@ function ProjectGallery({ title, images }) {
   );
 }
 
+function MethodCanvas({ canvas, kind }) {
+  if (!canvas?.steps?.length) return null;
+  const copy = (value) => displayCopy(value, kind);
+  const roleColumns = [
+    { title: "你", note: "决定与反馈", items: canvas.humanRole || [] },
+    { title: "AI", note: "研究与协助", items: canvas.aiRole || [] },
+    { title: "刻意没有", note: "有意不建设", items: canvas.absentByDesign || [] }
+  ];
+  const questions = canvas.thinkingQuestions || [];
+
+  return (
+    <section className="method-canvas document-section" aria-labelledby="method-canvas-title">
+      <header className="method-canvas-heading">
+        <p className="section-kicker">方法画布 · {canvas.steps.length} 步</p>
+        <h2 id="method-canvas-title">{copy(canvas.headline)}</h2>
+        <p>这是一张可直接照着使用的说明，不是学习进度表。每一步都说明谁来做，也保留暂停、反驳和改方向的空间。</p>
+      </header>
+      <ol className="method-step-flow" aria-label={`${canvas.steps.length} 步协作流程`}>
+        {canvas.steps.map((step, index) => (
+          <li key={`${step.actor}-${step.title}`}>
+            <span className="method-step-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span className="method-step-actor">{step.actor}</span>
+            <strong>{copy(step.title)}</strong>
+            <p>{copy(step.detail)}</p>
+          </li>
+        ))}
+      </ol>
+      <div className="method-role-grid plain-language-grid" aria-label="你、AI与刻意不建设的边界">
+        {roleColumns.map((column) => (
+          <article key={column.title}>
+            <header><h3>{column.title}</h3><span>{column.note}</span></header>
+            <ul className="plain-list">{column.items.map((item) => <li key={item}>{copy(item)}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+      {questions.length ? (
+        <section className="method-thinking-questions" aria-labelledby="method-thinking-questions-title">
+          <header>
+            <div><p className="section-kicker">可选练习</p><h3 id="method-thinking-questions-title">问题不计分，也不会形成掌握记录</h3></div>
+            <p>只选当前真正有帮助的一题即可；跳过、暂停或换方向都不需要解释。</p>
+          </header>
+          <ol className="number-list method-thinking-question-list">{questions.map((question, index) => <li key={question}><span>{index + 1}</span><div><p>{copy(question)}</p></div></li>)}</ol>
+        </section>
+      ) : null}
+    </section>
+  );
+}
+
 function ProjectOverview({ entry }) {
   const { project: currentProject, modules: currentModules } = entry;
+  const isLearning = entry.kind === "learning";
+  const copy = (value) => displayCopy(value, entry.kind);
   return (
     <article className="document-content overview-content">
       <section className="document-section document-section-first">
         <p className="section-kicker">先说人话</p>
-        {entry.kind === "agents" ? <><h2>它负责让个人 AI（人工智能）工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI（人工智能）查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : <><h2>这个项目实际解决什么</h2><p>{annotateTerms(currentProject.summary)}</p></>}
-        <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{annotateTerms(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(currentProject.result)}</p></article></div>
-        <ThreeStateSummary {...currentProject.readerStates} />
+        {entry.kind === "agents" ? <><h2>它负责让个人 AI（人工智能）工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI（人工智能）查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
+        <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
+        <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} />
       </section>
+
+      <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
 
       {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
 
       <section className="document-section split-section">
-        <div><h2>它负责</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
-        <div><h2>它不负责</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
+        <div><h2>{isLearning ? "AI协助" : "它负责"}</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
+        <div><h2>{isLearning ? "刻意不做" : "它不负责"}</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
       </section>
 
-      <section className="document-section"><h2>当前状态</h2><ProjectCurrentState entry={entry} /></section>
+      <section className="document-section"><h2>{isLearning ? "方法快照" : "当前状态"}</h2><ProjectCurrentState entry={entry} /></section>
 
       <section className="document-section compact-terms">
-        <h2>本页用到的名词</h2>
-        <p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} 项目里的准确含义。</p>
+        <h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2>
+        <p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p>
         <dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl>
       </section>
 
       <section className="document-section">
-        <h2>一条真实工作流</h2>
-        <ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{annotateTerms(step.title)}</strong><p>{annotateTerms(step.detail)}</p></div></li>)}</ol>
+        <h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2>
+        <ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol>
       </section>
 
       <section className="document-section">
-        <h2>系统里实际有什么</h2>
-        <p>下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。</p>
+        <h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2>
+        <p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p>
         <div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>
-          {currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{annotateTerms(item.name)}</strong><p>{annotateTerms(item.responsibility)}</p></div><p role="cell">{annotateTerms(item.implementation)}</p></article>)}
+          {currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}
         </div>
       </section>
 
-      <section className="document-section"><h2>我平时怎样使用它</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{item.ask}</blockquote><p>{annotateTerms(item.effect)}</p></article>)}</div></section>
+      <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
 
       <section className="document-section">
-        <h2>项目模块</h2>
-        <div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{annotateTerms(item.title)}</strong><span>{annotateTerms(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div>
+        <h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2>
+        <div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div>
       </section>
 
       {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
 
-      <section className="document-section"><h2>{currentProject.evidenceLayers.length} 层证据分别证明什么</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{annotateTerms(item.layer)}</strong><p><span>能证明：</span>{annotateTerms(item.proves)}</p><p><span>不能证明：</span>{annotateTerms(item.doesNotProve)}</p></article>)}</div></section>
+      <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
 
-      <section className="document-section"><h2>维护入口</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{annotateTerms(item.name)}</strong>：{annotateTerms(item.purpose)}</p></div>)}</div></section>
+      <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
 
-      <section className="document-section"><h2>项目怎样演化到现在</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{annotateTerms(item.result)}</p></article>)}</div></section>
+      <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
 
-      <section className="document-section source-note"><h2>快照怎样更新</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交或测试变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取私有 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
+      <section className="document-section source-note"><h2>{isLearning ? "公开页怎样更新" : "快照怎样更新"}</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? isLearning ? "这是本人明确要求后才会复核的公开方法快照。私有材料、讨论或进度变化不会自动触发网站任务；更新时只重新判断可复用的方法、公开边界和依据，不复制学习主题、原始反馈或个人状态。" : "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交或测试变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取私有 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
     </article>
   );
 }
@@ -1089,11 +1172,11 @@ const inlineTermTranslations = [
   ["Plugins", "插件包"],
   ["Skill", "能力入口"],
   ["Plugin", "插件包"],
+  ["AI", "人工智能"],
   ["Prompt", "提示词"],
   ["Git", "版本管理系统"],
   ["PCConfig", "本机配置控制面"],
   ["MVP", "最小可用版本"],
-  ["AI", "人工智能"],
   ["PUBLIC", "公开"],
   ["PRIVATE", "私有"],
   ["held-out attribution", "留出样本归属"],
@@ -1119,6 +1202,10 @@ const inlineTermTranslations = [
 
 const annotateTerms = createTermAnnotator(inlineTermTranslations);
 
+function displayCopy(value, kind) {
+  return kind === "learning" ? value : annotateTerms(value);
+}
+
 function maturityMeaning(value) {
   if (value === "A") return "稳定";
   if (value === "A-") return "基本稳定，仍有明确边界";
@@ -1128,30 +1215,32 @@ function maturityMeaning(value) {
 
 function ModuleDetail({ entry, module }) {
   const { project: currentProject, modules: currentModules } = entry;
+  const isLearning = entry.kind === "learning";
+  const copy = (value) => displayCopy(value, entry.kind);
   const index = currentModules.findIndex((item) => item.slug === module.slug);
   const previous = currentModules[index - 1];
   const next = currentModules[index + 1];
   return (
     <article className="document-content module-detail">
       <header className="module-heading">
-        <p className="section-kicker">模块 {String(index + 1).padStart(2, "0")}</p>
-        <h2>{annotateTerms(module.title)}</h2>
-        <p>{annotateTerms(module.value)}</p>
-        <StatusPill status={moduleStatusTone(module)}>{annotateTerms(module.status)}</StatusPill>
+        <p className="section-kicker">{isLearning ? "方法节点" : "模块"} {String(index + 1).padStart(2, "0")}</p>
+        <h2>{copy(module.title)}</h2>
+        <p>{copy(module.value)}</p>
+        <StatusPill status={moduleStatusTone(module)}>{copy(module.status)}</StatusPill>
       </header>
-      <section className="module-outcome"><p className="section-kicker">先说人话</p><h2>为什么需要、怎样使用、最后得到什么</h2><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(module.why)}</p></article><article><h3>举个实际例子</h3><p>{annotateTerms(module.example)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(module.result)}</p></article></div><ThreeStateSummary {...module.readerStates} /><h3>用上以后，实际会这样处理</h3><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{annotateTerms(change)}</p></article>)}</div></section>
-      <section className="document-section compact-terms"><h2>本模块用到的名词</h2><dl className="definition-list">{module.concepts.map((item) => <div key={item.term}><dt>{displayTerm(item.term)}</dt><dd>{annotateTerms(item.explanation)}</dd></div>)}</dl></section>
-      <section className="document-section"><h2>专业定义</h2><p>{annotateTerms(module.teaser)}</p></section>
-      <section className="problem-callout"><p className="section-kicker">解决什么</p><p>{annotateTerms(module.problem)}</p></section>
-      <section className="document-section"><h2>当前怎样实现</h2><StringList items={module.implementation.map(annotateTerms)} /></section>
-      <section className="document-section"><h2>执行流程</h2><ol className="number-list compact-list">{module.flow.map((item, flowIndex) => <li key={item}><span>{flowIndex + 1}</span><div><p>{annotateTerms(item)}</p></div></li>)}</ol></section>
-      <section className="document-section split-section"><div><h2>边界</h2><StringList items={module.boundaries.map(annotateTerms)} /></div><div><h2>失败与恢复</h2><dl className="failure-list">{module.failures.map((item) => <div key={item.condition}><dt>{annotateTerms(item.condition)}</dt><dd>{annotateTerms(item.response)}</dd></div>)}</dl></div></section>
-      <section className="document-section"><h2>真实入口</h2><div className="source-list">{module.sources.map((source) => <div key={source.path}><code>{source.path}</code><p>{annotateTerms(source.role)}</p></div>)}</div></section>
-      <section className="document-section"><h2>如何验证</h2><StringList items={module.verification.map(annotateTerms)} /></section>
-      <section className="document-section"><h2>与其他模块的关系</h2><p>{annotateTerms(module.relation)}</p></section>
+      <section className="module-outcome"><p className="section-kicker">先说人话</p><h2>{isLearning ? "为什么这样做、我能怎么用、最后得到什么" : "为什么需要、怎样使用、最后得到什么"}</h2><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(module.why)}</p></article><article><h3>举个实际例子</h3><p>{copy(module.example)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(module.result)}</p></article></div><ThreeStateSummary {...module.readerStates} kind={entry.kind} /><h3>{isLearning ? "实际会这样处理" : "用上以后，实际会这样处理"}</h3><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{copy(change)}</p></article>)}</div></section>
+      <section className="document-section compact-terms"><h2>{isLearning ? "这里会用到的说法" : "本模块用到的名词"}</h2><dl className="definition-list">{module.concepts.map((item) => <div key={item.term}><dt>{displayTerm(item.term)}</dt><dd>{copy(item.explanation)}</dd></div>)}</dl></section>
+      <section className="document-section"><h2>{isLearning ? "这一步说的是什么" : "专业定义"}</h2><p>{copy(module.teaser)}</p></section>
+      <section className="problem-callout"><p className="section-kicker">{isLearning ? "避免什么问题" : "解决什么"}</p><p>{copy(module.problem)}</p></section>
+      <section className="document-section"><h2>{isLearning ? "AI现在怎样协助" : "当前怎样实现"}</h2><StringList items={module.implementation.map(copy)} /></section>
+      <section className="document-section"><h2>{isLearning ? "这一步怎样进行" : "执行流程"}</h2><ol className="number-list compact-list">{module.flow.map((item, flowIndex) => <li key={item}><span>{flowIndex + 1}</span><div><p>{copy(item)}</p></div></li>)}</ol></section>
+      <section className="document-section split-section"><div><h2>边界</h2><StringList items={module.boundaries.map(copy)} /></div><div><h2>{isLearning ? "遇到问题时怎样处理" : "失败与恢复"}</h2><dl className="failure-list">{module.failures.map((item) => <div key={item.condition}><dt>{copy(item.condition)}</dt><dd>{copy(item.response)}</dd></div>)}</dl></div></section>
+      <section className="document-section"><h2>{isLearning ? "参考与依据" : "真实入口"}</h2><div className="source-list">{module.sources.map((source) => <div key={source.path}>{source.href ? <a className="source-reference-link" href={source.href} target={/^https?:\/\//.test(source.href) ? "_blank" : undefined} rel={/^https?:\/\//.test(source.href) ? "noopener noreferrer" : undefined}><code>{source.path}</code><ArrowRight size={16} aria-hidden="true" /></a> : <code>{source.path}</code>}<p>{copy(source.role)}</p></div>)}</div></section>
+      <section className="document-section"><h2>{isLearning ? "怎样检查这一步没有跑偏" : "如何验证"}</h2><StringList items={module.verification.map(copy)} /></section>
+      <section className="document-section"><h2>{isLearning ? "和其他步骤怎样衔接" : "与其他模块的关系"}</h2><p>{copy(module.relation)}</p></section>
       <nav className="document-pagination" aria-label="模块前后导航">
-        {previous ? <SiteLink href={`${currentProject.route}/${previous.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span><small>上一个模块</small>{previous.shortTitle}</span></SiteLink> : <span />}
-        {next ? <SiteLink href={`${currentProject.route}/${next.slug}`}><span><small>下一个模块</small>{next.shortTitle}</span><ArrowRight size={18} aria-hidden="true" /></SiteLink> : null}
+        {previous ? <SiteLink href={`${currentProject.route}/${previous.slug}`}><ArrowLeft size={18} aria-hidden="true" /><span><small>{isLearning ? "上一个方法节点" : "上一个模块"}</small>{previous.shortTitle}</span></SiteLink> : <span />}
+        {next ? <SiteLink href={`${currentProject.route}/${next.slug}`}><span><small>{isLearning ? "下一个方法节点" : "下一个模块"}</small>{next.shortTitle}</span><ArrowRight size={18} aria-hidden="true" /></SiteLink> : null}
       </nav>
     </article>
   );
@@ -1159,7 +1248,7 @@ function ModuleDetail({ entry, module }) {
 
 function ProjectPage({ entry, module }) {
   return (
-    <div className="page-frame project-page">
+    <div className={`page-frame project-page${entry.kind === "learning" ? " learning-project-page" : ""}`}>
       <ProjectHero entry={entry} />
       <div className="project-layout"><ProjectNav entry={entry} current={module?.slug} />{module ? <ModuleDetail entry={entry} module={module} /> : <ProjectOverview entry={entry} />}</div>
     </div>

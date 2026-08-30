@@ -13,6 +13,7 @@ import { githubIndexModules, githubIndexProject } from "../app/content-github-in
 import { pcconfigModules, pcconfigProject } from "../app/content-pcconfig.js";
 import { pcPanelHubModules, pcPanelHubProject } from "../app/content-pc-panel-hub.js";
 import { cacbModules, cacbProject } from "../app/content-cacb.js";
+import { learningModules, learningProject } from "../app/content-learning.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
 import { searchPanel } from "../app/search.js";
@@ -80,10 +81,10 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly seven projects and three navigation areas", async () => {
+test("the accepted panel has exactly eight projects and three navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
   assert.ok(!routePaths.includes("/ideas"));
@@ -162,7 +163,7 @@ test("term annotation is longest-match and never annotates its own translation",
 
 test("reader outcomes appear before technical decision lists", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  assert.match(pageSource, /module\.result[\s\S]{0,700}<ThreeStateSummary \{\.\.\.module\.readerStates\} \/>[\s\S]{0,300}module\.decisionImpact/);
+  assert.match(pageSource, /module\.result[\s\S]{0,700}<ThreeStateSummary \{\.\.\.module\.readerStates\} kind=\{entry\.kind\} \/>[\s\S]{0,300}module\.decisionImpact/);
   assert.match(pageSource, /outcome\.result[\s\S]{0,700}<ThreeStateSummary \{\.\.\.outcome\.readerStates\} \/>[\s\S]{0,400}outcome\.changes/);
 });
 
@@ -251,7 +252,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /materially improve the delivered\s+page/);
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work surfaces and net quality gain/);
-  assert.match(projectRules, /applies equally to projects added after the current seven/);
+  assert.match(projectRules, /applies equally to projects added after the current eight/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -266,7 +267,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Each project owns its\s+real module count/);
   assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
   assert.match(projectRules, /returned task id\s+is the creation receipt/);
-  assert.match(projectRules, /standing-authorized to commit, normal-push existing PUBLIC `main`/);
+  assert.match(projectRules, /standing-authorized to commit, normal-push\s+existing PUBLIC\s+`main`/);
   assert.match(projectRules, /ai_refresh\.mode=manual_owner_only/);
   assert.match(projectRules, /source, rule and Skill events never create a website task/i);
   assert.match(projectRules, /This rule creates no Skill, watcher or Source hook/);
@@ -278,10 +279,10 @@ test("project rules require professional, detailed and plain-language content", 
   assert.ok(!projectRules.toLowerCase().includes(forbiddenPublicTerms[1].toLowerCase()));
 });
 
-test("the authoritative desktop scale is last in the cascade", async () => {
+test("the authoritative desktop scale baseline follows the older compact block", async () => {
   const styles = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   const compactIndex = styles.lastIndexOf("Compact dashboard density");
-  const scaleIndex = styles.lastIndexOf("Authoritative desktop scale");
+  const scaleIndex = styles.lastIndexOf("Authoritative desktop scale baseline");
   assert.ok(compactIndex >= 0 && scaleIndex > compactIndex, "desktop scale is overridden by an older compact block");
   const scaleBlock = styles.slice(scaleIndex);
   assert.match(scaleBlock, /@media \(min-width: 901px\)/);
@@ -298,7 +299,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 7);
+  assert.equal(enabledProjectCount, 8);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -366,7 +367,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the seven accepted project packages", async () => {
+test("the maintenance registry drives exactly the eight accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v1");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -382,9 +383,9 @@ test("the maintenance registry drives exactly the seven accepted project package
   assert.equal(registry.refresh_policy.trigger, "displayed_fact_or_explanation_changed");
   assert.equal(registry.refresh_policy.only_private_document, "docs/design/private-content-rules.md");
   assert.equal(registry.refresh_policy.default_presentation_mode, "real_dashboard");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -528,6 +529,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "pc-panel-hub",
       expectedOrder: 6,
       expectedModules: ["telemetry-trust", "case-panel-rendering", "serial-transport", "hs2-overlay", "power-recovery"]
+    },
+    {
+      project: learningProject,
+      modules: learningModules,
+      expectedSlug: "learning",
+      expectedOrder: 8,
+      expectedModules: ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "human-control-simple"]
     }
   ];
   for (const entry of packages) {
@@ -797,6 +805,80 @@ test("CACB is a manual-only curated product package without tested-configuration
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
 });
 
+test("the learning project restores the AI-assisted method without topics, progress or supervision", async () => {
+  const publicText = JSON.stringify({ project: learningProject, modules: learningModules });
+  assertForbiddenTermsAreAbsent(publicText);
+  assert.doesNotMatch(publicText, /求职|简历|薪资|Offer|面试|第\s*0?[1-9]\s*篇|已读|待阅读|当前第|完成率|讲义索引|\bRAG\b|Prompt|Context|Schema/iu);
+  assert.equal(learningProject.slug, "learning");
+  assert.equal(learningProject.order, 8);
+  assert.equal(learningProject.route, "/projects/learning");
+  assert.equal(learningProject.visibility, "私有仓库");
+  assert.equal(learningProject.gallery, undefined);
+  assert.equal(learningModules.length, 5);
+  assert.deepEqual(learningModules.map((item) => item.slug), ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "human-control-simple"]);
+  assert.equal(learningProject.methodCanvas.steps.length, 6);
+  assert.ok(learningProject.methodCanvas.humanRole.length >= 3);
+  assert.ok(learningProject.methodCanvas.aiRole.length >= 3);
+  assert.ok(learningProject.methodCanvas.absentByDesign.length >= 3);
+  assert.ok(learningProject.methodCanvas.thinkingQuestions.length >= 5);
+  assert.match(publicText, /权威资料|一手来源/);
+  assert.match(publicText, /继续交流|重新搜索|重新查证|补查/);
+  assert.match(publicText, /人.*决定|人类最终决定/);
+  assert.match(publicText, /不计分/);
+  assert.match(publicText, /小注意力/);
+  assert.match(publicText, /不监督|没有.*监督/);
+  assert.match(publicText, /没有应用服务、学习数据库、提醒任务、后台同步/);
+  assert.match(publicText, /示例可以设计，结果不能编/);
+  assert.match(publicText, /不能.*普遍有效|不构成.*普遍有效/);
+  for (const module of learningModules) {
+    assert.ok(module.searchAliases.length >= 3, `${module.slug} lacks public-safe natural search aliases`);
+    assert.ok(module.sources.every((item) => /^https:\/\//.test(item.href)), `${module.slug} contains a non-public research reference`);
+  }
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "learning");
+  assert.equal(registration.presentation_mode, "curated_packaging");
+  assert.equal(registration.ai_refresh.mode, "manual_owner_only");
+  assert.equal(registration.ai_refresh.automatic_handoff, false);
+  assert.deepEqual(registration.impact_sources, []);
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.match(registration.ai_refresh.scope, /without exposing any learning subject or progress/);
+  assert.match(registration.refresh_rules.ignore_when.join("\n"), /topic and progress changes/);
+});
+
+test("the learning method canvas stays human-readable, static and responsive", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(pageSource, /function MethodCanvas\(\{ canvas, kind \}\)/);
+  assert.match(pageSource, /\["AI", "人工智能"\]/, "existing projects must retain the accepted AI term annotation");
+  assert.match(pageSource, /function displayCopy\(value, kind\)[\s\S]*?kind === "learning" \? value : annotateTerms\(value\)/);
+  assert.match(pageSource, /你、AI与刻意不建设的边界/);
+  assert.match(pageSource, /问题不计分，也不会形成掌握记录/);
+  assert.match(pageSource, /entry\.kind === "learning"/);
+  assert.match(pageSource, /公开范围：方法与边界，不含主题或进度/);
+  assert.match(pageSource, /source\.href \? <a className="source-reference-link"/);
+  assert.match(styleSource, /\.method-step-flow\s*\{[\s\S]*?grid-template-columns:\s*repeat\(6,/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.method-step-flow,[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/);
+  assert.match(styleSource, /@media \(max-width: 440px\)[\s\S]*?\.learning-project-card \.project-metrics/);
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "index.html"), "utf8");
+  assert.match(overviewHtml, /data-static-route="\/projects\/learning"/);
+  assert.match(overviewHtml, /class="method-canvas document-section"/);
+  for (const text of ["提出真正的问题", "找到该信谁", "把复杂内容讲明白", "继续交流", "补查、修正或验证", "决定继续还是停"]) {
+    assert.ok(overviewHtml.includes(text), `static learning method canvas omits: ${text}`);
+  }
+  for (const text of ["你", "AI", "刻意没有", "问题不计分，也不会形成掌握记录"]) {
+    assert.ok(overviewHtml.includes(text), `static learning role canvas omits: ${text}`);
+  }
+  assert.doesNotMatch(overviewHtml, /求职|简历|薪资|Offer|面试|第\s*0?[1-9]\s*篇|已读|待阅读|当前第|完成率|讲义索引/iu);
+  assert.doesNotMatch(overviewHtml, /AI（人工智能）/, "learning copy must not mechanically gloss the common AI term on every card");
+  const sourceHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "authoritative-research", "index.html"), "utf8");
+  assert.match(sourceHtml, /href="https:\/\/www\.ala\.org\/acrl\/standards\/ilframework"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/);
+  assert.match(sourceHtml, /href="https:\/\/doi\.org\/10\.6028\/NIST\.AI\.600-1"/);
+});
+
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /function\s+(?:ProjectGallery|Gallery)\s*\(/);
@@ -859,6 +941,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const pcPanelMaterial = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/TURZX.SideScreen.Stream.cs", "--material-change"]);
   const pcPanelHeartbeat = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/out/stream/stream-heartbeat.json", "--material-change"]);
   const cacbSourceChange = run(["--project", "cacb", "--path", "src/cacb/question_bank.py", "--material-change"]);
+  const learningSourceChange = run(["--project", "learning", "--path", "private/method-material.md", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -901,11 +984,17 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(cacbSourceChange.source_materiality_ignored, true);
   assert.equal(cacbSourceChange.task_required, false);
   assert.equal(cacbSourceChange.action, "manual_owner_request_required_no_automatic_handoff");
+  assert.equal(learningSourceChange.refresh_mode, "manual_owner_only");
+  assert.equal(learningSourceChange.impact_candidate, false);
+  assert.equal(learningSourceChange.material_change_confirmed, false);
+  assert.equal(learningSourceChange.source_materiality_ignored, true);
+  assert.equal(learningSourceChange.task_required, false);
+  assert.equal(learningSourceChange.action, "manual_owner_request_required_no_automatic_handoff");
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -913,6 +1002,8 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedPcPanelHub = run(["--project", "pc-panel-hub"]);
   const targetedCacbWithoutOwner = run(["--project", "cacb"]);
   const targetedCacb = run(["--project", "cacb", "--manual-owner-request"]);
+  const targetedLearningWithoutOwner = run(["--project", "learning"]);
+  const targetedLearning = run(["--project", "learning", "--manual-owner-request"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -946,10 +1037,20 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedCacb.selected_projects[0].refresh_mode, "manual_owner_only");
   assert.equal(targetedCacb.selected_projects[0].manual_owner_request, true);
   assert.deepEqual(targetedCacb.selected_projects[0].impact_sources, []);
+  assert.equal(targetedLearningWithoutOwner.status, "manual_owner_request_required");
+  assert.deepEqual(targetedLearningWithoutOwner.manual_project_ids, ["learning"]);
+  assert.equal(targetedLearningWithoutOwner.selected_projects[0].automatic_handoff, false);
+  assert.equal(targetedLearningWithoutOwner.selected_projects[0].manual_owner_request, false);
+  assert.equal(targetedLearning.status, "ready_for_ai");
+  assert.equal(targetedLearning.manual_owner_request, true);
+  assert.equal(targetedLearning.selected_projects[0].refresh_mode, "manual_owner_only");
+  assert.equal(targetedLearning.selected_projects[0].manual_owner_request, true);
+  assert.deepEqual(targetedLearning.selected_projects[0].impact_sources, []);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
+  assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -966,7 +1067,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(contract, /全量刷新是全量复核，不是全量重写/);
   assert.match(contract, /一个阶段可以是一天或时间段/);
   assert.match(contract, /manual_owner_only/);
-  assert.match(contract, /Source、规则、Skill.*不能触发.*网站任务/s);
+  assert.match(contract, /Source、材料、反馈、规则、Skill.*不能触发.*网站任务/s);
 
   const tempRoot = await mkdtemp(path.join(tmpdir(), "wly-ai-refresh-test-"));
   try {
@@ -1008,7 +1109,25 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf8");
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
-    assert.deepEqual(verification.counts, { changed: 0, unchanged: 7, blocked: 0 });
+    assert.deepEqual(verification.counts, { changed: 0, unchanged: 8, blocked: 0 });
+    const nullCollector = structuredClone(bundle);
+    nullCollector.projects.find((item) => item.id === "learning").collectors = [null];
+    await writeFile(bundlePath, JSON.stringify(nullCollector, null, 2), "utf8");
+    const nullCollectorRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(nullCollectorRejected.status, 0);
+    assert.match(nullCollectorRejected.stdout, /bundle_collector_entry_invalid|bundle_collector_command_missing/);
+    const wrongCollector = structuredClone(bundle);
+    wrongCollector.projects.find((item) => item.id === "learning").collectors[0].command += " --wrong-command";
+    await writeFile(bundlePath, JSON.stringify(wrongCollector, null, 2), "utf8");
+    const wrongCollectorRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(wrongCollectorRejected.status, 0);
+    assert.match(wrongCollectorRejected.stdout, /bundle_collector_command_unregistered|bundle_collector_command_missing/);
+    const failedCollector = structuredClone(bundle);
+    failedCollector.projects.find((item) => item.id === "learning").collectors[0].status = "failed";
+    await writeFile(bundlePath, JSON.stringify(failedCollector, null, 2), "utf8");
+    const failedCollectorRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(failedCollectorRejected.status, 0);
+    assert.match(failedCollectorRejected.stdout, /bundle_collector_not_passed/);
     const invalid = structuredClone(bundle);
     invalid.projects.find((item) => item.id === "pcconfig").collector_receipts[0].principal = "ordinary-user";
     await writeFile(bundlePath, JSON.stringify(invalid, null, 2), "utf8");
@@ -1103,6 +1222,9 @@ test("the rules workbench exposes exactly five verified current E-release rules"
     assert.ok(guide.sections.length >= 2, `${rule.logicalId} full guide is incomplete`);
     assert.ok(guide.sections.reduce((count, section) => count + section.items.length, 0) >= 15, `${rule.logicalId} full semantic list is incomplete`);
   }
+  const authorizationRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "authorization_delegation_contract");
+  assert.match(JSON.stringify(authorizationRule), /PUBLIC 项目.*PRIVATE companion|PUBLIC ignored 私有材料/);
+  assert.match(JSON.stringify(ruleGuides.authorization_delegation_contract), /PUBLIC 项目的私有伴随材料/);
 });
 
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
@@ -1171,6 +1293,7 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("TimeAudit")[0]?.title, "TimeAudit · 总览");
   assert.equal(searchPanel("PC Panel Hub")[0]?.title, "PC Panel Hub · 总览");
   assert.equal(searchPanel("CACB")[0]?.title, "CACB Agent 能力基准 · 总览");
+  assert.equal(searchPanel("AI帮我学习")[0]?.title, "用 AI 把一件事学明白 · 总览");
   assert.equal(searchPanel("过去一小时为什么卡")[0]?.title, "timeaudit-diagnostics");
   assert.ok(searchPanel("没有游戏帧是不是掉帧").some((item) => item.href === "/skills/timeaudit-diagnostics"));
   for (const query of ["1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开"]) {
@@ -1181,6 +1304,15 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   }
   for (const query of ["回答完成却没有结果", "隔离 workspace", "隐藏验证", "能力问题还是执行环境问题"]) {
     assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/cacb")), `CACB search misses: ${query}`);
+  }
+  for (const [query, href] of [
+    ["查权威资料再回答", "/projects/learning/authoritative-research"],
+    ["专业资料讲人话", "/projects/learning/plain-language"],
+    ["有分歧重新搜索", "/projects/learning/dialogue-revision"],
+    ["AI题目不计分", "/projects/learning/questions-validation"],
+    ["AI不监督不催促", "/projects/learning/human-control-simple"]
+  ]) {
+    assert.equal(searchPanel(query)[0]?.href, href, `learning search misroutes: ${query}`);
   }
   const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
   assert.doesNotMatch(searchSource, /\/projects\/timeaudit|TimeAudit · 总览/, "project routes and titles must derive from projectCatalog; Skill aliases may still name TimeAudit");

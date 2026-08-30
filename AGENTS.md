@@ -14,8 +14,9 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has seven enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR, TimeAudit, PC Panel Hub and CACB in order 1/2/3/4/5/6/7. The registry
+  target has eight enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR, TimeAudit, PC Panel Hub, CACB and the curated learning method in
+  order 1/2/3/4/5/6/7/8. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -176,6 +177,14 @@ read-only operating panel; public presentation is secondary.
   publishing internal lifecycle labels or implying untrue current operation.
 - If a learning product is ever selected, describe only its learning method,
   product design and implementation. Do not expose career or offer strategy.
+- A private personal domain is not automatically excluded from future project
+  selection. When the owner selects one, a `curated_packaging` +
+  `manual_owner_only` page may publish its reusable product thinking, evidence
+  method, correction flow, human decision boundary and design ideas while
+  omitting private payloads, personal state and individual outcomes. A health
+  project may therefore explain evidence routing, uncertainty and safety
+  boundaries, but must not publish the owner's health records, diagnoses, test
+  results, medication list or individualized advice.
 - Detail pages are durable reference documents, not one-line marketing cards.
   They should explain product intent, real scenarios, information flow,
   architecture, important decisions, boundaries, failure handling and
@@ -199,10 +208,11 @@ read-only operating panel; public presentation is secondary.
 ## Project expansion gate
 
 - The owner accepted the four-project public MVP on 2026-08-30, then explicitly
-  authorized TimeAudit as project 5, PC Panel Hub as project 6 and CACB as the
-  curated, manual-only project 7. The current target therefore contains
-  `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub and
-  CACB, plus the one-page Rules workbench and current
+  authorized TimeAudit as project 5, PC Panel Hub as project 6, CACB as the
+  curated manual-only project 7 and the AI-assisted learning method as the
+  curated manual-only project 8. The current target therefore contains
+  `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
+  CACB, the learning method, plus the one-page Rules workbench and current
   public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
@@ -316,8 +326,10 @@ read-only operating panel; public presentation is secondary.
   that cannot be repaired in the same goal remain visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
-  TimeAudit, PC Panel Hub and manually requested CACB additions, are standing-authorized to commit, normal-push existing PUBLIC `main`, wait for Pages and read back the deployed
-  commit automatically after all content, test, build and public gates pass.
+  TimeAudit, PC Panel Hub, manually requested CACB and manually requested
+  learning-method additions, are standing-authorized to commit, normal-push
+  existing PUBLIC `main`, wait for Pages and read back the deployed commit
+  automatically after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
   effect, secret exposure, force-push or explicit owner hold remains outside
   this authorization.
@@ -332,7 +344,7 @@ read-only operating panel; public presentation is secondary.
 - When this website task benefits from native delegation and all upper gates
   allow it, the project default is `gpt-5.6-sol` with `max` effort. Choose the
   actual number from independent work surfaces and net quality gain; the rule
-  applies equally to projects added after the current seven.
+  applies equally to projects added after the current eight.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

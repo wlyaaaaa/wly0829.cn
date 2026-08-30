@@ -57,7 +57,20 @@ for (const result of projectResults) {
   requireFact(typeof result.material === "boolean", "bundle_materiality_missing", result.id);
   requireFact(typeof result.semantic_change === "boolean", "bundle_semantic_change_missing", result.id);
   requireFact(typeof result.reason === "string" && result.reason.trim().length >= 8, "bundle_reason_missing", result.id);
-  requireFact(Array.isArray(result.collectors) && result.collectors.length >= 1, "bundle_collectors_missing", result.id);
+  const expectedCollectorCommands = registration.ai_refresh.collectors || [];
+  const collectors = Array.isArray(result.collectors) ? result.collectors : [];
+  requireFact(collectors.length === expectedCollectorCommands.length && expectedCollectorCommands.length >= 1, "bundle_collector_closure_invalid", result.id);
+  for (const collector of collectors) {
+    requireFact(Boolean(collector) && typeof collector === "object" && !Array.isArray(collector), "bundle_collector_entry_invalid", result.id);
+    if (!collector || typeof collector !== "object" || Array.isArray(collector)) continue;
+    requireFact(typeof collector.command === "string" && expectedCollectorCommands.includes(collector.command), "bundle_collector_command_unregistered", `${result.id}:${collector.command}`);
+    requireFact(["pass", "failed", "error", "blocked", "unknown"].includes(collector.status), "bundle_collector_status_invalid", `${result.id}:${collector.status}`);
+    requireFact(Number.isFinite(collector.duration_seconds) && collector.duration_seconds >= 0, "bundle_collector_duration_invalid", `${result.id}:${collector.duration_seconds}`);
+    if (result.status !== "blocked") requireFact(collector.status === "pass", "bundle_collector_not_passed", `${result.id}:${collector.command}:${collector.status}`);
+  }
+  for (const command of expectedCollectorCommands) {
+    requireFact(collectors.filter((collector) => collector?.command === command).length === 1, "bundle_collector_command_missing", `${result.id}:${command}`);
+  }
   const requirements = registration.ai_refresh.collector_requirements || [];
   const receipts = Array.isArray(result.collector_receipts) ? result.collector_receipts : [];
   requireFact(receipts.length === requirements.length, "bundle_collector_receipt_closure_invalid", result.id);

@@ -6,6 +6,7 @@ import { project as project_chinese_asr, modules as modules_chinese_asr } from "
 import { project as project_timeaudit, modules as modules_timeaudit } from "./content-timeaudit.js";
 import { project as project_pc_panel_hub, modules as modules_pc_panel_hub } from "./content-pc-panel-hub.js";
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
+import { project as project_learning, modules as modules_learning } from "./content-learning.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -14,5 +15,6 @@ export const projectContentPackages = new Map([
   ["chinese-asr", { project: project_chinese_asr, modules: modules_chinese_asr, kind: "chinese-asr" }],
   ["timeaudit", { project: project_timeaudit, modules: modules_timeaudit, kind: "timeaudit" }],
   ["pc-panel-hub", { project: project_pc_panel_hub, modules: modules_pc_panel_hub, kind: "pc-panel-hub" }],
-  ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }]
+  ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
+  ["learning", { project: project_learning, modules: modules_learning, kind: "learning" }]
 ]);

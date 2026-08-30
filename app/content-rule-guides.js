@@ -258,6 +258,7 @@ export const ruleGuides = {
           item("Trusted target 内按需保真", "环境文件、访问令牌、密码、私钥和 OAuth JSON（账号授权配置）在真正私密备份任务中按任务需要原样保留，不能静默换占位符。"),
           item("保真不扩大发送授权", "可信、可见性和 external effect authorization 仍是三个独立判断。"),
           item("PRIVATE 仓库应完整收敛", "只可因秘密边界、可重建 cache、活数据库、大制品、格式许可或用户 local-only 排除，并明确说明。"),
+          item("PUBLIC 项目的私有伴随材料", "只处理 Git 明确 ignored、未跟踪且有保留价值的本地材料；先复制并校验 hash，PRIVATE companion 提交与远端回读成功后，再用可回滚 rename 和本地 link 保留原路径。link 必须继续被 PUBLIC Git 忽略。"),
           item("不完整副本不能叫完整备份", "PRIVATE GitHub、本机热备、私有云备和人工冷备是不同层。")
         ]
       }

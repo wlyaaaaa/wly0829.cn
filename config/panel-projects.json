@@ -774,6 +774,56 @@
           "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
         ]
       }
+    },
+    {
+      "id": "learning",
+      "order": 8,
+      "title": "用 AI 把一件事学明白",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/learning",
+      "ai_refresh": {
+        "mode": "manual_owner_only",
+        "automatic_handoff": false,
+        "content_path": "app/content-learning.js",
+        "semantic_revision": 1,
+        "scope": "curated public overview and five modules covering authoritative research, professional plain-language explanation, dialogue-driven rechecking and correction, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
+        "collectors": [
+          "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
+        ],
+        "conditional_collectors": [],
+        "manual_refresh_rule": "source, material, feedback, rule, Skill and private-state changes never update this page or create a website task; only an explicit owner request for the learning method or an explicitly owner-requested full refresh may produce a new snapshot"
+      },
+      "source": {
+        "repo": "PRIVATE_MANAGED_SOURCE",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-ai-assisted-learning-method-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "curated_project_overview",
+        "project_modules",
+        "authoritative_research_and_source_evaluation",
+        "professional_plain_language_explanation",
+        "dialogue_research_and_explicit_correction",
+        "optional_questions_and_bounded_verification",
+        "human_final_authority_small_attention_and_low_complexity",
+        "manual_snapshot_without_subject_or_progress"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "manual_refresh_when": [
+          "the owner explicitly requests a learning-method project refresh",
+          "the owner explicitly includes this project in a full panel refresh"
+        ],
+        "automatic_refresh_when": [],
+        "ignore_when": [
+          "all source, material, feedback, rule, Skill and test changes without an explicit owner refresh request",
+          "all private learning topic and progress changes because those facts are outside the public product",
+          "any source-side materiality claim because this project has no automatic website handoff"
+        ]
+      }
     }
   ]
 }

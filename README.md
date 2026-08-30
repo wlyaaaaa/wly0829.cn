@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB（1/2/3/4/5/6/7）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白（1/2/3/4/5/6/7/8）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub 与 CACB 已依次选为第 5、6、7 项。CACB 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：只展示评测产品框架，不发布受测配置结果；Source、规则和 Skill 变化不会更新页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub、CACB 与学习方法已依次选为第 5、6、7、8 项。CACB 和学习方法都是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：学习方法只展示AI搜索、解释、交流修正、可选问题、必要验证、人类最终决定、无监督和低复杂度，不公开具体主题或个人进度；Source、材料、反馈、规则和 Skill 变化不会更新页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 

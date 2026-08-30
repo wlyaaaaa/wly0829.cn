@@ -24,6 +24,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     title: `${project.title} · 总览`,
     detail: project.summary,
     href: project.route,
+    aliases: project.searchAliases || [],
     search: [
       project.summary,
       project.status || "",
@@ -49,6 +50,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     title: module.title,
     detail: `${project.title}｜${module.teaser}`,
     href: `${project.route}/${module.slug}`,
+    aliases: module.searchAliases || [],
     search: [
       project.title,
       module.status,
