@@ -6,7 +6,7 @@ export const pcconfigProject = {
   visibility: "私有仓库",
   statusTone: "mixed",
   cardStatus: "Password Center 已独立运行，机器配置、秘密盲用和恢复入口可用",
-  cardStatusTone: "mixed",
+  cardStatusTone: "pass",
   snapshotBoundary: "Codex 对话热备已运行；H 冷备本次跳过，Codex Home 仍等待正式切换窗口，银行卡与新机恢复缺真实用户端到端验收",
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
@@ -319,7 +319,7 @@ export const pcconfigModules = [
       { term: "Hidden launcher（无窗口父启动器）", explanation: "从最外层就不创建可见控制台的启动链；Task Scheduler 的 Hidden 复选框不能单独证明这一点。" }
     ],
     boundaries: [
-      "不公开环境变量值、完整 PATH 私密片段、原始任务 Action、arguments、XML 或日志",
+      "环境变量、PATH、任务 Action、参数、XML 和日志按实际值判断：普通名称、路径、结构、状态和失败事实可以公开；只省略其中确含 L3+ 私人正文或可复用凭据的具体值",
       "不自动建立无人值守软件更新任务",
       "不因为 startup 新增、删除或启停变化就生成故障或待办",
       "不从 provider 名称猜管理员需求；安装范围由本次 status Adapter 回读",

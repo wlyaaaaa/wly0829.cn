@@ -4,15 +4,15 @@ export const githubIndexProject = {
   title: "GitHub 总索引",
   route: "/projects/github-index",
   visibility: "公开仓库",
-  repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。公开页面可以列出公开项目的来源路径；PRIVATE（私有）仓库身份、精确 clone（本地副本）路径与恢复材料只保留在被 Git（版本控制）忽略的本机登记区。",
+  repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。仓库身份、公开性、远端和 clone（本地副本）路径按实际值判断：能改变当前决定且不含 L3+ 私人正文或可复用凭据时，PUBLIC 与 PRIVATE 项目的普通技术事实都可以直接说明；本机 ignored 登记区继续保存完整动态导航。",
   status: "现役；公开 generation 已更新并完成内部闭合。2026-08-30 最新网络可用 Owner receipt 为 completed / review_needed：baseline 44、observed 45、delta 1，不能包装成全绿。",
   statusTone: "mixed",
   cardStatus: "仓库总账与单仓库入场判断可用，发布和清理仍按现场逐项收口",
-  cardStatusTone: "mixed",
+  cardStatusTone: "pass",
   snapshotBoundary: "仓库数量与 clone 覆盖来自带观察时间的 generation；公开 main 已更新，受管基线仍有 1 项私有身份待复核",
   summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
-  plainExample: "2026-08-29 为 wly0829.cn 准备本页时，现场回读确认它对应公开远端 wlyaaaaa/wly0829.cn，本地 main（默认主分支）与远端 main 的领先/落后提交数都是 0；但工作区已有其他任务的未提交修改，所以结论仍是“只改明确分配的新文件，不能发布”。这正说明 0/0 只证明已提交引用同步，不能证明工作区内容已交付。",
+  plainExample: "例如我问“这个功能分支已经推送了，能算完成吗？”它不会只看分支自己的上游是否同步，而会确认目标提交是否已经进入远端真正的默认分支，同时检查工作区是否还留着未提交内容。只有默认分支回读包含目标提交，Git 交付才真正收口。",
   result: "最终得到的不是一张好看的项目列表，而是一份可行动的证据：正确仓库与远端、当前可见性、默认分支、全部工作树和分支状态、继续/警告/阻断原因、公开发布还缺什么，以及出错后应从哪里恢复或补证。真正发布后还必须从远端默认分支再次回读。",
   readerStates: {
     pass: "仓库身份、可见性、远端、默认分支、相关工作树和发布候选都已现场核对时，表示没有 Git 入场阻断；是否提交、推送或发布仍由当前任务授权和候选内容审查决定。",
@@ -83,11 +83,11 @@ export const githubIndexProject = {
     facts: [
       "wlyaaaaa/github-local-index PUBLIC main 已于 2026-08-30 前进到 84eeaca823431c94bd532eb4909288b50aa517e0；该提交对齐活动全局个人数据分级。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
       "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29T21:01:41Z，8 份文档完整闭合并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
-      "聚合来源覆盖 45 个仓库身份和 43 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整），PRIVATE 名称与路径不进入页面。",
+      "聚合来源覆盖 45 个仓库身份和 43 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整）。本页当前以聚合为主是因为单项身份不改变这次判断，而不是因为 PRIVATE 名称或路径自动敏感。",
       "最新网络可用 Get-GitOwnerStatus receipt 返回 execution_status=completed、domain_status=review_needed：baseline 44、observed 45、delta=1。generation 完整与 live baseline 差异分层保留。"
     ],
     gaps: [
-      "live inventory 比受管 baseline 多 1 个 PRIVATE identity；页面只公开聚合差异，不公开身份。由 Git Owner 审查并迁移 baseline 前保持 review_needed。",
+      "live inventory 比受管 baseline 多 1 个仓库身份；在 Git Owner 确认这是新增、删除、改名还是登记漂移前，只能保留聚合差异和需要复核状态。",
       "重大 Git/GitHub 动作源码曾在 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从旧源码回归外推。",
       "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。"
     ]
@@ -104,8 +104,8 @@ export const githubIndexProject = {
     { title: "只有 Owner 事实变化才刷新总账", detail: "仓库新增、改名、可见性、远端、默认分支、clone 路径或长期治理变化时生成新 generation；普通业务提交不触发连锁刷新。" }
   ],
   components: [
-    { name: "公开索引与同步看板", responsibility: "让人快速看到公开仓库、聚合计数和值得复核的同步问题。", implementation: "由 Git/GitHub 事实生成 Markdown；PRIVATE 只计数不展开，本机绝对路径不进入公开行。" },
-    { name: "私有导航登记 v2", responsibility: "在不公开身份和路径的情况下，把仓库定位到已确认的本机 clone。", implementation: "保存于 ignored 的 99_private；读取后仍必须回读目标 .git origin，cache 缺失、过期或冲突时显式失败。" },
+    { name: "索引与同步看板", responsibility: "让人快速看到仓库身份、聚合计数和值得复核的同步问题。", implementation: "由 Git/GitHub 事实生成 Markdown；PUBLIC/PRIVATE 名称与路径只有在能改变判断且实际值可公开时才展开，其他内容保留聚合。" },
+    { name: "本机导航登记 v2", responsibility: "把仓库身份定位到已确认的本机 clone，同时保留路径变化和恢复线索。", implementation: "保存于 ignored 的 99_private；读取后仍必须回读目标 .git origin，cache 缺失、过期或冲突时显式失败。公开与否按具体值和当前用途判断。" },
     { name: "Owner 基线存储 v3", responsibility: "比较完整仓库身份集合与当前 GitHub 现场，发现新增、删除、可见性或默认分支漂移。", implementation: "identity 与可空 local root 分存，原子保存 current/previous、规范 hash 和 read-back receipt（回读回执）。" },
     { name: "Get-GitOwnerStatus", responsibility: "给跨 Owner 消费者一个紧凑、零写的 current/review_needed/blocked/unknown 结论。", implementation: "先核验总索引自身 .git identity；通过前不读 baseline、registry、GitHub 或任何本地 root。" },
     { name: "Get-ProjectCognitionSource", responsibility: "分页闭合地提供 GitHub Owner 仓库来源和有界远端提交比较。", implementation: "固定 v1 schema、repository node id、分页上限、clone origin 回读和最多 64 个比较文件；缺口显式返回。" },

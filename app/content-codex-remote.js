@@ -783,7 +783,7 @@ export const codexRemoteModules = [
       "不把 package=0.1.6-unreleased.0 写成已发布 v0.1.6。",
       "不把1771项测试写成当前在线证明。",
       "不把真实历史截图写成当前模型、额度或健康状态。",
-      "不公开内部生命周期 bookkeeping，也不把未验证状态包装成当前结果。"
+      "不把源码分支、发布状态或历史截图包装成当前在线结果。"
     ],
     failures: [
       { condition: "tag 与 commit 不匹配", response: "停止版本结论并重新回读 refs。" },
