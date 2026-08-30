@@ -1,6 +1,6 @@
 # 七项目 MAP 设计与产品验收
 
-状态：`seven_project_local_pass_pending_public_readback`
+状态：`seven_project_public_pass`
 
 观察时间：2026-08-30
 
@@ -121,12 +121,29 @@ Ignored QA：
   公开门与合同测试已经重建，但本轮新架构的发布级 Edge 交互复验仍须单列证据，
   不得用机械测试冒充。
 
+## PUBLIC 部署与回读
+
+- 产品提交：`312abd9a6d7e3c85a740872fcacc95d723070fed`；本地 HEAD、远端
+  `origin/main`、Pages workflow head 与最新 `github-pages` deployment SHA
+  四者一致。
+- Pages run：`33301748038`，build 与 deploy 均 success；deployment id
+  `6164803551`。
+- 公网 `/`、`/projects/cacb/`、`/projects/cacb/question-bank/`、
+  `/projects/pc-panel-hub/`、`/rules/?rule=agents_root_rules` 均为 HTTP 200，
+  route-specific static marker、代表正文和 Rules 五面板 noscript 合同均存在。
+- 当前生产 runtime `/assets/index-ClBowuHQ.js` 为 13,957 bytes，公网与本地
+  SHA-256 同为
+  `1F1E7A3AD1EBE35FEC0B8B6B04D91791AED37BDBBBA7C783565E783066F3880D`。
+- 机箱屏实时完整帧、三截 WebP、当前 Renderer 完整图和对应三截 WebP 均从公网
+  下载并与本地逐字节 SHA-256 一致；一次 GitHub Pages Unicorn 500 经有界重试后
+  恢复，不影响最终字节回读结论。
+
 ## 发布边界
 
 本地产品内容、manual-only 合同、35 项测试、构建和公开门已 PASS；迁移前内容、
 布局与画廊浏览器 QA 也已 PASS。新原生 runtime 的自动浏览器复验因 Browser Skill
 缓存版本错位未完成，当前最新本地预览已向 owner 打开；按已验收 MVP 后的项目规则，
 该预览证据缺口对所选新项目发布是 non-blocking（非阻断），但不得从报告中删除。
-当前公网仍是六项目提交；只有第七项目候选定向提交、normal push、Pages deployment
-与公网 commit/路由回读指向同一新提交后，状态才升级为
-`seven_project_public_pass`。
+第七项目、PC Panel Hub 画廊修复、静态路由架构和网站全局 Sol Max 质量规则已经随
+`312abd9a` normal push，并由 Pages deployment 与公网 commit/路由/字节回读共同
+确认；七项目公开状态因此为 `seven_project_public_pass`。
