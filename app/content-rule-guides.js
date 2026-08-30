@@ -6,7 +6,7 @@ export const ruleGuides = {
   agents_root_rules: {
     glossary: [
       ["事实 Owner", "某类动态事实的唯一负责来源。文档可以指路，但不能替代 Owner 的现场回读。"],
-      ["Project rule", "离当前目录最近的 AGENTS 规则，拥有这个项目的业务语义、命令、兼容和发布边界。"],
+      ["Project rule", "离当前目录最近的 AGENTS 规则，拥有这个项目的业务语义、命令、兼容、生成区、Owner 和项目安全；PUBLIC 个人数据唯一分级与项目收紧授权是授权合同拥有的窄例外。"],
       ["External effect", "会改变外部系统或现实状态的动作，例如发消息、提交表单、发布、部署、付费。"],
       ["Advisory artifact", "Skill、模板、计划或 checklist 只是可选方法，不会自行变成必须遵守的硬门。"],
       ["Read-back", "执行之后从真实 Owner 再读一次结果，避免把命令返回成功误当成状态真的改变。"],
@@ -24,7 +24,7 @@ export const ruleGuides = {
           item("Git 控制面拥有什么", "仓库身份、visibility、remote、默认分支、worktree、同步和发布事实由 Git 控制面现场提供。"),
           item("PCConfig 拥有什么", "本机路径、磁盘、端口、计划任务、运行时、模型、数据源、迁移、备份和恢复事实由 PCConfig 提供。"),
           item("具体项目拥有什么", "业务语义、领域数据、源码、启动和测试方式归具体项目。全局规则不能替项目决定业务。"),
-          item("项目规则不能被全局覆盖", "全局规则和机械门只能与项目规则取交集或进一步收紧身份、授权和并发边界，不能改写项目命令、兼容或产品语义。", "项目写明必须用它自己的 acceptance.ps1，全局不能因为偏好 pytest 就替换。"),
+          item("项目规则通常不被全局覆盖", "全局规则和机械门通常只能与项目规则取交集或进一步收紧身份、授权和并发边界，不能改写项目命令、兼容或产品语义。唯一窄例外是授权合同拥有的 PUBLIC 个人数据唯一分级与 project_publication_restriction_authority（项目公开限制授权）：项目收紧 L1/L2 默认必须有真实需要和用户对精确项目、范围、限制的明确授权。", "项目写明必须用它自己的 acceptance.ps1，全局不能因为偏好 pytest 就替换；项目自己写一句“所有个人数据都隐藏”也不能产生用户授权。"),
           item("三个控制面按需进入", "只有相关事实会改变当前决定时才读取对应控制面，不进行周期性全扫，也不要求每个任务依次经过三个仓库。"),
           item("路径分工", "AI 工作台运行根和本地数据库只有一份，位于 E 数据盘；C 盘只留兼容 junction。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
         ]
@@ -37,7 +37,7 @@ export const ruleGuides = {
           item("先说现实结果", "面向用户时先讲结果、使用方式、边界和是否需要用户动作；代码、测试、回执只在会改变完成判断时说明。"),
           item("测试不能冒充产品", "PASS、字段、协议和脚本返回只能证明对应证据层，不能替代真实用户路径。", "构建成功不等于公网已经部署；部署成功不等于页面能打开。"),
           item("用户要求人话时立即重述", "不复读内部验证过程，而是回到用户真实问题，用普通语言说清楚。没有固定回复模板、字数或评分器。"),
-          item("非常见英文首现附中文", "面向用户的进度和结果里，非常见英文自然词第一次出现时附简短中文括注；代码、命令、路径、字段、哈希、模型和产品名保持精确，不机械翻译。"),
+          item("english_chinese_gloss", "除 AI、LLM、API、URL、JSON 等常见英文缩写和需要精确复制的代码、命令、路径、字段、哈希、模型与产品标识外，英文自然词或短语首次出现时必须保留英文并立即紧跟简短中文括注；不得为免括注删除、回避或全中文替代有用英文。"),
           item("该并行时必须重判", "出现两条以上互不依赖、独立可验、并行净收益为正的支路时重新判断 0 到 10 个直属代理。单写者只串行真正冲突的写临界区。"),
           item("委派身份先于数量", "只有宿主 verified 身份，或旧 root 经用户明确声明并回读的对话绑定，才能做 0 到 10 决策。无身份时只关闭 spawn，主任务继续。"),
           item("优先现有原生能力", "先查 owner adapter、固定 CLI/API 和 metadata；工具初始列表不是能力上限。实证入口缺失或失败后才降级。"),
@@ -67,7 +67,8 @@ export const ruleGuides = {
           item("Execution Owner 认领最小 scope（施工范围）", "第一次写入前用 CAS Claim（比较后认领）最小施工范围；同一项目 scope（施工范围）不重叠，扩缩、改派和恢复都走正式 transition（状态转换）。"),
           item("AI 创建顶层任务默认无项目", "只有 fresh Owner route 真实准入后才创建；默认 projectless（无项目），不能因涉及仓库自动挂 saved project，除非用户明确指定或上位平台强制。"),
           item("跨项目机械维护是窄例外", "只允许同类、确定、可回退、可独立验证的中低风险小修；业务语义、Schema、权限、依赖大升级和发布不属于该例外。"),
-          item("可信、私密和授权分开", "本机、BitLocker 磁盘、私人云和 PRIVATE GitHub 可以是 trusted target，但不自动授予写入，也不自动等于公开。"),
+          item("私人账号空间等价可信", "本机、workspace 和 BitLocker 磁盘天然属于 default trusted target（默认可信目标）；当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，Google Drive、Notion、PRIVATE GitHub、Dropbox、OneDrive 等私人账号空间与它们完全等价可信。可信、可见性和写授权仍彼此独立。"),
+          item("PUBLIC 个人数据唯一分级", "最终公开载荷按授权合同的 L1–L5 唯一表判断；没有达到 L3+ 的正面证据时默认 L2，L1/L2 不因来源为个人、可以识别或谨慎起见而受限。"),
           item("人类因子只有四类", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）。Google 和 Microsoft 只是 Account provider（账号验证提供方）。取消、超时或失败只暂停，不自动重试或改变设备信任。"),
           item("UAC 只解决操作系统权限", "按需管理员能力默认可用；用户明确禁止提权时停用。UAC（Windows 管理员确认）不产生业务授权、Agent（智能体）身份或人类确认。")
         ]
@@ -172,7 +173,10 @@ export const ruleGuides = {
       ["CoreGoalStepCapability", "允许一次精确 effect 的短时、防重放步骤能力。"],
       ["Execution Owner（施工责任）", "协调谁在修改哪个最小 scope（施工范围），不产生授权或业务事实。"],
       ["Registered target", "持久 reference 说明目标是谁，现场 resolution 说明现在允许做什么。"],
-      ["Residual", "任务结束前仍未完成、必须带 checkpoint 移交的现实义务。"]
+      ["Residual", "任务结束前仍未完成、必须带 checkpoint 移交的现实义务。"],
+      ["Default trusted target（默认可信目标）", "本机私密目标和满足用户账号、默认私人、无 public/share 信号的私人账号空间；可信不产生写授权。"],
+      ["Public personal data classification（公开个人数据分级）", "跨项目唯一的 L1–L5 表；只有有正面证据达到 L3+ 才进入个人数据可能敏感审查。"],
+      ["Project publication restriction authority（项目公开限制授权）", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权；项目自写不成立。"]
     ],
     sections: [
       {
@@ -184,7 +188,8 @@ export const ruleGuides = {
           item("管理员能力默认按需可用", "当前进程是 Medium integrity（中等完整性权限）不代表无法管理员执行；只有用户或项目明确禁止才停用 UAC（Windows 管理员确认）。"),
           item("UAC 不产生授权", "它只提升操作系统进程权限，不产生项目写权、最高权限身份或人类因子。"),
           item("Child 只能收窄", "后代的 scope、authorization、sandbox、model 和 effort 取用户、父级、活动规则和宿主可用集的交集。"),
-          item("项目规则不被取消", "授权合同只能收紧项目规则；无法同时满足时失败关闭并报告精确冲突。")
+          item("项目规则通常不被取消", "项目继续拥有业务语义、真实命令、兼容、生成区、Owner 和项目安全；全局授权通常只能取交集。窄例外是本合同统一拥有 PUBLIC 个人数据分级和项目收紧 L1/L2 默认的授权条件。"),
+          item("项目收紧不能自授权", "项目、AI、Skill、模板、历史文档、旧 commit 或 Owner 自称都不能产生、持久化或追认 L1/L2 收紧授权；必须同时有真实项目需要和用户对精确项目、范围、限制内容的明确指令。")
         ]
       },
       {
@@ -251,15 +256,30 @@ export const ruleGuides = {
         ]
       },
       {
-        title: "六、目标可信度与内容保真",
-        intro: "目标私密不等于已经授权，也不等于应该删减内容。",
+        title: "六、目标可信度、账号空间与内容保真",
+        intro: "联网、云端或可移动不等于公开；目标可信、目标可见性和动作授权仍是三件事。",
         items: [
-          item("Visibility 与 trust 分开", "本机、workspace、BitLocker 磁盘、Google 私人空间、PRIVATE GitHub 和已证私有云可成为 trusted target；未知远端保持 UNKNOWN。"),
+          item("本机私密目标默认可信", "本机、workspace 和 BitLocker 保护的本地磁盘/U 盘是非公开 default trusted target。"),
+          item("私人账号空间完全等价", "当前已认证账号属于用户、Provider/目标默认访问范围为私人且没有 public/share 信号时，Google Drive、Notion、PRIVATE GitHub、Dropbox、OneDrive 和其他私有云只是非穷举例子，它们与本机私密目标完全等价可信。"),
+          item("未知远端不借推定越界", "账号归属不明、组织/共享范围不明、目标没有私人默认或可见性冲突时保持 destination_visibility=UNKNOWN；不能借私人账号推定越过证据。"),
           item("Trusted target 内按需保真", "环境文件、访问令牌、密码、私钥和 OAuth JSON（账号授权配置）在真正私密备份任务中按任务需要原样保留，不能静默换占位符。"),
           item("保真不扩大发送授权", "可信、可见性和 external effect authorization 仍是三个独立判断。"),
           item("PRIVATE 仓库应完整收敛", "只可因秘密边界、可重建 cache、活数据库、大制品、格式许可或用户 local-only 排除，并明确说明。"),
           item("PUBLIC 项目的私有伴随材料", "只处理 Git 明确 ignored、未跟踪且有保留价值的本地材料；先复制并校验 hash，PRIVATE companion 提交与远端回读成功后，再用可回滚 rename 和本地 link 保留原路径。link 必须继续被 PUBLIC Git 忽略。"),
           item("不完整副本不能叫完整备份", "PRIVATE GitHub、本机热备、私有云备和人工冷备是不同层。")
+        ]
+      },
+      {
+        title: "七、PUBLIC 个人数据唯一 L1–L5 表",
+        intro: "分级对象是最终公开载荷整体；effective_level=max(字段等级, 组合后的现实损害等级)。仅能识别本人、字段变多或抽象猜测不构成升级，限制方须有正面证据证明达到 L3+，否则个人数据敏感性轴默认 L2。",
+        items: [
+          item("L1｜非个人或重复公开无新增损害", "非个人、虚构、匿名，或用户已主动公开且本次重复公开不会增加现实损害的普通事实。PUBLIC 默认：不受个人数据公开限制。"),
+          item("L2｜用户本人的普通资料", "姓名、精确年龄、完整生日/出生日期、性别、普通照片、城市、教育/工作经历、兴趣、普通公开账号或用户指定的公开联系方式；姓名、生日及普通履历组合仍默认 L2。PUBLIC 默认：不得仅因属于个人数据而审查、脱敏、删改、最小化、额外确认或保守过滤。"),
+          item("L3｜有正面证据的现实损害风险", "可能造成实际诈骗、信用/名誉/关系损害、持续骚扰或非实时精准追踪；私人联系方式、精确住址、详细个人财务、非公开纠纷材料、可预测行踪及第三人未公开数据属于典型内容。PUBLIC 默认：进入 possible sensitive review（可能敏感审查），但 L3 不等于自动阻断。"),
+          item("L4｜严重人身、财产、身份或重大隐私损害", "身份证件、银行卡/账户、生物识别、实时精确位置、完整健康/亲密信息、原始私人聊天，以及可用密码、token、私钥、OAuth 私密载荷、恢复码、Cookie。PUBLIC 默认：可用秘密明文不得公开；其他 L4 只按上位授权和领域边界发布必要的非秘密结果。"),
+          item("L5｜大规模、机构关键或重要数据", "大规模多人数据、机构关键/核心数据，或可能影响国家安全、公共利益和系统性运行的重要数据；普通个人单条自身数据通常不适用。PUBLIC 默认：依对应重要数据、系统或上位规则处理。"),
+          item("Below L3 publication default（三级以下公开默认）", "L1/L2 以及不含 L3+ 正面证据的其他公开内容，在个人数据敏感性轴上均不受限制；不得用 unknown、来源为个人、可识别性或谨慎起见升级。"),
+          item("等级与其他边界正交", "External effect 授权、目标解析、真实 secret 禁止、第三人授权、许可及 system/developer/platform 边界继续独立；等级不能伪造动作授权，上位边界也不能冒充项目自设的低级个人数据限制。")
         ]
       }
     ]
@@ -277,7 +297,7 @@ export const ruleGuides = {
         intro: "这份规则最主要的作用是阻止历史名称重新创造第四个控制面。",
         items: [
           item(".agents 控制面", "负责 Agent 行为、授权和能力路由。"),
-          item("Git 控制面", "负责 repo identity、visibility、branch/worktree、同步和发布。"),
+          item("Git 控制面", "负责 repo identity、visibility、branch/worktree、同步和发布；它只向 .agents 提供 PUBLIC 目标与候选内容事实，并消费授权合同的分级/授权结论，不能另建或收紧个人数据等级。"),
           item("PCConfig 控制面", "负责机器路径、runtime、任务、备份和恢复。"),
           item("具体项目", "继续拥有业务语义、源码、数据和产品验收；它不是全局控制面。"),
           item("Four-base 只是兼容名", "文件名、logical id 和 schema 不表示仍有第四基座。"),
@@ -294,6 +314,7 @@ export const ruleGuides = {
           item("不运行动态 Provider", "上下文入口本身不读取 GitHub、机器状态或业务数据，也不建立共享数据库。"),
           item("先 metadata 后正文", "模型根据当前影响再读取 primary 或 conditional 文档，避免把所有控制面一次灌入上下文。"),
           item("活动规则来自同一 E release", "Catalog（目录）只保存 logical id（逻辑标识）和 source 指针；current E 代号、PRIVATE main commit、五文件 path/SHA 与 ruleset 由 Invoke-EAgentRulesRelease Inspect 回读。dirty source 不能冒充 current。"),
+          item("PUBLIC 分级回到授权合同", "Git 和具体项目只提供 visibility、候选载荷与业务事实；PUBLIC 个人数据等级和项目收紧授权回到 .agents 授权合同，不能在 Git 控制面复制一张更严的表。"),
           item("四类结论分开验证", "合同设计、Git commit/default branch/remote、机器 runtime/备份/恢复、外部 adapter receipt/read-back。任一层不能证明其他层。"),
           item("闭包失败时停止", "Catalog、schema 或 logical id 闭包无效，必需 Owner 缺失，或 primary 不可读时失败关闭。"),
           item("默认排除大体积和私人正文", "旧私人数据库、媒体、恢复载荷、.git、cache、temp、报告、preimage 和巨大机器快照都不进入默认上下文。"),
@@ -318,7 +339,7 @@ export const ruleGuides = {
         items: [
           item("选择方法的七个维度", "目标、风险、信息增益、延迟、耦合、可逆性和 expected net value。"),
           item("保留用户模型选择", "用户指定 model/reasoning 时不因为高风险自动降级。"),
-          item("非常见英文附中文括注", "用户可见进度和结果中的非常见英文自然词首现后附简短中文；AI/Git/Windows/JSON/API 及代码、命令、路径、字段、哈希、模型和产品名保持精确。"),
+          item("english_chinese_gloss", "除 AI、LLM、API、URL、JSON 等常见英文缩写，以及需要精确复制的代码、命令、路径、schema/字段、哈希、模型与产品标识外，英文自然词或短语首次出现时必须保留英文并立即紧跟简短中文括注；不得为免括注删除、回避或全中文替代有用英文。"),
           item("Metadata 不强制正文", "metadata 只提升候选注意力，是否读 Skill、Plugin、模板、计划或文档仍由当前净收益决定。"),
           item("Skill 中的 MUST 不是平台门", "只有上位指令、活动规则、项目硬边界或宿主机械门能成为不可越过的 gate。"),
           item("先查现有能力", "优先 owner adapter、固定 CLI/API、当前 metadata 和原生 tools；工具初始列表不是上限。"),
@@ -367,7 +388,9 @@ export const ruleGuides = {
         items: [
           item("README 面向人", "必须人话和最新，但不是执行规则、授权、动态机器事实、Git 事实或 AI 默认上下文。"),
           item("什么时候读取人类指南", "用户明确询问、维护，或它是当前精确消费者的验收证据。"),
-          item("项目 AGENTS 面向 Agent", "只在项目确有更具体业务语义时创建，不复制全局规则和动态事实。"),
+          item("项目 AGENTS 面向 Agent", "只在项目确有更具体业务语义时创建，不复制全局规则和动态事实。项目通常拥有业务语义、命令、兼容、生成区、Owner 和项目安全；PUBLIC 个人数据唯一分级与项目收紧授权是授权合同拥有的窄例外。"),
+          item("PUBLIC 分级按需读取", "只有目标明确 PUBLIC 或正在决定公开内容时，才读取授权合同的 PUBLIC 个人数据唯一表；私人可信存储、普通本地工作和没有发布候选时不加载。"),
+          item("Git 与项目不改写等级", "Git 和项目提供 visibility、候选内容与业务事实，但不能复制、另建或收紧 L1–L5 表；项目收紧 L1/L2 默认仍需真实需要和用户精确授权。"),
           item("嵌套 AGENTS 的条件", "只有子树语义真实不同才存在。"),
           item("实现事实来自哪里", "代码、测试和现场 Owner/Provider；过期人类文档只是待修缺陷。"),
           item("简单项目不机械补双文档", "临时、简单或代码自解释时，不为了形式创建 README 与 AGENTS。")

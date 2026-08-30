@@ -191,7 +191,7 @@ export const modules = [
     problem: "当全局要求、项目规则、历史文档和现场状态同时存在时，必须有一套稳定方法判断谁拥有事实、哪一层优先，否则模型会把旧报告当规则、用全局原则覆盖项目业务，或者一次性加载所有材料后丢失注意力。",
     implementation: [
       "根规则只保留跨项目元规则和硬边界；保护、授权、三控制面和能力选择分别下沉到专项合同。",
-      "项目根到当前目录链上的最近规则拥有业务语义、真实命令、兼容和发布边界；全局规则只能取交集或收紧。",
+      "项目根到当前目录链上的最近规则拥有业务语义、真实命令、兼容、生成区、Owner 和项目安全；全局通常只能取交集或收紧。窄例外是授权合同唯一拥有的 PUBLIC 个人数据分级与项目收紧授权。",
       "contract catalog 只保存触发 metadata、owner、文档和 validator 指针。模型先看 metadata，再按当前决定的信息价值读取正文。",
       "历史计划、报告、生成物和记忆只作线索，不会自动成为当前指令或动态事实。"
     ],
@@ -204,13 +204,13 @@ export const modules = [
     ],
     concepts: [
       { term: "事实 Owner", explanation: "某类动态事实的唯一负责来源。文档指针可以导航，但不能代替它的现场回读。" },
-      { term: "项目规则不覆盖", explanation: "全局规则不能改写具体项目的业务语义、命令或兼容约束；冲突无法同时满足时明确停止。" },
+      { term: "Project rule nonoverride（项目规则通常不覆盖）", explanation: "全局规则不能改写具体项目的业务语义、命令或兼容约束；唯一窄例外是授权合同统一拥有 PUBLIC 个人数据分级和项目收紧 L1/L2 默认的授权条件。" },
       { term: "渐进读取", explanation: "先确认 metadata 是否相关，再读取必要正文，不把全部合同机械灌进每个任务。" }
     ],
     boundaries: [
       "README 和操作指南面向人，不是执行规则或动态权威",
       "catalog 只能选择候选正文，不能证明某个 effect 已发生",
-      "全局规则不能以统一为理由覆盖项目自己的测试与发布边界",
+      "全局规则不能以统一为理由覆盖项目业务与测试；项目若要收紧 L1/L2 公开默认，必须有真实需要和用户对精确项目、范围、限制的明确授权",
       "兼容文件名和历史命名不能恢复已经退役的控制面"
     ],
     failures: [
@@ -294,7 +294,7 @@ export const modules = [
     slug: "authorization-owner",
     shortTitle: "授权与 Owner",
     title: "用户授权、CoreGoal 与执行 Owner",
-    teaser: "把用户目标拆成授权、目标身份、施工范围、步骤能力和真实收口。",
+    teaser: "把用户目标拆成授权、目标身份、施工范围、步骤能力和真实收口，并把私密目标信任、PUBLIC 个人数据分级与项目限制授权分开。",
     status: "合同已生效；Owner registry 回归通过",
     statusTone: "pass",
     value: "防止“用户让我做事”被误解成任何代理都能对任何对象任意写，也防止多个任务同时改同一范围或任务结束时遗失未完成义务。",
@@ -302,13 +302,15 @@ export const modules = [
     example: "例如用户要求重建并发布网站。当前任务可以编辑、测试和正常推送这个网站，但不能因此去改另一个仓库；若另一个任务正在改同一文件，必须先解决施工范围冲突。",
     result: "每一步都能回答谁获得了什么授权、谁正在改哪一块、是否完成远端回读；未完成义务会随检查点移交，不会在任务结束时消失。",
     readerStates: { pass: "目标、授权和施工范围明确且没有重叠 Owner 时，执行、验证和正常收口可以连续推进。", problem: "发现重叠施工、目标扩大或步骤事实漂移时，停止对应写入并重新协调或派生步骤。", unavailable: "授权事实或 Owner registry（施工登记表）不可验证时，外部写入和受保护动作停止；只读调查可以继续。" },
-    decisionImpact: ["本机低风险可逆操作可直接继续。", "外部现实动作未授权时停止。", "有重叠 Owner 时不绕过，先协调或等待一次。", "目标扩大时建立 successor，不拿旧授权硬套。", "有 residual 时必须带 checkpoint 移交，不能直接完成。"],
+    decisionImpact: ["本机低风险可逆操作可直接继续。", "用户私人账号空间在没有 public/share 信号时与本机私密目标等价可信。", "PUBLIC 个人数据只有 L3+ 才进入可能敏感审查，L1/L2 不因属于个人数据而删改。", "项目要收紧 L1/L2 默认必须同时有真实需要和用户对精确项目、范围、限制的明确授权。", "外部现实动作未授权时停止。", "有重叠 Owner 时不绕过，先协调或等待一次。", "目标扩大时建立 successor，不拿旧授权硬套。", "有 residual 时必须带 checkpoint 移交，不能直接完成。"],
     problem: "用户说要完成一件事，不等于任何代理都能对任何对象执行所有动作。系统必须区分用户授权、操作系统权限、最高权限身份、目标是否仍是原目标、施工范围是否被别人占用，以及动作完成后是否有正式回读。",
     implementation: [
       "低风险、可逆、范围内的本机读取、编辑和测试直接推进；消息、外部写入、发布、部署和付费需要明确授权。",
       "CoreGoalCommitment 冻结目标、范围、禁止项和停止条件，不冻结计划、代码、执行器或后续 epoch。",
       "每个现实步骤使用短时、单次、防重放的步骤能力，绑定 effect、目标、pre/post、回滚和 executor。",
       "scoped execution owner（范围化施工责任）用 expected revision CAS（预期修订号比较后交换）认领最小 scope（施工范围）；纯只读审计不需要排他绑定。",
+      "当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，私人账号空间与本机、workspace 和 BitLocker 盘同属 default trusted target（默认可信目标）；可信不等于已授权写入。",
+      "PUBLIC 个人数据按唯一 L1–L5 表判断最终载荷整体；没有达到 L3+ 的正面证据时默认按 L2，项目不能靠自写规则把 L1/L2 变成受限内容。",
       "Git 完成和业务完成分别报告；个人仓库最终必须从真实默认分支可达并由远端回读。"
     ],
     flow: [
@@ -325,13 +327,16 @@ export const modules = [
       { term: "CoreGoal", explanation: "长期不变的目标承诺。实现细节变化不会强迫用户重新确认，目标扩大才建立 successor。" },
       { term: "步骤能力", explanation: "只允许一次精确 effect 的短时凭据，过期或事实漂移后必须重新派生。" },
       { term: "Execution Owner", explanation: "协调谁在改哪一块，不替代事实 Owner，也不产生用户授权或管理员权限。" },
-      { term: "Registered target", explanation: "reference 证明目标是谁，live resolution 说明现在能做什么；两者都不证明动作已发生。" }
+      { term: "Registered target", explanation: "reference 证明目标是谁，live resolution 说明现在能做什么；两者都不证明动作已发生。" },
+      { term: "Public personal data classification（公开个人数据分级）", explanation: "跨项目唯一的 L1–L5 表；只有 L3+ 才进入个人数据可能敏感审查。" },
+      { term: "Project publication restriction authority（项目公开限制授权）", explanation: "项目收紧 L1/L2 默认时，必须有真实项目需要和用户对精确项目、范围、限制的明确授权；项目自写不成立。" }
     ],
     boundaries: [
       "UAC（Windows 管理员确认）只提升 Windows 进程权限，不扩大任务授权",
       "子代理、shell、worktree 和插件不能绕过已有重叠 Owner",
       "force-push、新公开面、付费和不可恢复动作不在默认收敛授权内",
-      "PRIVATE 或可信目标不等于已经授权写入"
+      "PRIVATE 或可信目标不等于已经授权写入",
+      "L1/L2 不受个人数据公开限制；真实 secret、第三人授权、许可和 external effect 授权仍是独立边界"
     ],
     failures: [
       { condition: "目标或 executor 漂移", response: "废弃当前步骤能力，现场重读后在同一 CoreGoal 下重新派生。" },
@@ -340,7 +345,7 @@ export const modules = [
       { condition: "任务仍有 residual", response: "保留 lease，记录 checkpoint 并转交真实 successor，不能直接宣称完成。" }
     ],
     sources: [
-      { path: "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md", role: "授权、CoreGoal、Owner、Git 和可信目标的唯一合同" },
+      { path: "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md", role: "授权、CoreGoal、Owner、Git、可信目标与 PUBLIC 个人数据唯一分级的合同" },
       { path: "E:\\.agents\\tools\\Invoke-ExecutionOwnerRegistry.ps1", role: "Owner CAS、scope transition 和 action authorization 入口" },
       { path: "E:\\.agents\\tests\\Test-ExecutionOwnerRegistry.ps1", role: "Owner claim、冲突、移交和恢复回归" }
     ],
@@ -369,7 +374,7 @@ export const modules = [
       "Invoke-EAgentRulesRelease.ps1 是唯一 activator/reader，current-rules.json 记录 current/previous、pointer revision 和 release record commitment。",
       `每代 release 固定五份 logical id、relative path、bytes、SHA、PRIVATE main commit 和 ruleset SHA；当前 ${panelSnapshot.authority.releaseId} 绑定 ${panelSnapshot.authority.gitCommit.slice(0, 7)} 与 ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…。`,
       "release 目录和 pointer 关闭 ACL 继承，由 SYSTEM 拥有；普通/管理员编辑器只读执行，Activator 临时写后恢复封闭 ACL。",
-      "E82 新增非常见英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行，否则不跑、不设门。",
+      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信、项目收紧授权窄例外与 english_chinese_gloss。",
       "普通规则文本、目录、预算及对应测试可走 FastRelease：只跑变更闭集关键回归，但复用同一 Git、五哈希、pointer CAS、UAC activator 和 fresh Inspect；触及保护合同、Activator、ACL、Hook、Owner Registry、身份/授权或其他代码时必须回标准路径。",
       "E rules release 的机器侧 Git 收口、激活和回读目标为 180 秒内；回执分列 focused tests、commit、push/readback 与 UAC activation 墙钟，网络或用户处理 UAC 的等待单列。",
       "e81-retirement-dispositions 证明旧 C production reader count=0，退役未新增 background service、queue、database 或 task；Secret Broker 等独立产品保留。",
@@ -566,8 +571,8 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("agents_root_rules").lines,
       sourcePath: "E:\\.agents\\AGENTS.md",
       releaseRelativePath: "AGENTS.md",
-      purpose: "所有任务的默认总入口。它定义 E 规则权威、指令优先级、事实 Owner、模型自治、授权总边界、Git 与验证习惯，以及私人领域固定路由。",
-      plainLanguage: "当前规则只认 E:\\.agents 的 E release；先确认谁拥有答案，再在安全边界内把事情办完，不拿旧 C 盘材料、流程或全局规则冒充当前结果。",
+      purpose: "所有任务的默认总入口。它定义 E 规则权威、指令优先级、事实 Owner、模型自治、english_chinese_gloss、授权总边界、Git 与验证习惯，以及私人领域固定路由。",
+      plainLanguage: "当前规则只认 E:\\.agents 的 E release；先确认谁拥有答案，再在安全边界内把事情办完。项目通常拥有业务语义，但 PUBLIC 个人数据唯一分级和项目收紧授权由授权合同统一裁决。",
       why: "一个任务可能同时出现用户本轮要求、项目规则、全局默认和旧记录。没有固定优先级，AI 会把旧计划当现行命令，或者用全局习惯覆盖项目真实做法。",
       example: `例如当前先验证 ${panelSnapshot.authority.releaseId}、commit ${panelSnapshot.authority.gitCommit.slice(0, 7)} 和五文件 ruleset，再读取项目规则；C Authority 即使 unavailable 也不能阻塞普通任务或原生委派。`,
       result: "AI 会从同一 E release、正确项目规则和事实来源开始；冲突不能同时满足时停止相关动作，旧 C 盘 generation、Publisher 或 epoch 不再成为 fallback。",
@@ -577,18 +582,20 @@ export const rulesSnapshot = {
         "E 代号、PRIVATE main commit、五文件 SHA 和 ruleset 是否构成当前活动规则",
         "system（系统指令）、developer（开发者指令）、本轮用户、最近项目规则、全局规则和记忆之间怎样排序",
         "Agent、Git、机器和业务事实分别回到哪个 Owner",
+        "english_chinese_gloss 怎样保留有用英文，并在英文自然词或短语首次出现时紧跟中文括注",
+        "PUBLIC 个人数据唯一分级和项目收紧 L1/L2 默认的授权由谁拥有",
         "什么工作直接推进，什么动作需要授权或进入受保护合同",
         "怎样保留已有改动、分层验证并收口个人仓库",
         "健康、微信、录音、扫描件、秘密和 Vault 应走哪条窄入口"
       ],
       allowed: ["范围内低风险本机工作直接推进", "E identity 可信时按净收益选择 0–10 个原生代理", "授权已明确时完成验证、发布和回读", "保留 dirty work 并定向提交"],
-      forbidden: ["读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务", "把历史报告或记忆当活动权威", "无可信身份时委派", "用测试或字段冒充产品结果", "恢复已退役中央个人上下文"],
+      forbidden: ["读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务，或让项目自写 PUBLIC 个人数据限制冒充用户授权", "把历史报告或记忆当活动权威", "无可信身份时委派", "删掉有用英文来规避中文括注", "用测试或字段冒充产品结果", "恢复已退役中央个人上下文"],
       process: ["Inspect 当前 E release 并核对五文件闭包", "读取最近项目规则", "确定目标与事实 Owner", "按触发读取专项合同", "实施并分层验证", "用人话报告现实结果"],
       failure: ["规则冲突无法同时满足时停止并说清冲突", "委派身份缺失只关闭委派，主任务继续", "授权不清时停止外部 effect，但继续安全调查", "Git 未收口时分别报告业务和 Git 状态"],
       sections: [
-        { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布", "PCConfig：机器路径、运行时、任务、备份和恢复", "AI 工作台运行根/数据库在 E 数据盘，C 盘只留兼容 junction；任务 temp 在 E 缓存盘独立目录", "具体项目：业务、领域数据、启动和测试"] },
-        { title: "模型自治与复杂度", paragraphs: ["模型按照目标、风险、信息增益、可逆性和净收益选方法；原生委派在 E identity 可信后按任务语义选择 Luna/Terra/Sol 与 0–10。"], items: ["Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界", "长任务保留可重建状态，短任务不制造文档债"] },
-        { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal。"], items: ["不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
+        { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "AI 工作台运行根/数据库在 E 数据盘，C 盘只留兼容 junction；任务 temp 在 E 缓存盘独立目录", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
+        { title: "模型自治与复杂度", paragraphs: ["模型按照目标、风险、信息增益、可逆性和净收益选方法；原生委派在 E identity 可信后按任务语义选择 Luna/Terra/Sol 与 0–10。"], items: ["english_chinese_gloss：除常见英文缩写和精确标识外，英文自然词或短语首次出现时保留英文并紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界", "长任务保留可重建状态，短任务不制造文档债"] },
+        { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。用户私人账号空间在默认私人且没有 public/share 信号时与本机私密目标等价可信，但信任不产生写授权。"], items: ["PUBLIC 个人数据唯一 L1–L5 表由授权合同拥有：L1/L2 不受个人数据限制，L3+ 才进入可能敏感审查", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权", "E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal", "不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
         { title: "私人领域与供应", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "新规则原位升级，不堆补丁"] }
       ],
       relation: `它是 ${panelSnapshot.authority.releaseId} 默认入口；其余四份规则分别拥有 E release/重大动作保护、授权、跨控制面取证和能力选择的完整语义。`
@@ -635,23 +642,24 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("authorization_delegation_contract").lines,
       sourcePath: "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md",
       releaseRelativePath: "docs\\contracts\\agents.authorization-delegation.md",
-      purpose: "唯一拥有用户授权、CoreGoal、委派收窄、Execution Owner、跨项目 coordination_id、可信目标、PUBLIC 项目 ignored 私有材料迁移、E rules 精确 scope release 与 Git 收口的合同。",
-      plainLanguage: "把一句用户目标拆成授权、目标身份、施工范围、单次步骤和正式回读；E release、Owner CAS、UAC 和人类因子各自证明不同事情，C 盘历史不能参与 Owner 恢复。",
+      purpose: "唯一拥有用户授权、CoreGoal、委派收窄、Execution Owner、跨项目 coordination_id、可信目标、PUBLIC 个人数据分级、项目公开限制授权、PUBLIC 项目 ignored 私有材料迁移、E rules 精确 scope release 与 Git 收口的合同。",
+      plainLanguage: "把一句用户目标拆成授权、目标身份、施工范围、单次步骤和正式回读；同时把目标是否可信、是否公开、PUBLIC 个人数据等级与项目能否收紧默认分开判断。",
       why: "用户同意完成一个目标，不代表任意代理都能扩大到其他仓库；多个任务同时修改同一范围，也会覆盖彼此工作或丢失未完成事项。",
       example: "例如用户明确要求刷新并发布网站时，只有当对象、内容和发布动作都已明确，任务才可继续编辑、定向提交、normal push、Pages 部署和公网回读；effect 边界仍要实时重验 PUBLIC 目标与默认分支。",
-      result: "每一步都能回答谁获得了什么授权、谁正在修改哪一块、远端是否真的收到结果；未完成事项必须移交或继续持有，不能直接消失。",
+      result: "每一步都能回答谁获得了什么授权、谁正在修改哪一块、远端是否真的收到结果；PUBLIC 内容还能回答为何属于 L1–L5、是否有 L3+ 正面证据，以及项目限制是否真的获得用户精确授权。",
       readerStates: { pass: "授权、目标和施工范围都明确时，同一目标内继续实施、验证、正常推送和正式回读。", problem: "Owner 冲突、目标扩大或步骤事实变化时，停止对应写入并重新协调或取得新确认。", unavailable: "授权事实或施工登记不可验证时，外部写入停止；不会用管理员权限、子代理或超时猜测替代授权。" },
       scope: ["本机工作与 external effect（外部现实动作）", "root（根代理）和 child（子代理）委派", "长期无人值守目标", "多任务施工与 Git 收口", "PRIVATE（私有）、PUBLIC（公开）和未知目标"],
-      decisions: ["当前请求是否已授权现实 effect", "是否需要 UAC 但不扩大授权", "目标是否仍是已登记目标", "谁拥有最小施工 scope", "显式跨项目目标是否使用同一 coordination_id 且逐项目隔离", "PUBLIC 项目被 Git 明确忽略的有价值私有材料是否需要迁入已登记 PRIVATE companion", "E rules release 的变化对应哪些精确 logical-id scope", "Git、发布和 external effect 是否真正收口"],
-      allowed: ["低风险本地工作直接做", "同一 active goal 内重派生步骤", "现有 upstream 定向 commit 和 normal push", "可信私有目标内按任务需要保真", "PUBLIC 项目私有伴随材料在 PRIVATE 远端回读后以 ignored 本地链接继续提供原路径"],
-      forbidden: ["child（子代理）、shell（命令行）、worktree（工作树）或 UAC（管理员确认）扩权", "绕过重叠 Owner（施工责任）", "用 timeout（超时）或自制 evidence（证据）恢复 Owner", "无明确门禁 force-push（强制推送）或新公开", "把 trusted（可信目标）当已授权"],
+      decisions: ["当前请求是否已授权现实 effect", "是否需要 UAC 但不扩大授权", "目标是否仍是已登记目标", "谁拥有最小施工 scope", "显式跨项目目标是否使用同一 coordination_id 且逐项目隔离", "私人账号空间是否满足用户账号、默认私人且无 public/share 信号的等价可信条件", "PUBLIC 最终载荷属于 L1–L5 哪一级，是否有升级到 L3+ 的正面证据", "项目收紧 L1/L2 默认是否同时具备真实需要与用户对精确项目、范围、限制的明确授权", "PUBLIC 项目被 Git 明确忽略的有价值私有材料是否需要迁入已登记 PRIVATE companion", "E rules release 的变化对应哪些精确 logical-id scope", "Git、发布和 external effect 是否真正收口"],
+      allowed: ["低风险本地工作直接做", "同一 active goal 内重派生步骤", "现有 upstream 定向 commit 和 normal push", "用户私人账号空间满足无公开信号条件时与本机私密目标等价可信", "可信私有目标内按任务需要保真", "PUBLIC 载荷没有 L3+ 正面证据时按 L2 处理，不因个人来源删改", "PUBLIC 项目私有伴随材料在 PRIVATE 远端回读后以 ignored 本地链接继续提供原路径"],
+      forbidden: ["child（子代理）、shell（命令行）、worktree（工作树）或 UAC（管理员确认）扩权", "绕过重叠 Owner（施工责任）", "用 timeout（超时）或自制 evidence（证据）恢复 Owner", "无明确门禁 force-push（强制推送）或新公开", "把 trusted（可信目标）当已授权", "用 unknown、来自个人、可识别或谨慎起见把 L1/L2 升级", "让项目、AI、Skill、模板、历史文档或 Owner 自称产生 L1/L2 收紧授权"],
       process: ["解析 effect（外部现实动作）", "解析 registered target（已登记目标）", "确认授权或 CoreGoal（长期目标授权）", "Claim（认领）最小 scope（施工范围）", "执行边界重验目标", "PUBLIC ignored 私有材料按 copy/hash、PRIVATE commit/read-back、rollback rename、本地 link/status 回读迁移", "执行并 read-back（正式回读）", "Git/Pages 收口", "Release（释放）或 Transfer（移交）"],
       failure: ["步骤漂移：废弃并重派生", "目标扩大：建立 successor 并重新确认", "Owner 冲突：一次有界协调", "PRIVATE companion 远端回读前任一步失败：恢复 PUBLIC worktree 原件", "E release scope 与五文件 descriptor 不符：拒绝激活", "Git 非 fast-forward：停止并解决同步", "Residual 未移交：保持 lease"],
       sections: [
-        { title: "授权与提权", paragraphs: ["本机可逆工作直接推进；external effect（外部现实动作）要有明确授权。Windows Medium integrity（中等完整性权限）不表示管理员能力不存在，UAC（Windows 管理员确认）只解决操作系统进程权限。"], items: ["当前请求明确对象、内容和动作即可授权", "实际 publish/deploy 边界重新解析 registered target", "不自动扩到新账号或新公开面", "委派边界只能收窄", "项目规则继续拥有业务语义"] },
+        { title: "授权与提权", paragraphs: ["本机可逆工作直接推进；external effect（外部现实动作）要有明确授权。Windows Medium integrity（中等完整性权限）不表示管理员能力不存在，UAC（Windows 管理员确认）只解决操作系统进程权限。"], items: ["当前请求明确对象、内容和动作即可授权", "实际 publish/deploy 边界重新解析 registered target", "不自动扩到新账号或新公开面", "委派边界只能收窄", "项目规则继续拥有业务语义、安全和项目验收", "PUBLIC 个人数据唯一分级与 project_publication_restriction_authority 由本合同拥有；项目自写限制不产生用户授权"] },
         { title: "CoreGoal 与步骤能力", paragraphs: ["CoreGoal 固定目标、范围、禁止项和停止条件，不冻结计划、代码或 executor。每个 effect 使用短时、单次、防重放的步骤能力。"], items: ["实现漂移不要求重新人类确认", "目标扩大才建立 successor", "步骤能力绑定 pre/post 和回滚", "四类人类因子全部丢失时不能自举"] },
         { title: "Execution Owner", paragraphs: ["Owner 只协调施工，不产生授权和事实。默认一个任务只持有一个项目；用户明确跨项目目标时用同一 coordination_id 逐项目 Claim 精确 scope，各项目仍独立 CAS、授权、回读和 Release。"], items: ["纯只读审计不 Claim", "禁止 whole_project 与授权串用", "child 不继承 coordination", "已有重叠 Owner 不能绕过", "未完 residual 必须随 checkpoint 移交"] },
-        { title: "E release、Git 与可信目标", paragraphs: ["E rules release 从同一 commit 的五个 descriptor 推导精确 scope；Git 实施默认含定向提交和正常推送，个人仓库结果必须从真实默认分支可达并由远端回读。"], items: ["E activation 不消费 CoreGoal 或旧 Publisher 权限", "force-push 不在默认授权", "PUBLIC 暴露检查失败时停止", "PRIVATE 不意味着可以泄露 secret", "PUBLIC 项目只迁移 Git 明确 ignored、未跟踪且尚无 PRIVATE 远端覆盖的有价值材料", "PRIVATE 远端 hash 回读成功前不替换原件；本地 link 仍须证明继续 ignored", "不完整副本不能称完整备份"] }
+        { title: "E release 与 Git 收口", paragraphs: ["E rules release 从同一 commit 的五个 descriptor 推导精确 scope；Git 实施默认含定向提交和正常推送，个人仓库结果必须从真实默认分支可达并由远端回读。"], items: ["E activation 不消费 CoreGoal 或旧 Publisher 权限", "force-push 不在默认授权", "PUBLIC 暴露检查失败时停止", "PUBLIC 项目只迁移 Git 明确 ignored、未跟踪且尚无 PRIVATE 远端覆盖的有价值材料", "PRIVATE 远端 hash 回读成功前不替换原件；本地 link 仍须证明继续 ignored", "不完整副本不能称完整备份"] },
+        { title: "可信目标与 PUBLIC 个人数据唯一分级", paragraphs: ["本机、workspace、BitLocker 盘与满足用户账号、默认私人、无 public/share 信号的私人账号空间同属 default_trusted_target（默认可信目标）；可信、可见性和写授权仍相互独立。PUBLIC 最终载荷按 effective_level=max(字段等级, 组合后的现实损害等级) 判断，缺少达到 L3+ 的正面证据时默认 L2。"], items: ["L1：非个人、虚构、匿名，或重复公开不会增加现实损害的普通已公开事实；不受个人数据限制", "L2：用户本人的姓名、完整生日、普通照片、城市、履历、兴趣、普通公开账号或指定公开联系方式；姓名+生日+普通履历仍默认 L2，不能仅因个人数据而审查、脱敏、删改或额外确认", "L3：有正面证据可能造成诈骗、信用/名誉/关系损害、持续骚扰或非实时精准追踪；私人联系方式、精确住址、详细财务、非公开纠纷、可预测行踪与第三人未公开数据进入可能敏感审查，但不自动阻断", "L4：可能造成严重人身、财产、身份或重大隐私损害；证件、账户、生物识别、实时位置、完整健康/亲密信息、原始私人聊天和可用秘密属于此级，可用秘密明文不得公开", "L5：大规模多人数据、机构关键/核心数据或影响国家安全、公共利益和系统性运行的重要数据；普通个人单条自身数据通常不适用", "L1/L2 以及没有 L3+ 正面证据的其他内容在个人数据敏感性轴上不受限制；只有 L3+ 才进入审查", "项目想收紧 L1/L2 默认，必须同时有真实项目需要，以及用户对精确项目、范围和限制内容的明确授权", "真实 secret、第三人授权、许可、目标解析、external effect 授权及 system/developer/platform 边界与等级正交"] }
       ],
       relation: "它拥有现实 effect 的授权、施工责任、E release 精确 scope 和 Git/Pages 收口；能力合同决定怎么做，保护合同决定 E release 与重大动作保护。"
     },
@@ -666,20 +674,20 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("four_base_decision_context_contract").lines,
       sourcePath: "E:\\.agents\\docs\\contracts\\agents.four-base-decision-context.md",
       releaseRelativePath: "docs\\contracts\\agents.four-base-decision-context.md",
-      purpose: "跨控制面架构、运行治理和长期演化的 metadata 入口。兼容 logical id 保留旧名称，但现行只有三个控制面。",
+      purpose: "跨控制面架构、运行治理和长期演化的 metadata 入口。兼容 logical id 保留旧名称，但现行只有三个控制面；Git 只提供 PUBLIC 目标事实并消费 .agents 的分级/授权结论。",
       plainLanguage: "只有跨 Owner（责任源）的事实会改变决定时才展开全景；规则事实从同一 E release 读取，Git 和机器事实回到各自 Owner，绝不读取 C 盘旧 authority 补上下文。",
       why: "Agent 规则、Git 仓库和本机配置分别由不同项目维护。把所有事实塞进一个总库会过期，也会让一个项目越权解释另一个项目。",
       example: "例如发布本机服务时，仓库是否公开从 Git 总索引读取，端口和计划任务从 PCConfig 读取，AI 的授权规则从 .agents 读取。",
       result: "任务只读取会改变决定的那部分事实，并保留每条结论的责任来源；某个来源不可读时只阻断依赖它的结论，不回退到旧中央系统。",
       readerStates: { pass: "所需控制面都可读时，按责任来源组合最小上下文并继续当前决定。", problem: "不同责任源给出矛盾事实时，分别保留并交给真正 Owner 复核，不把它们合成一个答案。", unavailable: "某个必要控制面不可读或 schema（数据结构）无效时，依赖它的跨项目结论阻断；不恢复历史中央系统补数据。" },
       scope: ["跨控制面架构评审", "运行治理", "全局演化", "Owner 关系和合同覆盖"],
-      decisions: ["当前需要哪个控制面的事实", "是否只需 metadata 还是要展开正文", "设计、Git、机器和 external receipt 应怎样分开验证", "是否真的出现需要新基座的稳定需求"],
+      decisions: ["当前需要哪个控制面的事实", "是否只需 metadata 还是要展开正文", "Git 是否只提供 visibility 与候选内容事实，而没有越权建立或收紧 PUBLIC 个人数据等级", "设计、Git、机器和 external receipt 应怎样分开验证", "是否真的出现需要新基座的稳定需求"],
       allowed: ["零写获取 metadata", "从 E current release 读取规则路径与 SHA", "按影响展开 owner 正文", "必要时联动三个 Owner"],
-      forbidden: ["把兼容名称理解成第四控制面", "读取 C 盘旧 authority/generation/Publisher/epoch", "恢复已退役中央上下文", "复制私人正文和巨大快照", "用 dirty source 冒充 E current", "用合同设计证明 runtime"],
+      forbidden: ["把兼容名称理解成第四控制面", "让 Git 控制面另建或收紧 PUBLIC 个人数据等级", "读取 C 盘旧 authority/generation/Publisher/epoch", "恢复已退役中央上下文", "复制私人正文和巨大快照", "用 dirty source 冒充 E current", "用合同设计证明 runtime"],
       process: ["确认跨 Owner（责任源）事实会改变决定", "列出视图和 owner（责任方）", "选择 operations governance（运行治理）或 global evolution（全局演化）", "读取 primary metadata（主要元数据）", "按影响展开 conditional（条件内容）", "独立验证各层"],
       failure: ["schema 无效：BLOCK", "E release 五规则闭包不完整：BLOCK", "required owner 缺失：BLOCK", "primary 不可读：BLOCK", "修正确 Owner，不回退 C 盘或历史中央系统"],
       sections: [
-        { title: "现行边界", paragraphs: ["现行控制面只有 .agents、Git 总索引和 PCConfig；具体项目继续拥有业务语义。文件名里的 four-base 只是兼容标识。"], items: [".agents：Agent 行为、授权、能力路由", "Git：仓库身份、可见性、分支、同步、发布", "PCConfig：机器路径、运行时、任务、备份、恢复", "具体项目：业务和产品结果"] },
+        { title: "现行边界", paragraphs: ["现行控制面只有 .agents、Git 总索引和 PCConfig；具体项目继续拥有业务语义。文件名里的 four-base 只是兼容标识。"], items: [".agents：Agent 行为、授权、能力路由及 PUBLIC 个人数据唯一分级", "Git：仓库身份、可见性、分支、同步、发布；只向 .agents 提供事实并消费分级/授权结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份、恢复", "具体项目：业务和产品结果"] },
         { title: "入口与证据", paragraphs: ["入口只返回 Owner（责任源）、E release path、content SHA、大小和 Token（模型计数单位）估算；不复制无关正文、不运行动态 Provider（现场读取器）、不建共享数据库。"], items: ["先 metadata（元数据）后正文", "活动规则从同一 E release 解析", "dirty source 不是 current", "设计、Git（版本管理系统）、机器和 Adapter receipt（适配器回执）分开验证", "普通单项目任务不机械进入全景"] },
         { title: "退役边界", paragraphs: ["历史中央系统及其冻结文档不是控制面、默认个人上下文或运行产品。备份对象存在也不会恢复它。"], items: ["不调用旧 context、beacon 或 probe", "不读取历史私人数据库和媒体", "历史命名不是新基座理由", "新基座必须有独立稳定 owner、生命周期和恢复边界"] }
       ],
@@ -696,22 +704,22 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("capability_routing_contract").lines,
       sourcePath: "E:\\.agents\\docs\\contracts\\agents.capability-routing.md",
       releaseRelativePath: "docs\\contracts\\agents.capability-routing.md",
-      purpose: "唯一拥有方法选择、上下文路由、复杂度治理、动态配置准入、reader routing、原生经济委派和按需插件语义的合同。",
-      plainLanguage: "不机械套 Skill（能力入口），不因工具列表短就宣布做不了；先找已有 Owner 和原生入口。原生委派先验证 model/effort/root 与同一 E release identity，再按任务语义选择 0–10 个 Luna/Terra/Sol 后代。",
+      purpose: "唯一拥有方法选择、english_chinese_gloss、上下文路由、复杂度治理、动态配置准入、reader routing、原生经济委派和按需插件语义的合同。",
+      plainLanguage: "不机械套 Skill（能力入口），不因工具列表短就宣布做不了；有用英文正常保留，除常见缩写与精确标识外首次出现紧跟中文括注。原生委派先验证 model/effort/root 与同一 E release identity，再按任务语义选择 0–10 个 Luna/Terra/Sol 后代。",
       why: "不同任务需要的工具和并行程度不同。机械套同一流程会用错能力、重复安装工具，或开出很多代理却没有人负责最终结果。",
       example: `例如刷新网页时，${panelSnapshot.authority.releaseId} 内容、响应式界面、刷新链和复杂度可以在独立可验时交给不同家族的只读支路；根任务继续重建快照、处理依赖并统一写入，避免冲突。`,
       result: "任务会在可信 E identity 下选择真正有收益的工具、上下文、代理家族和数量；C Authority unavailable 不再影响委派，root 始终负责方向、合并和最终验收。",
       readerStates: { pass: "能力身份、授权和净收益明确时，选择对应工具或代理并继续，主任务保留最终责任。", problem: "出现写冲突、资源争用、结果不可独立验收或收益不足时，减少并发、改为串行或由主任务直接完成。", unavailable: "委派身份或目标能力不可用时，只关闭该次委派或能力路线；主任务继续安全工作并报告真实缺口。" },
       scope: ["所有能力选择", "长任务状态重建", "README 与项目规则路由", "动态配置设计", "原生委派和插件缺口"],
-      decisions: ["当前任务值不值得使用某项能力", "应读多少上下文", "是否安装运行时或建议插件", "可信 model/effort/role/E release identity 是否成立", "应并行 0–10 个代理以及选择 Luna/Terra/Sol 哪个家族", "怎样保持代码和仓库不过度膨胀"],
+      decisions: ["当前任务值不值得使用某项能力", "英文自然词或短语是否需要按 english_chinese_gloss 在首次出现后紧跟中文括注", "PUBLIC 内容判断是否需要按需读取授权合同的唯一分级表", "应读多少上下文", "是否安装运行时或建议插件", "可信 model/effort/role/E release identity 是否成立", "应并行 0–10 个代理以及选择 Luna/Terra/Sol 哪个家族", "怎样保持代码和仓库不过度膨胀"],
       allowed: ["按净收益选择方法", "需要时安装官方稳定运行时", "verified 身份下委派", "真实能力缺口时提醒精确插件", "复杂任务建立可重建 checkpoint"],
-      forbidden: ["把 Skill 指令升级成硬门", "已有入口仍提示插件", "无身份 spawn", "固定默认 child 模型", "派出高于父级 effort 或超过 Ultra 绝对上限的后代", "用顶层 task 绕过 native 拒绝", "因 C Authority unavailable 关闭 E rules 委派", "为假想未来建动态配置平台", "把 README 当默认 AI 上下文"],
+      forbidden: ["把 Skill 指令升级成硬门", "为规避中文括注而删除、回避或全中文替代有用英文", "在非 PUBLIC 决策中无差别加载个人数据分级表", "已有入口仍提示插件", "无身份 spawn", "固定默认 child 模型", "派出高于父级 effort 或超过 Ultra 绝对上限的后代", "用顶层 task 绕过 native 拒绝", "因 C Authority unavailable 关闭 E rules 委派", "为假想未来建动态配置平台", "把 README 当默认 AI 上下文"],
       process: ["理解目标", "查 owner 和原生入口", "确认宿主或用户绑定的 model/effort/root 与 E release identity", "完整读取同 E release 的原生经济路由节", "按任务语义和 slots 决定 0–10 与家族", "缺能力再装 runtime 或建议插件", "root 与 child 并行实施并分层验证"],
       failure: ["无可信身份：只关闭委派", "E identity 变化或压缩：重读 11 条强门禁", "Provider（服务入口）缺失：报告受限，不造第二 Provider", "child（子代理）中断：优先恢复原 session（会话）", "C Authority unavailable：不影响此路径", "catalog schema（目录数据结构）无效：失败关闭"],
       sections: [
-        { title: "方法与能力自治", paragraphs: ["目标、信息增益、延迟、耦合和可逆性决定方法。Skill、Plugin、模板和计划只是候选能力，不会扩大授权。"], items: ["先找 owner adapter、CLI/API 和 metadata", "实证缺失才降级", "任务必需 runtime 可从官方路径安装", "既有项目服从 lock、版本和 CI"] },
+        { title: "方法与能力自治", paragraphs: ["目标、信息增益、延迟、耦合和可逆性决定方法。Skill、Plugin、模板和计划只是候选能力，不会扩大授权。"], items: ["english_chinese_gloss 保留有用英文；除 AI/LLM/API/URL/JSON 等常见缩写和精确标识外，英文自然词或短语首次出现后紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "先找 owner adapter、CLI/API 和 metadata", "实证缺失才降级", "任务必需 runtime 可从官方路径安装", "既有项目服从 lock、版本和 CI"] },
         { title: "耐久状态与代码", paragraphs: ["长任务必须可重建；代码优先内聚、单一事实源、显式接口和确定行为，不为假想未来建框架。"], items: ["Consumer 只依赖最小接口", "配置按真实需求逐级准入", "秘密只用 SecretRef", "完成计划和旧复盘由 Git 留史"] },
-        { title: "Reader routing（读者路由）", paragraphs: ["人类 README（说明文档）要保持人话和最新，但不是动态权威；项目规则只承载该项目真正更具体的语义。"], items: ["用户明确询问或验收需要时才读操作指南", "过期文档是待修缺陷", "嵌套规则只在子树语义不同才存在", "现场代码、测试和 Provider（事实入口）决定实现事实"] },
+        { title: "Reader routing（读者路由）", paragraphs: ["人类 README（说明文档）要保持人话和最新，但不是动态权威；项目规则只承载该项目真正更具体的语义。"], items: ["用户明确询问或验收需要时才读操作指南", "只有目标明确 PUBLIC 或正在决定公开内容时，才读取授权合同的 PUBLIC 个人数据唯一分级表", "Git 与项目提供 visibility、候选内容和业务事实，不复制或改写等级", "项目收紧 L1/L2 默认须满足授权合同的项目需要与用户精确授权", "过期文档是待修缺陷", "嵌套规则只在子树语义不同才存在", "现场代码、测试和 Provider（事实入口）决定实现事实"] },
         { title: "原生经济委派", paragraphs: ["现行 11 条规则先绑定 model、effective effort、root/child role 与 E release/commit/ruleset/合同 SHA，再做 0 到 10 决策；任务开始、独立支路、阻塞、steer、压缩、child 完成和槽位释放都重判。"], items: ["gpt-5.6-luna：封闭可验、读重和确定性工作", "gpt-5.6-terra：强耦合实现、深调试和架构审查", "gpt-5.6-sol：最高难度、风险、战略与终审", "宿主返回的其他 verified 模型归更强的未来模型家族，不维护型号白名单", "Sol 与未来模型可在父级上限内使用 High/XHigh/Max/Ultra；Luna/Terra 保持 Max", "家族与 effort 只能向下收窄，Root 持续负责目标、风险和最终集成"] },
         { title: "按需插件", paragraphs: ["Skill 注入、安装、账号连接、fresh task 和 E2E 是独立事实。只有能力缺口真实影响结果时才读取插件 catalog。"], items: ["已有等价入口不提示插件", "用户同意后才安装或连接", "未知 trigger 返回 not found", "catalog schema 无效失败关闭"] }
       ],
