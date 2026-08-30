@@ -32,18 +32,14 @@ read-only operating panel; public presentation is secondary.
   permission to euphemize a selected project's real identity. Name the actual
   product, platform and public repository when they make the project clearer;
   `Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly.
-  Hide only actual personal-sensitive payloads and reusable credentials.
-- If an otherwise public-safe exact path or identifier contains the prohibited
-  platform identity, describe its drive, role, ownership, migration and
-  read-back semantics without reproducing that branded path segment. This is a
-  deliberate public-copy exception, not permission to hide the underlying
-  technical state.
-- Accuracy remains the primary product requirement. Public-copy restrictions
-  apply only to the prohibited literal or private value; they must never change
-  the factual status, omit the component, soften a failure, invent a generic
-  substitute, or make the owner infer that the underlying system does not
-  exist. Always retain the public-safe state, role, drive/location class,
-  selected configuration, migration relation, evidence and decision impact.
+  Accuracy remains the primary product requirement. Product names, platform
+  labels and otherwise public-safe paths or identifiers are not sensitive
+  merely because of their wording and must not be replaced by euphemisms. Only
+  actual values with positive L3+ evidence enter the global
+  personal-data review; reusable credential values remain forbidden. When one
+  exact value is withheld, retain the component's public-safe identity, state,
+  role, drive/location class, selected configuration, migration relation,
+  evidence and decision impact.
 - Accuracy and owner usefulness outrank persuasion. Do not hide current rules,
   generations, limitations, evidence gaps or implementation state merely to
   make the site look cleaner or stronger.
@@ -59,8 +55,9 @@ read-only operating panel; public presentation is secondary.
   after those answers may the page present triggers, inputs, outputs,
   architecture, commands, schemas, hashes, evidence and recovery details.
 - For every selected project, the public panel is technically complete by
-  default. Except for private sensitive payloads and reusable secrets, retain
-  the details needed to reconstruct the current product: exact models,
+  default. Except for reviewed L3+ values that the active global classification
+  actually requires withholding and reusable secrets, retain the details
+  needed to reconstruct the current product: exact models,
   providers, profiles, versions, modes, paths, ports, components, data flow,
   commits, hashes, candidates, installed/runtime state, failures, tests, E2E
   evidence and named gaps. “Public”, “too technical”, “too much text” and
@@ -74,15 +71,17 @@ read-only operating panel; public presentation is secondary.
   model stack; a machine project must name current recovery/runtime versions;
   a Git project must name repository and worktree facts. The owner must not
   reconstruct current choices from later architecture prose.
-- If a detail contains private sensitive payload or a reusable secret, omit the
-  payload/value but keep the public-safe identity, state, boundary and effect on
-  current decisions. Unknown stays explicit Unknown. Never replace exact facts
-  with a vague “configured / available / verified” label.
+- If a reviewed L3+ value must be withheld, or a reusable secret is present,
+  omit only that payload/value while keeping the public-safe identity, state,
+  boundary and effect on current decisions. Unknown stays explicit Unknown.
+  Never replace exact facts with a vague “configured / available / verified”
+  label.
 - Sensitivity is decided from the actual value, not the field name. Process
   names, executable paths, command lines, window titles, timestamps, usage
   durations, telemetry, network metrics, hardware identifiers and screenshots
-  are not blanket-sensitive and may be public when useful. Redact only actual
-  private personal content or reusable credential values. Bulk raw data may be
+  are not blanket-sensitive and may be public when useful. Only actual values
+  with positive L3+ evidence enter review; redact a value only when that review
+  requires it, and never publish reusable credentials. Bulk raw data may be
   omitted for boundedness, noise or product value, but never mislabeled as
   forbidden merely because of its schema.
 - PUBLIC personal-data decisions follow the active global authorization
@@ -178,8 +177,9 @@ read-only operating panel; public presentation is secondary.
 - Do not remove technical paths, identifiers, hashes, generation facts,
   implementation details, failure evidence or operating limitations merely
   because the repository is public. This panel is allowed to be technically
-  complete. Unrelated sensitive personal domains such as litigation are
-  outside this MVP rather than silently generalized into public content.
+  complete. Unregistered personal domains are outside the current MVP because
+  they have not been selected as projects; their product or domain names are
+  not sensitive by themselves.
 - Do not expose project-retirement bookkeeping. A selected older project may
   describe its enduring product idea and what was actually built, without
   publishing internal lifecycle labels or implying untrue current operation.
@@ -189,7 +189,8 @@ read-only operating panel; public presentation is secondary.
   selection. When the owner selects one, a `curated_packaging` +
   `manual_owner_only` page may publish its reusable product thinking, evidence
   method, correction flow, human decision boundary and design ideas while
-  omitting private payloads, personal state and individual outcomes. A health
+  omitting only reviewed L3+ values that must stay private, reusable credentials
+  and individual outcomes outside the selected public product. A health
   project may therefore explain evidence routing, uncertainty and safety
   boundaries, but must not publish the owner's health records, diagnoses, test
   results, medication list or individualized advice.

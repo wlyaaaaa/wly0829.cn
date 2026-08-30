@@ -47,14 +47,15 @@ Codex Desktop 任务；不写成远程桌面、第二份聊天或当前在线服
 
 ## 同轮自动修复
 
-- public gate 原来全局禁掉字面量 Codex；已移除这一误禁，其他明确禁项与全部
-  credential regex 保留。
+- public gate 原来按 Codex 及若干产品名、领域词做全仓字面封禁；现已删除全部这类
+  blanket ban（笼统禁令）。产品/平台名和普通领域词可直接公开，具体 L3+ 值仍按全局
+  唯一分级判断，全部 credential regex（凭据值正则）继续保留。
 - manual-only 计划与页面原来一律写“私有 Owner 证据”；已改为中性的 fresh/current
   Owner evidence，使 PUBLIC Codex Remote 与 PRIVATE CACB/学习方法都准确。
 - full search 原来没有把 aliases 放入 Latin-token admission，导致完整搜索与构建期
   紧凑搜索排序不同；已修为同一可搜索文本，并由全部 alias 一致性测试覆盖。
 - 项目规则明确：网站整体可平台中立，但单个项目必须直说真实产品；微信、
-  WeChatDirect 与 Codex Remote 可直接出现。PUBLIC 个人数据分级只引用 E92 全局授权
+  WeChatDirect 与 Codex Remote 可直接出现。PUBLIC 个人数据分级只引用 E93 全局授权
   合同中的唯一表，项目不复制或自行收紧。
 - 删除桌面端奇数最后一张卡片居中特例；第 9 项保持普通网格顺序，未来第 10 项可直接
   填右列，不发生卡片跳位。
@@ -66,6 +67,12 @@ Codex Desktop 任务；不写成远程桌面、第二份聊天或当前在线服
   或精确名称保持原样；app-server、Sidecar、loopback、diff 等首次出现时立即解释。
 - 手机横向大图不再强制占满整屏：100% 时画布按图片比例收紧，放大后才扩展内部
   viewport 并保留双向滚动；竖图继续完整使用可用高度。
+- E92 identity 和 `content-core` 曾已正确但规则说明页仍残留 E91 的 task/Owner 文案；现已
+  补齐耐久授权、真实调用一次、lifecycle resolver、`RecoverRelease` / `RecoverReleaseClaim`、
+  `threadId` / `clientThreadId` 与来源任务归档边界，并把 personal-panel-refresh 状态改为
+  已完成 PUBLIC main、Pages 和公网回读，而不是“正在完成”。随后 E93 进一步明确：未归档
+  long-term Owner 不自动释放，终态长期任务必须由带 checkpoint/residual 的 successor 接续
+  或正式 retirement，归档任务仍无长期保留例外。
 
 ## Registry 与刷新合同
 
@@ -82,17 +89,17 @@ Codex Desktop 任务；不写成远程桌面、第二份聊天或当前在线服
 
 ## 构建、测试与反膨胀
 
-- E92 已刷新并由原生 snapshot verifier 现场通过：活动提交
-  `cf5981bfdb305be5b9cffc8c89f91697a3637e6e`、ruleset
-  `f9200d4c4d1ee2d497c3c54926a3838459433ae068b494a0e0440932a44a8a75`、pointer
-  revision 13、previous E91、5 项规则 binding、0 finding。当前 `.agents`
-  `main=83518cfd93672a6a9e87b3b90d714516eebc7887` 且工作树干净；五规则 bytes 仍与
-  E92 完全一致，后续 Skill 提交不覆盖活动 release。
+- E93 已刷新并由原生 snapshot verifier 现场通过：活动提交
+  `ea32ca05076a04c90895d468e1b878d4f19ff3d1`、ruleset
+  `c081c5d5949a2c8546e36b1145d19db58594cd8afd92ba44f2fd82884031210b`、pointer
+  revision 14、previous E92、5 项规则 binding、0 finding。当前 `.agents`
+  `main=ea32ca05076a04c90895d468e1b878d4f19ff3d1` 且工作树干净，五规则 bytes 与
+  E93 完全一致。
 - 最终 `npm run build` 通过：86 条完整静态产品路由、87 个 HTML、88 条紧凑搜索记录；
   PUBLIC gate 扫描 127 个 source 文件与 166 个 dist 文件，共 293 个，0 finding。
-- 最终 `npm test` 为 39/39；模块关系、Codex Remote 即时术语说明、逐图独立证据价值、
-  横向大图收紧、E92 durable authorization/lifecycle、personal-panel-refresh 精确派发
-  分类和静态增强脚本均进入回归合同。
+- 最终 `npm test` 为 40/40；模块关系、Codex Remote 即时术语说明、逐图独立证据价值、
+  横向大图收紧、E93 durable authorization/lifecycle、personal-panel-refresh 精确派发、
+  普通产品/领域词放行与构造凭据阻断、静态增强脚本均进入回归合同。
 - 共享 JavaScript：14.19 kB，gzip 5.12 kB；长正文没有进入浏览器包。
 - CSS：75.25 kB，gzip 13.41 kB；没有新增依赖、服务、数据库或后台刷新节点。
 - 搜索投影：32,203 bytes，gzip 13,132 bytes，低于 24 KiB 审查阈值。
@@ -124,7 +131,7 @@ Codex Desktop 任务；不写成远程桌面、第二份聊天或当前在线服
   左侧模块导航、绿色/白色设计系统和内容密度，没有新造另一套网站视觉。
 - `/404.html` 专用制品真实显示“这里没有这页”、返回首页/规则/Skills；Vite preview
   对未知 URL 的首页 fallback 不冒充 Pages 404，真实未知路由留到公网部署后回读。
-- `/rules/?rule=authorization_delegation_contract` 显示 E92、previous E91、pointer 13、
+- `/rules/?rule=authorization_delegation_contract` 显示 E93、previous E92、pointer 14、
   durable explicit user authorization、真实调用一次、RecoverRelease/Claim、真实
   threadId/clientThreadId 与 complete goal 关闭状态；`/skills/personal-panel-refresh/`
   同步 unavailable/failed/dispatch-unconfirmed，且不再公开旧 task ID/Owner 台账。
@@ -159,10 +166,11 @@ Ignored QA：
   404 并显示“这里没有这页”。公网 1440×900 与 390×844 再验无页面级横向溢出，
   模块原生导航、20 张画廊入口和控制台零 warning/error 通过。
 
-## E92 合并快照
+## E93 最新快照
 
-E92 Source 已正式发布并回读，assessor 确认 generation-changed、material-change 与
-fresh independent website task 均成立。本网站只保留公开产品事实：E92 活动身份、
-五规则 bytes/SHA、耐久明确授权、真实调用一次、terminal Owner 收敛、complete goal
-关闭状态、来源 task 可逆归档，以及 personal-panel-refresh 的精确派发分类。内部 task
-ID、Owner lifecycle 台账和 predecessor 细节不进入 PUBLIC 设计文档。
+E92 Source 正式发布后，网站异步任务已完成第九项目与 E92 公网收口。E93 仅进一步
+修正 long_term_task 的保留/接续语义；当前 Owner 直接在同一网站目标内收敛，无需制造
+第十项目。本网站只保留公开产品事实：E93 活动身份、五规则 bytes/SHA、耐久明确授权、
+真实调用一次、普通 terminal Owner 收敛、long-term Owner 接续/retirement、complete goal
+关闭状态、来源 task 可逆归档，以及 personal-panel-refresh 的精确派发分类。内部 task ID、
+Owner lifecycle 台账和 predecessor 细节不进入 PUBLIC 设计文档。

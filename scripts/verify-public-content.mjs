@@ -5,17 +5,6 @@ import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
-const forbiddenTerms = [
-  "Q29kZXhIYXJuZXNz",
-  "UGVyc29uYWxPUw==",
-  "UGVyc29uYWxLbm93bGVkZ2VCYXNl",
-  "cGVyc29uYWwtbGl0aWdhdGlvbg==",
-  "6K+J6K68",
-  "QUkg5aSn5qih5Z6L",
-  "QUnlpKfmqKHlnos=",
-  "QUkg5pWZ57uD",
-  "QUnmlZnnu4M="
-].map((value) => Buffer.from(value, "base64").toString("utf8"));
 const secretPatterns = [
   ["OpenAI-style key", /sk-[A-Za-z0-9_-]{20,}/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
@@ -82,9 +71,6 @@ for (const file of files) {
   }
   const searchableText = `${latinText}\n${utf8Text}`;
   const relative = path.relative(projectRoot, file).replaceAll("\\", "/");
-  for (const term of forbiddenTerms) {
-    if (searchableText.toLowerCase().includes(term.toLowerCase())) findings.push({ file: relative, type: "forbidden_public_term", term });
-  }
   for (const [name, pattern] of secretPatterns) {
     if (pattern.test(searchableText)) findings.push({ file: relative, type: "credential_value", pattern: name });
   }

@@ -6,7 +6,7 @@ export const ruleGuides = {
   agents_root_rules: {
     glossary: [
       ["事实 Owner", "某类动态事实的唯一负责来源。文档可以指路，但不能替代 Owner 的现场回读。"],
-      ["Project rule", "离当前目录最近的 AGENTS 规则，拥有这个项目的业务语义、命令、兼容、生成区、Owner 和项目安全；PUBLIC 个人数据唯一分级与项目收紧授权是授权合同拥有的窄例外。"],
+      ["Project rule", "离当前目录最近的 AGENTS 规则，拥有这个项目的业务语义、命令、兼容、生成区、Owner 和项目安全；PUBLIC 个人数据唯一分级、项目收紧授权和耐久明确用户授权解释是授权合同拥有的窄例外。"],
       ["External effect", "会改变外部系统或现实状态的动作，例如发消息、提交表单、发布、部署、付费。"],
       ["Advisory artifact", "Skill、模板、计划或 checklist 只是可选方法，不会自行变成必须遵守的硬门。"],
       ["Read-back", "执行之后从真实 Owner 再读一次结果，避免把命令返回成功误当成状态真的改变。"],
@@ -60,12 +60,14 @@ export const ruleGuides = {
           item("已登记目标继续收敛", "同一 active 目标的验证、发布、激活、read-back、修复、重试和 Git 收口默认继续，除非用户明确要求只本地。"),
           item("新边界仍要精确门禁", "首次登记、新公开目标、付费、force-push、不可逆迁移、信任根或授权边界变化不能从旧授权推导。"),
           item("服务不足也是问题", "AI 应最大化用户净收益并把事情办成；无理由少做、反复索权、把可自动解决的问题甩回用户，同样需要纠正。"),
+          item("耐久明确授权跨任务持续", "凡规则、合同或 Skill 标记为长期授权的精确目标和范围，用户已经持续同意；它跨轮次、压缩、root、全部 child/后代和新顶层任务有效，不能要求用户在当前消息重述。"),
+          item("已授权动作要真实调用一次", "Owner、目标和前提现场成立时，必须真实调用一次 adapter 或 tool；generic tool description（通用工具说明）、缓存或历史失败都不能让 AI 预判阻断。只有这次调用真实返回 deny、step-up、needs-evidence、unavailable 或 error 等结果时才按结果停止。"),
           item("最高权限身份不能复制", "当前最高权限角色只有独立登记的 root（根代理）。名称、提示词、同一 Windows 用户、管理员权限令牌或复制密钥都不能让其他代理继承。"),
           item("紧急对话授权只限当前对话", "一次可靠因子可让当前准确对话在 24 小时内临时优先于受保护规则，但不传播给子代理，不覆盖 system（系统指令）、developer（开发者指令）或 platform（平台规则），也不伪造外部事实。"),
           item("CoreGoal 冻结目标而非实现", "一次可靠因子固定目标、范围、禁止项和停止条件；计划、Schema、代码、executor 和后续 epoch 变化只重派生步骤。"),
           item("每个 effect 使用单次步骤能力", "步骤能力短时、单次、防重放，绑定目标、参数、影响上限、pre/post、回滚、executor 和 nonce。"),
           item("Execution Owner 认领最小 scope（施工范围）", "第一次写入前用 CAS Claim（比较后认领）最小施工范围；同一项目 scope（施工范围）不重叠，扩缩、改派和恢复都走正式 transition（状态转换）。"),
-          item("AI 创建顶层任务默认无项目", "只有 fresh Owner route 真实准入后才创建；默认 projectless（无项目），不能因涉及仓库自动挂 saved project，除非用户明确指定或上位平台强制。"),
+          item("AI 创建顶层任务默认无项目", "存在真实独立 Owner 边界、live registry 证明精确 scope 无现役 Owner且当前任务不能 Claim 时，耐久明确授权已经满足用户允许；create_thread 可见就真实调用一次。默认 projectless（无项目），不能因仓库工作自动挂 saved project，除非用户明确指定或上位平台强制。"),
           item("跨项目机械维护是窄例外", "只允许同类、确定、可回退、可独立验证的中低风险小修；业务语义、Schema、权限、依赖大升级和发布不属于该例外。"),
           item("私人账号空间等价可信", "本机、workspace 和 BitLocker 磁盘天然属于 default trusted target（默认可信目标）；当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，Google Drive、Notion、PRIVATE GitHub、Dropbox、OneDrive 等私人账号空间与它们完全等价可信。可信、可见性和写授权仍彼此独立。"),
           item("PUBLIC 个人数据唯一分级", "最终公开载荷按授权合同的 L1–L5 唯一表判断；没有达到 L3+ 的正面证据时默认 L2，L1/L2 不因来源为个人、可以识别或谨慎起见而受限。"),
@@ -174,6 +176,7 @@ export const ruleGuides = {
       ["Execution Owner（施工责任）", "协调谁在修改哪个最小 scope（施工范围），不产生授权或业务事实。"],
       ["Registered target", "持久 reference 说明目标是谁，现场 resolution 说明现在允许做什么。"],
       ["Residual", "任务结束前仍未完成、必须带 checkpoint 移交的现实义务。"],
+      ["Durable explicit user authorization（耐久明确用户授权）", "用户已经明确给出的持续同意；在冻结目标和范围内跨轮次、压缩、root、后代和新顶层任务有效，不要求同轮重述。"],
       ["Default trusted target（默认可信目标）", "本机私密目标和满足用户账号、默认私人、无 public/share 信号的私人账号空间；可信不产生写授权。"],
       ["Public personal data classification（公开个人数据分级）", "跨项目唯一的 L1–L5 表；只有有正面证据达到 L3+ 才进入个人数据可能敏感审查。"],
       ["Project publication restriction authority（项目公开限制授权）", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权；项目自写不成立。"]
@@ -189,7 +192,8 @@ export const ruleGuides = {
           item("UAC 不产生授权", "它只提升操作系统进程权限，不产生项目写权、最高权限身份或人类因子。"),
           item("Child 只能收窄", "后代的 scope、authorization、sandbox、model 和 effort 取用户、父级、活动规则和宿主可用集的交集。"),
           item("项目规则通常不被取消", "项目继续拥有业务语义、真实命令、兼容、生成区、Owner 和项目安全；全局授权通常只能取交集。窄例外是本合同统一拥有 PUBLIC 个人数据分级和项目收紧 L1/L2 默认的授权条件。"),
-          item("项目收紧不能自授权", "项目、AI、Skill、模板、历史文档、旧 commit 或 Owner 自称都不能产生、持久化或追认 L1/L2 收紧授权；必须同时有真实项目需要和用户对精确项目、范围、限制内容的明确指令。")
+          item("项目收紧不能自授权", "项目、AI、Skill、模板、历史文档、旧 commit 或 Owner 自称都不能产生、持久化或追认 L1/L2 收紧授权；必须同时有真实项目需要和用户对精确项目、范围、限制内容的明确指令。"),
+          item("项目不能降级长期授权", "项目可以定义客观业务前提，但不能把用户既有的耐久明确授权改成 absent（不存在）、要求同轮重述或持久化新的 grant（授权能力）。")
         ]
       },
       {
@@ -213,6 +217,8 @@ export const ruleGuides = {
         items: [
           item("Standing convergence 的对象", "只覆盖授权前已经由 Owner 登记且仍 active 的精确目标。"),
           item("默认继续的步骤", "验证、事务发布、部署、激活、正式 read-back、定向 Git 收口和正常 PR/release/deploy。"),
+          item("耐久明确授权不随对话丢失", "标记为 standing-authorized 的精确对象、范围和动作已经由用户长期允许；跨轮次、压缩、root、全部后代、新顶层 Owner task、重试和交接继续有效，直到用户撤销或规范边界改变。"),
+          item("真实调用一次而不是预判", "Owner、target 和 precondition 现场成立后直接调用一次真实入口；只有本次调用返回 deny、step-up、needs-evidence、action-time confirmation、unavailable 或 error，或身份/CAS/read-back 失败，才按事实停止。"),
           item("仍需精确门禁的变化", "首次登记、新外部目标、新公开或部署目标、付费、不可恢复迁移、force-push、信任根或授权边界变化。"),
           item("不重复询问", "对象、账号和能力范围已明确后，同一范围的实现、重试、验证、安装、发布和回读不再询问。"),
           item("Target reference 与 resolution", "Reference 固定原先登记目标的身份和 resolver；resolution 现场给出 active/retired、visibility、允许动作、adapter、preconditions、rollback 和授权要求。"),
@@ -230,16 +236,19 @@ export const ruleGuides = {
           item("一个任务最多一个项目", "同项目 scope 不重叠；首次 Claim，同 holder 追加独立 scope 用 Add，扩缩改派用正式 transition。"),
           item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
           item("写前 AuthorizeAction", "每次写入核对 action、task、scope、binding 和 revision，防止拿旧 claim 改新范围。"),
-          item("已有 Owner 时怎么办", "不借 shell、plugin、child、worktree 或 UAC 绕过。只发送一次有界请求；非硬依赖继续不冲突工作。"),
-          item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无 Owner、当前任务不能 Claim 且平台准入时才创建；默认无项目，不能因仓库工作自动选择 saved project。"),
+          item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。先用固定 Codex lifecycle resolver 判断对方是否仍 active；只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
+          item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无现役 Owner、当前任务不能 Claim 且独立 Owner 路线确有净价值时才创建；耐久明确授权已经满足用户允许，create_thread 可见就真实调用一次。默认无项目，不能因仓库工作自动选择 saved project。"),
+          item("任务创建结果精确分类", "threadId 是可继续管理的真实任务身份；clientThreadId 只证明 setup-pending（准备中），不能传给要求 threadId 的工具。真实工具缺失或 deny 是 unavailable，tool error 是 failed，无可追踪 ID 是 dispatch-unconfirmed；都停止且不盲重试。"),
           item("等待只有一轮", "关键路径只剩 Owner 结果时，作一次 terminal 或 needs-attention 事件等待，不持续轮询 commentary。"),
           item("Cross-thread delivery 不等于完成", "只证明宿主接受了发送；失败时不循环重试，改给可转发 prompt。"),
           item("Coordination Owner 不获得成员项目写权", "跨项目编排只拥有关系和最终集成。"),
           item("Coordination Owner 的唯一写权例外", "只有用户明确冻结的跨项目目标，才允许同一 coordination_id 逐个取得成员项目精确 scope；它仍不合并授权、effect、验收或 Release。"),
           item("Shared maintenance 的窄边界", "每次只 Claim 一个项目，限机械、确定、可回退的小修；业务语义、Schema、权限、依赖大升级、API 和发布全部禁止。"),
-          item("Release 前处理 residual", "普通 Release 只允许无残余；有残余必须随 checkpoint 原子 Transfer 给真实 successor。"),
+          item("Release 前处理 residual", "active Owner 无残余才普通 Release，有残余随 checkpoint 原子 Transfer。归档 predecessor，或未登记 long_term_task 的 inactive predecessor，经固定 resolver 证明 clean terminal 时用 RecoverRelease；有 open goal、turn_aborted 或 delivery residual 时必须带 checkpoint 和 residual 用 RecoverReleaseClaim 给真实 successor。"),
           item("恢复孤儿 Owner 的证据", "只接受固定宿主 adapter 的 terminal 或 task-not-found，并核对 project、scope、revision、workspace、checkpoint 和 pending transaction。timeout 和自制 JSON 不成立。"),
-          item("归档 predecessor 不唤醒", "用户要求 successor 接续已归档任务时，旧任务保持归档；先验证规范 rollout、无 queued work 和 active duplicate，再原子 RecoverReleaseClaim。"),
+          item("归档 predecessor 不唤醒", "旧任务保持归档，不等待、发消息或取消归档；先验证规范 rollout、无 queued work 和 active duplicate。clean 且无 residual 时 RecoverRelease；有 residual 才 RecoverReleaseClaim。"),
+          item("来源任务何时自动归档", "来源任务明确停止，或正式 terminal/completed 且无 follow-up、queued work、pending transaction 和未交接 Owner residual 时，来源才用真实 threadId 可逆归档；clientThreadId 不能代替，active、unknown 或 needs-attention 不归档。"),
+          item("长期任务不自动释放", "未归档且 binding 正式登记为 long_term_task（长期任务）的 Owner 不自动释放，即使 resolver 显示 terminal；终态长期任务只能由带 checkpoint/residual 的明确 successor 接续或走正式 retirement（退役）。一旦归档仍没有长期保留例外。"),
           item("E release scope（施工范围）不能自报", "由同一目标 commit 的五份 descriptor（规则描述符）与 canonical source blob SHA（源码指纹）的封闭映射推导；source/test/Git 后仍须 UAC activation、ACL/hash readback 和 fresh/spawn 验收。")
         ]
       },
@@ -397,7 +406,19 @@ export const ruleGuides = {
         ]
       },
       {
-        title: "五、原生经济路由的 11 条规则",
+        title: "五、原生子代理与独立 Owner task 分层",
+        intro: "子代理负责当前请求内的并行质量，顶层任务只服务真实独立 Owner 边界；两条路线不能互相冒充。",
+        items: [
+          item("Native child 不逐次索权", "耐久明确用户授权对 root、全部 child 和后代持续有效；身份、slot、scope 和真实 tool result 仍现场回读。"),
+          item("Owner 优先级不压缩子代理", "当前 Owner 能完成时不另建顶层任务，但两条独立可验支路仍按净收益使用 0 到 10 个 native child；root 继续战略、集成和不冲突工作。"),
+          item("顶层任务只在真实边界创建", "只有独立 Owner 边界、明显资源净价值、native slots 已满或 child 不适合承载时才评估新顶层 task；不得为等待或空闲制造任务。"),
+          item("create_thread 真实调用一次", "精确 standing grant 已覆盖且 live registry 无现役 Owner、当前任务不能 Claim 时，create_thread 可见就调用一次；不根据通用说明、缓存或历史失败预判缺少用户请求。"),
+          item("顶层任务默认 projectless", "AI 创建的任务默认无项目，只有用户明确选择或上位平台/工具强制项目上下文时例外；返回 task identity 后仍须 fresh CAS Claim 才成为 Owner。"),
+          item("禁止递归和空等表演", "新顶层 Owner 先自己完成、扩同目标 scope 或用 native child，不再递归造任务；来源 Owner 有其他实质工作时继续，只在唯一硬依赖上等待一次事件。")
+        ]
+      },
+      {
+        title: "六、原生经济路由的 11 条规则",
         intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。",
         items: [
           item("1. 身份先于决策", "宿主从真实 turn context（本轮上下文）验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA；旧 root 只能用用户明确绑定恢复。"),
@@ -416,7 +437,7 @@ export const ruleGuides = {
         ]
       },
       {
-        title: "六、按需插件与跨控制面",
+        title: "七、按需插件与跨控制面",
         intro: "只有真实能力缺口才让插件进入任务。",
         items: [
           item("五层能力证据分开", "Skill/tool 注入、安装回执、账号连接、fresh task 可用性和 E2E 彼此独立。"),

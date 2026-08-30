@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { access, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { gzipSync } from "node:zlib";
 import path from "node:path";
@@ -39,23 +39,23 @@ import {
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
 
-const forbiddenPublicTerms = [
-  "Q29kZXhIYXJuZXNz",
-  "UGVyc29uYWxPUw==",
-  "UGVyc29uYWxLbm93bGVkZ2VCYXNl",
-  "cGVyc29uYWwtbGl0aWdhdGlvbg==",
-  "6K+J6K68",
-  "QUkg5aSn5qih5Z6L",
-  "QUnlpKfmqKHlnos=",
-  "QUkg5pWZ57uD",
-  "QUnmlZnnu4M="
-].map((value) => Buffer.from(value, "base64").toString("utf8"));
+const credentialValuePatterns = [
+  ["OpenAI-style key", /sk-[A-Za-z0-9_-]{20,}/],
+  ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
+  ["GitHub fine-grained token", /github_pat_[A-Za-z0-9_]{20,}/],
+  ["Google API key", /AIza[0-9A-Za-z_-]{30,}/],
+  ["private key", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
+  ["assigned credential", /(?:password|passwd|api[_-]?key|access[_-]?token|client[_-]?secret)\s*[:=]\s*["']?[A-Za-z0-9_./+=-]{8,}/i]
+];
+const publicSafeProductAndDomainLabels = ["CodexHarness", "PersonalOS", "PersonalKnowledgeBase", "personal-litigation", "诉讼", "AI 大模型", "AI 教练"];
 
-function assertForbiddenTermsAreAbsent(text) {
-  for (const term of forbiddenPublicTerms) {
-    assert.ok(!text.toLowerCase().includes(term.toLowerCase()), `public content contains excluded term: ${term}`);
+function assertNoCredentialValues(text) {
+  for (const [name, pattern] of credentialValuePatterns) {
+    assert.doesNotMatch(text, pattern, `public content contains ${name}`);
   }
 }
+// Preserve the published TimeAudit assertion call while removing all label-based bans.
+const assertForbiddenTermsAreAbsent = assertNoCredentialValues;
 
 function assertReaderStates(states, label) {
   const keys = ["pass", "problem", "unavailable"];
@@ -242,13 +242,16 @@ test("context-dependent terms are not assigned one false global meaning", async 
 test("project rules require professional, detailed and plain-language content", async () => {
   const projectRules = await readFile(path.join(projectRoot, "AGENTS.md"), "utf8");
   assert.match(projectRules, /professional_detailed_plain_language/);
+  assert.match(projectRules, /Product names, platform\s+labels and otherwise public-safe paths or identifiers[\s\S]*?are not sensitive/);
+  assert.match(projectRules, /positive L3\+ evidence/);
+  assert.doesNotMatch(projectRules, /prohibited platform identity/);
   assert.match(projectRules, /what this thing actually does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic\s+example[\s\S]{0,500}owner receives/);
   assert.match(projectRules, /English（中文含义）/);
   assert.match(projectRules, /single-pass, longest-phrase safety net/);
   assert.match(projectRules, /Context-dependent words such as token, source, candidate/);
   assert.match(projectRules, /Owner, Provider, Authority and root/);
   assert.match(projectRules, /Field completeness,[\s\S]{0,200}correct terms do\s+not make that page understandable/);
-  assert.match(projectRules, /Except for private sensitive payloads and reusable secrets/);
+  assert.match(projectRules, /Except for reviewed L3\+ values[\s\S]{0,180}requires withholding and reusable secrets/);
   assert.match(projectRules, /exact models,[\s\S]{0,260}providers,[\s\S]{0,260}versions,[\s\S]{0,400}E2E/);
   assert.match(projectRules, /first project viewport must disclose 4–6 decision-critical current facts/);
   assert.match(projectRules, /Public visibility is never a reason to suppress a non-secret fact/);
@@ -272,8 +275,9 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /clarify, narrow or expand[\s\S]{0,200}same goal/);
   assert.match(projectRules, /never replace that goal with an\s+unrelated objective/);
   assert.match(projectRules, /Accuracy remains the primary product requirement/);
-  assert.match(projectRules, /restrictions\s+apply only to the prohibited literal or private value/);
-  assert.match(projectRules, /must never change\s+the factual status, omit the component, soften a failure/);
+  assert.match(projectRules, /When one\s+exact value is withheld, retain the component's public-safe identity/);
+  assert.match(projectRules, /Only actual values\s+with positive L3\+ evidence enter review/);
+  assert.match(projectRules, /Unregistered personal domains are outside the current MVP/);
   assert.match(projectRules, /independent product judgment/);
   assert.match(projectRules, /Do not copy a README section by section/);
   assert.match(projectRules, /Each project owns its\s+real module count/);
@@ -287,8 +291,6 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /clicks must\s+not show a spinner, skeleton or blank state/);
   assert.match(projectRules, /Likely transitions must issue\s+non-blocking prefetch hints before interaction/);
   assert.match(projectRules, /native navigation never\s+waits for a hint to finish/);
-  assert.ok(!projectRules.toLowerCase().includes(forbiddenPublicTerms[0].toLowerCase()));
-  assert.ok(!projectRules.toLowerCase().includes(forbiddenPublicTerms[1].toLowerCase()));
 });
 
 test("the authoritative desktop scale baseline follows the older compact block", async () => {
@@ -675,7 +677,7 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
 
 test("PC Panel Hub keeps software demos, full images and previews bounded and evidence-labelled", async () => {
   const publicText = JSON.stringify({ project: pcPanelHubProject, modules: pcPanelHubModules });
-  assertForbiddenTermsAreAbsent(publicText);
+  assertNoCredentialValues(publicText);
   for (const key of ["responsibilities", "exclusions", "glossary", "operatingFlow", "components", "usageExamples", "evidenceLayers", "evolution", "operationalEntrypoints"]) {
     assert.ok(Array.isArray(pcPanelHubProject[key]) && pcPanelHubProject[key].length >= 3, `PC Panel Hub overview ${key} is incomplete`);
   }
@@ -796,7 +798,7 @@ test("PC Panel Hub registry binds future material refreshes without device-side 
 
 test("CACB is a manual-only curated product package without tested-configuration output", async () => {
   const publicText = JSON.stringify({ project: cacbProject, modules: cacbModules });
-  assertForbiddenTermsAreAbsent(publicText);
+  assertNoCredentialValues(publicText);
   assert.doesNotMatch(publicText, /排行榜|排名|名次|分数|\bscore\b|ranking|leaderboard|退役|retir/i);
   for (const entry of [cacbProject, ...cacbModules]) {
     for (const key of ["testedConfigurations", "testedModels", "rankings", "scores", "comparisons", "leaderboard", "results"]) {
@@ -826,7 +828,7 @@ test("CACB is a manual-only curated product package without tested-configuration
 
 test("the learning project restores the AI-assisted method without topics, progress or supervision", async () => {
   const publicText = JSON.stringify({ project: learningProject, modules: learningModules });
-  assertForbiddenTermsAreAbsent(publicText);
+  assertNoCredentialValues(publicText);
   assert.doesNotMatch(publicText, /求职|简历|薪资|Offer|面试|第\s*0?[1-9]\s*篇|已读|待阅读|当前第|完成率|讲义索引|\bRAG\b|Prompt|Context|Schema/iu);
   assert.equal(learningProject.slug, "learning");
   assert.equal(learningProject.order, 8);
@@ -901,7 +903,7 @@ test("the learning method canvas stays human-readable, static and responsive", a
 
 test("Codex Remote is a manual-only public product with valuable real and synthetic visual evidence", async () => {
   const publicText = JSON.stringify({ project: codexRemoteProject, modules: codexRemoteModules });
-  assertForbiddenTermsAreAbsent(publicText);
+  assertNoCredentialValues(publicText);
   assert.doesNotMatch(publicText, /退役|不稳定|wly\.tailbe/i);
   assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/i);
   assert.match(publicText, /同一个 Codex Desktop 任务/);
@@ -1524,15 +1526,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   }
 });
 
-test("E92 panel preserves durable authorization and lifecycle convergence semantics", async () => {
+test("E93 panel preserves durable authorization and lifecycle convergence semantics", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E92");
-  assert.equal(bindings.ruleset_sha256, "f9200d4c4d1ee2d497c3c54926a3838459433ae068b494a0e0440932a44a8a75");
-  assert.equal(panelSnapshot.authority.releaseId, "E92");
-  assert.equal(panelSnapshot.authority.gitCommit, "cf5981bfdb305be5b9cffc8c89f91697a3637e6e");
-  assert.equal(panelSnapshot.authority.pointerRevision, 13);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E91");
+  const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
+  assert.equal(bindings.semantic_release_id, "E93");
+  assert.equal(bindings.ruleset_sha256, "c081c5d5949a2c8546e36b1145d19db58594cd8afd92ba44f2fd82884031210b");
+  assert.equal(panelSnapshot.authority.releaseId, "E93");
+  assert.equal(panelSnapshot.authority.gitCommit, "ea32ca05076a04c90895d468e1b878d4f19ff3d1");
+  assert.equal(panelSnapshot.authority.pointerRevision, 14);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E92");
   for (const expected of [
     "Durable explicit user authorization（耐久明确用户授权）",
     "root、全部 child/后代和新顶层任务",
@@ -1544,8 +1547,35 @@ test("E92 panel preserves durable authorization and lifecycle convergence semant
     "Complete goal（已完成目标）",
     "正式 terminal/completed 且无 follow-up、queued work、pending transaction 或未交接 Owner residual 时才自动归档"
   ]) {
-    assert.ok(coreSource.includes(expected), `E92 panel omits semantic contract: ${expected}`);
+    assert.ok(coreSource.includes(expected), `E93 panel omits semantic contract: ${expected}`);
   }
+  for (const expected of [
+    "耐久明确授权跨任务持续",
+    "已授权动作要真实调用一次",
+    "项目不能降级长期授权",
+    "真实调用一次而不是预判",
+    "已有 Owner 先解析 lifecycle",
+    "任务创建结果精确分类",
+    "clean terminal 时用 RecoverRelease",
+    "有 residual 才 RecoverReleaseClaim",
+    "来源任务何时自动归档",
+    "原生子代理与独立 Owner task 分层",
+    "顶层任务默认 projectless"
+  ]) {
+    assert.ok(ruleGuideSource.includes(expected), `E93 rule guide omits: ${expected}`);
+  }
+  for (const expected of [
+    "未归档且正式登记 long_term_task 的 Owner 不自动释放",
+    "terminal long-term 只能由带 checkpoint/residual 的明确 successor 接续或正式 retirement",
+    "归档任务仍无长期保留例外",
+    "普通非长期，或已归档且 clean 的 predecessor",
+    "未登记 long_term_task 的 inactive predecessor",
+    "长期任务不自动释放"
+  ]) {
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E93 long-term owner boundary omits: ${expected}`);
+  }
+  assert.doesNotMatch(coreSource, /terminal long-term 无 residual 自动释放|终态旧 Owner 无残留时释放|terminal 无 residual 的 exact scope RecoverRelease|terminal Owner 无 residual 用 RecoverRelease|terminal 无残留逐 scope RecoverRelease|固定 resolver 证明 terminal 后，无 residual/);
+  assert.doesNotMatch(ruleGuideSource, /平台准入时才创建|再原子 RecoverReleaseClaim/);
   const panelRefresh = skills.find((item) => item.slug === "personal-panel-refresh");
   const panelRefreshText = JSON.stringify({
     skill: panelRefresh,
@@ -1554,15 +1584,17 @@ test("E92 panel preserves durable authorization and lifecycle convergence semant
   });
   for (const expected of [
     "durable explicit user authorization",
-    "83518cfd",
+    "ea32ca05",
     "cf5981bf",
     "setup-pending",
     "dispatch-unconfirmed",
-    "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具"
+    "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具",
+    "网站内容、测试、PUBLIC main、Pages 部署和公网回读均已完成"
   ]) {
     assert.ok(panelRefreshText.includes(expected), `E92 personal-panel-refresh omits: ${expected}`);
   }
   assert.doesNotMatch(panelRefreshText, /01a050a0|Owner A/, "public Skill copy must not expose stale task bookkeeping");
+  assert.doesNotMatch(panelRefreshText, /网站 successor 正在完成/);
 });
 
 test("publication cannot upload before snapshot binding, production build, public gate and route tests", async () => {
@@ -1583,6 +1615,8 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /production_html_missing/);
   assert.match(verifier, /production_javascript_missing/);
   assert.match(verifier, /GitHub fine-grained token/);
+  assert.match(verifier, /const secretPatterns/);
+  assert.doesNotMatch(verifier, /forbiddenTerms|forbidden_public_term/);
   assert.doesNotMatch(verifier, /textExtensions/);
   assert.match(verifier, /core\.quotepath=false/);
   assert.match(verifier, /"-z"/);
@@ -1601,7 +1635,7 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.doesNotMatch(refresher, /--source-root|--skip-tests|--offline/);
 });
 
-test("public content excludes forbidden projects and obvious credential values", async () => {
+test("public content allows public-safe product names and excludes credential values", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const contentPaths = [...new Set([
     "app/page.jsx",
@@ -1614,13 +1648,44 @@ test("public content excludes forbidden projects and obvious credential values",
   const contentSources = await Promise.all(contentPaths.map((relative) => readFile(path.join(projectRoot, relative), "utf8")));
   const pageSource = contentSources[contentPaths.indexOf("app/page.jsx")];
   const publicText = contentSources.join("\n");
-  assertForbiddenTermsAreAbsent(publicText);
+  assertNoCredentialValues(publicSafeProductAndDomainLabels.join("\n"));
+  assertNoCredentialValues(publicText);
   assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}/);
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
   assert.doesNotMatch(publicText, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
   assert.doesNotMatch(publicText, /AIza[0-9A-Za-z_-]{30,}/);
   assert.match(pageSource, /搜索项目、规则或 Skill/);
   assert.doesNotMatch(pageSource, /addEventListener\("scroll"/);
+});
+
+test("the public gate allows ordinary labels and blocks a constructed credential", async () => {
+  const probeRoot = await mkdtemp(path.join(tmpdir(), "wly-public-gate-"));
+  const probeScript = path.join(probeRoot, "scripts", "verify-public-content.mjs");
+  const probeSource = path.join(probeRoot, "public-safe-labels.txt");
+  try {
+    await mkdir(path.join(probeRoot, "scripts"), { recursive: true });
+    await mkdir(path.join(probeRoot, "dist", "assets"), { recursive: true });
+    await copyFile(path.join(projectRoot, "scripts", "verify-public-content.mjs"), probeScript);
+    await writeFile(path.join(probeRoot, "package.json"), '{"type":"module"}\n', "utf8");
+    await writeFile(path.join(probeRoot, "dist", "index.html"), "<!doctype html><title>probe</title>", "utf8");
+    await writeFile(path.join(probeRoot, "dist", "assets", "index.js"), "document.documentElement.dataset.probe='ok';\n", "utf8");
+    await writeFile(probeSource, publicSafeProductAndDomainLabels.join("\n"), "utf8");
+    execFileSync("git", ["init", "--quiet"], { cwd: probeRoot, windowsHide: true });
+
+    const allowed = spawnSync(process.execPath, [probeScript], { cwd: probeRoot, encoding: "utf8", windowsHide: true });
+    assert.equal(allowed.status, 0, allowed.stderr || allowed.stdout);
+    assert.equal(JSON.parse(allowed.stdout).status, "pass");
+
+    const fakeToken = `ghp_${"A".repeat(24)}`;
+    await writeFile(probeSource, `${publicSafeProductAndDomainLabels.join("\n")}\n${fakeToken}\n`, "utf8");
+    const blocked = spawnSync(process.execPath, [probeScript], { cwd: probeRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(blocked.status, 0, "constructed credential must block publication");
+    const report = JSON.parse(blocked.stdout);
+    assert.equal(report.status, "block");
+    assert.ok(report.findings.some((item) => item.type === "credential_value" && item.pattern === "GitHub token"));
+  } finally {
+    await rm(probeRoot, { recursive: true, force: true });
+  }
 });
 
 test("every public route is unique and has useful metadata", () => {
