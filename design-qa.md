@@ -143,7 +143,16 @@ diagnostic summary provider 与 `timeaudit-diagnostics` Skill；一小时真实�
 portal 覆盖固定页头，关闭/上一张/下一张、Escape、左右键和焦点回收可用。390×844 的
 “TimeAudit 总览 → 硬件与流畅度 → 总览”两向 `scrollY 520 → 520`，delta=0。
 
-本地五项目预览与产品阅读审计已 PASS；现有 PUBLIC 目标已获自动发布授权。最终状态仍等待本任务
-定向 commit、Pages deployment 和公网 bundle/路由/交互 read-back。
+本地五项目预览与产品阅读审计已 PASS。交付内容 commit `fe660a97d07d362b7d88b660de33d6d7e089b4fc`
+已 normal-push 到 PUBLIC main；GitHub Pages run `33290605564` 的 build 19 秒、deploy 9 秒并成功。
+公网首页、`.agents`、TimeAudit 总览/六模块和 timeaudit-diagnostics Skill 代表路由全部 200；公网 JS
+`index-CdNCuuT_.js` SHA-256=`d8c809a57d6ae14a412910bf548d29590e45374367771595b26a47ad03c79bcb`，
+CSS `index-DEMPLj0Z.css` SHA-256=`df615e56ebc9fa80bee7b1752a459000298ff6ff40e8460c1ba8b68193c311eb`，
+与本地产物精确一致。PNG 原图与 WebP 预览均为正确 MIME 和源字节。
 
-current result: five_project_local_preview_pass_publication_pending
+公网 390×844 真实交互复核：TimeAudit“总览 → 硬件与流畅度”保持 `scrollY 700 → 700`；画廊
+1/11 → 2/11 → 1/11、Escape 关闭、焦点回到触发图；预览使用 WebP，灯箱使用完整 PNG；
+timeaudit-diagnostics 页面包含 3590 样本现场、aggregate-only 不是字段公开禁令的边界，console
+无 warning/error。四项目旧问题、第五项目、异步 projectless 刷新与自动 PUBLIC 发布均已收口。
+
+current result: five_project_public_pass
