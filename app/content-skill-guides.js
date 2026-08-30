@@ -184,12 +184,19 @@ export const skillGuides = {
     ["Impact candidate（影响候选）", "Changed path 命中项目清单，只说明可能影响，不自动创建任务。"],
     ["Material change（实质变化）", "不更新会让看板事实、解释、边界、成熟度或用户决策变错的变化。"],
     ["Read-back commit（正式回读提交）", "来源项目已经发布并从真实远端重新确认的提交。"],
-    ["Saved local Git project（已保存本地 Git 项目）", "桌面 AI 工作台能用准确 project id 创建独立 worktree（工作树）任务的项目登记。"],
+    ["Projectless task（无项目任务）", "AI 新建顶层对话的默认形态；任务不绑定 saved project，而是在提示中进入网站仓库并读取其项目规则。"],
+    ["Dispatch receipt（派发回执）", "create_thread 返回 threadId 或 clientThreadId 就表示任务已创建；没有可追踪 ID 则视为创建失败。"],
+    ["Asynchronous handoff（异步交接）", "来源对话报告任务 ID 后立即继续或结束，不读取网站任务进度、不等待完成，也不轮询。"],
+    ["Active handoff coalescing（现役交接收敛）", "同一来源对话已有同项目现役网站任务时，只把更新后的 read-back commit 续传一次，不创建竞争任务。"],
+    ["Existing PUBLIC target（现有公开目标）", "已验收的 wly0829.cn PUBLIC main 与 Pages；网站门通过后的 normal-push、部署等待和公网回读已获长期授权。"],
     ["Fresh website task（全新网站任务）", "为一次实质刷新新建、只处理一个目标的独立任务；完成后不复用。"]
   ], [
     ["只命中路径，没有实质影响", "输出 impact candidate，但 task_required=false。", "记录候选，等下一次实质更新一起维护，不开任务。"],
     ["来源仍是 candidate、draft 或未 read-back", "停止网站交接。", "等 Source Owner 完成正式发布和 read-back 后重新评估。"],
-    ["没有准确 saved local Git project", "返回 saved_local_git_project_missing，并且不创建任务。", "把 wly0829.cn 保存为准确本地 Git project 后，下一个 material event 再创建；不能降级到 projectless 或 .agents。"],
+    ["Projectless 任务创建报错或没有可追踪 ID", "报告精确创建失败；入口不可用时返回 projectless_website_task_creation_unavailable。", "停止本次交接，不盲目重试，也不改派到 .agents、来源项目或另一个 saved project。"],
+    ["同一项目现役交接收到更新提交", "向该任务发送一次新 read-back commit，不再新建任务。", "来源对话报告续传结果后立即继续；不读取进度或等待网站完成。"],
+    ["网站门失败或用户明确 hold", "不提交、不推送，保留精确 blocker 和现有 PUBLIC 状态。", "修复网站门后继续同一任务；用户解除 hold 后才进入既有目标发布。"],
+    ["出现新公网目标、付费、秘密暴露或 force-push", "长期授权不适用，停止对应外部动作。", "保持现有 PUBLIC main 不变，按新边界取得精确授权或改回安全方案。"],
     ["同一来源提交已经交接", "拒绝创建重复任务。", "使用现有交接结果或等新的 read-back commit。"]
   ]),
   "control-plane-doctor": guide([
@@ -382,12 +389,12 @@ export const skillOutcomes = {
     changes: ["仓库、remote（远端地址）、branch（分支）和 upstream（上游分支）正确且同步安全时，允许继续本地实施或正常推送。", "有 dirty work（未提交改动）时要求保留，并只 stage（暂存）当前任务文件。", "本地落后、分叉或不是 fast-forward（快进推送）时停止推送，先同步和解决冲突。", "PUBLIC（公开）仓库存在泄露风险时阻止发布。", "网络无法取得 live evidence（实时证据）时可以继续安全本地工作，但发布必须等 live read-back（实时回读）。"]
   },
   "personal-panel-refresh": {
-    value: "它让未来几十个项目的新对话都能意识到“这次发布可能让个人看板说错话”，同时用 material threshold（实质阈值）阻止每个小改动都创建网站任务；既解决漏更新，也避免异步任务泛滥。",
-    why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站又会产生大量无意义任务。",
+    value: "它让未来几十个项目的新对话都能意识到“这次发布可能让个人看板说错话”，同时用 material threshold（实质阈值）、同项目现役交接收敛和异步派发阻止小改动、重复任务或网站等待拖住来源发布。",
+    why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站会产生大量无意义任务，等待网站完成还会把两个独立发布错误地绑在一起。",
     example: "例如 .agents 新增或退役一个真实 Skill。来源项目发布并回读后，它检查这次变化是否会让看板内容变错。",
-    result: "只有看板会实质失真时，才创建一个新的独立网站任务；格式变化或页面已经准确说明的候选状态不会触发。",
-    readerStates: { pass: "来源已经发布回读且页面会实质失真、saved-project lookup 也取得准确正向回执时，创建一个新的独立网站刷新任务。", problem: "只命中路径但不改变事实时记录候选，不开任务；同一提交已经交接时不重复创建。", unavailable: "saved-project lookup 或任务创建入口不可用时保持 Unknown，不推断项目不存在，也不误建成无项目任务、.agents 或其他项目。" },
-    changes: ["来源没有正式 publish/read-back（发布/回读）时不评估网站。", "Changed path（变化路径）命中只记为 impact candidate（影响候选），不会自动开任务。", "Source Owner 确认看板会实质失真后，task_required 才变成 true。", "达到阈值后只创建一个 fresh independent website task（全新独立网站任务）。", "wly0829.cn 没有准确 saved local Git project 时失败关闭，不误建 projectless 或 .agents 任务。"]
+    result: "只有看板会实质失真时，才使用长期授权续传同项目现役交接，或创建一个新的 projectless 独立网站任务；拿到可追踪 ID 后来源对话立即继续，网站任务通过自身门后自动发布到现有 PUBLIC main/Pages 并公网回读。",
+    readerStates: { pass: "来源已经发布回读且页面会实质失真时，向同项目现役交接续传一次，或按长期授权创建一个 projectless 网站任务；取得 threadId / clientThreadId 后来源对话立即继续，网站门通过后不再另问发布授权。", problem: "只命中路径但不改变事实时不开任务；同一提交不重复创建；网站门失败或用户明确 hold 时保留现有 PUBLIC 状态，不推送。", unavailable: "任务创建报错或没有可追踪 ID 时报告精确失败并停止；新公网目标、付费、秘密暴露或 force-push 不在长期授权内。" },
+    changes: ["来源没有正式 publish/read-back（发布/回读）时不评估网站。", "Changed path（变化路径）命中只记为 impact candidate（影响候选），不会自动开任务。", "Source Owner 确认看板会实质失真后，task_required 才变成 true。", "同项目已有现役交接时只发送一次新 read-back commit；不复用完成、中断或失败任务。", "没有现役交接时，不再询问用户，直接按长期授权创建一个 projectless fresh independent website task（无项目的全新独立网站任务）。", "saved project 是否存在不参与准入；只有用户本轮明确选择或上位平台强制时才例外。", "threadId 或 clientThreadId 是创建成功回执；无 ID 或工具报错就明确失败。", "交接异步且不阻塞来源；不读进度、不等待、不轮询，上位平台硬要求时至多一次 timeoutMs:0 即时快照。", "四项目 MVP 和现有 PUBLIC 目标已经验收；网站门通过后自动定向 commit、normal-push main、等待 Pages 并公网回读，不再另问发布授权。", "长期授权不覆盖新公网目标、付费、秘密暴露、force-push 或用户明确 hold，也不跳过网站自身门。"]
   },
   "control-plane-doctor": {
     value: "当我怀疑三个控制面“哪里坏了”时，它把问题定位到真正负责的 Owner（责任源），并区分警告和阻塞，避免在错误仓库里乱修。",
