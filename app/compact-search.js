@@ -24,10 +24,10 @@ export function compactSearchScore(entry, query) {
   return matched * 10 + titleMatched * 8 + detailMatched * 4;
 }
 
-export function searchCompactEntries(entries, query) {
+export function searchCompactEntries(entries, query, scope = "all") {
   return entries
     .map((entry, index) => ({ entry, index, score: compactSearchScore(entry, query) }))
-    .filter((result) => result.score > 0)
+    .filter((result) => result.score > 0 && (scope === "all" || (result.entry.scopes || []).includes(scope)))
     .sort((left, right) => right.score - left.score || left.index - right.index)
     .map((result) => result.entry);
 }

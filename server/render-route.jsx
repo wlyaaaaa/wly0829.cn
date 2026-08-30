@@ -45,6 +45,9 @@ const compactSearchIndex = globalSearchEntries.map((entry) => {
   const href = canonicalDocumentHref(entry.href);
   return {
     type: entry.type,
+    group: entry.group,
+    scopes: entry.scopes || [],
+    projectSlug: entry.projectSlug || null,
     title: entry.title,
     detail: entry.detail.slice(0, 240),
     href,
@@ -71,7 +74,9 @@ function likelyNextRoutes(route) {
     routePaths[currentIndex + 1],
     routePaths[currentIndex - 1],
     "/",
+    "/system",
     "/rules",
+    "/search",
     "/skills"
   ].filter((candidate) => candidate && candidate !== route))].slice(0, 5);
 }

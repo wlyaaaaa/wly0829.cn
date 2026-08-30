@@ -48,6 +48,7 @@ restorePreservedScroll();
 
 function initializeSearch(container) {
   const input = container.querySelector("input");
+  const scopeSelect = container.querySelector(".search-scope-select");
   if (!input) return;
   const resultId = input.getAttribute("aria-controls") || `search-results-${Math.random().toString(36).slice(2)}`;
 
@@ -56,15 +57,63 @@ function initializeSearch(container) {
     input.setAttribute("aria-expanded", "false");
   }
 
+  function scopeInfo() {
+    const option = scopeSelect?.selectedOptions?.[0];
+    return {
+      id: scopeSelect?.value || "all",
+      label: option?.textContent || "全站",
+      placeholder: option?.dataset.searchPlaceholder || "搜索项目、系统、规则或 Skills",
+      help: option?.dataset.searchHelp || "可以输入准确名称，也可以直接描述你想解决的问题",
+      examples: option?.dataset.searchExamples || "恢复电脑 · 什么时候需要授权 · 找录音"
+    };
+  }
+
+  function addResultKeyboardNavigation(panel) {
+    panel.addEventListener("keydown", (event) => {
+      const links = Array.from(panel.querySelectorAll("a[href]"));
+      const currentIndex = links.indexOf(document.activeElement);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeResults();
+        input.focus();
+        return;
+      }
+      if (!links.length || !["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = currentIndex;
+      if (event.key === "ArrowDown") nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % links.length;
+      if (event.key === "ArrowUp") nextIndex = currentIndex <= 0 ? links.length - 1 : currentIndex - 1;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = links.length - 1;
+      links[nextIndex]?.focus();
+    });
+  }
+
   function renderResults() {
     closeResults();
     const query = input.value.trim();
-    if (!query) return;
-    const results = searchCompactEntries(searchEntries, query);
+    const scope = scopeInfo();
+    input.placeholder = scope.placeholder;
+    const results = query ? searchCompactEntries(searchEntries, query, scope.id) : [];
     const panel = document.createElement("div");
     panel.className = "global-search-results";
     panel.id = resultId;
-    panel.setAttribute("aria-label", "全站搜索结果");
+    panel.setAttribute("aria-label", `${scope.label}搜索结果`);
+
+    if (!query) {
+      const help = document.createElement("div");
+      help.className = "global-search-help";
+      const strong = document.createElement("strong");
+      strong.textContent = scope.help;
+      const examples = document.createElement("span");
+      examples.textContent = `试试：${scope.examples}`;
+      help.append(strong, examples);
+      panel.append(help);
+      addResultKeyboardNavigation(panel);
+      container.append(panel);
+      input.setAttribute("aria-expanded", "true");
+      return;
+    }
 
     const status = document.createElement("p");
     status.setAttribute("aria-live", "polite");
@@ -74,7 +123,7 @@ function initializeSearch(container) {
     if (!results.length) {
       const empty = document.createElement("div");
       empty.className = "global-search-empty";
-      empty.textContent = "没有匹配结果。可以直接搜索“委派”“录音”“仓库”或“加密”。";
+      empty.textContent = "没有匹配结果。可以换成项目用途、现实问题或更短的关键词。";
       panel.append(empty);
     } else {
       for (const entry of results.slice(0, 9)) {
@@ -94,17 +143,30 @@ function initializeSearch(container) {
         link.append(type, copy, arrow);
         panel.append(link);
       }
+      if (results.length > 9) {
+        const allResults = document.createElement("a");
+        allResults.className = "global-search-all-results";
+        allResults.href = `/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope.id)}`;
+        allResults.textContent = `查看全部 ${results.length} 条结果 →`;
+        panel.append(allResults);
+      }
     }
+    addResultKeyboardNavigation(panel);
     container.append(panel);
     input.setAttribute("aria-expanded", "true");
   }
 
   input.addEventListener("input", renderResults);
   input.addEventListener("focus", renderResults);
+  scopeSelect?.addEventListener("change", renderResults);
   input.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") return;
-    closeResults();
-    input.blur();
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      container.querySelector(".global-search-results a[href]")?.focus();
+    } else if (event.key === "Escape") {
+      closeResults();
+      input.blur();
+    }
   });
   container.addEventListener("focusout", () => {
     window.setTimeout(() => {
@@ -191,6 +253,79 @@ function initializeRulesWorkbench() {
   select?.addEventListener("change", () => activate(select.value, { updateUrl: true }));
   window.addEventListener("popstate", () => activate(new URLSearchParams(window.location.search).get("rule")));
   activate(new URLSearchParams(window.location.search).get("rule"));
+}
+
+function initializeSkillCategories() {
+  const rail = document.querySelector(".skill-category-rail");
+  const items = Array.from(document.querySelectorAll(".skill-directory-item[data-skill-categories]"));
+  if (!rail || !items.length) return;
+  const buttons = Array.from(rail.querySelectorAll("button[data-skill-category]"));
+  function activate(category, focus = false) {
+    const selected = buttons.some((button) => button.dataset.skillCategory === category) ? category : "all";
+    for (const button of buttons) {
+      const active = button.dataset.skillCategory === selected;
+      button.classList.toggle("is-current", active);
+      button.setAttribute("aria-pressed", String(active));
+      if (active && focus) button.focus();
+    }
+    for (const item of items) item.hidden = selected !== "all" && !String(item.dataset.skillCategories || "").split(/\s+/).includes(selected);
+  }
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => activate(button.dataset.skillCategory));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % buttons.length;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + buttons.length) % buttons.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = buttons.length - 1;
+      activate(buttons[nextIndex].dataset.skillCategory, true);
+    });
+  });
+  activate("all");
+}
+
+function initializeProjectReadingLayers() {
+  const nav = document.querySelector(".project-reading-nav");
+  const panels = Array.from(document.querySelectorAll("[data-project-reading-panel]"));
+  if (!nav || !panels.length) return;
+  const tabs = Array.from(nav.querySelectorAll("[data-project-reading-tab]"));
+  const ids = tabs.map((tab) => tab.dataset.projectReadingTab);
+  function activate(id, { updateUrl = false, focus = false } = {}) {
+    const selected = ids.includes(id) ? id : "quick";
+    for (const tab of tabs) {
+      const active = tab.dataset.projectReadingTab === selected;
+      tab.classList.toggle("is-current", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && focus) tab.focus({ preventScroll: true });
+    }
+    for (const panel of panels) panel.hidden = panel.dataset.projectReadingPanel !== selected;
+    if (updateUrl) {
+      const next = new URL(window.location.href);
+      next.hash = selected;
+      window.history.pushState({ preserveScroll: true }, "", `${next.pathname}${next.search}${next.hash}`);
+    }
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", (event) => {
+      event.preventDefault();
+      activate(tab.dataset.projectReadingTab, { updateUrl: true });
+    });
+    tab.addEventListener("keydown", (event) => {
+      if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabs.length - 1;
+      activate(tabs[nextIndex].dataset.projectReadingTab, { updateUrl: true, focus: true });
+    });
+  });
+  window.addEventListener("popstate", () => activate(window.location.hash.slice(1)));
+  activate(window.location.hash.slice(1));
 }
 
 function createButton(className, label, text) {
@@ -532,6 +667,8 @@ document.querySelectorAll(".global-search").forEach(initializeSearch);
 document.querySelectorAll(".project-gallery").forEach(initializeGallery);
 initializeHeader();
 initializeRulesWorkbench();
+initializeSkillCategories();
+initializeProjectReadingLayers();
 initializeFlowField();
 initializeDocumentPrefetch();
 initializePreservedScrollNavigation();

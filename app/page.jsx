@@ -31,11 +31,15 @@ import {
   rulesSnapshot,
   site,
   skills,
-  socialLinks
+  socialLinks,
+  systemBoundaries,
+  systemJourneys,
+  systemOwners,
+  systemRelations
 } from "./site-content.js";
 import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
-import { searchPanel } from "./search.js";
+import { searchPanel, searchScopeById, searchScopeForPath, searchScopeOptionsForPath } from "./search.js";
 import { createTermAnnotator } from "./term-annotator.js";
 
 function useLocationState(initialPathname, initialSearch) {
@@ -85,42 +89,61 @@ function SocialIcon({ name }) {
   return <EnvelopeSimple size={19} aria-hidden="true" />;
 }
 
-function GlobalSearch({ autoFocus = false, className = "", resultId = "global-search-results" }) {
-  const [query, setQuery] = useState("");
+function GlobalSearch({ path = "/", search = "", autoFocus = false, className = "", resultId = "global-search-results" }) {
+  const searchParams = new URLSearchParams(search);
+  const initialQuery = path === "/search" ? searchParams.get("q") || "" : "";
+  const requestedScope = path === "/search" ? searchScopeById(searchParams.get("scope")) : null;
+  const [query, setQuery] = useState(initialQuery);
   const [open, setOpen] = useState(false);
+  const currentScope = requestedScope || searchScopeForPath(path);
+  const scopeOptions = path === "/search"
+    ? [...new Map([currentScope, searchScopeById("all")].map((item) => [item.id, item])).values()]
+    : searchScopeOptionsForPath(path);
+  const [scope, setScope] = useState(currentScope.id);
+  useEffect(() => { setScope(currentScope.id); setQuery(initialQuery); setOpen(false); }, [path, search, currentScope.id, initialQuery]);
+  const selectedScope = scope === "all" ? searchScopeForPath("/search") : currentScope;
   const normalized = query.trim().toLowerCase();
   const results = useMemo(() => {
     if (!normalized) return [];
-    return searchPanel(normalized);
-  }, [normalized]);
+    return searchPanel(normalized, scope);
+  }, [normalized, scope]);
 
   return (
     <div
       className={`global-search${className ? ` ${className}` : ""}`}
+      data-search-scope={scope}
+      data-search-path={path}
       onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
     >
       <label>
         <MagnifyingGlass size={18} aria-hidden="true" />
-        <span className="visually-hidden">搜索项目、规则和 Skills（能力）</span>
+        <span className="visually-hidden">按当前范围搜索</span>
+        <select className="search-scope-select" aria-label="搜索范围" value={scope} onChange={(event) => { setScope(event.target.value); setOpen(true); }}>
+          {scopeOptions.map((option) => <option value={option.id} data-search-placeholder={option.placeholder || searchScopeById(option.id)?.placeholder} data-search-help={option.help || searchScopeById(option.id)?.help} data-search-examples={(option.examples || searchScopeById(option.id)?.examples || []).join(" · ")} key={option.id}>{option.label}</option>)}
+        </select>
         <input
           autoFocus={autoFocus}
           value={query}
           onChange={(event) => { setQuery(event.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); event.currentTarget.blur(); } }}
-          aria-expanded={Boolean(open && normalized)}
+          aria-expanded={Boolean(open)}
           aria-controls={resultId}
-          placeholder="搜索项目、规则或 Skill"
+          placeholder={selectedScope.placeholder}
         />
       </label>
-      {open && normalized ? (
-        <div className="global-search-results" id={resultId} aria-label="全站搜索结果">
-          <p aria-live="polite">{results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`}</p>
-          {results.length ? results.slice(0, 9).map((entry) => (
-            <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
-              <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
-            </SiteLink>
-          )) : <div className="global-search-empty">没有匹配结果。可以直接搜索“委派”“录音”“仓库”或“加密”。</div>}
+      {open ? (
+        <div className="global-search-results" id={resultId} aria-label={`${selectedScope.label}搜索结果`}>
+          {!normalized ? <div className="global-search-help"><strong>{selectedScope.help}</strong><span>{selectedScope.examples?.length ? `试试：${selectedScope.examples.join(" · ")}` : "输入名称或直接描述问题"}</span></div> : null}
+          {normalized ? <>
+            <p aria-live="polite">{results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`}</p>
+            {results.length ? results.slice(0, 9).map((entry) => (
+              <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
+                <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
+              </SiteLink>
+            )) : <div className="global-search-empty">没有匹配结果。可以换成项目用途、现实问题或更短的关键词。</div>}
+            {results.length > 9 ? <SiteLink className="global-search-all-results" href={`/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`}>查看全部 {results.length} 条结果<ArrowRight size={16} aria-hidden="true" /></SiteLink> : null}
+          </> : null}
         </div>
       ) : null}
     </div>
@@ -231,7 +254,7 @@ function navActive(href, path) {
   return path === href || path.startsWith(`${href}/`);
 }
 
-function Header({ path }) {
+function Header({ path, search = "" }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const menuButtonRef = useRef(null);
@@ -265,7 +288,7 @@ function Header({ path }) {
             >{item.label}</SiteLink>
           ))}
         </nav>
-        <GlobalSearch className="desktop-search" resultId="desktop-global-search-results" />
+        <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
@@ -306,7 +329,7 @@ function Header({ path }) {
             ))}
           </nav>
         </div>
-        <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}><GlobalSearch autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /></div>
+        <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}><GlobalSearch path={path} search={search} autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /></div>
         </div>
       </header>
       <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭顶部浮层背景" onClick={() => { setMenuOpen(false); setSearchOpen(false); }} hidden={!menuOpen && !searchOpen} />
@@ -387,64 +410,28 @@ function ObservedTime({ value }) {
   return <span className="observed-time" title={iso ? String(value) : undefined}>{iso ? <time dateTime={value}>{observedTimeText(value)}</time> : observedTimeText(value)}</span>;
 }
 
-function projectCardMetrics(entry, moduleCount) {
-  if (Array.isArray(entry.project.cardMetrics) && entry.project.cardMetrics.length) {
-    return [
-      ...entry.project.cardMetrics.slice(0, 3).map((item) => [item.label, item.value]),
-      ["模块（含总览）", moduleCount]
-    ];
-  }
-  if (entry.kind === "agents") {
-    return [
-      ["E 规则代号", panelSnapshot.authority.releaseId],
-      ["现行规则", rulesSnapshot.rules.length],
-      ["Skills（能力入口）", skills.length],
-      ["模块（含总览）", moduleCount]
-    ];
-  }
-  if (entry.kind === "learning") {
-    return [
-      ["决定权", "人做主"],
-      ["资料", "一手优先"],
-      ["练习", "问题不计分"],
-      ["方式", "无监督"]
-    ];
-  }
-  return [
-    ["已确认事实", entry.project.currentState?.facts?.length || 0],
-    ["当前缺口", entry.project.currentState?.gaps?.length || 0],
-    ["证据层", entry.project.evidenceLayers.length],
-    ["模块（含总览）", moduleCount]
-  ];
-}
-
 function publicRepositoryUrl(entry) {
   return entry.registration.source.visibility === "PUBLIC"
     ? `https://github.com/${entry.registration.source.repo}`
     : null;
 }
 
-function projectCardState(entry) {
+function projectCardPresentation(entry) {
   if (entry.kind === "agents") {
     const unresolved = panelSnapshot.validation.rows.filter((item) => item.status !== "pass").length;
     return {
-      tone: unresolved ? "repair" : "pass",
-      label: unresolved ? `基础验证还有 ${unresolved} 项未闭合` : panelSnapshot.authority.statusLabel,
+      tone: panelSnapshot.authority.status === "e_rules_active_verified" ? "pass" : "mixed",
+      status: `${panelSnapshot.authority.releaseId} 活动规则已验证`,
+      boundary: unresolved ? `基础验证本次还有 ${unresolved} 项未闭合` : "本页不承诺后台实时同步",
       observedAt: panelSnapshot.observedAt
     };
   }
-  if (entry.kind === "learning") {
-    return {
-      tone: moduleStatusTone(entry.project),
-      label: "人做主，AI协助",
-      observedAt: entry.project.currentState?.observedAt || "当前方法包"
-    };
-  }
-  const gapCount = entry.project.currentState?.gaps?.length || 0;
+  const state = entry.project.currentState || {};
   return {
-    tone: moduleStatusTone(entry.project),
-    label: gapCount ? `${gapCount} 项当前缺口，详见总览` : "当前状态已核对",
-    observedAt: entry.project.currentState?.observedAt || "当前内容包"
+    tone: entry.project.cardStatusTone || moduleStatusTone(entry.project),
+    status: entry.project.cardStatus || state.label || "可按当前说明使用",
+    boundary: entry.project.snapshotBoundary || state.gaps?.[0] || "本页不承诺后台实时同步",
+    observedAt: state.observedAt || "当前网页快照"
   };
 }
 
@@ -458,8 +445,7 @@ function ProjectCard({ entry }) {
     { length: Math.ceil(moduleOptions.length / 7) },
     (_, index) => moduleOptions.slice(index * 7, index * 7 + 7)
   );
-  const metrics = projectCardMetrics(entry, moduleOptions.length);
-  const state = projectCardState(entry);
+  const presentation = projectCardPresentation(entry);
   const headingId = `${currentProject.slug}-card-title`;
   const repositoryUrl = publicRepositoryUrl(entry);
 
@@ -479,12 +465,12 @@ function ProjectCard({ entry }) {
             <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id={headingId}>{currentProject.title}</h2></div>
           </div>
           <p className="project-summary">{displayCopy(currentProject.summary, entry.kind)}</p>
-          <dl className="project-metrics">
-            {metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
+          <dl className="project-card-state">
+            <div><dt>项目状态</dt><dd><StatusPill status={presentation.tone}>{displayCopy(presentation.status, entry.kind)}</StatusPill></dd></div>
+            <div className="project-card-snapshot-boundary"><dt>快照边界</dt><dd>{displayCopy(presentation.boundary, entry.kind)}</dd></div>
           </dl>
           <div className="project-card-foot">
-            <StatusPill status={state.tone}>{displayCopy(state.label, entry.kind)}</StatusPill>
-            <ObservedTime value={state.observedAt} />
+            <ObservedTime value={presentation.observedAt} />
             <ArrowRight size={18} aria-hidden="true" />
           </div>
         </div>
@@ -899,65 +885,76 @@ function MethodCanvas({ canvas, kind }) {
   );
 }
 
+const projectReadingLayers = [
+  { id: "quick", label: "速览" },
+  { id: "product", label: "项目怎么用" },
+  { id: "technical", label: "技术参考" }
+];
+
+function ProjectReadingNav() {
+  return (
+    <nav className="project-reading-nav" aria-label="项目阅读层" role="tablist">
+      {projectReadingLayers.map((layer, index) => <a role="tab" id={`project-reading-tab-${layer.id}`} aria-controls={`project-reading-panel-${layer.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-project-reading-tab={layer.id} className={index === 0 ? "is-current" : undefined} href={`#${layer.id}`} key={layer.id}>{layer.label}</a>)}
+    </nav>
+  );
+}
+
+function ProjectReadingPanel({ id, selected = false, children }) {
+  return <section className="project-reading-panel" id={`project-reading-panel-${id}`} data-project-reading-panel={id} role="tabpanel" aria-labelledby={`project-reading-tab-${id}`} hidden={!selected}>{children}</section>;
+}
+
+function ProjectQuickState({ entry }) {
+  const presentation = projectCardPresentation(entry);
+  return (
+    <dl className="project-quick-state">
+      <div><dt>项目状态</dt><dd><StatusPill status={presentation.tone}>{displayCopy(presentation.status, entry.kind)}</StatusPill></dd></div>
+      <div><dt>快照边界</dt><dd>{displayCopy(presentation.boundary, entry.kind)}</dd></div>
+      <div><dt>观察时间</dt><dd><ObservedTime value={presentation.observedAt} /></dd></div>
+    </dl>
+  );
+}
+
 function ProjectOverview({ entry }) {
   const { project: currentProject, modules: currentModules } = entry;
   const isLearning = entry.kind === "learning";
   const copy = (value) => displayCopy(value, entry.kind);
   return (
     <article className="document-content overview-content">
-      <section className="document-section document-section-first">
-        <p className="section-kicker">先说人话</p>
-        {entry.kind === "agents" ? <><h2>它负责让个人 AI 工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI 查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
-        <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
-        <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
-      </section>
+      <ProjectReadingNav />
 
-      <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
+      <ProjectReadingPanel id="quick" selected>
+        <section className="document-section document-section-first">
+          <p className="section-kicker">先说人话</p>
+          {entry.kind === "agents" ? <><h2>它负责让个人 AI 工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI 查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
+          <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>怎样开始使用</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
+          <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
+        </section>
+        <section className="document-section"><h2>最快先知道这三件事</h2><ProjectQuickState entry={entry} /></section>
+      </ProjectReadingPanel>
 
-      {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
+      <ProjectReadingPanel id="product">
+        <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
+        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
+        {currentProject.productPrinciples?.length ? <section className="document-section"><h2>产品思想与设计核心</h2><div className="product-principle-grid">{currentProject.productPrinciples.map((principle, index) => <article key={principle.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{copy(principle.title)}</h3><p>{copy(principle.detail)}</p></article>)}</div></section> : null}
+        <section className="document-section split-section">
+          <div><h2>{isLearning ? "AI协助" : "它负责"}</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
+          <div><h2>{isLearning ? "刻意不做" : "它不负责"}</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
+        </section>
+        <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
+        <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
+      </ProjectReadingPanel>
 
-      <section className="document-section split-section">
-        <div><h2>{isLearning ? "AI协助" : "它负责"}</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
-        <div><h2>{isLearning ? "刻意不做" : "它不负责"}</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
-      </section>
-
-      <section className="document-section"><h2>{isLearning ? "方法快照" : "当前状态"}</h2><ProjectCurrentState entry={entry} /></section>
-
-      <section className="document-section compact-terms">
-        <h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2>
-        <p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p>
-        <dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl>
-      </section>
-
-      <section className="document-section">
-        <h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2>
-        <ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol>
-      </section>
-
-      <section className="document-section">
-        <h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2>
-        <p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p>
-        <div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>
-          {currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}
-        </div>
-      </section>
-
-      <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
-
-      <section className="document-section">
-        <h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2>
-        <div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div>
-      </section>
-
-      {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
-
-      <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
-
-      <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
-
-      <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
-
-      <section className="document-section source-note"><h2>{isLearning ? "公开页怎样更新" : "快照怎样更新"}</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? isLearning ? "这是本人明确要求后才会复核的公开方法快照。私有材料、讨论或进度变化不会自动触发网站任务；更新时只重新判断可复用的方法、公开边界和依据，不复制学习主题、原始反馈或个人状态。" : "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交、测试或运行状态变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取该项目当前 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
+      <ProjectReadingPanel id="technical">
+        <section className="document-section document-section-first"><h2>{isLearning ? "方法状态与证据边界" : "完整项目状态与证据边界"}</h2><ProjectCurrentState entry={entry} /></section>
+        <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
+        <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2><p>模块是可直达的技术深入章节，不是另一套产品介绍。</p><div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div></section>
+        {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
+        <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
+        <section className="document-section source-note"><h2>快照怎样更新</h2><p>{copy(currentProject.snapshotUpdateNote || "本页代表最后一次明确核对并发布的项目状态，不承诺后台实时同步。再次更新时会重新读取该项目当前事实、边界和验证结果；无法确认的内容继续明确标成网页快照边界，不用旧记录猜成当前状态。")}</p></section>
+      </ProjectReadingPanel>
     </article>
   );
 }
@@ -1416,14 +1413,95 @@ function RulesPage({ search }) {
   );
 }
 
+function SystemPage() {
+  return (
+    <div className="page-frame system-page">
+      <header className="system-page-heading"><p className="section-kicker">跨项目说明</p><h1>系统</h1><p>先看谁负责什么，再沿着真实关系进入项目和可调用能力。这里不画装饰性网络，也不把项目存在冒充当前在线。</p></header>
+
+      <section className="system-owner-section" aria-labelledby="system-owner-title">
+        <div className="system-section-heading"><h2 id="system-owner-title">三个责任源分别解决什么</h2><p>事实回到正确来源，项目仍然拥有自己的产品语义和验证方式。</p></div>
+        <div className="system-owner-grid">{systemOwners.map((owner, index) => <SiteLink href={owner.href} key={owner.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{owner.title}</strong><p>{owner.summary}</p><small>{owner.when}</small><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div>
+      </section>
+
+      <section className="system-relation-section" aria-labelledby="system-relation-title">
+        <div className="system-section-heading"><h2 id="system-relation-title">事实怎样进入项目，再变成可用入口</h2><p>每一行都是一条有名字、有方向的事实或消费关系；没有强行连接的项目仍可独立使用。</p></div>
+        <div className="system-relation-table" role="table" aria-label="系统关系">
+          <div className="system-relation-header" role="row"><span role="columnheader">事实来源</span><span role="columnheader">项目或任务</span><span role="columnheader">可调用入口</span></div>
+          {systemRelations.map((relation) => <article id={`relation-${relation.id}`} role="row" key={relation.id}>
+            <SiteLink role="cell" href={relation.sourceHref}><strong>{relation.source}</strong><span>{relation.sourceRole}</span></SiteLink>
+            <span className="system-relation-arrow" aria-hidden="true"><small>{relation.relation}</small><ArrowRight size={20} /></span>
+            <SiteLink role="cell" href={relation.projectHref}><strong>{relation.project}</strong><span>{relation.projectRole}</span></SiteLink>
+            <span className="system-relation-arrow" aria-hidden="true"><ArrowRight size={20} /></span>
+            <SiteLink role="cell" href={relation.entryHref}><strong>{relation.entry}</strong><span>{relation.entryRole}</span></SiteLink>
+          </article>)}
+        </div>
+      </section>
+
+      <section className="system-project-section" aria-labelledby="system-project-title">
+        <div className="system-section-heading"><h2 id="system-project-title">当前项目都可以从这里进入</h2><p>系统页只补充跨项目关系，不替代项目自己的总览、模块和快照。</p></div>
+        <div className="system-project-links">{projectCatalog.map((entry) => <SiteLink href={entry.project.route} key={entry.project.slug}><span>{String(entry.project.order).padStart(2, "0")}</span><strong>{entry.project.title}</strong><ArrowRight size={16} aria-hidden="true" /></SiteLink>)}</div>
+      </section>
+
+      <section className="system-explanation-grid">
+        <article><h2>怎样读这张图</h2><p>从左向右读：先确认事实由谁负责，再看哪个项目使用它，最后进入真正可以操作或查询的入口。箭头说明关系，不表示实时网络连接。</p></article>
+        <article><h2>出现问题先去哪里</h2><p>不知道内部结构时，直接在页头搜索框描述问题。搜索会先给最短入口；只有需要更多证据时，才继续进入项目和责任源。</p></article>
+      </section>
+
+      <section className="system-journeys" id="system-journeys" aria-labelledby="system-journeys-title">
+        <div className="system-section-heading"><h2 id="system-journeys-title">三条典型使用链</h2><p>它们说明实际怎样走，不要求先记住系统名词。</p></div>
+        <div className="system-journey-grid">{systemJourneys.map((journey, index) => <article key={journey.ask}><span>{String(index + 1).padStart(2, "0")}</span><h3>{journey.ask}</h3><strong>{journey.path}</strong><p>{journey.explanation}</p></article>)}</div>
+      </section>
+
+      <section className="system-boundaries"><h2>这张图不表示什么</h2><StringList items={systemBoundaries} /></section>
+    </div>
+  );
+}
+
+function SearchResultsPage({ search }) {
+  const params = new URLSearchParams(search);
+  const query = params.get("q")?.trim() || "";
+  const requestedScope = searchScopeById(params.get("scope")) || searchScopeById("all");
+  const results = query ? searchPanel(query, requestedScope.id) : [];
+  const groupOrder = ["项目", "系统", "规则", "Skills"];
+  const grouped = new Map();
+  for (const result of results) grouped.set(result.group || result.type, [...(grouped.get(result.group || result.type) || []), result]);
+  const orderedGroups = [...grouped.entries()].sort((left, right) => groupOrder.indexOf(left[0]) - groupOrder.indexOf(right[0]));
+  return (
+    <div className="page-frame search-results-page">
+      <header><p className="section-kicker">完整搜索结果</p><h1>{query ? `“${query}”` : "输入一个名称或问题"}</h1><p>当前范围：{requestedScope.label}。修改查询或范围请直接使用页头唯一的搜索框。</p></header>
+      {!query ? <div className="search-results-empty"><strong>{requestedScope.help}</strong><p>试试：{requestedScope.examples.join(" · ")}</p></div> : null}
+      {query && !results.length ? <div className="search-results-empty"><strong>没有匹配结果</strong><p>可以换成项目用途、现实问题或更短的关键词。</p></div> : null}
+      {orderedGroups.map(([group, entries]) => <section className="search-result-group" key={group}><div><h2>{group}</h2><span>{entries.length} 项</span></div>{entries.map((entry) => <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`}><span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</section>)}
+    </div>
+  );
+}
+
+const skillCategoryDefinitions = [
+  { id: "all", label: "全部" },
+  { id: "find", label: "找东西", slugs: ["personal-media", "personal-materials", "wechat-direct", "google-workspace-direct"] },
+  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "md-to-pdf", "pdf-render-safe", "mojibake-doctor", "file-intake-router", "media-person-self"] },
+  { id: "diagnose", label: "电脑诊断", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
+  { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
+  { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
+  { id: "ai", label: "AI 协作", slugs: ["llm-backend-toolkit", "native-economy-routing", "token-budget-advisor"] }
+];
+
+function skillCategoryIds(slug) {
+  return skillCategoryDefinitions.filter((category) => category.slugs?.includes(slug)).map((category) => category.id);
+}
+
 function SkillsPage() {
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
       <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力）</strong><span>当前供应清单登记了 {panelSnapshot.skills.activeInstallIntent} 个需要安装的能力；另外 {panelSnapshot.skills.activeInstallIntent - skills.length} 项属于不进入公开面板的私人或冻结能力，页面不列名称与详情。收录项按使用频率、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
+        {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
+      </div>
+      <p className="skill-category-note">分类只影响浏览；页头搜索始终覆盖全部 Skills。</p>
       <div className="skill-directory">
           {skills.map((item, index) => (
-            <SiteLink href={`/skills/${item.slug}`} key={item.slug}>
+            <SiteLink className="skill-directory-item" href={`/skills/${item.slug}`} data-skill-categories={skillCategoryIds(item.slug).join(" ")} key={item.slug}>
               <span className="directory-index">{String(index + 1).padStart(2, "0")}</span>
               <span className="directory-copy"><span className="skill-card-top"><strong>{item.name}</strong><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></span><span className="skill-plain-title">{annotateTerms(item.title)}</span><span>{annotateTerms(skillOutcomes[item.slug].value)}</span><small>{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</small></span>
               <ArrowRight size={18} aria-hidden="true" />
@@ -1531,6 +1609,8 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
   let content;
   const currentProjectEntry = projectEntryForPath(path);
   if (path === "/") content = <HomePage />;
+  else if (path === "/system") content = <SystemPage />;
+  else if (path === "/search") content = <SearchResultsPage search={location.search} />;
   else if (currentProjectEntry) {
     if (path === currentProjectEntry.project.route) content = <ProjectPage entry={currentProjectEntry} />;
     else {
@@ -1545,5 +1625,5 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
     content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
-  return <><FlowField /><Header path={path} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main></>;
+  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main></>;
 }

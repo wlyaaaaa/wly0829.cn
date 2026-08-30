@@ -6,6 +6,13 @@ import {
   socialLinks
 } from "./content-core.js";
 import { excludedSkills, skills } from "./content-skills.js";
+import {
+  systemBoundaries,
+  systemJourneys,
+  systemOwners,
+  systemRelations,
+  systemSearchEntries
+} from "./system-content.js";
 import { projectContentPackages } from "./project-content-index.generated.js";
 import panelRegistry from "../config/panel-projects.json" with { type: "json" };
 
@@ -58,7 +65,12 @@ export {
   rulesSnapshot,
   site,
   skills,
-  socialLinks
+  socialLinks,
+  systemBoundaries,
+  systemJourneys,
+  systemOwners,
+  systemRelations,
+  systemSearchEntries
 };
 
 export function normalizePath(pathname) {
@@ -90,7 +102,9 @@ export const routePaths = [
     entry.project.route,
     ...entry.modules.map((item) => `${entry.project.route}/${item.slug}`)
   ]),
+  "/system",
   "/rules",
+  "/search",
   "/skills",
   ...skills.map((item) => `/skills/${item.slug}`)
 ];
@@ -127,6 +141,18 @@ export function routeMeta(pathname) {
     return {
       title: `${rulesSnapshot.releaseId} 当前规则｜${site.name}`,
       description: `${rulesSnapshot.releaseId} 五份活动 E 规则的完整人话解释、技术语义、文件 SHA、ruleset、current/previous 和验证矩阵。`
+    };
+  }
+  if (path === "/system") {
+    return {
+      title: `系统｜${site.name}`,
+      description: "查看 .agents、PCConfig、GitHub 总索引、各项目与 Skills 之间真实的责任、事实和使用关系。"
+    };
+  }
+  if (path === "/search") {
+    return {
+      title: `搜索｜${site.name}`,
+      description: "按项目、系统、规则、Skills 或当前项目作用域查看完整搜索结果。"
     };
   }
   if (path === "/skills") {
