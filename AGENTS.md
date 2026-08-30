@@ -14,9 +14,9 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has nine enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method and
-  Codex Remote in order 1/2/3/4/5/6/7/8/9. The registry
+  target has ten enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
+  Codex Remote and personal-health in order 1/2/3/4/5/6/7/8/9/10. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -54,6 +54,31 @@ read-only operating panel; public presentation is secondary.
   what happens when the check passes, finds a problem, or cannot run. Only
   after those answers may the page present triggers, inputs, outputs,
   architecture, commands, schemas, hashes, evidence and recovery details.
+- Every project detail page uses three reading layers: `速览`, `项目怎么用`
+  and `技术参考`. They are a content priority and reading order, not three
+  copies of the same prose, three network loads or a fixed module count.
+  `速览` owns the product essence, the problem, one ordinary example, the
+  result, the project's deliberate choices and its most important boundary.
+  `项目怎么用` owns natural requests, realistic flows, success/problem/
+  unavailable behavior, product principles and visual results when they help.
+  `技术参考` owns current snapshots, exact models and versions, architecture,
+  commands, schemas, hashes, source/test/runtime/publish evidence, failures,
+  recovery and evolution. Existing module routes remain the deep technical
+  reference instead of becoming a second product introduction.
+- Every project must state its own product principles and design highlights in
+  direct language: what it optimizes for, which common default it rejects, who
+  decides, what trade-off is deliberate and when it refuses to guess. These
+  judgments are part of the product, not optional marketing copy. Their count
+  follows the real project; do not force symmetry or pad a quota.
+- The product layers must not open with a release id, commit, test count,
+  schema, process name, port, model stack or internal component. Those facts
+  remain complete in `技术参考`; they are evidence for the product, not the
+  product's identity. A first-time reader must understand the value and use
+  without reading the reference layer.
+- Public pages never expose internal presentation or maintenance labels such
+  as `curated_packaging`, `manual_owner_only`, “包装内容”, “手动维护” or task
+  handoff bookkeeping. These may remain in Registry and tests as implementation
+  facts, but the visible product is described by its real usable form.
 - For every selected project, the public panel is technically complete by
   default. Except for reviewed L3+ values that the active global classification
   actually requires withholding and reusable secrets, retain the details
@@ -194,6 +219,15 @@ read-only operating panel; public presentation is secondary.
   project may therefore explain evidence routing, uncertainty and safety
   boundaries, but must not publish the owner's health records, diagnoses, test
   results, medication list or individualized advice.
+- The selected personal-health project is a curated, manual-only explanation of
+  its evidence product: processed-current routing, protected foreground refresh,
+  raw preservation and exact resume, deterministic offline verification,
+  decision-ready/inventory-only evidence states, Health Owner review, red flags
+  and low-attention governance. Never read or publish `CURRENT.md`, `SOURCES.md`,
+  reports, raw responses, manifests/briefs, personal values, diagnoses,
+  medications, individualized advice, OAuth payloads or credentials for this
+  page. Source code, tests, schema names, PRIVATE repository identity and
+  ordinary technical facts remain public-safe.
 - Detail pages are durable reference documents, not one-line marketing cards.
   They should explain product intent, real scenarios, information flow,
   architecture, important decisions, boundaries, failure handling and
@@ -220,14 +254,18 @@ read-only operating panel; public presentation is secondary.
   authorized TimeAudit as project 5, PC Panel Hub as project 6, CACB as the
   curated manual-only project 7 and the AI-assisted learning method as the
   curated manual-only project 8, followed by Codex Remote as the curated
-  manual-only project 9. The current target therefore contains
+  manual-only project 9 and personal-health as curated manual-only project 10.
+  The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
-  CACB, the learning method, Codex Remote, plus the one-page Rules workbench
+  CACB, the learning method, Codex Remote, personal-health, plus the one-page Rules workbench
   and current public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
   entire future backlog.
+- Project 10 is personal-health. Its completion and independent report must
+  precede any implementation of project 11 LocalOCR; no placeholder card or
+  advance route is allowed.
 - The selected sequential queue gives the future personal-media project a
   non-optional content floor: automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -343,8 +381,8 @@ read-only operating panel; public presentation is secondary.
   that cannot be repaired in the same goal remain visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
-  TimeAudit, PC Panel Hub, manually requested CACB, learning-method and Codex
-  Remote additions, are standing-authorized to commit, normal-push existing
+  TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
+  Remote and personal-health additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -361,7 +399,7 @@ read-only operating panel; public presentation is secondary.
 - When this website task benefits from native delegation and all upper gates
   allow it, the project default is `gpt-5.6-sol` with `max` effort. Choose the
   actual number from independent work surfaces and net quality gain; the rule
-  applies equally to projects added after the current nine.
+  applies equally to projects added after the current ten.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

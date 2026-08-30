@@ -5,8 +5,8 @@ export const pcconfigProject = {
   route: "/projects/pcconfig",
   visibility: "私有仓库",
   statusTone: "mixed",
-  repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页只公开机器配置产品的结构、入口、边界和无秘密验证事实，不公开凭据值、账号身份、原始任务参数或私人数据。",
-  summary: "PCConfig（电脑配置与恢复中心）的旧 C 盘规则运行链已经退役，只读保留历史。2026-08-30 的 SYSTEM/elevated task-scan 已发布 88 项任务定义并完成 88/88 比较，complete_visibility=true；随后 live drift 为 4 pass（通过）/ 3 warn（需关注）/ 0 block（阻断）。CoreRecovery 当前 ready_with_warnings；P0 第 68 版 normal（正常）/LKG（最后确认可用版本）已证明在线恢复，下一次自然启动的 deadline（时限）验收仍待完成。",
+  repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
+  summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
   plainExample: "例如我说“重装 Windows（微软操作系统）后，把开发环境、计划任务和必要配置恢复回来”。PCConfig 会先确认磁盘与恢复来源，再按运行时、项目、启动链和私密配置分层恢复；每一层都从现场 Provider（现场读取器）取证。最后我得到的不是一句“软件装完了”，而是一份分层结果：哪些已恢复并回读、哪些需要重新登录、哪些仍是 unknown（证据不足），以及每个失败项的安全停止点。",
   result: "我最终会得到一份可执行、可回读的机器状态与恢复结果：当前配置真正在哪里、准备修改什么、变更前状态怎样保存、每一层是否通过、哪些只完成源码或安装、哪些仍需登录或自然重启，以及失败后从哪个检查点恢复。",
@@ -22,6 +22,16 @@ export const pcconfigProject = {
     { label: "SYSTEM 任务快照", value: "task scan generation 20260830t011100879-3ff5ec92330242fc：Registry 88 / observed 88，added=0、removed=0、changed=0、complete_visibility=true" },
     { label: "P0 当前版本", value: "current 第 68 版 normal、active=LKG、trusted control=true；结果 4 已证明在线恢复，下一次自然 boot deadline 仍待验收" },
     { label: "桌面恢复入口", value: "adb0c4b–6922bdb 已补齐一个现有桌面恢复 launcher 的 source/test 与快捷方式回读；本看板未重新执行真实桌面故障 E2E，不能称所有桌面场景已验" }
+  ],
+  productPrinciples: [
+    { title: "先读现场，再改变机器", detail: "登记表负责导航，不能冒充当前状态；真正要改什么，先由 Windows、安装根、任务或项目配置现场证明。" },
+    { title: "项目仍拥有自己的配置", detail: "PCConfig 管机器路径、端口、任务、运行时和恢复关系，不把项目业务配置收走形成第二份真相。" },
+    { title: "每次变更都能退回", detail: "目标、变更前状态、影响对象、回滚入口和完成后的现场回读必须成对存在。" },
+    { title: "恢复按依赖分层进行", detail: "先恢复磁盘、网络和基础运行时，再恢复项目、任务、启动项和私密配置；不把整包覆盖当快捷方式。" },
+    { title: "秘密可以被使用，但不必被看见", detail: "凭据通过引用和受保护调用完成任务，不进入聊天、终端、命令行或普通文件。" },
+    { title: "每一层单独验收", detail: "源码、安装、运行、恢复、自然重启和用户可用分别回读，不能用文件存在或任务就绪代替真实结果。" },
+    { title: "未知不是失败，也不是通过", detail: "不可读、不存在、执行失败和证据不足分别说明，只暂停受影响的一层。" },
+    { title: "按需检查，不建设第二套操作系统", detail: "只在现实任务需要时读取机器事实，不新增全机后台扫描、自动更新或常驻治理层。" }
   ],
   responsibilities: [
     "维护本机路径、磁盘、目录用途、固定端口、运行时和本地数据源等机器事实",
@@ -246,7 +256,7 @@ export const pcconfigModules = [
     shortTitle: "运行与启动",
     title: "运行时、受管软件、启动项与计划任务",
     teaser: "把工具版本、环境元数据、登录启动和计划任务拆成各自可观察、可恢复、不会弹黑窗的运行链。",
-    status: "运行环境可读；任务全量可见性和 P0 下一次自然启动为两项 attention，无当前 block",
+    status: "运行环境与 88 项任务定义全量可读；3 项运行态 warning 与 P0 下一次自然启动验收继续分层保留，无当前 block",
     statusTone: "mixed",
     value: "让我知道“软件装着”之外，正确版本是否可用、启动入口是否仍在、计划任务上次怎样结束，以及重装后要按什么顺序恢复。故障会落到具体任务或组件，而不是一句笼统的“电脑环境坏了”。",
     why: "运行时路径会变化，环境变量可能双作用域，登录启动和计划任务又是两套机制。只看文件是否存在会漏掉错误 Action（执行命令）、错误身份、被禁用任务或非零结果；只看任务 Ready（就绪）也不能证明业务成功。",
@@ -336,7 +346,7 @@ export const pcconfigModules = [
     shortTitle: "恢复与备份",
     title: "核心恢复、备份介质与迁移回滚",
     teaser: "把“有备份”升级为“知道从哪里恢复、按什么顺序、如何验证、失败后怎样不覆盖原状”。",
-    status: "核心恢复链已通过；整机任务可见性阻断仍独立保留",
+    status: "CoreRecovery 当前 ready_with_warnings；88 项任务定义已闭合，H 冷备在线性与下一次自然启动验收仍独立待证",
     statusTone: "mixed",
     value: "重装、换机或磁盘故障时，不再凭记忆到处拷文件。它把网络可重建的软件、需要备份的日常数据、私密配置、计划任务和人工登录分层，让恢复可以停在安全检查点继续。",
     why: "单纯复制文件无法恢复任务身份、运行时顺序、路径引用、登录态和业务可见性；反过来整包覆盖又可能把旧配置、损坏数据库或错误路径带回新系统。恢复必须选择性、可回退并逐层验收。",
@@ -358,7 +368,7 @@ export const pcconfigModules = [
     problem: "备份往往回答“字节在哪里”，恢复却要回答“哪些字节可信、先恢复谁、路径怎样接回、任务用什么身份、秘密怎样重建、应用能否看到”。没有统一恢复顺序与 Owner 分工，就容易把备份存在误当成系统可用。",
     implementation: [
       "core_recovery Registry 当前登记 8 个 backup set（备份集合）和 2 个 external owner（外部责任源），明确 contains_secret_values=false。",
-      "Inspect 只读取任务和根路径元数据，不枚举个人文件名或内容；2026-08-29 返回 ready、0 warning、payload_names_emitted=false、payload_content_read=false。",
+      "Inspect 只读取任务和根路径元数据，不枚举个人文件名或内容；2026-08-29 的 ready / 0 warning 是历史回执，2026-08-30 最新现场为 ready_with_warnings，不能用旧绿灯覆盖。",
       "Hot 在 G 的同根 staging（暂存区）写 manifest、指南、观察上下文和 closure（闭合清单），完整回读后才原子切换 current 指针。",
       "Cold 重验卷身份、BitLocker、空间、Hot 指针、四文件 closure、48 小时时效和全部 SHA-256；复制采用加法式，不使用镜像删除。",
       "启动/任务恢复保存 exact XML preimage；同名任务只有 Owner marker 和 Action identity 同时匹配才可替换。",
@@ -580,7 +590,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig main 当前 6922bdb 与 origin/main 0/0、工作树干净；8ff001e 完成 runtime 退役，adb0c4b–6922bdb 补齐现有桌面恢复 launcher 的 source/test 和快捷方式回读"
+      "PCConfig 已发布 main 仍为 6922bdb 并与 origin/main 对齐；观察时当前 checkout 另有 12 项由现役 Owner 持有的候选施工，因此不能写成工作树干净或把候选冒充 main。8ff001e 完成 runtime 退役，adb0c4b–6922bdb 补齐现有桌面恢复 launcher 的 source/test 和快捷方式回读"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

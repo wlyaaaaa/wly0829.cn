@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote（1/2/3/4/5/6/7/8/9）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、个人健康证据与安全决策（1/2/3/4/5/6/7/8/9/10）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub、CACB、学习方法与 Codex Remote 已依次选为第 5、6、7、8、9 项。CACB、学习方法和 Codex Remote 都是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：学习方法只展示 AI 搜索、解释、交流修正、可选问题、必要验证、人类最终决定、无监督和低复杂度；Codex Remote 只在本人明确要求时从 PUBLIC Git、版本、测试与获准图片重新取证，不调用任何 Remote runtime，也不声称当前在线。Source、材料、截图、规则和 Skill 变化不会自动更新这些页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub、CACB、学习方法、Codex Remote 与 personal-health 已依次选为第 5、6、7、8、9、10 项。CACB、学习方法、Codex Remote 和 personal-health 都是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：学习方法只展示通用学习协作；Codex Remote 只读取 PUBLIC Git、版本、测试与获准图片，不调用冻结运行时；personal-health 只展示证据路由、前台刷新、离线验真、三态和 Health Owner 边界，不读取或公开个人健康载荷。Source、材料、截图、规则、Skill、设备或运行状态变化不会自动更新这些页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -43,6 +43,7 @@ npm run refresh:ai -- --project chinese-asr
 npm run refresh:ai -- --project timeaudit
 npm run refresh:ai -- --project pc-panel-hub
 npm run refresh:ai -- --project cacb --manual-owner-request
+npm run refresh:ai -- --project personal-health --manual-owner-request
 npm run refresh:ai -- --all
 npm run verify:ai-refresh -- --bundle <ai-result.json>
 ```
@@ -50,7 +51,7 @@ npm run verify:ai-refresh -- --bundle <ai-result.json>
 该命令只返回项目、当前内容指纹、事实采集入口和刷新边界，不写网页正文。完整合同见 [个人看板 AI 快速刷新合同](docs/maintenance/ai-panel-refresh.md)。
 
 `manual_owner_only` 项目没有 Source/Skill 自动刷新。未带
-`--manual-owner-request` 时，CACB、学习方法或 Codex Remote 的定向计划，以及包含
+`--manual-owner-request` 时，CACB、学习方法、Codex Remote 或 personal-health 的定向计划，以及包含
 这些项目的全量计划只返回 `manual_owner_request_required`，不会收集证据或创建网站
 任务；只有本人明确要求的网站任务才可携带该标记继续。
 

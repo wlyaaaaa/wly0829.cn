@@ -7,7 +7,7 @@ export const githubIndexProject = {
   repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。公开页面可以列出公开项目的来源路径；PRIVATE（私有）仓库身份、精确 clone（本地副本）路径与恢复材料只保留在被 Git（版本控制）忽略的本机登记区。",
   status: "现役；公开 generation 已更新并完成内部闭合。2026-08-30 最新网络可用 Owner receipt 为 completed / review_needed：baseline 44、observed 45、delta 1，不能包装成全绿。",
   statusTone: "mixed",
-  summary: "当前索引 45 个 GitHub 仓库（26 个 PUBLIC、19 个 PRIVATE）和 43 个已验证本地 clone occurrence。它先确认仓库、公开性、远端、默认分支、工作树、脏改动和同步，再给出继续或阻断证据；Admission 不会授予 push，发布仍要定向候选、授权和远端 main 回读。",
+  summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
   plainExample: "2026-08-29 为 wly0829.cn 准备本页时，现场回读确认它对应公开远端 wlyaaaaa/wly0829.cn，本地 main（默认主分支）与远端 main 的领先/落后提交数都是 0；但工作区已有其他任务的未提交修改，所以结论仍是“只改明确分配的新文件，不能发布”。这正说明 0/0 只证明已提交引用同步，不能证明工作区内容已交付。",
   result: "最终得到的不是一张好看的项目列表，而是一份可行动的证据：正确仓库与远端、当前可见性、默认分支、全部工作树和分支状态、继续/警告/阻断原因、公开发布还缺什么，以及出错后应从哪里恢复或补证。真正发布后还必须从远端默认分支再次回读。",
@@ -20,9 +20,19 @@ export const githubIndexProject = {
     { label: "仓库总数", value: "当前索引 45 个 GitHub 仓库：26 个 PUBLIC、19 个 PRIVATE" },
     { label: "公开 generation", value: "current=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29 21:01Z；8 份文档闭合，previous=1af2630…" },
     { label: "本地 clone 覆盖", value: "已验证 43 个 clone occurrence（检出实例），索引覆盖完整；一个仓库可以有多个 worktree" },
-    { label: "索引仓库自身", value: "PUBLIC main e01433e，与 origin/main 0/0，当前主工作树干净；最新网络可用 Owner receipt=completed / review_needed，baseline 44、observed 45、delta 1" },
+    { label: "索引仓库自身", value: "PUBLIC main 84eeaca；该提交已把公开个人数据分级改为消费 .agents 的活动唯一表，不再用路径或文件类型替代内容判断。公开 generation 仍是 2026-08-29 的闭合快照" },
     { label: "Admission 会做什么", value: "确认仓库、公开性、默认分支、远端、目标 worktree、同步与脏改动后给出继续或阻断证据；它不会授予 push 权限" },
     { label: "发布完成口径", value: "只有目标提交从真实默认分支可达、normal push 完成且远端 main 回读一致，才算 Git 交付收口" }
+  ],
+  productPrinciples: [
+    { title: "先确认真实仓库身份", detail: "目录名、标题和旧缓存不能证明远端是谁；写入前核对远端、默认分支和 Git 公共目录。" },
+    { title: "检查全部工作树和分支", detail: "未提交修改、独有提交和仍被任务使用的工作树都要保留，不能只看当前目录是否干净。" },
+    { title: "传输、公开内容和授权分开判断", detail: "网络能推不等于内容适合公开，内容适合公开也不等于当前任务已获授权。" },
+    { title: "默认分支回读才算交付", detail: "功能分支自己的上游为零不够；目标提交必须从远端真实默认分支可达并再次回读。" },
+    { title: "公开判断看实际内容", detail: "日志、数据库、路径和个人来源不因类型自动敏感；活动全局分级只在出现 L3+ 正面证据时限制具体值，可复用秘密始终阻断。" },
+    { title: "证据不足只阻断高影响动作", detail: "身份、可见性或远端不清时停止发布、删除和迁移，安全的本地工作与只读诊断仍可继续。" },
+    { title: "索引只在实质变化时刷新", detail: "仓库身份、可见性、远端、默认分支或长期治理变化才更新总账；不后台监视，也不自动删除任何仓库。" },
+    { title: "清理前先证明没有唯一内容", detail: "分支或工作树只有在内容已整合、证明确实冗余，或有明确保留用途和退出条件时才能退役。" }
   ],
   responsibilities: [
     "维护仓库身份、远端、可见性、默认分支和已确认本地 clone（副本）的总账",
@@ -37,7 +47,7 @@ export const githubIndexProject = {
     "不拥有具体项目的业务语义、源码、启动方式、测试或部署方式",
     "不因为 admission（入场检查）显示 proceed（无阻断）就授予修改、push（推送）或公开发布权限",
     "不拥有本机计划任务、端口、运行时、磁盘迁移和备份恢复事实；这些回到 PCConfig（电脑配置与恢复中心）",
-    "不把私有仓库身份、精确 clone 路径、凭据、原始日志、数据库、聊天或健康材料发布到公开页面",
+    "不发布可复用凭据和经活动全局分级确认需要保留的 L3+ 具体值；仓库名、路径、日志或数据库字段不因类型自动隐藏",
     "不要求每次普通 commit 或 push 都刷新总索引或写里程碑记录",
     "不运行后台 watcher（持续监视器），不自动 refresh、commit、push 或删除工作树"
   ],
@@ -68,7 +78,7 @@ export const githubIndexProject = {
     observedAt: "2026-08-30T01:14:38Z",
     label: "公开 generation 已更新；最新 live Owner 状态为 review_needed",
     facts: [
-      "wlyaaaaa/github-local-index 当前 PUBLIC main=e01433ea4eff300538d8e3cb533c7953aac0cd69，与 origin/main 为 0/0，主工作树干净。",
+      "wlyaaaaa/github-local-index PUBLIC main 已于 2026-08-30 前进到 84eeaca823431c94bd532eb4909288b50aa517e0；该提交对齐活动全局个人数据分级。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
       "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29T21:01:41Z，8 份文档完整闭合并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
       "聚合来源覆盖 45 个仓库身份和 43 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整），PRIVATE 名称与路径不进入页面。",
       "最新网络可用 Get-GitOwnerStatus receipt 返回 execution_status=completed、domain_status=review_needed：baseline 44、observed 45、delta=1。generation 完整与 live baseline 差异分层保留。"
@@ -134,7 +144,7 @@ export const githubIndexProject = {
     { date: "2026-08-21–2026-08-22", commit: "4283c05 / d00220d / b9a8cd6", result: "支持精确 target worktree/ref，修复远端默认 ref 测试，并退役无消费者的历史投影。" },
     { date: "2026-08-23", commit: "6bfa180", result: "恢复包含 PUBLIC 与 PRIVATE 身份的完整 Owner 基线；私有 local root 继续与 identity 分离。" },
     { date: "2026-08-25–2026-08-28", commit: "8749025 / b454cd9", result: "刷新公开 generation，并让精确目标工作树可以绕过陈旧导航提示后再做 .git identity 回读。" },
-    { date: "2026-08-29", commit: "6afc858–e01433e", result: "先把重大动作源码对齐四类因子、Account provider 独立与 step_up 语义，再发布 8 文档闭合的 generation 3c6487c… 并更新公开投影。当前 PUBLIC main 与远端一致；最新 live Owner status 为 review_needed、delta 1，重大动作安装与真实 E2E 仍独立未验。" }
+    { date: "2026-08-29—08-30", commit: "6afc858–84eeaca", result: "先发布 8 文档闭合的 generation 3c6487c…，随后把 PUBLIC 数据判断对齐活动全局 L1–L5 唯一表：Git 控制面只消费分级，路径和文件类型不再自行把普通内容升级为敏感；可用秘密与真实 L3+ 载荷仍按对应边界处理。" }
   ],
   operationalEntrypoints: [
     { name: "单仓库现场元数据", command: "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo <owner/name> -LiveMetadata -Json", purpose: "读取 GitHub visibility 与默认分支，不 fetch refs。" },
@@ -407,7 +417,7 @@ export const githubIndexModules = [
     implementation: [
       "唯一矩阵按用户授权、repo identity、sync、dirty、visibility、candidate exposure 和目标类别逐层判断。",
       "PUBLIC 路径分类由 PublicExposurePolicy.psd1 统一给 admission、Hook 与 `.gitignore` 使用，避免三套规则漂移。",
-      "真实 `.env` 家族、私钥、凭据配置、原始数据与可直接滥用材料失败关闭；明确 example/sample/template/dist 只豁免路径，内容仍扫描。",
+      "真实 `.env` 家族中的可用秘密、私钥、令牌、恢复材料和可直接滥用载荷失败关闭；日志、数据库、原始目录或普通个人数据只是内容审查候选，不因路径形态自动升级。",
       "pure delete、删除 secret-shaped 行和从敏感路径 rename 到安全目标属于修复；rename 进入敏感目标继续阻断。",
       "Git Hook 通过 NUL-delimited staged paths 与新增 diff 内容拦截高置信模式，只安装在总索引自身 bootstrap/repair。",
       "项目规则与 candidate diff 决定业务是否适合公开；总索引不生成 V1 publication_decision。"
@@ -489,7 +499,7 @@ export const githubIndexModules = [
       "最高权限智能体拥有 allow（允许）、step up（补充人类验证）、deny（拒绝）和 needs evidence（先补证据）的语义判断。",
       "机械适配器只能验证登记、签名、nonce（一次性随机凭据）、目标、事实、完整性、执行器和动作边界，不能按 effect 名称推导 human_required。",
       "Owner 仓库已经原位升级合同与适配器：非执行判断 deny（拒绝）、needs_evidence（先补证据）、suspected_tamper（疑似完整性异常）在 proposal（动作提案）前失败关闭，allow（允许继续）可走 runtime_allowed（运行时允许），step_up（补充人类验证）才产生 human_required（需要人类验证）。",
-      "提交 6afc858 已 normal push 到公开 main 并远端回读；当前仓库 main 已前进到 e01433e。证据未包含 current E consumer 安装或真实重大动作，因此生产层保持未闭合。",
+      "提交 6afc858 已 normal push 到公开 main 并远端回读；当前仓库 main 已前进到 84eeaca，并把公开内容判断对齐活动全局分级。证据未包含 current E consumer 安装或真实重大动作，因此生产层保持未闭合。",
       "网页只展示公开安全的动作类别、规则差异和证据层，不公开因子秘密、账号身份、内部请求材料或可重放参数。"
     ],
     flow: [

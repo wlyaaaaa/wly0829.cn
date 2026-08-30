@@ -5,8 +5,8 @@ export const cacbProject = {
   route: "/projects/cacb",
   visibility: "私有仓库",
   statusTone: "mixed",
-  repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。这里策展展示已经做成的评测产品、公开安全的架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 是一套可复现的 Agent 能力评测产品：它把真实工程任务整理成冻结的问题库，为每次执行创建独立 workspace（工作区），绑定任务与执行身份，用不依赖参与者自述的 verifier（验证器）检查产物，再把成功、能力问题、执行环境问题和证据不足分开记录。",
+  repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
+  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先冻结题目和验收标准，为每次尝试准备全新的工作区，再由参与者之外的验证器检查真实文件、行为、测试和修改范围。最后得到的是一份可复查的证据：做成了什么、问题在哪一层、哪些还不能下结论，而不是公开比较受测对象。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。CACB 把任务、输入、workspace、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”误当成真实能力。",
   plainExample: "例如我要检查一套新的 Agent 执行配置能否完成长程工程任务。CACB 先复制同一份冻结任务到独立 workspace，执行期间不泄露隐藏答案；结束后由固定验证器重放测试、核对文件范围和终态。如果只是基础设施中断，它不会把结果写成能力失败。",
   result: "我得到一套可复用产品：问题库、任务模板、隔离 workspace、身份和输入绑定、确定性验证、失败分类、证据归档与报告发布边界。网页只解释这套产品，不发布受测配置结果。",
@@ -16,12 +16,22 @@ export const cacbProject = {
     unavailable: "身份、workspace、终态或验证输入缺失时只保留证据不足状态，等待同一执行恢复或重新取得完整证据。"
   },
   heroFacts: [
-    { label: "成品范围", value: "47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件；网页只取经筛选的框架事实" },
+    { label: "成品范围", value: "47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件；公开页展示产品结构、验证边界和真实缺口" },
     { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
     { label: "隔离与验证", value: "每次执行独立 workspace；冻结输入、隐藏 verifier、范围审计、终态与归档 hash 分层绑定" },
     { label: "当前源码", value: "PRIVATE main=e6f7581d7d119b94b4df508df2d51c972cd9b73f；工作树干净，远端引用 0/0" },
     { label: "当前回归", value: "与公开产品结构直接相关的 11 个测试文件共 162 项全部通过；完整 928 项集合当前并非全绿" },
-    { label: "展示与更新", value: "页面不展示受测配置名单或比较结果；manual_owner_only，仅在本人明确要求时更新，不存在 Skill/Source 自动刷新" }
+    { label: "公开边界", value: "页面展示产品、隔离、验证、失败分类与证据设计，不展示受测配置名单、横向比较或结果数字" }
+  ],
+  productPrinciples: [
+    { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
+    { title: "每次尝试都从干净工作区开始", detail: "旧文件、其他候选和上一次执行不能提供借来的成功，也不能污染本次失败。" },
+    { title: "验收真实产物，不相信完成声明", detail: "固定验证器检查文件、行为、测试、修改范围和终态，回答得像完成没有证据价值。" },
+    { title: "隐藏检查不规定唯一实现", detail: "验证器只检查目标性质和边界，不向参与者泄露答案，也不把参考实现当成唯一正确路线。" },
+    { title: "整条证据必须属于同一次执行", detail: "身份、任务、工作区、动作、产物和终态彼此绑定，旧回执不能跨版本或跨候选复用。" },
+    { title: "失败先归到正确层", detail: "能力问题、题目缺陷、执行环境故障和证据不足分别记录，不把基础设施中断算成能力差。" },
+    { title: "证据不完整就不下结论", detail: "单次通过只证明精确任务、配置和版本；缺终态或缺验证时保持无法判定。" },
+    { title: "评测帮助人选择，不替人决定", detail: "结果不会自动改写全局模型、能力路由、授权或项目 Owner 的现实选择。" }
   ],
   responsibilities: [
     "把现实工程能力拆成可冻结、可复现、可验证的问题库与案例合同",
@@ -39,7 +49,7 @@ export const cacbProject = {
     "不因一次执行成功或失败就宣称长期稳定能力",
     "不自动改写全局能力路由、授权、安全边界或项目 Owner 决策",
     "不作为后台服务、自动测试队列、定时任务或持续同步系统",
-    "不因 Source、规则、Skill 或报告变化自动刷新网页"
+    "不把网页维护方式、内部生命周期标签或来源任务状态写成评测产品能力"
   ],
   glossary: [
     { term: "Benchmark（能力基准）", meaning: "用冻结任务和统一验证方法产生可复核证据；不是宣传性榜单。" },
@@ -52,8 +62,7 @@ export const cacbProject = {
     { term: "manifest（清单）", meaning: "记录任务、版本、workspace、文件 hash 和执行约束的机器可读合同。" },
     { term: "receipt（回执）", meaning: "证明某个动作、身份或终态真实发生，并绑定到本次执行。" },
     { term: "fail-closed（失败关闭）", meaning: "证据不完整或身份不匹配时不生成能力结论，不靠猜测补齐。" },
-    { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" },
-    { term: "manual snapshot（人工快照）", meaning: "只有本人明确要求时才重新取证、判断和发布的页面状态。" }
+    { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" }
   ],
   currentState: {
     observedAt: "2026-08-30T06:40:00Z",
@@ -63,15 +72,13 @@ export const cacbProject = {
       "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。",
       "问题库、campaign（评测活动）、workspace 隔离、worker contract（执行合同）、fast flow（快速准备/验收）、接入验收、公开案例、归档和报告 schema 的 11 个核心测试文件共 162 项，本轮全部通过。",
       "完整测试共收集 928 项，但当前不是全绿；失败集中在跨代冻结标识、原生身份 envelope、外部执行 adapter 和部分报告不变量，不能被核心 162 项覆盖。",
-      "PRIVATE 源保留冻结任务、私有验证与原始证据；网页只消费经逐项筛选的框架事实、提交、数量、验证范围和明确缺口，不复制受测配置或结果。",
-      "本页由本人本轮明确要求创建；今后 Source、规则、Skill、提交或测试变化都不会自动创建网站任务。"
+      "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
     ],
     gaps: [
       "完整 928 项测试集合当前没有闭合，因此不能把所有历史执行路线描述为当前可验证。",
       "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
       "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
-      "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。",
-      "manual_owner_only 意味着页面可能长期保持同一快照；只有本人明确要求时才复核。"
+      "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
     ]
   },
   operatingFlow: [
@@ -92,7 +99,7 @@ export const cacbProject = {
     { name: "Identity & evidence binding（身份与证据绑定）", responsibility: "把实际执行身份、任务、workspace、动作和终态绑定到同一回执。", implementation: "host receipt、manifest hash 与单次消费规则防止跨执行借证。" },
     { name: "Deterministic verifier（确定性验证器）", responsibility: "检查候选文件、隐藏属性、测试和范围变化。", implementation: "验证器独立进程、硬超时、隐藏材料隔离和结果 hash。" },
     { name: "Failure classifier（失败分类器）", responsibility: "区分能力、任务、执行环境与证据问题。", implementation: "不把 timeout、missing evidence、invalid harness 或未完成统一写成失败。" },
-    { name: "Schema & report layer（数据合同与报告层）", responsibility: "把证据包、案例、归档和说明约束成可重放格式。", implementation: "25 个 schema 与报告模板；网页只消费经筛选的框架事实，私有 payload、受测配置与结果不进入网页。" },
+    { name: "Schema & report layer（数据合同与报告层）", responsibility: "把证据包、案例、归档和说明约束成可重放格式。", implementation: "25 个 schema 与报告模板；公开说明保留产品结构和验证事实，私有 payload、受测配置与比较结果不进入网页。" },
     { name: "Fast model flow（快速接入流）", responsibility: "为新执行配置准备 workspace、完成门和盲化审阅包。", implementation: "准备、完成检查、证据包与代表选择分开，不由参与者 final answer 直接放行。" }
   ],
   usageExamples: [
@@ -384,7 +391,7 @@ export const cacbModules = [
     verification: [
       "public cases、question bank release 和 verify-related focused paths 本轮通过选定核心集合。",
       "完整外部执行 adapter 的若干测试仍失败，未被本模块 PASS 覆盖。",
-      "没有在网页任务中运行私有 holdout。"
+      "本轮没有运行私有 holdout，也没有生成新的受测配置比较结果。"
     ],
     relation: "消费问题库隐藏属性和 workspace 产物；输出给失败分类与报告层。"
   },
@@ -415,7 +422,7 @@ export const cacbModules = [
       "failure state 在 campaign/evaluator/finalizer 间保持枚举语义。",
       "task_workspace_archive 保存代码、trace、receipt 与 validity reason。",
       "export / report schema 约束公开安全输出。",
-      "manual-only 网站快照只读取框架事实，不消费受测结果。"
+      "公开报告只解释产品与证据边界，不消费受测配置比较结果。"
     ],
     flow: [
       "收集案例与终态。",
@@ -452,7 +459,7 @@ export const cacbModules = [
       "完整 report/finalization 历史路径仍有失败，页面保留 mixed。",
       "网站内容没有复制任何私有报告正文或受测比较结果。"
     ],
-    relation: "消费 verifier 和身份证据，形成可复核说明；manual snapshot 决定网页何时重新取证。"
+    relation: "消费 verifier 和身份证据，形成可复核说明；公开报告保留结论的精确范围和证据边界。"
   }
 ];
 

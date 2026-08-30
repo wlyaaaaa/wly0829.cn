@@ -1,6 +1,6 @@
 # wly0829.cn MVP rebuild
 
-status: nine_project_codex_remote_public_pass
+status: ten_project_personal_health_candidate
 
 ## Goal
 
@@ -8,6 +8,8 @@ Build the website from current owner sources so it is the owner's detailed,
 plain-language, professional, read-only operating panel for `.agents`, PCConfig,
 GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning
 method, Codex Remote, the five current rules and the usable Skills catalog.
+The tenth project adds the curated personal-health evidence and safe-decision
+product without exposing personal health payloads.
 
 The prior website copy is not an input. Existing code may be reused only as UI
 infrastructure after its content is removed.
@@ -21,6 +23,10 @@ infrastructure after its content is removed.
   authorized TimeAudit at order 5 with a reusable screenshot gallery, PC Panel
   Hub at order 6 with evidence-labelled visual output, CACB at order 7 and the
   learning method at order 8 as curated `manual_owner_only` product pages.
+- Codex Remote completed order 9; the owner then selected personal-health at
+  order 10 as a curated `manual_owner_only` page covering evidence routing,
+  protected foreground refresh, raw preservation, deterministic offline
+  verification, evidence states and Health Owner boundaries.
 - Top-level information areas are Project, Rules and Skills.
 - No Ideas area, website-self project, future placeholders, career marketing or
   salary-oriented copy.
@@ -83,4 +89,5 @@ public routes were read back against the same product commit. Codex Remote is th
 completed ninth curated/manual-only project: PUBLIC-source evidence, the safe
 20-image gallery, six modules, 39/39 tests, responsive preview, Pages deployment
 and public route/404 read-back all closed at implementation commit `1278c27`.
-No tenth project was started.
+The tenth personal-health candidate is now the only active construction scope;
+LocalOCR and every later project remain unstarted until its independent report.

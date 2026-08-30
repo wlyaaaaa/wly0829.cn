@@ -6,7 +6,7 @@ export const timeAuditProject = {
   visibility: "公开仓库",
   statusTone: "mixed",
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
-  summary: "TimeAudit 是 Windows 个人工作站的本机黑匣子：硬件与 FPS（每秒画面帧数）用 1 秒快车道，活跃进程用 3 秒慢车道，前台会话和进程生灭另行留痕；PostgreSQL 保存可回放时间线，Grafana 用 6 张仪表盘、78 个面板解释性能、功耗、进程取证和使用时间。",
+  summary: "TimeAudit 给这台 Windows 工作站留下一条可以回放的本机时间线。问题发生后，只要给出大致时刻——例如“昨晚游戏为什么突然卡了两秒”——它就把流畅度、硬件压力、磁盘和网络、前后台程序以及程序生灭放到同一条时间轴上，返回有证据的候选原因、数据空档和不能下结论的部分。它也能复盘长期发热、耗电和屏幕使用时间。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等问题发现时现场常已消失。TimeAudit 留下同一时刻的硬件压力、前后台资源、窗口焦点和生命周期，使偶发故障可事后定位，长期散热、功耗和使用习惯也能比较。",
   plainExample: "例如我问“昨晚游戏卡了两秒，是显卡、磁盘还是后台程序？”我把时间框到那两秒，对齐 FPS、1% Low（最差 1% 时段帧率）、单帧时间、CPU/GPU 压力、磁盘延迟和前后台争抢，得到有时间依据的候选原因，而不是凭印象重启。",
   result: "我得到一套只读本机诊断面：能回看整机与进程状态、估算能耗、复盘使用时间、检查程序启动与退出，并知道数据是否仍在采、哪些字段只是估算、哪层证据还缺失。需要快速历史判断时，timeaudit-diagnostics Skill 通过一次有界查询返回覆盖、聚合、信号和因果限制；它不自动结束进程或修改系统。",
@@ -35,6 +35,16 @@ export const timeAuditProject = {
     { src: "/media/timeaudit/resource-usage.png", thumbnail: "/media/timeaudit/thumbs/resource-usage.webp", alt: "资源大户与后台负载", caption: "按 CPU、GPU、内存、显存、磁盘和网络聚合排行，区分前台负载与后台活动。" },
     { src: "/media/timeaudit/process-forensics.png", thumbnail: "/media/timeaudit/thumbs/process-forensics.webp", alt: "进程取证与安全审计", caption: "用签名、提权、生命周期、退出码和路径异常提供线索；告警需要人工核查。" },
     { src: "/media/timeaudit/storage-scale.png", thumbnail: "/media/timeaudit/thumbs/storage-scale.webp", alt: "存储吞吐与数据库规模", caption: "展示写密集时序系统的吞吐和分区规模，判断长期保留、查询与恢复成本。" }
+  ],
+  productPrinciples: [
+    { title: "先问什么时候发生", detail: "时间窗口是诊断入口；先定位问题时刻，再决定需要哪些硬件、进程、前台和生命周期证据。" },
+    { title: "多种信号必须对齐解释", detail: "单个温度、帧率或磁盘尖峰不能直接给根因，只有同一时间轴上的关系才形成候选解释。" },
+    { title: "空白也有不同原因", detail: "没有游戏帧、没有采到和采集器故障是三种状态，不能都显示成零或正常。" },
+    { title: "实测、估算、推导和未知分开", detail: "能耗、电费、签名风险和因果判断都有边界，界面必须说明每个值来自哪里、能证明什么。" },
+    { title: "先看有界摘要，再决定是否深挖", detail: "快速查询先确认覆盖和方向，只有真正需要时才进入详细大盘，不让每次诊断都临时拼查询。" },
+    { title: "只记录和解释，不自动处置", detail: "项目不结束进程、不修改系统，也不把相关性、异常路径或无签名直接升级成安全结论。" },
+    { title: "运行健康不等于数据真理", detail: "心跳证明链路继续推进，不证明每个传感器值正确，也不证明历史没有空档。" },
+    { title: "备份成功不等于恢复完成", detail: "数据库、面板和任务都要在隔离环境恢复并回读结果，不能用备份任务退出码冒充可恢复。" }
   ],
   responsibilities: [
     "在本机连续采集硬件、FPS、活跃进程、前台上下文和进程生命周期",
@@ -90,7 +100,7 @@ export const timeAuditProject = {
     { title: "保留来源差异", detail: "NVML、PDH、LibreHardwareMonitor、PresentMon 与 Win32 各守边界；估算、空值和失败不互相冒充。" },
     { title: "写入分区数据库", detail: "点采样按周/月分区，前台区间另表保存；预热、时区和保留期避免长跑错位。" },
     { title: "先快查，再用问题型大盘回放", detail: "近期事件先由 timeaudit-diagnostics 用一次有界聚合确认覆盖与关键线索；需要更深细节时再框定问题时刻，跨性能、功耗、取证、资源和时间盘对齐证据。" },
-    { title: "自愈、备份与按需刷新", detail: "心跳和 Watchdog 恢复组件；数据库与大盘分层备份。只有展示事实实质改变才刷新本页，不做后台同步或追加日志。" }
+    { title: "自愈、备份与恢复", detail: "心跳和 Watchdog 只恢复故障组件；数据库与大盘分层备份，并在隔离环境回读恢复结果，不用备份任务成功冒充可恢复。" }
   ],
   components: [
     { name: "Python 主调度程序", responsibility: "组织 1 秒 / 3 秒调度、连接池、单例、分区和睡眠恢复。", implementation: "全进程扫描进工作线程；慢车道未完成时不排队。" },

@@ -52,7 +52,7 @@ export const project = {
   route: agentsRegistration.route,
   visibility: agentsRegistration.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库",
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
-  summary: `当前活动规则为 ${panelSnapshot.authority.releaseId}：绑定 PRIVATE main 提交 ${panelSnapshot.authority.gitCommit.slice(0, 7)}、五文件 ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…，前代为 ${panelSnapshot.authority.previous?.release_id || "无"}。C 盘 generation、Publisher、anchor 和 ledger 只作恢复材料，不再参与准入。E92 把长期明确授权、真实调用一次、Owner lifecycle（任务生命周期）收敛和来源任务可逆归档写进正式规则；E93 明确未归档的 long_term_task（长期任务）不自动释放，终态长期任务只能由带检查点与残余的 successor 接续或正式退役。项目同时管理 ${panelSnapshot.skills.activeInstallIntent} 个 active Skill 安装意图（公开看板收录 ${panelSnapshot.skills.selectedPublicCount} 个）、三个控制面协作，以及尚未完成的工作台运行根迁移。`,
+  summary: ".agents 是我和 AI 协作时的总规则与能力中枢。我只需用自然语言说清目标和不能越过的边界，它会让任务找对事实来源、在已有授权内行动、保护并发施工、选择合适能力，并把本地完成、远端发布和真正可用分开验证。最后我拿到的是办成的结果、真实缺口，以及是否还需要我作决定。",
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
   result: "我最终会得到一条可以追溯的工作链：每个事实来自正确项目，每个写入有人负责，每个外部动作有明确授权，失败时知道从哪里恢复，结束时能区分本地完成、远端完成和用户真正可用。",
@@ -63,11 +63,21 @@ export const project = {
   },
   heroFacts: [
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
-    { label: "规则与模块", value: `同一 ${panelSnapshot.authority.releaseId} release 的 5 份规则；E92 正式覆盖耐久授权、真实调用一次、lifecycle 收敛与来源任务归档，E93 补齐长期任务保留/接续边界；项目总览加 6 个模块` },
+    { label: "规则与模块", value: `同一 ${panelSnapshot.authority.releaseId} release 的 5 份规则；E92 正式覆盖耐久授权、真实调用一次、lifecycle 收敛与来源任务归档，E93 补齐长期任务保留/接续边界，E94 保证 RecoverReleaseClaim 与 Repartition 继续保留既有 coordination；项目总览加 6 个模块` },
     { label: "个人能力供应", value: `供应清单 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent；公开看板收录 ${panelSnapshot.skills.selectedPublicCount} 个，其余私人或冻结项不列名称` },
     { label: "三控制面", value: ".agents 管行为、授权和能力；GitHub 总索引管仓库与发布事实；PCConfig 管机器事实与恢复" },
     { label: "运行与临时目录", value: "迁移目标是 E 数据盘与 E 缓存盘；当前运行根仍由 C 盘实际目录承载，E 盘只有迁移 staging，尚未完成 junction、停写增量与运行时回读，不能称已切换" },
     { label: "模型与委派", value: `当前规则要求先验证宿主 model、effort、root/child 与 ${panelSnapshot.authority.releaseId} 身份，再按任务语义选择 0–10 条支路；网页不把某次任务的 child 数量当成持续能力` }
+  ],
+  productPrinciples: [
+    { title: "人定目标，AI负责方法", detail: "用户说明要达成什么、优先级和不能越过的边界；AI负责调查、工具、并行方式和验证深度，不把工程选择甩回用户。" },
+    { title: "事实回到真正负责它的地方", detail: "业务由项目解释，仓库与发布由 Git 总索引解释，机器事实与恢复由 PCConfig 解释；旧报告和模型记忆不能替代现场。" },
+    { title: "明确过的授权不反复索要", detail: "同一目标和范围内持续推进；只有目标、账号、公开面、付费、秘密或不可逆边界变化时，才重新判断。" },
+    { title: "并行提高质量，但不覆盖别人", detail: "互不依赖的工作可以并行；重叠写入用最小施工范围协调，已有改动始终保留。" },
+    { title: "完成必须分层证明", detail: "源码、测试、安装、发布和用户真正可用各自证明不同事情，任何一层都不能冒充整件事完成。" },
+    { title: "不知道就保留未知", detail: "证据不足只停止受影响步骤，说明缺什么和怎样恢复；不依赖该问题的安全工作继续。" },
+    { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
+    { title: "私人问题直接进入对应小入口", detail: "健康、诉讼、微信、材料、录音和扫描分别走自己的边界，不恢复中央个人画像或默认全景上下文。" }
   ],
   responsibilities: [
     "定义跨项目适用的 Agent 行为与指令优先级",
@@ -170,7 +180,7 @@ export const project = {
     { date: "2026-08-25", commit: "325d6a7", result: "补全归档任务的 Owner 恢复。" },
     { date: "2026-08-26", commit: "472ab3a", result: "CoreGoal 授权进入保护消费者，四类人类因子统一。" },
     { date: "2026-08-29", commit: "157060f–31009aa", result: "退役 C 盘规则 Publisher/Authority 生产链，建立 E release、跨项目 coordination、差异驱动快速验证和分阶段墙钟回执；运行根迁移已进入 staging 与兼容修复阶段，但尚未完成 junction、唯一副本和新运行时回读。" },
-    { date: "2026-08-30", commit: "464564b–ea32ca0", result: "E91 统一 PUBLIC L1–L5 分级、私人账号等价可信与 english_chinese_gloss；E92 将长期明确授权扩到 root/全部后代/新顶层任务，要求真实调用一次，并补齐 terminal Owner 收敛、complete goal 关闭语义和来源任务可逆归档；E93 明确未归档长期任务不自动释放，终态长期任务只接受带 checkpoint/residual 的 successor 或正式 retirement。" }
+    { date: "2026-08-30", commit: "464564b–185503e", result: "E91 统一 PUBLIC L1–L5 分级、私人账号等价可信与 english_chinese_gloss；E92 正式化耐久授权、真实调用一次和来源任务归档；E93 明确长期任务保留与接续；E94 保证 RecoverReleaseClaim 继承 predecessor 的非空 coordination，并让 Repartition 把当前冻结 coordination 写入全部 replacement bindings，避免跨项目目标在恢复或重分区时丢失身份。" }
   ],
   operationalEntrypoints: [
     { name: "活动 E 规则", command: "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json", purpose: "唯一证明 current/previous E release、commit、ruleset、五文件路径和 pointer。" },
@@ -392,7 +402,7 @@ export const modules = [
       "Invoke-EAgentRulesRelease.ps1 是唯一 activator/reader，current-rules.json 记录 current/previous、pointer revision 和 release record commitment。",
       `每代 release 固定五份 logical id、relative path、bytes、SHA、PRIVATE main commit 和 ruleset SHA；当前 ${panelSnapshot.authority.releaseId} 绑定 ${panelSnapshot.authority.gitCommit.slice(0, 7)} 与 ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…。`,
       "release 目录和 pointer 关闭 ACL 继承，由 SYSTEM 拥有；普通/管理员编辑器只读执行，Activator 临时写后恢复封闭 ACL。",
-      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信、项目收紧授权窄例外与 english_chinese_gloss；E92 正式化 durable explicit user authorization、真实调用一次、terminal Owner 收敛和来源任务自动归档；E93 明确 long_term_task 的保留、接续和正式退役边界。",
+      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信、项目收紧授权窄例外与 english_chinese_gloss；E92 正式化 durable explicit user authorization、真实调用一次、terminal Owner 收敛和来源任务自动归档；E93 明确 long_term_task 的保留、接续和正式退役边界；E94 修复 RecoverReleaseClaim 与 Repartition 的 coordination 延续。",
       "普通规则文本、目录、预算及对应测试可走 FastRelease：只跑变更闭集关键回归，但复用同一 Git、五哈希、pointer CAS、UAC activator 和 fresh Inspect；触及保护合同、Activator、ACL、Hook、Owner Registry、身份/授权或其他代码时必须回标准路径。",
       "E rules release 的机器侧 Git 收口、激活和回读目标为 180 秒内；回执分列 focused tests、commit、push/readback 与 UAC activation 墙钟，网络或用户处理 UAC 的等待单列。",
       "e81-retirement-dispositions 证明旧 C production reader count=0，退役未新增 background service、queue、database 或 task；Secret Broker 等独立产品保留。",

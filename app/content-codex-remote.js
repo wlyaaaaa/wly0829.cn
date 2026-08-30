@@ -7,9 +7,9 @@ export const codexRemoteProject = {
   statusTone: "mixed",
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这个页面直接展示 Codex Remote 的真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
-  summary: "Codex Remote 是一个自托管的手机浏览器控制台：离开电脑后，我仍能查看并继续 Windows 上同一个 Codex Desktop 任务，读取公开进展、命令、文件修改和子智能体，处理运行时真正给出的审批，追加当前轮要求、停止回复或排队下一轮。它不是远程桌面，也不是第二份聊天副本。",
-  why: "一个长任务可能在电脑上继续运行、等待审批或已经修改文件；另开手机聊天会丢失同一任务的上下文和真实状态。Codex Remote 让 Desktop 与手机共享同一个 threadId（任务标识）和 turnId（轮次标识），并在不能安全续接时失败关闭，避免把两条互不相干的任务误认为同步。",
-  plainExample: "例如电脑上的任务正在修改项目并等待一条命令审批。我用手机打开同一任务，先看公开 Work Log（工作记录）与 diff（差异），提交 app-server 本次实际提供的审批选项，再补充一句当前轮引导；若这轮已经接近完成，也可以把下一条要求放入可编辑队列，而不是重新开一个聊天。",
+  summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令和文件改动，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；也能在明确确认下浏览和操作自己的文件。它不传输桌面画面，也不另开一份聊天。",
+  why: "长任务可能正在电脑上运行、等待审批或已经改了文件。另开一个手机聊天只能复制文字，拿不到同一个任务的真实轮次、工具、审批和文件状态。Codex Remote 把移动端设计成“查看—审批—引导—排队—回读”的控制面，并在身份、连接或结果不清时拒绝动作。",
+  plainExample: "例如电脑上的任务正在改项目并等待一条命令审批。我在手机上先看命令会影响什么、刚改了哪些文件，再选择这次真实提供的审批选项并补充一个条件；如果当前回复已经快结束，就把下一件事放进可编辑队列。网络中断时先回读状态，不会自动重复发送。",
   result: "我得到一个移动优先但仍以 Desktop 为同一任务事实面的控制台：任务、轮次、公开进展、工具、文件、审批、子智能体、模型、上下文和额度保持可核对；文件工作台另行提供有确认边界的所有者文件操作。无法确认 Desktop 订阅、权限或请求身份时，产品明确拒绝，不猜造成功。",
   readerStates: {
     pass: "Desktop 与 Sidecar 连接同一个回环 Broker、任务订阅屏障完成且请求身份匹配时，手机和 Desktop 继续同一个任务与轮次。",
@@ -23,6 +23,16 @@ export const codexRemoteProject = {
     { label: "正式公开版本", value: "v0.1.5 / c3a07719ecbe00dbad515b3cae00fd0f33b186d2；记录 1771 项测试、public-safety 与 Chromium 响应式验收" },
     { label: "当前公开源码", value: "PUBLIC main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6；package=0.1.6-unreleased.0，不能写成已发布 v0.1.6" },
     { label: "本页证据边界", value: "12 张历史真实手机 UI + 7 张公开合成演示 + 1 张历史合成 QA；本轮未调用 Remote runtime，不代表当前在线" }
+  ],
+  productPrinciples: [
+    { title: "两端共享同一个任务事实", detail: "手机与 Desktop 使用同一任务和轮次，不复制聊天历史制造看似同步的第二份任务。" },
+    { title: "移动端只保留真正需要的控制", detail: "优先查看、审批、引导、停止、排队和回读，不把整套桌面界面机械缩小到手机。" },
+    { title: "当前轮和下一轮严格分开", detail: "当前回复怎样继续、下一轮换什么模型和做什么是两种状态，不能热切换出无法解释的中间结果。" },
+    { title: "界面只显示运行时真实提供的值", detail: "模型、审批选项、额度、上下文和工具状态不写死，也不为了界面完整补造按钮。" },
+    { title: "待发队列不是任务记录", detail: "Web草稿只有真正派发并被同一任务接受后，才成为任务的一部分。" },
+    { title: "项目任务和所有者文件是两条边界", detail: "任务工作区受项目身份约束，文件工作台使用 Windows 所有者能力；两者不能互相冒充权限。" },
+    { title: "公网只看到产品接口", detail: "认证、同源和确认边界挡在前面，底层任务协议、回环服务与敏感载荷留在本机。" },
+    { title: "结果不清就先回读，不自动重放", detail: "断线、重复提交或状态不确定时保留草稿和幂等身份，先确认权威状态再决定是否继续。" }
   ],
   gallery: [
     {
@@ -281,8 +291,7 @@ export const codexRemoteProject = {
     "不在同一轮生成中热切换模型、思考等级、速度或权限；设置只影响下一轮",
     "不把 Web 的下一轮队列冒充 Desktop 原生未发送草稿；真正派发后才进入 Desktop 持久记录",
     "不猜造审批选项、模型目录、额度或当前在线状态，缺失时保持 Unknown（未验证）",
-    "不公开密码、Cookie、token、认证数据库、私有 tailnet 地址或逐值判断后确属敏感的三级以上内容",
-    "不因 Source、规则、Skill、测试或截图变化自动刷新本页；只有本人明确要求时才重新取证和发布"
+    "不公开密码、Cookie、token、认证数据库、私有 tailnet 地址或逐值判断后确属敏感的三级以上内容"
   ],
   glossary: [
     { term: "Sidecar（认证侧车服务）", meaning: "对浏览器提供登录、产品 API、SSE 事件、文件能力和领域投影；公网只到这一层。" },
@@ -295,8 +304,7 @@ export const codexRemoteProject = {
     { term: "SSE（服务器事件流）", meaning: "浏览器接收实时任务更新的单向事件通道；断线后按事件序号续接或重读快照。" },
     { term: "CSRF（跨站请求伪造防护）", meaning: "写请求必须同时满足登录、可信来源和一次性校验，避免第三方网页借用会话操作电脑。" },
     { term: "opaque grant（不透明短时授权）", meaning: "任务正文中的本地绝对路径换成短时文件引用，避免形成可复用公网裸链接。" },
-    { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" },
-    { term: "manual snapshot（人工快照）", meaning: "本人明确要求后才重新取证、判断和发布；页面没有后台探针或自动刷新。" }
+    { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" }
   ],
   currentState: {
     observedAt: "2026-08-30T11:29:50Z",
@@ -752,7 +760,7 @@ export const codexRemoteModules = [
       "CI workflow 分开 source check、public safety 与 Chromium E2E。",
       "Playwright SharedRuntime 明确使用合成任务，不能升级成 Desktop 实机证据。",
       "历史 acceptance 记录同一任务、审批、文件 SHA、队列、停止和重连。",
-      "网站 gallery 为每张图写能证明/不能证明，manual_owner_only 阻止 Source 自动刷新。"
+      "公开画廊为每张图写清能证明与不能证明什么，避免把合成界面或历史实机画面冒充当前在线。"
     ],
     flow: [
       "回读 PUBLIC main、tags 与 latest release。",

@@ -874,6 +874,59 @@
           "any source-side materiality claim because this project has no automatic website handoff"
         ]
       }
+    },
+    {
+      "id": "personal-health",
+      "order": 10,
+      "title": "个人健康证据与安全决策",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/personal-health",
+      "ai_refresh": {
+        "mode": "manual_owner_only",
+        "automatic_handoff": false,
+        "content_path": "app/content-personal-health.js",
+        "semantic_revision": 1,
+        "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice",
+        "collectors": [
+          "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",
+          "manual_public_product_evidence: read only AGENTS.md, google_health_enroll.py, google_health_refresh.py, google_health_import.py, google_health_capture.py, google_health_brief.py and their five test modules; run python -m pytest -q; never read CURRENT.md, SOURCES.md, raw reports, manifests, briefs, provider payloads or credentials, and never invoke Google, Secret Broker or a device runtime"
+        ],
+        "conditional_collectors": [],
+        "manual_refresh_rule": "all source, health-material, device, rule, Skill, test and runtime changes remain outside automatic website handoff; only an explicit owner request for personal-health or an explicitly owner-requested full refresh may produce a new snapshot"
+      },
+      "source": {
+        "repo": "wlyaaaaa/personal-health",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-personal-health-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "curated_project_overview",
+        "evidence_decision_canvas",
+        "project_modules",
+        "processed_current_and_minimum_source_route",
+        "protected_foreground_refresh_and_credential_boundary",
+        "raw_preservation_manifest_hash_and_exact_resume",
+        "offline_decision_ready_and_inventory_only_gate",
+        "evidence_three_state_and_non_diagnostic_semantics",
+        "health_owner_red_flag_privacy_and_low_attention_boundary",
+        "manual_snapshot_without_health_payloads"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "manual_refresh_when": [
+          "the owner explicitly requests a personal-health project refresh",
+          "the owner explicitly includes personal-health in a full panel refresh"
+        ],
+        "automatic_refresh_when": [],
+        "ignore_when": [
+          "all source commits, code, tests, health materials, device data, rules, Skills and runtime changes when there is no explicit owner refresh request",
+          "all CURRENT.md, SOURCES.md, report, raw response, manifest, brief, credential and individual health-state changes because those facts are outside the public product",
+          "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
+        ]
+      }
     }
   ]
 }

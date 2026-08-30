@@ -1,4 +1,4 @@
-# 个人项目看板 MVP 与九项目扩展规格
+# 个人项目看板 MVP 与十项目扩展规格
 
 ## 产品定位
 
@@ -19,7 +19,7 @@
 
 项目注册表是 `config/panel-projects.json`。
 
-- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit、PC Panel Hub、CACB、学习方法与 Codex Remote 已依次扩展为第 5、6、7、8、9 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote（1/2/3/4/5/6/7/8/9）。CACB、学习方法与 Codex Remote 使用 curated packaging 和 manual-owner-only 快照；学习方法只还原 AI 协作机制，Codex Remote 只展示真实做成的产品、公开版本和分层证据，不调用运行时或声称当前在线。
+- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit、PC Panel Hub、CACB、学习方法、Codex Remote 与 personal-health 已依次扩展为第 5、6、7、8、9、10 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、个人健康证据与安全决策（1/2/3/4/5/6/7/8/9/10）。CACB、学习方法、Codex Remote 与 personal-health 使用 curated packaging 和 manual-owner-only 快照；personal-health 只展示证据路由、前台刷新、离线验真、三态和 Health Owner 边界，不读取个人健康载荷。
 - 注册表支持未来增加几十个项目，不以 MVP 数量作为长期上限。
 - 网站源项目本身不进入项目清单，避免自我套娃。
 - 项目默认 `presentation_mode=real_dashboard`：真实、详细地展示架构、状态、缺口和证据。
@@ -53,6 +53,10 @@
 /projects/cacb/:module    问题库、隔离执行、身份与证据、确定性验证、失败与报告模块
 /projects/learning        AI协助学习方法总览
 /projects/learning/:module 权威资料、人话解释、交流修正、问题与验证、人类决定模块
+/projects/codex-remote    Codex Remote 总览与证据画廊
+/projects/codex-remote/:module 同一任务、审批、文件、架构、安全与版本证据模块
+/projects/personal-health 个人健康证据与安全决策总览
+/projects/personal-health/:module 证据路由、前台刷新、保全续跑、离线判断、三态与人工边界模块
 /rules                    五份规则，一个页面内切换
 /skills                   按价值排序的 Skill 清单
 /skills/:skill            Skill 完整详情

@@ -234,7 +234,7 @@ export const ruleGuides = {
           item("纯只读不用 Claim", "首次专属写入、决定、受保护 proposal 或交接前才读取 binding 并认领。"),
           item("不能从标题或 cwd 推断", "只有 registry 的 expected revision CAS 绑定成立。"),
           item("一个任务最多一个项目", "同项目 scope 不重叠；首次 Claim，同 holder 追加独立 scope 用 Add，扩缩改派用正式 transition。"),
-          item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
+          item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。RecoverReleaseClaim 默认继承 predecessor 的非空 coordination，Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings，避免恢复或重分区丢失同一目标身份。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
           item("写前 AuthorizeAction", "每次写入核对 action、task、scope、binding 和 revision，防止拿旧 claim 改新范围。"),
           item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。先用固定 Codex lifecycle resolver 判断对方是否仍 active；只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
           item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无现役 Owner、当前任务不能 Claim 且独立 Owner 路线确有净价值时才创建；耐久明确授权已经满足用户允许，create_thread 可见就真实调用一次。默认无项目，不能因仓库工作自动选择 saved project。"),

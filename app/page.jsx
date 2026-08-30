@@ -338,10 +338,10 @@ function moduleStatusTone(module) {
   return "unknown";
 }
 
-function ThreeStateSummary({ pass, problem, unavailable, kind }) {
-  const labels = kind === "learning"
+function ThreeStateSummary({ pass, problem, unavailable, kind, labels: customLabels }) {
+  const labels = customLabels || (kind === "learning"
     ? ["证据足够时", "遇到冲突时", "暂时无法判断时"]
-    : ["正常时", "发现问题时", "入口不可用或证据不足时"];
+    : ["正常时", "发现问题时", "入口不可用或证据不足时"]);
   return (
     <div className="outcome-state-grid">
       <article><h3>{labels[0]}</h3><p>{displayCopy(pass, kind)}</p></article>
@@ -388,6 +388,12 @@ function ObservedTime({ value }) {
 }
 
 function projectCardMetrics(entry, moduleCount) {
+  if (Array.isArray(entry.project.cardMetrics) && entry.project.cardMetrics.length) {
+    return [
+      ...entry.project.cardMetrics.slice(0, 3).map((item) => [item.label, item.value]),
+      ["模块（含总览）", moduleCount]
+    ];
+  }
   if (entry.kind === "agents") {
     return [
       ["E 规则代号", panelSnapshot.authority.releaseId],
@@ -530,7 +536,7 @@ function ProjectHero({ entry }) {
       <section className="project-hero">
         <div className="project-hero-main">
           <div className="project-hero-copy">
-            <p className="section-kicker">{projectKicker(entry.kind)}</p>
+            <p className="section-kicker">{currentProject.kicker || projectKicker(entry.kind)}</p>
             <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
             <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
           </div>
@@ -848,7 +854,7 @@ function ProjectGallery({ title, images }) {
 function MethodCanvas({ canvas, kind }) {
   if (!canvas?.steps?.length) return null;
   const copy = (value) => displayCopy(value, kind);
-  const roleColumns = [
+  const roleColumns = canvas.columns || [
     { title: "你", note: "决定与反馈", items: canvas.humanRole || [] },
     { title: "AI", note: "研究与协助", items: canvas.aiRole || [] },
     { title: "刻意没有", note: "有意不建设", items: canvas.absentByDesign || [] }
@@ -858,9 +864,9 @@ function MethodCanvas({ canvas, kind }) {
   return (
     <section className="method-canvas document-section" aria-labelledby="method-canvas-title">
       <header className="method-canvas-heading">
-        <p className="section-kicker">方法画布 · {canvas.steps.length} 步</p>
+        <p className="section-kicker">{canvas.kicker || "方法画布"} · {canvas.steps.length} 步</p>
         <h2 id="method-canvas-title">{copy(canvas.headline)}</h2>
-        <p>这是一张可直接照着使用的说明，不是学习进度表。每一步都说明谁来做，也保留暂停、反驳和改方向的空间。</p>
+        <p>{copy(canvas.description || "这是一张可直接照着使用的说明，不是学习进度表。每一步都说明谁来做，也保留暂停、反驳和改方向的空间。")}</p>
       </header>
       <ol className="method-step-flow" aria-label={`${canvas.steps.length} 步协作流程`}>
         {canvas.steps.map((step, index) => (
@@ -872,7 +878,7 @@ function MethodCanvas({ canvas, kind }) {
           </li>
         ))}
       </ol>
-      <div className="method-role-grid plain-language-grid" aria-label="你、AI与刻意不建设的边界">
+      <div className="method-role-grid plain-language-grid" aria-label={canvas.columnsAriaLabel || "你、AI与刻意不建设的边界"}>
         {roleColumns.map((column) => (
           <article key={column.title}>
             <header><h3>{column.title}</h3><span>{column.note}</span></header>
@@ -903,7 +909,7 @@ function ProjectOverview({ entry }) {
         <p className="section-kicker">先说人话</p>
         {entry.kind === "agents" ? <><h2>它负责让个人 AI 工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI 查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
         <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
-        <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} />
+        <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
       </section>
 
       <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
@@ -1015,6 +1021,7 @@ const inlineTermTranslations = [
   ["External effect", "外部现实动作"],
   ["Recovery capsule", "恢复胶囊"],
   ["Password Center", "密码中心"],
+  ["Secret Broker", "本机受保护凭据中介"],
   ["LocalGpuBroker", "本地 GPU 调度器"],
   ["Speech Activity Detection", "语音活动检测"],
   ["Windows Subsystem for Linux", "Windows 的 Linux 子系统"],
@@ -1252,7 +1259,7 @@ function ModuleDetail({ entry, module }) {
         <p>{copy(module.value)}</p>
         <StatusPill status={moduleStatusTone(module)}>{copy(module.status)}</StatusPill>
       </header>
-      <section className="module-outcome"><p className="section-kicker">先说人话</p><h2>{isLearning ? "为什么这样做、我能怎么用、最后得到什么" : "为什么需要、怎样使用、最后得到什么"}</h2><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(module.why)}</p></article><article><h3>举个实际例子</h3><p>{copy(module.example)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(module.result)}</p></article></div><ThreeStateSummary {...module.readerStates} kind={entry.kind} /><h3>{isLearning ? "实际会这样处理" : "用上以后，实际会这样处理"}</h3><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{copy(change)}</p></article>)}</div></section>
+      <section className="module-outcome"><p className="section-kicker">先说人话</p><h2>{isLearning ? "为什么这样做、我能怎么用、最后得到什么" : "为什么需要、怎样使用、最后得到什么"}</h2><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(module.why)}</p></article><article><h3>举个实际例子</h3><p>{copy(module.example)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(module.result)}</p></article></div><ThreeStateSummary {...module.readerStates} kind={entry.kind} labels={module.stateLabels} /><h3>{isLearning ? "实际会这样处理" : "用上以后，实际会这样处理"}</h3><div className="skill-decision-list">{module.decisionImpact.map((change, index) => <article key={change}><span>{index + 1}</span><p>{copy(change)}</p></article>)}</div></section>
       <section className="document-section compact-terms"><h2>{isLearning ? "这里会用到的说法" : "本模块用到的名词"}</h2><dl className="definition-list">{module.concepts.map((item) => <div key={item.term}><dt>{displayTerm(item.term)}</dt><dd>{copy(item.explanation)}</dd></div>)}</dl></section>
       <section className="document-section"><h2>{isLearning ? "这一步说的是什么" : "专业定义"}</h2><p>{copy(module.teaser)}</p></section>
       <section className="problem-callout"><p className="section-kicker">{isLearning ? "避免什么问题" : "解决什么"}</p><p>{copy(module.problem)}</p></section>

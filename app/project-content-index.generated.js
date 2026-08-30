@@ -8,6 +8,7 @@ import { project as project_pc_panel_hub, modules as modules_pc_panel_hub } from
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
 import { project as project_learning, modules as modules_learning } from "./content-learning.js";
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
+import { project as project_personal_health, modules as modules_personal_health } from "./content-personal-health.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -18,5 +19,6 @@ export const projectContentPackages = new Map([
   ["pc-panel-hub", { project: project_pc_panel_hub, modules: modules_pc_panel_hub, kind: "pc-panel-hub" }],
   ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
   ["learning", { project: project_learning, modules: modules_learning, kind: "learning" }],
-  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }]
+  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }],
+  ["personal-health", { project: project_personal_health, modules: modules_personal_health, kind: "personal-health" }]
 ]);
