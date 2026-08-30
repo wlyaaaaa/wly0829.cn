@@ -145,8 +145,8 @@ export function searchScore(entry, query) {
   if (!normalized) return 0;
   const title = entry.title.toLowerCase();
   const detail = entry.detail.toLowerCase();
-  const all = `${entry.type} ${title} ${detail} ${entry.search}`.toLowerCase();
   const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
+  const all = `${entry.type} ${title} ${detail} ${entry.search} ${aliases.join(" ")}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !all.includes(token))) return 0;
   if (title.includes(normalized)) return 140;

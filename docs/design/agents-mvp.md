@@ -1,4 +1,4 @@
-# 个人项目看板 MVP 与八项目扩展规格
+# 个人项目看板 MVP 与九项目扩展规格
 
 ## 产品定位
 
@@ -19,7 +19,7 @@
 
 项目注册表是 `config/panel-projects.json`。
 
-- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit、PC Panel Hub、CACB 与学习方法已依次扩展为第 5、6、7、8 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白（1/2/3/4/5/6/7/8）。CACB 与学习方法使用 curated packaging 和 manual-owner-only 快照；学习方法只还原AI协作机制，不公开具体主题或个人进度。
+- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit、PC Panel Hub、CACB、学习方法与 Codex Remote 已依次扩展为第 5、6、7、8、9 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote（1/2/3/4/5/6/7/8/9）。CACB、学习方法与 Codex Remote 使用 curated packaging 和 manual-owner-only 快照；学习方法只还原 AI 协作机制，Codex Remote 只展示真实做成的产品、公开版本和分层证据，不调用运行时或声称当前在线。
 - 注册表支持未来增加几十个项目，不以 MVP 数量作为长期上限。
 - 网站源项目本身不进入项目清单，避免自我套娃。
 - 项目默认 `presentation_mode=real_dashboard`：真实、详细地展示架构、状态、缺口和证据。
@@ -170,4 +170,4 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 - 搜索、导航、规则切换、项目侧栏和响应式布局可用；
 - 自动化测试、构建、直接路由、自定义 404 和本地用户预览通过。
 
-单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 与 PC Panel Hub 已完成第五、第六项目扩展，CACB 已完成第七个 curated/manual-only 项目，学习方法已完成第八个 curated/manual-only 项目及 PUBLIC Pages 回读。规则权威由 verified current E release 动态提供；每个后续项目仍须完成自己的内容、更新合同、测试边界、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back。
+单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 与 PC Panel Hub 已完成第五、第六项目扩展，CACB 与学习方法已完成第七、第八个 curated/manual-only 项目，Codex Remote 是第九个 curated/manual-only 项目。规则权威由 verified current E release 动态提供；每个后续项目仍须完成自己的内容、更新合同、测试边界、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back。

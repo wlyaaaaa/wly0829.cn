@@ -14,9 +14,9 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has eight enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR, TimeAudit, PC Panel Hub, CACB and the curated learning method in
-  order 1/2/3/4/5/6/7/8. The registry
+  target has nine enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method and
+  Codex Remote in order 1/2/3/4/5/6/7/8/9. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -27,9 +27,12 @@ read-only operating panel; public presentation is secondary.
   can refresh it; source, rule and Skill events never create a website task.
 - The website source project is infrastructure for the presentation layer and
   never appears as one of the projects being presented.
-- Public copy stays vendor-neutral. Describe reusable AI workflows, rules and
-  capabilities without naming or implying one dedicated assistant product,
-  runtime wrapper or compatibility layer as the site's identity.
+- The site's overall identity stays platform-neutral: no one assistant product,
+  runtime wrapper or compatibility layer defines the whole panel. This is not
+  permission to euphemize a selected project's real identity. Name the actual
+  product, platform and public repository when they make the project clearer;
+  `Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly.
+  Hide only actual personal-sensitive payloads and reusable credentials.
 - If an otherwise public-safe exact path or identifier contains the prohibited
   platform identity, describe its drive, role, ownership, migration and
   read-back semantics without reproducing that branded path segment. This is a
@@ -82,6 +85,11 @@ read-only operating panel; public presentation is secondary.
   private personal content or reusable credential values. Bulk raw data may be
   omitted for boundedness, noise or product value, but never mislabeled as
   forbidden merely because of its schema.
+- PUBLIC personal-data decisions follow the active global authorization
+  contract's single classification table and the owner's exact project-specific
+  instructions. This project neither copies, redefines nor independently
+  tightens that table; a project-authored restriction cannot create its own
+  publication authority.
 - A page is still a riddle when a first-time reader can only tell that it is
   “related to Git / AI / files” but cannot explain what useful task it performs.
   Field completeness, a glossary, translated labels, tests and correct terms do
@@ -210,14 +218,22 @@ read-only operating panel; public presentation is secondary.
 - The owner accepted the four-project public MVP on 2026-08-30, then explicitly
   authorized TimeAudit as project 5, PC Panel Hub as project 6, CACB as the
   curated manual-only project 7 and the AI-assisted learning method as the
-  curated manual-only project 8. The current target therefore contains
+  curated manual-only project 8, followed by Codex Remote as the curated
+  manual-only project 9. The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
-  CACB, the learning method, plus the one-page Rules workbench and current
-  public-safe Skills catalog.
+  CACB, the learning method, Codex Remote, plus the one-page Rules workbench
+  and current public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
   entire future backlog.
+- The selected sequential queue gives the future personal-media project a
+  non-optional content floor: automatic increments, classification, cloud and
+  phone recovery bundles, dual preservation/read-back, and fail-closed controls
+  against unattended loss. The future 微信 / `WeChatDirect` project must directly
+  cover incremental WeChat archiving, reply and image/audio/file relationships,
+  resumable replay and recovery. These requirements do not authorize building
+  either project before its turn; finish and report the current project first.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
   owned by one assistant product. It may include both personally maintained
   Skills and high-value externally supplied Skills that are genuinely available
@@ -326,10 +342,10 @@ read-only operating panel; public presentation is secondary.
   that cannot be repaired in the same goal remain visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
-  TimeAudit, PC Panel Hub, manually requested CACB and manually requested
-  learning-method additions, are standing-authorized to commit, normal-push
-  existing PUBLIC `main`, wait for Pages and read back the deployed commit
-  automatically after all content, test, build and public gates pass.
+  TimeAudit, PC Panel Hub, manually requested CACB, learning-method and Codex
+  Remote additions, are standing-authorized to commit, normal-push existing
+  PUBLIC `main`, wait for Pages and read back the deployed commit automatically
+  after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
   effect, secret exposure, force-push or explicit owner hold remains outside
   this authorization.
@@ -344,7 +360,7 @@ read-only operating panel; public presentation is secondary.
 - When this website task benefits from native delegation and all upper gates
   allow it, the project default is `gpt-5.6-sol` with `max` effort. Choose the
   actual number from independent work surfaces and net quality gain; the rule
-  applies equally to projects added after the current eight.
+  applies equally to projects added after the current nine.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

@@ -824,6 +824,56 @@
           "any source-side materiality claim because this project has no automatic website handoff"
         ]
       }
+    },
+    {
+      "id": "codex-remote",
+      "order": 9,
+      "title": "Codex Remote",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/codex-remote",
+      "ai_refresh": {
+        "mode": "manual_owner_only",
+        "automatic_handoff": false,
+        "content_path": "app/content-codex-remote.js",
+        "semantic_revision": 1,
+        "scope": "curated public overview and six modules covering the same Desktop task on mobile, live conversation controls, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
+        "collectors": [
+          "manual_git_owner_evidence: only after an explicit owner refresh request, resolve the PUBLIC repository identity, default branch, tags, release commit and current clean/sync facts through Git Owner",
+          "manual_public_product_evidence: read only PUBLIC source, documentation, tests, release/CI receipts and individually approved media; never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server, installed runtime or Remote endpoint"
+        ],
+        "conditional_collectors": [],
+        "manual_refresh_rule": "source, release, test, rule, Skill, screenshot and runtime changes never update this page or create a website task; only an explicit owner request for Codex Remote or an explicitly owner-requested full refresh may produce a new snapshot"
+      },
+      "source": {
+        "repo": "wlyaaaaa/codex-local-remote",
+        "visibility": "PUBLIC",
+        "default_branch": "main"
+      },
+      "displayed_areas": [
+        "curated_project_overview",
+        "project_modules",
+        "same_task_and_remote_control",
+        "models_approvals_context_and_usage",
+        "projects_owner_files_and_input",
+        "shared_broker_sidecar_architecture",
+        "public_access_and_security_boundaries",
+        "version_test_real_e2e_and_gallery_evidence",
+        "manual_snapshot_without_online_probe"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "manual_refresh_when": [
+          "the owner explicitly requests a Codex Remote project refresh",
+          "the owner explicitly includes Codex Remote in a full panel refresh"
+        ],
+        "automatic_refresh_when": [],
+        "ignore_when": [
+          "all source commits, tags, releases, tests, rules, Skills, screenshots and runtime changes without an explicit owner refresh request",
+          "all current online or installed-runtime state because this page has no automatic probe and the frozen runtime must not be invoked",
+          "any source-side materiality claim because this project has no automatic website handoff"
+        ]
+      }
     }
   ]
 }

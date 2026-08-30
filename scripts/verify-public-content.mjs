@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
 const forbiddenTerms = [
-  "Q29kZXg=",
   "Q29kZXhIYXJuZXNz",
   "UGVyc29uYWxPUw==",
   "UGVyc29uYWxLbm93bGVkZ2VCYXNl",

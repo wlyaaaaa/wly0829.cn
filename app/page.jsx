@@ -477,7 +477,7 @@ function ProjectCard({ entry }) {
             {metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}
           </dl>
           <div className="project-card-foot">
-            <StatusPill status={state.tone}>{entry.kind === "learning" ? state.label : annotateTerms(state.label)}</StatusPill>
+            <StatusPill status={state.tone}>{displayCopy(state.label, entry.kind)}</StatusPill>
             <ObservedTime value={state.observedAt} />
             <ArrowRight size={18} aria-hidden="true" />
           </div>
@@ -507,7 +507,7 @@ function HomePage() {
 }
 
 function projectKicker(kind) {
-  if (kind === "agents") return "个人 AI（人工智能）工作控制项目";
+  if (kind === "agents") return "个人 AI 工作控制项目";
   if (kind === "pcconfig") return "电脑配置、运行与恢复控制面";
   if (kind === "github-index") return "Git 与 GitHub 仓库事实控制面";
   if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
@@ -515,6 +515,7 @@ function projectKicker(kind) {
   if (kind === "pc-panel-hub") return "Windows 双副屏显示、事件与恢复项目";
   if (kind === "cacb") return "可复现 Agent 评测产品与证据框架";
   if (kind === "learning") return "人做主、AI协助的学习方法";
+  if (kind === "codex-remote") return "手机继续同一个 Codex Desktop 任务";
   return "个人项目";
 }
 
@@ -527,10 +528,17 @@ function ProjectHero({ entry }) {
     <>
       <Breadcrumbs items={[{ label: "项目", href: "/" }, { label: currentProject.title }]} />
       <section className="project-hero">
-        <div className="project-hero-copy">
-          <p className="section-kicker">{projectKicker(entry.kind)}</p>
-          <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
-          <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
+        <div className="project-hero-main">
+          <div className="project-hero-copy">
+            <p className="section-kicker">{projectKicker(entry.kind)}</p>
+            <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
+            <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
+          </div>
+          {currentProject.heroFacts?.length ? (
+            <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
+              {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}
+            </dl>
+          ) : null}
         </div>
         <aside className="snapshot-card" aria-label={isLearning ? "方法快照" : "当前快照"}>
           <span className="snapshot-label">{isLearning ? "方法快照" : "当前快照"}</span>
@@ -540,11 +548,6 @@ function ProjectHero({ entry }) {
           <span>{displayCopy(currentProject.repositoryNote, entry.kind)}</span>
           {repositoryUrl ? <a className="project-hero-repository-link" href={repositoryUrl} target="_blank" rel="noopener noreferrer"><SiGithub size={17} aria-hidden="true" />打开 GitHub 仓库</a> : null}
         </aside>
-        {currentProject.heroFacts?.length ? (
-          <dl className="project-headline-facts" aria-label={`${currentProject.title} 当前关键事实`}>
-            {currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}
-          </dl>
-        ) : null}
       </section>
     </>
   );
@@ -642,10 +645,10 @@ function ProjectCurrentState({ entry }) {
   }
   return (
     <>
-      <div className="project-state-heading"><StatusPill status={moduleStatusTone(entry.project)}>{annotateTerms(state.label)}</StatusPill><ObservedTime value={state.observedAt} /></div>
+      <div className="project-state-heading"><StatusPill status={moduleStatusTone(entry.project)}>{displayCopy(state.label, entry.kind)}</StatusPill><ObservedTime value={state.observedAt} /></div>
       <div className="split-section project-state-split">
-        <div><h3>已确认事实</h3><ul className="plain-list">{state.facts.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
-        <div><h3>当前缺口</h3><ul className="plain-list">{state.gaps.map((item) => <li key={item}>{annotateTerms(item)}</li>)}</ul></div>
+        <div><h3>已确认事实</h3><ul className="plain-list">{state.facts.map((item) => <li key={item}>{displayCopy(item, entry.kind)}</li>)}</ul></div>
+        <div><h3>当前缺口</h3><ul className="plain-list">{state.gaps.map((item) => <li key={item}>{displayCopy(item, entry.kind)}</li>)}</ul></div>
       </div>
     </>
   );
@@ -671,6 +674,8 @@ function ProjectGallery({ title, images }) {
     const next = {
       width: Math.max(1, Math.floor(image.naturalWidth * scale)),
       height: Math.max(1, Math.floor(image.naturalHeight * scale)),
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
       viewportWidth: viewport.clientWidth,
       viewportHeight: viewport.clientHeight
     };
@@ -763,10 +768,11 @@ function ProjectGallery({ title, images }) {
     height: Math.max(1, Math.round(fitSize.height * zoom))
   } : null;
   const imageCanvasStyle = scaledImageSize ? {
-    width: `${Math.max(fitSize.viewportWidth, scaledImageSize.width)}px`,
-    height: `${Math.max(fitSize.viewportHeight, scaledImageSize.height)}px`
+    width: `${zoom === 1 ? scaledImageSize.width : Math.max(fitSize.viewportWidth, scaledImageSize.width)}px`,
+    height: `${zoom === 1 ? scaledImageSize.height : Math.max(fitSize.viewportHeight, scaledImageSize.height)}px`
   } : undefined;
   const imageStyle = scaledImageSize ? { width: `${scaledImageSize.width}px`, height: `${scaledImageSize.height}px` } : undefined;
+  const imageOrientation = fitSize && fitSize.naturalWidth > fitSize.naturalHeight ? "landscape" : "portrait";
   function openImage(index, event) {
     returnFocusRef.current = event.currentTarget;
     resetZoom();
@@ -803,7 +809,7 @@ function ProjectGallery({ title, images }) {
       </div>
       {activeImage ? createPortal((
         <div className="project-lightbox" role="dialog" aria-modal="true" aria-labelledby="project-lightbox-title" onMouseDown={(event) => { if (event.target === event.currentTarget) closeImage(); }}>
-          <div className="project-lightbox-dialog">
+          <div className="project-lightbox-dialog" data-image-orientation={imageOrientation} data-zoom={zoom}>
             <h2 className="visually-hidden" id="project-lightbox-title">图片查看器：{activeImage.alt}</h2>
             <div className="project-lightbox-toolbar">
               <span>{activeIndex + 1} / {images.length}</span>
@@ -895,7 +901,7 @@ function ProjectOverview({ entry }) {
     <article className="document-content overview-content">
       <section className="document-section document-section-first">
         <p className="section-kicker">先说人话</p>
-        {entry.kind === "agents" ? <><h2>它负责让个人 AI（人工智能）工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI（人工智能）查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
+        {entry.kind === "agents" ? <><h2>它负责让个人 AI 工作不走错、不越界，也不把“看起来成功”当成真的完成。</h2><p>当我让 AI 查资料、改代码、调用工具或发布结果时，它先弄清真实信息应该去哪里找、哪些动作已经得到允许、多个任务怎样避免互相覆盖，以及最后要看到什么证据才能确认事情真的做完。</p></> : isLearning ? <><h2>这套方法怎样帮我把一件事学明白</h2><p>{copy(currentProject.overviewIntro)}</p></> : <><h2>这个项目实际解决什么</h2><p>{copy(currentProject.summary)}</p></>}
         <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>举个完整例子</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
         <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} />
       </section>
@@ -945,7 +951,7 @@ function ProjectOverview({ entry }) {
 
       <section className="document-section"><h2>{isLearning ? "这套方法怎样形成" : "项目怎样演化到现在"}</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{copy(item.result)}</p></article>)}</div></section>
 
-      <section className="document-section source-note"><h2>{isLearning ? "公开页怎样更新" : "快照怎样更新"}</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? isLearning ? "这是本人明确要求后才会复核的公开方法快照。私有材料、讨论或进度变化不会自动触发网站任务；更新时只重新判断可复用的方法、公开边界和依据，不复制学习主题、原始反馈或个人状态。" : "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交或测试变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取私有 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
+      <section className="document-section source-note"><h2>{isLearning ? "公开页怎样更新" : "快照怎样更新"}</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? isLearning ? "这是本人明确要求后才会复核的公开方法快照。私有材料、讨论或进度变化不会自动触发网站任务；更新时只重新判断可复用的方法、公开边界和依据，不复制学习主题、原始反馈或个人状态。" : "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交、测试或运行状态变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取该项目当前 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
     </article>
   );
 }
@@ -1172,7 +1178,6 @@ const inlineTermTranslations = [
   ["Plugins", "插件包"],
   ["Skill", "能力入口"],
   ["Plugin", "插件包"],
-  ["AI", "人工智能"],
   ["Prompt", "提示词"],
   ["Git", "版本管理系统"],
   ["PCConfig", "本机配置控制面"],
@@ -1201,9 +1206,28 @@ const inlineTermTranslations = [
 ].sort((left, right) => right[0].length - left[0].length);
 
 const annotateTerms = createTermAnnotator(inlineTermTranslations);
+const codexRemoteSpecificTerms = {
+  "app-server": "任务协议服务",
+  "public-safety": "公开内容安全检查",
+  threadId: "任务标识",
+  turnId: "轮次标识",
+  Sidecar: "认证侧车服务",
+  Browser: "浏览器端",
+  loopback: "本机回环",
+  Chromium: "浏览器内核",
+  Origin: "请求来源",
+  Shell: "命令行入口",
+  diff: "文件差异"
+};
+const annotateCodexRemoteTerms = createTermAnnotator([
+  ...Object.entries(codexRemoteSpecificTerms),
+  ...inlineTermTranslations.filter(([term]) => term.toLowerCase() !== "remote")
+]);
 
 function displayCopy(value, kind) {
-  return kind === "learning" ? value : annotateTerms(value);
+  if (kind === "learning") return value;
+  if (kind === "codex-remote") return annotateCodexRemoteTerms(value);
+  return annotateTerms(value);
 }
 
 function maturityMeaning(value) {

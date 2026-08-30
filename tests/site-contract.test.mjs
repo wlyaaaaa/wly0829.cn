@@ -13,6 +13,7 @@ import { githubIndexModules, githubIndexProject } from "../app/content-github-in
 import { pcconfigModules, pcconfigProject } from "../app/content-pcconfig.js";
 import { pcPanelHubModules, pcPanelHubProject } from "../app/content-pc-panel-hub.js";
 import { cacbModules, cacbProject } from "../app/content-cacb.js";
+import { codexRemoteModules, codexRemoteProject } from "../app/content-codex-remote.js";
 import { learningModules, learningProject } from "../app/content-learning.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -39,7 +40,6 @@ const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
 
 const forbiddenPublicTerms = [
-  "Q29kZXg=",
   "Q29kZXhIYXJuZXNz",
   "UGVyc29uYWxPUw==",
   "UGVyc29uYWxLbm93bGVkZ2VCYXNl",
@@ -81,15 +81,17 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly eight projects and three navigation areas", async () => {
+test("the accepted panel has exactly nine projects and three navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8]);
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "规则", "Skills"]);
   assert.ok(!routePaths.includes("/ideas"));
   assert.match(pageSource, /共 \{projectCatalog\.length\} 个项目/);
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
+  assert.doesNotMatch(styleSource, /project-card-shell:nth-child\(odd\):last-child/, "an odd final project must stay in normal grid order instead of jumping to a centered special case");
 });
 
 test("the mobile header keeps primary navigation outside and uses a dedicated search icon", async () => {
@@ -115,12 +117,18 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
 });
 
-test("project hero facts use the full desktop width and technical prose wraps on mobile", async () => {
+test("project hero facts stay adjacent to the project copy and technical prose wraps on mobile", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.match(pageSource, /className="project-hero-copy"[\s\S]*?<aside className="snapshot-card"[\s\S]*?<dl className="project-headline-facts"/);
-  assert.match(styleSource, /\.project-hero\s*\{[\s\S]*?grid-template-areas:[\s\S]*?"facts facts";/);
-  assert.match(styleSource, /\.project-headline-facts\s*\{[\s\S]*?grid-area:\s*facts;[\s\S]*?max-width:\s*none;/);
+  const heroMainIndex = pageSource.indexOf('className="project-hero-main"');
+  const heroCopyIndex = pageSource.indexOf('className="project-hero-copy"', heroMainIndex);
+  const factsIndex = pageSource.indexOf('className="project-headline-facts"', heroCopyIndex);
+  const snapshotIndex = pageSource.indexOf('<aside className="snapshot-card"', factsIndex);
+  assert.ok(heroMainIndex >= 0 && heroCopyIndex > heroMainIndex && factsIndex > heroCopyIndex && snapshotIndex > factsIndex, "headline facts must follow project copy inside the left hero column before the independent snapshot card");
+  assert.match(styleSource, /\.project-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) minmax\(230px, 300px\);[\s\S]*?align-items:\s*start;/);
+  assert.match(styleSource, /\.project-hero-main\s*\{[\s\S]*?display:\s*grid;[\s\S]*?align-content:\s*start;[\s\S]*?gap:\s*22px;/);
+  assert.doesNotMatch(styleSource, /grid-template-areas:[\s\S]{0,120}"facts facts"/);
+  assert.match(styleSource, /\.project-headline-facts\s*\{[\s\S]*?max-width:\s*none;[\s\S]*?margin:\s*0;/);
   assert.match(styleSource, /\.project-headline-facts > div:last-child:nth-child\(odd\)\s*\{\s*grid-column:\s*1 \/ -1;/);
   assert.match(styleSource, /\.plain-list li,[\s\S]*?overflow-wrap:\s*anywhere;/);
   assert.match(styleSource, /\.failure-list dt,[\s\S]*?overflow-wrap:\s*anywhere;/);
@@ -247,12 +255,16 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Sensitivity is decided from the actual value, not the field name/);
   assert.match(projectRules, /Process\s+names, executable paths, command lines, window titles/);
   assert.match(projectRules, /not blanket-sensitive and may be public when useful/);
+  assert.match(projectRules, /PUBLIC personal-data decisions follow the active global authorization\s+contract's single classification table/);
+  assert.match(projectRules, /neither copies, redefines nor independently\s+tightens that table/);
+  assert.match(projectRules, /project-authored restriction cannot create its own\s+publication authority/);
+  assert.match(projectRules, /`Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly/);
   assert.match(projectRules, /project default is `gpt-5\.6-sol` with `max` effort/);
   assert.match(projectRules, /Every current and future website project may use multiple native subagents/);
   assert.match(projectRules, /materially improve the delivered\s+page/);
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work surfaces and net quality gain/);
-  assert.match(projectRules, /applies equally to projects added after the current eight/);
+  assert.match(projectRules, /applies equally to projects added after the current nine/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -267,7 +279,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Each project owns its\s+real module count/);
   assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
   assert.match(projectRules, /returned task id\s+is the creation receipt/);
-  assert.match(projectRules, /standing-authorized to commit, normal-push\s+existing PUBLIC\s+`main`/);
+  assert.match(projectRules, /standing-authorized to commit, normal-push\s+existing\s+PUBLIC\s+`main`/);
   assert.match(projectRules, /ai_refresh\.mode=manual_owner_only/);
   assert.match(projectRules, /source, rule and Skill events never create a website task/i);
   assert.match(projectRules, /This rule creates no Skill, watcher or Source hook/);
@@ -299,7 +311,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 8);
+  assert.equal(enabledProjectCount, 9);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -309,7 +321,7 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
-  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb)/, "browser runtime must not import narrative packages");
+  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
   assert.match(runtimeSource, /image\.addEventListener\("dblclick",[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules must expose all five static panels when JavaScript is disabled");
@@ -367,7 +379,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the eight accepted project packages", async () => {
+test("the maintenance registry drives exactly the nine accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v1");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -383,9 +395,9 @@ test("the maintenance registry drives exactly the eight accepted project package
   assert.equal(registry.refresh_policy.trigger, "displayed_fact_or_explanation_changed");
   assert.equal(registry.refresh_policy.only_private_document, "docs/design/private-content-rules.md");
   assert.equal(registry.refresh_policy.default_presentation_mode, "real_dashboard");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -407,7 +419,7 @@ test("the maintenance registry drives exactly the eight accepted project package
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -536,6 +548,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "learning",
       expectedOrder: 8,
       expectedModules: ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "human-control-simple"]
+    },
+    {
+      project: codexRemoteProject,
+      modules: codexRemoteModules,
+      expectedSlug: "codex-remote",
+      expectedOrder: 9,
+      expectedModules: ["same-task-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]
     }
   ];
   for (const entry of packages) {
@@ -553,7 +572,7 @@ test("non-rule project packages preserve the content contract and enter only the
     assert.equal(new Set(candidateModules.map((item) => item.slug)).size, candidateModules.length, `${candidate.slug} module slugs are not unique`);
     for (const module of candidateModules) {
       assert.ok(["pass", "problem", "unknown", "mixed"].includes(module.statusTone), `${candidate.slug}/${module.slug}.statusTone is invalid`);
-      for (const key of ["value", "why", "example", "result", "problem", "status"]) {
+      for (const key of ["value", "why", "example", "result", "problem", "status", "relation"]) {
         assert.equal(typeof module[key], "string", `${candidate.slug}/${module.slug}.${key} is missing`);
         assert.notEqual(module[key].trim(), "", `${candidate.slug}/${module.slug}.${key} is empty`);
       }
@@ -852,8 +871,9 @@ test("the learning method canvas stays human-readable, static and responsive", a
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.match(pageSource, /function MethodCanvas\(\{ canvas, kind \}\)/);
-  assert.match(pageSource, /\["AI", "人工智能"\]/, "existing projects must retain the accepted AI term annotation");
-  assert.match(pageSource, /function displayCopy\(value, kind\)[\s\S]*?kind === "learning" \? value : annotateTerms\(value\)/);
+  assert.doesNotMatch(pageSource, /\["AI", "人工智能"\]/, "AI is a common abbreviation and must not receive a mechanical parenthetical gloss");
+  assert.match(pageSource, /if \(kind === "learning"\) return value/);
+  assert.match(pageSource, /if \(kind === "codex-remote"\) return annotateCodexRemoteTerms\(value\)/);
   assert.match(pageSource, /你、AI与刻意不建设的边界/);
   assert.match(pageSource, /问题不计分，也不会形成掌握记录/);
   assert.match(pageSource, /entry\.kind === "learning"/);
@@ -873,14 +893,102 @@ test("the learning method canvas stays human-readable, static and responsive", a
     assert.ok(overviewHtml.includes(text), `static learning role canvas omits: ${text}`);
   }
   assert.doesNotMatch(overviewHtml, /求职|简历|薪资|Offer|面试|第\s*0?[1-9]\s*篇|已读|待阅读|当前第|完成率|讲义索引/iu);
-  assert.doesNotMatch(overviewHtml, /AI（人工智能）/, "learning copy must not mechanically gloss the common AI term on every card");
+  assert.doesNotMatch(overviewHtml, new RegExp("AI" + "（人工智能）"), "learning copy must not mechanically gloss the common AI term on every card");
   const sourceHtml = await readFile(path.join(projectRoot, "dist", "projects", "learning", "authoritative-research", "index.html"), "utf8");
   assert.match(sourceHtml, /href="https:\/\/www\.ala\.org\/acrl\/standards\/ilframework"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/);
   assert.match(sourceHtml, /href="https:\/\/doi\.org\/10\.6028\/NIST\.AI\.600-1"/);
 });
 
+test("Codex Remote is a manual-only public product with valuable real and synthetic visual evidence", async () => {
+  const publicText = JSON.stringify({ project: codexRemoteProject, modules: codexRemoteModules });
+  assertForbiddenTermsAreAbsent(publicText);
+  assert.doesNotMatch(publicText, /退役|不稳定|wly\.tailbe/i);
+  assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/i);
+  assert.match(publicText, /同一个 Codex Desktop 任务/);
+  assert.match(publicText, /不是远程桌面/);
+  assert.match(publicText, /v0\.1\.5/);
+  assert.match(publicText, /c3a07719/);
+  assert.match(publicText, /1771/);
+  assert.match(publicText, /main=94f1cfad/);
+  assert.match(publicText, /不代表当前在线|不宣称在线/);
+  assert.match(publicText, /12 张历史真实手机 UI|12张真实手机 UI/);
+  assert.equal(codexRemoteProject.slug, "codex-remote");
+  assert.equal(codexRemoteProject.order, 9);
+  assert.equal(codexRemoteProject.route, "/projects/codex-remote");
+  assert.equal(codexRemoteProject.visibility, "公开仓库");
+  assert.equal(codexRemoteModules.length, 6);
+  assert.deepEqual(codexRemoteModules.map((item) => item.slug), ["same-task-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]);
+  for (const module of codexRemoteModules) {
+    assert.ok(module.searchAliases.length >= 4, `${module.slug} lacks natural search aliases`);
+    assert.ok(module.sources.every((item) => /^https:\/\/github\.com\/wlyaaaaa\/codex-local-remote\//.test(item.href)), `${module.slug} contains a non-public source link`);
+    assert.ok(module.relation.trim().length >= 24, `${module.slug} lacks a useful cross-module relation`);
+  }
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "codex-remote");
+  assert.equal(registration.presentation_mode, "curated_packaging");
+  assert.equal(registration.ai_refresh.mode, "manual_owner_only");
+  assert.equal(registration.ai_refresh.automatic_handoff, false);
+  assert.deepEqual(registration.impact_sources, []);
+  assert.equal(registration.source.visibility, "PUBLIC");
+  assert.equal(registration.source.repo, "wlyaaaaa/codex-local-remote");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.match(registration.ai_refresh.scope, /without invoking any Remote runtime/);
+  assert.match(registration.ai_refresh.collectors.join("\n"), /never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server/);
+
+  assert.ok(Array.isArray(codexRemoteProject.gallery));
+  assert.ok(codexRemoteProject.gallery.some((item) => item.evidenceLevel === "E3"), "gallery lacks real mobile evidence");
+  assert.ok(codexRemoteProject.gallery.some((item) => item.evidenceLevel === "E1"), "gallery lacks public-safe UI evidence");
+  assert.equal(new Set(codexRemoteProject.gallery.map((item) => item.caption)).size, codexRemoteProject.gallery.length, "gallery contains repeated captions instead of distinct visual value");
+  assert.equal(new Set(codexRemoteProject.gallery.map((item) => `${item.proves}|${item.doesNotProve}`)).size, codexRemoteProject.gallery.length, "gallery contains repeated evidence claims instead of distinct value");
+  const mediaRoot = path.join(projectRoot, "public", "media", "codex-remote");
+  const thumbnailRoot = path.join(mediaRoot, "thumbs");
+  const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  const thumbnailFiles = (await readdir(thumbnailRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  const expectedMedia = codexRemoteProject.gallery.map((item) => path.posix.basename(item.src)).sort();
+  const expectedThumbnails = codexRemoteProject.gallery.map((item) => path.posix.basename(item.thumbnail)).sort();
+  assert.deepEqual(mediaFiles, expectedMedia, "Codex Remote media directory contains unregistered or missing full images");
+  assert.deepEqual(thumbnailFiles, expectedThumbnails, "Codex Remote preview set does not close over the gallery");
+  const fullHashes = [];
+  let fullBytes = 0;
+  let thumbnailBytes = 0;
+  for (const item of codexRemoteProject.gallery) {
+    assert.match(item.src, /^\/media\/codex-remote\/[a-z0-9-]+\.(?:jpg|png)$/);
+    assert.match(item.thumbnail, /^\/media\/codex-remote\/thumbs\/[a-z0-9-]+\.webp$/);
+    for (const key of ["alt", "caption", "evidenceLevel", "evidenceLabel", "proves", "doesNotProve", "observedAt", "sourceCommit"]) {
+      assert.ok(item[key]?.trim().length >= 2, `${item.src} lacks ${key}`);
+    }
+    const full = await readFile(path.join(projectRoot, "public", item.src.slice(1)));
+    const preview = await readFile(path.join(projectRoot, "public", item.thumbnail.slice(1)));
+    assert.ok(full.length < 1.5 * 1024 * 1024, `${item.src} exceeds the per-image review threshold`);
+    assert.ok(preview.length < 96 * 1024, `${item.thumbnail} exceeds the preview review threshold`);
+    fullBytes += full.length;
+    thumbnailBytes += preview.length;
+    fullHashes.push(createHash("sha256").update(full).digest("hex"));
+  }
+  assert.equal(new Set(fullHashes).size, fullHashes.length, "Codex Remote gallery contains duplicate full images");
+  assert.ok(fullBytes <= 4 * 1024 * 1024, `Codex Remote full images ${fullBytes} bytes exceed the 4 MiB review threshold`);
+  assert.ok(thumbnailBytes <= 1024 * 1024, `Codex Remote previews ${thumbnailBytes} bytes exceed the 1 MiB review threshold`);
+  assert.ok(fullBytes + thumbnailBytes <= 5 * 1024 * 1024, "Codex Remote gallery exceeds the combined media review threshold");
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "codex-remote", "index.html"), "utf8");
+  assert.match(overviewHtml, /data-static-route="\/projects\/codex-remote"/);
+  assert.match(overviewHtml, /Codex Remote/);
+  assert.match(overviewHtml, /不代表当前在线|不宣称在线/);
+  assert.match(overviewHtml, /href="https:\/\/github\.com\/wlyaaaaa\/codex-local-remote"/);
+  assert.match(overviewHtml, /20 张界面证据|20张界面证据/);
+  assert.doesNotMatch(overviewHtml, /Codex Remote（远端仓库）/, "product identity must not be mechanically annotated into a false generic meaning");
+  for (const text of ["app-server（任务协议服务）", "Sidecar（认证侧车服务）", "loopback（本机回环）", "diff（文件差异）"] ) {
+    assert.ok(overviewHtml.includes(text), `Codex Remote overview omits immediate technical explanation: ${text}`);
+  }
+  const securityHtml = await readFile(path.join(projectRoot, "dist", "projects", "codex-remote", "security-public-access", "index.html"), "utf8");
+  assert.match(securityHtml, /Origin（请求来源）/);
+  assert.doesNotMatch(securityHtml, /Origin（默认远端名称）/);
+});
+
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const staticSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   assert.match(pageSource, /function\s+(?:ProjectGallery|Gallery)\s*\(/);
   assert.match(pageSource, /(?:currentProject|project)\.gallery/);
   assert.match(pageSource, /(?:gallery|images)\.map\([\s\S]{0,1400}onClick=/, "gallery images must open on click");
@@ -903,6 +1011,13 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /event\.key === "Tab"[\s\S]*?event\.shiftKey[\s\S]*?last\?\.focus\(\)/, "lightbox must keep keyboard focus inside the dialog");
   assert.match(pageSource, /addEventListener\("keydown"/);
   assert.match(pageSource, /removeEventListener\("keydown"/);
+  assert.match(pageSource, /data-image-orientation=\{imageOrientation\}/);
+  assert.match(pageSource, /zoom === 1 \? scaledImageSize\.height/);
+  assert.match(staticSource, /dialog\.dataset\.imageOrientation = fitSize\.naturalWidth > fitSize\.naturalHeight/);
+  assert.match(staticSource, /zoom === 1 \? height : Math\.max\(fitSize\.viewportHeight, height\)/);
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(styleSource, /project-lightbox-dialog\[data-image-orientation="landscape"\][\s\S]*?height:\s*auto/);
+  assert.match(styleSource, /project-lightbox-dialog\[data-image-orientation="landscape"\][\s\S]*?max-height:\s*calc\(100svh - 260px\)/);
 });
 
 test("project evolution records important dated stages instead of append-only update logs", () => {
@@ -942,6 +1057,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const pcPanelHeartbeat = run(["--project", "pc-panel-hub", "--path", "tools/turzx_side_screen/out/stream/stream-heartbeat.json", "--material-change"]);
   const cacbSourceChange = run(["--project", "cacb", "--path", "src/cacb/question_bank.py", "--material-change"]);
   const learningSourceChange = run(["--project", "learning", "--path", "private/method-material.md", "--material-change"]);
+  const codexRemoteSourceChange = run(["--project", "codex-remote", "--path", "apps/web/src/App.tsx", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -990,11 +1106,17 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(learningSourceChange.source_materiality_ignored, true);
   assert.equal(learningSourceChange.task_required, false);
   assert.equal(learningSourceChange.action, "manual_owner_request_required_no_automatic_handoff");
+  assert.equal(codexRemoteSourceChange.refresh_mode, "manual_owner_only");
+  assert.equal(codexRemoteSourceChange.impact_candidate, false);
+  assert.equal(codexRemoteSourceChange.material_change_confirmed, false);
+  assert.equal(codexRemoteSourceChange.source_materiality_ignored, true);
+  assert.equal(codexRemoteSourceChange.task_required, false);
+  assert.equal(codexRemoteSourceChange.action, "manual_owner_request_required_no_automatic_handoff");
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -1004,6 +1126,8 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedCacb = run(["--project", "cacb", "--manual-owner-request"]);
   const targetedLearningWithoutOwner = run(["--project", "learning"]);
   const targetedLearning = run(["--project", "learning", "--manual-owner-request"]);
+  const targetedCodexRemoteWithoutOwner = run(["--project", "codex-remote"]);
+  const targetedCodexRemote = run(["--project", "codex-remote", "--manual-owner-request"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -1046,11 +1170,23 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedLearning.selected_projects[0].refresh_mode, "manual_owner_only");
   assert.equal(targetedLearning.selected_projects[0].manual_owner_request, true);
   assert.deepEqual(targetedLearning.selected_projects[0].impact_sources, []);
+  assert.equal(targetedCodexRemoteWithoutOwner.status, "manual_owner_request_required");
+  assert.deepEqual(targetedCodexRemoteWithoutOwner.manual_project_ids, ["codex-remote"]);
+  assert.equal(targetedCodexRemoteWithoutOwner.selected_projects[0].source.visibility, "PUBLIC");
+  assert.equal(targetedCodexRemoteWithoutOwner.selected_projects[0].automatic_handoff, false);
+  assert.equal(targetedCodexRemoteWithoutOwner.selected_projects[0].manual_owner_request, false);
+  assert.match(targetedCodexRemoteWithoutOwner.selected_projects[0].source_fingerprint_state, /Fresh Owner evidence/);
+  assert.doesNotMatch(targetedCodexRemoteWithoutOwner.selected_projects[0].source_fingerprint_state, /private Owner/i);
+  assert.equal(targetedCodexRemote.status, "ready_for_ai");
+  assert.equal(targetedCodexRemote.manual_owner_request, true);
+  assert.equal(targetedCodexRemote.selected_projects[0].refresh_mode, "manual_owner_only");
+  assert.equal(targetedCodexRemote.selected_projects[0].manual_owner_request, true);
+  assert.deepEqual(targetedCodexRemote.selected_projects[0].impact_sources, []);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
-  assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning"]);
+  assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -1109,7 +1245,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     await writeFile(bundlePath, JSON.stringify(bundle, null, 2), "utf8");
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
-    assert.deepEqual(verification.counts, { changed: 0, unchanged: 8, blocked: 0 });
+    assert.deepEqual(verification.counts, { changed: 0, unchanged: full.selected_projects.length, blocked: 0 });
     const nullCollector = structuredClone(bundle);
     nullCollector.projects.find((item) => item.id === "learning").collectors = [null];
     await writeFile(bundlePath, JSON.stringify(nullCollector, null, 2), "utf8");
@@ -1314,6 +1450,16 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   ]) {
     assert.equal(searchPanel(query)[0]?.href, href, `learning search misroutes: ${query}`);
   }
+  for (const [query, href] of [
+    ["手机和桌面同一个任务", "/projects/codex-remote/same-task-control"],
+    ["手机处理Codex审批", "/projects/codex-remote/models-approvals-context"],
+    ["手机浏览电脑文件", "/projects/codex-remote/projects-files-input"],
+    ["Broker Sidecar架构", "/projects/codex-remote/shared-realtime-architecture"],
+    ["Codex Remote安全吗", "/projects/codex-remote/security-public-access"],
+    ["Codex Remote跑通过吗", "/projects/codex-remote/versions-evidence"]
+  ]) {
+    assert.equal(searchPanel(query)[0]?.href, href, `Codex Remote search misroutes: ${query}`);
+  }
   const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
   assert.doesNotMatch(searchSource, /\/projects\/timeaudit|TimeAudit · 总览/, "project routes and titles must derive from projectCatalog; Skill aliases may still name TimeAudit");
   assert.equal(searchPanel("刷新看板")[0]?.title, "personal-panel-refresh");
@@ -1378,6 +1524,47 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   }
 });
 
+test("E92 panel preserves durable authorization and lifecycle convergence semantics", async () => {
+  const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
+  const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
+  assert.equal(bindings.semantic_release_id, "E92");
+  assert.equal(bindings.ruleset_sha256, "f9200d4c4d1ee2d497c3c54926a3838459433ae068b494a0e0440932a44a8a75");
+  assert.equal(panelSnapshot.authority.releaseId, "E92");
+  assert.equal(panelSnapshot.authority.gitCommit, "cf5981bfdb305be5b9cffc8c89f91697a3637e6e");
+  assert.equal(panelSnapshot.authority.pointerRevision, 13);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E91");
+  for (const expected of [
+    "Durable explicit user authorization（耐久明确用户授权）",
+    "root、全部 child/后代和新顶层任务",
+    "真实调用一次",
+    "deny、step_up、needs_evidence、action-time confirmation",
+    "固定 Codex lifecycle resolver",
+    "RecoverRelease / RecoverReleaseClaim",
+    "threadId / clientThreadId",
+    "Complete goal（已完成目标）",
+    "正式 terminal/completed 且无 follow-up、queued work、pending transaction 或未交接 Owner residual 时才自动归档"
+  ]) {
+    assert.ok(coreSource.includes(expected), `E92 panel omits semantic contract: ${expected}`);
+  }
+  const panelRefresh = skills.find((item) => item.slug === "personal-panel-refresh");
+  const panelRefreshText = JSON.stringify({
+    skill: panelRefresh,
+    guide: skillGuides["personal-panel-refresh"],
+    outcome: skillOutcomes["personal-panel-refresh"]
+  });
+  for (const expected of [
+    "durable explicit user authorization",
+    "83518cfd",
+    "cf5981bf",
+    "setup-pending",
+    "dispatch-unconfirmed",
+    "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具"
+  ]) {
+    assert.ok(panelRefreshText.includes(expected), `E92 personal-panel-refresh omits: ${expected}`);
+  }
+  assert.doesNotMatch(panelRefreshText, /01a050a0|Owner A/, "public Skill copy must not expose stale task bookkeeping");
+});
+
 test("publication cannot upload before snapshot binding, production build, public gate and route tests", async () => {
   const packageJson = JSON.parse(await readFile(path.join(projectRoot, "package.json"), "utf8"));
   const workflow = await readFile(path.join(projectRoot, ".github", "workflows", "pages.yml"), "utf8");
@@ -1415,19 +1602,18 @@ test("publication cannot upload before snapshot binding, production build, publi
 });
 
 test("public content excludes forbidden projects and obvious credential values", async () => {
-  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  const contentCore = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
-  const contentSkills = await readFile(path.join(projectRoot, "app", "content-skills.js"), "utf8");
-  const contentRuleGuides = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  const contentPcconfig = await readFile(path.join(projectRoot, "app", "content-pcconfig.js"), "utf8");
-  const contentGithubIndex = await readFile(path.join(projectRoot, "app", "content-github-index.js"), "utf8");
-  const contentChineseAsr = await readFile(path.join(projectRoot, "app", "content-chinese-asr.js"), "utf8");
-  const contentTimeAudit = await readFile(path.join(projectRoot, "app", "content-timeaudit.js"), "utf8");
-  const contentPcPanelHub = await readFile(path.join(projectRoot, "app", "content-pc-panel-hub.js"), "utf8");
-  const contentCacb = await readFile(path.join(projectRoot, "app", "content-cacb.js"), "utf8");
-  const siteContent = await readFile(path.join(projectRoot, "app", "site-content.js"), "utf8");
-  const searchSource = await readFile(path.join(projectRoot, "app", "search.js"), "utf8");
-  const publicText = `${pageSource}\n${contentCore}\n${contentSkills}\n${contentRuleGuides}\n${contentPcconfig}\n${contentGithubIndex}\n${contentChineseAsr}\n${contentTimeAudit}\n${contentPcPanelHub}\n${contentCacb}\n${siteContent}\n${searchSource}`;
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const contentPaths = [...new Set([
+    "app/page.jsx",
+    "app/content-skills.js",
+    "app/content-rule-guides.js",
+    "app/site-content.js",
+    "app/search.js",
+    ...registry.projects.filter((item) => item.enabled).map((item) => item.ai_refresh.content_path)
+  ])];
+  const contentSources = await Promise.all(contentPaths.map((relative) => readFile(path.join(projectRoot, relative), "utf8")));
+  const pageSource = contentSources[contentPaths.indexOf("app/page.jsx")];
+  const publicText = contentSources.join("\n");
   assertForbiddenTermsAreAbsent(publicText);
   assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}/);
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
@@ -1452,6 +1638,7 @@ test("every public route is unique and has useful metadata", () => {
   assert.match(routeMeta("/projects/timeaudit/nope/collection-pipeline").title, /页面不存在/);
   assert.match(routeMeta("/projects/pc-panel-hub/nope/serial-transport").title, /页面不存在/);
   assert.match(routeMeta("/projects/cacb/nope/question-bank").title, /页面不存在/);
+  assert.match(routeMeta("/projects/codex-remote/nope/same-task-control").title, /页面不存在/);
 });
 
 test("production build has direct entry files for every route", async () => {

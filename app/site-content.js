@@ -100,7 +100,7 @@ export function routeMeta(pathname) {
   if (path === "/") {
     return {
       title: `项目｜${site.name}`,
-      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI协助学习方法、现行规则、Skills 与真实缺口。"
+      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI协助学习方法、Codex Remote、现行规则、Skills 与真实缺口。"
     };
   }
 

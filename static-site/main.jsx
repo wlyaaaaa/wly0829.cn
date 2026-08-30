@@ -276,6 +276,8 @@ function initializeGallery(gallery) {
     fitSize = {
       width: Math.max(1, Math.floor(image.naturalWidth * scale)),
       height: Math.max(1, Math.floor(image.naturalHeight * scale)),
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
       viewportWidth: viewport.clientWidth,
       viewportHeight: viewport.clientHeight
     };
@@ -290,10 +292,12 @@ function initializeGallery(gallery) {
     zoomIn.disabled = zoom >= 4;
     zoomReset.textContent = `${Math.round(zoom * 100)}%`;
     if (!fitSize) return;
+    dialog.dataset.imageOrientation = fitSize.naturalWidth > fitSize.naturalHeight ? "landscape" : "portrait";
+    dialog.dataset.zoom = String(zoom);
     const width = Math.max(1, Math.round(fitSize.width * zoom));
     const height = Math.max(1, Math.round(fitSize.height * zoom));
-    canvas.style.width = `${Math.max(fitSize.viewportWidth, width)}px`;
-    canvas.style.height = `${Math.max(fitSize.viewportHeight, height)}px`;
+    canvas.style.width = `${zoom === 1 ? width : Math.max(fitSize.viewportWidth, width)}px`;
+    canvas.style.height = `${zoom === 1 ? height : Math.max(fitSize.viewportHeight, height)}px`;
     image.style.width = `${width}px`;
     image.style.height = `${height}px`;
   }
@@ -329,6 +333,8 @@ function initializeGallery(gallery) {
     const item = images[activeIndex];
     zoom = 1;
     fitSize = null;
+    delete dialog.dataset.imageOrientation;
+    dialog.dataset.zoom = "1";
     canvas.removeAttribute("style");
     image.removeAttribute("style");
     image.src = item.src;

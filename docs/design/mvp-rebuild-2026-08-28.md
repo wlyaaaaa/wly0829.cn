@@ -1,13 +1,13 @@
 # wly0829.cn MVP rebuild
 
-status: eight_project_learning_integration_active
+status: nine_project_codex_remote_integration_active
 
 ## Goal
 
 Build the website from current owner sources so it is the owner's detailed,
 plain-language, professional, read-only operating panel for `.agents`, PCConfig,
 GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning
-method, the five current rules and the usable Skills catalog.
+method, Codex Remote, the five current rules and the usable Skills catalog.
 
 The prior website copy is not an input. Existing code may be reused only as UI
 infrastructure after its content is removed.
@@ -79,4 +79,7 @@ publications and Pages read-back. CACB completed the seventh curated/manual-only
 publication and public acceptance at `1cc5ecf`. The learning method completed the
 eighth curated/manual-only publication at `b0adcc9`: its content, manual boundary,
 tests, eight-project preview, PUBLIC main, Pages deployment and representative
-public routes were read back against the same product commit.
+public routes were read back against the same product commit. Codex Remote is the
+selected ninth curated/manual-only project; it must complete its PUBLIC-source
+evidence, safe gallery, six modules, tests, preview, Pages deployment and public
+read-back before any tenth project begins.

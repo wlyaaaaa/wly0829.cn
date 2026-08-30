@@ -614,21 +614,21 @@ main {
 .project-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(230px, 300px);
-  grid-template-areas:
-    "copy snapshot"
-    "facts facts";
-  gap: 64px;
+  align-items: start;
+  gap: 34px;
   padding: 10px 0 42px;
   border-bottom: 1px solid var(--line);
 }
 
-.project-hero-copy {
-  grid-area: copy;
+.project-hero-main {
+  display: grid;
   min-width: 0;
+  align-content: start;
+  gap: 22px;
 }
 
-.project-hero > .snapshot-card {
-  grid-area: snapshot;
+.project-hero-copy {
+  min-width: 0;
 }
 
 .project-hero h1 {
@@ -1847,10 +1847,6 @@ main {
 
   .project-hero {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "copy"
-      "facts"
-      "snapshot";
     gap: 26px;
   }
 
@@ -4424,11 +4420,10 @@ main {
 
 .project-headline-facts {
   display: grid;
-  grid-area: facts;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   width: 100%;
   max-width: none;
-  margin: 18px 0 0;
+  margin: 0;
   border-top: 1px solid var(--line-strong);
   border-left: 1px solid var(--line);
 }
@@ -4734,6 +4729,22 @@ main {
   .project-lightbox-dialog {
     height: calc(100svh - 24px);
   }
+
+  .project-lightbox-dialog[data-image-orientation="landscape"] {
+    height: auto;
+  }
+
+  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-stage {
+    overflow: hidden;
+  }
+
+  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-stage figure {
+    grid-template-rows: auto auto;
+  }
+
+  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-viewport {
+    max-height: calc(100svh - 260px);
+  }
 }
 
 .project-lightbox-previous,
@@ -4818,11 +4829,6 @@ main {
   .global-search input { font-size: 16px; }
   .home-page { padding-top: 18px; padding-bottom: 32px; }
   .home-page .project-grid { gap: 18px 28px; }
-  .home-page .project-grid > .project-card-shell:nth-child(odd):last-child:not(:only-child) {
-    width: calc(50% - 14px);
-    grid-column: 1 / -1;
-    justify-self: center;
-  }
   .featured-project,
   .project-module-links { grid-template-columns: 68px minmax(0, 1fr); }
   .featured-project { min-height: 318px; }

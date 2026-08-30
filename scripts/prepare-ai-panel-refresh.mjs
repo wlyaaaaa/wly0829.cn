@@ -53,7 +53,7 @@ for (const registration of selected) {
     semantic_revision: registration.ai_refresh.semantic_revision,
     source_fingerprint: null,
     source_fingerprint_state: registration.ai_refresh.mode === "manual_owner_only"
-      ? "Fresh private Owner evidence is allowed only after an explicit owner refresh request"
+      ? "Fresh Owner evidence is allowed only after an explicit owner refresh request"
       : "AI must populate from fresh Owner evidence after collectors complete",
     observed_at: isAgents ? panelSnapshot.observedAt : entry.project.currentState?.observedAt || null,
     current_gap_count: isAgents

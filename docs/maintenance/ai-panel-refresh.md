@@ -12,7 +12,7 @@
 
 `manual_owner_only` 是独立手动快照模式。Source、材料、反馈、规则、Skill、commit、
 测试或报告变化都不能触发这类项目的网站任务；`personal-panel-refresh` 不适用。
-只有 owner 明确说更新 CACB、学习方法，或明确要求包含 manual-only 项目的全量更新时，网站任务才可
+只有 owner 明确说更新 CACB、学习方法、Codex Remote，或明确要求包含 manual-only 项目的全量更新时，网站任务才可
 携带 `--manual-owner-request` 继续。缺少该标记时计划返回
 `manual_owner_request_required`，不得取证、改文案或发布。
 
@@ -96,7 +96,7 @@ Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读
 
 Registry 是唯一项目清单。新增项目必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint。
 
-当前八项目已为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并在点击前预取高概率下一页。共享脚本 gzip 防膨胀审查阈值为 120 KiB，构建期紧凑搜索索引为 24 KiB；这些数字不是永久内容上限，超过时先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并最小增额。禁止把全部正文重新塞入公共 JS，也禁止点击后 lazy-load、fetch、spinner、骨架屏、空白或以删除专业正文换体积。派生搜索索引只能保留标题、短摘要、链接与明确 aliases（别名），由权威正文在构建时投影，不能成为第二份语义正文。
+当前九项目为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并在点击前预取高概率下一页。共享脚本 gzip 防膨胀审查阈值为 120 KiB，构建期紧凑搜索索引为 24 KiB；这些数字不是永久内容上限，超过时先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并最小增额。禁止把全部正文重新塞入公共 JS，也禁止点击后 lazy-load、fetch、spinner、骨架屏、空白或以删除专业正文换体积。派生搜索索引只能保留标题、短摘要、链接与明确 aliases（别名），由权威正文在构建时投影，不能成为第二份语义正文。
 
 ## 完成标准
 
