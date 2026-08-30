@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -38,13 +38,18 @@ import { createTermAnnotator } from "./term-annotator.js";
 function useLocationState() {
   const [location, setLocation] = useState(() => ({
     pathname: normalizePath(window.location.pathname),
-    search: window.location.search
+    search: window.location.search,
+    preservedScrollY: null
   }));
 
   useEffect(() => {
-    function update() {
-      setLocation({ pathname: normalizePath(window.location.pathname), search: window.location.search });
-      window.scrollTo({ top: 0, behavior: "instant" });
+    function update(event) {
+      const preserveScroll = event?.state?.preserveScroll === true;
+      const preservedScrollY = preserveScroll ? window.scrollY : null;
+      setLocation({ pathname: normalizePath(window.location.pathname), search: window.location.search, preservedScrollY });
+      if (!preserveScroll) {
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
     }
     window.addEventListener("popstate", update);
     return () => window.removeEventListener("popstate", update);
@@ -57,7 +62,7 @@ function isModifiedClick(event) {
   return event.metaKey || event.altKey || event.ctrlKey || event.shiftKey;
 }
 
-function SiteLink({ href, onNavigate, children, ...props }) {
+function SiteLink({ href, onNavigate, preserveScroll = false, children, ...props }) {
   const internal = href.startsWith("/");
   const targetHref = internal ? (() => {
     const target = new URL(href, "https://local.invalid");
@@ -71,10 +76,14 @@ function SiteLink({ href, onNavigate, children, ...props }) {
     const target = new URL(targetHref, window.location.origin);
     const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const next = `${target.pathname}${target.search}${target.hash}`;
-    if (current === next) window.scrollTo({ top: 0, behavior: "instant" });
+    if (current === next) {
+      if (!preserveScroll) window.scrollTo({ top: 0, behavior: "instant" });
+    }
     else {
       window.history.pushState({}, "", next);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      window.dispatchEvent(new PopStateEvent("popstate", {
+        state: preserveScroll ? { preserveScroll: true } : null
+      }));
     }
     onNavigate?.();
   }
@@ -547,11 +556,12 @@ function ProjectNav({ entry, current }) {
 
   return (
     <nav className="project-navigation" aria-label={`${currentProject.title} 模块导航`} ref={navigationRef}>
-      <SiteLink className={!current ? "is-current" : undefined} href={currentProject.route} aria-current={!current ? "page" : undefined}>总览</SiteLink>
+      <SiteLink className={!current ? "is-current" : undefined} href={currentProject.route} preserveScroll aria-current={!current ? "page" : undefined}>总览</SiteLink>
       {currentModules.map((item) => (
         <SiteLink
           className={current === item.slug ? "is-current" : undefined}
           href={`${currentProject.route}/${item.slug}`}
+          preserveScroll
           key={item.slug}
           aria-current={current === item.slug ? "page" : undefined}
         >{annotateTerms(item.shortTitle)}</SiteLink>
@@ -1195,6 +1205,10 @@ function NotFound() {
 export default function Page() {
   const location = useLocationState();
   const path = location.pathname;
+  useLayoutEffect(() => {
+    if (location.preservedScrollY === null) return;
+    window.scrollTo({ top: location.preservedScrollY, behavior: "instant" });
+  }, [path, location.search, location.preservedScrollY]);
   const mainHasMountedRef = useRef(false);
   const setMainRef = useCallback((node) => {
     if (!node) return;
@@ -1202,8 +1216,10 @@ export default function Page() {
       mainHasMountedRef.current = true;
       return;
     }
-    node.focus({ preventScroll: true });
-  }, [path]);
+    if (location.preservedScrollY === null) {
+      node.focus({ preventScroll: true });
+    }
+  }, [path, location.preservedScrollY]);
   useEffect(() => {
     const meta = routeMeta(path);
     document.title = meta.title;

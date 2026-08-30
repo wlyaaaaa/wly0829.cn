@@ -643,6 +643,12 @@ test("SPA links keep canonical directory URLs and move focus to main content", a
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /const targetHref = internal[\s\S]*?canonicalPath\(target\.pathname\)/);
   assert.match(pageSource, /next\.pathname = "\/rules\/";/);
+  assert.match(pageSource, /function SiteLink\(\{ href, onNavigate, preserveScroll = false/);
+  assert.match(pageSource, /const preservedScrollY = preserveScroll \? window\.scrollY : null/);
+  assert.match(pageSource, /useLayoutEffect\(\(\) => \{[\s\S]*?window\.scrollTo\(\{ top: location\.preservedScrollY, behavior: "instant" \}\)/);
+  assert.match(pageSource, /if \(location\.preservedScrollY === null\) \{[\s\S]*?node\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(pageSource, /state: preserveScroll \? \{ preserveScroll: true \} : null/);
+  assert.match(pageSource, /function ProjectNav[\s\S]*?<SiteLink[^>]+preserveScroll[\s\S]*?currentModules\.map[\s\S]*?<SiteLink[\s\S]*?preserveScroll/);
   assert.match(pageSource, /const setMainRef = useCallback[\s\S]*?node\.focus\(\{ preventScroll: true \}\)/);
   assert.match(pageSource, /<main id="main-content" ref=\{setMainRef\} tabIndex=\{-1\}>/);
 });
