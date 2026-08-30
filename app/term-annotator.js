@@ -18,7 +18,7 @@ export function createTermAnnotator(translations) {
     const translation = lookup.get(match.toLowerCase());
     return translation ? `${match}（${translation}）` : match;
   });
-  const protectedExpression = /(?:https?:\/\/[^\s<>"']+|(?:[A-Za-z]:\\|\\\\)[^\s<>"']+|\/(?:[A-Za-z0-9._-]+\/)+[A-Za-z0-9._-]+|--[A-Za-z0-9][A-Za-z0-9_-]*)/gi;
+  const protectedExpression = /(?:`[^`\r\n]+`|https?:\/\/[^\s<>"']+|(?:[A-Za-z]:\\|\\\\)[^\s<>"']+|\/(?:[A-Za-z0-9._-]+\/)+[A-Za-z0-9._-]+|--[A-Za-z0-9][A-Za-z0-9_-]*)/gi;
   const annotateSegment = (segment) => {
     let result = "";
     let cursor = 0;

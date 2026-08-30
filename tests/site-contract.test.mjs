@@ -34,7 +34,8 @@ import {
   routeMeta,
   routePaths,
   rulesSnapshot,
-  skills
+  skills,
+  systemRelations
 } from "../app/site-content.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -170,7 +171,7 @@ test("term annotation is longest-match and never annotates its own translation",
     assert.equal(annotate(once), once, `${value} annotation is not idempotent`);
   }
   const protectPaths = createTermAnnotator([["skills", "能力入口"], ["public", "公开"]]);
-  for (const exact of ["E:\\.agents\\skills", "C:\\ProgramData\\PCConfig\\public\\status.json", "https://example.com/public/status.json", "/opt/public/skills/config.json", "--public-mode"]) {
+  for (const exact of ["E:\\.agents\\skills", "C:\\ProgramData\\PCConfig\\public\\status.json", "https://example.com/public/status.json", "/opt/public/skills/config.json", "--public-mode", "`git worktree list --porcelain`", "`public.status.json`", "`skills/current`"] ) {
     assert.equal(protectPaths(exact), exact, `identifier/path was rewritten: ${exact}`);
   }
 });
@@ -279,12 +280,15 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /neither copies, redefines nor independently\s+tightens that table/);
   assert.match(projectRules, /project-authored restriction cannot create its own\s+publication authority/);
   assert.match(projectRules, /`Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly/);
-  assert.match(projectRules, /project default is `gpt-5\.6-sol` with `max` effort/);
+  assert.match(projectRules, /Every native subagent used for this website, at every descendant depth/);
+  assert.match(projectRules, /exactly `gpt-5\.6-sol` with `max` effort/);
+  assert.match(projectRules, /Luna, Terra, local aliases and\s+lower effort are forbidden/);
   assert.match(projectRules, /Every current and future website project may use multiple native subagents/);
   assert.match(projectRules, /materially improve the delivered\s+page/);
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
-  assert.match(projectRules, /actual number from independent work surfaces and net quality gain/);
-  assert.match(projectRules, /applies equally to projects added after the current ten/);
+  assert.match(projectRules, /actual number of Sol Max agents from independent work surfaces and net\s+quality gain/);
+  assert.match(projectRules, /zero remains valid/);
+  assert.match(projectRules, /applies equally to projects added\s+after the current ten/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -350,10 +354,13 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
   assert.doesNotMatch(generatedIndex, /=>\s*import\(/, "project details must not wait for a click-time dynamic import");
   const rootHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
-  const indexMatch = rootHtml.match(/<script id="search-index" type="application\/json">([\s\S]*?)<\/script>/);
-  assert.ok(indexMatch, "build must inline a compact search index before enhancement");
+  assert.match(rootHtml, /<script src="\/search-index\.js"><\/script>/, "build must load the shared compact search index before enhancement");
+  assert.doesNotMatch(rootHtml, /__WLY_SEARCH_INDEX__=/, "search index must not be duplicated into every route HTML");
+  const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
+  const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
+  assert.ok(indexMatch, "shared search index asset is invalid");
   const compactIndex = JSON.parse(indexMatch[1]);
-  assert.ok(gzipSync(indexMatch[1]).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "compact search index exceeds registry budget");
+  assert.ok(gzipSync(searchAsset).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "compact search index exceeds registry budget");
   assert.ok(compactIndex.length >= routePaths.length);
   for (const entry of compactIndex) {
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
@@ -1096,7 +1103,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.doesNotMatch(overviewHtml, /project-gallery|href="https:\/\/github\.com\/wlyaaaaa\/personal-health"/);
   const moduleHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-health", "offline-decision-brief", "index.html"), "utf8");
   assert.match(moduleHtml, /先检查数据是否完整，再只取与问题有关的部分/);
-  assert.match(moduleHtml, /不能证明/);
+  assert.match(moduleHtml, /没有记录不证明|80% coverage 不表示健康|blocked_fields/);
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -1642,6 +1649,12 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(systemHtml, /class="page-frame system-page"/);
   assert.doesNotMatch(systemHtml, /class="system-project-links"/, "System must not duplicate the full project directory");
   for (const text of ["三个责任源分别解决什么", "事实怎样进入项目", "三条典型使用链", "这张图不表示什么"]) assert.ok(systemHtml.includes(text), `System page omits: ${text}`);
+  for (const relation of systemRelations) {
+    for (const href of [relation.sourceHref, relation.projectHref, relation.entryHref]) {
+      const pathname = new URL(href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
+      assert.ok(routePaths.includes(pathname), `System relation ${relation.id} points to a missing route: ${href}`);
+    }
+  }
   for (const entry of projectCatalog) {
     const overviewHtml = await readFile(path.join(projectRoot, "dist", ...entry.project.route.slice(1).split("/"), "index.html"), "utf8");
     for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
@@ -1654,12 +1667,13 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal((homeHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
   assert.equal((homeHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
 
-  const indexMatch = homeHtml.match(/<script id="search-index" type="application\/json">([\s\S]*?)<\/script>/);
+  const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
+  const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
   const compactIndex = JSON.parse(indexMatch[1]);
   for (const moduleEntry of globalSearchEntries.filter((entry) => entry.type === "项目内容" && entry.aliases.length)) {
     for (const alias of moduleEntry.aliases) assert.equal(searchCompactEntries(compactIndex, alias, "project")[0]?.projectSlug, moduleEntry.projectSlug, `project compact search loses: ${alias}`);
   }
-  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["完整 928 项测试集合", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E94", "agents"]]) {
+  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["完整 928 项测试集合", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E94", "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
   }
 });
@@ -1972,7 +1986,7 @@ test("production build has direct entry files for every route", async () => {
     }
     assert.ok(html.includes(`<link rel="canonical" href="${canonicalUrl(route)}" />`), `${route} canonical drifted`);
     assert.match(html, /<link rel="prefetch" as="document" href="\/[^"]*" \/>/);
-    assert.match(html, /<script id="search-index" type="application\/json">/);
+    assert.match(html, /<script src="\/search-index\.js"><\/script>/);
     assert.doesNotMatch(html, /\.\.\/assets\//);
   }
 });

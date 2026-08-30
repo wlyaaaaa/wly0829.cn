@@ -26,6 +26,7 @@ let compactSearchRecordCount = 0;
 try {
   const renderer = await vite.ssrLoadModule("/server/render-route.jsx");
   compactSearchRecordCount = renderer.compactSearchRecordCount;
+  await writeFile(path.join(distRoot, "search-index.js"), renderer.compactSearchAsset, "utf8");
   for (const route of routePaths) {
     const targetDirectory = route === "/" ? distRoot : path.join(distRoot, ...route.slice(1).split("/"));
     await mkdir(targetDirectory, { recursive: true });

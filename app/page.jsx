@@ -797,12 +797,13 @@ function ProjectGallery({ title, images }) {
               <button className="project-lightbox-close" type="button" onClick={closeImage} ref={closeButtonRef} aria-label="关闭大图"><X size={22} aria-hidden="true" />关闭</button>
             </div>
             <div className="project-lightbox-stage">
-              <button className="project-lightbox-previous" type="button" onClick={() => changeImage(-1)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
               <figure>
                 <div className="project-lightbox-viewport" ref={viewportRef} data-zoom={zoom} tabIndex="0" aria-label={zoom > 1 ? "已放大的图片区域；使用方向键或滚动条查看细节" : "完整图片区域"}>
+                  <button className="project-lightbox-previous" type="button" onClick={() => changeImage(-1)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
                   <div className="project-lightbox-image-canvas" style={imageCanvasStyle}>
                     <img className="project-lightbox-image" ref={imageRef} src={activeImage.src} alt={activeImage.alt} style={imageStyle} onLoad={(event) => measureImageFit(event.currentTarget)} onDoubleClick={() => zoom === 1 ? setZoom(2) : resetZoom()} />
                   </div>
+                  <button className="project-lightbox-next" type="button" onClick={() => changeImage(1)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
                 </div>
                 <figcaption className="project-lightbox-caption" id="project-lightbox-caption">
                   {activeImage.evidenceLevel ? <strong>{activeImage.evidenceLevel} · {activeImage.evidenceLabel}</strong> : null}
@@ -811,7 +812,6 @@ function ProjectGallery({ title, images }) {
                   {activeImage.doesNotProve ? <small><b>不能证明：</b>{activeImage.doesNotProve}</small> : null}
                 </figcaption>
               </figure>
-              <button className="project-lightbox-next" type="button" onClick={() => changeImage(1)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
             </div>
           </div>
         </div>

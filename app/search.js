@@ -28,11 +28,13 @@ const projectCompactExtraAliases = {
 };
 
 function projectCompactSearchText(project, modules) {
+  const heroLatinTokens = (project.heroFacts || []).flatMap((item) => `${item.label} ${item.value}`.toLowerCase().match(/[a-z][a-z0-9_.:/-]*/g) || []);
   return [...new Set([
     project.cardStatus,
     project.snapshotBoundary,
     ...(project.usageExamples || []).map((item) => item.ask),
     ...(project.heroFacts || []).map((item) => item.label),
+    ...heroLatinTokens,
     ...(projectCompactExtraAliases[project.slug] || []),
     ...modules.flatMap((module) => [module.title, module.shortTitle, ...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])])
   ].filter(Boolean))].join(" ");

@@ -42,7 +42,7 @@ for (const alias of compactSearchCandidateAliases) {
   projectedAliases.set(ownerKey, [...(projectedAliases.get(ownerKey) || []), alias]);
 }
 
-const compactSearchIndex = globalSearchEntries.map((entry) => {
+export const compactSearchIndex = globalSearchEntries.map((entry) => {
   const href = canonicalDocumentHref(entry.href);
   const projectionKey = `${entry.type}|${entry.title}|${href}`;
   return {
@@ -69,7 +69,8 @@ function jsonForInlineScript(value) {
     .replaceAll("\u2029", "\\u2029");
 }
 
-const searchIndexScript = `<script id="search-index" type="application/json">${jsonForInlineScript(compactSearchIndex)}</script>`;
+export const compactSearchAsset = `window.__WLY_SEARCH_INDEX__=${jsonForInlineScript(compactSearchIndex)};\n`;
+const searchIndexScript = `<script src="/search-index.js"></script>`;
 
 function likelyNextRoutes(route) {
   const currentIndex = routePaths.indexOf(route);

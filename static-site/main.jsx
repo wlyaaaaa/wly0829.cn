@@ -1,9 +1,8 @@
 import "../app/style.css";
 import { searchCompactEntries } from "../app/compact-search.js";
 
-const searchIndexElement = document.getElementById("search-index");
-const searchEntries = searchIndexElement
-  ? JSON.parse(searchIndexElement.textContent || "[]")
+const searchEntries = Array.isArray(window.__WLY_SEARCH_INDEX__)
+  ? window.__WLY_SEARCH_INDEX__
   : [];
 const preservedScrollKey = "wly-route-scroll-v1";
 
@@ -556,11 +555,11 @@ function initializeGallery(gallery) {
   const image = document.createElement("img");
   image.className = "project-lightbox-image";
   canvas.append(image);
-  viewport.append(canvas);
+  viewport.append(previousButton, canvas, nextButton);
   const caption = document.createElement("figcaption");
   caption.className = "project-lightbox-caption";
   figure.append(viewport, caption);
-  stage.append(previousButton, figure, nextButton);
+  stage.append(figure);
   dialog.append(heading, toolbar, stage);
   overlay.append(dialog);
 

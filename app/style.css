@@ -4225,6 +4225,7 @@ main {
     left: 0;
     width: 100%;
     min-width: 0;
+    max-height: calc(100dvh - var(--header-height) - 64px);
   }
 
   .header-navigation .social-nav {
@@ -4677,6 +4678,7 @@ main {
 }
 
 .project-lightbox-viewport {
+  position: relative;
   display: block;
   width: 100%;
   min-width: 0;
@@ -4766,13 +4768,6 @@ main {
 
 .project-lightbox-next {
   right: 14px;
-}
-
-@media (max-width: 520px) {
-  .project-lightbox .project-lightbox-previous,
-  .project-lightbox .project-lightbox-next {
-    top: clamp(88px, 20svh, 150px);
-  }
 }
 
 .project-lightbox-caption {
@@ -5368,13 +5363,6 @@ body:has(.learning-project-page) { min-width: 0; }
 .system-relation-arrow { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--green-dark); }
 .system-relation-arrow small { color: var(--muted); font-size: 10px; text-align: center; }
 
-.system-project-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); border-left: 1px solid var(--line); }
-.system-project-links a { display: grid; grid-template-columns: 28px minmax(0, 1fr) 16px; align-items: center; gap: 8px; min-height: 62px; padding: 10px 12px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
-.system-project-links a:hover,
-.system-project-links a:focus-visible { background: var(--surface-green); color: var(--green-dark); }
-.system-project-links a > span { color: var(--green); font-family: var(--mono); font-size: 10px; }
-.system-project-links a > strong { min-width: 0; font-size: 12px; line-height: 1.35; }
-
 .system-explanation-grid,
 .system-journey-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .system-explanation-grid article,
@@ -5404,7 +5392,6 @@ body:has(.learning-project-page) { min-width: 0; }
 .search-result-group small { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
 
 @media (max-width: 1100px) {
-  .system-project-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .system-relation-header,
   .system-relation-table > article { grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1.1fr) 36px minmax(0, 1fr); }
   .system-relation-arrow small { display: none; }
@@ -5444,7 +5431,6 @@ body:has(.learning-project-page) { min-width: 0; }
   .skill-category-note { margin-right: -16px; margin-left: -16px; padding-right: 16px; padding-left: 16px; }
   .system-page,
   .search-results-page { padding-top: 24px; }
-  .system-project-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .search-result-group > a { grid-template-columns: 72px minmax(0, 1fr) 18px; padding-right: 10px; padding-left: 10px; }
 }
 
@@ -5454,5 +5440,4 @@ body:has(.learning-project-page) { min-width: 0; }
   .primary-nav a { font-size: 11.5px; }
   .mobile-search-button,
   .menu-button { width: 36px; height: 36px; }
-  .system-project-links { grid-template-columns: minmax(0, 1fr); }
 }
