@@ -396,10 +396,12 @@ read-only operating panel; public presentation is secondary.
   evidence collection or final audit can materially improve the delivered
   page. Do not reduce final quality merely to conserve an ample model quota,
   and do not create subagents just to reach a fixed count.
-- When this website task benefits from native delegation and all upper gates
-  allow it, the project default is `gpt-5.6-sol` with `max` effort. Choose the
-  actual number from independent work surfaces and net quality gain; the rule
-  applies equally to projects added after the current ten.
+- Every native subagent used for this website, at every descendant depth, must
+  be exactly `gpt-5.6-sol` with `max` effort. Luna, Terra, local aliases and
+  lower effort are forbidden even for bounded tests or read-only audits. Choose
+  the actual number of Sol Max agents from independent work surfaces and net
+  quality gain; zero remains valid. This rule applies equally to projects added
+  after the current ten.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
