@@ -10,6 +10,12 @@
 
 脚本和 Provider 只能采集事实、计算指纹、检查闭包和验证产物。它们不能决定内容是否重要，也不能机械重写专业叙述。
 
+`manual_owner_only` 是独立手动快照模式。Source、规则、Skill、commit、测试或
+报告变化都不能触发这类项目的网站任务；`personal-panel-refresh` 不适用。只有 owner
+明确说“更新 CACB”，或明确要求包含 manual-only 项目的全量更新时，网站任务才可
+携带 `--manual-owner-request` 继续。缺少该标记时计划返回
+`manual_owner_request_required`，不得取证、改文案或发布。
+
 ## 默认不更新
 
 AI 只有在“继续保留当前页面会让用户对能力、边界、当前状态、用法、成熟度、安全判断或下一步决策产生实质错误”时才修改网页。
@@ -26,7 +32,7 @@ AI 只有在“继续保留当前页面会让用户对能力、边界、当前�
 
 ## 定向刷新流程
 
-1. 运行 `npm run refresh:ai -- --project <id>`，读取本次项目、内容路径、当前内容指纹、Owner 采集入口和影响来源。
+1. 运行 `npm run refresh:ai -- --project <id>`，读取本次项目、内容路径、当前内容指纹、Owner 采集入口和影响来源；manual-only 项目必须由明确 owner 请求改用 `--manual-owner-request`。
 2. 完整阅读该项目当前总览、模块、状态、缺口和演化，不能只看结构化字段。
 3. 运行 Registry 登记的只读 collectors，并按问题增补最小 Owner 回读；不复制任意原始输出到网站。
 4. 比较新证据与当前页面，先作 material/no-op 判断。
@@ -44,7 +50,7 @@ Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 
 
 ## 全量刷新流程
 
-运行 `npm run refresh:ai -- --all`。AI 按 Registry 的 1…N 顺序建立计划，并可根据当前原生并发槽位分批取证。每个项目仍独立判断：
+运行 `npm run refresh:ai -- --all`。当清单包含 manual-only 项目时，只有 owner 明确要求全量复核才追加 `--manual-owner-request`；否则计划停在 `manual_owner_request_required`。AI 按 Registry 的 1…N 顺序建立计划，并可根据当前原生并发槽位分批取证。每个项目仍独立判断：
 
 ```text
 enabled = changed + unchanged + blocked
@@ -90,7 +96,7 @@ Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读
 
 Registry 是唯一项目清单。新增项目必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint。
 
-当前六项目 JavaScript gzip 防膨胀审查阈值为 320 KiB，并保持项目详情 eager（预先加载），保证站内点击不等待网络。这个数字不是永久内容上限：超过时先审真实重复、依赖和公网墙钟；内容无法无损压缩且仍满足流畅性时，记录证据并做最小增额。实测 bundle 增长接近审查线时，即使项目还不到十个，也不把全部正文继续塞入公共 JS，更不使用点击后 lazy-load：构建时为每条路由生成含完整正文的静态 HTML/内容产物，共享 JS 只保留交互，并在点击前预取高概率下一页。直接打开与站内切换都不能出现 spinner、骨架屏、空白或网络等待；不能通过删除专业正文换体积。派生轻量索引若出现，只能由 AI 正文生成，不能成为第二份语义正文。
+当前七项目已为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并在点击前预取高概率下一页。共享脚本 gzip 防膨胀审查阈值为 120 KiB，构建期紧凑搜索索引为 24 KiB；这些数字不是永久内容上限，超过时先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并最小增额。禁止把全部正文重新塞入公共 JS，也禁止点击后 lazy-load、fetch、spinner、骨架屏、空白或以删除专业正文换体积。派生搜索索引只能保留标题、短摘要、链接与明确 aliases（别名），由权威正文在构建时投影，不能成为第二份语义正文。
 
 ## 完成标准
 

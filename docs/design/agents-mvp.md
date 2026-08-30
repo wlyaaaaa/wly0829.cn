@@ -1,4 +1,4 @@
-# 个人项目看板 MVP 与六项目扩展规格
+# 个人项目看板 MVP 与七项目扩展规格
 
 ## 产品定位
 
@@ -19,7 +19,7 @@
 
 项目注册表是 `config/panel-projects.json`。
 
-- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit 与 PC Panel Hub 已依次扩展为第 5、6 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub（1/2/3/4/5/6）。
+- 四项目 PUBLIC MVP 已完成用户验收；TimeAudit、PC Panel Hub 与 CACB 已依次扩展为第 5、6、7 项，项目顺序为 `.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB（1/2/3/4/5/6/7）。CACB 使用 curated packaging 与 manual-owner-only 快照，不发布受测配置结果。
 - 注册表支持未来增加几十个项目，不以 MVP 数量作为长期上限。
 - 网站源项目本身不进入项目清单，避免自我套娃。
 - 项目默认 `presentation_mode=real_dashboard`：真实、详细地展示架构、状态、缺口和证据。
@@ -49,6 +49,8 @@
 /projects/timeaudit/:module 按真实产品边界划分的模块
 /projects/pc-panel-hub    PC Panel Hub 总览与软件演示画廊
 /projects/pc-panel-hub/:module 遥测、机箱屏、串口、HS2、恢复与证据模块
+/projects/cacb            CACB 评测产品总览
+/projects/cacb/:module    问题库、隔离执行、身份与证据、确定性验证、失败与报告模块
 /rules                    五份规则，一个页面内切换
 /skills                   按价值排序的 Skill 清单
 /skills/:skill            Skill 完整详情
@@ -152,6 +154,10 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 
 格式、注释、重构、时间戳、hash-only 漂移、已被页面准确描述的 dirty/unreleased source 或其他不改变用户判断的小变化，不创建异步任务，可以等待下一次实质刷新。
 
+`manual_owner_only` 项目不参与上述 Source 事件链。无论路径、commit 或 Source Owner
+怎样判断 material，都必须返回 no website task；只有 owner 明确发起该项目或包含它的
+全量刷新，才读取 ignored 私有 locator 和当前证据。
+
 ## 验收
 
 单项目内容 MVP 只有在以下事实同时成立时才通过：
@@ -162,4 +168,4 @@ Skill 清单按当前实际价值从高到低排列，不做分类 Tab。
 - 搜索、导航、规则切换、项目侧栏和响应式布局可用；
 - 自动化测试、构建、直接路由、自定义 404 和本地用户预览通过。
 
-单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 已完成第五项目扩展，PC Panel Hub 已由用户明确授权为第六项目。规则权威由 verified current E release 动态提供；第六项目最终完成仍要求源项目修复与发布回读、完整内容、刷新合同、软件演示与实体证据分层、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。
+单项目内容 MVP、三项目本地版和四项目 PUBLIC MVP 已通过；TimeAudit 与 PC Panel Hub 已完成第五、第六项目扩展，CACB 已由用户明确授权为第七个 curated/manual-only 项目。规则权威由 verified current E release 动态提供；第七项目最终完成仍要求内容、手动刷新合同、测试边界、浏览器 QA、PUBLIC main、Pages deployment 和公网 read-back 指向同一提交。

@@ -21,7 +21,7 @@ function registeredContent(entry) {
     content.project.title !== entry.title && "title",
     content.project.route !== entry.route && "route",
     content.project.visibility !== expectedVisibility && "visibility",
-    entry.presentation_mode !== "real_dashboard" && "presentation_mode"
+    !panelRegistry.refresh_policy.allowed_presentation_modes.includes(entry.presentation_mode) && "presentation_mode"
   ].filter(Boolean);
   if (mismatches.length) throw new Error(`Panel project registry/content mismatch for ${entry.id}: ${mismatches.join(",")}`);
   return { ...content, registration: entry };
@@ -100,7 +100,7 @@ export function routeMeta(pathname) {
   if (path === "/") {
     return {
       title: `项目｜${site.name}`,
-      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、现行规则、Skills 与真实缺口。"
+      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、现行规则、Skills 与真实缺口。"
     };
   }
 

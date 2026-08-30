@@ -14,14 +14,16 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has six enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR, TimeAudit and PC Panel Hub in order 1/2/3/4/5/6. The registry
+  target has seven enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  ChineseASR, TimeAudit, PC Panel Hub and CACB in order 1/2/3/4/5/6/7. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
-  the owner as `curated_packaging` may use packaging copy or exclusions.
+  the owner as `curated_packaging` may use packaging copy or exclusions. A
+  curated project may also be `manual_owner_only`: only an explicit owner request
+  can refresh it; source, rule and Skill events never create a website task.
 - The website source project is infrastructure for the presentation layer and
   never appears as one of the projects being presented.
 - Public copy stays vendor-neutral. Describe reusable AI workflows, rules and
@@ -125,14 +127,15 @@ read-only operating panel; public presentation is secondary.
   project, that single card spans both desktop columns instead of occupying an
   empty half-grid; two-column placement begins only when a second project exists.
 - Project navigation must not introduce click-time lazy loading or a visible
-  loading pause. The current panel keeps detail code eager. When measured eager
-  bundle growth approaches its review threshold—even if this happens before
-  the project count reaches ten—generate route-specific static HTML/content at
-  build time, keep shared interaction JavaScript small, and prefetch likely
-  next routes before interaction. Direct routes must expose complete content
-  before enhancement; clicks must not show a spinner, skeleton, blank state or
-  network wait. Verify both first load and transitions on the public site, and
-  never meet a size budget by deleting required professional content.
+  loading pause. The current panel generates complete route-specific HTML at
+  build time, uses native directory-document navigation, keeps one small shared
+  enhancement script, and prefetches likely next routes before interaction.
+  Direct routes must expose complete content before enhancement; clicks must
+  not show a spinner, skeleton or blank state. Likely transitions must issue
+  non-blocking prefetch hints before interaction, but native navigation never
+  waits for a hint to finish. Verify both first load and transitions on the
+  public site, and never meet a size budget by deleting
+  required professional content or moving narratives back into shared JS.
 - Registered byte budgets are anti-bloat review thresholds, not permanent
   content ceilings. If current facts and professional detail cannot fit without
   semantic loss, first audit real duplication, dependencies and public
@@ -196,9 +199,10 @@ read-only operating panel; public presentation is secondary.
 ## Project expansion gate
 
 - The owner accepted the four-project public MVP on 2026-08-30, then explicitly
-  authorized TimeAudit as project 5 and PC Panel Hub as project 6. The current
-  target therefore contains `.agents`, PCConfig, GitHub 总索引, ChineseASR,
-  TimeAudit and PC Panel Hub, plus the one-page Rules workbench and current
+  authorized TimeAudit as project 5, PC Panel Hub as project 6 and CACB as the
+  curated, manual-only project 7. The current target therefore contains
+  `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub and
+  CACB, plus the one-page Rules workbench and current
   public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
@@ -283,6 +287,12 @@ read-only operating panel; public presentation is secondary.
   maturity or user decision would otherwise become materially wrong. Small
   refactors, timestamps, formatting, blocked candidates and hash-only drift may
   wait for the next material refresh.
+- An enabled project with `ai_refresh.mode=manual_owner_only` is outside the
+  event-driven handoff set. `assess-panel-impact` must always return no website
+  task for it, even when paths or commits change and even when a source caller
+  claims materiality. It enters a targeted or full refresh only when the owner
+  explicitly asks to update it; the refresh plan and result must carry that
+  manual-owner-request fact. This rule creates no Skill, watcher or Source hook.
 - The owner has standing-authorized that one necessary fresh website task for
   registered rule, Skill and project sources. Once the material threshold and
   duplicate check pass, do not ask again whether a new conversation may be
@@ -306,7 +316,7 @@ read-only operating panel; public presentation is secondary.
   that cannot be repaired in the same goal remain visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
-  TimeAudit and PC Panel Hub additions, are standing-authorized to commit, normal-push existing PUBLIC `main`, wait for Pages and read back the deployed
+  TimeAudit, PC Panel Hub and manually requested CACB additions, are standing-authorized to commit, normal-push existing PUBLIC `main`, wait for Pages and read back the deployed
   commit automatically after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
   effect, secret exposure, force-push or explicit owner hold remains outside
@@ -314,8 +324,15 @@ read-only operating panel; public presentation is secondary.
 
 ## Subagent discipline
 
+- Every current and future website project may use multiple native subagents
+  whenever independent content judgment, visual work, implementation,
+  evidence collection or final audit can materially improve the delivered
+  page. Do not reduce final quality merely to conserve an ample model quota,
+  and do not create subagents just to reach a fixed count.
 - When this website task benefits from native delegation and all upper gates
-  allow it, the project default is `gpt-5.6-sol` with `max` effort.
+  allow it, the project default is `gpt-5.6-sol` with `max` effort. Choose the
+  actual number from independent work surfaces and net quality gain; the rule
+  applies equally to projects added after the current seven.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

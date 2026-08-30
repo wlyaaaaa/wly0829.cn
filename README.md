@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub（1/2/3/4/5/6）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB（1/2/3/4/5/6/7）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit 与 PC Panel Hub 已依次选为第 5、6 项，项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub 与 CACB 已依次选为第 5、6、7 项。CACB 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：只展示评测产品框架，不发布受测配置结果；Source、规则和 Skill 变化不会更新页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -42,13 +42,19 @@ npm run refresh:ai -- --project pcconfig
 npm run refresh:ai -- --project chinese-asr
 npm run refresh:ai -- --project timeaudit
 npm run refresh:ai -- --project pc-panel-hub
+npm run refresh:ai -- --project cacb --manual-owner-request
 npm run refresh:ai -- --all
 npm run verify:ai-refresh -- --bundle <ai-result.json>
 ```
 
 该命令只返回项目、当前内容指纹、事实采集入口和刷新边界，不写网页正文。完整合同见 [个人看板 AI 快速刷新合同](docs/maintenance/ai-panel-refresh.md)。
 
-当前 eager（预先加载）JavaScript gzip 防膨胀审查阈值为 320 KiB；它不是永久内容上限。当前项目详情保持站内点击即时切换，不使用点击后 lazy-load（延迟加载）。实测 bundle 接近审查线时，即使项目还不到十个，也改为构建时生成每条路由的完整静态正文、共享少量交互 JavaScript，并在点击前预取高概率下一页；不能以删减专业正文、spinner、骨架屏、空白或点击网络等待换取体积。
+`manual_owner_only` 项目没有 Source/Skill 自动刷新。未带
+`--manual-owner-request` 时，CACB 定向计划和包含 CACB 的全量计划只返回
+`manual_owner_request_required`，不会收集证据或创建网站任务；只有本人明确要求的
+网站任务才可携带该标记继续。
+
+当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并在点击前预取高概率下一页。共享交互 JavaScript gzip 审查阈值为 120 KiB，紧凑搜索索引为 24 KiB；它们是防膨胀审查线，不是永久内容上限。不得把全文重新塞回公共 JS，也不得用点击后 lazy-load（延迟加载）、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积。
 
 刷新 `.agents` 的活动规则/Skill 结构化证据：
 

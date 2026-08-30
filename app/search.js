@@ -2,7 +2,8 @@ import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { projectCatalog, rulesSnapshot, skills } from "./site-content.js";
 
-const ruleSearchAliases = {
+export const ruleSearchAliases = {
+  agents_root_rules: ["怎么避免全局规则覆盖项目自己的验收方式"],
   protected_major_actions_contract: ["dirty source 不能冒充 current release", "current E rules 怎么验证", "C盘规则为什么不能阻塞spawn", "旧Publisher为什么退役", "五份规则的 ruleset 是什么", "candidate 不能冒充 active"],
   authorization_delegation_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "谁可以修改这个项目"],
   four_base_decision_context_contract: ["这个事实应该去哪里查", "仓库事实和机器事实分别谁负责"],
@@ -78,6 +79,7 @@ export const globalSearchEntries = [
       title: rule.title,
       detail: rule.question,
       href: `/rules?rule=${rule.logicalId}`,
+      aliases: ruleSearchAliases[rule.logicalId] || [],
       search: [
         rule.logicalId,
         rule.purpose,
@@ -146,7 +148,7 @@ export function searchScore(entry, query) {
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   if (latinTokens.some((token) => !all.includes(token))) return 0;
   if (title.includes(normalized)) return 140;
-  if (aliases.some((alias) => alias.includes(normalized))) return 130;
+  if (aliases.some((alias) => alias.includes(normalized))) return 160;
   if (detail.includes(normalized)) return 110;
   if (all.includes(normalized)) return 90;
 

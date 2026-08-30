@@ -44,6 +44,10 @@ for (const result of projectResults) {
   const registration = registryById.get(result.id);
   requireFact(Boolean(registration), "bundle_project_unregistered", result.id);
   if (!registration) continue;
+  if (registration.ai_refresh?.mode === "manual_owner_only") {
+    requireFact(bundle.manual_owner_request === true, "bundle_manual_owner_request_missing", result.id);
+    requireFact(result.manual_owner_request === true, "bundle_project_manual_owner_request_missing", result.id);
+  }
   requireFact(result.content_path === registration.ai_refresh.content_path, "bundle_content_path_mismatch", result.id);
   requireFact(["changed", "unchanged", "blocked"].includes(result.status), "bundle_project_status_invalid", `${result.id}:${result.status}`);
   requireFact(validSha(result.old_content_sha256), "bundle_old_content_sha_invalid", result.id);

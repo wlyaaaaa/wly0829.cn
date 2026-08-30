@@ -19,6 +19,24 @@ if (!projectId) throw new Error("--project is required");
 const project = registry.projects.find((item) => item.id === projectId && item.enabled);
 if (!project) throw new Error(`unknown or disabled panel project: ${projectId}`);
 
+if (project.ai_refresh?.mode === "manual_owner_only") {
+  const result = {
+    schema: "wly.personal-panel-impact.v1",
+    project_id: project.id,
+    refresh_mode: "manual_owner_only",
+    impact_candidate: false,
+    material_change_confirmed: false,
+    source_materiality_ignored: materialChange,
+    task_required: false,
+    reasons: ["manual_owner_only_no_source_or_skill_handoff"],
+    changed_paths: changedPaths,
+    action: "manual_owner_request_required_no_automatic_handoff",
+    registry: "config/panel-projects.json"
+  };
+  process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+  process.exit(0);
+}
+
 function matches(pattern, candidate) {
   const normalized = pattern.replaceAll("\\", "/");
   let expression = "^";

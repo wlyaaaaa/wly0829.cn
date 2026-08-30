@@ -11,6 +11,8 @@ import {
   List,
   LockKey,
   MagnifyingGlass,
+  Minus,
+  Plus,
   Warning,
   Wrench,
   X
@@ -36,14 +38,16 @@ import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { searchPanel } from "./search.js";
 import { createTermAnnotator } from "./term-annotator.js";
 
-function useLocationState() {
+function useLocationState(initialPathname, initialSearch) {
+  const browserLocation = typeof window === "undefined" ? null : window.location;
   const [location, setLocation] = useState(() => ({
-    pathname: normalizePath(window.location.pathname),
-    search: window.location.search,
+    pathname: normalizePath(initialPathname || browserLocation?.pathname || "/"),
+    search: initialSearch ?? browserLocation?.search ?? "",
     preservedScrollY: null
   }));
 
   useEffect(() => {
+    if (typeof window === "undefined") return undefined;
     function update(event) {
       const preserveScroll = event?.state?.preserveScroll === true;
       const preservedScrollY = preserveScroll ? window.scrollY : null;
@@ -59,10 +63,6 @@ function useLocationState() {
   return location;
 }
 
-function isModifiedClick(event) {
-  return event.metaKey || event.altKey || event.ctrlKey || event.shiftKey;
-}
-
 function SiteLink({ href, onNavigate, preserveScroll = false, children, ...props }) {
   const internal = href.startsWith("/");
   const targetHref = internal ? (() => {
@@ -70,26 +70,11 @@ function SiteLink({ href, onNavigate, preserveScroll = false, children, ...props
     return `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
   })() : href;
 
-  function handleClick(event) {
-    props.onClick?.(event);
-    if (event.defaultPrevented || !internal || event.button !== 0 || isModifiedClick(event) || props.target) return;
-    event.preventDefault();
-    const target = new URL(targetHref, window.location.origin);
-    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    const next = `${target.pathname}${target.search}${target.hash}`;
-    if (current === next) {
-      if (!preserveScroll) window.scrollTo({ top: 0, behavior: "instant" });
-    }
-    else {
-      window.history.pushState({}, "", next);
-      window.dispatchEvent(new PopStateEvent("popstate", {
-        state: preserveScroll ? { preserveScroll: true } : null
-      }));
-    }
-    onNavigate?.();
-  }
-
-  return <a href={targetHref} {...props} onClick={handleClick}>{children}</a>;
+  // Route changes intentionally use native directory-document navigation. The
+  // build emits complete HTML for every target, so clicks never wait for a
+  // content import or a client-side route fetch.
+  void onNavigate;
+  return <a href={targetHref} data-preserve-scroll={preserveScroll ? "true" : undefined} {...props}>{children}</a>;
 }
 
 function SocialIcon({ name }) {
@@ -290,7 +275,8 @@ function Header({ path }) {
           aria-expanded={searchOpen}
           onClick={() => { setMenuOpen(false); setSearchOpen((value) => !value); }}
         >
-          {searchOpen ? <X size={20} aria-hidden="true" /> : <MagnifyingGlass size={20} aria-hidden="true" />}
+          <span className="header-state-icon header-state-icon-closed"><MagnifyingGlass size={20} aria-hidden="true" /></span>
+          <span className="header-state-icon header-state-icon-open"><X size={20} aria-hidden="true" /></span>
         </button>
         <button
           ref={menuButtonRef}
@@ -301,7 +287,8 @@ function Header({ path }) {
           aria-expanded={menuOpen}
           onClick={() => { setSearchOpen(false); setMenuOpen((value) => !value); }}
         >
-          {menuOpen ? <X size={20} aria-hidden="true" /> : <List size={20} aria-hidden="true" />}
+          <span className="header-state-icon header-state-icon-closed"><List size={20} aria-hidden="true" /></span>
+          <span className="header-state-icon header-state-icon-open"><X size={20} aria-hidden="true" /></span>
         </button>
         <div className={`header-navigation${menuOpen ? " is-open" : ""}`} id="site-navigation">
           <nav className="social-nav" aria-label="外部链接">
@@ -319,10 +306,10 @@ function Header({ path }) {
             ))}
           </nav>
         </div>
-        {searchOpen ? <div className="mobile-search-panel is-open" id="mobile-site-search"><GlobalSearch autoFocus className="mobile-search-control" resultId="mobile-global-search-results" /></div> : null}
+        <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}><GlobalSearch autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /></div>
         </div>
       </header>
-      {menuOpen || searchOpen ? <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭顶部浮层背景" onClick={() => { setMenuOpen(false); setSearchOpen(false); }} /> : null}
+      <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭顶部浮层背景" onClick={() => { setMenuOpen(false); setSearchOpen(false); }} hidden={!menuOpen && !searchOpen} />
     </>
   );
 }
@@ -508,6 +495,7 @@ function projectKicker(kind) {
   if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
   if (kind === "timeaudit") return "Windows 工作站时间、性能与故障回放项目";
   if (kind === "pc-panel-hub") return "Windows 双副屏显示、事件与恢复项目";
+  if (kind === "cacb") return "可复现 Agent 评测产品与证据框架";
   return "个人项目";
 }
 
@@ -634,10 +622,69 @@ function ProjectCurrentState({ entry }) {
 
 function ProjectGallery({ title, images }) {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const [fitSize, setFitSize] = useState(null);
   const closeButtonRef = useRef(null);
+  const imageRef = useRef(null);
   const returnFocusRef = useRef(null);
+  const viewportRef = useRef(null);
+  const zoomRef = useRef(1);
+  zoomRef.current = zoom;
   const isOpen = activeIndex !== null;
   const hasStructuredEvidence = images.every((image) => image.evidenceLevel && image.evidenceLabel && image.proves && image.doesNotProve);
+
+  const measureImageFit = useCallback((image = imageRef.current) => {
+    const viewport = viewportRef.current;
+    if (!image?.naturalWidth || !image?.naturalHeight || !viewport?.clientWidth || !viewport?.clientHeight) return;
+    const scale = Math.min(viewport.clientWidth / image.naturalWidth, viewport.clientHeight / image.naturalHeight);
+    const next = {
+      width: Math.max(1, Math.floor(image.naturalWidth * scale)),
+      height: Math.max(1, Math.floor(image.naturalHeight * scale)),
+      viewportWidth: viewport.clientWidth,
+      viewportHeight: viewport.clientHeight
+    };
+    setFitSize((current) => current && Object.keys(next).every((key) => current[key] === next[key]) ? current : next);
+  }, []);
+
+  function changeZoom(delta) {
+    setZoom((current) => {
+      const next = Math.min(4, Math.max(1, Number((current + delta).toFixed(1))));
+      zoomRef.current = next;
+      return next;
+    });
+  }
+
+  function resetZoom() {
+    zoomRef.current = 1;
+    setZoom(1);
+    viewportRef.current?.scrollTo({ top: 0, left: 0 });
+  }
+
+  function closeImage() {
+    resetZoom();
+    setFitSize(null);
+    setActiveIndex(null);
+  }
+
+  function changeImage(delta) {
+    resetZoom();
+    setFitSize(null);
+    setActiveIndex((index) => (index + delta + images.length) % images.length);
+  }
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setZoom(1);
+    setFitSize(null);
+    viewportRef.current?.scrollTo({ top: 0, left: 0 });
+  }, [activeIndex, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(() => measureImageFit());
+    if (viewportRef.current) observer.observe(viewportRef.current);
+    return () => observer.disconnect();
+  }, [isOpen, activeIndex, measureImageFit]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -645,7 +692,7 @@ function ProjectGallery({ title, images }) {
     document.body.style.overflow = "hidden";
     function handleKeyDown(event) {
       if (event.key === "Tab") {
-        const controls = Array.from(document.querySelectorAll(".project-lightbox button:not([disabled])"));
+        const controls = Array.from(document.querySelectorAll('.project-lightbox button:not([disabled]), .project-lightbox-viewport[tabindex="0"]'));
         const first = controls[0];
         const last = controls.at(-1);
         if (event.shiftKey && document.activeElement === first) {
@@ -655,9 +702,19 @@ function ProjectGallery({ title, images }) {
           event.preventDefault();
           first?.focus();
         }
-      } else if (event.key === "Escape") setActiveIndex(null);
-      else if (event.key === "ArrowLeft") setActiveIndex((index) => (index - 1 + images.length) % images.length);
-      else if (event.key === "ArrowRight") setActiveIndex((index) => (index + 1) % images.length);
+      } else if (event.key === "Escape") closeImage();
+      else if (event.key === "ArrowLeft" && !(zoomRef.current > 1 && viewportRef.current?.contains(document.activeElement))) changeImage(-1);
+      else if (event.key === "ArrowRight" && !(zoomRef.current > 1 && viewportRef.current?.contains(document.activeElement))) changeImage(1);
+      else if (!event.ctrlKey && !event.metaKey && !event.altKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        changeZoom(0.5);
+      } else if (!event.ctrlKey && !event.metaKey && !event.altKey && (event.key === "-" || event.key === "_")) {
+        event.preventDefault();
+        changeZoom(-0.5);
+      } else if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key === "0") {
+        event.preventDefault();
+        resetZoom();
+      }
     }
     window.addEventListener("keydown", handleKeyDown);
     closeButtonRef.current?.focus();
@@ -670,8 +727,19 @@ function ProjectGallery({ title, images }) {
 
   if (!images.length) return null;
   const activeImage = activeIndex === null ? null : images[activeIndex];
+  const scaledImageSize = fitSize ? {
+    width: Math.max(1, Math.round(fitSize.width * zoom)),
+    height: Math.max(1, Math.round(fitSize.height * zoom))
+  } : null;
+  const imageCanvasStyle = scaledImageSize ? {
+    width: `${Math.max(fitSize.viewportWidth, scaledImageSize.width)}px`,
+    height: `${Math.max(fitSize.viewportHeight, scaledImageSize.height)}px`
+  } : undefined;
+  const imageStyle = scaledImageSize ? { width: `${scaledImageSize.width}px`, height: `${scaledImageSize.height}px` } : undefined;
   function openImage(index, event) {
     returnFocusRef.current = event.currentTarget;
+    resetZoom();
+    setFitSize(null);
     setActiveIndex(index);
   }
 
@@ -679,27 +747,51 @@ function ProjectGallery({ title, images }) {
     <section className="document-section project-gallery" aria-labelledby="project-gallery-title">
       <div className="project-gallery-heading">
         <div><p className="section-kicker">{hasStructuredEvidence ? "可视化证据" : "真实界面"}</p><h2 id="project-gallery-title">{title} 的{hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}</h2></div>
-        <p>{hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。"}打开后可关闭，或切换上一张、下一张。</p>
+        <p>{hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。"}打开后可缩放、滚动查看细节，也可关闭或切换上一张、下一张。</p>
       </div>
       <div className="project-gallery-grid">
         {images.map((image, index) => (
-          <button className="project-gallery-card" type="button" onClick={(event) => openImage(index, event)} key={image.src} aria-label={`打开大图：${image.alt}`}>
+          <button
+            className="project-gallery-card"
+            type="button"
+            onClick={(event) => openImage(index, event)}
+            key={image.src}
+            aria-label={`打开大图：${image.alt}`}
+            data-gallery-src={image.src}
+            data-gallery-alt={image.alt}
+            data-gallery-caption={image.caption}
+            data-gallery-evidence-level={image.evidenceLevel || ""}
+            data-gallery-evidence-label={image.evidenceLabel || ""}
+            data-gallery-proves={image.proves || ""}
+            data-gallery-does-not-prove={image.doesNotProve || ""}
+          >
             <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" />
             <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : null}{image.caption}</span></span>
           </button>
         ))}
       </div>
       {activeImage ? createPortal((
-        <div className="project-lightbox" role="dialog" aria-modal="true" aria-labelledby="project-lightbox-caption" onMouseDown={(event) => { if (event.target === event.currentTarget) setActiveIndex(null); }}>
+        <div className="project-lightbox" role="dialog" aria-modal="true" aria-labelledby="project-lightbox-title" onMouseDown={(event) => { if (event.target === event.currentTarget) closeImage(); }}>
           <div className="project-lightbox-dialog">
+            <h2 className="visually-hidden" id="project-lightbox-title">图片查看器：{activeImage.alt}</h2>
             <div className="project-lightbox-toolbar">
-              <span aria-live="polite">{activeIndex + 1} / {images.length}</span>
-              <button className="project-lightbox-close" type="button" onClick={() => setActiveIndex(null)} ref={closeButtonRef} aria-label="关闭大图"><X size={22} aria-hidden="true" />关闭</button>
+              <span>{activeIndex + 1} / {images.length}</span>
+              <span className="visually-hidden" aria-live="polite" aria-atomic="true">第 {activeIndex + 1} 张，共 {images.length} 张：{activeImage.alt}</span>
+              <div className="project-lightbox-zoom-controls" role="group" aria-label="大图缩放">
+                <button type="button" onClick={() => changeZoom(-0.5)} disabled={zoom <= 1} aria-label="缩小大图"><Minus size={20} aria-hidden="true" /></button>
+                <button className="project-lightbox-zoom-reset" type="button" onClick={resetZoom} aria-label="恢复适合窗口大小"><span aria-live="polite">{Math.round(zoom * 100)}%</span></button>
+                <button type="button" onClick={() => changeZoom(0.5)} disabled={zoom >= 4} aria-label="放大大图"><Plus size={20} aria-hidden="true" /></button>
+              </div>
+              <button className="project-lightbox-close" type="button" onClick={closeImage} ref={closeButtonRef} aria-label="关闭大图"><X size={22} aria-hidden="true" />关闭</button>
             </div>
             <div className="project-lightbox-stage">
-              <button className="project-lightbox-previous" type="button" onClick={() => setActiveIndex((index) => (index - 1 + images.length) % images.length)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
+              <button className="project-lightbox-previous" type="button" onClick={() => changeImage(-1)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
               <figure>
-                <img className="project-lightbox-image" src={activeImage.src} alt={activeImage.alt} />
+                <div className="project-lightbox-viewport" ref={viewportRef} data-zoom={zoom} tabIndex="0" aria-label={zoom > 1 ? "已放大的图片区域；使用方向键或滚动条查看细节" : "完整图片区域"}>
+                  <div className="project-lightbox-image-canvas" style={imageCanvasStyle}>
+                    <img className="project-lightbox-image" ref={imageRef} src={activeImage.src} alt={activeImage.alt} style={imageStyle} onLoad={(event) => measureImageFit(event.currentTarget)} onDoubleClick={() => zoom === 1 ? setZoom(2) : resetZoom()} />
+                  </div>
+                </div>
                 <figcaption className="project-lightbox-caption" id="project-lightbox-caption">
                   {activeImage.evidenceLevel ? <strong>{activeImage.evidenceLevel} · {activeImage.evidenceLabel}</strong> : null}
                   <span>{activeImage.caption}</span>
@@ -707,7 +799,7 @@ function ProjectGallery({ title, images }) {
                   {activeImage.doesNotProve ? <small><b>不能证明：</b>{activeImage.doesNotProve}</small> : null}
                 </figcaption>
               </figure>
-              <button className="project-lightbox-next" type="button" onClick={() => setActiveIndex((index) => (index + 1) % images.length)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
+              <button className="project-lightbox-next" type="button" onClick={() => changeImage(1)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
             </div>
           </div>
         </div>
@@ -770,7 +862,7 @@ function ProjectOverview({ entry }) {
 
       <section className="document-section"><h2>项目怎样演化到现在</h2><div className="evolution-timeline">{currentProject.evolution.map((item) => <article key={`${item.date}-${item.commit}`}><time>{item.date}</time><code>{item.commit}</code><p>{annotateTerms(item.result)}</p></article>)}</div></section>
 
-      <section className="document-section source-note"><h2>快照怎样更新</h2><p>{entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
+      <section className="document-section source-note"><h2>快照怎样更新</h2><p>{entry.registration.ai_refresh.mode === "manual_owner_only" ? "这是 owner（本人）手动维护的策展快照。Source（源码）、规则、Skill、提交或测试变化都不会触发异步网站任务；只有 owner 明确要求更新这个项目，或明确要求包含它的全量刷新时，网站任务才读取私有 Owner 证据、重新判断公开内容并发布。" : entry.kind === "agents" ? "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取固定活动 Authority（活动规则权威）、真实默认分支、Skill registry（能力登记清单）和测试结果；扫描到可自动修复的问题先交给真实 Owner（责任源）修复，再生成新快照。" : "页面代表最后一次明确刷新并发布的状态，不承诺后台自动同步。更新时重新读取该项目的真实 Owner（责任源）、默认分支、现场 Provider（事实入口）和验证结果；扫描到可自动修复的问题先由真实 Owner 修复，再生成新快照。"}</p></section>
     </article>
   );
 }
@@ -1106,7 +1198,7 @@ function RuleSelector({ selectedId, onSelect }) {
             type="button"
             role="tab"
             id={`rule-tab-${rule.logicalId}`}
-            aria-controls="rule-panel"
+            aria-controls={`rule-panel-${rule.logicalId}`}
             aria-selected={selectedId === rule.logicalId}
             tabIndex={selectedId === rule.logicalId ? 0 : -1}
             className={selectedId === rule.logicalId ? "is-selected" : undefined}
@@ -1122,7 +1214,7 @@ function RuleSelector({ selectedId, onSelect }) {
   );
 }
 
-function RuleDetail({ rule }) {
+function RuleDetail({ rule, selected = true }) {
   const index = rulesSnapshot.rules.findIndex((item) => item.logicalId === rule.logicalId);
   const guide = ruleGuides[rule.logicalId];
   const sourceBinding = panelSnapshot.ruleBinding.find((item) => item.logicalId === rule.logicalId);
@@ -1130,7 +1222,7 @@ function RuleDetail({ rule }) {
     ? `Canonical source（规范源码）当前与 ${rulesSnapshot.releaseId} release 逐字节一致。`
     : `Canonical source（规范源码）当前属于未激活施工；活动正文仍固定为 ${rulesSnapshot.releaseId} release。`;
   return (
-    <article className="rule-detail" role="tabpanel" id="rule-panel" aria-labelledby={`rule-tab-${rule.logicalId}`}>
+    <article className="rule-detail" role="tabpanel" id={`rule-panel-${rule.logicalId}`} data-rule-panel={rule.logicalId} aria-labelledby={`rule-tab-${rule.logicalId}`} hidden={!selected}>
       <header className="rule-detail-heading"><span className="rule-order">{String(index + 1).padStart(2, "0")}</span><div><p className="section-kicker">{rule.logicalId}</p><h2>{rule.title}</h2><p>{rule.question}</p></div></header>
       <section className="rule-plain-language"><p className="section-kicker">先说人话</p><h3>这条规则到底管什么</h3><p>{annotateTerms(rule.plainLanguage)}</p><div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{annotateTerms(rule.why)}</p></article><article><h3>举个实际例子</h3><p>{annotateTerms(rule.example)}</p></article><article><h3>最后我会得到什么</h3><p>{annotateTerms(rule.result)}</p></article></div></section>
       <ThreeStateSummary {...rule.readerStates} />
@@ -1195,7 +1287,7 @@ function RulesPage({ search }) {
           <div><dt>Source（规范源码）</dt><dd>{rulesSnapshot.sourceMatchesRelease ? "五份与活动 release 一致" : `存在 ${panelSnapshot.sourceDirtyCount || 0} 项未激活施工；不覆盖 ${rulesSnapshot.releaseId}`}</dd></div>
         </dl>
       </section>
-      <div className="rules-workbench"><RuleSelector selectedId={selected.logicalId} onSelect={selectRule} /><RuleDetail rule={selected} /></div>
+      <div className="rules-workbench"><RuleSelector selectedId={selected.logicalId} onSelect={selectRule} /><div className="rule-detail-stack">{rulesSnapshot.rules.map((rule) => <RuleDetail rule={rule} selected={rule.logicalId === selected.logicalId} key={rule.logicalId} />)}</div></div>
       <section className="rules-validation">
         <div><p className="section-kicker">验证矩阵</p><h2>E release 有效，不代表当前 dirty source、Skills 场景或所有消费者都已通过。</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p></div>
         <ValidationMatrix />
@@ -1291,8 +1383,8 @@ function NotFound() {
   return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><SiteLink href="/"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
 }
 
-export default function Page() {
-  const location = useLocationState();
+export default function Page({ initialPathname = "/", initialSearch = "" } = {}) {
+  const location = useLocationState(initialPathname, initialSearch);
   const path = location.pathname;
   useLayoutEffect(() => {
     if (location.preservedScrollY === null) return;

@@ -20,6 +20,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   min-width: 320px;
   min-height: 100%;
@@ -239,6 +243,19 @@ main {
   background: #fff;
   color: var(--ink);
   cursor: pointer;
+}
+
+.header-state-icon {
+  display: inline-flex;
+}
+
+.header-state-icon-open,
+[aria-expanded="true"] > .header-state-icon-closed {
+  display: none;
+}
+
+[aria-expanded="true"] > .header-state-icon-open {
+  display: inline-flex;
 }
 
 .page-frame {
@@ -1213,6 +1230,10 @@ main {
   margin-top: 42px;
   border: 1px solid var(--line-strong);
   background: rgba(255, 255, 255, 0.96);
+}
+
+.rule-detail-stack {
+  min-width: 0;
 }
 
 .rule-selector-panel {
@@ -4578,7 +4599,8 @@ main {
 
 .project-lightbox-close,
 .project-lightbox-previous,
-.project-lightbox-next {
+.project-lightbox-next,
+.project-lightbox-zoom-controls button {
   display: inline-flex;
   width: 44px;
   height: 44px;
@@ -4601,16 +4623,43 @@ main {
   padding-left: 12px;
 }
 
+.project-lightbox-zoom-controls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.project-lightbox-zoom-controls button {
+  width: 40px;
+  height: 40px;
+}
+
+.project-lightbox-zoom-controls .project-lightbox-zoom-reset {
+  width: auto;
+  min-width: 66px;
+  padding: 0 12px;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.project-lightbox-zoom-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
 .project-lightbox-close:hover,
 .project-lightbox-previous:hover,
-.project-lightbox-next:hover {
+.project-lightbox-next:hover,
+.project-lightbox-zoom-controls button:not(:disabled):hover {
   background: #fff;
   color: var(--green-dark);
 }
 
 .project-lightbox-close:focus-visible,
 .project-lightbox-previous:focus-visible,
-.project-lightbox-next:focus-visible {
+.project-lightbox-next:focus-visible,
+.project-lightbox-zoom-controls button:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 3px;
 }
@@ -4619,10 +4668,41 @@ main {
   display: block;
   width: 100%;
   height: 100%;
+  max-width: none;
   max-height: none;
   min-height: 0;
   object-fit: contain;
   background: #07100a;
+  cursor: zoom-in;
+  user-select: none;
+}
+
+.project-lightbox-viewport {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+  background: #07100a;
+  scrollbar-color: rgba(255, 255, 255, 0.62) rgba(255, 255, 255, 0.08);
+}
+
+.project-lightbox-viewport:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -4px;
+}
+
+.project-lightbox-viewport[data-zoom]:not([data-zoom="1"]) .project-lightbox-image {
+  cursor: zoom-out;
+}
+
+.project-lightbox-image-canvas {
+  display: grid;
+  min-width: 100%;
+  min-height: 100%;
+  place-items: center;
 }
 
 .project-lightbox-stage {
@@ -4639,6 +4719,21 @@ main {
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 10px;
   margin: 0;
+}
+
+@media (max-width: 520px) {
+  .project-lightbox-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .project-lightbox-zoom-controls {
+    order: 3;
+    width: 100%;
+  }
+
+  .project-lightbox-dialog {
+    height: calc(100svh - 24px);
+  }
 }
 
 .project-lightbox-previous,

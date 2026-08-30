@@ -1,13 +1,13 @@
 # wly0829.cn MVP rebuild
 
-status: four_project_public_pass_timeaudit_integration_active
+status: seven_project_local_pass_pending_public_readback
 
 ## Goal
 
 Build the website from current owner sources so it is the owner's detailed,
 plain-language, professional, read-only operating panel for `.agents`, PCConfig,
-GitHub 总索引, ChineseASR, TimeAudit, the five current rules and the usable
-Skills catalog.
+GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub, CACB, the five current
+rules and the usable Skills catalog.
 
 The prior website copy is not an input. Existing code may be reused only as UI
 infrastructure after its content is removed.
@@ -18,7 +18,9 @@ infrastructure after its content is removed.
 - The owner first authorized PCConfig and GitHub 总索引 as the audited 1/2/3
   expansion, then ChineseASR at order 4. The resulting four-project MVP passed
   PUBLIC deployment and read-back on 2026-08-30; the owner then explicitly
-  authorized TimeAudit at order 5 with a reusable screenshot gallery.
+  authorized TimeAudit at order 5 with a reusable screenshot gallery, PC Panel
+  Hub at order 6 with evidence-labelled visual output, and CACB at order 7 as a
+  curated `manual_owner_only` product page.
 - Top-level information areas are Project, Rules and Skills.
 - No Ideas area, website-self project, future placeholders, career marketing or
   salary-oriented copy.
@@ -72,8 +74,8 @@ boundary, maturity or user decision would materially become wrong. Small or
 already-accurately-disclosed changes wait for the next material refresh.
 
 The owner accepted the one-project, three-project local and four-project public
-MVP stages. TimeAudit then completed the fifth-project publication and Pages
-read-back. PC Panel Hub is the explicitly selected sixth project; it remains
-unpublished until its source repairs, product-defined modules, public-safe
-refresh evidence, software-demo gallery, six-project preview and Pages
-read-back pass.
+MVP stages. TimeAudit and PC Panel Hub then completed the fifth- and sixth-project
+publications and Pages read-back. CACB is the explicitly selected seventh project;
+it uses curated packaging and manual-owner-only refresh, and remains unpublished
+until its product framework, manual boundary, tests, seven-project preview and
+Pages read-back pass.

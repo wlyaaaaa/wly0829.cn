@@ -37,28 +37,28 @@ export const pcPanelHubProject = {
       sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
-      src: "/media/pc-panel-hub/turzx-active-design.png",
-      thumbnail: "/media/pc-panel-hub/thumbs/turzx-active-design.webp",
-      alt: "PC Panel Hub 480×1920 机箱屏活跃状态软件设计预览",
-      caption: "480×1920 密集面板的软件设计预览：CPU、GPU、FPS、内存、物理网络、磁盘、进程与健康状态同时可读；全部名称和数值都是公开安全模拟值，不是实体屏截图。",
-      evidenceLevel: "E0",
-      evidenceLabel: "设计与软件示意",
-      proves: "证明当前信息结构、颜色层级和竖屏密度设计可以被完整表达。",
-      doesNotProve: "不证明现役 Renderer 已生成同一像素，也不证明实体 TURZX 已显示。",
-      observedAt: "2026-08-30",
-      sourceCommit: "271ffd25aae11e2f216993ec5595648167ab84bb"
+      src: "/media/pc-panel-hub/turzx-live-frame-current.png",
+      thumbnail: "/media/pc-panel-hub/thumbs/turzx-live-frame-current.webp",
+      alt: "PC Panel Hub 480×1920 机箱副屏当前生产发送帧",
+      caption: "2026-08-30 从当前生产发送循环取得的 480×1920 无损帧：frame 32986 已通过 command 204 差分路径写入 COM7，sent 32986、failed 0，PNG 比同帧 heartbeat（心跳）晚约 7.8 ms 落盘。公开版仅遮盖精确天气地点与前台应用名，其余像素来自同一实时帧；这不是设计稿或测试 fixture（固定演示数据）。",
+      evidenceLevel: "E2",
+      evidenceLabel: "当前生产发送帧",
+      proves: "证明抓取时生产 Renderer 生成了这张逻辑 framebuffer（帧缓冲区），发送循环已把同一帧成功写入目标 USB 串口路径。",
+      doesNotProve: "设备没有像素回读或摄像头，因此不证明物理面板逐像素 ACK，也不证明画面在抓取后持续刷新。",
+      observedAt: "2026-08-30T06:58:41.2987948Z",
+      sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
-      src: "/media/pc-panel-hub/turzx-idle-design.png",
-      thumbnail: "/media/pc-panel-hub/thumbs/turzx-idle-design.webp",
-      alt: "PC Panel Hub 机箱屏无游戏帧软件状态预览",
-      caption: "同一软件版面在没有有效游戏帧时显示“等待游戏帧 / PresentMon 正在等待游戏启动”，用于说明新鲜 idle 不等于采集故障；不是当前机器读数。",
-      evidenceLevel: "E0",
-      evidenceLabel: "空闲状态设计示意",
-      proves: "证明无有效游戏帧时保留空值语义和数据链状态，而不是显示 0 FPS。",
-      doesNotProve: "不证明当前机器正在 idle，也不证明 PresentMon 或实体屏现场正常。",
-      observedAt: "2026-08-30",
-      sourceCommit: "271ffd25aae11e2f216993ec5595648167ab84bb"
+      src: "/media/pc-panel-hub/turzx-renderer-current.png",
+      thumbnail: "/media/pc-panel-hub/thumbs/turzx-renderer-current.webp",
+      alt: "PC Panel Hub 当前 Renderer 使用公开安全数据生成的 480×1920 确定性预览",
+      caption: "当前 Renderer 代码使用公开安全 fixture（固定演示数据）直接生成的 480×1920 确定性输出：CPU、GPU、FPS、内存、网络、磁盘和进程层级都来自现役版式，不再使用旧 SVG 设计稿冒充实际渲染结果。",
+      evidenceLevel: "E1",
+      evidenceLabel: "当前渲染器确定性输出",
+      proves: "证明当前 Renderer 能按现役代码和公开安全输入生成这套完整像素布局，并保留活跃 FPS 的字段语义。",
+      doesNotProve: "输入数值是测试 fixture，不是当前机器读数；它也不证明 USB 串口发送、物理 TURZX 像素或长期运行。",
+      observedAt: "2026-08-30T06:47:00Z",
+      sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
       src: "/media/pc-panel-hub/hs2-max-six-demo.png",

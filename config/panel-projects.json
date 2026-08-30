@@ -20,10 +20,11 @@
     "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
     "evolution_policy": "record only important product stages; one entry may cover a date or date range and may merge multiple related changes",
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
-    "initial_bundle_gzip_budget_kib": 320,
-    "bundle_budget_semantics": "the number is the current anti-bloat review threshold, not a permanent content ceiling; when measured smoothness and semantic fidelity cannot be preserved below it, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
-    "detail_loading_mode": "eager_instant_navigation",
-    "bundle_scaling_policy": "keep project navigation free of click-time loading; when measured eager bundle growth approaches the review threshold, even before ten projects, move narrative content to build-time route-specific static HTML, keep shared interaction JavaScript small, and prefetch likely routes before interaction; never delete required content or shift latency to clicks",
+    "shared_interaction_gzip_budget_kib": 120,
+    "search_index_gzip_budget_kib": 24,
+    "bundle_budget_semantics": "the shared-runtime and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
+    "detail_loading_mode": "route_specific_static_native_document",
+    "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript and the generated search projection bounded, use native directory-document navigation, and prefetch likely routes before interaction; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
       "real_dashboard",
       "curated_packaging"
@@ -723,6 +724,54 @@
           "raw telemetry values, weather, process ranking or notification payload churn alone does not trigger a website task; useful non-secret technical values may still enter after actual-value review",
           "internal refactors or additional tests leave every displayed capability, boundary and verification interpretation unchanged",
           "a host-side heartbeat remains accurately disclosed as not proving device acknowledgement or physical pixels"
+        ]
+      }
+    },
+    {
+      "id": "cacb",
+      "order": 7,
+      "title": "CACB Agent 能力基准",
+      "enabled": true,
+      "presentation_mode": "curated_packaging",
+      "route": "/projects/cacb",
+      "ai_refresh": {
+        "mode": "manual_owner_only",
+        "automatic_handoff": false,
+        "content_path": "app/content-cacb.js",
+        "semantic_revision": 1,
+        "scope": "curated product overview and project-defined modules covering the question bank, isolated execution, identity/evidence binding, deterministic verification, failure semantics and reproducible reporting framework without publishing any tested-configuration outcome",
+        "collectors": [
+          "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
+        ],
+        "conditional_collectors": [],
+        "manual_refresh_rule": "source, rule and Skill events never update this page or create a website task; only an explicit owner request for CACB or an explicitly owner-requested full refresh may produce a new snapshot"
+      },
+      "source": {
+        "repo": "PRIVATE_MANAGED_SOURCE",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-cacb-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "curated_project_overview",
+        "project_modules",
+        "question_bank_and_case_contracts",
+        "isolated_execution_and_workspace_containment",
+        "identity_evidence_and_deterministic_verification",
+        "failure_semantics_and_reproducible_reports",
+        "manual_snapshot_boundary"
+      ],
+      "impact_sources": [],
+      "refresh_rules": {
+        "manual_refresh_when": [
+          "the owner explicitly requests a CACB refresh",
+          "the owner explicitly includes CACB in a full panel refresh"
+        ],
+        "automatic_refresh_when": [],
+        "ignore_when": [
+          "all source commits, paths, tests, reports, rules and Skill changes when there is no explicit owner refresh request",
+          "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
         ]
       }
     }

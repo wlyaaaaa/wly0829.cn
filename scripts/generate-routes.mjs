@@ -1,76 +1,38 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { canonicalUrl, routeMeta, routePaths } from "../app/site-content.js";
+import react from "@vitejs/plugin-react";
+import { createServer } from "vite";
+import { canonicalUrl, routePaths } from "../app/site-content.js";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
 const distRoot = path.join(projectRoot, "dist");
-const rootIndexPath = path.join(distRoot, "index.html");
-const rootHtml = await readFile(rootIndexPath, "utf8");
+const rootHtml = await readFile(path.join(distRoot, "index.html"), "utf8");
 
-function escapeAttribute(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
-function replaceMeta(html, matcher, replacement) {
-  if (!matcher.test(html)) {
-    throw new Error(`Expected metadata pattern was not found: ${matcher}`);
+const vite = await createServer({
+  root: projectRoot,
+  configFile: false,
+  appType: "custom",
+  logLevel: "error",
+  plugins: [react()],
+  server: {
+    middlewareMode: true,
+    hmr: false
   }
-  return html.replace(matcher, replacement);
-}
+});
 
-function htmlForRoute(route) {
-  const meta = routeMeta(route);
-  const canonical = canonicalUrl(route);
-  let html = rootHtml;
-  html = replaceMeta(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
-  html = replaceMeta(
-    html,
-    /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/,
-    `<meta name="description" content="${escapeAttribute(meta.description)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/,
-    `<link rel="canonical" href="${escapeAttribute(canonical)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/,
-    `<meta property="og:url" content="${escapeAttribute(canonical)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/,
-    `<meta property="og:title" content="${escapeAttribute(meta.title)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/,
-    `<meta property="og:description" content="${escapeAttribute(meta.description)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/,
-    `<meta name="twitter:title" content="${escapeAttribute(meta.title)}" />`
-  );
-  html = replaceMeta(
-    html,
-    /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/,
-    `<meta name="twitter:description" content="${escapeAttribute(meta.description)}" />`
-  );
-  return html;
-}
-
-for (const route of routePaths) {
-  const targetDirectory = route === "/" ? distRoot : path.join(distRoot, ...route.slice(1).split("/"));
-  await mkdir(targetDirectory, { recursive: true });
-  await writeFile(path.join(targetDirectory, "index.html"), htmlForRoute(route), "utf8");
+let compactSearchRecordCount = 0;
+try {
+  const renderer = await vite.ssrLoadModule("/server/render-route.jsx");
+  compactSearchRecordCount = renderer.compactSearchRecordCount;
+  for (const route of routePaths) {
+    const targetDirectory = route === "/" ? distRoot : path.join(distRoot, ...route.slice(1).split("/"));
+    await mkdir(targetDirectory, { recursive: true });
+    await writeFile(path.join(targetDirectory, "index.html"), renderer.renderDocument(rootHtml, route), "utf8");
+  }
+} finally {
+  await vite.close();
 }
 
 const sitemapEntries = routePaths
@@ -79,4 +41,4 @@ const sitemapEntries = routePaths
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;
 await writeFile(path.join(distRoot, "sitemap.xml"), sitemap, "utf8");
 
-console.log(`Generated ${routePaths.length} routable pages and sitemap.xml.`);
+console.log(`Generated ${routePaths.length} complete static pages, ${compactSearchRecordCount} compact search records and sitemap.xml.`);
