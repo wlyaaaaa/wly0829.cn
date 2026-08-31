@@ -148,13 +148,15 @@ export const personalHealthProject = {
     { name: "google_health_brief.py", responsibility: "生成字段级 decision_ready / blocked / inventory-only 结果。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；API 与 credential access 均为 false。" }
   ],
   usageExamples: [
-    { ask: "医生建议一项重大治疗，但我没听懂为什么一定要做。", effect: "先确认是否紧急，再把医生的依据、适用前提、主要收益和风险、合理替代、暂不处理的后果与复查条件讲清；解释仍不足时，帮助准备独立第二意见。" },
-    { ask: "两位医生意见不一致，我应该听谁的？", effect: "不按资历、人数或 AI 偏好投票，而是比较两边看到的事实、专业范围、关键假设、证据质量与可能遗漏；必要时让合适专科独立复核同一份原始资料。" },
-    { ask: "AI查到的指南和医生说法冲突，能直接停药吗？", effect: "不能。AI说明冲突发生在哪条事实、适用范围或假设，帮助向原医生追问或取得现实临床复核；不擅自开始、停止或替换处方治疗。" },
-    { ask: "这个健康问题需要重新翻报告吗？", effect: "先看已经整理好的当前信息是否足够；只有新报告、事实纠正、来源冲突或一个会改变选择的关键缺口，才打开最小相关来源。" },
-    { ask: "更新一下穿戴设备数据。", effect: "在当前任务里完成一次明确发起的更新。中断时保留已取得内容并从原处继续；数据完整、来源清楚且与当前问题相关后，才进入人工复核，不建立后台同步。" },
-    { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。分页恢复会按固定间隔原子记录 checkpoint；恢复时只续缺页，并在登记的页数、体积和记录数上限内重新核对完整性。" },
-    { ask: "今天先停，别再给我加健康任务。", effect: "停止当前非紧急工作，只保留恢复这次判断所需的最小断点；不打卡、不追问、不评分，也不把沉默解释成继续授权。" }
+    { ask: "医生建议一项重大治疗，但我没听懂为什么一定要做。", effect: "先确认是否紧急，再把医生的依据、适用前提、主要收益和风险、合理替代、暂不处理的后果与复查条件讲清；解释仍不足时，帮助准备独立第二意见。", moduleSlug: "health-owner-boundary" },
+    { ask: "两位医生意见不一致，我应该听谁的？", effect: "不按资历、人数或 AI 偏好投票，而是比较两边看到的事实、专业范围、关键假设、证据质量与可能遗漏；必要时让合适专科独立复核同一份原始资料。", moduleSlug: "health-owner-boundary" },
+    { ask: "AI查到的指南和医生说法冲突，能直接停药吗？", effect: "不能。AI说明冲突发生在哪条事实、适用范围或假设，帮助向原医生追问或取得现实临床复核；不擅自开始、停止或替换处方治疗。", moduleSlug: "health-owner-boundary" },
+    { ask: "这个健康问题需要重新翻报告吗？", effect: "先看已经整理好的当前信息是否足够；只有新报告、事实纠正、来源冲突或一个会改变选择的关键缺口，才打开最小相关来源。", moduleSlug: "current-evidence-route" },
+    { ask: "更新一下穿戴设备数据。", effect: "在当前任务里完成一次明确发起的更新。中断时保留已取得内容并从原处继续；数据完整、来源清楚且与当前问题相关后，才进入人工复核，不建立后台同步。", moduleSlug: "protected-foreground-refresh" },
+    { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。分页恢复会按固定间隔原子记录 checkpoint；恢复时只续缺页，并在登记的页数、体积和记录数上限内重新核对完整性。", moduleSlug: "raw-preservation-resume" },
+    { ask: "这么多设备字段，哪些真的能用于这次判断？", effect: "先验 complete 清单与页面指纹，只读取和当前问题有关且质量达门的四类默认字段；其余只保留 inventory_only 清单。", moduleSlug: "offline-decision-brief" },
+    { ask: "有记录为 0 和完全没有记录，是一回事吗？", effect: "不是。真实零、无记录、缺字段、结构残缺和来源未知分别标注；只有 decision_ready 才能进入当前问题，blocked 不能被消费。", moduleSlug: "evidence-three-state" },
+    { ask: "今天先停，别再给我加健康任务。", effect: "停止当前非紧急工作，只保留恢复这次判断所需的最小断点；不打卡、不追问、不评分，也不把沉默解释成继续授权。", moduleSlug: "health-owner-boundary" }
   ],
   evidenceLayers: [
     { layer: "Project rules（项目规则）", proves: "普通问答、来源维护、设备刷新、红旗与低打扰边界已经明确。", doesNotProve: "任何当前个人健康事实、诊断或医疗建议正确。" },
@@ -184,7 +186,13 @@ export const personalHealthModules = [
     slug: "current-evidence-route",
     shortTitle: "平时怎么回答",
     title: "平时提问，先用已经整理好的当前信息",
-    searchAliases: ["健康问题要不要重读报告", "CURRENT健康底色", "健康来源什么时候打开", "健康信息来源分层"],
+    searchAliases: ["健康问题要不要重读报告", "这个健康问题先看什么资料", "旧报告能不能当现在", "健康来源冲突怎么办", "CURRENT健康底色", "缺证据时保留未知"],
+    searchProjection: {
+      intents: ["用已有当前信息回答普通个人健康问题", "判断这次是否真的需要重新打开报告", "新旧资料冲突时只复核会改变答案的来源", "证据不足时保留未知而不外推旧结果"],
+      entities: ["现行健康底色", "CURRENT.md", "SOURCES.md", "原始报告", "本人陈述", "医生结论", "当前权威指导"],
+      relations: ["普通回答先读处理后的当前底色", "新报告纠正冲突或关键缺口才触发最小来源读取", "报告实测医生结论本人陈述和 AI 解释分层", "Health Owner 只局部更新受影响事实"],
+      failureRecovery: ["当前底色不可读时明确没有结合个人资料", "旧报告不能证明现在时保留 Unknown", "来源路径失效时只定位这一份原件", "高风险问题先处理现实红旗而不等待资料补全"]
+    },
     teaser: "同一份资料只处理一次；只有新报告、事实纠正、来源冲突或会改变答案的缺口，才重新打开最小相关来源。",
     status: "项目规则与 personal-health Skill 已固定这条路线；网页未读取任何底色正文或个人事实",
     statusTone: "pass",
@@ -256,7 +264,13 @@ export const personalHealthModules = [
     slug: "protected-foreground-refresh",
     shortTitle: "主动更新设备",
     title: "只有我明确要求时，才更新一次设备数据",
-    searchAliases: ["Fitbit一次授权", "健康设备不后台同步", "OAuth不生成token文件", "Secret Broker健康数据"],
+    searchAliases: ["我想主动更新一次设备数据", "Fitbit一次授权", "健康设备不后台同步", "账号授权失败会不会换账号", "刷新超时会不会留下后台进程", "OAuth不生成token文件"],
+    searchProjection: {
+      intents: ["本人明确发起一次穿戴设备刷新", "首次完成只读 OAuth 并安全保存长期凭据", "先消费已有离线结果再决定是否访问 provider", "刷新失败时停止而不换账号或后台重试"],
+      entities: ["OAuth", "PKCE", "loopback callback", "Secret Broker", "refresh credential", "success handoff", "foreground refresh"],
+      relations: ["只有本人明确请求才进入设备刷新", "凭据只通过 stdin 穿过固定 Secret Broker", "已有成功交接时优先离线处理", "固定 provider 调用最多一次且不创建后台任务"],
+      failureRecovery: ["rebind_required 时精确停止且不重复调用", "输出过大或回执不闭合时不进入 capture", "超时或中断时终止登记目标进程树", "账号或设备状态未现场验证时保持 Unknown"]
+    },
     teaser: "更新在当前任务里完成；凭据留在受保护位置，不写进普通文件，也不建立定时同步或后台监测。",
     status: "OAuth、PKCE、Secret Broker 存储/备份/回读、一次调用与进程终止均有源码和合成测试；当前账号未验证",
     statusTone: "mixed",
@@ -329,7 +343,13 @@ export const personalHealthModules = [
     slug: "raw-preservation-resume",
     shortTitle: "中断后继续",
     title: "更新中断不丢数据，也不从头乱来",
-    searchAliases: ["健康导入断点续跑", "manifest哈希分页", "空健康记录不是零", "Fitbit原始响应保全"],
+    searchAliases: ["健康导入断点续跑", "设备导出中断后要不要重下", "manifest哈希分页", "空健康记录不是零", "原始响应先保全再解析", "导入到一半怎样恢复"],
+    searchProjection: {
+      intents: ["保存 provider 原始响应后再做解释", "设备导出中断后从精确缺页继续", "确认分页清单哈希和预算是否完整", "区分空响应与真实数值零"],
+      entities: ["raw page", "manifest", "SHA-256", "page token", "resume frontier", "run lock", "failure handoff", "orphan page"],
+      relations: ["原始页面先原子写入再推进 manifest checkpoint", "完整页面与连续分页链共同定义 resume frontier", "failed running 和 complete 清单不能混用", "空响应只表示未观察到记录而不是零"],
+      failureRecovery: ["重复 token 或分页断裂时在下一次请求前停止", "预算耗尽时写精确 resume manifest", "哈希变化或额外 orphan 不匹配时拒绝续跑", "活进程仍持锁时拒绝第二个 writer"]
+    },
     teaser: "已经取得的原始内容先安全保留；下次从同一次更新的准确位置继续，对不上就停止，不猜最近目录。",
     status: "原子写、分页闭环、哈希、请求预算、锁、孤儿收敛和 exact resume 有源码与 57 项 import 测试；真实本轮导入未运行",
     statusTone: "mixed",
@@ -402,7 +422,13 @@ export const personalHealthModules = [
     slug: "offline-decision-brief",
     shortTitle: "筛选可用信息",
     title: "先检查数据是否完整，再只取与问题有关的部分",
-    searchAliases: ["decision_ready健康字段", "inventory_only健康数据", "健康brief离线验真", "14天80%覆盖门"],
+    searchAliases: ["哪些设备数据能用于这次判断", "为什么不读取全部健康字段", "decision_ready健康字段", "inventory_only健康数据", "健康brief离线验真", "14天80%覆盖门"],
+    searchProjection: {
+      intents: ["从完整导出中只选与当前问题有关的字段", "判断一个字段能否进入当前健康判断", "只看资料清单而不读取高噪声正文", "离线核对覆盖窗口哈希和来源"],
+      entities: ["success handoff", "complete manifest", "verification receipt", "decision_ready_fields", "blocked_fields", "inventory_only", "14/28/90 day windows"],
+      relations: ["先验证完整交接与页面指纹再读取字段", "默认 decision context 只包含四类低噪声字段", "inventory_only 只读取清单而不读取 raw 正文", "字段自身 ready 且与问题相关才交给 Health Owner"],
+      failureRecovery: ["来源无法证明时默认判断字段全部 provenance_blocked", "页面哈希漂移时在解释前停止", "空缺或 malformed 字段进入 blocked_fields", "页数字节或记录预算超限时不扩大读取"]
+    },
     teaser: "设备能提供很多数据，但当前判断只采用来源清楚、质量足够、确实相关的最小部分；其余只记录存在或暂时不用。",
     status: "capture/brief 无网络和凭据路线，字段选择、14/28/90 天窗口、80% 覆盖门与 inventory-only 有 33 项回归；当前个人数据未读取",
     statusTone: "pass",
@@ -476,7 +502,13 @@ export const personalHealthModules = [
     slug: "evidence-three-state",
     shortTitle: "证据三态",
     title: "三态判断的是证据，不是身体分数",
-    searchAliases: ["健康证据三态", "健康数据可用不等于正常", "空记录和零的区别", "blocked健康字段"],
+    searchAliases: ["健康证据三态", "健康数据可用是否等于正常", "有记录为0和没有记录的区别", "一个坏字段会不会拖垮全部证据", "blocked健康字段"],
+    searchProjection: {
+      intents: ["区分证据可用与身体正常", "区分真实零无记录缺字段和解析失败", "只阻断有问题的字段而不把全部证据判坏", "知道 decision_ready inventory_only blocked 各能做什么"],
+      entities: ["decision_ready", "inventory_only", "blocked", "real zero", "no_records", "partial", "coverage gate", "evidence state"],
+      relations: ["decision_ready 只代表可支持当前问题而不代表健康达标", "inventory_only 只证明资料类型存在", "blocked 字段不得进入下游判断", "真实零是有效观察而 no_records 不是零"],
+      failureRecovery: ["界面只剩颜色时恢复状态名称原因与限制", "no_records 被写成零时阻断并修正解释", "单字段 partial 时只隔离该字段", "高风险红旗不等待证据状态机给分"]
+    },
     teaser: "可用于判断、需要复核、本轮不可用只描述证据状态；不画健康分数、目标环或风险仪表盘。",
     status: "字段级 ready/partial/blocked、真实零与缺记录区分有源码和回归；医学正常性不属于该状态机",
     statusTone: "pass",
@@ -546,7 +578,13 @@ export const personalHealthModules = [
     slug: "health-owner-boundary",
     shortTitle: "谁做决定",
     title: "AI整理和核对，人做知情选择；谁都不是自动正确",
-    searchAliases: ["健康数据谁决定采用", "设备数据不能自动写CURRENT", "健康红旗和医生边界", "健康项目为什么不监控", "医生和AI谁更可信", "医疗利益冲突和第二意见"],
+    searchAliases: ["健康数据谁决定采用", "医生和AI意见冲突怎么办", "重大医疗选择怎样保护我的决定权", "医疗利益冲突和第二意见", "健康红旗要不要等设备刷新", "设备数据不能自动写CURRENT"],
+    searchProjection: {
+      intents: ["决定一条设备或报告证据是否值得采用", "医生与 AI 说法冲突时怎样核对而不擅自改药", "重大医疗选择前取得解释替代方案和第二意见", "出现急症红旗时立即转向现实医疗"],
+      entities: ["Health Owner", "doctor", "AI 证据核对", "informed choice", "red flag", "second opinion", "conflict of interest", "current authoritative guidance"],
+      relations: ["报告和设备提供有限证据而医生提供临床能力", "AI 负责交叉核对来源暴露未知并保护选择空间", "非紧急且本人有决定能力时由本人作最终知情选择", "技术结果不会自动写入 CURRENT 或创建后台监控"],
+      failureRecovery: ["依据不清或意见冲突时要求解释并准备独立专科复核", "AI 缺查体诊断能力时明确不能判断", "高风险红旗存在时停止低价值刷新并升级现实医疗", "公开候选含个人健康载荷时只阻断具体值"]
+    },
     teaser: "医生提供临床能力，AI帮助核对证据和保护选择空间，报告与设备提供有限观察；任何一方都应允许质疑、解释和复核。",
     status: "Owner review、current_updated=false、无后台工作和个人数据公开边界均已写入项目/代码；真实医疗采用不在本轮证据",
     statusTone: "mixed",

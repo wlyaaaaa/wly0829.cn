@@ -3,6 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const codexRemoteSnapshot = createProjectSnapshot({
   observedAt: "2026-08-30T11:29:50Z",
   label: "产品、公开版本、源码、历史真实多端使用与20张界面证据均已确认；本轮未调用运行时，页面不代表当前在线",
+  boundary: "历史真实链路与产品证据已形成，本轮未完成当前Windows接管方案的可重复无人值守验收；重新启用前需隔离验证，且不代表当前在线",
   metrics: [
     { label: "正式版", value: "v0.1.5" },
     { label: "验证", value: "1771" },
@@ -34,7 +35,7 @@ export const codexRemoteProject = {
   route: "/projects/codex-remote",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "手机继续同一 Codex Desktop 任务的产品、界面和真实多端证据已形成",
+  cardStatus: "历史真实链路与产品证据已形成；当前 Windows 接管方案仍待可重复无人值守验收",
   cardStatusTone: "pass",
   ...codexRemoteSnapshot,
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
@@ -353,13 +354,17 @@ export const codexRemoteProject = {
     { name: "PUBLIC demo fixtures（公开演示材料）", responsibility: "用合成任务展示界面而不复制真实主机、对话、路径或凭据。", implementation: "静态 demo.ts 与浏览器验收共享类型合同；截图不接触 Remote runtime。" }
   ],
   usageExamples: [
-    { ask: "电脑上的任务还在做什么？", effect: "打开电脑上的同一任务，查看当前回复、工作记录、工具、文件修改、计划和子智能体状态。" },
-    { ask: "这个命令能不能在手机批准？", effect: "只显示这次审批真正可选的决定；没有可提交选项时说明阻塞，不猜按钮。" },
-    { ask: "给正在生成的回复补一句要求", effect: "把补充要求发给正在生成的回复；若这轮已不再接受引导，就保留文本并建议放到下一轮。" },
-    { ask: "下一轮换模型并继续", effect: "先把要求加入队列，再选择运行时当前提供的模型、思考等级和速度；不改当前轮。" },
-    { ask: "手机查看刚才改了哪些文件", effect: "从工作记录或文件变更打开 diff、最新文件和有界预览，必要时下载。" },
-    { ask: "从手机给任务添加电脑里的文件", effect: "使用对话工具选择所有者文件引用；绝对路径换成短时授权，不形成公网裸链接。" },
-    { ask: "网页断线后会不会重复发送", effect: "草稿与队列保留稳定身份；状态不清时先回读真实任务再决定，不自动重发。" }
+    { ask: "电脑上的任务还在做什么？", effect: "打开电脑上的同一任务，查看当前回复、工作记录、工具、文件修改、计划和子智能体状态。", moduleSlug: "same-task-control" },
+    { ask: "给正在生成的回复补一句要求。", effect: "先核对同一 threadId、active turnId、连接和 availableActions，再把文字作为 steer 送入当前轮；当前轮不再接受时保留文字，不假装已送达。", moduleSlug: "conversation-control" },
+    { ask: "把这条要求放到下一轮，稍后再改顺序。", effect: "先把正文和下一轮设置加密持久化，再返回队列 revision；之后可按最新 revision 编辑、排序或删除。", moduleSlug: "conversation-control" },
+    { ask: "这个命令能不能在手机批准？", effect: "只显示这次审批真正可选的决定；没有可提交选项时说明阻塞，不猜按钮。", moduleSlug: "models-approvals-context" },
+    { ask: "下一轮换模型并继续。", effect: "选择运行时当前提供的模型、思考等级和速度，把设置绑定到下一轮队列；不改当前轮。", moduleSlug: "models-approvals-context" },
+    { ask: "手机查看刚才改了哪些文件。", effect: "从工作记录或文件变更打开 diff、最新文件和有界预览，必要时下载。", moduleSlug: "projects-files-input" },
+    { ask: "从手机给任务添加电脑里的文件。", effect: "使用对话工具选择所有者文件引用；绝对路径换成短时授权，不形成公网裸链接。", moduleSlug: "projects-files-input" },
+    { ask: "手机为什么能看到 Desktop 的实时进展？", effect: "沿 Browser、Sidecar、loopback Broker 到单一 app-server 解释共享 thread、订阅和 SSE 恢复，不把它说成远程桌面。", moduleSlug: "shared-realtime-architecture" },
+    { ask: "公网入口会不会直接暴露电脑文件和 app-server？", effect: "核对登录、同源、CSRF、限速、不透明文件授权与确认边界；底层协议只留在本机回环。", moduleSlug: "security-public-access" },
+    { ask: "网页断线后会不会重复发送？", effect: "用 clientUserMessageId 与 app-server 权威任务快照对账；结果不明时标记 ambiguous 并停止自动重发。", moduleSlug: "conversation-control" },
+    { ask: "Codex Remote 以前跑通过，能说明现在在线吗？", effect: "把 release、源码测试、历史真实链路和当前 Windows 接管验收分层；没有本轮运行态证据就不声明在线。", moduleSlug: "versions-evidence" }
   ],
   evidenceLayers: [
     { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动或在线。" },
@@ -372,9 +377,9 @@ export const codexRemoteProject = {
   ],
   evolution: [
     { date: "2026-07-25—07-27", commit: "ed801f5–352e14d", result: "形成同一任务、手机控制、公开任务列表、审批、队列和 v0.1.0/v0.1.1 产品基线。" },
-    { date: "2026-07-31—08-01", commit: "b6988c5–4ef151d", result: "补齐持久队列、长对话、Work Log、动态审批、附件、目标和所有者文件能力。" },
+    { date: "2026-07-31—08-01", commit: "b6988c5–4ef151d", result: "补齐长对话、steer/interrupt、DPAPI 持久 FIFO 队列、修订号编辑排序删除、发送对账、Work Log、动态审批、附件、目标和所有者文件能力。" },
     { date: "2026-08-02", commit: "df9ff3c–c3a0771", result: "完成 v0.1.3—v0.1.5 的移动体验、真实状态呈现、响应式验收和公开安全边界。" },
-    { date: "2026-08-02—08-06", commit: "e7949b6–94f1cfa", result: "继续收紧共享所有权、端口、交接与证据边界；公开 main 保留后续源码，但正式发布身份仍以 v0.1.5 为准。" }
+    { date: "2026-08-02—08-06", commit: "e7949b6–94f1cfa", result: "继续收紧共享所有权、端口、交接与证据边界；公开 main 保留后续源码，正式发布身份仍以 v0.1.5 为准，当前 Windows 接管方案重新启用前还需隔离完成可重复无人值守验收。" }
   ],
   operationalEntrypoints: [
     { name: "回读 PUBLIC refs", command: "git ls-remote --heads --tags https://github.com/wlyaaaaa/codex-local-remote.git", purpose: "只读确认 main、v0.1.5 和 tag 提交；不会触碰 Remote runtime。" },
@@ -391,6 +396,12 @@ export const codexRemoteModules = [
     shortTitle: "同一任务",
     title: "手机怎样继续 Desktop 上同一个任务，而不是另开一份",
     searchAliases: ["手机和桌面同一个任务", "threadId turnId一致", "Desktop不在时拒绝首轮", "手机新建项目任务"],
+    searchProjection: {
+      intents: ["手机继续电脑上已经运行的同一个任务", "手机新建任务后让 Desktop 订阅同一任务", "核对手机和 Desktop 是否真是同一条任务"],
+      entities: ["threadId", "turnId", "rollout", "Desktop resume barrier", "single app-server", "project root"],
+      relations: ["相同 threadId 和 turnId 证明两端共享任务事实", "Desktop 完成 resume 屏障后才放行手机首轮", "Broker 只协调连接而单一 app-server 拥有任务"],
+      failureRecovery: ["Desktop 缺席时拒绝首轮并保留任务壳", "订阅身份不清时回读权威任务快照而不重放", "Sidecar 断开时保持 Desktop 现有任务继续运行"]
+    },
     teaser: "用同一 threadId、turnId、单一 app-server 与 Desktop 订阅屏障维持任务身份；不能安全续接时拒绝首轮。",
     status: "v0.1.5 与历史真实多端验收有证据；current main 最新 CI 未闭合，本轮也未验证当前在线",
     statusTone: "mixed",
@@ -454,13 +465,105 @@ export const codexRemoteModules = [
       "历史真实验收确认手机创建的任务出现在 Desktop，并保持相同 thread/turn。",
       "本轮只读审查未调用 Remote runtime，因此当前在线保持未验证。"
     ],
-    relation: "它是审批、文件、实时架构与安全模块的身份基础：只有先证明手机和 Desktop 指向同一任务，后续操作才有明确对象。"
+    relation: "它是对话控制、审批、文件、实时架构与安全模块的身份基础：只有先证明手机和 Desktop 指向同一任务，后续操作才有明确对象。"
+  },
+  {
+    slug: "conversation-control",
+    shortTitle: "对话控制",
+    title: "当前轮怎样引导或停止，下一轮怎样安全排队",
+    searchAliases: ["给正在生成的回复补充要求", "停止正在生成的Codex回复", "把消息排到下一轮", "编辑排序删除排队消息", "断线后会不会重复发送", "steer interrupt和队列有什么区别"],
+    searchProjection: {
+      intents: ["给正在生成的回复追加要求", "停止当前回复但保留下一轮安排", "排队并编辑排序删除下一轮消息", "断线或重启后避免重复发送"],
+      entities: ["threadId", "turnId", "availableActions", "text", "queue revision", "clientUserMessageId", "连接状态", "next-turn settings"],
+      relations: ["当前轮 steer 和 interrupt 绑定 active turnId 与 availableActions", "下一轮正文和设置先持久化再确认并按 FIFO 派发", "revision 保护编辑排序删除而 clientUserMessageId 用于发送对账", "正常终态放行下一项而失败终态暂停队列"],
+      failureRecovery: ["连接或 turn 身份不匹配时隐藏实时动作并保留 text", "发送边界不明时与 app-server 权威任务快照对账", "无法证明已接收或未接收时标记 ambiguous 并停止自动重放", "修订号冲突时刷新队列快照后由用户重做选择"]
+    },
+    teaser: "当前轮只做 steer 或 interrupt；下一轮进入可编辑 FIFO 队列，先加密持久化再确认，断线后按稳定身份对账而不自动重发。",
+    status: "源码、测试与历史实测覆盖 steer、interrupt 和持久队列状态机；本轮未访问运行态，当前连接与在线状态未验证",
+    statusTone: "mixed",
+    value: "我在手机上能明确选择“现在补充”“现在停止”或“下一轮再做”，每个动作都有真实对象、可回读结果和不会误发两次的恢复边界。",
+    why: "运行中的 steer、停止当前回复和排队下一轮看起来都像“发一句话”，实际却改变不同状态。若不先核对轮次、能力和队列版本，断线、连点或多端编辑会造成发错轮、覆盖设置或重复执行。",
+    example: "任务正在生成回复。我输入“先别改配置，只分析原因”：界面先读 threadId、active turnId、availableActions 与连接状态；选择当前轮就 steer，选择下一轮就把 text、附件和 next-turn settings 写入 DPAPI outbox。若发送后断线，系统用 clientUserMessageId 回读任务，结果仍不明就停在 ambiguous。",
+    result: "得到一份可解释的控制结果：当前轮要求被同一 turn 接收、停止请求指向精确 turn，或下一轮消息带稳定 id 与 revision 安全留在队列；无法确认时保留原文并明确要求人工决定。",
+    readerStates: {
+      pass: "threadId、turnId、availableActions、连接和队列 revision 一致时，执行 steer、interrupt 或下一轮队列动作并回读新状态。",
+      problem: "revision 冲突、当前轮刚结束或发送回执丢失时，保留 text 和加密队列，先同步权威快照再决定。",
+      unavailable: "连接、任务身份或 action capability 不可确认时，不发送实时动作；ambiguous 项不会自动重放。"
+    },
+    decisionImpact: [
+      "输入事实固定包括 threadId、active turnId、availableActions、text、连接状态、queue revision、clientUserMessageId 与 next-turn settings。",
+      "当前轮只有运行时真实允许时才调用 turn/steer；停止只对精确 active turnId 调用 interrupt。",
+      "下一轮消息按任务 FIFO 保存，模型、思考、速度、权限和审批选择也只绑定下一轮。",
+      "编辑、排序、删除和手动发送必须携带最新 revision，过期多端操作失败关闭。",
+      "正常终态后才派发下一项；失败、异常结束或未知状态暂停后续队列。",
+      "断线不等于失败也不等于成功；先按 clientUserMessageId 对账，ambiguous 时停止自动重放。"
+    ],
+    problem: "解决当前轮与下一轮语义混淆、多端同时改队列、未落盘就显示成功、断线后重复 turn/start，以及模型设置热切换造成的不可解释结果。",
+    implementation: [
+      "Web 根据 active turnId、availableActions.steer / interrupt 和连接状态决定显示哪些当前轮动作，不补造运行时能力。",
+      "DurableTurnOutbox 在返回成功前先保护 prompt 与附件、分配稳定 clientUserMessageId、递增 revision 并原子替换 turn-outbox.json。",
+      "生产运行时使用 Windows 当前用户 DPAPI；SSE 只发布不含正文的队列摘要，待发正文不写浏览器队列存储。",
+      "enqueue、edit、reorder、remove、resume 与 steer 都保存幂等 receipt；revision 不匹配时返回冲突，要求重新同步。",
+      "TurnQueueDispatcher 只在权威线程为 idle 且 gate 可放行时 claim FIFO 首项，turn/start 接受后才清除受保护正文。",
+      "重启后用 clientUserMessageId 查询 app-server 权威任务快照；accepted、active、completed、failed、absent 与 unknown 分别收敛，无法判定则 ambiguous。"
+    ],
+    flow: [
+      "读取 threadId、active turnId、availableActions、连接状态、输入 text 与 next-turn settings。",
+      "用户选择当前轮 steer、当前轮 interrupt 或加入下一轮，界面不替用户混合三种语义。",
+      "队列路径先加密持久化正文、附件、稳定 id 和 revision，再向浏览器确认已排队。",
+      "后续编辑、排序或删除以 expectedRevision 做并发检查，并把新快照同步到已登录 Web/手机。",
+      "当前 turn 正常完成并回到 idle 后，串行 claim FIFO 首项并携带 clientUserMessageId 启动下一轮。",
+      "收到 userMessage/turn 事件后确认 accepted 与 turnId；失败终态暂停余项，正常终态继续下一项。",
+      "传输中断或重启时先读 authority snapshot（权威快照）对账；结果不明就停止重放并等待显式处理。"
+    ],
+    concepts: [
+      { term: "steer（当前轮引导）", explanation: "把补充要求送入仍在运行的精确 turn；它不创建下一轮，也不改变已完成回复。" },
+      { term: "interrupt（停止当前轮）", explanation: "请求精确 active turn 停止；终态仍由 app-server 事件决定，按钮点击本身不是完成证据。" },
+      { term: "queue revision（队列修订号）", explanation: "每次队列变化递增的并发版本；编辑、排序和删除只能基于最新快照。" },
+      { term: "clientUserMessageId（客户端消息稳定标识）", explanation: "跨 HTTP 重试、turn/start 和重启对账使用的同一逻辑消息身份。" },
+      { term: "ambiguous（发送结果不明）", explanation: "无法证明 app-server 已接收或未接收；停止自动重试，避免重复执行。" },
+      { term: "DPAPI outbox（Windows 加密待发箱）", explanation: "Sidecar 用当前 Windows 用户的 DPAPI 保存未派发正文，并以原子文件承载队列状态。" }
+    ],
+    boundaries: [
+      "Web 队列只在已登录 Web/手机之间同步；真正派发前不会冒充 Desktop 原生未发送输入。",
+      "turn/steer 返回 turnId 只证明当前轮接收；项目不向 Desktop 注入伪造用户气泡。",
+      "模型、思考、速度、权限与审批设置只作用于下一轮，不热切换当前轮。",
+      "断线期间审批、停止和 steer 等实时动作失败关闭；草稿和已持久化队列可保留。"
+    ],
+    failures: [
+      { condition: "active turnId 或 availableActions 与界面缓存不一致", response: "不发送 steer/interrupt，重新读取同一任务快照并保留输入文字。" },
+      { condition: "queue revision 已被另一端更新", response: "返回冲突并刷新完整 FIFO；不覆盖另一端的编辑、排序或删除。" },
+      { condition: "turn/start 或 turn/steer 在响应前断线", response: "保留加密正文并按 clientUserMessageId 对账；仍无法判定时标记 ambiguous，停止自动重发。" },
+      { condition: "前一轮失败或非正常结束", response: "暂停后续队列并保留原因，由用户检查后显式恢复或删除。" },
+      { condition: "Sidecar 重启时只看到未确认的 queued/dispatching 状态", response: "先检查权威 thread lifecycle；没有充分证据的待发项保持暂停。" }
+    ],
+    sources: [
+      { path: "docs/product-design.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/product-design.md", role: "定义当前回复、下一轮队列、Desktop 可见性和状态不明停止重试的产品语义。" },
+      { path: "docs/architecture.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/architecture.md", role: "定义共享 thread/turn、下一轮参数、FIFO、revision、client id 与 at-most-once 偏好。" },
+      { path: "docs/acceptance-todo.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/acceptance-todo.md", role: "记录 steer、interrupt、排队一次、刷新恢复与发送边界不明的历史真实验收。" },
+      { path: "apps/sidecar/src/turn-outbox.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/sidecar/src/turn-outbox.ts", role: "实现持久队列、幂等 receipt、revision、编辑排序删除、状态门与重启收敛。" },
+      { path: "apps/sidecar/src/prompt-protector.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/sidecar/src/prompt-protector.ts", role: "以 stdin 调用 Windows 当前用户 DPAPI 保护和还原待发正文，不把明文放进命令行参数。" },
+      { path: "apps/sidecar/src/turn-queue-dispatcher.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/sidecar/src/turn-queue-dispatcher.ts", role: "实现终态后派发、steer claim、clientUserMessageId 对账与 ambiguous 停止重放。" }
+    ],
+    verification: [
+      "产品设计 6.2、架构 6 和验收 P0-03 对当前轮/下一轮、队列可见性和未知结果边界一致。",
+      "turn-outbox 测试覆盖加密持久化、FIFO、幂等 enqueue、revision 冲突、编辑排序删除、steer 确认和 ambiguous 手动恢复。",
+      "dispatcher 测试覆盖正常终态后启动下一项、失败终态暂停、响应丢失不重发和重启后按 client id 对账。",
+      "历史真实验收证明 steer 被模型接收、interrupt 三端收敛、未发送队列刷新后恢复；本轮没有访问运行态。"
+    ],
+    relation: "它建立在同一任务身份之上，把用户文字准确分到当前轮或下一轮；模型审批、文件引用和实时架构分别提供设置、附件与权威事件。"
   },
   {
     slug: "models-approvals-context",
     shortTitle: "审批与上下文",
     title: "模型、审批、额度和上下文怎样保持真实，而不是写死界面",
     searchAliases: ["手机处理Codex审批", "下一轮换模型", "查看上下文和额度", "审批没有按钮怎么办"],
+    searchProjection: {
+      intents: ["在手机处理当前任务的真实审批", "给下一轮选择模型思考等级和速度", "查看任务上下文与账号额度", "运行时没有某项能力时知道为什么不能操作"],
+      entities: ["approvalId", "available decisions", "model catalog", "reasoning effort", "service tier", "context usage", "account usage"],
+      relations: ["审批按钮只来自本次请求实际提供的选项", "模型和思考选择绑定下一轮而不热切换当前 turn", "任务上下文与账号额度是不同来源和时间窗口", "未知运行时值保留原值而不补造默认"],
+      failureRecovery: ["审批无可提交选项时说明阻塞而不猜按钮", "模型目录缺项时保留当前设置并显示兼容原因", "额度读取失败时只把额度标为 Unknown", "下一轮启动失败时保留用户选择供重新确认"]
+    },
     teaser: "模型与权限来自运行时目录；审批只显示本次真实选项；当前参数、下一轮选择、线程上下文和账号额度分开。",
     status: "动态目录、审批、额度和压缩有源码与测试；历史真实任务曾走通，当前目录未查询",
     statusTone: "mixed",
@@ -531,6 +634,12 @@ export const codexRemoteModules = [
     shortTitle: "项目与文件",
     title: "任务项目、无项目工作区和所有者文件工作台怎样分清",
     searchAliases: ["手机浏览电脑文件", "Codex Remote文件管理", "上传文件给桌面任务", "项目任务和无项目任务"],
+    searchProjection: {
+      intents: ["从手机查看任务刚修改的文件和 diff", "给当前任务添加电脑文件或手机上传附件", "新建项目任务或隔离无项目任务", "在手机编辑移动或删除自己的文件"],
+      entities: ["registered project", "projectless root", "owner file manager", "rootId", "relativePath", "opaque grant", "overwrite decision"],
+      relations: ["项目任务 cwd 只来自已登记项目根", "无项目任务使用隔离临时根而不冒充项目", "所有者文件工作台继承 Windows 身份但与任务权限分开", "绝对路径通过短时 opaque grant 进入对话"],
+      failureRecovery: ["项目身份不明时拒绝创建任务", "路径或 rootId 不匹配时拒绝文件动作", "覆盖冲突时返回候选并等待明确选择", "删除失败时保留原文件并回读真实路径状态"]
+    },
     teaser: "任务从已登记项目或隔离无项目根启动；文件工作台另按当前 Windows 身份提供浏览、预览、上传、编辑、移动与删除。",
     status: "文件合同、路径检查与完整操作测试存在；历史真实手机曾上传并核对 SHA，本轮未访问本机文件",
     statusTone: "mixed",
@@ -601,6 +710,12 @@ export const codexRemoteModules = [
     shortTitle: "共享架构",
     title: "Browser、Sidecar、Broker 和单一 app-server 怎样实时协作",
     searchAliases: ["Broker Sidecar架构", "为什么不是远程桌面", "手机和Desktop实时同步", "loopback app-server"],
+    searchProjection: {
+      intents: ["理解手机与 Desktop 为什么能共享同一任务", "查看实时消息工具和文件事件怎样到浏览器", "断线重连后怎样补齐而不猜状态", "判断为什么产品不是远程桌面或公网 Shell"],
+      entities: ["Browser", "Sidecar", "loopback Broker", "single app-server", "WebSocket subscription", "SSE cursor", "thread snapshot"],
+      relations: ["Desktop 与 Sidecar 是同一 app-server 的两个连接", "Broker 只协调 RPC 和订阅而不执行任务", "Sidecar 把 app-server 事件投影成浏览器产品模型", "SSE 游标失效时用权威 thread snapshot 重建"],
+      failureRecovery: ["Sidecar 断开时 Desktop 与 app-server 继续运行", "Broker 或 upstream 不健康时拒绝新执行", "SSE 缺口超出窗口时读取完整快照", "连接身份变化时撤销在线声明并刷新诊断"]
+    },
     teaser: "公网只到认证 Sidecar；Broker 与 app-server 均在 loopback，Desktop 与 Sidecar 保持独立连接和各自订阅。",
     status: "共享架构、SSE 重连和订阅屏障有源码与测试；当前运行实例未查询",
     statusTone: "mixed",
@@ -671,6 +786,12 @@ export const codexRemoteModules = [
     shortTitle: "安全接入",
     title: "公网手机入口怎样保护审批、文件和本机任务能力",
     searchAliases: ["Codex Remote安全吗", "公网文件操作怎么保护", "CSRF和登录限速", "为什么Codex Remote不是公网Shell"],
+    searchProjection: {
+      intents: ["判断公网入口能访问什么不能访问什么", "从手机执行文件写入删除时需要哪些确认", "理解登录同源与 CSRF 怎样保护写请求", "确认底层 app-server 是否暴露到局域网或公网"],
+      entities: ["HTTPS reverse proxy", "session cookie", "Origin", "CSRF", "idempotency key", "opaque grant", "loopback listener", "DPAPI"],
+      relations: ["公网只到认证 Sidecar 而 Broker 和 app-server 只监听 loopback", "写请求同时要求登录同源 CSRF 与必要幂等键", "文件授权继承当前 Windows 用户并使用不透明根和相对路径", "可复用凭据和私人地址不进入日志源码或网页"],
+      failureRecovery: ["会话过期时重新登录且不继续原写请求", "Origin 或 CSRF 不匹配时拒绝 mutation", "幂等结果不明时用同一 key 回读而不创建第二次动作", "文件确认或 grant 过期时重新选择目标"]
+    },
     teaser: "单所有者密码会话、双重限速、Secure Cookie、Origin/CSRF、幂等、DPAPI 队列和不透明文件授权共同失败关闭。",
     status: "安全包、路径、会话、Markdown 与请求守卫有源码和测试；本轮未读取真实密码、Cookie或端点",
     statusTone: "pass",
@@ -742,37 +863,46 @@ export const codexRemoteModules = [
     shortTitle: "版本与证据",
     title: "哪些事实证明产品做成过，哪些不能推成当前在线",
     searchAliases: ["Codex Remote跑通过吗", "v0.1.5测试证据", "20张真实界面", "不代表当前在线"],
+    searchProjection: {
+      intents: ["确认 Codex Remote 历史上是否真实跑通过", "区分正式版本当前 main 和当前在线", "判断截图测试与实机验收各能证明什么", "了解当前 Windows 接管方案重新启用还缺什么"],
+      entities: ["v0.1.5", "c3a07719", "main=94f1cfad", "1771 tests", "historical real E2E", "current online", "Windows takeover acceptance"],
+      relations: ["release 测试只证明绑定版本", "历史真实链路证明产品做成过但不证明当前在线", "current main CI 与正式 release 证据分层", "当前 Windows 接管方案重新启用前需要隔离可重复无人值守验收"],
+      failureRecovery: ["tag 与 commit 不一致时停止版本结论并回读 refs", "截图来源不清时降为设计演示", "缺本轮运行态证据时不声明当前在线", "接管验收未闭合时只保留历史证据并要求隔离验证"]
+    },
     teaser: "v0.1.5 的1771项测试、六视口Chromium、历史真实多端E2E和20张界面证据分层呈现；main与release身份分开。",
-    status: "v0.1.5 正式证据闭合；current main 最新 CI 为 failure，本轮当前在线未验证",
+    status: "v0.1.5 正式证据与历史真实链路已形成；当前 Windows 接管方案仍缺可重复无人值守验收，本轮当前在线未验证",
     statusTone: "mixed",
     value: "我能清楚知道产品真正做成并跑通过什么，也不会因为一张绿图、一个历史截图或一个新提交就误判现在在线。",
     why: "源码、单元测试、合成浏览器、真实手机截图、真实 Desktop E2E 和当前在线是不同证据层。把它们合成一个‘可用’标签，会同时夸大成功和掩盖缺口。",
-    example: "v0.1.5 的 1771 项测试与 Chromium 通过，证明该 release 的代码和合成 UI；2026-07/08 的真实手机验收证明产品确实跑通过；本轮没有调用 runtime，所以当前在线仍不能由前两者推出。",
+    example: "v0.1.5 的 1771 项测试与 Chromium 通过，证明该 release 的代码和合成 UI；2026-07/08 的真实手机验收证明产品确实跑通过；当前 Windows 接管方案仍没有本轮可重复无人值守验收，因此不能从前两层推出当前在线。",
     result: "得到绑定到版本、提交、日期和证据类型的结论：做成过的能力可以明确展示，当前未验证的状态不会被冒充为已验证。",
     readerStates: {
       pass: "claim 与 release/tag、测试、E2E 或图片证据精确匹配时，页面明确写出能证明的范围。",
       problem: "current main、截图时间和正式版本不一致时，分层展示，不把新源码覆盖旧 release 证据。",
-      unavailable: "缺当前 runtime 验收时，仅停止当前在线声明，保留已做成产品与历史证据。"
+      unavailable: "缺当前 runtime 与 Windows 接管验收时，仅停止当前在线和重新启用声明，保留已做成产品与历史证据。"
     },
     decisionImpact: [
       "正式发布证据绑定 v0.1.5 / c3a07719。",
       "current main=94f1cfa 与 package version 单列，不冒充 release。",
       "真实截图标注日期，合成截图标注 demo。",
-      "当前在线必须有本轮 runtime E2E，历史证据不能代替。"
+      "当前在线必须有本轮 runtime E2E，历史证据不能代替。",
+      "历史真实链路与产品证据已形成，本轮未完成当前Windows接管方案的可重复无人值守验收；重新启用前需隔离验证。"
     ],
-    problem: "解决 release/main 混写、测试冒充运行、合成截图冒充实机、历史实机冒充当前在线和 commit 流水账膨胀。",
+    problem: "解决 release/main 混写、测试冒充运行、合成截图冒充实机、历史实机冒充当前在线，以及把一次接管成功误写成可重复无人值守交付。",
     implementation: [
       "Git refs 与 GitHub release 现场回读提供版本身份。",
       "CI workflow 分开 source check、public safety 与 Chromium E2E。",
       "Playwright SharedRuntime 明确使用合成任务，不能升级成 Desktop 实机证据。",
       "历史 acceptance 记录同一任务、审批、文件 SHA、队列、停止和重连。",
-      "公开画廊为每张图写清能证明与不能证明什么，避免把合成界面或历史实机画面冒充当前在线。"
+      "公开画廊为每张图写清能证明与不能证明什么，避免把合成界面或历史实机画面冒充当前在线。",
+      "Windows 接管方案单列可重复无人值守验收；重新启用前先在隔离环境复核启动、恢复与失败行为。"
     ],
     flow: [
       "回读 PUBLIC main、tags 与 latest release。",
       "把产品 claim 绑定到精确版本和提交。",
       "读取测试文件、数量与 CI 结论。",
       "区分合成浏览器与真实多端验收。",
+      "单列当前 Windows 接管方案的隔离可重复无人值守验收状态。",
       "逐张检查图片来源、日期、敏感值和重复。",
       "只发布与证据层匹配的结论。",
       "未来只有本人明确要求才重新取证。"
@@ -787,13 +917,15 @@ export const codexRemoteModules = [
       "不把 package=0.1.6-unreleased.0 写成已发布 v0.1.6。",
       "不把1771项测试写成当前在线证明。",
       "不把真实历史截图写成当前模型、额度或健康状态。",
-      "不把源码分支、发布状态或历史截图冒充为当前在线结果。"
+      "不把源码分支、发布状态或历史截图冒充为当前在线结果。",
+      "不把历史接管成功冒充为当前方案已经可重复无人值守。"
     ],
     failures: [
       { condition: "tag 与 commit 不匹配", response: "停止版本结论并重新回读 refs。" },
       { condition: "测试数来自不同提交", response: "绑定各自版本，不相加成总通过数。" },
       { condition: "截图来源或日期不清", response: "降为设计/演示或移出画廊。" },
-      { condition: "当前在线没有本轮证据", response: "明确写未验证，不调用 runtime 补证。" }
+      { condition: "当前在线没有本轮证据", response: "明确写未验证，不调用 runtime 补证。" },
+      { condition: "当前 Windows 接管方案缺可重复无人值守验收", response: "保留历史真实链路结论；重新启用前在隔离环境验证，不从单次成功外推。" }
     ],
     sources: [
       { path: "docs/release-notes-v0.1.5.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/release-notes-v0.1.5.md", role: "v0.1.5 产品范围与发布说明。" },
@@ -804,9 +936,10 @@ export const codexRemoteModules = [
       "Git refs 本轮只读回读 main=94f1cfa、v0.1.5=c3a07719。",
       "v0.1.5 记录 1771 tests、370-file public scan 与 157 Playwright 场景。",
       "20张最终图片 SHA 全唯一，总原图约2.51 MiB，三段式 WebP 预览约0.30 MiB。",
+      "历史真实链路与产品证据已形成；本轮未完成当前 Windows 接管方案的可重复无人值守验收，重新启用前需隔离验证。",
       "本轮没有启动、查询或控制任何 Codex Remote runtime。"
     ],
-    relation: "它为前五个模块标注证据强度与时间边界，防止把源码、测试、截图或历史实机验收误写成当前在线。"
+    relation: "它为前六个模块标注证据强度与时间边界，防止把源码、测试、截图、历史实机验收或单次接管成功误写成当前在线。"
   }
 ];
 
