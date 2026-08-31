@@ -225,26 +225,22 @@ export const skillGuides = {
     ["GitHub 网络暂不可达", "如实标记 live evidence unavailable。", "可继续安全本地工作，但发布前必须重新取得 live metadata 和 refs。"]
   ]),
   "personal-panel-refresh": guide([
-    ["Source Owner（来源项目责任人）", "先完成来源项目修改、测试、发布和正式回读，再判断网站是否需要跟进。"],
-    ["Durable explicit user authorization（耐久明确用户授权）", "用户已经持续授权满足阈值后的一个必要 projectless 网站任务；root、后代和 successor 不要求同轮重述，但所有上位门仍有效。"],
-    ["Impact candidate（影响候选）", "Changed path 命中项目清单，只说明可能影响，不自动创建任务。"],
-    ["Material change（实质变化）", "不更新会让看板事实、解释、边界、成熟度或用户决策变错的变化。"],
-    ["Read-back commit（正式回读提交）", "来源项目已经发布并从真实远端重新确认的提交。"],
-    ["Projectless task（无项目任务）", "AI 新建顶层对话的默认形态；任务不绑定 saved project，而是在提示中进入网站仓库并读取其项目规则。"],
-    ["Dispatch receipt（派发回执）", "create_thread 返回 threadId 或 clientThreadId 表示派发已受理；clientThreadId 只是 setup-pending，不能传给要求真实 threadId 的 lifecycle 或 archive 工具。"],
-    ["Dispatch classification（派发分类）", "工具实际缺失或 deny 是 unavailable，tool error 是 failed，没有可追踪 ID 是 dispatch-unconfirmed；三类都停止且不盲重试。"],
-    ["Asynchronous handoff（异步交接）", "来源对话报告任务 ID 后立即继续或结束，不读取网站任务进度、不等待完成，也不轮询。"],
-    ["Active handoff coalescing（现役交接收敛）", "本来源对话已经创建一个同项目且仍 active 的网站任务时，只把更新后的 read-back commit 续传一次，不创建竞争任务。"],
-    ["Existing PUBLIC target（现有公开目标）", "已验收的 wly0829.cn PUBLIC main 与 Pages；网站门通过后的 normal-push、部署等待和公网回读已获长期授权。"],
-    ["Fresh website task（全新网站任务）", "为一次实质刷新新建、只处理一个目标的独立任务；完成后不复用。"]
+    ["来源先完成", "先完成来源项目的修改、测试、发布和正式回读，再判断网站是否需要跟进。"],
+    ["页面实质失真", "如果不更新，网站对事实、解释、边界、成熟度或使用判断就会变错。"],
+    ["一次独立网站更新", "只有页面会实质失真时才安排一次；普通改字、时间戳和内部重构不安排。"],
+    ["安排结果", "来源只需要知道已经安排或安排失败；失败时说明实际原因，不暴露内部任务编号和状态字段。"],
+    ["来源立即继续", "得到安排结果后，来源工作立即继续或结束，不读取网站进度、不等待完成，也不轮询。"],
+    ["重复变化合并", "同一次来源变化已经安排过时不再安排第二次，避免两个网站更新互相竞争。"],
+    ["网站独立验收", "网站负责人自己完成内容、构建和公开检查，来源项目不替网站做这些工作。"],
+    ["现有公开目标", "全部检查通过后，自动正常推送到现有 PUBLIC main，等待 Pages 并从公网回读。"]
   ], [
-    ["只命中路径，没有实质影响", "输出 impact candidate，但 task_required=false。", "记录候选，等下一次实质更新一起维护，不开任务。"],
-    ["来源仍是 candidate、draft 或未 read-back", "停止网站交接。", "等 Source Owner 完成正式发布和 read-back 后重新评估。"],
-    ["Projectless 任务没有形成可追踪派发", "按真实结果区分 unavailable、failed 或 dispatch-unconfirmed；只有实际入口不可用时返回 projectless_website_task_creation_unavailable。", "停止本次交接，不盲目重试，也不改派到 .agents、来源项目或另一个 saved project。"],
-    ["同一项目现役交接收到更新提交", "向该任务发送一次新 read-back commit，不再新建任务。", "来源对话报告续传结果后立即继续；不读取进度或等待网站完成。"],
-    ["网站门失败或用户明确 hold", "不提交、不推送，保留精确 blocker 和现有 PUBLIC 状态。", "修复网站门后继续同一任务；用户解除 hold 后才进入既有目标发布。"],
-    ["出现新公网目标、付费、秘密暴露或 force-push", "长期授权不适用，停止对应外部动作。", "保持现有 PUBLIC main 不变，按新边界取得精确授权或改回安全方案。"],
-    ["同一来源提交已经交接", "拒绝创建重复任务。", "使用现有交接结果或等新的 read-back commit。"]
+    ["只命中改动范围，没有实质影响", "明确返回无需更新并说明原因。", "等未来真的会改变页面含义时再安排，不制造无意义的网站工作。"],
+    ["来源仍是草稿、候选或没有正式回读", "暂不判断网站更新。", "等来源项目完成发布和远端确认后重新评估。"],
+    ["确认页面会实质失真且此前未安排", "只安排一次独立网站更新，并明确告诉来源已经安排。", "来源立即继续；网站负责人独立验收，全部通过后发布到现有公开目标。"],
+    ["独立网站更新未能安排", "明确告诉来源安排失败及实际原因。", "来源立即继续；停止本次安排，不改派、不盲目重试。"],
+    ["同一次来源变化已经安排", "不再安排第二次。", "来源得到“不重复安排”的明确结果后立即继续，不读取进度或等待网站完成。"],
+    ["网站检查失败或用户明确暂缓", "不提交、不推送，保留精确阻塞原因和现有 PUBLIC 状态。", "修复网站问题后继续同一次更新；用户解除暂缓后才进入既有目标发布。"],
+    ["出现新公网目标、付费、秘密暴露或 force-push（强制推送）", "长期授权不适用，停止对应外部动作。", "保持现有 PUBLIC main 不变，按新边界取得精确授权或改回安全方案。"]
   ]),
   "control-plane-doctor": guide([
     ["Health（健康状态）", "当前被检查 Owner 是否可读、结构完整、关键入口可用。"],
@@ -468,12 +464,12 @@ export const skillOutcomes = {
     changes: ["仓库、remote（远端地址）、branch（分支）和 upstream（上游分支）正确且同步安全时，允许继续本地实施或正常推送。", "有 dirty work（未提交改动）时要求保留，并只 stage（暂存）当前任务文件。", "本地落后、分叉或不是 fast-forward（快进推送）时停止推送，先同步和解决冲突。", "PUBLIC（公开）仓库存在泄露风险时阻止发布。", "网络无法取得 live evidence（实时证据）时可以继续安全本地工作，但发布必须等 live read-back（实时回读）。"]
   },
   "personal-panel-refresh": {
-    value: "当一个项目、规则或 Skill 发布新结果后，它检查个人看板是不是已经过时。真正会让页面说错话才安排一次网站更新；普通小改动不打扰网站，也不会让来源项目停下来等。",
-    why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站会产生大量无意义任务，等待网站完成还会把两个独立发布错误地绑在一起。",
-    example: "例如 .agents 新增或退役一个真实 Skill。来源项目发布并回读后，它检查这次变化是否会让看板内容变错。",
-    result: "页面不受影响时什么也不创建；页面会明显过时时，只续接这个来源已经创建且仍在工作的同项目网站任务，或新建一个独立网站任务。来源项目拿到派发回执就继续自己的工作，网站任务再独立完成检查、发布和公网回读。",
-    readerStates: { pass: "来源已经发布回读且页面会实质失真时，向本来源已创建的同项目 active 交接续传一次，或按耐久明确授权创建一个 projectless 网站任务；threadId/clientThreadId 证明派发受理，来源立即继续，网站门通过后不再另问发布授权。", problem: "只命中路径但不改变事实时不开任务；同一提交不重复创建；clientThreadId 仍等待真实 threadId；网站门失败或用户明确 hold 时保留现有 PUBLIC 状态，不推送。", unavailable: "实际工具缺失或 deny、tool error、无可追踪 ID 分别报告 unavailable、failed、dispatch-unconfirmed 并停止；新公网目标、付费、秘密暴露或 force-push 不在长期授权内。" },
-    changes: ["来源没有正式 publish/read-back（发布/回读）时不评估网站。", "Changed path（变化路径）命中只记为 impact candidate（影响候选），不会自动开任务。", "Source Owner 确认看板会实质失真后，task_required 才变成 true。", "本来源已经创建同项目 active 交接时只发送一次新 read-back commit；不复用完成、中断或失败任务。", "否则不再询问用户，按 durable explicit user authorization 真实调用一次 create_thread，默认创建 projectless fresh independent website task（无项目的全新独立网站任务）。", "saved project 是否存在不参与准入；只有用户明确选择或上位平台强制时才例外。", "threadId 是真实任务标识；clientThreadId 只是 setup-pending 回执，不能用于 lifecycle/archive。", "实际入口缺失/deny、tool error、无可追踪 ID 分别是 unavailable、failed、dispatch-unconfirmed，均不盲重试。", "交接异步且不阻塞来源；不读进度、不等待、不轮询，上位平台硬要求时至多一次 timeoutMs:0 即时快照。", "四项目 MVP 和现有 PUBLIC 目标已经验收；网站门通过后自动定向 commit、normal-push main、等待 Pages 并公网回读，不再另问发布授权。", "长期授权不覆盖 system/developer/platform、真实 deny/step_up/needs_evidence、新公网目标、付费、秘密暴露、force-push 或用户明确 hold，也不跳过网站自身门。"]
+    value: "它让每个已登记项目在完成发布后都能判断“这次变化会不会让个人看板说错话”，同时用实质阈值、一次安排和异步处理阻止小改动、重复更新或网站等待拖住来源发布。",
+    why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站会产生大量无意义更新，等待网站完成还会把两个独立发布错误地绑在一起。",
+    example: "例如我说“这个新 Skill 已经发布了，看看个人看板要不要更新”。来源项目正式回读后，它会对照当前页面判断这次变化是否让能力说明变错。",
+    result: "页面不受影响时会明确说明无需更新；只有页面会实质失真时，才只安排一次独立的网站更新，并告诉来源已经安排或安排失败。来源立即继续，不等待网站完成；网站负责人独立通过内容、构建和公开检查后，自动正常推送到现有 PUBLIC main，等待 Pages 并从公网回读。",
+    readerStates: { pass: "来源已经发布回读且页面会实质失真时，只安排一次独立网站更新并明确告诉来源已经安排；来源立即继续，网站负责人独立检查通过后发布到现有公开目标。", problem: "页面不会实质失真或同一次变化已经安排时，明确返回无需更新或不重复安排；网站检查失败或用户明确暂缓时保留现有 PUBLIC 状态，不推送。", unavailable: "独立网站更新入口不可用、被拒绝或返回失败时，明确告诉来源安排失败及原因；来源立即继续，停止本次安排且不盲目重试。" },
+    changes: ["来源没有正式发布和回读时不判断网站更新。", "改动范围命中只表示可能影响，不会自动安排更新。", "只有网站内容会实质失真时才安排一次独立更新。", "同一次来源变化不重复安排。", "来源只接收已经安排或安排失败的明确结果，然后立即继续。", "来源不读取网站进度、不等待完成，也不轮询。", "网站负责人独立完成内容、构建和公开检查；全部通过后自动定向提交、正常推送到现有 PUBLIC main、等待 Pages 并公网回读。", "安排失败时说明实际原因并停止，不改派也不盲目重试。", "现有长期授权不覆盖 system/developer/platform、真实拒绝或补证要求，也不覆盖新公网目标、付费、秘密暴露、force-push（强制推送）或用户明确暂缓。"]
   },
   "control-plane-doctor": {
     value: "当我怀疑三个控制面“哪里坏了”时，它把问题定位到真正负责的 Owner（责任源），并区分警告和阻塞，避免在错误仓库里乱修。",

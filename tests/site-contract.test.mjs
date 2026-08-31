@@ -2065,20 +2065,26 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     guide: skillGuides["personal-panel-refresh"],
     outcome: skillOutcomes["personal-panel-refresh"]
   });
+  assert.ok(panelRefresh, "public personal-panel-refresh entry is missing");
+  assert.doesNotMatch(
+    panelRefreshText,
+    /create_thread|threadId|clientThreadId|task_required|handoff|lifecycle|archive|projectless|dispatch-unconfirmed|setup-pending|successor|follow-up|任务 ID|派发回执|派发分类/i,
+    "public personal-panel-refresh copy must not expose internal task bookkeeping"
+  );
   for (const expected of [
-    "durable explicit user authorization",
-    "d32210b",
-    "cf5981bf",
-    "setup-pending",
-    "dispatch-unconfirmed",
-    "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具",
-    "本轮没有由新的来源发布调用 impact assessor",
-    "当时的网站 Owner/build/PUBLIC/Pages 分层取证"
+    /来源项目.*发布.*正式回读/,
+    /只有.*页面.*实质失真.*安排一次.*独立.*网站更新/,
+    /告诉来源.*已经安排.*安排失败/,
+    /来源.*立即继续/,
+    /同一次.*不重复安排/,
+    /不等待.*不轮询/,
+    /网站负责人.*内容.*构建.*公开检查/,
+    /正常推送.*现有 PUBLIC main.*Pages.*公网回读/,
+    /安排失败.*不盲目重试/,
+    /新公网目标.*付费.*秘密暴露.*force-push/
   ]) {
-    assert.ok(panelRefreshText.includes(expected), `E92 personal-panel-refresh omits: ${expected}`);
+    assert.match(panelRefreshText, expected, `public personal-panel-refresh omits stable workflow semantics: ${expected}`);
   }
-  assert.doesNotMatch(panelRefreshText, /01a050a0|Owner A/, "public Skill copy must not expose stale task bookkeeping");
-  assert.doesNotMatch(panelRefreshText, /网站 successor 正在完成/);
 });
 
 test("publication cannot upload before snapshot binding, production build, public gate and route tests", async () => {
