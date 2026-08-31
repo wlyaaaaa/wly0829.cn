@@ -18,13 +18,18 @@ export const cacbProject = {
     problem: "产物错误、越界修改、任务未完成或验收失败时，分别说明问题属于任务、能力还是执行环境。",
     unavailable: "缺少任务身份、完整产物、最终状态或验收输入时保留无法判断，等待同一次执行恢复或重新取得完整证据。"
   },
+  cardMetrics: [
+    { label: "核心模块", value: "47" },
+    { label: "数据合同", value: "25" },
+    { label: "连续案例", value: "10" }
+  ],
   heroFacts: [
-    { label: "成品范围", value: "47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件；公开页展示产品结构、验证边界和真实缺口" },
+    { label: "成品范围", value: "233 个跟踪文件，其中有 47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件" },
     { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
     { label: "隔离与验证", value: "每次执行独立 workspace；冻结输入、隐藏 verifier、范围审计、终态与归档 hash 分层绑定" },
+    { label: "任务身份绑定", value: "WorkerHandle 同时绑定原始 task id 与 run id；任一身份不同都拒绝借用旧 handle 或旧证据" },
     { label: "当前源码", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009；工作树干净，远端引用 0/0；最新提交补强 WorkerHandle 与原始任务绑定" },
-    { label: "当前验证", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" },
-    { label: "公开边界", value: "页面展示产品、隔离、验证、失败分类与证据设计，不展示受测配置名单、横向比较或结果数字" }
+    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" }
   ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },

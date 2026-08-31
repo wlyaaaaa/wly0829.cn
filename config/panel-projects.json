@@ -42,7 +42,7 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 4,
+        "semantic_revision": 5,
         "scope": "project overview, six modules, current E release Rules and Skills evidence",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
@@ -166,7 +166,7 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
@@ -279,7 +279,7 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
@@ -367,7 +367,7 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
@@ -470,7 +470,7 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "project overview and product-defined modules covering collection, analysis, visualization, runtime reliability, actual-value sensitivity, and recovery",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
@@ -603,7 +603,7 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "project overview with layered physical/visual evidence, plus project-defined modules covering the case-panel data/render/transport path, HS2 event overlay, and power/recovery ownership",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
@@ -738,7 +738,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "curated product overview and project-defined modules covering the question bank, isolated execution, identity/evidence binding, deterministic verification, failure semantics and reproducible reporting framework without publishing any tested-configuration outcome",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
@@ -786,7 +786,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-learning.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "curated public overview and five modules covering authoritative research, professional plain-language explanation, dialogue-driven rechecking and correction, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
@@ -836,7 +836,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-codex-remote.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "curated public overview and six modules covering the same Desktop task on mobile, live conversation controls, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, resolve the PUBLIC repository identity, default branch, tags, release commit and current clean/sync facts through Git Owner",
@@ -886,7 +886,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-personal-health.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",

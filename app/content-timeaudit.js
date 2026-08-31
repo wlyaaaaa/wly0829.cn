@@ -18,13 +18,18 @@ export const timeAuditProject = {
     problem: "发现采样空档、指标越界、后台争抢、崩溃或查询口径异常时，指出受影响组件与恢复入口，不把异常直接解释成硬件故障或恶意行为。",
     unavailable: "保存、展示、采集或传感器入口不可用时，只把对应层写成证据不足并受控恢复；不伪造读数，也不靠读取私人正文数据补出一份报告。"
   },
+  cardMetrics: [
+    { label: "采样", value: "1 秒 / 3 秒" },
+    { label: "大盘", value: "6 · 78" },
+    { label: "回归", value: "180 + 11" }
+  ],
   heroFacts: [
-    { label: "采样节拍", value: "硬件 / FPS / 前台心跳 1 秒；活跃进程 3 秒；慢车道单飞" },
-    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）" },
-    { label: "产品范围", value: "6 张仪表盘、78 个面板：性能、流畅度、功耗、取证、资源和使用时间" },
-    { label: "运行现场", value: "3 个容器运行；入库器 healthy（健康）；三条无正文心跳新鲜；Watchdog（看门狗）上次结果 0" },
+    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
+    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
+    { label: "安全聚合快照", value: "2026-08-31T11:18:10Z：3615 样本、age 0.058 秒、coverage 3518/3600 秒、gap 82 秒；CPU 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95/max 0.316/8.005 ms" },
+    { label: "运行现场", value: "3 个容器运行，入库器 healthy；no_game_frames；packet-loss 信号 14 次、活动状态重叠 6 秒，仅表示需复核" },
     { label: "源码与回归", value: "PUBLIC（公开）main（默认主分支）=44a842e82ea03a18174b87fe77d248f776d62eb5；工作树干净；项目生产依赖 + 临时 pytest runner 下 180 项测试、11 个子测试通过" },
-    { label: "本次缺口", value: "诊断摘要最长 168 小时且仅聚合；本次无有效游戏帧，也未做完整数据库审计或整库恢复演练" }
+    { label: "已根治的采集误差", value: "已消除 172 个正常系统进程误报；修正一小时窗 138 对重叠，避免 1 小时算成 1.5 小时；把占采集耗时 86% 的父进程解析换成同快照映射" }
   ],
   gallery: [
     { src: "/media/timeaudit/dashboard-catalog.png", thumbnail: "/media/timeaudit/thumbs/dashboard-catalog.webp", alt: "TimeAudit 六张仪表盘目录", caption: "2026-08-29 的真实 Grafana 目录：六张盘把性能、流畅度、功耗、取证、后台资源和使用时间组成可回放产品。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明六张仪表盘和 78 个面板曾在真实 Grafana 中组成完整产品入口。", doesNotProve: "不证明当前服务在线、每个查询仍正确或当前数据没有空档。" },
@@ -78,7 +83,7 @@ export const timeAuditProject = {
     { term: "E2E（端到端验证）", meaning: "真实采集、写库、查询到用户看图完整走通；源码测试不能替代。" }
   ],
   currentState: {
-    observedAt: "2026-08-31T04:31:36Z",
+    observedAt: "2026-08-31T11:18:10Z",
     label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
     facts: [
       "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）；观察时 HEAD 与缓存 origin/main 均为 44a842e82ea03a18174b87fe77d248f776d62eb5，工作树干净。",
@@ -86,9 +91,11 @@ export const timeAuditProject = {
       "遥测主链、AHK 与入库器三条无正文 heartbeat（心跳）在 02:30Z 附近刷新，观察时文件年龄约 1–2 秒；Watchdog（看门狗）与每日备份任务最近结果均为 0。",
       "在干净的当前 main 中，复用项目 Python 3.11 生产依赖，并从本任务 E 盘临时目录注入 pytest runner；完整回归为 180 passed、11 subtests passed，用时 47.33 秒，项目 .venv 没有被加入开发依赖。",
       "公开安全聚合 provider（提供器）在 01:00Z—02:00Z 返回 status=ok（状态正常）、coverage=fresh（覆盖新鲜）、3530 个样本；1 个 scheduler_jitter_saturation（用户态调度抖动饱和）warning（警告）涉及 110 个样本，且 projection_recheck_recommended=false（不建议重查稳定机器投影）。",
-      "新的 `timeaudit_diagnostic_summary.py --hours 1` 在本轮返回 schema=timeaudit.diagnostic-summary.v1、status=ok、coverage=fresh、3702 个硬件样本，最新样本年龄约 0.77 秒；8 个 privacy flag 均为 false，没有有效游戏帧被正确标为 no_game_frames。",
+      "新的 `timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T11:18:10Z 返回 schema=timeaudit.diagnostic-summary.v1、status=ok、coverage=fresh、3615 个硬件样本，最新样本年龄 0.058 秒；CPU 均值/峰值 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95 0.316 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 14 次、活动状态重叠 6 秒都只进入复核边界。",
       "当前 main 使用单调时钟判断 PresentMon 新鲜度，避免系统墙钟回拨让陈旧帧继续存活；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。",
       "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。",
+      "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。",
+      "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。",
       "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。"
     ],
     gaps: [
@@ -132,7 +139,7 @@ export const timeAuditProject = {
     { layer: "Source（源码）", proves: "main 定义了采集、表、口径、自愈、备份，以及按实际值判断个人敏感内容与凭据的边界。", doesNotProve: "本机已安装、运行或每个查询正确。" },
     { layer: "Tests（测试）", proves: "180 项测试与 11 个子测试覆盖运行、入库、仪表盘合同、备份、FPS、新鲜度、原生崩溃隔离、未知路径与聚合摘要边界。", doesNotProve: "真实游戏负载、长期全库性能和任意历史问题的根因。" },
     { layer: "Runtime（运行）", proves: "观察时容器运行、入库器 healthy（健康）、heartbeat（心跳）新鲜、任务结果为 0。", doesNotProve: "样本值正确或历史无空档。" },
-    { layer: "Aggregate（聚合）", proves: "本轮一小时诊断摘要有 3702 个硬件样本、覆盖新鲜、no_game_frames，且 8 个 privacy flag 均为 false。", doesNotProve: "内核 DPC、硬件故障、具体进程原因或持续压力。" },
+    { layer: "Aggregate（聚合）", proves: "本轮一小时诊断摘要有 3615 个硬件样本、覆盖新鲜、no_game_frames，并保留温度、磁盘、packet-loss 与活动重叠信号。", doesNotProve: "内核 DPC、硬件故障、具体进程原因、网络根因或持续压力。" },
     { layer: "Gallery / dashboard contract（图片 / 大盘合同）", proves: "11 张获准截图展示真实界面；固定数据源与恢复结构有回归。", doesNotProve: "图片瞬时值可公开推广或全部 SQL 性能达标。" },
     { layer: "Recovery（恢复）", proves: "备份任务最近结果 0，备份与恢复路径有定向测试。", doesNotProve: "本次已从最新备份完成隔离整库恢复。" }
   ],
@@ -144,7 +151,7 @@ export const timeAuditProject = {
     { date: "2026-08-21", commit: "2ec7807–de82db7", result: "修复 spool 并建立 Grafana 13 固定数据源、备份与恢复失败关闭合同。" },
     { date: "2026-08-23—08-24", commit: "2d77616–59ecd01", result: "串行化遥测恢复并加固 FPS 数据库恢复，避免恢复器抢占与空闲误报。" },
     { date: "2026-08-29", commit: "238ea58–a5a34d6", result: "恢复 Grafana 时间轴 transformation、移除大盘硬件型号绑定，并新增一次查询即可消费的有界历史诊断 provider 与 fast path；`.agents` 同步增加 timeaudit-diagnostics Skill。" },
-    { date: "2026-08-30—08-31", commit: "44a842e", result: "PresentMon 新鲜度改用单调时钟，psutil 原生网络枚举进入可重启隔离进程，生产 Python 收敛到项目独立 .venv，避免墙钟回拨、原生崩溃和全局依赖漂移污染主采集链。" }
+    { date: "2026-08-30—08-31", commit: "44a842e", result: "PresentMon 新鲜度改用单调时钟，psutil 原生网络枚举进入可重启隔离进程，生产 Python 收敛到项目独立 .venv；同时消除 172 个正常系统进程误报、修正一小时窗 138 对重叠，并把占采集耗时 86% 的父进程解析换成同快照映射。" }
   ],
   operationalEntrypoints: [
     { name: "打开大盘", command: "http://localhost:53000", purpose: "从时间范围进入 6 张诊断盘。" },
@@ -289,7 +296,7 @@ export const timeAuditModules = [
     ],
     verification: [
       "PresentMon 选择与 dashboard contract 纳入本次 180 项通过结果。",
-      "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3702 样本，且 no_game_frames 没有被误报成掉帧。",
+      "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3615 样本，且 no_game_frames 没有被误报成掉帧。",
       "Grafana 容器运行，授权截图显示真实界面。",
       "未启动游戏或查询真实时序值，FPS E2E 仍 Unknown。"
     ],

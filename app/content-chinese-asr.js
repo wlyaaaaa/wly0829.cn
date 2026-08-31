@@ -18,12 +18,18 @@ export const chineseAsrProject = {
     problem: "某个引擎失败、两路分歧、检测到疑似幻觉或长音频只有部分完成时，保留可用片段但明确标为 provisional（暂定）或需要复核，不把降级结果冒充完整成功。",
     unavailable: "模型、GPU（图形处理器）、音频解码、任务服务或必要授权不可用时，返回具体阻断位置和已有任务身份；不反复提交同一录音，也不自动把普通录音上传云端。"
   },
+  cardMetrics: [
+    { label: "引擎", value: "6" },
+    { label: "回归", value: "345/345" },
+    { label: "真实长音频", value: "4/4" }
+  ],
   heroFacts: [
     { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
     { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
     { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
     { label: "重要录音云候选", value: "Qwen Audio 3.0 ASR Flash；必须同时确认重要性和本次上传授权" },
-    { label: "其他显式 Profile", value: "Fun-ASR-Nano-2512、Whisper Large V3；已登记但都不是默认" }
+    { label: "其他显式 Profile", value: "Fun-ASR-Nano-2512、Whisper Large V3；已登记但都不是默认" },
+    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.035 秒；Doctor 识别 6 个引擎与 32607 MiB 显存；历史真实长音频 4/4 切片，续跑 0 processed / 4 skipped" }
   ],
   productPrinciples: [
     { title: "原音频始终是真相来源", detail: "转写首先是搜索和回听导航，不是录音真实性、说话人身份或法律事实认证。" },
@@ -76,12 +82,12 @@ export const chineseAsrProject = {
     { term: "E2E（端到端验证）", meaning: "使用真实音频从入口跑到最终文件并检查用户可见结果；单元测试和 Doctor 不能替代它。" }
   ],
   currentState: {
-    observedAt: "2026-08-29T15:23:39Z",
+    observedAt: "2026-08-31T11:59:37.2566597Z",
     label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
     facts: [
       "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。",
       "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。",
-      "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，78.623 秒完成，345 项全部通过。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
+      "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，内部用时 83.035 秒，345 项全部通过。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
       "Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 610.88、32607 MiB 显存；WinHTTP 为直连，代理环境干净。",
       "FunASR、Qwen ASR 和 PyTorch 均已安装；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。",
       "当前模型 Registry（登记表）公开六个显式引擎：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；登记不代表每个引擎本次都跑过真实音频。",

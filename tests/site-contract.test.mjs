@@ -7,6 +7,7 @@ import { gzipSync } from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { panelProjectRegistry } from "../app/content-core.js";
 import { ruleGuides } from "../app/content-rule-guides.js";
 import { chineseAsrModules, chineseAsrProject } from "../app/content-chinese-asr.js";
 import { githubIndexModules, githubIndexProject } from "../app/content-github-index.js";
@@ -534,7 +535,7 @@ test("TimeAudit registry binds public-safe aggregate refresh evidence and impact
   assert.equal(registration.route, "/projects/timeaudit");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-timeaudit.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 1);
+  assert.equal(registration.ai_refresh.semantic_revision, 2);
   assert.equal(registration.source.repo, "wlyaaaaa/TimeAudit");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.default_branch, "main");
@@ -645,6 +646,29 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedModules: ["current-evidence-route", "protected-foreground-refresh", "raw-preservation-resume", "offline-decision-brief", "evidence-three-state", "health-owner-boundary"]
     }
   ];
+  const freshMetricCases = [
+    { project, metrics: [["活动规则", "E95 · 5/5"], ["能力供应", "25 项"], ["本地回归", "38 pass · 0 fail"], ["合同覆盖", "36/36"]], facts: ["2026-08-31T11:41:50Z", "81694 bytes", "38 pass", "4 项为 cross-owner skip", "37/37 安装事务 terminal", "0 unfinished、0 invalid", "finding 0"] },
+    { project: pcconfigProject, metrics: [["配置地图", "15 项目 · 157 键"], ["恢复任务", "10 Ready · 0 失败"], ["秘密恢复", "10/10 三路一致"], ["Codex 迁移", "75.13 GB · 已就绪"]], facts: ["2026-08-31T11:43:18Z", "PRIVATE main=f9245a1", "44 份 Registry", "89 个环境变量", "64 段 PATH", "V 盘 299.9 GiB", "10 个核心恢复任务", "G 路 20 份", "revision 68", "46.984 秒", "39911 个文件", "565 个文件 / 6.74 GiB", "ReadyCheck 58 秒", "SafeSwitch manifest"] },
+    { project: githubIndexProject, metrics: [["仓库总账", "47"], ["公开 / 私有", "27 / 20"], ["本地副本", "44"], ["当前差异", "0 delta · 0 issue"]], facts: ["2026-08-31T11:30:52Z", "26 个 PUBLIC、18 个 PRIVATE", "no fetch", "18295 bytes", "领先 7 个提交", "2 个 dirty worktree", "8/8 stable drift"] },
+    { project: chineseAsrProject, metrics: [["引擎", "6"], ["回归", "345/345"], ["真实长音频", "4/4"]], facts: ["2026-08-31T11:59:37.2566597Z", "PUBLIC main=70e3255", "83.035 秒", "6 个引擎", "32607 MiB", "0 processed / 4 skipped"] },
+    { project: timeAuditProject, metrics: [["采样", "1 秒 / 3 秒"], ["大盘", "6 · 78"], ["回归", "180 + 11"]], facts: ["2026-08-31T11:18:10Z", "coverage 3518/3600 秒", "gap 82 秒", "磁盘 p95/max 0.316/8.005 ms", "packet-loss 信号 14 次", "活动状态重叠 6 秒", "数据库与 Grafana 每类备份轮转上限为 14 份", "已消除 172 个正常系统进程误报", "138 对重叠", "采集耗时 86%"] },
+    { project: pcPanelHubProject, metrics: [["显示面", "2"], ["刷新", "1 Hz · failed 0"], ["回归", "84 + 8"]], facts: ["2026-08-31T11:19:19Z", "runtime ready", "frame/sent=2748/2748", "full=2700", "59/10/35 ms", "10 类信息", "最多 6 张事件卡", "15 个纯软件 demo", "第 60/120/180 帧与每 900 帧"] },
+    { project: cacbProject, metrics: [["核心模块", "47"], ["数据合同", "25"], ["连续案例", "10"]], facts: ["233 个跟踪文件", "59 个测试文件", "6 份报告/模板文件", "每次执行独立 workspace", "WorkerHandle 同时绑定原始 task id", "lint 门失败"] },
+    { project: learningProject, metrics: [["方法模块", "5"], ["协作步骤", "6"], ["单元", "1 次 1 个"]], facts: ["权威搜索", "反例重查", "最小验证", "完整 Markdown 成品", "一次只推进一个单元"] },
+    { project: codexRemoteProject, metrics: [["正式版", "v0.1.5"], ["验证", "1771"], ["证据图", "20"]], facts: ["同一个 Codex Desktop 任务", "12 张历史真实手机 UI", "7 张公开合成演示", "1 张历史合成 QA", "历史走通结果", "当前 main 最新 CI 未闭合", "不代表当前在线"] },
+    { project: personalHealthProject, metrics: [["合成回归", "112/112"], ["大分页恢复", "609 页"], ["分析窗", "14 · 28 · 90 天"]], facts: ["2026-08-31T12:00:18.5444628Z", "PRIVATE main=48d5a5b", "27.922 秒", "39 类 provider 数据", "21 个兼容字段", "4 个决策字段", "每 16 页", "最多 1000 页", "256 页 / 64 MiB / 50 万条", "health_owner_review_required=true", "background_work_created=false"] }
+  ];
+  for (const entry of freshMetricCases) {
+    assert.deepEqual(entry.project.cardMetrics.map((item) => [item.label, item.value]), entry.metrics, `${entry.project.slug} card metrics drifted`);
+    assert.equal(entry.project.cardMetrics.length, entry.metrics.length);
+    assert.ok(entry.project.cardMetrics.every((item) => item.label.length <= 10 && item.value.length <= 18), `${entry.project.slug} card metrics are not short display facts`);
+    const content = JSON.stringify(entry.project);
+    for (const fact of entry.facts) assert.ok(content.includes(fact), `${entry.project.slug} fresh content omits: ${fact}`);
+  }
+  assert.deepEqual(
+    Object.fromEntries(panelProjectRegistry.projects.map((item) => [item.id, item.ai_refresh.semantic_revision])),
+    { agents: 5, pcconfig: 3, "github-index": 3, "chinese-asr": 2, timeaudit: 2, "pc-panel-hub": 2, cacb: 2, learning: 2, "codex-remote": 2, "personal-health": 2 }
+  );
   for (const entry of packages) {
     const { project: candidate, modules: candidateModules } = entry;
     assert.equal(candidate.slug, entry.expectedSlug);
@@ -1095,7 +1119,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.equal(personalHealthProject.route, "/projects/personal-health");
   assert.equal(personalHealthProject.visibility, "私有仓库");
   assert.equal(personalHealthProject.statusTone, "mixed");
-  assert.equal(personalHealthProject.heroFacts.length, 4);
+  assert.equal(personalHealthProject.heroFacts.length, 6);
   assert.equal(personalHealthProject.methodCanvas.steps.length, 6);
   assert.equal(personalHealthProject.methodCanvas.columns.length, 3);
   assert.equal(personalHealthProject.productPrinciples.length, 11);
@@ -1329,16 +1353,16 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 2);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 3);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
-  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 2);
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 2);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);
