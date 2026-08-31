@@ -3,6 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const timeAuditSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T11:18:10Z",
   label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
+  boundary: "采集与大盘现场已核对；本次没有有效游戏帧、完整数据库审计或最新整库恢复演练",
   metrics: [
     { label: "近1小时样本", value: "3615" },
     { label: "CPU 均/峰", value: "64.5/68.8°C" },
@@ -42,6 +43,14 @@ export const timeAuditProject = {
   cardStatus: "本机时间线持续采集，可回放性能、进程、功耗和使用时间",
   cardStatusTone: "pass",
   ...timeAuditSnapshot,
+  searchAliases: [
+    "昨晚电脑为什么突然卡",
+    "哪个程序闪退写盘或联网",
+    "电脑最近发热耗电怎么复盘",
+    "TimeAudit新电脑怎样安装",
+    "换机怎样带走TimeAudit历史",
+    "系统重装后怎样恢复TimeAudit"
+  ],
   repositoryNote: "这是吴乐阳个人维护并集成第三方探针/库的 PUBLIC（公开）GitHub 仓库；根目录没有统一 LICENSE，不能仅因公开就称为开源，也不能把 LibreHardwareMonitor、PresentMon、Grafana 等外部组件冒充个人原创。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
   summary: "TimeAudit 给这台 Windows 工作站留下一条可以回放的本机时间线。问题发生后，只要给出大致时刻——例如“昨晚游戏为什么突然卡了两秒”——它就把流畅度、硬件压力、磁盘和网络、前后台程序以及程序生灭放到同一条时间轴上，返回有证据的候选原因、数据空档和不能下结论的部分。它也能复盘长期发热、耗电和屏幕使用时间。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等问题发现时现场常已消失。TimeAudit 留下同一时刻的硬件压力、前后台资源、窗口焦点和生命周期，使偶发故障可事后定位，长期散热、功耗和使用习惯也能比较。",
@@ -123,13 +132,14 @@ export const timeAuditProject = {
     { name: "diagnostic summary provider（历史诊断摘要接口）", responsibility: "为 timeaudit-diagnostics Skill 汇总硬件、有效游戏帧、电脑状态、覆盖空档和阈值信号。", implementation: "`--hours 1-168` 或精确 UTC 窗口执行一次 aggregate-only 查询；schema、owner、coverage 与因果限制失败关闭。" }
   ],
   usageExamples: [
-    { ask: "刚才游戏为什么卡？", effect: "对齐 1 秒 FPS 采样、1% Low、单帧时间、瓶颈、磁盘和后台争抢。" },
-    { ask: "谁在后台写盘或联网？", effect: "AI先用有界聚合确认覆盖、磁盘/网络方向和是否值得深挖；当前 Skill 不返回进程名，需点名程序时再进入本机 Grafana 资源盘查看具体进程和时间段。" },
-    { ask: "程序为什么闪退？", effect: "AI先用聚合摘要确认同窗资源与覆盖；具体退出码、存活时间、父子关系和路径明细要进入本机 Grafana 取证盘，本项目尚无已验收的自然语言逐进程查询入口。" },
-    { ask: "时间都花在哪？", effect: "用前台区间、暂离、睡眠、专注块和切换趋势复盘；窗口标题与时长可按实际价值展示，只隐藏其中真正敏感的具体内容。" },
-    { ask: "采集器是不是假活？", effect: "检查三条无正文 heartbeat（心跳）、容器 health（健康状态）和任务状态，再精确恢复组件。" },
-    { ask: "过去一小时电脑为什么偶尔卡？", effect: "timeaudit-diagnostics 先用一条聚合查询确认覆盖、硬件、游戏帧和状态时长，再把 occurrence 信号与 Windows、驱动、任务或 PCConfig 现场证据交叉判断。" },
-    { ask: "换机或系统损坏后怎么恢复？", effect: "用数据库 dump、Grafana 备份、JSON 和计划任务步骤重建，再验整条链。" }
+    { moduleSlug: "hardware-performance", ask: "刚才游戏为什么卡？", effect: "先用有界摘要确认覆盖、游戏帧和压力方向；需要具体时间线时，再到 Grafana 对齐 1 秒 FPS、1% Low、单帧时间、瓶颈、磁盘和后台争抢。" },
+    { moduleSlug: "process-forensics", ask: "谁在后台写盘或联网？", effect: "AI先用有界聚合确认覆盖、磁盘/网络方向和是否值得深挖；当前 Skill 不返回进程名，需点名程序时再进入本机 Grafana 资源盘查看具体进程和时间段。" },
+    { moduleSlug: "process-forensics", ask: "程序为什么闪退？", effect: "AI先用聚合摘要确认同窗资源与覆盖；具体退出码、存活时间、父子关系和路径明细要进入本机 Grafana 取证盘，本项目尚无已验收的自然语言逐进程查询入口。" },
+    { moduleSlug: "usage-energy", ask: "时间都花在哪？", effect: "用前台区间、暂离、睡眠、专注块和切换趋势复盘；窗口标题与时长可按实际价值展示，只隐藏其中真正敏感的具体内容。" },
+    { moduleSlug: "runtime-reliability", ask: "采集器是不是假活？", effect: "检查三条无正文 heartbeat（心跳）、容器 health（健康状态）和任务状态，再精确恢复组件。" },
+    { moduleSlug: "hardware-performance", ask: "过去一小时电脑为什么偶尔卡？", effect: "timeaudit-diagnostics 先用一条聚合查询确认覆盖、硬件、游戏帧和状态时长，再把 occurrence 信号与 Windows、驱动、任务或 PCConfig 现场证据交叉判断；需要具体时刻或进程再打开 Grafana。" },
+    { moduleSlug: "collection-pipeline", ask: "为什么最近一段时间完全没数据？", effect: "先区分睡眠、关机和采集缺口，再查快慢车道、AHK spool、入库事务、数据库分区与 heartbeat，不把空档当成电脑健康。" },
+    { moduleSlug: "backup-recovery", ask: "换机或系统损坏后怎么恢复？", effect: "先判断是全新安装、带历史换机还是灾后恢复；建立 WSL / Docker / 项目 .venv 和三容器后，在空库建表与 dump 恢复中二选一，再恢复 Grafana、任务和整条验收链。" }
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "main 定义了采集、表、口径、自愈、备份，以及按实际值判断个人敏感内容与凭据的边界。", doesNotProve: "本机已安装、运行或每个查询正确。" },
@@ -165,6 +175,13 @@ export const timeAuditModules = [
     slug: "collection-pipeline",
     shortTitle: "采集与数据流",
     title: "双节拍采集、两条前台管线与分区写入",
+    searchAliases: ["为什么最近一段时间没采集数据", "一秒采样和三秒采样有什么区别", "睡眠后使用时间为什么不连续", "AHK数据没有入库怎么办", "数据库断线后采集会怎样"],
+    searchProjection: {
+      intents: ["检查最近为什么没有遥测", "理解一秒与三秒采集", "确认睡眠后有没有错误尖峰", "排查 spool 没有入库"],
+      entities: ["main.py", "TimeAudit.ahk", "audit-ingester", "PostgreSQL partition", "heartbeat"],
+      relations: ["快车道采硬件 FPS 与前台心跳", "慢车道扫描活跃进程", "AHK spool 经事务入库", "点采样和区间事件进入不同分区表"],
+      failureRecovery: ["慢扫描超时只跳慢拍", "数据库断线后退避重连", "spool 失败保留源段", "睡眠或关机空档不冒充健康"]
+    },
     teaser: "用 1 秒硬件/FPS 快车道、3 秒进程慢车道和独立 AHK 区间管线，把不同频率与语义的数据写入 PostgreSQL，并保留来源、空值、睡眠和重试边界。",
     status: "主链运行且 heartbeat 新鲜；定向入库/运行回归通过，原始行本次未读",
     statusTone: "mixed",
@@ -233,13 +250,20 @@ export const timeAuditModules = [
     slug: "hardware-performance",
     shortTitle: "硬件与流畅度",
     title: "硬件真值、FPS 回放与前台性能诊断",
+    searchAliases: ["游戏卡顿先看摘要还是Grafana", "过去一小时温度磁盘有没有异常", "没有游戏帧是不是采集坏了", "1% Low为什么突然掉", "帧时尖刺和后台压力怎么对齐"],
+    searchProjection: {
+      intents: ["复盘一次卡顿或掉帧", "查看温度功耗和磁盘压力", "判断没有游戏帧是否正常", "从摘要进入具体时间线深挖"],
+      entities: ["timeaudit-diagnostics", "Grafana", "FPS", "1% Low", "frametime", "PresentMon"],
+      relations: ["有界 summary 先确认覆盖和方向", "Grafana 再对齐帧时硬件前台与后台", "PresentMon 只接受新鲜一致帧", "no_game_frames 表示没有有效渲染负载"],
+      failureRecovery: ["无游戏帧保持 idle 而不报掉帧", "探针掉线只留对应字段空值", "混入旧帧时拒绝性能结论", "摘要覆盖 stale 时先补现场证据"]
+    },
     teaser: "组合 NVML、PDH、LibreHardwareMonitor 和 PresentMon，对齐温度、功耗、内存、磁盘、网络、FPS、1% Low 与前台焦点，形成前台卡顿分析。",
     status: "硬件采集与 FPS 选择有源码/回归；真实截图可见，本次未跑游戏负载 E2E",
     statusTone: "mixed",
-    value: "我能从“感觉卡”追到同刻的低帧、帧时、CPU/GPU、磁盘、网络和后台压力。",
+    value: "我能先用最长 168 小时的有界 summary（摘要）确认覆盖、硬件、有效游戏帧和压力方向，再在需要具体时刻、程序或曲线时进入 Grafana，把“感觉卡”追到同刻的低帧、帧时、CPU/GPU、磁盘、网络和后台压力。",
     why: "平均 FPS 会掩盖短暂卡顿；混入核显/虚拟显示器会错报显存，跨不同负载比较温度也会制造伪老化。",
     example: "平均 120 FPS 但 1% Low 掉到 30、单帧超过 50ms；瓶颈线显示后台 CPU 争抢而非 GPU 温度墙，于是先处理后台负载。",
-    result: "得到硬件时间线、FPS 对比、卡顿标记、CPU/GPU 瓶颈、网络/磁盘压力和同负载散热趋势。",
+    result: "先得到一份覆盖质量、硬件聚合、有效游戏帧、状态时长和解释限制清楚的摘要；若它指出值得深挖，再得到 Grafana 中的硬件时间线、FPS 对比、卡顿标记、CPU/GPU 瓶颈、网络/磁盘压力和同负载散热趋势。摘要不返回具体进程，也不替代大盘。",
     readerStates: {
       pass: "传感器与渲染负载可用时，按同一时刻显示硬件、FPS、帧时和前台关系。",
       problem: "单一来源掉线或越界时保留空值，其他来源继续。",
@@ -247,6 +271,7 @@ export const timeAuditModules = [
     },
     decisionImpact: [
       "先看 1% Low 与帧时，再看平均 FPS。",
+      "先用 summary 确认窗口覆盖、有效游戏帧和方向；只有问题需要具体时刻、进程或跨曲线关系时才进 Grafana。",
       "只认 NVIDIA 独显，隔离核显与虚拟显示器。",
       "功耗墙、温度墙、空闲降频分开解释。",
       "只在相似负载下判断散热趋势。"
@@ -259,10 +284,11 @@ export const timeAuditModules = [
       "数据库会话锁定 Asia/Shanghai 本地日界。"
     ],
     flow: [
-      "识别物理 GPU 和传感器。",
-      "每秒采硬件、FPS、网络与系统压力。",
-      "隔离单个探针失败。",
-      "按时间桶对齐前台和卡顿。"
+      "用 timeaudit-diagnostics 对最短够用窗口做一次有界 summary，先核对 coverage、样本数、最新年龄与最大 gap。",
+      "若需要细节，再识别物理 GPU 和传感器并打开对应 Grafana 时间窗。",
+      "每秒采硬件、FPS、网络与系统压力，隔离单个探针失败。",
+      "按时间桶对齐前台、卡顿、温度、磁盘与网络曲线。",
+      "把 summary 的相关信号与大盘细节、Windows 事件、驱动或 PCConfig 现场交叉判断，不由一条阈值直接给根因。"
     ],
     concepts: [
       { term: "1% Low", explanation: "最差 1% 时段帧率，揭示偶发卡顿。" },
@@ -302,13 +328,20 @@ export const timeAuditModules = [
     slug: "process-forensics",
     shortTitle: "进程与取证",
     title: "进程资源、生命周期与有边界的取证线索",
+    searchAliases: ["谁在后台写盘", "哪个程序在联网", "哪个进程刚才闪退", "程序退出码在哪里看", "诊断Skill为什么不给进程名"],
+    searchProjection: {
+      intents: ["找出同一时刻谁写盘或联网", "查看某程序为什么闪退", "核对进程启动退出和父子关系", "从聚合方向进入逐进程大盘"],
+      entities: ["process key", "START / EXIT", "exit code", "Grafana 资源盘", "Grafana 取证盘"],
+      relations: ["Skill 聚合只给方向不返回进程名", "Grafana 把具体进程与时间窗口对齐", "生命周期把 PID 与时间身份关联", "签名路径和提权只是核查线索"],
+      failureRecovery: ["进程已退出时保留已有生命周期", "未知路径保持 unknown", "逐进程入口未验收时不猜名字", "单一安全信号不自动处置"]
+    },
     teaser: "保存进程资源、签名、提权、父进程、START / EXIT、退出码和卡死状态，回答谁占资源、谁闪退、哪些信号需人工核查。",
     status: "进程采集和未知路径有源码/回归；本次刷新未读取实际进程、标题或连接",
     statusTone: "mixed",
-    value: "我能回看哪类程序占资源、何时启动/退出、是否提权、退出码是什么，而不只知道“电脑很忙”。",
+    value: "我能回答“谁刚才闪退、谁在写盘、谁在联网”这类自然问题，但分两步：timeaudit-diagnostics 只先确认窗口覆盖和资源方向，不返回进程名；需要点名时再进入本机 Grafana 的资源盘或取证盘，回看具体程序、启动/退出、提权、退出码与路径。",
     why: "同名进程可来自不同路径，PID 会复用，退出后信息消失；单凭无签名或端口定罪又会误报。",
-    example: "程序每几秒 START 后 EXIT，退出码为内存访问异常，同刻内存快速上升。系统给出崩溃链，但不自动删文件或宣判恶意。",
-    result: "得到进程身份、资源、前后台、生灭、卡死、签名和提权线索，以及待人工核查列表。",
+    example: "我问“刚才哪个程序一直闪退？”摘要先证明这段时间有覆盖并指出同窗资源变化，但不会给出名字；我再把相同时间范围打开到 Grafana 取证盘，看到某程序每几秒 START 后 EXIT、退出码为内存访问异常且同刻内存快速上升。系统给出崩溃链，但不自动删文件或宣判恶意。",
+    result: "先得到是否有足够覆盖、是否值得深挖的聚合方向；再按需得到具体进程身份、写盘/联网资源、前后台、生灭、退出码、卡死、签名和提权线索，以及待人工核查列表。当前 Skill 本身不返回进程名，本项目也没有已验收的自然语言逐进程查询入口。",
     readerStates: {
       pass: "进程可访问或已持句柄时，保存身份、资源与真实退出码。",
       problem: "路径、签名或父进程不可读时保留 unknown 并组合其他线索。",
@@ -316,6 +349,8 @@ export const timeAuditModules = [
     },
     decisionImpact: [
       "高占用与恶意分开判断。",
+      "timeaudit-diagnostics 只给有界聚合和方向，不从省略字段猜进程名。",
+      "要回答谁闪退、写盘或联网，必须把同一时间范围带进 Grafana 资源盘 / 取证盘查看具体进程。",
       "未知路径不伪造为系统目录。",
       "PID 与时间/身份一起使用。",
       "公开页可在活动事实有决策价值时直接展示；只对实际包含个人敏感正文或凭据的具体值做隐藏。"
@@ -328,10 +363,11 @@ export const timeAuditModules = [
       "process_key 连接身份与事实表。"
     ],
     flow: [
-      "取得进程快照与身份。",
-      "计算资源速率并标记卡死。",
-      "比较基线生成 START / EXIT。",
-      "按时间窗聚合资源与待核查信号。"
+      "先用有界摘要核对目标时间窗覆盖、磁盘/网络/资源方向；摘要不包含进程名。",
+      "需要点名时，把同一窗口带入 Grafana 资源盘或取证盘。",
+      "取得进程快照与稳定身份，计算资源速率并标记卡死。",
+      "比较基线生成 START / EXIT，并保留退出码、父子关系、路径、签名和提权线索。",
+      "把具体进程与硬件、前台和生命周期时间线对齐，再输出候选解释与未知。"
     ],
     concepts: [
       { term: "process key（进程档案键）", explanation: "稳定关联身份，不能只用会复用的 PID。" },
@@ -340,10 +376,12 @@ export const timeAuditModules = [
     ],
     boundaries: [
       "提供取证线索，不是杀毒或阻断系统。",
+      "timeaudit-diagnostics 的 aggregate-only（仅聚合）合同不返回进程名；字段省略不能被模型补猜。",
       "网络速率近似分摊，远端信息可能不完整。",
       "字段类型不构成 blanket ban（整类禁令）；实际进程、路径、命令行、IP 和标题可在有用且具体值不含个人敏感正文或凭据时公开。"
     ],
     failures: [
+      { condition: "用户只给自然问题但需要具体进程名", response: "先用摘要确认覆盖和方向，再引导到同一时间窗的本机 Grafana；当前 Skill 不从聚合输出猜名字。" },
       { condition: "进程已退出或受保护", response: "保留 unknown 与可得生命周期，不猜路径。" },
       { condition: "单进程处理抛错", response: "在 finally 推进基线，避免事件重复。" },
       { condition: "安全规则命中", response: "进入待核查表，不自动修改机器。" }
@@ -367,6 +405,13 @@ export const timeAuditModules = [
     slug: "usage-energy",
     shortTitle: "时间与能耗",
     title: "屏幕使用、专注上下文与能耗成本",
+    searchAliases: ["今天电脑时间都花在哪", "屏幕使用时间为什么超过查询窗口", "睡眠为什么算进活跃时间", "电脑长期发热耗电怎么复盘", "电费数字是不是插座实测"],
+    searchProjection: {
+      intents: ["复盘屏幕使用与专注时间", "检查区间重复或跨窗", "估算长期能耗和电费", "区分活跃暂离息屏锁屏睡眠"],
+      entities: ["active", "idle", "display-off", "sleep", "focus block", "energy integration"],
+      relations: ["区间先裁剪再求并集", "暂离息屏锁屏睡眠从活跃中扣除", "功率点采样积分成能耗", "电价和其他部件功耗属于估算"],
+      failureRecovery: ["跨窗口只算交叠部分", "重叠 idle 先合并", "AHK 或 ingester 心跳陈旧先查管线", "来源不可读时不猜作息与费用"]
+    },
     teaser: "按正确区间口径汇总前台、暂离、息屏、睡眠、切换、功率和峰谷电价，回答时间花在哪里以及重负载成本。",
     status: "产品与截图可见；本次未读取个人时间线或实际能耗值",
     statusTone: "mixed",
@@ -434,6 +479,13 @@ export const timeAuditModules = [
     slug: "runtime-reliability",
     shortTitle: "自愈与正确性",
     title: "单例、心跳、看门狗与长期运行不变量",
+    searchAliases: ["采集进程在但没有数据", "采集器假活怎么判断", "Watchdog多久检查一次", "哪个采集组件会被自动重启", "睡眠唤醒后为什么先等一会"],
+    searchProjection: {
+      intents: ["判断采集器是否假活", "查看 Watchdog 最近恢复结果", "确认三个组件 heartbeat", "排查睡眠恢复后的短暂空档"],
+      entities: ["TimeAudit_Watchdog", "main.py heartbeat", "AHK heartbeat", "ingester heartbeat", "bounded backoff"],
+      relations: ["进程存在不等于成功推进", "Watchdog 每分钟按精确身份检查三个组件", "睡眠恢复宽限先于重启", "连续故障触发有界退避"],
+      failureRecovery: ["native crash 按组件重启", "false alive 由陈旧 heartbeat 发现", "交互会话不可用时不伪造前台采集", "在线状态不覆盖历史缺口"]
+    },
     teaser: "用单例、无 payload heartbeat、外部 Watchdog、退避、睡眠宽限和精确身份，把 native 崩溃、假活、探针掉线与数据库重连限制在受影响组件。",
     status: "容器/heartbeat/任务现场可见，运行硬化回归通过；未做完整故障注入",
     statusTone: "mixed",
@@ -498,63 +550,90 @@ export const timeAuditModules = [
   },
   {
     slug: "backup-recovery",
-    shortTitle: "存储与恢复",
-    title: "分区规模、备份同步与灾难恢复",
-    teaser: "分层保存时序数据库、Grafana 状态、dashboard JSON 和任务；备份拒绝脏改/分叉，恢复只接受固定数据源与完整结构。",
+    shortTitle: "安装与恢复",
+    title: "安装、换机与数据恢复",
+    searchAliases: ["新电脑第一次怎么装采集系统", "换机怎么带走采集历史", "系统重装后怎么恢复采集历史", "空数据库要建表还是恢复dump", "快速部署零丢失承诺还有效吗", "Watchdog到底一分钟还是五分钟"],
+    searchProjection: {
+      intents: ["在全新电脑安装 TimeAudit", "换机并带回历史数据", "系统重装或硬盘更换后恢复", "验证备份是否真的可恢复"],
+      entities: ["WSL2", "Docker Desktop", "setup_runtime.ps1", "PostgreSQL dump", "Grafana datasource", "TimeAudit_DailyBackup"],
+      relations: ["源码 checkout 后重建项目 .venv", "三容器就绪后空库建表或 dump restore 二选一", "Grafana 数据源先于 dashboard 恢复", "AutoStart Watchdog DailyBackup 连接运行与恢复", "heartbeat 入库聚合浏览器大盘组成验收链"],
+      failureRecovery: ["旧快速部署整树复制不作为现行命令", "零丢失承诺改为说明备份后缺口", "Watchdog 五分钟旧说明以当前每分钟事实为准", "最新 dump 未隔离整库恢复就保持缺口"]
+    },
+    teaser: "把全新安装、带历史换机、系统重装 / 硬盘更换三种场景拆开：先重建 WSL、Docker、项目 .venv 和三容器，再在空库建表或 dump 恢复中二选一，接回 Grafana、三项计划任务并做真实数据链验收。",
     status: "每日备份最近结果 0，备份/恢复定向测试通过；未从最新 dump 做隔离整库恢复",
     statusTone: "mixed",
-    value: "我能知道数据在哪、占多少、哪份能恢复；换机或损坏时不靠复制可能未干净关闭的数据卷碰运气。",
-    why: "数据库卷、Grafana 二进制库和 JSON 的一致性风险不同；直接覆盖会倒退 UI，自动 Git 也可能夹带脏改。",
-    example: "每日备份先取 Grafana 一致快照并导出 JSON，再检查仓库、运行实例与远端；脏改、落后或分叉即失败关闭。",
-    result: "得到数据库 dump、Grafana 备份、可审计 JSON、轮转、预检和安装/迁移/容灾步骤。",
+    value: "无论是新电脑第一次装、换机要带走历史，还是重装 / 硬盘更换后从备份回来，我都能沿同一条可验收旅程恢复到真正可用：运行环境、数据库、Grafana、自动任务、心跳、入库、聚合查询和浏览器大盘逐层回读，而不是看见几个文件就说完成。",
+    why: "全新空库与带历史恢复不是同一动作：前者需要 `schema.sql` 建表，后者应从 PostgreSQL dump 恢复并让 dump 自带结构，两者不能机械叠加。数据库卷、Grafana 二进制库和 JSON 的一致性风险也不同；直接复制整个项目树会夹带 `.venv`、运行卷和旧机器状态。现有 `快速部署.md` 仍有“复制整个树”“历史数据零丢失”和 Watchdog 每 5 分钟等漂移说法，不能继续当现行命令。",
+    example: "新机没有历史时，我安装 WSL / Docker，取得当前项目源码，用 `setup_runtime.ps1` 重建项目 `.venv`，拉起 PostgreSQL、ingester、Grafana 三容器并执行 `schema.sql`。如果是带历史换机，则前半段相同，但空库不再先建表，而是校验并恢复选定 dump；随后恢复固定 Grafana 数据源与 dashboard，重建 AutoStart、Watchdog、DailyBackup，直到 heartbeat 推进、数据入库、摘要可查、浏览器大盘能读。",
+    result: "得到一份按场景可复述的安装 / 恢复结果：源码和项目 `.venv` 已重建，三容器状态明确，空库建表或 dump restore 的唯一选择有记录，Grafana 数据源与 dashboard 可读，TimeAudit_AutoStart、TimeAudit_Watchdog、TimeAudit_DailyBackup 已接回，三条 heartbeat、真实入库、有界聚合和浏览器大盘逐层验收；备份之后到故障时刻之间的历史缺口、未恢复项和本轮未做的最新 dump 隔离整库恢复仍单独列出。",
     readerStates: {
-      pass: "来源一致、合同有效、目标可写且远端未分叉时生成并回读备份。",
-      problem: "脏改、版本落后、分叉、非法 JSON 或退役 UID 时停止并保留原因。",
-      unavailable: "介质、Docker 或数据库不可用时不删旧备份、不覆盖现状。"
+      pass: "选定场景、源码、运行环境和恢复来源都明确时，完成环境、数据库、Grafana、任务与数据链验收；只有每层回读通过才称该层恢复。",
+      problem: "dump 不可读、空库动作选错、数据源 / dashboard 合同失败、任务漂移、heartbeat 不前进或摘要无覆盖时停在对应层，保留已完成结果和旧备份。",
+      unavailable: "备份介质、Docker、数据库、账号因子或当前源码不可用时，只建立能安全建立的空环境并标明历史不可恢复；不删除旧备份、不复制可疑运行卷、不声称零丢失。"
     },
     decisionImpact: [
-      "数据库 dump 优先于运行中数据目录复制。",
-      "二进制库保存完整状态，JSON 提供版本化恢复。",
-      "只接受精确 .json，不导入 .json.bak。",
-      "任务结果 0 不替代隔离恢复。"
+      "全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。",
+      "取得现行项目源码后运行 `setup_runtime.ps1` 重建 `.venv`；不复制旧 `.venv`、整个项目运行树或未干净关闭的数据卷。",
+      "先建立 WSL2、Docker Desktop、项目 `.venv` 与 PostgreSQL / ingester / Grafana 三容器。",
+      "全新空库执行 `schema.sql`；带历史换机或灾后恢复使用校验过的 dump restore。两条只选一条，避免先建再清或把空库当历史。",
+      "数据库 dump 优先于运行中 `postgres_data` 目录复制；Grafana 先确认固定 PostgreSQL datasource，再恢复 dashboard JSON 或完整状态。",
+      "恢复 `TimeAudit_AutoStart`、每分钟 `TimeAudit_Watchdog` 与 `TimeAudit_DailyBackup` 后，依次验 heartbeat、真实入库、有界聚合和浏览器大盘。",
+      "二进制库保存完整 Grafana 状态，JSON 提供版本化 dashboard 恢复；只接受精确 `.json`，不导入 `.json.bak`。",
+      "任务结果 0、备份存在和源码测试都不替代最新 dump 的隔离整库恢复；历史缺口必须按最后备份时间保留。"
     ],
-    problem: "解决长期膨胀、备份夹带、Git 分叉、运行实例倒退、数据源失配和未经演练的恢复自信。",
+    problem: "解决全新安装与历史恢复混用、复制旧运行树、`.venv` 跨机器漂移、空库建表与 dump restore 重复、Grafana 数据源失配、计划任务漏装、长期膨胀、备份夹带、Git 分叉和未经真实数据链验收的恢复自信。",
     implementation: [
-      "schema/main 管周/月分区、预热和 1200 天默认保留。",
+      "setup_runtime.ps1 从固定 Python 3.11 基座创建项目 `.venv`、安装 requirements 并运行 pip check；启动器和 Watchdog 使用其中的 pythonw。",
+      "docker-compose.yml 拉起 PostgreSQL 15、audit-ingester 和 Grafana 13.0.2；schema/main 管周/月分区、预热和 1200 天默认保留。",
       "backup_db 用 pg_dump；backup_grafana 用一致快照导出 JSON。",
       "restore_grafana 只接受合同通过的 JSON，并支持 dry-run。",
-      "DailyBackup 每天 20:40 组合备份并轮转 14 份。"
+      "PCConfig 重建 AutoStart 与每分钟 Watchdog；DailyBackup 每天 20:40 组合备份并轮转 14 份。",
+      "README 记录当前 `.venv`、每 1 分钟 Watchdog 与运行链；`快速部署.md` 的整树复制、零丢失和每 5 分钟说法是待 Owner 修订的旧说明。"
     ],
     flow: [
-      "检查来源、目标和仓库。",
-      "生成数据库 dump 与 Grafana 快照。",
-      "导出并验证 JSON/UID/matcher。",
-      "定向提交并正常推送回读。",
-      "恢复先 dry-run，再导入并验全链。"
+      "先选场景：全新安装没有历史、换机需要带历史，或灾后 / 重装 / 硬盘更换从备份恢复；记录最后可靠备份与预期历史缺口。",
+      "安装或确认 WSL2 与 Docker Desktop，取得现行项目源码，运行 `pwsh -File .\\setup_runtime.ps1` 重建项目 `.venv`。",
+      "准备凭据后以 compose 拉起 PostgreSQL、audit-ingester、Grafana 三容器，并确认容器身份与 health。",
+      "数据库二选一：全新空库执行 `schema.sql`；带历史或灾后候选先校验 dump，再恢复到干净目标库，不额外走空库建表路线。",
+      "确认 Grafana 固定 PostgreSQL datasource，再用合同通过的 JSON 或完整 Grafana 备份恢复 dashboard，并在浏览器打开 `http://localhost:53000`。",
+      "重建并回读 `TimeAudit_AutoStart`、`TimeAudit_Watchdog`、`TimeAudit_DailyBackup`，再手动触发一次受控启动或备份检查。",
+      "按三条 heartbeat 推进、真实入库、`timeaudit_diagnostic_summary.py` 聚合覆盖、浏览器六张大盘可读的顺序验收。",
+      "最后列出备份后到故障时刻的历史缺口、不可恢复项和未执行的演练；本轮仍未从最新 dump 做隔离整库恢复。"
     ],
     concepts: [
       { term: "dump（逻辑备份）", explanation: "由 PostgreSQL 生成、可校验恢复的文件。" },
+      { term: "fresh install（全新安装）", explanation: "没有历史库的场景；在三容器就绪后用 `schema.sql` 创建空表结构。" },
+      { term: "history restore（历史恢复）", explanation: "换机或灾后把校验过的 dump 恢复到干净目标库；dump 自带结构，不与空库建表步骤叠加。" },
+      { term: "runtime rebuild（运行环境重建）", explanation: "从现行源码和 requirements 运行 `setup_runtime.ps1` 创建项目 `.venv`，不复制旧机器的虚拟环境。" },
+      { term: "acceptance chain（验收链）", explanation: "从任务、heartbeat、真实入库、聚合摘要到浏览器大盘逐层回读；上一层成功不替代下一层。" },
       { term: "consistent snapshot（一致快照）", explanation: "同一事务视图读取 Grafana SQLite。" },
       { term: "dry-run（预检）", explanation: "只发现和验证，不修改运行实例。" }
     ],
     boundaries: [
       "数据库和二进制备份不进入 PUBLIC Git。",
       "Git JSON 不等于完整数据库或用户状态。",
-      "无恢复回读不能称灾难恢复完成。"
+      "`快速部署.md` 当前“复制整个项目树”“历史零丢失”和 Watchdog 每 5 分钟属于已识别漂移；现行事实以 README、setup_runtime.ps1 与每分钟 Watchdog 定义为准。",
+      "恢复最多到最后一份可靠备份；故障前尚未备份的区间必须列为历史缺口。",
+      "无恢复回读不能称灾难恢复完成，本轮也没有把定向测试或任务结果 0 冒充最新 dump 的隔离整库恢复。"
     ],
     failures: [
+      { condition: "全新安装误走 dump 恢复或历史恢复先建空表", response: "停止并重新确认场景；在 `schema.sql` 建表与 dump restore 中只选正确的一条。" },
+      { condition: "旧文档要求复制整个项目树或旧 `.venv`", response: "只迁移现行源码与经选择的备份，在目标机运行 `setup_runtime.ps1` 重建环境；运行卷不作为默认迁移手段。" },
       { condition: "JSON 有人工脏改", response: "失败关闭，不覆盖或夹带。" },
       { condition: "退役 UID / matcher 缺失", response: "合同失败，不能恢复。" },
+      { condition: "任务显示成功但 heartbeat、入库或大盘不通", response: "只把任务层标为通过，继续定位受影响层；不宣布系统恢复。" },
       { condition: "远端领先或分叉", response: "不 push、不 force-push，保留本地备份。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\TimeAudit\\schema.sql", role: "表、分区与索引" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\docker-compose.yml", role: "数据库、ingester 与 Grafana" },
+      { path: "E:\\Projects\\Tools\\TimeAudit\\setup_runtime.ps1", role: "项目 .venv 创建、依赖安装和冲突检查" },
+      { path: "E:\\Projects\\Tools\\TimeAudit\\README.md", role: "现行每分钟 Watchdog、.venv 与运行验收事实" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\backup_all.ps1", role: "组合备份" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\backup_db.ps1", role: "数据库 dump" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\backup_grafana.py", role: "Grafana 导出与同步" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\restore_grafana.py", role: "验证与恢复" },
-      { path: "E:\\Projects\\Tools\\TimeAudit\\快速部署.md", role: "安装、迁移与容灾" },
+      { path: "E:\\Projects\\Tools\\TimeAudit\\快速部署.md", role: "三场景旧入口；含已识别的整树复制、零丢失与五分钟 Watchdog 漂移" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_backup_all_script.py", role: "备份回归" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_restore_grafana.py", role: "恢复回归" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py", role: "分区查询审计" }
@@ -562,9 +641,10 @@ export const timeAuditModules = [
     verification: [
       "DailyBackup 最近结果为 0。",
       "备份、恢复与大盘合同纳入定向测试并通过。",
-      "未从最新 dump 做隔离 pg_restore，恢复 E2E 仍缺。"
+      "README 与 setup_runtime.ps1 当前证明运行环境应在目标机重建、Watchdog 为每分钟检查；它们不证明某次换机已经完成。",
+      "未从最新 dump 做隔离 pg_restore，也未完整走三场景任一真实换机旅程，恢复 E2E 仍缺。"
     ],
-    relation: "保存其他模块的数据与可视化，并提供迁移/回滚。"
+    relation: "先重建采集模块的运行与存储底座，再恢复硬件、进程、时间和可视化所需历史；可靠性模块接回 AutoStart / Watchdog，最终由 heartbeat、入库、聚合和浏览器大盘共同验收。"
   }
 ];
 

@@ -3,6 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const chineseAsrSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T11:59:37.2566597Z",
   label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
+  boundary: "当前 70e3255 源码与 345 项单元回归已核对；历史真实四切片 E2E 可回读，但本轮没有用私人录音重跑模型，也不把自动文字当成事实认证",
   metrics: [
     { label: "引擎", value: "6" },
     { label: "回归", value: "345/345" },
@@ -37,6 +38,14 @@ export const chineseAsrProject = {
   cardStatus: "中文转写、长录音续跑和可复核结果包已经实现",
   cardStatusTone: "pass",
   ...chineseAsrSnapshot,
+  searchAliases: [
+    "把中文录音变成可复核文字",
+    "录音转写中断以后怎么继续",
+    "ASR结果怎样回到原音频复核",
+    "转写回执能不能证明内容正确",
+    "录音里谁说了哪句话",
+    "普通录音会不会被上传"
+  ],
   repositoryNote: "源代码位于 PUBLIC（公开）GitHub（代码托管平台）仓库；模型权重、私人录音、转写结果、声纹向量、云端请求和本机缓存不进入仓库，也不进入本页。",
   summary: "ChineseASR 把一段中文录音变成一份能搜索、能继续处理、能回到原音频人工复核的转写包，而不是只吐出一段看似通顺的文字。默认结果保留正文、原始输出、风险和失败证据；需要逐段时间线、匿名说话人或本人线索时再显式选择对应路线。中断后可以接着跑，普通录音默认留在本机。姓名、数字、承诺和争议语句仍以原音频为准。",
   why: "中文录音最危险的问题不是单纯“识别错一个字”，而是模型在静音、噪声、方言、专有名词或长音频切片处生成看似通顺的错误内容。普通结果还可能只有正文而没有完整逐句时间线；如果不保留输入指纹、模型版本、失败证据和可选定位路线，事后既不知道错在哪里，也无法判断重跑是否真的更可靠。",
@@ -121,13 +130,14 @@ export const chineseAsrProject = {
     { name: "专业云入口", responsibility: "只为明确的重要录音提供一次受控云候选。", implementation: "asr-professional-cloud.ps1 同时要求重要性和本次上传授权，密钥由 SecretRef 注入固定 worker。" }
   ],
   usageExamples: [
-    { ask: "把这段微信语音转成文字。", effect: "使用本地日常转写，返回可读正文、原始结果和风险提示；普通请求不会触发云上传。" },
-    { ask: "这段会议很重要，尽量降低看似通顺的错话。", effect: "使用严格双路转写，保留两份结果的分歧、风险标记和需要回听的句段；必要时再明确选择更重的证据路线。" },
-    { ask: "把两小时录音处理完，中断后别从头来。", effect: "按连续时间分段保存进度，中断后只补缺失或失效片段，不重复完成部分。" },
-    { ask: "把这个文件夹的录音都转写。", effect: "批量入口复用已加载模型，逐文件生成独立结果与失败状态，不用一个文件失败拖垮全部。" },
-    { ask: "告诉我哪一段可能是我说的。", effect: "结合本人声音线索、声道、联系人、对话角色和句义；证据冲突或单声道歧义时明确说无法确认。" },
-    { ask: "这段录音是不是完全没人说话？", effect: "只有处理完整且有规范负向证据时才说没有检测到语音；空文本、缺段或失败都保持无法判断。" },
-    { ask: "模型卡住了，我要不要再提交一次？", effect: "先看现有任务和恢复标识；仍在运行就继续观察，超时或失败沿原任务恢复，不盲目复制重任务。" }
+    { moduleSlug: "models-modes", ask: "把这段微信语音转成文字。", effect: "使用本地日常转写，返回可读正文、原始结果和风险提示；普通请求不会触发云上传。" },
+    { moduleSlug: "audit-evidence", ask: "这段会议很重要，尽量降低看似通顺的错话。", effect: "使用严格双路转写，保留两份结果的分歧、风险标记和需要回听的句段；必要时再明确选择更重的证据路线。" },
+    { moduleSlug: "long-batch", ask: "把两小时录音处理完，中断后别从头来。", effect: "按连续时间分段保存进度，中断后只补缺失或失效片段，不重复完成部分。" },
+    { moduleSlug: "long-batch", ask: "把这个文件夹的录音都转写。", effect: "批量入口复用已加载模型，逐文件生成独立结果与失败状态，不用一个文件失败拖垮全部。" },
+    { moduleSlug: "speaker-attribution", ask: "告诉我哪一段可能是我说的。", effect: "结合本人声音线索、声道、联系人、对话角色和句义；证据冲突或单声道歧义时明确说无法确认。" },
+    { moduleSlug: "audit-evidence", ask: "这段录音是不是完全没人说话？", effect: "只有处理完整且有规范负向证据时才说没有检测到语音；空文本、缺段或失败都保持无法判断。" },
+    { moduleSlug: "task-routing", ask: "模型卡住了，我要不要再提交一次？", effect: "先看持久化的任务终态和恢复标识；等待超时先查询原 job，服务重启留下的 interrupted（中断）任务不会自动重跑，长音频显式重试仍复用原稳定输出目录。" },
+    { moduleSlug: "runtime-privacy", ask: "这是一段重要录音，本次可以上传云端再给我一个候选。", effect: "只有重要性与本次上传授权同时成立才进入固定云入口；本地证据链、云候选和失败记录保持分开。" }
   ],
   evidenceLayers: [
     { layer: "Source（源码层）", proves: "当前 main 中实际存在的模型路由、任务、审计、边界和测试实现。", doesNotProve: "本机已经安装、服务正在运行或真实录音效果正确。" },
@@ -165,13 +175,20 @@ export const chineseAsrModules = [
     slug: "task-routing",
     shortTitle: "入口与任务",
     title: "输入检查、Smart API 与可恢复任务",
-    teaser: "统一处理文件身份、音频预检、job key、异步提交、状态观察、缓存复用、期限和取消，让上层不因重模型阻塞，也不因一次超时重复运行同一录音。",
+    searchAliases: ["服务重启后录音任务会自动重跑吗", "ASR任务中断后去哪看", "长录音重试会不会换输出目录", "同一个录音为什么没有重复跑", "转写任务超时要不要重新提交"],
+    searchProjection: {
+      intents: ["提交一段录音并稍后查进度", "恢复中断的转写任务", "判断超时后是否应该重提", "取消一条仍在运行的任务"],
+      entities: ["Smart API", "job id", "jobs.json", "request fingerprint", "稳定输出目录"],
+      relations: ["音频内容 SHA-256 与请求语义生成 fingerprint", "fingerprint 绑定 job key 和长音频恢复目录", "持久任务历史记录终态但不恢复可执行队列"],
+      failureRecovery: ["服务重启把未完成任务标成 service_restarted", "interrupted 任务不自动重跑", "长音频失败或取消后显式重试复用原目录", "等待超时先查原 job 而不是再提交"]
+    },
+    teaser: "统一处理文件内容身份、音频预检、job key、异步提交、终态持久化、状态观察、缓存复用、期限和取消，让上层不因重模型阻塞，也不因一次超时或服务重启重复运行同一录音。",
     status: "Smart API、任务生命周期和缓存完整性已有源码与单测；本次未重跑真实模型 smoke",
     statusTone: "mixed",
     value: "我可以用同一种方式提交短录音、长录音或批量任务，并在几秒内拿到稳定 job 身份；后续查询、恢复或取消都围绕同一任务，不用猜进程是否还活着。",
     why: "ASR 可能加载数 GB 模型并运行数分钟。若命令行超时就直接重发，容易同时运行两份任务、抢占 GPU、覆盖输出或把仍在处理误判为失败。",
-    example: "我提交一段 40 分钟录音，15 秒内只收到 running（运行中）和 job id。稍后查询同一 id 获取进度；再次提交相同文件与模式时命中相同 job key，而不是新建另一份重任务。",
-    result: "得到一个与输入和请求绑定的任务记录：当前阶段、开始与更新时间、输出位置、错误、缓存状态、是否可以恢复，以及最终正文与证据文件。",
+    example: "我提交一段 40 分钟录音，15 秒内只收到 running（运行中）和 job id。服务随后重启：原 queued / running 记录会持久回读为 service_restarted 失败，而不会偷偷再跑；我确认后显式重试，新的 job id 继续使用由同一内容和请求指纹确定的长音频输出目录。",
+    result: "得到一个与音频内容和请求绑定、可跨服务重启查询的任务记录：当前阶段、开始与更新时间、稳定输出位置、错误、缓存状态、是否中断、是否需要显式重试，以及最终正文与证据文件。终态历史可回读，但旧队列不会在重启后自动执行。",
     readerStates: {
       pass: "输入和服务可用时返回稳定 job id，任务在后台受监管运行，完成后输出完整文件清单。",
       problem: "客户端等待超时但服务端任务仍在时继续查询；任务期限、租约或子进程失败时结束对应任务并保留具体错误。",
@@ -179,8 +196,11 @@ export const chineseAsrModules = [
     },
     decisionImpact: [
       "先查询任务状态，再决定等待、恢复或重新提交。",
-      "相同输入和请求复用验证过的结果；输入或模型身份改变时必须新建任务。",
+      "request fingerprint（请求指纹）包含音频内容 SHA-256 与请求语义；只改修改时间不改变它，内容改变即使大小和时间相同也会改变它。",
+      "相同输入和请求复用验证过的结果；输入内容、模型或请求身份改变时必须新建任务。",
       "客户端 Timeout（等待超时）与服务端失败分开表达。",
+      "terminal（终态）任务写入持久历史；重启时未完成记录被标成 interrupted / service_restarted，不自动重新排队。",
+      "long-strict 失败或取消后的显式重试产生新 job id，但复用同一稳定输出目录，让 manifest 验证后只补缺失分段。",
       "取消、期限和租约丢失会回收完整子进程树。",
       "外部观察只返回有界状态，不公开私人正文或内部目录扫描结果。"
     ],
@@ -188,7 +208,9 @@ export const chineseAsrModules = [
     implementation: [
       "scripts/asr-smart.ps1 负责本地入口、轻量健康检查、提交和有界等待。",
       "src/zh_asr/service.py 维护 job 状态、队列、期限、状态查询与 observer projection。",
-      "job key 绑定输入文件身份、模式、引擎和输出语义，缓存命中前验证关键制品。",
+      "job key 绑定音频绝对路径、内容 SHA-256、模式、已解析引擎、模型配置、设备、切片参数和调用方绑定，缓存命中前验证关键制品。",
+      "jobs.json 持久化有界任务历史；服务启动时保留已完成终态，把遗留 queued / running 记录转换为明确的 service_restarted 失败。",
+      "long-strict 输出目录由稳定 request fingerprint 派生；失败或取消后的显式重试不会换目录，旧 manifest 和收据仍须重新验证。",
       "process_control.py 维护子进程树和终止边界，避免只结束父进程留下 GPU worker。",
       "状态投影不反射调用方任意标识，也不暴露提示、音频或转写正文。"
     ],
@@ -196,14 +218,18 @@ export const chineseAsrModules = [
       "规范并验证输入路径，计算输入身份和请求语义。",
       "检查服务健康和当前活跃任务，不以进程名代替 job 状态。",
       "计算 job key；命中已验证完成结果时返回 cache hit。",
-      "未命中则创建 job 并启动对应 CLI 子进程。",
+      "未命中则先把新 job 写入持久任务历史，再启动对应 CLI 子进程。",
       "调用方在 WaitSec 内轮询，超时只返回 job 身份。",
       "服务持续监管期限、取消和子进程退出。",
-      "完成后校验输出并把状态原子更新为 succeeded、failed 或 blocked。"
+      "完成后校验输出并把状态原子更新为 succeeded、failed、canceled 或 blocked。",
+      "若服务重启，回读终态供查询；遗留未完成记录只标 interrupted，不恢复执行，长音频必须由调用方显式重试后在稳定目录内续跑。"
     ],
     concepts: [
       { term: "Smart API", explanation: "把预检、任务提交、短等待和状态观察组合成一个稳定入口。" },
       { term: "job key", explanation: "绑定输入与请求语义的幂等键，防止同一重任务重复运行。" },
+      { term: "request fingerprint（请求指纹）", explanation: "由音频内容 SHA-256、模型与请求参数等组成；不是只看文件大小或修改时间。" },
+      { term: "terminal history（终态历史）", explanation: "把 succeeded、failed、canceled、blocked 等任务保存到 jobs.json 供重启后查询，但不把旧队列重新执行。" },
+      { term: "stable recovery directory（稳定恢复目录）", explanation: "long-strict 按请求指纹固定的输出目录；显式重试可验证并复用其中已完成分段。" },
       { term: "observer projection", explanation: "只返回上层决策所需状态，不暴露私人正文和内部实现细节。" },
       { term: "lease（租约）", explanation: "证明当前 worker 仍拥有任务的短时状态；丢失后不能继续写结果。" }
     ],
@@ -215,6 +241,8 @@ export const chineseAsrModules = [
     ],
     failures: [
       { condition: "客户端等待超时", response: "返回 job id 和查询入口；先读任务状态，不立即重发。" },
+      { condition: "服务在 queued 或 running 时重启", response: "持久记录转成 service_restarted 终态并注明自动重跑关闭；用户或调用方核对后才显式提交新的 job。" },
+      { condition: "long-strict 失败或取消后重试", response: "创建新 job id，但复用同一 request fingerprint 对应的稳定输出目录；manifest 与收据验证通过的分段才跳过。" },
       { condition: "缓存文件缺失或指纹不一致", response: "缓存失效并重新执行，不返回部分旧结果。" },
       { condition: "worker 超期、取消或租约丢失", response: "结束任务进程树并记录终态，保留可安全恢复的任务证据。" },
       { condition: "服务端口被其他程序占用", response: "明确报告身份冲突，不结束未知进程也不抢端口。" }
@@ -227,6 +255,7 @@ export const chineseAsrModules = [
     ],
     verification: [
       "本次全量 345 项单元测试通过，其中 service、process control、observer projection 和 scripts 均进入回归。",
+      "service 回归明确覆盖终态 jobs.json 持久化、遗留未完成任务转 service_restarted 且不自动重跑、long-strict 失败/取消后复用稳定目录，以及同大小同修改时间但内容不同仍产生不同 fingerprint。",
       "Doctor 当前确认代理环境干净、GPU 与模型配置可读。",
       "本次未运行真实 strict smoke，因此模块保持 mixed，不把单测冒充 E2E。"
     ],
@@ -236,6 +265,13 @@ export const chineseAsrModules = [
     slug: "models-modes",
     shortTitle: "模型与模式",
     title: "模型 Registry、quick / strict 模式与显式路由",
+    searchAliases: ["普通转写到底用哪个模型", "严格模式两路模型是什么", "装了新模型会不会偷偷换默认", "FireRed和Qwen什么时候一起用", "哪种ASR模式更快"],
+    searchProjection: {
+      intents: ["选择快速或严格转写", "确认一次结果实际用了哪个模型", "为重要录音选择本地证据路线", "比较新增模型但不改默认"],
+      entities: ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "Fun-ASR-Nano-2512", "Whisper Large V3"],
+      relations: ["quick 对应 SenseVoiceSmall", "strict 对应 Qwen 主引擎与 SenseVoice 对照", "FireRed 加 Qwen 是显式重要录音证据路线", "Registry 记录模型身份但安装不等于验收"],
+      failureRecovery: ["主引擎失败时降为 provisional", "两路都失败时输出听不清", "未知 profile 启动前失败", "实际 runtime 身份不符时回执失效"]
+    },
     teaser: "把模型身份、版本、运行方式、能力和默认角色集中登记；日常模式保持稳定，新增或安装更强模型不会自动改变默认结果。",
     status: "quick=SenseVoiceSmall；strict=Qwen3-ASR-1.7B + SenseVoiceSmall；其他 Profile 仅显式选择",
     statusTone: "mixed",
@@ -308,6 +344,13 @@ export const chineseAsrModules = [
     slug: "long-batch",
     shortTitle: "长音频与批量",
     title: "连续时间线、长音频断点续跑与文件夹批量",
+    searchAliases: ["两小时录音中断后接着跑", "长录音漏了一段怎么办", "文件夹批量转写一个坏文件怎么办", "manifest怎么判断哪些片段完成", "录音切片交界会不会重复"],
+    searchProjection: {
+      intents: ["把长录音分段转写", "中断后只补缺失分段", "批量转写一个文件夹", "检查时间线有没有漏段"],
+      entities: ["chunk", "overlap", "manifest.json", "metrics.json", "transcript.md"],
+      relations: ["manifest 绑定输入内容与模型配置", "chunk 状态聚合成整体覆盖", "overlap 减少断句但聚合必须去重", "批量共享模型但每个文件独立输出"],
+      failureRecovery: ["chunk 失败保留其他分段", "manifest 身份不一致拒绝续跑", "gap 或越界使完整覆盖失败", "损坏文件不拖垮整个批次"]
+    },
     teaser: "把超过单模型处理上限的录音分成连续区间，逐段运行并可恢复；批量任务复用已加载模型，但每个文件仍有独立身份、结果和失败边界。",
     status: "长音频、仲裁和批量模型复用已有完整单测；本次未运行两小时真实录音",
     statusTone: "mixed",
@@ -380,13 +423,20 @@ export const chineseAsrModules = [
     slug: "audit-evidence",
     shortTitle: "审计与证据",
     title: "双模型分歧、风险规则、客观结果与证据回执",
+    searchAliases: ["转写结果先看哪个文件", "正文有疑似怎么回听", "听不清是不是没有人说话", "ASR回执能证明文字是真的吗", "两路模型说法不一样看哪里", "strict复核队列在哪里"],
+    searchProjection: {
+      intents: ["按顺序阅读严格转写成品", "定位并回听疑似或听不清片段", "比较两路模型分歧与依据", "验证结果包有没有被替换", "用人工真值做 benchmark"],
+      entities: ["*.strict.md", "*.strict.audit.md", "*.strict.audit.json", "*.strict.review.json", "*.strict.receipt.json", "两路 *.raw.json", "review.md", "benchmark.json"],
+      relations: ["strict 正文先读再进入 audit", "audit 分歧生成 review queue", "receipt 绑定路径大小和 SHA-256", "raw JSON 保留两路原始模型证据", "长音频 manifest 和 metrics 解释覆盖与耗时"],
+      failureRecovery: ["疑似标记按 review 时间或 chunk 回听原音频", "听不清保持未知而不改写成静音", "回执不一致使 evidence unavailable", "缺少时间戳时按 chunk 与原始输出人工定位"]
+    },
     teaser: "把“程序运行成功”“覆盖完整”“文字质量足够”“检测到语音”和“关键内容已人工核听”拆开；正文、原始结果、审计和回执各自保留。",
     status: "审计、objective sidecar 和回执逻辑单测通过；真实录音结论仍需逐条核听",
     statusTone: "mixed",
     value: "我不仅能读到转写，还能快速找到可能错的地方、知道某个空结果到底是无语音还是处理失败，并能核对文件是否被替换或缺失。",
     why: "一段流畅文字可能来自真实语音，也可能来自模型补全；一个空文本可能是没有语音，也可能是解码、模型或覆盖失败。把这些状态压成一个成功/失败会让错误结论进入后续分析。",
-    example: "一段静音输入让某模型生成模板句。审计层记录 speech evidence（语音证据）不足和静音出字风险，正文标为疑似；另一段空文本但覆盖不完整则返回 indeterminate，而不是“没有人说话”。",
-    result: "得到正文、raw JSON、audit、metrics、objective sidecar、manifest 和 evidence receipt；每层说明能证明什么、不能证明什么。",
+    example: "一段会议里的金额被写成 `[疑似] 150 万`。我先在 `*.strict.md` 看完整上下文，再到 `*.strict.audit.md` 或 JSON 比较两路原文和判断依据，从 `*.strict.review.json`（长音频或评测另有 `review.md`）取时间或 chunk，回听原音频后再决定是否改成确定文字；如果只有 `[听不清]`，它保持未知，不能被解释成静音。",
+    result: "得到一套有明确阅读顺序的成品。先读给人的 `*.strict.md`；有风险再读 `*.strict.audit.md` 与 `*.strict.audit.json` 的两路分歧与依据，以及 `*.strict.review.json` 的结构化复核队列；长音频另读 `manifest.json` 和 `metrics.json`；评测 / benchmark（基准评测）另读 `review.md`，有人工 truth（真值）时再读 `benchmark.md` 与 `benchmark.json`；要追查模型原话时看两路 `*.raw.json`；要核对文件有没有换过时看 `*.strict.receipt.json` 的相对路径、大小、SHA-256 和 bundle hash。回执只证明包内字节与声明一致，不证明文字是真的。",
     readerStates: {
       pass: "执行、覆盖、质量和内容制品都闭合时返回 verified 的一致性结果，但仍保留人工核听边界。",
       problem: "存在分歧、低置信、失败引擎、缺段或可疑模式时列入 review，并把整体证据等级降级。",
@@ -397,29 +447,35 @@ export const chineseAsrModules = [
       "空文本不再自动等于无语音。",
       "主引擎失败会改变证据等级。",
       "内容文件与回执不一致时 verified 自动失效。",
-      "关键姓名、数字和争议句必须回到时间位置核听。"
+      "阅读从 `*.strict.md` 开始，不让用户先钻进 raw JSON。",
+      "`*.strict.audit.md` / `.json` 解释两路分歧，`*.strict.review.json` 与长流程 `review.md` 把最值得回听的位置排成队列。",
+      "receipt 只核对路径、大小、SHA-256、语义声明和 bundle hash；关键姓名、数字和争议句仍必须回到原音频核听。"
     ],
     problem: "解决流畅幻觉、空文本误判、双模型分歧被隐藏、结果文件被替换后仍显示通过，以及结构化回执被误当成外部真实性证明的问题。",
     implementation: [
       "risk_rules.py 定义静音出字、模板废话、异常重复、繁体残留和格式风险。",
       "audit.py 汇总主/对照原始结果、错误和风险。",
       "audio_outcome.py 正交表达 execution、coverage、quality 和 objective outcome。",
-      "result_writer.py 分开写正文、raw、audit、review 和 sidecar。",
-      "metadata.py 与回执绑定输入、模型、制品、大小和 SHA-256。"
+      "strict_writer.py 分开写 `*.strict.md`、audit Markdown/JSON、结构化 review JSON、两路 raw JSON、objective sidecar 和 receipt。",
+      "长音频另写 `manifest.json` 与 `metrics.json` 解释分段覆盖、状态和耗时；评测 / benchmark 另写 `review.md` 与 benchmark 成品，解释优先复核项和 truth 对比。",
+      "metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash。"
     ],
     flow: [
-      "读取两路原始模型输出和执行状态。",
-      "运行风险规则并比较分歧。",
-      "分别计算执行、覆盖和质量。",
-      "只在负向证据闭合时判断无语音。",
-      "生成正文和需要复核的位置。",
-      "写入所有内容制品和回执。",
-      "状态查询时重新验证回执覆盖的文件。"
+      "日常先打开 `outputs.final` 指向的 `*.strict.md`，阅读正文并保留其中的 `[疑似]` / `[听不清]` 标记。",
+      "遇到标记、关键姓名数字或争议句时，打开 `*.strict.audit.md` 或 `*.strict.audit.json`，比较主/对照原文、相似度、规则命中、错误和选择依据。",
+      "再读 `*.strict.review.json` 的结构化队列，按可用时间区间回到原音频逐项核听；评测 / benchmark 的聚合复核队列另看 `review.md`。",
+      "需要追查模型到底返回什么时，分别打开主引擎和对照引擎的两路 `*.raw.json`，不把 raw 直接当最终稿。",
+      "用 `*.strict.receipt.json` 复核六项内容制品的相对路径、字节数、SHA-256、引擎声明和 bundle hash；任何不一致都使 evidence unavailable，但一致仍不证明文字正确。",
+      "长音频继续读 `manifest.json` 的输入/模型/切片/每段状态和 `metrics.json` 的耗时、相似度、风险；有人工 truth 的评测再读 `benchmark.md` 与 `benchmark.json`。",
+      "只有执行、覆盖、质量和正式负向证据都闭合时才判断无语音；否则保持 indeterminate 或 speech_detected_but_not_transcribable。"
     ],
     concepts: [
+      { term: "strict transcript（严格正文）", explanation: "`*.strict.md` 是给人先读的最终候选；其中的疑似和听不清标记不得被静默删掉。" },
+      { term: "strict audit（严格审计）", explanation: "Markdown 便于阅读，JSON 便于机器处理；两者保存两路原文、分歧、规则命中、错误和选择依据。" },
+      { term: "review projection（复核投影）", explanation: "`*.strict.review.json` 是单份严格结果的结构化队列；评测 / benchmark 的 `review.md` 再按 P0/P1/P2 汇总最值得人工复核的位置。" },
       { term: "objective outcome", explanation: "只表达音频内容的客观状态，不混入执行和覆盖失败。" },
       { term: "indeterminate（无法确定）", explanation: "当前证据不足，不能断言有语音或无语音。" },
-      { term: "evidence receipt", explanation: "制品一致性清单，不是签名、可信时间戳或事实认证。" },
+      { term: "evidence receipt", explanation: "列出六项严格内容制品的相对路径、大小、SHA-256、声明与 bundle hash；它不是签名、可信时间戳、文字真值或事实认证。" },
       { term: "review queue（复核队列）", explanation: "按风险收集需要回听的句段，而不是让用户从头听完整录音。" }
     ],
     boundaries: [
@@ -430,20 +486,24 @@ export const chineseAsrModules = [
     ],
     failures: [
       { condition: "正文存在但主证据引擎失败", response: "保留文本但标为 provisional，并列出 evidence failure。" },
+      { condition: "正文出现 `[疑似]`", response: "保留标记，按 audit 的两路原文和 review 时间/chunk 回听原音频；人工确认前不把候选润色成确定事实。" },
+      { condition: "正文出现 `[听不清]`", response: "查看两路 raw、执行错误和客观结果，再回听原音频；它表示当前不能可靠转写，不等于没有语音。" },
       { condition: "空文本且覆盖或执行不完整", response: "返回 indeterminate，不宣称无语音。" },
       { condition: "回执引用的文件缺失、大小或指纹不符", response: "证据状态降为 unavailable，要求重新生成或恢复。" },
-      { condition: "两路模型对关键句冲突", response: "保留两路原始输出和时间位置，进入人工回听。" }
+      { condition: "两路模型对关键句冲突", response: "保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\audit.py", role: "双模型审计与风险汇总" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\risk_rules.py", role: "幻觉和格式风险规则" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\audio_outcome.py", role: "执行、覆盖、质量和客观结果" },
+      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\strict_writer.py", role: "strict 正文、audit、review、raw 与 receipt 成品写入" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\result_writer.py", role: "内容制品与 sidecar 写入" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\metadata.py", role: "输入、模型和制品身份" }
+      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\metadata.py", role: "输入、模型和制品身份" },
+      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\benchmark.py", role: "人工 truth 对齐、指标与 benchmark/review 成品" }
     ],
     verification: [
       "audit、risk rules、audio outcome、result writer 和 metadata 单元测试包含在本次 345 项通过结果中。",
-      "测试覆盖静音出字、空文本、partial coverage、回执损坏和模型失败。",
+      "strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。",
       "没有任何自动测试能够代替关键片段人工核听，页面明确保留该缺口。"
     ],
     relation: "模型、长音频和说话人模块产生的所有结果最终都经过本模块；它向用户解释证据强度，但不负责决定真实人物或外部事实。"
@@ -452,6 +512,13 @@ export const chineseAsrModules = [
     slug: "speaker-attribution",
     shortTitle: "说话人与归属",
     title: "时间线、匿名说话人、person:self 线索与可撤销归属",
+    searchAliases: ["录音里哪一段是我说的", "Speaker1是不是本人", "匿名说话人能不能证明身份", "单声道声纹分不清怎么办", "通话里有几个人说话"],
+    searchProjection: {
+      intents: ["查看逐句时间与匿名说话人", "判断哪些句子可能是本人", "估计参与人数但保留不可靠边界", "撤销旧本人声纹线索"],
+      entities: ["Paraformer", "CAM++", "speaker cluster", "person:self profile", "held-out evidence"],
+      relations: ["时间戳句段关联匿名 cluster", "留出声纹与声道联系人句义共同归属", "profile 指纹变化使旧声学证据失效", "cluster 数不等于真实人数"],
+      failureRecovery: ["只有 Speaker 编号时保持匿名", "同源样本不能自证", "单声道歧义带返回 unknown", "声学与上下文冲突时保留两侧依据"]
+    },
     teaser: "先区分匿名说话人，再把有限的本人声纹、声道、联系人、对话角色和句义组合成可解释、可撤销的线索；证据冲突时保持 unknown。",
     status: "说话人投影与 2–3 来源本人档案单测通过；它仍是推断线索，不是身份认证",
     statusTone: "mixed",
@@ -524,6 +591,13 @@ export const chineseAsrModules = [
     slug: "runtime-privacy",
     shortTitle: "运行与边界",
     title: "本地运行、GPU 协调、专业云入口与公开边界",
+    searchAliases: ["普通录音会上传云端吗", "重要录音怎样授权云转写", "两个语音模型抢显卡怎么办", "ASR密钥会不会写进日志", "云转写失败会不会冒充本地结果"],
+    searchProjection: {
+      intents: ["只在本机转写普通录音", "为一段重要录音授权一次云候选", "协调多个重 GPU 任务", "确认公开仓库不会带入私人结果"],
+      entities: ["LocalGpuBroker", "SecretRef", "Qwen Audio 3.0 ASR Flash", "127.0.0.1", "CloudUploadAuthorized"],
+      relations: ["普通任务默认本地", "重要性与本次上传授权共同打开云入口", "SecretRef 只注入固定 worker", "GPU lease 串行重模型"],
+      failureRecovery: ["缺少任一云门就上传前 blocked", "GPU 冲突等待而不抢占", "云失败保持本地证据独立", "broker 身份失败时不取得密钥"]
+    },
     teaser: "普通任务默认完全本地；重模型通过 GPU 协调器串行。只有明确标为重要并授权本次上传的录音才进入独立云入口，密钥通过 SecretRef 注入固定 worker。",
     status: "本地依赖与 GPU Doctor 通过；云入口只完成源码与单测验证，本次没有上传或付费调用",
     statusTone: "mixed",
