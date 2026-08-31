@@ -36,17 +36,30 @@ export const cacbProject = {
   cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
   cardStatusTone: "pass",
   ...cacbSnapshot,
-  searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告"],
+  searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它把证据分成两条车道：一条核对精确 model（模型）、provider（提供方）、version（版本）和 harness（执行环境）当前公开的官方能力、可用性、价格及可比外部证据；另一条只记录本地 Codex 在冻结任务中的真实执行与验证。先判断是否具备资格，再看任务能力与经济性，最后才形成精确范围内的路由建议；任何一条缺证据都保持未知，不填成零，也不与另一条混算。",
-  why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。CACB 把任务、输入、workspace、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”误当成真实能力。",
+  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它把证据分成两条车道：一条核对精确 model（模型）、provider（提供方）、version（版本）和 harness（执行环境）当前公开的官方能力、可用性、价格及可比外部证据；另一条只记录本地 Codex 在冻结任务中的真实执行与验证。执行层明确区分 executor union（执行器联合类型）的三条路线：native_managed 是宿主管理的原生任务，local_async_job 是 Toolkit/AICLI 驱动的本地异步任务，cloud_api_async_job 是经指定 provider API（提供方接口）运行的云端异步任务；三者共享任务与验收语义，却绝不互借身份、谱系或终态回执。先判断是否具备资格，再看任务能力与经济性，最后才形成精确范围内的路由建议；任何一条缺证据都保持未知，不填成零，也不与另一条混算。",
+  why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。不同执行路线还会带来完全不同的宿主身份、网络传输、GPU 占用和清理责任；若把它们都写成“调用一个 Agent”，就无法判断问题发生在哪一层。CACB 把任务、输入、workspace、执行路线、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”或“换了传输仍沿用旧身份”误当成真实能力。",
   plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方是否支持该模型、当前 provider 和 version、可用地区或账号条件、公开价格以及外部比较是否真的可比；本地车道再用冻结任务测它在当前环境里做出了什么。两条证据分别成表，先过资格门，再讨论能力和经济性；缺价格或外部证据时写未知，不把空白当成零。",
-  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份与当前官方/外部证据，benchmark report（基准报告）记录本地任务实测与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。",
+  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份、执行路线与当前官方/外部证据，benchmark report（基准报告）记录本地任务实测、路线专属终态回执与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。底层模型、provider 和通用智能来自外部产品；CACB 的交付是任务冻结、执行合同、证据绑定、验证与判断框架，不冒充这些智能能力的研发者。",
   readerStates: {
-    pass: "官方外证身份闭合、本地任务证据闭合且二者范围可比时，分别生成模型证据卡与基准报告，再形成有条件的综合判断。",
-    problem: "产物错误、越界修改、任务未完成、价格口径不可比或外部证据对象不一致时，分别标出受影响车道和失败平面。",
-    unavailable: "缺少精确身份、当前官方能力/价格、完整产物、终态或验收输入时保留无法判断；缺项不填零，也不阻断其他已闭合层的独立说明。"
+    pass: "执行路线通过接入门，官方外证身份闭合、本地任务证据闭合且二者范围可比时，分别生成模型证据卡与基准报告，再形成有条件的综合判断。",
+    problem: "产物错误、越界修改、任务未完成、路线身份或清理证据矛盾、价格口径不可比或外部证据对象不一致时，分别标出受影响车道和失败平面。",
+    unavailable: "缺少精确身份、当前官方能力/价格、路线接入证据、完整产物、终态或验收输入时保留无法判断；缺项不填零，也不阻断其他已闭合层的独立说明。"
   },
+  cardMetrics: [
+    { label: "核心模块", value: "47" },
+    { label: "数据合同", value: "25" },
+    { label: "连续案例", value: "10" }
+  ],
+  heroFacts: [
+    { label: "成品范围", value: "233 个跟踪文件，其中有 47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件" },
+    { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
+    { label: "隔离、验证与执行路线", value: "每次执行独立 workspace；同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job，冻结输入、隐藏 verifier、范围审计、路线专属终态与归档 hash 分层绑定" },
+    { label: "任务身份绑定", value: "WorkerHandle 同时绑定原始 task id 与 run id；任一身份不同都拒绝借用旧 handle 或旧证据" },
+    { label: "当前源码", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009；工作树干净，远端引用 0/0；最新提交补强 WorkerHandle 与原始任务绑定" },
+    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" }
+  ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
     { title: "每次尝试都从干净工作区开始", detail: "旧文件、其他候选和上一次执行不能提供借来的成功，也不能污染本次失败。" },
@@ -58,6 +71,10 @@ export const cacbProject = {
     { title: "当前官方外证与本地实测分车道", detail: "模型、提供方、版本、harness、能力、可用性、价格与可比外证单独核验；本地任务测量只说明真实执行，不互相补空白。" },
     { title: "先过资格，再谈能力和经济性", detail: "资格不成立时不进入路由建议；能力与成本分别保留口径，缺失数据保持未知而不是归零。" },
     { title: "三份交付各有责任", detail: "模型证据卡回答测的是谁，基准报告回答本地做成什么，综合判断报告才回答精确范围内怎样选。" },
+    { title: "统一任务语义，不伪装统一传输", detail: "三条执行路线共享冻结目标、workspace、产物与 verifier，但 host、provider、transport、lineage 和 cleanup 证据始终显式保留。" },
+    { title: "路线按用途选择，不静默替换", detail: "原生路线测宿主管理的真实任务，本地路线测精确本机模型制品，云端路线测指定 provider API 下的 Codex harness；任一路线失败都不能换模型或换传输补跑成成功。" },
+    { title: "非原生不等于少一项能力", detail: "native lineage 只对 native_managed 必须成立；本地与云端写 not_applicable 是正确身份语义，不加分也不扣分。" },
+    { title: "云端付费授权逐次绑定", detail: "配置好 provider、通过设计审查或完成上一次调用，都不授权下一次付费尝试；每次真实调用都要有该 attempt 的明确授权。" },
     { title: "评测帮助人选择，不替人决定", detail: "结果不会自动改写全局模型、能力路由、授权或项目 Owner 的现实选择。" },
     { title: "通用智能是被检验的能力，不是本项目自研", detail: "理解、推理、工具和代码执行来自已集成的外部 AI/智能体能力；CACB 负责冻结任务、绑定身份、验证产物、归因失败和管理证据。" }
   ],
@@ -71,7 +88,9 @@ export const cacbProject = {
     "把精确模型/提供方/版本/harness 的当前官方能力、可用性、价格和可比外证，与本地 Codex 真实测量分成两条证据车道",
     "按资格、能力、经济性和范围内路由建议分层，避免一个局部结果越级替代整体选择",
     "分别交付模型证据卡、基准报告和综合判断报告，保留缺失项而不归零、不混算",
-    "为新增执行方式提供 onboarding（接入验收），但不自动替用户做选择"
+    "用同一 worker.start / wait / cancel / result 生命周期承载三类执行路线，同时保留各自 host、provider、transport、lineage 和 cleanup 证据",
+    "为新增执行方式提供 onboarding（接入验收），先冻结身份与能力等价路径，再用宿主回执和同一 verifier 预演，绝不自动替用户做选择",
+    "在本地路线串行管理 LocalGpuBroker lease，在云端路线逐 request 绑定输入分类、usage 回执与流关闭，在原生路线绑定 parent/spawn/child 谱系"
   ],
   exclusions: [
     "本公开页不展示受测配置名单、比较结果、数字结论或先后顺序",
@@ -80,6 +99,9 @@ export const cacbProject = {
     "不把官方宣传、价格表或外部比较冒充本地任务实测，也不让本地单次结果替代当前官方可用性研究",
     "不把能力、经济性、外部指标或缺失项混成一个看似完整的数字；缺证据保持未知",
     "不因一次执行成功或失败就宣称长期稳定能力",
+    "不把 native_managed、local_async_job 与 cloud_api_async_job 写成同一种传输，也不允许静默 fallback（后备替换）",
+    "不因 provider 已配置、schema 已存在或预演通过就推定已获云端付费授权；每次付费 attempt 都单独确认",
+    "不把外部模型、provider 或通用智能写成 CACB 自研能力；项目只拥有评测合同、执行适配、证据与验证",
     "不自动改写全局能力路由、授权、安全边界或项目 Owner 决策",
     "不作为后台服务、自动测试队列、定时任务或持续同步系统"
   ],
@@ -96,13 +118,38 @@ export const cacbProject = {
     { term: "fail-closed（失败关闭）", meaning: "证据不完整或身份不匹配时不生成能力结论，不靠猜测补齐。" },
     { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" }
   ],
+  currentState: {
+    observedAt: "2026-08-31T04:13:00Z",
+    label: "三类执行合同、task-handle 绑定与路线专属证据边界已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
+    facts: [
+      "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。",
+      "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。",
+      "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。",
+      "当前 source-backed（源码可追溯）worker contract 明确定义 native_managed、local_async_job 与 cloud_api_async_job：共用冻结任务和终态语义，分别保留原生谱系、本地 Toolkit/AICLI + GPU lease、云端 provider request/stream 证据。",
+      "三类路线都要先过精确身份、workspace、工具策略、verifier、终态与清理门；native lineage 只对原生路线必需，本地与云端的 not_applicable 不构成能力缺口。",
+      "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
+      "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
+    ],
+    gaps: [
+      "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
+      "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
+      "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
+      "源码中的路线、schema 和 synthetic（合成）验证只证明框架边界，不证明任一精确 provider/model/profile 当前可执行；正式接入仍需本机 preflight（预演）与宿主回执。",
+      "配置存在不等于授权存在：云端真实调用仍需逐 attempt 的明确付费授权；清理无法确认时不得立即提交替代任务。",
+      "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
+      "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
+    ]
+  },
   operatingFlow: [
     { title: "定义能力问题", detail: "先把现实需求写成可以验收的任务家族，说明什么是完整结果、允许什么、禁止什么。" },
     { title: "建立当前官方与外部证据车道", detail: "对精确模型、provider、version 和 harness 核对官方能力、可用条件、价格日期与单位，并审查外部证据的任务、环境和口径是否可比。" },
     { title: "冻结任务与验证材料", detail: "固定可见 fixture、案例顺序、schema、隐藏 verifier 和版本 hash；执行开始后不原地改题。" },
+    { title: "选择并接入执行路线", detail: "按要测的现实路径选择 native_managed、local_async_job 或 cloud_api_async_job；新 harness 先冻结身份/能力映射、跑无结论预演并证明同一 verifier 能读取产物。" },
     { title: "创建唯一 workspace", detail: "每个执行配置取得独立目录；任务 cwd 必须覆盖所有输出，路径越界或共享写入失败关闭。" },
-    { title: "绑定身份、输入与范围", detail: "用 host（宿主）证据绑定实际执行身份、任务 capsule、workspace 和允许工具，不能靠参与者自报。" },
-    { title: "执行连续 episode", detail: "同一任务按固定顺序完成整组案例，保留恢复、压缩和终态证据，不合并不同尝试的半成品。" },
+    { title: "绑定身份、输入与范围", detail: "用 host（宿主）证据绑定实际执行身份、任务 capsule、workspace 和允许工具；原生取 parent/spawn/child 谱系，本地取 job/profile/artifact/lease，云端取 provider/profile/endpoint/request，不能靠参与者自报。" },
+    { title: "启动并有界等待", detail: "start 先验证绑定再返回 handle；wait 只读取状态，不因一次轮询到期虚构 timeout。原生等待宿主任务，本地轮询 Toolkit/AICLI job，云端同时绑定 request/stream 事件。" },
+    { title: "执行连续 episode", detail: "同一任务按固定顺序完成整组案例，保留恢复、压缩和终态证据；中断优先恢复同一 session/job/workspace，不合并不同尝试的半成品。" },
+    { title: "确认取消、超时与清理", detail: "cancel 只是请求；只有原生无活跃后代、本地进程树与 GPU lease 已释放、或云端流关闭且 provider 终态可观察，才能写 cancelled/timed_out。" },
     { title: "运行确定性验证", detail: "验证器在参与者之外重放测试、检查文件和范围；隐藏材料不进入候选进程。" },
     { title: "分类失败平面", detail: "分别记录能力、任务、执行环境和证据问题；证据不足保持 Unknown（未验证）。" },
     { title: "分别生成两条证据交付", detail: "模型证据卡只写精确身份与当前官方/可比外证；基准报告只写本地冻结任务、真实产物、测量与失败平面，缺项不填零。" },
@@ -114,6 +161,11 @@ export const cacbProject = {
     { name: "Campaign freezer（评测冻结器）", responsibility: "把问题库、episode、seed、fixture 和 verifier 固定成一次不可漂移的 campaign。", implementation: "manifest 与逐文件 hash 共同定义输入身份。" },
     { name: "Workspace manager（工作区管理）", responsibility: "创建、验证、归档每次执行的唯一目录。", implementation: "检查 cwd 祖先关系、任务 capsule、路径范围和归档完整性。" },
     { name: "Worker contract（执行合同）", responsibility: "定义参与者可见任务、允许工具、终态和产物要求。", implementation: "单一连续 episode；缺案例、pending 或 interrupted 不形成完整结果。" },
+    { name: "Executor union（执行器联合类型）", responsibility: "用一个显式类型承载三条真实执行路线，不抹平 transport 与生命周期差异。", implementation: "native_managed、local_async_job、cloud_api_async_job 共用 envelope/handle/status/result 语义，各自扩展身份、提交、清理和失败证据。" },
+    { name: "Native managed executor（原生受管执行器）", responsibility: "测量宿主管理的原生 Codex task，包括单 worker 或已冻结的原生编排处理。", implementation: "原生 transport；host 的 parent/spawn/child rollout 与 turn context 证明 lineage，终态需宿主确认且无活跃后代。" },
+    { name: "Local async executor（本地异步执行器）", responsibility: "在精确本机模型制品必须进入测量时，通过 Toolkit/AICLI 与 Codex CLI 运行任务。", implementation: "job id 绑定 backend/profile/model/artifact/quantization/template/engine；LocalGpuBroker 串行 lease，终态需进程树、workspace 和 lease 清理回执。" },
+    { name: "Cloud API async executor（云端接口异步执行器）", responsibility: "在指定非原生 provider API 需要接受同一 Codex harness 验证时承载调用。", implementation: "Responses transport 绑定 provider/profile/model/endpoint、request/stream 与 usage 事件；只发送 participant-public，隐藏 verifier 留在本地，并逐 attempt 核对付费授权。" },
+    { name: "Harness onboarding gate（执行环境接入门）", responsibility: "证明新执行方式能接收同一任务、产出同一种可验 artifact，并提供可信宿主证据。", implementation: "冻结身份和 capability map，做代表性 dry-run（预演），根侧重算 workspace/log/trace/artifact hash，再确认同一 verifier 无专用捷径即可读取。" },
     { name: "Identity & evidence binding（身份与证据绑定）", responsibility: "把实际执行身份、任务、workspace、动作和终态绑定到同一回执。", implementation: "host receipt、manifest hash 与单次消费规则防止跨执行借证。" },
     { name: "Deterministic verifier（确定性验证器）", responsibility: "检查候选文件、隐藏属性、测试和范围变化。", implementation: "验证器独立进程、硬超时、隐藏材料隔离和结果 hash。" },
     { name: "Failure classifier（失败分类器）", responsibility: "区分能力、任务、执行环境与证据问题。", implementation: "不把 timeout、missing evidence、invalid harness 或未完成统一写成失败。" },
@@ -128,7 +180,11 @@ export const cacbProject = {
     { moduleSlug: "deterministic-verification", ask: "为什么任务回答完成了却没有结果", effect: "检查每个案例是否真正结束、产物是否存在、验收是否闭合；缺任何一层都不相信完成总结。" },
     { moduleSlug: "failure-reporting", ask: "这次失败是能力问题还是执行环境问题", effect: "把产物错误、任务缺陷、身份/权限/工具故障和证据缺失分别归因，不把基础设施中断算成能力差。" },
     { moduleSlug: "identity-evidence", ask: "换一个执行方式能否沿用同一套验证", effect: "先比较它能否接收同一任务并产出同一种可验结果，再做代表性预演；验收真正兼容后才接入。" },
+    { moduleSlug: "identity-evidence", ask: "这次应该走原生、本地还是云 API 执行？", effect: "先明确要测的是宿主原生任务、精确本机模型制品，还是指定 provider API 下的 Codex harness；路线标签、身份来源和接入门随选择一起冻结，不做静默替换。" },
+    { moduleSlug: "identity-evidence", ask: "接入新的 harness 前要证明什么？", effect: "冻结精确身份与能力等价路径，读取真实 host receipt，重算 workspace 与 artifact hash，并证明同一 verifier 能验收后才允许进入正式样本。" },
     { moduleSlug: "campaign-workspace", ask: "怎样防止旧执行记录污染新结果", effect: "每次使用全新工作区和执行身份，旧产物、旧回执和上次未完成状态都不能借给新结果。" },
+    { moduleSlug: "campaign-workspace", ask: "本地模型执行时 GPU 怎样排队和释放？", effect: "提交前检查 LocalGpuBroker 与活动请求，独占取得 lease；结束时必须确认进程树消失、请求归零、模型清理与 lease 释放，再写终态。" },
+    { moduleSlug: "campaign-workspace", ask: "云 API 取消后为什么不能立刻重跑？", effect: "本地进程退出还不够；request stream 与可观察的 provider job 都要关闭。若远端清理无法确认，状态保持 cleanup_unconfirmed，先阻断替代提交。" },
     { moduleSlug: "failure-reporting", ask: "怎样保留失败样本供以后诊断", effect: "执行结束后归档代码、过程回执和失败原因并核对完整性，再释放临时工作区。" },
     { moduleSlug: "identity-evidence", ask: "某个模型现在到底能不能在这个 harness 里用？", effect: "模型证据卡核对精确模型、provider、version、harness、当前官方能力和可用条件；本地是否做成任务仍交给独立基准报告。" },
     { moduleSlug: "failure-reporting", ask: "官方价格和本地实测成本为什么要分开？", effect: "官方价目按日期、单位和适用条件记录，本地消耗按冻结任务真实测量；综合判断只在口径可比时讨论经济性。" },
@@ -139,6 +195,9 @@ export const cacbProject = {
     { layer: "Local Codex measurement（本地 Codex 测量）", proves: "同一次冻结任务的身份、workspace、真实产物、验证、消耗口径与失败平面。", doesNotProve: "不自动证明当前官方可用性、公开价格或其他 benchmark 与本地任务可比。" },
     { layer: "Source（源码）", proves: "PRIVATE main 包含问题库、campaign、workspace、verifier、证据、归档和报告实现。", doesNotProve: "当前所有执行路线都可用或任何受测配置已形成结论。" },
     { layer: "Schemas（数据合同）", proves: "25 个 schema 约束任务、执行、证据、归档和报告字段。", doesNotProve: "每个 producer 都已生成完全合格的实例。" },
+    { layer: "Executor contract（执行器合同）", proves: "当前源码把三类执行路线、共同生命周期和路线专属 identity/lineage/cleanup 字段写成可审计合同。", doesNotProve: "某个精确模型、provider、profile 或 endpoint 已通过本机接入或能够立即启动。" },
+    { layer: "Route terminal receipt（路线终态回执）", proves: "一次精确 run 的提交、状态、artifact、终态与清理属于同一执行；本地还绑定 GPU lease，云端还绑定 request/stream。", doesNotProve: "可以把回执借给另一条路线、另一个 task，或把配置存在当成下一次付费授权。" },
+    { layer: "Onboarding evidence（接入证据）", proves: "宿主预演已证明 identity、workspace、artifact、terminal 和同一 verifier 的兼容路径。", doesNotProve: "正式 episode 已运行、产生了受测结论，或外部模型/通用智能属于 CACB 自研。" },
     { layer: "Historical focused tests（历史核心回归）", proves: "e6f7581 观察代的 11 个核心测试文件曾有 162 项通过。", doesNotProve: "这些结果适用于当前 59b0b5c，或当前完整执行链已经闭合。" },
     { layer: "Current CI（当前持续集成）", proves: "59b0b5c 的四个最新 job 都在 lint 门失败，当前提交没有绿色 CI。", doesNotProve: "受测能力失败，或所有测试逻辑都错误。" },
     { layer: "Private evidence（私有证据）", proves: "项目可以保留冻结输入、hidden verifier、raw trace 和归档链。", doesNotProve: "这些私有内容适合公开或应复制到网页。" },
@@ -234,147 +293,210 @@ export const cacbModules = [
   {
     slug: "campaign-workspace",
     shortTitle: "隔离执行",
-    title: "Campaign 冻结、独立 workspace 与连续 episode",
-    teaser: "把整组案例、fixture、顺序和验证版本冻结，再为每次执行复制唯一 workspace；不同尝试不共享半成品。",
-    status: "campaign / workspace / archive 结构已形成；当前提交的 CI lint 门仍未闭合",
+    title: "Campaign 冻结、三路线执行与独立 workspace",
+    teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。",
+    status: "campaign / workspace / archive 与三类 executor 合同已有源码；当前提交的 CI lint 门仍未闭合，本页未启动任何路线",
     statusTone: "pass",
-    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode"],
+    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑"],
     searchProjection: {
-      intents: ["为一次评测冻结任务并创建独立工作区", "判断中断后能否精确恢复", "防止旧产物或不同尝试拼接"],
-      entities: ["campaign", "workspace", "episode", "capsule", "terminal state", "archive hash"],
-      relations: ["每次执行只属于一个唯一workspace", "同一episode的案例按固定顺序连续完成", "临时workspace只有归档校验后才能释放"],
-      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "无法恢复同一session时创建新的完整尝试"]
+      intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "防止旧产物或不同尝试拼接", "理解本地GPU与云端请求的资源流"],
+      entities: ["campaign", "workspace", "episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed"],
+      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "wait只是有界状态读取而不是自动判超时", "同一episode的案例按固定顺序连续完成", "本地终态绑定进程树与GPU lease清理", "云端终态绑定request stream和provider job关闭", "临时workspace只有归档校验后才能释放"],
+      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地进程或GPU lease未清理时保持不可用", "云端远程关闭不可观察时标记cleanup_unconfirmed并阻断替代提交"]
     },
-    value: "我能确认每次执行面对的是同一任务，又不会因为共享目录、旧文件或不同尝试拼接而污染结果。",
-    why: "直接在同一仓库反复运行会留下缓存和旧产物；中断后换 workspace 继续也会让证据无法解释。",
-    example: "一次十案例 episode 中途暂停，只有同一 session 和 workspace 能继续；无法精确恢复时，新 workspace 必须从头运行整组案例。",
-    result: "得到 campaign manifest、唯一 workspace、连续 episode、终态和归档之间的一一对应关系。",
+    value: "我能用同一冻结任务比较三种真实执行路线，又清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净；共享目录、旧文件或不同尝试都不能污染结果。",
+    why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。",
+    example: "一次连续 episode 中，本地任务收到取消请求。只有 AICLI/Codex 进程树消失、LocalGpuBroker lease 释放、workspace 末态 hash 和回执完成后，才记录 cancelled；若这些条件不齐，保持 cleanup_unconfirmed，而不是立刻换路线重跑。",
+    result: "得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档之间的一一对应关系；原生还给出宿主任务终态，本地给出 job/GPU 清理证据，云端给出 request/stream 与 provider 清理证据。",
     readerStates: {
-      pass: "workspace 唯一、输入 hash 匹配、路径在允许根内且所有案例终态闭合。",
-      problem: "发现共享文件、跨目录写入或半次执行拼接时，整次结果无效但保留诊断。",
-      unavailable: "无法恢复同一 session/workspace 时，只能创建新的完整尝试。"
+      pass: "workspace 唯一、输入 hash 匹配、路径在允许根内，所有案例终态闭合且该 executor 的进程、后代、GPU lease 或远端请求清理证据完整。",
+      problem: "发现共享文件、跨目录写入、半次执行拼接、终态早报或资源未释放时，整次结果无效但保留诊断。",
+      unavailable: "无法恢复同一 session/job/workspace，或 provider 侧关闭不可观察时，不提交替代执行；前者创建新的完整尝试，后者先保持路线不可用直至清理可确认。"
     },
     decisionImpact: [
       "每个执行配置使用唯一目录。",
+      "三条路线共用 start / wait / cancel / result 语义，但不共用身份或清理回执。",
+      "start 只在所有绑定通过后返回 handle，wait 只给状态快照。",
       "workspace 是临时施工区，不是唯一归档。",
       "中断优先精确恢复，不合并 partial。",
+      "原生终态要求宿主确认且无活跃后代；本地终态要求进程树和 GPU lease 清理；云端终态要求流与可观察远端任务关闭。",
       "清理前先归档并验证 hash。"
     ],
-    problem: "解决旧产物污染、共享写入、路径越界、不同尝试拼接和临时 workspace 丢失。",
+    problem: "解决旧产物污染、共享写入、路径越界、不同尝试拼接、轮询误判、资源泄漏、远端请求悬挂和临时 workspace 丢失。",
     implementation: [
       "campaign.py 冻结 episode manifest 与 fixture。",
       "task_workspace.py 创建、校验和封装 workspace。",
       "task_workspace_archive.py 在终态后归档代码、trace 和 receipt。",
-      "workspace containment 检查 cwd 与输出根祖先关系。"
+      "models.py 定义 worker.start(envelope)、wait(handle, deadline)、cancel(handle) 与 result(handle) 的共同类型；result 只接受带完整 receipt 的终态。",
+      "native_managed 由宿主提交原生 task，轮询宿主状态并绑定 parent/spawn/child lineage；取消或超时后必须确认宿主终态和没有活跃后代。",
+      "local_async_job 由 Toolkit/AICLI 提交 Codex CLI job，按 job id 轮询；任务在本地 workspace 中产出 artifact，重型执行由 LocalGpuBroker 串行，结束时确认进程树、活动请求、模型清理和 lease 释放。",
+      "cloud_api_async_job 在本地 workspace 运行 Codex harness，经绑定的 Responses transport 发出 provider request；每个请求与 usage 事件配对，hidden verifier 和 independent confirmation（独立确认）始终留在本地。",
+      "workspace containment 检查 cwd 与输出根祖先关系；所有路线先归档 artifact/trace/receipt/validity reason 并回读 hash，才允许释放临时目录。"
     ],
     flow: [
       "冻结 campaign。",
+      "选择 executor_kind，并验证它的接入状态、精确身份和授权边界。",
       "为执行配置创建 workspace。",
       "复制并校验 fixture。",
-      "顺序执行完整 episode。",
+      "用 start 提交 envelope；只有绑定验证通过才接收 WorkerHandle。",
+      "用 wait 在建议检查时间做有界状态读取；到达一次 deadline 不自行发明 timeout。",
+      "原生路线等待 host task；本地路线在取得 LocalGpuBroker lease 后运行 Toolkit/AICLI job；云端路线只向已绑定 provider 发送 participant-public request。",
+      "顺序执行完整 episode，并把 artifact 留在唯一 workspace。",
       "确认每个案例终态。",
+      "中断时优先恢复同一 session/job/workspace；不能精确续作时整次重开，不拼接 partial。",
+      "需要停止时调用 cancel，并继续观察到路线专属清理闭合；清理不可确认就保持 cleanup_unconfirmed。",
       "归档产物与证据。",
       "证明归档后再清理临时目录。"
     ],
     concepts: [
       { term: "campaign（评测活动）", explanation: "同一问题库版本、执行规则和验证器组成的一次比较边界。" },
       { term: "capsule（任务胶囊）", explanation: "hash 绑定的任务输入与最小读取合同。" },
-      { term: "terminal state（终态）", explanation: "案例明确 passed 或 failed；pending、missing、interrupted 都不算终态。" }
+      { term: "WorkerHandle（执行句柄）", explanation: "start 返回的 task id + run id + provider id 绑定；身份不同就不能继续 wait、cancel 或取 result。" },
+      { term: "terminal state（终态）", explanation: "completed、partial、blocked、failed、timed_out 或 cancelled；后两者只有清理已确认才成立。" },
+      { term: "cleanup_unconfirmed（清理未确认）", explanation: "取消或超时已发生，但仍不能证明进程、GPU lease、request stream 或远端 job 已终止；此时路线保持不可用。" },
+      { term: "LocalGpuBroker（本地 GPU 仲裁器）", explanation: "串行分配本地重型模型 lease，防止两个受测任务绕过 owner 同时占用 GPU。" },
+      { term: "provider request（提供方请求）", explanation: "云端路线经唯一绑定 endpoint 发出的调用；只携带参与者公开输入，hidden control 不离开本机。" }
     ],
     boundaries: [
       "workspace 不进入网站，也不作为长期事实源。",
       "不同尝试不能 best-of 选优后拼接。",
-      "当前网页不启动或清理任何评测 workspace。"
+      "native、local 与 cloud 之间不继承 handle、lineage、artifact 或 cleanup receipt，也不做静默 fallback。",
+      "云端 provider HTTPS 是 runner-side transport，不等于参与者获得任意联网、connector、远程 Git 或继续委派能力。",
+      "配置好云端 provider 不授权调用；每个真实付费 attempt 在提交前单独绑定明确授权，先前 attempt 的授权不可复用。",
+      "本地 GPU 路线不消耗云端 paid-attempt 授权，但仍必须经过资源 owner、兼容性和 broker 门。",
+      "当前网页不启动、取消或清理任何评测 workspace、GPU lease 或云端 request。"
     ],
     failures: [
       { condition: "输出路径不在 workspace 内", response: "启动前拒绝执行。" },
       { condition: "某案例缺失或 interrupted", response: "整次 episode 保持 incomplete。" },
+      { condition: "一次 wait 到期但 executor 仍在运行", response: "只返回当前状态和下次建议检查时间，不写 timed_out。" },
+      { condition: "原生取消后仍有活跃后代", response: "不写 cancelled，继续保持取消请求或清理未确认状态。" },
+      { condition: "本地进程树、活动请求或 GPU lease 未释放", response: "路线保持 cleanup_unconfirmed；不启动另一个重型任务。" },
+      { condition: "云端 stream 已断但 provider job 终态不可观察", response: "不把本地退出当远端清理；路线保持不可用且不立即替代提交。" },
       { condition: "归档 hash 不匹配", response: "保留 workspace，不释放唯一内容。" }
     ],
     sources: [
       { path: "PRIVATE source · src/cacb/campaign.py", role: "Campaign 冻结与 manifest" },
       { path: "PRIVATE source · src/cacb/task_workspace.py", role: "Workspace 创建与 containment" },
       { path: "PRIVATE source · src/cacb/task_workspace_archive.py", role: "终态归档与 hash" },
+      { path: "PRIVATE source · src/cacb/models.py", role: "WorkerHandle、状态机与 start/wait/cancel/result 共同合同" },
+      { path: "PRIVATE source · docs/WORKER_CONTRACT.md", role: "三类 executor、终态和路线专属 cleanup 语义" },
+      { path: "PRIVATE source · docs/LOCAL_CODEX_COMPATIBILITY.md", role: "本地 Codex、工具循环、恢复和 LocalGpuBroker 门" },
+      { path: "PRIVATE source · src/cacb/cloud_api_worker.py", role: "云端 request/usage/terminal machine-event 解析边界" },
       { path: "PRIVATE source · protocols/single-worker-episode.md", role: "连续 episode 合同" }
     ],
     verification: [
       "campaign、task_workspace 与 task_workspace_archive focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
-      "没有创建真实受测任务或调用外部执行器。",
+      "当前源码与 cross-executor contract test 明确覆盖 native_managed、local_async_job、cloud_api_async_job 及 native_lineage=not_applicable 语义；这只是 source contract，不是本轮 runtime 验收。",
+      "没有创建真实受测任务、取得 GPU lease 或调用外部执行器。",
       "完整 native formal-run 路径仍有跨代 fixture 缺口。"
     ],
-    relation: "消费问题库；向身份绑定和 verifier 提供唯一执行容器。"
+    relation: "消费问题库并冻结共同 envelope；身份与证据模块决定三条路线的精确 binding 和接入资格，本模块负责 start/wait/cancel/result、workspace、资源与归档生命周期，再把唯一执行容器和路线终态交给 verifier 与失败报告。"
   },
   {
     slug: "identity-evidence",
     shortTitle: "身份与证据",
-    title: "实际执行身份、输入、动作与终态怎样绑定",
-    teaser: "把谁执行、拿到什么任务、在哪个 workspace、做了哪些动作、最后怎样结束，绑定为不可跨执行借用的证据。",
-    status: "证据 schema 与核心 binding 路径存在；部分历史 native envelope 在完整回归中未闭合",
+    title: "三类 executor 的实际身份、谱系与接入证据",
+    teaser: "把谁执行、为何选择这条路线、host/provider/transport 是什么、是否需要 native lineage，以及任务、workspace、动作和终态怎样归属，绑定为不可跨执行借用的证据。",
+    status: "三类 executor identity/schema 与共同接入原则已有源码；部分历史 native envelope 在完整回归中未闭合",
     statusTone: "mixed",
-    searchAliases: ["当前模型provider版本到底是什么", "某模型在这个harness里现在能不能用", "模型证据卡包含什么", "task id和run id为什么都要绑定", "官方能力和本地实测怎么分开"],
+    searchAliases: ["当前模型provider版本到底是什么", "某模型在这个harness里现在能不能用", "模型证据卡包含什么", "task id和run id为什么都要绑定", "官方能力和本地实测怎么分开", "native local cloud三种executor怎么选", "非原生为什么没有native lineage", "新harness接入要过什么门"],
     searchProjection: {
-      intents: ["确认被研究和被测量的是哪个精确配置", "核对当前官方能力可用性与价格证据", "把本地任务身份动作产物和终态绑定"],
-      entities: ["model", "provider", "version", "harness", "WorkerHandle", "task id", "run id", "model evidence card"],
-      relations: ["模型证据卡记录当前官方与外部证据", "本地证据绑定同一次task和run", "官方可用性研究不能替代本地任务实测"],
-      failureRecovery: ["模型或harness身份不精确时不进入资格判断", "task或run不匹配时拒绝借用旧handle", "宿主证据缺失时保持Unknown而不靠参与者自报"]
+      intents: ["确认被研究和被测量的是哪个精确配置", "在原生本地云端三类执行路线间做用途判断", "核对当前官方能力可用性与价格证据", "证明新harness可接收同一任务并被同一verifier验收", "把本地任务身份动作产物和终态绑定", "判断native lineage是否适用"],
+      entities: ["model", "provider", "harness", "transport", "native lineage", "executor_kind", "WorkerHandle", "onboarding gate"],
+      relations: ["模型证据卡记录当前官方与外部证据", "本地证据绑定同一次task和run", "native_managed必须有parent spawn child谱系", "local_async_job绑定artifact profile engine与broker lease", "cloud_api_async_job绑定provider endpoint request与stream", "非原生路线的native lineage为not_applicable", "官方可用性研究不能替代本地任务实测"],
+      failureRecovery: ["模型或harness身份不精确时不进入资格判断", "requested effective attested不一致时失败关闭", "task或run不匹配时拒绝借用旧handle", "新harness缺host receipt时保持研究状态", "宿主证据缺失时保持Unknown而不靠参与者自报", "provider或transport漂移时创建新binding而不继承旧证据"]
     },
-    value: "我能区分“这个配置真的完成了任务”和“报告里自称完成”，也不会把一次执行证据借给另一次。",
-    why: "参与者可以写错自己的身份，宿主事件也会随版本变化；只看最终文本无法证明任务、workspace 和动作属于同一次执行。",
-    example: "执行返回完整文件，但 host receipt 显示任务 capsule 或 workspace 不匹配。系统保留产物供诊断，却不形成能力结论。",
-    result: "得到 identity、task、workspace、action、terminal 和 artifact 的一条 hash-bound（hash 绑定）证据链。",
+    value: "我能先判断该测宿主原生任务、精确本机模型还是指定云端 provider，再确认这条路线真的使用了声明的模型、harness 和 transport；非原生路线不会冒充原生子代理，一次执行证据也不会借给另一次。",
+    why: "参与者可以写错自己的身份，别名可能换了模型，profile 可能换了 endpoint，宿主事件也会随版本变化；只看最终文本无法证明任务、workspace、动作和终态属于同一次执行，更无法证明 native lineage 对这条路线是否适用。",
+    example: "一个云端任务产出了完整文件，但 effective provider 或 endpoint 与请求绑定不同。即使任务内容正确，系统也会保留产物供诊断、关闭这次身份资格，并拒绝把它改写成 native_managed 或借用原生 receipt。",
+    result: "得到 requested/effective/attested identity（请求/实际/证明身份）、executor_kind、host/provider/transport、lineage applicability（谱系适用性）、task、workspace、action、terminal 和 artifact 的一条 hash-bound（hash 绑定）证据链，并明确这条路线通过了哪一层接入门。",
     readerStates: {
-      pass: "宿主身份、任务、workspace、动作和终态全部匹配，证据可单次消费。",
-      problem: "某层矛盾时标记具体 failure plane，不删除诊断产物。",
-      unavailable: "宿主不提供必要证据时只保留证据不足状态，不用参与者文字补齐。"
+      pass: "路线已通过接入门，请求/实际/证明身份、任务、workspace、动作、终态和适用的 lineage 全部匹配，证据可单次消费。",
+      problem: "模型、provider、profile、transport、task、lineage 或 cleanup 任一层矛盾时标记具体 failure plane，不删除诊断产物，也不换路线补证。",
+      unavailable: "宿主不提供必要 receipt、新 harness 没有真实 preflight，或 provider 终态不可观察时只保留证据不足状态，不用参与者文字、设计 schema 或旧配置补齐。"
     },
     decisionImpact: [
       "宿主回执优先于自报身份。",
+      "native_managed 只在宿主能证明原生 parent/spawn/child lineage 时成立。",
+      "local_async_job 明确是 Toolkit/AICLI + Codex CLI 本地任务，不是原生 child；它绑定精确 artifact、quantization、tokenizer/template、engine、profile 与 broker lease。",
+      "cloud_api_async_job 明确是指定 provider 的 Responses 任务，不是原生 child；它绑定 provider/profile/model/endpoint、request/stream 和 machine events。",
+      "本地与云端路线的 native_lineage=not_applicable 是正确语义，不增加也不减少能力。",
       "任务输入与 workspace 同时绑定。",
       "动作范围逐条检查，未执行的外层 envelope 不算动作。",
+      "新增 harness 先证明等价能力路径和同一 verifier 兼容，不用专用验收捷径。",
       "证据只能用于精确执行和版本。"
     ],
-    problem: "解决身份自报、跨执行借证、任务输入漂移、动作范围不明和终态假完成。",
+    problem: "解决身份自报、原生谱系冒领、provider/profile/transport 漂移、跨执行借证、任务输入漂移、动作范围不明和终态假完成。",
     implementation: [
       "evidence.py 与 model_evidence.py 管证据结构与状态。",
-      "manifest / receipt schema 约束 identity、workspace 与 terminal。",
+      "model-evidence-card schema 把 executor_kind 固定为 native_managed、local_async_job 或 cloud_api_async_job，并分别约束 lineage applicability。",
+      "native_managed 选择于要测真实宿主原生 Codex 行为且宿主能提供权威 rollout 时；host receipt 绑定 model、effort、agent_type、provider、harness、parent/spawn/child 与 turn context，用户得到原生 task handle、artifact 和终态/清理回执。",
+      "local_async_job 选择于要测精确本机模型制品及其 Codex 工具循环时；Toolkit job id 与 AICLI machine events 绑定 backend/profile/model、artifact digest、quantization、tokenizer/chat template、serving engine、loopback transport、sandbox、LocalGpuBroker lease 和 fallback=false，用户得到本地 artifact、verifier 摘要与完整清理 receipt。",
+      "cloud_api_async_job 选择于非原生模型必须在指定 provider API 下接受同一 Codex harness 时；Toolkit/AICLI job 与 receipt id 绑定 provider/profile/model/revision、endpoint class/path fingerprint、Responses transport、request/stream id、machine events、privacy policy 和 fallback=false，用户得到本地 artifact、sanitized report（净化报告）与请求/终态证据。",
+      "harness onboarding 先冻结 identity + capability/equivalent-path map，再读取 host-owned preflight receipt、根侧重算 workspace/log/trace/artifact hash，并证明同一 frozen verifier 能验收；通过才允许正式样本。",
+      "manifest / receipt schema 约束 identity、workspace 与 terminal；云端 paid-attempt authorization hash 只绑定当前一次真实付费尝试，旧授权、provider 配置或 synthetic test 都不可复用。",
       "canonical action parser 把受支持动作还原为可审计语义。",
       "binding hash 防止别名或不同执行路线复用旧证据。"
     ],
     flow: [
-      "记录宿主实际身份。",
+      "先说明要测的现实对象：宿主原生任务、精确本机模型制品，或指定云端 provider 的 Codex harness。",
+      "冻结 executor_kind、requested identity、harness、transport、no-fallback 和比较基线。",
+      "新 harness 运行代表性 dry-run，读取 host receipt 并确认同一 verifier 能消费 artifact；未通过只保留候选状态。",
+      "记录宿主或受信适配器的 effective 与 attested identity。",
+      "原生路线核对 parent/spawn/child rollout；本地路线核对 job/profile/artifact/engine/lease；云端路线核对 provider/endpoint/request/stream。",
       "绑定任务 capsule 和 workspace。",
       "采集动作与终态。",
       "规范化可审计动作。",
       "核对 artifact 与 manifest。",
+      "核对路线专属 cleanup 与 authorization 证据。",
       "生成单次证据 commitment。"
     ],
     concepts: [
       { term: "attestation（证明）", explanation: "由宿主或受信适配器提供的执行事实，不是参与者自述。" },
+      { term: "executor_kind（执行器类型）", explanation: "决定任务由宿主原生、本机异步 job 还是云端 API job 承载，也是身份、传输与清理合同的分支。" },
+      { term: "requested / effective / attested identity（请求/实际/证明身份）", explanation: "分别记录想调用谁、实际运行谁、宿主或 provider 能证明谁；三者矛盾就失败关闭。" },
+      { term: "native lineage（原生谱系）", explanation: "宿主提供的 parent/spawn/child 与 rollout 关系；只对 native_managed 必需，非原生路线明确写 not_applicable。" },
+      { term: "onboarding gate（接入门）", explanation: "新 harness 在正式使用前证明身份、能力等价路径、workspace/artifact/terminal receipt 与同一 verifier 兼容的预演。" },
       { term: "envelope（动作信封）", explanation: "宿主记录的一次工具调用及参数外壳。" },
       { term: "binding hash（绑定指纹）", explanation: "把身份、任务、workspace 和版本组合成不可混用的内容指纹。" }
     ],
     boundaries: [
       "网页不展示原始宿主日志或任务密文。",
-      "缺 native lineage（原生谱系）对非原生执行不自动算失败。",
-      "宿主版本字面量不是永久 allowlist。"
+      "缺 native lineage 对非原生执行不自动算失败；反过来，非原生 receipt 绝不能证明 native_managed。",
+      "云端请求只允许 participant-public 与必要 harness protocol；hidden control、oracle、raw rollout、私有证据、secret 和无关私有来源不得发送给 provider。",
+      "云端真实付费 attempt 必须逐次明确授权；本地 GPU 与原生 task 不消费这个 paid-attempt gate，但仍服从各自 owner、资源和执行授权。",
+      "宿主版本字面量不是永久 allowlist；真正绑定的是当前发现的身份、协议、能力与 receipt。",
+      "底层模型、provider、理解、推理和代码能力属于外部 AI/平台；CACB 自己只实现接入、评测、证据与验证框架。"
     ],
     failures: [
       { condition: "身份或任务不匹配", response: "标记 infra invalid（执行证据无效）。" },
+      { condition: "native_managed 缺 parent/spawn/child 谱系", response: "原生身份门失败，不得改写为普通成功或借用另一次 rollout。" },
+      { condition: "本地 artifact/profile/engine 与 runtime receipt 不一致", response: "停止资格判断，保留 workspace 供诊断；不得换成本地别名、原生或云端 fallback。" },
+      { condition: "云端 requested/effective/attested provider、model 或 endpoint 不一致", response: "关闭本次身份资格并保留 request audit；不得继承 native receipt。" },
+      { condition: "新 harness 只有静态 profile、没有 host preflight receipt", response: "保持 draft/research 状态，不进入正式样本。" },
+      { condition: "云端没有当前 attempt 的付费授权", response: "不发 provider request；已配置账号、旧授权或设计验证都不能补足。" },
       { condition: "动作无法规范化", response: "只关闭受影响的执行证据，不猜行为。" },
       { condition: "终态缺失", response: "保持 incomplete，尝试同 session 恢复。" }
     ],
     sources: [
       { path: "PRIVATE source · src/cacb/evidence.py", role: "证据状态与 commitment" },
       { path: "PRIVATE source · src/cacb/model_evidence.py", role: "执行身份和证据卡" },
+      { path: "PRIVATE source · docs/WORKER_CONTRACT.md", role: "三类 executor union、identity、lineage 与 compatibility gate" },
+      { path: "PRIVATE source · docs/HARNESS_ONBOARDING.md", role: "新 harness 的 profile、host preflight 与同一 verifier 接入门" },
+      { path: "PRIVATE source · docs/LOCAL_CODEX_COMPATIBILITY.md", role: "本地 artifact、Codex tool loop 与 GPU 身份门" },
+      { path: "PRIVATE source · src/cacb/cloud_api_worker.py", role: "云端 provider/request/usage/privacy/terminal 的严格证据解析" },
+      { path: "PRIVATE source · schemas/model-evidence-card.schema.json", role: "三类 executor 与 lineage applicability 合同" },
       { path: "PRIVATE source · schemas/episode-manifest.schema.json", role: "Episode manifest 合同" },
       { path: "PRIVATE source · schemas/worker-receipt.schema.json", role: "执行回执合同" }
     ],
     verification: [
       "model evidence workflow 与 worker contract focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
+      "current cross-executor design contract 与 schemas 在源码层显式区分 native_managed、local_async_job、cloud_api_async_job，并要求 requested/effective/attested identity；这不证明任何具体配置已完成本机接入。",
       "完整 native identity envelope 测试当前存在跨代失败，页面没有升级为全绿。",
       "未读取或复制任何真实原始执行日志。"
     ],
-    relation: "绑定 campaign/workspace 的真实执行；verifier 只接受匹配证据。"
+    relation: "先为 campaign/workspace 选择并冻结精确 executor binding，再把路线专属 host/provider/transport/lineage/authorization 证据交给执行生命周期；verifier 只接受同一 task/run/workspace 的匹配 artifact，失败报告再按 identity、transport、harness、cleanup 或 model-task 平面归因。"
   },
   {
     slug: "deterministic-verification",
