@@ -3,6 +3,7 @@ import {
   systemComposedWorkflows,
   systemDependencyNodes,
   systemDependencyRelations,
+  systemEvidenceLayers,
   systemHomeHero,
   systemProjectDomains,
   systemScenarios
@@ -86,5 +87,14 @@ export const systemSearchEntries = [
     aliases: [],
     compactSearch: relation.nodes.map((id) => systemNodeTitles.get(id) || id).join(" "),
     search: relation.nodes.join(" ")
+  })),
+  ...systemEvidenceLayers.map((layer) => ({
+    type: "验证层",
+    title: layer.title,
+    detail: `能证明：${layer.proves} 不能证明：${layer.doesNotProve}`,
+    href: `/#${layer.id === "human" ? "evidence-human" : `evidence-${layer.id}`}`,
+    aliases: layer.searchAliases || [],
+    compactSearch: `${layer.proves} ${layer.doesNotProve}`,
+    search: `${layer.proves} ${layer.doesNotProve}`
   }))
 ];

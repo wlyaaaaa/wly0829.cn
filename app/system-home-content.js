@@ -1535,13 +1535,13 @@ export const systemSkillFamilies = [
 ];
 
 export const systemEvidenceLayers = [
-  { id: "source", title: "原件与来源", proves: "输入、事实和引用能回到真实来源。", doesNotProve: "不证明处理过程和最终结论正确。" },
-  { id: "test", title: "项目测试", proves: "行为在明确的测试条件下符合预期。", doesNotProve: "不证明已经安装、接入或真实运行。" },
+  { id: "source", title: "原件与来源", proves: "输入、事实和引用能回到真实来源。", doesNotProve: "不证明处理过程和最终结论正确。", searchAliases: ["原始来源能证明什么"] },
+  { id: "test", title: "项目测试", proves: "行为在明确的测试条件下符合预期。", doesNotProve: "不证明已经安装、接入、真实运行或网页已经发布。", searchAliases: ["源码或构建通过能不能证明网页发布", "测试通过不等于发布"] },
   { id: "install", title: "安装与接入", proves: "目标环境已经接入这项能力。", doesNotProve: "不证明新的自然任务会自动找到它。" },
   { id: "fresh", title: "新任务发现", proves: "新的普通请求能够找到并正确选择入口。", doesNotProve: "不证明真实对象已经产出预期结果。" },
   { id: "runtime", title: "现实运行", proves: "真实对象、工具或服务产生了预期输出。", doesNotProve: "不证明完整用户路径已经闭合。" },
   { id: "e2e", title: "真实端到端", proves: "从自然请求到最终结果的整条现实路径能够完成。", doesNotProve: "不自动覆盖其他环境、账号或任务类型。" },
-  { id: "publish", title: "按需发布与回读", proves: "需要发布时，结果已进入正确目标并重新读取。", doesNotProve: "本地任务不必经过此层，也不等于用户已经满意。" },
+  { id: "publish", title: "按需发布与回读", proves: "需要发布时，结果已进入正确目标并重新读取。", doesNotProve: "本地任务不必经过此层，也不等于用户已经满意。", searchAliases: ["网页发布与公网回读", "发布后怎样确认真的更新"] },
   { id: "human", title: "用户验收", proves: "本次结果和体验真正满足当前目标。", doesNotProve: "不代表它对所有人、所有场景都成立。" }
 ];
 

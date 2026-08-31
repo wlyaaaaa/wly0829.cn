@@ -462,7 +462,8 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
     ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
     ["仓库身份经过项目入口再进入业务项目", "系统关系", "/#system-relation-git-projects"],
     ["Hook 创建子代理前核对身份", "系统组成", "/skills/native-economy-routing/"],
-    ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"]
+    ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"],
+    ["源码或构建通过能不能证明网页发布", "验证层", "/#evidence-test"]
   ];
   for (const [query, type, href] of compactSystemCases) {
     const full = searchPanel(query, "system")[0];
