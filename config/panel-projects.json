@@ -44,8 +44,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 6,
-        "scope": "project overview, six modules, current E release Rules and Skills evidence",
+        "semantic_revision": 7,
+        "scope": "project overview, six modules, current E release Rules and Skills evidence, PUBLIC private-companion migration and the fixed E-to-G working-tree hot-mirror recovery layer",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
