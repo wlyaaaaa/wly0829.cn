@@ -44,8 +44,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 8,
-        "scope": "project overview, six modules, current E96 Rules and Skills evidence, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, PUBLIC private-companion migration and the fixed E-to-G working-tree hot-mirror recovery layer",
+        "semantic_revision": 9,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E96 Rules and Skills evidence, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, and PUBLIC private-companion migration",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -62,7 +62,8 @@
       },
       "displayed_areas": [
         "project_overview",
-        "six_modules",
+        "seven_modules",
+        "working_tree_hot_mirror_recovery",
         "active_rules",
         "skills_catalog",
         "validation_matrix",
@@ -176,8 +177,8 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 6,
-        "scope": "project overview and eight modules covering machine facts, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers/authorized-file encryption-resume-verify-recovery, protected actions and protected data",
+        "semantic_revision": 8,
+        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, protected actions and protected data",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
           "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
@@ -221,8 +222,10 @@
       },
       "displayed_areas": [
         "project_overview",
-        "eight_modules",
+        "nine_modules",
         "drift_acceptance_dual_status_and_bounded_evidence",
+        "timeaudit_anomaly_increment_cursor_and_stable_fact_recheck",
+        "independent_authorization_file_encrypt_verify_restore_lifecycle",
         "secondary_laptop_health_recovery_and_nvme_takeover",
         "current_machine_and_recovery_state",
         "evidence_layers",
@@ -244,6 +247,8 @@
             "tools/local_gpu_broker/**",
             "tools/Install-CoreRecoveryTasks.ps1",
             "tools/Invoke-PCConfigAcceptance.ps1",
+            "tools/Invoke-TimeAuditAnomalyIncrement.ps1",
+            "tools/timeaudit_anomaly_increment.test.ps1",
             "tools/invoke_acceptance_checks.test.ps1",
             "tools/test_pcconfig_drift.test.ps1",
             "tools/Get-SecondaryLaptopHealth.ps1",
@@ -394,8 +399,8 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 4,
-        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, audit evidence, speaker attribution and runtime/privacy",
+        "semantic_revision": 5,
+        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ChineseASR -RefreshRefs -Json",
@@ -420,6 +425,7 @@
         "installation_model_artifacts_and_offline_recovery",
         "model_and_mode_routing",
         "task_long_audio_and_evidence_state",
+        "optional_local_ollama_evidence_only_arbitration",
         "speaker_and_privacy_boundaries",
         "verification_and_evolution"
       ],
@@ -522,8 +528,8 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 4,
-        "scope": "project overview and seven product-defined modules covering collection, analysis, visualization, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery",
+        "semantic_revision": 5,
+        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
@@ -560,6 +566,7 @@
         "project_modules",
         "collection_and_storage_architecture",
         "hardware_process_usage_and_energy_boundaries",
+        "pcconfig_anomaly_digest_coverage_recheck_and_unavailable_semantics",
         "runtime_reliability_and_actual_value_boundary",
         "windows_clipboard_history_product_and_recovery",
         "verification_recovery_and_evolution"
@@ -804,8 +811,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 5,
-        "scope": "curated product overview and six project-defined modules covering the question bank, isolated execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, isolated 1/10-task quota-cost probes, compatible final selection and reports without publishing any tested-configuration score or rank",
+        "semantic_revision": 6,
+        "scope": "curated product overview and six project-defined modules covering the question bank, isolated execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, independent Sol Max root orchestration tracks with role-specific direct-child delivery and fail-closed evidence, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, isolated 1/10-task quota-cost probes, compatible final selection and reports without publishing any tested-configuration score or rank",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
@@ -826,6 +833,7 @@
         "isolated_execution_and_workspace_containment",
         "identity_evidence_and_deterministic_verification",
         "executor_union_identity_terminal_cleanup_and_authorization",
+        "native_orchestration_root_child_role_specific_delivery_and_separate_reporting",
         "sol_max_blind_arbitration_inferred_quality_and_evidence_binding",
         "isolated_quota_cost_probes_and_compatible_final_selection",
         "failure_semantics_and_reproducible_reports",
@@ -855,7 +863,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-learning.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "curated public overview and five modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
@@ -867,8 +875,10 @@
         "repo": "PRIVATE_MANAGED_SOURCE",
         "visibility": "PRIVATE",
         "default_branch": "main",
-        "public_identity": "private-ai-assisted-learning-method-source",
-        "locator_owner": "ignored-private-content-rules"
+      "public_identity": "private-ai-assisted-learning-method-source",
+      "snapshot_commit": "6534ac7a2bc57ab949224ee3d6f98854edc321a5",
+      "snapshot_observed_at": "2026-08-30T09:30:00Z",
+      "locator_owner": "ignored-private-content-rules"
       },
       "displayed_areas": [
         "curated_project_overview",

@@ -659,7 +659,7 @@ test("TimeAudit registry binds public-safe aggregate refresh evidence and impact
   assert.equal(registration.route, "/projects/timeaudit");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-timeaudit.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.equal(registration.source.repo, "wlyaaaaa/TimeAudit");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.default_branch, "main");
@@ -752,6 +752,11 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(auditText, /\[疑似\][\s\S]*回听原音频|回听原音频[\s\S]*\[疑似\]/);
   assert.match(auditText, /\[听不清\][\s\S]*(?:不等于没有语音|不能可靠转写)/);
   assert.match(auditText, /回执[\s\S]*(?:不证明文字正确|不证明文字是真的)/);
+  const arbitrationText = JSON.stringify(audit);
+  for (const expected of ["Ollama", "11434", "uncertain_only", "keep_alive=0", "默认关闭", "不读取音频", "不覆盖", "merged audit / metrics"]) {
+    assert.ok(arbitrationText.includes(expected), `ChineseASR optional arbitration omits: ${expected}`);
+  }
+  assert.match(arbitrationText, /(?:不可用|响应无效)[\s\S]*(?:基础双 ASR|基础长音频|基础转写)/);
   const asrSnapshot = JSON.stringify({ boundary: chineseAsrProject.snapshotBoundary, facts: chineseAsrProject.currentState, hero: chineseAsrProject.heroFacts });
   for (const exact of ["70e3255", "345", "83.524 秒"]) assert.ok(asrSnapshot.includes(exact), `ChineseASR fresh evidence drifted: ${exact}`);
 
@@ -761,7 +766,11 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(processText, /Skill.*不返回进程名|不返回进程名/);
   assert.match(processText, /Grafana.*(?:资源盘|取证盘)/);
   const hardware = timeAuditModules.find((item) => item.slug === "hardware-performance");
-  assert.match(JSON.stringify(hardware), /summary[\s\S]*Grafana|Grafana[\s\S]*summary/);
+  const hardwareText = JSON.stringify(hardware);
+  assert.match(hardwareText, /summary[\s\S]*Grafana|Grafana[\s\S]*summary/);
+  for (const expected of ["timeaudit.pcconfig-anomaly-digest.v1", "(after, until]", "168", "coverage", "projection_recheck_recommended", "不进入稳定", "不证明配置", "unavailable", "不重启"]) {
+    assert.ok(hardwareText.includes(expected), `TimeAudit PCConfig digest product axis omits: ${expected}`);
+  }
 
   const recovery = timeAuditModules.find((item) => item.slug === "backup-recovery");
   assert.equal(recovery.shortTitle, "安装与恢复");
@@ -794,8 +803,8 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   ]) assert.equal(searchPanel(query)[0]?.href, href, `natural project search misroutes: ${query}`);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "chinese-asr").ai_refresh.semantic_revision, 4);
-  assert.equal(registry.projects.find((item) => item.id === "timeaudit").ai_refresh.semantic_revision, 4);
+  assert.equal(registry.projects.find((item) => item.id === "chinese-asr").ai_refresh.semantic_revision, 5);
+  assert.equal(registry.projects.find((item) => item.id === "timeaudit").ai_refresh.semantic_revision, 5);
 });
 
 test("ChineseASR exposes installation, model identity and offline recovery as a complete axis", async () => {
@@ -812,7 +821,7 @@ test("ChineseASR exposes installation, model identity and offline recovery as a 
   assert.ok(chineseAsrProject.usageExamples.some((item) => item.moduleSlug === "installation-recovery"));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "chinese-asr");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.match(registration.ai_refresh.scope, /seven modules/);
   const impactPaths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["scripts/download-models.ps1", "scripts/export-lock.ps1", "scripts/build-wheelhouse.ps1", "scripts/verify-wheelhouse.ps1", "scripts/install-offline.ps1", "runtime/firered_worker.py", "tests/test_scripts.py"]) {
@@ -866,7 +875,7 @@ test("non-rule project packages preserve the content contract and enter only the
       modules: pcconfigModules,
       expectedSlug: "pcconfig",
       expectedOrder: 2,
-      expectedModules: ["machine-facts", "runtime-startup", "drift-acceptance", "recovery-backup", "secondary-laptop", "secrets-providers", "protected-actions", "protected-data"]
+      expectedModules: ["machine-facts", "runtime-startup", "drift-acceptance", "recovery-backup", "secondary-laptop", "secrets-providers", "authorization-files", "protected-actions", "protected-data"]
     },
     {
       project: githubIndexProject,
@@ -1053,11 +1062,11 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 6);
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 8);
 });
 
 test("PCConfig exposes secondary-laptop and drift acceptance as complete product and technical axes", async () => {
-  assert.equal(pcconfigModules.length, 8);
+  assert.equal(pcconfigModules.length, 9);
   const laptop = pcconfigModules.find((item) => item.slug === "secondary-laptop");
   const drift = pcconfigModules.find((item) => item.slug === "drift-acceptance");
   const laptopText = JSON.stringify(laptop);
@@ -1077,14 +1086,26 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(pcconfigProject.currentState), /not_applicable|host_mismatch/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 6);
-  assert.match(registration.ai_refresh.scope, /eight modules/);
+  assert.equal(registration.ai_refresh.semantic_revision, 8);
+  assert.match(registration.ai_refresh.scope, /nine product-defined modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));
 });
 
+test("PCConfig consumes TimeAudit anomaly windows without treating telemetry as stable machine truth", async () => {
+  const machineFacts = pcconfigModules.find((item) => item.slug === "machine-facts");
+  const text = JSON.stringify(machineFacts);
+  for (const expected of [
+    "TimeAudit", "(after, until]", "168", "cursor", "成功窗口", "unavailable", "非法 payload", "no_new_window",
+    "projection_recheck_recommended", "live stable provider", "no_change", "published", "不进入 stable_machine_projection", "不证明"
+  ]) assert.ok(text.includes(expected), `PCConfig TimeAudit anomaly consumer omits: ${expected}`);
+  assert.match(text, /(?:不推进|游标不动)[\s\S]*(?:不重启|重启 TimeAudit)|(?:不重启|重启 TimeAudit)[\s\S]*(?:不推进|游标不动)/);
+  assert.match(text, /(?:每周|weekly)[\s\S]*(?:不新增高频任务|不新建高频任务)/);
+  assert.ok(machineFacts.searchAliases.includes("TimeAudit异常会直接改变稳定机器投影吗"));
+});
+
 test("PCConfig exposes authorized-file encryption as an isolated resumable product domain", async () => {
-  const module = pcconfigModules.find((item) => item.slug === "secrets-providers");
-  const text = JSON.stringify({ module, usage: pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "secrets-providers"), current: pcconfigProject.currentState });
+  const module = pcconfigModules.find((item) => item.slug === "authorization-files");
+  const text = JSON.stringify({ module, usage: pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "authorization-files"), current: pcconfigProject.currentState });
   for (const expected of [
     "Authorization File Broker", "SelectedPath", "OutputPath", "plan_explicit_inputs", "10000", "100 GiB", "AES-256-GCM", "4 MiB",
     "domain root", "bundle key", "file key", "resume state", "index.enc", "receipt", "selection digest", "already_complete",
@@ -1093,10 +1114,10 @@ test("PCConfig exposes authorized-file encryption as an isolated resumable produ
   for (const expected of ["来源文件", "始终保留", "不读取", "正文", "不覆盖", "中断", "继续", "没有独立 preview", "runtime", "E2E", "not_run"]) {
     assert.ok(text.includes(expected), `PCConfig authorized-file product boundary omits: ${expected}`);
   }
-  assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "secrets-providers" && item.ask.includes("文件") && item.ask.includes("加密")));
+  assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "authorization-files" && item.ask.includes("文件") && item.ask.includes("加密")));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 6);
+  assert.equal(registration.ai_refresh.semantic_revision, 8);
   const paths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
     assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
@@ -1350,6 +1371,12 @@ test("CACB explains the product without publishing tested-configuration output",
   for (const expected of ["WorkerHandle", "parent/spawn/child", "native_lineage=not_applicable", "Toolkit/AICLI", "LocalGpuBroker", "provider request", "request/stream", "cleanup_unconfirmed", "onboarding gate", "paid-attempt", "fallback=false"]) {
     assert.ok(publicText.includes(expected), `CACB executor union omits: ${expected}`);
   }
+  const orchestration = cacbModules.find((item) => item.slug === "campaign-workspace");
+  const orchestrationText = JSON.stringify(orchestration);
+  for (const expected of ["Sol Max 根", "零到四个直接", "role-specific", "fork_turns=none", "分解", "并发", "冲突", "最终验证", "single-worker", "失败关闭", "不自动", "全局路由"]) {
+    assert.ok(orchestrationText.includes(expected), `CACB native orchestration product axis omits: ${expected}`);
+  }
+  assert.match(orchestrationText, /(?:分开报告|分报)[\s\S]*(?:单工作者|single-worker)|(?:单工作者|single-worker)[\s\S]*(?:分开报告|分报)/);
   const blindReview = cacbModules.find((item) => item.slug === "blind-quality-review");
   const blindText = JSON.stringify(blindReview);
   for (const expected of [
@@ -1377,7 +1404,7 @@ test("CACB explains the product without publishing tested-configuration output",
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.match(registration.ai_refresh.scope, /native_managed\/local_async_job\/cloud_api_async_job/);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
 });
@@ -1410,6 +1437,9 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.match(publicText, /没有应用服务、学习数据库、提醒任务、后台同步/);
   assert.match(publicText, /示例可以设计，结果不能编/);
   assert.match(publicText, /不能.*普遍有效|不构成.*普遍有效/);
+  assert.match(publicText, /PRIVATE_MANAGED_SOURCE.*6534ac7a2bc57ab949224ee3d6f98854edc321a5/);
+  assert.match(publicText, /Markdown（结构化文本格式）/);
+  assert.match(publicText, /PASS（方法合同已定义）/);
   for (const module of learningModules) {
     assert.ok(module.searchAliases.length >= 3, `${module.slug} lacks public-safe natural search aliases`);
     assert.ok(module.sources.every((item) => /^https:\/\//.test(item.href)), `${module.slug} contains a non-public research reference`);
@@ -1423,6 +1453,8 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
+  assert.equal(registration.source.snapshot_commit, "6534ac7a2bc57ab949224ee3d6f98854edc321a5");
+  assert.equal(registration.ai_refresh.semantic_revision, 4);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.scope, /without exposing any learning subject or progress/);
   assert.match(registration.refresh_rules.ignore_when.join("\n"), /topic and progress changes/);
@@ -1448,7 +1480,7 @@ test("TimeAudit exposes Windows clipboard history as an independent private side
   assert.doesNotMatch(currentText, /6 个 tracked dirty|未发布.*未激活|44a842e.*当前.*基线/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "timeaudit");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.match(registration.ai_refresh.scope, /seven product-defined modules/);
   assert.ok(registration.impact_sources.some((source) => source.paths?.includes("clipboard_history/**") && source.paths.includes("test_clipboard_history.py")));
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("test_clipboard_history.py")));
@@ -1464,7 +1496,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   assert.equal(packages.flatMap((entry) => entry.modules).length, 17);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" || project.slug === "cacb" ? 5 : 3;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 5 : project.slug === "cacb" ? 6 : 4;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -1921,12 +1953,12 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 6);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 8);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
-  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 4);
+  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 5);
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
@@ -2080,14 +2112,15 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   }
 });
 
-test("the .agents project has six complete modules plus Overview", () => {
+test("the .agents project has seven complete modules plus Overview", () => {
   assert.deepEqual(modules.map((item) => item.slug), [
     "rules-contracts",
     "capability-routing",
     "authorization-owner",
     "protected-policy",
     "skills-plugins",
-    "context-evidence"
+    "context-evidence",
+    "working-tree-hot-mirror"
   ]);
   for (const module of modules) {
     assert.ok(["pass", "problem", "unknown", "mixed"].includes(module.statusTone), `${module.slug}.statusTone is invalid`);
@@ -2175,7 +2208,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 8);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 9);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -2200,8 +2233,8 @@ test("authorization content explains PUBLIC private companion migration as a rec
 });
 
 test(".agents exposes its G-drive working-tree hot mirror without confusing Git or cold backup", async () => {
-  const context = modules.find((item) => item.slug === "context-evidence");
-  const text = JSON.stringify({ project: { currentState: project.currentState, principles: project.productPrinciples, usage: project.usageExamples, components: project.components }, context });
+  const hotMirror = modules.find((item) => item.slug === "working-tree-hot-mirror");
+  const text = JSON.stringify({ project: { currentState: project.currentState, principles: project.productPrinciples, usage: project.usageExamples, components: project.components }, hotMirror });
   const normalizedText = text.replaceAll("\\\\", "\\");
   for (const expected of [
     "E:\\.agents", "G:\\80_Backup\\ControlPlane\\.agents", "AgentsHotMirror-Daily", "Global\\CodexAgentsHotMirrorLock",
@@ -2513,7 +2546,7 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("C盘规则为什么不能阻塞spawn")[0]?.title, "重大动作保护");
   assert.equal(searchPanel("dirty source 不能冒充 current release")[0]?.title, "重大动作保护");
   assert.equal(searchPanel("同一个目标不要反复问我授权")[0]?.title, "授权与委派");
-  assert.equal(searchPanel("本地构建通过为什么还不能说网站完成")[0]?.title, "三控制面上下文、耐久状态、工作树热备与完成证据");
+  assert.equal(searchPanel("本地构建通过为什么还不能说网站完成")[0]?.title, "三控制面上下文、耐久状态与完成证据");
   assert.equal(searchPanel("怎么避免全局规则覆盖项目自己的验收方式")[0]?.title, "全局根规则");
   assert.equal(searchPanel("PCConfig")[0]?.title, "PCConfig · 总览");
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");

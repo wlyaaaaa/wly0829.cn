@@ -117,7 +117,7 @@ export const pcconfigProject = {
     { term: "Recovery capsule（恢复胶囊）", meaning: "副驾驶笔记本的目标状态、窄用户文件、世代闭合和恢复入口；它防止空白新机覆盖旧来源，不是整机镜像。" }
   ],
   currentState: {
-    observedAt: "2026-08-31T11:43:18Z",
+    observedAt: "2026-08-31T22:48:54Z",
     label: "主工作站配置与恢复可读；副驾驶笔记本产品已登记、现场状态待目标机回读",
     facts: [
       "源仓库 PRIVATE（私有）main 与 origin/main 当前同为 d4480abc17574177b91e52b0aff9aebd30583f58，worktree clean；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务。",
@@ -130,7 +130,7 @@ export const pcconfigProject = {
       "2026-08-31 从当前 WLY 调副驾驶健康入口返回 schema pcconfig.secondary-laptop-health.v1、status=not_applicable、reason=host_mismatch；这证明主机门正确停止，不证明笔记本服务或恢复状态。",
       "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。",
       "2026-08-31T17:49:27Z fresh Drift 返回 6 pass、1 warn、0 block，证据为 6 pass、0 fail、1 unknown；唯一 attention 是 tasks.live_match 的 complete_visibility=false，runtime_health 仍 pass 且 failure_last_result_count=0。",
-      "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。",
+      "Codex Home 已完成切换：E:\\Data\\AppData\\Codex 是唯一运行根，C:\\Users\\10979\\.codex 是指向它的 junction。迁移前 staging 曾覆盖 39911 个文件、75.13 GB，最终差异为 565 个文件 / 6.74 GiB；这些数字只解释切换准备，不再代表当前仍在等待。",
       "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。",
       "授权文件实现已包含在上述 9/9 current 安装态中：authorization_file_broker.py 的 source/installed SHA-256 同为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854，manifest anchor 匹配且 Inspect 零写入；独立 6/6 合成测试通过。"
     ],
@@ -140,7 +140,7 @@ export const pcconfigProject = {
       "授权文件本次只验证源码、独立测试和安装一致性，没有调用最高权限入口处理真实选择文件；当前 runtime（运行链）与自然用户 E2E 仍未在本次快照复核，不能由 6/6 合成测试或 9/9 安装态替代。正式入口目前也没有独立 preview/dry-run（预览/只预演）动作，只能把显式 SelectedPath/OutputPath 作为输入后在执行链内部生成有界计划。",
       "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练；同机重装、换机、系统盘故障和仅 PE 四条路径因此仍需在真实事件中分别完成端到端回读。",
       "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；恢复后在新系统重建 Hot/Cold 并形成新的 G/H 回执也尚未发生。",
-      "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
+      "本轮只读回读确认 C 兼容 junction 精确指向 E 唯一根；没有为了网页重新演练停写增量、原子 cutover（切换）或 rollback（回滚），因此本页证明当前落点，不把历史迁移流程冒充本轮 E2E。",
       "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
       "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
       "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
@@ -176,7 +176,7 @@ export const pcconfigProject = {
     { name: "Password Center（密码中心）", responsibility: "让用户查找、查看、导入、盲填和恢复凭据，同时把真实秘密留在受保护运行库。", implementation: "独立于退役 C Policy；银行卡三字段原子保存，查看窗口白底纯绿、可逐字段复制，剪贴板历史与云同步关闭并在 60 秒或关窗后按值清理。" },
     { name: "Authorization File Broker（授权文件代理）", responsibility: "把用户明确选择的文件或目录计划成可续作、可校验、可无覆盖恢复的加密包。", implementation: "独立随机域根、包密钥和逐文件密钥；AES-256-GCM 分块对象、加密 state/index、原子输出与无正文 receipt（回执）。不新增服务、数据库或后台任务。" },
     { name: "Browser Bridge（浏览器桥）", responsibility: "把网站登录和银行卡填充限定到用户当前确认的精确网页目标。", implementation: "1.4.0 launcher-verified；AgentCardFill 只对唯一 HTTPS 支付表单使用一次性能力，同时填入卡号、有效期和 CVV，不提交页面。" },
-    { name: "Codex 恢复与迁移", responsibility: "把对话恢复点和 Codex Home 迁移分别做成内容可验证、可以回退的事务。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；Home 迁移等待写入退出后完成最终增量、ACL/链接清单、原子切换、C 兼容联接和回滚。" },
+    { name: "Codex 恢复与迁移", responsibility: "把对话恢复点和 Codex Home 迁移分别做成内容可验证、可以回退的事务。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；Home 迁移以写入退出后的最终增量、ACL/链接清单、原子切换、C 兼容联接和回滚完成。当前 E 是唯一根，C 仅为 junction。" },
     { name: "固定 Google Workspace Provider", responsibility: "通过一个固定账号绑定提供邮件、云盘和日历的类型化动作。", implementation: "凭据用 DPAPI 保存；入口没有通用网址、方法或请求体透传，状态检查可做到 zero-network（零网络）。" },
     { name: "Protected-policy retirement", responsibility: "证明旧 C 盘规则运行面、Publisher consumer、worker 与任务已经退役，同时保留历史恢复材料和独立产品。", implementation: "Retirement Registry、固定 retired 状态入口、36 依赖分类、6 任务缺席和机器收敛回执。" },
     { name: "受保护数据连续性", responsibility: "提供版本换挡、最高权限因子、加密保险库、恢复载体和隔离恢复设计。", implementation: "P0–P7（八个严格串行阶段）各有独立完成证据；源码、安装、真实数据迁移和重启验收不能互相冒充。" },
@@ -198,11 +198,11 @@ export const pcconfigProject = {
     { moduleSlug: "secondary-laptop", ask: "副驾驶笔记本重装后怎样恢复，又不让空白新机覆盖旧备份？", effect: "从已验证胶囊 current 与 closure 生成恢复预览，保持 writerState=restore_pending；数据和设备验收后先标记 restored_unaccepted，只有用户确认整机可用才激活 writer。" },
     { moduleSlug: "secondary-laptop", ask: "副驾驶笔记本硬盘坏了或恢复 U 盘不在，能恢复到什么程度？", effect: "Git 恢复有远端的项目，独立加密 U 盘只恢复已提交世代覆盖的 Desktop、Documents、Downloads 与窄 Codex 策略；U 盘不在保持 unknown/等待，本机同盘 rollback 不能冒充灾备。" },
     { moduleSlug: "secrets-providers", ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
-    { moduleSlug: "secrets-providers", ask: "把我选中的这些文件和这个目录加密；中断后接着做，并确认以后能恢复。", effect: "把精确 SelectedPath 和 OutputPath 作为输入，执行链内部生成有界计划，再经最高权限授权逐文件分块加密；来源始终保留。当前没有独立 dry-run 预览动作；完成回执给计数、路径、哈希、状态和有界失败项，中断时复用已认证 state 续作，正文与密钥都不返回模型。" },
+    { moduleSlug: "authorization-files", ask: "把我选中的这些文件和这个目录加密；中断后接着做，并确认以后能恢复。", effect: "把精确 SelectedPath 和 OutputPath 作为输入，执行链内部生成有界计划，再经最高权限授权逐文件分块加密；来源始终保留。当前没有独立 dry-run 预览动作；完成回执给计数、路径、哈希、状态和有界失败项，中断时复用已认证 state 续作，正文与密钥都不返回模型。" },
     { moduleSlug: "secrets-providers", ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
     { moduleSlug: "secrets-providers", ask: "两台电脑之间怎样恢复账号和凭据，能不能直接复制登录状态？", effect: "不能复制旧会话、Cookie、Token、密码或设备身份密钥；在目标设备重新登录，非秘密配置按新路径重建，秘密只从凭据 Owner、Provider 或 SecretRef 恢复。" },
     { moduleSlug: "recovery-backup", ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
-    { moduleSlug: "protected-actions", ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先准备 staging、最终增量、ACL/链接清单和回滚副本；状态保持 waiting_for_codex_exit，只有 Codex 完全退出后才按需启动正式切换。" },
+    { moduleSlug: "protected-actions", ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "迁移事务会先准备 staging、最终增量、ACL/链接清单和回滚副本；写入仍活跃时保持 waiting_for_codex_exit。当前这次迁移已经完成，E 是唯一根，C 只保留兼容 junction。" },
     { moduleSlug: "protected-data", ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
   ],
   evidenceLayers: [
@@ -253,27 +253,31 @@ export const pcconfigModules = [
     teaser: "回答“这台电脑现在怎样、配置真正在哪里、改动会影响谁”，并为路径、端口和开发存储提供现场门禁。",
     status: "机器事实可读，开发存储 5/5 通过；稳定投影为版本 6",
     statusTone: "pass",
+    searchAliases: ["TimeAudit异常会直接改变稳定机器投影吗", "PCConfig异常游标什么时候推进", "每周机器维护怎样消费TimeAudit摘要"],
     searchProjection: {
-      intents: ["查看本机配置在哪里", "确认当前主机和设备角色", "迁移项目路径", "检查固定端口", "判断笔记本能否接管台式机"],
-      entities: ["WLY 主工作站", "磁盘与盘符", "V 开发盘", "Z 可重建缓存", "项目配置键", "稳定机器投影"],
-      relations: ["主机身份决定机器事实", "项目配置源投影到 PCConfig", "路径关联项目和任务消费者", "端口同时受系统范围和监听约束"],
-      failureRecovery: ["host mismatch 不套用另一台机器", "现场不可读保持 Unknown", "快照更新失败标记 stale", "迁移失败保留源路径和回滚"]
+      intents: ["查看本机配置在哪里", "确认当前主机和设备角色", "迁移项目路径", "检查固定端口", "判断笔记本能否接管台式机", "消费TimeAudit增量异常并决定是否重查稳定事实"],
+      entities: ["WLY 主工作站", "磁盘与盘符", "V 开发盘", "Z 可重建缓存", "项目配置键", "稳定机器投影", "TimeAudit anomaly cursor", "projection_recheck_recommended"],
+      relations: ["主机身份决定机器事实", "项目配置源投影到 PCConfig", "路径关联项目和任务消费者", "端口同时受系统范围和监听约束", "TimeAudit只给异常摘要和重查建议", "PCConfig live provider独立裁定投影是否变化"],
+      failureRecovery: ["host mismatch 不套用另一台机器", "现场不可读保持 Unknown", "快照更新失败标记 stale", "TimeAudit来源不可用或payload非法时游标不推进", "迁移失败保留源路径和回滚"]
     },
-    value: "把散落在磁盘、环境、项目文件和本机服务里的配置变成可导航、可验证的机器地图。用户不用靠记忆猜路径，也不会因为看到一个旧值就直接改错地方。",
-    why: "同一个端口可能同时受 Windows 动态范围、现有 listener（监听进程）和项目配置影响；同一个目录也可能被计划任务、快捷方式或服务引用。没有唯一 Owner 和依赖导航，迁移很容易造成“文件还在，但程序找不到”。",
-    example: "例如我要把一个新项目放到 V 盘，并让它使用固定本地端口。这个模块先证明 V 盘健康，再查端口是否落入动态/排除范围、是否已有监听、是否被别的 Owner 登记；通过后才让项目绑定并把稳定配置投影回 Registry。",
-    result: "检查通过时得到可用候选和验证入口；发现冲突时得到具体阻断原因；现场来源不可读时得到 unknown，并停止迁移或固定端口选择，不用默认路径或常见端口猜测。",
+    value: "把散落在磁盘、环境、项目文件和本机服务里的配置变成可导航、可验证的机器地图。用户不用靠记忆猜路径，也不会因为看到一个旧值就直接改错地方。TimeAudit 发现持续硬件压力时，PCConfig 还能按自己的游标消费一份有界异常摘要，再决定是否值得重新读取稳定机器事实。",
+    why: "同一个端口可能同时受 Windows 动态范围、现有 listener（监听进程）和项目配置影响；同一个目录也可能被计划任务、快捷方式或服务引用。没有唯一 Owner 和依赖导航，迁移很容易造成“文件还在，但程序找不到”。同样，一次温度或磁盘延迟异常只能说明时序信号，若直接写入稳定投影或自动判定硬件变化，就会把短暂负载变成错误机器基线。",
+    example: "例如我要把一个新项目放到 V 盘，并让它使用固定本地端口。这个模块先证明 V 盘健康，再查端口是否落入动态/排除范围、是否已有监听、是否被别的 Owner 登记；通过后才让项目绑定并把稳定配置投影回 Registry。每周维护还会用上次成功游标请求 TimeAudit 的 `(after, until]` 摘要；只有摘要明确建议重查时才额外读取一次 live stable provider，而摘要本身永不写进稳定投影。",
+    result: "检查通过时得到可用候选和验证入口；发现冲突时得到具体阻断原因；现场来源不可读时得到 unknown，并停止迁移或固定端口选择，不用默认路径或常见端口猜测。TimeAudit 增量消费另返回窗口、coverage、聚合异常、是否建议重查和 PCConfig 自己的 cursor/receipt；成功窗口才推进游标，相同边界严格 no-op，来源不可用或 payload 非法时游标不动。最终是否 `no_change` 或 `published` 仍只由 PCConfig 当前稳定事实决定。",
     readerStates: {
-      pass: "磁盘、路径、端口和依赖引用都由真实责任源确认后，返回可用目标和后续验证入口，项目才继续绑定或迁移。",
-      problem: "发现端口占用、目录引用、磁盘健康或登记冲突时阻断对应选择，并指出冲突对象和应由哪个项目处理。",
-      unavailable: "现场机器事实不可读时保持 Unknown（证据不足），不拿缓存路径、常见盘符或默认端口代替当前事实。"
+      pass: "磁盘、路径、端口和依赖引用都由真实责任源确认后，返回可用目标和后续验证入口，项目才继续绑定或迁移；TimeAudit 成功窗口另推进 PCConfig 游标并按建议最多触发一次稳定事实重查。",
+      problem: "发现端口占用、目录引用、磁盘健康或登记冲突时阻断对应选择；TimeAudit 异常只形成重查建议，不能直接宣称配置或硬件已经改变。",
+      unavailable: "现场机器事实不可读时保持 Unknown（证据不足），不拿缓存路径、常见盘符或默认端口代替当前事实；TimeAudit 来源不可用、窗口非法或摘要不合约时保留旧游标，不重启对方服务，也不发布新投影。"
     },
     decisionImpact: [
       "机器配置值先回到项目、服务或任务的真实配置源，PCConfig 快照只负责导航。",
       "路径迁移必须同时具备 source（源路径）、target（目标路径）、消费者、preimage（变更前像）、rollback（回滚）和 verification（验证）。",
       "固定端口在所有实时门禁通过后仍须立即真实 bind（绑定），预检不是预留。",
       "短生命周期服务直接绑定端口 0，由操作系统分配，不建立无意义的固定登记。",
-      "V 是开发层，Z 只放可重建有界缓存；唯一源码、数据库和正式备份不能放进 Z。"
+      "V 是开发层，Z 只放可重建有界缓存；唯一源码、数据库和正式备份不能放进 Z。",
+      "PCConfig 只持有 TimeAudit 增量 cursor 与有界 decision receipt；原始时序、进程、窗口标题和异常 payload 不进入稳定机器状态。",
+      "只有成功 `(after, until]` 窗口才推进游标；unavailable、非法 payload 和相同边界分别保持旧游标或严格 no-op。",
+      "TimeAudit 只建议是否重查，`Invoke-StableMachineProjection.ps1` 必须重新读取 PCConfig live 稳定事实后独立决定 no_change 或 published。"
     ],
     problem: "机器事实既有长期稳定信息，也有每次都可能变化的现场状态。把两者混在一份静态文档里，会让旧路径、旧端口或旧运行时继续被误用；反过来持续扫描整机又会制造隐私、延迟和第二事实源。",
     implementation: [
@@ -284,7 +288,9 @@ export const pcconfigModules = [
       "目录 Registry 和路径 Owner Registry 各登记 57 项；项目路径依赖 Registry 汇总 15 个项目。普通任务只读取命中的有界条目，不加载整份依赖表。",
       "generated_publication_pipelines 把 inventory、task scan、项目依赖、任务重建和用途目录限定到各自 allowlist、checkpoint 与 current pointer；机器生成物不能越界写叙事或替代源 Owner。",
       "端口 Provider 同时读取 IPv4/IPv6 动态范围、排除段、listener 和登记冲突，available、blocked、unknown 使用不同退出码。",
-      "开发存储 Provider 单独判断 V 与 Z；Z 降级不会自动阻断健康的 V 项目，当前现场摘要为 pass=5、warn=0、block=0。"
+      "开发存储 Provider 单独判断 V 与 Z；Z 降级不会自动阻断健康的 V 项目，当前现场摘要为 pass=5、warn=0、block=0。",
+      "Invoke-TimeAuditAnomalyIncrement.ps1 调用 TimeAudit 的 `timeaudit.pcconfig-anomaly-digest.v1` Provider，只在 `%LOCALAPPDATA%\\PCConfig\\stable-machine` 保存 `pcconfig.timeaudit-anomaly-cursor.v1` 和有界 consumption receipt。",
+      "weekly `PCConfig Governance Check` 复用现有维护路径：先消费增量，再固定运行一次稳定投影 publisher；若增量同时建议重查，罕见的第二次 publisher 调用严格 no-op，不新增高频任务。"
     ],
     flow: [
       "判断当前问题是否真的依赖机器事实",
@@ -293,6 +299,8 @@ export const pcconfigModules = [
       "需要变更时冻结 source、target、消费者、preimage、rollback 和 verification",
       "先由项目 Owner 修改并验收真实配置",
       "再用期望哈希事务更新 PCConfig 快照或稳定投影",
+      "每周维护按上次成功 cursor 向 TimeAudit 请求最长 168 小时的 `(after, until]` 聚合窗口；验证 owner/profile/schema/coverage、异常和重查建议。",
+      "成功窗口写 bounded receipt 并推进 cursor；source unavailable、非法 payload 或同一时间边界不推进、不重写。只有明确 recommendation 才额外 Inspect 一次 live stable provider。",
       "从项目与现场两端分别回读"
     ],
     concepts: [
@@ -301,7 +309,8 @@ export const pcconfigModules = [
       { term: "Mark stale（标记陈旧）", explanation: "保留 last-known value（最后已知值），但明确撤销“这是当前值”的声明。" },
       { term: "Port preflight（端口预检）", explanation: "判断候选端口此刻是否适合尝试绑定；它没有锁定端口，因此检查后必须立即 bind。" },
       { term: "Move gate（迁移门禁）", explanation: "只有源、目标、依赖、风险、回滚和验证全部明确，才允许从复制验证推进到切换引用。" },
-      { term: "Dev Drive（开发盘）", explanation: "V 盘的开发层；适合可恢复的仓库、worktree（隔离工作树）、包缓存和构建输出，不是独立物理备份。" }
+      { term: "Dev Drive（开发盘）", explanation: "V 盘的开发层；适合可恢复的仓库、worktree（隔离工作树）、包缓存和构建输出，不是独立物理备份。" },
+      { term: "TimeAudit anomaly cursor（异常消费游标）", explanation: "PCConfig 自己保存的最后成功时间边界；它让每周维护只消费新窗口，失败不越过证据缺口，相同窗口不重复写。" }
     ],
     boundaries: [
       "不递归扫描整个 C 盘，只看会改变当前决定的候选",
@@ -309,7 +318,9 @@ export const pcconfigModules = [
       "project_config_keys 快照不反向修改项目真实配置",
       "稳定投影不记录进程、负载、温度、空闲空间或时序数据",
       "VHD（虚拟磁盘文件）位于 E 盘，不构成独立故障域",
-      "目录不整齐不是迁移理由，移动和永久删除不能放在同一操作"
+      "目录不整齐不是迁移理由，移动和永久删除不能放在同一操作",
+      "TimeAudit digest 不进入 stable_machine_projection.json，也不证明温度、磁盘或硬件配置发生稳定变化。",
+      "增量消费不新建数据库、控制面或高频任务，不查询 TimeAudit 原始行，也不在来源不可用时重启它。"
     ],
     failures: [
       { condition: "Provider 或 Registry schema 失败", response: "对应事实保持 unknown，阻断依赖该事实的迁移或配置决定；旧报告不能补齐。" },
@@ -317,7 +328,10 @@ export const pcconfigModules = [
       { condition: "端口预检通过但真实 bind 失败", response: "停止服务启动，重新探测；不自动退回 8000 等常见默认端口。" },
       { condition: "稳定投影 live payload 不完整或含禁入字段", response: "在替换 current 前失败，保留最后一个已验证的 v6 current；失败采集不能覆盖既有投影。" },
       { condition: "生成投影 staging、manifest 或 current 不闭合", response: "保留旧 current 与 checkpoint，不把 .incoming 或部分 registry 拼进现行配置地图。" },
-      { condition: "V 或 Z 恢复锚点不可读", response: "只阻断依赖该盘的工作；不自动创建同名空盘覆盖恢复线索。" }
+      { condition: "V 或 Z 恢复锚点不可读", response: "只阻断依赖该盘的工作；不自动创建同名空盘覆盖恢复线索。" },
+      { condition: "TimeAudit source unavailable、窗口非法或 digest schema / payload 不合约", response: "写有界 unavailable 结果但不推进 cursor、不调用稳定投影 publisher，也不尝试重启 TimeAudit。" },
+      { condition: "同一 `(after, until]` 边界被重复调用", response: "返回 no_new_window，cursor 与 receipt 不重写；weekly 路径不会因此重复发布。" },
+      { condition: "异常建议重查但 live stable provider 返回无变化", response: "保留 anomaly receipt，稳定投影严格 no_change；摘要不能覆盖 live provider 的裁定。" }
     ],
     sources: [
       { path: "E:\\PCConfig\\registries\\folders.json", role: "57 个登记目录及其用途边界" },
@@ -328,6 +342,8 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\generated_publication_pipelines.json", role: "机器生成 Registry/报告的 allowlist、checkpoint 与 current 边界" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.path-project-config.md", role: "路径与项目配置事务合同" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.stable-machine-projection.md", role: "稳定字段、禁入项、版本与发布语义" },
+      { path: "E:\\PCConfig\\tools\\Invoke-TimeAuditAnomalyIncrement.ps1", role: "有界增量窗口、cursor、receipt、recommendation 与 publisher 调用边界" },
+      { path: "E:\\PCConfig\\tools\\timeaudit_anomaly_increment.test.ps1", role: "成功推进、unavailable 不推进、同边界 no-op 与重查建议回归" },
       { path: "E:\\PCConfig\\docs\\governance\\local_service_port_policy.md", role: "固定端口实时门禁" },
       { path: "E:\\PCConfig\\docs\\governance\\move_gate.md", role: "迁移、回滚与删除分离" },
       { path: "E:\\PCConfig\\docs\\governance\\dev_storage_policy.md", role: "E/V/Z 放置和恢复关系" }
@@ -338,9 +354,10 @@ export const pcconfigModules = [
       "Invoke-StableMachineProjection.ps1 -Action Read -Json 当前可读取版本 6；该投影生成于 2026-08-30，是稳定配置基线而非瞬时运行状态",
       "validate_project_config_keys.mjs 验证键、敏感级别、来源、快照状态和事务字段",
       "test_local_service_port.test.ps1 覆盖动态范围、排除段、listener、登记冲突和 unknown",
-      "stable_machine_projection.test.ps1 覆盖禁入字段、原子回读、变化链和重复 no-op"
+      "stable_machine_projection.test.ps1 覆盖禁入字段、原子回读、变化链和重复 no-op",
+      "d4480abc 的合同与 focused test 已定义 TimeAudit 增量消费者；本网页审计没有把测试存在冒充 weekly 任务本轮已运行或稳定投影发生变化。"
     ],
-    relation: "这个模块回答“机器配置在哪里、现在是什么”；运行时与启动模块负责“它怎样启动和运行”，恢复模块负责“故障后怎样重建”，受保护动作模块负责“重大写入怎样获准并回读”。"
+    relation: "这个模块回答“机器配置在哪里、现在是什么”；TimeAudit 增量摘要只提醒它何时值得重新读一次现场，不提供稳定事实本身。运行时与启动模块负责“它怎样启动和运行”，恢复模块负责“故障后怎样重建”，受保护动作模块负责“重大写入怎样获准并回读”。"
   },
   {
     slug: "runtime-startup",
@@ -823,26 +840,26 @@ export const pcconfigModules = [
   },
   {
     slug: "secrets-providers",
-    shortTitle: "秘密、文件与服务入口",
-    title: "SecretRef（秘密引用）、授权文件与固定 Workspace Provider（办公服务读取器）",
-    teaser: "让程序完成登录、调用和云端读写，也让用户明确选择的文件可续作加密、校验和恢复；秘密值、文件正文与密钥都不交给模型、终端或公开回执。",
-    status: "秘密代理可用；授权文件源码/测试/安装态已闭合、运行态/端到端本次未实跑；固定 Workspace 远端实读仍未复核",
+    shortTitle: "秘密与服务入口",
+    title: "SecretRef（秘密引用）与固定 Workspace Provider（办公服务读取器）",
+    teaser: "让程序完成登录、盲填和固定账号的类型化动作，同时让密码、令牌、银行卡和账号会话始终留在受保护运行库。",
+    status: "秘密代理可用；Password Center 安装态 current；固定 Workspace 仅完成零网络绑定检查，远端实读本次未复核",
     statusTone: "mixed",
-    searchAliases: ["批量加密明确选择的文件", "加密到一半怎样继续", "校验授权文件包", "解密恢复但不覆盖已有文件", "文件被篡改后拒绝恢复", "授权文件不是Vault也不是SecretRef"],
+    searchAliases: ["让程序用密码但不显示", "盲填银行卡但不要提交", "固定Workspace账号怎样读邮件云盘日历", "换电脑后能不能复制登录状态", "SecretRef怎样恢复"],
     searchProjection: {
-      intents: ["让程序使用凭据但不显示", "加密明确选择的文件或目录", "中断后继续文件加密", "验证加密包并恢复到新目录", "在新设备重新登录", "读取固定 Workspace 账号", "恢复 SecretRef", "盲填银行卡但不提交"],
-      entities: ["SecretRef", "Secret Broker", "Password Center", "Authorization File Broker", "授权文件包", "AES-GCM", "固定 Workspace Provider", "Browser Bridge"],
-      relations: ["秘密绑定精确执行目标", "授权文件只处理明确选择且保留来源", "Password Center 选择授权但不合并文件域", "授权文件与Vault使用独立根和恢复流程", "账号绑定限制 Provider 动作", "设备变化要求重新登录", "普通恢复只引用秘密入口"],
-      failureRecovery: ["凭据不可用暂停对应动作", "授权文件中断复用已认证状态续作", "恢复目标冲突不覆盖", "密文或索引篡改拒绝恢复", "scope 不匹配不换账号", "网络失败不判凭据失效", "旧登录态不跨设备复制"]
+      intents: ["让程序使用凭据但不显示", "盲填银行卡但不提交", "在新设备重新登录", "读取固定 Workspace 账号", "恢复 SecretRef"],
+      entities: ["SecretRef", "Secret Broker", "Password Center", "固定 Workspace Provider", "Browser Bridge", "CurrentUser DPAPI"],
+      relations: ["秘密绑定精确执行目标", "账号绑定限制Provider动作", "设备变化要求重新登录", "Browser Bridge只绑定唯一网页", "普通恢复只引用秘密入口"],
+      failureRecovery: ["凭据不可用暂停对应动作", "scope不匹配不换账号", "网络失败不判凭据失效", "旧登录态不跨设备复制", "Reveal缺新鲜因子时零字段返回"]
     },
-    value: "用户既可以让自动化真正使用账号和 API（程序接口），也可以把自己点名的文件做成可续作、可验证、可恢复的加密包，而不必把密码、令牌、文件正文或密钥交给模型。需要人工验证时只完成那个精确边界，日常任务不会获得批量明文能力。",
-    why: "把秘密写进环境变量、命令行、日志或聊天会扩大泄漏面；把任意文件塞进凭据库或普通 Vault 又会混淆用户选择、生命周期和恢复边界。PCConfig 用 SecretRef、固定 Provider 和独立授权文件域分别解决“使用秘密”“执行账号动作”和“保护明确选择的文件”，共享的只有受控授权入口，不共享正文、密钥、数据根或恢复流程。",
-    example: "例如我说“把这个文件夹和这两个文件加密到指定授权包，中断后继续，并确认能恢复”。系统只把我点名的路径和输出作为输入，在执行链内部生成有界计划，拒绝链接、联接点和输出落在来源内部；最高权限验证通过后按文件分块加密，持续保存已认证续作状态。当前没有独立预览动作；完成后可校验密文、索引和明文哈希，但不把正文落地或返回模型，来源文件一直保留。",
-    result: "正常时得到业务结果或一个完整授权文件包，以及不含正文/密钥的计数、路径、哈希和状态回执；文件加密中断可按同一 operation（操作）继续，解密重放遇到相同文件会确认后跳过。授权、设备、来源、密文或恢复目标有问题时只返回精确错误或 partial（部分完成），不静默换账号、扩大选择、覆盖冲突文件或把明文交给调用者。",
+    value: "自动化可以真正使用账号、API（程序接口）和银行卡字段，却不把密码、令牌或卡号交给模型。需要人工验证时只完成那个精确边界，日常任务不会因此获得批量明文能力。",
+    why: "把秘密写进环境变量、命令行、日志或聊天会扩大泄漏面；把 Provider 做成可临时换账号、网址和任意请求体的通用网络入口，又会让一次授权扩散到其他账号和动作。",
+    example: "例如我说“在当前支付页填我选中的银行卡，但不要提交”。系统确认唯一 HTTPS tab、origin、frame 与标准字段后，用一次性能力原子盲填卡号、有效期和 CVV；模型看不到值，提交按钮仍由我决定。另一个例子是读取邮件：只能用已登记的固定 Workspace binding 和类型化 Gmail action，不能临时换账号或构造任意 URL。",
+    result: "正常时得到登录、盲填或类型化账号动作的业务结果，以及固定不含明文、token 或 client secret 的回执。身份、设备、scope、网络或 Provider 有问题时只暂停对应动作并返回精确状态，不静默换账号、复制旧会话或降级为明文。",
     readerStates: {
-      pass: "SecretRef 路线核对登记执行目标，Workspace 路线核对固定 binding（绑定）、scope（权限范围）和 typed action（类型化动作）；授权文件路线核对最高权限、明确选择、独立域根、完整索引和逐块哈希。三条路线都只返回任务结果与无明文回执。",
-      problem: "授权文件来源在读取中变化、选择发生碰撞、密文被改动或恢复目标已有不同内容时停止受影响项并保留来源/包；账号、scope 或 Provider 不匹配时也不静默切换账号或扩大授权。",
-      unavailable: "最高权限、设备信任、独立域根、秘密代理、账号授权或固定 Provider 不可用时暂停对应动作，保留可续作状态与精确恢复入口；秘密或文件正文不会转入聊天、日志、命令行或普通回执。"
+      pass: "SecretRef 路线核对登记 executable、参数目标或受控输入，Workspace 路线核对固定 binding（绑定）、scope（权限范围）和 typed action（类型化动作）；两者只返回业务结果与无明文回执。",
+      problem: "目标程序、网页、账号、scope 或 Provider 不匹配时停止对应动作，不静默切换账号、扩大授权或把明文交给调用者。",
+      unavailable: "最高权限、设备信任、秘密代理、账号授权或固定 Provider 不可用时暂停对应动作，保留精确恢复入口；秘密不会转入聊天、日志、命令行或普通回执。"
     },
     decisionImpact: [
       "默认完成“使用秘密”，不默认 Reveal（显示明文）。",
@@ -851,25 +868,11 @@ export const pcconfigModules = [
       "只有 Gmail、Drive 和 Calendar 通过同一 Provider 的真实读取验收后，Read action（读取动作）才成为默认能力；当前仅证明零网络 binding（绑定）已配置，尚未证明远端 OAuth（账号授权）和实际读取可用。Write action（写入动作）还必须对每种动作独立验收，并由本轮明确对象和内容授权。",
       "OAuth enrollment（账号授权登记）只在前台进行一次，callback（回调）使用随机 loopback 端口与 PKCE（授权码保护）。",
       "换电脑、重装或从台式机切到副驾驶时，非秘密配置可以按新路径重建，但 DPAPI 状态、账号 session 和设备信任不跨机复制；目标设备必须重新登录或从正式 Recovery Set 恢复。",
-      "授权文件只处理用户本次明确点名的文件/目录和输出目标；既不自动扩成整盘扫描，也不把“导入 .env 凭据”与“把 .env 当不透明文件加密”合并执行。",
-      "来源文件和授权包默认始终保留；删除、上传、同步、备份或迁移任一侧都需要独立精确动作。",
-      "Password Center（密码中心）可以为授权文件工作流选择 SecretRef，既有最高权限策略再选择当前有效的已登记因子；文件域仍使用自己的随机根、包/文件密钥、会话、索引和恢复流程，不与凭据数据库、Key/Vault 或 P0–P7 合并。",
-      "Source/Test（源码与测试）、Install（受保护安装态）、Runtime（运行态）、真实最高权限验证和自然用户 E2E（端到端）是五层独立证据；本次只复核前两层，后三层没有实跑。",
       "Secret Broker 状态通过不证明每个外部网站、账号、网络请求或授权文件真实操作当前都成功。"
     ],
-    problem: "凭据系统常见两个极端：要么所有自动化都能读明文，要么秘密封得太深，真实任务无法使用；任意文件保护又常被误塞进凭据库、普通 Vault 或一次性脚本，导致选择扩大、中断重做、覆盖冲突和恢复边界混乱。PCConfig 把凭据存储/盲用、固定账号动作与授权文件状态机分开，每个入口只拿完成当前动作所需的最小结果。",
+    problem: "凭据系统常见两个极端：要么所有自动化都能读明文，要么秘密封得太深，真实任务无法使用；通用网络入口还会把一个固定账号动作扩大成任意账号和任意请求。",
     implementation: [
       "运行时数据库、密钥包和恢复材料位于 Git 仓库外并加密；PCConfig source 只保存策略、SecretRef、无秘密 Registry 和测试。",
-      "授权文件的真实入口是受保护安装态 Invoke-SecretBroker.ps1 的 AuthorizationFileEncrypt、AuthorizationFileVerify 和 AuthorizationFileDecrypt；Encrypt 只接收 SelectedPath 与 OutputPath，Verify 接收 InputPath，Decrypt 接收 InputPath 与 OutputPath。它复用 Password Center 既有最高权限因子选择和设备信任门，不发明第五种因子。",
-      "plan_explicit_inputs 只展开用户明确点名的路径：目录递归有界，symlink（符号链接）、junction/reparse point（联接点/重解析点）、特殊条目、输出位于来源内部和大小写折叠后的相对路径碰撞都会拒绝；默认上限为 10000 个文件、100 GiB。",
-      "授权文件域创建随机 256-bit domain root（域根），每个包再创建随机 bundle key（包密钥），每个文件再创建独立 file key（文件密钥）；AES-256-GCM（带完整性校验的加密）分别保护根封装、包/文件密钥、state（续作状态）、index（索引）和内容块。它不共享 Vault/KDBX 密钥，也不把文件放进凭据数据库。",
-      "每个文件默认按 4 MiB 分块，每块使用随机 nonce（一次性随机数）和绑定 operation id、item id、块序号与明文长度的 AAD（附加认证数据）。读取前后都核对文件大小和 mtime，任一变化返回 source_changed，不把不稳定来源写成成功。",
-      "一个包由 manifest（清单）、key-envelope（密钥封装）、objects（密文对象）、加密 resume state、加密 index 和 receipt（回执）组成；每完成一个文件就原子重写已认证 state，全部完成后生成 index.enc、记录 index/object hashes 并删除 state。最终索引不保留原始绝对 source path。",
-      "同一 selection digest（选择指纹）和 operation id（操作标识）可以继续 in_progress（处理中）包；已完成项跳过。已完成包再次 Encrypt 返回 already_complete（已经完成）；空目录以外的目标、不同选择、不同 operation 或不同独立根都拒绝复用。",
-      "解密先核对对象 SHA-256，再逐块验证 GCM tag（认证标签）和最终明文 SHA-256，只写同目录临时文件并在完整校验后原子换入。目标已有同大小同哈希文件时算 idempotent replay（幂等重放）并跳过；内容不同则 restore_conflict，绝不覆盖。",
-      "Verify 逐块解密到进程内只为重算长度和 SHA-256，不物化明文文件；对象、索引、密钥封装或认证 tag 被改动都会返回精确失败项。一次部分失败只能是 partial，不能冒充整包通过。",
-      "恢复集只把独立域根 envelope（封装）作为 opaque asset（不透明资产）恢复；换机仍生成新的设备/运行时密钥，下一次授权文件动作正常使用当前因子。密文包本身不会被自动上传、同步或备份。",
-      "这条工作流复用现有入口和运行库，不增加新服务、数据库、daemon（常驻进程）、计划任务或全机扫描器。",
       "AgentSecretRef 把 SecretRef 绑定到登记 executable、argv（参数）或 stdin（标准输入）目标；目标 hash、参数位置和调用方都必须匹配。",
       "Reveal 只允许用户明确点名的单个字段；批量恢复查看即使获准也不得进入模型、聊天、stdout、JSON、日志、剪贴板或普通文件。",
       "Secret Broker status 当前明确 plaintext_returned=false、key_project_touched=false、remote_fetch_performed=false，安全核心和 product closure（产品闭环）均 pass。",
@@ -880,23 +883,16 @@ export const pcconfigModules = [
       "access token（访问令牌）只在当前进程内存在；receipt（执行回执）明确 token_returned=false、client_secret_returned=false。"
     ],
     flow: [
-      "先区分请求是使用 SecretRef、执行固定账号动作，还是加密/校验/恢复用户明确选择的文件；三条路线不得静默合并",
-      "用固定 SecretRef、binding 或明确 SelectedPath/InputPath/OutputPath 定位精确 Owner 和目标",
+      "先区分请求是使用 SecretRef、浏览器盲填还是执行固定账号动作；各路线不得静默合并",
+      "用固定 SecretRef、网页目标或 binding 定位精确 Owner 和动作",
       "先确认当前设备、用户身份、运行时和设备信任；设备变化时把旧 DPAPI/session 视为不可直接继承",
-      "授权文件从显式路径和输出生成有界 plan、选择指纹、数量与总字节；当前入口没有独立 preview/dry-run 动作，也不读取正文语义",
       "需要人类因子时冻结精确 action 与 target，由最高权限策略选择当前有效已登记因子",
       "SecretRef/Provider 分支只在受保护进程内解密或刷新短时凭据，再盲填、盲注入或执行类型化动作",
-      "授权文件 Encrypt 分支创建或打开独立域根，写包 envelope/manifest/state，并逐文件 AES-GCM 分块；中断后用同一认证 state 继续",
-      "AuthorizationFileVerify 不落地明文地核对包，AuthorizationFileDecrypt 只在逐块、对象和最终哈希全通过后原子恢复；相同目标跳过，不同目标冲突停止",
-      "完成后回执只返回 action、状态、路径、hash、计数和有界错误码，不返回凭据、文件正文或密钥",
-      "换机恢复时凭据、授权文件域根和普通 Vault 各走自己的恢复流程；域根 envelope 恢复不自动恢复或上传用户的密文包"
+      "完成后回执只返回 action、状态和有界错误码，不返回凭据或 token",
+      "换机恢复时在目标设备重新登录；SecretRef、账号状态和普通 Vault 各走自己的恢复流程"
     ],
     concepts: [
       { term: "SecretRef（秘密引用标识）", explanation: "稳定指向一个秘密的名字；调用者使用它，不知道也不接收秘密值。" },
-      { term: "Authorization file domain（授权文件域）", explanation: "只处理用户明确选择文件的独立产品域；它复用最高权限授权，但不属于凭据存储、Key/Vault 或 P0–P7 VaultApp。" },
-      { term: "Authorization file bundle（授权文件包）", explanation: "包含 manifest、密钥封装、分块密文对象、加密索引和无正文回执的目录；来源默认不删。" },
-      { term: "Resume state（续作状态）", explanation: "用包密钥认证加密的逐文件进度；中断后只继续未完成项，完整完成后删除。" },
-      { term: "AES-GCM（带完整性校验的加密）", explanation: "每个密文块同时提供机密性和认证；块身份、序号和长度都进入 AAD，改动后无法通过验证。" },
       { term: "Blind injection（盲注入）", explanation: "秘密直接进入登记程序的受控输入，不经过模型、终端、环境变量、日志或剪贴板。" },
       { term: "Binding（固定绑定）", explanation: "把 Provider、账号身份、scope、状态路径和端点固定在 Registry 中，动作不能临时换账号。" },
       { term: "OAuth（账号授权协议）", explanation: "用户在官方页面同意固定 scope，Provider 用授权码换取并安全保存 refresh token（刷新令牌）。" },
@@ -906,12 +902,6 @@ export const pcconfigModules = [
     ],
     boundaries: [
       "不在仓库、模型上下文、stdout、JSON、日志或剪贴板保存秘密值",
-      "不读取、解析、摘要、分类或向模型/connector 发送授权文件正文；文件始终作为 opaque bytes（不透明字节）处理",
-      "只接受用户或当前任务明确命名的路径；不搜索 Downloads、Documents、整盘、仓库集合或其他目录来发现候选",
-      "目录递归拒绝 symlink、junction 和 reparse point；读取期间变化的文件失败关闭",
-      "来源和加密包默认都保留，不自动删除、上传、同步、备份或迁移；这些都是新的精确动作边界",
-      "恢复不覆盖不同内容；只有大小和 SHA-256 都相同的既有文件才能按幂等重放跳过",
-      "授权文件域与 SecretRef、凭据数据库、Key/Vault、P0–P7 分别拥有密钥、数据根、session、index、receipt 和 recovery；不得相互导入明文或扩大授权",
       "不把 Cookie、浏览器 profile、会话数据库或完整环境文件作为导入源",
       "不因管理员权限令牌、插件或账号登录扩大任务授权",
       "不静默切换到另一个账号、公共 connector（连接器）或第三方 CLI",
@@ -921,13 +911,6 @@ export const pcconfigModules = [
     ],
     failures: [
       { condition: "Secret Broker 状态无法验证", response: "冻结秘密使用，返回 failed/partial 或精确 unavailable；不从旧回执或 Registry 推断可用。" },
-      { condition: "授权文件输入为空、不可用、越界或含重解析点", response: "在创建包前拒绝；不扩大选择、不跟随链接，也不退回全盘搜索。" },
-      { condition: "输出位于来源内部、相对路径大小写碰撞或已有非空不匹配包", response: "返回精确 conflict，保留来源与既有输出；不改名猜测、不覆盖。" },
-      { condition: "加密中断", response: "保留 manifest、key envelope、已完成对象和加密 state；同一选择与 operation 重新进入时只继续未完成项。" },
-      { condition: "来源在读取前后发生变化", response: "该项返回 source_changed，不把可能混合两个版本的对象写成完成，来源仍保留。" },
-      { condition: "index、key envelope、对象 hash 或 GCM tag 被改动", response: "Verify/Decrypt 返回 authorization_file_index_invalid、authorization_file_key_envelope_invalid 或 authorization_file_object_tampered 等精确失败项，并拒绝该项明文落地；partial 不升级成整包 pass。" },
-      { condition: "恢复目标已有不同内容", response: "返回 restore_conflict 并保留双方；相同大小和 SHA-256 才记为 already_restored。" },
-      { condition: "最高权限、设备信任或独立域根不可用", response: "动作暂停并保留可续作状态；域根只从自己的主副本/Recovery Set opaque asset 恢复，不借 Vault 或 SecretRef 根。" },
       { condition: "Workspace binding 仅 configured", response: "当前零网络检查只证明固定配置与 state file 存在，不证明 OAuth scope、远端账号身份或某个动作可用。" },
       { condition: "换机后旧 credential state 文件存在", response: "不尝试从文件存在推断可解密或已登录；在目标设备重新 enrollment，或按 Secret Broker 的 RegisteredCarrier 与有效因子恢复。" },
       { condition: "网络错误、超时或限流", response: "报告 transport failure，不把凭据标成无效，也不自动更换账号或重复写操作。" },
@@ -939,27 +922,84 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\secret_broker.json", role: "SecretRef、运行时和安全边界 Registry" },
       { path: "E:\\PCConfig\\registries\\google_workspace_provider.json", role: "固定 Workspace binding、scope、端点与无秘密元数据" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.secret-broker.md", role: "秘密使用、恢复、信任与零明文产品合同" },
-      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "Password Center 用户体验与授权文件/SecretRef/Key/Vault 域隔离合同" },
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "Password Center 用户体验、SecretRef、银行卡盲填与产品域隔离合同" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.google-workspace-provider.md", role: "固定账号 Provider、OAuth 和类型化动作合同" },
-      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "正式秘密代理与 AuthorizationFileEncrypt/Verify/Decrypt 受保护入口" },
-      { path: "E:\\PCConfig\\tools\\authorization_file_broker.py", role: "授权文件计划、AES-GCM 分块、resume/index/receipt、verify 与无覆盖恢复实现" },
-      { path: "E:\\PCConfig\\tools\\authorization_file_broker.test.py", role: "独立域根、批量往返、中断续作、幂等恢复、篡改和来源变化合成测试" },
+      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "正式秘密代理与受保护入口" },
       { path: "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1", role: "Gmail、Drive 和 Calendar 类型化 dispatch（分发）入口" }
     ],
     verification: [
       "Invoke-SecretBroker.ps1 -Action Status -Json 当前 exit 0、status=pass、security_core_status=pass、product_closure_status=pass",
       "同次 Secret Broker 回执为 0 critical failure、1 optional gap，并明确 plaintext_returned=false、remote_fetch_performed=false",
-      "Source（源码）：authorization_file_broker.py 当前实现显式选择计划、默认 4 MiB AES-256-GCM 分块、独立 domain/bundle/file keys、加密 resume state/index、metadata-only receipt、verify 和无覆盖 decrypt；源码存在不等于运行成功",
-      "Test（测试）：2026-08-31 独立 authorization_file_broker.test.py 运行 6/6 PASS，覆盖不透明边界样例、空文件/同名叶子、加密中断续作、解密幂等续作、密文篡改拒绝、来源变化与 output-inside-source；这是合成 temp 数据，不是真实用户文件",
-      "Install（安装）：Install-PasswordCenterIndependent.ps1 -Mode Inspect -Json 返回 current、9/9 source=installed、manifest_anchor_matches=true、mutations_performed=false、plaintext_returned=false；authorization_file_broker.py 两侧 SHA-256 均为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854",
-      "Runtime（运行态）：受保护 Invoke-SecretBroker.ps1 已安装且枚举三种 AuthorizationFile action，但本次没有消费最高权限因子、打开独立域根或对真实选择执行 action；安装 current 不能替代 runtime receipt",
-      "E2E（端到端）：本次没有运行自然语言请求→明确选择输入→最高权限验证→真实 Encrypt→Verify→Decrypt→用户可见恢复的完整链，因此用户文件 E2E 保持 not_run；正式入口也没有独立 preview action，6/6 合成往返只证明 test 层",
       "Get-GoogleWorkspaceProviderBinding.ps1 -Json 当前 exit 0、status=configured、services=gmail/drive/calendar、zero_network=true",
       "binding status 明确 credential_state_decrypted=false；因此本页不把 configured 写成 OAuth 或 live API 验收",
       "secret_broker.test.py、secret_authority.test.py 与 secret_device_trust.test.py 覆盖授权、原子回读、恢复和负例",
       "invoke_google_workspace_provider.test.ps1 覆盖 closed action、大小边界、账号/scope 绑定、写入授权和无秘密回执"
     ],
-    relation: "本模块共同展示三条相邻但不合并的能力：SecretRef/Password Center 拥有凭据与盲用，固定 Workspace Provider 拥有一个账号的类型化动作，授权文件域拥有明确选择文件的计划、包状态机和恢复。Password Center 只提供 SecretRef 选择与既有最高权限因子政策，不能读取文件正文或合并根；授权文件的随机 domain/bundle/file keys、数据、session、index、receipt 和 recovery 与普通 Key/Vault、P0–P7 都独立。CoreRecovery 只引用各自恢复入口，不复制秘密或密文包；Recovery Set 只可把域根 envelope 当 opaque asset 恢复。"
+    relation: "本模块展示凭据盲用和固定账号动作；Password Center/Secret Broker 拥有 SecretRef、因子、浏览器盲填和恢复入口，Workspace Provider 拥有一个账号的类型化动作。授权文件的独立包状态机和恢复生命周期由下一模块说明，双方只复用既有最高权限因子选择，不共享数据根或密钥。"
+  },
+  {
+    slug: "authorization-files",
+    shortTitle: "授权文件",
+    title: "明确选择文件的续作加密、校验与无覆盖恢复",
+    teaser: "只处理用户本次点名的文件、目录和输出，把它们做成可续作、可验证、可恢复的独立加密包；来源文件、正文和密钥不交给模型。",
+    status: "源码、6/6 合成测试与 9/9 安装一致性已闭合；最高权限真实文件运行态与自然用户 E2E 本次未实跑",
+    statusTone: "mixed",
+    searchAliases: ["批量加密明确选择的文件", "加密到一半怎样继续", "校验授权文件包", "解密恢复但不覆盖已有文件", "文件被篡改后拒绝恢复", "授权文件不是Vault也不是SecretRef"],
+    searchProjection: {
+      intents: ["加密明确选择的文件或目录", "中断后继续文件加密", "验证加密包而不落地明文", "恢复到新目录且不覆盖冲突文件"],
+      entities: ["Authorization File Broker", "SelectedPath / OutputPath", "AES-256-GCM", "domain / bundle / file key", "resume state / index.enc", "AuthorizationFileVerify / Decrypt"],
+      relations: ["明确选择生成有界计划", "Password Center只提供因子而不合并文件域", "每文件每块独立认证", "来源与密文包默认都保留", "恢复冲突不覆盖"],
+      failureRecovery: ["输入越界或含联接点时创建前拒绝", "中断复用已认证state续作", "来源变化只失败对应项", "密文索引篡改拒绝明文落地", "相同目标幂等跳过而不同内容停止"]
+    },
+    value: "我可以把自己点名的文件做成一个中断后能继续、完成后能校验、换目录后能恢复的加密包，不需要把正文或密钥交给模型，也不用把普通文件塞进凭据库或 Vault。",
+    why: "一次性加密脚本常见四个事故：扫描范围扩大、处理中断后从头重做、密文损坏到恢复时才发现，以及恢复时覆盖同名原件。授权文件域把选择、密钥、续作、验证和恢复做成独立生命周期。",
+    example: "例如我说“把这个目录和这两个文件加密到指定输出，中断后继续，并确认以后能恢复”。系统只展开 SelectedPath，拒绝链接、联接点、输出落在来源内部和相对路径碰撞；经最高权限验证后按文件分块加密，每完成一项原子保存认证 state。之后 Verify 在内存中重算长度与哈希，Decrypt 只有完整通过后才原子落地，遇到不同内容绝不覆盖。",
+    result: "正常时得到 manifest、key envelope、分块密文 objects、加密 index 和不含正文/密钥的 receipt；中断时保留可续作 state。来源、密文或恢复目标有问题时返回精确 partial/conflict/tamper 状态并保留双方。当前没有独立 preview/dry-run 动作，也没有用真实用户文件跑最高权限 E2E。",
+    readerStates: { pass: "最高权限、明确选择、独立域根、完整索引、对象与逐块哈希闭合时，包或恢复结果成立。", problem: "来源变化、选择碰撞、密文被改动或恢复目标有不同内容时，只停止受影响项并保留来源和包。", unavailable: "最高权限、设备信任或独立域根不可用时暂停动作并保留续作状态；不改用 SecretRef/Vault 根，也不返回正文。" },
+    decisionImpact: [
+      "只处理用户本次明确点名的路径和输出；不自动扫描 Downloads、Documents、整盘或仓库集合。",
+      "来源文件和授权包默认都保留；删除、上传、同步、备份和迁移均是独立动作。",
+      "既有最高权限策略选择已登记因子；文件域使用自己的随机 domain/bundle/file keys、session、index、receipt 和 recovery，不与凭据数据库、Key/Vault 或 P0–P7 合并。",
+      "Source/Test、Install、Runtime、真实最高权限验证和自然用户 E2E 是五层独立证据；本次没有用前两层冒充后三层。"
+    ],
+    problem: "解决明确选择被扩大、中断重做、来源版本混合、密文篡改、恢复覆盖冲突和文件域与凭据/Vault 混线。",
+    implementation: [
+      "受保护 Invoke-SecretBroker.ps1 暴露 AuthorizationFileEncrypt、AuthorizationFileVerify 和 AuthorizationFileDecrypt；Encrypt 只接收 SelectedPath/OutputPath，Verify 接收 InputPath，Decrypt 接收 InputPath/OutputPath。",
+      "plan_explicit_inputs 有界展开明确路径，拒绝 symlink、junction/reparse point、特殊条目、输出位于来源内部和大小写折叠碰撞；默认上限 10000 文件、100 GiB。",
+      "随机 256-bit domain root 下每包生成 bundle key、每文件生成 file key；AES-256-GCM 保护根封装、密钥、state、index 和默认 4 MiB 内容块，AAD 绑定 operation/item/chunk/length。",
+      "每完成一个文件原子更新加密 resume state；全部完成后生成 index.enc、记录 index/object hashes 并删除 state。同一 selection digest 与 operation 可继续，completed 重入返回 already_complete。",
+      "Verify 逐块解密到进程内重算长度/SHA-256而不物化明文；Decrypt 先核对象与 GCM tag，再写同目录临时文件并原子换入。相同大小/哈希目标记 already_restored，不同内容返回 restore_conflict。",
+      "Recovery Set 只把域根 envelope 当 opaque asset 恢复；不自动上传、同步或备份密文包。复用现有运行库，不新增服务、数据库、daemon、任务或全盘扫描器。"
+    ],
+    flow: ["接收精确 SelectedPath/InputPath/OutputPath", "生成有界计划、选择指纹、数量和总字节", "冻结精确 action/target 并完成最高权限因子", "Encrypt 创建或打开独立域根并逐块写包", "中断时以认证 state 只续未完成项", "Verify 无明文落地校验", "Decrypt 完整通过后原子恢复且不覆盖冲突", "返回无正文/密钥的状态回执"],
+    concepts: [
+      { term: "Authorization file domain（授权文件域）", explanation: "只处理明确选择文件的独立产品域；复用最高权限授权，但不属于凭据、Key/Vault 或 P0–P7。" },
+      { term: "Authorization file bundle（授权文件包）", explanation: "manifest、密钥封装、分块密文、加密索引和无正文回执组成的目录；来源默认不删。" },
+      { term: "Resume state（续作状态）", explanation: "用包密钥认证加密的逐文件进度；中断后只继续未完成项，完整完成后删除。" },
+      { term: "AES-GCM（带完整性校验的加密）", explanation: "每个密文块同时提供机密性和认证，块身份、序号和长度进入 AAD。" }
+    ],
+    boundaries: ["不读取、解析、摘要、分类或发送文件正文", "不搜索未点名目录发现候选", "拒绝symlink/junction/reparse point和读取期间变化", "来源与包默认不删不上传不自动备份", "不同内容绝不覆盖", "与SecretRef/Key/Vault/P0–P7不共享根、session、index或recovery"],
+    failures: [
+      { condition: "输入为空、不可用、越界或含重解析点", response: "创建包前拒绝，不扩大选择、不跟随链接。" },
+      { condition: "输出位于来源内部、路径碰撞或已有不匹配包", response: "返回精确 conflict，保留来源与输出。" },
+      { condition: "加密中断", response: "保留 manifest、key envelope、已完成对象和加密 state；同一选择/operation 只续未完成项。" },
+      { condition: "来源读取前后变化", response: "该项返回 source_changed，不把两个版本混成完成。" },
+      { condition: "index、key envelope、object hash 或 GCM tag 被改动", response: "Verify/Decrypt 返回精确失败项，拒绝明文落地；partial 不升级整包 pass。" },
+      { condition: "恢复目标已有不同内容", response: "返回 restore_conflict 并保留双方；只有大小和 SHA-256 均相同才记 already_restored。" }
+    ],
+    sources: [
+      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "AuthorizationFileEncrypt/Verify/Decrypt 受保护入口" },
+      { path: "E:\\PCConfig\\tools\\authorization_file_broker.py", role: "显式计划、AES-GCM 分块、resume/index/receipt、verify 与无覆盖恢复" },
+      { path: "E:\\PCConfig\\tools\\authorization_file_broker.test.py", role: "独立域根、往返、中断续作、幂等恢复、篡改和来源变化合成测试" },
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "最高权限因子复用与授权文件/SecretRef/Key/Vault 域隔离" }
+    ],
+    verification: [
+      "Source：authorization_file_broker.py 实现显式选择、4 MiB AES-256-GCM、独立 keys、加密 state/index、metadata-only receipt、verify 与无覆盖 decrypt。",
+      "Test：2026-08-31 合成 temp 数据 6/6 PASS，覆盖空文件/同名叶子、中断续作、幂等恢复、篡改拒绝、来源变化和 output-inside-source。",
+      "Install：Install-PasswordCenterIndependent Inspect 返回 current、9/9 source=installed、manifest_anchor_matches=true；source/installed SHA-256 均为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854。",
+      "Runtime/E2E：本次未消费最高权限因子、未打开独立域根或处理真实选择；自然请求→Encrypt→Verify→Decrypt→用户可见恢复保持 not_run，且没有独立 preview action。"
+    ],
+    relation: "secrets-providers 只提供既有最高权限因子选择，不能读取文件正文或合并根；本模块独立拥有随机 keys、数据、session、index、receipt 和 recovery。CoreRecovery 只引用其恢复入口，Recovery Set 只恢复域根 envelope。"
   },
   {
     slug: "protected-actions",
@@ -976,7 +1016,7 @@ export const pcconfigModules = [
     },
     value: "我能知道一项高影响机器操作现在该走哪里：规则发布归 .agents，Codex Home 迁移走自己的可回滚事务，BitLocker、Password Center、P0–P7 各走独立产品入口；旧 C policy 只保留历史，不再因为拥有管理员能力就成为万能执行器。",
     why: "旧 C policy 平台把规则发布、长期目标、机器动作和多个产品耦合在一起，既复杂又容易把一个系统的授权扩散到另一个系统。完整退役不只是删任务，还要把现役动作逐项交回真实 Owner，保留必要恢复材料，并证明独立产品没有被误删或被旧状态重新激活。",
-    example: "例如我要在 Codex 完全退出后把 Home 切到 E 盘。现在使用迁移事务保存 preimage、最终增量、ACL/链接清单和回滚副本，状态保持 waiting_for_codex_exit；不会创建旧 CoreGoal step，也不会让规则 Publisher 或 BitLocker containment 代执行。另一个例子是规则发布，它只走 .agents 的 E release，不经过 PCConfig。",
+    example: "例如这次把 Codex Home 切到 E 盘时，迁移事务先保存 preimage、最终增量、ACL/链接清单和回滚副本；写入仍活跃时曾保持 waiting_for_codex_exit，退出后才原子切换并回读。现在 E 是唯一根，C 只是一条兼容 junction；全过程没有创建旧 CoreGoal step，也没有让规则 Publisher 或 BitLocker containment 代执行。另一个例子是规则发布，它只走 .agents 的 E release。",
     result: "我最终得到明确的动作归属和状态：旧 policy 是否保持 retired、历史材料是否完整、当前请求对应哪个窄 Owner、授权是否覆盖、preimage/rollback 在哪里、执行和回读是否发生。没有对应专用入口的动作不会退回通用管理员 shell。",
     readerStates: {
       pass: "旧 policy 保持 retired、任务与 worker 缺席，当前动作又能由自己的窄 Owner 提供授权、preimage、执行和回读时，两条路线分别成立而不互相继承。",
@@ -1000,7 +1040,7 @@ export const pcconfigModules = [
       "机器收敛回执证明旧任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改。",
       "CoreGoal V2 与 BitLocker containment 使用 retirement override 把旧 policy coupling 冻结为历史，不允许自动 action。",
       "旧 C policy tree、generation 79 和 ledgers 没有物理删除，仍可作为恢复/审计材料。",
-      "Codex Home 迁移是当前独立机器事务：staging、最终增量、ACL/链接 manifest、原子切换、C 兼容 junction 与 rollback 都由专用入口拥有；未退出前保持 waiting_for_codex_exit。",
+      "Codex Home 迁移是独立机器事务：staging、最终增量、ACL/链接 manifest、原子切换、C 兼容 junction 与 rollback 都由专用入口拥有；本次事务已完成，当前 E 是唯一运行根，C junction 精确指向 E。",
       "E rules 的 current/previous、UAC activation 和 Rules 页面由 .agents 拥有，不再由 PCConfig 安装或发布。"
     ],
     flow: [
@@ -1035,7 +1075,7 @@ export const pcconfigModules = [
       { condition: "旧 C 历史入口返回 integrity failure", response: "如实显示旧入口的 global-shim-invalid，但不把它升级成 E rules 或普通任务 blocker，也不尝试恢复旧 Publisher。" },
       { condition: "Secret Broker 或 BitLocker 被退役误伤", response: "回滚对应 PCConfig 变更并恢复独立产品，不恢复旧 policy runtime。" },
       { condition: "当前机器动作没有专用 Owner 或回滚入口", response: "保持未执行并报告缺口；不调用旧 CoreGoal、Publisher、任意管理员命令或旁路任务。" },
-      { condition: "Codex Home 仍有写入进程", response: "保持 waiting_for_codex_exit，不启动 cutover；继续保留 staging 和回滚材料，待真实退出后再复核。" },
+      { condition: "未来同类迁移在 cutover 前仍有写入进程", response: "保持 waiting_for_codex_exit，不启动切换；继续保留 staging 和回滚材料，待真实退出后再复核。这是事务失败语义，不是当前机器状态。" },
       { condition: "物理历史材料缺失", response: "报告恢复证据损失；不能为补材料重新启用 Publisher 或 consumer。" }
     ],
     sources: [
@@ -1050,7 +1090,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 当前 PRIVATE main=origin/main=d4480abc17574177b91e52b0aff9aebd30583f58，worktree clean；Codex Home 迁移覆盖 39911 个文件、75.13 GB，已通过 ReadyCheck 并等待本人退出。正式 cutover 与新运行时回读尚未发生。"
+      "PCConfig 固定 source cutoff 为 d4480abc17574177b91e52b0aff9aebd30583f58；该 commit 的时间晚于旧 11:43Z 现场，因此页面不再用旧观察时间冒充 source 绑定。2026-08-31T22:48:54Z 只读回读确认 C:\\Users\\10979\\.codex LinkType=Junction、Target=E:\\Data\\AppData\\Codex，且 E 目标存在；本轮未重演 cutover。"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

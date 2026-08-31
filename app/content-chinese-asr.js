@@ -605,30 +605,33 @@ export const chineseAsrModules = [
   {
     slug: "audit-evidence",
     shortTitle: "审计与证据",
-    title: "双模型分歧、风险规则、客观结果与证据回执",
-    searchAliases: ["转写结果先看哪个文件", "正文有疑似怎么回听", "听不清是不是没有人说话", "ASR回执能证明文字是真的吗", "两路模型说法不一样看哪里", "strict复核队列在哪里"],
+    title: "双模型分歧、可选本地仲裁、客观结果与证据回执",
+    searchAliases: ["转写结果先看哪个文件", "正文有疑似怎么回听", "听不清是不是没有人说话", "ASR回执能证明文字是真的吗", "两路模型说法不一样看哪里", "strict复核队列在哪里", "Ollama仲裁什么时候启用", "LLM会不会读取音频或改写原始结果"],
     searchProjection: {
-      intents: ["按顺序阅读严格转写成品", "定位并回听疑似或听不清片段", "比较两路模型分歧与依据", "验证结果包有没有被替换", "用人工真值做 benchmark"],
-      entities: ["*.strict.md", "*.strict.audit.md", "*.strict.audit.json", "*.strict.review.json", "*.strict.receipt.json", "两路 *.raw.json", "review.md", "benchmark.json"],
-      relations: ["strict 正文先读再进入 audit", "audit 分歧生成 review queue", "receipt 绑定路径大小和 SHA-256", "raw JSON 保留两路原始模型证据", "长音频 manifest 和 metrics 解释覆盖与耗时"],
-      failureRecovery: ["疑似标记按 review 时间或 chunk 回听原音频", "听不清保持未知而不改写成静音", "回执不一致使 evidence unavailable", "缺少时间戳时按 chunk 与原始输出人工定位"]
+      intents: ["按顺序阅读严格转写成品", "定位并回听疑似或听不清片段", "比较两路模型分歧与依据", "显式启用本地不确定片段仲裁", "验证结果包有没有被替换", "用人工真值做 benchmark"],
+      entities: ["*.strict.md", "*.strict.audit.json", "*.strict.review.json", "*.strict.receipt.json", "两路 *.raw.json", "Ollama 11434", "uncertain_only", "merged audit / metrics"],
+      relations: ["strict 正文先读再进入 audit", "audit 分歧生成 review queue", "Ollama只读不确定片段的结构化audit证据", "仲裁只写merged audit和metrics而不覆盖raw", "receipt 绑定路径大小和 SHA-256", "长音频 manifest 和 metrics 解释覆盖与耗时"],
+      failureRecovery: ["疑似标记按 review 时间或 chunk 回听原音频", "Ollama未启用或不可用时基础双ASR链照常完成", "仲裁响应无效时保留原始分歧和低置信结论", "听不清保持未知而不改写成静音", "回执不一致使 evidence unavailable"]
     },
-    teaser: "把“程序运行成功”“覆盖完整”“文字质量足够”“检测到语音”和“关键内容已人工核听”拆开；正文、原始结果、审计和回执各自保留。",
+    teaser: "把“程序运行成功”“覆盖完整”“文字质量足够”“检测到语音”和“关键内容已人工核听”拆开；正文、原始结果、审计和回执各自保留。长音频还可显式开启本地 Ollama，只对不确定片段做证据仲裁，不读取音频、不覆盖原始结果。",
     status: "审计、objective sidecar 和回执逻辑单测通过；真实录音结论仍需逐条核听",
     statusTone: "mixed",
-    value: "我不仅能读到转写，还能快速找到可能错的地方、知道某个空结果到底是无语音还是处理失败，并能核对文件是否被替换或缺失。",
-    why: "一段流畅文字可能来自真实语音，也可能来自模型补全；一个空文本可能是没有语音，也可能是解码、模型或覆盖失败。把这些状态压成一个成功/失败会让错误结论进入后续分析。",
-    example: "一段会议里的金额被写成 `[疑似] 150 万`。我先在 `*.strict.md` 看完整上下文，再到 `*.strict.audit.md` 或 JSON 比较两路原文和判断依据，从 `*.strict.review.json`（长音频或评测另有 `review.md`）取时间或 chunk，回听原音频后再决定是否改成确定文字；如果只有 `[听不清]`，它保持未知，不能被解释成静音。",
-    result: "得到一套有明确阅读顺序的成品。先读给人的 `*.strict.md`；有风险再读 `*.strict.audit.md` 与 `*.strict.audit.json` 的两路分歧与依据，以及 `*.strict.review.json` 的结构化复核队列；长音频另读 `manifest.json` 和 `metrics.json`；评测 / benchmark（基准评测）另读 `review.md`，有人工 truth（真值）时再读 `benchmark.md` 与 `benchmark.json`；要追查模型原话时看两路 `*.raw.json`；要核对文件有没有换过时看 `*.strict.receipt.json` 的相对路径、大小、SHA-256 和 bundle hash。回执只证明包内字节与声明一致，不证明文字是真的。",
+    value: "我不仅能读到转写，还能快速找到可能错的地方、知道某个空结果到底是无语音还是处理失败，并能核对文件是否被替换或缺失。双 ASR 证据仍拿不准时，我可以显式开启本地 Ollama，让它只解释不确定片段的结构化分歧，而不是听音频或替我改掉原始结果。",
+    why: "一段流畅文字可能来自真实语音，也可能来自模型补全；一个空文本可能是没有语音，也可能是解码、模型或覆盖失败。把这些状态压成一个成功/失败会让错误结论进入后续分析；让 LLM 默认介入或覆盖 raw JSON，则会把一次猜测伪装成原始证据，并让基础转写依赖额外的 GPU 常驻服务。",
+    example: "一段会议里的金额被写成 `[疑似] 150 万`。我先在 `*.strict.md` 看完整上下文，再到 `*.strict.audit.md` 或 JSON 比较两路原文和判断依据；若长音频任务已由我显式打开 `llm_arbitration`，只有带 flags、`needs_review` 或低相似度的 chunk 才把时间范围、相邻上下文、两路文字和规则命中交给本地 Ollama。它不读取音频，结论只追加到 merged audit / metrics；我仍从 `*.strict.review.json` 取位置回听原音频后再定稿。",
+    result: "得到一套有明确阅读顺序的成品。先读给人的 `*.strict.md`；有风险再读 `*.strict.audit.md` 与 `*.strict.audit.json` 的两路分歧和依据，以及 `*.strict.review.json` 的结构化复核队列；显式仲裁过的不确定 chunk 还会在 merged audit / metrics 留下本地 LLM 判断，但两路 `*.raw.json` 原样保留。长音频另读 `manifest.json` 和 `metrics.json`；评测 / benchmark（基准评测）另读 `review.md`，有人工 truth（真值）时再读 `benchmark.md` 与 `benchmark.json`；要核对文件有没有换过时看 `*.strict.receipt.json` 的相对路径、大小、SHA-256 和 bundle hash。Ollama 未启用或不可用时，基础双 ASR 链仍完成并保留原分歧；回执和仲裁都不能证明文字是真的。",
     readerStates: {
-      pass: "执行、覆盖、质量和内容制品都闭合时返回 verified 的一致性结果，但仍保留人工核听边界。",
-      problem: "存在分歧、低置信、失败引擎、缺段或可疑模式时列入 review，并把整体证据等级降级。",
-      unavailable: "缺少原始结果、回执、输入身份或必要 sidecar 时不从旧 Markdown 猜状态，也不输出确定负向结论。"
+      pass: "执行、覆盖、质量和内容制品都闭合时返回 verified 的一致性结果；若显式启用仲裁，只对不确定 chunk 追加有来源的解释，人工核听边界不变。",
+      problem: "存在分歧、低置信、失败引擎、缺段或可疑模式时列入 review；本地仲裁即使给出偏好，也不能覆盖 raw 证据或自动定稿。",
+      unavailable: "缺少原始结果、回执、输入身份或必要 sidecar 时不从旧 Markdown 猜状态；Ollama 未运行或响应无效只关闭可选仲裁，基础双 ASR 结果和复核队列继续保留。"
     },
     decisionImpact: [
       "静音出字和模板废话进入高风险复核。",
       "空文本不再自动等于无语音。",
       "主引擎失败会改变证据等级。",
+      "LLM 仲裁默认关闭；只有显式启用且 chunk 带 flags、needs_review 或低相似度时才触发。",
+      "仲裁只读结构化 audit 证据、不读音频，只写 merged audit / metrics；两路 raw ASR JSON 永不被它覆盖。",
+      "本地 Ollama 不可用或返回无效 JSON 时保留原始分歧和人工复核队列，基础转写不依赖它成功。",
       "内容文件与回执不一致时 verified 自动失效。",
       "阅读从 `*.strict.md` 开始，不让用户先钻进 raw JSON。",
       "`*.strict.audit.md` / `.json` 解释两路分歧，`*.strict.review.json` 与长流程 `review.md` 把最值得回听的位置排成队列。",
@@ -640,12 +643,15 @@ export const chineseAsrModules = [
       "audit.py 汇总主/对照原始结果、错误和风险。",
       "audio_outcome.py 正交表达 execution、coverage、quality 和 objective outcome。",
       "strict_writer.py 分开写 `*.strict.md`、audit Markdown/JSON、结构化 review JSON、两路 raw JSON、objective sidecar 和 receipt。",
+      "arbitration.py 从 `configs/models.yaml` 读取默认关闭的 `llm_arbitration`；启用时使用本地 `http://127.0.0.1:11434/api/chat`、`uncertain_only` 与 `keep_alive=0`，仅传结构化分歧证据。",
       "长音频另写 `manifest.json` 与 `metrics.json` 解释分段覆盖、状态和耗时；评测 / benchmark 另写 `review.md` 与 benchmark 成品，解释优先复核项和 truth 对比。",
       "metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash。"
     ],
     flow: [
       "日常先打开 `outputs.final` 指向的 `*.strict.md`，阅读正文并保留其中的 `[疑似]` / `[听不清]` 标记。",
       "遇到标记、关键姓名数字或争议句时，打开 `*.strict.audit.md` 或 `*.strict.audit.json`，比较主/对照原文、相似度、规则命中、错误和选择依据。",
+      "长音频只有在配置显式启用时，才把带 flags、needs_review 或低相似度的 chunk audit 送给本地 Ollama；调用在 ASR chunk 处理之后进行，`keep_alive=0` 让模型用完卸载。",
+      "把仲裁决定追加到 merged audit / metrics，同时保留两路 strict raw JSON；Ollama 失败、缺失或响应不可解析时不改写基础结果。",
       "再读 `*.strict.review.json` 的结构化队列，按可用时间区间回到原音频逐项核听；评测 / benchmark 的聚合复核队列另看 `review.md`。",
       "需要追查模型到底返回什么时，分别打开主引擎和对照引擎的两路 `*.raw.json`，不把 raw 直接当最终稿。",
       "用 `*.strict.receipt.json` 复核六项内容制品的相对路径、字节数、SHA-256、引擎声明和 bundle hash；任何不一致都使 evidence unavailable，但一致仍不证明文字正确。",
@@ -659,11 +665,14 @@ export const chineseAsrModules = [
       { term: "objective outcome", explanation: "只表达音频内容的客观状态，不混入执行和覆盖失败。" },
       { term: "indeterminate（无法确定）", explanation: "当前证据不足，不能断言有语音或无语音。" },
       { term: "evidence receipt", explanation: "列出六项严格内容制品的相对路径、大小、SHA-256、声明与 bundle hash；它不是签名、可信时间戳、文字真值或事实认证。" },
-      { term: "review queue（复核队列）", explanation: "按风险收集需要回听的句段，而不是让用户从头听完整录音。" }
+      { term: "review queue（复核队列）", explanation: "按风险收集需要回听的句段，而不是让用户从头听完整录音。" },
+      { term: "evidence-only arbitration（只读证据仲裁）", explanation: "可选本地 LLM 只看不确定 chunk 的两路文字、相似度、规则和上下文，结论进入 audit / metrics；它不听音频、不改 raw，也不替代人工核听。" }
     ],
     boundaries: [
       "SHA-256 一致只能证明字节未变，不能证明文字正确。",
       "verified 回执不能替代原音频和人工核听。",
+      "Ollama 仲裁默认关闭；没有它时基础链必须稳定，启用它也不能把 LLM 偏好当成原始证据或最终真值。",
+      "`keep_alive=0` 避免模型长期驻留 GPU；仲裁在 ASR chunk 完成后运行，不与两路 ASR 同时争抢资源。",
       "低分、空文本和失败必须分别表达。",
       "公开仓库不包含任何用户结果包。"
     ],
@@ -673,7 +682,8 @@ export const chineseAsrModules = [
       { condition: "正文出现 `[听不清]`", response: "查看两路 raw、执行错误和客观结果，再回听原音频；它表示当前不能可靠转写，不等于没有语音。" },
       { condition: "空文本且覆盖或执行不完整", response: "返回 indeterminate，不宣称无语音。" },
       { condition: "回执引用的文件缺失、大小或指纹不符", response: "证据状态降为 unavailable，要求重新生成或恢复。" },
-      { condition: "两路模型对关键句冲突", response: "保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。" }
+      { condition: "两路模型对关键句冲突", response: "保留两路原始输出、audit 依据和时间位置，进入人工回听；没有时间戳时按长音频 chunk 或原文上下文定位并保留未知。" },
+      { condition: "显式启用仲裁但本地 Ollama 不可达或响应不是有效 JSON", response: "只把该 chunk 的仲裁标为不可用或低置信，保留两路 raw、原 audit 与人工复核队列；不重启服务、不覆盖正文，也不让基础长音频任务失败。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\audit.py", role: "双模型审计与风险汇总" },
@@ -682,14 +692,17 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\strict_writer.py", role: "strict 正文、audit、review、raw 与 receipt 成品写入" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\result_writer.py", role: "内容制品与 sidecar 写入" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\metadata.py", role: "输入、模型和制品身份" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\benchmark.py", role: "人工 truth 对齐、指标与 benchmark/review 成品" }
+      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\benchmark.py", role: "人工 truth 对齐、指标与 benchmark/review 成品" },
+      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\arbitration.py", role: "默认关闭的本地 Ollama evidence-only 仲裁、结构化请求与失败回退" },
+      { path: "E:\\Projects\\Tools\\ChineseASR\\configs\\models.yaml", role: "llm_arbitration、uncertain_only、模型、11434 与 keep_alive=0 配置" }
     ],
     verification: [
       "audit、risk rules、audio outcome、result writer 和 metadata 单元测试包含在本次 345 项通过结果中。",
       "strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。",
+      "test_arbitration.py 与 test_config.py 覆盖默认关闭、Ollama 结构化请求、`uncertain_only`、`keep_alive=0`、有效 JSON 解析和无效响应回退；本轮没有调用真实 Ollama 模型。",
       "没有任何自动测试能够代替关键片段人工核听，页面明确保留该缺口。"
     ],
-    relation: "模型、长音频和说话人模块产生的所有结果最终都经过本模块；它向用户解释证据强度，但不负责决定真实人物或外部事实。"
+    relation: "模型、长音频和说话人模块产生的所有结果最终都经过本模块；可选 Ollama 只在长音频不确定 chunk 上增加一层不覆盖原证据的解释。模块向用户说明证据强度，但不负责决定真实人物、外部事实或最终文字真值。"
   },
   {
     slug: "speaker-attribution",

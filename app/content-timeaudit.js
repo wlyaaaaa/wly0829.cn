@@ -315,31 +315,33 @@ export const timeAuditModules = [
     slug: "hardware-performance",
     shortTitle: "硬件与流畅度",
     title: "硬件真值、FPS 回放与前台性能诊断",
-    searchAliases: ["游戏卡顿先看摘要还是Grafana", "过去一小时温度磁盘有没有异常", "没有游戏帧是不是采集坏了", "1% Low为什么突然掉", "帧时尖刺和后台压力怎么对齐"],
+    searchAliases: ["游戏卡顿先看摘要还是Grafana", "过去一小时温度磁盘有没有异常", "没有游戏帧是不是采集坏了", "1% Low为什么突然掉", "帧时尖刺和后台压力怎么对齐", "PCConfig为什么要求重新检查稳定配置", "TimeAudit异常摘要会不会直接改电脑配置"],
     searchProjection: {
-      intents: ["复盘一次卡顿或掉帧", "查看温度功耗和磁盘压力", "判断没有游戏帧是否正常", "从摘要进入具体时间线深挖"],
-      entities: ["timeaudit-diagnostics", "Grafana", "FPS", "1% Low", "frametime", "PresentMon"],
-      relations: ["有界 summary 先确认覆盖和方向", "Grafana 再对齐帧时硬件前台与后台", "PresentMon 只接受新鲜一致帧", "no_game_frames 表示没有有效渲染负载"],
-      failureRecovery: ["无游戏帧保持 idle 而不报掉帧", "探针掉线只留对应字段空值", "混入旧帧时拒绝性能结论", "摘要覆盖 stale 时先补现场证据"]
+      intents: ["复盘一次卡顿或掉帧", "查看温度功耗和磁盘压力", "判断没有游戏帧是否正常", "向PCConfig提供有界异常摘要", "从摘要进入具体时间线深挖"],
+      entities: ["timeaudit-diagnostics", "Grafana", "FPS / 1% Low", "frametime", "PresentMon", "timeaudit.pcconfig-anomaly-digest.v1", "(after, until]", "projection_recheck_recommended"],
+      relations: ["有界 summary 先确认覆盖和方向", "Grafana 再对齐帧时硬件前台与后台", "PresentMon 只接受新鲜一致帧", "PCConfig只消费聚合异常与重查建议", "异常摘要不进入稳定配置也不证明配置变化", "no_game_frames 表示没有有效渲染负载"],
+      failureRecovery: ["无游戏帧保持 idle 而不报掉帧", "探针掉线只留对应字段空值", "混入旧帧时拒绝性能结论", "摘要覆盖 stale 时先补现场证据", "Docker或PostgreSQL不可用时返回有界unavailable且不重启服务"]
     },
     teaser: "组合 NVML、PDH、LibreHardwareMonitor 和 PresentMon，对齐温度、功耗、内存、磁盘、网络、FPS、1% Low 与前台焦点，形成前台卡顿分析。",
     status: "001cee0 已发布；LHM 独立任务、外部 Watchdog 与只读 worker 已在现场生效，完整/定向/现场测试通过；未做 LHM 故障注入或游戏负载 E2E",
     statusTone: "mixed",
-    value: "我能先用最长 168 小时的有界 summary（摘要）确认覆盖、硬件、有效游戏帧和压力方向，再在需要具体时刻、程序或曲线时进入 Grafana，把“感觉卡”追到同刻的低帧、帧时、CPU/GPU、磁盘、网络和后台压力。",
-    why: "平均 FPS 会掩盖短暂卡顿；混入核显/虚拟显示器会错报显存，跨不同负载比较温度也会制造伪老化。",
-    example: "平均 120 FPS 但 1% Low 掉到 30、单帧超过 50ms；瓶颈线显示后台 CPU 争抢而非 GPU 温度墙，于是先处理后台负载。",
-    result: "先得到一份覆盖质量、硬件聚合、有效游戏帧、状态时长和解释限制清楚的摘要；若它指出值得深挖，再得到 Grafana 中的硬件时间线、FPS 对比、卡顿标记、CPU/GPU 瓶颈、网络/磁盘压力和同负载散热趋势。摘要不返回具体进程，也不替代大盘。",
+    value: "我能先用最长 168 小时的有界 summary（摘要）确认覆盖、硬件、有效游戏帧和压力方向，再在需要具体时刻、程序或曲线时进入 Grafana，把“感觉卡”追到同刻的低帧、帧时、CPU/GPU、磁盘、网络和后台压力。PCConfig 还可以按游标取一个不含原始数据的异常 digest（摘要），判断是否值得重新读取一次稳定机器事实。",
+    why: "平均 FPS 会掩盖短暂卡顿；混入核显/虚拟显示器会错报显存，跨不同负载比较温度也会制造伪老化。反过来，若 PCConfig 直接读取原始时序或把一次高温当成硬件配置已经改变，就会让短暂负载污染长期机器基线；所以 TimeAudit 只交付聚合异常和是否建议重查，不替 PCConfig 下配置结论。",
+    example: "平均 120 FPS 但 1% Low 掉到 30、单帧超过 50ms；瓶颈线显示后台 CPU 争抢而非 GPU 温度墙，于是先处理后台负载。另一条维护流程按 `(after, until]` 请求最近 24 小时摘要，发现至少 10 个样本持续 CPU 热压力，于是只返回 `projection_recheck_recommended=true`；PCConfig 随后独立读取现场稳定事实，摘要本身不进入稳定投影，也不会改任何配置。",
+    result: "先得到一份覆盖质量、硬件聚合、有效游戏帧、状态时长和解释限制清楚的诊断摘要；若它指出值得深挖，再得到 Grafana 中的硬件时间线、FPS 对比、卡顿标记、CPU/GPU 瓶颈、网络/磁盘压力和同负载散热趋势。给 PCConfig 的独立 digest 只返回窗口、样本与 coverage（覆盖）、异常 id / severity / count / first-last、阈值引用和一次稳定配置重查建议；不返回原始时序、进程、窗口标题、网络/机器标识或秘密，也不能证明配置变化。",
     readerStates: {
-      pass: "传感器与渲染负载可用时，按同一时刻显示硬件、FPS、帧时和前台关系。",
-      problem: "单一来源掉线或越界时保留空值，其他来源继续。",
-      unavailable: "无活跃 3D 程序时 FPS 可为空或 0，不造负载。"
+      pass: "传感器与渲染负载可用时，按同一时刻显示硬件、FPS、帧时和前台关系；PCConfig 请求的有效窗口另返回可推进游标的聚合摘要和是否建议重查。",
+      problem: "单一来源掉线或越界时保留空值，其他来源继续；异常命中只说明阈值信号成立，不直接证明稳定硬件或配置发生变化。",
+      unavailable: "无活跃 3D 程序时 FPS 可为空或 0，不造负载；Docker、PostgreSQL、窗口或 payload 不可用时 digest 返回有界 unavailable，不重启服务，也不让 PCConfig 推进该窗口。"
     },
     decisionImpact: [
       "先看 1% Low 与帧时，再看平均 FPS。",
       "先用 summary 确认窗口覆盖、有效游戏帧和方向；只有问题需要具体时刻、进程或跨曲线关系时才进 Grafana。",
       "只认 NVIDIA 独显，隔离核显与虚拟显示器。",
       "功耗墙、温度墙、空闲降频分开解释。",
-      "只在相似负载下判断散热趋势。"
+      "只在相似负载下判断散热趋势。",
+      "TimeAudit 拥有异常阈值和聚合语义；PCConfig 只消费有界 digest，不能绕过 Provider 读取原始行或自行解释阈值。",
+      "只有 digest 明确建议时才值得做一次 PCConfig live stable projection recheck；摘要既不进入投影，也不等于配置已经改变。"
     ],
     problem: "解决平均值遮蔽卡顿、GPU 混淆、探针故障级联、FPS 归属错误和伪老化趋势。",
     implementation: [
@@ -349,6 +351,8 @@ export const timeAuditModules = [
       "hardware_worker blob 与 001cee0 一致，运行中的 main.py 在该文件落盘后启动；现场只有 1 个有线程的 LHM 活实例，3 个零线程崩溃残影被健康检查排除。",
       "activity_worker 用 NVIDIA vendor id 锁独显 LUID。",
       "Grafana 对齐 FPS、帧时、瓶颈与前台焦点。",
+      "pcconfig_anomaly_digest.py 通过现有 audit-postgres 容器的本地 PostgreSQL socket 对 fact_system_hardware 做索引聚合，窗口固定为 `(after_utc, until_utc]` 且最长 168 小时。",
+      "timeaudit.pcconfig-anomaly-digest.v1 返回 Owner/Profile、next cursor、coverage、聚合异常与 `projection_recheck_recommended`；成功的空窗口也可推进，缺 Docker/PostgreSQL 或非法输出则有界 unavailable。",
       "数据库会话锁定 Asia/Shanghai 本地日界。"
     ],
     flow: [
@@ -356,22 +360,29 @@ export const timeAuditModules = [
       "若需要细节，再识别物理 GPU 和传感器并打开对应 Grafana 时间窗。",
       "每秒采硬件、FPS、网络与系统压力，隔离单个探针失败。",
       "按时间桶对齐前台、卡顿、温度、磁盘与网络曲线。",
+      "当 PCConfig 提供 exclusive after 与 inclusive until 时，只运行 aggregate filters（聚合筛选），生成不含 raw payload 的 digest；窗口超过 168 小时直接拒绝。",
+      "digest 只把异常信号和重查建议交还 PCConfig；后者若决定重查，必须由自己的 live stable provider 独立裁定 no_change 或 published。",
       "把 summary 的相关信号与大盘细节、Windows 事件、驱动或 PCConfig 现场交叉判断，不由一条阈值直接给根因。"
     ],
     concepts: [
       { term: "1% Low", explanation: "最差 1% 时段帧率，揭示偶发卡顿。" },
       { term: "frametime（帧时）", explanation: "渲染一帧的毫秒数；尖刺会影响手感。" },
-      { term: "LUID（图形设备标识）", explanation: "Windows 本机设备身份，用来锁目标独显。" }
+      { term: "LUID（图形设备标识）", explanation: "Windows 本机设备身份，用来锁目标独显。" },
+      { term: "anomaly digest（异常摘要）", explanation: "给 PCConfig 的有界聚合接口：说明窗口覆盖、异常种类和是否建议重查稳定机器事实，不提供原始时序，也不签发配置变化结论。" }
     ],
     boundaries: [
       "阈值按当前个人工作站调校，不是通用标准。",
       "能耗/电源轨含估算，不是外部仪器值。",
-      "空值不插成传感器真值。"
+      "空值不插成传感器真值。",
+      "异常摘要不返回原始遥测行、温度/负载曲线、进程活动、窗口标题、网络标识、凭据或机器标识。",
+      "scheduler jitter（调度抖动）是有界用户态信号，不冒充真实内核 DPC latency，也不建议稳定配置重查。"
     ],
     failures: [
       { condition: "LHM 连续不可达", response: "hardware worker 只留 CPU/GPU 对应真值字段为空；外部 telemetry_watchdog 先宽限 15 秒，再通过独立 LHM 任务做一次有界端点恢复。" },
       { condition: "单个 NVML 调用异常", response: "隔离字段，不清零整块 GPU。" },
-      { condition: "无渲染目标", response: "保持 FPS 空闲，不报故障。" }
+      { condition: "无渲染目标", response: "保持 FPS 空闲，不报故障。" },
+      { condition: "PCConfig 请求窗口超过 168 小时、时间边界非法或 Provider 输出不合约", response: "返回有界 unavailable；不查询原始行、不重启 Docker/PostgreSQL，也不提供可推进的成功窗口。" },
+      { condition: "摘要命中异常但现场稳定事实没有变化", response: "保留异常作为时序信号；PCConfig 的独立重查返回 no_change，摘要不写入 stable_machine_projection。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\TimeAudit\\hardware_worker.py", role: "硬件、网络与 PresentMon" },
@@ -381,6 +392,8 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\grafana_dashboards\\addmc8x__🚀 前台交互与流畅度诊断舱.json", role: "流畅度大盘 JSON" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\timeaudit_diagnostic_summary.py", role: "一次查询的硬件、有效游戏帧、覆盖与信号聚合" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\TIMEAUDIT_DIAGNOSTIC_SUMMARY_CONTRACT.md", role: "诊断摘要 schema、时间窗和因果边界" },
+      { path: "E:\\Projects\\Tools\\TimeAudit\\pcconfig_anomaly_digest.py", role: "给 PCConfig 的最长 168 小时只读聚合异常 Provider" },
+      { path: "E:\\Projects\\Tools\\TimeAudit\\PCCONFIG_ANOMALY_DIGEST_CONTRACT.md", role: "窗口、coverage、异常、隐私和稳定配置重查边界" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\telemetry_watchdog.ps1", role: "LHM 端点宽限、任务恢复和 crash ghost 过滤" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_runtime_hardening.py", role: "LHM 单 owner 与外部恢复断言" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_presentmon_fps_selection.py", role: "FPS 选择回归" },
@@ -390,10 +403,11 @@ export const timeAuditModules = [
       "001cee0 的 182 项 + 11 个子测试完整回归通过；LHM/Watchdog 定向断言另为 10/10。",
       "现场健康 21/21：项目任务的单一 LHM 活实例、18085、GPU 电压、近 2 分钟 120/120 条 GPU/Vcore 真值与持续写库均通过。",
       "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3660 样本，且 no_game_frames 没有被误报成掉帧。",
+      "test_pcconfig_anomaly_digest.py 覆盖窗口、聚合规则、privacy flags（载荷省略标记）与 unavailable；本页本轮没有把该单测冒充 PCConfig consumer 或 live projection E2E。",
       "Grafana 容器运行，授权截图显示真实界面。",
       "本轮未结束 LHM 或阻断 18085，不能把健康现场冒充恢复故障注入；也未启动游戏，FPS E2E 未形成。"
     ],
-    relation: "读取采集时间轴并与进程资源对齐；timeaudit-diagnostics 先消费它的有界聚合，必要时再进入 Grafana 深读；可靠性防止探针失败扩散。"
+    relation: "读取采集时间轴并与进程资源对齐；timeaudit-diagnostics 先消费它的有界诊断聚合，必要时再进入 Grafana 深读；PCConfig 只消费另一份零原始载荷的 anomaly digest，并独立决定是否重查稳定事实。可靠性模块防止探针或 Provider 失败扩散。"
   },
   {
     slug: "process-forensics",
