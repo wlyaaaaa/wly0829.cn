@@ -137,10 +137,12 @@ export const project = {
     facts: [
       `活动规则仍是 ${panelSnapshot.authority.releaseId} release commit=${panelSnapshot.authority.gitCommit}；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}，五规则 ruleset=${panelSnapshot.authority.rulesetSha256}。当前源码 main=${panelSnapshot.sourceCommit}，branch=${panelSnapshot.sourceBranch}，${panelSnapshot.sourceSync}；源码 main 不能冒充尚未发布的下一代 E release。`,
       `Owner 于 ${localOwnerObservation.observedAt} 对 ${localOwnerObservation.releaseId} 运行完整本地回归：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项属于 cross-owner skip；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。这是一条历史完整回归观察，不改写当前 source main。`,
-      `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent、${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`
+      `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent、${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`,
+      "工作树热备 source/合同存在；2026-08-31T21:24:42Z 只读观察确认 G 卷 Healthy/OK，且 G:\\80_Backup\\ControlPlane\\agents-hot-mirror-status.json 存在。该回执最后镜像时间为 2026-07-30T20:30:07-07:00、robocopy exit=1，当时记录 source HEAD=c96dbf1、dirty=21。"
     ],
     gaps: [
-      `refresh-panel-snapshot 只刷新 source、活动 E release 与 Skill 供应，不会自动重跑当前 source main 的完整本地回归；以上 ${localOwnerObservation.releaseId} 38/0 仍保持 ${localOwnerObservation.observedAt} 历史观察，直到新的 Owner 回执替换。`
+      `refresh-panel-snapshot 只刷新 source、活动 E release 与 Skill 供应，不会自动重跑当前 source main 的完整本地回归；以上 ${localOwnerObservation.releaseId} 38/0 仍保持 ${localOwnerObservation.observedAt} 历史观察，直到新的 Owner 回执替换。`,
+      "当前会话没有观察到 AgentsHotMirror-Daily 计划任务；现有状态回执也明显早于当前 source main。页面只能证明热备合同和历史镜像存在，不能声称每日自动热备当前已安装、正在运行或已覆盖最新工作树。"
     ]
   },
   productPrinciples: [
@@ -149,6 +151,7 @@ export const project = {
     { title: "明确过的授权不反复索要", detail: "同一目标和范围内持续推进；只有目标、账号、公开面、付费、秘密或不可逆边界变化时，才重新判断。" },
     { title: "并行提高质量，但不覆盖别人", detail: "互不依赖的工作可以并行；重叠写入用最小施工范围协调，已有改动始终保留。" },
     { title: "完成必须分层证明", detail: "源码、测试、安装、发布和用户真正可用各自证明不同事情，任何一层都不能冒充整件事完成。" },
+    { title: "Git 历史与工作树热备各保一层", detail: "PRIVATE Git 保存提交历史，G 盘 hot mirror（热镜像）保存当前工作树和未提交状态；两者互补，但热镜像不复制 .git、不触碰 H 冷备，也不冒充完整仓库备份。" },
     { title: "不知道就保留未知", detail: "证据不足只停止受影响步骤，说明缺什么和怎样恢复；不依赖该问题的安全工作继续。" },
     { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
     { title: "注意力质量高于上下文数量", detail: "先保住目标、边界、最新证据、未知和验收，再读取会改变判断的细节；既不漏掉关键事实，也不靠堆文件和日志制造理解假象。" },
@@ -163,7 +166,8 @@ export const project = {
     "选择工具、Skills、插件与原生代理的使用边界",
     "维护重大动作的活动规则、发布链和恢复语义",
     "在任务真正结束且没有后续义务时安全归档；仍有未交付内容时保留接手人与恢复线索",
-    "维护个人 Skills 的 canonical source、安装清单与验证分层"
+    "维护个人 Skills 的 canonical source、安装清单与验证分层",
+    "为 .agents 当前工作树提供固定 E→G 热备合同、状态回执与恢复边界"
   ],
   exclusions: [
     "不拥有仓库身份、远端、默认分支和发布事实；这些由 Git 控制面负责",
@@ -203,6 +207,7 @@ export const project = {
     { term: "Provider（事实或能力提供器）", meaning: "以固定 schema 返回现场状态或执行精确 operation 的 Owner 接口。" },
     { term: "Junction（目录联接）", meaning: "用户发现目录到 canonical Skill source 的 Windows 链接，不是第二份源码。" },
     { term: "Recovery capsule（恢复胶囊）", meaning: "安装事务在变更前记录的 source、destination、pre-image 和固定 roots，用于中断回滚。" },
+    { term: "Working-tree hot mirror（工作树热镜像）", meaning: "把 E:\\.agents 当前文件状态镜像到固定 G 盘热备根，保留尚未提交的工作，但排除 .git 和临时附件；它不同于 Git 历史与 H 冷备。" },
     { term: "Fresh task（全新任务验证）", meaning: "安装完成后启动的另一个任务真实发现该能力。" },
     { term: "E2E（端到端验证）", meaning: "用真实输入走完整路径并得到用户可见结果。" },
     { term: "Unknown（未验证）", meaning: "当前没有足够证据。它既不是 PASS，也不表示永久不可用。" }
@@ -226,6 +231,7 @@ export const project = {
     { name: "Execution Owner Registry", responsibility: "协调多个任务对项目最小 scope 的 Claim、Add、Transfer、Release 和恢复。", implementation: "Expected revision CAS 加 append-only transition journal；固定 resolver 证明普通非长期或已归档 predecessor terminal 后，无 residual 用 RecoverRelease，有 residual 用 RecoverReleaseClaim。未归档 long_term_task 只接续或正式退役。" },
     { name: "原生代理路由门", responsibility: "验证 model（模型）、effort、root/child 身份、E release/commit/ruleset 和合同 SHA 后才允许 spawn。", implementation: "宿主事件注入身份，创建前再检查 TOCTOU；它不替模型选择 0–10、家族或 scope。" },
     { name: "Personal Skill 供应链", responsibility: "维护 Skill canonical source（能力唯一源码）、安装意图、发现 junction（目录联接）、事务回滚和六层证据。", implementation: "一个 registry（登记表）、两个 canonical roots（唯一维护根目录）、事务 installer（安装器）和 recovery capsule（恢复胶囊）。" },
+    { name: ".agents 工作树热备", responsibility: "保存 E:\\.agents 当前工作树与未提交改动的 G 盘恢复点，补足 PRIVATE Git 只保存提交历史的边界。", implementation: "固定 E→G 路径、G 卷健康门、全局互斥、受限 robocopy 镜像、状态 JSON 和可选每日无窗口任务；不复制 .git，不访问 H。" },
     { name: "Control Plane Doctor", responsibility: "按用户点名的 Owner 做只读健康、漂移、迁移和恢复检查。", implementation: "只调用被选中的 Provider；需要修复时退出 Doctor 并交给真实 Owner。" },
     { name: "测试与复杂度预算", responsibility: "统一登记本地与跨 Owner 测试，并限制活动树中的文件、字节和历史副本。", implementation: "Test registry、Local/Cross-owner scope 和 repository bloat budget。" }
   ],
@@ -235,6 +241,7 @@ export const project = {
     { ask: "能并行的并行，避免写冲突。", effect: "把互不依赖支路交给不同代理，只有真实写冲突的临界区串行。", moduleSlug: "capability-routing" },
     { ask: "只读审计，不实施修复。", effect: "不 Claim 排他 Owner，不产生外部 effect，只报告事实、证据和缺口。", moduleSlug: "authorization-owner" },
     { ask: "现场回读，不用旧报告或记忆。", effect: "重新读取活动规则、项目规则、Owner Provider、Git 状态和当前源码。", moduleSlug: "rules-contracts" },
+    { ask: "我有一批还没提交的 .agents 修改，电脑出问题时怎样从 G 盘恢复？", effect: "先检查 G 卷健康和热备状态回执；需要执行时只允许固定 E:\\.agents → G:\\80_Backup\\ControlPlane\\.agents，排除 .git/临时附件并记录源 HEAD 与 dirty 数。恢复时把 G 当工作树文件来源，Git 历史仍从 PRIVATE Git 取得；当前任务未观察到已安装的每日任务，因此不冒充自动热备正在运行。", moduleSlug: "context-evidence" },
     { ask: "验证后定向提交并正常推送。", effect: "保留其他 dirty work，只 stage 本任务文件，提交后 normal push 并从远端默认分支回读。", moduleSlug: "authorization-owner" },
     { ask: "公开项目里有被 Git 忽略、但不能丢的私有配置和文档，怎样既保留又不泄露？", effect: "只筛 Git 明确 ignored、未跟踪/未暂存且有保留价值的材料；先复制和 hash 到现场仍为 PRIVATE 的 companion，提交推送并从远端默认分支回读后，才把原件同卷改为可回滚备份并在原路径建立继续 ignored 的本地 link。任一步失败都恢复原件，不把半份迁移写成完成。", moduleSlug: "authorization-owner" },
     { ask: "我新加了一个 Skill（能力入口），为什么文件有了，全新任务还是看不到？", effect: "把 canonical source（唯一维护源）、安装事务、发现入口、当前任务、fresh task（全新任务验证）和真实 E2E 分开检查，只修失败的那一层。", moduleSlug: "skills-plugins" },
@@ -690,67 +697,85 @@ export const modules = [
   {
     slug: "context-evidence",
     shortTitle: "上下文与证据",
-    title: "三控制面上下文、耐久状态与完成证据",
-    teaser: "只加载会改变决定的事实，并把设计、源码、运行、发布和用户结果分开证明。",
-    status: "三控制面视图与当前合同覆盖均通过",
-    statusTone: "pass",
-    value: "避免一次加载过多上下文让模型注意力丢失，也避免用“代码存在”“测试通过”或“部署返回成功”代替用户真正能用。",
-    why: "长任务会经历压缩、交接和外部状态变化；源码、测试、安装、发布和用户可见结果又分别证明不同事情。把它们混在一起最容易误报完成。",
+    title: "三控制面上下文、耐久状态、工作树热备与完成证据",
+    teaser: "只加载会改变决定的事实，把设计、源码、运行、发布和用户结果分开证明，并为尚未提交的 .agents 工作树保留固定 G 盘恢复层。",
+    status: "三控制面与热备源码合同通过；G 卷可用且有历史镜像回执，但当前未观察到每日任务，最新工作树覆盖未知",
+    statusTone: "mixed",
+    searchAliases: ["未提交的agents工作树怎样热备", "G盘agents热镜像", "AgentsHotMirror任务", "热备和Git历史有什么不同", "本地构建通过为什么还不能说完成"],
+    value: "避免一次加载过多上下文让模型注意力丢失，也避免用“代码存在”“测试通过”或“部署返回成功”代替用户真正能用；尚未提交的 .agents 修改还能进入独立 G 盘热镜像，而不是只能等下一次 Git commit。",
+    why: "长任务会经历压缩、交接和外部状态变化；源码、测试、安装、发布和用户可见结果又分别证明不同事情。PRIVATE Git 只保留已经提交的历史，未提交工作树如果没有另一层恢复点，机器故障会直接丢失。",
     example: "例如我说“网站本地构建通过了，为什么公网还是打不开，先别说已经完成”。系统会分别读取当前源码和测试、Git/Pages 发布事实与公网打开结果，保留“本地通过”和“公网失败”两个独立结论。",
-    result: "任务在压缩或交接后仍能从正确来源恢复；完成报告会明确每层已证明什么、还缺什么，以及用户现在能否真正使用。",
-    readerStates: { pass: "所需责任源可读且各证据层一致时，形成可重建的当前结论并继续任务。", problem: "摘要、源码、运行态或外部回读冲突时，以现场责任源为准，并把冲突层单独标出。", unavailable: "某个必要责任源不可读时，只把依赖它的结论标成 Unknown（证据不足）或阻断；不恢复退役中央系统补答案。" },
+    result: "任务在压缩或交接后仍能从正确来源恢复；完成报告会明确每层已证明什么、还缺什么，以及用户现在能否真正使用。若固定热镜像当前且可读，还能从 G 盘找回未提交工作树文件，再由 PRIVATE Git 补回提交历史。",
+    readerStates: { pass: "所需责任源可读且各证据层一致时，形成可重建的当前结论并继续任务；热备还需 G 卷健康、镜像回执新鲜且源/destination/HEAD/dirty 范围可解释。", problem: "摘要、源码、运行态或外部回读冲突，或热备回执陈旧/任务缺失时，以现场责任源为准，并把冲突层单独标出。", unavailable: "必要责任源或 G 卷不可读时，只把依赖它的结论标成 Unknown（证据不足）或阻断；不恢复退役中央系统、不改用 H 冷备或猜测镜像已完成。" },
     searchProjection: {
-      intents: ["本地构建通过为什么还不能说完成", "对话压缩或任务交接后怎样恢复现场", "跨规则仓库和机器怎样只取必要事实", "证据过期时应该标什么"],
-      entities: ["三控制面", "metadata", "checkpoint", "evidence layer", "read-back", "fresh task", "E2E", "Unknown"],
-      relations: ["摘要只作线索而现场 Owner 决定当前事实", "source、test、install、publish、fresh task 与 E2E 互不代替", "跨控制面先读 metadata 再展开必要正文", "用户可见验收高于内部 PASS 字段"],
-      failureRecovery: ["摘要与现场冲突时以规则 Owner 和当前源码为准", "证据陈旧时降为历史或 Unknown 后重跑最小 read-back", "必要 Owner 不可读时只阻断依赖结论", "跨控制面 schema 无效时修复正确 Owner 而不恢复中央资料库"]
+      intents: ["本地构建通过为什么还不能说完成", "对话压缩或任务交接后怎样恢复现场", "跨规则仓库和机器怎样只取必要事实", "证据过期时应该标什么", "热备未提交的agents工作树", "从G盘恢复当前规则源码文件"],
+      entities: ["三控制面", "metadata / checkpoint", "evidence layer / read-back", "fresh task / E2E / Unknown", "AgentsHotMirror-Daily", "E:\\.agents → G:\\80_Backup\\ControlPlane\\.agents", "robocopy / status JSON"],
+      relations: ["摘要只作线索而现场 Owner 决定当前事实", "source、test、install、publish、fresh task 与 E2E 互不代替", "PRIVATE Git保存提交历史而G热镜像保存当前工作树", "热镜像排除.git和临时附件", "G热备不触碰H冷备", "用户可见验收高于内部PASS字段"],
+      failureRecovery: ["摘要与现场冲突时以规则 Owner 和当前源码为准", "热备任务缺失或回执陈旧时保持Unknown", "G卷不健康或互斥超时时不覆盖既有镜像", "robocopy退出码>=8时保留失败回执与源文件", "恢复时先取PRIVATE Git历史再叠加G工作树文件", "跨控制面schema无效时修复正确Owner而不恢复中央资料库"]
     },
-    decisionImpact: ["普通单项目问题不进入全景控制面。", "跨 Owner（责任源）决策先读 metadata（元数据），再展开必要正文。", "证据缺失或过期时降为 Unknown（证据不足），而不是 PASS（通过）。", "设计、Git（版本管理系统）、机器运行和外部 read-back（正式回读）分开验证。"],
-    problem: "长任务会压缩，多个 owner 会变化，同一结论又可能来自文档、源码、测试、运行时或外部回执。系统必须让重要状态可重建，同时防止把摘要、历史命名或某一层 PASS 当成全部完成。",
+    decisionImpact: ["普通单项目问题不进入全景控制面。", "跨 Owner（责任源）决策先读 metadata（元数据），再展开必要正文。", "证据缺失或过期时降为 Unknown（证据不足），而不是 PASS（通过）。", "设计、Git（版本管理系统）、机器运行和外部 read-back（正式回读）分开验证。", "PRIVATE Git 与 G 热镜像不能互相冒充：前者保提交历史，后者保当前工作树；H 冷备不在自动链中。", "热备回执必须带源 HEAD、dirty 数、排除项和 robocopy 结果，旧回执不能证明当前工作树已覆盖。"],
+    problem: "长任务会压缩，多个 owner 会变化，同一结论又可能来自文档、源码、测试、运行时或外部回执。系统必须让重要状态可重建，同时防止把摘要、历史命名或某一层 PASS 当成全部完成；还要避免未提交工作只存在于 E 盘一个故障域。",
     implementation: [
       "现行只有三个控制面：.agents、Git 总索引和 PCConfig；具体项目拥有业务事实。兼容名称不会创造第四个控制面。",
       "跨控制面入口只返回 Owner（责任源）、路径、SHA（内容指纹）、大小和 Token（模型计数单位）估算，不复制私人正文、不运行动态 Provider（现场读取器）、不建立共享数据库。",
       "长任务使目标、边界、授权、关键决定、当前实现和验证状态可从正确 owner 或持久任务状态重建。",
       "证据层包括合同设计、源码、测试、安装、运行、发布、fresh task、E2E 和用户可见结果，互不冒充。",
-      "仓库膨胀治理把完成计划和历史复盘留给 Git，活动树只保留当前 source（源码）、contract（合同）、config（配置）和行为回归。"
+      "仓库膨胀治理把完成计划和历史复盘留给 Git，活动树只保留当前 source（源码）、contract（合同）、config（配置）和行为回归。",
+      "Sync-AgentsHotMirror.ps1 只接受固定 E:\\.agents 与 G:\\80_Backup\\ControlPlane\\.agents，先验证 G 卷 Healthy/OK，再取得 Global\\CodexAgentsHotMirrorLock，最多等待 30 分钟。",
+      "镜像使用有界 robocopy /MIR、/COPY:DAT、/DCOPY:DAT、/XJ、/R:2、/W:3、/MT:8；排除 .git、临时目录、pytest cache 和 Codex Remote 附件，退出码 >=8 才失败。",
+      "成功镜像写 agents.hot-mirror-status.v1，记录时间、固定源/目标、模式、robocopy exit、source Git HEAD、dirty entry count 与排除项；状态文件不证明计划任务已安装。",
+      "Install-AgentsHotMirrorTask.ps1 的可选任务为每日20:30、StartWhenAvailable=true（错过补跑）、Limited交互用户、wscript无窗口、IgnoreNew、3次/10分钟重试、2小时上限且WakeToRun=false；它明确不写H盘。"
     ],
     flow: [
       "判断跨控制面事实是否真的会改变当前决定",
       "先读取视图 metadata，再按影响展开 owner 正文",
       "分别调用 Git、机器或业务 provider 取得动态事实",
       "将每个结论标记为活动事实、设计原则或解释示例",
+      "需要保护未提交 .agents 工作时，先只读检查 G 卷、任务与状态回执；执行镜像时只用固定路径和互斥锁",
       "按证据层记录 PASS、FAIL、BLOCK、SKIP 或 unknown",
+      "恢复时先从 PRIVATE Git 取得提交历史，再从经过核对的 G 镜像恢复当前工作树文件；不复制热备中的 .git",
       "压缩或交接后重新读取规则、Owner、工作树和关键证据，而不是只信摘要"
     ],
     concepts: [
       { term: "三控制面", explanation: ".agents 管 Agent，Git 控制面管仓库，PCConfig 管机器；具体项目仍独立拥有业务。" },
       { term: "Durable state", explanation: "让任务在压缩、崩溃或交接后仍能从正确来源恢复目标和当前状态，不保存隐藏推理。" },
       { term: "Evidence layer", explanation: "每层只证明自己的事。代码存在不证明安装，部署成功不证明用户路径可用。" },
-      { term: "Unknown", explanation: "没有当前证据时的诚实状态，不是自动 PASS，也不等于永久不可用。" }
+      { term: "Unknown", explanation: "没有当前证据时的诚实状态，不是自动 PASS，也不等于永久不可用。" },
+      { term: "Hot mirror status（热镜像状态回执）", explanation: "记录一次固定 E→G 工作树镜像的时间、Git HEAD、dirty 数、排除项和 robocopy 结果；不是 Git 提交或完整备份证明。" }
     ],
     boundaries: [
       "普通单项目问题不机械进入三控制面全景",
       "兼容 ID 不会恢复已退役的第四基座或中央个人上下文",
       "checkpoint 不保存秘密、隐藏推理和无关私人内容",
-      "测试、receipt 和状态字段不能代替用户看得见的产品验收"
+      "测试、receipt 和状态字段不能代替用户看得见的产品验收",
+      "热镜像不复制 .git、临时目录和附件，不触碰 H 冷备，也不创建第二套规则权威",
+      "固定 /MIR 只用于 allowlisted source/destination；恢复前核对镜像时间与 source HEAD，不能把陈旧镜像覆盖当前源码"
     ],
     failures: [
       { condition: "视图 owner 或 primary 缺失", response: "失败关闭跨控制面结论，修复正确 owner 的 catalog 或路径。" },
       { condition: "摘要与现场冲突", response: "现场规则、Owner、Git 状态和当前源码优先；摘要只保留为定位线索。" },
-      { condition: "证据过期", response: "降为历史或 unknown，重新执行最小必要 read-back。" }
+      { condition: "证据过期", response: "降为历史或 unknown，重新执行最小必要 read-back。" },
+      { condition: "G 卷不健康、不可用或镜像互斥超时", response: "不运行 robocopy、不切换任何指针；保留 E 源和既有 G 镜像，报告精确门禁。" },
+      { condition: "robocopy 返回 8 或更高", response: "判本次镜像失败，保留源工作树和日志；不要用状态文件或旧镜像冒充成功。" },
+      { condition: "每日任务未安装或状态回执陈旧", response: "只报告 source/合同和历史镜像存在，自动热备状态保持 Unknown；需要时另行安装并回读任务。" }
     ],
     sources: [
       { path: "E:\\.agents\\docs\\contracts\\agents.four-base-decision-context.md", role: "三控制面架构和渐进上下文合同" },
       { path: "E:\\.agents\\tools\\Get-FourBaseDecisionContext.ps1", role: "零正文 metadata 视图入口" },
-      { path: "E:\\.agents\\config\\repository-bloat-budget.json", role: "活动树大小、历史路径和例外退出条件" }
+      { path: "E:\\.agents\\config\\repository-bloat-budget.json", role: "活动树大小、历史路径和例外退出条件" },
+      { path: "E:\\.agents\\tools\\Sync-AgentsHotMirror.ps1", role: "固定E→G镜像、卷健康、互斥、robocopy边界与状态回执" },
+      { path: "E:\\.agents\\tools\\Install-AgentsHotMirrorTask.ps1", role: "每日20:30、错过补跑、无窗口、Limited和有界重试任务合同" },
+      { path: "E:\\.agents\\tests\\Test-AgentsHotMirror.ps1", role: "固定路径、排除项、无H盘、任务设置与回读合同回归" }
     ],
     verification: [
       "FourBaseDecisionContext 当前验证两个视图、三个 owner、五规则闭包和无退役基座",
       "RepositoryBloatGovernance 单独验证活动树预算和禁止历史副本",
+      "Test-AgentsHotMirror.ps1 验证固定E/G路径、/MIR与.git排除、任务网络独立/错过补跑/3次重试/不唤醒/2小时上限、隐藏launcher与不触碰H。",
+      "2026-08-31T21:24:42Z只读现场：G卷Healthy/OK，历史status存在；未观察到AgentsHotMirror-Daily任务，最后状态为2026-07-30、HEAD=c96dbf1、dirty=21，因此当前安装/最新覆盖保持Unknown。",
       "Cross-control coverage（跨控制面覆盖）在项目当前快照中闭合且无 finding；以后新增合同仍必须单独回归",
       `当前 source 的 fresh full Local 结果见验证矩阵；它只证明当前施工回归，不替代 ${panelSnapshot.authority.releaseId} frozen release identity。`
     ],
-    relation: "这个模块把其他五个模块的结论放进正确证据层，并保证长任务和更新快照时不会靠记忆续写。"
+    relation: "这个模块把其他五个模块的结论放进正确证据层，并保证长任务和更新快照时不会靠记忆续写；工作树热镜像只补充未提交文件的恢复层，不替代PRIVATE Git历史、E release或PCConfig的机器备份。"
   }
 ];
 

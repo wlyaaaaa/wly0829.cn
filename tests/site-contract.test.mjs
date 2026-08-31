@@ -2149,6 +2149,25 @@ test("authorization content explains PUBLIC private companion migration as a rec
   assert.ok(guide.sections.some((section) => section.title.includes("私有伴随材料") && section.items.length >= 6));
 });
 
+test(".agents exposes its G-drive working-tree hot mirror without confusing Git or cold backup", async () => {
+  const context = modules.find((item) => item.slug === "context-evidence");
+  const text = JSON.stringify({ project: { currentState: project.currentState, principles: project.productPrinciples, usage: project.usageExamples, components: project.components }, context });
+  const normalizedText = text.replaceAll("\\\\", "\\");
+  for (const expected of [
+    "E:\\.agents", "G:\\80_Backup\\ControlPlane\\.agents", "AgentsHotMirror-Daily", "Global\\CodexAgentsHotMirrorLock",
+    "robocopy", "/MIR", ".git", "dirty", "agents.hot-mirror-status.v1", "20:30", "StartWhenAvailable", "WakeToRun=false", "3次", "2小时", "H 冷备"
+  ]) assert.ok(normalizedText.includes(expected), `.agents hot mirror omits: ${expected}`);
+  assert.match(text, /PRIVATE Git.*提交历史[\s\S]{0,180}G.*当前工作树/);
+  assert.match(text, /未观察到 AgentsHotMirror-Daily|没有观察到 AgentsHotMirror-Daily/);
+  assert.match(text, /2026-07-30[\s\S]{0,160}HEAD=c96dbf1[\s\S]{0,80}dirty=21/);
+  assert.match(text, /不能声称.*自动热备|自动热备.*Unknown/);
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const paths = registry.projects.find((item) => item.id === "agents").impact_sources.flatMap((source) => source.paths || []);
+  for (const expected of ["tools/Sync-AgentsHotMirror.ps1", "tools/Install-AgentsHotMirrorTask.ps1", "tests/Test-AgentsHotMirror.ps1"]) {
+    assert.ok(paths.includes(expected), `.agents hot mirror source missing from Registry: ${expected}`);
+  }
+});
+
 test("the rules workbench exposes exactly five verified current E-release rules", () => {
   assert.match(rulesSnapshot.releaseId, /^E\d+$/);
   assert.equal(rulesSnapshot.generation, rulesSnapshot.releaseId);

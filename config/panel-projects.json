@@ -116,6 +116,9 @@
             "tools/Get-FourBaseDecisionContext.ps1",
             "tools/Invoke-EAgentRulesRelease.ps1",
             "tools/Invoke-EAgentRulesFastRelease.ps1",
+            "tools/Sync-AgentsHotMirror.ps1",
+            "tools/Install-AgentsHotMirrorTask.ps1",
+            "tools/Sync-AgentsHotMirror-Hidden.vbs",
             "tools/codex_native_economy_gate.py",
             "tools/codex_native_economy_runtime.py"
           ]
@@ -141,6 +144,7 @@
             "tests/Test-ExecutionOwnerRegistry.ps1",
             "tests/Test-AttentionFidelityPolicy.ps1",
             "tests/Test-AgentRuntimeCompatibility.ps1",
+            "tests/Test-AgentsHotMirror.ps1",
             "tools/Test-ControlPlaneContractCoverage.ps1"
           ]
         }
