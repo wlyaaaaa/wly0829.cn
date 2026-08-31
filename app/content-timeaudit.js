@@ -578,7 +578,7 @@ export const timeAuditModules = [
     searchAliases: ["刚才复制的内容被覆盖了怎么找回", "怎样搜索以前复制过的网址", "剪贴板历史怎样再次复制", "复制过的文件路径在哪里找", "剪贴板历史采集器是不是还活着", "怎样增量读取电脑剪贴板历史"],
     searchProjection: {
       intents: ["找回被下一次复制覆盖的内容", "按日期类型或关键词搜索复制历史", "把历史记录再次复制到当前剪贴板", "检查剪贴板采集与近线备份状态", "让获准消费者从 checkpoint 继续增量读取"],
-      entities: ["WM_CLIPBOARDUPDATE", "clipboard_history.sqlite3", "events / blobs / content_fts", "PersonalOS 剪贴板历史查看器", "timeaudit.clipboard-export.response.v1", "TimeAudit_ClipboardCollector / Watchdog / NearlineBackup"],
+      entities: ["WM_CLIPBOARDUPDATE", "clipboard_history.sqlite3", "events / blobs / content_fts", "本机剪贴板历史查看器", "timeaudit.clipboard-export.response.v1", "TimeAudit_ClipboardCollector / TimeAudit_ClipboardWatchdog / TimeAudit_ClipboardNearlineBackup"],
       relations: ["Windows 消息事件进入 append-only 事件表", "相同 SHA-256 只复用 blob 而不合并复制事件", "FTS5 为桌面查看器提供全文搜索", "restore marker 把再次复制事件连接回原事件", "adapter 按 observed_at_utc 与 event_id checkpoint 增量导出"],
       failureRecovery: ["锁定或不支持的格式只写无 payload 原因事件", "陈旧无正文 heartbeat 交给独立 Watchdog 恢复", "FTS5 或 schema 不匹配时失败关闭", "SQLite Online Backup 校验后只恢复到空目录", "任务结果或备份根存在不冒充端到端恢复"]
     },
@@ -632,7 +632,8 @@ export const timeAuditModules = [
       "活动私密库在 E 盘持久数据层，G 盘只是近线恢复副本且不是查询依赖；网页、Git、日志和浏览器不接触原始正文、hash、FTS 或凭据。",
       "当前合同只覆盖 Windows 电脑；手机来源是另一 source instance（来源实例），不能在 collector 内猜测合并。",
       "clipboard_sequence 只在同一 Windows clipboard station（剪贴板站）相邻事实中解释，不能当作跨启动、会话或设备的全局顺序。",
-      "增量合同存在不等于下游消费者已上线；本轮只验证无 payload 的 adapter 形状，没有验证实际下游提交。"
+      "增量合同存在不等于下游消费者已上线；本轮只验证无 payload 的 adapter 形状，没有验证实际下游提交。",
+      "`PersonalOS.ClipboardHistory.RestoreV1` 与合同文件名只保留现有协议/lineage 标识，不表示已退役中央系统仍是当前产品或消费者。"
     ],
     failures: [
       { condition: "来源明确禁止、格式不支持、内容超限或剪贴板暂时锁定", response: "保存无 payload 的 skip/gap 原因；不把缺失内容猜回数据库。" },
