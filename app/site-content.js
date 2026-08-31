@@ -6,13 +6,7 @@ import {
   socialLinks
 } from "./content-core.js";
 import { excludedSkills, skills } from "./content-skills.js";
-import {
-  systemBoundaries,
-  systemJourneys,
-  systemOwners,
-  systemRelations,
-  systemSearchEntries
-} from "./system-content.js";
+import { systemSearchEntries } from "./system-content.js";
 import { projectContentPackages } from "./project-content-index.generated.js";
 import panelRegistry from "../config/panel-projects.json" with { type: "json" };
 
@@ -66,10 +60,6 @@ export {
   site,
   skills,
   socialLinks,
-  systemBoundaries,
-  systemJourneys,
-  systemOwners,
-  systemRelations,
   systemSearchEntries
 };
 
@@ -98,6 +88,7 @@ export function projectEntryForPath(pathname) {
 
 export const routePaths = [
   "/",
+  "/projects",
   ...projectCatalog.flatMap((entry) => [
     entry.project.route,
     ...entry.modules.map((item) => `${entry.project.route}/${item.slug}`)
@@ -113,8 +104,14 @@ export function routeMeta(pathname) {
   const path = normalizePath(pathname);
   if (path === "/") {
     return {
+      title: `个人 AI 协作系统｜${site.name}`,
+      description: "吴乐阳的个人 AI 协作系统：把通用 AI 能力与全部项目、规则、Skills、资料入口、电脑现场、验证和恢复连接起来，协助真实工作持续完成。"
+    };
+  }
+  if (path === "/projects") {
+    return {
       title: `项目｜${site.name}`,
-      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI协助学习方法、Codex Remote、个人健康证据与安全决策、现行规则、Skills 与真实缺口。"
+      description: "吴乐阳当前已完成公开产品介绍的项目目录；全部 GitHub 项目资产由 GitHub 总索引安全聚合。"
     };
   }
 
@@ -145,8 +142,8 @@ export function routeMeta(pathname) {
   }
   if (path === "/system") {
     return {
-      title: `系统｜${site.name}`,
-      description: "查看 .agents、PCConfig、GitHub 总索引、各项目与 Skills 之间真实的责任、事实和使用关系。"
+      title: `个人 AI 协作系统｜${site.name}`,
+      description: "兼容入口：个人 AI 协作系统首页已迁移到网站根路径。"
     };
   }
   if (path === "/search") {

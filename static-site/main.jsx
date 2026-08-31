@@ -486,6 +486,102 @@ function initializeProjectReadingLayers() {
   activate(idFromHash());
 }
 
+function initializeSystemHome() {
+  const home = document.querySelector(".system-home");
+  if (!home) return;
+  const tabs = Array.from(home.querySelectorAll("[data-system-scenario-tab]"));
+  const panels = Array.from(home.querySelectorAll("[data-system-scenario-panel]"));
+  const nodes = Array.from(home.querySelectorAll("[data-system-dependency-node]"));
+  const relations = Array.from(home.querySelectorAll("[data-system-relation]"));
+  const detailPanel = home.querySelector("[data-system-node-detail-panel]");
+  const ids = tabs.map((tab) => tab.dataset.systemScenarioTab);
+  if (!tabs.length || !panels.length) return;
+
+  function idFromHash() {
+    const match = window.location.hash.match(/^#system-scenario-(.+)$/);
+    return match?.[1] || ids[0];
+  }
+
+  function restoreScroll(previousY) {
+    let frames = 3;
+    const restore = () => {
+      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo({ top: Math.min(previousY, maxY), behavior: "instant" });
+      frames -= 1;
+      if (frames > 0) window.requestAnimationFrame(restore);
+    };
+    restore();
+  }
+
+  function activateScenario(requestedId, { updateUrl = false, focus = false } = {}) {
+    const previousY = window.scrollY;
+    const id = ids.includes(requestedId) ? requestedId : ids[0];
+    for (const tab of tabs) {
+      const active = tab.dataset.systemScenarioTab === id;
+      tab.classList.toggle("is-current", active);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && (updateUrl || focus)) {
+        tab.scrollIntoView({ block: "nearest", inline: "nearest" });
+        if (focus) tab.focus({ preventScroll: true });
+      }
+    }
+    for (const panel of panels) {
+      const active = panel.dataset.systemScenarioPanel === id;
+      panel.hidden = !active;
+      panel.classList.toggle("is-current", active);
+    }
+    for (const node of nodes) {
+      const used = (node.dataset.systemScenarios || "").split(/\s+/).includes(id);
+      node.classList.toggle("is-used", used);
+      node.querySelector("[data-system-node-state]").textContent = used ? "本次使用" : "本次未用";
+    }
+    for (const relation of relations) {
+      const used = (relation.dataset.systemScenarios || "").split(/\s+/).includes(id);
+      relation.classList.toggle("is-used", used);
+    }
+    if (updateUrl) {
+      const next = new URL(window.location.href);
+      next.hash = `system-scenario-${id}`;
+      window.history.replaceState({}, "", `${next.pathname}${next.search}${next.hash}`);
+    }
+    if (updateUrl || focus) restoreScroll(previousY);
+  }
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activateScenario(tab.dataset.systemScenarioTab, { updateUrl: true }));
+    tab.addEventListener("keydown", (event) => {
+      if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabs.length - 1;
+      activateScenario(tabs[nextIndex].dataset.systemScenarioTab, { updateUrl: true, focus: true });
+    });
+  });
+
+  for (const node of nodes) {
+    const button = node.querySelector("[data-system-node-select]");
+    button?.addEventListener("click", () => {
+      for (const candidate of nodes) candidate.classList.toggle("is-selected", candidate === node);
+      if (!detailPanel) return;
+      detailPanel.querySelector("strong").textContent = node.dataset.systemNodeTitle || "节点说明";
+      detailPanel.querySelector("p").textContent = node.dataset.systemNodeDetail || "";
+      const sourceLink = node.querySelector("a[href]");
+      const targetLink = detailPanel.querySelector("[data-system-node-detail-link]");
+      if (sourceLink && targetLink) {
+        targetLink.href = sourceLink.href;
+        targetLink.innerHTML = sourceLink.innerHTML;
+      }
+    });
+  }
+
+  window.addEventListener("hashchange", () => activateScenario(idFromHash()));
+  activateScenario(idFromHash());
+}
+
 function createButton(className, label, text) {
   const button = document.createElement("button");
   button.type = "button";
@@ -828,6 +924,7 @@ initializeHeader();
 initializeRulesWorkbench();
 initializeSkillCategories();
 initializeProjectReadingLayers();
+initializeSystemHome();
 initializeFlowField();
 initializeDocumentPrefetch();
 initializePreservedScrollNavigation();

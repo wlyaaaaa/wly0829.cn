@@ -15,8 +15,8 @@ export const socialLinks = [
 ];
 
 export const primaryNav = [
-  { label: "项目", href: "/" },
-  { label: "系统", href: "/system" },
+  { label: "系统", href: "/" },
+  { label: "项目", href: "/projects" },
   { label: "规则", href: "/rules" },
   { label: "Skills", href: "/skills" }
 ];

@@ -256,6 +256,8 @@ export function searchScopeForPath(pathname) {
   const normalized = path === "/" ? "/" : path;
   const projectEntry = projectCatalog.find((entry) => normalized === entry.project.route || normalized.startsWith(`${entry.project.route}/`));
   if (projectEntry) return searchScopeById(`project:${projectEntry.project.slug}`);
+  if (normalized === "/") return searchScopeById("all");
+  if (normalized === "/projects") return searchScopeById("project");
   if (normalized === "/system") return searchScopeById("system");
   if (normalized === "/rules") return searchScopeById("rules");
   if (normalized === "/skills" || normalized.startsWith("/skills/")) return searchScopeById("skills");
