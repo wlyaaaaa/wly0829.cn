@@ -29,10 +29,18 @@ async function listDistFiles(root) {
   return files;
 }
 
-const sourceFiles = execFileSync("git", ["-c", "core.quotepath=false", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], {
+const sourceCandidates = execFileSync("git", ["-c", "core.quotepath=false", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], {
   cwd: projectRoot,
   windowsHide: true
 }).toString("utf8").split("\0").filter(Boolean).map((relative) => path.join(projectRoot, relative));
+const sourceFiles = (await Promise.all(sourceCandidates.map(async (file) => {
+  try {
+    return (await stat(file)).isFile() ? file : null;
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+}))).filter(Boolean);
 const findings = [];
 let distFiles = [];
 try {

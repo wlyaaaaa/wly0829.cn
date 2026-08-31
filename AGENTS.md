@@ -331,12 +331,26 @@ read-only operating panel; public presentation is secondary.
 - A targeted refresh touches only the named project. A full refresh iterates all
   enabled projects but may leave most or all files byte-identical. It is a
   revalidation request, not permission to rewrite every page.
+- Before the first fully accepted baseline release, omissions, riddle copy and
+  blind-reader product defects are construction defects, not incremental drift;
+  repair them from owning sources before publication instead of deferring them
+  to the weekly review.
+- After that baseline, an incremental refresh merges the affected new truth into
+  current owning content. It must not replace richer valid prose with a shorter,
+  older or generated snapshot; unaffected content stays byte-identical, and
+  removal requires source evidence that the old product meaning is superseded.
 - This is a continuously maintainable panel with on-demand AI refreshes plus
   one owner-authorized weekly material-drift review. The weekly task reads
   current project, Rule and Skill evidence after governance, remains a no-op
   when the page would stay truthful, and updates only the affected snapshot
   when a real change would alter reader understanding. It is not continuous
   synchronization and does not justify a watcher, daemon or duplicate writer.
+- The weekly review closes Project, Rules and Skills pages through their own
+  Owners first, then derives whether System still tells the truth. Git history,
+  diffs and changed paths identify candidates only. When roles, use, boundaries,
+  entry points and reader decisions are unchanged, System remains byte-identical.
+  A `manual_owner_only` page without a fresh explicit owner request keeps its
+  last verified published snapshot; weekly review does not manufacture newer facts.
 - The published site represents the last verified and released state. E release
   identity is the rule-version boundary; the weekly review does not make every
   displayed fact live, and the site must not claim background freshness beyond

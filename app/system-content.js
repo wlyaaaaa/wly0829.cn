@@ -38,11 +38,11 @@ export const systemSearchEntries = [
   ...systemProjectDomains.map((domain) => ({
     type: "系统版图",
     title: domain.title,
-    detail: `${domain.summary} ${domain.assets.map((asset) => asset.title).join("、")}`,
+    detail: `${domain.summary} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join("、")}`,
     href: `/#system-project-domain-${domain.id}`,
     aliases: [domain.ordinaryRequest],
-    compactSearch: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.map((asset) => asset.title).join(" ")}`,
-    search: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.map((asset) => `${asset.repo || ""} ${asset.role}`).join(" ")}`
+    compactSearch: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join(" ")}`,
+    search: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => `${asset.repo || ""} ${asset.role}`).join(" ")}`
   })),
   ...systemProjectDomains.flatMap((domain) => domain.assets
     .filter((asset) => asset.href.includes("/github-index/repository-ledger"))
@@ -60,11 +60,11 @@ export const systemSearchEntries = [
   ...systemDependencyNodes.map((node) => ({
     type: "系统组成",
     title: node.title,
-    detail: `${node.subtitle}。${node.detail}`,
-    href: node.href.startsWith("#") ? `/${node.href}` : node.href,
+    detail: node.searchDetail || `${node.subtitle}。${node.detail}`,
+    href: (node.searchHref || node.href || node.links[0].href).startsWith("#") ? `/${node.searchHref || node.href || node.links[0].href}` : (node.searchHref || node.href || node.links[0].href),
     aliases: node.searchAliases || [],
-    compactSearch: `${node.subtitle} ${node.detail}`,
-    search: `${node.lane} ${node.subtitle} ${node.detail}`
+    compactSearch: node.compactSearch || `${node.subtitle} ${node.detail}`,
+    search: node.searchText || `${node.lane} ${node.subtitle} ${node.detail}`
   })),
   ...systemEvidenceLayers.map((layer) => ({
     type: "验证层",

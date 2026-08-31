@@ -47,7 +47,9 @@ import {
   routeMeta,
   routePaths,
   rulesSnapshot,
-  skills
+  site,
+  skills,
+  socialLinks
 } from "../app/site-content.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -135,11 +137,14 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-panel\.is-open,[\s\S]*?display:\s*block;/);
   assert.match(styleSource, /\.header-navigation\.is-open\s*\{\s*display:\s*block;/);
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.header-inner\s*\{\s*grid-template-columns:\s*max-content minmax\(0,1fr\) auto auto;[\s\S]*?\.primary-nav\s*\{\s*grid-column:\s*2;\s*justify-content:\s*center;/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.mobile-search-button\s*\{\s*grid-column:\s*3;[\s\S]*?\.menu-button\s*\{\s*grid-column:\s*4;/);
 });
 
 test("the desktop global search is geometrically centered without changing mobile search", async () => {
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.match(styleSource, /@media \(min-width: 1181px\)[\s\S]*?\.desktop-search\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?left:\s*50%;[\s\S]*?width:\s*clamp\(360px, 32vw, 520px\);[\s\S]*?transform:\s*translate\(-50%, -50%\)/);
+  assert.match(styleSource, /@media \(min-width: 1181px\) and \(max-width: 1680px\)[\s\S]*?\.desktop-search\s*\{\s*width:\s*360px;[\s\S]*?\.social-link span\s*\{[\s\S]*?clip:\s*rect\(0, 0, 0, 0\)/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.desktop-search\s*\{\s*display:\s*none;/);
 });
 
@@ -331,18 +336,27 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /clicks must\s+not show a spinner, skeleton or blank state/);
   assert.match(projectRules, /Likely transitions must issue\s+non-blocking prefetch hints before interaction/);
   assert.match(projectRules, /native navigation never\s+waits for a hint to finish/);
+  assert.match(projectRules, /closes Project, Rules and Skills pages[\s\S]{0,220}then derives whether System still tells the truth/);
+  assert.match(projectRules, /Git history,[\s\S]{0,120}identify candidates only/);
+  assert.match(projectRules, /System remains byte-identical/);
+  assert.match(projectRules, /manual_owner_only[\s\S]{0,180}keeps its[\s\S]{0,120}last verified published snapshot/);
+  assert.match(projectRules, /blind-reader product defects are construction defects,[\s\S]{0,180}not incremental drift/);
+  assert.match(projectRules, /must not replace richer valid prose with a shorter,[\s\S]{0,180}snapshot/);
 });
 
-test("the System source pack explains generic AI productivity without platform ownership claims", async () => {
-  const sourcePack = await readFile(path.join(projectRoot, "docs", "content", "system-home-source-pack.md"), "utf8");
-  for (const capability of ["自然语言理解", "推理", "搜索", "视觉和文档理解", "工具与代码执行", "浏览器操作", "并行协作"]) {
-    assert.ok(sourcePack.includes(capability), `System source pack omits generic capability: ${capability}`);
+test("the deployed System content explains generic AI productivity and long-running mechanisms", () => {
+  const systemText = JSON.stringify({ systemHomeHero, systemScenarios, systemDependencyNodes, systemProjectDomains, systemRuleStories, systemSkillFamilies });
+  for (const capability of ["理解自然语言", "推理", "研究", "图片与文档", "使用工具", "代码", "浏览器", "并行协作"]) {
+    assert.ok(systemText.includes(capability), `System content omits generic capability: ${capability}`);
   }
-  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "10 个项目", "5 份活动规则", "27 个 Skills"]) {
-    assert.ok(sourcePack.includes(phrase), `System source pack omits product boundary: ${phrase}`);
+  for (const phrase of ["外部生产力", "不是个人项目开发出来的基础智能", "个人 AI 协作系统", "全部项目", "5 份现行规则", "自然语言能力入口"]) {
+    assert.ok(systemText.includes(phrase), `System content omits product boundary: ${phrase}`);
   }
-  for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
-  for (const item of skills) assert.ok(sourcePack.includes(`\`${item.slug}\``), `System source pack omits Skill: ${item.slug}`);
+  assert.equal(systemRuleStories.length, 5);
+  assert.equal(systemSkillFamilies.flatMap((family) => family.members).length, skills.length);
+  for (const entry of projectCatalog) assert.ok(systemText.includes(entry.project.route), `System content omits project entry: ${entry.project.slug}`);
+  for (const item of skills) assert.ok(systemText.includes(`/skills/${item.slug}`), `System content omits Skill: ${item.slug}`);
+  for (const phrase of ["施工责任（Execution Owner）", "重叠时只停止对应写入", "登记表修订号", "连同检查点正式移交", "长任务状态与断点接续", "满足同一完整验收时", "自造复杂度导致失败时先删除或绕开"]) assert.ok(systemText.includes(phrase), `System content omits long-running mechanism: ${phrase}`);
   const documentMaterialsSurface = JSON.stringify({
     asset: systemProjectDomains.flatMap((domain) => domain.assets).find((asset) => asset.id === "formal-materials"),
     node: systemDependencyNodes.find((node) => node.id === "document-materials-skill"),
@@ -355,8 +369,7 @@ test("the System source pack explains generic AI productivity without platform o
   const hookText = JSON.stringify(hookNode);
   assert.match(hookText, /Hook.*身份.*规则/s, "System omits the runtime Hook identity path");
   assert.match(hookText, /创建协作者前再复核/, "System omits the pre-spawn Hook check");
-  assert.match(sourcePack, /Hook.*身份.*活动规则/s, "System source pack omits Hook behavior");
-  assert.doesNotMatch(sourcePack, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System source pack must stay model, vendor and runtime-wrapper neutral");
+  assert.doesNotMatch(systemText, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System content must stay model, vendor and runtime-wrapper neutral");
 });
 
 test("long pages expose one unobtrusive back-to-top control", async () => {
@@ -366,7 +379,26 @@ test("long pages expose one unobtrusive back-to-top control", async () => {
   assert.match(pageSource, /data-back-to-top[\s\S]{0,180}回到页面顶部/);
   assert.match(runtimeSource, /function initializeBackToTop\(\)[\s\S]*?window\.scrollTo\(\{ top: 0,[\s\S]*?behavior:/);
   assert.match(runtimeSource, /window\.scrollY < Math\.max\(520, window\.innerHeight \* 0\.75\)/);
+  assert.match(runtimeSource, /const footer = document\.querySelector\("\.site-footer"\)/);
+  assert.match(runtimeSource, /const footerVisible = footer[\s\S]{0,160}button\.hidden =[\s\S]{0,160}\|\| footerVisible/);
   assert.match(styleSource, /\.back-to-top:hover,[\s\S]{0,180}border-color:\s*var\(--green\)/);
+});
+
+test("the global footer exposes useful destinations instead of decorative repetition", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(pageSource, /function SiteFooter\(\)/);
+  assert.match(pageSource, /从总览进入真正拥有内容的页面/);
+  assert.match(pageSource, /这是最后一次验证并发布的只读快照，不是后台实时控制台/);
+  assert.match(pageSource, /<SiteFooter \/><BackToTopButton \/>/);
+  const rootHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  for (const item of primaryNav) assert.ok(rootHtml.includes(canonicalUrl(item.href)), `Footer omits full internal URL for ${item.label}`);
+  for (const item of socialLinks) assert.ok(rootHtml.includes(item.href), `Footer omits external destination for ${item.label}`);
+  assert.ok(rootHtml.includes(`${site.url}/`), "Footer omits the canonical site URL");
+  assert.match(styleSource, /\.site-footer\s*\{[\s\S]*?border-top:\s*2px solid var\(--green\)/);
+  assert.match(styleSource, /\.site-footer-links > a > code[\s\S]*?overflow-wrap:\s*anywhere/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.site-footer-inner\s*\{\s*grid-template-columns:\s*minmax\(0,1fr\)/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.system-directories\s*\{\s*padding-bottom:\s*24px;/);
 });
 
 test("the authoritative desktop scale baseline follows the older compact block", async () => {
@@ -385,8 +417,8 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 20);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 42);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 32);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 64);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 64);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -473,6 +505,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   const compactSystemCases = [
     ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
     ["仓库公开性分支远端工作树同步状态怎么确认", "系统组成", "/skills/project-entry-gate/"],
+    ["多个 AI 同时改一个文件怎么办", "系统组成", "/projects/agents/authorization-owner/"],
     ["Hook 创建子代理前核对身份", "系统组成", "/skills/native-economy-routing/"],
     ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"],
     ["源码或构建通过能不能证明网页发布", "验证层", "/#evidence-test"]
@@ -1759,6 +1792,13 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(contract, /一个阶段可以是一天或时间段/);
   assert.match(contract, /manual_owner_only/);
   assert.match(contract, /Source、材料、反馈、规则、Skill.*不能触发.*网站任务/s);
+  assert.match(contract, /先让项目、Rules 和 Skills[\s\S]{0,180}本轮已验证、可发布的状态/);
+  assert.match(contract, /manual_owner_only[\s\S]{0,160}保留上次已验证快照/);
+  assert.match(contract, /Git 提交范围、变更路径和发布记录只用来指出“哪里值得看”/);
+  assert.match(contract, /System 保持字节不变/);
+  assert.match(contract, /不需要 watcher（文件监视器）、数据库、后台同步服务或第二个叙述生成器/);
+  assert.match(contract, /首次完整版本发布前[\s\S]{0,260}属于基线建设缺陷/);
+  assert.match(contract, /不用较短摘要、旧字段或生成快照覆盖已经完整、仍然正确的内容/);
 
   const tempRoot = await mkdtemp(path.join(tmpdir(), "wly-ai-refresh-test-"));
   try {
@@ -2321,6 +2361,17 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(runtimeSource, /function initializeProjectReadingLayers\(\)/);
   assert.match(runtimeSource, /function initializeSystemHome\(\)/);
+  assert.match(pageSource, /data-system-case-scroll-indicator[\s\S]{0,120}左右滑动查看更多/);
+  assert.match(runtimeSource, /function updateScenarioScrollIndicator\(\)/);
+  assert.match(runtimeSource, /--scenario-scroll-thumb-width/);
+  assert.match(runtimeSource, /tabRail\?\.addEventListener\("scroll", updateScenarioScrollIndicator/);
+  assert.match(styleSource, /\.system-case-scroll-indicator\s*\{[\s\S]*?min-height:\s*28px;[\s\S]*?\.system-case-scroll-indicator i\s*\{[\s\S]*?--scenario-scroll-thumb-left/);
+  assert.match(runtimeSource, /function initializeSystemSectionNavigation\(\)/);
+  assert.match(runtimeSource, /function targetReached\(index\)/);
+  assert.match(runtimeSource, /window\.history\.replaceState\(window\.history\.state,[\s\S]{0,180}window\.scrollTo\(\{ top: targetTop, behavior: "instant" \}\)/);
+  assert.match(runtimeSource, /section\.getBoundingClientRect\(\)\.top <= readingLine \+ 2/);
+  assert.match(runtimeSource, /Math\.ceil\(window\.scrollY \+ sections\[index\]\.getBoundingClientRect\(\)\.top - readingLine\)/);
+  assert.match(runtimeSource, /window\.addEventListener\("scrollend", \(\) => releaseClickLock\(\)\)/);
   assert.match(runtimeSource, /function initializeSkillCategories\(\)/);
   assert.match(runtimeSource, /function initializeSearchResultsPage\(\)/);
   assert.match(runtimeSource, /function normalizedSearchScope\(value\)/);
@@ -2333,7 +2384,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
   assert.match(styleSource, /\.search-results-page h1\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*word-break:\s*break-word;/);
-  assert.match(pageSource, /node\.href === "\/skills" \|\| node\.href\.startsWith\("\/skills\/"\)/);
+  assert.match(pageSource, /primaryHref === "\/skills" \|\| primaryHref\.startsWith\("\/skills\/"\)/);
   assert.match(runtimeSource, /if \(id\) activateScenario\(id\);/);
   assert.match(runtimeSource, /activateScenario\(idFromHash\(\) \|\| ids\[0\]\)/);
 
@@ -2346,11 +2397,28 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const scenario of systemScenarios) assert.ok(systemHtml.includes(`id="system-scenario-${scenario.id}"`), `System scenario missing: ${scenario.id}`);
   for (const node of systemDependencyNodes) {
     assert.ok(systemHtml.includes(`id="system-node-${node.id}"`), `System node missing: ${node.id}`);
-    if (node.href.startsWith("/")) {
-      const pathname = new URL(node.href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
-      assert.ok(routePaths.includes(pathname), `System node ${node.id} points to a missing route: ${node.href}`);
+    for (const href of [...(node.links?.map((item) => item.href) || [node.href]), node.searchHref].filter(Boolean)) {
+      if (href.startsWith("/")) {
+        const pathname = new URL(href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
+        assert.ok(routePaths.includes(pathname), `System node ${node.id} points to a missing route: ${href}`);
+      }
     }
   }
+  const systemNodeIds = new Set(systemDependencyNodes.map((node) => node.id));
+  assert.equal(systemDependencyNodes.length, 48, "System composition must retain all 48 independently reviewed responsibility cards");
+  for (const expected of ["direct-input", "mixed-file-intake", "mojibake-repair", "execution-owner", "durable-task-state", "message-ai-gateway", "work-delivery", "ai-cli-entry", "local-ai-runtime", "llm-backend-job", "cross-device-files", "remote-workstation", "wechat-bridge", "wechat-direct", "companion-laptop", "career-development"]) assert.ok(systemNodeIds.has(expected), `System composition omits necessary node: ${expected}`);
+  for (const duplicate of ["all-projects", "document-output-choice", "ai-runtime-entry", "cross-device-workstation", "wechat"]) assert.ok(!systemNodeIds.has(duplicate), `System composition retains duplicate/non-component card: ${duplicate}`);
+  assert.ok(systemScenarios.every((scenario) => !Object.hasOwn(scenario, "dependencyIds")), "System scenarios must not retain dead cross-section highlight dependencies");
+  assert.doesNotMatch(JSON.stringify(systemScenarios.map((scenario) => scenario.systems)), /材料库|媒体库/, "Scenario contracts must name direct originals instead of imaginary material libraries");
+  assert.equal(systemDependencyNodes.find((node) => node.id === "materials")?.title, "位置未知时的非媒体原件查找");
+  assert.match(systemDependencyNodes.find((node) => node.id === "work-delivery")?.detail || "", /质量未就绪时不生成正式 Office 成品/);
+  assert.match(JSON.stringify(systemRuleStories.find((story) => story.id === "intent-to-capability")), /现有或原生入口已经满足时[\s\S]*不增加第二套适配器[\s\S]*自造复杂度导致失败时先删除或绕开/);
+  assert.doesNotMatch(systemHtml, /data-system-scenarios=|data-system-node-state|本次使用|本次未用|上方场景会用到|其他场景按需使用/);
+  assert.doesNotMatch(runtimeSource, /node\.classList\.toggle\("is-used"/);
+  assert.match(styleSource, /\.system-dependency-node\s*\{[^}]*border:\s*2px solid var\(--green\);[^}]*background:\s*var\(--surface-green\);/);
+  assert.match(styleSource, /data-node-mod-4="2"[\s\S]{0,180}grid-column:\s*span 6/);
+  assert.match(styleSource, /data-node-mod-3="2"[\s\S]{0,180}grid-column:\s*span 3/);
+  assert.match(styleSource, /data-node-mod-2="1"[\s\S]{0,180}grid-column:\s*1\s*\/\s*-1/);
   for (const layer of systemEvidenceLayers) assert.ok(systemHtml.includes(layer.title), `System evidence layer missing: ${layer.id}`);
   for (const item of systemDirectoryIntroductions) assert.ok(systemHtml.includes(`id="system-directory-${item.id}"`), `System directory intro missing: ${item.id}`);
   assert.equal(systemRuleStories.length, 5);
@@ -2373,7 +2441,13 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const expected of ["48", "27", "21", "45", "3"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
   const workDeliveryAsset = systemProjectAssets.find((asset) => asset.id === "work-delivery-copilot");
   assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility }, { title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE" });
+  for (const [assetId, repo] of [["ai-workbench-playbook", "codex-app-power-user-playbook"], ["message-ai-gateway", "OpenClawGateway"], ["local-ai-runtime", "rtx5090d-ollama-agent-bundle"], ["human-alignment-dataset", "human-alignment-dataset-001"]]) {
+    assert.equal(systemProjectAssets.find((asset) => asset.id === assetId)?.repo, repo, `System atlas hides public repository identity: ${assetId}`);
+    assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === assetId)?.sourceIdentity, `repo:${repo}`, `System source map treats public repository as private digest: ${assetId}`);
+  }
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "formal-materials")?.sourceIdentity, "sha256:d7ee4166428ce9693707b475e930a74b059b81610a1084eec495864ef258578d");
+  assert.doesNotMatch(systemHtml, /项呈现基础设施|system-project-presentation-note/);
+  assert.match(systemHtml, /网站源码仓库计入总账，但不作为系统资产卡展示/);
   const atlasMappingText = [...systemProjectSourceMap].sort((left, right) => left.assetId.localeCompare(right.assetId)).map((entry) => `${entry.assetId}=${entry.sourceIdentity}`).join("\n");
   assert.equal(`sha256:${createHash("sha256").update(atlasMappingText).digest("hex")}`, systemProjectInventory.mappingSha256);
   assert.match(systemProjectInventory.mappingSha256, /^sha256:[a-f0-9]{64}$/);
@@ -2699,6 +2773,11 @@ test("the public gate allows ordinary labels and blocks a constructed credential
     const allowed = spawnSync(process.execPath, [probeScript], { cwd: probeRoot, encoding: "utf8", windowsHide: true });
     assert.equal(allowed.status, 0, allowed.stderr || allowed.stdout);
     assert.equal(JSON.parse(allowed.stdout).status, "pass");
+
+    execFileSync("git", ["add", "public-safe-labels.txt"], { cwd: probeRoot, windowsHide: true });
+    await rm(probeSource);
+    const deleted = spawnSync(process.execPath, [probeScript], { cwd: probeRoot, encoding: "utf8", windowsHide: true });
+    assert.equal(deleted.status, 0, "a tracked worktree deletion must not make the public gate read a nonexistent file");
 
     const fakeToken = `ghp_${"A".repeat(24)}`;
     await writeFile(probeSource, `${publicSafeProductAndDomainLabels.join("\n")}\n${fakeToken}\n`, "utf8");

@@ -510,9 +510,21 @@ function initializeSystemHome() {
   if (!home) return;
   const tabs = Array.from(home.querySelectorAll("[data-system-scenario-tab]"));
   const panels = Array.from(home.querySelectorAll("[data-system-scenario-panel]"));
-  const nodes = Array.from(home.querySelectorAll("[data-system-dependency-node]"));
+  const tabRail = home.querySelector(".system-case-tabs");
+  const scrollIndicator = home.querySelector("[data-system-case-scroll-indicator]");
   const ids = tabs.map((tab) => tab.dataset.systemScenarioTab);
   if (!tabs.length || !panels.length) return;
+
+  function updateScenarioScrollIndicator() {
+    if (!tabRail || !scrollIndicator) return;
+    const overflow = Math.max(0, tabRail.scrollWidth - tabRail.clientWidth);
+    scrollIndicator.hidden = overflow <= 1;
+    if (overflow <= 1) return;
+    const thumbWidth = Math.max(12, Math.min(100, (tabRail.clientWidth / tabRail.scrollWidth) * 100));
+    const thumbLeft = Math.max(0, Math.min(100 - thumbWidth, (tabRail.scrollLeft / tabRail.scrollWidth) * 100));
+    scrollIndicator.style.setProperty("--scenario-scroll-thumb-width", `${thumbWidth}%`);
+    scrollIndicator.style.setProperty("--scenario-scroll-thumb-left", `${thumbLeft}%`);
+  }
 
   function idFromHash() {
     const match = window.location.hash.match(/^#system-scenario-(.+)$/);
@@ -541,6 +553,7 @@ function initializeSystemHome() {
       if (active && (updateUrl || focus)) {
         const rail = tab.closest(".system-case-tabs");
         if (rail) rail.scrollLeft = Math.max(0, Math.min(tab.offsetLeft - (rail.clientWidth - tab.clientWidth) / 2, rail.scrollWidth - rail.clientWidth));
+        window.requestAnimationFrame(updateScenarioScrollIndicator);
         if (focus) tab.focus({ preventScroll: true });
       }
     }
@@ -548,11 +561,6 @@ function initializeSystemHome() {
       const active = panel.dataset.systemScenarioPanel === id;
       panel.hidden = !active;
       panel.classList.toggle("is-current", active);
-    }
-    for (const node of nodes) {
-      const used = (node.dataset.systemScenarios || "").split(/\s+/).includes(id);
-      node.classList.toggle("is-used", used);
-      node.querySelector("[data-system-node-state]").textContent = used ? "本次使用" : "本次未用";
     }
     if (updateUrl) {
       const next = new URL(window.location.href);
@@ -580,7 +588,12 @@ function initializeSystemHome() {
     const id = idFromHash();
     if (id) activateScenario(id);
   });
+  tabRail?.addEventListener("scroll", updateScenarioScrollIndicator, { passive: true });
+  window.addEventListener("resize", updateScenarioScrollIndicator);
+  if (tabRail && typeof ResizeObserver !== "undefined") new ResizeObserver(updateScenarioScrollIndicator).observe(tabRail);
+  document.fonts?.ready?.then(updateScenarioScrollIndicator);
   activateScenario(idFromHash() || ids[0]);
+  updateScenarioScrollIndicator();
 }
 
 function initializeSystemSectionNavigation() {
@@ -595,6 +608,7 @@ function initializeSystemSectionNavigation() {
   let frame = 0;
   let clickedIndex = null;
   let clickScrollIdleTimer = 0;
+  let clickLockFallbackTimer = 0;
 
   function headerHeight() {
     return document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
@@ -631,7 +645,7 @@ function initializeSystemSectionNavigation() {
     const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
     let nextIndex = 0;
     sections.forEach((section, index) => {
-      if (section.getBoundingClientRect().top <= readingLine) nextIndex = index;
+      if (section.getBoundingClientRect().top <= readingLine + 2) nextIndex = index;
     });
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) nextIndex = sections.length - 1;
     setActive(nextIndex);
@@ -642,30 +656,49 @@ function initializeSystemSectionNavigation() {
     if (!frame) frame = window.requestAnimationFrame(update);
   }
 
-  function releaseClickLock() {
+  function targetReached(index) {
+    if (index === null) return true;
+    const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
+    const targetTop = sections[index].getBoundingClientRect().top;
+    const atPageEnd = index === sections.length - 1 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+    return atPageEnd || Math.abs(targetTop - readingLine) <= 32;
+  }
+
+  function releaseClickLock(force = false) {
     if (clickedIndex === null) return;
+    if (!force && !targetReached(clickedIndex)) return;
     clickedIndex = null;
     window.clearTimeout(clickScrollIdleTimer);
+    window.clearTimeout(clickLockFallbackTimer);
     scheduleUpdate();
   }
 
   function handleScroll() {
     if (clickedIndex !== null) {
       window.clearTimeout(clickScrollIdleTimer);
-      clickScrollIdleTimer = window.setTimeout(releaseClickLock, 160);
+      clickScrollIdleTimer = window.setTimeout(() => releaseClickLock(), 180);
     }
     scheduleUpdate();
   }
 
-  links.forEach((link, index) => link.addEventListener("click", () => {
+  links.forEach((link, index) => link.addEventListener("click", (event) => {
+    if (event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
+    event.preventDefault();
     clickedIndex = index;
     window.clearTimeout(clickScrollIdleTimer);
-    clickScrollIdleTimer = window.setTimeout(releaseClickLock, 1800);
+    window.clearTimeout(clickLockFallbackTimer);
     setActive(index);
     revealActiveLink(link);
+    const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
+    const targetTop = Math.max(0, Math.ceil(window.scrollY + sections[index].getBoundingClientRect().top - readingLine));
+    const next = new URL(window.location.href);
+    next.hash = link.dataset.systemSectionLink;
+    window.history.replaceState(window.history.state, "", `${next.pathname}${next.search}${next.hash}`);
+    window.scrollTo({ top: targetTop, behavior: "instant" });
+    clickLockFallbackTimer = window.setTimeout(() => releaseClickLock(true), 3200);
   }));
   window.addEventListener("scroll", handleScroll, { passive: true });
-  if ("onscrollend" in window) window.addEventListener("scrollend", releaseClickLock);
+  if ("onscrollend" in window) window.addEventListener("scrollend", () => releaseClickLock());
   window.addEventListener("resize", scheduleUpdate);
   window.addEventListener("hashchange", scheduleUpdate);
   if (typeof ResizeObserver !== "undefined") new ResizeObserver(scheduleUpdate).observe(home);
@@ -674,11 +707,13 @@ function initializeSystemSectionNavigation() {
 
 function initializeBackToTop() {
   const button = document.querySelector("[data-back-to-top]");
+  const footer = document.querySelector(".site-footer");
   if (!button) return;
   let frame = 0;
   function update() {
     frame = 0;
-    button.hidden = window.scrollY < Math.max(520, window.innerHeight * 0.75);
+    const footerVisible = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
+    button.hidden = window.scrollY < Math.max(520, window.innerHeight * 0.75) || footerVisible;
   }
   function scheduleUpdate() {
     if (!frame) frame = window.requestAnimationFrame(update);

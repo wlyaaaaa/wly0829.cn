@@ -472,6 +472,10 @@ function skillConnectionItems(slug) {
   return skillProjectLinks[slug] || [];
 }
 
+function systemSkillDisplayName(slug) {
+  return systemSkillFamilies.flatMap((family) => family.members).find((member) => member.slug === slug)?.name;
+}
+
 function projectConnectionItems(projectSlug) {
   const relatedSkills = new Map();
   for (const [skillSlug, relations] of Object.entries(skillProjectLinks)) {
@@ -498,7 +502,7 @@ function systemAssetSkillItems(asset) {
     });
     if (!matches) return [];
     const skill = skills.find((item) => item.slug === skillSlug);
-    return skill ? [{ relation: "skill-entry", kindLabel: "进入 Skill", label: skill.title, href: `/skills/${skillSlug}` }] : [];
+    return skill ? [{ relation: "skill-entry", kindLabel: "进入 Skill", label: systemSkillDisplayName(skillSlug) || skill.title, href: `/skills/${skillSlug}` }] : [];
   });
 }
 
@@ -1577,21 +1581,22 @@ function SystemScenarioPanel({ scenario, index }) {
   );
 }
 
-function SystemDependencyNode({ node, scenarioIds }) {
-  const linkLabel = node.href.startsWith("#") ? "查看本页说明" : /^https?:\/\//.test(node.href) ? "查看官方说明" : (node.href === "/skills" || node.href.startsWith("/skills/")) ? "进入 Skill" : node.href === "/rules" ? "进入规则" : "进入项目";
+function SystemDependencyNode({ node }) {
+  const primaryHref = node.href || node.links?.[0]?.href;
+  const defaultLinkLabel = node.linkLabel || (primaryHref.startsWith("#") ? "查看本页说明" : /^https?:\/\//.test(primaryHref) ? "查看官方说明" : (primaryHref === "/skills" || primaryHref.startsWith("/skills/")) ? "进入 Skill" : primaryHref === "/rules" ? "进入规则" : "进入项目");
+  const links = node.links?.length ? node.links : [{ href: primaryHref, label: defaultLinkLabel }];
   return (
     <article
       className="system-dependency-node"
       id={`system-node-${node.id}`}
       data-system-dependency-node={node.id}
-      data-system-scenarios={scenarioIds.join(" ")}
     >
       <div className="system-dependency-node-copy">
         <strong>{node.title}</strong>
         <span>{node.subtitle}</span>
         <p>{node.detail}</p>
       </div>
-      <div className="system-dependency-node-footer"><span data-system-node-state>系统总览</span><SiteLink href={node.href}>{linkLabel}<ArrowRight size={15} aria-hidden="true" /></SiteLink></div>
+      <div className="system-dependency-node-footer"><div className="system-dependency-node-actions">{links.map((link) => <SiteLink href={link.href} key={`${link.href}-${link.label}`}>{link.label}<ArrowRight size={15} aria-hidden="true" /></SiteLink>)}</div></div>
     </article>
   );
 }
@@ -1599,10 +1604,10 @@ function SystemDependencyNode({ node, scenarioIds }) {
 function SystemActiveAutomationList() {
   return (
     <section className="system-frame system-active-automations" id="system-automations" aria-labelledby="system-active-automations-title">
-      <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">7 个定时任务，正在持续替我工作</h2><p>有些工作不需要等我每次重新发起。5 个云端任务持续整理并把结果送到手机，2 个电脑端任务在真实项目现场治理和更新；频率观察于 {systemActiveAutomations.observedAt}，私有提示词与任务 ID 不公开。</p></div>
+      <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">7 个已启用的定时任务</h2><p>5 个云端任务和 2 个电脑端任务已登记为当前持续协作；这里说明它们计划何时运行、处理什么和交回什么。任务定义或 ACTIVE 状态不等于最近一次运行成功，也不证明通知已经送达；频率观察于 {systemActiveAutomations.observedAt}，私有提示词与任务 ID 不公开。</p></div>
       <div className="system-active-automation-groups">{systemActiveAutomations.groups.map((group) => (
         <section key={group.id}>
-          <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />正在使用</small></header>
+          <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />已启用</small></header>
           <div className="system-active-automation-grid">
             {systemActiveAutomations.items.filter((item) => item.group === group.id).map((item) => {
               const number = systemActiveAutomations.items.findIndex((candidate) => candidate.id === item.id) + 1;
@@ -1645,7 +1650,7 @@ function SystemSkillFamily({ family }) {
       <header>
         <span>{family.number} / 能力家族</span>
         <h3>{family.title}</h3>
-        <p>{family.members.length} 个当前可用入口</p>
+        <p>{family.members.length} 个当前收录入口</p>
       </header>
       <div className="system-skill-family-story">
         <section><h4>普通人会这样说</h4>{family.requests.map((request) => <blockquote key={request}>{request}</blockquote>)}</section>
@@ -1701,9 +1706,8 @@ function SystemProjectAtlas() {
   }
 
   function assetCountLabel(domain) {
-    const presentationCount = domain.assets.filter((asset) => asset.presentationOnly).length;
-    const visibleCount = domain.assets.length - presentationCount;
-    return presentationCount ? `${visibleCount} 项系统资产 + ${presentationCount} 项呈现基础设施` : `${visibleCount} 项资产`;
+    const visibleCount = domain.assets.filter((asset) => !asset.presentationOnly).length;
+    return `${visibleCount} 项资产`;
   }
 
   return (
@@ -1737,7 +1741,6 @@ function SystemProjectAtlas() {
             <div className="system-project-asset-grid" data-asset-remainder={assetColumnRemainder(domain)} style={{ "--asset-columns": assetColumnCount(domain) }}>
               {domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => <SystemProjectAssetCard asset={asset} key={asset.id} />)}
             </div>
-            {domain.assets.some((asset) => asset.presentationOnly) ? <p className="system-project-presentation-note">另 1 项是当前网站呈现仓库 wly0829.cn：{domain.assets.filter((asset) => asset.presentationOnly).map((asset) => asset.role).join(" ")}</p> : null}
           </article>
         ))}
       </div>
@@ -1777,27 +1780,30 @@ function SystemPage() {
         <div className="system-case-tabs" role="tablist" aria-label="选择真实工作场景">
           {systemScenarios.map((scenario, index) => <button type="button" role="tab" id={`system-scenario-tab-${scenario.id}`} aria-controls={`system-scenario-${scenario.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-system-scenario-tab={scenario.id} className={index === 0 ? "is-current" : undefined} key={scenario.id}>{scenario.label}</button>)}
         </div>
+        <div className="system-case-scroll-indicator" data-system-case-scroll-indicator aria-hidden="true" hidden><small>左右滑动查看更多</small><span><i /></span></div>
         <div className="system-case-panels">{systemScenarios.map((scenario, index) => <SystemScenarioPanel scenario={scenario} index={index} key={scenario.id} />)}</div>
       </section>
 
-      <SystemActiveAutomationList />
-
       <section className="system-frame system-dependencies" id="system-dependencies" aria-labelledby="system-dependencies-title">
-        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>通用 AI 提供理解和执行能力；.agents、PCConfig 与 GitHub 总索引分别提供协作边界、电脑现场和全部项目身份；外部服务、项目、Skills、个人资料与验证层再按任务进入。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>这里画长期职责和使用入口，不重复列仓库清单；同一个项目可以承担多项职责，下方项目版图再按全部资产身份与主要归属完整展开。</p></div>
         <div className="system-dependency-map">
           {systemDependencyLanes.map((lane) => {
-            const laneNodes = systemDependencyNodes.filter((node) => node.lane === lane.id);
+            const laneNodes = systemDependencyNodes
+              .filter((node) => node.lane === lane.id)
+              .sort((left, right) => (left.displayOrder || 0) - (right.displayOrder || 0));
             return (
               <section className="system-dependency-lane" id={`system-lane-${lane.id}`} data-system-lane={lane.id} key={lane.id}>
                 <header><span>{lane.number}</span><h3>{lane.title}</h3><p>{lane.description}</p></header>
-                <div className="system-dependency-node-grid">
-                  {laneNodes.map((node) => <SystemDependencyNode node={node} scenarioIds={systemScenarios.filter((scenario) => scenario.dependencyIds.includes(node.id)).map((scenario) => scenario.id)} key={node.id} />)}
+                <div className="system-dependency-node-grid" data-node-mod-4={laneNodes.length % 4} data-node-mod-3={laneNodes.length % 3} data-node-mod-2={laneNodes.length % 2}>
+                  {laneNodes.map((node) => <SystemDependencyNode node={node} key={node.id} />)}
                 </div>
               </section>
             );
           })}
         </div>
       </section>
+
+      <SystemActiveAutomationList />
 
       <SystemProjectAtlas />
 
@@ -1959,6 +1965,29 @@ function BackToTopButton() {
   return <button className="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部" hidden><ArrowUp size={21} weight="bold" aria-hidden="true" /></button>;
 }
 
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer-inner">
+        <section className="site-footer-intro" aria-labelledby="site-footer-title">
+          <span>个人 AI 协作系统</span>
+          <h2 id="site-footer-title">从总览进入真正拥有内容的页面</h2>
+          <p>System 解释整套协作关系；项目、规则与 Skills 分别承载产品正文、做事边界和可直接使用的能力入口。这是最后一次验证并发布的只读快照，不是后台实时控制台。</p>
+        </section>
+        <nav className="site-footer-links" aria-label="页脚站内导航">
+          <h2><span>01</span>站内入口</h2>
+          {primaryNav.map((item) => <SiteLink href={item.href} key={item.href}><strong>{item.label}</strong><code>{canonicalUrl(item.href)}</code><ArrowRight size={15} aria-hidden="true" /></SiteLink>)}
+        </nav>
+        <nav className="site-footer-links site-footer-external" aria-label="页脚外部与联系入口">
+          <h2><span>02</span>外部与联系</h2>
+          {socialLinks.map((item) => <a href={item.href} key={item.label} rel={item.mail ? undefined : "noopener noreferrer"} target={item.mail ? undefined : "_blank"}><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code><ArrowRight size={15} aria-hidden="true" /></a>)}
+        </nav>
+      </div>
+      <div className="site-footer-meta"><span>© 2026 吴乐阳</span><a href={`${site.url}/`}>{site.url}/</a><small>只读产品、规则与能力快照</small></div>
+    </footer>
+  );
+}
+
 export default function Page({ initialPathname = "/", initialSearch = "" } = {}) {
   const location = useLocationState(initialPathname, initialSearch);
   const path = location.pathname;
@@ -2004,5 +2033,5 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
     content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
-  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main><BackToTopButton /></>;
+  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main><SiteFooter /><BackToTopButton /></>;
 }
