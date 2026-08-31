@@ -2745,6 +2745,19 @@ test("route links use native directory documents and preserve module scroll with
   assert.match(rendererSource, /rel="prefetch" as="document"/);
 });
 
+test("Skills browsing categories cover every displayed capability exactly once", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const block = pageSource.match(/const skillCategoryDefinitions = \[([\s\S]*?)\n\];\n\nfunction skillCategoryIds/)?.[1] || "";
+  const assignments = new Map(skills.map((item) => [item.slug, 0]));
+  for (const match of block.matchAll(/slugs:\s*\[([^\]]*)\]/g)) {
+    for (const slug of [...match[1].matchAll(/"([^"]+)"/g)].map((item) => item[1])) {
+      if (assignments.has(slug)) assignments.set(slug, assignments.get(slug) + 1);
+    }
+  }
+  for (const [slug, count] of assignments) assert.equal(count, 1, `Skill category assignment must be exactly one: ${slug}=${count}`);
+  assert.match(block, /label:\s*"文书与交付"[\s\S]*?document-materials[\s\S]*?work-delivery[\s\S]*?documents[\s\S]*?pdf/);
+});
+
 test("dynamic snapshot facts are separated from partial validation", () => {
   assert.equal(panelSnapshot.schema, "wly.panel-facts.v2");
   assert.equal(panelSnapshot.authority.status, "e_rules_active_verified");
