@@ -443,7 +443,7 @@ export const modules = [
     readerStates: { pass: "目标、授权和施工范围明确且没有重叠 Owner 时，执行、验证和正常收口可以连续推进。", problem: "发现重叠施工、目标扩大或步骤事实漂移时，停止对应写入并重新协调或派生步骤。", unavailable: "授权事实或 Owner registry（施工登记表）不可验证时，外部写入和受保护动作停止；只读调查可以继续。" },
     searchProjection: {
       intents: ["同一目标已经授权为什么还反复问", "谁正在修改这个最小范围", "外部动作与本机可逆操作怎样区分", "旧任务未完成内容怎样交给 successor", "把PUBLIC项目里被忽略的私有材料迁到PRIVATE伴随仓库"],
-      entities: ["durable explicit user authorization", "CoreGoalCommitment", "StepCapability", "Execution Owner", "CAS", "external effect", "threadId", "public project private companion", "ignored untracked material", "PRIVATE manifest / local link"],
+      entities: ["durable explicit user authorization", "CoreGoalCommitment / StepCapability", "Execution Owner / CAS", "external effect / threadId", "public project private companion", "ignored untracked material", "PRIVATE manifest / default-branch read-back", "rollback rename / local-only link"],
       relations: ["用户授权不等于 UAC 或 Agent 身份", "CoreGoal 固定目标而步骤能力绑定一次 effect", "Execution Owner 协调写入范围但不制造授权", "有 residual 的旧 Owner 通过 checkpoint 转给真实 successor", "PUBLIC worktree只筛明确ignored材料", "PRIVATE远端hash回读先于替换原件", "local link必须继续不进入PUBLIC staging"],
       failureRecovery: ["重叠 Owner 时先解析 lifecycle 再 Claim 或 Transfer", "目标或 executor 漂移时废弃步骤能力并重新派生", "真实工具返回 deny 或 unavailable 时按现场结果停止", "PRIVATE target可见性或远端回读失败时保留原件", "link进入PUBLIC status时回滚rename并停止", "非 fast-forward时保留双方改动并停止推送"]
     },
