@@ -334,6 +334,17 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Unregistered personal domains are outside the current MVP/);
   assert.match(projectRules, /independent product judgment/);
   assert.match(projectRules, /Do not copy a README section by section/);
+  assert.match(projectRules, /`source_independent_coverage`/);
+  assert.match(projectRules, /before reading the website's module list/);
+  assert.match(projectRules, /Registry impact paths help locate evidence; they cannot[\s\S]{0,100}prove/);
+  assert.match(projectRules, /both a product explanation[\s\S]{0,260}and a technical[\s\S]{0,100}reference/);
+  assert.match(projectRules, /timeline mention, source[\s\S]{0,180}proves[\s\S]{0,80}neither layer/);
+  assert.match(projectRules, /`product_capability_completeness_gate`/);
+  assert.match(projectRules, /P0 content defect/);
+  assert.match(projectRules, /blocks that project's content PASS[\s\S]{0,100}blocks publication/);
+  assert.match(projectRules, /UI quality,[\s\S]{0,220}cannot downgrade or offset this defect/);
+  assert.match(projectRules, /Decide module boundaries only after the source-to-page difference/);
+  assert.match(projectRules, /auditing only the page's existing fields is circular/);
   assert.match(projectRules, /Each project owns its\s+real module count/);
   assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
   assert.match(projectRules, /returned task id\s+is the creation receipt/);

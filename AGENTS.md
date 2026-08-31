@@ -139,6 +139,34 @@ read-only operating panel; public presentation is secondary.
   evidence. Do not copy a README section by section, paraphrase one source as
   if that were analysis, or repeat fashionable conclusions without explaining
   the project's own trade-offs, evidence, failure modes and decision impact.
+- A new project, full refresh or completeness audit must start with a
+  `source_independent_coverage` pass. Reconstruct the source project's
+  long-lived product axes from its own current rules, human entrypoints,
+  product contracts, registries, recovery documents and code entrypoints
+  before reading the website's module list, search aliases or existing
+  coverage claims. Registry impact paths help locate evidence; they cannot
+  prove that every important subsystem was observed.
+- Compare that source inventory with the page in two separate layers. Every
+  selected long-lived axis needs both a product explanation (purpose, people or
+  devices, ordinary scenario, result and deliberate trade-off) and a technical
+  reference (identity, components, data flow, entrypoints, state/failure,
+  recovery, current evidence and named unknowns). A timeline mention, source
+  path, test count, glossary term or isolated technical paragraph proves
+  neither layer.
+- `product_capability_completeness_gate`: omitting a current, source-backed,
+  public-safe, long-lived product capability that could change how the owner
+  uses or judges the project is a P0 content defect. Missing either its product
+  explanation or its technical reference blocks that project's content PASS
+  and blocks publication of the incomplete snapshot. UI quality, route
+  existence, search results, schema fields, build success and prior page-only
+  audits cannot downgrade or offset this defect.
+- Decide module boundaries only after the source-to-page difference is known.
+  Add a module when the source proves an independent long-lived capability
+  with its own users/devices, lifecycle or recovery boundary; otherwise repair
+  the owning module in place. Module count remains project-specific. A fresh
+  reviewer must be able to name important source subsystems that are absent
+  from the page; auditing only the page's existing fields is circular and
+  cannot produce a content PASS.
 - Project evolution is a milestone timeline, not a commit log. Group related
   changes into one important product stage that explains the resulting change
   in capability, boundary or user experience. A stage may use one date or a
