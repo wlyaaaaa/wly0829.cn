@@ -1643,6 +1643,8 @@ test("the .agents project has six complete modules plus Overview", () => {
     for (const key of ["why", "example", "result"]) {
       assert.ok(module[key]?.length >= 45, `${module.slug} lacks plain-language ${key}`);
     }
+    assert.match(module.example, /我(?:说|问)[“"]/u, `${module.slug} does not begin from an ordinary user request`);
+    assert.doesNotMatch(module.result, /^(?:E\d+|commit|ruleset|schema|process|port)\b/i, `${module.slug} result opens with a construction receipt`);
     assertReaderStates(module.readerStates, module.slug);
     assert.ok(module.decisionImpact.length >= 4, `${module.slug} lacks decision impact`);
     assert.ok(module.implementation.length >= 4, `${module.slug} implementation is incomplete`);
@@ -1652,6 +1654,14 @@ test("the .agents project has six complete modules plus Overview", () => {
     assert.ok(module.failures.length >= 3, `${module.slug} failures are incomplete`);
     assert.ok(module.sources.length >= 3, `${module.slug} sources are incomplete`);
     assert.ok(module.verification.length >= 3, `${module.slug} verification is incomplete`);
+    assert.ok(module.sources.every((item) => item.path?.trim() && item.role?.trim()), `${module.slug} has a source without its real role`);
+    assert.ok(module.failures.every((item) => item.condition?.trim() && item.response?.trim()), `${module.slug} has a failure without a recovery response`);
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
+    for (const [key, values] of Object.entries(module.searchProjection)) {
+      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
+      assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
+    }
   }
   assert.ok(project.components.length >= 10);
   for (const key of ["why", "plainExample", "result"]) {
@@ -1660,10 +1670,59 @@ test("the .agents project has six complete modules plus Overview", () => {
   assertReaderStates(project.readerStates, "project overview");
   assert.ok(project.glossary.length >= 25);
   assert.ok(project.usageExamples.length >= 5);
+  assert.match(JSON.stringify(project.productPrinciples), /Hook只验真|Hook.*不替 AI 调度/);
+  assert.match(JSON.stringify(project.productPrinciples), /自然能力要用自然请求验收|自主选对能力.*用户.*正确结果/);
+  assert.match(JSON.stringify(project.productPrinciples), /官方更新.*版本号|package family.*事件.*能力/);
+  const moduleSlugs = new Set(modules.map((item) => item.slug));
+  assert.ok(project.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)), "an .agents usage example has no owning moduleSlug");
+  assert.ok(new Set(project.usageExamples.map((item) => item.moduleSlug)).size >= modules.length, ".agents usage examples do not cover every module journey");
   assert.ok(project.evidenceLayers.length >= 6);
   assert.ok(project.operationalEntrypoints.length >= 5);
   assert.ok(project.evolution.length >= 10);
   assert.equal(new Set(project.evolution.map((item) => item.date)).size, project.evolution.length, "evolution timeline must group same-day implementation commits into one milestone");
+});
+
+test("the .agents capability route explains Hook timing, blind acceptance and official-update continuity", () => {
+  const capability = modules.find((item) => item.slug === "capability-routing");
+  const moduleText = JSON.stringify(capability);
+  const guide = ruleGuides.capability_routing_contract;
+  const guideText = JSON.stringify(guide);
+  const rule = rulesSnapshot.rules.find((item) => item.logicalId === "capability_routing_contract");
+  const ruleText = JSON.stringify(rule);
+
+  assert.ok(capability.searchAliases.includes("Hook到底检查什么，谁决定开几个代理"));
+  assert.ok(guide.searchAliases.includes("Hook到底检查什么，谁决定开几个代理"));
+  for (const term of ["UserPromptSubmit", "SubagentStart", "PreToolUse", "implementation-blind fresh E2E", "route_selected_without_hint", "directed_execution_test", "package family", "versioned path"]) {
+    assert.ok(moduleText.includes(term), `capability module omits ${term}`);
+    assert.ok(guideText.includes(term), `capability rule guide omits ${term}`);
+    assert.ok(ruleText.includes(term), `capability rule reference omits ${term}`);
+  }
+  for (const expected of [
+    /UserPromptSubmit.*root.*SubagentStart.*child.*0–10.*判断前/,
+    /AI.*决定.*0–10.*家族.*Hook.*不做调度|Hook.*不调度.*AI.*决定/,
+    /PreToolUse.*spawn 前.*复核.*TOCTOU/,
+    /旧 root.*完全没有 Hook.*用户明确 model\/effort.*回读.*thread binding/,
+    /child 不继承|Child 不继承/,
+    /Hook.*不调度|Hook.*不选择.*数量/,
+    /不制造用户授权|不产生授权/,
+    /root.*继续.*集成|Root.*继续.*集成/,
+    /不点名 Skill.*tool.*plugin.*provider.*内部路径.*预期路线/,
+    /route_selected_without_hint.*用户可见结果/,
+    /directed.execution.test.*不能.*证明.*自己选择|directed_execution_test.*不能.*证明.*自主路由/,
+    /package family.*signer\/principal.*event.*capability/,
+    /app version.*build.*versioned.*path.*不.*准入/,
+    /缺失.*event.*capability.*只.*关闭.*受影响/
+  ]) assert.match(`${moduleText}\n${guideText}\n${ruleText}`, expected, `capability content omits stable journey semantics: ${expected}`);
+
+  const identityStep = rule.process.findIndex((item) => item.includes("UserPromptSubmit") && item.includes("SubagentStart"));
+  const decisionStep = rule.process.findIndex((item) => item.includes("AI") && item.includes("0–10"));
+  const preToolStep = rule.process.findIndex((item) => item.includes("PreToolUse"));
+  const blindStep = rule.process.findIndex((item) => item.includes("fresh evaluator"));
+  assert.ok(identityStep >= 0 && identityStep < decisionStep && decisionStep < preToolStep && preToolStep < blindStep, "capability rule does not preserve identity-before-decision, create-time recheck and blind acceptance order");
+  assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
+  assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
+
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 6);
 });
 
 test("the rules workbench exposes exactly five verified current E-release rules", () => {

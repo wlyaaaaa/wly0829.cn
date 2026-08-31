@@ -339,6 +339,15 @@ export const ruleGuides = {
     ]
   },
   capability_routing_contract: {
+    searchAliases: [
+      "Hook到底检查什么，谁决定开几个代理",
+      "UserPromptSubmit和SubagentStart分别做什么",
+      "PreToolUse为什么只是创建前复核",
+      "没有Hook为什么只是不能委派",
+      "什么时候要做实现盲测",
+      "不点名Skill怎么验证AI会自己选路",
+      "Codex官方更新后为什么不看版本号准入"
+    ],
     glossary: [
       ["Expected net value", "能力带来的信息、质量和时间收益，减去延迟、耦合、成本和出错风险。"],
       ["Capability salience", "先用 metadata 把可能有用的能力放回注意力，再决定要不要读正文。"],
@@ -346,6 +355,13 @@ export const ruleGuides = {
       ["Reader routing", "根据文件和任务类型选择原生 reader，不让一个总入口接管所有材料。"],
       ["Attention curation", "先保留会改变当前决定的目标、边界、证据、未知和验收，再读取必要细节。"],
       ["Implementation-blind fresh E2E", "让不了解实现线索的全新评估者只按自然用户目标走真实产品路径。"],
+      ["Natural-intent blind routing", "只给自然用户意图并保留正常能力 metadata，让 AI 自己发现 Skill、tool、plugin 或 provider。"],
+      ["Route selected without hint", "没有在提示中点名路线时，AI 仍自主选择了正确能力；它还必须与用户可见结果一起验证。"],
+      ["Directed execution test", "提示明确指定内部路线的定向执行测试；它可以证明路线能跑，但不能证明 AI 会自己选择。"],
+      ["Hook", "宿主在固定事件点注入或复核可信身份、E identity 和参数；它不选择模型或数量、不创建 child，也不产生授权。"],
+      ["UserPromptSubmit / SubagentStart", "前者服务 root 请求，后者服务 child 启动；都在各自任何 0–10 判断之前注入本轮可信身份。"],
+      ["PreToolUse", "真实 spawn 前的二次现场复核，只检查 TOCTOU、家族/effort 上限、参数和 fork，不能替代判断前身份。"],
+      ["Official update continuity", "Codex 官方同主体更新按稳定 package family、签名、事件和当前能力发现延续，不依赖易变版本号或安装路径。"],
       ["Fresh task", "安装完成后启动的另一个新任务真实发现能力。"],
       ["E2E", "用真实输入走完整路径并得到用户可见结果。"]
     ],
@@ -363,7 +379,9 @@ export const ruleGuides = {
           item("能力发现不扩权", "找到一个工具、账号或插件不代表允许调用它执行 external effect。"),
           item("Effect schema 和 executor 分开", "有类型化 operation 但缺实现时，由对应 Owner 补窄 executor 和测试；已有等价入口时不提示插件。"),
           item("缺环境时优先官方原生安装", "在任务必需、可逆和兼容边界内安装 runtime/SDK/CLI/build tool；既有项目服从 lock 和 CI。"),
-          item("兼容层是后选", "容器、旧 runtime 和 shim 只有原生路径不可用或不兼容时采用。付费、账号、重启和信任边界仍单独处理。")
+          item("兼容层是后选", "容器、旧 runtime 和 shim 只有原生路径不可用或不兼容时采用。付费、账号、重启和信任边界仍单独处理。"),
+          item("Codex 官方更新看稳定主体", "以稳定 PFN/package family、signer/principal、device/bridge key、schema/event/capability 和 current discovery 判断同一产品与能力；app version、build、versioned executable path、update epoch 和 optional metadata 不参与准入。"),
+          item("真实能力缺失才局部降级", "官方同主体更新或 optional metadata 缺失不 step-up/BLOCK。只有现场缺少某个精确 event 或 capability 时，才关闭受影响能力；普通项目继续。")
         ]
       },
       {
@@ -395,7 +413,12 @@ export const ruleGuides = {
           item("安全标签不是复杂度额度", "默认可信本地只按正确性、可靠性、恢复和公开分级处理；除非用户明确安全任务，不引入威胁模型、身份层、审计链、反篡改机制、守护进程或安全工作流。"),
           item("语义优先于压缩", "预算和瘦身不得删掉范围、强度、例外、停止条件、优先级或 Owner；实在无法无损表达时按实测缺口最小提高预算。"),
           item("注意力先编排再扩容", "先去重并保留目标、边界、最新证据、未知、失败链和验收；如果编排后额度仍会造成关键遗漏，必须按实测缺口增加容量，不能用过短摘要换取表面简洁。"),
-          item("实现盲测由模型主动识别", "模型或 UI 结果可能受确认偏差影响时，fresh evaluator 只拿自然用户意图和正常产品环境；点名 Skill、工具、Provider 或预期路线的测试只能证明定向执行，不能冒充自然路由。"),
+          item("实现盲测由模型主动识别", "实现者知道内部答案会污染验收、内部测试不能代表自然语言或用户可见路径，或模型、heuristic、UI、Provider、恢复结果容易受确认偏差影响时，模型必须自己识别需要 implementation-blind fresh E2E；提示不必出现“盲测”。"),
+          item("Fresh evaluator 只拿最小用户输入", "给它用户可见目标、最小充分输入和正常产品环境；不提供 diff、实现理由、失败根因、预期修复线索或无关项目细节。盲测不是每次机械执行，但客观需要时不能因省上下文跳过。"),
+          item("自然意图路由不点名答案", "验证 AI 会不会自己选择能力时，正常 metadata 保持可见，但提示只表达自然用户意图，不能点名 Skill、tool、plugin、provider、内部路径或预期路线。"),
+          item("盲路由要验两件事", "同时证明 route_selected_without_hint 和用户可见结果正确；只看到工具被调用或只拿到答案都不完整。"),
+          item("定向测试不能冒充盲测", "点名内部路线的用例只算 directed_execution_test。它适合证明该入口能运行，但不能证明模型在普通请求里会想到并选择它。"),
+          item("示例只教抽象模式", "示例问句用于解释自然意图到自主路由的关系，模型必须类推到其他能力；禁止给某一句话、产品名或路线写专用分支。"),
           item("动态配置逐级准入", "从静态重启、原子 watcher、单机多进程 SQLite/loopback、真 kill switch 到跨实例服务，只有真实需求才升级。"),
           item("不预装配置平台", "不为想象中的未来引入 Nacos、Consul 或 etcd。"),
           item("动态配置必须可恢复", "定义 Owner、Consumer、认证网络、原子应用、last-known-good、离线 bootstrap、备份、审计、回滚和移除路径。"),
@@ -430,9 +453,10 @@ export const ruleGuides = {
       },
       {
         title: "六、原生经济路由的 11 条规则",
-        intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。",
+        intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。正常主路径先在判断前验真，再由 AI 决策，最后只对真实创建做二次复核。",
         items: [
-          item("1. 身份先于决策", "宿主从真实 turn context（本轮上下文）验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA；旧 root 只能用用户明确绑定恢复。"),
+          item("最小主路径", "root 请求由 UserPromptSubmit、child 启动由 SubagentStart 在各自任何 0–10 判断前注入 verified model、effective effort、role、turn hash 与 E identity；随后 AI 按任务语义决定数量、家族、effort 和 scope，root 继续战略与集成。只有准备真实 spawn 时，PreToolUse 才复核现场 TOCTOU 和参数。", "Hook 到底检查什么，谁决定开几个代理？Hook 先验真、创建前再复核；AI 决定开不开、开几个和选哪一类，用户授权仍由原授权边界决定。"),
+          item("1. 身份先于决策", "UserPromptSubmit 验证 root transcript；SubagentStart 从 child transcript 绑定 lineage。宿主从真实 turn context 验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA，并在判断前注入。旧 root 只能在完全没有 Hook 或注入时用用户明确绑定恢复。"),
           item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
           item("3. 七类事件重判", "任务开始、新独立支路、阻塞、重大 steer、压缩、child terminal、槽位释放。普通工具步骤不填表。"),
           item("4. 每个父代理 0 到 10", "0 合法但不能惯性。Luna 适合封闭可验读重任务，Terra 适合强耦合实现和深调试，Sol 适合最高风险、战略和终审。"),
@@ -443,8 +467,11 @@ export const ruleGuides = {
           item("9. Root 不空等", "Root 始终负责目标、优先级、依赖、风险和最终集成；有不冲突工作就继续，只在硬依赖时一轮事件等待。"),
           item("10. 连续性", "Child 中断优先恢复原 session；不能恢复才重跑或升级；partial 不冒充 complete。"),
           item("11. Root 最终负责", "委派后仍由 Root 验收。Benchmark 只是带来源、版本、日期和置信度的参考，规则文字不能制造宿主 grant。"),
-          item("宿主 Gate 做什么", "稳定入口只验证身份、策略和参数，不替模型选代理或创建 child；PreToolUse 只做 spawn 前 TOCTOU 复核。"),
-          item("回执缺失的边界", "回执用于审计，不能阻塞普通工具和最终答复，也不安装 Stop Hook 作为额外门。")
+          item("宿主 Gate 做什么", "稳定入口只验证身份、E rules 和参数，不替模型选择模型家族、代理数量、分工或验收，不调度或创建 child，也不制造用户授权；PreToolUse 只做真实 spawn 前 TOCTOU、上限、参数和跨身份 fork 复核。"),
+          item("旧 root 绑定的窄例外", "只有完全没有 Hook 或身份注入的旧 root，才可在用户明确 model/effort 后写入并回读同一 CODEX_THREAD_ID 的 user_attested_verified。Child 不继承，宿主 verified 恢复后自动优先，冲突不能靠绑定绕过。"),
+          item("官方更新不断路", "受管 Hook 只依赖稳定 bridge/runtime、package family、signer/principal、事件和当前能力发现；Codex app version、build、versioned path、update epoch 与 optional host metadata 不是准入条件。"),
+          item("更新后的局部失败", "同一官方主体更新后照常运行。若现场真的缺失某个 UserPromptSubmit、SubagentStart、PreToolUse event 或 spawn capability，只关闭对应委派能力；普通调查、实现、测试和最终答复继续。"),
+          item("回执缺失的边界", "回执只用于审计，不能阻塞普通工具和最终答复；不依赖或安装 Stop Hook 作为额外门。")
         ]
       },
       {

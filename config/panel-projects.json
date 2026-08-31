@@ -44,7 +44,7 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 5,
+        "semantic_revision": 6,
         "scope": "project overview, six modules, current E release Rules and Skills evidence",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
