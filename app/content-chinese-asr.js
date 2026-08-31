@@ -7,14 +7,14 @@ export const chineseAsrProject = {
   statusTone: "mixed",
   cardStatus: "中文转写、长录音续跑和可复核结果包已经实现",
   cardStatusTone: "pass",
-  snapshotBoundary: "当前源码、依赖和回归已核对；本页没有用私人录音重跑真实端到端，也不把自动文字当成事实认证",
+  snapshotBoundary: "当前 70e3255 源码与 345 项单元回归已核对；历史真实四切片 E2E 可回读，但本轮没有用私人录音重跑模型，也不把自动文字当成事实认证",
   repositoryNote: "源代码位于 PUBLIC（公开）GitHub（代码托管平台）仓库；模型权重、私人录音、转写结果、声纹向量、云端请求和本机缓存不进入仓库，也不进入本页。",
-  summary: "ChineseASR 把一段中文录音变成一份能搜索、能定位、能回听、能继续处理的转写包，而不是只吐出一段看似通顺的文字。它保留时间位置、可疑句、失败片段和需要人工回听的清单，中断后还能接着跑。普通录音默认留在本机；重要录音只有明确选择时才进入更重的证据路线。姓名、数字、承诺和争议语句仍以原音频为准。",
-  why: "中文录音最危险的问题不是单纯“识别错一个字”，而是模型在静音、噪声、方言、专有名词或长音频切片处生成看似通顺的错误内容。普通转写结果往往没有输入指纹、模型版本、时间位置和失败证据，事后既不知道错在哪里，也无法判断重跑是否真的更可靠。",
-  plainExample: "例如我说“把这段两小时会议录音整理成可复核纪要，中断后别从头来”。它会沿连续时间线处理，保留已经完成、失败和需要重跑的片段；最后交付可读正文、可点击的时间位置、可疑句和回听清单。人可以从一句话直接回到原音频，而不是被一段流畅文字迫使盲信。",
-  result: "我最终会得到一个与原录音绑定的转写包：可读正文、逐句或逐段时间位置、模型与参数身份、原始 JSON、审计和质量字段、失败或疑似内容、说话人线索以及恢复入口。系统能证明的是“这份结果由哪个输入和流程生成、哪里有风险”；原录音仍是真相来源，关键内容仍需回听。",
+  summary: "ChineseASR 把一段中文录音变成一份能搜索、能继续处理、能回到原音频人工复核的转写包，而不是只吐出一段看似通顺的文字。默认结果保留正文、原始输出、风险和失败证据；需要逐段时间线、匿名说话人或本人线索时再显式选择对应路线。中断后可以接着跑，普通录音默认留在本机。姓名、数字、承诺和争议语句仍以原音频为准。",
+  why: "中文录音最危险的问题不是单纯“识别错一个字”，而是模型在静音、噪声、方言、专有名词或长音频切片处生成看似通顺的错误内容。普通结果还可能只有正文而没有完整逐句时间线；如果不保留输入指纹、模型版本、失败证据和可选定位路线，事后既不知道错在哪里，也无法判断重跑是否真的更可靠。",
+  plainExample: "例如我说“把这段两小时会议录音整理成可复核纪要，中断后别从头来”。它会按连续分段处理，保留已经完成、失败和需要重跑的片段；默认交付正文、原始结果、风险与恢复入口。如果我还要求逐段定位和匿名说话人，再显式加入 Paraformer 时间线。产品本身没有内置音频播放器或保证可点击跳转。",
+  result: "我最终会得到一个与原录音绑定的转写包：默认包含可读正文、模型与参数身份、原始 JSON、审计和质量字段、失败或疑似内容以及恢复入口；时间位置、匿名说话人和本人线索只在所选路线真实提供时加入。系统能证明的是“这份结果由哪个输入和流程生成、哪里有风险”；原录音仍是真相来源，关键内容仍需人工回听。",
   readerStates: {
-    pass: "音频可读、目标模式可用且任务完成时，返回正文和结构化证据包；严格模式同时保留两路模型结果、风险判断与可复核位置。",
+    pass: "音频可读、目标模式可用且任务完成时，返回正文和结构化证据包；严格模式保留两路模型结果与风险判断，时间位置只在对应引擎真实提供时出现。",
     problem: "某个引擎失败、两路分歧、检测到疑似幻觉或长音频只有部分完成时，保留可用片段但明确标为 provisional（暂定）或需要复核，不把降级结果冒充完整成功。",
     unavailable: "模型、GPU（图形处理器）、音频解码、任务服务或必要授权不可用时，返回具体阻断位置和已有任务身份；不反复提交同一录音，也不自动把普通录音上传云端。"
   },
@@ -77,18 +77,20 @@ export const chineseAsrProject = {
   ],
   currentState: {
     observedAt: "2026-08-29T15:23:39Z",
-    label: "源码、单元测试和本机依赖已闭合；本次看板刷新没有重跑真实录音端到端验收",
+    label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
     facts: [
       "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。",
-      "PUBLIC（公开）main 当前提交为 8792432ab0428564efcf484c98ba749aae3dc3ff；联网刷新后本地主检出与 origin/main 为 0/0，工作树干净。",
-      "2026-08-29 本次 fresh（新鲜）验证运行 344 项单元测试，70.534 秒完成，344 项全部通过。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
+      "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。",
+      "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，78.623 秒完成，345 项全部通过。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
       "Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 610.88、32607 MiB 显存；WinHTTP 为直连，代理环境干净。",
       "FunASR、Qwen ASR 和 PyTorch 均已安装；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。",
       "当前模型 Registry（登记表）公开六个显式引擎：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；登记不代表每个引擎本次都跑过真实音频。",
-      "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。"
+      "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。",
+      "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。",
+      "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。"
     ],
     gaps: [
-      "本次为了建设看板只运行 Doctor 和全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；因此不能把本次证据写成默认 strict 真实录音 E2E 已通过。",
+      "本次为了建设看板只运行全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；历史 E2E 仍是真实成品证据，但不能冒充本轮 fresh 模型验收。",
       "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口还需要明确本次重要录音与上传授权，也没有调用。",
       "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
       "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
@@ -129,9 +131,10 @@ export const chineseAsrProject = {
   ],
   evidenceLayers: [
     { layer: "Source（源码层）", proves: "当前 main 中实际存在的模型路由、任务、审计、边界和测试实现。", doesNotProve: "本机已经安装、服务正在运行或真实录音效果正确。" },
-    { layer: "Unit tests（单元测试层）", proves: "344 个受控场景的逻辑、失败关闭、结构和回归当前通过。", doesNotProve: "真实 GPU 模型加载、音频质量、端到端耗时和人工听感。" },
+    { layer: "Unit tests（单元测试层）", proves: "345 个受控场景的逻辑、媒体替换失败关闭、结构和回归当前通过。", doesNotProve: "真实 GPU 模型加载、音频质量、端到端耗时和人工听感。" },
     { layer: "Doctor（环境体检层）", proves: "GPU、核心依赖、模型配置和本机缓存入口当前可被识别。", doesNotProve: "每个 profile 都完成真实推理，也不证明服务没有运行期故障。" },
     { layer: "Runtime smoke（运行冒烟层）", proves: "指定入口、真实样本、模型和最终文件从头到尾能够完成。", doesNotProve: "对任意录音准确，或所有重要语句已经人工核听。" },
+    { layer: "Historical real E2E（历史真实端到端）", proves: "超过 40 秒中文电话录音的四切片 FireRed + Qwen 路线曾全部 verified，续跑复用了四段结果。", doesNotProve: "本轮模型、任意私人录音或每个字仍然正确。" },
     { layer: "Content receipt（内容回执层）", proves: "输入、模型、输出文件、指纹和状态在一个结果包内一致。", doesNotProve: "外部真实性、可信时间戳、说话人身份或文字事实正确。" },
     { layer: "Benchmark（基准评测层）", proves: "固定语料和 truth（人工真值）下的字错率、风险和模型对比。", doesNotProve: "用户下一段录音具有相同声学条件和准确率。" },
     { layer: "Human review（人工复核层）", proves: "关键片段已回到原音频核听并被人确认。", doesNotProve: "未听部分或不同原件也正确。" }
@@ -143,7 +146,8 @@ export const chineseAsrProject = {
     { date: "2026-08-09—08-17", commit: "a2c0b2b–b596098", result: "收紧音频来源、刷新显式 FunASR profile，并把空文本改造成执行、覆盖、质量和客观音频结果正交表达，避免失败被解释成无语音。" },
     { date: "2026-08-21", commit: "07516fa", result: "文件夹批量开始复用已加载模型，减少重复冷启动，同时保留每个文件独立的任务和失败边界。" },
     { date: "2026-08-24", commit: "fe11e0c–cfcc7a7", result: "建立失败关闭的说话人归属投影、可撤销 person:self 声纹线索、时间戳通话上下文和 2–3 来源的有界多参考档案；单声道歧义不再被强行赋予身份。" },
-    { date: "2026-08-27—08-28", commit: "7bd1dd4–8792432", result: "完成任务生命周期、缓存完整性、云失败路由、文本规范和说话人证据回读加固；当前 main 进入维护与真实使用校准阶段。" }
+    { date: "2026-08-27—08-28", commit: "7bd1dd4–8792432", result: "完成任务生命周期、缓存完整性、云失败路由、文本规范和说话人证据回读加固；当前 main 进入维护与真实使用校准阶段。" },
+    { date: "2026-08-30—08-31", commit: "70e3255", result: "补上说话人证据读取期间的目标媒体快照复核：文件被替换或改变时立即失败关闭，避免证据与目标错配。" }
   ],
   operationalEntrypoints: [
     { name: "环境体检", command: "E:\\Projects\\Tools\\ChineseASR\\scripts\\doctor.ps1", purpose: "检查代理、GPU、模型配置、依赖和缓存入口，不运行完整转写。" },
@@ -222,7 +226,7 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\tests\\test_service.py", role: "服务、缓存、状态和失败路径回归" }
     ],
     verification: [
-      "本次全量 344 项单元测试通过，其中 service、process control、observer projection 和 scripts 均进入回归。",
+      "本次全量 345 项单元测试通过，其中 service、process control、observer projection 和 scripts 均进入回归。",
       "Doctor 当前确认代理环境干净、GPU 与模型配置可读。",
       "本次未运行真实 strict smoke，因此模块保持 mixed，不把单测冒充 E2E。"
     ],
@@ -295,7 +299,7 @@ export const chineseAsrModules = [
     ],
     verification: [
       "Doctor 当前列出六个可用引擎，并确认 FunASR、Qwen ASR、PyTorch 已安装。",
-      "config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 344 项通过结果中。",
+      "config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 345 项通过结果中。",
       "本次没有对六个 profile 分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。"
     ],
     relation: "模型与模式模块向入口模块提供可执行 profile，向审计模块提供模型身份；长音频和说话人模块只能在这里声明的能力范围内工作。"
@@ -366,7 +370,7 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\tests\\test_long_audio.py", role: "长音频边界、恢复和覆盖回归" }
     ],
     verification: [
-      "long_audio、arbitration、batch 进入本次 344 项通过的全量单测。",
+      "long_audio、arbitration、batch 进入本次 345 项通过的全量单测。",
       "覆盖验证测试包含 gap、overlap、子证据和旧 manifest 身份场景。",
       "真实长音频耗时、切片效果和回听质量本次未重新验收。"
     ],
@@ -438,7 +442,7 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\metadata.py", role: "输入、模型和制品身份" }
     ],
     verification: [
-      "audit、risk rules、audio outcome、result writer 和 metadata 单元测试包含在本次 344 项通过结果中。",
+      "audit、risk rules、audio outcome、result writer 和 metadata 单元测试包含在本次 345 项通过结果中。",
       "测试覆盖静音出字、空文本、partial coverage、回执损坏和模型失败。",
       "没有任何自动测试能够代替关键片段人工核听，页面明确保留该缺口。"
     ],
@@ -510,7 +514,7 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\tests\\test_speaker_attribution.py", role: "双声道、单声道、时间线和冲突回归" }
     ],
     verification: [
-      "speaker evidence 与 attribution 回归包含在本次 344 项全量通过结果中。",
+      "speaker evidence 与 attribution 回归包含在本次 345 项全量通过结果中。",
       "fixtures 覆盖双声道、单声道 unknown、无时间戳、零长度时间和冲突证据。",
       "本次没有读取任何私人声纹档案或录音，也没有执行人物身份判断。"
     ],
@@ -586,7 +590,7 @@ export const chineseAsrModules = [
     ],
     verification: [
       "本次 Doctor 确认 GPU、代理、FunASR、Qwen ASR、PyTorch 和模型目录可读。",
-      "GPU broker、proxy guard、professional cloud script 和 broker worker 回归包含在 344 项通过结果中。",
+      "GPU broker、proxy guard、professional cloud script 和 broker worker 回归包含在 345 项通过结果中。",
       "本次没有调用云端、没有上传音频、没有消费密钥或额度，也没有运行重模型真实 smoke。"
     ],
     relation: "本模块给所有其他模块提供资源与隐私边界；它不决定正文质量，但决定某条处理路线是否允许执行、数据去了哪里。"

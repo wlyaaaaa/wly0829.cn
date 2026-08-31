@@ -8,7 +8,7 @@ export const timeAuditProject = {
   cardStatus: "本机时间线持续采集，可回放性能、进程、功耗和使用时间",
   cardStatusTone: "pass",
   snapshotBoundary: "采集与大盘现场已核对；本次没有有效游戏帧、完整数据库审计或最新整库恢复演练",
-  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
+  repositoryNote: "这是吴乐阳个人维护并集成第三方探针/库的 PUBLIC（公开）GitHub 仓库；根目录没有统一 LICENSE，不能仅因公开就称为开源，也不能把 LibreHardwareMonitor、PresentMon、Grafana 等外部组件冒充个人原创。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
   summary: "TimeAudit 给这台 Windows 工作站留下一条可以回放的本机时间线。问题发生后，只要给出大致时刻——例如“昨晚游戏为什么突然卡了两秒”——它就把流畅度、硬件压力、磁盘和网络、前后台程序以及程序生灭放到同一条时间轴上，返回有证据的候选原因、数据空档和不能下结论的部分。它也能复盘长期发热、耗电和屏幕使用时间。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等问题发现时现场常已消失。TimeAudit 留下同一时刻的硬件压力、前后台资源、窗口焦点和生命周期，使偶发故障可事后定位，长期散热、功耗和使用习惯也能比较。",
   plainExample: "例如我问“昨晚游戏卡了两秒，是显卡、磁盘还是后台程序？”我把时间框到那两秒，对齐帧率、最差时段表现、单帧耗时、处理器与显卡压力、磁盘延迟和前后台争抢，得到有时间依据的候选原因，而不是凭印象重启。",
@@ -23,21 +23,21 @@ export const timeAuditProject = {
     { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）" },
     { label: "产品范围", value: "6 张仪表盘、78 个面板：性能、流畅度、功耗、取证、资源和使用时间" },
     { label: "运行现场", value: "3 个容器运行；入库器 healthy（健康）；三条无正文心跳新鲜；Watchdog（看门狗）上次结果 0" },
-    { label: "源码与回归", value: "PUBLIC（公开）main（默认主分支）=a5a34d61360e52c1d019833eaa424f82ba06abcb；工作树干净；45 项 Python 定向回归 + 12 项 provider 单元测试 + 2 项子测试通过" },
+    { label: "源码与回归", value: "PUBLIC（公开）main（默认主分支）=44a842e82ea03a18174b87fe77d248f776d62eb5；工作树干净；项目生产依赖 + 临时 pytest runner 下 180 项测试、11 个子测试通过" },
     { label: "本次缺口", value: "诊断摘要最长 168 小时且仅聚合；本次无有效游戏帧，也未做完整数据库审计或整库恢复演练" }
   ],
   gallery: [
-    { src: "/media/timeaudit/dashboard-catalog.png", thumbnail: "/media/timeaudit/thumbs/dashboard-catalog.webp", alt: "TimeAudit 六张仪表盘目录", caption: "六张仪表盘把整机性能、流畅度、功耗、取证、后台资源和使用时间组成可回放的产品全貌。" },
-    { src: "/media/timeaudit/screen-time-focus.png", thumbnail: "/media/timeaudit/thumbs/screen-time-focus.webp", alt: "屏幕使用时间与专注复盘", caption: "复盘屏幕使用、专注上下文、最近切换以及关机、睡眠和暂离边界；图中的应用、标题与时长按真实界面保留。" },
-    { src: "/media/timeaudit/power-cost.png", thumbnail: "/media/timeaudit/thumbs/power-cost.webp", alt: "TimeAudit 功耗与电费诊断界面", caption: "把 CPU、GPU、其他部件、峰谷时段和电费估算放在同一视图，定位高耗能场景。" },
-    { src: "/media/timeaudit/hardware-long-term.png", thumbnail: "/media/timeaudit/thumbs/hardware-long-term.webp", alt: "整机硬件与长期趋势", caption: "同看温度、功率、频率、降频原因和同负载散热趋势，区分一次高负载与持续退化。" },
-    { src: "/media/timeaudit/fps-stutter.png", thumbnail: "/media/timeaudit/thumbs/fps-stutter.webp", alt: "FPS 与微观卡顿回放", caption: "把 FPS、1% Low、单帧渲染时间和微观卡顿放在同一轴，捕捉平均帧率正常时的瞬时问题。" },
-    { src: "/media/timeaudit/foreground-stutter-analysis.png", thumbnail: "/media/timeaudit/thumbs/foreground-stutter-analysis.webp", alt: "前台应用卡顿与瓶颈分析", caption: "比较前台应用 FPS 和卡顿标记，并用 CPU / GPU 瓶颈时间线定位限制侧。" },
-    { src: "/media/timeaudit/foreground-timeline.png", thumbnail: "/media/timeaudit/thumbs/foreground-timeline.webp", alt: "前台焦点与卡顿时间线", caption: "把微观卡顿与前台焦点对齐，回看问题发生时正在使用什么，并保留截图当时可见的真实应用上下文。" },
-    { src: "/media/timeaudit/system-pressure.png", thumbnail: "/media/timeaudit/thumbs/system-pressure.webp", alt: "系统压力与上下文切换", caption: "对齐用户态调度抖动、上下文切换、内存和磁盘延迟，解释整机为什么不跟手。" },
-    { src: "/media/timeaudit/resource-usage.png", thumbnail: "/media/timeaudit/thumbs/resource-usage.webp", alt: "资源大户与后台负载", caption: "按 CPU、GPU、内存、显存、磁盘和网络聚合排行，区分前台负载与后台活动。" },
-    { src: "/media/timeaudit/process-forensics.png", thumbnail: "/media/timeaudit/thumbs/process-forensics.webp", alt: "进程取证与安全审计", caption: "用签名、提权、生命周期、退出码和路径异常提供线索；告警需要人工核查。" },
-    { src: "/media/timeaudit/storage-scale.png", thumbnail: "/media/timeaudit/thumbs/storage-scale.webp", alt: "存储吞吐与数据库规模", caption: "展示写密集时序系统的吞吐和分区规模，判断长期保留、查询与恢复成本。" }
+    { src: "/media/timeaudit/dashboard-catalog.png", thumbnail: "/media/timeaudit/thumbs/dashboard-catalog.webp", alt: "TimeAudit 六张仪表盘目录", caption: "2026-08-29 的真实 Grafana 目录：六张盘把性能、流畅度、功耗、取证、后台资源和使用时间组成可回放产品。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明六张仪表盘和 78 个面板曾在真实 Grafana 中组成完整产品入口。", doesNotProve: "不证明当前服务在线、每个查询仍正确或当前数据没有空档。" },
+    { src: "/media/timeaudit/screen-time-focus.png", thumbnail: "/media/timeaudit/thumbs/screen-time-focus.webp", alt: "屏幕使用时间与专注复盘", caption: "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明使用时间与焦点关系曾能在同一大盘阅读，普通应用和时长按真实画面保留。", doesNotProve: "不证明这些应用、标题、时长或生活规律仍是当前事实。" },
+    { src: "/media/timeaudit/power-cost.png", thumbnail: "/media/timeaudit/thumbs/power-cost.webp", alt: "TimeAudit 功耗与电费诊断界面", caption: "2026-08-29 的真实功耗盘，把 CPU、GPU、其他部件、峰谷时段和费用估算放在同一视图。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明功率采样、时段和费用模型已有可用界面。", doesNotProve: "其他部件功耗、电费与碳排是模型估算，不是插座计量或账单。" },
+    { src: "/media/timeaudit/hardware-long-term.png", thumbnail: "/media/timeaudit/thumbs/hardware-long-term.webp", alt: "历史旧版整机硬件长期趋势界面", caption: "历史旧版截图仍含 RTX5080 标题；当前 dashboard 已移除 SKU 绑定，因此它只作为界面演化证据。", evidenceLevel: "E0", evidenceLabel: "历史旧版界面", observedAt: "2026-08-29", sourceCommit: "pre-44a842e dashboard capture", proves: "证明长期温度、功率、频率和降频趋势的界面形态曾存在。", doesNotProve: "不代表当前硬件型号、当前 dashboard 标题或当前长期趋势。" },
+    { src: "/media/timeaudit/fps-stutter.png", thumbnail: "/media/timeaudit/thumbs/fps-stutter.webp", alt: "历史 FPS 数据质量坏例", caption: "历史截图出现最高 8192 FPS 等不可信量级，现作为 PresentMon 新鲜度与一致性修复前的数据质量坏例保留。", evidenceLevel: "E0", evidenceLabel: "历史数据质量坏例", observedAt: "2026-08-29", sourceCommit: "pre-44a842e dashboard capture", proves: "证明旧链曾把异常量级带进 FPS/卡顿界面，也说明为什么需要单调时钟和新鲜度门。", doesNotProve: "不证明任何真实游戏性能、掉帧原因或当前 PresentMon 输出。" },
+    { src: "/media/timeaudit/foreground-stutter-analysis.png", thumbnail: "/media/timeaudit/thumbs/foreground-stutter-analysis.webp", alt: "历史前台卡顿数据质量坏例", caption: "历史界面曾显示 Windows Terminal 平均 826 FPS 等不可信值；它用于展示旧数据问题，不作为当前性能证据。", evidenceLevel: "E0", evidenceLabel: "历史数据质量坏例", observedAt: "2026-08-29", sourceCommit: "pre-44a842e dashboard capture", proves: "证明前台应用、卡顿标记和瓶颈时间线的界面结构，以及旧数据口径曾需要修复。", doesNotProve: "不证明截图中的应用 FPS、瓶颈或任何当前卡顿结论。" },
+    { src: "/media/timeaudit/foreground-timeline.png", thumbnail: "/media/timeaudit/thumbs/foreground-timeline.webp", alt: "前台焦点与卡顿时间线", caption: "2026-08-29 的真实界面，把微观卡顿与前台焦点对齐，并保留当时可见的真实应用上下文。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明焦点时间线和卡顿标记曾能在同一页面对齐。", doesNotProve: "不证明旧 FPS 点全部有效，也不代表当前使用上下文。" },
+    { src: "/media/timeaudit/system-pressure.png", thumbnail: "/media/timeaudit/thumbs/system-pressure.webp", alt: "系统压力与上下文切换", caption: "2026-08-29 的真实系统压力盘，对齐用户态调度抖动、上下文切换、内存与磁盘延迟。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明多个系统压力信号可在同一时间轴比较。", doesNotProve: "不证明内核 DPC、硬件故障或任何单一根因。" },
+    { src: "/media/timeaudit/resource-usage.png", thumbnail: "/media/timeaudit/thumbs/resource-usage.webp", alt: "资源大户与后台负载", caption: "2026-08-29 的真实资源盘，按 CPU、GPU、内存、显存、磁盘和网络展示程序聚合。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明本机 Grafana 可以查看具体程序的资源排行和时间变化。", doesNotProve: "不证明 timeaudit-diagnostics Skill 会自动返回程序名，也不证明资源占用就是根因。" },
+    { src: "/media/timeaudit/process-forensics.png", thumbnail: "/media/timeaudit/thumbs/process-forensics.webp", alt: "进程生命周期与取证线索", caption: "2026-08-29 的真实取证盘，用签名、提权、生命周期、退出码和路径异常提供人工核查线索。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明进程生灭与路径/签名线索有可视化入口。", doesNotProve: "无签名、异常路径或同期活动都不自动证明恶意、黑客或键盘监听。" },
+    { src: "/media/timeaudit/storage-scale.png", thumbnail: "/media/timeaudit/thumbs/storage-scale.webp", alt: "存储吞吐与数据库规模", caption: "2026-08-29 的真实存储盘，展示写密集时序系统的吞吐和分区规模。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明存储吞吐、显存/网络和数据库规模有可读界面。", doesNotProve: "不证明全部 SQL 当前都已裁剪、备份可恢复或长期容量没有风险。" }
   ],
   productPrinciples: [
     { title: "先问什么时候发生", detail: "时间窗口是诊断入口；先定位问题时刻，再决定需要哪些硬件、进程、前台和生命周期证据。" },
@@ -78,22 +78,25 @@ export const timeAuditProject = {
     { term: "E2E（端到端验证）", meaning: "真实采集、写库、查询到用户看图完整走通；源码测试不能替代。" }
   ],
   currentState: {
-    observedAt: "2026-08-30T03:10:59Z",
-    label: "PUBLIC main、运行链、两类聚合 provider 与定向回归均有新鲜证据；完整数据库审计和恢复本次未验",
+    observedAt: "2026-08-31T04:31:36Z",
+    label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
     facts: [
-      "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）；刷新远端引用后，观察时 HEAD 与 origin/main 均为 a5a34d61360e52c1d019833eaa424f82ba06abcb，工作树干净。",
+      "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）；观察时 HEAD 与缓存 origin/main 均为 44a842e82ea03a18174b87fe77d248f776d62eb5，工作树干净。",
       "audit-postgres、audit-ingester、audit-grafana 三个容器运行；入库器健康状态为 healthy（健康），PostgreSQL 为本机 45432，Grafana 13.0.2 为本机 53000。",
       "遥测主链、AHK 与入库器三条无正文 heartbeat（心跳）在 02:30Z 附近刷新，观察时文件年龄约 1–2 秒；Watchdog（看门狗）与每日备份任务最近结果均为 0。",
-      "在干净的当前 main 中，用项目实际 Python 3.11 运行运行硬化、入库、仪表盘合同、备份恢复、PresentMon 和未知路径定向回归：45 项与 2 项子测试通过；新的 diagnostic summary provider 另有 12 项单元测试全部通过。",
+      "在干净的当前 main 中，复用项目 Python 3.11 生产依赖，并从本任务 E 盘临时目录注入 pytest runner；完整回归为 180 passed、11 subtests passed，用时 47.33 秒，项目 .venv 没有被加入开发依赖。",
       "公开安全聚合 provider（提供器）在 01:00Z—02:00Z 返回 status=ok（状态正常）、coverage=fresh（覆盖新鲜）、3530 个样本；1 个 scheduler_jitter_saturation（用户态调度抖动饱和）warning（警告）涉及 110 个样本，且 projection_recheck_recommended=false（不建议重查稳定机器投影）。",
-      "新的 `timeaudit_diagnostic_summary.py --hours 1` 在 03:10Z 返回 schema=timeaudit.diagnostic-summary.v1、status=ok、coverage=fresh、3590 个硬件样本，最新样本年龄约 0.21 秒、最大空档约 2.98 秒；没有有效游戏帧被正确标为 no_game_frames，当前只有 9 次 packet-loss occurrence warning。",
+      "新的 `timeaudit_diagnostic_summary.py --hours 1` 在本轮返回 schema=timeaudit.diagnostic-summary.v1、status=ok、coverage=fresh、3702 个硬件样本，最新样本年龄约 0.77 秒；8 个 privacy flag 均为 false，没有有效游戏帧被正确标为 no_game_frames。",
+      "当前 main 使用单调时钟判断 PresentMon 新鲜度，避免系统墙钟回拨让陈旧帧继续存活；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。",
+      "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。",
       "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。"
     ],
     gaps: [
       "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
-      "未跑完整 test_telemetry_health.py、db_audit.py 或全部 Grafana SQL 执行计划；在线状态不证明字段与查询全绿。",
+      "本轮完整源码回归已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与单元测试都不能证明历史数据全绿。",
       "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
       "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
+      "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
       "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
     ]
   },
@@ -118,8 +121,8 @@ export const timeAuditProject = {
   ],
   usageExamples: [
     { ask: "刚才游戏为什么卡？", effect: "对齐 1 秒 FPS 采样、1% Low、单帧时间、瓶颈、磁盘和后台争抢。" },
-    { ask: "谁在后台写盘或联网？", effect: "按后台程序对齐磁盘和网络趋势，给出最相关程序、时间段和仍缺的归因证据。" },
-    { ask: "程序为什么闪退？", effect: "结合退出码、存活时间、父子关系与资源变化形成死因候选。" },
+    { ask: "谁在后台写盘或联网？", effect: "AI先用有界聚合确认覆盖、磁盘/网络方向和是否值得深挖；当前 Skill 不返回进程名，需点名程序时再进入本机 Grafana 资源盘查看具体进程和时间段。" },
+    { ask: "程序为什么闪退？", effect: "AI先用聚合摘要确认同窗资源与覆盖；具体退出码、存活时间、父子关系和路径明细要进入本机 Grafana 取证盘，本项目尚无已验收的自然语言逐进程查询入口。" },
     { ask: "时间都花在哪？", effect: "用前台区间、暂离、睡眠、专注块和切换趋势复盘；窗口标题与时长可按实际价值展示，只隐藏其中真正敏感的具体内容。" },
     { ask: "采集器是不是假活？", effect: "检查三条无正文 heartbeat（心跳）、容器 health（健康状态）和任务状态，再精确恢复组件。" },
     { ask: "过去一小时电脑为什么偶尔卡？", effect: "timeaudit-diagnostics 先用一条聚合查询确认覆盖、硬件、游戏帧和状态时长，再把 occurrence 信号与 Windows、驱动、任务或 PCConfig 现场证据交叉判断。" },
@@ -127,9 +130,9 @@ export const timeAuditProject = {
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "main 定义了采集、表、口径、自愈、备份，以及按实际值判断个人敏感内容与凭据的边界。", doesNotProve: "本机已安装、运行或每个查询正确。" },
-    { layer: "Tests（测试）", proves: "45 项 Python 定向回归、12 项 diagnostic provider 单元测试和 2 个子测试覆盖运行、入库、仪表盘合同、备份、FPS、未知路径与聚合摘要边界。", doesNotProve: "真实游戏负载、长期全库性能和任意历史问题的根因。" },
+    { layer: "Tests（测试）", proves: "180 项测试与 11 个子测试覆盖运行、入库、仪表盘合同、备份、FPS、新鲜度、原生崩溃隔离、未知路径与聚合摘要边界。", doesNotProve: "真实游戏负载、长期全库性能和任意历史问题的根因。" },
     { layer: "Runtime（运行）", proves: "观察时容器运行、入库器 healthy（健康）、heartbeat（心跳）新鲜、任务结果为 0。", doesNotProve: "样本值正确或历史无空档。" },
-    { layer: "Aggregate（聚合）", proves: "PCConfig 摘要窗口有 3530 样本与一个用户态抖动 warning；诊断摘要窗口有 3590 样本、覆盖新鲜、no_game_frames 和 9 次丢包 occurrence。", doesNotProve: "内核 DPC、硬件故障、具体进程原因或持续压力。" },
+    { layer: "Aggregate（聚合）", proves: "本轮一小时诊断摘要有 3702 个硬件样本、覆盖新鲜、no_game_frames，且 8 个 privacy flag 均为 false。", doesNotProve: "内核 DPC、硬件故障、具体进程原因或持续压力。" },
     { layer: "Gallery / dashboard contract（图片 / 大盘合同）", proves: "11 张获准截图展示真实界面；固定数据源与恢复结构有回归。", doesNotProve: "图片瞬时值可公开推广或全部 SQL 性能达标。" },
     { layer: "Recovery（恢复）", proves: "备份任务最近结果 0，备份与恢复路径有定向测试。", doesNotProve: "本次已从最新备份完成隔离整库恢复。" }
   ],
@@ -140,13 +143,14 @@ export const timeAuditProject = {
     { date: "2026-07-29—08-07", commit: "e677ad6–5f41846", result: "把 FPS 绑定前台渲染进程，加入不含正文的聚合异常接口，并加固采样与取证。" },
     { date: "2026-08-21", commit: "2ec7807–de82db7", result: "修复 spool 并建立 Grafana 13 固定数据源、备份与恢复失败关闭合同。" },
     { date: "2026-08-23—08-24", commit: "2d77616–59ecd01", result: "串行化遥测恢复并加固 FPS 数据库恢复，避免恢复器抢占与空闲误报。" },
-    { date: "2026-08-29", commit: "238ea58–a5a34d6", result: "恢复 Grafana 时间轴 transformation、移除大盘硬件型号绑定，并新增一次查询即可消费的有界历史诊断 provider 与 fast path；`.agents` 同步增加 timeaudit-diagnostics Skill。" }
+    { date: "2026-08-29", commit: "238ea58–a5a34d6", result: "恢复 Grafana 时间轴 transformation、移除大盘硬件型号绑定，并新增一次查询即可消费的有界历史诊断 provider 与 fast path；`.agents` 同步增加 timeaudit-diagnostics Skill。" },
+    { date: "2026-08-30—08-31", commit: "44a842e", result: "PresentMon 新鲜度改用单调时钟，psutil 原生网络枚举进入可重启隔离进程，生产 Python 收敛到项目独立 .venv，避免墙钟回拨、原生崩溃和全局依赖漂移污染主采集链。" }
   ],
   operationalEntrypoints: [
     { name: "打开大盘", command: "http://localhost:53000", purpose: "从时间范围进入 6 张诊断盘。" },
     { name: "启动主链", command: "schtasks /run /tn TimeAudit_AutoStart", purpose: "通过交互式提权任务拉起 AHK、Docker 与主引擎。" },
     { name: "查看 Watchdog（看门狗）", command: "Get-ScheduledTaskInfo TimeAudit_Watchdog", purpose: "确认外部恢复任务最近结果，不读遥测正文载荷。" },
-    { name: "源码回归", command: "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pytest -q <selected-tests>", purpose: "使用实际 Python 3.11 验证运行、入库、仪表盘、备份和 FPS。" },
+    { name: "源码回归", command: ".venv\\Scripts\\python.exe -m pytest -q", purpose: "在项目 Python 3.11 生产依赖上临时提供测试 runner，验证运行、入库、仪表盘、备份、FPS 与原生隔离；pytest 不进入生产依赖。" },
     { name: "公开安全聚合", command: "python E:\\Projects\\Tools\\TimeAudit\\pcconfig_anomaly_digest.py --after-utc <UTC> --until-utc <UTC>", purpose: "只返回异常计数、覆盖和建议。" },
     { name: "快速历史诊断", command: "python -B E:\\Projects\\Tools\\TimeAudit\\timeaudit_diagnostic_summary.py --hours <1-168>", purpose: "一次查询返回覆盖、硬件、有效游戏帧、状态时长、信号与解释限制，供 timeaudit-diagnostics Skill 使用。" },
     { name: "备份 / 恢复预检", command: "powershell -File E:\\Projects\\Tools\\TimeAudit\\backup_all.ps1 ; python E:\\Projects\\Tools\\TimeAudit\\restore_grafana.py --dry-run", purpose: "分层备份，并在实际恢复前验证候选。" }
@@ -216,7 +220,7 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\schema.sql", role: "表、分区与索引" }
     ],
     verification: [
-      "runtime hardening 与 ingest resilience 纳入本次 45 项通过结果。",
+      "runtime hardening 与 ingest resilience 纳入本次 180 项通过结果。",
       "容器与三条 heartbeat 在观察时持续推进。",
       "未读原始表、未跑完整数据库审计，故保持 mixed。"
     ],
@@ -284,8 +288,8 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_grafana_dashboard_contract.py", role: "大盘合同回归" }
     ],
     verification: [
-      "PresentMon 选择与 dashboard contract 纳入 45 项定向通过结果。",
-      "diagnostic summary provider 的 12 项 unittest 通过；一小时真实窗口 coverage=fresh、3590 样本，且 no_game_frames 没有被误报成掉帧。",
+      "PresentMon 选择与 dashboard contract 纳入本次 180 项通过结果。",
+      "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3702 样本，且 no_game_frames 没有被误报成掉帧。",
       "Grafana 容器运行，授权截图显示真实界面。",
       "未启动游戏或查询真实时序值，FPS E2E 仍 Unknown。"
     ],
@@ -352,7 +356,7 @@ export const timeAuditModules = [
     verification: [
       "unknown path 回归纳入本次定向测试并通过。",
       "没有读取任何实际进程、路径、标题或连接。",
-      "更广泛进程测试本次未全跑，故保持 mixed。"
+      "进程采集、生命周期和未知路径逻辑进入本次完整回归；本轮没有读取实际进程明细，因此产品现场仍保持 mixed。"
     ],
     relation: "把进程事实转成资源与取证视角，并与硬件卡顿时间对齐。"
   },
@@ -390,7 +394,7 @@ export const timeAuditModules = [
       "筛选与窗口交叠的区间。",
       "裁剪、合并并计算使用结构。",
       "积分功率并应用峰谷模型。",
-      "具体标题和个人统计只在本机显示。"
+      "原始全库不镜像进网页；具体标题和个人统计只有在具备产品价值、逐值没有 L3+ 或凭据证据时才公开，否则留在本机。"
     ],
     concepts: [
       { term: "gaps-and-islands（区间并集）", explanation: "合并重叠/相接时间片后再求总时长。" },
@@ -484,7 +488,7 @@ export const timeAuditModules = [
     ],
     verification: [
       "三条 heartbeat 新鲜、容器运行、ingester healthy、Watchdog 结果 0。",
-      "运行与入库回归纳入 45 项通过结果。",
+      "运行与入库回归纳入 180 项通过结果。",
       "未主动杀进程、断库或模拟睡眠。"
     ],
     relation: "监管采集和探针持续性；备份模块处理持久恢复。"

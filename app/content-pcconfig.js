@@ -7,7 +7,7 @@ export const pcconfigProject = {
   statusTone: "mixed",
   cardStatus: "Password Center 已独立运行，机器配置、秘密盲用和恢复入口可用",
   cardStatusTone: "pass",
-  snapshotBoundary: "Codex 对话热备已运行；H 冷备本次跳过，Codex Home 仍等待正式切换窗口，银行卡与新机恢复缺真实用户端到端验收",
+  snapshotBoundary: "Codex 对话热备已运行；87 项任务登记与 88 项完整现场存在迁移任务差异，Codex Home 仍等待正式切换，H 冷备、银行卡与新机恢复缺真实用户端到端验收",
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
@@ -19,10 +19,10 @@ export const pcconfigProject = {
     unavailable: "磁盘、Provider（现场读取器）或受保护入口不可用时，把对应结论标为 Unknown（证据不足），不猜默认路径、不整包覆盖，也不把部分复制或安装称为整机恢复。"
   },
   heroFacts: [
-    { label: "当前源码", value: "PRIVATE main d13ac199dad117a3cabe38771a428dfa771fe1a3 与 origin/main 对齐；观察时 checkout 另有 8 项受管软件/任务候选修改，均不属于已发布 main" },
+    { label: "当前源码", value: "PRIVATE main 5bb66e95825e8445c5e1ce53d0475ee85dee698b 与 origin/main 对齐；观察时 checkout 另有 3 个 Codex Home 迁移候选文件，均不属于已发布 main" },
     { label: "Password Center", value: "已脱离退役 C Policy 独立运行；9/9 安装文件与锚点一致，Secret Broker 安全核心和产品闭环均 pass，plaintext_returned=false" },
-    { label: "银行卡与浏览器", value: "银行卡作为卡号/有效期/CVV 一条原子凭据保存；AgentCardFill 对唯一 HTTPS 支付表单一次盲填、不提交页面，浏览器桥 1.4.0 为 launcher-verified" },
-    { label: "跨设备恢复", value: "PRIVATE Git 加密 Recovery Set 可作为独立载体，一个可靠因子可在新设备生成新密钥并恢复；不导出旧运行时私钥，G 只是额外热副本" },
+    { label: "受保护数据", value: "P0 已在线恢复到第 68 版 normal、active=LKG；Vault V2 仍只到 protected_install_effect_source_ready，没有安装器回读，不能称已安装" },
+    { label: "任务现场", value: "2026-08-31 管理员只读 Drift：Registry 87 项、Windows 现场 88 项，新增 2 个当前迁移任务、移除 1 个旧任务；29 个受管核心任务运行健康无失败" },
     { label: "Codex 对话恢复", value: "每日热备任务启用、Ready 且最近自然结果 0；恢复点按内容寻址和逐对象 SHA-256 回读，原始对话不进入 GitHub" },
     { label: "Codex Home 迁移", value: "迁移事务、E 盘 staging、ACL/内容/链接校验和回滚链已就绪；当前 source=true、staging=true、final=false，状态 waiting_for_codex_exit，尚未正式切换" }
   ],
@@ -76,10 +76,10 @@ export const pcconfigProject = {
     { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
   ],
   currentState: {
-    observedAt: "2026-08-30T19:52:59Z",
-    label: "Password Center 独立运行、Codex 对话热备已闭合；Codex Home 等待正式切换，H 冷备与真实支付/新机恢复验收仍有缺口",
+    observedAt: "2026-08-31T04:15:55Z",
+    label: "Password Center 独立运行、Codex 对话热备已闭合；完整权限现场发现任务登记漂移，Codex Home 仍未切换",
     facts: [
-      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 d13ac199dad117a3cabe38771a428dfa771fe1a3。观察时 checkout 另有 8 项受管软件和计划任务候选修改；这些未提交内容不是 main。",
+      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 5bb66e95825e8445c5e1ce53d0475ee85dee698b。观察时 checkout 另有 3 个 Codex Home 迁移候选文件；这些未提交内容不是 main。",
       "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。Secret Broker 安全核心与产品闭环均 pass，所有公开回执保持 plaintext_returned=false。",
       "PRIVATE Git 的完整加密 Recovery Set 可独立承担跨设备恢复；当前 cross_device_recovery_allowed=true、one_week_recovery_ready=true。新设备生成自己的设备/运行时密钥，不导出旧运行时私钥。",
       "银行卡的卡号、有效期和 CVV 作为一条原子凭据保存、备份和恢复；AgentCardFill 使用一次性、目标绑定能力盲填唯一 HTTPS 支付表单，不自动提交，也不把值交给模型。",
@@ -93,13 +93,14 @@ export const pcconfigProject = {
       "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
       "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
       "Codex Home 当前 source=true、staging=true、final=false，仍为 waiting_for_codex_exit；正式切换和新运行时回读没有发生。",
-      "观察时 checkout 的 8 项受管软件/任务修改均未提交，不属于 d13ac19 main，也不能写成已发布能力。",
+      "观察时 checkout 的 3 个 Codex Home 迁移候选文件均未提交，不属于 5bb66e9 main，也不能写成已发布能力。",
+      "2026-08-31 完整管理员只读 Drift 看到 Registry 87 项、Windows 现场 88 项：新增两个当前迁移任务、移除一个旧迁移任务，changed=0、complete_visibility=true。任务定义因此是明确漂移，不再沿用上一代 88/88 闭合结论。",
       "PCConfig Protected Data Safe Switch Boot Recovery 的 LastTaskResult=4 已由正式在线恢复回执证明为 historical_failure_recovered_online：current 第 68 版 normal、active=LKG、trusted control=true。最新自然 boot receipt 仍 deadline_met=false，因此下一次自然启动验收不能省略。",
       "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
       "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
       "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
       "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
-      "Recovery kit 共 16 项：1 项 WEPE 隐藏分区只有 present_observed，1 项完整 BIOS/UEFI 记录仍 pending_manual_capture；stable machine projection 有 2 项待发布变化，startup snapshot 有 3 项信息性新增，当前均未写入。"
+      "Recovery kit 的 BIOS/UEFI 核心设置记录已成为 present_verified，覆盖照片保留的 CPU、内存、启动和 PCIe 基线；它不等于每个菜单的完整原生 Profile，也没有替代下一次启动后的现场回读。WEPE 隐藏分区仍只有 present_observed。"
     ]
   },
   operatingFlow: [
@@ -271,7 +272,7 @@ export const pcconfigModules = [
     shortTitle: "运行与启动",
     title: "运行时、受管软件、启动项与计划任务",
     teaser: "把工具版本、环境元数据、登录启动和计划任务拆成各自可观察、可恢复、不会弹黑窗的运行链。",
-    status: "运行环境与 88 项任务定义全量可读；3 项运行态 warning 与 P0 下一次自然启动验收继续分层保留，无当前 block",
+    status: "运行环境可读；完整权限现场为 Registry 87 项、Windows 88 项，迁移任务有 2 新增/1 移除，运行健康本身通过",
     statusTone: "mixed",
     value: "让我知道“软件装着”之外，正确版本是否可用、启动入口是否仍在、计划任务上次怎样结束，以及重装后要按什么顺序恢复。故障会落到具体任务或组件，而不是一句笼统的“电脑环境坏了”。",
     why: "运行时路径会变化，环境变量可能双作用域，登录启动和计划任务又是两套机制。只看文件是否存在会漏掉错误 Action（执行命令）、错误身份、被禁用任务或非零结果；只看任务 Ready（就绪）也不能证明业务成功。",
@@ -298,7 +299,7 @@ export const pcconfigModules = [
       "环境变量索引当前记录 90 个变量元数据和 64 个 PATH（可执行搜索路径）条目；Probe-EnvVar 只返回存在性、作用域和差异，不返回任何值。",
       "启动快照只覆盖当前用户/机器 Run 与用户/公共 Startup 文件夹五个 surface，不复制 Task Scheduler，也不覆盖服务、驱动和 packaged app。",
       "2026-08-29 live startup 有 20 项：19 enabled、1 disabled；相对快照新增 3 项，Inspect 明确 classification=informational_only、无需用户确认。",
-      "tasks Registry 当前有 88 项；SYSTEM/elevated task-scan generation 已回读 88/88 且 complete_visibility=true。用途目录和重建计划继续保存受管任务用途与签名，运行态 warning 仍与定义闭合分开。",
+      "tasks Registry 当前有 87 项；2026-08-31 管理员只读现场观察到 88 项，complete_visibility=true，新增 2 个当前 Codex Home Migration 任务、移除 1 个旧任务且 changed=0。上一代 task-scan 的 88/88 只能作为历史快照。",
       "governance check 只调用登记的 zero-write Provider 和稳定 publisher；同一非 current fingerprint 只有首次或变化时产生 attention。"
     ],
     flow: [
@@ -327,7 +328,7 @@ export const pcconfigModules = [
       "具体任务为何成功仍由所属项目定义"
     ],
     failures: [
-      { condition: "SYSTEM 定义快照与运行态结论不同", response: "任务定义 88/88 已闭合；live drift 的 3 个 warning 继续由对应运行 Owner 解释，不把定义 PASS 冒充运行全绿，也不把 warning 反推成定义漂移。" },
+      { condition: "完整权限现场与 Registry 不同", response: "保留 87/88 和两个新增、一个移除的精确差异；不把上一代 88/88 task-scan 冒充当前闭合，也不把 runtime health PASS 反推成定义一致。" },
       { condition: "P0 历史 LastTaskResult=4", response: "正式回执已证明在线恢复到第 68 版 normal/LKG，因此分类为 historical_failure_recovered_online；下一次自然 boot deadline 仍须单独验收。" },
       { condition: "启动快照比现场少 3 项", response: "当前归类为 informational_only；无需自动刷新、关闭应用或要求用户确认，下次真实维护可吸收为新基线。" },
       { condition: "环境变量 registry/process 读取失败", response: "对应项 exists=null、diff_status=unknown；不把读取失败写成 absent。" },
@@ -346,9 +347,8 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.scheduled-tasks.md", role: "Scheduler 权威、无窗口和事务回滚合同" }
     ],
     verification: [
-      "task scan current generation 20260830t011100879-3ff5ec92330242fc 于 2026-08-30T01:11:01Z 发布并回读；registry_count=88、observed_count=88、added/removed/changed=0、complete_visibility=true",
-      "2026-08-30T01:13Z 随后 live drift 为 pass=4、warn=3、block=0；SYSTEM 定义闭合与运行态 warning 分层保留",
-      "tasks.runtime_health 评估 27 个 managed-core 任务；P0 结果 4 已分类为 historical_failure_recovered_online，另两项非零只是 Scheduler status；receipt failure=0",
+      "2026-08-31T04:15:55Z 管理员只读 Test-PCConfigDrift 完成：complete_visibility=true，Registry 87、observed 88、added 2、removed 1、changed 0；任务定义域因此 block，其他 6 个检查通过",
+      "tasks.runtime_health 评估 29 个 managed-core 任务；failure=0、unknown=0，两个非零结果均分类为 Scheduler status；定义漂移与运行健康继续分层",
       "正式 boot-deadline-recovery operation（开机时限恢复动作）6a723aa1-3749-4d80-90ea-f18fcf75b3b3 已 applied（执行完成），把 current 恢复到第 68 版 normal、active=LKG；它按合同不会改写历史 boot receipt（开机回执）或 Task Scheduler LastTaskResult",
       "Get-StartupInventory.ps1 -Json 当前返回 20 项、19 enabled、1 disabled、0 unknown",
       "Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json 当前返回 changes_observed，但 action_required=false、confirmation_required=false",
@@ -361,7 +361,7 @@ export const pcconfigModules = [
     shortTitle: "恢复与备份",
     title: "核心恢复、备份介质与迁移回滚",
     teaser: "把“有备份”升级为“知道从哪里恢复、按什么顺序、如何验证、失败后怎样不覆盖原状”。",
-    status: "CoreRecovery 当前 ready_with_warnings；88 项任务定义已闭合，H 冷备在线性与下一次自然启动验收仍独立待证",
+    status: "CoreRecovery 当前 ready；计划任务 Registry 与现场存在已知迁移任务差异，H 冷备在线性与下一次自然启动验收仍独立待证",
     statusTone: "mixed",
     value: "重装、换机或磁盘故障时，不再凭记忆到处拷文件。它把网络可重建的软件、需要备份的日常数据、私密配置、计划任务和人工登录分层，让恢复可以停在安全检查点继续。",
     why: "单纯复制文件无法恢复任务身份、运行时顺序、路径引用、登录态和业务可见性；反过来整包覆盖又可能把旧配置、损坏数据库或错误路径带回新系统。恢复必须选择性、可回退并逐层验收。",
@@ -605,7 +605,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 已发布 main 为 d13ac19 并与 origin/main 对齐；观察时 checkout 另有 8 项受管软件/任务候选修改，因此不能写成工作树干净或把候选冒充 main。9449bad–d13ac19 已把 Codex 对话恢复、Password Center 独立链和可按需启动的 Codex Home 迁移事务纳入 main"
+      "PCConfig 已发布 main 为 5bb66e9 并与 origin/main 对齐；观察时 checkout 另有 3 个 Codex Home 迁移候选文件，因此不能写成工作树干净或把候选冒充 main。当前机器仍由 C:\\Users\\10979\\.codex 普通目录承载；E:\\Data\\AppData\\Codex 不存在且 CODEX_HOME 未设置，正式 cutover 与新运行时回读尚未发生"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

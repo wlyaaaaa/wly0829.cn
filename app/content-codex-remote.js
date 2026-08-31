@@ -9,7 +9,7 @@ export const codexRemoteProject = {
   cardStatusTone: "pass",
   snapshotBoundary: "公开版本、历史实机使用和界面证据已核对；本轮没有调用运行时，因此不代表当前在线",
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
-  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这个页面直接展示 Codex Remote 的真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
+  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是社区构建的非官方 companion（配套工具），没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
   summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令和文件改动，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；也能在明确确认下浏览和操作自己的文件。它不传输桌面画面，也不另开一份聊天。",
   why: "长任务可能正在电脑上运行、等待审批或已经改了文件。另开一个手机聊天只能复制文字，拿不到同一个任务的真实轮次、工具、审批和文件状态。Codex Remote 把移动端设计成“查看—审批—引导—排队—回读”的控制面，并在身份、连接或结果不清时拒绝动作。",
   plainExample: "例如电脑上的任务正在改项目并等待一条命令审批。我在手机上先看命令会影响什么、刚改了哪些文件，再选择这次真实提供的审批选项并补充一个条件；如果当前回复已经快结束，就把下一件事放进可编辑队列。网络中断时先回读状态，不会自动重复发送。",
@@ -24,7 +24,7 @@ export const codexRemoteProject = {
     { label: "共享机制", value: "Browser → 认证 Sidecar → loopback Broker → 单一 app-server ← Codex Desktop；共享 threadId / turnId" },
     { label: "主要能力", value: "任务与历史、公开进展、工具、diff、子智能体、审批、引导、停止、下一轮队列、模型/上下文/额度、所有者文件工作台" },
     { label: "正式公开版本", value: "v0.1.5 / c3a07719ecbe00dbad515b3cae00fd0f33b186d2；记录 1771 项测试、public-safety 与 Chromium 响应式验收" },
-    { label: "当前公开源码", value: "PUBLIC main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6；package=0.1.6-unreleased.0，不能写成已发布 v0.1.6" },
+    { label: "当前公开源码", value: "PUBLIC main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6；package=0.1.6-unreleased.0，不能写成已发布 v0.1.6；当前 main 最新 CI 为 failure" },
     { label: "本页证据边界", value: "12 张历史真实手机 UI + 7 张公开合成演示 + 1 张历史合成 QA；本轮未调用 Remote runtime，不代表当前在线" }
   ],
   productPrinciples: [
@@ -35,7 +35,8 @@ export const codexRemoteProject = {
     { title: "待发队列不是任务记录", detail: "Web草稿只有真正派发并被同一任务接受后，才成为任务的一部分。" },
     { title: "项目任务和所有者文件是两条边界", detail: "任务工作区受项目身份约束，文件工作台使用 Windows 所有者能力；两者不能互相冒充权限。" },
     { title: "公网只看到产品接口", detail: "认证、同源和确认边界挡在前面，底层任务协议、回环服务与敏感载荷留在本机。" },
-    { title: "结果不清就先回读，不自动重放", detail: "断线、重复提交或状态不确定时保留草稿和幂等身份，先确认权威状态再决定是否继续。" }
+    { title: "结果不清就先回读，不自动重放", detail: "断线、重复提交或状态不确定时保留草稿和幂等身份，先确认权威状态再决定是否继续。" },
+    { title: "通用智能来自运行时，Remote 负责同任务控制", detail: "理解、推理、工具和代码执行来自已集成的 AI/智能体运行时；Codex Remote 负责把同一任务、审批、文件和恢复语义带到手机，不冒充基础智能的作者。" }
   ],
   gallery: [
     {
@@ -316,6 +317,7 @@ export const codexRemoteProject = {
       "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。",
       "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。",
       "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。",
+      "v0.1.5 对应公开 CI 已通过；当前 main 的最新 CI run 31145586404 为 failure，因此正式 release 证据与当前源码验证状态必须分开。",
       "源码实现任务、队列、审批、模型/上下文/额度、子智能体、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。",
       "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。",
       "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。"
@@ -323,6 +325,7 @@ export const codexRemoteProject = {
     gaps: [
       "本轮遵守只读边界，没有启动、关闭、重启、查询或访问任何 Remote 组件，因此不能声明当前在线。",
       "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
+      "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
       "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
       "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
       "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
@@ -361,6 +364,7 @@ export const codexRemoteProject = {
   evidenceLayers: [
     { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动或在线。" },
     { layer: "v0.1.5 release tests（正式版本测试）", proves: "c3a07719 记录 1771 项测试、public-safety 与 Chromium 六视口验收通过。", doesNotProve: "当前 main、当前 Desktop 或任意网络长期稳定。" },
+    { layer: "Current main CI（当前源码持续集成）", proves: "94f1cfa 的最新公开 CI run 31145586404 为 failure。", doesNotProve: "v0.1.5 的正式版本证据失效，或当前运行时在线/离线。" },
     { layer: "Historical real E2E（历史真实端到端）", proves: "真实手机、双 Web 与 Desktop 曾共享任务/轮次并走通审批、文件、子智能体、引导、队列、停止和恢复。", doesNotProve: "本轮当前在线或所有新版本继续兼容。" },
     { layer: "Real mobile gallery（真实手机画廊）", proves: "12张真实手机 UI 展示任务、对话、工具、命令、diff、文件、诊断、额度和输入控制。", doesNotProve: "截图里的任务、数值、模型或健康状态仍是当前事实。" },
     { layer: "Synthetic UI gallery（合成界面画廊）", proves: "7张公开演示与1张QA图在无私人数据情况下说明完整产品表面。", doesNotProve: "合成任务真的执行过或当前服务在线。" },
@@ -388,7 +392,7 @@ export const codexRemoteModules = [
     title: "手机怎样继续 Desktop 上同一个任务，而不是另开一份",
     searchAliases: ["手机和桌面同一个任务", "threadId turnId一致", "Desktop不在时拒绝首轮", "手机新建项目任务"],
     teaser: "用同一 threadId、turnId、单一 app-server 与 Desktop 订阅屏障维持任务身份；不能安全续接时拒绝首轮。",
-    status: "源码、v0.1.5 测试和历史真实多端验收均有证据；本轮未验证当前在线",
+    status: "v0.1.5 与历史真实多端验收有证据；current main 最新 CI 未闭合，本轮也未验证当前在线",
     statusTone: "mixed",
     value: "离开电脑后，我能继续原任务，不会因为手机端另开聊天而丢掉真实进展、审批和文件状态。",
     why: "仅把历史消息复制到网页并不能证明两端是同一个任务。若手机创建了第二个 app-server 或 Desktop 尚未订阅就启动首轮，两端会出现不同 task、不同 turn 和无法解释的重复执行。",
@@ -739,7 +743,7 @@ export const codexRemoteModules = [
     title: "哪些事实证明产品做成过，哪些不能推成当前在线",
     searchAliases: ["Codex Remote跑通过吗", "v0.1.5测试证据", "20张真实界面", "不代表当前在线"],
     teaser: "v0.1.5 的1771项测试、六视口Chromium、历史真实多端E2E和20张界面证据分层呈现；main与release身份分开。",
-    status: "v0.1.5 正式证据闭合；current main 只作为公开源码身份展示，本轮当前在线未验证",
+    status: "v0.1.5 正式证据闭合；current main 最新 CI 为 failure，本轮当前在线未验证",
     statusTone: "mixed",
     value: "我能清楚知道产品真正做成并跑通过什么，也不会因为一张绿图、一个历史截图或一个新提交就误判现在在线。",
     why: "源码、单元测试、合成浏览器、真实手机截图、真实 Desktop E2E 和当前在线是不同证据层。把它们合成一个‘可用’标签，会同时夸大成功和掩盖缺口。",

@@ -194,12 +194,13 @@ test("every project first viewport exposes current decision-critical choices", a
     assert.ok(asrFacts.includes(model), `ChineseASR first viewport hides model: ${model}`);
   }
   const pcconfigFacts = pcconfigProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(pcconfigFacts, /88.*88/);
+  assert.match(pcconfigFacts, /87.*88/);
+  assert.match(pcconfigFacts, /新增 2.*移除 1/);
   assert.match(pcconfigFacts, /第 68 版 normal/);
   assert.match(pcconfigFacts, /Vault V2/);
   const gitFacts = githubIndexProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(gitFacts, /45.*26.*19/);
-  assert.match(gitFacts, /43 个 clone occurrence/);
+  assert.match(gitFacts, /47.*27.*20/);
+  assert.match(gitFacts, /44 个 clone occurrence/);
   const agentsFacts = project.heroFacts.map((fact) => fact.value).join("\n");
   assert.ok(agentsFacts.includes(panelSnapshot.authority.releaseId));
   assert.ok(agentsFacts.includes(panelSnapshot.authority.previous.release_id));
@@ -249,7 +250,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /positive L3\+ evidence/);
   assert.doesNotMatch(projectRules, /prohibited platform identity/);
   assert.match(projectRules, /what this thing actually does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic\s+example[\s\S]{0,500}owner receives/);
-  assert.match(projectRules, /three reading layers: `速览`, `项目怎么用`\s+and `技术参考`/);
+  assert.match(projectRules, /three reading layers: `速览`, `产品` and\s+`技术`/);
   assert.match(projectRules, /product principles and design highlights/);
   assert.match(projectRules, /release id, commit, test count,[\s\S]{0,160}not the\s+product's identity/);
   assert.match(projectRules, /Public pages never expose internal presentation or maintenance labels/);
@@ -260,7 +261,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Field completeness,[\s\S]{0,200}correct terms do\s+not make that page understandable/);
   assert.match(projectRules, /Except for reviewed L3\+ values[\s\S]{0,180}requires withholding and reusable secrets/);
   assert.match(projectRules, /exact models,[\s\S]{0,260}providers,[\s\S]{0,260}versions,[\s\S]{0,400}E2E/);
-  assert.match(projectRules, /first project viewport must disclose 4–6 decision-critical current facts/);
+  assert.match(projectRules, /first project viewport stays product-first[\s\S]{0,260}short project\s+status[\s\S]{0,220}snapshot boundary/);
   assert.match(projectRules, /Public visibility is never a reason to suppress a non-secret fact/);
   assert.match(projectRules, /Sensitivity is decided from the actual value, not the field name/);
   assert.match(projectRules, /Process\s+names, executable paths, command lines, window titles/);
@@ -269,12 +270,12 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /neither copies, redefines nor independently\s+tightens that table/);
   assert.match(projectRules, /project-authored restriction cannot create its own\s+publication authority/);
   assert.match(projectRules, /`Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly/);
-  assert.match(projectRules, /project default is `gpt-5\.6-sol` with `max` effort/);
+  assert.match(projectRules, /Every native subagent used for this website[\s\S]{0,160}exactly `gpt-5\.6-sol` with `max` effort/);
   assert.match(projectRules, /Every current and future website project may use multiple native subagents/);
   assert.match(projectRules, /materially improve the delivered\s+page/);
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
-  assert.match(projectRules, /actual number from independent work surfaces and net quality gain/);
-  assert.match(projectRules, /applies equally to projects added after the current ten/);
+  assert.match(projectRules, /Choose\s+the actual number of Sol Max agents from independent work surfaces and net\s+quality gain/);
+  assert.match(projectRules, /applies equally to projects added\s+after the current ten/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -298,6 +299,19 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /clicks must\s+not show a spinner, skeleton or blank state/);
   assert.match(projectRules, /Likely transitions must issue\s+non-blocking prefetch hints before interaction/);
   assert.match(projectRules, /native navigation never\s+waits for a hint to finish/);
+});
+
+test("the System source pack explains generic AI productivity without platform ownership claims", async () => {
+  const sourcePack = await readFile(path.join(projectRoot, "docs", "content", "system-home-source-pack.md"), "utf8");
+  for (const capability of ["自然语言理解", "推理", "搜索", "视觉和文档理解", "工具与代码执行", "浏览器操作", "并行协作"]) {
+    assert.ok(sourcePack.includes(capability), `System source pack omits generic capability: ${capability}`);
+  }
+  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "10 个项目", "5 份活动规则", "23 个 Skills"]) {
+    assert.ok(sourcePack.includes(phrase), `System source pack omits product boundary: ${phrase}`);
+  }
+  for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
+  for (const item of skills) assert.ok(sourcePack.includes(`\`${item.slug}\``), `System source pack omits Skill: ${item.slug}`);
+  assert.doesNotMatch(sourcePack, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System source pack must stay model, vendor and runtime-wrapper neutral");
 });
 
 test("the authoritative desktop scale baseline follows the older compact block", async () => {
@@ -643,6 +657,7 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
     assert.equal(item.thumbnail, `/media/timeaudit/thumbs/${path.posix.basename(item.src, ".png")}.webp`);
     assert.ok(item.alt?.trim().length >= 8, `${item.src} alt is missing`);
     assert.ok(item.caption?.trim().length >= 12, `${item.src} caption is missing`);
+    for (const key of ["evidenceLevel", "evidenceLabel", "observedAt", "sourceCommit", "proves", "doesNotProve"]) assert.ok(item[key]?.trim().length >= 2, `${item.src} ${key} is missing`);
   }
 
   const mediaRoot = path.join(projectRoot, "public", "media", "timeaudit");
@@ -704,7 +719,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
     assert.ok(Array.isArray(pcPanelHubProject[key]) && pcPanelHubProject[key].length >= 3, `PC Panel Hub overview ${key} is incomplete`);
   }
   const heroText = pcPanelHubProject.heroFacts.map((item) => item.value).join("\n");
-  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "2717ecb4"]) {
+  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "ebbc1f2"]) {
     assert.ok(heroText.includes(fact), `PC Panel Hub first viewport hides ${fact}`);
   }
   assert.match(publicText, /软件(?:设计|演示)|demo/);
@@ -831,11 +846,11 @@ test("CACB explains the product without publishing tested-configuration output",
     assert.ok(Array.isArray(cacbProject[key]) && cacbProject[key].length >= 3, `CACB overview ${key} is incomplete`);
   }
   const heroText = cacbProject.heroFacts.map((item) => item.value).join("\n");
-  for (const fact of ["47", "25", "59", "162", "928", "e6f7581d"]) assert.ok(heroText.includes(fact), `CACB first viewport hides ${fact}`);
+  for (const fact of ["47", "25", "59", "59b0b5c", "CI", "lint"]) assert.ok(heroText.includes(fact), `CACB first viewport hides ${fact}`);
   assert.doesNotMatch(publicText, /manual_owner_only|curated_packaging|manual snapshot|人工快照|策展|包装内容/i, "CACB public content must not expose website-maintenance labels");
   assert.equal(cacbModules.length, 5);
-  assert.match(publicText, /完整 928 项测试集合当前没有闭合/);
-  assert.match(publicText, /11 个.*162 项.*全部通过/);
+  assert.match(publicText, /当前提交没有一份绿色 CI/);
+  assert.match(publicText, /旧提交的 focused\/full 记录继承为当前可验证/);
   assert.match(publicText, /不发布受测配置结果/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
@@ -871,6 +886,9 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.match(publicText, /不计分/);
   assert.match(publicText, /小注意力/);
   assert.match(publicText, /不监督|没有.*监督/);
+  assert.match(publicText, /完整可读.*成品/);
+  assert.match(publicText, /一次只推进一个单元/);
+  assert.match(publicText, /没有.*应用代码.*自动化测试/);
   assert.match(publicText, /没有应用服务、学习数据库、提醒任务、后台同步/);
   assert.match(publicText, /示例可以设计，结果不能编/);
   assert.match(publicText, /不能.*普遍有效|不构成.*普遍有效/);
@@ -1037,7 +1055,7 @@ test("personal-health publishes the evidence product without personal health pay
     assert.match(`${module.why}\n${module.example}\n${module.result}`, /证据|来源|判断|未知|凭据|清单|Owner|原件|字段/);
   }
   for (const expected of [
-    "111 passed、42 subtests passed",
+    "112 项全部通过",
     "health_owner_review_required=true",
     "current_updated=false",
     "background_work_created=false",
@@ -1100,7 +1118,7 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /activeImage\.proves/);
   assert.match(pageSource, /activeImage\.doesNotProve/);
   assert.match(pageSource, /const hasStructuredEvidence = images\.every/);
-  assert.ok(timeAuditProject.gallery.some((item) => !item.proves), "TimeAudit must exercise the real-interface gallery fallback");
+  assert.ok(timeAuditProject.gallery.every((item) => item.proves && item.doesNotProve), "TimeAudit must use structured visual evidence for every image");
   assert.ok(pcPanelHubProject.gallery.every((item) => item.proves && item.doesNotProve), "PC Panel Hub must exercise structured visual evidence");
   assert.match(pageSource, /role="dialog"/);
   assert.match(pageSource, /aria-modal="true"/);
@@ -1515,12 +1533,18 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     for (const key of ["name", "title", "status", "summary", "maturity", "sourcePath"]) {
       assert.ok(item[key]?.length >= 1, `${item.slug}.${key} is missing`);
     }
+    assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
+    assert.doesNotMatch(item.sourcePath, /[\t\r\n]/, `${item.slug}.sourcePath contains an escaped control character`);
     assert.ok(["pass", "mixed", "unknown", "problem"].includes(item.statusTone), `${item.slug}.statusTone is invalid`);
     assert.ok(item.transactionState.length >= 10, `${item.slug}.transactionState is incomplete`);
     assert.match(item.evidenceSourceCommit, /^[a-f0-9]{40}$/);
     assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
     for (const key of ["useWhen", "avoidWhen", "inputs", "outputs", "flow", "boundaries", "dependencies"]) {
       assert.ok(item[key].length >= 1, `${item.slug}.${key} is incomplete`);
+    }
+    for (const dependency of item.dependencies.filter((value) => /^[A-Za-z]:/.test(value))) {
+      assert.equal(path.win32.isAbsolute(dependency), true, `${item.slug} has a malformed Windows dependency path: ${dependency}`);
+      assert.doesNotMatch(dependency, /[\t\r\n]/, `${item.slug} dependency path contains an escaped control character`);
     }
     assert.ok(item.tests.length > 20, `${item.slug}.tests is incomplete`);
     assert.ok(skillOutcomes[item.slug]?.value.length >= 40, `${item.slug} lacks a plain-language value statement`);
@@ -1656,16 +1680,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   }
 });
 
-test("E94 panel preserves durable authorization, lifecycle and coordination continuity", async () => {
+test("E95 panel preserves continuity, trusted-local boundaries and attention quality", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E94");
-  assert.equal(bindings.ruleset_sha256, "4a1b39bcb4af674cf91515e2b02a55474ec2177a2d24d7a34f204e7ea5ba8f3d");
-  assert.equal(panelSnapshot.authority.releaseId, "E94");
-  assert.equal(panelSnapshot.authority.gitCommit, "185503ea5c0b2679caf3f6cbf95a1ae6075e2c35");
-  assert.equal(panelSnapshot.authority.pointerRevision, 15);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E93");
+  assert.equal(bindings.semantic_release_id, "E95");
+  assert.equal(bindings.ruleset_sha256, "b56847d29e1102945ffa437de0e58dfb79a887d4f0a606bfe1020b28746d8ef9");
+  assert.equal(panelSnapshot.authority.releaseId, "E95");
+  assert.equal(panelSnapshot.authority.gitCommit, "d32210b6594bf8ba1679da7b0f5bd66d18f3f6a7");
+  assert.equal(panelSnapshot.authority.pointerRevision, 16);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E94");
   for (const expected of [
     "Durable explicit user authorization（耐久明确用户授权）",
     "root、全部 child/后代和新顶层任务",
@@ -1677,7 +1701,7 @@ test("E94 panel preserves durable authorization, lifecycle and coordination cont
     "Complete goal（已完成目标）",
     "正式 terminal/completed 且无 follow-up、queued work、pending transaction 或未交接 Owner residual 时才自动归档"
   ]) {
-    assert.ok(coreSource.includes(expected), `E94 panel omits semantic contract: ${expected}`);
+    assert.ok(coreSource.includes(expected), `E95 panel omits semantic contract: ${expected}`);
   }
   for (const expected of [
     "耐久明确授权跨任务持续",
@@ -1692,7 +1716,7 @@ test("E94 panel preserves durable authorization, lifecycle and coordination cont
     "原生子代理与独立 Owner task 分层",
     "顶层任务默认 projectless"
   ]) {
-    assert.ok(ruleGuideSource.includes(expected), `E94 rule guide omits: ${expected}`);
+    assert.ok(ruleGuideSource.includes(expected), `E95 rule guide omits: ${expected}`);
   }
   for (const expected of [
     "未归档且正式登记 long_term_task 的 Owner 不自动释放",
@@ -1702,15 +1726,22 @@ test("E94 panel preserves durable authorization, lifecycle and coordination cont
     "未登记 long_term_task 的 inactive predecessor",
     "长期任务不自动释放"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E94 long-term owner boundary omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 long-term owner boundary omits: ${expected}`);
   }
   for (const expected of [
     "RecoverReleaseClaim 默认继承 predecessor 的非空 coordination",
     "Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings",
     "E94 修复 RecoverReleaseClaim 与 Repartition 的 coordination 延续"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E94 coordination continuity omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 coordination continuity omits: ${expected}`);
   }
+  for (const expected of [
+    "可信本地安全闭集",
+    "安全标签不是复杂度额度",
+    "注意力质量高于上下文数量",
+    "实现盲测",
+    "自然用户意图"
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 product semantics omit: ${expected}`);
   assert.doesNotMatch(coreSource, /terminal long-term 无 residual 自动释放|终态旧 Owner 无残留时释放|terminal 无 residual 的 exact scope RecoverRelease|terminal Owner 无 residual 用 RecoverRelease|terminal 无残留逐 scope RecoverRelease|固定 resolver 证明 terminal 后，无 residual/);
   assert.doesNotMatch(ruleGuideSource, /平台准入时才创建|再原子 RecoverReleaseClaim/);
   const panelRefresh = skills.find((item) => item.slug === "personal-panel-refresh");
@@ -1721,12 +1752,13 @@ test("E94 panel preserves durable authorization, lifecycle and coordination cont
   });
   for (const expected of [
     "durable explicit user authorization",
-    "ea32ca05",
+    "d32210b",
     "cf5981bf",
     "setup-pending",
     "dispatch-unconfirmed",
     "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具",
-    "网站内容、测试、PUBLIC main、Pages 部署和公网回读均已完成"
+    "本轮没有由新的来源发布调用 impact assessor",
+    "网站自己的 Owner/build/PUBLIC/Pages 门分层取证"
   ]) {
     assert.ok(panelRefreshText.includes(expected), `E92 personal-panel-refresh omits: ${expected}`);
   }
