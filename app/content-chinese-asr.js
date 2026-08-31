@@ -326,7 +326,7 @@ export const chineseAsrModules = [
     searchAliases: ["普通转写到底用哪个模型", "严格模式两路模型是什么", "装了新模型会不会偷偷换默认", "FireRed和Qwen什么时候一起用", "Whisper能不能直接转写", "登记模型和可执行引擎有什么区别"],
     searchProjection: {
       intents: ["选择快速或严格转写", "确认一次结果实际用了哪个模型", "为重要录音选择本地证据路线", "比较新增模型但不改默认", "判断Whisper是否可直接执行"],
-      entities: ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "Fun-ASR-Nano-2512", "Whisper Large V3"],
+      entities: ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "FunAudioLLM/Fun-ASR-Nano-2512", "Paraformer@v2.0.4", "Whisper Large V3"],
       relations: ["quick 对应 SenseVoiceSmall", "strict 对应 Qwen 主引擎与 SenseVoice 对照", "FireRed 加 Qwen 是显式重要录音证据路线", "Registry登记Profile不等于direct transcription可执行", "Whisper is_whisper标记把它排除在直接转写闭集外"],
       failureRecovery: ["主引擎失败时降为 provisional", "两路都失败时输出听不清", "未知 profile 启动前失败", "Whisper直接请求明确拒绝而不改走相近模型", "实际 runtime 身份不符时回执失效"]
     },
@@ -358,6 +358,7 @@ export const chineseAsrModules = [
       "config.py 分开 list_engine_names（全部登记）与 list_transcription_engine_names（排除 is_whisper 的直接转写闭集）。",
       "pipeline.py 按 quick、strict 和显式参数组织主/对照引擎；build_model 在加载前拒绝 is_whisper Profile。",
       "adapters 分离 Qwen、FunASR 与 FireRed 的运行差异。",
+      "fun-asr-nano 使用 ModelScope hub、funasr-automodel、GPU 与 trust_remote_code=true，固定 revision 05201c46…；Paraformer 固定 v2.0.4，并显式携带 VAD/PUNC/CAM++ aliases。",
       "qwen_identity.py 对 Qwen runtime 与模型身份做精确约束。"
     ],
     flow: [
@@ -378,6 +379,7 @@ export const chineseAsrModules = [
     ],
     boundaries: [
       "Fun-ASR-Nano、FireRed 和 Paraformer 可按各自显式路线执行但不会接管 quick/strict；Whisper 仅登记为备用/对照，当前不能直接转写。",
+      "Fun-ASR-Nano 精确身份为 FunAudioLLM/Fun-ASR-Nano-2512@05201c46f1c38592b1567f857c0d56eab3d0d8ef；Paraformer 精确身份为 iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4。",
       "模型安装成功不等于真实音频 E2E 通过。",
       "对照模型不是投票多数，也不自动证明主模型错误。",
       "云模型与本地模型分属不同授权和证据边界。"
@@ -402,6 +404,7 @@ export const chineseAsrModules = [
       "Doctor 当前枚举六个登记 Profile，并确认 FunASR、Qwen ASR、PyTorch 已安装；登记数量不等于可直接执行数量。",
       "config.py 当前直接转写闭集为5个；test_config验证whisper-large-v3带is_whisper且不进入该闭集，pipeline在加载前拒绝它。",
       "config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 345 项通过结果中。",
+      "Registry 静态回读确认 Fun-ASR-Nano revision=05201c46…、Paraformer revision=v2.0.4；本次未分别加载或运行它们，精确配置不冒充推理E2E。",
       "本次没有对六个 profile 分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。"
     ],
     relation: "模型与模式模块声明要运行的精确 profile；安装与恢复模块负责让对应依赖、模型工件和隔离运行时可重建，入口、长音频、审计和说话人模块只能在这两层共同成立的能力范围内工作。"
@@ -643,7 +646,7 @@ export const chineseAsrModules = [
       "audit.py 汇总主/对照原始结果、错误和风险。",
       "audio_outcome.py 正交表达 execution、coverage、quality 和 objective outcome。",
       "strict_writer.py 分开写 `*.strict.md`、audit Markdown/JSON、结构化 review JSON、两路 raw JSON、objective sidecar 和 receipt。",
-      "arbitration.py 从 `configs/models.yaml` 读取默认关闭的 `llm_arbitration`；启用时使用本地 `http://127.0.0.1:11434/api/chat`、`uncertain_only` 与 `keep_alive=0`，仅传结构化分歧证据。",
+      "arbitration.py 从 `configs/models.yaml` 读取默认关闭的 `llm_arbitration`；启用时使用本地 `http://127.0.0.1:11434/api/chat`、主模型 `qwen-main-v1:latest`、fallback `qwen3.6-27b-256k:latest`、`uncertain_only` 与 `keep_alive=0`，仅传结构化分歧证据。",
       "长音频另写 `manifest.json` 与 `metrics.json` 解释分段覆盖、状态和耗时；评测 / benchmark 另写 `review.md` 与 benchmark 成品，解释优先复核项和 truth 对比。",
       "metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash。"
     ],
@@ -699,7 +702,7 @@ export const chineseAsrModules = [
     verification: [
       "audit、risk rules、audio outcome、result writer 和 metadata 单元测试包含在本次 345 项通过结果中。",
       "strict writer 与 benchmark 测试覆盖成品文件名、两路 raw、review 投影、静音出字、空文本、partial coverage、回执损坏、模型失败和 truth 对齐。",
-      "test_arbitration.py 与 test_config.py 覆盖默认关闭、Ollama 结构化请求、`uncertain_only`、`keep_alive=0`、有效 JSON 解析和无效响应回退；本轮没有调用真实 Ollama 模型。",
+      "test_arbitration.py 与 test_config.py 覆盖默认关闭、Ollama 主模型 qwen-main-v1:latest、fallback qwen3.6-27b-256k:latest、结构化请求、`uncertain_only`、`keep_alive=0`、有效 JSON 解析和无效响应回退；本轮没有调用真实 Ollama 模型。",
       "没有任何自动测试能够代替关键片段人工核听，页面明确保留该缺口。"
     ],
     relation: "模型、长音频和说话人模块产生的所有结果最终都经过本模块；可选 Ollama 只在长音频不确定 chunk 上增加一层不覆盖原证据的解释。模块向用户说明证据强度，但不负责决定真实人物、外部事实或最终文字真值。"
@@ -738,6 +741,7 @@ export const chineseAsrModules = [
     problem: "解决匿名聚类被误当身份、拿同一录音建立和验证声纹、profile 撤销后旧结论继续有效、单声道边界分数强行归属，以及不同证据冲突却没有解释的问题。",
     implementation: [
       "Paraformer 可输出逐句时间和 CAM++ 匿名聚类。",
+      "Paraformer 固定 `iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4`；按需 person:self speaker verification 固定 CAM++ model revision v1.0.0、文件 campplus_cn_common.bin、阈值 0.31。",
       "speaker_evidence.py 建立唯一、私有、可替换的 person:self profile，并区分 enrollment 与 held-out。",
       "多参考模式只接受 2–3 个不同来源，生成有界质心而不是无限画像库。",
       "speaker_attribution.py 组合声学、声道、联系人、角色和句义依据。",
@@ -778,6 +782,7 @@ export const chineseAsrModules = [
     ],
     verification: [
       "speaker evidence 与 attribution 回归包含在本次 345 项全量通过结果中。",
+      "configs/models.yaml 静态回读确认 CAM++ speaker verification revision=v1.0.0、threshold=0.31；本轮未加载真实私人 profile，也未把阈值冒充身份认证。",
       "fixtures 覆盖双声道、单声道 unknown、无时间戳、零长度时间和冲突证据。",
       "本次没有读取任何私人声纹档案或录音，也没有执行人物身份判断。"
     ],
@@ -790,7 +795,7 @@ export const chineseAsrModules = [
     searchAliases: ["普通录音会上传云端吗", "重要录音怎样授权云转写", "两个语音模型抢显卡怎么办", "ASR密钥会不会写进日志", "云转写失败会不会冒充本地结果"],
     searchProjection: {
       intents: ["只在本机转写普通录音", "为一段重要录音授权一次云候选", "协调多个重 GPU 任务", "确认公开仓库不会带入私人结果"],
-      entities: ["LocalGpuBroker", "SecretRef", "Qwen Audio 3.0 ASR Flash", "127.0.0.1", "CloudUploadAuthorized"],
+      entities: ["LocalGpuBroker", "SecretRef", "Alibaba Cloud Model Studio（阿里云百炼）", "qwen-audio-3.0-asr-flash", "127.0.0.1", "CloudUploadAuthorized"],
       relations: ["普通任务默认本地", "重要性与本次上传授权共同打开云入口", "SecretRef 只注入固定 worker", "GPU lease 串行重模型"],
       failureRecovery: ["缺少任一云门就上传前 blocked", "GPU 冲突等待而不抢占", "云失败保持本地证据独立", "broker 身份失败时不取得密钥"]
     },
@@ -820,7 +825,8 @@ export const chineseAsrModules = [
       "gpu_broker.py 在重模型运行前取得有界租约。",
       "FireRed worker 隔离在专用运行环境，不改变默认模型。",
       "asr-professional-cloud.ps1 要求 Important 和 CloudUploadAuthorized 两个显式门。",
-      "qwen_audio3_broker_worker.py 只接受固定请求结构和 SecretRef 注入。",
+      "qwen_audio3_broker_worker.py 只接受固定请求结构和 SecretRef 注入，唯一 provider 为 Alibaba Cloud Model Studio（阿里云百炼），同步 API model id 固定 `qwen-audio-3.0-asr-flash`。",
+      "音频先在本机转为 16 kHz mono WAV，再切成最长 180 秒片段，通过 HTTPS Base64 同步接口逐段发送；`qwen-audio-3.0-asr-flash-filetrans` 需要公网文件 URL，当前未接入。",
       "outputs、models、私人评测、wheelhouse 和录音由 Git ignore 与公开门排除。"
     ],
     flow: [
@@ -828,6 +834,7 @@ export const chineseAsrModules = [
       "本地路线检查代理、GPU、依赖和模型。",
       "重模型取得 GPU 租约并启动受管进程。",
       "云路线在读取音频前验证重要性、上传授权和 broker。",
+      "本地切片后只向阿里云百炼 `qwen-audio-3.0-asr-flash` 同步接口发送最长 180 秒的 Base64 片段；filetrans 路线保持未接入。",
       "密钥只注入固定子进程环境。",
       "执行结果写入被 Git 忽略的本地输出。",
       "失败后返回本地后备或精确恢复条件。"
@@ -840,6 +847,7 @@ export const chineseAsrModules = [
     ],
     boundaries: [
       "云入口不能由普通模式、文件夹批量或音频长度隐式触发。",
+      "云入口的精确数据目的地是阿里云百炼同步模型 qwen-audio-3.0-asr-flash；需要公网 URL 的 qwen-audio-3.0-asr-flash-filetrans 不属于当前能力。",
       "任何输出都不能包含 API Key。",
       "本地 API 只监听 127.0.0.1。",
       "项目不结束未知 GPU 任务，也不通过强占资源制造成功。",
@@ -861,6 +869,7 @@ export const chineseAsrModules = [
     verification: [
       "本次 Doctor 确认 GPU、代理、FunASR、Qwen ASR、PyTorch 和模型目录可读。",
       "GPU broker、proxy guard、professional cloud script 和 broker worker 回归包含在 345 项通过结果中。",
+      "源码与测试固定 Alibaba Cloud Model Studio / qwen-audio-3.0-asr-flash、180 秒本地切片、HTTPS Base64 和一次有界重试；这些静态/测试事实不证明本轮云调用成功。",
       "本次没有调用云端、没有上传音频、没有消费密钥或额度，也没有运行重模型真实 smoke。"
     ],
     relation: "安装与恢复模块先提供可执行依赖和模型工件；本模块再为所有路线施加 GPU、进程、网络与隐私边界。它不决定正文质量，但决定某条处理路线是否允许执行、数据去了哪里。"

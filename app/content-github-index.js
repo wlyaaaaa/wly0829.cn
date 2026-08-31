@@ -96,6 +96,22 @@ export const githubIndexProject = {
     { term: "Retirement candidate（可退役候选）", meaning: "内容已进入默认分支且没有已知保护的分支或工作树；仍需确认没有活动依赖后才能删除。" },
     { term: "Commit-pinned snapshot（固定提交快照）", meaning: "干净、受限且固定在已知提交的审计工作树；它不同于普通无 upstream 或含独有工作的临时工作树。" }
   ],
+  currentState: {
+    observedAt: "2026-08-31T22:13:00Z",
+    label: "48 个 live Owner identity 已闭合，45 个本地副本已验证；源 main/origin 与公开 generation 分层回读",
+    facts: [
+      "wlyaaaaa/github-local-index 是 PUBLIC；2026-08-31 的 ForPublication（发布前双现场检查）回读 main 与 origin/main 同为 806b668e9b6ff275329d6dfeb76f5239a9182bbe，工作区 clean、ahead/behind=0/0、decision=proceed。",
+      "当前公开 generation=70efc65cdfec4b9cb1305ff48086744d，8 份文档共 23090 bytes，previous=d2f364cdf7664c06a34b81b07e5547df；manifest、generation 文档、兼容投影和 pointer 中的 bytes/hash 已逐项回读一致。",
+      "live source 覆盖 48 个仓库身份（27 PUBLIC、21 PRIVATE）和 45 个已验证 clone occurrence；identity coverage 与 clone coverage 均为 complete，剩余 3 个仓库明确为 remote-only。",
+      "Get-GitOwnerStatus 以零写入、no fetch（不抓取远端引用）返回 execution_status=completed、domain_status=current、baseline=48、observed=48、delta=0、issue=0。",
+      "history 保留一项 nonblocking attention（非阻断提醒）：上代到现代的 4 项变化已经被 baseline 接受，其中旧 identity 由 wlyaaaaa/personal-formal-documents 接续、新增 wlyaaaaa/work-delivery-copilot，并补入一项既有仓库本地 root；当前没有未处理 identity delta。"
+    ],
+    gaps: [
+      "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
+      "重大 Git/GitHub 动作源码曾在历史提交 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从历史源码回归外推。",
+      "本次页面刷新完成了 Owner status、Cognition Source、ForPublication 和 generation 文件闭包的直接回读，但没有真实创建一个新仓库，也没有执行重大动作 broker/人类因子 E2E；新 PRIVATE 创建只按当前源码合同与回归证据说明，不冒充现实动作验收。"
+    ]
+  },
   operatingFlow: [
     { title: "从普通请求确定真实目标", detail: "先回答这是现有仓库还是新仓库、个人项目还是工作项目、期望的远端可见性和默认分支；目录名字相似时不靠猜。" },
     { title: "先建立正确的本地起点", detail: "新个人仓库放 V:\\Personal\\Projects\\<name>，新工作仓库放 V:\\Work\\<name>；在真实目录初始化预期 main 与首个提交并保持 canonical worktree（规范工作树）clean，不为空目录预登记，也不把仓库或唯一副本放进 Z 盘。" },
@@ -534,7 +550,7 @@ export const githubIndexModules = [
       failureRecovery: ["同名远端已存在或账号不符时不创建", "远端已创建但 push 失败时从现有 PRIVATE 身份继续而不重建", "rename 目标已存在或 identity 改变时停止", "默认分支与预期不同就显式处理并重查", "delete/transfer/force-update 响应不确定时先读现场而不重放", "任一 target/executor/preimage/epoch 漂移使旧能力失效"]
     },
     teaser: "创建空 PRIVATE 仓库，以及删除、转移、改名、改变可见性、默认分支或远端等高影响动作，必须绑定精确目标、恢复条件和正式回读；普通 Git 操作不会因此全部变成人工审批。",
-    status: "E95 protection contract 已激活；源 main=806b668…包含类型化 PRIVATE 创建通道，历史回归可追溯，但本次没有真实创建仓库或执行 broker/人类因子 E2E",
+    status: "当前 E96 protection contract 已激活，受保护重大动作合同与 E95 同字节/SHA；源 main=806b668…包含类型化 PRIVATE 创建通道，历史回归可追溯，但本次没有真实创建仓库或执行 broker/人类因子 E2E",
     statusTone: "mixed",
     value: "把创建仓库、本地 ref 删除/强更、remote URL 替换，以及 GitHub 可见性、改名、默认分支、删除和转移收进九个封闭动作；每次只改变一个精确目标、保留恢复依据并从现场回读，同时让普通 commit 和 normal push 不被误升级。",
     why: "这些动作会改变仓库身份、公开面、默认入口或可恢复历史，目标错一位就可能泄露或丢失；但一律弹人类确认同样不正确。产品让最高权限智能体按真实意图决定 allow、step_up、deny 或先补证据，机械适配器只验证并执行一个被类型化的动作。",
@@ -628,7 +644,7 @@ export const githubIndexModules = [
       "历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook 通过；本次未把这些历史层升级为当前执行证据。",
       "2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。",
       "2026-08-31 直接回读源 main/origin=806b668…与 current create-repository 合同：只允许本人账号、空 PRIVATE、expected absent、本地 branch/HEAD/clean preimage，创建后的 origin/push 明确留给普通 Git 收敛。",
-      "E95 protection contract 已验证，但本次没有真实创建仓库，也没有 Git consumer 的 broker/人类因子 E2E，所以模块 statusTone 保持 mixed（混合证据）。"
+      "当前 E96 protection contract 已验证；其中 protected-major-actions 合同 SHA-256=500abc3f…，与 previous E95 同字节，因此 E95 只保留为历史连续性，不冒充 current。此次没有真实创建仓库，也没有 Git consumer 的 broker/人类因子 E2E，所以模块 statusTone 保持 mixed（混合证据）。"
     ],
     relation: "它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission 提供现场身份，Snapshot 只记录索引代际，二者都不能替代最高权限语义判断和正式回读。"
   },

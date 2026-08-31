@@ -188,7 +188,7 @@ export const project = {
     { term: "Ruleset SHA（五规则总指纹）", meaning: "按固定 logical id 顺序绑定五份文件 path、bytes 和 SHA 的总指纹。" },
     { term: "Release record（版本记录）", meaning: "绑定 E 代号、Git commit、五文件描述符、ruleset、远端包含和发布时 source clean 的 JSON。" },
     { term: "Recovery-only C history（仅恢复的 C 盘历史）", meaning: "旧 generation、Publisher、签名、anchor、manifest、ledger 和回执可读保留，但不是当前权威或运行依赖。" },
-    { term: "Runtime root（运行根）", meaning: "规则目标是把 AI 工作台配置和本地数据库收敛到唯一 E 盘根，并让 C 盘只留兼容 junction。2026-08-31 现场仍是 C 盘普通目录，E 目标不存在且 CODEX_HOME 未设置，所以这还是迁移目标，不是当前机器事实。" },
+    { term: "Runtime root（运行根）", meaning: "当前唯一 Codex 根是 E:\\Data\\AppData\\Codex；C:\\Users\\10979\\.codex 已是指向它的兼容 junction（目录联接），不是第二副本。任务临时目录位于 E:\\Cache\\Codex\\Temp\\<task-id>。" },
     { term: "Activator（激活器）", meaning: "唯一执行测试、PRIVATE main 回读、五哈希、UAC CAS、pointer 切换和 ACL/read-back 的本地工具。" },
     { term: "CoreGoalCommitment（目标承诺）", meaning: "一次可靠人类确认冻结的长期目标、范围、禁止项和停止条件，不冻结具体实现。" },
     { term: "StepCapability（单步能力）", meaning: "只允许一次精确现实动作的短时、防重放能力，绑定目标、参数、executor、pre/post 和回滚。" },

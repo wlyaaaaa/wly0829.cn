@@ -33,19 +33,19 @@ export const cacbProject = {
   route: "/projects/cacb",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
-  cardStatusTone: "pass",
+  cardStatus: "评测产品框架已形成；方法与评分有效性仍需复核，历史比较结论当前不可采用",
+  cardStatusTone: "mixed",
   ...cacbSnapshot,
-  snapshotBoundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
+  snapshotBoundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS、ROUTING_DECISION_FRAMEWORK 和 REPORTING_STANDARD 仍残留 8-case/八条计分合同；方法与评分基数未统一。最新四个 CI job 也停在 lint 门，旧测试不继承。本页只公开冲突与机制，不发布受测配置结果",
   searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理", "模型盲评分和盲质量复核", "盲审能不能改变PASS或资格", "一题和十题额度费用探针", "探针结果为什么不进排行榜", "机械分盲审和最终选择怎样分工", "为什么页面没有候选分数和名次"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。缺证据就保持未知或 pending，不填成零，也不拿盲审替代硬门。",
+  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。即使代码检查全部变绿，方法设计和评分有效性没有独立复核时，历史分数与名次仍不能采用；缺证据就保持未知或 pending。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。不同执行路线还会带来完全不同的宿主身份、网络传输、GPU 占用和清理责任；若把它们都写成“调用一个 Agent”，就无法判断问题发生在哪一层。CACB 把任务、输入、workspace、执行路线、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”或“换了传输仍沿用旧身份”误当成真实能力。",
   plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方身份、可用条件和经济口径；本地执行完成后，根侧确定性验证先决定这次样本是否有效、是否通过硬门。只有样本合格，才为它创建一个全新的 exact gpt-5.6-sol / max 盲审任务；盲审只看冻结任务、验收、工具边界、正确性依据和候选产物，不知道参与者、harness、价格、机械分、名次或其他答案。如果此时只想先观察宿主额度/费用/耗时，就另走固定临时目录的一题或十题探针，执行后再用第二条消息精确删除；它不成为样本。最终选择只接受同一兼容代的完整证据，任一层缺失就保持 pending，不生成候选排名。",
   result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份、执行路线与当前官方/外部证据，benchmark report（基准报告）分别保留确定性机械证据、身份盲质量复核、路线专属终态回执与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。额度/费用探针只留下临时任务产物供当场观察，第二阶段精确清理，不写正式回执、账本、分数或名次。公开网页只解释这些职责和兼容边界，不展示任何受测配置的分数、排名或 leaderboard（排行榜）。",
   readerStates: {
-    pass: "确定性身份/资格/硬门闭合后，机械证据可独立成立；合格样本再由一个全新 exact Sol Max 任务完成证据引用齐全的盲质量复核。只有完整、同代且互不借证的证据集才进入最终选择。",
-    problem: "产物错误、越界修改、任务未完成、路线身份矛盾、盲审泄露身份或复用 task/session、机械与盲审 hash 不匹配、探针命名空间未清理时，分别标出受影响层，不让一层替另一层补证。",
+    pass: "确定性身份/资格/硬门闭合、方法与评分有效性复核通过后，机械证据才可进入当前比较；合格样本再由一个全新 exact Sol Max 任务完成证据引用齐全的盲质量复核。只有完整、同代且互不借证的证据集才进入最终选择。",
+    problem: "即使 CI 变绿，只要方法与评分有效性仍未复核，历史分数和名次就保持不可采用；产物错误、越界、任务未完成、路线身份矛盾或盲审证据冲突也分别标出，不让一层替另一层补证。",
     unavailable: "缺身份、终态、验收输入、fresh Sol Max host receipt（宿主回执）或完整同代样本时保持无法判断或 pending；探针失败只保留临时诊断并等待精确清理，所有缺项都不填零。"
   },
   cardMetrics: [
@@ -59,7 +59,7 @@ export const cacbProject = {
     { label: "三类执行路线", value: "同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job；三者共享冻结输入与 verifier，却分别绑定原生谱系、本地 job/GPU lease、云端 request/stream 和路线专属 cleanup" },
     { label: "确定性硬门 + Sol Max 仲裁强审", value: "根侧 verifier 独占 identity、validity、eligibility、safety 与 PASS/FAIL；每个已合格样本再由 fresh exact gpt-5.6-sol / max 隐藏参与者身份，基于完整任务和候选产物做独立六维质量复核，形成可引用、可反驳的推定能力/推定质量" },
     { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress" },
-    { label: "选择与当前验证边界", value: "机械与强审冲突不平均成总分：硬门保持，质量分歧或缺项显式 pending；当前提交最新四个 GitHub CI job 全部在 lint 门失败，旧提交的 162/928 项记录不升级为当前结论" }
+    { label: "选择与当前验证边界", value: "现行 V11R1/C1–C10/24-slot 入口与仍写 8-case 的旧设计和评分合同相互冲突，因此历史分数、排名和比较当前不可采用；机械与强审冲突仍不平均，最新四个 CI job 也停在 lint 门" }
   ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
@@ -150,12 +150,16 @@ export const cacbProject = {
       "blind bundle（盲审包）只允许冻结任务、验收、工具边界、根侧 correctness basis（正确性依据）、可见 fixture/test 与候选 artifact；参与者身份、harness、AA、price、mechanical score、ranking 和其他候选答案在进入 judge 前失败关闭。",
       "config/probes 当前有 1 题短版和 10 题完整版两份固定提示词；每份都把执行与删除拆成两条消息，使用独立固定 namespace，不生成测量回执、不写账本，也不进入分数或排名。",
       "final_selection_release 当前要求机械证据、盲审证据、source commitment、host receipt 与 bundle/rubric generation（合同代）彼此兼容；部分覆盖只保留 pending，不得通过 best-of 或拼接不同尝试生成正式次序。",
+      "当前 V11R1 README 与 AGENTS 要求 24 个 canonical Codex slots、每次 C1–C10 全部终态；但 PRODUCT_DESIGN/REPORTING_STANDARD 仍写八案例，MODEL_EVIDENCE_SEMANTICS/ROUTING_DECISION_FRAMEWORK 仍固定 case_count=8 与八条 per_case_scores。当前任务基数和评分合同尚未统一。",
+      "V11R1 的 24-slot Registry 公开安全身份矩阵包括 OpenAI/Codex 原生 Luna、Terra、Sol 的多种 effort 与三条编排路线，本地 Codex CLI 的 qwen3.6:35b/27b，Codex CLI/Responses 的 qwen3.8-max 设计槽，以及 DeepSeek V4 Flash/Pro 云端槽；本页不附任何运行结果、分数或名次。",
+      "first-report sampling policy 对每个 canonical slot 取 first valid sample；唯一例外是已完成三份有效证据的 Luna Max slot，按机械分中位数选一份代表，只盲审和报告该代表，另两份保留为 audit-only。外部 Antigravity/OpenCode cohorts 后续独立补充，不进入24-slot阻断条件。",
       "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
       "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
     ],
     gaps: [
       "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
-      "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
+      "项目当前规则明确既有方法与评估有效性仍需复核；V11R1 的 C1–C10/24-slot 与旧 8-case 评分合同冲突未解决前，即使 CI 变绿，任何历史比较结论也不能作为公开选择依据。",
+      "V11 Registry 的 orchestration collaboration 仍写 descendants_allowed=true，而 NATIVE_RUN_OPERATOR/PRODUCT_DESIGN 把正式 arm 定义为 direct-only、无后代；身份合同没有统一前，编排 slot 不能写成已合格。",
       "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
       "本轮没有为任何受测配置启动 fresh Sol Max 盲审、没有执行额度/费用探针，也没有形成新的 final-selection manifest；页面只发布源码可证明的方法与边界。",
       "源码中的路线、schema 和 synthetic（合成）验证只证明框架边界，不证明任一精确 provider/model/profile 当前可执行；正式接入仍需本机 preflight（预演）与宿主回执。",
@@ -220,8 +224,9 @@ export const cacbProject = {
     { moduleSlug: "campaign-workspace", ask: "怎样防止旧执行记录污染新结果", effect: "每次使用全新工作区和执行身份，旧产物、旧回执和上次未完成状态都不能借给新结果。" },
     { moduleSlug: "campaign-workspace", ask: "本地模型执行时 GPU 怎样排队和释放？", effect: "提交前检查 LocalGpuBroker 与活动请求，独占取得 lease；结束时必须确认进程树消失、请求归零、模型清理与 lease 释放，再写终态。" },
     { moduleSlug: "campaign-workspace", ask: "云 API 取消后为什么不能立刻重跑？", effect: "本地进程退出还不够；request stream 与可观察的 provider job 都要关闭。若远端清理无法确认，状态保持 cleanup_unconfirmed，先阻断替代提交。" },
-    { moduleSlug: "campaign-workspace", ask: "什么时候用 1 题短探针，什么时候用 10 题全探针？", effect: "先用 1 题确认最小离线任务和宿主 UI 观察路径；需要更完整的十任务额度/费用/耗时观察时再用 10 题版。二者都不创建正式样本或分数。" },
-    { moduleSlug: "campaign-workspace", ask: "额度费用探针跑完怎样清理？", effect: "保留固定 namespace 直到观察完成，再单独发送第二条删除消息；只删该目录，不用通配符、git clean、父目录或项目清理。" },
+    { moduleSlug: "native-orchestration", ask: "Sol Max 作为根智能体怎样拆任务、派子代理并收口？", effect: "先冻结零到四个直接子代理选择，再由 Authority 为每个角色发布独立任务承诺；根只按清单派发、处理冲突并完成最终验证，结果与 Sol 单工作者分开。" },
+    { moduleSlug: "quota-cost-probes", ask: "什么时候用 1 题短探针，什么时候用 10 题全探针？", effect: "先用 1 题确认最小离线任务和宿主 UI 观察路径；需要更完整的十任务额度/费用/耗时观察时再用 10 题版。二者都不创建正式样本或分数。" },
+    { moduleSlug: "quota-cost-probes", ask: "额度费用探针跑完怎样清理？", effect: "保留固定 namespace 直到观察完成，再单独发送第二条删除消息；只删该目录，不用通配符、git clean、父目录或项目清理。" },
     { moduleSlug: "failure-reporting", ask: "怎样保留失败样本供以后诊断", effect: "执行结束后归档代码、过程回执和失败原因并核对完整性，再释放临时工作区。" },
     { moduleSlug: "identity-evidence", ask: "某个模型现在到底能不能在这个 harness 里用？", effect: "模型证据卡核对精确模型、provider、version、harness、当前官方能力和可用条件；本地是否做成任务仍交给独立基准报告。" },
     { moduleSlug: "failure-reporting", ask: "官方价格和本地实测成本为什么要分开？", effect: "官方价目按日期、单位和适用条件记录，本地消耗按冻结任务真实测量；综合判断只在口径可比时讨论经济性。" },
@@ -336,35 +341,29 @@ export const cacbModules = [
   {
     slug: "campaign-workspace",
     shortTitle: "隔离执行",
-    title: "Campaign 冻结、三路线执行、原生编排与独立 workspace",
-    teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。原生路线还把 Sol Max 单工作者与 Sol Max 根智能体直接编排子代理分开评测，避免把协作能力冒充单模型能力。若目的只是先观察宿主额度、费用与耗时，则改走独立 1 题/10 题探针，不创建 formal sample（正式样本）。",
-    status: "campaign / workspace / archive、三类 executor 与 native orchestration 合同已有源码；当前提交的 CI lint 门仍未闭合，本页未启动任何路线或编排 arm",
-    statusTone: "pass",
-    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "Sol Max根智能体怎样编排直接子代理", "原生单工作者和多代理结果为什么分开", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "一题或十题额度费用探针", "探针执行后为什么还要第二条删除"],
+    title: "Campaign 冻结、三路线执行与独立 workspace",
+    teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。",
+    status: "campaign / workspace / archive 与三类 executor 合同已有源码；当前提交的 CI lint 门仍未闭合，本页未启动任何正式路线",
+    statusTone: "mixed",
+    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑"],
     searchProjection: {
-      intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "评测Sol Max根智能体的分解并发和整合能力", "区分单工作者与原生编排结果", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "选择一题或十题额度费用耗时探针", "按第二阶段只清理固定探针命名空间"],
-      entities: ["campaign", "workspace / episode", "WorkerHandle", "native_managed", "native orchestration arm", "role-specific root/child commitment", "local/cloud async job", "quota/cost probe namespace"],
-      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "Sol Max根先冻结零到四个直接子代理选择", "子代理使用独立role-specific任务承诺", "根负责冲突整合和最终验证", "编排结果与Sol单工作者分开", "短探针固定1题而全探针固定10题", "第二条消息只删除对应固定namespace"],
-      failureRecovery: ["案例中断时整次episode保持不完整", "root或child身份交付不闭合时编排arm失败关闭", "出现后代重试替补或第五个child时拒绝结果", "无法精确恢复时创建新的完整尝试", "本地或云端资源未清理时保持不可用", "探针namespace已存在时立即停止不覆盖", "观察完成后用第二条消息精确删除目录再复用"]
+      intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "防止旧产物或不同尝试拼接"],
+      entities: ["campaign", "workspace / episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed"],
+      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "同一episode按固定顺序完成", "本地终态绑定进程树和GPU lease", "云端终态绑定request stream和provider job"],
+      failureRecovery: ["案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地或云端资源未清理时保持不可用"]
     },
-    value: "我能用同一冻结任务比较三种真实执行路线，又清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净。原生路线不只测 Sol Max 独自完成：还单独测它作为根智能体怎样拆任务、尽早派发、选择直接子代理、并发推进、处理冲突、整合产物和做最终验证；这个结果不会混进单工作者结论。如果还不需要正式样本，也能先用固定的一题或十题任务观察宿主额度、费用与耗时，而且不会污染 benchmark。",
-    why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。原生编排若让子代理复用根的任务胶囊、允许继续派后代或把协作结果并入 Sol 单工作者分数，也会把错误授权与多模型能力伪装成单模型能力。探针若复用旧目录、写正式回执或自动清理更大范围，同样会把一次轻量观察伪装成可比较测量。",
-    example: "在一个 formal orchestration arm（正式编排路线）里，精确 Sol Max 根先读取自己的冻结任务，给出零到四个直接子代理的选择和理由，然后结束选择阶段。Authority（权威登记）再为每个角色冻结独立 child plan、身份、任务名和 `fork_turns=none` 交付；下一阶段根只能按该清单派发，并负责合并冲突与最终核验。若 role-specific 交付、lineage 或 fresh E2E 缺一项，整条编排路线保持不合格，不借单工作者结果补位，也不改变全局能力路由。",
-    result: "正式路线得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档之间的一一对应关系；原生单工作者给出自己的宿主终态，原生编排另给 root selection、authority dispatch manifest、每个直接 child 的独立计划/回执/lineage、根整合与最终验证证据，本地给出 job/GPU 清理证据，云端给出 request/stream 与 provider 清理证据。编排结论与 Sol 单工作者分开报告，只描述这条冻结路线的协作能力，不自动启用或修改全局路由。探针路线只得到固定临时产物、实际 verifier 结果与宿主 UI 观察，随后由精确 cleanup 删除。",
+    value: "我能用同一冻结任务比较三种真实执行路线，并清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净。",
+    why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。",
+    example: "例如我问“云 API 取消后为什么不能立刻重跑”。系统先关闭本地 stream，再等待可观察 provider job 终态；若远端清理仍不可确认，就保持 cleanup_unconfirmed，不把本地进程退出冒充整条路线已经释放。",
+    result: "得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档的一一对应关系；原生给宿主终态，本地给进程树/GPU lease 清理证据，云端给 request/stream/provider 清理证据。",
     readerStates: {
-      pass: "workspace 唯一、输入 hash 匹配、路径在允许根内，所有案例终态闭合且该 executor 的进程、后代、GPU lease 或远端请求清理证据完整；编排路线还要求精确 Sol Max 根、零到四个直接 child、role-specific 交付、无后代/替补/重试和根最终验证全部闭合。",
-      problem: "发现共享文件、跨目录写入、半次执行拼接、终态早报或资源未释放时，整次结果无效但保留诊断；编排选择、实际派发、模型身份、child lineage 或整合证据冲突时同样拒绝该 arm。",
-      unavailable: "无法恢复同一 session/job/workspace，或 provider 侧关闭不可观察时，不提交替代执行；role-specific root/child commitment 或 fresh E2E 不足时，编排路线失败关闭但单工作者和其他 executor 仍独立判断。"
+      pass: "workspace 唯一、输入 hash 匹配、路径在允许根内，所有案例终态闭合且该 executor 的进程、后代、GPU lease 或远端请求清理证据完整。",
+      problem: "发现共享文件、跨目录写入、半次执行拼接、终态早报或资源未释放时，整次结果无效但保留诊断。",
+      unavailable: "无法恢复同一 session/job/workspace，或 provider 侧关闭不可观察时，不提交替代执行；前者创建新的完整尝试，后者保持路线不可用。"
     },
     decisionImpact: [
       "每个执行配置使用唯一目录。",
       "三条路线共用 start / wait / cancel / result 语义，但不共用身份或清理回执。",
-      "Sol Max 单工作者与 Sol Max 根编排是独立完整样本；编排只测分解、早派发、模型选择、并发、冲突整合和最终验证，不冒充 raw Sol 能力。",
-      "根在 selection phase（选择阶段）先给零到四个直接 child 及理由；Authority 再冻结 role-specific 交付，execution phase（执行阶段）不得出现第五个 child、后代、替补或模型失败后的重试。",
-      "编排资格不闭合时 fail-closed（失败关闭）；CACB 只报告证据，不自动激活、门禁或修改全局 subagent 路由。",
-      "只观察额度/费用/耗时时，不启动 formal campaign：先用 1 题短版验证最小路径，需要十任务观察时才用 10 题全版。",
-      "探针固定 namespace 已存在就停止；执行完成后先保留目录，等第二条消息只删除该目录，清理完成后才复用第一条。",
-      "探针不写测量回执、ledger、score、ranking、report progress 或 routing correction。",
       "start 只在所有绑定通过后返回 handle，wait 只给状态快照。",
       "workspace 是临时施工区，不是唯一归档。",
       "中断优先精确恢复，不合并 partial。",
@@ -380,22 +379,11 @@ export const cacbModules = [
       "native_managed 由宿主提交原生 task，轮询宿主状态并绑定 parent/spawn/child lineage；取消或超时后必须确认宿主终态和没有活跃后代。",
       "local_async_job 由 Toolkit/AICLI 提交 Codex CLI job，按 job id 轮询；任务在本地 workspace 中产出 artifact，重型执行由 LocalGpuBroker 串行，结束时确认进程树、活动请求、模型清理和 lease 释放。",
       "cloud_api_async_job 在本地 workspace 运行 Codex harness，经绑定的 Responses transport 发出 provider request；每个请求与 usage 事件配对，hidden verifier 和 independent confirmation（独立确认）始终留在本地。",
-      "native_orchestration.py 把精确 Sol/max 根、允许的直接 child 身份、最大四个 child、`fork_turns=none`、无后代预算、selection / dispatch / attempt / resolution schema 和 authority hashes 冻结为独立合同。",
-      "NativeOrchestrationOperator 把选择和执行拆成 S/E 两阶段：根先终态提交严格 selection artifact，Authority 再发布 child plans 与只读 dispatch manifest；实际 call id 只从 raw evidence 学得，不能预造或替补。",
-      "config/probes/universal-quota-cost-short-v1.md 固定一个离线 JSON 转换任务；只允许标准库、一次最小修正和 `.model-quota-probe-short-v1/`。",
-      "config/probes/universal-quota-cost-full-v1.md 固定十个同结构任务与 aggregate（汇总）验证；每题最多一次最小修正，失败保留真实状态并继续，其 namespace 是 `.model-quota-probe-full-v1/`。",
-      "两份 probe 都把执行和 cleanup 拆成两条消息；cleanup 禁止通配符、git clean、项目清理、父目录或兄弟目录删除。",
       "workspace containment 检查 cwd 与输出根祖先关系；所有路线先归档 artifact/trace/receipt/validity reason 并回读 hash，才允许释放临时目录。"
     ],
     flow: [
-      "先判断目的是正式评测，还是仅观察宿主额度、费用与耗时。",
-      "若只是观察，选择 1 题短探针或 10 题全探针；确认对应固定 namespace 不存在后执行，在宿主 UI 与临时 verifier 结果可见后停下。",
-      "探针观察完成后单独执行第二条 cleanup，只删除对应固定 namespace；删除成功后流程结束，不进入后续 ledger、verifier 或 final selection。",
-      "若需要正式评测，再冻结 campaign。",
+      "冻结 formal campaign。",
       "选择 executor_kind，并验证它的接入状态、精确身份和授权边界。",
-      "若选择 orchestration arm，先让同一精确 Sol Max 根在 S 阶段独立给出零到四个直接 child 的模型、理由与任务分解；零合法但必须说明为什么不派。",
-      "Authority 验证 selection 后，为根和每个 child 生成不同的 capsule/plan/reader/receipt 承诺；只有发布标记闭合才进入 E 阶段。",
-      "E 阶段根只能按冻结顺序发起精确直接 child，等待各自产物，处理冲突并完成最终验证；任何后代、额外回合、替补、重复或未计划调用都拒绝整条编排证据。",
       "为执行配置创建 workspace。",
       "复制并校验 fixture。",
       "用 start 提交 envelope；只有绑定验证通过才接收 WorkerHandle。",
@@ -415,12 +403,7 @@ export const cacbModules = [
       { term: "terminal state（终态）", explanation: "completed、partial、blocked、failed、timed_out 或 cancelled；后两者只有清理已确认才成立。" },
       { term: "cleanup_unconfirmed（清理未确认）", explanation: "取消或超时已发生，但仍不能证明进程、GPU lease、request stream 或远端 job 已终止；此时路线保持不可用。" },
       { term: "LocalGpuBroker（本地 GPU 仲裁器）", explanation: "串行分配本地重型模型 lease，防止两个受测任务绕过 owner 同时占用 GPU。" },
-      { term: "provider request（提供方请求）", explanation: "云端路线经唯一绑定 endpoint 发出的调用；只携带参与者公开输入，hidden control 不离开本机。" },
-      { term: "short probe（短探针）", explanation: "一个固定离线转换任务，用最低工作量先观察宿主额度、费用、耗时和最小执行路径；不是能力样本。" },
-      { term: "full probe（全探针）", explanation: "十个固定转换任务加汇总验证，用于更完整的宿主观察；仍不进入正式账本或评分。" },
-      { term: "probe namespace（探针命名空间）", explanation: "short/full 各自唯一的固定临时目录；存在时拒绝覆盖，观察后由第二条消息精确删除。" },
-      { term: "native orchestration arm（原生编排路线）", explanation: "把 Sol Max 作为根战略者、直接原生子代理作为有界执行者的独立完整样本；它单独衡量分解、并发、整合和最终验证，不与 Sol 单工作者混分。" },
-      { term: "role-specific commitment（角色专属任务承诺）", explanation: "根与每个 child 各自绑定的任务、身份、plan hash、reader 和 receipt；子代理不复用根胶囊，因此授权和证据不会混线。" }
+      { term: "provider request（提供方请求）", explanation: "云端路线经唯一绑定 endpoint 发出的调用；只携带参与者公开输入，hidden control 不离开本机。" }
     ],
     boundaries: [
       "workspace 不进入网站，也不作为长期事实源。",
@@ -431,10 +414,7 @@ export const cacbModules = [
       "本地 GPU 路线不消耗云端 paid-attempt 授权，但仍必须经过资源 owner、兼容性和 broker 门。",
       "探针只读取提示词内固定数据，不读对话历史、工作区记忆、父/兄弟目录、Git、.agents 或 .codex，不联网、不安装依赖、不调用其他 AI/API。",
       "探针输出只能留在固定 namespace；它不是 formal sample、benchmark evidence、cost receipt 或 routing input。",
-      "执行阶段不会自动清理目录；必须等观察完成再发送第二条，且只允许删除该固定 namespace。",
-      "当前网页不启动、取消或清理任何评测 workspace、GPU lease 或云端 request。",
-      "CACB 编排不创建全局路由、Hook 或默认 subagent 策略；它只在冻结 arm 内观察一次可复验的协作执行。",
-      "编排结果与单工作者结果分别报告；额度、并发或子模型数量不能代替正确性，也不能把多模型产物归为单模型能力。"
+      "当前网页不启动、取消或清理任何评测 workspace、GPU lease 或云端 request。"
     ],
     failures: [
       { condition: "输出路径不在 workspace 内", response: "启动前拒绝执行。" },
@@ -443,14 +423,7 @@ export const cacbModules = [
       { condition: "原生取消后仍有活跃后代", response: "不写 cancelled，继续保持取消请求或清理未确认状态。" },
       { condition: "本地进程树、活动请求或 GPU lease 未释放", response: "路线保持 cleanup_unconfirmed；不启动另一个重型任务。" },
       { condition: "云端 stream 已断但 provider job 终态不可观察", response: "不把本地退出当远端清理；路线保持不可用且不立即替代提交。" },
-      { condition: "探针固定 namespace 已存在", response: "立即停止，不覆盖、不改名，也不顺手清理；先由 owner 确认上一轮观察后执行原第二条 cleanup。" },
-      { condition: "1 题短探针一次最小修正后仍失败", response: "停止并保留真实失败和 namespace；不循环重试、不写账本，等待第二阶段精确清理。" },
-      { condition: "10 题全探针中的一题仍失败", response: "保留该题真实失败并继续其余固定题；不选优、不重抽样，最终仍只供宿主观察。" },
-      { condition: "探针 cleanup 目标不精确或请求扩大到父目录", response: "拒绝删除；只接受当前工作目录下的 exact short/full namespace。" },
-      { condition: "归档 hash 不匹配", response: "保留 workspace，不释放唯一内容。" },
-      { condition: "编排根或 child 的 role-specific capsule、identity、reader、receipt 或 lineage 不闭合", response: "整条 orchestration arm 失败关闭；不复用共享 capsule、不回退成单工作者成功，也不修改全局路由。" },
-      { condition: "根派出第五个 child、子代理继续委派、出现替补/重试/重复调用或未计划额外回合", response: "拒绝 dispatch 或 final resolution，保留 raw evidence 解释哪条冻结边界被破坏。" },
-      { condition: "根与 child 产物冲突或未形成最终验证", response: "编排结果保持 incomplete；不挑最好产物、不平均、不把子代理局部成功算作根完成。" }
+      { condition: "归档 hash 不匹配", response: "保留 workspace，不释放唯一内容。" }
     ],
     sources: [
       { path: "PRIVATE source · src/cacb/campaign.py", role: "Campaign 冻结与 manifest" },
@@ -460,24 +433,75 @@ export const cacbModules = [
       { path: "PRIVATE source · docs/WORKER_CONTRACT.md", role: "三类 executor、终态和路线专属 cleanup 语义" },
       { path: "PRIVATE source · docs/LOCAL_CODEX_COMPATIBILITY.md", role: "本地 Codex、工具循环、恢复和 LocalGpuBroker 门" },
       { path: "PRIVATE source · src/cacb/cloud_api_worker.py", role: "云端 request/usage/terminal machine-event 解析边界" },
-      { path: "PRIVATE source · config/probes/universal-quota-cost-short-v1.md", role: "1 题短探针、固定 namespace 与第二阶段清理合同" },
-      { path: "PRIVATE source · config/probes/universal-quota-cost-full-v1.md", role: "10 题全探针、逐题失败保留、汇总与精确清理合同" },
-      { path: "PRIVATE source · tests/test_quota_cost_probe_prompts.py", role: "两阶段、零回执、零账本与 exact cleanup 回归" },
-      { path: "PRIVATE source · protocols/single-worker-episode.md", role: "连续 episode 合同" },
-      { path: "PRIVATE source · src/cacb/native_orchestration.py", role: "Sol Max 根、零到四个直接 child、两阶段选择/派发、role-specific 交付与证据聚合" },
-      { path: "PRIVATE source · docs/NATIVE_RUN_OPERATOR.md", role: "单工作者/编排分轨、capsule/reader、authority dispatch、lineage 与失败关闭边界" },
-      { path: "PRIVATE source · docs/PRODUCT_DESIGN.md", role: "原生编排衡量对象、与 Sol 单工作者分报及不激活全局路由的产品边界" }
+      { path: "PRIVATE source · protocols/single-worker-episode.md", role: "连续 episode 合同" }
     ],
     verification: [
       "campaign、task_workspace 与 task_workspace_archive focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "当前源码与 cross-executor contract test 明确覆盖 native_managed、local_async_job、cloud_api_async_job 及 native_lineage=not_applicable 语义；这只是 source contract，不是本轮 runtime 验收。",
-      "59b0b5c 的 native orchestration source 固定精确 Sol/max 根、两个独立完整样本 arm、零到四个直接 child、role-specific delivery、无后代/替补/重试和分开报告；当前 CI lint 未闭合且本轮未跑 fresh orchestration E2E，不能把该 arm 写成已合格结果。",
-      "两份 probe prompt 与 test_quota_cost_probe_prompts 在 e6f7581 历史观察代已经存在；该历史证据不继承到当前 59b0b5c，当前 CI 仍停在 lint 门。",
-      "本轮未实际运行 short/full probe，因此没有宿主额度、费用或耗时观察，更没有可公开受测结果。",
       "没有创建真实受测任务、取得 GPU lease 或调用外部执行器。",
       "完整 native formal-run 路径仍有跨代 fixture 缺口。"
     ],
-    relation: "正式路线消费问题库并冻结共同 envelope；身份与证据模块决定三条 executor 的精确 binding 和接入资格。本模块负责 start/wait/cancel/result、workspace、资源与归档生命周期；原生编排在同一模块内增加独立的 Sol Max root selection、role-specific child dispatch、冲突整合和最终验证证据，并与 single-worker 分报。唯一执行容器和路线终态再交给 deterministic verifier，合格样本随后才进入 blind-quality-review。short/full probe 是独立轻量分支，完成精确 cleanup 后即结束，永不流入 verifier、formal ledger、评分或最终选择。"
+    relation: "消费问题库并冻结共同 envelope；身份与证据模块决定三条 executor 的精确 binding 和接入资格。本模块只负责 formal start/wait/cancel/result、workspace、资源与归档生命周期，再把唯一执行容器和路线终态交给 deterministic verifier。原生编排和额度/费用探针各由独立模块说明。"
+  },
+  {
+    slug: "native-orchestration",
+    shortTitle: "原生编排",
+    title: "Sol Max 根编排、角色专属交付与独立结果",
+    teaser: "把 Sol Max 作为根战略者，单独评测它怎样分解、尽早派发、选择零到四个直接子代理、并发推进、处理冲突、整合产物和完成最终验证。",
+    status: "原生编排 source 合同存在；当前 CI lint 未闭合且本轮没有 fresh orchestration E2E，两个 arm 均不能写成已合格结果",
+    statusTone: "mixed",
+    searchAliases: ["Sol Max根智能体怎样编排直接子代理", "原生单工作者和多代理结果为什么分开", "编排子代理能不能继续派后代", "零个子代理算不算有效选择", "role specific capsule为什么需要"],
+    searchProjection: {
+      intents: ["评测Sol Max根的任务分解和整合", "冻结零到四个直接子代理选择", "区分单工作者与原生编排结果", "验证根与child的角色专属交付"],
+      entities: ["native orchestration arm", "phase S / phase E", "root selection", "role-specific commitment", "authority dispatch manifest", "child lineage"],
+      relations: ["根先终态提交选择再由Authority发布", "child不复用root capsule", "编排结果与Sol单工作者分开", "root负责冲突整合和最终验证"],
+      failureRecovery: ["role-specific交付不闭合时失败关闭", "第五个child或后代调用被拒绝", "替补重试或额外回合使证据无效", "未形成根最终验证时保持incomplete"]
+    },
+    value: "我能把“Sol Max 自己完成任务”和“Sol Max 调度一组直接子代理后完成任务”分开判断，看到协作带来的分解、并发、冲突处理和最终整合能力，而不把多模型结果算成 raw Sol 能力。",
+    why: "若 child 复用 root 的任务胶囊、继续委派后代、失败后随意替补，或把编排结果并进单工作者分数，权限、身份和能力归属都会失真。",
+    example: "例如我说“评测 Sol Max 怎样拆分并整合这组工程任务”。同一精确 Sol Max 根先在 S 阶段给出零到四个直接 child 的模型、理由与任务；Authority 冻结各角色不同的 plan、reader、receipt 和 `fork_turns=none`。E 阶段只能按清单派发，根最后必须解决冲突并验证整体结果。",
+    result: "得到 root selection、authority dispatch manifest、每个直接 child 的独立计划/回执/lineage、根整合与最终验证证据，以及与 Sol single-worker（单工作者）分开的编排结论；它不自动启用或修改全局路由。",
+    readerStates: { pass: "精确 Sol/max 根、零到四个直接 child、角色专属交付、无后代/替补/重试和根最终验证全部闭合时，该编排样本成立。", problem: "选择、实际派发、模型身份、child lineage 或整合证据冲突时拒绝该 arm，并保留 raw evidence。", unavailable: "role-specific commitment、Authority发布或 fresh E2E 不足时失败关闭；单工作者和其他 executor 仍独立判断。" },
+    decisionImpact: ["编排与单工作者是独立完整样本。", "零个child合法但根必须给具体不派发理由。", "最多四个直接child且禁止后代、替补、重复和模型失败后重试。", "CACB只报告冻结arm证据，不创建全局路由、Hook或默认策略。"],
+    problem: "解决共享胶囊造成授权冲突、编排调用漂移、后代扩张、替补掩盖失败和多模型能力冒充单模型能力。",
+    implementation: ["native_orchestration.py 冻结精确 Sol/max 根、允许 child 身份、最大四个、fork_turns=none、无后代预算和 selection/dispatch/attempt/resolution schema。", "NativeOrchestrationOperator 把 S 选择和 E 执行分开；Authority 只在 selection 终态后发布 child plans、reader、prelaunch receipt 与 manifest。", "实际 call id 只从 raw evidence 学得；每个执行 child 必须有唯一 call→started→output→depth-one lineage，未启动计划只能标 unused。"],
+    flow: ["冻结 orchestration arm 与共同 campaign", "Sol Max root在S阶段提交零到四个选择并终态", "Authority校验后发布角色专属child材料", "同一root在E阶段按序直接派发", "回读每个child原始lineage和产物", "root处理冲突并最终验证", "独立发布编排resolution"],
+    concepts: [{ term: "native orchestration arm（原生编排路线）", explanation: "以Sol Max为根、直接原生子代理为有界执行者的独立完整样本。" }, { term: "role-specific commitment（角色专属任务承诺）", explanation: "根和每个child分别绑定的任务、身份、plan hash、reader和receipt；child不复用根胶囊。" }, { term: "phase S / E（选择/执行阶段）", explanation: "先让根在无派发时冻结选择，再由Authority发布精确材料后执行，避免边选边改证据。" }],
+    boundaries: ["不创建全局路由或默认subagent策略", "不让child继续委派", "不把编排结果并入Sol单工作者", "不允许第五个child、替补、重复或额外回合", "网页不启动任何真实arm"],
+    failures: [{ condition: "root/child的capsule、identity、reader、receipt或lineage不闭合", response: "整条arm失败关闭，不回退成单工作者成功。" }, { condition: "出现第五个child、后代、替补或重试", response: "拒绝dispatch或resolution，保留违反冻结边界的raw evidence。" }, { condition: "根未解决冲突或未形成最终验证", response: "保持incomplete，不挑最好子产物冒充整体完成。" }],
+    sources: [{ path: "PRIVATE source · src/cacb/native_orchestration.py", role: "Sol Max根、零到四个直接child、两阶段选择/派发与证据聚合" }, { path: "PRIVATE source · docs/NATIVE_RUN_OPERATOR.md", role: "role-specific capsule、Authority dispatch、lineage和失败关闭" }, { path: "PRIVATE source · docs/PRODUCT_DESIGN.md", role: "编排衡量对象、与单工作者分报及不激活全局路由" }],
+    verification: ["native orchestration focused tests 在 e6f7581 历史观察代曾存在；该证据不继承到当前 59b0b5c。", "59b0b5c 固定两个独立完整样本 arm、精确 Sol/max 根、零到四个直接 child、role-specific delivery、无后代/替补/重试和分开报告。", "当前 CI 仍在 lint 门失败且本轮未跑 fresh orchestration E2E，因此不发布合格结果。"],
+    relation: "消费 question-bank 与 campaign 的冻结输入、identity-evidence 的精确身份和 workspace；独立编排终态交给 deterministic-verification，不影响 blind-quality-review 的单样本盲化边界。"
+  },
+  {
+    slug: "quota-cost-probes",
+    shortTitle: "额度费用探针",
+    title: "1题/10题宿主观察与第二阶段精确清理",
+    teaser: "在不创建正式样本、账本或分数的前提下，用一个或十个固定离线任务观察宿主界面的额度、费用与耗时；观察完成后用第二条消息只删除固定临时目录。",
+    status: "short/full prompt 与合同测试存在；本轮未实际运行探针，没有新的额度、费用、耗时或cleanup现场",
+    statusTone: "mixed",
+    searchAliases: ["什么时候用一题短探针", "什么时候用十题全探针", "探针为什么不进排行榜", "探针跑完怎样精确删除", "namespace存在为什么停止"],
+    searchProjection: {
+      intents: ["用一题观察最小额度费用路径", "用十题观察连续宿主表现", "完成后第二阶段精确清理", "防止探针污染正式基准"],
+      entities: ["short probe", "full probe", "fixed namespace", "host UI observation", "exact cleanup"],
+      relations: ["短探针固定1题而全探针固定10题", "探针退出formal campaign和ledger", "执行与cleanup分两条消息", "namespace存在时拒绝覆盖"],
+      failureRecovery: ["短探针一次最小修正后失败就停止", "全探针单题失败保留并继续固定其余题", "cleanup目标扩大时拒绝删除", "观察完成前保留目录"]
+    },
+    value: "我可以先用很小、固定的任务观察宿主怎样显示额度、费用和耗时，再决定是否值得启动正式基准；这次观察不会被误算成模型能力结果。",
+    why: "若探针复用旧目录、自动写正式回执、循环重试或顺手清理更大范围，一次轻量宿主观察就会污染正式样本和工作区。",
+    example: "例如我问“先用最小任务看看新模型的额度和费用”。系统只在 `.model-quota-probe-short-v1/` 做一个固定 JSON 转换；我看完宿主 UI 后再发送第二条，只删除这个 exact namespace，不用通配符或 git clean。",
+    result: "得到固定临时输入、输出、verifier 状态和当场宿主 UI 观察；随后由第二阶段精确删除目录。没有 formal sample、measurement receipt、ledger、score、ranking、report progress 或 routing correction。",
+    readerStates: { pass: "固定namespace原本不存在、任务按提示完成并保留供观察、第二条exact cleanup只删除该目录时，本轮探针闭合。", problem: "固定题失败时保留真实状态，不选优、不重抽样、不写正式结论。", unavailable: "namespace已存在或cleanup目标不精确时停止，不覆盖、不改名、不扩大删除范围。" },
+    decisionImpact: ["只观察额度/费用/耗时时不启动formal campaign。", "先用1题确认最小路径，需要连续十任务观察才用10题。", "执行和删除必须分成两条消息。", "探针永不进入正式账本、分数、排名、报告进度或路由修正。"],
+    problem: "解决轻量观察污染正式基准、旧目录覆盖、循环重试挑结果和清理范围失控。",
+    implementation: ["universal-quota-cost-short-v1.md 固定一个标准库JSON转换任务、一次最小修正和short namespace。", "universal-quota-cost-full-v1.md 固定十个同结构任务与aggregate验证；每题最多一次最小修正，失败保留真实状态。", "两份prompt都把执行和cleanup拆开；cleanup禁止通配符、git clean、项目清理、父目录或兄弟目录删除。"],
+    flow: ["确认目的只是宿主观察", "选择1题或10题固定prompt", "确认对应namespace不存在", "执行并保留临时产物", "观察宿主UI与verifier", "发送第二条exact cleanup", "删除成功后结束且不进入正式链"],
+    concepts: [{ term: "short probe（短探针）", explanation: "一个固定离线任务，用最小工作量观察宿主额度、费用、耗时和执行路径。" }, { term: "full probe（全探针）", explanation: "十个固定任务加汇总验证，用于较完整的连续宿主观察，仍不是基准样本。" }, { term: "probe namespace（探针命名空间）", explanation: "short/full各自唯一固定临时目录；存在时拒绝覆盖，观察后由第二条消息精确删除。" }],
+    boundaries: ["不读对话历史、父兄弟目录、Git、.agents或.codex", "不联网、不安装依赖、不调用其他AI/API", "不写formal receipt/ledger/score/ranking", "不自动清理或扩大删除", "网页不运行任何探针"],
+    failures: [{ condition: "固定namespace已存在", response: "立即停止，不覆盖、不改名；先完成上一轮观察与原第二条cleanup。" }, { condition: "1题一次最小修正后仍失败", response: "停止并保留真实失败与目录，不循环重试。" }, { condition: "10题中一题仍失败", response: "保留该题失败并继续其余固定题，不选优或重抽样。" }, { condition: "cleanup目标不精确或扩大到父目录", response: "拒绝删除，只接受当前工作目录下exact short/full namespace。" }],
+    sources: [{ path: "PRIVATE source · config/probes/universal-quota-cost-short-v1.md", role: "1题短探针、固定namespace与第二阶段清理" }, { path: "PRIVATE source · config/probes/universal-quota-cost-full-v1.md", role: "10题全探针、逐题失败保留、汇总与精确清理" }, { path: "PRIVATE source · tests/test_quota_cost_probe_prompts.py", role: "两阶段、零回执、零账本与exact cleanup回归" }],
+    verification: ["两份 probe prompt 与 focused tests 在 e6f7581 历史观察代已经存在；该证据不继承到当前 59b0b5c。", "当前 source 固定 short=1题、full=10题、各自namespace、每题最多一次最小修正和独立cleanup消息。", "本轮未运行任何probe，因此没有新的宿主额度、费用、耗时或cleanup结果。"],
+    relation: "这是退出 formal campaign 的独立宿主观察工具；完成cleanup后流程结束，不进入 campaign-workspace、deterministic-verification、blind-quality-review 或 failure-reporting 的正式结果。"
   },
   {
     slug: "identity-evidence",
@@ -488,7 +512,7 @@ export const cacbModules = [
     statusTone: "mixed",
     searchAliases: ["当前模型provider版本到底是什么", "某模型在这个harness里现在能不能用", "模型证据卡包含什么", "task id和run id为什么都要绑定", "官方能力和本地实测怎么分开", "native local cloud三种executor怎么选", "非原生为什么没有native lineage", "新harness接入要过什么门"],
     searchProjection: {
-      intents: ["确认被研究和被测量的是哪个精确配置", "在原生本地云端三类执行路线间做用途判断", "核对当前官方能力可用性与价格证据", "证明新harness可接收同一任务并被同一verifier验收", "把本地任务身份动作产物和终态绑定", "判断native lineage是否适用"],
+      intents: ["确认被研究和被测量的是哪个精确配置", "读取V11R1二十四槽身份矩阵", "在原生本地云端三类执行路线间做用途判断", "核对当前官方能力可用性与价格证据", "证明新harness可接收同一任务并被同一verifier验收", "判断native lineage是否适用"],
       entities: ["model", "provider", "harness", "transport", "native lineage", "executor_kind", "WorkerHandle", "onboarding gate"],
       relations: ["模型证据卡记录当前官方与外部证据", "本地证据绑定同一次task和run", "native_managed必须有parent spawn child谱系", "local_async_job绑定artifact profile engine与broker lease", "cloud_api_async_job绑定provider endpoint request与stream", "非原生路线的native lineage为not_applicable", "官方可用性研究不能替代本地任务实测"],
       failureRecovery: ["模型或harness身份不精确时不进入资格判断", "requested effective attested不一致时失败关闭", "task或run不匹配时拒绝借用旧handle", "新harness缺host receipt时保持研究状态", "宿主证据缺失时保持Unknown而不靠参与者自报", "provider或transport漂移时创建新binding而不继承旧证据"]
@@ -517,6 +541,13 @@ export const cacbModules = [
     implementation: [
       "evidence.py 与 model_evidence.py 管证据结构与状态。",
       "model-evidence-card schema 把 executor_kind 固定为 native_managed、local_async_job 或 cloud_api_async_job，并分别约束 lineage applicability。",
+      "V11R1 slots 01–03：native-luna-max-single=gpt-5.6-luna/max/codex/native/OpenAI；native-terra-max-single=gpt-5.6-terra/max/codex/native/OpenAI；native-sol-max-single=gpt-5.6-sol/max/codex/native/OpenAI。",
+      "slots 04–05：native-sol-max-orchestrated=gpt-5.6-sol/max + 0–4 Sol Max children；native-sol-economy-orchestrated=gpt-5.6-sol/max root + 0–4 Sol/Terra/Luna Max children；两者均为 codex/native/OpenAI，结果与 single-worker 分开。",
+      "slots 06–08：local-35b-max-codex=qwen3.6:35b/max/codex-cli/Responses/provider codex-ollama-main；local-27b-max-codex=qwen3.6:27b/max/codex-cli/Responses/provider codex-ollama-review；cloud-qwen3-8-max-agent=qwen3.8-max/max/codex-cli/Responses/provider codex-qwen3-8-max-paygo，当前仅 design-only。",
+      "slots 09–15：native-luna-xhigh-single、native-terra-xhigh-single、native-sol-medium/high/xhigh-single 均为对应 gpt-5.6 模型/codex/native/OpenAI；native-luna-max-orchestrated 为 Luna Max root + Luna Max children；native-terra-adaptive-orchestrated 为 Terra Max root + Terra/Luna Max children。",
+      "slots 16–22：native-sol-low-single；native-luna-low/medium/high-single；native-terra-low/medium/high-single，均为精确 gpt-5.6 model + 对应 effort、codex/native/OpenAI、fallback=false。",
+      "slots 23–24：cloud-deepseek-v4-flash-0731-codex=deepseek-v4-flash/max/codex-cli/Responses/provider deepseek-responses-0731；cloud-deepseek-v4-pro-0813-codex=deepseek-v4-pro/max/codex-cli/Responses/provider deepseek-responses-0813；两者当前 prelaunch-pending。",
+      "first report 每槽取 first valid sample；Luna Max 已有三份有效机械证据时只按中位数选一份代表进入盲审，另外两份 audit-only。Antigravity 与 OpenCode 是后续独立 supplement，不改变 24-slot 阻断边界。",
       "native_managed 选择于要测真实宿主原生 Codex 行为且宿主能提供权威 rollout 时；host receipt 绑定 model、effort、agent_type、provider、harness、parent/spawn/child 与 turn context，用户得到原生 task handle、artifact 和终态/清理回执。",
       "local_async_job 选择于要测精确本机模型制品及其 Codex 工具循环时；Toolkit job id 与 AICLI machine events 绑定 backend/profile/model、artifact digest、quantization、tokenizer/chat template、serving engine、loopback transport、sandbox、LocalGpuBroker lease 和 fallback=false，用户得到本地 artifact、verifier 摘要与完整清理 receipt。",
       "cloud_api_async_job 选择于非原生模型必须在指定 provider API 下接受同一 Codex harness 时；Toolkit/AICLI job 与 receipt id 绑定 provider/profile/model/revision、endpoint class/path fingerprint、Responses transport、request/stream id、machine events、privacy policy 和 fallback=false，用户得到本地 artifact、sanitized report（净化报告）与请求/终态证据。",
@@ -574,11 +605,14 @@ export const cacbModules = [
       { path: "PRIVATE source · src/cacb/cloud_api_worker.py", role: "云端 provider/request/usage/privacy/terminal 的严格证据解析" },
       { path: "PRIVATE source · schemas/model-evidence-card.schema.json", role: "三类 executor 与 lineage applicability 合同" },
       { path: "PRIVATE source · schemas/episode-manifest.schema.json", role: "Episode manifest 合同" },
-      { path: "PRIVATE source · schemas/worker-receipt.schema.json", role: "执行回执合同" }
+      { path: "PRIVATE source · schemas/worker-receipt.schema.json", role: "执行回执合同" },
+      { path: "PRIVATE source · config/arms/v11.registry.json", role: "24 canonical slots、C1–C10、精确模型/effort/harness/provider 与 launch state" },
+      { path: "PRIVATE source · config/formal-sampling.v1.json", role: "first-valid 与 Luna Max median representative 的首份报告采样政策" }
     ],
     verification: [
       "model evidence workflow 与 worker contract focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "current cross-executor design contract 与 schemas 在源码层显式区分 native_managed、local_async_job、cloud_api_async_job，并要求 requested/effective/attested identity；这不证明任何具体配置已完成本机接入。",
+      "v11.registry.json 当前 nominal_slot_count=24、episode.case_count=10；页面逐组列出全部24个精确 identity binding，但不读取或发布候选结果。",
       "完整 native identity envelope 测试当前存在跨代失败，页面没有升级为全绿。",
       "未读取或复制任何真实原始执行日志。"
     ],

@@ -251,8 +251,8 @@ export const pcconfigModules = [
     shortTitle: "机器事实",
     title: "机器事实、路径与配置导航",
     teaser: "回答“这台电脑现在怎样、配置真正在哪里、改动会影响谁”，并为路径、端口和开发存储提供现场门禁。",
-    status: "机器事实可读，开发存储 5/5 通过；稳定投影为版本 6",
-    statusTone: "pass",
+    status: "机器事实可读，开发存储 5/5 通过，稳定投影为版本 6；TimeAudit 增量消费者已有合同与定向测试，本轮未证明 weekly 现场运行",
+    statusTone: "mixed",
     searchAliases: ["TimeAudit异常会直接改变稳定机器投影吗", "PCConfig异常游标什么时候推进", "每周机器维护怎样消费TimeAudit摘要"],
     searchProjection: {
       intents: ["查看本机配置在哪里", "确认当前主机和设备角色", "迁移项目路径", "检查固定端口", "判断笔记本能否接管台式机", "消费TimeAudit增量异常并决定是否重查稳定事实"],
@@ -848,7 +848,7 @@ export const pcconfigModules = [
     searchAliases: ["让程序用密码但不显示", "盲填银行卡但不要提交", "固定Workspace账号怎样读邮件云盘日历", "换电脑后能不能复制登录状态", "SecretRef怎样恢复"],
     searchProjection: {
       intents: ["让程序使用凭据但不显示", "盲填银行卡但不提交", "在新设备重新登录", "读取固定 Workspace 账号", "恢复 SecretRef"],
-      entities: ["SecretRef", "Secret Broker", "Password Center", "固定 Workspace Provider", "Browser Bridge", "CurrentUser DPAPI"],
+      entities: ["SecretRef", "Secret Broker", "Password Center", "google-workspace.primary / v1.1.0", "Browser Bridge", "CurrentUser DPAPI"],
       relations: ["秘密绑定精确执行目标", "账号绑定限制Provider动作", "设备变化要求重新登录", "Browser Bridge只绑定唯一网页", "普通恢复只引用秘密入口"],
       failureRecovery: ["凭据不可用暂停对应动作", "scope不匹配不换账号", "网络失败不判凭据失效", "旧登录态不跨设备复制", "Reveal缺新鲜因子时零字段返回"]
     },
@@ -865,6 +865,7 @@ export const pcconfigModules = [
       "默认完成“使用秘密”，不默认 Reveal（显示明文）。",
       "AgentLogin（浏览器盲填）只匹配精确 tab、origin 和 frame；AgentSecretRef 只匹配登记 executable、参数目标或受控输入通道。",
       "固定 Workspace Provider 只有一个 binding，动作不能在运行时选择其他账号。",
+      "当前精确 Provider kind=pcconfig-google-workspace-direct、version=1.1.0、binding id=google-workspace.primary；这些是公开安全的执行身份，不包含账号值。",
       "只有 Gmail、Drive 和 Calendar 通过同一 Provider 的真实读取验收后，Read action（读取动作）才成为默认能力；当前仅证明零网络 binding（绑定）已配置，尚未证明远端 OAuth（账号授权）和实际读取可用。Write action（写入动作）还必须对每种动作独立验收，并由本轮明确对象和内容授权。",
       "OAuth enrollment（账号授权登记）只在前台进行一次，callback（回调）使用随机 loopback 端口与 PKCE（授权码保护）。",
       "换电脑、重装或从台式机切到副驾驶时，非秘密配置可以按新路径重建，但 DPAPI 状态、账号 session 和设备信任不跨机复制；目标设备必须重新登录或从正式 Recovery Set 恢复。",
@@ -878,6 +879,7 @@ export const pcconfigModules = [
       "Secret Broker status 当前明确 plaintext_returned=false、key_project_touched=false、remote_fetch_performed=false，安全核心和 product closure（产品闭环）均 pass。",
       "当前唯一 optional gap 是外部密码管理器缺少逐条公开 API；它不会把核心状态改写为失败，也不会授权抓取浏览器数据库。",
       "Workspace credential state 使用 CurrentUser DPAPI；状态检查只看固定路径和文件存在性，不解密，2026-08-29 返回 configured、credential_state_present=true、credential_state_decrypted=false、zero_network=true。",
+      "pcconfig-google-workspace-direct v1.1.0 固定使用 google-workspace.primary，服务面只有 Gmail、Drive、Calendar；MCP（模型上下文协议）只读工具固定为 gmail_search、gmail_get_message、gmail_get_thread、gmail_list_labels、drive_search、drive_get、drive_list_permissions、drive_export、calendar_list_calendars、calendar_events。",
       "副驾驶恢复胶囊明确排除密码、Token、Cookie、私钥、设备身份密钥、Codex 登录态和 raw config.toml；只恢复无秘密 [agents] 两键投影，账号在目标机按官方流程重新建立。",
       "Provider 暴露 Gmail（邮件）、Drive（云盘）和 Calendar（日历）的 closed action allowlist，没有通用 URL、HTTP method（请求方法）、body 或账号透传。",
       "access token（访问令牌）只在当前进程内存在；receipt（执行回执）明确 token_returned=false、client_secret_returned=false。"
@@ -898,7 +900,8 @@ export const pcconfigModules = [
       { term: "OAuth（账号授权协议）", explanation: "用户在官方页面同意固定 scope，Provider 用授权码换取并安全保存 refresh token（刷新令牌）。" },
       { term: "PKCE（授权码保护）", explanation: "给一次 OAuth 流程绑定 code verifier（校验秘密），降低授权码被截获后复用的风险。" },
       { term: "Typed action（类型化动作）", explanation: "每个邮件、云盘或日历操作都有固定参数 schema，不允许调用者构造任意网络请求。" },
-      { term: "Device trust（设备信任）", explanation: "某项秘密是否允许在当前 Windows 身份与设备使用的独立事实；复制文件、管理员权限或旧登录态不能继承。" }
+      { term: "Device trust（设备信任）", explanation: "某项秘密是否允许在当前 Windows 身份与设备使用的独立事实；复制文件、管理员权限或旧登录态不能继承。" },
+      { term: "google-workspace.primary", explanation: "PCConfig v1.1.0 唯一固定的 Workspace binding id；它绑定一个既定账号，但公开页不披露账号值。" }
     ],
     boundaries: [
       "不在仓库、模型上下文、stdout、JSON、日志或剪贴板保存秘密值",
@@ -925,12 +928,14 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "Password Center 用户体验、SecretRef、银行卡盲填与产品域隔离合同" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.google-workspace-provider.md", role: "固定账号 Provider、OAuth 和类型化动作合同" },
       { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "正式秘密代理与受保护入口" },
-      { path: "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1", role: "Gmail、Drive 和 Calendar 类型化 dispatch（分发）入口" }
+      { path: "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1", role: "Gmail、Drive 和 Calendar 类型化 dispatch（分发）入口" },
+      { path: "E:\\PCConfig\\tools\\Start-GoogleWorkspaceMcp.ps1", role: "十个只读 stdio MCP 工具的固定入口" }
     ],
     verification: [
       "Invoke-SecretBroker.ps1 -Action Status -Json 当前 exit 0、status=pass、security_core_status=pass、product_closure_status=pass",
       "同次 Secret Broker 回执为 0 critical failure、1 optional gap，并明确 plaintext_returned=false、remote_fetch_performed=false",
       "Get-GoogleWorkspaceProviderBinding.ps1 -Json 当前 exit 0、status=configured、services=gmail/drive/calendar、zero_network=true",
+      "Registry 精确绑定 provider kind=pcconfig-google-workspace-direct、version=1.1.0、binding=google-workspace.primary；MCP ListTools 只应返回十个登记只读工具，本轮未用它冒充远端读取。",
       "binding status 明确 credential_state_decrypted=false；因此本页不把 configured 写成 OAuth 或 live API 验收",
       "secret_broker.test.py、secret_authority.test.py 与 secret_device_trust.test.py 覆盖授权、原子回读、恢复和负例",
       "invoke_google_workspace_provider.test.ps1 覆盖 closed action、大小边界、账号/scope 绑定、写入授权和无秘密回执"

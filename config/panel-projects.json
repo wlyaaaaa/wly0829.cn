@@ -279,7 +279,9 @@
             "tools/Invoke-SecretBroker.ps1",
             "tools/authorization_file_broker.py",
             "tools/authorization_file_broker.test.py",
+            "registries/google_workspace_provider.json",
             "tools/Invoke-GoogleWorkspaceProvider.ps1",
+            "tools/Start-GoogleWorkspaceMcp.ps1",
             "docs/contracts/pcconfig.google-workspace-*.md",
             "docs/contracts/pcconfig.secret-broker.md",
             "docs/contracts/pcconfig.password-center-m2.md",
@@ -811,8 +813,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 6,
-        "scope": "curated product overview and six project-defined modules covering the question bank, isolated execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, independent Sol Max root orchestration tracks with role-specific direct-child delivery and fail-closed evidence, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, isolated 1/10-task quota-cost probes, compatible final selection and reports without publishing any tested-configuration score or rank",
+        "semantic_revision": 7,
+        "scope": "curated product overview and eight project-defined modules covering the question bank, isolated formal execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, an independent Sol Max root orchestration module with role-specific direct-child delivery and fail-closed evidence, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, an independent 1/10-task quota-cost probe and exact-cleanup module, compatible final selection and reports without publishing any tested-configuration score or rank",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
@@ -835,7 +837,8 @@
         "executor_union_identity_terminal_cleanup_and_authorization",
         "native_orchestration_root_child_role_specific_delivery_and_separate_reporting",
         "sol_max_blind_arbitration_inferred_quality_and_evidence_binding",
-        "isolated_quota_cost_probes_and_compatible_final_selection",
+        "isolated_quota_cost_probes",
+        "compatible_final_selection",
         "failure_semantics_and_reproducible_reports",
         "manual_snapshot_boundary"
       ],
@@ -863,8 +866,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-learning.js",
-        "semantic_revision": 4,
-        "scope": "curated public overview and five modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
+        "semantic_revision": 5,
+        "scope": "curated public overview and six modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, an independent AI-owned capability/dependency/depth/stop/checkpoint route lifecycle, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
         ],
@@ -887,6 +890,7 @@
         "professional_plain_language_explanation",
         "dialogue_research_and_explicit_correction",
         "optional_questions_and_bounded_verification",
+        "ai_owned_route_capability_dependency_depth_stop_and_checkpoint",
         "human_final_authority_small_attention_and_low_complexity",
         "manual_snapshot_without_subject_or_progress"
       ],

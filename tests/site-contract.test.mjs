@@ -741,6 +741,9 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   for (const expected of ["6 / 5", "registered-only", "fallback/comparison", "list_transcription_engine_names", "is_whisper", "Whisper Large V3", "禁止直接转写", "加载前明确拒绝"]) {
     assert.ok(modelText.includes(expected), `ChineseASR registered/executable split omits: ${expected}`);
   }
+  for (const expected of ["FunAudioLLM/Fun-ASR-Nano-2512", "05201c46", "Paraformer", "v2.0.4"]) {
+    assert.ok(modelText.includes(expected), `ChineseASR exact model matrix omits: ${expected}`);
+  }
   assert.doesNotMatch(modelText, /Whisper[^。；]{0,80}(?:可显式执行|可直接转写)|Doctor 当前列出六个可用引擎/);
 
   const audit = chineseAsrModules.find((item) => item.slug === "audit-evidence");
@@ -756,7 +759,14 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   for (const expected of ["Ollama", "11434", "uncertain_only", "keep_alive=0", "默认关闭", "不读取音频", "不覆盖", "merged audit / metrics"]) {
     assert.ok(arbitrationText.includes(expected), `ChineseASR optional arbitration omits: ${expected}`);
   }
+  for (const expected of ["qwen-main-v1:latest", "qwen3.6-27b-256k:latest"]) assert.ok(arbitrationText.includes(expected), `ChineseASR Ollama identity omits: ${expected}`);
   assert.match(arbitrationText, /(?:不可用|响应无效)[\s\S]*(?:基础双 ASR|基础长音频|基础转写)/);
+  const speakerText = JSON.stringify(chineseAsrModules.find((item) => item.slug === "speaker-attribution"));
+  for (const expected of ["v2.0.4", "CAM++", "v1.0.0", "0.31"]) assert.ok(speakerText.includes(expected), `ChineseASR speaker model identity omits: ${expected}`);
+  const runtimeText = JSON.stringify(chineseAsrModules.find((item) => item.slug === "runtime-privacy"));
+  for (const expected of ["Alibaba Cloud Model Studio", "阿里云百炼", "qwen-audio-3.0-asr-flash", "180 秒", "HTTPS Base64", "qwen-audio-3.0-asr-flash-filetrans", "未接入"]) {
+    assert.ok(runtimeText.includes(expected), `ChineseASR exact cloud route omits: ${expected}`);
+  }
   const asrSnapshot = JSON.stringify({ boundary: chineseAsrProject.snapshotBoundary, facts: chineseAsrProject.currentState, hero: chineseAsrProject.heroFacts });
   for (const exact of ["70e3255", "345", "83.524 秒"]) assert.ok(asrSnapshot.includes(exact), `ChineseASR fresh evidence drifted: ${exact}`);
 
@@ -785,6 +795,7 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
   assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
   assert.equal(timeAuditProject.currentState.observedAt, "2026-08-31T21:45:19Z", "TimeAudit cutoff observation drifted");
+  assert.match(timeAuditProject.currentState.gaps.join("\n"), /README@001cee0[\s\S]*5 个 worker[\s\S]*四个 worker/);
 
   for (const [query, href] of [
     ["服务重启后录音任务会自动重跑吗", "/projects/chinese-asr/task-routing"],
@@ -854,6 +865,9 @@ test("GitHub index exposes the current 48-repository facts and complete owner jo
   }
   const majorActions = githubIndexModules.find((item) => item.slug === "protected-major-actions");
   const majorText = JSON.stringify(majorActions);
+  assert.equal(githubIndexProject.currentState.observedAt, "2026-08-31T22:13:00Z");
+  assert.match(majorText, /当前 E96 protection contract/);
+  assert.match(majorText, /E95[\s\S]*(?:同字节|同.*SHA)[\s\S]*历史/);
   for (const operation of ["delete-local-ref", "force-update-local-ref", "replace-remote-url", "create-repository", "set-visibility", "rename-repository", "set-default-branch", "delete-repository", "transfer-repository"]) {
     assert.ok(majorText.includes(operation), `Git major actions omit typed operation: ${operation}`);
   }
@@ -903,7 +917,7 @@ test("non-rule project packages preserve the content contract and enter only the
       modules: cacbModules,
       expectedSlug: "cacb",
       expectedOrder: 7,
-      expectedModules: ["question-bank", "campaign-workspace", "identity-evidence", "deterministic-verification", "blind-quality-review", "failure-reporting"]
+      expectedModules: ["question-bank", "campaign-workspace", "native-orchestration", "quota-cost-probes", "identity-evidence", "deterministic-verification", "blind-quality-review", "failure-reporting"]
     },
     {
       project: pcPanelHubProject,
@@ -917,7 +931,7 @@ test("non-rule project packages preserve the content contract and enter only the
       modules: learningModules,
       expectedSlug: "learning",
       expectedOrder: 8,
-      expectedModules: ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "human-control-simple"]
+      expectedModules: ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "route-checkpoint", "human-control-simple"]
     },
     {
       project: codexRemoteProject,
@@ -1122,6 +1136,15 @@ test("PCConfig exposes authorized-file encryption as an isolated resumable produ
   for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
     assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
   }
+});
+
+test("PCConfig names the exact fixed Workspace provider without upgrading zero-network configuration to live access", () => {
+  const module = pcconfigModules.find((item) => item.slug === "secrets-providers");
+  const text = JSON.stringify(module);
+  for (const expected of ["pcconfig-google-workspace-direct", "1.1.0", "google-workspace.primary", "gmail_search", "gmail_get_message", "gmail_get_thread", "gmail_list_labels", "drive_search", "drive_get", "drive_list_permissions", "drive_export", "calendar_list_calendars", "calendar_events"]) {
+    assert.ok(text.includes(expected), `PCConfig Workspace identity omits: ${expected}`);
+  }
+  assert.match(text, /zero_network=true[\s\S]*(?:不证明|尚未证明).*OAuth|configured[\s\S]*(?:不证明|尚未证明).*实际读取/);
 });
 
 test("TimeAudit keeps collectors bounded without blanket-banning useful technical facts", async () => {
@@ -1360,7 +1383,7 @@ test("CACB explains the product without publishing tested-configuration output",
   const heroText = cacbProject.heroFacts.map((item) => item.value).join("\n");
   for (const fact of ["47", "25", "59", "59b0b5c", "CI", "lint"]) assert.ok(heroText.includes(fact), `CACB first viewport hides ${fact}`);
   assert.doesNotMatch(publicText, /manual_owner_only|curated_packaging|manual snapshot|人工快照|策展|包装内容/i, "CACB public content must not expose website-maintenance labels");
-  assert.equal(cacbModules.length, 6);
+  assert.equal(cacbModules.length, 8);
   for (const module of cacbModules) assert.match(module.verification.join("\n"), /e6f7581.*历史.*不继承.*当前/, `${module.slug} upgrades historical focused tests to current evidence`);
   assert.match(publicText, /当前提交没有一份绿色 CI/);
   assert.match(publicText, /旧提交的 focused\/full 记录继承为当前可验证/);
@@ -1371,12 +1394,21 @@ test("CACB explains the product without publishing tested-configuration output",
   for (const expected of ["WorkerHandle", "parent/spawn/child", "native_lineage=not_applicable", "Toolkit/AICLI", "LocalGpuBroker", "provider request", "request/stream", "cleanup_unconfirmed", "onboarding gate", "paid-attempt", "fallback=false"]) {
     assert.ok(publicText.includes(expected), `CACB executor union omits: ${expected}`);
   }
-  const orchestration = cacbModules.find((item) => item.slug === "campaign-workspace");
+  const orchestration = cacbModules.find((item) => item.slug === "native-orchestration");
   const orchestrationText = JSON.stringify(orchestration);
   for (const expected of ["Sol Max 根", "零到四个直接", "role-specific", "fork_turns=none", "分解", "并发", "冲突", "最终验证", "single-worker", "失败关闭", "不自动", "全局路由"]) {
     assert.ok(orchestrationText.includes(expected), `CACB native orchestration product axis omits: ${expected}`);
   }
   assert.match(orchestrationText, /(?:分开报告|分报)[\s\S]*(?:单工作者|single-worker)|(?:单工作者|single-worker)[\s\S]*(?:分开报告|分报)/);
+  for (const expected of [
+    "nominal_slot_count=24", "episode.case_count=10", "native-luna-max-single", "native-terra-max-single", "native-sol-max-single",
+    "native-sol-max-orchestrated", "native-sol-economy-orchestrated", "qwen3.6:35b", "qwen3.6:27b", "qwen3.8-max",
+    "native-luna-xhigh-single", "native-terra-xhigh-single", "native-sol-medium/high/xhigh-single", "native-luna-max-orchestrated",
+    "native-terra-adaptive-orchestrated", "native-sol-low-single", "native-luna-low/medium/high-single", "native-terra-low/medium/high-single",
+    "deepseek-v4-flash", "deepseek-v4-pro", "first valid sample", "中位数", "audit-only"
+  ]) assert.ok(publicText.includes(expected), `CACB V11 identity matrix omits: ${expected}`);
+  assert.match(publicText, /C1–C10[\s\S]*24[\s\S]*8-case|24-slot[\s\S]*8-case/);
+  assert.match(publicText, /即使 CI 变绿[\s\S]*(?:历史分数|历史比较结论).*(?:不能|不可)/);
   const blindReview = cacbModules.find((item) => item.slug === "blind-quality-review");
   const blindText = JSON.stringify(blindReview);
   for (const expected of [
@@ -1404,7 +1436,7 @@ test("CACB explains the product without publishing tested-configuration output",
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
-  assert.equal(registration.ai_refresh.semantic_revision, 6);
+  assert.equal(registration.ai_refresh.semantic_revision, 7);
   assert.match(registration.ai_refresh.scope, /native_managed\/local_async_job\/cloud_api_async_job/);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
 });
@@ -1418,8 +1450,8 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.equal(learningProject.route, "/projects/learning");
   assert.equal(learningProject.visibility, "私有仓库");
   assert.equal(learningProject.gallery, undefined);
-  assert.equal(learningModules.length, 5);
-  assert.deepEqual(learningModules.map((item) => item.slug), ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "human-control-simple"]);
+  assert.equal(learningModules.length, 6);
+  assert.deepEqual(learningModules.map((item) => item.slug), ["authoritative-research", "plain-language", "dialogue-revision", "questions-validation", "route-checkpoint", "human-control-simple"]);
   assert.equal(learningProject.methodCanvas.steps.length, 6);
   assert.ok(learningProject.methodCanvas.humanRole.length >= 3);
   assert.ok(learningProject.methodCanvas.aiRole.length >= 3);
@@ -1437,6 +1469,12 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.match(publicText, /没有应用服务、学习数据库、提醒任务、后台同步/);
   assert.match(publicText, /示例可以设计，结果不能编/);
   assert.match(publicText, /不能.*普遍有效|不构成.*普遍有效/);
+  const routeText = JSON.stringify(learningModules.find((item) => item.slug === "route-checkpoint"));
+  for (const expected of ["能力覆盖", "依赖", "深度", "停止标准", "当前断点", "下一单元", "反馈", "反证", "不冻结总课程", "Unknown"]) {
+    assert.ok(routeText.includes(expected), `learning route/checkpoint omits: ${expected}`);
+  }
+  assert.match(routeText, /fresh gpt-5\.6-sol \/ max/);
+  assert.match(routeText, /旧代理上下文|终审不复用/);
   assert.match(publicText, /PRIVATE_MANAGED_SOURCE.*6534ac7a2bc57ab949224ee3d6f98854edc321a5/);
   assert.match(publicText, /Markdown（结构化文本格式）/);
   assert.match(publicText, /PASS（方法合同已定义）/);
@@ -1454,7 +1492,7 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
   assert.equal(registration.source.snapshot_commit, "6534ac7a2bc57ab949224ee3d6f98854edc321a5");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.scope, /without exposing any learning subject or progress/);
   assert.match(registration.refresh_rules.ignore_when.join("\n"), /topic and progress changes/);
@@ -1493,10 +1531,10 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
     { project: cacbProject, modules: cacbModules },
     { project: learningProject, modules: learningModules }
   ];
-  assert.equal(packages.flatMap((entry) => entry.modules).length, 17);
+  assert.equal(packages.flatMap((entry) => entry.modules).length, 20);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" ? 5 : project.slug === "cacb" ? 6 : 4;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 5 : project.slug === "cacb" ? 7 : 5;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
