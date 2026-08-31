@@ -36,7 +36,7 @@ export const cacbProject = {
   cardStatus: "评测产品框架已形成；方法与评分有效性仍需复核，历史比较结论当前不可采用",
   cardStatusTone: "mixed",
   ...cacbSnapshot,
-  snapshotBoundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS 和 ROUTING_DECISION_FRAMEWORK 仍残留 8-case/八条计分合同；方法与评分基数未统一。REPORTING_STANDARD 已写 C1–C10/10-row，文中的 eight 指除 C5/C7 外其余八个离线案例，legacy bridge 也明确 unranked。最新四个 CI job 仍停在 lint 门，旧测试不继承。",
+  snapshotBoundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS 和 ROUTING_DECISION_FRAMEWORK 仍残留 8-case/八条计分合同；方法与评分基数未统一。REPORTING_STANDARD 已写 C1–C10/10-row，文中的 eight 指除 C5/C7 外其余八个离线案例，legacy bridge 也明确 unranked。最新四个 CI job 仍停在 lint 门，旧测试不继承；本页不发布受测配置结果。",
   searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理", "模型盲评分和盲质量复核", "盲审能不能改变PASS或资格", "一题和十题额度费用探针", "探针结果为什么不进排行榜", "机械分盲审和最终选择怎样分工", "为什么页面没有候选分数和名次"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
   summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。即使代码检查全部变绿，方法设计和评分有效性没有独立复核时，历史分数与名次仍不能采用；缺证据就保持未知或 pending。",
