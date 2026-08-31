@@ -368,7 +368,8 @@ export const pcconfigModules = [
     statusTone: "mixed",
     searchAliases: [
       "BIOS", "UEFI", "主板设置", "换机 BIOS", "重装 BIOS", "启动U盘", "WEPE", "WinPE", "Q-Flash Plus", "Windows ISO",
-      "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified"
+      "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified",
+      "BIOS和换机重装有什么关系", "换主板或重装前 BIOS 要留什么", "重装 Windows 后怎么把电脑恢复回来"
     ],
     value: "重装 Windows、换电脑、系统盘故障或只能进入 PE 时，我能从当前手里真正可用的来源开始，按不破坏原盘的顺序恢复：先认机器和磁盘，再处理 BIOS/UEFI、Windows 与驱动，接回三个控制面、运行时、项目、用户配置、任务和启动项，最后恢复登录与受保护数据并做真实应用验收。",
     why: "“有 ISO”“能进 PE”“备份目录存在”“任务是 Ready”都只证明一小段。恢复最容易漏掉的是主板版本和 BIOS 边界、盘符变化、驱动兼容、项目路径、C 盘用户配置、任务身份、登录因子，以及应用能否在自然启动后看到原数据；直接 clean、format、修 BCD 或整包覆盖，会先破坏还能取证和回退的来源。",

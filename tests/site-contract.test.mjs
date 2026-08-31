@@ -798,6 +798,15 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
     "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified"
   ];
   for (const alias of expectedAliases) assert.ok(recovery.searchAliases.includes(alias), `PCConfig recovery search alias is missing: ${alias}`);
+  const naturalQueries = [
+    "BIOS和换机重装有什么关系",
+    "换主板或重装前 BIOS 要留什么",
+    "重装 Windows 后怎么把电脑恢复回来"
+  ];
+  for (const query of naturalQueries) {
+    assert.ok(recovery.searchAliases.includes(query), `PCConfig recovery natural query is missing: ${query}`);
+    assert.equal(searchPanel(query)[0]?.href, "/projects/pcconfig/recovery-backup", `PCConfig recovery natural query misroutes: ${query}`);
+  }
 
   const publicText = JSON.stringify({ project: pcconfigProject, modules: pcconfigModules });
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
