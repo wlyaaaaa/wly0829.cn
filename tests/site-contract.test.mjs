@@ -1408,6 +1408,8 @@ test("CACB explains the product without publishing tested-configuration output",
     "deepseek-v4-flash", "deepseek-v4-pro", "first valid sample", "中位数", "audit-only"
   ]) assert.ok(publicText.includes(expected), `CACB V11 identity matrix omits: ${expected}`);
   assert.match(publicText, /C1–C10[\s\S]*24[\s\S]*8-case|24-slot[\s\S]*8-case/);
+  assert.match(publicText, /REPORTING_STANDARD 已.*C1–C10[\s\S]*other eight[\s\S]*C5\/C7[\s\S]*legacy bridge.*unranked/);
+  assert.match(publicText, /四条编排路线/);
   assert.match(publicText, /即使 CI 变绿[\s\S]*(?:历史分数|历史比较结论).*(?:不能|不可)/);
   assert.match(publicText, /native slots=ready[\s\S]*local 35B\/27B=prelaunch-pending[\s\S]*qwen3\.8=design-only[\s\S]*DeepSeek V4 Flash\/Pro=prelaunch-pending/);
   assert.match(publicText, /ready 只表示配置准入，不是有效样本/);
