@@ -62,7 +62,7 @@ const credentialValuePatterns = [
   ["private key", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
   ["assigned credential", /(?:password|passwd|api[_-]?key|access[_-]?token|client[_-]?secret)\s*[:=]\s*["']?[A-Za-z0-9_./+=-]{8,}/i]
 ];
-const publicSafeProductAndDomainLabels = ["CodexHarness", "PersonalOS", "PersonalKnowledgeBase", "personal-litigation", "诉讼", "AI 大模型", "AI 教练"];
+const publicSafeProductAndDomainLabels = ["CodexHarness", "PersonalOS", "PersonalKnowledgeBase", "AI 大模型", "AI 教练"];
 
 function assertNoCredentialValues(text) {
   for (const [name, pattern] of credentialValuePatterns) {
@@ -1625,7 +1625,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     "timeaudit-diagnostics",
     "localocr",
     "personal-health",
-    "personal-litigation",
+    "document-materials",
     "documents",
     "pdf",
     "md-to-pdf",
@@ -1650,7 +1650,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     }
     assert.ok(["personal_install", "host_integrated"].includes(item.sourceKind), `${item.slug}.sourceKind is invalid`);
     assert.equal(item.availability, "available", `${item.slug} is not publicly usable`);
-    if (item.sourceKind === "personal_install") {
+    if (item.slug === "document-materials") {
+      assert.equal(item.sourcePath, "private-source:document-materials", "document-materials must expose only its neutral private-source identifier");
+    } else if (item.sourceKind === "personal_install") {
       assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
     } else {
       assert.equal(item.sourcePath, item.capabilityId);
@@ -1698,10 +1700,30 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.ok(item.evidenceObservedAt.length >= 20, item.slug + ".evidenceObservedAt is incomplete");
     assert.doesNotMatch(item.tests, /\b\d+ bytes\b|SHA-256|[a-f0-9]{64}/, item.slug + ".tests duplicates its structured source receipt");
   }
-  const litigationGuide = skillGuides["personal-litigation"];
-  const litigationSemantics = JSON.stringify(litigationGuide);
-  for (const term of ["明确决定继续", "ready_for_upload", "cancellation", "non-submission", "failure", "withdrawal", "deferral"]) assert.ok(litigationSemantics.includes(term), "personal-litigation omits presumption condition: " + term);
-  const readyOnlyFailure = litigationGuide.failures.find((item) => item[0].includes("只有可提交成品"));
+  const documentMaterials = skills.find((item) => item.slug === "document-materials");
+  const documentMaterialsGuide = skillGuides["document-materials"];
+  const documentMaterialsText = JSON.stringify({ entry: documentMaterials, guide: documentMaterialsGuide, outcome: skillOutcomes["document-materials"] });
+  assert.deepEqual({ slug: documentMaterials.slug, name: documentMaterials.name, title: documentMaterials.title }, { slug: "document-materials", name: "document-materials", title: "文书和材料制作" });
+  assert.equal(documentMaterials.sourcePath, "private-source:document-materials");
+  assert.equal(documentMaterials.sourceBytes, 7445);
+  assert.equal(documentMaterials.sourceSha256, "9732926454d3e67e9fd283d958e593c23c15106ba9c2279c90c5d7e4cba0df8a");
+  assert.match(documentMaterials.evidenceSourceCommit, /^[a-f0-9]{40}$/);
+  assert.doesNotMatch(documentMaterialsText, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i, "public document-materials copy must remain domain-neutral");
+  for (const expected of [
+    /起草或修订合同/,
+    /正式说明/,
+    /申请材料/,
+    /事件材料/,
+    /提交包/,
+    /原件/,
+    /格式.*证据验收/,
+    /材料已生成.*本人已操作.*平台已收到.*接收方已处理/,
+    /期限/,
+    /恢复点/,
+    /本人明确决定继续.*完成核对的可使用成品.*取消.*未操作.*失败.*撤回.*延期.*避免重复操作/,
+    /未全部完成真实 E2E（端到端）验收/
+  ]) assert.match(documentMaterialsText, expected, `document-materials omits stable public workflow semantics: ${expected}`);
+  const readyOnlyFailure = documentMaterialsGuide.failures.find((item) => item[0].includes("只有可使用成品"));
   assert.match(readyOnlyFailure.join("\n"), /Unknown|未知/);
   assert.match(readyOnlyFailure.join("\n"), /现实状态回读/);
   const firstUseCases = [
