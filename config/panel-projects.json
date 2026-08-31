@@ -115,7 +115,9 @@
             "tools/Invoke-ExecutionOwnerRegistry.ps1",
             "tools/Get-FourBaseDecisionContext.ps1",
             "tools/Invoke-EAgentRulesRelease.ps1",
-            "tools/Invoke-EAgentRulesFastRelease.ps1"
+            "tools/Invoke-EAgentRulesFastRelease.ps1",
+            "tools/codex_native_economy_gate.py",
+            "tools/codex_native_economy_runtime.py"
           ]
         },
         {
@@ -137,6 +139,8 @@
             "tests/Test-AllTestsRunner.ps1",
             "tests/Test-EAgentRulesRelease.ps1",
             "tests/Test-ExecutionOwnerRegistry.ps1",
+            "tests/Test-AttentionFidelityPolicy.ps1",
+            "tests/Test-AgentRuntimeCompatibility.ps1",
             "tools/Test-ControlPlaneContractCoverage.ps1"
           ]
         }
@@ -281,8 +285,8 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 3,
-        "scope": "project overview and six modules",
+        "semantic_revision": 4,
+        "scope": "project overview and six modules covering the 48-repository owner ledger, private-repository creation and first default-branch convergence, admission, worktree completion and cleanup, publication, major actions, immutable generation and interruption recovery",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
@@ -369,7 +373,7 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
@@ -429,8 +433,10 @@
             "src/zh_asr/audit.py",
             "src/zh_asr/risk_rules.py",
             "src/zh_asr/audio_outcome.py",
+            "src/zh_asr/strict_writer.py",
             "src/zh_asr/result_writer.py",
             "src/zh_asr/metadata.py",
+            "src/zh_asr/benchmark.py",
             "src/zh_asr/speaker_evidence.py",
             "src/zh_asr/speaker_attribution.py"
           ]
@@ -442,6 +448,7 @@
             "src/zh_asr/proxy_guard.py",
             "scripts/asr-professional-cloud.ps1",
             "scripts/qwen_audio3_broker_worker.py",
+            "scripts/benchmark.ps1",
             "scripts/smoke-*.ps1",
             "tests/*.py"
           ]
@@ -472,7 +479,7 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "project overview and product-defined modules covering collection, analysis, visualization, runtime reliability, actual-value sensitivity, and recovery",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
@@ -537,7 +544,8 @@
             "telemetry_watchdog.ps1",
             "runtime_health.py",
             "check_telemetry_status.py",
-            "start_all.bat"
+            "start_all.bat",
+            "setup_runtime.ps1"
           ]
         },
         {
@@ -605,8 +613,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 2,
-        "scope": "project overview with layered physical/visual evidence, plus project-defined modules covering the case-panel data/render/transport path, HS2 event overlay, and power/recovery ownership",
+        "semantic_revision": 3,
+        "scope": "project overview with layered physical/visual evidence, plus five project-defined modules covering the case-panel data/render/transport path, HS2 event overlay, power/recovery ownership and the source-backed but separately untested physical A108/OLED wiring-to-rebinding journey",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -740,8 +748,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 2,
-        "scope": "curated product overview and project-defined modules covering the question bank, isolated execution, identity/evidence binding, deterministic verification, failure semantics and reproducible reporting framework without publishing any tested-configuration outcome",
+        "semantic_revision": 3,
+        "scope": "curated product overview and five project-defined modules covering the question bank, isolated execution, identity/evidence binding, deterministic verification, separate current official/external evidence and local Codex measurement lanes, plus model evidence card, benchmark report and comprehensive judgment report delivery without publishing any tested-configuration outcome",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
@@ -788,8 +796,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-learning.js",
-        "semantic_revision": 2,
-        "scope": "curated public overview and five modules covering authoritative research, professional plain-language explanation, dialogue-driven rechecking and correction, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
+        "semantic_revision": 3,
+        "scope": "curated public overview and five modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
         ],
@@ -838,8 +846,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-codex-remote.js",
-        "semantic_revision": 2,
-        "scope": "curated public overview and six modules covering the same Desktop task on mobile, live conversation controls, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
+        "semantic_revision": 3,
+        "scope": "curated public overview and seven modules covering same-task identity on mobile, current-turn steer/interrupt and durable next-turn queue control, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, resolve the PUBLIC repository identity, default branch, tags, release commit and current clean/sync facts through Git Owner",
           "manual_public_product_evidence: read only PUBLIC source, documentation, tests, release/CI receipts and individually approved media; never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server, installed runtime or Remote endpoint"
@@ -855,7 +863,8 @@
       "displayed_areas": [
         "curated_project_overview",
         "project_modules",
-        "same_task_and_remote_control",
+        "same_task_identity_and_desktop_resume_barrier",
+        "conversation_control_and_durable_next_turn_queue",
         "models_approvals_context_and_usage",
         "projects_owner_files_and_input",
         "shared_broker_sidecar_architecture",
@@ -888,7 +897,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-personal-health.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",

@@ -338,7 +338,7 @@ test("the System source pack explains generic AI productivity without platform o
   for (const capability of ["自然语言理解", "推理", "搜索", "视觉和文档理解", "工具与代码执行", "浏览器操作", "并行协作"]) {
     assert.ok(sourcePack.includes(capability), `System source pack omits generic capability: ${capability}`);
   }
-  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "5 份活动规则", "27 个 Skills"]) {
+  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "10 个项目", "5 份活动规则", "27 个 Skills"]) {
     assert.ok(sourcePack.includes(phrase), `System source pack omits product boundary: ${phrase}`);
   }
   for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
@@ -584,7 +584,7 @@ test("TimeAudit registry binds public-safe aggregate refresh evidence and impact
   assert.equal(registration.route, "/projects/timeaudit");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-timeaudit.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 2);
+  assert.equal(registration.ai_refresh.semantic_revision, 3);
   assert.equal(registration.source.repo, "wlyaaaaa/TimeAudit");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.default_branch, "main");
@@ -627,6 +627,119 @@ test("TimeAudit registry binds public-safe aggregate refresh evidence and impact
   }
   assert.match(JSON.stringify(registration.refresh_rules.semantic_review_required_when), /architecture|sampling|data model|actual-value|sensitivity|recovery|verification|架构|采样|数据模型|敏感|恢复|验证/i);
   assert.match(JSON.stringify(registration.refresh_rules.ignore_when), /raw|window|process|machine|cache|volume|log|原始|窗口|进程|机器|缓存|日志/i);
+});
+
+test("ChineseASR and TimeAudit expose complete source-to-result journeys and bounded module search projections", async () => {
+  const packages = [
+    { project: chineseAsrProject, modules: chineseAsrModules },
+    { project: timeAuditProject, modules: timeAuditModules }
+  ];
+  for (const { project: candidate, modules: candidateModules } of packages) {
+    assert.ok(candidate.searchAliases.length >= 4, `${candidate.slug} lacks natural project search aliases`);
+    const moduleSlugs = candidateModules.map((item) => item.slug);
+    assert.deepEqual(
+      [...new Set(candidate.usageExamples.map((item) => item.moduleSlug))].sort(),
+      [...moduleSlugs].sort(),
+      `${candidate.slug} usage examples do not cover every real module`
+    );
+    for (const example of candidate.usageExamples) {
+      assert.ok(moduleSlugs.includes(example.moduleSlug), `${candidate.slug} usage example points at an unknown module: ${example.moduleSlug}`);
+    }
+    for (const module of candidateModules) {
+      assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${candidate.slug}/${module.slug} natural search aliases are not bounded`);
+      assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${candidate.slug}/${module.slug} search projection shape drifted`);
+      for (const [axis, values] of Object.entries(module.searchProjection)) {
+        assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${candidate.slug}/${module.slug}.${axis} is not a bounded useful projection`);
+        assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 2), `${candidate.slug}/${module.slug}.${axis} contains an empty search phrase`);
+      }
+    }
+  }
+
+  const taskRouting = chineseAsrModules.find((item) => item.slug === "task-routing");
+  const taskText = JSON.stringify(taskRouting);
+  for (const expected of ["jobs.json", "service_restarted", "不自动重跑", "音频内容 SHA-256", "稳定输出目录", "显式重试"]) {
+    assert.ok(taskText.includes(expected), `ChineseASR task recovery omits: ${expected}`);
+  }
+
+  const audit = chineseAsrModules.find((item) => item.slug === "audit-evidence");
+  const auditText = JSON.stringify({ result: audit.result, flow: audit.flow, concepts: audit.concepts, failures: audit.failures });
+  for (const artifact of ["*.strict.md", "*.strict.audit.md", "*.strict.audit.json", "*.strict.review.json", "review.md", "*.strict.receipt.json", "*.raw.json", "manifest.json", "metrics.json", "benchmark.md", "benchmark.json"]) {
+    assert.ok(auditText.includes(artifact), `ChineseASR reading journey omits: ${artifact}`);
+  }
+  assert.ok(audit.flow[0].includes("*.strict.md"), "ChineseASR must begin with the human-readable strict transcript");
+  assert.match(auditText, /\[疑似\][\s\S]*回听原音频|回听原音频[\s\S]*\[疑似\]/);
+  assert.match(auditText, /\[听不清\][\s\S]*(?:不等于没有语音|不能可靠转写)/);
+  assert.match(auditText, /回执[\s\S]*(?:不证明文字正确|不证明文字是真的)/);
+  const asrSnapshot = JSON.stringify({ boundary: chineseAsrProject.snapshotBoundary, facts: chineseAsrProject.currentState, hero: chineseAsrProject.heroFacts });
+  for (const exact of ["70e3255", "345", "83.035 秒"]) assert.ok(asrSnapshot.includes(exact), `ChineseASR fresh evidence drifted: ${exact}`);
+
+  const processForensics = timeAuditModules.find((item) => item.slug === "process-forensics");
+  const processText = JSON.stringify(processForensics);
+  assert.match(processText, /谁.*闪退|谁.*写盘|谁.*联网/);
+  assert.match(processText, /Skill.*不返回进程名|不返回进程名/);
+  assert.match(processText, /Grafana.*(?:资源盘|取证盘)/);
+  const hardware = timeAuditModules.find((item) => item.slug === "hardware-performance");
+  assert.match(JSON.stringify(hardware), /summary[\s\S]*Grafana|Grafana[\s\S]*summary/);
+
+  const recovery = timeAuditModules.find((item) => item.slug === "backup-recovery");
+  assert.equal(recovery.shortTitle, "安装与恢复");
+  assert.equal(recovery.title, "安装、换机与数据恢复");
+  const recoveryText = JSON.stringify(recovery);
+  for (const expected of ["全新安装", "带历史换机", "灾后", "WSL2", "Docker Desktop", "setup_runtime.ps1", ".venv", "PostgreSQL", "audit-ingester", "Grafana", "schema.sql", "dump restore", "二选一", "datasource", "TimeAudit_AutoStart", "TimeAudit_Watchdog", "TimeAudit_DailyBackup", "heartbeat", "真实入库", "有界聚合", "http://localhost:53000", "历史缺口"]) {
+    assert.ok(recoveryText.includes(expected), `TimeAudit install/recovery journey omits: ${expected}`);
+  }
+  assert.match(recoveryText, /快速部署\.md[\s\S]*(?:复制整个项目树|复制整个树)/);
+  assert.match(recoveryText, /零丢失[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*零丢失/);
+  assert.match(recoveryText, /每 5 分钟[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*每 5 分钟/);
+  assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
+  assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
+  assert.equal(timeAuditProject.currentState.observedAt, "2026-08-31T11:18:10Z", "TimeAudit must not invent a newer observation time");
+
+  for (const [query, href] of [
+    ["服务重启后录音任务会自动重跑吗", "/projects/chinese-asr/task-routing"],
+    ["严格模式两路模型是什么", "/projects/chinese-asr/models-modes"],
+    ["两小时录音中断后接着跑", "/projects/chinese-asr/long-batch"],
+    ["转写结果先看哪个文件", "/projects/chinese-asr/audit-evidence"],
+    ["Speaker1是不是本人", "/projects/chinese-asr/speaker-attribution"],
+    ["普通录音会上传云端吗", "/projects/chinese-asr/runtime-privacy"],
+    ["为什么最近一段时间没采集数据", "/projects/timeaudit/collection-pipeline"],
+    ["游戏卡顿先看摘要还是Grafana", "/projects/timeaudit/hardware-performance"],
+    ["谁在后台写盘", "/projects/timeaudit/process-forensics"],
+    ["今天电脑时间都花在哪", "/projects/timeaudit/usage-energy"],
+    ["采集进程在但没有数据", "/projects/timeaudit/runtime-reliability"],
+    ["新电脑第一次怎么装采集系统", "/projects/timeaudit/backup-recovery"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `natural project search misroutes: ${query}`);
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  assert.equal(registry.projects.find((item) => item.id === "chinese-asr").ai_refresh.semantic_revision, 3);
+  assert.equal(registry.projects.find((item) => item.id === "timeaudit").ai_refresh.semantic_revision, 3);
+});
+
+test("GitHub index exposes the current 48-repository facts and complete owner journeys", async () => {
+  assert.deepEqual(githubIndexProject.cardMetrics.map((item) => [item.label, item.value]), [
+    ["仓库总账", "48"],
+    ["公开 / 私有", "27 / 21"],
+    ["本地 / 仅远端", "45 / 3"],
+    ["当前差异", "0 delta · 0 issue"]
+  ]);
+  const publicText = JSON.stringify({ project: githubIndexProject, modules: githubIndexModules });
+  for (const expected of ["806b668", "70efc65cdfec4b9cb1305ff48086744d", "23090 bytes", "work-delivery-copilot", "personal-formal-documents", "delta=0", "issue=0"]) {
+    assert.ok(publicText.includes(expected), `GitHub index omits current owner fact: ${expected}`);
+  }
+  assert.doesNotMatch(publicText, /legal-filing-kit|personal-litigation|litigation|lawsuit|诉讼|法律|案件|起诉|法院/i, "Git project reintroduces retired lawsuit branding");
+  assert.equal(githubIndexModules.length, 6);
+  for (const module of githubIndexModules) {
+    for (const key of ["intents", "entities", "relations", "failureRecovery"]) {
+      assert.ok(Array.isArray(module.searchProjection?.[key]) && module.searchProjection[key].length >= 3, `${module.slug} lacks searchProjection.${key}`);
+    }
+  }
+  assert.ok(githubIndexProject.usageExamples.every((item) => githubIndexModules.some((module) => module.slug === item.moduleSlug)), "Git usage example lacks an owning module");
+  const createPrivate = githubIndexProject.usageExamples.find((item) => item.ask.includes("PRIVATE"));
+  for (const expected of ["V 盘", "本地 main", "首个提交", "PRIVATE 远端", "origin", "正常 push", "真实默认分支", "登记", "恢复"]) {
+    assert.ok(createPrivate.effect.includes(expected), `private repository creation journey omits: ${expected}`);
+  }
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  assert.equal(registry.projects.find((item) => item.id === "github-index").ai_refresh.semantic_revision, 4);
 });
 
 test("non-rule project packages preserve the content contract and enter only their own routes", () => {
@@ -685,7 +798,7 @@ test("non-rule project packages preserve the content contract and enter only the
       modules: codexRemoteModules,
       expectedSlug: "codex-remote",
       expectedOrder: 9,
-      expectedModules: ["same-task-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]
+      expectedModules: ["same-task-control", "conversation-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]
     },
     {
       project: personalHealthProject,
@@ -1114,6 +1227,66 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.match(registration.refresh_rules.ignore_when.join("\n"), /topic and progress changes/);
 });
 
+test("PC Panel Hub, CACB and learning expose complete journeys through bounded module search semantics", async () => {
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const packages = [
+    { project: pcPanelHubProject, modules: pcPanelHubModules },
+    { project: cacbProject, modules: cacbModules },
+    { project: learningProject, modules: learningModules }
+  ];
+  assert.equal(packages.flatMap((entry) => entry.modules).length, 15);
+
+  for (const { project, modules } of packages) {
+    assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, 3, `${project.slug} semantic revision did not advance`);
+    const moduleSlugs = new Set(modules.map((module) => module.slug));
+    for (const usage of project.usageExamples) {
+      assert.ok(moduleSlugs.has(usage.moduleSlug), `${project.slug} usage is not routed to a real module: ${usage.ask}`);
+    }
+    for (const module of modules) {
+      assert.ok(project.usageExamples.some((usage) => usage.moduleSlug === module.slug), `${project.slug}/${module.slug} has no natural usage journey`);
+      assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${project.slug}/${module.slug} search aliases are not bounded`);
+      assert.equal(new Set(module.searchAliases).size, module.searchAliases.length, `${project.slug}/${module.slug} repeats a search alias`);
+      assert.deepEqual(Object.keys(module.searchProjection).sort(), ["entities", "failureRecovery", "intents", "relations"]);
+      for (const [field, values] of Object.entries(module.searchProjection)) {
+        assert.ok(values.length >= 3 && values.length <= 8, `${project.slug}/${module.slug} ${field} is not bounded`);
+        assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 2), `${project.slug}/${module.slug} ${field} contains an empty search phrase`);
+        assert.equal(new Set(values).size, values.length, `${project.slug}/${module.slug} repeats a ${field} phrase`);
+      }
+    }
+  }
+
+  const expectedNaturalRoutes = [
+    [pcPanelHubProject, "A108 或显示端点不见了，物理接线怎么恢复？", "power-recovery"],
+    [cacbProject, "某个模型现在到底能不能在这个 harness 里用？", "identity-evidence"],
+    [cacbProject, "官方价格和本地实测成本为什么要分开？", "failure-reporting"],
+    [cacbProject, "缺失外部证据能不能填 0？", "failure-reporting"],
+    [learningProject, "先给我完整讲义再聊", "plain-language"],
+    [learningProject, "后来发现讲义错了要不要告诉我", "dialogue-revision"],
+    [learningProject, "我没反馈别生成下一篇", "human-control-simple"]
+  ];
+  for (const [project, query, moduleSlug] of expectedNaturalRoutes) {
+    assert.equal(project.usageExamples.find((usage) => usage.ask === query)?.moduleSlug, moduleSlug, `${query} does not expose its expected module route`);
+  }
+
+  const panelRecovery = JSON.stringify(pcPanelHubModules.find((module) => module.slug === "power-recovery"));
+  for (const pattern of [/关机.*断开整机电源/, /USB 2\.0 9-pin/, /EDGE HUB/, /一分二 Hub.*不支持 LCD/, /SATA/, /唯一 8091.*port 2 controller.*port 3 LED.*连续两次/, /source contract.*未.*实测|源码.*没有实际.*实体恢复/]) {
+    assert.match(panelRecovery, pattern, `PC Panel Hub physical recovery journey is incomplete: ${pattern}`);
+  }
+
+  const cacbJudgment = JSON.stringify({ project: cacbProject, failureReporting: cacbModules.find((module) => module.slug === "failure-reporting") });
+  assert.match(cacbJudgment, /官方能力.*可用性.*价格/);
+  assert.match(cacbJudgment, /本地 Codex.*真实/);
+  assert.match(cacbJudgment, /资格.*能力.*经济性.*路由建议/);
+  assert.match(cacbJudgment, /model evidence card.*benchmark report.*comprehensive judgment report/);
+  assert.match(cacbJudgment, /缺失.*不归零|缺项.*不填零/);
+
+  const learningJourney = JSON.stringify({ project: learningProject, dialogueRevision: learningModules.find((module) => module.slug === "dialogue-revision") });
+  assert.match(learningJourney, /核验.*反查.*反例.*自审/);
+  assert.match(learningJourney, /完整讲义.*最终版/);
+  assert.match(learningJourney, /重要修正.*主动/);
+  assert.match(learningJourney, /不能.*假设.*重读|不假设.*重读/);
+});
+
 test("the learning method canvas stays human-readable, static and responsive", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
@@ -1158,18 +1331,41 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   assert.match(publicText, /1771/);
   assert.match(publicText, /main=94f1cfad/);
   assert.match(publicText, /不代表当前在线|不宣称在线/);
+  assert.match(publicText, /历史真实链路与产品证据已形成，本轮未完成当前Windows接管方案的可重复无人值守验收；重新启用前需隔离验证/);
   assert.match(publicText, /12 张历史真实手机 UI|12张真实手机 UI/);
   assert.equal(codexRemoteProject.slug, "codex-remote");
   assert.equal(codexRemoteProject.order, 9);
   assert.equal(codexRemoteProject.route, "/projects/codex-remote");
   assert.equal(codexRemoteProject.visibility, "公开仓库");
-  assert.equal(codexRemoteModules.length, 6);
-  assert.deepEqual(codexRemoteModules.map((item) => item.slug), ["same-task-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]);
+  assert.equal(codexRemoteModules.length, 7);
+  assert.deepEqual(codexRemoteModules.map((item) => item.slug), ["same-task-control", "conversation-control", "models-approvals-context", "projects-files-input", "shared-realtime-architecture", "security-public-access", "versions-evidence"]);
   for (const module of codexRemoteModules) {
     assert.ok(module.searchAliases.length >= 4, `${module.slug} lacks natural search aliases`);
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
+    for (const [key, values] of Object.entries(module.searchProjection)) {
+      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
+      assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
+    }
     assert.ok(module.sources.every((item) => /^https:\/\/github\.com\/wlyaaaaa\/codex-local-remote\//.test(item.href)), `${module.slug} contains a non-public source link`);
     assert.ok(module.relation.trim().length >= 24, `${module.slug} lacks a useful cross-module relation`);
   }
+  const remoteModuleSlugs = new Set(codexRemoteModules.map((item) => item.slug));
+  assert.ok(codexRemoteProject.usageExamples.every((item) => remoteModuleSlugs.has(item.moduleSlug)), "a Codex Remote usage example has no owning moduleSlug");
+  assert.deepEqual(new Set(codexRemoteProject.usageExamples.map((item) => item.moduleSlug)), remoteModuleSlugs, "Codex Remote usage examples do not cover all seven module journeys");
+  const conversationControl = codexRemoteModules.find((item) => item.slug === "conversation-control");
+  const conversationText = JSON.stringify(conversationControl);
+  for (const term of ["threadId", "turnId", "availableActions", "text", "queue revision", "clientUserMessageId", "连接状态", "next-turn settings", "steer", "interrupt", "FIFO", "DPAPI", "authority snapshot", "ambiguous"]) {
+    assert.ok(conversationText.includes(term), `conversation-control omits ${term}`);
+  }
+  for (const expected of [
+    /当前轮.*steer.*interrupt.*下一轮.*队列/s,
+    /先.*持久化.*再确认/s,
+    /编辑.*排序.*删除/s,
+    /正常终态.*派发|终态后.*派发/s,
+    /权威.*快照.*对账|authority snapshot.*对账/s,
+    /ambiguous.*停止自动重放|ambiguous.*停止自动重发/s
+  ]) assert.match(conversationText, expected, `conversation-control omits state-machine journey: ${expected}`);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "codex-remote");
@@ -1179,6 +1375,8 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.repo, "wlyaaaaa/codex-local-remote");
+  assert.equal(registration.ai_refresh.semantic_revision, 3);
+  assert.match(registration.ai_refresh.scope, /seven modules/);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.scope, /without invoking any Remote runtime/);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server/);
@@ -1255,9 +1453,18 @@ test("personal-health publishes the evidence product without personal health pay
   for (const module of personalHealthModules) {
     assert.deepEqual(module.stateLabels, personalHealthProject.stateLabels, `${module.slug} does not use the evidence three-state labels`);
     assert.ok(module.searchAliases.length >= 4, `${module.slug} lacks natural search aliases`);
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
+    for (const [key, values] of Object.entries(module.searchProjection)) {
+      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
+      assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
+    }
     assert.ok(module.sources.every((item) => !item.href || /^https:\/\/(?:www\.ahrq\.gov|www\.who\.int|www\.gmc-uk\.org|code-medical-ethics\.ama-assn\.org|www\.cancer\.gov)\//.test(item.href)), `${module.slug} may link only to reviewed public health authorities, never an inaccessible private source`);
     assert.match(`${module.why}\n${module.example}\n${module.result}`, /证据|来源|判断|未知|凭据|清单|Owner|原件|字段/);
   }
+  const healthModuleSlugs = new Set(personalHealthModules.map((item) => item.slug));
+  assert.ok(personalHealthProject.usageExamples.every((item) => healthModuleSlugs.has(item.moduleSlug)), "a personal-health usage example has no owning moduleSlug");
+  assert.deepEqual(new Set(personalHealthProject.usageExamples.map((item) => item.moduleSlug)), healthModuleSlugs, "personal-health usage examples do not cover all six evidence journeys");
   for (const expected of [
     "112 项全部通过",
     "health_owner_review_required=true",
@@ -1284,6 +1491,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "wlyaaaaa/personal-health");
+  assert.equal(registration.ai_refresh.semantic_revision, 3);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never read CURRENT\.md, SOURCES\.md, raw reports, manifests, briefs, provider payloads or credentials/);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never invoke Google, Secret Broker or a device runtime/);
@@ -1480,11 +1688,11 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
-  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 2);
+  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 3);
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 2);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 3);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);
@@ -1880,6 +2088,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const documentMaterialsGuide = skillGuides["document-materials"];
   const documentMaterialsText = JSON.stringify({ entry: documentMaterials, guide: documentMaterialsGuide, outcome: skillOutcomes["document-materials"] });
   assert.deepEqual({ slug: documentMaterials.slug, name: documentMaterials.name, title: documentMaterials.title }, { slug: "document-materials", name: "document-materials", title: "文书和材料制作" });
+  assert.equal(documentMaterials.registryName, "personal-formal-documents");
   assert.match(documentMaterials.sourcePath, /\\personal-formal-documents\\SKILL\.md$/);
   assert.equal(documentMaterials.sourceBytes, 2159);
   assert.equal(documentMaterials.sourceSha256, "a006fe6a82423935c4a058a02d9d91f031518ba91fa7d6e5757009bc6fb3503f");
@@ -1887,9 +2096,13 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.doesNotMatch(documentMaterialsText, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i, "public document-materials copy must remain domain-neutral");
   for (const expected of [
     /起草或修订合同/,
-    /正式说明/,
+    /协议/,
+    /通知/,
+    /信访\/投诉/,
+    /售后索赔/,
+    /争议函件/,
     /申请材料/,
-    /事件材料/,
+    /证据清单/,
     /提交包/,
     /原件/,
     /格式.*证据验收/,
@@ -1902,6 +2115,14 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const readyOnlyFailure = documentMaterialsGuide.failures.find((item) => item[0].includes("只有可使用成品"));
   assert.match(readyOnlyFailure.join("\n"), /Unknown|未知/);
   assert.match(readyOnlyFailure.join("\n"), /现实状态回读/);
+  const workDelivery = skills.find((item) => item.slug === "work-delivery");
+  const workDeliveryText = JSON.stringify({ entry: workDelivery, guide: skillGuides["work-delivery"], outcome: skillOutcomes["work-delivery"] });
+  assert.equal(workDelivery.sourcePath, "E:\\.agents\\skills\\work-delivery\\SKILL.md");
+  assert.equal(workDelivery.sourceBytes, 3369);
+  assert.equal(workDelivery.sourceSha256, "e9fc8080d60363850e257e4c58de55e9737b57ddcf1ab862f4dd84878428ec16");
+  for (const expected of [/明确选中/, /事实.*假设.*冲突.*未知/, /同一事实版本/, /PRD/, /项目计划/, /评审 PPT/, /执行表/, /周报/, /汇报/, /5 分钟/, /10–15 分钟/, /20 分钟/, /15 秒/, /来源变化/, /受影响/, /过期/, /一次性单文件编辑/, /本轮.*没有.*E2E|E2E.*本轮.*Unknown/]) {
+    assert.match(workDeliveryText, expected, `work-delivery omits its product contract: ${expected}`);
+  }
   const firstUseCases = [
     ["documents", "DOCX", "DOCX（可编辑 Word 文档）"],
     ["documents", "bundle", "bundle（宿主能力包）"],
@@ -2002,6 +2223,14 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("怎么避免全局规则覆盖项目自己的验收方式")[0]?.title, "全局根规则");
   assert.equal(searchPanel("PCConfig")[0]?.title, "PCConfig · 总览");
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");
+  for (const [query, href] of [
+    ["新建一个私有仓库", "/projects/github-index/protected-major-actions"],
+    ["这个目录会推到哪里", "/projects/github-index/project-admission"],
+    ["分支推了算完成吗", "/projects/github-index/worktree-sync"],
+    ["工作树能删吗", "/projects/github-index/worktree-sync"],
+    ["公开仓库里什么能发", "/projects/github-index/publication-gate"],
+    ["索引中断怎么恢复", "/projects/github-index/snapshot-recovery"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `GitHub index search misroutes: ${query}`);
   assert.equal(searchPanel("ChineseASR")[0]?.title, "ChineseASR · 总览");
   assert.equal(searchPanel("TimeAudit")[0]?.title, "TimeAudit · 总览");
   assert.equal(searchPanel("PC Panel Hub")[0]?.title, "PC Panel Hub · 总览");
@@ -2009,6 +2238,9 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("AI帮我学习")[0]?.title, "用 AI 把一件事学明白 · 总览");
   assert.equal(searchPanel("健康信息怎么判断能不能用")[0]?.title, "个人健康证据与安全决策 · 总览");
   assert.equal(searchPanel("过去一小时为什么卡")[0]?.title, "timeaudit-diagnostics");
+  assert.equal(searchPanel("来源变更后哪些文档要重做")[0]?.href, "/skills/work-delivery");
+  assert.equal(searchPanel("需求变了怎么同步PRD和执行表")[0]?.href, "/skills/work-delivery");
+  assert.equal(searchPanel("帮我起草合同并整理材料包")[0]?.href, "/skills/document-materials");
   assert.ok(searchPanel("没有游戏帧是不是掉帧").some((item) => item.href === "/skills/timeaudit-diagnostics"));
   for (const query of ["1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开"]) {
     assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/timeaudit")), `TimeAudit search misses: ${query}`);
@@ -2030,6 +2262,10 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   }
   for (const [query, href] of [
     ["手机和桌面同一个任务", "/projects/codex-remote/same-task-control"],
+    ["给正在生成的回复补充要求", "/projects/codex-remote/conversation-control"],
+    ["停止正在生成的Codex回复", "/projects/codex-remote/conversation-control"],
+    ["把消息排到下一轮", "/projects/codex-remote/conversation-control"],
+    ["断线后会不会重复发送", "/projects/codex-remote/conversation-control"],
     ["手机处理Codex审批", "/projects/codex-remote/models-approvals-context"],
     ["手机浏览电脑文件", "/projects/codex-remote/projects-files-input"],
     ["Broker Sidecar架构", "/projects/codex-remote/shared-realtime-architecture"],
@@ -2040,11 +2276,17 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   }
   for (const [query, href] of [
     ["健康问题要不要重读报告", "/projects/personal-health/current-evidence-route"],
+    ["这个健康问题先看什么资料", "/projects/personal-health/current-evidence-route"],
     ["Fitbit一次授权", "/projects/personal-health/protected-foreground-refresh"],
+    ["我想主动更新一次设备数据", "/projects/personal-health/protected-foreground-refresh"],
     ["健康导入断点续跑", "/projects/personal-health/raw-preservation-resume"],
+    ["设备导出中断后要不要重下", "/projects/personal-health/raw-preservation-resume"],
     ["decision_ready健康字段", "/projects/personal-health/offline-decision-brief"],
+    ["哪些设备数据能用于这次判断", "/projects/personal-health/offline-decision-brief"],
     ["健康证据三态", "/projects/personal-health/evidence-three-state"],
-    ["健康数据谁决定采用", "/projects/personal-health/health-owner-boundary"]
+    ["有记录为0和没有记录的区别", "/projects/personal-health/evidence-three-state"],
+    ["健康数据谁决定采用", "/projects/personal-health/health-owner-boundary"],
+    ["重大医疗选择怎样保护我的决定权", "/projects/personal-health/health-owner-boundary"]
   ]) {
     assert.equal(searchPanel(query)[0]?.href, href, `personal-health search misroutes: ${query}`);
   }
