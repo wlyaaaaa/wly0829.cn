@@ -36,10 +36,8 @@ import {
 } from "./site-content.js";
 import {
   systemActiveAutomations,
-  systemComposedWorkflows,
   systemDependencyLanes,
   systemDependencyNodes,
-  systemDependencyRelations,
   systemDirectoryIntroductions,
   systemEvidenceLayers,
   systemHomeChapters,
@@ -52,6 +50,7 @@ import {
 } from "./system-home-content.js";
 import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
+import { capabilityRelationLabels, projectReferenceLinks, skillProjectLinks } from "./content-capability-links.js";
 import { searchPanel, searchScopeById, searchScopeForPath, searchScopeOptionsForPath } from "./search.js";
 import { createTermAnnotator } from "./term-annotator.js";
 
@@ -439,6 +438,68 @@ function projectCardPresentation(entry) {
     boundary: entry.project.snapshotBoundary || state.gaps?.[0] || "本页不承诺后台实时同步",
     observedAt: state.observedAt || "当前网页快照"
   };
+}
+
+function resolvedCapabilityRelation(relation) {
+  if (relation.href) return { ...relation, href: relation.href };
+  if (relation.systemAssetId) return { ...relation, href: `/#system-project-asset-${relation.systemAssetId}` };
+  if (relation.projectSlug) {
+    const projectEntry = projectCatalog.find((entry) => entry.project.slug === relation.projectSlug);
+    if (!projectEntry) return { ...relation, href: null };
+    const module = relation.moduleSlug ? projectEntry.modules.find((item) => item.slug === relation.moduleSlug) : null;
+    return { ...relation, href: module ? `${projectEntry.project.route}/${module.slug}` : projectEntry.project.route };
+  }
+  return { ...relation, href: null };
+}
+
+function CapabilityLinkBar({ title, items }) {
+  const resolved = items.map(resolvedCapabilityRelation);
+  if (!resolved.length) return null;
+  return (
+    <aside className="capability-link-bar" aria-label={title}>
+      <strong>{title}</strong>
+      <div>{resolved.map((item, index) => {
+        const content = <><span>{item.kindLabel || capabilityRelationLabels[item.relation] || "相关入口"}</span><b>{item.label}</b>{item.href ? <ArrowRight size={14} aria-hidden="true" /> : null}</>;
+        return item.href
+          ? <SiteLink href={item.href} key={`${item.relation}-${item.href}-${index}`}>{content}</SiteLink>
+          : <span className="capability-link-note" key={`${item.relation}-${item.label}-${index}`}>{content}</span>;
+      })}</div>
+    </aside>
+  );
+}
+
+function skillConnectionItems(slug) {
+  return skillProjectLinks[slug] || [];
+}
+
+function projectConnectionItems(projectSlug) {
+  const relatedSkills = new Map();
+  for (const [skillSlug, relations] of Object.entries(skillProjectLinks)) {
+    const relation = relations.find((item) => item.projectSlug === projectSlug);
+    const skill = skills.find((item) => item.slug === skillSlug);
+    if (!relation || !skill) continue;
+    relatedSkills.set(skillSlug, {
+      relation: relation.relation,
+      href: `/skills/${skillSlug}`,
+      label: skill.title,
+      kindLabel: relation.relation === "uses-project" ? "相关 Skill" : "能力入口"
+    });
+  }
+  return [...(projectReferenceLinks[projectSlug] || []), ...relatedSkills.values()];
+}
+
+function systemAssetSkillItems(asset) {
+  return Object.entries(skillProjectLinks).flatMap(([skillSlug, relations]) => {
+    const matches = relations.some((relation) => {
+      if (relation.systemAssetId === asset.id) return true;
+      if (!relation.projectSlug) return false;
+      const projectEntry = projectCatalog.find((entry) => entry.project.slug === relation.projectSlug);
+      return projectEntry?.project.route === asset.href;
+    });
+    if (!matches) return [];
+    const skill = skills.find((item) => item.slug === skillSlug);
+    return skill ? [{ relation: "skill-entry", kindLabel: "进入 Skill", label: skill.title, href: `/skills/${skillSlug}` }] : [];
+  });
 }
 
 function ProjectMetrics({ items, kind }) {
@@ -988,6 +1049,7 @@ function ProjectOverview({ entry }) {
           <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />
           <ProjectQuickState entry={entry} />
         </section>
+        <CapabilityLinkBar title="可以继续进入" items={projectConnectionItems(currentProject.slug)} />
         {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
         <section className="document-section">
           <p className="section-kicker">先说人话</p>
@@ -1005,7 +1067,7 @@ function ProjectOverview({ entry }) {
           <div><h2>{isLearning ? "刻意不做" : "它不负责"}</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
         </section>
         <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
-        <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p>{item.moduleSlug ? <SiteLink className="usage-module-link" href={`${currentProject.route}/${item.moduleSlug}`}>查看对应模块<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}</article>)}</div></section>
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="technical">
@@ -1534,18 +1596,6 @@ function SystemDependencyNode({ node, scenarioIds }) {
   );
 }
 
-function SystemComposedWorkflow({ workflow }) {
-  return (
-    <article className="system-composed-workflow" id={`system-composed-workflow-${workflow.id}`}>
-      <header><span>{workflow.number} / 组合工作流</span><StatusPill status={workflow.tone}>{workflow.evidence}</StatusPill></header>
-      <h4>{workflow.title}</h4>
-      <blockquote>{workflow.request}</blockquote>
-      <div className="system-composed-path">{workflow.path.map((step, index) => <span key={step}>{index ? <ArrowRight size={14} aria-hidden="true" /> : null}<em>{step}</em></span>)}</div>
-      <dl><div><dt>系统交回</dt><dd>{workflow.delivery}</dd></div><div><dt>入口不可用时</dt><dd>{workflow.unavailable}</dd></div></dl>
-    </article>
-  );
-}
-
 function SystemActiveAutomationList() {
   return (
     <section className="system-frame system-active-automations" id="system-automations" aria-labelledby="system-active-automations-title">
@@ -1621,25 +1671,20 @@ function SystemSkillFamily({ family }) {
 function SystemProjectAssetCard({ asset }) {
   const anchorId = `system-project-asset-${asset.id}`;
   const hasDetailedPage = !asset.href.includes("/github-index/repository-ledger");
-  const content = (
-    <>
-      <span>{asset.kind}</span>
+  const skillItems = systemAssetSkillItems(asset);
+  const detailedProject = projectCatalog.find((entry) => entry.project.route === asset.href);
+  const referenceItems = detailedProject ? (projectReferenceLinks[detailedProject.project.slug] || []) : [];
+  return (
+    <article className="system-project-asset-card" id={anchorId}>
+      <span>{asset.kind}{asset.visibility ? ` · ${asset.visibility}` : ""}</span>
       <strong>{asset.title}</strong>
       {asset.repo ? <code>{asset.repo}</code> : null}
       <p>{asset.role}</p>
-    </>
-  );
-  if (hasDetailedPage) {
-    return (
-      <SiteLink className="system-project-asset-card" id={anchorId} href={asset.href}>
-        {content}
-        <small>{asset.entryLabel || "进入完整项目页"}<ArrowRight size={14} aria-hidden="true" /></small>
-      </SiteLink>
-    );
-  }
-  return (
-    <article className="system-project-asset-card" id={anchorId}>
-      {content}
+      {hasDetailedPage || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
+        {hasDetailedPage ? <SiteLink href={asset.href}>{asset.entryLabel || "进入完整项目页"}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
+        {referenceItems.map((item) => <SiteLink href={item.href} key={`${item.relation}-${item.href}`}>进入规则<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
+        {skillItems.map((item) => <SiteLink href={item.href} key={item.href}>进入 Skill<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
+      </div> : null}
     </article>
   );
 }
@@ -1714,7 +1759,6 @@ function SystemSectionNavigation() {
 }
 
 function SystemPage() {
-  const nodeById = new Map(systemDependencyNodes.map((node) => [node.id, node]));
   return (
     <div className="system-home">
       <header className="system-frame system-home-hero" id="general-ai">
@@ -1729,7 +1773,7 @@ function SystemPage() {
       <SystemSectionNavigation />
 
       <section className="system-frame system-cases" id="system-cases" aria-labelledby="system-cases-title">
-        <div className="system-home-section-heading"><h2 id="system-cases-title">AI 如何协助我把一件真实工作办成</h2><p>一次只展示这项工作真正使用的项目、Skills、资料和规则。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-cases-title">AI 如何协助我把一件真实工作办成</h2><p>材料可以直接随提示词、附件或已知路径进入；只有非媒体原件位置未知或定位失效时才调用材料查找。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
         <div className="system-case-tabs" role="tablist" aria-label="选择真实工作场景">
           {systemScenarios.map((scenario, index) => <button type="button" role="tab" id={`system-scenario-tab-${scenario.id}`} aria-controls={`system-scenario-${scenario.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-system-scenario-tab={scenario.id} className={index === 0 ? "is-current" : undefined} key={scenario.id}>{scenario.label}</button>)}
         </div>
@@ -1751,24 +1795,6 @@ function SystemPage() {
                 </div>
               </section>
             );
-          })}
-        </div>
-      </section>
-
-      <section className="system-frame system-collaboration" id="system-collaboration" aria-labelledby="system-collaboration-title">
-        <div className="system-home-section-heading"><h2 id="system-collaboration-title">项目、Skills、规则和外部能力怎样协作</h2><p>上面说明每类东西各自负责什么；这里把它们连成能真正完成工作的组合。先看系统能够主动办成什么，再看长期稳定的代表性依赖。</p></div>
-        <section className="system-composed-workflows" aria-labelledby="system-composed-workflows-title">
-          <div className="system-composed-workflows-heading"><span>继续扩展</span><h3 id="system-composed-workflows-title">这些能力组合起来，系统还能主动做什么</h3><p>这里展示的是可以继续接通的完整工作，不是上面 7 个当前任务的重复清单。卡片右上角说明单项能力已有证据，还是整条流程已经跑通。</p></div>
-          <div className="system-composed-workflow-grid">{systemComposedWorkflows.map((workflow) => <SystemComposedWorkflow workflow={workflow} key={workflow.id} />)}</div>
-        </section>
-
-        <div className="system-relation-ledger" aria-labelledby="system-relation-ledger-title">
-          <div className="system-relation-ledger-heading"><span>怎么协作</span><h3 id="system-relation-ledger-title">代表性依赖</h3><p>这里只保留稳定、会改变理解的责任链；某个场景才需要的临时关系由上方场景高亮表达。</p></div>
-          {systemDependencyRelations.map((relation) => {
-            const relationNodeIds = relation.nodes || [relation.from, relation.to];
-            const relationNodes = relationNodeIds.map((id) => nodeById.get(id)).filter(Boolean);
-            const scenarioIds = systemScenarios.filter((scenario) => relationNodeIds.every((id) => scenario.dependencyIds.includes(id))).map((scenario) => scenario.id);
-            return <article id={`system-relation-${relation.id}`} data-system-relation data-from={relationNodeIds[0]} data-to={relationNodeIds.at(-1)} data-system-scenarios={scenarioIds.join(" ")} key={relation.id}><div className="system-relation-path">{relationNodes.map((node, index) => <span key={node.id}>{index ? <ArrowRight size={16} aria-hidden="true" /> : null}<em>{node.title}</em></span>)}</div><strong>{relation.label}</strong><p>{relation.detail}</p></article>;
           })}
         </div>
       </section>
@@ -1822,8 +1848,8 @@ function SearchResultsPage({ search }) {
 const skillCategoryDefinitions = [
   { id: "all", label: "全部" },
   { id: "find", label: "找东西", slugs: ["personal-media", "personal-materials", "wechat-direct", "google-workspace-direct"] },
-  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "file-intake-router", "media-person-self"] },
-  { id: "documents", label: "文书与材料", slugs: ["document-materials", "documents", "pdf", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
+  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "file-intake-router", "media-person-self", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
+  { id: "deliver", label: "文书与交付", slugs: ["document-materials", "work-delivery", "documents", "pdf"] },
   { id: "diagnose", label: "电脑诊断", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
@@ -1882,6 +1908,7 @@ function SkillDetail({ item, search }) {
       <article className="standalone-document skill-document">
         <Breadcrumbs items={[{ label: "Skills", href: back }, { label: item.name }]} />
         <header><p className="section-kicker">{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</p><h1>{item.name}</h1><p className="skill-human-title">{annotateTerms(item.title)}</p><p className="standfirst">{annotateTerms(outcome.value)}</p><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></header>
+        <CapabilityLinkBar title="项目与系统关系" items={skillConnectionItems(item.slug)} />
         <section className="skill-outcome">
           <p className="section-kicker">先说人话</p>
           <h2>为什么需要、怎样使用、最后得到什么</h2>

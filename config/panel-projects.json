@@ -22,7 +22,7 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 20,
-    "search_index_gzip_budget_kib": 40,
+    "search_index_gzip_budget_kib": 42,
     "project_search_index_gzip_budget_kib": 25,
     "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
     "detail_loading_mode": "route_specific_static_native_document",

@@ -29,7 +29,6 @@ export const systemHomeChapters = [
   { id: "system-cases", label: "真实工作" },
   { id: "system-automations", label: "自动协作" },
   { id: "system-dependencies", label: "系统组成" },
-  { id: "system-collaboration", label: "怎么协作" },
   { id: "system-project-atlas", label: "项目版图" },
   { id: "system-rule-stories", label: "规则与能力" },
   { id: "evidence", label: "验证" }
@@ -280,10 +279,10 @@ export const systemScenarios = [
       {
         number: "01",
         kicker: "资产与恢复前提",
-        title: "先确认能够恢复什么",
-        body: "核对网络、磁盘、备份时间、文件哈希、全部仓库身份、加密载体和有效恢复因子。软件可以重建，未备份的聊天、密码和个人文件不能凭空恢复。",
+        title: "先认清机器、磁盘和真正可用的恢复来源",
+        body: "先区分同机重装、换机/换板、系统盘故障还是只能进入 PE；核对主板与 BIOS/UEFI、物理磁盘、加密状态、备份时间、仓库身份和恢复因子。只读识盘完成前不格式化，也不沿用旧盘符猜设备。",
         items: [
-          ["环境", "系统首登、网络、磁盘与恢复介质"],
+          ["机器", "主板、BIOS/UEFI、PE、网络、物理磁盘与目标系统盘"],
           ["数据", "文档、下载、微信、存档、应用配置和数据库"],
           ["秘密", "Password Center、Vault、加密数据和恢复条件"]
         ]
@@ -291,10 +290,10 @@ export const systemScenarios = [
       {
         number: "02",
         kicker: "按依赖重建",
-        title: "从运行环境到项目，再到计划任务",
-        body: "恢复控制面和兼容运行时，按真实安装位置重建 PATH 与非秘密配置；恢复项目、容器、数据库、仪表盘和外部探针后，再分类重建计划任务、自启动与登录前恢复。",
+        title: "从 Windows 和驱动，到项目、任务和登录",
+        body: "确认目标盘后安装系统和关键驱动，再恢复三个控制面与兼容运行时，按真实位置重建 PATH 和非秘密配置；项目、用户配置、数据库与工具就绪后，再分类恢复计划任务、自启动、账号和受保护数据。",
         items: [
-          ["运行环境", "运行时、虚拟化、容器、端口与开发存储"],
+          ["基础系统", "Windows、关键驱动、运行时、虚拟化、容器与开发存储"],
           ["项目", "远端身份、本地副本、数据库、面板与工具"],
           ["运行链", "计划任务、自启动、外部探针和绝对路径"]
         ]
@@ -498,75 +497,6 @@ export const systemScenarios = [
   }
 ];
 
-export const systemComposedWorkflows = [
-  {
-    id: "mail-event-brief",
-    number: "01",
-    title: "重要邮件到达后，系统主动整理并提醒",
-    request: "“这类新邮件到了就读相关上下文，整理我要做什么、截止时间和附件，然后提醒我。”",
-    path: ["Gmail 新邮件事件", "固定收件箱与 Drive", "对应项目或文书能力", "可用通知渠道"],
-    delivery: "邮件与附件摘要、行动项、截止时间、来源入口、待本人决定项和主动提醒。",
-    evidence: "单项能力已具备 · 整条流程待验",
-    tone: "mixed",
-    unavailable: "事件入口不可用时仍能按需读取；没有 email 渠道时结果保留在任务或 Activity，并使用当前账号可用的通知方式。"
-  },
-  {
-    id: "meeting-prep",
-    number: "02",
-    title: "会前自动准备一页真正相关的材料",
-    request: "“开会前半小时，把日程、最近邮件和 Drive 文件整理成一页准备材料。”",
-    path: ["定时任务", "Calendar", "Gmail / Drive", "可编辑文档", "主动提醒"],
-    delivery: "议题、参会背景、近期往来、相关文件、待问问题和一页会前材料。",
-    evidence: "单项能力已具备 · 整条流程待验",
-    tone: "mixed",
-    unavailable: "缺少某个来源时直接标出缺口，继续使用其余当前材料，不拿旧邮件或旧文件补造当前背景。"
-  },
-  {
-    id: "local-cloud-reconcile",
-    number: "03",
-    title: "本地原件和云端版本可以直接对账",
-    request: "“本机和 Drive 里各有一份，告诉我哪个更新、具体差在哪，先不要覆盖。”",
-    path: ["本地原件定位", "Drive 搜索与导出", "内容与指纹比较", "差异文档"],
-    delivery: "版本矩阵、具体差异、来源、建议主版本、冲突和不覆盖原件的处理方案。",
-    evidence: "单项能力已具备 · 整条流程待验",
-    tone: "mixed",
-    unavailable: "只说明真正核对过的范围；无法打开一侧时不根据文件名或时间戳擅自选主版本。"
-  },
-  {
-    id: "github-event-triage",
-    number: "04",
-    title: "项目事件到达后先分诊，再决定是否处理",
-    request: "“有新的 PR 活动时，先判断影响哪个项目、要不要处理，再把结论提醒我。”",
-    path: ["GitHub 事件", "项目身份与发布总账", "项目身份入口", "目标项目规则", "通知"],
-    delivery: "影响范围、风险、需要验证什么、能否继续和下一步，不自动改代码或合并。",
-    evidence: "尚未接通",
-    tone: "unknown",
-    unavailable: "事件任务不能进入本地项目现场时，只交付事件摘要与待办，不冒充已经完成代码审查。"
-  },
-  {
-    id: "health-material-arrival",
-    number: "05",
-    title: "新报告到达后，直接进入健康协作",
-    request: "“新报告到了，结合我当前材料告诉我哪些变化值得问、还缺什么。”",
-    path: ["邮件 / Drive 或本地原件", "PDF / OCR", "个人健康项目", "权威资料", "人的决定"],
-    delivery: "变化、证据质量、问题清单、选项、停止或复查条件和仍需补充的材料。",
-    evidence: "单项能力已具备 · 整条流程待验",
-    tone: "mixed",
-    unavailable: "新材料先进入待审核，不自动改写当前健康事实，也不替本人作高风险决定。"
-  },
-  {
-    id: "notify-remote-continue",
-    number: "06",
-    title: "任务需要决定时提醒我，手机回答后继续",
-    request: "“任务需要我决定时主动提醒；我在手机上回答后，让同一个任务继续。”",
-    path: ["任务状态", "主动通知", "跨设备任务入口", "同一审批与文件", "最终项目结果"],
-    delivery: "当前进展、待决定项、手机回复、继续后的结果文件和真实交付状态。",
-    evidence: "尚未接通",
-    tone: "unknown",
-    unavailable: "通知无法深链到任务时提供可打开的任务入口，不创建第二份任务，也不复制聊天。"
-  }
-];
-
 export const systemActiveAutomations = {
   observedAt: "2026-08-31",
   groups: [
@@ -641,15 +571,15 @@ export const systemActiveAutomations = {
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-08-31",
-  total: 47,
+  observedAt: "2026-08-31T16:22:53.6677663Z",
+  total: 48,
   publicCount: 27,
-  privateCount: 20,
-  localCloneCount: 44,
+  privateCount: 21,
+  localCloneCount: 45,
   remoteOnlyCount: 3,
   detailedPageCount: 10,
-  identitySha256: "sha256:a6f2f51b305dc975d21bc22ecc291e6f6553ac532672cb62a637007da85d98a5",
-  mappingSha256: "sha256:21b214da99889fa05a7aaa366b2392f773526d936bf702b0969f0e82373a3c00",
+  identitySha256: "sha256:5dcdadb63d6c6763a295daf6b30570983cb00b3fd7da1e617495fb14fbfc87ba",
+  mappingSha256: "sha256:5119f090d277c94a28a68c13e4607dfabf4b7d720ce07b9e5d73e7227376fbd2",
   description: "这里的数量来自本次 GitHub 项目总账快照，不是永久常量。项目目录提供可深入阅读的完整参考，其余身份与系统角色由项目总账承载。"
 };
 
@@ -757,6 +687,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "codex-agent-model-benchmark", title: "真实任务能力基准（CACB）", repo: "codex-agent-model-benchmark", role: "用同一任务和可复核结果比较不同 AI 工作方式，不把一次回答或当前有问题的评分当结论。", kind: "研究验证", href: "/projects/cacb" },
       { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
+      { id: "work-delivery-copilot", title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "把用户明确选中的需求、会议记录、规则和表格，整理成来源可追溯、跨文档口径一致、来源变化后能说明影响范围的交付包。", kind: "本地优先的持续工作交付工具", href: projectLedgerHref },
       { id: "wly0829-cn", title: "当前网站呈现仓库", repo: "wly0829.cn", role: "只负责把项目、规则、Skills 和公开安全事实呈现成当前网站；它计入总账，但不作为一个被介绍的项目。", kind: "呈现基础设施", href: "/", presentationOnly: true },
       { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: projectLedgerHref }
     ]
@@ -806,7 +737,7 @@ const privateProjectSourceDigests = {
   "message-ai-gateway": "8e5de0096247f1175b59a57e0f94487a86fc356703625ec693310ea485aeb164",
   "local-ai-runtime": "eb3fb89fcfec4f2343a7fb5edbbf2e3d17dc68cc2422d9a712391b763356f01b",
   "career-development": "e850873a91e7fa504e6b07c82e39c3d790767fbdcfbcbe127d7bb8ec4167feb3",
-  "formal-materials": "f4ad413f0b788d97cf5e8db4280383f19dde38a64916bb35455b60bfe8121e32",
+  "formal-materials": "d7ee4166428ce9693707b475e930a74b059b81610a1084eec495864ef258578d",
   "ai-memory-backup-a": "c040c5a65fdb91143944def084d1a1d1dd16973552fecf60ad94b70e2e11de91",
   "ai-memory-backup-b": "c52d549dad47c53914941e3df71dbcc76c687c895a13a1faab73c90760c4f549",
   "ai-memory-backup-c": "2f2561db3b4df99fbf11e8e54f5159369d32b3845ead50544e29dad9bba1d502",
@@ -892,10 +823,10 @@ export const systemDependencyNodes = [
   {
     id: "recovery-backup",
     lane: "machine",
-    title: "开发环境备份与恢复（DevConfig）",
-    subtitle: "备份、项目、开发环境、任务和分层验收",
+    title: "换机、重装、备份与恢复",
+    subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "按依赖重建电脑与开发环境，并分别验证文件、运行、登录、用户结果和回滚；有备份不等于已经可恢复。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复；BIOS 记录、启动介质、备份、任务 Ready 和文件复制都只是中间证据，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -1123,20 +1054,6 @@ export const systemDependencyLanes = [
   { id: "projects", number: "05", title: "项目与连续性", description: "全部项目资产、长期产品、验证与跨设备工作。" },
   { id: "personal", number: "06", title: "资料与个人领域", description: "原件与领域事实保持独立，按当前问题有界进入。" },
   { id: "evidence", number: "07", title: "结果与人类验收", description: "每一层分别证明，最终由人决定继续或停止。" }
-];
-
-export const systemDependencyRelations = [
-  { id: "ai-governance", nodes: ["general-ai", "agents", "rules", "skills"], label: "普通目标进入个人做事边界", detail: "通用 AI 提供理解与执行能力；.agents、现行规则和 Skills（能力入口）依次补上责任来源、授权、协作、失败和领域入口。" },
-  { id: "hooked-collaboration", nodes: ["agents", "rules", "collaboration-hooks", "skills"], label: "规则通过 Hook 进入运行现场，再由 AI 选择有界协作", detail: "活动规则先说明身份、授权和协作边界；Hook 在决策前注入真实宿主与规则版本，并在创建前复核；随后才由原生协作路由按当前任务决定保持单线或并行。" },
-  { id: "git-projects", nodes: ["github-index", "project-entry-gate", "all-projects"], label: "从仓库身份进入具体项目", detail: "GitHub 总索引提供全部项目事实，项目身份入口只在这些事实会改变决定时检查，再进入真正拥有业务做法的项目。" },
-  { id: "machine-diagnostics", nodes: ["pcconfig", "timeaudit", "timeaudit-skill"], label: "从机器现场到有界历史诊断", detail: "PCConfig 提供当前机器和恢复关系，TimeAudit 保存过去证据，诊断入口把自然问题收窄成时间窗、覆盖质量和竞争假设。" },
-  { id: "audio-task", nodes: ["wechat", "chinese-asr", "chinese-asr-skill"], label: "从微信语音到可复核转写", detail: "微信入口保留消息和媒体关系，ChineseASR 项目拥有语音处理实现，Skill 选择本次转写、时间位置和复核模式。" },
-  { id: "document-task", nodes: ["materials", "document-output-choice", "verification"], label: "从混合原件到可编辑或逐页验收的成品", detail: "材料入口先找到真实原件；扫描识别按需进入；系统再按成品形态选择 Word、PDF 或二者组合，不把它们画成固定必经顺序。" },
-  { id: "document-materials-task", nodes: ["materials", "document-materials-skill", "document-output-choice", "human-review"], label: "从真实材料进入可用文书，四层现实状态始终分开", detail: "材料入口先找到原件，文书和材料制作能力再区分事实、解释、待确认项与未知，并按成品形态选择文档或 PDF；生成、本人操作、平台收到和接收方处理不会混成一个状态。" },
-  { id: "external-events", nodes: ["google-workspace", "scheduled-events", "notifications", "human-review"], label: "云端现场触发工作，并把需要注意的结果送回来", detail: "固定账号提供邮件、云盘和日历；支持的时间或应用事件启动任务；通知渠道再按当前账号和设置提醒本人，email 不是每次运行的固定承诺。" },
-  { id: "health-task", nodes: ["materials", "personal-health", "personal-health-skill", "human-review"], label: "健康原件进入协作，最终由人采用", detail: "健康项目保留当前证据和新资料边界，Skill 选择已有事实、原件或前台刷新路线，最终选择和停止条件仍由本人决定。" },
-  { id: "recovery-task", nodes: ["pcconfig", "recovery-backup", "verification"], label: "从机器资产到分层恢复验收", detail: "PCConfig 提供依赖和恢复关系，开发环境备份保存不可再生材料，文件、运行、登录、重启与用户可用分别验证。" },
-  { id: "project-delivery", nodes: ["all-projects", "verification", "human-review"], label: "从项目结果到真实交付", detail: "具体项目提供实现和各层证据；验证矩阵说明已闭合到哪里，最后由用户判断是否真正满足当前目标。" }
 ];
 
 export const systemRuleStories = [
@@ -1370,6 +1287,7 @@ export const systemSkillFamilies = [
     number: "03",
     title: "交付文档与私人事务材料",
     requests: [
+      "“把这几份需求、会议记录、规则和表格整理成口径一致的 PRD、评审材料和执行表；来源变化时告诉我哪些要重做。”",
       "“根据现有合同和材料准备一份可编辑文书，把制作完成、本人操作和外部回执分开。”",
       "“把这份 Word 文档修订好，保留批注，并逐页检查表格和页眉页脚。”",
       "“填写这份 PDF 表单，既检查页面显示，也核对真实字段值。”",
@@ -1377,13 +1295,15 @@ export const systemSkillFamilies = [
       "“这份文件打开后中文乱码，先判断能不能无损修复。”"
     ],
     inputs: [
+      "用户明确选中的 2–5 份需求、会议记录、规则或表格，以及这次要交付给谁",
       "当前事实、唯一状态来源、原件、目标用途与外部动作边界",
       "Word、PDF、Markdown 或乱码文件的当前原件与目标格式",
       "修订、批注、字段、样式、页数和逐页验收要求",
       "乱码文件的原始字节，而不是已经错误显示的复制文本"
     ],
-    collaboration: "私人事务入口先区分事实、文书制作和现实状态；Word 与 PDF 能力分别保留可编辑结构和表单逻辑；转换、逐页渲染与乱码修复再完成具体交付。",
+    collaboration: "工作交付入口先分开事实、假设、冲突和未知，并让多份成品引用同一事实版本；文书入口再区分材料制作和现实状态，Word、PDF、逐页渲染与乱码修复完成具体成品。",
     delivery: [
+      "来源可追溯、跨文档口径一致的 PRD、评审材料与执行表，以及来源变化后的影响范围",
       "DOCX（可编辑 Word 文档）、已验收 PDF 或按要求保留交互性的表单",
       "文书制作、本人操作、平台或外部状态的独立结论",
       "完整页面总览图、可疑页、字段或具体页码问题",
@@ -1393,11 +1313,13 @@ export const systemSkillFamilies = [
       "不会因为目标文件已经存在就把旧输出当成本轮成品",
       "不会把能渲染等同于内容语义正确",
       "不会把文书生成写成本人已经操作或外部已经处理",
+      "不会后台扫描材料，也不会自动发送、审批或让一次性单文件编辑绕远路",
       "未经精确授权不会提交、付款、撤回或联系外部机构",
       "不会在编码链不明确时批量改写文件",
       "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
+      { slug: "work-delivery", name: "工作交付副驾驶", technicalName: "work-delivery", summary: "把明确选中的需求、会议记录、规则和表格整理成来源可追溯、跨文档口径一致的交付包；来源变化时标记旧结果并说明哪些需要重做。", href: "/skills/work-delivery" },
       { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "核对当前材料状态和真实原件，制作合同、说明、申请、事件材料或提交包，并把生成、本人操作、平台收到和接收方处理分开。", href: "/skills/document-materials" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },

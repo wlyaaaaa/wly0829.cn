@@ -191,13 +191,13 @@ function initializeSearch(container) {
         link.append(type, copy, arrow);
         panel.append(link);
       }
-      if (usesPartialAllIndex || results.length > 9) {
-        const allResults = document.createElement("a");
-        allResults.className = "global-search-all-results";
-        allResults.href = `/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope.id)}`;
-        allResults.textContent = usesPartialAllIndex ? "查看完整搜索结果 →" : `查看全部 ${results.length} 条结果 →`;
-        panel.append(allResults);
-      }
+    }
+    if (usesPartialAllIndex || results.length > 9) {
+      const allResults = document.createElement("a");
+      allResults.className = "global-search-all-results";
+      allResults.href = `/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope.id)}`;
+      allResults.textContent = usesPartialAllIndex ? "查看完整搜索结果 →" : `查看全部 ${results.length} 条结果 →`;
+      panel.append(allResults);
     }
     addResultKeyboardNavigation(panel);
     container.append(panel);
@@ -511,7 +511,6 @@ function initializeSystemHome() {
   const tabs = Array.from(home.querySelectorAll("[data-system-scenario-tab]"));
   const panels = Array.from(home.querySelectorAll("[data-system-scenario-panel]"));
   const nodes = Array.from(home.querySelectorAll("[data-system-dependency-node]"));
-  const relations = Array.from(home.querySelectorAll("[data-system-relation]"));
   const ids = tabs.map((tab) => tab.dataset.systemScenarioTab);
   if (!tabs.length || !panels.length) return;
 
@@ -555,10 +554,6 @@ function initializeSystemHome() {
       node.classList.toggle("is-used", used);
       node.querySelector("[data-system-node-state]").textContent = used ? "本次使用" : "本次未用";
     }
-    for (const relation of relations) {
-      const used = (relation.dataset.systemScenarios || "").split(/\s+/).includes(id);
-      relation.classList.toggle("is-used", used);
-    }
     if (updateUrl) {
       const next = new URL(window.location.href);
       next.hash = `system-scenario-${id}`;
@@ -598,6 +593,8 @@ function initializeSystemSectionNavigation() {
   if (!rail || links.length === 0 || sections.some((section) => !section)) return;
   let activeIndex = -1;
   let frame = 0;
+  let clickedIndex = null;
+  let clickScrollIdleTimer = 0;
 
   function headerHeight() {
     return document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
@@ -627,6 +624,10 @@ function initializeSystemSectionNavigation() {
 
   function update() {
     frame = 0;
+    if (clickedIndex !== null) {
+      setActive(clickedIndex);
+      return;
+    }
     const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
     let nextIndex = 0;
     sections.forEach((section, index) => {
@@ -641,11 +642,30 @@ function initializeSystemSectionNavigation() {
     if (!frame) frame = window.requestAnimationFrame(update);
   }
 
+  function releaseClickLock() {
+    if (clickedIndex === null) return;
+    clickedIndex = null;
+    window.clearTimeout(clickScrollIdleTimer);
+    scheduleUpdate();
+  }
+
+  function handleScroll() {
+    if (clickedIndex !== null) {
+      window.clearTimeout(clickScrollIdleTimer);
+      clickScrollIdleTimer = window.setTimeout(releaseClickLock, 160);
+    }
+    scheduleUpdate();
+  }
+
   links.forEach((link, index) => link.addEventListener("click", () => {
+    clickedIndex = index;
+    window.clearTimeout(clickScrollIdleTimer);
+    clickScrollIdleTimer = window.setTimeout(releaseClickLock, 1800);
     setActive(index);
     revealActiveLink(link);
   }));
-  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  if ("onscrollend" in window) window.addEventListener("scrollend", releaseClickLock);
   window.addEventListener("resize", scheduleUpdate);
   window.addEventListener("hashchange", scheduleUpdate);
   if (typeof ResizeObserver !== "undefined") new ResizeObserver(scheduleUpdate).observe(home);

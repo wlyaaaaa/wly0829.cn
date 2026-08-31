@@ -60,7 +60,7 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | --- | --- | --- | --- | --- |
 | `.agents` | 吴乐阳个人维护的规则与能力控制面；不开发底层 AI | “把这个目标办成，别覆盖其他任务。”它让 AI 找对事实 Owner、复用已有授权、选择能力、协调并行并分层验收 | E95 `d32210b`、五规则闭包与 Skill 供应通过；不证明每项能力当前 E2E。Codex Home 的 E 盘规则目标与机器仍由 C 盘普通目录承载的现场必须并列 | `/projects/agents/`、`/rules/`、`/skills/` |
 | PCConfig | 吴乐阳个人维护的 Windows 配置与恢复控制面 | “为什么任务没启动”“迁移到 V 盘”“重装后怎样恢复”。它把通用工具能力接到这台机器的路径、运行时、任务、备份和回滚 | PRIVATE main `f9245a1` 与 origin/main 对齐且工作树干净；完整可见 Drift 为 Registry 87 / Windows 88、2 新增/1 移除；BIOS 核心记录已验证。Codex Home 在线 ReadyCheck 已放行但仍等待用户自行退出：当前仍由 C 盘普通目录承载，E 正式目录和 CODEX_HOME 尚未生效 | `/projects/pcconfig/` |
-| GitHub 总索引 | 吴乐阳公开维护的 Git/GitHub 事实控制面 | “这个目录会推到哪里”“worktree 能删吗”“是否真正进入远端主分支”。它补上多仓库身份、所有工作树与公开发布边界 | PUBLIC main `e6bf84b`；live 47 个仓库（27 PUBLIC / 20 PRIVATE）、44 个 clone，baseline 47/47、delta 0、issue 0、历史过渡提醒 1。公开 generation 仍是 45/43 的旧快照 | `/projects/github-index/`、`/skills/project-entry-gate/` |
+| GitHub 总索引 | 吴乐阳公开维护的 Git/GitHub 事实控制面 | “这个目录会推到哪里”“worktree 能删吗”“是否真正进入远端主分支”。它补上多仓库身份、所有工作树与公开发布边界 | PUBLIC main `8cbafc5`；live baseline 48 / observed 48 / delta 0 / issue 0，27 PUBLIC、21 PRIVATE、45 个 canonical clone、3 个 remote-only，projection valid 且 gap 0 | `/projects/github-index/`、`/skills/project-entry-gate/` |
 | ChineseASR | 吴乐阳个人维护并集成外部识别运行时的公开中文语音项目 | “转写这段录音”“中断后继续”“哪些句段可能是我”。它把语言理解接到稳定 job、结果包、风险、可选时间线和人工复核 | PUBLIC main `70e3255`，345/345 单元测试通过；历史真实四切片 E2E 可回读。默认 strict 不保证完整逐句时间线，时间线/说话人需显式路线；本轮未跑真实模型 | `/projects/chinese-asr/`、`/skills/chinese-asr/` |
 | TimeAudit | 吴乐阳个人维护并集成第三方探针/数据库/大盘的公开工作站黑匣子 | “过去一小时为什么卡”“是否断采”。AI先取得最长 168 小时聚合摘要；具体程序和闪退明细再进本机 Grafana 深读 | PUBLIC main `44a842e`，180 项 + 11 子测试通过；一小时 provider 3702 样本、coverage fresh。无有效游戏帧、无整库审计/最新恢复；上游手册仍有过强因果措辞 | `/projects/timeaudit/`、`/skills/timeaudit-diagnostics/` |
 | PC Panel Hub | 吴乐阳个人维护的 MIT 双副屏源码；厂商二进制与壁纸素材不属于该许可 | “机箱屏冻了吗”“HS2 卡片会不会塞满”。TURZX 是 480×1920 USB 串口位图屏；HS2 是 2288×1048 Windows 副显示器上的透明事件层 | PUBLIC main `ebbc1f2`；84 指标 + 8 天气及项目原生检查通过。HS2 浮层当前 visible=1/misplaced=0；动态壁纸仅有 2026-08-30 本人确认，TURZX 实体像素/睡眠恢复未复验。市场壁纸作者/再发布许可 Unknown | `/projects/pc-panel-hub/` |
@@ -79,7 +79,7 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | 三控制面 | 只在 Git、机器或规则事实会改变决定时取证 | 最小进入 `.agents`、GitHub 总索引、PCConfig 或具体项目 | 入口不运行所有动态 Provider，也不恢复历史第四控制面 |
 | 能力路由 | 选择 Skill、工具、reader、Provider、并行与必要盲测 | 用最有净收益的现有能力；真实缺失才降级 | E95 增加安全不换复杂度、注意力编排和自然意图盲测；合同不证明账号/工具当前可用 |
 
-## 26 个 Skills 在系统中的位置
+## 27 个 Skills 在系统中的位置
 
 | Skill | 自然请求 → 用户得到什么 | 接入价值与依赖 | 当前边界 |
 | --- | --- | --- | --- |
@@ -92,6 +92,7 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | `localocr` | “读扫描 PDF/表格/公式” → 文本、版面、表格、坐标和 sidecar | 复杂扫描材料走本地 OCR；普通清晰图片仍直接视觉 | 上次小图 E2E 可保留，当前 18665 health 本轮不可达 |
 | `personal-health` | “结合我的当前资料回答/刷新设备” → 分层健康证据与最小更新 | 连接 processed-current、权威医学信息和 Health Owner | 未读取个人健康正文，不证明任何当前事实 |
 | `document-materials` | “把这些合同、附件、聊天或扫描件整理成一份正式材料，并告诉我还缺什么” → 可编辑文书、PDF 或材料包，事实/解释/待确认/未知与四层现实状态分开 | 连接当前材料状态、真实原件、Word/PDF 工具、逐页验收与恢复点 | 通用流程已具备；合同起草、正式说明、申请、事件材料与提交包不是每类都已完成真实 E2E |
+| `work-delivery` | “把这些需求、会议记录、规则和表格整理成能评审和执行的一套材料” → PRD、评审材料、执行表与来源变化影响范围 | 连接 PRIVATE `work-delivery-copilot` 项目，把事实、假设、冲突和未知分开，并让多份产物共享同一事实版本 | source/install/fresh discovery 已通过；当前没有领域任务 E2E，不自动发送或审批 |
 | `documents` | “创建或修订这份 Word 文书并逐页检查” → 可编辑 DOCX、修订/批注和版面验收 | 宿主集成能力保留 Word 结构，并以逐页渲染检查真实版面 | 本轮只核对 observed bundle source/bytes/SHA，未创建真实文档，Current/Fresh/E2E Unknown |
 | `pdf` | “填写或生成这份 PDF，并核对表单字段和页面显示” → 最终 PDF、字段逻辑与逐页验收 | 宿主集成能力同时检查 PDF 结构、表单字段、控件、外观和页面 | 本轮只核对 observed bundle source/bytes/SHA，未处理真实 PDF，Current/Fresh/E2E Unknown |
 | `md-to-pdf` | “按正式样式导出 PDF” → 与源 hash、页数和布局绑定的 PDF | 本地插件连接 Markdown、浏览器渲染和原子发布 | 本轮未生成实际 PDF |
@@ -110,25 +111,14 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | `native-economy-routing` | 任务进入或准备创建协作者 → Hook 注入并复核宿主身份与活动规则 → 有界子代理或保持单线，主任务继续集成 | 让规则真正进入运行现场，再接入平台原生并行生产力；Hook 只验证身份、规则和参数，不替 AI 选数量或扩大授权 | Hook 缺失或身份不可信只关闭这次委派；普通工作继续，具体事件与技术字段留在 Skill 详情 |
 | `token-budget-advisor` | 用户明确问配额/reset/Token → 只读现场或权威计数 | 不因任务看起来长就制造预算门，也不拿字符猜计数 | 本轮没有明确配额请求，因此没有调用当前账号入口 |
 
-## 首页关系图建议只保留的稳定主线
+## 为什么首页不再单列第二张协作关系图
 
-1. `通用 AI → .agents → 现行规则 → Hook → Skills`：外部智能先进入个人目标、授权与协作边界，Hook 再把当前身份和规则带进运行现场。
-2. `GitHub 总索引 → project-entry-gate → 全部项目`：先确认仓库身份与发布事实，再进入项目业务。
-3. `PCConfig → TimeAudit → timeaudit-diagnostics`：机器事实、历史采集和有界诊断三层分开。
-4. `微信入口 → ChineseASR 项目 → chinese-asr Skill`：消息与媒体关系、语音实现和本次任务模式分开。
-5. `材料入口 → LocalOCR → documents → pdf → 验证矩阵`：特殊材料识别、可编辑结构、PDF 字段与逐页版面分别验收。
-6. `材料入口 → document-materials → documents / pdf → 人的决定`：当前材料、文书制作、本人操作、平台收到和接收方处理分开。
-7. `邮件/云盘/日历 → 定时或应用事件 → 主动通知 → 人的决定`：云端现场可以启动工作并把需要注意的结果送回来，具体通知渠道按账号设置。
-8. `健康材料 → personal-health 项目 → personal-health Skill → 人的决定`：已有材料、前台更新、离线验真和人工采用分开。
-9. `PCConfig → 开发环境备份与恢复 → 验证矩阵`：恢复关系、不可再生材料和现实验收分开。
-10. `全部项目 → 验证矩阵 → 用户验收`：项目证据不能互相升级，最终结果回到当前目标。
-
-其余关系只有在真实跨项目协作会改变理解时才进入；项目数量增加不扩大这组稳定主线。
+10 个真实场景已经说明输入、处理与交付，并驱动系统组成节点高亮；48 项版图的每个系统域也分别说明怎样协作。再画一组线性箭头会把按需能力误解成固定流水线，并重复规则与 Skill 家族已经说清的内容。材料默认直接随提示词、附件或已知路径进入；只有非媒体原件位置未知或旧定位失效时才调用材料查找。未来某条跨项目整链真实投入持续使用后，进入真实场景或自动协作，不另建路线图。
 
 ## 仍需 System Owner 在最终页面验证
 
 - System 首页正文和 System 数据对象中没有具体模型名或专用运行外壳概念；项目技术页不受此删减。
 - 通用 AI 底层生产力不是一句尾注，而是首屏产品定义的一部分。
-- 页面没有把全部项目和 26 个 Skills 全部强行画成网络；搜索、能力版图与目录承载完整清单，关系图只保留稳定主线。
+- 页面没有把全部项目和 27 个 Skills 强行画成第二张网络；搜索、真实场景、系统组成、能力版图与目录分别承担自己的职责。
 - 移动端没有大片空白、横向溢出或滚动跳顶；系统图在 320/390/768/1440 宽度可读。
 - 本内容包一旦被 System 页面和项目内容完全吸收，应重新评估是否仍有独立消费者；若只剩重复说明，可由最终 Owner 在保留 Git 历史后删除。

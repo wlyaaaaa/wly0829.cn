@@ -18,12 +18,12 @@ import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
+import { projectReferenceLinks, skillProjectLinks } from "../app/content-capability-links.js";
 import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { searchCompactEntries } from "../app/compact-search.js";
 import {
   systemDependencyNodes,
-  systemDependencyRelations,
   systemDirectoryIntroductions,
   systemEvidenceLayers,
   systemHomeHero,
@@ -135,6 +135,18 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-panel\.is-open,[\s\S]*?display:\s*block;/);
   assert.match(styleSource, /\.header-navigation\.is-open\s*\{\s*display:\s*block;/);
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
+});
+
+test("the desktop global search is geometrically centered without changing mobile search", async () => {
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(styleSource, /@media \(min-width: 1181px\)[\s\S]*?\.desktop-search\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?left:\s*50%;[\s\S]*?width:\s*clamp\(360px, 32vw, 520px\);[\s\S]*?transform:\s*translate\(-50%, -50%\)/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.desktop-search\s*\{\s*display:\s*none;/);
+});
+
+test("desktop Skill details match project-detail scale without changing mobile or project pages", async () => {
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(styleSource, /@media \(min-width: 901px\)[\s\S]*?\.skill-document\s*\{\s*width:\s*min\(100%, 1420px\);[\s\S]*?\.skill-document h1\s*\{\s*font-size:\s*clamp\(46px, 3\.8vw, 58px\);[\s\S]*?\.skill-document \.skill-human-title\s*\{\s*font-size:\s*22px;[\s\S]*?\.skill-document \.standfirst\s*\{[\s\S]*?font-size:\s*17px/);
+  assert.doesNotMatch(styleSource, /\.skill-document[^}]*\b(?:zoom|transform)\s*:/, "Skill scale must not use zoom or transform hacks");
 });
 
 test("project hero stays product-first and technical prose wraps on mobile", async () => {
@@ -326,7 +338,7 @@ test("the System source pack explains generic AI productivity without platform o
   for (const capability of ["自然语言理解", "推理", "搜索", "视觉和文档理解", "工具与代码执行", "浏览器操作", "并行协作"]) {
     assert.ok(sourcePack.includes(capability), `System source pack omits generic capability: ${capability}`);
   }
-  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "5 份活动规则", "26 个 Skills"]) {
+  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "5 份活动规则", "27 个 Skills"]) {
     assert.ok(sourcePack.includes(phrase), `System source pack omits product boundary: ${phrase}`);
   }
   for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
@@ -334,15 +346,13 @@ test("the System source pack explains generic AI productivity without platform o
   const documentMaterialsSurface = JSON.stringify({
     asset: systemProjectDomains.flatMap((domain) => domain.assets).find((asset) => asset.id === "formal-materials"),
     node: systemDependencyNodes.find((node) => node.id === "document-materials-skill"),
-    relation: systemDependencyRelations.find((relation) => relation.id === "document-materials-task"),
     family: systemSkillFamilies.flatMap((family) => family.members).find((item) => item.slug === "document-materials")
   });
   assert.match(documentMaterialsSurface, /文书和材料制作/);
   assert.match(documentMaterialsSurface, /\/skills\/document-materials/);
   assert.doesNotMatch(documentMaterialsSurface, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i);
   const hookNode = systemDependencyNodes.find((node) => node.id === "collaboration-hooks");
-  const hookRelation = systemDependencyRelations.find((relation) => relation.id === "hooked-collaboration");
-  assert.match(JSON.stringify({ hookNode, hookRelation }), /Hook.*身份.*规则.*创建前复核/s, "System omits the runtime Hook that applies collaboration rules");
+  assert.match(JSON.stringify(hookNode), /Hook.*身份.*规则.*创建前复核/s, "System omits the runtime Hook that applies collaboration rules");
   assert.match(sourcePack, /Hook.*身份.*活动规则/s, "System source pack omits Hook behavior");
   assert.doesNotMatch(sourcePack, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System source pack must stay model, vendor and runtime-wrapper neutral");
 });
@@ -373,7 +383,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 20);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 40);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 42);
   assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 25);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
@@ -460,7 +470,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   }
   const compactSystemCases = [
     ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
-    ["仓库身份经过项目入口再进入业务项目", "系统关系", "/#system-relation-git-projects"],
+    ["仓库公开性分支远端工作树同步状态怎么确认", "系统组成", "/skills/project-entry-gate/"],
     ["Hook 创建子代理前核对身份", "系统组成", "/skills/native-economy-routing/"],
     ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"],
     ["源码或构建通过能不能证明网页发布", "验证层", "/#evidence-test"]
@@ -1723,7 +1733,7 @@ test("each current rule tells an ordinary reader how it applies without manual i
 });
 
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
-  assert.equal(skills.length, 26);
+  assert.equal(skills.length, 27);
   assert.deepEqual(skills.map((item) => item.slug), [
     "personal-media",
     "personal-materials",
@@ -1734,6 +1744,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     "localocr",
     "personal-health",
     "document-materials",
+    "work-delivery",
     "documents",
     "pdf",
     "md-to-pdf",
@@ -1758,9 +1769,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     }
     assert.ok(["personal_install", "host_integrated"].includes(item.sourceKind), `${item.slug}.sourceKind is invalid`);
     assert.equal(item.availability, "available", `${item.slug} is not publicly usable`);
-    if (item.slug === "document-materials") {
-      assert.equal(item.sourcePath, "private-source:document-materials", "document-materials must expose only its neutral private-source identifier");
-    } else if (item.sourceKind === "personal_install") {
+    if (item.sourceKind === "personal_install") {
       assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
     } else {
       assert.equal(item.sourcePath, item.capabilityId);
@@ -1798,7 +1807,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.ok(skillGuides[item.slug]?.glossary.length >= 3, `${item.slug} lacks term translations`);
     assert.ok(skillGuides[item.slug]?.failures.length >= 2, `${item.slug} lacks failure and recovery rules`);
   }
-  assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 24);
+  assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 25);
   assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
   assert.equal(new Set(skills.map((item) => item.slug)).size, skills.length);
   assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
@@ -1812,9 +1821,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const documentMaterialsGuide = skillGuides["document-materials"];
   const documentMaterialsText = JSON.stringify({ entry: documentMaterials, guide: documentMaterialsGuide, outcome: skillOutcomes["document-materials"] });
   assert.deepEqual({ slug: documentMaterials.slug, name: documentMaterials.name, title: documentMaterials.title }, { slug: "document-materials", name: "document-materials", title: "文书和材料制作" });
-  assert.equal(documentMaterials.sourcePath, "private-source:document-materials");
-  assert.equal(documentMaterials.sourceBytes, 7445);
-  assert.equal(documentMaterials.sourceSha256, "9732926454d3e67e9fd283d958e593c23c15106ba9c2279c90c5d7e4cba0df8a");
+  assert.match(documentMaterials.sourcePath, /\\personal-formal-documents\\SKILL\.md$/);
+  assert.equal(documentMaterials.sourceBytes, 2159);
+  assert.equal(documentMaterials.sourceSha256, "a006fe6a82423935c4a058a02d9d91f031518ba91fa7d6e5757009bc6fb3503f");
   assert.match(documentMaterials.evidenceSourceCommit, /^[a-f0-9]{40}$/);
   assert.doesNotMatch(documentMaterialsText, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i, "public document-materials copy must remain domain-neutral");
   for (const expected of [
@@ -1850,6 +1859,46 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.equal(readerText.slice(firstIndex, firstIndex + glossed.length), glossed, slug + " first " + term + " use lacks a Chinese gloss");
   }
   assert.equal(excludedSkills.length, 0);
+});
+
+test("project and Skill links come from one explicit ownership map", async () => {
+  const skillBySlug = new Map(skills.map((item) => [item.slug, item]));
+  const projectBySlug = new Map(projectCatalog.map((entry) => [entry.project.slug, entry]));
+  const systemAssets = new Set(systemProjectDomains.flatMap((domain) => domain.assets.map((asset) => asset.id)));
+  const agentsMapped = [];
+  for (const [skillSlug, relations] of Object.entries(skillProjectLinks)) {
+    assert.ok(skillBySlug.has(skillSlug), `capability relation references missing Skill: ${skillSlug}`);
+    const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", skillSlug, "index.html"), "utf8");
+    for (const relation of relations) {
+      let href = relation.href || null;
+      if (relation.projectSlug) {
+        const projectEntry = projectBySlug.get(relation.projectSlug);
+        assert.ok(projectEntry, `${skillSlug} references missing project: ${relation.projectSlug}`);
+        const module = relation.moduleSlug ? projectEntry.modules.find((item) => item.slug === relation.moduleSlug) : null;
+        if (relation.moduleSlug) assert.ok(module, `${skillSlug} references missing module: ${relation.projectSlug}/${relation.moduleSlug}`);
+        href = module ? `${projectEntry.project.route}/${module.slug}` : projectEntry.project.route;
+        const projectHtml = await readFile(path.join(projectRoot, "dist", ...projectEntry.project.route.slice(1).split("/"), "index.html"), "utf8");
+        assert.ok(projectHtml.includes(`/skills/${skillSlug}/`), `${projectEntry.project.slug} does not link back to ${skillSlug}`);
+        if (relation.projectSlug === "agents") agentsMapped.push(skillSlug);
+      } else if (relation.systemAssetId) {
+        assert.ok(systemAssets.has(relation.systemAssetId), `${skillSlug} references missing System asset: ${relation.systemAssetId}`);
+        href = `/#system-project-asset-${relation.systemAssetId}`;
+      }
+      if (href) {
+        const target = new URL(href, "https://wly0829.cn");
+        const canonicalHref = `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
+        assert.ok(skillHtml.includes(`href="${canonicalHref}"`), `${skillSlug} does not link to ${canonicalHref}`);
+      }
+    }
+  }
+  assert.ok(new Set(agentsMapped).size < skills.length / 2, "Skills were blindly assigned to .agents");
+  const agentsHtml = await readFile(path.join(projectRoot, "dist", "projects", "agents", "index.html"), "utf8");
+  assert.ok(projectReferenceLinks.agents.some((item) => item.href === "/rules"));
+  assert.ok(agentsHtml.includes('href="/rules/"'), ".agents project does not link to current Rules");
+  const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  assert.doesNotMatch(systemHtml, /<a(?:\s|>)[^>]*class="system-project-asset-card"/, "System project cards must not nest project and Skill anchors");
+  assert.match(systemHtml, /class="system-project-asset-actions"/);
+  assert.ok(systemHtml.includes('href="/skills/work-delivery/"'), "System work-delivery asset does not link to its Skill");
 });
 
 test("native routing public copy explains the Hook identity path without expanding authority", () => {
@@ -1976,6 +2025,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(runtimeSource, /searchCompactEntries\(searchEntries, query, scope\)/);
   assert.match(runtimeSource, /input\.value = query/);
   assert.match(runtimeSource, /查看全部 \$\{results\.length\} 条结果/);
+  assert.match(runtimeSource, /if \(!results\.length\)[\s\S]*?\}\s*if \(usesPartialAllIndex \|\| results\.length > 9\)/, "quick all-site misses must still expose the full-search route");
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
   assert.match(styleSource, /\.search-results-page h1\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*word-break:\s*break-word;/);
@@ -1989,7 +2039,6 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal((systemHtml.match(/data-system-scenario-tab=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-scenario-panel=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-dependency-node=/g) || []).length, systemDependencyNodes.length);
-  assert.equal((systemHtml.match(/data-system-relation/g) || []).length, systemDependencyRelations.length);
   for (const scenario of systemScenarios) assert.ok(systemHtml.includes(`id="system-scenario-${scenario.id}"`), `System scenario missing: ${scenario.id}`);
   for (const node of systemDependencyNodes) {
     assert.ok(systemHtml.includes(`id="system-node-${node.id}"`), `System node missing: ${node.id}`);
@@ -1998,7 +2047,6 @@ test("shared search scopes, project reading layers, Skills categories and System
       assert.ok(routePaths.includes(pathname), `System node ${node.id} points to a missing route: ${node.href}`);
     }
   }
-  for (const relation of systemDependencyRelations) assert.ok(systemHtml.includes(`id="system-relation-${relation.id}"`), `System relation missing: ${relation.id}`);
   for (const layer of systemEvidenceLayers) assert.ok(systemHtml.includes(layer.title), `System evidence layer missing: ${layer.id}`);
   for (const item of systemDirectoryIntroductions) assert.ok(systemHtml.includes(`id="system-directory-${item.id}"`), `System directory intro missing: ${item.id}`);
   assert.equal(systemRuleStories.length, 5);
@@ -2012,6 +2060,16 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectInventory.total);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectInventory.total);
   assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
+  assert.equal(systemProjectInventory.total, 48);
+  assert.deepEqual(
+    { publicCount: systemProjectInventory.publicCount, privateCount: systemProjectInventory.privateCount, localCloneCount: systemProjectInventory.localCloneCount, remoteOnlyCount: systemProjectInventory.remoteOnlyCount },
+    { publicCount: 27, privateCount: 21, localCloneCount: 45, remoteOnlyCount: 3 }
+  );
+  const githubInventoryText = JSON.stringify(githubIndexProject.currentSnapshot);
+  for (const expected of ["48", "27", "21", "45", "3"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
+  const workDeliveryAsset = systemProjectAssets.find((asset) => asset.id === "work-delivery-copilot");
+  assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility }, { title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE" });
+  assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "formal-materials")?.sourceIdentity, "sha256:d7ee4166428ce9693707b475e930a74b059b81610a1084eec495864ef258578d");
   const atlasMappingText = [...systemProjectSourceMap].sort((left, right) => left.assetId.localeCompare(right.assetId)).map((entry) => `${entry.assetId}=${entry.sourceIdentity}`).join("\n");
   assert.equal(`sha256:${createHash("sha256").update(atlasMappingText).digest("hex")}`, systemProjectInventory.mappingSha256);
   assert.match(systemProjectInventory.mappingSha256, /^sha256:[a-f0-9]{64}$/);

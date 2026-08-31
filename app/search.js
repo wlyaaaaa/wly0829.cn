@@ -108,6 +108,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       module.why,
       module.example,
       module.result,
+      compactSearchTopics(module.searchProjection),
       ...(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect]),
       ...Object.values(module.readerStates || {}),
       ...module.decisionImpact,
@@ -137,7 +138,7 @@ export const globalSearchEntries = [
       detail: rule.question,
       href: `/rules?rule=${rule.logicalId}`,
       aliases: ruleSearchAliases[rule.logicalId] || [],
-      compactSearch: compactSearchTopics(rule.searchProjection),
+      compactSearch: compactSearchTopics([rule.searchProjection, rule.plainLanguage, rule.example, rule.decisions]),
       search: [
         rule.logicalId,
         rule.purpose,
@@ -165,7 +166,7 @@ export const globalSearchEntries = [
       detail: `${item.title}：${outcome.value}`,
       href: `/skills/${item.slug}`,
       aliases: skillSearchAliases[item.slug] || [],
-      compactSearch: compactSearchTopics(item.searchProjection),
+      compactSearch: compactSearchTopics([item.searchProjection, item.useWhen, outcome.example, guide.failures.map((failure) => failure[0])]),
       search: [
         item.title,
         item.status,

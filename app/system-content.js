@@ -1,15 +1,11 @@
 import {
   systemActiveAutomations,
-  systemComposedWorkflows,
   systemDependencyNodes,
-  systemDependencyRelations,
   systemEvidenceLayers,
   systemHomeHero,
   systemProjectDomains,
   systemScenarios
 } from "./system-home-content.js";
-
-const systemNodeTitles = new Map(systemDependencyNodes.map((node) => [node.id, node.title]));
 
 export const systemSearchEntries = [
   {
@@ -38,15 +34,6 @@ export const systemSearchEntries = [
     aliases: [],
     compactSearch: `${item.process} ${item.delivery}`,
     search: `${item.process} ${item.delivery}`
-  })),
-  ...systemComposedWorkflows.map((workflow) => ({
-    type: "组合工作流",
-    title: workflow.title,
-    detail: `${workflow.request}｜${workflow.delivery}`,
-    href: `/#system-composed-workflow-${workflow.id}`,
-    aliases: [],
-    compactSearch: `${workflow.path.join(" ")} ${workflow.unavailable}`,
-    search: `${workflow.path.join(" ")} ${workflow.unavailable} ${workflow.evidence}`
   })),
   ...systemProjectDomains.map((domain) => ({
     type: "系统版图",
@@ -78,15 +65,6 @@ export const systemSearchEntries = [
     aliases: node.searchAliases || [],
     compactSearch: `${node.subtitle} ${node.detail}`,
     search: `${node.lane} ${node.subtitle} ${node.detail}`
-  })),
-  ...systemDependencyRelations.map((relation) => ({
-    type: "系统关系",
-    title: relation.label,
-    detail: relation.detail,
-    href: `/#system-relation-${relation.id}`,
-    aliases: [],
-    compactSearch: relation.nodes.map((id) => systemNodeTitles.get(id) || id).join(" "),
-    search: relation.nodes.join(" ")
   })),
   ...systemEvidenceLayers.map((layer) => ({
     type: "验证层",
