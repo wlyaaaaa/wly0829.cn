@@ -3,6 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const cacbSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T04:13:00Z",
   label: "评测产品结构与 task-handle 绑定已在源码形成；当前提交 CI lint 未闭合，本页不发布受测配置结果",
+  boundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
   metrics: [
     { label: "核心模块", value: "47" },
     { label: "数据合同", value: "25" },
@@ -35,15 +36,16 @@ export const cacbProject = {
   cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
   cardStatusTone: "pass",
   ...cacbSnapshot,
+  searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先冻结题目和验收标准，为每次尝试准备全新的工作区，再由参与者之外的验证器检查真实文件、行为、测试和修改范围。最后得到的是一份可复查的证据：做成了什么、问题在哪一层、哪些还不能下结论，而不是公开比较受测对象。",
+  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它把证据分成两条车道：一条核对精确 model（模型）、provider（提供方）、version（版本）和 harness（执行环境）当前公开的官方能力、可用性、价格及可比外部证据；另一条只记录本地 Codex 在冻结任务中的真实执行与验证。先判断是否具备资格，再看任务能力与经济性，最后才形成精确范围内的路由建议；任何一条缺证据都保持未知，不填成零，也不与另一条混算。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。CACB 把任务、输入、workspace、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”误当成真实能力。",
-  plainExample: "例如我要检查一套新的 Agent 执行配置能否完成长程工程任务。CACB 先复制同一份冻结任务到独立 workspace，执行期间不泄露隐藏答案；结束后由固定验证器重放测试、核对文件范围和终态。如果只是基础设施中断，它不会把结果写成能力失败。",
-  result: "我得到一份可复查的结果：这次做成了什么、哪里失败、失败属于任务、执行环境还是证据链，以及哪些仍不能下结论。",
+  plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方是否支持该模型、当前 provider 和 version、可用地区或账号条件、公开价格以及外部比较是否真的可比；本地车道再用冻结任务测它在当前环境里做出了什么。两条证据分别成表，先过资格门，再讨论能力和经济性；缺价格或外部证据时写未知，不把空白当成零。",
+  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份与当前官方/外部证据，benchmark report（基准报告）记录本地任务实测与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。",
   readerStates: {
-    pass: "任务、输入、允许范围、最终产物和独立验收相互匹配时，生成一份可重放的能力证据。",
-    problem: "产物错误、越界修改、任务未完成或验收失败时，分别说明问题属于任务、能力还是执行环境。",
-    unavailable: "缺少任务身份、完整产物、最终状态或验收输入时保留无法判断，等待同一次执行恢复或重新取得完整证据。"
+    pass: "官方外证身份闭合、本地任务证据闭合且二者范围可比时，分别生成模型证据卡与基准报告，再形成有条件的综合判断。",
+    problem: "产物错误、越界修改、任务未完成、价格口径不可比或外部证据对象不一致时，分别标出受影响车道和失败平面。",
+    unavailable: "缺少精确身份、当前官方能力/价格、完整产物、终态或验收输入时保留无法判断；缺项不填零，也不阻断其他已闭合层的独立说明。"
   },
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
@@ -53,6 +55,9 @@ export const cacbProject = {
     { title: "整条证据必须属于同一次执行", detail: "身份、任务、工作区、动作、产物和终态彼此绑定，旧回执不能跨版本或跨候选复用。" },
     { title: "失败先归到正确层", detail: "能力问题、题目缺陷、执行环境故障和证据不足分别记录，不把基础设施中断算成能力差。" },
     { title: "证据不完整就不下结论", detail: "单次通过只证明精确任务、配置和版本；缺终态或缺验证时保持无法判定。" },
+    { title: "当前官方外证与本地实测分车道", detail: "模型、提供方、版本、harness、能力、可用性、价格与可比外证单独核验；本地任务测量只说明真实执行，不互相补空白。" },
+    { title: "先过资格，再谈能力和经济性", detail: "资格不成立时不进入路由建议；能力与成本分别保留口径，缺失数据保持未知而不是归零。" },
+    { title: "三份交付各有责任", detail: "模型证据卡回答测的是谁，基准报告回答本地做成什么，综合判断报告才回答精确范围内怎样选。" },
     { title: "评测帮助人选择，不替人决定", detail: "结果不会自动改写全局模型、能力路由、授权或项目 Owner 的现实选择。" },
     { title: "通用智能是被检验的能力，不是本项目自研", detail: "理解、推理、工具和代码执行来自已集成的外部 AI/智能体能力；CACB 负责冻结任务、绑定身份、验证产物、归因失败和管理证据。" }
   ],
@@ -63,13 +68,17 @@ export const cacbProject = {
     "把能力问题、任务问题、执行环境问题和证据不足分开，避免错误归因",
     "保存可重放的 manifest、receipt、hash 和归档，使结果能被独立复核",
     "用 schema 约束证据包和报告结构，避免不同执行路线各写一套口径",
-    "把公开研究、资格、能力、经济性和最终决策证据分层，避免一个局部结果越级替代整体选择",
+    "把精确模型/提供方/版本/harness 的当前官方能力、可用性、价格和可比外证，与本地 Codex 真实测量分成两条证据车道",
+    "按资格、能力、经济性和范围内路由建议分层，避免一个局部结果越级替代整体选择",
+    "分别交付模型证据卡、基准报告和综合判断报告，保留缺失项而不归零、不混算",
     "为新增执行方式提供 onboarding（接入验收），但不自动替用户做选择"
   ],
   exclusions: [
     "本公开页不展示受测配置名单、比较结果、数字结论或先后顺序",
     "不公开私有任务变体、隐藏答案、原始执行记录、系统提示或机器快照",
     "不把速度、消耗或工具次数当成正确性的替代品",
+    "不把官方宣传、价格表或外部比较冒充本地任务实测，也不让本地单次结果替代当前官方可用性研究",
+    "不把能力、经济性、外部指标或缺失项混成一个看似完整的数字；缺证据保持未知",
     "不因一次执行成功或失败就宣称长期稳定能力",
     "不自动改写全局能力路由、授权、安全边界或项目 Owner 决策",
     "不作为后台服务、自动测试队列、定时任务或持续同步系统"
@@ -89,12 +98,15 @@ export const cacbProject = {
   ],
   operatingFlow: [
     { title: "定义能力问题", detail: "先把现实需求写成可以验收的任务家族，说明什么是完整结果、允许什么、禁止什么。" },
+    { title: "建立当前官方与外部证据车道", detail: "对精确模型、provider、version 和 harness 核对官方能力、可用条件、价格日期与单位，并审查外部证据的任务、环境和口径是否可比。" },
     { title: "冻结任务与验证材料", detail: "固定可见 fixture、案例顺序、schema、隐藏 verifier 和版本 hash；执行开始后不原地改题。" },
     { title: "创建唯一 workspace", detail: "每个执行配置取得独立目录；任务 cwd 必须覆盖所有输出，路径越界或共享写入失败关闭。" },
     { title: "绑定身份、输入与范围", detail: "用 host（宿主）证据绑定实际执行身份、任务 capsule、workspace 和允许工具，不能靠参与者自报。" },
     { title: "执行连续 episode", detail: "同一任务按固定顺序完成整组案例，保留恢复、压缩和终态证据，不合并不同尝试的半成品。" },
     { title: "运行确定性验证", detail: "验证器在参与者之外重放测试、检查文件和范围；隐藏材料不进入候选进程。" },
     { title: "分类失败平面", detail: "分别记录能力、任务、执行环境和证据问题；证据不足保持 Unknown（未验证）。" },
+    { title: "分别生成两条证据交付", detail: "模型证据卡只写精确身份与当前官方/可比外证；基准报告只写本地冻结任务、真实产物、测量与失败平面，缺项不填零。" },
+    { title: "形成分层综合判断", detail: "综合判断报告按资格、能力、经济性和范围内路由建议逐层引用前两份交付；不能比较的口径保持并列或未知。" },
     { title: "归档并生成可公开说明", detail: "先把产物、trace、receipt 和 hash 收入项目归档，再从中筛选不含私有样本与受测比较结果的结构化说明。" }
   ],
   components: [
@@ -106,17 +118,25 @@ export const cacbProject = {
     { name: "Deterministic verifier（确定性验证器）", responsibility: "检查候选文件、隐藏属性、测试和范围变化。", implementation: "验证器独立进程、硬超时、隐藏材料隔离和结果 hash。" },
     { name: "Failure classifier（失败分类器）", responsibility: "区分能力、任务、执行环境与证据问题。", implementation: "不把 timeout、missing evidence、invalid harness 或未完成统一写成失败。" },
     { name: "Schema & report layer（数据合同与报告层）", responsibility: "把证据包、案例、归档和说明约束成可重放格式。", implementation: "25 个 schema 与报告模板；公开说明保留产品结构和验证事实，私有 payload、受测配置与比较结果不进入网页。" },
+    { name: "Model evidence card（模型证据卡）", responsibility: "记录精确模型、提供方、版本、harness 与当前官方能力、可用性、价格和可比外证。", implementation: "每条事实带官方来源、观察日期、单位、适用条件和可比性；缺项保持 Unknown。" },
+    { name: "Benchmark report（基准报告）", responsibility: "记录本地 Codex 冻结任务中的真实执行、产物、验证、消耗口径与失败平面。", implementation: "只消费同一次 run 的本地证据，不用官方说明或外部结果填补本地未测项。" },
+    { name: "Comprehensive judgment report（综合判断报告）", responsibility: "把资格、能力和经济性转成精确范围内的路由建议。", implementation: "逐层引用前两份交付，不混算不同口径，不把缺失证据归零，也不自动改写全局路由。" },
     { name: "Fast model flow（快速接入流）", responsibility: "为新执行配置准备 workspace、完成门和盲化审阅包。", implementation: "准备、完成检查、证据包与代表选择分开，不由参与者 final answer 直接放行。" }
   ],
   usageExamples: [
-    { ask: "给一套新的 Agent 执行方式做可复现验收", effect: "为它准备同一版本的任务和独立工作区，完成后由参与者之外的固定验收检查真实产物。" },
-    { ask: "为什么任务回答完成了却没有结果", effect: "检查每个案例是否真正结束、产物是否存在、验收是否闭合；缺任何一层都不相信完成总结。" },
-    { ask: "这次失败是能力问题还是执行环境问题", effect: "把产物错误、任务缺陷、身份/权限/工具故障和证据缺失分别归因，不把基础设施中断算成能力差。" },
-    { ask: "换一个执行方式能否沿用同一套验证", effect: "先比较它能否接收同一任务并产出同一种可验结果，再做代表性预演；验收真正兼容后才接入。" },
-    { ask: "怎样防止旧执行记录污染新结果", effect: "每次使用全新工作区和执行身份，旧产物、旧回执和上次未完成状态都不能借给新结果。" },
-    { ask: "怎样保留失败样本供以后诊断", effect: "执行结束后归档代码、过程回执和失败原因并核对完整性，再释放临时工作区。" }
+    { moduleSlug: "question-bank", ask: "给一套新的 Agent 执行方式做可复现验收", effect: "为它准备同一版本的任务和独立工作区，完成后由参与者之外的固定验收检查真实产物。" },
+    { moduleSlug: "deterministic-verification", ask: "为什么任务回答完成了却没有结果", effect: "检查每个案例是否真正结束、产物是否存在、验收是否闭合；缺任何一层都不相信完成总结。" },
+    { moduleSlug: "failure-reporting", ask: "这次失败是能力问题还是执行环境问题", effect: "把产物错误、任务缺陷、身份/权限/工具故障和证据缺失分别归因，不把基础设施中断算成能力差。" },
+    { moduleSlug: "identity-evidence", ask: "换一个执行方式能否沿用同一套验证", effect: "先比较它能否接收同一任务并产出同一种可验结果，再做代表性预演；验收真正兼容后才接入。" },
+    { moduleSlug: "campaign-workspace", ask: "怎样防止旧执行记录污染新结果", effect: "每次使用全新工作区和执行身份，旧产物、旧回执和上次未完成状态都不能借给新结果。" },
+    { moduleSlug: "failure-reporting", ask: "怎样保留失败样本供以后诊断", effect: "执行结束后归档代码、过程回执和失败原因并核对完整性，再释放临时工作区。" },
+    { moduleSlug: "identity-evidence", ask: "某个模型现在到底能不能在这个 harness 里用？", effect: "模型证据卡核对精确模型、provider、version、harness、当前官方能力和可用条件；本地是否做成任务仍交给独立基准报告。" },
+    { moduleSlug: "failure-reporting", ask: "官方价格和本地实测成本为什么要分开？", effect: "官方价目按日期、单位和适用条件记录，本地消耗按冻结任务真实测量；综合判断只在口径可比时讨论经济性。" },
+    { moduleSlug: "failure-reporting", ask: "缺失外部证据能不能填 0？", effect: "不能。缺项保持 Unknown，并在综合判断中说明它阻断哪一层；不把未知写成零，也不与本地能力证据混算。" }
   ],
   evidenceLayers: [
+    { layer: "Current official and external evidence（当前官方与外部证据）", proves: "在给定观察日，精确模型、提供方、版本和 harness 的官方能力、可用条件、价格口径及外部证据可比性。", doesNotProve: "不证明该配置在本地 Codex 冻结任务中真实做成了什么，也不填补本地未测项。" },
+    { layer: "Local Codex measurement（本地 Codex 测量）", proves: "同一次冻结任务的身份、workspace、真实产物、验证、消耗口径与失败平面。", doesNotProve: "不自动证明当前官方可用性、公开价格或其他 benchmark 与本地任务可比。" },
     { layer: "Source（源码）", proves: "PRIVATE main 包含问题库、campaign、workspace、verifier、证据、归档和报告实现。", doesNotProve: "当前所有执行路线都可用或任何受测配置已形成结论。" },
     { layer: "Schemas（数据合同）", proves: "25 个 schema 约束任务、执行、证据、归档和报告字段。", doesNotProve: "每个 producer 都已生成完全合格的实例。" },
     { layer: "Historical focused tests（历史核心回归）", proves: "e6f7581 观察代的 11 个核心测试文件曾有 162 项通过。", doesNotProve: "这些结果适用于当前 59b0b5c，或当前完整执行链已经闭合。" },
@@ -146,6 +166,13 @@ export const cacbModules = [
     teaser: "把工程实现、诊断、连续性、证据和恢复要求写成版本化案例；可见输入足够完成任务，隐藏检查只负责验收。",
     status: "问题库、公开案例与版本化加载器有源码和核心回归；私有变体不进入网页",
     statusTone: "pass",
+    searchAliases: ["同一个题怎么公平复现", "任务是不是谜语人", "隐藏验证会不会泄露答案", "现实工程问题怎么进入问题库"],
+    searchProjection: {
+      intents: ["把现实工程需求写成可完成的评测任务", "判断题目是否依赖作者私有知识", "设计不限定实现的隐藏验收"],
+      entities: ["question bank", "task family", "fixture", "holdout", "oracle", "provenance"],
+      relations: ["可见输入必须足以独立完成任务", "隐藏检查只验证行为属性而不泄露答案", "任务变化创建新版本而不改写旧证据"],
+      failureRecovery: ["作者知识缺失时补齐上下文或撤题", "隐藏检查过拟合代码形状时改验行为", "来源许可不清时拒绝进入正式问题库"]
+    },
     value: "我能反复用同一任务边界检验不同 Agent 执行方式，而不是每次临时出题、临时改验收。",
     why: "题目太依赖作者记忆会变成猜谜；把隐藏答案直接给参与者又失去检验价值。问题库必须同时做到可完成和不可针对。",
     example: "一个仓库修复案例向参与者提供代码、测试和目标，但不提供隐藏断言；验证器最后检查行为而不是特定实现写法。",
@@ -211,6 +238,13 @@ export const cacbModules = [
     teaser: "把整组案例、fixture、顺序和验证版本冻结，再为每次执行复制唯一 workspace；不同尝试不共享半成品。",
     status: "campaign / workspace / archive 结构已形成；当前提交的 CI lint 门仍未闭合",
     statusTone: "pass",
+    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode"],
+    searchProjection: {
+      intents: ["为一次评测冻结任务并创建独立工作区", "判断中断后能否精确恢复", "防止旧产物或不同尝试拼接"],
+      entities: ["campaign", "workspace", "episode", "capsule", "terminal state", "archive hash"],
+      relations: ["每次执行只属于一个唯一workspace", "同一episode的案例按固定顺序连续完成", "临时workspace只有归档校验后才能释放"],
+      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "无法恢复同一session时创建新的完整尝试"]
+    },
     value: "我能确认每次执行面对的是同一任务，又不会因为共享目录、旧文件或不同尝试拼接而污染结果。",
     why: "直接在同一仓库反复运行会留下缓存和旧产物；中断后换 workspace 继续也会让证据无法解释。",
     example: "一次十案例 episode 中途暂停，只有同一 session 和 workspace 能继续；无法精确恢复时，新 workspace 必须从头运行整组案例。",
@@ -277,6 +311,13 @@ export const cacbModules = [
     teaser: "把谁执行、拿到什么任务、在哪个 workspace、做了哪些动作、最后怎样结束，绑定为不可跨执行借用的证据。",
     status: "证据 schema 与核心 binding 路径存在；部分历史 native envelope 在完整回归中未闭合",
     statusTone: "mixed",
+    searchAliases: ["当前模型provider版本到底是什么", "某模型在这个harness里现在能不能用", "模型证据卡包含什么", "task id和run id为什么都要绑定", "官方能力和本地实测怎么分开"],
+    searchProjection: {
+      intents: ["确认被研究和被测量的是哪个精确配置", "核对当前官方能力可用性与价格证据", "把本地任务身份动作产物和终态绑定"],
+      entities: ["model", "provider", "version", "harness", "WorkerHandle", "task id", "run id", "model evidence card"],
+      relations: ["模型证据卡记录当前官方与外部证据", "本地证据绑定同一次task和run", "官方可用性研究不能替代本地任务实测"],
+      failureRecovery: ["模型或harness身份不精确时不进入资格判断", "task或run不匹配时拒绝借用旧handle", "宿主证据缺失时保持Unknown而不靠参与者自报"]
+    },
     value: "我能区分“这个配置真的完成了任务”和“报告里自称完成”，也不会把一次执行证据借给另一次。",
     why: "参与者可以写错自己的身份，宿主事件也会随版本变化；只看最终文本无法证明任务、workspace 和动作属于同一次执行。",
     example: "执行返回完整文件，但 host receipt 显示任务 capsule 或 workspace 不匹配。系统保留产物供诊断，却不形成能力结论。",
@@ -342,6 +383,13 @@ export const cacbModules = [
     teaser: "验证器在隔离进程中检查文件、行为、测试、隐藏属性和修改范围；不把最终回答或进程退出当成成功。",
     status: "Verifier、公开案例和 CLI 核心路径存在；本页不执行私有 holdout",
     statusTone: "pass",
+    searchAliases: ["回答说完成为什么还没结果", "怎样验证真实产物", "隐藏检查会不会限定写法", "越界修改怎么发现"],
+    searchProjection: {
+      intents: ["验证Agent是否真的交付了可运行产物", "检查候选是否越过允许文件范围", "用隐藏属性避免只针对公开测试"],
+      entities: ["verifier", "hidden property", "sandbox", "artifact", "scope audit", "replay"],
+      relations: ["验证器运行在参与者之外", "公开测试通过仍要检查隐藏属性和修改范围", "最终回答与进程退出不能替代产物验证"],
+      failureRecovery: ["verifier指纹漂移时进入新版本", "候选访问隐藏材料时标记污染", "验证超时后终止子进程并保留具体状态"]
+    },
     value: "我得到的是能重放的客观验收，而不是对参与者文案的主观印象。",
     why: "参与者可以看见公开测试并针对写法硬编码；验证器若和候选代码同进程，也可能泄露 oracle 或被修改。",
     example: "候选通过公开测试，但修改了禁止目录。隐藏 verifier 会让这次执行失败，并把范围问题与功能问题分开。",
@@ -407,10 +455,17 @@ export const cacbModules = [
     teaser: "把能力、任务、执行环境和证据问题分开，先保存可重放 evidence，再生成 schema-backed（schema 约束）的公开安全说明。",
     status: "归档、failure semantics 与公开 report schema 的核心回归通过；完整历史报告链存在未闭合项",
     statusTone: "mixed",
+    searchAliases: ["官方价格和本地实测成本为什么分开", "缺失外部证据能不能填0", "基准报告和综合判断报告有什么区别", "资格能力经济性怎样形成路由建议", "失败是模型还是环境"],
+    searchProjection: {
+      intents: ["区分能力任务执行环境和证据失败", "分别生成模型证据卡与本地基准报告", "按资格能力经济性形成范围内路由建议", "处理价格或外部证据缺失"],
+      entities: ["failure plane", "model evidence card", "benchmark report", "comprehensive judgment report", "qualification", "economics", "Unknown"],
+      relations: ["模型证据卡回答精确身份和当前官方外证", "基准报告回答本地真实任务表现", "综合判断按资格到能力到经济性引用两条车道", "缺失证据保持Unknown而不归零"],
+      failureRecovery: ["基础设施失败时不形成能力结论", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "任务缺陷进入新版本后重新完整评测"]
+    },
     value: "我能知道一次执行到底哪里出了问题，并保留足够证据修任务或执行环境，而不是只看到红灯。",
     why: "把 timeout、权限、身份缺失、题目缺陷和候选代码错误都写成“能力失败”，会直接污染后续判断。",
-    example: "执行因 workspace 权限失败，没有产生可验证产物。报告把它记为执行环境问题，不形成能力结论；修好后运行新的完整 episode。",
-    result: "得到失败分类、逐案例状态、证据 hash、归档位置、已知限制和可重放命令组成的报告框架。",
+    example: "如果官方页面能确认某精确模型在目标 harness 可用，却没有当前价格，而本地 episode 又因 workspace 权限失败，两条车道分别写：官方资格可确认、价格未知；本地执行环境无效、没有能力结论。未知不填零，基础设施失败也不冒充能力差。",
+    result: "得到模型证据卡、基准报告和综合判断报告三份交付：前两份各守自己的证据车道，后一份按资格→能力→经济性→范围内路由建议引用它们，并列出所有未知和重验条件。",
     readerStates: {
       pass: "证据闭合后，报告准确写出任务范围、结果、失败平面和不能推导的结论。",
       problem: "能力或任务失败时保留逐案例事实，不被一个总结果覆盖。",
@@ -419,6 +474,8 @@ export const cacbModules = [
     decisionImpact: [
       "基础设施问题不转成能力问题。",
       "任务缺陷进入新版本，不回写旧结果。",
+      "当前官方能力、可用性、价格和可比外证与本地 Codex 测量分开保存，不用一条车道补另一条空白。",
+      "先判断资格，再说明能力与经济性，最后才给精确范围内的路由建议；任何缺失证据都不归零。",
       "先归档，后释放临时 workspace。",
       "公开报告只含安全聚合与可复现元数据。"
     ],
@@ -430,11 +487,14 @@ export const cacbModules = [
       "公开报告只解释产品与证据边界，不消费受测配置比较结果。"
     ],
     flow: [
+      "核对精确模型、provider、version、harness 与官方证据观察日。",
+      "把当前能力、可用性、价格单位和外部可比性写入模型证据卡。",
       "收集案例与终态。",
       "验证 evidence closure。",
       "判定 failure plane。",
       "归档产物与 hash。",
-      "生成 schema-backed 报告。",
+      "把本地任务实测和失败平面写入基准报告。",
+      "按资格、能力、经济性和适用范围生成综合判断报告。",
       "应用 public/private 边界。",
       "列出重验触发。"
     ],
@@ -446,10 +506,14 @@ export const cacbModules = [
     boundaries: [
       "网页不展示任何受测配置结果或数字比较。",
       "私有 raw trace、prompt、holdout 和机器快照不公开。",
+      "官方说明、外部 benchmark 与本地 Codex 任务证据不得合并成一条来源；仅在身份、任务、环境和计量口径可比时建立关系。",
+      "能力结论、经济性和路由建议是不同层；缺价格、缺外证或缺本地测量时保留 Unknown，不填零、不混算。",
       "报告建议不自动改变全局规则或能力路由。"
     ],
     failures: [
       { condition: "证据文件缺失或 hash 不符", response: "报告保持证据不足并保留 blocker。" },
+      { condition: "官方能力、价格或外部证据已过期", response: "只把对应模型证据卡字段降为 Unknown，按当前官方来源重查；不删除仍有效的本地任务证据。" },
+      { condition: "官方价格与本地消耗口径不可比", response: "分别保留单位、日期和条件，不换算、不混算，也不据此形成经济性结论。" },
       { condition: "任务本身有缺陷", response: "撤出受影响案例并创建新版本。" },
       { condition: "公开输出含私有 payload", response: "PUBLIC gate 阻断，不做界面隐藏式补救。" }
     ],

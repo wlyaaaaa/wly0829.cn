@@ -3,6 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const pcPanelHubSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T11:19:19Z",
   label: "PUBLIC 源码、纯软件回归、主机发送链与 HS2 浮层落点有新鲜证据；实体动态壁纸沿用 2026-08-30 本人历史确认",
+  boundary: "2026-08-31 本轮仅确认主机发送链、Wallpaper Engine 进程与 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，TURZX 实体像素、冻结恢复和睡眠唤醒仍需现场观察",
   metrics: [
     { label: "当前帧", value: "2748" },
     { label: "失败", value: "0" },
@@ -46,6 +47,7 @@ export const pcPanelHubProject = {
   cardStatus: "双副屏产品链在运行；HS2 浮层当前落点健康，实体动态壁纸沿用 2026-08-30 本人历史确认",
   cardStatusTone: "pass",
   ...pcPanelHubSnapshot,
+  searchAliases: ["机箱副屏冻住怎么办", "HS2水冷屏通知浮层", "副屏睡眠后恢复", "A108端点不见了怎么接线", "双副屏遥测和事件"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库并使用 MIT 许可；仓库只发布项目源码、脚本、合同与公开示例，厂商二进制明确不属于该许可。端口、协议、硬件型号、进程名和状态等技术事实不按字段类别自动隐藏；只有具体值实际含私人正文、身份隐私或可复用凭据时才省略。",
   summary: "PC Panel Hub 把两块实体副屏组成一条不打扰主工作的桌面信息通道。竖直机箱屏一直显示我需要随时瞥一眼的硬件、流畅度、网络、磁盘和后台状态；曲面水冷屏平时保留动态壁纸，只有媒体、任务、手机事件或真正需要注意的告警出现时，才叠加有限数量的透明卡片。两块屏不重复，也不把监控窗口搬回主屏。",
   why: "主屏上的监控窗口会挡工作，也容易在问题发生前被关掉；实体副屏又可能出现“任务仍在运行、主机仍在写串口，但画面已经冻结”的假健康。这个项目把数据可信度、渲染、传输、实体观察和恢复分层，使我既能随时看见关键状态，也能知道哪一层真的被证明。",
@@ -193,12 +195,14 @@ export const pcPanelHubProject = {
     { name: "纯软件测试与 demo", responsibility: "验证指标口径、渲染、HTTP、节拍、浮层布局、恢复合同和公开发布边界。", implementation: "fixture 值和 demo 场景不触碰设备，也不会被标成实体屏证据。" }
   ],
   usageExamples: [
-    { ask: "机箱屏是不是又冻住了？", effect: "先看唯一写入者、heartbeat 年龄、发送动作、节拍与最近全帧，再决定是否运行有界 repair；最终仍观察实体时钟。" },
-    { ask: "为什么网络数字和任务管理器不一样？", effect: "确认项目只统计物理公网出口，TUN、Tailscale、Hyper-V 和 VMware 等虚拟接口不会叠加。" },
-    { ask: "没开游戏为什么 FPS 是空的？", effect: "把新鲜的 no game frames（无游戏帧）显示为等待状态，而不是 0 FPS 或采集器故障。" },
-    { ask: "来通知时 HS2 会不会被卡片塞满？", effect: "最多六卡按优先级选择，最新手机通知、活动来电、任务和硬件告警有不同寿命与保留规则。" },
-    { ask: "主屏休眠后窗口为什么跑到小屏？", effect: "只有 HS2 Secondary（副显示器）已验证后才启用窗口保护；主屏断开时先最小化普通应用，不改主屏或远程虚拟屏配置。" },
-    { ask: "睡眠回来副屏为什么没恢复？", effect: "看门狗按当前已枚举模式恢复：已有 Windows Secondary 就原位验，只有 native 模式才在稳定后尝试一次提升，失败即回到原生亮屏。" }
+    { moduleSlug: "serial-transport", ask: "机箱屏是不是又冻住了？", effect: "先看唯一写入者、heartbeat 年龄、发送动作、节拍与最近全帧，再决定是否运行有界 repair；最终仍观察实体时钟。" },
+    { moduleSlug: "telemetry-trust", ask: "为什么网络数字和任务管理器不一样？", effect: "确认项目只统计物理公网出口，TUN、Tailscale、Hyper-V 和 VMware 等虚拟接口不会叠加。" },
+    { moduleSlug: "telemetry-trust", ask: "没开游戏为什么 FPS 是空的？", effect: "把新鲜的 no game frames（无游戏帧）显示为等待状态，而不是 0 FPS 或采集器故障。" },
+    { moduleSlug: "case-panel-rendering", ask: "机箱屏上的长名称把版面挤坏了怎么办？", effect: "渲染器在固定 480×1920 画布中有界换行或截断，慢预览可以丢弃，但不能拖住主发送循环。" },
+    { moduleSlug: "hs2-overlay", ask: "来通知时 HS2 会不会被卡片塞满？", effect: "最多六卡按优先级选择，最新手机通知、活动来电、任务和硬件告警有不同寿命与保留规则。" },
+    { moduleSlug: "power-recovery", ask: "主屏休眠后窗口为什么跑到小屏？", effect: "只有 HS2 Secondary（副显示器）已验证后才启用窗口保护；主屏断开时先最小化普通应用，不改主屏或远程虚拟屏配置。" },
+    { moduleSlug: "power-recovery", ask: "睡眠回来副屏为什么没恢复？", effect: "看门狗按当前已枚举模式恢复：已有 Windows Secondary 就原位验，只有 native 模式才在稳定后尝试一次提升，失败即回到原生亮屏。" },
+    { moduleSlug: "power-recovery", ask: "A108 或显示端点不见了，物理接线怎么恢复？", effect: "先关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时补 SATA。改线后只在唯一 8091、port 2 controller、port 3 LED 拓扑连续两次健康时重新绑定；这条顺序来自项目合同，本页没有执行实体接线实测。" }
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "PUBLIC main 定义两块屏、数据来源、渲染、协议边界、事件规则、恢复和公开安全约束。", doesNotProve: "本机依赖已就绪、任务正在运行或实体设备正常。" },
@@ -236,6 +240,13 @@ export const pcPanelHubModules = [
     teaser: "把硬件、物理公网、磁盘、天气、FPS、前台和进程排行汇成带新鲜度与 trust（可信度）的本地快照，来源不确定时失败关闭。",
     status: "84 项指标测试通过，运行依赖就绪；本轮未逐值核验所有真实传感器",
     statusTone: "mixed",
+    searchAliases: ["为什么网络数字和任务管理器不一样", "没开游戏FPS为什么空", "副屏指标是不是旧数据", "物理公网出口怎么选"],
+    searchProjection: {
+      intents: ["判断副屏指标是否来自当前可信来源", "解释物理公网速率为什么不叠加虚拟接口", "区分没有游戏帧与FPS采集故障"],
+      entities: ["CPU", "GPU", "FPS", "TimeAudit", "物理公网出口", "trust"],
+      relations: ["每个值同时绑定来源和新鲜度", "物理公网出口排除隧道与虚拟交换接口", "新鲜无游戏帧是等待状态而不是零"],
+      failureRecovery: ["来源歧义时返回空值而不猜数字", "慢来源超时后复用最后好快照并降低可信度", "单字段失败时隔离该字段并保留其他数据"]
+    },
     value: "屏幕上的每个数字不仅要“能取到”，还要知道它来自哪里、多久前更新、是不是估算或空闲状态。",
     why: "虚拟网卡叠加、CPU 口径混用、探针陈旧、无游戏帧被写成 0 FPS，都会让漂亮面板给出错误判断。",
     example: "网络有 Tailscale 和虚拟机时，系统只选择唯一物理公网出口；无法唯一确认就不给出合计速率，而不是把多个接口相加。",
@@ -300,6 +311,13 @@ export const pcPanelHubModules = [
     teaser: "把可信 snapshot（快照）排成适合竖屏远读的时钟、CPU/GPU、FPS、内存、网络、磁盘和进程卡片，并让慢 HTTP 或 PNG 预览不阻塞真实发送。",
     status: "renderer、HTTP pipeline 与 preview 回归通过；gallery 使用合成预览，不是实体照片",
     statusTone: "mixed",
+    searchAliases: ["机箱屏长文字怎么显示", "480×1920面板怎么渲染", "快照超时屏幕会卡住吗", "PNG预览能证明实体屏吗"],
+    searchProjection: {
+      intents: ["查看480×1920机箱屏怎样组织信息", "处理长名称空值和慢快照", "判断软件PNG能证明到哪一层"],
+      entities: ["480×1920", "Renderer", "GDI+", "snapshot", "PNG preview", "wall-clock deadline"],
+      relations: ["渲染器把带可信度的快照变成固定像素位图", "诊断预览与串口主循环解耦", "软件位图不能代替实体像素观察"],
+      failureRecovery: ["HTTP body超时后使用最后好快照", "预览编码失败时丢弃预览但继续发送", "构建失败时停止发送而不复用旧二进制"]
+    },
     value: "我不用在主屏打开监控窗口，也能一眼看到温度、负载、FPS、网络、磁盘和后台程序。",
     why: "480 像素宽的竖屏很容易字太小、长名称溢出、卡片空洞；预览编码或慢 HTTP 也可能反过来拖住实体刷新。",
     example: "磁盘名称很长、FPS 暂时为空时，版面仍保留可读层级和状态说明；异步写预览即使失败也不影响串口主路径。",
@@ -365,6 +383,13 @@ export const pcPanelHubModules = [
     teaser: "以 command 200 建完整画面基线、command 204 做有界增量，并用唯一写入者、发送上限、定期重开会话和 heartbeat 限制静默冻结。",
     status: "安装态 Hybrid 1 Hz heartbeat 新鲜且 failed=0；本轮保护 COM7，实体更新未重验",
     statusTone: "mixed",
+    searchAliases: ["机箱屏是不是冻住了", "1Hz混合刷新", "command 200和204区别", "串口写成功等于屏幕正常吗"],
+    searchProjection: {
+      intents: ["诊断机箱屏主机发送链是否冻结", "解释1Hz混合刷新为何同时需要全帧和差分", "判断串口成功是否等于实体屏正常"],
+      entities: ["command 200", "command 204", "COM", "heartbeat", "one writer", "device ACK"],
+      relations: ["command 200建立完整基线而command 204维持有界差分", "唯一写入者拥有目标串口", "主机写入成功不等于设备确认或实体像素正常"],
+      failureRecovery: ["旧写入者未退出时拒绝第二个writer", "发送超时后退出worker并由watchdog有界重建", "heartbeat缺恢复基线时判为不健康"]
+    },
     value: "主机每秒尝试发送并记录节拍，同时遇到驱动停滞或设备漏掉新会话时补一个完整全帧基线；实体时钟是否真的每秒变化仍靠现场观察。",
     why: "只发全帧约需 2.3 秒，无法做 1 Hz；只发未确认的增量又可能在设备漏帧后永久冻结。",
     example: "stream 重启后先 prime 并发两帧完整基线，再做增量；第 60、120、180 帧重开会话补全帧，之后每 900 帧再恢复一次。",
@@ -430,6 +455,13 @@ export const pcPanelHubModules = [
     teaser: "在唯一非主 2288×1048 显示器的动态壁纸上，以透明卡片显示媒体、任务、手机、音量、游戏和告警；没有真实内容就不创建空卡。",
     status: "本轮确认 Wallpaper Engine 进程与 2288×1048 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，完整恢复情景未重验",
     statusTone: "mixed",
+    searchAliases: ["来通知HS2会不会塞满", "HS2浮层跑到主屏怎么办", "动态壁纸和事件卡是什么关系", "2288×1048六卡布局"],
+    searchProjection: {
+      intents: ["理解HS2动态壁纸与透明事件卡怎样分工", "处理通知过多重复或过期", "防止浮层误落到主屏"],
+      entities: ["HS2", "2288×1048", "Wallpaper Engine", "CrystalOverlay", "event lifetime", "display binding"],
+      relations: ["动态壁纸提供背景而浮层只提供低频事件", "最多六卡按优先级寿命与去重选择", "目标显示器不唯一时不回退主屏"],
+      failureRecovery: ["显示器缺失或多解时停止旧浮层并等待", "单个通知来源异常时隔离该来源", "启动时旧通知只建立基线而不重新弹出"]
+    },
     value: "动态壁纸保持水冷副屏的视觉背景，低频但重要的信息只以透明卡片叠在上面；密集硬件指标仍留在机箱屏，不让两块屏重复。",
     why: "普通通知可能重复、过期或包含占位文字；卡片太多会越过曲面折线，显示器误选还可能把浮层放到主屏。",
     example: "三条手机通知、Steam、网易云和音量同时出现时，最多六卡，最新通知在底部；硬件告警和来电可抢占，暂时被挤出的计时卡暂停可见寿命。",
@@ -499,19 +531,28 @@ export const pcPanelHubModules = [
     teaser: "由一个长期 watchdog（看门狗）协调两块屏：保留已经成功枚举的模式、证明旧 owner 退出、限制 Secondary 尝试，并在连续失败后熔断。",
     status: "任务 Running、运行硬化回归通过；本轮未主动睡眠、关机、重启服务或操作 USB",
     statusTone: "mixed",
+    searchAliases: ["A108端点不见了怎么接线", "随附一分二Hub能不能带LCD", "OLED供电不足要接SATA吗", "8091端口2控制器端口3LED", "改接线后为什么要连续两次健康", "睡眠回来副屏没恢复"],
+    searchProjection: {
+      intents: ["恢复A108或显示端点缺失后的物理链路", "判断OLED应该接主板排针还是Hub", "在改线后重新确认唯一控制器和LED拓扑", "处理睡眠唤醒与显示漂移"],
+      entities: ["A108", "OLED USB主线", "USB 2.0 9-pin", "EDGE HUB", "SATA", "8091", "port 2 controller", "port 3 LED"],
+      relations: ["随附一分二Hub不支持LCD而官方EDGE HUB可承载目标链路", "供电不足时由SATA补充供电", "只有唯一8091与port 2控制器和port 3 LED拓扑连续两次健康才重新绑定"],
+      failureRecovery: ["端点缺失时先关机断电再检查物理接线", "拓扑歧义或健康检查不连续时保持未绑定", "实体恢复未执行时保留Unknown而不拿源码或进程冒充"]
+    },
     value: "副屏异常时只修受影响链路，不通过重启整机、反复切显示模式或重置整棵 USB 树碰碰运气。",
     why: "电源事件和设备重枚举容易产生双 watchdog、串口未释放、Windows 窗口被困小屏或每几十秒重建 GPU 拓扑。",
-    example: "HS2 启动时已是 Windows Secondary，就原位验证；若只有 native 模式，稳定 30 秒后只尝试一次提升，失败马上回原生亮屏并等下一 epoch。",
-    result: "得到一个无可见控制台的长期 Owner、明确的 Active/Suspend/Shutdown 行为、有界重试和不会扩大到无关设备的恢复路径。",
+    example: "若 A108 或显示端点消失，先正常关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时接上 SATA。重新上电后只接受唯一 8091、port 2 controller（控制器）与 port 3 LED 的拓扑，并连续两次检查健康后才换绑。",
+    result: "得到一个无可见控制台的长期 Owner、明确的 Active/Suspend/Shutdown 行为、有界重试，以及从安全断电、物理接线到唯一拓扑双次确认的完整恢复路径；源码规定了这条旅程，但本页没有实际拔插、改线或完成实体恢复 E2E（端到端验证）。",
     readerStates: {
       pass: "任务、精确进程、heartbeat、控制器模式与绑定均满足时维持当前输出。",
       problem: "进程死亡、假活、COM 停滞或显示漂移时，只恢复目标组件并回读新证据。",
-      unavailable: "控制器/端点/绑定缺失或歧义时保持安全模式，不发送模式命令、不碰 USB/PnP。"
+      unavailable: "控制器或端点缺失时停止软件恢复；需要物理处理则明确要求先关机断电，并在重新上电后用唯一拓扑连续两次健康检查决定是否换绑。"
     },
     decisionImpact: [
       "只有一个长期 watchdog 处理 resume；旧事件任务保持禁用。",
       "已有 Secondary 绝不先降级，native 每 epoch 只尝试一次提升。",
       "三次连续失败后 30 秒熔断，先证明旧 stream 释放 COM。",
+      "A108 或端点缺失进入物理恢复：断电后只用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，随附一分二 Hub 不承载 LCD；供电不足再接 SATA。",
+      "改变接线后，唯一 8091 + port 2 controller + port 3 LED 拓扑必须连续两次健康才允许换绑。",
       "普通恢复不重启 Hub、不删设备、不做 PnP scan，也不改物理主屏和远程虚拟屏。"
     ],
     problem: "解决双恢复 Owner、显示模式抖动、串口竞争、任务假成功退出、睡眠后窗口乱跑和过度 USB 修复。",
@@ -524,6 +565,9 @@ export const pcPanelHubModules = [
     flow: [
       "登录后启动唯一 watchdog。",
       "检查当前控制器模式、设备绑定和旧 owner。",
+      "若 A108 或显示端点缺失，停止软件恢复并正常关机、断开整机电源。",
+      "把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；不用随附一分二 Hub 承载 LCD，供电不足时接 SATA。",
+      "重新上电后核对唯一 8091、port 2 controller 和 port 3 LED，连续两次健康才更新绑定。",
       "按实际状态启动两块屏。",
       "持续检查 heartbeat、进程和电源事件。",
       "故障时熔断并精确恢复。",
@@ -537,10 +581,15 @@ export const pcPanelHubModules = [
     boundaries: [
       "修复入口会真实影响副屏，必须先核对精确目标；网站刷新只读。",
       "内部 USB 排针不得带电插拔。",
+      "随附一分二 Hub 不支持 LCD；只能使用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，供电不足时才补 SATA。",
+      "接线改变后的单次枚举不够；唯一 8091、port 2 controller、port 3 LED 拓扑必须连续两次健康才换绑。",
+      "上述接线与拓扑来自项目 source contract（源码合同）；本轮未关机、拔插、改线或执行物理恢复，不能写成实体实测通过。",
       "服务/进程回读不等于实体显示恢复。"
     ],
     failures: [
-      { condition: "A108 Boot ROM 或控制器缺失", response: "只读等待，不发送模式命令或 USB 操作。" },
+      { condition: "A108 Boot ROM 或显示端点缺失", response: "停止软件尝试；需要恢复时先关机断电，再按主板 USB 2.0 9-pin 直连或官方 EDGE HUB 的物理旅程处理，绝不带电拔插。" },
+      { condition: "随附一分二 Hub 上看不到 LCD", response: "不继续重试该 Hub；它不支持 LCD。改用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，若供电不足再接 SATA。" },
+      { condition: "改线后出现多个 8091 或端口角色不一致", response: "保持旧绑定失效，不启动浮层；只在唯一 8091、port 2 controller、port 3 LED 连续两次健康后重新绑定。" },
       { condition: "Secondary 提升失败", response: "立即回原生亮屏并停止旧浮层，本 epoch 不再尝试。" },
       { condition: "watchdog 子进程反复失败", response: "保留长期循环，30 秒熔断后只启动一次新 stack。" }
     ],
@@ -554,6 +603,7 @@ export const pcPanelHubModules = [
     verification: [
       "观察时计划任务 Running / Highest，唯一 stream 与新鲜 heartbeat 存在。",
       "TestPowerWatchdog、TestRefreshDefaults 和 TestRuntimeReliability 本轮通过。",
+      "接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。",
       "未制造睡眠、关机、驱动故障或显示拓扑变化，真实恢复 E2E 未重验。"
     ],
     relation: "监管机箱屏传输和 HS2 显示状态；总览中的分层证据决定主机事实能否升级为实体结论。"
