@@ -21,7 +21,7 @@
 
 ## 全部项目能力版图基线
 
-2026-08-31 现场项目总账闭合为 47 个 GitHub 仓库：27 PUBLIC、20 PRIVATE，44 个有经 origin 核对的本地 clone，3 个仅远端；本次 identity 指纹为 sha256:a6f2f51b305dc975d21bc22ecc291e6f6553ac532672cb62a637007da85d98a5。数字只代表本次观察，不是永久常量。
+项目数量、公开属性、本地覆盖与 identity 指纹只在 `systemProjectInventory` 结构化快照中维护；页面、搜索与测试从它派生，本说明不复制一份会漂移的数字账本。刷新时先由 GitHub 总索引重新闭合全部项目身份，再更新能力版图与映射指纹。
 
 当前 10 个项目是已经补齐完整产品说明和详情路由的入口，不是系统分母。全部仓库按现实作用进入八个稳定系统域：AI 协作与能力运行；电脑、服务与跨设备；材料、微信与原件；文档、媒体与专项制作；个人事务与长期协作；项目资产、研究与交付；凭据、备份与恢复；历史与迁移参考。
 
@@ -38,6 +38,13 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 5. 工具在真实目标上执行；不确定、失败或缺能力只影响对应步骤。
 6. source、test、install、runtime、publish、fresh task、E2E 和用户验收分别回读。
 7. 用户拿到现实结果、明确 Unknown、恢复入口和是否还需要本人决定。
+
+## 外部服务、事件与主动通知
+
+- 固定 Google Workspace 入口让普通请求直接读取收件箱、Drive 文件和日历；默认只读，明确授权后只执行同一入口已经支持的精确写入。
+- ChatGPT Scheduled tasks 可以按时间后台运行；符合条件的 Web / Mobile 方案还能由 Gmail 新邮件、Slack 频道消息或 GitHub PR 活动触发。官方说明：https://learn.chatgpt.com/docs/automations
+- 工作需要注意时，ChatGPT 可以通过当前表面和账号支持的通知渠道提醒；渠道可能包括桌面通知、Activity、push、email 或 SMS。官方说明：https://learn.chatgpt.com/docs/notifications
+- 因此系统能够形成“新邮件或项目事件到达 → 读取相关上下文 → 调用项目与 Skills 处理 → 通过可用渠道主动提醒”的工作流。组件能力成立不自动等于这条组合已经跑过真实 E2E；页面用对应证据状态单独说明。
 
 ## 10 个已完整介绍的代表项目在系统中的位置
 
@@ -101,10 +108,12 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 2. `GitHub 总索引 → project-entry-gate → 全部项目`：先确认仓库身份与发布事实，再进入项目业务。
 3. `PCConfig → TimeAudit → timeaudit-diagnostics`：机器事实、历史采集和有界诊断三层分开。
 4. `微信入口 → ChineseASR 项目 → chinese-asr Skill`：消息与媒体关系、语音实现和本次任务模式分开。
-5. `材料入口 → LocalOCR → 验证矩阵`：只有扫描件或复杂版面进入识别，文字继续绑定原件质量。
-6. `健康材料 → personal-health 项目 → personal-health Skill → 人的决定`：已有材料、前台更新、离线验真和人工采用分开。
-7. `PCConfig → 开发环境备份与恢复 → 验证矩阵`：恢复关系、不可再生材料和现实验收分开。
-8. `全部项目 → 验证矩阵 → 用户验收`：项目证据不能互相升级，最终结果回到当前目标。
+5. `材料入口 → LocalOCR → documents → pdf → 验证矩阵`：特殊材料识别、可编辑结构、PDF 字段与逐页版面分别验收。
+6. `材料入口 → personal-litigation → documents / pdf → 人的决定`：合同与私人事务的现状、文书制作、本人操作和外部状态分开。
+7. `邮件/云盘/日历 → 定时或应用事件 → 主动通知 → 人的决定`：云端现场可以启动工作并把需要注意的结果送回来，具体通知渠道按账号设置。
+8. `健康材料 → personal-health 项目 → personal-health Skill → 人的决定`：已有材料、前台更新、离线验真和人工采用分开。
+9. `PCConfig → 开发环境备份与恢复 → 验证矩阵`：恢复关系、不可再生材料和现实验收分开。
+10. `全部项目 → 验证矩阵 → 用户验收`：项目证据不能互相升级，最终结果回到当前目标。
 
 其余关系只有在真实跨项目协作会改变理解时才进入；项目数量增加不扩大这组稳定主线。
 

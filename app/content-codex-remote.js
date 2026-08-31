@@ -1,3 +1,32 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const codexRemoteSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-30T11:29:50Z",
+  label: "产品、公开版本、源码、历史真实多端使用与20张界面证据均已确认；本轮未调用运行时，页面不代表当前在线",
+  metrics: [
+    { label: "正式版", value: "v0.1.5" },
+    { label: "验证", value: "1771" },
+    { label: "证据图", value: "20" }
+  ],
+  facts: [
+    { label: "它实际是什么", value: "手机浏览器继续同一个 Codex Desktop 任务；不是远程桌面、屏幕串流或公网 Shell。" },
+    { label: "当前源码", value: "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。" },
+    { label: "正式公开版本", value: "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。" },
+    { label: "源码与CI分层", value: "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。v0.1.5 对应公开 CI 已通过；当前 main 最新 CI run 31145586404 为 failure。" },
+    { label: "主要能力", value: "源码实现任务、队列、审批、模型/上下文/额度、子智能体、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。" },
+    { label: "历史真实验收", value: "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。" },
+    { label: "界面证据", value: "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。", hero: false }
+  ],
+  gaps: [
+    "本轮遵守只读边界，没有启动、关闭、重启、查询或访问任何 Remote 组件，因此不能声明当前在线。",
+    "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
+    "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
+    "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
+    "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
+    "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
+  ]
+});
+
 export const codexRemoteProject = {
   order: 9,
   slug: "codex-remote",
@@ -7,7 +36,7 @@ export const codexRemoteProject = {
   statusTone: "mixed",
   cardStatus: "手机继续同一 Codex Desktop 任务的产品、界面和真实多端证据已形成",
   cardStatusTone: "pass",
-  snapshotBoundary: "正式版本与历史实机证据已核对；当前 main 最新 CI 未闭合，本轮没有调用运行时，因此不代表当前在线",
+  ...codexRemoteSnapshot,
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是吴乐阳个人开发和维护的非官方 companion（配套工具），不是厂商产品，也没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
   summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令和文件改动，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；也能在明确确认下浏览和操作自己的文件。它不传输桌面画面，也不另开一份聊天。",
@@ -19,19 +48,6 @@ export const codexRemoteProject = {
     problem: "网络抖动、审批缺少可提交选项、队列状态不确定或文件目标冲突时，保留草稿和真实状态，给出精确可恢复动作，不重复提交。",
     unavailable: "无法确认电脑连接、登录会话、任务身份或文件授权时，只拒绝受影响操作；不启动第二个任务，也不把历史画面冒充当前在线。"
   },
-  cardMetrics: [
-    { label: "正式版", value: "v0.1.5" },
-    { label: "验证", value: "1771" },
-    { label: "证据图", value: "20" }
-  ],
-  heroFacts: [
-    { label: "它实际是什么", value: "手机浏览器继续同一个 Codex Desktop 任务；不是远程桌面、屏幕串流或公网 Shell" },
-    { label: "主要能力", value: "任务与历史、公开进展、工具、diff、子智能体、审批、引导、停止、下一轮队列、模型/上下文/额度、所有者文件工作台" },
-    { label: "正式公开版本", value: "v0.1.5 / c3a07719ecbe00dbad515b3cae00fd0f33b186d2；记录 1771 项测试、public-safety 与 Chromium 响应式验收" },
-    { label: "界面证据", value: "12 张历史真实手机 UI + 7 张公开合成演示 + 1 张历史合成 QA，共 20 张" },
-    { label: "历史走通结果", value: "手机、双 Web 与 Desktop 曾走通同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩与重连" },
-    { label: "共享机制", value: "Browser → 认证 Sidecar → loopback Broker → 单一 app-server ← Codex Desktop；共享 threadId / turnId" }
-  ],
   productPrinciples: [
     { title: "两端共享同一个任务事实", detail: "手机与 Desktop 使用同一任务和轮次，不复制聊天历史制造看似同步的第二份任务。" },
     { title: "移动端只保留真正需要的控制", detail: "优先查看、审批、引导、停止、排队和回读，不把整套桌面界面机械缩小到手机。" },
@@ -315,27 +331,6 @@ export const codexRemoteProject = {
     { term: "opaque grant（不透明短时授权）", meaning: "任务正文中的本地绝对路径换成短时文件引用，避免形成可复用公网裸链接。" },
     { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" }
   ],
-  currentState: {
-    observedAt: "2026-08-30T11:29:50Z",
-    label: "产品、公开版本、源码、历史真实多端使用与20张界面证据均已确认；本轮未调用运行时，页面不代表当前在线",
-    facts: [
-      "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。",
-      "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。",
-      "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。",
-      "v0.1.5 对应公开 CI 已通过；当前 main 的最新 CI run 31145586404 为 failure，因此正式 release 证据与当前源码验证状态必须分开。",
-      "源码实现任务、队列、审批、模型/上下文/额度、子智能体、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。",
-      "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。",
-      "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。"
-    ],
-    gaps: [
-      "本轮遵守只读边界，没有启动、关闭、重启、查询或访问任何 Remote 组件，因此不能声明当前在线。",
-      "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
-      "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
-      "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
-      "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
-      "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
-    ]
-  },
   operatingFlow: [
     { title: "浏览器先通过认证入口", detail: "手机只访问 HTTPS 反向代理后的 Sidecar；登录、会话、Origin、CSRF 与限速在产品 API 之前生效。" },
     { title: "选择同一个任务或创建有界任务", detail: "已有任务按 threadId 恢复；新任务只能使用本机登记项目或隔离无项目根。" },

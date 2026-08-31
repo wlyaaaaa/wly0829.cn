@@ -1,3 +1,37 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const timeAuditSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T11:18:10Z",
+  label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
+  metrics: [
+    { label: "近1小时样本", value: "3615" },
+    { label: "CPU 均/峰", value: "64.5/68.8°C" },
+    { label: "GPU 均/峰", value: "52.6/54°C" },
+    { label: "磁盘 P95", value: "0.316 ms" }
+  ],
+  facts: [
+    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份。" },
+    { label: "存储与展示", value: "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器 healthy（健康）；PostgreSQL 15 位于本机 45432，Grafana 13.0.2 位于本机 53000；产品有 6 张仪表盘、78 个面板。" },
+    { label: "近一小时诊断", value: "`timeaudit_diagnostic_summary.py --hours 1` 本轮返回 status=ok、coverage=fresh、3615 个硬件样本，最新样本年龄 0.058 秒；CPU 均值/峰值 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95 0.316 ms；没有有效游戏帧被正确标为 no_game_frames。" },
+    { label: "运行现场", value: "遥测主链、AHK 与入库器三条无正文 heartbeat（心跳）在 02:30Z 附近刷新，观察时文件年龄约 1–2 秒；Watchdog（看门狗）与每日备份任务最近结果均为 0；packet-loss 信号 14 次、活动状态重叠 6 秒只进入复核边界。" },
+    { label: "源码与回归", value: "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main；观察时 HEAD 与缓存 origin/main 均为 44a842e82ea03a18174b87fe77d248f776d62eb5，工作树干净；复用项目 Python 3.11 生产依赖与临时 pytest runner 后，完整回归为 180 passed、11 subtests passed，用时 47.33 秒。" },
+    { label: "已根治的采集误差", value: "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。" },
+    { label: "公开安全聚合", value: "公开安全聚合 provider（提供器）在 01:00Z—02:00Z 返回 status=ok、coverage=fresh、3530 个样本；1 个 scheduler_jitter_saturation warning 涉及 110 个样本，且 projection_recheck_recommended=false。", hero: false },
+    { label: "采集可靠性", value: "当前 main 使用单调时钟判断 PresentMon 新鲜度；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。", hero: false },
+    { label: "运行依赖", value: "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。", hero: false },
+    { label: "容量合同", value: "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。", hero: false },
+    { label: "接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；阈值信号只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
+  ],
+  gaps: [
+    "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
+    "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
+    "本轮完整源码回归已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与单元测试都不能证明历史数据全绿。",
+    "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
+    "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
+    "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
+  ]
+});
+
 export const timeAuditProject = {
   order: 5,
   slug: "timeaudit",
@@ -7,7 +41,7 @@ export const timeAuditProject = {
   statusTone: "mixed",
   cardStatus: "本机时间线持续采集，可回放性能、进程、功耗和使用时间",
   cardStatusTone: "pass",
-  snapshotBoundary: "采集与大盘现场已核对；本次没有有效游戏帧、完整数据库审计或最新整库恢复演练",
+  ...timeAuditSnapshot,
   repositoryNote: "这是吴乐阳个人维护并集成第三方探针/库的 PUBLIC（公开）GitHub 仓库；根目录没有统一 LICENSE，不能仅因公开就称为开源，也不能把 LibreHardwareMonitor、PresentMon、Grafana 等外部组件冒充个人原创。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
   summary: "TimeAudit 给这台 Windows 工作站留下一条可以回放的本机时间线。问题发生后，只要给出大致时刻——例如“昨晚游戏为什么突然卡了两秒”——它就把流畅度、硬件压力、磁盘和网络、前后台程序以及程序生灭放到同一条时间轴上，返回有证据的候选原因、数据空档和不能下结论的部分。它也能复盘长期发热、耗电和屏幕使用时间。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等问题发现时现场常已消失。TimeAudit 留下同一时刻的硬件压力、前后台资源、窗口焦点和生命周期，使偶发故障可事后定位，长期散热、功耗和使用习惯也能比较。",
@@ -18,19 +52,6 @@ export const timeAuditProject = {
     problem: "发现采样空档、指标越界、后台争抢、崩溃或查询口径异常时，指出受影响组件与恢复入口，不把异常直接解释成硬件故障或恶意行为。",
     unavailable: "保存、展示、采集或传感器入口不可用时，只把对应层写成证据不足并受控恢复；不伪造读数，也不靠读取私人正文数据补出一份报告。"
   },
-  cardMetrics: [
-    { label: "采样", value: "1 秒 / 3 秒" },
-    { label: "大盘", value: "6 · 78" },
-    { label: "回归", value: "180 + 11" }
-  ],
-  heroFacts: [
-    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
-    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
-    { label: "安全聚合快照", value: "2026-08-31T11:18:10Z：3615 样本、age 0.058 秒、coverage 3518/3600 秒、gap 82 秒；CPU 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95/max 0.316/8.005 ms" },
-    { label: "运行现场", value: "3 个容器运行，入库器 healthy；no_game_frames；packet-loss 信号 14 次、活动状态重叠 6 秒，仅表示需复核" },
-    { label: "源码与回归", value: "PUBLIC（公开）main（默认主分支）=44a842e82ea03a18174b87fe77d248f776d62eb5；工作树干净；项目生产依赖 + 临时 pytest runner 下 180 项测试、11 个子测试通过" },
-    { label: "已根治的采集误差", value: "已消除 172 个正常系统进程误报；修正一小时窗 138 对重叠，避免 1 小时算成 1.5 小时；把占采集耗时 86% 的父进程解析换成同快照映射" }
-  ],
   gallery: [
     { src: "/media/timeaudit/dashboard-catalog.png", thumbnail: "/media/timeaudit/thumbs/dashboard-catalog.webp", alt: "TimeAudit 六张仪表盘目录", caption: "2026-08-29 的真实 Grafana 目录：六张盘把性能、流畅度、功耗、取证、后台资源和使用时间组成可回放产品。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明六张仪表盘和 78 个面板曾在真实 Grafana 中组成完整产品入口。", doesNotProve: "不证明当前服务在线、每个查询仍正确或当前数据没有空档。" },
     { src: "/media/timeaudit/screen-time-focus.png", thumbnail: "/media/timeaudit/thumbs/screen-time-focus.webp", alt: "屏幕使用时间与专注复盘", caption: "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明使用时间与焦点关系曾能在同一大盘阅读，普通应用和时长按真实画面保留。", doesNotProve: "不证明这些应用、标题、时长或生活规律仍是当前事实。" },
@@ -82,31 +103,6 @@ export const timeAuditProject = {
     { term: "diagnostic summary（诊断摘要）", meaning: "在最长 168 小时的窗口内用一次聚合查询返回覆盖、硬件、游戏帧、电脑状态、阈值信号和解释边界。" },
     { term: "E2E（端到端验证）", meaning: "真实采集、写库、查询到用户看图完整走通；源码测试不能替代。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T11:18:10Z",
-    label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
-    facts: [
-      "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）；观察时 HEAD 与缓存 origin/main 均为 44a842e82ea03a18174b87fe77d248f776d62eb5，工作树干净。",
-      "audit-postgres、audit-ingester、audit-grafana 三个容器运行；入库器健康状态为 healthy（健康），PostgreSQL 为本机 45432，Grafana 13.0.2 为本机 53000。",
-      "遥测主链、AHK 与入库器三条无正文 heartbeat（心跳）在 02:30Z 附近刷新，观察时文件年龄约 1–2 秒；Watchdog（看门狗）与每日备份任务最近结果均为 0。",
-      "在干净的当前 main 中，复用项目 Python 3.11 生产依赖，并从本任务 E 盘临时目录注入 pytest runner；完整回归为 180 passed、11 subtests passed，用时 47.33 秒，项目 .venv 没有被加入开发依赖。",
-      "公开安全聚合 provider（提供器）在 01:00Z—02:00Z 返回 status=ok（状态正常）、coverage=fresh（覆盖新鲜）、3530 个样本；1 个 scheduler_jitter_saturation（用户态调度抖动饱和）warning（警告）涉及 110 个样本，且 projection_recheck_recommended=false（不建议重查稳定机器投影）。",
-      "新的 `timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T11:18:10Z 返回 schema=timeaudit.diagnostic-summary.v1、status=ok、coverage=fresh、3615 个硬件样本，最新样本年龄 0.058 秒；CPU 均值/峰值 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95 0.316 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 14 次、活动状态重叠 6 秒都只进入复核边界。",
-      "当前 main 使用单调时钟判断 PresentMon 新鲜度，避免系统墙钟回拨让陈旧帧继续存活；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。",
-      "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。",
-      "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。",
-      "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。",
-      "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。"
-    ],
-    gaps: [
-      "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
-      "本轮完整源码回归已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与单元测试都不能证明历史数据全绿。",
-      "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
-      "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
-      "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
-      "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
-    ]
-  },
   operatingFlow: [
     { title: "分开两条前台记录", detail: "AHK 记录简版使用区间并经 spool 入库；Python 主引擎写硬件、进程、上下文和生命周期事实。" },
     { title: "按快慢节拍采集", detail: "每 1 秒推进硬件、FPS 与前台心跳；全进程扫描约每 3 秒单飞，过慢时跳过而不积压。" },

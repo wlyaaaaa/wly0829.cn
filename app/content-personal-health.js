@@ -1,4 +1,32 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
 const evidenceStateLabels = ["可用于当前判断", "需要复核", "本轮不可用"];
+
+const personalHealthSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T12:00:18.5444628Z",
+  label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
+  metrics: [
+    { label: "合成回归", value: "112/112" },
+    { label: "大分页恢复", value: "609 页" },
+    { label: "分析窗", value: "14 · 28 · 90 天" }
+  ],
+  facts: [
+    { label: "AI为谁负责", value: "以用户的健康、安全、自主、隐私、现实负担和已表达目标为准；不为流程完成、机构利益、设备活跃度或 AI 自信优化。" },
+    { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任。" },
+    { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见。" },
+    { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见。" },
+    { label: "当前源码与回归", value: "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；项目有 5 个产品 Python 模块、5 个测试模块；本轮 unittest 112 项全部通过（112/112），内部用时 27.922 秒。" },
+    { label: "证据结构与恢复", value: "provider 的 39 类数据先归一为 21 个兼容字段，默认 decision context 只采用 4 个低噪声字段；比较窗口为 14 / 28 / 90 天。大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint，中断后只续缺页。" },
+    { label: "源码规模", value: "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库。", hero: false },
+    { label: "分页上限", value: "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报。", hero: false },
+    { label: "离线回执", value: "离线 capture 回执保持 health_owner_review_required=true、current_updated=false、background_work_created=false；合成回归不能证明任何个人健康值。", hero: false },
+    { label: "运行形态", value: "没有新增服务、数据库、计划任务、后台 watcher 或持续同步节点。", hero: false }
+  ],
+  gaps: [
+    "本轮没有调用真实 OAuth、Secret Broker、Google/Fitbit provider 或当前个人数据；源码和合成测试不能证明当前账号仍授权、当前设备同步正常或当前记录质量达标。",
+    "没有任何个人健康结论、医生采用回执或高风险医疗 E2E 进入本网页证据。"
+  ]
+});
 
 export const personalHealthProject = {
   order: 10,
@@ -9,7 +37,7 @@ export const personalHealthProject = {
   statusTone: "mixed",
   cardStatus: "当前证据路由、前台设备刷新链和离线质量门已实现；健康决策原则已明确",
   cardStatusTone: "pass",
-  snapshotBoundary: "最新 112 项合成回归已核对；广义健康选择内容是产品原则，不表示代码执行诊断、处方或治疗决定，也没有调用当前账号、设备或个人健康数据",
+  ...personalHealthSnapshot,
   kicker: "让健康选择更安全、更自主，也更容易复查",
   searchAliases: [
     "健康信息怎么判断能不能用",
@@ -32,19 +60,6 @@ export const personalHealthProject = {
     unavailable: "出现急症红旗时不等待资料完整；缺少查体、诊断或可靠来源时也不让 AI 补猜。产品明确说明当前不能判断，并给出更安全的现实下一步。"
   },
   stateLabels: evidenceStateLabels,
-  cardMetrics: [
-    { label: "合成回归", value: "112/112" },
-    { label: "大分页恢复", value: "609 页" },
-    { label: "分析窗", value: "14 · 28 · 90 天" }
-  ],
-  heroFacts: [
-    { label: "AI为谁负责", value: "以用户的健康、安全、自主、隐私、现实负担和已表达目标为准；不为流程完成、机构利益、设备活跃度或 AI 自信优化" },
-    { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任" },
-    { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见" },
-    { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见" },
-    { label: "当前源码与回归", value: "PRIVATE main=48d5a5b；5 个产品模块 + 5 个测试模块；112/112 合成回归通过，内部用时 27.922 秒" },
-    { label: "证据结构与恢复", value: "provider 数据先归一为兼容字段，再只选与当前决定有关的最小字段；分页中断只续缺页，质量门不通过就不更新当前底色" }
-  ],
   methodCanvas: {
     kicker: "健康选择画布",
     headline: "遇到一个健康问题时，AI怎样帮助我做出更好的决定",
@@ -114,25 +129,6 @@ export const personalHealthProject = {
     { term: "Foreground refresh（前台刷新）", meaning: "本人明确发起并在同一任务中完成的采集；没有 watcher、计划任务或后台同步。" },
     { term: "Fail closed（失败关闭）", meaning: "来源、清单、哈希、质量或凭据边界不成立时停止对应路线，不换路线补猜。" }
   ],
-  currentState: {
-    label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
-    observedAt: "2026-08-31T12:00:18.5444628Z",
-    facts: [
-      "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；本地与 origin/main 同步，工作树干净",
-      "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库",
-      "本轮在任务独立 E 盘临时目录运行 unittest，112 项全部通过，内部用时 27.922 秒；最新提交新增对完整 capture 结果的闭合校验",
-      "provider 的 39 类数据先归一为 21 个兼容字段，默认 decision context 只采用睡眠、步数、活动分钟和已记录运动事件 4 个字段；比较窗口为 14 / 28 / 90 天",
-      "大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint；中断后只续缺页，不用重新下载或覆盖已验证原始页",
-      "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报",
-      "离线 capture 回执保持 health_owner_review_required=true、current_updated=false、background_work_created=false；合成回归不能证明任何个人健康值",
-      "没有新增服务、数据库、计划任务、后台 watcher 或持续同步节点"
-    ],
-    gaps: [
-      "本轮没有调用真实 OAuth、Secret Broker、Google/Fitbit provider 或当前个人数据",
-      "源码和合成测试不能证明当前账号仍授权、当前设备同步正常或当前记录质量达标",
-      "没有任何个人健康结论、医生采用回执或高风险医疗 E2E 进入本网页证据"
-    ]
-  },
   operatingFlow: [
     { title: "先判断是否需要新证据", detail: "普通问题只读现行底色；只有新报告、纠正、来源冲突、完整性问题或本人明确设备刷新才进入维护。" },
     { title: "凭据只穿过受保护边界", detail: "首次 OAuth（账号授权协议）使用 PKCE（授权码防截获校验）和回环回调，长期凭据经标准输入进入受保护中心，不生成 token 文件。" },

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowUp,
   BookOpenText,
   CheckCircle,
   EnvelopeSimple,
@@ -34,11 +35,14 @@ import {
   socialLinks
 } from "./site-content.js";
 import {
+  systemActiveAutomations,
+  systemComposedWorkflows,
   systemDependencyLanes,
   systemDependencyNodes,
   systemDependencyRelations,
   systemDirectoryIntroductions,
   systemEvidenceLayers,
+  systemHomeChapters,
   systemHomeHero,
   systemProjectDomains,
   systemProjectInventory,
@@ -437,6 +441,11 @@ function projectCardPresentation(entry) {
   };
 }
 
+function ProjectMetrics({ items, kind }) {
+  if (!items?.length) return null;
+  return <dl className="project-metrics">{items.map((item) => <div key={item.label}><dt>{displayCopy(item.label, kind)}</dt><dd>{displayCopy(item.value, kind)}</dd></div>)}</dl>;
+}
+
 function ProjectCard({ entry }) {
   const { project: currentProject, modules: currentModules } = entry;
   const moduleOptions = [
@@ -467,6 +476,7 @@ function ProjectCard({ entry }) {
             <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id={headingId}>{currentProject.title}</h2></div>
           </div>
           <p className="project-summary">{displayCopy(currentProject.summary, entry.kind)}</p>
+          <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />
           <dl className="project-card-state">
             <div><dt>项目状态</dt><dd><span className={`project-card-status-text status-${presentation.tone}`}>{displayCopy(presentation.status, entry.kind)}</span></dd></div>
             <div className="project-card-snapshot-boundary"><dt>快照边界</dt><dd>{displayCopy(presentation.boundary, entry.kind)}</dd></div>
@@ -646,11 +656,14 @@ function ProjectGallery({ title, images }) {
   const [activeIndex, setActiveIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [fitSize, setFitSize] = useState(null);
+  const [displayedImageSrc, setDisplayedImageSrc] = useState(null);
   const closeButtonRef = useRef(null);
   const imageRef = useRef(null);
   const returnFocusRef = useRef(null);
   const viewportRef = useRef(null);
   const zoomRef = useRef(1);
+  const fullImageRequestsRef = useRef(new Map());
+  const fullRequestTokenRef = useRef(0);
   zoomRef.current = zoom;
   const isOpen = activeIndex !== null;
   const hasStructuredEvidence = images.every((image) => image.evidenceLevel && image.evidenceLabel && image.proves && image.doesNotProve);
@@ -670,6 +683,30 @@ function ProjectGallery({ title, images }) {
     setFitSize((current) => current && Object.keys(next).every((key) => current[key] === next[key]) ? current : next);
   }, []);
 
+  const loadDecodedFullImage = useCallback((src) => {
+    const existing = fullImageRequestsRef.current.get(src);
+    if (existing) return existing;
+    const request = (async () => {
+      const candidate = new Image();
+      candidate.decoding = "async";
+      candidate.src = src;
+      await candidate.decode();
+      if (!candidate.naturalWidth || !candidate.naturalHeight) throw new Error("gallery_full_image_empty");
+      return candidate;
+    })();
+    fullImageRequestsRef.current.set(src, request);
+    request.catch(() => {
+      if (fullImageRequestsRef.current.get(src) === request) fullImageRequestsRef.current.delete(src);
+    });
+    return request;
+  }, []);
+
+  const prefetchAdjacentFullImages = useCallback((index) => {
+    if (images.length < 2) return;
+    const adjacent = new Set([(index - 1 + images.length) % images.length, (index + 1) % images.length]);
+    for (const adjacentIndex of adjacent) void loadDecodedFullImage(images[adjacentIndex].src).catch(() => {});
+  }, [images, loadDecodedFullImage]);
+
   function changeZoom(delta) {
     setZoom((current) => {
       const next = Math.min(4, Math.max(1, Number((current + delta).toFixed(1))));
@@ -684,16 +721,25 @@ function ProjectGallery({ title, images }) {
     viewportRef.current?.scrollTo({ top: 0, left: 0 });
   }
 
-  function closeImage() {
+  function selectImage(index) {
+    const nextIndex = (index + images.length) % images.length;
+    fullRequestTokenRef.current += 1;
     resetZoom();
     setFitSize(null);
+    setDisplayedImageSrc(images[nextIndex].thumbnail || images[nextIndex].src);
+    setActiveIndex(nextIndex);
+  }
+
+  function closeImage() {
+    fullRequestTokenRef.current += 1;
+    resetZoom();
+    setFitSize(null);
+    setDisplayedImageSrc(null);
     setActiveIndex(null);
   }
 
   function changeImage(delta) {
-    resetZoom();
-    setFitSize(null);
-    setActiveIndex((index) => (index + delta + images.length) % images.length);
+    selectImage(activeIndex + delta);
   }
 
   useEffect(() => {
@@ -709,6 +755,26 @@ function ProjectGallery({ title, images }) {
     if (viewportRef.current) observer.observe(viewportRef.current);
     return () => observer.disconnect();
   }, [isOpen, activeIndex, measureImageFit]);
+
+  useEffect(() => {
+    if (activeIndex === null) return undefined;
+    const requestIndex = activeIndex;
+    const requestToken = fullRequestTokenRef.current;
+    let current = true;
+    void (async () => {
+      try {
+        await loadDecodedFullImage(images[requestIndex].src);
+        if (!current || requestToken !== fullRequestTokenRef.current || requestIndex !== activeIndex) return;
+        setDisplayedImageSrc(images[requestIndex].src);
+        setFitSize(null);
+        window.requestAnimationFrame(() => measureImageFit());
+        prefetchAdjacentFullImages(requestIndex);
+      } catch {
+        // Keep the eager thumbnail visible and every control usable.
+      }
+    })();
+    return () => { current = false; };
+  }, [activeIndex, images, loadDecodedFullImage, measureImageFit, prefetchAdjacentFullImages]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -763,9 +829,7 @@ function ProjectGallery({ title, images }) {
   const imageOrientation = fitSize && fitSize.naturalWidth > fitSize.naturalHeight ? "landscape" : "portrait";
   function openImage(index, event) {
     returnFocusRef.current = event.currentTarget;
-    resetZoom();
-    setFitSize(null);
-    setActiveIndex(index);
+    selectImage(index);
   }
 
   return (
@@ -814,7 +878,7 @@ function ProjectGallery({ title, images }) {
                 <div className="project-lightbox-viewport" ref={viewportRef} data-zoom={zoom} tabIndex="0" aria-label={zoom > 1 ? "已放大的图片区域；使用方向键或滚动条查看细节" : "完整图片区域"}>
                   <button className="project-lightbox-previous" type="button" onClick={() => changeImage(-1)} aria-label="上一张"><ArrowLeft size={25} aria-hidden="true" /></button>
                   <div className="project-lightbox-image-canvas" style={imageCanvasStyle}>
-                    <img className="project-lightbox-image" ref={imageRef} src={activeImage.src} alt={activeImage.alt} style={imageStyle} onLoad={(event) => measureImageFit(event.currentTarget)} onDoubleClick={() => zoom === 1 ? setZoom(2) : resetZoom()} />
+                    <img className="project-lightbox-image" ref={imageRef} src={displayedImageSrc || activeImage.thumbnail || activeImage.src} alt={activeImage.alt} style={imageStyle} onLoad={(event) => measureImageFit(event.currentTarget)} onDoubleClick={() => zoom === 1 ? setZoom(2) : resetZoom()} />
                   </div>
                   <button className="project-lightbox-next" type="button" onClick={() => changeImage(1)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
                 </div>
@@ -919,13 +983,18 @@ function ProjectOverview({ entry }) {
       <ProjectReadingNav />
 
       <ProjectReadingPanel id="quick" selected>
-        <section className="document-section document-section-first">
+        <section className="document-section document-section-first project-positive-snapshot">
+          <h2>当前项目快照</h2>
+          <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />
+          <ProjectQuickState entry={entry} />
+        </section>
+        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
+        <section className="document-section">
           <p className="section-kicker">先说人话</p>
           <h2>最快了解这个项目</h2>
           <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>怎样开始使用</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
           <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
         </section>
-        <section className="document-section"><h2>最快先知道这三件事</h2><ProjectQuickState entry={entry} /></section>
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="product">
@@ -937,7 +1006,6 @@ function ProjectOverview({ entry }) {
         </section>
         <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
         <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p></article>)}</div></section>
-        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="technical">
@@ -1392,6 +1460,7 @@ function RulesPage({ search }) {
 
   return (
     <div className="page-frame rules-page">
+      <div className="rules-workbench"><RuleSelector selectedId={selected.logicalId} onSelect={selectRule} /><div className="rule-detail-stack">{rulesSnapshot.rules.map((rule) => <RuleDetail rule={rule} selected={rule.logicalId === selected.logicalId} key={rule.logicalId} />)}</div></div>
       <section className="rules-dashboard-bar">
         <div><p className="section-kicker">当前活动规则</p><h1>E rules（E 规则） {rulesSnapshot.releaseId}</h1><span>{rulesSnapshot.observedAt}</span></div>
         <dl>
@@ -1402,7 +1471,6 @@ function RulesPage({ search }) {
           <div><dt>Source（规范源码）</dt><dd>{rulesSnapshot.sourceMatchesRelease ? "五份与活动 release 一致" : `存在 ${panelSnapshot.sourceDirtyCount || 0} 项未激活施工；不覆盖 ${rulesSnapshot.releaseId}`}</dd></div>
         </dl>
       </section>
-      <div className="rules-workbench"><RuleSelector selectedId={selected.logicalId} onSelect={selectRule} /><div className="rule-detail-stack">{rulesSnapshot.rules.map((rule) => <RuleDetail rule={rule} selected={rule.logicalId === selected.logicalId} key={rule.logicalId} />)}</div></div>
       <section className="rules-validation">
         <div><p className="section-kicker">验证矩阵</p><h2>E release 有效，不代表当前 dirty source、Skills 场景或所有消费者都已通过。</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p></div>
         <ValidationMatrix />
@@ -1448,7 +1516,7 @@ function SystemScenarioPanel({ scenario, index }) {
 }
 
 function SystemDependencyNode({ node, scenarioIds }) {
-  const linkLabel = node.href.startsWith("#") ? "查看本页说明" : (node.href === "/skills" || node.href.startsWith("/skills/")) ? "进入 Skill" : node.href === "/rules" ? "进入规则" : "进入项目";
+  const linkLabel = node.href.startsWith("#") ? "查看本页说明" : /^https?:\/\//.test(node.href) ? "查看官方说明" : (node.href === "/skills" || node.href.startsWith("/skills/")) ? "进入 Skill" : node.href === "/rules" ? "进入规则" : "进入项目";
   return (
     <article
       className="system-dependency-node"
@@ -1463,6 +1531,37 @@ function SystemDependencyNode({ node, scenarioIds }) {
       </div>
       <div className="system-dependency-node-footer"><span data-system-node-state>系统总览</span><SiteLink href={node.href}>{linkLabel}<ArrowRight size={15} aria-hidden="true" /></SiteLink></div>
     </article>
+  );
+}
+
+function SystemComposedWorkflow({ workflow }) {
+  return (
+    <article className="system-composed-workflow" id={`system-composed-workflow-${workflow.id}`}>
+      <header><span>{workflow.number} / 组合工作流</span><StatusPill status={workflow.tone}>{workflow.evidence}</StatusPill></header>
+      <h4>{workflow.title}</h4>
+      <blockquote>{workflow.request}</blockquote>
+      <div className="system-composed-path">{workflow.path.map((step, index) => <span key={step}>{index ? <ArrowRight size={14} aria-hidden="true" /> : null}<em>{step}</em></span>)}</div>
+      <dl><div><dt>系统交回</dt><dd>{workflow.delivery}</dd></div><div><dt>入口不可用时</dt><dd>{workflow.unavailable}</dd></div></dl>
+    </article>
+  );
+}
+
+function SystemActiveAutomationList() {
+  return (
+    <section className="system-frame system-active-automations" id="system-automations" aria-labelledby="system-active-automations-title">
+      <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">7 个定时任务，正在持续替我工作</h2><p>有些工作不需要等我每次重新发起。5 个云端任务持续整理并把结果送到手机，2 个电脑端任务在真实项目现场治理和更新；频率观察于 {systemActiveAutomations.observedAt}，私有提示词与任务 ID 不公开。</p></div>
+      <div className="system-active-automation-groups">{systemActiveAutomations.groups.map((group) => (
+        <section key={group.id}>
+          <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />正在使用</small></header>
+          <div className="system-active-automation-grid">
+            {systemActiveAutomations.items.filter((item) => item.group === group.id).map((item) => {
+              const number = systemActiveAutomations.items.findIndex((candidate) => candidate.id === item.id) + 1;
+              return <article key={item.id}><span>{String(number).padStart(2, "0")} / {item.cadence}</span><strong>{item.title}</strong><dl><div><dt>关注什么</dt><dd>{item.focus}</dd></div><div><dt>怎样处理</dt><dd>{item.process}</dd></div><div><dt>交回什么</dt><dd>{item.delivery}</dd></div></dl></article>;
+            })}
+          </div>
+        </section>
+      ))}</div>
+    </section>
   );
 }
 
@@ -1563,7 +1662,7 @@ function SystemProjectAtlas() {
   }
 
   return (
-    <section className="system-frame system-project-atlas" aria-labelledby="system-project-atlas-title">
+    <section className="system-frame system-project-atlas" id="system-project-atlas" aria-labelledby="system-project-atlas-title">
       <div className="system-home-section-heading">
         <h2 id="system-project-atlas-title">全部项目怎样组成个人 AI 协作系统</h2>
         <p>系统不是项目目录的合集。全部 GitHub 项目按现实作用进入能力版图；可深入阅读的项目继续进入完整参考，其他项目仍提供能力、事实、研究、备份、恢复或历史依据。</p>
@@ -1602,6 +1701,18 @@ function SystemProjectAtlas() {
   );
 }
 
+function SystemSectionNavigation() {
+  return (
+    <nav className="system-section-navigation" data-system-section-navigation aria-label="System 章节导航">
+      <div className="system-frame">
+        <div className="system-section-navigation-rail">
+          {systemHomeChapters.map((item, index) => <a className={index === 0 ? "is-current" : undefined} aria-current={index === 0 ? "location" : undefined} data-system-section-link={item.id} href={`#${item.id}`} key={item.id}>{item.label}</a>)}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 function SystemPage() {
   const nodeById = new Map(systemDependencyNodes.map((node) => [node.id, node]));
   return (
@@ -1615,7 +1726,9 @@ function SystemPage() {
         </div>
       </header>
 
-      <section className="system-frame system-cases" aria-labelledby="system-cases-title">
+      <SystemSectionNavigation />
+
+      <section className="system-frame system-cases" id="system-cases" aria-labelledby="system-cases-title">
         <div className="system-home-section-heading"><h2 id="system-cases-title">AI 如何协助我把一件真实工作办成</h2><p>一次只展示这项工作真正使用的项目、Skills、资料和规则。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
         <div className="system-case-tabs" role="tablist" aria-label="选择真实工作场景">
           {systemScenarios.map((scenario, index) => <button type="button" role="tab" id={`system-scenario-tab-${scenario.id}`} aria-controls={`system-scenario-${scenario.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-system-scenario-tab={scenario.id} className={index === 0 ? "is-current" : undefined} key={scenario.id}>{scenario.label}</button>)}
@@ -1623,8 +1736,10 @@ function SystemPage() {
         <div className="system-case-panels">{systemScenarios.map((scenario, index) => <SystemScenarioPanel scenario={scenario} index={index} key={scenario.id} />)}</div>
       </section>
 
-      <section className="system-frame system-dependencies" aria-labelledby="system-dependencies-title">
-        <div className="system-home-section-heading"><h2 id="system-dependencies-title">核心基座与代表性协作链</h2><p>这里先用一条代表链解释真实工作怎样调用项目、Skills、资料和规则；它不是全部项目清单。选择场景后，本次参与的节点会明确标注，完整项目版图在下一节展开。</p></div>
+      <SystemActiveAutomationList />
+
+      <section className="system-frame system-dependencies" id="system-dependencies" aria-labelledby="system-dependencies-title">
+        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>通用 AI 提供理解和执行能力；.agents、PCConfig 与 GitHub 总索引分别提供协作边界、电脑现场和全部项目身份；外部服务、项目、Skills、个人资料与验证层再按任务进入。</p></div>
         <div className="system-dependency-map">
           {systemDependencyLanes.map((lane) => {
             const laneNodes = systemDependencyNodes.filter((node) => node.lane === lane.id);
@@ -1638,6 +1753,14 @@ function SystemPage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="system-frame system-collaboration" id="system-collaboration" aria-labelledby="system-collaboration-title">
+        <div className="system-home-section-heading"><h2 id="system-collaboration-title">项目、Skills、规则和外部能力怎样协作</h2><p>上面说明每类东西各自负责什么；这里把它们连成能真正完成工作的组合。先看系统能够主动办成什么，再看长期稳定的代表性依赖。</p></div>
+        <section className="system-composed-workflows" aria-labelledby="system-composed-workflows-title">
+          <div className="system-composed-workflows-heading"><span>能力推定</span><h3 id="system-composed-workflows-title">这些能力组合起来，系统能主动做什么</h3><p>事实说明有哪些组件；这里进一步说明它们能够共同完成的工作。组合证据状态放在卡片右上角，不削弱产品主句。</p></div>
+          <div className="system-composed-workflow-grid">{systemComposedWorkflows.map((workflow) => <SystemComposedWorkflow workflow={workflow} key={workflow.id} />)}</div>
+        </section>
 
         <div className="system-relation-ledger" aria-labelledby="system-relation-ledger-title">
           <div className="system-relation-ledger-heading"><span>怎么协作</span><h3 id="system-relation-ledger-title">代表性依赖</h3><p>这里只保留稳定、会改变理解的责任链；某个场景才需要的临时关系由上方场景高亮表达。</p></div>
@@ -1652,12 +1775,12 @@ function SystemPage() {
 
       <SystemProjectAtlas />
 
-      <section className="system-frame system-rule-stories" aria-labelledby="system-rule-stories-title">
+      <section className="system-frame system-rule-stories" id="system-rule-stories" aria-labelledby="system-rule-stories-title">
         <div className="system-home-section-heading"><h2 id="system-rule-stories-title">五条规则，实际改变 AI 怎样工作</h2><p>规则不是让人背的合同。它们分别决定从哪里取事实、什么动作可以继续、多人怎样不互相覆盖、跨项目问题怎样组合证据，以及一句普通要求怎样进入正确能力。</p></div>
         <div className="system-rule-story-list">{systemRuleStories.map((story) => <SystemRuleStory story={story} key={story.id} />)}</div>
       </section>
 
-      <section className="system-frame system-skill-families" aria-labelledby="system-skill-families-title">
+      <section className="system-frame system-skill-families" id="system-skill-families" aria-labelledby="system-skill-families-title">
         <div className="system-home-section-heading"><h2 id="system-skill-families-title">按想完成的事找到能力入口</h2><p>完整目录仍保留每个 Skill 的触发、流程和技术边界；这里先把 {systemSkillFamilies.flatMap((family) => family.members).length} 个入口按七类现实动作解释清楚，每个入口只出现一次。</p></div>
         <div className="system-skill-family-list">{systemSkillFamilies.map((family) => <SystemSkillFamily family={family} key={family.id} />)}</div>
       </section>
@@ -1794,7 +1917,7 @@ function SkillDetail({ item, search }) {
         <section><h2>依赖</h2><StringList items={item.dependencies.map(annotateTerms)} /></section>
         <section><h2>验证状态</h2><p>六层状态分开显示，Regression（回归证据）另列。Source（源码）、Install（安装）和 Transaction（供应事务）不会自动提升 Current task（当前任务）、Fresh task（全新任务验证）或真实 E2E（端到端验证）。</p><EvidenceGrid skill={item} /></section>
         <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd>{item.evidenceSourceCommit ? <code>{item.evidenceSourceCommit}</code> : "不适用：宿主集成能力不绑定项目 Git 提交"}</dd></div><div><dt>Supply command（供应验证命令）</dt><dd><code>{item.supplyEvidenceCommand}</code></dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
-        <section><h2>Canonical source（唯一维护源）</h2><div className="source-list"><div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div></div></section>
+        <section><h2>Canonical source（唯一维护源）</h2><div className="source-list">{item.sourceKind === "host_integrated" ? <><div><code>{item.capabilityId}</code><p>这是稳定的宿主能力身份；宿主更新后仍按能力发现，不以版本化缓存路径准入。</p></div><div><code>{item.observedSourcePath}</code><p>这是本次观察到的 bundle（宿主能力包）源码位置，只用于记录本轮 bytes / SHA 快照。</p></div></> : <div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div>}</div></section>
         <SiteLink className="back-link" href={back}><ArrowLeft size={18} aria-hidden="true" />返回 Skills（能力）</SiteLink>
       </article>
     </div>
@@ -1803,6 +1926,10 @@ function SkillDetail({ item, search }) {
 
 function NotFound() {
   return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><SiteLink href="/projects"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+}
+
+function BackToTopButton() {
+  return <button className="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部" hidden><ArrowUp size={21} weight="bold" aria-hidden="true" /></button>;
 }
 
 export default function Page({ initialPathname = "/", initialSearch = "" } = {}) {
@@ -1850,5 +1977,5 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
     content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
-  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main></>;
+  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main><BackToTopButton /></>;
 }

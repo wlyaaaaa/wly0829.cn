@@ -1,3 +1,39 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const pcconfigSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T11:43:18Z",
+  label: "机器配置、恢复任务与秘密恢复闭合；Codex Home 已就绪并等待本人退出切换",
+  metrics: [
+    { label: "配置地图", value: "15 项目 · 157 键" },
+    { label: "恢复任务", value: "10 Ready · 0 失败" },
+    { label: "秘密恢复", value: "10/10 三路一致" },
+    { label: "Codex 迁移", value: "75.13 GB · 已就绪" }
+  ],
+  facts: [
+    { label: "配置地图", value: "源仓库 PRIVATE（私有）main 当前提交为 f9245a1；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务。" },
+    { label: "开发存储", value: "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。" },
+    { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。" },
+    { label: "秘密恢复", value: "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。" },
+    { label: "Codex Home 迁移", value: "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。" },
+    { label: "凭据中心", value: "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。" },
+    { label: "受保护数据", value: "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。", hero: false },
+    { label: "运行健康", value: "fresh Drift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；旧启动失败不再进入当前任务健康计数。", hero: false }
+  ],
+  gaps: [
+    "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
+    "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
+    "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
+    "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
+    "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
+    "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
+    "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
+    "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
+    "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
+    "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
+    "Recovery kit 的 BIOS/UEFI 核心设置记录已成为 present_verified，覆盖照片保留的 CPU、内存、启动和 PCIe 基线；它不等于每个菜单的完整原生 Profile，也没有替代下一次启动后的现场回读。WEPE 隐藏分区仍只有 present_observed。"
+  ]
+});
+
 export const pcconfigProject = {
   order: 2,
   slug: "pcconfig",
@@ -7,7 +43,7 @@ export const pcconfigProject = {
   statusTone: "mixed",
   cardStatus: "机器配置与恢复可用；Codex Home 等待本人退出后切换",
   cardStatusTone: "pass",
-  snapshotBoundary: "SafeSwitch manifest invalid 仍是后置缺口；Codex Home 等待本人退出后切换，切换后的新运行时与自然启动、新机恢复端到端验收仍需各自回读",
+  ...pcconfigSnapshot,
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
@@ -18,20 +54,6 @@ export const pcconfigProject = {
     problem: "发现路径漂移、任务失败、版本不一致或恢复证据不完整时，只暂停受影响的一层，保留变更前状态并列出责任源、失败位置和下一步恢复入口。",
     unavailable: "磁盘、Provider（现场读取器）或受保护入口不可用时，把对应结论标为 Unknown（证据不足），不猜默认路径、不整包覆盖，也不把部分复制或安装称为整机恢复。"
   },
-  cardMetrics: [
-    { label: "配置地图", value: "15 项目 · 157 键" },
-    { label: "恢复任务", value: "10 Ready · 0 失败" },
-    { label: "秘密恢复", value: "10/10 三路一致" },
-    { label: "Codex 迁移", value: "75.13 GB · 已就绪" }
-  ],
-  heroFacts: [
-    { label: "配置地图", value: "PRIVATE main=f9245a1；44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项、87 个任务" },
-    { label: "开发存储", value: "V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过" },
-    { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过" },
-    { label: "秘密恢复", value: "10/10 项在三条恢复路线一致；G 路 20 份、PRIVATE 路 65 份快照，跨度 33 天" },
-    { label: "受保护数据", value: "P0 当前选择器、自然启动与时限已经闭合；SafeSwitch manifest、后续版本和正式数据仍按各自证据分层" },
-    { label: "Codex Home 迁移", value: "39911 个文件、75.13 GB；最终差异 565 个文件 / 6.74 GiB，ReadyCheck 58 秒，预计离线窗口 4:37–7:56；已就绪并等待本人退出" }
-  ],
   productPrinciples: [
     { title: "先读现场，再改变机器", detail: "登记表负责导航，不能冒充当前状态；真正要改什么，先由 Windows、安装根、任务或项目配置现场证明。" },
     { title: "项目仍拥有自己的配置", detail: "PCConfig 管机器路径、端口、任务、运行时和恢复关系，不把项目业务配置收走形成第二份真相。" },
@@ -81,33 +103,6 @@ export const pcconfigProject = {
     { term: "Recovery Carrier（恢复载体）", meaning: "保存一份完整加密恢复集的已登记介质；只有载体或只有因子都不足以恢复原文。" },
     { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T11:43:18Z",
-    label: "机器配置、恢复任务与秘密恢复闭合；Codex Home 已就绪并等待本人退出切换",
-    facts: [
-      "源仓库 PRIVATE（私有）main 当前提交为 f9245a1；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务。",
-      "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。",
-      "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。",
-      "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。",
-      "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。",
-      "fresh Drift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；旧启动失败不再进入当前任务健康计数。",
-      "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。",
-      "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。"
-    ],
-    gaps: [
-      "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
-      "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
-      "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
-      "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
-      "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
-      "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
-      "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
-      "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
-      "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
-      "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
-      "Recovery kit 的 BIOS/UEFI 核心设置记录已成为 present_verified，覆盖照片保留的 CPU、内存、启动和 PCIe 基线；它不等于每个菜单的完整原生 Profile，也没有替代下一次启动后的现场回读。WEPE 隐藏分区仍只有 present_observed。"
-    ]
-  },
   operatingFlow: [
     { title: "先确认问题属于机器层", detail: "只有当前决定依赖本机路径、端口、运行时、任务、启动、备份或恢复事实时才进入 PCConfig；项目业务问题继续回到项目本身。" },
     { title: "定位唯一 Owner 和真实配置源", detail: "用最小 Registry 找到对应文件、任务、服务或 Provider；旧报告和人类指南只负责导航。" },

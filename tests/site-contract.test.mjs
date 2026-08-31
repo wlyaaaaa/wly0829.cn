@@ -343,11 +343,12 @@ test("the authoritative desktop scale baseline follows the older compact block",
   assert.match(scaleBlock, /body\s*\{\s*font-size:\s*18px/);
 });
 
-test("the shared enhancement bundle stays under 120 KiB and carries no route narratives", async () => {
+test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS review lines", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
-  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 120);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 24);
+  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
+  assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 20);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 25);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -359,12 +360,17 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   const javascriptSources = await Promise.all(javascript.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const gzipBytes = javascriptSources.reduce((total, source) => total + gzipSync(source).length, 0);
   assert.ok(gzipBytes <= registry.refresh_policy.shared_interaction_gzip_budget_kib * 1024, `shared enhancement JavaScript gzip ${gzipBytes} exceeds registry budget`);
+  const stylesheets = (await readdir(assetsRoot)).filter((item) => item.endsWith(".css"));
+  assert.ok(stylesheets.length >= 1, "production build has no shared stylesheet");
+  const stylesheetSources = await Promise.all(stylesheets.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
+  const stylesheetGzipBytes = stylesheetSources.reduce((total, source) => total + gzipSync(source).length, 0);
+  assert.ok(stylesheetGzipBytes <= registry.refresh_policy.shared_css_gzip_budget_kib * 1024, `shared CSS gzip ${stylesheetGzipBytes} exceeds registry budget`);
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
-  assert.match(runtimeSource, /image\.addEventListener\("dblclick",[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
+  assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
   for (const { project: currentProject } of projectCatalog) {
     assert.ok(!clientGraph.includes(currentProject.summary.slice(0, 80)), `${currentProject.slug} narrative leaked into client JavaScript`);
@@ -1644,7 +1650,13 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     }
     assert.ok(["personal_install", "host_integrated"].includes(item.sourceKind), `${item.slug}.sourceKind is invalid`);
     assert.equal(item.availability, "available", `${item.slug} is not publicly usable`);
-    assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
+    if (item.sourceKind === "personal_install") {
+      assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
+    } else {
+      assert.equal(item.sourcePath, item.capabilityId);
+      assert.match(item.capabilityId, /^host:[a-z-]+$/);
+      assert.equal(path.win32.isAbsolute(item.observedSourcePath), true, `${item.slug}.observedSourcePath is not an absolute Windows path`);
+    }
     assert.doesNotMatch(item.sourcePath, /[\t\r\n]/, `${item.slug}.sourcePath contains an escaped control character`);
     assert.ok(["pass", "mixed", "unknown", "problem"].includes(item.statusTone), `${item.slug}.statusTone is invalid`);
     assert.ok(item.transactionState.length >= 10, `${item.slug}.transactionState is incomplete`);
@@ -1834,14 +1846,14 @@ test("shared search scopes, project reading layers, Skills categories and System
   const systemProjectAssets = systemProjectDomains.flatMap((domain) => domain.assets);
   assert.equal(systemProjectAssets.length, systemProjectInventory.total);
   assert.equal(new Set(systemProjectAssets.map((asset) => asset.id)).size, systemProjectInventory.total);
-  assert.equal(systemProjectInventory.identitySha256, "sha256:a6f2f51b305dc975d21bc22ecc291e6f6553ac532672cb62a637007da85d98a5");
+  assert.match(systemProjectInventory.identitySha256, /^sha256:[a-f0-9]{64}$/);
   assert.equal(systemProjectSourceMap.length, systemProjectInventory.total);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectInventory.total);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectInventory.total);
   assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
   const atlasMappingText = [...systemProjectSourceMap].sort((left, right) => left.assetId.localeCompare(right.assetId)).map((entry) => `${entry.assetId}=${entry.sourceIdentity}`).join("\n");
   assert.equal(`sha256:${createHash("sha256").update(atlasMappingText).digest("hex")}`, systemProjectInventory.mappingSha256);
-  assert.equal(systemProjectInventory.mappingSha256, "sha256:21b214da99889fa05a7aaa366b2392f773526d936bf702b0969f0e82373a3c00");
+  assert.match(systemProjectInventory.mappingSha256, /^sha256:[a-f0-9]{64}$/);
   for (const story of systemRuleStories) assert.ok(systemHtml.includes("id=\"system-rule-story-" + story.id + "\""));
   for (const family of systemSkillFamilies) assert.ok(systemHtml.includes("id=\"system-skill-family-" + family.id + "\""));
   for (const domain of systemProjectDomains) assert.ok(systemHtml.includes("id=\"system-project-domain-" + domain.id + "\""));
@@ -1858,12 +1870,33 @@ test("shared search scopes, project reading layers, Skills categories and System
     for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
     assert.match(overviewHtml, /class="module-index"/);
     assert.ok(overviewHtml.includes(entry.project.productPrinciples[0].title), `${entry.project.slug} omits its first product principle`);
+    assert.match(overviewHtml, /class="document-section document-section-first project-positive-snapshot"/);
+    for (const metric of entry.project.cardMetrics) {
+      assert.ok(overviewHtml.includes(metric.label) && overviewHtml.includes(metric.value), `${entry.project.slug} quick layer omits card metric: ${metric.label}`);
+    }
+    assert.ok(overviewHtml.indexOf(entry.project.cardMetrics[0].value) < overviewHtml.indexOf("快照边界"), `${entry.project.slug} shows boundary before positive snapshot`);
+    assert.ok(overviewHtml.indexOf("快照边界") < overviewHtml.indexOf("最快了解这个项目"), `${entry.project.slug} does not lead with snapshot and boundary`);
+    assert.equal((overviewHtml.match(/project-headline-facts-technical/g) || []).length, 1, `${entry.project.slug} must render technical facts exactly once`);
+    assert.doesNotMatch(overviewHtml, /project-headline-facts-quick/);
+    const quickHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="quick"'), overviewHtml.indexOf('data-project-reading-panel="product"'));
+    const productHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="product"'), overviewHtml.indexOf('data-project-reading-panel="technical"'));
+    if (entry.project.gallery?.length) {
+      const galleryClassPattern = /class="document-section project-gallery"/g;
+      assert.equal((quickHtml.match(galleryClassPattern) || []).length, 1, `${entry.project.slug} gallery is not visible in Quick`);
+      assert.equal((productHtml.match(galleryClassPattern) || []).length, 0, `${entry.project.slug} duplicates gallery in Product`);
+      const galleryPosition = quickHtml.search(galleryClassPattern);
+      assert.ok(quickHtml.indexOf("快照边界") < galleryPosition && galleryPosition < quickHtml.indexOf("最快了解这个项目"), `${entry.project.slug} gallery order drifted`);
+    }
   }
   const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "index.html"), "utf8");
   assert.match(skillsHtml, /data-skill-category="all"[^>]*aria-pressed="true"|aria-pressed="true"[^>]*data-skill-category="all"/);
   const projectsHtml = await readFile(path.join(projectRoot, "dist", "projects", "index.html"), "utf8");
   assert.equal((projectsHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
   assert.equal((projectsHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
+  assert.equal((projectsHtml.match(/class="project-metrics"/g) || []).length, projectCatalog.length);
+  for (const entry of projectCatalog) {
+    for (const metric of entry.project.cardMetrics) assert.ok(projectsHtml.includes(metric.value), `project card omits metric: ${entry.project.slug}/${metric.label}`);
+  }
 
   const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
   const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
@@ -2057,9 +2090,9 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(packageJson.scripts.build, /build:site/);
   assert.match(packageJson.scripts.build, /verify:snapshot/);
   assert.match(packageJson.scripts.build, /verify:public/);
-  assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("run: npm test"));
-  assert.ok(workflow.indexOf("run: npm test") < workflow.indexOf("actions\/upload-pages-artifact"));
-  assert.ok(workflow.lastIndexOf("run: npm run verify:public") > workflow.indexOf("run: npm test"));
+  assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("run: npm run test:built"));
+  assert.ok(workflow.indexOf("run: npm run test:built") < workflow.indexOf("actions/upload-pages-artifact"));
+  assert.ok(workflow.lastIndexOf("run: npm run verify:public") > workflow.indexOf("run: npm run test:built"));
   assert.ok(workflow.lastIndexOf("run: npm run verify:public") < workflow.indexOf("actions\/upload-pages-artifact"));
   assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("actions\/upload-pages-artifact"));
   assert.match(verifier, /production_artifact_missing/);
@@ -2220,7 +2253,9 @@ test("production build has direct entry files for every route", async () => {
     }
     assert.ok(html.includes(`<link rel="canonical" href="${expectedCanonicalUrl(route)}" />`), `${route} canonical drifted`);
     if (route === "/system") assert.match(html, /<meta http-equiv="refresh" content="0; url=\/" \/>/);
-    assert.match(html, /<link rel="prefetch" as="document" href="\/[^"]*" \/>/);
+    const staticPrefetches = html.match(/<link rel="prefetch" as="document" href="\/[^"]*" \/>/g) || [];
+    assert.ok(staticPrefetches.length <= 1, `${route} emits more than one static document prefetch`);
+    if (route === "/system") assert.equal(staticPrefetches.length, 0, "compatibility redirect must not prefetch another route");
     assert.match(html, /<script src="\/search-index\.js"><\/script>/);
     const routeProject = projectCatalog.find((entry) => route === entry.project.route || route.startsWith(`${entry.project.route}/`));
     if (route === "/search") {

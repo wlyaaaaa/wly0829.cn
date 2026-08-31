@@ -18,7 +18,8 @@
     "verify:ai-refresh": "node scripts/verify-ai-panel-refresh.mjs",
     "verify:public": "node scripts/verify-public-content.mjs",
     "pretest": "npm run build:site",
-    "test": "node --test tests/*.test.mjs"
+    "test": "npm run test:built",
+    "test:built": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "13.15.1",

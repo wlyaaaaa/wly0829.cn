@@ -326,12 +326,16 @@ read-only operating panel; public presentation is secondary.
 - A targeted refresh touches only the named project. A full refresh iterates all
   enabled projects but may leave most or all files byte-identical. It is a
   revalidation request, not permission to rewrite every page.
-- This is a continuously maintainable panel with on-demand AI refreshes. It is
-  neither an immutable one-time snapshot nor an automatically synchronized
-  monitoring service.
-- The published site represents the last explicitly refreshed and released
-  state. E release identity is the rule-version boundary; do not claim
-  background freshness, watchers or scheduled synchronization.
+- This is a continuously maintainable panel with on-demand AI refreshes plus
+  one owner-authorized weekly material-drift review. The weekly task reads
+  current project, Rule and Skill evidence after governance, remains a no-op
+  when the page would stay truthful, and updates only the affected snapshot
+  when a real change would alter reader understanding. It is not continuous
+  synchronization and does not justify a watcher, daemon or duplicate writer.
+- The published site represents the last verified and released state. E release
+  identity is the rule-version boundary; the weekly review does not make every
+  displayed fact live, and the site must not claim background freshness beyond
+  the evidence and observation time it actually read back.
 - The fast project function must provide `targeted` and `all` AI refresh plans
   from `config/panel-projects.json`, including the current content path, source
   identity, evidence collectors and existing snapshot fingerprint. Plans are

@@ -35,7 +35,7 @@ jobs:
         run: npm run build
 
       - name: Test source and generated routes
-        run: npm test
+        run: npm run test:built
 
       - name: Reverify final generated artifact
         run: npm run verify:public

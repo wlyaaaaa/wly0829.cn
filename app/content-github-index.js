@@ -1,3 +1,29 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const githubIndexSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T11:30:52Z",
+  label: "live Owner identity 闭合、本地副本覆盖已验证；发布与投影刷新仍按各自证据收口",
+  metrics: [
+    { label: "仓库总账", value: "47" },
+    { label: "公开 / 私有", value: "27 / 20" },
+    { label: "本地副本", value: "44" },
+    { label: "当前差异", value: "0 delta · 0 issue" }
+  ],
+  facts: [
+    { label: "当前仓库责任源", value: "wlyaaaaa/github-local-index PUBLIC main 当前为 e6bf84bb46c3915e96d537eb0a60ed2acb1837c7；它对齐活动全局个人数据分级，并提供 zero-fetch（不联网抓取）原子投影收敛。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。" },
+    { label: "公开投影", value: "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，8 份文档共 18295 bytes 并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。" },
+    { label: "仓库与本地副本", value: "live source 覆盖 47 个仓库身份（27 PUBLIC、20 PRIVATE）和 44 个已验证 clone occurrence（26 PUBLIC、18 PRIVATE）；identity coverage 与 clone coverage 均为 complete（完整）。" },
+    { label: "现场读取方式", value: "同一 Get-GitOwnerStatus receipt 以零写入、no fetch 方式返回 execution_status=completed，baseline 与 observed 一致、delta=0、issue=0。" },
+    { label: "真实入场例子", value: "本次发布入场曾发现 wly0829.cn 本地 main 领先 7 个提交并有 2 个 dirty worktree，因此阻止把本地 E95 误报为公网完成；这是一条历史真实例子，最终状态始终重新读取 live Owner。" }
+  ],
+  gaps: [
+    "8/8 stable drift 仍待后置刷新；这不改写 live identity baseline 与 0 delta / 0 issue 的当前 Owner 结论。",
+    "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
+    "重大 Git/GitHub 动作源码曾在历史提交 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从历史源码回归外推。",
+    "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。"
+  ]
+});
+
 export const githubIndexProject = {
   order: 3,
   slug: "github-index",
@@ -9,7 +35,7 @@ export const githubIndexProject = {
   statusTone: "mixed",
   cardStatus: "仓库总账闭合，本地副本覆盖已验证",
   cardStatusTone: "pass",
-  snapshotBoundary: "公开 generation 只证明其观察时点；8/8 stable drift 留待后置刷新；Admission 只提供证据，不授予 push 权限",
+  ...githubIndexSnapshot,
   summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
   plainExample: "例如我问“这个功能分支已经推送了，能算完成吗？”它不会只看分支自己的上游是否同步，而会确认目标提交是否已经进入远端真正的默认分支，同时检查工作区是否还留着未提交内容。只有默认分支回读包含目标提交，Git 交付才真正收口。",
@@ -19,20 +45,6 @@ export const githubIndexProject = {
     problem: "发现未提交修改、分支落后或分叉、工作树独有内容、索引漂移或公开风险时，给出警告或阻断及具体处理项，不覆盖并发施工。",
     unavailable: "GitHub、远端引用或本地仓库证据不可取得时，可以继续不依赖远端的安全只读或本地工作，但身份、同步和发布结论保持 Unknown（证据不足）。"
   },
-  cardMetrics: [
-    { label: "仓库总账", value: "47" },
-    { label: "公开 / 私有", value: "27 / 20" },
-    { label: "本地副本", value: "44" },
-    { label: "当前差异", value: "0 delta · 0 issue" }
-  ],
-  heroFacts: [
-    { label: "仓库闭合口径", value: "只有 live baseline 与现场 identity 集合一致、delta 和 issue 都为零时才称 current；目录名和旧投影不能补齐" },
-    { label: "本地副本语义", value: "clone coverage 逐一回读真实 origin；一个仓库可以有多个 worktree，副本数不等于仓库数" },
-    { label: "Owner 读取", value: "当前 Provider 零写入、no fetch（不抓取远端引用），只返回现场身份、计数、差异与证据边界" },
-    { label: "公开 generation", value: "current=3c6487c23da245f8a8be94e7ab5c7436；8 份文档闭合，共 18295 bytes；generation 完整不冒充 live Owner 新鲜度" },
-    { label: "历史发布入场例子", value: "本次发布入场曾发现 wly0829.cn 本地 main 领先 7 个提交并有 2 个 dirty worktree，因此阻止把本地 E95 误报为公网完成；最终状态始终重新读取 live Owner" },
-    { label: "后置刷新", value: "8/8 stable drift 留待后置刷新；它与 live identity current 结论分层，不能互相冒充" }
-  ],
   productPrinciples: [
     { title: "先确认真实仓库身份", detail: "目录名、标题和旧缓存不能证明远端是谁；写入前核对远端、默认分支和 Git 公共目录。" },
     { title: "检查全部工作树和分支", detail: "未提交修改、独有提交和仍被任务使用的工作树都要保留，不能只看当前目录是否干净。" },
@@ -83,23 +95,6 @@ export const githubIndexProject = {
     { term: "Retirement candidate（可退役候选）", meaning: "内容已进入默认分支且没有已知保护的分支或工作树；仍需确认没有活动依赖后才能删除。" },
     { term: "Commit-pinned snapshot（固定提交快照）", meaning: "干净、受限且固定在已知提交的审计工作树；它不同于普通无 upstream 或含独有工作的临时工作树。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T11:30:52Z",
-    label: "live Owner identity 闭合、本地副本覆盖已验证；发布与投影刷新仍按各自证据收口",
-    facts: [
-      "wlyaaaaa/github-local-index PUBLIC main 当前为 e6bf84bb46c3915e96d537eb0a60ed2acb1837c7；它对齐活动全局个人数据分级，并提供 zero-fetch（不联网抓取）原子投影收敛。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
-      "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，8 份文档共 18295 bytes 并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
-      "live source 覆盖 47 个仓库身份（27 PUBLIC、20 PRIVATE）和 44 个已验证 clone occurrence（26 PUBLIC、18 PRIVATE）；identity coverage 与 clone coverage 均为 complete（完整）。",
-      "同一 Get-GitOwnerStatus receipt 以零写入、no fetch 方式返回 execution_status=completed，baseline 与 observed 一致、delta=0、issue=0。",
-      "本次发布入场曾发现 wly0829.cn 本地 main 领先 7 个提交并有 2 个 dirty worktree，因此阻止把本地 E95 误报为公网完成；这是一条历史真实例子，最终状态始终重新读取 live Owner。"
-    ],
-    gaps: [
-      "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
-      "重大 Git/GitHub 动作源码曾在历史提交 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从历史源码回归外推。",
-      "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。",
-      "8/8 stable drift 仍待后置刷新；这不改写 live identity baseline 与 0 delta / 0 issue 的当前 Owner 结论。"
-    ]
-  },
   operatingFlow: [
     { title: "从普通请求确定目标", detail: "先回答要改哪个项目、期望交付到哪个远端和默认分支；目录名字相似时不靠猜。" },
     { title: "选择正确落盘位置", detail: "新建或 clone（克隆）后再核对真实身份并登记：个人仓库放 V:\\Personal\\Projects，临时工作树放 V:\\Personal\\Worktrees，工作项目放 V:\\Work；不为空目录预登记，也不把仓库或唯一副本放进 Z 盘。" },

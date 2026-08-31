@@ -1,3 +1,41 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const pcPanelHubSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T11:19:19Z",
+  label: "PUBLIC 源码、纯软件回归、主机发送链与 HS2 浮层落点有新鲜证据；实体动态壁纸沿用 2026-08-30 本人历史确认",
+  metrics: [
+    { label: "当前帧", value: "2748" },
+    { label: "失败", value: "0" },
+    { label: "周期", value: "1000 ms" },
+    { label: "采集/渲染/发送", value: "59/10/35 ms" }
+  ],
+  facts: [
+    { label: "两块显示面", value: "TURZX 480×1920 密集遥测；HS2 2288×1048 动态壁纸 + 透明事件浮层；覆盖 10 类信息、最多 6 张事件卡与 15 个纯软件 demo。" },
+    { label: "当前刷新选择", value: "安装态为 1 Hz Hybrid（混合）刷新：command 200 全帧基线 + command 204 有界增量；3 秒全帧仅作兼容回退。" },
+    { label: "数据与恢复节拍", value: "主周期 1000 ms；最近 fetch/render/send 为 59/10/35 ms；第 60/120/180 帧与每 900 帧重建会话或补全帧，进程排行约 3 秒。" },
+    { label: "运行快照", value: "本轮 runtime ready、missing=0；frame/sent=2748/2748、failed=0、period=1000 ms、full=2700；同时确认 HS2 浮层落点，实体动态壁纸沿用 2026-08-30 本人历史确认。" },
+    { label: "源码与回归", value: "PUBLIC main=ebbc1f2ab28bcef7a9a205a346981f16a3d253dc；工作树干净且缓存远端 0/0；本轮项目原生 test.ps1 的指标 84/84、天气 8/8 及整套检查通过，未打开 COM7。" },
+    { label: "实体证据边界", value: "本轮为保护正在运行的 COM7 跳过 TestVideoStream；command 204 没有设备 ACK，进程、heartbeat 和 demo 均不能代替实体像素观察。" },
+    { label: "运行依赖", value: "项目 runtime check（运行依赖检查）确认 Python 3.11、.NET Framework C# 编译器、RJCP 串口库、既有 TURZX 运行文件和主 stack（运行栈）入口均存在；检查没有安装或改动任务。", hero: false },
+    { label: "并发采样保护", value: "当前 main 的 metrics agent 新增 snapshot build lock，防止并发 `/snapshot` 请求同时推进共享采样基线。", hero: false },
+    { label: "公开构建", value: "新的公开 ZIP 真实构建并解包通过：双屏源码完整包含 HS2，机器 JSON、厂商二进制和生成目录均被排除；只保留无实际天气坐标和网卡值的 config.example.json，本机 config.json 已保留实体文件但停止 Git 跟踪。", hero: false },
+    { label: "恢复节拍", value: "恢复节拍按第 60/120/180 帧与每 900 帧分层，用于重建会话或补全帧；这些数字是帧数而不是秒数，任何阈值只处理对应链路，不重启整机。", hero: false },
+    { label: "当前进程", value: "TURZX SideScreen 计划任务状态为 Running、RunLevel=Highest；last result 267009 表示任务仍在运行而不是失败。现场只有一个 TURZX.SideScreen.Stream 进程，HS2.CrystalOverlay 进程也存在。", hero: false },
+    { label: "浮层落点", value: "2026-08-31T04:19:33Z 项目窗口落点策略回读 DISPLAY31 为非主 2288×1048，OverlayPlacementStatus=healthy、visible=1、misplaced=0、actions=0；证明透明浮层当前位于目标副屏。", hero: false },
+    { label: "历史实体确认", value: "2026-08-30 显示缓冲区截图由本人当次确认同画面已在 HS2 实体屏生效；该历史物理验收与 2026-08-31 当前浮层落点证据分层保留。", hero: false },
+    { label: "主机侧含义", value: "当前运行快照只证明主机侧采集、渲染和发送循环继续推进。它没有读取私人通知正文，也没有证明 COM 后的实体面板已经收到或显示相同画面。", hero: false }
+  ],
+  gaps: [
+    "本轮没有打开、重启或写入 COM7，也没有主动操作 HS2、L-Connect、USB 或显示模式；实体屏 1 Hz、冻结恢复、睡眠/唤醒和实际位置没有重新验收。",
+    "command 204 没有设备 ACK；定期重开串口并补 command 200 全帧只能限制主机侧恢复间隔，不能量化实体冻结时间。",
+    "本轮只确认 Wallpaper Engine 进程与 HS2 浮层落点，未重新观察实体动态壁纸像素或运动；2026-08-30 本人历史确认不能升级成当前帧率、透明合成性能、全部事件源、睡眠后恢复或异常重启验收。",
+    "画廊中的实际壁纸帧来自 Wallpaper Engine 市场场景；作者与公网再发布许可当前 Unknown（证据不足）。本页把它作为当次现场截图，不声称用户原创或拥有该美术素材。",
+    "纯软件 gallery（画廊）中的测试 fixture（固定演示数据）和 demo 场景用于验证布局、文本和状态，不代表当前机器数值或实体硬件照片。",
+    "公开仓库不含厂商运行二进制和本机绑定，换机安装仍需合法取得厂商文件并重新确认实际串口、显示器和 Hub 拓扑。",
+    "普通提交已清理当前 main 与未来 ZIP，但不会抹除既有 PUBLIC Git 历史中的旧机器配置字面量；本轮没有执行未授权的历史重写或 force-push。"
+  ]
+});
+
 export const pcPanelHubProject = {
   order: 6,
   slug: "pc-panel-hub",
@@ -7,7 +45,7 @@ export const pcPanelHubProject = {
   statusTone: "mixed",
   cardStatus: "双副屏产品链在运行；HS2 浮层当前落点健康，实体动态壁纸沿用 2026-08-30 本人历史确认",
   cardStatusTone: "pass",
-  snapshotBoundary: "2026-08-31 本轮仅确认主机发送链、Wallpaper Engine 进程与 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，TURZX 实体像素、冻结恢复和睡眠唤醒仍需现场观察",
+  ...pcPanelHubSnapshot,
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库并使用 MIT 许可；仓库只发布项目源码、脚本、合同与公开示例，厂商二进制明确不属于该许可。端口、协议、硬件型号、进程名和状态等技术事实不按字段类别自动隐藏；只有具体值实际含私人正文、身份隐私或可复用凭据时才省略。",
   summary: "PC Panel Hub 把两块实体副屏组成一条不打扰主工作的桌面信息通道。竖直机箱屏一直显示我需要随时瞥一眼的硬件、流畅度、网络、磁盘和后台状态；曲面水冷屏平时保留动态壁纸，只有媒体、任务、手机事件或真正需要注意的告警出现时，才叠加有限数量的透明卡片。两块屏不重复，也不把监控窗口搬回主屏。",
   why: "主屏上的监控窗口会挡工作，也容易在问题发生前被关掉；实体副屏又可能出现“任务仍在运行、主机仍在写串口，但画面已经冻结”的假健康。这个项目把数据可信度、渲染、传输、实体观察和恢复分层，使我既能随时看见关键状态，也能知道哪一层真的被证明。",
@@ -18,19 +56,6 @@ export const pcPanelHubProject = {
     problem: "节拍超时、发送失败、串口身份漂移、显示器绑定异常或浮层错屏时，只处理受影响组件，并保留当前模式、退避和回退证据。",
     unavailable: "设备、串口、L-Connect、本地指标或交互桌面不可用时，停止相应输出并标为 Unknown（未验证）；不抢串口、不重置 USB 树，也不把旧预览冒充当前画面。"
   },
-  cardMetrics: [
-    { label: "显示面", value: "2" },
-    { label: "刷新", value: "1 Hz · failed 0" },
-    { label: "回归", value: "84 + 8" }
-  ],
-  heroFacts: [
-    { label: "两块显示面", value: "TURZX 480×1920 密集遥测；HS2 2288×1048 动态壁纸 + 透明事件浮层；覆盖 10 类信息、最多 6 张事件卡与 15 个纯软件 demo" },
-    { label: "当前刷新选择", value: "安装态为 1 Hz Hybrid（混合）刷新：command 200 全帧基线 + command 204 有界增量；3 秒全帧仅作兼容回退" },
-    { label: "数据与恢复节拍", value: "主周期 1000 ms；最近 fetch/render/send 59/10/35 ms；第 60/120/180 帧与每 900 帧重建会话或补全帧，进程排行约 3 秒" },
-    { label: "运行快照", value: "2026-08-31T11:19:19Z runtime ready、missing=0；frame/sent=2748/2748、failed=0、period=1000 ms、full=2700；本轮确认 HS2 浮层落点，实体动态壁纸沿用 2026-08-30 本人历史确认" },
-    { label: "源码与回归", value: "PUBLIC main=ebbc1f2ab28bcef7a9a205a346981f16a3d253dc；工作树干净且缓存远端 0/0；84 项指标、8 项天气及项目原生整套检查通过" },
-    { label: "证据缺口", value: "本轮为保护正在运行的 COM7 跳过 TestVideoStream；command 204 没有设备 ACK，进程、heartbeat 和 demo 均不能代替实体像素观察" }
-  ],
   productPrinciples: [
     { title: "两块屏承担不同工作", detail: "机箱屏负责持续状态，水冷屏负责低频事件；同一信息不在两块屏重复堆叠。" },
     { title: "先保证一眼可读，再显示更多", detail: "信息层级、字号、间距和状态含义优先于指标数量，副屏不能变成缩小版监控墙。" },
@@ -146,33 +171,6 @@ export const pcPanelHubProject = {
     { term: "device ACK（设备确认）", meaning: "设备明确回报已接收并显示画面；当前协议没有这样的可信回执。" },
     { term: "physical acceptance（实体观察验收）", meaning: "直接观察真实副屏刷新、位置、睡眠和恢复；软件日志或截图不能替代。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T11:19:19Z",
-    label: "PUBLIC 源码、纯软件回归、主机发送链与 HS2 浮层落点有新鲜证据；实体动态壁纸沿用 2026-08-30 本人历史确认",
-    facts: [
-      "Git Owner 回读 wlyaaaaa/PC-Panel-Hub 为 PUBLIC（公开）仓库，默认 main（默认主分支）；本地 HEAD 与缓存 origin/main 均为 ebbc1f2ab28bcef7a9a205a346981f16a3d253dc，工作树干净。",
-      "项目 runtime check（运行依赖检查）确认 Python 3.11、.NET Framework C# 编译器、RJCP 串口库、既有 TURZX 运行文件和主 stack（运行栈）入口均存在；检查没有安装或改动任务。",
-      "本轮项目原生 test.ps1 通过：指标 84/84、天气 8/8，并完成 renderer、HTTP、power、shortcut、refresh default、cadence、runtime reliability、dry-run stream 与 public release ZIP 检查；未打开 COM7。",
-      "当前 main 的 metrics agent 新增 snapshot build lock，防止并发 `/snapshot` 请求同时推进共享采样基线。",
-      "新的公开 ZIP 真实构建并解包通过：双屏源码完整包含 HS2，机器 JSON、厂商二进制和生成目录均被排除；只保留无实际天气坐标和网卡值的 config.example.json，本机 config.json 已保留实体文件但停止 Git 跟踪。",
-      "2026-08-31T11:19:19Z 的 runtime check 为 ready、missing=0；有界 heartbeat 状态为 ok、snapshot_status=fresh、transport=hybrid_diff_204_full_200、frame=2748、sent=2748、failed=0、period_ms=1000、full=2700；最近 fetch/render/send 为 59/10/35 ms。",
-      "当前产品公开 10 类信息，HS2 最多同时显示 6 张事件卡，15 个纯软件 demo 覆盖满载、告警、缺项和恢复布局；这些 demo 不冒充当前事件或实体屏验收。",
-      "恢复节拍按第 60/120/180 帧与每 900 帧分层，用于重建会话或补全帧；这些数字是帧数而不是秒数，任何阈值只处理对应链路，不重启整机。",
-      "TURZX SideScreen 计划任务状态为 Running、RunLevel=Highest；last result 267009 表示任务仍在运行而不是失败。现场只有一个 TURZX.SideScreen.Stream 进程，HS2.CrystalOverlay 进程也存在。",
-      "2026-08-31T04:19:33Z 项目窗口落点策略回读 DISPLAY31 为非主 2288×1048，OverlayPlacementStatus=healthy、visible=1、misplaced=0、actions=0；证明透明浮层当前位于目标副屏。",
-      "2026-08-30 显示缓冲区截图由本人当次确认同画面已在 HS2 实体屏生效；该历史物理验收与 2026-08-31 当前浮层落点证据分层保留。",
-      "当前运行快照只证明主机侧采集、渲染和发送循环继续推进。它没有读取私人通知正文，也没有证明 COM 后的实体面板已经收到或显示相同画面。"
-    ],
-    gaps: [
-      "本轮没有打开、重启或写入 COM7，也没有主动操作 HS2、L-Connect、USB 或显示模式；实体屏 1 Hz、冻结恢复、睡眠/唤醒和实际位置没有重新验收。",
-      "command 204 没有设备 ACK；定期重开串口并补 command 200 全帧只能限制主机侧恢复间隔，不能量化实体冻结时间。",
-      "本轮只确认 Wallpaper Engine 进程与 HS2 浮层落点，未重新观察实体动态壁纸像素或运动；2026-08-30 本人历史确认不能升级成当前帧率、透明合成性能、全部事件源、睡眠后恢复或异常重启验收。",
-      "画廊中的实际壁纸帧来自 Wallpaper Engine 市场场景；作者与公网再发布许可当前 Unknown（证据不足）。本页把它作为当次现场截图，不声称用户原创或拥有该美术素材。",
-      "纯软件 gallery（画廊）中的测试 fixture（固定演示数据）和 demo 场景用于验证布局、文本和状态，不代表当前机器数值或实体硬件照片。",
-      "公开仓库不含厂商运行二进制和本机绑定，换机安装仍需合法取得厂商文件并重新确认实际串口、显示器和 Hub 拓扑。",
-      "普通提交已清理当前 main 与未来 ZIP，但不会抹除既有 PUBLIC Git 历史中的旧机器配置字面量；本轮没有执行未授权的历史重写或 force-push。"
-    ]
-  },
   operatingFlow: [
     { title: "先从真实来源采样", detail: "metrics agent（指标代理）按来源读取硬件、网络、磁盘、天气、FPS 和前台信息；进程排行独立每 3 秒采样，避免拖住 1 秒主循环。" },
     { title: "给每个值保留时效与可信度", detail: "来源不可达、陈旧或歧义时使用空值、旧快照或失败状态，不把 0 冒充真实传感器值。" },

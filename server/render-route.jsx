@@ -45,13 +45,14 @@ for (const alias of compactSearchCandidateAliases) {
 function compactSearchProjection(entry) {
   const href = canonicalDocumentHref(entry.href);
   const projectionKey = `${entry.type}|${entry.title}|${href}`;
+  const detailLimit = entry.type === "项目资产" ? 120 : entry.type === "系统组成" ? 140 : 180;
   return {
     type: entry.type,
     group: entry.group,
     scopes: entry.scopes || [],
     projectSlug: entry.projectSlug || null,
     title: entry.title,
-    detail: entry.detail.slice(0, 240),
+    detail: entry.detail.slice(0, detailLimit),
     href,
     aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(projectionKey) || [])])],
     search: entry.type === "项目" ? entry.compactSearch || "" : ""
@@ -99,16 +100,11 @@ function searchIndexScripts(route) {
   return scripts.join("\n    ");
 }
 
-function likelyNextRoutes(route) {
+function nextStaticRoute(route) {
+  if (route === "/system") return null;
   const currentIndex = routePaths.indexOf(route);
-  return [...new Set([
-    routePaths[currentIndex + 1],
-    routePaths[currentIndex - 1],
-    "/",
-    "/rules",
-    "/search",
-    "/skills"
-  ].filter((candidate) => candidate && candidate !== route))].slice(0, 5);
+  if (currentIndex < 0) return null;
+  return routePaths.slice(currentIndex + 1).find((candidate) => candidate !== "/system") || null;
 }
 
 export function renderRoute(pathname, search = "") {
@@ -119,9 +115,8 @@ export function renderDocument(template, pathname, search = "") {
   const route = canonicalPath(pathname) === "/" ? "/" : canonicalPath(pathname).slice(0, -1);
   const meta = routeMeta(route);
   const canonical = canonicalUrl(route === "/system" ? "/" : route);
-  const prefetchLinks = likelyNextRoutes(route)
-    .map((target) => `<link rel="prefetch" as="document" href="${escapeAttribute(canonicalPath(target))}" />`)
-    .join("\n    ");
+  const prefetchTarget = nextStaticRoute(route);
+  const prefetchLinks = prefetchTarget ? `<link rel="prefetch" as="document" href="${escapeAttribute(canonicalPath(prefetchTarget))}" />` : "";
   let html = template;
   html = replaceRequired(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
   html = replaceRequired(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, `<meta name="description" content="${escapeAttribute(meta.description)}" />`);

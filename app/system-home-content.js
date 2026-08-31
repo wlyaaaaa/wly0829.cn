@@ -25,6 +25,16 @@ export const systemHomeHero = {
   ]
 };
 
+export const systemHomeChapters = [
+  { id: "system-cases", label: "真实工作" },
+  { id: "system-automations", label: "自动协作" },
+  { id: "system-dependencies", label: "系统组成" },
+  { id: "system-collaboration", label: "怎么协作" },
+  { id: "system-project-atlas", label: "项目版图" },
+  { id: "system-rule-stories", label: "规则与能力" },
+  { id: "evidence", label: "验证" }
+];
+
 export const systemScenarios = [
   {
     id: "project-work",
@@ -173,7 +183,7 @@ export const systemScenarios = [
     rules: "先按真实文件类型选择保留结构最多的读取方式；乱码从原始字节诊断；扫描识别绑定页码和版面；源内容、生成文件、渲染页面和语义验收分别核对。",
     result: "结构化源文档、当前 PDF、页数与源文件指纹、完整页面总览、可疑页清单、冲突与未确认项，以及不会覆盖原件的恢复位置。",
     value: "它不是把文本拼成一个文件，而是让来源、转换、版面和最终阅读体验都能重新核对。",
-    dependencyIds: ["general-ai", "agents", "rules", "skills", "materials", "localocr", "documents-skill", "pdf-skill", "verification", "human-review"],
+    dependencyIds: ["general-ai", "agents", "rules", "skills", "materials", "localocr", "documents-skill", "pdf-skill", "document-output-choice", "verification", "human-review"],
     stages: [
       {
         number: "01",
@@ -488,6 +498,148 @@ export const systemScenarios = [
   }
 ];
 
+export const systemComposedWorkflows = [
+  {
+    id: "mail-event-brief",
+    number: "01",
+    title: "重要邮件到达后，系统主动整理并提醒",
+    request: "“这类新邮件到了就读相关上下文，整理我要做什么、截止时间和附件，然后提醒我。”",
+    path: ["Gmail 新邮件事件", "固定收件箱与 Drive", "对应项目或文书能力", "可用通知渠道"],
+    delivery: "邮件与附件摘要、行动项、截止时间、来源入口、待本人决定项和主动提醒。",
+    evidence: "组件齐全 · 组合待验",
+    tone: "mixed",
+    unavailable: "事件入口不可用时仍能按需读取；没有 email 渠道时结果保留在任务或 Activity，并使用当前账号可用的通知方式。"
+  },
+  {
+    id: "meeting-prep",
+    number: "02",
+    title: "会前自动准备一页真正相关的材料",
+    request: "“开会前半小时，把日程、最近邮件和 Drive 文件整理成一页准备材料。”",
+    path: ["定时任务", "Calendar", "Gmail / Drive", "可编辑文档", "主动提醒"],
+    delivery: "议题、参会背景、近期往来、相关文件、待问问题和一页会前材料。",
+    evidence: "组件齐全 · 组合待验",
+    tone: "mixed",
+    unavailable: "缺少某个来源时直接标出缺口，继续使用其余当前材料，不拿旧邮件或旧文件补造当前背景。"
+  },
+  {
+    id: "local-cloud-reconcile",
+    number: "03",
+    title: "本地原件和云端版本可以直接对账",
+    request: "“本机和 Drive 里各有一份，告诉我哪个更新、具体差在哪，先不要覆盖。”",
+    path: ["本地原件定位", "Drive 搜索与导出", "内容与指纹比较", "差异文档"],
+    delivery: "版本矩阵、具体差异、来源、建议主版本、冲突和不覆盖原件的处理方案。",
+    evidence: "组件齐全 · 组合待验",
+    tone: "mixed",
+    unavailable: "只说明真正核对过的范围；无法打开一侧时不根据文件名或时间戳擅自选主版本。"
+  },
+  {
+    id: "github-event-triage",
+    number: "04",
+    title: "项目事件到达后先分诊，再决定是否处理",
+    request: "“有新的 PR 活动时，先判断影响哪个项目、要不要处理，再把结论提醒我。”",
+    path: ["GitHub 事件", "项目身份与发布总账", "项目身份入口", "目标项目规则", "通知"],
+    delivery: "影响范围、风险、需要验证什么、能否继续和下一步，不自动改代码或合并。",
+    evidence: "设计候选",
+    tone: "unknown",
+    unavailable: "事件任务不能进入本地项目现场时，只交付事件摘要与待办，不冒充已经完成代码审查。"
+  },
+  {
+    id: "health-material-arrival",
+    number: "05",
+    title: "新报告到达后，直接进入健康协作",
+    request: "“新报告到了，结合我当前材料告诉我哪些变化值得问、还缺什么。”",
+    path: ["邮件 / Drive 或本地原件", "PDF / OCR", "个人健康项目", "权威资料", "人的决定"],
+    delivery: "变化、证据质量、问题清单、选项、停止或复查条件和仍需补充的材料。",
+    evidence: "组件齐全 · 组合待验",
+    tone: "mixed",
+    unavailable: "新材料先进入待审核，不自动改写当前健康事实，也不替本人作高风险决定。"
+  },
+  {
+    id: "notify-remote-continue",
+    number: "06",
+    title: "任务需要决定时提醒我，手机回答后继续",
+    request: "“任务需要我决定时主动提醒；我在手机上回答后，让同一个任务继续。”",
+    path: ["任务状态", "主动通知", "跨设备任务入口", "同一审批与文件", "最终项目结果"],
+    delivery: "当前进展、待决定项、手机回复、继续后的结果文件和真实交付状态。",
+    evidence: "设计候选",
+    tone: "unknown",
+    unavailable: "通知无法深链到任务时提供可打开的任务入口，不创建第二份任务，也不复制聊天。"
+  }
+];
+
+export const systemActiveAutomations = {
+  observedAt: "2026-08-31",
+  groups: [
+    { id: "mobile", label: "01–05", title: "云端定时协作（手机接收）", description: "云端定时或事件任务持续整理、监控并提醒，手机是接收结果和继续协作的入口。" },
+    { id: "computer", label: "06–07", title: "电脑端自动治理（本机执行）", description: "电脑端任务进入真实项目、规则、Git 与发布现场，持续治理和更新。" }
+  ],
+  items: [
+    {
+      id: "important-mail",
+      group: "mobile",
+      cadence: "每小时",
+      title: "重要邮件提醒",
+      focus: "检查自上次成功运行后新到的 Gmail 邮件，也识别三个 QQ 邮箱转发件的原始发件人、主题和收件邮箱。",
+      process: "按原始邮件、线程和同一事件去重，只保留任务、截止日期、账单、行程变更、账号事件和重要人工邮件；验证码、促销和普通更新直接略过。",
+      delivery: "只有出现新的重要邮件才提醒：说明谁发来、主题、为什么重要、金额或期限和下一步；没有重要变化就保持安静。"
+    },
+    {
+      id: "github-major-change",
+      group: "mobile",
+      cadence: "每小时",
+      title: "GitHub 重大变更监控",
+      focus: "把当前 GitHub 状态与上一次检查比较，关注仓库新增、消失、改名、可见性、归档状态和默认分支。",
+      process: "普通 commit、push、PR、Issue 和 CI 失败不打扰；网站仓库更新后，继续核对 wly0829.cn 是否真的换成新版本。",
+      delivery: "只报告会改变项目身份或公网结果的变化，以及网站更新成功、仍是旧版、无法访问或明显异常；无重大变化不通知。"
+    },
+    {
+      id: "daily-priorities",
+      group: "mobile",
+      cadence: "每日",
+      title: "每日重点简报",
+      focus: "覆盖 AI 产品、本地模型与硬件、AI 编程、职业发展、科技商业、中国政治经济与全球重大事件。",
+      process: "从新闻、发布、实测、模型对比、工具教程、趋势和机会中去重降噪，优先保留真正会改变判断或行动的内容。",
+      delivery: "每条都说明发生了什么、为什么重要、对我有什么影响；需要时给出来源与不确定性，而不是只罗列标题。"
+    },
+    {
+      id: "github-daily",
+      group: "mobile",
+      cadence: "每日",
+      title: "GitHub 每日日报",
+      focus: "统计北京时间当天 00:00 至运行时，GitHub 上当前可见的仓库、commit、PR、Issue 和重大身份变化。",
+      process: "区分正常开发与明显自动 commit，按仓库统计并给出 TOP 5；同时核对网站仓库的新 commit 与公网版本，无法确认就明确写未知。",
+      delivery: "交回 30 秒内能读完的数字、仓库排行、重要变化和 1–3 句工作总结；本地未 push 的 commit 不算进去。"
+    },
+    {
+      id: "weekly-reading",
+      group: "mobile",
+      cadence: "每周",
+      title: "每周精选文章",
+      focus: "从过去两周的新文章中选择一篇可免费阅读全文、符合 AI、技术、职业、商业与全球局势兴趣的高价值内容。",
+      process: "完整阅读原文后再判断，不靠标题或摘要，不选付费墙，也不重复近期已经推荐过的文章。",
+      delivery: "交回标题、作者、日期、来源与链接，以及核心逻辑、最值得记住的事实、推荐理由和可以采取的启发或行动。"
+    },
+    {
+      id: "three-base-governance",
+      group: "computer",
+      cadence: "每周",
+      title: "三基座与 GitHub 持续治理",
+      focus: "核对 .agents、PCConfig、GitHub 总索引和全部仓库的责任、规则、机器事实、分支、同步、发布与既有备份回执。",
+      process: "证据新鲜且没有变化就直接 no-op；只展开新增、变化、失败、未知或公开暴露风险，并在责任明确、可分离、可验证时做最小修复。",
+      delivery: "按责任源给出 PASS、ATTENTION、BLOCK，说明证据新鲜度、实际修复、保留的并发工作、复杂度取舍和下一次真实触发点。"
+    },
+    {
+      id: "website-snapshot",
+      group: "computer",
+      cadence: "每周",
+      title: "个人系统网页快照更新",
+      focus: "在治理事实收敛后，对照真实项目、规则和 Skills，检查 System、项目、规则与能力页面是否已经产生实质失真。",
+      process: "没有会改变读者判断的变化就不改；有变化才更新对应快照与说明，并完成内容、构建、公开检查和真实页面验收。",
+      delivery: "交回明确 no-op，或已验证的新快照、修改范围、发布结果与公网回读；不因时间戳、格式或仅哈希变化制造更新。"
+    }
+  ]
+};
+
 export const systemProjectInventory = {
   observedAt: "2026-08-31",
   total: 47,
@@ -601,7 +753,7 @@ export const systemProjectDomains = [
     ordinaryRequest: "“先确认这个仓库是谁、现在在哪个分支；用真实任务验证能力，通过后再发布并从目标重新读取。”",
     collaboration: "项目总账确认身份与远端，具体项目拥有实现和测试，能力基准只给有限验证结论，公开入口负责最终呈现。",
     delivery: "全部项目身份、修改与验证边界、有限结论、正确远端、发布回读和公开入口。",
-    unavailable: "仓库身份、远端引用或发布目标不可确认时仍可继续安全本地工作，但不能把提交存在写成已经发布。",
+    unavailable: "缺失的 Git 事实只阻断依赖它的分支、同步或发布；目标已确认且不依赖该缺口的本地工作继续，提交存在不会冒充已经发布。",
     assets: [
       { id: "codex-agent-model-benchmark", title: "真实任务能力基准（CACB）", repo: "codex-agent-model-benchmark", role: "用同一任务和可复核结果比较不同 AI 工作方式，不把一次回答或当前有问题的评分当结论。", kind: "研究验证", href: "/projects/cacb" },
       { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
@@ -746,11 +898,27 @@ export const systemDependencyNodes = [
   },
   {
     id: "google-workspace",
-    lane: "machine",
-    title: "固定办公服务入口",
-    subtitle: "已集成的邮件、云盘和日历读取能力",
+    lane: "external",
+    title: "邮件、云盘与日历",
+    subtitle: "固定账号的收件箱、Drive 文件和日历事件可以按需进入任务",
     href: "/skills/google-workspace-direct",
-    detail: "通过 PCConfig 登记的固定账号和类型化入口处理当前任务需要的邮件、云盘和日历；默认只读，明确授权后只执行入口已经支持的精确写入，不静默换账号、浏览器或第二条服务路线。"
+    detail: "可以直接用普通要求查收件箱、云端硬盘或日历；默认只读，明确授权后只执行入口已支持的精确写入，不静默换账号、浏览器或第二条服务路线。"
+  },
+  {
+    id: "scheduled-events",
+    lane: "external",
+    title: "定时与事件触发",
+    subtitle: "按时间，或由支持的 Gmail、Slack、GitHub 事件启动任务",
+    href: "https://learn.chatgpt.com/docs/automations",
+    detail: "定时任务可在后台运行；符合条件的 Web / Mobile 账号还能监听新邮件、指定频道消息或 PR 活动。账号、计划和工作区设置决定实际可用性。"
+  },
+  {
+    id: "notifications",
+    lane: "external",
+    title: "主动通知与待处理提醒",
+    subtitle: "工作需要注意时，通过当前账号可用的桌面、Activity、push、email 或 SMS 渠道提醒",
+    href: "https://learn.chatgpt.com/docs/notifications",
+    detail: "通知类别和渠道由当前表面、账号与设置决定；email 是可能的可配置渠道，不写成每个任务都保证发送邮件。"
   },
   {
     id: "timeaudit",
@@ -782,7 +950,7 @@ export const systemDependencyNodes = [
     title: "GitHub 总索引",
     subtitle: "全部项目身份、公开性、远端、工作树、同步和发布",
     href: "/projects/github-index",
-    detail: "拥有完整项目资产事实，而不是首页十个精选项目。能传输、内容适合公开和用户授权发布是三个不同判断。"
+    detail: "拥有完整项目资产事实，而不是项目目录中的精选入口。能传输、内容适合公开和用户授权发布是三个不同判断。"
   },
   {
     id: "project-entry-gate",
@@ -875,10 +1043,18 @@ export const systemDependencyNodes = [
   {
     id: "private-affairs-skill",
     lane: "personal",
-    title: "合同与私人事务文书入口（personal-litigation）",
+    title: "合同与私人事务文书入口",
     subtitle: "围绕唯一现状来源和真实原件准备文书并分开现实状态",
     href: "/skills/personal-litigation",
     detail: "把文书制作、签署、本人操作、平台回执和外部处理分别说明；私人正文与个人结果不进入首页，外部动作仍需精确授权。"
+  },
+  {
+    id: "document-output-choice",
+    lane: "personal",
+    title: "按成品形态选择文档或 PDF 能力",
+    subtitle: "可编辑 Word、交互 PDF、静态 PDF 可以单独使用，也可以组合",
+    href: "#system-skill-family-make-documents",
+    detail: "扫描识别只在原件需要时进入；Word 与 PDF 不是固定先后关系，系统按最终成品、修订、表单和逐页验收要求选择。"
   },
   {
     id: "chinese-asr",
@@ -933,10 +1109,11 @@ export const systemDependencyNodes = [
 export const systemDependencyLanes = [
   { id: "capability", number: "01", title: "通用能力", description: "提供理解、研究和执行能力，不冒充个人开发成果。" },
   { id: "governance", number: "02", title: "治理与入口", description: "个人规则和 Skills 决定能力怎样进入真实任务。" },
-  { id: "machine", number: "03", title: "电脑、服务与恢复", description: "机器、服务、秘密、历史和实体运行事实。" },
-  { id: "projects", number: "04", title: "项目与连续性", description: "全部项目资产、长期产品、验证与跨设备工作。" },
-  { id: "personal", number: "05", title: "资料与个人领域", description: "原件与领域事实保持独立，按当前问题有界进入。" },
-  { id: "evidence", number: "06", title: "结果与人类验收", description: "每一层分别证明，最终由人决定继续或停止。" }
+  { id: "external", number: "03", title: "外部服务与事件", description: "邮件、云盘、日历、定时与事件触发把云端现场主动带进任务。" },
+  { id: "machine", number: "04", title: "电脑、服务与恢复", description: "机器、服务、秘密、历史和实体运行事实。" },
+  { id: "projects", number: "05", title: "项目与连续性", description: "全部项目资产、长期产品、验证与跨设备工作。" },
+  { id: "personal", number: "06", title: "资料与个人领域", description: "原件与领域事实保持独立，按当前问题有界进入。" },
+  { id: "evidence", number: "07", title: "结果与人类验收", description: "每一层分别证明，最终由人决定继续或停止。" }
 ];
 
 export const systemDependencyRelations = [
@@ -944,8 +1121,9 @@ export const systemDependencyRelations = [
   { id: "git-projects", nodes: ["github-index", "project-entry-gate", "all-projects"], label: "从仓库身份进入具体项目", detail: "GitHub 总索引提供全部项目事实，项目身份入口只在这些事实会改变决定时检查，再进入真正拥有业务做法的项目。" },
   { id: "machine-diagnostics", nodes: ["pcconfig", "timeaudit", "timeaudit-skill"], label: "从机器现场到有界历史诊断", detail: "PCConfig 提供当前机器和恢复关系，TimeAudit 保存过去证据，诊断入口把自然问题收窄成时间窗、覆盖质量和竞争假设。" },
   { id: "audio-task", nodes: ["wechat", "chinese-asr", "chinese-asr-skill"], label: "从微信语音到可复核转写", detail: "微信入口保留消息和媒体关系，ChineseASR 项目拥有语音处理实现，Skill 选择本次转写、时间位置和复核模式。" },
-  { id: "document-task", nodes: ["materials", "localocr", "documents-skill", "pdf-skill", "verification"], label: "从混合原件到可编辑、逐页验收的成品", detail: "材料入口先找到真实原件，LocalOCR 只在扫描件或复杂版面需要时进入，Word 与 PDF 能力再分别保留可编辑结构、字段逻辑和逐页版面。" },
-  { id: "private-affairs-task", nodes: ["materials", "private-affairs-skill", "documents-skill", "pdf-skill", "human-review"], label: "私人事务材料进入文书，现实状态仍然分开", detail: "合同与私人事务入口先核对现状来源和原件，文档与 PDF 能力负责成品；制作、本人操作、外部回执和最终决定不会混成一个状态。" },
+  { id: "document-task", nodes: ["materials", "document-output-choice", "verification"], label: "从混合原件到可编辑或逐页验收的成品", detail: "材料入口先找到真实原件；扫描识别按需进入；系统再按成品形态选择 Word、PDF 或二者组合，不把它们画成固定必经顺序。" },
+  { id: "private-affairs-task", nodes: ["materials", "private-affairs-skill", "document-output-choice", "human-review"], label: "私人事务材料进入文书，现实状态仍然分开", detail: "合同与私人事务入口先核对现状来源和原件，再按成品形态选择文档或 PDF；制作、本人操作、外部回执和最终决定不会混成一个状态。" },
+  { id: "external-events", nodes: ["google-workspace", "scheduled-events", "notifications", "human-review"], label: "云端现场触发工作，并把需要注意的结果送回来", detail: "固定账号提供邮件、云盘和日历；支持的时间或应用事件启动任务；通知渠道再按当前账号和设置提醒本人，email 不是每次运行的固定承诺。" },
   { id: "health-task", nodes: ["materials", "personal-health", "personal-health-skill", "human-review"], label: "健康原件进入协作，最终由人采用", detail: "健康项目保留当前证据和新资料边界，Skill 选择已有事实、原件或前台刷新路线，最终选择和停止条件仍由本人决定。" },
   { id: "recovery-task", nodes: ["pcconfig", "recovery-backup", "verification"], label: "从机器资产到分层恢复验收", detail: "PCConfig 提供依赖和恢复关系，开发环境备份保存不可再生材料，文件、运行、登录、重启与用户可用分别验证。" },
   { id: "project-delivery", nodes: ["all-projects", "verification", "human-review"], label: "从项目结果到真实交付", detail: "具体项目提供实现和各层证据；验证矩阵说明已闭合到哪里，最后由用户判断是否真正满足当前目标。" }
@@ -1210,7 +1388,7 @@ export const systemSkillFamilies = [
       "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
-      { slug: "personal-litigation", name: "合同与私人事务文书", technicalName: "personal-litigation", summary: "围绕唯一现状来源和真实原件准备文书，并把制作、本人操作、平台回执与外部状态分开。", href: "/skills/personal-litigation" },
+      { slug: "personal-litigation", name: "合同与私人事务文书", technicalName: "私人事务文书入口", summary: "围绕唯一现状来源和真实原件准备文书，并把制作、本人操作、平台回执与外部状态分开。", href: "/skills/personal-litigation" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },
       { slug: "md-to-pdf", name: "Markdown 转 PDF", technicalName: "md-to-pdf", summary: "按文档用途和分页要求生成 PDF，并核对源文件指纹、页数、中文文本和当前输出。", href: "/skills/md-to-pdf" },

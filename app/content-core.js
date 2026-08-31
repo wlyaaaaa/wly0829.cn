@@ -1,4 +1,5 @@
 import { generatedPanelFacts } from "./panel-facts.generated.js";
+import { createProjectSnapshot } from "./project-snapshot.js";
 import panelProjectRegistry from "../config/panel-projects.json" with { type: "json" };
 
 export const site = {
@@ -68,6 +69,28 @@ const localOwnerObservation = Object.freeze({
   findings: 0
 });
 
+const agentsSnapshot = createProjectSnapshot({
+  observedAt: localOwnerObservation.observedAt,
+  label: `${localOwnerObservation.releaseId} 观察：规则、能力供应、本地回归与合同覆盖闭合`,
+  metrics: [
+    { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
+    { label: "能力目录", value: `${panelSnapshot.skills.selectedPublicCount} · ${panelSnapshot.skills.personalSelectedCount}+${panelSnapshot.skills.hostIntegratedCount}` },
+    { label: `本地回归 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.passed} pass · ${localOwnerObservation.failed} fail` },
+    { label: `合同覆盖 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}` }
+  ],
+  facts: [
+    { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
+    { label: "活动规则闭包", value: `当前 ${activeRuleCount}/${activeRuleCount} 份规则共 ${activeRuleBytes} bytes；每份 release 与 source 的 bytes/SHA 必须一致，dirty source 和历史材料不能替代当前指针` },
+    { label: "本地回归与合同", value: `${localOwnerObservation.releaseId} 本次现场观察：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项属于 cross-owner skip；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。未来 release 不继承本次观察。` },
+    { label: "个人能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 个个人安装意图中有 ${panelSnapshot.skills.personalSelectedCount} 个公开可用、${panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount} 个当前不可用不展示；另有 ${panelSnapshot.skills.hostIntegratedCount} 个宿主集成能力，公开目录共 ${panelSnapshot.skills.selectedPublicCount} 个；${localOwnerObservation.skillTransactions}/${localOwnerObservation.skillTransactions} 安装事务 terminal、${localOwnerObservation.unfinished} unfinished、${localOwnerObservation.invalid} invalid。` },
+    { label: "合同覆盖边界", value: "当前覆盖闭合不代表未来合同自动通过；规则、授权、能力、Git 与机器事实继续由各自责任源解释。" },
+    { label: "产品能力", value: "自然语言目标可接到真实项目、规则、Skills 与工具；源码、测试、安装、发布、恢复和用户结果分层回读。" }
+  ],
+  gaps: [
+    `${localOwnerObservation.releaseId} 观察的完整本地回归不会由 refresh-panel-snapshot 自动重跑；未来 release 即使切换，以上测试仍保持 ${localOwnerObservation.releaseId} 观察，直到新的 Owner 回执替换。`
+  ]
+});
+
 const agentsRegistration = panelProjectRegistry.projects.find((item) => item.id === "agents" && item.enabled);
 if (!agentsRegistration || agentsRegistration.order !== 1 || agentsRegistration.presentation_mode !== "real_dashboard") {
   throw new Error("panel project registry must contain enabled .agents at order 1 in real_dashboard mode");
@@ -84,7 +107,7 @@ export const project = {
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
   cardStatus: `当前 ${panelSnapshot.authority.releaseId} 已激活；最近完整 Owner 回归为 ${localOwnerObservation.releaseId} 观察`,
   cardStatusTone: "pass",
-  snapshotBoundary: `本页活动规则绑定已验证的 ${panelSnapshot.authority.releaseId}；本地回归仍是 ${localOwnerObservation.releaseId} 观察：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail，另 ${localOwnerObservation.crossOwnerSkipped} 项是 cross-owner skip（跨 Owner 跳过）；未来 release 不继承这次回归`,
+  ...agentsSnapshot,
   summary: ".agents 是我和 AI 协作时的总规则与能力中枢。我只需用自然语言说清目标和不能越过的边界，它会让任务找对事实来源、在已有授权内行动、保护并发施工、选择合适能力，并把本地完成、远端发布和真正可用分开验证。最后我拿到的是办成的结果、真实缺口，以及是否还需要我作决定。",
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
@@ -93,31 +116,6 @@ export const project = {
     pass: "目标、事实来源、授权、施工范围和验证层都明确时，任务继续执行并分别回读本地、远端和用户可见结果。",
     problem: "只停止发生冲突或验证失败的那一步，明确失败位置、原因和恢复线索；其他不依赖该问题的安全工作可以继续。",
     unavailable: "把对应事实标记为 Unknown（证据不足），不猜路径、不猜授权，也不把本地成功冒充成远端或用户可用。"
-  },
-  cardMetrics: [
-    { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
-    { label: "能力目录", value: `${panelSnapshot.skills.selectedPublicCount} · ${panelSnapshot.skills.personalSelectedCount}+${panelSnapshot.skills.hostIntegratedCount}` },
-    { label: `本地回归 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.passed} pass · ${localOwnerObservation.failed} fail` },
-    { label: `合同覆盖 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}` }
-  ],
-  heroFacts: [
-    { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
-    { label: "活动规则闭包", value: `当前 ${activeRuleCount}/${activeRuleCount} 份规则共 ${activeRuleBytes} bytes；每份 release 与 source 的 bytes/SHA 必须一致，dirty source 和历史材料不能替代当前指针` },
-    { label: "本地回归边界", value: `${localOwnerObservation.releaseId} 的独立 Owner 观察与未来 release identity 分层；跨 Owner 跳过项不折算成失败或通过` },
-    { label: "个人能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 个个人安装意图中有 ${panelSnapshot.skills.personalSelectedCount} 个公开可用、${panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount} 个当前不可用不展示；另有 ${panelSnapshot.skills.hostIntegratedCount} 个宿主集成能力，公开目录共 ${panelSnapshot.skills.selectedPublicCount} 个` },
-    { label: "合同覆盖边界", value: "当前覆盖闭合不代表未来合同自动通过；规则、授权、能力、Git 与机器事实继续由各自责任源解释" },
-    { label: "产品能力", value: "自然语言目标可接到真实项目、规则、Skills 与工具；源码、测试、安装、发布、恢复和用户结果分层回读" }
-  ],
-  currentState: {
-    observedAt: localOwnerObservation.observedAt,
-    label: `${localOwnerObservation.releaseId} Owner 观察：规则、能力供应、本地回归与合同覆盖闭合`,
-    facts: [
-      `PRIVATE main=${localOwnerObservation.gitCommit}；current pointer revision ${localOwnerObservation.pointerRevision}，previous=${localOwnerObservation.previousReleaseId}；${localOwnerObservation.ruleCount}/${localOwnerObservation.ruleCount} 份活动规则共 ${localOwnerObservation.ruleBytes} bytes，ruleset=${localOwnerObservation.rulesetSha256}。`,
-      `Owner 于 ${localOwnerObservation.observedAt} 现场运行本地登记：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项属于 cross-owner skip；能力供应为 ${localOwnerObservation.activeIntent} 项 active，${localOwnerObservation.skillTransactions}/${localOwnerObservation.skillTransactions} 安装事务 terminal、${localOwnerObservation.unfinished} unfinished、${localOwnerObservation.invalid} invalid；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。`
-    ],
-    gaps: [
-      `refresh-panel-snapshot 只刷新登记快照，不会自动重跑 ${localOwnerObservation.releaseId} Owner 的完整本地回归；未来 release 即使切换，以上测试仍保持 ${localOwnerObservation.releaseId} 观察，直到新的 Owner 回执替换。`
-    ]
   },
   productPrinciples: [
     { title: "人定目标，AI负责方法", detail: "用户说明要达成什么、优先级和不能越过的边界；AI负责调查、工具、并行方式和验证深度，不把工程选择甩回用户。" },
@@ -129,7 +127,7 @@ export const project = {
     { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
     { title: "注意力质量高于上下文数量", detail: "先保住目标、边界、最新证据、未知和验收，再读取会改变判断的细节；既不漏掉关键事实，也不靠堆文件和日志制造理解假象。" },
     { title: "普通本地工作不虚构对抗者", detail: "本机现有用户、文件、进程、软件和私人账号空间默认可信；除非用户明确提出安全任务，不额外制造攻击模型、审计链或守护服务，正确性、可靠性和恢复仍单独做好。" },
-    { title: "私人问题直接进入对应小入口", detail: "健康、诉讼、微信、材料、录音和扫描分别走自己的边界，不恢复中央个人画像或默认全景上下文。" }
+    { title: "私人问题直接进入对应小入口", detail: "健康、私人事务文书、微信、材料、录音和扫描分别走自己的边界，不恢复中央个人画像或默认全景上下文。" }
   ],
   responsibilities: [
     "定义跨项目适用的 Agent 行为与指令优先级",

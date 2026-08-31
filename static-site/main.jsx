@@ -588,6 +588,90 @@ function initializeSystemHome() {
   activateScenario(idFromHash() || ids[0]);
 }
 
+function initializeSystemSectionNavigation() {
+  const navigation = document.querySelector("[data-system-section-navigation]");
+  const home = document.querySelector(".system-home");
+  if (!navigation || !home) return;
+  const rail = navigation.querySelector(".system-section-navigation-rail");
+  const links = Array.from(navigation.querySelectorAll("[data-system-section-link]"));
+  const sections = links.map((link) => document.getElementById(link.dataset.systemSectionLink));
+  if (!rail || links.length === 0 || sections.some((section) => !section)) return;
+  let activeIndex = -1;
+  let frame = 0;
+
+  function headerHeight() {
+    return document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+  }
+
+  function revealActiveLink(link, behavior = "smooth") {
+    if (rail.scrollWidth <= rail.clientWidth) return;
+    const left = link.offsetLeft;
+    const right = left + link.offsetWidth;
+    const visibleLeft = rail.scrollLeft;
+    const visibleRight = visibleLeft + rail.clientWidth;
+    if (left < visibleLeft + 8) rail.scrollTo({ left: Math.max(0, left - 12), behavior });
+    else if (right > visibleRight - 8) rail.scrollTo({ left: Math.min(rail.scrollWidth - rail.clientWidth, right - rail.clientWidth + 12), behavior });
+  }
+
+  function setActive(index) {
+    if (index === activeIndex) return;
+    activeIndex = index;
+    links.forEach((link, linkIndex) => {
+      const current = linkIndex === index;
+      link.classList.toggle("is-current", current);
+      if (current) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    revealActiveLink(links[index]);
+  }
+
+  function update() {
+    frame = 0;
+    const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
+    let nextIndex = 0;
+    sections.forEach((section, index) => {
+      if (section.getBoundingClientRect().top <= readingLine) nextIndex = index;
+    });
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) nextIndex = sections.length - 1;
+    setActive(nextIndex);
+
+  }
+
+  function scheduleUpdate() {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  }
+
+  links.forEach((link, index) => link.addEventListener("click", () => {
+    setActive(index);
+    revealActiveLink(link);
+  }));
+  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", scheduleUpdate);
+  window.addEventListener("hashchange", scheduleUpdate);
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(scheduleUpdate).observe(home);
+  update();
+}
+
+function initializeBackToTop() {
+  const button = document.querySelector("[data-back-to-top]");
+  if (!button) return;
+  let frame = 0;
+  function update() {
+    frame = 0;
+    button.hidden = window.scrollY < Math.max(520, window.innerHeight * 0.75);
+  }
+  function scheduleUpdate() {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  }
+  button.addEventListener("click", () => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
+  });
+  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", scheduleUpdate);
+  update();
+}
+
 function createButton(className, label, text) {
   const button = document.createElement("button");
   button.type = "button";
@@ -602,6 +686,7 @@ function initializeGallery(gallery) {
   if (!cards.length) return;
   const images = cards.map((card) => ({
     src: card.dataset.gallerySrc,
+    thumbnail: card.querySelector("img")?.currentSrc || card.querySelector("img")?.getAttribute("src") || card.dataset.gallerySrc,
     alt: card.dataset.galleryAlt,
     caption: card.dataset.galleryCaption,
     evidenceLevel: card.dataset.galleryEvidenceLevel,
@@ -615,6 +700,8 @@ function initializeGallery(gallery) {
   let returnFocus = null;
   let previousOverflow = "";
   let resizeObserver = null;
+  let fullRequestToken = 0;
+  const fullImageRequests = new Map();
 
   const overlay = document.createElement("div");
   overlay.className = "project-lightbox";
@@ -654,7 +741,7 @@ function initializeGallery(gallery) {
   viewport.tabIndex = 0;
   const canvas = document.createElement("div");
   canvas.className = "project-lightbox-image-canvas";
-  const image = document.createElement("img");
+  let image = document.createElement("img");
   image.className = "project-lightbox-image";
   canvas.append(image);
   viewport.append(previousButton, canvas, nextButton);
@@ -703,6 +790,63 @@ function initializeGallery(gallery) {
     renderZoom();
   }
 
+  function handleImageDoubleClick() {
+    if (zoom === 1) {
+      zoom = 2;
+      renderZoom();
+    } else resetZoom();
+  }
+
+  function installDisplayImage(candidate, item) {
+    candidate.className = "project-lightbox-image";
+    candidate.alt = item.alt;
+    candidate.decoding = "async";
+    candidate.removeAttribute("loading");
+    candidate.removeAttribute("style");
+    candidate.ondblclick = handleImageDoubleClick;
+    candidate.addEventListener("load", measureFit, { once: true });
+    image.replaceWith(candidate);
+    image = candidate;
+    if (image.complete && image.naturalWidth) window.requestAnimationFrame(measureFit);
+  }
+
+  function loadDecodedFullImage(src) {
+    const existing = fullImageRequests.get(src);
+    if (existing) return existing;
+    const request = (async () => {
+      const candidate = new Image();
+      candidate.decoding = "async";
+      candidate.src = src;
+      await candidate.decode();
+      if (!candidate.naturalWidth || !candidate.naturalHeight) throw new Error("gallery_full_image_empty");
+      return candidate;
+    })();
+    fullImageRequests.set(src, request);
+    request.catch(() => {
+      if (fullImageRequests.get(src) === request) fullImageRequests.delete(src);
+    });
+    return request;
+  }
+
+  function prefetchAdjacentFullImages(index) {
+    if (images.length < 2) return;
+    const adjacent = new Set([(index - 1 + images.length) % images.length, (index + 1) % images.length]);
+    for (const adjacentIndex of adjacent) void loadDecodedFullImage(images[adjacentIndex].src).catch(() => {});
+  }
+
+  async function upgradeToFullImage(index, token) {
+    const item = images[index];
+    try {
+      const candidate = await loadDecodedFullImage(item.src);
+      if (token !== fullRequestToken || index !== activeIndex || !overlay.isConnected) return;
+      fitSize = null;
+      installDisplayImage(candidate, item);
+      prefetchAdjacentFullImages(index);
+    } catch {
+      // Keep the thumbnail visible and every control usable.
+    }
+  }
+
   function renderCaption(item) {
     caption.replaceChildren();
     if (item.evidenceLevel) {
@@ -726,24 +870,27 @@ function initializeGallery(gallery) {
   function showImage(index) {
     activeIndex = (index + images.length) % images.length;
     const item = images[activeIndex];
+    const requestToken = ++fullRequestToken;
     zoom = 1;
     fitSize = null;
     delete dialog.dataset.imageOrientation;
     dialog.dataset.zoom = "1";
     canvas.removeAttribute("style");
-    image.removeAttribute("style");
-    image.src = item.src;
-    image.alt = item.alt;
+    const preview = new Image();
+    preview.src = item.thumbnail || item.src;
+    installDisplayImage(preview, item);
     heading.textContent = `图片查看器：${item.alt}`;
     count.textContent = `${activeIndex + 1} / ${images.length}`;
     live.textContent = `第 ${activeIndex + 1} 张，共 ${images.length} 张：${item.alt}`;
     renderCaption(item);
     resetZoom();
     if (image.complete) window.requestAnimationFrame(measureFit);
+    void upgradeToFullImage(activeIndex, requestToken);
   }
 
   function close() {
     if (!overlay.isConnected) return;
+    fullRequestToken += 1;
     resizeObserver?.disconnect();
     resizeObserver = null;
     overlay.remove();
@@ -795,13 +942,6 @@ function initializeGallery(gallery) {
     closeButton.focus();
   }
 
-  image.addEventListener("load", measureFit);
-  image.addEventListener("dblclick", () => {
-    if (zoom === 1) {
-      zoom = 2;
-      renderZoom();
-    } else resetZoom();
-  });
   zoomOut.addEventListener("click", () => { zoom -= 0.5; renderZoom(); });
   zoomIn.addEventListener("click", () => { zoom += 0.5; renderZoom(); });
   zoomReset.addEventListener("click", resetZoom);
@@ -936,6 +1076,8 @@ initializeRulesWorkbench();
 initializeSkillCategories();
 initializeProjectReadingLayers();
 initializeSystemHome();
+initializeSystemSectionNavigation();
+initializeBackToTop();
 initializeFlowField();
 initializeDocumentPrefetch();
 initializePreservedScrollNavigation();

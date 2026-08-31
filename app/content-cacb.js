@@ -1,3 +1,30 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const cacbSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T04:13:00Z",
+  label: "评测产品结构与 task-handle 绑定已在源码形成；当前提交 CI lint 未闭合，本页不发布受测配置结果",
+  metrics: [
+    { label: "核心模块", value: "47" },
+    { label: "数据合同", value: "25" },
+    { label: "连续案例", value: "10" }
+  ],
+  facts: [
+    { label: "当前源码", value: "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。" },
+    { label: "成品范围", value: "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。" },
+    { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复。" },
+    { label: "任务身份绑定", value: "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。" },
+    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。" },
+    { label: "公开证据范围", value: "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。", hero: false }
+  ],
+  gaps: [
+    "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
+    "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
+    "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
+    "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
+    "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
+  ]
+});
+
 export const cacbProject = {
   order: 7,
   slug: "cacb",
@@ -7,7 +34,7 @@ export const cacbProject = {
   statusTone: "mixed",
   cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
   cardStatusTone: "pass",
-  snapshotBoundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
+  ...cacbSnapshot,
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
   summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先冻结题目和验收标准，为每次尝试准备全新的工作区，再由参与者之外的验证器检查真实文件、行为、测试和修改范围。最后得到的是一份可复查的证据：做成了什么、问题在哪一层、哪些还不能下结论，而不是公开比较受测对象。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。CACB 把任务、输入、workspace、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”误当成真实能力。",
@@ -18,19 +45,6 @@ export const cacbProject = {
     problem: "产物错误、越界修改、任务未完成或验收失败时，分别说明问题属于任务、能力还是执行环境。",
     unavailable: "缺少任务身份、完整产物、最终状态或验收输入时保留无法判断，等待同一次执行恢复或重新取得完整证据。"
   },
-  cardMetrics: [
-    { label: "核心模块", value: "47" },
-    { label: "数据合同", value: "25" },
-    { label: "连续案例", value: "10" }
-  ],
-  heroFacts: [
-    { label: "成品范围", value: "233 个跟踪文件，其中有 47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件" },
-    { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
-    { label: "隔离与验证", value: "每次执行独立 workspace；冻结输入、隐藏 verifier、范围审计、终态与归档 hash 分层绑定" },
-    { label: "任务身份绑定", value: "WorkerHandle 同时绑定原始 task id 与 run id；任一身份不同都拒绝借用旧 handle 或旧证据" },
-    { label: "当前源码", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009；工作树干净，远端引用 0/0；最新提交补强 WorkerHandle 与原始任务绑定" },
-    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" }
-  ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
     { title: "每次尝试都从干净工作区开始", detail: "旧文件、其他候选和上一次执行不能提供借来的成功，也不能污染本次失败。" },
@@ -73,24 +87,6 @@ export const cacbProject = {
     { term: "fail-closed（失败关闭）", meaning: "证据不完整或身份不匹配时不生成能力结论，不靠猜测补齐。" },
     { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T04:13:00Z",
-    label: "评测产品结构与 task-handle 绑定已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
-    facts: [
-      "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。",
-      "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。",
-      "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。",
-      "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
-      "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
-    ],
-    gaps: [
-      "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
-      "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
-      "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
-      "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
-      "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
-    ]
-  },
   operatingFlow: [
     { title: "定义能力问题", detail: "先把现实需求写成可以验收的任务家族，说明什么是完整结果、允许什么、禁止什么。" },
     { title: "冻结任务与验证材料", detail: "固定可见 fixture、案例顺序、schema、隐藏 verifier 和版本 hash；执行开始后不原地改题。" },

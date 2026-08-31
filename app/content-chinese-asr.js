@@ -1,3 +1,32 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const chineseAsrSnapshot = createProjectSnapshot({
+  observedAt: "2026-08-31T11:59:37.2566597Z",
+  label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
+  metrics: [
+    { label: "引擎", value: "6" },
+    { label: "回归", value: "345/345" },
+    { label: "真实长音频", value: "4/4" }
+  ],
+  facts: [
+    { label: "引擎与证据路线", value: "当前 Registry 公开 6 个显式引擎：SenseVoiceSmall、Qwen3-ASR-1.7B、FireRedASR2-LLM、Paraformer、Fun-ASR-Nano-2512 和 Whisper Large V3；日常 quick 使用 SenseVoiceSmall，strict 使用 Qwen3-ASR-1.7B 加 SenseVoiceSmall；时间线与匿名说话人另配 CAM++，明确授权的云候选是 Qwen Audio 3.0 ASR Flash。" },
+    { label: "当前源码", value: "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。" },
+    { label: "完整回归", value: "2026-08-31 本次 fresh（新鲜）验证为 345/345 项单元测试通过，内部用时 83.035 秒。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。" },
+    { label: "本机环境", value: "Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 610.88、32607 MiB 显存；WinHTTP 为直连，代理环境干净。" },
+    { label: "运行依赖", value: "FunASR、Qwen ASR 和 PyTorch 均已安装；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。" },
+    { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。" },
+    { label: "媒体替换保护", value: "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。", hero: false },
+    { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成 4/4 切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
+  ],
+  gaps: [
+    "本次为了建设看板只运行全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；历史 E2E 仍是真实成品证据，但不能冒充本轮 fresh 模型验收。",
+    "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口还需要明确本次重要录音与上传授权，也没有调用。",
+    "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
+    "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
+    "真实录音 benchmark、模型组合调优和 VAD（语音活动检测）切片校准属于使用期工作，不是当前源码关闭阻断，但会影响特定录音上的实际准确率。"
+  ]
+});
+
 export const chineseAsrProject = {
   order: 4,
   slug: "chinese-asr",
@@ -7,7 +36,7 @@ export const chineseAsrProject = {
   statusTone: "mixed",
   cardStatus: "中文转写、长录音续跑和可复核结果包已经实现",
   cardStatusTone: "pass",
-  snapshotBoundary: "当前 70e3255 源码与 345 项单元回归已核对；历史真实四切片 E2E 可回读，但本轮没有用私人录音重跑模型，也不把自动文字当成事实认证",
+  ...chineseAsrSnapshot,
   repositoryNote: "源代码位于 PUBLIC（公开）GitHub（代码托管平台）仓库；模型权重、私人录音、转写结果、声纹向量、云端请求和本机缓存不进入仓库，也不进入本页。",
   summary: "ChineseASR 把一段中文录音变成一份能搜索、能继续处理、能回到原音频人工复核的转写包，而不是只吐出一段看似通顺的文字。默认结果保留正文、原始输出、风险和失败证据；需要逐段时间线、匿名说话人或本人线索时再显式选择对应路线。中断后可以接着跑，普通录音默认留在本机。姓名、数字、承诺和争议语句仍以原音频为准。",
   why: "中文录音最危险的问题不是单纯“识别错一个字”，而是模型在静音、噪声、方言、专有名词或长音频切片处生成看似通顺的错误内容。普通结果还可能只有正文而没有完整逐句时间线；如果不保留输入指纹、模型版本、失败证据和可选定位路线，事后既不知道错在哪里，也无法判断重跑是否真的更可靠。",
@@ -18,19 +47,6 @@ export const chineseAsrProject = {
     problem: "某个引擎失败、两路分歧、检测到疑似幻觉或长音频只有部分完成时，保留可用片段但明确标为 provisional（暂定）或需要复核，不把降级结果冒充完整成功。",
     unavailable: "模型、GPU（图形处理器）、音频解码、任务服务或必要授权不可用时，返回具体阻断位置和已有任务身份；不反复提交同一录音，也不自动把普通录音上传云端。"
   },
-  cardMetrics: [
-    { label: "引擎", value: "6" },
-    { label: "回归", value: "345/345" },
-    { label: "真实长音频", value: "4/4" }
-  ],
-  heroFacts: [
-    { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
-    { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
-    { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
-    { label: "重要录音云候选", value: "Qwen Audio 3.0 ASR Flash；必须同时确认重要性和本次上传授权" },
-    { label: "其他显式 Profile", value: "Fun-ASR-Nano-2512、Whisper Large V3；已登记但都不是默认" },
-    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.035 秒；Doctor 识别 6 个引擎与 32607 MiB 显存；历史真实长音频 4/4 切片，续跑 0 processed / 4 skipped" }
-  ],
   productPrinciples: [
     { title: "原音频始终是真相来源", detail: "转写首先是搜索和回听导航，不是录音真实性、说话人身份或法律事实认证。" },
     { title: "流畅不等于可靠", detail: "模型越能生成通顺文字，越要把不确定、分歧和疑似内容变成可定位的复核清单。" },
@@ -81,28 +97,6 @@ export const chineseAsrProject = {
     { term: "SecretRef（秘密引用）", meaning: "只引用受管密钥，不把密钥值放进命令、日志、Git 或模型上下文。" },
     { term: "E2E（端到端验证）", meaning: "使用真实音频从入口跑到最终文件并检查用户可见结果；单元测试和 Doctor 不能替代它。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T11:59:37.2566597Z",
-    label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
-    facts: [
-      "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。",
-      "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。",
-      "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，内部用时 83.035 秒，345 项全部通过。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
-      "Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 610.88、32607 MiB 显存；WinHTTP 为直连，代理环境干净。",
-      "FunASR、Qwen ASR 和 PyTorch 均已安装；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。",
-      "当前模型 Registry（登记表）公开六个显式引擎：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；登记不代表每个引擎本次都跑过真实音频。",
-      "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。",
-      "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。",
-      "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。"
-    ],
-    gaps: [
-      "本次为了建设看板只运行全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；历史 E2E 仍是真实成品证据，但不能冒充本轮 fresh 模型验收。",
-      "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口还需要明确本次重要录音与上传授权，也没有调用。",
-      "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
-      "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
-      "真实录音 benchmark、模型组合调优和 VAD（语音活动检测）切片校准属于使用期工作，不是当前源码关闭阻断，但会影响特定录音上的实际准确率。"
-    ]
-  },
   operatingFlow: [
     { title: "先确认输入和目标", detail: "固定音频文件、输入指纹、语言、普通或重要录音、快速或严格模式，以及是否需要时间线和说话人线索。" },
     { title: "做音频预处理和任务去重", detail: "检查格式与可读性，必要时规范为 16 kHz 单声道；根据输入和请求生成 job key，已有相同任务时复用而不重复跑模型。" },
