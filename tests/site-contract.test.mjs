@@ -1502,6 +1502,15 @@ test("the rules workbench exposes exactly five verified current E-release rules"
   assert.match(JSON.stringify(ruleGuides.authorization_delegation_contract), /PUBLIC 项目的私有伴随材料/);
 });
 
+test("each current rule tells an ordinary reader how it applies without manual invocation", () => {
+  assert.equal(rulesSnapshot.rules.length, 5);
+  for (const rule of rulesSnapshot.rules) {
+    assert.match(rule.example, /你不需要/iu, `${rule.logicalId} does not explain automatic use`);
+    assert.match(rule.example, /说|问/iu, `${rule.logicalId} lacks a natural-language request example`);
+    assert.doesNotMatch(rule.example, /先验证 E\d+|五文件 ruleset|fast (?:或|\/|and) standard lane|successor 现场确认/iu, `${rule.logicalId} still opens with internal execution vocabulary`);
+  }
+});
+
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
   assert.equal(skills.length, 23);
   assert.deepEqual(skills.map((item) => item.slug), [
