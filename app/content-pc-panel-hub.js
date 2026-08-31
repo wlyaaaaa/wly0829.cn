@@ -47,12 +47,12 @@ export const pcPanelHubProject = {
   cardStatus: "双副屏产品链在运行；HS2 浮层当前落点健康，实体动态壁纸沿用 2026-08-30 本人历史确认",
   cardStatusTone: "pass",
   ...pcPanelHubSnapshot,
-  searchAliases: ["机箱副屏冻住怎么办", "HS2水冷屏通知浮层", "副屏睡眠后恢复", "A108端点不见了怎么接线", "双副屏遥测和事件"],
+  searchAliases: ["机箱副屏冻住怎么办", "HS2水冷屏通知浮层", "副屏睡眠后恢复", "A108端点不见了怎么接线", "双副屏遥测和事件", "新电脑怎么安装双副屏", "换机后怎么恢复副屏绑定", "Win+F1清理HS2通知", "Win+F2切换HS2时钟", "怎么把长任务显示到HS2"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库并使用 MIT 许可；仓库只发布项目源码、脚本、合同与公开示例，厂商二进制明确不属于该许可。端口、协议、硬件型号、进程名和状态等技术事实不按字段类别自动隐藏；只有具体值实际含私人正文、身份隐私或可复用凭据时才省略。",
-  summary: "PC Panel Hub 把两块实体副屏组成一条不打扰主工作的桌面信息通道。竖直机箱屏一直显示我需要随时瞥一眼的硬件、流畅度、网络、磁盘和后台状态；曲面水冷屏平时保留动态壁纸，只有媒体、任务、手机事件或真正需要注意的告警出现时，才叠加有限数量的透明卡片。两块屏不重复，也不把监控窗口搬回主屏。",
-  why: "主屏上的监控窗口会挡工作，也容易在问题发生前被关掉；实体副屏又可能出现“任务仍在运行、主机仍在写串口，但画面已经冻结”的假健康。这个项目把数据可信度、渲染、传输、实体观察和恢复分层，使我既能随时看见关键状态，也能知道哪一层真的被证明。",
-  plainExample: "例如我在工作或游戏时，不需要把监控窗口留在主屏：机箱屏持续显示温度、负载、流畅度、网络和磁盘；来电、媒体或任务事件只在水冷屏上临时出现，结束后让动态壁纸继续成为主角。若机箱屏时钟不再跳动，系统只修受影响链路，最终仍以真实屏幕是否继续更新为准。",
-  result: "我得到一块持续显示密集遥测的机箱屏、一块只在有意义事件出现时显示的透明 OLED 浮层，以及明确的启动、睡眠、关机、自愈和回退入口。页面同时告诉我：源码和主机合同通过了什么、当前运行链证明了什么、软件 demo（演示）展示了什么，以及哪些实体屏结论仍需现场观察。",
+  summary: "PC Panel Hub 把两块实体副屏组成一条不打扰主工作的桌面信息通道。竖直机箱屏一直显示我需要随时瞥一眼的硬件、流畅度、网络、磁盘和后台状态；曲面水冷屏平时保留动态壁纸，只有媒体、任务、手机事件或真正需要注意的告警出现时，才叠加有限数量的透明卡片。公开源码还保留从干净克隆到本机双屏绑定的重建路线，使换机或重装不必靠旧路径和记忆拼安装。",
+  why: "主屏上的监控窗口会挡工作，也容易在问题发生前被关掉；实体副屏又可能出现“任务仍在运行、主机仍在写串口，但画面已经冻结”的假健康。换机时若把源码、厂商运行文件、本机配置和硬件绑定混成一份，也会把旧机器身份带到新机器。这个项目把安装、数据可信度、渲染、传输、控制、实体观察和恢复分层，使我既能随时看见关键状态，也能知道哪一层真的被证明。",
+  plainExample: "例如我在工作或游戏时，不需要把监控窗口留在主屏：机箱屏持续显示温度、负载、流畅度、网络和磁盘；来电、媒体或任务事件只在水冷屏上临时出现，结束后让动态壁纸继续成为主角。我可以用 Win+F1 清掉已结束的信息而保留活动媒体、任务、来电和告警；换电脑时则从公开源码重新填写本机串口、物理网卡、天气与双屏绑定，不复制旧机器身份。",
+  result: "我得到一块持续显示密集遥测的机箱屏、一块只在有意义事件出现时显示的透明 OLED 浮层、一组可直接清场或切换时钟的全局控制，以及从干净源码重建本机安装态的明确路径。页面同时告诉我：源码和主机合同通过了什么、当前运行链证明了什么、软件 demo（演示）展示了什么，以及哪些换机和实体屏结论仍需现场观察。",
   readerStates: {
     pass: "源码、纯软件回归、运行依赖、唯一发送者和新鲜 heartbeat（心跳）分别通过时，主机侧链路可判为健康；若另有当次实体观察，才把对应屏幕画面记为实体 PASS。",
     problem: "节拍超时、发送失败、串口身份漂移、显示器绑定异常或浮层错屏时，只处理受影响组件，并保留当前模式、退避和回退证据。",
@@ -65,7 +65,9 @@ export const pcPanelHubProject = {
     { title: "每个值带着来源和新鲜度到像素层", detail: "陈旧、估算和未知不能冒充当前实测；UI显示什么必须能追到采集与更新时间。" },
     { title: "实体像素才是最终验收", detail: "进程、日志、发送成功和心跳只能证明主机侧，不能替代对真实屏幕持续更新的观察。" },
     { title: "恢复必须精确而有界", detail: "同一设备只有一个写入者；冻结时只修本链路，不靠重启电脑或重置整棵 USB 树碰运气。" },
-    { title: "动态壁纸与事件浮层互不绑架", detail: "浮层透明、低频且可退出；找不到精确副屏时绝不回退到主屏。" }
+    { title: "动态壁纸与事件浮层互不绑架", detail: "浮层透明、低频且可退出；找不到精确副屏时绝不回退到主屏。" },
+    { title: "公开源码与本机安装态分开", detail: "Git 只保存可重建的源码、脚本、合同和无真实值示例；厂商运行文件、串口、物理网卡、天气坐标与硬件绑定在每台机器上合法取得或重新确认。" },
+    { title: "人在屏前可以立即收束信息", detail: "Win+F1 只清已结束或短时内容，活动媒体、游戏、任务、传输、来电和硬件告警继续保留；Win+F2 只切换时钟并记住选择。" }
   ],
   gallery: [
     {
@@ -147,8 +149,10 @@ export const pcPanelHubProject = {
     "在保守 command 200 全帧与有界 command 204 增量之间维持可关闭、可回退的刷新合同",
     "在 HS2 曲面 OLED 上显示低频事件、任务、媒体、手机状态与真正需要注意的硬件告警",
     "保持 HS2 浮层逐像素透明，让动态壁纸应用或 Windows 静态降级背景继续可见，而不接管壁纸设置",
+    "用 Win+F1 清理可清内容、Win+F2 持久切换时钟，并让主动任务通过有租约的本机命名管道显示进度与完成状态",
     "协调两块屏在启动、睡眠、唤醒、关机、显示拓扑变化和进程故障时的安全状态",
     "用单一看门狗、唯一串口写入者、heartbeat（心跳）、熔断和全帧基线限制静默冻结",
+    "提供从 clean clone（干净克隆）、合法厂商运行文件和私有配置到双屏重新绑定、启动任务与分层验收的换机路径",
     "提供纯软件 demo（演示）、渲染预览、主机侧回归和独立实体观察四种不互相冒充的证据"
   ],
   exclusions: [
@@ -157,6 +161,8 @@ export const pcPanelHubProject = {
     "不把串口写入成功、进程存活、计划任务 Running 或 heartbeat 新鲜解释为设备 ACK 或实体像素正常",
     "不在普通恢复中重置 USB root hub、删除设备、扫描 PnP、改主屏模式或创建第二个 resume owner",
     "不把 command 204 描述成厂商公开且通用验证的协议；它仍是设备特定候选路径",
+    "不把厂商 EXE/DLL、本机 config.json、天气坐标、物理网卡名、设备拓扑绑定、日志或生成目录放进 Git 或公开源码包",
+    "不在换机时照搬旧串口、旧显示器编号或旧 HS2 实例绑定；这些值必须在新机器上重新发现和验证",
     "不在公开仓库或网页复制厂商二进制、验证码、凭据值，或经逐值判断确含私人正文、达到 L3+ 的具体载荷；设备实例号、路径和日志等普通技术事实若会改变绑定或恢复判断则保留"
   ],
   glossary: [
@@ -171,42 +177,57 @@ export const pcPanelHubProject = {
     { term: "one writer（唯一写入者）", meaning: "同一时刻只能有一个 stream 进程拥有目标串口，避免交错写入和错误恢复。" },
     { term: "circuit breaker（熔断）", meaning: "连续失败后先冷却并证明旧进程已释放资源，再创建一次新链路。" },
     { term: "device ACK（设备确认）", meaning: "设备明确回报已接收并显示画面；当前协议没有这样的可信回执。" },
-    { term: "physical acceptance（实体观察验收）", meaning: "直接观察真实副屏刷新、位置、睡眠和恢复；软件日志或截图不能替代。" }
+    { term: "physical acceptance（实体观察验收）", meaning: "直接观察真实副屏刷新、位置、睡眠和恢复；软件日志或截图不能替代。" },
+    { term: "clean clone（干净克隆）", meaning: "只从公开仓库取得被 Git 跟踪的源码、文档和无真实值示例，不携带旧机器的运行输出或绑定。" },
+    { term: "local installation state（本机安装态）", meaning: "合法取得的厂商运行文件、私有 config、设备绑定、计划任务和当前机器验收共同组成的可重建状态。" },
+    { term: "named pipe（命名管道）", meaning: "同一台 Windows 机器上让任务生产者把有界 JSON 更新交给 HS2 浮层的进程间通道。" },
+    { term: "lease（租约）", meaning: "活动任务必须周期续报的最长保留时间；默认五分钟，生产者异常退出后卡片会自动收起。" },
+    { term: "narrow fallback hook（窄范围回退钩子）", meaning: "只有 Win+F1 被其他程序占用时启用，只接管真实键盘的 Win+F1 且要求不带 Ctrl/Alt，不吞掉注入按键或其他冲突组合。" }
   ],
   operatingFlow: [
+    { title: "先建立本机安装态", detail: "从 clean clone 补齐合法取得的厂商运行文件，把无真实值示例复制为 ignored（Git 忽略）的 config.json，重新确认串口、物理公网接口、天气与 HS2 拓扑，再让 runtime check 决定能否安装启动任务。" },
     { title: "先从真实来源采样", detail: "metrics agent（指标代理）按来源读取硬件、网络、磁盘、天气、FPS 和前台信息；进程排行独立每 3 秒采样，避免拖住 1 秒主循环。" },
     { title: "给每个值保留时效与可信度", detail: "来源不可达、陈旧或歧义时使用空值、旧快照或失败状态，不把 0 冒充真实传感器值。" },
     { title: "渲染机箱屏", detail: "C# 渲染器把 snapshot（快照）变成 480×1920 位图；网络、磁盘、FPS 和长名称都按真实版面有界显示。" },
     { title: "按当前刷新合同发送", detail: "启动先建立 command 200 全帧基线，再以 command 204 增量维持 1 Hz；60、120、180 和每 900 帧重开会话并补全帧。" },
-    { title: "在动态壁纸上独立组织 HS2 事件", detail: "底层背景由动态壁纸应用负责；透明浮层从本地媒体、任务、Windows 通知和硬件状态形成最多六张卡，优先级、寿命、去重和布局由纯逻辑核心决定。" },
+    { title: "在动态壁纸上独立组织和控制 HS2 事件", detail: "底层背景由动态壁纸应用负责；透明浮层从本地媒体、命名管道任务、Windows 通知和硬件状态形成最多六张卡。Win+F1 清理可清内容并抑制同一中继内容复活，Win+F2 持久切换时钟。" },
     { title: "由一个看门狗协调电源和恢复", detail: "看门狗拥有启动、睡眠、关机和恢复；先证明旧写入者退出，再只恢复目标组件，避免串口或显示拓扑竞争。" },
     { title: "分层验收并诚实标注", detail: "源码、测试、运行、演示、协议与实体观察分别记录；实体动态壁纸只沿用 2026-08-30 本人历史确认，其余实体情景继续保留真实缺口，不用软件回执替代像素观察。" }
   ],
   components: [
+    { name: "公开源码包与 private config（私有配置）", responsibility: "把可公开重建的源码/示例与每台机器的串口、物理网卡、天气、厂商运行文件和 HS2 拓扑绑定分开。", implementation: "公开 ZIP 只允许 config.example.json；config.json、vendor EXE/DLL、out、bin、obj 与设备绑定保持在 Git 外。" },
+    { name: "check-runtime.ps1 + startup installer（启动安装器）", responsibility: "在注册登录启动任务前检查 Python、C# 编译器、RJCP、TURZX 运行文件和 stack 入口。", implementation: "缺项即拒绝安装；通过后用 wscript 无窗口父适配器为当前交互用户注册 Highest 任务，并禁用旧并行 Owner。" },
     { name: "metrics_agent.py", responsibility: "提供 127.0.0.1:18765/snapshot 的硬件、网络、磁盘、天气、FPS、前台和健康快照。", implementation: "主指标目标 1 秒；物理公网出口歧义时失败关闭，虚拟接口不重复计数。" },
     { name: "top_processes_helper.py", responsibility: "独立采集进程 CPU / RAM 排行。", implementation: "约 3 秒节拍写有界结果，不阻塞主 snapshot 请求。" },
     { name: "TURZX.SideScreen.Stream", responsibility: "取得快照、渲染 480×1920 位图并发送到机箱屏。", implementation: "完整 HTTP body 有墙钟 deadline（截止时间）；失败时可复用最后一份好快照，PNG 预览异步低优先级生成。" },
     { name: "command 200 / 204 transport（传输层）", responsibility: "在完整基线、1 Hz 增量和周期恢复之间保持明确合同。", implementation: "全帧 10 秒上限、增量 900 ms 上限；首次发送失败即退出给看门狗重建。" },
     { name: "HS2.CrystalOverlay.Core", responsibility: "拥有事件、优先级、寿命、去重、布局和告警规则。", implementation: "不依赖显示器，可用合成数据做确定性单元测试。" },
     { name: "HS2.CrystalOverlay", responsibility: "在唯一非主 2288×1048 显示器上创建透明、鼠标穿透的事件浮层。", implementation: "单实例；找不到精确目标时不回退到主屏。" },
+    { name: "GlobalHotkeyCoordinator + GlanceSource", responsibility: "提供 Win+F1 清场与 Win+F2 时钟开关。", implementation: "F1 被占用时只启用精确物理组合的窄回退；时钟状态写入应用本地设置并在重启后继续。" },
+    { name: "Publish-HS2Task.ps1 + task pipe（任务管道）", responsibility: "让复制、下载、渲染或安装脚本显式发布标题、详情、进度、预计剩余和结束状态。", implementation: "命名管道逐条接收有界 JSON；同 Id 更新，默认五分钟租约，静默生产者到期自动清卡。" },
     { name: "动态壁纸 / Windows 背景层", responsibility: "在 HS2 浮层下方提供连续背景，动态壁纸应用退出时由 Windows 当前静态背景降级。", implementation: "这是独立显示内容提供者；PC Panel Hub 不修改壁纸设置，也不把背景资源打进仓库。" },
     { name: "StartSideScreenWatchdog.ps1", responsibility: "统一管理 stream、HS2、电源事件、串口所有权、模式保留和故障恢复。", implementation: "连续三次失败进入 30 秒熔断；不因一次重启异常退出长期 Owner。" },
     { name: "Windows startup task（启动任务）", responsibility: "在交互用户登录后以 Highest 运行无可见控制台的长期看门狗。", implementation: "wscript 父适配器保持任务 Running；旧 resume 任务被禁用，不形成第二恢复 Owner。" },
     { name: "纯软件测试与 demo", responsibility: "验证指标口径、渲染、HTTP、节拍、浮层布局、恢复合同和公开发布边界。", implementation: "fixture 值和 demo 场景不触碰设备，也不会被标成实体屏证据。" }
   ],
   usageExamples: [
+    { moduleSlug: "installation-binding-migration", ask: "新电脑第一次怎么把两块副屏装回来？", effect: "从 clean clone 补合法厂商运行文件，复制无真实值示例到 ignored config，重新确认 TURZX 串口、物理公网、天气与 HS2 唯一拓扑；runtime check 通过后才安装启动任务，并分别验主机链与实体像素。" },
+    { moduleSlug: "installation-binding-migration", ask: "重装 Windows 后能直接复制旧的 HS2 绑定吗？", effect: "同机可保留私有配置作为输入，但仍要重验实际设备；换机不复制旧串口、DISPLAY 编号或 8091/AD23/LED 实例绑定，只在新拓扑唯一且连续两次健康时保存。" },
     { moduleSlug: "serial-transport", ask: "机箱屏是不是又冻住了？", effect: "先看唯一写入者、heartbeat 年龄、发送动作、节拍与最近全帧，再决定是否运行有界 repair；最终仍观察实体时钟。" },
     { moduleSlug: "telemetry-trust", ask: "为什么网络数字和任务管理器不一样？", effect: "确认项目只统计物理公网出口，TUN、Tailscale、Hyper-V 和 VMware 等虚拟接口不会叠加。" },
     { moduleSlug: "telemetry-trust", ask: "没开游戏为什么 FPS 是空的？", effect: "把新鲜的 no game frames（无游戏帧）显示为等待状态，而不是 0 FPS 或采集器故障。" },
     { moduleSlug: "case-panel-rendering", ask: "机箱屏上的长名称把版面挤坏了怎么办？", effect: "渲染器在固定 480×1920 画布中有界换行或截断，慢预览可以丢弃，但不能拖住主发送循环。" },
     { moduleSlug: "hs2-overlay", ask: "来通知时 HS2 会不会被卡片塞满？", effect: "最多六卡按优先级选择，最新手机通知、活动来电、任务和硬件告警有不同寿命与保留规则。" },
+    { moduleSlug: "hs2-overlay", ask: "我只想清掉旧通知，不要停掉正在播放和运行中的任务。", effect: "按 Win+F1 清除手机通知、短操作、完成提示和游戏总结；活动媒体、游戏、任务、传输、来电与硬件告警保留，同一中继内容在抑制窗内不会立刻复活。" },
+    { moduleSlug: "hs2-overlay", ask: "把这次长复制的进度显示到 HS2，脚本异常退出也别留下死卡。", effect: "生产者用稳定 Id 上报标题、详情、进度与预计剩余；同 Id 更新会续租，completed/cancelled 正确收口，默认五分钟无续报自动清除。" },
     { moduleSlug: "power-recovery", ask: "主屏休眠后窗口为什么跑到小屏？", effect: "只有 HS2 Secondary（副显示器）已验证后才启用窗口保护；主屏断开时先最小化普通应用，不改主屏或远程虚拟屏配置。" },
     { moduleSlug: "power-recovery", ask: "睡眠回来副屏为什么没恢复？", effect: "看门狗按当前已枚举模式恢复：已有 Windows Secondary 就原位验，只有 native 模式才在稳定后尝试一次提升，失败即回到原生亮屏。" },
     { moduleSlug: "power-recovery", ask: "A108 或显示端点不见了，物理接线怎么恢复？", effect: "先关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时补 SATA。改线后只在唯一 8091、port 2 controller、port 3 LED 拓扑连续两次健康时重新绑定；这条顺序来自项目合同，本页没有执行实体接线实测。" }
   ],
   evidenceLayers: [
-    { layer: "Source（源码）", proves: "PUBLIC main 定义两块屏、数据来源、渲染、协议边界、事件规则、恢复和公开安全约束。", doesNotProve: "本机依赖已就绪、任务正在运行或实体设备正常。" },
-    { layer: "Tests（测试）", proves: "指标 84、天气 8，以及项目原生脚本覆盖渲染、HTTP、电源、快捷方式、节拍、恢复、dry-run stream 和公开 ZIP 合同。", doesNotProve: "正在使用的 COM 设备可被安全重测，或真实画面没有冻结。" },
+    { layer: "Source（源码）", proves: "PUBLIC main 定义两块屏、数据来源、渲染、协议边界、Win+F1/Win+F2、任务生产者协议、安装/换机、恢复和公开安全约束。", doesNotProve: "本机依赖已就绪、任务正在运行、全局键可实际注册或实体设备正常。" },
+    { layer: "Tests（测试）", proves: "指标 84、天气 8，以及项目原生脚本覆盖渲染、HTTP、热键手势、清场保留/抑制、任务字段/租约/管道恢复、电源、快捷方式、节拍、恢复、dry-run stream 和公开 ZIP 合同。", doesNotProve: "正在使用的 COM 设备可被安全重测，真实键盘路径已触发，或真实画面没有冻结。" },
+    { layer: "Installation contract（安装合同）", proves: "公开 ZIP 可解包，缺厂商文件时 runtime check 失败关闭，私有配置/绑定不进包，启动任务只在依赖通过后注册。", doesNotProve: "另一台电脑、系统重装或新硬件拓扑已完成一次自然启动和双屏实体 E2E。" },
     { layer: "Runtime（运行）", proves: "观察时任务、唯一 stream、新鲜发送 heartbeat、2288×1048 HS2、wallpaper64 和 HS2 浮层进程同时存在，失败计数为 0。", doesNotProve: "仅凭进程不能证明动态壁纸运动、透明像素、通知内容和所有传感器值正确。" },
     { layer: "Demo / render（演示 / 渲染）", proves: "软件能在固定合成数据上生成机箱屏版面，并能用 HS2 场景检查六卡、缺项、重排和长文本。", doesNotProve: "截图来自实体硬件或当前机器现场。" },
     { layer: "Protocol observation（协议观察）", proves: "command 200 全帧和 command 123 亮度路径有本机验证；混合刷新有主机侧有界实现。", doesNotProve: "command 204 是厂商保证的通用协议或有设备 ACK。" },
@@ -215,7 +236,7 @@ export const pcPanelHubProject = {
   evolution: [
     { date: "2026-07-04—07-08", commit: "5e552b7–2bafc57", result: "发布 TURZX 机箱屏源码，建立天气、低干扰刷新、睡眠/关机恢复、无闪窗启动和迁移后的真实路径。" },
     { date: "2026-07-22—07-30", commit: "4592994–e7180e3", result: "从简单副屏升级为可信遥测面板：重做 CPU/GPU/网络/磁盘/FPS、修正口径和长帧展示，并加入 HS2 透明浮层。" },
-    { date: "2026-07-31—08-06", commit: "fed85f1–e7a5f73", result: "建立 HS2 事件寿命、手机通知、媒体身份、任务、音量、游戏和六卡自适应布局，使第二块屏从装饰层变成低频事件面。" },
+    { date: "2026-07-31—08-06", commit: "fed85f1–e7a5f73", result: "建立 HS2 事件寿命、手机通知、媒体身份、主动任务命名管道、Win+F1 清场、Win+F2 时钟、音量、游戏和六卡自适应布局，使第二块屏从装饰层变成可直接控制的低频事件面。" },
     { date: "2026-08-07—08-12", commit: "dfff40a–699600d", result: "把副屏恢复改成证据驱动：保留现有模式、唯一绑定、一次 Secondary 尝试、串口会话重建、全帧恢复和墙钟 deadline。" },
     { date: "2026-08-14—08-16", commit: "7ea67fd–7dfa5c4", result: "物理公网出口、1 Hz 默认与长期看门狗收敛，连续恢复失败不再让计划任务假成功退出。" },
     { date: "2026-08-23—08-25", commit: "78058b2–271ffd2", result: "进一步自愈 stream watchdog、TimeAudit FPS、HS2 monitor 漂移和 COM7 驱动停滞，同时保持设备操作边界不扩大。" },
@@ -224,6 +245,9 @@ export const pcPanelHubProject = {
   ],
   operationalEntrypoints: [
     { name: "运行依赖检查", command: "pwsh -NoProfile -File .\\scripts\\check-runtime.ps1", purpose: "只读确认 Python、C# 编译器、串口库、厂商运行文件和 stack 入口是否存在。" },
+    { name: "安装登录启动", command: "pwsh -NoProfile -File .\\scripts\\install-startup-admin.ps1", purpose: "先跑 runtime check，再为当前交互用户注册 Highest、无可见控制台的唯一长期看门狗；需要管理员 PowerShell。" },
+    { name: "撤销启动注册", command: "pwsh -NoProfile -File .\\scripts\\uninstall-startup-admin.ps1", purpose: "移除本项目启动任务，保留源码、合法厂商文件与私有配置，供修正后重装或手动运行。" },
+    { name: "登记 HS2 长任务", command: "pwsh -NoProfile -File .\\tools\\hs2_crystal_overlay\\Publish-HS2Task.ps1 -Id copy-photos -Title \"复制照片\" -ProgressPercent 42 -RemainingMinutes 3", purpose: "通过本机命名管道更新任务卡；相同 Id 续报，结束时传 completed 或 cancelled。" },
     { name: "安全回归", command: "pwsh -NoProfile -File .\\scripts\\test.ps1 -SkipStreamWhenRunning", purpose: "生产 stream 已由新鲜 heartbeat 证明运行时，跑纯软件回归并跳过设备写入测试；否则应拆开运行无设备检查。" },
     { name: "查看主机侧健康", command: "Get-Content .\\tools\\turzx_side_screen\\out\\stream\\stream-heartbeat*.json", purpose: "读取节拍、发送动作、失败数、transport 和全帧基线；不把它当实体 ACK。" },
     { name: "有界修复", command: "pwsh -NoProfile -File .\\scripts\\repair-panel.ps1", purpose: "仅在需要且符合项目设备边界时，核对精确 COM 设备、唯一写入者和 1 Hz Hybrid heartbeat 后修复。" },
@@ -302,7 +326,7 @@ export const pcPanelHubModules = [
       "check-runtime 确认 Python 3.11 与 TimeAudit 读取依赖就绪。",
       "没有逐项对照实体传感器或外部仪表，真实值准确度仍按来源解释。"
     ],
-    relation: "为机箱屏渲染和 HS2 硬件告警提供当前值；TimeAudit 继续拥有长期历史。"
+    relation: "安装与换机模块提供当前机私有来源配置；本模块为机箱屏渲染和 HS2 硬件告警提供当前值，TimeAudit 继续拥有长期历史。"
   },
   {
     slug: "case-panel-rendering",
@@ -446,83 +470,210 @@ export const pcPanelHubModules = [
       "StreamCadence 与 RuntimeReliability 本轮通过。",
       "TestVideoStream 被保护性跳过，实体面板未由本轮写入。"
     ],
-    relation: "接收 renderer 位图；失败由电源与恢复模块处理；实体结果进入验收模块。"
+    relation: "安装与换机模块先确认当前串口和本地 runtime；本模块接收 renderer 位图，失败由电源与恢复模块处理，实体结果进入分层验收。"
   },
   {
     slug: "hs2-overlay",
     shortTitle: "HS2 事件浮层",
-    title: "2288×1048 OLED 的事件优先级、寿命与显示安全",
-    teaser: "在唯一非主 2288×1048 显示器的动态壁纸上，以透明卡片显示媒体、任务、手机、音量、游戏和告警；没有真实内容就不创建空卡。",
+    title: "2288×1048 OLED 的事件优先级、全局控制与任务接入",
+    teaser: "在唯一非主 2288×1048 显示器的动态壁纸上，以透明卡片显示媒体、任务、手机、音量、游戏和告警；Win+F1 清场、Win+F2 切换时钟，长任务由发起脚本显式登记。",
     status: "本轮确认 Wallpaper Engine 进程与 2288×1048 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，完整恢复情景未重验",
     statusTone: "mixed",
-    searchAliases: ["来通知HS2会不会塞满", "HS2浮层跑到主屏怎么办", "动态壁纸和事件卡是什么关系", "2288×1048六卡布局"],
+    searchAliases: ["来通知HS2会不会塞满", "HS2浮层跑到主屏怎么办", "动态壁纸和事件卡是什么关系", "2288×1048六卡布局", "Win+F1清理HS2通知", "Win+F2关闭HS2时钟", "怎么把长任务显示到HS2", "HS2任务卡片为什么自动消失"],
     searchProjection: {
-      intents: ["理解HS2动态壁纸与透明事件卡怎样分工", "处理通知过多重复或过期", "防止浮层误落到主屏"],
-      entities: ["HS2", "2288×1048", "Wallpaper Engine", "CrystalOverlay", "event lifetime", "display binding"],
-      relations: ["动态壁纸提供背景而浮层只提供低频事件", "最多六卡按优先级寿命与去重选择", "目标显示器不唯一时不回退主屏"],
-      failureRecovery: ["显示器缺失或多解时停止旧浮层并等待", "单个通知来源异常时隔离该来源", "启动时旧通知只建立基线而不重新弹出"]
+      intents: ["理解HS2动态壁纸与透明事件卡怎样分工", "处理通知过多重复或过期", "用Win+F1清场并保留活动内容", "用Win+F2持久切换时钟", "把复制下载渲染安装任务接到HS2", "防止浮层误落到主屏"],
+      entities: ["HS2", "2288×1048", "Wallpaper Engine", "CrystalOverlay", "Win+F1", "Win+F2", "HS2.CrystalOverlay.Tasks", "Publish-HS2Task"],
+      relations: ["动态壁纸提供背景而浮层只提供低频事件", "最多六卡按优先级寿命与去重选择", "Win+F1只清可清内容并抑制同一中继内容复活", "Win+F2切换时钟并把状态保存在应用本地设置", "任务生产者用稳定Id和租约更新同一张进度卡", "目标显示器不唯一时不回退主屏"],
+      failureRecovery: ["显示器缺失或多解时停止旧浮层并等待", "单个通知来源异常时隔离该来源", "启动时旧通知只建立基线而不重新弹出", "Win+F1注册冲突1409时只启用物理Win+F1且不带Ctrl或Alt的窄回退", "生产者停止续租时默认五分钟自动清除活动卡", "管道客户端静默或半途断开时限时释放并接受下一次连接"]
     },
-    value: "动态壁纸保持水冷副屏的视觉背景，低频但重要的信息只以透明卡片叠在上面；密集硬件指标仍留在机箱屏，不让两块屏重复。",
-    why: "普通通知可能重复、过期或包含占位文字；卡片太多会越过曲面折线，显示器误选还可能把浮层放到主屏。",
-    example: "三条手机通知、Steam、网易云和音量同时出现时，最多六卡，最新通知在底部；硬件告警和来电可抢占，暂时被挤出的计时卡暂停可见寿命。",
-    result: "得到动态壁纸背景之上的透明卡片舞台、清晰的来源/寿命/去重规则，以及找不到精确显示器时不显示的安全降级；壁纸引擎与事件浮层仍可独立启停。",
+    value: "动态壁纸保持水冷副屏的视觉背景，低频但重要的信息只以透明卡片叠在上面；我可以一键清掉已结束的信息、单独开关时钟，也能让真正的长任务显示可靠进度而不靠猜系统进程。",
+    why: "普通通知可能重复、过期或包含占位文字；卡片太多会越过曲面折线，显示器误选还可能把浮层放到主屏。若清场误删来电或正在运行的任务、热键冲突时吞掉其他按键，或生产者异常退出后留下永久任务卡，这块副屏同样会变成干扰源。",
+    example: "我说“把这次照片复制进度放到 HS2，旧通知先清掉，但别收掉正在播放、运行中的任务、来电和告警”。发起脚本用同一 Id 续报进度；我按 Win+F1 只清可清内容，任务结束后显示一次完成提示，脚本异常退出则由租约自动收卡。",
+    result: "得到动态壁纸背景之上的透明卡片舞台、可预测的来源/寿命/去重规则、不会误伤活动工作的清场键、可持久记忆的时钟开关，以及带失败回收的主动任务接入；找不到精确显示器时仍不显示到主屏。",
     readerStates: {
-      pass: "唯一 2288×1048 非主屏与绑定验证通过时创建鼠标穿透浮层，事件按规则显示。",
-      problem: "来源陈旧、重复、超长或卡片竞争时去重、滚动、暂停寿命或淘汰低优先级项。",
-      unavailable: "目标显示器不唯一或未验证时不回退主屏；停止旧浮层并等待。"
+      pass: "唯一 2288×1048 非主屏与绑定验证通过时创建鼠标穿透浮层；Win+F1 清可清内容、Win+F2 切换时钟，合法任务更新按 Id 与租约投影。",
+      problem: "来源陈旧、重复、超长或卡片竞争时去重、滚动、暂停寿命或淘汰低优先级项；热键冲突和静默生产者只降级各自功能。",
+      unavailable: "目标显示器不唯一或未验证时不回退主屏；热键注册的非预期错误只记为不可用，非法或超界管道消息被拒绝。"
     },
     decisionImpact: [
       "密集遥测和低频事件分屏，不复制 TimeAudit 或机箱屏。",
       "动态壁纸只提供背景，浮层只提供信息；任一方退出不会伪装成另一方故障。",
       "最多六卡且只为真实内容占位；少量内容贴底收拢。",
       "通知来源独立采集、标准化去重，验证码只在明确语义下识别且不写日志。",
+      "Win+F1 清除手机通知、验证码、短操作、完成提示、游戏总结和恢复提示，但保留活动媒体、游戏、任务、传输、来电与硬件告警；同一中继内容在抑制窗内不复活。",
+      "Win+F2 只切换中国标准时间的 HH:mm 时钟；状态写入应用本地设置，重启后继续，Win+F3/F4 不占用。",
+      "只有 Win+F1 注册返回冲突 1409 时才启用低级键盘窄回退；它只处理真实键盘的 Win+F1 且要求不带 Ctrl/Alt，并从按下到抬起只触发一次。Win+F2 不安装广域回退。",
+      "主动任务必须由生产者显式发布 Id、Title、可选 Detail/ProgressPercent/RemainingMinutes 与 active/completed/cancelled，不扫描系统进程猜任务。",
+      "活动任务默认五分钟租约；同 Id 进度续报自动续租，重开先清旧完成提示，completed 显示 15 秒完成卡，cancelled 清除两种状态，异常退出后自动收卡。",
       "浮层不修改壁纸、主屏、远程虚拟屏或 Windows 原生鼠标边界。"
     ],
-    problem: "解决双屏重复、空卡、通知风暴、旧通知复活、验证码误识别、超长文本和目标显示器误选。",
+    problem: "解决双屏重复、空卡、通知风暴、旧通知复活、验证码误识别、超长文本、目标显示器误选、清场误伤活动工作、热键冲突扩大以及长任务卡永久残留。",
     implementation: [
       "Core 项目拥有事件、优先级、寿命、去重、布局与告警纯逻辑。",
       "WinUI 3 应用创建逐像素透明、无激活、鼠标穿透窗口。",
       "Wallpaper Engine 或 Windows 当前背景负责底层画面；浮层不连接或修改其设置。",
       "媒体、Steam、任务、音量、手机和硬件各有独立 adapter（适配器）。",
+      "GlobalHotkeyCoordinator 优先 RegisterHotKey；只有 Win+F1 的 1409 冲突进入低级键盘 hook（钩子），手势状态机过滤注入按键、Ctrl/Alt 和重复 keydown。",
+      "GlanceSource 把 GlanceVisible 写入 ApplicationData 本地设置；默认显示 HH:mm，启动、解锁和每个整分钟边界刷新。",
+      "OverlayScheduler 的 ClearDismissible 只移除可清类型，并按内容指纹保存至少 10 秒、手机中继 3 分钟的抑制状态。",
+      "Publish-HS2Task.ps1 把有界 JSON 写入 `HS2.CrystalOverlay.Tasks`；协议层校验 Id、字段类型与范围，投影层管理活动/完成身份，租约表每 5 秒清理超时任务。",
       "max-six、sparse、reflow、overflow 等 demo 使用合成数据。"
     ],
     flow: [
       "发现并验证目标显示器。",
-      "从每个本地来源形成事件候选。",
+      "从每个本地 adapter 和任务命名管道形成事件候选。",
+      "任务生产者用稳定 Id 上报 active；进度续报刷新租约，completed 或 cancelled 明确收口。",
       "标准化、去重并应用来源新鲜度。",
       "按优先级、寿命和六卡上限选择。",
       "布局到曲面安全区域并透明显示。",
-      "事件结束、超时或按键清场后收起。"
+      "Win+F1 只清可清内容并建立复活抑制；Win+F2 只切换并保存时钟状态。",
+      "事件结束、租约到期或显示器失效后收起。"
     ],
     concepts: [
       { term: "event lifetime（事件寿命）", explanation: "卡片实际可见的累计时间；被高优先级挤出时可暂停。" },
       { term: "pixel alpha（逐像素透明度）", explanation: "只有卡片和文字参与合成，不建立黑色全屏底板。" },
-      { term: "display binding（显示器绑定）", explanation: "用尺寸、主/副属性和已保存拓扑锁定目标 OLED，而不是猜 DISPLAY 编号。" }
+      { term: "display binding（显示器绑定）", explanation: "用尺寸、主/副属性和已保存拓扑锁定目标 OLED，而不是猜 DISPLAY 编号。" },
+      { term: "dismissal suppression（清场抑制）", explanation: "清掉一条可清内容后，在有界时间内按同一内容身份拒绝中继重复投递；真正不同的新内容仍可显示。" },
+      { term: "task producer protocol（任务生产者协议）", explanation: "发起长任务的脚本通过命名管道显式声明 Id、标题、详情、进度、预计剩余、状态和租约。" },
+      { term: "lease sweep（租约清理）", explanation: "浮层每五秒检查活动任务；超过默认五分钟未续报就移除卡片，避免异常生产者留下死状态。" }
     ],
     boundaries: [
       "通知正文和验证码属于本机显示内容，不进入公开仓库或网站样图。",
       "动态壁纸由独立应用提供；当前现场截图中的市场场景作者与公网再发布许可为 Unknown，不声称用户拥有或原创。纯软件 demo 继续使用项目可证明的合成背景。",
       "网易云当前无权威播放位置，因此不显示歌词、进度条和已播时间。",
-      "Steam 成就和非 Steam 游戏通用识别尚未实现。"
+      "Steam 成就和非 Steam 游戏通用识别尚未实现。",
+      "Win+F1 的窄回退只在注册冲突 1409 时启用；注入按键、没有 Win、带 Ctrl/Alt 的 F1 全部透传，其他注册错误不扩大拦截。Win+F2 注册失败时只记录不可用。",
+      "任务管道是本机显式生产者入口，不是权限通道、远程 API 或通用进程监视器；单行最多 64K 字符，Id 最多 128 个安全字符，标题最多 256、详情最多 1024。"
     ],
     failures: [
       { condition: "目标显示器缺失或多解", response: "不在主屏创建窗口，等待唯一目标。" },
       { condition: "单个通知来源异常", response: "继续检查另一来源，不让一条链短路全部手机状态。" },
-      { condition: "普通旧通知在启动时存在", response: "只建立基线，不翻出旧消息；活动来电/传输可恢复。" }
+      { condition: "普通旧通知在启动时存在", response: "只建立基线，不翻出旧消息；活动来电/传输可恢复。" },
+      { condition: "Win+F1 已被其他程序注册", response: "仅在错误 1409 时启用真实键盘 Win+F1 且不带 Ctrl/Alt 的窄回退；按下一次触发、重复按下不重触发、抬起后释放，注入按键和冲突组合透传。" },
+      { condition: "Win+F2 或非冲突型热键注册失败", response: "记录具体错误并只关闭该快捷键，不安装会吞掉其他按键的广域 hook。" },
+      { condition: "任务 JSON 非法、超界、客户端静默或半途断开", response: "非法消息不发布；读取一秒超时且单行最多 64 KiB，断开的管道立即重开，意外服务错误记录后退避一秒。" },
+      { condition: "任务生产者异常退出或同 Id 重开", response: "无续报时默认五分钟租约到期自动清卡；同 Id 重开先清旧完成提示，再显示新的活动进度。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay.Core\\OverlayScheduler.cs", role: "事件、优先级和寿命调度" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay.Core\\OverlayDeckLayout.cs", role: "六卡与曲面安全布局" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay\\GlobalHotkeyCoordinator.cs", role: "Win+F1/F2 注册、冲突处理和窄回退" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay.Core\\GlobalHotkeyGestureState.cs", role: "物理 Win+F1 一次触发、注入过滤和按键透传状态机" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay\\GlanceSource.cs", role: "HH:mm 时钟、整分钟刷新与持久可见状态" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\Publish-HS2Task.ps1", role: "主动任务命名管道生产者入口" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay.Core\\ImportantTaskProtocol.cs", role: "任务 JSON 字段、类型、范围和状态校验" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay\\ImportantTaskSource.cs", role: "任务管道、默认租约、到期清卡和失败隔离" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\src\\HS2.CrystalOverlay\\App.xaml.cs", role: "WinUI 应用、显示选择和本地 adapter" },
-      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\tests\\HS2.CrystalOverlay.Tests", role: "事件、来源、时间和布局测试" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\hs2_crystal_overlay\\tests\\HS2.CrystalOverlay.Tests", role: "事件、清场抑制、热键手势、任务协议/租约/管道、时间和布局测试" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\docs\\hs2-crystal-overlay.md", role: "产品行为、演示场景和实体验收" }
     ],
     verification: [
       "源码列出 max-six 等 15 类纯软件 demo 场景，并明确全部使用合成数据。",
+      "当前 main 的 GlobalHotkeyGestureStateTests 与 OverlaySchedulerTests 覆盖物理 Win+F1 一次触发、注入/冲突组合透传、活动媒体/游戏/任务/来电/传输/告警保留及同一手机中继内容不复活；项目原生整套检查于本轮快照中通过。",
+      "ImportantTaskProtocolTests、ImportantTaskProjectionTests 与 BoundedLineReaderTests 覆盖明确进度单位、completed/cancelled、同 Id 重开、五分钟租约续报、并发到期、静默客户端超时和下一客户端恢复；本轮未用真实生产任务做用户可见 E2E。",
       "本轮回读到 2288×1048 HS2、wallpaper64 和 HS2.CrystalOverlay 同时在线，并确认浮层落点；实体动态壁纸只沿用 2026-08-30 本人历史确认，没有读取通知正文。",
-      "实体动态壁纸本轮未重验；透明合成性能、全部事件寿命、睡眠与异常重启恢复也仍未重演。"
+      "实体动态壁纸本轮未重验；透明合成性能、全部事件寿命、真实 Win+F1/Win+F2、生产任务异常退出、睡眠与异常重启恢复也仍未重演。"
     ],
-    relation: "读取指标模块的异常值，并与电源恢复模块共享显示器模式边界；不依赖机箱屏渲染。"
+    relation: "安装与换机模块先建立本机 HS2 绑定；本模块读取指标异常、接收显式任务并管理用户控制，与电源恢复模块共享显示器模式边界，但不依赖机箱屏渲染。"
+  },
+  {
+    slug: "installation-binding-migration",
+    shortTitle: "安装、绑定与换机",
+    title: "从干净源码到双副屏本机安装态",
+    teaser: "把 clean clone（干净克隆）、合法取得的厂商运行文件、每台机器自己的串口/物理网卡/天气配置和双屏绑定按顺序组装；依赖未齐时不装启动任务，主机通过后仍单独看实体像素。",
+    status: "源码安装合同、公开 ZIP 回归与当前主机运行态已有证据；clean clone（干净克隆）、换机和重装 E2E 未执行",
+    statusTone: "mixed",
+    searchAliases: ["新电脑第一次怎么装双副屏", "换机后怎么恢复PC Panel Hub", "重装Windows后副屏怎么重新绑定", "config.json为什么不进Git", "厂商TURZX文件放在哪里", "计划任务怎么安装", "旧HS2绑定能不能复制", "clean clone怎么验收"],
+    searchProjection: {
+      intents: ["从公开源码在新电脑安装双副屏", "重装Windows后恢复本机配置和启动任务", "判断哪些厂商文件和私有配置不能进Git", "重新绑定TURZX串口与HS2显示拓扑", "区分主机安装通过与实体像素通过", "失败后撤销启动任务或使用兼容回退"],
+      entities: ["clean clone", "config.example.json", "config.json", "RJCP.SerialPortStream.dll", "TURZX.exe", "check-runtime.ps1", "TURZX SideScreen task", "HS2 topology binding"],
+      relations: ["公开源码只提供可重建代码而厂商运行文件由安装者合法取得", "config.example复制为ignored config后才填写串口物理网卡和天气", "runtime check通过先于启动任务注册", "TURZX绑定实际串口而HS2绑定唯一8091与AD23和LED拓扑", "换机重新发现设备身份而不复制旧实例号", "主机进程心跳与实体像素观察分层验收"],
+      failureRecovery: ["厂商运行文件或编译运行依赖缺失时不安装任务", "串口网卡或天气未确认时修正私有config而不改公开示例", "HS2拓扑缺失歧义或不连续时保持未绑定", "启动任务路径错误时卸载后用正确Root重装", "Hybrid不兼容时显式退回三秒command200而不自动降级", "没有换机或自然启动实测时保留Unknown"]
+    },
+    value: "换电脑、重装系统或重新布线时，我能从公开仓库重建一套属于当前机器的双副屏安装，而不用复制旧路径、旧串口和旧硬件实例号，也不会为了方便把私人配置或厂商二进制塞回 Git。",
+    why: "源码能构建不代表本机能运行；公开仓库故意不带厂商程序、真实天气位置、物理网卡、串口和 HS2 绑定。若跳过依赖检查或照搬旧机器身份，计划任务可能指向错误路径、抢错 COM，或让浮层绑定到不确定显示器。",
+    example: "我说“这台新电脑要把两块副屏恢复出来”。先 clean clone（干净克隆），再从合法来源补齐 RJCP 与 TURZX 运行文件，把 config.example.json 复制成不入 Git 的 config.json 并填写当前串口、物理公网和天气；依赖通过后分别确认 TURZX 与 HS2，最后才安装登录任务并观察真实像素。",
+    result: "我得到一套可解释、可撤销的本机安装态：公开源码保持干净，私人值与厂商文件留在本机；启动任务只在依赖完整后注册，两块屏各自有明确绑定，源码/测试/运行/实体像素和自然启动不会被混成一个 PASS。",
+    readerStates: {
+      pass: "源码包、合法本机依赖、私有配置、TURZX 串口、HS2 唯一拓扑、启动任务和分层验收都通过时，才把当前机器记为完整安装。",
+      problem: "缺依赖、路径漂移、旧绑定、设备歧义或 Hybrid 不兼容时停在对应层，修正配置/绑定或显式回退后重验，不靠重启整机碰运气。",
+      unavailable: "无法合法取得厂商运行文件、无法唯一识别串口/HS2 拓扑或没有实体观察条件时，不安装或不升级对应结论；保留源码可用与实体 Unknown。"
+    },
+    decisionImpact: [
+      "clean clone 只带公开源码、文档、脚本、测试和无真实值示例；厂商 EXE/DLL、私有 JSON、out/bin/obj、日志和设备绑定不属于 Git 交付。",
+      "RJCP.SerialPortStream.dll 与 TURZX.exe 或 TURZX.weatherfix.metrics.exe 必须由安装者从有权使用的来源取得，并放在仓库根；项目不代为分发。",
+      "config.example.json 只能作为模板；复制成 ignored config.json 后再填写当前 serial.port、network.publicInterface 与 weather 经纬度，换机不沿用旧值。",
+      "check-runtime 只读检查 Python、按需 psutil/asyncpg、csc.exe、RJCP、TURZX 运行文件和 StartSideScreenStack；任一必需项缺失时安装器拒绝注册任务。",
+      "TURZX 绑定当前真实串口并在实机写入前确认唯一健康设备；COM7 只是本机默认，不是迁移常量。",
+      "HS2 重新发现唯一健康 8091 Hub、port 2 控制器、port 3 LED、AD23 与 MI_00 显示接口；只有连续两次健康才保存新的 ignored 拓扑绑定并启用浮层。",
+      "启动任务属于当前交互用户，以 Highest 在登录时由 wscript 无窗口启动唯一长期 watchdog；旧 stock 任务被禁用而非删除，旧 Resume Owner 不得与新 watchdog 并存。",
+      "验收顺序固定为源码/公开包、runtime check、配置与绑定、任务/进程/heartbeat、TURZX 实体像素、HS2 实体背景与浮层、睡眠恢复和异常断电后的自然启动；前一层不能替后一层。"
+    ],
+    problem: "解决公开源码缺少本机私有运行态、换机误复制硬件身份、厂商文件误入 Git、依赖未齐先装任务、旧路径残留、双屏只验进程不验像素，以及安装失败后没有清晰回退的问题。",
+    implementation: [
+      "build-release.ps1 从源码构建 ZIP，只纳入 README、AGENTS、LICENSE、docs、scripts 与三套 tool source；测试会解包核对 HS2 源码和公开清单。",
+      "发布规则只允许 tools/turzx_side_screen/config.example.json 这一份配置示例；真实 config.json、weather local JSON、out、bin、obj、AppPackages、厂商 EXE/DLL 和生成预览全部排除。",
+      "config.json 保存当前机 serial、480×1920 刷新、loopback metrics、天气、时区、物理公网接口与 UI 选项；天气也可从显式私有路径或成对环境变量注入，未填坐标时失败关闭。",
+      "check-runtime.ps1 发现合适 Python 与 C# 编译器，核对 RJCP/TURZX 文件和 stack 入口，并返回 ready/missing；TimeAudit 凭据存在时才要求 Python 同时具备 psutil 与 asyncpg。",
+      "StartSideScreenWatchdog.ps1 在 ignored out 中维护 hs2-usb-topology-binding.json；新机器或改线后由健康拓扑生成，旧绑定不作为跨机事实。",
+      "install-startup-admin.ps1 先调用 runtime check，再把已解析 Root、Port、Interval 与 Hybrid 模式写进计划任务动作；wscript 父适配器保持无窗口长期运行。",
+      "uninstall-startup-admin.ps1 可移除主任务与旧 Resume task；安装器只禁用旧 stock 任务而不删除，Hybrid 不兼容时另有显式 command-200 三秒兼容模式。",
+      "验收记录把当前主机运行证据和新机/重装 E2E 分开；没有摄像头或设备 ACK 时，以人工观察两块实体屏和自然启动作为最后一层。"
+    ],
+    flow: [
+      "从 PUBLIC main 或公开源码 ZIP 建立 clean clone。",
+      "从合法来源把 RJCP 串口库与 TURZX 运行程序放到仓库根。",
+      "复制 config.example.json 为 ignored config.json，填写当前串口、物理公网接口和天气；不改公开模板。",
+      "运行 check-runtime，缺项时停止且不注册启动任务。",
+      "确认 TURZX 当前实际串口与唯一设备身份，再做主机侧渲染/发送检查。",
+      "让 HS2 进入当前可用模式，核对唯一 8091、port 2 controller、port 3 LED、AD23/MI_00 与非主 2288×1048 显示器；连续两次健康后保存绑定。",
+      "在 HS2 目标显示器选择 Wallpaper Engine 背景或 Windows 静态背景；浮层本身不复制或修改壁纸资产。",
+      "以管理员 PowerShell 安装当前交互用户的登录任务，并回读任务动作、Root、Highest 与唯一 watchdog。",
+      "检查 runtime、唯一进程、heartbeat、HS2 落点和公开安全边界。",
+      "分别观察 TURZX 实体时钟/像素、HS2 背景/透明浮层，再按需要验睡眠恢复与异常断电后的自然启动。"
+    ],
+    concepts: [
+      { term: "source package（源码包）", explanation: "能公开克隆、构建和检查的代码/文档集合，不包含一台机器的可执行依赖、配置、绑定或运行输出。" },
+      { term: "private config（私有配置）", explanation: "由 config.example.json 派生、被 Git 忽略的当前机串口、物理网卡和天气等值；可备份但不能公开提交。" },
+      { term: "machine binding（机器绑定）", explanation: "当前电脑上 TURZX 串口与 HS2 Hub/controller/LED/display 的实际身份关系；换机或重接后必须重新发现。" },
+      { term: "runtime gate（运行依赖门）", explanation: "check-runtime 返回 ready 前不允许安装启动任务，避免把缺依赖的路径变成开机故障。" },
+      { term: "layered acceptance（分层验收）", explanation: "源码、测试、安装、进程/heartbeat、实体像素、睡眠恢复和自然启动分别给结论，不能互相替代。" }
+    ],
+    boundaries: [
+      "厂商 TURZX 程序、RJCP 二进制和 Wallpaper Engine 场景必须从安装者有权使用的来源取得；PUBLIC 仓库与源码 ZIP 不重新分发。",
+      "config.json、天气坐标、物理网卡名、TIMEAUDIT 凭据、设备拓扑绑定、日志和生成输出保持在 Git 外；公开示例继续为空值。",
+      "旧机器的 COM7、DISPLAY 编号、8091/AD23/LED 实例号和任务 Root 都不是新机器事实；迁移必须重新发现并回读。",
+      "内部 USB 排针改线属于实体操作，必须关机并断开整机电源；安装页面不会把源码接线说明写成已完成实测。",
+      "安装启动任务需要管理员 PowerShell，会改变当前用户的 Task Scheduler；网站刷新和本模块证据采集保持只读。",
+      "当前主机健康、公开 ZIP 回归或 source contract 都不能证明另一台机器、重装系统、睡眠或异常断电后的真实 E2E。"
+    ],
+    failures: [
+      { condition: "Python、csc、RJCP、TURZX 运行文件或 stack 入口缺失", response: "check-runtime 返回具体 missing 且非零退出；安装器立即停止，不留下半注册启动任务。" },
+      { condition: "私有串口、物理网卡或天气值仍是旧机器内容", response: "保留公开示例不动，在 ignored config.json 中重新发现并填写；天气坐标缺失时 shim 失败关闭，不回落作者位置。" },
+      { condition: "TURZX 串口不唯一或旧 writer 仍占用", response: "不启动第二个 writer，不把 COM7 当常量；先确认当前设备身份和旧 Owner 退出。" },
+      { condition: "HS2 绑定缺失、歧义或只出现 A108 Boot ROM", response: "不复制旧绑定、不发送模式命令；等待唯一完整拓扑，并在 AD23/MI_00 与 LED 连续两次健康后再保存。" },
+      { condition: "启动任务 Root、参数或安装结果错误", response: "运行 uninstall-startup-admin.ps1 撤销本项目任务，修正路径/配置并重新通过 runtime check 后再安装；不并行启用旧 Resume Owner。" },
+      { condition: "1 Hz Hybrid 在目标 TURZX 上不兼容", response: "显式使用 `-HybridRefresh:$false` 回到已验证 command 200 三秒兼容模式；不把自动降频当修复成功。" },
+      { condition: "主机检查通过但实体画面未更新", response: "把问题留在实体/设备层，不升级 PASS；观察真实 TURZX 时钟和 HS2 背景/浮层，必要时交给串口或电源恢复模块。" }
+    ],
+    sources: [
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\README.md", role: "clean clone、本机配置、厂商运行文件、启动任务与实体验收总入口" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\docs\\release.md", role: "公开源码包包含/排除与合法本地 runtime 边界" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\config.example.json", role: "无真实值的 serial/network/weather 安装模板" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\check-runtime.ps1", role: "Python、csc、RJCP、TURZX 与 stack 的只读 ready/missing 门" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\install-startup-admin.ps1", role: "Highest 登录任务、Root/Port/Hybrid 参数与旧任务收口" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\uninstall-startup-admin.ps1", role: "启动任务撤销与重装前回退入口" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\docs\\startup.md", role: "双屏启动、HS2 绑定、任务动作、模式回退与分层验收合同" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\HS2ActiveRecoveryPolicy.ps1", role: "唯一 8091/AD23/MI_00/LED 拓扑发现、读取与原子绑定规则" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\test-public-release.ps1", role: "fresh ZIP 解包、缺厂商 runtime 失败和私有/二进制排除回归" }
+    ],
+    verification: [
+      "当前 PUBLIC main=ebbc1f2ab28bcef7a9a205a346981f16a3d253dc，源工作树在快照时干净；公开发布测试真实构建并解包 ZIP，确认 config.example、双屏源码和安装脚本存在，厂商二进制、本机 JSON 与生成目录不存在。",
+      "2026-08-31T11:19:19Z 当前主机 check-runtime 为 ready、missing=0，TURZX SideScreen 任务为 Running/Highest，唯一 stream 与新鲜 Hybrid heartbeat 存在；这些只证明现有安装态。",
+      "当前源码的 runtime checker 回归同时验证：缺 RJCP/TURZX 时失败，补齐要求的 runtime 与 stack 后才 ready；安装器自身也会在注册任务前调用该门。",
+      "本轮没有在 clean clone、另一台电脑或重装后的 Windows 上重建 private config、重新绑定两块屏、安装任务并完成自然启动；TURZX 与 HS2 实体像素、睡眠/恢复和异常断电验收保持 Unknown。"
+    ],
+    relation: "本模块把公开源码变成当前机器可运行的前置安装态，为指标、渲染、串口和 HS2 浮层提供私有配置与双屏绑定；安装完成后的睡眠、冻结、端点消失和运行期自愈仍由电源恢复模块负责。"
   },
   {
     slug: "power-recovery",
@@ -553,6 +704,7 @@ export const pcPanelHubModules = [
       "三次连续失败后 30 秒熔断，先证明旧 stream 释放 COM。",
       "A108 或端点缺失进入物理恢复：断电后只用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，随附一分二 Hub 不承载 LCD；供电不足再接 SATA。",
       "改变接线后，唯一 8091 + port 2 controller + port 3 LED 拓扑必须连续两次健康才允许换绑。",
+      "本模块从已经建立的本机安装态开始；clean clone、厂商文件、private config、首次双屏绑定和启动任务安装属于独立安装与换机模块。",
       "普通恢复不重启 Hub、不删设备、不做 PnP scan，也不改物理主屏和远程虚拟屏。"
     ],
     problem: "解决双恢复 Owner、显示模式抖动、串口竞争、任务假成功退出、睡眠后窗口乱跑和过度 USB 修复。",
@@ -584,6 +736,7 @@ export const pcPanelHubModules = [
       "随附一分二 Hub 不支持 LCD；只能使用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，供电不足时才补 SATA。",
       "接线改变后的单次枚举不够；唯一 8091、port 2 controller、port 3 LED 拓扑必须连续两次健康才换绑。",
       "上述接线与拓扑来自项目 source contract（源码合同）；本轮未关机、拔插、改线或执行物理恢复，不能写成实体实测通过。",
+      "这里处理已安装机器的运行期端点消失和接线修正，不代替 clean clone、换机或系统重装验收。",
       "服务/进程回读不等于实体显示恢复。"
     ],
     failures: [
@@ -606,7 +759,7 @@ export const pcPanelHubModules = [
       "接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。",
       "未制造睡眠、关机、驱动故障或显示拓扑变化，真实恢复 E2E 未重验。"
     ],
-    relation: "监管机箱屏传输和 HS2 显示状态；总览中的分层证据决定主机事实能否升级为实体结论。"
+    relation: "接收安装与换机模块已经验证的本机配置和双屏绑定，监管运行期机箱屏传输与 HS2 显示状态；它不拥有 clean clone 或首次安装，总览中的分层证据决定主机事实能否升级为实体结论。"
   }
 ];
 
