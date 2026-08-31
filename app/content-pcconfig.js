@@ -130,7 +130,7 @@ export const pcconfigProject = {
       "2026-08-31 从当前 WLY 调副驾驶健康入口返回 schema pcconfig.secondary-laptop-health.v1、status=not_applicable、reason=host_mismatch；这证明主机门正确停止，不证明笔记本服务或恢复状态。",
       "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。",
       "2026-08-31T17:49:27Z fresh Drift 返回 6 pass、1 warn、0 block，证据为 6 pass、0 fail、1 unknown；唯一 attention 是 tasks.live_match 的 complete_visibility=false，runtime_health 仍 pass 且 failure_last_result_count=0。",
-      "Codex Home 已完成切换：E:\\Data\\AppData\\Codex 是唯一运行根，C:\\Users\\10979\\.codex 是指向它的 junction。迁移前 staging 曾覆盖 39911 个文件、75.13 GB，最终差异为 565 个文件 / 6.74 GiB；这些数字只解释切换准备，不再代表当前仍在等待。",
+      "AI 工作台当前唯一运行根是 E:\\Data\\AppData\\Codex；C:\\Users\\10979\\.codex 只是指向它的兼容 junction，不存在第二份活动 Codex Home。",
       "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。",
       "授权文件实现已包含在上述 9/9 current 安装态中：authorization_file_broker.py 的 source/installed SHA-256 同为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854，manifest anchor 匹配且 Inspect 零写入；独立 6/6 合成测试通过。"
     ],
