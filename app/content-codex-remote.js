@@ -35,11 +35,12 @@ export const codexRemoteProject = {
   route: "/projects/codex-remote",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "历史真实链路与产品证据已形成；当前 Windows 接管方案仍待可重复无人值守验收",
-  cardStatusTone: "pass",
+  cardStatus: "历史真实链路与产品证据已形成；当前控制入口不可用且冻结",
+  cardStatusTone: "problem",
   ...codexRemoteSnapshot,
+  snapshotBoundary: "历史真实链路与产品证据已形成；当前控制入口明确为不可用且冻结，禁止打开、关闭、重启或调用。恢复属于另一个明确启动的项目，并需重新完成端到端验收",
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote", "Codex Remote怎么更新回滚", "手机查看子智能体"],
-  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是社区构建的非官方 companion（配套工具），没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
+  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是社区构建的非官方 companion（配套工具），没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前控制入口不可用且冻结，页面不宣称在线，也不调用任何运行组件。",
   summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令、文件改动和父子智能体，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；自身更新则用可回退运行代保护正在工作的 Desktop 链。它不传输桌面画面，也不另开一份聊天。",
   why: "长任务可能正在电脑上运行、等待审批、派出子智能体或已经改了文件。另开一个手机聊天只能复制文字，拿不到同一个任务的真实轮次、父子层级、工具、审批和文件状态；粗暴更新又可能中断正在工作的 Sidecar。Codex Remote 把移动端设计成“查看—审批—引导—排队—回读”的控制面，并把安装、采用与回滚分开。",
   plainExample: "例如父任务正在改项目并让两个子智能体分别检查代码和测试。我在手机上先进入子任务核对进展与结果，再返回父任务补充要求；需要更新 Remote 时，先登记新的不可变运行代，兼容的 Web/Sidecar 更新排空已接纳写入后短切换，失败就恢复旧 Sidecar。网络中断时先回读状态，不会自动重复发送。",
@@ -47,7 +48,7 @@ export const codexRemoteProject = {
   readerStates: {
     pass: "手机和电脑确认指向同一个任务、同一轮进展和同一份持久记录时，可以继续查看父子任务、审批、补充要求或排队下一件事；兼容更新只滚动 Web/Sidecar。",
     problem: "网络抖动、子智能体历史不完整、审批缺少可提交选项、队列状态不确定或新 Sidecar 启动失败时，保留草稿与真实状态，恢复旧 Sidecar 或给出精确恢复动作。",
-    unavailable: "无法确认电脑连接、登录会话、父子任务身份、运行代或文件授权时，只拒绝受影响操作；不启动第二个任务、不隐式交接 Broker/app-server，也不把历史画面冒充当前在线。"
+    unavailable: "当前控制入口明确不可用且冻结：不打开、关闭、重启、调用 dispatcher/任务/Sidecar/Broker/public endpoint，也不走替代重启路径。只保留具名静态证据的只读查看；恢复必须另开明确项目。"
   },
   productPrinciples: [
     { title: "两端共享同一个任务事实", detail: "手机与 Desktop 使用同一任务和轮次，不复制聊天历史制造看似同步的第二份任务。" },
@@ -342,6 +343,32 @@ export const codexRemoteProject = {
     { term: "opaque grant（不透明短时授权）", meaning: "任务正文中的本地绝对路径换成短时文件引用，避免形成可复用公网裸链接。" },
     { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" }
   ],
+  currentState: {
+    observedAt: "2026-08-30T11:29:50Z",
+    label: "历史真实链路、正式版本、源码与20张界面证据已确认；当前控制入口不可用且冻结",
+    facts: [
+      "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。",
+      "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。",
+      "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。",
+      "v0.1.5 对应公开 CI 已通过；当前 main 的最新 CI run 31145586404 为 failure，因此正式 release 证据与当前源码验证状态必须分开。",
+      "当前 codex-local-remote-control Skill 明确返回 Status=不可用，并冻结 runtime：禁止 Open、Close、restart、dispatcher、计划任务、Sidecar、Broker、public endpoint 或替代启动路径。该状态高于‘本轮未探测在线’的 Unknown 表述。",
+      "源码实现同一任务、steer、interrupt、DPAPI 加密 FIFO 队列、审批、模型/上下文/额度、父子智能体历史与只读导航、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。",
+      "源码还实现内容寻址不可变运行代、原子 current/previous 指针、兼容 Web/Sidecar 排空切换、同一幂等键续接与新 Sidecar 失败后的旧代恢复；Broker/app-server 变化仍走显式交接。",
+      "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。",
+      "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。"
+    ],
+    gaps: [
+      "历史真实链路与产品证据已形成，但当前控制入口不可用且冻结；页面与本轮任务没有访问任何 Remote 运行态。",
+      "恢复不是普通状态检查或重启：必须由用户明确启动独立恢复项目，重新决定实现并完成 fresh E2E；静态证据、旧制品和历史成功都不能改变当前不可用状态。",
+      "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
+      "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
+      "本轮没有读取已安装 runtime-current.json、Supervisor 或 Sidecar 状态，也没有执行安装、滚动更新、回滚、显式 handoff 或无人值守接管验收。",
+      "产品设计要求从子任务返回父任务并恢复阅读位置；现有源码与浏览器场景证明可进入子任务和返回父任务，但本轮没有取得精确滚动位置恢复的独立验收结果。",
+      "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
+      "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
+      "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
+    ]
+  },
   operatingFlow: [
     { title: "安装先生成可回退运行代", detail: "构建与检查通过后，注册器把 Web、Sidecar、Broker 和 Windows 脚本复制到内容寻址目录，验证 manifest，再原子记录 current/previous；登记本身不打开 Remote。" },
     { title: "浏览器先通过认证入口", detail: "手机只访问 HTTPS 反向代理后的 Sidecar；登录、会话、Origin、CSRF 与限速在产品 API 之前生效。" },
@@ -389,6 +416,7 @@ export const codexRemoteProject = {
     { layer: "v0.1.5 release tests（正式版本测试）", proves: "c3a07719 记录 1771 项测试、public-safety 与 Chromium 六视口验收通过。", doesNotProve: "当前 main、当前 Desktop 或任意网络长期稳定。" },
     { layer: "Current main CI（当前源码持续集成）", proves: "94f1cfa 的最新公开 CI run 31145586404 为 failure。", doesNotProve: "v0.1.5 的正式版本证据失效，或当前运行时在线/离线。" },
     { layer: "Historical real E2E（历史真实端到端）", proves: "真实手机、双 Web 与 Desktop 曾共享任务/轮次并走通审批、文件、子智能体、引导、队列、停止和恢复。", doesNotProve: "本轮当前在线或所有新版本继续兼容。" },
+    { layer: "Current control status（当前控制状态）", proves: "现行 Skill 明确 Status=不可用且 runtime frozen；任何控制、启动、停止或重启都禁止。", doesNotProve: "产品没有做成过、源码不可读，或未来不能在独立项目中恢复。" },
     { layer: "Real mobile gallery（真实手机画廊）", proves: "12张真实手机 UI 展示任务、对话、工具、命令、diff、文件、诊断、额度和输入控制。", doesNotProve: "截图里的任务、数值、模型或健康状态仍是当前事实。" },
     { layer: "Synthetic UI gallery（合成界面画廊）", proves: "7张公开演示与1张QA图在无私人数据情况下说明完整产品表面。", doesNotProve: "合成任务真的执行过或当前服务在线。" },
     { layer: "Current Git identity（当前 Git 身份）", proves: "观察时 PUBLIC main=94f1cfad、v0.1.5=c3a07719 且 source worktree 干净。", doesNotProve: "网页会自动跟随未来提交更新。" }
@@ -1066,7 +1094,7 @@ export const codexRemoteModules = [
       failureRecovery: ["tag 与 commit 不一致时停止版本结论并回读 refs", "截图来源不清时降为设计演示", "缺本轮运行态证据时不声明当前在线", "接管验收未闭合时只保留历史证据并要求隔离验证"]
     },
     teaser: "v0.1.5 的1771项测试、六视口Chromium、历史真实多端E2E和20张界面证据分层呈现；main与release身份分开。",
-    status: "v0.1.5 正式证据与历史真实链路已形成；当前 Windows 接管方案仍缺可重复无人值守验收，本轮当前在线未验证",
+    status: "v0.1.5 正式证据与历史真实链路已形成；当前控制入口 Status=不可用、runtime frozen，不允许用在线探测或重启改变这一状态",
     statusTone: "mixed",
     value: "我能清楚知道产品真正做成并跑通过什么，也不会因为一张绿图、一个历史截图或一个新提交就误判现在在线。",
     why: "源码、单元测试、合成浏览器、真实手机截图、真实 Desktop E2E 和当前在线是不同证据层。把它们合成一个‘可用’标签，会同时夸大成功和掩盖缺口。",
@@ -1075,7 +1103,7 @@ export const codexRemoteModules = [
     readerStates: {
       pass: "claim 与 release/tag、测试、E2E 或图片证据精确匹配时，页面明确写出能证明的范围。",
       problem: "current main、截图时间和正式版本不一致时，分层展示，不把新源码覆盖旧 release 证据。",
-      unavailable: "缺当前 runtime 与 Windows 接管验收时，仅停止当前在线和重新启用声明，保留已做成产品与历史证据。"
+      unavailable: "现行控制入口明确不可用且冻结；只允许具名静态证据的只读查看。恢复需由用户另行启动独立项目并重新做端到端验收。"
     },
     decisionImpact: [
       "正式发布证据绑定 v0.1.5 / c3a07719。",

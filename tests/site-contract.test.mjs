@@ -1509,7 +1509,9 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   assert.match(publicText, /1771/);
   assert.match(publicText, /main=94f1cfad/);
   assert.match(publicText, /不代表当前在线|不宣称在线/);
-  assert.match(publicText, /历史真实链路与产品证据已形成，本轮未完成当前Windows接管方案的可重复无人值守验收；重新启用前需隔离验证/);
+  assert.match(publicText, /当前控制入口.*不可用.*冻结/);
+  assert.match(publicText, /禁止打开、关闭、重启或调用|不打开、关闭、重启、调用/);
+  assert.match(publicText, /恢复.*另一个明确启动的项目|恢复必须另开明确项目/);
   assert.match(publicText, /12 张历史真实手机 UI|12张真实手机 UI/);
   assert.equal(codexRemoteProject.slug, "codex-remote");
   assert.equal(codexRemoteProject.order, 9);
@@ -1605,7 +1607,7 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "codex-remote", "index.html"), "utf8");
   assert.match(overviewHtml, /data-static-route="\/projects\/codex-remote"/);
   assert.match(overviewHtml, /Codex Remote/);
-  assert.match(overviewHtml, /不代表当前在线|不宣称在线/);
+  assert.match(overviewHtml, /不可用.*冻结/);
   assert.match(overviewHtml, /href="https:\/\/github\.com\/wlyaaaaa\/codex-local-remote"/);
   assert.match(overviewHtml, /20 张界面证据|20张界面证据/);
   assert.doesNotMatch(overviewHtml, /Codex Remote（远端仓库）/, "product identity must not be mechanically annotated into a false generic meaning");
@@ -2793,6 +2795,11 @@ test("dynamic snapshot facts are separated from partial validation", () => {
     assert.equal(typeof binding.sourceMatchesRelease, "boolean");
     assert.ok(binding.releasePath.includes(`E:\\.agents\\releases\\${panelSnapshot.authority.releaseId}\\`));
   }
+  const agentsCurrentText = JSON.stringify(project.currentState);
+  assert.ok(agentsCurrentText.includes(panelSnapshot.sourceCommit), "agents current state omits current source main");
+  assert.ok(agentsCurrentText.includes(`${panelSnapshot.skills.activeInstallIntent} 个 active install intent`));
+  assert.ok(agentsCurrentText.includes(`${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction`));
+  assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
 test("E95 panel preserves continuity, trusted-local boundaries and attention quality", async () => {
