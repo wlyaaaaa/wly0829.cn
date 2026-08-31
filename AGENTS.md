@@ -153,6 +153,13 @@ read-only operating panel; public presentation is secondary.
   recovery, current evidence and named unknowns). A timeline mention, source
   path, test count, glossary term or isolated technical paragraph proves
   neither layer.
+- For every long-lived mechanism selected from source, the owning product
+  reader layer must let a first-time reader answer five practical questions in
+  plain language: which accident it prevents; when it activates; what actually
+  happens; what happens on conflict or unavailability; and which result,
+  evidence or recovery point is returned. Naming the mechanism only in a
+  system diagram, glossary, rule field or technical module is still a content
+  omission.
 - `product_capability_completeness_gate`: omitting a current, source-backed,
   public-safe, long-lived product capability that could change how the owner
   uses or judges the project is a P0 content defect. Missing either its product

@@ -339,6 +339,8 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Registry impact paths help locate evidence; they cannot[\s\S]{0,100}prove/);
   assert.match(projectRules, /both a product explanation[\s\S]{0,260}and a technical[\s\S]{0,100}reference/);
   assert.match(projectRules, /timeline mention, source[\s\S]{0,180}proves[\s\S]{0,80}neither layer/);
+  assert.match(projectRules, /which accident it prevents; when it activates; what actually[\s\S]{0,180}recovery point is returned/);
+  assert.match(projectRules, /system diagram, glossary, rule field or technical module[\s\S]{0,80}content[\s\S]{0,30}omission/);
   assert.match(projectRules, /`product_capability_completeness_gate`/);
   assert.match(projectRules, /P0 content defect/);
   assert.match(projectRules, /blocks that project's content PASS[\s\S]{0,100}blocks publication/);
