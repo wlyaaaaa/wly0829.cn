@@ -1198,7 +1198,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
     assert.ok(Array.isArray(pcPanelHubProject[key]) && pcPanelHubProject[key].length >= 3, `PC Panel Hub overview ${key} is incomplete`);
   }
   const heroText = pcPanelHubProject.heroFacts.map((item) => item.value).join("\n");
-  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "ebbc1f2"]) {
+  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "8c217ead"]) {
     assert.ok(heroText.includes(fact), `PC Panel Hub first viewport hides ${fact}`);
   }
   assert.match(publicText, /软件(?:设计|演示)|demo/);
@@ -2154,7 +2154,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
     /UserPromptSubmit.*root.*SubagentStart.*child.*0–10.*判断前/,
     /AI.*决定.*0–10.*家族.*Hook.*不做调度|Hook.*不调度.*AI.*决定/,
     /PreToolUse.*spawn 前.*复核.*TOCTOU/,
-    /旧 root.*完全没有 Hook.*用户明确 model\/effort.*回读.*thread binding/,
+    /完全没有 Hook.*旧 root.*用户明确 model\/effort.*回读.*thread binding|旧 root.*完全无 Hook.*用户明确 model\/effort.*回读.*thread binding/,
     /child 不继承|Child 不继承/,
     /Hook.*不调度|Hook.*不选择.*数量/,
     /不制造用户授权|不产生授权/,
@@ -2513,7 +2513,7 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("C盘规则为什么不能阻塞spawn")[0]?.title, "重大动作保护");
   assert.equal(searchPanel("dirty source 不能冒充 current release")[0]?.title, "重大动作保护");
   assert.equal(searchPanel("同一个目标不要反复问我授权")[0]?.title, "授权与委派");
-  assert.equal(searchPanel("本地构建通过为什么还不能说网站完成")[0]?.title, "三控制面上下文、耐久状态与完成证据");
+  assert.equal(searchPanel("本地构建通过为什么还不能说网站完成")[0]?.title, "三控制面上下文、耐久状态、工作树热备与完成证据");
   assert.equal(searchPanel("怎么避免全局规则覆盖项目自己的验收方式")[0]?.title, "全局根规则");
   assert.equal(searchPanel("PCConfig")[0]?.title, "PCConfig · 总览");
   assert.equal(searchPanel("GitHub 总索引")[0]?.title, "GitHub 总索引 · 总览");
@@ -2778,7 +2778,7 @@ test("shared search scopes, project reading layers, Skills categories and System
       assert.equal(match?.href, canonicalPath(new URL(moduleEntry.href, "https://wly0829.cn").pathname), `project compact search misroutes: ${alias}`);
     }
   }
-  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E95", "agents"]]) {
+  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["59b0b5c", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E95", "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
   }
 });
@@ -2818,7 +2818,7 @@ test("route links use native directory documents and preserve module scroll with
 
 test("Skills browsing categories cover every displayed capability exactly once", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  const block = pageSource.match(/const skillCategoryDefinitions = \[([\s\S]*?)\n\];\n\nfunction skillCategoryIds/)?.[1] || "";
+  const block = pageSource.match(/const skillCategoryDefinitions = \[([\s\S]*?)\r?\n\];\r?\n\r?\nfunction skillCategoryIds/)?.[1] || "";
   const assignments = new Map(skills.map((item) => [item.slug, 0]));
   for (const match of block.matchAll(/slugs:\s*\[([^\]]*)\]/g)) {
     for (const slug of [...match[1].matchAll(/"([^"]+)"/g)].map((item) => item[1])) {
