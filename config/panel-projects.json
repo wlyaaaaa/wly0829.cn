@@ -176,8 +176,8 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 5,
-        "scope": "project overview and eight modules covering machine facts, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, secrets/providers, protected actions and protected data",
+        "semantic_revision": 6,
+        "scope": "project overview and eight modules covering machine facts, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers/authorized-file encryption-resume-verify-recovery, protected actions and protected data",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
           "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
@@ -272,8 +272,13 @@
             "registries/secret_broker.json",
             "tools/secret_broker.py",
             "tools/Invoke-SecretBroker.ps1",
+            "tools/authorization_file_broker.py",
+            "tools/authorization_file_broker.test.py",
             "tools/Invoke-GoogleWorkspaceProvider.ps1",
-            "docs/contracts/pcconfig.google-workspace-*.md"
+            "docs/contracts/pcconfig.google-workspace-*.md",
+            "docs/contracts/pcconfig.secret-broker.md",
+            "docs/contracts/pcconfig.password-center-m2.md",
+            "docs/recovery/password-center-m2-operations.md"
           ]
         }
       ],

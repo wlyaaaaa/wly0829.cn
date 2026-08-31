@@ -1053,7 +1053,7 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 5);
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 6);
 });
 
 test("PCConfig exposes secondary-laptop and drift acceptance as complete product and technical axes", async () => {
@@ -1077,9 +1077,30 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(pcconfigProject.currentState), /not_applicable|host_mismatch/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.match(registration.ai_refresh.scope, /eight modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));
+});
+
+test("PCConfig exposes authorized-file encryption as an isolated resumable product domain", async () => {
+  const module = pcconfigModules.find((item) => item.slug === "secrets-providers");
+  const text = JSON.stringify({ module, usage: pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "secrets-providers"), current: pcconfigProject.currentState });
+  for (const expected of [
+    "Authorization File Broker", "SelectedPath", "OutputPath", "plan_explicit_inputs", "10000", "100 GiB", "AES-256-GCM", "4 MiB",
+    "domain root", "bundle key", "file key", "resume state", "index.enc", "receipt", "selection digest", "already_complete",
+    "source_changed", "AuthorizationFileVerify", "AuthorizationFileDecrypt", "restore_conflict", "already_restored", "opaque asset"
+  ]) assert.ok(text.includes(expected), `PCConfig authorized-file workflow omits: ${expected}`);
+  for (const expected of ["来源文件", "始终保留", "不读取", "正文", "不覆盖", "中断", "继续", "没有独立 preview", "runtime", "E2E", "not_run"]) {
+    assert.ok(text.includes(expected), `PCConfig authorized-file product boundary omits: ${expected}`);
+  }
+  assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "secrets-providers" && item.ask.includes("文件") && item.ask.includes("加密")));
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "pcconfig");
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
+  const paths = registration.impact_sources.flatMap((source) => source.paths || []);
+  for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
+    assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
+  }
 });
 
 test("TimeAudit keeps collectors bounded without blanket-banning useful technical facts", async () => {
@@ -1881,7 +1902,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 5);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 6);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
