@@ -210,6 +210,7 @@ export const project = {
     { ask: "只读审计，不实施修复。", effect: "不 Claim 排他 Owner，不产生外部 effect，只报告事实、证据和缺口。", moduleSlug: "authorization-owner" },
     { ask: "现场回读，不用旧报告或记忆。", effect: "重新读取活动规则、项目规则、Owner Provider、Git 状态和当前源码。", moduleSlug: "rules-contracts" },
     { ask: "验证后定向提交并正常推送。", effect: "保留其他 dirty work，只 stage 本任务文件，提交后 normal push 并从远端默认分支回读。", moduleSlug: "authorization-owner" },
+    { ask: "公开项目里有被 Git 忽略、但不能丢的私有配置和文档，怎样既保留又不泄露？", effect: "只筛 Git 明确 ignored、未跟踪/未暂存且有保留价值的材料；先复制和 hash 到现场仍为 PRIVATE 的 companion，提交推送并从远端默认分支回读后，才把原件同卷改为可回滚备份并在原路径建立继续 ignored 的本地 link。任一步失败都恢复原件，不把半份迁移写成完成。", moduleSlug: "authorization-owner" },
     { ask: "我新加了一个 Skill（能力入口），为什么文件有了，全新任务还是看不到？", effect: "把 canonical source（唯一维护源）、安装事务、发现入口、当前任务、fresh task（全新任务验证）和真实 E2E 分开检查，只修失败的那一层。", moduleSlug: "skills-plugins" },
     { ask: "发布一版新规则，保留上一版回退，别让 dirty source 冒充 current。", effect: "从已验证 PRIVATE main commit 生成五文件 E release，经 expected-pointer CAS 激活并回读 current/previous。", moduleSlug: "protected-policy" },
     { ask: "Hook（宿主钩子）到底检查什么，谁决定开几个代理？", effect: "UserPromptSubmit 或 SubagentStart 先注入可信身份，AI 再自主决定 0–10 与家族，PreToolUse 只在创建前复核。", moduleSlug: "capability-routing" },
@@ -441,12 +442,12 @@ export const modules = [
     result: "每一步都能回答授权是否跨轮次仍有效、真实工具有没有被调用、谁正在改哪一块、旧 Owner 是否真正终态、以及远端是否完成回读；未完成义务会随检查点移交。",
     readerStates: { pass: "目标、授权和施工范围明确且没有重叠 Owner 时，执行、验证和正常收口可以连续推进。", problem: "发现重叠施工、目标扩大或步骤事实漂移时，停止对应写入并重新协调或派生步骤。", unavailable: "授权事实或 Owner registry（施工登记表）不可验证时，外部写入和受保护动作停止；只读调查可以继续。" },
     searchProjection: {
-      intents: ["同一目标已经授权为什么还反复问", "谁正在修改这个最小范围", "外部动作与本机可逆操作怎样区分", "旧任务未完成内容怎样交给 successor"],
-      entities: ["durable explicit user authorization", "CoreGoalCommitment", "StepCapability", "Execution Owner", "CAS", "external effect", "threadId"],
-      relations: ["用户授权不等于 UAC 或 Agent 身份", "CoreGoal 固定目标而步骤能力绑定一次 effect", "Execution Owner 协调写入范围但不制造授权", "有 residual 的旧 Owner 通过 checkpoint 转给真实 successor"],
-      failureRecovery: ["重叠 Owner 时先解析 lifecycle 再 Claim 或 Transfer", "目标或 executor 漂移时废弃步骤能力并重新派生", "真实工具返回 deny 或 unavailable 时按现场结果停止", "非 fast-forward 时保留双方改动并停止推送"]
+      intents: ["同一目标已经授权为什么还反复问", "谁正在修改这个最小范围", "外部动作与本机可逆操作怎样区分", "旧任务未完成内容怎样交给 successor", "把PUBLIC项目里被忽略的私有材料迁到PRIVATE伴随仓库"],
+      entities: ["durable explicit user authorization", "CoreGoalCommitment", "StepCapability", "Execution Owner", "CAS", "external effect", "threadId", "public project private companion", "ignored untracked material", "PRIVATE manifest / local link"],
+      relations: ["用户授权不等于 UAC 或 Agent 身份", "CoreGoal 固定目标而步骤能力绑定一次 effect", "Execution Owner 协调写入范围但不制造授权", "有 residual 的旧 Owner 通过 checkpoint 转给真实 successor", "PUBLIC worktree只筛明确ignored材料", "PRIVATE远端hash回读先于替换原件", "local link必须继续不进入PUBLIC staging"],
+      failureRecovery: ["重叠 Owner 时先解析 lifecycle 再 Claim 或 Transfer", "目标或 executor 漂移时废弃步骤能力并重新派生", "真实工具返回 deny 或 unavailable 时按现场结果停止", "PRIVATE target可见性或远端回读失败时保留原件", "link进入PUBLIC status时回滚rename并停止", "非 fast-forward时保留双方改动并停止推送"]
     },
-    decisionImpact: ["本机低风险可逆操作可直接继续。", "用户明确标记的长期授权在冻结 goal/scope 内跨轮次、压缩、root、全部 child/后代和新顶层任务持续有效。", "前提成立时必须真实调用一次，不因通用工具说明、缓存失败或 AI 预判再次索权。", "system/developer、实际 deny/step_up/needs_evidence/action-time confirmation 与现场身份、CAS、target、read-back 失败仍有效。", "用户私人账号空间在没有 public/share 信号时与本机私密目标等价可信。", "PUBLIC 个人数据只有 L3+ 才进入可能敏感审查，L1/L2 不因属于个人数据而删改。", "有重叠 Owner 先用固定 resolver 判断 lifecycle；归档不是终态证明。", "普通非长期 terminal scope，或已归档且 clean 的 predecessor，无 residual 时用 RecoverRelease；有 residual 才带 checkpoint RecoverReleaseClaim。", "未归档 long_term_task 不自动释放，只能明确接续或正式退役。", "只有真实 threadId 可归档，clientThreadId 只是创建中回执。", "complete goal 是关闭状态；来源任务仍须确认无 follow-up、queue、pending transaction 和 Owner residual 才可逆归档。"],
+    decisionImpact: ["本机低风险可逆操作可直接继续。", "用户明确标记的长期授权在冻结 goal/scope 内跨轮次、压缩、root、全部 child/后代和新顶层任务持续有效。", "前提成立时必须真实调用一次，不因通用工具说明、缓存失败或 AI 预判再次索权。", "system/developer、实际 deny/step_up/needs_evidence/action-time confirmation 与现场身份、CAS、target、read-back 失败仍有效。", "用户私人账号空间在没有 public/share 信号时与本机私密目标等价可信。", "PUBLIC 个人数据只有 L3+ 才进入可能敏感审查，L1/L2 不因属于个人数据而删改。", "PUBLIC 项目的有价值 ignored 私有材料不是自动丢弃物；没有现成 PRIVATE 远端覆盖时，应在不打开已推送版本正文的前提下收敛进唯一 PRIVATE companion。", "有重叠 Owner 先用固定 resolver 判断 lifecycle；归档不是终态证明。", "普通非长期 terminal scope，或已归档且 clean 的 predecessor，无 residual 时用 RecoverRelease；有 residual 才带 checkpoint RecoverReleaseClaim。", "未归档 long_term_task 不自动释放，只能明确接续或正式退役。", "只有真实 threadId 可归档，clientThreadId 只是创建中回执。", "complete goal 是关闭状态；来源任务仍须确认无 follow-up、queue、pending transaction 和 Owner residual 才可逆归档。"],
     problem: "用户说要完成一件事，不等于任何代理都能对任何对象执行所有动作。系统必须区分用户授权、操作系统权限、最高权限身份、目标是否仍是原目标、施工范围是否被别人占用，以及动作完成后是否有正式回读。",
     implementation: [
       "低风险、可逆、范围内的本机读取、编辑和测试直接推进；消息、外部写入、发布、部署和付费需要明确授权。",
@@ -459,6 +460,8 @@ export const modules = [
       "来源创建的顶层任务只有取得真实 threadId，且正式完成/停止后无 follow-up、queue、pending transaction 或 Owner residual，才由来源可逆归档；complete goal 已关闭，不算 open residual。",
       "当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，私人账号空间与本机、workspace 和 BitLocker 盘同属 default trusted target（默认可信目标）；可信不等于已授权写入。",
       "PUBLIC 个人数据按唯一 L1–L5 表判断最终载荷整体；没有达到 L3+ 的正面证据时默认按 L2，项目不能靠自写规则把 L1/L2 变成受限内容。",
+      "PUBLIC companion 只审 Git check-ignore/本机 exclude 明确忽略、未跟踪且未暂存的 path；tracked/unignored 候选留给公开项目 Owner，已推来源GitHub的版本不重新打开复审。依赖、cache、build、普通日志、可重建下载、活数据库和大制品默认排除。",
+      "迁移按 copy/hash → PRIVATE manifest+commit/normal push → default branch/hash read-back → 同卷 rollback rename → local-only link 与 PUBLIC git status 回读执行；PRIVATE远端回读成功前绝不替换原件。",
       "Git 完成和业务完成分别报告；个人仓库最终必须从真实默认分支可达并由远端回读。"
     ],
     flow: [
@@ -469,6 +472,7 @@ export const modules = [
       "Inspect Owner；冲突时先解析 lifecycle，再 Claim、RecoverRelease 或 RecoverReleaseClaim 最小 scope",
       "为单一 effect 派生短时步骤能力",
       "在副作用边界重读目标事实后执行",
+      "若目标是PUBLIC ignored私有伴随材料，先筛候选并现场重验唯一PRIVATE companion，再按复制/远端回读/可回滚替换/link状态链执行",
       "取得 owner receipt、read-back 和必要的 Git 收口",
       "释放 Owner，或将未完 residual 连同 checkpoint 原子移交"
     ],
@@ -481,7 +485,8 @@ export const modules = [
       { term: "Registered target", explanation: "reference 证明目标是谁，live resolution 说明现在能做什么；两者都不证明动作已发生。" },
       { term: "Public personal data classification（公开个人数据分级）", explanation: "跨项目唯一的 L1–L5 表；只有 L3+ 才进入个人数据可能敏感审查。" },
       { term: "Project publication restriction authority（项目公开限制授权）", explanation: "项目收紧 L1/L2 默认时，必须有真实项目需要和用户对精确项目、范围、限制的明确授权；项目自写不成立。" },
-      { term: "Source task auto archive（来源任务自动归档）", explanation: "来源只在真实 threadId 已解析、任务终态且无后续、队列、pending transaction 或 Owner residual 时执行可逆 archive。" }
+      { term: "Source task auto archive（来源任务自动归档）", explanation: "来源只在真实 threadId 已解析、任务终态且无后续、队列、pending transaction 或 Owner residual 时执行可逆 archive。" },
+      { term: "Private companion（私有伴随仓库）", explanation: "为一个PUBLIC项目保存Git明确忽略但有价值的私有材料的唯一已登记PRIVATE目标；映射和本机指针不进入PUBLIC提交。" }
     ],
     boundaries: [
       "UAC（Windows 管理员确认）只提升 Windows 进程权限，不扩大任务授权",
@@ -489,7 +494,8 @@ export const modules = [
       "子代理、shell、worktree 和插件不能绕过已有重叠 Owner",
       "force-push、新公开面、付费和不可恢复动作不在默认收敛授权内",
       "PRIVATE 或可信目标不等于已经授权写入",
-      "L1/L2 不受个人数据公开限制；真实 secret、第三人授权、许可和 external effect 授权仍是独立边界"
+      "L1/L2 不受个人数据公开限制；真实 secret、第三人授权、许可和 external effect 授权仍是独立边界",
+      "PRIVATE companion不接管tracked/unignored候选，不用skip-worktree、硬链接或改公开.gitignore隐藏内容，也不迁移可重建cache、活数据库和大制品"
     ],
     failures: [
       { condition: "目标或 executor 漂移", response: "废弃当前步骤能力，现场重读后在同一 CoreGoal 下重新派生。" },
@@ -497,16 +503,18 @@ export const modules = [
       { condition: "长期授权已覆盖但平台结果未知", response: "真实调用一次；按 unavailable、deny、step_up、needs_evidence、error 或 dispatch-unconfirmed 的实际结果收口，不靠预判。" },
       { condition: "旧任务已归档但有 open goal 或 turn_aborted", response: "保留旧任务归档；用 checkpoint 和 residual 原子 RecoverReleaseClaim 到真实 successor。" },
       { condition: "Git 非 fast-forward", response: "停止推送并解决同步，不使用 force-push掩盖冲突。" },
-      { condition: "任务仍有 residual", response: "保留 lease，记录 checkpoint 并转交真实 successor，不能直接宣称完成。" }
+      { condition: "任务仍有 residual", response: "保留 lease，记录 checkpoint 并转交真实 successor，不能直接宣称完成。" },
+      { condition: "PRIVATE companion可见性、copy/hash、commit/push、default-branch/hash回读或local link状态任一步失败", response: "远端回读前不替换原件；替换后失败则用同卷rollback rename恢复原件，移除有问题的link并保持PUBLIC状态不含候选。" }
     ],
     sources: [
-      { path: "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md", role: "授权、CoreGoal、Owner、Git、可信目标与 PUBLIC 个人数据唯一分级的合同" },
+      { path: "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md", role: "授权、CoreGoal、Owner、Git、可信目标、PUBLIC个人数据分级与PUBLIC项目私有伴随材料迁移合同" },
       { path: "E:\\.agents\\tools\\Invoke-ExecutionOwnerRegistry.ps1", role: "Owner CAS、scope transition 和 action authorization 入口" },
       { path: "E:\\.agents\\tests\\Test-ExecutionOwnerRegistry.ps1", role: "Owner claim、冲突、移交和恢复回归" }
     ],
     verification: [
       `${panelSnapshot.authority.releaseId} release descriptor 确认授权合同路径、SHA 和 bytes 来自同一 ruleset`,
       "ExecutionOwnerRegistry 聚焦回归验证 Claim/Add/Transfer/Release、RecoverRelease/RecoverReleaseClaim、complete goal 与 archived lifecycle 语义",
+      "E95授权合同把PUBLIC companion迁移绑定为PRIVATE远端先完成default-branch/hash回读、随后才替换原件并验证local link继续ignored；失败恢复原件，不接受半完成。",
       "Git 结果必须另由 Git owner 现场确认 default branch、remote 和 push read-back"
     ],
     relation: "这个模块决定谁被允许做哪一步；能力路由只推荐方法，保护策略只证明重大动作使用哪一代规则。"

@@ -285,7 +285,20 @@ export const ruleGuides = {
         ]
       },
       {
-        title: "七、PUBLIC 个人数据唯一 L1–L5 表",
+        title: "七、PUBLIC 项目的私有伴随材料",
+        intro: "公开仓库旁边可能有被 Git 明确忽略、但对恢复和继续工作有价值的私有配置、脚本或文档。目标是既不把它们推到 PUBLIC，也不因看不见就让它们成为单机唯一副本。",
+        items: [
+          item("什么时候用", "例如我问“这个公开项目里被 Git 忽略的本地配置和文档怎样备份，又不泄露到公开仓库”。只有项目当前由 Git Owner 确认 PUBLIC、有本地 worktree，且材料确实 ignored、未跟踪/未暂存并有保留价值时进入。"),
+          item("什么不进入", "Tracked/unignored 候选继续由公开项目 Owner 决定；已推到来源 GitHub 的版本不重新打开复审。依赖、cache、build/generated/temp、普通日志、可重建下载、活数据库和大制品默认排除，歧义原地保留。"),
+          item("最终得到什么", "一个现场仍为 PRIVATE 的唯一 companion 仓库、含来源映射和 hash 的私有 manifest、远端默认分支回读，以及原路径继续可用且仍被 PUBLIC Git 忽略的本地 link；PUBLIC commit 不包含私有映射。"),
+          item("完整执行顺序", "copy/hash → PRIVATE manifest、commit 和 normal push → 从远端默认分支回读提交与 hash → 原件同卷 rollback rename → 建立 local-only link → 回读 PUBLIC git status 仍无候选。远端回读成功前不得替换原件。"),
+          item("正常时", "PRIVATE 目标、远端内容和本地 link 全部回读一致后，原项目继续按原路径使用材料，同时已有独立私有恢复点。"),
+          item("发现问题时", "目标不是 PRIVATE、内容已由另一私有远端覆盖、hash/remote read-back 不一致或 link 进入 PUBLIC staging 时停止；已经替换原件则立即从 rollback rename 恢复。"),
+          item("入口不可用时", "保留原件和现有 PUBLIC worktree，不创建猜测目标、不用 skip-worktree/硬链接/修改公开 .gitignore 隐藏，也不把半成品叫完成。")
+        ]
+      },
+      {
+        title: "八、PUBLIC 个人数据唯一 L1–L5 表",
         intro: "分级对象是最终公开载荷整体；effective_level=max(字段等级, 组合后的现实损害等级)。仅能识别本人、字段变多或抽象猜测不构成升级，限制方须有正面证据证明达到 L3+，否则个人数据敏感性轴默认 L2。",
         items: [
           item("L1｜非个人或重复公开无新增损害", "非个人、虚构、匿名，或用户已主动公开且本次重复公开不会增加现实损害的普通事实。PUBLIC 默认：不受个人数据公开限制。"),
