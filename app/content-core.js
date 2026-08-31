@@ -154,6 +154,7 @@ export const project = {
     { title: "Git 历史与工作树热备各保一层", detail: "PRIVATE Git 保存提交历史，G 盘 hot mirror（热镜像）保存当前工作树和未提交状态；两者互补，但热镜像不复制 .git、不触碰 H 冷备，也不冒充完整仓库备份。" },
     { title: "不知道就保留未知", detail: "证据不足只停止受影响步骤，说明缺什么和怎样恢复；不依赖该问题的安全工作继续。" },
     { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
+    { title: "产品复杂度由需求决定，技术架构必须最小充分", detail: "用户要的功能、流程、状态和体验不能被反膨胀删减；先冻结同一完整验收，再在能满足质量、可维护性、兼容和已证扩展轴的路线中，强制选择更小、更快、少节点的实现。" },
     { title: "注意力质量高于上下文数量", detail: "先保住目标、边界、最新证据、未知和验收，再读取会改变判断的细节；既不漏掉关键事实，也不靠堆文件和日志制造理解假象。" },
     { title: "自然能力要用自然请求验收", detail: "需要证明 AI 会自己选路时，给全新评估者普通用户目标，不泄露 Skill、工具或预期路线；同时检查它是否自主选对能力，以及用户最后是否真的拿到正确结果。" },
     { title: "官方更新不靠易变版本号维持", detail: "同一官方主体更新后按稳定 package family（软件包家族）、签名、宿主事件和当前能力继续；版本号或安装路径改变不构成阻断，只有真实缺失的精确能力局部降级。" },
@@ -167,7 +168,8 @@ export const project = {
     "维护重大动作的活动规则、发布链和恢复语义",
     "在任务真正结束且没有后续义务时安全归档；仍有未交付内容时保留接手人与恢复线索",
     "维护个人 Skills 的 canonical source、安装清单与验证分层",
-    "为 .agents 当前工作树提供固定 E→G 热备合同、状态回执与恢复边界"
+    "为 .agents 当前工作树提供固定 E→G 热备合同、状态回执与恢复边界",
+    "在不削弱产品验收的前提下执行最小充分架构硬门，并在自造复杂度失败时优先删层"
   ],
   exclusions: [
     "不拥有仓库身份、远端、默认分支和发布事实；这些由 Git 控制面负责",
@@ -233,7 +235,7 @@ export const project = {
     { name: "Personal Skill 供应链", responsibility: "维护 Skill canonical source（能力唯一源码）、安装意图、发现 junction（目录联接）、事务回滚和六层证据。", implementation: "一个 registry（登记表）、两个 canonical roots（唯一维护根目录）、事务 installer（安装器）和 recovery capsule（恢复胶囊）。" },
     { name: ".agents 工作树热备", responsibility: "保存 E:\\.agents 当前工作树与未提交改动的 G 盘恢复点，补足 PRIVATE Git 只保存提交历史的边界。", implementation: "固定 E→G 路径、G 卷健康门、全局互斥、受限 robocopy 镜像、状态 JSON 和可选每日无窗口任务；不复制 .git，不访问 H。" },
     { name: "Control Plane Doctor", responsibility: "按用户点名的 Owner 做只读健康、漂移、迁移和恢复检查。", implementation: "只调用被选中的 Provider；需要修复时退出 Doctor 并交给真实 Owner。" },
-    { name: "测试与复杂度预算", responsibility: "统一登记本地与跨 Owner 测试，并限制活动树中的文件、字节和历史副本。", implementation: "Test registry、Local/Cross-owner scope 和 repository bloat budget。" }
+    { name: "最小充分架构与测试", responsibility: "冻结完整产品/质量验收，比较短路线与长路线的总生命周期成本，并阻止没有现实需求证据的新技术层。", implementation: "complete_acceptance_floor + minimum_sufficient_architecture_hard_gate；复杂度失败先删层，再按差异运行 Local/Cross-owner 验证和 repository bloat budget。" }
   ],
   usageExamples: [
     { ask: "比较几个方案，给我净收益最好的一个。", effect: "模型自己选择调查、工具和验证深度，不机械套头脑风暴模板。", moduleSlug: "capability-routing" },
@@ -247,6 +249,7 @@ export const project = {
     { ask: "我新加了一个 Skill（能力入口），为什么文件有了，全新任务还是看不到？", effect: "把 canonical source（唯一维护源）、安装事务、发现入口、当前任务、fresh task（全新任务验证）和真实 E2E 分开检查，只修失败的那一层。", moduleSlug: "skills-plugins" },
     { ask: "发布一版新规则，保留上一版回退，别让 dirty source 冒充 current。", effect: "从已验证 PRIVATE main commit 生成五文件 E release，经 expected-pointer CAS 激活并回读 current/previous。", moduleSlug: "protected-policy" },
     { ask: "Hook（宿主钩子）到底检查什么，谁决定开几个代理？", effect: "UserPromptSubmit 或 SubagentStart 先注入可信身份，AI 再自主决定 0–10 与家族，PreToolUse 只在创建前复核。", moduleSlug: "capability-routing" },
+    { ask: "功能和质量都别删，但别为了显得专业再加服务、数据库和状态机。", effect: "先冻结完整功能、好用程度、正确性、可靠性、恢复、性能、可维护性和现有兼容；若现有入口或单模块已经满足，就禁止新增技术层。只有短路线明确缺少某项验收且有当前证据时，才增加解决该缺口的最小实现。", moduleSlug: "capability-routing" },
     { ask: "别告诉验收者内部路线，看看它能不能自己选对能力并给出结果。", effect: "用 implementation-blind fresh E2E（实现盲态全新端到端验收）同时验证无提示选路和用户可见结果；点名工具的测试仍只算定向执行。", moduleSlug: "capability-routing" }
   ],
   evidenceLayers: [
@@ -271,7 +274,7 @@ export const project = {
     { date: "2026-08-26", commit: "472ab3a", result: "CoreGoal 授权进入保护消费者，四类人类因子统一。" },
     { date: "2026-08-29", commit: "157060f–31009aa", result: "退役 C 盘规则 Publisher/Authority 生产链，建立 E release、跨项目 coordination、差异驱动快速验证和分阶段墙钟回执；运行根迁移已进入 staging 与兼容修复阶段，但尚未完成 junction、唯一副本和新运行时回读。" },
     { date: "2026-08-30", commit: "464564b–185503e", result: "E91 统一 PUBLIC L1–L5 分级、私人账号等价可信与 english_chinese_gloss；E92 正式化耐久授权、真实调用一次和来源任务归档；E93 明确长期任务保留与接续；E94 保证 RecoverReleaseClaim 继承 predecessor 的非空 coordination，并让 Repartition 把当前冻结 coordination 写入全部 replacement bindings，避免跨项目目标在恢复或重分区时丢失身份。" },
-    { date: "2026-08-31", commit: "d32210b", result: "E95 把普通本地安全收敛到现有可信闭集，禁止用安全标签制造额外系统复杂度；同时把注意力质量、显著性编排、实现盲测和自然意图路由验收写入活动能力合同。" }
+    { date: "2026-08-31", commit: "d32210b–2049620", result: "E95 先把普通本地安全收敛到可信闭集，并建立注意力、实现盲测和自然意图路由；E96 随后把产品复杂度与技术复杂度分轴：用户功能和完整质量验收不能因反膨胀被削弱，同一验收下强制最小充分架构，新增技术层必须有当前证据，自造复杂度失败先删层。" }
   ],
   operationalEntrypoints: [
     { name: "活动 E 规则", command: "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json", purpose: "唯一证明 current/previous E release、commit、ruleset、五文件路径和 pointer。" },
@@ -349,14 +352,14 @@ export const modules = [
     slug: "capability-routing",
     shortTitle: "能力路由",
     title: "能力、方法与原生代理路由",
-    teaser: "用户只说目标；AI 找到现有能力，并在可信身份成立后自主决定是否并行、开几个代理以及怎样验收。",
+    teaser: "用户只说目标；AI 找到现有能力，在可信身份成立后自主决定方法与并行，并在不删产品功能的前提下强制选择满足完整验收的最小充分技术架构。",
     status: "已落地；身份门禁与路由回归通过",
     statusTone: "pass",
-    value: "我不需要背 Skill（能力入口）、工具、插件或代理名称。AI 先找现有入口，再按任务价值选择方法；涉及子代理时，宿主先证明本轮身份，AI 自己决定 0–10、模型家族和分工，Hook（宿主钩子）只负责验真。",
-    why: "读取文件、转写录音、修复代码、跨项目审计和验收页面需要的能力不同。只说“系统会检查一下”仍是谜语：必须讲清什么时候取得身份、谁决定并行、创建前谁复核，以及测试怎样证明 AI 没有靠路线提示答题。",
-    example: "例如我说“同时核对这批文件、录音和网页，能并行就并行，但别覆盖别人”。root（根代理）请求进入时，UserPromptSubmit 先注入可信身份；AI 再判断哪些支路独立可验、开几个代理和选哪一类模型。每个 child（子代理）启动时由 SubagentStart 绑定自己的身份，真正创建前由 PreToolUse 再复核；Hook 不替 AI 定数量，也不替用户授权。",
-    result: "我会得到与任务匹配的能力组合和有界并行结果，root 在子代理工作时继续负责目标、冲突和最终合并。身份或某项能力缺失只关闭受影响路线；普通工作继续，最终明确给出用户可见结果和仍然存在的缺口。",
-    readerStates: { pass: "判断前可信身份、授权边界、能力和并行净收益都成立时，AI 选择方法、0–10 与模型家族；每次创建前再复核，root 同时继续集成。", problem: "身份、E identity、参数、写入范围、资源或验收方式发生变化时，停止受影响的创建或路线并重新判断；不沿用旧回执。", unavailable: "Hook 与有效旧 root 绑定都不可用时只关闭委派；所需能力真实缺失时只降级该能力。普通调查、实现、测试和最终答复继续。" },
+    value: "我不需要背 Skill（能力入口）、工具、插件或代理名称。AI 先找现有入口，再按任务价值选择方法；涉及子代理时由宿主验真、AI 决定 0–10 和分工。涉及架构时，产品功能和质量先完整保留，能用现有入口、单模块或少步骤满足同一验收，就不能另加服务、数据库、状态机或证明层。",
+    why: "读取文件、转写录音、修复代码、跨项目审计和验收页面需要的能力不同。过度简化会丢需求，过度工程化又会增加等待、失败、维护和恢复成本。系统必须同时讲清身份与并行，也要讲清新增每一层技术结构究竟解决哪一项已证需求缺口。",
+    example: "例如我说“功能、可靠性和维护性都保留，但别为了显得专业再加服务、数据库和状态机”。AI 先冻结完整验收；若现有项目内一个模块已经满足，就直接实现并验证。只有短路线明确缺少某项验收，且当前证据证明新增层正好解决该缺口时，才允许最小增量。若自造层导致失败，先删除或绕开那一层，不继续叠 guard、receipt 或 fallback。",
+    result: "我会得到与任务匹配的能力组合、可信并行和最小充分实现：产品语义与质量不被删，新增技术层都有明确消费者和验收依据。身份或能力缺失只关闭受影响路线；复杂实现失败先收缩架构，最终说明用户可见结果、真实缺口和没有引入的多余层。",
+    readerStates: { pass: "可信身份、授权、能力和完整验收成立后，AI 选择方法与并行；短路线满足 complete acceptance floor（完整验收底线）时强制采用，不新增无证据技术层。", problem: "身份、参数、写范围、资源或验收变化时重判；新增层无法映射精确需求/质量缺口，或该层导致失败时，停止写入并先删层/绕开复杂度。", unavailable: "Hook 缺失只关闭委派；短路线证据不足时先补最小证据，不以假想未来授权长架构。普通调查、实现、测试和答复继续。" },
     searchAliases: [
       "Hook到底检查什么，谁决定开几个代理",
       "UserPromptSubmit和SubagentStart有什么区别",
@@ -364,13 +367,14 @@ export const modules = [
       "什么时候需要实现盲测",
       "不点名Skill怎么验AI会自己选路",
       "点名工具的测试算不算盲测",
-      "Codex官方更新后为什么不能看版本号准入"
+      "Codex官方更新后为什么不能看版本号准入",
+      "功能不删怎样选择最小充分架构"
     ],
     searchProjection: {
-      intents: ["Hook 到底检查什么以及谁决定 0–10", "什么时候需要 implementation-blind fresh E2E", "怎样证明 AI 在没有路线提示时自己选对能力", "Codex 官方更新后怎样保持能力连续"],
-      entities: ["UserPromptSubmit", "SubagentStart", "PreToolUse", "verified model", "E identity", "route_selected_without_hint", "directed_execution_test", "package family"],
-      relations: ["UserPromptSubmit 为 root 在判断前注入身份", "SubagentStart 为 child 在判断前绑定真实身份", "AI 决定数量和家族而 Hook 只验真", "PreToolUse 只在 spawn 前复核 TOCTOU", "稳定主体与事件能力发现高于 app version 和 versioned path"],
-      failureRecovery: ["可信身份缺失时只关闭委派并继续普通任务", "创建前身份或上限漂移时取消本次 spawn 后重判", "盲测提示点名路线时降为 directed execution test 并用新上下文重测", "官方更新后缺失精确 event 或 capability 时只降级受影响能力"]
+      intents: ["Hook 到底检查什么以及谁决定 0–10", "什么时候需要 implementation-blind fresh E2E", "怎样证明 AI 在没有路线提示时自己选对能力", "Codex 官方更新后怎样保持能力连续", "不删产品功能时怎样选择最小充分架构", "新增技术层需要什么证据"],
+      entities: ["UserPromptSubmit / SubagentStart", "PreToolUse / verified identity", "route_selected_without_hint", "directed_execution_test", "package family", "complete_acceptance_floor", "minimum_sufficient_architecture_hard_gate", "complexity_failure_collapse"],
+      relations: ["UserPromptSubmit和SubagentStart在判断前提供各自身份", "AI决定数量和家族而Hook只验真", "PreToolUse只在spawn前复核TOCTOU", "稳定主体与事件能力发现高于版本路径", "用户和业务Owner拥有产品复杂度", "同一验收下短路线满足就禁止长路线", "新增技术层逐项映射精确需求和当前证据", "自造复杂度失败先删层而不是加门"],
+      failureRecovery: ["可信身份缺失时只关闭委派并继续普通任务", "创建前身份或上限漂移时取消本次spawn后重判", "盲测点名路线时降为directed execution test后重测", "新增层无法举证时禁止写入和派发", "自造复杂度失败时先删除或绕开该层", "官方更新缺失精确能力时只降级受影响路线"]
     },
     decisionImpact: [
       "简单问题可以直接完成；稳定窄能力存在时优先走对应 Skill（能力入口）或 Owner（责任源）入口。",
@@ -380,9 +384,13 @@ export const modules = [
       "只有完全没有 Hook 或身份注入的旧 root 才使用用户明确 model/effort 建立并回读耐久 thread binding；child 不继承。",
       "实现者知道内部答案可能污染验收时，AI 主动安排 implementation-blind fresh E2E，而不是等用户说出“盲测”。",
       "测试自然语言自主路由时，提示不点名 Skill、tool、plugin、provider、内部路径或预期路线，同时验 route_selected_without_hint 和用户可见结果。",
-      "Codex 官方更新按稳定主体、事件和现场能力发现保持连续；app version、build 与 versioned path 不准入，真实能力缺失才局部降级。"
+      "Codex 官方更新按稳定主体、事件和现场能力发现保持连续；app version、build 与 versioned path 不准入，真实能力缺失才局部降级。",
+      "产品/需求复杂度由用户和业务 Owner 决定；反膨胀只能优化实现，不能删功能、流程、状态、体验、质量、维护性或已证扩展轴。",
+      "写入前冻结完整验收底线；原生能力、现有入口、单模块或少步骤已经满足时，长路线属于 prohibited_unjustified_complexity（禁止的无依据复杂度）。",
+      "新增 source/module、服务、任务、进程、watcher、schema、数据库、队列、状态机、Owner、receipt 或验证层，都必须逐项对应一个短路线未满足的验收项和当前正面证据。",
+      "Agent 自造复杂度导致失败时执行 complexity_failure_collapse：先移除或绕开复杂层，再重判最小路径，不能默认继续叠 guard、preflight、baseline、fallback 或状态。"
     ],
-    problem: "工具、Skills、插件和模型很多，真正困难的不是有没有，而是当前任务是否值得使用、是否有更直接的 Owner 入口、并行是否真的节省时间，以及验收者是否因为知道实现答案而产生确认偏差。固定模板会让简单任务膨胀；只测定向命令又可能把“工具能运行”误报成“AI 会自己选路并交付结果”。",
+    problem: "工具、Skills、插件和模型很多，真正困难的不只是选哪个，还要防止两种错误：借反膨胀删掉真实产品需求，或把产品复杂误当成可以无限增加技术层的理由。固定模板会让简单任务膨胀；自造层失败后继续叠门又会把工程成本和等待转嫁给用户。",
     implementation: [
       "model intuition precedence 让模型根据目标、风险、信息增益、延迟、耦合、可逆性和净收益选择方法。",
       "Skill、Plugin、模板和计划默认只是建议性制品，不能凭正文里的 MUST 自行升级为硬门。",
@@ -396,6 +404,10 @@ export const modules = [
       "Codex official update continuity 只认稳定 PFN/package family、signer/principal、device/bridge key、schema/event/capability 与 current discovery；版本号、build、带版本路径、update epoch 和可选 metadata 不作为准入。",
       "同一官方主体更新或 optional metadata 缺失不触发 step-up/BLOCK；只有精确 event 或 capability 现场不存在时关闭对应能力，普通项目不受影响。",
       "change_surface_validation 按现实风险和 diff 影响面选择 focused 或 standard 验证；E rules 快速发布目标 180 秒内并分列测试、Git、push/readback、UAC activation 墙钟。",
+      "product_requirement_complexity_authority 把产品与技术复杂度分轴：用户/业务 Owner 拥有用户可见需求，技术结构逐项映射精确需求或质量不变量。",
+      "minimum_sufficient_architecture_hard_gate 先冻结功能、好用、正确、可靠、可恢复、性能、可维护、兼容和已证扩展轴，再在同一 floor 下强制选择总成本更低的路线。",
+      "新增技术层要列出对应验收项、短路线失败证据和最小解决增量；假想未来、最佳实践、更安全、更完整或额度充足都不能举证。",
+      "complexity_failure_collapse 要求因新增层/状态/证明链失败时先删层或绕开，不给原长路线继续增加 guard、receipt、preflight、baseline、fallback 或状态。",
       "长任务保留可重建目标、边界、关键决定、实现和验证状态；压缩摘要只作线索。"
     ],
     flow: [
@@ -406,6 +418,9 @@ export const modules = [
       "root 派出 child 后继续战略、依赖、风险和不冲突工作，不把等待冒充进展",
       "每次真实 spawn 前由 PreToolUse 复核现场身份、TOCTOU、上限和参数；漂移则取消这次创建并重判",
       "能力确实缺失时才安装官方运行时或提出精确插件；官方更新只按稳定主体、事件和能力现场局部降级",
+      "架构变更前冻结完整验收；比较现有入口/单模块短路线与长路线在用户时间、额度、金钱、IO、退出和返工上的总成本",
+      "短路线满足同一验收就直接采用；不满足时只增加解决已证缺口的最小技术层",
+      "新增层导致失败时先收缩架构，再重新运行受影响验收，不继续沿长路线叠复杂度",
       "实现知识可能污染验收时，另给 fresh evaluator 最小自然目标和正常环境，不暴露内部答案",
       "最后分别验证能力可用、route_selected_without_hint、用户可见结果与剩余 Unknown；定向测试单列"
     ],
@@ -420,6 +435,9 @@ export const modules = [
       { term: "Natural-intent blind routing", explanation: "提示不点名能力路线，正常 metadata 仍可见；同时验证 AI 自己选路和最终用户结果。" },
       { term: "Directed execution test", explanation: "明确告诉模型使用哪个 Skill、tool 或 provider 的定向测试，只证明该路线能执行，不证明自主路由。" },
       { term: "Official update continuity", explanation: "官方同主体更新以稳定 package family、签名、事件和当前能力发现延续，不把易变版本号或安装路径当身份。" },
+      { term: "Complete acceptance floor（完整验收底线）", explanation: "功能、好用、正确、可靠、恢复、性能、可维护、现有兼容和已证扩展轴的共同验收；短长路线必须在同一底线上比较。" },
+      { term: "Minimum sufficient architecture（最小充分架构）", explanation: "满足完整验收所需的最少技术层、节点、状态和人工步骤；不是靠删产品功能获得的表面简单。" },
+      { term: "Complexity failure collapse（复杂度失败收缩）", explanation: "Agent 新增的层导致失败时，先删除或绕开该层再重判；不能继续给长路线叠证明和保护结构。" },
       { term: "证据式降级", explanation: "只有入口真实缺失、失败或策略阻断时才换路线，不因想象中的风险先降级。" }
     ],
     boundaries: [
@@ -432,7 +450,9 @@ export const modules = [
       "不依赖 Stop Hook；回执缺失不能阻塞普通工具或最终答复",
       "app version、build、versioned executable path、update epoch 和 optional metadata 不能成为准入门",
       "盲测不是每次机械执行；客观需要时也不能因省上下文或反膨胀而跳过",
-      "测试提示点名 Skill、tool、plugin、provider、内部路径或预期路线时不得称为 blind routing E2E"
+      "测试提示点名 Skill、tool、plugin、provider、内部路径或预期路线时不得称为 blind routing E2E",
+      "反膨胀不删除或降级用户已知且接受的产品语义，也不以一次性烂代码、封死真实扩展点或漏验收伪造简单",
+      "任何新增技术层若没有精确需求、短路线失败验收和当前证据，写入、派发和制品创建都停止"
     ],
     failures: [
       { condition: "委派身份不可验证", response: "停止 spawn，但继续本地调查、实现、测试和答复。" },
@@ -441,7 +461,9 @@ export const modules = [
       { condition: "provider 缺失或账号不可用", response: "报告确切缺口，不伪造第二 provider 或静默换账号。" },
       { condition: "盲测提示泄露 Skill、工具、Provider 或预期路线", response: "把该结果降为定向执行证据，用新的独立上下文和纯自然意图重新验收。" },
       { condition: "官方更新后某个精确 event 或 capability 不存在", response: "只关闭受影响的 Hook 或能力并报告缺口；不因版本号或路径变化阻塞普通项目。" },
-      { condition: "子代理中断", response: "优先恢复原 session；无法恢复才重新执行，partial 不能冒充完成。" }
+      { condition: "子代理中断", response: "优先恢复原 session；无法恢复才重新执行，partial 不能冒充完成。" },
+      { condition: "新增技术层无法映射精确需求或质量缺口", response: "标记 prohibited_unjustified_complexity，停止写入/派发/创建制品，回到现有入口或更短路线。" },
+      { condition: "Agent 新增的服务、状态机、证明链或验证层导致任务失败", response: "先移除或绕开该复杂度并重判完整验收；只有短路线被独立证据证明不足时，才恢复精确最小增量。" }
     ],
     sources: [
       { path: "E:\\.agents\\docs\\contracts\\agents.capability-routing.md", role: "能力、上下文、复杂度和原生委派的唯一语义 owner" },
@@ -456,6 +478,7 @@ export const modules = [
       "NativeEconomyRoutingGate 验证 UserPromptSubmit/SubagentStart 的判断前注入、E identity 先行、家族/effort 上限与 PreToolUse 创建前复核",
       "AgentRuntimeCompatibility 验证官方同主体更新以稳定 package/signature/event/capability 连续，app version 和 versioned path 不参与准入",
       "AgentAutonomyPolicy 与 AttentionFidelityPolicy 验证模型主动识别盲测、提示不泄露路线、route_selected_without_hint 和 directed_execution_test 的证据边界",
+      "E96 根规则和 capability contract 已把产品复杂度权威、complete acceptance floor、minimum sufficient architecture hard gate 与 complexity failure collapse 激活；网页不把 E95 的复杂度概述冒充 E96 语义。",
       "implementation-blind fresh E2E 只有在 fresh evaluator 未获得 diff、根因或路线提示，并真实走完用户路径后才成立",
       "natural-intent blind routing E2E 必须同时证明 AI 自己选择了正确路线和用户可见结果正确；只命中工具或只得到答案都不完整",
       "聚焦 Hook、合同和定向执行回归只能证明对应机制，不冒充某个真实自然语言任务的盲测结果"
@@ -547,7 +570,7 @@ export const modules = [
     verification: [
       `${panelSnapshot.authority.releaseId} release descriptor 确认授权合同路径、SHA 和 bytes 来自同一 ruleset`,
       "ExecutionOwnerRegistry 聚焦回归验证 Claim/Add/Transfer/Release、RecoverRelease/RecoverReleaseClaim、complete goal 与 archived lifecycle 语义",
-      "E95授权合同把PUBLIC companion迁移绑定为PRIVATE远端先完成default-branch/hash回读、随后才替换原件并验证local link继续ignored；失败恢复原件，不接受半完成。",
+      "E96活动授权合同继续把PUBLIC companion迁移绑定为PRIVATE远端先完成default-branch/hash回读、随后才替换原件并验证local link继续ignored；失败恢复原件，不接受半完成。",
       "Git 结果必须另由 Git owner 现场确认 default branch、remote 和 push read-back"
     ],
     relation: "这个模块决定谁被允许做哪一步；能力路由只推荐方法，保护策略只证明重大动作使用哪一代规则。"
@@ -576,7 +599,7 @@ export const modules = [
       "Invoke-EAgentRulesRelease.ps1 是唯一 activator/reader，current-rules.json 记录 current/previous、pointer revision 和 release record commitment。",
       `每代 release 固定五份 logical id、relative path、bytes、SHA、PRIVATE main commit 和 ruleset SHA；当前 ${panelSnapshot.authority.releaseId} 绑定 ${panelSnapshot.authority.gitCommit.slice(0, 7)} 与 ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…。`,
       "release 目录和 pointer 关闭 ACL 继承，由 SYSTEM 拥有；普通/管理员编辑器只读执行，Activator 临时写后恢复封闭 ACL。",
-      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信、项目收紧授权窄例外与 english_chinese_gloss；E92 正式化 durable explicit user authorization、真实调用一次、terminal Owner 收敛和来源任务自动归档；E93 明确 long_term_task 的保留、接续和正式退役边界；E94 修复 RecoverReleaseClaim 与 Repartition 的 coordination 延续；E95 建立可信本地安全闭集、禁止安全复杂度额度，并要求注意力编排与必要的实现盲测。",
+      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信与项目收紧授权窄例外；E92–E94 正式化耐久授权、真实调用、Owner 生命周期与 coordination 延续；E95 建立可信本地安全闭集、注意力和实现盲测；E96 把产品复杂度与技术复杂度分轴，并加入完整验收、最小充分架构与复杂度失败先删层的硬门。",
       "普通规则文本、目录、预算及对应测试可走 FastRelease：只跑变更闭集关键回归，但复用同一 Git、五哈希、pointer CAS、UAC activator 和 fresh Inspect；触及保护合同、Activator、ACL、Hook、Owner Registry、身份/授权或其他代码时必须回标准路径。",
       "E rules release 的机器侧 Git 收口、激活和回读目标为 180 秒内；回执分列 focused tests、commit、push/readback 与 UAC activation 墙钟，网络或用户处理 UAC 的等待单列。",
       "e81-retirement-dispositions 证明旧 C production reader count=0，退役未新增 background service、queue、database 或 task；Secret Broker 等独立产品保留。",

@@ -2175,7 +2175,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 7);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 8);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -2871,16 +2871,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E95 panel preserves continuity, trusted-local boundaries and attention quality", async () => {
+test("E96 panel preserves continuity, trusted-local boundaries, attention and minimum architecture", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E95");
-  assert.equal(bindings.ruleset_sha256, "b56847d29e1102945ffa437de0e58dfb79a887d4f0a606bfe1020b28746d8ef9");
-  assert.equal(panelSnapshot.authority.releaseId, "E95");
-  assert.equal(panelSnapshot.authority.gitCommit, "d32210b6594bf8ba1679da7b0f5bd66d18f3f6a7");
-  assert.equal(panelSnapshot.authority.pointerRevision, 16);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E94");
+  assert.equal(bindings.semantic_release_id, "E96");
+  assert.equal(bindings.ruleset_sha256, "637c65b0405692aba9cbf0e61846379b5bdea614400efa0b60485907d8683c94");
+  assert.equal(panelSnapshot.authority.releaseId, "E96");
+  assert.equal(panelSnapshot.authority.gitCommit, "2049620444663fed382f0f48f1ef7b6c11c1611a");
+  assert.equal(panelSnapshot.authority.pointerRevision, 4);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E95");
   for (const expected of [
     "Durable explicit user authorization（耐久明确用户授权）",
     "root、全部 child/后代和新顶层任务",
@@ -2892,7 +2892,7 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     "Complete goal（已完成目标）",
     "正式 terminal/completed 且无 follow-up、queued work、pending transaction 或未交接 Owner residual 时才自动归档"
   ]) {
-    assert.ok(coreSource.includes(expected), `E95 panel omits semantic contract: ${expected}`);
+    assert.ok(coreSource.includes(expected), `E96 panel omits semantic contract: ${expected}`);
   }
   for (const expected of [
     "耐久明确授权跨任务持续",
@@ -2907,7 +2907,7 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     "原生子代理与独立 Owner task 分层",
     "顶层任务默认 projectless"
   ]) {
-    assert.ok(ruleGuideSource.includes(expected), `E95 rule guide omits: ${expected}`);
+    assert.ok(ruleGuideSource.includes(expected), `E96 rule guide omits: ${expected}`);
   }
   for (const expected of [
     "未归档且正式登记 long_term_task 的 Owner 不自动释放",
@@ -2917,14 +2917,14 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     "未登记 long_term_task 的 inactive predecessor",
     "长期任务不自动释放"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 long-term owner boundary omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E96 long-term owner boundary omits: ${expected}`);
   }
   for (const expected of [
     "RecoverReleaseClaim 默认继承 predecessor 的非空 coordination",
     "Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings",
-    "E94 修复 RecoverReleaseClaim 与 Repartition 的 coordination 延续"
+    "E94 保证 RecoverReleaseClaim 继承 predecessor 的非空 coordination"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 coordination continuity omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E96 coordination continuity omits: ${expected}`);
   }
   for (const expected of [
     "可信本地安全闭集",
@@ -2932,7 +2932,21 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     "注意力质量高于上下文数量",
     "实现盲测",
     "自然用户意图"
-  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E95 product semantics omit: ${expected}`);
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E96 product semantics omit: ${expected}`);
+  for (const expected of [
+    "产品复杂度由需求决定，技术架构必须最小充分",
+    "产品复杂度由用户和业务 Owner 决定",
+    "Complete acceptance floor（完整验收底线）",
+    "Minimum sufficient architecture（最小充分架构）",
+    "Complexity failure collapse（复杂度失败收缩）",
+    "prohibited_unjustified_complexity",
+    "新增技术层必须逐项举证",
+    "自造复杂度失败先删层",
+    "额度多不是长架构理由"
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E96 minimum architecture semantics omit: ${expected}`);
+  assert.match(`${coreSource}\n${ruleGuideSource}`, /功能、流程、状态.*不能.*反膨胀.*(?:删除|降级)|反膨胀.*不能.*删功能/s);
+  assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*完整验收.*(?:短路线|现有入口|单模块).*必须/);
+  assert.match(`${coreSource}\n${ruleGuideSource}`, /新增.*(?:服务|数据库|状态机).*精确.*(?:需求|缺口).*当前.*证据/s);
   assert.doesNotMatch(coreSource, /terminal long-term 无 residual 自动释放|终态旧 Owner 无残留时释放|terminal 无 residual 的 exact scope RecoverRelease|terminal Owner 无 residual 用 RecoverRelease|terminal 无残留逐 scope RecoverRelease|固定 resolver 证明 terminal 后，无 residual/);
   assert.doesNotMatch(ruleGuideSource, /平台准入时才创建|再原子 RecoverReleaseClaim/);
   const panelRefresh = skills.find((item) => item.slug === "personal-panel-refresh");
