@@ -168,7 +168,7 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "project overview and six modules",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",

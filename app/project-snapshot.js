@@ -22,7 +22,7 @@ function freezeFact(entry) {
   });
 }
 
-export function createProjectSnapshot({ observedAt, label, metrics, facts, gaps }) {
+export function createProjectSnapshot({ observedAt, label, boundary, metrics, facts, gaps }) {
   nonEmptyString(observedAt, "observedAt");
   if (!Number.isFinite(Date.parse(observedAt))) throw new TypeError("project snapshot observedAt must be a valid timestamp");
   nonEmptyString(label, "label");
@@ -30,9 +30,11 @@ export function createProjectSnapshot({ observedAt, label, metrics, facts, gaps 
   if (!Array.isArray(facts) || facts.length < 1) throw new TypeError("project snapshot facts must be a non-empty array");
   if (!Array.isArray(gaps) || gaps.length < 1) throw new TypeError("project snapshot gaps must be a non-empty array");
 
+  const snapshotBoundary = nonEmptyString(boundary || gaps[0], "boundary");
   const currentSnapshot = Object.freeze({
     observedAt,
     label,
+    boundary: snapshotBoundary,
     metrics: Object.freeze(metrics.map(freezeMetric)),
     facts: Object.freeze(facts.map(freezeFact)),
     gaps: Object.freeze(gaps.map((gap) => nonEmptyString(gap, "gaps")))
@@ -51,6 +53,6 @@ export function createProjectSnapshot({ observedAt, label, metrics, facts, gaps 
     cardMetrics,
     heroFacts,
     currentState,
-    snapshotBoundary: `观察于 ${currentSnapshot.observedAt}；${currentSnapshot.gaps[0]}`
+    snapshotBoundary: `观察于 ${currentSnapshot.observedAt}；${currentSnapshot.boundary}`
   });
 }

@@ -3,8 +3,9 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const pcconfigSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T11:43:18Z",
   label: "机器配置、恢复任务与秘密恢复闭合；Codex Home 已就绪并等待本人退出切换",
+  boundary: "机器配置、核心恢复与恢复介质的现行静态证据已闭合；H 冷备、新机端到端恢复、WEPE 内部盘/网络 smoke（冒烟验证）、BIOS 保存后重启回读及 Codex Home 正式切换仍须分别验收",
   metrics: [
-    { label: "配置地图", value: "15 项目 · 157 键" },
+    { label: "配置地图", value: "v6 · 15 项目 · 157 键" },
     { label: "恢复任务", value: "10 Ready · 0 失败" },
     { label: "秘密恢复", value: "10/10 三路一致" },
     { label: "Codex 迁移", value: "75.13 GB · 已就绪" }
@@ -14,23 +15,25 @@ const pcconfigSnapshot = createProjectSnapshot({
     { label: "开发存储", value: "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。" },
     { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。" },
     { label: "秘密恢复", value: "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。" },
+    { label: "稳定机器投影", value: "稳定机器投影当前为 v6，登记 15 个项目路径关系；开发存储有 17 个恢复锚点，C 盘用户配置 inventory（清单）有 26 项，三者都是恢复导航而不是应用可用性的替代证明。", hero: false },
+    { label: "恢复介质", value: "恢复介质 Registry 当前 16 项资产通过校验，0 error、0 warning；BIOS/UEFI 文字基线在 E 源、E 镜像和 G 热备三份同 SHA-256，F 有救急速查，文档引用的 20 个照片路径均存在且本次未读取照片内容。", hero: false },
     { label: "Codex Home 迁移", value: "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。" },
     { label: "凭据中心", value: "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。" },
     { label: "受保护数据", value: "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。", hero: false },
     { label: "运行健康", value: "fresh Drift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；旧启动失败不再进入当前任务健康计数。", hero: false }
   ],
   gaps: [
-    "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
-    "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
     "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
     "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
-    "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
-    "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
+    "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练；同机重装、换机、系统盘故障和仅 PE 四条路径因此仍需在真实事件中分别完成端到端回读。",
+    "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；恢复后在新系统重建 Hot/Cold 并形成新的 G/H 回执也尚未发生。",
+    "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
+    "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
     "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
     "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
     "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
     "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
-    "Recovery kit 的 BIOS/UEFI 核心设置记录已成为 present_verified，覆盖照片保留的 CPU、内存、启动和 PCIe 基线；它不等于每个菜单的完整原生 Profile，也没有替代下一次启动后的现场回读。WEPE 隐藏分区仍只有 present_observed。"
+    "Recovery kit 的 BIOS/UEFI 核心设置记录是 present_verified（材料存在且指纹已核对），CPU/内存生效语义来自 user_confirmed（用户确认）；它不等于完整原生 Profile，也没有证明保存设置后的自然重启。WEPE 隐藏分区是 present_observed（现场观察到），只能说明能进入 PE；内部盘识别与网络 smoke 尚未验证。"
   ]
 });
 
@@ -115,7 +118,7 @@ export const pcconfigProject = {
   components: [
     { name: "机器事实 Registry", responsibility: "登记磁盘、路径、配置键、任务、运行时、启动、恢复和受保护产品的稳定结构。", implementation: "当前仓库有 44 份 Registry；动态值仍由匹配 Provider 或 Windows 现场裁定。" },
     { name: "现场 Provider", responsibility: "以闭合 schema（数据结构合同）读取运行时、磁盘、启动项、端口、任务和安装态。", implementation: "主要使用 PowerShell（Windows 自动化终端）入口，输出有界 JSON，不返回秘密值或原始任务参数。" },
-    { name: "稳定机器投影", responsibility: "保存长期有意义的硬件、系统、磁盘与关键运行时薄快照。", implementation: "规范 SHA-256（文件指纹）、版本链、原子替换和 no-change（无变化不重写）语义；当前 Registry 为版本 5。" },
+    { name: "稳定机器投影", responsibility: "保存长期有意义的硬件、系统、磁盘与关键运行时薄快照。", implementation: "规范 SHA-256（文件指纹）、版本链、原子替换和 no-change（无变化不重写）语义；当前 Registry 为版本 6。" },
     { name: "项目配置快照", responsibility: "为路径、端口、模型和本地数据源提供跨项目导航。", implementation: "157 个登记键使用 inspect、期望哈希、dry-run（只预演）、apply（正式应用）和 mark-stale（标记陈旧）事务。" },
     { name: "任务与启动链", responsibility: "维护计划任务恢复投影、用途目录、启动快照和无窗口父进程合同。", implementation: "Task Scheduler 是运行权威；任务 XML、原始 Action 和敏感参数不进入公开回执。" },
     { name: "受管软件路由", responsibility: "把组件别名解析到自己的状态与更新 Adapter。", implementation: "当前目录登记 11 个组件；behind 才更新，equal 不重装，ahead 不降级，unknown 直接停止。" },
@@ -134,7 +137,7 @@ export const pcconfigProject = {
     { ask: "这个项目准备从 E 盘搬到 V 盘。", effect: "先确认仓库状态、路径消费者、计划任务、快捷方式、回滚和目标盘健康；复制验证后再切引用，不把移动和永久删除混在一起。" },
     { ask: "把本机已登记的开发工具安全升级。", effect: "先由组件 Adapter 读取 current/target/relation；只有 behind 才备份、精确更新、等待和回读，unknown 或 channel mismatch（通道不匹配）都停止。" },
     { ask: "为什么某个计划任务没有按预期工作？", effect: "比较 Scheduler 现场、稳定任务签名、LastTaskResult（最近运行结果）和 Owner 回执；不输出完整 Action 或 XML，也不凭任务存在认定业务成功。" },
-    { ask: "重装系统后恢复主要日常环境。", effect: "按磁盘与网络、三个控制面、运行时、项目、任务、启动、私密配置和最终验收分层恢复；需要重新登录的部分明确留给用户。" },
+    { ask: "重装系统或换机后恢复主要日常环境。", effect: "先分清同机重装、换机、系统盘故障或仅 PE，再只读识盘并重认盘符；随后按 BIOS/UEFI、Windows、三个控制面、运行时、项目、用户配置、任务、启动、登录与受保护数据分层恢复，最后以自然启动和应用内数据可见收口。" },
     { ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
     { ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
     { ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
@@ -161,7 +164,7 @@ export const pcconfigProject = {
     { date: "2026-08-24—08-27", commit: "8753374–d3d8d00", result: "CoreGoal V2 进入耐久目标与单步能力模型，Workspace Provider 增加固定类型化读写和原生文档导出，受保护数据推进到 P3/P4 候选；同时补齐受管软件、备份介质结构和恢复 read-back。" },
     { date: "2026-08-28", commit: "0fffc15–c63d804", result: "把 P0–P4 后续实现收敛为更小的 RecoveryKernel（恢复内核）、AuthorityVault（因子保险库）、GoalJournal（目标账本）和 VaultApp（加密文件应用）四角色；改善日常预览/排序，补完 P5–P7 设计与任务投影。" },
     { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。" },
-    { date: "2026-08-30", commit: "9449bad–d13ac19", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；中文与 Google 导入改为严格解码、保留重复项和事务回滚；Codex 对话进入内容寻址的 G→H 恢复链；Codex Home 形成可预演、可回滚、等待退出后按需启动的迁移事务。" }
+    { date: "2026-08-30—08-31", commit: "9449bad–f9245a1", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；Codex 对话进入内容寻址的 G→H 恢复链，Codex Home 形成可预演、可回滚的迁移事务；同时把 BIOS/UEFI 文字基线、恢复介质、驱动、项目路径、用户配置、任务与自然启动验收串成完整换机/重装旅程。" }
   ],
   operationalEntrypoints: [
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
@@ -185,7 +188,7 @@ export const pcconfigModules = [
     shortTitle: "机器事实",
     title: "机器事实、路径与配置导航",
     teaser: "回答“这台电脑现在怎样、配置真正在哪里、改动会影响谁”，并为路径、端口和开发存储提供现场门禁。",
-    status: "机器事实可读，开发存储 5/5 通过；稳定投影为版本 5",
+    status: "机器事实可读，开发存储 5/5 通过；稳定投影为版本 6",
     statusTone: "pass",
     value: "把散落在磁盘、环境、项目文件和本机服务里的配置变成可导航、可验证的机器地图。用户不用靠记忆猜路径，也不会因为看到一个旧值就直接改错地方。",
     why: "同一个端口可能同时受 Windows 动态范围、现有 listener（监听进程）和项目配置影响；同一个目录也可能被计划任务、快捷方式或服务引用。没有唯一 Owner 和依赖导航，迁移很容易造成“文件还在，但程序找不到”。",
@@ -242,7 +245,7 @@ export const pcconfigModules = [
       { condition: "Provider 或 Registry schema 失败", response: "对应事实保持 unknown，阻断依赖该事实的迁移或配置决定；旧报告不能补齐。" },
       { condition: "项目配置源已改变但快照无法安全更新", response: "优先把命中键标记为 stale；标记也失败则保留原文件并报告哈希或锁冲突。" },
       { condition: "端口预检通过但真实 bind 失败", response: "停止服务启动，重新探测；不自动退回 8000 等常见默认端口。" },
-      { condition: "稳定投影 live payload 不完整或含禁入字段", response: "在替换 current 前失败，保留版本 5 的既有投影。" },
+      { condition: "稳定投影 live payload 不完整或含禁入字段", response: "在替换 current 前失败，保留最后一个已验证的 v6 current；失败采集不能覆盖既有投影。" },
       { condition: "V 或 Z 恢复锚点不可读", response: "只阻断依赖该盘的工作；不自动创建同名空盘覆盖恢复线索。" }
     ],
     sources: [
@@ -260,7 +263,7 @@ export const pcconfigModules = [
     verification: [
       "Get-DevStorageHealth.ps1 -Json 于 2026-08-29 返回 5 项 pass、0 warn、0 block",
       "Get-RuntimeInventory.ps1 -Json 当前 exit 0 且返回 pcconfig.runtimes.v1",
-      "Invoke-StableMachineProjection.ps1 -Action Read -Json 当前可读取版本 5；该投影最后生成于 2026-08-16，不能冒充 2026-08-29 live 采集",
+      "Invoke-StableMachineProjection.ps1 -Action Read -Json 当前可读取版本 6；该投影生成于 2026-08-30，是稳定配置基线而非瞬时运行状态",
       "validate_project_config_keys.mjs 验证键、敏感级别、来源、快照状态和事务字段",
       "test_local_service_port.test.ps1 覆盖动态范围、排除段、listener、登记冲突和 unknown",
       "stable_machine_projection.test.ps1 覆盖禁入字段、原子回读、变化链和重复 no-op"
@@ -358,91 +361,137 @@ export const pcconfigModules = [
   },
   {
     slug: "recovery-backup",
-    shortTitle: "恢复与备份",
-    title: "核心恢复、备份介质与迁移回滚",
-    teaser: "把“有备份”升级为“知道从哪里恢复、按什么顺序、如何验证、失败后怎样不覆盖原状”。",
-    status: "10 个核心恢复任务均 Ready 且最近结果 0；CoreRecovery 3/3 通过，H 冷备与新机恢复端到端验收仍独立待证",
+    shortTitle: "换机与恢复",
+    title: "换机、重装、备份与恢复",
+    teaser: "从 BIOS/UEFI、启动介质和盘符识别开始，一直恢复到项目、登录、自然启动和应用内数据可见；备份只是来源，不是完成证明。",
+    status: "CoreRecovery 当前 ready：10 个任务、9 个备份集合、2 个外部 Owner，区域验收 3/3 PASS；H、新机端到端、WEPE 识盘/网络和 BIOS 保存重启仍待真实验收",
     statusTone: "mixed",
-    value: "重装、换机或磁盘故障时，不再凭记忆到处拷文件。它把网络可重建的软件、需要备份的日常数据、私密配置、计划任务和人工登录分层，让恢复可以停在安全检查点继续。",
-    why: "单纯复制文件无法恢复任务身份、运行时顺序、路径引用、登录态和业务可见性；反过来整包覆盖又可能把旧配置、损坏数据库或错误路径带回新系统。恢复必须选择性、可回退并逐层验收。",
-    example: "例如系统盘损坏但数据盘和一份冷备仍在。这个模块先验证机器、磁盘和恢复载体，再重建三个控制面与开发运行时，随后按 allowlist（明确允许清单）恢复 Documents、Downloads、应用数据和任务；私密配置走自己的人工门禁。最后用 checklist（验收清单）列出可用、需登录和未证明项。",
-    result: "Inspect 通过时得到不含文件名和正文的恢复准备摘要；执行恢复时每个对象都有 source（来源）、target（目标）、hash/read-back（指纹与回读）和 rollback（回滚）；来源缺失或锁定时只暂停对应层，不把部分复制称为整机恢复。",
+    searchAliases: [
+      "BIOS", "UEFI", "主板设置", "换机 BIOS", "重装 BIOS", "启动U盘", "WEPE", "WinPE", "Q-Flash Plus", "Windows ISO",
+      "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified"
+    ],
+    value: "重装 Windows、换电脑、系统盘故障或只能进入 PE 时，我能从当前手里真正可用的来源开始，按不破坏原盘的顺序恢复：先认机器和磁盘，再处理 BIOS/UEFI、Windows 与驱动，接回三个控制面、运行时、项目、用户配置、任务和启动项，最后恢复登录与受保护数据并做真实应用验收。",
+    why: "“有 ISO”“能进 PE”“备份目录存在”“任务是 Ready”都只证明一小段。恢复最容易漏掉的是主板版本和 BIOS 边界、盘符变化、驱动兼容、项目路径、C 盘用户配置、任务身份、登录因子，以及应用能否在自然启动后看到原数据；直接 clean、format、修 BCD 或整包覆盖，会先破坏还能取证和回退的来源。",
+    example: "例如系统盘损坏但 E/G 数据仍可读。我先在 UEFI 启动的 WEPE/WinPE 里只读列出物理盘和卷，不按旧 C/E/G 盘符猜，也不先 clean、format 或重建 BCD。确认主板与 PCB revision（电路板版本）、当前 BIOS、Windows 目标盘和恢复来源后，再安装系统与关键驱动，clone 三个控制面，恢复 15 个项目路径、26 项用户配置和必要任务。最后逐个自然启动应用、确认数据可见，并在新系统重新建立 Hot/Cold 备份链。",
+    result: "最后得到的不是“文件拷回来了”，而是一份按层可继续的恢复结果：四种场景走了哪条路，F/G/H/Git/P0–P7 各提供了什么，哪些设置和数据已回读，哪些应用仍要登录，哪些只到 present_verified、present_observed 或 user_confirmed，哪些真实验收尚未发生，以及失败时应停在哪个检查点。",
     readerStates: {
-      pass: "恢复载体、目标磁盘、分层清单和回退入口完整时，按层恢复并逐项核对来源、目标、内容指纹和用户可用结果。",
-      problem: "某一层复制、任务恢复、路径重建或登录验证失败时停在该检查点，保留已验证层和原始恢复来源，不继续整包覆盖。",
-      unavailable: "恢复载体离线、来源被锁定或关键清单不可读时只暂停对应层，并明确还缺哪份来源或人工登录，不宣称整机已恢复。"
+      pass: "场景、物理磁盘、恢复来源、主板/驱动兼容和回滚入口都已确认时，按依赖顺序恢复；每一层都从真实 Owner 回读，最终用自然启动、应用内数据可见和新备份回执验收。",
+      problem: "识盘、兼容、复制、路径、任务、启动、登录或应用可见性任一层失败时，停在该层并保留原盘、旧 current 和已验证结果；不靠后续步骤掩盖前面的失败。",
+      unavailable: "只有启动 U 盘、G/H 离线、BitLocker 未解锁、账号/因子不可用或证据不足时，只做当前允许的只读识别与网络重建，逐项标明缺失来源；不格式化、不猜盘符、不声称整机已恢复。"
     },
     decisionImpact: [
-      "GitHub 和官方网络可重建软件与已发布代码，但不能恢复未推送改动或私人数据。",
-      "普通恢复与受保护媒体/私密数据恢复分开，不能把一条备份链扩大成全盘恢复。",
-      "Hot（在线热备）是 G 恢复上下文唯一 writer，Cold（人工冷备）只消费已验证 Hot。",
-      "恢复可以从宽备份中选择性取回，禁止整包覆盖新系统。",
-      "H 不可用时记录 skipped，不写 G/H，也不自动弹解锁或改变设备信任。",
-      "实际恢复完成要经过应用打开、数据可见和业务操作，复制成功只是中间证据。"
+      "同机重装：若主板与 BIOS 没有重置或升级，不为重装 Windows 额外刷写 BIOS；先保护现有数据盘，再按旧机器基线重认盘符和配置。",
+      "换机或换主板：旧板的超频、固件包和驱动不能直接套到新板；BIOS 文字记录只帮助理解旧机器，目标机必须按自己的型号、PCB revision 和兼容清单重建。",
+      "系统盘故障：先只读确认物理盘、分区、BitLocker 和可用副本；不要因 Windows 起不来就先 clean、format、改分区或修 BCD。",
+      "只有 PE：F 只提供 UEFI/WEPE 启动与救急导航，不是完整数据包；先验证内部盘和网络，能进 PE 不能升级成“可恢复”。",
+      "GitHub 与官方网络只能重建已发布源码、软件和非秘密默认环境；未推送改动、私人文件、聊天、密码和原样登录态必须来自其他已核验来源。",
+      "G 是在线 Hot（热备）来源，H 是人工解锁窗口中的 Cold（冷备）来源；H 不可用时记录 skipped，不自动解锁、回锁或改变设备信任。",
+      "Password Center、媒体和其他受保护数据走 P0–P7 的完整 Carrier（恢复载体）加有效因子；普通备份、程序已安装或只有因子都不能替代它。",
+      "实际完成必须经过自然启动、应用打开、账号与数据可见、必要业务动作，以及恢复后重新建立备份；复制、hash 或任务 Ready 都只是中间证据。"
     ],
-    problem: "备份往往回答“字节在哪里”，恢复却要回答“哪些字节可信、先恢复谁、路径怎样接回、任务用什么身份、秘密怎样重建、应用能否看到”。没有统一恢复顺序与 Owner 分工，就容易把备份存在误当成系统可用。",
+    problem: "过去的恢复说明更像一组名词和入口：知道有 CoreRecovery、BIOS、项目路径和任务计划，却无法从“我现在是同机重装还是换机”一路走到“应用真的能用”。完整恢复必须把场景分流、来源选择、破坏性动作禁区、依赖顺序、证据等级和用户可见验收串成一条连续旅程。",
     implementation: [
-      "core_recovery Registry 当前登记 8 个 backup set（备份集合）和 2 个 external owner（外部责任源），明确 contains_secret_values=false。",
-      "Inspect 只读取任务和根路径元数据，不枚举个人文件名或内容；2026-08-29 的 ready / 0 warning 是历史回执，2026-08-30 最新现场为 ready_with_warnings，不能用旧绿灯覆盖。",
-      "Hot 在 G 的同根 staging（暂存区）写 manifest、指南、观察上下文和 closure（闭合清单），完整回读后才原子切换 current 指针。",
-      "Cold 重验卷身份、BitLocker、空间、Hot 指针、四文件 closure、48 小时时效和全部 SHA-256；复制采用加法式，不使用镜像删除。",
-      "启动/任务恢复保存 exact XML preimage；同名任务只有 Owner marker 和 Action identity 同时匹配才可替换。",
-      "move gate 要求先刷新目录证据，再 copy-first、验证 target、更新引用、验消费者，最后才讨论旧路径退役。",
-      "acceptance Registry 当前有 12 个 area、17 个 item；selector 不存在时在启动任何 check 前直接 error。",
-      "恢复完成后的稳定硬件、系统或运行时变化可以发布为 projection（稳定机器投影）版本，或显式记录 migration/reinstall lifecycle event（迁移/重装生命周期事件）。"
+      "现行入口按四种事故分流：同机重装保留硬件/数据盘并重建 Windows；换机重新建立硬件、盘符和驱动映射；系统盘故障优先保护可读介质；仅 PE 先把机器恢复到可登录、联网并能由 AI 接管。",
+      "恢复来源分工固定：F 是启动/救急 U 盘；G 是在线 Hot；H 是人工 Cold；Git 只重建正常仓库与公开安全元数据；P0–P7 处理需要 Carrier 与有效因子的受保护数据。介质存在不等于内容完整。",
+      "Recovery kit（恢复材料包）当前登记 16 项资产，校验器为 0 error、0 warning。UEFI 启动 F 可进入 PE 是 user_confirmed；隐藏 WEPE 分区为 present_observed，内部盘与网络 smoke 尚未验。Windows ISO、ADK/WinPE、驱动和 BIOS 包各有独立版本、路径、hash 与兼容边界。",
+      "BIOS/UEFI 文字基线覆盖 Gigabyte X870E AORUS PRO ICE 的 CPU、内存、启动与 PCIe 核心设置；E 源、E 镜像和 G 热备三份同 SHA-256，F 保留救急速查，20 个照片引用路径存在但照片内容不进入本页。native profile（原生配置档）未找到。",
+      "Windows 当前观察到 F4b；F 根的 GIGABYTE.bin 与 fan 属于 F4b 救急材料，F12 是稳定归档，F13b 是 beta/archive-only（测试版仅归档）。刷写前必须现场确认精确主板、PCB revision、目标文件、hash、BitLocker/启动恢复条件和稳定供电；本模块从不自动刷写。",
+      "只有 BIOS reset（重置）或明确升级后需要恢复设置时，才人工应用照片中已确认的核心项；未拍外围菜单保持“未验证的默认候选”。保存、重启、进入 Windows 后再读稳定机器投影，不能用 user_confirmed 替代 post-boot read-back（启动后回读）。",
+      "WEPE/WinPE 先用 list disk / list volume 等只读观察识别物理盘、卷、文件系统、BitLocker 和安装目标；盘符按卷角色、内容锚点与现场重新映射，不能把旧 C/E/G/H 字母当设备身份。决定前禁止 clean、format、分区重建和 BCD 改写。",
+      "驱动先恢复存储、芯片组、LAN、Wi-Fi、蓝牙、RAID/USB 等关键链；现有系统驱动导出含 230 个 package（驱动包），是匹配新硬件后可选择导入的候选，不保证换板兼容，也不替代厂商当前驱动。",
+      "基础系统可登录联网后，从可信 GitHub clone PCConfig、.agents 和 GitHub 总索引三个控制面；再按稳定机器投影 v6 和现场 Provider 重建 PowerShell、Git、Node.js、Python、Go、.NET、WSL、Docker、Ollama 等实际需要的运行时。",
+      "项目与用户层使用 17 个恢复锚点、15 个项目路径关系和 26 项 C 盘用户配置 inventory 做导航；先安装工具，再选择性恢复配置并按新盘符改引用，不整包灌回 AppData、cache、旧 session、旧 executable 或陈旧 PATH。",
+      "计划任务恢复投影有 9 个阶段、53 个现行任务，启动快照有 17 项。先恢复项目、解释器、账号入口和配置，再按 rebuild_required、optional、manual_after_install、hold_for_user 与 vendor-owned 边界重建；任务 identity 使用 task_path + task_name，并保存 exact preimage。",
+      "登录与秘密最后分层处理：GitHub/客户端重新登录，SecretRef 只盲用不出明文，Password Center 与媒体/PersonalData 走各自 P0–P7；恢复文件、恢复登录态和应用确认是三个不同结果。",
+      "应用验收后才在新系统重新建立备份：发布 G Hot 上下文，并在用户提供 H 解锁窗口后用已验证 Hot 建 Cold。Hot 原子切换 current；Cold 重验卷身份、BitLocker、空间、48 小时时效和 closure，采用加法复制，不使用 /MIR。"
     ],
     flow: [
-      "确认故障范围与可用网络、磁盘、恢复介质",
-      "验证三个控制面根锚点和 GitHub 身份",
-      "按 Windows、运行时、项目、任务、应用、私密配置的顺序恢复",
-      "对每个对象固定 source（恢复来源）、target（恢复目标）、preimage（变更前状态）、hash（内容指纹）和回滚",
-      "先在隔离或新路径验证，再切换消费者引用",
-      "运行匹配 area 的验收和真实应用检查",
-      "保留需登录、unknown 和无法恢复项，不用品质百分比掩盖"
+      "先回答是哪一种场景：同机重装、换机/换板、系统盘故障，还是只有 PE；记录现存机器、网络、可读磁盘、F/G/H、GitHub 权限和 P0–P7 Carrier。",
+      "在任何写入前只读识别物理盘和卷：核对型号、容量、文件系统、BitLocker、恢复锚点与数据角色；建立本次盘符映射，不沿用旧字母猜测。",
+      "若涉及 BIOS reset、升级或换板，先确认主板与 PCB revision、当前 BIOS 和供电；同板未变则保持现状，换板不套旧值，需要恢复时只手工应用已确认核心基线。",
+      "验证 UEFI 启动链、WEPE/WinPE、Windows ISO 和目标盘；能进 PE 之后仍须分别验证内部盘与网络，未作决定前不 clean、不 format、不重分区、不改 BCD。",
+      "安装 Windows 到已确认目标，先装存储/芯片组/网络等关键驱动；230 包导出按硬件兼容选择，缺驱动时优先使用精确主板/设备的官方当前版本。",
+      "取得本人 GitHub 与客户端访问权，clone PCConfig、.agents、GitHub 总索引；验证 remote、identity、visibility、branch，Git 不恢复 worktree、未推送或未提交内容。",
+      "按现场路径恢复稳定盘位、17 个锚点和 15 个项目关系；copy-first（先复制）、验证 target、改消费者引用，再决定旧路径是否退役。",
+      "从官方来源安装当前兼容运行时和软件，按真实安装路径重建非秘密环境变量与 PATH；公共软件、AI、模型、OCR/ASR 放在依赖链后段。",
+      "从 26 项 C 用户配置清单中按 Owner 选择恢复；Documents、Downloads、微信、存档保持原生格式，登录态、秘密、浏览器/聊天数据库不作为普通配置整包导入。",
+      "依赖齐全后，按 9 阶段/53 任务重建计划任务，并对 17 个启动项逐个检查；只恢复现役且前置条件满足的项，不从旧 XML 复活退役任务。",
+      "重新登录 GitHub、Codex 和必要应用；SecretRef、Password Center、媒体与其他受保护数据各走自己的人工因子与 P0–P7 恢复入口。",
+      "自然启动 Windows 与关键应用，核对任务/启动链、项目打开、账号、Documents/Downloads/微信或应用数据可见和必要业务动作；把需登录、unknown 与失败项保留为独立结果。",
+      "发布恢复后的稳定机器投影和必要 lifecycle event（生命周期事件），重建 G Hot；H 可用时再建立 Cold 并核对回执，使下一次恢复不依赖旧机器快照。"
     ],
     concepts: [
-      { term: "CoreRecovery（核心恢复）", explanation: "重装/换机后的主恢复编排与观察入口，不是磁盘镜像，也不读取所有私人 payload。" },
-      { term: "Hot（在线热备）", explanation: "在可持续访问介质上原子发布的小型恢复上下文与已登记数据副本。" },
-      { term: "Cold（人工冷备）", explanation: "需要人工接入/解锁的独立介质，只从完整验证的 Hot 消费，不反向改写 Hot。" },
+      { term: "BIOS/UEFI（主板固件设置）", explanation: "Windows 启动前的主板设置层。文字基线帮助人工恢复确认过的核心项，但不是可导入 Profile，也不自动刷写。" },
+      { term: "PCB revision（主板电路板版本）", explanation: "同一商品名下的硬件修订版；刷 BIOS 和选驱动前必须现场确认，支持页路径不能替代板上标识。" },
+      { term: "WEPE/WinPE（Windows 预安装环境）", explanation: "系统无法登录时用于识盘、联网、安装或修复的轻量环境；能启动不等于内部盘、网络和备份都可用。" },
+      { term: "CoreRecovery（核心恢复）", explanation: "重装/换机后的恢复范围、来源、任务和 Hot/Cold 关系的主观察入口；不是磁盘镜像，也不读取私人 payload 正文。" },
+      { term: "Hot（在线热备）", explanation: "G 上持续可访问的恢复上下文与已登记数据副本；完整写入 staging 并回读后才原子更新 current。" },
+      { term: "Cold（人工冷备）", explanation: "H 上由用户提供解锁窗口的独立副本；只消费已验证 Hot，不反向改写 G，也不自动解锁或回锁。" },
       { term: "Closure（闭合清单）", explanation: "把规范文件名、schema、长度和 SHA-256 绑在一起，避免 current 指向不完整的一组文件。" },
-      { term: "Selective restore（选择性恢复）", explanation: "备份可以宽，恢复只取经过 Owner 与新系统验证的必要对象，不整包覆盖。" },
+      { term: "Selective restore（选择性恢复）", explanation: "备份可以宽，恢复只取经过 Owner、新硬件兼容和新系统验证的必要对象，不整包覆盖。" },
+      { term: "present_verified / present_observed / user_confirmed（材料证据三种边界）", explanation: "前者证明材料存在且通过指纹检查；observed 只证明现场看见；user_confirmed 保存用户确认的生效语义。三者都不能替代未执行的自然重启或新机端到端验收。" },
       { term: "Recovery checkpoint（恢复检查点）", explanation: "每一层完成后可回读、可停下并继续的耐久状态，而不是一次长命令的临时输出。" }
     ],
     boundaries: [
+      "不把 BIOS 变成独立模块；它只在同板设置丢失、明确升级或换板判断中作为恢复旅程的一步",
+      "不自动刷写 BIOS，不根据文件较新、支持页 Rev. 1.0 线索或照片中的 Q-Flash 进度决定活动版本",
+      "只读识盘完成前不 clean、format、改分区或 BCD；旧盘符不等于设备身份",
+      "F 启动 U 盘不等于 G/H 数据备份，Windows ISO、WEPE 启动和应用数据恢复是三层证据",
       "不把 Git 工作树、未推送提交、untracked、ignored 或 .git 当普通备份 payload",
       "不递归复制整个 AppData，不把浏览器登录态或原始聊天数据库写入仓库",
       "不新增云上传、不切换账号、不读取活动 OAuth 私密内容",
+      "230 个导出驱动包不保证换板或新系统兼容；关键驱动仍须按目标硬件和官方来源筛选",
+      "普通恢复不接管 P0–P7、Password Center 或 personal-media 的 Carrier、因子与正式数据动作",
       "备份存在、任务 exit 0、文件复制或 hash 通过都不单独证明应用恢复",
       "冷备不使用 /MIR，不因版本多就删除未知历史包",
       "永久删除和秘密恢复始终保留精确人工门禁"
     ],
     failures: [
-      { condition: "当前 CoreRecovery 区域验收", response: "manifest_contract、maintenance_inspect 和 task_contract 三项均 pass；它只证明该区域合同，不覆盖全局 task drift。" },
-      { condition: "整机任务仍有 attention", response: "fresh Drift 已为 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；只保留 SafeSwitch manifest、H 冷备、Codex Home 切换后验收等真实缺口。" },
+      { condition: "PE 能启动但看不到内部盘或网络", response: "保持 present_observed，不格式化 U 盘或内盘；先补存储/网络驱动和只读 smoke，仍不可见就停止该来源的恢复。" },
+      { condition: "旧盘符与新机器不一致", response: "按物理盘、卷、文件系统、容量和恢复锚点重建映射，再更新项目/任务消费者；不创建同名字母空盘掩盖缺失。" },
+      { condition: "主板 PCB revision 或当前 BIOS 无法确认", response: "不刷写、不导入旧设置；只保留文字基线与候选包，待现场确认精确板号、版本、文件、hash 和供电。" },
+      { condition: "BIOS 设置已按记录填写但未做保存重启", response: "保持 user_confirmed 历史语义，当前恢复仍未完成；进入 Windows 后重新读取稳定机器投影并做稳定性验收。" },
+      { condition: "导出驱动与目标硬件不兼容", response: "跳过该包，优先安装精确硬件的官方当前驱动；不因 230 包清单完整就强行批量安装。" },
+      { condition: "CoreRecovery 当前区域检查", response: "manifest_contract、maintenance_inspect 和 task_contract 三项均 PASS；它证明恢复合同、10 个当前任务与 9 个备份集合可观察，不覆盖新机应用验收。" },
       { condition: "H 锁定、缺失或卷身份不符", response: "Cold 返回 skipped 或 fail，既不写入介质，也不自动解锁、锁卷或改变设备信任。" },
       { condition: "Hot closure 或时效不满足", response: "Cold 不复制，也不用进程成功值或旧 current 补齐。" },
       { condition: "复制中断或校验失败", response: "保留逐项结果、旧 current（当前完整状态）和 source（恢复来源）；不切消费者，不清旧路径。" },
-      { condition: "应用数据已复制但客户端不可见", response: "保持恢复未完成，回到应用 Owner 做原生打开、账号和数据一致性验证。" }
+      { condition: "任务或启动项定义已恢复但自然启动失败", response: "区分身份、Action、权限、依赖和应用 Owner 结果；不靠手动点开一次或旧 LastTaskResult 冒充自然启动通过。" },
+      { condition: "应用数据已复制但客户端不可见", response: "保持恢复未完成，回到应用 Owner 做原生打开、账号、数据格式和一致性验证。" }
     ],
     sources: [
       { path: "E:\\PCConfig\\registries\\core_recovery.json", role: "核心恢复 scope、备份集合、外部 Owner 和成功条件" },
-      { path: "E:\\PCConfig\\registries\\backup_media_structure.json", role: "热备/冷备介质结构导航" },
-      { path: "E:\\PCConfig\\registries\\scheduled_task_rebuild_plan.json", role: "任务恢复阶段与授权边界" },
-      { path: "E:\\PCConfig\\registries\\recovery_kit.json", role: "启动介质、驱动、固件和恢复资产清单" },
-      { path: "E:\\PCConfig\\registries\\acceptance_checklist.json", role: "12 区域、17 项验收入口" },
+      { path: "E:\\PCConfig\\registries\\recovery_kit.json", role: "F/G/H 恢复介质、UEFI/WEPE、Windows ISO、230 包驱动导出、BIOS/驱动归档及证据状态" },
+      { path: "E:\\PCConfig\\docs\\recovery\\bios-settings.md", role: "照片固化的 BIOS/UEFI 核心基线、F4b/F12/F13b 边界与恢复后回读要求；不包含照片原件" },
+      { path: "E:\\PCConfig\\registries\\project_restore_anchors.json", role: "17 个开发存储恢复锚点" },
+      { path: "E:\\PCConfig\\registries\\projects.json", role: "15 个项目及当前路径导航" },
+      { path: "E:\\PCConfig\\registries\\c_user_config_inventory.json", role: "26 项 C 盘用户配置及选择性恢复分层" },
+      { path: "E:\\PCConfig\\registries\\scheduled_task_rebuild_plan.json", role: "9 个阶段、53 个现行任务、恢复决定与授权边界" },
+      { path: "E:\\PCConfig\\registries\\startup_snapshot.json", role: "17 个启动项的现场观察与用途分类" },
+      { path: "E:\\PCConfig\\registries\\stable_machine_projection.json", role: "版本 6 的硬件、磁盘和运行时稳定基线" },
+      { path: "E:\\PCConfig\\registries\\backup_media_structure.json", role: "Hot/Cold 介质结构导航" },
+      { path: "E:\\PCConfig\\registries\\acceptance_checklist.json", role: "分区域验收入口，当前 core_recovery 精确选择三项" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.core-recovery.md", role: "CoreRecovery、Hot/Cold 和选择性恢复合同" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.recovery-privacy.md", role: "迁移、秘密与私人 payload 边界" },
-      { path: "E:\\PCConfig\\docs\\recovery\\START_RECOVERY.md", role: "重装/换机的机器接管入口" }
+      { path: "E:\\PCConfig\\docs\\recovery\\START_RECOVERY.md", role: "同机重装、换机、系统盘故障与仅 PE 的第一入口和来源分流" },
+      { path: "E:\\PCConfig\\docs\\recovery\\scheduled_tasks_rebuild.md", role: "项目/运行时先于任务的九阶段人类恢复说明" },
+      { path: "E:\\PCConfig\\docs\\recovery\\private_config_restore.md", role: "重新登录、SecretRef、Password Center 与 P0–P7 分层" }
     ],
     verification: [
-      "Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json 当前返回 pcconfig.core_recovery_observation.v2、status=ready、warnings=0",
-      "同次 Inspect 只报告 9 个任务、8 个 backup set、2 个 external owner；payload_names_emitted=false、payload_content_read=false",
-      "Invoke-PCConfigAcceptance.ps1 -NoWrite -Area core_recovery -Json 当前 3 pass、0 fail、0 unknown、0 blocking_unresolved",
+      "2026-08-31 现场：PCConfig PRIVATE main=f9245a1；node tools\\validate_recovery_kit.mjs 返回 16 assets、0 error、0 warning",
+      "同次只读 CoreRecovery Inspect 返回 pcconfig.core_recovery_observation.v2、status=ready、warnings=[]，报告 10 个任务、9 个 backup set、2 个 external owner；不枚举 payload 名称或正文",
+      "同次 Invoke-PCConfigAcceptance.ps1 -NoWrite -Area core_recovery -Json 返回 3 PASS、0 fail、0 unknown、0 blocking_unresolved",
+      "Invoke-StableMachineProjection.ps1 -Action Read -Json 返回 projection_version=6；project_restore_anchors、projects 与 c_user_config_inventory 分别登记 17、15、26 项",
+      "scheduled_task_rebuild_plan.json 当前为 9 个阶段、53 个任务；startup_snapshot.json 当前观察 17 个启动项。两者是重建导航，不单独证明自然启动",
+      "BIOS 文字记录的 E 源、E 镜像与 G 热备三份 SHA-256 均为 2FE3B5C7…B0E21B；F 救急速查存在。20 个引用照片路径只做存在性检查，本次未读取照片",
+      "BIOS 核心基线为 present_verified，CPU/内存生效为 user_confirmed；native_profile_status=not_found，PCB revision、保存后自然重启和完整外围菜单仍未独立验证",
+      "F 的 UEFI→PE 启动由用户确认；WEPE 隐藏分区仅 present_observed，内部 Windows 磁盘可见和网络可用的 PE smoke 仍未执行",
+      "H 冷备、新机/换板端到端恢复、恢复后的 Hot/Cold 重建，以及各应用自然启动与数据可见仍是命名缺口，不从静态校验或当前机器状态推断通过",
       "core_recovery_maintenance.test.ps1 覆盖 Inspect、Hot、Cold、closure、时效、卷身份和中断回执",
       "build_scheduled_task_rebuild_plan.test.mjs 与 validate_scheduled_task_rebuild_plan.test.mjs 覆盖任务恢复投影",
       "acceptance runner 的精确 area/check selector、超时、unknown 和有界输出由 invoke_acceptance_checks.test.ps1 验证"
     ],
-    relation: "本模块消费机器事实、运行时与任务模块的入口；秘密模块提供不进普通备份的私密恢复；受保护数据模块承担需要 Carrier 与因子的独立加密恢复。"
+    relation: "本模块是 PCConfig 从机器断点回到可用电脑的完整旅程：机器事实模块提供主板、磁盘、盘符、锚点和项目路径；运行时与启动模块提供软件、任务和自然启动链；秘密模块负责重新登录与 SecretRef；受保护数据模块继续独立承担 P0–P7 Carrier、因子和正式数据恢复。BIOS/UEFI 归这条恢复旅程，不另拆模块。"
   },
   {
     slug: "secrets-providers",

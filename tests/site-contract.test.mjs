@@ -753,6 +753,59 @@ test("non-rule project packages preserve the content contract and enter only the
   }
 });
 
+test("PCConfig recovery is one complete replacement and reinstall journey instead of a BIOS riddle", async () => {
+  const recovery = pcconfigModules.find((item) => item.slug === "recovery-backup");
+  assert.ok(recovery, "PCConfig recovery module is missing");
+  assert.equal(recovery.shortTitle, "换机与恢复");
+  assert.equal(recovery.title, "换机、重装、备份与恢复");
+  assert.equal(pcconfigModules.some((item) => /bios|uefi/i.test(item.slug)), false, "BIOS must remain inside the recovery journey instead of becoming a module");
+
+  const readerText = JSON.stringify({
+    value: recovery.value,
+    why: recovery.why,
+    example: recovery.example,
+    result: recovery.result,
+    states: recovery.readerStates,
+    decisions: recovery.decisionImpact
+  });
+  for (const term of ["同机重装", "换机", "系统盘故障", "只有 PE", "先认机器和磁盘", "自然启动", "应用内数据可见", "不格式化"]) {
+    assert.ok(readerText.includes(term), `PCConfig recovery reader layer omits: ${term}`);
+  }
+
+  const technicalText = JSON.stringify({
+    implementation: recovery.implementation,
+    flow: recovery.flow,
+    concepts: recovery.concepts,
+    boundaries: recovery.boundaries,
+    failures: recovery.failures,
+    sources: recovery.sources,
+    verification: recovery.verification,
+    relation: recovery.relation
+  });
+  for (const term of [
+    "F 是启动/救急 U 盘", "G 是在线 Hot", "H 是人工 Cold", "P0–P7", "PCB revision", "F4b", "F12", "F13b",
+    "不自动刷写", "list disk / list volume", "clean", "format", "BCD", "230 个 package", "三个控制面", "17 个恢复锚点",
+    "15 个项目路径关系", "26 项 C 盘用户配置", "9 个阶段、53 个现行任务", "17 个启动项", "SecretRef", "重新建立备份"
+  ]) {
+    assert.ok(technicalText.includes(term), `PCConfig recovery technical layer omits: ${term}`);
+  }
+  for (const term of ["present_verified", "present_observed", "user_confirmed", "H 冷备", "新机/换板端到端恢复", "PE smoke", "保存后自然重启"]) {
+    assert.ok(technicalText.includes(term), `PCConfig recovery evidence boundary omits: ${term}`);
+  }
+
+  const expectedAliases = [
+    "BIOS", "UEFI", "主板设置", "换机 BIOS", "重装 BIOS", "启动U盘", "WEPE", "WinPE", "Q-Flash Plus", "Windows ISO",
+    "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified"
+  ];
+  for (const alias of expectedAliases) assert.ok(recovery.searchAliases.includes(alias), `PCConfig recovery search alias is missing: ${alias}`);
+
+  const publicText = JSON.stringify({ project: pcconfigProject, modules: pcconfigModules });
+  assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 4);
+});
+
 test("TimeAudit keeps collectors bounded without blanket-banning useful technical facts", async () => {
   const publicText = JSON.stringify({ project: timeAuditProject, modules: timeAuditModules });
   assertForbiddenTermsAreAbsent(publicText);
@@ -1402,7 +1455,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 3);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 4);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);

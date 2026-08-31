@@ -46,7 +46,7 @@ test("all ten project surfaces are deterministic projections of one currentSnaps
       facts: snapshot.facts.map(({ value }) => value),
       gaps: snapshot.gaps
     });
-    assert.equal(candidate.snapshotBoundary, `观察于 ${snapshot.observedAt}；${snapshot.gaps[0]}`);
+    assert.equal(candidate.snapshotBoundary, `观察于 ${snapshot.observedAt}；${snapshot.boundary}`);
 
     const factText = snapshot.facts.map(({ value }) => value).join("\n");
     for (const metric of snapshot.metrics) {
