@@ -237,7 +237,10 @@ const registryByName = new Map(registry.skills.map((item) => [item.name, item]))
 const activeInstallIntentCount = registry.skills.filter((item) => item.install).length;
 const personalSelectedSkills = skills.filter((item) => item.sourceKind === "personal_install");
 const hostIntegratedSkills = skills.filter((item) => item.sourceKind === "host_integrated");
-const missingSelectedSkills = personalSelectedSkills.map((item) => item.slug).filter((name) => !registryByName.get(name)?.install);
+const missingSelectedSkills = personalSelectedSkills
+  .map((item) => ({ publicSlug: item.slug, registryName: item.registryName || item.slug }))
+  .filter((item) => !registryByName.get(item.registryName)?.install)
+  .map((item) => `${item.publicSlug}->${item.registryName}`);
 if (missingSelectedSkills.length) throw new Error(`selected Skills are not active install intent: ${missingSelectedSkills.join(", ")}`);
 const invalidHostIntegratedEvidenceShape = hostIntegratedSkills.filter((item) => item.availability !== "available" || !item.sourcePath || !/^[a-f0-9]{64}$/.test(item.sourceSha256 || ""));
 if (invalidHostIntegratedEvidenceShape.length) throw new Error(`host-integrated Skill snapshot evidence is malformed: ${invalidHostIntegratedEvidenceShape.map((item) => item.slug).join(", ")}`);

@@ -2,15 +2,18 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-08-31 21:09（中国时间）",
-  "sourceCommit": "d32210b6594bf8ba1679da7b0f5bd66d18f3f6a7",
+  "observedAt": "2026-09-01 01:00（中国时间）",
+  "sourceCommit": "df1a361080d31ea7881b35a80f75944e40285606",
   "sourceBranch": "main",
-  "sourceWorktreeClean": true,
-  "sourceDirtyCount": 0,
-  "sourceDirtyPaths": [],
+  "sourceWorktreeClean": false,
+  "sourceDirtyCount": 2,
+  "sourceDirtyPaths": [
+    "tests/Test-PersonalSkillJunctionInstaller.ps1",
+    "tools/Install-PersonalSkillJunctions.ps1"
+  ],
   "sourceAhead": 0,
   "sourceBehind": 0,
-  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树干净",
+  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树有 2 项未激活修改",
   "repositoryVisibility": "私有",
   "repositoryVisibilityEvidence": "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   "ruleBinding": [
@@ -71,12 +74,12 @@ export const generatedPanelFacts = {
     }
   ],
   "skills": {
-    "activeInstallIntent": 25,
-    "personalSelectedCount": 24,
+    "activeInstallIntent": 27,
+    "personalSelectedCount": 25,
     "hostIntegratedCount": 2,
     "hostIntegratedDiscovery": "not_rerun_by_agents_snapshot_refresh",
-    "selectedPublicCount": 26,
-    "transactionCampaignCount": 37
+    "selectedPublicCount": 27,
+    "transactionCampaignCount": 38
   },
   "authority": {
     "status": "e_rules_active_verified",
@@ -106,8 +109,8 @@ export const generatedPanelFacts = {
     "legacyCState": "retired_recovery_only"
   },
   "validation": {
-    "label": "还有 1 层未闭合",
-    "summary": "E rules 活动且五规则闭包通过，但仍有 1 个独立验证层没有通过。",
+    "label": "还有 2 层未闭合",
+    "summary": "E rules 活动且五规则闭包通过，但仍有 2 个独立验证层没有通过。",
     "rows": [
       {
         "layer": "E rules current（E 规则当前指针）",
@@ -123,9 +126,9 @@ export const generatedPanelFacts = {
       },
       {
         "layer": "Source checkout（候选源码工作树）",
-        "status": "pass",
-        "label": "与 release 一致",
-        "detail": "source HEAD=d32210b6594b，origin/main=d32210b6594b，active release commit=d32210b6594b。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E95。"
+        "status": "repair",
+        "label": "2 项未激活施工",
+        "detail": "source HEAD=df1a361080d3，origin/main=df1a361080d3，active release commit=d32210b6594b。未提交路径：tests/Test-PersonalSkillJunctionInstaller.ps1、tools/Install-PersonalSkillJunctions.ps1。 Source 不等于 active release 时只作候选施工，不会覆盖 E95。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -143,7 +146,7 @@ export const generatedPanelFacts = {
         "layer": "Skill supply（能力供应）",
         "status": "pass",
         "label": "通过",
-        "detail": "25 个 personal active install intent；公开目录含 24 个可用 personal Skill 与 2 个 host-integrated Skill，共 26 个；另有 1 个 current unavailable personal intent 不展示。personal source/install/transaction 通过，37 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
+        "detail": "27 个 personal active install intent；公开目录含 25 个可用 personal Skill 与 2 个 host-integrated Skill，共 27 个；另有 2 个 current unavailable personal intent 不展示。personal source/install/transaction 通过，38 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
       },
       {
         "layer": "Contract coverage（跨控制面合同覆盖）",
@@ -157,6 +160,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "9be422e886582a97047633f9398e08185d845f02d57f9ed75656e8d117529bdb"
+    "payloadSha256": "23e92f452d5a42cc7b90cfc571c79b8c13565a8bc0e0babfd4b318228530ce4a"
   }
 };
