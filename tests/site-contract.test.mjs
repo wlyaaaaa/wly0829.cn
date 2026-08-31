@@ -143,7 +143,7 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
 
 test("the desktop global search is geometrically centered without changing mobile search", async () => {
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.match(styleSource, /@media \(min-width: 1181px\)[\s\S]*?\.desktop-search\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?left:\s*50%;[\s\S]*?width:\s*clamp\(360px, 32vw, 520px\);[\s\S]*?transform:\s*translate\(-50%, -50%\)/);
+  assert.match(styleSource, /@media \(min-width: 1181px\)[\s\S]*?\.desktop-search\s*\{[\s\S]*?position:\s*fixed;[\s\S]*?top:\s*calc\(var\(--header-height\) \/ 2\);[\s\S]*?left:\s*50%;[\s\S]*?width:\s*clamp\(360px, 32vw, 520px\);[\s\S]*?transform:\s*translate\(-50%, -50%\)/);
   assert.match(styleSource, /@media \(min-width: 1181px\) and \(max-width: 1680px\)[\s\S]*?\.desktop-search\s*\{\s*width:\s*360px;[\s\S]*?\.social-link span\s*\{[\s\S]*?clip:\s*rect\(0, 0, 0, 0\)/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.desktop-search\s*\{\s*display:\s*none;/);
 });
@@ -386,17 +386,31 @@ test("long pages expose one unobtrusive back-to-top control", async () => {
 
 test("the global footer exposes useful destinations instead of decorative repetition", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.match(pageSource, /function SiteFooter\(\)/);
+  assert.match(pageSource, /function FooterEmailLink\(\{ item \}\)/);
+  assert.match(pageSource, /data-footer-email-copy=\{site\.email\}/);
+  assert.match(pageSource, /data-footer-email-copy-button/);
+  assert.match(runtimeSource, /function initializeFooterEmailCopy\(\)/);
+  assert.match(runtimeSource, /navigator\.clipboard\?\.writeText[\s\S]{0,120}navigator\.clipboard\.writeText\(value\)/);
+  assert.match(runtimeSource, /document\.execCommand\("copy"\)/);
+  assert.match(runtimeSource, /label\.textContent = success \? "已复制" : "复制失败"/);
+  assert.match(runtimeSource, /const restoreFocus = document\.activeElement === button/);
+  assert.match(runtimeSource, /button\.focus\(\{ preventScroll: true \}\)/);
+  assert.doesNotMatch(runtimeSource, /button\.disabled = true/);
+  assert.match(runtimeSource, /initializeFooterEmailCopy\(\)/);
   assert.match(pageSource, /从总览进入真正拥有内容的页面/);
   assert.match(pageSource, /这是最后一次验证并发布的只读快照，不是后台实时控制台/);
   assert.match(pageSource, /<SiteFooter \/><BackToTopButton \/>/);
   const rootHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   for (const item of primaryNav) assert.ok(rootHtml.includes(canonicalUrl(item.href)), `Footer omits full internal URL for ${item.label}`);
   for (const item of socialLinks) assert.ok(rootHtml.includes(item.href), `Footer omits external destination for ${item.label}`);
+  assert.match(rootHtml, /aria-label="复制邮箱地址"/);
   assert.ok(rootHtml.includes(`${site.url}/`), "Footer omits the canonical site URL");
   assert.match(styleSource, /\.site-footer\s*\{[\s\S]*?border-top:\s*2px solid var\(--green\)/);
   assert.match(styleSource, /\.site-footer-links > a > code[\s\S]*?overflow-wrap:\s*anywhere/);
+  assert.match(styleSource, /\.site-footer-email-row > button\s*\{[\s\S]*?min-width:\s*66px;[\s\S]*?border:\s*1px solid var\(--green\)/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.site-footer-inner\s*\{\s*grid-template-columns:\s*minmax\(0,1fr\)/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.system-directories\s*\{\s*padding-bottom:\s*24px;/);
 });
@@ -2015,6 +2029,14 @@ test("the rules workbench exposes exactly five verified current E-release rules"
   const authorizationRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "authorization_delegation_contract");
   assert.match(JSON.stringify(authorizationRule), /PUBLIC 项目.*PRIVATE companion|PUBLIC ignored 私有材料/);
   assert.match(JSON.stringify(ruleGuides.authorization_delegation_contract), /PUBLIC 项目的私有伴随材料/);
+});
+
+test("Rules reader content stays ahead of release telemetry", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const ruleDetail = pageSource.slice(pageSource.indexOf("function RuleDetail"), pageSource.indexOf("function RulesPage"));
+  const rulesPage = pageSource.slice(pageSource.indexOf("function RulesPage"), pageSource.indexOf("function SystemScenarioPanel"));
+  assert.ok(ruleDetail.indexOf('className="rule-plain-language"') >= 0 && ruleDetail.indexOf('className="rule-plain-language"') < ruleDetail.indexOf('className="rule-identity-grid"'), "Rule telemetry appears before its plain-language reader layer");
+  assert.ok(rulesPage.indexOf('className="rules-workbench"') >= 0 && rulesPage.indexOf('className="rules-workbench"') < rulesPage.indexOf('className="rules-dashboard-bar"'), "Release dashboard appears before the rule reader workbench");
 });
 
 test("each current rule tells an ordinary reader how it applies without manual invocation", () => {

@@ -6,6 +6,7 @@ import {
   ArrowUp,
   BookOpenText,
   CheckCircle,
+  CopySimple,
   EnvelopeSimple,
   House,
   Info,
@@ -1965,6 +1966,16 @@ function BackToTopButton() {
   return <button className="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部" hidden><ArrowUp size={21} weight="bold" aria-hidden="true" /></button>;
 }
 
+function FooterEmailLink({ item }) {
+  return (
+    <div className="site-footer-email-row" data-footer-email-copy={site.email}>
+      <a href={item.href}><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code></a>
+      <button type="button" data-footer-email-copy-button aria-label="复制邮箱地址"><CopySimple size={15} aria-hidden="true" /><span data-footer-email-copy-label>复制</span></button>
+      <span className="visually-hidden" data-footer-email-copy-status role="status" aria-live="polite" />
+    </div>
+  );
+}
+
 function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -1980,7 +1991,9 @@ function SiteFooter() {
         </nav>
         <nav className="site-footer-links site-footer-external" aria-label="页脚外部与联系入口">
           <h2><span>02</span>外部与联系</h2>
-          {socialLinks.map((item) => <a href={item.href} key={item.label} rel={item.mail ? undefined : "noopener noreferrer"} target={item.mail ? undefined : "_blank"}><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code><ArrowRight size={15} aria-hidden="true" /></a>)}
+          {socialLinks.map((item) => item.mail
+            ? <FooterEmailLink item={item} key={item.label} />
+            : <a href={item.href} key={item.label} rel="noopener noreferrer" target="_blank"><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code><ArrowRight size={15} aria-hidden="true" /></a>)}
         </nav>
       </div>
       <div className="site-footer-meta"><span>© 2026 吴乐阳</span><a href={`${site.url}/`}>{site.url}/</a><small>只读产品、规则与能力快照</small></div>

@@ -727,6 +727,62 @@ function initializeBackToTop() {
   update();
 }
 
+function initializeFooterEmailCopy() {
+  document.querySelectorAll("[data-footer-email-copy]").forEach((row) => {
+    const button = row.querySelector("[data-footer-email-copy-button]");
+    const label = row.querySelector("[data-footer-email-copy-label]");
+    const status = row.querySelector("[data-footer-email-copy-status]");
+    const value = row.dataset.footerEmailCopy;
+    if (!button || !label || !status || !value) return;
+    let resetTimer = 0;
+    let copying = false;
+
+    function legacyCopy() {
+      const field = document.createElement("textarea");
+      field.value = value;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.append(field);
+      field.select();
+      try {
+        return document.execCommand("copy");
+      } finally {
+        field.remove();
+      }
+    }
+
+    button.addEventListener("click", async () => {
+      if (copying) return;
+      let success = false;
+      const restoreFocus = document.activeElement === button;
+      copying = true;
+      button.setAttribute("aria-busy", "true");
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+          success = true;
+        }
+      } catch {
+        // A denied Clipboard API falls through to the bounded local fallback.
+      }
+      if (!success) {
+        try { success = legacyCopy(); } catch { success = false; }
+      }
+      window.clearTimeout(resetTimer);
+      label.textContent = success ? "已复制" : "复制失败";
+      status.textContent = success ? "邮箱地址已复制" : "邮箱地址复制失败";
+      copying = false;
+      button.removeAttribute("aria-busy");
+      if (restoreFocus) window.requestAnimationFrame(() => button.focus({ preventScroll: true }));
+      resetTimer = window.setTimeout(() => {
+        label.textContent = "复制";
+        status.textContent = "";
+      }, 1800);
+    });
+  });
+}
+
 function createButton(className, label, text) {
   const button = document.createElement("button");
   button.type = "button";
@@ -1133,6 +1189,7 @@ initializeProjectReadingLayers();
 initializeSystemHome();
 initializeSystemSectionNavigation();
 initializeBackToTop();
+initializeFooterEmailCopy();
 initializeFlowField();
 initializeDocumentPrefetch();
 initializePreservedScrollNavigation();
