@@ -283,6 +283,11 @@ export const skillGuides = {
     ["读取等待超时", "保留 job 和 receipt，不重复 submit。", "按推荐时间继续查询同一个 job。"]
   ]),
   "native-economy-routing": guide([
+    ["Hook（宿主钩子）", "宿主在固定事件点提供或复核可信事实；它只验证身份、E identity 和参数，不替代理选模型、定数量、创建 child 或制造授权。"],
+    ["UserPromptSubmit / SubagentStart（请求进入 / 子代理启动）", "root 通过前者、child 通过后者，在任何 0–10 判断前取得 verified model、effective effort、root/child、turn hash、E release 与 contract SHA。"],
+    ["Verified identity（可信身份）", "由宿主当前回合证明的模型、思考等级、root/child 角色、回合指纹和 E identity；标题、任务名、历史回执或模型自报都不能替代。"],
+    ["Thread binding（耐久对话绑定）", "只有旧 root 完全没有 Hook 或身份注入时，才由用户明确 model/effort 后写入并回读；同一 E identity 下可跨上下文压缩保留，child 不继承。"],
+    ["PreToolUse（创建前复核）", "真正 spawn 前再次核对 TOCTOU、模型家族上限、effort 上限和参数；它不能代替判断前的可信身份。"],
     ["Root / child（根代理 / 子代理）", "Root 负责目标、风险和最终集成；child 只负责被分配的有界支路。"],
     ["Effort（思考等级）", "模型在任务上允许使用的推理强度，child 不能高于父级。"],
     ["Spawn（创建子代理）", "在当前任务树中启动一个原生 child，不是创建用户侧顶层对话。"],
@@ -290,8 +295,12 @@ export const skillGuides = {
     ["TOCTOU（检查到执行之间的漂移）", "真正 spawn 前再次核对身份、generation、模型和参数，避免使用已经过期的前置判断。"],
     ["0–10 决策", "每个父代理按质量和净收益决定直属 child 数量；0 合法，不是默认。"]
   ], [
-    ["宿主身份或对话绑定缺失", "关闭 spawn，但主任务和普通工具继续。", "取得宿主 verified 身份，或由用户明确 model/effort 后建立并回读绑定。"],
+    ["正常宿主 Hook 可用", "UserPromptSubmit 或 SubagentStart 在 0–10 前注入可信身份。", "代理按当前任务语义决定数量、家族与 effort；真实 spawn 前再由 PreToolUse 复核。"],
+    ["旧 root 完全没有 Hook 或身份注入", "只有用户明确 model/effort 才能建立耐久 thread binding。", "写入后必须回读同一对话绑定；child 不继承，宿主身份恢复后仍以宿主为准。"],
+    ["宿主身份和有效对话绑定都缺失", "只关闭 spawn，不能猜身份或从任务名恢复。", "主任务的普通调查、实现、测试和最终答复继续。"],
     ["Generation 或合同 hash 变化", "旧路由判断失效。", "从新的活动 generation 完整重读经济路由节后再决定。"],
+    ["PreToolUse 发现身份、家族、effort 或参数漂移", "停止这一次 spawn，不把前一次判断当当前事实。", "回到当前身份和任务范围重新判断，不扩大授权。"],
+    ["没有 Stop Hook 或应用更新改变了安装路径", "不影响既有身份主路径，也不构成准入阻断。", "继续按稳定事件、主体与能力发现；缺失的精确 Hook 只关闭对应委派能力。"],
     ["Child 中断", "不把 partial 当 complete。", "优先恢复原 session；无法恢复才重跑或换更强模型。"],
     ["槽位满", "当前不再 spawn。", "Root 继续不冲突工作；child terminal 释放槽位后重新判断。"]
   ]),
@@ -502,12 +511,12 @@ export const skillOutcomes = {
     changes: ["没有独立 verifier 时不使用。", "先读取 live registry 再选 route。", "提交后保存 job 和 receipt。", "超时继续查同一 job，不重复提交。", "结果必须由顶层模型按 verifier 复核。"]
   },
   "native-economy-routing": {
-    value: "它决定什么时候开原生子代理可以提高质量或缩短时间，并保证子代理不超出当前模型、授权和任务范围；同时避免主代理开完子代理后原地空等。",
-    why: "复杂任务可以并行，但乱开代理会造成重复工作、写入冲突、权限扩大或主任务无人负责。简单任务开代理反而更慢。",
-    example: "例如网站更新同时需要内容、界面和刷新链审计；只有这些支路独立可验且不会写冲突时才并行，root 每次都按当时的 current E release 和宿主身份决定数量，不拿旧 identity 或上次代理数直接复用。",
-    result: "独立工作可以并行完成，子代理只拿到必要范围；主任务继续负责方向、合并和最终验收，不会把责任交出去。",
-    readerStates: { pass: "身份、授权和并行收益成立时创建有界子代理，主任务继续集成。", problem: "任务耦合、写冲突、槽位或资源不足时减少代理数量、改成串行或保持 0。", unavailable: "可信模型/思考等级/角色身份不可验证时不创建子代理；主任务的普通调查和实施继续。" },
-    changes: ["身份、E release/commit/ruleset 和能力合同 SHA 可信后才做 0–10 判断。", "C Authority unavailable 不影响 E rules 原生路由。", "有独立可验且净收益为正的支路时可以 spawn（创建子代理）。", "gpt-5.6-luna/terra/sol 按任务语义选择，不设固定默认；其他宿主 verified 模型归未来模型家族。", "Child（子代理）只能收窄 scope、家族和 effort；Sol/未来模型可在父级允许时到 Ultra，绝对不能超过父级或 Ultra。", "Root 派出 child 后继续战略、集成和其他不冲突工作。"]
+    value: "它让原生子代理并行建立在宿主先验真的身份上：正常情况下，UserPromptSubmit 或 SubagentStart 在 0–10 判断前注入可信模型、思考等级、角色和 E identity；代理再自主决定数量与家族，创建前由 PreToolUse 做最后复核。",
+    why: "复杂任务可以并行，但如果先拿任务名、模型自报或旧回执猜身份，再决定子代理数量，就可能选错家族、越过 effort 上限或复用过期参数。Hook 主路径把“判断前验真”和“创建前复核”分开，同时不把验证器变成调度器或授权来源。",
+    example: "例如网站更新同时需要内容、界面和刷新链审计。root 收到请求时先由 UserPromptSubmit 注入可信身份；只有支路独立可验且不会写冲突时，代理才决定开几个 Luna、Terra 或 Sol child。每个 child 由 SubagentStart 取得自己的身份，真实 spawn 前再由 PreToolUse 复核，root 同时继续方向和集成工作。",
+    result: "我会得到基于本次可信身份的 0–10 判断、模型家族、effort 和范围；子代理只拿必要工作，root 不空等并继续最终集成。Hook 只验真和复核，不选择数量或家族、不创建 child，也不产生授权。",
+    readerStates: { pass: "UserPromptSubmit 或 SubagentStart 已在判断前注入可信身份，授权和并行收益也成立时，由代理创建有界子代理；PreToolUse 在每次 spawn 前复核，root 继续集成。", problem: "E identity、参数、家族上限、effort、写冲突或 slots 发生变化时，停止该次 spawn 并重新判断，不把旧结果直接复用。", unavailable: "Hook 与有效旧 root thread binding 都不可用时不创建子代理；只关闭委派，主任务的普通调查、实现、测试和最终答复继续。" },
+    changes: ["root 的 UserPromptSubmit 与 child 的 SubagentStart 在 0–10 前注入 verified model、effective effort、root/child、turn hash、E release 与 contract SHA。", "只有旧 root 完全没有 Hook 或身份注入时，才由用户明确 model/effort 写入并回读耐久 thread binding；child 不继承。", "PreToolUse 在真实 spawn 前复核 TOCTOU、模型家族上限、effort 上限和参数。", "Hook 只验证身份、E identity 和参数，不选择模型家族或代理数量、不创建 child，也不制造授权。", "Hook 缺失只关闭委派，普通任务继续；不依赖 Stop Hook，app version 和 versioned path 不是准入条件。", "有独立可验且净收益为正的支路时可以 spawn（创建子代理）；0 合法但不是固定默认。", "Luna、Terra、Sol 按任务语义选择，child 只能收窄 scope、家族和 effort，绝不能超过父级上限。", "Root 派出 child 后继续战略、集成和其他不冲突工作，不原地空等。"]
   },
   "token-budget-advisor": {
     value: "让我在明确询问时读取当前工作台配额/reset 状态，或按 GPT-5.6 Sol 的权威口径计算、比较可见文本 Token；不会因为对话看起来很长就自动触发。",

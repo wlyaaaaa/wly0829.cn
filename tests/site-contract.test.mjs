@@ -1744,6 +1744,29 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(excludedSkills.length, 0);
 });
 
+test("native routing public copy explains the Hook identity path without expanding authority", () => {
+  const nativeRouting = skills.find((item) => item.slug === "native-economy-routing");
+  const nativeRoutingText = JSON.stringify({ entry: nativeRouting, guide: skillGuides["native-economy-routing"], outcome: skillOutcomes["native-economy-routing"] });
+  for (const term of ["UserPromptSubmit", "SubagentStart", "verified model", "effective effort", "root/child", "turn hash", "E release", "contract SHA", "thread binding", "PreToolUse", "TOCTOU", "Stop Hook", "app version", "versioned path", "Luna", "Terra", "Sol"]) {
+    assert.ok(nativeRoutingText.includes(term), `native routing public copy omits ${term}`);
+  }
+  for (const expected of [
+    /UserPromptSubmit.*SubagentStart.*0–10.*前.*注入/,
+    /旧 root.*完全没有 Hook.*用户明确 model\/effort.*写入.*回读.*thread binding/,
+    /child 不继承/,
+    /PreToolUse.*spawn 前.*TOCTOU.*家族.*effort.*参数/,
+    /Hook 只验证.*身份.*E identity.*参数/,
+    /不选择.*家族.*数量|不选择模型家族或代理数量/,
+    /不创建 child/,
+    /不制造授权/,
+    /Hook.*缺失.*只关闭委派.*普通任务继续/,
+    /不依赖 Stop Hook/,
+    /app version.*versioned path.*不是准入/,
+    /0.*10/,
+    /root.*不空等|Root.*不原地空等/
+  ]) assert.match(nativeRoutingText, expected, `native routing public copy omits a stable Hook boundary: ${expected}`);
+});
+
 test("global search handles natural rewrites, mixed Latin terms and bounded broad results", async () => {
   assert.equal(searchPanel("哪个 Skill 可以找照片")[0]?.title, "personal-media");
   assert.equal(searchPanel("fresh task 为什么受阻")[0]?.title, "personal-panel-refresh");
