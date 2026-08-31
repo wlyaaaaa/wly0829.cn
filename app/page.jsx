@@ -1683,7 +1683,7 @@ function SystemProjectAssetCard({ asset }) {
       {hasDetailedPage || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
         {hasDetailedPage ? <SiteLink href={asset.href}>{asset.entryLabel || "进入完整项目页"}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
         {referenceItems.map((item) => <SiteLink href={item.href} key={`${item.relation}-${item.href}`}>进入规则<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
-        {skillItems.map((item) => <SiteLink href={item.href} key={item.href}>进入 Skill<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
+        {skillItems.map((item) => <SiteLink href={item.href} key={item.href}>Skill：{item.label}<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
       </div> : null}
     </article>
   );

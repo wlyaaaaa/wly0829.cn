@@ -2181,6 +2181,7 @@ test("project and Skill links come from one explicit ownership map", async () =>
   assert.doesNotMatch(systemHtml, /<a(?:\s|>)[^>]*class="system-project-asset-card"/, "System project cards must not nest project and Skill anchors");
   assert.match(systemHtml, /class="system-project-asset-actions"/);
   assert.ok(systemHtml.includes('href="/skills/work-delivery/"'), "System work-delivery asset does not link to its Skill");
+  assert.ok(systemHtml.includes("Skill：工作交付副驾驶"), "System Skill actions must show the full Skill name");
 });
 
 test("native routing public copy explains the Hook identity path without expanding authority", () => {
