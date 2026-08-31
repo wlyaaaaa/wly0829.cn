@@ -44,14 +44,14 @@ export const pcconfigProject = {
   route: "/projects/pcconfig",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "机器配置与恢复可用；Codex Home 等待本人退出后切换",
+  cardStatus: "主工作站配置可用；副驾驶笔记本已登记，现场状态待在该机回读",
   cardStatusTone: "pass",
   ...pcconfigSnapshot,
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
-  summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
-  why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
-  plainExample: "例如我说“重装 Windows（微软操作系统）后，把开发环境、计划任务和必要配置恢复回来”。PCConfig 会先确认磁盘与恢复来源，再按运行时、项目、启动链和私密配置分层恢复；每一层都从现场 Provider（现场读取器）取证。最后我得到的不是一句“软件装完了”，而是一份分层结果：哪些已恢复并回读、哪些需要重新登录、哪些仍是 unknown（证据不足），以及每个失败项的安全停止点。",
-  result: "我最终会得到一份可执行、可回读的机器状态与恢复结果：当前配置真正在哪里、准备修改什么、变更前状态怎样保存、每一层是否通过、哪些只完成源码或安装、哪些仍需登录或自然重启，以及失败后从哪个检查点恢复。",
+  summary: "PCConfig 是 Windows（微软操作系统）设备的配置地图和恢复中心。它既管理 WLY 台式主工作站的磁盘、运行时、任务、备份和重大机器动作，也登记一台真实副驾驶笔记本的远控、轻量开发、独立灾备和故障接管边界。我可以直接问“为什么这个任务没启动”“离开主机时笔记本能做什么”或“台式机坏了怎样继续工作”。",
+  why: "机器配置不仅散落在文件、环境变量、任务、服务和安装目录里，还会随主机身份改变。同一个 V 盘、任务或登录入口在台式机与笔记本上可能完全不同；全盘同步会复制错误驱动、登录态和故障，只靠 Git（版本控制）又漏掉普通文件、设备服务和恢复介质。PCConfig 用主机限定事实、选择性恢复和逐层回读把两台设备接成可理解、可接管但不互相污染的系统。",
+  plainExample: "例如台式机突然无法开机。我可以先用副驾驶笔记本继续远控以外的本地 Git、文档和轻量开发；若原 NVMe 完好，再把它装进已验收硬盘盒，只读识别原 E/V 工作区并继续必要项目。PCConfig 会明确哪些来自 Git、哪些来自原盘、哪些账号要重新登录、哪些重型能力不能继承，以及修好台式机后怎样安全交回。",
+  result: "我最终会得到一份按设备和证据分层的可执行结果：当前是哪台主机、它承担什么角色、路径和端口真正属于谁、日常与离线能力有哪些、变更如何回退、重装/丢盘/主机故障从哪条来源恢复、哪些只完成源码或离线测试、哪些仍须在真实设备、重启或应用中验收。",
   readerStates: {
     pass: "需要的机器事实、配置责任源和恢复入口都能现场读取时，按依赖顺序执行，并分别回读文件、运行时、计划任务、账号入口和用户可见结果。",
     problem: "发现路径漂移、任务失败、版本不一致或恢复证据不完整时，只暂停受影响的一层，保留变更前状态并列出责任源、失败位置和下一步恢复入口。",
@@ -59,6 +59,7 @@ export const pcconfigProject = {
   },
   productPrinciples: [
     { title: "先读现场，再改变机器", detail: "登记表负责导航，不能冒充当前状态；真正要改什么，先由 Windows、安装根、任务或项目配置现场证明。" },
+    { title: "先确认主机，再解释配置", detail: "台式机和副驾驶笔记本各有自己的路径、任务、端口和规则入口；host mismatch 只表示不适用，不能把另一台机器的账本套过来。" },
     { title: "项目仍拥有自己的配置", detail: "PCConfig 管机器路径、端口、任务、运行时和恢复关系，不把项目业务配置收走形成第二份真相。" },
     { title: "每次变更都能退回", detail: "目标、变更前状态、影响对象、回滚入口和完成后的现场回读必须成对存在。" },
     { title: "恢复按依赖分层进行", detail: "先恢复磁盘、网络和基础运行时，再恢复项目、任务、启动项和私密配置；不把整包覆盖当快捷方式。" },
@@ -71,6 +72,7 @@ export const pcconfigProject = {
     "维护本机路径、磁盘、目录用途、固定端口、运行时和本地数据源等机器事实",
     "维护 Registry（结构化登记表）、现场 Provider、稳定投影、漂移检查和验收入口",
     "维护 Windows 计划任务、启动项、受管软件、快捷方式和恢复顺序的机器配置",
+    "维护主工作站与副驾驶笔记本的设备角色、主机限定健康入口、双机网络边界和故障接管路线",
     "维护迁移门禁、核心恢复、热备与冷备衔接、恢复介质和回滚边界",
     "提供 SecretRef（秘密引用标识）、固定账号 Provider 和零明文的秘密使用入口",
     "承载本机受保护重大动作、长期目标授权、版本换挡和受保护数据恢复的机器侧运行边界"
@@ -80,7 +82,8 @@ export const pcconfigProject = {
     "不拥有 Git（版本控制）仓库身份、可见性、远端、默认分支和发布事实；这些由 Git 控制面负责",
     "不拥有跨项目智能体行为、能力路由和活动规则正文；这些由规则控制面负责",
     "不把明文密码、令牌、私钥或恢复码写入 Registry、聊天、日志或普通文件；秘密值留在受保护存储中，并只按精确引用盲用或经用户明确验证后受控显示",
-    "不把 Registry、测试、安装或任务存在单独误报为整机恢复完成",
+    "不把 Registry、测试、安装或任务存在单独冒充为整机恢复完成",
+    "不把两台电脑做成后台全盘同步，不复制驱动、任务、AppData、登录态或秘密，也不把临时笔记本观察写回主工作站事实",
     "不因为目录看起来不整齐就自动搬移，也不通过 watcher（后台监听器）或轮询持续扫描整台电脑"
   ],
   glossary: [
@@ -104,9 +107,12 @@ export const pcconfigProject = {
     { term: "CoreGoal（长期目标授权）", meaning: "一次可靠人类确认冻结目标；同一目标下的现实步骤再使用短时、单次、不可重放的能力。" },
     { term: "LKG（最后确认可用版本）", meaning: "Last Known Good 的缩写；版本切换失败时可回到的最后一个已证明健康版本。" },
     { term: "Recovery Carrier（恢复载体）", meaning: "保存一份完整加密恢复集的已登记介质；只有载体或只有因子都不足以恢复原文。" },
-    { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
+    { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" },
+    { term: "Host-scoped（主机限定）", meaning: "一份账本或 Provider 只有在实时机器身份满足条件时才解释现场；在其他电脑上只能作为设计和恢复导航。" },
+    { term: "Recovery capsule（恢复胶囊）", meaning: "副驾驶笔记本的目标状态、窄用户文件、世代闭合和恢复入口；它防止空白新机覆盖旧来源，不是整机镜像。" }
   ],
   operatingFlow: [
+    { title: "先确认当前是哪台设备", detail: "读取实时计算机名与用户根，区分 WLY 主工作站、副驾驶笔记本和临时 NVMe 接管；主机不匹配就返回不适用，不加载另一台机器的现场路径。" },
     { title: "先确认问题属于机器层", detail: "只有当前决定依赖本机路径、端口、运行时、任务、启动、备份或恢复事实时才进入 PCConfig；项目业务问题继续回到项目本身。" },
     { title: "定位唯一 Owner 和真实配置源", detail: "用最小 Registry 找到对应文件、任务、服务或 Provider；旧报告和人类指南只负责导航。" },
     { title: "现场观察并分离证据状态", detail: "读取 Provider、Windows 现场和安装根，把明确不匹配写成 fail，把无法读取写成 unknown，不用缓存补齐。" },
@@ -123,6 +129,8 @@ export const pcconfigProject = {
     { name: "任务与启动链", responsibility: "维护计划任务恢复投影、用途目录、启动快照和无窗口父进程合同。", implementation: "Task Scheduler 是运行权威；任务 XML、原始 Action 和敏感参数不进入公开回执。" },
     { name: "受管软件路由", responsibility: "把组件别名解析到自己的状态与更新 Adapter。", implementation: "当前目录登记 11 个组件；behind 才更新，equal 不重装，ahead 不降级，unknown 直接停止。" },
     { name: "CoreRecovery（核心恢复）", responsibility: "组织重装或换机时的恢复顺序、热备/冷备衔接、任务重建和选择性验收。", implementation: "Inspect 零正文读取；Hot 原子发布小型上下文；Cold 只消费已验证 Hot，不用镜像删除。" },
+    { name: "副驾驶笔记本健康与接管", responsibility: "维护备用笔记本的角色、远控、Tailscale、防火墙、运行时和台式机故障接管边界。", implementation: "唯一健康 Provider 只在 LAPTOP-E48N0DRJ 上读取现场；WLY 调用固定返回 host_mismatch，不建立第二份主工作站机器事实。" },
+    { name: "副驾驶恢复胶囊", responsibility: "让笔记本重装、换机或丢盘后从独立世代恢复，同时防止空白新机覆盖旧数据。", implementation: "ProgramData 受保护任务、三态 writer 门、7 天周期、2 世代、本地 rollback 与加密 USB 分层；用户文件只覆盖 Desktop/Documents/Downloads。" },
     { name: "Secret Broker（秘密代理）", responsibility: "集中管理秘密的发现、盲用、恢复集和设备信任，不把明文交给调用者。", implementation: "运行库在仓库外加密保存；公开 Registry 只保存 SecretRef、策略和无秘密入口。" },
     { name: "Password Center（密码中心）", responsibility: "让用户查找、查看、导入、盲填和恢复凭据，同时把真实秘密留在受保护运行库。", implementation: "独立于退役 C Policy；银行卡三字段原子保存，查看窗口白底纯绿、可逐字段复制，剪贴板历史与云同步关闭并在 60 秒或关窗后按值清理。" },
     { name: "Browser Bridge（浏览器桥）", responsibility: "把网站登录和银行卡填充限定到用户当前确认的精确网页目标。", implementation: "1.4.0 launcher-verified；AgentCardFill 只对唯一 HTTPS 支付表单使用一次性能力，同时填入卡号、有效期和 CVV，不提交页面。" },
@@ -133,16 +141,26 @@ export const pcconfigProject = {
     { name: "漂移与验收", responsibility: "把策略结论和证据结论分开，让失败与 unknown 可定位。", implementation: "稳定 check id、bounded output（有界输出）和按 area/check 精确选择；验证器不会自动修复业务 Owner。" }
   ],
   usageExamples: [
-    { ask: "我要把一个本地服务换到固定端口。", effect: "先检查动态端口范围、系统排除段、现有监听和登记冲突；通过后立即绑定并回到项目真实配置源验证，不把预检当成预留。" },
-    { ask: "这个项目准备从 E 盘搬到 V 盘。", effect: "先确认仓库状态、路径消费者、计划任务、快捷方式、回滚和目标盘健康；复制验证后再切引用，不把移动和永久删除混在一起。" },
-    { ask: "把本机已登记的开发工具安全升级。", effect: "先由组件 Adapter 读取 current/target/relation；只有 behind 才备份、精确更新、等待和回读，unknown 或 channel mismatch（通道不匹配）都停止。" },
-    { ask: "为什么某个计划任务没有按预期工作？", effect: "比较 Scheduler 现场、稳定任务签名、LastTaskResult（最近运行结果）和 Owner 回执；不输出完整 Action 或 XML，也不凭任务存在认定业务成功。" },
-    { ask: "重装系统或换机后恢复主要日常环境。", effect: "先分清同机重装、换机、系统盘故障或仅 PE，再只读识盘并重认盘符；随后按 BIOS/UEFI、Windows、三个控制面、运行时、项目、用户配置、任务、启动、登录与受保护数据分层恢复，最后以自然启动和应用内数据可见收口。" },
-    { ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
-    { ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
-    { ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
-    { ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先准备 staging、最终增量、ACL/链接清单和回滚副本；状态保持 waiting_for_codex_exit，只有 Codex 完全退出后才按需启动正式切换。" },
-    { ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
+    { moduleSlug: "machine-facts", ask: "我要把一个本地服务换到固定端口。", effect: "先检查动态端口范围、系统排除段、现有监听和登记冲突；通过后立即绑定并回到项目真实配置源验证，不把预检当成预留。" },
+    { moduleSlug: "machine-facts", ask: "这个项目准备从 E 盘搬到 V 盘。", effect: "先确认仓库状态、路径消费者、计划任务、快捷方式、回滚和目标盘健康；复制验证后再切引用，不把移动和永久删除混在一起。" },
+    { moduleSlug: "secondary-laptop", ask: "PCConfig 里登记了哪些电脑，它们分别做什么？", effect: "先按实时主机身份区分 WLY 主工作站与唯一副驾驶笔记本；只展示各自职责、稳定入口和未知，不把一台机器的盘符、任务或规则套到另一台。" },
+    { moduleSlug: "runtime-startup", ask: "把本机已登记的开发工具安全升级。", effect: "先由组件 Adapter 读取 current/target/relation；只有 behind 才备份、精确更新、等待和回读，unknown 或 channel mismatch（通道不匹配）都停止。" },
+    { moduleSlug: "runtime-startup", ask: "为什么某个计划任务没有按预期工作？", effect: "比较 Scheduler 现场、稳定任务签名、LastTaskResult（最近运行结果）和 Owner 回执；不输出完整 Action 或 XML，也不凭任务存在认定业务成功。" },
+    { moduleSlug: "runtime-startup", ask: "本地模型、OCR 和语音任务会不会一起抢显卡？", effect: "先从 LocalGpuBroker 读取 lease（占用租约）、活动请求、内部 Ollama 和当前宿主能力；所有重型工作复用同一个串行入口，宿主不满足就零启动，普通 CPU/文档工作继续。" },
+    { moduleSlug: "secondary-laptop", ask: "离开台式机时，副驾驶笔记本能不能独立工作？", effect: "在笔记本现场检查 Tailscale、ToDesk、FlyingBird、开发工具、WSL2/Docker 和精确防火墙；台式机代理或数据库不可达时只标出依赖，不开放 LAN/公网替代。" },
+    { moduleSlug: "drift-acceptance", ask: "PCConfig 现在到底健康吗？", effect: "运行当前只读 drift，分别回答策略上是否需要关注、证据是否 pass/fail/unknown，并把任务、运行时、开发盘和恢复合同拆成稳定 check。" },
+    { moduleSlug: "drift-acceptance", ask: "为什么任务数量对不上，是故障还是权限看不全？", effect: "读取 complete_visibility、registry/observed 计数和有界差异；部分可见保持 unknown，只有完整只读扫描才能判定真实定义漂移。" },
+    { moduleSlug: "drift-acceptance", ask: "只检查核心恢复，不要跑整套验收。", effect: "用精确 area/check selector 只启动 core_recovery 的登记项；拼错或空交集时零检查启动，不把未选区域写成通过。" },
+    { moduleSlug: "recovery-backup", ask: "重装系统或换机后恢复主要日常环境。", effect: "先分清同机重装、换机、系统盘故障或仅 PE，再只读识盘并重认盘符；随后按 BIOS/UEFI、Windows、三个控制面、运行时、项目、用户配置、任务、启动、登录与受保护数据分层恢复，最后以自然启动和应用内数据可见收口。" },
+    { moduleSlug: "secondary-laptop", ask: "台式机坏了，能不能把原 NVMe 接到笔记本继续工作？", effect: "用笔记本自己的 Windows 启动，把原 GM7000 只当数据盘；只读确认分区和 E/V 锚点，按实际根继续 Git、文档和项目，不改写台式机 Registry，也不假定重型 GPU 能力可继承。" },
+    { moduleSlug: "secondary-laptop", ask: "副驾驶笔记本重装后怎样恢复，又不让空白新机覆盖旧备份？", effect: "从已验证胶囊 current 与 closure 生成恢复预览，保持 writerState=restore_pending；数据和设备验收后先标记 restored_unaccepted，只有用户确认整机可用才激活 writer。" },
+    { moduleSlug: "secondary-laptop", ask: "副驾驶笔记本硬盘坏了或恢复 U 盘不在，能恢复到什么程度？", effect: "Git 恢复有远端的项目，独立加密 U 盘只恢复已提交世代覆盖的 Desktop、Documents、Downloads 与窄 Codex 策略；U 盘不在保持 unknown/等待，本机同盘 rollback 不能冒充灾备。" },
+    { moduleSlug: "secrets-providers", ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
+    { moduleSlug: "secrets-providers", ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
+    { moduleSlug: "secrets-providers", ask: "两台电脑之间怎样恢复账号和凭据，能不能直接复制登录状态？", effect: "不能复制旧会话、Cookie、Token、密码或设备身份密钥；在目标设备重新登录，非秘密配置按新路径重建，秘密只从凭据 Owner、Provider 或 SecretRef 恢复。" },
+    { moduleSlug: "recovery-backup", ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
+    { moduleSlug: "protected-actions", ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先准备 staging、最终增量、ACL/链接清单和回滚副本；状态保持 waiting_for_codex_exit，只有 Codex 完全退出后才按需启动正式切换。" },
+    { moduleSlug: "protected-data", ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
   ],
   evidenceLayers: [
     { layer: "Registry（登记层）", proves: "已登记 Owner、路径引用、恢复关系、schema 和验证入口。", doesNotProve: "现场值仍相同、任务正在运行或消费者已加载。" },
@@ -175,6 +193,7 @@ export const pcconfigProject = {
     { name: "受管软件目录", command: "E:\\PCConfig\\tools\\Invoke-ManagedSoftware.ps1 -List -Json", purpose: "列出已登记组件和自己的状态/更新路由，不探测未知组件。" },
     { name: "启动快照比较", command: "E:\\PCConfig\\tools\\Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json", purpose: "比较五个登录启动 surface（来源面）；差异只作信息，不自动修复。" },
     { name: "核心恢复观察", command: "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json", purpose: "只读任务和根路径元数据，不枚举个人文件名或内容。" },
+    { name: "副驾驶笔记本健康", command: "<当前 PCConfig checkout>\\tools\\Get-SecondaryLaptopHealth.ps1 -Json", purpose: "只在精确副驾驶主机读取远控、网络、工具、任务和恢复状态；其他主机返回 not_applicable/host_mismatch。" },
     { name: "秘密代理状态", command: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action Status -Json", purpose: "验证安全核心和恢复闭环，回执固定不返回明文。" },
     { name: "Workspace 绑定", command: "E:\\PCConfig\\tools\\Get-GoogleWorkspaceProviderBinding.ps1 -Json", purpose: "零网络读取固定绑定与凭据文件存在性；不解密、不证明远端授权。" },
     { name: "旧 policy 退役状态", command: "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json", purpose: "固定返回 retired、历史保留和 E rules replacement；不再读取 C 盘活动代际。" },
@@ -190,6 +209,12 @@ export const pcconfigModules = [
     teaser: "回答“这台电脑现在怎样、配置真正在哪里、改动会影响谁”，并为路径、端口和开发存储提供现场门禁。",
     status: "机器事实可读，开发存储 5/5 通过；稳定投影为版本 6",
     statusTone: "pass",
+    searchProjection: {
+      intents: ["查看本机配置在哪里", "确认当前主机和设备角色", "迁移项目路径", "检查固定端口", "判断笔记本能否接管台式机"],
+      entities: ["WLY 主工作站", "磁盘与盘符", "V 开发盘", "Z 可重建缓存", "项目配置键", "稳定机器投影"],
+      relations: ["主机身份决定机器事实", "项目配置源投影到 PCConfig", "路径关联项目和任务消费者", "端口同时受系统范围和监听约束"],
+      failureRecovery: ["host mismatch 不套用另一台机器", "现场不可读保持 Unknown", "快照更新失败标记 stale", "迁移失败保留源路径和回滚"]
+    },
     value: "把散落在磁盘、环境、项目文件和本机服务里的配置变成可导航、可验证的机器地图。用户不用靠记忆猜路径，也不会因为看到一个旧值就直接改错地方。",
     why: "同一个端口可能同时受 Windows 动态范围、现有 listener（监听进程）和项目配置影响；同一个目录也可能被计划任务、快捷方式或服务引用。没有唯一 Owner 和依赖导航，迁移很容易造成“文件还在，但程序找不到”。",
     example: "例如我要把一个新项目放到 V 盘，并让它使用固定本地端口。这个模块先证明 V 盘健康，再查端口是否落入动态/排除范围、是否已有监听、是否被别的 Owner 登记；通过后才让项目绑定并把稳定配置投影回 Registry。",
@@ -213,6 +238,7 @@ export const pcconfigModules = [
       "稳定投影用规范哈希、previous 链和同目录原子替换；payload（有效数据）不变时返回 no_change，不刷新 mtime（文件修改时间）。",
       "项目配置快照当前有 157 个键。update 请求必须绑定 Registry 期望哈希、单一 project id、唯一 key 集和项目 Owner 验证；安全投影失败时 mark_stale，而不是保留伪 current。",
       "目录 Registry 和路径 Owner Registry 各登记 57 项；项目路径依赖 Registry 汇总 15 个项目。普通任务只读取命中的有界条目，不加载整份依赖表。",
+      "generated_publication_pipelines 把 inventory、task scan、项目依赖、任务重建和用途目录限定到各自 allowlist、checkpoint 与 current pointer；机器生成物不能越界写叙事或替代源 Owner。",
       "端口 Provider 同时读取 IPv4/IPv6 动态范围、排除段、listener 和登记冲突，available、blocked、unknown 使用不同退出码。",
       "开发存储 Provider 单独判断 V 与 Z；Z 降级不会自动阻断健康的 V 项目，当前现场摘要为 pass=5、warn=0、block=0。"
     ],
@@ -246,6 +272,7 @@ export const pcconfigModules = [
       { condition: "项目配置源已改变但快照无法安全更新", response: "优先把命中键标记为 stale；标记也失败则保留原文件并报告哈希或锁冲突。" },
       { condition: "端口预检通过但真实 bind 失败", response: "停止服务启动，重新探测；不自动退回 8000 等常见默认端口。" },
       { condition: "稳定投影 live payload 不完整或含禁入字段", response: "在替换 current 前失败，保留最后一个已验证的 v6 current；失败采集不能覆盖既有投影。" },
+      { condition: "生成投影 staging、manifest 或 current 不闭合", response: "保留旧 current 与 checkpoint，不把 .incoming 或部分 registry 拼进现行配置地图。" },
       { condition: "V 或 Z 恢复锚点不可读", response: "只阻断依赖该盘的工作；不自动创建同名空盘覆盖恢复线索。" }
     ],
     sources: [
@@ -254,6 +281,7 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\project_path_dependencies.json", role: "15 个项目的路径依赖汇总" },
       { path: "E:\\PCConfig\\registries\\project_config_keys.json", role: "路径、端口、模型和数据源的非权威快照目录" },
       { path: "E:\\PCConfig\\registries\\stable_machine_projection.json", role: "版本化稳定机器投影 current" },
+      { path: "E:\\PCConfig\\registries\\generated_publication_pipelines.json", role: "机器生成 Registry/报告的 allowlist、checkpoint 与 current 边界" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.path-project-config.md", role: "路径与项目配置事务合同" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.stable-machine-projection.md", role: "稳定字段、禁入项、版本与发布语义" },
       { path: "E:\\PCConfig\\docs\\governance\\local_service_port_policy.md", role: "固定端口实时门禁" },
@@ -277,6 +305,12 @@ export const pcconfigModules = [
     teaser: "把工具版本、环境元数据、登录启动和计划任务拆成各自可观察、可恢复、不会弹黑窗的运行链。",
     status: "运行环境与配置地图可读；当前覆盖 17 个启动项、87 个任务，10 个核心恢复任务均 Ready 且最近结果 0",
     statusTone: "mixed",
+    searchProjection: {
+      intents: ["检查运行时版本", "排查计划任务", "恢复登录启动链", "安全升级受管软件", "判断离线时哪些能力可用"],
+      entities: ["PowerShell 运行时", "受管软件 Adapter", "启动来源面", "Task Scheduler", "业务 Owner 回执", "无窗口 launcher"],
+      relations: ["软件状态决定是否更新", "任务定义和业务结果分层", "项目先恢复再注册任务", "启动项依赖当前用户和机器"],
+      failureRecovery: ["unknown 不自动安装", "任务 Ready 不冒充业务成功", "任务注册失败恢复 XML preimage", "启动差异只按真实影响处理"]
+    },
     value: "让我知道“软件装着”之外，正确版本是否可用、启动入口是否仍在、计划任务上次怎样结束，以及重装后要按什么顺序恢复。故障会落到具体任务或组件，而不是一句笼统的“电脑环境坏了”。",
     why: "运行时路径会变化，环境变量可能双作用域，登录启动和计划任务又是两套机制。只看文件是否存在会漏掉错误 Action（执行命令）、错误身份、被禁用任务或非零结果；只看任务 Ready（就绪）也不能证明业务成功。",
     example: "例如我问“为什么一个后台维护任务今天没生效”。这个模块先比较 Task Scheduler（Windows 计划任务服务）现场和稳定签名，再读 LastTaskResult（最近运行结果）、结构化 Owner 回执和 hidden launcher（无窗口启动器）身份。若任务本身成功但业务回执失败，会保留两层不同结果。",
@@ -292,6 +326,7 @@ export const pcconfigModules = [
       "登录启动快照差异默认 informational（仅供参考），不会自动关闭或修复应用。",
       "Task Scheduler 是任务运行权威，瞬时 Ready/Running 不进入稳定 drift。",
       "无交互任务必须由验证过的父级 hidden launcher 创建无可见控制台的子进程。",
+      "LocalGpuBroker 统一拥有客户端 32100 与内部 Ollama backend 32101，把 Ollama、LocalOCR、ChineseASR 等重型 GPU 工作串行化；项目不能绕过 Broker 直接抢占同一 GPU。",
       "任务存在、exit 0 或 receipt 文件存在都不能单独证明业务成功。"
     ],
     problem: "版本、路径、权限、环境、启动面和任务结果经常被压成一个“环境是否正常”的问题，导致自动重装、误删启动项或用旧任务结果猜当前状态。PCConfig 必须把每个运行面分开，并只让真实 Owner 解释业务结果。",
@@ -303,6 +338,7 @@ export const pcconfigModules = [
       "启动快照只覆盖当前用户/机器 Run 与用户/公共 Startup 文件夹五个 surface，不复制 Task Scheduler，也不覆盖服务、驱动和 packaged app。",
       "本轮配置地图覆盖 17 个启动项；更早的 2026-08-29 live startup 20 项观察只保留为历史，不覆盖当前快照。",
       "tasks Registry 当前有 87 项；10 个核心恢复任务均为 Ready、最近结果 0，并由 CoreRecovery 3/3 验收分层回读。",
+      "OllamaStable32100 与 SelfHeal 任务负责 Broker/内部 backend 的登录启动和幂等恢复；启动前先验当前宿主内存、NVIDIA GPU/显存、命令和模型路径，失败时不创建日志目录或进程。",
       "governance check 只调用登记的 zero-write Provider 和稳定 publisher；同一非 current fingerprint 只有首次或变化时产生 attention。"
     ],
     flow: [
@@ -310,6 +346,7 @@ export const pcconfigModules = [
       "读取 live runtime、startup 或 Scheduler 现场",
       "把配置签名、瞬时状态、LastTaskResult 和 Owner receipt 分开",
       "需要更新时先固定 current/target/relation 和回滚材料",
+      "重型 GPU 请求先取得 Broker lease 并在当前宿主通过能力门，结束或失败后释放；普通运行时不进入这条串行链",
       "需要注册任务时保存 exact XML preimage 或 absent",
       "执行后回读路径、版本、Principal、trigger、Settings 和业务 receipt",
       "将确定故障、提醒和 unknown 分别收口"
@@ -320,7 +357,8 @@ export const pcconfigModules = [
       { term: "Startup surface（启动来源面）", explanation: "Run 注册表或 Startup 文件夹中的一个独立来源；跨来源同名项不会被错误去重。" },
       { term: "Task signature（任务稳定签名）", explanation: "恢复所需的 enabled、Action、trigger、重试和执行限制等配置，不包含 Ready/Running 瞬时状态。" },
       { term: "LastTaskResult（最近运行结果）", explanation: "Scheduler 的最近返回码；信息码与真实失败要分类，非零也要结合业务 Owner 回读。" },
-      { term: "Hidden launcher（无窗口父启动器）", explanation: "从最外层就不创建可见控制台的启动链；Task Scheduler 的 Hidden 复选框不能单独证明这一点。" }
+      { term: "Hidden launcher（无窗口父启动器）", explanation: "从最外层就不创建可见控制台的启动链；Task Scheduler 的 Hidden 复选框不能单独证明这一点。" },
+      { term: "LocalGpuBroker（本地 GPU 串行代理）", explanation: "给 Ollama、OCR、ASR 和模型工作提供一个共享入口、lease 与内部 backend，避免多个重型进程同时争抢显卡。" }
     ],
     boundaries: [
       "环境变量、PATH、任务 Action、参数、XML 和日志按实际值判断：普通名称、路径、结构、状态和失败事实可以公开；只省略其中确含 L3+ 私人正文或可复用凭据的具体值",
@@ -328,6 +366,7 @@ export const pcconfigModules = [
       "不因为 startup 新增、删除或启停变化就生成故障或待办",
       "不从 provider 名称猜管理员需求；安装范围由本次 status Adapter 回读",
       "不重装 equal 但 degraded 的组件，只报告健康缺口",
+      "不在宿主能力门失败时启动 Broker、Ollama 或重型项目，也不把临时宿主观察写回主工作站基线",
       "具体任务为何成功仍由所属项目定义"
     ],
     failures: [
@@ -336,6 +375,7 @@ export const pcconfigModules = [
       { condition: "启动快照比现场少 3 项", response: "当前归类为 informational_only；无需自动刷新、关闭应用或要求用户确认，下次真实维护可吸收为新基线。" },
       { condition: "环境变量 registry/process 读取失败", response: "对应项 exists=null、diff_status=unknown；不把读取失败写成 absent。" },
       { condition: "组件 status 为 unknown 或通道不匹配", response: "不备份、不安装、不降级，返回稳定错误码和 Owner 入口。" },
+      { condition: "LocalGpuBroker backend 已活动或 lease 被占用", response: "组件更新和新的重型任务等待或停止，不终止现有 Owner；读取 Broker 状态后从原 lease 恢复，不另开直接 backend。" },
       { condition: "任务注册 read-back 不一致", response: "自动恢复 exact XML preimage 并再次核对；回滚失败单独 fail closed。" }
     ],
     sources: [
@@ -347,7 +387,9 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\task_purpose_catalog.json", role: "任务用途、Owner 和验证入口" },
       { path: "E:\\PCConfig\\registries\\scheduled_task_rebuild_plan.json", role: "分阶段任务重建计划" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.managed-software-routing.md", role: "受控更新状态机" },
-      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.scheduled-tasks.md", role: "Scheduler 权威、无窗口和事务回滚合同" }
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.scheduled-tasks.md", role: "Scheduler 权威、无窗口和事务回滚合同" },
+      { path: "E:\\PCConfig\\tools\\local_gpu_broker\\broker.py", role: "32100 公共入口、32101 内部 backend、lease 与重型请求串行实现" },
+      { path: "E:\\PCConfig\\tools\\local_gpu_broker\\Test-HeavyRuntimeHostCapability.ps1", role: "重型运行前的当前宿主能力门" }
     ],
     verification: [
       "2026-08-31T11:43:18Z 配置地图回读 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务",
@@ -355,9 +397,114 @@ export const pcconfigModules = [
       "P0 rev68 为 normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true",
       "Get-StartupInventory.ps1 -Json 当前覆盖 17 个启动项",
       "Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json 当前返回 changes_observed，但 action_required=false、confirmation_required=false",
+      "2026-08-31 Test-LocalGpuBroker.ps1 返回 ok=true、lease=null、active_ollama_requests=0、ollama_version=0.33.1；这是当前 Broker 状态，不证明每个重型项目已运行",
       "validate_managed_software_catalog.mjs、validate_env_var_index.mjs 与对应回归覆盖 catalog、环境元数据和闭合状态机"
     ],
     relation: "机器事实模块告诉它们在哪里；本模块证明怎样启动和运行；恢复模块在系统重建后按顺序重新接上这些运行链；漂移结果又成为整体验收的输入。"
+  },
+  {
+    slug: "drift-acceptance",
+    shortTitle: "漂移与验收",
+    title: "机器事实漂移、证据状态与分区验收",
+    teaser: "回答“当前登记和现场是否一致、证据够不够、究竟要修什么”，并允许只运行与本次决定有关的检查。",
+    status: "2026-08-31 live_read_only（现场只读）为 6 pass、1 warn、0 block；任务定义只得到 partial visibility（部分可见），因此 tasks.live_match 是 warn/unknown，运行时、开发存储、CoreRecovery 和任务运行结果均有 pass 证据",
+    statusTone: "mixed",
+    searchProjection: {
+      intents: ["检查 PCConfig 当前是否健康", "比较登记与现场", "只验一个恢复区域", "区分故障和证据不足", "定位计划任务差异", "判断是否需要修复"],
+      entities: ["pcconfig.drift.v2", "status", "evidence_status", "稳定 check ID", "acceptance area", "tasks.live_match", "bounded evidence"],
+      relations: ["策略处置和执行证据双轴", "Registry 与 live Provider 比较", "验收 area 关联 Owner check", "任务定义漂移与运行健康分离", "unknown 不能折算为 pass"],
+      failureRecovery: ["部分可见保持 unknown", "selector 不存在时零检查启动", "Provider 超时保留阻断原因", "真实不匹配交回事实 Owner", "旧报告不补齐当前证据"]
+    },
+    value: "我可以直接问“PCConfig 现在到底健康吗”“任务数量为什么对不上”或“只检查核心恢复”。系统会把明确不匹配、证据不足和仅需提醒分开，给出稳定检查名、当前证据和真正负责修复的 Owner，而不是用一个总绿灯或一长串日志让我自己猜。",
+    why: "机器登记可能陈旧，现场读取也可能因权限、设备离线或 Provider 失败而不完整。把这两种情况都写成失败会制造误修，把 unknown 写成通过又会掩盖真实风险；每次全跑所有验收还会浪费时间并触发无关依赖。需要一个能分离政策处置与证据结论、支持精确选区且输出有界的长期证据层。",
+    example: "例如 Registry 有 87 个任务，而普通用户现场只看到 84 个。漂移入口不会立刻说“丢了 3 个任务”，而是返回 tasks.live_match=warn、evidence_status=unknown、complete_visibility=false，并列出有界 added/removed 候选；与此同时 tasks.runtime_health 可以独立 PASS。只有提升后的完整只读扫描才能把定义漂移变成 pass 或 fail。",
+    result: "我最终得到一份可行动但不越权的结论：哪些检查已证明一致，哪些已证明不匹配，哪些因证据不足仍未知，是否需要关注或阻断，哪个 Owner 负责下一步，以及重跑时应选哪个 area/check。验收不会自动修项目、迁移路径、秘密或外部系统。",
+    readerStates: {
+      pass: "相关 check 的 status 与 evidence_status 都有当前证据，且所选 area/check 完整运行时，返回稳定 ID、关键计数和证据范围；只说明本次选择证明的层。",
+      problem: "现场明确与 Registry/合同不符时标为 fail，并按现实风险给出 warn 或 block；修复交给对应任务、运行时、磁盘、恢复或项目 Owner，验收器本身不改事实源。",
+      unavailable: "权限不足、Provider/Registry 不可用、超时或上游未执行时 evidence_status=unknown；策略可以提醒或阻断，但永远不把 unknown 折算为 pass。"
+    },
+    decisionImpact: [
+      "status=pass|warn|block 表示当前处置级别，evidence_status=pass|fail|unknown 表示证据结论；两条轴必须同时读。",
+      "真实不匹配是 fail；完整性不足是 unknown；已证明但只需提醒的陈旧证据可以是 warn/fail，不能靠一个颜色覆盖语义。",
+      "任务定义 tasks.live_match 与任务运行结果 tasks.runtime_health 独立；定义可见性不足不等于任务业务失败，LastTaskResult 信息码也不自动算失败。",
+      "Test-PCConfigDrift -NoWrite 与 Get-DevStorageHealth 是 zero-write（零写入）；acceptance 的 NoWrite 不改 PCConfig 报告/Registry，但被选 Owner check 可能创建并删除有界临时产物。",
+      "acceptance selector 采用 area 与 check ID 的精确交集；任一不存在或交集为空时，在启动任何检查前返回 selection error。",
+      "只运行会改变本次决定的 area/check；未选项不进入 selected_items 或 results，也不能被写成通过。",
+      "任务差异只返回有界 task key、计数和 changed_fields 字段名，不返回完整 Action、参数、trigger 或旧/新值。",
+      "验收结论只证明机器事实证据，不反向拥有 Git admission、Skill 供应、项目业务状态或公开发布。"
+    ],
+    problem: "旧式健康检查容易把命令 exit 0 当全局 PASS、把权限不足当对象不存在、把任务定义和业务结果混在一起，或者为了“完整”每次运行全套脚本。这样既会误修，又无法从结果恢复。漂移与验收层必须保留稳定 ID、双状态、精确选择、超时和有界证据，才能在现场变化时仍给出同一种可理解答案。",
+    implementation: [
+      "Test-PCConfigDrift.ps1 -NoWrite 输出 pcconfig.drift.v2：每个 check 有稳定 id、domain、status、evidence_status、message 与有界 evidence，summary 分别汇总策略计数和证据计数。",
+      "当前检查集包括 registry.schema、tasks.live_match、tasks.runtime_health、tasks.path_integrity、runtimes.live_match、drives.dev_storage 与 recovery.core_contract；新增检查必须保留 owner、状态域和输出边界。",
+      "tasks.live_match 在完整可见时比较 registry_count、observed_count、added/removed/changed；最多返回 20 条清理后的 task key 和 changed_fields 名称，超出以 *_truncated 标记。",
+      "tasks.runtime_health 只评估 managed-core 的 LastTaskResult 与可选结构化 Owner receipt；Scheduler 状态码、真实失败、历史已恢复结果和外部 Owner unknown 分开计数。",
+      "runtimes.live_match 调当前运行时 Provider；drives.dev_storage 调 V/Z 健康 Provider；recovery.core_contract 同时核对 manifest、任务 Inspect 与维护 Inspect，不用一个文件代替整条合同。",
+      "acceptance_checklist.json 登记 area、check ID、blocking、命令、超时、隐私边界、trigger 和 acceptance；Invoke-PCConfigAcceptance 只执行 selector 交集并返回 selected_items。",
+      "selector 支持数组或逗号分隔、大小写不敏感但必须精确匹配；未知 area/check、空交集或 checklist schema 错误都 selection.status=error、exit 1、零检查启动。",
+      "每个 owner check 的 stdout、stderr、超时和 exit code 被转换为 pass/fail/unknown 与简短 output_excerpt；原始大日志、秘密和完整任务定义不进入公共结果。",
+      "按需排障先消费结构化摘要；只有一个 check fail/unknown 时才读取它指向的 owner 证据，避免加载整份历史报告或无关机器状态。",
+      "验收器不自动修复：Registry 漂移交 Registry Owner，任务交任务/项目 Owner，运行时交 PCConfig/组件 Adapter，恢复数据与秘密继续走各自专用入口。"
+    ],
+    flow: [
+      "先写清当前决定依赖哪类机器事实：任务、运行时、开发盘、恢复、秘密入口或完整收尾。",
+      "选择最小入口：快速 drift 摘要、单个 live Provider，或 acceptance 的精确 area/check；不为普通项目收尾机械全跑。",
+      "读取 execution_status 与 selection；selector 错误时确认零检查已启动，再修正名称而不是解释空结果。",
+      "逐项同时读 status 和 evidence_status：pass/pass 是已证，warn/fail 是已证但只需关注，warn/unknown 是证据不足，block/unknown 是关键证据无法成立。",
+      "核对 evidence 的观察范围、complete_visibility、计数、截断和时间；不拿旧 Registry 或旧报告补现场缺口。",
+      "把 tasks.live_match、runtime_health、path_integrity 等相邻但不同结论分开，不用一个通过项覆盖另一个未知。",
+      "明确差异时转给对应 Owner，带上稳定 check ID、最小 evidence 和重新验证入口；验收器不直接修改真实配置。",
+      "修复后重新运行同一精确 check/area；只有当前证据转为 pass 才收口，未选择或无法运行的项继续保持未知。"
+    ],
+    concepts: [
+      { term: "Drift（漂移）", explanation: "登记、合同或稳定投影与当前现场不一致；它可能是需修故障，也可能只是快照尚未刷新。" },
+      { term: "Status（处置状态）", explanation: "pass、warn、block 表示当前应继续、关注或停止的策略结论，不等于证据真假本身。" },
+      { term: "Evidence status（证据状态）", explanation: "pass、fail、unknown 表示当前证明满足、证明不满足或无法证明；unknown 永远不是 pass。" },
+      { term: "Stable check ID（稳定检查标识）", explanation: "跨版本保持含义的检查名，用于定向选择、Owner 交接和修复后重验。" },
+      { term: "Area selector（区域选择器）", explanation: "只运行某一产品区域的检查；与 check ID 同时给出时取精确交集。" },
+      { term: "Complete visibility（完整可见性）", explanation: "当前身份能看到足够完整的系统对象；普通用户的部分任务列表不能证明定义一致或缺失。" },
+      { term: "Bounded evidence（有界证据）", explanation: "只返回会改变判断的计数、稳定字段和有限差异，避免泄露完整参数或淹没注意力。" },
+      { term: "NoWrite（不改权威状态）", explanation: "不改 PCConfig Registry/报告；acceptance 中的 Owner check 仍可能按合同创建并删除有界临时验证产物。" }
+    ],
+    boundaries: [
+      "不把 schema 正确、命令 exit 0、文件存在或一个 check PASS 推成全机健康",
+      "不把权限不足、Provider 超时、设备离线或上游未执行写成 absent 或 fail",
+      "不把 unknown 折算为 pass，也不因 status=warn 就隐去 evidence_status=fail/unknown",
+      "不把任务定义漂移、任务运行结果、业务 Owner 回执和历史结果混成一个状态",
+      "不在 selector 无效时启动任何检查，不把未选择项放进结果或总数",
+      "不输出完整任务 XML、Action、路径参数、旧/新敏感值、原始日志或秘密",
+      "不让验收器自动修改 Registry、注册任务、迁移路径、恢复秘密、推送 Git 或执行外部写入",
+      "不周期性全扫；只有机器事实或恢复状态会改变当前决定时才触发对应检查"
+    ],
+    failures: [
+      { condition: "tasks.live_match complete_visibility=false", response: "保持 warn/unknown，显示 registry/observed 计数和有界候选；只有提升后的完整只读扫描能判定真实漂移。" },
+      { condition: "Provider、Registry 或 owner validator 超时/失败", response: "对应 check 保持 unknown 并列出依赖与重试入口；其他已完成检查仍保留自身结论。" },
+      { condition: "Registry 与完整现场明确不同", response: "标记 fail，并按风险选择 warn/block；修复真实来源或刷新 owning snapshot 后重跑同一 check。" },
+      { condition: "任务非零结果是 Scheduler 状态码", response: "按分类保留为运行状态，不自动算业务失败；有 Owner receipt 时再判断业务结论。" },
+      { condition: "area/check selector 拼错或交集为空", response: "selection error、exit 1、selected_items=[]，不执行 fallback 全套验收。" },
+      { condition: "检查输出超过边界或含不允许字段", response: "截断或拒绝该证据并保持 unknown；不能为了给结论公开完整任务参数或日志。" },
+      { condition: "修复后只看到旧报告变绿", response: "重新调用当前 Provider/同一 check；旧报告只能解释历史，不能关闭当前漂移。" }
+    ],
+    sources: [
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.drift-acceptance.md", role: "双状态、稳定 ID、选择器、有界证据与 Owner 边界合同" },
+      { path: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1", role: "机器事实与恢复合同的现场只读 drift 汇总" },
+      { path: "E:\\PCConfig\\registries\\acceptance_checklist.json", role: "area、check、blocking、超时、隐私与验收登记" },
+      { path: "E:\\PCConfig\\tools\\Invoke-PCConfigAcceptance.ps1", role: "精确 selector、超时和有界结果的 acceptance runner" },
+      { path: "E:\\PCConfig\\tools\\Get-DevStorageHealth.ps1", role: "V/Z 开发存储 zero-write Provider" },
+      { path: "E:\\PCConfig\\tools\\Get-RuntimeInventory.ps1", role: "当前运行时事实 Provider" },
+      { path: "E:\\PCConfig\\tools\\invoke_acceptance_checks.test.ps1", role: "selector、超时、unknown、未启动项和输出边界回归" },
+      { path: "E:\\PCConfig\\tools\\test_pcconfig_drift.test.ps1", role: "drift 双状态、任务差异、历史结果和零写入回归" }
+    ],
+    verification: [
+      "2026-08-31T17:49:27Z Test-PCConfigDrift.ps1 -NoWrite -Json 返回 schema=pcconfig.drift.v2、execution_status=completed、summary=6 pass/1 warn/0 block，证据为 6 pass/0 fail/1 unknown",
+      "同次唯一 attention 是 tasks.live_match=warn/unknown：registry_count=87、observed_count=84、complete_visibility=false；它是部分可见性，不是已证明任务丢失",
+      "同次 tasks.runtime_health、tasks.path_integrity、runtimes.live_match、drives.dev_storage 与 recovery.core_contract 均 pass/pass；两条 Scheduler 状态码未被误分类成失败",
+      "drives.dev_storage 回读 5 pass、0 warn、0 block；CoreRecovery 维护状态 ready、warnings=0、Cold=additive_no_mirror、Git/云 payload 写入禁止",
+      "先前精确 core_recovery area 验收返回 manifest_contract、maintenance_inspect、task_contract 三项 PASS；只证明该 area，不代表未选择区域",
+      "invoke_acceptance_checks.test.ps1 与 test_pcconfig_drift.test.ps1 分别覆盖 selector 零启动、超时/unknown、有界输出和 drift 双状态；测试证据不替代当前 live Provider"
+    ],
+    relation: "机器事实、运行时、恢复、副驾驶、秘密和受保护数据模块各自产生 Owner 证据；本模块只负责把这些证据按稳定 ID、双状态和精确选择组合成可行动结论。它不接管修复，也不把项目/Git/Skill 的上游验收吞进 PCConfig。"
   },
   {
     slug: "recovery-backup",
@@ -371,6 +518,12 @@ export const pcconfigModules = [
       "驱动导出", "重装后恢复驱动", "C盘用户配置", "换机后恢复项目", "重新登录", "自然启动验收", "present_verified",
       "BIOS和换机重装有什么关系", "换主板或重装前 BIOS 要留什么", "重装 Windows 后怎么把电脑恢复回来"
     ],
+    searchProjection: {
+      intents: ["重装 Windows 后恢复电脑", "换机后恢复项目和配置", "系统盘故障只读救援", "从 PE 开始恢复", "重建 Hot 和 Cold 备份"],
+      entities: ["BIOS/UEFI", "WEPE/WinPE", "F 启动 U 盘", "G Hot", "H Cold", "项目与用户配置", "计划任务与启动项"],
+      relations: ["恢复来源决定可恢复范围", "盘符按现场重新识别", "项目和运行时先于任务", "应用可见性晚于文件复制", "普通恢复不替代 P0–P7"],
+      failureRecovery: ["识盘前不 clean 或 format", "驱动不兼容改用官方来源", "H 不可用保持 skipped", "应用看不到数据保持未完成", "恢复后重新建立备份"]
+    },
     value: "重装 Windows、换电脑、系统盘故障或只能进入 PE 时，我能从当前手里真正可用的来源开始，按不破坏原盘的顺序恢复：先认机器和磁盘，再处理 BIOS/UEFI、Windows 与驱动，接回三个控制面、运行时、项目、用户配置、任务和启动项，最后恢复登录与受保护数据并做真实应用验收。",
     why: "“有 ISO”“能进 PE”“备份目录存在”“任务是 Ready”都只证明一小段。恢复最容易漏掉的是主板版本和 BIOS 边界、盘符变化、驱动兼容、项目路径、C 盘用户配置、任务身份、登录因子，以及应用能否在自然启动后看到原数据；直接 clean、format、修 BCD 或整包覆盖，会先破坏还能取证和回退的来源。",
     example: "例如系统盘损坏但 E/G 数据仍可读。我先在 UEFI 启动的 WEPE/WinPE 里只读列出物理盘和卷，不按旧 C/E/G 盘符猜，也不先 clean、format 或重建 BCD。确认主板与 PCB revision（电路板版本）、当前 BIOS、Windows 目标盘和恢复来源后，再安装系统与关键驱动，clone 三个控制面，恢复 15 个项目路径、26 项用户配置和必要任务。最后逐个自然启动应用、确认数据可见，并在新系统重新建立 Hot/Cold 备份链。",
@@ -479,7 +632,7 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\docs\\recovery\\private_config_restore.md", role: "重新登录、SecretRef、Password Center 与 P0–P7 分层" }
     ],
     verification: [
-      "2026-08-31 现场：PCConfig PRIVATE main=f9245a1；node tools\\validate_recovery_kit.mjs 返回 16 assets、0 error、0 warning",
+      "2026-08-31 现场：PCConfig PRIVATE main=origin/main=d4480abc17574177b91e52b0aff9aebd30583f58，worktree clean；node tools\\validate_recovery_kit.mjs 返回 16 assets、0 error、0 warning",
       "同次只读 CoreRecovery Inspect 返回 pcconfig.core_recovery_observation.v2、status=ready、warnings=[]，报告 10 个任务、9 个 backup set、2 个 external owner；不枚举 payload 名称或正文",
       "同次 Invoke-PCConfigAcceptance.ps1 -NoWrite -Area core_recovery -Json 返回 3 PASS、0 fail、0 unknown、0 blocking_unresolved",
       "Invoke-StableMachineProjection.ps1 -Action Read -Json 返回 projection_version=6；project_restore_anchors、projects 与 c_user_config_inventory 分别登记 17、15、26 项",
@@ -495,12 +648,148 @@ export const pcconfigModules = [
     relation: "本模块是 PCConfig 从机器断点回到可用电脑的完整旅程：机器事实模块提供主板、磁盘、盘符、锚点和项目路径；运行时与启动模块提供软件、任务和自然启动链；秘密模块负责重新登录与 SecretRef；受保护数据模块继续独立承担 P0–P7 Carrier、因子和正式数据恢复。BIOS/UEFI 归这条恢复旅程，不另拆模块。"
   },
   {
+    slug: "secondary-laptop",
+    shortTitle: "副驾驶笔记本",
+    title: "副驾驶笔记本、跨设备接管与独立恢复",
+    teaser: "让一台真正登记的 Windows（微软操作系统）笔记本承担远控、轻量开发和台式机 NVMe（固态硬盘）故障接管，同时拥有自己的健康检查、恢复胶囊和不覆盖旧数据的换机流程。",
+    status: "已登记 1 台副驾驶笔记本 LAPTOP-E48N0DRJ；角色、健康 Provider（现场读取器）与恢复源码存在且离线回归通过，本次从 WLY 主机只得到 not_applicable/host_mismatch，笔记本当前现场、恢复 U 盘和 NVMe 外置演练仍未知",
+    statusTone: "mixed",
+    searchProjection: {
+      intents: ["查看副驾驶笔记本能做什么", "离开台式机继续工作", "检查笔记本健康", "重装副电脑并恢复", "台式机坏后用笔记本接管", "笔记本丢盘后恢复"],
+      entities: ["LAPTOP-E48N0DRJ", "ToDesk", "Tailscale", "FlyingBird", "CodexRecovery-SecondaryLaptop", "恢复胶囊 USB", "原台式机 GM7000 NVMe"],
+      relations: ["台式机主工作站与笔记本副驾驶分工", "主机身份决定账本和 Provider 是否适用", "本地 rollback 与独立 USB 灾备分层", "Git 项目与无远端项目恢复方式不同", "原 NVMe 临时接管不改写台式机事实"],
+      failureRecovery: ["host_mismatch 返回 not_applicable", "断网时不开放 LAN 或公网替代", "空白新机保持 writer 冻结", "U 盘不在保持正常等待", "NVMe 接管未验不冒充可用", "无远端项目明确保全或接受丢失"]
+    },
+    value: "我不在台式机旁边时，这台笔记本可以作为副驾驶完成远控、文档、Git（版本控制）和轻量开发；台式机非硬盘硬件故障时，它还可以读取原 NVMe 上的代码和工作区继续最必要的工作。笔记本自己重装、换机或丢盘时，则从独立恢复胶囊重建，而不是复制台式机或让空白新机反向覆盖旧备份。",
+    why: "只有一台高性能主工作站时，离开主机、远控故障、主板/电源故障或笔记本自身重装都会中断工作。简单把两台电脑做成全盘镜像会同步错误驱动、登录态、硬件配置和损坏状态；只靠 Git 又覆盖不了未入库的普通文件、设备服务、网络边界和恢复写入门。副驾驶需要自己的角色、现场健康、数据范围和恢复生命周期。",
+    example: "例如台式机因主板故障无法开机，但原 4 TB NVMe 完好。我用笔记本自己的 Windows 启动，把原盘装进已验收的 NVMe 硬盘盒，只读确认分区和 E/V 锚点，从实际根读取 PCConfig、规则和项目；普通 Git、文档和轻量开发可继续，台式机驱动、任务、登录态和 GPU 能力不会被继承。修复主机前提交或备份新增工作，再卸载 VHDX、安全弹出并把原盘装回。",
+    result: "我最终得到一张清楚的双机能力图：台式机负责什么、笔记本日常能独立做什么、哪些动作依赖主机或网络、事故时从 Git/胶囊/原 NVMe 哪条路接管、账号与秘密怎样重新建立、当前哪些只完成源码和离线测试、哪些必须回到真实笔记本或介质验收。",
+    readerStates: {
+      pass: "实时主机身份匹配副驾驶笔记本，远控、Tailscale、防火墙、开发工具、恢复任务、本地世代和在场介质均按合同回读时，分别显示日常可用能力与恢复准备度；整机恢复还要完成用户验收后才能启用 writer。",
+      problem: "服务、精确防火墙、任务信任链、世代闭合、存储空间或恢复来源明确不满足时，只阻断对应日常或恢复能力，保留现有数据和 writer 冻结状态，不自动放宽网络或覆盖旧胶囊。",
+      unavailable: "当前不在 LAPTOP-E48N0DRJ、笔记本离线、USB 未接入/未解锁或原 NVMe 未装入时，对应现场结论保持 not_applicable 或 Unknown；账本仍说明设计，但不冒充设备当前健康。"
+    },
+    decisionImpact: [
+      "WLY 是主工作站，承担 canonical E/V/Z、G 在线备份和本地重型 GPU/OCR/ASR；LAPTOP-E48N0DRJ 是副驾驶/备用终端，不复制主机职责。",
+      "日常远控以 ToDesk 为主，Moonlight/Sunshine 只作备用；双机发现和精确访问走 Tailscale，不为方便开放普通 LAN 或公网。",
+      "笔记本可以有自己的 WSL2、Docker 和开发工具，但 Docker 登录自启关闭、Kubernetes 不启用，重型能力必须按当前宿主重新验收。",
+      "PCConfig PRIVATE Git 同步版本化账本和恢复源码，不同步实时机器状态、用户文件、登录态或秘密，也不把一台机器的盘符写成另一台事实。",
+      "恢复胶囊只覆盖登记的 Desktop、Documents、Downloads 和窄 Codex 策略束；GitHub-backed 项目重新 clone，无远端项目必须另选 PRIVATE Git、加密导出或明确接受丢失。",
+      "本地 rollback cache 与笔记本 C: 在同一物理故障域，只帮助同机回滚；只有独立、已绑定且加密的 USB 世代能承担笔记本丢盘/换机介质角色。",
+      "台式机 NVMe 外置接管只把原盘作为数据与工作区来源；不从外置盘启动 Windows，不恢复台式机任务/驱动，也不改写 WLY Registry。",
+      "公司内网转接尚未激活；离开公司或断网时，不自动发布网段、切换未登记代理或把临时网络路径固化成长期配置。"
+    ],
+    problem: "副驾驶不是“装了几个软件的第二台电脑”。它同时涉及两台主机的事实隔离、日常远控、端口和防火墙、可离线的工具基线、跨设备数据来源、笔记本自身灾备、空白新机防覆盖，以及台式机故障时的临时 NVMe 接管。漏掉任一层，都可能把远控可用误写成可恢复，把源码测试误写成设备健康，或让新机第一次备份覆盖唯一旧世代。",
+    implementation: [
+      "唯一登记的笔记本主机为 LAPTOP-E48N0DRJ，角色是 secondary-laptop。只有计算机名精确匹配、活动用户根为 C:\\Users\\wly 且本地规则入口存在时，副驾驶账本和该主机 Codex 入口才适用；其他主机返回 not_applicable/host_mismatch。",
+      "副驾驶稳定职责包含 ToDesk 日常远控、Tailscale 双机通道、FlyingBird 服务、可选 Moonlight；台式机代理 7892 只经 tailnet Serve 使用，PostgreSQL 45432 只读测试入口和笔记本 SSH 22/RDP 3389 只允许登记的台式机 Tailscale 对端。",
+      "WLY 主工作站自己的 RDP 3389 暴露由 rdp_tailscale_exposure Registry 单独管理，只允许登记的同用户 Tailscale peers，并保留 ToDesk 与既有 Serve/Funnel；它与笔记本入站规则不能互相复制。",
+      "笔记本默认阻止入站；精确防火墙只接受 Tailscale 接口上的登记对端。公司网段转接未激活，宽泛 Tailscale-In 规则在系统或 Tailscale 更新后须重新确认未被启用。",
+      "副驾驶 IPv4/IPv6 TCP active/persistent 动态范围登记为 49152–65535，旧 MaxUserPort=15000 应保持移除；Codex localhost:1455 再现 10013 时重查范围、排除段和真实 listener，不用循环重启 WinNAT 或新增普通 excluded range 掩盖根因。",
+      "运行基线登记 Git/LFS、VS Code、Python/uv、Temurin JDK 21、Maven、psql、WSL2 Ubuntu 24.04 与 Docker Desktop。Docker 使用 WSL2/Linux 容器、关闭登录自启和 Kubernetes；WSL/Docker 停止是正常状态，健康检查不会为验证启动它们。",
+      "Get-SecondaryLaptopHealth.ps1 是唯一只读健康入口：检查 role.machine、远控/网络/防火墙、recovery.task/local/usb、BitLocker、WinRE、WSL2、Docker、空间、工具和 PCConfig Git。它不联网、不提权、不启动服务、不解锁 U 盘、不触发备份或写健康快照。",
+      "恢复内核安装在管理员保护的 C:\\ProgramData\\CodexRecovery\\secondary-laptop；唯一任务 CodexRecovery-SecondaryLaptop 每天 09:00 和 21:00 以 S4U + Highest 运行，恰好一个 System32 wscript.exe //B //NoLogo Action，再调用受保护 pwsh，全链不得引用普通用户可写代码。",
+      "任务信任链覆盖 ProgramData 祖先、安装根、launcher、Backup 脚本、settings、deployment manifest、runtime receipt、实际 pwsh 和 Windows Task Scheduler 定义；reparse、非可信 Owner 或可替换叶文件都阻断，不能只检查安装根 ACL。",
+      "writerState 固定为 restore_pending → restored_unaccepted → writer_activated。新机和重装默认禁用任务；-Force 不能越门。Mark 与 Activate 在两个进程中重新验证同一个 current、generation、manifest、closure、exact set、长度和 SHA-256，最后由用户确认才启用 writer。",
+      "本地与 USB 都用原子世代和 current.json，默认保留 2 个已验证世代；距离上次成功至少 7 天才生成新世代。USB 未接入、未解锁或未绑定是正常等待，不推进 USB 成功时间。",
+      "USB 首次绑定只接受 BusType=USB、稳定卷/磁盘身份、BitLocker FullyEncrypted + Protection On 且路径无 reparse；绑定本身不备份，只有 writer_activated 后显式 CreateInitialBackup 才写第一个世代。",
+      "胶囊对用户文件只做 Desktop、Documents、Downloads 的非破坏性合并；同名和敏感候选先预览。它不复制整棵 AppData、旧驱动/OEM/电源计划、浏览器或 Codex 登录态、活动 WSL/Docker VHDX、密码、Token、Cookie、私钥或设备身份密钥。",
+      "Codex 策略只保存不可自动加载的三项惰性束：唯一规则正文、worker 定义和 [agents] 两键投影；恢复时物化到新用户唯一目标并语义合并，不恢复整个 .codex 或 raw config.toml。",
+      "副驾驶重装顺序是 Windows/网络 → Git 与 PCConfig 账本 → Tailscale/ToDesk/FlyingBird → 经确认用户文件 → 开发工具 → 人工重建 WSL/Docker → 可选 Moonlight → 精确防火墙 → 整体验收 → writer 激活。账号与设备配对在目标机重新完成。",
+      "台式机故障接管默认由笔记本自己的 Windows 启动，原 Predator GM7000 只作为数据盘；动态根记为 DesktopDataRoot，原 E/V 可按需读取或挂载，Z 重建，G 默认不挂载。缺少原机应用、服务或登录态不阻断 Git/文档接管。",
+      "启动 LocalGpuBroker、Ollama、本地模型、LocalOCR 或 ChineseASR 前必须对笔记本当前硬件运行重型能力检查；不满足就零启动、零目录创建，普通 Codex、Git 和文档继续，不把临时宿主观察写回 WLY 稳定投影。"
+    ],
+    flow: [
+      "先确认现实目标：日常离开主机继续工作、笔记本自身重装/换机、笔记本磁盘故障，还是台式机非硬盘故障后的临时接管。",
+      "回读当前计算机名和用户根。只有精确命中 LAPTOP-E48N0DRJ/C:\\Users\\wly 才运行副驾驶 live Provider；在 WLY 或其他主机只读账本，不加载对方本地路径。",
+      "日常使用先验证 Tailscale、ToDesk/FlyingBird、精确防火墙和所需开发工具；台式机代理、数据库或远控不可达时，列出依赖并继续本地可做的 Git、文档和轻量开发。",
+      "笔记本重装或换机时先保持恢复任务 Disabled 与 writerState=restore_pending，从 USB 胶囊 current 指向的已提交世代读取 START_FOR_CODEX、desired、snapshot、manifest 和 closure。",
+      "生成一页恢复预览，分成自动执行、需要登录/配对、冲突/跳过；用户集中确认后，非破坏性恢复 Desktop、Documents、Downloads 和窄 Codex 策略。",
+      "从 PRIVATE PCConfig 刷新账本；Git-backed 项目重新 clone。对每个无远端 V 项目选择 PRIVATE Git、加密导出或明确接受丢失，不把它们假装包含在胶囊。",
+      "按目标机重新安装工具、Tailscale、ToDesk、FlyingBird；人工重建 WSL2/Docker，只从停机导出或 Owner-aware 导出恢复不可再生数据。",
+      "重新登录 Codex、Tailscale、ToDesk、FlyingBird、浏览器和其他身份应用；秘密只经凭据 Owner、Provider 或 SecretRef，不复制旧 session。",
+      "恢复文件后以真实胶囊来源标记 restored_unaccepted；检查服务、工具、精确防火墙、文件和仍缺项目，用户确认整体可用后再 Activate writer。",
+      "writer 激活后才绑定/验证独立 USB，并显式创建初始世代；未接入或未解锁时保留正常等待，本地 rollback 继续但不冒充灾备。",
+      "台式机故障接管时，用笔记本自己的 Windows 启动并取消任何初始化/格式化提示；只读识别原 GM7000、分区和锚点，从 DesktopDataRoot 工作。",
+      "需要 V 项目时先只读检查 Dev Drive VHDX，再在 V: 空闲且确需写入时挂载；不恢复 Z，不默认挂 G，不把临时盘符写回 PCConfig。",
+      "接管结束前提交或备份新增工作，停止外置盘消费者，卸载 VHDX 并安全弹出；原盘装回 WLY 后再以原机现场重建 E/V/Z、任务、运行时和备份结论。"
+    ],
+    concepts: [
+      { term: "Host-scoped ledger（主机限定账本）", explanation: "只有主机身份和用户根同时匹配时才解释该设备现场；在别的电脑上只能作为设计与恢复导航。" },
+      { term: "Secondary laptop（副驾驶笔记本）", explanation: "承担远控、轻量开发和应急接管的备用 Windows 设备，不是台式机硬件、任务和盘符的镜像。" },
+      { term: "Health Provider（健康读取器）", explanation: "一次只读检查设备角色、网络、运行时、任务和恢复链；它不修复、不联网，也不启动或备份。" },
+      { term: "Recovery capsule（恢复胶囊）", explanation: "由目标状态、窄用户文件、惰性 Codex 策略、世代 manifest 和恢复入口组成的笔记本重建包。" },
+      { term: "Writer state（备份写入者状态）", explanation: "控制空白/未验新机何时可以开始覆盖性风险最低的后续备份；只有用户验收后才激活。" },
+      { term: "Local rollback cache（本机回滚副本）", explanation: "与笔记本系统盘同故障域的快速回退材料，不能替代独立 USB 灾备。" },
+      { term: "USB generation（USB 恢复世代）", explanation: "写入已绑定加密介质、经 exact-set/长度/SHA-256 验证后由 current 指向的完整版本。" },
+      { term: "External NVMe takeover（原盘外置接管）", explanation: "把故障台式机的原 NVMe 接到笔记本，只作为数据与工作区来源，不从它启动或把笔记本改写成主机。" },
+      { term: "DesktopDataRoot（原台式机数据根）", explanation: "外接后按现场得到的临时根，不把临时盘符固化回台式机 Registry。" },
+      { term: "Heavy-runtime gate（重型运行能力门）", explanation: "在临时宿主上启动 GPU 模型/OCR/ASR 前重新检查内存、GPU、命令和资源路径，不继承台式机能力声明。" }
+    ],
+    boundaries: [
+      "不把副驾驶账本变成跨主机全局规则，不从机器名称之外的猜测加载 C:\\Users\\wly 或 V:\\GitHub\\PCConfig",
+      "不后台同步两台电脑的完整磁盘、AppData、任务、注册表、驱动、登录态或秘密",
+      "不把 PCConfig Git checkout 或源码测试冒充笔记本当前服务、任务、BitLocker、WinRE、USB 或远控健康",
+      "不把 ToDesk 当通用端口隧道，不为 7892 开 Funnel，不把 SSH/RDP 放宽到 LAN、公网、整个 tailnet 或公司网段",
+      "不为了健康检查启动 WSL、Docker、服务、备份、UAC、重启或 USB 解锁",
+      "不让 restore_pending 或 restored_unaccepted 的新机运行备份，即使使用 -Force",
+      "不把同盘 local cache 称为换机/丢盘备份，不在 USB 未绑定/未加密时写用户世代",
+      "不复制整棵 .codex、raw config.toml、旧 session、Cookie、Token、密码、设备密钥或原始数据库行",
+      "不热拷 WSL ext4.vhdx 或 Docker VHDX；不可再生内容只从停机/Owner-aware 导出恢复",
+      "不从外置 GM7000 启动 Windows，不初始化、格式化、修复分区或重建 EFI/BCD",
+      "不因临时盘符、笔记本硬件或任务变化更新 WLY 的 canonical Registry",
+      "不假定 NVMe 硬盘盒已购入、兼容或验收，不假定笔记本可挂 ReFS VHDX 或解锁跨机 BitLocker"
+    ],
+    failures: [
+      { condition: "在 WLY 或其他非目标主机调用健康入口", response: "返回 not_applicable/host_mismatch，只报告当前主机名；不读取或套用副驾驶路径和现场结论。" },
+      { condition: "Tailscale、ToDesk 或 FlyingBird 不可用", response: "区分双机发现、远控和本地工作；不开放 LAN/公网、不切未登记代理，本地 Git/文档能力按实际继续。" },
+      { condition: "台式机代理 7892 或 PostgreSQL 45432 不可达", response: "只暂停依赖它的代理或只读测试路径，不把笔记本整体判坏，也不新增公开端口。" },
+      { condition: "BitLocker/WinRE 在非管理员会话不可读", response: "策略可保持 pass，证据状态保留 unknown；需要完整验收时另开明确现场任务。" },
+      { condition: "恢复任务定义正确但 ACL 或信任链不可读", response: "保持 block/unknown，不把安装根看起来正常写成安全；不得启用任务。" },
+      { condition: "恢复 U 盘未接入、未解锁或未绑定", response: "返回正常等待，不告警、不自动解锁、不推进 USB 成功时间；本地副本仍不升级为灾备。" },
+      { condition: "新机数据已复制但尚未整体验收", response: "保持 restored_unaccepted 和任务 Disabled；继续验证服务、文件、登录、项目与防火墙，不能提前激活 writer。" },
+      { condition: "胶囊 current、manifest、closure 或 payload 不一致", response: "停止恢复/激活，保留旧世代与来源；调用方声明的 generation id 或 digest 不能补齐真实证据。" },
+      { condition: "V 盘无远端项目没有独立导出", response: "明确列为单机故障风险，选择 PRIVATE Git、加密导出或接受丢失；不声称胶囊或 PCConfig Git 已覆盖。" },
+      { condition: "外接 NVMe 出现初始化/格式化提示或身份不清", response: "取消写入，只读核对磁盘、分区和锚点；无法确认就停止接管并保留原盘。" },
+      { condition: "笔记本不满足重型 GPU 能力门", response: "LocalGpuBroker、模型、OCR/ASR 零启动；普通 Codex、Git 和文档继续，必要时使用已授权云能力。" }
+    ],
+    sources: [
+      { path: "E:\\PCConfig\\docs\\recovery\\副驾驶笔记本账本.md", role: "副驾驶角色、日常能力、网络边界、运行基线和 host-scoped 事实" },
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.secondary-laptop-health.md", role: "唯一健康 Provider 的检查 ID、证据双轴、正常例外与隐私边界" },
+      { path: "E:\\PCConfig\\tools\\Get-SecondaryLaptopHealth.ps1", role: "副驾驶笔记本只读健康入口；主机不匹配时提前返回" },
+      { path: "E:\\PCConfig\\tools\\secondary-laptop-recovery\\README.md", role: "受保护安装、任务、writer 状态机、USB 世代和恢复命令合同" },
+      { path: "E:\\PCConfig\\tools\\secondary-laptop-recovery\\config\\desired.yaml", role: "副驾驶目标软件、WSL/Docker、启动、网络、数据和人工动作基线" },
+      { path: "E:\\PCConfig\\tools\\secondary-laptop-recovery\\config\\settings.json", role: "恢复 profile、7 天周期、2 世代保留、本地根和三类用户文件范围" },
+      { path: "E:\\PCConfig\\tools\\secondary-laptop-recovery\\templates\\START_FOR_CODEX.md", role: "新机先冻结 writer、恢复预览、两阶段验收和激活顺序" },
+      { path: "E:\\PCConfig\\docs\\recovery\\nvme_enclosure_takeover.md", role: "台式机非硬盘故障时的原 NVMe 外置接管与结束流程" },
+      { path: "E:\\PCConfig\\docs\\recovery\\codex_login_10013.md", role: "副驾驶 localhost 1455 与动态端口范围的持久修复/复核边界" },
+      { path: "E:\\PCConfig\\registries\\rdp_tailscale_exposure.json", role: "WLY 主工作站 RDP 的独立 Tailscale-only 对端、规则与保留入口" },
+      { path: "E:\\PCConfig\\tools\\test_secondary_laptop_recovery.test.ps1", role: "恢复胶囊、writer、USB、ACL、任务和负例的离线回归" }
+    ],
+    verification: [
+      "2026-08-31 从 WLY 主工作站调用 Get-SecondaryLaptopHealth.ps1 -Json 返回 schema=pcconfig.secondary-laptop-health.v1、status=not_applicable、reason=host_mismatch；这证明 host gate 正常，不证明笔记本健康",
+      "get_secondary_laptop_health.test.ps1 本次离线 fixture 通过；它验证 Provider 的角色、网络、任务、恢复、unknown 和 host mismatch 语义，不替代目标设备现场",
+      "test_secondary_laptop_recovery.test.ps1 本次完整离线回归通过；它证明恢复胶囊的 writer/世代/USB/ACL/任务负例实现，不证明真实笔记本或介质已恢复",
+      "恢复源码固定 profileId=secondary-laptop、writerState 默认 restore_pending、backupIntervalDays=7、generationRetentionCount=2，dataSources 仅 Desktop/Documents/Downloads",
+      "健康合同覆盖 ToDesk/Tailscale/FlyingBird、精确防火墙、CodexRecovery-SecondaryLaptop、local/USB 世代、BitLocker/WinRE、WSL2/Docker、空间、工具与 Git；Provider 明确零网络、零写入",
+      "副驾驶当前服务版本、任务最近结果、BitLocker/WinRE、USB 绑定/世代、实时防火墙和项目盘状态未从目标笔记本回读，均保持 Unknown",
+      "原 GM7000 通过硬盘盒的真实识盘、持续读取、跨机 BitLocker、ReFS Dev Drive VHDX 挂载和重型能力尚未做端到端演练"
+    ],
+    relation: "机器事实模块保留主机身份与盘符事实，运行时模块解释单机软件/任务，普通恢复模块负责 WLY 主工作站重装链，秘密模块负责目标设备重新登录与 SecretRef；本模块独立拥有副驾驶产品角色、双机网络、笔记本恢复胶囊和原 NVMe 临时接管。它不复制这些模块，也不把笔记本变成第二个主工作站。"
+  },
+  {
     slug: "secrets-providers",
     shortTitle: "秘密与 Provider",
     title: "SecretRef（秘密引用）、秘密代理与固定 Workspace Provider",
     teaser: "让程序完成登录、调用和云端读写，同时把秘密值留在受保护运行库；Provider（类型化读取器）只返回任务结果，不把秘密交给模型、终端或公开回执。",
     status: "秘密代理可用；固定 Workspace 账号的远端实读仍未复核",
     statusTone: "mixed",
+    searchProjection: {
+      intents: ["让程序使用凭据但不显示", "在新设备重新登录", "读取固定 Workspace 账号", "恢复 SecretRef", "盲填银行卡但不提交"],
+      entities: ["SecretRef", "Secret Broker", "Password Center", "DPAPI", "固定 Workspace Provider", "OAuth", "Browser Bridge"],
+      relations: ["秘密绑定精确执行目标", "账号绑定限制 Provider 动作", "设备变化要求重新登录", "普通恢复只引用秘密入口"],
+      failureRecovery: ["凭据不可用暂停对应动作", "scope 不匹配不换账号", "网络失败不判凭据失效", "旧登录态不跨设备复制"]
+    },
     value: "用户可以让自动化真正使用账号和 API（程序接口），而不是反复复制密码、令牌或客户端密钥。需要人工验证时只完成那个精确边界，日常任务不因此获得查看秘密明文的能力。",
     why: "把秘密写进环境变量、命令行、日志或聊天会扩大泄漏面；只说“凭据在密码管理器里”又不能让项目稳定调用。SecretRef 和固定 Provider 在可用性与零明文之间建立一条可回读路线。",
     example: "例如我说“从固定 Workspace 账号读取一个云端文档并导出为 PDF（便携文档格式）”。系统先用固定 binding（绑定）和类型化 Drive action（云盘动作），按需解密 DPAPI 状态并在进程内刷新 access token（访问令牌）；输出只写指定文件，回执不包含账号、标题、正文、文件 id 或访问令牌。",
@@ -516,6 +805,7 @@ export const pcconfigModules = [
       "固定 Workspace Provider 只有一个 binding，动作不能在运行时选择其他账号。",
       "只有 Gmail、Drive 和 Calendar 通过同一 Provider 的真实读取验收后，Read action（读取动作）才成为默认能力；当前仅证明零网络 binding（绑定）已配置，尚未证明远端 OAuth（账号授权）和实际读取可用。Write action（写入动作）还必须对每种动作独立验收，并由本轮明确对象和内容授权。",
       "OAuth enrollment（账号授权登记）只在前台进行一次，callback（回调）使用随机 loopback 端口与 PKCE（授权码保护）。",
+      "换电脑、重装或从台式机切到副驾驶时，非秘密配置可以按新路径重建，但 DPAPI 状态、账号 session 和设备信任不跨机复制；目标设备必须重新登录或从正式 Recovery Set 恢复。",
       "Secret Broker 状态通过不证明每个外部网站、账号或网络请求当前都成功。"
     ],
     problem: "凭据系统常见两个极端：要么所有自动化都能读明文，要么秘密封得太深，真实任务无法使用。PCConfig 把存储、授权、盲用、单项显示、恢复和设备信任分开，每个入口只拿完成当前动作所需的最小结果。",
@@ -526,11 +816,13 @@ export const pcconfigModules = [
       "Secret Broker status 当前明确 plaintext_returned=false、key_project_touched=false、remote_fetch_performed=false，安全核心和 product closure（产品闭环）均 pass。",
       "当前唯一 optional gap 是外部密码管理器缺少逐条公开 API；它不会把核心状态改写为失败，也不会授权抓取浏览器数据库。",
       "Workspace credential state 使用 CurrentUser DPAPI；状态检查只看固定路径和文件存在性，不解密，2026-08-29 返回 configured、credential_state_present=true、credential_state_decrypted=false、zero_network=true。",
+      "副驾驶恢复胶囊明确排除密码、Token、Cookie、私钥、设备身份密钥、Codex 登录态和 raw config.toml；只恢复无秘密 [agents] 两键投影，账号在目标机按官方流程重新建立。",
       "Provider 暴露 Gmail（邮件）、Drive（云盘）和 Calendar（日历）的 closed action allowlist，没有通用 URL、HTTP method（请求方法）、body 或账号透传。",
       "access token（访问令牌）只在当前进程内存在；receipt（执行回执）明确 token_returned=false、client_secret_returned=false。"
     ],
     flow: [
       "用固定 SecretRef 或 binding 定位 Owner",
+      "先确认当前设备与用户身份；设备变化时把旧 DPAPI/session 视为不可直接继承，列出需要重新登录或正式恢复的入口",
       "只读检查运行时、设备信任和目标登记",
       "需要人类因子时冻结精确 action 与 target",
       "在受保护进程内解密或刷新短时凭据",
@@ -544,19 +836,22 @@ export const pcconfigModules = [
       { term: "Binding（固定绑定）", explanation: "把 Provider、账号身份、scope、状态路径和端点固定在 Registry 中，动作不能临时换账号。" },
       { term: "OAuth（账号授权协议）", explanation: "用户在官方页面同意固定 scope，Provider 用授权码换取并安全保存 refresh token（刷新令牌）。" },
       { term: "PKCE（授权码保护）", explanation: "给一次 OAuth 流程绑定 code verifier（校验秘密），降低授权码被截获后复用的风险。" },
-      { term: "Typed action（类型化动作）", explanation: "每个邮件、云盘或日历操作都有固定参数 schema，不允许调用者构造任意网络请求。" }
+      { term: "Typed action（类型化动作）", explanation: "每个邮件、云盘或日历操作都有固定参数 schema，不允许调用者构造任意网络请求。" },
+      { term: "Device trust（设备信任）", explanation: "某项秘密是否允许在当前 Windows 身份与设备使用的独立事实；复制文件、管理员权限或旧登录态不能继承。" }
     ],
     boundaries: [
       "不在仓库、模型上下文、stdout、JSON、日志或剪贴板保存秘密值",
       "不把 Cookie、浏览器 profile、会话数据库或完整环境文件作为导入源",
       "不因管理员权限令牌、插件或账号登录扩大任务授权",
       "不静默切换到另一个账号、公共 connector（连接器）或第三方 CLI",
+      "不在两台电脑之间复制浏览器/Codex session、DPAPI 密文、Cookie、Token、私钥或设备身份密钥来跳过重新登录",
       "单请求有固定传输上限；大文件失败不会引入无边界上传平台",
       "验证码、CAPTCHA 和网站确认继续由用户完成"
     ],
     failures: [
       { condition: "Secret Broker 状态无法验证", response: "冻结秘密使用，返回 failed/partial 或精确 unavailable；不从旧回执或 Registry 推断可用。" },
       { condition: "Workspace binding 仅 configured", response: "当前零网络检查只证明固定配置与 state file 存在，不证明 OAuth scope、远端账号身份或某个动作可用。" },
+      { condition: "换机后旧 credential state 文件存在", response: "不尝试从文件存在推断可解密或已登录；在目标设备重新 enrollment，或按 Secret Broker 的 RegisteredCarrier 与有效因子恢复。" },
       { condition: "网络错误、超时或限流", response: "报告 transport failure，不把凭据标成无效，也不自动更换账号或重复写操作。" },
       { condition: "scope 多、少、重复或账号身份不符", response: "OAuth enrollment 在持久化前 fail closed，既有 enrolled record 不被重复导入覆盖。" },
       { condition: "Reveal 命中不唯一或缺少新鲜因子", response: "不返回任何字段，不降级为批量列表或侧路文件。" },
@@ -583,18 +878,24 @@ export const pcconfigModules = [
   {
     slug: "protected-actions",
     shortTitle: "受保护动作",
-    title: "C 盘 policy runtime 退役、历史 CoreGoal 与独立机器动作",
-    teaser: "旧规则 Publisher、policy consumer、worker 和任务已经退出生产；E rules 独立在 .agents 激活。PCConfig 只保留历史兼容材料，并继续拥有 Secret Broker、BitLocker、P0–P7 与各机器动作自己的 Owner/read-back。",
+    title: "旧受保护平台退役与机器动作归属",
+    teaser: "旧规则 Publisher（发布器）、CoreGoal consumer（目标消费者）和通用执行链退出生产；当前每个机器动作回到自己的窄 Owner、事务、授权和回读，不再共享一个万能管理员平台。",
     status: "protected-policy status=retired；6 个退役任务缺席，CoreGoal 仅 frozen historical compatibility",
     statusTone: "mixed",
-    value: "让我明确知道哪些旧链已经退出、哪些历史材料仍保留，以及 E rules、Secret Broker、BitLocker、P0–P7 为什么互不依赖；不会因删除 policy runtime 顺手破坏机器恢复产品。",
-    why: "旧 C policy 平台把规则发布、CoreGoal、机器动作和多个独立产品耦合在一起，代码和运行节点过大。退役必须减掉生产读者与执行器，同时保留恢复证据和真正仍被产品消费的 Secret Broker、Password Center、BitLocker 与 P0。",
-    example: "退役事务停止 1 个旧 policy process、移除 6 个目标任务并保留 C policy tree、generation 79 和 ledgers；current E rules 另由 .agents release 激活，P0 boot recovery、Password Center 和 BitLocker 没有被修改，也不需要重启。",
-    result: "E 盘退役 Owner 固定返回 retired；我能看到 36 个依赖分类、6 个任务缺席、历史材料保留和各独立产品未改变。旧 C 入口当前明确报 global-shim-invalid，但这个历史诊断不会被误写成当前 E 规则失败。旧 policy 不能再创建 goal/step、发布规则或执行机器动作。",
+    searchProjection: {
+      intents: ["确认旧 policy 是否退役", "执行受保护机器动作", "迁移 Codex Home", "保留历史回退", "区分规则发布和机器动作"],
+      entities: ["E rules", "退役 C policy", "CoreGoal 历史兼容", "BitLocker", "机器动作 Owner", "Codex Home 迁移"],
+      relations: ["E rules 与 PCConfig 机器动作分离", "退役链不再发布或执行", "独立产品不继承旧 policy", "迁移事务绑定 preimage 和回读"],
+      failureRecovery: ["旧任务重现时阻断退役验收", "历史入口失败不冒充 E rules 失败", "迁移未切换保持 waiting", "回滚失败保持精确状态"]
+    },
+    value: "我能知道一项高影响机器操作现在该走哪里：规则发布归 .agents，Codex Home 迁移走自己的可回滚事务，BitLocker、Password Center、P0–P7 各走独立产品入口；旧 C policy 只保留历史，不再因为拥有管理员能力就成为万能执行器。",
+    why: "旧 C policy 平台把规则发布、长期目标、机器动作和多个产品耦合在一起，既复杂又容易把一个系统的授权扩散到另一个系统。完整退役不只是删任务，还要把现役动作逐项交回真实 Owner，保留必要恢复材料，并证明独立产品没有被误删或被旧状态重新激活。",
+    example: "例如我要在 Codex 完全退出后把 Home 切到 E 盘。现在使用迁移事务保存 preimage、最终增量、ACL/链接清单和回滚副本，状态保持 waiting_for_codex_exit；不会创建旧 CoreGoal step，也不会让规则 Publisher 或 BitLocker containment 代执行。另一个例子是规则发布，它只走 .agents 的 E release，不经过 PCConfig。",
+    result: "我最终得到明确的动作归属和状态：旧 policy 是否保持 retired、历史材料是否完整、当前请求对应哪个窄 Owner、授权是否覆盖、preimage/rollback 在哪里、执行和回读是否发生。没有对应专用入口的动作不会退回通用管理员 shell。",
     readerStates: {
-      pass: "status=retired、依赖分类、任务缺席和保留产品验收全部通过时，旧 policy 路线保持 fail-closed，其他机器产品继续。",
-      problem: "退役任务重新出现、旧 Publisher 可执行、CoreGoal 新 goal/step 可创建，或独立产品被误删时，退役验收失败并由 PCConfig Owner 修复。",
-      unavailable: "退役 Registry、任务现场或机器回执不可读时，不恢复旧 runtime，也不猜完成；普通只读调查和独立产品继续按各自证据工作。"
+      pass: "旧 policy 保持 retired、任务与 worker 缺席，当前动作又能由自己的窄 Owner 提供授权、preimage、执行和回读时，两条路线分别成立而不互相继承。",
+      problem: "旧 Publisher/consumer 复活、通用执行入口重现、现役动作串错 Owner，或独立产品被退役误伤时停止相关动作，恢复正确边界后分别回读。",
+      unavailable: "旧状态或某个专用机器动作入口不可读时，不恢复旧平台、不改用通用管理员 shell；只暂停该动作，其他独立产品按自己的证据继续。"
     },
     decisionImpact: [
       "Verified current E release 是规则权威；C 盘第 79 代、Publisher、anchor 和 ledgers 只作历史恢复。",
@@ -602,6 +903,8 @@ export const pcconfigModules = [
       "CoreGoal V2 Registry 为 frozen_historical_compatibility，禁止新 goal/step，policy-publish consumer inactive。",
       "6 个旧目标任务必须 absent，系统不得有匹配的 Authority/Protected service 或 policy Python worker。",
       "Secret Broker、Password Center、BitLocker 和 P0–P7 是独立产品，退役不能删除或改变它们。",
+      "当前机器动作必须有具名 Owner 和窄入口：Codex Home migration、CoreRecovery、RDP/Tailscale、Secret Broker、P0 selector 等各自拥有 transaction/read-back，不能互相借授权。",
+      "bitlocker_containment Registry 的 retirement override 已生效：旧 automatic action、设备信任变更和 scheduled executor 都不允许；手工 BitLocker 与恢复路径仍保留。",
       "物理删除 C tree 或彻底卸载历史 CoreGoal 没有发生，未来若需要是另一项明确决定。"
     ],
     problem: "退役不是把状态改成一个字符串。旧任务、worker、service、Publisher、consumer 与所有依赖都要分类和缺席回读，同时保留真正有 consumer 的历史/恢复材料与独立产品。",
@@ -611,6 +914,7 @@ export const pcconfigModules = [
       "机器收敛回执证明旧任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改。",
       "CoreGoal V2 与 BitLocker containment 使用 retirement override 把旧 policy coupling 冻结为历史，不允许自动 action。",
       "旧 C policy tree、generation 79 和 ledgers 没有物理删除，仍可作为恢复/审计材料。",
+      "Codex Home 迁移是当前独立机器事务：staging、最终增量、ACL/链接 manifest、原子切换、C 兼容 junction 与 rollback 都由专用入口拥有；未退出前保持 waiting_for_codex_exit。",
       "E rules 的 current/previous、UAC activation 和 Rules 页面由 .agents 拥有，不再由 PCConfig 安装或发布。"
     ],
     flow: [
@@ -619,6 +923,7 @@ export const pcconfigModules = [
       "确认 6 个退役任务在 Task Scheduler 中 absent",
       "确认无匹配旧 service、worker 或可执行 Publisher 路径",
       "核对 Secret Broker、Password Center、BitLocker、P0–P7 未被改变",
+      "遇到新机器动作时定位其具名 Owner、精确授权、preimage、rollback 与 read-back；没有专用入口就停止，不回退旧 CoreGoal",
       "保留历史 tree、generation 79 和 ledgers，不恢复生产读者",
       "以后每次漂移检查继续验证退役不反弹"
     ],
@@ -626,13 +931,15 @@ export const pcconfigModules = [
       { term: "Protected policy retirement（规则平台退役）", explanation: "旧 C 盘规则生产读者、Publisher、consumer、任务和 worker 退出，历史材料保留。" },
       { term: "Frozen historical compatibility（冻结历史兼容）", explanation: "数据结构仍可读取旧记录，但禁止创建新 goal/step 或执行旧 consumer。" },
       { term: "Retirement override（退役覆盖）", explanation: "对旧 Registry 历史字段施加现行禁止语义，避免历史 production_enabled 被误执行。" },
-      { term: "Independent product（独立产品）", explanation: "Secret Broker、BitLocker、P0 等有自己的 Owner、状态和验收，不由规则退役连带删除。" }
+      { term: "Independent product（独立产品）", explanation: "Secret Broker、BitLocker、P0 等有自己的 Owner、状态和验收，不由规则退役连带删除。" },
+      { term: "Specific machine action（具名机器动作）", explanation: "只有一个明确目标、专用执行入口、preimage、回滚和回读的机器变更；管理员权限本身不创造通用动作授权。" }
     ],
     boundaries: [
       "不提供通用 shell、任意管理员执行器、第二规则系统、第二队列或后台守护服务",
       "智能体名称、提示词、管理员权限令牌或复制密钥不能继承最高权限身份",
       "紧急授权不覆盖 system/developer/platform，不伪造密码学或外部事实，也不补足缺失 Carrier/因子",
       "活动规则发布、受保护机器动作和 P0 各自拥有执行与账本，CoreGoal 不内嵌它们",
+      "不因旧平台退役就删除手工 BitLocker 恢复、Secret Broker、Password Center、P0 boot recovery 或专用迁移事务",
       "source test、registry 状态或 P0 health 不能单独证明两个真实 consumer 的 effect",
       "未提交 source 和 concurrent dirty work 不计入 installed current"
     ],
@@ -641,6 +948,8 @@ export const pcconfigModules = [
       { condition: "E 盘退役 Owner 返回 active/candidate", response: "视为退役回归，必须恢复固定 retired 输出，不能把 C 链当当前 authority。" },
       { condition: "旧 C 历史入口返回 integrity failure", response: "如实显示旧入口的 global-shim-invalid，但不把它升级成 E rules 或普通任务 blocker，也不尝试恢复旧 Publisher。" },
       { condition: "Secret Broker 或 BitLocker 被退役误伤", response: "回滚对应 PCConfig 变更并恢复独立产品，不恢复旧 policy runtime。" },
+      { condition: "当前机器动作没有专用 Owner 或回滚入口", response: "保持未执行并报告缺口；不调用旧 CoreGoal、Publisher、任意管理员命令或旁路任务。" },
+      { condition: "Codex Home 仍有写入进程", response: "保持 waiting_for_codex_exit，不启动 cutover；继续保留 staging 和回滚材料，待真实退出后再复核。" },
       { condition: "物理历史材料缺失", response: "报告恢复证据损失；不能为补材料重新启用 Publisher 或 consumer。" }
     ],
     sources: [
@@ -655,7 +964,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 当前 PRIVATE main 为 f9245a1；Codex Home 迁移覆盖 39911 个文件、75.13 GB，已通过 ReadyCheck 并等待本人退出。正式 cutover 与新运行时回读尚未发生。"
+      "PCConfig 当前 PRIVATE main=origin/main=d4480abc17574177b91e52b0aff9aebd30583f58，worktree clean；Codex Home 迁移覆盖 39911 个文件、75.13 GB，已通过 ReadyCheck 并等待本人退出。正式 cutover 与新运行时回读尚未发生。"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },
@@ -666,6 +975,12 @@ export const pcconfigModules = [
     teaser: "让受保护数据产品可以旁路升级、失败回退和用一份完整恢复载体重建，同时诚实区分源码候选、安装态和正式数据迁移。",
     status: "当前第 68 版 normal/LKG 与自然启动已通过；SafeSwitch manifest、v2/Vault 和正式数据仍未闭合",
     statusTone: "problem",
+    searchProjection: {
+      intents: ["升级受保护数据应用", "恢复加密数据", "验证 Carrier 和因子", "失败回到 LKG", "确认源码安装和真实数据边界"],
+      entities: ["P0–P7", "selector", "LKG", "Recovery Carrier", "AuthorityVault", "Vault V2", "正式数据"],
+      relations: ["版本候选经健康检查后切 selector", "Carrier 与有效因子共同恢复", "源码安装运行和正式数据分层", "CoreRecovery 不替代加密恢复"],
+      failureRecovery: ["候选失败回到 LKG", "所有版本未知进入只读恢复", "Carrier 或因子缺失不恢复原文", "未安装候选不冒充可用"]
+    },
     value: "升级加密数据产品时，用户不会因为一个坏版本、进程崩溃或电脑重启就失去最后可用入口；真正灾难恢复也不依赖全部介质同时在线，只需要一份完整有效 Carrier（恢复载体）和一个有效因子。",
     why: "普通应用升级失败可以重装，但加密数据升级失败可能同时损坏入口、索引、密钥封装和恢复线。必须先证明新版本可读写、可重开、可恢复，再切换；任何 unknown 都要停止写入并保留旧版本。",
     example: "例如要给加密文件应用上线一个支持更快搜索的新版本。P0 先把候选放进不可变 slot（版本槽），运行切换前健康检查，再切到 trial（试运行），并通过 stable selector（稳定版本选择器）做切换后健康检查。任何一步失败都回到 LKG；如果旧版也无法证明健康，则只提供 read-only recovery（只读恢复），绝不继续写正式数据。",
@@ -692,6 +1007,7 @@ export const pcconfigModules = [
       "正式 boot-deadline-recovery operation 先把 current 恢复为第 68 版 normal、active=LKG；随后新的自然启动闭合 boot acceptance，历史失败回执不再代表当前启动状态。",
       "P0 vNext RecoveryKernel 设计旁路安装到 v2 root，但继续使用唯一 v1 state/slots；2026-08-29 v2 public status root absent（安装根不存在），所以仍是 source candidate（源码候选版本）。",
       "vNext 设计中的 P1 AuthorityVault 将提供 Passkey、TOTP、Recovery、Account 四类同接口因子，成功只交付进程内 opaque session（不透明会话）；当前 source 不能冒充安装态。",
+      "RecoveryFactorHost 是 P1 的窄候选：Registry 当前 lifecycle=candidate_only、actual_install_state=not_installed、production_activation=false；它只适配现有 RegisteredCarrier/因子解封，不拥有因子 Registry、root key 或生产仪式。",
       "P3/P4 Vault V2 使用 AES-GCM（带完整性校验的分块加密）、单一对象/索引引擎、opaque lease（不透明租约）和恢复 Bridge；读取流一次最多保留 1 MiB 明文，EOF（读到结尾）后才确认完整 hash。",
       "Vault V2 Registry 当前 lifecycle=protected_install_effect_source_ready，并要求 production_state_source=installer-inspect-readback-only；这不是 installed current。",
       "P5–P7 Registry 当前 status=fixture_replica_acceptance_only、formal_data_action_authorized=false、formal_data_paths_touched=false，明确没有正式数据迁移。",
@@ -730,6 +1046,7 @@ export const pcconfigModules = [
       { condition: "候选版本切换前后健康检查失败或超时", response: "恢复旧 LKG；旧 LKG 也不能证明时写 read_only_recovery（只读恢复），并拒绝业务写入。" },
       { condition: "control current 损坏", response: "只接受完整验证的 previous preimage；不能靠猜测选择 newest slot。" },
       { condition: "v2 RecoveryKernel root absent（安装根不存在）", response: "只称 source candidate（源码候选版本），不称 side-by-side installed（并行版本已安装）、fresh read-back（全新回读）或 reboot verified（重启已验证）。" },
+      { condition: "RecoveryFactorHost source 或 fixture 通过", response: "仍保持 candidate_only/not_installed；没有正式 installer read-back、生产因子和真实 Carrier E2E 时，不得称 P1 可用。" },
       { condition: "P0 source Inspector 返回 install_manifest_invalid", response: "明确显示当前源码检查器无法验证旧安装 manifest；保留 selector/LKG 可用事实，不把检查器 BLOCK 夸大成数据损坏，也不自动重装。" },
       { condition: "Vault V2 source/fixture 通过", response: "仍不等于 protected install、真实因子、Carrier、重启或故障恢复 E2E。" },
       { condition: "P5–P7 正式授权为 false", response: "保持 fixture-only；formal_data_paths_touched=false，禁止以设计或测试推动真实数据迁移。" }
@@ -740,6 +1057,8 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\protected_data_safe_switch.json", role: "P0 source、root、task、预算和 closed mode Registry" },
       { path: "C:\\ProgramData\\PCConfig\\ProtectedDataSafeSwitch\\v1\\public\\status.json", role: "P0 当前零秘密 selector 状态" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.protected-data-vault-v2-engine.md", role: "Vault V2 engine、对象、索引、lease 与 consumer 边界" },
+      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.protected-data-recovery-factor-host.md", role: "P1 因子 Host 候选、现有 Carrier 复用、固定 operation 与禁止所有权边界" },
+      { path: "E:\\PCConfig\\registries\\recovery_factor_host.json", role: "candidate_only、not_installed 与 production_activation=false 生命周期证据" },
       { path: "E:\\PCConfig\\registries\\protected_data_vault_v2_formal.json", role: "Vault V2 source/install lifecycle Registry" },
       { path: "E:\\PCConfig\\registries\\protected_data_p5_p7_delivery_v3.json", role: "P5–P7 fixture、正式授权和真实路径触碰状态" }
     ],
@@ -749,6 +1068,7 @@ export const pcconfigModules = [
       "fresh Test-PCConfigDrift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0",
       "boot-latest.json 当前回读为第 68 版 normal/LKG、46984 ms、deadline_met=true、recovery_status=null；旧回执只按上方明确日期保留",
       "C:\\ProgramData\\PCConfig\\ProtectedDataSafeSwitch\\v2\\public\\status.json 当前不存在，明确阻止 installed-v2 声明",
+      "recovery_factor_host.json 当前 lifecycle.state=candidate_only、actual_install_state=not_installed、install_execution_permitted=false；只证明源码边界已登记",
       "Install-ProtectedDataSafeSwitch.ps1 -Mode Inspect 当前返回 protected_data_safe_switch_install_manifest_invalid；旧安装文件仍与旧 manifest 一致，但当前 source Registry 的 release/字段合同已前进",
       "Vault V2 Registry 只允许 installer inspect read-back 作为 production state source；source acceptance 不能替代",
       "P5–P7 Registry 当前 formal_data_action_authorized=false、formal_data_paths_touched=false",
