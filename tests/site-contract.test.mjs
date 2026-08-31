@@ -345,6 +345,10 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /UI quality,[\s\S]{0,220}cannot downgrade or offset this defect/);
   assert.match(projectRules, /Decide module boundaries only after the source-to-page difference/);
   assert.match(projectRules, /auditing only the page's existing fields is circular/);
+  assert.match(projectRules, /Content completeness is a separate, source-first acceptance gate/);
+  assert.match(projectRules, /independent[\s\S]{0,80}Sol Max reviewer/);
+  assert.match(projectRules, /without being given the page's module list as the expected answer/);
+  assert.match(projectRules, /One P0 capability omission blocks content acceptance and publication/);
   assert.match(projectRules, /Each project owns its\s+real module count/);
   assert.match(projectRules, /projectless unless the\s+owner explicitly selected a project/);
   assert.match(projectRules, /returned task id\s+is the creation receipt/);

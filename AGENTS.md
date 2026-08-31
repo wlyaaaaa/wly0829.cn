@@ -480,6 +480,14 @@ read-only operating panel; public presentation is secondary.
   be able to restate its practical use, concrete risk, example and final result
   without opening the source Skill or asking a follow-up question. Automated
   field checks are supporting evidence only.
+- Content completeness is a separate, source-first acceptance gate. Before a
+  new project, full refresh or completeness repair may PASS, an independent
+  Sol Max reviewer receives the current source entrypoints and the candidate
+  page without being given the page's module list as the expected answer. It
+  must reconstruct important product capabilities and technical subsystems,
+  compare both layers with the page and report any absent source-backed axis.
+  One P0 capability omission blocks content acceptance and publication; a
+  reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects:
   open the project index, Overview and representative detail, notify the owner,
