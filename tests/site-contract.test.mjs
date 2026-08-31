@@ -22,6 +22,14 @@ import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/sea
 import { createTermAnnotator } from "../app/term-annotator.js";
 import { searchCompactEntries } from "../app/compact-search.js";
 import {
+  systemDependencyNodes,
+  systemDependencyRelations,
+  systemDirectoryIntroductions,
+  systemEvidenceLayers,
+  systemHomeHero,
+  systemScenarios
+} from "../app/system-home-content.js";
+import {
   canonicalPath,
   canonicalUrl,
   excludedSkills,
@@ -34,8 +42,7 @@ import {
   routeMeta,
   routePaths,
   rulesSnapshot,
-  skills,
-  systemRelations
+  skills
 } from "../app/site-content.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -89,7 +96,10 @@ test("the accepted panel has exactly ten projects and four navigation areas", as
   assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
   assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   assert.equal(project.slug, "agents");
-  assert.deepEqual(primaryNav.map((item) => item.label), ["项目", "系统", "规则", "Skills"]);
+  assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
+  assert.equal(primaryNav[0].href, "/");
+  assert.equal(primaryNav[1].href, "/projects");
+  assert.ok(routePaths.includes("/projects"));
   assert.ok(routePaths.includes("/system"));
   assert.ok(routePaths.includes("/search"));
   assert.ok(!routePaths.includes("/ideas"));
@@ -1643,7 +1653,8 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
 });
 
 test("shared search scopes, project reading layers, Skills categories and System stay coherent", async () => {
-  assert.equal(searchScopeForPath("/").id, "project");
+  assert.equal(searchScopeForPath("/").id, "all");
+  assert.equal(searchScopeForPath("/projects").id, "project");
   assert.equal(searchScopeForPath("/system").id, "system");
   assert.equal(searchScopeForPath("/rules").id, "rules");
   assert.equal(searchScopeForPath("/skills").id, "skills");
@@ -1652,7 +1663,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.ok(searchPanel("FPS", "project:timeaudit").every((entry) => entry.projectSlug === "timeaudit"), "project search escaped the current project");
   assert.ok(searchPanel("授权", "rules").every((entry) => entry.group === "规则"), "rule search leaked another surface");
   assert.ok(searchPanel("照片", "skills").every((entry) => entry.group === "Skills"), "Skills search leaked another surface");
-  assert.ok(searchPanel("昨晚电脑为什么卡", "system").some((entry) => entry.href.startsWith("/system/")), "system search misses a real relationship journey");
+  assert.ok(searchPanel("昨晚电脑为什么卡", "system").some((entry) => entry.href.startsWith("/#system-scenario-")), "system search misses a real work journey");
 
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
@@ -1660,6 +1671,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const text of ["速览", "产品", "技术"]) assert.ok(pageSource.includes(text), `project reading layer is missing: ${text}`);
   assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(runtimeSource, /function initializeProjectReadingLayers\(\)/);
+  assert.match(runtimeSource, /function initializeSystemHome\(\)/);
   assert.match(runtimeSource, /function initializeSkillCategories\(\)/);
   assert.match(runtimeSource, /function initializeSearchResultsPage\(\)/);
   assert.match(runtimeSource, /new URLSearchParams\(window\.location\.search\)/);
@@ -1669,16 +1681,28 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
 
-  const systemHtml = await readFile(path.join(projectRoot, "dist", "system", "index.html"), "utf8");
-  assert.match(systemHtml, /class="page-frame system-page"/);
-  assert.doesNotMatch(systemHtml, /class="system-project-links"/, "System must not duplicate the full project directory");
-  for (const text of ["三个责任源分别解决什么", "事实怎样进入项目", "三条典型使用链", "这张图不表示什么"]) assert.ok(systemHtml.includes(text), `System page omits: ${text}`);
-  for (const relation of systemRelations) {
-    for (const href of [relation.sourceHref, relation.projectHref, relation.entryHref]) {
-      const pathname = new URL(href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
-      assert.ok(routePaths.includes(pathname), `System relation ${relation.id} points to a missing route: ${href}`);
+  const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  assert.match(systemHtml, /class="system-home"/);
+  for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "通用 AI 与智能体能力", "如何确认工作真的完成", "项目、规则和 Skills 各自负责什么"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
+  assert.equal((systemHtml.match(/data-system-scenario-tab=/g) || []).length, systemScenarios.length);
+  assert.equal((systemHtml.match(/data-system-scenario-panel=/g) || []).length, systemScenarios.length);
+  assert.equal((systemHtml.match(/data-system-dependency-node=/g) || []).length, systemDependencyNodes.length);
+  assert.equal((systemHtml.match(/data-system-relation/g) || []).length, systemDependencyRelations.length);
+  for (const scenario of systemScenarios) assert.ok(systemHtml.includes(`id="system-scenario-${scenario.id}"`), `System scenario missing: ${scenario.id}`);
+  for (const node of systemDependencyNodes) {
+    assert.ok(systemHtml.includes(`id="system-node-${node.id}"`), `System node missing: ${node.id}`);
+    if (node.href.startsWith("/")) {
+      const pathname = new URL(node.href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
+      assert.ok(routePaths.includes(pathname), `System node ${node.id} points to a missing route: ${node.href}`);
     }
   }
+  for (const relation of systemDependencyRelations) assert.ok(systemHtml.includes(`id="system-relation-${relation.id}"`), `System relation missing: ${relation.id}`);
+  for (const layer of systemEvidenceLayers) assert.ok(systemHtml.includes(layer.title), `System evidence layer missing: ${layer.id}`);
+  for (const item of systemDirectoryIntroductions) assert.ok(systemHtml.includes(`id="system-directory-${item.id}"`), `System directory intro missing: ${item.id}`);
+  assert.doesNotMatch(systemHtml, /\bHarness\b|gpt-\d/i, "System home must stay vendor-neutral and model-neutral");
+  assert.match(styleSource, /\.system-home\s*\{[\s\S]*?--system-max:\s*1184px/);
+  const systemStyles = styleSource.slice(styleSource.indexOf("/* System home v2"));
+  assert.doesNotMatch(systemStyles, /\bzoom\s*:|transform:\s*scale\(/, "System home must not fake 125% comfort with scaling");
   for (const entry of projectCatalog) {
     const overviewHtml = await readFile(path.join(projectRoot, "dist", ...entry.project.route.slice(1).split("/"), "index.html"), "utf8");
     for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
@@ -1687,9 +1711,9 @@ test("shared search scopes, project reading layers, Skills categories and System
   }
   const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "index.html"), "utf8");
   assert.match(skillsHtml, /data-skill-category="all"[^>]*aria-pressed="true"|aria-pressed="true"[^>]*data-skill-category="all"/);
-  const homeHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
-  assert.equal((homeHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
-  assert.equal((homeHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
+  const projectsHtml = await readFile(path.join(projectRoot, "dist", "projects", "index.html"), "utf8");
+  assert.equal((projectsHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
+  assert.equal((projectsHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
 
   const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
   const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
@@ -1697,7 +1721,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const moduleEntry of globalSearchEntries.filter((entry) => entry.type === "项目内容" && entry.aliases.length)) {
     for (const alias of moduleEntry.aliases) assert.equal(searchCompactEntries(compactIndex, alias, "project")[0]?.projectSlug, moduleEntry.projectSlug, `project compact search loses: ${alias}`);
   }
-  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["完整 928 项测试集合", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E94", "agents"]]) {
+  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E95", "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
   }
 });
@@ -1952,7 +1976,7 @@ test("the public gate allows ordinary labels and blocks a constructed credential
 
 test("every public route is unique and has useful metadata", () => {
   assert.equal(new Set(routePaths).size, routePaths.length);
-  assert.equal(routePaths.length, 5 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
+  assert.equal(routePaths.length, 6 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
   for (const route of routePaths) {
     const meta = routeMeta(route);
     assert.match(meta.title, /吴乐阳/);
@@ -1986,8 +2010,11 @@ test("production build has direct entry files for every route", async () => {
     assert.doesNotMatch(rootHtml, /<div id="root"><\/div>/);
 
     if (route === "/") {
+      assert.match(rootHtml, /class="system-home"/);
+      assert.ok(rootHtml.includes(systemHomeHero.title), "System home omits its product promise");
+    } else if (route === "/projects") {
       assert.match(rootHtml, /class="page-frame home-page"/);
-      for (const entry of projectCatalog) assert.ok(rootHtml.includes(entry.project.title), `home omits ${entry.project.title}`);
+      for (const entry of projectCatalog) assert.ok(rootHtml.includes(entry.project.title), `projects index omits ${entry.project.title}`);
     } else {
       const projectEntry = projectCatalog.find((entry) => route === entry.project.route || route.startsWith(`${entry.project.route}/`));
       if (projectEntry) {
@@ -2003,8 +2030,7 @@ test("production build has direct entry files for every route", async () => {
         assert.match(rootHtml, /class="rules-workbench"/);
         for (const rule of rulesSnapshot.rules) assert.ok(rootHtml.includes(`data-rule-panel="${rule.logicalId}"`), `rules HTML omits ${rule.logicalId}`);
       } else if (route === "/system") {
-        assert.match(rootHtml, /class="page-frame system-page"/);
-        assert.match(rootHtml, /class="system-relation-table"/);
+        assert.match(rootHtml, /class="system-home"/);
       } else if (route === "/search") {
         assert.match(rootHtml, /class="page-frame search-results-page"/);
       } else if (route === "/skills") {
