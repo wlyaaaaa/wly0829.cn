@@ -92,7 +92,13 @@ requireFact(authority.rulesetSha256 === rulesSnapshot.rulesetSha256, "snapshot_r
 requireFact(authority.status === rulesSnapshot.status, "snapshot_authority_status_mismatch", `${authority.status}/${rulesSnapshot.status}`);
 
 requireFact(payload.skills.selectedPublicCount === skills.length, "snapshot_selected_skill_count_mismatch", `${payload.skills.selectedPublicCount}/${skills.length}`);
-requireFact(payload.skills.activeInstallIntent >= payload.skills.selectedPublicCount, "snapshot_skill_supply_count_invalid", `${payload.skills.activeInstallIntent}/${payload.skills.selectedPublicCount}`);
+const personalSelectedCount = skills.filter((item) => item.sourceKind === "personal_install").length;
+const hostIntegratedCount = skills.filter((item) => item.sourceKind === "host_integrated").length;
+requireFact(payload.skills.personalSelectedCount === personalSelectedCount, "snapshot_personal_skill_count_mismatch", `${payload.skills.personalSelectedCount}/${personalSelectedCount}`);
+requireFact(payload.skills.hostIntegratedCount === hostIntegratedCount, "snapshot_host_skill_count_mismatch", `${payload.skills.hostIntegratedCount}/${hostIntegratedCount}`);
+requireFact(payload.skills.hostIntegratedDiscovery === "not_rerun_by_agents_snapshot_refresh", "snapshot_host_skill_discovery_boundary_missing", String(payload.skills.hostIntegratedDiscovery));
+requireFact(payload.skills.selectedPublicCount === personalSelectedCount + hostIntegratedCount, "snapshot_skill_source_split_invalid", `${payload.skills.selectedPublicCount}/${personalSelectedCount + hostIntegratedCount}`);
+requireFact(payload.skills.activeInstallIntent >= payload.skills.personalSelectedCount, "snapshot_skill_supply_count_invalid", `${payload.skills.activeInstallIntent}/${payload.skills.personalSelectedCount}`);
 requireFact(Array.isArray(payload.validation?.rows) && payload.validation.rows.length >= 5, "snapshot_validation_rows_invalid", String(payload.validation?.rows?.length));
 requireFact(Array.isArray(payload.validation?.failures), "snapshot_validation_failures_invalid", typeof payload.validation?.failures);
 const releaseValidatorRow = payload.validation?.rows?.find((row) => row.layer.startsWith("E release validator"));

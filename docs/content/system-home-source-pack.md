@@ -64,7 +64,7 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | 三控制面 | 只在 Git、机器或规则事实会改变决定时取证 | 最小进入 `.agents`、GitHub 总索引、PCConfig 或具体项目 | 入口不运行所有动态 Provider，也不恢复历史第四控制面 |
 | 能力路由 | 选择 Skill、工具、reader、Provider、并行与必要盲测 | 用最有净收益的现有能力；真实缺失才降级 | E95 增加安全不换复杂度、注意力编排和自然意图盲测；合同不证明账号/工具当前可用 |
 
-## 23 个 Skills 在系统中的位置
+## 26 个 Skills 在系统中的位置
 
 | Skill | 自然请求 → 用户得到什么 | 接入价值与依赖 | 当前边界 |
 | --- | --- | --- | --- |
@@ -76,6 +76,9 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | `timeaudit-diagnostics` | “过去一小时为什么卡” → 覆盖、聚合信号、因果限制和下一步 | 连接 TimeAudit 有界 provider 与 Windows/PCConfig 现场 | 最新一小时 3702 样本、fresh；不返回具体进程或证明根因 |
 | `localocr` | “读扫描 PDF/表格/公式” → 文本、版面、表格、坐标和 sidecar | 复杂扫描材料走本地 OCR；普通清晰图片仍直接视觉 | 上次小图 E2E 可保留，当前 18665 health 本轮不可达 |
 | `personal-health` | “结合我的当前资料回答/刷新设备” → 分层健康证据与最小更新 | 连接 processed-current、权威医学信息和 Health Owner | 未读取个人健康正文，不证明任何当前事实 |
+| `personal-litigation` | “根据合同和现有材料准备一份正式文书，并告诉我现在到哪一步” → 可编辑文书、事实/未知和现实状态分层 | 连接唯一现状来源、真实原件、Word/PDF 工具与私人事务边界 | 只说明合同与私人事务文书产品；不读取或公开具体私人事实，本轮未跑真实事务 E2E |
+| `documents` | “创建或修订这份 Word 文书并逐页检查” → 可编辑 DOCX、修订/批注和版面验收 | 宿主集成能力保留 Word 结构，并以逐页渲染检查真实版面 | 本轮只核对 observed bundle source/bytes/SHA，未创建真实文档，Current/Fresh/E2E Unknown |
+| `pdf` | “填写或生成这份 PDF，并核对表单字段和页面显示” → 最终 PDF、字段逻辑与逐页验收 | 宿主集成能力同时检查 PDF 结构、表单字段、控件、外观和页面 | 本轮只核对 observed bundle source/bytes/SHA，未处理真实 PDF，Current/Fresh/E2E Unknown |
 | `md-to-pdf` | “按正式样式导出 PDF” → 与源 hash、页数和布局绑定的 PDF | 本地插件连接 Markdown、浏览器渲染和原子发布 | 本轮未生成实际 PDF |
 | `pdf-render-safe` | “检查 PDF 裁切/空白/错位” → 逐页 PNG、总览图与指纹报告 | 先低成本全量看，再提高可疑页分辨率 | 本轮未渲染 PDF |
 | `mojibake-doctor` | “这个文件乱码了” → 原字节诊断、预览和可逆修复计划 | 避免直接另存覆盖仍可恢复的原字节 | 本轮未 Apply 文件 |

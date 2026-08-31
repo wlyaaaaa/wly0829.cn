@@ -173,7 +173,7 @@ export const systemScenarios = [
     rules: "先按真实文件类型选择保留结构最多的读取方式；乱码从原始字节诊断；扫描识别绑定页码和版面；源内容、生成文件、渲染页面和语义验收分别核对。",
     result: "结构化源文档、当前 PDF、页数与源文件指纹、完整页面总览、可疑页清单、冲突与未确认项，以及不会覆盖原件的恢复位置。",
     value: "它不是把文本拼成一个文件，而是让来源、转换、版面和最终阅读体验都能重新核对。",
-    dependencyIds: ["general-ai", "agents", "rules", "skills", "materials", "localocr", "verification", "human-review"],
+    dependencyIds: ["general-ai", "agents", "rules", "skills", "materials", "localocr", "documents-skill", "pdf-skill", "verification", "human-review"],
     stages: [
       {
         number: "01",
@@ -857,6 +857,30 @@ export const systemDependencyNodes = [
     detail: "保留页码、坐标和未确认项。普通清晰图片不机械 OCR，原件始终高于识别结果。"
   },
   {
+    id: "documents-skill",
+    lane: "personal",
+    title: "可编辑文档能力（documents）",
+    subtitle: "创建、修订、批注 Word 文书并逐页检查真实版面",
+    href: "/skills/documents",
+    detail: "保留 DOCX 的样式、表格、页眉页脚、修订和批注；结构正确不能替代最后一轮逐页渲染验收。"
+  },
+  {
+    id: "pdf-skill",
+    lane: "personal",
+    title: "PDF 读写与表单能力（pdf）",
+    subtitle: "同时核对内容结构、字段值、页面控件、显示外观和逐页版面",
+    href: "/skills/pdf",
+    detail: "页面看见值不等于表单字段已经正确写入；默认保留交互性，只有明确要求才压平。"
+  },
+  {
+    id: "private-affairs-skill",
+    lane: "personal",
+    title: "合同与私人事务文书入口（personal-litigation）",
+    subtitle: "围绕唯一现状来源和真实原件准备文书并分开现实状态",
+    href: "/skills/personal-litigation",
+    detail: "把文书制作、签署、本人操作、平台回执和外部处理分别说明；私人正文与个人结果不进入首页，外部动作仍需精确授权。"
+  },
+  {
     id: "chinese-asr",
     lane: "personal",
     title: "ChineseASR",
@@ -920,7 +944,8 @@ export const systemDependencyRelations = [
   { id: "git-projects", nodes: ["github-index", "project-entry-gate", "all-projects"], label: "从仓库身份进入具体项目", detail: "GitHub 总索引提供全部项目事实，项目身份入口只在这些事实会改变决定时检查，再进入真正拥有业务做法的项目。" },
   { id: "machine-diagnostics", nodes: ["pcconfig", "timeaudit", "timeaudit-skill"], label: "从机器现场到有界历史诊断", detail: "PCConfig 提供当前机器和恢复关系，TimeAudit 保存过去证据，诊断入口把自然问题收窄成时间窗、覆盖质量和竞争假设。" },
   { id: "audio-task", nodes: ["wechat", "chinese-asr", "chinese-asr-skill"], label: "从微信语音到可复核转写", detail: "微信入口保留消息和媒体关系，ChineseASR 项目拥有语音处理实现，Skill 选择本次转写、时间位置和复核模式。" },
-  { id: "document-task", nodes: ["materials", "localocr", "verification"], label: "从扫描原件到可验证文字与结构", detail: "材料入口先找到真实原件，LocalOCR 只在扫描件或复杂版面需要时进入，识别结果继续保留页码、坐标、质量和未确认项。" },
+  { id: "document-task", nodes: ["materials", "localocr", "documents-skill", "pdf-skill", "verification"], label: "从混合原件到可编辑、逐页验收的成品", detail: "材料入口先找到真实原件，LocalOCR 只在扫描件或复杂版面需要时进入，Word 与 PDF 能力再分别保留可编辑结构、字段逻辑和逐页版面。" },
+  { id: "private-affairs-task", nodes: ["materials", "private-affairs-skill", "documents-skill", "pdf-skill", "human-review"], label: "私人事务材料进入文书，现实状态仍然分开", detail: "合同与私人事务入口先核对现状来源和原件，文档与 PDF 能力负责成品；制作、本人操作、外部回执和最终决定不会混成一个状态。" },
   { id: "health-task", nodes: ["materials", "personal-health", "personal-health-skill", "human-review"], label: "健康原件进入协作，最终由人采用", detail: "健康项目保留当前证据和新资料边界，Skill 选择已有事实、原件或前台刷新路线，最终选择和停止条件仍由本人决定。" },
   { id: "recovery-task", nodes: ["pcconfig", "recovery-backup", "verification"], label: "从机器资产到分层恢复验收", detail: "PCConfig 提供依赖和恢复关系，开发环境备份保存不可再生材料，文件、运行、登录、重启与用户可用分别验证。" },
   { id: "project-delivery", nodes: ["all-projects", "verification", "human-review"], label: "从项目结果到真实交付", detail: "具体项目提供实现和各层证据；验证矩阵说明已闭合到哪里，最后由用户判断是否真正满足当前目标。" }
@@ -1155,29 +1180,39 @@ export const systemSkillFamilies = [
   {
     id: "make-documents",
     number: "03",
-    title: "把内容整理成能交付的文档",
+    title: "交付文档与私人事务材料",
     requests: [
+      "“根据现有合同和材料准备一份可编辑文书，把制作完成、本人操作和外部回执分开。”",
+      "“把这份 Word 文档修订好，保留批注，并逐页检查表格和页眉页脚。”",
+      "“填写这份 PDF 表单，既检查页面显示，也核对真实字段值。”",
       "“把这篇中文 Markdown 导出成规定页数的 PDF，并检查每一页。”",
       "“这份文件打开后中文乱码，先判断能不能无损修复。”"
     ],
     inputs: [
-      "当前源文件、目标格式、样式和页数要求",
-      "源文件指纹、当前输出和需要检查的真实页面",
+      "当前事实、唯一状态来源、原件、目标用途与外部动作边界",
+      "Word、PDF、Markdown 或乱码文件的当前原件与目标格式",
+      "修订、批注、字段、样式、页数和逐页验收要求",
       "乱码文件的原始字节，而不是已经错误显示的复制文本"
     ],
-    collaboration: "转换能力负责生成当前 PDF，渲染能力负责逐页目检；乱码修复先独立诊断原始字节，确认可逆后才修改。",
+    collaboration: "私人事务入口先区分事实、文书制作和现实状态；Word 与 PDF 能力分别保留可编辑结构和表单逻辑；转换、逐页渲染与乱码修复再完成具体交付。",
     delivery: [
-      "与当前源文件绑定的 PDF、页数和关键文本检查",
-      "完整页面总览图、可疑页高清图和具体页码问题",
+      "DOCX（可编辑 Word 文档）、已验收 PDF 或按要求保留交互性的表单",
+      "文书制作、本人操作、平台或外部状态的独立结论",
+      "完整页面总览图、可疑页、字段或具体页码问题",
       "乱码修复计划、原字节备份和修复后的重新验证"
     ],
     willNot: [
       "不会因为目标文件已经存在就把旧输出当成本轮成品",
       "不会把能渲染等同于内容语义正确",
+      "不会把文书生成写成本人已经操作或外部已经处理",
+      "未经精确授权不会提交、付款、撤回或联系外部机构",
       "不会在编码链不明确时批量改写文件",
-      "不会为了套统一主题重写原文"
+      "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
+      { slug: "personal-litigation", name: "合同与私人事务文书", technicalName: "personal-litigation", summary: "围绕唯一现状来源和真实原件准备文书，并把制作、本人操作、平台回执与外部状态分开。", href: "/skills/personal-litigation" },
+      { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
+      { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },
       { slug: "md-to-pdf", name: "Markdown 转 PDF", technicalName: "md-to-pdf", summary: "按文档用途和分页要求生成 PDF，并核对源文件指纹、页数、中文文本和当前输出。", href: "/skills/md-to-pdf" },
       { slug: "pdf-render-safe", name: "PDF 逐页视觉验收", technicalName: "pdf-render-safe", summary: "把全部页面做成总览图，再单独检查可疑页，发现裁切、空白、错位和陈旧页面图。", href: "/skills/pdf-render-safe" },
       { slug: "mojibake-doctor", name: "中文乱码诊断与修复", technicalName: "mojibake-doctor", summary: "从原始字节判断乱码链，默认只给修复预览；确认可逆后才带备份原子替换。", href: "/skills/mojibake-doctor" }
@@ -1193,7 +1228,7 @@ export const systemSkillFamilies = [
       "“只让我的具名设备访问这个本机服务，并从对端实际验收。”"
     ],
     inputs: [
-      "尽可能窄的事故时间、症状和当前现场",
+      "尽可能窄的故障时间、症状和当前现场",
       "需要检查的责任来源，而不是默认全扫",
       "精确服务、协议、端口和经过核对的目标设备"
     ],

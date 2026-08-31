@@ -30,6 +30,11 @@ if (
   || !Array.isArray(generatedPanelFacts?.validation?.rows)
   || !Array.isArray(generatedPanelFacts?.validation?.failures)
   || !Number.isInteger(generatedPanelFacts?.skills?.activeInstallIntent)
+  || !Number.isInteger(generatedPanelFacts?.skills?.personalSelectedCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.hostIntegratedCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.selectedPublicCount)
+  || generatedPanelFacts.skills.selectedPublicCount !== generatedPanelFacts.skills.personalSelectedCount + generatedPanelFacts.skills.hostIntegratedCount
+  || generatedPanelFacts.skills.hostIntegratedDiscovery !== "not_rerun_by_agents_snapshot_refresh"
   || !Number.isInteger(generatedPanelFacts?.skills?.transactionCampaignCount)
   || !generatedPanelFacts?.integrity?.payloadSha256
 ) {
@@ -71,7 +76,7 @@ export const project = {
   heroFacts: [
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
     { label: "规则与模块", value: `同一 ${panelSnapshot.authority.releaseId} release 的 5 份规则；E92–E94 收口耐久授权、任务生命周期与跨项目 coordination，E95 增加可信本地边界、注意力质量和实现盲测；项目总览加 6 个模块` },
-    { label: "个人能力供应", value: `供应清单 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent；公开看板收录 ${panelSnapshot.skills.selectedPublicCount} 个，其余私人或冻结项不列名称` },
+    { label: "个人能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 个个人安装意图中有 ${panelSnapshot.skills.personalSelectedCount} 个公开可用、${panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount} 个当前不可用不展示；另有 ${panelSnapshot.skills.hostIntegratedCount} 个宿主集成能力，公开目录共 ${panelSnapshot.skills.selectedPublicCount} 个` },
     { label: "三控制面", value: ".agents 管行为、授权和能力；GitHub 总索引管仓库与发布事实；PCConfig 管机器事实与恢复" },
     { label: "运行与临时目录", value: "迁移目标是 E 数据盘与 E 缓存盘；当前运行根仍由 C 盘实际目录承载，E 盘只有迁移 staging，尚未完成 junction、停写增量与运行时回读，不能称已切换" },
     { label: "模型与委派", value: `当前规则要求先验证宿主 model、effort、root/child 与 ${panelSnapshot.authority.releaseId} 身份，再按任务语义选择 0–10 条支路；网页不把某次任务的 child 数量当成持续能力` }

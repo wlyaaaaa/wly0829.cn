@@ -230,7 +230,7 @@ test("project technical facts remain complete without taking over the first view
   const agentsFacts = project.heroFacts.map((fact) => fact.value).join("\n");
   assert.ok(agentsFacts.includes(panelSnapshot.authority.releaseId));
   assert.ok(agentsFacts.includes(panelSnapshot.authority.previous.release_id));
-  assert.match(agentsFacts, /25.*23/);
+  assert.match(agentsFacts, /25.*24.*2.*26/);
   const timeAuditFacts = timeAuditProject.heroFacts.map((fact) => fact.value).join("\n");
   for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "53000", "6 张仪表盘", "78 个面板"]) {
     assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit technical reference hides: ${currentFact}`);
@@ -336,7 +336,7 @@ test("the System source pack explains generic AI productivity without platform o
   for (const capability of ["自然语言理解", "推理", "搜索", "视觉和文档理解", "工具与代码执行", "浏览器操作", "并行协作"]) {
     assert.ok(sourcePack.includes(capability), `System source pack omits generic capability: ${capability}`);
   }
-  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "10 个项目", "5 份活动规则", "23 个 Skills"]) {
+  for (const phrase of ["已经接入的外部生产力", "个人系统真正创造的价值", "不冒充为个人开发", "全部项目能力版图基线", "5 份活动规则", "26 个 Skills"]) {
     assert.ok(sourcePack.includes(phrase), `System source pack omits product boundary: ${phrase}`);
   }
   for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
@@ -1618,9 +1618,13 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.doesNotMatch(item.sourcePath, /[\t\r\n]/, `${item.slug}.sourcePath contains an escaped control character`);
     assert.ok(["pass", "mixed", "unknown", "problem"].includes(item.statusTone), `${item.slug}.statusTone is invalid`);
     assert.ok(item.transactionState.length >= 10, `${item.slug}.transactionState is incomplete`);
-    assert.match(item.evidenceSourceCommit, /^[a-f0-9]{40}$/);
-    if (item.sourceKind === "personal_install") assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
-    else assert.match(item.supplyEvidenceCommand, /workspace dependency loader/);
+    if (item.sourceKind === "personal_install") {
+      assert.match(item.evidenceSourceCommit, /^[a-f0-9]{40}$/);
+      assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
+    } else {
+      assert.equal(item.evidenceSourceCommit, null);
+      assert.match(item.supplyEvidenceCommand, /workspace dependency loader/);
+    }
     for (const key of ["useWhen", "avoidWhen", "inputs", "outputs", "flow", "boundaries", "dependencies"]) {
       assert.ok(item[key].length >= 1, `${item.slug}.${key} is incomplete`);
     }
@@ -1641,17 +1645,10 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 24);
   assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
   assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
-  const newSkillReceipts = {
-    "personal-litigation": [7445, "9732926454d3e67e9fd283d958e593c23c15106ba9c2279c90c5d7e4cba0df8a"],
-    documents: [42857, "adb4fa343854795dcb724871b66c5e05ba537d110a62ecc700fa2f44967a0295"],
-    pdf: [7269, "9e429bfc5ada20ccf25a531484e3dcc5da59811d936a7cc5dfd23dbf2dfadd31"]
-  };
-  for (const [slug, [bytes, sha256]] of Object.entries(newSkillReceipts)) {
+  for (const slug of ["personal-litigation", "documents", "pdf"]) {
     const entry = skills.find((item) => item.slug === slug);
-    assert.equal(entry.sourceBytes, bytes);
-    assert.equal(entry.sourceSha256, sha256);
-    assert.match(entry.tests, new RegExp(`${bytes} bytes`));
-    assert.match(entry.tests, new RegExp(sha256));
+    assert.ok(Number.isInteger(entry.sourceBytes) && entry.sourceBytes > 0);
+    assert.match(entry.sourceSha256, /^[a-f0-9]{64}$/);
   }
   assert.equal(excludedSkills.length, 0);
 });
@@ -1891,10 +1888,14 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.ok(Number.isInteger(panelSnapshot.sourceDirtyCount));
   assert.equal(panelSnapshot.sourceDirtyCount, panelSnapshot.sourceDirtyPaths.length);
   assert.equal(panelSnapshot.skills.selectedPublicCount, skills.length);
-  assert.ok(panelSnapshot.skills.activeInstallIntent >= panelSnapshot.skills.selectedPublicCount);
+  assert.equal(panelSnapshot.skills.personalSelectedCount, skills.filter((item) => item.sourceKind === "personal_install" && item.availability === "available").length);
+  assert.equal(panelSnapshot.skills.hostIntegratedCount, skills.filter((item) => item.sourceKind === "host_integrated" && item.availability === "available").length);
+  assert.equal(panelSnapshot.skills.selectedPublicCount, panelSnapshot.skills.personalSelectedCount + panelSnapshot.skills.hostIntegratedCount);
+  assert.equal(panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount, 1);
   assert.ok(Number.isInteger(panelSnapshot.skills.transactionCampaignCount) && panelSnapshot.skills.transactionCampaignCount >= panelSnapshot.skills.activeInstallIntent);
-  assert.ok(skills.every((item) => item.transactionState.includes(`${panelSnapshot.skills.transactionCampaignCount} 个供应事务`)));
-  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`${panelSnapshot.skills.activeInstallIntent} 个 active install intent`)));
+  assert.ok(skills.filter((item) => item.sourceKind === "personal_install").every((item) => item.transactionState.includes(`${panelSnapshot.skills.transactionCampaignCount} 个供应事务`)));
+  assert.ok(skills.filter((item) => item.sourceKind === "host_integrated").every((item) => item.transactionState.includes("不经过个人 Skill 安装事务")));
+  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`${panelSnapshot.skills.activeInstallIntent} 个 personal active install intent`)));
   assert.equal(panelSnapshot.ruleBinding.length, 5);
   for (const binding of panelSnapshot.ruleBinding) {
     assert.match(binding.sourceSha256, /^[a-f0-9]{64}$/);

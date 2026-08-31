@@ -1658,7 +1658,7 @@ function SystemPage() {
       </section>
 
       <section className="system-frame system-skill-families" aria-labelledby="system-skill-families-title">
-        <div className="system-home-section-heading"><h2 id="system-skill-families-title">不用记 23 个名字，按想做的事进入</h2><p>完整目录仍保留每个 Skill 的触发、流程和技术边界；这里先把 23 个入口按七类现实动作解释清楚，每个入口只出现一次。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-skill-families-title">按想完成的事找到能力入口</h2><p>完整目录仍保留每个 Skill 的触发、流程和技术边界；这里先把 {systemSkillFamilies.flatMap((family) => family.members).length} 个入口按七类现实动作解释清楚，每个入口只出现一次。</p></div>
         <div className="system-skill-family-list">{systemSkillFamilies.map((family) => <SystemSkillFamily family={family} key={family.id} />)}</div>
       </section>
 
@@ -1699,7 +1699,8 @@ function SearchResultsPage({ search }) {
 const skillCategoryDefinitions = [
   { id: "all", label: "全部" },
   { id: "find", label: "找东西", slugs: ["personal-media", "personal-materials", "wechat-direct", "google-workspace-direct"] },
-  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "md-to-pdf", "pdf-render-safe", "mojibake-doctor", "file-intake-router", "media-person-self"] },
+  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "file-intake-router", "media-person-self"] },
+  { id: "documents", label: "文档与私人事务", slugs: ["personal-litigation", "documents", "pdf", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
   { id: "diagnose", label: "电脑诊断", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
@@ -1711,10 +1712,13 @@ function skillCategoryIds(slug) {
 }
 
 function SkillsPage() {
+  const personalSkillCount = skills.filter((item) => item.sourceKind === "personal_install").length;
+  const hostIntegratedCount = skills.filter((item) => item.sourceKind === "host_integrated").length;
+  const unavailablePersonalCount = panelSnapshot.skills.activeInstallIntent - personalSkillCount;
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
-      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力）</strong><span>当前供应清单登记了 {panelSnapshot.skills.activeInstallIntent} 个需要安装的能力；另外 {panelSnapshot.skills.activeInstallIntent - skills.length} 项属于不进入公开面板的私人或冻结能力，页面不列名称与详情。收录项按使用频率、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力入口）</strong><span>{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；供应清单另有 {unavailablePersonalCount} 个当前不可用入口不展示。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
         {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
       </div>
@@ -1789,7 +1793,7 @@ function SkillDetail({ item, search }) {
         </div>
         <section><h2>依赖</h2><StringList items={item.dependencies.map(annotateTerms)} /></section>
         <section><h2>验证状态</h2><p>六层状态分开显示，Regression（回归证据）另列。Source（源码）、Install（安装）和 Transaction（供应事务）不会自动提升 Current task（当前任务）、Fresh task（全新任务验证）或真实 E2E（端到端验证）。</p><EvidenceGrid skill={item} /></section>
-        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd><code>{item.evidenceSourceCommit}</code></dd></div><div><dt>Supply command（供应验证命令）</dt><dd><code>{item.supplyEvidenceCommand}</code></dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
+        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd>{item.evidenceSourceCommit ? <code>{item.evidenceSourceCommit}</code> : "不适用：宿主集成能力不绑定项目 Git 提交"}</dd></div><div><dt>Supply command（供应验证命令）</dt><dd><code>{item.supplyEvidenceCommand}</code></dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
         <section><h2>Canonical source（唯一维护源）</h2><div className="source-list"><div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div></div></section>
         <SiteLink className="back-link" href={back}><ArrowLeft size={18} aria-hidden="true" />返回 Skills（能力）</SiteLink>
       </article>
