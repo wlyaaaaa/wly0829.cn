@@ -651,7 +651,9 @@ test("non-rule project packages preserve the content contract and enter only the
       assert.ok(observedRelease, "agents Owner observation omits its release identity");
       assert.ok(candidate.snapshotBoundary.includes(`${observedRelease} 观察`), "agents boundary mixes live release with an unlabelled historical Owner observation");
       assert.ok(candidate.cardMetrics.some((item) => item.label.includes(observedRelease) && item.value.includes("pass")), "agents local regression metric omits its observed release");
+      assert.ok(candidate.cardMetrics.some((item) => item.label.startsWith("合同覆盖") && item.label.includes(observedRelease)), "agents contract metric omits its observed release");
       assert.ok(candidate.cardMetrics.find((item) => item.label === "活动规则")?.value.startsWith(panelSnapshot.authority.releaseId), "agents live release metric is not panelSnapshot-derived");
+      assert.ok(candidate.cardStatus.includes(panelSnapshot.authority.releaseId) && candidate.cardStatus.includes(`${observedRelease} 观察`), "agents status assigns an older Owner regression to the live release");
     }
     const canonicalFacts = JSON.stringify({ heroFacts: candidate.heroFacts, currentState: candidate.currentState, components: candidate.components, methodCanvas: candidate.methodCanvas, modules: candidateModules, liveSnapshot: candidate === project ? panelSnapshot : undefined });
     for (const metric of candidate.cardMetrics) {
@@ -1584,18 +1586,27 @@ test("the rules workbench exposes exactly five verified current E-release rules"
 
 test("each current rule tells an ordinary reader how it applies without manual invocation", () => {
   assert.equal(rulesSnapshot.rules.length, 5);
+  const readerConstructionTerms = /\b(?:E release|generation|Publisher|anchor|manifest|ledger|fallback|root|child|successor|durable grant)\b/i;
   for (const rule of rulesSnapshot.rules) {
     assert.match(rule.example, /你不需要/iu, `${rule.logicalId} does not explain automatic use`);
     assert.match(rule.example, /说|问/iu, `${rule.logicalId} lacks a natural-language request example`);
-    assert.doesNotMatch(rule.example, /先验证 E\d+|五文件 ruleset|fast (?:或|\/|and) standard lane|successor 现场确认/iu, `${rule.logicalId} still opens with internal execution vocabulary`);
+    const readerLayer = JSON.stringify({ question: rule.question, plainLanguage: rule.plainLanguage, why: rule.why, result: rule.result, readerStates: rule.readerStates });
+    assert.doesNotMatch(readerLayer, readerConstructionTerms, `${rule.logicalId} reader layer opens with construction vocabulary`);
+    assert.ok(rule.question.length >= 16 && rule.plainLanguage.length >= 45 && rule.result.length >= 35, `${rule.logicalId} reader layer is too thin`);
   }
   const rootRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "agents_root_rules");
+  const protectionRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "protected_major_actions_contract");
+  const authorizationRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "authorization_delegation_contract");
+  const contextRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "four_base_decision_context_contract");
   const capabilityRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "capability_routing_contract");
   assert.match(JSON.stringify(rootRule), /本人私人事务文书/);
-  assert.match(capabilityRule.example, /聊天附件、录音、扫描件和合同原件/);
-  assert.match(capabilityRule.example, /可编辑文书和逐页验收 PDF/);
-  assert.match(capabilityRule.example, /不能确认的事实单列/);
-  assert.doesNotMatch(capabilityRule.example, /画廊/);
+  assert.match(JSON.stringify({ question: rootRule.question, plainLanguage: rootRule.plainLanguage, result: rootRule.result }), /当前用户要求|项目规则|事实来源/);
+  assert.match(JSON.stringify({ question: protectionRule.question, plainLanguage: protectionRule.plainLanguage, result: protectionRule.result }), /当前可用版|上一可用版|生效位置/);
+  assert.match(JSON.stringify({ question: authorizationRule.question, plainLanguage: authorizationRule.plainLanguage, result: authorizationRule.result }), /不用|不反复|发生变化/);
+  assert.match(JSON.stringify({ question: contextRule.question, plainLanguage: contextRule.plainLanguage, result: contextRule.result }), /规则|Git|PCConfig|项目/);
+  assert.match(JSON.stringify({ question: capabilityRule.question, plainLanguage: capabilityRule.plainLanguage, result: capabilityRule.result }), /AI|工具|能力|并行|不可用/);
+  assert.match(capabilityRule.example, /核对[\s\S]*文书[\s\S]*逐页[\s\S]*PDF|核对[\s\S]*文书[\s\S]*PDF[\s\S]*逐页/);
+  assert.match(capabilityRule.example, /未知|不能确认/);
 });
 
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
@@ -1642,8 +1653,12 @@ test("the Skills catalog contains the selected usable capabilities in value orde
       assert.match(item.evidenceSourceCommit, /^[a-f0-9]{40}$/);
       assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
     } else {
-      assert.equal(item.evidenceSourceCommit, null);
+      assert.equal(item.evidenceSourceCommit, null, item.slug + " incorrectly inherits the E rules Git commit");
       assert.match(item.supplyEvidenceCommand, /workspace dependency loader/);
+      assert.ok(Number.isInteger(item.sourceBytes) && item.sourceBytes > 0, item.slug + ".sourceBytes is invalid");
+      assert.match(item.sourceSha256, /^[a-f0-9]{64}$/, item.slug + ".sourceSha256 is invalid");
+      assert.ok(item.evidenceObservedAt.length >= 20, item.slug + ".evidenceObservedAt is incomplete");
+      assert.doesNotMatch([item.dependencies.join("\n"), item.tests, item.evidenceBasis].join("\n"), /openai-primary-runtime\\(?:documents|pdf)\\\d|\b\d+ bytes\b|SHA-256|26\.826\.12353/, item.slug + " duplicates its structured source receipt in prose");
     }
     for (const key of ["useWhen", "avoidWhen", "inputs", "outputs", "flow", "boundaries", "dependencies"]) {
       assert.ok(item[key].length >= 1, `${item.slug}.${key} is incomplete`);
@@ -1664,11 +1679,34 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   }
   assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 24);
   assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
+  assert.equal(new Set(skills.map((item) => item.slug)).size, skills.length);
   assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
-  for (const slug of ["personal-litigation", "documents", "pdf"]) {
-    const entry = skills.find((item) => item.slug === slug);
-    assert.ok(Number.isInteger(entry.sourceBytes) && entry.sourceBytes > 0);
-    assert.match(entry.sourceSha256, /^[a-f0-9]{64}$/);
+  for (const item of skills.filter((entry) => Object.hasOwn(entry, "sourceBytes") || Object.hasOwn(entry, "sourceSha256"))) {
+    assert.ok(Number.isInteger(item.sourceBytes) && item.sourceBytes > 0, item.slug + ".sourceBytes is invalid");
+    assert.match(item.sourceSha256, /^[a-f0-9]{64}$/, item.slug + ".sourceSha256 is invalid");
+    assert.ok(item.evidenceObservedAt.length >= 20, item.slug + ".evidenceObservedAt is incomplete");
+    assert.doesNotMatch(item.tests, /\b\d+ bytes\b|SHA-256|[a-f0-9]{64}/, item.slug + ".tests duplicates its structured source receipt");
+  }
+  const litigationGuide = skillGuides["personal-litigation"];
+  const litigationSemantics = JSON.stringify(litigationGuide);
+  for (const term of ["明确决定继续", "ready_for_upload", "cancellation", "non-submission", "failure", "withdrawal", "deferral"]) assert.ok(litigationSemantics.includes(term), "personal-litigation omits presumption condition: " + term);
+  const readyOnlyFailure = litigationGuide.failures.find((item) => item[0].includes("只有可提交成品"));
+  assert.match(readyOnlyFailure.join("\n"), /Unknown|未知/);
+  assert.match(readyOnlyFailure.join("\n"), /现实状态回读/);
+  const firstUseCases = [
+    ["documents", "DOCX", "DOCX（可编辑 Word 文档）"],
+    ["documents", "bundle", "bundle（宿主能力包）"],
+    ["pdf", "Widget", "Widget（页面表单控件）"],
+    ["pdf", "bundle", "bundle（宿主能力包）"],
+    ["file-intake-router", "DOCX", "DOCX（可编辑 Word 文档）"],
+    ["authorization-file-broker", "bundle", "bundle（加密包）"]
+  ];
+  for (const [slug, term, glossed] of firstUseCases) {
+    const outcome = skillOutcomes[slug];
+    const readerText = JSON.stringify({ value: outcome.value, why: outcome.why, example: outcome.example, result: outcome.result, readerStates: outcome.readerStates, changes: outcome.changes });
+    const firstIndex = readerText.indexOf(term);
+    assert.ok(firstIndex >= 0, slug + " reader layer omits " + term);
+    assert.equal(readerText.slice(firstIndex, firstIndex + glossed.length), glossed, slug + " first " + term + " use lacks a Chinese gloss");
   }
   assert.equal(excludedSkills.length, 0);
 });
