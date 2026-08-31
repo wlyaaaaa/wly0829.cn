@@ -7,7 +7,7 @@ export const pcconfigProject = {
   statusTone: "mixed",
   cardStatus: "Password Center 已独立运行，机器配置、秘密盲用和恢复入口可用",
   cardStatusTone: "pass",
-  snapshotBoundary: "Codex 对话热备已运行；87 项任务登记与 88 项完整现场存在迁移任务差异，Codex Home 仍等待正式切换，H 冷备、银行卡与新机恢复缺真实用户端到端验收",
+  snapshotBoundary: "Codex 对话热备已运行；87 项任务登记与 88 项完整现场存在迁移任务差异；Codex Home 的在线 ReadyCheck 已放行，但仍由 C 盘普通目录承载，等待用户自行退出后才会正式切换；H 冷备、银行卡与新机恢复缺真实用户端到端验收",
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是这台 Windows 电脑的配置地图和恢复中心。我可以直接问“为什么这个任务没启动”“把项目迁到 V 盘”或“重装后恢复开发环境”。它会先从现场确认路径、磁盘、运行时、启动任务和备份，再用可回退的方式处理。最后我会看到哪些已经恢复并能用、哪些需要重新登录、哪些证据还不足，以及从哪里继续或回滚。",
   why: "机器配置分散在文件、环境变量、计划任务、服务、安装目录和加密状态里。没有统一导航和恢复顺序时，重装或迁移后经常不是“文件丢了”，而是路径、任务、登录状态和程序引用互相接不上；直接整包覆盖又会把旧配置和故障一起带回来。",
@@ -19,12 +19,12 @@ export const pcconfigProject = {
     unavailable: "磁盘、Provider（现场读取器）或受保护入口不可用时，把对应结论标为 Unknown（证据不足），不猜默认路径、不整包覆盖，也不把部分复制或安装称为整机恢复。"
   },
   heroFacts: [
-    { label: "当前源码", value: "PRIVATE main 5bb66e95825e8445c5e1ce53d0475ee85dee698b 与 origin/main 对齐；观察时 checkout 另有 3 个 Codex Home 迁移候选文件，均不属于已发布 main" },
+    { label: "当前源码", value: "PRIVATE main f9245a140a9b5356599282b6e4af2cfdc2f3c804 与 origin/main 对齐；工作树干净" },
     { label: "Password Center", value: "已脱离退役 C Policy 独立运行；9/9 安装文件与锚点一致，Secret Broker 安全核心和产品闭环均 pass，plaintext_returned=false" },
     { label: "受保护数据", value: "P0 已在线恢复到第 68 版 normal、active=LKG；Vault V2 仍只到 protected_install_effect_source_ready，没有安装器回读，不能称已安装" },
     { label: "任务现场", value: "2026-08-31 管理员只读 Drift：Registry 87 项、Windows 现场 88 项，新增 2 个当前迁移任务、移除 1 个旧任务；29 个受管核心任务运行健康无失败" },
     { label: "Codex 对话恢复", value: "每日热备任务启用、Ready 且最近自然结果 0；恢复点按内容寻址和逐对象 SHA-256 回读，原始对话不进入 GitHub" },
-    { label: "Codex Home 迁移", value: "迁移事务、E 盘 staging、ACL/内容/链接校验和回滚链已就绪；当前 source=true、staging=true、final=false，状态 waiting_for_codex_exit，尚未正式切换" }
+    { label: "Codex Home 迁移", value: "在线 ReadyCheck 已放行并给出离线时间预算；当前 source=true、staging=true、final=false，状态 ready_waiting_for_user_exit。它不会自动关闭或重启 Codex，正式切换和新运行时回读尚未发生" }
   ],
   productPrinciples: [
     { title: "先读现场，再改变机器", detail: "登记表负责导航，不能冒充当前状态；真正要改什么，先由 Windows、安装根、任务或项目配置现场证明。" },
@@ -76,24 +76,23 @@ export const pcconfigProject = {
     { term: "E2E（端到端验证）", meaning: "真实输入从用户入口经过完整链路，最终得到可见且可回读的结果。" }
   ],
   currentState: {
-    observedAt: "2026-08-31T04:15:55Z",
-    label: "Password Center 独立运行、Codex 对话热备已闭合；完整权限现场发现任务登记漂移，Codex Home 仍未切换",
+    observedAt: "2026-08-31T11:00:58Z",
+    label: "Password Center 独立运行、Codex 对话热备已闭合；完整权限现场发现任务登记漂移，Codex Home 已通过在线准备检查但仍未切换",
     facts: [
-      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 5bb66e95825e8445c5e1ce53d0475ee85dee698b。观察时 checkout 另有 3 个 Codex Home 迁移候选文件；这些未提交内容不是 main。",
+      "源仓库为 PRIVATE（私有）main；本地 HEAD 与 origin/main 当前同为 f9245a140a9b5356599282b6e4af2cfdc2f3c804，工作树干净。最新两次提交把 Codex Home 切换改为增量路线，并修复本地化 USN journal（更新日志）输出解析。",
       "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。Secret Broker 安全核心与产品闭环均 pass，所有公开回执保持 plaintext_returned=false。",
       "PRIVATE Git 的完整加密 Recovery Set 可独立承担跨设备恢复；当前 cross_device_recovery_allowed=true、one_week_recovery_ready=true。新设备生成自己的设备/运行时密钥，不导出旧运行时私钥。",
       "银行卡的卡号、有效期和 CVV 作为一条原子凭据保存、备份和恢复；AgentCardFill 使用一次性、目标绑定能力盲填唯一 HTTPS 支付表单，不自动提交，也不把值交给模型。",
       "中文输出严格按 UTF-8、再按 GB18030 解码，仍失败就关闭；Google 官方完整 CSV 导入保留重复登录的稳定身份，并在主库、G 热备和 PRIVATE Git 副本全部回读后才删除明文导出。",
       "CodexConversationBackup-Hot-Daily 已启用、Ready，最近自然 LastTaskResult=0；恢复点使用 VSS、内容寻址、逐对象 SHA-256 和 pointer-last，原始对话不进入 GitHub。",
-      "Codex Home 迁移已具备停写等待、最终增量镜像、内容/ACL/链接清单核对、原子切换、C 兼容联接与回滚副本；当前 waiting_for_codex_exit，尚未执行正式 cutover。"
+      "Codex Home 迁移已具备停写等待、最终增量镜像、内容/ACL/链接清单核对、原子切换、C 兼容联接与回滚副本；在线 ReadyCheck 当前为 ready_waiting_for_user_exit，明确不会自动关闭或重启 Codex。"
     ],
     gaps: [
       "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
       "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
       "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练。",
       "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；不能写成 H 冷备已完成。",
-      "Codex Home 当前 source=true、staging=true、final=false，仍为 waiting_for_codex_exit；正式切换和新运行时回读没有发生。",
-      "观察时 checkout 的 3 个 Codex Home 迁移候选文件均未提交，不属于 5bb66e9 main，也不能写成已发布能力。",
+      "Codex Home 当前 source=true、staging=true、final=false：C:\\Users\\10979\\.codex 仍是普通物理目录，E:\\Data\\AppData\\Codex 尚不存在，用户级 CODEX_HOME 与 CODEX_SQLITE_HOME 均未设置。ReadyCheck 放行只说明可以等待用户自行退出后进入切换，不等于正式 cutover 或新运行时回读已经发生。",
       "2026-08-31 完整管理员只读 Drift 看到 Registry 87 项、Windows 现场 88 项：新增两个当前迁移任务、移除一个旧迁移任务，changed=0、complete_visibility=true。任务定义因此是明确漂移，不再沿用上一代 88/88 闭合结论。",
       "PCConfig Protected Data Safe Switch Boot Recovery 的 LastTaskResult=4 已由正式在线恢复回执证明为 historical_failure_recovered_online：current 第 68 版 normal、active=LKG、trusted control=true。最新自然 boot receipt 仍 deadline_met=false，因此下一次自然启动验收不能省略。",
       "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
@@ -138,7 +137,7 @@ export const pcconfigProject = {
     { ask: "让一个程序使用凭据，但不要把密码发给我。", effect: "使用 SecretRef 和登记执行目标盲注入；结果回执固定不含明文，调用者只知道成功、失败或需要人工因子。" },
     { ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
     { ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
-    { ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先准备 staging、最终增量、ACL/链接清单和回滚副本；状态保持 waiting_for_codex_exit，只有 Codex 完全退出后才按需启动正式切换。" },
+    { ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "先在 Codex 保持可用时准备 staging、最终增量、ACL/链接清单、回滚副本和离线时间预算。ReadyCheck 通过后也不会自动关闭或重启；只有用户自行退出后才进入正式切换。" },
     { ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
   ],
   evidenceLayers: [
@@ -161,7 +160,8 @@ export const pcconfigProject = {
     { date: "2026-08-24—08-27", commit: "8753374–d3d8d00", result: "CoreGoal V2 进入耐久目标与单步能力模型，Workspace Provider 增加固定类型化读写和原生文档导出，受保护数据推进到 P3/P4 候选；同时补齐受管软件、备份介质结构和恢复 read-back。" },
     { date: "2026-08-28", commit: "0fffc15–c63d804", result: "把 P0–P4 后续实现收敛为更小的 RecoveryKernel（恢复内核）、AuthorityVault（因子保险库）、GoalJournal（目标账本）和 VaultApp（加密文件应用）四角色；改善日常预览/排序，补完 P5–P7 设计与任务投影。" },
     { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。" },
-    { date: "2026-08-30", commit: "9449bad–d13ac19", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；中文与 Google 导入改为严格解码、保留重复项和事务回滚；Codex 对话进入内容寻址的 G→H 恢复链；Codex Home 形成可预演、可回滚、等待退出后按需启动的迁移事务。" }
+    { date: "2026-08-30", commit: "9449bad–d13ac19", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；中文与 Google 导入改为严格解码、保留重复项和事务回滚；Codex 对话进入内容寻址的 G→H 恢复链；Codex Home 形成可预演、可回滚、等待退出后按需启动的迁移事务。" },
+    { date: "2026-08-31", commit: "aad7e7b–f9245a1", result: "Codex Home 切换改为有界增量路线，并修复本地化 USN journal 输出解析。当前在线 ReadyCheck 已放行，但仍等待用户自行退出；C 盘普通目录尚未切换，E 盘正式目录和新运行时回读仍不存在。" }
   ],
   operationalEntrypoints: [
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
@@ -605,7 +605,7 @@ export const pcconfigModules = [
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
       "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 已发布 main 为 5bb66e9 并与 origin/main 对齐；观察时 checkout 另有 3 个 Codex Home 迁移候选文件，因此不能写成工作树干净或把候选冒充 main。当前机器仍由 C:\\Users\\10979\\.codex 普通目录承载；E:\\Data\\AppData\\Codex 不存在且 CODEX_HOME 未设置，正式 cutover 与新运行时回读尚未发生"
+      "PCConfig 已发布 main 为 f9245a1 并与 origin/main 对齐，工作树干净。Codex Home 在线 ReadyCheck 状态为 ready_waiting_for_user_exit，但当前机器仍由 C:\\Users\\10979\\.codex 普通目录承载；E:\\Data\\AppData\\Codex 不存在，用户级 CODEX_HOME/CODEX_SQLITE_HOME 未设置，正式 cutover 与新运行时回读尚未发生"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

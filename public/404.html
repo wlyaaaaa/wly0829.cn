@@ -14,7 +14,7 @@
         font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
       }
       * { box-sizing: border-box; }
-      body { min-width: 320px; min-height: 100svh; margin: 0; }
+      body { min-height: 100svh; margin: 0; }
       header { min-height: 72px; border-bottom: 1px solid #e1e4e1; }
       header a { display: flex; width: min(100%, 1360px); min-height: 72px; align-items: center; margin: 0 auto; padding: 0 44px; color: #101210; font-weight: 700; text-decoration: none; }
       main { display: flex; width: min(100%, 1360px); min-height: calc(100svh - 72px); flex-direction: column; justify-content: center; margin: 0 auto; padding: 70px 44px 90px; }
@@ -39,9 +39,10 @@
     <main>
       <p class="eyebrow">Error / 404</p>
       <h1>这里没有这页。</h1>
-      <p>地址可能已经变化，也可能从未存在。可以返回项目清单，或进入规则与 Skills 工作台。</p>
+      <p>地址可能已经变化，也可能从未存在。可以返回系统首页、项目目录，或进入规则与 Skills 工作台。</p>
       <nav aria-label="404 页面导航">
-        <a href="/">返回首页</a>
+        <a href="/">返回系统首页</a>
+        <a href="/projects/">查看项目</a>
         <a href="/rules/">查看规则</a>
         <a href="/skills/">查看 Skills</a>
       </nav>

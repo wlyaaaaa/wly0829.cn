@@ -55,7 +55,7 @@ export const project = {
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
   cardStatus: "规则、授权、能力和多任务协作中枢已生效",
   cardStatusTone: "pass",
-  snapshotBoundary: `本页绑定已验证的 ${panelSnapshot.authority.releaseId}；更晚源码、某次工具可用性和单个项目结果仍按各自现场证据判断`,
+  snapshotBoundary: `本页快照观察于 ${panelSnapshot.observedAt}，绑定已验证的 ${panelSnapshot.authority.releaseId}；更晚源码、某次工具可用性和单个项目结果仍按各自现场证据判断`,
   summary: ".agents 是我和 AI 协作时的总规则与能力中枢。我只需用自然语言说清目标和不能越过的边界，它会让任务找对事实来源、在已有授权内行动、保护并发施工、选择合适能力，并把本地完成、远端发布和真正可用分开验证。最后我拿到的是办成的结果、真实缺口，以及是否还需要我作决定。",
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
@@ -64,6 +64,9 @@ export const project = {
     pass: "目标、事实来源、授权、施工范围和验证层都明确时，任务继续执行并分别回读本地、远端和用户可见结果。",
     problem: "只停止发生冲突或验证失败的那一步，明确失败位置、原因和恢复线索；其他不依赖该问题的安全工作可以继续。",
     unavailable: "把对应事实标记为 Unknown（证据不足），不猜路径、不猜授权，也不把本地成功冒充成远端或用户可用。"
+  },
+  currentState: {
+    observedAt: panelSnapshot.observedAt
   },
   heroFacts: [
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
@@ -110,7 +113,7 @@ export const project = {
     { term: "Ruleset SHA（五规则总指纹）", meaning: "按固定 logical id 顺序绑定五份文件 path、bytes 和 SHA 的总指纹。" },
     { term: "Release record（版本记录）", meaning: "绑定 E 代号、Git commit、五文件描述符、ruleset、远端包含和发布时 source clean 的 JSON。" },
     { term: "Recovery-only C history（仅恢复的 C 盘历史）", meaning: "旧 generation、Publisher、签名、anchor、manifest、ledger 和回执可读保留，但不是当前权威或运行依赖。" },
-    { term: "Runtime root（运行根）", meaning: "规则目标是把 AI 工作台配置和本地数据库收敛到唯一 E 盘根，并让 C 盘只留兼容 junction。2026-08-31 现场仍是 C 盘普通目录，E 目标不存在且 CODEX_HOME 未设置，所以这还是迁移目标，不是当前机器事实。" },
+    { term: "Runtime root（运行根）", meaning: "规则目标是把 AI 工作台配置和本地数据库收敛到唯一 E 盘根，并让 C 盘只留兼容 junction。本页收录的机器现场仍是 C 盘普通目录，E 盘正式目标不存在且 CODEX_HOME 未设置，所以这还是迁移目标，不是当前机器事实。" },
     { term: "Activator（激活器）", meaning: "唯一执行测试、PRIVATE main 回读、五哈希、UAC CAS、pointer 切换和 ACL/read-back 的本地工具。" },
     { term: "CoreGoalCommitment（目标承诺）", meaning: "一次可靠人类确认冻结的长期目标、范围、禁止项和停止条件，不冻结具体实现。" },
     { term: "StepCapability（单步能力）", meaning: "只允许一次精确现实动作的短时、防重放能力，绑定目标、参数、executor、pre/post 和回滚。" },
@@ -630,7 +633,7 @@ export const rulesSnapshot = {
       process: ["Inspect 当前 E release 并核对五文件闭包", "读取最近项目规则", "确定目标与事实 Owner", "按触发读取专项合同", "Owner 冲突时先解析 lifecycle 并收敛 exact scopes", "实施并分层验证", "用人话报告现实结果"],
       failure: ["规则冲突无法同时满足时停止并说清冲突", "委派身份缺失只关闭委派，主任务继续", "授权不清时停止外部 effect，但继续安全调查", "长期授权已覆盖时以真实 tool call 的 unavailable/deny/error 等结果为准", "Git 未收口时分别报告业务和 Git 状态"],
       sections: [
-        { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "规则目标是 AI 工作台运行根/数据库迁往 E 数据盘、C 盘只留兼容 junction；2026-08-31 机器现场仍由 C 盘普通目录承载，E 目标与 CODEX_HOME 尚未生效，任务 temp 已独立进入 E 缓存盘", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
+        { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "规则目标是 AI 工作台运行根/数据库迁往 E 数据盘、C 盘只留兼容 junction；本页收录的机器现场仍由 C 盘普通目录承载，E 盘正式目标与 CODEX_HOME 尚未生效，任务 temp 已独立进入 E 缓存盘", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
         { title: "模型自治与复杂度", paragraphs: ["模型按照目标、风险、信息增益、可逆性和净收益选方法；原生委派在 E identity 可信后按任务语义选择 Luna/Terra/Sol 与 0–10。"], items: ["english_chinese_gloss：除常见英文缩写和精确标识外，英文自然词或短语首次出现时保留英文并紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界", "长任务保留可重建状态，短任务不制造文档债"] },
         { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。durable grant（耐久授权）不要求同轮重述，但不会覆盖上位 deny、证据、目标或不可逆边界。用户私人账号空间在默认私人且没有 public/share 信号时与本机私密目标等价可信，但信任不产生写授权。"], items: ["长期明确授权在冻结 goal/scope 内跨 root、child、压缩和 successor 持续有效；前提成立须真实调用一次", "实际 unavailable、deny、step_up、needs_evidence、action-time confirmation、error、身份/CAS/target/read-back 失败仍按现场结果处理", "PUBLIC 个人数据唯一 L1–L5 表由授权合同拥有：L1/L2 不受个人数据限制，L3+ 才进入可能敏感审查", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权", "普通非长期或已归档且 clean 的 terminal predecessor 无 residual 用 RecoverRelease；有 residual 用 RecoverReleaseClaim；未归档 long_term_task 只接续或正式退役", "只有真实 threadId 可归档", "E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal", "不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
         { title: "私人领域与供应", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "新规则原位升级，不堆补丁"] }

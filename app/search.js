@@ -5,13 +5,13 @@ import { projectCatalog, rulesSnapshot, skills, systemSearchEntries } from "./si
 export const ruleSearchAliases = {
   agents_root_rules: ["怎么避免全局规则覆盖项目自己的验收方式"],
   protected_major_actions_contract: ["dirty source 不能冒充 current release", "current E rules 怎么验证", "C盘规则为什么不能阻塞spawn", "旧Publisher为什么退役", "五份规则的 ruleset 是什么", "candidate 不能冒充 active"],
-  authorization_delegation_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "谁可以修改这个项目"],
+  authorization_delegation_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "谁可以修改这个项目", "不要覆盖未提交修改", "未提交修改怎么保留"],
   four_base_decision_context_contract: ["这个事实应该去哪里查", "仓库事实和机器事实分别谁负责"],
   capability_routing_contract: ["什么时候开子代理", "应该用哪个工具或 Skill", "模型怎么选择能力"]
 };
 
 const skillSearchAliases = {
-  "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件"],
+  "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件", "找一张照片"],
   "personal-panel-refresh": ["刷新看板", "fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
   "timeaudit-diagnostics": ["过去一小时为什么卡", "没有游戏帧是不是掉帧", "电脑昨天为什么发热", "睡眠还是采集断档", "TimeAudit 历史证据"],
   "project-entry-gate": ["提交前为什么要检查仓库", "会不会推错远端", "公开仓库泄露"],
@@ -114,7 +114,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
 
 export const globalSearchEntries = [
   ...projectSearchEntries,
-  ...systemSearchEntries.map((entry) => ({ ...entry, group: "系统", scopes: ["system"] })),
+  ...systemSearchEntries.map((entry) => ({ ...entry, group: entry.group || "系统", scopes: entry.scopes || ["system"] })),
   ...rulesSnapshot.rules.map((rule) => {
     const guide = ruleGuides[rule.logicalId];
     return {

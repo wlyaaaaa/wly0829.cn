@@ -1,6 +1,7 @@
 import {
   systemDependencyNodes,
   systemHomeHero,
+  systemProjectDomains,
   systemScenarios
 } from "./system-home-content.js";
 
@@ -21,11 +22,31 @@ export const systemSearchEntries = [
     aliases: [scenario.label],
     search: `${scenario.systems.join(" ")} ${scenario.rules} ${scenario.value} ${scenario.stages.map((stage) => `${stage.title} ${stage.body} ${stage.items.flat().join(" ")}`).join(" ")}`
   })),
+  ...systemProjectDomains.map((domain) => ({
+    type: "系统版图",
+    title: domain.title,
+    detail: `${domain.summary} ${domain.assets.map((asset) => asset.title).join("、")}`,
+    href: `/#system-project-domain-${domain.id}`,
+    aliases: [domain.ordinaryRequest],
+    search: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.map((asset) => `${asset.repo || ""} ${asset.role}`).join(" ")}`
+  })),
+  ...systemProjectDomains.flatMap((domain) => domain.assets
+    .filter((asset) => asset.href.includes("/github-index/repository-ledger"))
+    .map((asset) => ({
+      type: "项目资产",
+      group: "项目",
+      scopes: ["project"],
+      title: asset.title,
+      detail: asset.role,
+      href: `/#system-project-asset-${asset.id}`,
+      aliases: [asset.repo].filter(Boolean),
+      search: domain.title
+    }))),
   ...systemDependencyNodes.map((node) => ({
     type: "系统组成",
     title: node.title,
     detail: `${node.subtitle}。${node.detail}`,
-    href: `/#system-node-${node.id}`,
+    href: node.href.startsWith("#") ? `/${node.href}` : node.href,
     aliases: [],
     search: `${node.lane} ${node.subtitle} ${node.detail}`
   }))

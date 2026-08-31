@@ -412,10 +412,10 @@ export const skillOutcomes = {
     changes: ["仓库、remote（远端地址）、branch（分支）和 upstream（上游分支）正确且同步安全时，允许继续本地实施或正常推送。", "有 dirty work（未提交改动）时要求保留，并只 stage（暂存）当前任务文件。", "本地落后、分叉或不是 fast-forward（快进推送）时停止推送，先同步和解决冲突。", "PUBLIC（公开）仓库存在泄露风险时阻止发布。", "网络无法取得 live evidence（实时证据）时可以继续安全本地工作，但发布必须等 live read-back（实时回读）。"]
   },
   "personal-panel-refresh": {
-    value: "它让未来几十个项目的新对话都能意识到“这次发布可能让个人看板说错话”，同时用 material threshold（实质阈值）、同项目现役交接收敛和异步派发阻止小改动、重复任务或网站等待拖住来源发布。",
+    value: "当一个项目、规则或 Skill 发布新结果后，它检查个人看板是不是已经过时。真正会让页面说错话才安排一次网站更新；普通小改动不打扰网站，也不会让来源项目停下来等。",
     why: "项目更新后，个人看板可能继续展示旧功能、旧规则或旧测试结果；但每次改注释都重建网站会产生大量无意义任务，等待网站完成还会把两个独立发布错误地绑在一起。",
     example: "例如 .agents 新增或退役一个真实 Skill。来源项目发布并回读后，它检查这次变化是否会让看板内容变错。",
-    result: "只有看板会实质失真时，才使用耐久明确授权续传本来源已经创建的同项目 active 交接，或真实调用一次 create_thread 创建新的 projectless 独立网站任务；拿到 threadId/clientThreadId 后来源立即继续，网站任务通过自身门后自动发布到现有 PUBLIC main/Pages 并公网回读。",
+    result: "页面不受影响时什么也不创建；页面会明显过时时，只续接这个来源已经创建且仍在工作的同项目网站任务，或新建一个独立网站任务。来源项目拿到派发回执就继续自己的工作，网站任务再独立完成检查、发布和公网回读。",
     readerStates: { pass: "来源已经发布回读且页面会实质失真时，向本来源已创建的同项目 active 交接续传一次，或按耐久明确授权创建一个 projectless 网站任务；threadId/clientThreadId 证明派发受理，来源立即继续，网站门通过后不再另问发布授权。", problem: "只命中路径但不改变事实时不开任务；同一提交不重复创建；clientThreadId 仍等待真实 threadId；网站门失败或用户明确 hold 时保留现有 PUBLIC 状态，不推送。", unavailable: "实际工具缺失或 deny、tool error、无可追踪 ID 分别报告 unavailable、failed、dispatch-unconfirmed 并停止；新公网目标、付费、秘密暴露或 force-push 不在长期授权内。" },
     changes: ["来源没有正式 publish/read-back（发布/回读）时不评估网站。", "Changed path（变化路径）命中只记为 impact candidate（影响候选），不会自动开任务。", "Source Owner 确认看板会实质失真后，task_required 才变成 true。", "本来源已经创建同项目 active 交接时只发送一次新 read-back commit；不复用完成、中断或失败任务。", "否则不再询问用户，按 durable explicit user authorization 真实调用一次 create_thread，默认创建 projectless fresh independent website task（无项目的全新独立网站任务）。", "saved project 是否存在不参与准入；只有用户明确选择或上位平台强制时才例外。", "threadId 是真实任务标识；clientThreadId 只是 setup-pending 回执，不能用于 lifecycle/archive。", "实际入口缺失/deny、tool error、无可追踪 ID 分别是 unavailable、failed、dispatch-unconfirmed，均不盲重试。", "交接异步且不阻塞来源；不读进度、不等待、不轮询，上位平台硬要求时至多一次 timeoutMs:0 即时快照。", "四项目 MVP 和现有 PUBLIC 目标已经验收；网站门通过后自动定向 commit、normal-push main、等待 Pages 并公网回读，不再另问发布授权。", "长期授权不覆盖 system/developer/platform、真实 deny/step_up/needs_evidence、新公网目标、付费、秘密暴露、force-push 或用户明确 hold，也不跳过网站自身门。"]
   },

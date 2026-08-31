@@ -27,6 +27,11 @@ import {
   systemDirectoryIntroductions,
   systemEvidenceLayers,
   systemHomeHero,
+  systemProjectDomains,
+  systemProjectInventory,
+  systemProjectSourceMap,
+  systemRuleStories,
+  systemSkillFamilies,
   systemScenarios
 } from "../app/system-home-content.js";
 import {
@@ -47,6 +52,7 @@ import {
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
+const expectedCanonicalUrl = (route) => canonicalUrl(route === "/system" ? "/" : route);
 
 const credentialValuePatterns = [
   ["OpenAI-style key", /sk-[A-Za-z0-9_-]{20,}/],
@@ -215,7 +221,7 @@ test("project technical facts remain complete without taking over the first view
   assert.match(pcconfigFacts, /新增 2.*移除 1/);
   assert.match(pcconfigFacts, /第 68 版 normal/);
   assert.match(pcconfigFacts, /Vault V2/);
-  assert.match(pcconfigFacts, /waiting_for_codex_exit/);
+  assert.match(pcconfigFacts, /ready_waiting_for_user_exit/);
   const pcconfigTechnical = JSON.stringify({ project: pcconfigProject, modules: pcconfigModules });
   for (const retainedFact of ["Password Center", "银行卡", "Recovery Set", "第 68 版 normal", "Vault V2"]) assert.ok(pcconfigTechnical.includes(retainedFact), `PCConfig technical reference lost: ${retainedFact}`);
   const gitFacts = githubIndexProject.heroFacts.map((fact) => fact.value).join("\n");
@@ -385,11 +391,36 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
   assert.ok(indexMatch, "shared search index asset is invalid");
   const compactIndex = JSON.parse(indexMatch[1]);
   assert.ok(gzipSync(searchAsset).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "compact search index exceeds registry budget");
-  assert.ok(compactIndex.length >= routePaths.length);
+  assert.ok(compactIndex.length >= projectCatalog.length + rulesSnapshot.rules.length + skills.length);
+  assert.ok(compactIndex.every((entry) => entry.type !== "项目内容"), "shared search index must not carry project module narratives");
   for (const entry of compactIndex) {
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
   }
+  const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
+  const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
+  assert.ok(projectIndexMatch, "all-project search index asset is invalid");
+  const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
+  assert.ok(gzipSync(projectSearchAsset).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "all-project compact search index exceeds registry budget");
+  assert.equal(compactProjectIndex.length, projectCatalog.reduce((count, entry) => count + entry.modules.length, 0));
+  assert.ok(compactProjectIndex.every((entry) => entry.type === "项目内容"), "all-project search index must contain only project modules");
+  for (const entry of compactProjectIndex) {
+    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
+    assert.ok(entry.detail.length <= 240, `${entry.href} project search summary is not compact`);
+  }
+  const projectSearchIndices = [];
+  for (const entry of projectCatalog) {
+    const projectAsset = await readFile(path.join(projectRoot, "dist", `search-project-${entry.project.slug}.js`), "utf8");
+    const projectMatch = projectAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
+    assert.ok(projectMatch, `${entry.project.slug} project search index asset is invalid`);
+    const projectIndex = JSON.parse(projectMatch[1]);
+    assert.ok(gzipSync(projectAsset).length <= 8 * 1024, `${entry.project.slug} project search index exceeds 8 KiB gzip`);
+    assert.equal(projectIndex.length, entry.modules.length, `${entry.project.slug} project search index does not match its module count`);
+    assert.ok(projectIndex.every((candidate) => candidate.type === "项目内容" && candidate.projectSlug === entry.project.slug), `${entry.project.slug} project search index leaks another project`);
+    projectSearchIndices.push(...projectIndex);
+  }
+  assert.deepEqual(projectSearchIndices, compactProjectIndex, "per-project search indices do not reconstruct the all-project index");
+  const completeCompactIndex = [...compactIndex, ...compactProjectIndex];
   const compactAliasCases = [
     ["C盘规则为什么不能阻塞spawn", "重大动作保护", "/rules/?rule=protected_major_actions_contract"],
     ["dirty source 不能冒充 current release", "重大动作保护", "/rules/?rule=protected_major_actions_contract"],
@@ -399,16 +430,16 @@ test("the shared enhancement bundle stays under 120 KiB and carries no route nar
     ["过去一小时为什么卡", "timeaudit-diagnostics", "/skills/timeaudit-diagnostics/"]
   ];
   for (const [query, title, href] of compactAliasCases) {
-    const match = searchCompactEntries(compactIndex, query)[0];
+    const match = searchCompactEntries(completeCompactIndex, query)[0];
     assert.equal(match?.title, title, `production compact search loses: ${query}`);
     assert.equal(match?.href, href, `production compact search misroutes: ${query}`);
   }
-  for (const entry of compactIndex) {
+  for (const entry of completeCompactIndex) {
     for (const alias of entry.aliases) {
       const expected = searchPanel(alias)[0];
       const target = new URL(expected.href, "https://wly0829.cn");
       const expectedHref = `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
-      const actual = searchCompactEntries(compactIndex, alias)[0];
+      const actual = searchCompactEntries(completeCompactIndex, alias)[0];
       assert.equal(actual?.title, expected.title, `compact alias changes full-search title: ${alias}`);
       assert.equal(actual?.href, expectedHref, `compact alias changes full-search route: ${alias}`);
     }
@@ -1669,6 +1700,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(searchScopeForPath("/skills").id, "skills");
   assert.equal(searchScopeForPath("/projects/timeaudit/hardware-performance").id, "project:timeaudit");
   assert.ok(searchPanel("卡顿", "project").every((entry) => entry.type === "项目"), "project-index search must land on project entities");
+  assert.equal(searchPanel("ProxyClean", "project")[0]?.href, "/#system-project-asset-proxy-clean");
   assert.ok(searchPanel("FPS", "project:timeaudit").every((entry) => entry.projectSlug === "timeaudit"), "project search escaped the current project");
   assert.ok(searchPanel("授权", "rules").every((entry) => entry.group === "规则"), "rule search leaked another surface");
   assert.ok(searchPanel("照片", "skills").every((entry) => entry.group === "Skills"), "Skills search leaked another surface");
@@ -1683,12 +1715,18 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(runtimeSource, /function initializeSystemHome\(\)/);
   assert.match(runtimeSource, /function initializeSkillCategories\(\)/);
   assert.match(runtimeSource, /function initializeSearchResultsPage\(\)/);
+  assert.match(runtimeSource, /function normalizedSearchScope\(value\)/);
+  assert.match(runtimeSource, /const scope = normalizedSearchScope\(params\.get\("scope"\) \|\| "all"\)/);
   assert.match(runtimeSource, /new URLSearchParams\(window\.location\.search\)/);
   assert.match(runtimeSource, /searchCompactEntries\(searchEntries, query, scope\)/);
   assert.match(runtimeSource, /input\.value = query/);
   assert.match(runtimeSource, /查看全部 \$\{results\.length\} 条结果/);
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
+  assert.match(styleSource, /\.search-results-page h1\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*word-break:\s*break-word;/);
+  assert.match(pageSource, /node\.href === "\/skills" \|\| node\.href\.startsWith\("\/skills\/"\)/);
+  assert.match(runtimeSource, /if \(id\) activateScenario\(id\);/);
+  assert.match(runtimeSource, /activateScenario\(idFromHash\(\) \|\| ids\[0\]\)/);
 
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   assert.match(systemHtml, /class="system-home"/);
@@ -1708,6 +1746,27 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const relation of systemDependencyRelations) assert.ok(systemHtml.includes(`id="system-relation-${relation.id}"`), `System relation missing: ${relation.id}`);
   for (const layer of systemEvidenceLayers) assert.ok(systemHtml.includes(layer.title), `System evidence layer missing: ${layer.id}`);
   for (const item of systemDirectoryIntroductions) assert.ok(systemHtml.includes(`id="system-directory-${item.id}"`), `System directory intro missing: ${item.id}`);
+  assert.equal(systemRuleStories.length, 5);
+  assert.equal(systemSkillFamilies.flatMap((family) => family.members).length, skills.length);
+  assert.equal(new Set(systemSkillFamilies.flatMap((family) => family.members.map((member) => member.slug))).size, skills.length);
+  const systemProjectAssets = systemProjectDomains.flatMap((domain) => domain.assets);
+  assert.equal(systemProjectAssets.length, systemProjectInventory.total);
+  assert.equal(new Set(systemProjectAssets.map((asset) => asset.id)).size, systemProjectInventory.total);
+  assert.equal(systemProjectInventory.identitySha256, "sha256:a6f2f51b305dc975d21bc22ecc291e6f6553ac532672cb62a637007da85d98a5");
+  assert.equal(systemProjectSourceMap.length, systemProjectInventory.total);
+  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectInventory.total);
+  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectInventory.total);
+  assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
+  const atlasMappingText = [...systemProjectSourceMap].sort((left, right) => left.assetId.localeCompare(right.assetId)).map((entry) => `${entry.assetId}=${entry.sourceIdentity}`).join("\n");
+  assert.equal(`sha256:${createHash("sha256").update(atlasMappingText).digest("hex")}`, systemProjectInventory.mappingSha256);
+  assert.equal(systemProjectInventory.mappingSha256, "sha256:21b214da99889fa05a7aaa366b2392f773526d936bf702b0969f0e82373a3c00");
+  for (const story of systemRuleStories) assert.ok(systemHtml.includes("id=\"system-rule-story-" + story.id + "\""));
+  for (const family of systemSkillFamilies) assert.ok(systemHtml.includes("id=\"system-skill-family-" + family.id + "\""));
+  for (const domain of systemProjectDomains) assert.ok(systemHtml.includes("id=\"system-project-domain-" + domain.id + "\""));
+  for (const asset of systemProjectAssets) {
+    const pathname = new URL(asset.href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
+    assert.ok(routePaths.includes(pathname), "System project asset points to a missing route: " + asset.id);
+  }
   assert.doesNotMatch(systemHtml, /\bHarness\b|gpt-\d/i, "System home must stay vendor-neutral and model-neutral");
   assert.match(styleSource, /\.system-home\s*\{[\s\S]*?--system-max:\s*1184px/);
   const systemStyles = styleSource.slice(styleSource.indexOf("/* System home v2"));
@@ -1727,8 +1786,24 @@ test("shared search scopes, project reading layers, Skills categories and System
   const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
   const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
   const compactIndex = JSON.parse(indexMatch[1]);
+  const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
+  const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
+  const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
+  assert.equal(searchCompactEntries(compactIndex, "AI 如何协助工作", "system")[0]?.group, "系统", "System compact search is not available from the shared index");
+  for (const domain of systemProjectDomains) {
+    assert.equal(searchCompactEntries(compactIndex, domain.ordinaryRequest, "system")[0]?.title, domain.title, "System domain compact search misses: " + domain.id);
+  }
+  for (const projectName of [".agents", "PCConfig", "GitHub 总索引", "ChineseASR", "TimeAudit", "PC Panel Hub", "Codex Remote"]) {
+    assert.equal(searchCompactEntries(compactIndex, projectName)[0]?.type, "项目", "System atlas outranks the exact project entry: " + projectName);
+  }
+  assert.equal(searchCompactEntries(compactIndex, "ProxyClean", "project")[0]?.href, "/#system-project-asset-proxy-clean");
   for (const moduleEntry of globalSearchEntries.filter((entry) => entry.type === "项目内容" && entry.aliases.length)) {
-    for (const alias of moduleEntry.aliases) assert.equal(searchCompactEntries(compactIndex, alias, "project")[0]?.projectSlug, moduleEntry.projectSlug, `project compact search loses: ${alias}`);
+    const projectEntries = compactProjectIndex.filter((entry) => entry.projectSlug === moduleEntry.projectSlug);
+    for (const alias of moduleEntry.aliases) {
+      const match = searchCompactEntries([...compactIndex, ...projectEntries], alias, `project:${moduleEntry.projectSlug}`)[0];
+      assert.equal(match?.title, moduleEntry.title, `project compact search loses: ${alias}`);
+      assert.equal(match?.href, canonicalPath(new URL(moduleEntry.href, "https://wly0829.cn").pathname), `project compact search misroutes: ${alias}`);
+    }
   }
   for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E95", "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
@@ -1747,6 +1822,10 @@ test("route links use native directory documents and preserve module scroll with
   assert.match(pageSource, /function ProjectNav[\s\S]*?<SiteLink[^>]+preserveScroll[\s\S]*?currentModules\.map[\s\S]*?<SiteLink[\s\S]*?preserveScroll/);
   assert.match(pageSource, /<main id="main-content" ref=\{setMainRef\} tabIndex=\{-1\}>/);
   assert.match(runtimeSource, /const preservedScrollKey = "wly-route-scroll-v1"/);
+  assert.match(runtimeSource, /const documentHref = \(value\) =>/);
+  assert.match(runtimeSource, /targetDocument === documentHref\(window\.location\.href\)/);
+  const likelyNextSource = rendererSource.slice(rendererSource.indexOf("function likelyNextRoutes"), rendererSource.indexOf("export function renderRoute"));
+  assert.doesNotMatch(likelyNextSource, /"\/system"/);
   assert.match(runtimeSource, /record\.target !== currentTarget/);
   assert.match(runtimeSource, /Date\.now\(\) - record\.createdAt > 15000/);
   assert.match(runtimeSource, /window\.sessionStorage\.removeItem\(preservedScrollKey\)/);
@@ -1875,7 +1954,7 @@ test("E95 panel preserves continuity, trusted-local boundaries and attention qua
     "dispatch-unconfirmed",
     "clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具",
     "本轮没有由新的来源发布调用 impact assessor",
-    "网站自己的 Owner/build/PUBLIC/Pages 门分层取证"
+    "当时的网站 Owner/build/PUBLIC/Pages 分层取证"
   ]) {
     assert.ok(panelRefreshText.includes(expected), `E92 personal-panel-refresh omits: ${expected}`);
   }
@@ -1943,7 +2022,8 @@ test("public content allows public-safe product names and excludes credential va
   assert.match(pageSource, /<form className="global-search-form" role="search" action="\/search\/" method="get">/);
   assert.match(pageSource, /className="search-scope-select" name="scope"/);
   assert.match(pageSource, /name="q"[\s\S]{0,100}aria-label=\{`在\$\{selectedScope\.label\}范围搜索关键词`\}/);
-  assert.match(pageSource, /查看全部 \{results\.length\} 条结果/);
+  assert.match(pageSource, /usesPartialAllIndex/);
+  assert.match(pageSource, /查看完整搜索结果/);
   assert.doesNotMatch(pageSource, /addEventListener\("scroll"/);
   const publicMaintenanceLabels = /curated_packaging|manual_owner_only|manual-only|策展快照|策展展示|包装内容|手动维护/i;
   for (const route of routePaths) {
@@ -2051,9 +2131,20 @@ test("production build has direct entry files for every route", async () => {
         assert.match(rootHtml, /class="standalone-document skill-document"/);
       }
     }
-    assert.ok(html.includes(`<link rel="canonical" href="${canonicalUrl(route)}" />`), `${route} canonical drifted`);
+    assert.ok(html.includes(`<link rel="canonical" href="${expectedCanonicalUrl(route)}" />`), `${route} canonical drifted`);
+    if (route === "/system") assert.match(html, /<meta http-equiv="refresh" content="0; url=\/" \/>/);
     assert.match(html, /<link rel="prefetch" as="document" href="\/[^"]*" \/>/);
     assert.match(html, /<script src="\/search-index\.js"><\/script>/);
+    const routeProject = projectCatalog.find((entry) => route === entry.project.route || route.startsWith(`${entry.project.route}/`));
+    if (route === "/search") {
+      assert.match(html, /<script src="\/search-projects\.js"><\/script>/, "full search route must load every project module index");
+      assert.doesNotMatch(html, /<script src="\/search-project-[^"]+\.js"><\/script>/, "full search route must not also load a per-project index");
+    } else if (routeProject) {
+      assert.match(html, new RegExp(`<script src="/search-project-${routeProject.project.slug}\\.js"></script>`), `${route} does not load its project search index`);
+      assert.doesNotMatch(html, /<script src="\/search-projects\.js"><\/script>/, `${route} must not load every project's module index`);
+    } else {
+      assert.doesNotMatch(html, /<script src="\/search-projects\.js"><\/script>|<script src="\/search-project-[^"]+\.js"><\/script>/, `${route} loads a project module index outside a project context`);
+    }
     assert.doesNotMatch(html, /\.\.\/assets\//);
   }
 });
@@ -2067,14 +2158,14 @@ test("SEO, sitemap, robots and custom 404 match the current route set", async ()
     const html = await readFile(routeIndex, "utf8");
     assert.ok(html.includes(`<title>${escapeAttribute(meta.title)}</title>`), `${route} title drifted`);
     assert.ok(html.includes(`<meta name="description" content="${escapeAttribute(meta.description)}" />`), `${route} description drifted`);
-    assert.ok(html.includes(`<link rel="canonical" href="${canonicalUrl(route)}" />`), `${route} canonical drifted`);
-    assert.ok(html.includes(`<meta property="og:url" content="${canonicalUrl(route)}" />`), `${route} Open Graph URL drifted`);
+    assert.ok(html.includes(`<link rel="canonical" href="${expectedCanonicalUrl(route)}" />`), `${route} canonical drifted`);
+    assert.ok(html.includes(`<meta property="og:url" content="${expectedCanonicalUrl(route)}" />`), `${route} Open Graph URL drifted`);
     assert.ok(html.includes(`<meta property="og:title" content="${escapeAttribute(meta.title)}" />`), `${route} Open Graph title drifted`);
     assert.ok(html.includes(`<meta name="twitter:title" content="${escapeAttribute(meta.title)}" />`), `${route} Twitter title drifted`);
   }
   const sitemap = await readFile(path.join(distRoot, "sitemap.xml"), "utf8");
-  assert.equal((sitemap.match(/<url>/g) || []).length, routePaths.length);
-  for (const route of routePaths) assert.ok(sitemap.includes(`<loc>${canonicalUrl(route)}</loc>`));
+  assert.equal((sitemap.match(/<url>/g) || []).length, routePaths.length - 1);
+  for (const route of routePaths.filter((candidate) => candidate !== "/system")) assert.ok(sitemap.includes(`<loc>${canonicalUrl(route)}</loc>`));
   const robots = await readFile(path.join(projectRoot, "public", "robots.txt"), "utf8");
   const favicon = await readFile(path.join(projectRoot, "public", "favicon.svg"), "utf8");
   const rootHtml = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
@@ -2086,5 +2177,7 @@ test("SEO, sitemap, robots and custom 404 match the current route set", async ()
   assert.match(robots, /Sitemap: https:\/\/wly0829\.cn\/sitemap\.xml/);
   const notFound = await readFile(path.join(projectRoot, "public", "404.html"), "utf8");
   assert.match(notFound, /<meta name="robots" content="noindex, follow"/);
+  assert.match(notFound, /href="\/projects\/">查看项目/);
+  assert.doesNotMatch(notFound, /body\s*\{[^}]*min-width:\s*320px/);
   assert.doesNotMatch(notFound, /<footer|WLY0829\.CN/);
 });

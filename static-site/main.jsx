@@ -1,9 +1,10 @@
 import "../app/style.css";
 import { searchCompactEntries } from "../app/compact-search.js";
 
-const searchEntries = Array.isArray(window.__WLY_SEARCH_INDEX__)
-  ? window.__WLY_SEARCH_INDEX__
-  : [];
+const searchEntries = [
+  ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),
+  ...(Array.isArray(window.__WLY_PROJECT_SEARCH_INDEX__) ? window.__WLY_PROJECT_SEARCH_INDEX__ : [])
+];
 const preservedScrollKey = "wly-route-scroll-v1";
 
 function restorePreservedScroll() {
@@ -80,6 +81,7 @@ function initializeSearch(container) {
   const scopeSelect = container.querySelector(".search-scope-select");
   if (!input) return;
   const resultId = input.getAttribute("aria-controls") || `search-results-${Math.random().toString(36).slice(2)}`;
+  input.removeAttribute("aria-controls");
   let suppressNextFocusOpen = false;
   const liveStatus = document.createElement("span");
   liveStatus.className = "visually-hidden search-live-status";
@@ -91,6 +93,7 @@ function initializeSearch(container) {
   function closeResults() {
     container.querySelector(".global-search-results")?.remove();
     input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-controls");
   }
 
   function scopeInfo() {
@@ -130,6 +133,7 @@ function initializeSearch(container) {
     closeResults();
     const query = input.value.trim();
     const scope = scopeInfo();
+    const usesPartialAllIndex = container.dataset.searchPath !== "/search" && scope.id === "all";
     input.placeholder = scope.placeholder;
     input.setAttribute("aria-label", `在${scope.label}范围搜索关键词`);
     const results = query ? searchCompactEntries(searchEntries, query, scope.id) : [];
@@ -150,19 +154,24 @@ function initializeSearch(container) {
       addResultKeyboardNavigation(panel);
       container.append(panel);
       input.setAttribute("aria-expanded", "true");
+      input.setAttribute("aria-controls", resultId);
       liveStatus.textContent = `${scope.label}搜索提示已展开`;
       return;
     }
 
     const status = document.createElement("p");
-    status.textContent = results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`;
+    status.textContent = usesPartialAllIndex
+      ? (results.length ? `显示最相关的前 ${Math.min(results.length, 9)} 项` : "快速结果未命中")
+      : (results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`);
     liveStatus.textContent = status.textContent;
     panel.append(status);
 
     if (!results.length) {
       const empty = document.createElement("div");
       empty.className = "global-search-empty";
-      empty.textContent = "没有匹配结果。可以换成项目用途、现实问题或更短的关键词。";
+      empty.textContent = usesPartialAllIndex
+        ? "快速结果没有命中；完整搜索还会检索项目正文。"
+        : "没有匹配结果。可以换成项目用途、现实问题或更短的关键词。";
       panel.append(empty);
     } else {
       for (const entry of results.slice(0, 9)) {
@@ -182,17 +191,18 @@ function initializeSearch(container) {
         link.append(type, copy, arrow);
         panel.append(link);
       }
-      if (results.length > 9) {
+      if (usesPartialAllIndex || results.length > 9) {
         const allResults = document.createElement("a");
         allResults.className = "global-search-all-results";
         allResults.href = `/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope.id)}`;
-        allResults.textContent = `查看全部 ${results.length} 条结果 →`;
+        allResults.textContent = usesPartialAllIndex ? "查看完整搜索结果 →" : `查看全部 ${results.length} 条结果 →`;
         panel.append(allResults);
       }
     }
     addResultKeyboardNavigation(panel);
     container.append(panel);
     input.setAttribute("aria-expanded", "true");
+    input.setAttribute("aria-controls", resultId);
   }
 
   input.addEventListener("input", renderResults);
@@ -238,6 +248,15 @@ function searchScopePresentation(scope) {
   return { label: "全站", placeholder: "搜索项目、系统、规则或 Skills", help: "搜索全部公开内容" };
 }
 
+function normalizedSearchScope(value) {
+  if (["all", "project", "system", "rules", "skills"].includes(value)) return value;
+  if (value?.startsWith("project:")) {
+    const slug = value.slice("project:".length);
+    if (searchEntries.some((entry) => entry.type === "项目" && entry.projectSlug === slug)) return value;
+  }
+  return "all";
+}
+
 function createFullResultLink(entry) {
   const link = document.createElement("a");
   link.href = entry.href;
@@ -261,7 +280,7 @@ function initializeSearchResultsPage() {
   if (!page) return;
   const params = new URLSearchParams(window.location.search);
   const query = params.get("q")?.trim() || "";
-  const scope = params.get("scope") || "all";
+  const scope = normalizedSearchScope(params.get("scope") || "all");
   const presentation = searchScopePresentation(scope);
   const results = query ? searchCompactEntries(searchEntries, query, scope) : [];
 
@@ -493,13 +512,12 @@ function initializeSystemHome() {
   const panels = Array.from(home.querySelectorAll("[data-system-scenario-panel]"));
   const nodes = Array.from(home.querySelectorAll("[data-system-dependency-node]"));
   const relations = Array.from(home.querySelectorAll("[data-system-relation]"));
-  const detailPanel = home.querySelector("[data-system-node-detail-panel]");
   const ids = tabs.map((tab) => tab.dataset.systemScenarioTab);
   if (!tabs.length || !panels.length) return;
 
   function idFromHash() {
     const match = window.location.hash.match(/^#system-scenario-(.+)$/);
-    return match?.[1] || ids[0];
+    return match && ids.includes(match[1]) ? match[1] : null;
   }
 
   function restoreScroll(previousY) {
@@ -522,7 +540,8 @@ function initializeSystemHome() {
       tab.setAttribute("aria-selected", String(active));
       tab.tabIndex = active ? 0 : -1;
       if (active && (updateUrl || focus)) {
-        tab.scrollIntoView({ block: "nearest", inline: "nearest" });
+        const rail = tab.closest(".system-case-tabs");
+        if (rail) rail.scrollLeft = Math.max(0, Math.min(tab.offsetLeft - (rail.clientWidth - tab.clientWidth) / 2, rail.scrollWidth - rail.clientWidth));
         if (focus) tab.focus({ preventScroll: true });
       }
     }
@@ -562,24 +581,11 @@ function initializeSystemHome() {
     });
   });
 
-  for (const node of nodes) {
-    const button = node.querySelector("[data-system-node-select]");
-    button?.addEventListener("click", () => {
-      for (const candidate of nodes) candidate.classList.toggle("is-selected", candidate === node);
-      if (!detailPanel) return;
-      detailPanel.querySelector("strong").textContent = node.dataset.systemNodeTitle || "节点说明";
-      detailPanel.querySelector("p").textContent = node.dataset.systemNodeDetail || "";
-      const sourceLink = node.querySelector("a[href]");
-      const targetLink = detailPanel.querySelector("[data-system-node-detail-link]");
-      if (sourceLink && targetLink) {
-        targetLink.href = sourceLink.href;
-        targetLink.innerHTML = sourceLink.innerHTML;
-      }
-    });
-  }
-
-  window.addEventListener("hashchange", () => activateScenario(idFromHash()));
-  activateScenario(idFromHash());
+  window.addEventListener("hashchange", () => {
+    const id = idFromHash();
+    if (id) activateScenario(id);
+  });
+  activateScenario(idFromHash() || ids[0]);
 }
 
 function createButton(className, label, text) {
@@ -891,18 +897,23 @@ function initializeFlowField() {
 }
 
 function initializeDocumentPrefetch() {
-  const prefetched = new Set(Array.from(document.querySelectorAll("link[rel='prefetch'][as='document']"), (link) => link.href));
+  const documentHref = (value) => {
+    const target = new URL(value, window.location.href);
+    return `${target.origin}${target.pathname}${target.search}`;
+  };
+  const prefetched = new Set(Array.from(document.querySelectorAll("link[rel='prefetch'][as='document']"), (link) => documentHref(link.href)));
   function prefetchAnchor(anchor) {
     if (!anchor || anchor.target || anchor.hasAttribute("download")) return;
     const target = new URL(anchor.href, window.location.href);
-    if (target.origin !== window.location.origin || target.href === window.location.href || prefetched.has(target.href)) return;
+    const targetDocument = documentHref(target.href);
+    if (target.origin !== window.location.origin || targetDocument === documentHref(window.location.href) || prefetched.has(targetDocument)) return;
     if (/\.[a-z0-9]{2,8}$/i.test(target.pathname)) return;
     const link = document.createElement("link");
     link.rel = "prefetch";
     link.as = "document";
     link.href = `${target.pathname}${target.search}`;
     document.head.append(link);
-    prefetched.add(target.href);
+    prefetched.add(targetDocument);
   }
   document.addEventListener("pointerover", (event) => prefetchAnchor(event.target.closest?.("a[href]")), { passive: true });
   document.addEventListener("focusin", (event) => prefetchAnchor(event.target.closest?.("a[href]")));

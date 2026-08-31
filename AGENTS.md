@@ -219,6 +219,13 @@ read-only operating panel; public presentation is secondary.
   project may therefore explain evidence routing, uncertainty and safety
   boundaries, but must not publish the owner's health records, diagnoses, test
   results, medication list or individualized advice.
+- Contract, formal-document and private-affairs projects or Skills are eligible
+  for the public panel. Their public product layer may describe contract and
+  document intake, fact/source checking, drafting, formatting, evidence review,
+  submission-state separation and recovery as a general private-affairs
+  workflow. Do not foreground lawsuit/case labels, case facts, personal
+  evidence or individual outcomes on the homepage. Public copy presents the
+  usable product directly and never exposes "packaging" as a maintenance label.
 - The selected personal-health project is a curated, manual-only explanation of
   its evidence product: processed-current routing, protected foreground refresh,
   raw preservation and exact resume, deterministic offline verification,

@@ -107,7 +107,7 @@ export const skills = [
     flow: ["普通录音走 strict", "长录音走 long-strict", "说话人先聚类再对精确句段做 held-out attribution", "重要录音按授权进入唯一云路线", "以原音频为权威复核结果"],
     boundaries: ["原音频始终高于转写", "云失败不能伪装成本地成功", "其他说话人保持匿名", "空文本和超时不能自动解释为没有内容"],
     dependencies: ["E:\\Projects\\Tools\\ChineseASR", "模型 registry", "LocalGpuBroker", "本地私有 person:self profile"],
-    tests: "项目正式 Python 3.11 venv 两次完整运行均为 344 tests OK，关键 15 项定向验证全部通过，doctor 也确认 Qwen、FunASR 与 PyTorch 已安装。",
+    tests: "项目正式 Python 3.11 venv 完整运行 345 tests OK，关键 15 项定向验证全部通过，doctor 也确认 Qwen、FunASR 与 PyTorch 已安装。",
     sourcePath: "E:\\.agents\\skills\\chinese-asr\\SKILL.md",
     endToEndState: "正式 venv 与主要模型链已验"
   }),
@@ -168,7 +168,7 @@ export const skills = [
     flow: ["普通问题先读完整 CURRENT", "高风险问题再查权威指导", "新报告走 capture 和 brief", "由 Health Owner 复核后更新", "保持 unknown 和证据日期"],
     boundaries: ["不读旧记忆代替 CURRENT", "不建中央画像", "不自动持续同步", "不把建议和事实混写"],
     dependencies: ["个人健康项目的 CURRENT", "高风险问题的权威医学来源"],
-    tests: "项目 111 项测试和 42 个子测试通过；供应元数据已修复并通过 320 字符预算与 quick validation。",
+    tests: "项目 112 项测试和 42 个子测试通过；供应元数据已修复并通过 320 字符预算与 quick validation。",
     sourcePath: "E:\\.agents\\skills\\personal-health\\SKILL.md"
   }),
   skill({
@@ -342,9 +342,9 @@ export const skills = [
     slug: "personal-panel-refresh",
     name: "personal-panel-refresh",
     title: "个人项目看板刷新判断",
-    status: "已安装 / E95 source 与供应验证通过 / 历史 material handoff E2E 已验",
+    status: "已安装 / E95 source 与供应验证通过 / E92 历史交接验收已通过",
     maturity: "A-",
-    summary: "已登记规则、Skill 或项目发布并正式回读后，它判断这次变化会不会让 wly0829.cn 的事实、边界、成熟度或用户判断变错。达到实质阈值时，durable explicit user authorization（耐久明确用户授权）已满足用户允许：若本来源对话已创建一个同项目且仍 active（活动中）的交接，只续传一次新提交；否则真实调用一次 create_thread 创建 projectless（无项目）网站任务。threadId 或 clientThreadId 表示派发已受理，但 clientThreadId 只是 setup-pending（准备中）回执；工具缺失/deny、tool error、无可追踪 ID 分别归类 unavailable、failed、dispatch-unconfirmed。来源对话立即继续，不等待网站完成；网站门通过后自动 normal-push（正常推送）现有 PUBLIC main、等待 Pages 并公网回读。格式、时间戳、hash-only 和已准确披露的 blocked candidate 不触发。",
+    summary: "一个已登记项目、规则或 Skill 发布后，它判断个人看板会不会因此继续说旧话。只有变化会让页面事实、边界、成熟度或使用判断明显过期时，才续接已有同项目网站任务，或新建一个独立网站任务；格式、时间戳、只变哈希和页面已经准确说明的受阻候选都不会触发。来源发布不等待网站完成。",
     useWhen: ["来源项目已经完成发布和正式 read-back（回读）", "changed path（变化路径）命中项目清单中的影响来源", "项目的事实、解释、边界、成熟度或用户决策可能因此变错"],
     avoidWhen: ["来源还只是草稿、candidate（候选）或未验证状态", "只有格式、注释、内部重构、时间戳或 hash-only 变化", "当前页面已经准确写出 blocked candidate，没有新的实质失真", "试图让来源任务直接修改或发布网站"],
     inputs: ["项目清单中的 project id", "来源仓库与正式 read-back commit", "所有 repository-relative changed paths（仓库相对变化路径）", "Source Owner 对 materiality（实质影响）的理由"],
@@ -352,15 +352,15 @@ export const skills = [
     flow: ["等 Source Owner 先完成自己的发布和回读", "每次重新读取网站项目清单", "用 changed paths 运行 impact assessor（影响判断脚本）", "Source Owner 对照当前页面判断是否真的会失真", "只有 material=true 时再次运行 assessor", "task_required=true 后，若本来源对话已创建一个同项目且仍 active 的网站交接，就只续传一次新 read-back commit", "否则使用耐久明确授权真实调用一次 create_thread，默认目标为 projectless", "取得 threadId 或 clientThreadId 后报告 ID，来源对话立即继续或结束；clientThreadId 不传给要求真实 threadId 的 lifecycle/archive 工具", "网站任务进入仓库、读取项目规则并领取精确 Owner scope", "通过网站 build、PUBLIC gate 与 owner_preview_checkpoint（本人预览检查点）后自动定向提交、normal-push 现有 PUBLIC main、等待 Pages 并公网回读"],
     boundaries: ["不复制项目清单", "不建 watcher、daemon、定时任务或轮询", "不在 Source 任务里编辑、构建、测试或发布网站", "不把 candidate 冒充 active", "不复用完成、中断或失败的网站任务", "默认不查询或要求 saved project；只有用户明确选择或上位平台强制时例外", "只有真实 threadId 可用于后续 lifecycle/archive；clientThreadId 只是 setup-pending 回执", "不读取网站任务进度、不等待完成、不轮询；上位平台硬性要求时至多做一次 timeoutMs:0 即时快照", "工具实际缺失或 deny 才是 unavailable；tool error 是 failed；无可追踪 ID 是 dispatch-unconfirmed；都停止且不盲重试", "耐久授权不跳过 system/developer/platform、Owner、target、deny/step_up/needs_evidence、网站门或本人预览检查点，也不覆盖新公网目标、付费、秘密暴露、force-push 或用户明确 hold（暂缓）"],
     dependencies: ["V:\\Personal\\Projects\\wly0829.cn\\config\\panel-projects.json", "V:\\Personal\\Projects\\wly0829.cn\\scripts\\assess-panel-impact.mjs", "桌面 AI 工作台的 projectless create_thread（创建无项目任务）与现役任务 follow-up 入口", "已验收的 wly0829.cn PUBLIC main、GitHub Pages 与公网回读路径"],
-    tests: "E92 规则回归覆盖 durable explicit user authorization、真实调用一次、projectless 默认、threadId/clientThreadId 区分与 unavailable/failed/dispatch-unconfirmed 分类；本轮 E92 assessor 的 material handoff 已真实创建 successor，并完成网站测试、PUBLIC main、Pages 与公网回读。",
+    tests: "历史 E92 回归覆盖 durable explicit user authorization、真实调用一次、projectless 默认、threadId/clientThreadId 区分与 unavailable/failed/dispatch-unconfirmed 分类；E92 当时的 material handoff 曾真实创建 successor，并完成网站测试、PUBLIC main、Pages 与公网回读。当前 E95 只重新确认源码、安装供应和字节延续，没有把那次历史交接写成本轮新派发。",
     sourceState: "PRIVATE main d32210b 已正式回读且工作树干净；personal-panel-refresh 自 E92 commit cf5981bf 起到 E95 current main 字节未变",
     currentTaskState: "本轮没有由新的来源发布调用 impact assessor；当前只回读 E95 source/install 与既有历史 E2E，不能冒充新的 handoff 已发生",
-    freshTaskState: "真实 Source Owner 已在发布回读后运行 assessor 并创建 projectless successor；来源对话没有等待网站完成",
-    evidenceObservedAt: "E92 来源回读与 assessor、E95 current main 字节回读、已完成 successor 现场：2026-08-31",
+    freshTaskState: "E92 历史验收中，真实 Source Owner 曾在发布回读后运行 assessor 并创建 projectless successor；本轮没有创建新的 successor",
+    evidenceObservedAt: `E95 source/install 现场：${generatedPanelFacts.observedAt}；E92 assessor 与 successor 是历史验收`,
     evidenceSourceCommit: "cf5981bfdb305be5b9cffc8c89f91697a3637e6e",
-    evidenceBasis: "personal-panel-refresh 的 E92 唯一源码、PRIVATE main read-back、generation-changed material assessor、真实 projectless successor 派发，以及本网站自己的 Owner/build/PUBLIC/Pages 门分层取证；不公开 task ID 或内部 Owner bookkeeping。",
+    evidenceBasis: "当前 E95 唯一源码、PRIVATE main read-back 与供应验证，加上 E92 历史 generation-changed material assessor、真实 projectless successor 派发和当时的网站 Owner/build/PUBLIC/Pages 分层取证；不公开 task ID 或内部 Owner bookkeeping。",
     sourcePath: "E:\\.agents\\skills\\personal-panel-refresh\\SKILL.md",
-    endToEndState: "projectless 创建、来源自己创建的 active handoff 续传、漏触发检测、耐久授权与 E92 精确派发分类均有真实或回归证据；来源自动归档仍须由来源按真实 threadId 和终态回读判断"
+    endToEndState: "E92 历史验收为 projectless 创建、现役交接续传、漏触发检测、耐久授权和精确派发分类留下真实或回归证据；本轮未新派发，来源自动归档仍须按真实 threadId 和终态回读判断"
   }),
   skill({
     slug: "control-plane-doctor",

@@ -40,6 +40,10 @@ import {
   systemDirectoryIntroductions,
   systemEvidenceLayers,
   systemHomeHero,
+  systemProjectDomains,
+  systemProjectInventory,
+  systemRuleStories,
+  systemSkillFamilies,
   systemScenarios
 } from "./system-home-content.js";
 import { ruleGuides } from "./content-rule-guides.js";
@@ -112,6 +116,7 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
     if (!normalized) return [];
     return searchPanel(normalized, scope);
   }, [normalized, scope]);
+  const usesPartialAllIndex = path !== "/search" && scope === "all";
 
   return (
     <div
@@ -134,7 +139,7 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
           onFocus={() => setOpen(true)}
           onKeyDown={(event) => { if (event.key === "Escape") { setOpen(false); event.currentTarget.blur(); } }}
           aria-expanded={Boolean(open)}
-          aria-controls={resultId}
+          aria-controls={open ? resultId : undefined}
           placeholder={selectedScope.placeholder}
         />
       </form>
@@ -142,13 +147,13 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
         <div className="global-search-results" id={resultId} aria-label={`${selectedScope.label}搜索结果`}>
           {!normalized ? <div className="global-search-help"><strong>{selectedScope.help}</strong><span>{selectedScope.examples?.length ? `试试：${selectedScope.examples.join(" · ")}` : "输入名称或直接描述问题"}</span></div> : null}
           {normalized ? <>
-            <p aria-live="polite">{results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`}</p>
+            <p aria-live="polite">{usesPartialAllIndex ? (results.length ? `显示最相关的前 ${Math.min(results.length, 9)} 项` : "快速结果未命中") : (results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`)}</p>
             {results.length ? results.slice(0, 9).map((entry) => (
               <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
                 <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
               </SiteLink>
-            )) : <div className="global-search-empty">没有匹配结果。可以换成项目用途、现实问题或更短的关键词。</div>}
-            {results.length > 9 ? <SiteLink className="global-search-all-results" href={`/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`}>查看全部 {results.length} 条结果<ArrowRight size={16} aria-hidden="true" /></SiteLink> : null}
+            )) : <div className="global-search-empty">{usesPartialAllIndex ? "快速结果没有命中；完整搜索还会检索项目正文。" : "没有匹配结果。可以换成项目用途、现实问题或更短的关键词。"}</div>}
+            {usesPartialAllIndex || results.length > 9 ? <SiteLink className="global-search-all-results" href={`/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`}>{usesPartialAllIndex ? "查看完整搜索结果" : `查看全部 ${results.length} 条结果`}<ArrowRight size={16} aria-hidden="true" /></SiteLink> : null}
           </> : null}
         </div>
       ) : null}
@@ -508,12 +513,15 @@ function projectKicker(kind) {
   return "个人项目";
 }
 
-function ProjectHero({ entry }) {
+function ProjectHero({ entry, module }) {
   const { project: currentProject } = entry;
   const repositoryUrl = publicRepositoryUrl(entry);
+  const breadcrumbItems = module
+    ? [{ label: "项目", href: "/projects" }, { label: currentProject.title, href: currentProject.route }, { label: module.shortTitle || module.title }]
+    : [{ label: "项目", href: "/projects" }, { label: currentProject.title }];
   return (
     <>
-      <Breadcrumbs items={[{ label: "项目", href: "/projects" }, { label: currentProject.title }]} />
+      <Breadcrumbs items={breadcrumbItems} />
       <section className="project-hero">
         <div className="project-hero-main">
           <div className="project-hero-copy">
@@ -1267,7 +1275,7 @@ function ModuleDetail({ entry, module }) {
 function ProjectPage({ entry, module }) {
   return (
     <div className={`page-frame project-page${entry.kind === "learning" ? " learning-project-page" : ""}`}>
-      <ProjectHero entry={entry} />
+      <ProjectHero entry={entry} module={module} />
       <div className="project-layout"><ProjectNav entry={entry} current={module?.slug} />{module ? <ModuleDetail entry={entry} module={module} /> : <ProjectOverview entry={entry} />}</div>
     </div>
   );
@@ -1416,11 +1424,6 @@ function SystemScenarioPanel({ scenario, index }) {
         <span>场景 {String(index + 1).padStart(2, "0")}</span>
         <h3>{scenario.title}</h3>
         <blockquote>{scenario.request}</blockquote>
-        <dl>
-          <div><dt>本次实际使用</dt><dd>{scenario.systems.join("、")}</dd></div>
-          <div><dt>规则怎样作用</dt><dd>{scenario.rules}</dd></div>
-          <div><dt>最终交付</dt><dd>{scenario.result}</dd></div>
-        </dl>
         <p>{scenario.value}</p>
       </aside>
       <div className="system-case-stages">
@@ -1435,33 +1438,172 @@ function SystemScenarioPanel({ scenario, index }) {
           </article>
         ))}
       </div>
+      <dl className="system-case-contract">
+        <div><dt>本次实际使用</dt><dd>{scenario.systems.join("、")}</dd></div>
+        <div><dt>规则怎样作用</dt><dd>{scenario.rules}</dd></div>
+        <div><dt>最终交付</dt><dd>{scenario.result}</dd></div>
+      </dl>
     </section>
   );
 }
 
 function SystemDependencyNode({ node, scenarioIds }) {
-  const linkLabel = node.href.startsWith("#") ? "查看本页说明" : node.href.startsWith("/skills/") ? "进入 Skill" : node.href === "/rules" ? "进入规则" : "进入项目";
+  const linkLabel = node.href.startsWith("#") ? "查看本页说明" : (node.href === "/skills" || node.href.startsWith("/skills/")) ? "进入 Skill" : node.href === "/rules" ? "进入规则" : "进入项目";
   return (
     <article
       className="system-dependency-node"
       id={`system-node-${node.id}`}
       data-system-dependency-node={node.id}
       data-system-scenarios={scenarioIds.join(" ")}
-      data-system-node-title={node.title}
-      data-system-node-detail={node.detail}
     >
-      <button type="button" data-system-node-select={node.id} aria-controls="system-node-detail">
+      <div className="system-dependency-node-copy">
         <strong>{node.title}</strong>
         <span>{node.subtitle}</span>
-      </button>
-      <div><span data-system-node-state>系统总览</span><SiteLink href={node.href}>{linkLabel}<ArrowRight size={15} aria-hidden="true" /></SiteLink></div>
+        <p>{node.detail}</p>
+      </div>
+      <div className="system-dependency-node-footer"><span data-system-node-state>系统总览</span><SiteLink href={node.href}>{linkLabel}<ArrowRight size={15} aria-hidden="true" /></SiteLink></div>
     </article>
+  );
+}
+
+function SystemTextList({ items }) {
+  return <ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>;
+}
+
+function SystemRuleStory({ story }) {
+  return (
+    <article className="system-rule-story" id={`system-rule-story-${story.id}`}>
+      <header>
+        <span>{story.number} / 规则</span>
+        <h3>{story.title}</h3>
+        <p>{story.summary}</p>
+        <SiteLink href={story.href}>{story.entryLabel}<ArrowRight size={16} aria-hidden="true" /></SiteLink>
+      </header>
+      <blockquote>{story.ordinaryRequest}</blockquote>
+      <div className="system-rule-story-grid">
+        <section><h4>从什么开始</h4><SystemTextList items={story.inputs} /></section>
+        <section><h4>系统怎样协作</h4><SystemTextList items={story.collaboration} /></section>
+        <section><h4>最后交回什么</h4><SystemTextList items={story.delivery} /></section>
+        <section><h4>不会怎样做</h4><SystemTextList items={story.willNot} /></section>
+      </div>
+    </article>
+  );
+}
+
+function SystemSkillFamily({ family }) {
+  return (
+    <article className="system-skill-family" id={`system-skill-family-${family.id}`}>
+      <header>
+        <span>{family.number} / 能力家族</span>
+        <h3>{family.title}</h3>
+        <p>{family.members.length} 个当前可用入口</p>
+      </header>
+      <div className="system-skill-family-story">
+        <section><h4>普通人会这样说</h4>{family.requests.map((request) => <blockquote key={request}>{request}</blockquote>)}</section>
+        <section><h4>这次需要什么</h4><SystemTextList items={family.inputs} /></section>
+        <section><h4>系统怎样协作</h4><p>{family.collaboration}</p></section>
+        <section><h4>最后交回什么</h4><SystemTextList items={family.delivery} /></section>
+        <section><h4>不会怎样做</h4><SystemTextList items={family.willNot} /></section>
+      </div>
+      <div className="system-skill-member-grid">
+        {family.members.map((member) => (
+          <SiteLink href={member.href} key={member.slug}>
+            <span>{member.technicalName}</span>
+            <strong>{member.name}</strong>
+            <p>{member.summary}</p>
+            <small>进入 Skill <ArrowRight size={14} aria-hidden="true" /></small>
+          </SiteLink>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function SystemProjectAssetCard({ asset }) {
+  const anchorId = `system-project-asset-${asset.id}`;
+  const hasDetailedPage = !asset.href.includes("/github-index/repository-ledger");
+  const content = (
+    <>
+      <span>{asset.kind}</span>
+      <strong>{asset.title}</strong>
+      {asset.repo ? <code>{asset.repo}</code> : null}
+      <p>{asset.role}</p>
+    </>
+  );
+  if (hasDetailedPage) {
+    return (
+      <SiteLink className="system-project-asset-card" id={anchorId} href={asset.href}>
+        {content}
+        <small>{asset.entryLabel || "进入完整项目页"}<ArrowRight size={14} aria-hidden="true" /></small>
+      </SiteLink>
+    );
+  }
+  return (
+    <article className="system-project-asset-card" id={anchorId}>
+      {content}
+    </article>
+  );
+}
+
+function SystemProjectAtlas() {
+  function assetColumnCount(domain) {
+    const count = domain.assets.filter((asset) => !asset.presentationOnly).length;
+    return count === 3 ? 3 : Math.min(count, 4);
+  }
+
+  function assetColumnRemainder(domain) {
+    const count = domain.assets.filter((asset) => !asset.presentationOnly).length;
+    return count % assetColumnCount(domain);
+  }
+
+  function assetCountLabel(domain) {
+    const presentationCount = domain.assets.filter((asset) => asset.presentationOnly).length;
+    const visibleCount = domain.assets.length - presentationCount;
+    return presentationCount ? `${visibleCount} 项系统资产 + ${presentationCount} 项呈现基础设施` : `${visibleCount} 项资产`;
+  }
+
+  return (
+    <section className="system-frame system-project-atlas" aria-labelledby="system-project-atlas-title">
+      <div className="system-home-section-heading">
+        <h2 id="system-project-atlas-title">全部项目怎样组成个人 AI 协作系统</h2>
+        <p>系统不是项目目录的合集。全部 GitHub 项目按现实作用进入能力版图；可深入阅读的项目继续进入完整参考，其他项目仍提供能力、事实、研究、备份、恢复或历史依据。</p>
+      </div>
+      <div className="system-project-inventory">
+        <div><span>本次总账快照</span><strong>{systemProjectInventory.total}</strong><small>个 GitHub 项目</small></div>
+        <div><span>公开 / 私人</span><strong>{systemProjectInventory.publicCount} / {systemProjectInventory.privateCount}</strong><small>公开属性不决定产品价值</small></div>
+        <div><span>本地 / 仅远端</span><strong>{systemProjectInventory.localCloneCount} / {systemProjectInventory.remoteOnlyCount}</strong><small>都计入项目资产</small></div>
+        <div><span>完整项目页</span><strong>{systemProjectInventory.detailedPageCount}</strong><small>只是当前已补齐的入口</small></div>
+      </div>
+      <p className="system-project-inventory-note">观察于 {systemProjectInventory.observedAt}。{systemProjectInventory.description}</p>
+      <div className="system-project-domain-list">
+        {systemProjectDomains.map((domain) => (
+          <article className="system-project-domain" id={`system-project-domain-${domain.id}`} key={domain.id}>
+            <header>
+              <span>{domain.number} / 系统域</span>
+              <h3>{domain.title}</h3>
+              <p>{domain.summary}</p>
+              <strong>{assetCountLabel(domain)}</strong>
+            </header>
+            <div className="system-project-domain-use">
+              <section><h4>普通人会这样说</h4><blockquote>{domain.ordinaryRequest}</blockquote></section>
+              <section><h4>怎么协作</h4><p>{domain.collaboration}</p></section>
+              <section><h4>最后交回什么</h4><p>{domain.delivery}</p></section>
+              <section><h4>入口不可用时</h4><p>{domain.unavailable}</p></section>
+            </div>
+            <div className="system-project-asset-grid" data-asset-remainder={assetColumnRemainder(domain)} style={{ "--asset-columns": assetColumnCount(domain) }}>
+              {domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => <SystemProjectAssetCard asset={asset} key={asset.id} />)}
+            </div>
+            {domain.assets.some((asset) => asset.presentationOnly) ? <p className="system-project-presentation-note">另 1 项是当前网站呈现仓库 wly0829.cn：{domain.assets.filter((asset) => asset.presentationOnly).map((asset) => asset.role).join(" ")}</p> : null}
+          </article>
+        ))}
+      </div>
+      <p className="system-project-role-note">进入项目总账不等于当前正在运行。系统同时区分工作能力、支撑与恢复、研究验证、公开入口和历史参考；它们都属于个人系统资产，但承担的角色不同。</p>
+    </section>
   );
 }
 
 function SystemPage() {
   const nodeById = new Map(systemDependencyNodes.map((node) => [node.id, node]));
-  const defaultNode = nodeById.get("general-ai");
   return (
     <div className="system-home">
       <header className="system-frame system-home-hero" id="general-ai">
@@ -1482,12 +1624,12 @@ function SystemPage() {
       </section>
 
       <section className="system-frame system-dependencies" aria-labelledby="system-dependencies-title">
-        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>默认展示全部真实系统；选择上面的场景后，参与本次工作的节点会明确标注“本次使用”，其他节点保持正常可读。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-dependencies-title">核心基座与代表性协作链</h2><p>这里先用一条代表链解释真实工作怎样调用项目、Skills、资料和规则；它不是全部项目清单。选择场景后，本次参与的节点会明确标注，完整项目版图在下一节展开。</p></div>
         <div className="system-dependency-map">
           {systemDependencyLanes.map((lane) => {
             const laneNodes = systemDependencyNodes.filter((node) => node.lane === lane.id);
             return (
-              <section className="system-dependency-lane" data-system-lane={lane.id} key={lane.id}>
+              <section className="system-dependency-lane" id={`system-lane-${lane.id}`} data-system-lane={lane.id} key={lane.id}>
                 <header><span>{lane.number}</span><h3>{lane.title}</h3><p>{lane.description}</p></header>
                 <div className="system-dependency-node-grid">
                   {laneNodes.map((node) => <SystemDependencyNode node={node} scenarioIds={systemScenarios.filter((scenario) => scenario.dependencyIds.includes(node.id)).map((scenario) => scenario.id)} key={node.id} />)}
@@ -1495,26 +1637,35 @@ function SystemPage() {
               </section>
             );
           })}
-          <section className="system-node-detail" id="system-node-detail" data-system-node-detail-panel aria-live="polite">
-            <span>节点说明</span><strong>{defaultNode.title}</strong><p>{defaultNode.detail}</p><SiteLink href={defaultNode.href} data-system-node-detail-link>查看本页说明<ArrowRight size={15} aria-hidden="true" /></SiteLink>
-          </section>
         </div>
 
         <div className="system-relation-ledger" aria-labelledby="system-relation-ledger-title">
-          <h3 id="system-relation-ledger-title">真实依赖</h3>
+          <div className="system-relation-ledger-heading"><span>怎么协作</span><h3 id="system-relation-ledger-title">代表性依赖</h3><p>这里只保留稳定、会改变理解的责任链；某个场景才需要的临时关系由上方场景高亮表达。</p></div>
           {systemDependencyRelations.map((relation) => {
-            const from = nodeById.get(relation.from);
-            const to = nodeById.get(relation.to);
-            const scenarioIds = systemScenarios.filter((scenario) => scenario.dependencyIds.includes(relation.from) && scenario.dependencyIds.includes(relation.to)).map((scenario) => scenario.id);
-            return <article id={`system-relation-${relation.id}`} data-system-relation data-from={relation.from} data-to={relation.to} data-system-scenarios={scenarioIds.join(" ")} key={relation.id}><span>{from?.title}</span><ArrowRight size={16} aria-hidden="true" /><strong>{relation.label}</strong><ArrowRight size={16} aria-hidden="true" /><span>{to?.title}</span><p>{relation.detail}</p></article>;
+            const relationNodeIds = relation.nodes || [relation.from, relation.to];
+            const relationNodes = relationNodeIds.map((id) => nodeById.get(id)).filter(Boolean);
+            const scenarioIds = systemScenarios.filter((scenario) => relationNodeIds.every((id) => scenario.dependencyIds.includes(id))).map((scenario) => scenario.id);
+            return <article id={`system-relation-${relation.id}`} data-system-relation data-from={relationNodeIds[0]} data-to={relationNodeIds.at(-1)} data-system-scenarios={scenarioIds.join(" ")} key={relation.id}><div className="system-relation-path">{relationNodes.map((node, index) => <span key={node.id}>{index ? <ArrowRight size={16} aria-hidden="true" /> : null}<em>{node.title}</em></span>)}</div><strong>{relation.label}</strong><p>{relation.detail}</p></article>;
           })}
         </div>
       </section>
 
+      <SystemProjectAtlas />
+
+      <section className="system-frame system-rule-stories" aria-labelledby="system-rule-stories-title">
+        <div className="system-home-section-heading"><h2 id="system-rule-stories-title">五条规则，实际改变 AI 怎样工作</h2><p>规则不是让人背的合同。它们分别决定从哪里取事实、什么动作可以继续、多人怎样不互相覆盖、跨项目问题怎样组合证据，以及一句普通要求怎样进入正确能力。</p></div>
+        <div className="system-rule-story-list">{systemRuleStories.map((story) => <SystemRuleStory story={story} key={story.id} />)}</div>
+      </section>
+
+      <section className="system-frame system-skill-families" aria-labelledby="system-skill-families-title">
+        <div className="system-home-section-heading"><h2 id="system-skill-families-title">不用记 23 个名字，按想做的事进入</h2><p>完整目录仍保留每个 Skill 的触发、流程和技术边界；这里先把 23 个入口按七类现实动作解释清楚，每个入口只出现一次。</p></div>
+        <div className="system-skill-family-list">{systemSkillFamilies.map((family) => <SystemSkillFamily family={family} key={family.id} />)}</div>
+      </section>
+
       <section className="system-frame system-evidence" id="evidence" aria-labelledby="system-evidence-title">
-        <div className="system-home-section-heading"><h2 id="system-evidence-title">如何确认工作真的完成</h2><p>每一层只证明自己的事。不是把所有格子点亮，而是明确这次结果已经走到哪里、还缺什么。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-evidence-title">如何确认工作真的完成</h2><p>这是按任务选择的验证矩阵，不是每次都要走到发布。每一层分别说明能证明什么、不能证明什么，以及这次结果已经闭合到哪里。</p></div>
         <div className="system-evidence-grid">
-          {systemEvidenceLayers.map((layer, index) => <article id={layer.id === "human" ? "evidence-human" : `evidence-${layer.id}`} key={layer.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{layer.title}</strong><p>{layer.meaning}</p></article>)}
+          {systemEvidenceLayers.map((layer, index) => <article id={layer.id === "human" ? "evidence-human" : `evidence-${layer.id}`} key={layer.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{layer.title}</strong><p>{layer.proves}</p><small>不能证明：{layer.doesNotProve}</small></article>)}
         </div>
       </section>
 
