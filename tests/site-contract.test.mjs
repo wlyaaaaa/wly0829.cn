@@ -7,7 +7,6 @@ import { gzipSync } from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import { panelProjectRegistry } from "../app/content-core.js";
 import { ruleGuides } from "../app/content-rule-guides.js";
 import { chineseAsrModules, chineseAsrProject } from "../app/content-chinese-asr.js";
 import { githubIndexModules, githubIndexProject } from "../app/content-github-index.js";
@@ -217,21 +216,9 @@ test("project technical facts remain complete without taking over the first view
   for (const model of ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "Paraformer", "CAM++", "Qwen Audio 3.0 ASR Flash", "Fun-ASR-Nano-2512", "Whisper Large V3"]) {
     assert.ok(asrFacts.includes(model), `ChineseASR technical reference hides model: ${model}`);
   }
-  const pcconfigFacts = pcconfigProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(pcconfigFacts, /87.*88/);
-  assert.match(pcconfigFacts, /新增 2.*移除 1/);
-  assert.match(pcconfigFacts, /第 68 版 normal/);
-  assert.match(pcconfigFacts, /Vault V2/);
-  assert.match(pcconfigFacts, /ready_waiting_for_user_exit/);
-  const pcconfigTechnical = JSON.stringify({ project: pcconfigProject, modules: pcconfigModules });
-  for (const retainedFact of ["Password Center", "银行卡", "Recovery Set", "第 68 版 normal", "Vault V2"]) assert.ok(pcconfigTechnical.includes(retainedFact), `PCConfig technical reference lost: ${retainedFact}`);
-  const gitFacts = githubIndexProject.heroFacts.map((fact) => fact.value).join("\n");
-  assert.match(gitFacts, /47.*27.*20/);
-  assert.match(gitFacts, /44 个 clone occurrence/);
   const agentsFacts = project.heroFacts.map((fact) => fact.value).join("\n");
   assert.ok(agentsFacts.includes(panelSnapshot.authority.releaseId));
   assert.ok(agentsFacts.includes(panelSnapshot.authority.previous.release_id));
-  assert.match(agentsFacts, /25.*24.*2.*26/);
   const timeAuditFacts = timeAuditProject.heroFacts.map((fact) => fact.value).join("\n");
   for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "53000", "6 张仪表盘", "78 个面板"]) {
     assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit technical reference hides: ${currentFact}`);
@@ -646,29 +633,36 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedModules: ["current-evidence-route", "protected-foreground-refresh", "raw-preservation-resume", "offline-decision-brief", "evidence-three-state", "health-owner-boundary"]
     }
   ];
-  const freshMetricCases = [
-    { project, metrics: [["活动规则", "E95 · 5/5"], ["能力供应", "25 项"], ["本地回归", "38 pass · 0 fail"], ["合同覆盖", "36/36"]], facts: ["2026-08-31T11:41:50Z", "81694 bytes", "38 pass", "4 项为 cross-owner skip", "37/37 安装事务 terminal", "0 unfinished、0 invalid", "finding 0"] },
-    { project: pcconfigProject, metrics: [["配置地图", "15 项目 · 157 键"], ["恢复任务", "10 Ready · 0 失败"], ["秘密恢复", "10/10 三路一致"], ["Codex 迁移", "75.13 GB · 已就绪"]], facts: ["2026-08-31T11:43:18Z", "PRIVATE main=f9245a1", "44 份 Registry", "89 个环境变量", "64 段 PATH", "V 盘 299.9 GiB", "10 个核心恢复任务", "G 路 20 份", "revision 68", "46.984 秒", "39911 个文件", "565 个文件 / 6.74 GiB", "ReadyCheck 58 秒", "SafeSwitch manifest"] },
-    { project: githubIndexProject, metrics: [["仓库总账", "47"], ["公开 / 私有", "27 / 20"], ["本地副本", "44"], ["当前差异", "0 delta · 0 issue"]], facts: ["2026-08-31T11:30:52Z", "26 个 PUBLIC、18 个 PRIVATE", "no fetch", "18295 bytes", "领先 7 个提交", "2 个 dirty worktree", "8/8 stable drift"] },
-    { project: chineseAsrProject, metrics: [["引擎", "6"], ["回归", "345/345"], ["真实长音频", "4/4"]], facts: ["2026-08-31T11:59:37.2566597Z", "PUBLIC main=70e3255", "83.035 秒", "6 个引擎", "32607 MiB", "0 processed / 4 skipped"] },
-    { project: timeAuditProject, metrics: [["采样", "1 秒 / 3 秒"], ["大盘", "6 · 78"], ["回归", "180 + 11"]], facts: ["2026-08-31T11:18:10Z", "coverage 3518/3600 秒", "gap 82 秒", "磁盘 p95/max 0.316/8.005 ms", "packet-loss 信号 14 次", "活动状态重叠 6 秒", "数据库与 Grafana 每类备份轮转上限为 14 份", "已消除 172 个正常系统进程误报", "138 对重叠", "采集耗时 86%"] },
-    { project: pcPanelHubProject, metrics: [["显示面", "2"], ["刷新", "1 Hz · failed 0"], ["回归", "84 + 8"]], facts: ["2026-08-31T11:19:19Z", "runtime ready", "frame/sent=2748/2748", "full=2700", "59/10/35 ms", "10 类信息", "最多 6 张事件卡", "15 个纯软件 demo", "第 60/120/180 帧与每 900 帧"] },
-    { project: cacbProject, metrics: [["核心模块", "47"], ["数据合同", "25"], ["连续案例", "10"]], facts: ["233 个跟踪文件", "59 个测试文件", "6 份报告/模板文件", "每次执行独立 workspace", "WorkerHandle 同时绑定原始 task id", "lint 门失败"] },
-    { project: learningProject, metrics: [["方法模块", "5"], ["协作步骤", "6"], ["单元", "1 次 1 个"]], facts: ["权威搜索", "反例重查", "最小验证", "完整 Markdown 成品", "一次只推进一个单元"] },
-    { project: codexRemoteProject, metrics: [["正式版", "v0.1.5"], ["验证", "1771"], ["证据图", "20"]], facts: ["同一个 Codex Desktop 任务", "12 张历史真实手机 UI", "7 张公开合成演示", "1 张历史合成 QA", "历史走通结果", "当前 main 最新 CI 未闭合", "不代表当前在线"] },
-    { project: personalHealthProject, metrics: [["合成回归", "112/112"], ["大分页恢复", "609 页"], ["分析窗", "14 · 28 · 90 天"]], facts: ["2026-08-31T12:00:18.5444628Z", "PRIVATE main=48d5a5b", "27.922 秒", "39 类 provider 数据", "21 个兼容字段", "4 个决策字段", "每 16 页", "最多 1000 页", "256 页 / 64 MiB / 50 万条", "health_owner_review_required=true", "background_work_created=false"] }
-  ];
-  for (const entry of freshMetricCases) {
-    assert.deepEqual(entry.project.cardMetrics.map((item) => [item.label, item.value]), entry.metrics, `${entry.project.slug} card metrics drifted`);
-    assert.equal(entry.project.cardMetrics.length, entry.metrics.length);
-    assert.ok(entry.project.cardMetrics.every((item) => item.label.length <= 10 && item.value.length <= 18), `${entry.project.slug} card metrics are not short display facts`);
-    const content = JSON.stringify(entry.project);
-    for (const fact of entry.facts) assert.ok(content.includes(fact), `${entry.project.slug} fresh content omits: ${fact}`);
+  const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
+  const digitWords = { 0: "零", 1: "一", 2: "二", 3: "三", 4: "四", 5: "五", 6: "六", 7: "七", 8: "八", 9: "九" };
+  for (const { project: candidate, modules: candidateModules } of snapshotPackages) {
+    assert.ok(candidate.cardMetrics.length >= 3 && candidate.cardMetrics.length <= 4, `${candidate.slug} card metrics must stay compact`);
+    assert.equal(new Set(candidate.cardMetrics.map((item) => item.label)).size, candidate.cardMetrics.length, `${candidate.slug} repeats a card metric label`);
+    assert.ok(candidate.cardMetrics.every((item) => item.label.length <= 10 && item.value.length <= 18), `${candidate.slug} card metrics are not short display facts`);
+    assert.ok(candidate.heroFacts.length >= 4 && candidate.heroFacts.length <= 6, `${candidate.slug} hero facts are incomplete`);
+    assert.equal(new Set(candidate.heroFacts.map((item) => item.label)).size, candidate.heroFacts.length, `${candidate.slug} repeats a hero fact label`);
+    assert.ok(candidate.heroFacts.every((item) => item.label?.length >= 2 && item.value?.length >= 18), `${candidate.slug} has an incomplete hero fact`);
+    assert.match(candidate.currentState.observedAt, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/, `${candidate.slug} observedAt is not precise UTC`);
+    assert.ok(Number.isFinite(Date.parse(candidate.currentState.observedAt)), `${candidate.slug} observedAt is invalid`);
+    assert.ok(candidate.currentState.label?.length >= 12, `${candidate.slug} currentState label is incomplete`);
+    assert.ok(candidate.currentState.facts.length >= 2 && candidate.currentState.gaps.length >= 1, `${candidate.slug} currentState is incomplete`);
+    if (candidate === project) {
+      const observedRelease = candidate.currentState.label.match(/E\d+/)?.[0];
+      assert.ok(observedRelease, "agents Owner observation omits its release identity");
+      assert.ok(candidate.snapshotBoundary.includes(`${observedRelease} 观察`), "agents boundary mixes live release with an unlabelled historical Owner observation");
+      assert.ok(candidate.cardMetrics.some((item) => item.label.includes(observedRelease) && item.value.includes("pass")), "agents local regression metric omits its observed release");
+      assert.ok(candidate.cardMetrics.find((item) => item.label === "活动规则")?.value.startsWith(panelSnapshot.authority.releaseId), "agents live release metric is not panelSnapshot-derived");
+    }
+    const canonicalFacts = JSON.stringify({ heroFacts: candidate.heroFacts, currentState: candidate.currentState, components: candidate.components, methodCanvas: candidate.methodCanvas, modules: candidateModules, liveSnapshot: candidate === project ? panelSnapshot : undefined });
+    for (const metric of candidate.cardMetrics) {
+      const tokens = metric.value.match(/(?:[Ev]\d+(?:\.\d+)+|\d+(?:\.\d+)?(?:\/\d+)?)/g) || [];
+      assert.ok(tokens.length >= 1, `${candidate.slug}/${metric.label} has no traceable value token`);
+      for (const token of tokens) {
+        const alternate = /^\d$/.test(token) ? digitWords[token] : null;
+        assert.ok(canonicalFacts.includes(token) || (alternate && canonicalFacts.includes(alternate)), `${candidate.slug}/${metric.label} is not traceable to canonical project facts`);
+      }
+    }
   }
-  assert.deepEqual(
-    Object.fromEntries(panelProjectRegistry.projects.map((item) => [item.id, item.ai_refresh.semantic_revision])),
-    { agents: 5, pcconfig: 3, "github-index": 3, "chinese-asr": 2, timeaudit: 2, "pc-panel-hub": 2, cacb: 2, learning: 2, "codex-remote": 2, "personal-health": 2 }
-  );
   for (const entry of packages) {
     const { project: candidate, modules: candidateModules } = entry;
     assert.equal(candidate.slug, entry.expectedSlug);
@@ -809,7 +803,8 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
   assert.match(publicText, /具体值实际含|按字段类别自动隐藏/);
   assert.match(publicText, /% Processor Utility/);
   assert.match(publicText, /等待游戏帧/);
-  assert.match(publicText, /动态壁纸已经生效/);
+  assert.match(publicText, /实体动态壁纸沿用 2026-08-30 本人历史确认/);
+  assert.match(publicText, /本轮只确认 Wallpaper Engine 进程与 HS2 浮层落点/);
   assert.match(publicText, /wallpaper64/);
   assert.ok(!pcPanelHubModules.some((item) => item.slug === "acceptance-evidence"));
 
@@ -931,6 +926,7 @@ test("CACB explains the product without publishing tested-configuration output",
   for (const fact of ["47", "25", "59", "59b0b5c", "CI", "lint"]) assert.ok(heroText.includes(fact), `CACB first viewport hides ${fact}`);
   assert.doesNotMatch(publicText, /manual_owner_only|curated_packaging|manual snapshot|人工快照|策展|包装内容/i, "CACB public content must not expose website-maintenance labels");
   assert.equal(cacbModules.length, 5);
+  for (const module of cacbModules) assert.match(module.verification.join("\n"), /e6f7581.*历史.*不继承.*当前/, `${module.slug} upgrades historical focused tests to current evidence`);
   assert.match(publicText, /当前提交没有一份绿色 CI/);
   assert.match(publicText, /旧提交的 focused\/full 记录继承为当前可验证/);
   assert.match(publicText, /不发布受测配置结果/);

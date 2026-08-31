@@ -29,7 +29,7 @@ export const pcconfigProject = {
     { label: "开发存储", value: "V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过" },
     { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过" },
     { label: "秘密恢复", value: "10/10 项在三条恢复路线一致；G 路 20 份、PRIVATE 路 65 份快照，跨度 33 天" },
-    { label: "受保护数据", value: "P0 revision 68 为 normal、active=LKG、trusted=true；自然启动用时 46.984 秒，低于 180 秒门" },
+    { label: "受保护数据", value: "P0 当前选择器、自然启动与时限已经闭合；SafeSwitch manifest、后续版本和正式数据仍按各自证据分层" },
     { label: "Codex Home 迁移", value: "39911 个文件、75.13 GB；最终差异 565 个文件 / 6.74 GiB，ReadyCheck 58 秒，预计离线窗口 4:37–7:56；已就绪并等待本人退出" }
   ],
   productPrinciples: [
@@ -89,7 +89,8 @@ export const pcconfigProject = {
       "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。",
       "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。",
       "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。",
-      "P0 current 为 revision 68、normal、active=LKG、trusted=true；最近自然启动用时 46.984 秒，低于 180 秒门。",
+      "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。",
+      "fresh Drift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；旧启动失败不再进入当前任务健康计数。",
       "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。",
       "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。"
     ],
@@ -333,7 +334,7 @@ export const pcconfigModules = [
     ],
     failures: [
       { condition: "完整权限现场与 Registry 不同", response: "保留精确差异并标明观察时间；不把历史 task-scan 冒充当前闭合，也不把 runtime health PASS 反推成定义一致。" },
-      { condition: "P0 历史 LastTaskResult=4", response: "正式回执已证明在线恢复到第 68 版 normal/LKG，因此分类为 historical_failure_recovered_online；下一次自然 boot deadline 仍须单独验收。" },
+      { condition: "2026-08-28 的历史 LastTaskResult=4", response: "保留为带日期的旧回执；当前 rev68 自然启动已在 46984 ms 内返回 deadline_met=true，不再把历史失败算进当前健康。" },
       { condition: "启动快照比现场少 3 项", response: "当前归类为 informational_only；无需自动刷新、关闭应用或要求用户确认，下次真实维护可吸收为新基线。" },
       { condition: "环境变量 registry/process 读取失败", response: "对应项 exists=null、diff_status=unknown；不把读取失败写成 absent。" },
       { condition: "组件 status 为 unknown 或通道不匹配", response: "不备份、不安装、不降级，返回稳定错误码和 Owner 入口。" },
@@ -353,7 +354,7 @@ export const pcconfigModules = [
     verification: [
       "2026-08-31T11:43:18Z 配置地图回读 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务",
       "10 个核心恢复任务均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过",
-      "P0 第 68 版为 normal、active=LKG、trusted=true；最新自然启动用时 46.984 秒、deadline_met=true",
+      "P0 rev68 为 normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true",
       "Get-StartupInventory.ps1 -Json 当前覆盖 17 个启动项",
       "Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json 当前返回 changes_observed，但 action_required=false、confirmation_required=false",
       "validate_managed_software_catalog.mjs、validate_env_var_index.mjs 与对应回归覆盖 catalog、环境元数据和闭合状态机"
@@ -422,7 +423,7 @@ export const pcconfigModules = [
     ],
     failures: [
       { condition: "当前 CoreRecovery 区域验收", response: "manifest_contract、maintenance_inspect 和 task_contract 三项均 pass；它只证明该区域合同，不覆盖全局 task drift。" },
-      { condition: "整机任务仍有 attention", response: "CoreRecovery maintenance inspect 与区域验收通过；但 4 项任务缺少完整可见性，P0 下一次自然 boot deadline 未验，所以不称整机治理全绿。" },
+      { condition: "整机任务仍有 attention", response: "fresh Drift 已为 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；只保留 SafeSwitch manifest、H 冷备、Codex Home 切换后验收等真实缺口。" },
       { condition: "H 锁定、缺失或卷身份不符", response: "Cold 返回 skipped 或 fail，既不写入介质，也不自动解锁、锁卷或改变设备信任。" },
       { condition: "Hot closure 或时效不满足", response: "Cold 不复制，也不用进程成功值或旧 current 补齐。" },
       { condition: "复制中断或校验失败", response: "保留逐项结果、旧 current（当前完整状态）和 source（恢复来源）；不切消费者，不清旧路径。" },
@@ -641,8 +642,8 @@ export const pcconfigModules = [
     implementation: [
       "P0 v1 在固定 ProgramData root 使用 immutable slot、一个 control.json、journal/receipt 和公开零秘密 status；selector 以 revision CAS 和同卷原子替换更新。",
       "control 只有 normal、trial、read_only_recovery 三种 mode，绑定 active、LKG、rollback 和 manifest hash；每次 launch/health/recovery 都重新核验完整闭包。",
-      "当前 public status revision 68、mode=normal、trusted_control=true、active=LKG、rollback distinct；recovery_status=boot_deadline_recovery。",
-      "较早的 2026-08-27 与 2026-08-28 启动失败回执继续作为历史保留；当前最新自然启动已由同一 AtStartup SYSTEM task 全新运行，回读第 68 版 normal、active=LKG、trusted=true，用时 46.984 秒并返回 deadline_met=true。",
+      "当前 public status revision 68、mode=normal、trusted_control=true、active=LKG、rollback distinct、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true。",
+      "2026-08-27 的 196468 ms 超时与 2026-08-28 的 rev66、57656 ms、deadline_met=false、LastTaskResult=4 都只作为带日期的历史回执保留，不代表当前状态。",
       "正式 boot-deadline-recovery operation 先把 current 恢复为第 68 版 normal、active=LKG；随后新的自然启动闭合 boot acceptance，历史失败回执不再代表当前启动状态。",
       "P0 vNext RecoveryKernel 设计旁路安装到 v2 root，但继续使用唯一 v1 state/slots；2026-08-29 v2 public status root absent（安装根不存在），所以仍是 source candidate（源码候选版本）。",
       "vNext 设计中的 P1 AuthorityVault 将提供 Passkey、TOTP、Recovery、Account 四类同接口因子，成功只交付进程内 opaque session（不透明会话）；当前 source 不能冒充安装态。",
@@ -680,7 +681,7 @@ export const pcconfigModules = [
     ],
     failures: [
       { condition: "当前 P0 selector", response: "public status 显示 normal、trusted、active=LKG 且有独立 rollback，说明当前选择器有可用证据。" },
-      { condition: "当前 P0 boot task", response: "LastTaskResult=4 已证明在线恢复并降为 warning；它仍不替代下一次自然 task/reboot deadline 证据。" },
+      { condition: "P0 boot task 返回当前失败", response: "按新回执重新判断并保留 rev68 当前可用版本；2026-08-28 的历史 LastTaskResult=4 不得代替当前结果。" },
       { condition: "候选版本切换前后健康检查失败或超时", response: "恢复旧 LKG；旧 LKG 也不能证明时写 read_only_recovery（只读恢复），并拒绝业务写入。" },
       { condition: "control current 损坏", response: "只接受完整验证的 previous preimage；不能靠猜测选择 newest slot。" },
       { condition: "v2 RecoveryKernel root absent（安装根不存在）", response: "只称 source candidate（源码候选版本），不称 side-by-side installed（并行版本已安装）、fresh read-back（全新回读）或 reboot verified（重启已验证）。" },
@@ -699,9 +700,9 @@ export const pcconfigModules = [
     ],
     verification: [
       "P0 public status 于 2026-08-29 可读取 schema pcconfig.protected-data-safe-switch.public-status.v1、mode=normal、revision=68、trusted_control=true",
-      "当前状态回读 active_equals_lkg=true、rollback_distinct=true；最新自然启动为第 68 版 normal/LKG、46.984 秒、deadline_met=true",
-      "Test-PCConfigDrift 当前把 P0 boot task LastTaskResult=4 分类为 historical_failure_recovered_online；tasks.runtime_health 为 warning/evidence pass，不再 block",
-      "boot-latest.json 最新回读为第 68 版 normal/LKG、46984 ms、deadline_met=true；较早的 57656 ms 与 196468 ms 失败回执单独保留为历史",
+      "当前状态回读 active_equals_lkg=true、rollback_distinct=true，并与项目 currentState 的 rev68 自然启动事实一致",
+      "fresh Test-PCConfigDrift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0",
+      "boot-latest.json 当前回读为第 68 版 normal/LKG、46984 ms、deadline_met=true、recovery_status=null；旧回执只按上方明确日期保留",
       "C:\\ProgramData\\PCConfig\\ProtectedDataSafeSwitch\\v2\\public\\status.json 当前不存在，明确阻止 installed-v2 声明",
       "Install-ProtectedDataSafeSwitch.ps1 -Mode Inspect 当前返回 protected_data_safe_switch_install_manifest_invalid；旧安装文件仍与旧 manifest 一致，但当前 source Registry 的 release/字段合同已前进",
       "Vault V2 Registry 只允许 installer inspect read-back 作为 production state source；source acceptance 不能替代",

@@ -298,7 +298,7 @@ export const timeAuditModules = [
       "PresentMon 选择与 dashboard contract 纳入本次 180 项通过结果。",
       "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3615 样本，且 no_game_frames 没有被误报成掉帧。",
       "Grafana 容器运行，授权截图显示真实界面。",
-      "未启动游戏或查询真实时序值，FPS E2E 仍 Unknown。"
+      "本轮已查询 3615 个样本的一小时真实聚合，但未启动游戏且窗口内没有有效游戏帧，因此 FPS E2E 未形成。"
     ],
     relation: "读取采集时间轴并与进程资源对齐；timeaudit-diagnostics 先消费它的有界聚合，必要时再进入 Grafana 深读；可靠性防止探针失败扩散。"
   },

@@ -43,7 +43,7 @@ export const personalHealthProject = {
     { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见" },
     { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见" },
     { label: "当前源码与回归", value: "PRIVATE main=48d5a5b；5 个产品模块 + 5 个测试模块；112/112 合成回归通过，内部用时 27.922 秒" },
-    { label: "证据结构与恢复", value: "39 类 provider 数据归一为 21 个兼容字段、默认采用 4 个决策字段；609 页每 16 页 checkpoint，最多 1000 页；单次选择上限 256 页 / 64 MiB / 50 万条，review_required=true、current_updated=false、background_work=0" }
+    { label: "证据结构与恢复", value: "provider 数据先归一为兼容字段，再只选与当前决定有关的最小字段；分页中断只续缺页，质量门不通过就不更新当前底色" }
   ],
   methodCanvas: {
     kicker: "健康选择画布",
@@ -157,7 +157,7 @@ export const personalHealthProject = {
     { ask: "AI查到的指南和医生说法冲突，能直接停药吗？", effect: "不能。AI说明冲突发生在哪条事实、适用范围或假设，帮助向原医生追问或取得现实临床复核；不擅自开始、停止或替换处方治疗。" },
     { ask: "这个健康问题需要重新翻报告吗？", effect: "先看已经整理好的当前信息是否足够；只有新报告、事实纠正、来源冲突或一个会改变选择的关键缺口，才打开最小相关来源。" },
     { ask: "更新一下穿戴设备数据。", effect: "在当前任务里完成一次明确发起的更新。中断时保留已取得内容并从原处继续；数据完整、来源清楚且与当前问题相关后，才进入人工复核，不建立后台同步。" },
-    { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。609 页合成回归证明每 16 页可以原子记录 checkpoint；恢复时只续缺页，并在 1000 页、256 选中页、64 MiB 和 50 万条上限内重新核对完整性。" },
+    { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。分页恢复会按固定间隔原子记录 checkpoint；恢复时只续缺页，并在登记的页数、体积和记录数上限内重新核对完整性。" },
     { ask: "今天先停，别再给我加健康任务。", effect: "停止当前非紧急工作，只保留恢复这次判断所需的最小断点；不打卡、不追问、不评分，也不把沉默解释成继续授权。" }
   ],
   evidenceLayers: [
@@ -172,7 +172,7 @@ export const personalHealthProject = {
     { date: "2026-08-24", commit: "ace3596–a222a85", result: "建立最小现行健康底色、一次性有界设备保全与不落 token 文件的 OAuth enrollment（授权登记）。" },
     { date: "2026-08-24—08-25", commit: "0f42703–98f514a", result: "把处理后的底色设为普通回答权威入口，补全原始响应保全、离线窄查、分页闭包、预算与精确中断续跑。" },
     { date: "2026-08-25", commit: "50131b3–377cbe9", result: "加入确定性离线 brief、Fitbit tracker family 来源边界、decision-ready 质量门、inventory-only 分流、前台链解耦和 Health Owner 最终审阅。" },
-    { date: "2026-08-30—08-31", commit: "48d5a5b", result: "把前台刷新收到的 complete capture 结果纳入失败关闭，并用 112/112、内部用时 27.922 秒的合成回归覆盖 39→21→4 字段收敛、609 页每 16 页 checkpoint、1000 页与 256 页/64 MiB/50 万条选择上限；Owner review、CURRENT 未更新和无后台工作必须同时一致。" }
+    { date: "2026-08-30—08-31", commit: "48d5a5b", result: "把前台刷新收到的 complete capture 结果纳入失败关闭，并用合成回归覆盖字段收敛、大分页 checkpoint 与选择上限；Owner review、CURRENT 未更新和无后台工作必须同时一致。" }
   ],
   operationalEntrypoints: [
     { name: "普通个人健康入口", command: "Skill: personal-health", purpose: "从现行健康底色回答；不重复读取 SOURCES、原件、旧项目或 Codex 记忆。" },

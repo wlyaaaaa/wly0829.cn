@@ -5,9 +5,9 @@ export const pcPanelHubProject = {
   route: "/projects/pc-panel-hub",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "双副屏产品链在运行；HS2 浮层当前落点健康，动态壁纸于 2026-08-30 由本人确认生效",
+  cardStatus: "双副屏产品链在运行；HS2 浮层当前落点健康，实体动态壁纸沿用 2026-08-30 本人历史确认",
   cardStatusTone: "pass",
-  snapshotBoundary: "2026-08-31 主机发送链和 HS2 透明浮层落点有新鲜证据；动态壁纸像素/运动只保留 2026-08-30 本人确认，TURZX 实体像素、冻结恢复和睡眠唤醒仍需现场观察",
+  snapshotBoundary: "2026-08-31 本轮仅确认主机发送链、Wallpaper Engine 进程与 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，TURZX 实体像素、冻结恢复和睡眠唤醒仍需现场观察",
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库并使用 MIT 许可；仓库只发布项目源码、脚本、合同与公开示例，厂商二进制明确不属于该许可。端口、协议、硬件型号、进程名和状态等技术事实不按字段类别自动隐藏；只有具体值实际含私人正文、身份隐私或可复用凭据时才省略。",
   summary: "PC Panel Hub 把两块实体副屏组成一条不打扰主工作的桌面信息通道。竖直机箱屏一直显示我需要随时瞥一眼的硬件、流畅度、网络、磁盘和后台状态；曲面水冷屏平时保留动态壁纸，只有媒体、任务、手机事件或真正需要注意的告警出现时，才叠加有限数量的透明卡片。两块屏不重复，也不把监控窗口搬回主屏。",
   why: "主屏上的监控窗口会挡工作，也容易在问题发生前被关掉；实体副屏又可能出现“任务仍在运行、主机仍在写串口，但画面已经冻结”的假健康。这个项目把数据可信度、渲染、传输、实体观察和恢复分层，使我既能随时看见关键状态，也能知道哪一层真的被证明。",
@@ -27,7 +27,7 @@ export const pcPanelHubProject = {
     { label: "两块显示面", value: "TURZX 480×1920 密集遥测；HS2 2288×1048 动态壁纸 + 透明事件浮层；覆盖 10 类信息、最多 6 张事件卡与 15 个纯软件 demo" },
     { label: "当前刷新选择", value: "安装态为 1 Hz Hybrid（混合）刷新：command 200 全帧基线 + command 204 有界增量；3 秒全帧仅作兼容回退" },
     { label: "数据与恢复节拍", value: "主周期 1000 ms；最近 fetch/render/send 59/10/35 ms；第 60/120/180 帧与每 900 帧重建会话或补全帧，进程排行约 3 秒" },
-    { label: "运行快照", value: "2026-08-31T11:19:19Z runtime ready、missing=0；frame/sent=2748/2748、failed=0、period=1000 ms、full=2700；HS2 visible=1、misplaced=0；动态壁纸已经生效是 2026-08-30 本人确认" },
+    { label: "运行快照", value: "2026-08-31T11:19:19Z runtime ready、missing=0；frame/sent=2748/2748、failed=0、period=1000 ms、full=2700；本轮确认 HS2 浮层落点，实体动态壁纸沿用 2026-08-30 本人历史确认" },
     { label: "源码与回归", value: "PUBLIC main=ebbc1f2ab28bcef7a9a205a346981f16a3d253dc；工作树干净且缓存远端 0/0；84 项指标、8 项天气及项目原生整套检查通过" },
     { label: "证据缺口", value: "本轮为保护正在运行的 COM7 跳过 TestVideoStream；command 204 没有设备 ACK，进程、heartbeat 和 demo 均不能代替实体像素观察" }
   ],
@@ -148,7 +148,7 @@ export const pcPanelHubProject = {
   ],
   currentState: {
     observedAt: "2026-08-31T11:19:19Z",
-    label: "PUBLIC 源码、纯软件回归、主机发送链与 HS2 浮层落点有新鲜证据；动态壁纸像素保留 2026-08-30 本人确认",
+    label: "PUBLIC 源码、纯软件回归、主机发送链与 HS2 浮层落点有新鲜证据；实体动态壁纸沿用 2026-08-30 本人历史确认",
     facts: [
       "Git Owner 回读 wlyaaaaa/PC-Panel-Hub 为 PUBLIC（公开）仓库，默认 main（默认主分支）；本地 HEAD 与缓存 origin/main 均为 ebbc1f2ab28bcef7a9a205a346981f16a3d253dc，工作树干净。",
       "项目 runtime check（运行依赖检查）确认 Python 3.11、.NET Framework C# 编译器、RJCP 串口库、既有 TURZX 运行文件和主 stack（运行栈）入口均存在；检查没有安装或改动任务。",
@@ -166,7 +166,7 @@ export const pcPanelHubProject = {
     gaps: [
       "本轮没有打开、重启或写入 COM7，也没有主动操作 HS2、L-Connect、USB 或显示模式；实体屏 1 Hz、冻结恢复、睡眠/唤醒和实际位置没有重新验收。",
       "command 204 没有设备 ACK；定期重开串口并补 command 200 全帧只能限制主机侧恢复间隔，不能量化实体冻结时间。",
-      "本轮只确认 Wallpaper Engine 进程存在，未重新观察动态壁纸像素或运动；2026-08-30 本人确认不能升级成当前帧率、透明合成性能、全部事件源、睡眠后恢复或异常重启验收。",
+      "本轮只确认 Wallpaper Engine 进程与 HS2 浮层落点，未重新观察实体动态壁纸像素或运动；2026-08-30 本人历史确认不能升级成当前帧率、透明合成性能、全部事件源、睡眠后恢复或异常重启验收。",
       "画廊中的实际壁纸帧来自 Wallpaper Engine 市场场景；作者与公网再发布许可当前 Unknown（证据不足）。本页把它作为当次现场截图，不声称用户原创或拥有该美术素材。",
       "纯软件 gallery（画廊）中的测试 fixture（固定演示数据）和 demo 场景用于验证布局、文本和状态，不代表当前机器数值或实体硬件照片。",
       "公开仓库不含厂商运行二进制和本机绑定，换机安装仍需合法取得厂商文件并重新确认实际串口、显示器和 Hub 拓扑。",
@@ -180,7 +180,7 @@ export const pcPanelHubProject = {
     { title: "按当前刷新合同发送", detail: "启动先建立 command 200 全帧基线，再以 command 204 增量维持 1 Hz；60、120、180 和每 900 帧重开会话并补全帧。" },
     { title: "在动态壁纸上独立组织 HS2 事件", detail: "底层背景由动态壁纸应用负责；透明浮层从本地媒体、任务、Windows 通知和硬件状态形成最多六张卡，优先级、寿命、去重和布局由纯逻辑核心决定。" },
     { title: "由一个看门狗协调电源和恢复", detail: "看门狗拥有启动、睡眠、关机和恢复；先证明旧写入者退出，再只恢复目标组件，避免串口或显示拓扑竞争。" },
-    { title: "分层验收并诚实标注", detail: "源码、测试、运行、演示、协议与实体观察分别记录；本人观察确认动态壁纸已实际生效，其余实体情景继续保留真实缺口，不用软件回执替代像素观察。" }
+    { title: "分层验收并诚实标注", detail: "源码、测试、运行、演示、协议与实体观察分别记录；实体动态壁纸只沿用 2026-08-30 本人历史确认，其余实体情景继续保留真实缺口，不用软件回执替代像素观察。" }
   ],
   components: [
     { name: "metrics_agent.py", responsibility: "提供 127.0.0.1:18765/snapshot 的硬件、网络、磁盘、天气、FPS、前台和健康快照。", implementation: "主指标目标 1 秒；物理公网出口歧义时失败关闭，虚拟接口不重复计数。" },
@@ -419,7 +419,7 @@ export const pcPanelHubModules = [
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\TestRuntimeReliability.ps1", role: "唯一 writer、heartbeat 和超时回归" }
     ],
     verification: [
-      "观察时 heartbeat frame=22201、period=1005 ms、send_ms=34、failed=0、last_full_frame=21600。",
+      "2026-08-31T11:19:19Z heartbeat frame=2748、sent=2748、period=1000 ms、send_ms=35、failed=0、last_full_frame=2700。",
       "StreamCadence 与 RuntimeReliability 本轮通过。",
       "TestVideoStream 被保护性跳过，实体面板未由本轮写入。"
     ],
@@ -430,7 +430,7 @@ export const pcPanelHubModules = [
     shortTitle: "HS2 事件浮层",
     title: "2288×1048 OLED 的事件优先级、寿命与显示安全",
     teaser: "在唯一非主 2288×1048 显示器的动态壁纸上，以透明卡片显示媒体、任务、手机、音量、游戏和告警；没有真实内容就不创建空卡。",
-    status: "2288×1048 显示器、Wallpaper Engine 与浮层同时在线，本人确认动态壁纸已生效；完整恢复情景未重验",
+    status: "本轮确认 Wallpaper Engine 进程与 2288×1048 HS2 浮层落点；实体动态壁纸沿用 2026-08-30 本人历史确认，完整恢复情景未重验",
     statusTone: "mixed",
     value: "动态壁纸保持水冷副屏的视觉背景，低频但重要的信息只以透明卡片叠在上面；密集硬件指标仍留在机箱屏，不让两块屏重复。",
     why: "普通通知可能重复、过期或包含占位文字；卡片太多会越过曲面折线，显示器误选还可能把浮层放到主屏。",
@@ -489,8 +489,8 @@ export const pcPanelHubModules = [
     ],
     verification: [
       "源码列出 max-six 等 15 类纯软件 demo 场景，并明确全部使用合成数据。",
-      "本轮回读到 2288×1048 HS2、wallpaper64 和 HS2.CrystalOverlay 同时在线，且本人确认动态壁纸已在水冷屏生效；没有读取通知正文。",
-      "动态壁纸当前状态已确认；透明合成性能、全部事件寿命、睡眠与异常重启恢复仍未重演。"
+      "本轮回读到 2288×1048 HS2、wallpaper64 和 HS2.CrystalOverlay 同时在线，并确认浮层落点；实体动态壁纸只沿用 2026-08-30 本人历史确认，没有读取通知正文。",
+      "实体动态壁纸本轮未重验；透明合成性能、全部事件寿命、睡眠与异常重启恢复也仍未重演。"
     ],
     relation: "读取指标模块的异常值，并与电源恢复模块共享显示器模式边界；不依赖机箱屏渲染。"
   },

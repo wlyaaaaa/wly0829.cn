@@ -202,7 +202,7 @@ export const cacbModules = [
       { path: "PRIVATE source · tests/test_question_bank_release.py", role: "问题库发布回归" }
     ],
     verification: [
-      "question bank、public cases 与 release focused tests 本轮通过。",
+      "question bank、public cases 与 release focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "私有 holdout 内容未读取到网页项目。",
       "完整跨代问题库路径仍受完整回归缺口约束。"
     ],
@@ -268,7 +268,7 @@ export const cacbModules = [
       { path: "PRIVATE source · protocols/single-worker-episode.md", role: "连续 episode 合同" }
     ],
     verification: [
-      "campaign、task_workspace 与 task_workspace_archive focused tests 本轮通过。",
+      "campaign、task_workspace 与 task_workspace_archive focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "没有创建真实受测任务或调用外部执行器。",
       "完整 native formal-run 路径仍有跨代 fixture 缺口。"
     ],
@@ -333,7 +333,7 @@ export const cacbModules = [
       { path: "PRIVATE source · schemas/worker-receipt.schema.json", role: "执行回执合同" }
     ],
     verification: [
-      "model evidence workflow 与 worker contract focused tests 本轮通过。",
+      "model evidence workflow 与 worker contract focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "完整 native identity envelope 测试当前存在跨代失败，页面没有升级为全绿。",
       "未读取或复制任何真实原始执行日志。"
     ],
@@ -398,7 +398,7 @@ export const cacbModules = [
       { path: "PRIVATE source · schemas/case-artifact-v2.schema.json", role: "案例产物合同" }
     ],
     verification: [
-      "public cases、question bank release 和 verify-related focused paths 本轮通过选定核心集合。",
+      "public cases、question bank release 和 verify-related focused paths 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "完整外部执行 adapter 的若干测试仍失败，未被本模块 PASS 覆盖。",
       "本轮没有运行私有 holdout，也没有生成新的受测配置比较结果。"
     ],
@@ -464,7 +464,7 @@ export const cacbModules = [
       { path: "PRIVATE source · docs/REPORTING_STANDARD.md", role: "失败、证据和限制写法" }
     ],
     verification: [
-      "workspace archive、worker contract 与 public report schema 核心回归本轮通过。",
+      "workspace archive、worker contract 与 public report schema 核心回归在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "完整 report/finalization 历史路径仍有失败，页面保留 mixed。",
       "网站内容没有复制任何私有报告正文或受测比较结果。"
     ],

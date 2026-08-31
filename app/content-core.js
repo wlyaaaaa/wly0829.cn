@@ -38,6 +38,30 @@ if (
 
 export const panelSnapshot = generatedPanelFacts;
 const currentValidationDetail = (prefix) => panelSnapshot.validation.rows.find((row) => row.layer.startsWith(prefix))?.detail || "本轮没有取得这一层的当前证据。";
+const activeRuleCount = panelSnapshot.ruleBinding.length;
+const activeRuleBytes = panelSnapshot.ruleBinding.reduce((total, binding) => total + binding.sourceBytes, 0);
+const localOwnerObservation = Object.freeze({
+  observedAt: "2026-08-31T11:41:50Z",
+  releaseId: "E95",
+  gitCommit: "d32210b6594bf8ba1679da7b0f5bd66d18f3f6a7",
+  pointerRevision: 16,
+  previousReleaseId: "E94",
+  ruleCount: 5,
+  ruleBytes: 81694,
+  rulesetSha256: "b56847d29e1102945ffa437de0e58dfb79a887d4f0a606bfe1020b28746d8ef9",
+  registered: 42,
+  passed: 38,
+  failed: 0,
+  timedOut: 0,
+  crossOwnerSkipped: 4,
+  activeIntent: 25,
+  skillTransactions: 37,
+  unfinished: 0,
+  invalid: 0,
+  contractPassed: 36,
+  contractTotal: 36,
+  findings: 0
+});
 
 const agentsRegistration = panelProjectRegistry.projects.find((item) => item.id === "agents" && item.enabled);
 if (!agentsRegistration || agentsRegistration.order !== 1 || agentsRegistration.presentation_mode !== "real_dashboard") {
@@ -53,9 +77,9 @@ export const project = {
   route: agentsRegistration.route,
   visibility: agentsRegistration.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库",
   repositoryNote: "仓库不向匿名访客开放；本面板完整介绍它的产品、规则、模块和真实验证状态。",
-  cardStatus: "E95 已激活，规则、能力供应与本地回归闭合",
+  cardStatus: `${panelSnapshot.authority.releaseId} 已激活，规则、能力供应与本地回归闭合`,
   cardStatusTone: "pass",
-  snapshotBoundary: `本页绑定已验证的 ${panelSnapshot.authority.releaseId}；本地登记 42 项中 38 项通过，另 4 项是 cross-owner skip（跨 Owner 跳过），不冒充失败或通过；更晚源码、工具和单项目结果仍按各自现场判断`,
+  snapshotBoundary: `本页活动规则绑定已验证的 ${panelSnapshot.authority.releaseId}；本地回归仍是 ${localOwnerObservation.releaseId} 观察：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail，另 ${localOwnerObservation.crossOwnerSkipped} 项是 cross-owner skip（跨 Owner 跳过）；未来 release 不继承这次回归`,
   summary: ".agents 是我和 AI 协作时的总规则与能力中枢。我只需用自然语言说清目标和不能越过的边界，它会让任务找对事实来源、在已有授权内行动、保护并发施工、选择合适能力，并把本地完成、远端发布和真正可用分开验证。最后我拿到的是办成的结果、真实缺口，以及是否还需要我作决定。",
   why: "个人 AI 工作会同时跨越代码仓库、本机配置、私有资料、外部服务和多个并行任务。没有统一边界时，最容易改错项目、扩大授权、覆盖其他任务，或者把测试通过误报成用户已经能用。",
   plainExample: "例如我说“重建并发布个人项目网站”。它先让网站项目决定页面内容和测试方式，让 Git 总索引确认公开仓库、主分支和远端，让 .agents 判断哪些动作已经得到允许以及能否并行；构建、推送和公网打开分别验证。任何一步没完成，都不能用上一层的成功冒充整个任务已经完成。",
@@ -66,28 +90,28 @@ export const project = {
     unavailable: "把对应事实标记为 Unknown（证据不足），不猜路径、不猜授权，也不把本地成功冒充成远端或用户可用。"
   },
   cardMetrics: [
-    { label: "活动规则", value: "E95 · 5/5" },
-    { label: "能力供应", value: "25 项" },
-    { label: "本地回归", value: "38 pass · 0 fail" },
-    { label: "合同覆盖", value: "36/36" }
+    { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
+    { label: "能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 项` },
+    { label: `本地回归 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.passed} pass · ${localOwnerObservation.failed} fail` },
+    { label: "合同覆盖", value: `${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}` }
   ],
   heroFacts: [
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
-    { label: "五文件闭包", value: "5/5 份规则共 81694 bytes；ruleset=b56847d2…，每份 source bytes/SHA 都与 E95 release 一致" },
-    { label: "本地回归", value: "本地登记 42 项：38 pass、0 fail、0 timeout；另 4 项为 cross-owner skip，不冒充失败或通过" },
-    { label: "个人能力供应", value: "25 项 active；37/37 安装事务 terminal，0 unfinished、0 invalid" },
-    { label: "合同覆盖", value: "跨控制面合同 36/36，finding 0；规则、授权、能力、Git 与机器事实继续由各自责任源解释" },
+    { label: "活动规则闭包", value: `当前 ${activeRuleCount}/${activeRuleCount} 份规则共 ${activeRuleBytes} bytes；每份 release 与 source 的 bytes/SHA 必须一致，dirty source 和历史材料不能替代当前指针` },
+    { label: "本地回归边界", value: `${localOwnerObservation.releaseId} 的独立 Owner 观察与未来 release identity 分层；跨 Owner 跳过项不折算成失败或通过` },
+    { label: "个人能力供应", value: "active install intent 只说明供应目标；安装事务、当前任务、全新任务和真实场景验收仍分别取证" },
+    { label: "合同覆盖边界", value: "当前覆盖闭合不代表未来合同自动通过；规则、授权、能力、Git 与机器事实继续由各自责任源解释" },
     { label: "产品能力", value: "自然语言目标可接到真实项目、规则、Skills 与工具；源码、测试、安装、发布、恢复和用户结果分层回读" }
   ],
   currentState: {
-    observedAt: "2026-08-31T11:41:50Z",
-    label: "E95 已激活；规则、能力供应、本地回归与合同覆盖闭合",
+    observedAt: localOwnerObservation.observedAt,
+    label: `${localOwnerObservation.releaseId} Owner 观察：规则、能力供应、本地回归与合同覆盖闭合`,
     facts: [
-      "PRIVATE main=d32210b6594bf8ba1679da7b0f5bd66d18f3f6a7；current pointer revision 16，previous=E94；5/5 份活动规则共 81694 bytes，ruleset=b56847d29e1102945ffa437de0e58dfb79a887d4f0a606bfe1020b28746d8ef9。",
-      "Owner 本轮现场运行的本地登记结果为 38 pass、0 fail、0 timeout，另 4 项属于 cross-owner skip；能力供应为 25 项 active，37/37 安装事务 terminal、0 unfinished、0 invalid；合同覆盖 36/36、finding 0。"
+      `PRIVATE main=${localOwnerObservation.gitCommit}；current pointer revision ${localOwnerObservation.pointerRevision}，previous=${localOwnerObservation.previousReleaseId}；${localOwnerObservation.ruleCount}/${localOwnerObservation.ruleCount} 份活动规则共 ${localOwnerObservation.ruleBytes} bytes，ruleset=${localOwnerObservation.rulesetSha256}。`,
+      `Owner 于 ${localOwnerObservation.observedAt} 现场运行本地登记：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项属于 cross-owner skip；能力供应为 ${localOwnerObservation.activeIntent} 项 active，${localOwnerObservation.skillTransactions}/${localOwnerObservation.skillTransactions} 安装事务 terminal、${localOwnerObservation.unfinished} unfinished、${localOwnerObservation.invalid} invalid；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。`
     ],
     gaps: [
-      "refresh-panel-snapshot 只刷新登记快照，不会自动重跑本轮 Owner 的完整本地回归；两层事实必须按各自时间与回执解释。"
+      `refresh-panel-snapshot 只刷新登记快照，不会自动重跑 ${localOwnerObservation.releaseId} Owner 的完整本地回归；未来 release 即使切换，以上测试仍保持 ${localOwnerObservation.releaseId} 观察，直到新的 Owner 回执替换。`
     ]
   },
   productPrinciples: [
@@ -543,7 +567,7 @@ export const modules = [
     shortTitle: "上下文与证据",
     title: "三控制面上下文、耐久状态与完成证据",
     teaser: "只加载会改变决定的事实，并把设计、源码、运行、发布和用户结果分开证明。",
-    status: "三控制面视图与 36/36 合同覆盖均通过",
+    status: "三控制面视图与当前合同覆盖均通过",
     statusTone: "pass",
     value: "避免一次加载过多上下文让模型注意力丢失，也避免用“代码存在”“测试通过”或“部署返回成功”代替用户真正能用。",
     why: "长任务会经历压缩、交接和外部状态变化；源码、测试、安装、发布和用户可见结果又分别证明不同事情。把它们混在一起最容易误报完成。",
@@ -592,7 +616,7 @@ export const modules = [
     verification: [
       "FourBaseDecisionContext 当前验证两个视图、三个 owner、五规则闭包和无退役基座",
       "RepositoryBloatGovernance 单独验证活动树预算和禁止历史副本",
-      "Cross-control coverage（跨控制面覆盖）当前为 36/36，finding_count=0；以后新增合同仍必须单独回归",
+      "Cross-control coverage（跨控制面覆盖）在项目当前快照中闭合且无 finding；以后新增合同仍必须单独回归",
       `当前 source 的 fresh full Local 结果见验证矩阵；它只证明当前施工回归，不替代 ${panelSnapshot.authority.releaseId} frozen release identity。`
     ],
     relation: "这个模块把其他五个模块的结论放进正确证据层，并保证长任务和更新快照时不会靠记忆续写。"
