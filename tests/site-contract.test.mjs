@@ -263,7 +263,9 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Product names, platform\s+labels and otherwise public-safe paths or identifiers[\s\S]*?are not sensitive/);
   assert.match(projectRules, /positive L3\+ evidence/);
   assert.doesNotMatch(projectRules, /prohibited platform identity/);
-  assert.match(projectRules, /what this thing actually does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic\s+example[\s\S]{0,500}owner receives/);
+  assert.match(projectRules, /what this thing[\s\S]{0,80}does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic ordinary request[\s\S]{0,500}owner receives/);
+  assert.match(projectRules, /content\s+quality floor, not a shared card layout[\s\S]{0,260}System stays medium-density/);
+  assert.match(projectRules, /adding more words never substitutes for removing mystery copy/);
   assert.match(projectRules, /three reading layers: `速览`, `产品`\s+and\s+`技术`/);
   assert.match(projectRules, /product principles and design highlights/);
   assert.match(projectRules, /release id, commit, test count,[\s\S]{0,160}not the\s+product's identity/);
@@ -329,7 +331,30 @@ test("the System source pack explains generic AI productivity without platform o
   }
   for (const entry of projectCatalog) assert.ok(sourcePack.includes(entry.project.route), `System source pack omits project entry: ${entry.project.slug}`);
   for (const item of skills) assert.ok(sourcePack.includes(`\`${item.slug}\``), `System source pack omits Skill: ${item.slug}`);
+  const documentMaterialsSurface = JSON.stringify({
+    asset: systemProjectDomains.flatMap((domain) => domain.assets).find((asset) => asset.id === "formal-materials"),
+    node: systemDependencyNodes.find((node) => node.id === "document-materials-skill"),
+    relation: systemDependencyRelations.find((relation) => relation.id === "document-materials-task"),
+    family: systemSkillFamilies.flatMap((family) => family.members).find((item) => item.slug === "document-materials")
+  });
+  assert.match(documentMaterialsSurface, /文书和材料制作/);
+  assert.match(documentMaterialsSurface, /\/skills\/document-materials/);
+  assert.doesNotMatch(documentMaterialsSurface, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i);
+  const hookNode = systemDependencyNodes.find((node) => node.id === "collaboration-hooks");
+  const hookRelation = systemDependencyRelations.find((relation) => relation.id === "hooked-collaboration");
+  assert.match(JSON.stringify({ hookNode, hookRelation }), /Hook.*身份.*规则.*创建前复核/s, "System omits the runtime Hook that applies collaboration rules");
+  assert.match(sourcePack, /Hook.*身份.*活动规则/s, "System source pack omits Hook behavior");
   assert.doesNotMatch(sourcePack, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System source pack must stay model, vendor and runtime-wrapper neutral");
+});
+
+test("long pages expose one unobtrusive back-to-top control", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(pageSource, /data-back-to-top[\s\S]{0,180}回到页面顶部/);
+  assert.match(runtimeSource, /function initializeBackToTop\(\)[\s\S]*?window\.scrollTo\(\{ top: 0,[\s\S]*?behavior:/);
+  assert.match(runtimeSource, /window\.scrollY < Math\.max\(520, window\.innerHeight \* 0\.75\)/);
+  assert.match(styleSource, /\.back-to-top:hover,[\s\S]{0,180}border-color:\s*var\(--green\)/);
 });
 
 test("the authoritative desktop scale baseline follows the older compact block", async () => {
@@ -348,7 +373,8 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 20);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 25);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 40);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 25);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -390,17 +416,21 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   for (const entry of compactIndex) {
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
+    assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} compact search contains an unexpanded object`);
+    assert.ok(entry.search.length <= (entry.type === "项目" ? 1800 : 900), `${entry.href} compact search phrases are unbounded`);
   }
   const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
   const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
   assert.ok(projectIndexMatch, "all-project search index asset is invalid");
   const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
-  assert.ok(gzipSync(projectSearchAsset).length <= registry.refresh_policy.search_index_gzip_budget_kib * 1024, "all-project compact search index exceeds registry budget");
+  assert.ok(gzipSync(projectSearchAsset).length <= registry.refresh_policy.project_search_index_gzip_budget_kib * 1024, "all-project compact search index exceeds registry budget");
   assert.equal(compactProjectIndex.length, projectCatalog.reduce((count, entry) => count + entry.modules.length, 0));
   assert.ok(compactProjectIndex.every((entry) => entry.type === "项目内容"), "all-project search index must contain only project modules");
   for (const entry of compactProjectIndex) {
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} project search summary is not compact`);
+    assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} project search contains an unexpanded object`);
+    assert.ok(entry.search.length <= 900, `${entry.href} project search phrases are unbounded`);
   }
   const projectSearchIndices = [];
   for (const entry of projectCatalog) {
@@ -427,6 +457,21 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
     const match = searchCompactEntries(completeCompactIndex, query)[0];
     assert.equal(match?.title, title, `production compact search loses: ${query}`);
     assert.equal(match?.href, href, `production compact search misroutes: ${query}`);
+  }
+  const compactSystemCases = [
+    ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
+    ["仓库身份经过项目入口再进入业务项目", "系统关系", "/#system-relation-git-projects"],
+    ["Hook 创建子代理前核对身份", "系统组成", "/skills/native-economy-routing/"],
+    ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"]
+  ];
+  for (const [query, type, href] of compactSystemCases) {
+    const full = searchPanel(query, "system")[0];
+    const compact = searchCompactEntries(compactIndex, query, "system")[0];
+    assert.equal(full?.type, type, `full System search mistypes: ${query}`);
+    assert.equal(compact?.type, type, `compact System search mistypes: ${query}`);
+    assert.equal(canonicalPath(new URL(full.href, "https://wly0829.cn").pathname) + new URL(full.href, "https://wly0829.cn").hash, href, `full System search misroutes: ${query}`);
+    assert.equal(compact?.href, href, `compact System search misroutes: ${query}`);
+    assert.ok(compact.detail.length >= 12, `compact System search has no useful summary: ${query}`);
   }
   for (const entry of completeCompactIndex) {
     for (const alias of entry.aliases) {
@@ -1767,6 +1812,14 @@ test("native routing public copy explains the Hook identity path without expandi
   ]) assert.match(nativeRoutingText, expected, `native routing public copy omits a stable Hook boundary: ${expected}`);
 });
 
+test("generic Hook annotation stays neutral while owning content explains each event", async () => {
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.match(pageSource, /\["Hook", "钩子"\]/);
+  assert.doesNotMatch(pageSource, /\["Hook", "提交前钩子"\]/);
+  const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "native-economy-routing", "index.html"), "utf8");
+  assert.doesNotMatch(skillsHtml, /Stop Hook（提交前钩子）|Git Hook（提交前钩子）/);
+});
+
 test("global search handles natural rewrites, mixed Latin terms and bounded broad results", async () => {
   assert.equal(searchPanel("哪个 Skill 可以找照片")[0]?.title, "personal-media");
   assert.equal(searchPanel("fresh task 为什么受阻")[0]?.title, "personal-panel-refresh");
@@ -1869,7 +1922,7 @@ test("shared search scopes, project reading layers, Skills categories and System
 
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   assert.match(systemHtml, /class="system-home"/);
-  for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "通用 AI 与智能体能力", "如何确认工作真的完成", "项目、规则和 Skills 各自负责什么"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
+  for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "通用 AI 与智能体能力", "各层验证分别能证明什么", "下一步去哪里看完整细节"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
   assert.equal((systemHtml.match(/data-system-scenario-tab=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-scenario-panel=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-dependency-node=/g) || []).length, systemDependencyNodes.length);

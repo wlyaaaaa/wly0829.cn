@@ -27,13 +27,23 @@ const projectCompactExtraAliases = {
   timeaudit: ["卡顿", "电脑卡顿", "游戏卡顿"]
 };
 
+function compactSearchTopics(projection) {
+  if (!projection) return "";
+  const values = Array.isArray(projection)
+    ? projection
+    : Object.values(projection).flatMap((value) => Array.isArray(value) ? value : [value]);
+  return [...new Set(values.map((value) => String(value || "").trim()).filter(Boolean))].join(" ");
+}
+
 function projectCompactSearchText(project, modules) {
   const heroLatinTokens = (project.heroFacts || []).flatMap((item) => `${item.label} ${item.value}`.toLowerCase().match(/[a-z][a-z0-9_.:/-]*/g) || []);
   return [...new Set([
     project.cardStatus,
     project.snapshotBoundary,
-    ...(project.usageExamples || []).map((item) => item.ask),
+    ...(project.cardMetrics || []).map((item) => item.label),
+    ...(project.usageExamples || []).filter((item) => !item.moduleSlug).map((item) => item.ask),
     ...(project.heroFacts || []).map((item) => item.label),
+    compactSearchTopics(project.searchProjection),
     ...heroLatinTokens,
     ...(projectCompactExtraAliases[project.slug] || []),
     ...modules.flatMap((module) => [module.title, module.shortTitle, ...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])])
@@ -65,7 +75,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       ...(project.currentState?.gaps || []),
       project.currentState?.label || "",
       ...project.components.flatMap((item) => [item.name, item.responsibility, item.implementation]),
-      ...project.usageExamples.flatMap((item) => [item.ask, item.effect]),
+      ...project.usageExamples.filter((item) => !item.moduleSlug).flatMap((item) => [item.ask, item.effect]),
       ...project.evidenceLayers.flatMap((item) => [item.layer, item.proves, item.doesNotProve]),
       ...project.operationalEntrypoints.flatMap((item) => [item.name, item.command, item.purpose]),
       ...project.evolution.flatMap((item) => [item.date, item.commit, item.result]),
@@ -90,6 +100,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     detail: `${project.title}｜${module.teaser}`,
     href: `${project.route}/${module.slug}`,
     aliases: [...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])],
+    compactSearch: `${compactSearchTopics(module.searchProjection)} ${(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect]).join(" ")}`.trim(),
     search: [
       project.title,
       module.status,
@@ -97,6 +108,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       module.why,
       module.example,
       module.result,
+      ...(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect]),
       ...Object.values(module.readerStates || {}),
       ...module.decisionImpact,
       ...module.implementation,
@@ -125,6 +137,7 @@ export const globalSearchEntries = [
       detail: rule.question,
       href: `/rules?rule=${rule.logicalId}`,
       aliases: ruleSearchAliases[rule.logicalId] || [],
+      compactSearch: compactSearchTopics(rule.searchProjection),
       search: [
         rule.logicalId,
         rule.purpose,
@@ -152,6 +165,7 @@ export const globalSearchEntries = [
       detail: `${item.title}：${outcome.value}`,
       href: `/skills/${item.slug}`,
       aliases: skillSearchAliases[item.slug] || [],
+      compactSearch: compactSearchTopics(item.searchProjection),
       search: [
         item.title,
         item.status,
@@ -193,7 +207,8 @@ export function searchScore(entry, query) {
   const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
   const all = `${entry.type} ${title} ${detail} ${entry.search} ${aliases.join(" ")}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
-  if (latinTokens.some((token) => !all.includes(token))) return 0;
+  const matchedLatinTokens = latinTokens.filter((token) => all.includes(token));
+  if (latinTokens.length && matchedLatinTokens.length / latinTokens.length < 0.6) return 0;
   if (title.includes(normalized)) return 14000;
   if (aliases.some((alias) => alias.includes(normalized))) return 16000;
   if (detail.includes(normalized)) return 11000;
@@ -203,7 +218,7 @@ export function searchScore(entry, query) {
   const grams = compact.length >= 3
     ? Array.from({ length: compact.length - 1 }, (_, index) => compact.slice(index, index + 2))
     : compact ? [compact] : [];
-  if (!grams.length) return latinTokens.length ? 70 + latinTokens.length * 8 : 0;
+  if (!grams.length) return matchedLatinTokens.length ? 70 + matchedLatinTokens.length * 12 : 0;
   const matched = grams.filter((gram) => all.includes(gram)).length;
   if (matched / grams.length < 0.45) return 0;
   const titleMatched = grams.filter((gram) => title.includes(gram)).length;

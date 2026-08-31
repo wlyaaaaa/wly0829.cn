@@ -1,7 +1,7 @@
 # System 首页内容源包
 
 本文件是 `/` System 首页的产品与关系事实源，不是第二套动态状态数据库，也不是页面施工说明。
-项目、规则和 Skills 的完整技术正文仍由各自内容文件拥有；System 首页只提炼跨项目关系与入口。
+项目、规则和 Skills 的完整技术正文仍由各自内容文件拥有；System 首页负责中等密度的产品总览、真实工作场景、当前持续任务、系统组成、跨项目关系、全部项目版图和进入详情的方向，不复制各详情页的完整技术正文。
 
 观察基线：2026-08-31。活动规则为 E95；项目与能力状态按下文各自的观察时间和证据层解释。
 
@@ -25,7 +25,7 @@
 
 当前 10 个项目是已经补齐完整产品说明和详情路由的入口，不是系统分母。全部仓库按现实作用进入八个稳定系统域：AI 协作与能力运行；电脑、服务与跨设备；材料、微信与原件；文档、媒体与专项制作；个人事务与长期协作；项目资产、研究与交付；凭据、备份与恢复；历史与迁移参考。
 
-系统域允许一个项目参与多条关系，但完整资产表只给每个仓库一个主要归属，保证 47 项不重不漏。没有独立详情页的项目继续由 GitHub 总索引承载，不生成占位页；PRIVATE 项目在首页只写公开安全的产品角色。合同与私人事务类能力可以描述为合同、正式材料和文书协作，不主动突出案件或起诉，也不公开私人事实、证据和个人结果。
+系统域允许一个项目参与多条关系，但完整资产表只给每个仓库一个主要归属，保证当前结构化快照中的项目不重不漏。没有独立详情页的项目继续由 GitHub 总索引承载，不生成占位页；PRIVATE 项目在首页只写公开安全的产品角色。文书和材料制作能力使用通用产品语言说明合同、正式说明、申请、事件材料和提交包怎样从真实原件进入可编辑成品、格式验收、状态分层与恢复，不公开私人正文和个人结果。
 
 PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-private-archive 当前只提供历史与迁移参考，不承担运行职责。出现在项目总账也不代表正在运行；源码、安装、运行、发布和现实验收仍分别判断。
 
@@ -45,6 +45,14 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 - ChatGPT Scheduled tasks 可以按时间后台运行；符合条件的 Web / Mobile 方案还能由 Gmail 新邮件、Slack 频道消息或 GitHub PR 活动触发。官方说明：https://learn.chatgpt.com/docs/automations
 - 工作需要注意时，ChatGPT 可以通过当前表面和账号支持的通知渠道提醒；渠道可能包括桌面通知、Activity、push、email 或 SMS。官方说明：https://learn.chatgpt.com/docs/notifications
 - 因此系统能够形成“新邮件或项目事件到达 → 读取相关上下文 → 调用项目与 Skills 处理 → 通过可用渠道主动提醒”的工作流。组件能力成立不自动等于这条组合已经跑过真实 E2E；页面用对应证据状态单独说明。
+
+## 当前 7 个持续协作任务的内容依据
+
+- 用户在 2026-08-31 明确确认 5 个云端任务正在使用及其频率，并提供当前共享任务定义：重要邮件提醒与 GitHub 重大变更每小时运行；每日重点简报与 GitHub 每日日报每日运行；每周精选文章每周运行。共享定义证明每项任务关注的来源、筛选与交付规则，但不提供本账号最近一次成功、失败或通知渠道回执。
+- 重要邮件提醒读取自上次成功运行后的 Gmail 新邮件和三个 QQ 邮箱转发件，还原原始发件信息并去重；只把任务、截止日期、账单、行程、账号事件和重要人工邮件整理成下一步提醒，没有重要变化就不通知。
+- GitHub 重大变更只比较仓库新增、消失、改名、可见性、归档、默认分支和网站版本；普通 commit、PR、Issue 或 CI 不触发。每日 GitHub 报告则统计北京时间当天的远端活动、正常与自动 commit、仓库 TOP 5、PR、Issue、重大变化和网站版本，不把本地未推送结果算进去。
+- 每日重点简报覆盖 AI、技术、职业、科技商业、中国政治经济与全球事件，要求去重降噪，并逐条说明发生了什么、为什么重要和对用户的影响。每周精选只选择过去两周可免费阅读全文的一篇内容，完整阅读后交回来源、逻辑、事实、推荐理由和行动启发。
+- 两个电脑端任务从本机正式配置回读为 ACTIVE：三基座与 GitHub 持续治理每周先核验活动规则、Owner、机器和 Git 事实，只展开变化、失败、未知或风险；个人系统网页快照更新在其后检查页面是否实质失真，无变化 no-op，有变化才完成内容、构建、公开检查、发布和公网回读。任务定义存在不自动证明最近一次真实运行成功。
 
 ## 10 个已完整介绍的代表项目在系统中的位置
 
@@ -83,7 +91,7 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | `timeaudit-diagnostics` | “过去一小时为什么卡” → 覆盖、聚合信号、因果限制和下一步 | 连接 TimeAudit 有界 provider 与 Windows/PCConfig 现场 | 最新一小时 3702 样本、fresh；不返回具体进程或证明根因 |
 | `localocr` | “读扫描 PDF/表格/公式” → 文本、版面、表格、坐标和 sidecar | 复杂扫描材料走本地 OCR；普通清晰图片仍直接视觉 | 上次小图 E2E 可保留，当前 18665 health 本轮不可达 |
 | `personal-health` | “结合我的当前资料回答/刷新设备” → 分层健康证据与最小更新 | 连接 processed-current、权威医学信息和 Health Owner | 未读取个人健康正文，不证明任何当前事实 |
-| `personal-litigation` | “根据合同和现有材料准备一份正式文书，并告诉我现在到哪一步” → 可编辑文书、事实/未知和现实状态分层 | 连接唯一现状来源、真实原件、Word/PDF 工具与私人事务边界 | 只说明合同与私人事务文书产品；不读取或公开具体私人事实，本轮未跑真实事务 E2E |
+| `document-materials` | “把这些合同、附件、聊天或扫描件整理成一份正式材料，并告诉我还缺什么” → 可编辑文书、PDF 或材料包，事实/解释/待确认/未知与四层现实状态分开 | 连接当前材料状态、真实原件、Word/PDF 工具、逐页验收与恢复点 | 通用流程已具备；合同起草、正式说明、申请、事件材料与提交包不是每类都已完成真实 E2E |
 | `documents` | “创建或修订这份 Word 文书并逐页检查” → 可编辑 DOCX、修订/批注和版面验收 | 宿主集成能力保留 Word 结构，并以逐页渲染检查真实版面 | 本轮只核对 observed bundle source/bytes/SHA，未创建真实文档，Current/Fresh/E2E Unknown |
 | `pdf` | “填写或生成这份 PDF，并核对表单字段和页面显示” → 最终 PDF、字段逻辑与逐页验收 | 宿主集成能力同时检查 PDF 结构、表单字段、控件、外观和页面 | 本轮只核对 observed bundle source/bytes/SHA，未处理真实 PDF，Current/Fresh/E2E Unknown |
 | `md-to-pdf` | “按正式样式导出 PDF” → 与源 hash、页数和布局绑定的 PDF | 本地插件连接 Markdown、浏览器渲染和原子发布 | 本轮未生成实际 PDF |
@@ -99,17 +107,17 @@ PersonalKnowledgeBase、PersonalOS-Retired、HealthLongevity 和 WeChatDirect-pr
 | `control-plane-doctor` | “三个控制面哪里漂移了” → 按 Owner 分开的 health/convergence | 快速定位应去哪个 Owner，Doctor 本身不修业务 | scope run 不证明三个控制面所有现场都健康 |
 | `tailscale-safe-exposure` | “只让这个 peer 访问这个端口” → 最小配置、回滚和分层验收 | 连接具名设备、服务和 Tailscale CLI，不扩大到公网 | 没有本轮具名 peer E2E |
 | `llm-backend-toolkit` | “把封闭可验任务交给额外后端” → job/result/receipt，由主任务复核 | 接入额外计算能力，不自动 fallback、不信后端自报 | live registry 可读 6 个后端；不证明具体 job E2E |
-| `native-economy-routing` | 任务出现独立并行面 → 有界子代理或保持 0，root 继续集成 | 接入平台原生并行生产力，同时收窄 scope、授权与责任 | System 只写能力类别；具体技术标识留在规则/Skill 技术页 |
+| `native-economy-routing` | 任务进入或准备创建协作者 → Hook 注入并复核宿主身份与活动规则 → 有界子代理或保持单线，主任务继续集成 | 让规则真正进入运行现场，再接入平台原生并行生产力；Hook 只验证身份、规则和参数，不替 AI 选数量或扩大授权 | Hook 缺失或身份不可信只关闭这次委派；普通工作继续，具体事件与技术字段留在 Skill 详情 |
 | `token-budget-advisor` | 用户明确问配额/reset/Token → 只读现场或权威计数 | 不因任务看起来长就制造预算门，也不拿字符猜计数 | 本轮没有明确配额请求，因此没有调用当前账号入口 |
 
 ## 首页关系图建议只保留的稳定主线
 
-1. `通用 AI → .agents → 现行规则 → Skills`：外部智能先进入个人目标、授权、协作和领域边界。
+1. `通用 AI → .agents → 现行规则 → Hook → Skills`：外部智能先进入个人目标、授权与协作边界，Hook 再把当前身份和规则带进运行现场。
 2. `GitHub 总索引 → project-entry-gate → 全部项目`：先确认仓库身份与发布事实，再进入项目业务。
 3. `PCConfig → TimeAudit → timeaudit-diagnostics`：机器事实、历史采集和有界诊断三层分开。
 4. `微信入口 → ChineseASR 项目 → chinese-asr Skill`：消息与媒体关系、语音实现和本次任务模式分开。
 5. `材料入口 → LocalOCR → documents → pdf → 验证矩阵`：特殊材料识别、可编辑结构、PDF 字段与逐页版面分别验收。
-6. `材料入口 → personal-litigation → documents / pdf → 人的决定`：合同与私人事务的现状、文书制作、本人操作和外部状态分开。
+6. `材料入口 → document-materials → documents / pdf → 人的决定`：当前材料、文书制作、本人操作、平台收到和接收方处理分开。
 7. `邮件/云盘/日历 → 定时或应用事件 → 主动通知 → 人的决定`：云端现场可以启动工作并把需要注意的结果送回来，具体通知渠道按账号设置。
 8. `健康材料 → personal-health 项目 → personal-health Skill → 人的决定`：已有材料、前台更新、离线验真和人工采用分开。
 9. `PCConfig → 开发环境备份与恢复 → 验证矩阵`：恢复关系、不可再生材料和现实验收分开。

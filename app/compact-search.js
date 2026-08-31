@@ -6,7 +6,8 @@ export function compactSearchScore(entry, query) {
   const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
   const searchable = `${entry.type} ${title} ${detail} ${aliases.join(" ")} ${entry.search || ""}`.toLowerCase();
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
-  if (latinTokens.some((token) => !searchable.includes(token))) return 0;
+  const matchedLatinTokens = latinTokens.filter((token) => searchable.includes(token));
+  if (latinTokens.length && matchedLatinTokens.length / latinTokens.length < 0.6) return 0;
   if (title.includes(normalized)) return 14000;
   if (aliases.some((alias) => alias.includes(normalized))) return 16000;
   if (detail.includes(normalized)) return 11000;
@@ -16,7 +17,7 @@ export function compactSearchScore(entry, query) {
   const grams = compact.length >= 3
     ? Array.from({ length: compact.length - 1 }, (_, index) => compact.slice(index, index + 2))
     : compact ? [compact] : [];
-  if (!grams.length) return latinTokens.length ? 70 + latinTokens.length * 8 : 0;
+  if (!grams.length) return matchedLatinTokens.length ? 70 + matchedLatinTokens.length * 12 : 0;
   const matched = grams.filter((gram) => searchable.includes(gram)).length;
   if (matched / grams.length < 0.45) return 0;
   const titleMatched = grams.filter((gram) => title.includes(gram)).length;

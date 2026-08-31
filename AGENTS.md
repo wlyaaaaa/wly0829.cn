@@ -48,12 +48,16 @@ read-only operating panel; public presentation is secondary.
   replacing it with a short marketing summary. Every project, module, rule and
   Skill page must begin with a reader layer that a person unfamiliar with the
   system can understand before the technical reference layer starts.
-- The reader layer must answer, in this order: what this thing actually does for
-  the owner; what concrete problem or accident it prevents; one realistic
-  example using an ordinary request; what the owner receives at the end; and
-  what happens when the check passes, finds a problem, or cannot run. Only
-  after those answers may the page present triggers, inputs, outputs,
-  architecture, commands, schemas, hashes, evidence and recovery details.
+- The reader layer must make these things easy to understand: what this thing
+  actually does for the owner; what concrete problem or accident it prevents;
+  one realistic ordinary request; what the owner receives; and what happens
+  when the work succeeds, finds a problem or cannot run. This is a content
+  quality floor, not a shared card layout, field order or three-label template;
+  each System section, project, Rule and Skill keeps the structure that best
+  explains its subject. System stays medium-density while owning detail pages
+  go deeper. Only after the reader can form a real working picture should the
+  page lead with architecture, commands, schemas, hashes and implementation
+  evidence; adding more words never substitutes for removing mystery copy.
 - Every project detail page uses three reading layers: `速览`, `产品` and
   `技术`. They are a content priority and reading order, not three
   copies of the same prose, three network loads or a fixed module count.
@@ -219,13 +223,14 @@ read-only operating panel; public presentation is secondary.
   project may therefore explain evidence routing, uncertainty and safety
   boundaries, but must not publish the owner's health records, diagnoses, test
   results, medication list or individualized advice.
-- Contract, formal-document and private-affairs projects or Skills are eligible
-  for the public panel. Their public product layer may describe contract and
-  document intake, fact/source checking, drafting, formatting, evidence review,
-  submission-state separation and recovery as a general private-affairs
-  workflow. Do not foreground lawsuit/case labels, case facts, personal
-  evidence or individual outcomes on the homepage. Public copy presents the
-  usable product directly and never exposes "packaging" as a maintenance label.
+- The public `document-materials` capability is presented as “文书和材料制作”.
+  Explain how contracts, formal statements, applications, event materials and
+  submission packs move from originals and current material state into
+  editable files, PDF or reviewed bundles; keep generated material, user
+  action, platform receipt and recipient processing separate. Do not expose a
+  narrower private-domain identity, internal source route or personal result.
+  Public copy presents the usable product directly and never exposes
+  "packaging" as a maintenance label.
 - The selected personal-health project is a curated, manual-only explanation of
   its evidence product: processed-current routing, protected foreground refresh,
   raw preservation and exact resume, deterministic offline verification,

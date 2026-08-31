@@ -1154,7 +1154,7 @@ const inlineTermTranslations = [
   ["refresh", "刷新"],
   ["fetch", "拉取远端引用"],
   ["bytes", "字节数"],
-  ["Hook", "提交前钩子"],
+  ["Hook", "钩子"],
   ["execution limit", "执行时限"],
   ["access token", "访问令牌"],
   ["refresh token", "刷新令牌"],
@@ -1758,7 +1758,7 @@ function SystemPage() {
       <section className="system-frame system-collaboration" id="system-collaboration" aria-labelledby="system-collaboration-title">
         <div className="system-home-section-heading"><h2 id="system-collaboration-title">项目、Skills、规则和外部能力怎样协作</h2><p>上面说明每类东西各自负责什么；这里把它们连成能真正完成工作的组合。先看系统能够主动办成什么，再看长期稳定的代表性依赖。</p></div>
         <section className="system-composed-workflows" aria-labelledby="system-composed-workflows-title">
-          <div className="system-composed-workflows-heading"><span>能力推定</span><h3 id="system-composed-workflows-title">这些能力组合起来，系统能主动做什么</h3><p>事实说明有哪些组件；这里进一步说明它们能够共同完成的工作。组合证据状态放在卡片右上角，不削弱产品主句。</p></div>
+          <div className="system-composed-workflows-heading"><span>继续扩展</span><h3 id="system-composed-workflows-title">这些能力组合起来，系统还能主动做什么</h3><p>这里展示的是可以继续接通的完整工作，不是上面 7 个当前任务的重复清单。卡片右上角说明单项能力已有证据，还是整条流程已经跑通。</p></div>
           <div className="system-composed-workflow-grid">{systemComposedWorkflows.map((workflow) => <SystemComposedWorkflow workflow={workflow} key={workflow.id} />)}</div>
         </section>
 
@@ -1786,14 +1786,14 @@ function SystemPage() {
       </section>
 
       <section className="system-frame system-evidence" id="evidence" aria-labelledby="system-evidence-title">
-        <div className="system-home-section-heading"><h2 id="system-evidence-title">如何确认工作真的完成</h2><p>这是按任务选择的验证矩阵，不是每次都要走到发布。每一层分别说明能证明什么、不能证明什么，以及这次结果已经闭合到哪里。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-evidence-title">各层验证分别能证明什么</h2><p>验证不是固定流水线，也不是每次都要走到发布。系统按当前任务选择真正需要的层，并明确每层已经证明什么、仍不能推出什么。</p></div>
         <div className="system-evidence-grid">
           {systemEvidenceLayers.map((layer, index) => <article id={layer.id === "human" ? "evidence-human" : `evidence-${layer.id}`} key={layer.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{layer.title}</strong><p>{layer.proves}</p><small>不能证明：{layer.doesNotProve}</small></article>)}
         </div>
       </section>
 
       <section className="system-frame system-directories" aria-labelledby="system-directories-title">
-        <div className="system-home-section-heading"><h2 id="system-directories-title">项目、规则和 Skills 各自负责什么</h2><p>System 只负责解释和连接；三个成熟目录继续使用现有 UI，完整内容留在各自页面。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-directories-title">下一步去哪里看完整细节</h2><p>System 负责让人先看懂整套协作关系；想了解某个产品、判断规则或直接执行能力时，再进入对应的成熟页面。</p></div>
         {systemDirectoryIntroductions.map((item, index) => <article id={`system-directory-${item.id}`} key={item.id}><span>{String(index + 1).padStart(2, "0")} / {item.label}</span><h3>{item.title}</h3><p>{item.body}</p><SiteLink href={item.href}>进入{item.label}<ArrowRight size={17} aria-hidden="true" /></SiteLink></article>)}
       </section>
     </div>
@@ -1823,7 +1823,7 @@ const skillCategoryDefinitions = [
   { id: "all", label: "全部" },
   { id: "find", label: "找东西", slugs: ["personal-media", "personal-materials", "wechat-direct", "google-workspace-direct"] },
   { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "file-intake-router", "media-person-self"] },
-  { id: "documents", label: "文档与私人事务", slugs: ["personal-litigation", "documents", "pdf", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
+  { id: "documents", label: "文书与材料", slugs: ["document-materials", "documents", "pdf", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
   { id: "diagnose", label: "电脑诊断", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },

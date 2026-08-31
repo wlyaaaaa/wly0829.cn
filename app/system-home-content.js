@@ -8,19 +8,19 @@ export const systemHomeHero = {
   ],
   roles: [
     {
-      id: "general-ai",
-      title: "通用 AI 与智能体能力",
-      body: "理解、推理、搜索、视觉与文档理解、工具和代码执行、浏览器操作与并行协作。"
+      id: "natural-request",
+      title: "从一句自然要求开始",
+      body: "说清想完成什么，给出现有材料或项目，并说明不能越过的边界；不要求先记住任何工具名。"
     },
     {
-      id: "personal-system",
-      title: "个人系统提供真实现场",
-      body: "资料、媒体、电脑、全部项目、规则、Skills、长期状态、执行入口和恢复方法。"
+      id: "real-context",
+      title: "系统自己找到正确现场",
+      body: "按这件事读取对应项目、规则、Skills、资料、电脑或外部服务，再选择需要的能力完成工作。"
     },
     {
       id: "usable-result",
-      title: "结果可以继续使用",
-      body: "成品、来源、证据、未确认项、保存位置、恢复点和是否还需要人决定。"
+      title: "结果带着依据一起回来",
+      body: "交回可继续使用的成品、来源、未确认项、保存位置、恢复点，以及是否还需要本人决定。"
     }
   ]
 };
@@ -365,37 +365,37 @@ export const systemScenarios = [
     request: "“我已经出门了，用手机看看电脑上的任务做到哪；如果它需要决定，我在手机上回答，完成后把结果文件和真实交付状态给我。”",
     systems: ["通用 AI 与智能体能力", "Codex Remote", "当前项目", "安全接入", "GitHub 总索引"],
     rules: "必须连接同一个桌面任务、轮次和文件状态；手机不是第二个执行者；审批仍由本人决定；断线和派发不明不自动重放。",
-    result: "同一个任务的进展、工具活动、文件变化、审批、当前轮结果、下一轮队列和最终项目交付回读。",
-    value: "移动 Web、本机中介、共享任务协调、认证、重连、队列和文件操作是个人维护的连续性产品；它不是外部工作环境自带的远程功能。",
+    result: "同一个任务现在做到哪里、改了哪些文件、正在等什么决定、这一轮完成了什么、下一条要求是否已经排队，以及原项目的真实交付状态。",
+    value: "手机入口、电脑连接、任务同步、身份验证、断线续接和文件操作组成一套个人维护的连续工作产品；它不是另外复制一份聊天。",
     dependencyIds: ["general-ai", "agents", "rules", "skills", "github-index", "all-projects", "codex-remote", "verification", "human-review"],
     stages: [
       {
         number: "01",
         kicker: "同一任务身份",
         title: "先确认手机接的是电脑上那一项工作",
-        body: "显式打开入口并登录，手机读取桌面端已加载任务与历史；进入任务后核对同一任务、轮次、目录和项目，不复制第二份聊天。",
+        body: "打开入口并登录后，手机读取电脑端已经存在的任务和历史；进入时核对任务、当前回复、工作目录和项目，确认接回的是同一项工作，而不是重新创建一份。",
         items: [
           ["任务", "同一持久任务和当前轮次"],
           ["项目", "原工作区、文件和真实项目身份"],
-          ["会话", "认证、订阅屏障和唯一任务拥有者"]
+          ["连接", "本人登录，手机和电脑只控制同一份任务状态"]
         ]
       },
       {
         number: "02",
         kicker: "移动控制与重连",
         title: "看进展、补要求、审批和处理文件",
-        body: "手机持续接收公开进展、工具活动、文件变化、结构化提问和审批。可以引导当前回复、停止、排队下一轮或打开明确文件；断线后用事件游标恢复。",
+        body: "手机持续接收进展、工具活动、文件变化、待回答问题和审批。可以补充当前要求、停止、排队下一轮或打开指定文件；短暂断线后从最后收到的位置补齐，不必从头开始。",
         items: [
           ["当前轮", "进展、命令、文件和待处理问题"],
           ["人类决定", "审批、停止、补充要求和下一轮"],
-          ["断线恢复", "保留草稿与队列，从持久状态重新收敛"]
+          ["断线恢复", "保留草稿和待办，从最后位置继续"]
         ]
       },
       {
         number: "03",
         kicker: "回到项目结果",
         title: "手机只是连续性入口，不替项目证明完成",
-        body: "最终文件、测试、提交和发布仍属于原任务和原项目；派发结果不明时停止自动重试，避免重复消息或产生第二个工作拥有者。",
+        body: "最终文件、测试、提交和发布仍属于原任务和原项目；如果一条手机要求是否送达无法确认，就先停下来核对，避免重复发送或让两份任务同时改同一件事。",
         items: [
           ["轮次结果", "做成了什么、还缺什么和下一步"],
           ["项目证据", "真实文件、测试、提交和发布状态"],
@@ -417,9 +417,9 @@ export const systemScenarios = [
     stages: [
       {
         number: "01",
-        kicker: "权威研究与能力依赖",
+        kicker: "先找准当前问题",
         title: "先判断真正需要理解什么",
-        body: "读取唯一当前节点，判断概念、事实、例子还是选择缺口，查当前一手资料并确定这次需要学到的深度，不冻结完整课程表。",
+        body: "先看现在真正卡在哪里：是概念没懂、事实不清、缺少例子，还是不知道怎样选择；再查当前一手资料，决定这次讲到什么深度，不预先写死整套课程。",
         items: [
           ["问题", "真实困惑、使用场景和理解深度"],
           ["来源", "当前权威资料、版本和适用范围"],
@@ -456,42 +456,42 @@ export const systemScenarios = [
     title: "用真实任务判断一种 AI 工作方式是否可靠",
     request: "“我想换一种 AI 工作方式来做复杂代码任务。拿几类真实任务试，不看它自己说完成了没有；告诉我哪些确实做成、哪些失败、证据够不够。”",
     systems: ["通用 AI 与智能体能力", "真实任务能力基准（CACB）", "隔离工作区", "独立验证器", "证据归档"],
-    rules: "任务、输入、执行规则和验证版本冻结；每个样本使用独立工作区；AI 自述不算完成；中断优先恢复同一会话，不能恢复就整轮重跑；证据未闭合时不形成排名。",
-    result: "任务族能力、完成证据、失败平面、环境问题、证据时效、成本与仍不能下的结论；不生成混合营销分。",
-    value: "CACB 不是一句缩写或排行榜，而是一套让真实工程任务、候选产物、确定性重放和终态归档属于同一次执行的验证产品。",
+    rules: "开始前固定任务、输入和验收办法；每次尝试使用独立工作区；AI 说“完成了”不算结果，必须检查真实文件和行为；中断时优先接回同一次尝试，无法精确接回就整轮重做。",
+    result: "哪些类型的任务确实做成、实际文件和行为证据、失败发生在哪一层、环境是否影响结果、这份结论能用到什么范围，以及目前仍不能下的判断。",
+    value: "它不是排行榜，而是把不同 AI 工作方式放到相同真实任务和验收条件下，用实际产物回答“靠不靠谱、哪里不可靠、证据够不够”。",
     dependencyIds: ["general-ai", "agents", "rules", "skills", "all-projects", "cacb", "verification", "human-review"],
     stages: [
       {
         number: "01",
-        kicker: "冻结任务与隔离执行",
-        title: "每次尝试从同一任务、独立工作区开始",
-        body: "冻结问题、输入、顺序、执行规则和验证版本；每个样本只在自己的临时工作区施工，拒绝跨工作区写入和混合两次执行。",
+        kicker: "同题、同条件",
+        title: "先把要做的事和怎样验收定清楚",
+        body: "同一轮比较使用相同问题、输入、执行顺序和检查办法；每次尝试在自己的临时副本里完成，不能把前一次的文件或修改混进来。",
         items: [
-          ["任务族", "跨文件实现、故障修复、持久状态和研究"],
-          ["身份", "任务、工作区、运行组合和验证版本绑定"],
-          ["隔离", "候选产物不能污染别的样本或源仓库"]
+          ["真实任务", "跨文件开发、故障修复、持续状态和研究工作"],
+          ["运行条件", "任务、工作副本和验收版本属于同一次尝试"],
+          ["相互隔离", "不会污染其他尝试，也不会直接改原项目"]
         ]
       },
       {
         number: "02",
-        kicker: "候选产物与独立验证",
-        title: "完成声明不能替代真实文件和行为",
-        body: "通用 AI 完成连续复杂任务；根侧证据与参与者之外的验证器重放候选产物。基础设施失败、能力失败、任务设计问题和缺证据分别归类。",
+        kicker: "实际产物与独立检查",
+        title: "先看真实文件和行为，再听它怎样解释",
+        body: "AI 完成任务后，另一套检查只看实际文件、测试、行为和修改范围。是 AI 没做成、运行环境出问题、任务本身有缺陷，还是证据不够，会分别说明。",
         items: [
-          ["候选", "代码、状态、轨迹、工具回执和失败"],
-          ["重放", "确定性检查真实文件、行为和修改范围"],
-          ["分类", "能力、环境、数据和验证问题不混为一个分数"]
+          ["实际结果", "代码、文件、状态、操作记录和失败"],
+          ["独立检查", "重新核对真实行为和修改范围"],
+          ["分开归因", "能力、环境、任务和证据问题不混成一个分数"]
         ]
       },
       {
         number: "03",
-        kicker: "终态归档与有限结论",
-        title: "先收回证据，再决定能说什么",
-        body: "成功、失败、中断和阻塞都归档产物并回读哈希；缺题或恢复不精确时整轮重跑；输出能力、限制、时效和成本，证据未闭合时不形成公开排名。",
+        kicker: "保存结果与有限结论",
+        title: "把每次实际发生的结果保存下来，再决定能说什么",
+        body: "无论成功、失败还是中断，都保存本次文件、检查结果和工作区状态；无法确认是否完整接回时整轮重做。最后只报告证据真正支持的能力和限制。",
         items: [
-          ["归档", "产物、回执、轨迹、哈希和工作区终态"],
-          ["报告", "白名单字段、任务族结果和失败层"],
-          ["边界", "哪些主张成立，哪些现在仍不能下"]
+          ["保留", "最终文件、操作记录、检查结果和工作区状态"],
+          ["报告", "各类任务做成了什么、失败在哪里"],
+          ["边界", "哪些结论现在成立，哪些还需要更多验证"]
         ]
       }
     ]
@@ -506,7 +506,7 @@ export const systemComposedWorkflows = [
     request: "“这类新邮件到了就读相关上下文，整理我要做什么、截止时间和附件，然后提醒我。”",
     path: ["Gmail 新邮件事件", "固定收件箱与 Drive", "对应项目或文书能力", "可用通知渠道"],
     delivery: "邮件与附件摘要、行动项、截止时间、来源入口、待本人决定项和主动提醒。",
-    evidence: "组件齐全 · 组合待验",
+    evidence: "单项能力已具备 · 整条流程待验",
     tone: "mixed",
     unavailable: "事件入口不可用时仍能按需读取；没有 email 渠道时结果保留在任务或 Activity，并使用当前账号可用的通知方式。"
   },
@@ -517,7 +517,7 @@ export const systemComposedWorkflows = [
     request: "“开会前半小时，把日程、最近邮件和 Drive 文件整理成一页准备材料。”",
     path: ["定时任务", "Calendar", "Gmail / Drive", "可编辑文档", "主动提醒"],
     delivery: "议题、参会背景、近期往来、相关文件、待问问题和一页会前材料。",
-    evidence: "组件齐全 · 组合待验",
+    evidence: "单项能力已具备 · 整条流程待验",
     tone: "mixed",
     unavailable: "缺少某个来源时直接标出缺口，继续使用其余当前材料，不拿旧邮件或旧文件补造当前背景。"
   },
@@ -528,7 +528,7 @@ export const systemComposedWorkflows = [
     request: "“本机和 Drive 里各有一份，告诉我哪个更新、具体差在哪，先不要覆盖。”",
     path: ["本地原件定位", "Drive 搜索与导出", "内容与指纹比较", "差异文档"],
     delivery: "版本矩阵、具体差异、来源、建议主版本、冲突和不覆盖原件的处理方案。",
-    evidence: "组件齐全 · 组合待验",
+    evidence: "单项能力已具备 · 整条流程待验",
     tone: "mixed",
     unavailable: "只说明真正核对过的范围；无法打开一侧时不根据文件名或时间戳擅自选主版本。"
   },
@@ -539,7 +539,7 @@ export const systemComposedWorkflows = [
     request: "“有新的 PR 活动时，先判断影响哪个项目、要不要处理，再把结论提醒我。”",
     path: ["GitHub 事件", "项目身份与发布总账", "项目身份入口", "目标项目规则", "通知"],
     delivery: "影响范围、风险、需要验证什么、能否继续和下一步，不自动改代码或合并。",
-    evidence: "设计候选",
+    evidence: "尚未接通",
     tone: "unknown",
     unavailable: "事件任务不能进入本地项目现场时，只交付事件摘要与待办，不冒充已经完成代码审查。"
   },
@@ -550,7 +550,7 @@ export const systemComposedWorkflows = [
     request: "“新报告到了，结合我当前材料告诉我哪些变化值得问、还缺什么。”",
     path: ["邮件 / Drive 或本地原件", "PDF / OCR", "个人健康项目", "权威资料", "人的决定"],
     delivery: "变化、证据质量、问题清单、选项、停止或复查条件和仍需补充的材料。",
-    evidence: "组件齐全 · 组合待验",
+    evidence: "单项能力已具备 · 整条流程待验",
     tone: "mixed",
     unavailable: "新材料先进入待审核，不自动改写当前健康事实，也不替本人作高风险决定。"
   },
@@ -561,7 +561,7 @@ export const systemComposedWorkflows = [
     request: "“任务需要我决定时主动提醒；我在手机上回答后，让同一个任务继续。”",
     path: ["任务状态", "主动通知", "跨设备任务入口", "同一审批与文件", "最终项目结果"],
     delivery: "当前进展、待决定项、手机回复、继续后的结果文件和真实交付状态。",
-    evidence: "设计候选",
+    evidence: "尚未接通",
     tone: "unknown",
     unavailable: "通知无法深链到任务时提供可打开的任务入口，不创建第二份任务，也不复制聊天。"
   }
@@ -741,7 +741,7 @@ export const systemProjectDomains = [
       { id: "ai-coach", title: "AI 学习协作", repo: "ai-coach", role: "先读原始材料，再按用户实际反馈继续，避免反复从零讲或自动推进。它与公开的通用学习方法有关，但不是同一个项目身份。", kind: "长期协作", href: projectLedgerHref },
       { id: "ai-llm-job-prep", title: "学习材料库", repo: "ai-llm-job-prep", role: "把课程原件、总结和可打印知识地图组织成可复核的学习底稿。", kind: "学习资料", href: projectLedgerHref },
       { id: "career-development", title: "个人发展协作", role: "把方向、学习、项目表达和长期准备放在同一条可持续推进的工作线上；私人事实不进入首页。", kind: "长期协作", href: projectLedgerHref },
-      { id: "formal-materials", title: "合同与私人事务文书协作", role: "把合同、事实、原件和外部要求整理成可核验、可打印、可恢复的正式材料；私人正文和个人结果不进入首页。", kind: "文书协作", href: projectLedgerHref },
+      { id: "formal-materials", title: "文书和材料制作", role: "把合同、说明、申请、事件材料和附件整理成可编辑、可打印、可核验、可恢复的正式成品，并把材料制作、本人操作和接收方处理分开说明。", kind: "文书与材料", href: projectLedgerHref },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" }
     ]
   },
@@ -847,6 +847,15 @@ export const systemDependencyNodes = [
     subtitle: "根规则、重大动作、授权协作、决策上下文和能力路由",
     href: "/rules",
     detail: "规则约束什么时候继续、暂停、调用能力和怎样验收。它们不产生事实或智能，而是让强能力在不同项目里保持同一做事边界。"
+  },
+  {
+    id: "collaboration-hooks",
+    lane: "governance",
+    title: "协作运行钩子（Hooks）",
+    subtitle: "在任务进入和创建协作者前，把真实宿主身份与活动规则带进运行现场",
+    href: "/skills/native-economy-routing",
+    searchAliases: ["Hook 创建子代理前核对身份", "宿主钩子怎样让规则生效"],
+    detail: "对话开始或子代理启动时先注入已经核验的身份与当前规则；真正创建协作者前再复核一次。Hook 只验证身份、规则和参数，不替 AI 决定开多少协作者，也不扩大授权。"
   },
   {
     id: "skills",
@@ -1041,12 +1050,12 @@ export const systemDependencyNodes = [
     detail: "页面看见值不等于表单字段已经正确写入；默认保留交互性，只有明确要求才压平。"
   },
   {
-    id: "private-affairs-skill",
+    id: "document-materials-skill",
     lane: "personal",
-    title: "合同与私人事务文书入口",
-    subtitle: "围绕唯一现状来源和真实原件准备文书并分开现实状态",
-    href: "/skills/personal-litigation",
-    detail: "把文书制作、签署、本人操作、平台回执和外部处理分别说明；私人正文与个人结果不进入首页，外部动作仍需精确授权。"
+    title: "文书和材料制作",
+    subtitle: "从真实原件和当前材料状态进入合同、说明、申请、事件材料或提交包",
+    href: "/skills/document-materials",
+    detail: "先核对原件、事实、解释、待确认项和未知，再生成可编辑文书、PDF 或材料包；材料生成、本人操作、平台收到和接收方处理始终分开。"
   },
   {
     id: "document-output-choice",
@@ -1118,11 +1127,12 @@ export const systemDependencyLanes = [
 
 export const systemDependencyRelations = [
   { id: "ai-governance", nodes: ["general-ai", "agents", "rules", "skills"], label: "普通目标进入个人做事边界", detail: "通用 AI 提供理解与执行能力；.agents、现行规则和 Skills（能力入口）依次补上责任来源、授权、协作、失败和领域入口。" },
+  { id: "hooked-collaboration", nodes: ["agents", "rules", "collaboration-hooks", "skills"], label: "规则通过 Hook 进入运行现场，再由 AI 选择有界协作", detail: "活动规则先说明身份、授权和协作边界；Hook 在决策前注入真实宿主与规则版本，并在创建前复核；随后才由原生协作路由按当前任务决定保持单线或并行。" },
   { id: "git-projects", nodes: ["github-index", "project-entry-gate", "all-projects"], label: "从仓库身份进入具体项目", detail: "GitHub 总索引提供全部项目事实，项目身份入口只在这些事实会改变决定时检查，再进入真正拥有业务做法的项目。" },
   { id: "machine-diagnostics", nodes: ["pcconfig", "timeaudit", "timeaudit-skill"], label: "从机器现场到有界历史诊断", detail: "PCConfig 提供当前机器和恢复关系，TimeAudit 保存过去证据，诊断入口把自然问题收窄成时间窗、覆盖质量和竞争假设。" },
   { id: "audio-task", nodes: ["wechat", "chinese-asr", "chinese-asr-skill"], label: "从微信语音到可复核转写", detail: "微信入口保留消息和媒体关系，ChineseASR 项目拥有语音处理实现，Skill 选择本次转写、时间位置和复核模式。" },
   { id: "document-task", nodes: ["materials", "document-output-choice", "verification"], label: "从混合原件到可编辑或逐页验收的成品", detail: "材料入口先找到真实原件；扫描识别按需进入；系统再按成品形态选择 Word、PDF 或二者组合，不把它们画成固定必经顺序。" },
-  { id: "private-affairs-task", nodes: ["materials", "private-affairs-skill", "document-output-choice", "human-review"], label: "私人事务材料进入文书，现实状态仍然分开", detail: "合同与私人事务入口先核对现状来源和原件，再按成品形态选择文档或 PDF；制作、本人操作、外部回执和最终决定不会混成一个状态。" },
+  { id: "document-materials-task", nodes: ["materials", "document-materials-skill", "document-output-choice", "human-review"], label: "从真实材料进入可用文书，四层现实状态始终分开", detail: "材料入口先找到原件，文书和材料制作能力再区分事实、解释、待确认项与未知，并按成品形态选择文档或 PDF；生成、本人操作、平台收到和接收方处理不会混成一个状态。" },
   { id: "external-events", nodes: ["google-workspace", "scheduled-events", "notifications", "human-review"], label: "云端现场触发工作，并把需要注意的结果送回来", detail: "固定账号提供邮件、云盘和日历；支持的时间或应用事件启动任务；通知渠道再按当前账号和设置提醒本人，email 不是每次运行的固定承诺。" },
   { id: "health-task", nodes: ["materials", "personal-health", "personal-health-skill", "human-review"], label: "健康原件进入协作，最终由人采用", detail: "健康项目保留当前证据和新资料边界，Skill 选择已有事实、原件或前台刷新路线，最终选择和停止条件仍由本人决定。" },
   { id: "recovery-task", nodes: ["pcconfig", "recovery-backup", "verification"], label: "从机器资产到分层恢复验收", detail: "PCConfig 提供依赖和恢复关系，开发环境备份保存不可再生材料，文件、运行、登录、重启与用户可用分别验证。" },
@@ -1388,7 +1398,7 @@ export const systemSkillFamilies = [
       "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
-      { slug: "personal-litigation", name: "合同与私人事务文书", technicalName: "私人事务文书入口", summary: "围绕唯一现状来源和真实原件准备文书，并把制作、本人操作、平台回执与外部状态分开。", href: "/skills/personal-litigation" },
+      { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "核对当前材料状态和真实原件，制作合同、说明、申请、事件材料或提交包，并把生成、本人操作、平台收到和接收方处理分开。", href: "/skills/document-materials" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },
       { slug: "md-to-pdf", name: "Markdown 转 PDF", technicalName: "md-to-pdf", summary: "按文档用途和分页要求生成 PDF，并核对源文件指纹、页数、中文文本和当前输出。", href: "/skills/md-to-pdf" },
@@ -1517,7 +1527,7 @@ export const systemSkillFamilies = [
       "不会因为对话看起来很长就自动查配额，也不会用字符或旧记录猜结果"
     ],
     members: [
-      { slug: "native-economy-routing", name: "原生代理协作路由", technicalName: "native-economy-routing", summary: "身份和当前规则可信后，按独立性、写冲突和真实收益决定是否并行；主任务继续负责集成。", href: "/skills/native-economy-routing" },
+      { slug: "native-economy-routing", name: "原生代理协作路由", technicalName: "native-economy-routing", summary: "Hook 先在任务进入和创建前核对宿主身份与活动规则；随后按独立性、写冲突和真实收益决定是否并行，主任务继续负责集成。", href: "/skills/native-economy-routing" },
       { slug: "llm-backend-toolkit", name: "额外 AI 后端工具箱", technicalName: "llm-backend-toolkit", summary: "只把范围封闭、可独立验收的任务交给当前登记的额外后端，并保存任务与结果回执。", href: "/skills/llm-backend-toolkit" },
       { slug: "token-budget-advisor", name: "配额与文本计量", technicalName: "token-budget-advisor", summary: "仅在用户明确询问时读取权威配额或文本计量；官方入口不可得时返回未知，不自行换算或猜测。", href: "/skills/token-budget-advisor" }
     ]
@@ -1537,24 +1547,24 @@ export const systemEvidenceLayers = [
 
 export const systemDirectoryIntroductions = [
   {
-    id: "rules",
-    label: "规则",
-    title: "让强能力长期可靠地替我工作",
-    body: "规则保护事实来源、授权、重大动作、协作和完成口径。它们不是智能来源，也不是让访客背的合同，而是每次工作中真实生效的五个承诺。",
-    href: "/rules"
-  },
-  {
     id: "projects",
     label: "项目",
-    title: "保存长期工具、数据、状态和恢复入口",
-    body: "全部 GitHub 项目属于个人系统；GitHub 总索引承载完整身份，项目目录提供可以深入阅读的产品、代码和证据参考。",
+    title: "想深入了解一个长期产品",
+    body: "进入项目可以继续看它为什么存在、平时怎样使用、当前状态、完整工作流和技术证据；GitHub 总索引仍承载全部仓库身份。",
     href: "/projects"
+  },
+  {
+    id: "rules",
+    label: "规则",
+    title: "想知道 AI 为什么继续、暂停或要求人决定",
+    body: "进入规则可以看事实向谁读取、什么动作需要保护、多人怎样不互相覆盖，以及做到哪一步才算真正完成。",
+    href: "/rules"
   },
   {
     id: "skills",
     label: "Skills",
-    title: "把普通需求送到正确能力",
-    body: "Skills 把自然语言约束成有触发、流程、依赖、失败和边界的入口。公开目录是当前选择，不等于所有现役和按需能力。",
+    title: "已经有一个目标，想找到直接可用的能力",
+    body: "进入 Skills 可以按现实需求找到触发方式、所需输入、处理流程、交付结果和失败边界；不知道名称时仍可以直接描述问题来搜索。",
     href: "/skills"
   }
 ];

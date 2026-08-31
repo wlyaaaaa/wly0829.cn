@@ -1,19 +1,8 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Page from "../app/page.jsx";
-import { globalSearchEntries, searchPanel } from "../app/search.js";
+import { globalSearchEntries } from "../app/search.js";
 import { canonicalPath, canonicalUrl, projectCatalog, projectEntryForPath, routeMeta, routePaths } from "../app/site-content.js";
-
-const compactSearchCandidateAliases = [
-  "规则如何激活", "什么时候开子代理", "能力路由与授权", "三控制面怎么分工",
-  "本地构建通过为什么还不能说网站完成",
-  "电脑配置恢复", "本机运行时和端口", "Windows 重装恢复", "机器事实在哪里",
-  "仓库是公开还是私有", "远端和默认分支", "工作树和发布事实", "会不会推错仓库",
-  "中文录音转写", "长音频断点续跑", "说话人分离", "本地语音识别",
-  "过去一小时为什么卡", "1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开",
-  "机箱屏冻结", "command 204", "HS2 六卡", "实体像素验收", "副屏显示恢复",
-  "回答完成却没有结果", "隔离 workspace", "隐藏验证", "能力问题还是执行环境问题", "Agent 能力评测"
-];
 
 function escapeAttribute(value) {
   return String(value)
@@ -33,18 +22,8 @@ function canonicalDocumentHref(href) {
   return `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
 }
 
-const projectedAliases = new Map();
-for (const alias of compactSearchCandidateAliases) {
-  const owner = searchPanel(alias)[0];
-  if (!owner) continue;
-  const ownerHref = canonicalDocumentHref(owner.href);
-  const ownerKey = `${owner.type}|${owner.title}|${ownerHref}`;
-  projectedAliases.set(ownerKey, [...(projectedAliases.get(ownerKey) || []), alias]);
-}
-
 function compactSearchProjection(entry) {
   const href = canonicalDocumentHref(entry.href);
-  const projectionKey = `${entry.type}|${entry.title}|${href}`;
   const detailLimit = entry.type === "项目资产" ? 120 : entry.type === "系统组成" ? 140 : 180;
   return {
     type: entry.type,
@@ -54,8 +33,8 @@ function compactSearchProjection(entry) {
     title: entry.title,
     detail: entry.detail.slice(0, detailLimit),
     href,
-    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(projectionKey) || [])])],
-    search: entry.type === "项目" ? entry.compactSearch || "" : ""
+    aliases: [...new Set(entry.aliases || [])],
+    search: entry.compactSearch || ""
   };
 }
 
