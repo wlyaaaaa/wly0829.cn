@@ -7,9 +7,9 @@ export const personalHealthProject = {
   route: "/projects/personal-health",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "健康决策方法、证据分层和安全更新链已经实现",
+  cardStatus: "当前证据路由、前台设备刷新链和离线质量门已实现；健康决策原则已明确",
   cardStatusTone: "pass",
-  snapshotBoundary: "源码与合成回归已核对；本页没有调用当前账号、设备或个人健康数据，也不提供个体诊断和处方",
+  snapshotBoundary: "最新 112 项合成回归已核对；广义健康选择内容是产品原则，不表示代码执行诊断、处方或治疗决定，也没有调用当前账号、设备或个人健康数据",
   kicker: "让健康选择更安全、更自主，也更容易复查",
   searchAliases: [
     "健康信息怎么判断能不能用",
@@ -116,9 +116,9 @@ export const personalHealthProject = {
     label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
     observedAt: "2026-08-30T18:45:00Z",
     facts: [
-      "PRIVATE main=377cbe936b505cee4609cb941f9832565ef9778c；本地与 origin/main 同步，工作树干净",
-      "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块和 4 个规则/状态来源；运行代码仅使用 Python 标准库",
-      "本轮 pytest 为 111 passed、42 subtests passed，用时 45.56 秒；独立 unittest 也确认 111 项通过",
+      "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；本地与 origin/main 同步，工作树干净",
+      "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库",
+      "本轮在任务独立 E 盘临时目录运行 unittest，112 项全部通过，用时 29.93 秒；最新提交新增对完整 capture 结果的闭合校验",
       "离线 capture 明确返回 health_owner_review_required=true、current_updated=false、background_work_created=false",
       "没有新增服务、数据库、计划任务、后台 watcher 或持续同步节点"
     ],
@@ -143,7 +143,7 @@ export const personalHealthProject = {
     { name: "google_health_enroll.py", responsibility: "完成一次桌面 OAuth 授权并安全存入长期凭据。", implementation: "只读 scope、PKCE、回环 callback、stdin secret、恢复副本与 lookup read-back；不生成 token 文件。" },
     { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时固定 Secret Broker 调用一次，输出有界且不含秘密，超时终止整棵进程树。" },
     { name: "google_health_import.py", responsibility: "保全 provider 原始响应并维护可续跑清单。", implementation: "连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；唯一接触网络和凭据的模块。" },
-    { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；成功最后才清理 pointer，不更新 CURRENT.md。" },
+    { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；本地证据闭合并持久化后消费 pointer，再把结果交给 Health Owner 审阅，不更新 CURRENT.md。" },
     { name: "google_health_brief.py", responsibility: "生成字段级 decision_ready / blocked / inventory-only 结果。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；API 与 credential access 均为 false。" }
   ],
   usageExamples: [
@@ -157,21 +157,22 @@ export const personalHealthProject = {
   evidenceLayers: [
     { layer: "Project rules（项目规则）", proves: "普通问答、来源维护、设备刷新、红旗与低打扰边界已经明确。", doesNotProve: "任何当前个人健康事实、诊断或医疗建议正确。" },
     { layer: "Source code（源码）", proves: "授权、前台刷新、导入、精确续跑、离线验真、字段质量门和 Owner 审阅合同真实存在。", doesNotProve: "当前账号可用、provider 在线或本轮取得了真实记录。" },
-    { layer: "111 tests + 42 subtests", proves: "合成夹具下的凭据不落盘、一次调用、原始保全、分页/哈希、续跑、决策门、inventory-only 和失败语义通过。", doesNotProve: "真实 OAuth、真实当前设备、网络兼容或医学结论。" },
-    { layer: "PRIVATE 仓库身份", proves: "main=377cbe9 与远端同步、工作树干净，网页内容绑定精确源码版本。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
+    { layer: "112 tests", proves: "合成夹具下的凭据不落盘、一次调用、原始保全、分页/哈希、续跑、capture 结果闭合、决策门、inventory-only 和失败语义通过。", doesNotProve: "真实 OAuth、真实当前设备、网络兼容或医学结论。" },
+    { layer: "PRIVATE 仓库身份", proves: "main=48d5a5b 与远端同步、工作树干净，网页内容绑定精确源码版本。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
     { layer: "Live provider/runtime（现场数据提供方与运行链）", proves: "只有本轮真实前台刷新和回读才能证明账号、设备、交接与记录质量。", doesNotProve: "历史成功、源码或单测不能替它证明当前可用。" },
     { layer: "Health Owner（健康资料责任源）+ 当前权威医学指导", proves: "某条合格证据是否与当前问题相关、是否值得局部采用，以及高风险建议是否符合当前权威指导。", doesNotProve: "自动 brief 不能替代人工判断、查体、诊断或处方。" }
   ],
   evolution: [
     { date: "2026-08-24", commit: "ace3596–a222a85", result: "建立最小现行健康底色、一次性有界设备保全与不落 token 文件的 OAuth enrollment（授权登记）。" },
     { date: "2026-08-24—08-25", commit: "0f42703–98f514a", result: "把处理后的底色设为普通回答权威入口，补全原始响应保全、离线窄查、分页闭包、预算与精确中断续跑。" },
-    { date: "2026-08-25", commit: "50131b3–377cbe9", result: "加入确定性离线 brief、Fitbit tracker family 来源边界、decision-ready 质量门、inventory-only 分流、前台链解耦和 Health Owner 最终审阅。" }
+    { date: "2026-08-25", commit: "50131b3–377cbe9", result: "加入确定性离线 brief、Fitbit tracker family 来源边界、decision-ready 质量门、inventory-only 分流、前台链解耦和 Health Owner 最终审阅。" },
+    { date: "2026-08-30—08-31", commit: "48d5a5b", result: "把前台刷新收到的 complete capture 结果也纳入失败关闭：schema、状态、路径/哈希、ready/blocked、Owner review、CURRENT 未更新和无后台工作必须同时一致。" }
   ],
   operationalEntrypoints: [
     { name: "普通个人健康入口", command: "Skill: personal-health", purpose: "从现行健康底色回答；不重复读取 SOURCES、原件、旧项目或 Codex 记忆。" },
     { name: "前台设备刷新", command: "python google_health_refresh.py", purpose: "本人明确发起时调用一次 Secret Broker 并完成离线采集；不会创建后台任务。" },
     { name: "离线清单验真", command: "python google_health_brief.py --verify-for-health-brief <manifest>", purpose: "重验决策字段页面的哈希和分页闭环；不访问网络或凭据。" },
-    { name: "完整回归", command: "python -m pytest -q", purpose: "验证五个产品模块的 111 项测试与 42 个 subtests；它不代表真实账号或医学 E2E。" },
+    { name: "完整回归", command: "python -m unittest discover -s tests -p 'test_*.py' -v", purpose: "验证五个产品模块的 112 项合成测试；它不代表真实账号或医学 E2E。" },
     { name: "仓库身份", command: "git status --short --branch", purpose: "确认 PRIVATE main、同步和工作树状态；网页不公开本机 source locator。" }
   ]
 };
@@ -436,7 +437,7 @@ export const personalHealthModules = [
       "只选择四类判断字段页面。",
       "计算字段质量、近期窗口和 blocked reason。",
       "生成 decision context、inventory-only 和 downstream contract。",
-      "Health Owner 审阅成功后才清理交接 pointer。"
+      "本地 manifest、verification receipt 与 brief 闭合并持久化后消费交接 pointer；Health Owner 随后审阅最小结果并决定是否局部采用。"
     ],
     concepts: [
       { term: "decision_ready（可用于当前判断）", explanation: "字段证据质量足以支持一个明确问题，不代表身体正常或临床结论。" },

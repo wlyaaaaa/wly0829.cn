@@ -5,11 +5,11 @@ export const githubIndexProject = {
   route: "/projects/github-index",
   visibility: "公开仓库",
   repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。仓库身份、公开性、远端和 clone（本地副本）路径按实际值判断：能改变当前决定且不含 L3+ 私人正文或可复用凭据时，PUBLIC 与 PRIVATE 项目的普通技术事实都可以直接说明；本机 ignored 登记区继续保存完整动态导航。",
-  status: "现役；公开 generation 已更新并完成内部闭合。2026-08-30 最新网络可用 Owner receipt 为 completed / review_needed：baseline 44、observed 45、delta 1，不能包装成全绿。",
+  status: "现役；2026-08-31 live Owner inventory 为 47/47、delta 0、issue 0；仍有 1 项历史过渡复核提醒。公开 generation 是更早的完整快照，不能冒充当前现场。",
   statusTone: "mixed",
   cardStatus: "仓库总账与单仓库入场判断可用，发布和清理仍按现场逐项收口",
   cardStatusTone: "pass",
-  snapshotBoundary: "仓库数量与 clone 覆盖来自带观察时间的 generation；公开 main 已更新，受管基线仍有 1 项私有身份待复核",
+  snapshotBoundary: "live Owner 现为 47 个仓库、44 个已验证 clone；公开 generation 仍停在 45/43 的 2026-08-29 快照，1 项提醒属于 previous→current 历史过渡复核",
   summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
   plainExample: "例如我问“这个功能分支已经推送了，能算完成吗？”它不会只看分支自己的上游是否同步，而会确认目标提交是否已经进入远端真正的默认分支，同时检查工作区是否还留着未提交内容。只有默认分支回读包含目标提交，Git 交付才真正收口。",
@@ -20,10 +20,10 @@ export const githubIndexProject = {
     unavailable: "GitHub、远端引用或本地仓库证据不可取得时，可以继续不依赖远端的安全只读或本地工作，但身份、同步和发布结论保持 Unknown（证据不足）。"
   },
   heroFacts: [
-    { label: "仓库总数", value: "当前索引 45 个 GitHub 仓库：26 个 PUBLIC、19 个 PRIVATE" },
+    { label: "当前现场", value: "live Owner source 已闭合 47 个 GitHub 仓库：27 个 PUBLIC、20 个 PRIVATE；baseline=47、observed=47、delta=0、issue=0" },
     { label: "公开 generation", value: "current=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29 21:01Z；8 份文档闭合，previous=1af2630…" },
-    { label: "本地 clone 覆盖", value: "已验证 43 个 clone occurrence（检出实例），索引覆盖完整；一个仓库可以有多个 worktree" },
-    { label: "索引仓库自身", value: "PUBLIC main 84eeaca；该提交已把公开个人数据分级改为消费 .agents 的活动唯一表，不再用路径或文件类型替代内容判断。公开 generation 仍是 2026-08-29 的闭合快照" },
+    { label: "本地 clone 覆盖", value: "live source 已验证 44 个 clone occurrence（检出实例），coverage=complete；一个仓库可以有多个 worktree" },
+    { label: "索引仓库自身", value: "PUBLIC main e6bf84b；已对齐活动全局数据分级，并新增不联网抓取的原子投影刷新入口。公开 generation 仍是 2026-08-29 的闭合快照" },
     { label: "Admission 会做什么", value: "确认仓库、公开性、默认分支、远端、目标 worktree、同步与脏改动后给出继续或阻断证据；它不会授予 push 权限" },
     { label: "发布完成口径", value: "只有目标提交从真实默认分支可达、normal push 完成且远端 main 回读一致，才算 Git 交付收口" }
   ],
@@ -78,16 +78,16 @@ export const githubIndexProject = {
     { term: "Commit-pinned snapshot（固定提交快照）", meaning: "干净、受限且固定在已知提交的审计工作树；它不同于普通无 upstream 或含独有工作的临时工作树。" }
   ],
   currentState: {
-    observedAt: "2026-08-30T01:14:38Z",
-    label: "公开 generation 已更新；最新 live Owner 状态为 review_needed",
+    observedAt: "2026-08-31T04:16:12Z",
+    label: "live Owner inventory 已与 47 项基线一致；公开 generation 仍是带时间边界的旧快照",
     facts: [
-      "wlyaaaaa/github-local-index PUBLIC main 已于 2026-08-30 前进到 84eeaca823431c94bd532eb4909288b50aa517e0；该提交对齐活动全局个人数据分级。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
+      "wlyaaaaa/github-local-index PUBLIC main 当前为 e6bf84bb46c3915e96d537eb0a60ed2acb1837c7；它对齐活动全局个人数据分级，并提供 zero-fetch（不联网抓取）原子投影收敛。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
       "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29T21:01:41Z，8 份文档完整闭合并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
-      "聚合来源覆盖 45 个仓库身份和 43 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整）。本页当前以聚合为主是因为单项身份不改变这次判断，而不是因为 PRIVATE 名称或路径自动敏感。",
-      "最新网络可用 Get-GitOwnerStatus receipt 返回 execution_status=completed、domain_status=review_needed：baseline 44、observed 45、delta=1。generation 完整与 live baseline 差异分层保留。"
+      "live source 覆盖 47 个仓库身份（27 PUBLIC、20 PRIVATE）和 44 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整）。",
+      "最新 Get-GitOwnerStatus receipt 返回 execution_status=completed、baseline=47、observed=47、delta=0、issue=0、attention=1。提醒只要求复核 previous→current 的五项历史过渡，不代表当前 identity baseline 漂移。"
     ],
     gaps: [
-      "live inventory 比受管 baseline 多 1 个仓库身份；在 Git Owner 确认这是新增、删除、改名还是登记漂移前，只能保留聚合差异和需要复核状态。",
+      "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
       "重大 Git/GitHub 动作源码曾在 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从旧源码回归外推。",
       "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。"
     ]
@@ -147,7 +147,8 @@ export const githubIndexProject = {
     { date: "2026-08-21–2026-08-22", commit: "4283c05 / d00220d / b9a8cd6", result: "支持精确 target worktree/ref，修复远端默认 ref 测试，并退役无消费者的历史投影。" },
     { date: "2026-08-23", commit: "6bfa180", result: "恢复包含 PUBLIC 与 PRIVATE 身份的完整 Owner 基线；私有 local root 继续与 identity 分离。" },
     { date: "2026-08-25–2026-08-28", commit: "8749025 / b454cd9", result: "刷新公开 generation，并让精确目标工作树可以绕过陈旧导航提示后再做 .git identity 回读。" },
-    { date: "2026-08-29—08-30", commit: "6afc858–84eeaca", result: "先发布 8 文档闭合的 generation 3c6487c…，随后把 PUBLIC 数据判断对齐活动全局 L1–L5 唯一表：Git 控制面只消费分级，路径和文件类型不再自行把普通内容升级为敏感；可用秘密与真实 L3+ 载荷仍按对应边界处理。" }
+    { date: "2026-08-29—08-30", commit: "6afc858–84eeaca", result: "先发布 8 文档闭合的 generation 3c6487c…，随后把 PUBLIC 数据判断对齐活动全局 L1–L5 唯一表：Git 控制面只消费分级，路径和文件类型不再自行把普通内容升级为敏感；可用秘密与真实 L3+ 载荷仍按对应边界处理。" },
+    { date: "2026-08-30—08-31", commit: "e01433e–e6bf84b", result: "Live Owner 基线收敛到 47 个仓库和 44 个已验证 clone；新增 zero-fetch 原子刷新，让已知来源提交变动可以在不重新抓取 GitHub 的情况下收敛公开投影，同时保留 generation 与 live source 的事实分层。" }
   ],
   operationalEntrypoints: [
     { name: "单仓库现场元数据", command: "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo <owner/name> -LiveMetadata -Json", purpose: "读取 GitHub visibility 与默认分支，不 fetch refs。" },
@@ -169,7 +170,7 @@ export const githubIndexModules = [
     shortTitle: "仓库总账",
     title: "仓库身份总账与 Owner（责任源）状态",
     teaser: "回答“我到底有哪些仓库、它们现在是谁、总账是否落后于 GitHub（远端托管）现场”。",
-    status: "仓库总账可用；当前基线有 1 个私有身份待复核",
+    status: "仓库总账可用；47/47 当前基线无 delta 或 issue，仍有 1 项历史过渡复核提醒",
     statusTone: "mixed",
     value: "把散落在不同磁盘、公开与私有仓库中的身份事实收成一个可审计总账；公开页面按事实是否有用和实际值风险决定展示明细或聚合，不因 PRIVATE 标签整类隐藏。",
     why: "公开 Markdown（面向人阅读的文本投影）只能安全展示一部分仓库，而且会随时间过期；直接扫描所有磁盘又会漏范围、扩大隐私和把目录名错当身份。总账需要 GitHub 全量身份、已验证 clone（本地副本）和明确 registry（结构化治理登记表）各司其职。",
@@ -234,7 +235,7 @@ export const githubIndexModules = [
     verification: [
       "2026-08-29 Test-GitOwnerStatus.ps1 通过：identity gate、zero write、全量 PUBLIC/PRIVATE 基线、history、registry、远端失败和无路径泄露。",
       "2026-08-29 Test-ProjectCognitionSource.ps1 通过：分页闭合、稳定 node id、origin 验证 clone、compare 上限、partial gaps 和无凭据输出。",
-      "2026-08-30T01:14:38Z 最新网络可用 Owner receipt 为 execution_status=completed、domain_status=review_needed、baseline=44、observed=45、delta=1。",
+      "2026-08-31T04:16:12Z Owner receipt 为 execution_status=completed、baseline=47、observed=47、delta=0、issue=0、attention=1；history=continuous。",
       "当前公开 pointer 明确声明 authoritative=false 与 decision_authority=false，避免投影冒充动态事实。"
     ],
     relation: "它回答整个仓库集合是否可信和是否需要复核；单仓库 Admission 再回答某个精确目录、工作树和分支现在能否安全继续。"
@@ -555,7 +556,7 @@ export const githubIndexModules = [
     shortTitle: "快照与恢复",
     title: "Refresh（刷新）、原子 Generation（索引代际）与中断恢复",
     teaser: "总账变化时生成一个完整新版本；失败时保住旧版本，绝不留下半新半旧的 current（当前指针）。",
-    status: "generation 3c6487c… 的 8 份公开投影已闭合；live Owner baseline 仍有 1 个 identity delta",
+    status: "generation 3c6487c… 的 8 份公开投影已闭合；live Owner 47/47 无 identity delta，1 项提醒只属于历史过渡复核",
     statusTone: "problem",
     value: "让公开索引可重建、可判断 stale（过期），并在写到一半、投影失败或进程中断后继续从最后一个完整版本恢复。",
     why: "八份公开文档若逐个覆盖，任何中断都会让看板混合两个观察时间。顶层 Markdown（文本投影）又容易被误当动态权威，所以必须把完整文档集合、hash（哈希）、pointer（指针）和投影关系一起管理。",
@@ -625,7 +626,7 @@ export const githubIndexModules = [
       "单元测试注入 projection 中途失败，验证旧 pointer 保持有效；下一次完整 publish 修复 mixed projections 后才切换。",
       "测试拒绝越界 projection、额外文件、unknown/case-variant schema 字段和 reparse-point 父目录。",
       "generation 3c6487c23da245f8a8be94e7ab5c7436 已发布并回读 8 份文档闭包，previous=1af2630…；指针仍声明 authoritative=false、decision_authority=false。",
-      "generation integrity 与 live Owner status 分开：前者证明当前投影内部完整，后者最新为 review_needed、baseline 44 / observed 45 / delta 1。"
+      "generation integrity 与 live Owner status 分开：前者证明 2026-08-29 投影内部完整，后者最新为 baseline 47 / observed 47 / delta 0 / issue 0，并保留一项历史过渡复核提醒。"
     ],
     relation: "它把总账和诊断保存成可重建快照，但不替 Admission 判断单仓库现场，也不替 Publication Gate 批准外部发布。"
   }

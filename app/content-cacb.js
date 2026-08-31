@@ -7,7 +7,7 @@ export const cacbProject = {
   statusTone: "mixed",
   cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
   cardStatusTone: "pass",
-  snapshotBoundary: "核心 162 项回归通过，完整 928 项集合仍有未闭合合同；本页不发布任何受测配置比较结论",
+  snapshotBoundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
   summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先冻结题目和验收标准，为每次尝试准备全新的工作区，再由参与者之外的验证器检查真实文件、行为、测试和修改范围。最后得到的是一份可复查的证据：做成了什么、问题在哪一层、哪些还不能下结论，而不是公开比较受测对象。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。CACB 把任务、输入、workspace、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”误当成真实能力。",
@@ -22,8 +22,8 @@ export const cacbProject = {
     { label: "成品范围", value: "47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件；公开页展示产品结构、验证边界和真实缺口" },
     { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
     { label: "隔离与验证", value: "每次执行独立 workspace；冻结输入、隐藏 verifier、范围审计、终态与归档 hash 分层绑定" },
-    { label: "当前源码", value: "PRIVATE main=e6f7581d7d119b94b4df508df2d51c972cd9b73f；工作树干净，远端引用 0/0" },
-    { label: "当前回归", value: "与公开产品结构直接相关的 11 个测试文件共 162 项全部通过；完整 928 项集合当前并非全绿" },
+    { label: "当前源码", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009；工作树干净，远端引用 0/0；最新提交补强 WorkerHandle 与原始任务绑定" },
+    { label: "当前验证", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" },
     { label: "公开边界", value: "页面展示产品、隔离、验证、失败分类与证据设计，不展示受测配置名单、横向比较或结果数字" }
   ],
   productPrinciples: [
@@ -34,7 +34,8 @@ export const cacbProject = {
     { title: "整条证据必须属于同一次执行", detail: "身份、任务、工作区、动作、产物和终态彼此绑定，旧回执不能跨版本或跨候选复用。" },
     { title: "失败先归到正确层", detail: "能力问题、题目缺陷、执行环境故障和证据不足分别记录，不把基础设施中断算成能力差。" },
     { title: "证据不完整就不下结论", detail: "单次通过只证明精确任务、配置和版本；缺终态或缺验证时保持无法判定。" },
-    { title: "评测帮助人选择，不替人决定", detail: "结果不会自动改写全局模型、能力路由、授权或项目 Owner 的现实选择。" }
+    { title: "评测帮助人选择，不替人决定", detail: "结果不会自动改写全局模型、能力路由、授权或项目 Owner 的现实选择。" },
+    { title: "通用智能是被检验的能力，不是本项目自研", detail: "理解、推理、工具和代码执行来自已集成的外部 AI/智能体能力；CACB 负责冻结任务、绑定身份、验证产物、归因失败和管理证据。" }
   ],
   responsibilities: [
     "把现实工程能力拆成可冻结、可复现、可验证的问题库与案例合同",
@@ -43,6 +44,7 @@ export const cacbProject = {
     "把能力问题、任务问题、执行环境问题和证据不足分开，避免错误归因",
     "保存可重放的 manifest、receipt、hash 和归档，使结果能被独立复核",
     "用 schema 约束证据包和报告结构，避免不同执行路线各写一套口径",
+    "把公开研究、资格、能力、经济性和最终决策证据分层，避免一个局部结果越级替代整体选择",
     "为新增执行方式提供 onboarding（接入验收），但不自动替用户做选择"
   ],
   exclusions: [
@@ -67,17 +69,18 @@ export const cacbProject = {
     { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" }
   ],
   currentState: {
-    observedAt: "2026-08-30T06:40:00Z",
-    label: "评测产品框架与核心公开结构回归通过；完整私有执行链仍有跨代合同未闭合，本页不发布受测结果",
+    observedAt: "2026-08-31T04:13:00Z",
+    label: "评测产品结构与 task-handle 绑定已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
     facts: [
-      "Git Owner 回读 PRIVATE main=e6f7581d7d119b94b4df508df2d51c972cd9b73f，工作树干净，本地与远端引用 0/0。",
+      "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。",
       "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。",
-      "问题库、campaign（评测活动）、workspace 隔离、worker contract（执行合同）、fast flow（快速准备/验收）、接入验收、公开案例、归档和报告 schema 的 11 个核心测试文件共 162 项，本轮全部通过。",
-      "完整测试共收集 928 项，但当前不是全绿；失败集中在跨代冻结标识、原生身份 envelope、外部执行 adapter 和部分报告不变量，不能被核心 162 项覆盖。",
+      "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。",
+      "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
       "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
     ],
     gaps: [
-      "完整 928 项测试集合当前没有闭合，因此不能把所有历史执行路线描述为当前可验证。",
+      "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
+      "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
       "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
       "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
       "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
@@ -115,8 +118,8 @@ export const cacbProject = {
   evidenceLayers: [
     { layer: "Source（源码）", proves: "PRIVATE main 包含问题库、campaign、workspace、verifier、证据、归档和报告实现。", doesNotProve: "当前所有执行路线都可用或任何受测配置已形成结论。" },
     { layer: "Schemas（数据合同）", proves: "25 个 schema 约束任务、执行、证据、归档和报告字段。", doesNotProve: "每个 producer 都已生成完全合格的实例。" },
-    { layer: "Focused tests（核心回归）", proves: "11 个与公开产品结构直接相关的测试文件共 162 项通过。", doesNotProve: "跨代 formal-run、外部 adapter 和全部私有路径全绿。" },
-    { layer: "Full regression（完整回归）", proves: "本轮实际收集并运行 928 项，暴露了跨代与执行合同缺口。", doesNotProve: "失败都属于核心产品缺陷，或可以被忽略。" },
+    { layer: "Historical focused tests（历史核心回归）", proves: "e6f7581 观察代的 11 个核心测试文件曾有 162 项通过。", doesNotProve: "这些结果适用于当前 59b0b5c，或当前完整执行链已经闭合。" },
+    { layer: "Current CI（当前持续集成）", proves: "59b0b5c 的四个最新 job 都在 lint 门失败，当前提交没有绿色 CI。", doesNotProve: "受测能力失败，或所有测试逻辑都错误。" },
     { layer: "Private evidence（私有证据）", proves: "项目可以保留冻结输入、hidden verifier、raw trace 和归档链。", doesNotProve: "这些私有内容适合公开或应复制到网页。" },
     { layer: "Git identity（Git 身份）", proves: "观察时 PRIVATE main、HEAD、origin/main 和干净工作树一致。", doesNotProve: "页面会随未来 commit 自动更新。" }
   ],
@@ -205,7 +208,7 @@ export const cacbModules = [
     shortTitle: "隔离执行",
     title: "Campaign 冻结、独立 workspace 与连续 episode",
     teaser: "把整组案例、fixture、顺序和验证版本冻结，再为每次执行复制唯一 workspace；不同尝试不共享半成品。",
-    status: "campaign / workspace / archive 核心路径 162 项 focused 集合内通过",
+    status: "campaign / workspace / archive 结构已形成；当前提交的 CI lint 门仍未闭合",
     statusTone: "pass",
     value: "我能确认每次执行面对的是同一任务，又不会因为共享目录、旧文件或不同尝试拼接而污染结果。",
     why: "直接在同一仓库反复运行会留下缓存和旧产物；中断后换 workspace 继续也会让证据无法解释。",
