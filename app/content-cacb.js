@@ -36,16 +36,17 @@ export const cacbProject = {
   cardStatus: "评测产品框架、隔离执行和核心验证链已形成",
   cardStatusTone: "pass",
   ...cacbSnapshot,
-  searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理"],
+  snapshotBoundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
+  searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理", "模型盲评分和盲质量复核", "盲审能不能改变PASS或资格", "一题和十题额度费用探针", "探针结果为什么不进排行榜", "机械分盲审和最终选择怎样分工", "为什么页面没有候选分数和名次"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它把证据分成两条车道：一条核对精确 model（模型）、provider（提供方）、version（版本）和 harness（执行环境）当前公开的官方能力、可用性、价格及可比外部证据；另一条只记录本地 Codex 在冻结任务中的真实执行与验证。执行层明确区分 executor union（执行器联合类型）的三条路线：native_managed 是宿主管理的原生任务，local_async_job 是 Toolkit/AICLI 驱动的本地异步任务，cloud_api_async_job 是经指定 provider API（提供方接口）运行的云端异步任务；三者共享任务与验收语义，却绝不互借身份、谱系或终态回执。先判断是否具备资格，再看任务能力与经济性，最后才形成精确范围内的路由建议；任何一条缺证据都保持未知，不填成零，也不与另一条混算。",
+  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。缺证据就保持未知或 pending，不填成零，也不拿盲审替代硬门。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。不同执行路线还会带来完全不同的宿主身份、网络传输、GPU 占用和清理责任；若把它们都写成“调用一个 Agent”，就无法判断问题发生在哪一层。CACB 把任务、输入、workspace、执行路线、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”或“换了传输仍沿用旧身份”误当成真实能力。",
-  plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方是否支持该模型、当前 provider 和 version、可用地区或账号条件、公开价格以及外部比较是否真的可比；本地车道再用冻结任务测它在当前环境里做出了什么。两条证据分别成表，先过资格门，再讨论能力和经济性；缺价格或外部证据时写未知，不把空白当成零。",
-  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份、执行路线与当前官方/外部证据，benchmark report（基准报告）记录本地任务实测、路线专属终态回执与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。底层模型、provider 和通用智能来自外部产品；CACB 的交付是任务冻结、执行合同、证据绑定、验证与判断框架，不冒充这些智能能力的研发者。",
+  plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方身份、可用条件和经济口径；本地执行完成后，根侧确定性验证先决定这次样本是否有效、是否通过硬门。只有样本合格，才为它创建一个全新的 exact gpt-5.6-sol / max 盲审任务；盲审只看冻结任务、验收、工具边界、正确性依据和候选产物，不知道参与者、harness、价格、机械分、名次或其他答案。如果此时只想先观察宿主额度/费用/耗时，就另走固定临时目录的一题或十题探针，执行后再用第二条消息精确删除；它不成为样本。最终选择只接受同一兼容代的完整证据，任一层缺失就保持 pending，不生成候选排名。",
+  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份、执行路线与当前官方/外部证据，benchmark report（基准报告）分别保留确定性机械证据、身份盲质量复核、路线专属终态回执与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。额度/费用探针只留下临时任务产物供当场观察，第二阶段精确清理，不写正式回执、账本、分数或名次。公开网页只解释这些职责和兼容边界，不展示任何受测配置的分数、排名或 leaderboard（排行榜）。",
   readerStates: {
-    pass: "执行路线通过接入门，官方外证身份闭合、本地任务证据闭合且二者范围可比时，分别生成模型证据卡与基准报告，再形成有条件的综合判断。",
-    problem: "产物错误、越界修改、任务未完成、路线身份或清理证据矛盾、价格口径不可比或外部证据对象不一致时，分别标出受影响车道和失败平面。",
-    unavailable: "缺少精确身份、当前官方能力/价格、路线接入证据、完整产物、终态或验收输入时保留无法判断；缺项不填零，也不阻断其他已闭合层的独立说明。"
+    pass: "确定性身份/资格/硬门闭合后，机械证据可独立成立；合格样本再由一个全新 exact Sol Max 任务完成证据引用齐全的盲质量复核。只有完整、同代且互不借证的证据集才进入最终选择。",
+    problem: "产物错误、越界修改、任务未完成、路线身份矛盾、盲审泄露身份或复用 task/session、机械与盲审 hash 不匹配、探针命名空间未清理时，分别标出受影响层，不让一层替另一层补证。",
+    unavailable: "缺身份、终态、验收输入、fresh Sol Max host receipt（宿主回执）或完整同代样本时保持无法判断或 pending；探针失败只保留临时诊断并等待精确清理，所有缺项都不填零。"
   },
   cardMetrics: [
     { label: "核心模块", value: "47" },
@@ -53,17 +54,20 @@ export const cacbProject = {
     { label: "连续案例", value: "10" }
   ],
   heroFacts: [
-    { label: "成品范围", value: "233 个跟踪文件，其中有 47 个 Python 核心模块、25 个 schema（数据合同）、59 个测试文件与 6 份报告/模板文件" },
-    { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复" },
-    { label: "隔离、验证与执行路线", value: "每次执行独立 workspace；同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job，冻结输入、隐藏 verifier、范围审计、路线专属终态与归档 hash 分层绑定" },
-    { label: "任务身份绑定", value: "WorkerHandle 同时绑定原始 task id 与 run id；任一身份不同都拒绝借用旧 handle 或旧证据" },
-    { label: "当前源码", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009；工作树干净，远端引用 0/0；最新提交补强 WorkerHandle 与原始任务绑定" },
-    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部在 lint 门失败；因此本页不把旧提交的 162/928 项测试记录写成当前验证结论" }
+    { label: "当前源码与成品范围", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净、远端引用 0/0；233 个跟踪文件中有 47 个 Python 核心模块、25 个 schema、59 个测试文件与 6 份报告/模板文件" },
+    { label: "问题库与任务绑定", value: "当前核心用 10 个连续案例组成一次 episode，覆盖实现、诊断、连续性、证据和恢复；每次执行独立 workspace，WorkerHandle 同时绑定原始 task id 与 run id" },
+    { label: "三类执行路线", value: "同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job；三者共享冻结输入与 verifier，却分别绑定原生谱系、本地 job/GPU lease、云端 request/stream 和路线专属 cleanup" },
+    { label: "确定性硬门 + Sol Max 仲裁强审", value: "根侧 verifier 独占 identity、validity、eligibility、safety 与 PASS/FAIL；每个已合格样本再由 fresh exact gpt-5.6-sol / max 隐藏参与者身份，基于完整任务和候选产物做独立六维质量复核，形成可引用、可反驳的推定能力/推定质量" },
+    { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress" },
+    { label: "选择与当前验证边界", value: "机械与强审冲突不平均成总分：硬门保持，质量分歧或缺项显式 pending；当前提交最新四个 GitHub CI job 全部在 lint 门失败，旧提交的 162/928 项记录不升级为当前结论" }
   ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
     { title: "每次尝试都从干净工作区开始", detail: "旧文件、其他候选和上一次执行不能提供借来的成功，也不能污染本次失败。" },
     { title: "验收真实产物，不相信完成声明", detail: "固定验证器检查文件、行为、测试、修改范围和终态，回答得像完成没有证据价值。" },
+    { title: "硬门和质量判断分权", detail: "确定性 verifier 决定身份、资格、有效性、安全边界与 PASS/FAIL；盲质量复核只解释已经过门的可见产物质量，不能推翻或补发硬门。" },
+    { title: "一份样本一个全新盲审任务", detail: "每个合格样本独占一个 fresh gpt-5.6-sol / max task、session 和 host receipt；不复用上下文，不让评审看到另一个候选。" },
+    { title: "盲审有足够信息但没有来源暗示", detail: "完整冻结任务、验收、工具边界、正确性依据、可见测试与候选产物必须在包内；参与者、harness、AA、价格、机械分和排名必须在包外。" },
     { title: "隐藏检查不规定唯一实现", detail: "验证器只检查目标性质和边界，不向参与者泄露答案，也不把参考实现当成唯一正确路线。" },
     { title: "整条证据必须属于同一次执行", detail: "身份、任务、工作区、动作、产物和终态彼此绑定，旧回执不能跨版本或跨候选复用。" },
     { title: "失败先归到正确层", detail: "能力问题、题目缺陷、执行环境故障和证据不足分别记录，不把基础设施中断算成能力差。" },
@@ -72,6 +76,8 @@ export const cacbProject = {
     { title: "先过资格，再谈能力和经济性", detail: "资格不成立时不进入路由建议；能力与成本分别保留口径，缺失数据保持未知而不是归零。" },
     { title: "三份交付各有责任", detail: "模型证据卡回答测的是谁，基准报告回答本地做成什么，综合判断报告才回答精确范围内怎样选。" },
     { title: "统一任务语义，不伪装统一传输", detail: "三条执行路线共享冻结目标、workspace、产物与 verifier，但 host、provider、transport、lineage 和 cleanup 证据始终显式保留。" },
+    { title: "探针是宿主观察工具，不是基准样本", detail: "1 题与 10 题探针只帮助观察额度、费用和耗时；固定目录、一次最小修正和第二阶段精确删除共同防止它污染正式 campaign。" },
+    { title: "最终选择拒绝部分集和混代证据", detail: "机械 lane（证据车道）、盲质量 lane、host receipt、bundle schema 与 rubric 必须属于同一兼容代；缺一层就 pending，不做 best-of、不拼 partial。" },
     { title: "路线按用途选择，不静默替换", detail: "原生路线测宿主管理的真实任务，本地路线测精确本机模型制品，云端路线测指定 provider API 下的 Codex harness；任一路线失败都不能换模型或换传输补跑成成功。" },
     { title: "非原生不等于少一项能力", detail: "native lineage 只对 native_managed 必须成立；本地与云端写 not_applicable 是正确身份语义，不加分也不扣分。" },
     { title: "云端付费授权逐次绑定", detail: "配置好 provider、通过设计审查或完成上一次调用，都不授权下一次付费尝试；每次真实调用都要有该 attempt 的明确授权。" },
@@ -82,6 +88,9 @@ export const cacbProject = {
     "把现实工程能力拆成可冻结、可复现、可验证的问题库与案例合同",
     "为每次执行创建唯一 workspace，并把任务输入、执行身份和允许范围绑定到同一证据链",
     "用确定性 verifier 检查真实文件、行为、测试和终态，而不是相信参与者的完成声明",
+    "为每个已过资格的样本创建一个全新的 exact Sol Max 盲审任务，只提供完整冻结任务、验收、工具边界、正确性依据和候选产物",
+    "按任务正确性、要求覆盖、证据质量、稳健性、安全与范围、清晰与可维护性六维复核，并要求每维同时引用候选与案例材料",
+    "保存 bundle、turn context、host receipt、judgment 与机械/盲审原始车道的 hash 绑定，但不让盲审修改身份、有效性、资格或 PASS/FAIL",
     "把能力问题、任务问题、执行环境问题和证据不足分开，避免错误归因",
     "保存可重放的 manifest、receipt、hash 和归档，使结果能被独立复核",
     "用 schema 约束证据包和报告结构，避免不同执行路线各写一套口径",
@@ -90,12 +99,18 @@ export const cacbProject = {
     "分别交付模型证据卡、基准报告和综合判断报告，保留缺失项而不归零、不混算",
     "用同一 worker.start / wait / cancel / result 生命周期承载三类执行路线，同时保留各自 host、provider、transport、lineage 和 cleanup 证据",
     "为新增执行方式提供 onboarding（接入验收），先冻结身份与能力等价路径，再用宿主回执和同一 verifier 预演，绝不自动替用户做选择",
-    "在本地路线串行管理 LocalGpuBroker lease，在云端路线逐 request 绑定输入分类、usage 回执与流关闭，在原生路线绑定 parent/spawn/child 谱系"
+    "在本地路线串行管理 LocalGpuBroker lease，在云端路线逐 request 绑定输入分类、usage 回执与流关闭，在原生路线绑定 parent/spawn/child 谱系",
+    "提供固定 1 题短探针与 10 题全探针：只在各自临时 namespace 内运行、观察宿主 UI，并由独立第二阶段精确清理",
+    "用 final selection（最终选择）验证机械证据、盲审证据和代表样本的同代兼容性；完整覆盖不足时不生成正式次序"
   ],
   exclusions: [
     "本公开页不展示受测配置名单、比较结果、数字结论或先后顺序",
     "不公开私有任务变体、隐藏答案、原始执行记录、系统提示或机器快照",
     "不把速度、消耗或工具次数当成正确性的替代品",
+    "不把盲质量复核写成真理裁判，也不允许它更改 identity、validity、PASS/FAIL、eligibility 或 safety gate",
+    "不让盲审看到参与者 provenance、harness、AA、价格、机械分、排名、其他候选或其他答案",
+    "不把一题/十题探针的产物、宿主 UI 观察或失败写入正式 ledger、score、ranking、report progress 或 routing correction",
+    "不在公开页展示任何受测配置的机械分、盲审分、总分、名次、比较表或排行榜",
     "不把官方宣传、价格表或外部比较冒充本地任务实测，也不让本地单次结果替代当前官方可用性研究",
     "不把能力、经济性、外部指标或缺失项混成一个看似完整的数字；缺证据保持未知",
     "不因一次执行成功或失败就宣称长期稳定能力",
@@ -113,6 +128,10 @@ export const cacbProject = {
     { term: "fixture（固定测试材料）", meaning: "每个执行配置收到字节一致的公开输入，避免任务内容漂移。" },
     { term: "holdout（隐藏验证材料）", meaning: "参与者不可见、只由验证器消费的检查数据，防止针对答案硬编码。" },
     { term: "verifier（验证器）", meaning: "在参与者之外运行的确定性检查器，核对产物、范围、行为和终态。" },
+    { term: "identity-blind judge（身份盲评审）", meaning: "每个合格样本独占的 fresh Sol Max 质量复核任务；知道任务和证据，不知道参与者及比较上下文。" },
+    { term: "rubric（评分量表）", meaning: "六个固定质量维度及各自上限；它约束解释和证据引用，不授予身份、资格或硬门裁决权。" },
+    { term: "quota/cost probe（额度/费用探针）", meaning: "独立于正式基准的一题或十题固定任务，用于观察宿主额度、费用与耗时；完成后按第二条消息清理。" },
+    { term: "final selection（最终选择）", meaning: "核对机械 lane、盲审 lane、host receipt、bundle 与代表样本是否同代且完整；不是公开排行榜生成器。" },
     { term: "manifest（清单）", meaning: "记录任务、版本、workspace、文件 hash 和执行约束的机器可读合同。" },
     { term: "receipt（回执）", meaning: "证明某个动作、身份或终态真实发生，并绑定到本次执行。" },
     { term: "fail-closed（失败关闭）", meaning: "证据不完整或身份不匹配时不生成能力结论，不靠猜测补齐。" },
@@ -127,6 +146,10 @@ export const cacbProject = {
       "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。",
       "当前 source-backed（源码可追溯）worker contract 明确定义 native_managed、local_async_job 与 cloud_api_async_job：共用冻结任务和终态语义，分别保留原生谱系、本地 Toolkit/AICLI + GPU lease、云端 provider request/stream 证据。",
       "三类路线都要先过精确身份、workspace、工具策略、verifier、终态与清理门；native lineage 只对原生路线必需，本地与云端的 not_applicable 不构成能力缺口。",
+      "当前源码把盲质量复核定义为独立生命周期：每个已合格样本对应一个 fresh gpt-5.6-sol / max task、唯一 session、host turn-context receipt、单样本 bundle 和受约束 judgment；六维 rubric 合计 1000 个方法点，但本页不展示任何候选所得分。",
+      "blind bundle（盲审包）只允许冻结任务、验收、工具边界、根侧 correctness basis（正确性依据）、可见 fixture/test 与候选 artifact；参与者身份、harness、AA、price、mechanical score、ranking 和其他候选答案在进入 judge 前失败关闭。",
+      "config/probes 当前有 1 题短版和 10 题完整版两份固定提示词；每份都把执行与删除拆成两条消息，使用独立固定 namespace，不生成测量回执、不写账本，也不进入分数或排名。",
+      "final_selection_release 当前要求机械证据、盲审证据、source commitment、host receipt 与 bundle/rubric generation（合同代）彼此兼容；部分覆盖只保留 pending，不得通过 best-of 或拼接不同尝试生成正式次序。",
       "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
       "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
     ],
@@ -134,6 +157,7 @@ export const cacbProject = {
       "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
       "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
       "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
+      "本轮没有为任何受测配置启动 fresh Sol Max 盲审、没有执行额度/费用探针，也没有形成新的 final-selection manifest；页面只发布源码可证明的方法与边界。",
       "源码中的路线、schema 和 synthetic（合成）验证只证明框架边界，不证明任一精确 provider/model/profile 当前可执行；正式接入仍需本机 preflight（预演）与宿主回执。",
       "配置存在不等于授权存在：云端真实调用仍需逐 attempt 的明确付费授权；清理无法确认时不得立即提交替代任务。",
       "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
@@ -150,11 +174,16 @@ export const cacbProject = {
     { title: "启动并有界等待", detail: "start 先验证绑定再返回 handle；wait 只读取状态，不因一次轮询到期虚构 timeout。原生等待宿主任务，本地轮询 Toolkit/AICLI job，云端同时绑定 request/stream 事件。" },
     { title: "执行连续 episode", detail: "同一任务按固定顺序完成整组案例，保留恢复、压缩和终态证据；中断优先恢复同一 session/job/workspace，不合并不同尝试的半成品。" },
     { title: "确认取消、超时与清理", detail: "cancel 只是请求；只有原生无活跃后代、本地进程树与 GPU lease 已释放、或云端流关闭且 provider 终态可观察，才能写 cancelled/timed_out。" },
-    { title: "运行确定性验证", detail: "验证器在参与者之外重放测试、检查文件和范围；隐藏材料不进入候选进程。" },
-    { title: "分类失败平面", detail: "分别记录能力、任务、执行环境和证据问题；证据不足保持 Unknown（未验证）。" },
-    { title: "分别生成两条证据交付", detail: "模型证据卡只写精确身份与当前官方/可比外证；基准报告只写本地冻结任务、真实产物、测量与失败平面，缺项不填零。" },
+    { title: "运行确定性验证", detail: "根侧 verifier 在参与者之外重放测试、检查身份、资格、文件、行为、范围和终态，独立给出 PASS/FAIL；隐藏材料不进入候选进程。" },
+    { title: "只把合格样本交给盲质量复核", detail: "每个 eligible（合格）样本创建一个全新 gpt-5.6-sol / max task；先捕获真实 turn context 和 host receipt，再绑定只含单一样本的完整任务、正确性依据与候选产物。" },
+    { title: "按六维 rubric 引用证据", detail: "judge 分别复核任务正确性、要求覆盖、证据质量、稳健性、安全与范围、清晰与可维护性；每一维必须同时引用候选 artifact 和 case material，且不能改动任何硬门。" },
+    { title: "按需运行独立额度/费用探针", detail: "只想观察宿主额度、费用或耗时时，选择 1 题短版或 10 题全版，在固定临时 namespace 中执行；它与 formal campaign、ledger 和评分完全分离。" },
+    { title: "完成探针第二阶段清理", detail: "先观察宿主 UI 与临时验证结果，再单独发送删除消息，只移除该固定 namespace；目录已存在就停止，清理完成后才可原样复用执行提示词。" },
+    { title: "分类失败并验证两条评分证据", detail: "能力、任务、执行环境、证据和盲审合同问题分别归因；机械 lane 由 sealed replay（封存重放）重算，盲审 lane 由 bundle、receipt、judgment 和证据引用重验。" },
+    { title: "执行兼容的最终选择", detail: "只在所有 required sample（必需样本）属于同一 bundle/rubric generation、task/session 不复用且机械/盲审证据完整时选择代表；任何部分集保持 pending，不产生次序。" },
+    { title: "分别生成两条证据交付", detail: "模型证据卡只写精确身份与当前官方/可比外证；基准报告保留机械验证、盲质量复核、真实产物、测量与失败平面，缺项不填零。" },
     { title: "形成分层综合判断", detail: "综合判断报告按资格、能力、经济性和范围内路由建议逐层引用前两份交付；不能比较的口径保持并列或未知。" },
-    { title: "归档并生成可公开说明", detail: "先把产物、trace、receipt 和 hash 收入项目归档，再从中筛选不含私有样本与受测比较结果的结构化说明。" }
+    { title: "归档并生成可公开说明", detail: "先把 source archive、bundle、trace、host receipt、mechanical envelope、raw judgment 与 hash 收入项目归档，再只公开方法、边界和安全聚合，不公开候选分数或名次。" }
   ],
   components: [
     { name: "Question bank（问题库）", responsibility: "拥有案例、任务家族、可见输入、隐藏检查和版本边界。", implementation: "JSON 合同 + Python 生成/加载器；任务改变进入新版本，不回写旧证据。" },
@@ -168,6 +197,10 @@ export const cacbProject = {
     { name: "Harness onboarding gate（执行环境接入门）", responsibility: "证明新执行方式能接收同一任务、产出同一种可验 artifact，并提供可信宿主证据。", implementation: "冻结身份和 capability map，做代表性 dry-run（预演），根侧重算 workspace/log/trace/artifact hash，再确认同一 verifier 无专用捷径即可读取。" },
     { name: "Identity & evidence binding（身份与证据绑定）", responsibility: "把实际执行身份、任务、workspace、动作和终态绑定到同一回执。", implementation: "host receipt、manifest hash 与单次消费规则防止跨执行借证。" },
     { name: "Deterministic verifier（确定性验证器）", responsibility: "检查候选文件、隐藏属性、测试和范围变化。", implementation: "验证器独立进程、硬超时、隐藏材料隔离和结果 hash。" },
+    { name: "Sol Max blind & arbitration review（Sol Max 盲审与仲裁强审）", responsibility: "隐藏参与者身份，对每个已经通过身份、有效性、资格和硬门的单一样本做独立六维语义复核，形成可引用、可反驳的推定能力/推定质量。", implementation: "一个 fresh gpt-5.6-sol / max task 对应一个 sample/task/session；judge 只收完整冻结任务、验收、工具边界、正确性依据和候选 artifact。" },
+    { name: "Blind bundle & receipt binding（盲审包与回执绑定）", responsibility: "证明 judge 看见的材料、实际模型/effort、输出 schema 和 judgment 属于同一次单样本复核。", implementation: "bundle、case/artifact manifest、source commitment、turn context、host receipt、task/session 与 judgment 都以 SHA-256 互相绑定；复用或漂移即拒绝。" },
+    { name: "Quota/cost probes（额度/费用探针）", responsibility: "用固定 1 题或 10 题离线任务帮助观察宿主 UI 中的额度、费用与耗时。", implementation: "short/full 各有固定 namespace；执行阶段最多一次最小修正，第二条消息只精确删除对应目录，且不生成 ledger/score/ranking 记录。" },
+    { name: "Scoring & final selection（评分与最终选择）", responsibility: "重放机械证据、验证独立盲审证据，并只从同一兼容代的完整集合中选择代表。", implementation: "机械 envelope 不接受手填总数；生产选择禁用 legacy composite（旧复合）捷径，拒绝 partial、best-of、混代 bundle/rubric 或复用 task/session。" },
     { name: "Failure classifier（失败分类器）", responsibility: "区分能力、任务、执行环境与证据问题。", implementation: "不把 timeout、missing evidence、invalid harness 或未完成统一写成失败。" },
     { name: "Schema & report layer（数据合同与报告层）", responsibility: "把证据包、案例、归档和说明约束成可重放格式。", implementation: "25 个 schema 与报告模板；公开说明保留产品结构和验证事实，私有 payload、受测配置与比较结果不进入网页。" },
     { name: "Model evidence card（模型证据卡）", responsibility: "记录精确模型、提供方、版本、harness 与当前官方能力、可用性、价格和可比外证。", implementation: "每条事实带官方来源、观察日期、单位、适用条件和可比性；缺项保持 Unknown。" },
@@ -178,6 +211,8 @@ export const cacbProject = {
   usageExamples: [
     { moduleSlug: "question-bank", ask: "给一套新的 Agent 执行方式做可复现验收", effect: "为它准备同一版本的任务和独立工作区，完成后由参与者之外的固定验收检查真实产物。" },
     { moduleSlug: "deterministic-verification", ask: "为什么任务回答完成了却没有结果", effect: "检查每个案例是否真正结束、产物是否存在、验收是否闭合；缺任何一层都不相信完成总结。" },
+    { moduleSlug: "blind-quality-review", ask: "确定性检查通过后，怎样做模型盲评分或盲质量复核？", effect: "为这一份合格样本创建一个全新 gpt-5.6-sol / max 任务，只发送冻结任务、验收、工具边界、正确性依据和候选产物，并要求六维判断逐项引用证据。" },
+    { moduleSlug: "blind-quality-review", ask: "盲审觉得质量很好，能不能把 FAIL 改成 PASS？", effect: "不能；identity、validity、eligibility、safety gate 和 PASS/FAIL 始终由根侧确定性验证拥有，盲审只提供独立质量解释。" },
     { moduleSlug: "failure-reporting", ask: "这次失败是能力问题还是执行环境问题", effect: "把产物错误、任务缺陷、身份/权限/工具故障和证据缺失分别归因，不把基础设施中断算成能力差。" },
     { moduleSlug: "identity-evidence", ask: "换一个执行方式能否沿用同一套验证", effect: "先比较它能否接收同一任务并产出同一种可验结果，再做代表性预演；验收真正兼容后才接入。" },
     { moduleSlug: "identity-evidence", ask: "这次应该走原生、本地还是云 API 执行？", effect: "先明确要测的是宿主原生任务、精确本机模型制品，还是指定 provider API 下的 Codex harness；路线标签、身份来源和接入门随选择一起冻结，不做静默替换。" },
@@ -185,14 +220,21 @@ export const cacbProject = {
     { moduleSlug: "campaign-workspace", ask: "怎样防止旧执行记录污染新结果", effect: "每次使用全新工作区和执行身份，旧产物、旧回执和上次未完成状态都不能借给新结果。" },
     { moduleSlug: "campaign-workspace", ask: "本地模型执行时 GPU 怎样排队和释放？", effect: "提交前检查 LocalGpuBroker 与活动请求，独占取得 lease；结束时必须确认进程树消失、请求归零、模型清理与 lease 释放，再写终态。" },
     { moduleSlug: "campaign-workspace", ask: "云 API 取消后为什么不能立刻重跑？", effect: "本地进程退出还不够；request stream 与可观察的 provider job 都要关闭。若远端清理无法确认，状态保持 cleanup_unconfirmed，先阻断替代提交。" },
+    { moduleSlug: "campaign-workspace", ask: "什么时候用 1 题短探针，什么时候用 10 题全探针？", effect: "先用 1 题确认最小离线任务和宿主 UI 观察路径；需要更完整的十任务额度/费用/耗时观察时再用 10 题版。二者都不创建正式样本或分数。" },
+    { moduleSlug: "campaign-workspace", ask: "额度费用探针跑完怎样清理？", effect: "保留固定 namespace 直到观察完成，再单独发送第二条删除消息；只删该目录，不用通配符、git clean、父目录或项目清理。" },
     { moduleSlug: "failure-reporting", ask: "怎样保留失败样本供以后诊断", effect: "执行结束后归档代码、过程回执和失败原因并核对完整性，再释放临时工作区。" },
     { moduleSlug: "identity-evidence", ask: "某个模型现在到底能不能在这个 harness 里用？", effect: "模型证据卡核对精确模型、provider、version、harness、当前官方能力和可用条件；本地是否做成任务仍交给独立基准报告。" },
     { moduleSlug: "failure-reporting", ask: "官方价格和本地实测成本为什么要分开？", effect: "官方价目按日期、单位和适用条件记录，本地消耗按冻结任务真实测量；综合判断只在口径可比时讨论经济性。" },
-    { moduleSlug: "failure-reporting", ask: "缺失外部证据能不能填 0？", effect: "不能。缺项保持 Unknown，并在综合判断中说明它阻断哪一层；不把未知写成零，也不与本地能力证据混算。" }
+    { moduleSlug: "failure-reporting", ask: "缺失外部证据能不能填 0？", effect: "不能。缺项保持 Unknown，并在综合判断中说明它阻断哪一层；不把未知写成零，也不与本地能力证据混算。" },
+    { moduleSlug: "failure-reporting", ask: "机械证据齐了但盲质量复核缺一份，最终选择会怎样？", effect: "保留已经闭合的 raw lanes 和 blocker，把整代状态写成 pending；不生成总次序，不拿其他样本或旧 judgment 补位。" }
   ],
   evidenceLayers: [
     { layer: "Current official and external evidence（当前官方与外部证据）", proves: "在给定观察日，精确模型、提供方、版本和 harness 的官方能力、可用条件、价格口径及外部证据可比性。", doesNotProve: "不证明该配置在本地 Codex 冻结任务中真实做成了什么，也不填补本地未测项。" },
     { layer: "Local Codex measurement（本地 Codex 测量）", proves: "同一次冻结任务的身份、workspace、真实产物、验证、消耗口径与失败平面。", doesNotProve: "不自动证明当前官方可用性、公开价格或其他 benchmark 与本地任务可比。" },
+    { layer: "Deterministic verifier（确定性验证）", proves: "精确身份、资格、硬边界、终态和候选产物在冻结 verifier 下得到可重放 PASS/FAIL，机械 lane 可从 sealed archive 重算。", doesNotProve: "可见产物的架构、证据表达、稳健性与可维护性已经得到独立质量复核。" },
+    { layer: "Identity-blind Sol review（身份盲 Sol 复核）", proves: "一个 fresh exact Sol Max task 对单一样本按六维 rubric 给出候选+案例材料双引用的质量判断，并由 bundle/receipt/judgment hash 绑定。", doesNotProve: "参与者 identity、validity、eligibility、PASS/FAIL 或 safety gate；它也不是真理裁判。" },
+    { layer: "Quota/cost probe（额度/费用探针）", proves: "固定 1 题或 10 题离线任务在独立 namespace 内执行，并可供当场观察宿主额度、费用、耗时和临时验证状态。", doesNotProve: "正式样本、能力分、稳定成本、report progress、routing correction 或排名；清理前目录仍明确存在。" },
+    { layer: "Final-selection binding（最终选择绑定）", proves: "机械与盲审 raw lanes、host receipt、bundle/rubric generation、代表样本和完整覆盖满足同一兼容合同。", doesNotProve: "网页可以公开候选分数、名次或排行榜，也不自动改写模型路由。" },
     { layer: "Source（源码）", proves: "PRIVATE main 包含问题库、campaign、workspace、verifier、证据、归档和报告实现。", doesNotProve: "当前所有执行路线都可用或任何受测配置已形成结论。" },
     { layer: "Schemas（数据合同）", proves: "25 个 schema 约束任务、执行、证据、归档和报告字段。", doesNotProve: "每个 producer 都已生成完全合格的实例。" },
     { layer: "Executor contract（执行器合同）", proves: "当前源码把三类执行路线、共同生命周期和路线专属 identity/lineage/cleanup 字段写成可审计合同。", doesNotProve: "某个精确模型、provider、profile 或 endpoint 已通过本机接入或能够立即启动。" },
@@ -206,12 +248,13 @@ export const cacbProject = {
   evolution: [
     { date: "2026-08-08—08-13", commit: "连续评测证据链", result: "从问题库和单次验证扩展为连续 episode、workspace 隔离、身份回执、任务 capsule、归档与可复现报告框架。" },
     { date: "2026-08-14", commit: "ce29323–bb14d37", result: "补充多执行方式接入、公共任务合同与无效输入隔离，使同一验证器可检查不同执行路线的工作产物。" },
-    { date: "2026-08-15—08-16", commit: "8a911fe–e6f7581", result: "收紧执行身份、终态、公开报告 schema 和已知有效性边界，保留可诊断证据而不把不完整结果升级成结论。" }
+    { date: "2026-08-15—08-16", commit: "8a911fe–e6f7581", result: "形成独立单样本 Sol Max 盲质量复核、两阶段 1/10 题额度费用探针、机械/盲审分车道与最终选择兼容门，同时收紧执行身份、终态、公开报告 schema 和已知有效性边界；不完整结果保持 pending。" }
   ],
   operationalEntrypoints: [
     { name: "准备问题库 campaign", command: "python scripts/prepare_campaign.py --help", purpose: "从版本化问题库创建冻结 manifest、fixture 与验证目录。" },
     { name: "快速准备执行", command: "python -m cacb.fast_model_flow --help", purpose: "为一个或一批新执行配置生成独立 workspace 和完成门材料。" },
     { name: "验证候选 workspace", command: "python scripts/verify_arm.py --help", purpose: "在参与者之外运行确定性验证并生成结构化摘要。" },
+    { name: "盲审、探针与最终选择合同回归", command: "python -m pytest -q tests/test_sol_max_blind_judge.py tests/test_sol_max_judge_batch.py tests/test_quota_cost_probe_prompts.py tests/test_final_selection_release.py", purpose: "验证单样本盲化、exact Sol Max host receipt、两阶段零账本探针和同代最终选择边界。" },
     { name: "核心产品回归", command: "python -m pytest -q <11 focused test files>", purpose: "验证问题库、campaign、workspace、worker contract、fast flow、接入、归档和公开 schema。" },
     { name: "完整回归", command: "python -m pytest -q", purpose: "检查所有历史和当前执行路线；当前存在已明确披露的未闭合项。" }
   ]
@@ -288,26 +331,26 @@ export const cacbModules = [
       "私有 holdout 内容未读取到网页项目。",
       "完整跨代问题库路径仍受完整回归缺口约束。"
     ],
-    relation: "向 campaign 模块提供冻结案例；verifier 模块消费隐藏验收属性。"
+    relation: "向 campaign 模块提供冻结案例；deterministic verifier 消费隐藏验收属性并拥有 PASS/FAIL，blind-quality-review 只消费已过门样本的完整可见任务、正确性依据和候选 artifact。"
   },
   {
     slug: "campaign-workspace",
     shortTitle: "隔离执行",
     title: "Campaign 冻结、三路线执行与独立 workspace",
-    teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。",
+    teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。若目的只是先观察宿主额度、费用与耗时，则改走独立 1 题/10 题探针，不创建 formal sample（正式样本）。",
     status: "campaign / workspace / archive 与三类 executor 合同已有源码；当前提交的 CI lint 门仍未闭合，本页未启动任何路线",
     statusTone: "pass",
-    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑"],
+    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑", "一题额度费用耗时短探针", "十题额度费用耗时全探针", "model quota probe namespace", "探针执行后为什么还要第二条删除", "探针失败后怎么清理"],
     searchProjection: {
-      intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "防止旧产物或不同尝试拼接", "理解本地GPU与云端请求的资源流"],
-      entities: ["campaign", "workspace", "episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed"],
-      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "wait只是有界状态读取而不是自动判超时", "同一episode的案例按固定顺序连续完成", "本地终态绑定进程树与GPU lease清理", "云端终态绑定request stream和provider job关闭", "临时workspace只有归档校验后才能释放"],
-      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地进程或GPU lease未清理时保持不可用", "云端远程关闭不可观察时标记cleanup_unconfirmed并阻断替代提交"]
+      intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "防止旧产物或不同尝试拼接", "理解本地GPU与云端请求的资源流", "选择一题或十题额度费用耗时探针", "按第二阶段只清理固定探针命名空间"],
+      entities: ["campaign", "workspace", "episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed", "quota/cost probe", ".model-quota-probe-short-v1", ".model-quota-probe-full-v1"],
+      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "wait只是有界状态读取而不是自动判超时", "同一episode的案例按固定顺序连续完成", "本地终态绑定进程树与GPU lease清理", "云端终态绑定request stream和provider job关闭", "临时workspace只有归档校验后才能释放", "短探针固定1题而全探针固定10题", "探针只观察宿主UI且不进入正式账本分数排名", "第二条消息只删除对应固定namespace"],
+      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地进程或GPU lease未清理时保持不可用", "云端远程关闭不可观察时标记cleanup_unconfirmed并阻断替代提交", "探针namespace已存在时立即停止不覆盖", "短探针一次最小修正后仍失败就停止并保留目录", "全探针单题失败保留真实失败并继续其余题", "观察完成后用第二条消息精确删除目录再复用"]
     },
-    value: "我能用同一冻结任务比较三种真实执行路线，又清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净；共享目录、旧文件或不同尝试都不能污染结果。",
-    why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。",
-    example: "一次连续 episode 中，本地任务收到取消请求。只有 AICLI/Codex 进程树消失、LocalGpuBroker lease 释放、workspace 末态 hash 和回执完成后，才记录 cancelled；若这些条件不齐，保持 cleanup_unconfirmed，而不是立刻换路线重跑。",
-    result: "得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档之间的一一对应关系；原生还给出宿主任务终态，本地给出 job/GPU 清理证据，云端给出 request/stream 与 provider 清理证据。",
+    value: "我能用同一冻结任务比较三种真实执行路线，又清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净；如果还不需要正式样本，也能先用固定的一题或十题任务观察宿主额度、费用与耗时，而且不会把这次观察污染进 benchmark。",
+    why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。探针若复用旧目录、写正式回执或自动清理更大范围，同样会把一次轻量观察伪装成可比较测量。",
+    example: "我只想先确认一个新模型的宿主界面会怎样显示额度、费用和耗时，于是先发 1 题短探针。它只在 `.model-quota-probe-short-v1/` 内创建输入、转换、结果和验证文件；任务结束后目录保留供检查。观察完成后再单独发送第二条，只删除这个目录。整个过程不生成 CACB 样本、账本、分数或排名。",
+    result: "正式路线得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档之间的一一对应关系；原生还给出宿主任务终态，本地给出 job/GPU 清理证据，云端给出 request/stream 与 provider 清理证据。探针路线只得到固定临时产物、实际 verifier 结果与宿主 UI 观察，随后由精确 cleanup 删除，不进入任何 formal evidence（正式证据）车道。",
     readerStates: {
       pass: "workspace 唯一、输入 hash 匹配、路径在允许根内，所有案例终态闭合且该 executor 的进程、后代、GPU lease 或远端请求清理证据完整。",
       problem: "发现共享文件、跨目录写入、半次执行拼接、终态早报或资源未释放时，整次结果无效但保留诊断。",
@@ -316,6 +359,9 @@ export const cacbModules = [
     decisionImpact: [
       "每个执行配置使用唯一目录。",
       "三条路线共用 start / wait / cancel / result 语义，但不共用身份或清理回执。",
+      "只观察额度/费用/耗时时，不启动 formal campaign：先用 1 题短版验证最小路径，需要十任务观察时才用 10 题全版。",
+      "探针固定 namespace 已存在就停止；执行完成后先保留目录，等第二条消息只删除该目录，清理完成后才复用第一条。",
+      "探针不写测量回执、ledger、score、ranking、report progress 或 routing correction。",
       "start 只在所有绑定通过后返回 handle，wait 只给状态快照。",
       "workspace 是临时施工区，不是唯一归档。",
       "中断优先精确恢复，不合并 partial。",
@@ -331,10 +377,16 @@ export const cacbModules = [
       "native_managed 由宿主提交原生 task，轮询宿主状态并绑定 parent/spawn/child lineage；取消或超时后必须确认宿主终态和没有活跃后代。",
       "local_async_job 由 Toolkit/AICLI 提交 Codex CLI job，按 job id 轮询；任务在本地 workspace 中产出 artifact，重型执行由 LocalGpuBroker 串行，结束时确认进程树、活动请求、模型清理和 lease 释放。",
       "cloud_api_async_job 在本地 workspace 运行 Codex harness，经绑定的 Responses transport 发出 provider request；每个请求与 usage 事件配对，hidden verifier 和 independent confirmation（独立确认）始终留在本地。",
+      "config/probes/universal-quota-cost-short-v1.md 固定一个离线 JSON 转换任务；只允许标准库、一次最小修正和 `.model-quota-probe-short-v1/`。",
+      "config/probes/universal-quota-cost-full-v1.md 固定十个同结构任务与 aggregate（汇总）验证；每题最多一次最小修正，失败保留真实状态并继续，其 namespace 是 `.model-quota-probe-full-v1/`。",
+      "两份 probe 都把执行和 cleanup 拆成两条消息；cleanup 禁止通配符、git clean、项目清理、父目录或兄弟目录删除。",
       "workspace containment 检查 cwd 与输出根祖先关系；所有路线先归档 artifact/trace/receipt/validity reason 并回读 hash，才允许释放临时目录。"
     ],
     flow: [
-      "冻结 campaign。",
+      "先判断目的是正式评测，还是仅观察宿主额度、费用与耗时。",
+      "若只是观察，选择 1 题短探针或 10 题全探针；确认对应固定 namespace 不存在后执行，在宿主 UI 与临时 verifier 结果可见后停下。",
+      "探针观察完成后单独执行第二条 cleanup，只删除对应固定 namespace；删除成功后流程结束，不进入后续 ledger、verifier 或 final selection。",
+      "若需要正式评测，再冻结 campaign。",
       "选择 executor_kind，并验证它的接入状态、精确身份和授权边界。",
       "为执行配置创建 workspace。",
       "复制并校验 fixture。",
@@ -355,7 +407,10 @@ export const cacbModules = [
       { term: "terminal state（终态）", explanation: "completed、partial、blocked、failed、timed_out 或 cancelled；后两者只有清理已确认才成立。" },
       { term: "cleanup_unconfirmed（清理未确认）", explanation: "取消或超时已发生，但仍不能证明进程、GPU lease、request stream 或远端 job 已终止；此时路线保持不可用。" },
       { term: "LocalGpuBroker（本地 GPU 仲裁器）", explanation: "串行分配本地重型模型 lease，防止两个受测任务绕过 owner 同时占用 GPU。" },
-      { term: "provider request（提供方请求）", explanation: "云端路线经唯一绑定 endpoint 发出的调用；只携带参与者公开输入，hidden control 不离开本机。" }
+      { term: "provider request（提供方请求）", explanation: "云端路线经唯一绑定 endpoint 发出的调用；只携带参与者公开输入，hidden control 不离开本机。" },
+      { term: "short probe（短探针）", explanation: "一个固定离线转换任务，用最低工作量先观察宿主额度、费用、耗时和最小执行路径；不是能力样本。" },
+      { term: "full probe（全探针）", explanation: "十个固定转换任务加汇总验证，用于更完整的宿主观察；仍不进入正式账本或评分。" },
+      { term: "probe namespace（探针命名空间）", explanation: "short/full 各自唯一的固定临时目录；存在时拒绝覆盖，观察后由第二条消息精确删除。" }
     ],
     boundaries: [
       "workspace 不进入网站，也不作为长期事实源。",
@@ -364,6 +419,9 @@ export const cacbModules = [
       "云端 provider HTTPS 是 runner-side transport，不等于参与者获得任意联网、connector、远程 Git 或继续委派能力。",
       "配置好云端 provider 不授权调用；每个真实付费 attempt 在提交前单独绑定明确授权，先前 attempt 的授权不可复用。",
       "本地 GPU 路线不消耗云端 paid-attempt 授权，但仍必须经过资源 owner、兼容性和 broker 门。",
+      "探针只读取提示词内固定数据，不读对话历史、工作区记忆、父/兄弟目录、Git、.agents 或 .codex，不联网、不安装依赖、不调用其他 AI/API。",
+      "探针输出只能留在固定 namespace；它不是 formal sample、benchmark evidence、cost receipt 或 routing input。",
+      "执行阶段不会自动清理目录；必须等观察完成再发送第二条，且只允许删除该固定 namespace。",
       "当前网页不启动、取消或清理任何评测 workspace、GPU lease 或云端 request。"
     ],
     failures: [
@@ -373,6 +431,10 @@ export const cacbModules = [
       { condition: "原生取消后仍有活跃后代", response: "不写 cancelled，继续保持取消请求或清理未确认状态。" },
       { condition: "本地进程树、活动请求或 GPU lease 未释放", response: "路线保持 cleanup_unconfirmed；不启动另一个重型任务。" },
       { condition: "云端 stream 已断但 provider job 终态不可观察", response: "不把本地退出当远端清理；路线保持不可用且不立即替代提交。" },
+      { condition: "探针固定 namespace 已存在", response: "立即停止，不覆盖、不改名，也不顺手清理；先由 owner 确认上一轮观察后执行原第二条 cleanup。" },
+      { condition: "1 题短探针一次最小修正后仍失败", response: "停止并保留真实失败和 namespace；不循环重试、不写账本，等待第二阶段精确清理。" },
+      { condition: "10 题全探针中的一题仍失败", response: "保留该题真实失败并继续其余固定题；不选优、不重抽样，最终仍只供宿主观察。" },
+      { condition: "探针 cleanup 目标不精确或请求扩大到父目录", response: "拒绝删除；只接受当前工作目录下的 exact short/full namespace。" },
       { condition: "归档 hash 不匹配", response: "保留 workspace，不释放唯一内容。" }
     ],
     sources: [
@@ -383,15 +445,20 @@ export const cacbModules = [
       { path: "PRIVATE source · docs/WORKER_CONTRACT.md", role: "三类 executor、终态和路线专属 cleanup 语义" },
       { path: "PRIVATE source · docs/LOCAL_CODEX_COMPATIBILITY.md", role: "本地 Codex、工具循环、恢复和 LocalGpuBroker 门" },
       { path: "PRIVATE source · src/cacb/cloud_api_worker.py", role: "云端 request/usage/terminal machine-event 解析边界" },
+      { path: "PRIVATE source · config/probes/universal-quota-cost-short-v1.md", role: "1 题短探针、固定 namespace 与第二阶段清理合同" },
+      { path: "PRIVATE source · config/probes/universal-quota-cost-full-v1.md", role: "10 题全探针、逐题失败保留、汇总与精确清理合同" },
+      { path: "PRIVATE source · tests/test_quota_cost_probe_prompts.py", role: "两阶段、零回执、零账本与 exact cleanup 回归" },
       { path: "PRIVATE source · protocols/single-worker-episode.md", role: "连续 episode 合同" }
     ],
     verification: [
       "campaign、task_workspace 与 task_workspace_archive focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "当前源码与 cross-executor contract test 明确覆盖 native_managed、local_async_job、cloud_api_async_job 及 native_lineage=not_applicable 语义；这只是 source contract，不是本轮 runtime 验收。",
+      "两份 probe prompt 与 test_quota_cost_probe_prompts 在 e6f7581 历史观察代已经存在；该历史证据不继承到当前 59b0b5c，当前 CI 仍停在 lint 门。",
+      "本轮未实际运行 short/full probe，因此没有宿主额度、费用或耗时观察，更没有可公开受测结果。",
       "没有创建真实受测任务、取得 GPU lease 或调用外部执行器。",
       "完整 native formal-run 路径仍有跨代 fixture 缺口。"
     ],
-    relation: "消费问题库并冻结共同 envelope；身份与证据模块决定三条路线的精确 binding 和接入资格，本模块负责 start/wait/cancel/result、workspace、资源与归档生命周期，再把唯一执行容器和路线终态交给 verifier 与失败报告。"
+    relation: "正式路线消费问题库并冻结共同 envelope；身份与证据模块决定三条路线的精确 binding 和接入资格，本模块负责 start/wait/cancel/result、workspace、资源与归档生命周期，再把唯一执行容器和路线终态交给 deterministic verifier，合格样本随后才进入 blind-quality-review。short/full probe 是本模块的独立轻量分支，完成精确 cleanup 后即结束，永不流入 verifier、formal ledger、评分或最终选择。"
   },
   {
     slug: "identity-evidence",
@@ -496,43 +563,47 @@ export const cacbModules = [
       "完整 native identity envelope 测试当前存在跨代失败，页面没有升级为全绿。",
       "未读取或复制任何真实原始执行日志。"
     ],
-    relation: "先为 campaign/workspace 选择并冻结精确 executor binding，再把路线专属 host/provider/transport/lineage/authorization 证据交给执行生命周期；verifier 只接受同一 task/run/workspace 的匹配 artifact，失败报告再按 identity、transport、harness、cleanup 或 model-task 平面归因。"
+    relation: "先为 campaign/workspace 选择并冻结精确 executor binding，再把路线专属 host/provider/transport/lineage/authorization 证据交给执行生命周期；deterministic verifier 只接受同一 task/run/workspace 的匹配 artifact 并拥有样本资格。对已合格样本，identity 模块还要为 blind-quality-review 提供 fresh exact Sol Max 的实际 turn context、唯一 task/session 与 host receipt；这些 judge 身份证据不能反向证明参与者身份。失败报告再按 identity、transport、harness、cleanup、judge-contract 或 model-task 平面归因。"
   },
   {
     slug: "deterministic-verification",
     shortTitle: "确定性验证",
-    title: "参与者之外的隐藏验证与范围审计",
-    teaser: "验证器在隔离进程中检查文件、行为、测试、隐藏属性和修改范围；不把最终回答或进程退出当成成功。",
+    title: "身份、资格、硬边界与真实产物的确定性验证",
+    teaser: "根侧验证器在隔离进程中检查 participant identity（参与者身份）、sample validity（样本有效性）、eligibility（资格）、文件、行为、测试、隐藏属性、修改范围和终态，给出可重放 PASS/FAIL；它不把最终回答、进程退出或后续盲审意见当成成功。",
     status: "Verifier、公开案例和 CLI 核心路径存在；本页不执行私有 holdout",
     statusTone: "pass",
-    searchAliases: ["回答说完成为什么还没结果", "怎样验证真实产物", "隐藏检查会不会限定写法", "越界修改怎么发现"],
+    searchAliases: ["回答说完成为什么还没结果", "怎样验证真实产物", "隐藏检查会不会限定写法", "越界修改怎么发现", "谁决定样本identity validity eligibility", "谁拥有PASS FAIL和safety gate", "盲审能不能推翻确定性验证", "机械分怎样从sealed replay重算"],
     searchProjection: {
-      intents: ["验证Agent是否真的交付了可运行产物", "检查候选是否越过允许文件范围", "用隐藏属性避免只针对公开测试"],
-      entities: ["verifier", "hidden property", "sandbox", "artifact", "scope audit", "replay"],
-      relations: ["验证器运行在参与者之外", "公开测试通过仍要检查隐藏属性和修改范围", "最终回答与进程退出不能替代产物验证"],
-      failureRecovery: ["verifier指纹漂移时进入新版本", "候选访问隐藏材料时标记污染", "验证超时后终止子进程并保留具体状态"]
+      intents: ["验证Agent是否真的交付了可运行产物", "决定样本身份有效性资格和硬门", "检查候选是否越过允许文件范围", "用隐藏属性避免只针对公开测试", "区分确定性PASS FAIL与后续推定质量证据", "从sealed archive重算机械证据"],
+      entities: ["deterministic verifier", "identity", "validity", "eligibility", "hard gate", "hidden property", "sandbox", "artifact", "scope audit", "sealed replay", "mechanical lane"],
+      relations: ["验证器运行在参与者之外", "身份资格硬边界和PASS FAIL由根侧确定性门拥有", "公开测试通过仍要检查隐藏属性和修改范围", "最终回答与进程退出不能替代产物验证", "盲质量复核只接收已经过门的样本且不能反向改门", "机械证据必须从封存归档和冻结verifier重算而不能手填"],
+      failureRecovery: ["verifier指纹漂移时进入新版本", "候选访问隐藏材料时标记污染", "验证超时后终止子进程并保留具体状态", "身份终态或资格缺失时样本不进入盲审", "机械envelope与sealed replay不一致时拒绝评分而不采纳展示数值"]
     },
-    value: "我得到的是能重放的客观验收，而不是对参与者文案的主观印象。",
-    why: "参与者可以看见公开测试并针对写法硬编码；验证器若和候选代码同进程，也可能泄露 oracle 或被修改。",
-    example: "候选通过公开测试，但修改了禁止目录。隐藏 verifier 会让这次执行失败，并把范围问题与功能问题分开。",
-    result: "得到外部进程、硬超时、隐藏材料隔离、属性检查、范围变化和 hash 回读组成的验证摘要。",
+    value: "我先得到一份可重放的客观验收：这是谁的执行、样本是否有效、是否有资格比较、硬边界是否满足、真实产物到底 PASS 还是 FAIL。只有这层闭合，后续盲审的推定质量证据才有对象。",
+    why: "参与者可以看见公开测试并针对写法硬编码，也可以写一段像成功的 final answer；验证器若和候选代码同进程，还可能泄露 oracle 或被修改。更危险的是让一个主观评审替无效样本补发资格，因此 identity、validity、eligibility、safety 与 PASS/FAIL 必须留在确定性根侧。",
+    example: "候选产物看起来结构清楚，也可能得到正面的盲质量判断，但它修改了禁止目录。deterministic verifier 会把范围硬门判为 FAIL，这个样本不进入正式质量比较；盲审意见不能把它改成 PASS。",
+    result: "得到 participant/runtime identity、sample validity、ranking eligibility、hard gate、逐案例 PASS/FAIL、机械证据、范围变化、终态与 hash 回读组成的验证摘要；它同时明确哪些合格样本可以交给 blind-quality-review。",
     readerStates: {
-      pass: "候选在隔离 verifier 中满足公开与隐藏属性，且修改范围正确。",
-      problem: "功能、隐藏属性或范围任一失败时返回具体案例与 failure plane。",
-      unavailable: "verifier 版本、输入或 hash 不匹配时不执行判定。"
+      pass: "身份、终态、冻结输入、公开/隐藏属性和修改范围全部闭合时，样本取得可重放 PASS 与 eligibility；这只是盲审的前置资格，不预设质量分。",
+      problem: "身份、有效性、功能、隐藏属性、范围或 safety gate 任一失败时返回具体案例与 failure plane；后续质量意见无权覆盖。",
+      unavailable: "verifier 版本、输入、host evidence 或 hash 不匹配时不执行判定，也不创建 formal blind review。"
     },
     decisionImpact: [
       "验证器不信任候选代码。",
       "隐藏材料不进入候选环境。",
       "检查行为属性而非固定实现。",
-      "验证摘要不能冒充宿主身份回执。"
+      "验证摘要不能冒充宿主身份回执。",
+      "identity、validity、eligibility、safety gate 与 PASS/FAIL 是本层独占裁决面。",
+      "blind review 产生的是可反驳推定质量证据，不能升级无效或失败样本。",
+      "机械 lane 必须从同一 sealed archive、frozen verifier 和 source commitment 重放；展示字段和自洽 hash 不能替代真实输入。"
     ],
     problem: "解决公开测试过拟合、oracle 泄露、候选篡改验证、超时失控和越界修改。",
     implementation: [
       "evaluator.py 管 case verification 与状态。",
       "public_cases_v2 定义可发布的案例行为。",
       "verify_arm.py 提供已完成 workspace 的外部验证入口。",
-      "结果包含 workspace/verifier hash 与逐案例状态。"
+      "结果包含 workspace/verifier hash 与逐案例状态。",
+      "sol_max_blind_judge 的机械 envelope builder 会重新读取 sealed archive、participant replay、case material 与 artifact commitment，拒绝调用者手填或换包。"
     ],
     flow: [
       "确认 campaign 与 verifier 身份。",
@@ -540,71 +611,189 @@ export const cacbModules = [
       "在候选之外启动验证。",
       "运行公开与隐藏属性检查。",
       "审计文件范围和终态。",
-      "写验证摘要与 hash。"
+      "写验证摘要、机械 evidence envelope 与 hash。",
+      "只有 identity、validity、eligibility、hard gate 和终态全部闭合的样本，才向 blind-quality-review 发出单样本复核资格。"
     ],
     concepts: [
       { term: "hidden property（隐藏属性）", explanation: "不暴露答案、但可客观检查的行为条件。" },
       { term: "sandbox（隔离环境）", explanation: "限制候选访问 oracle、控制文件和无关路径。" },
-      { term: "replay（重放）", explanation: "使用同一输入、版本和验证器再次得到可解释结果。" }
+      { term: "replay（重放）", explanation: "使用同一输入、版本和验证器再次得到可解释结果。" },
+      { term: "eligibility（资格）", explanation: "样本的精确身份、比较基线、终态、工具/范围和确定性证据闭合后，才允许进入对应报告或盲质量复核。" },
+      { term: "mechanical lane（机械证据车道）", explanation: "从封存 participant archive 和冻结 verifier 可重复重算的客观证据；不接受参与者声明、盲审意见或手填总数。" }
     ],
     boundaries: [
       "本页不公开 oracle、seed 或私有失败正文。",
       "验证摘要不证明宿主 identity 或工具事件。",
-      "合理等价实现必须能通过，不要求复制参考代码。"
+      "合理等价实现必须能通过，不要求复制参考代码。",
+      "blind-quality-review 不能创建或修改 identity、validity、eligibility、PASS/FAIL、hard safety gate。",
+      "确定性 PASS 不等于“所有质量维度完美”；它只说明冻结验收和硬边界成立，质量推定另由独立盲审解释。"
     ],
     failures: [
       { condition: "Verifier hash 漂移", response: "结果不比较，进入新版本。" },
       { condition: "候选访问隐藏材料", response: "标记污染并拒绝结果。" },
-      { condition: "硬超时", response: "终止 verifier 子进程并记录 timeout。" }
+      { condition: "硬超时", response: "终止 verifier 子进程并记录 timeout。" },
+      { condition: "盲审给出正面意见但 deterministic gate 失败", response: "保留意见作非正式诊断但不赋予资格、不改 PASS/FAIL，也不进入最终选择。" },
+      { condition: "机械 score envelope 能自洽但无法从 sealed evaluator input 重算", response: "拒绝该 lane；不接受重算 hash 后的手填数值。" }
     ],
     sources: [
       { path: "PRIVATE source · src/cacb/evaluator.py", role: "验证器与案例状态" },
       { path: "PRIVATE source · src/cacb/public_cases_v2.py", role: "公开安全案例实现" },
       { path: "PRIVATE source · scripts/verify_arm.py", role: "外部验证 CLI" },
-      { path: "PRIVATE source · schemas/case-artifact-v2.schema.json", role: "案例产物合同" }
+      { path: "PRIVATE source · schemas/case-artifact-v2.schema.json", role: "案例产物合同" },
+      { path: "PRIVATE source · src/cacb/sol_max_blind_judge.py", role: "根侧 gate 与 sealed mechanical replay 对盲审/机械 lane 的边界" }
     ],
     verification: [
       "public cases、question bank release 和 verify-related focused paths 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "完整外部执行 adapter 的若干测试仍失败，未被本模块 PASS 覆盖。",
+      "mechanical envelope 与 blind gate contract tests 在 e6f7581 历史观察代已经存在；历史结果不继承到当前 59b0b5c，当前 CI 仍停在 lint。",
       "本轮没有运行私有 holdout，也没有生成新的受测配置比较结果。"
     ],
-    relation: "消费问题库隐藏属性和 workspace 产物；输出给失败分类与报告层。"
+    relation: "消费问题库隐藏属性、identity/terminal host evidence 和唯一 workspace 产物，输出 identity、validity、eligibility、hard gate、PASS/FAIL 与可重放机械 lane 给失败分类和报告层；只有 eligible 样本才把完整冻结任务、正确性依据与候选 artifact 投影交给 blind-quality-review。后者只能增加可反驳的推定质量/推定能力证据，不能回写本层。"
+  },
+  {
+    slug: "blind-quality-review",
+    shortTitle: "Sol Max 盲审",
+    title: "Sol Max 盲审与仲裁强审",
+    teaser: "隐藏参与者身份，对已经过硬门的产物做独立六维质量复核。盲审隔离 provenance（参与者来源）、harness（执行环境）、price（价格）、mechanical score（机械分）、rank（名次）和 other candidates（其他候选）；仲裁模型强审则用 fresh exact gpt-5.6-sol / max 做高强度语义复核，产出可引用、可反驳的推定能力/推定质量。",
+    status: "单样本 blind bundle、六维 rubric、fresh exact Sol Max host receipt 与 batch binding 已有源码；当前提交 CI 仍停在 lint，本页没有运行或公开任何候选 judgment",
+    statusTone: "mixed",
+    searchAliases: ["模型盲评分是怎么做的", "盲质量复核看哪些东西", "盲审推定能力是什么意思", "推定质量证据能不能反驳", "为什么每个样本都要新Sol Max task", "盲审为什么不能看到模型和价格", "六维blind rubric有哪些", "blind bundle和host receipt怎样绑定", "盲审能不能改PASS FAIL", "为什么不公开盲审分数排名"],
+    searchProjection: {
+      intents: ["在确定性PASS后独立复核可见产物质量", "从冻结任务和候选artifact形成可反驳推定能力证据", "确认盲审没有参与者或比较上下文泄露", "证明每个样本使用fresh exact Sol Max task", "核对六维判断是否同时引用候选与案例材料", "区分盲质量证据与身份资格PASS FAIL"],
+      entities: ["identity-blind judge", "gpt-5.6-sol", "max", "fresh task", "blinded bundle", "host turn context", "judge receipt", "six-dimension rubric", "presumptive quality evidence", "candidate artifact", "case material"],
+      relations: ["每个eligible样本独占一个fresh Sol Max task和session", "judge只看冻结任务验收工具边界正确性依据和候选artifact", "参与者provenance harness AA price mechanical points ranking和其他候选被隔离", "六个维度都必须同时引用candidate artifact和case material", "bundle host receipt output schema judgment和raw lanes由hash绑定", "盲审形成可反驳推定质量证据但不能改identity validity eligibility PASS FAIL safety", "最终选择只接受完整同代盲审集合"],
+      failureRecovery: ["样本未过deterministic gate时不创建formal blind review", "实际model或effort不是exact Sol Max时拒绝receipt", "task session receipt或turn context复用时拒绝整个assignment", "judge可见材料泄露provenance或比较字段时失败关闭", "dimension缺候选或案例证据引用时拒绝judgment", "bundle artifact case material或receipt hash漂移时重建新revision而不覆盖旧包", "必需样本盲审不齐时final selection保持pending"]
+    },
+    value: "确定性 PASS 只能证明冻结验收与硬边界成立，不能充分解释架构是否稳健、证据是否扎实、失败处理是否清楚、交付是否容易维护。Sol Max 盲审先消除参与者与比较先验，仲裁模型强审再从同一份任务和可见产物高强度推定这些质量维度，让我获得一份可追问、可举反例、可被后续证据推翻的推定能力证据，而不是只剩机械通过或失败。",
+    why: "如果 reviewer 知道模型名、价格、机械分或其他候选，判断容易被先验和相对比较污染；如果只给最终答案，又会缺少任务、验收和正确性依据。CACB 选择“信息完整、身份隔离”：让 judge 看见判断质量所需的全部冻结材料，同时剥离参与者来源和比较信号。它依然不是事实真值 owner，因此不能裁决样本身份、资格、硬门或安全。",
+    example: "两个实现都已通过同一 deterministic verifier，其中一个产物可能只满足表面输出，另一个清楚保留失败路径、边界说明和可维护结构。盲审不知道它们分别来自谁，也不会在同一任务中互看；每个 fresh Sol Max 只根据自己那份冻结任务、可见测试/fixture、正确性依据和候选文件，引用具体位置说明对稳健性与可维护性的推定。这个推定可以被新的可见证据反驳，但不能改写机械 PASS。",
+    result: "每个合格样本得到一个 hash-bound（hash 绑定）的 single-sample judgment（单样本判断）：六个固定维度的整数判断、逐维理由、candidate artifact 与 case material 双引用、bundle/task/session/receipt 绑定和 raw judgment。它增加的是独立的推定质量/推定能力 evidence lane，不是参与者身份确认、deterministic truth（确定性真值）、公开候选分数或排行榜。机械与强审若出现质量解释冲突，不做平均或强行合成：deterministic hard gate 保持，分歧与 pending 原样进入报告。",
+    readerStates: {
+      pass: "fresh exact Sol Max host evidence、单样本 bundle、身份盲化扫描、六维顺序/上限、双类证据引用和总数重算都闭合时，接纳这份 judgment 为可反驳推定质量证据。",
+      problem: "出现身份泄露、task/session/receipt 复用、model/effort 不符、case/artifact hash 漂移、理由缺证据或跨 bundle judgment 时，拒绝该盲审证据，不影响原 deterministic 结果。",
+      unavailable: "样本未过 eligibility、没有 fresh gpt-5.6-sol / max host receipt、完整冻结材料无法投影或必需 assignment 缺失时，盲质量 lane 保持 unavailable/pending，不填零。"
+    },
+    decisionImpact: [
+      "盲审只在 deterministic identity、validity、eligibility、hard gate 和 PASS/FAIL 已完成后开始。",
+      "推定质量/推定能力 evidence 可以被具体反例、缺失 artifact、新的确定性重放或另一份合格独立复核反驳；它不被包装成真理。",
+      "一个样本对应一个 fresh gpt-5.6-sol / max task、唯一 session、唯一 host receipt 和唯一 judgment。",
+      "judge 看见完整冻结任务、acceptance requirements、allowed tool boundary、root evaluator correctness basis、visible tests/fixtures 与 candidate artifacts。",
+      "judge 不看 participant provenance、model/harness identity、AA、price、mechanical points、ranking、其他候选或其他答案。",
+      "六维 rubric 是 task correctness 350、requirement coverage 200、evidence quality 150、robustness 120、safety and scope 100、clarity and maintainability 80；这些是方法上限，不是公开候选结果。",
+      "每个维度必须同时引用一条 candidate artifact 和一条 case material，并给出可定位理由。",
+      "盲审不能创建或改变 identity、validity、eligibility、PASS/FAIL、safety gate、ranking eligibility 或任何 protected boundary。",
+      "raw mechanical lane 与 raw blind lane 分开归档；生产报告/选择不得调用已弃用的历史 composite helper。",
+      "机械证据与仲裁强审发生质量分歧时不平均成一个看似确定的总数；硬门不变，分歧、证据引用和 revalidation trigger（重验触发）显式保留。",
+      "公开页不显示任何受测配置的 judgment score、total、rank、pairwise comparison 或 leaderboard。"
+    ],
+    problem: "解决机械 PASS 后仍缺架构/证据/稳健性解释、reviewer 受模型与价格先验污染、跨候选相对比较、评审任务复用、证据引用空泛和主观意见越权改硬门。",
+    implementation: [
+      "sol_max_blind_judge.py 定义 blinded-artifact bundle v5、blinding policy v5、六维 rubric v2、judgment v3 与 exact gpt-5.6-sol / max identity contract。",
+      "root 从 sealed archive 重建冻结 task/acceptance/tool boundary/correctness basis 与可见 candidate answer projection；caller 不能替换成更容易的任务或手填 artifact commitment。",
+      "sol_max_judge_batch.py 先生成只要求 READY 的空 fresh-task dispatch；捕获实际 session_meta 与 turn_context 后才写 create-new host receipt、构造 bundle 和 judge-visible payload。",
+      "forbidden-value 与 provenance-label scan 排除参与者、harness、AA、price、mechanical score、ranking 和其他答案通道；candidate artifact 被当作 untrusted evidence（不可信证据），不是 judge 指令。",
+      "bundle_sha256、case_material_hashes、artifact_hashes、source_commitment_sha256、host_turn_context_sha256、judge_receipt_sha256 与 bound output schema 共同阻断换包。",
+      "judgment validator 固定六维顺序、整数范围、total 重算，并要求每维同时引用 bundle 内的 candidate_artifact 和 case_material。",
+      "final_selection_release 只接受 unique task/session、完整同代 bundle/rubric 与 raw lane；任一 required sample 缺盲审就保持 pending，不构造正式次序。",
+      "contract module 本身不启动模型、API、candidate code 或网络；实际 dispatcher、host evidence capture、归档和最终选择由 root coordinator 拥有。"
+    ],
+    flow: [
+      "根侧先完成 participant identity、sample validity、eligibility、hard gate 与 PASS/FAIL。",
+      "从 sealed archive 重放 verifier，并投影完整 frozen case material 与 candidate artifact；生成 source commitment。",
+      "构造 participant/harness/AA/price/mechanical/ranking 等 forbidden values，并扫描所有 judge-visible 字段。",
+      "为一个 sample 规划一个全新空 gpt-5.6-sol / max task；初始只要求 READY，不提前暴露候选包。",
+      "从实际 host JSONL 捕获唯一 session、agent path、turn context、model 和 effort，写 create-new host runtime receipt。",
+      "把单一样本 bundle、receipt 与 bound JSON output schema 投递给对应 judge；不附 batch、其他样本或历史 judgment。",
+      "judge 按六维分别推定可见质量，每维引用 candidate artifact 与 case material，只返回 schema 对象。",
+      "根侧重验 blinding、bundle/judgment/receipt/hash、任务/session 唯一性、维度顺序与 total。",
+      "分别归档 host receipt、turn-context evidence、raw mechanical lane 与 raw blind judgment；盲审不能回写 deterministic ledger。",
+      "只有所有 required samples 在同一 contract generation 完整闭合，final selection 才能消费；否则保持 pending。"
+    ],
+    concepts: [
+      { term: "rebuttable presumptive evidence（可反驳的推定证据）", explanation: "从完整冻结任务和可见产物推定架构、证据、稳健性与可维护性；结论必须引用可检查事实，并允许被新证据或反例推翻。" },
+      { term: "arbitration-strength review（仲裁模型强审）", explanation: "由独立 exact Sol Max 对主观质量和证据分歧做高强度语义复核；只增加可引用推定证据，无权覆盖 identity、eligibility、deterministic PASS/FAIL 或 safety。" },
+      { term: "fresh judge task（全新评审任务）", explanation: "只处理一个样本、没有旧候选上下文的 exact gpt-5.6-sol / max task；task、session、receipt 都不可复用。" },
+      { term: "blinded bundle（身份盲审包）", explanation: "含完整任务/验收/工具边界/正确性依据和候选 artifact，但不含参与者来源、harness、价格、机械分、排名或其他答案。" },
+      { term: "dual evidence citation（双类证据引用）", explanation: "每个质量维度都要同时引用 candidate artifact 与 frozen case material，防止只凭感觉给结论。" },
+      { term: "raw lane（原始证据车道）", explanation: "机械重放和 Sol 盲审分别保存原始、可重验产物；最终选择可以检查二者，但不能把一个缺口用另一个补齐。" }
+    ],
+    boundaries: [
+      "盲审不是 identity provider、validity verifier、eligibility gate、PASS/FAIL owner、safety authority 或真理裁判。",
+      "quality judgment 只能解释 bundle 内可见证据；不得使用外部先验、联网研究、价格、AA、机械分、排名或其他候选。",
+      "safety_and_scope 维度只评估 artifact 中可见的边界纪律，不能签发或撤销真实 safety gate。",
+      "一个 judge 不得看到 batch、另一个 sample、另一个 answer 或先前 judgment，也不得继续委派。",
+      "rubric 方法与 schema 可公开，任何受测配置实际 dimension score、total、rank 和 leaderboard 不公开。",
+      "没有 fresh exact Sol Max host evidence 时保持 unavailable；不能用 prompt 自称、静态配置或旧 receipt 补齐。",
+      "质量推定即使正面，也不能救回 deterministic FAIL；即使负面，也不能篡改已经记录的机械 PASS，只能作为独立解释。",
+      "机械与强审冲突不做算术平均、不制造总分；保留 hard gate、quality disagreement 和 pending，等待新的同代证据。"
+    ],
+    failures: [
+      { condition: "样本未通过 identity/validity/eligibility/hard gate", response: "不创建 formal blind review；保留 deterministic failure plane。" },
+      { condition: "host turn context 不是 gpt-5.6-sol 或 effort 不是 max", response: "拒绝 receipt 和 bundle，盲质量 lane 保持 unavailable。" },
+      { condition: "task、session、turn-context 文件或 receipt 在样本间复用", response: "拒绝 assignment set；每个样本必须重新创建独立 judge。" },
+      { condition: "judge-visible 文本出现 participant provenance、harness、AA、price、mechanical score、ranking 或其他答案", response: "blinding scan 失败关闭，不做文字替换式掩盖。" },
+      { condition: "某维只引用候选或只引用案例材料", response: "judgment schema 拒绝；补齐真实 bundle 内双类证据后创建新 revision。" },
+      { condition: "bundle、artifact、case material、source commitment、receipt 或 judgment hash 漂移", response: "拒绝换包；保留旧 revision，按新 evidence 生成 create-new successor。" },
+      { condition: "required sample 的盲审缺失或合同代不同", response: "final selection 整体保持 pending，不输出 rank，不拿旧 judgment 或其他样本补位。" }
+    ],
+    sources: [
+      { path: "PRIVATE source · src/cacb/sol_max_blind_judge.py", role: "单样本盲审、六维 rubric、blinding、bundle/judgment/receipt/hash 合同" },
+      { path: "PRIVATE source · src/cacb/sol_max_judge_batch.py", role: "fresh task wave、actual host turn context、唯一 task/session 与 judge-only payload" },
+      { path: "PRIVATE source · src/cacb/final_selection_release.py", role: "同代 raw lanes、unique judge assignments 与 incomplete-no-ranking 最终选择门" },
+      { path: "PRIVATE source · tests/test_sol_max_blind_judge.py", role: "信息完整、身份隔离、双引用、sealed replay 与不可手填机械 lane 回归" },
+      { path: "PRIVATE source · tests/test_sol_max_judge_batch.py", role: "fresh exact Sol Max host receipt、唯一任务/session 与单样本 payload 回归" },
+      { path: "PRIVATE source · tests/test_final_selection_release.py", role: "机械/盲审分车道、同代选择与 pending 不归零合同" }
+    ],
+    verification: [
+      "sol_max_blind_judge、sol_max_judge_batch 与 final-selection focused tests 在 e6f7581 历史观察代已经存在；该历史证据不继承到当前 59b0b5c，当前 CI 仍在 lint 门失败。",
+      "当前源码静态合同明确 required judge model=gpt-5.6-sol、effort=max、exactly_one_sample=true、fresh_task=true，并禁止 judge 改 identity/validity/PASS/FAIL/eligibility/safety gate。",
+      "本轮没有启动任何受测样本的 judge task、没有读取 private judgment/raw rollout，也没有生成或公开候选分数、比较或名次。"
+    ],
+    relation: "上游 deterministic-verification 独占 identity、validity、eligibility、hard gate、PASS/FAIL 和 sealed mechanical lane；identity-evidence 提供 judge 自身 fresh exact Sol Max 的实际 host receipt；campaign-workspace 提供唯一 source archive。盲审模块只增加可反驳的推定质量/推定能力 raw lane，并把证据与 hash 交给 failure-reporting/final selection；它不回写上游，也不消费 quota/cost probe。"
   },
   {
     slug: "failure-reporting",
-    shortTitle: "失败与报告",
-    title: "失败平面、证据归档与可复现报告框架",
-    teaser: "把能力、任务、执行环境和证据问题分开，先保存可重放 evidence，再生成 schema-backed（schema 约束）的公开安全说明。",
-    status: "归档、failure semantics 与公开 report schema 的核心回归通过；完整历史报告链存在未闭合项",
+    shortTitle: "失败与选择",
+    title: "失败归因、机械/强审分车道与最终选择",
+    teaser: "把能力、任务、执行环境、机械验证、Sol Max 仲裁强审和证据问题分开，先保存可重放 raw lanes，再验证同代兼容性。机械与强审冲突不平均：硬门保持，质量分歧或 pending 显式保留；公开页不展示候选分数、名次或排行榜。",
+    status: "失败语义、归档、机械 envelope、blind judgment 与 final-selection compatibility gate 已有源码；当前 CI lint 未闭合，完整报告链仍有已披露缺口",
     statusTone: "mixed",
-    searchAliases: ["官方价格和本地实测成本为什么分开", "缺失外部证据能不能填0", "基准报告和综合判断报告有什么区别", "资格能力经济性怎样形成路由建议", "失败是模型还是环境"],
+    searchAliases: ["官方价格和本地实测成本为什么分开", "缺失外部证据能不能填0", "基准报告和综合判断报告有什么区别", "资格能力经济性怎样形成路由建议", "失败是模型还是环境", "机械分盲审最终选择怎么分工", "机械与Sol Max强审冲突怎么办", "为什么冲突不平均成总分", "盲审缺一份为什么最终选择pending", "最终选择怎样防best of", "为什么公开页没有候选排行榜", "额度费用探针失败进不进报告"],
     searchProjection: {
-      intents: ["区分能力任务执行环境和证据失败", "分别生成模型证据卡与本地基准报告", "按资格能力经济性形成范围内路由建议", "处理价格或外部证据缺失"],
-      entities: ["failure plane", "model evidence card", "benchmark report", "comprehensive judgment report", "qualification", "economics", "Unknown"],
-      relations: ["模型证据卡回答精确身份和当前官方外证", "基准报告回答本地真实任务表现", "综合判断按资格到能力到经济性引用两条车道", "缺失证据保持Unknown而不归零"],
-      failureRecovery: ["基础设施失败时不形成能力结论", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "任务缺陷进入新版本后重新完整评测"]
+      intents: ["区分能力任务执行环境盲审和证据失败", "理解机械证据与推定质量证据的职责", "验证最终选择是否使用完整同代样本", "保留机械与仲裁强审的质量分歧", "分别生成模型证据卡与本地基准报告", "按资格能力经济性形成范围内路由建议", "处理价格外部证据或blind lane缺失", "确保公开说明没有候选分数名次排行榜"],
+      entities: ["failure plane", "mechanical lane", "Sol Max arbitration review", "raw judgment", "final selection", "contract generation", "pending", "model evidence card", "benchmark report", "comprehensive judgment report", "qualification", "economics", "Unknown"],
+      relations: ["deterministic verifier拥有identity eligibility hard gate和PASS FAIL", "机械lane从sealed replay重算", "Sol Max强审提供可反驳推定能力推定质量", "机械与强审冲突不平均且不改硬门", "最终选择要求完整同代bundle rubric和唯一task session", "部分样本或缺blind judgment时整代pending不排名", "quota cost probe永不进入formal ledger或report progress", "模型证据卡回答精确身份和当前官方外证", "基准报告回答本地真实任务表现", "综合判断按资格到能力到经济性引用两条车道", "缺失证据保持Unknown而不归零", "公开页面只讲方法边界不展示候选分数名次leaderboard"],
+      failureRecovery: ["基础设施失败时不形成能力结论", "机械envelope不能重算时拒绝展示数值", "blind judgment缺证据或hash不符时只关闭盲审lane", "机械与强审分歧时保留hard gate和quality disagreement等待同代复核", "required sample缺失时final selection保持pending", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "任务缺陷进入新版本后重新完整评测", "探针失败只保留临时诊断并按第二阶段清理"]
     },
-    value: "我能知道一次执行到底哪里出了问题，并保留足够证据修任务或执行环境，而不是只看到红灯。",
-    why: "把 timeout、权限、身份缺失、题目缺陷和候选代码错误都写成“能力失败”，会直接污染后续判断。",
-    example: "如果官方页面能确认某精确模型在目标 harness 可用，却没有当前价格，而本地 episode 又因 workspace 权限失败，两条车道分别写：官方资格可确认、价格未知；本地执行环境无效、没有能力结论。未知不填零，基础设施失败也不冒充能力差。",
-    result: "得到模型证据卡、基准报告和综合判断报告三份交付：前两份各守自己的证据车道，后一份按资格→能力→经济性→范围内路由建议引用它们，并列出所有未知和重验条件。",
+    value: "我不仅知道一次执行哪里出了问题，还能区分三种不同问题：确定性机械证据说明冻结任务与硬门是否成立，Sol Max 仲裁强审说明可见产物在六个质量维度上可怎样推定，final selection 说明这些证据能否在同一代里共同被采用。这样既不会只剩一个红灯，也不会把主观质量意见包装成真理。",
+    why: "把 timeout、权限、身份缺失、题目缺陷和候选代码错误都写成“能力失败”，会污染判断；把机械分和强审意见平均成一个总数，则会掩盖 hard gate、证据冲突与合同代差异。最终选择必须先证明来源、版本、代表规则和完整覆盖，不能因为想要排行榜就拼 partial 或挑最好的一次。",
+    example: "一组样本的机械 evidence envelope 都能从 sealed archive 重算，但其中一个 required sample 没有 fresh Sol Max judgment。系统保留已有机械 lane 和其他 raw judgments，把整代 final selection 写成 pending；不会用旧 judgment 补位，也不会先发布部分次序。若机械硬门通过而强审指出质量风险，PASS 保持，质量分歧和证据引用单独列出，不做平均。",
+    result: "得到模型证据卡、基准报告和综合判断报告三份交付：基准报告把 deterministic mechanical lane、Sol Max 推定质量 lane、failure plane 和 pending 分开；最终选择 manifest 只证明证据集合与代表规则是否兼容；综合判断再按资格→能力→经济性→范围内路由建议引用它们。公开页面只说明职责、状态和重验条件，不包含任何受测配置实际 score、rank 或 leaderboard。",
     readerStates: {
-      pass: "证据闭合后，报告准确写出任务范围、结果、失败平面和不能推导的结论。",
-      problem: "能力或任务失败时保留逐案例事实，不被一个总结果覆盖。",
-      unavailable: "证据不足时报告只写 Unknown 和重验条件，不生成受测比较结论。"
+      pass: "机械 lane 可从同一 sealed source 重算、blind lane 绑定 fresh exact Sol Max 与完整引用、required samples 同代齐全时，final selection 才接纳代表集合；报告仍分别展示职责，不让强审改硬门。",
+      problem: "能力、任务、身份、机械重放、盲审合同或质量解释冲突时保留逐案例事实、raw lanes 和具体 blocker，不被一个平均总数覆盖。",
+      unavailable: "任一 required mechanical/blind/host/bundle generation 证据不足时只写 Unknown 或 pending 和重验条件，不生成受测比较结论。"
     },
     decisionImpact: [
       "基础设施问题不转成能力问题。",
       "任务缺陷进入新版本，不回写旧结果。",
       "当前官方能力、可用性、价格和可比外证与本地 Codex 测量分开保存，不用一条车道补另一条空白。",
+      "机械 score 只来自 deterministic sealed replay；Sol Max 强审只提供可反驳推定质量/推定能力，两条 raw lanes 互不补证。",
+      "机械与强审冲突不平均成总分：hard gate 和 PASS/FAIL 保持，quality disagreement、pending 与 revalidation trigger 显式保留。",
+      "final selection 只做同代兼容与代表选择，不发明分数；禁止 partial merge、best-of、旧 judgment 补位和 task/session 复用。",
+      "1 题/10 题额度费用探针的完成、失败、UI 观察和 cleanup 都不进入 formal report、score、ranking 或 routing correction。",
       "先判断资格，再说明能力与经济性，最后才给精确范围内的路由建议；任何缺失证据都不归零。",
       "先归档，后释放临时 workspace。",
-      "公开报告只含安全聚合与可复现元数据。"
+      "公开报告只含安全聚合与可复现元数据；本网页进一步排除所有候选分数、名次、比较表和 leaderboard。"
     ],
     problem: "解决失败归因混乱、历史重写、证据丢失、报告口径漂移和私有内容外泄。",
     implementation: [
       "failure state 在 campaign/evaluator/finalizer 间保持枚举语义。",
       "task_workspace_archive 保存代码、trace、receipt 与 validity reason。",
+      "sol_max_blind_judge 从 sealed archive 重建 mechanical source commitment 与 envelope，且生产报告/选择禁用 deprecated compose_dual_score 历史 helper。",
+      "sol_max_blind_judge 与 sol_max_judge_batch 分别验证 blind bundle/judgment 和 fresh exact Sol Max task/session/host receipt。",
+      "final_selection_release 重验 source archive、mechanical envelope、blind judgment、bundle/rubric generation、unique assignments 与 representative policy；缺完整覆盖就 pending。",
+      "config/first-report-policy.v1.json 把代表选择和额外有效样本的 audit-only（仅审计）保留写成显式兼容合同，不做 best-of。",
       "export / report schema 约束公开安全输出。",
       "公开报告只解释产品与证据边界，不消费受测配置比较结果。"
     ],
@@ -612,10 +801,13 @@ export const cacbModules = [
       "核对精确模型、provider、version、harness 与官方证据观察日。",
       "把当前能力、可用性、价格单位和外部可比性写入模型证据卡。",
       "收集案例与终态。",
-      "验证 evidence closure。",
+      "从 sealed archive 重算 deterministic mechanical lane，验证 identity、validity、eligibility、hard gate 和 PASS/FAIL。",
+      "验证每个 eligible sample 的 fresh Sol Max host receipt、blind bundle、六维 judgment 和双类证据引用。",
+      "分别归档 raw mechanical envelope 与 raw blind judgment，不做 composite 平均。",
       "判定 failure plane。",
       "归档产物与 hash。",
-      "把本地任务实测和失败平面写入基准报告。",
+      "核对 required samples 是否使用同一 bundle/rubric contract generation、unique task/session 和冻结代表规则；不完整就保持 final-selection pending。",
+      "把本地机械实测、可反驳推定质量、质量分歧、pending 和失败平面写入基准报告。",
       "按资格、能力、经济性和适用范围生成综合判断报告。",
       "应用 public/private 边界。",
       "列出重验触发。"
@@ -623,34 +815,50 @@ export const cacbModules = [
     concepts: [
       { term: "failure plane（失败平面）", explanation: "能力、任务、执行环境或证据问题所在的责任层。" },
       { term: "infra invalid（执行证据无效）", explanation: "基础设施或身份链不满足，不能形成能力结论。" },
-      { term: "schema-backed report（数据合同报告）", explanation: "字段、状态和限制由机器合同约束的报告。" }
+      { term: "schema-backed report（数据合同报告）", explanation: "字段、状态和限制由机器合同约束的报告。" },
+      { term: "mechanical evidence envelope（机械证据信封）", explanation: "从封存任务、participant replay 和冻结 verifier 重算并 hash 绑定的客观 lane；展示值不能由调用者手填。" },
+      { term: "quality disagreement（质量分歧）", explanation: "deterministic hard gate 与仲裁强审关注面不同，或两份合格质量证据不一致；系统保留分歧，不算术平均、不偷改 PASS/FAIL。" },
+      { term: "contract generation（合同代）", explanation: "bundle schema、blinding policy、rubric、judgment schema、mechanical basis 与选择规则的兼容组合；不同代不能混排。" },
+      { term: "representative selection（代表选择）", explanation: "按冻结政策从每个 treatment 的合格证据中选定唯一报告代表；不是挑最高分，也不删除未选审计证据。" }
     ],
     boundaries: [
-      "网页不展示任何受测配置结果或数字比较。",
+      "网页不展示任何受测配置的 mechanical score、blind dimension score、total、rank、pairwise comparison、leaderboard 或数字比较。",
       "私有 raw trace、prompt、holdout 和机器快照不公开。",
       "官方说明、外部 benchmark 与本地 Codex 任务证据不得合并成一条来源；仅在身份、任务、环境和计量口径可比时建立关系。",
       "能力结论、经济性和路由建议是不同层；缺价格、缺外证或缺本地测量时保留 Unknown，不填零、不混算。",
+      "Sol Max 仲裁强审只能处理主观质量与证据分歧；不能覆盖 identity、eligibility、deterministic PASS/FAIL、hard safety gate 或 protected boundary。",
+      "机械与强审证据不得平均成一个掩盖冲突的总数；final selection 只消费合同允许的独立 raw lanes。",
+      "探针结果和 cleanup 状态不进入正式报告；它们只属于当场宿主观察。",
       "报告建议不自动改变全局规则或能力路由。"
     ],
     failures: [
       { condition: "证据文件缺失或 hash 不符", response: "报告保持证据不足并保留 blocker。" },
       { condition: "官方能力、价格或外部证据已过期", response: "只把对应模型证据卡字段降为 Unknown，按当前官方来源重查；不删除仍有效的本地任务证据。" },
       { condition: "官方价格与本地消耗口径不可比", response: "分别保留单位、日期和条件，不换算、不混算，也不据此形成经济性结论。" },
+      { condition: "机械 evidence envelope 无法从 sealed source 重算", response: "机械 lane 关闭并记录 blocker；不接受自洽 hash 或手填显示值。" },
+      { condition: "Sol Max judgment 缺 fresh host receipt、双类证据引用或 bundle binding", response: "只关闭 blind lane，保留 deterministic 事实；required sample 因此使 final selection pending。" },
+      { condition: "机械硬门与仲裁强审质量解释冲突", response: "hard gate 和 PASS/FAIL 保持；单列 quality disagreement、证据引用与重验触发，不平均、不覆盖。" },
+      { condition: "required samples 不齐、bundle/rubric 代不同或 judge task/session 复用", response: "拒绝 final selection 次序，整代保持 pending。" },
+      { condition: "额度/费用探针任务失败或 namespace 尚未清理", response: "只保留临时诊断并执行 exact 第二阶段 cleanup；不写正式 report 或分数。" },
       { condition: "任务本身有缺陷", response: "撤出受影响案例并创建新版本。" },
       { condition: "公开输出含私有 payload", response: "PUBLIC gate 阻断，不做界面隐藏式补救。" }
     ],
     sources: [
       { path: "PRIVATE source · src/cacb/task_workspace_archive.py", role: "执行归档与 hash" },
       { path: "PRIVATE source · src/cacb/export.py", role: "公开安全导出" },
+      { path: "PRIVATE source · src/cacb/sol_max_blind_judge.py", role: "sealed mechanical envelope、独立 blind judgment 与 deprecated composite 边界" },
+      { path: "PRIVATE source · src/cacb/final_selection_release.py", role: "同代 raw lanes、代表策略、unique assignments 与 incomplete-no-ranking 门" },
+      { path: "PRIVATE source · config/first-report-policy.v1.json", role: "每 treatment 代表、额外样本 audit-only 与非 best-of 选择合同" },
       { path: "PRIVATE source · schemas/public-run-report.schema.json", role: "公开报告数据合同" },
       { path: "PRIVATE source · docs/REPORTING_STANDARD.md", role: "失败、证据和限制写法" }
     ],
     verification: [
       "workspace archive、worker contract 与 public report schema 核心回归在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "完整 report/finalization 历史路径仍有失败，页面保留 mixed。",
+      "mechanical/blind/final-selection focused contracts 在 e6f7581 历史观察代已经存在；历史结果不继承到当前 59b0b5c，当前 CI 仍停在 lint。",
       "网站内容没有复制任何私有报告正文或受测比较结果。"
     ],
-    relation: "消费 verifier 和身份证据，形成可复核说明；公开报告保留结论的精确范围和证据边界。"
+    relation: "消费 deterministic-verification 的 identity/eligibility/PASS/FAIL 与 mechanical raw lane，消费 blind-quality-review 的可反驳推定质量 raw judgment，并从 campaign/identity 模块重验 source archive、host receipt 和 unique task/session。final selection 只核对同代完整性与代表规则；quota/cost probe 永不进入。公开报告保留硬门、质量分歧、pending 和重验触发，但排除所有候选分数、名次与排行榜。"
   }
 ];
 
