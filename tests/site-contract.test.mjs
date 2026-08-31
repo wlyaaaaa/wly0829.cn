@@ -1569,10 +1569,17 @@ test("each current rule tells an ordinary reader how it applies without manual i
     assert.match(rule.example, /说|问/iu, `${rule.logicalId} lacks a natural-language request example`);
     assert.doesNotMatch(rule.example, /先验证 E\d+|五文件 ruleset|fast (?:或|\/|and) standard lane|successor 现场确认/iu, `${rule.logicalId} still opens with internal execution vocabulary`);
   }
+  const rootRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "agents_root_rules");
+  const capabilityRule = rulesSnapshot.rules.find((rule) => rule.logicalId === "capability_routing_contract");
+  assert.match(JSON.stringify(rootRule), /本人私人事务文书/);
+  assert.match(capabilityRule.example, /聊天附件、录音、扫描件和合同原件/);
+  assert.match(capabilityRule.example, /可编辑文书和逐页验收 PDF/);
+  assert.match(capabilityRule.example, /不能确认的事实单列/);
+  assert.doesNotMatch(capabilityRule.example, /画廊/);
 });
 
 test("the Skills catalog contains the selected usable capabilities in value order", () => {
-  assert.equal(skills.length, 23);
+  assert.equal(skills.length, 26);
   assert.deepEqual(skills.map((item) => item.slug), [
     "personal-media",
     "personal-materials",
@@ -1582,6 +1589,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     "timeaudit-diagnostics",
     "localocr",
     "personal-health",
+    "personal-litigation",
+    "documents",
+    "pdf",
     "md-to-pdf",
     "pdf-render-safe",
     "mojibake-doctor",
@@ -1599,15 +1609,18 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     "token-budget-advisor"
   ]);
   for (const item of skills) {
-    for (const key of ["name", "title", "status", "summary", "maturity", "sourcePath"]) {
+    for (const key of ["name", "title", "status", "summary", "maturity", "sourcePath", "provenance", "sourceKind", "availability"]) {
       assert.ok(item[key]?.length >= 1, `${item.slug}.${key} is missing`);
     }
+    assert.ok(["personal_install", "host_integrated"].includes(item.sourceKind), `${item.slug}.sourceKind is invalid`);
+    assert.equal(item.availability, "available", `${item.slug} is not publicly usable`);
     assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
     assert.doesNotMatch(item.sourcePath, /[\t\r\n]/, `${item.slug}.sourcePath contains an escaped control character`);
     assert.ok(["pass", "mixed", "unknown", "problem"].includes(item.statusTone), `${item.slug}.statusTone is invalid`);
     assert.ok(item.transactionState.length >= 10, `${item.slug}.transactionState is incomplete`);
     assert.match(item.evidenceSourceCommit, /^[a-f0-9]{40}$/);
-    assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
+    if (item.sourceKind === "personal_install") assert.match(item.supplyEvidenceCommand, /Test-PersonalSkillSupply\.ps1/);
+    else assert.match(item.supplyEvidenceCommand, /workspace dependency loader/);
     for (const key of ["useWhen", "avoidWhen", "inputs", "outputs", "flow", "boundaries", "dependencies"]) {
       assert.ok(item[key].length >= 1, `${item.slug}.${key} is incomplete`);
     }
@@ -1624,6 +1637,21 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.ok(skillOutcomes[item.slug]?.changes.length >= 3, `${item.slug} lacks decision impact`);
     assert.ok(skillGuides[item.slug]?.glossary.length >= 3, `${item.slug} lacks term translations`);
     assert.ok(skillGuides[item.slug]?.failures.length >= 2, `${item.slug} lacks failure and recovery rules`);
+  }
+  assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 24);
+  assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
+  assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
+  const newSkillReceipts = {
+    "personal-litigation": [7445, "9732926454d3e67e9fd283d958e593c23c15106ba9c2279c90c5d7e4cba0df8a"],
+    documents: [42857, "adb4fa343854795dcb724871b66c5e05ba537d110a62ecc700fa2f44967a0295"],
+    pdf: [7269, "9e429bfc5ada20ccf25a531484e3dcc5da59811d936a7cc5dfd23dbf2dfadd31"]
+  };
+  for (const [slug, [bytes, sha256]] of Object.entries(newSkillReceipts)) {
+    const entry = skills.find((item) => item.slug === slug);
+    assert.equal(entry.sourceBytes, bytes);
+    assert.equal(entry.sourceSha256, sha256);
+    assert.match(entry.tests, new RegExp(`${bytes} bytes`));
+    assert.match(entry.tests, new RegExp(sha256));
   }
   assert.equal(excludedSkills.length, 0);
 });
@@ -2019,13 +2047,14 @@ test("public content allows public-safe product names and excludes credential va
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
   assert.doesNotMatch(publicText, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
   assert.doesNotMatch(publicText, /AIza[0-9A-Za-z_-]{30,}/);
+  assert.doesNotMatch(publicText, /包装/, "public content source still uses rejected packaging language");
   assert.match(pageSource, /<form className="global-search-form" role="search" action="\/search\/" method="get">/);
   assert.match(pageSource, /className="search-scope-select" name="scope"/);
   assert.match(pageSource, /name="q"[\s\S]{0,100}aria-label=\{`在\$\{selectedScope\.label\}范围搜索关键词`\}/);
   assert.match(pageSource, /usesPartialAllIndex/);
   assert.match(pageSource, /查看完整搜索结果/);
   assert.doesNotMatch(pageSource, /addEventListener\("scroll"/);
-  const publicMaintenanceLabels = /curated_packaging|manual_owner_only|manual-only|策展快照|策展展示|包装内容|手动维护/i;
+  const publicMaintenanceLabels = /curated_packaging|manual_owner_only|manual-only|策展快照|策展展示|包装|手动维护/i;
   for (const route of routePaths) {
     const routeIndex = route === "/" ? path.join(projectRoot, "dist", "index.html") : path.join(projectRoot, "dist", ...route.slice(1).split("/"), "index.html");
     const html = await readFile(routeIndex, "utf8");

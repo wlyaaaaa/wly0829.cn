@@ -305,7 +305,7 @@ export const personalHealthModules = [
       "刷新失败不切换浏览器、账号、provider 或备用凭据路线。"
     ],
     failures: [
-      { condition: "OAuth scope 不完整或 refresh token 有明确期限", response: "拒绝登记，不把短期访问包装成长期刷新能力。" },
+      { condition: "OAuth scope 不完整或 refresh token 有明确期限", response: "拒绝登记，不把短期访问冒充为长期刷新能力。" },
       { condition: "Secret Broker 返回 rebind_required", response: "精确返回 runtime_rebind_required；本轮停止且不重试。" },
       { condition: "Secret Broker 输出过大、stderr 非空或回执字段不闭合", response: "按稳定无秘密错误码失败，不调用 capture。" },
       { condition: "watchdog 超时或用户中断", response: "终止整棵进程树，关闭 pipe，不留下后台子进程。" }
@@ -332,7 +332,7 @@ export const personalHealthModules = [
     status: "原子写、分页闭环、哈希、请求预算、锁、孤儿收敛和 exact resume 有源码与 57 项 import 测试；真实本轮导入未运行",
     statusTone: "mixed",
     value: "网络或解析中途失败时，已取得的原始证据仍可核对；恢复不会重新下载完成页面，也不会误选另一批文件。",
-    why: "目录里有文件不等于导入完成。若恢复逻辑按时间猜最近目录、把缺页当零或忽略分页 token 循环，后续统计会把不完整证据包装成完整趋势。",
+    why: "目录里有文件不等于导入完成。若恢复逻辑按时间猜最近目录、把缺页当零或忽略分页 token 循环，后续统计会把不完整证据冒充为完整趋势。",
     example: "一次导入在第几个日期窗口中断。失败 receipt 指向唯一 failed manifest。下次先验证计划、锁、已完成页面、孤儿文件、请求预算和清单哈希；全部匹配才接续下一页，否则在刷新 token 前停止。",
     result: "得到一份可验证的 raw evidence（原始证据）闭包：每页字节、字段、日期、页码、记录数与 SHA-256 可回读，complete / failed / running 状态不会混用。",
     readerStates: {

@@ -86,7 +86,7 @@ export const project = {
     { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
     { title: "注意力质量高于上下文数量", detail: "先保住目标、边界、最新证据、未知和验收，再读取会改变判断的细节；既不漏掉关键事实，也不靠堆文件和日志制造理解假象。" },
     { title: "普通本地工作不虚构对抗者", detail: "本机现有用户、文件、进程、软件和私人账号空间默认可信；除非用户明确提出安全任务，不额外制造攻击模型、审计链或守护服务，正确性、可靠性和恢复仍单独做好。" },
-    { title: "私人问题直接进入对应小入口", detail: "健康、诉讼、微信、材料、录音和扫描分别走自己的边界，不恢复中央个人画像或默认全景上下文。" }
+    { title: "私人问题直接进入对应小入口", detail: "健康、私人事务文书、微信、材料、录音和扫描分别走自己的边界，不恢复中央个人画像或默认全景上下文。" }
   ],
   responsibilities: [
     "定义跨项目适用的 Agent 行为与指令优先级",
@@ -626,7 +626,7 @@ export const rulesSnapshot = {
         "terminal/archived Owner 怎样 RecoverRelease 或 RecoverReleaseClaim，以及来源任务何时可逆归档",
         "什么工作直接推进，什么动作需要授权或进入受保护合同",
         "怎样保留已有改动、分层验证并收口个人仓库",
-        "健康、微信、录音、扫描件、秘密和 Vault 应走哪条窄入口"
+        "健康、本人私人事务文书、微信、录音、扫描件、秘密和 Vault 应走哪条窄入口"
       ],
       allowed: ["范围内低风险本机工作直接推进", "E identity 可信时按净收益选择 0–10 个原生代理", "长期明确授权覆盖精确动作且前提成立时真实调用一次", "授权已明确时完成验证、发布和回读", "保留 dirty work 并定向提交"],
       forbidden: ["读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务，或让项目自写 PUBLIC 个人数据限制冒充用户授权", "让项目、Skill 或历史把既有长期授权降为 absent 或要求同轮重述", "把历史报告或记忆当活动权威", "无可信身份时委派", "删掉有用英文来规避中文括注", "用测试或字段冒充产品结果", "恢复已退役中央个人上下文"],
@@ -636,7 +636,7 @@ export const rulesSnapshot = {
         { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "规则目标是 AI 工作台运行根/数据库迁往 E 数据盘、C 盘只留兼容 junction；本页收录的机器现场仍由 C 盘普通目录承载，E 盘正式目标与 CODEX_HOME 尚未生效，任务 temp 已独立进入 E 缓存盘", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
         { title: "模型自治与复杂度", paragraphs: ["模型按照目标、风险、信息增益、可逆性和净收益选方法；原生委派在 E identity 可信后按任务语义选择 Luna/Terra/Sol 与 0–10。"], items: ["english_chinese_gloss：除常见英文缩写和精确标识外，英文自然词或短语首次出现时保留英文并紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界", "长任务保留可重建状态，短任务不制造文档债"] },
         { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。durable grant（耐久授权）不要求同轮重述，但不会覆盖上位 deny、证据、目标或不可逆边界。用户私人账号空间在默认私人且没有 public/share 信号时与本机私密目标等价可信，但信任不产生写授权。"], items: ["长期明确授权在冻结 goal/scope 内跨 root、child、压缩和 successor 持续有效；前提成立须真实调用一次", "实际 unavailable、deny、step_up、needs_evidence、action-time confirmation、error、身份/CAS/target/read-back 失败仍按现场结果处理", "PUBLIC 个人数据唯一 L1–L5 表由授权合同拥有：L1/L2 不受个人数据限制，L3+ 才进入可能敏感审查", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权", "普通非长期或已归档且 clean 的 terminal predecessor 无 residual 用 RecoverRelease；有 residual 用 RecoverReleaseClaim；未归档 long_term_task 只接续或正式退役", "只有真实 threadId 可归档", "E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal", "不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
-        { title: "私人领域与供应", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "新规则原位升级，不堆补丁"] }
+        { title: "私人领域与供应", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、本人私人事务文书、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "新规则原位升级，不堆补丁"] }
       ],
       relation: `它是 ${panelSnapshot.authority.releaseId} 默认入口；其余四份规则分别拥有 E release/重大动作保护、授权、跨控制面取证和能力选择的完整语义。`
     },
@@ -748,7 +748,7 @@ export const rulesSnapshot = {
       purpose: "唯一拥有方法选择、english_chinese_gloss、上下文路由、复杂度治理、动态配置准入、reader routing、原生经济委派和按需插件语义的合同。",
       plainLanguage: "不机械套 Skill（能力入口），不因工具列表短就宣布做不了；有用英文正常保留，除常见缩写与精确标识外首次出现紧跟中文括注。原生委派先验证 model/effort/root 与同一 E release identity，再按任务语义选择 0–10 个 Luna/Terra/Sol 后代；durable grant 已满足用户允许，但不能伪造身份、slot 或真实 tool result。",
       why: "不同任务需要的工具和并行程度不同。机械套同一流程会用错能力、重复安装工具，或开出很多代理却没有人负责最终结果。",
-      example: "你不需要指定 Skill、工具或子代理。只要说“把这些真实截图做成可放大画廊，手机也要流畅，能并行提高质量就并行”，系统会自己选择视觉、浏览器、代码和审计能力；并行工作只提供证据，最终仍由当前任务统一收口。",
+      example: "你不需要指定 Skill、工具或子代理。只要说“把聊天附件、录音、扫描件和合同原件核对后整理成可编辑文书和逐页验收 PDF；不能确认的事实单列”，系统会自己选择原件、转写、识别、文书和 PDF 验收能力，并把未知保留到成品。",
       result: "任务会在可信 E identity 下选择真正有收益的工具、上下文、代理家族和数量；长期授权不因 root/child/successor 或压缩丢失，真实创建能力与 unavailable/failed/dispatch-unconfirmed 仍由一次 tool call 证明。root 始终负责方向、合并和最终验收。",
       readerStates: { pass: "能力身份、授权和净收益明确时，选择对应工具或代理并继续，主任务保留最终责任。", problem: "出现写冲突、资源争用、结果不可独立验收或收益不足时，减少并发、改为串行或由主任务直接完成。", unavailable: "委派身份或目标能力不可用时，只关闭该次委派或能力路线；主任务继续安全工作并报告真实缺口。" },
       scope: ["所有能力选择", "长任务状态重建", "README 与项目规则路由", "动态配置设计", "原生委派和插件缺口"],
