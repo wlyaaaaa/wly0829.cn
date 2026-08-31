@@ -666,8 +666,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 4,
-        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership and the source-backed but separately untested physical A108/OLED wiring-to-rebinding journey",
+        "semantic_revision": 5,
+        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the 8c217ead bounded display-topology/Wallpaper Engine render-rebind recovery chain",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -804,8 +804,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 4,
-        "scope": "curated product overview and five project-defined modules covering the question bank, isolated execution, native_managed/local_async_job/cloud_api_async_job executor identities and lifecycles, deterministic verification, separate current official/external evidence and local Codex measurement lanes, plus model evidence card, benchmark report and comprehensive judgment report delivery without publishing any tested-configuration outcome",
+        "semantic_revision": 5,
+        "scope": "curated product overview and six project-defined modules covering the question bank, isolated execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, isolated 1/10-task quota-cost probes, compatible final selection and reports without publishing any tested-configuration score or rank",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
@@ -826,6 +826,8 @@
         "isolated_execution_and_workspace_containment",
         "identity_evidence_and_deterministic_verification",
         "executor_union_identity_terminal_cleanup_and_authorization",
+        "sol_max_blind_arbitration_inferred_quality_and_evidence_binding",
+        "isolated_quota_cost_probes_and_compatible_final_selection",
         "failure_semantics_and_reproducible_reports",
         "manual_snapshot_boundary"
       ],

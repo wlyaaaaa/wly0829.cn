@@ -775,7 +775,7 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(recoveryText, /每 5 分钟[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*每 5 分钟/);
   assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
   assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
-  assert.equal(timeAuditProject.currentState.observedAt, "2026-08-31T11:18:10Z", "TimeAudit must not invent a newer observation time");
+  assert.equal(timeAuditProject.currentState.observedAt, "2026-08-31T21:45:19Z", "TimeAudit cutoff observation drifted");
 
   for (const [query, href] of [
     ["服务重启后录音任务会自动重跑吗", "/projects/chinese-asr/task-routing"],
@@ -894,7 +894,7 @@ test("non-rule project packages preserve the content contract and enter only the
       modules: cacbModules,
       expectedSlug: "cacb",
       expectedOrder: 7,
-      expectedModules: ["question-bank", "campaign-workspace", "identity-evidence", "deterministic-verification", "failure-reporting"]
+      expectedModules: ["question-bank", "campaign-workspace", "identity-evidence", "deterministic-verification", "blind-quality-review", "failure-reporting"]
     },
     {
       project: pcPanelHubProject,
@@ -1327,7 +1327,7 @@ test("PC Panel Hub registry binds future material refreshes without device-side 
 test("CACB explains the product without publishing tested-configuration output", async () => {
   const publicText = JSON.stringify({ project: cacbProject, modules: cacbModules });
   assertNoCredentialValues(publicText);
-  assert.doesNotMatch(publicText, /排行榜|排名|名次|分数|\bscore\b|ranking|leaderboard|退役|retir/i);
+  assert.doesNotMatch(publicText, /退役|不稳定|retir/i);
   for (const entry of [cacbProject, ...cacbModules]) {
     for (const key of ["testedConfigurations", "testedModels", "rankings", "scores", "comparisons", "leaderboard", "results"]) {
       assert.equal(Object.hasOwn(entry, key), false, `CACB public package exposes forbidden result field: ${key}`);
@@ -1339,7 +1339,7 @@ test("CACB explains the product without publishing tested-configuration output",
   const heroText = cacbProject.heroFacts.map((item) => item.value).join("\n");
   for (const fact of ["47", "25", "59", "59b0b5c", "CI", "lint"]) assert.ok(heroText.includes(fact), `CACB first viewport hides ${fact}`);
   assert.doesNotMatch(publicText, /manual_owner_only|curated_packaging|manual snapshot|人工快照|策展|包装内容/i, "CACB public content must not expose website-maintenance labels");
-  assert.equal(cacbModules.length, 5);
+  assert.equal(cacbModules.length, 6);
   for (const module of cacbModules) assert.match(module.verification.join("\n"), /e6f7581.*历史.*不继承.*当前/, `${module.slug} upgrades historical focused tests to current evidence`);
   assert.match(publicText, /当前提交没有一份绿色 CI/);
   assert.match(publicText, /旧提交的 focused\/full 记录继承为当前可验证/);
@@ -1350,6 +1350,24 @@ test("CACB explains the product without publishing tested-configuration output",
   for (const expected of ["WorkerHandle", "parent/spawn/child", "native_lineage=not_applicable", "Toolkit/AICLI", "LocalGpuBroker", "provider request", "request/stream", "cleanup_unconfirmed", "onboarding gate", "paid-attempt", "fallback=false"]) {
     assert.ok(publicText.includes(expected), `CACB executor union omits: ${expected}`);
   }
+  const blindReview = cacbModules.find((item) => item.slug === "blind-quality-review");
+  const blindText = JSON.stringify(blindReview);
+  for (const expected of [
+    "Sol Max 盲审与仲裁强审", "fresh gpt-5.6-sol / max", "推定能力", "推定质量", "可反驳", "six-dimension rubric",
+    "task correctness", "requirement coverage", "evidence quality", "robustness", "safety and scope", "clarity and maintainability",
+    "candidate artifact", "case material", "blinded bundle", "host turn context", "judge receipt", "single-sample judgment"
+  ]) assert.ok(blindText.includes(expected), `CACB blind arbitration omits: ${expected}`);
+  for (const hidden of ["participant provenance", "harness", "price", "mechanical score", "ranking", "其他候选"]) {
+    assert.ok(blindText.includes(hidden), `CACB blind review does not state hidden context: ${hidden}`);
+  }
+  assert.match(blindText, /不能.*identity.*validity.*eligibility.*PASS\/FAIL.*safety|无权覆盖.*identity.*eligibility.*PASS\/FAIL.*safety/s);
+  assert.match(blindText, /机械.*强审.*不.*平均|不做算术平均/);
+  assert.match(blindText, /硬门.*不变|hard gate.*保持/);
+  assert.match(blindText, /分歧.*pending|pending.*分歧/);
+  assert.match(publicText, /1 题.*10 题|1\/10 题/);
+  assert.match(publicText, /固定.*namespace[\s\S]{0,160}(?:第二阶段|第二条消息).*(?:清理|删除)/);
+  assert.match(publicText, /不.*formal ledger.*score.*ranking|永不进入.*ledger.*score.*ranking/);
+  assert.match(publicText, /不.*公开.*候选.*(?:分数|score).*(?:名次|rank)|不展示任何受测配置.*(?:score|rank)/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "cacb");
@@ -1359,7 +1377,7 @@ test("CACB explains the product without publishing tested-configuration output",
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.match(registration.ai_refresh.scope, /native_managed\/local_async_job\/cloud_api_async_job/);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
 });
@@ -1424,9 +1442,10 @@ test("TimeAudit exposes Windows clipboard history as an independent private side
   assert.match(text, /PersonalOS\.ClipboardHistory\.RestoreV1[\s\S]{0,220}不表示[\s\S]{0,80}当前产品或消费者/);
   assert.ok(timeAuditProject.usageExamples.some((item) => item.moduleSlug === "clipboard-history" && item.ask.includes("复制")));
   const currentText = JSON.stringify(timeAuditProject.currentState);
-  for (const expected of ["44a842e", "6 个", "dirty", "未发布", "未激活", "18085", "LibreHardwareMonitor", "telemetry_watchdog"]) {
-    assert.ok(currentText.includes(expected), `TimeAudit released/candidate split omits: ${expected}`);
+  for (const expected of ["001cee0", "clean", "18085", "LibreHardwareMonitor", "telemetry_watchdog", "182 passed", "21/21", "10/10"]) {
+    assert.ok(currentText.includes(expected), `TimeAudit cutoff/runtime split omits: ${expected}`);
   }
+  assert.doesNotMatch(currentText, /6 个 tracked dirty|未发布.*未激活|44a842e.*当前.*基线/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "timeaudit");
   assert.equal(registration.ai_refresh.semantic_revision, 4);
@@ -1442,10 +1461,10 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
     { project: cacbProject, modules: cacbModules },
     { project: learningProject, modules: learningModules }
   ];
-  assert.equal(packages.flatMap((entry) => entry.modules).length, 16);
+  assert.equal(packages.flatMap((entry) => entry.modules).length, 17);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" || project.slug === "cacb" ? 4 : 3;
+    const expectedRevision = project.slug === "pc-panel-hub" || project.slug === "cacb" ? 5 : 3;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -1911,7 +1930,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 4);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 5);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);

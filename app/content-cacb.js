@@ -281,7 +281,7 @@ export const cacbModules = [
     result: "得到带任务家族、输入、约束、验收属性、版本和 provenance（来源）的案例合同。",
     readerStates: {
       pass: "可见信息足够、隐藏检查实现无关且版本冻结时，案例进入问题库。",
-      problem: "任务含作者私有知识、只能匹配一种写法或验证不稳定时，案例返回设计审查。",
+      problem: "任务含作者私有知识、只能匹配一种写法或验证无法一致复现时，案例返回设计审查。",
       unavailable: "缺 fixture、schema 或 verifier 时不创建正式 campaign。"
     },
     decisionImpact: [
@@ -340,12 +340,12 @@ export const cacbModules = [
     teaser: "把整组案例、fixture、顺序和验证版本冻结，再让原生受管、本地异步或云端 API 异步路线在唯一 workspace 中执行；三者共享任务语义，但提交、轮询、恢复和清理证据各自闭合。若目的只是先观察宿主额度、费用与耗时，则改走独立 1 题/10 题探针，不创建 formal sample（正式样本）。",
     status: "campaign / workspace / archive 与三类 executor 合同已有源码；当前提交的 CI lint 门仍未闭合，本页未启动任何路线",
     statusTone: "pass",
-    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "旧产物污染新结果", "十个案例连续episode", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑", "一题额度费用耗时短探针", "十题额度费用耗时全探针", "model quota probe namespace", "探针执行后为什么还要第二条删除", "探针失败后怎么清理"],
+    searchAliases: ["每次测试怎么用干净工作区", "中断后能不能换workspace继续", "原生任务怎样提交和等待", "本地模型GPU lease怎样释放", "云API request stream怎样关闭", "cleanup unconfirmed为什么不能重跑", "一题或十题额度费用探针", "探针执行后为什么还要第二条删除"],
     searchProjection: {
       intents: ["为一次评测冻结任务并创建独立工作区", "在三类执行路线中提交并有界读取状态", "判断中断后能否精确恢复", "确认取消超时和清理真正闭合", "防止旧产物或不同尝试拼接", "理解本地GPU与云端请求的资源流", "选择一题或十题额度费用耗时探针", "按第二阶段只清理固定探针命名空间"],
-      entities: ["campaign", "workspace", "episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed", "quota/cost probe", ".model-quota-probe-short-v1", ".model-quota-probe-full-v1"],
-      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "wait只是有界状态读取而不是自动判超时", "同一episode的案例按固定顺序连续完成", "本地终态绑定进程树与GPU lease清理", "云端终态绑定request stream和provider job关闭", "临时workspace只有归档校验后才能释放", "短探针固定1题而全探针固定10题", "探针只观察宿主UI且不进入正式账本分数排名", "第二条消息只删除对应固定namespace"],
-      failureRecovery: ["输出越界时启动前拒绝执行", "案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地进程或GPU lease未清理时保持不可用", "云端远程关闭不可观察时标记cleanup_unconfirmed并阻断替代提交", "探针namespace已存在时立即停止不覆盖", "短探针一次最小修正后仍失败就停止并保留目录", "全探针单题失败保留真实失败并继续其余题", "观察完成后用第二条消息精确删除目录再复用"]
+      entities: ["campaign", "workspace / episode", "WorkerHandle", "native_managed", "local_async_job", "cloud_api_async_job", "cleanup_unconfirmed", "quota/cost probe namespace"],
+      relations: ["每次执行只属于一个唯一workspace", "start返回的handle同时绑定task和run", "同一episode的案例按固定顺序连续完成", "本地终态绑定进程树与GPU lease清理", "云端终态绑定request stream和provider job关闭", "短探针固定1题而全探针固定10题", "探针只观察宿主UI且不进入正式账本分数排名", "第二条消息只删除对应固定namespace"],
+      failureRecovery: ["案例中断时整次episode保持不完整", "能精确恢复时复用同一session或job和workspace", "无法精确恢复时创建新的完整尝试", "本地进程或GPU lease未清理时保持不可用", "云端远程关闭不可观察时标记cleanup_unconfirmed", "探针namespace已存在时立即停止不覆盖", "短探针一次最小修正后仍失败就停止并保留目录", "观察完成后用第二条消息精确删除目录再复用"]
     },
     value: "我能用同一冻结任务比较三种真实执行路线，又清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净；如果还不需要正式样本，也能先用固定的一题或十题任务观察宿主额度、费用与耗时，而且不会把这次观察污染进 benchmark。",
     why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。探针若复用旧目录、写正式回执或自动清理更大范围，同样会把一次轻量观察伪装成可比较测量。",
@@ -575,7 +575,7 @@ export const cacbModules = [
     searchAliases: ["回答说完成为什么还没结果", "怎样验证真实产物", "隐藏检查会不会限定写法", "越界修改怎么发现", "谁决定样本identity validity eligibility", "谁拥有PASS FAIL和safety gate", "盲审能不能推翻确定性验证", "机械分怎样从sealed replay重算"],
     searchProjection: {
       intents: ["验证Agent是否真的交付了可运行产物", "决定样本身份有效性资格和硬门", "检查候选是否越过允许文件范围", "用隐藏属性避免只针对公开测试", "区分确定性PASS FAIL与后续推定质量证据", "从sealed archive重算机械证据"],
-      entities: ["deterministic verifier", "identity", "validity", "eligibility", "hard gate", "hidden property", "sandbox", "artifact", "scope audit", "sealed replay", "mechanical lane"],
+      entities: ["deterministic verifier", "identity / validity / eligibility", "hard gate / safety gate", "hidden property / sandbox", "artifact / scope audit", "sealed replay", "mechanical lane", "PASS / FAIL"],
       relations: ["验证器运行在参与者之外", "身份资格硬边界和PASS FAIL由根侧确定性门拥有", "公开测试通过仍要检查隐藏属性和修改范围", "最终回答与进程退出不能替代产物验证", "盲质量复核只接收已经过门的样本且不能反向改门", "机械证据必须从封存归档和冻结verifier重算而不能手填"],
       failureRecovery: ["verifier指纹漂移时进入新版本", "候选访问隐藏材料时标记污染", "验证超时后终止子进程并保留具体状态", "身份终态或资格缺失时样本不进入盲审", "机械envelope与sealed replay不一致时拒绝评分而不采纳展示数值"]
     },
@@ -657,10 +657,10 @@ export const cacbModules = [
     teaser: "隐藏参与者身份，对已经过硬门的产物做独立六维质量复核。盲审隔离 provenance（参与者来源）、harness（执行环境）、price（价格）、mechanical score（机械分）、rank（名次）和 other candidates（其他候选）；仲裁模型强审则用 fresh exact gpt-5.6-sol / max 做高强度语义复核，产出可引用、可反驳的推定能力/推定质量。",
     status: "单样本 blind bundle、六维 rubric、fresh exact Sol Max host receipt 与 batch binding 已有源码；当前提交 CI 仍停在 lint，本页没有运行或公开任何候选 judgment",
     statusTone: "mixed",
-    searchAliases: ["模型盲评分是怎么做的", "盲质量复核看哪些东西", "盲审推定能力是什么意思", "推定质量证据能不能反驳", "为什么每个样本都要新Sol Max task", "盲审为什么不能看到模型和价格", "六维blind rubric有哪些", "blind bundle和host receipt怎样绑定", "盲审能不能改PASS FAIL", "为什么不公开盲审分数排名"],
+    searchAliases: ["模型盲评分是怎么做的", "盲质量复核看哪些东西", "盲审推定能力是什么意思", "推定质量证据能不能反驳", "为什么每个样本都要新Sol Max task", "盲审为什么不能看到模型和价格", "盲审能不能改PASS FAIL", "为什么不公开盲审分数排名"],
     searchProjection: {
       intents: ["在确定性PASS后独立复核可见产物质量", "从冻结任务和候选artifact形成可反驳推定能力证据", "确认盲审没有参与者或比较上下文泄露", "证明每个样本使用fresh exact Sol Max task", "核对六维判断是否同时引用候选与案例材料", "区分盲质量证据与身份资格PASS FAIL"],
-      entities: ["identity-blind judge", "gpt-5.6-sol", "max", "fresh task", "blinded bundle", "host turn context", "judge receipt", "six-dimension rubric", "presumptive quality evidence", "candidate artifact", "case material"],
+      entities: ["identity-blind judge", "gpt-5.6-sol / max", "fresh task", "blinded bundle", "host turn context / judge receipt", "six-dimension rubric", "presumptive quality evidence", "candidate artifact / case material"],
       relations: ["每个eligible样本独占一个fresh Sol Max task和session", "judge只看冻结任务验收工具边界正确性依据和候选artifact", "参与者provenance harness AA price mechanical points ranking和其他候选被隔离", "六个维度都必须同时引用candidate artifact和case material", "bundle host receipt output schema judgment和raw lanes由hash绑定", "盲审形成可反驳推定质量证据但不能改identity validity eligibility PASS FAIL safety", "最终选择只接受完整同代盲审集合"],
       failureRecovery: ["样本未过deterministic gate时不创建formal blind review", "实际model或effort不是exact Sol Max时拒绝receipt", "task session receipt或turn context复用时拒绝整个assignment", "judge可见材料泄露provenance或比较字段时失败关闭", "dimension缺候选或案例证据引用时拒绝judgment", "bundle artifact case material或receipt hash漂移时重建新revision而不覆盖旧包", "必需样本盲审不齐时final selection保持pending"]
     },
@@ -758,12 +758,12 @@ export const cacbModules = [
     teaser: "把能力、任务、执行环境、机械验证、Sol Max 仲裁强审和证据问题分开，先保存可重放 raw lanes，再验证同代兼容性。机械与强审冲突不平均：硬门保持，质量分歧或 pending 显式保留；公开页不展示候选分数、名次或排行榜。",
     status: "失败语义、归档、机械 envelope、blind judgment 与 final-selection compatibility gate 已有源码；当前 CI lint 未闭合，完整报告链仍有已披露缺口",
     statusTone: "mixed",
-    searchAliases: ["官方价格和本地实测成本为什么分开", "缺失外部证据能不能填0", "基准报告和综合判断报告有什么区别", "资格能力经济性怎样形成路由建议", "失败是模型还是环境", "机械分盲审最终选择怎么分工", "机械与Sol Max强审冲突怎么办", "为什么冲突不平均成总分", "盲审缺一份为什么最终选择pending", "最终选择怎样防best of", "为什么公开页没有候选排行榜", "额度费用探针失败进不进报告"],
+    searchAliases: ["官方价格和本地实测成本为什么分开", "基准报告和综合判断报告有什么区别", "失败是模型还是环境", "机械分盲审最终选择怎么分工", "机械与Sol Max强审冲突怎么办", "盲审缺一份为什么最终选择pending", "为什么公开页没有候选排行榜", "额度费用探针失败进不进报告"],
     searchProjection: {
       intents: ["区分能力任务执行环境盲审和证据失败", "理解机械证据与推定质量证据的职责", "验证最终选择是否使用完整同代样本", "保留机械与仲裁强审的质量分歧", "分别生成模型证据卡与本地基准报告", "按资格能力经济性形成范围内路由建议", "处理价格外部证据或blind lane缺失", "确保公开说明没有候选分数名次排行榜"],
-      entities: ["failure plane", "mechanical lane", "Sol Max arbitration review", "raw judgment", "final selection", "contract generation", "pending", "model evidence card", "benchmark report", "comprehensive judgment report", "qualification", "economics", "Unknown"],
-      relations: ["deterministic verifier拥有identity eligibility hard gate和PASS FAIL", "机械lane从sealed replay重算", "Sol Max强审提供可反驳推定能力推定质量", "机械与强审冲突不平均且不改硬门", "最终选择要求完整同代bundle rubric和唯一task session", "部分样本或缺blind judgment时整代pending不排名", "quota cost probe永不进入formal ledger或report progress", "模型证据卡回答精确身份和当前官方外证", "基准报告回答本地真实任务表现", "综合判断按资格到能力到经济性引用两条车道", "缺失证据保持Unknown而不归零", "公开页面只讲方法边界不展示候选分数名次leaderboard"],
-      failureRecovery: ["基础设施失败时不形成能力结论", "机械envelope不能重算时拒绝展示数值", "blind judgment缺证据或hash不符时只关闭盲审lane", "机械与强审分歧时保留hard gate和quality disagreement等待同代复核", "required sample缺失时final selection保持pending", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "任务缺陷进入新版本后重新完整评测", "探针失败只保留临时诊断并按第二阶段清理"]
+      entities: ["failure plane", "mechanical lane", "Sol Max arbitration review", "raw judgment / final selection", "contract generation / pending", "model evidence card", "benchmark / comprehensive report", "qualification / economics / Unknown"],
+      relations: ["deterministic verifier拥有identity eligibility hard gate和PASS FAIL", "机械lane从sealed replay重算", "Sol Max强审提供可反驳推定能力推定质量", "机械与强审冲突不平均且不改硬门", "最终选择要求完整同代bundle rubric和唯一task session", "缺blind judgment时整代pending不排名", "quota cost probe永不进入formal ledger或report progress", "公开页面不展示候选分数名次leaderboard"],
+      failureRecovery: ["基础设施失败时不形成能力结论", "机械envelope不能重算时拒绝展示数值", "blind judgment缺证据或hash不符时只关闭盲审lane", "机械与强审分歧时保留hard gate等待同代复核", "required sample缺失时final selection保持pending", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "探针失败只保留临时诊断并按第二阶段清理"]
     },
     value: "我不仅知道一次执行哪里出了问题，还能区分三种不同问题：确定性机械证据说明冻结任务与硬门是否成立，Sol Max 仲裁强审说明可见产物在六个质量维度上可怎样推定，final selection 说明这些证据能否在同一代里共同被采用。这样既不会只剩一个红灯，也不会把主观质量意见包装成真理。",
     why: "把 timeout、权限、身份缺失、题目缺陷和候选代码错误都写成“能力失败”，会污染判断；把机械分和强审意见平均成一个总数，则会掩盖 hard gate、证据冲突与合同代差异。最终选择必须先证明来源、版本、代表规则和完整覆盖，不能因为想要排行榜就拼 partial 或挑最好的一次。",
