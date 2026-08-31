@@ -38,16 +38,16 @@ export const codexRemoteProject = {
   cardStatus: "历史真实链路与产品证据已形成；当前 Windows 接管方案仍待可重复无人值守验收",
   cardStatusTone: "pass",
   ...codexRemoteSnapshot,
-  searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote"],
-  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是吴乐阳个人开发和维护的非官方 companion（配套工具），不是厂商产品，也没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
-  summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令和文件改动，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；也能在明确确认下浏览和操作自己的文件。它不传输桌面画面，也不另开一份聊天。",
-  why: "长任务可能正在电脑上运行、等待审批或已经改了文件。另开一个手机聊天只能复制文字，拿不到同一个任务的真实轮次、工具、审批和文件状态。Codex Remote 把移动端设计成“查看—审批—引导—排队—回读”的控制面，并在身份、连接或结果不清时拒绝动作。",
-  plainExample: "例如电脑上的任务正在改项目并等待一条命令审批。我在手机上先看命令会影响什么、刚改了哪些文件，再选择这次真实提供的审批选项并补充一个条件；如果当前回复已经快结束，就把下一件事放进可编辑队列。网络中断时先回读状态，不会自动重复发送。",
-  result: "我得到一个移动优先但仍以 Desktop 为同一任务事实面的控制台：任务、轮次、公开进展、工具、文件、审批、子智能体、模型、上下文和额度保持可核对；文件工作台另行提供有确认边界的所有者文件操作。无法确认 Desktop 订阅、权限或请求身份时，产品明确拒绝，不猜造成功。",
+  searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote", "Codex Remote怎么更新回滚", "手机查看子智能体"],
+  repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是社区构建的非官方 companion（配套工具），没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前在线状态没有在本轮验证，因此页面不宣称在线。",
+  summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令、文件改动和父子智能体，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；自身更新则用可回退运行代保护正在工作的 Desktop 链。它不传输桌面画面，也不另开一份聊天。",
+  why: "长任务可能正在电脑上运行、等待审批、派出子智能体或已经改了文件。另开一个手机聊天只能复制文字，拿不到同一个任务的真实轮次、父子层级、工具、审批和文件状态；粗暴更新又可能中断正在工作的 Sidecar。Codex Remote 把移动端设计成“查看—审批—引导—排队—回读”的控制面，并把安装、采用与回滚分开。",
+  plainExample: "例如父任务正在改项目并让两个子智能体分别检查代码和测试。我在手机上先进入子任务核对进展与结果，再返回父任务补充要求；需要更新 Remote 时，先登记新的不可变运行代，兼容的 Web/Sidecar 更新排空已接纳写入后短切换，失败就恢复旧 Sidecar。网络中断时先回读状态，不会自动重复发送。",
+  result: "我得到一个移动优先但仍以 Desktop 为同一任务事实面的控制台：任务、轮次、公开进展、工具、文件、审批、父子智能体、模型、上下文和额度保持可核对；文件工作台与可回退运行代分别承担所有者文件和产品生命周期。无法确认 Desktop 订阅、父子身份、运行代、权限或请求结果时，产品明确拒绝，不猜造成功。",
   readerStates: {
-    pass: "手机和电脑确认指向同一个任务、同一轮进展和同一份持久记录时，可以继续查看、审批、补充要求或排队下一件事。",
-    problem: "网络抖动、审批缺少可提交选项、队列状态不确定或文件目标冲突时，保留草稿和真实状态，给出精确可恢复动作，不重复提交。",
-    unavailable: "无法确认电脑连接、登录会话、任务身份或文件授权时，只拒绝受影响操作；不启动第二个任务，也不把历史画面冒充当前在线。"
+    pass: "手机和电脑确认指向同一个任务、同一轮进展和同一份持久记录时，可以继续查看父子任务、审批、补充要求或排队下一件事；兼容更新只滚动 Web/Sidecar。",
+    problem: "网络抖动、子智能体历史不完整、审批缺少可提交选项、队列状态不确定或新 Sidecar 启动失败时，保留草稿与真实状态，恢复旧 Sidecar 或给出精确恢复动作。",
+    unavailable: "无法确认电脑连接、登录会话、父子任务身份、运行代或文件授权时，只拒绝受影响操作；不启动第二个任务、不隐式交接 Broker/app-server，也不把历史画面冒充当前在线。"
   },
   productPrinciples: [
     { title: "两端共享同一个任务事实", detail: "手机与 Desktop 使用同一任务和轮次，不复制聊天历史制造看似同步的第二份任务。" },
@@ -58,6 +58,8 @@ export const codexRemoteProject = {
     { title: "项目任务和所有者文件是两条边界", detail: "任务工作区受项目身份约束，文件工作台使用 Windows 所有者能力；两者不能互相冒充权限。" },
     { title: "公网只看到产品接口", detail: "认证、同源和确认边界挡在前面，底层任务协议、回环服务与敏感载荷留在本机。" },
     { title: "结果不清就先回读，不自动重放", detail: "断线、重复提交或状态不确定时保留草稿和幂等身份，先确认权威状态再决定是否继续。" },
+    { title: "子智能体是任务树，不是会消失的通知", detail: "运行、等待、完成和失败都留在父子层级与历史中；手机可进入只读查看，补充要求仍回到可控制的父任务。" },
+    { title: "登记、采用和底层交接必须分开", detail: "新构建先成为可验证、可回退的候选；兼容 Web/Sidecar 才能滚动更新，Broker 或 app-server 变化必须显式 handoff（交接）。" },
     { title: "通用智能来自运行时，Remote 负责同任务控制", detail: "理解、推理、工具和代码执行来自已集成的 AI/智能体运行时；Codex Remote 负责把同一任务、审批、文件和恢复语义带到手机，不冒充基础智能的作者。" }
   ],
   gallery: [
@@ -305,10 +307,12 @@ export const codexRemoteProject = {
   responsibilities: [
     "在手机与 Desktop 之间保持同一任务、同一轮次和同一持久记录，而不是生成第二份聊天",
     "显示 Codex 公开提供的助手正文、推理摘要、工具、命令、文件修改、图片、子智能体、计划和最终回答",
+    "把当前与归档子智能体恢复成可进入的父子任务树，保留运行、等待、完成、失败与历史完整性状态",
     "让用户在手机处理运行时实际提供的审批与结构化问题，并区分当前轮引导、停止和下一轮队列",
     "从当前运行时读取模型、思考等级、速度、权限、审批、上下文和额度，不用写死目录冒充当前状态",
     "提供注册项目、隔离无项目任务和独立所有者文件工作台，并为覆盖、永久删除等动作保留确认边界",
     "用认证 Sidecar、回环 Broker 和单一 app-server 保持公网入口与底层协议隔离",
+    "把构建安装成内容寻址的不可变运行代，以原子 current/previous 指针、排空切换和精确旧 Sidecar 恢复管理更新",
     "在断线、重复提交、订阅缺失和身份不清时失败关闭，保留草稿和可恢复状态"
   ],
   exclusions: [
@@ -316,6 +320,8 @@ export const codexRemoteProject = {
     "不显示模型隐藏的完整思维链，只展示运行时公开提供的 summary（摘要）与工具活动",
     "不在同一轮生成中热切换模型、思考等级、速度或权限；设置只影响下一轮",
     "不把 Web 的下一轮队列冒充 Desktop 原生未发送草稿；真正派发后才进入 Desktop 持久记录",
+    "不让手机直接控制只读子智能体；补充要求必须回到仍可控制的父任务，由父智能体转交",
+    "不把登记候选写成已经采用，不把兼容 Web/Sidecar 更新扩大成 Broker、app-server 或 Desktop 的隐式重启",
     "不猜造审批选项、模型目录、额度或当前在线状态，缺失时保持 Unknown（未验证）",
     "不公开密码、Cookie、token、认证数据库、私有 tailnet 地址或逐值判断后确属敏感的三级以上内容"
   ],
@@ -327,19 +333,26 @@ export const codexRemoteProject = {
     { term: "Work Log（公开工作记录）", meaning: "按顺序呈现公开进展、工具、命令、文件和子智能体活动，不含隐藏推理。" },
     { term: "steer（当前轮引导）", meaning: "在当前回复仍运行时追加要求；它不同于排队下一轮。" },
     { term: "outbox（加密待发队列）", meaning: "Sidecar 保存尚未派发的下一轮消息；内容以当前 Windows 用户 DPAPI 密文落盘。" },
+    { term: "runtime generation（运行代）", meaning: "由运行文件内容和兼容身份共同计算 SHA-256 的不可变目录；同样内容复用同一代。" },
+    { term: "current / previous pointer（当前 / 上一运行代指针）", meaning: "原子记录待采用版本、上一可回退版本及两个 manifest 哈希，不等于当前进程已经切换。" },
+    { term: "drain（排空）", meaning: "更新前拒绝新写入与下一轮派发，等待已经接纳的活动结束，再签发绑定同一 update id 的回执。" },
+    { term: "subagent history integrity（子智能体历史完整性）", meaning: "分别说明当前与归档记录是否读尽、部分、未知或失败，避免把短列表冒充全部历史。" },
     { term: "SSE（服务器事件流）", meaning: "浏览器接收实时任务更新的单向事件通道；断线后按事件序号续接或重读快照。" },
     { term: "CSRF（跨站请求伪造防护）", meaning: "写请求必须同时满足登录、可信来源和一次性校验，避免第三方网页借用会话操作电脑。" },
     { term: "opaque grant（不透明短时授权）", meaning: "任务正文中的本地绝对路径换成短时文件引用，避免形成可复用公网裸链接。" },
     { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" }
   ],
   operatingFlow: [
+    { title: "安装先生成可回退运行代", detail: "构建与检查通过后，注册器把 Web、Sidecar、Broker 和 Windows 脚本复制到内容寻址目录，验证 manifest，再原子记录 current/previous；登记本身不打开 Remote。" },
     { title: "浏览器先通过认证入口", detail: "手机只访问 HTTPS 反向代理后的 Sidecar；登录、会话、Origin、CSRF 与限速在产品 API 之前生效。" },
     { title: "选择同一个任务或创建有界任务", detail: "已有任务按 threadId 恢复；新任务只能使用本机登记项目或隔离无项目根。" },
     { title: "Broker 完成 Desktop 订阅屏障", detail: "需要新首轮时，先让任务壳持久化并确认 Desktop 已 resume；没有 Desktop 证据就拒绝 turn/start。" },
     { title: "实时投影公开任务事件", detail: "Sidecar 将正文、公开摘要、工具、文件、审批、计划和子智能体投影为浏览器能读的产品状态。" },
+    { title: "进入子任务后仍沿父子关系返回", detail: "手机从父任务打开缩进列表，进入任一仍有记录的子任务只读查看消息、工具和文件；补充要求回到父任务转交，历史不完整时明确提示。" },
     { title: "用户选择当前轮或下一轮动作", detail: "steer、interrupt、审批是当前实时动作；队列、模型和模式属于下一轮，界面明确分开。" },
     { title: "文件动作逐步确认并回读", detail: "浏览、预览、上传、编辑、移动和删除都按不透明根与相对路径执行；覆盖、永久删除需要明确选择。" },
     { title: "断线只恢复可证明的部分", detail: "SSE 用事件 ID 重连，草稿和加密队列保持；实时动作缺连接时失败关闭，不静默重放。" },
+    { title: "更新只切换兼容的公网层", detail: "显式租约内先排空已接纳写入，再短切换 Web/Sidecar；浏览器以同一幂等键续接，新 Sidecar 失败则恢复旧 Sidecar。Broker 或 app-server 变化必须另走显式交接。" },
     { title: "人工取证后更新网页", detail: "只有本人明确要求时，网页才重新读取 PUBLIC Git、版本、测试和获准图片；不建立在线探针或自动刷新。" }
   ],
   components: [
@@ -349,12 +362,16 @@ export const codexRemoteProject = {
     { name: "单一 app-server", responsibility: "提供任务、轮次、模型、审批、额度和事件协议。", implementation: "由 Broker 独占；原始 WebSocket 不监听 LAN 或公网。" },
     { name: "Domain projection（领域投影）", responsibility: "把协议事件变成稳定的任务、消息、工具、文件和审批产品模型。", implementation: "浏览器只依赖项目合同，不直接依赖底层 app-server 类型；原始 reasoning 被丢弃。" },
     { name: "Turn queue（下一轮队列）", responsibility: "保存、排序、编辑和派发尚未发送的下一轮要求。", implementation: "稳定消息 id、revision、串行 claim 与幂等键；不确定状态保持 ambiguous 而不重复发。" },
+    { name: "Subagent navigation（子智能体导航）", responsibility: "恢复父子层级、运行状态、当前与归档历史，并提供进入子任务与返回父任务的只读旅程。", implementation: "domain 合并 current/archived 与任务内活动，计算 depth；Web 显示完整性元数据、分页和失败提示。" },
+    { name: "Immutable runtime manager（不可变运行代管理）", responsibility: "安装、选择、验证与回退 Remote 自身版本。", implementation: "RuntimeVersions/<content-sha256> + runtime-manifest.json + 原子 runtime-current.json；稳定 dispatcher 每次先验证再调用。" },
+    { name: "Supervisor maintenance drain（监督器维护排空）", responsibility: "在运行中任务不动的前提下切换兼容 Web/Sidecar。", implementation: "受保护维护 capability、绑定 update id 的 drain receipt、owner/compatibility 复核与旧 Sidecar 补偿启动。" },
     { name: "Owner file manager（所有者文件工作台）", responsibility: "按当前 Windows 身份浏览和操作检测到的磁盘。", implementation: "不透明 root id + 卷内相对路径；拒绝 traversal、UNC、设备路径、ADS 与未确认覆盖。" },
     { name: "Security package（安全组件）", responsibility: "提供密码哈希、会话、限速、Origin/CSRF、下载与 Windows 路径检查。", implementation: "Secure/HttpOnly/SameSite=Strict Cookie；写入需认证和同源证据。" },
     { name: "PUBLIC demo fixtures（公开演示材料）", responsibility: "用合成任务展示界面而不复制真实主机、对话、路径或凭据。", implementation: "静态 demo.ts 与浏览器验收共享类型合同；截图不接触 Remote runtime。" }
   ],
   usageExamples: [
     { ask: "电脑上的任务还在做什么？", effect: "打开电脑上的同一任务，查看当前回复、工作记录、工具、文件修改、计划和子智能体状态。", moduleSlug: "same-task-control" },
+    { ask: "两个子智能体分别做到哪一步，完成的那个还能看吗？", effect: "打开父任务的子智能体树，按运行中、等待、已完成或失败查看当前与归档记录；进入子任务只读核对消息、工具和文件，再返回父任务补充要求。", moduleSlug: "subagent-navigation" },
     { ask: "给正在生成的回复补一句要求。", effect: "先核对同一 threadId、active turnId、连接和 availableActions，再把文字作为 steer 送入当前轮；当前轮不再接受时保留文字，不假装已送达。", moduleSlug: "conversation-control" },
     { ask: "把这条要求放到下一轮，稍后再改顺序。", effect: "先把正文和下一轮设置加密持久化，再返回队列 revision；之后可按最新 revision 编辑、排序或删除。", moduleSlug: "conversation-control" },
     { ask: "这个命令能不能在手机批准？", effect: "只显示这次审批真正可选的决定；没有可提交选项时说明阻塞，不猜按钮。", moduleSlug: "models-approvals-context" },
@@ -362,12 +379,13 @@ export const codexRemoteProject = {
     { ask: "手机查看刚才改了哪些文件。", effect: "从工作记录或文件变更打开 diff、最新文件和有界预览，必要时下载。", moduleSlug: "projects-files-input" },
     { ask: "从手机给任务添加电脑里的文件。", effect: "使用对话工具选择所有者文件引用；绝对路径换成短时授权，不形成公网裸链接。", moduleSlug: "projects-files-input" },
     { ask: "手机为什么能看到 Desktop 的实时进展？", effect: "沿 Browser、Sidecar、loopback Broker 到单一 app-server 解释共享 thread、订阅和 SSE 恢复，不把它说成远程桌面。", moduleSlug: "shared-realtime-architecture" },
+    { ask: "怎样更新 Codex Remote，又不打断电脑上正在跑的任务？", effect: "先构建、检查并登记新的不可变运行代；兼容时排空并只滚动 Web/Sidecar，失败恢复旧 Sidecar。若 Broker/app-server 变化，则停止自动采用并要求显式交接。", moduleSlug: "installation-update-rollback" },
     { ask: "公网入口会不会直接暴露电脑文件和 app-server？", effect: "核对登录、同源、CSRF、限速、不透明文件授权与确认边界；底层协议只留在本机回环。", moduleSlug: "security-public-access" },
     { ask: "网页断线后会不会重复发送？", effect: "用 clientUserMessageId 与 app-server 权威任务快照对账；结果不明时标记 ambiguous 并停止自动重发。", moduleSlug: "conversation-control" },
     { ask: "Codex Remote 以前跑通过，能说明现在在线吗？", effect: "把 release、源码测试、历史真实链路和当前 Windows 接管验收分层；没有本轮运行态证据就不声明在线。", moduleSlug: "versions-evidence" }
   ],
   evidenceLayers: [
-    { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动或在线。" },
+    { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、子智能体历史、不可变运行代、更新回滚、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动、成功更新或在线。" },
     { layer: "v0.1.5 release tests（正式版本测试）", proves: "c3a07719 记录 1771 项测试、public-safety 与 Chromium 六视口验收通过。", doesNotProve: "当前 main、当前 Desktop 或任意网络长期稳定。" },
     { layer: "Current main CI（当前源码持续集成）", proves: "94f1cfa 的最新公开 CI run 31145586404 为 failure。", doesNotProve: "v0.1.5 的正式版本证据失效，或当前运行时在线/离线。" },
     { layer: "Historical real E2E（历史真实端到端）", proves: "真实手机、双 Web 与 Desktop 曾共享任务/轮次并走通审批、文件、子智能体、引导、队列、停止和恢复。", doesNotProve: "本轮当前在线或所有新版本继续兼容。" },
@@ -378,13 +396,14 @@ export const codexRemoteProject = {
   evolution: [
     { date: "2026-07-25—07-27", commit: "ed801f5–352e14d", result: "形成同一任务、手机控制、公开任务列表、审批、队列和 v0.1.0/v0.1.1 产品基线。" },
     { date: "2026-07-31—08-01", commit: "b6988c5–4ef151d", result: "补齐长对话、steer/interrupt、DPAPI 持久 FIFO 队列、修订号编辑排序删除、发送对账、Work Log、动态审批、附件、目标和所有者文件能力。" },
-    { date: "2026-08-02", commit: "df9ff3c–c3a0771", result: "完成 v0.1.3—v0.1.5 的移动体验、真实状态呈现、响应式验收和公开安全边界。" },
-    { date: "2026-08-02—08-06", commit: "e7949b6–94f1cfa", result: "继续收紧共享所有权、端口、交接与证据边界；公开 main 保留后续源码，正式发布身份仍以 v0.1.5 为准，当前 Windows 接管方案重新启用前还需隔离完成可重复无人值守验收。" }
+    { date: "2026-08-02", commit: "df9ff3c–c3a0771", result: "完成 v0.1.3—v0.1.5 的移动体验、父子智能体查看、响应式验收与公开安全边界，并让兼容 Web/Sidecar 在活动任务期间经排空和补偿回滚有界更新。" },
+    { date: "2026-08-02—08-06", commit: "e7949b6–94f1cfa", result: "继续收紧共享所有权、内容寻址运行代、current/previous 指针、历史完整性、端口与显式交接边界；公开 main 保留后续源码，正式发布身份仍以 v0.1.5 为准，当前 Windows 接管方案重新启用前还需隔离完成可重复无人值守验收。" }
   ],
   operationalEntrypoints: [
     { name: "回读 PUBLIC refs", command: "git ls-remote --heads --tags https://github.com/wlyaaaaa/codex-local-remote.git", purpose: "只读确认 main、v0.1.5 和 tag 提交；不会触碰 Remote runtime。" },
     { name: "查看产品边界", command: "Get-Content .\\docs\\feature-matrix.md", purpose: "读取注册项目、无项目任务、审批、队列、文件和失败行为的当前源码合同。" },
     { name: "查看共享架构", command: "Get-Content .\\docs\\architecture.md", purpose: "读取 Browser、Sidecar、Broker、单一 app-server、SSE 与安全边界。" },
+    { name: "查看安装更新旅程", command: "Get-Content .\\docs\\quickstart.md", purpose: "读取构建、登记、显式 Open、兼容滚动更新、Status 与待采用版本回滚的人类入口。" },
     { name: "SOURCE 静态验收", command: "pnpm check", purpose: "运行格式、lint、typecheck、单测、构建和公开安全检查；它只产生源码证据，不代表当前在线。" },
     { name: "合成浏览器验收", command: "pnpm test:e2e", purpose: "使用 SharedRuntime 合成数据验证六个 viewport；不会启动真实 Desktop、Broker 或 Sidecar。" }
   ]
@@ -465,7 +484,91 @@ export const codexRemoteModules = [
       "历史真实验收确认手机创建的任务出现在 Desktop，并保持相同 thread/turn。",
       "本轮只读审查未调用 Remote runtime，因此当前在线保持未验证。"
     ],
-    relation: "它是对话控制、审批、文件、实时架构与安全模块的身份基础：只有先证明手机和 Desktop 指向同一任务，后续操作才有明确对象。"
+    relation: "它是对话控制、子智能体导航、审批、文件、实时架构与安全模块的身份基础：只有先证明手机和 Desktop 指向同一任务，后续操作和父子关系才有明确对象。"
+  },
+  {
+    slug: "subagent-navigation",
+    shortTitle: "子智能体导航",
+    title: "手机怎样进入父子任务、保留完整历史，再回到父任务继续",
+    searchAliases: ["手机查看Codex子智能体", "进入子任务再返回父任务", "已完成子智能体还在吗", "子智能体历史是否完整", "子任务为什么只能读", "子智能体断线后能不能操作"],
+    searchProjection: {
+      intents: ["从手机查看一个父任务派出的全部子智能体", "进入已完成或失败的子任务核对消息工具和文件", "返回父任务并从原阅读位置继续", "在子任务只读或断线时安全补充要求"],
+      entities: ["parentThreadId", "SubagentSummary", "depth", "run state", "current and archived streams", "history integrity", "parent handoff"],
+      relations: ["parentThreadId 与 depth 还原父子层级", "当前与归档流共同保留运行和终态子任务", "子任务详情只读而补充要求经父任务转交", "完整性元数据约束列表能否声称已经读尽"],
+      failureRecovery: ["历史分页未闭合时显示已获取数量而不声称全部", "父级元数据缺失时有界读取祖先并保留未知", "连接或轮次身份不清时隐藏输入转交和停止", "返回父任务后无法证明精确滚动恢复时不把路由成功冒充位置验收"]
+    },
+    teaser: "父子层级、运行中/等待审批/已完成/失败状态和当前/归档历史共同组成任务树；子任务只读，补充要求回到父任务转交。",
+    status: "父子投影、历史完整性、只读子任务和进入/返回旅程有源码与测试；本轮未验证当前在线，也未取得精确父任务滚动位置恢复的独立验收",
+    statusTone: "mixed",
+    value: "我能在手机上知道每个子智能体在做什么、是否等待或失败，并在任务结束后继续查看它的完整公开记录，而不是只看到一条已经消失的活动提示。",
+    why: "长任务会把工作分给多层子智能体。如果页面只显示最新一条活动、只查当前列表或允许手机直接向只读子任务写入，用户既会漏掉已完成结果，也可能把要求送到错误的执行边界。",
+    example: "父任务让一个子智能体检查实现、另一个检查测试。我在手机打开子智能体面板，看到一个运行中、一个已完成；进入已完成项核对消息、工具和文件变更，再返回父任务，把新的要求交给父智能体转发。",
+    result: "得到可进入、可回溯的父子任务树：终态记录保留，历史不完整会明说，子任务没有伪造的直接输入；返回父任务的产品合同包含恢复阅读位置，但精确滚动位置仍按当前证据单列验收。",
+    readerStates: {
+      pass: "父子身份、当前与归档分页及详情读取都闭合时，列表显示层级和状态，可进入任一仍有持久记录的子任务并返回父任务。",
+      problem: "只读到部分历史、祖先缺失或某页失败时，保留已经验证的记录和数量，显示 partial（部分）、unknown（未知）或 failed（失败），继续加载而不抹掉风险。",
+      unavailable: "连接、父任务或轮次身份无法确认时，只允许查看已经载入的内容；不显示直接输入、转交或停止入口，恢复后再从父任务操作。"
+    },
+    decisionImpact: [
+      "已完成子智能体进入归档流，但不会从父任务导航中凭空消失。",
+      "运行中、等待审批、已完成和失败是任务状态，不用颜色或更新时间猜测。",
+      "子任务详情展示消息、公开摘要、工具和文件变更，但不直接获得控制入口。",
+      "转交补充要求的 owner 是仍可控制的父任务，不是手机对子任务的旁路写入。",
+      "只有第一页到末页连续闭合且来源一致时，界面才显示‘已显示全部子智能体’。"
+    ],
+    problem: "解决父子关系被扁平化、终态子任务丢失、短分页冒充完整历史、子任务误开放写入，以及断线时把不可执行按钮继续留在界面。",
+    implementation: [
+      "SubagentSummary 公开 threadId、parentThreadId、depth、state、updatedAt 与 isDirectlyControllable。",
+      "domain service 合并当前与归档 thread/list 流，并从父任务内的 subAgentActivity 递归发现仍有记录的后代。",
+      "缺失祖先用有界并发 thread/read 补齐；calculateDepth 与 isDescendantOf 按 parentThreadId 还原层级并防循环。",
+      "Web 将 idle、running、waiting-for-approval、failed、complete 显示为空闲、运行中、等待审批、失败、已完成。",
+      "X-Subagent-History-Integrity 传递 complete、partial、unknown、failed 以及 current/archived 流状态；后续成功页不能覆盖较早页的风险。",
+      "子任务路由复用完整 ThreadDetail 与持久历史读取，隐藏 composer（输入器）和 Desktop 接入，只显示返回父对话。",
+      "产品设计要求返回父任务时恢复滚动位置；当前源码已有任务内历史锚点保持，但现有子任务 E2E 只验证路由返回，没有单独证明跨父子路由的精确 scroll offset（滚动偏移）。"
+    ],
+    flow: [
+      "父任务页读取子智能体第一页及历史完整性。",
+      "合并 current 与 archived，补齐祖先并计算缩进层级。",
+      "列表按状态显示运行中、等待审批、已完成或失败；有游标时由用户继续加载。",
+      "点开子任务，读取它的消息、公开摘要、工具、文件变更和最终结果。",
+      "子任务保持只读；需要补充要求时点击返回父任务，再由父智能体转交。",
+      "返回父任务时恢复原阅读位置是产品合同；若当前位置证据不足，保持诚实的验收缺口。",
+      "断线或身份不明时继续显示已载入记录，但禁用会产生远端影响的入口。"
+    ],
+    concepts: [
+      { term: "parentThreadId（父任务标识）", explanation: "把一个任务连接到直接父任务；沿链可计算多层深度。" },
+      { term: "history integrity（历史完整性）", explanation: "说明当前看到的是全部、部分、未知还是读取失败，不用短列表猜测完整。" },
+      { term: "archived stream（归档流）", explanation: "承载已经归档的终态子任务，与当前流合并后仍可导航。" },
+      { term: "read-only handoff（只读转交）", explanation: "子任务本身不接收手机输入；用户返回父任务，由父智能体决定怎样转交。" }
+    ],
+    boundaries: [
+      "不显示隐藏思维链，只展示 Codex 公开的消息、摘要、工具和文件活动。",
+      "isDirectlyControllable 元数据不授权 Web 直接写子任务；当前产品统一回父任务。",
+      "完整性 header 缺失兼容旧 Sidecar，但有下一页时仍不能声称历史完整。",
+      "父任务路由返回与精确滚动位置恢复是两个证据层，前者通过不能替代后者。",
+      "本轮没有访问真实任务树、当前连接或安装中的 Sidecar。"
+    ],
+    failures: [
+      { condition: "current 或 archived 分页仍有下一页", response: "显示已获取数量和‘历史尚未确认完整’，由用户加载下一页。" },
+      { condition: "历史读取失败或被截断", response: "保留已验证记录，维持 failed/partial 风险，不用后来成功页覆盖。" },
+      { condition: "父级记录暂时缺失", response: "有界读取祖先；仍无法确认时保持未知，不把子任务挂到猜测的父级。" },
+      { condition: "子任务需要新要求", response: "不出现直接输入框；返回仍可控制的父任务后再转交。" },
+      { condition: "浏览器断线或轮次身份不清", response: "记录仍可看，输入、转交与停止入口禁用，恢复连接后重新回读。" },
+      { condition: "返回父任务但位置恢复未独立验收", response: "承认当前证据只证明成功返回，补做精确滚动位置浏览器场景后再升级结论。" }
+    ],
+    sources: [
+      { path: "docs/product-design.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/product-design.md", role: "定义父子层级、终态保留、只读转交、断线禁用与返回父任务旅程。" },
+      { path: "packages/domain/src/service.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/packages/domain/src/service.ts", role: "合并当前/归档流、发现后代、补齐祖先、计算深度并生成历史完整性。" },
+      { path: "apps/web/src/App.tsx", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/web/src/App.tsx", role: "呈现状态树、分页提示、子任务详情、只读边界与返回父对话入口。" },
+      { path: "tests/e2e/journey.spec.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/tests/e2e/journey.spec.ts", role: "验证手机打开子智能体、读取历史内容并返回父任务的合成浏览器旅程。" }
+    ],
+    verification: [
+      "domain projection 与 service 测试覆盖 parentThreadId、depth、当前/归档合并、祖先补读和状态折叠。",
+      "api-subagent-history 与 App state 测试覆盖完整性 header、连续分页、风险累积和失败提示。",
+      "Chromium journey 场景验证进入子任务、看到消息/工具/结果并返回父任务；响应式场景验证子智能体触控目标。",
+      "本轮只读审查没有连接真实 Desktop/Sidecar，也没有取得精确父任务滚动位置恢复的专项 E2E。"
+    ],
+    relation: "它依赖同一任务模块提供稳定父子身份，读取共享架构投影的任务历史；补充要求回到对话控制模块，版本与证据模块负责标注实现、浏览器验收和当前在线之间的边界。"
   },
   {
     slug: "conversation-control",
@@ -551,7 +654,7 @@ export const codexRemoteModules = [
       "dispatcher 测试覆盖正常终态后启动下一项、失败终态暂停、响应丢失不重发和重启后按 client id 对账。",
       "历史真实验收证明 steer 被模型接收、interrupt 三端收敛、未发送队列刷新后恢复；本轮没有访问运行态。"
     ],
-    relation: "它建立在同一任务身份之上，把用户文字准确分到当前轮或下一轮；模型审批、文件引用和实时架构分别提供设置、附件与权威事件。"
+    relation: "它建立在同一任务身份之上，把用户文字准确分到当前轮或下一轮；子智能体模块只允许经父任务转交，模型审批、文件引用和实时架构分别提供设置、附件与权威事件。"
   },
   {
     slug: "models-approvals-context",
@@ -779,7 +882,100 @@ export const codexRemoteModules = [
       "历史真实多端验收确认手机与 Desktop 同时看到同一任务事件。",
       "本轮未建立 listener，也未读取任何当前 runtime endpoint。"
     ],
-    relation: "它是同一任务、审批、文件与安全能力共用的传输骨架；版本证据只说明这条链曾被验证，不能代替当前在线回读。"
+    relation: "它是同一任务、子智能体、审批、文件与安全能力共用的传输骨架；安装更新模块只能在这条链的 Broker/app-server 身份不变时滚动公网层，版本证据仍不能代替当前在线回读。"
+  },
+  {
+    slug: "installation-update-rollback",
+    shortTitle: "安装与回滚",
+    title: "怎样安装和更新 Remote，又不把正在运行的 Desktop 任务当成代价",
+    searchAliases: ["Codex Remote怎么安装", "Codex Remote怎么更新", "Codex Remote更新失败怎么回滚", "运行中任务能更新Sidecar吗", "runtime-current current previous", "Broker变化为什么要显式交接"],
+    searchProjection: {
+      intents: ["第一次安装并显式打开 Codex Remote", "登记新版本但暂时不切换当前运行链", "活动任务期间只更新兼容 Web 和 Sidecar", "新 Sidecar 失败后恢复旧版本", "Broker或app-server变化时走显式交接"],
+      entities: ["RuntimeVersions/content-sha256", "runtime-manifest.json", "runtime-current.json", "current and previous", "maintenance drain", "update id", "idempotency key", "explicit handoff"],
+      relations: ["运行文件哈希决定不可变运行代", "原子 current/previous 指针保留精确回滚祖先", "排空回执与同一 update id 绑定后才停止旧 Sidecar", "浏览器用同一幂等键跨短切换续接", "Broker或app-server变化不能伪装成Sidecar热更新"],
+      failureRecovery: ["排空超时回到 serving 而不停止旧 Sidecar", "新 Sidecar 启动或握手失败时复核 owner 后恢复旧 Sidecar", "所选运行代或 owner 漂移时失败关闭", "待采用版本有误时回滚 current/previous 而不改变当前进程", "底层组件变化时停止滚动路径并要求显式 Open handoff"]
+    },
+    teaser: "构建先进入内容寻址不可变目录，登记只更新可回退指针；兼容 Web/Sidecar 经排空短切换，失败恢复旧 Sidecar，底层变化必须显式交接。",
+    status: "v0.1.5 发布说明、当前 runtime/Supervisor 源码与定向测试覆盖安装、活动任务滚动更新和补偿回滚；current main 最新 CI 未闭合，本轮未读取已安装运行代或执行实机更新",
+    statusTone: "mixed",
+    value: "我可以先把新版本安全地准备好，再决定何时采用；仅网页和 Sidecar 兼容变化时，电脑上的任务继续由原 Broker/app-server 持有，更新失败也有精确旧版本可恢复。",
+    why: "直接从可变 Git 工作树启动、覆盖正在运行的目录，或把任何更新都当成重启理由，会同时失去版本身份、回滚祖先和正在工作的 Desktop 任务。安装、选择、采用与底层交接必须是四个不同动作。",
+    example: "我拉取新源码后先运行依赖安装和检查，再用 Register-CodexLocalRemoteStartup.ps1 -NoStart 登记。当前任务仍继续；显式 Open 发现只需兼容 Web/Sidecar 更新时，旧 Sidecar 排空写入后短切换，新进程握手失败便恢复旧 Sidecar。",
+    result: "得到一个可回读的交付：不可变运行代、manifest、current/previous 指针、实际受管配置和更新结果各有精确身份；普通用户能用 Status 判断、用 Open 显式采用、用回滚脚本撤回待采用版本，且不会从源码测试推导当前在线。",
+    readerStates: {
+      pass: "新运行代逐文件大小与 SHA-256、manifest、current/previous 和任务绑定均回读一致；兼容滚动更新还必须完成排空、owner 不变、新 Sidecar 握手与运行回执。",
+      problem: "排空超时、新 Sidecar 失败或浏览器遇到短暂同端口间隙时，旧 Sidecar 保持或恢复服务，浏览器在有界窗口内复用同一幂等键并刷新权威任务快照。",
+      unavailable: "指针、manifest、Broker/upstream/Desktop 身份、连接计数或兼容 id 任一不清时，更新失败关闭；Broker/app-server 变化等待显式 handoff，不获得无人值守重启授权。"
+    },
+    decisionImpact: [
+      "第一次安装和每次更新都从已构建文件计算内容身份，不直接绑定 Git 工作树。",
+      "Register -NoStart 只安装并选择候选，不打开 Remote、不停止 Broker，也不重启 Desktop。",
+      "current 表示 selected（已选择待采用）运行代，不等同于当前进程已经运行该代；previous 保留精确回滚祖先。",
+      "只有 Broker/Sidecar compatibility id 相同、owner 身份不变且 unknown connection 为零时，才允许 Web/Sidecar 滚动更新。",
+      "Broker、app-server 或兼容 id 变化必须由新的显式 Open 重新判断并 handoff；需要 Desktop 重开时还要独立授权。",
+      "本页的 v0.1.5/测试证据不证明任何当前机器已安装、当前在线或无人值守接管已经验收。"
+    ],
+    problem: "解决可变源码被直接执行、更新覆盖回滚祖先、活动任务阻塞发布、短切换重复写入、新 Sidecar 失败后无恢复，以及把公网层修复扩大成底层 owner 重启。",
+    implementation: [
+      "Get-CodexLocalRemoteRuntimeVersionPlan 枚举 package.json、Broker/Sidecar/Web dist 与 Windows 脚本，记录逐文件 Size/SHA-256、源码 commit 和 dirty 状态。",
+      "VersionId 是 runtime-content/v1 规范 JSON 的 SHA-256，身份同时包含 BrokerSidecarCompatibilityId；文件先复制到 .installing 临时目录，完整验证后再移动为 RuntimeVersions/<versionId>。",
+      "runtime-current.json 原子记录 CurrentVersionId/Root/ManifestSha256 与 Previous 对；读取时重新验证目录名、全部文件、manifest 哈希和任务绑定。",
+      "managed-config.json 保存实际 Sidecar、Broker、upstream 端口、BasePath 和任务名，Status、Open、回滚与卸载不猜默认值。",
+      "Supervisor 在显式租约内捕获 selected runtime、Broker/upstream PID 与创建时间、Desktop root、runtime invocation 和 compatibility id，漂移即停止更新。",
+      "旧 Sidecar 的维护入口只接受受保护 bearer capability 与 32 位十六进制 update id；排空拒绝新 mutation（写动作）和下一轮派发，等待已接纳活动归零。",
+      "浏览器把 method、API path 和 body 形成逻辑 intent（意图），将同一幂等键保存在内存与可用的 session storage 中，在有界网络/503 恢复窗口复用。",
+      "新 Sidecar 启动或握手失败后，事务再次核对旧运行代与 owner invariant（不变量），再启动并验证精确旧 Sidecar；owner 漂移时不会冒险补偿。",
+      "Rollback-CodexLocalRemoteRuntime.ps1 验证 previous manifest 后重新登记旧代为下一次采用，返回 RunningInstanceChanged=false；它不终止当前 Desktop。"
+    ],
+    flow: [
+      "首次安装：运行 pnpm install --frozen-lockfile、pnpm check，并在本机交互设置密码与登记允许选择的项目。",
+      "在管理员 PowerShell 或受支持的 sudo/UAC 路径执行 Register-CodexLocalRemoteStartup.ps1 -NoStart，生成并回读不可变运行代与稳定 dispatcher。",
+      "先从固定 DataDir dispatcher 执行 Status；确认边界后再显式 Open。已健康时 Open 幂等零重启返回。",
+      "普通更新：重新构建、检查并执行 Register -NoStart；当前 Bootstrap、Broker、app-server、Desktop 和 Sidecar 保持不动。",
+      "显式 Open 或既有租约发现兼容候选时，旧 Sidecar 进入 drain，拒绝新写入并等待已接纳活动完成。",
+      "核对绑定 update id 的 drained receipt 与 owner/compatibility 不变量，停止旧 Sidecar、启动新 Sidecar并等待握手。",
+      "浏览器在短暂同端口间隙使用原幂等键续接并重读任务；成功后采用新 Sidecar，失败则恢复精确旧 Sidecar。",
+      "若更新涉及 Broker、app-server 或 compatibility id，退出滚动路径并要求新的显式 Open handoff；不把它并入普通更新。",
+      "若只想撤回尚未采用的候选，运行 Rollback-CodexLocalRemoteRuntime.ps1，再用 Status 回读 current、previous 与 ImmutableRuntimeReady；当前运行进程不因指针回滚改变。"
+    ],
+    concepts: [
+      { term: "content-addressed runtime（内容寻址运行代）", explanation: "目录 id 由运行文件和兼容身份的规范清单计算；任一受管字节变化都会得到新代。" },
+      { term: "selected vs active（已选择与正在运行）", explanation: "current 指针表示下一次允许采用的版本；Supervisor 当前持有的 Sidecar 可能仍是上一代。" },
+      { term: "atomic pointer（原子指针）", explanation: "临时写入后用文件替换一次提交，并回读哈希，避免 current/previous 半写状态。" },
+      { term: "maintenance drain（维护排空）", explanation: "先停止接纳新活动，等已接纳写入和派发完成，再允许切换进程。" },
+      { term: "explicit handoff（显式交接）", explanation: "底层 Broker/app-server/Desktop owner 变化必须由用户发起的 Open 单独判断，不能借兼容更新自动发生。" }
+    ],
+    boundaries: [
+      "登记、回滚指针和实际进程切换是三个证据层，任何一个都不能冒充另一个。",
+      "v0.1.5 之前已运行的 Supervisor 不会凭磁盘更新获得 drain 协议；首次采用仍遵守原安全边界。",
+      "兼容滚动更新允许活动 Codex turn 继续，但不允许 unknown connection、Broker/upstream/Desktop owner 漂移。",
+      "排空后的公网 listener 有短暂同端口间隙；浏览器恢复有界，超时会明确离线。",
+      "回滚旧 Sidecar 也必须复核 owner；无法安全恢复时报告失败，不重启 Broker 或 Desktop 掩盖问题。",
+      "当前 Windows 接管方案仍缺可重复无人值守验收，本模块不把源码、测试或一次更新模拟写成在线交付。"
+    ],
+    failures: [
+      { condition: "排空超时或 update id/回执不匹配", response: "旧 Sidecar 回到 serving 或保持运行，不执行停止。" },
+      { condition: "浏览器在短切换时连接失败", response: "同一逻辑 mutation 在有界窗口复用同一幂等键；仍未恢复时给出明确离线结果。" },
+      { condition: "新 Sidecar 启动或握手失败", response: "停止候选，复核旧代与 owner 后恢复并验证精确旧 Sidecar。" },
+      { condition: "selected runtime、Broker、upstream 或 Desktop root 漂移", response: "更新失败关闭；不跨 owner 猜测补偿。" },
+      { condition: "Broker/app-server 或 compatibility id 改变", response: "不走 Sidecar-only 路线，要求新的显式 Open handoff。" },
+      { condition: "previous manifest 或指针校验失败", response: "拒绝回滚，不覆盖 current，也不触碰当前运行进程。" }
+    ],
+    sources: [
+      { path: "docs/quickstart.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/quickstart.md", role: "给普通用户定义首次安装、Status/Open/Close、更新、回滚与显式交接旅程。" },
+      { path: "docs/release-notes-v0.1.5.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/release-notes-v0.1.5.md", role: "定义活动任务期间的 Sidecar drain、同一幂等键续接、失败恢复和底层 handoff 边界。" },
+      { path: "scripts/windows/CodexLocalRemote.Windows.psm1", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/scripts/windows/CodexLocalRemote.Windows.psm1", role: "实现内容寻址运行代、manifest/current/previous 验证、原子指针和 Sidecar 更新补偿事务。" },
+      { path: "apps/sidecar/src/maintenance.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/sidecar/src/maintenance.ts", role: "实现受保护 drain、活动租约、update id 绑定、超时恢复 serving。" },
+      { path: "apps/web/src/api.ts", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/apps/web/src/api.ts", role: "在短暂 Sidecar 恢复窗口为同一逻辑写入保留幂等键并有界重试。" }
+    ],
+    verification: [
+      "runtime-version-package、runtime-registration-pending 与 runtime-promotion 测试覆盖内容身份、不可变安装、current/previous、待采用阻断和精确回读。",
+      "sidecar-runtime-update 测试覆盖活动 turn 更新、排空失败不停止、兼容门、owner 漂移、新 Sidecar 失败恢复旧代及补偿失败边界。",
+      "maintenance 与 api-idempotency 测试覆盖 drain 超时恢复、同 update id 复用、跨 Sidecar 重启的同一幂等键和有界离线终态。",
+      "v0.1.5 的发布说明把上述路径列为正式能力；当前 main 最新 CI run 仍为 failure，不能把旧 release 结果升级为 current main PASS。",
+      "本轮没有执行 Register、Open、Rollback、Sidecar drain、Broker/app-server handoff 或真实无人值守接管验收。"
+    ],
+    relation: "它依赖共享架构区分可滚动的 Web/Sidecar 与必须显式交接的 Broker/app-server；安全模块保护维护 capability 与幂等写入，版本与证据模块约束 release、current main、安装态和当前在线结论。"
   },
   {
     slug: "security-public-access",
@@ -856,7 +1052,7 @@ export const codexRemoteModules = [
       "PUBLIC safety 扫描阻断真实主机、密码、token、对话日志和私有路径进入源仓库。",
       "本轮20张图片逐张视觉检查；凭据承载面和私有 tailnet 地址全部排除或裁除。"
     ],
-    relation: "它包住同一任务、审批、文件和实时架构的所有公网入口；版本证据说明这些防护在哪个正式版本接受过验证。"
+    relation: "它包住同一任务、子智能体、审批、文件、实时架构与更新维护入口；安装更新模块复用受保护 capability 与幂等边界，版本证据说明这些防护在哪个正式版本接受过验证。"
   },
   {
     slug: "versions-evidence",
@@ -939,7 +1135,7 @@ export const codexRemoteModules = [
       "历史真实链路与产品证据已形成；本轮未完成当前 Windows 接管方案的可重复无人值守验收，重新启用前需隔离验证。",
       "本轮没有启动、查询或控制任何 Codex Remote runtime。"
     ],
-    relation: "它为前六个模块标注证据强度与时间边界，防止把源码、测试、截图、历史实机验收或单次接管成功误写成当前在线。"
+    relation: "它为前八个模块标注证据强度与时间边界，防止把源码、测试、截图、历史实机验收、安装指针或单次接管成功误写成当前在线。"
   }
 ];
 
