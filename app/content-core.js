@@ -15,8 +15,8 @@ export const socialLinks = [
 ];
 
 export const primaryNav = [
-  { label: "项目", href: "/" },
-  { label: "系统", href: "/system" },
+  { label: "系统", href: "/" },
+  { label: "项目", href: "/projects" },
   { label: "规则", href: "/rules" },
   { label: "Skills", href: "/skills" }
 ];
@@ -30,6 +30,11 @@ if (
   || !Array.isArray(generatedPanelFacts?.validation?.rows)
   || !Array.isArray(generatedPanelFacts?.validation?.failures)
   || !Number.isInteger(generatedPanelFacts?.skills?.activeInstallIntent)
+  || !Number.isInteger(generatedPanelFacts?.skills?.personalSelectedCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.hostIntegratedCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.selectedPublicCount)
+  || generatedPanelFacts.skills.selectedPublicCount !== generatedPanelFacts.skills.personalSelectedCount + generatedPanelFacts.skills.hostIntegratedCount
+  || generatedPanelFacts.skills.hostIntegratedDiscovery !== "not_rerun_by_agents_snapshot_refresh"
   || !Number.isInteger(generatedPanelFacts?.skills?.transactionCampaignCount)
   || !generatedPanelFacts?.integrity?.payloadSha256
 ) {
@@ -91,7 +96,7 @@ export const project = {
   },
   cardMetrics: [
     { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
-    { label: "能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 项` },
+    { label: "能力目录", value: `${panelSnapshot.skills.selectedPublicCount} · ${panelSnapshot.skills.personalSelectedCount}+${panelSnapshot.skills.hostIntegratedCount}` },
     { label: `本地回归 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.passed} pass · ${localOwnerObservation.failed} fail` },
     { label: `合同覆盖 · ${localOwnerObservation.releaseId}`, value: `${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}` }
   ],
@@ -99,7 +104,7 @@ export const project = {
     { label: "当前活动规则", value: `${panelSnapshot.authority.releaseId} · PRIVATE main ${panelSnapshot.authority.gitCommit.slice(0, 7)} · ruleset ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}` },
     { label: "活动规则闭包", value: `当前 ${activeRuleCount}/${activeRuleCount} 份规则共 ${activeRuleBytes} bytes；每份 release 与 source 的 bytes/SHA 必须一致，dirty source 和历史材料不能替代当前指针` },
     { label: "本地回归边界", value: `${localOwnerObservation.releaseId} 的独立 Owner 观察与未来 release identity 分层；跨 Owner 跳过项不折算成失败或通过` },
-    { label: "个人能力供应", value: "active install intent 只说明供应目标；安装事务、当前任务、全新任务和真实场景验收仍分别取证" },
+    { label: "个人能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 个个人安装意图中有 ${panelSnapshot.skills.personalSelectedCount} 个公开可用、${panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount} 个当前不可用不展示；另有 ${panelSnapshot.skills.hostIntegratedCount} 个宿主集成能力，公开目录共 ${panelSnapshot.skills.selectedPublicCount} 个` },
     { label: "合同覆盖边界", value: "当前覆盖闭合不代表未来合同自动通过；规则、授权、能力、Git 与机器事实继续由各自责任源解释" },
     { label: "产品能力", value: "自然语言目标可接到真实项目、规则、Skills 与工具；源码、测试、安装、发布、恢复和用户结果分层回读" }
   ],

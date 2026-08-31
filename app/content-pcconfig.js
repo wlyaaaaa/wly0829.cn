@@ -55,7 +55,7 @@ export const pcconfigProject = {
     "不拥有 Git（版本控制）仓库身份、可见性、远端、默认分支和发布事实；这些由 Git 控制面负责",
     "不拥有跨项目智能体行为、能力路由和活动规则正文；这些由规则控制面负责",
     "不把明文密码、令牌、私钥或恢复码写入 Registry、聊天、日志或普通文件；秘密值留在受保护存储中，并只按精确引用盲用或经用户明确验证后受控显示",
-    "不把 Registry、测试、安装或任务存在单独包装成整机恢复完成",
+    "不把 Registry、测试、安装或任务存在单独误报为整机恢复完成",
     "不因为目录看起来不整齐就自动搬移，也不通过 watcher（后台监听器）或轮询持续扫描整台电脑"
   ],
   glossary: [
@@ -403,7 +403,7 @@ export const pcconfigModules = [
       "对每个对象固定 source（恢复来源）、target（恢复目标）、preimage（变更前状态）、hash（内容指纹）和回滚",
       "先在隔离或新路径验证，再切换消费者引用",
       "运行匹配 area 的验收和真实应用检查",
-      "保留需登录、unknown 和无法恢复项，不用百分比包装"
+      "保留需登录、unknown 和无法恢复项，不用品质百分比掩盖"
     ],
     concepts: [
       { term: "CoreRecovery（核心恢复）", explanation: "重装/换机后的主恢复编排与观察入口，不是磁盘镜像，也不读取所有私人 payload。" },
@@ -638,7 +638,7 @@ export const pcconfigModules = [
       "P5 正式迁移只允许 copy-encrypt-hash-readback（复制、加密、哈希、回读），旧明文先只读保留。",
       "源码、fixture、protected install permitted（允许进入受保护安装）都不等于真实数据 action 已获准或发生。"
     ],
-    problem: "受保护数据同时依赖版本、selector、密钥因子、加密对象、索引、GUI、Carrier 和恢复入口。旧实现曾把同一 effect 在多个 wrapper（包装层）重复编排，增加了状态分叉和安装放大；当前 vNext 目标是用四个清晰角色收敛。",
+    problem: "受保护数据同时依赖版本、selector、密钥因子、加密对象、索引、GUI、Carrier 和恢复入口。旧实现曾把同一 effect 在多个 wrapper（封装层）重复编排，增加了状态分叉和安装放大；当前 vNext 目标是用四个清晰角色收敛。",
     implementation: [
       "P0 v1 在固定 ProgramData root 使用 immutable slot、一个 control.json、journal/receipt 和公开零秘密 status；selector 以 revision CAS 和同卷原子替换更新。",
       "control 只有 normal、trial、read_only_recovery 三种 mode，绑定 active、LKG、rollback 和 manifest hash；每次 launch/health/recovery 都重新核验完整闭包。",
