@@ -123,7 +123,7 @@ export const githubIndexProject = {
     { name: "Owner-local 合同与回归测试", responsibility: "固定 admission、worktree、publication、refresh、里程碑和重大动作的边界。", implementation: "合同只写稳定机制，动态路径和计数现场读取；测试覆盖 schema、失败关闭、原子切换和隐私边界。" }
   ],
   usageExamples: [
-    { moduleSlug: "protected-major-actions", ask: "新建一个 PRIVATE 仓库。", effect: "先区分个人/工作项目并在 V 盘正确根目录建立 clean 的本地 main 与首个提交；再创建本人账号下空 PRIVATE 远端，配置 origin、正常 push，现场回读身份/可见性/真实默认分支，完成 origin/<default> 可达后才登记。任一步失败都保留已完成的现实状态并从该步恢复，不重复创建。" },
+    { moduleSlug: "protected-major-actions", ask: "新建一个私有仓库（PRIVATE）。", effect: "先区分个人/工作项目并在 V 盘正确根目录建立 clean 的本地 main 与首个提交；再创建本人账号下空 PRIVATE 远端，配置 origin、正常 push，现场回读身份/可见性/真实默认分支，完成 origin/<default> 可达后才登记。任一步失败都保留已完成的现实状态并从该步恢复，不重复创建。" },
     { moduleSlug: "project-admission", ask: "这个目录最后会推到哪里？", effect: "读取 remote.origin.url、Git common directory、当前 branch/upstream 和现场 GitHub identity；目录名或缓存冲突时只读诊断，不继续写。" },
     { moduleSlug: "worktree-sync", ask: "这个分支已经推了，算完成吗？", effect: "除了自身 upstream 0/0，还比较目标提交是否能从远端真实默认分支到达；没进入 default branch 就仍是行动项。" },
     { moduleSlug: "worktree-sync", ask: "这个工作树能删吗？", effect: "检查 dirty、独有提交、默认分支可达性、locked/prunable、必要保留和活动依赖；证据不全就保留，不把 unknown 当作可删。" },

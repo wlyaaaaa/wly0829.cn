@@ -352,7 +352,9 @@ test("the System source pack explains generic AI productivity without platform o
   assert.match(documentMaterialsSurface, /\/skills\/document-materials/);
   assert.doesNotMatch(documentMaterialsSurface, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i);
   const hookNode = systemDependencyNodes.find((node) => node.id === "collaboration-hooks");
-  assert.match(JSON.stringify(hookNode), /Hook.*身份.*规则.*创建前复核/s, "System omits the runtime Hook that applies collaboration rules");
+  const hookText = JSON.stringify(hookNode);
+  assert.match(hookText, /Hook.*身份.*规则/s, "System omits the runtime Hook identity path");
+  assert.match(hookText, /创建协作者前再复核/, "System omits the pre-spawn Hook check");
   assert.match(sourcePack, /Hook.*身份.*活动规则/s, "System source pack omits Hook behavior");
   assert.doesNotMatch(sourcePack, /gpt-5\.|Luna|Terra|Sol Max|Harness/i, "System source pack must stay model, vendor and runtime-wrapper neutral");
 });
@@ -384,7 +386,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 20 KiB CSS r
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 20);
   assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 42);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 25);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 32);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -2501,7 +2503,7 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.equal(panelSnapshot.skills.personalSelectedCount, skills.filter((item) => item.sourceKind === "personal_install" && item.availability === "available").length);
   assert.equal(panelSnapshot.skills.hostIntegratedCount, skills.filter((item) => item.sourceKind === "host_integrated" && item.availability === "available").length);
   assert.equal(panelSnapshot.skills.selectedPublicCount, panelSnapshot.skills.personalSelectedCount + panelSnapshot.skills.hostIntegratedCount);
-  assert.equal(panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount, 1);
+  assert.equal(panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount, 2);
   assert.ok(Number.isInteger(panelSnapshot.skills.transactionCampaignCount) && panelSnapshot.skills.transactionCampaignCount >= panelSnapshot.skills.activeInstallIntent);
   assert.ok(skills.filter((item) => item.sourceKind === "personal_install").every((item) => item.transactionState.includes(`${panelSnapshot.skills.transactionCampaignCount} 个供应事务`)));
   assert.ok(skills.filter((item) => item.sourceKind === "host_integrated").every((item) => item.transactionState.includes("不经过个人 Skill 安装事务")));

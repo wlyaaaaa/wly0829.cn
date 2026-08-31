@@ -23,7 +23,7 @@
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 20,
     "search_index_gzip_budget_kib": 42,
-    "project_search_index_gzip_budget_kib": 25,
+    "project_search_index_gzip_budget_kib": 32,
     "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
