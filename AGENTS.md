@@ -329,7 +329,7 @@ read-only operating panel; public presentation is secondary.
   while keeping product-facing names and explanations vendor-neutral.
 - Display an integrated Skill only when it is currently usable, materially
   valuable, sufficiently understood, non-duplicative and safe to publish.
-- Finish content before breadth. `.agents` Overview and all six project modules, all
+- Finish content before breadth. `.agents` Overview and all seven project modules, all
   five current rules, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
