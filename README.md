@@ -96,4 +96,4 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-完整产品规格见 [个人项目看板 MVP 产品规格](docs/design/agents-mvp.md)，内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；不再维护一份会重复模块数、Skill 数和快照状态的第二规格。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
