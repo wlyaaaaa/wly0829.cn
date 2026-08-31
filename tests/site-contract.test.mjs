@@ -734,6 +734,13 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
     assert.ok(taskText.includes(expected), `ChineseASR task recovery omits: ${expected}`);
   }
 
+  const modelModes = chineseAsrModules.find((item) => item.slug === "models-modes");
+  const modelText = JSON.stringify({ project: { metrics: chineseAsrProject.cardMetrics, hero: chineseAsrProject.heroFacts, facts: chineseAsrProject.currentState }, module: modelModes });
+  for (const expected of ["6 / 5", "registered-only", "fallback/comparison", "list_transcription_engine_names", "is_whisper", "Whisper Large V3", "禁止直接转写", "加载前明确拒绝"]) {
+    assert.ok(modelText.includes(expected), `ChineseASR registered/executable split omits: ${expected}`);
+  }
+  assert.doesNotMatch(modelText, /Whisper[^。；]{0,80}(?:可显式执行|可直接转写)|Doctor 当前列出六个可用引擎/);
+
   const audit = chineseAsrModules.find((item) => item.slug === "audit-evidence");
   const auditText = JSON.stringify({ result: audit.result, flow: audit.flow, concepts: audit.concepts, failures: audit.failures });
   for (const artifact of ["*.strict.md", "*.strict.audit.md", "*.strict.audit.json", "*.strict.review.json", "review.md", "*.strict.receipt.json", "*.raw.json", "manifest.json", "metrics.json", "benchmark.md", "benchmark.json"]) {
@@ -771,6 +778,7 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   for (const [query, href] of [
     ["服务重启后录音任务会自动重跑吗", "/projects/chinese-asr/task-routing"],
     ["严格模式两路模型是什么", "/projects/chinese-asr/models-modes"],
+    ["Whisper能不能直接转写", "/projects/chinese-asr/models-modes"],
     ["两小时录音中断后接着跑", "/projects/chinese-asr/long-batch"],
     ["转写结果先看哪个文件", "/projects/chinese-asr/audit-evidence"],
     ["Speaker1是不是本人", "/projects/chinese-asr/speaker-attribution"],

@@ -59,7 +59,7 @@ export const chineseAsrProject = {
     unavailable: "模型、GPU（图形处理器）、音频解码、任务服务、依赖工件或必要授权不可用时，返回具体阻断位置和已有任务身份；环境损坏时按依赖与模型两条恢复链处理，不反复提交录音，也不自动上传云端。"
   },
   cardMetrics: [
-    { label: "引擎", value: "6" },
+    { label: "登记 / 可执行", value: "6 / 5" },
     { label: "回归", value: "345/345" },
     { label: "真实长音频", value: "4/4" }
   ],
@@ -68,8 +68,8 @@ export const chineseAsrProject = {
     { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
     { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
     { label: "重要录音云候选", value: "Qwen Audio 3.0 ASR Flash；必须同时确认重要性和本次上传授权" },
-    { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512、Whisper Large V3；依赖与模型工件分层恢复，wheelhouse 不含权重" },
-    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.524 秒；Doctor 识别 6 个引擎与 32607 MiB 显存；历史真实长音频 4/4 切片，续跑 0 processed / 4 skipped" }
+    { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512 可显式执行；Whisper Large V3 只登记为 fallback/comparison，当前禁止直接转写" },
+    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.524 秒；Doctor 枚举 6 个登记 Profile，直转闭集为 5 个，显存 32607 MiB；历史真实长音频 4/4 切片" }
   ],
   productPrinciples: [
     { title: "原音频始终是真相来源", detail: "转写首先是搜索和回听导航，不是录音真实性、说话人身份或法律事实认证。" },
@@ -140,7 +140,7 @@ export const chineseAsrProject = {
       "Qwen MODEL_RECEIPT 当前为 1763 字节、SHA-256=0c43de9dd883adefb65cfa1477ad7156f749868105a554e647b47de73c841ef9，绑定 revision a04930dbe5419bfee073f7cade734f572689a3a8 的 13 个必要文件、合计 4703115105 字节；本轮确认文件都存在且大小一致。",
       "FireRed MODEL_RECEIPT 当前为 2124 字节、SHA-256=c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，绑定 revision 2c5e0f415b9afb8f67cb8b00ea4c54959f70e824 的 14 个必要文件、合计 18870501538 字节；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净。",
       "FireRed WSL 当前使用 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0 和 NumPy 2.4.2；CUDA 与 BF16 可用，WSL 约 32 GiB RAM + 8 GiB swap，当前可用量高于半精度装载门槛。",
-      "当前模型 Registry（登记表）公开六个显式引擎：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；登记不代表每个引擎本次都跑过真实音频。",
+      "当前模型 Registry（登记表）包含 6 个 Profile：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；其中前 5 个进入 direct transcription（直接转写）闭集，Whisper 只作 fallback/comparison 登记，pipeline 明确拒绝直接执行。",
       "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。",
       "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。",
       "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。"
@@ -323,29 +323,31 @@ export const chineseAsrModules = [
     slug: "models-modes",
     shortTitle: "模型与模式",
     title: "模型 Registry、quick / strict 模式与显式路由",
-    searchAliases: ["普通转写到底用哪个模型", "严格模式两路模型是什么", "装了新模型会不会偷偷换默认", "FireRed和Qwen什么时候一起用", "哪种ASR模式更快"],
+    searchAliases: ["普通转写到底用哪个模型", "严格模式两路模型是什么", "装了新模型会不会偷偷换默认", "FireRed和Qwen什么时候一起用", "Whisper能不能直接转写", "登记模型和可执行引擎有什么区别"],
     searchProjection: {
-      intents: ["选择快速或严格转写", "确认一次结果实际用了哪个模型", "为重要录音选择本地证据路线", "比较新增模型但不改默认"],
+      intents: ["选择快速或严格转写", "确认一次结果实际用了哪个模型", "为重要录音选择本地证据路线", "比较新增模型但不改默认", "判断Whisper是否可直接执行"],
       entities: ["SenseVoiceSmall", "Qwen3-ASR-1.7B", "FireRedASR2-LLM", "Fun-ASR-Nano-2512", "Whisper Large V3"],
-      relations: ["quick 对应 SenseVoiceSmall", "strict 对应 Qwen 主引擎与 SenseVoice 对照", "FireRed 加 Qwen 是显式重要录音证据路线", "Registry 记录模型身份但安装不等于验收"],
-      failureRecovery: ["主引擎失败时降为 provisional", "两路都失败时输出听不清", "未知 profile 启动前失败", "实际 runtime 身份不符时回执失效"]
+      relations: ["quick 对应 SenseVoiceSmall", "strict 对应 Qwen 主引擎与 SenseVoice 对照", "FireRed 加 Qwen 是显式重要录音证据路线", "Registry登记Profile不等于direct transcription可执行", "Whisper is_whisper标记把它排除在直接转写闭集外"],
+      failureRecovery: ["主引擎失败时降为 provisional", "两路都失败时输出听不清", "未知 profile 启动前失败", "Whisper直接请求明确拒绝而不改走相近模型", "实际 runtime 身份不符时回执失效"]
     },
     teaser: "把模型身份、版本、运行方式、能力和默认角色集中登记；日常模式保持稳定，新增或安装更强模型不会自动改变默认结果。",
-    status: "quick=SenseVoiceSmall；strict=Qwen3-ASR-1.7B + SenseVoiceSmall；其他 Profile 仅显式选择",
+    status: "Registry 登记 6 个 Profile，直接转写闭集 5 个；quick/strict 固定，Whisper Large V3 仅 fallback/comparison、当前不可直接执行",
     statusTone: "mixed",
-    value: "我能直接看到 quick 使用 SenseVoiceSmall、strict 使用 Qwen3-ASR-1.7B + SenseVoiceSmall、证据级本地路线使用 FireRedASR2-LLM + Qwen3-ASR-1.7B、时间线使用 Paraformer + CAM++；升级一个模型不会悄悄改变所有旧任务。",
+    value: "我能直接看到 quick 使用 SenseVoiceSmall、strict 使用 Qwen3-ASR-1.7B + SenseVoiceSmall、证据级本地路线使用 FireRedASR2-LLM + Qwen3-ASR-1.7B、时间线使用 Paraformer + CAM++；还会区分‘已登记供比较’和‘当前可以直接转写’，避免把 Whisper 备用条目误写成可用入口。",
     why: "如果模型名、参数和默认选择散落在脚本里，安装新模型或换版本可能让相同命令产生完全不同结果，也无法解释某次转写为什么更快、更慢或更容易幻觉。",
-    example: "我只说“严格转写”时，系统固定使用 Qwen3-ASR-1.7B 主引擎和 SenseVoice 对照；即使机器已经安装 Fun-ASR-Nano 或 FireRed，也不会自动替换默认组合。",
-    result: "得到带明确模型 id、版本、角色、设备和模式的转写结果；显式选择和默认路径可以分别审计。",
+    example: "我问“Whisper Large V3 能不能直接转写这段录音？”系统会回答它目前只登记为 fallback/comparison，pipeline 明确禁止 direct transcription；不会因为配置里出现模型名就假装有可执行路线，也不会静默换成别的引擎。",
+    result: "得到带明确模型 id、版本、角色、设备和模式的转写结果，或一个精确的 registered-only（仅登记）拒绝；显式选择、默认路径和不可执行 Profile 可以分别审计。",
     readerStates: {
-      pass: "模式引用的模型配置、依赖和权重身份可用时，按固定角色执行并记录实际模型。",
+      pass: "模式引用的模型属于直接转写闭集，且配置、依赖和权重身份可用时，按固定角色执行并记录实际模型。",
       problem: "主引擎失败而对照引擎成功时保留暂定文本和失败证据，不把单路回退称为完整 strict。",
-      unavailable: "模型配置、依赖或权重身份不满足时阻断该路线，不猜相近模型、不自动下载并改默认。"
+      unavailable: "模型仅登记为对照、或配置/依赖/权重身份不满足时阻断该路线，不猜相近模型、不自动下载并改默认。"
     },
     decisionImpact: [
       "普通默认不因新模型安装而漂移。",
       "quick 与 strict 的质量和成本边界明确。",
       "证据级、时间线和备用模型必须显式选择。",
+      "Registry 当前登记 6 个 Profile，但 list_transcription_engine_names 只返回 5 个可直接执行引擎；数量不能互相冒充。",
+      "Whisper Large V3 是 fallback/comparison 设计记录，当前 pipeline 看到 is_whisper=true 会在模型加载前明确拒绝。",
       "每次结果记录实际引擎，而不是只记录模式名。",
       "模型失败影响状态和证据等级，不只影响一段错误文本。"
     ],
@@ -353,13 +355,15 @@ export const chineseAsrModules = [
     implementation: [
       "configs/models.yaml 声明模型 id、适配器、版本、能力和设备要求。",
       "config.py 读取并验证模型配置；未知引擎直接失败。",
-      "pipeline.py 按 quick、strict 和显式参数组织主/对照引擎。",
+      "config.py 分开 list_engine_names（全部登记）与 list_transcription_engine_names（排除 is_whisper 的直接转写闭集）。",
+      "pipeline.py 按 quick、strict 和显式参数组织主/对照引擎；build_model 在加载前拒绝 is_whisper Profile。",
       "adapters 分离 Qwen、FunASR 与 FireRed 的运行差异。",
       "qwen_identity.py 对 Qwen runtime 与模型身份做精确约束。"
     ],
     flow: [
       "解析模式和显式引擎参数。",
       "从 Registry 取得精确 profile。",
+      "检查 Profile 是否进入 direct transcription 闭集；Whisper registered-only 请求在加载前停止。",
       "检查依赖、权重、设备和输入能力。",
       "为主引擎和对照引擎创建独立原始输出。",
       "把实际身份和执行状态写入结果。",
@@ -369,16 +373,18 @@ export const chineseAsrModules = [
       { term: "Registry", explanation: "模型配置的唯一登记表，决定 id、角色、适配器和边界。" },
       { term: "primary engine（主引擎）", explanation: "严格模式主要正文候选的来源。" },
       { term: "secondary engine（对照引擎）", explanation: "独立转写同一输入，用于发现分歧和疑似幻觉。" },
-      { term: "profile", explanation: "一个精确模型及其运行合同，不是模糊产品别名。" }
+      { term: "profile", explanation: "一个精确模型及其运行合同，不是模糊产品别名。" },
+      { term: "registered-only profile（仅登记配置）", explanation: "为了记录备用/对照身份而保留在 Registry，但当前没有直接转写执行路径；Whisper Large V3 属于这一类。" }
     ],
     boundaries: [
-      "Fun-ASR-Nano、FireRed、Paraformer 和 Whisper 都不会自动接管 quick/strict 默认。",
+      "Fun-ASR-Nano、FireRed 和 Paraformer 可按各自显式路线执行但不会接管 quick/strict；Whisper 仅登记为备用/对照，当前不能直接转写。",
       "模型安装成功不等于真实音频 E2E 通过。",
       "对照模型不是投票多数，也不自动证明主模型错误。",
       "云模型与本地模型分属不同授权和证据边界。"
     ],
     failures: [
       { condition: "未知模型或配置字段错误", response: "启动前失败并指出精确 profile，不选择相近模型。" },
+      { condition: "用户直接请求 Whisper Large V3", response: "返回 fallback/comparison only 的明确不可用结果；不加载模型、不生成假转写，也不静默改走另一个引擎。" },
       { condition: "主引擎失败、对照成功", response: "保留对照文本但标为 provisional，并记录主引擎错误。" },
       { condition: "两路都失败", response: "输出听不清或失败状态，不生成貌似完整正文。" },
       { condition: "结果声明的模型与实际 runtime 不同", response: "证据回执验证失败，结果不能升级为 verified。" }
@@ -387,12 +393,14 @@ export const chineseAsrModules = [
       { path: "E:\\Projects\\Tools\\ChineseASR\\configs\\models.yaml", role: "模型 Registry 与默认角色" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\config.py", role: "配置加载与验证" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\pipeline.py", role: "quick / strict 流水线" },
+      { path: "E:\\Projects\\Tools\\ChineseASR\\tests\\test_config.py", role: "Whisper fallback-only标记与直接转写闭集回归" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\adapters\\qwen_asr.py", role: "Qwen ASR 适配器" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\adapters\\funasr.py", role: "SenseVoice、Paraformer 与 FunASR 适配" },
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\adapters\\firered_worker.py", role: "FireRed 隔离 worker 适配" }
     ],
     verification: [
-      "Doctor 当前列出六个可用引擎，并确认 FunASR、Qwen ASR、PyTorch 已安装。",
+      "Doctor 当前枚举六个登记 Profile，并确认 FunASR、Qwen ASR、PyTorch 已安装；登记数量不等于可直接执行数量。",
+      "config.py 当前直接转写闭集为5个；test_config验证whisper-large-v3带is_whisper且不进入该闭集，pipeline在加载前拒绝它。",
       "config、pipeline、Qwen identity、FireRed worker 等单元回归包含在 345 项通过结果中。",
       "本次没有对六个 profile 分别运行真实录音，实际速度与准确率仍以具名 benchmark 为准。"
     ],
