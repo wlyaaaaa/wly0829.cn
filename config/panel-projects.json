@@ -1,8 +1,9 @@
 {
-  "schema": "wly.personal-panel-project-registry.v1",
+  "schema": "wly.personal-panel-project-registry.v2",
   "refresh_policy": {
     "mode": "ai_managed_on_demand",
     "semantic_writer": "website_ai_task_only",
+    "semantic_model_policy": "select a Sol-family or stronger future native model through the active native economy routing contract; the current exact model id and effort are runtime configuration, not a permanent product identity",
     "targeted_refresh_prompt": "刷新个人看板中的<project-id>",
     "full_refresh_prompt": "全部更新一下",
     "trigger": "displayed_fact_or_explanation_changed",
@@ -34,6 +35,42 @@
     "default_presentation_mode": "real_dashboard",
     "only_private_document": "docs/design/private-content-rules.md"
   },
+  "global_surfaces": [
+    {
+      "id": "authority-supply-facts",
+      "title": "Rules and Skills shared facts",
+      "role": "Generated current E-release and Skill-supply evidence shared by the Rules and Skills pages; it carries facts, not narrative decisions.",
+      "content_paths": [
+        "app/panel-facts.generated.js"
+      ]
+    },
+    {
+      "id": "rules",
+      "title": "Rules",
+      "role": "The five current rule explanations and reader guides derived only from the verified active E release.",
+      "content_paths": [
+        "app/content-rule-guides.js"
+      ]
+    },
+    {
+      "id": "skills",
+      "title": "Skills",
+      "role": "The usable Skill catalog, detailed guides and project-to-Skill relationships.",
+      "content_paths": [
+        "app/content-skills.js",
+        "app/content-skill-guides.js",
+        "app/content-capability-links.js"
+      ]
+    },
+    {
+      "id": "system",
+      "title": "System",
+      "role": "The derived system map, responsibilities, scenarios and collaboration relationships after Projects, Rules and Skills are closed.",
+      "content_paths": [
+        "app/system-home-content.js"
+      ]
+    }
+  ],
   "projects": [
     {
       "id": "agents",

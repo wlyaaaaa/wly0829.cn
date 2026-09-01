@@ -65,13 +65,15 @@ System 首页不是第四个事实源，也不从 Git 提交记录直接生成�
 6. 只有 material change 才原位改写、合并或删除该项目内容；不触碰其他项目。
 7. 运行内容合同、构建、公开边界和本地预览；四项目 MVP 验收后的已登记刷新默认自动提交到现有 PUBLIC `main`，等待 Pages 并完成公网回读，不再单独询问发布授权。
 
-AI 完成取证和内容判断后，生成 `wly.ai-panel-refresh-result.v1` 结果包并运行：
+AI 完成取证和内容判断后，生成 `wly.ai-panel-refresh-result.v2` 结果包并运行：
 
 ```powershell
 npm run verify:ai-refresh -- --bundle <ai-result.json>
 ```
 
-Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 source fingerprint、materiality、semantic revision 和 no-op 字节不变性。它只验证 AI 结果合同，不替 AI 判断语义。
+AI 在改正文前必须先交付一份简洁语义差分：产品与技术分别列出新增、修改、退役/替代和 Unknown，并把结论映射到项目、Rules、Skills、System。每项只保留人话结论和 Owner 证据，不暴露内部推理。Git、路径、commit 和 hash 只定位候选，不能生成或否决这份差分。
+
+Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 source fingerprint、materiality、semantic revision，以及项目、Rules、Skills、System 的逐文件 no-op 字节不变性。它只检查 AI 差分与实际改动是否闭合，绝不替 AI 判断新增、修改或退役语义是否正确。
 
 ## 全量刷新流程
 
@@ -93,6 +95,7 @@ AI 在任务上下文中为每个项目保留最小公开安全证据：
 
 - Registry 项目 ID、来源仓库、默认分支与当前 content path；
 - 旧/新 source fingerprint 和内容 SHA-256；
+- AI 判定的产品/技术新增、修改、退役/替代、Unknown 及受影响页面；
 - observedAt 与只读 collectors 的有界结论；
 - materiality 结论和人话理由；
 - 自动修复、验证结果、真实 blocker；
@@ -135,3 +138,5 @@ Registry 是唯一项目清单。新增项目必须提供唯一内容包、轻�
 - 是否发生提交、发布和正式回读；所有门通过后默认自动发布，若未发布必须说明用户暂停或精确阻断。
 
 文件存在、脚本成功、hash 一致或测试通过都不能单独代替内容准确、专业、详细且人话的阅读验收。
+
+自动刷新任务的语义判断和正文写入使用活动原生经济路由选出的 Sol 家族或更强未来模型；不把当前某个精确 model id 或固定 effort 写成永久产品身份。机械收集、hash 与测试可以由工具完成，但不能由较低质量路线代替语义差分、内容取舍或最终阅读验收。

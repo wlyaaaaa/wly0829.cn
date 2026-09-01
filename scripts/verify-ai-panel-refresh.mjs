@@ -14,6 +14,8 @@ const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "pan
 const bundle = JSON.parse(await readFile(bundlePath, "utf8"));
 const enabled = registry.projects.filter((item) => item.enabled).sort((left, right) => left.order - right.order);
 const registryById = new Map(enabled.map((item) => [item.id, item]));
+const globalSurfaceDefinitions = registry.global_surfaces || [];
+const globalSurfaceById = new Map(globalSurfaceDefinitions.map((item) => [item.id, item]));
 const findings = [];
 
 function requireFact(condition, code, detail) {
@@ -28,9 +30,11 @@ function validSha(value) {
   return /^[a-f0-9]{64}$/.test(String(value || ""));
 }
 
-requireFact(bundle.schema === "wly.ai-panel-refresh-result.v1", "bundle_schema_invalid", bundle.schema);
+requireFact(bundle.schema === "wly.ai-panel-refresh-result.v2", "bundle_schema_invalid", bundle.schema);
 requireFact(["targeted", "all"].includes(bundle.mode), "bundle_mode_invalid", bundle.mode);
 requireFact(Array.isArray(bundle.projects) && bundle.projects.length > 0, "bundle_projects_missing", typeof bundle.projects);
+requireFact(Array.isArray(bundle.source_deltas), "bundle_source_deltas_missing", typeof bundle.source_deltas);
+requireFact(Array.isArray(bundle.global_surfaces), "bundle_global_surfaces_missing", typeof bundle.global_surfaces);
 requireFact(Array.isArray(bundle.auto_repairs), "bundle_auto_repairs_missing", typeof bundle.auto_repairs);
 requireFact(Array.isArray(bundle.blockers), "bundle_blockers_missing", typeof bundle.blockers);
 
@@ -39,6 +43,50 @@ const ids = projectResults.map((item) => item.id);
 requireFact(new Set(ids).size === ids.length, "bundle_project_duplicate", ids.join(","));
 if (bundle.mode === "all") requireFact(JSON.stringify(ids) === JSON.stringify(enabled.map((item) => item.id)), "bundle_all_closure_invalid", ids.join(","));
 if (bundle.mode === "targeted") requireFact(ids.length === 1, "bundle_targeted_count_invalid", String(ids.length));
+
+const semanticBuckets = ["added", "changed", "retired"];
+const sourceDeltas = Array.isArray(bundle.source_deltas) ? bundle.source_deltas : [];
+const deltaIds = sourceDeltas.map((item) => item?.project_id);
+requireFact(new Set(deltaIds).size === deltaIds.length, "bundle_source_delta_duplicate", deltaIds.join(","));
+requireFact(JSON.stringify(deltaIds) === JSON.stringify(ids), "bundle_source_delta_closure_invalid", deltaIds.join(","));
+
+function validSemanticItem(item) {
+  return Boolean(item)
+    && typeof item === "object"
+    && !Array.isArray(item)
+    && typeof item.summary === "string"
+    && item.summary.trim().length >= 4
+    && typeof item.evidence === "string"
+    && item.evidence.trim().length >= 4;
+}
+
+const allowedSurfaceIds = new Set([
+  ...ids.map((id) => `project:${id}`),
+  ...globalSurfaceDefinitions.map((surface) => surface.id)
+]);
+for (const delta of sourceDeltas) {
+  requireFact(Boolean(registryById.get(delta?.project_id)), "bundle_source_delta_project_invalid", delta?.project_id);
+  requireFact(Boolean(delta?.product) && typeof delta.product === "object" && !Array.isArray(delta.product), "bundle_product_delta_missing", delta?.project_id);
+  requireFact(Boolean(delta?.technical) && typeof delta.technical === "object" && !Array.isArray(delta.technical), "bundle_technical_delta_missing", delta?.project_id);
+  for (const axis of ["product", "technical"]) {
+    for (const bucket of semanticBuckets) {
+      const items = delta?.[axis]?.[bucket];
+      requireFact(Array.isArray(items), "bundle_semantic_delta_bucket_missing", `${delta?.project_id}:${axis}:${bucket}`);
+      for (const item of Array.isArray(items) ? items : []) {
+        requireFact(validSemanticItem(item), "bundle_semantic_delta_item_invalid", `${delta?.project_id}:${axis}:${bucket}`);
+      }
+    }
+  }
+  requireFact(Array.isArray(delta?.unknowns), "bundle_semantic_delta_unknowns_missing", delta?.project_id);
+  for (const unknown of Array.isArray(delta?.unknowns) ? delta.unknowns : []) {
+    requireFact(typeof unknown === "string" && unknown.trim().length >= 4, "bundle_semantic_delta_unknown_invalid", delta?.project_id);
+  }
+  requireFact(Array.isArray(delta?.affected_surfaces), "bundle_semantic_delta_surfaces_missing", delta?.project_id);
+  requireFact(new Set(delta?.affected_surfaces || []).size === (delta?.affected_surfaces || []).length, "bundle_semantic_delta_surface_duplicate", delta?.project_id);
+  for (const surfaceId of delta?.affected_surfaces || []) {
+    requireFact(allowedSurfaceIds.has(surfaceId), "bundle_semantic_delta_surface_invalid", `${delta?.project_id}:${surfaceId}`);
+  }
+}
 
 for (const result of projectResults) {
   const registration = registryById.get(result.id);
@@ -115,6 +163,48 @@ for (const result of projectResults) {
   else requireFact(result.new_semantic_revision === result.old_semantic_revision, "bundle_semantic_revision_unexpected_change", result.id);
 }
 
+const globalSurfaceResults = Array.isArray(bundle.global_surfaces) ? bundle.global_surfaces : [];
+const globalSurfaceIds = globalSurfaceResults.map((item) => item?.id);
+requireFact(new Set(globalSurfaceIds).size === globalSurfaceIds.length, "bundle_global_surface_duplicate", globalSurfaceIds.join(","));
+requireFact(JSON.stringify(globalSurfaceIds) === JSON.stringify(globalSurfaceDefinitions.map((item) => item.id)), "bundle_global_surface_closure_invalid", globalSurfaceIds.join(","));
+for (const surface of globalSurfaceResults) {
+  const definition = globalSurfaceById.get(surface?.id);
+  requireFact(Boolean(definition), "bundle_global_surface_unregistered", surface?.id);
+  if (!definition) continue;
+  requireFact(["changed", "unchanged", "blocked"].includes(surface.status), "bundle_global_surface_status_invalid", `${surface.id}:${surface.status}`);
+  requireFact(typeof surface.reason === "string" && surface.reason.trim().length >= 8, "bundle_global_surface_reason_missing", surface.id);
+  const files = Array.isArray(surface.files) ? surface.files : [];
+  requireFact(JSON.stringify(files.map((item) => item?.path)) === JSON.stringify(definition.content_paths), "bundle_global_surface_files_invalid", surface.id);
+  let changedFileCount = 0;
+  for (const file of files) {
+    requireFact(validSha(file?.old_content_sha256), "bundle_global_surface_old_sha_invalid", `${surface.id}:${file?.path}`);
+    requireFact(validSha(file?.new_content_sha256), "bundle_global_surface_new_sha_invalid", `${surface.id}:${file?.path}`);
+    const contentPath = path.resolve(projectRoot, file?.path || "");
+    const relative = path.relative(projectRoot, contentPath);
+    requireFact(relative && !relative.startsWith("..") && !path.isAbsolute(relative), "bundle_global_surface_path_outside_project", `${surface.id}:${file?.path}`);
+    if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) continue;
+    const currentSha = sha256(await readFile(contentPath));
+    requireFact(currentSha === file.new_content_sha256, "bundle_global_surface_current_content_mismatch", `${surface.id}:${file.path}:${currentSha}`);
+    if (file.old_content_sha256 !== file.new_content_sha256) changedFileCount += 1;
+  }
+  if (surface.status === "changed") requireFact(changedFileCount > 0, "bundle_global_surface_changed_without_drift", surface.id);
+  else requireFact(changedFileCount === 0, "bundle_global_surface_unchanged_with_drift", surface.id);
+}
+
+const changedSurfaceIds = new Set([
+  ...projectResults.filter((item) => item.status === "changed").map((item) => `project:${item.id}`),
+  ...globalSurfaceResults.filter((item) => item.status === "changed").map((item) => item.id)
+]);
+const declaredSurfaceIds = new Set(sourceDeltas.flatMap((item) => item?.affected_surfaces || []));
+requireFact(
+  JSON.stringify([...declaredSurfaceIds].sort()) === JSON.stringify([...changedSurfaceIds].sort()),
+  "bundle_semantic_delta_surface_closure_invalid",
+  JSON.stringify({ declared: [...declaredSurfaceIds].sort(), changed: [...changedSurfaceIds].sort() })
+);
+const semanticItemCount = sourceDeltas.reduce((count, delta) => count + ["product", "technical"].reduce((axisCount, axis) => axisCount + semanticBuckets.reduce((bucketCount, bucket) => bucketCount + (Array.isArray(delta?.[axis]?.[bucket]) ? delta[axis][bucket].length : 0), 0), 0), 0);
+if (changedSurfaceIds.size > 0) requireFact(semanticItemCount > 0, "bundle_changed_without_semantic_delta", String(changedSurfaceIds.size));
+else requireFact(semanticItemCount === 0, "bundle_noop_with_semantic_delta", String(semanticItemCount));
+
 const counts = {
   changed: projectResults.filter((item) => item.status === "changed").length,
   unchanged: projectResults.filter((item) => item.status === "unchanged").length,
@@ -123,11 +213,17 @@ const counts = {
 requireFact(projectResults.length === counts.changed + counts.unchanged + counts.blocked, "bundle_result_partition_invalid", JSON.stringify(counts));
 
 const report = {
-  schema: "wly.ai-panel-refresh-verification.v1",
+  schema: "wly.ai-panel-refresh-verification.v2",
   status: findings.length ? "block" : "pass",
   mode: bundle.mode,
   project_count: projectResults.length,
   counts,
+  global_surface_counts: {
+    changed: globalSurfaceResults.filter((item) => item.status === "changed").length,
+    unchanged: globalSurfaceResults.filter((item) => item.status === "unchanged").length,
+    blocked: globalSurfaceResults.filter((item) => item.status === "blocked").length
+  },
+  semantic_delta_item_count: semanticItemCount,
   auto_repair_count: bundle.auto_repairs?.length || 0,
   blocker_count: bundle.blockers?.length || 0,
   finding_count: findings.length,

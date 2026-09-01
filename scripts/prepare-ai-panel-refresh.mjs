@@ -66,15 +66,47 @@ for (const registration of selected) {
   });
 }
 
+const globalSurfaces = [];
+for (const surface of registry.global_surfaces || []) {
+  const contentFiles = [];
+  for (const contentPath of surface.content_paths || []) {
+    const resolvedPath = safeContentPath(contentPath);
+    const contentBytes = await readFile(resolvedPath);
+    contentFiles.push({
+      path: contentPath,
+      content_sha256: createHash("sha256").update(contentBytes).digest("hex")
+    });
+  }
+  globalSurfaces.push({
+    id: surface.id,
+    title: surface.title,
+    role: surface.role,
+    content_files: contentFiles
+  });
+}
+
 const result = {
-  schema: "wly.ai-panel-refresh-plan.v1",
+  schema: "wly.ai-panel-refresh-plan.v2",
   status: manualSelected.length && !manualOwnerRequest ? "manual_owner_request_required" : "ready_for_ai",
   mode: allRequested ? "all" : "targeted",
   manual_owner_request: manualOwnerRequest,
   manual_project_ids: manualSelected.map((item) => item.id),
   semantic_writer: registry.refresh_policy.semantic_writer,
+  semantic_model_policy: registry.refresh_policy.semantic_model_policy,
   selected_project_count: projects.length,
   selected_projects: projects,
+  global_surfaces: globalSurfaces,
+  semantic_delta_contract: {
+    owner: "the selected website AI, never a deterministic script",
+    axes: {
+      product: ["added", "changed", "retired"],
+      technical: ["added", "changed", "retired"]
+    },
+    item: "each conclusion is { summary, evidence }; retirement or replacement requires current Owner evidence",
+    unknowns: "keep unresolved source contradictions explicit instead of guessing",
+    affected_surfaces: ["project:<project-id>", ...globalSurfaces.map((surface) => surface.id)],
+    mechanical_boundary: "scripts may verify closure, current bytes and publication; they never decide the semantic delta"
+  },
   materiality: {
     default: registry.refresh_policy.default_change_policy,
     source_event_threshold: registry.refresh_policy.task_creation_threshold,
@@ -100,7 +132,8 @@ const result = {
       ? "Stop before evidence collection: a manual_owner_only project is selected without an explicit owner refresh request."
       : "Read this plan and the current project content before collecting evidence.",
     "Run only the selected project collectors and any decision-relevant Owner readbacks.",
-    "Compare evidence with the current page; default to no file change.",
+    "Before editing, let the selected AI compare current Owner evidence with the published meaning and record product and technical additions, changes, retirements or replacements; Git paths and hashes are locators, never the semantic decision.",
+    "Map that semantic delta to the project, Rules, Skills and System surfaces; default every unaffected surface to byte-identical no-op.",
     "Repair safe, reversible, in-scope source defects through their real Owner when independently verifiable.",
     "When material drift exists, replace, merge or remove owning content in professional detailed plain language; never append refresh logs.",
     "Validate content contracts, build, public-content boundaries and a local owner preview.",
@@ -109,6 +142,8 @@ const result = {
   expected_result: {
     changed_projects: "only materially stale projects",
     unchanged_projects: "explicit no-op with unchanged content SHA-256",
+    global_surfaces: "authority and supply facts, Rules, Skills and System each close as changed, unchanged or blocked with per-file SHA-256",
+    semantic_deltas: "one AI-authored product/technical delta for every selected source project, including additions, changes, retirements and unknowns",
     auto_repairs: "named fixes with Owner evidence",
     blockers: "named evidence gaps without invented completion"
   }

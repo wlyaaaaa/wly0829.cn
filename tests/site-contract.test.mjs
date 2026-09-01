@@ -334,15 +334,15 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /neither copies, redefines nor independently\s+tightens that table/);
   assert.match(projectRules, /project-authored restriction cannot create its own\s+publication authority/);
   assert.match(projectRules, /`Codex Remote`, 微信 and `WeChatDirect` may therefore be stated directly/);
-  assert.match(projectRules, /Every native subagent used for this website, at every descendant depth/);
-  assert.match(projectRules, /exactly `gpt-5\.6-sol` with `max` effort/);
-  assert.match(projectRules, /Luna, Terra, local aliases and\s+lower effort are forbidden/);
+  assert.match(projectRules, /Every native subagent that performs website semantic judgment, writing or\s+content acceptance, at every descendant depth/);
+  assert.match(projectRules, /Sol-family[\s\S]{0,100}stronger future native model[\s\S]{0,140}active economy\s+route/);
+  assert.match(projectRules, /Luna, Terra and local\s+aliases cannot replace these semantic roles/);
   assert.match(projectRules, /Every current and future website project may use multiple native subagents/);
   assert.match(projectRules, /materially improve the delivered\s+page/);
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
-  assert.match(projectRules, /actual number of Sol Max agents from independent work surfaces and net\s+quality gain/);
+  assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally to projects added\s+after the current ten/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current ten/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -369,7 +369,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Decide module boundaries only after the source-to-page difference/);
   assert.match(projectRules, /auditing only the page's existing fields is circular/);
   assert.match(projectRules, /Content completeness is a separate, source-first acceptance gate/);
-  assert.match(projectRules, /independent[\s\S]{0,80}Sol Max reviewer/);
+  assert.match(projectRules, /independent[\s\S]{0,140}Sol-family-or-stronger economy-routing floor/);
   assert.match(projectRules, /without being given the page's module list as the expected answer/);
   assert.match(projectRules, /One P0 capability omission blocks content acceptance and publication/);
   assert.match(projectRules, /Each project owns its\s+real module count/);
@@ -622,9 +622,10 @@ test("TimeAudit reuses the existing website runtime without services, databases 
 
 test("the maintenance registry drives exactly the ten accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.schema, "wly.personal-panel-project-registry.v1");
+  assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
   assert.equal(registry.refresh_policy.semantic_writer, "website_ai_task_only");
+  assert.match(registry.refresh_policy.semantic_model_policy, /Sol-family.*stronger future native model.*economy routing/i);
   assert.equal(registry.refresh_policy.website_project_type, "projectless");
   assert.match(registry.refresh_policy.website_task_rule, /asynchronous projectless/);
   assert.match(registry.refresh_policy.website_task_rule, /task-id return is the dispatch receipt/);
@@ -636,6 +637,12 @@ test("the maintenance registry drives exactly the ten accepted project packages"
   assert.equal(registry.refresh_policy.trigger, "displayed_fact_or_explanation_changed");
   assert.equal(registry.refresh_policy.only_private_document, "docs/design/private-content-rules.md");
   assert.equal(registry.refresh_policy.default_presentation_mode, "real_dashboard");
+  assert.deepEqual(registry.global_surfaces.map((item) => item.id), ["authority-supply-facts", "rules", "skills", "system"]);
+  assert.deepEqual(registry.global_surfaces.find((item) => item.id === "rules").content_paths, ["app/content-rule-guides.js"]);
+  assert.deepEqual(registry.global_surfaces.find((item) => item.id === "skills").content_paths, ["app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js"]);
+  assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
+  const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
+  assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
   assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
   assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health"]);
@@ -2016,7 +2023,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2034,9 +2041,14 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
 
-  assert.equal(targeted.schema, "wly.ai-panel-refresh-plan.v1");
+  assert.equal(targeted.schema, "wly.ai-panel-refresh-plan.v2");
   assert.equal(targeted.status, "ready_for_ai");
   assert.equal(targeted.mode, "targeted");
+  assert.match(targeted.semantic_model_policy, /Sol-family.*stronger future native model.*economy routing/i);
+  assert.deepEqual(targeted.global_surfaces.map((item) => item.id), ["authority-supply-facts", "rules", "skills", "system"]);
+  assert.ok(targeted.global_surfaces.every((surface) => surface.content_files.length >= 1 && surface.content_files.every((file) => /^[a-f0-9]{64}$/.test(file.content_sha256))));
+  assert.deepEqual(targeted.semantic_delta_contract.axes, { product: ["added", "changed", "retired"], technical: ["added", "changed", "retired"] });
+  assert.match(targeted.semantic_delta_contract.mechanical_boundary, /never decide the semantic delta/i);
   assert.deepEqual(targeted.selected_projects.map((item) => item.id), ["pcconfig"]);
   assert.ok(targeted.selected_projects[0].collectors.some((item) => /SYSTEM\/Administrator[\s\S]*complete_visibility=true/.test(item)));
   assert.deepEqual(targeted.selected_projects[0].collector_requirements.map((item) => item.id), ["pcconfig-task-definitions"]);
@@ -2129,7 +2141,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   try {
     const bundlePath = path.join(tempRoot, "bundle.json");
     const bundle = {
-      schema: "wly.ai-panel-refresh-result.v1",
+      schema: "wly.ai-panel-refresh-result.v2",
       mode: "all",
       manual_owner_request: true,
       projects: full.selected_projects.map((item) => ({
@@ -2159,6 +2171,23 @@ test("AI refresh planner supports targeted and full refresh without writing narr
           observed_at: "2026-08-30T01:11:01.278Z"
         }))
       })),
+      source_deltas: full.selected_projects.map((item) => ({
+        project_id: item.id,
+        product: { added: [], changed: [], retired: [] },
+        technical: { added: [], changed: [], retired: [] },
+        unknowns: [],
+        affected_surfaces: []
+      })),
+      global_surfaces: full.global_surfaces.map((surface) => ({
+        id: surface.id,
+        status: "unchanged",
+        reason: "fresh AI review found no material change for this global surface",
+        files: surface.content_files.map((file) => ({
+          path: file.path,
+          old_content_sha256: file.content_sha256,
+          new_content_sha256: file.content_sha256
+        }))
+      })),
       auto_repairs: [],
       blockers: []
     };
@@ -2166,6 +2195,20 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     const verification = JSON.parse(execFileSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
     assert.equal(verification.status, "pass");
     assert.deepEqual(verification.counts, { changed: 0, unchanged: full.selected_projects.length, blocked: 0 });
+    assert.deepEqual(verification.global_surface_counts, { changed: 0, unchanged: full.global_surfaces.length, blocked: 0 });
+    assert.equal(verification.semantic_delta_item_count, 0);
+    const missingSurface = structuredClone(bundle);
+    missingSurface.global_surfaces.pop();
+    await writeFile(bundlePath, JSON.stringify(missingSurface, null, 2), "utf8");
+    const missingSurfaceRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(missingSurfaceRejected.status, 0);
+    assert.match(missingSurfaceRejected.stdout, /bundle_global_surface_closure_invalid/);
+    const falseSemanticDelta = structuredClone(bundle);
+    falseSemanticDelta.source_deltas[0].product.added.push({ summary: "imaginary capability", evidence: "no changed surface exists" });
+    await writeFile(bundlePath, JSON.stringify(falseSemanticDelta, null, 2), "utf8");
+    const falseSemanticDeltaRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.notEqual(falseSemanticDeltaRejected.status, 0);
+    assert.match(falseSemanticDeltaRejected.stdout, /bundle_noop_with_semantic_delta/);
     const nullCollector = structuredClone(bundle);
     nullCollector.projects.find((item) => item.id === "learning").collectors = [null];
     await writeFile(bundlePath, JSON.stringify(nullCollector, null, 2), "utf8");
