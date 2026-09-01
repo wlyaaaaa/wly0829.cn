@@ -94,4 +94,4 @@ PRIVATE 不是删技术的理由：页面仍完整解释 request、DOCX/PDF、Wo
 - First Reader：PASS；320/390 两列导航完整可见，每个独立表面的核心状态首现均有人话解释，P0/P1=0。
 - UI / Bloat / Privacy：PASS；1440/900/768/390/320 无页面溢出、大片空白、控制台或资源错误，画廊交互与所有体积/隐私门通过，P0/P1/P2=0。
 
-网站候选此刻仍在隔离 worktree，尚未提交、推送或完成 Pages 公网回读；任何本地 PASS 都不冒充 PUBLIC 完成。
+网站内容提交 `9e027e0348be7ba11b2c60b8b5376d5482f027e6` 已 fast-forward 到 PUBLIC `main` 并由远端回读；GitHub Pages run `33493830395` 的 build/deploy 均成功。公网 System、Projects、第 13 项总览、5 个模块、Skill、项目搜索分片与完全虚构样张已逐项回读：HTML 与最终构建在换行规范化后完全一致，搜索分片和 PNG 字节级一致。第 13 项的本地候选、发布效果与公网事实至此闭合。
