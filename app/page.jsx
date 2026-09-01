@@ -292,7 +292,7 @@ function Header({ path, search = "" }) {
       <header className="site-header">
         <a className="skip-link" href="#main-content">跳到主要内容</a>
         <div className="header-inner">
-        <a className="brand" href="https://github.com/wlyaaaaa" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开吴乐阳的 GitHub 主页">吴乐阳</a>
+        <a className="brand" href="https://github.com/wlyaaaaa" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开吴乐阳的 GitHub 主页"><img className="brand-logo" src="/media/brand/wuleyang-logo-full.png" width="1687" height="327" alt="" fetchPriority="high" /><span className="brand-text">吴乐阳</span></a>
         <nav className="primary-nav" aria-label="主要导航">
           {primaryNav.map((item) => (
             <SiteLink
