@@ -128,7 +128,9 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(pageSource, /className="brand-logo" src="\/media\/brand\/wuleyang-logo-full\.png" width="1687" height="327"/);
   assert.match(pageSource, /className="brand-text">吴乐阳<\/span>/);
   assert.match(styleSource, /\.brand-logo\s*\{[^}]*width:\s*clamp\(190px, 15vw, 260px\);[^}]*height:\s*auto;/);
-  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.brand-logo\s*\{\s*display:\s*none;[\s\S]*?\.brand-text\s*\{\s*display:\s*inline;/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.brand-logo\s*\{\s*display:\s*block;\s*width:\s*110px;[\s\S]*?\.brand-text\s*\{\s*display:\s*none;/);
+  assert.match(styleSource, /@media \(max-width: 420px\)[\s\S]*?\.brand-logo\s*\{\s*width:\s*90px;/);
+  assert.match(styleSource, /@media \(min-width: 901px\) and \(max-width: 1180px\)[\s\S]*?grid-template-columns:\s*150px max-content minmax\(180px, 220px\) auto;/);
   const brandAssetPath = path.join(projectRoot, "public", "media", "brand", "wuleyang-logo-full.png");
   assert.ok((await stat(brandAssetPath)).size > 100_000, "Full transparent wordmark asset is missing or unexpectedly truncated");
   assert.equal((await readFile(brandAssetPath))[25], 6, "Wordmark PNG must retain an RGBA alpha channel");
