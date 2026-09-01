@@ -26,7 +26,7 @@ export const systemHomeHero = {
 };
 
 export const systemHomeChapters = [
-  { id: "system-cases", label: "真实工作" },
+  { id: "system-workflows", label: "真实工作" },
   { id: "system-dependencies", label: "系统组成" },
   { id: "system-automations", label: "自动协作" },
   { id: "system-project-atlas", label: "项目版图" },
@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 12,
+  detailedPageCount: 13,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十二个可深入阅读的完整参考，personal-materials 已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十三个可深入阅读的完整参考，文书和材料制作已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -663,7 +663,7 @@ export const systemProjectDomains = [
       { id: "ai-coach", title: "AI 学习协作", repo: "ai-coach", role: "先读原始材料，再按用户实际反馈继续，避免反复从零讲或自动推进。它与公开的通用学习方法有关，但不是同一个项目身份。", kind: "长期协作", href: projectLedgerHref },
       { id: "ai-llm-job-prep", title: "学习材料库", repo: "ai-llm-job-prep", role: "把课程原件、总结和可打印知识地图组织成可复核的学习底稿。", kind: "学习资料", href: projectLedgerHref },
       { id: "career-development", title: "个人发展协作", role: "把方向、学习、项目表达和长期准备放在同一条可持续推进的工作线上；私人事实不进入首页。", kind: "长期协作", href: projectLedgerHref },
-      { id: "formal-materials", title: "文书和材料制作", role: "把合同、说明、申请、事件材料和附件整理成可编辑、可打印、可核验、可恢复的正式成品，并把材料制作、本人操作和接收方处理分开说明。", kind: "文书与材料", href: projectLedgerHref },
+      { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
       { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人当前明示、行为事实核对和可纠正推定组织成消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常选择；完整项目页尚未收录，当前从 Skill 进入。", kind: "私人日常协作项目", href: "/skills/daily-preferences", entryLabel: "进入 Skill" }
     ]
@@ -749,7 +749,7 @@ export const systemDependencyNodes = [
     lane: "inputs",
     title: "提示词、附件与已知路径",
     subtitle: "大多数工作直接使用本次请求给出的文字、文件或明确位置",
-    href: "#system-cases",
+    href: "#system-workflows",
     linkLabel: "查看真实工作场景",
     detail: "已知材料直接交给合适的读取器，不先绕到材料查找，也不为了定位建立第二份长期副本；工具所需临时文件不改变原件身份。只有非媒体文件位置未知或旧定位失效时，才调用原件查找。"
   },
@@ -1134,11 +1134,12 @@ export const systemDependencyNodes = [
     title: "文书和材料制作",
     subtitle: "从真实原件和当前材料状态进入合同、说明、申请、事件材料或提交包",
     links: [
-      { href: "#system-project-asset-formal-materials", label: "查看项目版图" },
+      { href: "/projects/document-materials", label: "进入文书和材料制作完整项目页" },
       { href: "/skills/document-materials", label: "Skill：文书和材料制作" }
     ],
-    searchHref: "/skills/document-materials",
-    detail: "先核对原件、事实、解释、待确认项和未知，再生成可编辑文书、PDF 或材料包；材料生成、本人操作、平台收到和接收方处理始终分开。"
+    searchHref: "/projects/document-materials",
+    searchAliases: ["文书和材料制作", "制作DOCX和PDF材料包", "递送收件处理状态", "对方签回哪个版本", "材料生成平台收到接收方处理"],
+    detail: "先核对当前事项、必要原件、事实、来源说明、待确认项和未知，再生成同源 DOCX/PDF、自包含材料包与逐页彩色/灰度证据；produced（已生成）、signed（本人已签）、ready_for_delivery（已具备递送条件）、delivered（已递送）、received（已收件）、handled（已处理）和 counterparty_signed_returned（对方签回）始终分开。"
   },
   {
     id: "chinese-asr",
@@ -1496,7 +1497,7 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "work-delivery", name: "工作交付副驾驶", technicalName: "work-delivery", summary: "把明确选中的需求、会议记录、规则和表格整理成来源可追溯、跨文档口径一致的交付包；来源变化时标记旧结果并说明哪些需要重做。", href: "/skills/work-delivery" },
-      { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "核对当前材料状态和真实原件，制作合同、说明、申请、事件材料或提交包，并把生成、本人操作、平台收到和接收方处理分开。", href: "/skills/document-materials" },
+      { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "从当前事项和必要原件生成同源 DOCX/PDF、逐页证据与自包含材料包，并把本人签名、可递送、递送、收件、处理和对方签回分别记录。", href: "/skills/document-materials" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },
       { slug: "md-to-pdf", name: "Markdown 转 PDF", technicalName: "md-to-pdf", summary: "按文档用途和分页要求生成 PDF，并核对源文件指纹、页数、中文文本和当前输出。", href: "/skills/md-to-pdf" },

@@ -45,7 +45,7 @@ export const skillProjectLinks = {
     { relation: "uses-project", projectSlug: "chinese-asr", moduleSlug: "task-routing", label: "中文语音转写项目" }
   ],
   "document-materials": [
-    { relation: "no-detail-project", systemAssetId: "formal-materials", label: "文书和材料制作项目" }
+    { relation: "owned-by-project", projectSlug: "document-materials", moduleSlug: "current-matter-sources", label: "文书和材料制作项目" }
   ],
   "llm-backend-toolkit": [
     { relation: "no-detail-project", systemAssetId: "llm-backend-toolkit", label: "额外 AI 长任务执行器" }
@@ -101,6 +101,10 @@ export const projectReferenceLinks = {
   ],
   "personal-materials": [
     { relation: "skill", href: "/skills/personal-materials", label: "Skill：非媒体原件查找" }
+  ],
+  "document-materials": [
+    { relation: "skill", href: "/skills/document-materials", label: "Skill：文书和材料制作" },
+    { relation: "uses-project", href: "/projects/personal-materials/registered-lookup", label: "位置未知时先找原件" }
   ],
   "wechat-direct": [
     { relation: "uses-project", href: "/projects/chinese-asr/task-routing", label: "语音转写交给 ChineseASR" }

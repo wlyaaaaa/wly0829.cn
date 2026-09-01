@@ -1549,31 +1549,31 @@ function RulesPage({ search }) {
 function SystemScenarioPanel({ scenario, index }) {
   return (
     <section
-      className={`system-case-panel${index === 0 ? " is-current" : ""}`}
+      className={`system-workflow-panel${index === 0 ? " is-current" : ""}`}
       id={`system-scenario-${scenario.id}`}
       data-system-scenario-panel={scenario.id}
       role="tabpanel"
       aria-labelledby={`system-scenario-tab-${scenario.id}`}
     >
-      <aside className="system-case-summary">
+      <aside className="system-workflow-summary">
         <span>场景 {String(index + 1).padStart(2, "0")}</span>
         <h3>{scenario.title}</h3>
         <blockquote>{scenario.request}</blockquote>
         <p>{scenario.value}</p>
       </aside>
-      <div className="system-case-stages">
+      <div className="system-workflow-stages">
         {scenario.stages.map((stage) => (
-          <article className="system-case-stage" key={`${scenario.id}-${stage.number}`}>
+          <article className="system-workflow-stage" key={`${scenario.id}-${stage.number}`}>
             <span>{stage.number} / {stage.kicker}</span>
             <h4>{stage.title}</h4>
             <p>{stage.body}</p>
-            <div className="system-case-stage-items">
+            <div className="system-workflow-stage-items">
               {stage.items.map(([title, detail]) => <div key={title}><strong>{title}</strong><small>{detail}</small></div>)}
             </div>
           </article>
         ))}
       </div>
-      <dl className="system-case-contract">
+      <dl className="system-workflow-contract">
         <div><dt>本次实际使用</dt><dd>{scenario.systems.join("、")}</dd></div>
         <div><dt>规则怎样作用</dt><dd>{scenario.rules}</dd></div>
         <div><dt>最终交付</dt><dd>{scenario.result}</dd></div>
@@ -1776,13 +1776,13 @@ function SystemPage() {
 
       <SystemSectionNavigation />
 
-      <section className="system-frame system-cases" id="system-cases" aria-labelledby="system-cases-title">
-        <div className="system-home-section-heading"><h2 id="system-cases-title">AI 如何协助我把一件真实工作办成</h2><p>材料可以直接随提示词、附件或已知路径进入；只有非媒体原件位置未知或定位失效时才调用材料查找。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
-        <div className="system-case-tabs" role="tablist" aria-label="选择真实工作场景">
+      <section className="system-frame system-workflows" id="system-workflows" aria-labelledby="system-workflows-title">
+        <div className="system-home-section-heading"><h2 id="system-workflows-title">AI 如何协助我把一件真实工作办成</h2><p>材料可以直接随提示词、附件或已知路径进入；只有非媒体原件位置未知或定位失效时才调用材料查找。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
+        <div className="system-workflow-tabs" role="tablist" aria-label="选择真实工作场景">
           {systemScenarios.map((scenario, index) => <button type="button" role="tab" id={`system-scenario-tab-${scenario.id}`} aria-controls={`system-scenario-${scenario.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-system-scenario-tab={scenario.id} className={index === 0 ? "is-current" : undefined} key={scenario.id}>{scenario.label}</button>)}
         </div>
-        <div className="system-case-scroll-indicator" data-system-case-scroll-indicator aria-hidden="true" hidden><small>左右滑动查看更多</small><span><i /></span></div>
-        <div className="system-case-panels">{systemScenarios.map((scenario, index) => <SystemScenarioPanel scenario={scenario} index={index} key={scenario.id} />)}</div>
+        <div className="system-workflow-scroll-indicator" data-system-workflow-scroll-indicator aria-hidden="true" hidden><small>左右滑动查看更多</small><span><i /></span></div>
+        <div className="system-workflow-panels">{systemScenarios.map((scenario, index) => <SystemScenarioPanel scenario={scenario} index={index} key={scenario.id} />)}</div>
       </section>
 
       <section className="system-frame system-dependencies" id="system-dependencies" aria-labelledby="system-dependencies-title">
@@ -1951,8 +1951,8 @@ function SkillDetail({ item, search }) {
         </div>
         <section><h2>依赖</h2><StringList items={item.dependencies.map(annotateTerms)} /></section>
         <section><h2>验证状态</h2><p>六层状态分开显示，Regression（回归证据）另列。Source（源码）、Install（安装）和 Transaction（供应事务）不会自动提升 Current task（当前任务）、Fresh task（全新任务验证）或真实 E2E（端到端验证）。</p><EvidenceGrid skill={item} /></section>
-        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd>{item.evidenceSourceCommit ? <code>{item.evidenceSourceCommit}</code> : "不适用：宿主集成能力不绑定项目 Git 提交"}</dd></div><div><dt>Supply command（供应验证命令）</dt><dd><code>{item.supplyEvidenceCommand}</code></dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
-        <section><h2>Canonical source（唯一维护源）</h2><div className="source-list">{item.sourceKind === "host_integrated" ? <><div><code>{item.capabilityId}</code><p>这是稳定的宿主能力身份；宿主更新后仍按能力发现，不以版本化缓存路径准入。</p></div><div><code>{item.observedSourcePath}</code><p>这是本次观察到的 bundle（宿主能力包）源码位置，只用于记录本轮 bytes / SHA 快照。</p></div></> : <div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div>}</div></section>
+        <section><h2>证据时间与来源</h2><dl className="fact-grid"><div><dt>Observed at（观察时间）</dt><dd>{item.evidenceObservedAt}</dd></div><div><dt>Source commit（来源提交）</dt><dd>{item.evidenceSourceCommit ? <code>{item.evidenceSourceCommit}</code> : "不适用：宿主集成能力不绑定项目 Git 提交"}</dd></div><div><dt>Supply command（供应验证命令）</dt><dd>{item.sourceLocatorVisibility === "withheld" ? "由个人 Skill 供应链在内部执行并回读；公开页不展示维护命令或路径。" : <code>{item.supplyEvidenceCommand}</code>}</dd></div><div><dt>Evidence basis（证据来源）</dt><dd>{annotateTerms(item.evidenceBasis)}</dd></div><div><dt>Snapshot（快照）</dt><dd>供应链事实是当前回读；项目场景回归与 E2E 只有在本页明确写出本轮重验时才称当前，否则是上次验证记录。</dd></div></dl></section>
+        <section><h2>Canonical source（唯一维护源）</h2><div className="source-list">{item.sourceKind === "host_integrated" ? <><div><code>{item.capabilityId}</code><p>这是稳定的宿主能力身份；宿主更新后仍按能力发现，不以版本化缓存路径准入。</p></div><div><code>{item.observedSourcePath}</code><p>这是本次观察到的 bundle（宿主能力包）源码位置，只用于记录本轮 bytes / SHA 快照。</p></div></> : item.sourceLocatorVisibility === "withheld" ? <div><code>{item.publicSourceLabel}</code><p>精确维护定位由个人 Skill 供应链保留；公开页只显示可用产品入口、当前规则与分层验证，不暴露内部维护路径。</p></div> : <div><code>{item.sourcePath}</code><p>该路径是维护源；用户目录中的发现入口不是第二份源码。</p></div>}</div></section>
         <SiteLink className="back-link" href={back}><ArrowLeft size={18} aria-hidden="true" />返回 Skills（能力）</SiteLink>
       </article>
     </div>

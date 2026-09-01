@@ -510,8 +510,8 @@ function initializeSystemHome() {
   if (!home) return;
   const tabs = Array.from(home.querySelectorAll("[data-system-scenario-tab]"));
   const panels = Array.from(home.querySelectorAll("[data-system-scenario-panel]"));
-  const tabRail = home.querySelector(".system-case-tabs");
-  const scrollIndicator = home.querySelector("[data-system-case-scroll-indicator]");
+  const tabRail = home.querySelector(".system-workflow-tabs");
+  const scrollIndicator = home.querySelector("[data-system-workflow-scroll-indicator]");
   const ids = tabs.map((tab) => tab.dataset.systemScenarioTab);
   if (!tabs.length || !panels.length) return;
 
@@ -551,7 +551,7 @@ function initializeSystemHome() {
       tab.setAttribute("aria-selected", String(active));
       tab.tabIndex = active ? 0 : -1;
       if (active && (updateUrl || focus)) {
-        const rail = tab.closest(".system-case-tabs");
+        const rail = tab.closest(".system-workflow-tabs");
         if (rail) rail.scrollLeft = Math.max(0, Math.min(tab.offsetLeft - (rail.clientWidth - tab.clientWidth) / 2, rail.scrollWidth - rail.clientWidth));
         window.requestAnimationFrame(updateScenarioScrollIndicator);
         if (focus) tab.focus({ preventScroll: true });

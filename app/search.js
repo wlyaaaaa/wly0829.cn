@@ -12,6 +12,7 @@ export const ruleSearchAliases = {
 
 const skillSearchAliases = {
   "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件", "找一张照片"],
+  "document-materials": ["帮我起草合同并整理材料包", "制作文书和附件包", "生成DOCX和PDF材料"],
   "personal-panel-refresh": ["刷新看板", "fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
   "timeaudit-diagnostics": ["过去一小时为什么卡", "没有游戏帧是不是掉帧", "电脑昨天为什么发热", "睡眠还是采集断档", "TimeAudit 历史证据"],
   "daily-preferences": ["吃什么", "今天吃什么", "购物", "购物推荐", "支付", "支付习惯", "出行", "出行推荐", "旅行景点", "住宿推荐", "娱乐", "娱乐推荐", "数字消费", "服务怎么选", "工具习惯", "审美偏好", "我改主意", "我改主意了", "以后按这个推荐", "以后按我的偏好推荐"],
@@ -164,7 +165,7 @@ export const globalSearchEntries = [
       type: "Skill",
       group: "Skills",
       scopes: ["skills"],
-      title: item.name,
+      title: item.slug === "document-materials" ? item.title : item.name,
       detail: `${item.title}：${outcome.value}`,
       href: `/skills/${item.slug}`,
       aliases: skillSearchAliases[item.slug] || [],

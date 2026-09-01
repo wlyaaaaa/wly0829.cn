@@ -17,6 +17,7 @@ import { codexRemoteModules, codexRemoteProject } from "../app/content-codex-rem
 import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { personalMaterialsModules, personalMaterialsProject } from "../app/content-personal-materials.js";
+import { documentMaterialsModules, documentMaterialsProject } from "../app/content-document-materials.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -66,6 +67,7 @@ const credentialValuePatterns = [
   ["private key", /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
   ["assigned credential", /(?:password|passwd|api[_-]?key|access[_-]?token|client[_-]?secret)\s*[:=]\s*["']?[A-Za-z0-9_./+=-]{8,}/i]
 ];
+const documentMaterialsForbidden = /personal[-_]?litigation|\b(?:case|legal|litigation|lawsuit|court)\b|legal[_-]filing(?:[_-]kit)?|诉讼|法律|案件|起诉|法院/i;
 const publicSafeProductAndDomainLabels = ["CodexHarness", "PersonalOS", "PersonalKnowledgeBase", "AI 大模型", "AI 教练"];
 
 function assertNoCredentialValues(text) {
@@ -100,11 +102,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly twelve projects and four navigation areas", async () => {
+test("the accepted panel has exactly thirteen projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -344,7 +346,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current twelve/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current thirteen/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -413,7 +415,7 @@ test("the deployed System content explains generic AI productivity and long-runn
   });
   assert.match(documentMaterialsSurface, /文书和材料制作/);
   assert.match(documentMaterialsSurface, /\/skills\/document-materials/);
-  assert.doesNotMatch(documentMaterialsSurface, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i);
+  assert.doesNotMatch(documentMaterialsSurface, documentMaterialsForbidden);
   const hookNode = systemDependencyNodes.find((node) => node.id === "collaboration-hooks");
   const hookText = JSON.stringify(hookNode);
   assert.match(hookText, /Hook.*身份.*规则/s, "System omits the runtime Hook identity path");
@@ -500,7 +502,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 12);
+  assert.equal(enabledProjectCount, 13);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -584,7 +586,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
     ["仓库公开性分支远端工作树同步状态怎么确认", "系统组成", "/skills/project-entry-gate/"],
     ["多个 AI 同时改一个文件怎么办", "系统组成", "/projects/agents/authorization-owner/"],
     ["Hook 创建子代理前核对身份", "系统组成", "/skills/native-economy-routing/"],
-    ["材料生成平台收到接收方处理", "系统组成", "/skills/document-materials/"],
+    ["材料生成平台收到接收方处理", "系统组成", "/projects/document-materials/"],
     ["源码或构建通过能不能证明网页发布", "验证层", "/#evidence-test"]
   ];
   for (const [query, type, href] of compactSystemCases) {
@@ -622,7 +624,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the twelve accepted project packages", async () => {
+test("the maintenance registry drives exactly the thirteen accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -645,9 +647,9 @@ test("the maintenance registry drives exactly the twelve accepted project packag
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -670,7 +672,7 @@ test("the maintenance registry drives exactly the twelve accepted project packag
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -1014,6 +1016,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "personal-materials",
       expectedOrder: 12,
       expectedModules: ["registered-lookup", "bounded-discovery", "verified-open", "exact-intake"]
+    },
+    {
+      project: documentMaterialsProject,
+      modules: documentMaterialsModules,
+      expectedSlug: "document-materials",
+      expectedOrder: 13,
+      expectedModules: ["current-matter-sources", "editable-docx-pdf", "page-audit-release", "signature-delivery-version", "reality-readback-recovery"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1946,7 +1955,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 1);
-  assert.equal(systemProjectInventory.detailedPageCount, 12);
+  assert.equal(systemProjectInventory.detailedPageCount, 13);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
@@ -2062,7 +2071,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 12);
+  assert.equal(systemProjectInventory.detailedPageCount, 13);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.ok(skillProjectLinks["personal-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "personal-materials" && item.moduleSlug === "registered-lookup"));
@@ -2086,6 +2095,138 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
     ["选中候选后怎么核对哈希", "/projects/personal-materials/verified-open"],
     ["新材料怎样精确接入而不复制原件", "/projects/personal-materials/exact-intake"]
   ]) assert.equal(searchPanel(query)[0]?.href, href, `personal-materials search misroutes: ${query}`);
+});
+
+test("document-materials explains same-source production, page audits, release states and reality readback without private-domain branding", async () => {
+  assert.equal(documentMaterialsProject.slug, "document-materials");
+  assert.equal(documentMaterialsProject.order, 13);
+  assert.equal(documentMaterialsProject.route, "/projects/document-materials");
+  assert.equal(documentMaterialsProject.title, "文书和材料制作");
+  assert.equal(documentMaterialsProject.visibility, "私有仓库");
+  assert.equal(documentMaterialsProject.repositoryUrl == null, true);
+  assert.deepEqual(documentMaterialsModules.map((item) => item.slug), ["current-matter-sources", "editable-docx-pdf", "page-audit-release", "signature-delivery-version", "reality-readback-recovery"]);
+
+  const forbidden = documentMaterialsForbidden;
+  const publicText = JSON.stringify({ project: documentMaterialsProject, modules: documentMaterialsModules });
+  assertNoCredentialValues(publicText);
+  assert.doesNotMatch(publicText, forbidden, "document-materials reintroduces a forbidden private-domain identity");
+  assert.doesNotMatch(publicText, /[A-Za-z]:\\/, "document-materials leaks an absolute Windows locator");
+  assert.match(publicText, /PRIVATE main 3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc/);
+  for (const expected of [/2\.0\.1/, /526/, /32 pass/, /101 个子测试/, /Microsoft Word/, /Poppler/, /真实事项[^。；]{0,60}(?:not_run|未运行)/]) assert.match(publicText, expected, `document-materials omits current evidence: ${expected}`);
+
+  const overviewText = JSON.stringify({
+    summary: documentMaterialsProject.summary,
+    why: documentMaterialsProject.why,
+    example: documentMaterialsProject.plainExample,
+    result: documentMaterialsProject.result,
+    states: documentMaterialsProject.readerStates,
+    principles: documentMaterialsProject.productPrinciples,
+    responsibilities: documentMaterialsProject.responsibilities,
+    exclusions: documentMaterialsProject.exclusions,
+    gaps: documentMaterialsProject.currentState.gaps
+  });
+  for (const expected of [
+    /只改.*(?:Word|PDF).*直接|单文件.*绕过/,
+    /只.*找原件.*个人材料查找|个人材料查找.*原件/,
+    /工作交付/,
+    /DOCX.*PDF|PDF.*DOCX/,
+    /彩色.*灰度|灰度.*彩色/,
+    /produced.*signed.*ready_for_delivery.*delivered.*received.*handled/,
+    /counterparty_signed_returned/,
+    /source_note.*可选/,
+    /整篇语义审阅.*(?:没有|未)/,
+    /v2.*non-self-contained|legacy_v2_non_self_contained/,
+    /没有.*(?:断点续传|可续传).*mirror|无.*(?:断点续传|可续传).*mirror/
+  ]) assert.match(overviewText, expected, `document-materials overview omits: ${expected}`);
+
+  const moduleBySlug = new Map(documentMaterialsModules.map((item) => [item.slug, item]));
+  const sourceText = JSON.stringify(moduleBySlug.get("current-matter-sources"));
+  for (const expected of [/request/, /participants/, /recipient/, /channel/, /facts/, /attachments/, /source_note/, /input snapshot/i, /只解析一次|单次解析/, /TOCTOU|源文件.*变化/]) assert.match(sourceText, expected, `source-plan omits: ${expected}`);
+  const buildText = JSON.stringify(moduleBySlug.get("editable-docx-pdf"));
+  for (const expected of [/formal-plan/, /formal-build/, /DOCX/, /PDF/, /Microsoft Word/, /ReportLab/, /build ID/i, /四类/, /内部.*代码.*不进入|不含内部/]) assert.match(buildText, expected, `build-review omits: ${expected}`);
+  const auditText = JSON.stringify(moduleBySlug.get("page-audit-release"));
+  for (const expected of [/page number|页码/i, /彩色/, /灰度/, /grayscale/, /exact set|精确集合/i, /空目录/, /v3 release/i, /legacy_v2_non_self_contained/, /manifest digest.*不是.*数字签名|不是.*数字签名.*manifest digest/i]) assert.match(auditText, expected, `page-audit-release omits: ${expected}`);
+  const signatureText = JSON.stringify(moduleBySlug.get("signature-delivery-version"));
+  for (const expected of [/profile/i, /asset SHA-256|SHA-256.*asset/i, /produced/, /signed/, /ready_for_delivery/, /delivered.*false/, /不是.*(?:证书签名|可信时间戳)/]) assert.match(signatureText, expected, `signature module omits: ${expected}`);
+  const realityText = JSON.stringify(moduleBySlug.get("reality-readback-recovery"));
+  for (const expected of [/delivered/, /received/, /handled/, /counterparty_signed_returned/, /通用CLI.*不实现|没有.*通用.*(?:schema|command|test)/i, /复制.*空目录.*verify|空目录.*verify/i, /没有.*(?:自动备份|断点续传)/]) assert.match(realityText, expected, `reality module omits: ${expected}`);
+  assert.match(JSON.stringify(documentMaterialsProject.usageExamples), /produced（已生成）.*signed（本人已签）.*ready_for_delivery（已具备递送条件）/);
+  assert.match(moduleBySlug.get("editable-docx-pdf").relation, /produced（已生成）.*signed（本人已签）.*ready_for_delivery（已具备递送条件）/);
+  assert.match(moduleBySlug.get("editable-docx-pdf").failures.find((item) => item.condition.includes("缺输出字段")).response, /ready_for_delivery（已具备递送条件）/);
+  assert.match(moduleBySlug.get("page-audit-release").readerStates.pass, /ready_for_delivery（已具备递送条件）/);
+  assert.match(moduleBySlug.get("signature-delivery-version").why, /signed（本人已签）/);
+  assert.match(moduleBySlug.get("reality-readback-recovery").decisionImpact.join(" "), /produced（已生成）.*signed（本人已签）.*ready_for_delivery（已具备递送条件）.*delivered（已递送）.*received（已收件）.*handled（已处理）.*counterparty_signed_returned（对方签回）/);
+  assert.match(JSON.stringify(skillGuides["document-materials"]), /produced（已生成）.*signed（本人已签）.*ready_for_delivery（已具备递送条件）.*delivered（已递送）.*received（已收件）.*handled（已处理）.*counterparty_signed_returned（对方签回）/);
+
+  const moduleSlugs = new Set(documentMaterialsModules.map((item) => item.slug));
+  assert.ok(documentMaterialsProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)));
+  assert.deepEqual(new Set(documentMaterialsProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs);
+  for (const module of documentMaterialsModules) {
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"]);
+    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8);
+    for (const source of module.sources) {
+      assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/);
+      assert.doesNotMatch(source.path, forbidden);
+      assert.equal(source.href == null, true);
+    }
+  }
+
+  assert.equal(documentMaterialsProject.gallery.length, 1);
+  const gallery = documentMaterialsProject.gallery[0];
+  assert.equal(gallery.thumbnail, undefined, "single fictional page must not add a duplicate thumbnail");
+  assert.match(`${gallery.alt}\n${gallery.caption}\n${gallery.proves}\n${gallery.doesNotProve}`, /完全虚构/);
+  assert.doesNotMatch(`${gallery.alt}\n${gallery.caption}`, forbidden);
+  const galleryFile = path.join(projectRoot, "public", ...gallery.src.slice(1).split("/"));
+  assert.ok((await stat(galleryFile)).size <= 250 * 1024, "fictional document gallery exceeds 250 KiB");
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "document-materials");
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.ai_refresh.content_path, "app/content-document-materials.js");
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(registration.source.repo, "wlyaaaaa/personal-formal-documents");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.doesNotMatch(JSON.stringify(registration), forbidden);
+
+  assert.equal(systemProjectInventory.detailedPageCount, 13);
+  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
+  assert.equal(asset.href, "/projects/document-materials");
+  assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
+  assert.ok(projectReferenceLinks["document-materials"].some((item) => item.href === "/skills/document-materials"));
+  const skill = skills.find((item) => item.slug === "document-materials");
+  assert.equal(skill.registryName, "personal-formal-documents");
+  assert.equal(skill.sourceLocatorVisibility, "withheld");
+  assert.equal(skill.sourcePath, "withheld:document-materials");
+  assert.doesNotMatch(JSON.stringify({ skill, guide: skillGuides["document-materials"], outcome: skillOutcomes["document-materials"] }), forbidden);
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "document-materials", "index.html"), "utf8");
+  const moduleHtml = await Promise.all(documentMaterialsModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "document-materials", item.slug, "index.html"), "utf8")));
+  const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "document-materials", "index.html"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-document-materials.js"), "utf8");
+  const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
+  assert.match(overviewHtml, /data-static-route="\/projects\/document-materials"/);
+  assert.match(overviewHtml, /project-gallery/);
+  assert.doesNotMatch(generatedSurface, forbidden, "generated document-materials surfaces reintroduce a forbidden identity");
+  assert.doesNotMatch(generatedSurface, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated document-materials surfaces leak an absolute Windows locator");
+  assert.doesNotMatch(skillHtml, /[A-Za-z]:\\|withheld:document-materials|personal-formal-documents/);
+
+  const documentSkillSearch = searchPanel("帮我起草合同并整理材料包")[0];
+  assert.equal(documentSkillSearch?.title, "文书和材料制作");
+  assert.equal(documentSkillSearch?.href, "/skills/document-materials");
+  assert.equal(searchPanel("文书和材料制作", "system")[0]?.href, "/projects/document-materials");
+  for (const [query, href] of [
+    ["原件里的日期和草稿不一致怎么办", "/projects/document-materials/current-matter-sources"],
+    ["怎样同时生成Word和PDF", "/projects/document-materials/editable-docx-pdf"],
+    ["材料包复制到空目录恢复", "/projects/document-materials/page-audit-release"],
+    ["这份材料只是生成还是已签名", "/projects/document-materials/signature-delivery-version"],
+    ["已经递送对方收到没有", "/projects/document-materials/reality-readback-recovery"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `document-materials search misroutes: ${query}`);
+
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  const mobileProjectNavigationStart = styleSource.indexOf("@media (max-width: 900px)");
+  const mobileProjectNavigation = styleSource.slice(mobileProjectNavigationStart, styleSource.indexOf("@media (max-width: 680px)", mobileProjectNavigationStart));
+  assert.match(mobileProjectNavigation, /\.project-navigation\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);[\s\S]*?overflow-x:\s*visible;/);
+  assert.match(mobileProjectNavigation, /\.project-navigation a\s*\{[\s\S]*?white-space:\s*normal;/);
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -2167,6 +2308,9 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const personalMaterialsCandidate = run(["--project", "personal-materials", "--path", "materials.py"]);
   const personalMaterialsMaterial = run(["--project", "personal-materials", "--path", "materials.py", "--material-change"]);
   const personalMaterialsPrivateDatabase = run(["--project", "personal-materials", "--path", "private/materials.sqlite3", "--material-change"]);
+  const documentMaterialsCandidate = run(["--project", "document-materials", "--path", "src/product/formal_documents.py"]);
+  const documentMaterialsMaterial = run(["--project", "document-materials", "--path", "src/product/formal_documents.py", "--material-change"]);
+  const documentMaterialsPrivateOutput = run(["--project", "document-materials", "--path", "private/matter-output.pdf", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -2239,11 +2383,17 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(personalMaterialsMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
   assert.equal(personalMaterialsPrivateDatabase.impact_candidate, false);
   assert.equal(personalMaterialsPrivateDatabase.task_required, false);
+  assert.equal(documentMaterialsCandidate.impact_candidate, true);
+  assert.equal(documentMaterialsCandidate.task_required, false);
+  assert.equal(documentMaterialsMaterial.task_required, true);
+  assert.equal(documentMaterialsMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
+  assert.equal(documentMaterialsPrivateOutput.impact_candidate, false);
+  assert.equal(documentMaterialsPrivateOutput.task_required, false);
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2259,6 +2409,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedPersonalHealth = run(["--project", "personal-health", "--manual-owner-request"]);
   const targetedWechatDirect = run(["--project", "wechat-direct"]);
   const targetedPersonalMaterials = run(["--project", "personal-materials"]);
+  const targetedDocumentMaterials = run(["--project", "document-materials"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2343,11 +2494,19 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedPersonalMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-materials");
   assert.equal(Object.hasOwn(targetedPersonalMaterials.selected_projects[0].source, "local_root"), false);
   assert.ok(targetedPersonalMaterials.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedDocumentMaterials.status, "ready_for_ai");
+  assert.deepEqual(targetedDocumentMaterials.selected_projects.map((item) => item.id), ["document-materials"]);
+  assert.equal(targetedDocumentMaterials.selected_projects[0].content_path, "app/content-document-materials.js");
+  assert.equal(targetedDocumentMaterials.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedDocumentMaterials.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedDocumentMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-formal-documents");
+  assert.equal(Object.hasOwn(targetedDocumentMaterials.selected_projects[0].source, "local_root"), false);
+  assert.ok(targetedDocumentMaterials.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -2740,7 +2899,12 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.ok(["personal_install", "host_integrated"].includes(item.sourceKind), `${item.slug}.sourceKind is invalid`);
     assert.equal(item.availability, "available", `${item.slug} is not publicly usable`);
     if (item.sourceKind === "personal_install") {
-      assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
+      if (item.sourceLocatorVisibility === "withheld") {
+        assert.match(item.sourcePath, /^withheld:[a-z-]+$/);
+        assert.ok(item.publicSourceLabel?.length >= 10, `${item.slug}.publicSourceLabel is incomplete`);
+      } else {
+        assert.equal(path.win32.isAbsolute(item.sourcePath), true, `${item.slug}.sourcePath is not an absolute Windows path`);
+      }
     } else {
       assert.equal(item.sourcePath, item.capabilityId);
       assert.match(item.capabilityId, /^host:[a-z-]+$/);
@@ -2800,32 +2964,32 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const documentMaterialsText = JSON.stringify({ entry: documentMaterials, guide: documentMaterialsGuide, outcome: skillOutcomes["document-materials"] });
   assert.deepEqual({ slug: documentMaterials.slug, name: documentMaterials.name, title: documentMaterials.title }, { slug: "document-materials", name: "document-materials", title: "文书和材料制作" });
   assert.equal(documentMaterials.registryName, "personal-formal-documents");
-  assert.match(documentMaterials.sourcePath, /\\personal-formal-documents\\SKILL\.md$/);
-  assert.equal(documentMaterials.sourceBytes, 2159);
-  assert.equal(documentMaterials.sourceSha256, "a006fe6a82423935c4a058a02d9d91f031518ba91fa7d6e5757009bc6fb3503f");
+  assert.equal(documentMaterials.sourceLocatorVisibility, "withheld");
+  assert.equal(documentMaterials.sourcePath, "withheld:document-materials");
+  assert.match(documentMaterials.publicSourceLabel, /文书和材料制作/);
+  assert.equal(documentMaterials.sourceBytes, 2179);
+  assert.equal(documentMaterials.sourceSha256, "462a6592e7fbd42ace718091af3d9c2a1070a36843ac2eeb7d6107f1d9116dd8");
   assert.match(documentMaterials.evidenceSourceCommit, /^[a-f0-9]{40}$/);
-  assert.doesNotMatch(documentMaterialsText, /personal-litigation|litigation|lawsuit|\blegal\b|legal-filing-kit|诉讼|法律|案件|起诉|法院/i, "public document-materials copy must remain domain-neutral");
+  assert.doesNotMatch(documentMaterialsText, documentMaterialsForbidden, "public document-materials copy must remain domain-neutral");
   for (const expected of [
-    /起草或修订合同/,
-    /协议/,
-    /通知/,
-    /信访\/投诉/,
-    /售后索赔/,
-    /争议函件/,
-    /申请材料/,
-    /证据清单/,
-    /提交包/,
-    /原件/,
-    /格式.*证据验收/,
-    /材料已生成.*本人已操作.*平台已收到.*接收方已处理/,
-    /期限/,
-    /恢复点/,
-    /本人明确决定继续.*完成核对的可使用成品.*取消.*未操作.*失败.*撤回.*延期.*避免重复操作/,
-    /未全部完成真实 E2E（端到端）验收/
+    /合同|协议/,
+    /说明|申请|通知|回复/,
+    /售后材料/,
+    /DOCX.*PDF|PDF.*DOCX/,
+    /彩色.*灰度|灰度.*彩色/,
+    /produced.*signed.*ready_for_delivery.*delivered.*received.*handled/,
+    /counterparty_signed_returned/,
+    /v3 release/,
+    /legacy_v2_non_self_contained|non-self-contained/,
+    /526 pass/,
+    /32 pass/,
+    /Microsoft Word.*Poppler/,
+    /真实个人材料.*not_run|真实个人材料.*未运行/,
+    /恢复点/
   ]) assert.match(documentMaterialsText, expected, `document-materials omits stable public workflow semantics: ${expected}`);
-  const readyOnlyFailure = documentMaterialsGuide.failures.find((item) => item[0].includes("只有可使用成品"));
-  assert.match(readyOnlyFailure.join("\n"), /Unknown|未知/);
-  assert.match(readyOnlyFailure.join("\n"), /现实状态回读/);
+  const readyOnlyFailure = documentMaterialsGuide.failures.find((item) => item[0].includes("只有 ready"));
+  assert.match(readyOnlyFailure.join("\n"), /delivered=false/);
+  assert.match(readyOnlyFailure.join("\n"), /现实回读|现实状态/);
   const workDelivery = skills.find((item) => item.slug === "work-delivery");
   const workDeliveryText = JSON.stringify({ entry: workDelivery, guide: skillGuides["work-delivery"], outcome: skillOutcomes["work-delivery"] });
   assert.equal(workDelivery.sourcePath, "E:\\.agents\\skills\\work-delivery\\SKILL.md");
@@ -3054,11 +3218,11 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(runtimeSource, /function initializeProjectReadingLayers\(\)/);
   assert.match(runtimeSource, /function initializeSystemHome\(\)/);
-  assert.match(pageSource, /data-system-case-scroll-indicator[\s\S]{0,120}左右滑动查看更多/);
+  assert.match(pageSource, /data-system-workflow-scroll-indicator[\s\S]{0,120}左右滑动查看更多/);
   assert.match(runtimeSource, /function updateScenarioScrollIndicator\(\)/);
   assert.match(runtimeSource, /--scenario-scroll-thumb-width/);
   assert.match(runtimeSource, /tabRail\?\.addEventListener\("scroll", updateScenarioScrollIndicator/);
-  assert.match(styleSource, /\.system-case-scroll-indicator\s*\{[\s\S]*?min-height:\s*28px;[\s\S]*?\.system-case-scroll-indicator i\s*\{[\s\S]*?--scenario-scroll-thumb-left/);
+  assert.match(styleSource, /\.system-workflow-scroll-indicator\s*\{[\s\S]*?min-height:\s*28px;[\s\S]*?\.system-workflow-scroll-indicator i\s*\{[\s\S]*?--scenario-scroll-thumb-left/);
   assert.match(runtimeSource, /function initializeSystemSectionNavigation\(\)/);
   assert.match(runtimeSource, /function targetReached\(index\)/);
   assert.match(runtimeSource, /window\.history\.replaceState\(window\.history\.state,[\s\S]{0,180}window\.scrollTo\(\{ top: targetTop, behavior: "instant" \}\)/);

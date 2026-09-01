@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找（1/2/3/4/5/6/7/8/9/10/11/12）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找、文书和材料制作（1/2/3/4/5/6/7/8/9/10/11/12/13）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub、CACB、学习方法、Codex Remote、personal-health、WeChatDirect 与 personal-materials 已依次选为第 5 至 12 项。WeChatDirect 与 personal-materials 都是 `real_dashboard`：前者直接展示具名微信上下文、显式触发的自动增量、回复/媒体关系、朋友圈缓存、保全、验真和真实恢复缺口；后者完整说明可靠定位优先、已登记查找、有界发现、选中后字节验真、精确接入、零命中范围和媒体分流，不读取或公开真实材料库、来源根、候选、路径、指纹或原件。CACB、学习方法、Codex Remote 和 personal-health 则是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：学习方法只展示通用学习协作；Codex Remote 只读取 PUBLIC Git、版本、测试与获准图片，不调用冻结运行时；personal-health 只展示证据路由、前台刷新、离线验真、三态和 Health Owner 边界，不读取或公开个人健康载荷。Source、材料、截图、规则、Skill、设备或运行状态变化不会自动更新这些 manual-only 页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；TimeAudit、PC Panel Hub、CACB、学习方法、Codex Remote、personal-health、WeChatDirect、personal-materials 与 document-materials 已依次选为第 5 至 13 项。document-materials 是 `real_dashboard`：完整展示当前事项与必要原件、同源 DOCX/PDF、逐页彩色/灰度验收、自包含材料包、本人签名与 ready 版本，以及递送、收件、处理、对方签回和恢复边界；只使用“文书和材料制作”这一公开名称，不读取或公开真实个人原件、签名、正文、路径、回执或结果。CACB、学习方法、Codex Remote 和 personal-health 则是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目：学习方法只展示通用学习协作；Codex Remote 只读取 PUBLIC Git、版本、测试与获准图片，不调用冻结运行时；personal-health 只展示证据路由、前台刷新、离线验真、三态和 Health Owner 边界，不读取或公开个人健康载荷。Source、材料、截图、规则、Skill、设备或运行状态变化不会自动更新这些 manual-only 页面。项目仍由 Registry（登记清单）驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -44,6 +44,7 @@ npm run refresh:ai -- --project timeaudit
 npm run refresh:ai -- --project pc-panel-hub
 npm run refresh:ai -- --project wechat-direct
 npm run refresh:ai -- --project personal-materials
+npm run refresh:ai -- --project document-materials
 npm run refresh:ai -- --project cacb --manual-owner-request
 npm run refresh:ai -- --project personal-health --manual-owner-request
 npm run refresh:ai -- --all

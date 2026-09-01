@@ -1210,6 +1210,92 @@
           "an unrelated domain project changes how it interprets a material after personal-materials has returned the same verified original"
         ]
       }
+    },
+    {
+      "id": "document-materials",
+      "order": 13,
+      "title": "文书和材料制作",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/document-materials",
+      "ai_refresh": {
+        "content_path": "app/content-document-materials.js",
+        "semantic_revision": 1,
+        "scope": "complete public-safe overview and five source-backed modules covering current matter inputs and source gaps, same-source editable DOCX and PDF production, page/color/grayscale/self-contained release verification, local signature and ready-for-delivery versioning, and separately sourced delivery/receipt/handling/sign-back plus copy-and-verify recovery boundaries",
+        "collectors": [
+          "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-formal-documents; expose only public-safe repository identity, visibility, clean/sync state, version and commit",
+          "read only the admitted current product rules, human entry, formal matter contract, generic formal-document module, versioned schemas and synthetic tests; never open any real matter card, original, signature, output, receipt or private-data root",
+          "run source-owned full pytest, focused generic-document pytest and ruff with task-scoped temp; run only the tracked fictional plan/build/verify demo and review its bounded public-safe receipt and page image"
+        ],
+        "conditional_collectors": [
+          "one explicit user-authorized real document build only when current real compatibility would otherwise change; keep all personal inputs, outputs, paths, signatures, receipts and hashes outside public content",
+          "one exact restored-release verification only for an explicitly reviewed public-safe or fictional package; never scan private output roots to find a candidate"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/personal-formal-documents",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-document-materials-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "project_overview_product_principles_and_entry_bypass",
+        "current_matter_explicit_inputs_source_notes_and_unknowns",
+        "same_source_editable_docx_pdf_and_attachment_production",
+        "page_number_color_grayscale_hash_and_exact_set_audits",
+        "self_contained_v3_release_empty_root_verify_and_legacy_v2_limits",
+        "local_signature_produced_signed_ready_for_delivery_boundaries",
+        "separate_delivery_receipt_handling_and_counterparty_signback_contract",
+        "copy_verify_recovery_without_background_or_resumable_mirror",
+        "single_fictional_public_safe_gallery_page"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_scope_and_current_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "AGENT_ENTRY.md",
+            "docs/formal-matters.md",
+            "用户与第三方说明书.md"
+          ]
+        },
+        {
+          "kind": "generic_document_build_audit_release_and_version",
+          "paths": [
+            "pyproject.toml",
+            "src/**/formal_documents.py",
+            "src/**/word_export.py",
+            "src/**/audit.py",
+            "src/**/schemas/formal-*.json",
+            "src/**/resources/*.ps1"
+          ]
+        },
+        {
+          "kind": "synthetic_behavior_and_compatibility_evidence",
+          "paths": [
+            "tests/test_formal_documents.py",
+            "tests/test_document_package.py",
+            "examples/fictional/formal-document-request.json"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed input, output type, attachment, signature, page audit, release closure, version compatibility, state or recovery behavior changes meaning",
+          "a current false-PASS path, missing closure file, extra file, field drift, Word/fallback, page number, grayscale, sign-back or external-state gap becomes implemented, regresses or changes the user's next action",
+          "an explicitly authorized public-safe real or fictional E2E changes what the owner should trust about installed compatibility, output appearance or recovery"
+        ],
+        "snapshot_only_when": [
+          "the clean PRIVATE main commit, product version, synthetic test result, gallery image hash or observation time changes without altering product meaning"
+        ],
+        "ignore_when": [
+          "a real personal matter, original, draft, signature, output, receipt, path, hash, recipient, amount or result changes without altering the public product contract",
+          "an internal refactor or test addition leaves every displayed capability, boundary, failure and recovery behavior unchanged",
+          "an external status changes for one private matter without changing the reusable separation between local production and reality readback"
+        ]
+      }
     }
   ]
 }

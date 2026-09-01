@@ -2079,29 +2079,24 @@ main {
 
   .project-navigation {
     position: static;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     margin: 0 -28px;
     padding: 18px 28px;
-    overflow-x: auto;
+    overflow-x: visible;
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    scrollbar-width: none;
-  }
-
-  .project-navigation::-webkit-scrollbar {
-    display: none;
   }
 
   .project-navigation a {
+    width: 100%;
     min-height: 40px;
-    flex: 0 0 auto;
     padding: 8px 12px;
     border-top: 3px solid transparent;
     border-left: 0;
     border-radius: 4px;
-    white-space: nowrap;
+    white-space: normal;
   }
 
   .project-navigation a.is-current {
@@ -5689,7 +5684,7 @@ body:has(.learning-project-page) { min-width: 0; }
 }
 
 .system-home [id="general-ai"],
-.system-home [id="system-cases"],
+.system-home [id="system-workflows"],
 .system-home [id="system-automations"],
 .system-home [id="system-dependencies"],
 .system-home [id="system-project-atlas"],
@@ -5751,7 +5746,7 @@ body:has(.learning-project-page) { min-width: 0; }
 .system-home-role-grid strong { display: block; font-size: 16px; }
 .system-home-role-grid p { margin: 5px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
 
-.system-cases,
+.system-workflows,
 .system-active-automations,
 .system-project-atlas,
 .system-dependencies,
@@ -5776,7 +5771,7 @@ body:has(.learning-project-page) { min-width: 0; }
 .system-home-section-heading h2 { margin: 0; font-size: 36px; line-height: 1.15; letter-spacing: -.035em; text-wrap: balance; }
 .system-home-section-heading p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
 
-.system-case-tabs {
+.system-workflow-tabs {
   display: flex;
   overflow-x: auto;
   border: 1px solid var(--line-strong);
@@ -5786,9 +5781,9 @@ body:has(.learning-project-page) { min-width: 0; }
   scroll-snap-type: x proximity;
 }
 
-.system-case-tabs::-webkit-scrollbar { display: none; }
+.system-workflow-tabs::-webkit-scrollbar { display: none; }
 
-.system-case-tabs button {
+.system-workflow-tabs button {
   min-height: 52px;
   flex: 0 0 auto;
   padding: 0 18px;
@@ -5802,16 +5797,16 @@ body:has(.learning-project-page) { min-width: 0; }
 }
 
 @media (min-width: 1101px) {
-  .system-case-tabs button { min-width: 0; flex: 1 1 0; padding-right: 10px; padding-left: 10px; }
+  .system-workflow-tabs button { min-width: 0; flex: 1 1 0; padding-right: 10px; padding-left: 10px; }
 }
 
-.system-case-tabs button:first-child { border-left: 0; }
-.system-case-tabs button:hover,
-.system-case-tabs button:focus-visible,
-.system-case-tabs button.is-current { background: var(--surface-green); color: var(--green-dark); }
-.system-case-tabs button.is-current { box-shadow: inset 0 -3px 0 var(--green); }
+.system-workflow-tabs button:first-child { border-left: 0; }
+.system-workflow-tabs button:hover,
+.system-workflow-tabs button:focus-visible,
+.system-workflow-tabs button.is-current { background: var(--surface-green); color: var(--green-dark); }
+.system-workflow-tabs button.is-current { box-shadow: inset 0 -3px 0 var(--green); }
 
-.system-case-scroll-indicator {
+.system-workflow-scroll-indicator {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -5821,17 +5816,17 @@ body:has(.learning-project-page) { min-width: 0; }
   border-top: 0;
   background: #fff;
 }
-.system-case-scroll-indicator small { flex: 0 0 auto; color: var(--green-dark); font-size: 10px; font-weight: 700; }
-.system-case-scroll-indicator > span { position: relative; height: 3px; flex: 1 1 auto; overflow: hidden; background: var(--green-soft); }
-.system-case-scroll-indicator i { position: absolute; top: 0; bottom: 0; left: var(--scenario-scroll-thumb-left, 0%); width: var(--scenario-scroll-thumb-width, 40%); background: var(--green); transition: left 120ms ease, width 120ms ease; }
-.system-case-scroll-indicator:not([hidden]) + .system-case-panels { border-top: 0; }
+.system-workflow-scroll-indicator small { flex: 0 0 auto; color: var(--green-dark); font-size: 10px; font-weight: 700; }
+.system-workflow-scroll-indicator > span { position: relative; height: 3px; flex: 1 1 auto; overflow: hidden; background: var(--green-soft); }
+.system-workflow-scroll-indicator i { position: absolute; top: 0; bottom: 0; left: var(--scenario-scroll-thumb-left, 0%); width: var(--scenario-scroll-thumb-width, 40%); background: var(--green); transition: left 120ms ease, width 120ms ease; }
+.system-workflow-scroll-indicator:not([hidden]) + .system-workflow-panels { border-top: 0; }
 
-.system-case-panels { border: 1px solid var(--line-strong); background: rgba(255,255,255,.98); }
-.system-case-panel { display: grid; grid-template-columns: 290px minmax(0, 1fr); }
-html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; }
-.system-case-panel + .system-case-panel { border-top: 1px solid var(--line-strong); }
+.system-workflow-panels { border: 1px solid var(--line-strong); background: rgba(255,255,255,.98); }
+.system-workflow-panel { display: grid; grid-template-columns: 290px minmax(0, 1fr); }
+html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: none; }
+.system-workflow-panel + .system-workflow-panel { border-top: 1px solid var(--line-strong); }
 
-.system-case-summary {
+.system-workflow-summary {
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -5840,23 +5835,23 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
   background: var(--surface-green);
 }
 
-.system-case-summary > span { color: var(--green-dark); font-family: var(--mono); font-size: 12px; }
-.system-case-summary h3 { margin: 12px 0 16px; font-size: 25px; line-height: 1.32; letter-spacing: -.025em; }
-.system-case-summary blockquote { margin: 0; padding: 16px 0; border-top: 1px solid #cadbce; border-bottom: 1px solid #cadbce; font-size: 16px; font-weight: 650; }
-.system-case-summary > p { margin: auto 0 0; padding-top: 20px; color: var(--green-dark); font-size: 14px; font-weight: 650; }
+.system-workflow-summary > span { color: var(--green-dark); font-family: var(--mono); font-size: 12px; }
+.system-workflow-summary h3 { margin: 12px 0 16px; font-size: 25px; line-height: 1.32; letter-spacing: -.025em; }
+.system-workflow-summary blockquote { margin: 0; padding: 16px 0; border-top: 1px solid #cadbce; border-bottom: 1px solid #cadbce; font-size: 16px; font-weight: 650; }
+.system-workflow-summary > p { margin: auto 0 0; padding-top: 20px; color: var(--green-dark); font-size: 14px; font-weight: 650; }
 
-.system-case-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.system-case-stage { min-width: 0; padding: 27px; border-left: 1px solid var(--line); }
-.system-case-stage:first-child { border-left: 0; }
-.system-case-stage > span { color: var(--green); font-family: var(--mono); font-size: 12px; }
-.system-case-stage h4 { margin: 9px 0 13px; font-size: 21px; line-height: 1.3; }
-.system-case-stage > p { min-height: 145px; margin: 0; color: var(--muted-strong); font-size: 14px; line-height: 1.72; }
-.system-case-stage-items { margin-top: 18px; border-top: 1px solid var(--line); }
-.system-case-stage-items > div { padding: 12px 0; border-bottom: 1px solid var(--line); }
-.system-case-stage-items strong { display: block; font-size: 14px; }
-.system-case-stage-items small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.system-workflow-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.system-workflow-stage { min-width: 0; padding: 27px; border-left: 1px solid var(--line); }
+.system-workflow-stage:first-child { border-left: 0; }
+.system-workflow-stage > span { color: var(--green); font-family: var(--mono); font-size: 12px; }
+.system-workflow-stage h4 { margin: 9px 0 13px; font-size: 21px; line-height: 1.3; }
+.system-workflow-stage > p { min-height: 145px; margin: 0; color: var(--muted-strong); font-size: 14px; line-height: 1.72; }
+.system-workflow-stage-items { margin-top: 18px; border-top: 1px solid var(--line); }
+.system-workflow-stage-items > div { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.system-workflow-stage-items strong { display: block; font-size: 14px; }
+.system-workflow-stage-items small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.55; }
 
-.system-case-contract {
+.system-workflow-contract {
   display: grid;
   grid-column: 1 / -1;
   grid-template-columns: repeat(3, minmax(0,1fr));
@@ -5864,10 +5859,10 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
   border-top: 1px solid var(--line-strong);
   background: #fff;
 }
-.system-case-contract > div { min-width: 0; padding: 18px 22px; border-left: 1px solid var(--line); }
-.system-case-contract > div:first-child { border-left: 0; }
-.system-case-contract dt { color: var(--green-dark); font-family: var(--mono); font-size: 11px; }
-.system-case-contract dd { margin: 6px 0 0; color: var(--muted-strong); font-size: 13px; line-height: 1.65; }
+.system-workflow-contract > div { min-width: 0; padding: 18px 22px; border-left: 1px solid var(--line); }
+.system-workflow-contract > div:first-child { border-left: 0; }
+.system-workflow-contract dt { color: var(--green-dark); font-family: var(--mono); font-size: 11px; }
+.system-workflow-contract dd { margin: 6px 0 0; color: var(--muted-strong); font-size: 13px; line-height: 1.65; }
 
 .system-active-automation-groups {
   display: grid;
@@ -6129,7 +6124,7 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
 .system-directories article > a { display: inline-flex; min-height: 44px; align-items: center; justify-content: flex-end; gap: 5px; color: var(--green-dark); font-size: 13px; font-weight: 700; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .system-case-panel.is-changing { opacity: .55; transform: translateY(4px); transition: opacity 180ms ease, transform 180ms ease; }
+  .system-workflow-panel.is-changing { opacity: .55; transform: translateY(4px); transition: opacity 180ms ease, transform 180ms ease; }
   .system-dependency-node { transition: border-color 180ms ease, background 180ms ease; }
 }
 
@@ -6143,17 +6138,17 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
   .system-home-role-grid p { font-size: 15px; }
   .system-home-section-heading h2 { font-size: 40px; }
   .system-home-section-heading p { font-size: 16px; }
-  .system-case-panel { grid-template-columns: 340px minmax(0,1fr); }
-  .system-case-summary h3 { font-size: 28px; }
-  .system-case-tabs button { min-height: 60px; padding: 0 22px; font-size: 17px; }
-  .system-case-summary blockquote { font-size: 18px; }
-  .system-case-stage > p { font-size: 15px; }
-  .system-case-stage > span,
-  .system-case-stage-items small { font-size: 13px; }
-  .system-case-stage h4 { font-size: 24px; }
-  .system-case-stage-items strong { font-size: 16px; }
-  .system-case-contract dt { font-size: 12px; }
-  .system-case-contract dd { font-size: 15px; }
+  .system-workflow-panel { grid-template-columns: 340px minmax(0,1fr); }
+  .system-workflow-summary h3 { font-size: 28px; }
+  .system-workflow-tabs button { min-height: 60px; padding: 0 22px; font-size: 17px; }
+  .system-workflow-summary blockquote { font-size: 18px; }
+  .system-workflow-stage > p { font-size: 15px; }
+  .system-workflow-stage > span,
+  .system-workflow-stage-items small { font-size: 13px; }
+  .system-workflow-stage h4 { font-size: 24px; }
+  .system-workflow-stage-items strong { font-size: 16px; }
+  .system-workflow-contract dt { font-size: 12px; }
+  .system-workflow-contract dd { font-size: 15px; }
   .system-project-inventory span,
   .system-project-inventory small { font-size: 13px; }
   .system-project-inventory strong { font-size: 30px; }
@@ -6175,10 +6170,10 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
 
 @media (max-width: 1000px) {
   .system-home-section-heading { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .system-case-panel { grid-template-columns: minmax(0, 1fr); }
-  .system-case-summary { border-right: 0; border-bottom: 1px solid var(--line-strong); }
-  .system-case-summary > p { margin-top: 18px; }
-  .system-case-stage > p { min-height: 0; }
+  .system-workflow-panel { grid-template-columns: minmax(0, 1fr); }
+  .system-workflow-summary { border-right: 0; border-bottom: 1px solid var(--line-strong); }
+  .system-workflow-summary > p { margin-top: 18px; }
+  .system-workflow-stage > p { min-height: 0; }
   .system-dependency-lane { --system-lane-rail: 170px; }
   .system-dependency-node-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .system-dependency-node { grid-column: span 1; }
@@ -6211,9 +6206,9 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
 }
 
 @media (min-width: 681px) and (max-width: 820px) {
-  .system-case-stages { grid-template-columns: minmax(0,1fr); }
-  .system-case-stage { border-top: 1px solid var(--line); border-left: 0; }
-  .system-case-stage:first-child { border-top: 0; }
+  .system-workflow-stages { grid-template-columns: minmax(0,1fr); }
+  .system-workflow-stage { border-top: 1px solid var(--line); border-left: 0; }
+  .system-workflow-stage:first-child { border-top: 0; }
 }
 
 @media (max-width: 680px) {
@@ -6240,7 +6235,7 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
   .system-home-role-grid { grid-template-columns: minmax(0,1fr); }
   .system-home-role-grid article { border-top: 1px solid var(--line); border-left: 0; }
   .system-home-role-grid article:first-child { border-top: 0; }
-  .system-cases,
+  .system-workflows,
   .system-active-automations,
   .system-project-atlas,
   .system-dependencies,
@@ -6250,13 +6245,13 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
   .system-directories { padding-top: 42px; padding-bottom: 42px; }
   .system-directories { padding-bottom: 24px; }
   .system-home-section-heading h2 { font-size: 28px; }
-  .system-case-tabs button { min-height: 48px; padding: 0 15px; font-size: 14px; }
-  .system-case-stages { grid-template-columns: minmax(0,1fr); }
-  .system-case-stage { border-top: 1px solid var(--line); border-left: 0; }
-  .system-case-stage:first-child { border-top: 0; }
-  .system-case-contract { grid-template-columns: minmax(0,1fr); }
-  .system-case-contract > div { border-top: 1px solid var(--line); border-left: 0; }
-  .system-case-contract > div:first-child { border-top: 0; }
+  .system-workflow-tabs button { min-height: 48px; padding: 0 15px; font-size: 14px; }
+  .system-workflow-stages { grid-template-columns: minmax(0,1fr); }
+  .system-workflow-stage { border-top: 1px solid var(--line); border-left: 0; }
+  .system-workflow-stage:first-child { border-top: 0; }
+  .system-workflow-contract { grid-template-columns: minmax(0,1fr); }
+  .system-workflow-contract > div { border-top: 1px solid var(--line); border-left: 0; }
+  .system-workflow-contract > div:first-child { border-top: 0; }
   .system-active-automation-groups > section { grid-template-columns: minmax(0,1fr); }
   .system-active-automation-groups > section > header { border-right: 0; border-bottom: 1px solid var(--line-strong); }
   .system-active-automation-grid { grid-template-columns: minmax(0,1fr); }

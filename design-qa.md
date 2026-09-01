@@ -1,94 +1,97 @@
-# 十二项目 MAP 设计与产品验收
+# 十三项目 MAP 设计与产品验收
 
 ## 本轮范围
 
-本轮只建设第 12 项“个人材料查找（personal-materials）”，并把它接入已有项目目录、System、搜索和 `personal-materials` Skill。没有预建 personal-formal-documents 或更后的项目页面。
+本轮只建设第 13 项“文书和材料制作（document-materials）”，并把它接入项目目录、System、搜索和同名 Skill。没有预建 work-delivery-copilot 或 daily-preferences 页面。
 
-统一验收标准没有改变：不了解项目的人看完后，能准确说明它为什么存在、什么时候不该用、怎样从一句普通描述回到真正原件、最后得到什么，以及找不到、文件变化或入口不可用时怎样恢复；产品思想和人话先于技术名词，技术事实仍完整可核验。
+公开产品只使用“文书和材料制作”以及合同、说明、申请、通知、回复、售后材料、附件包等中性表达。项目、Skill、System、搜索、SEO、图片说明和生成 HTML 均禁止重新暴露受限的私人领域身份、内部兼容包名、维护路径或真实个人载荷。
 
 ## 权威来源与自动修复
 
-- Source：PRIVATE（私有）`wlyaaaaa/personal-materials`，默认分支 `main`。
-- 正式回读：本地 `main`、`origin/main` 与 GitHub 远端 `main` 均为 `08a3b0df5e999615c127e401e84b35b04a8752cb`，工作树 clean（干净）。
-- 合成回归：37 项全部通过，根任务实测 33.30 秒；Ruff 静态检查通过。
-- 本轮没有打开真实 `materials.sqlite3`、来源根、候选、token、路径、哈希、正文或原件，也没有运行真实自然请求 E2E（端到端验收）。
+- Source：PRIVATE `wlyaaaaa/personal-formal-documents`，默认分支 `main`。
+- 正式回读：本地 `main`、`origin/main` 与 GitHub 远端 `main` 均为 `3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc`，工作树 clean。
+- 当前产品版本：2.0.1。
+- 聚焦回归：32 项全部通过。
+- 全仓回归：526 项通过、6 项环境性跳过、101 个子测试通过；Ruff 通过。
+- 本轮没有读取任何真实事项、原件、签名、正文、路径、回执、哈希或个人结果。
 
-首次全量取证发现并自动修复了源项目的真实问题：
+首次 source-first 取证发现并自动修复了会影响网页可信度的真实问题：
 
-1. handoff 接入改为在同一文件句柄上完成 `stat → SHA-256 → stat`，并保持到数据库提交前再次核对。
-2. 禁止 `material_key` 与 `source/native_id` 双向静默重绑；内容变化时先清理旧 `material_text`。
-3. `filesystem-directory` 根必须为绝对路径；`init` 核对完整四表列合同与 SQLite integrity（完整性）。
-4. 有界发现改为受预算约束的增量目录枚举；目录/条目读取失败进入明确 gap，候选消失不再拖垮整次发现。
-5. 同路径新内容刷新版本字段并清理旧派生文字；`open` 与 `open-discovered` 在启动前再次复验。
-6. 查找第二阶段改名为 `unverified_source_evidence`，准确表达它可由来源/材料元数据、`search_text` 或绑定文字命中，不再把无 `material_text` 的候选冒充“只靠派生文字”。
+1. 输入只解析一次，实际用于生成的规范值被封存；参与方、收件方、渠道、日期、事实、请求和附件全部进入成品读回。
+2. 四类通用正式材料都完成 build→verify 参数化回归；对外文书不再显示内部 role 或原始渠道 enum。
+3. 2.0.1 wheel 携带唯一 Word exporter 资源，兼容构建共用同一实现，并以无窗口方式运行。
+4. PDF 每页必须有可见页码；彩色渲染同时生成 L 模式灰度 artifact，并分别记录哈希与 ink/edge 审计。
+5. v3 release 携带输入、DOCX/PDF、附件、三类审计、逐页彩色/灰度图和所需签名快照；缺文件、多文件、路径逃逸、大小或哈希变化都会失败。
+6. v3 release 复制到空目录、删除原 build 后仍可独立 verify；2.0.0 的 v2 release 继续有限验证并明确 `legacy_v2_non_self_contained` limitations。
 
 ## 信息架构
 
-页面复用现有 Project/Module 静态壳层，没有新增专用组件、CSS、客户端依赖或运行时。
+Overview（总览）先说清入口、绕过规则、最终结果、现实状态与当前证据；技术细节不占据首屏。
 
-- Overview（总览）：可靠定位直接绕过；非媒体才进入；位置未知时才发现；选中后才读字节；零命中只说明本轮范围。
-- `registered-lookup`：已登记查找、版本/重复/原生关系、三阶段证据强度和路径隐藏。
-- `bounded-discovery`：最多 8 个来源、2500 个文件、每源 12 层、总计 8 秒；选择前不读正文、不算哈希、不跟随链接。
-- `verified-open`：来源根、相对路径、stat、SHA-256、稳定身份、事务回滚、版本刷新和启动前复验。
-- `exact-intake`：`personal-materials.handoff.v1`、四表最小索引、稳定句柄、身份防重绑、文字失效、媒体拒绝、`init/status` 边界。
+1. `current-matter-sources`：当前事项、最小必要原件、事实、来源说明、未知与本人决定。
+2. `editable-docx-pdf`：制作计划、同源 DOCX/PDF、附件、Word/fallback 和不可覆盖 build。
+3. `page-audit-release`：正文读回、页码、彩色/灰度页面、自包含 v3 release、空目录复验和 v2 限制。
+4. `signature-delivery-version`：本人签名或明确无需签名、produced/signed/ready_for_delivery 与 delivered=false。
+5. `reality-readback-recovery`：delivered/received/handled、对方签回、现实回读、复制恢复和避免重复动作。
 
-项目没有公开安全的真实视觉输出：CLI 截图会带出私人候选，文件管理器假界面又不是真产品。因此本页没有 gallery（画廊），这是事实边界，不是遗漏。
+模块不按命令、Schema 或材料类别拆分；它们只围绕会改变用户判断的五段产品旅程。
+
+## 可视化证据
+
+- 画廊只有 1 张完全虚构的单页样张，不创建重复缩略图。
+- 图片来自 2.0.1 当前生成器的真实 Microsoft Word → PDF → Poppler 流程。
+- 样张与灰度页均完成 1/1 页审计；公开 PNG 为 110,278 bytes，低于 250 KiB。
+- 它只证明当前生成器、版式、正文、页码和页面边缘真实工作过，不证明真实个人事项、全部材料类型、真实签名或外部递送。
+- 受限模板不进入画廊，也不经裁切、改字或匿名化后冒充原貌。
 
 ## 整站接入
 
-- Registry：第 12 项、`real_dashboard`、PRIVATE source、首次完整快照，后续只按实质变化增量维护。
-- Projects：项目目录现在有 12 张真实卡，第 12 张直接暴露总览与 4 个模块。
-- System：完整项目页计数 12；项目资产和“位置未知时的非媒体原件查找”组成节点均直达新项目，并同时保留 Skill 入口。
-- Skills：修正旧的“9 项测试”“候选直接给路径”“发现阶段核对 hash/content”等陈旧说法；项目与 Skill 双向可达。
-- Search：总览、4 个模块、System 入口与项目作用域搜索均使用有界语义投影；没有把完整正文复制进共享 JavaScript。
+- Registry：第 13 项、`real_dashboard`、PRIVATE source、5 个模块和材料变化阈值；无公开 `local_root`。
+- Projects：13 张真实项目卡，第 13 张直接暴露总览和 5 个模块。
+- System：完整项目页计数 13；既有文书资产和组成节点原位直达新项目，同时保留 Skill 入口。
+- Skills：从四层旧概述升级为 produced→signed→ready_for_delivery→delivered→received→handled，加独立对方签回；维护命令、内部定位和内部任务名不进入 HTML 或搜索。
+- Search：总览、5 个模块、System 与 Skill 均使用有界语义投影；不把完整正文复制进共享 JavaScript。
 
 ## 构建、体积与回归
 
-- `npm test`：71/71 通过。
-- 静态输出：127 条完整页面路由、129 个生产 HTML、245 条紧凑搜索记录。
-- PUBLIC gate（公开内容门）：139 个 source + 224 个 dist 文件，共 363 个文件，0 finding（发现项）。
-- 共享增强 JS：10,100 bytes gzip（9.86 KiB），低于 12 KiB 审查线。
-- 共享 CSS：20,907 bytes gzip（20.42 KiB），低于 21 KiB 审查线。
-- 全站搜索：51,047 bytes gzip（49.85 KiB），低于 64 KiB 审查线。
-- 全项目模块搜索：53,737 bytes gzip（52.48 KiB），低于 64 KiB 审查线。
-- 正文仍在各自静态 HTML；没有点击后 `fetch`、动态正文 import、spinner、骨架屏或空白占位。
+- `npm test`：72/72 通过。
+- 静态输出：133 条完整页面路由、135 个生产 HTML、250 条紧凑搜索记录。
+- PUBLIC gate：141 个 source + 232 个 dist 文件，共 373 个文件，0 finding。
+- 共享增强 JS：10,103 bytes gzip（9.87 KiB），低于 12 KiB。
+- 共享 CSS：20,910 bytes gzip（20.42 KiB），低于 21 KiB。
+- 全站搜索：52,357 bytes gzip（51.13 KiB），低于 64 KiB。
+- 全项目模块搜索：55,976 bytes gzip（54.66 KiB），低于 64 KiB；本项目 2,999 bytes gzip。
+- 新项目没有专用 renderer、CSS、依赖、服务、数据库、后台状态、正文 fetch、动态 import、spinner 或骨架屏。
 
 ## 真实浏览器验收
 
 - 视口：1440、768、390、320 CSS px。
-- 项目目录、总览、代表模块、Skill 与 System 的文档 `scrollWidth === clientWidth`；没有页面级水平溢出。
-- 390/320 的模块导航只在自己的横向轨道内移动，不带动整页；直接进入模块时页面保持顶部。
-- 项目标题、PRIVATE 入口卡、速览、三态、人话三格和模块正文按既有断点自然换行，没有大块无意义空白。
-- 连续访问 Projects、总览、模块和 System：0 console error、0 page exception、0 resource failure。
-- 本地静态预览的代表页面 TTFB 为 1.7–2.2 ms；该数字只证明本机静态链路，不冒充公网性能。
+- 项目目录、总览、代表模块、Skill 与 System 的文档 `scrollWidth === clientWidth`；没有页面级横向溢出。
+- 移动端项目导航按实际模块数完整换行成两列，六个入口首屏全部可见；不再依赖隐藏滚动条或无提示横向滑动，直接进入模块时保持页面顶部。
+- 标题、PRIVATE 入口卡、速览、画廊、三态、人话三格与长技术字段自然换行，没有大块无意义空白。
+- 连续访问 Projects、总览、模块、Skill 和 System：0 console error、0 page exception、0 resource failure。
+- 画廊在 Overview 可见；图片单击进入现有 lightbox，复用关闭、缩放和键盘控制。
 
 ## 公开边界
 
-公开的是项目身份、产品流程、命令、表结构、算法、数值上限、失败语义、PRIVATE main commit 与合成测试。未公开实际数据库、来源根、账号/设备、标题、候选、内部 ID、token、真实路径、文件哈希、关系边、绑定正文或原件。
+公开的是产品身份、流程、输出格式、版本、命令语义、文件结构、状态、失败、测试、PRIVATE main commit 和完全虚构样张。真实个人事项、原件、签名、正文、收件对象、地址、金额、路径、回执、哈希和结果全部未读取、未公开。
 
-PRIVATE 不是删减公开安全技术的理由；页面仍完整写出 SQLite、四表、匹配阶段、Base64 选择句柄、来源根承诺、文件签名、SHA-256、事务和所有当前失败边界。
+PRIVATE 不是删技术的理由：页面仍完整解释 request、DOCX/PDF、Word/fallback、逐页彩色/灰度、SHA-256、manifest digest、exact set、v2/v3、签名资产和状态边界。
 
 ## 仍然存在的真实缺口
 
-- 本轮没有执行一次真实自然请求 → 候选 → 选择 → 打开原件 E2E；当前私人来源覆盖与默认应用现场保持 Unknown（未验证）。
-- Windows `os.startfile` 只能接收路径，不能把已核验句柄交给目标应用；最后一次复验到应用真正读取之间仍有极小窗口。
-- 外部文件系统与 SQLite 不能形成一个原子事务；提交前复核、启动前复核和以后每次 `open` 重验只能收窄窗口。
-- 有界发现达到预算时，已检查子集可能随文件系统枚举顺序变化；零命中始终只代表本次检查范围。
+- `facts[].source_note` 仍可选；整包输入固定不等于每条事实已逐一闭合来源。
+- 自动化没有绑定 AI 或人工整篇语义审阅回执，不能证明事实主线、语气和请求事项已经完成最终审阅。
+- 通用 CLI 只实现 produced/signed/ready_for_delivery；delivered/received/handled 与对方签回由当前事项和现实来源拥有。
+- 签名是图片与 SHA-256 绑定，不是证书签名或可信时间戳；manifest digest 也不是数字签名。
+- v3 可普通复制到空目录后复验，但没有自动备份、后台恢复或断点续传 mirror。
+- 本轮只有完全虚构 E2E；真实个人材料、真实签名和外部递送 E2E 为 not_run。
 
 ## 四路终审
 
-- Product Completeness：PASS，P0=0 / P1=0 / P2=0。
-- Technical Truth：PASS，P0=0 / P1=0 / P2=0；曾发现的未验证阶段语义偏差已修源、发布、回读并补回归。
-- First Reader：PASS，P0=0 / P1=0 / P2=0。
-- UI / Bloat / Privacy：PASS，P0=0 / P1=0 / P2=0；旧 `design-qa.md` 是唯一 P1，本文件已就地替换并完成只读回签。
+- Product Completeness：PASS；5 个模块最小充分，项目、Skill、System、Registry、搜索和画廊没有能力遗漏或产品过称。
+- Technical Truth：PASS；最终 HTML、搜索分片、Skill 回执、签名边界和扩展禁词门均通过，P0/P1=0。
+- First Reader：PASS；320/390 两列导航完整可见，每个独立表面的核心状态首现均有人话解释，P0/P1=0。
+- UI / Bloat / Privacy：PASS；1440/900/768/390/320 无页面溢出、大片空白、控制台或资源错误，画廊交互与所有体积/隐私门通过，P0/P1/P2=0。
 
-## PUBLIC 发布与回读
-
-- 审过的产品内容 commit：`048e6bc4f8534ebbe716e30e9d47bf94715ea1bf`。
-- Git：本地 `main`、`origin/main` 与远端 `main` 已在第一次产品发布后回读为同一 commit，工作树 clean。
-- GitHub Actions：Pages run `33481682089` success（成功）；build job `99772472352`、deploy job `99772619445` 均完成。
-- GitHub Pages deployment：`6196504710`，`sha=048e6bc4f8534ebbe716e30e9d47bf94715ea1bf`，state=`success`，环境 URL 为 `https://wly0829.cn/`。
-- 公网回读：项目总览、4 个模块、`/skills/personal-materials/`、Projects、System 与项目搜索索引均返回 HTTP 200；页面包含正式 source commit `08a3b0df...`、37 项回归、四模块路由与 System/Skill 关系。
-- 公网 390 px 浏览器回读：`scrollWidth === clientWidth === 390`，`scrollX=0`，0 console/page/resource error，无 gallery。
-
-本次 docs-only（仅文档）收口只把上述发布事实写回仓库，不改变项目、System、Skill 或搜索页面语义；最终 current commit 与第二次 Pages readback 由 Git/Pages 现场事实拥有，不在文档内递归自指。
+网站候选此刻仍在隔离 worktree，尚未提交、推送或完成 Pages 公网回读；任何本地 PASS 都不冒充 PUBLIC 完成。
