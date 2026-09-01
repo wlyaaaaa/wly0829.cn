@@ -55,7 +55,7 @@ npm run verify:ai-refresh -- --bundle <ai-result.json>
 这些项目的全量计划只返回 `manual_owner_request_required`，不会收集证据或创建网站
 任务；只有本人明确要求的网站任务才可携带该标记继续。
 
-当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并在点击前预取高概率下一页。共享交互 JavaScript gzip 审查阈值为 120 KiB，紧凑搜索索引为 24 KiB；它们是防膨胀审查线，不是永久内容上限。不得把全文重新塞回公共 JS，也不得用点击后 lazy-load（延迟加载）、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积。
+当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值分别为 12 KiB、20 KiB、42 KiB 和 32 KiB；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript；全站索引实测约 40.69 KiB，完整 58 模块索引实测约 30.57 KiB，因此分别采用最小合理门 42/32 KiB。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
 
 刷新 `.agents` 的活动规则/Skill 结构化证据：
 
@@ -96,4 +96,4 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-完整产品规格见 [个人项目看板 MVP 产品规格](docs/design/agents-mvp.md)，内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；不再维护一份会重复模块数、Skill 数和快照状态的第二规格。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。

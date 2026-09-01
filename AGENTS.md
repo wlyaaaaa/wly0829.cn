@@ -48,12 +48,16 @@ read-only operating panel; public presentation is secondary.
   replacing it with a short marketing summary. Every project, module, rule and
   Skill page must begin with a reader layer that a person unfamiliar with the
   system can understand before the technical reference layer starts.
-- The reader layer must answer, in this order: what this thing actually does for
-  the owner; what concrete problem or accident it prevents; one realistic
-  example using an ordinary request; what the owner receives at the end; and
-  what happens when the check passes, finds a problem, or cannot run. Only
-  after those answers may the page present triggers, inputs, outputs,
-  architecture, commands, schemas, hashes, evidence and recovery details.
+- The reader layer must make these things easy to understand: what this thing
+  actually does for the owner; what concrete problem or accident it prevents;
+  one realistic ordinary request; what the owner receives; and what happens
+  when the work succeeds, finds a problem or cannot run. This is a content
+  quality floor, not a shared card layout, field order or three-label template;
+  each System section, project, Rule and Skill keeps the structure that best
+  explains its subject. System stays medium-density while owning detail pages
+  go deeper. Only after the reader can form a real working picture should the
+  page lead with architecture, commands, schemas, hashes and implementation
+  evidence; adding more words never substitutes for removing mystery copy.
 - Every project detail page uses three reading layers: `速览`, `产品` and
   `技术`. They are a content priority and reading order, not three
   copies of the same prose, three network loads or a fixed module count.
@@ -135,6 +139,41 @@ read-only operating panel; public presentation is secondary.
   evidence. Do not copy a README section by section, paraphrase one source as
   if that were analysis, or repeat fashionable conclusions without explaining
   the project's own trade-offs, evidence, failure modes and decision impact.
+- A new project, full refresh or completeness audit must start with a
+  `source_independent_coverage` pass. Reconstruct the source project's
+  long-lived product axes from its own current rules, human entrypoints,
+  product contracts, registries, recovery documents and code entrypoints
+  before reading the website's module list, search aliases or existing
+  coverage claims. Registry impact paths help locate evidence; they cannot
+  prove that every important subsystem was observed.
+- Compare that source inventory with the page in two separate layers. Every
+  selected long-lived axis needs both a product explanation (purpose, people or
+  devices, ordinary scenario, result and deliberate trade-off) and a technical
+  reference (identity, components, data flow, entrypoints, state/failure,
+  recovery, current evidence and named unknowns). A timeline mention, source
+  path, test count, glossary term or isolated technical paragraph proves
+  neither layer.
+- For every long-lived mechanism selected from source, the owning product
+  reader layer must let a first-time reader answer five practical questions in
+  plain language: which accident it prevents; when it activates; what actually
+  happens; what happens on conflict or unavailability; and which result,
+  evidence or recovery point is returned. Naming the mechanism only in a
+  system diagram, glossary, rule field or technical module is still a content
+  omission.
+- `product_capability_completeness_gate`: omitting a current, source-backed,
+  public-safe, long-lived product capability that could change how the owner
+  uses or judges the project is a P0 content defect. Missing either its product
+  explanation or its technical reference blocks that project's content PASS
+  and blocks publication of the incomplete snapshot. UI quality, route
+  existence, search results, schema fields, build success and prior page-only
+  audits cannot downgrade or offset this defect.
+- Decide module boundaries only after the source-to-page difference is known.
+  Add a module when the source proves an independent long-lived capability
+  with its own users/devices, lifecycle or recovery boundary; otherwise repair
+  the owning module in place. Module count remains project-specific. A fresh
+  reviewer must be able to name important source subsystems that are absent
+  from the page; auditing only the page's existing fields is circular and
+  cannot produce a content PASS.
 - Project evolution is a milestone timeline, not a commit log. Group related
   changes into one important product stage that explains the resulting change
   in capability, boundary or user experience. A stage may use one date or a
@@ -219,6 +258,14 @@ read-only operating panel; public presentation is secondary.
   project may therefore explain evidence routing, uncertainty and safety
   boundaries, but must not publish the owner's health records, diagnoses, test
   results, medication list or individualized advice.
+- The public `document-materials` capability is presented as “文书和材料制作”.
+  Explain how contracts, formal statements, applications, event materials and
+  submission packs move from originals and current material state into
+  editable files, PDF or reviewed bundles; keep generated material, user
+  action, platform receipt and recipient processing separate. Do not expose a
+  narrower private-domain identity, internal source route or personal result.
+  Public copy presents the usable product directly and never exposes
+  "packaging" as a maintenance label.
 - The selected personal-health project is a curated, manual-only explanation of
   its evidence product: processed-current routing, protected foreground refresh,
   raw preservation and exact resume, deterministic offline verification,
@@ -282,7 +329,7 @@ read-only operating panel; public presentation is secondary.
   while keeping product-facing names and explanations vendor-neutral.
 - Display an integrated Skill only when it is currently usable, materially
   valuable, sufficiently understood, non-duplicative and safe to publish.
-- Finish content before breadth. `.agents` Overview and all six project modules, all
+- Finish content before breadth. `.agents` Overview and all seven project modules, all
   five current rules, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
@@ -319,12 +366,30 @@ read-only operating panel; public presentation is secondary.
 - A targeted refresh touches only the named project. A full refresh iterates all
   enabled projects but may leave most or all files byte-identical. It is a
   revalidation request, not permission to rewrite every page.
-- This is a continuously maintainable panel with on-demand AI refreshes. It is
-  neither an immutable one-time snapshot nor an automatically synchronized
-  monitoring service.
-- The published site represents the last explicitly refreshed and released
-  state. E release identity is the rule-version boundary; do not claim
-  background freshness, watchers or scheduled synchronization.
+- Before the first fully accepted baseline release, omissions, riddle copy and
+  blind-reader product defects are construction defects, not incremental drift;
+  repair them from owning sources before publication instead of deferring them
+  to the weekly review.
+- After that baseline, an incremental refresh merges the affected new truth into
+  current owning content. It must not replace richer valid prose with a shorter,
+  older or generated snapshot; unaffected content stays byte-identical, and
+  removal requires source evidence that the old product meaning is superseded.
+- This is a continuously maintainable panel with on-demand AI refreshes plus
+  one owner-authorized weekly material-drift review. The weekly task reads
+  current project, Rule and Skill evidence after governance, remains a no-op
+  when the page would stay truthful, and updates only the affected snapshot
+  when a real change would alter reader understanding. It is not continuous
+  synchronization and does not justify a watcher, daemon or duplicate writer.
+- The weekly review closes Project, Rules and Skills pages through their own
+  Owners first, then derives whether System still tells the truth. Git history,
+  diffs and changed paths identify candidates only. When roles, use, boundaries,
+  entry points and reader decisions are unchanged, System remains byte-identical.
+  A `manual_owner_only` page without a fresh explicit owner request keeps its
+  last verified published snapshot; weekly review does not manufacture newer facts.
+- The published site represents the last verified and released state. E release
+  identity is the rule-version boundary; the weekly review does not make every
+  displayed fact live, and the site must not claim background freshness beyond
+  the evidence and observation time it actually read back.
 - The fast project function must provide `targeted` and `all` AI refresh plans
   from `config/panel-projects.json`, including the current content path, source
   identity, evidence collectors and existing snapshot fingerprint. Plans are
@@ -422,6 +487,14 @@ read-only operating panel; public presentation is secondary.
   be able to restate its practical use, concrete risk, example and final result
   without opening the source Skill or asking a follow-up question. Automated
   field checks are supporting evidence only.
+- Content completeness is a separate, source-first acceptance gate. Before a
+  new project, full refresh or completeness repair may PASS, an independent
+  Sol Max reviewer receives the current source entrypoints and the candidate
+  page without being given the page's module list as the expected answer. It
+  must reconstruct important product capabilities and technical subsystems,
+  compare both layers with the page and report any absent source-backed axis.
+  One P0 capability omission blocks content acceptance and publication; a
+  reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects:
   open the project index, Overview and representative detail, notify the owner,

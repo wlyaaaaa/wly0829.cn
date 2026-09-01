@@ -1,19 +1,8 @@
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Page from "../app/page.jsx";
-import { globalSearchEntries, searchPanel } from "../app/search.js";
-import { canonicalPath, canonicalUrl, routeMeta, routePaths } from "../app/site-content.js";
-
-const compactSearchCandidateAliases = [
-  "规则如何激活", "什么时候开子代理", "能力路由与授权", "三控制面怎么分工",
-  "本地构建通过为什么还不能说网站完成",
-  "电脑配置恢复", "本机运行时和端口", "Windows 重装恢复", "机器事实在哪里",
-  "仓库是公开还是私有", "远端和默认分支", "工作树和发布事实", "会不会推错仓库",
-  "中文录音转写", "长音频断点续跑", "说话人分离", "本地语音识别",
-  "过去一小时为什么卡", "1 秒 FPS 采样", "前台卡顿分析", "时间都花在哪", "数据库行和窗口标题不公开",
-  "机箱屏冻结", "command 204", "HS2 六卡", "实体像素验收", "副屏显示恢复",
-  "回答完成却没有结果", "隔离 workspace", "隐藏验证", "能力问题还是执行环境问题", "Agent 能力评测"
-];
+import { globalSearchEntries } from "../app/search.js";
+import { canonicalPath, canonicalUrl, projectCatalog, projectEntryForPath, routeMeta, routePaths } from "../app/site-content.js";
 
 function escapeAttribute(value) {
   return String(value)
@@ -33,26 +22,36 @@ function canonicalDocumentHref(href) {
   return `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
 }
 
-const projectedAliases = new Map();
-for (const alias of compactSearchCandidateAliases) {
-  const owner = searchPanel(alias)[0];
-  if (!owner) continue;
-  const ownerHref = canonicalDocumentHref(owner.href);
-  projectedAliases.set(ownerHref, [...(projectedAliases.get(ownerHref) || []), alias]);
-}
-
-const compactSearchIndex = globalSearchEntries.map((entry) => {
+function compactSearchProjection(entry) {
   const href = canonicalDocumentHref(entry.href);
+  const detailLimit = entry.type === "项目资产" ? 120 : entry.type === "系统组成" ? 140 : 180;
   return {
     type: entry.type,
+    group: entry.group,
+    scopes: entry.scopes || [],
+    projectSlug: entry.projectSlug || null,
     title: entry.title,
-    detail: entry.detail.slice(0, 240),
+    detail: entry.detail.slice(0, detailLimit),
     href,
-    aliases: [...new Set([...(entry.aliases || []), ...(projectedAliases.get(href) || [])])]
+    aliases: [...new Set(entry.aliases || [])],
+    search: entry.compactSearch || ""
   };
-});
+}
 
-export const compactSearchRecordCount = compactSearchIndex.length;
+export const compactSearchIndex = globalSearchEntries
+  .filter((entry) => entry.type !== "项目内容")
+  .map(compactSearchProjection);
+
+export const compactProjectSearchIndex = globalSearchEntries
+  .filter((entry) => entry.type === "项目内容")
+  .map(compactSearchProjection);
+
+export const compactProjectSearchIndices = Object.fromEntries(projectCatalog.map((entry) => [
+  entry.project.slug,
+  compactProjectSearchIndex.filter((candidate) => candidate.projectSlug === entry.project.slug)
+]));
+
+export const compactSearchRecordCount = compactSearchIndex.length + compactProjectSearchIndex.length;
 
 function jsonForInlineScript(value) {
   return JSON.stringify(value)
@@ -63,17 +62,28 @@ function jsonForInlineScript(value) {
     .replaceAll("\u2029", "\\u2029");
 }
 
-const searchIndexScript = `<script id="search-index" type="application/json">${jsonForInlineScript(compactSearchIndex)}</script>`;
+export const compactSearchAsset = `window.__WLY_SEARCH_INDEX__=${jsonForInlineScript(compactSearchIndex)};\n`;
+export const compactProjectSearchAsset = `window.__WLY_PROJECT_SEARCH_INDEX__=${jsonForInlineScript(compactProjectSearchIndex)};\n`;
+export const compactProjectSearchAssets = Object.fromEntries(Object.entries(compactProjectSearchIndices).map(([slug, entries]) => [
+  slug,
+  `window.__WLY_PROJECT_SEARCH_INDEX__=${jsonForInlineScript(entries)};\n`
+]));
 
-function likelyNextRoutes(route) {
+function searchIndexScripts(route) {
+  const scripts = ['<script src="/search-index.js"></script>'];
+  if (route === "/search") scripts.push('<script src="/search-projects.js"></script>');
+  else {
+    const projectEntry = projectEntryForPath(route);
+    if (projectEntry) scripts.push(`<script src="/search-project-${escapeAttribute(projectEntry.project.slug)}.js"></script>`);
+  }
+  return scripts.join("\n    ");
+}
+
+function nextStaticRoute(route) {
+  if (route === "/system") return null;
   const currentIndex = routePaths.indexOf(route);
-  return [...new Set([
-    routePaths[currentIndex + 1],
-    routePaths[currentIndex - 1],
-    "/",
-    "/rules",
-    "/skills"
-  ].filter((candidate) => candidate && candidate !== route))].slice(0, 5);
+  if (currentIndex < 0) return null;
+  return routePaths.slice(currentIndex + 1).find((candidate) => candidate !== "/system") || null;
 }
 
 export function renderRoute(pathname, search = "") {
@@ -83,10 +93,9 @@ export function renderRoute(pathname, search = "") {
 export function renderDocument(template, pathname, search = "") {
   const route = canonicalPath(pathname) === "/" ? "/" : canonicalPath(pathname).slice(0, -1);
   const meta = routeMeta(route);
-  const canonical = canonicalUrl(route);
-  const prefetchLinks = likelyNextRoutes(route)
-    .map((target) => `<link rel="prefetch" as="document" href="${escapeAttribute(canonicalPath(target))}" />`)
-    .join("\n    ");
+  const canonical = canonicalUrl(route === "/system" ? "/" : route);
+  const prefetchTarget = nextStaticRoute(route);
+  const prefetchLinks = prefetchTarget ? `<link rel="prefetch" as="document" href="${escapeAttribute(canonicalPath(prefetchTarget))}" />` : "";
   let html = template;
   html = replaceRequired(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
   html = replaceRequired(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, `<meta name="description" content="${escapeAttribute(meta.description)}" />`);
@@ -97,7 +106,8 @@ export function renderDocument(template, pathname, search = "") {
   html = replaceRequired(html, /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:title" content="${escapeAttribute(meta.title)}" />`);
   html = replaceRequired(html, /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:description" content="${escapeAttribute(meta.description)}" />`);
   html = replaceRequired(html, /<div id="root"><\/div>/, `<div id="root" data-static-route="${escapeAttribute(route)}">${renderRoute(route, search)}</div>`);
-  html = html.replace("</head>", `    ${prefetchLinks}\n  </head>`);
+  const compatibilityRedirect = route === "/system" ? '<meta http-equiv="refresh" content="0; url=/" />\n    ' : "";
+  html = html.replace("</head>", `    ${compatibilityRedirect}${prefetchLinks}\n  </head>`);
   if (!/<script\s+type="module"/.test(html)) throw new Error("HTML template has no client enhancement entry");
-  return html.replace(/(<script\s+type="module")/, `${searchIndexScript}\n    $1`);
+  return html.replace(/(<script\s+type="module")/, `${searchIndexScripts(route)}\n    $1`);
 }

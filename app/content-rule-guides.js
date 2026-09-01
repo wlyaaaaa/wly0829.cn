@@ -26,7 +26,7 @@ export const ruleGuides = {
           item("具体项目拥有什么", "业务语义、领域数据、源码、启动和测试方式归具体项目。全局规则不能替项目决定业务。"),
           item("项目规则通常不被全局覆盖", "全局规则和机械门通常只能与项目规则取交集或进一步收紧身份、授权和并发边界，不能改写项目命令、兼容或产品语义。唯一窄例外是授权合同拥有的 PUBLIC 个人数据唯一分级与 project_publication_restriction_authority（项目公开限制授权）：项目收紧 L1/L2 默认必须有真实需要和用户对精确项目、范围、限制的明确授权。", "项目写明必须用它自己的 acceptance.ps1，全局不能因为偏好 pytest 就替换；项目自己写一句“所有个人数据都隐藏”也不能产生用户授权。"),
           item("三个控制面按需进入", "只有相关事实会改变当前决定时才读取对应控制面，不进行周期性全扫，也不要求每个任务依次经过三个仓库。"),
-          item("路径分工", "AI 工作台运行根和本地数据库只有一份，位于 E 数据盘；C 盘只留兼容 junction。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
+          item("路径分工", "AI 工作台运行根和本地数据库已经统一到 E 数据盘；C 盘同名目录只保留经过验证的 compatibility junction（兼容目录联接），不是第二份权威或数据副本。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
         ]
       },
       {
@@ -47,6 +47,10 @@ export const ruleGuides = {
           item("代码只为真实变化抽象", "只在已有重复、稳定变化轴或 Owner 边界能降低总成本时抽象；没有真实 consumer 的适配器和安装态应退出。"),
           item("控制仓库膨胀", "保护产品语义、必要身份、恢复、兼容结果和上位精确边界，不保护文件、状态机或报告形态。完成计划和旧复盘交给 Git 历史，不留活动副本。"),
           item("系统级反膨胀", "任何项目按改动规模审查源码、运行节点、状态、人工步骤、上下文和墙钟；等价方案取小、快、少点击，但不得削弱需求、正确性、可靠性、恢复或上位精确边界。安全标签也不能换取额外复杂度。"),
+          item("产品复杂度由用户和业务 Owner 决定", "功能、流程、状态、规则和体验不能被反膨胀删除、合并或降级；产品复杂也不能反向授权更多服务、数据库、状态机、Owner 或证明链。"),
+          item("最小充分架构是写入前硬门", "先冻结功能、好用、正确、可靠、恢复、性能、维护、兼容和已证扩展轴；现有入口、单模块或少步骤满足同一完整验收时必须采用，长路线禁止。"),
+          item("新增技术层必须逐项举证", "每个 source/module、服务、任务、watcher、schema、数据库、队列、状态机、Owner 或验证层，都要对应短路线缺失的精确验收项和当前正面证据；假想未来、最佳实践或额度充足不成立。"),
+          item("自造复杂度失败先删层", "Agent 新增的层、状态或证明链导致失败时，先删除或绕开该复杂度并重判最短路线；不能继续给原路线叠 guard、receipt、preflight、baseline、fallback 或状态。"),
           item("注意力质量高于上下文数量", "先编排会改变决定的目标、边界、最新证据、未知、失败链、真实用户路径和验收；遗漏关键事实与盲目塞入日志、历史和重复规则，都会造成注意力崩溃。"),
           item("必要时做实现盲测", "当实现者知道内部答案会污染验收，或内部测试不能代表自然用户路径时，由 fresh evaluator（全新评估者）只拿用户可见目标和正常环境完成 E2E，不把 diff、根因或预期修复线索交给它。"),
           item("压缩不能删义", "字符预算和反膨胀不得弱化范围、强制程度、例外、停止条件、优先级或 Owner；先删重复，仍无法无损表达时按实测缺口最小增额。"),
@@ -97,7 +101,7 @@ export const ruleGuides = {
         title: "五、私人领域、文档和 Skills",
         intro: "最后一部分把私人需求拆成窄能力，避免恢复一个中央个人数据库。",
         items: [
-          item("中央个人知识入口已永久退役", "健康、本人法律事务和微信分别进入自己的独立入口；只有原件位置未知时才用材料定位，录音和扫描件分别交给 ASR 与 OCR。"),
+          item("中央个人知识入口已永久退役", "健康、本人私人事务文书和微信分别进入自己的独立入口；只有原件位置未知时才用材料定位，录音和扫描件分别交给 ASR 与 OCR。"),
           item("没有持续需求就不建新项目", "普通问题直接用当前对话和最小原件回答；只有稳定持续需求、净收益成立并由用户明确启动时才建小项目。"),
           item("禁止中央画像和后台同步", "不恢复中央个人数据库、统一事件图、跨领域画像、后台同步或总 Skill。照片视频只进入明确启动的有界媒体任务。"),
           item("秘密有固定 Owner", "SecretRef 走本地 Secret Broker；Vault 和 Key 走独立 Vault 工作流。BitLocker 全量恢复的敏感结果不能进入聊天、stdout、JSON 或剪贴板。"),
@@ -239,7 +243,7 @@ export const ruleGuides = {
           item("一个任务最多一个项目", "同项目 scope 不重叠；首次 Claim，同 holder 追加独立 scope 用 Add，扩缩改派用正式 transition。"),
           item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。RecoverReleaseClaim 默认继承 predecessor 的非空 coordination，Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings，避免恢复或重分区丢失同一目标身份。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
           item("写前 AuthorizeAction", "每次写入核对 action、task、scope、binding 和 revision，防止拿旧 claim 改新范围。"),
-          item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。先用固定 Codex lifecycle resolver 判断对方是否仍 active；只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
+          item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。固定 Codex lifecycle resolver 先读取物理 CODEX_HOME；只有验证 C 盘 compatibility junction 确实指向同一 E 根后，才把兼容路径下发现的 rollout 归一为同一任务记录，绝不把 C 盘重新当成 authority。只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
           item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无现役 Owner、当前任务不能 Claim 且独立 Owner 路线确有净价值时才创建；耐久明确授权已经满足用户允许，create_thread 可见就真实调用一次。默认无项目，不能因仓库工作自动选择 saved project。"),
           item("任务创建结果精确分类", "threadId 是可继续管理的真实任务身份；clientThreadId 只证明 setup-pending（准备中），不能传给要求 threadId 的工具。真实工具缺失或 deny 是 unavailable，tool error 是 failed，无可追踪 ID 是 dispatch-unconfirmed；都停止且不盲重试。"),
           item("等待只有一轮", "关键路径只剩 Owner 结果时，作一次 terminal 或 needs-attention 事件等待，不持续轮询 commentary。"),
@@ -285,7 +289,20 @@ export const ruleGuides = {
         ]
       },
       {
-        title: "七、PUBLIC 个人数据唯一 L1–L5 表",
+        title: "七、PUBLIC 项目的私有伴随材料",
+        intro: "公开仓库旁边可能有被 Git 明确忽略、但对恢复和继续工作有价值的私有配置、脚本或文档。目标是既不把它们推到 PUBLIC，也不因看不见就让它们成为单机唯一副本。",
+        items: [
+          item("什么时候用", "例如我问“这个公开项目里被 Git 忽略的本地配置和文档怎样备份，又不泄露到公开仓库”。只有项目当前由 Git Owner 确认 PUBLIC、有本地 worktree，且材料确实 ignored、未跟踪/未暂存并有保留价值时进入。"),
+          item("什么不进入", "Tracked/unignored 候选继续由公开项目 Owner 决定；已推到来源 GitHub 的版本不重新打开复审。依赖、cache、build/generated/temp、普通日志、可重建下载、活数据库和大制品默认排除，歧义原地保留。"),
+          item("最终得到什么", "一个现场仍为 PRIVATE 的唯一 companion 仓库、含来源映射和 hash 的私有 manifest、远端默认分支回读，以及原路径继续可用且仍被 PUBLIC Git 忽略的本地 link；PUBLIC commit 不包含私有映射。"),
+          item("完整执行顺序", "copy/hash → PRIVATE manifest、commit 和 normal push → 从远端默认分支回读提交与 hash → 原件同卷 rollback rename → 建立 local-only link → 回读 PUBLIC git status 仍无候选。远端回读成功前不得替换原件。"),
+          item("正常时", "PRIVATE 目标、远端内容和本地 link 全部回读一致后，原项目继续按原路径使用材料，同时已有独立私有恢复点。"),
+          item("发现问题时", "目标不是 PRIVATE、内容已由另一私有远端覆盖、hash/remote read-back 不一致或 link 进入 PUBLIC staging 时停止；已经替换原件则立即从 rollback rename 恢复。"),
+          item("入口不可用时", "保留原件和现有 PUBLIC worktree，不创建猜测目标、不用 skip-worktree/硬链接/修改公开 .gitignore 隐藏，也不把半成品叫完成。")
+        ]
+      },
+      {
+        title: "八、PUBLIC 个人数据唯一 L1–L5 表",
         intro: "分级对象是最终公开载荷整体；effective_level=max(字段等级, 组合后的现实损害等级)。仅能识别本人、字段变多或抽象猜测不构成升级，限制方须有正面证据证明达到 L3+，否则个人数据敏感性轴默认 L2。",
         items: [
           item("L1｜非个人或重复公开无新增损害", "非个人、虚构、匿名，或用户已主动公开且本次重复公开不会增加现实损害的普通事实。PUBLIC 默认：不受个人数据公开限制。"),
@@ -339,6 +356,16 @@ export const ruleGuides = {
     ]
   },
   capability_routing_contract: {
+    searchAliases: [
+      "Hook到底检查什么，谁决定开几个代理",
+      "UserPromptSubmit和SubagentStart分别做什么",
+      "PreToolUse为什么只是创建前复核",
+      "没有Hook为什么只是不能委派",
+      "什么时候要做实现盲测",
+      "不点名Skill怎么验证AI会自己选路",
+      "Codex官方更新后为什么不看版本号准入",
+      "功能不删怎样选择最小充分架构"
+    ],
     glossary: [
       ["Expected net value", "能力带来的信息、质量和时间收益，减去延迟、耦合、成本和出错风险。"],
       ["Capability salience", "先用 metadata 把可能有用的能力放回注意力，再决定要不要读正文。"],
@@ -346,6 +373,18 @@ export const ruleGuides = {
       ["Reader routing", "根据文件和任务类型选择原生 reader，不让一个总入口接管所有材料。"],
       ["Attention curation", "先保留会改变当前决定的目标、边界、证据、未知和验收，再读取必要细节。"],
       ["Implementation-blind fresh E2E", "让不了解实现线索的全新评估者只按自然用户目标走真实产品路径。"],
+      ["Natural-intent blind routing", "只给自然用户意图并保留正常能力 metadata，让 AI 自己发现 Skill、tool、plugin 或 provider。"],
+      ["Route selected without hint", "没有在提示中点名路线时，AI 仍自主选择了正确能力；它还必须与用户可见结果一起验证。"],
+      ["Directed execution test", "提示明确指定内部路线的定向执行测试；它可以证明路线能跑，但不能证明 AI 会自己选择。"],
+      ["Hook", "宿主在固定事件点注入或复核可信身份、E identity 和参数；它不选择模型或数量、不创建 child，也不产生授权。"],
+      ["UserPromptSubmit / SubagentStart", "前者服务 root 请求，后者服务 child 启动；都在各自任何 0–10 判断之前注入本轮可信身份。"],
+      ["PreToolUse", "真实 spawn 前的二次现场复核，只检查 TOCTOU、家族/effort 上限、参数和 fork，不能替代判断前身份。"],
+      ["Official update continuity", "Codex 官方同主体更新按稳定 package family、签名、事件和当前能力发现延续，不依赖易变版本号或安装路径。"],
+      ["Product requirement complexity authority", "用户和业务 Owner 拥有产品功能、流程、状态、规则与体验；反膨胀只能优化技术实现。"],
+      ["Complete acceptance floor", "功能、好用、正确、可靠、恢复、性能、可维护、兼容和已证扩展轴组成的完整验收底线。"],
+      ["Minimum sufficient architecture", "满足同一完整验收所需的最少技术层、节点、状态和人工步骤，不靠删产品语义伪造简单。"],
+      ["Prohibited unjustified complexity", "新增技术层无法用精确需求、短路线失败验收和当前证据举证时的禁止结论。"],
+      ["Complexity failure collapse", "Agent 自造复杂度导致失败时先删层或绕开，再重判最短充分路线。"],
       ["Fresh task", "安装完成后启动的另一个新任务真实发现能力。"],
       ["E2E", "用真实输入走完整路径并得到用户可见结果。"]
     ],
@@ -363,14 +402,18 @@ export const ruleGuides = {
           item("能力发现不扩权", "找到一个工具、账号或插件不代表允许调用它执行 external effect。"),
           item("Effect schema 和 executor 分开", "有类型化 operation 但缺实现时，由对应 Owner 补窄 executor 和测试；已有等价入口时不提示插件。"),
           item("缺环境时优先官方原生安装", "在任务必需、可逆和兼容边界内安装 runtime/SDK/CLI/build tool；既有项目服从 lock 和 CI。"),
-          item("兼容层是后选", "容器、旧 runtime 和 shim 只有原生路径不可用或不兼容时采用。付费、账号、重启和信任边界仍单独处理。")
+          item("兼容层是后选", "容器、旧 runtime 和 shim 只有原生路径不可用或不兼容时采用。付费、账号、重启和信任边界仍单独处理。"),
+          item("Codex 官方更新看稳定主体", "以稳定 PFN/package family、signer/principal、device/bridge key、schema/event/capability 和 current discovery 判断同一产品与能力；app version、build、versioned executable path、update epoch 和 optional metadata 不参与准入。"),
+          item("真实能力缺失才局部降级", "官方同主体更新或 optional metadata 缺失不 step-up/BLOCK。只有现场缺少某个精确 event 或 capability 时，才关闭受影响能力；普通项目继续。"),
+          item("产品需求不能被技术瘦身改写", "用户和业务 Owner 决定产品复杂度；模型不能为了反膨胀删功能、流程、状态、体验、质量或已证扩展点，也不能用技术偏好制造新产品需求。"),
+          item("同一完整验收下强制短路线", "原生能力、现有入口、单模块或少步骤已经满足 complete acceptance floor 时必须采用；一次性烂代码、封死真实扩展点或漏验收不算更简单。")
         ]
       },
       {
         title: "二、私人领域和 Google Workspace",
         intro: "能力路由把持续私人需求拆成窄入口，不恢复中央知识库。",
         items: [
-          item("健康、本人法律事务和微信直达", "它们分别由自己的项目和 Skill 负责，不经过 Personal Knowledge（中央个人知识入口）。"),
+          item("健康、本人私人事务文书和微信直达", "它们分别由自己的项目和 Skill 负责，不经过 Personal Knowledge（中央个人知识入口）。"),
           item("原件未知才用定位能力", "非媒体原件走 personal materials；媒体走 personal media；录音和扫描件分别走 ASR/OCR。"),
           item("照片视频只在明确任务中处理", "不建立后台媒体扫描和统一人物服务。"),
           item("没有独立项目就用最小原件", "只在稳定持续需求和净收益成立并由用户明确启动时建新项目。"),
@@ -392,10 +435,19 @@ export const ruleGuides = {
           item("仓库膨胀治理", "活动 HEAD（当前提交）只留现行 source（源码）、contract（合同）、config（配置）和行为回归；计划、复盘和旧设计由 Git 留史。"),
           item("Change-surface validation", "验证强度由现实风险和当前 diff 的已知影响面决定；小而已知的改动跑直接语义/合同/预算和生效回读，未知映射、运行时/权限/身份边界或失败漂移自动转标准路径。"),
           item("系统反膨胀按改动规模执行", "大设计审查源码、服务/任务/进程、队列/数据库、状态机、Owner/worktree、用户点击、上下文和墙钟；普通小改只做轻量判断，不新增治理层。"),
+          item("写入前冻结完整验收底线", "先固定用户功能、好用、正确、可靠、恢复、性能、可维护、现有兼容和有证据的扩展轴；短路线和长路线只能在同一底线上比较。"),
+          item("新增每一层都要有当前证据", "新增 source/module、framework/adapter、服务/任务/进程/watcher、schema/database/queue、状态机、Owner/lease、manifest/receipt/audit chain、验证层或用户点击，都必须映射精确缺口；缺一项举证就停止写入和派发。"),
+          item("用户时间和退出成本也算复杂度", "等待、额度、金钱、计算/IO、重试、退出窗口、返工和对其他任务的阻塞都是一等成本；额度多不是长架构理由。"),
+          item("复杂度失败先收缩", "如果 Agent 新增的层、状态或证明链导致失败，先删除/绕开并重判；只有独立证据证明短路线不能满足完整验收，才恢复精确最小增量。"),
           item("安全标签不是复杂度额度", "默认可信本地只按正确性、可靠性、恢复和公开分级处理；除非用户明确安全任务，不引入威胁模型、身份层、审计链、反篡改机制、守护进程或安全工作流。"),
           item("语义优先于压缩", "预算和瘦身不得删掉范围、强度、例外、停止条件、优先级或 Owner；实在无法无损表达时按实测缺口最小提高预算。"),
           item("注意力先编排再扩容", "先去重并保留目标、边界、最新证据、未知、失败链和验收；如果编排后额度仍会造成关键遗漏，必须按实测缺口增加容量，不能用过短摘要换取表面简洁。"),
-          item("实现盲测由模型主动识别", "模型或 UI 结果可能受确认偏差影响时，fresh evaluator 只拿自然用户意图和正常产品环境；点名 Skill、工具、Provider 或预期路线的测试只能证明定向执行，不能冒充自然路由。"),
+          item("实现盲测由模型主动识别", "实现者知道内部答案会污染验收、内部测试不能代表自然语言或用户可见路径，或模型、heuristic、UI、Provider、恢复结果容易受确认偏差影响时，模型必须自己识别需要 implementation-blind fresh E2E；提示不必出现“盲测”。"),
+          item("Fresh evaluator 只拿最小用户输入", "给它用户可见目标、最小充分输入和正常产品环境；不提供 diff、实现理由、失败根因、预期修复线索或无关项目细节。盲测不是每次机械执行，但客观需要时不能因省上下文跳过。"),
+          item("自然意图路由不点名答案", "验证 AI 会不会自己选择能力时，正常 metadata 保持可见，但提示只表达自然用户意图，不能点名 Skill、tool、plugin、provider、内部路径或预期路线。"),
+          item("盲路由要验两件事", "同时证明 route_selected_without_hint 和用户可见结果正确；只看到工具被调用或只拿到答案都不完整。"),
+          item("定向测试不能冒充盲测", "点名内部路线的用例只算 directed_execution_test。它适合证明该入口能运行，但不能证明模型在普通请求里会想到并选择它。"),
+          item("示例只教抽象模式", "示例问句用于解释自然意图到自主路由的关系，模型必须类推到其他能力；禁止给某一句话、产品名或路线写专用分支。"),
           item("动态配置逐级准入", "从静态重启、原子 watcher、单机多进程 SQLite/loopback、真 kill switch 到跨实例服务，只有真实需求才升级。"),
           item("不预装配置平台", "不为想象中的未来引入 Nacos、Consul 或 etcd。"),
           item("动态配置必须可恢复", "定义 Owner、Consumer、认证网络、原子应用、last-known-good、离线 bootstrap、备份、审计、回滚和移除路径。"),
@@ -430,10 +482,11 @@ export const ruleGuides = {
       },
       {
         title: "六、原生经济路由的 11 条规则",
-        intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。",
+        intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。正常主路径先在判断前验真，再由 AI 决策，最后只对真实创建做二次复核。",
         items: [
-          item("1. 身份先于决策", "宿主从真实 turn context（本轮上下文）验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA；旧 root 只能用用户明确绑定恢复。"),
-          item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
+          item("最小主路径", "root 请求由 UserPromptSubmit、child 启动由 SubagentStart 在各自任何 0–10 判断前注入 verified model、effective effort、role、turn hash 与 E identity；随后 AI 按任务语义决定数量、家族、effort 和 scope，root 继续战略与集成。只有准备真实 spawn 时，PreToolUse 才复核现场 TOCTOU 和参数。", "Hook 到底检查什么，谁决定开几个代理？Hook 先验真、创建前再复核；AI 决定开不开、开几个和选哪一类，用户授权仍由原授权边界决定。"),
+          item("1. 身份先于决策", "UserPromptSubmit 验证 root transcript；SubagentStart 从 child transcript 绑定 lineage。宿主从真实 turn context 验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA，并在判断前注入。完全没有 Hook 或身份注入的旧 root 可复用同一任务中用户已经作出的自然语言模型与思考等级确认；确认层负责把别名规范化，绑定工具和落盘记录只接收 canonical ID（规范标识）。"),
+          item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节并重派生当前代快照。E 代际变化不会让已经成立的用户确认失效，也不要求用户重复确认；规则撤销该路径时才失败关闭。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
           item("3. 七类事件重判", "任务开始、新独立支路、阻塞、重大 steer、压缩、child terminal、槽位释放。普通工具步骤不填表。"),
           item("4. 每个父代理 0 到 10", "0 合法但不能惯性。Luna 适合封闭可验读重任务，Terra 适合强耦合实现和深调试，Sol 适合最高风险、战略和终审。"),
           item("5. 家族和 effort 只能向下", "只有 gpt-5.6-luna/terra/sol 属于现行三家族；其他宿主 verified 模型归更强的未来模型家族。Luna 只能派 Luna，Terra 可派 Luna/Terra，Sol 可派三家族，未来模型还可派未来模型；Sol 与未来模型可到 Ultra，任何 child 都不得高于父级或超过 Ultra。"),
@@ -443,8 +496,11 @@ export const ruleGuides = {
           item("9. Root 不空等", "Root 始终负责目标、优先级、依赖、风险和最终集成；有不冲突工作就继续，只在硬依赖时一轮事件等待。"),
           item("10. 连续性", "Child 中断优先恢复原 session；不能恢复才重跑或升级；partial 不冒充 complete。"),
           item("11. Root 最终负责", "委派后仍由 Root 验收。Benchmark 只是带来源、版本、日期和置信度的参考，规则文字不能制造宿主 grant。"),
-          item("宿主 Gate 做什么", "稳定入口只验证身份、策略和参数，不替模型选代理或创建 child；PreToolUse 只做 spawn 前 TOCTOU 复核。"),
-          item("回执缺失的边界", "回执用于审计，不能阻塞普通工具和最终答复，也不安装 Stop Hook 作为额外门。")
+          item("宿主 Gate 做什么", "稳定入口只验证身份、E rules 和参数，不替模型选择模型家族、代理数量、分工或验收，不调度或创建 child，也不制造用户授权；PreToolUse 只做真实 spawn 前 TOCTOU、上限、参数和跨身份 fork 复核。"),
+          item("旧 root 绑定的窄例外", "只有完全没有 Hook 或身份注入的旧 root，才可把同一任务中用户已经给出的自然语言 model/effort 确认规范化为 canonical ID，写入并回读同一 CODEX_THREAD_ID 的 user_attested_verified。E identity 换代只刷新快照、重读并重派生，不重复索要确认；Child 不继承，宿主 verified 恢复后自动优先，规则撤销或身份冲突不能靠旧绑定绕过。"),
+          item("官方更新不断路", "受管 Hook 只依赖稳定 bridge/runtime、package family、signer/principal、事件和当前能力发现；Codex app version、build、versioned path、update epoch 与 optional host metadata 不是准入条件。"),
+          item("更新后的局部失败", "同一官方主体更新后照常运行。若现场真的缺失某个 UserPromptSubmit、SubagentStart、PreToolUse event 或 spawn capability，只关闭对应委派能力；普通调查、实现、测试和最终答复继续。"),
+          item("回执缺失的边界", "回执只用于审计，不能阻塞普通工具和最终答复；不依赖或安装 Stop Hook 作为额外门。")
         ]
       },
       {

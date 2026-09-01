@@ -26,6 +26,11 @@ let compactSearchRecordCount = 0;
 try {
   const renderer = await vite.ssrLoadModule("/server/render-route.jsx");
   compactSearchRecordCount = renderer.compactSearchRecordCount;
+  await writeFile(path.join(distRoot, "search-index.js"), renderer.compactSearchAsset, "utf8");
+  await writeFile(path.join(distRoot, "search-projects.js"), renderer.compactProjectSearchAsset, "utf8");
+  for (const [slug, asset] of Object.entries(renderer.compactProjectSearchAssets)) {
+    await writeFile(path.join(distRoot, `search-project-${slug}.js`), asset, "utf8");
+  }
   for (const route of routePaths) {
     const targetDirectory = route === "/" ? distRoot : path.join(distRoot, ...route.slice(1).split("/"));
     await mkdir(targetDirectory, { recursive: true });
@@ -36,6 +41,7 @@ try {
 }
 
 const sitemapEntries = routePaths
+  .filter((route) => route !== "/system")
   .map((route) => `  <url>\n    <loc>${canonicalUrl(route)}</loc>\n  </url>`)
   .join("\n");
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;

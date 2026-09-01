@@ -20,11 +20,13 @@
     "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
     "evolution_policy": "record only important product stages; one entry may cover a date or date range and may merge multiple related changes",
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
-    "shared_interaction_gzip_budget_kib": 120,
-    "search_index_gzip_budget_kib": 24,
-    "bundle_budget_semantics": "the shared-runtime and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
+    "shared_interaction_gzip_budget_kib": 12,
+    "shared_css_gzip_budget_kib": 21,
+    "search_index_gzip_budget_kib": 64,
+    "project_search_index_gzip_budget_kib": 64,
+    "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
     "detail_loading_mode": "route_specific_static_native_document",
-    "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript and the generated search projection bounded, use native directory-document navigation, and prefetch likely routes before interaction; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
+    "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
       "real_dashboard",
       "curated_packaging"
@@ -42,8 +44,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 4,
-        "scope": "project overview, six modules, current E release Rules and Skills evidence",
+        "semantic_revision": 10,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E97 Rules and 28-Skill evidence, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, and PUBLIC private-companion migration",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -60,7 +62,8 @@
       },
       "displayed_areas": [
         "project_overview",
-        "six_modules",
+        "seven_modules",
+        "working_tree_hot_mirror_recovery",
         "active_rules",
         "skills_catalog",
         "validation_matrix",
@@ -113,7 +116,12 @@
             "tools/Invoke-ExecutionOwnerRegistry.ps1",
             "tools/Get-FourBaseDecisionContext.ps1",
             "tools/Invoke-EAgentRulesRelease.ps1",
-            "tools/Invoke-EAgentRulesFastRelease.ps1"
+            "tools/Invoke-EAgentRulesFastRelease.ps1",
+            "tools/Sync-AgentsHotMirror.ps1",
+            "tools/Install-AgentsHotMirrorTask.ps1",
+            "tools/Sync-AgentsHotMirror-Hidden.vbs",
+            "tools/codex_native_economy_gate.py",
+            "tools/codex_native_economy_runtime.py"
           ]
         },
         {
@@ -135,6 +143,9 @@
             "tests/Test-AllTestsRunner.ps1",
             "tests/Test-EAgentRulesRelease.ps1",
             "tests/Test-ExecutionOwnerRegistry.ps1",
+            "tests/Test-AttentionFidelityPolicy.ps1",
+            "tests/Test-AgentRuntimeCompatibility.ps1",
+            "tests/Test-AgentsHotMirror.ps1",
             "tools/Test-ControlPlaneContractCoverage.ps1"
           ]
         }
@@ -166,8 +177,8 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 2,
-        "scope": "project overview and six modules",
+        "semantic_revision": 9,
+        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
           "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
@@ -178,6 +189,7 @@
           "E:\\PCConfig\\tools\\Get-RuntimeInventory.ps1 -Json",
           "E:\\PCConfig\\tools\\Get-StartupInventory.ps1 -Json",
           "E:\\PCConfig\\tools\\Invoke-StableMachineProjection.ps1 -Action Read -Json",
+          "Get-ScheduledTask/Get-ScheduledTaskInfo -TaskName PersonalDataReplica-Hot-Daily read-only plus owner receipt when available",
           "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action Status -Json",
           "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1 -Action Status -Json",
           "E:\\PCConfig\\tools\\Get-GoogleWorkspaceProviderBinding.ps1 -Json",
@@ -198,6 +210,7 @@
           }
         ],
         "conditional_collectors": [
+          "E:\\PCConfig\\tools\\Get-SecondaryLaptopHealth.ps1 -Json only after live host identity exactly matches LAPTOP-E48N0DRJ/C:\\Users\\wly; on WLY or any other host record only not_applicable/host_mismatch and never reuse laptop paths as current facts",
           "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json when displayed protected-policy retirement state may change",
           "owner-specific protected installers/tests only when their displayed implementation or evidence changed"
         ]
@@ -210,7 +223,11 @@
       },
       "displayed_areas": [
         "project_overview",
-        "six_modules",
+        "nine_modules",
+        "drift_acceptance_dual_status_and_bounded_evidence",
+        "timeaudit_anomaly_increment_cursor_and_stable_fact_recheck",
+        "independent_authorization_file_encrypt_verify_restore_lifecycle",
+        "secondary_laptop_health_recovery_and_nvme_takeover",
         "current_machine_and_recovery_state",
         "evidence_layers",
         "evolution_and_operating_entries"
@@ -228,7 +245,17 @@
             "tools/scan_tasks.ps1",
             "tools/Get-DevStorageHealth.ps1",
             "tools/Get-RuntimeInventory.ps1",
-            "tools/Install-CoreRecoveryTasks.ps1"
+            "tools/local_gpu_broker/**",
+            "tools/Install-CoreRecoveryTasks.ps1",
+            "tools/Invoke-PCConfigAcceptance.ps1",
+            "tools/Invoke-TimeAuditAnomalyIncrement.ps1",
+            "tools/timeaudit_anomaly_increment.test.ps1",
+            "tools/invoke_acceptance_checks.test.ps1",
+            "tools/test_pcconfig_drift.test.ps1",
+            "tools/Get-SecondaryLaptopHealth.ps1",
+            "tools/get_secondary_laptop_health.test.ps1",
+            "tools/test_secondary_laptop_recovery.test.ps1",
+            "tools/secondary-laptop-recovery/**"
           ]
         },
         {
@@ -251,8 +278,15 @@
             "registries/secret_broker.json",
             "tools/secret_broker.py",
             "tools/Invoke-SecretBroker.ps1",
+            "tools/authorization_file_broker.py",
+            "tools/authorization_file_broker.test.py",
+            "registries/google_workspace_provider.json",
             "tools/Invoke-GoogleWorkspaceProvider.ps1",
-            "docs/contracts/pcconfig.google-workspace-*.md"
+            "tools/Start-GoogleWorkspaceMcp.ps1",
+            "docs/contracts/pcconfig.google-workspace-*.md",
+            "docs/contracts/pcconfig.secret-broker.md",
+            "docs/contracts/pcconfig.password-center-m2.md",
+            "docs/recovery/password-center-m2-operations.md"
           ]
         }
       ],
@@ -279,8 +313,8 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 2,
-        "scope": "project overview and six modules",
+        "semantic_revision": 6,
+        "scope": "project overview and six modules covering the 49-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 27555327 and interruption recovery",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
@@ -318,6 +352,7 @@
             "tools/Get-GitOwnerStatus.ps1",
             "tools/Get-ProjectAdmission.ps1",
             "tools/Get-ProjectCognitionSource.ps1",
+            "tools/Add-PushRecord.ps1",
             "tools/GitHubIndex*.psm1",
             "tools/Install-GitHook.ps1",
             "config/git-artifact-governance.json"
@@ -367,8 +402,8 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 1,
-        "scope": "project overview and six modules",
+        "semantic_revision": 5,
+        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ChineseASR -RefreshRefs -Json",
@@ -389,9 +424,11 @@
       },
       "displayed_areas": [
         "project_overview",
-        "six_modules",
+        "seven_modules",
+        "installation_model_artifacts_and_offline_recovery",
         "model_and_mode_routing",
         "task_long_audio_and_evidence_state",
+        "optional_local_ollama_evidence_only_arbitration",
         "speaker_and_privacy_boundaries",
         "verification_and_evolution"
       ],
@@ -427,10 +464,33 @@
             "src/zh_asr/audit.py",
             "src/zh_asr/risk_rules.py",
             "src/zh_asr/audio_outcome.py",
+            "src/zh_asr/strict_writer.py",
             "src/zh_asr/result_writer.py",
             "src/zh_asr/metadata.py",
+            "src/zh_asr/benchmark.py",
             "src/zh_asr/speaker_evidence.py",
             "src/zh_asr/speaker_attribution.py"
+          ]
+        },
+        {
+          "kind": "installation_model_artifacts_and_offline_recovery",
+          "paths": [
+            "pyproject.toml",
+            "requirements-core.txt",
+            "requirements-qwen.txt",
+            "requirements-firered.txt",
+            "scripts/setup-core.ps1",
+            "scripts/setup-qwen.ps1",
+            "scripts/setup-firered.ps1",
+            "scripts/install-torch-cu128-direct.ps1",
+            "scripts/download-models.ps1",
+            "scripts/export-lock.ps1",
+            "scripts/build-wheelhouse.ps1",
+            "scripts/verify-wheelhouse.ps1",
+            "scripts/install-offline.ps1",
+            "offline/manifests/**",
+            "runtime/firered_worker.py",
+            "tests/test_scripts.py"
           ]
         },
         {
@@ -440,6 +500,7 @@
             "src/zh_asr/proxy_guard.py",
             "scripts/asr-professional-cloud.ps1",
             "scripts/qwen_audio3_broker_worker.py",
+            "scripts/benchmark.ps1",
             "scripts/smoke-*.ps1",
             "tests/*.py"
           ]
@@ -470,8 +531,8 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 1,
-        "scope": "project overview and product-defined modules covering collection, analysis, visualization, runtime reliability, actual-value sensitivity, and recovery",
+        "semantic_revision": 5,
+        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
@@ -482,6 +543,8 @@
         ],
         "conditional_collectors": [
           "python -m pytest -q E:\\Projects\\Tools\\TimeAudit\\test_main_cadence.py E:\\Projects\\Tools\\TimeAudit\\test_runtime_hardening.py E:\\Projects\\Tools\\TimeAudit\\test_ingest_resilience.py when sampling cadence, watchdog or recovery semantics changed",
+          "python -m pytest -q E:\\Projects\\Tools\\TimeAudit\\test_clipboard_history.py when clipboard collector, FTS search, lineage, incremental export, backup or empty-directory restore semantics changed; never read a real clipboard payload for website refresh",
+          "SYSTEM/Administrator read-only PCConfig task publication for TimeAudit_ClipboardCollector, TimeAudit_ClipboardWatchdog and TimeAudit_ClipboardNearlineBackup; consume only task existence/state/last-result/observation fields with complete_visibility=true, never task XML, arguments, logs or clipboard content",
           "python E:\\Projects\\Tools\\TimeAudit\\test_grafana_dashboard_contract.py and python E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py when dashboard, SQL partitioning or datasource recovery semantics changed",
           "run the bounded anomaly digest again for a fresh <=168-hour window when displayed runtime coverage or aggregate anomaly state may have changed; never substitute test_telemetry_health.py, db_audit.py or direct database rows as public receipts"
         ],
@@ -506,7 +569,9 @@
         "project_modules",
         "collection_and_storage_architecture",
         "hardware_process_usage_and_energy_boundaries",
+        "pcconfig_anomaly_digest_coverage_recheck_and_unavailable_semantics",
         "runtime_reliability_and_actual_value_boundary",
+        "windows_clipboard_history_product_and_recovery",
         "verification_recovery_and_evolution"
       ],
       "impact_sources": [
@@ -535,7 +600,8 @@
             "telemetry_watchdog.ps1",
             "runtime_health.py",
             "check_telemetry_status.py",
-            "start_all.bat"
+            "start_all.bat",
+            "setup_runtime.ps1"
           ]
         },
         {
@@ -550,6 +616,13 @@
             "backup_db.ps1",
             "backup_grafana.py",
             "restore_grafana.py"
+          ]
+        },
+        {
+          "kind": "clipboard_history_product",
+          "paths": [
+            "clipboard_history/**",
+            "test_clipboard_history.py"
           ]
         },
         {
@@ -603,8 +676,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 1,
-        "scope": "project overview with layered physical/visual evidence, plus project-defined modules covering the case-panel data/render/transport path, HS2 event overlay, and power/recovery ownership",
+        "semantic_revision": 5,
+        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the 8c217ead bounded display-topology/Wallpaper Engine render-rebind recovery chain",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -641,6 +714,8 @@
         "project_modules",
         "case_panel_metrics_render_and_transport",
         "hs2_event_overlay_and_display_safety",
+        "hs2_external_task_producer_and_hotkey_controls",
+        "installation_private_binding_and_machine_migration",
         "power_startup_watchdog_and_recovery",
         "physical_acceptance_and_visual_evidence",
         "verification_gaps_and_evolution"
@@ -694,6 +769,7 @@
             "scripts/start.ps1",
             "scripts/repair-panel.ps1",
             "scripts/install-startup-admin.ps1",
+            "scripts/uninstall-startup-admin.ps1",
             "scripts/build-release.ps1",
             "scripts/Test*.ps1",
             "scripts/test.ps1",
@@ -738,8 +814,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-cacb.js",
-        "semantic_revision": 1,
-        "scope": "curated product overview and project-defined modules covering the question bank, isolated execution, identity/evidence binding, deterministic verification, failure semantics and reproducible reporting framework without publishing any tested-configuration outcome",
+        "semantic_revision": 7,
+        "scope": "curated product overview and eight project-defined modules covering the question bank, isolated formal execution, native_managed/local_async_job/cloud_api_async_job identities and lifecycles, an independent Sol Max root orchestration module with role-specific direct-child delivery and fail-closed evidence, deterministic hard gates, Sol Max identity-blind arbitration review as rebuttable inferred quality evidence, an independent 1/10-task quota-cost probe and exact-cleanup module, compatible final selection and reports without publishing any tested-configuration score or rank",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator, read the current default-branch commit and bounded product/test facts, and reduce them to public-safe framework evidence without tested-configuration outputs, private samples, raw runs or hidden answers"
         ],
@@ -759,6 +835,11 @@
         "question_bank_and_case_contracts",
         "isolated_execution_and_workspace_containment",
         "identity_evidence_and_deterministic_verification",
+        "executor_union_identity_terminal_cleanup_and_authorization",
+        "native_orchestration_root_child_role_specific_delivery_and_separate_reporting",
+        "sol_max_blind_arbitration_inferred_quality_and_evidence_binding",
+        "isolated_quota_cost_probes",
+        "compatible_final_selection",
         "failure_semantics_and_reproducible_reports",
         "manual_snapshot_boundary"
       ],
@@ -786,8 +867,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-learning.js",
-        "semantic_revision": 1,
-        "scope": "curated public overview and five modules covering authoritative research, professional plain-language explanation, dialogue-driven rechecking and correction, optional low-stakes questions, bounded verification, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
+        "semantic_revision": 5,
+        "scope": "curated public overview and six modules covering authoritative research, a first complete final lecture after prior-unit cross-check, counterexample and self-review, dialogue-driven rechecking with proactive notice of understanding-changing corrections, optional low-stakes questions, bounded verification, an independent AI-owned capability/dependency/depth/stop/checkpoint route lifecycle, human final authority, small attention and low-complexity implementation without exposing any learning subject or progress",
         "collectors": [
           "manual_owner_evidence: only after an explicit owner refresh request, resolve the private source through the ignored owner locator and reduce current method rules, source-selection principles, question design, feedback mechanics, validation boundaries and human-control decisions to public-safe product mechanics without subjects, materials, inventory, personal feedback or progress"
         ],
@@ -798,8 +879,10 @@
         "repo": "PRIVATE_MANAGED_SOURCE",
         "visibility": "PRIVATE",
         "default_branch": "main",
-        "public_identity": "private-ai-assisted-learning-method-source",
-        "locator_owner": "ignored-private-content-rules"
+      "public_identity": "private-ai-assisted-learning-method-source",
+      "snapshot_commit": "6534ac7a2bc57ab949224ee3d6f98854edc321a5",
+      "snapshot_observed_at": "2026-08-30T09:30:00Z",
+      "locator_owner": "ignored-private-content-rules"
       },
       "displayed_areas": [
         "curated_project_overview",
@@ -808,6 +891,7 @@
         "professional_plain_language_explanation",
         "dialogue_research_and_explicit_correction",
         "optional_questions_and_bounded_verification",
+        "ai_owned_route_capability_dependency_depth_stop_and_checkpoint",
         "human_final_authority_small_attention_and_low_complexity",
         "manual_snapshot_without_subject_or_progress"
       ],
@@ -836,8 +920,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-codex-remote.js",
-        "semantic_revision": 1,
-        "scope": "curated public overview and six modules covering the same Desktop task on mobile, live conversation controls, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
+        "semantic_revision": 4,
+        "scope": "curated public overview and nine modules covering same-task identity, subagent navigation, current-turn steer/interrupt and durable next-turn queue control, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, installation/rolling update/rollback, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, resolve the PUBLIC repository identity, default branch, tags, release commit and current clean/sync facts through Git Owner",
           "manual_public_product_evidence: read only PUBLIC source, documentation, tests, release/CI receipts and individually approved media; never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server, installed runtime or Remote endpoint"
@@ -853,10 +937,13 @@
       "displayed_areas": [
         "curated_project_overview",
         "project_modules",
-        "same_task_and_remote_control",
+        "same_task_identity_and_desktop_resume_barrier",
+        "subagent_hierarchy_state_history_and_parent_return",
+        "conversation_control_and_durable_next_turn_queue",
         "models_approvals_context_and_usage",
         "projects_owner_files_and_input",
         "shared_broker_sidecar_architecture",
+        "installation_rolling_update_and_atomic_rollback",
         "public_access_and_security_boundaries",
         "version_test_real_e2e_and_gallery_evidence",
         "manual_snapshot_without_online_probe"
@@ -886,7 +973,7 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-personal-health.js",
-        "semantic_revision": 1,
+        "semantic_revision": 3,
         "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",

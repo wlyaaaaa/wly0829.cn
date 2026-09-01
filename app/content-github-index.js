@@ -1,3 +1,35 @@
+import { createProjectSnapshot } from "./project-snapshot.js";
+
+const githubIndexSnapshot = createProjectSnapshot({
+  observedAt: "2026-09-01T01:54:35.9652187Z",
+  label: "49 个 live Owner identity 已闭合，46 个本地副本已验证；源 main/origin 与公开 generation 分层回读",
+  boundary: "Owner 现场观察于 2026-09-01 01:54 UTC；公开 generation 27555327…观察于 01:34 UTC；Admission 只提供证据，不授予 push 权限",
+  metrics: [
+    { label: "仓库总账", value: "49" },
+    { label: "公开 / 私有", value: "27 / 22" },
+    { label: "本地 / 仅远端", value: "46 / 3" },
+    { label: "当前差异", value: "0 delta · 0 issue" }
+  ],
+  facts: [
+    { label: "仓库闭合口径", value: "baseline=49、observed=49、delta=0、issue=0 才称 current；目录名和旧投影不能补齐" },
+    { label: "本地副本语义", value: "46 个 clone occurrence 逐一回读真实 origin；其余 3 个仓库明确为 remote-only，一个仓库的多个 worktree 不重复算仓库" },
+    { label: "源仓库现场", value: "wlyaaaaa/github-local-index 是 PUBLIC；main 与 origin/main 同为 281344becbce205d336fb816d4efd9d4705eba8f，工作区 clean、0/0" },
+    { label: "公开 generation", value: "current=275553278b7747f5b9c64f1a325b86b0；8 份文档闭合，共 20026 bytes；generation 完整不冒充 live Owner 新鲜度" },
+    { label: "已接受的过渡", value: "previous→current 记录新增 wlyaaaaa/daily-preferences；它已完成 PRIVATE main、origin、默认分支、本地 clean 0/0 与 Owner baseline 登记，当前 delta=0、issue=0" },
+    { label: "公开表达边界", value: "普通仓库名、路径、提交和失败事实可按价值展示；PRIVATE 不生成猜测链接，可复用秘密和真实 L3+ 私人载荷仍禁止公开" },
+    { label: "源仓库同步", value: "wlyaaaaa/github-local-index 本地 main、origin/main 与 HEAD 同为 281344becbce205d336fb816d4efd9d4705eba8f，工作区 clean、ahead/behind=0/0。", hero: false },
+    { label: "公开投影闭包", value: "当前公开 generation=275553278b7747f5b9c64f1a325b86b0，8 份文档共 20026 bytes，previous=70efc65cdfec4b9cb1305ff48086744d；manifest、generation 文档、兼容投影和 pointer 中的 bytes/hash 已逐项回读一致。", hero: false },
+    { label: "仓库与本地副本", value: "live source 覆盖 49 个仓库身份（27 PUBLIC、22 PRIVATE）和 46 个已验证 clone occurrence；identity coverage 与 clone coverage 均为 complete，剩余 3 个仓库明确为 remote-only。", hero: false },
+    { label: "现场读取方式", value: "Get-GitOwnerStatus 以零写入、no fetch（不抓取远端引用）返回 execution_status=completed、domain_status=current、baseline=49、observed=49、delta=0、issue=0。", hero: false },
+    { label: "过渡历史", value: "history 保留一项 nonblocking attention（非阻断提醒）：新增 PRIVATE wlyaaaaa/daily-preferences 已被 current baseline 接受；当前没有未处理 identity delta。", hero: false }
+  ],
+  gaps: [
+    "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
+    "重大 Git/GitHub 动作源码曾在历史提交 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从历史源码回归外推。",
+    "本次已真实创建并回读 PRIVATE wlyaaaaa/daily-preferences；其他重大动作 broker/人类因子 E2E 本轮没有执行，不能由这一次创建外推。"
+  ]
+});
+
 export const githubIndexProject = {
   order: 3,
   slug: "github-index",
@@ -5,28 +37,20 @@ export const githubIndexProject = {
   route: "/projects/github-index",
   visibility: "公开仓库",
   repositoryNote: "源仓库 wlyaaaaa/github-local-index 是公开仓库。仓库身份、公开性、远端和 clone（本地副本）路径按实际值判断：能改变当前决定且不含 L3+ 私人正文或可复用凭据时，PUBLIC 与 PRIVATE 项目的普通技术事实都可以直接说明；本机 ignored 登记区继续保存完整动态导航。",
-  status: "现役；2026-08-31 live Owner inventory 为 47/47、delta 0、issue 0；仍有 1 项历史过渡复核提醒。公开 generation 是更早的完整快照，不能冒充当前现场。",
+  status: "现役；live Owner inventory（现场责任源仓库清单）已闭合为 49 个仓库，delta=0、issue=0；46 个本地 clone（副本）已回读 origin，3 个 remote-only（仅远端仓库）保持显式。",
   statusTone: "mixed",
-  cardStatus: "仓库总账与单仓库入场判断可用，发布和清理仍按现场逐项收口",
+  cardStatus: "49 个仓库已闭合，46 个本地副本已验证",
   cardStatusTone: "pass",
-  snapshotBoundary: "live Owner 现为 47 个仓库、44 个已验证 clone；公开 generation 仍停在 45/43 的 2026-08-29 快照，1 项提醒属于 previous→current 历史过渡复核",
-  summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会核对真实远端、公开性、默认分支、所有工作树和候选内容，并把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布或清理还缺哪一步。",
+  ...githubIndexSnapshot,
+  summary: "GitHub 总索引是我所有仓库和本地副本的导航与安全收口中心。我可以直接问“新建一个 PRIVATE 仓库”“这个目录会推到哪里”“这个分支算完成了吗”或“这个工作树能删吗”。它会从落盘、创建和登记开始，核对真实远端、可见性、默认分支、所有工作树和候选内容，再把能否传输、内容是否适合公开、当前是否已获授权分开判断。最后我得到明确的继续、警告或阻断结论，以及发布、恢复或清理还缺哪一步。",
   why: "仓库一多，同名目录、旧路径、临时工作树和多个远端很容易混在一起。只看当前目录或一句“已经推送”会漏掉公开泄露、覆盖他人未提交修改、分支落后、提交没有进入远端默认分支，以及临时工作树仍保存独有内容等真实事故。",
-  plainExample: "例如我问“这个功能分支已经推送了，能算完成吗？”它不会只看分支自己的上游是否同步，而会确认目标提交是否已经进入远端真正的默认分支，同时检查工作区是否还留着未提交内容。只有默认分支回读包含目标提交，Git 交付才真正收口。",
-  result: "最终得到的不是一张好看的项目列表，而是一份可行动的证据：正确仓库与远端、当前可见性、默认分支、全部工作树和分支状态、继续/警告/阻断原因、公开发布还缺什么，以及出错后应从哪里恢复或补证。真正发布后还必须从远端默认分支再次回读。",
+  plainExample: "例如我说“新建一个 PRIVATE 仓库”。它先判断这是个人还是工作项目，选择 V 盘正确根目录并建立本地 main 与首个提交；随后只创建本人账号下同名的空 PRIVATE 远端，配置 origin，正常推送 main，再现场回读仓库身份、可见性、真实默认分支和远端可达性。仓库真实存在并完成首次默认分支收敛后才进入总账，不为空目录预登记。",
+  result: "最终得到的不是一张好看的项目列表，而是一份可行动的证据：正确仓库与远端、当前可见性、默认分支、全部工作树和分支状态、继续/警告/阻断原因、公开发布还缺什么，以及出错后应从哪里恢复或补证。新仓库还会得到落盘位置、创建回读、登记结果和首次默认分支收敛；真正发布后仍必须从远端默认分支再次回读。",
   readerStates: {
     pass: "仓库身份、可见性、远端、默认分支、相关工作树和发布候选都已现场核对时，表示没有 Git 入场阻断；是否提交、推送或发布仍由当前任务授权和候选内容审查决定。",
     problem: "发现未提交修改、分支落后或分叉、工作树独有内容、索引漂移或公开风险时，给出警告或阻断及具体处理项，不覆盖并发施工。",
     unavailable: "GitHub、远端引用或本地仓库证据不可取得时，可以继续不依赖远端的安全只读或本地工作，但身份、同步和发布结论保持 Unknown（证据不足）。"
   },
-  heroFacts: [
-    { label: "当前现场", value: "live Owner source 已闭合 47 个 GitHub 仓库：27 个 PUBLIC、20 个 PRIVATE；baseline=47、observed=47、delta=0、issue=0" },
-    { label: "公开 generation", value: "current=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29 21:01Z；8 份文档闭合，previous=1af2630…" },
-    { label: "本地 clone 覆盖", value: "live source 已验证 44 个 clone occurrence（检出实例），coverage=complete；一个仓库可以有多个 worktree" },
-    { label: "索引仓库自身", value: "PUBLIC main e6bf84b；已对齐活动全局数据分级，并新增不联网抓取的原子投影刷新入口。公开 generation 仍是 2026-08-29 的闭合快照" },
-    { label: "Admission 会做什么", value: "确认仓库、公开性、默认分支、远端、目标 worktree、同步与脏改动后给出继续或阻断证据；它不会授予 push 权限" },
-    { label: "发布完成口径", value: "只有目标提交从真实默认分支可达、normal push 完成且远端 main 回读一致，才算 Git 交付收口" }
-  ],
   productPrinciples: [
     { title: "先确认真实仓库身份", detail: "目录名、标题和旧缓存不能证明远端是谁；写入前核对远端、默认分支和 Git 公共目录。" },
     { title: "检查全部工作树和分支", detail: "未提交修改、独有提交和仍被任务使用的工作树都要保留，不能只看当前目录是否干净。" },
@@ -44,7 +68,8 @@ export const githubIndexProject = {
     "维护公开安全的索引投影、私有导航登记、全量 Owner 基线和原子 generation（索引代际）",
     "为专门 Owner 分支、冻结历史和必要保留工作树保存精确且可退出的治理依据",
     "在删除分支、工作树或 Git 恢复材料前保留独有内容与默认分支可达性证据",
-    "规定新个人仓库、临时工作树和工作项目的默认落盘位置：个人仓库进入 V:\\Personal\\Projects，临时工作树进入 V:\\Personal\\Worktrees，工作项目进入 V:\\Work；V:\\Dev 只兼容旧工作树，Z 盘不放仓库、工作树或唯一副本"
+    "规定新个人仓库、临时工作树和工作项目的默认落盘位置：个人仓库进入 V:\\Personal\\Projects，临时工作树进入 V:\\Personal\\Worktrees，工作项目进入 V:\\Work；V:\\Dev 只兼容旧工作树，Z 盘不放仓库、工作树或唯一副本",
+    "把新 PRIVATE 仓库从本地 main 与首个提交、空私有远端创建、origin 配置和首次 push，一直收敛到现场身份/可见性/默认分支回读、Owner 登记与远端默认分支可达"
   ],
   exclusions: [
     "不拥有具体项目的业务语义、源码、启动方式、测试或部署方式",
@@ -77,31 +102,17 @@ export const githubIndexProject = {
     { term: "Retirement candidate（可退役候选）", meaning: "内容已进入默认分支且没有已知保护的分支或工作树；仍需确认没有活动依赖后才能删除。" },
     { term: "Commit-pinned snapshot（固定提交快照）", meaning: "干净、受限且固定在已知提交的审计工作树；它不同于普通无 upstream 或含独有工作的临时工作树。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T04:16:12Z",
-    label: "live Owner inventory 已与 47 项基线一致；公开 generation 仍是带时间边界的旧快照",
-    facts: [
-      "wlyaaaaa/github-local-index PUBLIC main 当前为 e6bf84bb46c3915e96d537eb0a60ed2acb1837c7；它对齐活动全局个人数据分级，并提供 zero-fetch（不联网抓取）原子投影收敛。公开 generation 仍是观察于 2026-08-29 的闭合快照，两者不能互相冒充。",
-      "当前公开 generation=3c6487c23da245f8a8be94e7ab5c7436，观察于 2026-08-29T21:01:41Z，8 份文档完整闭合并保留 previous=1af2630…；它证明该公开投影内部完整，不替代 live Owner 判断。",
-      "live source 覆盖 47 个仓库身份（27 PUBLIC、20 PRIVATE）和 44 个已验证 clone occurrence（本地副本出现项）；identity coverage 与 clone coverage 均为 complete（完整）。",
-      "最新 Get-GitOwnerStatus receipt 返回 execution_status=completed、baseline=47、observed=47、delta=0、issue=0、attention=1。提醒只要求复核 previous→current 的五项历史过渡，不代表当前 identity baseline 漂移。"
-    ],
-    gaps: [
-      "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
-      "重大 Git/GitHub 动作源码曾在 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从旧源码回归外推。",
-      "里程碑 Provider 当前 coverage_state=partial、bootstrap_gap=true、retained_window_only=true，只能表示保留窗口中的部分记录，不代表完整历史。"
-    ]
-  },
   operatingFlow: [
-    { title: "从普通请求确定目标", detail: "先回答要改哪个项目、期望交付到哪个远端和默认分支；目录名字相似时不靠猜。" },
-    { title: "选择正确落盘位置", detail: "新建或 clone（克隆）后再核对真实身份并登记：个人仓库放 V:\\Personal\\Projects，临时工作树放 V:\\Personal\\Worktrees，工作项目放 V:\\Work；不为空目录预登记，也不把仓库或唯一副本放进 Z 盘。" },
-    { title: "读取项目规则和本地 Git 状态", detail: "从目标项目取得业务语义与测试方式，用 git status、remote 和当前分支保护已有 dirty work。" },
-    { title: "有不确定性才做 Admission", detail: "按信息价值选择缓存、LiveMetadata（现场元数据）、RefreshRefs（刷新远端引用）或 ForPublication（发布用双现场证据），并可限定精确工作树或 ref。" },
+    { title: "从普通请求确定真实目标", detail: "先回答这是现有仓库还是新仓库、个人项目还是工作项目、期望的远端可见性和默认分支；目录名字相似时不靠猜。" },
+    { title: "先建立正确的本地起点", detail: "新个人仓库放 V:\\Personal\\Projects\\<name>，新工作仓库放 V:\\Work\\<name>；在真实目录初始化预期 main 与首个提交并保持 canonical worktree（规范工作树）clean，不为空目录预登记，也不把仓库或唯一副本放进 Z 盘。" },
+    { title: "安全创建空的 PRIVATE 远端", detail: "确认本人账号下同名仓库确实不存在，并把精确本地 branch/HEAD 绑定到受保护 create-repository 动作；它只创建 private=true、auto_init=false 的空远端，不顺带传入模板或任意参数。" },
+    { title: "完成第一次默认分支收敛", detail: "创建回读成功后才配置 origin，正常 push 本地 main；随后现场回读 owner/repo、PRIVATE、实际默认分支、upstream、0/0 和 origin/<default> 对目标提交的可达性。默认分支不同就显式处理，不能猜。" },
+    { title: "真实存在后才登记", detail: "只有远端和本地身份均已回读、首个默认分支收敛完成后，才刷新私有导航、Owner baseline 和公开 generation；最终 Owner status 要回到 baseline=observed、delta=0、issue=0。" },
+    { title: "现有项目先读规则和 Git 状态", detail: "从目标项目取得业务语义与测试方式，用 git status、remote 和当前分支保护已有 dirty work；不把别人的施工纳入候选。" },
+    { title: "有不确定性才做 Admission", detail: "按信息价值选择 LiveMetadata（现场元数据）、RefreshRefs（刷新远端引用）或 ForPublication，并可限定精确 worktree/ref；普通明确的小改不机械打卡。" },
     { title: "检查全部工作树和分支", detail: "比较 dirty、upstream、ahead/behind、默认分支可达性、独有提交、专门 Owner 和必要保留，不只看当前窗口。" },
-    { title: "把三个判断分开", detail: "先判断 transport 是否可行，再判断候选内容是否适合当前 visibility，最后确认本轮用户授权；三者不能互相推出。" },
-    { title: "显式执行并保护并发修改", detail: "只修改和暂存明确文件；behind、diverged、conflicted、detached 或目标冲突时先补证和制定 reconcile（收敛）方案。" },
-    { title: "从远端默认分支回读", detail: "本地测试、commit、push、默认分支可达、部署或用户结果分别验证；临时工作树和本地 main 都不能冒充远端交付。" },
-    { title: "只有 Owner 事实变化才刷新总账", detail: "仓库新增、改名、可见性、远端、默认分支、clone 路径或长期治理变化时生成新 generation；普通业务提交不触发连锁刷新。" }
+    { title: "把传输、内容与授权分开", detail: "先判断 transport 是否可行，再判断候选内容是否适合当前 visibility，最后确认本轮用户授权；三者不能互相推出。" },
+    { title: "显式执行并从远端回读", detail: "只修改和暂存明确文件；本地测试、commit、push、默认分支可达、部署与用户结果分别验证。临时分支、本地 main 和命令成功都不能冒充远端交付。" }
   ],
   components: [
     { name: "索引与同步看板", responsibility: "让人快速看到仓库身份、聚合计数和值得复核的同步问题。", implementation: "由 Git/GitHub 事实生成 Markdown；PUBLIC/PRIVATE 名称与路径只有在能改变判断且实际值可公开时才展开，其他内容保留聚合。" },
@@ -118,13 +129,16 @@ export const githubIndexProject = {
     { name: "Owner-local 合同与回归测试", responsibility: "固定 admission、worktree、publication、refresh、里程碑和重大动作的边界。", implementation: "合同只写稳定机制，动态路径和计数现场读取；测试覆盖 schema、失败关闭、原子切换和隐私边界。" }
   ],
   usageExamples: [
-    { ask: "帮我 clone 或新建一个个人仓库。", effect: "先放到 V:\\Personal\\Projects；只有真实仓库创建或 clone 成功后，才回读 origin、可见性和默认分支并登记。临时工作树另放 V:\\Personal\\Worktrees，不在 Z 盘创建。" },
-    { ask: "在 wly0829.cn 加一个 GitHub 总索引项目页，只改分给你的文件。", effect: "先确认公开仓库、main 和所有 dirty 项；即使 0/0，也只触碰明确文件，保留其他任务的修改。" },
-    { ask: "这个目录到底会推到哪个 GitHub 仓库？", effect: "读取 remote.origin.url 与 .git common directory，再和预期 repo identity 比较；冲突时只读诊断，不继续写。" },
-    { ask: "这个 feature 分支已经 push 了，能算完成吗？", effect: "除了 upstream 0/0，还比较它的 HEAD 是否已被远端默认分支吸收；没进 main 就仍是行动项。" },
-    { ask: "这个临时 worktree 可以删了吗？", effect: "检查 dirty、独有提交、默认分支可达性、locked/prunable、必要保留和活动依赖；unknown 不作为长期结论。" },
-    { ask: "准备把这批内容推到公开仓库。", effect: "先取得当前 visibility 和 refs，再审查实际 commits、paths、content 与项目规则；transport proceed 仍不等于 publication safe。" },
-    { ask: "总索引现在还是最新的吗？", effect: "把登记的仓库清单与当前现场比较；发现新增、删除或关键身份变化时明确标为需要复核，确认后才更新公开索引。" }
+    { moduleSlug: "protected-major-actions", ask: "新建一个私有仓库（PRIVATE）。", effect: "先区分个人/工作项目并在 V 盘正确根目录建立 clean 的本地 main 与首个提交；再创建本人账号下空 PRIVATE 远端，配置 origin、正常 push，现场回读身份/可见性/真实默认分支，完成 origin/<default> 可达后才登记。任一步失败都保留已完成的现实状态并从该步恢复，不重复创建。" },
+    { moduleSlug: "protected-major-actions", ask: "把这个仓库改名、改可见性或换默认分支。", effect: "选择一个精确 typed effect（类型化动作），冻结当前 repo ID、旧名称、visibility、default branch 和目标值；Prepare/Execute 两阶段逐次回读，动作后只接受同一 repository identity 的精确结果，不把一次改名顺手变成公开或换 owner。" },
+    { moduleSlug: "protected-major-actions", ask: "删除、转移仓库，或者强制改本地 ref / remote URL。", effect: "先由最高权限智能体判断真实目标、可恢复性和是否需要人类因子；适配器只接受固定的 3 个 git-local 与 6 个 github-api 动作，不接受 shell 字符串。结果不确定先读现场，绝不盲重放删除、转移或强更。" },
+    { moduleSlug: "project-admission", ask: "这个目录最后会推到哪里？", effect: "读取 remote.origin.url、Git common directory、当前 branch/upstream 和现场 GitHub identity；目录名或缓存冲突时只读诊断，不继续写。" },
+    { moduleSlug: "worktree-sync", ask: "这个分支已经推了，算完成吗？", effect: "除了自身 upstream 0/0，还比较目标提交是否能从远端真实默认分支到达；没进入 default branch 就仍是行动项。" },
+    { moduleSlug: "worktree-sync", ask: "这个工作树能删吗？", effect: "检查 dirty、独有提交、默认分支可达性、locked/prunable、必要保留和活动依赖；证据不全就保留，不把 unknown 当作可删。" },
+    { moduleSlug: "publication-gate", ask: "公开仓库里什么能发？", effect: "按实际候选逐值判断：有用的仓库名、路径、提交、失败和技术事实可以公开，PRIVATE 不生成猜测链接；可复用秘密和真实 L3+ 私人载荷必须移除。transport proceed 仍不等于 publication safe。" },
+    { moduleSlug: "snapshot-recovery", ask: "索引刷新中断了怎么恢复？", effect: "先验证旧 current generation 仍完整，再检查 `.incoming`、manifest 和投影；只补齐新代并完成全部 hash/bytes 回读后切 pointer，不把半成品拼进旧快照。" },
+    { moduleSlug: "repository-ledger", ask: "总索引现在还是最新的吗？", effect: "把完整 Owner baseline 与现场 49 个 identity 比较，并单独核对 46 个 origin 已验证 clone 与 3 个 remote-only；变化先进入 review，确认并刷新后才回到 delta=0、issue=0。" },
+    { moduleSlug: "repository-ledger", ask: "这次发布是真正里程碑，给总账留一条记录。", effect: "只有外层 closeout 已确认 repo、branch、commit 和公开安全理由时才调用纯文件 helper；稳定键重复时 changed=false，普通 push 不记录。Owner Provider 最多只读返回当前50条，并明确 bootstrap_gap/retained_window_only，不伪装完整Git历史。" }
   ],
   evidenceLayers: [
     { layer: "Local identity（本地身份）", proves: "当前目录的 origin、Git common directory、HEAD、branch 和 worktree inventory。", doesNotProve: "GitHub 端当前 visibility、默认分支或远端引用。" },
@@ -147,8 +161,9 @@ export const githubIndexProject = {
     { date: "2026-08-21–2026-08-22", commit: "4283c05 / d00220d / b9a8cd6", result: "支持精确 target worktree/ref，修复远端默认 ref 测试，并退役无消费者的历史投影。" },
     { date: "2026-08-23", commit: "6bfa180", result: "恢复包含 PUBLIC 与 PRIVATE 身份的完整 Owner 基线；私有 local root 继续与 identity 分离。" },
     { date: "2026-08-25–2026-08-28", commit: "8749025 / b454cd9", result: "刷新公开 generation，并让精确目标工作树可以绕过陈旧导航提示后再做 .git identity 回读。" },
-    { date: "2026-08-29—08-30", commit: "6afc858–84eeaca", result: "先发布 8 文档闭合的 generation 3c6487c…，随后把 PUBLIC 数据判断对齐活动全局 L1–L5 唯一表：Git 控制面只消费分级，路径和文件类型不再自行把普通内容升级为敏感；可用秘密与真实 L3+ 载荷仍按对应边界处理。" },
-    { date: "2026-08-30—08-31", commit: "e01433e–e6bf84b", result: "Live Owner 基线收敛到 47 个仓库和 44 个已验证 clone；新增 zero-fetch 原子刷新，让已知来源提交变动可以在不重新抓取 GitHub 的情况下收敛公开投影，同时保留 generation 与 live source 的事实分层。" }
+    { date: "2026-08-29—08-30", commit: "6afc858–84eeaca", result: "先发布当时的 8 文档闭合 generation，随后把 PUBLIC 数据判断对齐活动全局 L1–L5 唯一表：Git 控制面只消费分级，路径和文件类型不再自行把普通内容升级为敏感；可用秘密与真实 L3+ 载荷仍按对应边界处理。" },
+    { date: "2026-08-30—08-31", commit: "e01433e–806b668", result: "Live Owner 基线收敛为 48 个仓库、45 个 origin 已验证本地副本和 3 个 remote-only；旧 identity 由 personal-formal-documents 接续并新增 work-delivery-copilot，公开 generation 更新到 70efc65c…，同时保留 generation 与 live source 的事实分层。" },
+    { date: "2026-09-01", commit: "281344b", result: "新增 PRIVATE daily-preferences 后，Owner baseline 与现场收敛为 49 个仓库、46 个 origin 已验证本地副本和 3 个 remote-only；公开 generation 切换到 27555327…，PRIVATE 名称仍不进入公开投影明细。" }
   ],
   operationalEntrypoints: [
     { name: "单仓库现场元数据", command: "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo <owner/name> -LiveMetadata -Json", purpose: "读取 GitHub visibility 与默认分支，不 fetch refs。" },
@@ -169,13 +184,20 @@ export const githubIndexModules = [
     slug: "repository-ledger",
     shortTitle: "仓库总账",
     title: "仓库身份总账与 Owner（责任源）状态",
+    searchAliases: ["总索引现在还是最新的吗", "我到底有多少个GitHub仓库", "新增仓库为什么还是0 delta", "哪些仓库只有远端没有本地副本", "仓库改名后怎样进入总账", "记录一次发布里程碑", "为什么普通push不写里程碑", "里程碑只保留50条"],
+    searchProjection: {
+      intents: ["核对完整仓库总数和公开私有分布", "判断新增改名删除是否已经进入 Owner 基线", "区分已验证本地副本与 remote-only", "理解已接受过渡为何仍保留历史提醒", "为真实发布里程碑写一条公开安全记录", "读取有界里程碑窗口"],
+      entities: ["49 个仓库", "27 PUBLIC / 22 PRIVATE", "46 个已验证 clone", "3 个 remote-only", "Owner baseline v3", "delta / issue", "milestone_records", "Add-PushRecord changed", "50 条上限"],
+      relations: ["GitHub 全量 inventory 与 current baseline 比较", "本地路径只有 origin 回读匹配才成为 clone occurrence", "previous→current 变化进入 history 后不再算当前 delta", "公开 generation 与 live Owner 状态分层", "外层 closeout 决定是否构成里程碑", "pure-file helper 稳定键去重", "Owner Provider 只读返回当前保留窗口"],
+      failureRecovery: ["GitHub 身份源不可用时保持 Unknown", "baseline 与现场不同先进入 review_needed", "导航 cache 冲突时回读目标 .git 而不猜", "不安全理由或文件锁失败保持里程碑文件不变", "历史窗口不完整时只报告 bootstrap gap 和 retained_window_only"]
+    },
     teaser: "回答“我到底有哪些仓库、它们现在是谁、总账是否落后于 GitHub（远端托管）现场”。",
-    status: "仓库总账可用；47/47 当前基线无 delta 或 issue，仍有 1 项历史过渡复核提醒",
+    status: "49 个仓库的 baseline 与现场一致，27 PUBLIC / 22 PRIVATE、delta=0、issue=0；daily-preferences 新增过渡作为非阻断 history 保留",
     statusTone: "mixed",
     value: "把散落在不同磁盘、公开与私有仓库中的身份事实收成一个可审计总账；公开页面按事实是否有用和实际值风险决定展示明细或聚合，不因 PRIVATE 标签整类隐藏。",
     why: "公开 Markdown（面向人阅读的文本投影）只能安全展示一部分仓库，而且会随时间过期；直接扫描所有磁盘又会漏范围、扩大隐私和把目录名错当身份。总账需要 GitHub 全量身份、已验证 clone（本地副本）和明确 registry（结构化治理登记表）各司其职。",
-    example: "例如 GitHub 新增一个仓库，但公开快照仍是旧 generation（索引代际）。零写 Owner status（责任源状态）会返回 review_needed（需要复核）和一个 identity delta（身份差异），而不是继续显示 current（当前一致）；名称或路径是否展示取决于它是否改变当前判断，以及实际值是否含 L3+ 内容或凭据。",
-    result: "得到稳定的 current（当前一致）、review_needed（需要复核）、blocked（证据无效）或 unknown（证据不足）结论、差异数量、问题代码、历史连续性和公开安全 fingerprint（指纹）；需要详情时再到正确 Owner 展开。",
+    example: "例如我问“刚增加了 daily-preferences，为什么现在还是 0 delta？”Owner status 会说明它已经进入 current baseline，所以当前 baseline=observed=49、delta=0、issue=0；previous→current 的 repo_added 仍作为 nonblocking history（非阻断历史）保留，而不是假装从未发生。",
+    result: "得到稳定的 current（当前一致）、review_needed（需要复核）、blocked（证据无效）或 unknown（证据不足）结论、49 个仓库的公开/私有分布、46 个已验证本地副本与 3 个 remote-only、差异数量、问题代码、历史连续性和公开安全 fingerprint（指纹）；需要详情时再到正确 Owner 展开。",
     readerStates: {
       pass: "GitHub 全量身份、已验证本地副本和结构化登记表一致时，返回 current（当前一致）以及可安全公开的汇总证据。",
       problem: "现场身份与基线不同、公开投影过期或本地登记冲突时返回 review_needed（需要复核）或 blocked（阻断），并给出差异数量和责任源。",
@@ -186,6 +208,7 @@ export const githubIndexModules = [
       "出现新增、删除、visibility 或默认分支差异时进入 review_needed，不自动改 baseline。",
       "总索引自身 origin identity 不符时先 blocked，且不读取 baseline、registry、GitHub 或本地 root。",
       "GitHub CLI 或远端元数据执行失败属于 execution error，不伪造 domain conclusion（领域结论）。",
+      "普通 commit/push 不写里程碑；只有真实、已确认且有公开安全理由的发布节点才显式记录。helper 返回 changed 只表示记录文件变化，不代表 Git commit/push 已完成。",
       "PUBLIC 页面按决策价值选择仓库明细或聚合计数；PUBLIC/PRIVATE 都按具体值判断，只省略真实 L3+ 内容、凭据和不影响判断的噪声。"
     ],
     problem: "人类需要可读总账，机器需要结构化完整身份，而页面不应为了完整性把所有动态路径和低价值明细全部铺开。若把公开 Markdown 当完整权威，新仓库会被漏掉；若把本机目录当仓库身份，旧 clone、重命名和 origin 错配会制造假事实。",
@@ -194,7 +217,9 @@ export const githubIndexModules = [
       "ignored 私有导航 v2 保存 repo 到本机 clone 的定位，但只有 `.git` origin 回读一致才建立 clone occurrence。",
       "owner-baseline-store.v3 把完整 identity snapshot 与 nullable local-root snapshot 分开；current、previous、hash 和 receipt 原子读写。",
       "Get-GitOwnerStatus.ps1 只比较稳定 Owner 事实，排除工作树 dirty、ahead/behind、观察时间、索引 HEAD 和任务状态等高频噪声。",
-      "governance registry 只输出规范化有效性和 fingerprint，不把内部条目内容放进 compact status。"
+      "governance registry 只输出规范化有效性和 fingerprint，不把内部条目内容放进 compact status。",
+      "Add-PushRecord.ps1 是 pure-file（纯文件）且幂等的窄 helper：用稳定键去重、拒绝 secret-shaped reason，只更新目标记录并返回 changed，不 stage、commit、pull、rebase 或 push。",
+      "Get-GitOwnerStatus 的 milestone_records 只读输出最多 50 条现存公开安全记录；空表是合法 current，bootstrap_gap 与 retained_window_only 永久保留。"
     ],
     flow: [
       "核验 GitHub 总索引仓库自身 origin 与预期 identity",
@@ -202,14 +227,16 @@ export const githubIndexModules = [
       "分页读取 GitHub 全量 identity，必要时关联 origin 已验证的 clone",
       "规范化并比较 baseline 与 observed fact set",
       "返回 domain_status、delta/issue 计数、history 和 fingerprint",
-      "只有 review 确认后才用独立 MigrateBaseline 写入口推进下一代基线"
+      "只有 review 确认后才用独立 MigrateBaseline 写入口推进下一代基线",
+      "若外层 closeout 确认本次是真实里程碑，显式传入 repo/branch/commit/reason 调用 Add-PushRecord；读取结果时只消费 Owner Provider 的有界 milestone_records"
     ],
     concepts: [
       { term: "Owner baseline（责任源基线）", explanation: "完整仓库 identity 的受管 current/previous 快照；不是 PUBLIC 子集，也不是一次 live 自比。" },
       { term: "domain_status（领域状态）", explanation: "事实是 current、review_needed、blocked 还是 unknown；与 Provider 是否成功执行分开。" },
       { term: "history_gap（历史缺口）", explanation: "第一次迁移没有可信 previous 全量基线；即使 current 内容有效，也不能伪装成连续历史。" },
       { term: "clone occurrence（clone 出现记录）", explanation: "私有导航给出候选路径后，实际 `.git` origin 与 repo identity 一致的本机副本关联。" },
-      { term: "semantic fingerprint（语义指纹）", explanation: "对稳定事实规范化后计算的 SHA-256；字段顺序、观察时间和工作树噪声不会改变它。" }
+      { term: "semantic fingerprint（语义指纹）", explanation: "对稳定事实规范化后计算的 SHA-256；字段顺序、观察时间和工作树噪声不会改变它。" },
+      { term: "Milestone record（里程碑记录）", explanation: "外层已确认的少量公开安全 Git 事实节点；稳定键重复不追加，最多读取当前50条，不等于完整 Git 历史。" }
     ],
     boundaries: [
       "compact Owner status 不返回私有 local root、branch、worktree、dirty 或 task 状态",
@@ -223,20 +250,25 @@ export const githubIndexModules = [
       { condition: "v3 baseline 缺失、无效或第一次 history gap", response: "返回 unknown；不回退到 PUBLIC Markdown 或伪造 previous。" },
       { condition: "现场身份集合与基线不同", response: "返回 review_needed 和 delta 计数；由 Owner 审查后再迁移基线。" },
       { condition: "registry schema、重复 ref 或 retention 条目无效", response: "Owner current 失败关闭，只公开稳定问题代码。" },
-      { condition: "GitHub CLI 不可用、非零退出或 JSON 无效", response: "返回 execution_status=error、domain_status=unknown，供调用者决定重试。" }
+      { condition: "GitHub CLI 不可用、非零退出或 JSON 无效", response: "返回 execution_status=error、domain_status=unknown，供调用者决定重试。" },
+      { condition: "里程碑 reason 像秘密、稳定键重复、文件锁或写入失败", response: "不安全或失败时保持文件不变；重复项返回 changed=false。Git stage/commit/push 仍由外层处理。" }
     ],
     sources: [
       { path: "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1", role: "零写 compact Owner Provider" },
       { path: "E:\\GitHub总索引\\tools\\Get-ProjectCognitionSource.ps1", role: "分页闭合的 GitHub 仓库来源与有界 compare" },
       { path: "E:\\GitHub总索引\\tools\\GitHubIndex.PrivateNavigation.psm1", role: "私有导航 v2 与 Owner baseline store v3" },
       { path: "E:\\GitHub总索引\\config\\git-artifact-governance.json", role: "专门 Owner、冻结历史和必要保留的 schema 来源；页面不展开条目" },
-      { path: "E:\\GitHub总索引\\00_总览\\current-generation.json", role: "当前公开 generation 的兼容指针" }
+      { path: "E:\\GitHub总索引\\00_总览\\current-generation.json", role: "当前公开 generation 的兼容指针" },
+      { path: "E:\\GitHub总索引\\docs\\contracts\\git.milestone-record.md", role: "真实里程碑触发、pure-file写入、50条Provider输出与历史缺口合同" },
+      { path: "E:\\GitHub总索引\\tools\\Add-PushRecord.ps1", role: "稳定键幂等、拒绝秘密形理由且不执行Git事务的记录helper" }
     ],
     verification: [
-      "2026-08-29 Test-GitOwnerStatus.ps1 通过：identity gate、zero write、全量 PUBLIC/PRIVATE 基线、history、registry、远端失败和无路径泄露。",
-      "2026-08-29 Test-ProjectCognitionSource.ps1 通过：分页闭合、稳定 node id、origin 验证 clone、compare 上限、partial gaps 和无凭据输出。",
-      "2026-08-31T04:16:12Z Owner receipt 为 execution_status=completed、baseline=47、observed=47、delta=0、issue=0、attention=1；history=continuous。",
-      "当前公开 pointer 明确声明 authoritative=false 与 decision_authority=false，避免投影冒充动态事实。"
+      "2026-08-29 的 Test-GitOwnerStatus.ps1 历史回归通过：identity gate、zero write、全量 PUBLIC/PRIVATE 基线、history、registry、远端失败和无路径泄露。",
+      "2026-08-29 的 Test-ProjectCognitionSource.ps1 历史回归通过：分页闭合、稳定 node id、origin 验证 clone、compare 上限、partial gaps 和无凭据输出。",
+      "2026-09-01 直接运行 Get-GitOwnerStatus：execution completed、domain current、baseline=49、observed=49、delta=0、issue=0；history 记录 daily-preferences repo_added 已进入 current。",
+      "2026-09-01 Owner baseline 与私有导航回读 49 个 repository、46 个 origin_verified occurrence，因此 3 个 remote-only。",
+      "当前公开 pointer 明确声明 authoritative=false 与 decision_authority=false，避免投影冒充动态事实。",
+      "Test-PushRecord.ps1 验证 pure-file、幂等、并发去重、不安全理由拒绝和 no Git transaction；Test-GitOwnerStatus.ps1 验证空表、稳定摘要、50条上界与公开安全失败关闭。"
     ],
     relation: "它回答整个仓库集合是否可信和是否需要复核；单仓库 Admission 再回答某个精确目录、工作树和分支现在能否安全继续。"
   },
@@ -244,12 +276,19 @@ export const githubIndexModules = [
     slug: "project-admission",
     shortTitle: "项目入场",
     title: "单仓库 Admission（入场检查）与精确目标判断",
+    searchAliases: ["这个目录推到哪里", "这个目录会推到哪里", "这个项目是公开还是私有", "当前默认分支是什么", "只检查这个工作树", "新仓库远端还不存在怎么检查"],
+    searchProjection: {
+      intents: ["确认一个目录对应哪个 GitHub 仓库", "读取当前可见性与真实默认分支", "判断精确 worktree/ref 是否适合继续", "区分缓存现场元数据和现场远端引用"],
+      entities: ["remote.origin.url", "Git common directory", "PUBLIC / PRIVATE / INTERNAL", "default branch", "TargetWorktree", "ForPublication"],
+      relations: ["目录经 .git origin 回读绑定 repo identity", "LiveMetadata 读取可见性但不 fetch", "RefreshRefs 更新 origin refs", "ForPublication 同时要求 metadata 与 refs 现场"],
+      failureRecovery: ["identity 多义时只读定位并 block", "live metadata 失败时不拿缓存发布", "target 不存在时不退回任意 worktree", "远端尚不存在的新仓库转入受保护 create-repository 路径"]
+    },
     teaser: "在路径、远端、可见性或同步会改变做法时，给一个项目做现场体检。",
     status: "项目入场事实入口可用；实时元数据、远端引用和精确目标已有回归",
     statusTone: "pass",
     value: "在真正改文件或推送前确认“我站在正确的仓库、正确的工作树和正确的远端前”，并把继续、警告和阻断原因说清。",
     why: "目录名、旧 Markdown（文本投影）和缓存路径都可能过期；多工作树仓库中，另一个临时目录的 dirty（有未提交修改）或 no-upstream（无上游）又可能污染当前目标。需要一个既核实 identity（仓库身份）、又能精确限定目标且保留全局证据的入口。",
-    example: "这次 wly0829.cn 现场检查使用 ForPublication 取得 live metadata（现场元数据）与 live refs（现场远端引用）：identity、PUBLIC（公开）、main（默认主分支）和 0/0 都正确，但工作区 dirty，因此 decision=warn（入场警告）、push_strategy=clean_or_stage_explicitly（清理或只暂存明确文件），而不是 proceed（无阻断）。",
+    example: "例如我问“E:\\GitHub总索引这个目录最后会推到哪里？”2026-08-31 的 ForPublication 先回读 `.git`、origin 与 GitHub 现场：它确认目标是 PUBLIC 的 wlyaaaaa/github-local-index，真实默认分支是 main，本地 main 与 origin/main 同为 806b668…、工作区 clean、0/0，因此返回 proceed；如果目录名相同但 origin 不符，就只做定位而不继续写。",
     result: "得到固定 v1 JSON（结构化记录）：仓库身份、远端地址、可见性、默认分支、本机根目录、Git 共享目录、新鲜度、目标引用/工作树、入场结论、传输建议、原因/错误，以及全部工作树和分支。",
     readerStates: {
       pass: "目标仓库、工作树、远端、公开属性和同步状态适合当前动作时，返回 proceed（没有入场阻断）及建议传输策略；它不产生提交、推送或发布授权。",
@@ -258,6 +297,7 @@ export const githubIndexModules = [
     },
     decisionImpact: [
       "普通已知仓库的可逆小改可只用 git status；Admission 不是固定打卡。",
+      "准备创建但远端还不存在时，不拿要求远端已存在的普通 Admission 伪造 identity；先走受保护的空 PRIVATE 创建，再回来做 live Admission。",
       "只需要 GitHub 可见性时用 LiveMetadata，不会 fetch。",
       "需要真实 ahead/behind 时用 RefreshRefs；准备发布判断时用 ForPublication 同时要求两类 live 证据。",
       "TargetWorktree/TargetRef 只改变顶层 transport 判断，其他工作树仍保留在 evidence 中。",
@@ -309,8 +349,8 @@ export const githubIndexModules = [
       { path: "E:\\GitHub总索引\\tests\\Test-ProjectAdmission.ps1", role: "真实 Git fixture 和失败关闭回归" }
     ],
     verification: [
-      "2026-08-29 完整运行 Test-ProjectAdmission.ps1，exit 0，并以 `All project admission tests passed.` 收口。",
-      "2026-08-29 对 github-local-index 与 wly0829.cn 的 ForPublication 现场调用均返回 v1、freshness=live、live_checked=true、PUBLIC/main 和明确 dirty warning。",
+      "2026-08-29 完整运行 Test-ProjectAdmission.ps1，exit 0，并以 `All project admission tests passed.` 收口；这是历史源码回归，不冒充本次现场。",
+      "2026-08-31 对 github-local-index 直接运行 ForPublication：schema v1、freshness=live、live_checked=true、PUBLIC/main、HEAD=origin/main=806b668…、clean、0/0、decision=proceed。",
       "测试覆盖正常/异常记录同 shape、visibility 闭集、LiveMetadata never fetch、RefreshRefs、ForPublication 和兼容 Fetch。",
       "真实 fixture 覆盖 primary、linked、detached、prunable、no-upstream、ahead、behind、diverged 和 inspection failure。",
       "target fixture 验证无关工作树不会污染顶层判断，但仍完整出现在 worktrees evidence。"
@@ -321,6 +361,13 @@ export const githubIndexModules = [
     slug: "worktree-sync",
     shortTitle: "工作树同步",
     title: "Worktree（工作树）、分支同步与默认分支收敛",
+    searchAliases: ["分支推了算完成吗", "工作树能删吗", "feature分支0/0为什么还没完成", "另一个工作树有修改怎么办", "提交有没有进入远端main"],
+    searchProjection: {
+      intents: ["判断已推送分支是否真正交付", "确认一个 worktree 能否安全删除", "找出未提交或独有内容", "检查目标提交是否进入远端默认分支"],
+      entities: ["worktree", "upstream", "ahead / behind", "origin/default", "integration_state", "retirement candidate"],
+      relations: ["每个 worktree 分别读取 dirty 与 HEAD", "分支 0/0 只证明自身 upstream 同步", "远端默认分支可达才证明 Git 交付", "已整合且无保护只成为退役候选"],
+      failureRecovery: ["远端默认 ref 不可读时保持 Unknown", "dirty 或独有提交时保留 worktree", "diverged 时 reconcile 后重查", "删除前无法证明无活动依赖就 BLOCK"]
+    },
     teaser: "不只看当前窗口，确认所有独有提交最终都能从远端默认分支到达。",
     status: "工作树与远端默认分支收敛检查可用",
     statusTone: "pass",
@@ -390,7 +437,8 @@ export const githubIndexModules = [
       "测试 fixture 真实创建 primary、linked、detached、prunable、ahead 与 no-upstream 工作树。",
       "回归覆盖 remote-only branch、已推送但未进默认分支、merged ancestry、patch equivalence 和 retirement candidate。",
       "registry 测试验证 missing/wrong schema、重复 ref、未知 override 和不完整 retention 全部失败关闭。",
-      "2026-08-29 两个 PUBLIC 仓库现场均确认 main/default integration=default、0/0，但 dirty 仍单独保留为 warning。"
+      "2026-08-29 两个 PUBLIC 仓库现场均确认 main/default integration=default、0/0，但 dirty 仍单独保留为 warning；这是历史现场。",
+      "2026-08-31 github-local-index 的 live Admission 回读唯一 main worktree 为 clean、0/0、integration_state=default、missing_default_commits=0；本次未重跑多 worktree fixture。"
     ],
     relation: "它把 Admission 的 worktrees/branches 证据解释为真实收敛状态；Publication Gate 在此基础上继续审查候选内容和授权。"
   },
@@ -398,12 +446,19 @@ export const githubIndexModules = [
     slug: "publication-gate",
     shortTitle: "公开发布",
     title: "Transport（Git 传输）、公开内容与授权三重门",
+    searchAliases: ["公开仓库里什么能发", "PRIVATE仓库名字能不能公开", "路径和提交哈希是不是敏感", "push能成功就能公开吗", "公开页面能不能链接私有仓库"],
+    searchProjection: {
+      intents: ["判断一批候选内容能否进入公开仓库", "区分普通技术事实与可复用秘密", "确认 PRIVATE identity 是否能按实际值说明", "核对 transport 内容安全和授权三层"],
+      entities: ["candidate commits", "paths / content", "PUBLIC / PRIVATE", "L3+", "reusable secret", "publication authorization"],
+      relations: ["transport proceed 不推出 publication safe", "仓库名路径提交和失败按实际值判断", "PRIVATE 技术事实可说明但不生成猜测链接", "可复用秘密与真实 L3+ 载荷阻断公开"],
+      failureRecovery: ["候选范围不清时只暂存精确文件", "visibility 不新鲜时停止发布", "命中秘密时移除或改成安全摘要", "授权未覆盖时保留本地结果"]
+    },
     teaser: "能 push（推送）、适合公开、已经获授权是三件独立的事，缺一不可。",
     status: "发布三重门已落地；传输、内容与授权分开判断",
     statusTone: "pass",
     value: "避免把私有材料推到公开仓库，也避免因为仓库是 PRIVATE（私有）就错误破坏恢复所需的精确内容。",
     why: "Git transport 只关心引用能否传输，不理解聊天、数据库、密钥或机器快照是否该公开；简单 secret scanner（秘密扫描器）也无法证明语义安全和用户授权。",
-    example: "wly0829.cn 的本地 main（默认主分支）与远端 main 为 0/0，但当前有并发未提交修改，所以 transport 尚需显式限定候选。即使清理后 push_decision=proceed（传输可继续），仍要逐值复审新页面，阻断凭据和真实 L3+ 内容，并确认本轮发布授权。",
+    example: "例如我问“公开仓库里什么能发？”答案不靠字段名或 PRIVATE 标签一刀切：能改变判断的仓库名、普通路径、提交哈希、版本、失败和架构事实可以按实际值说明；PRIVATE 仓库不提供猜测或不可访问链接。真实凭据、可复用秘密和经活动分级确认的 L3+ 私人载荷必须移除，之后还要确认精确候选与本轮发布授权。",
     result: "得到三个独立答案：Git 目标和分支是否 transport ready（传输就绪）、实际候选是否 publication safe（发布安全）、当前请求是否 authorization present（已有授权）；只有三者都成立才执行并回读。",
     readerStates: {
       pass: "传输目标与分支正确、实际发布候选适合公开且本轮已有明确发布授权时，才正常推送并从公开远端回读。",
@@ -414,6 +469,7 @@ export const githubIndexModules = [
       "用户未授权外部写入时，只做本地实现和只读诊断。",
       "PUBLIC 目标必须使用当前 visibility，并审查实际 commits、paths 和 content。",
       "PRIVATE 备份/恢复目标可按范围 preserve exact content，但不能把内容复制到公开索引或聊天。",
+      "PUBLIC 页面可以说明有用且已核对的 PRIVATE 仓库名、普通路径和状态，但不给 PRIVATE 项目制造猜测 GitHub 链接，也不展开其秘密或私人正文。",
       "dirty 或混合工作区必须显式候选文件；不使用 `git add .`。",
       "Hook/scan 零命中只是一层防护，不能替代人工/模型对候选语义的复审。"
     ],
@@ -447,6 +503,7 @@ export const githubIndexModules = [
       "PUBLIC 历史 visibility 不可代替本次现场 visibility",
       "模板后缀不豁免 secret content",
       "PRIVATE 不等于可以向公开页面、日志或聊天泄露内容",
+      "PRIVATE 也不等于普通仓库名、公开安全路径或 Git 技术事实必须整类消失；只按实际值与当前用途判断",
       "本模块不替目标项目决定 deploy、Pages 或用户验收"
     ],
     failures: [
@@ -476,47 +533,67 @@ export const githubIndexModules = [
     slug: "protected-major-actions",
     shortTitle: "重大变更保护",
     title: "重大 Git/GitHub 变更保护与人类确认边界",
-    teaser: "删除、转移、改名、改变可见性、默认分支或远端等高影响动作，必须绑定精确目标、恢复条件和正式回读；普通 Git 操作不会因此全部变成人工审批。",
-    status: "Current E protection contract 已激活；Git Owner 6afc858 源码基线已推送，但 consumer 安装与真实 E2E 未复核",
+    searchAliases: ["新建一个 PRIVATE 仓库", "新建私有仓库", "新建PRIVATE仓库完整流程", "创建私有仓库后怎样第一次推main", "改仓库可见性要不要确认", "仓库创建成功但push失败怎么办", "删除改名转移仓库怎样保护", "强制改本地ref", "替换remote URL", "修改默认分支", "仓库转移后怎样回读"],
+    searchProjection: {
+      intents: ["从本地项目创建并收敛一个 PRIVATE 仓库", "删除或强制更新本地 ref", "替换一个精确 remote URL", "改变仓库可见性、名称或默认分支", "删除或转移 GitHub 仓库", "判断一次重大动作是否需要人类因子", "在动作结果不确定时恢复而不重复执行"],
+      entities: ["git-local / github-api", "delete-local-ref / force-update-local-ref / replace-remote-url", "create-repository / set-visibility / rename-repository / set-default-branch / delete-repository / transfer-repository", "Prepare / Execute", "execution_mode", "semantic decision", "single-use capability", "formal read-back"],
+      relations: ["最高权限语义判断决定 runtime_allowed 或 human_required", "Prepare 冻结 typed parameters、preimage 和 executor hashes", "Execute 再取证、Authorize、single-use Consume 后才执行", "git-local 只走固定 Git argv", "github-api 只走固定 REST endpoint/method", "每个动作回读精确 identity 与目标字段"],
+      failureRecovery: ["同名远端已存在或账号不符时不创建", "远端已创建但 push 失败时从现有 PRIVATE 身份继续而不重建", "rename 目标已存在或 identity 改变时停止", "默认分支与预期不同就显式处理并重查", "delete/transfer/force-update 响应不确定时先读现场而不重放", "任一 target/executor/preimage/epoch 漂移使旧能力失效"]
+    },
+    teaser: "创建空 PRIVATE 仓库，以及删除、转移、改名、改变可见性、默认分支或远端等高影响动作，必须绑定精确目标、恢复条件和正式回读；普通 Git 操作不会因此全部变成人工审批。",
+    status: "当前 E97 protection contract 已激活，受保护重大动作合同与 previous E96 同字节/SHA；源 main=281344b…包含类型化 PRIVATE 创建通道，本轮已真实创建并回读 daily-preferences，其他重大动作与人类因子路径未执行",
     statusTone: "mixed",
-    value: "避免一个提示词、管理员权限或普通脚本直接删除仓库、把私有仓库改公开、替换远端或改掉默认分支；同时让已明确授权、可恢复的正常提交和推送继续自动完成。",
-    why: "仓库删除、转移、改名和可见性变更会改变外部现实状态，错误目标可能造成公开泄露或历史丢失。但如果机械层看到某类动作就一律弹人类验证，也会把真正的语义判断变成僵硬关键词规则。",
-    example: "例如我要求把一个明确的 PRIVATE（私有）仓库改名。最高权限智能体先判断真实目标、影响、回退和现有授权是否足够；需要人类因子时只请求一次已登记因子。适配器只核对目标、一次性随机凭据、前置状态、执行器和回读，不会仅因动作叫“改名”就自行决定必须人工确认。",
-    result: "正常时得到精确目标、允许或拒绝结论、一次性执行能力、变更前状态、现实操作回执和 GitHub 现场回读；规则或适配器语义未对齐时，该重大动作保持阻断，普通只读、提交和已授权正常推送不受牵连。",
+    value: "把创建仓库、本地 ref 删除/强更、remote URL 替换，以及 GitHub 可见性、改名、默认分支、删除和转移收进九个封闭动作；每次只改变一个精确目标、保留恢复依据并从现场回读，同时让普通 commit 和 normal push 不被误升级。",
+    why: "这些动作会改变仓库身份、公开面、默认入口或可恢复历史，目标错一位就可能泄露或丢失；但一律弹人类确认同样不正确。产品让最高权限智能体按真实意图决定 allow、step_up、deny 或先补证据，机械适配器只验证并执行一个被类型化的动作。",
+    example: "例如我说“把仓库改名但不要改变公开性和默认分支”。系统冻结旧 slug、database/node ID、visibility、default branch 与新名应不存在；只允许固定 rename 动作。完成后必须从新 slug 回读同一 ID、同一 visibility 和同一 default branch。它不会顺手改 owner、公开性或默认分支，目标漂移就停止。新建 PRIVATE 仓库则走另一条 create 通道，创建后仍要单独完成 origin、normal push 和默认分支收敛。",
+    result: "我会得到九种动作之一的精确目标、变更前状态、语义判断、运行时或人类验证要求、单次执行能力、现实动作结果和正式回读。成功只证明该动作的目标字段已经收敛；后续普通 Git、Owner 登记或项目发布继续分层完成。结果不确定时保留 state_unknown 并先读现场，不重放破坏性动作。",
     readerStates: {
-      pass: "正式 E 盘保护规则、最高权限判断、目标身份、前置状态、一次性能力、执行器和回读全部匹配时，执行一个精确重大动作，并证明远端最终状态。",
-      problem: "源码修复后若安装态仍旧、目标漂移、回读不一致或恢复条件不成立，继续阻断对应重大动作并保留原状态，不能靠管理员权限或本地测试绕过。",
+      pass: "正式 E 盘保护规则、最高权限判断、目标身份、前置状态、一次性能力、执行器和回读全部匹配时，执行一个精确重大动作；新仓库还要完成后续 origin、首次 push、默认分支和登记回读才算完整交付。",
+      problem: "源码修复后若安装态仍旧、目标漂移、创建后 push 未完成、回读不一致或恢复条件不成立，继续阻断对应未完成步骤并保留已形成的本地/远端状态，不能靠管理员权限或本地测试绕过。",
       unavailable: "Current E release 身份、GitHub 现场身份、已登记因子或重大动作适配器不可用时，不执行该动作；普通只读诊断和不依赖该入口的低风险 Git 工作可以继续。"
     },
     decisionImpact: [
       "普通本地读取、可逆编辑、定向提交和已授权正常推送不自动升级为重大动作。",
-      "删除仓库、转移所有权、改名、改变 PUBLIC/PRIVATE、替换远端和更改默认分支进入精确重大动作判断。",
+      "git-local 固定只允许 delete-local-ref、force-update-local-ref、replace-remote-url；github-api 固定只允许 create-repository、set-visibility、rename-repository、set-default-branch、delete-repository、transfer-repository。",
+      "create-repository 只负责创建空 PRIVATE 远端；配置 origin、首次 normal push、live Admission、Owner 登记和 default-branch convergence 必须随后分别完成。",
+      "每种动作使用自己的精确参数、preimage 和 read-back；改名不能顺带改 owner/visibility/default branch，替换 remote URL 不能变成任意 Git 命令。",
       "是否需要人类因子由最高权限智能体结合真实目标和风险判断，不由适配器按动作名称机械决定。",
       "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）是四类因子；Google 和 Microsoft 只是 Account 类别的不同 Provider（提供方）。",
       "当前 Git Owner 源码基线已经推送，但针对 current E release 的安装和真实 broker/人类因子 E2E 未执行，因此只把历史源码/回归层标成通过。",
-      "C 盘第 79 代已退役；current E release 是当前保护合同。6afc858 只证明当时修正的四类因子和 step_up 语义，不自动证明当前 consumer。"
+      "C 盘第 79 代已退役；current E release 是当前保护合同。历史 6afc858 只证明当时修正的四类因子和 step_up 语义，不自动证明当前 consumer。"
     ],
-    problem: "此前 GitHub 总索引合同把 Google/Microsoft 当成独立因子，并让适配器按 effect（动作类型）机械派生 human_required；6afc858 已改成四类因子、独立 Account provider，并让 human_required 只消费最高权限智能体的 step_up。Current E contract 保持同一判断边界，但 Git consumer 没有本轮安装/E2E 证据。",
+    problem: "此前 GitHub 总索引合同把 Google/Microsoft 当成独立因子，并让适配器按 effect（动作类型）机械派生 human_required；历史 6afc858 已改成四类因子、独立 Account provider，并让 human_required 只消费最高权限智能体的 step_up。Current E contract 保持同一判断边界，但 Git consumer 没有本轮安装/E2E 证据。",
     implementation: [
-      "Owner 合同列出仓库删除、转移、改名、可见性、默认分支和远端替换等重大动作，并要求绑定精确仓库和前置状态。",
-      "Current E release 把人类因子固定为 Passkey、TOTP、Recovery、Account 四类；Google/Microsoft 归入 Account provider。Git Owner 6afc858 源码使用同一语义。",
+      "Adapter schema 只有两个 effect family：git-local 的 3 个操作和 github-api 的 6 个操作；不接受 shell string、任意 executable、别名、重定向或任意 REST endpoint。",
+      "Prepare 读取 live Admission 与 GitHub metadata，冻结 repo database/node ID、worktree/common-dir、visibility/default branch、typed parameters、完整 argv、execution_mode、语义判断、preconditions 与 adapter/native executor hashes，能力 TTL 为 30 秒。",
+      "最高权限智能体的 allow 冻结为 runtime_allowed，step_up 冻结为 human_required；deny、needs_evidence、suspected_tamper 在读取 broker 或执行 effect 前失败关闭。适配器不能按动作名自行要求或取消人类因子。",
+      "Execute 依次重新取得现场事实、调用 AuthorityHost AuthorizeMajorAction、再取证并 single-use Consume，非 dry-run 只在 consume 成功后最终取证并执行固定 argv；任何 target、参数、preimage、assessment、executor 或 epoch 漂移都使旧能力失效。",
+      "git-local 只使用固定 Git for Windows 与 ArgumentList，清除 Git/SSH/askpass/config 环境覆盖并禁用 hooks/credential helper；github-api 只调用固定 gh api endpoint 与 method。",
+      "类型化 create-repository 只接受 expected_absent=true、visibility=PRIVATE、expected_local_branch 和 expected_head_oid；它要求 canonical worktree clean，并固定调用本人账号的空仓库创建接口。",
+      "rename-repository 冻结旧/新 slug、同一 database/node ID、visibility 和 default branch；新 slug 必须 absent，回读必须确认 identity 与除名称外的字段不变。其他 set/delete/transfer/ref/remote 操作也按各自 schema 精确绑定目标字段。",
+      "Current E release 把人类因子固定为 Passkey、TOTP、Recovery、Account 四类；Google/Microsoft 归入 Account provider。Git Owner 历史 6afc858 源码使用同一语义。",
       "最高权限智能体拥有 allow（允许）、step up（补充人类验证）、deny（拒绝）和 needs evidence（先补证据）的语义判断。",
       "机械适配器只能验证登记、签名、nonce（一次性随机凭据）、目标、事实、完整性、执行器和动作边界，不能按 effect 名称推导 human_required。",
       "Owner 仓库已经原位升级合同与适配器：非执行判断 deny（拒绝）、needs_evidence（先补证据）、suspected_tamper（疑似完整性异常）在 proposal（动作提案）前失败关闭，allow（允许继续）可走 runtime_allowed（运行时允许），step_up（补充人类验证）才产生 human_required（需要人类验证）。",
-      "提交 6afc858 已 normal push 到公开 main 并远端回读；当前仓库 main 已前进到 84eeaca，并把公开内容判断对齐活动全局分级。证据未包含 current E consumer 安装或真实重大动作，因此生产层保持未闭合。",
+      "历史提交 6afc858 曾 normal push 到公开 main 并远端回读；当前仓库 main 与 origin/main 均为 281344b。当前源码包含 PRIVATE 创建与四类因子语义，本轮已用它创建并回读 daily-preferences；其他重大动作消费者与需要人类因子的路径没有做现实 E2E，因此这些层继续保持未闭合。",
       "网页只展示公开安全的动作类别、规则差异和证据层，不公开因子秘密、账号身份、内部请求材料或可重放参数。"
     ],
     flow: [
-      "解析精确仓库、当前可见性、默认分支和准备执行的重大动作",
-      "由最高权限智能体根据真实目标、影响、授权、可恢复性和异常证据作语义判断",
-      "需要人类因子时，针对同一精确候选完成生产等价预演并请求一种已登记因子",
-      "签发短时、单次、不可重放且绑定前后条件的执行能力",
-      "适配器在动作边界重新读取仓库身份、前置状态、执行器和 current E 保护规则；任一身份或版本不一致时停止",
-      "执行一次现实动作；响应不确定时先从 GitHub 现场回读，不盲目重复",
-      "验证远端最终状态和恢复条件，再记录不含秘密的正式回执"
+      "先从九个固定操作中选择一个；把其精确仓库/ref/remote、旧值、目标值、恢复条件和 execution_mode 写进 typed JSON，不接受自由命令",
+      "最高权限智能体按真实目的、范围、可恢复性和异常证据给 allow、step_up、deny、needs_evidence 或 suspected_tamper；只有前两者继续",
+      "Prepare 取得 live Admission/provider facts，冻结 identity、preimage、argv、参数、执行器 hashes 和 30 秒 TTL；dry_run 与 execute 不能互相升级",
+      "需要人类因子时只用 Passkey/TOTP/Recovery/Account 之一；Authorize 后再次取证，single-use Consume 成功才进入现实动作",
+      "执行前最后核对同一 target、参数、preimage、assessment、executor 与 AuthorityHost epoch；任一漂移就让旧能力失效",
+      "固定 Git argv 或固定 GitHub REST endpoint 只执行一次；native 返回非零或响应丢失仍先从本地/GitHub 现场回读",
+      "read-back 比较操作自己的目标字段：ref OID、remote URL、repo identity/visibility/name/default branch/existence/owner；不以命令成功替代现实状态",
+      "create 之后另做 origin、normal push、default-branch convergence 与 Owner 登记；其他动作成功后也只报告精确字段变化，项目发布/恢复继续由对应 Owner 完成"
     ],
     concepts: [
       { term: "Major action（重大动作）", explanation: "会删除、转移、公开、重命名或改变仓库关键身份和恢复路径的 GitHub 现实操作。" },
+      { term: "Typed effect（类型化动作）", explanation: "九个固定操作之一，使用封闭字段、argv、endpoint 与回读合同；不是通用 shell 或 GitHub API 通道。" },
+      { term: "Proposal（动作提案）", explanation: "Prepare 冻结的短时不可变候选，包含身份、preimage、参数、执行模式、语义判断和执行器指纹。" },
+      { term: "Single-use capability（单次执行能力）", explanation: "Authorize/Consume 后只能对同一提案消费一次；漂移或重放都会失败。" },
+      { term: "Execution mode（执行模式）", explanation: "dry_run 只验证能力且不得执行；execute 才允许在全部门成立后执行，二者不能互相升级。" },
       { term: "Human factor（人类因子）", explanation: "Passkey、TOTP、Recovery、Account 四类已登记证明中的任一类；是否需要由最高权限智能体判断。" },
       { term: "Semantic decision（语义判断）", explanation: "结合用户真实目标、范围、影响和可恢复性决定允许、补验证、拒绝或先补证据。" },
       { term: "Mechanical adapter（机械适配器）", explanation: "只核对签名、一次性凭据、目标、事实、执行器和边界并执行；不能自行扩大授权或决定人类下限。" },
@@ -526,28 +603,39 @@ export const githubIndexModules = [
     boundaries: [
       "管理员权限、插件、账号登录或适配器存在都不产生用户授权",
       "普通提交和正常推送不会仅因使用 GitHub 就自动要求人类因子",
+      "九个 typed effect 是闭集；不开放任意 shell、任意 Git argv、任意 gh alias/extension、任意 endpoint 或任意 payload",
+      "Dry-run 仍验证授权与 capability，但 execute_allowed=false、capability_consumed=false，不调用 effect executor",
       "人类因子值、恢复秘密、账号身份和一次性执行材料不进入公开网页",
       "源码、安装态或正式 E 盘保护规则不一致时不静默选择其中一份，也不把源码修复或旧第 79 代快照写成生产 E2E 已通过",
       "公开页面只报告会改变用户判断的状态、缺口和完成证据"
     ],
     failures: [
-      { condition: "Current E consumer 安装/E2E 未证明", response: "不执行删除、转移、改名或可见性等重大动作；普通只读、可逆编辑和已授权常规 Git 工作继续。" },
+      { condition: "Current E consumer 安装/E2E 未证明", response: "不执行创建、删除、转移、改名或可见性等受保护重大动作；普通只读、可逆编辑和已授权常规 Git 工作继续。" },
+      { condition: "删除/强更 ref 或替换 remote URL 的旧值/OID 不再匹配", response: "能力失效，保留当前 ref/remote 并重新取证；不把目标漂移当作允许覆盖。" },
+      { condition: "改名目标已存在，或改名后 database/node ID、visibility、default branch 变化", response: "停止并报告 identity/read-back mismatch；不把另一仓库或顺带字段变更写成成功。" },
+      { condition: "set-visibility、set-default-branch、delete 或 transfer 后回读不一致", response: "保留 state_unknown，先从 GitHub 现场确认最终 visibility/branch/existence/owner；禁止盲目重放。" },
+      { condition: "创建前同名远端已存在、登录 owner 不符或本地 branch/HEAD/clean 漂移", response: "create-repository 失败关闭；保留本地仓库，先确认是接入已有远端、改名还是修复本地 preimage。" },
+      { condition: "空 PRIVATE 远端已创建，但配置 origin 或首次 push 失败", response: "不再调用 create；从已回读的同一 PRIVATE identity 继续普通 Git 收敛，保留本地首个提交并在完成默认分支回读后再登记。" },
+      { condition: "首次 push 成功但默认分支或 Owner 登记未闭合", response: "把远端提交保留为已完成事实；显式修正/确认 default branch，再刷新 baseline/generation，不删除或重建仓库。" },
       { condition: "仓库身份、可见性或目标动作漂移", response: "使本次能力失效，重新取得现场事实；不能拿旧仓库名或旧可见性继续。" },
       { condition: "人类验证取消、超时或 Provider 不可用", response: "只暂停未形成的重大动作，不自动换另一因子，也不改变设备信任。" },
       { condition: "动作响应丢失或结果不确定", response: "保留同一尝试并先从 GitHub 现场回读；禁止直接重放删除、转移、改名或公开操作。" },
       { condition: "正式回读与预期不一致", response: "标记现实状态未收敛并进入恢复或人工协调；不以本地日志冒充完成。" }
     ],
     sources: [
-      { path: "E:\\GitHub总索引\\docs\\contracts\\git.protected-major-actions.md", role: "Git/GitHub 重大动作 Owner 合同；提交 6afc858 已对齐四类因子与最高权限语义判断" },
+      { path: "E:\\GitHub总索引\\docs\\contracts\\git.protected-major-actions.md", role: "Git/GitHub 重大动作 Owner 合同；历史提交 6afc858 曾对齐四类因子与最高权限语义判断" },
       { path: "E:\\GitHub总索引\\tools\\Invoke-ProtectedGitHubMajorAction.ps1", role: "重大动作适配器；human_required（需要人类验证）只消费 step_up（补充人类验证），不再按动作类型机械派生" },
       { path: "E:\\.agents\\releases\\current-rules.json", role: "解析 current E 保护合同路径的当前指针；正文路径由 Inspect 返回" },
       { path: "E:\\GitHub总索引\\AGENTS.md", role: "GitHub 总索引的项目重大动作边界和公开安全规则" }
     ],
     verification: [
-      "2026-08-29 提交 6afc858 修复五因子与机械 human_required（需要人类验证）旧语义，并 normal push（正常推送）到公开 main。",
-      "Test-ProtectedGitHubMajorAction.ps1、Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook 全部通过。",
-      "GitHub API 与 ls-remote 对 refs/heads/main 的回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d。",
-      "Current E protection contract 已验证，但 Git consumer 的安装与真实 broker/人类因子 E2E 没有本轮证据，所以模块 statusTone 保持 mixed（混合证据）。"
+      "2026-08-29 历史提交 6afc858 修复五因子与机械 human_required（需要人类验证）旧语义，并 normal push（正常推送）到当时的公开 main。",
+      "2026-08-31 Test-ProtectedGitHubMajorAction.ps1 重新通过：类型化 create 的 absent/PRIVATE/local branch/HEAD 绑定、固定 POST、dry run、竞争目标、失败响应与 read-back mismatch 均有回归；这是源码测试，不是现实仓库创建 E2E。",
+      "合同与源码当前声明 3 个 git-local + 6 个 github-api 操作；回归覆盖 typed schema、多余字段/shell 拒绝、Prepare/DryRun/Execute、drift、single-use consume 与 read-back，且不对真实仓库执行破坏动作。",
+      "历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook 通过；本次未把这些历史层升级为当前执行证据。",
+      "2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。",
+      "2026-09-01 直接回读源 main/origin=281344b…与 current create-repository 合同：只允许本人账号、空 PRIVATE、expected absent、本地 branch/HEAD/clean preimage，创建后的 origin/push 明确留给普通 Git 收敛。",
+      "当前 E97 protection contract 已验证；其中 protected-major-actions 合同 SHA-256=500abc3f…，与 previous E96 同字节，因此 E96 及更早 E95 只保留为历史连续性，不冒充 current。本轮真实创建并回读 PRIVATE daily-preferences，其他破坏性动作和人类因子路径没有执行，所以模块 statusTone 保持 mixed（混合证据）。"
     ],
     relation: "它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission 提供现场身份，Snapshot 只记录索引代际，二者都不能替代最高权限语义判断和正式回读。"
   },
@@ -555,9 +643,16 @@ export const githubIndexModules = [
     slug: "snapshot-recovery",
     shortTitle: "快照与恢复",
     title: "Refresh（刷新）、原子 Generation（索引代际）与中断恢复",
+    searchAliases: ["索引中断怎么恢复", "刷新到一半能不能继续", "current generation是什么", "为什么保留previous generation", "投影和pointer不一致怎么办"],
+    searchProjection: {
+      intents: ["从一次中断的索引刷新恢复", "验证 current generation 是否完整", "区分投影过期与 Owner 事实漂移", "在切 pointer 前核对全部文档"],
+      entities: ["27555327 generation", "manifest", "current pointer", "previous generation", ".incoming", "8 documents / 20026 bytes"],
+      relations: ["新文档先写 incoming generation", "manifest 绑定固定文档闭包与 hashes", "全部 projection 回读后才切 current", "previous 保留最后一个完整恢复点"],
+      failureRecovery: ["中途失败继续使用旧 current", "残留 incoming 先做路径与 reparse 检查", "projection stale 时重写整组而不局部拼接", "pointer/manifest 无效时停止发布并恢复闭合代际"]
+    },
     teaser: "总账变化时生成一个完整新版本；失败时保住旧版本，绝不留下半新半旧的 current（当前指针）。",
-    status: "generation 3c6487c… 的 8 份公开投影已闭合；live Owner 47/47 无 identity delta，1 项提醒只属于历史过渡复核",
-    statusTone: "problem",
+    status: "generation 27555327… 的 8 份公开文档、manifest、pointer 和兼容投影已回读闭合；live Owner 49/49、delta=0、issue=0",
+    statusTone: "pass",
     value: "让公开索引可重建、可判断 stale（过期），并在写到一半、投影失败或进程中断后继续从最后一个完整版本恢复。",
     why: "八份公开文档若逐个覆盖，任何中断都会让看板混合两个观察时间。顶层 Markdown（文本投影）又容易被误当动态权威，所以必须把完整文档集合、hash（哈希）、pointer（指针）和投影关系一起管理。",
     example: "如果新 generation 已写好一部分兼容投影后失败，旧 current pointer（当前指针）仍指向完整旧代；一致性检查会报告 projection stale（投影过期）。下一次完整 publish（发布）会重写全部投影并在回读后一次切换指针。",
@@ -625,8 +720,9 @@ export const githubIndexModules = [
       "current-generation.json 声明 schema v1、generation root、manifest SHA-256、八份 documents、current+previous 和 pointer-after-readback。",
       "单元测试注入 projection 中途失败，验证旧 pointer 保持有效；下一次完整 publish 修复 mixed projections 后才切换。",
       "测试拒绝越界 projection、额外文件、unknown/case-variant schema 字段和 reparse-point 父目录。",
-      "generation 3c6487c23da245f8a8be94e7ab5c7436 已发布并回读 8 份文档闭包，previous=1af2630…；指针仍声明 authoritative=false、decision_authority=false。",
-      "generation integrity 与 live Owner status 分开：前者证明 2026-08-29 投影内部完整，后者最新为 baseline 47 / observed 47 / delta 0 / issue 0，并保留一项历史过渡复核提醒。"
+      "2026-09-01 直接回读 generation 275553278b7747f5b9c64f1a325b86b0：manifest hash 匹配，8 份 generation 文档与兼容投影的 SHA-256、bytes 全部匹配 pointer，总计 20026 bytes；previous=70efc65cdfec4b9cb1305ff48086744d。",
+      "generation integrity 与 live Owner status 分开：前者证明 2026-09-01 01:34 UTC 的投影内部完整，后者在 01:54 UTC 证明 baseline 49 / observed 49 / delta 0 / issue 0，并保留 daily-preferences repo_added 的非阻断历史提醒。",
+      "本次没有通过 refresh 故障注入重新制造一次中断；恢复行为仍由既有源码回归证明，当前现场验证只覆盖已发布闭包的 read-back（回读）。"
     ],
     relation: "它把总账和诊断保存成可重建快照，但不替 Admission 判断单仓库现场，也不替 Publication Gate 批准外部发布。"
   }

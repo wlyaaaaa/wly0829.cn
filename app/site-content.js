@@ -6,6 +6,7 @@ import {
   socialLinks
 } from "./content-core.js";
 import { excludedSkills, skills } from "./content-skills.js";
+import { systemSearchEntries } from "./system-content.js";
 import { projectContentPackages } from "./project-content-index.generated.js";
 import panelRegistry from "../config/panel-projects.json" with { type: "json" };
 
@@ -58,7 +59,8 @@ export {
   rulesSnapshot,
   site,
   skills,
-  socialLinks
+  socialLinks,
+  systemSearchEntries
 };
 
 export function normalizePath(pathname) {
@@ -86,11 +88,14 @@ export function projectEntryForPath(pathname) {
 
 export const routePaths = [
   "/",
+  "/projects",
   ...projectCatalog.flatMap((entry) => [
     entry.project.route,
     ...entry.modules.map((item) => `${entry.project.route}/${item.slug}`)
   ]),
+  "/system",
   "/rules",
+  "/search",
   "/skills",
   ...skills.map((item) => `/skills/${item.slug}`)
 ];
@@ -99,8 +104,14 @@ export function routeMeta(pathname) {
   const path = normalizePath(pathname);
   if (path === "/") {
     return {
+      title: `个人 AI 协作系统｜${site.name}`,
+      description: "吴乐阳的个人 AI 协作系统：把通用 AI 能力与全部项目、规则、Skills、资料入口、电脑现场、验证和恢复连接起来，协助真实工作持续完成。"
+    };
+  }
+  if (path === "/projects") {
+    return {
       title: `项目｜${site.name}`,
-      description: "吴乐阳的个人只读工作台，完整记录 .agents、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI协助学习方法、Codex Remote、个人健康证据与安全决策、现行规则、Skills 与真实缺口。"
+      description: "吴乐阳当前已完成公开产品介绍的项目目录；全部 GitHub 项目资产由 GitHub 总索引安全聚合。"
     };
   }
 
@@ -127,6 +138,18 @@ export function routeMeta(pathname) {
     return {
       title: `${rulesSnapshot.releaseId} 当前规则｜${site.name}`,
       description: `${rulesSnapshot.releaseId} 五份活动 E 规则的完整人话解释、技术语义、文件 SHA、ruleset、current/previous 和验证矩阵。`
+    };
+  }
+  if (path === "/system") {
+    return {
+      title: `个人 AI 协作系统｜${site.name}`,
+      description: "兼容入口：个人 AI 协作系统首页已迁移到网站根路径。"
+    };
+  }
+  if (path === "/search") {
+    return {
+      title: `搜索｜${site.name}`,
+      description: "按项目、系统、规则、Skills 或当前项目作用域查看完整搜索结果。"
     };
   }
   if (path === "/skills") {
