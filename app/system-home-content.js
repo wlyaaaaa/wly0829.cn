@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 14,
+  detailedPageCount: 15,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十四个可深入阅读的完整参考，工作交付副驾驶已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE。项目目录现在提供十五个可深入阅读的完整参考；日常偏好与个性化推荐已从只有 Skill 入口的系统资产进入完整项目页。其余资产继续在系统版图中保持可读，网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -665,7 +665,7 @@ export const systemProjectDomains = [
       { id: "career-development", title: "个人发展协作", role: "把方向、学习、项目表达和长期准备放在同一条可持续推进的工作线上；私人事实不进入首页。", kind: "长期协作", href: projectLedgerHref },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人当前明示、行为事实核对和可纠正推定组织成消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常选择；完整项目页尚未收录，当前从 Skill 进入。", kind: "私人日常协作项目", href: "/skills/daily-preferences", entryLabel: "进入 Skill" }
+      { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人最新明示、多来源行为事实和可纠正推定分开保管，按一次问题只取相关证据，再把历史变成熟悉、相邻和新鲜选择；不把买过写成喜欢，也不建立中央画像。", kind: "私人日常协作项目", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" }
     ]
   },
   {
@@ -1178,8 +1178,8 @@ export const systemDependencyNodes = [
   {
     id: "daily-preferences-skill",
     lane: "personal",
-    title: "日常偏好与个性化推荐（daily-preferences）",
-    subtitle: "最新明示优先，用薄快照、事实核对和最小证据给出可纠正的日常选择",
+    title: "日常偏好自然请求入口（daily-preferences）",
+    subtitle: "最新明示优先，事实核对后给熟悉、相邻和新鲜选择",
     href: "/skills/daily-preferences",
     linkLabel: "Skill：日常偏好与个性化推荐",
     searchAliases: ["吃什么", "购物", "支付习惯", "出行旅行", "住宿推荐", "数字消费", "服务工具", "审美偏好", "娱乐", "我改主意"],

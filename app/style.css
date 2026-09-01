@@ -805,6 +805,10 @@ main {
   letter-spacing: -0.06em;
 }
 
+.project-hero-title-text {
+  min-width: 0;
+}
+
 .title-accent {
   width: 4px;
   height: 46px;
@@ -5569,6 +5573,37 @@ body:has(.learning-project-page) { min-width: 0; }
 }
 
 @media (max-width: 680px) {
+  .daily-preferences-project-page .project-hero h1 {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: 4px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    font-size: clamp(34px, 10.2vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .daily-preferences-project-page .project-hero-title-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .daily-preferences-project-page .project-hero .title-accent {
+    height: 1.05em;
+  }
+
+  .daily-preferences-project-page .project-hero-copy,
+  .daily-preferences-project-page .project-lead,
+  .daily-preferences-project-page .document-content,
+  .daily-preferences-project-page .project-reading-nav,
+  .daily-preferences-project-page .project-metrics {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
   .header-inner { grid-template-columns: max-content minmax(0,1fr) auto auto; gap: 8px; padding-right: 12px; padding-left: 12px; }
   .brand { grid-column: 1; margin-right: 0; }
   .brand-logo { display: none; }

@@ -602,7 +602,7 @@ function ProjectHero({ entry, module }) {
         <div className="project-hero-main">
           <div className="project-hero-copy">
             <p className="section-kicker">{currentProject.kicker || projectKicker(entry.kind)}</p>
-            <h1><span className="title-accent" aria-hidden="true" />{currentProject.title}</h1>
+            <h1><span className="title-accent" aria-hidden="true" /><span className="project-hero-title-text">{currentProject.title}</span></h1>
             <p className="project-lead">{displayCopy(currentProject.summary, entry.kind)}</p>
           </div>
         </div>
@@ -1409,7 +1409,7 @@ function ModuleDetail({ entry, module }) {
 
 function ProjectPage({ entry, module }) {
   return (
-    <div className={`page-frame project-page${entry.kind === "learning" ? " learning-project-page" : ""}`}>
+    <div className={`page-frame project-page${entry.kind === "learning" ? " learning-project-page" : ""}${entry.kind === "daily-preferences" ? " daily-preferences-project-page" : ""}`}>
       <ProjectHero entry={entry} module={module} />
       <div className="project-layout"><ProjectNav entry={entry} current={module?.slug} />{module ? <ModuleDetail entry={entry} module={module} /> : <ProjectOverview entry={entry} />}</div>
     </div>

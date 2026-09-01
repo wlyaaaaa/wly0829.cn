@@ -27,9 +27,15 @@ export function compactSearchScore(entry, query) {
 }
 
 export function searchCompactEntries(entries, query, scope = "all") {
+  const seenHrefs = new Set();
   return entries
     .map((entry, index) => ({ entry, index, score: compactSearchScore(entry, query) }))
     .filter((result) => result.score > 0 && (scope === "all" || (result.entry.scopes || []).includes(scope)))
     .sort((left, right) => right.score - left.score || (left.entry.type === "项目内容" ? 0 : 1) - (right.entry.type === "项目内容" ? 0 : 1) || left.index - right.index)
-    .map((result) => result.entry);
+    .map((result) => result.entry)
+    .filter((entry) => {
+      if (seenHrefs.has(entry.href)) return false;
+      seenHrefs.add(entry.href);
+      return true;
+    });
 }

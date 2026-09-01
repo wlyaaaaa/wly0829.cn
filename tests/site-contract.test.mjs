@@ -19,6 +19,7 @@ import { personalHealthModules, personalHealthProject } from "../app/content-per
 import { personalMaterialsModules, personalMaterialsProject } from "../app/content-personal-materials.js";
 import { documentMaterialsModules, documentMaterialsProject } from "../app/content-document-materials.js";
 import { workDeliveryModules, workDeliveryProject } from "../app/content-work-delivery.js";
+import { dailyPreferencesModules, dailyPreferencesProject } from "../app/content-daily-preferences.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -103,11 +104,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly fourteen projects and four navigation areas", async () => {
+test("the accepted panel has exactly fifteen projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -347,7 +348,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current fourteen/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current fifteen/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -503,7 +504,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 14);
+  assert.equal(enabledProjectCount, 15);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -582,6 +583,10 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
     assert.equal(match?.title, title, `production compact search loses: ${query}`);
     assert.equal(match?.href, href, `production compact search misroutes: ${query}`);
   }
+  const dailyNaturalResults = searchCompactEntries(completeCompactIndex, "吃什么");
+  assert.equal(dailyNaturalResults[0]?.href, "/projects/daily-preferences/recommendation-choice/");
+  assert.equal(new Set(dailyNaturalResults.map((item) => item.href)).size, dailyNaturalResults.length, "compact search repeats one daily-preferences Skill href");
+  assert.equal(searchCompactEntries(completeCompactIndex, "根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query/");
   const compactSystemCases = [
     ["重要邮件原始发件人去重", "自动协作", "/#system-automations"],
     ["仓库公开性分支远端工作树同步状态怎么确认", "系统组成", "/skills/project-entry-gate/"],
@@ -625,7 +630,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the fourteen accepted project packages", async () => {
+test("the maintenance registry drives exactly the fifteen accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -648,9 +653,9 @@ test("the maintenance registry drives exactly the fourteen accepted project pack
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery", "/projects/daily-preferences"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -673,7 +678,7 @@ test("the maintenance registry drives exactly the fourteen accepted project pack
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -1031,6 +1036,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "work-delivery",
       expectedOrder: 14,
       expectedModules: ["package-sources", "evidence-quality", "consistent-deliverables", "source-change-next-version", "value-state-recovery"]
+    },
+    {
+      project: dailyPreferencesProject,
+      modules: dailyPreferencesModules,
+      expectedSlug: "daily-preferences",
+      expectedOrder: 15,
+      expectedModules: ["current-corrections", "source-coverage", "evidence-query", "fact-verification", "recommendation-choice"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1963,7 +1975,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 1);
-  assert.equal(systemProjectInventory.detailedPageCount, 14);
+  assert.equal(systemProjectInventory.detailedPageCount, 15);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
@@ -2079,7 +2091,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 14);
+  assert.equal(systemProjectInventory.detailedPageCount, 15);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.ok(skillProjectLinks["personal-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "personal-materials" && item.moduleSlug === "registered-lookup"));
@@ -2196,7 +2208,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 14);
+  assert.equal(systemProjectInventory.detailedPageCount, 15);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2343,7 +2355,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
-  assert.equal(systemProjectInventory.detailedPageCount, 14);
+  assert.equal(systemProjectInventory.detailedPageCount, 15);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
   assert.equal(asset.href, "/projects/work-delivery");
   assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));
@@ -2371,6 +2383,125 @@ test("work-delivery explains the current six-file product, quality gate, precise
     ["同一句出现两次怎么办", "/projects/work-delivery/source-change-next-version"],
     ["数据库丢了能从Git恢复吗", "/projects/work-delivery/value-state-recovery"]
   ]) assert.equal(searchPanel(query)[0]?.href, href, `work-delivery search misroutes: ${query}`);
+});
+
+test("daily-preferences separates current truth, evidence, inference and AI-owned choice without a central profile", async () => {
+  assert.equal(dailyPreferencesProject.slug, "daily-preferences");
+  assert.equal(dailyPreferencesProject.order, 15);
+  assert.equal(dailyPreferencesProject.route, "/projects/daily-preferences");
+  assert.equal(dailyPreferencesProject.title, "日常偏好与个性化推荐");
+  assert.equal(dailyPreferencesProject.visibility, "私有仓库");
+  assert.equal(dailyPreferencesProject.repositoryUrl, null);
+  assert.deepEqual(dailyPreferencesModules.map((item) => item.slug), ["current-corrections", "source-coverage", "evidence-query", "fact-verification", "recommendation-choice"]);
+  assert.equal(dailyPreferencesProject.gallery.length, 0);
+
+  const publicText = JSON.stringify({ project: dailyPreferencesProject, modules: dailyPreferencesModules });
+  assert.doesNotMatch(publicText, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "daily-preferences leaks an absolute local locator");
+  assert.doesNotMatch(publicText, /chatgpt\.account-|credit\.cmb|wechat-pay\.primary|taobao\.primary|eleme\.primary|didi\.primary/i, "daily-preferences leaks a private source instance");
+  assert.doesNotMatch(publicText, /苏打水是农夫山泉的。并非气泡水|总不能不干净/, "daily-preferences publishes raw private conversation text");
+  for (const expected of [
+    /4bcc37c295ba0476d4965eb5cd47244dd4b38654/,
+    /821ee49ae954549f16dd454a5f9ef81c80be7180/,
+    /daily-preferences\.v0\.6/,
+    /40\/40/,
+    /54,283/,
+    /61,388/,
+    /1,749/,
+    /841/,
+    /11 个来源实例|11 个来源/,
+    /5 类逻辑来源|5 个未取得来源/,
+    /bank_transactions/,
+    /jd_orders/,
+    /pinduoduo_orders/,
+    /meituan_orders/,
+    /cainiao_logistics/,
+    /1 个已知缺月|1 个已知.*缺月/,
+    /51 条.*44.*7|51\/44\/7/s,
+    /10 个非人工来源|10 个来源.*v0\.6/s,
+    /6 个.*推定|6 个.*快照/,
+    /integrity_check=ok/,
+    /外键.*0/,
+    /最新.*明示|现在说的优先/,
+    /买过不等于喜欢/,
+    /熟悉.*相邻.*新鲜/s,
+    /Skill.*AI.*Python|Python.*Skill.*AI/s,
+    /不是.*推荐模型|不内置推荐模型/,
+    /不.*中央.*画像/,
+    /不.*后台同步|人工增量/,
+    /verified_artifact_cached_excerpt/,
+    /邮箱.*7–19 位数字.*末四位/s,
+    /不是全局匿名化|非全局匿名化/,
+    /PATH.*LocalAppData.*bundled runtime/s,
+    /Python runtime not found/,
+    /init --json/,
+    /UTF-8-sig.*UTF-16.*GB18030/s,
+    /\.blob/,
+    /Excel serial/,
+    /YYYYMMDD-YYYYMMDD/,
+    /75 份.*非人工记录层.*CURRENT.*尚存 SQLite/s,
+    /PDF.*重新抽取.*不是逐字原文/s,
+    /Gemini.*mixed_activity|mixed_activity.*Gemini/s,
+    /旅行.*住宿.*娱乐.*数字消费.*服务.*工具.*审美/s,
+    /专门.*parser|专门.*解析/s,
+    /实现盲.*自然请求/,
+    /gpt-5\.6-sol.*max.*child.*fork_turns=none.*terminal final/s,
+    /不改业务数据或 SQLite 主文件/
+  ]) assert.match(publicText, expected, `daily-preferences omits current truth: ${expected}`);
+  assert.ok(dailyPreferencesProject.operationalEntrypoints.every((item) => item.command.startsWith("pwsh -NoProfile -File .\\daily-preferences.ps1")), "daily-preferences exposes a non-runnable wrapper command");
+
+  const moduleSlugs = new Set(dailyPreferencesModules.map((item) => item.slug));
+  assert.ok(dailyPreferencesProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)));
+  assert.deepEqual(new Set(dailyPreferencesProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs);
+  for (const module of dailyPreferencesModules) {
+    assertReaderStates(module.readerStates, `daily-preferences/${module.slug}`);
+    for (const key of ["intents", "entities", "relations", "failureRecovery"]) {
+      assert.ok(module.searchProjection[key].length >= 3, `${module.slug}.${key} is incomplete`);
+    }
+    assert.ok(module.sources.length >= 2, `${module.slug} lacks source ownership`);
+    assert.ok(module.verification.length >= 3, `${module.slug} lacks verification evidence`);
+  }
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "daily-preferences");
+  assert.equal(registration.order, 15);
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.ai_refresh.content_path, "app/content-daily-preferences.js");
+  assert.equal(registration.source.repo, "wlyaaaaa/daily-preferences");
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.ok(registration.impact_sources.length >= 3);
+  assert.ok(skillProjectLinks["daily-preferences"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "daily-preferences"));
+  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "daily-preferences");
+  assert.equal(asset.href, "/projects/daily-preferences");
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(pageSource, /entry\.kind === "daily-preferences" \? " daily-preferences-project-page"/);
+  assert.match(pageSource, /project-hero-title-text/);
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.daily-preferences-project-page \.project-hero h1\s*\{[\s\S]*?grid-template-columns:\s*4px minmax\(0, 1fr\);[\s\S]*?\.daily-preferences-project-page \.project-hero-title-text\s*\{[\s\S]*?overflow-wrap:\s*anywhere;/);
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "daily-preferences", "index.html"), "utf8");
+  const moduleHtml = await Promise.all(dailyPreferencesModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "daily-preferences", item.slug, "index.html"), "utf8")));
+  const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "daily-preferences", "index.html"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-daily-preferences.js"), "utf8");
+  const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
+  const projectGeneratedSurface = [overviewHtml, ...moduleHtml, searchShard].join("\n");
+  assert.match(overviewHtml, /data-static-route="\/projects\/daily-preferences"/);
+  assert.match(overviewHtml, /<link rel="canonical" href="https:\/\/wly0829\.cn\/projects\/daily-preferences\/"/);
+  assert.equal((overviewHtml.match(/href="\/skills\/daily-preferences\/"/g) || []).length, 1, "daily-preferences overview must expose one Skill entry without duplication");
+  assert.doesNotMatch(overviewHtml, /project-gallery|gallery-dialog/, "daily-preferences invents a visual product gallery");
+  assert.doesNotMatch(projectGeneratedSurface, /chatgpt\.account-|credit\.cmb|wechat-pay\.primary|(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated daily-preferences surface leaks private source identity or locator");
+  assert.equal(searchPanel("日常偏好与个性化推荐", "project")[0]?.href, "/projects/daily-preferences");
+  for (const [query, href] of [
+    ["我改主意了", "/projects/daily-preferences/current-corrections"],
+    ["准备投递增量", "/projects/daily-preferences/source-coverage"],
+    ["为什么订单比聊天靠前", "/projects/daily-preferences/evidence-query"],
+    ["买过就是喜欢吗", "/projects/daily-preferences/fact-verification"],
+    ["给我熟悉和新鲜的选择", "/projects/daily-preferences/recommendation-choice"]
+  ]) assert.equal(searchPanel(query, "project:daily-preferences")[0]?.href, href, `daily-preferences search misroutes: ${query}`);
+  const naturalRecommendationResults = searchPanel("吃什么");
+  assert.equal(naturalRecommendationResults[0]?.href, "/projects/daily-preferences/recommendation-choice");
+  assert.equal(new Set(naturalRecommendationResults.map((item) => item.href)).size, naturalRecommendationResults.length, "daily-preferences search repeats one Skill href");
+  assert.equal(searchPanel("根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query");
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -2538,7 +2669,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/content-daily-preferences.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2556,6 +2687,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedPersonalMaterials = run(["--project", "personal-materials"]);
   const targetedDocumentMaterials = run(["--project", "document-materials"]);
   const targetedWorkDelivery = run(["--project", "work-delivery"]);
+  const targetedDailyPreferences = run(["--project", "daily-preferences"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2656,11 +2788,19 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedWorkDelivery.selected_projects[0].source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(Object.hasOwn(targetedWorkDelivery.selected_projects[0].source, "local_root"), false);
   assert.ok(targetedWorkDelivery.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedDailyPreferences.status, "ready_for_ai");
+  assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
+  assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
+  assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
+  assert.ok(targetedDailyPreferences.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -3103,7 +3243,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(dailyPreferences.sourcePath, "E:\\.agents\\skills\\daily-preferences\\SKILL.md");
   assert.ok(Number.isInteger(dailyPreferences.sourceBytes) && dailyPreferences.sourceBytes > 3000);
   assert.match(dailyPreferences.sourceSha256, /^[a-f0-9]{64}$/);
-  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /逐.*(?:source instance|来源实例).*覆盖截止|覆盖截止.*来源实例/s, /snapshot.*时间|快照时间/i, /full.*incremental/s, /3860c61/, /23\/23/, /全新无提示任务/, /8\/10/, /11 个来源实例/, /5 个未取得/, /盲测.*PASS|盲测.*通过/i]) {
+  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /逐.*(?:source instance|来源实例).*覆盖截止|覆盖截止.*来源实例/s, /snapshot.*时间|快照时间/i, /full.*incremental/s, /821ee49/, /v0\.6/, /40\/40/, /实现盲/, /54,283/, /1,749/, /11 个来源(?:实例)?/, /5 个未取得/, /熟悉.*相邻.*新鲜/s, /零扫描.*不改业务数据|不改业务数据/, /51.*44.*7/s, /82 条支付/, /2 个消息节点/, /不等于本人已明确说喜欢/]) {
     assert.match(dailyPreferencesText, expected, `daily-preferences omits product boundary: ${expected}`);
   }
   assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
@@ -3201,8 +3341,8 @@ test("project and Skill links come from one explicit ownership map", async () =>
     }
   }
   assert.ok(new Set(agentsMapped).size < skills.length / 2, "Skills were blindly assigned to .agents");
-  assert.deepEqual(skillProjectLinks["daily-preferences"], [{ relation: "unlisted-project", label: "对应本地项目尚未收录详情" }]);
-  assert.ok(!projectBySlug.has("daily-preferences"), "daily-preferences must not create a project page before selection");
+  assert.deepEqual(skillProjectLinks["daily-preferences"], [{ relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "recommendation-choice", label: "日常偏好与个性化推荐项目" }]);
+  assert.ok(projectBySlug.has("daily-preferences"), "daily-preferences project page is missing after selection");
   const agentsHtml = await readFile(path.join(projectRoot, "dist", "projects", "agents", "index.html"), "utf8");
   assert.ok(projectReferenceLinks.agents.some((item) => item.href === "/rules"));
   assert.ok(agentsHtml.includes('href="/rules/"'), ".agents project does not link to current Rules");
@@ -3456,7 +3596,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   const githubInventoryText = JSON.stringify(githubIndexProject.currentSnapshot);
   for (const expected of ["49", "27", "22", "46", "3"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
   const dailyPreferencesAsset = systemProjectAssets.find((asset) => asset.id === "daily-preferences");
-  assert.deepEqual({ repo: dailyPreferencesAsset.repo, visibility: dailyPreferencesAsset.visibility, href: dailyPreferencesAsset.href, entryLabel: dailyPreferencesAsset.entryLabel }, { repo: "daily-preferences", visibility: "PRIVATE", href: "/skills/daily-preferences", entryLabel: "进入 Skill" });
+  assert.deepEqual({ repo: dailyPreferencesAsset.repo, visibility: dailyPreferencesAsset.visibility, href: dailyPreferencesAsset.href, entryLabel: dailyPreferencesAsset.entryLabel }, { repo: "daily-preferences", visibility: "PRIVATE", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" });
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "daily-preferences")?.sourceIdentity, "repo:daily-preferences");
   const workDeliveryAsset = systemProjectAssets.find((asset) => asset.id === "work-delivery-copilot");
   assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility, href: workDeliveryAsset.href }, { title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", href: "/projects/work-delivery" });

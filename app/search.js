@@ -243,11 +243,17 @@ function searchTiePriority(entry) {
 }
 
 export function searchPanel(query, scope = "all") {
+  const seenHrefs = new Set();
   return globalSearchEntries
     .map((entry, index) => ({ entry, index, score: searchScore(entry, query) }))
     .filter((result) => result.score > 0 && entryMatchesScope(result.entry, scope))
     .sort((left, right) => right.score - left.score || searchTiePriority(left.entry) - searchTiePriority(right.entry) || left.index - right.index)
-    .map((result) => result.entry);
+    .map((result) => result.entry)
+    .filter((entry) => {
+      if (seenHrefs.has(entry.href)) return false;
+      seenHrefs.add(entry.href);
+      return true;
+    });
 }
 
 export function searchScopeById(scopeId) {

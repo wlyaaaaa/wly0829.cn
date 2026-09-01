@@ -14,11 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has fourteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has fifteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials, followed by work-delivery in order
-  1/2/3/4/5/6/7/8/9/10/11/12/13/14. The registry
+  document-materials, work-delivery and daily-preferences in order
+  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -317,19 +317,20 @@ read-only operating panel; public presentation is secondary.
   manual-only project 9 and personal-health as curated manual-only project 10,
   then WeChatDirect as real-dashboard project 11, personal-materials as
   real-dashboard project 12, document-materials as real-dashboard project 13,
-  and work-delivery as real-dashboard project 14.
+  work-delivery as real-dashboard project 14, and daily-preferences as
+  real-dashboard project 15.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
-  personal-materials, document-materials, work-delivery, plus the one-page Rules workbench
+  personal-materials, document-materials, work-delivery, daily-preferences, plus the one-page Rules workbench
   and current public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
   entire future backlog.
-- Project 14 is work-delivery. After its full source-first snapshot, audit,
-  PUBLIC release, read-back and independent completion report, the approved
-  queue continues one project at a time with daily-preferences. No
+- Project 15 is daily-preferences. It follows the completed work-delivery
+  project and must receive one source-first full snapshot, source repair,
+  independent audit, PUBLIC release, read-back and completion report. No
   placeholder card or advance route is allowed for a later item.
 - The selected sequential queue gives the future personal-media project a
   non-optional content floor: automatic increments, classification, cloud and
@@ -477,7 +478,8 @@ read-only operating panel; public presentation is secondary.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
-  Remote, personal-health, WeChatDirect, personal-materials, document-materials and work-delivery additions, are standing-authorized to commit, normal-push existing
+  Remote, personal-health, WeChatDirect, personal-materials, document-materials,
+  work-delivery and daily-preferences additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -498,7 +500,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current fourteen.
+  to projects added after the current fifteen.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -529,7 +531,8 @@ read-only operating panel; public presentation is secondary.
   reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
-  including WeChatDirect, personal-materials, document-materials and work-delivery:
+  including WeChatDirect, personal-materials, document-materials, work-delivery
+  and daily-preferences:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or

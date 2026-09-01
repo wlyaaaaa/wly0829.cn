@@ -1388,6 +1388,88 @@
           "a work-delivery Skill wording change remains semantically identical to the current route, output and boundary explanation"
         ]
       }
+    },
+    {
+      "id": "daily-preferences",
+      "order": 15,
+      "title": "日常偏好与个性化推荐",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/daily-preferences",
+      "ai_refresh": {
+        "content_path": "app/content-daily-preferences.js",
+        "semantic_revision": 1,
+        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation, per-instance manual source coverage and import health, natural-query scoped evidence, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff",
+        "collectors": [
+          "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
+          "read current AGENTS.md, README.md, schema.sql, daily_preferences.py, PowerShell wrapper and source-owned tests; distinguish Python evidence/state behavior from Skill/AI recommendation behavior",
+          "run the source-owned test suite, py_compile, read-only status/evidence/facts performance checks and database integrity/foreign-key checks without copying private payload",
+          "read only public-safe aggregates and owner-selected ordinary L2 examples from the current local snapshot; never publish source ids tied to accounts, raw statements, merchant/amount/time combinations, routes, locators, hashes or original private material",
+          "review current implementation-blind natural requests for recommendation, per-source zero-write increment preparation and exact fact separation; preserve what each proves and cannot prove"
+        ],
+        "conditional_collectors": [
+          "one owner-selected new ordinary L2 preference example only when it materially improves product explanation; omit its private source payload and locator",
+          "one explicit source migration or recovery acceptance only when implementation changes require it; publish aggregate integrity and key-drift results, never backup paths or private records"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/daily-preferences",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-daily-preferences-product-source"
+      },
+      "displayed_areas": [
+        "project_overview_product_principles_current_boundary_and_user_choice",
+        "current_historical_statement_timeline_and_correction_invalidation",
+        "eleven_source_instances_manual_increment_coverage_gap_and_import_health",
+        "nine_parser_profiles_v06_record_versioning_and_fail_closed_full_semantics",
+        "natural_query_domain_axis_scoped_context_chinese_recall_and_ai_expression_filtering",
+        "specific_order_payment_expression_fact_roles_and_public_l2_soda_example",
+        "artifact_hash_original_readback_and_cached_excerpt_boundary",
+        "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
+        "current_54283_keys_1749_time_corrections_six_rebuilt_snapshots_40_tests",
+        "named_missing_sources_credit_gap_specialized_domain_limits_and_recovery_gaps"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_scope_skill_and_reader_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "CURRENT_ACCEPTANCE.md",
+            "daily-preferences.ps1"
+          ]
+        },
+        {
+          "kind": "source_identity_ingest_evidence_snapshot_and_original_implementation",
+          "paths": [
+            "daily_preferences.py",
+            "schema.sql",
+            "requirements.txt"
+          ]
+        },
+        {
+          "kind": "behavior_and_regression_evidence",
+          "paths": [
+            "tests/test_daily_preferences.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed domain boundary, source profile, import mode, current/history rule, evidence role, query scope, fact interpretation, snapshot invalidation, original verification state, recommendation menu, search handoff, failure behavior or recovery gap changes meaning",
+          "a false-PASS path, destructive full-import path, source-identity conflict, coverage/gap drift, stale snapshot error, AI-expression misclassification, Chinese recall truncation or original-drift failure becomes implemented, regresses or changes the user's next action",
+          "a current implementation-blind recommendation, increment-preparation, exact-fact or source-migration acceptance changes what the owner should trust without exposing private payload"
+        ],
+        "snapshot_only_when": [
+          "the clean PRIVATE main commit, parser version, aggregate current/source/snapshot/test count, bounded timing or observation time changes without altering product meaning"
+        ],
+        "ignore_when": [
+          "ordinary private preference records or source increments change while the displayed product capability, boundary, evidence interpretation and user decision remain true",
+          "a specific order, payment, trip, message, account, locator or private payload changes without altering the reusable public product contract",
+          "an internal refactor or test addition leaves every displayed capability, failure and recovery behavior unchanged"
+        ]
+      }
     }
   ]
 }
