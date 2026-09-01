@@ -8,6 +8,7 @@ export function compactSearchScore(entry, query) {
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   const matchedLatinTokens = latinTokens.filter((token) => searchable.includes(token));
   if (latinTokens.length && matchedLatinTokens.length / latinTokens.length < 0.6) return 0;
+  if (title === normalized || title.startsWith(`${normalized} ·`)) return 18000;
   if (title.includes(normalized)) return 14000;
   if (aliases.some((alias) => alias.includes(normalized))) return 16000;
   if (detail.includes(normalized)) return 11000;

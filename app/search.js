@@ -14,6 +14,7 @@ const skillSearchAliases = {
   "personal-media": ["哪个 Skill 可以找照片", "找照片视频录音", "用一句话找媒体原件", "找一张照片"],
   "personal-panel-refresh": ["刷新看板", "fresh task 为什么受阻", "改了项目怎么没有自动刷新面板", "为什么看板没有更新", "这次发布会不会让看板说错话"],
   "timeaudit-diagnostics": ["过去一小时为什么卡", "没有游戏帧是不是掉帧", "电脑昨天为什么发热", "睡眠还是采集断档", "TimeAudit 历史证据"],
+  "daily-preferences": ["吃什么", "今天吃什么", "购物", "购物推荐", "支付", "支付习惯", "出行", "出行推荐", "旅行景点", "住宿推荐", "娱乐", "娱乐推荐", "数字消费", "服务怎么选", "工具习惯", "审美偏好", "我改主意", "我改主意了", "以后按这个推荐", "以后按我的偏好推荐"],
   "work-delivery": ["来源变更后哪些文档要重做", "需求变了怎么同步PRD和执行表"],
   "project-entry-gate": ["提交前为什么要检查仓库", "会不会推错远端", "公开仓库泄露"],
   "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
@@ -211,6 +212,7 @@ export function searchScore(entry, query) {
   const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
   const matchedLatinTokens = latinTokens.filter((token) => all.includes(token));
   if (latinTokens.length && matchedLatinTokens.length / latinTokens.length < 0.6) return 0;
+  if (title === normalized || title.startsWith(`${normalized} ·`)) return 18000;
   if (title.includes(normalized)) return 14000;
   if (aliases.some((alias) => alias.includes(normalized))) return 16000;
   if (detail.includes(normalized)) return 11000;

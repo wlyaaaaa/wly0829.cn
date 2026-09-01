@@ -2,25 +2,43 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const cacbSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T04:13:00Z",
-  label: "评测产品结构与 task-handle 绑定已在源码形成；当前提交 CI lint 未闭合，本页不发布受测配置结果",
-  boundary: "当前 PRIVATE main 已前进到 59b0b5c，最新四个 CI job 都在 lint 门失败；旧提交的 focused/full 测试证据不自动继承，本页不发布受测配置结果或比较结论",
+  label: "三类执行合同、task-handle 绑定与路线专属证据边界已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
+  boundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS 和 ROUTING_DECISION_FRAMEWORK 仍残留 8-case/八条计分合同；方法与评分基数未统一。REPORTING_STANDARD 已写 C1–C10/10-row，文中的 eight 指除 C5/C7 外其余八个离线案例，legacy bridge 也明确 unranked。最新四个 CI job 仍停在 lint 门，旧测试不继承；本页不发布受测配置结果。",
   metrics: [
     { label: "核心模块", value: "47" },
     { label: "数据合同", value: "25" },
     { label: "连续案例", value: "10" }
   ],
   facts: [
-    { label: "当前源码", value: "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。" },
-    { label: "成品范围", value: "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。" },
-    { label: "问题库结构", value: "当前核心使用 10 个连续案例组成一次完整 episode（评测回合），覆盖实现、诊断、连续性、证据和恢复。" },
-    { label: "任务身份绑定", value: "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。" },
-    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。" },
+    { label: "当前源码与成品范围", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净、远端引用 0/0；233 个跟踪文件中有 47 个 Python 核心模块、25 个 schema、59 个测试文件与 6 份报告/模板文件" },
+    { label: "问题库与任务绑定", value: "当前核心用 10 个连续案例组成一次 episode，覆盖实现、诊断、连续性、证据和恢复；每次执行独立 workspace，WorkerHandle 同时绑定原始 task id 与 run id" },
+    { label: "三类执行路线", value: "同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job；三者共享冻结输入与 verifier，却分别绑定原生谱系、本地 job/GPU lease、云端 request/stream 和路线专属 cleanup" },
+    { label: "确定性硬门 + Sol Max 仲裁强审", value: "根侧 verifier 独占 identity、validity、eligibility、safety 与 PASS/FAIL；每个已合格样本再由 fresh exact gpt-5.6-sol / max 隐藏参与者身份，基于完整任务和候选产物做独立六维质量复核，形成可引用、可反驳的推定能力/推定质量" },
+    { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress" },
+    { label: "选择与当前验证边界", value: "现行 V11R1/C1–C10/24-slot 入口与仍写 8-case 的旧设计和评分合同相互冲突，因此历史分数、排名和比较当前不可采用；机械与强审冲突仍不平均，最新四个 CI job 也停在 lint 门" },
+    { label: "当前源码", value: "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。", hero: false },
+    { label: "成品范围", value: "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。", hero: false },
+    { label: "任务身份绑定", value: "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。", hero: false },
+    { label: "执行路线合同", value: "当前 source-backed（源码可追溯）worker contract 明确定义 native_managed、local_async_job 与 cloud_api_async_job：共用冻结任务和终态语义，分别保留原生谱系、本地 Toolkit/AICLI + GPU lease、云端 provider request/stream 证据。", hero: false },
+    { label: "路线证据门", value: "三类路线都要先过精确身份、workspace、工具策略、verifier、终态与清理门；native lineage 只对原生路线必需，本地与云端的 not_applicable 不构成能力缺口。", hero: false },
+    { label: "盲质量复核", value: "当前源码把盲质量复核定义为独立生命周期：每个已合格样本对应一个 fresh gpt-5.6-sol / max task、唯一 session、host turn-context receipt、单样本 bundle 和受约束 judgment；六维 rubric 合计 1000 个方法点，但本页不展示任何候选所得分。", hero: false },
+    { label: "盲审包边界", value: "blind bundle（盲审包）只允许冻结任务、验收、工具边界、根侧 correctness basis（正确性依据）、可见 fixture/test 与候选 artifact；参与者身份、harness、AA、price、mechanical score、ranking 和其他候选答案在进入 judge 前失败关闭。", hero: false },
+    { label: "额度费用探针", value: "config/probes 当前有 1 题短版和 10 题完整版两份固定提示词；每份都把执行与删除拆成两条消息，使用独立固定 namespace，不生成测量回执、不写账本，也不进入分数或排名。", hero: false },
+    { label: "最终选择合同", value: "final_selection_release 当前要求机械证据、盲审证据、source commitment、host receipt 与 bundle/rubric generation（合同代）彼此兼容；部分覆盖只保留 pending，不得通过 best-of 或拼接不同尝试生成正式次序。", hero: false },
+    { label: "方法合同冲突", value: "当前 V11R1 README 与 AGENTS 要求 24 个 canonical Codex slots、每次 C1–C10 全部终态；PRODUCT_DESIGN 仍写八案例，MODEL_EVIDENCE_SEMANTICS/ROUTING_DECISION_FRAMEWORK 仍固定 case_count=8 与八条 per_case_scores。REPORTING_STANDARD 已对齐 ordered ten-row、case_count=10、weight=0.1；其中 other eight 是除 C5/C7 两个联网例外以外的八个离线案例，legacy bridge 明确 unranked。当前设计/评分合同仍未完全统一。", hero: false },
+    { label: "24 槽身份矩阵", value: "V11R1 的 24-slot Registry 公开安全身份矩阵包括 OpenAI/Codex 原生 Luna、Terra、Sol 的多种 effort 与四条编排路线，本地 Codex CLI 的 qwen3.6:35b/27b，Codex CLI/Responses 的 qwen3.8-max 设计槽，以及 DeepSeek V4 Flash/Pro 云端槽；本页不附任何运行结果、分数或名次。", hero: false },
+    { label: "首报采样策略", value: "first-report sampling policy 对每个 canonical slot 取 first valid sample；唯一例外是已完成三份有效证据的 Luna Max slot，按机械分中位数选一份代表，只盲审和报告该代表，另两份保留为 audit-only。外部 Antigravity/OpenCode cohorts 后续独立补充，不进入24-slot阻断条件。", hero: false },
+    { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。", hero: false },
     { label: "公开证据范围", value: "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。", hero: false }
   ],
   gaps: [
     "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
-    "项目当前规则明确既有方法与评估有效性仍需复核；任何历史比较结论都不能直接作为公开选择依据。",
+    "项目当前规则明确既有方法与评估有效性仍需复核；V11R1 的 C1–C10/24-slot 与旧 8-case 评分合同冲突未解决前，即使 CI 变绿，任何历史比较结论也不能作为公开选择依据。",
+    "V11 Registry 的 orchestration collaboration 仍写 descendants_allowed=true，而 NATIVE_RUN_OPERATOR/PRODUCT_DESIGN 把正式 arm 定义为 direct-only、无后代；身份合同没有统一前，编排 slot 不能写成已合格。",
     "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
+    "本轮没有为任何受测配置启动 fresh Sol Max 盲审、没有执行额度/费用探针，也没有形成新的 final-selection manifest；页面只发布源码可证明的方法与边界。",
+    "源码中的路线、schema 和 synthetic（合成）验证只证明框架边界，不证明任一精确 provider/model/profile 当前可执行；正式接入仍需本机 preflight（预演）与宿主回执。",
+    "配置存在不等于授权存在：云端真实调用仍需逐 attempt 的明确付费授权；清理无法确认时不得立即提交替代任务。",
     "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
     "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
   ]
@@ -36,7 +54,6 @@ export const cacbProject = {
   cardStatus: "评测产品框架已形成；方法与评分有效性仍需复核，历史比较结论当前不可采用",
   cardStatusTone: "mixed",
   ...cacbSnapshot,
-  snapshotBoundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS 和 ROUTING_DECISION_FRAMEWORK 仍残留 8-case/八条计分合同；方法与评分基数未统一。REPORTING_STANDARD 已写 C1–C10/10-row，文中的 eight 指除 C5/C7 外其余八个离线案例，legacy bridge 也明确 unranked。最新四个 CI job 仍停在 lint 门，旧测试不继承；本页不发布受测配置结果。",
   searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理", "模型盲评分和盲质量复核", "盲审能不能改变PASS或资格", "一题和十题额度费用探针", "探针结果为什么不进排行榜", "机械分盲审和最终选择怎样分工", "为什么页面没有候选分数和名次"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
   summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。即使代码检查全部变绿，方法设计和评分有效性没有独立复核时，历史分数与名次仍不能采用；缺证据就保持未知或 pending。",
@@ -48,19 +65,6 @@ export const cacbProject = {
     problem: "即使 CI 变绿，只要方法与评分有效性仍未复核，历史分数和名次就保持不可采用；产物错误、越界、任务未完成、路线身份矛盾或盲审证据冲突也分别标出，不让一层替另一层补证。",
     unavailable: "缺身份、终态、验收输入、fresh Sol Max host receipt（宿主回执）或完整同代样本时保持无法判断或 pending；探针失败只保留临时诊断并等待精确清理，所有缺项都不填零。"
   },
-  cardMetrics: [
-    { label: "核心模块", value: "47" },
-    { label: "数据合同", value: "25" },
-    { label: "连续案例", value: "10" }
-  ],
-  heroFacts: [
-    { label: "当前源码与成品范围", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净、远端引用 0/0；233 个跟踪文件中有 47 个 Python 核心模块、25 个 schema、59 个测试文件与 6 份报告/模板文件" },
-    { label: "问题库与任务绑定", value: "当前核心用 10 个连续案例组成一次 episode，覆盖实现、诊断、连续性、证据和恢复；每次执行独立 workspace，WorkerHandle 同时绑定原始 task id 与 run id" },
-    { label: "三类执行路线", value: "同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job；三者共享冻结输入与 verifier，却分别绑定原生谱系、本地 job/GPU lease、云端 request/stream 和路线专属 cleanup" },
-    { label: "确定性硬门 + Sol Max 仲裁强审", value: "根侧 verifier 独占 identity、validity、eligibility、safety 与 PASS/FAIL；每个已合格样本再由 fresh exact gpt-5.6-sol / max 隐藏参与者身份，基于完整任务和候选产物做独立六维质量复核，形成可引用、可反驳的推定能力/推定质量" },
-    { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress" },
-    { label: "选择与当前验证边界", value: "现行 V11R1/C1–C10/24-slot 入口与仍写 8-case 的旧设计和评分合同相互冲突，因此历史分数、排名和比较当前不可采用；机械与强审冲突仍不平均，最新四个 CI job 也停在 lint 门" }
-  ],
   productPrinciples: [
     { title: "同一结论必须来自同一版本", detail: "任务、输入、允许范围和验收标准先被冻结，不能边跑边换题再比较结果。" },
     { title: "每次尝试都从干净工作区开始", detail: "旧文件、其他候选和上一次执行不能提供借来的成功，也不能污染本次失败。" },
@@ -137,37 +141,6 @@ export const cacbProject = {
     { term: "fail-closed（失败关闭）", meaning: "证据不完整或身份不匹配时不生成能力结论，不靠猜测补齐。" },
     { term: "contamination（污染）", meaning: "任务或隐藏验证内容被参与者事先看见，导致结果失去解释力。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T04:13:00Z",
-    label: "三类执行合同、task-handle 绑定与路线专属证据边界已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
-    facts: [
-      "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。",
-      "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。",
-      "最新提交要求 WorkerHandle 同时绑定原始 task id；即使 run id 相同，只要 task id 不同也会拒绝借用旧 handle。",
-      "当前 source-backed（源码可追溯）worker contract 明确定义 native_managed、local_async_job 与 cloud_api_async_job：共用冻结任务和终态语义，分别保留原生谱系、本地 Toolkit/AICLI + GPU lease、云端 provider request/stream 证据。",
-      "三类路线都要先过精确身份、workspace、工具策略、verifier、终态与清理门；native lineage 只对原生路线必需，本地与云端的 not_applicable 不构成能力缺口。",
-      "当前源码把盲质量复核定义为独立生命周期：每个已合格样本对应一个 fresh gpt-5.6-sol / max task、唯一 session、host turn-context receipt、单样本 bundle 和受约束 judgment；六维 rubric 合计 1000 个方法点，但本页不展示任何候选所得分。",
-      "blind bundle（盲审包）只允许冻结任务、验收、工具边界、根侧 correctness basis（正确性依据）、可见 fixture/test 与候选 artifact；参与者身份、harness、AA、price、mechanical score、ranking 和其他候选答案在进入 judge 前失败关闭。",
-      "config/probes 当前有 1 题短版和 10 题完整版两份固定提示词；每份都把执行与删除拆成两条消息，使用独立固定 namespace，不生成测量回执、不写账本，也不进入分数或排名。",
-      "final_selection_release 当前要求机械证据、盲审证据、source commitment、host receipt 与 bundle/rubric generation（合同代）彼此兼容；部分覆盖只保留 pending，不得通过 best-of 或拼接不同尝试生成正式次序。",
-      "当前 V11R1 README 与 AGENTS 要求 24 个 canonical Codex slots、每次 C1–C10 全部终态；PRODUCT_DESIGN 仍写八案例，MODEL_EVIDENCE_SEMANTICS/ROUTING_DECISION_FRAMEWORK 仍固定 case_count=8 与八条 per_case_scores。REPORTING_STANDARD 已对齐 ordered ten-row、case_count=10、weight=0.1；其中 other eight 是除 C5/C7 两个联网例外以外的八个离线案例，legacy bridge 明确 unranked。当前设计/评分合同仍未完全统一。",
-      "V11R1 的 24-slot Registry 公开安全身份矩阵包括 OpenAI/Codex 原生 Luna、Terra、Sol 的多种 effort 与四条编排路线，本地 Codex CLI 的 qwen3.6:35b/27b，Codex CLI/Responses 的 qwen3.8-max 设计槽，以及 DeepSeek V4 Flash/Pro 云端槽；本页不附任何运行结果、分数或名次。",
-      "first-report sampling policy 对每个 canonical slot 取 first valid sample；唯一例外是已完成三份有效证据的 Luna Max slot，按机械分中位数选一份代表，只盲审和报告该代表，另两份保留为 audit-only。外部 Antigravity/OpenCode cohorts 后续独立补充，不进入24-slot阻断条件。",
-      "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。",
-      "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。"
-    ],
-    gaps: [
-      "当前提交没有一份绿色 CI 或本轮完整本地回归，因此不能把旧提交的 focused/full 记录继承为当前可验证。",
-      "项目当前规则明确既有方法与评估有效性仍需复核；V11R1 的 C1–C10/24-slot 与旧 8-case 评分合同冲突未解决前，即使 CI 变绿，任何历史比较结论也不能作为公开选择依据。",
-      "V11 Registry 的 orchestration collaboration 仍写 descendants_allowed=true，而 NATIVE_RUN_OPERATOR/PRODUCT_DESIGN 把正式 arm 定义为 direct-only、无后代；身份合同没有统一前，编排 slot 不能写成已合格。",
-      "本轮没有启动新的受测执行、没有调用云端接口、没有运行本地重型推理，也没有生成新的受测结果。",
-      "本轮没有为任何受测配置启动 fresh Sol Max 盲审、没有执行额度/费用探针，也没有形成新的 final-selection manifest；页面只发布源码可证明的方法与边界。",
-      "源码中的路线、schema 和 synthetic（合成）验证只证明框架边界，不证明任一精确 provider/model/profile 当前可执行；正式接入仍需本机 preflight（预演）与宿主回执。",
-      "配置存在不等于授权存在：云端真实调用仍需逐 attempt 的明确付费授权；清理无法确认时不得立即提交替代任务。",
-      "私有 holdout、原始执行记录和隐藏失败正文不会进入网页，公开读者无法从本页复算私有结果。",
-      "单次执行即使验证通过，也只证明精确任务、精确配置和精确版本，不证明普遍能力。"
-    ]
-  },
   operatingFlow: [
     { title: "定义能力问题", detail: "先把现实需求写成可以验收的任务家族，说明什么是完整结果、允许什么、禁止什么。" },
     { title: "建立当前官方与外部证据车道", detail: "对精确模型、provider、version 和 harness 核对官方能力、可用条件、价格日期与单位，并审查外部证据的任务、环境和口径是否可比。" },
@@ -729,7 +702,7 @@ export const cacbModules = [
     },
     decisionImpact: [
       "盲审只在 deterministic identity、validity、eligibility、hard gate 和 PASS/FAIL 已完成后开始。",
-      "推定质量/推定能力 evidence 可以被具体反例、缺失 artifact、新的确定性重放或另一份合格独立复核反驳；它不被包装成真理。",
+      "推定质量/推定能力 evidence 可以被具体反例、缺失 artifact、新的确定性重放或另一份合格独立复核反驳；它不被说成真理。",
       "一个样本对应一个 fresh gpt-5.6-sol / max task、唯一 session、唯一 host receipt 和唯一 judgment。",
       "judge 看见完整冻结任务、acceptance requirements、allowed tool boundary、root evaluator correctness basis、visible tests/fixtures 与 candidate artifacts。",
       "judge 不看 participant provenance、model/harness identity、AA、price、mechanical points、ranking、其他候选或其他答案。",
@@ -819,7 +792,7 @@ export const cacbModules = [
       relations: ["deterministic verifier拥有identity eligibility hard gate和PASS FAIL", "机械lane从sealed replay重算", "Sol Max强审提供可反驳推定能力推定质量", "机械与强审冲突不平均且不改硬门", "最终选择要求完整同代bundle rubric和唯一task session", "缺blind judgment时整代pending不排名", "quota cost probe永不进入formal ledger或report progress", "公开页面不展示候选分数名次leaderboard"],
       failureRecovery: ["基础设施失败时不形成能力结论", "机械envelope不能重算时拒绝展示数值", "blind judgment缺证据或hash不符时只关闭盲审lane", "机械与强审分歧时保留hard gate等待同代复核", "required sample缺失时final selection保持pending", "价格口径不可比时并列呈现而不混算", "证据文件缺失或指纹不符时保留blocker", "探针失败只保留临时诊断并按第二阶段清理"]
     },
-    value: "我不仅知道一次执行哪里出了问题，还能区分三种不同问题：确定性机械证据说明冻结任务与硬门是否成立，Sol Max 仲裁强审说明可见产物在六个质量维度上可怎样推定，final selection 说明这些证据能否在同一代里共同被采用。这样既不会只剩一个红灯，也不会把主观质量意见包装成真理。",
+    value: "我不仅知道一次执行哪里出了问题，还能区分三种不同问题：确定性机械证据说明冻结任务与硬门是否成立，Sol Max 仲裁强审说明可见产物在六个质量维度上可怎样推定，final selection 说明这些证据能否在同一代里共同被采用。这样既不会只剩一个红灯，也不会把主观质量意见说成真理。",
     why: "把 timeout、权限、身份缺失、题目缺陷和候选代码错误都写成“能力失败”，会污染判断；把机械分和强审意见平均成一个总数，则会掩盖 hard gate、证据冲突与合同代差异。最终选择必须先证明来源、版本、代表规则和完整覆盖，不能因为想要排行榜就拼 partial 或挑最好的一次。",
     example: "一组样本的机械 evidence envelope 都能从 sealed archive 重算，但其中一个 required sample 没有 fresh Sol Max judgment。系统保留已有机械 lane 和其他 raw judgments，把整代 final selection 写成 pending；不会用旧 judgment 补位，也不会先发布部分次序。若机械硬门通过而强审指出质量风险，PASS 保持，质量分歧和证据引用单独列出，不做平均。",
     result: "得到模型证据卡、基准报告和综合判断报告三份交付：基准报告把 deterministic mechanical lane、Sol Max 推定质量 lane、failure plane 和 pending 分开；最终选择 manifest 只证明证据集合与代表规则是否兼容；综合判断再按资格→能力→经济性→范围内路由建议引用它们。公开页面只说明职责、状态和重验条件，不包含任何受测配置实际 score、rank 或 leaderboard。",

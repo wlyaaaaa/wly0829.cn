@@ -2,26 +2,37 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const codexRemoteSnapshot = createProjectSnapshot({
   observedAt: "2026-08-30T11:29:50Z",
-  label: "产品、公开版本、源码、历史真实多端使用与20张界面证据均已确认；本轮未调用运行时，页面不代表当前在线",
-  boundary: "历史真实链路与产品证据已形成，本轮未完成当前Windows接管方案的可重复无人值守验收；重新启用前需隔离验证，且不代表当前在线",
+  label: "历史真实链路、正式版本、源码与20张界面证据已确认；当前控制入口不可用且冻结",
+  boundary: "历史真实链路与产品证据已形成；当前控制入口明确为不可用且冻结，禁止打开、关闭、重启或调用。恢复属于另一个明确启动的项目，并需重新完成端到端验收",
   metrics: [
     { label: "正式版", value: "v0.1.5" },
     { label: "验证", value: "1771" },
     { label: "证据图", value: "20" }
   ],
   facts: [
-    { label: "它实际是什么", value: "手机浏览器继续同一个 Codex Desktop 任务；不是远程桌面、屏幕串流或公网 Shell。" },
-    { label: "当前源码", value: "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。" },
-    { label: "正式公开版本", value: "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。" },
-    { label: "源码与CI分层", value: "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。v0.1.5 对应公开 CI 已通过；当前 main 最新 CI run 31145586404 为 failure。" },
-    { label: "主要能力", value: "源码实现任务、队列、审批、模型/上下文/额度、子智能体、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。" },
-    { label: "历史真实验收", value: "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。" },
-    { label: "界面证据", value: "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。", hero: false }
+    { label: "它实际是什么", value: "手机浏览器继续同一个 Codex Desktop 任务；不是远程桌面、屏幕串流或公网 Shell" },
+    { label: "主要能力", value: "任务与历史、公开进展、工具、diff、父子智能体导航、审批、引导、停止、下一轮队列、模型/上下文/额度、所有者文件工作台、安装更新回滚" },
+    { label: "正式公开版本", value: "v0.1.5 / c3a07719ecbe00dbad515b3cae00fd0f33b186d2；CI run 30756063724 记录 1771 项 Vitest、370 文件 PUBLIC scan，以及 Playwright 192 项发现 / 157 通过 / 35 跳过" },
+    { label: "界面证据", value: "12 张历史真实手机 UI + 7 张公开合成演示 + 1 张历史合成 QA，共 20 张" },
+    { label: "历史走通结果", value: "手机、双 Web 与 Desktop 曾走通同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩与重连" },
+    { label: "共享机制", value: "Browser → 认证 Sidecar → loopback Broker → 单一 app-server ← Codex Desktop；共享 threadId / turnId" },
+    { label: "当前源码", value: "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。", hero: false },
+    { label: "正式版本证据", value: "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；GitHub Actions run 30756063724 / job 91519619868 正式回读 114 个 Vitest 文件、1771 passed，PUBLIC scan 370 files，Playwright 192 discovered / 157 passed / 35 skipped。", hero: false },
+    { label: "当前源码版本", value: "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。", hero: false },
+    { label: "CI 分层", value: "v0.1.5 对应公开 CI 已通过；当前 main 的最新 CI run 31145586404 为 failure，因此正式 release 证据与当前源码验证状态必须分开。", hero: false },
+    { label: "冻结状态", value: "当前 codex-local-remote-control Skill 明确返回 Status=不可用，并冻结 runtime：禁止 Open、Close、restart、dispatcher、计划任务、Sidecar、Broker、public endpoint 或替代启动路径。该状态高于‘本轮未探测在线’的 Unknown 表述。", hero: false },
+    { label: "源码能力", value: "源码实现同一任务、steer、interrupt、DPAPI 加密 FIFO 队列、审批、模型/上下文/额度、父子智能体历史与只读导航、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。", hero: false },
+    { label: "运行代与回退", value: "源码还实现内容寻址不可变运行代、原子 current/previous 指针、兼容 Web/Sidecar 排空切换、同一幂等键续接与新 Sidecar 失败后的旧代恢复；Broker/app-server 变化仍走显式交接。", hero: false },
+    { label: "历史真实验收", value: "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。", hero: false },
+    { label: "图像证据组成", value: "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。", hero: false }
   ],
   gaps: [
-    "本轮遵守只读边界，没有启动、关闭、重启、查询或访问任何 Remote 组件，因此不能声明当前在线。",
+    "历史真实链路与产品证据已形成，但当前控制入口不可用且冻结；页面与本轮任务没有访问任何 Remote 运行态。",
+    "恢复不是普通状态检查或重启：必须由用户明确启动独立恢复项目，重新决定实现并完成 fresh E2E；静态证据、旧制品和历史成功都不能改变当前不可用状态。",
     "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
     "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
+    "本轮没有读取已安装 runtime-current.json、Supervisor 或 Sidecar 状态，也没有执行安装、滚动更新、回滚、显式 handoff 或无人值守接管验收。",
+    "产品设计要求从子任务返回父任务并恢复阅读位置；现有源码与浏览器场景证明可进入子任务和返回父任务，但本轮没有取得精确滚动位置恢复的独立验收结果。",
     "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
     "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
     "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
@@ -38,7 +49,6 @@ export const codexRemoteProject = {
   cardStatus: "历史真实链路与产品证据已形成；当前控制入口不可用且冻结",
   cardStatusTone: "problem",
   ...codexRemoteSnapshot,
-  snapshotBoundary: "历史真实链路与产品证据已形成；当前控制入口明确为不可用且冻结，禁止打开、关闭、重启或调用。恢复属于另一个明确启动的项目，并需重新完成端到端验收",
   searchAliases: ["手机继续Codex桌面任务", "Codex手机远程控制", "同一个Desktop任务", "手机审批和看diff", "Codex Remote", "Codex Remote怎么更新回滚", "手机查看子智能体"],
   repositoryNote: "源码位于 PUBLIC（公开）GitHub 仓库。这是社区构建的非官方 companion（配套工具），没有厂商隶属、背书或合作关系。页面直接展示真实产品名、公开版本、架构、代码、测试和历史真实手机画面；只隐藏可复用凭据、私人 tailnet 地址和实际达到三级以上且经逐值判断确属敏感的内容。当前控制入口不可用且冻结，页面不宣称在线，也不调用任何运行组件。",
   summary: "Codex Remote 让我离开电脑后，用手机浏览器继续电脑上正在进行的同一个 Codex Desktop 任务。手机上能看任务进展、命令、文件改动和父子智能体，处理真实审批，补充当前要求，停止回复，或把下一件事排到后面；自身更新则用可回退运行代保护正在工作的 Desktop 链。它不传输桌面画面，也不另开一份聊天。",
@@ -343,32 +353,6 @@ export const codexRemoteProject = {
     { term: "opaque grant（不透明短时授权）", meaning: "任务正文中的本地绝对路径换成短时文件引用，避免形成可复用公网裸链接。" },
     { term: "owner file manager（所有者文件工作台）", meaning: "继承 Sidecar 当前 Windows 身份的文件能力，不是多用户沙箱。" }
   ],
-  currentState: {
-    observedAt: "2026-08-30T11:29:50Z",
-    label: "历史真实链路、正式版本、源码与20张界面证据已确认；当前控制入口不可用且冻结",
-    facts: [
-      "Git Owner 确认 wlyaaaaa/codex-local-remote 为 PUBLIC（公开），默认 main；观察时远端 main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6，本地工作树干净。",
-      "最新正式公开版本为 v0.1.5，对应 c3a07719ecbe00dbad515b3cae00fd0f33b186d2；该版本记录 1771 项测试、public-safety 和 Chromium 六视口验收通过。",
-      "当前 main 的 package version 是 0.1.6-unreleased.0；它包含 v0.1.5 后的源码变化，但本页不把它写成已发布 v0.1.6。",
-      "v0.1.5 对应公开 CI 已通过；当前 main 的最新 CI run 31145586404 为 failure，因此正式 release 证据与当前源码验证状态必须分开。",
-      "当前 codex-local-remote-control Skill 明确返回 Status=不可用，并冻结 runtime：禁止 Open、Close、restart、dispatcher、计划任务、Sidecar、Broker、public endpoint 或替代启动路径。该状态高于‘本轮未探测在线’的 Unknown 表述。",
-      "源码实现同一任务、steer、interrupt、DPAPI 加密 FIFO 队列、审批、模型/上下文/额度、父子智能体历史与只读导航、文件工作台、认证、SSE 重连、回环 Broker 与单一 app-server 边界。",
-      "源码还实现内容寻址不可变运行代、原子 current/previous 指针、兼容 Web/Sidecar 排空切换、同一幂等键续接与新 Sidecar 失败后的旧代恢复；Broker/app-server 变化仍走显式交接。",
-      "历史真实手机、双 Web 与 Desktop 曾完成同一任务/轮次、审批、文件 SHA、子智能体、引导、队列、停止、计划问题、压缩和重连验收。",
-      "本页20张图由12张真实手机 UI、7张 PUBLIC 合成演示和1张历史合成 QA 组成；真实图只裁除私有地址栏并清除元数据，普通非敏感技术事实保留。"
-    ],
-    gaps: [
-      "历史真实链路与产品证据已形成，但当前控制入口不可用且冻结；页面与本轮任务没有访问任何 Remote 运行态。",
-      "恢复不是普通状态检查或重启：必须由用户明确启动独立恢复项目，重新决定实现并完成 fresh E2E；静态证据、旧制品和历史成功都不能改变当前不可用状态。",
-      "v0.1.5 的测试和历史真实验收只证明对应版本与场景，不自动覆盖当前 Desktop、Codex、网络或浏览器版本。",
-      "当前 main 最新 CI 未闭合；它不推翻 v0.1.5 的历史正式证据，但也不能从旧 release 推导当前 main 已通过。",
-      "本轮没有读取已安装 runtime-current.json、Supervisor 或 Sidecar 状态，也没有执行安装、滚动更新、回滚、显式 handoff 或无人值守接管验收。",
-      "产品设计要求从子任务返回父任务并恢复阅读位置；现有源码与浏览器场景证明可进入子任务和返回父任务，但本轮没有取得精确滚动位置恢复的独立验收结果。",
-      "公开合成截图证明 UI 与状态合同，不证明真实任务执行；历史真实截图也只代表拍摄时刻。",
-      "文件工作台继承单一 Windows 所有者权限，不提供多用户隔离，也不能抵御同一 Windows 用户下的恶意软件。",
-      "Desktop 未连接、订阅屏障失败、审批没有选项或请求身份不清时，相关动作会失败关闭；网页不会补造结果。"
-    ]
-  },
   operatingFlow: [
     { title: "安装先生成可回退运行代", detail: "构建与检查通过后，注册器把 Web、Sidecar、Broker 和 Windows 脚本复制到内容寻址目录，验证 manifest，再原子记录 current/previous；登记本身不打开 Remote。" },
     { title: "浏览器先通过认证入口", detail: "手机只访问 HTTPS 反向代理后的 Sidecar；登录、会话、Origin、CSRF 与限速在产品 API 之前生效。" },
@@ -413,7 +397,7 @@ export const codexRemoteProject = {
   ],
   evidenceLayers: [
     { layer: "PUBLIC source（公开源码）", proves: "main 定义 Web、Sidecar、Broker、app-server client、domain、子智能体历史、不可变运行代、更新回滚、security、queue 与 files 的实现和边界。", doesNotProve: "当前机器已安装、启动、成功更新或在线。" },
-    { layer: "v0.1.5 release tests（正式版本测试）", proves: "c3a07719 记录 1771 项测试、public-safety 与 Chromium 六视口验收通过。", doesNotProve: "当前 main、当前 Desktop 或任意网络长期稳定。" },
+    { layer: "v0.1.5 release tests（正式版本测试）", proves: "c3a07719 的正式 CI 记录 1771 项 Vitest、370 文件 PUBLIC scan，以及 Playwright 192 项发现 / 157 通过 / 35 跳过。", doesNotProve: "当前 main、当前 Desktop 或任意网络长期稳定。" },
     { layer: "Current main CI（当前源码持续集成）", proves: "94f1cfa 的最新公开 CI run 31145586404 为 failure。", doesNotProve: "v0.1.5 的正式版本证据失效，或当前运行时在线/离线。" },
     { layer: "Historical real E2E（历史真实端到端）", proves: "真实手机、双 Web 与 Desktop 曾共享任务/轮次并走通审批、文件、子智能体、引导、队列、停止和恢复。", doesNotProve: "本轮当前在线或所有新版本继续兼容。" },
     { layer: "Current control status（当前控制状态）", proves: "现行 Skill 明确 Status=不可用且 runtime frozen；任何控制、启动、停止或重启都禁止。", doesNotProve: "产品没有做成过、源码不可读，或未来不能在独立项目中恢复。" },
@@ -1093,12 +1077,12 @@ export const codexRemoteModules = [
       relations: ["release 测试只证明绑定版本", "历史真实链路证明产品做成过但不证明当前在线", "current main CI 与正式 release 证据分层", "当前 Windows 接管方案重新启用前需要隔离可重复无人值守验收"],
       failureRecovery: ["tag 与 commit 不一致时停止版本结论并回读 refs", "截图来源不清时降为设计演示", "缺本轮运行态证据时不声明当前在线", "接管验收未闭合时只保留历史证据并要求隔离验证"]
     },
-    teaser: "v0.1.5 的1771项测试、六视口Chromium、历史真实多端E2E和20张界面证据分层呈现；main与release身份分开。",
+    teaser: "v0.1.5 的1771项测试、370文件公开扫描、Playwright 192项发现/157通过/35跳过、历史真实多端E2E和20张界面证据分层呈现；main与release身份分开。",
     status: "v0.1.5 正式证据与历史真实链路已形成；当前控制入口 Status=不可用、runtime frozen，不允许用在线探测或重启改变这一状态",
     statusTone: "mixed",
     value: "我能清楚知道产品真正做成并跑通过什么，也不会因为一张绿图、一个历史截图或一个新提交就误判现在在线。",
     why: "源码、单元测试、合成浏览器、真实手机截图、真实 Desktop E2E 和当前在线是不同证据层。把它们合成一个‘可用’标签，会同时夸大成功和掩盖缺口。",
-    example: "v0.1.5 的 1771 项测试与 Chromium 通过，证明该 release 的代码和合成 UI；2026-07/08 的真实手机验收证明产品确实跑通过；当前 Windows 接管方案仍没有本轮可重复无人值守验收，因此不能从前两层推出当前在线。",
+    example: "v0.1.5 的 1771 项 Vitest 与 Playwright 157/192 通过（35 项按视口跳过），证明该 release 的代码和合成 UI；2026-07/08 的真实手机验收证明产品确实跑通过；当前 Windows 接管方案仍没有本轮可重复无人值守验收，因此不能从前两层推出当前在线。",
     result: "得到绑定到版本、提交、日期和证据类型的结论：做成过的能力可以明确展示，当前未验证的状态不会被冒充为已验证。",
     readerStates: {
       pass: "claim 与 release/tag、测试、E2E 或图片证据精确匹配时，页面明确写出能证明的范围。",
@@ -1115,7 +1099,7 @@ export const codexRemoteModules = [
     problem: "解决 release/main 混写、测试冒充运行、合成截图冒充实机、历史实机冒充当前在线，以及把一次接管成功误写成可重复无人值守交付。",
     implementation: [
       "Git refs 与 GitHub release 现场回读提供版本身份。",
-      "CI workflow 分开 source check、public safety 与 Chromium E2E。",
+      "GitHub Actions run 30756063724 / job 91519619868 分开记录 source check、370 文件 public safety 与 Chromium E2E；Release 正文没有重复这些计数，正式计数来源是 CI 日志。",
       "Playwright SharedRuntime 明确使用合成任务，不能升级成 Desktop 实机证据。",
       "历史 acceptance 记录同一任务、审批、文件 SHA、队列、停止和重连。",
       "公开画廊为每张图写清能证明与不能证明什么，避免把合成界面或历史实机画面冒充当前在线。",
@@ -1154,11 +1138,13 @@ export const codexRemoteModules = [
     sources: [
       { path: "docs/release-notes-v0.1.5.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/release-notes-v0.1.5.md", role: "v0.1.5 产品范围与发布说明。" },
       { path: ".github/workflows/ci.yml", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/.github/workflows/ci.yml", role: "Windows source、public safety 与 Chromium 验收流程。" },
-      { path: "docs/acceptance-todo.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/acceptance-todo.md", role: "历史真实手机/Desktop 同任务验收记录。" }
+      { path: "docs/acceptance-todo.md", href: "https://github.com/wlyaaaaa/codex-local-remote/blob/main/docs/acceptance-todo.md", role: "历史真实手机/Desktop 同任务验收记录。" },
+      { path: "GitHub Actions run 30756063724", href: "https://github.com/wlyaaaaa/codex-local-remote/actions/runs/30756063724", role: "v0.1.5 同提交测试、PUBLIC scan 与 Playwright 数量的正式 CI 回执。" }
     ],
     verification: [
       "Git refs 本轮只读回读 main=94f1cfa、v0.1.5=c3a07719。",
-      "v0.1.5 记录 1771 tests、370-file public scan 与 157 Playwright 场景。",
+      "v0.1.5 的 GitHub Actions run 30756063724（attempt 2，job 91519619868）记录 114 个 Vitest 文件 / 1771 passed、370 files checked、Playwright 192 discovered / 157 passed / 35 skipped。",
+      "该 CI run 没有独立上传 artifact 或签名 attestation；Release 正文也不拥有这三个计数，不能把 release 文案本身冒充计数回执。",
       "20张最终图片 SHA 全唯一，总原图约2.51 MiB，三段式 WebP 预览约0.30 MiB。",
       "历史真实链路与产品证据已形成；本轮未完成当前 Windows 接管方案的可重复无人值守验收，重新启用前需隔离验证。",
       "本轮没有启动、查询或控制任何 Codex Remote runtime。"

@@ -10,7 +10,7 @@ export function createTermAnnotator(translations) {
     if (!lookup.has(key)) lookup.set(key, translation);
   }
   const expression = new RegExp(
-    `(?<![A-Za-z0-9_-])(?:${ordered.map(([term]) => escapeRegExp(term)).join("|")})(?![A-Za-z0-9_-]|（|\\.[A-Za-z0-9])`,
+    `(?<![A-Za-z0-9_.-])(?:${ordered.map(([term]) => escapeRegExp(term)).join("|")})(?![A-Za-z0-9_-]|（|\\.[A-Za-z0-9])`,
     "gi"
   );
 

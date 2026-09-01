@@ -334,7 +334,7 @@ export const personalHealthModules = [
     ],
     verification: [
       "10 项 enrollment 测试覆盖 desktop client、PKCE、scope、stdin、backup 与 read-back",
-      "11 项 refresh 测试覆盖一次调用、离线优先、rebind、bounded output、timeout 与 interruption",
+      "12 项 refresh 测试覆盖一次调用、离线优先、rebind、bounded output、timeout 与 interruption",
       "本轮没有触发真实 OAuth、Secret Broker 或 provider，因此当前现场状态保持 Unknown"
     ],
     relation: "它是唯一凭据/网络前台入口；成功后把精确 manifest 交给原始保全和离线判断模块，自己不解释健康。"

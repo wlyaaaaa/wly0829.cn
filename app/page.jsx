@@ -1676,9 +1676,9 @@ function SystemSkillFamily({ family }) {
 
 function SystemProjectAssetCard({ asset }) {
   const anchorId = `system-project-asset-${asset.id}`;
-  const hasDetailedPage = !asset.href.includes("/github-index/repository-ledger");
   const skillItems = systemAssetSkillItems(asset);
   const detailedProject = projectCatalog.find((entry) => entry.project.route === asset.href);
+  const entryLabel = detailedProject ? (asset.entryLabel || "进入完整项目页") : asset.entryLabel;
   const referenceItems = detailedProject ? (projectReferenceLinks[detailedProject.project.slug] || []) : [];
   return (
     <article className="system-project-asset-card" id={anchorId}>
@@ -1686,8 +1686,8 @@ function SystemProjectAssetCard({ asset }) {
       <strong>{asset.title}</strong>
       {asset.repo ? <code>{asset.repo}</code> : null}
       <p>{asset.role}</p>
-      {hasDetailedPage || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
-        {hasDetailedPage ? <SiteLink href={asset.href}>{asset.entryLabel || "进入完整项目页"}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
+      {entryLabel || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
+        {entryLabel ? <SiteLink href={asset.href}>{entryLabel}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
         {referenceItems.map((item) => <SiteLink href={item.href} key={`${item.relation}-${item.href}`}>进入规则<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
         {skillItems.map((item) => <SiteLink href={item.href} key={item.href}>Skill：{item.label}<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
       </div> : null}
@@ -1855,9 +1855,10 @@ function SearchResultsPage({ search }) {
 const skillCategoryDefinitions = [
   { id: "all", label: "全部" },
   { id: "find", label: "找东西", slugs: ["personal-media", "personal-materials", "wechat-direct", "google-workspace-direct"] },
-  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "personal-health", "file-intake-router", "media-person-self", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
+  { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "file-intake-router", "media-person-self", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
+  { id: "personal", label: "个人事务", slugs: ["personal-health", "daily-preferences"] },
   { id: "deliver", label: "文书与交付", slugs: ["document-materials", "work-delivery", "documents", "pdf"] },
-  { id: "diagnose", label: "电脑诊断", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
+  { id: "diagnose", label: "电脑与系统", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
   { id: "ai", label: "AI 协作", slugs: ["llm-backend-toolkit", "native-economy-routing", "token-budget-advisor"] }
@@ -1870,11 +1871,11 @@ function skillCategoryIds(slug) {
 function SkillsPage() {
   const personalSkillCount = skills.filter((item) => item.sourceKind === "personal_install").length;
   const hostIntegratedCount = skills.filter((item) => item.sourceKind === "host_integrated").length;
-  const unavailablePersonalCount = panelSnapshot.skills.activeInstallIntent - personalSkillCount;
+  const unlistedPersonalCount = panelSnapshot.skills.activeInstallIntent - personalSkillCount;
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
-      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力入口）</strong><span>{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；供应清单另有 {unavailablePersonalCount} 个当前不可用入口不展示。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力入口）</strong><span>{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有进入本次公开目录，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不以此目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
         {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
       </div>
@@ -1959,7 +1960,7 @@ function SkillDetail({ item, search }) {
 }
 
 function NotFound() {
-  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><SiteLink href="/projects"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><p className="not-found-easter-egg">啦啦啦，没找到页面啦</p><SiteLink href="/projects"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
 }
 
 function BackToTopButton() {
@@ -1996,7 +1997,12 @@ function SiteFooter() {
             : <a href={item.href} key={item.label} rel="noopener noreferrer" target="_blank"><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code><ArrowRight size={15} aria-hidden="true" /></a>)}
         </nav>
       </div>
-      <div className="site-footer-meta"><span>© 2026 吴乐阳</span><a href={`${site.url}/`}>{site.url}/</a><small>只读产品、规则与能力快照</small></div>
+      <div className="site-footer-meta">
+        <span className="site-footer-identity">© 2026 吴乐阳 <a href={`${site.url}/`}>{site.url}/</a></span>
+        <button className="site-footer-signature" type="button" data-footer-signature aria-label="查看页脚彩蛋"><span data-footer-signature-label>啦啦啦</span></button>
+        <span className="visually-hidden" data-footer-signature-status role="status" aria-live="polite" />
+        <small>只读产品、规则与能力快照</small>
+      </div>
     </footer>
   );
 }

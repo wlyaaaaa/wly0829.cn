@@ -1,39 +1,54 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const pcconfigSnapshot = createProjectSnapshot({
-  observedAt: "2026-08-31T11:43:18Z",
-  label: "机器配置、恢复任务与秘密恢复闭合；Codex Home 已就绪并等待本人退出切换",
-  boundary: "机器配置、核心恢复与恢复介质的现行静态证据已闭合；H 冷备、新机端到端恢复、WEPE 内部盘/网络 smoke（冒烟验证）、BIOS 保存后重启回读及 Codex Home 正式切换仍须分别验收",
+  observedAt: "2026-09-01T02:10:34.6608193Z",
+  label: "主工作站配置与恢复可读；副驾驶笔记本产品已登记、现场状态待目标机回读",
+  boundary: "WLY 主工作站事实已现场回读；副驾驶笔记本仅完成 host-scoped（主机限定）账本、Provider（现场读取器）和恢复源码复核，本次 host_mismatch，设备健康、U 盘世代与原 NVMe（固态硬盘）外置接管仍待目标机验收",
   metrics: [
     { label: "配置地图", value: "v6 · 15 项目 · 157 键" },
     { label: "恢复任务", value: "10 Ready · 0 失败" },
     { label: "秘密恢复", value: "10/10 三路一致" },
-    { label: "Codex 迁移", value: "75.13 GB · 已就绪" }
+    { label: "设备角色", value: "1 主工作站 · 1 副驾驶" }
   ],
   facts: [
-    { label: "配置地图", value: "源仓库 PRIVATE（私有）main 当前提交为 f9245a1；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务。" },
-    { label: "开发存储", value: "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。" },
-    { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。" },
-    { label: "秘密恢复", value: "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。" },
+    { label: "配置地图", value: "PRIVATE main=3fae514；稳定机器投影 v6、44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、21 个 live 启动项、87 个任务" },
+    { label: "开发存储", value: "V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过" },
+    { label: "恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过" },
+    { label: "秘密恢复", value: "10/10 项在三条恢复路线一致；G 路 20 份、PRIVATE 路 65 份快照，跨度 33 天" },
+    { label: "受保护数据", value: "P0 当前选择器、自然启动与时限已经闭合；SafeSwitch manifest、后续版本和正式数据仍按各自证据分层" },
+    { label: "双机角色", value: "WLY 是主工作站；唯一登记的 LAPTOP-E48N0DRJ 是副驾驶笔记本，承担远控、轻量开发和应急接管。本次从 WLY 调健康入口只得到 not_applicable/host_mismatch，不冒充笔记本当前健康" },
+    { label: "当前配置地图", value: "源仓库 PRIVATE（私有）main 与 origin/main 当前同为 3fae514305862a0eafefdcbedb233436094c3efe，worktree clean；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件和 87 个任务；Get-StartupInventory 当前另回读 21 个启动项（20 enabled、1 disabled）。", hero: false },
+    { label: "开发存储回读", value: "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。", hero: false },
+    { label: "核心恢复任务", value: "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。", hero: false },
+    { label: "秘密恢复回读", value: "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。", hero: false },
     { label: "稳定机器投影", value: "稳定机器投影当前为 v6，登记 15 个项目路径关系；开发存储有 17 个恢复锚点，C 盘用户配置 inventory（清单）有 26 项，三者都是恢复导航而不是应用可用性的替代证明。", hero: false },
     { label: "恢复介质", value: "恢复介质 Registry 当前 16 项资产通过校验，0 error、0 warning；BIOS/UEFI 文字基线在 E 源、E 镜像和 G 热备三份同 SHA-256，F 有救急速查，文档引用的 20 个照片路径均存在且本次未读取照片内容。", hero: false },
-    { label: "Codex Home 迁移", value: "Codex Home 迁移覆盖 39911 个文件、75.13 GB；最终差异为 565 个文件 / 6.74 GiB，ReadyCheck 用时 58 秒，预计离线窗口 4:37–7:56。当前已就绪并等待本人退出后切换。" },
-    { label: "凭据中心", value: "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。" },
-    { label: "受保护数据", value: "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。", hero: false },
-    { label: "运行健康", value: "fresh Drift 返回 runtime_health=pass、failure_last_result_count=0、recovered_historical_count=0；旧启动失败不再进入当前任务健康计数。", hero: false }
+    { label: "电脑角色", value: "PCConfig 现登记两种电脑角色：WLY 主工作站与 1 台副驾驶/备用笔记本 LAPTOP-E48N0DRJ；后者有独立 host identity 门、健康 Provider、远控/网络基线、恢复任务、writer 状态机和 USB 世代设计。", hero: false },
+    { label: "副驾驶现场边界", value: "2026-08-31 从当前 WLY 调副驾驶健康入口返回 schema pcconfig.secondary-laptop-health.v1、status=not_applicable、reason=host_mismatch；这证明主机门正确停止，不证明笔记本服务或恢复状态。", hero: false },
+    { label: "P0 当前状态", value: "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。", hero: false },
+    { label: "Drift 现场", value: "2026-09-01T02:10:34Z fresh Drift 返回 6 pass、1 warn、0 block，证据为 6 pass、0 fail、1 unknown；唯一 attention 是普通权限任务观察不完整，runtime_health 仍 pass 且 failure_last_result_count=0。", hero: false },
+    { label: "Codex Home 现役落点", value: "AI 工作台当前唯一运行根是 E:\\Data\\AppData\\Codex；C:\\Users\\10979\\.codex 只是指向它的兼容 junction，不存在第二份活动 Codex Home。", hero: false },
+    { label: "个人数据当前副本", value: "PersonalDataReplica-Hot-Daily 已登记并启用，状态 Ready、最近结果 0；2026-08-31 16:25:27（本机时间）的 personal-data.replica-receipt.v1 回读五个映射均 complete/post_verified=true、copy/extra=0、errors=0，且 payload_content_read=false。它证明完成时刻 E/G 零差异，不证明两次任务之间持续相同；覆盖、重命名与删除会同步，也不提供历史版本。", hero: false },
+    { label: "Password Center", value: "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。", hero: false },
+    { label: "授权文件", value: "授权文件实现已包含在上述 9/9 current 安装态中：authorization_file_broker.py 的 source/installed SHA-256 同为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854，manifest anchor 匹配且 Inspect 零写入；独立 6/6 合成测试通过。", hero: false }
   ],
   gaps: [
     "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
     "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
+    "授权文件本次只验证源码、独立测试和安装一致性，没有调用最高权限入口处理真实选择文件；当前 runtime（运行链）与自然用户 E2E 仍未在本次快照复核，不能由 6/6 合成测试或 9/9 安装态替代。正式入口目前也没有独立 preview/dry-run（预览/只预演）动作，只能把显式 SelectedPath/OutputPath 作为输入后在执行链内部生成有界计划。",
     "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练；同机重装、换机、系统盘故障和仅 PE 四条路径因此仍需在真实事件中分别完成端到端回读。",
     "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；恢复后在新系统重建 Hot/Cold 并形成新的 G/H 回执也尚未发生。",
-    "Codex Home 当前已就绪但仍等待本人退出；正式切换、新运行时回读和回滚副本退出条件尚未发生。",
+    "本轮只读回读确认 C 兼容 junction 精确指向 E 唯一根；4d17554 已删除五个完成使命的 Codex Home 迁移脚本与测试，当前没有可再次调用的迁移产品。历史 cutover（切换）只解释现役落点与恢复依据，未来若要再次迁移必须建立新的具名目标和验收。",
+    "PersonalDataReplica-Hot-Daily 的五映射回执已经在 2026-08-31 16:25:27（本机时间）完成回读；该结果只绑定完成时刻，不证明随后新增或修改的数据已在下一次自然运行前同步。",
     "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
     "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
     "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
     "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
     "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
-    "Recovery kit 的 BIOS/UEFI 核心设置记录是 present_verified（材料存在且指纹已核对），CPU/内存生效语义来自 user_confirmed（用户确认）；它不等于完整原生 Profile，也没有证明保存设置后的自然重启。WEPE 隐藏分区是 present_observed（现场观察到），只能说明能进入 PE；内部盘识别与网络 smoke 尚未验证。"
+    "Recovery kit 的 BIOS/UEFI 核心设置记录是 present_verified（材料存在且指纹已核对），CPU/内存生效语义来自 user_confirmed（用户确认）；它不等于完整原生 Profile，也没有证明保存设置后的自然重启。WEPE 隐藏分区是 present_observed（现场观察到），只能说明能进入 PE；内部盘识别与网络 smoke 尚未验证。",
+    "副驾驶笔记本当前 ToDesk/Tailscale/FlyingBird、防火墙、工具、WSL/Docker、BitLocker/WinRE、恢复任务、本地/U 盘世代和项目盘均未在目标机现场回读，保持 Unknown。",
+    "原台式机 GM7000 通过 NVMe 硬盘盒在笔记本识盘、持续读取、跨机 BitLocker 解锁、ReFS Dev Drive VHDX 挂载与重型能力检查尚未做真实端到端演练。",
+    "副驾驶本地项目 V:\\Projects\\ai-engineering-lab 无远端且不在恢复胶囊；未建立 PRIVATE Git 或加密导出前仍是单机故障风险。"
   ]
 });
 
@@ -45,8 +60,8 @@ export const pcconfigProject = {
   searchAliases: ["PCConfig能管理哪些机器事实", "PCConfig怎样换机重装", "PCConfig有哪些受保护能力", "PCConfig如何恢复本机配置"],
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "主工作站配置可用；副驾驶笔记本已登记，现场状态待在该机回读",
-  cardStatusTone: "pass",
+  cardStatus: "主工作站配置可用；protected-policy 依赖分类需修复，副驾驶笔记本现场状态待在该机回读",
+  cardStatusTone: "mixed",
   ...pcconfigSnapshot,
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
   summary: "PCConfig 是 Windows（微软操作系统）设备的配置地图和恢复中心。它既管理 WLY 台式主工作站的磁盘、运行时、任务、备份、重大机器动作和明确选中文件的授权加密，也登记一台真实副驾驶笔记本的远控、轻量开发、独立灾备和故障接管边界。我可以直接问“为什么这个任务没启动”“把这些文件加密并确认可恢复”“离开主机时笔记本能做什么”或“台式机坏了怎样继续工作”。",
@@ -75,7 +90,7 @@ export const pcconfigProject = {
     "维护 Registry（结构化登记表）、现场 Provider、稳定投影、漂移检查和验收入口",
     "维护 Windows 计划任务、启动项、受管软件、快捷方式和恢复顺序的机器配置",
     "维护主工作站与副驾驶笔记本的设备角色、主机限定健康入口、双机网络边界和故障接管路线",
-    "维护迁移门禁、核心恢复、热备与冷备衔接、恢复介质和回滚边界",
+    "维护现役路径、核心恢复、热备与冷备衔接、个人数据当前副本、恢复介质和回滚边界",
     "提供 SecretRef（秘密引用标识）、固定账号 Provider 和零明文的秘密使用入口",
     "为用户明确选择的文件或目录提供独立的计划、分块加密、校验、续作和无覆盖恢复入口，并始终保留来源",
     "承载本机受保护重大动作、长期目标授权、版本换挡和受保护数据恢复的机器侧运行边界"
@@ -116,42 +131,6 @@ export const pcconfigProject = {
     { term: "Host-scoped（主机限定）", meaning: "一份账本或 Provider 只有在实时机器身份满足条件时才解释现场；在其他电脑上只能作为设计和恢复导航。" },
     { term: "Recovery capsule（恢复胶囊）", meaning: "副驾驶笔记本的目标状态、窄用户文件、世代闭合和恢复入口；它防止空白新机覆盖旧来源，不是整机镜像。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T22:48:54Z",
-    label: "主工作站配置与恢复可读；副驾驶笔记本产品已登记、现场状态待目标机回读",
-    facts: [
-      "源仓库 PRIVATE（私有）main 与 origin/main 当前同为 d4480abc17574177b91e52b0aff9aebd30583f58，worktree clean；配置地图覆盖 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务。",
-      "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。",
-      "10 个核心恢复任务均为 Ready、最近结果 0，CoreRecovery 3/3 验收通过；任务就绪和业务恢复结果仍按各自责任源分层。",
-      "Secret 恢复 10/10 项在三条路线一致；G 路 20 份、PRIVATE 路 65 份快照，覆盖 33 天。公开回执不返回秘密原文。",
-      "稳定机器投影当前为 v6，登记 15 个项目路径关系；开发存储有 17 个恢复锚点，C 盘用户配置 inventory（清单）有 26 项，三者都是恢复导航而不是应用可用性的替代证明。",
-      "恢复介质 Registry 当前 16 项资产通过校验，0 error、0 warning；BIOS/UEFI 文字基线在 E 源、E 镜像和 G 热备三份同 SHA-256，F 有救急速查，文档引用的 20 个照片路径均存在且本次未读取照片内容。",
-      "PCConfig 现登记两种电脑角色：WLY 主工作站与 1 台副驾驶/备用笔记本 LAPTOP-E48N0DRJ；后者有独立 host identity 门、健康 Provider、远控/网络基线、恢复任务、writer 状态机和 USB 世代设计。",
-      "2026-08-31 从当前 WLY 调副驾驶健康入口返回 schema pcconfig.secondary-laptop-health.v1、status=not_applicable、reason=host_mismatch；这证明主机门正确停止，不证明笔记本服务或恢复状态。",
-      "P0 current 为 revision 68、normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true，低于 180 秒门。",
-      "2026-08-31T17:49:27Z fresh Drift 返回 6 pass、1 warn、0 block，证据为 6 pass、0 fail、1 unknown；唯一 attention 是 tasks.live_match 的 complete_visibility=false，runtime_health 仍 pass 且 failure_last_result_count=0。",
-      "AI 工作台当前唯一运行根是 E:\\Data\\AppData\\Codex；C:\\Users\\10979\\.codex 只是指向它的兼容 junction，不存在第二份活动 Codex Home。",
-      "Password Center 独立安装态为 current：9/9 文件与锚点一致，retired_c_policy_used=false。银行卡三字段可原子保存与盲填，但真实支付页提交始终由用户决定。",
-      "授权文件实现已包含在上述 9/9 current 安装态中：authorization_file_broker.py 的 source/installed SHA-256 同为 5eb7b3e59099ccde45804824d3edef03ced8abfab3ff8a3cbc1252db65123854，manifest anchor 匹配且 Inspect 零写入；独立 6/6 合成测试通过。"
-    ],
-    gaps: [
-      "Google Password Manager 没有稳定逐条 API 或 changefeed；当前只支持官方完整导出快照，reconciliation 状态仍为 missing，不能称实时双向同步。",
-      "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
-      "授权文件本次只验证源码、独立测试和安装一致性，没有调用最高权限入口处理真实选择文件；当前 runtime（运行链）与自然用户 E2E 仍未在本次快照复核，不能由 6/6 合成测试或 9/9 安装态替代。正式入口目前也没有独立 preview/dry-run（预览/只预演）动作，只能把显式 SelectedPath/OutputPath 作为输入后在执行链内部生成有界计划。",
-      "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练；同机重装、换机、系统盘故障和仅 PE 四条路径因此仍需在真实事件中分别完成端到端回读。",
-      "最近一次 CoreRecovery 冷备因 H_unavailable 跳过，没有当前 Codex 对话 H closure；恢复后在新系统重建 Hot/Cold 并形成新的 G/H 回执也尚未发生。",
-      "本轮只读回读确认 C 兼容 junction 精确指向 E 唯一根；没有为了网页重新演练停写增量、原子 cutover（切换）或 rollback（回滚），因此本页证明当前落点，不把历史迁移流程冒充本轮 E2E。",
-      "SafeSwitch manifest 当前 invalid；P0 revision 68 的在线与自然启动证据不能替代该 manifest 缺口的后置修复和回读。",
-      "Workspace 只完成零网络绑定检查，尚未证明远端 OAuth（账号授权）和具体动作本次可用。",
-      "P0 v2 尚无安装根和自然重启证据，只能称源码候选。",
-      "Vault V2 当前只到 protected_install_effect_source_ready（受保护安装动作源码已准备），没有 installer read-back（安装器回读），不能称已安装。",
-      "P5–P7 仍是隔离样例；正式数据动作未授权，正式数据路径也没有被触碰。",
-      "Recovery kit 的 BIOS/UEFI 核心设置记录是 present_verified（材料存在且指纹已核对），CPU/内存生效语义来自 user_confirmed（用户确认）；它不等于完整原生 Profile，也没有证明保存设置后的自然重启。WEPE 隐藏分区是 present_observed（现场观察到），只能说明能进入 PE；内部盘识别与网络 smoke 尚未验证。",
-      "副驾驶笔记本当前 ToDesk/Tailscale/FlyingBird、防火墙、工具、WSL/Docker、BitLocker/WinRE、恢复任务、本地/U 盘世代和项目盘均未在目标机现场回读，保持 Unknown。",
-      "原台式机 GM7000 通过 NVMe 硬盘盒在笔记本识盘、持续读取、跨机 BitLocker 解锁、ReFS Dev Drive VHDX 挂载与重型能力检查尚未做真实端到端演练。",
-      "副驾驶本地项目 V:\\Projects\\ai-engineering-lab 无远端且不在恢复胶囊；未建立 PRIVATE Git 或加密导出前仍是单机故障风险。"
-    ]
-  },
   operatingFlow: [
     { title: "先确认当前是哪台设备", detail: "读取实时计算机名与用户根，区分 WLY 主工作站、副驾驶笔记本和临时 NVMe 接管；主机不匹配就返回不适用，不加载另一台机器的现场路径。" },
     { title: "先确认问题属于机器层", detail: "只有当前决定依赖本机路径、端口、运行时、任务、启动、备份或恢复事实时才进入 PCConfig；项目业务问题继续回到项目本身。" },
@@ -176,9 +155,10 @@ export const pcconfigProject = {
     { name: "Password Center（密码中心）", responsibility: "让用户查找、查看、导入、盲填和恢复凭据，同时把真实秘密留在受保护运行库。", implementation: "独立于退役 C Policy；银行卡三字段原子保存，查看窗口白底纯绿、可逐字段复制，剪贴板历史与云同步关闭并在 60 秒或关窗后按值清理。" },
     { name: "Authorization File Broker（授权文件代理）", responsibility: "把用户明确选择的文件或目录计划成可续作、可校验、可无覆盖恢复的加密包。", implementation: "独立随机域根、包密钥和逐文件密钥；AES-256-GCM 分块对象、加密 state/index、原子输出与无正文 receipt（回执）。不新增服务、数据库或后台任务。" },
     { name: "Browser Bridge（浏览器桥）", responsibility: "把网站登录和银行卡填充限定到用户当前确认的精确网页目标。", implementation: "1.4.0 launcher-verified；AgentCardFill 只对唯一 HTTPS 支付表单使用一次性能力，同时填入卡号、有效期和 CVV，不提交页面。" },
-    { name: "Codex 恢复与迁移", responsibility: "把对话恢复点和 Codex Home 迁移分别做成内容可验证、可以回退的事务。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；Home 迁移以写入退出后的最终增量、ACL/链接清单、原子切换、C 兼容联接和回滚完成。当前 E 是唯一根，C 仅为 junction。" },
+    { name: "Codex 恢复与现役落点", responsibility: "保存对话恢复点，并让应用与恢复工具都解析同一个物理 Codex Home。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；当前唯一根是 E:\\Data\\AppData\\Codex，C 只保留兼容 junction。迁移已完成，专用迁移脚本和测试在 4d17554 退役，不再作为当前动作入口。" },
+    { name: "个人数据当前副本", responsibility: "把五个精确 E 源按当前状态镜像到 G，供本机故障后的快速恢复。", implementation: "PersonalDataReplica-Hot-Daily 由 Scripts 项目拥有；覆盖、重命名和删除直接传播，不保留版本、旧副本或隔离区，只有五映射 complete/post_verified 的业务回执才能证明零差异。" },
     { name: "固定 Google Workspace Provider", responsibility: "通过一个固定账号绑定提供邮件、云盘和日历的类型化动作。", implementation: "凭据用 DPAPI 保存；入口没有通用网址、方法或请求体透传，状态检查可做到 zero-network（零网络）。" },
-    { name: "Protected-policy retirement", responsibility: "证明旧 C 盘规则运行面、Publisher consumer、worker 与任务已经退役，同时保留历史恢复材料和独立产品。", implementation: "Retirement Registry、固定 retired 状态入口、36 依赖分类、6 任务缺席和机器收敛回执。" },
+    { name: "Protected-policy retirement", responsibility: "证明旧 C 盘规则运行面、Publisher consumer、worker 与任务已经退役，同时保留历史恢复材料和独立产品。", implementation: "Retirement Registry 当前有 37 个 source dependency，固定状态入口仍为 retired 且零 mutation；当前 validator 因 independent_product_installer 尚未进入分类 allowlist 而失败，不能继续把旧 36 项 PASS 冒充当前。" },
     { name: "受保护数据连续性", responsibility: "提供版本换挡、最高权限因子、加密保险库、恢复载体和隔离恢复设计。", implementation: "P0–P7（八个严格串行阶段）各有独立完成证据；源码、安装、真实数据迁移和重启验收不能互相冒充。" },
     { name: "漂移与验收", responsibility: "把策略结论和证据结论分开，让失败与 unknown 可定位。", implementation: "稳定 check id、bounded output（有界输出）和按 area/check 精确选择；验证器不会自动修复业务 Owner。" }
   ],
@@ -202,7 +182,7 @@ export const pcconfigProject = {
     { moduleSlug: "secrets-providers", ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
     { moduleSlug: "secrets-providers", ask: "两台电脑之间怎样恢复账号和凭据，能不能直接复制登录状态？", effect: "不能复制旧会话、Cookie、Token、密码或设备身份密钥；在目标设备重新登录，非秘密配置按新路径重建，秘密只从凭据 Owner、Provider 或 SecretRef 恢复。" },
     { moduleSlug: "recovery-backup", ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先验证内容寻址恢复点、逐对象哈希和 closure；G 热备或已闭合的 H 冷备按各自证据恢复，原始对话不上传 GitHub。" },
-    { moduleSlug: "protected-actions", ask: "把 Codex Home 搬到 E 盘，但当前不能重启应用。", effect: "迁移事务会先准备 staging、最终增量、ACL/链接清单和回滚副本；写入仍活跃时保持 waiting_for_codex_exit。当前这次迁移已经完成，E 是唯一根，C 只保留兼容 junction。" },
+    { moduleSlug: "protected-actions", ask: "Codex Home 现在到底在哪里，迁移入口还需要保留吗？", effect: "现场回读 E 是唯一物理根、C 是兼容 junction；已完成迁移的专用脚本和测试已经退役，不再显示为可重复调用的当前能力。未来若要再次迁移，必须重新建立目标、preimage、回滚和验收。" },
     { moduleSlug: "protected-data", ask: "升级受保护数据应用，同时保证失败能退回。", effect: "候选进入不可变旁路版本，经过 pre/post health（切换前后健康检查）后才更新 selector（版本选择器）；失败回到 LKG，无法证明任何版本可用时进入只读恢复。" }
   ],
   evidenceLayers: [
@@ -225,7 +205,8 @@ export const pcconfigProject = {
     { date: "2026-08-24—08-27", commit: "8753374–d3d8d00", result: "CoreGoal V2 进入耐久目标与单步能力模型，Workspace Provider 增加固定类型化读写和原生文档导出，受保护数据推进到 P3/P4 候选；同时补齐受管软件、备份介质结构和恢复 read-back。" },
     { date: "2026-08-28", commit: "0fffc15–c63d804", result: "把 P0–P4 后续实现收敛为更小的 RecoveryKernel（恢复内核）、AuthorityVault（因子保险库）、GoalJournal（目标账本）和 VaultApp（加密文件应用）四角色；改善日常预览/排序，补完 P5–P7 设计与任务投影。" },
     { date: "2026-08-29", commit: "ec98fb1–6922bdb", result: "先补齐残留步骤恢复与旧发布链诊断，随后正式退役 C 盘 protected-policy runtime：移除生产读者、Publisher consumer、worker 与六个任务，保留历史材料和独立产品；再正确分类 P0 历史失败，并为现有桌面恢复入口补齐有界 launcher、测试和快捷方式回读。" },
-    { date: "2026-08-30—08-31", commit: "9449bad–f9245a1", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；Codex 对话进入内容寻址的 G→H 恢复链，Codex Home 形成可预演、可回滚的迁移事务；同时把 BIOS/UEFI 文字基线、恢复介质、驱动、项目路径、用户配置、任务与自然启动验收串成完整换机/重装旅程。" }
+    { date: "2026-08-30—08-31", commit: "9449bad–f9245a1", result: "Password Center 从“能找到密码”进化为可独立恢复、可原子保存银行卡并精确盲填；Codex 对话进入内容寻址的 G→H 恢复链，Codex Home 形成可预演、可回滚的迁移事务；同时把 BIOS/UEFI 文字基线、恢复介质、驱动、项目路径、用户配置、任务与自然启动验收串成完整换机/重装旅程。" },
+    { date: "2026-09-01", commit: "4d17554–3fae514", result: "Codex Home 已稳定在 E 唯一物理根后，删除完成使命的迁移脚本与测试；CoreRecovery 冷备改为消费已验证 Hot context，并登记 PersonalDataReplica-Hot-Daily，把五个精确 E 源的当前副本镜像到 G。" }
   ],
   operationalEntrypoints: [
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
@@ -364,7 +345,7 @@ export const pcconfigModules = [
     shortTitle: "运行与启动",
     title: "运行时、受管软件、启动项与计划任务",
     teaser: "把工具版本、环境元数据、登录启动和计划任务拆成各自可观察、可恢复、不会弹黑窗的运行链。",
-    status: "运行环境与配置地图可读；当前覆盖 17 个启动项、87 个任务，10 个核心恢复任务均 Ready 且最近结果 0",
+    status: "运行环境与配置地图可读；当前 live 覆盖 21 个启动项、Registry 登记 87 个任务，10 个核心恢复任务均 Ready 且最近结果 0",
     statusTone: "mixed",
     searchProjection: {
       intents: ["检查运行时版本", "排查计划任务", "恢复登录启动链", "安全升级受管软件", "判断离线时哪些能力可用"],
@@ -397,7 +378,7 @@ export const pcconfigModules = [
       "更新流程固定为 Resolve → Status → Backup → Preflight → Update → Wait → Verify；目标版本在安装前 pin（精确固定），安装后强制相等。",
       "环境变量索引当前记录 90 个变量元数据和 64 个 PATH（可执行搜索路径）条目；Probe-EnvVar 只返回存在性、作用域和差异，不返回任何值。",
       "启动快照只覆盖当前用户/机器 Run 与用户/公共 Startup 文件夹五个 surface，不复制 Task Scheduler，也不覆盖服务、驱动和 packaged app。",
-      "本轮配置地图覆盖 17 个启动项；更早的 2026-08-29 live startup 20 项观察只保留为历史，不覆盖当前快照。",
+      "Get-StartupInventory 本轮 live 回读 21 个启动项，其中 20 enabled、1 disabled；版本化 startup_snapshot 仍是维护基线，不能覆盖当前现场。",
       "tasks Registry 当前有 87 项；10 个核心恢复任务均为 Ready、最近结果 0，并由 CoreRecovery 3/3 验收分层回读。",
       "OllamaStable32100 与 SelfHeal 任务负责 Broker/内部 backend 的登录启动和幂等恢复；启动前先验当前宿主内存、NVIDIA GPU/显存、命令和模型路径，失败时不创建日志目录或进程。",
       "governance check 只调用登记的 zero-write Provider 和稳定 publisher；同一非 current fingerprint 只有首次或变化时产生 attention。"
@@ -453,10 +434,10 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\tools\\local_gpu_broker\\Test-HeavyRuntimeHostCapability.ps1", role: "重型运行前的当前宿主能力门" }
     ],
     verification: [
-      "2026-08-31T11:43:18Z 配置地图回读 44 份 Registry、15 个项目、157 个配置键、89 个环境变量、64 段 PATH、11 个受管软件、17 个启动项和 87 个任务",
+      "2026-09-01 Get-StartupInventory.ps1 -Json 当前回读 21 个启动项：20 enabled、1 disabled；配置 Registry 仍登记 87 个任务",
       "10 个核心恢复任务均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过",
       "P0 rev68 为 normal、active=LKG、trusted=true、recovery_status=null；最新自然启动为 46984 ms、deadline_met=true",
-      "Get-StartupInventory.ps1 -Json 当前覆盖 17 个启动项",
+      "Get-StartupInventory.ps1 -Json 当前覆盖 21 个启动项",
       "Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json 当前返回 changes_observed，但 action_required=false、confirmation_required=false",
       "2026-08-31 Test-LocalGpuBroker.ps1 返回 ok=true、lease=null、active_ollama_requests=0、ollama_version=0.33.1；这是当前 Broker 状态，不证明每个重型项目已运行",
       "validate_managed_software_catalog.mjs、validate_env_var_index.mjs 与对应回归覆盖 catalog、环境元数据和闭合状态机"
@@ -616,7 +597,7 @@ export const pcconfigModules = [
       "驱动先恢复存储、芯片组、LAN、Wi-Fi、蓝牙、RAID/USB 等关键链；现有系统驱动导出含 230 个 package（驱动包），是匹配新硬件后可选择导入的候选，不保证换板兼容，也不替代厂商当前驱动。",
       "基础系统可登录联网后，从可信 GitHub clone PCConfig、.agents 和 GitHub 总索引三个控制面；再按稳定机器投影 v6 和现场 Provider 重建 PowerShell、Git、Node.js、Python、Go、.NET、WSL、Docker、Ollama 等实际需要的运行时。",
       "项目与用户层使用 17 个恢复锚点、15 个项目路径关系和 26 项 C 盘用户配置 inventory 做导航；先安装工具，再选择性恢复配置并按新盘符改引用，不整包灌回 AppData、cache、旧 session、旧 executable 或陈旧 PATH。",
-      "计划任务恢复投影有 9 个阶段、53 个现行任务，启动快照有 17 项。先恢复项目、解释器、账号入口和配置，再按 rebuild_required、optional、manual_after_install、hold_for_user 与 vendor-owned 边界重建；任务 identity 使用 task_path + task_name，并保存 exact preimage。",
+      "计划任务恢复投影有 9 个阶段、54 个现行任务；当前 live 启动清单为 21 项。先恢复项目、解释器、账号入口和配置，再按 rebuild_required、optional、manual_after_install、hold_for_user 与 vendor-owned 边界重建；任务 identity 使用 task_path + task_name，并保存 exact preimage。",
       "登录与秘密最后分层处理：GitHub/客户端重新登录，SecretRef 只盲用不出明文，Password Center 与媒体/PersonalData 走各自 P0–P7；恢复文件、恢复登录态和应用确认是三个不同结果。",
       "应用验收后才在新系统重新建立备份：发布 G Hot 上下文，并在用户提供 H 解锁窗口后用已验证 Hot 建 Cold。Hot 原子切换 current；Cold 重验卷身份、BitLocker、空间、48 小时时效和 closure，采用加法复制，不使用 /MIR。"
     ],
@@ -630,7 +611,7 @@ export const pcconfigModules = [
       "按现场路径恢复稳定盘位、17 个锚点和 15 个项目关系；copy-first（先复制）、验证 target、改消费者引用，再决定旧路径是否退役。",
       "从官方来源安装当前兼容运行时和软件，按真实安装路径重建非秘密环境变量与 PATH；公共软件、AI、模型、OCR/ASR 放在依赖链后段。",
       "从 26 项 C 用户配置清单中按 Owner 选择恢复；Documents、Downloads、微信、存档保持原生格式，登录态、秘密、浏览器/聊天数据库不作为普通配置整包导入。",
-      "依赖齐全后，按 9 阶段/53 任务重建计划任务，并对 17 个启动项逐个检查；只恢复现役且前置条件满足的项，不从旧 XML 复活退役任务。",
+      "依赖齐全后，按 9 阶段/54 任务重建计划任务，并对 21 个 live 启动项逐个检查；只恢复现役且前置条件满足的项，不从旧 XML 复活退役任务。",
       "重新登录 GitHub、Codex 和必要应用；SecretRef、Password Center、媒体与其他受保护数据各走自己的人工因子与 P0–P7 恢复入口。",
       "自然启动 Windows 与关键应用，核对任务/启动链、项目打开、账号、Documents/Downloads/微信或应用数据可见和必要业务动作；把需登录、unknown 与失败项保留为独立结果。",
       "发布恢复后的稳定机器投影和必要 lifecycle event（生命周期事件），重建 G Hot；H 可用时再建立 Cold 并核对回执，使下一次恢复不依赖旧机器快照。"
@@ -681,8 +662,8 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\registries\\project_restore_anchors.json", role: "17 个开发存储恢复锚点" },
       { path: "E:\\PCConfig\\registries\\projects.json", role: "15 个项目及当前路径导航" },
       { path: "E:\\PCConfig\\registries\\c_user_config_inventory.json", role: "26 项 C 盘用户配置及选择性恢复分层" },
-      { path: "E:\\PCConfig\\registries\\scheduled_task_rebuild_plan.json", role: "9 个阶段、53 个现行任务、恢复决定与授权边界" },
-      { path: "E:\\PCConfig\\registries\\startup_snapshot.json", role: "17 个启动项的现场观察与用途分类" },
+      { path: "E:\\PCConfig\\registries\\scheduled_task_rebuild_plan.json", role: "9 个阶段、54 个现行任务、恢复决定与授权边界" },
+      { path: "E:\\PCConfig\\registries\\startup_snapshot.json", role: "版本化启动维护基线；当前 21 项仍由 live Provider 回读" },
       { path: "E:\\PCConfig\\registries\\stable_machine_projection.json", role: "版本 6 的硬件、磁盘和运行时稳定基线" },
       { path: "E:\\PCConfig\\registries\\backup_media_structure.json", role: "Hot/Cold 介质结构导航" },
       { path: "E:\\PCConfig\\registries\\acceptance_checklist.json", role: "分区域验收入口，当前 core_recovery 精确选择三项" },
@@ -697,7 +678,7 @@ export const pcconfigModules = [
       "同次只读 CoreRecovery Inspect 返回 pcconfig.core_recovery_observation.v2、status=ready、warnings=[]，报告 10 个任务、9 个 backup set、2 个 external owner；不枚举 payload 名称或正文",
       "同次 Invoke-PCConfigAcceptance.ps1 -NoWrite -Area core_recovery -Json 返回 3 PASS、0 fail、0 unknown、0 blocking_unresolved",
       "Invoke-StableMachineProjection.ps1 -Action Read -Json 返回 projection_version=6；project_restore_anchors、projects 与 c_user_config_inventory 分别登记 17、15、26 项",
-      "scheduled_task_rebuild_plan.json 当前为 9 个阶段、53 个任务；startup_snapshot.json 当前观察 17 个启动项。两者是重建导航，不单独证明自然启动",
+      "scheduled_task_rebuild_plan.json 当前为 9 个阶段、54 个任务；Get-StartupInventory 当前观察 21 个启动项。两者是重建导航与现场清单，不单独证明自然启动",
       "BIOS 文字记录的 E 源、E 镜像与 G 热备三份 SHA-256 均为 2FE3B5C7…B0E21B；F 救急速查存在。20 个引用照片路径只做存在性检查，本次未读取照片",
       "BIOS 核心基线为 present_verified，CPU/内存生效为 user_confirmed；native_profile_status=not_found，PCB revision、保存后自然重启和完整外围菜单仍未独立验证",
       "F 的 UEFI→PE 启动由用户确认；WEPE 隐藏分区仅 present_observed，内部 Windows 磁盘可见和网络可用的 PE smoke 仍未执行",
@@ -1011,17 +992,17 @@ export const pcconfigModules = [
     shortTitle: "受保护动作",
     title: "旧受保护平台退役与机器动作归属",
     teaser: "旧规则 Publisher（发布器）、CoreGoal consumer（目标消费者）和通用执行链退出生产；当前每个机器动作回到自己的窄 Owner、事务、授权和回读，不再共享一个万能管理员平台。",
-    status: "protected-policy status=retired；6 个退役任务缺席，CoreGoal 仅 frozen historical compatibility",
+    status: "protected-policy status=retired 且 6 个退役任务缺席；现行 Registry 37 个依赖，但当前分类 validator 因 allowlist 漂移失败",
     statusTone: "mixed",
     searchProjection: {
-      intents: ["确认旧 policy 是否退役", "执行受保护机器动作", "迁移 Codex Home", "保留历史回退", "区分规则发布和机器动作"],
-      entities: ["E rules", "退役 C policy", "CoreGoal 历史兼容", "BitLocker", "机器动作 Owner", "Codex Home 迁移"],
-      relations: ["E rules 与 PCConfig 机器动作分离", "退役链不再发布或执行", "独立产品不继承旧 policy", "迁移事务绑定 preimage 和回读"],
-      failureRecovery: ["旧任务重现时阻断退役验收", "历史入口失败不冒充 E rules 失败", "迁移未切换保持 waiting", "回滚失败保持精确状态"]
+      intents: ["确认旧 policy 是否退役", "执行受保护机器动作", "确认 Codex Home 现役落点", "保留历史回退", "区分规则发布和机器动作"],
+      entities: ["E rules", "退役 C policy", "CoreGoal 历史兼容", "BitLocker", "机器动作 Owner", "Codex Home 现役落点"],
+      relations: ["E rules 与 PCConfig 机器动作分离", "退役链不再发布或执行", "独立产品不继承旧 policy", "完成迁移只保留现役落点和历史恢复依据"],
+      failureRecovery: ["旧任务重现时阻断退役验收", "历史入口失败不冒充 E rules 失败", "现役落点漂移时只读回读物理根与 junction", "未来新迁移缺少专用 Owner 时停止"]
     },
-    value: "我能知道一项高影响机器操作现在该走哪里：规则发布归 .agents，Codex Home 迁移走自己的可回滚事务，BitLocker、Password Center、P0–P7 各走独立产品入口；旧 C policy 只保留历史，不再因为拥有管理员能力就成为万能执行器。",
+    value: "我能知道一项高影响机器操作现在该走哪里：规则发布归 .agents，BitLocker、Password Center、P0–P7 各走独立产品入口；Codex Home 当前只是一项已闭合的机器落点事实，迁移工具已经退役。旧 C policy 只保留历史，不再因为拥有管理员能力就成为万能执行器。",
     why: "旧 C policy 平台把规则发布、长期目标、机器动作和多个产品耦合在一起，既复杂又容易把一个系统的授权扩散到另一个系统。完整退役不只是删任务，还要把现役动作逐项交回真实 Owner，保留必要恢复材料，并证明独立产品没有被误删或被旧状态重新激活。",
-    example: "例如这次把 Codex Home 切到 E 盘时，迁移事务先保存 preimage、最终增量、ACL/链接清单和回滚副本；写入仍活跃时曾保持 waiting_for_codex_exit，退出后才原子切换并回读。现在 E 是唯一根，C 只是一条兼容 junction；全过程没有创建旧 CoreGoal step，也没有让规则 Publisher 或 BitLocker containment 代执行。另一个例子是规则发布，它只走 .agents 的 E release。",
+    example: "例如历史上的 Codex Home 切换曾先保存 preimage、最终增量、ACL/链接清单和回滚副本；写入仍活跃时保持 waiting_for_codex_exit，退出后才原子切换并回读。现在 E 是唯一根，C 只是一条兼容 junction，迁移工具已经退役；另一个例子是当前规则发布，它只走 .agents 的 E release。",
     result: "我最终得到明确的动作归属和状态：旧 policy 是否保持 retired、历史材料是否完整、当前请求对应哪个窄 Owner、授权是否覆盖、preimage/rollback 在哪里、执行和回读是否发生。没有对应专用入口的动作不会退回通用管理员 shell。",
     readerStates: {
       pass: "旧 policy 保持 retired、任务与 worker 缺席，当前动作又能由自己的窄 Owner 提供授权、preimage、执行和回读时，两条路线分别成立而不互相继承。",
@@ -1034,18 +1015,18 @@ export const pcconfigModules = [
       "CoreGoal V2 Registry 为 frozen_historical_compatibility，禁止新 goal/step，policy-publish consumer inactive。",
       "6 个旧目标任务必须 absent，系统不得有匹配的 Authority/Protected service 或 policy Python worker。",
       "Secret Broker、Password Center、BitLocker 和 P0–P7 是独立产品，退役不能删除或改变它们。",
-      "当前机器动作必须有具名 Owner 和窄入口：Codex Home migration、CoreRecovery、RDP/Tailscale、Secret Broker、P0 selector 等各自拥有 transaction/read-back，不能互相借授权。",
+      "当前机器动作必须有具名 Owner 和窄入口：CoreRecovery、RDP/Tailscale、Secret Broker、P0 selector 等各自拥有 transaction/read-back，不能互相借授权；Codex Home migration 已完成并退役，不再列作当前可调用动作。",
       "bitlocker_containment Registry 的 retirement override 已生效：旧 automatic action、设备信任变更和 scheduled executor 都不允许；手工 BitLocker 与恢复路径仍保留。",
       "物理删除 C tree 或彻底卸载历史 CoreGoal 没有发生，未来若需要是另一项明确决定。"
     ],
     problem: "退役不是把状态改成一个字符串。旧任务、worker、service、Publisher、consumer 与所有依赖都要分类和缺席回读，同时保留真正有 consumer 的历史/恢复材料与独立产品。",
     implementation: [
       "registries/protected_policy_retirement.json 是退役结构化事实源；E 盘 PCConfig 的 Get-ProtectedPolicyAuthorityStatus.ps1 返回 retired 摘要。旧 C 历史目录里的同名入口不是当前 Owner。",
-      "Test-ProtectedPolicyRetirement 检查 36 个依赖、6 个任务缺席、状态入口、无 App 版本绑定、Secret Broker 保留和 BitLocker 未改变。",
+      "现行 protected_policy_retirement Registry 有 37 个 source dependency；固定状态入口仍返回 retired、mutations_performed=false。当前 Test-ProtectedPolicyRetirement 因 independent_product_installer 不在 classification allowlist 中返回 protected_policy_retirement_dependency_classification_invalid。",
       "机器收敛回执证明旧任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改。",
       "CoreGoal V2 与 BitLocker containment 使用 retirement override 把旧 policy coupling 冻结为历史，不允许自动 action。",
       "旧 C policy tree、generation 79 和 ledgers 没有物理删除，仍可作为恢复/审计材料。",
-      "Codex Home 迁移是独立机器事务：staging、最终增量、ACL/链接 manifest、原子切换、C 兼容 junction 与 rollback 都由专用入口拥有；本次事务已完成，当前 E 是唯一运行根，C junction 精确指向 E。",
+      "Codex Home 历史迁移曾以 staging、最终增量、ACL/链接 manifest、原子切换、C 兼容 junction 与 rollback 闭合；当前 E 是唯一运行根，C junction 精确指向 E。4d17554 已删除五个迁移脚本/测试，当前没有该事务入口。",
       "E rules 的 current/previous、UAC activation 和 Rules 页面由 .agents 拥有，不再由 PCConfig 安装或发布。"
     ],
     flow: [
@@ -1070,7 +1051,7 @@ export const pcconfigModules = [
       "智能体名称、提示词、管理员权限令牌或复制密钥不能继承最高权限身份",
       "紧急授权不覆盖 system/developer/platform，不伪造密码学或外部事实，也不补足缺失 Carrier/因子",
       "活动规则发布、受保护机器动作和 P0 各自拥有执行与账本，CoreGoal 不内嵌它们",
-      "不因旧平台退役就删除手工 BitLocker 恢复、Secret Broker、Password Center、P0 boot recovery 或专用迁移事务",
+      "不因旧平台退役就删除手工 BitLocker 恢复、Secret Broker、Password Center 或 P0 boot recovery；已完成且无当前消费者的迁移工具应退役",
       "source test、registry 状态或 P0 health 不能单独证明两个真实 consumer 的 effect",
       "未提交 source 和 concurrent dirty work 不计入 installed current"
     ],
@@ -1080,7 +1061,7 @@ export const pcconfigModules = [
       { condition: "旧 C 历史入口返回 integrity failure", response: "如实显示旧入口的 global-shim-invalid，但不把它升级成 E rules 或普通任务 blocker，也不尝试恢复旧 Publisher。" },
       { condition: "Secret Broker 或 BitLocker 被退役误伤", response: "回滚对应 PCConfig 变更并恢复独立产品，不恢复旧 policy runtime。" },
       { condition: "当前机器动作没有专用 Owner 或回滚入口", response: "保持未执行并报告缺口；不调用旧 CoreGoal、Publisher、任意管理员命令或旁路任务。" },
-      { condition: "未来同类迁移在 cutover 前仍有写入进程", response: "保持 waiting_for_codex_exit，不启动切换；继续保留 staging 和回滚材料，待真实退出后再复核。这是事务失败语义，不是当前机器状态。" },
+      { condition: "未来再次提出 Codex Home 迁移", response: "不得调用已退役脚本；先建立新的具名目标、Owner、preimage、停写边界、回滚和验收，再决定是否实现。" },
       { condition: "物理历史材料缺失", response: "报告恢复证据损失；不能为补材料重新启用 Publisher 或 consumer。" }
     ],
     sources: [
@@ -1093,9 +1074,10 @@ export const pcconfigModules = [
     verification: [
       "E 盘 PCConfig Get-ProtectedPolicyAuthorityStatus 当前返回 retired、production_activation=false、reason=protected_policy_retired、historical_state_preserved=true",
       "旧 C 盘历史 Provider 原入口当前返回 active_integrity_failure / global-shim-invalid；按现行 E 规则合同它不是权威、准入、fallback 或 Owner 证明",
-      "Test-ProtectedPolicyRetirement PASS：36 个依赖、6 个退役任务缺席、无 App 版本绑定、Secret Broker 保留、BitLocker 未变、无 mutation",
+      "Test-ProtectedPolicyRetirement 当前 FAIL：37 个依赖中的 independent_product_installer 未被 validator allowlist 接纳；固定 retired 状态、6 个退役任务缺席和独立产品保留仍有各自证据，但不能合并称整体验收 PASS",
       "机器收敛回执证明 6 个目标任务 absent、无匹配 service/worker，P0 boot recovery、Password Center 和 BitLocker 未改",
-      "PCConfig 固定 source cutoff 为 d4480abc17574177b91e52b0aff9aebd30583f58；该 commit 的时间晚于旧 11:43Z 现场，因此页面不再用旧观察时间冒充 source 绑定。2026-08-31T22:48:54Z 只读回读确认 C:\\Users\\10979\\.codex LinkType=Junction、Target=E:\\Data\\AppData\\Codex，且 E 目标存在；本轮未重演 cutover。"
+      "PCConfig 固定 source cutoff 为 3fae514305862a0eafefdcbedb233436094c3efe；main 与 origin/main 一致、worktree clean。4d17554 已退役完成使命的迁移工具；本轮只读回读确认 C:\\Users\\10979\\.codex LinkType=Junction、Target=E:\\Data\\AppData\\Codex，且 E 目标存在。",
+      "PersonalDataReplica-Hot-Daily 已存在、启用、Ready，最近结果 0；最新 personal-data.replica-receipt.v1 于 2026-08-31 16:25:27（本机时间）回读五个映射均 complete/post_verified=true、copy/extra=0、errors=0、payload_content_read=false。"
     ],
     relation: "本模块只说明旧 C policy/CoreGoal coupling 的退役与历史保留；秘密、BitLocker、P0–P7 和 E rules 分别由各自 Owner/模块继续，不因退役相互继承或删除。"
   },

@@ -1170,6 +1170,25 @@ function initializeDocumentPrefetch() {
   document.addEventListener("focusin", (event) => prefetchAnchor(event.target.closest?.("a[href]")));
 }
 
+function initializeFooterSignature() {
+  const button = document.querySelector("[data-footer-signature]");
+  const label = button?.querySelector("[data-footer-signature-label]");
+  const status = document.querySelector("[data-footer-signature-status]");
+  if (!button || !label) return;
+  let resetTimer = 0;
+  button.addEventListener("click", () => {
+    window.clearTimeout(resetTimer);
+    label.textContent = "事情办成啦";
+    button.classList.add("is-revealed");
+    if (status) status.textContent = "页脚彩蛋：事情办成啦";
+    resetTimer = window.setTimeout(() => {
+      label.textContent = "啦啦啦";
+      button.classList.remove("is-revealed");
+      if (status) status.textContent = "";
+    }, 1800);
+  });
+}
+
 function centerCurrentProjectNavigation() {
   if (window.innerWidth > 900) return;
   const navigation = document.querySelector(".project-navigation");
@@ -1190,6 +1209,7 @@ initializeSystemHome();
 initializeSystemSectionNavigation();
 initializeBackToTop();
 initializeFooterEmailCopy();
+initializeFooterSignature();
 initializeFlowField();
 initializeDocumentPrefetch();
 initializePreservedScrollNavigation();

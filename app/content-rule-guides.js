@@ -26,7 +26,7 @@ export const ruleGuides = {
           item("具体项目拥有什么", "业务语义、领域数据、源码、启动和测试方式归具体项目。全局规则不能替项目决定业务。"),
           item("项目规则通常不被全局覆盖", "全局规则和机械门通常只能与项目规则取交集或进一步收紧身份、授权和并发边界，不能改写项目命令、兼容或产品语义。唯一窄例外是授权合同拥有的 PUBLIC 个人数据唯一分级与 project_publication_restriction_authority（项目公开限制授权）：项目收紧 L1/L2 默认必须有真实需要和用户对精确项目、范围、限制的明确授权。", "项目写明必须用它自己的 acceptance.ps1，全局不能因为偏好 pytest 就替换；项目自己写一句“所有个人数据都隐藏”也不能产生用户授权。"),
           item("三个控制面按需进入", "只有相关事实会改变当前决定时才读取对应控制面，不进行周期性全扫，也不要求每个任务依次经过三个仓库。"),
-          item("路径分工", "规则目标是让 AI 工作台运行根和本地数据库最终只保留在 E 数据盘，C 盘只留兼容 junction；这描述的是迁移完成后的状态。当前 Codex Home 仍由 C 盘普通目录承载，E 盘正式目录和 CODEX_HOME 尚未生效。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
+          item("路径分工", "AI 工作台运行根和本地数据库已经统一到 E 数据盘；C 盘同名目录只保留经过验证的 compatibility junction（兼容目录联接），不是第二份权威或数据副本。任务 TEMP/TMP 使用 E 缓存盘的 task 独立目录；仓库/worktree 继续放 V 盘既定根，Z 盘只允许可重建 cache。")
         ]
       },
       {
@@ -243,7 +243,7 @@ export const ruleGuides = {
           item("一个任务最多一个项目", "同项目 scope 不重叠；首次 Claim，同 holder 追加独立 scope 用 Add，扩缩改派用正式 transition。"),
           item("显式跨项目目标使用 coordination_id", "用户明确同一跨项目目标后，首个 binding 固定项目集合和 coordination_id；后续逐项目 Claim 精确非 whole_project scope，各项目授权、effect、验收和 Release 仍独立。RecoverReleaseClaim 默认继承 predecessor 的非空 coordination，Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings，避免恢复或重分区丢失同一目标身份。Child 不继承 coordination，capability 不能跨项目复用；id 漂移、项目集合扩大或 whole_project 均拒绝。"),
           item("写前 AuthorizeAction", "每次写入核对 action、task、scope、binding 和 revision，防止拿旧 claim 改新范围。"),
-          item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。先用固定 Codex lifecycle resolver 判断对方是否仍 active；只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
+          item("已有 Owner 先解析 lifecycle", "不借 shell、plugin、child、worktree 或 UAC 绕过。固定 Codex lifecycle resolver 先读取物理 CODEX_HOME；只有验证 C 盘 compatibility junction 确实指向同一 E 根后，才把兼容路径下发现的 rollout 归一为同一任务记录，绝不把 C 盘重新当成 authority。只有未归档且 active 的 Owner 才发送一次有界请求，非硬依赖继续不冲突工作。"),
           item("AI 新建 Owner 默认 projectless", "只有 live registry 证明 scope 无现役 Owner、当前任务不能 Claim 且独立 Owner 路线确有净价值时才创建；耐久明确授权已经满足用户允许，create_thread 可见就真实调用一次。默认无项目，不能因仓库工作自动选择 saved project。"),
           item("任务创建结果精确分类", "threadId 是可继续管理的真实任务身份；clientThreadId 只证明 setup-pending（准备中），不能传给要求 threadId 的工具。真实工具缺失或 deny 是 unavailable，tool error 是 failed，无可追踪 ID 是 dispatch-unconfirmed；都停止且不盲重试。"),
           item("等待只有一轮", "关键路径只剩 Owner 结果时，作一次 terminal 或 needs-attention 事件等待，不持续轮询 commentary。"),
@@ -485,8 +485,8 @@ export const ruleGuides = {
         intro: "这一节只管理原生子代理的身份、数量、家族、上下文和连续性。正常主路径先在判断前验真，再由 AI 决策，最后只对真实创建做二次复核。",
         items: [
           item("最小主路径", "root 请求由 UserPromptSubmit、child 启动由 SubagentStart 在各自任何 0–10 判断前注入 verified model、effective effort、role、turn hash 与 E identity；随后 AI 按任务语义决定数量、家族、effort 和 scope，root 继续战略与集成。只有准备真实 spawn 时，PreToolUse 才复核现场 TOCTOU 和参数。", "Hook 到底检查什么，谁决定开几个代理？Hook 先验真、创建前再复核；AI 决定开不开、开几个和选哪一类，用户授权仍由原授权边界决定。"),
-          item("1. 身份先于决策", "UserPromptSubmit 验证 root transcript；SubagentStart 从 child transcript 绑定 lineage。宿主从真实 turn context 验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA，并在判断前注入。旧 root 只能在完全没有 Hook 或注入时用用户明确绑定恢复。"),
-          item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
+          item("1. 身份先于决策", "UserPromptSubmit 验证 root transcript；SubagentStart 从 child transcript 绑定 lineage。宿主从真实 turn context 验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA，并在判断前注入。完全没有 Hook 或身份注入的旧 root 可复用同一任务中用户已经作出的自然语言模型与思考等级确认；确认层负责把别名规范化，绑定工具和落盘记录只接收 canonical ID（规范标识）。"),
+          item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节并重派生当前代快照。E 代际变化不会让已经成立的用户确认失效，也不要求用户重复确认；规则撤销该路径时才失败关闭。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
           item("3. 七类事件重判", "任务开始、新独立支路、阻塞、重大 steer、压缩、child terminal、槽位释放。普通工具步骤不填表。"),
           item("4. 每个父代理 0 到 10", "0 合法但不能惯性。Luna 适合封闭可验读重任务，Terra 适合强耦合实现和深调试，Sol 适合最高风险、战略和终审。"),
           item("5. 家族和 effort 只能向下", "只有 gpt-5.6-luna/terra/sol 属于现行三家族；其他宿主 verified 模型归更强的未来模型家族。Luna 只能派 Luna，Terra 可派 Luna/Terra，Sol 可派三家族，未来模型还可派未来模型；Sol 与未来模型可到 Ultra，任何 child 都不得高于父级或超过 Ultra。"),
@@ -497,7 +497,7 @@ export const ruleGuides = {
           item("10. 连续性", "Child 中断优先恢复原 session；不能恢复才重跑或升级；partial 不冒充 complete。"),
           item("11. Root 最终负责", "委派后仍由 Root 验收。Benchmark 只是带来源、版本、日期和置信度的参考，规则文字不能制造宿主 grant。"),
           item("宿主 Gate 做什么", "稳定入口只验证身份、E rules 和参数，不替模型选择模型家族、代理数量、分工或验收，不调度或创建 child，也不制造用户授权；PreToolUse 只做真实 spawn 前 TOCTOU、上限、参数和跨身份 fork 复核。"),
-          item("旧 root 绑定的窄例外", "只有完全没有 Hook 或身份注入的旧 root，才可在用户明确 model/effort 后写入并回读同一 CODEX_THREAD_ID 的 user_attested_verified。Child 不继承，宿主 verified 恢复后自动优先，冲突不能靠绑定绕过。"),
+          item("旧 root 绑定的窄例外", "只有完全没有 Hook 或身份注入的旧 root，才可把同一任务中用户已经给出的自然语言 model/effort 确认规范化为 canonical ID，写入并回读同一 CODEX_THREAD_ID 的 user_attested_verified。E identity 换代只刷新快照、重读并重派生，不重复索要确认；Child 不继承，宿主 verified 恢复后自动优先，规则撤销或身份冲突不能靠旧绑定绕过。"),
           item("官方更新不断路", "受管 Hook 只依赖稳定 bridge/runtime、package family、signer/principal、事件和当前能力发现；Codex app version、build、versioned path、update epoch 与 optional host metadata 不是准入条件。"),
           item("更新后的局部失败", "同一官方主体更新后照常运行。若现场真的缺失某个 UserPromptSubmit、SubagentStart、PreToolUse event 或 spawn capability，只关闭对应委派能力；普通调查、实现、测试和最终答复继续。"),
           item("回执缺失的边界", "回执只用于审计，不能阻塞普通工具和最终答复；不依赖或安装 Stop Hook 作为额外门。")

@@ -19,6 +19,9 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "personal-health", moduleSlug: "current-evidence-route", label: "个人健康项目" },
     { relation: "uses-project", projectSlug: "personal-health", moduleSlug: "protected-foreground-refresh", label: "设备前台更新" }
   ],
+  "daily-preferences": [
+    { relation: "unlisted-project", label: "对应本地项目尚未收录详情" }
+  ],
   "local-secret-broker": [
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }
   ],

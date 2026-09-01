@@ -561,16 +561,16 @@ export const systemActiveAutomations = {
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-08-31T16:22:53.6677663Z",
-  total: 48,
+  observedAt: "2026-09-01 09:54（中国时间）",
+  total: 49,
   publicCount: 27,
-  privateCount: 21,
-  localCloneCount: 45,
+  privateCount: 22,
+  localCloneCount: 46,
   remoteOnlyCount: 3,
   detailedPageCount: 10,
-  identitySha256: "sha256:5dcdadb63d6c6763a295daf6b30570983cb00b3fd7da1e617495fb14fbfc87ba",
-  mappingSha256: "sha256:f22d1bbbe9e79a45fb78b8d3fc36b6f6ce4ef8761aeb6a748f11c6e68a2ab472",
-  description: "这里的数量来自本次 GitHub 项目总账快照，不是永久常量。项目目录提供可深入阅读的完整参考，其余身份与系统角色由项目总账承载；当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
+  mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录仍只提供十个可深入阅读的完整参考，其余资产在系统版图中保持可读；当前网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -662,7 +662,8 @@ export const systemProjectDomains = [
       { id: "ai-llm-job-prep", title: "学习材料库", repo: "ai-llm-job-prep", role: "把课程原件、总结和可打印知识地图组织成可复核的学习底稿。", kind: "学习资料", href: projectLedgerHref },
       { id: "career-development", title: "个人发展协作", role: "把方向、学习、项目表达和长期准备放在同一条可持续推进的工作线上；私人事实不进入首页。", kind: "长期协作", href: projectLedgerHref },
       { id: "formal-materials", title: "文书和材料制作", role: "把合同、说明、申请、事件材料和附件整理成可编辑、可打印、可核验、可恢复的正式成品，并把材料制作、本人操作和接收方处理分开说明。", kind: "文书与材料", href: projectLedgerHref },
-      { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" }
+      { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
+      { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人当前明示、行为事实核对和可纠正推定组织成消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常选择；完整项目页尚未收录，当前从 Skill 进入。", kind: "私人日常协作项目", href: "/skills/daily-preferences", entryLabel: "进入 Skill" }
     ]
   },
   {
@@ -1168,6 +1169,16 @@ export const systemDependencyNodes = [
     detail: "它把普通健康问题送到当前证据、权威研究和领域项目；最终采用、停止与高风险选择仍由本人决定。"
   },
   {
+    id: "daily-preferences-skill",
+    lane: "personal",
+    title: "日常偏好与个性化推荐（daily-preferences）",
+    subtitle: "最新明示优先，用薄快照、事实核对和最小证据给出可纠正的日常选择",
+    href: "/skills/daily-preferences",
+    linkLabel: "Skill：日常偏好与个性化推荐",
+    searchAliases: ["吃什么", "购物", "支付习惯", "出行旅行", "住宿推荐", "数字消费", "服务工具", "审美偏好", "娱乐", "我改主意"],
+    detail: "处理用户本人尚未由专门领域拥有的偏好，包括吃喝、购物、支付消费、出行旅行与住宿、娱乐和数字消费、服务工具、审美与日常决策方式；具体复购或原因先核对事实，旧记录只帮助排序，当前纠正可以立即推翻推定。它不建设中央画像或后台同步，也不替代健康、资产、凭据付款、文书材料、他人偏好和工作执行入口。"
+  },
+  {
     id: "verification",
     lane: "evidence",
     title: "如何确认工作真的完成",
@@ -1403,36 +1414,42 @@ export const systemSkillFamilies = [
   {
     id: "understand-evidence",
     number: "02",
-    title: "读懂声音、扫描件和个人证据",
+    title: "读懂材料、个人事实与日常偏好",
     requests: [
       "“把这段两小时录音转成带时间位置的文字，没听清的不要猜。”",
       "“读这份扫描合同里的金额表格和盖章页；这批混合附件先分清该怎么读。”",
-      "“结合我当前健康事实回答这个问题，新报告先别自动覆盖。”"
+      "“结合我当前健康事实回答这个问题，新报告先别自动覆盖。”",
+      "“今天吃什么？我改主意了，最近不想吃辣，也想试点新鲜的。”",
+      "“按我平时的取舍推荐一个周末景点和住宿，再给两个工具或数字服务选择，说明为什么。”"
     ],
     inputs: [
       "一个明确文件、短列表或与当前问题有关的附件子集",
       "原音频、原图、原报告和当前健康事实",
-      "需要精确到时间、页码、坐标或本人判断的真实问题"
+      "需要精确到时间、页码、坐标或本人判断的真实问题",
+      "用户本人当前明示，以及会改变这次吃喝、购物、支付消费、旅行住宿、娱乐、数字服务、工具或审美选择的最小证据"
     ],
-    collaboration: "先由附件分流选择保留结构最多的读取方式；录音、扫描件、本人判断和健康事实分别进入自己的能力，最后由通用 AI 组织成可理解的回答。",
+    collaboration: "先由附件分流选择保留结构最多的读取方式；录音、扫描件、本人判断、健康事实和日常偏好分别进入自己的能力。偏好路线先尊重当前明示，再用薄快照和最小证据排序；具体复购或原因需要时先核对事实，最后由通用 AI 组织成可理解、可纠正的回答。",
     delivery: [
       "带时间位置的转写、匿名说话人范围和不确定性",
       "可回到页码、表格或坐标核对的扫描结果",
       "具名媒体中本人候选的位置或语音时间段",
-      "区分个人事实、原始报告、医生意见、AI 分析和未知的健康回答"
+      "区分个人事实、原始报告、医生意见、AI 分析和未知的健康回答",
+      "说明具体内容、依据、取舍和推测边界的熟悉、相邻与新鲜日常选择"
     ],
     willNot: [
       "不会把语音或文字识别结果抬高成原件本身",
       "不会因空结果就声称没有声音或没有文字",
       "不会扫描整个媒体库、建立人物库或识别其他人",
-      "不会自动诊断、改药或用新报告静默覆盖当前健康事实"
+      "不会自动诊断、改药或用新报告静默覆盖当前健康事实",
+      "不会把旧消费记录写成固定人格，也不会建立中央画像或后台同步"
     ],
     members: [
       { slug: "file-intake-router", name: "混合附件分流", technicalName: "file-intake-router", summary: "先看清 Word、表格、PDF、图片、压缩包或文件夹结构，再交给保留信息最多的读取器。", href: "/skills/file-intake-router" },
       { slug: "chinese-asr", name: "中文录音理解", technicalName: "chinese-asr", summary: "把中文录音变成带时间位置的文字，保留任务续跑、匿名说话人和本人语音判断的证据边界。", href: "/skills/chinese-asr" },
       { slug: "localocr", name: "扫描件与版面识别", technicalName: "localocr", summary: "读取扫描 PDF、表格、公式、印章和版面，保留页码、结构、坐标和空结果语义。", href: "/skills/localocr" },
       { slug: "media-person-self", name: "具名媒体中的本人判断", technicalName: "media-person-self", summary: "只判断指定照片或录音中是否支持本人候选，并返回可复核的位置、覆盖范围和未知。", href: "/skills/media-person-self" },
-      { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" }
+      { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" },
+      { slug: "daily-preferences", name: "日常偏好与个性化推荐", technicalName: "daily-preferences", summary: "当前明示优先，用薄快照、事实核对和最小证据给出可纠正的消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常建议。", href: "/skills/daily-preferences" }
     ]
   },
   {

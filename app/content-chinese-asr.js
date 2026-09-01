@@ -1,26 +1,40 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const chineseAsrSnapshot = createProjectSnapshot({
-  observedAt: "2026-08-31T11:59:37.2566597Z",
-  label: "当前源码、345 项单元测试与本机依赖已闭合；历史真实 E2E 可回读，本轮没有重跑录音模型",
-  boundary: "当前 70e3255 源码与 345 项单元回归已核对；历史真实四切片 E2E 可回读，但本轮没有用私人录音重跑模型，也不把自动文字当成事实认证",
+  observedAt: "2026-08-31T18:35:39.7717725Z",
+  label: "当前源码、同日全量回归、安装脚本回归与本机运行工件可核对；离线包和本轮模型 E2E 尚未验收",
+  boundary: "当前 70e3255 源码、同日 345 项全量回归与本轮 18 项安装脚本回归已核对；本机模型回执和 FireRed WSL 可读，但当前没有已构建的离线依赖包，也没有重跑私人录音或离线安装 E2E",
   metrics: [
-    { label: "引擎", value: "6" },
+    { label: "登记 / 可执行", value: "6 / 5" },
     { label: "回归", value: "345/345" },
     { label: "真实长音频", value: "4/4" }
   ],
   facts: [
-    { label: "引擎与证据路线", value: "当前 Registry 公开 6 个显式引擎：SenseVoiceSmall、Qwen3-ASR-1.7B、FireRedASR2-LLM、Paraformer、Fun-ASR-Nano-2512 和 Whisper Large V3；日常 quick 使用 SenseVoiceSmall，strict 使用 Qwen3-ASR-1.7B 加 SenseVoiceSmall；时间线与匿名说话人另配 CAM++，明确授权的云候选是 Qwen Audio 3.0 ASR Flash。" },
-    { label: "当前源码", value: "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。" },
-    { label: "完整回归", value: "2026-08-31 本次 fresh（新鲜）验证为 345/345 项单元测试通过，内部用时 83.035 秒。测试覆盖配置、流水线、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。" },
-    { label: "本机环境", value: "Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 610.88、32607 MiB 显存；WinHTTP 为直连，代理环境干净。" },
-    { label: "运行依赖", value: "FunASR、Qwen ASR 和 PyTorch 均已安装；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。" },
-    { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。" },
+    { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
+    { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
+    { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
+    { label: "重要录音云候选", value: "Qwen Audio 3.0 ASR Flash；必须同时确认重要性和本次上传授权" },
+    { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512 可显式执行；Whisper Large V3 只登记为 fallback/comparison，当前禁止直接转写" },
+    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.524 秒；Doctor 枚举 6 个登记 Profile，直转闭集为 5 个，显存 32607 MiB；历史真实长音频 4/4 切片" },
+    { label: "模型路线", value: "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。", hero: false },
+    { label: "当前源码", value: "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。", hero: false },
+    { label: "完整回归", value: "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，内部用时 83.524 秒，345 项全部通过。测试覆盖配置、流水线、安装恢复、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。", hero: false },
+    { label: "本机环境", value: "Doctor（环境体检）本轮现场识别到 NVIDIA GeForce RTX 5090 D、驱动 616.56、32607 MiB 显存；WinHTTP 为直连，代理环境干净。", hero: false },
+    { label: "运行依赖", value: "Windows 运行环境当前是 Python 3.11.9、PyTorch / TorchAudio 2.11.0+cu128、FunASR 1.4.5、Qwen ASR 0.0.6 和 ModelScope 1.38.1；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。", hero: false },
+    { label: "安装脚本回归", value: "本轮 tests.test_scripts 的 18 项安装与入口脚本回归全部通过，覆盖核心/Qwen/FireRed setup、固定模型下载、依赖锁导出、wheelhouse 构建与校验、offline install、Smart API 和两类 smoke 脚本的静态合同。", hero: false },
+    { label: "Qwen 模型回执", value: "Qwen MODEL_RECEIPT 当前为 1763 字节、SHA-256=0c43de9dd883adefb65cfa1477ad7156f749868105a554e647b47de73c841ef9，绑定 revision a04930dbe5419bfee073f7cade734f572689a3a8 的 13 个必要文件、合计 4703115105 字节；本轮确认文件都存在且大小一致。", hero: false },
+    { label: "FireRed 模型回执", value: "FireRed MODEL_RECEIPT 当前为 2124 字节、SHA-256=c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，绑定 revision 2c5e0f415b9afb8f67cb8b00ea4c54959f70e824 的 14 个必要文件、合计 18870501538 字节；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净。", hero: false },
+    { label: "FireRed WSL", value: "FireRed WSL 当前使用 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0 和 NumPy 2.4.2；CUDA 与 BF16 可用，WSL 约 32 GiB RAM + 8 GiB swap，当前可用量高于半精度装载门槛。", hero: false },
+    { label: "模型 Registry", value: "当前模型 Registry（登记表）包含 6 个 Profile：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；其中前 5 个进入 direct transcription（直接转写）闭集，Whisper 只作 fallback/comparison 登记，pipeline 明确拒绝直接执行。", hero: false },
+    { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。", hero: false },
     { label: "媒体替换保护", value: "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。", hero: false },
-    { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成 4/4 切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
+    { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
   ],
   gaps: [
     "本次为了建设看板只运行全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；历史 E2E 仍是真实成品证据，但不能冒充本轮 fresh 模型验收。",
+    "当前 offline\\manifests 只有占位文件，没有 requirements-lock.txt、wheelhouse.sha256 或 wheelhouse.json，offline\\wheelhouse 也不存在；因此当前只有恢复脚本和回归，不存在可直接拿走的本轮离线依赖包，也没有运行 install-offline smoke。",
+    "本轮只核对两份模型回执自身 SHA-256、必要文件存在性与声明大小，没有重新计算约 4.7 GB Qwen 和约 18.9 GB FireRed 全部权重文件的 SHA-256，也没有触发模型 loader 的完整身份校验。",
+    "现有 wheelhouse 只恢复 Windows Python 依赖，不打包模型权重，也不完整重建 FireRed 的 WSL 源码、Python 环境和模型目录；完全断网的新机还必须事先从可信备份保留这些工件，项目当前没有一键生成并验收完整离线恢复包的脚本。",
     "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口还需要明确本次重要录音与上传授权，也没有调用。",
     "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
     "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
@@ -58,19 +72,6 @@ export const chineseAsrProject = {
     problem: "某个引擎失败、两路分歧、检测到疑似幻觉或长音频只有部分完成时，保留可用片段但明确标为 provisional（暂定）或需要复核，不把降级结果冒充完整成功。",
     unavailable: "模型、GPU（图形处理器）、音频解码、任务服务、依赖工件或必要授权不可用时，返回具体阻断位置和已有任务身份；环境损坏时按依赖与模型两条恢复链处理，不反复提交录音，也不自动上传云端。"
   },
-  cardMetrics: [
-    { label: "登记 / 可执行", value: "6 / 5" },
-    { label: "回归", value: "345/345" },
-    { label: "真实长音频", value: "4/4" }
-  ],
-  heroFacts: [
-    { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
-    { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
-    { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
-    { label: "重要录音云候选", value: "Qwen Audio 3.0 ASR Flash；必须同时确认重要性和本次上传授权" },
-    { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512 可显式执行；Whisper Large V3 只登记为 fallback/comparison，当前禁止直接转写" },
-    { label: "本轮快照", value: "PUBLIC main=70e3255；345/345 单元测试用时 83.524 秒；Doctor 枚举 6 个登记 Profile，直转闭集为 5 个，显存 32607 MiB；历史真实长音频 4/4 切片" }
-  ],
   productPrinciples: [
     { title: "原音频始终是真相来源", detail: "转写首先是搜索和回听导航，不是录音真实性、说话人身份或法律事实认证。" },
     { title: "流畅不等于可靠", detail: "模型越能生成通顺文字，越要把不确定、分歧和疑似内容变成可定位的复核清单。" },
@@ -127,35 +128,6 @@ export const chineseAsrProject = {
     { term: "SecretRef（秘密引用）", meaning: "只引用受管密钥，不把密钥值放进命令、日志、Git 或模型上下文。" },
     { term: "E2E（端到端验证）", meaning: "使用真实音频从入口跑到最终文件并检查用户可见结果；单元测试和 Doctor 不能替代它。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T18:35:39.7717725Z",
-    label: "当前源码、同日全量回归、安装脚本回归与本机运行工件可核对；离线包和本轮模型 E2E 尚未验收",
-    facts: [
-      "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。",
-      "PUBLIC（公开）main 当前提交为 70e3255326ad8ba7b0e335fdf6b4a19caf0d8029；本地主检出与 origin/main 为 0/0，工作树干净。",
-      "2026-08-31 本次 fresh（新鲜）验证运行 345 项单元测试，内部用时 83.524 秒，345 项全部通过。测试覆盖配置、流水线、安装恢复、长音频、批量、服务、结果写入、审计、客观音频状态、GPU 协调、云入口、说话人证据和归属投影。",
-      "Doctor（环境体检）本轮现场识别到 NVIDIA GeForce RTX 5090 D、驱动 616.56、32607 MiB 显存；WinHTTP 为直连，代理环境干净。",
-      "Windows 运行环境当前是 Python 3.11.9、PyTorch / TorchAudio 2.11.0+cu128、FunASR 1.4.5、Qwen ASR 0.0.6 和 ModelScope 1.38.1；模型配置文件可读，默认快速引擎为 SenseVoice，严格模式为 Qwen3-ASR-1.7B 加 SenseVoice。",
-      "本轮 tests.test_scripts 的 18 项安装与入口脚本回归全部通过，覆盖核心/Qwen/FireRed setup、固定模型下载、依赖锁导出、wheelhouse 构建与校验、offline install、Smart API 和两类 smoke 脚本的静态合同。",
-      "Qwen MODEL_RECEIPT 当前为 1763 字节、SHA-256=0c43de9dd883adefb65cfa1477ad7156f749868105a554e647b47de73c841ef9，绑定 revision a04930dbe5419bfee073f7cade734f572689a3a8 的 13 个必要文件、合计 4703115105 字节；本轮确认文件都存在且大小一致。",
-      "FireRed MODEL_RECEIPT 当前为 2124 字节、SHA-256=c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，绑定 revision 2c5e0f415b9afb8f67cb8b00ea4c54959f70e824 的 14 个必要文件、合计 18870501538 字节；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净。",
-      "FireRed WSL 当前使用 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0 和 NumPy 2.4.2；CUDA 与 BF16 可用，WSL 约 32 GiB RAM + 8 GiB swap，当前可用量高于半精度装载门槛。",
-      "当前模型 Registry（登记表）包含 6 个 Profile：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；其中前 5 个进入 direct transcription（直接转写）闭集，Whisper 只作 fallback/comparison 登记，pipeline 明确拒绝直接执行。",
-      "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。",
-      "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。",
-      "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。"
-    ],
-    gaps: [
-      "本次为了建设看板只运行全量单元测试，没有占用重模型重跑 scripts\\smoke-asr-smart.ps1；历史 E2E 仍是真实成品证据，但不能冒充本轮 fresh 模型验收。",
-      "当前 offline\\manifests 只有占位文件，没有 requirements-lock.txt、wheelhouse.sha256 或 wheelhouse.json，offline\\wheelhouse 也不存在；因此当前只有恢复脚本和回归，不存在可直接拿走的本轮离线依赖包，也没有运行 install-offline smoke。",
-      "本轮只核对两份模型回执自身 SHA-256、必要文件存在性与声明大小，没有重新计算约 4.7 GB Qwen 和约 18.9 GB FireRed 全部权重文件的 SHA-256，也没有触发模型 loader 的完整身份校验。",
-      "现有 wheelhouse 只恢复 Windows Python 依赖，不打包模型权重，也不完整重建 FireRed 的 WSL 源码、Python 环境和模型目录；完全断网的新机还必须事先从可信备份保留这些工件，项目当前没有一键生成并验收完整离线恢复包的脚本。",
-      "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口还需要明确本次重要录音与上传授权，也没有调用。",
-      "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
-      "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
-      "真实录音 benchmark、模型组合调优和 VAD（语音活动检测）切片校准属于使用期工作，不是当前源码关闭阻断，但会影响特定录音上的实际准确率。"
-    ]
-  },
   operatingFlow: [
     { title: "先确认运行环境", detail: "正常任务先核对 Python/CUDA、模型配置和固定回执；新机、断网或环境损坏时先进入安装与恢复路线，不用半残环境直接跑录音。" },
     { title: "再确认输入和目标", detail: "固定音频文件、输入指纹、语言、普通或重要录音、快速或严格模式，以及是否需要时间线和说话人线索。" },

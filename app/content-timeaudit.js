@@ -1,34 +1,45 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const timeAuditSnapshot = createProjectSnapshot({
-  observedAt: "2026-08-31T11:18:10Z",
-  label: "PUBLIC main、运行链、聚合 provider 与 180 项完整回归均有新鲜证据；数据库全量审计和整库恢复本次未验",
-  boundary: "采集与大盘现场已核对；本次没有有效游戏帧、完整数据库审计或最新整库恢复演练",
+  observedAt: "2026-08-31T21:45:19Z",
+  label: "001cee0 已发布且 LHM 单 owner 的任务/运行已加载；完整回归与两条现场链通过，故障恢复、正游戏帧、Grafana 和整库恢复 E2E 本次未验",
+  boundary: "源码固定到已发布的 001cee0；主时间线、LHM 单 owner（单一责任方）任务/运行与独立剪贴板 sidecar（伴随子系统）已分层核对；本次没有 LHM 故障注入、有效游戏帧、Grafana 用户可见 E2E（端到端验证）、完整数据库审计、剪贴板真机回环或最新整库恢复演练",
   metrics: [
-    { label: "近1小时样本", value: "3615" },
-    { label: "CPU 均/峰", value: "64.5/68.8°C" },
-    { label: "GPU 均/峰", value: "52.6/54°C" },
-    { label: "磁盘 P95", value: "0.316 ms" }
+    { label: "采样", value: "1 秒 / 3 秒" },
+    { label: "大盘", value: "6 · 78" },
+    { label: "回归", value: "182 + 11" }
   ],
   facts: [
-    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份。" },
-    { label: "存储与展示", value: "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器 healthy（健康）；PostgreSQL 15 位于本机 45432，Grafana 13.0.2 位于本机 53000；产品有 6 张仪表盘、78 个面板。" },
-    { label: "近一小时诊断", value: "`timeaudit_diagnostic_summary.py --hours 1` 本轮返回 status=ok、coverage=fresh、3615 个硬件样本，最新样本年龄 0.058 秒；CPU 均值/峰值 64.5/68.8°C、GPU 52.6/54°C、磁盘 p95 0.316 ms；没有有效游戏帧被正确标为 no_game_frames。" },
-    { label: "运行现场", value: "遥测主链、AHK 与入库器三条无正文 heartbeat（心跳）在 02:30Z 附近刷新，观察时文件年龄约 1–2 秒；Watchdog（看门狗）与每日备份任务最近结果均为 0；packet-loss 信号 14 次、活动状态重叠 6 秒只进入复核边界。" },
-    { label: "源码与回归", value: "Git Owner 确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main；观察时 HEAD 与缓存 origin/main 均为 44a842e82ea03a18174b87fe77d248f776d62eb5，工作树干净；复用项目 Python 3.11 生产依赖与临时 pytest runner 后，完整回归为 180 passed、11 subtests passed，用时 47.33 秒。" },
-    { label: "已根治的采集误差", value: "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。" },
-    { label: "公开安全聚合", value: "公开安全聚合 provider（提供器）在 01:00Z—02:00Z 返回 status=ok、coverage=fresh、3530 个样本；1 个 scheduler_jitter_saturation warning 涉及 110 个样本，且 projection_recheck_recommended=false。", hero: false },
-    { label: "采集可靠性", value: "当前 main 使用单调时钟判断 PresentMon 新鲜度；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。", hero: false },
+    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
+    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
+    { label: "安全聚合快照", value: "2026-08-31T21:45:19Z：3660 个硬件样本、age 0.129 秒、max gap 1.086 秒；活动记录覆盖 3478/3600 秒、未覆盖 122 秒；CPU 65.4/71.4°C、GPU hotspot（热点）最高 64°C、磁盘 p95/max 0.235/10.87 ms" },
+    { label: "运行现场", value: "3 个容器运行、入库器 healthy；LHM 独立任务与 18085 端点在线，主引擎已加载只读 worker（采集工作单元）；no_game_frames；packet-loss 信号 17 次、活动状态重叠 36 秒，仅表示需复核" },
+    { label: "发布与验证", value: "PUBLIC（公开）main（默认主分支）=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，工作树 clean（干净）；完整回归 182 passed（通过）+ 11 subtests（子测试），LHM/Watchdog 定向断言 10/10、只读现场健康 21/21" },
+    { label: "独立剪贴板历史", value: "WM_CLIPBOARDUPDATE 事件采集 + SQLite schema v1 / WAL / FTS5；当前 5234 事件、2312 个 blob（正文对象）、3406 条全文索引，3 个任务与无正文 adapter（适配出口）验证通过，专属 11 项测试通过" },
+    { label: "固定发布边界", value: "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。本轮以该提交为固定 cutoff（截止点），不追踪其后的新提交。", hero: false },
+    { label: "LHM 单 Owner 源码", value: "44a842e..001cee0 的 6 文件变更已成为正式 source（源码）：LibreHardwareMonitor 的运行 owner 收敛到独立 `LibreHardwareMonitor` 计划任务，`telemetry_watchdog.ps1` 是登记的自动恢复路径，hardware_worker.py 对运行中的 LHM 只读本机 18085，端点不可用时留空而不自行拉起、结束或替换 LHM；缺少二进制时的 prepare（文件准备）线程仍只负责取得组件文件。", hero: false },
+    { label: "运行字节加载", value: "hardware_worker.py 当前 blob 为 9cfc397，与 001cee0 完全一致；文件在 16:56:22Z 落盘，项目 `.venv` 的 main.py 逻辑进程在 17:10:05Z 启动，因此本轮不仅确认已发布源码，也确认运行中的主引擎是在新 worker 字节落盘后加载。Windows 中可见的 `.venv` launcher（启动器）与其 Python 3.11 子进程是一个父子运行链，不是两个独立 collector。", hero: false },
+    { label: "LHM 与 Watchdog 现场", value: "`LibreHardwareMonitor` 任务为 Interactive Highest（交互式最高权限）、IgnoreNew（忽略重复实例）且 action（动作）精确指向项目 exe；观察时 1 个 46-thread（线程）实例运行并由 18085 返回 HTTP 200，另有 3 个零线程 stopped（已停止）的 crash ghost（崩溃残影），新健康检查不会把残影冒充在线。`TimeAudit_Watchdog` 每分钟 + 登录触发、IgnoreNew、3 次/1 分钟任务级重试、3 分钟上限，最近一轮结果为 0；任务清单中只有这两个入口引用 LHM / telemetry_watchdog。", hero: false },
+    { label: "容器与数据库现场", value: "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器为 healthy（健康），PostgreSQL 暴露本机 45432，Grafana 13.0.2 暴露本机 53000；只读现场健康脚本 21/21 通过，近 2 分钟 120/120 条硬件样本均有 LHM GPU 电压与 CPU Vcore，最新写入年龄 0.8 秒。", hero: false },
+    { label: "完整回归", value: "001cee0 完整回归为 182 passed（通过）、11 subtests passed（子测试通过）、49.01 秒；另对 LHM/Watchdog 的单 owner、精确身份、睡眠/启动宽限、数据库断线延后、零线程残影和短命 wrapper（封装器）执行 10/10 定向断言。runner（测试运行器）来自本机 Python 3.11，项目依赖优先取 `.venv`，没有安装或改写生产依赖。", hero: false },
+    { label: "剪贴板 Sidecar", value: "剪贴板 sidecar 的当前 PCConfig 有界验证为 passed（通过）：TimeAudit_ClipboardCollector 为 Running，TimeAudit_ClipboardWatchdog 与 TimeAudit_ClipboardNearlineBackup 为 Ready，三任务均为普通用户 Limited（受限）运行级别；无正文 heartbeat 年龄 2824 ms、数据库 integrity=ok、schema_version=1，计数为 5234 个事件 / 2312 个正文对象 / 3406 条 FTS 索引，adapter（适配出口）返回 v1 且 payload（正文载荷）缺省。专属 11 项合成回归另在 0.806 秒内通过。", hero: false },
+    { label: "一小时诊断", value: "`timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T21:45:19Z 返回 schema=timeaudit.diagnostic-summary.v1、owner=timeaudit:diagnostic-history、status=ok、coverage=fresh、3660 个硬件样本，最新样本年龄 0.129 秒、最大 gap 1.086 秒；活动记录覆盖 3478/3600 秒，未覆盖 122 秒。CPU 均值/峰值 65.4/71.4°C、GPU hotspot 最高 64°C、磁盘 p95 0.235 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 17 次、活动状态重叠 36 秒都只进入复核边界。", hero: false },
+    { label: "采集可靠性", value: "当前 main 使用单调时钟判断 PresentMon 新鲜度，避免系统墙钟回拨让陈旧帧继续存活；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。", hero: false },
     { label: "运行依赖", value: "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。", hero: false },
     { label: "容量合同", value: "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。", hero: false },
-    { label: "接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；阈值信号只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
+    { label: "已根治的采集误差", value: "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。", hero: false },
+    { label: "聚合接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
   ],
   gaps: [
-    "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
     "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
-    "本轮完整源码回归已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与单元测试都不能证明历史数据全绿。",
+    "001cee0 的 182 项完整源码回归与 21 项现场健康检查已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与测试都不能证明历史数据全绿。",
+    "LHM 单 owner 的 source、任务 action、运行中主引擎加载时序、单一活实例、18085 端点和 Watchdog 最近成功均已核对；本次坚持只读，没有结束 LHM、阻断端点或等待真实崩溃，因此“故障后由 telemetry_watchdog 唯一恢复”的生产故障注入 E2E 仍未验证。",
+    "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
+    "本次没有打开 Grafana 做 index→Overview→代表模块的用户可见路径验收；容器运行、聚合查询和历史截图不能替代当前浏览器 E2E。",
     "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
     "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
+    "README@001cee0 仍写 `main.py + 5 个 worker`，但当前 main.py 只导入 activity/context/hardware/lifecycle 四个 worker，源码树也只有这四条；本页按代码与测试展示四个，并把 README 数量视为待 Owner 修正的源文档漂移。",
+    "剪贴板专属 11 项单元测试与 PCConfig 无正文运行验证通过，但本次没有执行会写入合成剪贴板内容的真机 smoke test（回环测试），也没有从 G 盘近线副本恢复到空目录；任务结果 0 与备份根存在都不能证明最新副本已完成端到端恢复。",
     "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
   ]
 });
@@ -43,7 +54,6 @@ export const timeAuditProject = {
   cardStatus: "本机时间线与剪贴板历史持续采集，可回放故障、使用与复制记录",
   cardStatusTone: "pass",
   ...timeAuditSnapshot,
-  snapshotBoundary: "源码固定到已发布的 001cee0；主时间线、LHM 单 owner（单一责任方）任务/运行与独立剪贴板 sidecar（伴随子系统）已分层核对；本次没有 LHM 故障注入、有效游戏帧、Grafana 用户可见 E2E（端到端验证）、完整数据库审计、剪贴板真机回环或最新整库恢复演练",
   searchAliases: [
     "昨晚电脑为什么突然卡",
     "哪个程序闪退写盘或联网",
@@ -66,19 +76,6 @@ export const timeAuditProject = {
     problem: "发现采样空档、指标越界、剪贴板跳过/缺口、后台争抢、崩溃或查询口径异常时，指出受影响组件与恢复入口，不把异常或复制动作直接解释成硬件故障、恶意行为或用户意图。",
     unavailable: "任一链的保存、展示、采集、索引或传感器入口不可用时，只把对应层写成证据不足并受控恢复；不伪造读数，不做长期全表扫描，也不读取私人正文来补一份公开报告。"
   },
-  cardMetrics: [
-    { label: "采样", value: "1 秒 / 3 秒" },
-    { label: "大盘", value: "6 · 78" },
-    { label: "回归", value: "182 + 11" }
-  ],
-  heroFacts: [
-    { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
-    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
-    { label: "安全聚合快照", value: "2026-08-31T21:45:19Z：3660 个硬件样本、age 0.129 秒、max gap 1.086 秒；活动记录覆盖 3478/3600 秒、未覆盖 122 秒；CPU 65.4/71.4°C、GPU hotspot（热点）最高 64°C、磁盘 p95/max 0.235/10.87 ms" },
-    { label: "运行现场", value: "3 个容器运行、入库器 healthy；LHM 独立任务与 18085 端点在线，主引擎已加载只读 worker（采集工作单元）；no_game_frames；packet-loss 信号 17 次、活动状态重叠 36 秒，仅表示需复核" },
-    { label: "发布与验证", value: "PUBLIC（公开）main（默认主分支）=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，工作树 clean（干净）；完整回归 182 passed（通过）+ 11 subtests（子测试），LHM/Watchdog 定向断言 10/10、只读现场健康 21/21" },
-    { label: "独立剪贴板历史", value: "WM_CLIPBOARDUPDATE 事件采集 + SQLite schema v1 / WAL / FTS5；当前 5234 事件、2312 个 blob（正文对象）、3406 条全文索引，3 个任务与无正文 adapter（适配出口）验证通过，专属 11 项测试通过" }
-  ],
   gallery: [
     { src: "/media/timeaudit/dashboard-catalog.png", thumbnail: "/media/timeaudit/thumbs/dashboard-catalog.webp", alt: "TimeAudit 六张仪表盘目录", caption: "2026-08-29 的真实 Grafana 目录：六张盘把性能、流畅度、功耗、取证、后台资源和使用时间组成可回放产品。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明六张仪表盘和 78 个面板曾在真实 Grafana 中组成完整产品入口。", doesNotProve: "不证明当前服务在线、每个查询仍正确或当前数据没有空档。" },
     { src: "/media/timeaudit/screen-time-focus.png", thumbnail: "/media/timeaudit/thumbs/screen-time-focus.webp", alt: "屏幕使用时间与专注复盘", caption: "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", evidenceLevel: "E2", evidenceLabel: "历史真实界面", observedAt: "2026-08-29", sourceCommit: "a5a34d6-era dashboard capture", proves: "证明使用时间与焦点关系曾能在同一大盘阅读，普通应用和时长按真实画面保留。", doesNotProve: "不证明这些应用、标题、时长或生活规律仍是当前事实。" },
@@ -140,37 +137,6 @@ export const timeAuditProject = {
     { term: "diagnostic summary（诊断摘要）", meaning: "在最长 168 小时的窗口内用一次聚合查询返回覆盖、硬件、游戏帧、电脑状态、阈值信号和解释边界。" },
     { term: "E2E（端到端验证）", meaning: "真实采集、写库、查询到用户看图完整走通；源码测试不能替代。" }
   ],
-  currentState: {
-    observedAt: "2026-08-31T21:45:19Z",
-    label: "001cee0 已发布且 LHM 单 owner 的任务/运行已加载；完整回归与两条现场链通过，故障恢复、正游戏帧、Grafana 和整库恢复 E2E 本次未验",
-    facts: [
-      "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），默认 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。本轮以该提交为固定 cutoff（截止点），不追踪其后的新提交。",
-      "44a842e..001cee0 的 6 文件变更已成为正式 source（源码）：LibreHardwareMonitor 的运行 owner 收敛到独立 `LibreHardwareMonitor` 计划任务，`telemetry_watchdog.ps1` 是登记的自动恢复路径，hardware_worker.py 对运行中的 LHM 只读本机 18085，端点不可用时留空而不自行拉起、结束或替换 LHM；缺少二进制时的 prepare（文件准备）线程仍只负责取得组件文件。",
-      "hardware_worker.py 当前 blob 为 9cfc397，与 001cee0 完全一致；文件在 16:56:22Z 落盘，项目 `.venv` 的 main.py 逻辑进程在 17:10:05Z 启动，因此本轮不仅确认已发布源码，也确认运行中的主引擎是在新 worker 字节落盘后加载。Windows 中可见的 `.venv` launcher（启动器）与其 Python 3.11 子进程是一个父子运行链，不是两个独立 collector。",
-      "`LibreHardwareMonitor` 任务为 Interactive Highest（交互式最高权限）、IgnoreNew（忽略重复实例）且 action（动作）精确指向项目 exe；观察时 1 个 46-thread（线程）实例运行并由 18085 返回 HTTP 200，另有 3 个零线程 stopped（已停止）的 crash ghost（崩溃残影），新健康检查不会把残影冒充在线。`TimeAudit_Watchdog` 每分钟 + 登录触发、IgnoreNew、3 次/1 分钟任务级重试、3 分钟上限，最近一轮结果为 0；任务清单中只有这两个入口引用 LHM / telemetry_watchdog。",
-      "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器为 healthy（健康），PostgreSQL 暴露本机 45432，Grafana 13.0.2 暴露本机 53000；只读现场健康脚本 21/21 通过，近 2 分钟 120/120 条硬件样本均有 LHM GPU 电压与 CPU Vcore，最新写入年龄 0.8 秒。",
-      "001cee0 完整回归为 182 passed（通过）、11 subtests passed（子测试通过）、49.01 秒；另对 LHM/Watchdog 的单 owner、精确身份、睡眠/启动宽限、数据库断线延后、零线程残影和短命 wrapper（包装器）执行 10/10 定向断言。runner（测试运行器）来自本机 Python 3.11，项目依赖优先取 `.venv`，没有安装或改写生产依赖。",
-      "剪贴板 sidecar 的当前 PCConfig 有界验证为 passed（通过）：TimeAudit_ClipboardCollector 为 Running，TimeAudit_ClipboardWatchdog 与 TimeAudit_ClipboardNearlineBackup 为 Ready，三任务均为普通用户 Limited（受限）运行级别；无正文 heartbeat 年龄 2824 ms、数据库 integrity=ok、schema_version=1，计数为 5234 个事件 / 2312 个正文对象 / 3406 条 FTS 索引，adapter（适配出口）返回 v1 且 payload（正文载荷）缺省。专属 11 项合成回归另在 0.806 秒内通过。",
-      "`timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T21:45:19Z 返回 schema=timeaudit.diagnostic-summary.v1、owner=timeaudit:diagnostic-history、status=ok、coverage=fresh、3660 个硬件样本，最新样本年龄 0.129 秒、最大 gap 1.086 秒；活动记录覆盖 3478/3600 秒，未覆盖 122 秒。CPU 均值/峰值 65.4/71.4°C、GPU hotspot 最高 64°C、磁盘 p95 0.235 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 17 次、活动状态重叠 36 秒都只进入复核边界。",
-      "当前 main 使用单调时钟判断 PresentMon 新鲜度，避免系统墙钟回拨让陈旧帧继续存活；`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。",
-      "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。",
-      "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。",
-      "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。",
-      "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。"
-    ],
-    gaps: [
-      "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
-      "001cee0 的 182 项完整源码回归与 21 项现场健康检查已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与测试都不能证明历史数据全绿。",
-      "LHM 单 owner 的 source、任务 action、运行中主引擎加载时序、单一活实例、18085 端点和 Watchdog 最近成功均已核对；本次坚持只读，没有结束 LHM、阻断端点或等待真实崩溃，因此“故障后由 telemetry_watchdog 唯一恢复”的生产故障注入 E2E 仍未验证。",
-      "一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论；no_game_frames 是有效状态，不是掉帧或采集故障。",
-      "本次没有打开 Grafana 做 index→Overview→代表模块的用户可见路径验收；容器运行、聚合查询和历史截图不能替代当前浏览器 E2E。",
-      "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
-      "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
-      "README@001cee0 仍写 `main.py + 5 个 worker`，但当前 main.py 只导入 activity/context/hardware/lifecycle 四个 worker，源码树也只有这四条；本页按代码与测试展示四个，并把 README 数量视为待 Owner 修正的源文档漂移。",
-      "剪贴板专属 11 项单元测试与 PCConfig 无正文运行验证通过，但本次没有执行会写入合成剪贴板内容的真机 smoke test（回环测试），也没有从 G 盘近线副本恢复到空目录；任务结果 0 与备份根存在都不能证明最新副本已完成端到端恢复。",
-      "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
-    ]
-  },
   operatingFlow: [
     { title: "分开两条前台记录", detail: "AHK 记录简版使用区间并经 spool 入库；Python 主引擎写硬件、进程、上下文和生命周期事实。" },
     { title: "按快慢节拍采集", detail: "每 1 秒推进硬件、FPS 与前台心跳；全进程扫描约每 3 秒单飞，过慢时跳过而不积压。" },
