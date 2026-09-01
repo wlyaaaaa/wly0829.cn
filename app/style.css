@@ -144,6 +144,30 @@ main {
 .back-to-top:hover,
 .back-to-top:focus-visible { border-color: var(--green); background: var(--surface-green); color: var(--green-dark); transform: translateY(-2px); }
 
+.back-to-top-stamp {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  margin-left: 12px;
+  padding: 3px 9px;
+  border: 1px solid var(--green);
+  border-radius: 3px;
+  background: var(--surface-green);
+  color: var(--green-dark);
+  box-shadow: 2px 2px 0 var(--green-soft);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  line-height: 1.25;
+  vertical-align: middle;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.back-to-top-stamp.is-visible { opacity: 1; transform: none; }
+
 .site-footer {
   position: relative;
   z-index: 2;
@@ -2639,6 +2663,8 @@ main {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  .back-to-top-stamp { opacity: 1; transform: none; }
 }
 
 /* MVP rebuild: owner-facing operating panel */
@@ -6191,6 +6217,7 @@ html[data-enhanced="true"] .system-case-panel:not(.is-current) { display: none; 
 
 @media (max-width: 680px) {
   .back-to-top { right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); width: 42px; height: 42px; }
+  .back-to-top-stamp { min-height: 24px; margin-left: 8px; padding: 3px 7px; font-size: 11px; }
   .capability-link-bar { grid-template-columns: minmax(0,1fr); }
   .capability-link-bar > strong { border-right: 0; border-bottom: 1px solid var(--line); }
   .capability-link-bar > div { flex-direction: column; }

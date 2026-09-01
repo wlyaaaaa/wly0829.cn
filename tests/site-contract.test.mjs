@@ -428,7 +428,15 @@ test("long pages expose one unobtrusive back-to-top control", async () => {
   assert.match(runtimeSource, /window\.scrollY < Math\.max\(520, window\.innerHeight \* 0\.75\)/);
   assert.match(runtimeSource, /const footer = document\.querySelector\("\.site-footer"\)/);
   assert.match(runtimeSource, /const footerVisible = footer[\s\S]{0,160}button\.hidden =[\s\S]{0,160}\|\| footerVisible/);
+  assert.match(pageSource, /data-back-to-top-stamp-status[\s\S]{0,120}aria-live="polite"/);
+  assert.match(runtimeSource, /let hasShown = false[\s\S]*?window\.scrollY <= 2[\s\S]*?showStamp/);
+  assert.match(runtimeSource, /stamp\.textContent = "↟ 兜一圈，回来啦"/);
+  assert.match(runtimeSource, /status\.textContent = "已回到页面顶部。兜一圈，回来啦。"/);
+  assert.match(runtimeSource, /window\.setTimeout\(hideStamp, 1800\)/);
+  assert.match(runtimeSource, /event\.key !== "Escape"[\s\S]{0,120}hideStamp\(\)/);
   assert.match(styleSource, /\.back-to-top:hover,[\s\S]{0,180}border-color:\s*var\(--green\)/);
+  assert.match(styleSource, /\.back-to-top-stamp[\s\S]{0,700}\.back-to-top-stamp\.is-visible/);
+  assert.match(styleSource, /prefers-reduced-motion:\s*reduce[\s\S]*?\.back-to-top-stamp\s*\{\s*opacity:\s*1;\s*transform:\s*none;/);
 });
 
 test("the global footer exposes useful destinations instead of decorative repetition", async () => {

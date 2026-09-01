@@ -708,19 +708,71 @@ function initializeSystemSectionNavigation() {
 function initializeBackToTop() {
   const button = document.querySelector("[data-back-to-top]");
   const footer = document.querySelector(".site-footer");
+  const status = document.querySelector("[data-back-to-top-stamp-status]");
   if (!button) return;
   let frame = 0;
+  let stamp;
+  let stampTimer = 0;
+  let returning = false;
+  let hasShown = false;
+
+  function firstVisibleHeading() {
+    return Array.from(document.querySelectorAll("main h1, main h2")).find((heading) => {
+      const style = window.getComputedStyle(heading);
+      return !heading.classList.contains("visually-hidden")
+        && style.display !== "none"
+        && style.visibility !== "hidden"
+        && heading.getClientRects().length > 0;
+    });
+  }
+
+  function hideStamp() {
+    window.clearTimeout(stampTimer);
+    stampTimer = 0;
+    stamp?.remove();
+    stamp = undefined;
+    if (status) status.textContent = "";
+  }
+
+  function showStamp(reducedMotion) {
+    if (hasShown) return;
+    hasShown = true;
+    const heading = firstVisibleHeading();
+    if (heading) {
+      stamp = document.createElement("span");
+      stamp.className = "back-to-top-stamp";
+      stamp.textContent = "↟ 兜一圈，回来啦";
+      stamp.setAttribute("aria-hidden", "true");
+      heading.append(stamp);
+      if (reducedMotion) stamp.classList.add("is-visible");
+      else window.requestAnimationFrame(() => stamp?.classList.add("is-visible"));
+    }
+    if (status) status.textContent = "已回到页面顶部。兜一圈，回来啦。";
+    stampTimer = window.setTimeout(hideStamp, 1800);
+  }
+
   function update() {
     frame = 0;
     const footerVisible = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
     button.hidden = window.scrollY < Math.max(520, window.innerHeight * 0.75) || footerVisible;
+    if (returning && window.scrollY <= 2) {
+      returning = false;
+      showStamp(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    }
   }
   function scheduleUpdate() {
     if (!frame) frame = window.requestAnimationFrame(update);
   }
   button.addEventListener("click", () => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    returning = true;
     window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
+    window.requestAnimationFrame(scheduleUpdate);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    returning = false;
+    hideStamp();
   });
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   window.addEventListener("resize", scheduleUpdate);

@@ -1964,7 +1964,12 @@ function NotFound() {
 }
 
 function BackToTopButton() {
-  return <button className="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部" hidden><ArrowUp size={21} weight="bold" aria-hidden="true" /></button>;
+  return (
+    <>
+      <button className="back-to-top" type="button" data-back-to-top aria-label="回到页面顶部" title="回到顶部" hidden><ArrowUp size={21} weight="bold" aria-hidden="true" /></button>
+      <span className="visually-hidden" data-back-to-top-stamp-status role="status" aria-live="polite" aria-atomic="true" />
+    </>
+  );
 }
 
 function FooterEmailLink({ item }) {
