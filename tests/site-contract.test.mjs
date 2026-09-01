@@ -18,6 +18,7 @@ import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { personalMaterialsModules, personalMaterialsProject } from "../app/content-personal-materials.js";
 import { documentMaterialsModules, documentMaterialsProject } from "../app/content-document-materials.js";
+import { workDeliveryModules, workDeliveryProject } from "../app/content-work-delivery.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -102,11 +103,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly thirteen projects and four navigation areas", async () => {
+test("the accepted panel has exactly fourteen projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -346,7 +347,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current thirteen/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current fourteen/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -502,7 +503,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 13);
+  assert.equal(enabledProjectCount, 14);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -624,7 +625,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the thirteen accepted project packages", async () => {
+test("the maintenance registry drives exactly the fourteen accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -647,9 +648,9 @@ test("the maintenance registry drives exactly the thirteen accepted project pack
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -672,7 +673,7 @@ test("the maintenance registry drives exactly the thirteen accepted project pack
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -1023,6 +1024,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "document-materials",
       expectedOrder: 13,
       expectedModules: ["current-matter-sources", "editable-docx-pdf", "page-audit-release", "signature-delivery-version", "reality-readback-recovery"]
+    },
+    {
+      project: workDeliveryProject,
+      modules: workDeliveryModules,
+      expectedSlug: "work-delivery",
+      expectedOrder: 14,
+      expectedModules: ["package-sources", "evidence-quality", "consistent-deliverables", "source-change-next-version", "value-state-recovery"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1955,7 +1963,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 1);
-  assert.equal(systemProjectInventory.detailedPageCount, 13);
+  assert.equal(systemProjectInventory.detailedPageCount, 14);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
@@ -2071,7 +2079,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 13);
+  assert.equal(systemProjectInventory.detailedPageCount, 14);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.ok(skillProjectLinks["personal-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "personal-materials" && item.moduleSlug === "registered-lookup"));
@@ -2188,7 +2196,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 13);
+  assert.equal(systemProjectInventory.detailedPageCount, 14);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2229,6 +2237,142 @@ test("document-materials explains same-source production, page audits, release s
   assert.match(mobileProjectNavigation, /\.project-navigation a\s*\{[\s\S]*?white-space:\s*normal;/);
 });
 
+test("work-delivery explains the current six-file product, quality gate, precise source change and honest value boundary", async () => {
+  assert.equal(workDeliveryProject.slug, "work-delivery");
+  assert.equal(workDeliveryProject.order, 14);
+  assert.equal(workDeliveryProject.route, "/projects/work-delivery");
+  assert.equal(workDeliveryProject.title, "工作交付副驾驶");
+  assert.equal(workDeliveryProject.visibility, "私有仓库");
+  assert.equal(workDeliveryProject.repositoryUrl, null);
+  assert.deepEqual(workDeliveryModules.map((item) => item.slug), ["package-sources", "evidence-quality", "consistent-deliverables", "source-change-next-version", "value-state-recovery"]);
+
+  const publicText = JSON.stringify({ project: workDeliveryProject, modules: workDeliveryModules });
+  assertNoCredentialValues(publicText);
+  assert.doesNotMatch(publicText, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "work-delivery leaks an absolute local locator");
+  for (const expected of [
+    /PRIVATE main 73f92f1e57869628380e72aad14ceec8e0400c7d/,
+    /c815ea3daa04d4012200419fa989a9808ab7be36/,
+    /0\.2\.0/,
+    /37\/37/,
+    /Ruff/,
+    /隔离 wheel/,
+    /两套.*Office E2E/,
+    /SQLite/,
+    /canonical manifest/,
+    /手写 ready/,
+    /money.*date.*datetime/s,
+    /CSV.*行列/,
+    /追加.*理由/,
+    /actor.*(?:没有|缺)/,
+    /事实.*(?:整个|整).*build/,
+    /输入.*(?:文本|本地文本).*Markdown.*CSV/,
+    /AI.*项目外/,
+    /简体中文/,
+    /Asia\/Shanghai/,
+    /YYYY-MM-DD/,
+    /人民币 CNY|CNY/,
+    /需求方.*产品.*研发.*测试.*负责人.*评审人/s,
+    /背景.*目标.*范围.*角色与流程.*需求.*指标.*异常.*验收.*待确认/s,
+    /WPS.*Microsoft Office|Microsoft Office.*WPS/,
+    /baseline_required/,
+    /1\.25 倍/,
+    /0\.75 倍/,
+    /累计人工时间/,
+    /明确选择资料.*处理冲突.*确认生成/s,
+    /退回.*窄工作流|收窄.*单一产物|确定性流程/,
+    /没有第一项真实工作|没有真实工作/,
+    /没有.*真实来源变化/,
+    /没有.*(?:导出|备份).*恢复/,
+    /唯一原文.*(?:rebound|重新绑定)/,
+    /stale/
+  ]) assert.match(publicText, expected, `work-delivery omits current truth: ${expected}`);
+
+  const exactOutputs = ["PRD.md", "manifest.json", "traceability.csv", "产品需求文档.docx", "项目评审.pptx", "执行跟踪表.xlsx"];
+  for (const output of exactOutputs) assert.ok(publicText.includes(output), `work-delivery omits current output: ${output}`);
+  assert.match(publicText, /当前没有(?:现成)?项目计划、周报或汇报|当前没有.*项目计划.*周报.*汇报/);
+  const outputDecision = workDeliveryModules.find((item) => item.slug === "consistent-deliverables").decisionImpact.join("\n");
+  assert.match(outputDecision, /正式输出只包括/);
+  assert.equal(exactOutputs.every((output) => outputDecision.includes(output)), true);
+
+  const moduleBySlug = new Map(workDeliveryModules.map((item) => [item.slug, item]));
+  for (const expected of [/2–5|2-5/, /稳定.*package ID|package ID.*稳定/, /未选文件/, /文本.*Markdown.*CSV/]) assert.match(JSON.stringify(moduleBySlug.get("package-sources")), expected);
+  for (const expected of [/EvidenceSpan/, /money/, /date/, /datetime/, /CSV/, /FactReviewEvent/, /actor/, /canonical manifest/, /手写.*ready.*拒绝|手写 ready/]) assert.match(JSON.stringify(moduleBySlug.get("evidence-quality")), expected);
+  for (const expected of [/PRD\.md/, /产品需求文档\.docx/, /项目评审\.pptx/, /执行跟踪表\.xlsx/, /只请求 docx/, /不可覆盖/, /隔离 wheel/]) assert.match(JSON.stringify(moduleBySlug.get("consistent-deliverables")), expected);
+  const deliverablesText = JSON.stringify(moduleBySlug.get("consistent-deliverables"));
+  assert.match(deliverablesText, /每次.*(?:builder|artifacts).*不自动|不是每次 builder 自动|公开 artifacts.*不自动/);
+  assert.match(deliverablesText, /合成.*(?:acceptance|验收).*重新导入.*几何.*公式/s);
+  for (const expected of [/唯一原文/, /rebound/, /stale fact|事实 stale/, /stale build/, /whole builds|整个 build|整 build/, /未关联事实.*fresh/]) assert.match(JSON.stringify(moduleBySlug.get("source-change-next-version")), expected);
+  const valueText = JSON.stringify(moduleBySlug.get("value-state-recovery"));
+  for (const expected of [/route_selected_without_hint|无.*路线提示|未获.*路线提示/, /3\/3/, /27 条事实/, /39 条追溯/, /5 条待确认/, /4 条阻断/, /quality.*draft/, /Office builder.*0/, /current.*verify/, /旧 build.*stale/, /12 分 12 秒/, /0\.043 秒/, /baseline_required/, /1\.25 倍/, /0\.75 倍/, /累计人工时间/, /三类动作/, /窄工作流/, /确定性流程/, /单一产物/, /数据库.*无法.*Git.*恢复|不能.*Git.*恢复/]) assert.match(valueText, expected);
+
+  const moduleSlugs = new Set(workDeliveryModules.map((item) => item.slug));
+  assert.ok(workDeliveryProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)));
+  assert.deepEqual(new Set(workDeliveryProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs);
+  for (const module of workDeliveryModules) {
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"]);
+    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8);
+    for (const source of module.sources) {
+      assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/);
+      assert.equal(source.href, undefined);
+    }
+  }
+
+  assert.equal(workDeliveryProject.gallery.length, 3);
+  assert.equal(new Set(workDeliveryProject.gallery.map((item) => item.caption)).size, 3);
+  assert.equal(new Set(workDeliveryProject.gallery.map((item) => `${item.proves}|${item.doesNotProve}`)).size, 3);
+  const galleryExpected = new Map([
+    ["fictional-prd-page.png", "69c333fcf8c34037e51438800ceed968228d94878bf16523b4c5b2c38cb2a4da"],
+    ["fictional-review-slide.png", "d02c74e85870aab2c2061859d79009c5ca43dcef51fc98cd4ec973a6a35fd420"],
+    ["fictional-execution-tracker.png", "0c8133cc06e695a496b6f57bc22c5d821ecb242bf0695a1e529f71419cd99b5e"]
+  ]);
+  for (const item of workDeliveryProject.gallery) {
+    assert.equal(item.thumbnail, undefined, "the three owner-selected images must not create duplicate thumbnails");
+    assert.match(`${item.alt}\n${item.caption}`, /完全虚构/);
+    assert.match(item.proves, /证明/);
+    assert.match(item.doesNotProve, /不证明/);
+    assert.equal(item.sourceCommit, "c815ea3daa04d4012200419fa989a9808ab7be36");
+    const fileName = path.posix.basename(item.src);
+    const bytes = await readFile(path.join(projectRoot, "public", ...item.src.slice(1).split("/")));
+    assert.equal(`sha256:${createHash("sha256").update(bytes).digest("hex")}`, `sha256:${galleryExpected.get(fileName)}`);
+  }
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "work-delivery");
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.ai_refresh.content_path, "app/content-work-delivery.js");
+  assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.equal(systemProjectInventory.detailedPageCount, 14);
+  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
+  assert.equal(asset.href, "/projects/work-delivery");
+  assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));
+  assert.match(workDeliveryProject.operationalEntrypoints.find((item) => item.name === "来源更新").command, /--file <file>/);
+  assert.doesNotMatch(workDeliveryProject.operationalEntrypoints.find((item) => item.name === "来源更新").command, /--path/);
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "work-delivery", "index.html"), "utf8");
+  const moduleHtml = await Promise.all(workDeliveryModules.map((item) => readFile(path.join(projectRoot, "dist", "projects", "work-delivery", item.slug, "index.html"), "utf8")));
+  const skillHtml = await readFile(path.join(projectRoot, "dist", "skills", "work-delivery", "index.html"), "utf8");
+  const searchShard = await readFile(path.join(projectRoot, "dist", "search-project-work-delivery.js"), "utf8");
+  const generatedSurface = [overviewHtml, ...moduleHtml, skillHtml, searchShard].join("\n");
+  const projectGeneratedSurface = [overviewHtml, ...moduleHtml, searchShard].join("\n");
+  assert.match(overviewHtml, /data-static-route="\/projects\/work-delivery"/);
+  assert.match(overviewHtml, /project-gallery/);
+  assert.equal((overviewHtml.match(/href="\/skills\/work-delivery\/"/g) || []).length, 1, "work-delivery overview must expose one Skill entry without duplication");
+  assert.match(overviewHtml, /<link rel="canonical" href="https:\/\/wly0829\.cn\/projects\/work-delivery\/"/);
+  for (const output of exactOutputs) assert.ok(generatedSurface.includes(output), `generated work-delivery surface omits ${output}`);
+  assert.doesNotMatch(projectGeneratedSurface, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "generated work-delivery project surfaces leak a private local locator");
+
+  assert.equal(searchPanel("工作交付副驾驶", "system")[0]?.href, "/projects/work-delivery");
+  for (const [query, href] of [
+    ["怎么建立持续更新的交付包", "/projects/work-delivery/package-sources"],
+    ["手写ready为什么被拒绝", "/projects/work-delivery/evidence-quality"],
+    ["只生成PRD不要PPT", "/projects/work-delivery/consistent-deliverables"],
+    ["同一句出现两次怎么办", "/projects/work-delivery/source-change-next-version"],
+    ["数据库丢了能从Git恢复吗", "/projects/work-delivery/value-state-recovery"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `work-delivery search misroutes: ${query}`);
+});
+
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const staticSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
@@ -2244,6 +2388,7 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /const hasStructuredEvidence = images\.every/);
   assert.ok(timeAuditProject.gallery.every((item) => item.proves && item.doesNotProve), "TimeAudit must use structured visual evidence for every image");
   assert.ok(pcPanelHubProject.gallery.every((item) => item.proves && item.doesNotProve), "PC Panel Hub must exercise structured visual evidence");
+  assert.ok(workDeliveryProject.gallery.every((item) => item.proves && item.doesNotProve), "Work Delivery must preserve per-image evidence boundaries");
   assert.match(pageSource, /role="dialog"/);
   assert.match(pageSource, /aria-modal="true"/);
   assert.match(pageSource, /createPortal\([\s\S]*?document\.body\)/, "lightbox must escape the main stacking context and cover the fixed header");
@@ -2393,7 +2538,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2410,6 +2555,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedWechatDirect = run(["--project", "wechat-direct"]);
   const targetedPersonalMaterials = run(["--project", "personal-materials"]);
   const targetedDocumentMaterials = run(["--project", "document-materials"]);
+  const targetedWorkDelivery = run(["--project", "work-delivery"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2502,11 +2648,19 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDocumentMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-formal-documents");
   assert.equal(Object.hasOwn(targetedDocumentMaterials.selected_projects[0].source, "local_root"), false);
   assert.ok(targetedDocumentMaterials.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedWorkDelivery.status, "ready_for_ai");
+  assert.deepEqual(targetedWorkDelivery.selected_projects.map((item) => item.id), ["work-delivery"]);
+  assert.equal(targetedWorkDelivery.selected_projects[0].content_path, "app/content-work-delivery.js");
+  assert.equal(targetedWorkDelivery.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedWorkDelivery.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedWorkDelivery.selected_projects[0].source.repo, "wlyaaaaa/work-delivery-copilot");
+  assert.equal(Object.hasOwn(targetedWorkDelivery.selected_projects[0].source, "local_root"), false);
+  assert.ok(targetedWorkDelivery.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -2993,9 +3147,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const workDelivery = skills.find((item) => item.slug === "work-delivery");
   const workDeliveryText = JSON.stringify({ entry: workDelivery, guide: skillGuides["work-delivery"], outcome: skillOutcomes["work-delivery"] });
   assert.equal(workDelivery.sourcePath, "E:\\.agents\\skills\\work-delivery\\SKILL.md");
-  assert.equal(workDelivery.sourceBytes, 4530);
-  assert.equal(workDelivery.sourceSha256, "2fcba1a69b0f73cb45dac06e967ab98cffb04c0e1011ec1f81b6245d6c6428ff");
-  for (const expected of [/明确选中/, /事实.*假设.*冲突.*未知/, /同一事实版本/, /work-delivery\.batch\.v1/, /package ID/, /重复.*错误|已存在.*拒绝/, /quality\.status=ready/, /PRD/, /项目计划/, /评审 PPT/, /执行表/, /周报/, /汇报/, /5 分钟/, /复杂度/, /同模型.*同质量|同模型\/同质量/, /不设固定.*截止|固定完成截止线/, /15 秒/, /来源变化/, /受影响/, /过期/, /一次性单文件编辑/, /本轮.*没有.*E2E|E2E.*本轮.*Unknown/]) {
+  assert.equal(workDelivery.sourceBytes, 5178);
+  assert.equal(workDelivery.sourceSha256, "e39ed36db7a3c753bca217d31a0ab3f0c20a3ae5dbf6508f3693b78126ba90fb");
+  for (const expected of [/明确选择|明确选中/, /事实.*假设.*冲突.*未知/, /同一事实版本/, /work-delivery\.batch\.v1/, /package ID/, /重复.*错误|已存在.*拒绝/, /SQLite/, /canonical manifest/, /quality\.status=ready/, /手写 ready.*拒绝|手写.*ready.*拒绝/, /PRD\.md/, /manifest\.json/, /traceability\.csv/, /产品需求文档\.docx/, /项目评审\.pptx/, /执行跟踪表\.xlsx/, /当前没有.*项目计划.*周报.*汇报/, /5 分钟/, /同模型.*同质量|同模型\/同质量/, /15 秒/, /唯一原文.*(?:rebound|重新绑定)/, /stale|过期/, /actor/, /事实.*整个 build|事实.*整 build/, /输入.*文本.*Markdown.*CSV/, /AI 分析.*项目外/, /baseline_required/, /37\/37/, /Ruff/, /隔离 wheel/, /两套.*Office E2E/, /无.*路线提示|未获.*路线提示/, /3\/3/, /27 条事实/, /39 条追溯/, /5 条待确认/, /4 条阻断/, /quality.*draft/, /Office builder.*0/, /current verify.*旧 build stale/, /12 分 12 秒/, /0\.043 秒/, /没有.*导出.*备份.*恢复/]) {
     assert.match(workDeliveryText, expected, `work-delivery omits its product contract: ${expected}`);
   }
   const firstUseCases = [
@@ -3057,6 +3211,7 @@ test("project and Skill links come from one explicit ownership map", async () =>
   assert.match(systemHtml, /class="system-project-asset-actions"/);
   assert.ok(systemHtml.includes('href="/skills/work-delivery/"'), "System work-delivery asset does not link to its Skill");
   assert.ok(systemHtml.includes("Skill：工作交付副驾驶"), "System Skill actions must show the full Skill name");
+  assert.ok(systemHtml.includes('href="/projects/work-delivery/"'), "System work-delivery asset does not link to its project page");
 });
 
 test("native routing public copy explains the Hook identity path without expanding authority", () => {
@@ -3304,7 +3459,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.deepEqual({ repo: dailyPreferencesAsset.repo, visibility: dailyPreferencesAsset.visibility, href: dailyPreferencesAsset.href, entryLabel: dailyPreferencesAsset.entryLabel }, { repo: "daily-preferences", visibility: "PRIVATE", href: "/skills/daily-preferences", entryLabel: "进入 Skill" });
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "daily-preferences")?.sourceIdentity, "repo:daily-preferences");
   const workDeliveryAsset = systemProjectAssets.find((asset) => asset.id === "work-delivery-copilot");
-  assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility }, { title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE" });
+  assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility, href: workDeliveryAsset.href }, { title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", href: "/projects/work-delivery" });
   for (const [assetId, repo] of [["ai-workbench-playbook", "codex-app-power-user-playbook"], ["message-ai-gateway", "OpenClawGateway"], ["local-ai-runtime", "rtx5090d-ollama-agent-bundle"], ["human-alignment-dataset", "human-alignment-dataset-001"]]) {
     assert.equal(systemProjectAssets.find((asset) => asset.id === assetId)?.repo, repo, `System atlas hides public repository identity: ${assetId}`);
     assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === assetId)?.sourceIdentity, `repo:${repo}`, `System source map treats public repository as private digest: ${assetId}`);

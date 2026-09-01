@@ -2,8 +2,8 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-09-01 13:08（中国时间）",
-  "sourceCommit": "e1c1e3644b6c3d2c74eeb2fd0a469444e81c7290",
+  "observedAt": "2026-09-01 20:17（中国时间）",
+  "sourceCommit": "6a9e1b0704cd86c4674ddc4521a3aae04cb6356f",
   "sourceBranch": "main",
   "sourceWorktreeClean": true,
   "sourceDirtyCount": 0,
@@ -106,8 +106,8 @@ export const generatedPanelFacts = {
     "legacyCState": "retired_recovery_only"
   },
   "validation": {
-    "label": "还有 1 层未闭合",
-    "summary": "E rules 活动且五规则闭包通过，但仍有 1 个独立验证层没有通过。",
+    "label": "还有 2 层未闭合",
+    "summary": "E rules 活动且五规则闭包通过，但仍有 2 个独立验证层没有通过。",
     "rows": [
       {
         "layer": "E rules current（E 规则当前指针）",
@@ -123,9 +123,9 @@ export const generatedPanelFacts = {
       },
       {
         "layer": "Source checkout（候选源码工作树）",
-        "status": "pass",
-        "label": "与 release 一致",
-        "detail": "source HEAD=e1c1e3644b6c，origin/main=e1c1e3644b6c，active release commit=e1c1e3644b6c。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E98。"
+        "status": "repair",
+        "label": "main 已进入下一候选提交",
+        "detail": "source HEAD=6a9e1b0704cd，origin/main=6a9e1b0704cd，active release commit=e1c1e3644b6c。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E98。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -157,6 +157,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "3e1f39635884dcf32cbff74be1069732952ef3e6265c2047063c48353691e3c8"
+    "payloadSha256": "985c6cc88e957273986ede4004e71a8a7f5b548fd79fb48fdeca9db53439a1e6"
   }
 };

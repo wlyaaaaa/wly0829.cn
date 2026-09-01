@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 13,
+  detailedPageCount: 14,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十三个可深入阅读的完整参考，文书和材料制作已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十四个可深入阅读的完整参考，工作交付副驾驶已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -680,7 +680,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "codex-agent-model-benchmark", title: "真实任务能力基准（CACB）", repo: "codex-agent-model-benchmark", role: "用同一任务和可复核结果比较不同 AI 工作方式，不把一次回答或当前有问题的评分当结论。", kind: "研究验证", href: "/projects/cacb" },
       { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
-      { id: "work-delivery-copilot", title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "把用户明确选中的需求、会议记录、规则和表格，整理成来源可追溯、跨文档口径一致、来源变化后能说明影响范围的交付包。", kind: "本地优先的持续工作交付工具", href: projectLedgerHref },
+      { id: "work-delivery-copilot", title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "把用户明确选中的需求、会议记录、规则和表格，整理成来源可追溯、跨文档口径一致、来源变化后能说明影响范围的交付包；当前六个正式文件、质量门和真实恢复缺口都在详情页分层说明。", kind: "本地优先的持续工作交付工具", href: "/projects/work-delivery" },
       { id: "wly0829-cn", title: "当前网站呈现仓库", repo: "wly0829.cn", role: "只负责把项目、规则、Skills 和公开安全事实呈现成当前网站；它计入总账，但不作为一个被介绍的项目。", kind: "呈现基础设施", href: "/", presentationOnly: true },
       { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: projectLedgerHref }
     ]
@@ -990,10 +990,10 @@ export const systemDependencyNodes = [
     title: "工作交付副驾驶",
     subtitle: "让需求、会议记录、规则和表格在 PRD、评审材料和执行表之间保持同一事实版本",
     links: [
-      { href: "#system-project-asset-work-delivery-copilot", label: "查看项目版图" },
+      { href: "/projects/work-delivery", label: "查看完整项目" },
       { href: "/skills/work-delivery", label: "Skill：工作交付副驾驶" }
     ],
-    detail: "项目保存来源版本、确认事实、冲突、跨产物一致性和来源变化后的影响；Skill 只负责把持续工作请求送进项目。缺少目标、范围、验收条件，或仍有未解决的关键冲突时，只交回明确标注问题的草稿；质量未就绪时不生成正式 Office 成品，项目入口不可用时报告精确缺口，不另造替代项目。一次性单文件仍直接使用对应文件能力，不扫描未选资料。"
+    detail: "项目保存来源版本、结构化事实、追加审阅、质量状态、六个固定文件和来源变化后的影响；Skill 只负责把持续工作请求送进项目。缺少目标、范围、验收条件，或仍有未解决的关键冲突时，只交回明确标注问题的草稿；质量未就绪时不生成正式 Office 成品，项目入口不可用时报告精确缺口，不另造替代项目。一次性单文件仍直接使用对应文件能力，不扫描未选资料。"
   },
   {
     id: "ai-cli-entry",
@@ -1496,7 +1496,7 @@ export const systemSkillFamilies = [
       "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
-      { slug: "work-delivery", name: "工作交付副驾驶", technicalName: "work-delivery", summary: "把明确选中的需求、会议记录、规则和表格整理成来源可追溯、跨文档口径一致的交付包；来源变化时标记旧结果并说明哪些需要重做。", href: "/skills/work-delivery" },
+      { slug: "work-delivery", name: "工作交付副驾驶", technicalName: "work-delivery", summary: "把明确选中的需求、会议记录、规则和表格整理成来源可追溯、跨文档口径一致的交付包；Skill 只发现和路由，完整产品、质量门、六个固定文件与恢复缺口进入项目页。", href: "/skills/work-delivery" },
       { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "从当前事项和必要原件生成同源 DOCX/PDF、逐页证据与自包含材料包，并把本人签名、可递送、递送、收件、处理和对方签回分别记录。", href: "/skills/document-materials" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },

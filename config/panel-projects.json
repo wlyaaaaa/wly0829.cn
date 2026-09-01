@@ -1296,6 +1296,98 @@
           "an external status changes for one private matter without changing the reusable separation between local production and reality readback"
         ]
       }
+    },
+    {
+      "id": "work-delivery",
+      "order": 14,
+      "title": "工作交付副驾驶",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/work-delivery",
+      "ai_refresh": {
+        "content_path": "app/content-work-delivery.js",
+        "semantic_revision": 1,
+        "scope": "complete public-safe overview and five source-backed modules covering package entry and selected source versions, evidence/typed facts/review/quality gates, six same-build deliverables, precise rebound/stale source-change handling, and layered status/time-value/failure/recovery evidence",
+        "collectors": [
+          "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/work-delivery-copilot; expose only public-safe repository identity, visibility, clean/sync state, version and commits",
+          "read the admitted current AGENTS.md, README.md, docs/product-contract.md, batch schema, pyproject, CLI/store/compiler/artifacts/acceptance entrypoints and source-owned tests; do not read any real work database or company material",
+          "run the source-owned 37-test suite with the current workspace Office runtime, Ruff, isolated wheel closure and both fully synthetic Office acceptance scenarios",
+          "review the bounded current implementation-blind natural routing E2E receipt for route selection, 3/3 source isolation, 27 facts, 39 traces, five pending items, four formal blockers, draft-only output, zero Office builders, current verify and stale prior build",
+          "hash and visually inspect only the three owner-selected fully fictional rendered images; compare their visible build/fact semantics with the current manifest and explain what each proves and cannot prove"
+        ],
+        "conditional_collectors": [
+          "one explicit user-selected real work item only when the owner requests it; keep every real source, package, database, output, path, identifier and business result outside public content",
+          "one explicit real source-change acceptance only after a real package exists; publish only reusable product conclusions, never the private payload"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/work-delivery-copilot",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-work-delivery-copilot-product-source"
+      },
+      "displayed_areas": [
+        "project_overview_product_principles_scope_and_real_value_boundary",
+        "package_entry_selected_sources_stable_id_and_narrow_input_types",
+        "evidence_spans_typed_values_append_only_reviews_actor_gap_and_quality_gate",
+        "canonical_sqlite_manifest_manual_ready_rejection_and_current_build_verification",
+        "exact_six_file_same_build_outputs_prd_only_path_and_non_overwrite_directory",
+        "unique_quote_rebound_stale_fact_whole_build_impact_and_next_version",
+        "unified_cli_isolated_wheel_37_tests_ruff_two_synthetic_office_e2e",
+        "current_implementation_blind_natural_routing_e2e_and_draft_formal_block",
+        "baseline_required_no_real_work_no_real_source_change_and_no_export_backup_restore",
+        "three_fully_fictional_public_safe_gallery_images_with_per_image_evidence_boundaries"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_scope_and_current_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "docs/product-contract.md",
+            "docs/work-delivery-batch-v1.schema.json",
+            "pyproject.toml"
+          ]
+        },
+        {
+          "kind": "package_evidence_quality_build_and_change_implementation",
+          "paths": [
+            "tools/Invoke-WorkDelivery.ps1",
+            "src/work_delivery/models.py",
+            "src/work_delivery/store.py",
+            "src/work_delivery/compiler.py",
+            "src/work_delivery/batch.py",
+            "src/work_delivery/cli.py",
+            "src/work_delivery/artifacts.py",
+            "src/work_delivery/acceptance.py",
+            "artifact_builders/*"
+          ]
+        },
+        {
+          "kind": "synthetic_behavior_install_and_office_evidence",
+          "paths": [
+            "tests/*.py",
+            "examples/reporting-review/**",
+            "examples/project-launch-review/**",
+            "examples/work-delivery-batch-v1.example.json"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed entry boundary, source type, data relationship, review field, quality rule, formal output, build directory, CLI, source-change behavior, time-value state, recovery gap or current E2E conclusion changes meaning",
+          "a current false-PASS path, manual-ready bypass, stale/rebound error, output overwrite, package duplication, Office builder bypass or input-isolation gap becomes implemented, regresses or changes the user's next action",
+          "a current implementation-blind natural routing E2E, real work acceptance, real source-change acceptance or recovery test changes what the owner should trust without exposing private payload"
+        ],
+        "snapshot_only_when": [
+          "the clean PRIVATE main commit, implementation commit, test count, synthetic timing, image hash or observation time changes without altering product meaning"
+        ],
+        "ignore_when": [
+          "a real company source, fact, package, database, output, path, identifier, amount, person or business result changes without altering the reusable public product contract",
+          "an internal refactor or test addition leaves every displayed capability, boundary, failure and recovery behavior unchanged",
+          "a work-delivery Skill wording change remains semantically identical to the current route, output and boundary explanation"
+        ]
+      }
     }
   ]
 }

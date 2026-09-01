@@ -55,7 +55,7 @@ export const skillProjectLinks = {
     { relation: "no-detail-project", systemAssetId: "key", label: "私有发布目标：Key" }
   ],
   "work-delivery": [
-    { relation: "no-detail-project", systemAssetId: "work-delivery-copilot", label: "工作交付副驾驶项目" }
+    { relation: "owned-by-project", projectSlug: "work-delivery", moduleSlug: "package-sources", label: "工作交付副驾驶项目" }
   ],
   documents: [
     { relation: "host-integrated", href: "/#system-node-documents-skill", label: "宿主集成文档能力" }

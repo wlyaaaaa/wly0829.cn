@@ -12,6 +12,7 @@ import { project as project_personal_health, modules as modules_personal_health 
 import { project as project_wechat_direct, modules as modules_wechat_direct } from "./content-wechatdirect.js";
 import { project as project_personal_materials, modules as modules_personal_materials } from "./content-personal-materials.js";
 import { project as project_document_materials, modules as modules_document_materials } from "./content-document-materials.js";
+import { project as project_work_delivery, modules as modules_work_delivery } from "./content-work-delivery.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -26,5 +27,6 @@ export const projectContentPackages = new Map([
   ["personal-health", { project: project_personal_health, modules: modules_personal_health, kind: "personal-health" }],
   ["wechat-direct", { project: project_wechat_direct, modules: modules_wechat_direct, kind: "wechat-direct" }],
   ["personal-materials", { project: project_personal_materials, modules: modules_personal_materials, kind: "personal-materials" }],
-  ["document-materials", { project: project_document_materials, modules: modules_document_materials, kind: "document-materials" }]
+  ["document-materials", { project: project_document_materials, modules: modules_document_materials, kind: "document-materials" }],
+  ["work-delivery", { project: project_work_delivery, modules: modules_work_delivery, kind: "work-delivery" }]
 ]);

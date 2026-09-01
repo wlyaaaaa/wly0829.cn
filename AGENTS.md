@@ -14,10 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has thirteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has fourteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials in order 1/2/3/4/5/6/7/8/9/10/11/12/13. The registry
+  document-materials, followed by work-delivery in order
+  1/2/3/4/5/6/7/8/9/10/11/12/13/14. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -267,6 +268,17 @@ read-only operating panel; public presentation is secondary.
   narrower private-domain identity, internal source route or personal result.
   Public copy presents the usable product directly and never exposes
   "packaging" as a maintenance label.
+- The selected `work-delivery` project is presented as “工作交付副驾驶”.
+  Explain package entry and explicitly selected sources, evidence and typed
+  facts, append-only reviews and the canonical quality gate, the exact six
+  current deliverables, precise source rebound/stale behavior, and the
+  separate status/time-value/recovery evidence. The Skill remains discovery
+  and routing only. Current formal outputs are exactly `PRD.md`,
+  `manifest.json`, `traceability.csv`, `产品需求文档.docx`, `项目评审.pptx`
+  and `执行跟踪表.xlsx`; never claim a current project-plan, weekly-report or
+  reporting output. Keep actor absence, fact/whole-build impact granularity,
+  narrow inputs, external AI analysis, `baseline_required`, no real work or
+  real source-change acceptance, and no export/backup/restore visible.
 - The selected personal-health project is a curated, manual-only explanation of
   its evidence product: processed-current routing, protected foreground refresh,
   raw preservation and exact resume, deterministic offline verification,
@@ -304,29 +316,29 @@ read-only operating panel; public presentation is secondary.
   curated manual-only project 8, followed by Codex Remote as the curated
   manual-only project 9 and personal-health as curated manual-only project 10,
   then WeChatDirect as real-dashboard project 11, personal-materials as
-  real-dashboard project 12 and document-materials as real-dashboard project 13.
+  real-dashboard project 12, document-materials as real-dashboard project 13,
+  and work-delivery as real-dashboard project 14.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
-  personal-materials, document-materials, plus the one-page Rules workbench
+  personal-materials, document-materials, work-delivery, plus the one-page Rules workbench
   and current public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
   entire future backlog.
-- Project 13 is document-materials. After its full source-first snapshot,
-  audit, PUBLIC release, read-back and independent completion report, the
-  approved queue continues one project at a time with work-delivery-copilot
-  and daily-preferences. No
+- Project 14 is work-delivery. After its full source-first snapshot, audit,
+  PUBLIC release, read-back and independent completion report, the approved
+  queue continues one project at a time with daily-preferences. No
   placeholder card or advance route is allowed for a later item.
 - The selected sequential queue gives the future personal-media project a
   non-optional content floor: automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
-  against unattended loss. The current document-materials project must
-  directly explain entry bypass, current matter and original inputs, same-source
+  against unattended loss. The completed document-materials project directly
+  explains entry bypass, current matter and original inputs, same-source
   DOCX/PDF, page/color/grayscale verification, signature and ready versioning,
   reality-state separation, sign-back and copy-and-verify recovery. These requirements do not authorize
-  building a later project before its turn; finish and report the current
+  building a later project before its turn; finish and report each selected
   project first.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
   owned by one assistant product. It may include both personally maintained
@@ -465,7 +477,7 @@ read-only operating panel; public presentation is secondary.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
-  Remote, personal-health, WeChatDirect, personal-materials and document-materials additions, are standing-authorized to commit, normal-push existing
+  Remote, personal-health, WeChatDirect, personal-materials, document-materials and work-delivery additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -486,7 +498,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current thirteen.
+  to projects added after the current fourteen.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -517,7 +529,7 @@ read-only operating panel; public presentation is secondary.
   reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
-  including WeChatDirect, personal-materials and document-materials:
+  including WeChatDirect, personal-materials, document-materials and work-delivery:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or
