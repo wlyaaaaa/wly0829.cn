@@ -14,10 +14,10 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has eleven enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has twelve enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
-  Codex Remote, personal-health and WeChatDirect in order
-  1/2/3/4/5/6/7/8/9/10/11. The registry
+  Codex Remote, personal-health, WeChatDirect and personal-materials in order
+  1/2/3/4/5/6/7/8/9/10/11/12. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -303,27 +303,29 @@ read-only operating panel; public presentation is secondary.
   curated manual-only project 7 and the AI-assisted learning method as the
   curated manual-only project 8, followed by Codex Remote as the curated
   manual-only project 9 and personal-health as curated manual-only project 10,
-  then WeChatDirect as the owner-selected real-dashboard project 11.
+  then WeChatDirect as real-dashboard project 11 and personal-materials as
+  real-dashboard project 12.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
-  CACB, the learning method, Codex Remote, personal-health, WeChatDirect, plus the one-page Rules workbench
+  CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
+  personal-materials, plus the one-page Rules workbench
   and current public-safe Skills catalog.
 - Most real projects may eventually enter the panel. Add them in owner-selected
   value order, one completed project at a time; do not create placeholder cards
   or delay a selected project's construction by making agents vote on the
   entire future backlog.
-- Project 11 is WeChatDirect. After its full source-first snapshot, audit,
-  PUBLIC release, read-back and independent completion report, the approved
-  queue continues one project at a time with personal-materials,
+- Project 12 is personal-materials. After its full source-first snapshot,
+  audit, PUBLIC release, read-back and independent completion report, the
+  approved queue continues one project at a time with
   personal-formal-documents, work-delivery-copilot and daily-preferences. No
   placeholder card or advance route is allowed for a later item.
 - The selected sequential queue gives the future personal-media project a
   non-optional content floor: automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
-  against unattended loss. The current 微信 / `WeChatDirect` project must directly
-  cover explicit-trigger incremental WeChat archiving, reply and
-  image/audio/file relationships, completed-state replay, full reconcile and
-  the exact limits of crash recovery. These requirements do not authorize
+  against unattended loss. The current personal-materials project must
+  directly explain reliable-locator bypass, registered lookup, bounded
+  discovery, selected-original byte verification, exact provenance intake,
+  media ownership and the real meaning of zero hits. These requirements do not authorize
   building a later project before its turn; finish and report the current
   project first.
 - “Skills” means the owner's personal usable capability catalog, not a catalog
@@ -463,7 +465,7 @@ read-only operating panel; public presentation is secondary.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
-  Remote, personal-health and WeChatDirect additions, are standing-authorized to commit, normal-push existing
+  Remote, personal-health, WeChatDirect and personal-materials additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -484,7 +486,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current eleven.
+  to projects added after the current twelve.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -515,7 +517,7 @@ read-only operating panel; public presentation is secondary.
   reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
-  including WeChatDirect:
+  including WeChatDirect and personal-materials:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or

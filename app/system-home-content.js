@@ -86,9 +86,9 @@ export const systemScenarios = [
     title: "用一段记忆，找到最可能的照片、录音或文件原件",
     request: "“找去年在餐厅拍的那组照片，还有我忘了放在哪的延保合同。先给少量最可能的原件，不要全盘扫描，也不要复制或移动文件。”",
     systems: ["通用 AI 与智能体能力", "个人媒体定位（personal-media）", "非媒体原件定位（personal-materials）", "当前目录与索引", "真实原件"],
-    rules: "先把时间、地点、人物、文件角色和内容线索拆开；已有精确路径直接读原件，只有位置未知或旧定位失效时才扩大到获准范围；零匹配只说明本轮没找到。",
-    result: "少量核对过的候选、可直接打开的原件位置、每项为什么匹配、实际检查范围、仍需本人确认的候选和没有覆盖的地方。",
-    value: "系统帮助从模糊记忆回到原件，但不复制一套中央资料库，也不把搜索结果冒充原件本身。",
+    rules: "先把时间、地点、人物、文件角色和内容线索拆开；已有精确路径直接读原件。媒体按目录与预览证据核对，非媒体在位置未知时先给隐藏路径的候选，只有选中后才重算大小和 SHA-256；零匹配只说明本轮没找到。",
+    result: "媒体得到带预览或原件入口的少量候选；非媒体先得到隐藏真实路径的候选卡，选中后才交回通过大小与 SHA-256 验真的原件位置、匹配依据、实际检查范围和覆盖缺口。",
+    value: "系统帮助从模糊记忆回到原件；个人材料项目只保留最小 locator/metadata SQLite（定位与元数据数据库），不复制原件、不建立跨领域中央资料库，也不把候选冒充已经验真的原件。",
     stages: [
       {
         number: "01",
@@ -105,10 +105,11 @@ export const systemScenarios = [
         number: "02",
         kicker: "候选与原件核对",
         title: "让索引缩小范围，再回到真实文件",
-        body: "媒体和非媒体入口分别给出少量候选；系统再核对路径、文件角色、时间、大小、必要的预览和原件状态，排除同名、缓存或已失效定位。",
+        body: "媒体入口可以按现有目录、时间与预览关系缩小候选；非媒体 find 或 discover 先返回隐藏路径的候选，其中 discover 只看名称、原生目录和 stat（文件状态），不预读正文或计算哈希。",
         items: [
           ["候选", "只返回最有区分力的少量结果"],
-          ["核对", "路径、时间、角色、预览与必要指纹"],
+          ["媒体核对", "目录、时间、类型、已有说明和必要预览"],
+          ["非媒体候选", "标题、来源、原生容器、版本角色和文件状态；真实路径先隐藏"],
           ["未知", "目录未覆盖、原盘离线或索引比原件旧"]
         ]
       },
@@ -116,9 +117,10 @@ export const systemScenarios = [
         number: "03",
         kicker: "直接可用的原件",
         title: "交回能打开的东西，而不是一段猜测",
-        body: "结果按可信度列出可直接打开的原件和匹配理由；需要浏览时建立不复制原件字节的临时目录。没有找到时说明真正查过哪里和下一条最有价值线索。",
+        body: "媒体结果可以按需打开或建立不复制原件字节的临时浏览目录；非媒体只有在明确选择后才核对来源根、路径边界、大小和 SHA-256，通过后返回真实路径并打开。没有找到时说明真正查过哪里和下一条最有价值线索。",
         items: [
-          ["原件入口", "真实路径、临时浏览目录或少量候选"],
+          ["媒体入口", "预览、真实路径或临时浏览目录"],
+          ["非媒体入口", "选中一项后才返回通过 stat 与 SHA-256 验真的真实路径"],
           ["匹配理由", "哪条记忆线索被哪项事实支持"],
           ["下一步", "本人确认、接入离线介质或补一个更具体线索"]
         ]
@@ -567,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 11,
+  detailedPageCount: 12,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十一个可深入阅读的完整参考，WeChatDirect 已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十二个可深入阅读的完整参考，personal-materials 已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -628,7 +630,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，而不是只吐一段无法回听的稿。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地文档理解", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标。", kind: "工作能力", href: projectLedgerHref },
-      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "用一句普通话找回少量原件候选，选中后重新核对再打开。", kind: "资料入口", href: projectLedgerHref },
+      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "用普通描述先查已登记定位；位置确实未知时只看获准目录的名称与 stat（文件状态），选中一项后才核对大小和 SHA-256 并打开。", kind: "资料入口", href: "/projects/personal-materials" },
       { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文，保留回复、媒体和可重放增量关系；完成态可继续增量，硬崩溃半成品仍明确保留为缺口。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
@@ -1059,10 +1061,14 @@ export const systemDependencyNodes = [
     id: "materials",
     lane: "inputs",
     title: "位置未知时的非媒体原件查找",
-    subtitle: "只有文件位置不清楚或旧定位失效时，才返回少量核对过的候选",
-    href: "/skills/personal-materials",
-    linkLabel: "Skill：非媒体原件查找",
-    detail: "用户已经给出附件或可靠路径时直接读取原件，不先经过本入口；它不全盘扫描、不复制原件，也不建立中心数据库。"
+    subtitle: "先查登记定位；只有位置确实未知时才有界发现，选中后再验真",
+    links: [
+      { href: "/projects/personal-materials", label: "进入个人材料查找完整项目页" },
+      { href: "/skills/personal-materials", label: "Skill：非媒体原件查找" }
+    ],
+    searchHref: "/projects/personal-materials",
+    searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里"],
+    detail: "项目拥有最小 locator/metadata SQLite（定位与元数据数据库），只保存来源、定位、版本、hash、打开状态、原生关系和与原件绑定的可重建文字；不保存原件字节、人物事件或跨领域资料。Skill 负责把位置未知或旧定位失效的普通请求送入登记查询或有界发现：候选阶段隐藏真实路径，只有选中后才重新核对大小和 SHA-256。用户已经给出附件或可靠路径时仍直接读取原件，不先经过本入口。"
   },
   {
     id: "media",
@@ -1406,7 +1412,7 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "personal-media", name: "个人媒体定位", technicalName: "personal-media", summary: "按自然线索找到照片、视频和录音原件，也能建立不复制原件字节的临时浏览目录。", href: "/skills/personal-media" },
-      { slug: "personal-materials", name: "非媒体原件定位", technicalName: "personal-materials", summary: "路径未知或失效时，在获准位置返回少量合同、报告或其他非媒体原件并重新核对。", href: "/skills/personal-materials" },
+      { slug: "personal-materials", name: "非媒体原件定位", technicalName: "personal-materials", summary: "先查项目登记的定位与版本；位置确实未知时只做有界名称与文件状态发现，候选隐藏路径，选中后才重算大小和 SHA-256 并打开。", href: "/skills/personal-materials" },
       { slug: "wechat-direct", name: "具名微信上下文", technicalName: "wechat-direct", summary: "读取一个明确联系人或群的小段上下文、回复关系和相关媒体；明确需要时才做单对象增量归档。", href: "/skills/wechat-direct" },
       { slug: "google-workspace-direct", name: "固定办公账号入口", technicalName: "google-workspace-direct", summary: "通过登记的同一账号读取邮件、云盘和日历；明确写入只使用现有的精确操作。", href: "/skills/google-workspace-direct" }
     ]

@@ -16,6 +16,7 @@ import { cacbModules, cacbProject } from "../app/content-cacb.js";
 import { codexRemoteModules, codexRemoteProject } from "../app/content-codex-remote.js";
 import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
+import { personalMaterialsModules, personalMaterialsProject } from "../app/content-personal-materials.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -99,11 +100,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly eleven projects and four navigation areas", async () => {
+test("the accepted panel has exactly twelve projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -343,7 +344,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current eleven/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current twelve/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -499,7 +500,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 11);
+  assert.equal(enabledProjectCount, 12);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -621,7 +622,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the eleven accepted project packages", async () => {
+test("the maintenance registry drives exactly the twelve accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -644,9 +645,9 @@ test("the maintenance registry drives exactly the eleven accepted project packag
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -669,6 +670,7 @@ test("the maintenance registry drives exactly the eleven accepted project packag
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -679,6 +681,15 @@ test("the maintenance registry drives exactly the eleven accepted project packag
   for (const entry of projectCatalog) {
     if (entry.registration.ai_refresh.mode === "manual_owner_only") {
       assert.deepEqual(entry.registration.impact_sources, []);
+      continue;
+    }
+    if (!entry.registration.source.local_root) {
+      assert.equal(entry.registration.source.visibility, "PRIVATE", `${entry.project.slug} may omit local_root only for a PRIVATE source`);
+      for (const module of entry.modules) {
+        for (const source of module.sources) {
+          assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/, `${entry.project.slug}/${module.slug} leaks a local source locator: ${source.path}`);
+        }
+      }
       continue;
     }
     const root = `${entry.registration.source.local_root.replaceAll("\\", "/")}/`;
@@ -996,6 +1007,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "wechat-direct",
       expectedOrder: 11,
       expectedModules: ["bounded-chat-context", "named-chat-archive", "reply-media-relations", "moments-local-cache", "account-source-identity", "preservation-verification"]
+    },
+    {
+      project: personalMaterialsProject,
+      modules: personalMaterialsModules,
+      expectedSlug: "personal-materials",
+      expectedOrder: 12,
+      expectedModules: ["registered-lookup", "bounded-discovery", "verified-open", "exact-intake"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1928,7 +1946,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 1);
-  assert.equal(systemProjectInventory.detailedPageCount, 11);
+  assert.equal(systemProjectInventory.detailedPageCount, 12);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
@@ -1949,6 +1967,125 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.match(pageSource, /referenceItems\.map\(\(item\) => <SiteLink[^>]+>\{item\.label\}/, "System project references must render their owning label instead of a hard-coded rules caption");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
   assert.match(styleSource, /@media \(max-width: 420px\)[\s\S]*?\.home-page \.project-card-header \{ padding-top: 34px; padding-right: 0; \}/, "narrow project cards must reserve a separate first row for the repository or visibility badge");
+});
+
+test("personal-materials explains direct lookup, bounded discovery, verified opening and exact intake without private payloads", async () => {
+  assert.equal(personalMaterialsProject.slug, "personal-materials");
+  assert.equal(personalMaterialsProject.order, 12);
+  assert.equal(personalMaterialsProject.route, "/projects/personal-materials");
+  assert.equal(personalMaterialsProject.visibility, "私有仓库");
+  assert.equal(personalMaterialsProject.repositoryUrl == null, true, "a PRIVATE project must not expose a repository button");
+  assert.equal(personalMaterialsProject.gallery, undefined, "original lookup does not need an invented gallery");
+  assert.deepEqual(personalMaterialsModules.map((item) => item.slug), ["registered-lookup", "bounded-discovery", "verified-open", "exact-intake"]);
+
+  const publicText = JSON.stringify({ project: personalMaterialsProject, modules: personalMaterialsModules });
+  assertNoCredentialValues(publicText);
+  assert.doesNotMatch(publicText, /__PERSONAL_MATERIALS_[A-Z_]+__/, "personal-materials still contains an evidence placeholder");
+  assert.match(publicText, /PRIVATE main [a-f0-9]{7,40}/, "personal-materials omits its final source commit evidence");
+  assert.match(publicText, /(?:\d+ passed|\d+ 项[^。；]{0,40}(?:通过|pass))/i, "personal-materials omits its final synthetic regression result");
+  assert.doesNotMatch(publicText, /[A-Za-z]:\\\\/, "personal-materials public content leaks an absolute Windows locator");
+  assert.doesNotMatch(publicText, /成都案|工资扣分|京东快递|调解说明|民事起诉状/, "personal-materials public content copied a private or fixture candidate");
+  assert.doesNotMatch(publicText, /后台(?:扫描|索引|同步)已(?:启用|运行)|全盘扫描已(?:启用|完成)|原件字节已复制|媒体原件已接入/, "personal-materials overclaims a prohibited background, bulk, copy or media route");
+
+  const overviewText = JSON.stringify({
+    summary: personalMaterialsProject.summary,
+    why: personalMaterialsProject.why,
+    example: personalMaterialsProject.plainExample,
+    result: personalMaterialsProject.result,
+    principles: personalMaterialsProject.productPrinciples,
+    states: personalMaterialsProject.readerStates,
+    responsibilities: personalMaterialsProject.responsibilities,
+    exclusions: personalMaterialsProject.exclusions,
+    evidence: personalMaterialsProject.evidenceLayers,
+    snapshot: personalMaterialsProject.currentState
+  });
+  for (const expected of [
+    /可靠.*(?:定位|locator).*直接|已有.*(?:定位|locator).*直接/,
+    /位置未知|不知道.*位置|定位失效/,
+    /非媒体/,
+    /不.*(?:领域判断|解释材料含义)|领域.*Owner/,
+    /零命中|找不到/,
+    /不证明.*不存在|不能证明.*不存在/,
+    /不复制.*原件|原件.*零复制/,
+    /(?:不|没有|无).*后台/,
+    /合成.*(?:测试|回归)|(?:测试|回归).*合成/,
+    /(?:未|没有)读取.*(?:实际|真实|私人).*(?:SQLite|数据库|原件|候选)|(?:本轮|本页).*没有.*(?:真实|私人).*(?:E2E|端到端)/
+  ]) assert.match(overviewText, expected, `personal-materials overview omits product boundary: ${expected}`);
+
+  const moduleBySlug = new Map(personalMaterialsModules.map((item) => [item.slug, item]));
+  const registeredLookupText = JSON.stringify(moduleBySlug.get("registered-lookup"));
+  assert.doesNotMatch(registeredLookupText, /未验证派生文字|hash_bound_derived_text/, "registered lookup retains the retired text-only stage claim");
+  for (const expected of [/\bfind\b/i, /少量.*候选|候选.*少量/, /路径.*隐藏|不显示.*路径/, /version|版本/, /relation|关系/, /native|ocr|extracted/, /SHA-256.*重复|重复.*SHA-256/, /scope|覆盖/, /gap|缺口/, /verified_locator[\s\S]{0,120}open_state[=:]?verified|open_state[=:]?verified[\s\S]{0,120}verified_locator/, /unverified_source_evidence/, /(?:即使没有|不要求).*material_text/, /known_locator_gap/]) {
+    assert.match(registeredLookupText, expected, `registered lookup omits: ${expected}`);
+  }
+
+  const boundedDiscoveryText = JSON.stringify(moduleBySlug.get("bounded-discovery"));
+  for (const expected of [/\bdiscover\b/i, /filesystem-directory/, /8 个.*来源|最多 8.*来源/, /2500/, /12 层|深度.*12/, /8 秒/, /不.*读取.*正文|正文.*不读取/, /不.*(?:预先|扫描时).*哈希|选中.*才.*哈希/, /不跟随.*(?:链接|symlink)|follow_symlinks=False/, /未搜索|unsearched/, /cutoff|截断|上限/, /增量.*(?:枚举|scandir)|(?:枚举|scandir).*增量/i, /目录.*(?:读取|枚举).*(?:错误|失败).*gap|(?:scan_error|directory_error)/i]) {
+    assert.match(boundedDiscoveryText, expected, `bounded discovery omits: ${expected}`);
+  }
+
+  const verifiedOpenText = JSON.stringify(moduleBySlug.get("verified-open"));
+  for (const expected of [/open-discovered/, /token/i, /Base64/i, /不是.*(?:数字签名|秘密)|不承担.*(?:授权|身份)/, /root.*commitment|来源根.*承诺/, /相对路径|relative/, /(?:stat|signature|文件状态)/i, /SHA-256/, /identity.*conflict|身份冲突/, /rollback|回滚/, /\binspect\b/i, /\bopen\b/i, /missing|hash_mismatch|launcher_failed|缺失|哈希不匹配|启动失败/, /启动前.*(?:重新|再次).*(?:SHA-256|哈希)|(?:SHA-256|哈希).*启动前.*(?:重新|再次)/]) {
+    assert.match(verifiedOpenText, expected, `verified opening omits: ${expected}`);
+  }
+
+  const exactIntakeText = JSON.stringify(moduleBySlug.get("exact-intake"));
+  for (const expected of [/personal-materials\.handoff\.v1/, /\bintake\b/i, /sources/, /materials/, /material_relations/, /material_text/, /native/, /ocr/, /extracted/, /asr|transcript/i, /original_bytes_copied|原件.*零复制/, /media_owned_by_personal_media|personal-media/, /\binit\b/i, /foreign.*database|外来.*数据库/, /\bstatus\b/i, /(?:同一|稳定).*句柄[\s\S]{0,180}(?:stat|SHA-256)[\s\S]{0,180}(?:提交|commit)/i, /(?:material_key|source_key)[\s\S]{0,180}(?:native_id)?[\s\S]{0,120}(?:不允许|拒绝|禁止).*重绑|重绑[\s\S]{0,160}(?:拒绝|禁止)/i, /(?:内容|SHA-256).*变化[\s\S]{0,180}(?:material_text|绑定文字)[\s\S]{0,120}(?:清理|删除|失效)/i]) {
+    assert.match(exactIntakeText, expected, `exact intake omits: ${expected}`);
+  }
+
+  const moduleSlugs = new Set(personalMaterialsModules.map((item) => item.slug));
+  assert.ok(personalMaterialsProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)), "a personal-materials usage example has no owning module");
+  assert.deepEqual(new Set(personalMaterialsProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs, "personal-materials usage examples do not cover all four journeys");
+  for (const module of personalMaterialsModules) {
+    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${module.slug} search aliases are not bounded`);
+    assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
+    for (const values of Object.values(module.searchProjection)) assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug} has an incomplete search projection`);
+    for (const source of module.sources) {
+      assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/, `${module.slug} source label leaks a local locator: ${source.path}`);
+      assert.equal(source.href == null, true, `${module.slug} must not link to its PRIVATE source`);
+    }
+  }
+
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "personal-materials");
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.ai_refresh.content_path, "app/content-personal-materials.js");
+  assert.equal(registration.ai_refresh.semantic_revision, 1);
+  assert.equal(registration.source.repo, "wlyaaaaa/personal-materials");
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(registration.source.default_branch, "main");
+  assert.equal(Object.hasOwn(registration.source, "local_root"), false);
+  assert.ok(registration.impact_sources.length >= 3);
+  assert.match(registration.ai_refresh.collectors.join("\n"), /never open the default database, registered source roots, candidate tokens, originals or handoff payloads/);
+  assert.match(registration.refresh_rules.ignore_when.join("\n"), /private database, source root, original, candidate, title, identifier, path, hash, token/);
+  assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
+  assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
+
+  assert.equal(systemProjectInventory.detailedPageCount, 12);
+  const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
+  assert.equal(materialAsset.href, "/projects/personal-materials");
+  assert.ok(skillProjectLinks["personal-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "personal-materials" && item.moduleSlug === "registered-lookup"));
+  assert.ok(!skillProjectLinks["personal-materials"].some((item) => item.systemAssetId), "personal-materials Skill still points to the old no-detail System asset relation");
+  assert.ok(projectReferenceLinks["personal-materials"].some((item) => item.href === "/skills/personal-materials"), "personal-materials project does not link back to its Skill");
+  const materialsSkill = skills.find((item) => item.slug === "personal-materials");
+  const materialsSkillText = JSON.stringify({ skill: materialsSkill, outcome: skillOutcomes["personal-materials"] });
+  assert.doesNotMatch(materialsSkillText, /__PERSONAL_MATERIALS_[A-Z_]+__/, "personal-materials Skill still contains an evidence placeholder");
+  assert.match(materialsSkill.tests, /(?:\d+ passed|\d+ 项[^。；]{0,40}(?:通过|pass))/i, "personal-materials Skill omits the final synthetic regression result");
+  assert.match(materialsSkillText, /不含[^。；]{0,40}路径[^。；]{0,40}候选|候选[^。；]{0,80}(?:隐藏|不含)[^。；]{0,40}路径/, "personal-materials Skill exposes candidate paths before selection");
+  assert.match(materialsSkillText, /discover[\s\S]{0,220}不读正文[\s\S]{0,120}不算哈希/i, "personal-materials Skill loses the pre-selection discovery boundary");
+  assert.match(materialsSkillText, /open-discovered[\s\S]{0,260}来源根[\s\S]{0,260}SHA-256/i, "personal-materials Skill loses selected-original verification");
+
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-materials", "index.html"), "utf8");
+  assert.match(overviewHtml, /data-static-route="\/projects\/personal-materials"/);
+  assert.doesNotMatch(overviewHtml, /project-gallery|href="https:\/\/github\.com\/wlyaaaaa\/personal-materials"/);
+  assert.equal(searchPanel("个人材料查找", "system")[0]?.href, "/projects/personal-materials");
+  for (const [query, href] of [
+    ["已登记材料怎么快速找", "/projects/personal-materials/registered-lookup"],
+    ["不知道文件在哪怎么有界搜索", "/projects/personal-materials/bounded-discovery"],
+    ["选中候选后怎么核对哈希", "/projects/personal-materials/verified-open"],
+    ["新材料怎样精确接入而不复制原件", "/projects/personal-materials/exact-intake"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `personal-materials search misroutes: ${query}`);
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -2027,6 +2164,9 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const wechatDirectCandidate = run(["--project", "wechat-direct", "--path", "wechat_cli.py"]);
   const wechatDirectMaterial = run(["--project", "wechat-direct", "--path", "wechat_cli.py", "--material-change"]);
   const wechatDirectPrivateArchive = run(["--project", "wechat-direct", "--path", "exports/private/messages.jsonl", "--material-change"]);
+  const personalMaterialsCandidate = run(["--project", "personal-materials", "--path", "materials.py"]);
+  const personalMaterialsMaterial = run(["--project", "personal-materials", "--path", "materials.py", "--material-change"]);
+  const personalMaterialsPrivateDatabase = run(["--project", "personal-materials", "--path", "private/materials.sqlite3", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -2093,11 +2233,17 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(wechatDirectMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
   assert.equal(wechatDirectPrivateArchive.impact_candidate, false);
   assert.equal(wechatDirectPrivateArchive.task_required, false);
+  assert.equal(personalMaterialsCandidate.impact_candidate, true);
+  assert.equal(personalMaterialsCandidate.task_required, false);
+  assert.equal(personalMaterialsMaterial.task_required, true);
+  assert.equal(personalMaterialsMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
+  assert.equal(personalMaterialsPrivateDatabase.impact_candidate, false);
+  assert.equal(personalMaterialsPrivateDatabase.task_required, false);
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2112,6 +2258,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedPersonalHealthWithoutOwner = run(["--project", "personal-health"]);
   const targetedPersonalHealth = run(["--project", "personal-health", "--manual-owner-request"]);
   const targetedWechatDirect = run(["--project", "wechat-direct"]);
+  const targetedPersonalMaterials = run(["--project", "personal-materials"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2188,11 +2335,19 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedWechatDirect.selected_projects[0].semantic_revision, 1);
   assert.equal(targetedWechatDirect.selected_projects[0].source.visibility, "PUBLIC");
   assert.ok(targetedWechatDirect.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedPersonalMaterials.status, "ready_for_ai");
+  assert.deepEqual(targetedPersonalMaterials.selected_projects.map((item) => item.id), ["personal-materials"]);
+  assert.equal(targetedPersonalMaterials.selected_projects[0].content_path, "app/content-personal-materials.js");
+  assert.equal(targetedPersonalMaterials.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedPersonalMaterials.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedPersonalMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-materials");
+  assert.equal(Object.hasOwn(targetedPersonalMaterials.selected_projects[0].source, "local_root"), false);
+  assert.ok(targetedPersonalMaterials.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);

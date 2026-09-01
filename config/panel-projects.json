@@ -1134,6 +1134,82 @@
           "an unconnected internal helper or dormant source path changes without entering a public command or verified product route"
         ]
       }
+    },
+    {
+      "id": "personal-materials",
+      "order": 12,
+      "title": "个人材料查找",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/personal-materials",
+      "ai_refresh": {
+        "content_path": "app/content-personal-materials.js",
+        "semantic_revision": 1,
+        "scope": "complete private-source public product overview and four source-backed modules covering registered natural-language lookup, bounded on-demand discovery across approved non-media roots, selected-original byte verification and opening, and exact provenance intake without exposing any private database, source root, path, candidate, identifier, content fingerprint or original",
+        "collectors": [
+          "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-materials; expose only repository identity, visibility, clean/sync state and commit, never the private local source locator",
+          "read only tracked AGENTS.md, README.md, materials.py, schema.sql and tests/test_materials.py from the admitted clean main; never open the default database, registered source roots, candidate tokens, originals or handoff payloads",
+          "run the source-owned pytest and ruff checks in the admitted project with task-scoped temp; tests must use synthetic fixtures and must not resolve the default private database"
+        ],
+        "conditional_collectors": [
+          "one explicit user-requested real find or discover E2E only when a current compatibility claim would otherwise change; keep all candidates, roots, paths, identifiers, hashes, tokens and gaps outside public content",
+          "one explicit selected-candidate inspect/open/open-discovered E2E only when the user separately requests that private action; review the bounded receipt before deciding whether any non-payload product fact changed"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/personal-materials",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-personal-materials-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "project_overview_product_principles_and_scope_boundary",
+        "registered_natural_language_search_and_version_evidence",
+        "bounded_source_routed_filename_and_directory_discovery",
+        "selected_original_hash_verification_registration_and_opening",
+        "exact_handoff_provenance_relations_and_rebuildable_text",
+        "source_coverage_zero_hit_cutoff_and_unsearched_scope_receipts",
+        "media_to_personal_media_and_domain_meaning_to_owning_workflow",
+        "no_background_scan_no_original_copy_and_private_payload_exclusion"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_scope_and_public_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md"
+          ]
+        },
+        {
+          "kind": "lookup_discovery_verification_and_intake_implementation",
+          "paths": [
+            "materials.py",
+            "schema.sql"
+          ]
+        },
+        {
+          "kind": "behavior_recovery_and_privacy_evidence",
+          "paths": [
+            "tests/test_materials.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed routing boundary, query match, version role, candidate projection, source coverage, discovery budget, token/root binding, byte verification, opening, intake, relation, text or media exclusion behavior changes meaning",
+          "a current source selection, false-match, concurrent-file-change, locator drift, launch, foreign-database, media classification or zero-hit recovery gap becomes implemented, regresses or changes the user's next action",
+          "an explicitly authorized private E2E changes the public conclusion about current compatibility without requiring any private payload to be published"
+        ],
+        "snapshot_only_when": [
+          "the clean PRIVATE main commit, synthetic test result or observation time changes without altering product meaning"
+        ],
+        "ignore_when": [
+          "a private database, source root, original, candidate, title, identifier, path, hash, token, account, device, text, relation or coverage receipt changes without altering the public product contract",
+          "an internal refactor or test addition leaves every displayed capability, boundary, failure and recovery behavior unchanged",
+          "an unrelated domain project changes how it interprets a material after personal-materials has returned the same verified original"
+        ]
+      }
     }
   ]
 }

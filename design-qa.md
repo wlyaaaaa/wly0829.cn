@@ -1,160 +1,85 @@
-# 十一项目 MAP 设计与产品验收
+# 十二项目 MAP 设计与产品验收
 
-状态：`eleven_project_wechatdirect_audit_pass`
+## 本轮范围
 
-观察时间：2026-09-01
+本轮只建设第 12 项“个人材料查找（personal-materials）”，并把它接入已有项目目录、System、搜索和 `personal-materials` Skill。没有预建 personal-formal-documents 或更后的项目页面。
 
-## 当前范围
+统一验收标准没有改变：不了解项目的人看完后，能准确说明它为什么存在、什么时候不该用、怎样从一句普通描述回到真正原件、最后得到什么，以及找不到、文件变化或入口不可用时怎样恢复；产品思想和人话先于技术名词，技术事实仍完整可核验。
 
-Registry 当前启用 11 项：`.agents`、PCConfig、GitHub 总索引、ChineseASR、
-TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、
-个人健康证据与安全决策、WeChatDirect。
+## 权威来源与自动修复
 
-本轮只建设第 11 项 WeChatDirect，并把它接入已有 System、项目目录、搜索和
-`wechat-direct` Skill。没有预建 personal-materials 或任何后续项目页面。
+- Source：PRIVATE（私有）`wlyaaaaa/personal-materials`，默认分支 `main`。
+- 正式回读：本地 `main`、`origin/main` 与 GitHub 远端 `main` 均为 `08a3b0df5e999615c127e401e84b35b04a8752cb`，工作树 clean（干净）。
+- 合成回归：37 项全部通过，根任务实测 33.30 秒；Ruff 静态检查通过。
+- 本轮没有打开真实 `materials.sqlite3`、来源根、候选、token、路径、哈希、正文或原件，也没有运行真实自然请求 E2E（端到端验收）。
 
-## 唯一验收标准
+首次全量取证发现并自动修复了源项目的真实问题：
 
-一个不了解 WeChatDirect 的人看完页面后，能够准确说明它为什么存在、解决什么、
-怎样使用、得到什么；页面不遗漏会改变使用判断的重要能力，不以技术名词遮住产品
-价值，所有事实都能回到当前 source 验证，桌面和手机完整流畅。
+1. handoff 接入改为在同一文件句柄上完成 `stat → SHA-256 → stat`，并保持到数据库提交前再次核对。
+2. 禁止 `material_key` 与 `source/native_id` 双向静默重绑；内容变化时先清理旧 `material_text`。
+3. `filesystem-directory` 根必须为绝对路径；`init` 核对完整四表列合同与 SQLite integrity（完整性）。
+4. 有界发现改为受预算约束的增量目录枚举；目录/条目读取失败进入明确 gap，候选消失不再拖垮整次发现。
+5. 同路径新内容刷新版本字段并清理旧派生文字；`open` 与 `open-discovered` 在启动前再次复验。
+6. 查找第二阶段改名为 `unverified_source_evidence`，准确表达它可由来源/材料元数据、`search_text` 或绑定文字命中，不再把无 `material_text` 的候选冒充“只靠派生文字”。
 
-## Source-first 产品结论
+## 信息架构
 
-- PUBLIC source：`wlyaaaaa/WeChatDirect`，当前本地与远端
-  `main=488353629098f24535784c1663159d7570ae96f1`，工作树干净。
-- 当前包版本 `0.1.0`；主 CLI 为 Windows + Python 3.14，语音派生使用独立
-  Python 3.11 + `pilk`。
-- 8 个公开命令：`context`、`sync-contact`、`moments`、
-  `sync-moments`、`media-open`、`preserve`、`doctor`、
-  `verify-export`。
-- 当前 fresh 回归为 50 项测试 + 2 个子测试；ruff 通过。无正文 Doctor 当前为
-  success：2 个账号槽位所需配置/状态文件、加密/压缩依赖和语音解码器均 available。
-- 页面没有读取真实聊天、朋友圈、联系人、群、媒体、配置、archive 或凭据，也没有
-  运行具名聊天 E2E。
-- “自动增量”准确写成：用户再次显式运行同一具名归档命令时，程序自动选择无变化、
-  单来源排序游标或多来源时间重叠；没有 watcher、计划任务或全账号后台同步。
-- 图片、视频、表情和文件当前保留与原消息的资源关系和不可打开缺口；真正可打开和
-  复制原始字节的公开路径主要是唯一 `VoiceInfo` 语音。SILK 原件与 WAV 派生通过
-  SHA-256 关系区分，转写另交 ChineseASR。
-- 完成态档案可以增量重放或显式 `--full-reconcile`；首次硬崩溃无
-  `state.json` 半成品、陈旧 `.sync.lock`、自动 repair 和恢复回微信仍未实现。
-  `verify-export` 只验真不修复。
+页面复用现有 Project/Module 静态壳层，没有新增专用组件、CSS、客户端依赖或运行时。
 
-## 同轮自动修复
+- Overview（总览）：可靠定位直接绕过；非媒体才进入；位置未知时才发现；选中后才读字节；零命中只说明本轮范围。
+- `registered-lookup`：已登记查找、版本/重复/原生关系、三阶段证据强度和路径隐藏。
+- `bounded-discovery`：最多 8 个来源、2500 个文件、每源 12 层、总计 8 秒；选择前不读正文、不算哈希、不跟随链接。
+- `verified-open`：来源根、相对路径、stat、SHA-256、稳定身份、事务回滚、版本刷新和启动前复验。
+- `exact-intake`：`personal-materials.handoff.v1`、四表最小索引、稳定句柄、身份防重绑、文字失效、媒体拒绝、`init/status` 边界。
 
-WeChatDirect source 原 README 曾把“媒体资源关系”写得像所有图片/视频/文件都能
-打开，也没有把完成态重放与崩溃断点续跑分开。本轮已通过真实 source Owner 修复并
-发布：
-
-- README 与 CLI 帮助现在明确 VoiceInfo-only 字节打开、非语音媒体关系/缺口、
-  完成态增量、首次硬崩溃半成品、陈旧锁、verify-only 和无 restore/import。
-- `sync-contact` 的 no-change 快速路径不再只看来源指纹、文件存在和数量；
-  返回成功前会重验 manifest 自身哈希、manifest/state 绑定，以及
-  `context.md`、`ai-context.md`、`messages.jsonl` 的哈希、大小和记录数。
-- 任何不一致都精确失败并保留原文件，不静默覆盖未知内容。
-- source 回归由 48 + 2 增至 50 + 2；新测试覆盖 manifest、自哈希、三份档案漂移、
-  大小、数量和 state 绑定。
-
-## 最终审计修复回合
-
-- Reader/UI P1：390/320px 的第 11 张项目卡中，WeChatDirect 长标题被右上 GitHub
-  徽标覆盖。现以通用 `<=420px` 规则为所有项目卡徽标保留独立首行；390/320
-  复测的交叠高度均为 0，未增加项目专用 CSS。
-- Reader/UI P1：System 资产卡把所有项目 reference 硬编码显示成“进入规则”。现改为
-  渲染每条关系自己的 label；WeChatDirect 可见文字“语音转写交给 ChineseASR”与
-  `/projects/chinese-asr/task-routing/` 完全一致，`.agents` 规则入口仍显示自己的 label。
-- Reader/UI P2：项目快照测试标题声称 11 项但只遍历 10 项。现已导入
-  `wechatDirectProject` 并让两条单一快照投影测试真实遍历 11 项。
-- Reader/UI P2：产品层提前使用 WAL、RAG 等缩写。现把产品流程改回“数据库写入
-  日志”“检索增强生成系统”等人话；命令、schema 和内部名继续留在技术层。
-- Technical P2：两类导出共享文件的文案曾让人误以为朋友圈也写媒体字节。现明确
-  只有联系人导出另写当前可打开的 VoiceInfo 语音，朋友圈只保留关系与缺口。
-- Technical P2：技术入口漏列 `sync-moments`。现补齐真实第八命令，并把
-  `--full-reconcile` 与 pytest 分别标成补充模式和开发回归，不冒充独立产品命令。
-- Bloat/Public P2：System source pack 标为 E97/E98 时仍残留 E95 current 文案。现
-  统一到活动 E98 `e1c1e36`、previous E97；E98 的发布后看板实质漂移规则同时进入
-  `.agents`、Rules、Registry semantic revision 11、System source pack 与测试。
-
-## 页面信息架构
-
-页面沿用同一个通用项目外壳和三层阅读顺序，不新增 WeChat 专属 React 组件、CSS、
-图片依赖或客户端状态机。
-
-- 速览：产品定义、当前快照、最重要边界、普通请求、结果与三态。
-- 产品：六步工作流、10 条产品原则、职责/不负责和覆盖全部模块的真实用法。
-- 技术：当前版本、Doctor、组件、证据、命令、演进和六个项目自有模块。
-- 六模块：聊天上下文、具名增量归档、回复与媒体、朋友圈缓存、账号与只读源、
-  保全与验真。
-- v1 不设画廊。source 没有公开安全图片资产，仿微信聊天截图会误导产品身份；
-  方法画布与结构化正文已提供必要可视化。
+项目没有公开安全的真实视觉输出：CLI 截图会带出私人候选，文件管理器假界面又不是真产品。因此本页没有 gallery（画廊），这是事实边界，不是遗漏。
 
 ## 整站接入
 
-- Registry：`id=wechat-direct`、`order=11`、PUBLIC、`real_dashboard`、
-  `route=/projects/wechat-direct`，未来实质 source 变化可触发增量快照。
-- System：GitHub 项目总数仍为 49；完整详情页由 10 增至 11。原
-  WeChatDirect 资产入口已改到完整项目页，`wechat-history-ai-bridge` 继续保持
-  独立接入桥身份。
-- Projects：11 张真实项目卡，无占位卡；WeChatDirect 卡直接暴露总览和 6 个模块。
-- Skills：`wechat-direct` 从“详情逐步收录”改为对应 WeChatDirect 项目，并保留
-  ChineseASR 语音转写关系；测试事实同步更新为 50 + 2。
-- Search：广义 “WeChatDirect” 进入总览；聊天、增量、语音关系、朋友圈账号、
-  主副号隔离和保全验真分别进入对应模块。
-- 静态路由：115 增至 122；每条路由构建时已含完整正文，无点击时正文 fetch、
-  spinner、骨架屏或空白壳。
+- Registry：第 12 项、`real_dashboard`、PRIVATE source、首次完整快照，后续只按实质变化增量维护。
+- Projects：项目目录现在有 12 张真实卡，第 12 张直接暴露总览与 4 个模块。
+- System：完整项目页计数 12；项目资产和“位置未知时的非媒体原件查找”组成节点均直达新项目，并同时保留 Skill 入口。
+- Skills：修正旧的“9 项测试”“候选直接给路径”“发现阶段核对 hash/content”等陈旧说法；项目与 Skill 双向可达。
+- Search：总览、4 个模块、System 入口与项目作用域搜索均使用有界语义投影；没有把完整正文复制进共享 JavaScript。
 
-## 构建、测试与反膨胀
+## 构建、体积与回归
 
-- `npm run build` 通过：E98 snapshot binding 通过，122 条完整静态路由，
-  124 个 production HTML，PUBLIC gate 扫描 138 个 source 与 218 个 dist 文件，
-  共 356 个文件，0 finding；新增两份搜索验证文件不改变渲染页面。
-- `npm run test:built` 为 70/70。
-- 共享 JavaScript 为 32.44 kB / gzip 9.86 KiB，低于 12 KiB 线；增量来自已合并的全站回顶反馈，不是 WeChatDirect 专用运行时。
-- 共享 CSS 为 127.81 kB / gzip 20.42 KiB，低于 21 KiB 线；65 bytes 增量是修复所有窄屏长项目标题与徽标重叠的通用规则，WeChatDirect 没有新增专用 CSS。
-- 全站紧凑搜索 gzip 48.60 KiB；64 项项目模块搜索 gzip 50.45 KiB，均低于
-  64 KiB 线。
-- 没有新增服务、数据库、API、worker、daemon、watcher、scheduler、动态 import、
-  正文 fetch、画廊资产或运行时依赖。新增成本只有完整静态 HTML、Registry 数据与
-  构建期搜索投影。
+- `npm test`：71/71 通过。
+- 静态输出：127 条完整页面路由、129 个生产 HTML、245 条紧凑搜索记录。
+- PUBLIC gate（公开内容门）：139 个 source + 224 个 dist 文件，共 363 个文件，0 finding（发现项）。
+- 共享增强 JS：10,100 bytes gzip（9.86 KiB），低于 12 KiB 审查线。
+- 共享 CSS：20,907 bytes gzip（20.42 KiB），低于 21 KiB 审查线。
+- 全站搜索：51,047 bytes gzip（49.85 KiB），低于 64 KiB 审查线。
+- 全项目模块搜索：53,737 bytes gzip（52.48 KiB），低于 64 KiB 审查线。
+- 正文仍在各自静态 HTML；没有点击后 `fetch`、动态正文 import、spinner、骨架屏或空白占位。
 
-## 当前浏览器 QA
+## 真实浏览器验收
 
-本轮使用本机 Chrome 对 Vite preview 完成真实交互验收；console error、
-page error、request failure 均为 0。
+- 视口：1440、768、390、320 CSS px。
+- 项目目录、总览、代表模块、Skill 与 System 的文档 `scrollWidth === clientWidth`；没有页面级水平溢出。
+- 390/320 的模块导航只在自己的横向轨道内移动，不带动整页；直接进入模块时页面保持顶部。
+- 项目标题、PRIVATE 入口卡、速览、三态、人话三格和模块正文按既有断点自然换行，没有大块无意义空白。
+- 连续访问 Projects、总览、模块和 System：0 console error、0 page exception、0 resource failure。
+- 本地静态预览的代表页面 TTFB 为 1.7–2.2 ms；该数字只证明本机静态链路，不冒充公网性能。
 
-- 1440×1000：Overview 首屏连续展示产品定义、公开仓库入口、六模块导航和当前项目
-  快照；`scrollWidth=clientWidth=1440`，没有大片无意义空白或页面横向溢出。
-- 390×844：Overview 与代表性“具名增量归档”模块均有
-  `scrollWidth=clientWidth=390`；六模块导航在自己的横向轨道滚动，不撑宽正文。
-- 移动端阅读层切换使用真实坐标点击与原生 `.click()` 复验：从 560px / 620px
-  切到“产品”后滚动位置差值均为 0。Playwright 的高层 `page.click` 会先替测试
-  滚动目标进视口，曾产生一次假跳顶；该结果没有作为产品缺陷。
-- 代表性模块直接路由 200，包含 7 个失败/恢复状态、4 个 source 入口、完整
-  full reconcile 与首次硬崩溃缺口；移动端没有溢出。
-- `/projects/` 实际渲染 11 张卡；System 的“完整项目页”显示 11；
-  System WeChatDirect 资产和 `/skills/wechat-direct/` 均可进入新项目页。
-- 项目页没有 gallery，公开 GitHub 按钮在 390px 下仍为 156×36px 并保留完整文字。
+## 公开边界
 
-## 最终独立审计
+公开的是项目身份、产品流程、命令、表结构、算法、数值上限、失败语义、PRIVATE main commit 与合成测试。未公开实际数据库、来源根、账号/设备、标题、候选、内部 ID、token、真实路径、文件哈希、关系边、绑定正文或原件。
 
-四路 fresh Sol Max 对同一 clean candidate `b9bb8387b4d3fcd9ad2a0c7261bc3a555d7ccb8c`
-完成终审与修复回读：
+PRIVATE 不是删减公开安全技术的理由；页面仍完整写出 SQLite、四表、匹配阶段、Base64 选择句柄、来源根承诺、文件签名、SHA-256、事务和所有当前失败边界。
 
-- Product content：P0=0、P1=0、P2=0。
-- Technical：P0=0、P1=0、P2=0。
-- Reader/UI：P0=0、P1=0、P2=0。
-- Bloat/Public：P0=0、P1=0、P2=0。
+## 仍然存在的真实缺口
 
-四路签字只证明候选内容、实现、读者体验、公开边界和反膨胀已经通过；它不冒充
-Git default-branch convergence、Pages deployment 或公网 read-back。
+- 本轮没有执行一次真实自然请求 → 候选 → 选择 → 打开原件 E2E；当前私人来源覆盖与默认应用现场保持 Unknown（未验证）。
+- Windows `os.startfile` 只能接收路径，不能把已核验句柄交给目标应用；最后一次复验到应用真正读取之间仍有极小窗口。
+- 外部文件系统与 SQLite 不能形成一个原子事务；提交前复核、启动前复核和以后每次 `open` 重验只能收窄窗口。
+- 有界发现达到预算时，已检查子集可能随文件系统枚举顺序变化；零命中始终只代表本次检查范围。
 
-## 当前真实缺口与发布边界
+## 四路终审
 
-- 当前 source 仍没有非语音媒体字节打开、群聊窗口外引用全覆盖、首次硬崩溃自动
-  续跑、陈旧锁自动修复或恢复回微信；页面已把它们作为具名缺口。
-- 当前真实具名微信 E2E 没有在网页任务中执行；源码、50 + 2 回归和无正文 Doctor
-  不能替代私人对象现场结果。
-- 候选已经通过一次完整独立审计；网站提交、normal push、Pages deployment 与公网
-  多视口 read-back 仍须在发布步骤独立完成并进入最终交付报告。本 QA 状态只表示
-  审计通过，不提前声明公网已经更新。
+- Product Completeness：PASS，P0=0 / P1=0 / P2=0。
+- Technical Truth：PASS，P0=0 / P1=0 / P2=0；曾发现的未验证阶段语义偏差已修源、发布、回读并补回归。
+- First Reader：PASS，P0=0 / P1=0 / P2=0。
+- UI / Bloat / Privacy：PASS，P0=0 / P1=0 / P2=0；旧 `design-qa.md` 是唯一 P1，本文件已就地替换并完成只读回签。
+
+网站候选此刻仍是本地 worktree，尚未提交、推送或完成 Pages 回读；上述 PASS 不冒充 PUBLIC 完成。

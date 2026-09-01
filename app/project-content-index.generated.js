@@ -10,6 +10,7 @@ import { project as project_learning, modules as modules_learning } from "./cont
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
 import { project as project_personal_health, modules as modules_personal_health } from "./content-personal-health.js";
 import { project as project_wechat_direct, modules as modules_wechat_direct } from "./content-wechatdirect.js";
+import { project as project_personal_materials, modules as modules_personal_materials } from "./content-personal-materials.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -22,5 +23,6 @@ export const projectContentPackages = new Map([
   ["learning", { project: project_learning, modules: modules_learning, kind: "learning" }],
   ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }],
   ["personal-health", { project: project_personal_health, modules: modules_personal_health, kind: "personal-health" }],
-  ["wechat-direct", { project: project_wechat_direct, modules: modules_wechat_direct, kind: "wechat-direct" }]
+  ["wechat-direct", { project: project_wechat_direct, modules: modules_wechat_direct, kind: "wechat-direct" }],
+  ["personal-materials", { project: project_personal_materials, modules: modules_personal_materials, kind: "personal-materials" }]
 ]);
