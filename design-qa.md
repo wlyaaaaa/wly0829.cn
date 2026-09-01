@@ -82,4 +82,13 @@ PRIVATE 不是删减公开安全技术的理由；页面仍完整写出 SQLite�
 - First Reader：PASS，P0=0 / P1=0 / P2=0。
 - UI / Bloat / Privacy：PASS，P0=0 / P1=0 / P2=0；旧 `design-qa.md` 是唯一 P1，本文件已就地替换并完成只读回签。
 
-网站候选此刻仍是本地 worktree，尚未提交、推送或完成 Pages 回读；上述 PASS 不冒充 PUBLIC 完成。
+## PUBLIC 发布与回读
+
+- 审过的产品内容 commit：`048e6bc4f8534ebbe716e30e9d47bf94715ea1bf`。
+- Git：本地 `main`、`origin/main` 与远端 `main` 已在第一次产品发布后回读为同一 commit，工作树 clean。
+- GitHub Actions：Pages run `33481682089` success（成功）；build job `99772472352`、deploy job `99772619445` 均完成。
+- GitHub Pages deployment：`6196504710`，`sha=048e6bc4f8534ebbe716e30e9d47bf94715ea1bf`，state=`success`，环境 URL 为 `https://wly0829.cn/`。
+- 公网回读：项目总览、4 个模块、`/skills/personal-materials/`、Projects、System 与项目搜索索引均返回 HTTP 200；页面包含正式 source commit `08a3b0df...`、37 项回归、四模块路由与 System/Skill 关系。
+- 公网 390 px 浏览器回读：`scrollWidth === clientWidth === 390`，`scrollX=0`，0 console/page/resource error，无 gallery。
+
+本次 docs-only（仅文档）收口只把上述发布事实写回仓库，不改变项目、System、Skill 或搜索页面语义；最终 current commit 与第二次 Pages readback 由 Git/Pages 现场事实拥有，不在文档内递归自指。
