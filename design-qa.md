@@ -1,6 +1,6 @@
 # 十一项目 MAP 设计与产品验收
 
-状态：`wechatdirect_candidate_repaired_waiting_clean_recheck`
+状态：`eleven_project_wechatdirect_audit_pass`
 
 观察时间：2026-09-01
 
@@ -136,12 +136,25 @@ page error、request failure 均为 0。
   System WeChatDirect 资产和 `/skills/wechat-direct/` 均可进入新项目页。
 - 项目页没有 gallery，公开 GitHub 按钮在 390px 下仍为 156×36px 并保留完整文字。
 
-## 当前缺口与下一门
+## 最终独立审计
+
+四路 fresh Sol Max 对同一 clean candidate `b9bb8387b4d3fcd9ad2a0c7261bc3a555d7ccb8c`
+完成终审与修复回读：
+
+- Product content：P0=0、P1=0、P2=0。
+- Technical：P0=0、P1=0、P2=0。
+- Reader/UI：P0=0、P1=0、P2=0。
+- Bloat/Public：P0=0、P1=0、P2=0。
+
+四路签字只证明候选内容、实现、读者体验、公开边界和反膨胀已经通过；它不冒充
+Git default-branch convergence、Pages deployment 或公网 read-back。
+
+## 当前真实缺口与发布边界
 
 - 当前 source 仍没有非语音媒体字节打开、群聊窗口外引用全覆盖、首次硬崩溃自动
   续跑、陈旧锁自动修复或恢复回微信；页面已把它们作为具名缺口。
 - 当前真实具名微信 E2E 没有在网页任务中执行；源码、50 + 2 回归和无正文 Doctor
   不能替代私人对象现场结果。
-- Candidate 尚未经过最终独立 Sol Max 四路审计，也尚未提交/发布网站。
-- 通过最终审计、修复、main 收敛、Pages 和公网多视口回读后，才可把状态改为
-  `eleven_project_wechatdirect_public_pass`。
+- 候选已经通过一次完整独立审计；网站提交、normal push、Pages deployment 与公网
+  多视口 read-back 仍须在发布步骤独立完成并进入最终交付报告。本 QA 状态只表示
+  审计通过，不提前声明公网已经更新。
