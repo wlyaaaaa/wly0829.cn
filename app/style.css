@@ -5603,6 +5603,7 @@ body:has(.learning-project-page) { min-width: 0; }
   .primary-nav a { font-size: 11.5px; }
   .mobile-search-button,
   .menu-button { width: 36px; height: 36px; }
+  .home-page .project-card-header { padding-top: 34px; padding-right: 0; }
   .home-page .project-metrics { display: none; }
   .home-page .project-summary { -webkit-line-clamp: 3; line-clamp: 3; }
   .home-page .project-card-status-text { -webkit-line-clamp: 1; line-clamp: 1; }

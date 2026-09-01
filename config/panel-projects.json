@@ -1051,6 +1051,89 @@
           "any source-side materiality claim or impact assessment because this project has no automatic website handoff"
         ]
       }
+    },
+    {
+      "id": "wechat-direct",
+      "order": 11,
+      "title": "WeChatDirect",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/wechat-direct",
+      "ai_refresh": {
+        "content_path": "app/content-wechatdirect.js",
+        "semantic_revision": 1,
+        "scope": "complete public overview and six source-backed modules covering bounded named-object chat context, explicit-trigger incremental contact archives plus completed-state replay and named crash-recovery gaps, reply and media relations with voice-only byte access, explicit-account local Moments cache, account/source identity and read-only snapshots, and preservation/export verification",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\WeChatDirect status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/WeChatDirect -LiveMetadata -RefreshRefs -Json",
+          "py -3.14 -m pytest -q",
+          "py -3.14 wechat_cli.py doctor"
+        ],
+        "conditional_collectors": [
+          "one explicit user-authorized named contact/group context or sync E2E only when the displayed live compatibility or runtime claim would otherwise change; never read a private body merely to refresh the website",
+          "wechat-direct verify-export --output <explicit-reviewed-export> only when an existing export integrity claim changes and the resulting bounded receipt is separately reviewed as public-safe"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/WeChatDirect",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\WeChatDirect"
+      },
+      "displayed_areas": [
+        "project_overview_and_product_principles",
+        "six_source_backed_modules",
+        "bounded_named_chat_context_and_sender_roles",
+        "explicit_trigger_full_then_incremental_contact_archive",
+        "reply_and_all_media_relations_with_voice_only_byte_access",
+        "explicit_account_current_local_moments_cache",
+        "primary_secondary_identity_and_read_only_database_snapshot",
+        "preservation_export_manifest_hash_and_offline_verification",
+        "completed_state_replay_and_named_hard_crash_recovery_gaps",
+        "version_doctor_tests_and_evidence_boundaries"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_commands_and_public_contract",
+          "paths": [
+            "README.md",
+            "pyproject.toml",
+            "accounts.example.json",
+            "local-settings.example.json",
+            "wechat_cli.py",
+            "voice_decode.py"
+          ]
+        },
+        {
+          "kind": "source_identity_messages_moments_and_media",
+          "paths": [
+            "wechat_source.py"
+          ]
+        },
+        {
+          "kind": "behavior_and_recovery_evidence",
+          "paths": [
+            "tests/test_public_commands.py",
+            "tests/test_wechat_cli.py",
+            "tests/test_wechat_source.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed command, account/object resolution rule, source identity, message/reply/media relation, archive, Moments, preservation, verification or recovery behavior changes meaning",
+          "a current non-voice media, group reply, hard-crash resume, stale-lock, repair or restore gap becomes implemented, regresses or changes its user decision",
+          "a real named-object E2E changes what the owner should trust about current local compatibility or output"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit, package version, test result, body-free Doctor result or observation time changes without semantic change"
+        ],
+        "ignore_when": [
+          "a private chat, contact, group, Moments cache, media item, local archive, locator, config, path, commitment or credential changes without altering the public product contract",
+          "an internal refactor or test addition leaves every displayed capability, failure and recovery boundary unchanged",
+          "an unconnected internal helper or dormant source path changes without entering a public command or verified product route"
+        ]
+      }
     }
   ]
 }

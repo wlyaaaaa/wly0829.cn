@@ -130,7 +130,7 @@ export const systemScenarios = [
     label: "微信工作材料",
     title: "聊天、语音、图片和附件，整理成可以继续办事的材料",
     request: "“把昨晚这段微信聊天、对方发的语音和附件整理成纪要。人名、数字和待办不要猜，没听清的单独列出来。”",
-    systems: ["通用 AI 与智能体能力", "WeChatDirect 绑定的消息与附件原件", "ChineseASR", "LocalOCR"],
+    systems: ["通用 AI 与智能体能力", "WeChatDirect 绑定的消息与媒体关系", "ChineseASR", "LocalOCR"],
     rules: "只读取明确会话和时间范围；消息关系与本地原件必须能够对应；原音频和扫描件高于识别结果；第三人私人内容不进入公开页面。",
     result: "可编辑纪要、决定与待办、消息与附件引用、录音时间位置、人名和数字复核表、来源缺口与矛盾项。",
     value: "它保留聊天顺序、回复关系和原件位置，不把一堆材料压成无法追溯来源的 AI 摘要。",
@@ -139,7 +139,7 @@ export const systemScenarios = [
         number: "01",
         kicker: "具名上下文与原件",
         title: "先把聊天和附件关系找对",
-        body: "WeChatDirect 只读取明确联系人或群的有界窗口，保留消息顺序、方向、回复关系，并直接打开与消息绑定的图片、语音和文件原件。",
+        body: "WeChatDirect 只读取明确联系人或群的有界窗口，保留消息顺序、方向、回复关系，以及图片、语音和文件与原消息的关系；当前只直接打开与消息唯一绑定的 VoiceInfo 语音，图片和文件没有另行取得可访问原件时保留缺口。",
         items: [
           ["消息", "原生顺序、发送方向与回复关系"],
           ["媒体", "语音、图片和文件与消息精确绑定"],
@@ -567,10 +567,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 10,
+  detailedPageCount: 11,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录仍只提供十个可深入阅读的完整参考，其余资产在系统版图中保持可读；当前网站源码仓库计入总账，但不作为系统资产卡展示。"
+  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE；daily-preferences 已作为新的 PRIVATE main 项目进入总账。项目目录现在提供十一个可深入阅读的完整参考，WeChatDirect 已从项目版图进入详情页；其余资产继续在系统版图中保持可读。当前网站源码仓库计入总账，但不作为系统资产卡展示。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -630,7 +630,7 @@ export const systemProjectDomains = [
       { id: "local-ocr", title: "本地文档理解", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标。", kind: "工作能力", href: projectLedgerHref },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "用一句普通话找回少量原件候选，选中后重新核对再打开。", kind: "资料入口", href: projectLedgerHref },
       { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
-      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文，保留回复、媒体和可重放增量关系。", kind: "资料入口", href: projectLedgerHref }
+      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文，保留回复、媒体和可重放增量关系；完成态可继续增量，硬崩溃半成品仍明确保留为缺口。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
   },
   {
@@ -1088,10 +1088,10 @@ export const systemDependencyNodes = [
     title: "微信工作材料与具名归档（WeChatDirect）",
     subtitle: "读取明确对象的聊天、回复关系和媒体，也能维护一个具名会话的可重放增量",
     links: [
-      { href: "#system-project-asset-wechat-direct", label: "查看微信工作材料项目" },
+      { href: "/projects/wechat-direct", label: "进入 WeChatDirect 完整项目页" },
       { href: "/skills/wechat-direct", label: "Skill：微信上下文与单会话归档" }
     ],
-    detail: "当前问题只读取明确联系人或群的有界窗口；需要长期保存时才为该具名对象建立首次归档、完整性清单和增量重放。语音、图片和文件保持与原消息绑定，不后台同步整个账号。"
+    detail: "当前问题只读取明确联系人或群的有界窗口；需要长期保存时才为该具名对象建立首次归档、完整性清单和显式触发的增量重放。所有媒体保留与原消息的关系，当前可实际打开的字节主要是语音；不后台同步整个账号。"
   },
   {
     id: "localocr",

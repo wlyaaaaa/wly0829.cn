@@ -1,177 +1,147 @@
-# 九项目 MAP 设计与产品验收
+# 十一项目 MAP 设计与产品验收
 
-状态：`nine_project_public_pass`
+状态：`wechatdirect_candidate_repaired_waiting_clean_recheck`
 
-观察时间：2026-08-30
+观察时间：2026-09-01
 
 ## 当前范围
 
-Registry 当前启用 9 项：`.agents`、PCConfig、GitHub 总索引、ChineseASR、
-TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote。
+Registry 当前启用 11 项：`.agents`、PCConfig、GitHub 总索引、ChineseASR、
+TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、
+个人健康证据与安全决策、WeChatDirect。
 
-第 9 项 Codex Remote 是 `curated_packaging + manual_owner_only` 的 PUBLIC
-来源项目。它直接使用真实产品名，解释怎样从手机浏览器继续 Windows 上同一个
-Codex Desktop 任务；不写成远程桌面、第二份聊天或当前在线服务。Source、release、
-测试、截图、规则、Skill 与运行状态变化不会自动创建网站任务。
+本轮只建设第 11 项 WeChatDirect，并把它接入已有 System、项目目录、搜索和
+`wechat-direct` Skill。没有预建 personal-materials 或任何后续项目页面。
 
-## 产品事实与内容
+## 唯一验收标准
 
-- PUBLIC source：`wlyaaaaa/codex-local-remote`，观察时远端
-  `main=94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6`，本地工作树干净。
-- 最新正式发布版：`v0.1.5`，提交
-  `c3a07719ecbe00dbad515b3cae00fd0f33b186d2`；发布记录为 1771 项测试、
-  public-safety 与 Chromium 六视口验收通过。
-- 当前 main 的 package 是 `0.1.6-unreleased.0`；页面保留该精确源码事实，但不把它
-  写成已发布 v0.1.6。
-- Overview + 6 个模块：同一任务、审批与上下文、项目与文件、共享架构、安全接入、
-  版本与证据。每页均有用途、现实事故、完整例子、结果、正常/问题/不可用三态、
-  实现、流程、边界、失败恢复、真实入口和验证。
-- 首屏 6 项直接给出产品形态、同一任务机制、完整能力、正式版本、当前源码和证据
-  边界；本人不必读完整页才知道证据是什么。
-- 页面区分 source、v0.1.5 测试、历史真实多端 E2E、真实手机图、合成图和当前 Git
-  identity；任何一层都不冒充本轮在线验收。
+一个不了解 WeChatDirect 的人看完页面后，能够准确说明它为什么存在、解决什么、
+怎样使用、得到什么；页面不遗漏会改变使用判断的重要能力，不以技术名词遮住产品
+价值，所有事实都能回到当前 source 验证，桌面和手机完整流畅。
 
-## 价值导向画廊
+## Source-first 产品结论
 
-- 当前保留 20 张：12 张真实手机 UI、7 张 PUBLIC tracked 合成演示、1 张历史合成
-  QA。数量不是 KPI；只有逐张审查后仍能解释独立产品能力的图片才进入。
-- 9 张 2026-07-28 真实图统一裁去顶部 400px 私有地址栏并 strip metadata；3 张
-  2026-08-02 真实 UI 细节保持原幅；原始个人媒体不改动。
-- 每张图都有证据等级、标签、能证明、不能证明、日期和来源身份；20 张 SHA-256
-  全部唯一，没有用语言或文件格式重复凑数。
-- 完整图 20 张、2,630,521 bytes；WebP 预览 20 张、316,858 bytes；合计
-  2,947,379 bytes。竖图预览用上/中/下三段并排，点击后仍打开完整图。
-- 逐图排除了凭据承载面、明确禁项、私人高风险正文、无关购物/医疗/支付图片、私有
-  tailnet 地址和低相关重复图。普通任务名、模型、版本、路径、命令、diff、目录和
-  额度等 L1/L2 或实际非敏感事实保留。
+- PUBLIC source：`wlyaaaaa/WeChatDirect`，当前本地与远端
+  `main=488353629098f24535784c1663159d7570ae96f1`，工作树干净。
+- 当前包版本 `0.1.0`；主 CLI 为 Windows + Python 3.14，语音派生使用独立
+  Python 3.11 + `pilk`。
+- 8 个公开命令：`context`、`sync-contact`、`moments`、
+  `sync-moments`、`media-open`、`preserve`、`doctor`、
+  `verify-export`。
+- 当前 fresh 回归为 50 项测试 + 2 个子测试；ruff 通过。无正文 Doctor 当前为
+  success：2 个账号槽位所需配置/状态文件、加密/压缩依赖和语音解码器均 available。
+- 页面没有读取真实聊天、朋友圈、联系人、群、媒体、配置、archive 或凭据，也没有
+  运行具名聊天 E2E。
+- “自动增量”准确写成：用户再次显式运行同一具名归档命令时，程序自动选择无变化、
+  单来源排序游标或多来源时间重叠；没有 watcher、计划任务或全账号后台同步。
+- 图片、视频、表情和文件当前保留与原消息的资源关系和不可打开缺口；真正可打开和
+  复制原始字节的公开路径主要是唯一 `VoiceInfo` 语音。SILK 原件与 WAV 派生通过
+  SHA-256 关系区分，转写另交 ChineseASR。
+- 完成态档案可以增量重放或显式 `--full-reconcile`；首次硬崩溃无
+  `state.json` 半成品、陈旧 `.sync.lock`、自动 repair 和恢复回微信仍未实现。
+  `verify-export` 只验真不修复。
 
 ## 同轮自动修复
 
-- public gate 原来按 Codex 及若干产品名、领域词做全仓字面封禁；现已删除全部这类
-  blanket ban（笼统禁令）。产品/平台名和普通领域词可直接公开，具体 L3+ 值仍按全局
-  唯一分级判断，全部 credential regex（凭据值正则）继续保留。
-- manual-only 计划与页面原来一律写“私有 Owner 证据”；已改为中性的 fresh/current
-  Owner evidence，使 PUBLIC Codex Remote 与 PRIVATE CACB/学习方法都准确。
-- full search 原来没有把 aliases 放入 Latin-token admission，导致完整搜索与构建期
-  紧凑搜索排序不同；已修为同一可搜索文本，并由全部 alias 一致性测试覆盖。
-- 项目规则明确：网站整体可平台中立，但单个项目必须直说真实产品；微信、
-  WeChatDirect 与 Codex Remote 可直接出现。PUBLIC 个人数据分级只引用 E93 全局授权
-  合同中的唯一表，项目不复制或自行收紧。
-- 删除桌面端奇数最后一张卡片居中特例；第 9 项保持普通网格顺序，未来第 10 项可直接
-  填右列，不发生卡片跳位。
-- 修复所有项目详情首屏的无意义大空白：hero 左列现在按“标题与说明 → 22px 间距 →
-  关键事实”连续排布，右侧快照卡独立成列，不再用其高度把关键事实压到页面底部。
-- 六个 Codex Remote 模块补齐真实的跨模块关系，并把 `relation` 纳入所有项目模块的
-  公共内容合同；不会再出现只有标题、正文为空但测试仍绿的段落。
-- 技术词不再用“整项目关闭解释”的方式保护品牌。`Codex Remote`、AI、LLM 等常见
-  或精确名称保持原样；app-server、Sidecar、loopback、diff 等首次出现时立即解释。
-- 手机横向大图不再强制占满整屏：100% 时画布按图片比例收紧，放大后才扩展内部
-  viewport 并保留双向滚动；竖图继续完整使用可用高度。
-- E92 identity 和 `content-core` 曾已正确但规则说明页仍残留 E91 的 task/Owner 文案；现已
-  补齐耐久授权、真实调用一次、lifecycle resolver、`RecoverRelease` / `RecoverReleaseClaim`、
-  `threadId` / `clientThreadId` 与来源任务归档边界，并把 personal-panel-refresh 状态改为
-  已完成 PUBLIC main、Pages 和公网回读，而不是“正在完成”。随后 E93 进一步明确：未归档
-  long-term Owner 不自动释放，终态长期任务必须由带 checkpoint/residual 的 successor 接续
-  或正式 retirement，归档任务仍无长期保留例外。
+WeChatDirect source 原 README 曾把“媒体资源关系”写得像所有图片/视频/文件都能
+打开，也没有把完成态重放与崩溃断点续跑分开。本轮已通过真实 source Owner 修复并
+发布：
 
-## Registry 与刷新合同
+- README 与 CLI 帮助现在明确 VoiceInfo-only 字节打开、非语音媒体关系/缺口、
+  完成态增量、首次硬崩溃半成品、陈旧锁、verify-only 和无 restore/import。
+- `sync-contact` 的 no-change 快速路径不再只看来源指纹、文件存在和数量；
+  返回成功前会重验 manifest 自身哈希、manifest/state 绑定，以及
+  `context.md`、`ai-context.md`、`messages.jsonl` 的哈希、大小和记录数。
+- 任何不一致都精确失败并保留原文件，不静默覆盖未知内容。
+- source 回归由 48 + 2 增至 50 + 2；新测试覆盖 manifest、自哈希、三份档案漂移、
+  大小、数量和 state 绑定。
 
-- `id=codex-remote`、`order=9`、`route=/projects/codex-remote`、PUBLIC source、
-  `manual_owner_only`、`automatic_handoff=false`、`impact_sources=[]`。
-- assessor 即使收到 source path 与 `--material-change` 也始终返回
-  `manual_owner_request_required_no_automatic_handoff`。
-- targeted refresh 未带 `--manual-owner-request` 时返回
-  `manual_owner_request_required`；全量计划的 manual IDs 为 CACB、learning、
-  codex-remote。
-- collectors 只允许 Git Owner、PUBLIC source、release/CI 与已批准图片；明确禁止
-  dispatcher、计划任务、Broker、Sidecar、app-server、安装运行时和 Remote endpoint。
-- 没有新增 Skill、Source hook、watcher、服务、数据库、队列、在线探针或依赖。
+## 最终审计修复回合
+
+- Reader/UI P1：390/320px 的第 11 张项目卡中，WeChatDirect 长标题被右上 GitHub
+  徽标覆盖。现以通用 `<=420px` 规则为所有项目卡徽标保留独立首行；390/320
+  复测的交叠高度均为 0，未增加项目专用 CSS。
+- Reader/UI P1：System 资产卡把所有项目 reference 硬编码显示成“进入规则”。现改为
+  渲染每条关系自己的 label；WeChatDirect 可见文字“语音转写交给 ChineseASR”与
+  `/projects/chinese-asr/task-routing/` 完全一致，`.agents` 规则入口仍显示自己的 label。
+- Reader/UI P2：项目快照测试标题声称 11 项但只遍历 10 项。现已导入
+  `wechatDirectProject` 并让两条单一快照投影测试真实遍历 11 项。
+- Reader/UI P2：产品层提前使用 WAL、RAG 等缩写。现把产品流程改回“数据库写入
+  日志”“检索增强生成系统”等人话；命令、schema 和内部名继续留在技术层。
+- Technical P2：两类导出共享文件的文案曾让人误以为朋友圈也写媒体字节。现明确
+  只有联系人导出另写当前可打开的 VoiceInfo 语音，朋友圈只保留关系与缺口。
+- Technical P2：技术入口漏列 `sync-moments`。现补齐真实第八命令，并把
+  `--full-reconcile` 与 pytest 分别标成补充模式和开发回归，不冒充独立产品命令。
+- Bloat/Public P2：System source pack 标为 E97/E98 时仍残留 E95 current 文案。现
+  统一到活动 E98 `e1c1e36`、previous E97；E98 的发布后看板实质漂移规则同时进入
+  `.agents`、Rules、Registry semantic revision 11、System source pack 与测试。
+
+## 页面信息架构
+
+页面沿用同一个通用项目外壳和三层阅读顺序，不新增 WeChat 专属 React 组件、CSS、
+图片依赖或客户端状态机。
+
+- 速览：产品定义、当前快照、最重要边界、普通请求、结果与三态。
+- 产品：六步工作流、10 条产品原则、职责/不负责和覆盖全部模块的真实用法。
+- 技术：当前版本、Doctor、组件、证据、命令、演进和六个项目自有模块。
+- 六模块：聊天上下文、具名增量归档、回复与媒体、朋友圈缓存、账号与只读源、
+  保全与验真。
+- v1 不设画廊。source 没有公开安全图片资产，仿微信聊天截图会误导产品身份；
+  方法画布与结构化正文已提供必要可视化。
+
+## 整站接入
+
+- Registry：`id=wechat-direct`、`order=11`、PUBLIC、`real_dashboard`、
+  `route=/projects/wechat-direct`，未来实质 source 变化可触发增量快照。
+- System：GitHub 项目总数仍为 49；完整详情页由 10 增至 11。原
+  WeChatDirect 资产入口已改到完整项目页，`wechat-history-ai-bridge` 继续保持
+  独立接入桥身份。
+- Projects：11 张真实项目卡，无占位卡；WeChatDirect 卡直接暴露总览和 6 个模块。
+- Skills：`wechat-direct` 从“详情逐步收录”改为对应 WeChatDirect 项目，并保留
+  ChineseASR 语音转写关系；测试事实同步更新为 50 + 2。
+- Search：广义 “WeChatDirect” 进入总览；聊天、增量、语音关系、朋友圈账号、
+  主副号隔离和保全验真分别进入对应模块。
+- 静态路由：115 增至 122；每条路由构建时已含完整正文，无点击时正文 fetch、
+  spinner、骨架屏或空白壳。
 
 ## 构建、测试与反膨胀
 
-- E93 已刷新并由原生 snapshot verifier 现场通过：活动提交
-  `ea32ca05076a04c90895d468e1b878d4f19ff3d1`、ruleset
-  `c081c5d5949a2c8546e36b1145d19db58594cd8afd92ba44f2fd82884031210b`、pointer
-  revision 14、previous E92、5 项规则 binding、0 finding。当前 `.agents`
-  `main=ea32ca05076a04c90895d468e1b878d4f19ff3d1` 且工作树干净，五规则 bytes 与
-  E93 完全一致。
-- 最终 `npm run build` 通过：86 条完整静态产品路由、87 个 HTML、88 条紧凑搜索记录；
-  PUBLIC gate 扫描 127 个 source 文件与 166 个 dist 文件，共 293 个，0 finding。
-- 最终 `npm test` 为 40/40；模块关系、Codex Remote 即时术语说明、逐图独立证据价值、
-  横向大图收紧、E93 durable authorization/lifecycle、personal-panel-refresh 精确派发、
-  普通产品/领域词放行与构造凭据阻断、静态增强脚本均进入回归合同。
-- 共享 JavaScript：14.19 kB，gzip 5.12 kB；长正文没有进入浏览器包。
-- CSS：75.25 kB，gzip 13.41 kB；没有新增依赖、服务、数据库或后台刷新节点。
-- 搜索投影：32,203 bytes，gzip 13,132 bytes，低于 24 KiB 审查阈值。
-- 初始总览只观察到 20 张 WebP 预览资源，完整 JPG/PNG 资源为 0；完整图只在
-  lightbox 打开后请求。页面没有正文 fetch/import、spinner、骨架屏或空白壳。
+- `npm run build` 通过：E98 snapshot binding 通过，122 条完整静态路由，
+  124 个 production HTML，PUBLIC gate 扫描 138 个 source 与 218 个 dist 文件，
+  共 356 个文件，0 finding；新增两份搜索验证文件不改变渲染页面。
+- `npm run test:built` 为 70/70。
+- 共享 JavaScript 为 32.44 kB / gzip 9.86 KiB，低于 12 KiB 线；增量来自已合并的全站回顶反馈，不是 WeChatDirect 专用运行时。
+- 共享 CSS 为 127.81 kB / gzip 20.42 KiB，低于 21 KiB 线；65 bytes 增量是修复所有窄屏长项目标题与徽标重叠的通用规则，WeChatDirect 没有新增专用 CSS。
+- 全站紧凑搜索 gzip 48.60 KiB；64 项项目模块搜索 gzip 50.45 KiB，均低于
+  64 KiB 线。
+- 没有新增服务、数据库、API、worker、daemon、watcher、scheduler、动态 import、
+  正文 fetch、画廊资产或运行时依赖。新增成本只有完整静态 HTML、Registry 数据与
+  构建期搜索投影。
 
 ## 当前浏览器 QA
 
-本轮使用 Codex in-app Browser 完成真实交互验收；控制台 warning/error 为 0。
+本轮使用本机 Chrome 对 Vite preview 完成真实交互验收；console error、
+page error、request failure 均为 0。
 
-- 1440×900：Overview、6 项首屏事实、7 个模块入口、GitHub 按钮和 20 图完整；
-  无页面级横向溢出。hero 的 copy→facts 实测间距为 22px，空白修复后 facts 与右侧
-  snapshot 底部基本对齐。
-- TimeAudit 同轮复验：copy→facts 同为 22px，原先用户圈出的空白同步消失，证明修复
-  不是 Codex Remote 专用补丁。
-- 390×844：Overview 与三段式预览可读；页面没有横向溢出。横向图 100% 状态从旧版
-  535px viewport / 217px 图片、59.4% 空黑区，收敛为 217px viewport / 217px 图片、
-  空白比 0；150% 与 400% 继续在内部 viewport 双向滚动。竖图 100% 使用 554px 高度。
-- 320×800：页面 `scrollWidth=window.innerWidth=320`；项目导航自身横向滚动，不把
-  正文撑宽。
-- 768×1024：模块点击保留阅读位置，直接进入完整 `same-task-control` 静态文档；
-  reader layer、源码入口、跨模块关系和当前证据边界均在首次 HTML 中。
-- lightbox：1/20 打开完整 JPG，`+` 到 150%，切到 2/20 时恢复 100%，关闭后 body
-  scroll 恢复且焦点回到原缩略卡；ArrowRight 切图、Escape 关闭也通过。移动端横图
-  100% 为 348×217，150% 后内部 scrollWidth=522；竖图 100% 为 284×554。
-- 页面正文不再把 Codex Remote 误解成普通远端仓库，也不会给 AI 机械补中文全称；
-  app-server、Sidecar、loopback 与 diff 均在首次出现处有人话解释。
-- 与同视口 TimeAudit 参考图并排检查：沿用同一 header、hero、快照卡、首屏事实、
-  左侧模块导航、绿色/白色设计系统和内容密度，没有新造另一套网站视觉。
-- `/404.html` 专用制品真实显示“这里没有这页”、返回首页/规则/Skills；Vite preview
-  对未知 URL 的首页 fallback 不冒充 Pages 404，真实未知路由留到公网部署后回读。
-- `/rules/?rule=authorization_delegation_contract` 显示 E93、previous E92、pointer 14、
-  durable explicit user authorization、真实调用一次、RecoverRelease/Claim、真实
-  threadId/clientThreadId 与 complete goal 关闭状态；`/skills/personal-panel-refresh/`
-  同步 unavailable/failed/dispatch-unconfirmed，且不再公开旧 task ID/Owner 台账。
+- 1440×1000：Overview 首屏连续展示产品定义、公开仓库入口、六模块导航和当前项目
+  快照；`scrollWidth=clientWidth=1440`，没有大片无意义空白或页面横向溢出。
+- 390×844：Overview 与代表性“具名增量归档”模块均有
+  `scrollWidth=clientWidth=390`；六模块导航在自己的横向轨道滚动，不撑宽正文。
+- 移动端阅读层切换使用真实坐标点击与原生 `.click()` 复验：从 560px / 620px
+  切到“产品”后滚动位置差值均为 0。Playwright 的高层 `page.click` 会先替测试
+  滚动目标进视口，曾产生一次假跳顶；该结果没有作为产品缺陷。
+- 代表性模块直接路由 200，包含 7 个失败/恢复状态、4 个 source 入口、完整
+  full reconcile 与首次硬崩溃缺口；移动端没有溢出。
+- `/projects/` 实际渲染 11 张卡；System 的“完整项目页”显示 11；
+  System WeChatDirect 资产和 `/skills/wechat-direct/` 均可进入新项目页。
+- 项目页没有 gallery，公开 GitHub 按钮在 390px 下仍为 156×36px 并保留完整文字。
 
-Ignored QA：
+## 当前缺口与下一门
 
-- `docs/design/qa/codex-remote/01-overview-1440x900.png`
-- `docs/design/qa/codex-remote/02-gallery-1440x900.png`
-- `docs/design/qa/codex-remote/03-lightbox-1440x900.png`
-- `docs/design/qa/codex-remote/04-overview-390x844.png`
-- `docs/design/qa/codex-remote/05-gallery-390x844.png`
-- `docs/design/qa/codex-remote/06-lightbox-390x844.png`
-- `docs/design/qa/codex-remote/07-overview-320x800.png`
-- `docs/design/qa/codex-remote/08-overview-768x1024.png`
-- `docs/design/qa/codex-remote/09-module-768x1024.png`
-- `docs/design/qa/codex-remote/12-overview-compact-1440x900.png`
-- `docs/design/qa/codex-remote/13-timeaudit-compact-1440x900.png`
-
-## 当前缺口与 PUBLIC 收口
-
-- 本轮没有启动、关闭、重启、查询或访问 Codex Remote runtime；页面只说明真实做成、
-  跑通过的产品与版本证据，不宣称当前在线。
-- v0.1.5 测试和历史真实截图不能自动覆盖当前 Desktop、Codex、网络或浏览器版本。
-- 第九项目与 E92 主体实现提交为 `1278c272c569f294a2a1348cc6b509da80a51fb2`；
-  E93 快照、规则正文与公开策略最终提交为
-  `6385491211f1cf876add2a9240e47e4064e715c4`，已从本地 `main` normal-push 到
-  远端 `main` 并由 GitHub API 双回读。GitHub Pages run `33328304602`、deployment
-  `6169868470` 均 success，deployment SHA 与最终提交一致。
-- 公网首页、Codex Remote Overview、`same-task-control` 模块、E93 Rules 与
-  `personal-panel-refresh` Skill 均为 200 且回读到代表性正文；完整图
-  `08-real-task-runtime.jpg` 为 `image/jpeg`、267,332 bytes。
-- `/projects/codex-remote` 以 301 收敛到 trailing-slash canonical；真实未知路由为
-  404 并显示“这里没有这页”。公网 1440×900 与 390×844 再验无页面级横向溢出，
-  模块原生导航、20 张画廊入口和控制台零 warning/error 通过。
-
-## E93 最新快照
-
-E92 Source 正式发布后，网站异步任务已完成第九项目与 E92 公网收口。E93 仅进一步
-修正 long_term_task 的保留/接续语义；当前 Owner 直接在同一网站目标内收敛，无需制造
-第十项目。本网站只保留公开产品事实：E93 活动身份、五规则 bytes/SHA、耐久明确授权、
-真实调用一次、普通 terminal Owner 收敛、long-term Owner 接续/retirement、complete goal
-关闭状态、来源 task 可逆归档，以及 personal-panel-refresh 的精确派发分类。内部 task ID、
-Owner lifecycle 台账和 predecessor 细节不进入 PUBLIC 设计文档。
+- 当前 source 仍没有非语音媒体字节打开、群聊窗口外引用全覆盖、首次硬崩溃自动
+  续跑、陈旧锁自动修复或恢复回微信；页面已把它们作为具名缺口。
+- 当前真实具名微信 E2E 没有在网页任务中执行；源码、50 + 2 回归和无正文 Doctor
+  不能替代私人对象现场结果。
+- Candidate 尚未经过最终独立 Sol Max 四路审计，也尚未提交/发布网站。
+- 通过最终审计、修复、main 收敛、Pages 和公网多视口回读后，才可把状态改为
+  `eleven_project_wechatdirect_public_pass`。

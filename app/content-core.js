@@ -128,6 +128,7 @@ export const project = {
     { title: "明确过的授权不反复索要", detail: "同一目标和范围内持续推进；只有目标、账号、公开面、付费、秘密或不可逆边界变化时，才重新判断。" },
     { title: "并行提高质量，但不覆盖别人", detail: "互不依赖的工作可以并行；重叠写入用最小施工范围协调，已有改动始终保留。" },
     { title: "完成必须分层证明", detail: "源码、测试、安装、发布和用户真正可用各自证明不同事情，任何一层都不能冒充整件事完成。" },
+    { title: "来源发布后再判断看板是否会说错", detail: "已登记项目、活动 E Rule 或个人 Skill 完成 source 发布和正式回读后，用 personal-panel-refresh 判断现有网页是否出现实质语义漂移；非实质、重复和需要本人明确启动的页面不新建任务，也不阻塞来源发布。" },
     { title: "Git 历史与工作树热备各保一层", detail: "PRIVATE Git 保存提交历史，G 盘 hot mirror（热镜像）保存当前工作树和未提交状态；两者互补，但热镜像不复制 .git、不触碰 H 冷备，也不冒充完整仓库备份。" },
     { title: "不知道就保留未知", detail: "证据不足只停止受影响步骤，说明缺什么和怎样恢复；不依赖该问题的安全工作继续。" },
     { title: "能力越小越容易长期可靠", detail: "优先复用窄而成熟的 Skill、工具和接口；没有现实消费者的框架、服务和历史链退出活动面。" },
@@ -143,6 +144,7 @@ export const project = {
     "管理用户授权、委派收窄和执行 Owner",
     "选择工具、Skills、插件与原生代理的使用边界",
     "维护重大动作的活动规则、发布链和恢复语义",
+    "在登记来源发布回读后判断个人看板是否实质失真；只有实质影响才异步安排一次 projectless 网站任务",
     "在任务真正结束且没有后续义务时安全归档；仍有未交付内容时保留接手人与恢复线索",
     "维护个人 Skills 的 canonical source、安装清单与验证分层",
     "为 .agents 当前工作树提供固定 E→G 热备合同、状态回执与恢复边界",
@@ -197,6 +199,7 @@ export const project = {
     { title: "选择能力", detail: "根据风险、信息价值、延迟、耦合和可逆性，决定直接处理、读取 Skill、调用工具或并行委派。" },
     { title: "绑定授权与施工责任", detail: "外部动作确认授权；既有 durable grant（耐久授权）不要求同轮重述，前提成立就真实调用一次并以实际 deny/unavailable/error 为准。写入前由最小 execution scope 认领 Owner。" },
     { title: "执行并分层验证", detail: "源码、测试、安装、发布、全新任务可用性和用户可见结果分别取证，任何一层都不能代替另一层。" },
+    { title: "检查发布是否让个人看板失真", detail: "登记项目、活动规则或个人 Skill 发布并回读后，用 personal-panel-refresh 只判断现有页面的产品或技术解释是否会因此实质错误；非实质变化直接 no-op。" },
     { title: "用人话收口", detail: "先说明现实结果、使用方式、边界和是否需要用户动作，再保留会改变判断的技术证据。" }
   ],
   components: [
@@ -210,6 +213,7 @@ export const project = {
     { name: "Execution Owner Registry", responsibility: "协调多个任务对项目最小 scope 的 Claim、Add、Transfer、Release 和恢复。", implementation: "Expected revision CAS 加 append-only transition journal；固定 resolver 证明普通非长期或已归档 predecessor terminal 后，无 residual 用 RecoverRelease，有 residual 用 RecoverReleaseClaim。未归档 long_term_task 只接续或正式退役。" },
     { name: "原生代理路由门", responsibility: "验证 model（模型）、effort、root/child 身份、E release/commit/ruleset 和合同 SHA 后才允许 spawn。", implementation: "宿主事件注入身份，创建前再检查 TOCTOU；它不替模型选择 0–10、家族或 scope。" },
     { name: "Personal Skill 供应链", responsibility: "维护 Skill canonical source（能力唯一源码）、安装意图、发现 junction（目录联接）、事务回滚和六层证据。", implementation: "一个 registry（登记表）、两个 canonical roots（唯一维护根目录）、事务 installer（安装器）和 recovery capsule（恢复胶囊）。" },
+    { name: "发布后看板收口", responsibility: "登记来源发布完成后，判断 wly0829.cn 是否会因新事实而实质失真。", implementation: "personal-panel-refresh 只把路径、commit 和 hash 当候选线索；Source Owner 判断产品/技术语义，实质影响才异步创建一次 projectless 网站任务，非实质、重复和需要本人明确启动的页面均不安排更新。" },
     { name: ".agents 工作树热备", responsibility: "保存 E:\\.agents 当前工作树与未提交改动的 G 盘恢复点，补足 PRIVATE Git 只保存提交历史的边界。", implementation: "固定 E→G 路径、G 卷健康门、全局互斥、受限 robocopy 镜像、状态 JSON 和可选每日无窗口任务；不复制 .git，不访问 H。" },
     { name: "Control Plane Doctor", responsibility: "按用户点名的 Owner 做只读健康、漂移、迁移和恢复检查。", implementation: "只调用被选中的 Provider；需要修复时退出 Doctor 并交给真实 Owner。" },
     { name: "最小充分架构与测试", responsibility: "冻结完整产品/质量验收，比较短路线与长路线的总生命周期成本，并阻止没有现实需求证据的新技术层。", implementation: "complete_acceptance_floor + minimum_sufficient_architecture_hard_gate；复杂度失败先删层，再按差异运行 Local/Cross-owner 验证和 repository bloat budget。" }
@@ -222,6 +226,7 @@ export const project = {
     { ask: "现场回读，不用旧报告或记忆。", effect: "重新读取活动规则、项目规则、Owner Provider、Git 状态和当前源码。", moduleSlug: "rules-contracts" },
     { ask: "我有一批还没提交的 .agents 修改，电脑出问题时怎样从 G 盘恢复？", effect: "先检查 G 卷健康和热备状态回执；需要执行时只允许固定 E:\\.agents → G:\\80_Backup\\ControlPlane\\.agents，排除 .git/临时附件并记录源 HEAD 与 dirty 数。恢复时把 G 当工作树文件来源，Git 历史仍从 PRIVATE Git 取得；当前任务未观察到已安装的每日任务，因此不冒充自动热备正在运行。", moduleSlug: "working-tree-hot-mirror" },
     { ask: "验证后定向提交并正常推送。", effect: "保留其他 dirty work，只 stage 本任务文件，提交后 normal push 并从远端默认分支回读。", moduleSlug: "authorization-owner" },
+    { ask: "这个项目已经发布了，要不要同步更新个人网站？", effect: "先让来源发布和远端回读独立完成，再用 personal-panel-refresh 判断现有页面是否会实质说错。只有产品能力、边界、用法、成熟度或用户决定真的变化时，才异步创建一次无项目网站任务；普通重构、时间戳和 hash 漂移不更新。", moduleSlug: "context-evidence" },
     { ask: "公开项目里有被 Git 忽略、但不能丢的私有配置和文档，怎样既保留又不泄露？", effect: "只筛 Git 明确 ignored、未跟踪/未暂存且有保留价值的材料；先复制和 hash 到现场仍为 PRIVATE 的 companion，提交推送并从远端默认分支回读后，才把原件同卷改为可回滚备份并在原路径建立继续 ignored 的本地 link。任一步失败都恢复原件，不把半份迁移写成完成。", moduleSlug: "authorization-owner" },
     { ask: "我新加了一个 Skill（能力入口），为什么文件有了，全新任务还是看不到？", effect: "把 canonical source（唯一维护源）、安装事务、发现入口、当前任务、fresh task（全新任务验证）和真实 E2E 分开检查，只修失败的那一层。", moduleSlug: "skills-plugins" },
     { ask: "发布一版新规则，保留上一版回退，别让 dirty source 冒充 current。", effect: "从已验证 PRIVATE main commit 生成五文件 E release，经 expected-pointer CAS 激活并回读 current/previous。", moduleSlug: "protected-policy" },
@@ -838,7 +843,7 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("agents_root_rules").lines,
       sourcePath: "E:\\.agents\\AGENTS.md",
       releaseRelativePath: "AGENTS.md",
-      purpose: "所有任务的默认总入口。它定义 E 规则权威、指令优先级、事实 Owner、模型自治、english_chinese_gloss、耐久授权总边界、Owner lifecycle、Git 与验证习惯，以及私人领域固定路由。",
+      purpose: "所有任务的默认总入口。它定义 E 规则权威、指令优先级、事实 Owner、模型自治、english_chinese_gloss、耐久授权总边界、Owner lifecycle、Git 与验证习惯、来源发布后的个人看板实质漂移收口，以及私人领域固定路由。",
       plainLanguage: "先听当前用户要求和离工作位置最近的项目规则；仓库、机器、业务和授权事实分别去真正负责它们的来源确认，旧记录只能帮助定位，不能压过现场。",
       why: "同一任务里常同时出现用户新要求、项目自己的做法、通用习惯和旧笔记。顺序不清时，AI 容易沿用过时计划、改错项目，或用通用习惯覆盖项目真实验收。",
       example: "你不需要手动调用这条规则。只要说“帮我把网站修好，保留别人已有改动，能自动完成的直接做，最后告诉我真实缺口”，它就会先找对项目、Git 和机器事实，再选择方法和验证层。",
@@ -855,17 +860,18 @@ export const rulesSnapshot = {
         "terminal/archived Owner 怎样 RecoverRelease 或 RecoverReleaseClaim，以及来源任务何时可逆归档",
         "什么工作直接推进，什么动作需要授权或进入受保护合同",
         "怎样保留已有改动、分层验证并收口个人仓库",
+        "已登记来源发布并回读后，何时用 personal-panel-refresh 异步刷新个人看板，何时保持 no-op",
         "健康、微信、录音、扫描件、秘密和 Vault 应走哪条窄入口"
       ],
-      allowed: ["范围内低风险本机工作直接推进", "E identity 可信时按净收益选择 0–10 个原生代理", "长期明确授权覆盖精确动作且前提成立时真实调用一次", "授权已明确时完成验证、发布和回读", "保留 dirty work 并定向提交"],
-      forbidden: ["读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务，或让项目自写 PUBLIC 个人数据限制冒充用户授权", "让项目、Skill 或历史把既有长期授权降为 absent 或要求同轮重述", "把历史报告或记忆当活动权威", "无可信身份时委派", "删掉有用英文来规避中文括注", "用测试或字段冒充产品结果", "恢复已退役中央个人上下文"],
-      process: ["Inspect 当前 E release 并核对五文件闭包", "读取最近项目规则", "确定目标与事实 Owner", "按触发读取专项合同", "Owner 冲突时先解析 lifecycle 并收敛 exact scopes", "实施并分层验证", "用人话报告现实结果"],
+      allowed: ["范围内低风险本机工作直接推进", "E identity 可信时按净收益选择 0–10 个原生代理", "长期明确授权覆盖精确动作且前提成立时真实调用一次", "授权已明确时完成验证、发布和回读", "来源发布回读后只在看板会实质说错时异步安排一次 projectless 刷新", "保留 dirty work 并定向提交"],
+      forbidden: ["读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务，或让项目自写 PUBLIC 个人数据限制冒充用户授权", "让项目、Skill 或历史把既有长期授权降为 absent 或要求同轮重述", "把历史报告或记忆当活动权威", "无可信身份时委派", "仅因路径、commit、hash 或普通重构就强制改写个人看板", "删掉有用英文来规避中文括注", "用测试或字段冒充产品结果", "恢复已退役中央个人上下文"],
+      process: ["Inspect 当前 E release 并核对五文件闭包", "读取最近项目规则", "确定目标与事实 Owner", "按触发读取专项合同", "Owner 冲突时先解析 lifecycle 并收敛 exact scopes", "实施并分层验证", "已登记来源发布回读后用 personal-panel-refresh 判断看板实质漂移", "用人话报告现实结果"],
       failure: ["规则冲突无法同时满足时停止并说清冲突", "委派身份缺失只关闭委派，主任务继续", "授权不清时停止外部 effect，但继续安全调查", "长期授权已覆盖时以真实 tool call 的 unavailable/deny/error 等结果为准", "Git 未收口时分别报告业务和 Git 状态"],
       sections: [
         { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "AI 工作台唯一运行根与数据库位于 E:\\Data\\AppData\\Codex，C:\\Users\\10979\\.codex 只是兼容 junction；任务 temp 位于 E:\\Cache\\Codex\\Temp\\<task-id>", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
         { title: "模型自治与复杂度", paragraphs: ["模型按照目标、风险、信息增益、可逆性和净收益选方法；原生委派在 E identity 可信后按任务语义选择 Luna/Terra/Sol 与 0–10。"], items: ["english_chinese_gloss：除常见英文缩写和精确标识外，英文自然词或短语首次出现时保留英文并紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界", "长任务保留可重建状态，短任务不制造文档债"] },
         { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。durable grant（耐久授权）不要求同轮重述，但不会覆盖上位 deny、证据、目标或不可逆边界。用户私人账号空间在默认私人且没有 public/share 信号时与本机私密目标等价可信，但信任不产生写授权。"], items: ["长期明确授权在冻结 goal/scope 内跨 root、child、压缩和 successor 持续有效；前提成立须真实调用一次", "实际 unavailable、deny、step_up、needs_evidence、action-time confirmation、error、身份/CAS/target/read-back 失败仍按现场结果处理", "PUBLIC 个人数据唯一 L1–L5 表由授权合同拥有：L1/L2 不受个人数据限制，L3+ 才进入可能敏感审查", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权", "普通非长期或已归档且 clean 的 terminal predecessor 无 residual 用 RecoverRelease；有 residual 用 RecoverReleaseClaim；未归档 long_term_task 只接续或正式退役", "只有真实 threadId 可归档", "E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal", "不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
-        { title: "私人领域与供应", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "新规则原位升级，不堆补丁"] }
+        { title: "私人领域、供应与发布后看板", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。登记来源发布后，个人看板只在现有页面会实质失真时跟进。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "项目、活动 Rule 或个人 Skill 发布并正式回读后，personal-panel-refresh 只评估产品/技术语义影响", "实质影响才异步创建一次 projectless 网站任务；非实质、重复、需要本人明确启动的页面或未登记来源均不安排更新", "新规则原位升级，不堆补丁"] }
       ],
       relation: `它是 ${panelSnapshot.authority.releaseId} 默认入口；其余四份规则分别拥有 E release/重大动作保护、授权、跨控制面取证和能力选择的完整语义。`
     },

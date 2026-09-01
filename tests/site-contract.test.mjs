@@ -17,6 +17,7 @@ import { codexRemoteModules, codexRemoteProject } from "../app/content-codex-rem
 import { learningModules, learningProject } from "../app/content-learning.js";
 import { personalHealthModules, personalHealthProject } from "../app/content-personal-health.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
+import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
 import { projectReferenceLinks, skillProjectLinks } from "../app/content-capability-links.js";
 import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
@@ -98,11 +99,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly ten projects and four navigation areas", async () => {
+test("the accepted panel has exactly eleven projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -342,7 +343,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current ten/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current eleven/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -498,7 +499,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 10);
+  assert.equal(enabledProjectCount, 11);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -513,7 +514,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
-  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health)/, "browser runtime must not import narrative packages");
+  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
@@ -620,7 +621,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the ten accepted project packages", async () => {
+test("the maintenance registry drives exactly the eleven accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -643,9 +644,9 @@ test("the maintenance registry drives exactly the ten accepted project packages"
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -667,7 +668,7 @@ test("the maintenance registry drives exactly the ten accepted project packages"
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -988,6 +989,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "personal-health",
       expectedOrder: 10,
       expectedModules: ["current-evidence-route", "protected-foreground-refresh", "raw-preservation-resume", "offline-decision-brief", "evidence-three-state", "health-owner-boundary"]
+    },
+    {
+      project: wechatDirectProject,
+      modules: wechatDirectModules,
+      expectedSlug: "wechat-direct",
+      expectedOrder: 11,
+      expectedModules: ["bounded-chat-context", "named-chat-archive", "reply-media-relations", "moments-local-cache", "account-source-identity", "preservation-verification"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1886,6 +1894,63 @@ test("personal-health publishes the evidence product without personal health pay
   assert.match(moduleHtml, /没有记录不证明|80% coverage 不表示健康|blocked_fields/);
 });
 
+test("WeChatDirect explains the real local product, incremental trigger, media limits and recovery gaps", async () => {
+  assert.equal(wechatDirectProject.slug, "wechat-direct");
+  assert.equal(wechatDirectProject.order, 11);
+  assert.equal(wechatDirectProject.route, "/projects/wechat-direct");
+  assert.equal(wechatDirectProject.visibility, "公开仓库");
+  assert.equal(wechatDirectProject.repositoryUrl, "https://github.com/wlyaaaaa/WeChatDirect");
+  assert.deepEqual(wechatDirectModules.map((item) => item.slug), ["bounded-chat-context", "named-chat-archive", "reply-media-relations", "moments-local-cache", "account-source-identity", "preservation-verification"]);
+  const publicText = JSON.stringify({ project: wechatDirectProject, modules: wechatDirectModules });
+  for (const expected of [
+    "488353629098f24535784c1663159d7570ae96f1",
+    "v0.1.0",
+    "50 项测试",
+    "2 个子测试",
+    "configuredAccounts=2",
+    "再次显式执行",
+    "full_reconcile",
+    "图片、视频、文件和表情",
+    "VoiceInfo 语音",
+    "current_local_cache_only",
+    "sync_output_not_initialized",
+    "陈旧锁",
+    "verify-export 只验真不修复",
+    "不声称可以把档案恢复回微信"
+  ]) assert.ok(publicText.includes(expected), `WeChatDirect omits product truth: ${expected}`);
+  assert.doesNotMatch(publicText, /后台自动(?:同步|归档)|全账号自动|朋友圈全历史|全部媒体(?:都)?(?:能|可)打开|图片、视频、文件和表情(?:都)?已(?:复制|归档)|硬崩溃后自动续跑|恢复回微信已经实现/);
+  const moduleSlugs = new Set(wechatDirectModules.map((item) => item.slug));
+  assert.ok(wechatDirectProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)), "a WeChatDirect usage example has no owning module");
+  assert.deepEqual(new Set(wechatDirectProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs, "WeChatDirect usage examples do not cover all modules");
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "wechat-direct");
+  assert.equal(registration.presentation_mode, "real_dashboard");
+  assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
+  assert.equal(registration.source.visibility, "PUBLIC");
+  assert.equal(registration.ai_refresh.semantic_revision, 1);
+  assert.equal(systemProjectInventory.detailedPageCount, 11);
+  const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
+  assert.equal(wechatAsset.href, "/projects/wechat-direct");
+  assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
+  assert.ok(projectReferenceLinks["wechat-direct"].some((item) => item.href === "/projects/chinese-asr/task-routing"));
+  const wechatScenarioText = JSON.stringify(systemScenarios.find((item) => item.id === "wechat-work-record"));
+  assert.match(wechatScenarioText, /WeChatDirect 绑定的消息与媒体关系/);
+  assert.match(wechatScenarioText, /当前只直接打开与消息唯一绑定的 VoiceInfo 语音/);
+  assert.doesNotMatch(wechatScenarioText, /消息与附件原件|直接打开[^。；]*(?:图片|文件)原件/);
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "wechat-direct", "index.html"), "utf8");
+  assert.match(overviewHtml, /data-static-route="\/projects\/wechat-direct"/);
+  assert.match(overviewHtml, /WeChatDirect/);
+  assert.match(overviewHtml, /再次显式执行/);
+  assert.doesNotMatch(overviewHtml, /project-gallery/);
+  const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  assert.match(systemHtml, /语音转写交给 ChineseASR/);
+  assert.doesNotMatch(systemHtml, /href="\/projects\/chinese-asr\/task-routing\/"[^>]*>进入规则/);
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.match(pageSource, /referenceItems\.map\(\(item\) => <SiteLink[^>]+>\{item\.label\}/, "System project references must render their owning label instead of a hard-coded rules caption");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(styleSource, /@media \(max-width: 420px\)[\s\S]*?\.home-page \.project-card-header \{ padding-top: 34px; padding-right: 0; \}/, "narrow project cards must reserve a separate first row for the repository or visibility badge");
+});
+
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const staticSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
@@ -1959,6 +2024,9 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   const learningSourceChange = run(["--project", "learning", "--path", "private/method-material.md", "--material-change"]);
   const codexRemoteSourceChange = run(["--project", "codex-remote", "--path", "apps/web/src/App.tsx", "--material-change"]);
   const personalHealthSourceChange = run(["--project", "personal-health", "--path", "google_health_brief.py", "--material-change"]);
+  const wechatDirectCandidate = run(["--project", "wechat-direct", "--path", "wechat_cli.py"]);
+  const wechatDirectMaterial = run(["--project", "wechat-direct", "--path", "wechat_cli.py", "--material-change"]);
+  const wechatDirectPrivateArchive = run(["--project", "wechat-direct", "--path", "exports/private/messages.jsonl", "--material-change"]);
   assert.equal(candidateOnly.impact_candidate, true);
   assert.equal(candidateOnly.task_required, false);
   assert.equal(material.task_required, true);
@@ -2019,11 +2087,17 @@ test("impact assessment creates tasks only for confirmed material changes", () =
   assert.equal(personalHealthSourceChange.source_materiality_ignored, true);
   assert.equal(personalHealthSourceChange.task_required, false);
   assert.equal(personalHealthSourceChange.action, "manual_owner_request_required_no_automatic_handoff");
+  assert.equal(wechatDirectCandidate.impact_candidate, true);
+  assert.equal(wechatDirectCandidate.task_required, false);
+  assert.equal(wechatDirectMaterial.task_required, true);
+  assert.equal(wechatDirectMaterial.action, "create_fresh_independent_website_project_task_after_source_readback");
+  assert.equal(wechatDirectPrivateArchive.impact_candidate, false);
+  assert.equal(wechatDirectPrivateArchive.task_required, false);
 });
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2037,6 +2111,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedCodexRemote = run(["--project", "codex-remote", "--manual-owner-request"]);
   const targetedPersonalHealthWithoutOwner = run(["--project", "personal-health"]);
   const targetedPersonalHealth = run(["--project", "personal-health", "--manual-owner-request"]);
+  const targetedWechatDirect = run(["--project", "wechat-direct"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2107,11 +2182,17 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedPersonalHealth.selected_projects[0].refresh_mode, "manual_owner_only");
   assert.equal(targetedPersonalHealth.selected_projects[0].manual_owner_request, true);
   assert.deepEqual(targetedPersonalHealth.selected_projects[0].impact_sources, []);
+  assert.equal(targetedWechatDirect.status, "ready_for_ai");
+  assert.deepEqual(targetedWechatDirect.selected_projects.map((item) => item.id), ["wechat-direct"]);
+  assert.equal(targetedWechatDirect.selected_projects[0].content_path, "app/content-wechatdirect.js");
+  assert.equal(targetedWechatDirect.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedWechatDirect.selected_projects[0].source.visibility, "PUBLIC");
+  assert.ok(targetedWechatDirect.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -2719,6 +2800,15 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("CACB")[0]?.title, "CACB Agent 能力基准 · 总览");
   assert.equal(searchPanel("AI帮我学习")[0]?.title, "用 AI 把一件事学明白 · 总览");
   assert.equal(searchPanel("健康信息怎么判断能不能用")[0]?.title, "个人健康证据与安全决策 · 总览");
+  assert.equal(searchPanel("WeChatDirect")[0]?.title, "WeChatDirect · 总览");
+  for (const [query, href] of [
+    ["查某个人上次在微信说了什么", "/projects/wechat-direct/bounded-chat-context"],
+    ["微信聊天自动增量归档", "/projects/wechat-direct/named-chat-archive"],
+    ["微信语音和原消息怎样关联", "/projects/wechat-direct/reply-media-relations"],
+    ["副号朋友圈当前缓存", "/projects/wechat-direct/moments-local-cache"],
+    ["微信主号副号怎样防止拿错", "/projects/wechat-direct/account-source-identity"],
+    ["微信聊天保全包怎样验真", "/projects/wechat-direct/preservation-verification"]
+  ]) assert.equal(searchPanel(query)[0]?.href, href, `WeChatDirect search misroutes: ${query}`);
   assert.equal(searchPanel("过去一小时为什么卡")[0]?.title, "timeaudit-diagnostics");
   assert.equal(searchPanel("来源变更后哪些文档要重做")[0]?.href, "/skills/work-delivery");
   assert.equal(searchPanel("需求变了怎么同步PRD和执行表")[0]?.href, "/skills/work-delivery");
@@ -3312,6 +3402,7 @@ test("every public route is unique and has useful metadata", () => {
   assert.match(routeMeta("/projects/cacb/nope/question-bank").title, /页面不存在/);
   assert.match(routeMeta("/projects/codex-remote/nope/same-task-control").title, /页面不存在/);
   assert.match(routeMeta("/projects/personal-health/nope/current-evidence-route").title, /页面不存在/);
+  assert.match(routeMeta("/projects/wechat-direct/nope/bounded-chat-context").title, /页面不存在/);
 });
 
 test("production build has direct entry files for every route", async () => {

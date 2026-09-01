@@ -41,7 +41,8 @@ export const skillProjectLinks = {
     { relation: "no-detail-project", systemAssetId: "personal-materials", label: "个人材料查找项目" }
   ],
   "wechat-direct": [
-    { relation: "no-detail-project", systemAssetId: "wechat-direct", label: "微信工作材料项目" }
+    { relation: "owned-by-project", projectSlug: "wechat-direct", moduleSlug: "bounded-chat-context", label: "WeChatDirect 项目" },
+    { relation: "uses-project", projectSlug: "chinese-asr", moduleSlug: "task-routing", label: "中文语音转写项目" }
   ],
   "document-materials": [
     { relation: "no-detail-project", systemAssetId: "formal-materials", label: "文书和材料制作项目" }
@@ -97,6 +98,9 @@ export const skillProjectLinks = {
 export const projectReferenceLinks = {
   agents: [
     { relation: "rules", href: "/rules", label: "查看 5 份现行规则" }
+  ],
+  "wechat-direct": [
+    { relation: "uses-project", href: "/projects/chinese-asr/task-routing", label: "语音转写交给 ChineseASR" }
   ]
 };
 
