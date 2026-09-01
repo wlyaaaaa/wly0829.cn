@@ -541,7 +541,7 @@ export const githubIndexModules = [
       failureRecovery: ["同名远端已存在或账号不符时不创建", "远端已创建但 push 失败时从现有 PRIVATE 身份继续而不重建", "rename 目标已存在或 identity 改变时停止", "默认分支与预期不同就显式处理并重查", "delete/transfer/force-update 响应不确定时先读现场而不重放", "任一 target/executor/preimage/epoch 漂移使旧能力失效"]
     },
     teaser: "创建空 PRIVATE 仓库，以及删除、转移、改名、改变可见性、默认分支或远端等高影响动作，必须绑定精确目标、恢复条件和正式回读；普通 Git 操作不会因此全部变成人工审批。",
-    status: "当前 E97 protection contract 已激活，受保护重大动作合同与 previous E96 同字节/SHA；源 main=281344b…包含类型化 PRIVATE 创建通道，本轮已真实创建并回读 daily-preferences，其他重大动作与人类因子路径未执行",
+    status: "当前 E98 protection contract 已激活，受保护重大动作合同与 previous E97 同字节/SHA；源 main=281344b…包含类型化 PRIVATE 创建通道，本轮已真实创建并回读 daily-preferences，其他重大动作与人类因子路径未执行",
     statusTone: "mixed",
     value: "把创建仓库、本地 ref 删除/强更、remote URL 替换，以及 GitHub 可见性、改名、默认分支、删除和转移收进九个封闭动作；每次只改变一个精确目标、保留恢复依据并从现场回读，同时让普通 commit 和 normal push 不被误升级。",
     why: "这些动作会改变仓库身份、公开面、默认入口或可恢复历史，目标错一位就可能泄露或丢失；但一律弹人类确认同样不正确。产品让最高权限智能体按真实意图决定 allow、step_up、deny 或先补证据，机械适配器只验证并执行一个被类型化的动作。",
@@ -635,7 +635,7 @@ export const githubIndexModules = [
       "历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook 通过；本次未把这些历史层升级为当前执行证据。",
       "2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。",
       "2026-09-01 直接回读源 main/origin=281344b…与 current create-repository 合同：只允许本人账号、空 PRIVATE、expected absent、本地 branch/HEAD/clean preimage，创建后的 origin/push 明确留给普通 Git 收敛。",
-      "当前 E97 protection contract 已验证；其中 protected-major-actions 合同 SHA-256=500abc3f…，与 previous E96 同字节，因此 E96 及更早 E95 只保留为历史连续性，不冒充 current。本轮真实创建并回读 PRIVATE daily-preferences，其他破坏性动作和人类因子路径没有执行，所以模块 statusTone 保持 mixed（混合证据）。"
+      "当前 E98 protection contract 已验证；其中 protected-major-actions 合同 SHA-256=500abc3f…，与 previous E97 同字节，因此 E97 及更早版本只保留为历史连续性，不冒充 current。本轮真实创建并回读 PRIVATE daily-preferences，其他破坏性动作和人类因子路径没有执行，所以模块 statusTone 保持 mixed（混合证据）。"
     ],
     relation: "它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission 提供现场身份，Snapshot 只记录索引代际，二者都不能替代最高权限语义判断和正式回读。"
   },

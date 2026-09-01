@@ -107,6 +107,7 @@ export const ruleGuides = {
           item("秘密有固定 Owner", "SecretRef 走本地 Secret Broker；Vault 和 Key 走独立 Vault 工作流。BitLocker 全量恢复的敏感结果不能进入聊天、stdout、JSON 或剪贴板。"),
           item("人类文档不是动态权威", "README、操作指南和恢复教程必须人话且保持最新，但只有用户明确询问、维护或它是具名验收证据时才读取。"),
           item("Personal Skill 只有一份 source", "Canonical source 位于 E 盘 skills 与 plugins，唯一清单是 personal-skill-supply.json，用户目录只放事务 installer 创建的 junction。"),
+          item("发布后必须回看个人面板", "已登记项目、活动 E Rule 或个人 Skill 完成发布和正式回读后，来源任务必须进入 personal-panel-refresh。路径、commit 和 hash 只定位候选；Source Owner 用产品与技术语义判断页面是否会说错。只有实质变化才异步安排一次独立网站任务，其余 no-op，不阻塞来源发布。", "例如一个新 Skill 已完成 PRIVATE main 回读：来源任务先判断当前 Skills、Rules、项目或 System 是否会遗漏新增能力；只有确实会误导使用时才安排网站 AI 更新。"),
           item("新规则原位升级", "根规则只放跨项目元规则和真实硬边界；专项 SOP 放合同、Skill 或项目；触发 metadata 只在 catalog 维护；字符预算由配置和测试执行。")
         ]
       }

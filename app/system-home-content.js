@@ -554,8 +554,8 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "个人系统网页快照更新",
       focus: "先从项目、Rules 和 Skills 各自的事实来源取得本轮已验证、可发布的状态；需要本人明确启动的页面没有新请求时，保留上次已验证快照。再判断 System 总览是否仍真实；Git 记录只提示可能受影响的位置。",
-      process: "AI 只更新本轮真正获准且实质受影响的页面，再比较 System 的场景、职责卡、自动协作、项目版图和能力家族。提交、路径、时间戳或哈希变化本身不触发改写。",
-      delivery: "交回明确的“无需修改”，或已验证的新快照、修改范围、发布结果与公网回读。"
+      process: "由活动经济路由选出的 Sol 家族或更强未来 AI，先分别判断产品与技术的新增、修改、退役/替代和 Unknown，再闭合 Project、Rules、Skills、System；提交、路径、时间戳或哈希只定位候选，不能决定正文。",
+      delivery: "交回明确的“无需修改”，或四类页面各自 changed、unchanged、blocked 的闭包、已验证新快照、发布结果与公网回读。"
     }
   ]
 };
@@ -1557,7 +1557,7 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "project-entry-gate", name: "Git 项目身份入口", technicalName: "project-entry-gate", summary: "在身份、公开性、分支、远端或同步状态会改变决定时，取得当前仓库真实现场。", href: "/skills/project-entry-gate" },
-      { slug: "personal-panel-refresh", name: "个人看板实质更新判断", technicalName: "personal-panel-refresh", summary: "来源项目发布后，只有现有页面会因此变得实质错误时，才安排一次独立网站更新。", href: "/skills/personal-panel-refresh" }
+      { slug: "personal-panel-refresh", name: "个人看板实质更新判断", technicalName: "personal-panel-refresh", summary: "已登记项目、活动规则或个人 Skill 发布回读后，只有现有页面会实质失真时，才由高质量网站 AI 安排一次独立增量。", href: "/skills/personal-panel-refresh" }
     ]
   },
   {

@@ -908,8 +908,8 @@ test("GitHub index exposes the current 49-repository facts and complete owner jo
   const majorActions = githubIndexModules.find((item) => item.slug === "protected-major-actions");
   const majorText = JSON.stringify(majorActions);
   assert.equal(githubIndexProject.currentState.observedAt, "2026-09-01T01:54:35.9652187Z");
-  assert.match(majorText, /当前 E97 protection contract/);
-  assert.match(majorText, /E96[\s\S]*(?:同字节|同.*SHA)[\s\S]*历史/);
+  assert.match(majorText, /当前 E98 protection contract/);
+  assert.match(majorText, /E97[\s\S]*(?:同字节|同.*SHA)[\s\S]*历史/);
   for (const operation of ["delete-local-ref", "force-update-local-ref", "replace-remote-url", "create-repository", "set-visibility", "rename-repository", "set-default-branch", "delete-repository", "transfer-repository"]) {
     assert.ok(majorText.includes(operation), `Git major actions omit typed operation: ${operation}`);
   }
@@ -1006,11 +1006,11 @@ test("non-rule project packages preserve the content contract and enter only the
     if (candidate === project) {
       const observedRelease = candidate.currentState.label.match(/E\d+/)?.[0];
       assert.ok(observedRelease, "agents Owner observation omits its release identity");
-      assert.ok(candidate.snapshotBoundary.includes(`${observedRelease} 观察`), "agents boundary mixes live release with an unlabelled historical Owner observation");
+      assert.ok(candidate.snapshotBoundary.includes(observedRelease) && candidate.snapshotBoundary.includes("pass") && candidate.snapshotBoundary.includes("fail"), "agents boundary omits the release-bound Owner observation");
       assert.ok(candidate.cardMetrics.some((item) => item.label.includes(observedRelease) && item.value.includes("pass")), "agents local regression metric omits its observed release");
       assert.ok(candidate.cardMetrics.some((item) => item.label.startsWith("合同覆盖") && item.label.includes(observedRelease)), "agents contract metric omits its observed release");
       assert.ok(candidate.cardMetrics.find((item) => item.label === "活动规则")?.value.startsWith(panelSnapshot.authority.releaseId), "agents live release metric is not panelSnapshot-derived");
-      assert.ok(candidate.cardStatus.includes(panelSnapshot.authority.releaseId) && candidate.cardStatus.includes(`${observedRelease} 观察`), "agents status assigns an older Owner regression to the live release");
+      assert.ok(candidate.cardStatus.includes(panelSnapshot.authority.releaseId) && candidate.cardStatus.includes("回归"), "agents status omits the release-bound Owner regression");
     }
     const canonicalFacts = JSON.stringify({ heroFacts: candidate.heroFacts, currentState: candidate.currentState, components: candidate.components, methodCanvas: candidate.methodCanvas, modules: candidateModules, liveSnapshot: candidate === project ? panelSnapshot : undefined });
     for (const metric of candidate.cardMetrics) {
@@ -2341,7 +2341,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 10);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 11);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -2973,7 +2973,7 @@ test("shared search scopes, project reading layers, Skills categories and System
       assert.equal(match?.href, canonicalPath(new URL(moduleEntry.href, "https://wly0829.cn").pathname), `project compact search misroutes: ${alias}`);
     }
   }
-  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["59b0b5c", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E97", "agents"], ["E95", "agents"]]) {
+  for (const [query, slug] of [["卡顿", "timeaudit"], ["电脑卡顿", "timeaudit"], ["游戏卡顿", "timeaudit"], ["Vault V2", "pcconfig"], ["银行卡盲填", "pcconfig"], ["waiting_for_codex_exit", "pcconfig"], ["SenseVoiceSmall", "chinese-asr"], ["Qwen3-ASR-1.7B", "chinese-asr"], ["真实任务能力验证", "cacb"], ["59b0b5c", "cacb"], ["Fitbit一次授权", "personal-health"], ["decision_ready健康字段", "personal-health"], ["E98", "agents"], ["E97", "agents"]]) {
     assert.equal(searchCompactEntries(compactIndex, query, "project")[0]?.projectSlug, slug, `project compact search misroutes: ${query}`);
   }
 });
@@ -3068,16 +3068,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E97 panel preserves continuity, trusted-local boundaries, attention and minimum architecture", async () => {
+test("E98 panel preserves continuity, post-publication closeout and minimum architecture", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E97");
-  assert.equal(bindings.ruleset_sha256, "f678b2556622b5ea743790ac4cc53859d7b07094ebe5f34b23d4698b4ff25b5d");
-  assert.equal(panelSnapshot.authority.releaseId, "E97");
-  assert.equal(panelSnapshot.authority.gitCommit, "805abf628fb9a0a78cd2a27077c6f70dbbda26fb");
-  assert.equal(panelSnapshot.authority.pointerRevision, 5);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E96");
+  assert.equal(bindings.semantic_release_id, "E98");
+  assert.equal(bindings.ruleset_sha256, "2fcb55e00a416352cc680d0bb25dd9744703cb455f1d6508e249c0a68890c7a8");
+  assert.equal(panelSnapshot.authority.releaseId, "E98");
+  assert.equal(panelSnapshot.authority.gitCommit, "e1c1e3644b6c3d2c74eeb2fd0a469444e81c7290");
+  assert.equal(panelSnapshot.authority.pointerRevision, 6);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E97");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",
@@ -3085,7 +3085,7 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "E identity 换代只刷新快照",
     "不重复索要确认",
     "Child 不继承"
-  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E97 continuity semantics omit: ${expected}`);
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 continuity semantics omit: ${expected}`);
   for (const expected of [
     "Durable explicit user authorization（耐久明确用户授权）",
     "root、全部 child/后代和新顶层任务",
@@ -3097,7 +3097,7 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "Complete goal（已完成目标）",
     "正式 terminal/completed 且无 follow-up、queued work、pending transaction 或未交接 Owner residual 时才自动归档"
   ]) {
-    assert.ok(coreSource.includes(expected), `E97 panel omits semantic contract: ${expected}`);
+    assert.ok(coreSource.includes(expected), `E98 panel omits semantic contract: ${expected}`);
   }
   for (const expected of [
     "耐久明确授权跨任务持续",
@@ -3112,7 +3112,7 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "原生子代理与独立 Owner task 分层",
     "顶层任务默认 projectless"
   ]) {
-    assert.ok(ruleGuideSource.includes(expected), `E97 rule guide omits: ${expected}`);
+    assert.ok(ruleGuideSource.includes(expected), `E98 rule guide omits: ${expected}`);
   }
   for (const expected of [
     "未归档且正式登记 long_term_task 的 Owner 不自动释放",
@@ -3122,14 +3122,14 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "未登记 long_term_task 的 inactive predecessor",
     "长期任务不自动释放"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E97 long-term owner boundary omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 long-term owner boundary omits: ${expected}`);
   }
   for (const expected of [
     "RecoverReleaseClaim 默认继承 predecessor 的非空 coordination",
     "Repartition 把当前 task 的冻结 coordination 写入全部 replacement bindings",
     "E94 保证 RecoverReleaseClaim 继承 predecessor 的非空 coordination"
   ]) {
-    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E97 coordination continuity omits: ${expected}`);
+    assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 coordination continuity omits: ${expected}`);
   }
   for (const expected of [
     "可信本地安全闭集",
@@ -3137,7 +3137,7 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "注意力质量高于上下文数量",
     "实现盲测",
     "自然用户意图"
-  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E97 product semantics omit: ${expected}`);
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 product semantics omit: ${expected}`);
   for (const expected of [
     "产品复杂度由需求决定，技术架构必须最小充分",
     "产品复杂度由用户和业务 Owner 决定",
@@ -3148,7 +3148,10 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     "新增技术层必须逐项举证",
     "自造复杂度失败先删层",
     "额度多不是长架构理由"
-  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E97 minimum architecture semantics omit: ${expected}`);
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 minimum architecture semantics omit: ${expected}`);
+  for (const expected of ["发布后必须回看个人面板", "personal-panel-refresh", "Source Owner 用产品与技术语义判断", "只有实质变化才异步安排一次独立网站任务"]) {
+    assert.ok(ruleGuideSource.includes(expected), `E98 panel closeout semantics omit: ${expected}`);
+  }
   assert.match(`${coreSource}\n${ruleGuideSource}`, /功能、流程、状态.*不能.*反膨胀.*(?:删除|降级)|反膨胀.*不能.*删功能/s);
   assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*完整验收.*(?:短路线|现有入口|单模块).*必须/);
   assert.match(`${coreSource}\n${ruleGuideSource}`, /新增.*(?:服务|数据库|状态机).*精确.*(?:需求|缺口).*当前.*证据/s);
@@ -3175,6 +3178,9 @@ test("E97 panel preserves continuity, trusted-local boundaries, attention and mi
     /不等待.*不轮询/,
     /网站负责人.*内容.*构建.*公开检查/,
     /正常推送.*现有 PUBLIC main.*Pages.*公网回读/,
+    /产品与技术.*新增.*修改.*退役\/替代.*Unknown/,
+    /Project.*Rules.*Skills.*System/,
+    /Sol 家族.*更强未来模型/,
     /安排失败.*不盲目重试/,
     /新公网目标.*付费.*秘密暴露.*force-push/
   ]) {
