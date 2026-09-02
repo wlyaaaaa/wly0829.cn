@@ -629,7 +629,7 @@ export const systemProjectDomains = [
     unavailable: "原件不在当前覆盖、附件丢失或识别失败时明确实际检查范围与待确认项，不用摘要补齐缺失事实。",
     assets: [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，而不是只吐一段无法回听的稿。", kind: "工作能力", href: "/projects/chinese-asr" },
-      { id: "local-ocr", title: "本地文档理解", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标。", kind: "工作能力", href: projectLedgerHref },
+      { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: projectLedgerHref },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "用普通描述先查已登记定位；位置确实未知时只看获准目录的名称与 stat（文件状态），选中一项后才核对大小和 SHA-256 并打开。", kind: "资料入口", href: "/projects/personal-materials" },
       { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文，保留回复、媒体和可重放增量关系；完成态可继续增量，硬崩溃半成品仍明确保留为缺口。", kind: "资料入口", href: "/projects/wechat-direct" }
@@ -1102,13 +1102,13 @@ export const systemDependencyNodes = [
   {
     id: "localocr",
     lane: "inputs",
-    title: "扫描文档理解（LocalOCR）",
-    subtitle: "扫描 PDF、表格、公式、印章和版面",
+    title: "图像场景与精确文字分工（LocalOCR）",
+    subtitle: "按结果选择原生视觉、精确 OCR 或两路独立执行",
     links: [
       { href: "#system-project-asset-local-ocr", label: "查看项目版图" },
-      { href: "/skills/localocr", label: "Skill：扫描文档理解" }
+      { href: "/skills/localocr", label: "Skill：图像理解与精确 OCR 分工" }
     ],
-    detail: "输出文字、表格、公式、版面、页码、坐标和待确认项。普通清晰图片不机械 OCR，原件始终高于识别结果。"
+    detail: "只描述场景、物体或活动时直接看原图，不启动 LocalOCR；逐字抄写、小字、坐标、表格、公式、印章、批量或全本地请求进入 LocalOCR。混合请求让视觉与 OCR 独立读取同一原图，再把场景观察、精确文字、识别状态和冲突分开；display_summary 只解释 OCR 状态，不替代原始文字、坐标或客观结果侧车。"
   },
   {
     id: "documents-skill",
@@ -1453,7 +1453,7 @@ export const systemSkillFamilies = [
     members: [
       { slug: "file-intake-router", name: "混合附件分流", technicalName: "file-intake-router", summary: "先看清 Word、表格、PDF、图片、压缩包或文件夹结构，再交给保留信息最多的读取器。", href: "/skills/file-intake-router" },
       { slug: "chinese-asr", name: "中文录音理解", technicalName: "chinese-asr", summary: "把中文录音变成带时间位置的文字，保留任务续跑、匿名说话人和本人语音判断的证据边界。", href: "/skills/chinese-asr" },
-      { slug: "localocr", name: "扫描件与版面识别", technicalName: "localocr", summary: "读取扫描 PDF、表格、公式、印章和版面，保留页码、结构、坐标和空结果语义。", href: "/skills/localocr" },
+      { slug: "localocr", name: "图像场景与精确文字分工", technicalName: "localocr", summary: "按请求选择原生视觉、LocalOCR 或两路独立执行；分开保留场景观察、精确文字、识别状态、坐标、空结果语义与冲突。", href: "/skills/localocr" },
       { slug: "media-person-self", name: "具名媒体中的本人判断", technicalName: "media-person-self", summary: "只判断指定照片或录音中是否支持本人候选，并返回可复核的位置、覆盖范围和未知。", href: "/skills/media-person-self" },
       { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" },
       { slug: "daily-preferences", name: "日常偏好与个性化推荐", technicalName: "daily-preferences", summary: "当前明示优先，用薄快照、事实核对和最小证据给出可纠正的消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常建议。", href: "/skills/daily-preferences" }

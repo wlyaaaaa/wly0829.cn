@@ -65,7 +65,7 @@
 | `google-workspace-direct` | “查邮件/Drive/日历” → 固定账号、固定 Provider 的窄结果 | 避免静默换账号/第二 Provider；原生文档走正确 export | 零网络 ValidateOnly ready；在线账号与真实返回本轮未验 |
 | `chinese-asr` | “转写并给复核线索” → 正文、风险、可选时间线/说话人证据 | 连接具名音频、模型路由、GPU 与结果包 | 本轮只跑 345 单测，未处理录音 |
 | `timeaudit-diagnostics` | “过去一小时为什么卡” → 覆盖、聚合信号、因果限制和下一步 | 连接 TimeAudit 有界 provider 与 Windows/PCConfig 现场 | 最新一小时 3702 样本、fresh；不返回具体进程或证明根因 |
-| `localocr` | “读扫描 PDF/表格/公式” → 文本、版面、表格、坐标和 sidecar | 复杂扫描材料走本地 OCR；普通清晰图片仍直接视觉 | 上次小图 E2E 可保留，当前 18665 health 本轮不可达 |
+| `localocr` | “描述照片并准确抄下招牌” → 场景观察、精确文字、识别状态与冲突分开 | 只看场景走原生视觉，精确文字走 LocalOCR，混合请求两路独立；全本地要求只走本机 OCR | `.agents` 31278a0 的三路自然请求盲验收与 LocalOCR acc6d15 的 `display_summary` 回归已由来源 Owner 回读；本网站任务未重跑源像素 |
 | `personal-health` | “结合我的当前资料回答/刷新设备” → 分层健康证据与最小更新 | 连接 processed-current、权威医学信息和 Health Owner | 未读取个人健康正文，不证明任何当前事实 |
 | `daily-preferences` | “以后按我的偏好推荐，但我纠正后要改” → 有依据、可纠正的日常建议 | 连接本人明示、行为事实核对和当前选择，不扩到健康、资产或关系画像 | 当前 Skill 与 PRIVATE 项目入口已登记；网页不读取私人偏好正文或个体推荐结果 |
 | `document-materials` | “把这些原件整理成合同、说明、申请或事件材料” → 可编辑文档、PDF 或核过的材料包 | 连接真实原件、当前材料状态、文档生成和提交状态分层 | 只公开通用文书与材料产品，不展示私人案件、内部 source route 或个人结果 |

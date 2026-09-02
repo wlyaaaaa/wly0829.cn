@@ -2,8 +2,8 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-09-01 20:17（中国时间）",
-  "sourceCommit": "6a9e1b0704cd86c4674ddc4521a3aae04cb6356f",
+  "observedAt": "2026-09-02 12:25（中国时间）",
+  "sourceCommit": "31278a0587bc8fdd81f24f38f340639eb40e715e",
   "sourceBranch": "main",
   "sourceWorktreeClean": true,
   "sourceDirtyCount": 0,
@@ -125,7 +125,7 @@ export const generatedPanelFacts = {
         "layer": "Source checkout（候选源码工作树）",
         "status": "repair",
         "label": "main 已进入下一候选提交",
-        "detail": "source HEAD=6a9e1b0704cd，origin/main=6a9e1b0704cd，active release commit=e1c1e3644b6c。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E98。"
+        "detail": "source HEAD=31278a0587bc，origin/main=31278a0587bc，active release commit=e1c1e3644b6c。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E98。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -157,6 +157,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "985c6cc88e957273986ede4004e71a8a7f5b548fd79fb48fdeca9db53439a1e6"
+    "payloadSha256": "13fec69f0fb63413e48b96137ca17a5e93001c2b12690e0adbad6a3c92bbfc58"
   }
 };

@@ -3238,6 +3238,21 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 26);
   assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
   assert.equal(new Set(skills.map((item) => item.slug)).size, skills.length);
+  const localOcr = skills.find((item) => item.slug === "localocr");
+  const localOcrText = JSON.stringify({ entry: localOcr, guide: skillGuides.localocr, outcome: skillOutcomes.localocr });
+  for (const expected of [
+    /只描述场景.*原生视觉|场景描述.*原生视觉/,
+    /精确文字.*LocalOCR|LocalOCR.*精确文字/,
+    /混合请求.*独立|两条路线独立/,
+    /视觉观察.*精确文字.*识别状态.*(?:不确定|冲突)/,
+    /display_summary/,
+    /全本地.*不.*原生视觉|全部本地.*不.*原生视觉/,
+    /不是场景描述模型/
+  ]) assert.match(localOcrText, expected, `localocr omits hybrid evidence contract: ${expected}`);
+  const localOcrSystemText = JSON.stringify({ systemScenarios, systemDependencyNodes, systemProjectDomains, systemSkillFamilies });
+  for (const expected of [/原生视觉.*(?:精确 OCR|LocalOCR).*两路独立/, /display_summary/, /场景观察.*精确文字.*识别状态.*冲突/]) {
+    assert.match(localOcrSystemText, expected, `System omits LocalOCR hybrid routing: ${expected}`);
+  }
   const dailyPreferences = skills.find((item) => item.slug === "daily-preferences");
   const dailyPreferencesText = JSON.stringify({ entry: dailyPreferences, guide: skillGuides["daily-preferences"], outcome: skillOutcomes["daily-preferences"] });
   assert.equal(dailyPreferences.sourcePath, "E:\\.agents\\skills\\daily-preferences\\SKILL.md");
