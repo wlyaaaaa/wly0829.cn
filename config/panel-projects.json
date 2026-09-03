@@ -930,7 +930,7 @@
     {
       "id": "learning",
       "order": 8,
-      "title": "用 AI 把一件事学明白",
+      "title": "AI 协作学习",
       "enabled": true,
       "presentation_mode": "curated_packaging",
       "route": "/projects/learning",

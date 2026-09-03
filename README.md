@@ -5,7 +5,7 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、用 AI 把一件事学明白、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找、文书和材料制作、工作交付副驾驶（1/2/3/4/5/6/7/8/9/10/11/12/13/14）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI 协作学习、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找、文书和材料制作、工作交付副驾驶（1/2/3/4/5/6/7/8/9/10/11/12/13/14）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 

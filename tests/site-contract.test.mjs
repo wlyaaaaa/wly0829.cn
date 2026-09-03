@@ -3562,7 +3562,8 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
   assert.equal(searchPanel("TimeAudit")[0]?.title, "TimeAudit · 总览");
   assert.equal(searchPanel("PC Panel Hub")[0]?.title, "PC Panel Hub · 总览");
   assert.equal(searchPanel("CACB")[0]?.title, "CACB Agent 能力基准 · 总览");
-  assert.equal(searchPanel("AI帮我学习")[0]?.title, "用 AI 把一件事学明白 · 总览");
+  assert.equal(searchPanel("AI帮我学习")[0]?.title, "AI 协作学习 · 总览");
+  assert.equal(searchPanel("AI 协作学习")[0]?.title, "AI 协作学习 · 总览");
   assert.equal(searchPanel("健康信息怎么判断能不能用")[0]?.title, "个人健康证据与安全决策 · 总览");
   assert.equal(searchPanel("WeChatDirect")[0]?.title, "WeChatDirect · 总览");
   for (const [query, href] of [
