@@ -870,7 +870,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复；BIOS 记录、启动介质、备份、任务 Ready 和文件复制都只是中间证据，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 当前有 14 组计划，H 尚未返回。BIOS 记录、启动介质、任务 Ready 和复制都只是中间证据，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",

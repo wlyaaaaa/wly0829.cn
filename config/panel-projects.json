@@ -25,7 +25,7 @@
     "shared_css_gzip_budget_kib": 21,
     "search_index_gzip_budget_kib": 96,
     "project_search_index_gzip_budget_kib": 121,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. vault-tool project18 and its corrected Skill explanation change shared/all-project search from the released baseline 93603/118114 gzip bytes to 97524/123274. Its eight modules have eight unique routes and eight explicit compact searchProjection records; no full technical arrays are added to shared interaction JS. The overview replaces the old System-only entry instead of duplicating it; complete search records grow from 269 to 277. Round up only to the measured minimum integer 96/121 KiB. The new per-project shard is 6221 gzip bytes, below the unchanged 20 KiB ceiling. Shared entry JS remains byte-identical at 35257 raw/11596 gzip bytes, CSS remains 129197 raw/21082 gzip; preserve 12 KiB JS, 21 KiB CSS, native navigation/prefetch and full professional content, with no new compression protocol, dependency or service",
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The bounded PCConfig recovery refresh keeps 18 projects and 277 search records. After removing redundant new aliases and repeated example details, shared/all-project search measures 97652/123896 gzip bytes and stays within the existing 96/121 KiB lines. Its per-project shard is 20556 gzip bytes: the source-backed ordinary/protected recovery distinction, 14-set scope, exact entrypoints and evidence terms exceed 20 KiB by 76 bytes, so round only that line to the minimum integer 21 KiB. No other project narrative, interaction JS, CSS, loading architecture, dependency or service changes; preserve 12 KiB shared JS, 21 KiB CSS, native navigation/prefetch and complete professional content",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -34,7 +34,7 @@
     ],
     "default_presentation_mode": "real_dashboard",
     "only_private_document": "docs/design/private-content-rules.md",
-    "project_search_shard_gzip_budget_kib": 20
+    "project_search_shard_gzip_budget_kib": 21
   },
   "global_surfaces": [
     {
@@ -221,7 +221,7 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 10,
+        "semantic_revision": 11,
         "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data; current machine/runtime identity, main-workstation startup, Password Center lifecycle, Google Workspace limits and partial-effect semantics, actual protected-data maturity, and the existing daily personal backup coordinating indexes and the phone package",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
@@ -300,6 +300,8 @@
             "tools/Get-RuntimeInventory.ps1",
             "tools/local_gpu_broker/**",
             "tools/Install-CoreRecoveryTasks.ps1",
+            "tools/Invoke-CoreRecoveryMaintenance.ps1",
+            "tools/Invoke-PasswordCenterColdBackup.ps1",
             "tools/Invoke-PCConfigAcceptance.ps1",
             "tools/Invoke-TimeAuditAnomalyIncrement.ps1",
             "tools/timeaudit_anomaly_increment.test.ps1",
