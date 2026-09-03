@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 88,
-    "project_search_index_gzip_budget_kib": 112,
-    "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase; 2026-09 source-complete natural-language search preserves purpose/result and command text after simple de-duplication: measured core 88261 bytes, all modules 112824, largest project shard 19921 gzip after retaining existing technical identifiers; budgets are 88/112/20 KiB, shared runtime remains 12 KiB, with no custom compression protocol or content removal",
+    "search_index_gzip_budget_kib": 92,
+    "project_search_index_gzip_budget_kib": 116,
+"bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. LocalOCR project17 adds one real overview and six compact module records: the public HEAD baseline was 90111/113172 gzip bytes for shared/all-project search, the source-complete candidate was 93546/118112; 114/114 explicit module search projection values are retained with no duplicated old records or full technical arrays. The old LocalOCR System-only entry is replaced, not duplicated. Round up only to 92/116 KiB; the largest existing per-project shard stays below 20 KiB and LocalOCR is 5741 bytes. Shared entry JS is byte-identical at 35257 raw/11596 gzip bytes; keep the 12 KiB JS, 21 KiB CSS and 20 KiB shard thresholds, native prefetch/navigation, and full professional content; add no compression protocol or service",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1607,6 +1607,68 @@
           "ordinary private media increments, classification decisions, local paths or candidate rows change without altering the public product contract or owner-selected public gallery",
           "a phone is disconnected, an external account is unavailable or upload remains unauthorized while the page already states that exact boundary",
           "an internal refactor or test addition leaves every displayed capability, failure and recovery behavior unchanged"
+        ]
+      }
+    },
+    {
+      "id": "localocr",
+      "order": 17,
+      "title": "LocalOCR",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/localocr",
+      "ai_refresh": {
+        "content_path": "app/content-localocr.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first LocalOCR overview and six source-backed modules: explicit inputs and native-reader/OCR/VL routing; table/formula/layout/seal/region parsing and coordinate frames; TXT/Markdown/JSON, objective evidence and independent visual correction; job identity, validated result reuse and partial failure; supervised warm-worker execution, exact cancellation, whole-request deadlines and existing GPU coordination; installation, model configuration and honest offline recovery boundaries",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\LocalOCR status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/LocalOCR -TargetWorktree E:\\Projects\\Tools\\LocalOCR -ForPublication -Json",
+          "read current localocr/model_profiles.json, pyproject.toml, existing AI entrypoints and source implementation; distinguish declared profiles from installed packages and loaded models",
+          "scripts/run_in_wsl.sh -m unittest discover -s tests -q from the source root; preserve pass, fail, skip, retries and wall-clock evidence instead of treating a retry as no prior failure",
+          "GET http://127.0.0.1:18665/health only when reachable; expose the LocalOCR service identity, model/resource state and active-job count, not unrelated private inputs"
+        ],
+        "conditional_collectors": [
+          "one bounded, explicitly selected public or synthetic sample through ocr_smart.ps1 when the user-visible OCR output or runtime needs current evidence; keep input, actual output, quality, omitted regions and human review distinct",
+          "tests/run_tests.py --allow-heavy or scripts/download_models.py --allow-heavy only for an explicitly authorized heavy multi-model integration or environment-recovery task",
+          "never install, restart, stop unrelated work, scan a private library or publish private sample pixels merely to refresh this page"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/LocalOCR",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\LocalOCR"
+      },
+      "displayed_areas": [
+        "product_overview_named_inputs_outputs_principles_and_current_evidence",
+        "six_source_backed_modules",
+        "ordinary_ocr_local_vl_escalation_and_explicit_structure",
+        "model_registry_options_and_explicit_selection_precedence",
+        "page_rendering_layout_table_formula_seal_and_coordinate_fidelity",
+        "formal_outputs_objective_states_empty_result_limits_and_independent_correction",
+        "task_identity_validated_cache_partial_evidence_and_read_only_observation",
+        "supervised_runtime_deadline_cancellation_memory_and_existing_gpu_broker",
+        "installation_model_cache_and_offline_recovery_limits",
+        "real_synthetic_sample_original_and_output_without_accuracy_inflation"
+      ],
+      "impact_sources": [
+        { "kind": "entrypoints_and_model_contract", "paths": ["docs/QUICKSTART_FOR_AI.md", "docs/ARCHITECTURE.md", "docs/MODELS.md", "localocr/model_profiles.json", "localocr/model_registry.py", "localocr/smart_router.py", "localocr/router.py", "localocr/difficulty.py", "localocr/cli.py", "ocr_smart.ps1", "ocr_once.ps1", "start.ps1"] },
+        { "kind": "document_structure_and_result_evidence", "paths": ["localocr/engines/*.py", "localocr/pdf_utils.py", "localocr/outputs.py", "localocr/objective_result.py", "localocr/path_utils.py"] },
+        { "kind": "tasks_runtime_and_resources", "paths": ["localocr/service.py", "localocr/server.py", "localocr/job_registry.py", "localocr/runtime.py", "localocr/gpu_broker.py", "localocr/gpu_probe.py", "localocr/observer.py", "start_server.ps1", "stop_server.ps1", "release_resources.ps1"] },
+        { "kind": "installation_recovery_and_verification", "paths": ["pyproject.toml", "scripts/install_wsl.sh", "scripts/run_in_wsl.sh", "scripts/download_models.py", "docs/TROUBLESHOOTING.md", "tests/*.py"] }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed input, model/default option, escalation, structure field, coordinate, formal output, quality or no-text evidence boundary changes meaning",
+          "a task/cache, deadline, cancellation, resource, local-processing, installation or recovery behavior changes what the owner should do",
+          "a current source or actual sample contradicts a published capability, result or evidence claim"
+        ],
+        "snapshot_only_when": ["source commit, observed installed version, test count, health time or one sample timing changes while all displayed product meaning remains true"],
+        "ignore_when": [
+          "internal refactors, formatting or test additions do not change displayed behavior",
+          "private input files, generated outputs or model-cache contents change without altering public product facts",
+          "a model is only registered or downloaded without becoming the selected default or gaining current runtime evidence"
         ]
       }
     }

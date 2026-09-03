@@ -20,6 +20,7 @@ import { documentMaterialsProject } from "../app/content-document-materials.js";
 import { workDeliveryProject } from "../app/content-work-delivery.js";
 import { dailyPreferencesProject } from "../app/content-daily-preferences.js";
 import { personalMediaProject } from "../app/content-personal-media.js";
+import { localOcrProject } from "../app/content-localocr.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packages = [
@@ -38,10 +39,11 @@ const packages = [
   [documentMaterialsProject, "app/content-document-materials.js"],
   [workDeliveryProject, "app/content-work-delivery.js"],
   [dailyPreferencesProject, "app/content-daily-preferences.js"],
-  [personalMediaProject, "app/content-personal-media.js"]
+  [personalMediaProject, "app/content-personal-media.js"],
+  [localOcrProject, "app/content-localocr.js"]
 ];
 
-test("all sixteen project surfaces are deterministic projections of one currentSnapshot", () => {
+test("all seventeen project surfaces are deterministic projections of one currentSnapshot", () => {
   for (const [candidate] of packages) {
     const snapshot = candidate.currentSnapshot;
     assert.ok(snapshot && typeof snapshot === "object", `${candidate.slug} has no currentSnapshot`);

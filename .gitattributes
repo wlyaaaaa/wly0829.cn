@@ -1,0 +1,3 @@
+# Raw OCR evidence must retain its exact bytes across Windows and Linux checkouts.
+public/media/localocr/sample-table-actual.md -text whitespace=-blank-at-eof
+public/media/localocr/sample-table-actual.json -text

@@ -35,7 +35,7 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 协作路由" }
   ],
   "localocr": [
-    { relation: "no-detail-project", systemAssetId: "local-ocr", label: "LocalOCR 精确文字与版面项目" }
+    { relation: "owned-by-project", projectSlug: "localocr", moduleSlug: "input-routing", label: "LocalOCR 本地文字识别与文档解析" }
   ],
   "personal-materials": [
     { relation: "owned-by-project", projectSlug: "personal-materials", moduleSlug: "registered-lookup", label: "个人材料查找项目" }
