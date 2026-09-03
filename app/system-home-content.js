@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 19,
+  detailedPageCount: 20,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供十九个完整参考页，当前新增 video-scaffold 的本地视频制作、输入安全复用与分阶段交付详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十个完整参考页，当前新增 AI CLI Profile Manager 的原生 CLI 启动、精确 Profile、分层验证与可恢复运行详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -589,7 +589,7 @@ export const systemProjectDomains = [
     unavailable: "某个入口不可用时只停止依赖它的支路，保留已经完成的工作并说明缺口；不静默换路线冒充原结果。",
     assets: [
       { id: "agents", title: "AI 协作规则与能力中心", repo: ".agents", role: "让 AI 知道听谁的、能做什么、该用哪种能力、多个协作者怎样不互相覆盖，以及何时需要停下来交给人。", kind: "核心基座", href: "/projects/agents" },
-      { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检和真实连接测试收在一起。", kind: "工作能力", href: projectLedgerHref },
+      { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
       { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: projectLedgerHref },
       { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: projectLedgerHref },
       { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "从 Telegram、飞书或 Google Chat 主动交办工作，并维护本机网关的启动、自愈、版本和受控更新边界。", kind: "集成与运维", href: projectLedgerHref },
@@ -998,7 +998,7 @@ export const systemDependencyNodes = [
     lane: "projects",
     title: "AI 命令行工作入口（AI CLI Profile Manager）",
     subtitle: "把多套命令行入口的启动、配置档、隔离、体检和真实连接测试放在一起",
-    href: "#system-project-asset-ai-cli-profile-manager",
+    href: "/projects/ai-cli-profile-manager",
     linkLabel: "查看 AI 命令行项目",
     detail: "它负责选择并启动明确的命令行工作入口，保存可恢复的配置和隔离边界；启动成功不等于远端账号、模型或目标任务已经可用，仍要做当次连接和现实任务验证。"
   },

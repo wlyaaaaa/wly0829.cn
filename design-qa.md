@@ -1,50 +1,57 @@
-# video-scaffold 第 19 项：本地内容与视觉验收
+# AI CLI Profile Manager 第 20 项：产品、内容与视觉验收
 
 ## 结果与范围
 
-本次只把既有 video-scaffold 建成第 19 个独立项目页，并修复会让该页失真的源项目陈旧复用问题。没有重写其他 18 个项目正文，没有生成演示视频、调用 Fish Audio、运行完整 4K60 成片、增加播放器、改共享样式或路由运行时，也没有新增服务、数据库、后台任务或依赖。
+本次只把既有 AI CLI Profile Manager 建成第 20 个独立项目页，并修复实际阻断本机同版本安装的 `CODEX_HOME` / `.codex` 兼容 Junction（目录连接）问题。没有预建第 21–25 项卡片或路由，没有新增 Provider、模型、付费 Live、GUI、TUI、聊天外壳、网站运行时、服务、数据库、后台任务、依赖或图片画廊。
 
-页面采用现有 Registry、React、Vite 与 GitHub Pages 静态路由链，提供总览和七个来源模块：新项目与体检、旁白与词级时间、场景与动画、构建与预览、确定性渲染、成片与交付、复用与恢复。System 中原有 video-scaffold 资产改为直达项目页；vault-tool 只移除“第十九项”的过期序号表述。
+页面继续使用现有 Registry、React、Vite 与 GitHub Pages 静态路由链，提供总览和七个来源模块：配置档与启动、引擎与 Provider、秘密与隔离、检查与实测、可恢复机器运行、本地模型与双代理、安装/退役与恢复。System 中原有 AI CLI Profile Manager 资产改为直达项目页。
 
-此文记录发布前候选的来源、内容、测试、浏览器与体积证据，不把将来的提交或 Pages 部署预写成完成。最终 Git、Pages 和公网结果以任务结束时的正式回读为准。
+此文记录发布前候选的来源、产品功能、内容、测试、浏览器与体积证据，不把将来的站点提交或 Pages 部署预写成完成。最终 Git、Pages 与公网结果以任务结束时的正式回读为准。
 
-## 源项目修复与证据
+## 源项目修复与产品功能实测
 
-- Git Owner 实时确认 wlyaaaaa/video-scaffold 为 PUBLIC，默认分支 main；源修复已发布为 17040edc0a8f5b2a26116e204d1705cb5d6490ed，本地 main、origin/main 一致且工作区干净。
-- 修复前，音频和词级时间只因文件非空而复用，渲染分片只验帧数；脚本、音频、场景、同一路径素材、背景或编码配置改变后可能混入旧产物。
-- 当前音频身份绑定脚本、Fish 端点/模型/声线/格式、尾静音与输出 SHA-256；时间轴与时长表绑定当前音频和识别配置；渲染续作绑定场景 HTML、file:/// 素材字节、背景、时长、画布、转场、效果、编码和分片边界。
-- 无身份或身份漂移的 TTS/timing 产物保留原文件但拒绝普通复用，要求审阅后明确 force；渲染只删除受管可再生分片，删不掉就失败。Fish 需要重建却失败时直接抛错，旧文件不能让阶段假绿。
-- 源仓库最终 33/33 回归通过，compileall 通过；从当前源码新建的空白项目再次独立 33/33。独立 Terra 审查发现并推动补齐 file:/// 素材身份后，最终复核 P0=0、P1=0。
-- 2026-09-03 20:29 UTC，本机 doctor 10/10 PASS：Python 3.11.9、依赖、FFmpeg/ffprobe、AV1 4K60 背景、NVENC 单帧、SVG seekTime(t)、CUDA、large-v3 缓存和 Fish 配置均可见。
-- doctor-live、真实旁白、Whisper 音频、完整 render/merge/cover/chapters/verify 与人工成片观看本轮均未运行。页面保留这些 Unknown，不把环境、单元测试或单帧编码冒充作品。
+- Git Owner 实时确认 `wlyaaaaa/ai-cli-profile-manager` 为 PUBLIC，默认分支 `main`；源修复已发布为 `88f72e668bcfc8499b89f390343bae909e50db1c`，本地 `main`、`origin/main` 与 GitHub API 回读一致，工作区干净。
+- 开始时，本机已安装模块虽然显示 `0.3.12`，但 73 个文件只有 72 个与 `main` 相同，`ProfileService.ps1` 仍等于 `v0.3.12` tag，缺少 `255c300` 对损坏或非对象用户 Profile 的失败关闭修复。
+- 第一次执行 `Install.ps1 -Force` 在任何替换前被退役预检阻断：`C:\Users\10979\.codex` 是指向真实 `E:\Data\AppData\Codex` 的兼容 Junction，而旧脚本把该入口当作实际扫描根并一概拒绝重解析点。原安装没有被改坏。
+- `88f72e6` 让退役预检优先现有真实 `CODEX_HOME`；历史 managed state 只有文件名一致、直系父目录为单目标完整绝对 Junction、目标严格等于已验证真实 home 时才可作路径等价比对。旧记录路径不成为移动或存在性目标；未知、改写、越界、多层或身份不闭合对象仍在变更前停止。
+- 独立反需求膨胀审查把初版 `+737/-36` 候选收缩为最终 `+362/-54`：删除三个通过改写生产脚本制造竞争的测试、大型合成 target/filename 矩阵和重复根校验；保留一个真实重复 helper、四个实际行为与原有退役/前像/回滚合同。
+- 最终退役专项 32/32；完整 Pester 385/385、0 失败、0 跳过，耗时 146.232 秒；`scripts/Test-Release.ps1` exit 0，耗时 6.606 秒；PowerShell parser、UTF-8 BOM 与 `git diff --check` 均通过。
+- 真实默认退役预检为 `ready / planned=0 / blocked=0`。最终 `Install.ps1 -Force` 成功，真实 `CODEX_HOME` 为 `E:\Data\AppData\Codex`，兼容 `.codex` Junction 与 target 原样保留，真实 quarantine 指纹未变化；安装载荷 73/73 与源码模块/data 字节匹配。
+- 安装后 `aicli version` exit 0；`profile list --available --json` 回读 21 个公开 Profile、9 个 Codex Profile；`profile show codex-official --json` 为 OpenAI / `gpt-5.6-sol` / Responses 且 SecretRef 脱敏。
+- 安装后的 `doctor codex-official --json` 为 14 通过、5 有限制、0 不可用；本地 Qwen3.8-27B Doctor 为 16 通过、5 有限制、0 不可用。限制包括父终端 `OPENAI_BASE_URL` 会被官方子进程清除、两个代理已安装未运行、Ollama 默认 11434 不可达，以及旧 Live 因 Codex CLI 已变为 0.153.0 而失效。
+- `native codex-official` exit 0，真实显示官方登录、数据去向与将清除的 Provider 变量；`eject` exit 0，生成 2 个文件，`start.ps1` 为 1,566 B，未命中 `sk-` 秘密模式；不带 `--live` 的测试以 exit 2 正确拒绝。
+- 安装态对 malformed JSON 与非对象 `[]` 两种内建同名用户 Profile 的 `show` / `list --available` 均返回 exit 4，不再静默退回内置模板。
+- 本轮没有执行 `start`、Codex machine run、云端 Qwen/DeepSeek、官方 Codex/Claude、Rust Open Interpreter、OAuth、代理或本地 GPU 模型 Live。旧回执只按原版本、Profile 指纹和日期保留，不能晋升为当前 0.153.0 证据。
 
 ## 内容完整性与准确性
 
-- 第一轮 source-first 独立审查从源入口重建长期产品轴，不以网站七模块作为答案；初始化、外部配音、本机词级时间、SVG 创作、渲染前关口、确定性分片、成片交付、复用恢复均有产品解释和技术参考，P0=0。
-- 审查发现并修正三处 P1：lint 实际每场只查一个 max(0.5, duration-0.4) 收尾稳定帧；preview 缺背景时退为纯色而不是失败；SVG 结构靠人或 AI 创作审阅，build 只强制编号、cue 与模板组合，零素材场景合法。
-- 最终正式终审宿主 verified 身份为 gpt-5.6-sol / high / child，重新 source-first 对比 17040ed、候选源码与当前静态页后给出 P0=0、P1=0、PASS。
-- 普通读者层明确说明产品用途、一个真实请求、输入、输出、正常/问题/不可用状态、本机与 Fish 外部边界，以及环境就绪、源代码通过和一条视频完成之间的证据差异。
-- 没有图片画廊。仓库只有真实通用背景、模板与明确标为 SAMPLE GEAR / PLACEHOLDER 的占位素材，本轮不把它们冒充可展示成片。
+- 第一轮 source-first 独立审查从源规则、维护归档、两本手册、兼容矩阵、23 个 Manifest、模型/端口/代理 Registry 和代码入口重建长期产品轴，不以网站模块作为答案。
+- 候选页同时说明 Profile → SecretRef → LaunchPlan → 原生 CLI、交互 `start`、`native` / `eject`、五类引擎、exact / no-fallback、DPAPI 与目标进程隔离、Doctor/text/tool/agent/all、Codex exact resume、硬预算、公开事件、受管搜索、本地模型、双代理、安装/更新/退役/卸载、中文手册与 OpenClaw 导入。
+- 初次正式内容门发现并修复 3 个 P0：技术层缺少 21 个公开 Profile 的完整身份/兼容矩阵；OpenClaw 默认预览、`-Apply` / `-Force`、四个 DeepSeek Profile 与 DPAPI 导入生命周期完全缺失；Hero 把 Codex run 的实际模型/权限回读错误扩大到所有交互式启动。
+- 同轮修复 Profile `set-default/remove` 与最后 SecretRef 删除边界、Rust Open Interpreter 0.0.21+ / 旧 Python 0.4.x 拒绝、Shell Key 排除、两本手册各自职责、PDF 证据边界、完整 profile/proxy/update/uninstall 命令面和 0/2/3/4/5/6 退出码。
+- 最终矩阵与当前 `hidden=false` Manifest 集合精确为 21/21，Missing/Extra 均为空；每条保留 ID、引擎/Provider/模型、认证、start 或 machine-only、exact resume、source/static、installed/runtime、当前 Live/日期/限制。没有把 19 个已配置入口写成 19 个当前 Live 通过。
+- 最终正式内容终审由宿主 verified 的 `gpt-5.6-sol / high / child` 完成，从 `88f72e6` 再次对照候选源码与构建页后给出 P0=0、P1=0、PASS。
+- 公开内容门独立扫描 183 个源文件和 318 个构建文件，共 501 个文件，finding=0；未发现 Key、Bearer token、OAuth secret、私有端点或其他可复用秘密。
 
 ## 网站构建、测试与浏览器
 
-- 修正后的完整网页测试为 105/105，通过项目登记、七模块、三阅读层、单一快照、自然搜索、刷新计划、System 直达、全部路由、SEO、404、预算与公开内容合同。
-- 静态构建生成 176 个完整页面和 284 条紧凑搜索记录；总览与七个模块均为直接目录文档，禁用 JavaScript 仍有完整正文。
-- 本地浏览器实测项目目录、总览、旁白与词级时间、确定性渲染、复用与恢复五条路线均 HTTP 200；采样 networkidle 墙钟约 538–700 ms，不把它当首次绘制性能。
-- 1440×900、768×900、390×844、320×640 四档对项目目录、总览和确定性渲染代表页共 12 个组合检查，横向溢出全部为 0。
-- 项目卡原生导航、七模块可见链接、GitHub 按钮、速览→产品→技术的方向键和 End 切换、自然搜索“素材换了怎么避免混入旧渲染分片”、自定义 404 均通过。
-- 禁用 JavaScript 的 390 宽度总览中三阅读层都可见，正文约 11,959 字符且横向溢出为 0。浏览器 console error 与 page error 均为 0。
-- 独立视觉 QA 的宿主 verified 身份为 gpt-5.6-sol / high / child。它指出首屏首次使用 SVG、FFmpeg、NVENC、4K60 时缺少中文解释；修正并重建后复核 P0=0、P1=0、PASS，四档宽度仍无新增溢出。
+- 修正后的完整网页测试为 112/112，通过第 20 项登记、七模块、三阅读层、单一快照、21 Profile 集合、OpenClaw/生命周期、自然搜索、刷新计划、System 直达、既有 19 项回归、全部路由、SEO、404、预算与公开内容合同。
+- 静态构建生成 184 个完整页面和 291 条紧凑搜索记录；总览、七个模块和 21 Profile 矩阵均在构建 HTML 内，点击不等待正文 fetch（网络取数），禁用 JavaScript 时速览/产品/技术三层都显示。
+- Playwright 使用本机 Edge 对 1440×900、768×1024、390×844、320×720 四档实测总览、可恢复机器运行与引擎矩阵：全部 HTTP 200，`documentWidth = clientWidth`，一个 h1，8 个总览/模块链接可见，最长 Profile ID 与命令无页面级横向溢出。
+- GitHub 仓库按钮正确指向 `https://github.com/wlyaaaaa/ai-cli-profile-manager`；长标题在 390/320 自然换成两行，不与仓库卡重叠。320 首屏可读产品用途、start/run 权限差异、源码/安装状态、远程 Live 边界和观察时间。
+- 速览→产品→技术的 ArrowRight / End 键切换会同步 `aria-selected`、`tabIndex`、`hidden` 与 hash；无 JavaScript 的 390 宽度页面三层均为 `display:block`。
+- 21 条 Profile 在 1440/768/390/320 均首尾完整；390/320 全页截图中长 ID 可在连字符处自然换行，条目间距可扫描。浏览器 console warning/error、page error 与 request failed 均为 0。
+- 独立视觉 QA 先发现移动首屏缺少当前状态和英语首现问题；Hero、项目卡、recoverable-runs 与 engines-providers 首现逐项修正后，由同一宿主 verified 的 `gpt-5.6-sol / high / child` 复核为 P0=0、P1=0、视觉 PASS。
 - 本地预览已通过 Codex 右侧浏览器入口排队展示；queued 只表示已提交显示，不冒充本人已经查看。
-- 可重建截图保存在 ignored 的 docs/design/qa/video-scaffold-project19/，不进入公开 Git 历史。
+- 可重建截图保存在 ignored 的 `docs/design/qa/ai-cli-profile-manager-project20/`，不进入公开 Git 历史。
 
 ## 体积与最小实现
 
-- 共享交互 JavaScript 为 11,596 gzip B，仍在 12 KiB 线内；共享 CSS 为 21,082 gzip B，仍在 21 KiB 线内。两者与加入第 19 项前字节相同。
-- 共享搜索为 101,426 gzip B，全项目模块搜索为 128,962 gzip B；七个 video-scaffold 模块分片为 6,020 gzip B，现有最大 PCConfig 分片仍为 20,556 gzip B。
-- 新项目加入前两条总搜索线只剩 652 B / 8 B。当前内容没有复制整篇正文，搜索投影已经是有界短语；首屏四个技术词所需的中文首现解释使共享搜索比 99 KiB 多 50 B，因此两条总线使用实测所需的最小整数 100 KiB / 126 KiB。单项目 21 KiB、共享 JS/CSS 线不变。
-- 没有修改 page.jsx、style.css、搜索算法、路由生成器、依赖或加载方式。新增面仅为一个内容包、一项 Registry 登记、定向测试、生成索引和必要的人类入口/项目规则/QA 同步。
+- 共享交互 JavaScript 为 11,596 gzip B，在 12 KiB 线内；共享 CSS 为 21,082 gzip B，在 21 KiB 线内。两者与加入第 20 项前字节相同。
+- 共享搜索为 105,656 gzip B，全项目模块搜索为 134,905 gzip B；七个 AI CLI Profile Manager 模块分片为 6,860 gzip B，仍远低于单项目 21 KiB 线。
+- 21 Profile 完整矩阵和 OpenClaw/命令边界使原 103/131 KiB 搜索线不再足够；没有复制正文、没有删必要内容，最终只把总线调整为实测所需的最小整数 104/132 KiB。共享 JS/CSS 与单项目线不变。
+- 没有修改 `page.jsx`、`style.css`、搜索算法、路由生成器、依赖或加载方式。新增面只是一份内容包、一项 Registry 登记、生成索引、定向测试、System 直达和必要的人类入口/项目规则/QA 同步。
 
 ## 发布边界
 
-发布前仍须在包含本文件的最终工作树上重跑 npm run build、npm test 与 git diff --check，定向暂存本任务文件并 normal-push main；随后等待 Pages，确认本地 HEAD、远端 main 与部署 head SHA 一致，并公网回读项目目录、总览、代表模块、sitemap 与 404。新公网目标、force-push、付费服务、秘密暴露和演示视频均不在本次授权内。
+发布前仍须在包含本文件的最终工作树上重跑 `npm run build`、`npm test` 与 `git diff --check`，定向暂存本任务文件并 normal-push `main`；随后等待 Pages，确认本地 HEAD、远端 main 与部署 head SHA 一致，并公网回读项目目录、总览、代表模块、sitemap 与 404。新公网目标、force-push、付费 Live、秘密暴露和第 21–25 项施工均不在本项目本轮动作内。

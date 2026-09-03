@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 100,
-    "project_search_index_gzip_budget_kib": 126,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete video-scaffold addition keeps all 19 projects and 284 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 101426/128962 gzip bytes. The required first-use Chinese explanations raised shared search 50 bytes past 99 KiB, so the two lines use the minimum passing integers 100/126 KiB. The video-scaffold shard is 6020 bytes and the existing maximum PCConfig shard remains 20556 bytes within 21 KiB. Shared interaction JavaScript and CSS stay byte-identical at 11596/21082 gzip bytes within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "search_index_gzip_budget_kib": 104,
+    "project_search_index_gzip_budget_kib": 132,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete AI CLI Profile Manager addition keeps all 20 projects and 291 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 105656/134905 gzip bytes, so the two lines use the minimum passing integers 104/132 KiB. The AI CLI Profile Manager shard is 6860 bytes and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript and CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1807,6 +1807,86 @@
         "ignore_when": [
           "a private script, narration, source image, generated audio, scene, render chunk or final video changes without changing the reusable public product contract",
           "an old bespoke example or placeholder asset changes while the generic bootstrap and workflow remain unchanged",
+          "formatting, comments or internal refactors leave every displayed capability, failure, recovery and user decision unchanged"
+        ]
+      }
+    },
+    {
+      "id": "ai-cli-profile-manager",
+      "order": 20,
+      "title": "AI CLI Profile Manager",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/ai-cli-profile-manager",
+      "ai_refresh": {
+        "content_path": "app/content-ai-cli-profile-manager.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first Windows 11 AI CLI operations layer with seven source-backed modules: explicit Profile selection and native CLI launch; exact Provider and model identities with no fallback; DPAPI SecretRef and target-process isolation; Doctor and text/tool/Agent evidence separation; recoverable Codex machine runs with exact thread identity, permissions, budgets and managed public search; local models and optional third-party proxies; CurrentUser install, upgrade, retirement recovery, uninstall, transparent native/eject output and Chinese manuals",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\ai-cli-profile-manager status --porcelain=v2 --branch and git describe --tags --always",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ai-cli-profile-manager -TargetWorktree E:\\Projects\\Tools\\ai-cli-profile-manager -ForPublication -Json",
+          "read current AGENTS.md, README.md, CHANGELOG.md, maintainer archive, both canonical user manuals, compatibility matrix, provider/model/proxy registries, command router, adapters, Doctor, Live/Agent acceptance, recovery and install/uninstall entrypoints before using old receipts",
+          "run the complete Pester suite and scripts\\Test-Release.ps1 with task-specific TEMP/TMP/TMPDIR, then exercise source and installed version, profile list/show, native, eject, Doctor, invalid command and no-live refusal paths without exposing secrets",
+          "compare the installed CurrentUser module payload with final source bytes; installation, runtime and Live remain separate from source tests"
+        ],
+        "conditional_collectors": [
+          "run a paid or remote Provider Live test only when the exact account, Profile, expected charge and external call are authorized; one old or differently fingerprinted receipt never refreshes another route",
+          "run a zero-cost local Codex task only when LocalGpuBroker and the exact model are currently available without disrupting another GPU owner, and report actual model, Provider, permissions, tools, cleanup and result separately",
+          "refresh an approved proxy artifact only as an explicit source-product change with current upstream checksum/signature evidence and its own install/runtime tests; a newer upstream tag alone is a named gap, not authorization to execute it"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/ai-cli-profile-manager",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\ai-cli-profile-manager"
+      },
+      "displayed_areas": [
+        "product_purpose_named_inputs_outputs_principles_and_ordinary_requests",
+        "seven_source_independent_product_modules",
+        "setup_profile_start_native_eject_and_original_cli_boundary",
+        "public_interactive_machine_only_retired_and_unopened_provider_routes",
+        "exact_models_responses_requested_effective_effort_and_no_fallback",
+        "DPAPI_SecretRef_target_process_environment_and_official_login_isolation",
+        "Doctor_text_tool_agent_all_and_current_evidence_layers",
+        "Codex_machine_run_background_status_resume_abort_and_exact_thread_identity",
+        "danger_full_access_permission_readback_hard_budgets_usage_cleanup_and_managed_search",
+        "local_Ollama_LocalGpuBroker_Qwen_Code_OpenCode_and_optional_proxy_boundaries",
+        "CurrentUser_install_update_repair_retirement_uninstall_and_remote_OAuth_boundary",
+        "native_eject_OpenClaw_import_context_continuity_and_canonical_Chinese_manuals",
+        "current_source_release_installed_runtime_live_tests_and_named_gaps"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_boundary_profiles_and_user_guides",
+          "paths": ["AGENTS.md", "README.md", "CHANGELOG.md", "docs/maintainer/*", "docs/user/*", "docs/compatibility/*"]
+        },
+        {
+          "kind": "provider_profile_secret_and_launch_contracts",
+          "paths": ["data/providers", "data/providers/*", "data/model-catalogs", "data/model-catalogs/*", "data/schemas/*", "scripts/Import-FromOpenClaw.ps1", "src/AiCliProfileManager/Private/CommandRouter.ps1", "src/AiCliProfileManager/Private/ManifestService.ps1", "src/AiCliProfileManager/Private/ProfileService.ps1", "src/AiCliProfileManager/Private/SecretStore.ps1", "src/AiCliProfileManager/Private/LaunchPlan.ps1", "src/AiCliProfileManager/Private/Redaction.ps1", "src/AiCliProfileManager/Private/*Adapter.ps1"]
+        },
+        {
+          "kind": "doctor_live_machine_recovery_and_public_events",
+          "paths": ["src/AiCliProfileManager/Private/DoctorService.ps1", "src/AiCliProfileManager/Private/LiveTestService.ps1", "src/AiCliProfileManager/Private/AgentAcceptance.ps1", "src/AiCliProfileManager/Private/RecoveryService.ps1", "src/AiCliProfileManager/Private/ChildProcess.ps1", "src/AiCliProfileManager/Private/LocalGpuBrokerSession.ps1", "src/AiCliProfileManager/Support/*", "tests/*"]
+        },
+        {
+          "kind": "proxy_install_update_and_retirement",
+          "paths": ["data/ports/*", "data/proxy-artifacts/*", "src/AiCliProfileManager/Private/ProxyService.ps1", "src/AiCliProfileManager/Private/UpdateService.ps1", "scripts/Install.ps1", "scripts/Uninstall.ps1", "scripts/Invoke-AiCliRetirementMigration.ps1"]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed Profile, Provider, model, transport, effort, fallback, data destination, start/native/eject or secret-isolation behavior changes owner use or expected results",
+          "Doctor, text/tool/Agent acceptance, Codex machine-run permission, exact-resume, event, budget, usage, cleanup or managed-search behavior changes what a result proves",
+          "an install, update, proxy, retirement, uninstall, import, manual or current compatibility boundary changes the safe user path",
+          "current source, Release, installed payload, runtime or Live evidence contradicts a published capability or status"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit, exact local CLI version, passing test count or observation timestamp changes while every displayed product behavior and evidence interpretation remains true"
+        ],
+        "ignore_when": [
+          "a user Profile, SecretRef, OAuth payload, private endpoint or run event changes without changing the reusable public product contract",
+          "a Provider publishes an unadopted model or a proxy publishes an unapproved artifact while the page already names that gap accurately",
           "formatting, comments or internal refactors leave every displayed capability, failure, recovery and user decision unchanged"
         ]
       }

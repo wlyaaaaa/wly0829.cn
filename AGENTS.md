@@ -14,12 +14,12 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has nineteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has twenty enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
   document-materials, work-delivery, daily-preferences, personal-media,
-  LocalOCR, vault-tool and video-scaffold in order
-  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19. The registry
+  LocalOCR, vault-tool, video-scaffold and AI CLI Profile Manager in order
+  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -358,12 +358,14 @@ read-only operating panel; public presentation is secondary.
   work-delivery as real-dashboard project 14, and daily-preferences as
   real-dashboard project 15, followed by personal-media as real-dashboard
   project 16, then LocalOCR as real-dashboard project 17, vault-tool as
-  real-dashboard project 18 and video-scaffold as real-dashboard project 19.
+  real-dashboard project 18, video-scaffold as real-dashboard project 19 and
+  AI CLI Profile Manager as real-dashboard project 20.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
   personal-materials, document-materials, work-delivery, daily-preferences,
-  personal-media, LocalOCR, vault-tool and video-scaffold, plus the one-page
+  personal-media, LocalOCR, vault-tool, video-scaffold and AI CLI Profile Manager,
+  plus the one-page
   Rules workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
   presented within its actual public-content boundary. Exclude only an exact
@@ -402,6 +404,23 @@ read-only operating panel; public presentation is secondary.
   browser editor, cloud renderer, daemon, database or a new video format merely
   to build the page. Placeholder art and old bespoke examples never prove a
   current finished video.
+- Project 20 is AI CLI Profile Manager, the existing Windows 11 PowerShell
+  product for launching and operating native Codex CLI, Claude Code, Qwen Code,
+  OpenCode and the current Rust Open Interpreter through explicit Profiles. It
+  follows the completed video-scaffold project and receives one source-first
+  complete product and technical snapshot, necessary source repair, independent
+  content audit, PUBLIC release and read-back. Explain Profile creation and
+  selection, `start` / `native` / `eject`, exact Provider and no-fallback
+  identities, DPAPI and target-process-only secret injection, Doctor versus
+  text/tool/Agent Live evidence, recoverable Codex machine runs, permission and
+  model read-back, managed public search, local-model and optional proxy
+  boundaries, CurrentUser install, upgrade, uninstall, retirement recovery,
+  Chinese manuals and the current compatibility matrix. Source, static,
+  installed, runtime and Live evidence remain separate; old or differently
+  fingerprinted receipts never become current merely because the page exists.
+  Do not add a GUI, TUI, PTY or chat shell, a new Provider or model Profile,
+  paid Live calls, a second run ledger, a daemon, database, dynamic website
+  runtime or placeholder routes for projects 21–25 merely to build the page.
 - The selected personal-media project has a non-optional content floor:
   automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -566,9 +585,9 @@ read-only operating panel; public presentation is secondary.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
   Remote, personal-health, WeChatDirect, personal-materials, document-materials,
-  work-delivery, daily-preferences, personal-media, LocalOCR, vault-tool and
-  video-scaffold additions, are standing-authorized to commit, normal-push existing
-  PUBLIC `main`, wait for Pages and read back the deployed commit automatically
+  work-delivery, daily-preferences, personal-media, LocalOCR, vault-tool,
+  video-scaffold and AI CLI Profile Manager additions, are standing-authorized to commit, normal-push
+  existing PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
   effect, secret exposure, force-push or explicit owner hold remains outside
@@ -588,7 +607,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current nineteen.
+  to projects added after the current twenty.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -625,7 +644,8 @@ read-only operating panel; public presentation is secondary.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
   including WeChatDirect, personal-materials, document-materials, work-delivery,
-  daily-preferences, personal-media, LocalOCR, vault-tool and video-scaffold:
+  daily-preferences, personal-media, LocalOCR, vault-tool, video-scaffold and
+  AI CLI Profile Manager:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or
