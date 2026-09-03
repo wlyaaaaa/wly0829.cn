@@ -129,7 +129,7 @@ test("project quick metrics lead with product reality instead of implementation 
     ["pc-panel-hub", ["2", "2748 / 2748", "0", "1 Hz"]],
     ["cacb", ["0", "10", "24", "8 ↔ 10"]],
     ["codex-remote", ["0", "0", "v0.1.5", "20"]],
-    ["personal-health", ["未读取", "未执行", "不展示", "14 · 28 · 90 天"]],
+    ["personal-health", ["Fitbit Air", "21 类设备数据", "睡眠 · 活动", "14 · 28 · 90 天"]],
     ["wechat-direct", ["3 个", "6032 条", "3 + 3 个文件", "3 / 3"]],
     ["personal-materials", ["43,916", "34", "43,882", "36"]],
     ["document-materials", ["3 类", "1 页 · 10 文件", "Unknown（未知）", "未执行"]],
@@ -341,6 +341,8 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /what this thing[\s\S]{0,80}does for[\s\S]{0,500}concrete problem or accident[\s\S]{0,500}realistic ordinary request[\s\S]{0,500}owner receives/);
   assert.match(projectRules, /content\s+quality floor, not a shared card layout[\s\S]{0,260}System stays medium-density/);
   assert.match(projectRules, /adding more words never substitutes for removing mystery copy/);
+  assert.match(projectRules, /concrete data categories[\s\S]{0,700}private memory/);
+  assert.match(projectRules, /Device brands and models[\s\S]{0,300}not[\s\S]{0,150}forbid them as keywords/);
   assert.match(projectRules, /three reading layers: `速览`, `产品`\s+and\s+`技术`/);
   assert.match(projectRules, /product principles and design highlights/);
   assert.match(projectRules, /release id, commit, test count,[\s\S]{0,160}not the\s+product's identity/);
@@ -1909,7 +1911,7 @@ test("personal-health publishes the evidence product without personal health pay
       assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
       assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
     }
-    assert.ok(module.sources.every((item) => !item.href || /^https:\/\/(?:www\.ahrq\.gov|www\.who\.int|www\.gmc-uk\.org|code-medical-ethics\.ama-assn\.org|www\.cancer\.gov)\//.test(item.href)), `${module.slug} may link only to reviewed public health authorities, never an inaccessible private source`);
+    assert.ok(module.sources.every((item) => !item.href || /^https:\/\/(?:www\.ahrq\.gov|www\.who\.int|www\.gmc-uk\.org|code-medical-ethics\.ama-assn\.org|www\.cancer\.gov|blog\.google|developers\.google\.com)\//.test(item.href)), `${module.slug} may link only to reviewed public health and device authorities, never an inaccessible private source`);
     assert.match(`${module.why}\n${module.example}\n${module.result}`, /证据|来源|判断|未知|凭据|清单|Owner|原件|字段/);
   }
   const healthModuleSlugs = new Set(personalHealthModules.map((item) => item.slug));
@@ -1930,7 +1932,11 @@ test("personal-health publishes the evidence product without personal health pay
   ]) {
     assert.ok(publicText.includes(expected), `personal-health omits product boundary: ${expected}`);
   }
-  assert.doesNotMatch(publicText, /E:\\PersonalData|manifest\.fitbit-air\.json|尿酸|肌酐|心电图|\bBMI\b/iu);
+  assert.doesNotMatch(publicText, /E:\\PersonalData|manifest\.fitbit-air\.json/iu);
+  assert.match(personalHealthProject.summary, /Google Fitbit Air[\s\S]*睡眠[\s\S]*步数/);
+  const healthDataDescription = JSON.stringify(personalHealthProject.dataSources);
+  for (const category of ["活动分钟", "运动", "心率", "血氧", "呼吸", "皮温", "TCX", "profile"]) assert.ok(healthDataDescription.includes(category), `health reader layer omits a concrete data category: ${category}`);
+  assert.match(personalHealthProject.dataSources.note, /心电图[\s\S]*未纳入/);
   assert.ok(personalHealthProject.currentState.gaps.some((item) => item.includes("不能证明当前账号仍授权")));
   assert.doesNotMatch(personalHealthProject.currentState.facts.join("\n"), /当前账号已授权|当前设备在线|当前设备同步正常|已经诊断|建议服用/iu);
 
@@ -1942,7 +1948,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "wlyaaaaa/personal-health");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never read CURRENT\.md, SOURCES\.md, raw reports, manifests, briefs, provider payloads or credentials/);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never invoke Google, Secret Broker or a device runtime/);

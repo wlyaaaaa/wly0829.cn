@@ -53,12 +53,18 @@ function withTechnicalSearchTerms(entry) {
   return { ...entry, compactSearch: [compact.search, ...missing].filter(Boolean).join(" ") };
 }
 
+function projectDataSourceText(project) {
+  const sources = project.dataSources;
+  return sources ? [sources.intro, ...(sources.rows || []).flatMap((item) => [item.source, item.data, item.result]), sources.note].filter(Boolean).join(" ") : "";
+}
+
 function projectCompactSearchText(project, modules) {
   const heroLatinTokens = (project.heroFacts || []).flatMap((item) => `${item.label} ${item.value}`.toLowerCase().match(/[a-z][a-z0-9_.:/-]*/g) || []);
   return compactSearchTopics([
     project.summary,
     project.why,
     project.plainExample,
+    projectDataSourceText(project),
     ...project.responsibilities,
     project.cardStatus,
     ...(project.usageExamples || []).filter((item) => !item.moduleSlug).map((item) => item.ask),
@@ -86,6 +92,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       project.status || "",
       project.why,
       project.plainExample,
+      projectDataSourceText(project),
       project.result,
       ...Object.values(project.readerStates || {}),
       ...project.responsibilities,

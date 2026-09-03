@@ -1058,6 +1058,7 @@ function ProjectOverview({ entry }) {
           <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>怎样开始使用</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
           <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
         </section>
+        {currentProject.dataSources?.rows?.length ? <section className="document-section project-data-sources"><h2>{copy(currentProject.dataSources.title)}</h2><p>{copy(currentProject.dataSources.intro)}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 的来源、数据与用途`}>{currentProject.dataSources.rows.map((item, index) => <article role="row" key={item.source}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.source)}</strong><p>{copy(item.data)}</p></div><p role="cell">{copy(item.result)}</p></article>)}</div>{currentProject.dataSources.note ? <p>{copy(currentProject.dataSources.note)}</p> : null}</section> : null}
         <section className="document-section project-positive-snapshot">
           <h2>当前项目快照</h2>
           <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />

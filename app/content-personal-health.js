@@ -6,9 +6,9 @@ const personalHealthSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T12:00:18.5444628Z",
   label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
   metrics: [
-    { label: "本页个人材料", value: "未读取" },
-    { label: "账号 / 设备复核", value: "未执行" },
-    { label: "个人健康结论", value: "不展示" },
+    { label: "设备入口", value: "Fitbit Air" },
+    { label: "采集范围", value: "21 类设备数据" },
+    { label: "默认摘要", value: "睡眠 · 活动" },
     { label: "分析窗", value: "14 · 28 · 90 天" }
   ],
   facts: [
@@ -18,7 +18,7 @@ const personalHealthSnapshot = createProjectSnapshot({
     { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见。" },
     { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见。" },
     { label: "当前源码与回归", value: "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；项目有 5 个产品 Python 模块、5 个测试模块；本轮 unittest 112 项全部通过（112/112），内部用时 27.922 秒。" },
-    { label: "证据结构与恢复", value: "provider 的 39 类数据先归一为 21 个兼容字段，默认 decision context 只采用 4 个低噪声字段；比较窗口为 14 / 28 / 90 天。大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint，中断后只续缺页。" },
+    { label: "证据结构与恢复", value: "源码登记 39 类 API 数据类型，当前前台采集从中选择适配 Fitbit Air 的 21 类，并保全历史起点资料和有可用运动标识时的 TCX 运动文件；不是把 39 类归一成 21 类。默认摘要只展开睡眠、步数、活动分钟、已记录运动四类，比较 14 / 28 / 90 天窗口。大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint，中断后只续缺页。" },
     { label: "源码规模", value: "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库。", hero: false },
     { label: "分页上限", value: "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报。", hero: false },
     { label: "离线回执", value: "离线 capture 回执保持 health_owner_review_required=true、current_updated=false、background_work_created=false；合成回归不能证明任何个人健康值。", hero: false },
@@ -38,7 +38,7 @@ export const personalHealthProject = {
   route: "/projects/personal-health",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "证据路由、前台设备刷新链和离线质量门已实现；本页未读取个人材料或复核账号与设备",
+  cardStatus: "Fitbit Air 记录导入、离线摘要和健康证据整理已实现；本页未读取个人材料或复核当前账号与设备",
   cardStatusTone: "mixed",
   ...personalHealthSnapshot,
   kicker: "让健康选择更安全、更自主，也更容易复查",
@@ -53,10 +53,24 @@ export const personalHealthProject = {
     "健康建议怎样比较收益风险和替代方案"
   ],
   repositoryNote: "源码位于 PRIVATE（私有）仓库。页面公开产品方法、代码结构、失败边界和测试证据，不提供不可访问的仓库链接；不读取或展示 CURRENT.md 正文、具体健康事实、报告数值、诊断、药物、个体建议、原始响应、OAuth 载荷或凭据。",
-  summary: "这个项目帮助我在医生意见、检查报告、设备记录、网上资料和 AI 分析之间做出更安全、更自主的健康选择。AI站在用户一边，但不是一味迎合：它要核对证据、指出未知和利益关系、比较真实选项，也要在用户想做危险事情时明确劝阻。任何结论都不因为来自医生、机构、报告、设备或 AI 就自动正确；非紧急情况下，最终知情选择属于本人。",
+  summary: "这个项目把本人描述、检查报告、医生意见与 Google Fitbit Air（无屏健身手环）的记录整理成可复查的健康依据。手环通过手机上的 Google Health 应用同步；我明确要求更新时，项目取回睡眠、步数、活动、心率、血氧、呼吸和皮温等记录，默认先汇总睡眠、步数、活动分钟与已记录运动，并标清缺失和质量问题。AI站在用户一边，但不是一味迎合：它核对证据、解释未知、比较真实选项，也会劝阻危险行为。医生、设备和 AI 都不是自动正确；非紧急情况下，最终知情选择属于本人。",
   why: "健康决定常把几件不同的事混在一起：报告看到了什么、医生怎样解释、机构或个人可能受什么限制、AI依据什么资料、用户真正重视什么，以及不行动会怎样。若只听身份最高或声音最肯定的一方，容易把专业能力误当成永远正确，也可能忽略替代方案、利益冲突、现实负担和可逆空间。",
-  plainExample: "例如医生建议一项长期、昂贵或难以撤回的治疗，却没有把依据、主要风险和其他选择讲清楚。这个项目不会让 AI 直接判医生错，也不会让用户盲目服从；它先确认是否紧急，再把已知事实、关键未知、医生理由、可能的限制或利益关系、合理替代、暂不处理的后果和复查条件摆在一起。必要时准备问题并寻求独立第二意见，最后由用户在充分理解后选择。",
-  result: "我得到的不是一个替我下命令的答案，而是一份可以追责和复查的决定：现在真正要决定什么，哪些事实可靠，谁在作解释，各方可能遗漏什么，有哪些选项及其收益、风险、负担和退出条件，什么时候必须就医，什么时候值得取得第二意见，以及我为什么选择这一条路。",
+  plainExample: "我可以说：“更新一下 Fitbit Air 的记录，看看近两周睡眠和日常活动有没有变化，先告诉我数据够不够。”项目先核对来源、日期和完整性，再给出统计与缺口。遇到医生建议长期、昂贵或难以撤回的治疗，却没有讲清依据和其他选择时，AI也会先确认是否紧急，再把已知事实、医生理由、可能的限制或利益关系、合理替代、暂不处理的后果和复查条件摆在一起；必要时准备独立第二意见，不直接判医生错或要求用户盲从。",
+  result: "设备方面，我得到最近 14 / 28 / 90 天的睡眠时长、每日步数、活动分钟和已记录运动次数；另有最近 14 / 90 天的睡觉与起床时段，以及覆盖日期、变化和缺口。健康决定方面，我得到可复查的事实、未知、选项及其收益、风险、负担和退出条件，知道什么时候必须就医、什么时候值得取得第二意见；不是身体总分、自动诊断或替我下命令的答案。",
+  dataSources: {
+    title: "具体读什么、从哪里来、拿来做什么",
+    intro: "这是代码支持的输入与采集范围，不是本次个人记录。设备入口是 Fitbit Air，经 Google Health API v4 读取 google-wearables（Google/Fitbit 追踪设备家族），不含手工输入或手机估算。家族标识不能逐条证明唯一机型；当前授权、同步情况和记录质量仍需当次核对。",
+    rows: [
+      { source: "本人描述、检查报告与医生意见", data: "本人提供的感受、目标、现实负担，报告所见和医生的解释；普通问答先用已经整理好的当前信息，需要时才看相关原件。", result: "分清事实、解释、建议与未知，比较选择并准备需要向医生追问的问题；不自动登录医院或把报告内容变成诊断。" },
+      { source: "Fitbit Air / Google Health：日常活动", data: "6 类：步数、距离、活动分钟、活跃区间分钟、久坐时段、总热量。", result: "默认摘要展开步数和活动分钟，比较最近 14 / 28 / 90 天与前一同长窗口，列覆盖日期、真实零值和缺口；其余先保全，不自动解释成健康结论。" },
+      { source: "Fitbit Air / Google Health：运动与体能", data: "5 类：已记录运动、游泳趟数、VO2 max（心肺能力估计）、每日 VO2 max、跑步 VO2 max。", result: "默认只汇总已记录运动的次数和日期；没记录不能推断没有运动。游泳和心肺能力数据可保全，但默认摘要不展开分析。" },
+      { source: "Fitbit Air / Google Health：睡眠", data: "1 类：睡眠记录，包括记录中的时段及主睡眠、小睡或未分类信息。", result: "汇总睡眠时长、睡觉与起床时段及规律性线索，比较时间窗，并标明覆盖不足、重叠冲突和未分类记录。" },
+      { source: "Fitbit Air / Google Health：心率与变化", data: "4 类：心率、每日静息心率、HRV（心率变异性）、每日 HRV。", result: "当前导入可请求并保全这些原始记录；默认摘要只展示是否有记录、记录数、页数及暂不分析原因，不读取其正文或据此诊断。" },
+      { source: "Fitbit Air / Google Health：血氧、呼吸与皮温", data: "5 类：血氧、每日血氧、每日呼吸率、睡眠呼吸汇总、睡眠皮温变化。", result: "当前导入可请求并保全，默认摘要仍只保留记录存在情况。睡眠皮温变化不等于体温计测得的核心体温，单一信号也不等于疾病。" },
+      { source: "账号资料与运动附属文件", data: "profile（账号资料）用于确定可请求的历史起点；有可用运动标识时，还取回 TCX（运动轨迹文件）原件。这两部分不计入上述 21 类。", result: "不把 profile 当成当前配对或在线检查。运动文件保全不等于摘要分析路线；Air 的定位来自手机协同，不是手环内置 GPS。" }
+    ],
+    note: "默认摘要只展开睡眠、步数、活动分钟和已记录运动四类；其他数据保全后也不自动用于健康判断或更新当前信息。血糖、体重、体脂、身高、核心体温、心电图、心律不齐通知、饮食与饮水日志等未纳入默认 Air 采集；通用接口有定义，不代表本项目已经收集。"
+  },
   readerStates: {
     pass: "事实、未知、选项、主要收益和风险都已说清，用户理解后可以选择、拒绝、暂停、复查或改变主意；这不表示某个建议永远正确。",
     problem: "依据不足、意见冲突、解释不清、决定重大或可能存在利益关系时，先补最有价值的信息、要求说明或取得独立第二意见，不靠投票和身份决定。",
@@ -100,7 +114,7 @@ export const personalHealthProject = {
     { role: "医生", can: "完成问诊、查体、诊断、处方与专业解释，并对专业行为负责", cannot: "仅凭身份证明结论必然正确、没有偏差或利益冲突、已经考虑所有合理替代" },
     { role: "AI", can: "整理输入、搜索并比较资料、发现矛盾、解释不确定性、准备问题和劝阻危险行为", cannot: "补出未见体征、独立完成临床诊断或处方，也不能因为找到一条指南就宣判医生错误" },
     { role: "检查报告", can: "说明特定时间、样本和方法得到的数值或所见，以及报告者当时的解释", cannot: "单独证明整体诊断、因果、现在仍相同或必须采取某项治疗" },
-    { role: "设备", can: "在来源和质量闭合时提供特定时间的有限记录或趋势线索", cannot: "证明医疗级准确、没有记录等于零、没有提醒等于没有疾病，或一个信号等于诊断" }
+    { role: "Fitbit Air 等已接入设备", can: "在来源和质量闭合时提供睡眠、日常活动、心率等特定时间记录或趋势线索", cannot: "证明医疗级准确、没有记录等于零、没有提醒等于没有疾病，或一个信号等于诊断" }
   ],
   responsibilities: [
     "以用户的健康、安全、自主、隐私、现实负担和已表达目标为成功标准",
@@ -135,9 +149,9 @@ export const personalHealthProject = {
   operatingFlow: [
     { title: "先判断是否需要新证据", detail: "普通问题先用现行底色；已保全的某日记录仍未回答时，只按一个字段和日期离线窄查。只有新报告、纠正、来源冲突、完整性问题或本人明确设备刷新才进入维护。" },
     { title: "凭据只穿过受保护边界", detail: "首次 OAuth（账号授权协议）使用 PKCE（授权码防截获校验）和回环回调，长期凭据经标准输入进入受保护中心，不生成 token 文件。" },
-    { title: "前台入口优先完成离线残余", detail: "已有成功交接时先本地处理；没有待处理结果时才调用固定 Secret Broker 一次，失败不重试或换账号。" },
-    { title: "Importer 先保全再解析", detail: "原始页面原样写入本机并记录内容指纹、窗口、记录数和分页链；失败回执只指向唯一精确清单。" },
-    { title: "Capture 离线闭合证据", detail: "成功交接、complete 清单、选中页面指纹与验证回执全部一致后，才生成只含最小判断字段的 brief。" },
+    { title: "明确需要时取回 Fitbit 记录", detail: "已有成功导出尚未处理时先离线完成；否则通过固定凭据入口只读请求 Google Health API，取回默认 21 类设备记录、历史起点资料和可用的运动文件，失败不换账号。" },
+    { title: "先保存原始记录，再检查完整性", detail: "Importer（导入器）把原始页面与运动附件原样保全，并记下日期、记录数、分页和内容指纹；中断后从同一份导出清单续缺页，不重新猜目录。" },
+    { title: "从四类记录形成日常摘要", detail: "Capture（离线验收）核对完整清单与文件指纹后，Brief（摘要生成器）统计睡眠、步数、活动分钟、已记录运动及时间窗变化；覆盖不足、冲突和未记录分别列出，其余字段默认不展开正文。" },
     { title: "Health Owner 做最后一跳", detail: "只消费与当前问题相关且字段自身 decision_ready 的结果；被阻断字段和 inventory_only 内容不进入判断。" }
   ],
   components: [
@@ -146,18 +160,18 @@ export const personalHealthProject = {
     { name: "SOURCES.md", responsibility: "登记已处理来源的定位与处理范围。", implementation: "只在新报告、纠正、冲突、审计或答案关键缺口时读取；网页不公开路径、哈希或个人内容。" },
     { name: "google_health_enroll.py", responsibility: "完成一次桌面 OAuth 授权并安全存入长期凭据。", implementation: "只读 scope、PKCE、回环 callback、stdin secret、恢复副本与 lookup read-back；不生成 token 文件。" },
     { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时固定 Secret Broker 调用一次，输出有界且不含秘密，超时终止整棵进程树。" },
-    { name: "google_health_import.py", responsibility: "保全 provider 原始响应、维护可续跑清单，并提供已保全记录的离线窄查。", implementation: "在线分支负责连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；query/summary 分支在构造客户端之前返回，只读精确清单与选中页面，不访问网络或凭据。" },
+    { name: "google_health_import.py", responsibility: "从 Google Health API 取回 Fitbit Air 默认范围的记录、profile 与可用 TCX，保全原件并维护可续跑清单；也提供已保全记录的离线窄查。", implementation: "在线分支负责连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；query/summary 分支在构造客户端之前返回，只读精确清单与选中页面，不访问网络或凭据。" },
     { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；本地证据闭合并持久化后消费 pointer，再把结果交给 Health Owner 审阅，不更新 CURRENT.md。" },
-    { name: "google_health_brief.py", responsibility: "生成字段级 decision_ready / blocked / inventory-only 结果。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；API 与 credential access 均为 false。" }
+    { name: "google_health_brief.py", responsibility: "把睡眠、步数、活动分钟与已记录运动变成统计、比较和质量说明，并区分可采用、被阻断、仅保全的数据。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；其他字段只读清单元数据。API 与 credential access 均为 false。" }
   ],
   usageExamples: [
     { ask: "医生建议一项重大治疗，但我没听懂为什么一定要做。", effect: "先确认是否紧急，再把医生的依据、适用前提、主要收益和风险、合理替代、暂不处理的后果与复查条件讲清；解释仍不足时，帮助准备独立第二意见。", moduleSlug: "health-owner-boundary" },
     { ask: "两位医生意见不一致，我应该听谁的？", effect: "不按资历、人数或 AI 偏好投票，而是比较两边看到的事实、专业范围、关键假设、证据质量与可能遗漏；必要时让合适专科独立复核同一份原始资料。", moduleSlug: "health-owner-boundary" },
     { ask: "AI查到的指南和医生说法冲突，能直接停药吗？", effect: "不能。AI说明冲突发生在哪条事实、适用范围或假设，帮助向原医生追问或取得现实临床复核；不擅自开始、停止或替换处方治疗。", moduleSlug: "health-owner-boundary" },
     { ask: "这个健康问题需要重新翻报告吗？", effect: "先看已经整理好的当前信息是否足够；只有新报告、事实纠正、来源冲突或一个会改变选择的关键缺口，才打开最小相关来源。", moduleSlug: "current-evidence-route" },
-    { ask: "更新一下穿戴设备数据。", effect: "在当前任务里完成一次明确发起的更新。中断时保留已取得内容并从原处继续；数据完整、来源清楚且与当前问题相关后，才进入人工复核，不建立后台同步。", moduleSlug: "protected-foreground-refresh" },
+    { ask: "更新一下 Fitbit Air 的记录，看看近两周睡眠和日常活动有没有变化，先告诉我数据够不够。", effect: "在当前任务里从 Google Health 取回默认范围的设备记录，保全后生成睡眠、步数、活动分钟与已记录运动的统计和缺口说明。中断时从原处续跑；只有来源清楚、质量足够且与问题相关的结果才进入复核，不建立后台同步。", moduleSlug: "protected-foreground-refresh" },
     { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。分页恢复会按固定间隔原子记录 checkpoint；恢复时只续缺页，并在登记的页数、体积和记录数上限内重新核对完整性。", moduleSlug: "raw-preservation-resume" },
-    { ask: "这么多设备字段，哪些真的能用于这次判断？", effect: "先验 complete 清单与页面指纹，只读取和当前问题有关且质量达门的四类默认字段；其余只保留 inventory_only 清单。", moduleSlug: "offline-decision-brief" },
+    { ask: "心率、血氧这些记录也会自动变成健康结论吗？", effect: "不会。默认只展开睡眠、步数、活动分钟、已记录运动四类；心率、血氧、呼吸、皮温等已保全字段只展示记录存在情况及暂不分析的原因。字段本身通过质量门、且与当前问题相关后，才可由健康资料负责人决定是否采用。", moduleSlug: "offline-decision-brief" },
     { ask: "上周三的步数有没有保存？不用重新同步。", effect: "如果现行底色还不能回答，就在已经完成的精确导出清单中只查步数字段和那一天；返回实际记录、覆盖日期和缺口，不重新授权或下载，也不把没查到记录说成走了零步。", moduleSlug: "offline-decision-brief" },
     { ask: "有记录为 0 和完全没有记录，是一回事吗？", effect: "不是。真实零、无记录、缺字段、结构残缺和来源未知分别标注；只有 decision_ready 才能进入当前问题，blocked 不能被消费。", moduleSlug: "evidence-three-state" },
     { ask: "今天先停，别再给我加健康任务。", effect: "停止当前非紧急工作，只保留恢复这次判断所需的最小断点；不打卡、不追问、不评分，也不把沉默解释成继续授权。", moduleSlug: "health-owner-boundary" }
@@ -378,7 +392,10 @@ export const personalHealthModules = [
     ],
     problem: "解决半次导入被当完整数据、断线后全量重下、分页死循环、目录扫描误选运行和原始字节被解析结果覆盖。",
     implementation: [
-      "字段 registry 是封闭集合，默认 Air capture 只选 Google wearable family 支持的 21 类兼容设备字段和 profile metadata。",
+      "字段 registry 登记 39 类 API 类型；默认 Fitbit Air capture 从中选择 google-wearables 来源家族的 21 类兼容设备字段，另取 profile 以确定历史起点，有可用运动标识时保全 TCX。",
+      "日常活动接口：steps、distance、active-minutes、active-zone-minutes、sedentary-period、total-calories；运动与体能接口：exercise、swim-lengths-data、vo2-max、daily-vo2-max、run-vo2-max。",
+      "睡眠接口 sleep 映射为 sleep.session；心率接口包括 heart-rate、daily-resting-heart-rate、heart-rate-variability、daily-heart-rate-variability。",
+      "其余默认接口为 oxygen-saturation、daily-oxygen-saturation、daily-respiratory-rate、respiratory-rate-sleep-summary、daily-sleep-temperature-derivations，对应血氧、呼吸与睡眠皮温变化。",
       "日期窗口连续且右开；每个 raw page 记录字段、operation、窗口、page、token、bytes、count 与 SHA-256。",
       "_atomic_write 先写同目录临时文件再原子替换。",
       "manifest 持续检查 field/metadata/TCX receipt、分页链和 full-history start。",
@@ -403,8 +420,9 @@ export const personalHealthModules = [
     boundaries: [
       "原始健康载荷只留在私有健康原件目录，不进入 Git 或网页。",
       "页面数、字节数、记录数、请求数和 elapsed time 均有边界。",
-      "google-wearables 证明 tracker family，不逐条证明唯一设备型号。",
-      "connected GPS 来自手机协同，不写成设备内置 GPS。"
+      "google-wearables 只证明来自 Google/Fitbit 追踪设备家族，不逐条证明唯一设备型号，也不证明当前配对或在线。",
+      "connected GPS（手机协同定位）不是 Air 内置 GPS；运动 TCX 可随原件保全，但默认摘要不分析路线。",
+      "通用登记表另有 18 类未纳入默认 Air 采集：心率区间时长与热量、楼层、海拔、活动消耗、活动等级、每日心率区间、血糖、体脂、核心体温、身高、体重、心电图、心律不齐通知、食物目录、食物单位目录、饮水日志、饮食日志。接口有定义不代表正在采集，也不代表设备本身一概不支持。"
     ],
     failures: [
       { condition: "重复 page token 或分页链不连续", response: "在下一次 fetch 前失败，保留原始页和 terminal receipt。" },
@@ -415,7 +433,9 @@ export const personalHealthModules = [
     sources: [
       { path: "google_health_import.py", role: "字段 registry、客户端、原始保全、manifest、验证、query 和 resume 主实现" },
       { path: "tests/test_google_health_import.py", role: "57 项 import、分页、预算、锁、哈希、query、handoff 与 resume 回归" },
-      { path: "AGENTS.md", role: "一次前台更新、精确失败交接和不扫描目录的项目边界" }
+      { path: "AGENTS.md", role: "一次前台更新、精确失败交接和不扫描目录的项目边界" },
+      { path: "Google 官方 Fitbit Air 介绍", href: "https://blog.google/products-and-platforms/devices/fitbit/fitbit-air/", role: "核实无屏健身手环及 Google Health 手机应用的产品关系；不证明个人当前设备在线" },
+      { path: "Google Health API 数据接口", href: "https://developers.google.com/health/endpoints", role: "核实 API 数据类型与 google-wearables 来源家族；实际采集范围仍以本项目白名单为准" }
     ],
     verification: [
       "import 测试覆盖 609-page fixture 的 bounded checkpoint 与完整 manifest",

@@ -60,6 +60,16 @@ read-only operating panel; public presentation is secondary.
   go deeper. Only after the reader can form a real working picture should the
   page lead with architecture, commands, schemas, hashes and implementation
   evidence; adding more words never substitutes for removing mystery copy.
+- When a project reads, collects or accepts information, its reader layer must
+  name the actual devices, services, applications or files and explain the
+  concrete data categories it uses, what happens to them and what the owner
+  receives. A collector, probe, provider or evidence pipeline is not an adequate
+  substitute for the real source and observations. Distinguish implemented
+  collection, configured access, current records, quality checks and analysis;
+  an endpoint count, field count, connection test or technical glossary cannot
+  stand in for that explanation. For a method without automatic collection,
+  state what the person supplies and what AI produces instead of inventing a
+  collector. Readers must not need the owner's private memory to understand it.
 - Every project detail page uses three reading layers: `速览`, `产品` and
   `技术`. They are a content priority and reading order, not three
   copies of the same prose, three network loads or a fixed module count.
@@ -115,6 +125,11 @@ read-only operating panel; public presentation is secondary.
   requires it, and never publish reusable credentials. Bulk raw data may be
   omitted for boundedness, noise or product value, but never mislabeled as
   forbidden merely because of its schema.
+- Device brands and models, software identities, measurement names and data
+  categories are product facts, not the person's raw records or measured
+  values. Do not hide them behind generic labels or forbid them as keywords.
+  Retain the exact private payload boundary without erasing what the product
+  actually collects, processes or delivers.
 - PUBLIC personal-data decisions follow the active global authorization
   contract's single classification table and the owner's exact project-specific
   instructions. This project neither copies, redefines nor independently
@@ -511,9 +526,15 @@ read-only operating panel; public presentation is secondary.
   because another refresh occurred. A 40+ project panel must remain readable;
   unchanged projects and unchanged sections stay byte-identical.
 - Before publishing a refreshed snapshot, inspect the current source owners for
-  contradictions and broken validation paths. Repair safe, in-scope defects
-  through their real owner when possible; publish the repaired state. Defects
-  that cannot be repaired in the same goal remain visible as named gaps.
+  contradictions, missing product explanations and broken validation paths.
+  The owner has explicitly authorized necessary source-project repairs,
+  including product functionality, and corrections to these website project
+  rules within the requested goal. Repair real defects through their owning
+  source and preserve its boundaries; do not ask the owner to repeat ordinary
+  implementation permission or use a page edit to disguise a source defect.
+  Publish the repaired state. This authorization does not create additional
+  product goals; defects that cannot be repaired in the same goal remain
+  visible as named gaps.
 - The four-project MVP and the existing PUBLIC destination are owner-accepted.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
@@ -559,7 +580,12 @@ read-only operating panel; public presentation is secondary.
   from every content type and every displayed Skill, a first-time reader must
   be able to restate its practical use, concrete risk, example and final result
   without opening the source Skill or asking a follow-up question. Automated
-  field checks are supporting evidence only.
+  field checks are supporting evidence only. For each reviewed project the
+  reviewer must also be able to describe its real inputs or collected data,
+  their named sources and the resulting output without relying on the owner's
+  private knowledge. Missing meaning is a content defect even when all names,
+  links, counts and tests exist; correct the owning explanation, not just a
+  glossary or a passing assertion.
 - Content completeness is a separate, source-first acceptance gate. Before a
   new project, full refresh or completeness repair may PASS, an independent
   reviewer meeting the current Sol-family-or-stronger economy-routing floor receives the current source entrypoints and the candidate

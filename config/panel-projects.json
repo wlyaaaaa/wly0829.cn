@@ -1045,8 +1045,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-personal-health.js",
-        "semantic_revision": 4,
-        "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice; offline field/date query and summary with explicit limits and uncertainty; unread personal state is not zero",
+        "semantic_revision": 5,
+        "scope": "curated public overview, concrete Fitbit Air and Google Health input/data/output explanation, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice; all 21 default collection types plus profile and available TCX, four-field default summary, offline field/date query and explicit limits; unread personal state is not zero",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",
           "manual_public_product_evidence: read only AGENTS.md, google_health_enroll.py, google_health_refresh.py, google_health_import.py, google_health_capture.py, google_health_brief.py and their five test modules; run python -m pytest -q; never read CURRENT.md, SOURCES.md, raw reports, manifests, briefs, provider payloads or credentials, and never invoke Google, Secret Broker or a device runtime"
