@@ -569,7 +569,7 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 17,
+  detailedPageCount: 18,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
   description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供十七个完整参考页，新增 LocalOCR 的本地文字识别与文档解析详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
@@ -702,7 +702,7 @@ export const systemProjectDomains = [
       { id: "openclaw-backup", title: "消息智能体恢复备份", role: "把消息型智能体网关的配置与工作区保存在独立私人恢复链里。", kind: "恢复资产", href: projectLedgerHref },
       { id: "public-project-private-backup", title: "公开项目的私有文件备份", repo: "public-project-private-backup", role: "把不能公开但值得恢复的本地文件，连同指纹和清单保存到独立私人备份库。", kind: "恢复资产", href: projectLedgerHref },
       { id: "steam-millennium-config-backup", title: "Steam 个性化配置备份", repo: "steam-millennium-config-backup", role: "为重装保留主题、插件清单和关键界面配置的公开安全快照。", kind: "恢复资产", href: projectLedgerHref },
-      { id: "vault-tool", title: "本地加密保险库", repo: "vault-tool", role: "在本机把任意文件装进可验证、可备份、可选择性恢复的加密容器。", kind: "加密工具", href: projectLedgerHref }
+      { id: "vault-tool", title: "本地文件加密与恢复", repo: "vault-tool", role: "把明确文件和子目录加密保存，按需在本机查看或取回；区分合并、密码与密钥文件、库维护、双密码层、图片载体和私人密文备份。", kind: "加密工具", href: "/projects/vault-tool" }
     ]
   },
   {

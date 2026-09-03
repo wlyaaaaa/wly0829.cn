@@ -14,11 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has seventeen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has eighteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials, work-delivery, daily-preferences, personal-media and LocalOCR in
-  order 1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17. The registry
+  document-materials, work-delivery, daily-preferences, personal-media, LocalOCR and vault-tool in
+  order 1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -356,12 +356,13 @@ read-only operating panel; public presentation is secondary.
   real-dashboard project 12, document-materials as real-dashboard project 13,
   work-delivery as real-dashboard project 14, and daily-preferences as
   real-dashboard project 15, followed by personal-media as real-dashboard
-  project 16, then LocalOCR as real-dashboard project 17.
+  project 16, then LocalOCR as real-dashboard project 17 and vault-tool as
+  real-dashboard project 18.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
   personal-materials, document-materials, work-delivery, daily-preferences,
-  personal-media and LocalOCR, plus the one-page Rules workbench
+  personal-media, LocalOCR and vault-tool, plus the one-page Rules workbench
   and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
   presented within its actual public-content boundary. Exclude only an exact
@@ -371,17 +372,21 @@ read-only operating panel; public presentation is secondary.
   owner-selected value order, one completed project at a time; do not create
   placeholder cards or delay a selected project's construction by making agents
   vote on the entire future backlog.
-- Project 17 is LocalOCR. It follows the completed personal-media project and
-  receives one source-first complete product and technical snapshot, necessary
-  source repair, independent content audit, PUBLIC release, read-back and
-  completion report. It uses the existing three reading layers and real source
-  module boundaries, not a model showcase or a new online OCR service. Its
-  reader layer names the selected images, PDFs and directories, actual text and
-  structure outputs, ordinary requests, deliberate choices and success/problem/
-  unavailable behavior. Preserve the exact input, model, coordinate, output,
-  quality, cache, runtime and recovery boundaries, and distinguish original
-  samples, actual inference results and human checks. No placeholder card or
-  advance route is allowed for a later item.
+- Project 18 is vault-tool, the existing local file-encryption and recovery
+  product. It follows the completed LocalOCR project and receives one
+  source-first complete product and technical snapshot, necessary source
+  repair, independent content audit, PUBLIC release and read-back. Explain
+  selected files and directories, archive creation versus merge, local viewing
+  and extraction, password/keyfile and format choices, maintenance and recovery,
+  dual-password containers, image carriers, AI metadata and local UI boundaries,
+  and private ciphertext publication. Keep ordinary scenarios and actual
+  outcomes ahead of algorithms. Preserve the three reading layers and actual
+  source module boundaries; do not create a web encryption service, another
+  password manager or a new vault format. Verify with isolated fictional files,
+  never the owner's real vault, password, keyfile or private plaintext. Tests,
+  metadata inspection, actual cryptographic round trips, GUI interaction and
+  remote recovery are separate evidence layers. No placeholder card or advance
+  route is allowed for a later item.
 - The selected personal-media project has a non-optional content floor:
   automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -546,7 +551,7 @@ read-only operating panel; public presentation is secondary.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
   Remote, personal-health, WeChatDirect, personal-materials, document-materials,
-  work-delivery, daily-preferences, personal-media and LocalOCR additions, are standing-authorized to commit, normal-push existing
+  work-delivery, daily-preferences, personal-media, LocalOCR and vault-tool additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -567,7 +572,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current seventeen.
+  to projects added after the current eighteen.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -604,7 +609,7 @@ read-only operating panel; public presentation is secondary.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
   including WeChatDirect, personal-materials, document-materials, work-delivery
-  daily-preferences, personal-media and LocalOCR:
+  daily-preferences, personal-media, LocalOCR and vault-tool:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or

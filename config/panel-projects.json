@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 92,
-    "project_search_index_gzip_budget_kib": 116,
-"bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. LocalOCR project17 adds one real overview and six compact module records: the public HEAD baseline was 90111/113172 gzip bytes for shared/all-project search, the source-complete candidate was 93546/118112; 114/114 explicit module search projection values are retained with no duplicated old records or full technical arrays. The old LocalOCR System-only entry is replaced, not duplicated. Round up only to 92/116 KiB; the largest existing per-project shard stays below 20 KiB and LocalOCR is 5741 bytes. Shared entry JS is byte-identical at 35257 raw/11596 gzip bytes; keep the 12 KiB JS, 21 KiB CSS and 20 KiB shard thresholds, native prefetch/navigation, and full professional content; add no compression protocol or service",
+    "search_index_gzip_budget_kib": 96,
+    "project_search_index_gzip_budget_kib": 121,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. vault-tool project18 and its corrected Skill explanation change shared/all-project search from the released baseline 93603/118114 gzip bytes to 97524/123274. Its eight modules have eight unique routes and eight explicit compact searchProjection records; no full technical arrays are added to shared interaction JS. The overview replaces the old System-only entry instead of duplicating it; complete search records grow from 269 to 277. Round up only to the measured minimum integer 96/121 KiB. The new per-project shard is 6221 gzip bytes, below the unchanged 20 KiB ceiling. Shared entry JS remains byte-identical at 35257 raw/11596 gzip bytes, CSS remains 129197 raw/21082 gzip; preserve 12 KiB JS, 21 KiB CSS, native navigation/prefetch and full professional content, with no new compression protocol, dependency or service",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1669,6 +1669,66 @@
           "internal refactors, formatting or test additions do not change displayed behavior",
           "private input files, generated outputs or model-cache contents change without altering public product facts",
           "a model is only registered or downloaded without becoming the selected default or gaining current runtime evidence"
+        ]
+      }
+    },
+    {
+      "id": "vault-tool",
+      "order": 18,
+      "title": "vault-tool",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/vault-tool",
+      "ai_refresh": {
+        "content_path": "app/content-vault-tool.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first local file encryption and recovery: selected files, archive creation and merge; memory viewing, search, clipboard and selective extraction; passwords, keyfiles, exact formats/KDF and platform dependencies; maintenance, backups and plaintext lifecycle; dual-password capacity and image carriers; metadata-only AI checks versus explicit local viewing/editing; PRIVATE ciphertext publication and separate remote README protection; eight source-backed modules covering all ten independently reconstructed product axes",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\vault-tool status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/vault-tool -TargetWorktree E:\\Projects\\Tools\\vault-tool -ForPublication -Json",
+          "read current vault_tool.py, test_vault_tool.py, Publish-KeyVaultToGitHub.ps1 and Start-KeyVaultEncrypt.ps1; reconstruct actual operations before trusting README claims",
+          "read only the current vault-workflow Skill source, mode contracts and bounded tests; separate .agents ownership and installed discovery from the independent vault-tool engine",
+          "run isolated source regressions only after checking all file, clipboard, GUI and subprocess effects; task-specific TEMP/TMP/TMPDIR and no real vault, keyfile or system clipboard",
+          "record source, Python/dependency metadata, unit-test, real cryptographic fixture, GUI and remote-publication evidence separately"
+        ],
+        "conditional_collectors": [
+          "one explicitly fictional fixture with text, CSV and binary members through actual KDF/AES for content roundtrip, selective extraction, maintenance and image/dual-password checks; public evidence never contains passwords or keyfile bytes/hashes",
+          "isolated local-UI callbacks and real cryptographic persistence tests when the existing viewer/editor changes; a GUI test double does not prove physical desktop entry",
+          "metadata-only reads of an owner-selected real artifact or remote target only when that exact observation is requested; never decrypt private contents, read README bodies, publish fixtures to Key or run PromptOnly against auto-discovered real vaults merely for the website"
+        ]
+      },
+      "source": { "repo": "wlyaaaaa/vault-tool", "visibility": "PUBLIC", "default_branch": "main", "local_root": "E:\\Projects\\Tools\\vault-tool" },
+      "displayed_areas": [
+        "product_purpose_named_files_outputs_principles_and_ordinary_requests",
+        "eight_modules_covering_ten_source_independent_product_axes",
+        "file_archive_creation_merge_collision_and_plaintext_staging",
+        "memory_view_search_clipboard_selective_extract_and_cleanup_limits",
+        "password_keyfile_kdf_formats_and_platform_recovery_dependencies",
+        "password_change_migration_backup_lifetime_and_layer_boundaries",
+        "dual_password_container_bucketing_and_capacity_refusal",
+        "image_carrier_original_bytes_and_reencoding_limits",
+        "metadata_only_check_and_plan_separate_from_local_view_edit",
+        "local_member_fidelity_kdf_preservation_and_failed_save_rollback",
+        "private_ciphertext_publish_remote_readback_and_readme_protection",
+        "fictional_real_crypto_evidence_and_unverified_real_private_recovery"
+      ],
+      "impact_sources": [
+        { "kind": "local_product_and_format", "paths": ["vault_tool.py", "README.md", "scripts/Start-KeyVaultEncrypt.ps1"] },
+        { "kind": "private_publication_and_recovery", "paths": ["scripts/Publish-KeyVaultToGitHub.ps1", "scripts/Test-Publish-KeyVaultToGitHub.ps1", "docs/key-repository-workflow.md"] },
+        { "kind": "behavioral_verification", "paths": ["test_vault_tool.py"] }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed archive, merge, view, extraction, cleanup, password, keyfile, format, KDF, dual-layer or image-carrier behavior changes owner use or expected results",
+          "the existing metadata or local-UI route changes actual effects, member fidelity, supported editing, target selection, refusal or recovery",
+          "PRIVATE publication, default-branch readback, remote README protection or a displayed evidence boundary changes meaning",
+          "source or actual fictional fixtures contradict a published product claim"
+        ],
+        "snapshot_only_when": ["commit, installed dependency version, bounded test count or fixture timing changes while displayed meaning remains true"],
+        "ignore_when": [
+          "formatting or internal refactors leave public product behavior unchanged",
+          "private vault bytes, passwords, keyfiles or source/decrypted contents change without a public product semantic change",
+          "a source test or GUI test double passes without new real-use or restoration evidence"
         ]
       }
     }

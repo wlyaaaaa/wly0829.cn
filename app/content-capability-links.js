@@ -51,7 +51,7 @@ export const skillProjectLinks = {
     { relation: "no-detail-project", systemAssetId: "llm-backend-toolkit", label: "额外 AI 长任务执行器" }
   ],
   "vault-workflow": [
-    { relation: "no-detail-project", systemAssetId: "vault-tool", label: "实现项目：本地加密保险库" },
+    { relation: "owned-by-project", projectSlug: "vault-tool", moduleSlug: "ai-local-interface", label: "vault-tool 本地文件加密与恢复" },
     { relation: "no-detail-project", systemAssetId: "key", label: "私有发布目标：Key" }
   ],
   "work-delivery": [
