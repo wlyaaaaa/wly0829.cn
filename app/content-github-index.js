@@ -25,8 +25,7 @@ const githubIndexSnapshot = createProjectSnapshot({
   ],
   gaps: [
     "Owner history 只保留窗口内记录，milestone coverage 仍为 partial，并明确 bootstrap_gap 与 retained_window_only；不能据此声称拥有更早的完整里程碑历史。",
-    "重大 Git/GitHub 动作源码曾在历史提交 6afc858 对齐旧 C79 基线；当前语义来自 verified current E release。普通 Git identity/admission/normal push 仍可用，但重大动作 consumer 的安装、broker/人类因子 E2E 没有新证据，不能从历史源码回归外推。",
-    "本次已真实创建并回读 PRIVATE wlyaaaaa/daily-preferences；其他重大动作 broker/人类因子 E2E 本轮没有执行，不能由这一次创建外推。"
+    "重大动作分层取证：2026-09-01已有PRIVATE daily-preferences创建及回读记录；2026-09-02只读GitHub元数据再次确认同一仓库为PRIVATE、默认分支main，创建时间为2026-09-01T01:33:17Z。这不等于重跑授权/执行链，也不能外推其余八种动作或四类真人因子E2E；缺少本轮全链证据不等于已确认整条链不可用。"
   ]
 });
 
@@ -58,7 +57,7 @@ export const githubIndexProject = {
     { title: "默认分支回读才算交付", detail: "功能分支自己的上游为零不够；目标提交必须从远端真实默认分支可达并再次回读。" },
     { title: "公开判断看实际内容", detail: "日志、数据库、路径和个人来源不因类型自动敏感；活动全局分级只在出现 L3+ 正面证据时限制具体值，可复用秘密始终阻断。" },
     { title: "证据不足只阻断高影响动作", detail: "身份、可见性或远端不清时停止发布、删除和迁移，安全的本地工作与只读诊断仍可继续。" },
-    { title: "索引只在实质变化时刷新", detail: "仓库身份、可见性、远端、默认分支或长期治理变化才更新总账；不后台监视，也不自动删除任何仓库。" },
+    { title: "一次完整刷新收敛总账", detail: "仓库身份、可见性、远端、默认分支或长期治理变化才更新总账。用户发起正常完整刷新后，系统先更新公开快照与本机导航，再自动推进已有有效基线并回读，不要求再迁移一遍；零写状态查询仍不改基线，也没有后台监视或自动删仓库。" },
     { title: "清理前先证明没有唯一内容", detail: "分支或工作树只有在内容已整合、证明确实冗余，或有明确保留用途和退出条件时才能退役。" }
   ],
   responsibilities: [
@@ -107,7 +106,7 @@ export const githubIndexProject = {
     { title: "先建立正确的本地起点", detail: "新个人仓库放 V:\\Personal\\Projects\\<name>，新工作仓库放 V:\\Work\\<name>；在真实目录初始化预期 main 与首个提交并保持 canonical worktree（规范工作树）clean，不为空目录预登记，也不把仓库或唯一副本放进 Z 盘。" },
     { title: "安全创建空的 PRIVATE 远端", detail: "确认本人账号下同名仓库确实不存在，并把精确本地 branch/HEAD 绑定到受保护 create-repository 动作；它只创建 private=true、auto_init=false 的空远端，不顺带传入模板或任意参数。" },
     { title: "完成第一次默认分支收敛", detail: "创建回读成功后才配置 origin，正常 push 本地 main；随后现场回读 owner/repo、PRIVATE、实际默认分支、upstream、0/0 和 origin/<default> 对目标提交的可达性。默认分支不同就显式处理，不能猜。" },
-    { title: "真实存在后才登记", detail: "只有远端和本地身份均已回读、首个默认分支收敛完成后，才刷新私有导航、Owner baseline 和公开 generation；最终 Owner status 要回到 baseline=observed、delta=0、issue=0。" },
+    { title: "真实存在后才登记", detail: "远端和本地身份回读、首个默认分支收敛后，再运行正常完整刷新：先原子发布公开generation并更新本机导航，再自动推进已有有效Owner基线并回读。最终baseline=observed、delta=0、issue=0；只有基线缺失或需要修复时才走显式bootstrap/repair，不再要求重复迁移。" },
     { title: "现有项目先读规则和 Git 状态", detail: "从目标项目取得业务语义与测试方式，用 git status、remote 和当前分支保护已有 dirty work；不把别人的施工纳入候选。" },
     { title: "有不确定性才做 Admission", detail: "按信息价值选择 LiveMetadata（现场元数据）、RefreshRefs（刷新远端引用）或 ForPublication，并可限定精确 worktree/ref；普通明确的小改不机械打卡。" },
     { title: "检查全部工作树和分支", detail: "比较 dirty、upstream、ahead/behind、默认分支可达性、独有提交、专门 Owner 和必要保留，不只看当前窗口。" },
@@ -117,7 +116,7 @@ export const githubIndexProject = {
   components: [
     { name: "索引与同步看板", responsibility: "让人快速看到仓库身份、聚合计数和值得复核的同步问题。", implementation: "由 Git/GitHub 事实生成 Markdown；PUBLIC/PRIVATE 名称与路径只有在能改变判断且实际值可公开时才展开，其他内容保留聚合。" },
     { name: "本机导航登记 v2", responsibility: "把仓库身份定位到已确认的本机 clone，同时保留路径变化和恢复线索。", implementation: "保存于 ignored 的 99_private；读取后仍必须回读目标 .git origin，cache 缺失、过期或冲突时显式失败。公开与否按具体值和当前用途判断。" },
-    { name: "Owner 基线存储 v3", responsibility: "比较完整仓库身份集合与当前 GitHub 现场，发现新增、删除、可见性或默认分支漂移。", implementation: "identity 与可空 local root 分存，原子保存 current/previous、规范 hash 和 read-back receipt（回读回执）。" },
+    { name: "Owner 基线存储 v3", responsibility: "比较完整仓库身份集合与当前 GitHub 现场，发现并收敛新增、删除、可见性或默认分支漂移。", implementation: "identity与可空local root分存，原子保存current/previous、hash与回读。普通status零写；正常full refresh在公开generation和导航更新后自动推进已有有效基线，并保留非阻断过渡历史。" },
     { name: "Get-GitOwnerStatus", responsibility: "给跨 Owner 消费者一个紧凑、零写的 current/review_needed/blocked/unknown 结论。", implementation: "先核验总索引自身 .git identity；通过前不读 baseline、registry、GitHub 或任何本地 root。" },
     { name: "Get-ProjectCognitionSource", responsibility: "分页闭合地提供 GitHub Owner 仓库来源和有界远端提交比较。", implementation: "固定 v1 schema、repository node id、分页上限、clone origin 回读和最多 64 个比较文件；缺口显式返回。" },
     { name: "Get-ProjectAdmission", responsibility: "对一个精确仓库给出身份、visibility、worktree、branch、同步和 transport 证据。", implementation: "v1 schema 区分 metadata 与 refs 新鲜度；可用 TargetWorktree/TargetRef 限定顶层决定，同时保留全部 inventory。" },
@@ -137,7 +136,7 @@ export const githubIndexProject = {
     { moduleSlug: "worktree-sync", ask: "这个工作树能删吗？", effect: "检查 dirty、独有提交、默认分支可达性、locked/prunable、必要保留和活动依赖；证据不全就保留，不把 unknown 当作可删。" },
     { moduleSlug: "publication-gate", ask: "公开仓库里什么能发？", effect: "按实际候选逐值判断：有用的仓库名、路径、提交、失败和技术事实可以公开，PRIVATE 不生成猜测链接；可复用秘密和真实 L3+ 私人载荷必须移除。transport proceed 仍不等于 publication safe。" },
     { moduleSlug: "snapshot-recovery", ask: "索引刷新中断了怎么恢复？", effect: "先验证旧 current generation 仍完整，再检查 `.incoming`、manifest 和投影；只补齐新代并完成全部 hash/bytes 回读后切 pointer，不把半成品拼进旧快照。" },
-    { moduleSlug: "repository-ledger", ask: "总索引现在还是最新的吗？", effect: "把完整 Owner baseline 与现场 49 个 identity 比较，并单独核对 46 个 origin 已验证 clone 与 3 个 remote-only；变化先进入 review，确认并刷新后才回到 delta=0、issue=0。" },
+    { moduleSlug: "repository-ledger", ask: "总索引现在还是最新的吗？有变化就正常完整刷新。", effect: "先零写比较完整Owner基线与现场身份、本地副本和仅远端仓库。有变化且事实完整时，一次完整刷新先更新公开generation与导航，再自动推进已有有效基线，最终回到delta=0、issue=0；不再另跑迁移。基线缺失、损坏或远端证据不足则说明精确缺口，不伪造连续历史。" },
     { moduleSlug: "repository-ledger", ask: "这次发布是真正里程碑，给总账留一条记录。", effect: "只有外层 closeout 已确认 repo、branch、commit 和公开安全理由时才调用纯文件 helper；稳定键重复时 changed=false，普通 push 不记录。Owner Provider 最多只读返回当前50条，并明确 bootstrap_gap/retained_window_only，不伪装完整Git历史。" }
   ],
   evidenceLayers: [
@@ -172,6 +171,7 @@ export const githubIndexProject = {
     { name: "Git Owner 紧凑状态", command: "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json", purpose: "零写比较完整身份基线、现场 GitHub 和治理 registry。" },
     { name: "分页仓库来源", command: "E:\\GitHub总索引\\tools\\Get-ProjectCognitionSource.ps1 -Json", purpose: "返回闭合分页、稳定 node id、clone 关联和可选有界远端比较。" },
     { name: "刷新预览", command: "E:\\GitHub总索引\\tools\\Update-GitHubIndex.ps1 -SkipFetch -NoWrite", purpose: "重建候选文档到临时位置，不改 tracked 投影。" },
+    { name: "正常完整刷新", command: "E:\\GitHub总索引\\tools\\Refresh-GitHubLocalIndex.ps1 -Json", purpose: "先原子发布公开generation并更新导航，再自动推进已有有效v3基线和回读；不commit/push，缺失基线须显式bootstrap。" },
     { name: "一致性诊断", command: "E:\\GitHub总索引\\tools\\Test-GitHubLocalIndexConsistency.ps1 -SkipFetch", purpose: "比较 current generation、兼容投影与现场重建结果。" },
     { name: "Admission 回归", command: "E:\\GitHub总索引\\tests\\Test-ProjectAdmission.ps1", purpose: "验证 schema、worktree、sync、visibility、target、retention 和公开路径语义。" },
     { name: "Owner Provider 回归", command: "E:\\GitHub总索引\\tests\\Test-GitOwnerStatus.ps1", purpose: "验证 identity gate、零写、完整基线、registry、history 和稳定失败代码。" },
@@ -196,16 +196,17 @@ export const githubIndexModules = [
     statusTone: "mixed",
     value: "把散落在不同磁盘、公开与私有仓库中的身份事实收成一个可审计总账；公开页面按事实是否有用和实际值风险决定展示明细或聚合，不因 PRIVATE 标签整类隐藏。",
     why: "公开 Markdown（面向人阅读的文本投影）只能安全展示一部分仓库，而且会随时间过期；直接扫描所有磁盘又会漏范围、扩大隐私和把目录名错当身份。总账需要 GitHub 全量身份、已验证 clone（本地副本）和明确 registry（结构化治理登记表）各司其职。",
-    example: "例如我问“刚增加了 daily-preferences，为什么现在还是 0 delta？”Owner status 会说明它已经进入 current baseline，所以当前 baseline=observed=49、delta=0、issue=0；previous→current 的 repo_added 仍作为 nonblocking history（非阻断历史）保留，而不是假装从未发生。",
+    example: "例如我说“刚加了一个仓库，把总索引正常完整刷新一下”。已有有效基线时，同一次命令先更新公开快照与本地导航，再取得完整现场身份并自动推进基线，不需要我再说一次迁移。daily-preferences已进入当前基线，所以快照里baseline=observed=49、delta=0、issue=0；新增过渡仍作为nonblocking history（非阻断历史）保留，不是假装从未发生。",
     result: "得到稳定的 current（当前一致）、review_needed（需要复核）、blocked（证据无效）或 unknown（证据不足）结论、49 个仓库的公开/私有分布、46 个已验证本地副本与 3 个 remote-only、差异数量、问题代码、历史连续性和公开安全 fingerprint（指纹）；需要详情时再到正确 Owner 展开。",
     readerStates: {
-      pass: "GitHub 全量身份、已验证本地副本和结构化登记表一致时，返回 current（当前一致）以及可安全公开的汇总证据。",
-      problem: "现场身份与基线不同、公开投影过期或本地登记冲突时返回 review_needed（需要复核）或 blocked（阻断），并给出差异数量和责任源。",
+      pass: "全量身份、本地副本和登记一致时返回current（当前一致）；正常完整刷新会自动推进已有有效基线并回读，不需要第二次相同迁移。",
+      problem: "零写status发现差异时返回review_needed（需要复核），不自行写入。完整刷新中的无效基线、事实不完整或回读失败则停止对应阶段，分别说明公开快照和私有基线已完成哪一层。",
       unavailable: "GitHub 身份源、本地副本或登记表不可读时返回 Unknown（证据不足），不从目录名、旧 Markdown（文本投影）或缓存猜仓库事实。"
     },
     decisionImpact: [
       "identity baseline 与现场一致且无 issue 时，仓库总账可视为 current。",
-      "出现新增、删除、visibility 或默认分支差异时进入 review_needed，不自动改 baseline。",
+      "普通零写status发现新增、删除、visibility或默认分支差异时返回review_needed，不自行改基线；正常完整refresh会在同一命令内自动推进已有有效v3基线并回读。",
+      "-MigrateBaseline只保留显式首次bootstrap/repair用途；有效基线的普通增量不再要求额外迁移。缺失previous的历史不能被伪造补齐。",
       "总索引自身 origin identity 不符时先 blocked，且不读取 baseline、registry、GitHub 或本地 root。",
       "GitHub CLI 或远端元数据执行失败属于 execution error，不伪造 domain conclusion（领域结论）。",
       "普通 commit/push 不写里程碑；只有真实、已确认且有公开安全理由的发布节点才显式记录。helper 返回 changed 只表示记录文件变化，不代表 Git commit/push 已完成。",
@@ -216,6 +217,8 @@ export const githubIndexModules = [
       "GitHub 全量 inventory 由现场 API 分页闭合；每项保留稳定 node id、visibility、默认分支 OID 和公开安全元数据。",
       "ignored 私有导航 v2 保存 repo 到本机 clone 的定位，但只有 `.git` origin 回读一致才建立 clone occurrence。",
       "owner-baseline-store.v3 把完整 identity snapshot 与 nullable local-root snapshot 分开；current、previous、hash 和 receipt 原子读写。",
+      "Refresh-GitHubLocalIndex.ps1先验证既有v3基线是否为missing或current；invalid在公开generation发布前拒绝。正常full refresh原子发布generation并更新private clone navigation后，调用Invoke-RefreshGitOwnerBaselineAdvance，使用同一份fresh owner inventory做前后比较。",
+      "零delta返回owner_baseline.status=current；完整有效的真实delta触发原子advance，必须execution_status=completed、domain_status=current、history_gap=false，再回读delta=0、issue=0才返回advanced。基线missing只返回skipped/owner_baseline_missing_requires_explicit_bootstrap，不静默建立首次历史。",
       "Get-GitOwnerStatus.ps1 只比较稳定 Owner 事实，排除工作树 dirty、ahead/behind、观察时间、索引 HEAD 和任务状态等高频噪声。",
       "governance registry 只输出规范化有效性和 fingerprint，不把内部条目内容放进 compact status。",
       "Add-PushRecord.ps1 是 pure-file（纯文件）且幂等的窄 helper：用稳定键去重、拒绝 secret-shaped reason，只更新目标记录并返回 changed，不 stage、commit、pull、rebase 或 push。",
@@ -227,7 +230,7 @@ export const githubIndexModules = [
       "分页读取 GitHub 全量 identity，必要时关联 origin 已验证的 clone",
       "规范化并比较 baseline 与 observed fact set",
       "返回 domain_status、delta/issue 计数、history 和 fingerprint",
-      "只有 review 确认后才用独立 MigrateBaseline 写入口推进下一代基线",
+      "若请求正常完整刷新且已有有效v3基线，先发布公开generation和导航，再自动advance/read-back；只有缺失或修复才显式使用-MigrateBaseline",
       "若外层 closeout 确认本次是真实里程碑，显式传入 repo/branch/commit/reason 调用 Add-PushRecord；读取结果时只消费 Owner Provider 的有界 milestone_records"
     ],
     concepts: [
@@ -242,19 +245,22 @@ export const githubIndexModules = [
       "compact Owner status 不返回私有 local root、branch、worktree、dirty 或 task 状态",
       "不扫描未声明的磁盘根；新 root 由显式 refresh 发现",
       "公开 Markdown 是导航和投影，不是完整 owner baseline",
-      "MigrateBaseline 是独立写入口；普通 status 保持 zero_write=true、fetch_performed=false",
+      "普通status保持zero_write=true、fetch_performed=false；full refresh是独立写操作，会自动收敛已有有效基线，-MigrateBaseline仅为显式bootstrap/repair兼容入口",
       "里程碑记录是有界补充来源，不是完整 Git 历史或每次 push 的事件流"
     ],
     failures: [
       { condition: "总索引自身 origin 缺失或不匹配", response: "返回 completed/blocked 与有界 issue，阻止所有不可信下游读取。" },
       { condition: "v3 baseline 缺失、无效或第一次 history gap", response: "返回 unknown；不回退到 PUBLIC Markdown 或伪造 previous。" },
-      { condition: "现场身份集合与基线不同", response: "返回 review_needed 和 delta 计数；由 Owner 审查后再迁移基线。" },
+      { condition: "现场身份集合与基线不同", response: "零写status返回review_needed和delta；用户发起正常完整刷新时，事实完整且已有有效基线就自动推进并回读，不再要求另跑迁移。" },
+      { condition: "完整刷新时基线缺失、无效或推进回读失败", response: "缺失时baseline推进标skipped并要求显式bootstrap；无效时在公开发布前停止。若公开generation已成功而随后基线推进失败，分别保留实际状态、报告未收口阶段，不谎称两层整体回滚。" },
       { condition: "registry schema、重复 ref 或 retention 条目无效", response: "Owner current 失败关闭，只公开稳定问题代码。" },
       { condition: "GitHub CLI 不可用、非零退出或 JSON 无效", response: "返回 execution_status=error、domain_status=unknown，供调用者决定重试。" },
       { condition: "里程碑 reason 像秘密、稳定键重复、文件锁或写入失败", response: "不安全或失败时保持文件不变；重复项返回 changed=false。Git stage/commit/push 仍由外层处理。" }
     ],
     sources: [
       { path: "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1", role: "零写 compact Owner Provider" },
+      { path: "E:\\GitHub总索引\\tools\\Refresh-GitHubLocalIndex.ps1", role: "正常完整刷新中的有效基线自动advance与前后回读；仅缺失/修复走显式迁移" },
+      { path: "E:\\GitHub总索引\\docs\\contracts\\git.refresh-consistency.md", role: "status零写、full refresh自动基线收敛与bootstrap/repair边界" },
       { path: "E:\\GitHub总索引\\tools\\Get-ProjectCognitionSource.ps1", role: "分页闭合的 GitHub 仓库来源与有界 compare" },
       { path: "E:\\GitHub总索引\\tools\\GitHubIndex.PrivateNavigation.psm1", role: "私有导航 v2 与 Owner baseline store v3" },
       { path: "E:\\GitHub总索引\\config\\git-artifact-governance.json", role: "专门 Owner、冻结历史和必要保留的 schema 来源；页面不展开条目" },
@@ -268,6 +274,7 @@ export const githubIndexModules = [
       "2026-09-01 直接运行 Get-GitOwnerStatus：execution completed、domain current、baseline=49、observed=49、delta=0、issue=0；history 记录 daily-preferences repo_added 已进入 current。",
       "2026-09-01 Owner baseline 与私有导航回读 49 个 repository、46 个 origin_verified occurrence，因此 3 个 remote-only。",
       "当前公开 pointer 明确声明 authoritative=false 与 decision_authority=false，避免投影冒充动态事实。",
+      "2026-09-02只读核对当前源码：正常完整刷新按generation/navigation→Invoke-RefreshGitOwnerBaselineAdvance排序；Run-UnitTests.ps1已有自动推进、无效基线前置拒绝和调用顺序断言。本次未执行有写入的完整refresh，也未把源码检查冒充新的基线推进回执。",
       "Test-PushRecord.ps1 验证 pure-file、幂等、并发去重、不安全理由拒绝和 no Git transaction；Test-GitOwnerStatus.ps1 验证空表、稳定摘要、50条上界与公开安全失败关闭。"
     ],
     relation: "它回答整个仓库集合是否可信和是否需要复核；单仓库 Admission 再回答某个精确目录、工作树和分支现在能否安全继续。"
@@ -541,7 +548,7 @@ export const githubIndexModules = [
       failureRecovery: ["同名远端已存在或账号不符时不创建", "远端已创建但 push 失败时从现有 PRIVATE 身份继续而不重建", "rename 目标已存在或 identity 改变时停止", "默认分支与预期不同就显式处理并重查", "delete/transfer/force-update 响应不确定时先读现场而不重放", "任一 target/executor/preimage/epoch 漂移使旧能力失效"]
     },
     teaser: "创建空 PRIVATE 仓库，以及删除、转移、改名、改变可见性、默认分支或远端等高影响动作，必须绑定精确目标、恢复条件和正式回读；普通 Git 操作不会因此全部变成人工审批。",
-    status: "当前 E98 protection contract 已激活，受保护重大动作合同与 previous E97 同字节/SHA；源 main=281344b…包含类型化 PRIVATE 创建通道，本轮已真实创建并回读 daily-preferences，其他重大动作与人类因子路径未执行",
+    status: "当前 E98 protection contract（保护合同）已激活，与 previous E97 同字节/SHA；源 main=281344b…含九种类型化动作。2026-09-01已有PRIVATE创建验收记录，2026-09-02再读GitHub确认该仓库存在；没有重跑其他动作或真人因子链",
     statusTone: "mixed",
     value: "把创建仓库、本地 ref 删除/强更、remote URL 替换，以及 GitHub 可见性、改名、默认分支、删除和转移收进九个封闭动作；每次只改变一个精确目标、保留恢复依据并从现场回读，同时让普通 commit 和 normal push 不被误升级。",
     why: "这些动作会改变仓库身份、公开面、默认入口或可恢复历史，目标错一位就可能泄露或丢失；但一律弹人类确认同样不正确。产品让最高权限智能体按真实意图决定 allow、step_up、deny 或先补证据，机械适配器只验证并执行一个被类型化的动作。",
@@ -559,10 +566,10 @@ export const githubIndexModules = [
       "每种动作使用自己的精确参数、preimage 和 read-back；改名不能顺带改 owner/visibility/default branch，替换 remote URL 不能变成任意 Git 命令。",
       "是否需要人类因子由最高权限智能体结合真实目标和风险判断，不由适配器按动作名称机械决定。",
       "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）是四类因子；Google 和 Microsoft 只是 Account 类别的不同 Provider（提供方）。",
-      "当前 Git Owner 源码基线已经推送，但针对 current E release 的安装和真实 broker/人类因子 E2E 未执行，因此只把历史源码/回归层标成通过。",
+      "已证层分别是当前源码、既有回归、2026-09-01的精确PRIVATE创建记录，以及2026-09-02的仓库元数据回读；没有本轮完整broker/人类因子E2E，不代表整条链已被判不可用，也不能外推其余动作通过。",
       "C 盘第 79 代已退役；current E release 是当前保护合同。历史 6afc858 只证明当时修正的四类因子和 step_up 语义，不自动证明当前 consumer。"
     ],
-    problem: "此前 GitHub 总索引合同把 Google/Microsoft 当成独立因子，并让适配器按 effect（动作类型）机械派生 human_required；历史 6afc858 已改成四类因子、独立 Account provider，并让 human_required 只消费最高权限智能体的 step_up。Current E contract 保持同一判断边界，但 Git consumer 没有本轮安装/E2E 证据。",
+    problem: "重大动作最容易把三件不同的事混为一谈：源码支持某个操作、某一次现实动作确实完成、当前全部执行路线仍可用。历史6afc858修复了四类因子和最高权限判断语义，现行E98保留这条边界；已完成的PRIVATE创建应保留为精确结果，其他动作或真人路径未重验则明确未重验，不据此泛称全部不可用或全部通过。",
     implementation: [
       "Adapter schema 只有两个 effect family：git-local 的 3 个操作和 github-api 的 6 个操作；不接受 shell string、任意 executable、别名、重定向或任意 REST endpoint。",
       "Prepare 读取 live Admission 与 GitHub metadata，冻结 repo database/node ID、worktree/common-dir、visibility/default branch、typed parameters、完整 argv、execution_mode、语义判断、preconditions 与 adapter/native executor hashes，能力 TTL 为 30 秒。",
@@ -575,14 +582,14 @@ export const githubIndexModules = [
       "最高权限智能体拥有 allow（允许）、step up（补充人类验证）、deny（拒绝）和 needs evidence（先补证据）的语义判断。",
       "机械适配器只能验证登记、签名、nonce（一次性随机凭据）、目标、事实、完整性、执行器和动作边界，不能按 effect 名称推导 human_required。",
       "Owner 仓库已经原位升级合同与适配器：非执行判断 deny（拒绝）、needs_evidence（先补证据）、suspected_tamper（疑似完整性异常）在 proposal（动作提案）前失败关闭，allow（允许继续）可走 runtime_allowed（运行时允许），step_up（补充人类验证）才产生 human_required（需要人类验证）。",
-      "历史提交 6afc858 曾 normal push 到公开 main 并远端回读；当前仓库 main 与 origin/main 均为 281344b。当前源码包含 PRIVATE 创建与四类因子语义，本轮已用它创建并回读 daily-preferences；其他重大动作消费者与需要人类因子的路径没有做现实 E2E，因此这些层继续保持未闭合。",
+      "历史提交6afc858曾正常推送并远端回读，当前源码main/origin仍为281344b。既有快照记录2026-09-01已创建并回读PRIVATE daily-preferences；2026-09-02固定gh api只读再次确认full_name、private=true、default_branch=main与created_at=2026-09-01T01:33:17Z。这次只读不重新证明创建时的Authorize/Consume链，不代表其余八种动作、四类真人因子或当前所有安装态已验收。",
       "网页只展示公开安全的动作类别、规则差异和证据层，不公开因子秘密、账号身份、内部请求材料或可重放参数。"
     ],
     flow: [
       "先从九个固定操作中选择一个；把其精确仓库/ref/remote、旧值、目标值、恢复条件和 execution_mode 写进 typed JSON，不接受自由命令",
       "最高权限智能体按真实目的、范围、可恢复性和异常证据给 allow、step_up、deny、needs_evidence 或 suspected_tamper；只有前两者继续",
       "Prepare 取得 live Admission/provider facts，冻结 identity、preimage、argv、参数、执行器 hashes 和 30 秒 TTL；dry_run 与 execute 不能互相升级",
-      "需要人类因子时只用 Passkey/TOTP/Recovery/Account 之一；Authorize 后再次取证，single-use Consume 成功才进入现实动作",
+      "需要人类因子时，先按活动.agents保护合同完成同候选四类生产等价演练，再打开本人选择的Passkey/TOTP/Recovery/Account之一；Authorize后再次取证，single-use Consume成功才进入现实动作",
       "执行前最后核对同一 target、参数、preimage、assessment、executor 与 AuthorityHost epoch；任一漂移就让旧能力失效",
       "固定 Git argv 或固定 GitHub REST endpoint 只执行一次；native 返回非零或响应丢失仍先从本地/GitHub 现场回读",
       "read-back 比较操作自己的目标字段：ref OID、remote URL、repo identity/visibility/name/default branch/existence/owner；不以命令成功替代现实状态",
@@ -610,7 +617,7 @@ export const githubIndexModules = [
       "公开页面只报告会改变用户判断的状态、缺口和完成证据"
     ],
     failures: [
-      { condition: "Current E consumer 安装/E2E 未证明", response: "不执行创建、删除、转移、改名或可见性等受保护重大动作；普通只读、可逆编辑和已授权常规 Git 工作继续。" },
+      { condition: "本页没有本轮某项生产E2E，或真实调用发现入口/身份/能力失效", response: "前者只标未重验，不单凭网页旧快照拒绝已授权动作；执行时现场核对精确目标并以真实adapter的allow/deny/step_up/unavailable及回读为准。实际失败只停受影响动作，保留既有创建结果，普通工作继续。" },
       { condition: "删除/强更 ref 或替换 remote URL 的旧值/OID 不再匹配", response: "能力失效，保留当前 ref/remote 并重新取证；不把目标漂移当作允许覆盖。" },
       { condition: "改名目标已存在，或改名后 database/node ID、visibility、default branch 变化", response: "停止并报告 identity/read-back mismatch；不把另一仓库或顺带字段变更写成成功。" },
       { condition: "set-visibility、set-default-branch、delete 或 transfer 后回读不一致", response: "保留 state_unknown，先从 GitHub 现场确认最终 visibility/branch/existence/owner；禁止盲目重放。" },
@@ -635,7 +642,7 @@ export const githubIndexModules = [
       "历史 Test-ControlPlaneContracts.ps1、git diff --check 和 staged public-content hook 通过；本次未把这些历史层升级为当前执行证据。",
       "2026-08-29 当时的 GitHub API 与 ls-remote 对 refs/heads/main 回读均精确等于 6afc858d418714664a757a4950f65de8a9d3578d；它只是一条历史验收。",
       "2026-09-01 直接回读源 main/origin=281344b…与 current create-repository 合同：只允许本人账号、空 PRIVATE、expected absent、本地 branch/HEAD/clean preimage，创建后的 origin/push 明确留给普通 Git 收敛。",
-      "当前 E98 protection contract 已验证；其中 protected-major-actions 合同 SHA-256=500abc3f…，与 previous E97 同字节，因此 E97 及更早版本只保留为历史连续性，不冒充 current。本轮真实创建并回读 PRIVATE daily-preferences，其他破坏性动作和人类因子路径没有执行，所以模块 statusTone 保持 mixed（混合证据）。"
+      "当前E98保护合同SHA-256=500abc3f…与previous E97同字节；只证明规则连续性。2026-09-01已有PRIVATE daily-preferences创建回读记录，2026-09-02的独立GitHub元数据读取再次确认该结果；本次没有触发Authorize/Consume、创建/删除/转移或真人窗口，所以其他执行链的当前验收仍未重跑，模块保持mixed（混合证据）。"
     ],
     relation: "它在 Publication Gate 已证明目标、内容和授权之后，单独处理少数高影响 GitHub 动作；Admission 提供现场身份，Snapshot 只记录索引代际，二者都不能替代最高权限语义判断和正式回读。"
   },
@@ -655,25 +662,28 @@ export const githubIndexModules = [
     statusTone: "pass",
     value: "让公开索引可重建、可判断 stale（过期），并在写到一半、投影失败或进程中断后继续从最后一个完整版本恢复。",
     why: "八份公开文档若逐个覆盖，任何中断都会让看板混合两个观察时间。顶层 Markdown（文本投影）又容易被误当动态权威，所以必须把完整文档集合、hash（哈希）、pointer（指针）和投影关系一起管理。",
-    example: "如果新 generation 已写好一部分兼容投影后失败，旧 current pointer（当前指针）仍指向完整旧代；一致性检查会报告 projection stale（投影过期）。下一次完整 publish（发布）会重写全部投影并在回读后一次切换指针。",
-    result: "得到不可变 generation、闭合 manifest（清单）、current 指针、current+previous（当前加上一代）保留、明确 stale 原因和可恢复路径；同时保留公开投影“仅截至 observed_at（观察时间）”的诚实边界。",
+    example: "例如我说“新增仓库后，把索引完整刷新一遍”。已有有效基线时，同一命令先发布完整公开快照与本地导航，再自动推进Owner基线并回读，不需要额外迁移。若写投影时失败，旧current（当前指针）仍指向完整旧代；若新代已经发布、后续基线推进才失败，则分别保留新公开代际和实际基线状态，报告失败阶段，不谎称全部回滚。",
+    result: "成功得到完整公开索引、更新的本机导航，以及自动收敛并回读的已有有效Owner基线；过渡历史继续保留。生成阶段中断时可从上一完整代际恢复，基线阶段失败则明确哪层已完成、哪层仍未收口。技术层分别用不可变generation、manifest（清单）、current/previous和私有基线原子更新实现，不把它们说成一个跨存储总事务。",
     readerStates: {
-      pass: "新代际全部文档、清单和内容指纹闭合并完成回读后，才原子切换 current（当前）指针，同时保留上一完整代际用于恢复。",
-      problem: "生成或投影中途失败、八份文档观察时间不一致或稳定投影漂移时，继续保留旧完整代际并标明 stale（过期）原因。",
+      pass: "新代际全部文档和回读闭合后才切current，保留previous；随后正常完整刷新自动推进已有有效基线，前后回读零delta/issue才完成这层收口。",
+      problem: "切指针前的生成或投影失败保留旧完整代际并标stale（过期）。指针已切后若基线推进失败，不否认已发布代际，也不声称整体已完成；按实际失败阶段补证或恢复。",
       unavailable: "代际清单、当前指针或恢复来源不可读时不覆盖公开投影，也不把局部新文件拼进旧快照；先恢复闭合版本再继续发布。"
     },
     decisionImpact: [
       "只有仓库 identity、visibility、remote、clone、默认分支或长期治理等 Owner 事实变化才重建。",
       "普通业务 commit、格式、时间戳或没有改变用户判断的 drift 不触发连锁 refresh。",
       "generation integrity 通过只证明这一代内部一致，不证明动态事实仍最新。",
+      "正常full refresh自动推进已有有效v3基线；零写status、Fast和CheckOnly都不因此变成基线写入口，首次bootstrap/repair仍须显式处理。",
       "partial projection failure 不切 current；旧 generation 继续有效但 projection 标记 stale。",
       "stale `.incoming` 只在名称、路径和 reparse-point（重解析点）检查通过后回收。"
     ],
     problem: "公开看板既要易读，又不能把 generated Markdown 升级成动态权威。一次 refresh 还会读 GitHub、扫描已声明 clone、生成多文档和更新私有导航，必须在中断、网络失败和并发运行时保持一致。",
     implementation: [
+      "完整刷新先检查Owner基线：invalid在公开generation写入前拒绝；missing允许生成公开快照，但后续baseline阶段只返回skipped/owner_baseline_missing_requires_explicit_bootstrap，不伪造首次历史。",
       "完整 refresh 在全局 mutex（互斥锁）下运行，generation 写入同卷 `<id>.incoming`，先校验路径闭合、文件 hash、bytes 和 provenance。",
       "兼容 projection 只能映射到固定八份公开文档；manifest 或 pointer 有未知字段、大小写变体、额外文件或越界路径就失败关闭。",
       "全部投影写入并回读后，current-generation.json 才原子切换；pointer 保存 manifest hash、previous id 和 current+previous retention policy。",
+      "Invoke-AtomicGitHubLocalIndexRefresh成功、导航已更新后，同一full refresh调用Invoke-RefreshGitOwnerBaselineAdvance：fresh全量事实完整且无issue才自动advance，回读domain=current、delta=0、issue=0，保留previous→current非阻断历史。公开generation与私有baseline各自原子，并不是一次跨两层事务。",
       "consistency checker 在 system temp 重建候选并区分 stable drift 与 volatile drift；默认不 stage、commit 或 push。",
       "hidden CheckOnly 入口只原子写 ignored 私有 consistency receipt，供机器 Owner 读取 outcome、drift files 和错误代码。",
       "fetch 最多尝试三次；失败保留 fetch_failed。commit-pinned snapshot 只刷新 metadata，不假装普通工作树已同步。"
@@ -686,6 +696,7 @@ export const githubIndexModules = [
       "回读 hash、bytes、schema、路径、reparse 与文档 provenance",
       "发布并回读全部兼容 projections",
       "原子切 current pointer，验证 current/previous 后再清理更旧 generation",
+      "使用更新后的导航与同一fresh owner inventory，自动推进已有有效v3基线，再回读current、delta=0、issue=0；无变化返回current，有变化返回advanced，缺失返回skipped",
       "一致性检查发现 drift 时只报告；是否 refresh 由 Owner 事实变化决定"
     ],
     concepts: [
@@ -707,7 +718,7 @@ export const githubIndexModules = [
       { condition: "残留 `.incoming` 名称、路径或 reparse 检查异常", response: "拒绝清理，避免递归删除越出 generations root。" },
       { condition: "fetch 连续三次失败", response: "记录 fetch_failed；不把旧 refs 冒充 live，也不自动 push。" },
       { condition: "pointer/manifest 多字段、大小写漂移或 document closure 破坏", response: "generation valid=false，停止基于它的 current 判断。" },
-      { condition: "Owner baseline 与 live inventory 不同但 projection hash 一致", response: "保持 generation integrity 结论，同时把 owner domain 标为 review_needed；两层不互相冒充。" }
+      { condition: "Owner baseline与live inventory不同但projection hash一致", response: "保持generation integrity，同时让零写status报告review_needed；正常完整refresh会自动收敛有效基线。若基线阶段失败，保留真实已发布generation与实际基线，明确未收口层，不假称整体回滚或成功。" }
     ],
     sources: [
       { path: "E:\\GitHub总索引\\tools\\Refresh-GitHubLocalIndex.ps1", role: "mutex、incoming recovery、generation publish、pointer switch 和 retention" },
@@ -719,6 +730,7 @@ export const githubIndexModules = [
     verification: [
       "current-generation.json 声明 schema v1、generation root、manifest SHA-256、八份 documents、current+previous 和 pointer-after-readback。",
       "单元测试注入 projection 中途失败，验证旧 pointer 保持有效；下一次完整 publish 修复 mixed projections 后才切换。",
+      "当前源码与git.refresh-consistency合同一致：正常full refresh先generation/navigation后自动baseline advance；已有断言验证此顺序与invalid基线前置拒绝。本次只读核对，没有再次执行刷新或迁移。",
       "测试拒绝越界 projection、额外文件、unknown/case-variant schema 字段和 reparse-point 父目录。",
       "2026-09-01 直接回读 generation 275553278b7747f5b9c64f1a325b86b0：manifest hash 匹配，8 份 generation 文档与兼容投影的 SHA-256、bytes 全部匹配 pointer，总计 20026 bytes；previous=70efc65cdfec4b9cb1305ff48086744d。",
       "generation integrity 与 live Owner status 分开：前者证明 2026-09-01 01:34 UTC 的投影内部完整，后者在 01:54 UTC 证明 baseline 49 / observed 49 / delta 0 / issue 0，并保留 daily-preferences repo_added 的非阻断历史提醒。",

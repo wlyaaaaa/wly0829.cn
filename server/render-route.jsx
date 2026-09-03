@@ -2,6 +2,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Page from "../app/page.jsx";
 import { globalSearchEntries } from "../app/search.js";
+import { createCompactSearchEntry } from "../app/compact-search.js";
 import { canonicalPath, canonicalUrl, projectCatalog, projectEntryForPath, routeMeta, routePaths } from "../app/site-content.js";
 
 function escapeAttribute(value) {
@@ -23,19 +24,7 @@ function canonicalDocumentHref(href) {
 }
 
 function compactSearchProjection(entry) {
-  const href = canonicalDocumentHref(entry.href);
-  const detailLimit = entry.type === "项目资产" ? 120 : entry.type === "系统组成" ? 140 : 180;
-  return {
-    type: entry.type,
-    group: entry.group,
-    scopes: entry.scopes || [],
-    projectSlug: entry.projectSlug || null,
-    title: entry.title,
-    detail: entry.detail.slice(0, detailLimit),
-    href,
-    aliases: [...new Set(entry.aliases || [])],
-    search: entry.compactSearch || ""
-  };
+  return createCompactSearchEntry(entry, canonicalDocumentHref(entry.href));
 }
 
 export const compactSearchIndex = globalSearchEntries

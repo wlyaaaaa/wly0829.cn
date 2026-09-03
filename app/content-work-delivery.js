@@ -9,17 +9,19 @@ const workDeliverySnapshot = createProjectSnapshot({
   label: "0.2.0 源码、37 项回归、Ruff、隔离 wheel、两套完全合成 Office 验收与当前实现盲自然路由 E2E 已核对；真实工作价值仍待首个现实事项",
   boundary: "本页证明当前 0.2.0 的确定性状态、质量门和完全合成输出；没有第一项真实工作、第一次真实来源变化、同模型同质量直接基线或数据库恢复验收，时间价值仍是 baseline_required（需要基线）。",
   metrics: [
-    { label: "产品版本", value: "0.2.0" },
-    { label: "产品模块", value: "5 个" },
-    { label: "源码回归", value: "37/37 pass" },
-    { label: "合成验收", value: "2 套 Office E2E" }
+    { label: "正式输出", value: "6 个文件" },
+    { label: "现实工作包", value: "0" },
+    { label: "真实来源变化", value: "0" },
+    { label: "备份恢复验收", value: "0" }
   ],
   facts: [
+    { label: "当前现实结果", value: "产品固定生成 6 个正式文件；当前现实工作包为 0，真实来源变化 E2E 为 0，导出备份与数据库丢失恢复验收为 0。现有证据来自两套完全合成 Office 场景，时间价值仍是 baseline_required。" },
     { label: "什么时候进入", value: "一个持续工作事项有 2–5 份本人明确选择的资料，并且需要多种一致交付物，或本轮只做 PRD 但来源确定还会继续变化时进入。" },
     { label: "当前正式输出", value: "只有 PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx、执行跟踪表.xlsx 六个文件；当前没有现成项目计划、周报或汇报产物。" },
     { label: "质量与一致性", value: "SQLite（本地状态库）拥有当前事实修订与 build；正式 Office 入口重建 canonical manifest（规范清单）并拒绝手写 ready、事实漂移、过期 build 和跨目录覆盖。" },
+    { label: "失败时已经写入什么", value: "事实确认后的确定性 batch 以 15 秒为时间门，分别在状态提交、核心文件生成和 Office 生成后检查。超时表示时间验收失败，不自动撤销已经提交的包或文件；同一 build 的文件逐个替换，也不是跨文件原子事务。", hero: false },
     { label: "来源变化", value: "新版本中原文仍唯一存在就自动 rebound（重新绑定）；原文消失或匹配不唯一才把事实标为 stale（已过期），引用变化的旧 build 同时过期。" },
-    { label: "当前证据", value: `PRIVATE main ${sourceMainCommit}；0.2.0 实现 ${implementationCommit}；37/37 测试与 Ruff 通过；隔离 wheel、两套合成 Office E2E 和当前实现盲自然路由 E2E 已分层核对。` },
+    { label: "当前证据", value: `PRIVATE main ${sourceMainCommit}；0.2.0 实现 ${implementationCommit}；37/37 测试与 Ruff 通过；隔离 wheel、两套合成 Office E2E 和当前实现盲自然路由 E2E 已分层核对。`, hero: false },
     { label: "价值与缺口", value: "合成场景证明功能、质量和安装闭包，不证明真实工作节省时间；当前没有同模型同质量直接处理基线、真实工作包、真实来源变化、导出备份或数据库丢失恢复。" },
     { label: "中国工作默认", value: "默认简体中文、Asia/Shanghai、YYYY-MM-DD 与人民币 CNY；使用需求方、产品、研发、测试、负责人、评审人等角色，并按背景、目标、范围、角色与流程、需求、指标、异常、验收、待确认组织 PRD。", hero: false }
   ],
@@ -29,6 +31,7 @@ const workDeliverySnapshot = createProjectSnapshot({
     "可靠输入仍以本地文本、Markdown 和 CSV 为主；DOCX、PDF、邮件和在线文档需要先由相应能力读取或导出，再作为明确文件进入。",
     "AI 对来源的分析、事实提取和判断在项目外完成；仓库负责确定性保存、质量门、构建和验收，不内置模型或声称自动理解任意材料。",
     "公开 artifacts 调用负责核对 current build 并生成文件；Office 重新导入、PPT 几何重叠、XLSX 公式和全部页面/工作表查看属于合成验收与测试证据，不是每次 builder 调用自动执行的产品门。",
+    "15 秒时间门在各阶段已写入后检查，不提供整次回滚；核心与 Office 文件也逐个替换，没有跨文件原子事务。超时或替换中断后必须核对实际已提交状态，不能从非零退出推断全部未发生。",
     "时间结论仍为 baseline_required：没有同模型、同思考强度、相近输入和同质量的直接处理基线。",
     "没有第一项真实工作，也没有第一次真实来源变化 E2E；两套完全合成 Office 场景不能替代现实价值和真人判断。",
     "没有交付包导出、SQLite 备份、数据库丢失恢复或跨机器迁移入口；Git 只能恢复源码，不能恢复真实工作包。"
@@ -59,11 +62,11 @@ const workDeliveryProject = {
   summary: "当一项工作有几份会继续变化的需求说明、会议记录、规则或表格，我不再分别手改每份成品。工作交付副驾驶先把本人明确选中的来源冻结成版本，分开事实、假设、冲突和未知，只让我处理真正需要决定的地方，再从同一事实修订版生成产品需求文档、项目评审和执行跟踪表。来源改变后，它说明什么仍有效、什么已经过期，以及下一版只需要处理什么。",
   why: "分别维护需求文档、评审材料和执行表时，同一个日期、范围、负责人、指标或验收口径很容易出现多个版本。更危险的是来源已经变化，旧成品看起来仍然完整，却没人知道它引用了失效证据。这个项目把来源版本、决定理由、正式构建和变更影响放在一条可核对的本地链里。",
   plainExample: "例如我明确选择一份立项说明、一份评审纪要和一张执行计划表，要求生成 PRD、项目评审和执行跟踪表。项目先交回来源覆盖、关键事实、冲突、未知和拟采用结构；我只处理真正冲突。质量门通过后，它生成六个固定文件。后来执行计划表更新，仍唯一存在的原文自动重新绑定，真正失效的事实和旧构建才被标为过期。",
-  result: "我会得到一组不可覆盖、可追溯且口径一致的正式文件：PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx 和执行跟踪表.xlsx；同时知道使用了哪些来源、哪些事实已确认、哪些是假设或冲突、当前能否正式构建、哪些旧结果已过期，以及下一步唯一需要决定什么。",
+  result: "完整请求会得到六个可追溯且口径一致的文件：PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx 和执行跟踪表.xlsx；只要 PRD 时不等待另外两类 Office 文件。不同事实修订版不能互相覆盖目录，同一 current build 可以重生成自己的文件。我还会知道来源、已确认事实、假设与冲突、过期结果，以及本轮真正写到了哪一步。",
   readerStates: {
-    pass: "来源、事实、范围、需求、异常和验收都已确认且当前，canonical manifest 与 SQLite 一致时，从同一事实修订版生成所请求的正式文件并只读 verify。",
-    problem: "关键事实缺来源、互相冲突、仍未确认或已经过期时，只形成醒目标记的待确认草稿，列出两边证据和唯一需要处理的问题，不启动正式 Office 构建。",
-    unavailable: "项目入口、SQLite、当前 build 或现有 Office 运行时不可用时保留来源、决定历史和旧结果，返回精确失败点；不扫描更多资料、不造第二状态库，也不把 Markdown 预览冒充成品。"
+    pass: "事实与质量通过、规范清单和 SQLite 一致后，按请求生成同一修订版的文件：built 表示所请求 Office 文件已生成，core 表示只生成三类核心文件。每次只声明实际完成的格式与检查，不把状态验真当作整套 Office 视觉验收。",
+    problem: "关键事实缺来源、冲突、未确认或过期时，返回 draft 和待确认草稿，不启动正式 Office 构建。若失败的是 15 秒时间门或文件替换，包、核心文件甚至 Office 文件可能已经写入；先核对原包与当前构建，不能把非零退出当成整次未发生。",
+    unavailable: "入口或 SQLite 在写入前不可用时保留原件与请求；Office 运行时在后续阶段不可用时，已提交的来源、事实和核心文件仍可能存在。返回精确阶段并核对恢复点，不重复新建同一包、不扫描更多资料，也不把预览冒充正式成品。"
   },
   stateLabels,
   methodCanvas: {
@@ -83,7 +86,7 @@ const workDeliveryProject = {
     columns: [
       { title: "我提供与决定", note: "目标、资料和冲突", items: ["明确选择当前 2–5 份资料", "确认目标、范围、事实、假设与真正冲突", "决定生成哪些文件，以及是否进入下一版"] },
       { title: "AI 协助", note: "理解与专业判断", items: ["从已选资料提取候选事实和证据", "解释冲突、缺口和拟采用结构", "不在项目内部伪装成自动分析引擎"] },
-      { title: "项目负责", note: "状态、质量与一致构建", items: ["冻结来源、证据和追加决定历史", "从 SQLite 当前 build 核对 canonical manifest", "生成不可覆盖文件、标记 stale 并交回恢复点"] }
+      { title: "项目负责", note: "状态、质量与一致构建", items: ["冻结来源、证据和追加决定历史", "从 SQLite 当前 build 核对 canonical manifest", "保持不同构建的目录隔离、标记 stale 并交回实际恢复点"] }
     ]
   },
   productPrinciples: [
@@ -95,7 +98,7 @@ const workDeliveryProject = {
     { title: "ready 由状态库计算，不由调用方声明", detail: "正式入口从 SQLite 重建规范清单；手写 quality.status=ready 或修改 goal、fact、evidence、hash 都会失败。" },
     { title: "决定历史追加，不覆盖", detail: "确认、驳回、退回、来源重新绑定都保留前态、后态、证据和理由；当前仍缺 actor 字段，页面不冒充多人审计。" },
     { title: "来源变化只处理真实影响", detail: "原文在新版本中仍唯一存在时自动重新绑定；只有消失或不唯一的事实过期，未关联事实保持有效。" },
-    { title: "正式目录不可覆盖", detail: "当前 build 的六个文件固定在同一目录；新修订不能覆盖旧 build，也不能把正式 Office 文件重定向到另一个 build。" },
+    { title: "不同构建的目录不能混用", detail: "当前 build 的文件固定在其目录；新修订不能覆盖旧 build，也不能把 Office 文件重定向到另一个 build。同一 current build 允许重新生成自己的文件，不能把目录隔离理解成每个文件永久只写一次。" },
     { title: "合成通过不冒充真实价值", detail: "37 项测试、隔离 wheel 和两套合成 Office E2E 证明功能与安装闭包；没有真实工作和直接基线时，时间价值保持 baseline_required。" },
     { title: "时间价值硬门决定继续还是收窄", detail: "同模型同质量首轮不得超过直接基线 1.25 倍；完成第一次来源变化时累计人工时间不得更高，变更轮墙钟目标不超过直接重做的 0.75 倍。达不到就退回窄工作流、确定性流程或单一产物，不因追溯更专业而放行。" },
     { title: "恢复缺口直接说明", detail: "SQLite 能保留过程，但当前没有交付包导出、备份、数据库丢失恢复或跨机器迁移；Git 不能恢复真实工作包。" }
@@ -234,13 +237,13 @@ const workDeliveryModules = [
     example: "我明确选择立项说明、评审纪要和执行计划表；一个 batch 请求创建稳定 package 并导入三份来源，不读取同目录的其他文件。",
     result: "得到 package、当前来源快照、内容 SHA-256、版本、来源标签和可继续更新的数据库；重复 ID 不产生半套事实。",
     readerStates: {
-      pass: "稳定 ID、标题、目标、2–5 份来源和格式均有效时，原子创建 package 与全部当前来源。",
+      pass: "稳定 ID、标题、目标、2–5 份来源和格式均有效时，在一个 SQLite 事务内提交 package、来源、事实与审阅；这只保证该状态事务，不包含后面的文件生成或时间验收。",
       problem: "ID 已存在、来源数量不对、文件不可读或 schema 不合法时，在新增事实前拒绝并指出精确字段。",
-      unavailable: "项目入口或 SQLite 不可用时不创建替代目录索引；保留原件和请求，恢复入口后重试同一稳定 ID。"
+      unavailable: "入口或数据库在提交前不可用时保留原件和请求；提交后才遇到超时或构建失败，则原 ID 可能已经存在。先只读核对该包，已有包沿更新和构建入口继续，不换随机 ID 或直接重跑新建。"
     },
     decisionImpact: ["一次性单文件、普通文本 PRD、学习和私人正式材料绕过。", "来源必须是本人本次明确选择的 2–5 份文件。", "同一 package ID 第二次 batch 是明确错误。", "已有包用 update-source、impact、review、build、verify 和 artifacts 继续。", "默认简体中文、Asia/Shanghai、YYYY-MM-DD 与人民币 CNY；中国企业角色和 PRD 章节结构是当前产品合同，不是调用方随意显示文本。", "正式输出使用标准 OOXML，兼顾 WPS 与 Microsoft Office；核心不保存个人/公司配置分支。", "DOCX/PDF、邮件和在线文档当前先经对应能力读取或导出。"],
     problem: "解决随机重建、来源范围失控、未选文件混入和一个事项出现两套状态的问题。",
-    implementation: ["work-delivery.batch.v1 在写库前校验 package、sources、facts 和 build。", "Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。", "SourceSnapshot 保存 source key、名称、provider label、版本、字节数、SHA-256 和 supersedes。", "文本支持 UTF-8 与 GB18030；CSV 后续由证据层计算行列。", "标准 OOXML 输出使用 YYYY-MM-DD 与中国企业常用角色/章节语义，兼顾 WPS 与 Microsoft Office。", "单个 SQLite 是唯一状态库，没有 watcher、后台同步或第二数据库。"],
+    implementation: ["work-delivery.batch.v1 在写库前校验 package、sources、facts 和 build。", "run_batch 的 store._transaction 一起提交新包、来源、事实和审阅；随后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。", "Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。", "SourceSnapshot 保存 source key、名称、provider label、版本、字节数、SHA-256 和 supersedes。", "文本支持 UTF-8 与 GB18030；CSV 后续由证据层计算行列。", "标准 OOXML 输出使用 YYYY-MM-DD 与中国企业常用角色/章节语义，兼顾 WPS 与 Microsoft Office。", "单个 SQLite 是唯一状态库，没有 watcher、后台同步或第二数据库。"],
     flow: ["判断持续来源关系", "选择2–5份资料", "给稳定package ID", "校验完整batch", "创建package", "冻结来源字节与hash", "返回当前包和下一步"],
     concepts: [
       { term: "Package ID（交付包标识）", explanation: "一个持续工作事项的稳定非空身份；不是每次运行重新生成的临时编号。" },
@@ -252,7 +255,8 @@ const workDeliveryModules = [
     failures: [
       { condition: "Package ID 已存在", response: "任何新事实写入前拒绝，使用原 package 的更新入口。" },
       { condition: "来源少于 2 或多于 5", response: "schema 校验失败，不创建数据库或半成品。" },
-      { condition: "来源在读取中变化", response: "导入失败；重新选择当前文件，不把两个版本拼成一个快照。" }
+      { condition: "来源在读取中变化", response: "导入失败；重新选择当前文件，不把两个版本拼成一个快照。" },
+      { condition: "新包事务提交后的时间检查失败", response: "返回时间失败，但该稳定 ID、来源和事实可能已持久化；先核对原包，再从已存在状态继续，不用新建命令重复导入。" }
     ],
     sources: [
       { path: "PRIVATE product contract · user path", role: "进入条件、2–5份来源和绕过边界" },
@@ -311,30 +315,30 @@ const workDeliveryModules = [
   commonModuleShape({
     slug: "consistent-deliverables",
     shortTitle: "同版多种交付物",
-    title: "六个正式文件使用同一事实修订，并固定在不可覆盖目录",
+    title: "六个正式文件使用同一事实修订，不同构建不混用目录",
     searchAliases: ["PRD评审PPT执行表保持一致", "当前能生成哪些正式文件", "只生成PRD不要PPT", "Office文件为什么不能换目录", "隔离wheel包含哪些builder", "项目计划周报是否支持"],
     searchProjection: {
       intents: ["生成一致交付物", "只构建请求格式", "核对正式输出集合", "拒绝跨build覆盖"],
       entities: ["PRD.md", "manifest.json", "traceability.csv", "DOCX", "PPTX", "XLSX", "build directory", "wheel"],
       relations: ["六文件绑定same build", "Office builders读取canonical manifest", "docx-only跳过pptx/xlsx", "output directory绑定build id"],
-      failureRecovery: ["builder失败不发布半成品", "目录冲突拒绝", "manifest漂移停止", "缺runtime保留core files"]
+      failureRecovery: ["builder生成失败不晋升暂存文件", "逐文件替换中断可能留下部分成品", "目录冲突拒绝", "manifest漂移停止", "缺runtime保留core files"]
     },
     teaser: "当前正式输出严格是三类追溯文件和三类 Office 文件；不存在项目计划、周报、汇报或调用方自行追加的第七个正式文件。",
-    status: "0.2.0 已闭合公开 artifacts 入口、内部 canonical binding、三类 Office、不可覆盖目录、统一 CLI 与隔离 wheel；完整重导入/几何/公式/视觉检查当前由合成验收执行",
+    status: "0.2.0 已闭合公开 artifacts 入口、内部 canonical binding、三类 Office、跨构建不可覆盖、统一 CLI 与隔离 wheel；同一构建允许重生成，完整重导入/几何/公式/视觉检查由合成验收执行",
     statusTone: "pass",
     value: "产品需求文档、评审材料和执行跟踪表不会分别使用不同日期、范围、指标或负责人；每个文件都能回到同一 build。",
     why: "如果直接调用三个 builder 或允许把成品写到任意目录，调用方可以绕过质量门、混用事实版本或覆盖旧交付包。",
     example: "事实确认后先生成 PRD.md、manifest 和 traceability；本轮只要 PRD 就只生成产品需求文档.docx。需要完整包时，再从同一 current build 生成项目评审.pptx 和执行跟踪表.xlsx。",
-    result: "得到固定六文件集合或本轮请求的合法子集；同一个 build 的正式文件留在同一不可覆盖目录，失败不会发布半套 Office。",
+    result: "得到固定六文件集合或本轮请求的合法子集，各文件留在所属 build 的目录。所有 builder 先在临时区生成；逐文件替换完成才表示本轮 Office 输出完成。生成失败与替换中断不同，后者可能已经留下部分正式文件。",
     readerStates: {
-      pass: "current build 的持久化 manifest 与 SQLite 完全一致，quality ready 且目录正确时，按请求格式原子生成 Office 文件。",
-      problem: "目录属于另一个 build、文件已经冲突、manifest 漂移或 builder 失败时，拒绝发布并清理本轮临时文件。",
+      pass: "current build 的清单与 SQLite 一致、quality ready 且目录正确时，所有请求格式先生成到临时区，再逐个替换到所属目录；全部替换完成后返回实际文件。每个文件替换是原子的，整组文件不是一个原子事务。",
+      problem: "目录属于另一个 build 或 manifest 漂移时，写 Office 前拒绝；builder 生成失败时不晋升本轮暂存文件。若生成已完成、后续逐文件检查或替换失败，之前替换的文件可能已存在，必须按实际文件逐个核对，不能声称全部回滚。",
       unavailable: "现有 Node/Python/Office 运行时缺失时保留 PRD、manifest、traceability 和待生成状态，不安装第二套引擎或把预览冒充正式文件。"
     },
-    decisionImpact: ["正式输出只包括 PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx、执行跟踪表.xlsx。", "当前没有现成项目计划、周报或汇报产物。", "artifacts 公开入口只接受 database + current build ID。", "内部 builder 要求同一进程的 canonical binding，不能作为第二公开入口。", "同一目录六文件不可覆盖，新事实修订使用新 build。", "PRD-only 不启动 PPTX/XLSX builder。", "每次 artifacts 调用不自动执行 Office 重新导入、PPT 几何、XLSX 公式和全部页面/工作表查看；这些结论来自两套合成验收和测试。", "wheel 携带两个合成场景、schema 和三个 builder，脱离源码目录可运行。"],
-    problem: "解决跨成品口径漂移、绕过质量门、旧目录被覆盖、半套文件发布和安装后缺 builder 的问题。",
-    implementation: ["DeliveryCompiler 先写 PRD.md、manifest.json 和 traceability.csv。", "artifacts.py verify persisted manifest，再解析所请求 formats。", "DOCX builder 使用 python-docx；PPTX/XLSX builder 使用工作区 Node packages。", "正式文件先在临时 staging 生成，全部成功后原子替换到所属 build 目录。", "两套合成 acceptance 和 tests 在构建后重新导入 Office，检查 PPT 几何、XLSX 公式和全部页面/工作表；公开 artifacts 命令本身不自动运行这整套验收。"],
-    flow: ["选择current build", "重建并核对manifest", "确认quality ready", "确认输出目录属于build", "生成请求格式到临时区", "核对预期文件存在", "原子发布正式文件", "按验收需要另行重导入/视觉检查", "只读verify"],
+    decisionImpact: ["正式输出只包括 PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx、执行跟踪表.xlsx。", "当前没有现成项目计划、周报或汇报产物。", "artifacts 公开入口只接受 database + current build ID。", "内部 builder 要求同一进程的 canonical binding，不能作为第二公开入口。", "新事实修订使用新 build 和独立目录；同一 current build 可重生成文件。", "PRD-only 不启动 PPTX/XLSX builder。", "暂存减少生成失败造成的半成品，但逐文件 os.replace 不提供跨文件回滚或整包原子性。", "每次 artifacts 调用不自动执行 Office 重新导入、PPT 几何、XLSX 公式和全部页面/工作表查看；这些结论来自两套合成验收和测试。", "wheel 携带两个合成场景、schema 和三个 builder，脱离源码目录可运行。"],
+    problem: "解决跨成品口径漂移、绕过质量门、其他构建目录被覆盖和安装后缺 builder 的问题；临时区避免生成失败就直接留下成品，但不提供后续逐文件替换的整组回滚。",
+    implementation: ["DeliveryCompiler 依次写 PRD.md、manifest.json 和 traceability.csv，各用同目录临时文件替换；三文件与 SQLite 状态不构成一个跨文件事务。", "artifacts.py verify persisted manifest，再解析所请求 formats。", "DOCX builder 使用 python-docx；PPTX/XLSX builder 使用工作区 Node packages。", "所请求 builder 在临时 staging 并行生成，全部返回后依次检查各文件非空并 os.replace 到所属 build 目录；没有跨文件事务或替换失败回滚。", "两套合成 acceptance 和 tests 在构建后重新导入 Office，检查 PPT 几何、XLSX 公式和全部页面/工作表；公开 artifacts 命令本身不自动运行这整套验收。"],
+    flow: ["选择current build", "重建并核对manifest", "确认quality ready", "确认输出目录属于build", "生成请求格式到临时区", "依次检查文件非空并单文件替换", "全部替换后返回实际文件", "按验收需要另行重导入/视觉检查", "只读verify规范状态"],
     concepts: [
       { term: "ArtifactBuild（产物构建）", explanation: "绑定 package、事实修订、semantic hash、状态、时间和唯一输出目录的一次正式构建。" },
       { term: "Canonical binding（规范绑定）", explanation: "内部 builder 只接受本进程由公开入口生成的规范清单引用，用来防止误走实现脚本。" },
@@ -343,7 +347,8 @@ const workDeliveryModules = [
     boundaries: ["不提供任意模板商城", "不支持现成计划/周报/汇报", "预览QA留在正式目录外", "每次builder不自动完成重导入/几何/公式/全页检查", "内部环境绑定不是授权或安全证明", "视觉合成不等于真实内容正确"],
     failures: [
       { condition: "正式目录指向另一个 build", response: "在写 Office 文件前拒绝，两个 build 都保持不变。" },
-      { condition: "任一 builder 失败", response: "不发布半套正式 Office；保留 core files 与精确错误。" },
+      { condition: "任一 builder 在生成阶段失败", response: "不晋升本轮暂存 Office；保留核心文件与精确错误。" },
+      { condition: "生成完成后逐文件检查或替换失败", response: "之前已替换的文件不会自动撤销；核对所属 build 和各文件实际状态，再决定重生成，不能把部分输出称为完整包。" },
       { condition: "调用方只请求 docx", response: "只构建产品需求文档.docx，不启动或等待 PPTX/XLSX。" }
     ],
     sources: [
@@ -351,7 +356,7 @@ const workDeliveryModules = [
       { path: "PRIVATE source · artifacts.py", role: "公开Office入口、staging与正式目录绑定" },
       { path: "PRIVATE artifact builders", role: "DOCX/PPTX/XLSX与视觉/重导入检查" }
     ],
-    verification: ["三种输出从同一 manifest 生成并重新导入。", "builder 失败不会发布半成品。", "跨 build 目录重定向被拒绝。", "每个直接 builder 都要求 canonical binding。", "隔离 wheel 携带样本、schema 和 builder。"],
+    verification: ["三种输出从同一 manifest 生成并重新导入。", "已有 builder 失败回归证明生成阶段不晋升暂存文件，不证明逐文件替换失败能回滚。", "跨 build 目录重定向被拒绝。", "每个直接 builder 都要求 canonical binding。", "隔离 wheel 携带样本、schema 和 builder。"],
     relation: "本模块形成当前正式文件；来源一旦变化，下一模块决定哪些事实和旧 build 还能继续使用。"
   }),
   commonModuleShape({
@@ -416,16 +421,16 @@ const workDeliveryModules = [
     statusTone: "mixed",
     value: "我能知道当前到底可以相信哪一层，失败后从哪个来源、事实修订或 build 继续，以及哪些结论仍不能说。",
     why: "机械构建很快不代表 AI 分析和整个工作更快；SQLite 能保留历史也不代表数据库丢失后可恢复。把这些混成“已完成”会直接影响是否值得采用。",
-    example: "两套合成 Office 完整构建约两秒，证明确定性文件链可用；但没有同模型同质量直接基线和真实工作，所以总体时间仍 baseline_required。数据库文件若丢失，也不能从 Git 恢复真实 package。",
+    example: "两套合成 Office 完整构建约两秒，证明确定性文件链可用；但没有同模型同质量直接基线和真实工作，总体时间仍 baseline_required。另一次 batch 若在 Office 完成后超过 15 秒，文件可能已经生成，失败的是时间门；应核对原包与实际文件，而不是换一个 ID 从头新建。数据库若丢失，也不能从 Git 恢复真实 package。",
     result: "得到分层状态、最近可靠来源/事实/build、失败位置、下一步和真实缺口；不会用测试 PASS 替代现实价值或恢复证明。",
     readerStates: {
       pass: "当前 build 可 verify、所需 artifacts 已完成，并且相应验证层有独立证据时，只声明那一层通过并交回文件与恢复点。",
-      problem: "quality 不 ready、builder 失败、来源 stale、manifest 漂移或正式时间价值硬门不达标时保留上一可靠状态，列出精确失败并把产品收窄，而不是因追溯更专业而放行。",
+      problem: "quality 不 ready、生成失败、来源 stale 或清单漂移时分别报告草稿或失败阶段。15 秒门在状态、核心文件和 Office 阶段之后检查，失败可能已有新写入；逐文件替换也可能部分完成，须核对实际恢复点。真实时间价值不达标再按产品合同收窄，不能把任一种报错都写成未发生。",
       unavailable: "SQLite 丢失且没有备份时明确真实工作包不可恢复；不从 Git、图片或旧 Office 文件反向伪造状态库。"
     },
     decisionImpact: ["37/37 测试与 Ruff 本轮通过。", "隔离 wheel 脱离源码目录完成安装闭包。", "两套合成 Office E2E 证明三类文件、重导入、几何与公式检查。", "当前实现盲自然路由 E2E 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。", "5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E。", "约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。", "首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。", "同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍。", "如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。", "没有同模型同质量直接基线，时间状态必须 baseline_required。", "没有真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移。"],
     problem: "解决把源码、测试、安装、合成输出、真实价值和恢复能力互相冒充的问题。",
-    implementation: ["acceptance.py 分开 functional、complexity、timing 和 per-scenario checks。", "没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。", "ArtifactBuild 保存 current/stale、semantic hash、fact revision 与 output directory。", "verify 只读比较当前 SQLite 与 persisted manifest。", "builder 使用 staging，失败不发布半成品。", "当前没有 export/backup/restore command、后台镜像或跨机器迁移。"],
+    implementation: ["acceptance.py 分开 functional、complexity、timing 和 per-scenario checks。", "没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。", "run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15 秒抛 MechanicalStageTimeoutError，CLI 非零退出，不补做事务或文件回滚。", "ArtifactBuild 保存 current/stale、semantic hash、fact revision 与 output directory。", "verify 只读比较当前 SQLite 与 persisted manifest，不检查每种 Office 成品的全部像素或语义。", "builder 生成阶段使用 staging，正式文件逐个替换；跨文件中断恢复仍依赖原包和实际文件核对。", "当前没有 export/backup/restore command、后台镜像或跨机器迁移。"],
     flow: ["读取current package", "检查facts与quality", "verify current build", "生成请求artifacts", "分别记录test/install/E2E", "核对首轮1.25倍/变更轮0.75倍/累计人工时间", "判断继续窄工作流、确定性流程或单产物路线", "报告real work状态", "交回恢复点或不可恢复结论"],
     concepts: [
       { term: "baseline_required（需要基线）", explanation: "功能可用，但缺少可比的直接处理对照；不能计算或宣称相对时间收益。" },
@@ -437,12 +442,14 @@ const workDeliveryModules = [
     boundaries: ["测试不替代真实工作", "机械时间不包含AI分析", "当前盲路由 draft 不冒充正式Office E2E", "没有合法direct baseline不计算相对收益", "任一正式时间硬门失败就收窄而非放行", "Git不备份SQLite运行数据", "没有导出恢复或跨机器迁移"],
     failures: [
       { condition: "质量门未 ready", response: "保留待确认 PRD、来源和事实，列出阻断，不生成正式 Office。" },
-      { condition: "Office builder 中途失败", response: "删除本轮 staging，不发布半套文件；core files 和旧 build 保持不变。" },
+      { condition: "Office builder 生成阶段失败", response: "清理本轮 staging，不晋升这次暂存文件；已生成核心文件和原包状态保留。若失败已在替换阶段，另核对可能存在的部分成品。" },
+      { condition: "确定性 batch 超过 15 秒", response: "时间门失败并非整次未写入：状态提交后可能只有包和事实，core 后已有核心文件，Office 后可能已有所请求成品。先核对原稳定 ID、构建和文件，再从已发生状态继续。" },
       { condition: "首轮、变更轮或累计人工时间不达标", response: "验收失败；减少步骤、退回确定性窄工作流或只保留真实稳定复用的单一产物。" },
       { condition: "SQLite 数据库丢失", response: "明确真实 package、来源快照、决定历史和 build 记录当前无法从 Git 恢复。" }
     ],
     sources: [
       { path: "PRIVATE source · acceptance.py", role: "功能、复杂度、时间和合成场景分层" },
+      { path: "PRIVATE source · batch.py / artifacts.py", role: "15秒检查的真实时点、已提交状态与逐文件替换边界" },
       { path: "PRIVATE tests · 37 cases", role: "源码、CLI、正式入口、wheel与失败恢复" },
       { path: "PRIVATE README · current acceptance", role: "0.2.0 当前证据、历史路由和未完成项" }
     ],

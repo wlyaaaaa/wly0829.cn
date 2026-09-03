@@ -1,6 +1,7 @@
 import { ruleGuides } from "./content-rule-guides.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { projectCatalog, rulesSnapshot, skills, systemSearchEntries } from "./site-content.js";
+import { compactSearchScore, createCompactSearchEntry, searchCompactEntries } from "./compact-search.js";
 
 export const ruleSearchAliases = {
   agents_root_rules: ["怎么避免全局规则覆盖项目自己的验收方式"],
@@ -35,22 +36,38 @@ function compactSearchTopics(projection) {
   const values = Array.isArray(projection)
     ? projection
     : Object.values(projection).flatMap((value) => Array.isArray(value) ? value : [value]);
-  return [...new Set(values.map((value) => String(value || "").trim()).filter(Boolean))].join(" ");
+  const unique = [...new Set(values.map((value) => String(value || "").trim()).filter(Boolean))];
+  return unique.filter((value) => !unique.some((other) => other.length > value.length && other.toLowerCase().includes(value.toLowerCase()))).join(" ");
+}
+
+function withTechnicalSearchTerms(entry) {
+  const compact = createCompactSearchEntry(entry);
+  const covered = `${compact.title} ${compact.detail} ${compact.aliases.join(" ")} ${compact.search}`.toLowerCase();
+  const tokens = [...new Set((entry.search.match(/[a-z0-9][a-z0-9_.:/\\-]*/gi) || []).map((token) => token.replace(/[.:]+$/g, "")))];
+  const technical = tokens.filter((token) => token.length > 1 && (
+    /^[a-f0-9]{7,64}$/i.test(token)
+    || /^v?\d+(?:\.\d+)+/i.test(token)
+    || (/[a-z]/i.test(token) && (/\d|[_.:/\\-]/.test(token) || /[a-z][A-Z]/.test(token) || /^[A-Z]{2,}$/.test(token)))
+  ));
+  const missing = technical.filter((token) => !covered.includes(token.toLowerCase()));
+  return { ...entry, compactSearch: [compact.search, ...missing].filter(Boolean).join(" ") };
 }
 
 function projectCompactSearchText(project, modules) {
   const heroLatinTokens = (project.heroFacts || []).flatMap((item) => `${item.label} ${item.value}`.toLowerCase().match(/[a-z][a-z0-9_.:/-]*/g) || []);
-  return [...new Set([
+  return compactSearchTopics([
+    project.summary,
+    project.why,
+    project.plainExample,
+    ...project.responsibilities,
     project.cardStatus,
-    project.snapshotBoundary,
-    ...(project.cardMetrics || []).map((item) => item.label),
     ...(project.usageExamples || []).filter((item) => !item.moduleSlug).map((item) => item.ask),
-    ...(project.heroFacts || []).map((item) => item.label),
+    ...(project.operationalEntrypoints || []).map((item) => item.command),
     compactSearchTopics(project.searchProjection),
     ...heroLatinTokens,
     ...(projectCompactExtraAliases[project.slug] || []),
-    ...modules.flatMap((module) => [module.title, module.shortTitle, ...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])])
-  ].filter(Boolean))].join(" ");
+    ...modules.flatMap((module) => [module.title, module.teaser, ...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])])
+  ]);
 }
 
 const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
@@ -103,7 +120,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     detail: `${project.title}｜${module.teaser}`,
     href: `${project.route}/${module.slug}`,
     aliases: [...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])],
-    compactSearch: `${compactSearchTopics(module.searchProjection)} ${(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect]).join(" ")}`.trim(),
+    compactSearch: compactSearchTopics([compactSearchTopics(module.searchProjection), module.value, module.result, ...(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect])]),
     search: [
       project.title,
       module.status,
@@ -201,59 +218,12 @@ export const globalSearchEntries = [
       ].join(" ")
     };
   })
-];
+].map(withTechnicalSearchTerms);
 
-export function searchScore(entry, query) {
-  const normalized = String(query).trim().toLowerCase();
-  if (!normalized) return 0;
-  const title = entry.title.toLowerCase();
-  const detail = entry.detail.toLowerCase();
-  const aliases = (entry.aliases || []).map((value) => value.toLowerCase());
-  const all = `${entry.type} ${title} ${detail} ${entry.search} ${aliases.join(" ")}`.toLowerCase();
-  const latinTokens = normalized.match(/[a-z][a-z0-9_.:/-]*/g) || [];
-  const matchedLatinTokens = latinTokens.filter((token) => all.includes(token));
-  if (latinTokens.length && matchedLatinTokens.length / latinTokens.length < 0.6) return 0;
-  if (title === normalized || title.startsWith(`${normalized} ·`)) return 18000;
-  if (title.includes(normalized)) return 14000;
-  if (aliases.some((alias) => alias.includes(normalized))) return 16000;
-  if (detail.includes(normalized)) return 11000;
-  if (all.includes(normalized)) return 9000;
-
-  const compact = normalized.replace(/[a-z0-9_.:/-]+/gi, "").replace(/[^\p{Script=Han}]/gu, "");
-  const grams = compact.length >= 3
-    ? Array.from({ length: compact.length - 1 }, (_, index) => compact.slice(index, index + 2))
-    : compact ? [compact] : [];
-  if (!grams.length) return matchedLatinTokens.length ? 70 + matchedLatinTokens.length * 12 : 0;
-  const matched = grams.filter((gram) => all.includes(gram)).length;
-  if (matched / grams.length < 0.45) return 0;
-  const titleMatched = grams.filter((gram) => title.includes(gram)).length;
-  const detailMatched = grams.filter((gram) => detail.includes(gram)).length;
-  return matched * 10 + titleMatched * 8 + detailMatched * 4;
-}
-
-function entryMatchesScope(entry, scope) {
-  if (!scope || scope === "all") return true;
-  return (entry.scopes || []).includes(scope);
-}
-
-function searchTiePriority(entry) {
-  if (entry.type === "项目内容") return 0;
-  if (entry.type === "项目") return 1;
-  return 2;
-}
+export const searchScore = compactSearchScore;
 
 export function searchPanel(query, scope = "all") {
-  const seenHrefs = new Set();
-  return globalSearchEntries
-    .map((entry, index) => ({ entry, index, score: searchScore(entry, query) }))
-    .filter((result) => result.score > 0 && entryMatchesScope(result.entry, scope))
-    .sort((left, right) => right.score - left.score || searchTiePriority(left.entry) - searchTiePriority(right.entry) || left.index - right.index)
-    .map((result) => result.entry)
-    .filter((entry) => {
-      if (seenHrefs.has(entry.href)) return false;
-      seenHrefs.add(entry.href);
-      return true;
-    });
+  return searchCompactEntries(globalSearchEntries, query, scope);
 }
 
 export function searchScopeById(scopeId) {

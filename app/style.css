@@ -4716,6 +4716,10 @@ main {
   background: var(--surface-green);
 }
 
+.project-gallery.photo-showcase .project-gallery-card img {
+  aspect-ratio: 4 / 3;
+}
+
 .project-gallery-card > span {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -5006,6 +5010,10 @@ main {
   .project-gallery-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .project-gallery.photo-showcase .project-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* Authoritative desktop scale baseline; project-specific responsive rules may follow. */
@@ -5036,21 +5044,33 @@ main {
   .project-module-links a { min-height: 68px; }
   .home-page .featured-project { min-height: 0; grid-template-columns: 56px minmax(0, 1fr); }
   .home-page .project-module-links { grid-template-columns: 56px minmax(0, 1fr); }
-  .home-page .project-card-body { padding: 18px 24px 14px; }
+  .home-page .project-card-body { padding: 14px 24px 10px; }
   .home-page .project-title-row h2 { font-size: clamp(28px, 2.4vw, 36px); }
   .home-page .project-visibility { top: 17px; right: 24px; }
   .home-page .project-summary {
-    margin: 12px 0;
+    margin: 8px 0;
     font-size: 13.5px;
     line-height: 1.5;
     overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+  .home-page .project-card-snapshot-boundary dd {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
   }
   .home-page .project-metrics > div { padding: 8px 6px; }
   .home-page .project-metrics dt { font-size: 10.5px; line-height: 1.3; }
-  .home-page .project-metrics dd { font-size: 17px; }
+  .home-page .project-metrics dd { font-size: 17px; line-height: 1.4; }
   .home-page .project-card-foot { margin-top: 10px; font-size: 11px; }
   .home-page .project-module-links > span,
-  .home-page .project-module-links a { min-height: 48px; font-size: 12px; }
+  .home-page .project-module-links a { min-height: 44px; font-size: 12px; }
   .breadcrumbs { min-height: 54px; font-size: 15px; }
   .project-hero h1 { font-size: clamp(50px, 4.2vw, 60px); }
   .project-lead { font-size: 18px; line-height: 1.7; }

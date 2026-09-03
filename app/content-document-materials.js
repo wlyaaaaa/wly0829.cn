@@ -6,25 +6,26 @@ const sourceCommit = "3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc";
 const documentMaterialsSnapshot = createProjectSnapshot({
   observedAt: "2026-09-01T08:34:22.061Z",
   label: "2.0.1 源码、全仓回归、隔离 wheel 与完全虚构生成链已核对；本轮未读取真实个人材料，也未执行任何外部递送",
-  boundary: "本页只公开产品流程、结构、测试和完全虚构样张；不读取或发布真实事项、原件、姓名、联系方式、金额、地址、签名、正文、路径、回执、哈希或个人结果。",
+  boundary: "本页没有读取真实事项正文、原件载荷、签名图或个人结果；实际事项数量与外部递送状态保持 Unknown（未知），未读取不等于数量为 0。公开安全的产品状态、已核实数量、路径类别、组件、哈希机制、命令、测试、失败和恢复事实正常展示，只逐值省略具体命中 L3+ 或可复用秘密的载荷。",
   metrics: [
-    { label: "产品模块", value: "5 个" },
-    { label: "全仓回归", value: "526 pass" },
-    { label: "通用文书回归", value: "32 pass" },
-    { label: "虚构样张", value: "1 页 · 10 文件包" }
+    { label: "正式成品", value: "3 类" },
+    { label: "虚构验收", value: "1 页 · 10 文件" },
+    { label: "真实事项数量", value: "Unknown（未知）" },
+    { label: "本轮外部递送", value: "未执行" }
   ],
   facts: [
+    { label: "当前产品结果", value: "当前可生成 3 类正式成品：可编辑 DOCX、同源 PDF 和自包含附件包。完全虚构链已验收 1 页与 10 文件包；本轮未读取真实事项，也未执行外部递送，不能据此判断现实事项或递送总数。" },
     { label: "什么时候使用", value: "已经有明确目标、接收对象和必要原件，需要形成合同、说明、申请、通知、回复、售后材料或附件包时进入；只改单文件、只找原件或持续维护工作交付时直接分流。" },
-    { label: "当前本地能力", value: "严格输入经过 plan、build、verify 后生成同源 DOCX、PDF、附件和逐页审计；当前通用 CLI 只自动推进 produced（已生成）、signed（本人已签）与 ready_for_delivery（已具备递送条件），始终 delivered（已递送）=false。" },
+    { label: "当前本地能力", value: "严格输入经过 plan、build、verify 后生成 3 类同源成品：DOCX、PDF、附件包和对应逐页审计；当前通用 CLI 只自动推进 produced（已生成）、signed（本人已签）与 ready_for_delivery（已具备递送条件），始终 delivered（已递送）=false。" },
     { label: "当前完整性", value: "v3 release 封存规范化输入、文档、附件、结构审计、逐页彩色/灰度渲染和所需签名快照；精确文件集合复制到空目录后仍可独立 verify。" },
     { label: "现实状态", value: "已生成、本人已签、已具备递送条件、已递送、已收件、已处理必须分别回读；对方签回是另一条独立事实，前一步不能自动推出后一步。" },
-    { label: "当前版本证据", value: `PRIVATE main ${sourceCommit}；产品版本 2.0.1；全仓 526 项通过、6 项环境性跳过、101 个子测试通过，其中通用文书 32 项通过，Ruff 通过。` },
+    { label: "当前版本证据", value: `PRIVATE main ${sourceCommit}；产品版本 2.0.1；全仓 526 项通过、6 项环境性跳过、101 个子测试通过，其中通用文书 32 pass，Ruff 通过。`, hero: false },
     { label: "安装后虚构验收", value: "隔离 wheel 的两个控制台入口均真实携带 Word 导出资源，并用 Microsoft Word + Poppler 完成完全虚构的 plan → build → verify；1/1 页彩色和灰度审计通过，材料包状态为已具备递送条件，但没有发生递送。" }
   ],
   gaps: [
     "本轮没有读取真实个人材料、真实签名或现实回执，也没有执行真实制作与递送 E2E；合成结果不能证明任一真实事项当前可完成。",
     "facts[].source_note 仍是可选说明：当前可以固定整包输入，但不能机械证明每条事实分别来自哪份原件、本人陈述或其他依据。",
-    "自动化能核对字段、结构、正文存在、页码、彩色/灰度页面、附件、签名图片和哈希；没有绑定 AI 或人工整篇语义审阅回执，不能证明事实主线、语气和请求事项已经完整审过。",
+    "自动化能核对字段、结构、正文存在、页码、彩色/灰度页面、附件与哈希；DOCX 会匹配签名资产的精确哈希，PDF 只要求图像对象计数至少为 1，不能证明该对象就是签名、位置正确或最终可见。没有绑定 AI 或人工整篇语义审阅回执，也不能证明事实主线、语气和请求事项已经完整审过。",
     "通用 CLI 没有实现 delivered、received、handled 或 counterparty_signed_returned；这些只由当前事项和现实来源推进。",
     "签名是规范图片资产与 SHA-256 绑定，不是证书签名、可信时间戳或对方同意证明；manifest digest 也是内容摘要，不是数字签名。",
     "v3 release 可以完整复制到空目录后独立复验，但没有自动备份、后台恢复或可续传 mirror；2.0.0 的 v2 release 只按其历史实际携带内容验证并返回 non-self-contained 限制。"
@@ -53,13 +54,13 @@ const documentMaterialsProject = {
     "材料制作中断后继续"
   ],
   repositoryNote: "实现位于 PRIVATE（私有）仓库。本公开页保留版本、命令语义、文件结构、状态、失败、测试和完全虚构样张；不提供匿名源码跳转，也不公开真实个人载荷或内部维护入口。",
-  summary: "当我已经有明确目标、接收对象和一组必要原件，需要把它们整理成合同、说明、申请、通知、回复、售后材料或附件包时，用这个项目；只改单个 Word/PDF 时直接绕过，只找原件时进入个人材料查找。它从当前事项和最小原件开始，生成同源 DOCX 与 PDF，逐页核对内容、附件、签名图片是否存在、可读和可见、页码、灰度和版本，再把已生成、本人已签、可递送、已递送、已收件、已处理与对方签回分别记录。",
+  summary: "当我已经有明确目标、接收对象和一组必要原件，需要把它们整理成合同、说明、申请、通知、回复、售后材料或附件包时，用这个项目；只改单个 Word/PDF 时直接绕过，只找原件时进入个人材料查找。它从当前事项和最小原件开始，生成同源 DOCX 与 PDF，核对内容、附件、签名资产、页码、灰度和版本，并提供逐页渲染结果。最终签名是否清楚、位置是否正确仍须看实际页面，不能只看图片数量；已生成、本人已签、可递送、已递送、已收件、已处理与对方签回分别记录。",
   why: "同一事项往往同时存在原始记录、旧草稿、核对后的成品、签名版、递送版、回执和对方返回版本。只按文件名继续会用错版本；把“文件生成成功”写成现实进展，又会造成漏签、重复递送或错误判断。这个项目把原件、成品、完整性证据和现实步骤拆开，发生中断时仍能从最近一次核对状态继续。",
   plainExample: "例如我说：“维修服务没有按约完成，请把购买记录、沟通事实和退款要求整理成可编辑申请、PDF 和附件清单。”项目先区分已确认事实、来源说明、真正未知和需要本人决定的内容，再从同一输入生成 DOCX 与 PDF，逐页检查正文、附件、页码和打印灰度。无需本人签名就明确停在 produced（已生成）；材料包完整核验后只能写 ready_for_delivery（已具备递送条件）。没有真实递送回读时，绝不写成已送达。",
   result: "我会得到可继续编辑的 DOCX、同一内容版本的 PDF、核对过的附件与自包含材料包，以及当前精确状态、下一步和恢复点。若原件、内容、签名、版面或现实回读不足，我得到的是保留下来的旧版本、具体失败位置、真正未知和一个需要决定的问题，而不是一份看似完整但无法使用的成品。",
   readerStates: {
-    pass: "当前事项、必要原件、输出规格和接收要求一致时，生成同源 DOCX/PDF 与材料包，完成结构、正文、页码、彩色/灰度逐页和哈希验收，并只推进到来源真正支持的状态。",
-    problem: "原件冲突、日期金额不清、附件缺失、签名不匹配、页面失败或现实回读不足时，保留最近一次核对成品，列出失败位置和唯一需要决定的问题，不覆盖旧版或跨级推进。",
+    pass: "当前事项、必要原件、输出规格和接收要求一致时，生成同源 DOCX/PDF、材料包及结构、正文、页码、彩色/灰度逐页和哈希证据。自动检查通过只证明各自范围；签名最终可见性与整篇表达仍按实际页面审阅结果说明。",
+    problem: "原件冲突、日期金额不清、附件缺失、签名不匹配或页面检查失败时，保留最近核对成品并指出失败位置。只有 PDF 图片计数通过却未核实签名可见时，也要明确这项缺口；现实回读不足不跨级推进。",
     unavailable: "当前事项、关键原件、Word/PDF 生成器、页面渲染器、签名资产或接收渠道不可用时，只暂停受影响步骤；保留原件、草稿、核过成品和恢复点，不用旧缓存或日志补猜。"
   },
   stateLabels,
@@ -73,14 +74,14 @@ const documentMaterialsProject = {
       { actor: "只取必要原件", title: "核对参与方、日期、金额、附件和来源", detail: "显式绑定输入与附件，不扫描无关目录；来源冲突和真正未知单独保留。" },
       { actor: "冻结方案", title: "确定结构、DOCX/PDF、签名和渠道", detail: "在生成前明确文书用途、正文结构、附件清单、是否需要本人签名以及接收对象和渠道。" },
       { actor: "同源生成", title: "一次生成可编辑版和固定版", detail: "DOCX 与 PDF 来自同一规范输入；附件复制后重新核对哈希，内部角色代码不会进入对外成品。" },
-      { actor: "完整验收", title: "重读正文并检查每一页", detail: "核对所有输出字段、页码、页面数、空白、边缘、彩色/灰度效果、签名图片存在性与可见性和文件指纹。" },
+      { actor: "完整验收", title: "重读正文并检查每一页", detail: "自动核对输出字段、页码、页面数、墨迹、边缘和文件指纹，并保留彩色/灰度页。签名资产哈希和 PDF 图片计数是机械证据，签名在最终页面上的位置与可见性仍须看渲染结果。" },
       { actor: "冻结材料包", title: "形成可独立复验的递送前版本", detail: "v3 release 携带输入、文档、附件、审计、逐页图和所需签名快照；额外或缺失文件都会失败。" },
       { actor: "现实回读", title: "递送、收件、处理和签回分别记录", detail: "本地 ready_for_delivery（已具备递送条件）不表示已经递送；每一步只由真实记录推进，中断从最近一次核对版本继续。" }
     ],
     columnsAriaLabel: "用户、文书制作项目和现实接收方的责任边界",
     columns: [
       { title: "我提供与决定", note: "目标、原件与现实动作", items: ["说明目标、接收对象、期限和必要原件", "确认真正未知、是否需要签名和最终表达", "明确授权递送、撤回、付款或联系外部对象"] },
-      { title: "项目负责", note: "同源成品与可恢复证据", items: ["生成 DOCX/PDF、附件包和精确版本清单", "核对正文、页码、彩色/灰度页面、签名图片存在性与可见性和哈希", "保留自包含 release、失败位置、下一步与恢复点"] },
+      { title: "项目负责", note: "同源成品与可恢复证据", items: ["生成 DOCX/PDF、附件包和精确版本清单", "核对正文、页码、彩色/灰度页面、DOCX 签名资产哈希与 PDF 图像对象，并说明可见性缺口", "保留自包含 release、失败位置、下一步与恢复点"] },
       { title: "外部现实负责", note: "递送之后发生什么", items: ["递送记录证明动作发生", "对方或平台记录证明收到", "处理结果和对方签回分别由各自来源证明"] }
     ]
   },
@@ -89,7 +90,7 @@ const documentMaterialsProject = {
     { title: "整包输入已固定，不等于逐事实来源已闭合", detail: "规范输入与附件会被封存；单条 source_note 目前仍可选，因此页面不把整包哈希写成每条事实都已逐一溯源。" },
     { title: "事实、来源说明、未知和本人决定分开", detail: "输入冲突时先停下来说明；文字流畅不能把缺失来源、推测或尚未决定的请求变成已确认事实。" },
     { title: "电子版和打印版来自同一内容", detail: "DOCX、PDF 与附件包不分别手改；改变规范输入就产生新的不可覆盖 build。" },
-    { title: "逐页验收是产品步骤", detail: "能打开 PDF 不等于能递送；正文、页码、空白、裁切、边缘、彩色/灰度和签名可见性都进入验收。" },
+    { title: "逐页验收是产品步骤", detail: "能打开 PDF 不等于能递送；正文、页码、空白、裁切、边缘、彩色/灰度和签名可见性都影响成品是否可用。当前自动化检查墨迹与边缘，并不识别哪张图是签名；最终可见性要看渲染页。" },
     { title: "自动检查不冒充整篇判断", detail: "字段和页面回归能发现机械漂移，但当前没有绑定 AI/人工整篇语义审阅回执，最终内容判断仍须明确完成。" },
     { title: "本人签名只证明本地版本", detail: "签名图片与规范资产哈希绑定；它不是证书签名、可信时间戳、对方签名或外部接收证明。" },
     { title: "ready_for_delivery（已具备递送条件）只表示版本已经锁定", detail: "接收对象、渠道、附件和文件指纹已固定后才能进入该状态；它始终不等于 delivered（已递送）。" },
@@ -113,7 +114,7 @@ const documentMaterialsProject = {
     "从当前事项、接收对象和最小必要原件形成可执行制作方案",
     "从同一规范输入生成可编辑 DOCX、固定版 PDF 和附件包",
     "按需要核对本人签名资产并把签名版本与未签版本分开",
-    "重读所有输出字段，完成结构、页码、彩色/灰度逐页、签名图片存在性与可见性和文件哈希验收",
+    "重读所有输出字段，核对结构、页码、彩色/灰度页、DOCX 签名资产与 PDF 图像对象；最终签名可见性按实际渲染页另行说明",
     "形成不可覆盖、自包含、精确文件集合的 ready_for_delivery release",
     "把已生成、本人已签、可递送、已递送、已收件、已处理和对方签回分别说明",
     "中断或复制后从最近一次核对材料包恢复并独立 verify"
@@ -124,7 +125,7 @@ const documentMaterialsProject = {
     "不把源码、测试、生成成功、签名图片或本地可递送状态写成已经递送、收到或处理",
     "不把对方签回写成本人签名、收件、履行、付款或事项解决",
     "不自动发送、付款、撤回或联系外部对象；这些动作仍需精确授权",
-    "不公开真实个人材料、签名、输出、回执、路径、哈希或结果",
+    "不公开具体命中 L3+ 的个人载荷、签名图、回执正文或可复用秘密；公开安全的状态、数量、路径类别、哈希机制、组件、失败和结果边界正常保留",
     "不建立中央个人数据库、RAG、后台同步、服务、队列或提醒中心"
   ],
   glossary: [
@@ -316,7 +317,7 @@ const documentMaterialsModules = [
       unavailable: "渲染器或结构读取器不可用时，机械逐页腿保持 unavailable；不把结构测试冒充视觉通过。"
     },
     stateLabels,
-    decisionImpact: ["每页彩色与灰度图都是 manifest 可追溯 artifact，不是临时截图。", "可见页码逐页匹配；空白和边缘裁切使用 ink/edge 启发式检查。", "自动化仍不能证明整篇语气和事实主线已由AI或人工审阅。", "v2 release继续可读，但明确返回legacy_v2_non_self_contained和limitations。", "复制到空目录后完整verify不等于已有自动备份或断点续传。"],
+    decisionImpact: ["每页彩色与灰度图都是 manifest 可追溯 artifact，不是临时截图。", "可见页码逐页匹配；空白和边缘裁切使用 ink/edge 启发式检查。", "墨迹和边缘通过不证明签名身份、位置、对比度或未被遮挡；实际渲染页是进一步视觉核对的输入。", "自动化仍不能证明整篇语气和事实主线已由AI或人工审阅。", "v2 release继续可读，但明确返回legacy_v2_non_self_contained和limitations。", "复制到空目录后完整verify不等于已有自动备份或断点续传。"],
     problem: "解决“能打开就算完成”、递送包缺输入/审计、复制后无法复验和旧格式被新工具无版本破坏。",
     implementation: ["DOCX/PDF结构审计与全部输出字段读回先运行。", "Poppler按DPI渲染每页彩色PNG，再生成L模式灰度PNG。", "逐页记录大小、SHA-256、墨迹覆盖、边缘暗度和可见页码。", "v3 release按build manifest复制所有closure并拒绝额外文件。", "formal-verify在release根重跑嵌入build验证和当前结构/页面检查。", "v2/v3共享兼容schema；v2只按历史实际携带内容通过并返回限制。"],
     flow: ["重读DOCX/PDF正文", "检查结构和页码", "渲染全部彩色页", "生成并检查灰度页", "写审计与每页哈希", "复制完整closure到release", "核对精确文件集合", "空目录复制后独立verify"],
@@ -326,7 +327,7 @@ const documentMaterialsModules = [
       { term: "Grayscale artifact（灰度页制品）", explanation: "由每张彩色渲染页转换的L模式页面，用于检查打印灰度下的墨迹和边缘。" },
       { term: "legacy_v2_non_self_contained", explanation: "历史v2仍可验证其真实携带内容，但没有v3输入、审计、灰度页和签名closure。" }
     ],
-    boundaries: ["ink/edge不是整篇语义审阅", "灰度页不表示强制黑白输出", "manifest digest不是数字签名", "普通复制恢复不等于可续传mirror", "v2限制不会被静默升级"],
+    boundaries: ["ink/edge不是整篇语义审阅或签名可见性证明", "渲染成功不证明签名正确且清楚可见", "灰度页不表示强制黑白输出", "manifest digest不是数字签名", "普通复制恢复不等于可续传mirror", "v2限制不会被静默升级"],
     failures: [
       { condition: "页面渲染器不可用", response: "page audit标为unavailable，只保留build，不形成release。" },
       { condition: "页码、灰度或页面边缘失败", response: "记录精确页码和失败腿，修复后重新完整构建。" },
@@ -353,33 +354,34 @@ const documentMaterialsModules = [
       failureRecovery: ["签署人不符停止", "签名资源缺失停止", "无需签名保持produced", "ready后仍等待外部授权"]
     },
     teaser: "签名是一个独立制作步骤：需要时核对规范 profile 和图片 hash，不需要时明确保持 produced（已生成）；两种情况都要经过完整审计才能进入 ready_for_delivery（已具备递送条件）。",
-    status: "已能核对签署人、签名图片来源、DOCX 中的同一图片和 PDF 可见性；它不等于证书签名或可信时间戳",
+    status: "已能核对签署人、签名资产来源与 DOCX 同图哈希；PDF 当前只有图像对象数量检查，签名最终可见性仍需逐页核对",
     statusTone: "mixed",
     value: "用户能知道当前版本到底是已生成、本人已签还是已经锁定可递送，而不会把一张签名图误写成外部结果。",
     why: "签署人、签名资产、日期和最终 PDF 只要错一项，就可能用错版本；反过来，不需要签名的材料也不能伪造 signed（本人已签）状态。",
-    example: "申请无需本人签名，build 保持 produced（已生成）；内容和页面通过后形成 ready_for_delivery（已具备递送条件）材料包。另一份协议要求本人签名，就先核对 profile 姓名和签名图片，再验证 DOCX 内的精确 hash 及 PDF 中的可见图片。",
+    example: "申请无需本人签名，build 保持 produced（已生成）；内容和页面通过后形成 ready_for_delivery（已具备递送条件）材料包。另一份协议要求本人签名，就先核对 profile 姓名和签名图片，匹配 DOCX 内的精确 hash，并检查 PDF 是否有图像对象；还要看实际渲染页上的签名位置与可见性，其他插图不能替它作证。",
     result: "得到 produced（已生成）或 signed（本人已签）的确切本地版本，以及 ready_for_delivery（已具备递送条件）材料包；状态里仍明确 delivered（已递送）=false。",
     readerStates: {
-      pass: "签名要求与规范资产一致，或明确无需签名；完整审计通过后形成ready release。",
-      problem: "签署人不符、图片缺失、profile路径越界、DOCX/PDF签名读回失败时不release，保留输入和旧版本。",
+      pass: "明确无需签名，或所需资产、DOCX 内同图哈希及 PDF 图像对象数量通过，并且当前机械逐页审计通过时，CLI 可形成 ready release；这个状态不自动证明最终 PDF 中签名清楚可见。",
+      problem: "签署人不符、资产缺失、profile 路径越界、DOCX 找不到同一资产或 PDF 没有图像对象时不 release。只有图片计数通过但未核实是哪张图、位置或可见性时，仍须保留这项待核，不能称签名视觉通过。",
       unavailable: "规范签名资产或页面检查不可用时暂停签名/ready步骤，不生成占位签名。"
     },
     stateLabels,
-    decisionImpact: ["signature.required=false保持produced，不伪造signed。", "required=true必须profile姓名完全匹配并封存profile/asset快照。", "DOCX要求找到精确asset SHA-256，PDF当前检查至少一张可见图片。", "本地签名不证明对方签名、递送、收到或处理。", "外部递送仍需明确对象、版本、渠道和动作授权。"],
+    decisionImpact: ["signature.required=false保持produced，不伪造signed。", "required=true必须profile姓名完全匹配并封存profile/asset快照。", "DOCX要求找到精确asset SHA-256；PDF当前仅要求pdf_image_count>=1，没有把该对象与签名资产、最终位置或可见性绑定。", "自动化signed/ready状态与实际渲染页上的签名可见性是不同证据，不应相互替代。", "本地签名不证明对方签名、递送、收到或处理。", "外部递送仍需明确对象、版本、渠道和动作授权。"],
     problem: "解决错签、漏签、占位签名、无需签名却标signed和把ready误报成已发送。",
-    implementation: ["signature profile与图片必须是普通可读文件且同目录受控。", "profile.person.name与request signer_name完全匹配。", "build封存profile与asset并再次解析快照。", "DOCX内嵌媒体按完整SHA-256匹配，PDF检查可见图片计数。", "build state为produced或signed；release只把delivery改为ready_for_delivery并固定delivered=false。"],
-    flow: ["读取签名要求", "核对profile与签署人", "验证签名图片", "生成DOCX/PDF", "读回签名可见性", "封存签名快照", "完成逐页审计", "形成ready release"],
+    implementation: ["signature profile与图片必须是普通可读文件且同目录受控。", "profile.person.name与request signer_name完全匹配。", "build封存profile与asset并再次解析快照。", "_docx_embedded_hashes 对 word/media 内嵌媒体做完整 SHA-256 匹配；_pdf_image_count 仅合计 pypdf 每页 images 数量，要求至少 1，不检查它是否就是签名或是否实际可见。", "audit_rendered_page 对彩色和灰度页检查墨迹覆盖及边缘暗度；这不是签名位置、遮挡或可读性识别。", "build state为produced或signed；release只把delivery改为ready_for_delivery并固定delivered=false。"],
+    flow: ["读取签名要求", "核对profile与签署人", "验证签名图片", "生成DOCX/PDF", "匹配DOCX资产并统计PDF图像对象", "封存签名快照", "完成当前机械逐页审计", "形成ready release并说明签名可见性证据边界"],
     concepts: [
       { term: "produced（已生成）", explanation: "文书已生成和核对，但没有声明本人签名已固定。" },
       { term: "signed（本人已签）", explanation: "本地成品包含核对过的本人签名资产；不表示其他人签名或外部动作。" },
       { term: "ready_for_delivery（可递送）", explanation: "确切版本、接收对象、渠道、附件和指纹已锁定，delivered仍为false。" },
       { term: "Signature asset（签名资产）", explanation: "受profile管理并以SHA-256绑定的签名图片；不是证书签名或可信时间戳。" }
     ],
-    boundaries: ["不生成占位签名", "不把图片hash称为密码学签名", "不把本人签名称为对方签回", "不把ready称为已递送", "不自动执行外部动作"],
+    boundaries: ["不生成占位签名", "PDF图像对象计数不证明签名身份、位置或最终可见性", "不把图片hash称为密码学签名", "不把本人签名称为对方签回", "不把ready称为已递送", "不自动执行外部动作"],
     failures: [
       { condition: "profile姓名与请求不一致", response: "构建前失败，不选择其他签名图片。" },
       { condition: "签名图片不可读或越出profile目录", response: "停止签名腿，保留request和旧版本。" },
-      { condition: "DOCX/PDF没有读回签名", response: "审计失败，不形成release。" },
+      { condition: "DOCX没有匹配签名资产，或PDF图像对象为0", response: "当前机械检查失败，不形成release；PDF对象数大于0也不能反向证明签名可见。" },
+      { condition: "PDF有图片但签名位置或可见性尚未核实", response: "保留渲染页供核对，明确签名视觉证据仍未闭合；现行CLI没有专门识别这一缺口的自动检查。" },
       { condition: "无需签名", response: "明确保持produced；通过审计后仍可ready，但不写signed。" }
     ],
     sources: [
@@ -387,7 +389,7 @@ const documentMaterialsModules = [
       { path: "PRIVATE source · signature helpers", role: "签名图片嵌入和规范路径" },
       { path: "PRIVATE tests · signature/readback", role: "签署人、图片hash、produced/signed/ready回归" }
     ],
-    verification: ["签署人不匹配和直接注入图片路径均失败。", "签名profile和asset快照被纳入v3 closure。", "无需签名build保持produced且不含占位线。", "真实签名和外部递送E2E本轮未运行。"],
+    verification: ["签署人不匹配和直接注入图片路径均失败。", "签名profile和asset快照被纳入v3 closure。", "合成签名测试核对docx_asset_verified=true与pdf_image_count>=1；这只证明当前机械条件，不证明PDF签名像素、身份或位置正确。", "无需签名build保持produced且不含占位线。", "渲染器不可用的回归保持ready_for_delivery=false且不生成release。", "真实签名和外部递送E2E本轮未运行。"],
     relation: "本模块只负责本地签名和递送版本；递送之后的现实状态必须进入下一模块回读。"
   },
   {

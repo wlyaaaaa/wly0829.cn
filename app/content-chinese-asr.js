@@ -26,7 +26,7 @@ const chineseAsrSnapshot = createProjectSnapshot({
     { label: "FireRed 模型回执", value: "FireRed MODEL_RECEIPT 当前为 2124 字节、SHA-256=c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，绑定 revision 2c5e0f415b9afb8f67cb8b00ea4c54959f70e824 的 14 个必要文件、合计 18870501538 字节；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净。", hero: false },
     { label: "FireRed WSL", value: "FireRed WSL 当前使用 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0 和 NumPy 2.4.2；CUDA 与 BF16 可用，WSL 约 32 GiB RAM + 8 GiB swap，当前可用量高于半精度装载门槛。", hero: false },
     { label: "模型 Registry", value: "当前模型 Registry（登记表）包含 6 个 Profile：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；其中前 5 个进入 direct transcription（直接转写）闭集，Whisper 只作 fallback/comparison 登记，pipeline 明确拒绝直接执行。", hero: false },
-    { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案、时间戳通话归属、单声道歧义失败关闭和 profile 撤销后旧证据失效。", hero: false },
+    { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案和时间戳通话归属；具体且一致的上下文可在解释反对声学线索后支持 inferred（暂时推断），无法消解的歧义保持未知，profile 撤销后旧声学证据失效。", hero: false },
     { label: "媒体替换保护", value: "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。", hero: false },
     { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，四段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
   ],
@@ -80,7 +80,7 @@ export const chineseAsrProject = {
     { title: "默认路线不能被安装变化偷偷改掉", detail: "日常、严格、重要录音和时间线模式各有清楚含义；新增模型必须显式接入，不能改变旧请求。" },
     { title: "恢复能力必须在故障前制备", detail: "依赖 wheelhouse、校验清单和模型缓存都不会在断网后凭空出现；先冻结、校验和保存，再用离线安装与真实 smoke 验收。" },
     { title: "普通录音本地优先", detail: "只有录音确实重要且本次上传得到明确授权，才进入一次云候选；文件较长或批量不构成上传理由。" },
-    { title: "声音线索不等于人物身份", detail: "匿名说话人、本人声学线索和真实身份分开；证据冲突或单声道歧义时保持未知。" },
+    { title: "声音线索不等于人物身份", detail: "匿名说话人、本人声学线索和真实身份分开。具体且一致的来源或句义可以支持可撤销推断，即使声学线索相反也须把理由讲清；上下文互相冲突或没有可用依据时才保持未知。" },
     { title: "部分成功也要诚实有用", detail: "可用片段、暂定结果、失败位置和无法运行分别返回，不把降级或空文本冒充完整成功。" }
   ],
   responsibilities: [
@@ -148,7 +148,7 @@ export const chineseAsrProject = {
     { name: "批量转写", responsibility: "按文件组织任务并复用已加载模型。", implementation: "src/zh_asr/batch.py 与 transcribe-folder.ps1 避免每个文件重复冷启动。" },
     { name: "审计与风险规则", responsibility: "检测分歧、静音出字、模板废话、重复和格式异常。", implementation: "audit.py、risk_rules.py、strict_writer.py 分别保存风险、疑似标记和复核队列。" },
     { name: "客观结果 Sidecar", responsibility: "把执行、覆盖、质量与语音结果分开。", implementation: "audio_outcome.py 生成结构化 sidecar，避免空文本直接被解释为无语音。" },
-    { name: "说话人证据", responsibility: "提供匿名聚类、时间线和有边界的本人声音线索。", implementation: "speaker_evidence.py 与 speaker_attribution.py 组合声学、声道和调用方上下文；冲突时回到 unknown。" },
+    { name: "说话人证据", responsibility: "提供匿名聚类、时间线和有边界的本人声音线索。", implementation: "speaker_evidence.py 与 speaker_attribution.py 组合声学、声道和调用方上下文；方向一致可推断，声学冲突可由具体一致的上下文解释，无法消解才 unknown。结果不升为身份确认。" },
     { name: "证据回执", responsibility: "绑定内容文件、指纹、大小、引擎身份和状态。", implementation: "result_writer.py 与 metadata.py 生成自包含一致性清单，但不冒充外部签名。" },
     { name: "GPU 与进程控制", responsibility: "防止重模型互抢资源，并回收超时或失联进程。", implementation: "gpu_broker.py、process_control.py 和本地任务生命周期共同控制显存与进程树。" },
     { name: "专业云入口", responsibility: "只为明确的重要录音提供一次受控云候选。", implementation: "asr-professional-cloud.ps1 同时要求重要性和本次上传授权，密钥由 SecretRef 注入固定 worker。" }
@@ -159,7 +159,7 @@ export const chineseAsrProject = {
     { moduleSlug: "audit-evidence", ask: "这段会议很重要，尽量降低看似通顺的错话。", effect: "使用严格双路转写，保留两份结果的分歧、风险标记和需要回听的句段；必要时再明确选择更重的证据路线。" },
     { moduleSlug: "long-batch", ask: "把两小时录音处理完，中断后别从头来。", effect: "按连续时间分段保存进度，中断后只补缺失或失效片段，不重复完成部分。" },
     { moduleSlug: "long-batch", ask: "把这个文件夹的录音都转写。", effect: "批量入口复用已加载模型，逐文件生成独立结果与失败状态，不用一个文件失败拖垮全部。" },
-    { moduleSlug: "speaker-attribution", ask: "告诉我哪一段可能是我说的。", effect: "结合本人声音线索、声道、联系人、对话角色和句义；证据冲突或单声道歧义时明确说无法确认。" },
+    { moduleSlug: "speaker-attribution", ask: "告诉我哪一段可能是我说的。", effect: "结合本人声音线索、声道、联系人、对话角色和句义，给出带支持与反对理由的暂时推断；具体一致的上下文可解释声学冲突，依据不足或上下文彼此矛盾才保持未知，任何结果都不是身份认证。" },
     { moduleSlug: "audit-evidence", ask: "这段录音是不是完全没人说话？", effect: "只有处理完整且有规范负向证据时才说没有检测到语音；空文本、缺段或失败都保持无法判断。" },
     { moduleSlug: "task-routing", ask: "模型卡住了，我要不要再提交一次？", effect: "先看持久化的任务终态和恢复标识；等待超时先查询原 job，服务重启留下的 interrupted（中断）任务不会自动重跑，长音频显式重试仍复用原稳定输出目录。" },
     { moduleSlug: "runtime-privacy", ask: "这是一段重要录音，本次可以上传云端再给我一个候选。", effect: "只有重要性与本次上传授权同时成立才进入固定云入口；本地证据链、云候选和失败记录保持分开。" }
@@ -688,9 +688,9 @@ export const chineseAsrModules = [
       intents: ["查看逐句时间与匿名说话人", "判断哪些句子可能是本人", "估计参与人数但保留不可靠边界", "撤销旧本人声纹线索"],
       entities: ["Paraformer", "CAM++", "speaker cluster", "person:self profile", "held-out evidence"],
       relations: ["时间戳句段关联匿名 cluster", "留出声纹与声道联系人句义共同归属", "profile 指纹变化使旧声学证据失效", "cluster 数不等于真实人数"],
-      failureRecovery: ["只有 Speaker 编号时保持匿名", "同源样本不能自证", "单声道歧义带返回 unknown", "声学与上下文冲突时保留两侧依据"]
+      failureRecovery: ["只有 Speaker 编号时保持匿名", "同源样本不能自证", "单声道歧义带且无其他可用依据时返回 unknown", "声学与上下文冲突时保留两侧依据，具体一致的上下文可支持可撤销推断"]
     },
-    teaser: "先区分匿名说话人，再把有限的本人声纹、声道、联系人、对话角色和句义组合成可解释、可撤销的线索；证据冲突时保持 unknown。",
+    teaser: "先区分匿名说话人，再把有限的本人声纹、声道、联系人、对话角色和句义组合成可解释、可撤销的线索；有具体理由可以暂作推断，无法消解的冲突才保持 unknown。",
     status: "说话人投影与 2–3 来源本人档案单测通过；它仍是推断线索，不是身份认证",
     statusTone: "mixed",
     value: "当录音里有多个人时，我能看到谁在什么时间段说话，并在证据足够时得到“可能是本人”的有理由判断；不再把 Speaker 1 直接写成某个人。",
@@ -698,17 +698,17 @@ export const chineseAsrModules = [
     example: "一段双声道通话里，右声道与已知角色、联系人和句义都指向本人，留出声纹也支持，因此输出有界归属；另一段单声道混音只得到边界分数，则保持 unknown。",
     result: "得到逐段时间、匿名 cluster、候选角色、支持与反对依据、attribution status（归属状态）和 gap；旧声纹档案被删除或替换后，依赖它的旧证据自动失效。",
     readerStates: {
-      pass: "独立声学线索与具体上下文一致且时间区间有效时，输出带理由的可撤销归属。",
-      problem: "声纹、声道和上下文冲突或分数落入歧义带时保留所有证据并返回 unknown。",
-      unavailable: "没有时间线、可用 profile 或调用方上下文时只保留匿名说话人，不猜真实身份。"
+      pass: "时间区间有效且有可用方向性依据时，输出带理由的 inferred（暂时推断）；不要求声学、声道与上下文每一项同时具备，也不把推断提升为身份确认。",
+      problem: "声学线索反对，但来源、联系人、对话角色或句义判断具体且彼此一致时，保留双方理由并说明为何暂采用上下文，结论仍可撤销。上下文本身冲突，或只有相互矛盾、处于歧义带的声学线索而无其他可用依据时，才返回 unknown（未知）。",
+      unavailable: "缺少有效起止时间、无法把依据绑定到片段，或所有方向性线索都不可用时，保留匿名和未知；profile 不可用只使该声学分支失效，其他有效上下文仍可单独判断。"
     },
     decisionImpact: [
       "Speaker 编号永远不是人物姓名。",
       "同原件 enrollment 不参与对外自证。",
       "本人 profile 只允许一个当前版本，替换后旧证据失效。",
       "单声道混音使用更宽风险带。",
-      "有具体理由的上下文可压过声学线索，但必须说明原因。",
-      "冲突、零长度时间或缺少时间戳时保持 unknown。"
+      "有具体理由且彼此一致的上下文可暂时压过相反声学线索，必须同时保留反对依据并说明原因，结论仍为 inferred。",
+      "无法消解的冲突、零长度时间或缺少时间戳时保持 unknown；不能把所有声学冲突一律写成不可归属。"
     ],
     problem: "解决匿名聚类被误当身份、拿同一录音建立和验证声纹、profile 撤销后旧结论继续有效、单声道边界分数强行归属，以及不同证据冲突却没有解释的问题。",
     implementation: [
@@ -716,7 +716,7 @@ export const chineseAsrModules = [
       "Paraformer 固定 `iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4`；按需 person:self speaker verification 固定 CAM++ model revision v1.0.0、文件 campplus_cn_common.bin、阈值 0.31。",
       "speaker_evidence.py 建立唯一、私有、可替换的 person:self profile，并区分 enrollment 与 held-out。",
       "多参考模式只接受 2–3 个不同来源，生成有界质心而不是无限画像库。",
-      "speaker_attribution.py 组合声学、声道、联系人、角色和句义依据。",
+      "speaker_attribution.py 组合声学、声道、联系人、角色和句义依据；方向一致可给 inferred，方向冲突时仅在 contextual roles 唯一且有具体理由时采用上下文，否则 unknown。",
       "profile 指纹进入证据；删除或替换后旧声学证据不再参与归属。"
     ],
     flow: [
@@ -726,7 +726,7 @@ export const chineseAsrModules = [
       "计算声学分数和歧义带。",
       "合并调用方提供的声道、联系人、对话角色和句义依据。",
       "记录支持、反对与未知。",
-      "输出可解释归属或 unknown，并绑定 profile 指纹。"
+      "输出可解释的 inferred 或 unknown；使用声纹证据时另绑定当前 profile 指纹。"
     ],
     concepts: [
       { term: "diarization", explanation: "把声音聚成匿名说话人；它回答“声音是否像不同人”，不回答姓名。" },
@@ -743,8 +743,8 @@ export const chineseAsrModules = [
     failures: [
       { condition: "只有 Speaker 编号", response: "保持匿名，不映射真实姓名。" },
       { condition: "profile 已撤销或指纹变化", response: "旧声学证据失效，其他独立上下文证据单独保留。" },
-      { condition: "单声道混音分数接近阈值", response: "进入更宽歧义带并返回 unknown。" },
-      { condition: "声学与具体上下文冲突", response: "同时记录两侧证据；只有上下文本身具体且一致时才说明暂时压过声学，否则 unknown。" }
+      { condition: "单声道混音分数接近阈值", response: "该分数进入更宽歧义带，不单独支持归属；仍可使用其他具体、有效的上下文，全部依据不足时才 unknown。" },
+      { condition: "声学与具体上下文冲突", response: "同时记录两侧证据；只有上下文本身具体且一致时才说明为何暂时压过声学，并标为可撤销 inferred，否则 unknown。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\speaker_evidence.py", role: "person:self profile、留出证据和撤销" },
@@ -755,7 +755,7 @@ export const chineseAsrModules = [
     verification: [
       "speaker evidence 与 attribution 回归包含在本次 345 项全量通过结果中。",
       "configs/models.yaml 静态回读确认 CAM++ speaker verification revision=v1.0.0、threshold=0.31；本轮未加载真实私人 profile，也未把阈值冒充身份认证。",
-      "fixtures 覆盖双声道、单声道 unknown、无时间戳、零长度时间和冲突证据。",
+      "fixtures 覆盖双声道、单声道 unknown、无时间戳、零长度时间和冲突证据；另有具体对话理由覆盖弱声纹反证、单声道歧义分数仍可由上下文判断，以及上下文本身冲突必须 unknown 的用例。",
       "本次没有读取任何私人声纹档案或录音，也没有执行人物身份判断。"
     ],
     relation: "本模块消费模型或 Paraformer 的时间线和审计结果；它只增加可解释人物线索，不能提高原转写文本本身的准确性。"

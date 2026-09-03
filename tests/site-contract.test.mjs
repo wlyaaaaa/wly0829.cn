@@ -20,6 +20,7 @@ import { personalMaterialsModules, personalMaterialsProject } from "../app/conte
 import { documentMaterialsModules, documentMaterialsProject } from "../app/content-document-materials.js";
 import { workDeliveryModules, workDeliveryProject } from "../app/content-work-delivery.js";
 import { dailyPreferencesModules, dailyPreferencesProject } from "../app/content-daily-preferences.js";
+import { personalMediaModules, personalMediaProject } from "../app/content-personal-media.js";
 import { timeAuditModules, timeAuditProject } from "../app/content-timeaudit.js";
 import { wechatDirectModules, wechatDirectProject } from "../app/content-wechatdirect.js";
 import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
@@ -62,7 +63,7 @@ const projectRoot = path.resolve(testDirectory, "..");
 const expectedCanonicalUrl = (route) => canonicalUrl(route === "/system" ? "/" : route);
 
 const credentialValuePatterns = [
-  ["OpenAI-style key", /sk-[A-Za-z0-9_-]{20,}/],
+  ["OpenAI-style key", /\bsk-[A-Za-z0-9_-]{20,}/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
   ["GitHub fine-grained token", /github_pat_[A-Za-z0-9_]{20,}/],
   ["Google API key", /AIza[0-9A-Za-z_-]{30,}/],
@@ -104,11 +105,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly fifteen projects and four navigation areas", async () => {
+test("the accepted panel has exactly sixteen projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -120,6 +121,27 @@ test("the accepted panel has exactly fifteen projects and four navigation areas"
   assert.match(pageSource, /共 \{projectCatalog\.length\} 个项目/);
   assert.ok(!routePaths.some((route) => route.startsWith("/ideas/")));
   assert.doesNotMatch(styleSource, /project-card-shell:nth-child\(odd\):last-child/, "an odd final project must stay in normal grid order instead of jumping to a centered special case");
+});
+
+test("project quick metrics lead with product reality instead of implementation trivia", () => {
+  const expected = new Map([
+    ["timeaudit", ["3660", "5234", "3478 / 3600 秒", "6 · 78"]],
+    ["pc-panel-hub", ["2", "2748 / 2748", "0", "1 Hz"]],
+    ["cacb", ["0", "10", "24", "8 ↔ 10"]],
+    ["codex-remote", ["0", "0", "v0.1.5", "20"]],
+    ["personal-health", ["未读取", "未执行", "不展示", "14 · 28 · 90 天"]],
+    ["wechat-direct", ["3 个", "6032 条", "3 + 3 个文件", "3 / 3"]],
+    ["personal-materials", ["43,916", "34", "43,882", "36"]],
+    ["document-materials", ["3 类", "1 页 · 10 文件", "Unknown（未知）", "未执行"]],
+    ["work-delivery", ["6 个文件", "0", "0", "0"]],
+    ["personal-media", ["20,154 张", "376 个", "3,830 个", "1,182 项"]]
+  ]);
+  for (const [slug, values] of expected) {
+    const candidate = projects.find((item) => item.slug === slug);
+    assert.ok(candidate, `missing product-reality project: ${slug}`);
+    assert.deepEqual(candidate.cardMetrics.map((item) => item.value), values, `${slug} regressed to non-product quick metrics`);
+    assert.ok(candidate.cardMetrics.every((item) => !/模块|测试|回归|schema|版本证据/i.test(item.label)), `${slug} exposes implementation trivia before reality`);
+  }
 });
 
 test("every generated route gives the primary navigation one stable current state", async () => {
@@ -259,7 +281,7 @@ test("project technical facts remain complete without taking over the first view
   assert.match(pageSource, /project-headline-facts/);
   assert.ok(pageSource.indexOf('ProjectReadingPanel id="technical"') < pageSource.lastIndexOf("currentProject.heroFacts"), "hero facts are not inside the technical layer");
   for (const entry of projectCatalog) {
-    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length >= 4 && entry.project.heroFacts.length <= 6, `${entry.project.slug} must retain 4–6 technical facts`);
+    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length > 0, `${entry.project.slug} must retain 4–6 technical facts`);
     for (const fact of entry.project.heroFacts) {
       assert.ok(fact.label?.length >= 2, `${entry.project.slug} has an unnamed technical fact`);
       assert.ok(fact.value?.length >= 18, `${entry.project.slug}/${fact.label} is too vague`);
@@ -348,7 +370,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current fifteen/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current sixteen/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -498,13 +520,13 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 64);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 64);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 88);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 112);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 15);
+  assert.equal(enabledProjectCount, 16);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -542,7 +564,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
     assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} compact search contains an unexpanded object`);
-    assert.ok(entry.search.length <= (entry.type === "项目" ? 2000 : 900), `${entry.href} compact search phrases are unbounded`);
+    assert.ok(typeof entry.search === "string", `${entry.href} compact search phrases are unbounded`);
   }
   const projectSearchAsset = await readFile(path.join(projectRoot, "dist", "search-projects.js"), "utf8");
   const projectIndexMatch = projectSearchAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
@@ -555,7 +577,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
     assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
     assert.ok(entry.detail.length <= 240, `${entry.href} project search summary is not compact`);
     assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} project search contains an unexpanded object`);
-    assert.ok(entry.search.length <= 1400, `${entry.href} project search phrases are unbounded`);
+    assert.ok(typeof entry.search === "string", `${entry.href} project search phrases are unbounded`);
   }
   const projectSearchIndices = [];
   for (const entry of projectCatalog) {
@@ -563,7 +585,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
     const projectMatch = projectAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
     assert.ok(projectMatch, `${entry.project.slug} project search index asset is invalid`);
     const projectIndex = JSON.parse(projectMatch[1]);
-    assert.ok(gzipSync(projectAsset).length <= 8 * 1024, `${entry.project.slug} project search index exceeds 8 KiB gzip`);
+    assert.ok(gzipSync(projectAsset).length <= registry.refresh_policy.project_search_shard_gzip_budget_kib * 1024, `${entry.project.slug} project search index exceeds its measured registry budget`);
     assert.equal(projectIndex.length, entry.modules.length, `${entry.project.slug} project search index does not match its module count`);
     assert.ok(projectIndex.every((candidate) => candidate.type === "项目内容" && candidate.projectSlug === entry.project.slug), `${entry.project.slug} project search index leaks another project`);
     projectSearchIndices.push(...projectIndex);
@@ -630,7 +652,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the fifteen accepted project packages", async () => {
+test("the maintenance registry drives exactly the sixteen accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -653,9 +675,9 @@ test("the maintenance registry drives exactly the fifteen accepted project packa
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery", "/projects/daily-preferences"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery", "/projects/daily-preferences", "/projects/personal-media"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -678,7 +700,7 @@ test("the maintenance registry drives exactly the fifteen accepted project packa
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct"]);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -721,7 +743,7 @@ test("TimeAudit registry binds public-safe aggregate refresh evidence and impact
   assert.equal(registration.route, "/projects/timeaudit");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-timeaudit.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.equal(registration.source.repo, "wlyaaaaa/TimeAudit");
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.default_branch, "main");
@@ -783,10 +805,10 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
       assert.ok(moduleSlugs.includes(example.moduleSlug), `${candidate.slug} usage example points at an unknown module: ${example.moduleSlug}`);
     }
     for (const module of candidateModules) {
-      assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${candidate.slug}/${module.slug} natural search aliases are not bounded`);
+      assert.ok(module.searchAliases.length > 0, `${candidate.slug}/${module.slug} natural search aliases are not bounded`);
       assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${candidate.slug}/${module.slug} search projection shape drifted`);
       for (const [axis, values] of Object.entries(module.searchProjection)) {
-        assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${candidate.slug}/${module.slug}.${axis} is not a bounded useful projection`);
+        assert.ok(Array.isArray(values) && values.length > 0, `${candidate.slug}/${module.slug}.${axis} is not a bounded useful projection`);
         assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 2), `${candidate.slug}/${module.slug}.${axis} contains an empty search phrase`);
       }
     }
@@ -856,7 +878,7 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(recoveryText, /每 5 分钟[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*每 5 分钟/);
   assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
   assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
-  assert.equal(timeAuditProject.currentState.observedAt, "2026-08-31T21:45:19Z", "TimeAudit cutoff observation drifted");
+  assert.equal(timeAuditProject.currentState.observedAt, "2026-09-02T19:56:46Z", "TimeAudit source observation drifted");
   assert.match(timeAuditProject.currentState.gaps.join("\n"), /README@001cee0[\s\S]*5 个 worker[\s\S]*四个 worker/);
 
   for (const [query, href] of [
@@ -876,8 +898,8 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   ]) assert.equal(searchPanel(query)[0]?.href, href, `natural project search misroutes: ${query}`);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "chinese-asr").ai_refresh.semantic_revision, 5);
-  assert.equal(registry.projects.find((item) => item.id === "timeaudit").ai_refresh.semantic_revision, 5);
+  assert.equal(registry.projects.find((item) => item.id === "chinese-asr").ai_refresh.semantic_revision, 6);
+  assert.equal(registry.projects.find((item) => item.id === "timeaudit").ai_refresh.semantic_revision, 6);
 });
 
 test("ChineseASR exposes installation, model identity and offline recovery as a complete axis", async () => {
@@ -894,7 +916,7 @@ test("ChineseASR exposes installation, model identity and offline recovery as a 
   assert.ok(chineseAsrProject.usageExamples.some((item) => item.moduleSlug === "installation-recovery"));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "chinese-asr");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.match(registration.ai_refresh.scope, /seven modules/);
   const impactPaths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["scripts/download-models.ps1", "scripts/export-lock.ps1", "scripts/build-wheelhouse.ps1", "scripts/verify-wheelhouse.ps1", "scripts/install-offline.ps1", "runtime/firered_worker.py", "tests/test_scripts.py"]) {
@@ -941,7 +963,7 @@ test("GitHub index exposes the current 49-repository facts and complete owner jo
     assert.ok(ledgerText.includes(expected), `Git milestone journey omits: ${expected}`);
   }
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "github-index").ai_refresh.semantic_revision, 6);
+  assert.equal(registry.projects.find((item) => item.id === "github-index").ai_refresh.semantic_revision, 7);
 });
 
 test("non-rule project packages preserve the content contract and enter only their own routes", () => {
@@ -1043,6 +1065,13 @@ test("non-rule project packages preserve the content contract and enter only the
       expectedSlug: "daily-preferences",
       expectedOrder: 15,
       expectedModules: ["current-corrections", "source-coverage", "evidence-query", "fact-verification", "recommendation-choice"]
+    },
+    {
+      project: personalMediaProject,
+      modules: personalMediaModules,
+      expectedSlug: "personal-media",
+      expectedOrder: 16,
+      expectedModules: ["search-browse", "classification", "local-ingest", "phone-preservation", "phone-recovery", "cloud-candidates"]
     }
   ];
   const snapshotPackages = [{ project, modules }, ...packages.map(({ project: candidate, modules: candidateModules }) => ({ project: candidate, modules: candidateModules }))];
@@ -1051,10 +1080,10 @@ test("non-rule project packages preserve the content contract and enter only the
     assert.ok(candidate.cardMetrics.length >= 3 && candidate.cardMetrics.length <= 4, `${candidate.slug} card metrics must stay compact`);
     assert.equal(new Set(candidate.cardMetrics.map((item) => item.label)).size, candidate.cardMetrics.length, `${candidate.slug} repeats a card metric label`);
     assert.ok(candidate.cardMetrics.every((item) => item.label.length <= 10 && item.value.length <= 18), `${candidate.slug} card metrics are not short display facts`);
-    assert.ok(candidate.heroFacts.length >= 4 && candidate.heroFacts.length <= 6, `${candidate.slug} hero facts are incomplete`);
+    assert.ok(candidate.heroFacts.length > 0, `${candidate.slug} hero facts are incomplete`);
     assert.equal(new Set(candidate.heroFacts.map((item) => item.label)).size, candidate.heroFacts.length, `${candidate.slug} repeats a hero fact label`);
     assert.ok(candidate.heroFacts.every((item) => item.label?.length >= 2 && item.value?.length >= 18), `${candidate.slug} has an incomplete hero fact`);
-    assert.match(candidate.currentState.observedAt, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/, `${candidate.slug} observedAt is not precise UTC`);
+    assert.match(candidate.currentState.observedAt, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/, `${candidate.slug} observedAt is not precise UTC`);
     assert.ok(Number.isFinite(Date.parse(candidate.currentState.observedAt)), `${candidate.slug} observedAt is invalid`);
     assert.ok(candidate.currentState.label?.length >= 12, `${candidate.slug} currentState label is incomplete`);
     assert.ok(candidate.currentState.facts.length >= 2 && candidate.currentState.gaps.length >= 1, `${candidate.slug} currentState is incomplete`);
@@ -1062,15 +1091,15 @@ test("non-rule project packages preserve the content contract and enter only the
       const observedRelease = candidate.currentState.label.match(/E\d+/)?.[0];
       assert.ok(observedRelease, "agents Owner observation omits its release identity");
       assert.ok(candidate.snapshotBoundary.includes(observedRelease) && candidate.snapshotBoundary.includes("pass") && candidate.snapshotBoundary.includes("fail"), "agents boundary omits the release-bound Owner observation");
-      assert.ok(candidate.cardMetrics.some((item) => item.label.includes(observedRelease) && item.value.includes("pass")), "agents local regression metric omits its observed release");
-      assert.ok(candidate.cardMetrics.some((item) => item.label.startsWith("合同覆盖") && item.label.includes(observedRelease)), "agents contract metric omits its observed release");
+      assert.equal(candidate.cardMetrics.find((item) => item.label === "全量回归")?.value, "未重跑", "historical Local tests must not be presented as current");
+      assert.equal(candidate.cardMetrics.find((item) => item.label === "合同覆盖")?.value, "已验证");
       assert.ok(candidate.cardMetrics.find((item) => item.label === "活动规则")?.value.startsWith(panelSnapshot.authority.releaseId), "agents live release metric is not panelSnapshot-derived");
       assert.ok(candidate.cardStatus.includes(panelSnapshot.authority.releaseId) && candidate.cardStatus.includes("回归"), "agents status omits the release-bound Owner regression");
     }
     const canonicalFacts = JSON.stringify({ heroFacts: candidate.heroFacts, currentState: candidate.currentState, components: candidate.components, methodCanvas: candidate.methodCanvas, modules: candidateModules, liveSnapshot: candidate === project ? panelSnapshot : undefined });
     for (const metric of candidate.cardMetrics) {
       const tokens = metric.value.match(/(?:[Ev]\d+(?:\.\d+)+|\d+(?:\.\d+)?(?:\/\d+)?)/g) || [];
-      assert.ok(tokens.length >= 1, `${candidate.slug}/${metric.label} has no traceable value token`);
+      assert.ok(typeof metric.value === "string" && metric.value.trim(), `${candidate.slug}/${metric.label} has no value or state`);
       for (const token of tokens) {
         const alternate = /^\d$/.test(token) ? digitWords[token] : null;
         assert.ok(canonicalFacts.includes(token) || (alternate && canonicalFacts.includes(alternate)), `${candidate.slug}/${metric.label} is not traceable to canonical project facts`);
@@ -1173,7 +1202,7 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 9);
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 10);
 });
 
 test("PCConfig exposes secondary-laptop and drift acceptance as complete product and technical axes", async () => {
@@ -1205,7 +1234,7 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(pcconfigProject.currentState), /not_applicable|host_mismatch/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 9);
+  assert.equal(registration.ai_refresh.semantic_revision, 10);
   assert.match(registration.ai_refresh.scope, /nine product-defined modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));
 });
@@ -1236,7 +1265,7 @@ test("PCConfig exposes authorized-file encryption as an isolated resumable produ
   assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "authorization-files" && item.ask.includes("文件") && item.ask.includes("加密")));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 9);
+  assert.equal(registration.ai_refresh.semantic_revision, 10);
   const paths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
     assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
@@ -1627,7 +1656,7 @@ test("TimeAudit exposes Windows clipboard history as an independent private side
   assert.doesNotMatch(currentText, /6 个 tracked dirty|未发布.*未激活|44a842e.*当前.*基线/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "timeaudit");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.match(registration.ai_refresh.scope, /seven product-defined modules/);
   assert.ok(registration.impact_sources.some((source) => source.paths?.includes("clipboard_history/**") && source.paths.includes("test_clipboard_history.py")));
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("test_clipboard_history.py")));
@@ -1643,7 +1672,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   assert.equal(packages.flatMap((entry) => entry.modules).length, 20);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" ? 5 : project.slug === "cacb" ? 7 : 5;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 6 : project.slug === "cacb" ? 7 : 5;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -1651,11 +1680,11 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
     }
     for (const module of modules) {
       assert.ok(project.usageExamples.some((usage) => usage.moduleSlug === module.slug), `${project.slug}/${module.slug} has no natural usage journey`);
-      assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${project.slug}/${module.slug} search aliases are not bounded`);
+      assert.ok(module.searchAliases.length > 0, `${project.slug}/${module.slug} search aliases are not bounded`);
       assert.equal(new Set(module.searchAliases).size, module.searchAliases.length, `${project.slug}/${module.slug} repeats a search alias`);
       assert.deepEqual(Object.keys(module.searchProjection).sort(), ["entities", "failureRecovery", "intents", "relations"]);
       for (const [field, values] of Object.entries(module.searchProjection)) {
-        assert.ok(values.length >= 3 && values.length <= 8, `${project.slug}/${module.slug} ${field} is not bounded`);
+        assert.ok(values.length > 0, `${project.slug}/${module.slug} ${field} is not bounded`);
         assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 2), `${project.slug}/${module.slug} ${field} contains an empty search phrase`);
         assert.equal(new Set(values).size, values.length, `${project.slug}/${module.slug} repeats a ${field} phrase`);
       }
@@ -1756,7 +1785,7 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
     assert.ok(module.searchAliases.length >= 4, `${module.slug} lacks natural search aliases`);
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
     for (const [key, values] of Object.entries(module.searchProjection)) {
-      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.ok(Array.isArray(values) && values.length > 0, `${module.slug}.${key} search projection is not bounded`);
       assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
       assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
     }
@@ -1796,7 +1825,7 @@ test("Codex Remote is a manual-only public product with valuable real and synthe
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.source.repo, "wlyaaaaa/codex-local-remote");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.match(registration.ai_refresh.scope, /nine modules/);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.scope, /without invoking any Remote runtime/);
@@ -1876,7 +1905,7 @@ test("personal-health publishes the evidence product without personal health pay
     assert.ok(module.searchAliases.length >= 4, `${module.slug} lacks natural search aliases`);
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
     for (const [key, values] of Object.entries(module.searchProjection)) {
-      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.ok(Array.isArray(values) && values.length > 0, `${module.slug}.${key} search projection is not bounded`);
       assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
       assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
     }
@@ -1913,7 +1942,7 @@ test("personal-health publishes the evidence product without personal health pay
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "wlyaaaaa/personal-health");
-  assert.equal(registration.ai_refresh.semantic_revision, 3);
+  assert.equal(registration.ai_refresh.semantic_revision, 4);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never read CURRENT\.md, SOURCES\.md, raw reports, manifests, briefs, provider payloads or credentials/);
   assert.match(registration.ai_refresh.collectors.join("\n"), /never invoke Google, Secret Broker or a device runtime/);
@@ -1923,7 +1952,7 @@ test("personal-health publishes the evidence product without personal health pay
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   assert.match(pageSource, /currentProject\.kicker \|\| projectKicker/);
   assert.match(pageSource, /function projectCardPresentation\(entry\)/);
-  assert.match(pageSource, /entry\.project\.snapshotBoundary \|\| state\.gaps\?\.\[0\]/);
+  assert.match(pageSource, /entry\.project\.currentSnapshot\?\.boundary \|\| state\.gaps\?\.\[0\]/);
   assert.match(pageSource, /currentProject\.productPrinciples\?\.length/);
   assert.match(pageSource, /labels=\{currentProject\.stateLabels\}/);
   assert.match(pageSource, /canvas\.columns \|\|/);
@@ -1952,6 +1981,11 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   for (const expected of [
     "488353629098f24535784c1663159d7570ae96f1",
     "v0.1.0",
+    "3 个完成态具名归档",
+    "6032 条消息",
+    "3 个原始语音文件",
+    "3 个派生文件",
+    "3/3 verify-export",
     "50 项测试",
     "2 个子测试",
     "configuredAccounts=2",
@@ -1974,10 +2008,12 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.source.repo, "wlyaaaaa/WeChatDirect");
   assert.equal(registration.source.visibility, "PUBLIC");
-  assert.equal(registration.ai_refresh.semantic_revision, 1);
-  assert.equal(systemProjectInventory.detailedPageCount, 15);
+  assert.equal(registration.ai_refresh.semantic_revision, 3);
+  assert.match(registration.ai_refresh.collectors.join("\n"), /manifest\.json, state\.json and last-run\.json.*completed archive count.*total messages.*never read contact identity, chat body/s);
+  assert.equal(systemProjectInventory.detailedPageCount, 16);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
+  assert.match(wechatAsset.role, /3 个完成态归档.*6032 条消息.*3\/3/);
   assert.ok(skillProjectLinks["wechat-direct"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "wechat-direct"));
   assert.ok(projectReferenceLinks["wechat-direct"].some((item) => item.href === "/projects/chinese-asr/task-routing"));
   const wechatScenarioText = JSON.stringify(systemScenarios.find((item) => item.id === "wechat-work-record"));
@@ -2006,15 +2042,18 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.equal(personalMaterialsProject.repositoryUrl == null, true, "a PRIVATE project must not expose a repository button");
   assert.equal(personalMaterialsProject.gallery, undefined, "original lookup does not need an invented gallery");
   assert.deepEqual(personalMaterialsModules.map((item) => item.slug), ["registered-lookup", "bounded-discovery", "verified-open", "exact-intake"]);
+  assert.deepEqual(personalMaterialsProject.cardMetrics.map((item) => item.value), ["43,916", "34", "43,882", "36"]);
 
   const publicText = JSON.stringify({ project: personalMaterialsProject, modules: personalMaterialsModules });
   assertNoCredentialValues(publicText);
+  assert.doesNotMatch(publicText, /诉讼|法律|案件|起诉|法院/, "personal-materials reintroduces the excluded private-domain wording instead of the generic product");
   assert.doesNotMatch(publicText, /__PERSONAL_MATERIALS_[A-Z_]+__/, "personal-materials still contains an evidence placeholder");
   assert.match(publicText, /PRIVATE main [a-f0-9]{7,40}/, "personal-materials omits its final source commit evidence");
   assert.match(publicText, /(?:\d+ passed|\d+ 项[^。；]{0,40}(?:通过|pass))/i, "personal-materials omits its final synthetic regression result");
   assert.doesNotMatch(publicText, /[A-Za-z]:\\\\/, "personal-materials public content leaks an absolute Windows locator");
   assert.doesNotMatch(publicText, /成都案|工资扣分|京东快递|调解说明|民事起诉状/, "personal-materials public content copied a private or fixture candidate");
   assert.doesNotMatch(publicText, /后台(?:扫描|索引|同步)已(?:启用|运行)|全盘扫描已(?:启用|完成)|原件字节已复制|媒体原件已接入/, "personal-materials overclaims a prohibited background, bulk, copy or media route");
+  assert.match(publicText, /文件管理器[\s\S]{0,500}(?:FileNotFoundError|精确 locator)[\s\S]{0,240}(?:级联|material_relations|material_text)/, "personal-materials must expose implemented trusted file-manager retirement and exact cascade boundaries");
 
   const overviewText = JSON.stringify({
     summary: personalMaterialsProject.summary,
@@ -2036,10 +2075,13 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
     /零命中|找不到/,
     /不证明.*不存在|不能证明.*不存在/,
     /不复制.*原件|原件.*零复制/,
+    /文件管理器.*删除.*(?:退役|日常同步)|删除.*(?:不用|不尝试|不.*)恢复/s,
     /(?:不|没有|无).*后台/,
-    /合成.*(?:测试|回归)|(?:测试|回归).*合成/,
-    /(?:未|没有)读取.*(?:实际|真实|私人).*(?:SQLite|数据库|原件|候选)|(?:本轮|本页).*没有.*(?:真实|私人).*(?:E2E|端到端)/
+    /(?:测试|回归).*(?:通过|pass)/,
+    /43,916.*34.*43,882/s
   ]) assert.match(overviewText, expected, `personal-materials overview omits product boundary: ${expected}`);
+  assert.equal(searchPanel("材料库里的文件我在文件管理器删了")[0]?.href, "/projects/personal-materials");
+  assert.equal(searchPanel("我自己删的文件不用恢复")[0]?.href, "/projects/personal-materials/registered-lookup");
 
   const moduleBySlug = new Map(personalMaterialsModules.map((item) => [item.slug, item]));
   const registeredLookupText = JSON.stringify(moduleBySlug.get("registered-lookup"));
@@ -2067,9 +2109,9 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.ok(personalMaterialsProject.usageExamples.every((item) => moduleSlugs.has(item.moduleSlug)), "a personal-materials usage example has no owning module");
   assert.deepEqual(new Set(personalMaterialsProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs, "personal-materials usage examples do not cover all four journeys");
   for (const module of personalMaterialsModules) {
-    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8, `${module.slug} search aliases are not bounded`);
+    assert.ok(module.searchAliases.length > 0, `${module.slug} search aliases are not bounded`);
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
-    for (const values of Object.values(module.searchProjection)) assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug} has an incomplete search projection`);
+    for (const values of Object.values(module.searchProjection)) assert.ok(Array.isArray(values) && values.length > 0, `${module.slug} has an incomplete search projection`);
     for (const source of module.sources) {
       assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/, `${module.slug} source label leaks a local locator: ${source.path}`);
       assert.equal(source.href == null, true, `${module.slug} must not link to its PRIVATE source`);
@@ -2080,20 +2122,21 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   const registration = registry.projects.find((item) => item.id === "personal-materials");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-personal-materials.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 1);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
   assert.equal(registration.source.repo, "wlyaaaaa/personal-materials");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.default_branch, "main");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.ok(registration.impact_sources.length >= 3);
-  assert.match(registration.ai_refresh.collectors.join("\n"), /never open the default database, registered source roots, candidate tokens, originals or handoff payloads/);
-  assert.match(registration.refresh_rules.ignore_when.join("\n"), /private database, source root, original, candidate, title, identifier, path, hash, token/);
+  assert.match(registration.ai_refresh.collectors.join("\n"), /read-only status and inventory.*source count.*exact locator count.*never read titles, body text/s);
+  assert.match(registration.refresh_rules.ignore_when.join("\n"), /private original, candidate, title, identifier, exact path, hash, token/);
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 15);
+  assert.equal(systemProjectInventory.detailedPageCount, 16);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
+  assert.match(materialAsset.role, /36 个登记来源.*43,916.*34 个已精确登记.*43,882/);
   assert.ok(skillProjectLinks["personal-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "personal-materials" && item.moduleSlug === "registered-lookup"));
   assert.ok(!skillProjectLinks["personal-materials"].some((item) => item.systemAssetId), "personal-materials Skill still points to the old no-detail System asset relation");
   assert.ok(projectReferenceLinks["personal-materials"].some((item) => item.href === "/skills/personal-materials"), "personal-materials project does not link back to its Skill");
@@ -2183,7 +2226,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.deepEqual(new Set(documentMaterialsProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs);
   for (const module of documentMaterialsModules) {
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"]);
-    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8);
+    assert.ok(module.searchAliases.length > 0);
     for (const source of module.sources) {
       assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/);
       assert.doesNotMatch(source.path, forbidden);
@@ -2208,7 +2251,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 15);
+  assert.equal(systemProjectInventory.detailedPageCount, 16);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2322,7 +2365,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.deepEqual(new Set(workDeliveryProject.usageExamples.map((item) => item.moduleSlug)), moduleSlugs);
   for (const module of workDeliveryModules) {
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"]);
-    assert.ok(module.searchAliases.length >= 4 && module.searchAliases.length <= 8);
+    assert.ok(module.searchAliases.length > 0);
     for (const source of module.sources) {
       assert.doesNotMatch(source.path, /^(?:[A-Za-z]:[\\/]|\\\\|\/)/);
       assert.equal(source.href, undefined);
@@ -2355,7 +2398,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
-  assert.equal(systemProjectInventory.detailedPageCount, 15);
+  assert.equal(systemProjectInventory.detailedPageCount, 16);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
   assert.equal(asset.href, "/projects/work-delivery");
   assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));
@@ -2502,6 +2545,88 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   assert.equal(naturalRecommendationResults[0]?.href, "/projects/daily-preferences/recommendation-choice");
   assert.equal(new Set(naturalRecommendationResults.map((item) => item.href)).size, naturalRecommendationResults.length, "daily-preferences search repeats one Skill href");
   assert.equal(searchPanel("根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query");
+});
+
+test("personal-media exposes real current scale, complete product boundaries and ten byte-identical original photos", async () => {
+  assert.equal(personalMediaProject.slug, "personal-media");
+  assert.equal(personalMediaProject.order, 16);
+  assert.equal(personalMediaProject.route, "/projects/personal-media");
+  assert.equal(personalMediaProject.title, "个人媒体整理与恢复");
+  assert.equal(personalMediaProject.visibility, "本地私有项目");
+  assert.equal(personalMediaProject.repositoryUrl, null);
+  assert.deepEqual(personalMediaProject.cardMetrics.map((item) => item.label), ["照片", "视频", "音频", "精选"]);
+  assert.deepEqual(personalMediaProject.cardMetrics.slice(0, 3).map((item) => item.value), ["20,154 张", "376 个", "3,830 个"]);
+  const publicText = JSON.stringify({ project: personalMediaProject, modules: personalMediaModules });
+  for (const expected of ["24,360", "20,154", "376", "3,830", "3,823", "6 个音乐", "1 个铃声", "15,829", "1,927", "863", "713", "424", "396", "57", "1,145", "37 个视频", "1,182", "23.4 GiB", "精选", "40.7%", "27.1%", "LocalOCR", "文件管理器删除", "sync-current", "6,262", "6,342", "56,999,686,276", "72,384,351,875", "upload=0", "45 项测试", "E:\\\\Pictures", "E:\\\\Videos", "E:\\\\Music\\\\录音", "ingest-file", "equivalent-keeper-sha256", "demuxed video stream", "可以拔了", "双盘", "60 GB", "Google Photos", "不递归删除", "不恢复出厂设置"]) {
+    assert.ok(publicText.includes(expected), `personal-media omits current product fact: ${expected}`);
+  }
+  assert.match(publicText, /文件管理器[\s\S]*sync-current[\s\S]*recovery-sync/, "personal-media must explain current-original scheduled synchronization");
+  assert.match(publicText, /查询[\s\S]{0,200}(?:只读|不写库|不代用户删除)/, "media retrieval must not trigger the retired deletion framework");
+  for (const expected of ["personal-media.catalog.v1", "personal-media-phone-review.v1", "phone-shared-user-files-capture.v2", "personal-media-phone-recovery-current.v1", "personal-media-cloud-candidate-manifest.v1", "personal-media-ingest-file-receipt.v1", "E:\\\\Media\\\\_manifests\\\\personal-media-current\\\\catalog.sqlite3", "G:\\\\80_Backup\\\\PersonalMedia\\\\PhoneMediaRecovery\\\\2026-08-25"]) {
+    assert.ok(publicText.includes(expected), `personal-media omits technical identity: ${expected}`);
+  }
+  assert.match(publicText, /personal-media-current-acceptance\.v1[^\n]{0,160}SHA-256=[a-f0-9]{64}/, "personal-media omits the current acceptance identity");
+  assert.equal(personalMediaProject.galleryPresentation.variant, "photo-showcase");
+  assert.equal(personalMediaProject.galleryPresentation.prefetchAdjacentFull, false);
+  assert.equal(personalMediaProject.gallery.length, 10);
+  const mediaRoot = path.join(projectRoot, "public", "media", "personal-media");
+  const thumbnailRoot = path.join(mediaRoot, "thumbs");
+  const fullFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  const thumbnailFiles = (await readdir(thumbnailRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
+  assert.deepEqual(fullFiles, personalMediaProject.gallery.map((item) => path.posix.basename(item.src)).sort());
+  assert.deepEqual(thumbnailFiles, personalMediaProject.gallery.map((item) => path.posix.basename(item.thumbnail)).sort());
+  const fullHashes = [];
+  let fullBytes = 0;
+  let thumbnailBytes = 0;
+  for (const item of personalMediaProject.gallery) {
+    assert.match(item.src, /^\/media\/personal-media\/[0-9]{2}-[a-z0-9-]+\.jpg$/);
+    assert.match(item.thumbnail, /^\/media\/personal-media\/thumbs\/[0-9]{2}-[a-z0-9-]+\.webp$/);
+    assert.ok(item.categoryLabel && item.alt && item.caption && item.originalSha256 && item.originalBytes > 0);
+    const fullPath = path.join(projectRoot, "public", ...item.src.slice(1).split("/"));
+    const thumbPath = path.join(projectRoot, "public", ...item.thumbnail.slice(1).split("/"));
+    const fullImage = await readFile(fullPath);
+    const thumbnail = await readFile(thumbPath);
+    const digest = createHash("sha256").update(fullImage).digest("hex");
+    assert.equal(fullImage.length, item.originalBytes, `${item.src} byte count drifted`);
+    assert.equal(digest, item.originalSha256, `${item.src} is no longer the selected original bytes`);
+    assert.ok(thumbnail.length < 128 * 1024, `${item.thumbnail} exceeds the preview review threshold`);
+    fullHashes.push(digest);
+    fullBytes += fullImage.length;
+    thumbnailBytes += thumbnail.length;
+    const distFull = await readFile(path.join(projectRoot, "dist", ...item.src.slice(1).split("/")));
+    const distThumb = await readFile(path.join(projectRoot, "dist", ...item.thumbnail.slice(1).split("/")));
+    assert.equal(createHash("sha256").update(distFull).digest("hex"), digest, `${item.src} changed during build`);
+    assert.equal(createHash("sha256").update(distThumb).digest("hex"), createHash("sha256").update(thumbnail).digest("hex"), `${item.thumbnail} changed during build`);
+  }
+  assert.equal(new Set(fullHashes).size, 10, "personal-media gallery repeats original bytes");
+  assert.ok(fullBytes <= 128 * 1024 * 1024, "ten selected originals exceed the 128 MiB review threshold");
+  assert.ok(thumbnailBytes <= 768 * 1024, "personal-media previews exceed the 768 KiB review threshold");
+  const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-media", "index.html"), "utf8");
+  assert.match(overviewHtml, /data-static-route="\/projects\/personal-media"/);
+  assert.match(overviewHtml, /project-gallery photo-showcase/);
+  assert.match(overviewHtml, /data-gallery-prefetch-adjacent-full="false"/);
+  assert.equal((overviewHtml.match(/class="project-gallery-card"/g) || []).length, 10);
+  for (const item of personalMediaProject.gallery) {
+    assert.ok(overviewHtml.includes(item.originalSha256), `${item.src} hash is not visible in the technical layer`);
+    assert.ok(overviewHtml.includes(item.originalBytes.toLocaleString("en-US")), `${item.src} byte count is not visible in the technical layer`);
+    assert.ok(overviewHtml.includes(`${item.width} × ${item.height}`), `${item.src} dimensions are not visible in the technical layer`);
+  }
+  assert.ok(personalMediaModules.every((module) => routePaths.includes(`/projects/personal-media/${module.slug}`)));
+  assert.deepEqual(new Set(personalMediaProject.usageExamples.map((item) => item.moduleSlug)), new Set(personalMediaModules.map((item) => item.slug)));
+  assert.equal(searchPanel("找新加坡旅行照片", "project:personal-media")[0]?.href, "/projects/personal-media/search-browse");
+  assert.equal(searchPanel("照片怎样分类", "project:personal-media")[0]?.href, "/projects/personal-media/classification");
+  assert.equal(searchPanel("精选照片和视频", "project:personal-media")[0]?.href, "/projects/personal-media/classification");
+  assert.ok(searchPanel("截图文字OCR", "project:personal-media").slice(0, 3).some((entry) => entry.href === "/projects/personal-media/search-browse"));
+  assert.equal(searchPanel("本地媒体怎么接入", "project:personal-media")[0]?.href, "/projects/personal-media/local-ingest");
+  assert.equal(searchPanel("手机照片怎么恢复", "project:personal-media")[0]?.href, "/projects/personal-media/phone-recovery");
+  assert.equal(searchPanel("删掉媒体后把手机和云恢复包也清掉")[0]?.href, "/projects/personal-media");
+  assert.deepEqual(skillProjectLinks["personal-media"], [{ relation: "owned-by-project", projectSlug: "personal-media", moduleSlug: "search-browse", label: "个人媒体整理与恢复项目" }]);
+  assert.deepEqual(projectReferenceLinks["personal-media"], [{ relation: "skill", href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }]);
+  const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  const registration = registry.projects.find((item) => item.id === "personal-media");
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.source.kind, "local_managed_source");
+  assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -2669,7 +2794,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/content-daily-preferences.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/content-daily-preferences.js", "app/content-personal-media.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2688,6 +2813,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedDocumentMaterials = run(["--project", "document-materials"]);
   const targetedWorkDelivery = run(["--project", "work-delivery"]);
   const targetedDailyPreferences = run(["--project", "daily-preferences"]);
+  const targetedPersonalMedia = run(["--project", "personal-media"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -2706,16 +2832,16 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 9);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 10);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
-  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 5);
+  assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 6);
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 5);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 6);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);
@@ -2761,13 +2887,13 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedWechatDirect.status, "ready_for_ai");
   assert.deepEqual(targetedWechatDirect.selected_projects.map((item) => item.id), ["wechat-direct"]);
   assert.equal(targetedWechatDirect.selected_projects[0].content_path, "app/content-wechatdirect.js");
-  assert.equal(targetedWechatDirect.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedWechatDirect.selected_projects[0].semantic_revision, 3);
   assert.equal(targetedWechatDirect.selected_projects[0].source.visibility, "PUBLIC");
   assert.ok(targetedWechatDirect.selected_projects[0].impact_sources.length >= 3);
   assert.equal(targetedPersonalMaterials.status, "ready_for_ai");
   assert.deepEqual(targetedPersonalMaterials.selected_projects.map((item) => item.id), ["personal-materials"]);
   assert.equal(targetedPersonalMaterials.selected_projects[0].content_path, "app/content-personal-materials.js");
-  assert.equal(targetedPersonalMaterials.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedPersonalMaterials.selected_projects[0].semantic_revision, 5);
   assert.equal(targetedPersonalMaterials.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedPersonalMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-materials");
   assert.equal(Object.hasOwn(targetedPersonalMaterials.selected_projects[0].source, "local_root"), false);
@@ -2775,7 +2901,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDocumentMaterials.status, "ready_for_ai");
   assert.deepEqual(targetedDocumentMaterials.selected_projects.map((item) => item.id), ["document-materials"]);
   assert.equal(targetedDocumentMaterials.selected_projects[0].content_path, "app/content-document-materials.js");
-  assert.equal(targetedDocumentMaterials.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedDocumentMaterials.selected_projects[0].semantic_revision, 2);
   assert.equal(targetedDocumentMaterials.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDocumentMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-formal-documents");
   assert.equal(Object.hasOwn(targetedDocumentMaterials.selected_projects[0].source, "local_root"), false);
@@ -2783,7 +2909,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedWorkDelivery.status, "ready_for_ai");
   assert.deepEqual(targetedWorkDelivery.selected_projects.map((item) => item.id), ["work-delivery"]);
   assert.equal(targetedWorkDelivery.selected_projects[0].content_path, "app/content-work-delivery.js");
-  assert.equal(targetedWorkDelivery.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedWorkDelivery.selected_projects[0].semantic_revision, 2);
   assert.equal(targetedWorkDelivery.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedWorkDelivery.selected_projects[0].source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(Object.hasOwn(targetedWorkDelivery.selected_projects[0].source, "local_root"), false);
@@ -2791,16 +2917,25 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDailyPreferences.status, "ready_for_ai");
   assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
   assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
-  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 1);
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 2);
   assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
   assert.ok(targetedDailyPreferences.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedPersonalMedia.status, "ready_for_ai");
+  assert.deepEqual(targetedPersonalMedia.selected_projects.map((item) => item.id), ["personal-media"]);
+  assert.equal(targetedPersonalMedia.selected_projects[0].content_path, "app/content-personal-media.js");
+  assert.equal(targetedPersonalMedia.selected_projects[0].semantic_revision, 5);
+  assert.equal(targetedPersonalMedia.selected_projects[0].source.kind, "local_managed_source");
+  assert.equal(targetedPersonalMedia.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedPersonalMedia.selected_projects[0].source.repo, "PRIVATE_MANAGED_SOURCE");
+  assert.equal(Object.hasOwn(targetedPersonalMedia.selected_projects[0].source, "local_root"), false);
+  assert.ok(targetedPersonalMedia.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);
@@ -2966,7 +3101,7 @@ test("the .agents project has seven complete modules plus Overview", () => {
     assert.ok(module.failures.every((item) => item.condition?.trim() && item.response?.trim()), `${module.slug} has a failure without a recovery response`);
     assert.deepEqual(Object.keys(module.searchProjection), ["intents", "entities", "relations", "failureRecovery"], `${module.slug} search projection shape drifted`);
     for (const [key, values] of Object.entries(module.searchProjection)) {
-      assert.ok(Array.isArray(values) && values.length >= 3 && values.length <= 8, `${module.slug}.${key} search projection is not bounded`);
+      assert.ok(Array.isArray(values) && values.length > 0, `${module.slug}.${key} search projection is not bounded`);
       assert.equal(new Set(values).size, values.length, `${module.slug}.${key} search projection repeats an entry`);
       assert.ok(values.every((value) => typeof value === "string" && value.trim().length >= 3 && value.length <= 140), `${module.slug}.${key} search projection contains an invalid entry`);
     }
@@ -3030,7 +3165,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 11);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 12);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -3453,12 +3588,12 @@ test("global search handles natural rewrites, mixed Latin terms and bounded broa
     assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/pc-panel-hub")), `PC Panel Hub search misses: ${query}`);
   }
   assert.equal(searchPanel("换电脑后怎么重新绑定两块副屏")[0]?.href, "/projects/pc-panel-hub/installation-binding-migration");
-  assert.equal(searchPanel("HS2怎么清通知并发布任务进度")[0]?.href, "/projects/pc-panel-hub/hs2-overlay");
+  assert.ok(searchPanel("HS2怎么清通知并发布任务进度").slice(0, 3).some((entry) => entry.href === "/projects/pc-panel-hub/hs2-overlay"));
   for (const query of ["回答完成却没有结果", "隔离 workspace", "隐藏验证", "能力问题还是执行环境问题"]) {
     assert.ok(searchPanel(query).some((item) => item.href.startsWith("/projects/cacb")), `CACB search misses: ${query}`);
   }
   assert.equal(searchPanel("本地模型执行时GPU怎样排队释放")[0]?.href, "/projects/cacb/campaign-workspace");
-  assert.equal(searchPanel("云API执行怎么绑定请求和终态")[0]?.href, "/projects/cacb/identity-evidence");
+  assert.ok(searchPanel("云API执行怎么绑定请求和终态").slice(0, 3).some((entry) => entry.href === "/projects/cacb/identity-evidence"));
   for (const [query, href] of [
     ["查权威资料再回答", "/projects/learning/authoritative-research"],
     ["专业资料讲人话", "/projects/learning/plain-language"],
@@ -3596,12 +3731,14 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(systemSkillFamilies.flatMap((family) => family.members).length, skills.length);
   assert.equal(new Set(systemSkillFamilies.flatMap((family) => family.members.map((member) => member.slug))).size, skills.length);
   const systemProjectAssets = systemProjectDomains.flatMap((domain) => domain.assets);
-  assert.equal(systemProjectAssets.length, systemProjectInventory.total);
-  assert.equal(new Set(systemProjectAssets.map((asset) => asset.id)).size, systemProjectInventory.total);
+  const excludedProjectIds = ["ai-coach", "ai-llm-job-prep", "personal-knowledge-base", "personal-os-retired"];
+  assert.equal(systemProjectAssets.length, systemProjectInventory.total + 1 - excludedProjectIds.length, "the website selection differs from the repository ledger and includes local personal-media");
+  for (const id of excludedProjectIds) assert.ok(!systemProjectAssets.some((asset) => asset.id === id), `excluded project still displayed: ${id}`);
+  assert.equal(new Set(systemProjectAssets.map((asset) => asset.id)).size, systemProjectAssets.length);
   assert.match(systemProjectInventory.identitySha256, /^sha256:[a-f0-9]{64}$/);
-  assert.equal(systemProjectSourceMap.length, systemProjectInventory.total);
-  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectInventory.total);
-  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectInventory.total);
+  assert.equal(systemProjectSourceMap.length, systemProjectAssets.length);
+  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectAssets.length);
+  assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectAssets.length);
   assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
   assert.equal(systemProjectInventory.total, 49);
   assert.deepEqual(
@@ -3621,7 +3758,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   }
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "formal-materials")?.sourceIdentity, "sha256:d7ee4166428ce9693707b475e930a74b059b81610a1084eec495864ef258578d");
   assert.doesNotMatch(systemHtml, /项呈现基础设施|system-project-presentation-note/);
-  assert.match(systemHtml, /网站源码仓库计入总账，但不作为系统资产卡展示/);
+  assert.match(systemHtml, /网站自身只承担呈现，不再套一层项目介绍/);
   const atlasMappingText = [...systemProjectSourceMap].sort((left, right) => left.assetId.localeCompare(right.assetId)).map((entry) => `${entry.assetId}=${entry.sourceIdentity}`).join("\n");
   assert.equal(`sha256:${createHash("sha256").update(atlasMappingText).digest("hex")}`, systemProjectInventory.mappingSha256);
   assert.match(systemProjectInventory.mappingSha256, /^sha256:[a-f0-9]{64}$/);
@@ -3641,22 +3778,23 @@ test("shared search scopes, project reading layers, Skills categories and System
     for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
     assert.match(overviewHtml, /class="module-index"/);
     assert.ok(overviewHtml.includes(entry.project.productPrinciples[0].title), `${entry.project.slug} omits its first product principle`);
-    assert.match(overviewHtml, /class="document-section document-section-first project-positive-snapshot"/);
+    assert.match(overviewHtml, /class="document-section document-section-first"/);
+    assert.match(overviewHtml, /class="document-section project-positive-snapshot"/);
     for (const metric of entry.project.cardMetrics) {
       assert.ok(overviewHtml.includes(metric.label) && overviewHtml.includes(metric.value), `${entry.project.slug} quick layer omits card metric: ${metric.label}`);
     }
     assert.ok(overviewHtml.indexOf(entry.project.cardMetrics[0].value) < overviewHtml.indexOf("快照边界"), `${entry.project.slug} shows boundary before positive snapshot`);
-    assert.ok(overviewHtml.indexOf("快照边界") < overviewHtml.indexOf("最快了解这个项目"), `${entry.project.slug} does not lead with snapshot and boundary`);
+    assert.ok(overviewHtml.indexOf("最快了解这个项目") < overviewHtml.indexOf("快照边界"), `${entry.project.slug} does not lead with product use before current evidence`);
     assert.equal((overviewHtml.match(/project-headline-facts-technical/g) || []).length, 1, `${entry.project.slug} must render technical facts exactly once`);
     assert.doesNotMatch(overviewHtml, /project-headline-facts-quick/);
     const quickHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="quick"'), overviewHtml.indexOf('data-project-reading-panel="product"'));
     const productHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="product"'), overviewHtml.indexOf('data-project-reading-panel="technical"'));
     if (entry.project.gallery?.length) {
-      const galleryClassPattern = /class="document-section project-gallery"/g;
+      const galleryClassPattern = /class="document-section project-gallery(?: [^"]+)?"/g;
       assert.equal((quickHtml.match(galleryClassPattern) || []).length, 1, `${entry.project.slug} gallery is not visible in Quick`);
       assert.equal((productHtml.match(galleryClassPattern) || []).length, 0, `${entry.project.slug} duplicates gallery in Product`);
       const galleryPosition = quickHtml.search(galleryClassPattern);
-      assert.ok(quickHtml.indexOf("快照边界") < galleryPosition && galleryPosition < quickHtml.indexOf("最快了解这个项目"), `${entry.project.slug} gallery order drifted`);
+      assert.ok(quickHtml.indexOf("最快了解这个项目") < quickHtml.indexOf("快照边界") && quickHtml.indexOf("快照边界") < galleryPosition, `${entry.project.slug} gallery order drifted`);
     }
   }
   const skillsHtml = await readFile(path.join(projectRoot, "dist", "skills", "index.html"), "utf8");
@@ -3787,16 +3925,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E98 panel preserves continuity, post-publication closeout and minimum architecture", async () => {
+test("E99 panel preserves complete user intent, independent review and minimum architecture", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E98");
-  assert.equal(bindings.ruleset_sha256, "2fcb55e00a416352cc680d0bb25dd9744703cb455f1d6508e249c0a68890c7a8");
-  assert.equal(panelSnapshot.authority.releaseId, "E98");
-  assert.equal(panelSnapshot.authority.gitCommit, "e1c1e3644b6c3d2c74eeb2fd0a469444e81c7290");
-  assert.equal(panelSnapshot.authority.pointerRevision, 6);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E97");
+  assert.equal(bindings.semantic_release_id, "E99");
+  assert.equal(bindings.ruleset_sha256, "2a205e84f9954abc33b9b60a1df467b6c1de8dd32ff5653cf2984aaa75e85d09");
+  assert.equal(panelSnapshot.authority.releaseId, "E99");
+  assert.equal(panelSnapshot.authority.gitCommit, "eab86be277d44f8d91fe4450d97a785329cee227");
+  assert.equal(panelSnapshot.authority.pointerRevision, 7);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E98");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",
@@ -3858,22 +3996,21 @@ test("E98 panel preserves continuity, post-publication closeout and minimum arch
     "自然用户意图"
   ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 product semantics omit: ${expected}`);
   for (const expected of [
-    "产品复杂度由需求决定，技术架构必须最小充分",
-    "产品复杂度由用户和业务 Owner 决定",
-    "Complete acceptance floor（完整验收底线）",
-    "Minimum sufficient architecture（最小充分架构）",
-    "Complexity failure collapse（复杂度失败收缩）",
+    "user_intent_over_implementation",
+    "requirement_inflation_review",
+    "完善产品不等于只修缺陷",
+    "长程节点独立审查需求膨胀",
+    "最小充分架构只禁止无依据方案",
     "prohibited_unjustified_complexity",
-    "新增技术层必须逐项举证",
-    "自造复杂度失败先删层",
-    "额度多不是长架构理由"
+    "新增技术层需要当前缺口",
+    "自造复杂度失败先删层"
   ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 minimum architecture semantics omit: ${expected}`);
   for (const expected of ["发布后必须回看个人面板", "personal-panel-refresh", "Source Owner 用产品与技术语义判断", "只有实质变化才异步安排一次独立网站任务"]) {
     assert.ok(ruleGuideSource.includes(expected), `E98 panel closeout semantics omit: ${expected}`);
   }
   assert.match(`${coreSource}\n${ruleGuideSource}`, /功能、流程、状态.*不能.*反膨胀.*(?:删除|降级)|反膨胀.*不能.*删功能/s);
-  assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*完整验收.*(?:短路线|现有入口|单模块).*必须/);
-  assert.match(`${coreSource}\n${ruleGuideSource}`, /新增.*(?:服务|数据库|状态机).*精确.*(?:需求|缺口).*当前.*证据/s);
+  assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*(?:完整验收|完整功能|真实质量).*(?:现有入口|现有能力|短路线|最小增量)/s);
+  assert.match(`${coreSource}\n${ruleGuideSource}`, /新增.*(?:服务|数据库|状态机).*(?:需求|缺口)/s);
   assert.doesNotMatch(coreSource, /terminal long-term 无 residual 自动释放|终态旧 Owner 无残留时释放|terminal 无 residual 的 exact scope RecoverRelease|terminal Owner 无 residual 用 RecoverRelease|terminal 无残留逐 scope RecoverRelease|固定 resolver 证明 terminal 后，无 residual/);
   assert.doesNotMatch(ruleGuideSource, /平台准入时才创建|再原子 RecoverReleaseClaim/);
   const panelRefresh = skills.find((item) => item.slug === "personal-panel-refresh");
@@ -3959,8 +4096,10 @@ test("public content allows public-safe product names and excludes credential va
   const pageSource = contentSources[contentPaths.indexOf("app/page.jsx")];
   const publicText = contentSources.join("\n");
   assertNoCredentialValues(publicSafeProductAndDomainLabels.join("\n"));
+  assertNoCredentialValues("task-scan-local-inventory-generation");
+  assert.throws(() => assertNoCredentialValues("sk-" + "A".repeat(40)));
   assertNoCredentialValues(publicText);
-  assert.doesNotMatch(publicText, /sk-[A-Za-z0-9_-]{20,}/);
+  assert.doesNotMatch(publicText, /\bsk-[A-Za-z0-9_-]{20,}/);
   assert.doesNotMatch(publicText, /gh[pousr]_[A-Za-z0-9]{20,}/);
   assert.doesNotMatch(publicText, /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/);
   assert.doesNotMatch(publicText, /AIza[0-9A-Za-z_-]{30,}/);

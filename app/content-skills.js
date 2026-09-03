@@ -37,7 +37,7 @@ export const skills = [
     flow: ["把用户原话压缩成最小可靠过滤条件", "用 SQLite 条件和 FTS 执行小结果 search", "核对权威原件定位记录确实指向现存原件", "需要浏览时创建 task-unique hardlink 文件夹", "身份问题只把选中的少量原件交给 person:self 能力", "用户不再需要时只清理那个受管浏览目录"],
     boundaries: ["私密项默认隐藏，只有用户明确要求才包含", "地点只表示已复核的拍摄现场，文字里的地名走 query", "不使用当前没有证据的人物过滤", "不读取完整 NDJSON、全盘扫描或复制媒体进知识库", "浏览清理绝不删除原件"],
     dependencies: ["V:\\Personal\\Projects\\personal-media", "E:\\Media\\_manifests\\personal-media-current\\catalog.sqlite3", "E:\\Pictures、E:\\Videos 与 E:\\Music\\录音 canonical roots"],
-    tests: "个人媒体项目当前 31 项测试通过、2 项按环境跳过；Skill source、quick validation、junction 和 transaction 均通过。",
+    tests: "个人媒体项目当前共 45 项回归，其中 43 项通过、2 项真机项跳过；新回读覆盖全部 1,182 项精选进入手机包与云候选，普通检索和状态不触发同步。Skill 的来源与安装证据另行核对。",
     sourcePath: "E:\\.agents\\skills\\personal-media\\SKILL.md",
     endToEndState: "本地 search、browse 和 clean 契约已验"
   }),
@@ -55,7 +55,7 @@ export const skills = [
     flow: ["所属业务已有可靠 locator 时直接使用原业务入口，跳过本 Skill", "先用 find 查询已登记的非媒体定位和绑定文字", "登记候选明确时选择 material key，再由 open 重新核对当前大小和 SHA-256", "没有合适登记候选且位置确实未知时才用 discover；此阶段只看文件名、原生目录名和 stat（文件状态），不读正文、不算哈希", "选择一个 discovery token（发现候选令牌）后调用 open-discovered，核对来源根、路径边界和文件状态，计算这一份原件的 SHA-256，再登记并按请求打开", "没有命中时只报告本次覆盖与缺口，不推断其他设备、账号或未登记位置"],
     boundaries: ["照片、视频、录音及其他视听媒体始终交给 personal-media", "候选 token、material key 和内部来源 ID 不进入面向用户的回答", "项目只保存最小 locator/metadata SQLite（定位与元数据数据库）及与原件绑定、可删除重建的文字，不保存原件字节、人物事件或跨领域画像", "discover 最多选择 8 个来源，全部来源共享 2500 个文件和总计 8 秒的预算，每来源最多 12 层，并且不跟随链接", "不复制、移动、改写或删除原件；hash 漂移、来源根变化或文件状态变化都失败关闭"],
     dependencies: ["个人材料查找项目（私有源码）", "personal-materials.handoff.v1 与项目最小 locator/metadata SQLite（定位与元数据数据库）"],
-    tests: "37 项合成回归全部通过（33.30 秒）；Ruff 静态检查通过。",
+    tests: "40 项回归全部通过（29.20 秒）；Ruff 静态检查通过；显式 inventory 只读盘点来源规模，默认 status 仍保持快速。",
     sourcePath: "E:\\.agents\\skills\\personal-materials\\SKILL.md",
     endToEndState: "项目源码与合成 fixture（测试样本）回归；本次网页刷新未读取私人原件、真实来源根或默认应用现场"
   }),

@@ -5,16 +5,18 @@ const cacbSnapshot = createProjectSnapshot({
   label: "三类执行合同、task-handle 绑定与路线专属证据边界已在源码形成；当前提交 CI lint 未闭合，本页不发布受测结果",
   boundary: "历史分数、名次和旧比较结论当前都不能直接作为选择依据：59b0b5c 的现行 V11R1 入口要求 C1–C10 与 24 个 canonical slots，但 PRODUCT_DESIGN、MODEL_EVIDENCE_SEMANTICS 和 ROUTING_DECISION_FRAMEWORK 仍残留 8-case/八条计分合同；方法与评分基数未统一。REPORTING_STANDARD 已写 C1–C10/10-row，文中的 eight 指除 C5/C7 外其余八个离线案例，legacy bridge 也明确 unranked。最新四个 CI job 仍停在 lint 门，旧测试不继承；本页不发布受测配置结果。",
   metrics: [
-    { label: "核心模块", value: "47" },
-    { label: "数据合同", value: "25" },
-    { label: "连续案例", value: "10" }
+    { label: "当前可采用比较", value: "0" },
+    { label: "连续案例", value: "10" },
+    { label: "计划槽", value: "24" },
+    { label: "冲突基数", value: "8 ↔ 10" }
   ],
   facts: [
+    { label: "当前能不能拿来选", value: "当前可采用的受测配置比较、分数或排名为 0。产品框架、10 个连续案例和 24 个计划槽已经存在，但 8-case 与 10-case 评分合同冲突、当前 CI lint 未闭合，所以现实选择必须等待方法与验证重新统一。" },
     { label: "当前源码与成品范围", value: "PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净、远端引用 0/0；233 个跟踪文件中有 47 个 Python 核心模块、25 个 schema、59 个测试文件与 6 份报告/模板文件" },
     { label: "问题库与任务绑定", value: "当前核心用 10 个连续案例组成一次 episode，覆盖实现、诊断、连续性、证据和恢复；每次执行独立 workspace，WorkerHandle 同时绑定原始 task id 与 run id" },
     { label: "三类执行路线", value: "同一任务合同显式覆盖 native_managed、local_async_job、cloud_api_async_job；三者共享冻结输入与 verifier，却分别绑定原生谱系、本地 job/GPU lease、云端 request/stream 和路线专属 cleanup" },
     { label: "确定性硬门 + Sol Max 仲裁强审", value: "根侧 verifier 独占 identity、validity、eligibility、safety 与 PASS/FAIL；每个已合格样本再由 fresh exact gpt-5.6-sol / max 隐藏参与者身份，基于完整任务和候选产物做独立六维质量复核，形成可引用、可反驳的推定能力/推定质量" },
-    { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress" },
+    { label: "额度/费用探针", value: "1 题短探针与 10 题全探针各使用固定临时 namespace 和第二阶段精确 cleanup；只帮助观察宿主 UI，永不进入 formal ledger、score、ranking 或 report progress", hero: false },
     { label: "选择与当前验证边界", value: "现行 V11R1/C1–C10/24-slot 入口与仍写 8-case 的旧设计和评分合同相互冲突，因此历史分数、排名和比较当前不可采用；机械与强审冲突仍不平均，最新四个 CI job 也停在 lint 门" },
     { label: "当前源码", value: "Git Owner 回读 PRIVATE main=59b0b5c9706e76b8abc2d910af484b9d13237009，工作树干净，本地与远端引用 0/0。", hero: false },
     { label: "成品范围", value: "当前源树包含 233 个跟踪文件，其中 47 个 Python 核心模块、25 个 schema、59 个 test_*.py 测试文件，以及 6 份报告/模板文件；数量不代表这些文件可原样公开。", hero: false },
@@ -56,10 +58,10 @@ export const cacbProject = {
   ...cacbSnapshot,
   searchAliases: ["模型当前能不能在指定harness用", "官方价格和本地实测成本", "基准失败怎么归因", "缺失外部证据不能填0", "模型证据卡和综合判断报告", "三种执行路线怎么选", "本地GPU和云API执行有什么区别", "取消超时后怎样确认清理", "模型盲评分和盲质量复核", "盲审能不能改变PASS或资格", "一题和十题额度费用探针", "探针结果为什么不进排行榜", "机械分盲审和最终选择怎样分工", "为什么页面没有候选分数和名次"],
   repositoryNote: "源码位于 PRIVATE（私有）仓库，因此本页不提供仓库跳转。页面完整展示已经做成的评测产品、设计取舍、架构与当前验证边界；私有任务样本、隐藏答案、原始执行记录、机器快照和任何受测配置比较结果都不进入网页。",
-  summary: "CACB 用同一套真实工程任务，检查一套 Agent 执行方式究竟有没有把事情做完。它先把当前官方与外部证据、本地 Codex 实测分成两条车道，再把本地评测拆成四个不能互相越权的层次：deterministic verifier（确定性验证器）核对身份、资格、硬边界和真实产物，给出可重放的 PASS/FAIL；identity-blind quality review（身份盲质量复核）只对已经过门的单一样本做六维质量判断；quota/cost probe（额度/费用探针）只用固定 1 题或 10 题任务帮助观察宿主界面的额度、费用与耗时，永不进入正式账本；scoring and final selection（评分与最终选择）验证机械证据、盲审证据和代表选择是否属于同一兼容代。执行层仍明确区分 native_managed、local_async_job、cloud_api_async_job 三条真实路线；它们共享任务与验收语义，却绝不互借身份、谱系、终态或清理回执。即使代码检查全部变绿，方法设计和评分有效性没有独立复核时，历史分数与名次仍不能采用；缺证据就保持未知或 pending。",
+  summary: "CACB 是一套 Agent 工程能力评测台：把同一批真实任务交给精确执行配置，在隔离工作区里运行，再检查真正的文件、行为、测试和清理结果。它先回答“有没有做成、证据能不能算”，再让不知道参与者身份的独立评审解释产物质量，最后交回模型证据卡、基准报告和范围内选择建议。原生、本地和云端三条执行路线各自保留身份与终态，不借用彼此回执。当前方法与评分基数仍有 8 对 10 的冲突，最新 CI 也停在 lint，因此现在没有任何可采用的配置比较、分数或名次。",
   why: "一次任务看似完成，可能只是写了总结、留下半成品、借用了旧文件，或因执行环境失败而没有真正接受检验。不同执行路线还会带来完全不同的宿主身份、网络传输、GPU 占用和清理责任；若把它们都写成“调用一个 Agent”，就无法判断问题发生在哪一层。CACB 把任务、输入、workspace、执行路线、终态、产物和验证证据锁在同一条链上，避免把“回答得像完成”或“换了传输仍沿用旧身份”误当成真实能力。",
   plainExample: "例如我要判断某个精确模型是否值得在当前 Codex harness 中承担一类工程任务。研究车道先核对官方身份、可用条件和经济口径；本地执行完成后，根侧确定性验证先决定这次样本是否有效、是否通过硬门。只有样本合格，才为它创建一个全新的 exact gpt-5.6-sol / max 盲审任务；盲审只看冻结任务、验收、工具边界、正确性依据和候选产物，不知道参与者、harness、价格、机械分、名次或其他答案。如果此时只想先观察宿主额度/费用/耗时，就另走固定临时目录的一题或十题探针，执行后再用第二条消息精确删除；它不成为样本。最终选择只接受同一兼容代的完整证据，任一层缺失就保持 pending，不生成候选排名。",
-  result: "我得到三份互相引用但不混写的交付：model evidence card（模型证据卡）记录精确身份、执行路线与当前官方/外部证据，benchmark report（基准报告）分别保留确定性机械证据、身份盲质量复核、路线专属终态回执与失败平面，comprehensive judgment report（综合判断报告）按资格→能力→经济性→范围内路由建议说明最终判断和未知。额度/费用探针只留下临时任务产物供当场观察，第二阶段精确清理，不写正式回执、账本、分数或名次。公开网页只解释这些职责和兼容边界，不展示任何受测配置的分数、排名或 leaderboard（排行榜）。",
+  result: "我最终得到三份能互相追溯、但不会互相补证的交付：model evidence card（模型证据卡）说明测的是谁和通过哪条路线，benchmark report（基准报告）说明真实任务做成了什么、哪里失败、产物质量如何，comprehensive judgment report（综合判断报告）才说明在证据允许的范围内怎样选以及哪些仍未知。额度与费用探针只供当场观察并随后精确清理，不进入正式分数或名次；公开页也不展示任何受测配置比较结果。",
   readerStates: {
     pass: "确定性身份/资格/硬门闭合、方法与评分有效性复核通过后，机械证据才可进入当前比较；合格样本再由一个全新 exact Sol Max 任务完成证据引用齐全的盲质量复核。只有完整、同代且互不借证的证据集才进入最终选择。",
     problem: "即使 CI 变绿，只要方法与评分有效性仍未复核，历史分数和名次就保持不可采用；产物错误、越界、任务未完成、路线身份矛盾或盲审证据冲突也分别标出，不让一层替另一层补证。",
@@ -328,7 +330,7 @@ export const cacbModules = [
     value: "我能用同一冻结任务比较三种真实执行路线，并清楚知道每条路线怎样启动、怎样看进度、何时算终态、资源是否清干净。",
     why: "直接在同一仓库反复运行会留下缓存和旧产物；把一次 wait 到期写成 timeout、只结束本地进程却留下 GPU lease 或远端请求、或中断后换 workspace 继续，都会让证据无法解释。",
     example: "例如我问“云 API 取消后为什么不能立刻重跑”。系统先关闭本地 stream，再等待可观察 provider job 终态；若远端清理仍不可确认，就保持 cleanup_unconfirmed，不把本地进程退出冒充整条路线已经释放。",
-    result: "得到 campaign manifest、唯一 workspace、WorkerHandle、连续 episode、路线专属终态回执和项目归档的一一对应关系；原生给宿主终态，本地给进程树/GPU lease 清理证据，云端给 request/stream/provider 清理证据。",
+    result: "我得到一份可以重放并追责到单次运行的评测包：每个任务只使用自己的工作区，能看清由谁执行、何时结束、留下哪些产物，以及进程、GPU 或云端请求是否已经清理。技术层再用 campaign manifest、WorkerHandle、episode 和路线专属回执保存这些精确绑定。",
     readerStates: {
       pass: "workspace 唯一、输入 hash 匹配、路径在允许根内，所有案例终态闭合且该 executor 的进程、后代、GPU lease 或远端请求清理证据完整。",
       problem: "发现共享文件、跨目录写入、半次执行拼接、终态早报或资源未释放时，整次结果无效但保留诊断。",
@@ -493,7 +495,7 @@ export const cacbModules = [
     value: "我能先判断该测宿主原生任务、精确本机模型还是指定云端 provider，再确认这条路线真的使用了声明的模型、harness 和 transport；非原生路线不会冒充原生子代理，一次执行证据也不会借给另一次。",
     why: "参与者可以写错自己的身份，别名可能换了模型，profile 可能换了 endpoint，宿主事件也会随版本变化；只看最终文本无法证明任务、workspace、动作和终态属于同一次执行，更无法证明 native lineage 对这条路线是否适用。",
     example: "一个云端任务产出了完整文件，但 effective provider 或 endpoint 与请求绑定不同。即使任务内容正确，系统也会保留产物供诊断、关闭这次身份资格，并拒绝把它改写成 native_managed 或借用原生 receipt。",
-    result: "得到 requested/effective/attested identity（请求/实际/证明身份）、executor_kind、host/provider/transport、lineage applicability（谱系适用性）、task、workspace、action、terminal 和 artifact 的一条 hash-bound（hash 绑定）证据链，并明确这条路线通过了哪一层接入门。",
+    result: "我先得到一个明确答案：这次到底是谁在什么路线里执行，结果属于哪一个任务和工作区，是否真的结束，以及这份证据能不能进入比较。技术层再把请求身份、实际身份、执行器、宿主或提供方、终态与产物做 hash 绑定，防止借用旧回执。",
     readerStates: {
       pass: "路线已通过接入门，请求/实际/证明身份、任务、workspace、动作、终态和适用的 lineage 全部匹配，证据可单次消费。",
       problem: "模型、provider、profile、transport、task、lineage 或 cleanup 任一层矛盾时标记具体 failure plane，不删除诊断产物，也不换路线补证。",
@@ -609,7 +611,7 @@ export const cacbModules = [
     value: "我先得到一份可重放的客观验收：这是谁的执行、样本是否有效、是否有资格比较、硬边界是否满足、真实产物到底 PASS 还是 FAIL。只有这层闭合，后续盲审的推定质量证据才有对象。",
     why: "参与者可以看见公开测试并针对写法硬编码，也可以写一段像成功的 final answer；验证器若和候选代码同进程，还可能泄露 oracle 或被修改。更危险的是让一个主观评审替无效样本补发资格，因此 identity、validity、eligibility、safety 与 PASS/FAIL 必须留在确定性根侧。",
     example: "候选产物看起来结构清楚，也可能得到正面的盲质量判断，但它修改了禁止目录。deterministic verifier 会把范围硬门判为 FAIL，这个样本不进入正式质量比较；盲审意见不能把它改成 PASS。",
-    result: "得到 participant/runtime identity、sample validity、ranking eligibility、hard gate、逐案例 PASS/FAIL、机械证据、范围变化、终态与 hash 回读组成的验证摘要；它同时明确哪些合格样本可以交给 blind-quality-review。",
+    result: "我得到一份可重放的客观验收摘要：这次样本是否有效、是否有资格比较、哪些案例真正通过或失败、有没有越过允许范围、终态和产物哈希是否闭合。技术层保留参与者/运行时身份、硬门和机械证据；只有合格样本才进入后续盲质量复核。",
     readerStates: {
       pass: "身份、终态、冻结输入、公开/隐藏属性和修改范围全部闭合时，样本取得可重放 PASS 与 eligibility；这只是盲审的前置资格，不预设质量分。",
       problem: "身份、有效性、功能、隐藏属性、范围或 safety gate 任一失败时返回具体案例与 failure plane；后续质量意见无权覆盖。",

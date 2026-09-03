@@ -3,9 +3,8 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 // These three values are replaced only after the parallel source repair has
 // finished and its current evidence has been read back. Keeping them loud
 // prevents a provisional source state from becoming a published snapshot.
-const SOURCE_COMMIT = "08a3b0df5e999615c127e401e84b35b04a8752cb";
-const TEST_RESULT = "37 项合成回归全部通过（33.30 秒）；Ruff 静态检查通过";
-const OBSERVED_AT = "2026-09-01T07:09:34.800Z";
+const SOURCE_COMMIT = "f2e24a8d9345ae7e1cfcb437dd5b64b8a57d8dca";
+const TEST_RESULT = "56 项回归通过；Ruff 静态检查通过";
 
 // Product limits live together so a future source-backed change can be
 // calibrated once instead of being hunted through the narrative.
@@ -19,17 +18,44 @@ const limits = Object.freeze({
   discoverySeconds: "8"
 });
 
+const inventory = Object.freeze({
+  observedAt: "2026-09-02T23:22:32.486861Z",
+  registeredSources: 36,
+  discoveryDirectories: 32,
+  nonMediaPathEntries: 43916,
+  exactLocators: 34,
+  onDemandEntries: 43882,
+  mediaSkipped: 7514,
+  completedRoots: 36,
+  directoriesBeyondDepth: 2591,
+  readErrors: 0,
+  cutoff: false
+});
+
 const personalMaterialsSnapshot = createProjectSnapshot({
-  observedAt: OBSERVED_AT,
-  label: `四条产品链已有源码实现；${TEST_RESULT}；真实材料现场未在本页读取`,
-  boundary: "本轮只核对项目规则、README、源码、schema 与测试，不打开实际 SQLite、原件、来源登记、内部选择凭据或候选；因此不声明当前覆盖数量，也不把源码状态冒充一次真实查找已经成功。",
+  observedAt: inventory.observedAt,
+  label: `36 个登记来源当前覆盖 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个非媒体文件路径；34 个已精确登记，${inventory.onDemandEntries.toLocaleString("zh-CN")} 个需按请求有界发现`,
+  boundary: `本轮只读 inventory（现状盘点）完成 ${inventory.completedRoots}/${inventory.registeredSources} 个登记根、0 个读取错误且未截止；它只数最大深度 12 内的路径和文件元数据，不读正文、不算文件哈希、不写数据库。${inventory.directoriesBeyondDepth.toLocaleString("zh-CN")} 个更深目录不在本次计数内；${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 是规范化去重后的路径条目，不是 SHA-256 去重的独立内容数，也不表示一次 discover 能查完全部。`,
   metrics: [
-    { label: "产品模块", value: "4 个" },
-    { label: "默认候选", value: `${limits.skillCandidates} 个` },
-    { label: "发现来源", value: `${limits.discoverySources} 个` },
-    { label: "文件 / 时间", value: `${limits.discoveryFiles} / ${limits.discoverySeconds} 秒` }
+    { label: "来源内文件", value: inventory.nonMediaPathEntries.toLocaleString("zh-CN") },
+    { label: "精确登记", value: inventory.exactLocators.toLocaleString("zh-CN") },
+    { label: "按需发现", value: inventory.onDemandEntries.toLocaleString("zh-CN") },
+    { label: "登记来源", value: inventory.registeredSources.toLocaleString("zh-CN") }
   ],
   facts: [
+    {
+      label: "当前实际规模",
+      value: `36 个登记来源当前包含 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个可发现非媒体文件路径；其中 34 个已经拥有精确 locator（定位记录），其余 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个只在用户真正需要时进入有界发现。另有 ${inventory.mediaSkipped.toLocaleString("zh-CN")} 个媒体文件按产品边界跳过并交给 personal-media。`
+    },
+    {
+      label: "这三个数字分别意味着什么",
+      value: `${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 是来源范围内的现存非媒体路径条目；34 是可以直接 find/inspect/open 的精确登记原件；${inventory.onDemandEntries.toLocaleString("zh-CN")} 是可能被 discover 找到、但尚未逐个读字节和登记哈希的候选池。三者不能互相冒充。`
+    },
+    {
+      label: "当前盘点证据",
+      value: `显式 inventory 在约 3.4 秒内完成 ${inventory.completedRoots}/${inventory.registeredSources} 个根，读取错误 ${inventory.readErrors}、cutoff=${inventory.cutoff}；不跟随目录链接、最大深度 12，${inventory.directoriesBeyondDepth.toLocaleString("zh-CN")} 个更深目录明确跳过；只读文件名与 stat，不读正文、不计算内容哈希、不持久化。`,
+      hero: false
+    },
     {
       label: "使用入口",
       value: "已有可靠原件定位时由当前业务直接打开；只有位置未知、需要跨获准位置查找，或旧定位失效时才进入本项目。"
@@ -48,15 +74,17 @@ const personalMaterialsSnapshot = createProjectSnapshot({
     },
     {
       label: "存储与后台",
-      value: "项目只使用内置最小 SQLite（轻量元数据索引）保存定位与可重建文字；原件复制量为 0，也没有常驻后台进程或全盘扫描。"
+      value: "项目只使用内置最小 SQLite（轻量元数据索引）保存定位与可重建文字；原件复制量为 0，也没有常驻后台进程或全盘扫描。",
+      hero: false
     },
-    {
-      label: "源码证据",
-      value: `PRIVATE main ${SOURCE_COMMIT}；${TEST_RESULT}。源码与测试证明实现合同，不证明当前登记来源、真实原件或本轮自然请求已经通过。`
-    }
+    { label: "源码证据", value: `PRIVATE main ${SOURCE_COMMIT}；${TEST_RESULT}。源码、测试与 inventory 证明当前产品合同和来源规模；它们仍不证明某个自然请求已经找到用户真正想要的原件。`, hero: false }
   ],
   gaps: [
-    "本页没有读取实际索引，因此当前登记来源、材料数量、覆盖状态和来源缺口均不从网页推断。",
+    "日常维护只清理已登记且确切不存在的非媒体定位记录；单文件来源先看父目录是否可访问，目录来源不可访问时保留并报告。查找与状态只读，不触发删除或恢复；当前 34 个定位记录均仍有原件，本轮没有材料退出。",
+    `当前 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个来源范围文件没有精确 locator；一轮 discover 仍只选择最多 ${limits.discoverySources} 个相关目录，共享 ${limits.discoveryFiles} 个文件、${limits.discoverySeconds} 秒与每源 12 层上限，不能把候选池大小写成一次查询保证。`,
+    `${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 是路径去重条目，不是内容哈希去重数；同一内容位于不同路径时仍可能重复计数。`,
+    `${inventory.directoriesBeyondDepth.toLocaleString("zh-CN")} 个超过 12 层的目录未进入本次 inventory，因此 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 是现行产品深度合同内的精确值，不是登记根下无限深度的全树总数。`,
+    "当前精确登记记录没有绑定可检索 OCR/extracted 文字；自然请求主要依赖来源、标题、版本、路径与按需文件名发现，正文召回覆盖仍是明确缺口。",
     "本页没有执行真实自然请求、选择候选或打开原件，因此当前端到端可用性仍须在用户真正需要时按精确范围验证。",
     "实际来源不可达、定位漂移、文件变化或启动器失败时，只影响该次路线；页面不把局部失败扩大成材料不存在。",
     "有界发现逐项消费文件系统枚举，达到上限时命中的具体子集可能随系统枚举顺序变化；它证明本次检查范围，不提供稳定的全目录排序。",
@@ -72,7 +100,7 @@ const personalMaterialsProject = {
   visibility: "私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
-  cardStatus: "已实现登记查找、有界发现、选中后验真和精确接入；真实索引覆盖按每次请求单独说明",
+  cardStatus: `36 个登记来源当前覆盖 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个非媒体文件路径；34 个精确登记，其余按请求有界发现`,
   cardStatusTone: "mixed",
   ...personalMaterialsSnapshot,
   kicker: "路径未知时，从一句普通话回到真正的非媒体原件",
@@ -83,17 +111,21 @@ const personalMaterialsProject = {
     "旧文件路径失效",
     "跨几个位置找文件",
     "不全盘扫描找原件",
-    "找到以后重新核对再打开"
+    "找到以后重新核对再打开",
+    "文件管理器删了材料就不要恢复",
+    "原件不见了就当我不要了",
+    "我自己删的文件退出材料库",
+    "删除原件后清理索引和绑定文字"
   ],
-  repositoryNote: "实现项目是 PRIVATE（私有）仓库。本公开页只说明项目规则、产品流程、源码结构与验证边界，不读取或发布实际 SQLite 内容、来源根、账号或设备登记、材料标题、候选、内部标识、真实路径、文件指纹、正文或个人结果。",
-  summary: "这个项目只解决一件很具体的事：我知道要找的是哪份非媒体材料，却忘了它放在哪里，或者旧定位已经失效。它先从已登记范围返回少量候选；仍找不到时，才在获准来源里做一次有上限的即时发现。只有明确选中一项后，它才读取那一个文件、重新核对并用系统默认应用打开真正原件。",
-  why: "现实材料常散在不同项目、设备或保存位置中。同名文件、草稿、签字版、交付版和回执容易混淆；反过来，为了避免遗漏而扫描整台电脑、复制全部文件或建立中央个人知识库，又会制造更大的维护和判断问题。需要的是一条短路线：只在位置未知时查少量候选，并在打开前证明选中的仍是那一份文件。",
+  repositoryNote: `实现项目是 PRIVATE（私有）仓库。页面从显式只读 inventory 公开 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个来源范围文件、34 个精确 locator、${inventory.onDemandEntries.toLocaleString("zh-CN")} 个按需发现条目与覆盖缺口；不读取正文、材料标题、候选、账号/设备标识、真实 locator、文件指纹或个人结果。普通聚合、状态、路径类别、组件、命令、测试和失败事实正常展示。`,
+  summary: `当前 36 个登记来源覆盖 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个非媒体文件路径：34 个已经精确登记，可以直接查找、复核和打开；其余 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个不预建全量索引，只在我确实不知道位置时，从最相关的少量来源做一次有上限的即时发现。这个项目只解决一件很具体的事：我知道要找的是哪份非媒体材料，却忘了它放在哪里。本人在可信文件管理器删除原件则是另一种明确结果：下一次日常同步精确退出该 occurrence、仅由它支撑的关系和绑定文字，不再作为恢复候选。`,
+  why: "现实材料常散在不同项目、设备或保存位置中。同名文件、草稿、签字版、交付版和回执容易混淆；反过来，为了避免遗漏而扫描整台电脑、复制全部文件、恢复本人已经删除的材料或建立中央个人知识库，又会制造更大的维护和判断问题。需要的是一条短路线：只在位置未知时查少量候选，在打开前证明选中的仍是那一份文件，并把可信文件管理器中的删除当作本人最终决定。",
   plainExample: "例如我说“帮我找那份延保合同，我忘了放哪了”。系统先查已登记非媒体索引，给出少量不含真实路径的候选，并保留来源、时间、版本角色和所在容器等区分信息。若没有合适候选，它才在与这句话最相关的获准目录里查看文件名和目录名。选中一项后重新计算大小与 SHA-256，匹配才打开；不匹配就停下来说明变化。",
-  result: "我最终得到的是已经重新核对、能够打开的真正原件，以及它来自哪个登记来源、属于哪个版本、何时完成核验。若没有找到，我得到实际检查过的来源、文件和目录范围、触发的上限、未搜索部分与已知缺口，而不是一句无法复核的“没有”。",
+  result: "我最终得到的是已经重新核对、能够打开的真正原件，以及它来自哪个登记来源、属于哪个版本、何时完成核验。若没有找到，我得到实际检查过的来源、文件和目录范围、触发的上限与未搜索部分；若本人已在可信文件管理器删除原件，正确结果应是该 locator、仅由它支撑的关系和绑定文字全部退出，不再作为待恢复候选。",
   readerStates: {
     pass: "返回少量可区分候选；选中一项后，当前大小、SHA-256、来源根与文件身份重新核对通过，真正原件被打开或明确完成只验真。",
-    problem: "没有合适候选、出现多个难以区分的版本、达到发现上限，或文件在选择前后发生变化时，保留实际范围与失败原因；只补一个真正有区分力的线索，不扩大成全盘扫描。",
-    unavailable: "索引身份不符、获准来源不可访问、旧定位失效、内部选择凭据过期、文件缺失或默认启动器失败时，停止受影响的步骤；不猜路径、不改写原件，也不把局部不可用说成材料不存在。"
+    problem: "没有合适候选、版本难分、发现达到上限或文件已变化时，说明实际范围与原因；只补必要线索，不全盘扫描。已删除的原件不再进入本次候选，清单由日常维护更新，不把它当作待恢复材料。",
+    unavailable: "索引身份不符、整个获准来源不可访问、内部选择凭据过期或默认启动器失败时，停止受影响的步骤；不猜路径、不改写原件，也不把整个来源离线误写成每个原件都已删除。"
   },
   stateLabels: ["找到并选中时", "没有合适候选或原件变化时", "来源或验证入口不可用时"],
   methodCanvas: {
@@ -116,8 +148,9 @@ const personalMaterialsProject = {
     ]
   },
   productPrinciples: [
+    { title: "原件删了就是删了", detail: "你在文件管理器删除原件，不需要通知 AI。查询和状态不代删、不恢复；现有每日任务调用 sync-current，移除确切缺失的索引及仅由它支撑的关系/文字。单文件来源以父目录可访问区分删除与离线，其他来源离线则保留其索引并说明缺口。" },
     { title: "可靠定位永远优先", detail: "已知精确路径时由当前业务直接打开；本项目只补位置未知、跨获准位置查找或旧定位失效这一段。" },
-    { title: "定位原件，不解释人生", detail: "项目只负责来源、版本、定位、哈希与可打开状态；材料属于哪个案件、健康问题或工作决定，继续由对应领域负责。" },
+    { title: "定位原件，不解释人生", detail: "项目只负责来源、版本、定位、哈希与可打开状态；材料属于哪个具体业务场景、健康问题或工作决定，继续由对应领域负责。" },
     { title: "少量可区分胜过全量列表", detail: "候选必须帮助选择，而不是把所有相似文件倒给用户。版本角色、来源容器、时间和原生关系比堆数量更有价值。" },
     { title: "发现与验真分两步", detail: "即时发现只看名称、目录和文件元数据；只有选择一项后才读完整字节计算哈希，既控制耗时，也避免无目的读取。" },
     { title: "零命中只代表本轮范围", detail: "没有候选不等于其他账号、设备、离线介质或未获准位置不存在原件；结果必须带着已搜索与未搜索范围回来。" },
@@ -133,15 +166,17 @@ const personalMaterialsProject = {
     "在候选阶段隐藏真实路径和内部标识，保留来源、容器、时间、版本角色与原生关系",
     "只对明确选中的文件重新核对大小、SHA-256、来源根和文件身份，再登记并打开",
     "通过精确交接接收来源与定位元数据，并现场拒绝大小、哈希、schema 或媒体边界不一致的对象",
-    "零命中、截止、缺失、漂移或入口不可用时，返回实际检查范围、失败原因和下一条有效恢复线索"
+    "零命中、截止、缺失、漂移或入口不可用时，返回实际检查范围、失败原因和下一条有效恢复线索",
+    "通过现有每日任务的 sync-current 维护失效索引；status、inventory、find、discover、inspect 只读，intake 与明确打开动作保留原有登记/状态更新功能"
   ],
   exclusions: [
     "不处理照片、视频、录音及其他视听媒体；这些原件只走 personal-media",
-    "不替诉讼、健康、工作或其他领域判断材料的意义、结论、重要性和现实状态",
+    "不替正式事项、健康、工作或其他领域判断材料的意义、结论、重要性和现实状态",
     "不建立人物、事件、关系、画像、跨来源推断或中央个人知识库",
     "不默认扫描整台电脑、全部账号或所有登记来源，也不跟随目录链接",
     "不复制、移动、改写、删除原件，也不把 OCR（光学字符识别）或提取文字冒充原件",
-    "不把零命中、索引状态、测试或迁移回执冒充用户已经拿到真实原件"
+    "不把零命中、索引状态、测试或迁移回执冒充用户已经拿到真实原件",
+    "不从旧 SQLite、绑定文字或备份把本人已删除的材料复活"
   ],
   glossary: [
     { term: "Locator（原件定位记录）", meaning: "指向真实非媒体原件的位置与版本身份；每次打开前仍须现场核对，旧记录不能替代当前文件。" },
@@ -152,7 +187,8 @@ const personalMaterialsProject = {
     { term: "SQLite（轻量数据库）", meaning: "项目内置的最小定位与文字索引；它不保存原件字节，也不是跨领域中央知识库。" },
     { term: "Coverage（覆盖状态）", meaning: "来源明确声明 complete、partial 或 unknown，并附带缺口；它描述登记范围，不承诺整台设备或全部账号。" },
     { term: "Native evidence（来源原生证据）", meaning: "来源自身提供的标题、目录、时间、版本角色和关系；草稿、签字、交付或回执只从这些事实判断。" },
-    { term: "Derived text（可重建文字）", meaning: "绑定到一份已选非媒体原件的原生文字、OCR 或提取文字；可以删除重建，不获得高于原件的事实地位。" }
+    { term: "Derived text（可重建文字）", meaning: "绑定到一份已选非媒体原件的原生文字、OCR 或提取文字；可以删除重建，不获得高于原件的事实地位。" },
+    { term: "File-manager deletion（文件管理器删除）", meaning: "原件不在了就从本次候选跳过；后续计划维护退出该索引及其独有关系/文字，不推断误删、不尝试恢复。" }
   ],
   operatingFlow: [
     { title: "先决定是否绕过", detail: "已有可靠 locator（原件定位记录）直接打开；媒体转 personal-media；只有位置未知、跨来源或旧定位失效才继续。" },
@@ -161,7 +197,7 @@ const personalMaterialsProject = {
     { title: "执行一次有界发现", detail: `最多选择 ${limits.discoverySources} 个获准目录，共享 ${limits.discoveryFiles} 个文件、每源 ${limits.discoveryDepth} 层、总计 ${limits.discoverySeconds} 秒；跳过媒体、链接和无法读取项。` },
     { title: "让用户只面对少量差异", detail: "展示来源、标题、原生容器、时间、版本角色和文件大小；真实路径、内部标识与内部选择凭据不进入用户答复。" },
     { title: "选中后重新验真", detail: "完整读取这一个文件计算 SHA-256，并在提交前后复核 stat 与来源根；身份冲突或中途变化时回滚。" },
-    { title: "打开或交回缺口", detail: "匹配时用系统默认应用打开；失败时区分未登记、缺失、哈希漂移、来源根变化、启动失败、截止和未搜索来源。" }
+    { title: "打开原件或说明找不到", detail: "匹配时打开真正原件；已删除就返回路径缺失，来源离线、哈希漂移、启动失败和未搜索范围分别说明。删除同步由计划维护负责，不挤进查找/检查路径。" }
   ],
   components: [
     { name: "materials.py 命令入口", responsibility: "承载初始化、精确接入、登记查找、有界发现、选中验真、打开和最小状态读取。", implementation: "单个 Python 模块与标准库实现，不需要服务、队列、后台任务或专用运行时。" },
@@ -175,11 +211,13 @@ const personalMaterialsProject = {
     { ask: "帮我找那份延保合同，我忘了放哪了。", effect: "先查已登记索引，返回少量不含真实路径的候选；已有明确版本时可以直接进入选中后验真。", moduleSlug: "registered-lookup" },
     { ask: "登记候选都不对，在我已经允许的几个目录里再找一次。", effect: "用同一句描述选择最相关来源，只看文件名、目录名和文件元数据，并说明真正扫描的范围、截止与未搜索来源。", moduleSlug: "bounded-discovery" },
     { ask: "打开第二个候选，但先确认它没有被替换。", effect: "只读取所选文件，重新核对大小、SHA-256、来源根和文件身份；匹配才打开，漂移则停止并说明原因。", moduleSlug: "verified-open" },
-    { ask: "把这份已经确认的非媒体原件加入以后可查的范围。", effect: "只接受精确交接包，现场核对 schema、来源、大小和哈希；元数据进入最小索引，原件继续留在原处。", moduleSlug: "exact-intake" }
+    { ask: "把这份已经确认的非媒体原件加入以后可查的范围。", effect: "只接受精确交接包，现场核对 schema、来源、大小和哈希；元数据进入最小索引，原件继续留在原处。", moduleSlug: "exact-intake" },
+    { ask: "这份材料我已经在文件管理器删了，不用恢复。", effect: "下一次日常同步确认登记来源根可用、精确 locator 已不存在后，自动退出该 occurrence，并由外键级联清理仅由它支撑的关系和绑定文字；其他版本、来源和副本保留。", moduleSlug: "registered-lookup" }
   ],
   evidenceLayers: [
     { layer: "Project rules（项目规则）", proves: "产品只负责定位、核验和打开非媒体原件，并明确媒体、领域语义、原件保护和零命中边界。", doesNotProve: "不证明代码已经实现，也不证明当前来源可访问。" },
     { layer: "README（人类入口）", proves: "普通人可以理解何时使用、先 find 还是 discover、选中后怎样打开，以及不会发生什么。", doesNotProve: "README 不是运行时事实，也不能替代源码和真实请求。" },
+    { layer: "Current inventory（当前来源盘点）", proves: `显式只读 inventory 完成 ${inventory.completedRoots}/${inventory.registeredSources} 个登记根，得到 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个非媒体路径条目、34 个精确 locator 与 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个按需发现条目；读取错误 0、未截止、数据库字节不变。`, doesNotProve: "不证明路径条目经过内容哈希去重，也不证明一轮 discover 或一个自然请求会覆盖全部来源。" },
     { layer: "Source and schema（源码与结构）", proves: `PRIVATE main ${SOURCE_COMMIT} 定义命令、限额、SQLite 表、状态、事务、媒体拒绝和完整性检查。`, doesNotProve: "不证明当前数据库内容、登记范围、设备挂载或系统默认启动器可用。" },
     { layer: "Automated tests（自动回归）", proves: `${TEST_RESULT}；用于核对身份冲突、回滚、路径隐藏、范围报告、有界发现、来源根绑定、媒体拒绝和初始化身份。`, doesNotProve: "合成临时文件不能证明真实私人材料或自然请求已经成功。" },
     { layer: "Skill route（能力入口）", proves: "当前能力说明会在位置未知、跨获准位置或 locator 失效时选择本项目，并把媒体和可靠定位分流。", doesNotProve: "Skill source、安装、当前任务发现与真实端到端结果必须分别验证。" },
@@ -188,22 +226,24 @@ const personalMaterialsProject = {
   ],
   operationalEntrypoints: [
     { name: "初始化最小索引", command: "python materials.py init", purpose: "只在项目索引尚不存在时建立空 schema；已有合法索引会原样返回 ready，外部或损坏数据库不会被覆盖。" },
+    { name: "读取当前来源规模", command: "python materials.py inventory", purpose: "显式按需枚举登记根的文件元数据，返回来源范围文件、精确 locator、按需发现条目、媒体跳过、错误与 cutoff；不读正文、不算文件哈希、不写数据库。" },
     { name: "查已登记材料", command: "python materials.py find --text \"<普通描述>\" --limit 4", purpose: "优先从已登记非媒体索引返回少量候选，不遍历原件目录。" },
     { name: "有界即时发现", command: "python materials.py discover --text \"<同一普通描述>\" --limit 4", purpose: "只有无合适登记候选且位置未知时，查看获准目录的文件名与原生目录名。" },
     { name: "验真登记候选", command: "python materials.py inspect --id \"<内部材料标识>\"", purpose: "重新核对一份已登记原件的大小与 SHA-256，但不启动阅读器。" },
     { name: "打开登记候选", command: "python materials.py open --id \"<内部材料标识>\"", purpose: "核验通过后用系统默认应用打开真正原件。" },
     { name: "打开发现候选", command: "python materials.py open-discovered --token \"<内部选择凭据>\"", purpose: "只对选中的发现候选读取完整字节、登记定位并打开。" },
     { name: "精确接入", command: "python materials.py intake --file \"<personal-materials.handoff.v1.json>\"", purpose: "接收一小组经过明确选择并已携带预期大小与哈希的非媒体原件元数据。" },
-    { name: "读取最小状态", command: "python materials.py status", purpose: "只返回四表计数、background_process=false 和 original_bytes_copied=0；它不是覆盖证明、查找结果或真实端到端验收。" }
+    { name: "同步当前原件清单", command: "python materials.py sync-current", purpose: "现有每日备份任务调用；只清理已登记且确切不存在的非媒体索引及独有关系/文字，来源不可访问则跳过，不扫描新增来源、不复制或删除原件。" },
+    { name: "读取最小状态", command: "python materials.py status", purpose: "快速返回数据库表行数，并把 34 明确命名为 exact_registered_locator_rows；它不是来源范围总数、查找结果或真实端到端验收。" }
   ],
   evolution: [
     { date: "2026-08-24", commit: "milestone-01", result: "建立最小非媒体来源、定位、版本、关系与哈希索引，以及先核验再打开的产品主链。" },
     { date: "2026-08-25", commit: "milestone-02", result: "接入有界来源并改善长自然语言请求匹配，让用户不需要先记住路径或内部标识。" },
     { date: "2026-08-26—2026-08-27", commit: "milestone-03", result: "把照片、视频、音频和录音完整移交 personal-media，并让接入、查找、发现和打开一致拒绝媒体。" },
     { date: "2026-08-30", commit: "milestone-04", result: "把发现候选绑定到各自来源根，补齐数据库身份拒绝、选择期间文件变化检测、身份冲突回滚和稳定材料身份。" },
-    { date: "2026-09-01", commit: SOURCE_COMMIT, result: `${TEST_RESULT}；可靠性修复已正常推送 PRIVATE main，并从远端默认分支回读同一提交。` }
+    { date: "2026-09-02", commit: SOURCE_COMMIT, result: `${TEST_RESULT}；新增显式按需、零正文、零哈希、零持久化的 inventory，并实现可信文件管理器删除后的精确 occurrence 退役与关系/文字级联。当前回读 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} / ${inventory.exactLocators} / ${inventory.onDemandEntries.toLocaleString("zh-CN")}，生产 34/34 locator 存在，PRIVATE main 已 normal push 并回读同一提交。` }
   ],
-  snapshotUpdateNote: "本页只在项目的用途、查找路线、限额、失败语义、媒体边界、完整性保证或用户应该怎样使用发生实质变化时更新。实际来源、材料、候选、路径、内部选择凭据和索引计数从不进入公开快照；仅提交、测试数或时间变化而产品含义不变时，不重写产品正文。"
+  snapshotUpdateNote: "本页在项目用途、查找路线、限额、失败语义、媒体边界、完整性保证或当前来源规模发生实质变化时更新。公开快照保留来源范围文件数、精确 locator 数、按需发现数、覆盖与错误等安全聚合；不复制正文、标题、候选、真实 locator、内部选择凭据或文件指纹。仅提交、测试或观察时间变化而产品与实际规模含义不变时，不重写正文。"
 };
 
 const personalMaterialsModules = [
@@ -211,15 +251,15 @@ const personalMaterialsModules = [
     slug: "registered-lookup",
     shortTitle: "已登记查找",
     title: "先查已登记的非媒体原件，不先遍历文件目录",
-    searchAliases: ["已登记材料怎么快速找", "find材料", "材料候选为什么隐藏路径", "签字版交付版怎么区分", "同一材料多个版本", "找文件先查索引"],
+    searchAliases: ["已登记材料怎么快速找", "find材料", "材料候选为什么隐藏路径", "签字版交付版怎么区分", "找文件先查索引", "材料在文件管理器删了", "我自己删的文件不用恢复", "删除材料后退出索引"],
     searchProjection: {
-      intents: ["用普通描述查已登记非媒体原件", "区分草稿签字交付与回执版本", "确认候选阶段为何隐藏真实路径", "解释登记索引零命中的实际范围"],
+      intents: ["用普通描述查已登记非媒体原件", "本人删除原件后退出 locator 和绑定文字", "区分草稿签字交付与回执版本", "确认候选阶段为何隐藏真实路径", "解释登记索引零命中的实际范围"],
       entities: ["find", "sources", "materials", "material_relations", "material_text", "logical_id", "version_role", "open_state"],
-      relations: ["verified_locator 只承载当前 verified 记录", "unverified_source_evidence 承载未验证的来源元数据与绑定文字证据", "known_locator_gap 承载 missing hash_mismatch not_openable", "登记候选进入 verified-open 后才打开"],
-      failureRecovery: ["已知定位缺口不冒充 verified", "零命中返回已搜索与未搜索范围", "派生文字命中仍要回到原件验真", "数据库身份不符时拒绝读取和覆盖"]
+      relations: ["verified_locator 只承载当前 verified 记录", "unverified_source_evidence 承载未验证的来源元数据与绑定文字证据", "本人已删的 missing occurrence 在查询前退出", "hash_mismatch 与 not_openable 仍是可复核 gap", "登记候选进入 verified-open 后才打开"],
+      failureRecovery: ["本人已删原件不应作为恢复候选", "哈希漂移和不可打开不冒充 verified", "零命中返回已搜索与未搜索范围", "派生文字命中仍要回到原件验真", "数据库身份不符时拒绝读取和覆盖"]
     },
     teaser: "用一句普通描述匹配已登记来源、标题、原生标识、版本角色和绑定文字，优先返回已有可靠定位的少量候选。",
-    status: `登记查找已把 verified_locator、unverified_source_evidence 与 known_locator_gap 三阶段分开；版本区分、路径隐藏、零命中范围和媒体过滤已有源码与测试结构；${TEST_RESULT}；真实索引未在本页读取。`,
+    status: `当前有 ${inventory.exactLocators} 个 verified 精确 locator；登记查找把 verified_locator、unverified_source_evidence 与 known_locator_gap 三阶段分开，版本区分、路径隐藏、零命中范围、媒体过滤与可信文件管理器退役由 ${TEST_RESULT} 支持。生产 34/34 locator 存在，missing=0、uncertain=0。`,
     statusTone: "mixed",
     value: "绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。",
     why: "同一材料可能有草稿、签字版、交付版、回执或完全相同的副本。只按文件名排序会把版本混在一起；直接公开路径又会在尚未选择时暴露不必要的私人位置。登记查找先把候选缩小，并保留来源原生差异。",
@@ -227,7 +267,7 @@ const personalMaterialsModules = [
     result: "得到少量可比较候选和明确的登记搜索范围。候选还不是最终原件证明；选中后继续进入重新验真，零命中则说明哪些来源和材料记录确实被查询。",
     readerStates: {
       pass: "verified_locator 只返回 open_state=verified 的少量匹配项；来源、版本角色、时间、容器、重复与关系足以选择，真实路径和内部标识仍不进入用户答复。",
-      problem: "没有 verified 匹配时，才依次使用未验证的来源元数据与绑定文字证据，或进入 known_locator_gap；missing、hash_mismatch、not_openable 会带着原状态返回，不能被写成已验证。",
+      problem: "没有 verified 匹配时，才依次使用未验证的来源元数据与绑定文字证据，或进入 known_locator_gap；hash_mismatch、not_openable 会带着原状态返回。可信根中的本人已删 missing occurrence 已在查询前退出。",
       unavailable: "最小 SQLite（轻量数据库）不存在、应用身份不符或只读连接失败时，不读取外部数据库猜结果；停止查找并说明需要恢复的项目入口。"
     },
     stateLabels: ["有清晰登记候选时", "零命中或版本仍歧义时", "登记索引不可读取时"],
@@ -236,12 +276,13 @@ const personalMaterialsModules = [
       "登记候选与发现候选分开：已有定位优先，不为每次查询遍历文件系统。",
       "查找阶段本身表达证据强度：verified、未验证来源证据（来源/材料元数据、search_text 或绑定文字）和已知定位缺口不会混在同一个“已找到”标签里。",
       "完全相同字节、逻辑版本和来源原生关系分别表达，不把“相似”写成“同一份”。",
-      "零命中自动携带已搜索与未搜索范围，不能被解释成其他设备或位置不存在。"
+      "零命中自动携带已搜索与未搜索范围，不能被解释成其他设备或位置不存在。",
+      "来源根可访问而已登记原件不存在时，不再返回 known_locator_gap；该 occurrence 和级联文字/关系在事务重检后退出。"
     ],
     problem: "解决路径遗忘、同名文件、版本混淆、旧定位优先级和候选阶段不必要暴露真实位置。",
     implementation: [
       "从 sources、materials、material_relations 和 material_text 读取登记事实；媒体历史行在查询前过滤。",
-      "第一阶段只匹配 open_state=verified，并把 lookup_stage 标为 verified_locator；missing、hash_mismatch 和 not_openable 绝不进入这一阶段。",
+      "先按 verified_locator 查找，确切缺失候选不占 limit；该阶段没有有效结果才回退 unverified_source_evidence，再回退已记录问题。不能因为一个已删文件挡住后面的真实原件。",
       "没有 verified 匹配时才查 open_state=unverified 的来源名、标题、原生 ID、版本字段、材料 search_text 与 material_text，并标为 unverified_source_evidence；即使没有 material_text，来源原生元数据仍可形成未验证候选。",
       "material_text 只接收 native、ocr 或 extracted 三类可重建文字；它们可以帮助召回，但不能替代当前原件验真。",
       "查询文本去除常见请求词，并结合完整短语、拉丁词和中文二元片段计算有界匹配分。",
@@ -252,7 +293,7 @@ const personalMaterialsModules = [
     flow: [
       "确认请求属于非媒体原件且没有可靠 locator；否则直接分流或绕过。",
       "把用户原话规范为搜索签名，不要求用户翻译成内部字段。",
-      "按 verified_locator → unverified_source_evidence → known_locator_gap 的顺序搜索，前一阶段有结果就不混入较弱阶段。",
+      "查询按 verified_locator → unverified_source_evidence → known_locator_gap 逐阶段返回仍可核对的候选，不写数据库或触发同步；候选数量上限只计算有效项。",
       `按分数、来源时间和稳定材料身份排序，只保留最多 ${limits.skillCandidates} 个候选。`,
       "返回候选、查找阶段、搜索范围与零命中说明；不在这一步打开原件。"
     ],
@@ -262,7 +303,7 @@ const personalMaterialsModules = [
       { term: "Exact duplicate（精确重复）", explanation: "只有完整 SHA-256 相同才成立；标题相同或迁移回执不能证明。" },
       { term: "Hash-bound text（哈希绑定文字）", explanation: "OCR、提取或原生文字与一份精确原件身份绑定；只帮助召回，引用仍回到原件。" },
       { term: "Search scope（搜索范围）", explanation: "本次实际查询的登记材料与来源，以及未查询部分；零命中必须与它一起解释。" },
-      { term: "Lookup stage（查找阶段）", explanation: "verified_locator 只含 verified；unverified_source_evidence 只含 unverified 的来源元数据或绑定文字证据；known_locator_gap 只含 missing、hash_mismatch 或 not_openable。" }
+      { term: "Lookup stage（查找阶段）", explanation: "verified_locator 只含 verified；unverified_source_evidence 只含 unverified 的来源元数据或绑定文字证据；known_locator_gap 只保留 hash_mismatch、not_openable 等仍可复核问题，本人已删的 missing occurrence 已先退出。" }
     ],
     boundaries: [
       "已有可靠路径直接打开，不先经过登记查找。",
@@ -275,7 +316,8 @@ const personalMaterialsModules = [
       { condition: "零命中", response: "返回 not_found、登记搜索阶段、实际材料数量、来源样本、未搜索来源与缺口；只说明本轮登记索引没有合适候选。" },
       { condition: "指定来源没有可用登记项", response: "不静默扩大到其他来源；显示空范围并等待更正来源或明确进入发现。" },
       { condition: "只有旧的未验证文字命中", response: "明确标为派生文字召回，不能跳过原件验真，也不能把文字内容直接当当前原件。" },
-      { condition: "只有已知定位缺口命中", response: "返回 known_locator_gap 和原 open_state；missing、hash_mismatch、not_openable 只能帮助恢复，不能称 verified_locator。" },
+      { condition: "本人已从可信文件管理器删除登记原件", response: "查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。" },
+      { condition: "只有仍可核对的定位缺口命中", response: "hash_mismatch、not_openable 等返回 known_locator_gap 和原 open_state，不能称 verified_locator。" },
       { condition: "数据库身份不符", response: "拒绝连接，不初始化或覆盖外部字节；由项目入口恢复正确的最小 SQLite。" }
     ],
     sources: [
@@ -290,6 +332,7 @@ const personalMaterialsModules = [
       "分别构造 verified、unverified、missing、hash_mismatch、not_openable，确认三个 lookup_stage 严格分层且缺口从不标成 verified_locator。",
       "验证零命中返回来源范围、未搜索数量与缺口，而不是空对象或绝对不存在。",
       "验证媒体历史行既不能成为来源，也不能通过 find 返回或打开。",
+      "隔离回归覆盖查询/状态/检查不改库，缺失项不占 limit，verified 全失效后正确回退，单文件来源删除可同步，以及维护仅级联移除失效项的独有关系/文字。",
       "真实产品验收必须从自然请求开始，并最终选中、重新验真、打开一份真实原件；单元测试不能替代。"
     ],
     relation: "这是主入口。候选清楚时进入“验真再打开”；没有合适登记候选且位置真正未知时才进入“有界发现”。“精确接入”持续为本模块提供小而可信的来源与版本事实。"
@@ -306,7 +349,7 @@ const personalMaterialsModules = [
       failureRecovery: ["来源根不可访问时标记未搜索", "目录或目录项读取错误进入显式 gap", "达到文件或时间上限时保留截止原因", "截止子集不冒充稳定完整排序"]
     },
     teaser: "按同一句自然描述选择最相关的少量来源，在全局机械上限内只查看文件名、原生目录名和 stat；不预扫描、不持续索引。",
-    status: `来源路由、增量有界枚举、目录读取 gap、共同预算、媒体跳过、链接拒绝、未搜索来源摘要和候选来源根绑定已有源码与测试结构；${TEST_RESULT}；真实来源未在本页扫描。`,
+    status: `当前来源范围内有 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个尚未精确登记的非媒体路径条目；来源路由、共同预算、媒体跳过、链接拒绝、未搜索来源摘要和根绑定由 ${TEST_RESULT} 支持。`,
     statusTone: "mixed",
     value: "在不知道位置时仍能扩大一次搜索范围，但扩大过程可预期、可说明、不会变成后台全盘索引。",
     why: "登记索引有意保持小而精确，必然不能覆盖每一份尚未接入的文件。直接递归所有登记目录会耗时、读取过量并把“查一次”变成持续维护。发现因此只在真正需要时运行一次，并让所有来源共享硬上限。",
@@ -393,7 +436,7 @@ const personalMaterialsModules = [
       failureRecovery: ["旧句柄缺少来源根时要求刷新", "同路径新内容刷新版本并清除旧派生文字", "启动前再次变化时标为 hash_mismatch", "启动器失败与字节核验失败分开记录"]
     },
     teaser: "登记候选与发现候选都必须在打开前重新核对；发现候选还要证明来源根、相对位置和选择期间文件身份没有改变。",
-    status: `登记原件复核、发现候选来源根承诺、同路径新内容刷新、读取与启动前变化检测、身份冲突回滚和启动失败状态已有源码与测试结构；${TEST_RESULT}；本页未打开真实原件。`,
+    status: `当前 ${inventory.exactLocators} 个精确 locator 均在数据库中标为 verified；本页只做来源 inventory，没有启动默认应用或打开真实原件正文。复核、变化检测、身份冲突回滚和启动失败状态由 ${TEST_RESULT} 支持。`,
     statusTone: "mixed",
     value: "把“看起来像”变成“当前字节仍匹配”：任何漂移都在打开和提交前停止，旧定位不会悄悄指向另一份文件。",
     why: "候选生成与用户选择之间，文件可能被移动、替换或改写；来源根也可能重新挂载到别的位置。若只在发现时记一个路径，之后直接打开，用户得到的可能已不是当时看到的那一项。",
@@ -401,7 +444,7 @@ const personalMaterialsModules = [
     result: "成功时返回 verified 或 opened，并带出选中原件的标题、来源、版本、大小、SHA-256、核验时间和是否已启动；失败时返回精确 gap，不留下半登记状态。",
     readerStates: {
       pass: "大小、SHA-256、来源根、相对位置和选择前后文件身份一致；登记事务提交后，原件被打开或按请求只完成验真。",
-      problem: "文件缺失、大小或哈希不符、来源根改变、候选读取期间变化、身份冲突或启动失败时，返回精确 gap 并保留旧的可恢复状态。",
+      problem: "文件缺失、大小或哈希不符、来源变化或启动失败时返回具体 gap；缺失原件不是等待恢复的状态。检查只读，明确打开动作保留原有核验和状态记录。",
       unavailable: "索引不能安全写入、来源根无法解析或默认应用不可调用时，不绕过核验；只说明哪一层不可用以及可否先保留 verified 结果。"
     },
     stateLabels: ["当前字节完全匹配时", "定位、文件或身份发生变化时", "写入或启动入口不可用时"],
@@ -451,7 +494,7 @@ const personalMaterialsModules = [
       "SQLite 提交与外部文件系统变化不能组成一个原子事务；发现路线用提交前身份检查、提交后启动前重哈希和后续每次 open 复核收窄风险，但不宣称数学上的零窗口。"
     ],
     failures: [
-      { condition: "登记 locator 缺失", response: "写回 missing 与 locator_missing，返回实际检查的旧定位；不从相邻目录猜新位置。" },
+      { condition: "登记 locator 在可访问可信根中已不存在", response: "inspect 返回 locator_missing，不改索引、不猜相邻路径、不恢复文件；清单在日常 sync-current 中跟随删除。" },
       { condition: "大小或 SHA-256 漂移", response: "写回 hash_mismatch，返回 size_match/hash_match；旧版本不打开，重新发现后形成新定位。" },
       { condition: "来源根或候选 stat 改变", response: "返回 refresh_required、root_changed 或 candidate_changed；旧内部选择凭据失效，重新 discover。" },
       { condition: "读取期间文件改变", response: "事务回滚并返回 changed_during_hash；不留下新材料记录。" },
@@ -490,7 +533,7 @@ const personalMaterialsModules = [
       failureRecovery: ["四表关键列或 integrity_check 不通过时拒绝数据库", "材料稳定句柄在提交前变化时整体回滚", "material_key 与 source/native 重绑时拒绝", "内容变化先清旧 material_text 再写本次文字"]
     },
     teaser: "上游业务只交接已明确选择的一小组非媒体原件；项目现场复算大小与 SHA-256，接受定位元数据和可重建文字，不接管原件。",
-    status: `handoff schema（交接结构合同）、绝对来源根、稳定文件句柄、身份防重绑、内容变化文字清理、完整数据库身份与 integrity_check 已有源码与测试结构；${TEST_RESULT}；本页未读取任何真实交接包。`,
+    status: `当前精确接入结果为 ${inventory.exactLocators} 个 locator、4 条关系、0 条绑定检索文字；本页未读取交接包正文。handoff schema、稳定文件句柄、身份防重绑、文字清理和数据库身份由 ${TEST_RESULT} 支持。`,
     statusTone: "mixed",
     value: "让以后能够快速查找，但不把所有文件搬进新目录，也不把材料项目扩成跨领域数据库。",
     why: "自动爬盘建立全量索引会引入大量无消费者内容、旧版本和媒体重复；仅保存路径又无法确认后来打开的仍是同一字节。精确接入要求上游先选定对象，并让元数据、版本和哈希在写入前一致。",
@@ -558,7 +601,7 @@ const personalMaterialsModules = [
       "不保存事件、人物关系、重要性、领域判断、用户画像或跨来源推断。",
       "status 中的表计数不代表来源 complete，也不证明任何登记 locator 当前仍可打开。",
       "稳定句柄的提交前复核无法把外部文件系统与 SQLite 合成单一原子事务；极小的提交后窗口由以后每次 inspect/open 再哈希兜底。",
-      "交接成功不证明平台提交、法院受理、合同生效或用户已经阅读；现实状态由领域责任项目判断。"
+      "交接成功不证明平台接收、接收方处理、合同生效或用户已经阅读；现实状态由领域责任项目判断。"
     ],
     failures: [
       { condition: "交接字段或 schema 不匹配", response: "返回明确 validation error，整个交接不写入；由上游按当前合同重建小包。" },

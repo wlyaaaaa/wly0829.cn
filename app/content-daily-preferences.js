@@ -22,6 +22,7 @@ const dailyPreferencesSnapshot = createProjectSnapshot({
     { label: "当前来源", value: "11 个来源实例中有 9 个 acquired_verified（来源已取得并核对）、2 个 snapshot_only（只有快照）；10 个非人工来源已收敛到解析版本 daily-preferences.v0.6。" },
     { label: "当前缺口", value: "bank transactions（银行交易）、京东订单、拼多多订单、美团订单与菜鸟物流 5 类逻辑来源尚未取得；信用卡来源有 1 个已知缺月；最近一次导入没有 failed（失败）或 partial（部分完成）。" },
     { label: "事实与推定", value: "订单只证明买过或点过，支付只补渠道旁证，行程只证明发生过；用户当前同 key（偏好键）明示优先，推定必须绑定 current 证据并可随来源或纠正失效。" },
+    { label: "接入结果不是推荐结果", value: "ingest 分别返回 completed（本次接入完成）、no_change（没有新解析记录）、partial（部分完成）或 failed（失败），并列出文件/记录计数、gaps 与失效推定数量。接入只更新证据和状态，不自动生成新推荐；新候选仍由 Skill 与 AI 依据有效证据组织。", hero: false },
     { label: "当前性能", value: "40/40 源码回归通过；真实 54,283 个 current 记录上，证据查询观察约 1.2–1.5 秒，这不是 SLO（服务目标）；中文具体词会检查完整相关来源，不再只看最近 1,000 条。", hero: false },
     { label: "v0.6 数据修正", value: "1,749 条微信支付 Excel 本地时间全部纠正，其中 841 条回到正确日历日；迁移前后 current 键零增零减，数据库 integrity_check=ok、外键 finding=0。" },
     { label: "数据与整页时间", value: "CURRENT 数据层最后写于 2026-09-01T14:20:46.3506127Z；整页 observedAt 是后来完成 source main、实现盲请求、内容接线与终审的时间，两者不互相冒充。", hero: false },
@@ -35,6 +36,7 @@ const dailyPreferencesSnapshot = createProjectSnapshot({
     "支付与详细订单可以按精确 correlation key（关联键）建立关系，但推荐证据当前仍由 Skill 与 AI 判断其旁证角色；没有把付款计入订单 repeat_count（重复次数）。",
     "权威 full（完整快照）若解析为零记录会失败关闭并保留旧 current；尚未为每个平台证明‘有效空快照’的独立语义。",
     "历史已经按时间相邻区间保存，但没有面向用户的 history（历史查询）或 withdraw（撤回）命令。",
+    "ingest、record 和 snapshot 都先提交 SQLite，再刷新 CURRENT.md。缓存写入失败可能发生在业务数据已经提交之后；当前没有明确的 db_committed/cache_stale 分层回执，不能把错误当作整次未记录后盲目重复写入。",
     "75 份现存来源制品足以重放非人工记录层；CURRENT 只能从尚存 SQLite 重建。用户明示、推定及其历史没有独立恢复输入，完整 SQLite 丢失恢复尚未建立；项目也没有正式导出、备份或跨机器迁移入口。"
   ]
 });
@@ -65,11 +67,11 @@ const dailyPreferencesProject = {
   summary: "这个项目保存的不是一份“我是什么样的人”的总画像，而是：我现在明确说了什么，哪些行为事实支持或反驳某个判断，这条推定何时应该失效。普通问题先读一份很小的当前快照，需要解释时才查相关证据。推荐同时给熟悉稳妥、相邻探索和有依据的新鲜尝试，我可以随时用一句纠正改变后续排序。",
   why: "没有这条能力，AI 要么每次从零猜，要么把旧订单、付款和对话压成永久标签。买过不等于喜欢，同一订单的付款也不等于又买了一次，曾经喜欢更不代表现在。这个项目把事实、推定、当前表达和未知分开，让连续性不会牺牲可纠正性。",
   plainExample: "例如我问“今晚吃什么”，并补一句“最近不想太辣”。能力入口先以这句最新明示为准，再分别补查“吃”和“喝”的相关证据；只有需要解释复购理由时，才核对具体商品、成功与关闭次数、时间和文本变体。结果同时给熟悉、相邻和新鲜选择，需要当前门店、菜单或优惠时再附合适平台和可复制关键词。",
-  result: "我得到的是一组可以自己选择的候选：具体内容、为什么适合、关键取舍和哪里只是推测都写清。需要当前价格、门店或菜单时还有搜索接力；接受、拒绝或改主意以后，下一次推荐按新的 current 排序，旧表述只留作历史。",
+  result: "推荐时，我得到一组可以自己选择的候选，写清具体内容、适合理由、关键取舍与推测，必要时附搜索接力。补来源时得到的则是接入状态、处理计数、缺口和已失效推定数量，不是一份新菜单；表达或改主意被成功记录后，下一次推荐才按新的 current 排序，旧表述留作历史。",
   readerStates: {
-    pass: "当前明示、薄快照或相关证据足够时，交付熟悉、相邻和新鲜三类候选，并写清理由、取舍与搜索接力。",
-    problem: "新旧表达冲突、证据稀疏、具体商品被过度概括或来源不完整时，把当前、历史、事实、推定和 Unknown（未知）分开，不强行贴标签。",
-    unavailable: "薄快照和证据入口都不可用时，只依据本轮清楚表达给临时候选；不把缺快照说成没有偏好，也不恢复中央画像或扩大扫描。"
+    pass: "推荐请求由 Skill/AI 根据当前明示和有效证据交付熟悉、相邻与新鲜候选；记录或接入请求则交回 recorded/recorded_historical 或 completed/no_change 及具体计数。保存证据、更新缓存与生成推荐是不同结果，不互相冒充。",
+    problem: "接入部分完成或失败时列出已处理记录、gaps 与失效推定，不把 acquired_verified 来源标签当作本轮导入成功。新旧表达、事实或推定冲突时分开解释，失效推定不继续用于当前推荐。",
+    unavailable: "查询入口不可用时只依据本轮表达给临时候选；写入出错则先区分数据库未提交还是提交后缓存刷新失败，保留已发生结果并核对原记录，不盲重写。不把缺快照说成没有偏好，也不扩大扫描。"
   },
   stateLabels,
   methodCanvas: {
@@ -140,14 +142,14 @@ const dailyPreferencesProject = {
     { title: "需要原因时核对 facts", detail: "具体商品按品牌与品类词返回匹配、正向/负向状态、首末时间与变体；模板和赠品过滤。" },
     { title: "必要时有界回原件", detail: "先核对制品存在和 SHA-256；ChatGPT 再核消息 hash 并返回对应原文，PDF 重新抽取后做窄掩码，其他类型明确返回已验制品的缓存片段。" },
     { title: "组织选择菜单", detail: "Skill 与 AI 返回熟悉、相邻、新鲜候选；每项说明理由、取舍和推测，实时信息走搜索接力。" },
-    { title: "纠正或准备增量", detail: "新的明示更新 current；只有明确准备补数据时，status 才逐来源返回覆盖、缺口、材料、重叠起点和模式。" }
+    { title: "纠正或准备增量", detail: "新的明示更新 current；准备补数据时，status 只读返回覆盖、缺口、材料、重叠起点和模式。实际 ingest 后另报完成/无变化/部分完成/失败、计数和失效推定，不把准备清单或接入成功写成新推荐已生成。" }
   ],
   components: [
     { name: "daily-preferences Skill", responsibility: "从自然偏好、纠正、推荐和增量请求进入正确流程。", implementation: "拥有推荐菜单、搜索接力、领域边界和用户选择权；不复制 SQLite 实现。" },
     { name: "Python CLI（命令行入口）", responsibility: "提供 init、ingest、status、evidence、facts、record、snapshot 与 original 八个动作。", implementation: "主要使用 Python 标准库；信用卡 PDF 文本读取依赖 pypdf。" },
     { name: "PowerShell wrapper（PowerShell 启动入口）", responsibility: "让自然路由和人工维护从项目根使用同一个 Windows 入口，而不要求用户寻找 Python。", implementation: "先使用 PATH 中的 python，再查 LocalAppData 下最新 Python*，最后查 bundled runtime（随工作区提供的运行时）；三处都不存在时明确抛出 Python runtime not found，不静默换执行器。" },
     { name: "SQLite / FTS5（本地数据库 / 全文索引）", responsibility: "保存来源实例、制品、导入、记录版本、明示、推定与证据关系。", implementation: "schema v1、WAL、外键、STRICT 表和 current 唯一索引；没有第二数据库或后台进程。" },
-    { name: "CURRENT.md", responsibility: "让普通推荐快速读取 current 明示、有效推定和来源覆盖。", implementation: "通过临时文件与 os.replace 原子替换；可删除重建，不是原件或数据库备份。" },
+    { name: "CURRENT.md", responsibility: "让普通推荐快速读取 current 明示、有效推定和来源覆盖。", implementation: "SQLite 提交后，再通过临时文件与 os.replace 原子替换缓存；文件替换不和数据库构成同一事务，失败时数据库可能已更新而缓存仍旧。它可重建，不是原件或数据库备份。" },
     { name: "Profile parsers（来源解析器）", responsibility: "把 9 类已实现导出格式转成稳定记录。", implementation: "淘宝、淘宝闪购/饿了么、支付宝、微信支付、信用卡、滴滴网约车、ChatGPT、Gemini JSON 与 Gemini HTML；旁系 Didi 导出不冒充支持。" },
     { name: "窄索引清洗", responsibility: "让本地检索不需要保存某些无产品价值的联系方式和长标识，同时不牺牲普通偏好事实。", implementation: "scrub_sensitive 把邮箱和独立 7–19 位数字替换为占位；scrub_payment_method 再掩码括号内末四位。它只用于选定 parser 字段，不是全库、原件或公开页面的统一脱敏器。" },
     { name: "原件验真", responsibility: "防止缓存片段继续指向已经缺失或变字节的来源。", implementation: "先核 artifact SHA-256；ChatGPT 再核消息 content hash，PDF 重读失败明确返回不可读，其余类型标明缓存片段。" }
@@ -183,7 +185,7 @@ const dailyPreferencesProject = {
   snapshotUpdateNote: "本页只在 daily-preferences 项目或 Skill 正式发布并回读后产生实质产品变化时更新。普通偏好数据增量若不改变公开产品能力、边界、证据解释或用户决策，只更新本地状态，不制造网站任务或公开消费日记。"
 };
 
-const commonModuleShape = (definition) => ({ ...definition, stateLabels });
+const commonModuleShape = (definition) => ({ stateLabels, ...definition });
 
 const dailyPreferencesModules = [
   commonModuleShape({
@@ -205,10 +207,11 @@ const dailyPreferencesModules = [
     example: "先说“以前喜欢重辣”，后来明确“现在只想吃微辣”。较新的表述成为 current；旧表述有结束时间并保留历史，相关 food 推定退出 current。",
     result: "得到一条明确时间线：现在生效什么、过去曾经是什么、哪条推定因用户纠正或来源变化失效。",
     readerStates: {
-      pass: "新表述时间不早于当前时，重建同 key 时间线并更新 current；同领域推定 stale。",
+      pass: "新表述成为当前时返回 recorded，按生效时间重建同 key 时间线并使同领域推定 stale；较早表述返回 recorded_historical。两者都表示记录结果，不表示已经生成下一份推荐。",
       problem: "带日期的表述早于 current 时只进入历史；同一自然范围若用了不同 key，当前实现不会自动语义合并。",
-      unavailable: "数据库或 CURRENT 缓存不可写时不声称记录成功；数据库是权威，缓存可重建，但当前没有撤回/历史查询命令。"
+      unavailable: "数据库提交前失败时不能声称已记录；CURRENT 缓存刷新失败却可能发生在提交之后，此时明示与失效状态已经保存、缓存可能仍旧。先核对数据库，不把错误理解成未写入后再次 record；当前没有分层回执或撤回/历史查询命令。"
     },
+    stateLabels: ["已记录", "分清当前与历史", "记录或缓存不可用"],
     decisionImpact: [
       "同一个 preference_key 只有一个 current；历史按 effective_from 排序，相邻区间不重叠。",
       "回顾过去只改变历史，不覆盖现在。",
@@ -223,9 +226,9 @@ const dailyPreferencesModules = [
       "每次 record 后按时间和 statement_id 重建同 key 全部相邻区间，最后一条成为 current。",
       "新 current 明示使相同 key 或相同领域前缀的 current snapshot stale。",
       "user.current 来源覆盖随明示的最早/最晚生效时间更新。",
-      "CURRENT.md 只投影 current 明示，不复制完整历史。"
+      "CURRENT.md 投影 current 明示、有效推定与来源覆盖，不复制完整历史；record_statement 先 connection.commit，再调用 write_current，两步不是同一事务。"
     ],
-    flow: ["用户自然表达或带日期回顾", "Skill 选择稳定 preference_key", "record 写入表述", "按时间重建同 key 时间线", "判断是否成为 current", "必要时让同领域推定 stale", "原子刷新 CURRENT 快照"],
+    flow: ["用户自然表达或带日期回顾", "Skill 选择稳定 preference_key", "record 写入表述", "按时间重建同 key 时间线", "判断是否成为 current", "必要时让同领域推定 stale", "提交 SQLite", "单独原子替换 CURRENT 缓存", "返回 recorded 或 recorded_historical"],
     concepts: [
       { term: "preference_key（偏好键）", explanation: "让同一具体偏好在多次表达中保持稳定身份；它不是人格标签。" },
       { term: "effective time（生效时间）", explanation: "这句话描述何时开始成立；回顾过去可以显式给日期。" },
@@ -236,7 +239,7 @@ const dailyPreferencesModules = [
       { condition: "生效时间无法解析", response: "返回 invalid effective time，不写入。" },
       { condition: "旧日期晚录入", response: "记录为 historical，结束于下一条表述的起点，不覆盖 current。" },
       { condition: "同 key 已有 current 明示却请求推定", response: "返回 blocked_by_current_statement，不插入 snapshot。" },
-      { condition: "缓存刷新失败", response: "数据库提交与缓存失败需要分别判断；当前缺少明确 db_committed/cache_stale 回执，列为 P2。" }
+      { condition: "数据库提交后的缓存刷新失败", response: "明示可能已保存、相关推定可能已 stale，而 CURRENT 仍旧；先只读核对原记录和数据库状态，再处理缓存，不盲目重复 record。当前没有明确 db_committed/cache_stale 回执。" }
     ],
     sources: [
       { path: "daily_preferences.py", role: "实现 record、时间线重建、同领域快照失效与 CURRENT 刷新。" },
@@ -263,12 +266,13 @@ const dailyPreferencesModules = [
     value: "知道每个来源真实到哪里、缺什么、该准备什么和怎样补，不靠模糊的‘最近同步过’做决定。",
     why: "把不同账号或补包混在一起，会让覆盖日期、缺口和去重身份失真；默认 full 更可能把未随补包提供的旧记录误判为消失。",
     example: "用户说准备投递增量。status 分别列 ChatGPT 两个账号、Gemini 两个快照、订单、支付、信用卡与滴滴，并给每个实例的材料、截止、缺口、重叠起点和模式；现在不扫描或写入。",
-    result: "得到逐来源的准备清单和明确缺口；用户提供材料后才 ingest，普通补包默认 incremental，完整权威快照才显式 full。",
+    result: "准备阶段得到逐来源的清单和缺口，不发生接入；用户提供材料后才 ingest。实际接入回执列 completed/no_change/partial/failed、文件与记录计数、gaps、退出旧记录和失效推定数量。普通补包默认 incremental，完整权威快照才显式 full；失效旧推定不等于已生成新推定或推荐。",
     readerStates: {
-      pass: "来源、格式、身份和模式一致时，解析并记录 artifact/import/record 版本，coverage 不缩小，相关推定按来源修订失效。",
-      problem: "格式错误、部分解析、缺月或来源身份冲突时返回 failed/partial 和 gap；旧 current 不因不完整输入退出。",
-      unavailable: "原件、依赖或数据库不可用时保留上次覆盖和缺口；不扫描其他目录、不换来源 ID，也不冒充同步成功。"
+      pass: "完成本轮接入返回 completed；复用同版本制品且符合无变化条件时返回 no_change。两者都要看 counts、gaps 和 invalidated_snapshots；no_change 仍可记录导入与刷新缓存，不等于零写入，也不表示推荐菜单已经更新。",
+      problem: "有解析缺口且取得部分记录时返回 partial，没有取得记录则为 failed；回执保留已处理计数和具体 gaps。部分有效记录仍可能入库并使旧推定失效，只是不因不完整 full 把本次缺失的旧 current 退出。",
+      unavailable: "格式、来源身份、原件或依赖不成立时在相应阶段停止，不换来源或扫描其他目录。数据库已提交、随后 CURRENT 刷新失败时，接入状态可能已经保存，须先核对而非重导；不能一律说旧状态完全没变。"
     },
+    stateLabels: ["完成或无新记录", "部分完成或失败", "入口或缓存不可用"],
     decisionImpact: [
       "当前 11 个来源实例：9 acquired_verified、2 snapshot_only；另有 5 类逻辑来源尚未取得。",
       "5 类来源分别是 bank_transactions、jd_orders、pinduoduo_orders、meituan_orders 与 cainiao_logistics；页面直接给出名字，不把‘5 类’留成谜语。",
@@ -279,7 +283,8 @@ const dailyPreferencesModules = [
       "Didi 目录只选网约车订单 TXT，旁系公交、货运、代驾和个人资料不进入 ride source。",
       "精确输入合同为：淘宝 .xlsx/.blob，淘宝闪购 .xlsx，支付宝 .csv，微信支付 .xlsx，信用卡 .pdf，Didi .txt，ChatGPT/Gemini .zip/.blob；显式文件扩展名不匹配时整体拒绝。",
       "文本按 UTF-8-sig、UTF-16、GB18030 顺序读取；Excel serial 按中国本地时间解释，文件名中的 YYYYMMDD-YYYYMMDD 或 YYYY年M月只在解析成功后补业务覆盖。",
-      "最近导入健康与来源已取得状态分开，failed/partial 不会被 acquired_verified 文案掩盖。"
+      "最近导入健康与来源已取得状态分开，failed/partial 不会被 acquired_verified 文案掩盖。",
+      "接入返回的 counts 含 records、new、updated、duplicate、artifacts 与 artifact_duplicates，另有 exact_links、retired_invalid_records、retired_missing_records 和 invalidated_snapshots；这些数字说明处理和失效，不说明推荐质量。"
     ],
     problem: "解决账号混并、覆盖缩短、缺口被无关补包清除、错误 full 误退 current、同制品回滚失败和 unsupported 格式静默成功。",
     implementation: [
@@ -290,10 +295,12 @@ const dailyPreferencesModules = [
       "records 按 source/type/native/hash 保留版本，partial/full/no_change 的 current 退出语义分开。",
       "collect_paths 对显式错误扩展名整体失败；目录只筛支持类型，Didi 再筛当前真实网约车订单导出。",
       "coverage 只接纳成功解析文件的声明范围；incremental 保留旧覆盖和未解决 gap。",
-      "status 返回每个来源的覆盖起止、快照时间、gap、材料、推荐 mode、重叠建议和 latest_import。"
+      "status 返回每个来源的覆盖起止、快照时间、gap、材料、推荐 mode、重叠建议和 latest_import。",
+      "ingest 外层结果有 completed/no_change/partial/failed 四态；单文件 import_runs 另用 success/no_change/partial/failed，不应把来源 acquired_verified、单文件 success 与整次 completed 混写。",
+      "接入完成覆盖重算、关联重建和失效推定标记后先提交数据库，再写 CURRENT.md；write_current 失败不会撤销已提交记录，当前也没有自动生成替代推定或推荐。"
       ,"特定支付方式先用 scrub_payment_method 掩码邮箱、独立 7–19 位数字和括号内末四位；信用卡正文与 Didi 搜索文本使用 scrub_sensitive。普通商品和偏好语义不因此泛化。"
     ],
-    flow: ["用户先说准备增量", "status 只读列来源实例，不改业务数据或 SQLite 主文件", "用户提供精确材料", "按 profile 与 source_id 校验", "计算 artifact SHA-256 并解析", "保存 import 与记录版本", "更新 coverage/gap", "使受影响推定 stale并刷新CURRENT"],
+    flow: ["用户先说准备增量", "status 只读列来源实例，不改业务数据或 SQLite 主文件", "用户提供精确材料", "按 profile 与 source_id 校验", "计算 artifact SHA-256 并解析", "保存 import 与记录版本", "更新 coverage/gap并使受影响推定stale", "提交SQLite后单独刷新CURRENT", "返回接入四态、计数、缺口与失效推定数量"],
     concepts: [
       { term: "source instance（来源实例）", explanation: "一个明确平台/账号/快照的独立来源身份；两个账号永远分别列。" },
       { term: "incremental（增量）", explanation: "普通带重叠补包；只增加或更新看见的记录，不把本次没带来的旧记录退出。" },
@@ -304,9 +311,10 @@ const dailyPreferencesModules = [
     boundaries: ["不后台同步。", "普通推荐不导入。", "未取得来源只列缺口，不预建解析器。", "窄索引清洗不是全局匿名化，也不修改或覆盖原件。", "Gemini snapshot 不声称连续增量。", "权威空 full 尚无独立平台语义，当前失败关闭。"],
     failures: [
       { condition: "显式文件扩展名不属于 profile", response: "在数据库连接和任何写入前整体拒绝；合法文件与错误文件混合也不部分执行。" },
-      { condition: "解析没有有效记录或出现错误", response: "import health 为 failed/partial，保存精确 gap；full 不退出旧 current。" },
+      { condition: "解析有缺口", response: "取得部分记录时整次为 partial，没有取得记录时为 failed；保存已处理计数和精确 gap，不回滚已经接纳的有效记录，full 不因缺失项退出旧 current。" },
       { condition: "source_id 换 provider 或 logical source", response: "返回 source identity conflict，保留原身份。" },
-      { condition: "同一旧 artifact 重新成为权威", response: "若旧观察已不是 current 就重新解析并激活对应历史版本；连续 no_change 不清空 seen keys。" }
+      { condition: "同一旧 artifact 重新成为权威", response: "若旧观察已不是 current 就重新解析并激活对应历史版本；连续 no_change 不清空 seen keys。" },
+      { condition: "数据库提交后 CURRENT 缓存写入失败", response: "记录、覆盖和失效推定可能已经更新；先只读核对该来源本次 import 与数据库，不将异常当成未导入后盲目重试。当前缺少区分已提交/缓存失败的正式回执。" }
       ,{ condition: "Python 三条发现路线均不存在", response: "PowerShell wrapper 明确抛出 Python runtime not found；不伪装成 status、evidence 或 ingest 成功。" }
     ],
     sources: [
@@ -341,6 +349,7 @@ const dailyPreferencesModules = [
       problem: "扩展域没有专门 parser/权重时只用用户明示与 AI 对话候选，明确不声称同等覆盖。",
       unavailable: "数据库不存在或不可读时返回精确失败；Skill 可依据本轮明示临时回答，但不伪造历史偏好。"
     },
+    stateLabels: ["已取得相关证据", "覆盖仍有边界", "证据入口不可用"],
     decisionImpact: [
       "food、shopping、payment、ride 有专门词、来源与权重；beverage 另有吃喝分轴。",
       "travel、stay、entertainment、digital、service、tool、aesthetic 已能识别并用明示/通用证据，但没有同等专门 parser。",
@@ -402,6 +411,7 @@ const dailyPreferencesModules = [
       problem: "只有付款、关闭订单、模板、赠品或疑问时保持旁证/负向/无结论，不升级喜欢。",
       unavailable: "原件缺失、字节变化、内容定位变化或不可读时返回明确状态，text 为空；不继续输出旧缓存冒充原文。"
     },
+    stateLabels: ["已核对事实", "证据不能升级", "原件核对不可用"],
     decisionImpact: [
       "order_observation 只证明买过/点过；repeat_count 只来自详细订单的相同事实文本。",
       "payment_observation 只补支付渠道与消费链，不进入订单重复次数。",
@@ -460,7 +470,7 @@ const dailyPreferencesModules = [
     result: "得到一份可以比较的菜单，而不是一句命令：具体内容、熟悉/相邻/推测身份、为什么适合、关键取舍、必要的粗略价格/场景和搜索接力。",
     readerStates: {
       pass: "明示与证据足够时，Skill/AI 生成至少 3 个熟悉、3 个相邻、3 个合理新鲜候选；仍有显著路线时继续列。",
-      problem: "证据矛盾、过期或扩展域覆盖较弱时标注依据、推测和 Unknown，不用同款变体凑数。",
+      problem: "证据矛盾、过期或扩展域覆盖较弱时标注依据、推测和 Unknown，不用同款变体凑数。来源接入成功或旧推定被标 stale 都不等于菜单已重新生成；只使用仍有效的明示和证据继续判断。",
       unavailable: "项目或平台实时信息不可用时，依据本轮表达给临时候选和搜索词；不声称最低价、库存或下单成功。"
     },
     decisionImpact: [
@@ -477,7 +487,8 @@ const dailyPreferencesModules = [
       "Skill 先读 current 快照，按会改变选择的轴调用 evidence/facts，必要时有界 original。",
       "AI 将来源事实、current 明示、推定和 Unknown 分层，再生成三类候选。",
       "搜索接力按品类选 1–2 个平台与可复制关键词，不遍历所有平台。",
-      "Python CLI 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单。",
+      "Python CLI 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单；ingest 的 completed 和 invalidated_snapshots 只报告证据接入与旧推定失效。",
+      "snapshot 保存的是 AI 已明确给定的推定文本及当前证据绑定，不是 Python 自动推导；它同样先提交 SQLite 再写 CURRENT，saved 回执与缓存写入失败须按真实阶段解释。",
       "用户的接受、拒绝和纠正只有在明确表达后才通过 record 更新 current。"
     ],
     flow: ["自然推荐请求进入 Skill", "读取 current 与最小证据", "必要时 facts/original 核对", "AI 分开事实/推定/未知", "生成熟悉/相邻/新鲜菜单", "补关键取舍和搜索接力", "用户选择或纠正"],

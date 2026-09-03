@@ -14,6 +14,7 @@ import { project as project_personal_materials, modules as modules_personal_mate
 import { project as project_document_materials, modules as modules_document_materials } from "./content-document-materials.js";
 import { project as project_work_delivery, modules as modules_work_delivery } from "./content-work-delivery.js";
 import { project as project_daily_preferences, modules as modules_daily_preferences } from "./content-daily-preferences.js";
+import { project as project_personal_media, modules as modules_personal_media } from "./content-personal-media.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -30,5 +31,6 @@ export const projectContentPackages = new Map([
   ["personal-materials", { project: project_personal_materials, modules: modules_personal_materials, kind: "personal-materials" }],
   ["document-materials", { project: project_document_materials, modules: modules_document_materials, kind: "document-materials" }],
   ["work-delivery", { project: project_work_delivery, modules: modules_work_delivery, kind: "work-delivery" }],
-  ["daily-preferences", { project: project_daily_preferences, modules: modules_daily_preferences, kind: "daily-preferences" }]
+  ["daily-preferences", { project: project_daily_preferences, modules: modules_daily_preferences, kind: "daily-preferences" }],
+  ["personal-media", { project: project_personal_media, modules: modules_personal_media, kind: "personal-media" }]
 ]);

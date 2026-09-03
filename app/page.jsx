@@ -436,7 +436,7 @@ function projectCardPresentation(entry) {
   return {
     tone: entry.project.cardStatusTone || moduleStatusTone(entry.project),
     status: entry.project.cardStatus || state.label || "可按当前说明使用",
-    boundary: entry.project.snapshotBoundary || state.gaps?.[0] || "本页不承诺后台实时同步",
+    boundary: entry.project.currentSnapshot?.boundary || state.gaps?.[0] || "本页不承诺后台实时同步",
     observedAt: state.observedAt || "当前网页快照"
   };
 }
@@ -718,7 +718,7 @@ function ProjectCurrentState({ entry }) {
   );
 }
 
-function ProjectGallery({ title, images }) {
+function ProjectGallery({ title, images, presentation = {} }) {
   const [activeIndex, setActiveIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [fitSize, setFitSize] = useState(null);
@@ -730,6 +730,7 @@ function ProjectGallery({ title, images }) {
   const zoomRef = useRef(1);
   const fullImageRequestsRef = useRef(new Map());
   const fullRequestTokenRef = useRef(0);
+  const prefetchAdjacent = presentation.prefetchAdjacentFull !== false;
   zoomRef.current = zoom;
   const isOpen = activeIndex !== null;
   const hasStructuredEvidence = images.every((image) => image.evidenceLevel && image.evidenceLabel && image.proves && image.doesNotProve);
@@ -768,10 +769,10 @@ function ProjectGallery({ title, images }) {
   }, []);
 
   const prefetchAdjacentFullImages = useCallback((index) => {
-    if (images.length < 2) return;
+    if (!prefetchAdjacent || images.length < 2) return;
     const adjacent = new Set([(index - 1 + images.length) % images.length, (index + 1) % images.length]);
     for (const adjacentIndex of adjacent) void loadDecodedFullImage(images[adjacentIndex].src).catch(() => {});
-  }, [images, loadDecodedFullImage]);
+  }, [images, loadDecodedFullImage, prefetchAdjacent]);
 
   function changeZoom(delta) {
     setZoom((current) => {
@@ -790,6 +791,7 @@ function ProjectGallery({ title, images }) {
   function selectImage(index) {
     const nextIndex = (index + images.length) % images.length;
     fullRequestTokenRef.current += 1;
+    if (!prefetchAdjacent) fullImageRequestsRef.current.clear();
     resetZoom();
     setFitSize(null);
     setDisplayedImageSrc(images[nextIndex].thumbnail || images[nextIndex].src);
@@ -899,10 +901,10 @@ function ProjectGallery({ title, images }) {
   }
 
   return (
-    <section className="document-section project-gallery" aria-labelledby="project-gallery-title">
+    <section className={`document-section project-gallery${presentation.variant ? ` ${presentation.variant}` : ""}`} aria-labelledby="project-gallery-title" data-gallery-prefetch-adjacent-full={prefetchAdjacent ? "true" : "false"}>
       <div className="project-gallery-heading">
-        <div><p className="section-kicker">{hasStructuredEvidence ? "可视化证据" : "真实界面"}</p><h2 id="project-gallery-title">{title} 的{hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}</h2></div>
-        <p>{hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。"}打开后可缩放、滚动查看细节，也可关闭或切换上一张、下一张。</p>
+        <div><p className="section-kicker">{presentation.kicker || (hasStructuredEvidence ? "可视化证据" : "真实界面")}</p><h2 id="project-gallery-title">{presentation.title || `${title} 的${hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}`}</h2></div>
+        <p>{presentation.description || (hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。")}打开后可缩放、滚动查看细节，也可关闭或切换上一张、下一张。</p>
       </div>
       <div className="project-gallery-grid">
         {images.map((image, index) => (
@@ -919,9 +921,10 @@ function ProjectGallery({ title, images }) {
             data-gallery-evidence-label={image.evidenceLabel || ""}
             data-gallery-proves={image.proves || ""}
             data-gallery-does-not-prove={image.doesNotProve || ""}
+            data-gallery-category-label={image.categoryLabel || ""}
           >
-            <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" />
-            <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : null}{image.caption}</span></span>
+            <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" style={image.thumbnailPosition ? { objectPosition: image.thumbnailPosition } : undefined} />
+            <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : image.categoryLabel ? <b>{image.categoryLabel}</b> : null}{image.caption}</span></span>
           </button>
         ))}
       </div>
@@ -949,7 +952,7 @@ function ProjectGallery({ title, images }) {
                   <button className="project-lightbox-next" type="button" onClick={() => changeImage(1)} aria-label="下一张"><ArrowRight size={25} aria-hidden="true" /></button>
                 </div>
                 <figcaption className="project-lightbox-caption" id="project-lightbox-caption">
-                  {activeImage.evidenceLevel ? <strong>{activeImage.evidenceLevel} · {activeImage.evidenceLabel}</strong> : null}
+                  {activeImage.evidenceLevel ? <strong>{activeImage.evidenceLevel} · {activeImage.evidenceLabel}</strong> : activeImage.categoryLabel ? <strong>{activeImage.categoryLabel}</strong> : null}
                   <span>{activeImage.caption}</span>
                   {activeImage.proves ? <small><b>能证明：</b>{activeImage.proves}</small> : null}
                   {activeImage.doesNotProve ? <small><b>不能证明：</b>{activeImage.doesNotProve}</small> : null}
@@ -1049,19 +1052,19 @@ function ProjectOverview({ entry }) {
       <ProjectReadingNav />
 
       <ProjectReadingPanel id="quick" selected>
-        <section className="document-section document-section-first project-positive-snapshot">
-          <h2>当前项目快照</h2>
-          <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />
-          <ProjectQuickState entry={entry} />
-        </section>
-        <CapabilityLinkBar title="可以继续进入" items={projectConnectionItems(currentProject.slug)} />
-        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} /> : null}
-        <section className="document-section">
-          <p className="section-kicker">先说人话</p>
+        <section className="document-section document-section-first">
+          <p className="section-kicker">先说产品与现实用途</p>
           <h2>最快了解这个项目</h2>
           <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>怎样开始使用</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
           <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
         </section>
+        <section className="document-section project-positive-snapshot">
+          <h2>当前项目快照</h2>
+          <ProjectMetrics items={currentProject.cardMetrics} kind={entry.kind} />
+          <ProjectQuickState entry={entry} />
+        </section>
+        {currentProject.gallery?.length ? <ProjectGallery title={currentProject.title} images={currentProject.gallery} presentation={currentProject.galleryPresentation} /> : null}
+        <CapabilityLinkBar title="可以继续进入" items={projectConnectionItems(currentProject.slug)} />
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="product">
@@ -1081,6 +1084,8 @@ function ProjectOverview({ entry }) {
         {currentProject.heroFacts?.length ? <section className="document-section"><h2>当前关键技术事实</h2><dl className="project-headline-facts project-headline-facts-technical" aria-label={`${currentProject.title} 当前关键技术事实`}>{currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}</dl></section> : null}
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
+        {currentProject.technicalContracts?.length ? <section className="document-section"><h2>当前数据合同与写读边界</h2><div className="component-table" role="table" aria-label={`${currentProject.title} 当前数据合同`}>{currentProject.technicalContracts.map((item, index) => <article role="row" key={item.artifact}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{item.artifact}</strong><p><code>{item.schema}</code></p></div><p role="cell"><strong>{copy(item.owner)}</strong>：{copy(item.boundary)}</p></article>)}</div></section> : null}
+        {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section"><h2>公开原图字节身份</h2><p>缩略图只负责首屏性能；下列尺寸、bytes 与 SHA-256 绑定点击后加载的完整原图，构建后的公开文件必须逐项保持一致。</p><div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}><code>{item.src.split("/").at(-1)}</code><p>{item.width} × {item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p></div>)}</div></section> : null}
         <section className="document-section"><h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2><p>模块是可直达的技术深入章节，不是另一套产品介绍。</p><div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div></section>
         {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
         <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
@@ -1195,7 +1200,7 @@ const inlineTermTranslations = [
   ["active generation root", "活动代际根目录"],
   ["generation root", "代际根目录"],
   ["repository root", "仓库根目录"],
-  ["source root", "源码根目录"],
+  ["source root", "来源根目录"],
   ["root/child role", "根代理/子代理角色"],
   ["root/child", "根代理/子代理"],
   ["root agent", "根代理"],
@@ -1875,7 +1880,7 @@ function SkillsPage() {
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
-      <p className="directory-status-line"><strong>本地预览目录收录 {skills.length} 个 Skills（能力入口）</strong><span>{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有进入本次公开目录，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不以此目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <p className="directory-status-line"><strong>描述想完成的事，按用途选择或直接搜索能力</strong><span>每一项都会先说明它能做什么、什么时候用、最后得到什么以及失败时怎样处理。本地预览目录当前收录 {skills.length} 个 Skills（能力入口）：{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有进入本次公开目录，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不以此目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
         {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
       </div>

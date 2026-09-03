@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 64,
-    "project_search_index_gzip_budget_kib": 64,
-    "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase",
+    "search_index_gzip_budget_kib": 88,
+    "project_search_index_gzip_budget_kib": 112,
+    "bundle_budget_semantics": "the shared-runtime, shared-CSS and compact-search numbers are current anti-bloat review thresholds, not permanent content ceilings; when measured smoothness and semantic fidelity cannot be preserved below them, audit real duplication and wall-clock cost, record the evidence, and apply only the smallest justified increase; 2026-09 source-complete natural-language search preserves purpose/result and command text after simple de-duplication: measured core 88261 bytes, all modules 112824, largest project shard 19921 gzip after retaining existing technical identifiers; budgets are 88/112/20 KiB, shared runtime remains 12 KiB, with no custom compression protocol or content removal",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -33,7 +33,8 @@
       "curated_packaging"
     ],
     "default_presentation_mode": "real_dashboard",
-    "only_private_document": "docs/design/private-content-rules.md"
+    "only_private_document": "docs/design/private-content-rules.md",
+    "project_search_shard_gzip_budget_kib": 20
   },
   "global_surfaces": [
     {
@@ -81,8 +82,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 11,
-        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E98 Rules and 28-Skill evidence, mandatory post-publication panel impact closeout, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, and PUBLIC private-companion migration",
+        "semantic_revision": 12,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E99 Rules and 28-Skill evidence, mandatory post-publication panel impact closeout, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation, reuses independent requirement-inflation review at long-task decision nodes and resolves exact-turn continuation transcripts",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -104,7 +105,10 @@
         "active_rules",
         "skills_catalog",
         "validation_matrix",
-        "evolution_and_operating_entries"
+        "evolution_and_operating_entries",
+        "user_intent_over_implementation",
+        "independent_requirement_inflation_review",
+        "exact_turn_continuation"
       ],
       "impact_sources": [
         {
@@ -158,7 +162,8 @@
             "tools/Install-AgentsHotMirrorTask.ps1",
             "tools/Sync-AgentsHotMirror-Hidden.vbs",
             "tools/codex_native_economy_gate.py",
-            "tools/codex_native_economy_runtime.py"
+            "tools/codex_native_economy_runtime.py",
+            "tools/Invoke-ControlPlaneDoctor.ps1"
           ]
         },
         {
@@ -183,7 +188,9 @@
             "tests/Test-AttentionFidelityPolicy.ps1",
             "tests/Test-AgentRuntimeCompatibility.ps1",
             "tests/Test-AgentsHotMirror.ps1",
-            "tools/Test-ControlPlaneContractCoverage.ps1"
+            "tools/Test-ControlPlaneContractCoverage.ps1",
+            "tests/test_codex_native_economy_gate.py",
+            "tests/Test-ControlPlaneDoctorScope.ps1"
           ]
         }
       ],
@@ -214,8 +221,8 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 9,
-        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data",
+        "semantic_revision": 10,
+        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data; current machine/runtime identity, main-workstation startup, Password Center lifecycle, Google Workspace limits and partial-effect semantics, actual protected-data maturity, and the existing daily personal backup coordinating indexes and the phone package",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
           "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
@@ -239,10 +246,15 @@
             "id": "pcconfig-task-definitions",
             "owner": "PCConfig",
             "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -Write -Json through the canonical task-scan publication pipeline",
-            "required_principals": ["SYSTEM", "Administrator"],
+            "required_principals": [
+              "SYSTEM",
+              "Administrator"
+            ],
             "expected_schema": "pcconfig.tasks.v1",
             "pointer_path": "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
-            "required_evidence": { "complete_visibility": true },
+            "required_evidence": {
+              "complete_visibility": true
+            },
             "failure_semantics": "mark only affected task fields Unknown; never downgrade to a partial ordinary-user snapshot"
           }
         ],
@@ -267,7 +279,11 @@
         "secondary_laptop_health_recovery_and_nvme_takeover",
         "current_machine_and_recovery_state",
         "evidence_layers",
-        "evolution_and_operating_entries"
+        "evolution_and_operating_entries",
+        "main_workstation_startup_and_runtime",
+        "password_center_lifecycle",
+        "google_workspace_exact_effect_boundaries",
+        "personal_current_source_backup_and_recovery"
       ],
       "impact_sources": [
         {
@@ -292,7 +308,13 @@
             "tools/Get-SecondaryLaptopHealth.ps1",
             "tools/get_secondary_laptop_health.test.ps1",
             "tools/test_secondary_laptop_recovery.test.ps1",
-            "tools/secondary-laptop-recovery/**"
+            "tools/secondary-laptop-recovery/**",
+            "tools/Install-ToDeskPreLoginWatchdog.ps1",
+            "tools/Install-WeChatDualAutostart.ps1",
+            "tools/Install-WeFlowSecondaryWatchdog.ps1",
+            "tools/Install-PasswordCenterIndependent.ps1",
+            "tools/GoogleWorkspaceDirectProvider.psm1",
+            "tools/Open-ProtectedDataVault.ps1"
           ]
         },
         {
@@ -350,8 +372,8 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 6,
-        "scope": "project overview and six modules covering the 49-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 27555327 and interruption recovery",
+        "semantic_revision": 7,
+        "scope": "project overview and six modules covering the 49-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 27555327 and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
@@ -377,7 +399,8 @@
         "six_modules",
         "repository_identity_and_worktree_state",
         "publication_and_major_action_boundaries",
-        "snapshot_recovery_and_evidence"
+        "snapshot_recovery_and_evidence",
+        "baseline_and_action_history_semantics"
       ],
       "impact_sources": [
         {
@@ -439,8 +462,8 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 5,
-        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy",
+        "semantic_revision": 6,
+        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy; consistent contextual evidence may support reversible inferred speaker attribution without pretending acoustic certainty",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ChineseASR -RefreshRefs -Json",
@@ -467,7 +490,8 @@
         "task_long_audio_and_evidence_state",
         "optional_local_ollama_evidence_only_arbitration",
         "speaker_and_privacy_boundaries",
-        "verification_and_evolution"
+        "verification_and_evolution",
+        "reversible_context_supported_attribution"
       ],
       "impact_sources": [
         {
@@ -568,8 +592,8 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 5,
-        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery",
+        "semantic_revision": 6,
+        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
@@ -609,7 +633,8 @@
         "pcconfig_anomaly_digest_coverage_recheck_and_unavailable_semantics",
         "runtime_reliability_and_actual_value_boundary",
         "windows_clipboard_history_product_and_recovery",
-        "verification_recovery_and_evolution"
+        "verification_recovery_and_evolution",
+        "rtss_fps_precedence_and_freshness"
       ],
       "impact_sources": [
         {
@@ -621,7 +646,9 @@
             "使用手册.md",
             "PCCONFIG_ANOMALY_DIGEST_CONTRACT.md",
             "TIMEAUDIT_DIAGNOSTIC_SUMMARY_CONTRACT.md",
-            "requirements.txt"
+            "requirements.txt",
+            "test_fps_capture_contract.py",
+            "test_health_presentmon_gate.py"
           ]
         },
         {
@@ -713,8 +740,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 5,
-        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the 8c217ead bounded display-topology/Wallpaper Engine render-rebind recovery chain",
+        "semantic_revision": 6,
+        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the 8c217ead bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -732,10 +759,15 @@
             "id": "pc-panel-hub-task-definitions",
             "owner": "PCConfig",
             "invocation_contract": "E:\\PCConfig\\tools\\scan_tasks.ps1 -Write -Json through the canonical task-scan publication pipeline; website consumes only the exact PC Panel Hub task state/result and bounded identity fields",
-            "required_principals": ["SYSTEM", "Administrator"],
+            "required_principals": [
+              "SYSTEM",
+              "Administrator"
+            ],
             "expected_schema": "pcconfig.tasks.v1",
             "pointer_path": "E:\\PCConfig\\state\\generated-publications\\task-scan\\current.json",
-            "required_evidence": { "complete_visibility": true },
+            "required_evidence": {
+              "complete_visibility": true
+            },
             "failure_semantics": "mark only the scheduled-task fields Unknown with the last verified evidence time; never substitute a partial ordinary-user task view or call the project unavailable"
           }
         ]
@@ -755,7 +787,8 @@
         "installation_private_binding_and_machine_migration",
         "power_startup_watchdog_and_recovery",
         "physical_acceptance_and_visual_evidence",
-        "verification_gaps_and_evolution"
+        "verification_gaps_and_evolution",
+        "hs2_events_and_startup_guard"
       ],
       "impact_sources": [
         {
@@ -766,7 +799,8 @@
             "docs/architecture.md",
             "docs/startup.md",
             "docs/hs2-crystal-overlay.md",
-            "docs/release.md"
+            "docs/release.md",
+            "tools/turzx_side_screen/Invoke-HS2StartupWindowGuard.ps1"
           ]
         },
         {
@@ -916,10 +950,10 @@
         "repo": "PRIVATE_MANAGED_SOURCE",
         "visibility": "PRIVATE",
         "default_branch": "main",
-      "public_identity": "private-ai-assisted-learning-method-source",
-      "snapshot_commit": "6534ac7a2bc57ab949224ee3d6f98854edc321a5",
-      "snapshot_observed_at": "2026-08-30T09:30:00Z",
-      "locator_owner": "ignored-private-content-rules"
+        "public_identity": "private-ai-assisted-learning-method-source",
+        "snapshot_commit": "6534ac7a2bc57ab949224ee3d6f98854edc321a5",
+        "snapshot_observed_at": "2026-08-30T09:30:00Z",
+        "locator_owner": "ignored-private-content-rules"
       },
       "displayed_areas": [
         "curated_project_overview",
@@ -957,8 +991,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-codex-remote.js",
-        "semantic_revision": 4,
-        "scope": "curated public overview and nine modules covering same-task identity, subagent navigation, current-turn steer/interrupt and durable next-turn queue control, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, installation/rolling update/rollback, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status",
+        "semantic_revision": 5,
+        "scope": "curated public overview and nine modules covering same-task identity, subagent navigation, current-turn steer/interrupt and durable next-turn queue control, models/approvals/context, project and owner-file workflows, shared Broker/Sidecar architecture, installation/rolling update/rollback, public access safety, versions and layered evidence without invoking any Remote runtime or claiming current online status; all direct detail routes inherit the frozen-runtime boundary and do not imply current operation",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, resolve the PUBLIC repository identity, default branch, tags, release commit and current clean/sync facts through Git Owner",
           "manual_public_product_evidence: read only PUBLIC source, documentation, tests, release/CI receipts and individually approved media; never invoke a dispatcher, scheduled task, Broker, Sidecar, app-server, installed runtime or Remote endpoint"
@@ -983,7 +1017,8 @@
         "installation_rolling_update_and_atomic_rollback",
         "public_access_and_security_boundaries",
         "version_test_real_e2e_and_gallery_evidence",
-        "manual_snapshot_without_online_probe"
+        "manual_snapshot_without_online_probe",
+        "frozen_runtime_all_routes"
       ],
       "impact_sources": [],
       "refresh_rules": {
@@ -1010,8 +1045,8 @@
         "mode": "manual_owner_only",
         "automatic_handoff": false,
         "content_path": "app/content-personal-health.js",
-        "semantic_revision": 3,
-        "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice",
+        "semantic_revision": 4,
+        "scope": "curated public overview, one evidence-decision canvas and six modules covering the processed-current route, protected foreground refresh, raw preservation and exact resume, deterministic offline decision brief, evidence three-state semantics and Health Owner safety boundary without exposing any personal health result or individualized advice; offline field/date query and summary with explicit limits and uncertainty; unread personal state is not zero",
         "collectors": [
           "manual_git_owner_evidence: only after an explicit owner refresh request, read back the PRIVATE wlyaaaaa/personal-health main identity, default branch, commit and clean/sync facts through Git Owner without exposing a local source locator",
           "manual_public_product_evidence: read only AGENTS.md, google_health_enroll.py, google_health_refresh.py, google_health_import.py, google_health_capture.py, google_health_brief.py and their five test modules; run python -m pytest -q; never read CURRENT.md, SOURCES.md, raw reports, manifests, briefs, provider payloads or credentials, and never invoke Google, Secret Broker or a device runtime"
@@ -1036,7 +1071,9 @@
         "offline_decision_ready_and_inventory_only_gate",
         "evidence_three_state_and_non_diagnostic_semantics",
         "health_owner_red_flag_privacy_and_low_attention_boundary",
-        "manual_snapshot_without_health_payloads"
+        "manual_snapshot_without_health_payloads",
+        "offline_field_date_query_and_summary",
+        "unread_state_is_not_zero"
       ],
       "impact_sources": [],
       "refresh_rules": {
@@ -1061,13 +1098,14 @@
       "route": "/projects/wechat-direct",
       "ai_refresh": {
         "content_path": "app/content-wechatdirect.js",
-        "semantic_revision": 1,
-        "scope": "complete public overview and six source-backed modules covering bounded named-object chat context, explicit-trigger incremental contact archives plus completed-state replay and named crash-recovery gaps, reply and media relations with voice-only byte access, explicit-account local Moments cache, account/source identity and read-only snapshots, and preservation/export verification",
+        "semantic_revision": 3,
+        "scope": "complete public overview and six source-backed modules covering current aggregate completed-archive scale, bounded named-object chat context, explicit-trigger incremental contact archives plus completed-state replay and named crash-recovery gaps, reply and media relations with voice-only byte access, explicit-account local Moments cache, account/source identity and read-only snapshots, and preservation/export verification; unchanged archives still validate bound manifest/state, JSONL and complete Markdown hashes and bytes",
         "collectors": [
           "git -C E:\\Projects\\Tools\\WeChatDirect status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/WeChatDirect -LiveMetadata -RefreshRefs -Json",
           "py -3.14 -m pytest -q",
-          "py -3.14 wechat_cli.py doctor"
+          "py -3.14 wechat_cli.py doctor",
+          "read only manifest.json, state.json and last-run.json from the registered export root to aggregate completed archive count, total messages, raw voice and derived file counts, verify-export success count, archives with gaps and newest manifest time; never read contact identity, chat body, media payload or exact path"
         ],
         "conditional_collectors": [
           "one explicit user-authorized named contact/group context or sync E2E only when the displayed live compatibility or runtime claim would otherwise change; never read a private body merely to refresh the website",
@@ -1082,6 +1120,7 @@
       },
       "displayed_areas": [
         "project_overview_and_product_principles",
+        "current_completed_archive_message_voice_derived_verify_and_gap_aggregates",
         "six_source_backed_modules",
         "bounded_named_chat_context_and_sender_roles",
         "explicit_trigger_full_then_incremental_contact_archive",
@@ -1090,7 +1129,8 @@
         "primary_secondary_identity_and_read_only_database_snapshot",
         "preservation_export_manifest_hash_and_offline_verification",
         "completed_state_replay_and_named_hard_crash_recovery_gaps",
-        "version_doctor_tests_and_evidence_boundaries"
+        "version_doctor_tests_and_evidence_boundaries",
+        "unchanged_archive_full_validation"
       ],
       "impact_sources": [
         {
@@ -1126,10 +1166,10 @@
           "a real named-object E2E changes what the owner should trust about current local compatibility or output"
         ],
         "snapshot_only_when": [
-          "the clean PUBLIC main commit, package version, test result, body-free Doctor result or observation time changes without semantic change"
+          "the clean PUBLIC main commit, package version, test result, body-free Doctor result, completed archive/message/media aggregate or observation time changes without semantic change"
         ],
         "ignore_when": [
-          "a private chat, contact, group, Moments cache, media item, local archive, locator, config, path, commitment or credential changes without altering the public product contract",
+          "a private chat body, contact identity, group identity, Moments payload, media payload, locator, config, exact path, commitment or credential changes while the public-safe archive/message/media aggregate and product contract remain unchanged",
           "an internal refactor or test addition leaves every displayed capability, failure and recovery boundary unchanged",
           "an unconnected internal helper or dormant source path changes without entering a public command or verified product route"
         ]
@@ -1144,12 +1184,13 @@
       "route": "/projects/personal-materials",
       "ai_refresh": {
         "content_path": "app/content-personal-materials.js",
-        "semantic_revision": 1,
-        "scope": "complete private-source public product overview and four source-backed modules covering registered natural-language lookup, bounded on-demand discovery across approved non-media roots, selected-original byte verification and opening, and exact provenance intake without exposing any private database, source root, path, candidate, identifier, content fingerprint or original",
+        "semantic_revision": 5,
+        "scope": "complete private-source public product overview and four source-backed modules covering the current registered-root inventory scale, exact registered locators versus on-demand discovery entries, registered natural-language lookup, bounded discovery across approved non-media roots, selected-original byte verification and opening, exact provenance intake without exposing private payloads, and implemented trusted file-manager retirement of one exact occurrence plus cascade-owned relations and text; source-authoritative sync-current in the existing daily backup task; read-only lookup/status/inspection, effective-candidate limits and fallback, and single-file deletion versus parent unavailability",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-materials; expose only repository identity, visibility, clean/sync state and commit, never the private local source locator",
-          "read only tracked AGENTS.md, README.md, materials.py, schema.sql and tests/test_materials.py from the admitted clean main; never open the default database, registered source roots, candidate tokens, originals or handoff payloads",
-          "run the source-owned pytest and ruff checks in the admitted project with task-scoped temp; tests must use synthetic fixtures and must not resolve the default private database"
+          "read tracked AGENTS.md, README.md, materials.py, schema.sql and tests/test_materials.py from the admitted clean main; run the explicit read-only status and inventory commands against the current default database to publish only source count, current depth-bounded non-media path entries, exact locator count, on-demand discovery count, media skips, relation/text counts, errors and cutoff semantics; never read titles, body text, candidates, payloads, exact locators or file fingerprints",
+          "run the source-owned pytest and ruff checks in the admitted project with task-scoped temp; tests must use synthetic fixtures and must not resolve the default private database",
+          "verify trusted file-manager retirement from PRIVATE main: only an available registered non-link root plus exact locator FileNotFoundError deletes one non-media occurrence; existing foreign keys cascade only its relation/text rows while sources, surviving copies, directories, OSError, drift and out-of-scope locators remain"
         ],
         "conditional_collectors": [
           "one explicit user-requested real find or discover E2E only when a current compatibility claim would otherwise change; keep all candidates, roots, paths, identifiers, hashes, tokens and gaps outside public content",
@@ -1165,13 +1206,17 @@
       },
       "displayed_areas": [
         "project_overview_product_principles_and_scope_boundary",
+        "current_registered_source_nonmedia_path_exact_locator_and_on_demand_inventory",
         "registered_natural_language_search_and_version_evidence",
         "bounded_source_routed_filename_and_directory_discovery",
         "selected_original_hash_verification_registration_and_opening",
         "exact_handoff_provenance_relations_and_rebuildable_text",
+        "trusted_file_manager_deletion_authority_exact_occurrence_retirement_and_relation_text_cascade",
         "source_coverage_zero_hit_cutoff_and_unsearched_scope_receipts",
         "media_to_personal_media_and_domain_meaning_to_owning_workflow",
-        "no_background_scan_no_original_copy_and_private_payload_exclusion"
+        "no_background_scan_no_original_copy_and_private_payload_exclusion",
+        "scheduled_current_original_sync",
+        "read_only_lookup_and_valid_candidate_limits"
       ],
       "impact_sources": [
         {
@@ -1197,15 +1242,15 @@
       ],
       "refresh_rules": {
         "semantic_review_required_when": [
-          "a displayed routing boundary, query match, version role, candidate projection, source coverage, discovery budget, token/root binding, byte verification, opening, intake, relation, text or media exclusion behavior changes meaning",
-          "a current source selection, false-match, concurrent-file-change, locator drift, launch, foreign-database, media classification or zero-hit recovery gap becomes implemented, regresses or changes the user's next action",
+          "a displayed inventory meaning, routing boundary, query match, version role, candidate projection, source coverage, discovery budget, token/root binding, byte verification, opening, intake, relation, text or media exclusion behavior changes meaning",
+          "a current source selection, false-match, concurrent-file-change, trusted file-manager deletion, locator drift, launch, foreign-database, media classification or zero-hit recovery gap becomes implemented, regresses or changes the user's next action",
           "an explicitly authorized private E2E changes the public conclusion about current compatibility without requiring any private payload to be published"
         ],
         "snapshot_only_when": [
-          "the clean PRIVATE main commit, synthetic test result or observation time changes without altering product meaning"
+          "the clean PRIVATE main commit, source count, depth-bounded path-entry count, exact locator count, on-demand count, media skip count, relation/text count, synthetic test result or observation time changes without altering product meaning"
         ],
         "ignore_when": [
-          "a private database, source root, original, candidate, title, identifier, path, hash, token, account, device, text, relation or coverage receipt changes without altering the public product contract",
+          "a private original, candidate, title, identifier, exact path, hash, token, account, device or body text changes while current public-safe aggregate scale, coverage, capability and decision meaning remain unchanged",
           "an internal refactor or test addition leaves every displayed capability, boundary, failure and recovery behavior unchanged",
           "an unrelated domain project changes how it interprets a material after personal-materials has returned the same verified original"
         ]
@@ -1220,8 +1265,8 @@
       "route": "/projects/document-materials",
       "ai_refresh": {
         "content_path": "app/content-document-materials.js",
-        "semantic_revision": 1,
-        "scope": "complete public-safe overview and five source-backed modules covering current matter inputs and source gaps, same-source editable DOCX and PDF production, page/color/grayscale/self-contained release verification, local signature and ready-for-delivery versioning, and separately sourced delivery/receipt/handling/sign-back plus copy-and-verify recovery boundaries",
+        "semantic_revision": 2,
+        "scope": "complete public-safe overview and five source-backed modules covering current matter inputs and source gaps, same-source editable DOCX and PDF production, page/color/grayscale/self-contained release verification, local signature and ready-for-delivery versioning, and separately sourced delivery/receipt/handling/sign-back plus copy-and-verify recovery boundaries; unknown real matters versus unexecuted actions, PDF image-object presence versus rendered signature visibility",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-formal-documents; expose only public-safe repository identity, visibility, clean/sync state, version and commit",
           "read only the admitted current product rules, human entry, formal matter contract, generic formal-document module, versioned schemas and synthetic tests; never open any real matter card, original, signature, output, receipt or private-data root",
@@ -1248,7 +1293,8 @@
         "local_signature_produced_signed_ready_for_delivery_boundaries",
         "separate_delivery_receipt_handling_and_counterparty_signback_contract",
         "copy_verify_recovery_without_background_or_resumable_mirror",
-        "single_fictional_public_safe_gallery_page"
+        "single_fictional_public_safe_gallery_page",
+        "pdf_object_and_visible_signature_distinction"
       ],
       "impact_sources": [
         {
@@ -1306,8 +1352,8 @@
       "route": "/projects/work-delivery",
       "ai_refresh": {
         "content_path": "app/content-work-delivery.js",
-        "semantic_revision": 1,
-        "scope": "complete public-safe overview and five source-backed modules covering package entry and selected source versions, evidence/typed facts/review/quality gates, six same-build deliverables, precise rebound/stale source-change handling, and layered status/time-value/failure/recovery evidence",
+        "semantic_revision": 2,
+        "scope": "complete public-safe overview and five source-backed modules covering package entry and selected source versions, evidence/typed facts/review/quality gates, six same-build deliverables, precise rebound/stale source-change handling, and layered status/time-value/failure/recovery evidence; post-commit timing outcomes, per-file replacement rather than cross-file transactions, and same-build regeneration with cross-build directory isolation",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/work-delivery-copilot; expose only public-safe repository identity, visibility, clean/sync state, version and commits",
           "read the admitted current AGENTS.md, README.md, docs/product-contract.md, batch schema, pyproject, CLI/store/compiler/artifacts/acceptance entrypoints and source-owned tests; do not read any real work database or company material",
@@ -1336,7 +1382,8 @@
         "unified_cli_isolated_wheel_37_tests_ruff_two_synthetic_office_e2e",
         "current_implementation_blind_natural_routing_e2e_and_draft_formal_block",
         "baseline_required_no_real_work_no_real_source_change_and_no_export_backup_restore",
-        "three_fully_fictional_public_safe_gallery_images_with_per_image_evidence_boundaries"
+        "three_fully_fictional_public_safe_gallery_images_with_per_image_evidence_boundaries",
+        "post_commit_timing_and_per_file_replacement"
       ],
       "impact_sources": [
         {
@@ -1398,8 +1445,8 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 1,
-        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation, per-instance manual source coverage and import health, natural-query scoped evidence, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff",
+        "semantic_revision": 2,
+        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation, per-instance manual source coverage and import health, natural-query scoped evidence, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff; ingest completion states, gaps and invalidated recommendations, with committed data distinct from later cache refresh",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
           "read current AGENTS.md, README.md, schema.sql, daily_preferences.py, PowerShell wrapper and source-owned tests; distinguish Python evidence/state behavior from Skill/AI recommendation behavior",
@@ -1428,7 +1475,8 @@
         "artifact_hash_original_readback_and_cached_excerpt_boundary",
         "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
         "current_54283_keys_1749_time_corrections_six_rebuilt_snapshots_40_tests",
-        "named_missing_sources_credit_gap_specialized_domain_limits_and_recovery_gaps"
+        "named_missing_sources_credit_gap_specialized_domain_limits_and_recovery_gaps",
+        "ingest_states_and_post_commit_cache_gap"
       ],
       "impact_sources": [
         {
@@ -1467,6 +1515,97 @@
         "ignore_when": [
           "ordinary private preference records or source increments change while the displayed product capability, boundary, evidence interpretation and user decision remain true",
           "a specific order, payment, trip, message, account, locator or private payload changes without altering the reusable public product contract",
+          "an internal refactor or test addition leaves every displayed capability, failure and recovery behavior unchanged"
+        ]
+      }
+    },
+    {
+      "id": "personal-media",
+      "order": 16,
+      "title": "个人媒体整理与恢复",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/personal-media",
+      "ai_refresh": {
+        "content_path": "app/content-personal-media.js",
+        "semantic_revision": 5,
+        "scope": "complete local-private-source public dashboard and six source-backed modules covering natural-language media search, image semantics, bounded OCR evidence and hardlink browsing; visual classification, exact/near-duplicate decisions and the single no-quota selected-media entry; one-file local ingest plus equivalent video-container retirement; phone E/G dual preservation and exact clear-state separation; a sealed under-60GB phone recovery package; upload=0 cloud candidates; implemented trusted file-manager retirement across catalog/seed/G/phone/cloud derivatives; and an owner-authorized gallery of 10–20 byte-identical original photos; read-only retrieval and scheduled current-original/catalog/seed/candidate synchronization in the existing backup task; all selected media included without duplicate recovery entries, current selected names and albums, still-image typing verified by image decoding, and no query-time deletion framework",
+        "collectors": [
+          "read the local managed project's current AGENTS.md, README.md, personal_media.py, phone_file_preserve_clear.py, two test modules and current acceptance receipt; expose public-safe product, implementation, path, state, failure, test and named-gap facts without inventing a Git repository",
+          "read current catalog, recovery and cloud aggregates only through the current acceptance receipt or bounded product commands; ordinary personal photos are L2 and must not be excluded merely because the source is private",
+          "read the current selected-photo and selected-video roots as one product entry, keep photos and videos physically separate, and expose counts plus E/G hash read-back without treating the public gallery as a second selected collection",
+          "read and verify the implemented trusted canonical file-manager retirement: source-root availability, exact locator FileNotFoundError, catalog/FTS/place/seed convergence, upload=0 phone/cloud plan exit, and guarded G/variant/phone-package deletion only inside fixed non-reparse roots with same-handle size/identity/SHA-256 read-back",
+          "use the personal-media route to locate a bounded visual shortlist only after an explicit owner request; inspect exact originals, choose 10–20 aesthetically strong photos, copy browser-native originals byte-identically and generate one lightweight WebP preview per image",
+          "verify every published original's byte count and SHA-256 before and after the static build, and run the existing PUBLIC gate across source media and production artifacts"
+        ],
+        "conditional_collectors": [
+          "one connected-phone preservation or exact-clear acceptance only after an explicit current device request; never connect, clear or keep a phone occupied merely to refresh the website",
+          "one cloud upload or external read-back only after the owner reviews a concrete candidate list and explicitly authorizes that external action; upload=0 is the normal current state",
+          "one selected-original person:self check only when the owner asks whether they appear in that exact image; never perform a broad person scan"
+        ]
+      },
+      "source": {
+        "kind": "local_managed_source",
+        "repo": "PRIVATE_MANAGED_SOURCE",
+        "visibility": "PRIVATE",
+        "public_identity": "local-personal-media-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "project_overview_product_principles_current_scale_and_user_authorized_original_gallery",
+        "natural_language_place_query_category_type_date_search_and_hardlink_browse",
+        "bounded_image_semantics_OCR_evidence_and_single_FTS_projection",
+        "single_selected_entry_with_1145_images_37_videos_no_quota_and_separate_roots",
+        "visual_meaning_quality_exact_and_near_duplicate_classification",
+        "single_reviewed_local_file_ingest_and_equivalent_video_container_variant_retirement",
+        "phone_new_shared_file_E_G_dual_preservation_and_can_unplug_checkpoint",
+        "phone_exact_clear_state_separate_from_preservation",
+        "single_rebuildable_sqlite_two_production_modules_and_no_background_service",
+        "sealed_under_60gb_photo_video_phone_recovery_package",
+        "upload_zero_cloud_candidates_album_plan_and_explicit_upload_gate",
+        "trusted_file_manager_deletion_authority_catalog_seed_G_phone_cloud_convergence_and_guarded_mismatch_preservation",
+        "current_24360_keeper_46_test_203ms_query_and_named_live_phone_gaps",
+        "public_personal_photo_L2_default_and_value_specific_L3_plus_boundary",
+        "scheduled_current_original_and_recovery_sync",
+        "complete_selected_recovery_coverage",
+        "jpeg_image_type_detection"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_scope_phone_and_small_batch_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md"
+          ]
+        },
+        {
+          "kind": "catalog_search_classification_recovery_and_cloud_implementation",
+          "paths": [
+            "personal_media.py",
+            "phone_file_preserve_clear.py"
+          ]
+        },
+        {
+          "kind": "behavior_recovery_and_current_acceptance_evidence",
+          "paths": [
+            "test_personal_media.py",
+            "test_phone_file_preserve_clear.py",
+            "acceptance.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed media-owner boundary, search filter, place/query distinction, catalog schema, visual classification, duplicate decision, local ingest, equivalent-container retirement, phone preservation, exact clear state, recovery package, cloud candidate, upload gate, failure behavior or recovery gap changes meaning",
+          "a current false-PASS, original-loss, duplicate-retirement, phone-delete, recovery-size, external-upload, broad-person-scan or second-index path becomes implemented, regresses or changes the owner's next action",
+          "the owner explicitly replaces, removes or adds a public gallery image, or a published original no longer matches its registered byte count and SHA-256"
+        ],
+        "snapshot_only_when": [
+          "aggregate keeper, recovery item, cloud candidate, test, timing or observation values change while every displayed capability, boundary and decision remains true"
+        ],
+        "ignore_when": [
+          "ordinary private media increments, classification decisions, local paths or candidate rows change without altering the public product contract or owner-selected public gallery",
+          "a phone is disconnected, an external account is unavailable or upload remains unauthorized while the page already states that exact boundary",
           "an internal refactor or test addition leaves every displayed capability, failure and recovery behavior unchanged"
         ]
       }

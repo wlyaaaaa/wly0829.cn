@@ -847,6 +847,7 @@ function createButton(className, label, text) {
 function initializeGallery(gallery) {
   const cards = Array.from(gallery.querySelectorAll(".project-gallery-card[data-gallery-src]"));
   if (!cards.length) return;
+  const prefetchAdjacent = gallery.dataset.galleryPrefetchAdjacentFull !== "false";
   const images = cards.map((card) => ({
     src: card.dataset.gallerySrc,
     thumbnail: card.querySelector("img")?.currentSrc || card.querySelector("img")?.getAttribute("src") || card.dataset.gallerySrc,
@@ -854,6 +855,7 @@ function initializeGallery(gallery) {
     caption: card.dataset.galleryCaption,
     evidenceLevel: card.dataset.galleryEvidenceLevel,
     evidenceLabel: card.dataset.galleryEvidenceLabel,
+    categoryLabel: card.dataset.galleryCategoryLabel,
     proves: card.dataset.galleryProves,
     doesNotProve: card.dataset.galleryDoesNotProve
   }));
@@ -992,7 +994,7 @@ function initializeGallery(gallery) {
   }
 
   function prefetchAdjacentFullImages(index) {
-    if (images.length < 2) return;
+    if (!prefetchAdjacent || images.length < 2) return;
     const adjacent = new Set([(index - 1 + images.length) % images.length, (index + 1) % images.length]);
     for (const adjacentIndex of adjacent) void loadDecodedFullImage(images[adjacentIndex].src).catch(() => {});
   }
@@ -1016,6 +1018,10 @@ function initializeGallery(gallery) {
       const evidence = document.createElement("strong");
       evidence.textContent = `${item.evidenceLevel} · ${item.evidenceLabel}`;
       caption.append(evidence);
+    } else if (item.categoryLabel) {
+      const category = document.createElement("strong");
+      category.textContent = item.categoryLabel;
+      caption.append(category);
     }
     const copy = document.createElement("span");
     copy.textContent = item.caption;
@@ -1034,6 +1040,7 @@ function initializeGallery(gallery) {
     activeIndex = (index + images.length) % images.length;
     const item = images[activeIndex];
     const requestToken = ++fullRequestToken;
+    if (!prefetchAdjacent) fullImageRequests.clear();
     zoom = 1;
     fitSize = null;
     delete dialog.dataset.imageOrientation;

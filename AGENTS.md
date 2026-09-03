@@ -14,11 +14,11 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has fifteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has sixteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials, work-delivery and daily-preferences in order
-  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15. The registry
+  document-materials, work-delivery, daily-preferences and personal-media in
+  order 1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -124,6 +124,28 @@ read-only operating panel; public presentation is secondary.
   “related to Git / AI / files” but cannot explain what useful task it performs.
   Field completeness, a glossary, translated labels, tests and correct terms do
   not make that page understandable by themselves.
+- A page is also still a riddle when current Owner evidence can safely answer a
+  basic scale or state question but the page hides behind “not read in this
+  refresh”, “private source” or a generic boundary. Real-dashboard pages must
+  directly expose decision-changing public-safe aggregates, current counts,
+  component/path identities, usable results, known coverage and named gaps.
+  Omitting raw private payload does not authorize omitting its harmless count or
+  product state. Personal-media must state separate current photo, video and
+  audio counts, then split audio by its real canonical roles instead of calling
+  every audio file a recording; personal-materials must state current source, material,
+  relation and searchable-text counts when the bounded read-only status path is
+  available.
+- Personal-materials and personal-media canonical roots are trusted owner
+  surfaces. When the owner deletes an exact original in the file manager and
+  that locator no longer exists under an available registered root, the product
+  meaning is authoritative retirement without a second AI notification or
+  recovery prompt. Read and search entries remain read-only; the existing daily
+  backup task maintains the current catalog, seed, bound relations/text,
+  G mirrors, phone-package and cloud-candidate derivatives. No separate
+  deletion/protection/recovery framework is required. A whole source root
+  being unavailable is still only unavailable. Public copy may claim this only
+  after source tests pass; until then it is a named source blocker, never a
+  silent restore or a completed capability.
 - The first occurrence of a technical English term must either follow an
   immediately visible explanation or use `English（中文含义）`. A glossary later
   on the page cannot excuse unexplained English used earlier. Repeated terms may
@@ -318,24 +340,41 @@ read-only operating panel; public presentation is secondary.
   then WeChatDirect as real-dashboard project 11, personal-materials as
   real-dashboard project 12, document-materials as real-dashboard project 13,
   work-delivery as real-dashboard project 14, and daily-preferences as
-  real-dashboard project 15.
+  real-dashboard project 15, followed by personal-media as real-dashboard
+  project 16.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
-  personal-materials, document-materials, work-delivery, daily-preferences, plus the one-page Rules workbench
+  personal-materials, document-materials, work-delivery, daily-preferences,
+  personal-media, plus the one-page Rules workbench
   and current public-safe Skills catalog.
-- Most real projects may eventually enter the panel. Add them in owner-selected
-  value order, one completed project at a time; do not create placeholder cards
-  or delay a selected project's construction by making agents vote on the
-  entire future backlog.
-- Project 15 is daily-preferences. It follows the completed work-delivery
+- The intended end state includes essentially every real project that can be
+  presented within its actual public-content boundary. Exclude only an exact
+  project identity or payload that the owner or an applicable higher rule
+  actually excludes; a private source, technical depth, long page or the need
+  to omit one L3+ value never excludes the remaining project. Add projects in
+  owner-selected value order, one completed project at a time; do not create
+  placeholder cards or delay a selected project's construction by making agents
+  vote on the entire future backlog.
+- Project 16 is personal-media. It follows the completed daily-preferences
   project and must receive one source-first full snapshot, source repair,
   independent audit, PUBLIC release, read-back and completion report. No
   placeholder card or advance route is allowed for a later item.
-- The selected sequential queue gives the future personal-media project a
-  non-optional content floor: automatic increments, classification, cloud and
+- The selected personal-media project has a non-optional content floor:
+  automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
-  against unattended loss. The completed document-materials project directly
+  against unattended loss. It also explains that the media library owns fast
+  retrieval and image understanding while LocalOCR contributes bounded exact
+  text evidence to the same catalog rather than a second index; it exposes the
+  one no-quota selected-media entry with separate photo/video roots, current
+  counts and E/G read-back. A canonical original deleted by the owner in the
+  trusted file manager is authoritative retirement, not an accidental-loss or
+  restore request: publish catalog/seed/G/phone-package/cloud-candidate
+  convergence only after the source implementation and tests prove it, and
+  otherwise show the source blocker explicitly. Its Overview also contains 10–20 owner-authorized,
+  aesthetically selected original photos with byte-identical full images and
+  lightweight previews; ordinary personal photos are not excluded merely because
+  their source is private. The completed document-materials project directly
   explains entry bypass, current matter and original inputs, same-source
   DOCX/PDF, page/color/grayscale verification, signature and ready versioning,
   reality-state separation, sign-back and copy-and-verify recovery. These requirements do not authorize
@@ -479,7 +518,7 @@ read-only operating panel; public presentation is secondary.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
   Remote, personal-health, WeChatDirect, personal-materials, document-materials,
-  work-delivery and daily-preferences additions, are standing-authorized to commit, normal-push existing
+  work-delivery, daily-preferences and personal-media additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -500,7 +539,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current fifteen.
+  to projects added after the current sixteen.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -532,7 +571,7 @@ read-only operating panel; public presentation is secondary.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
   including WeChatDirect, personal-materials, document-materials, work-delivery
-  and daily-preferences:
+  daily-preferences and personal-media:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or

@@ -4,15 +4,16 @@ const stateLabels = ["可直接使用", "需要确认", "当前不可用"];
 
 const wechatDirectSnapshot = createProjectSnapshot({
   observedAt: "2026-09-01T04:24:24.7471576Z",
-  label: "PUBLIC main、50 项回归、2 个子测试与无正文 Doctor 已核对；本轮未读取真实聊天正文或运行具名会话 E2E",
+  label: "3 个完成态具名归档共保存 6032 条消息，3/3 独立验真通过；PUBLIC main、无正文 Doctor 与回归也已核对",
   metrics: [
-    { label: "命令入口", value: "8 个" },
-    { label: "回归", value: "50 + 2 pass" },
-    { label: "账号槽位", value: "2 个" },
-    { label: "AI小上下文", value: "80 条 · 128 KiB" }
+    { label: "完成态归档", value: "3 个" },
+    { label: "已保存消息", value: "6032 条" },
+    { label: "语音 / 派生", value: "3 + 3 个文件" },
+    { label: "独立验真", value: "3 / 3" }
   ],
   facts: [
-    { label: "当前公开版本", value: "WeChatDirect v0.1.0；PUBLIC main=488353629098f24535784c1663159d7570ae96f1，工作树与远端 main 同步且干净。" },
+    { label: "当前现实归档", value: "当前已有 3 个完成态具名联系人归档，manifest 合计 6032 条消息、3 个原始语音文件和 3 个派生文件；3/3 verify-export 成功。三份归档都保留明确 gap，最新 manifest 时间为 2026-08-25T22:23:16.8259403Z；这些聚合不读取聊天正文或联系人身份。" },
+    { label: "当前公开版本", value: "WeChatDirect v0.1.0；PUBLIC main=488353629098f24535784c1663159d7570ae96f1，工作树与远端 main 同步且干净。", hero: false },
     { label: "当前环境体检", value: "Windows + Python 3.14 的无正文 Doctor 成功；两个账号槽位、两个来源配置文件、两个本地状态文件、加密依赖、压缩依赖与语音解码器均报告可用。" },
     { label: "聊天读取边界", value: "一次只解析一个明确联系人或群的有界窗口；最多扫描 500 条、返回 80 条，保留消息方向、群成员标签、回复目标、媒体关系、实际时间范围与可见历史缺口。" },
     { label: "具名自动增量", value: "sync-contact 首次保存该对象当前设备可见的完整本地历史；之后同一命令用来源指纹、增量游标和默认 1 天重叠窗口合并变化，不建立全账号同步或后台任务。" },
@@ -38,7 +39,7 @@ export const wechatDirectProject = {
   visibility: "公开仓库",
   repositoryUrl: "https://github.com/wlyaaaaa/WeChatDirect",
   statusTone: "mixed",
-  cardStatus: "v0.1.0 的八个命令、当前无正文环境体检和合成回归已通过；真实聊天 E2E 未在网页刷新中执行",
+  cardStatus: "3 个完成态具名归档已保存 6032 条消息并全部独立验真；当前远端全历史和非语音附件仍有明确缺口",
   cardStatusTone: "pass",
   ...wechatDirectSnapshot,
   kicker: "把微信上下文、回复和附件变成可核对的工作材料",
@@ -53,9 +54,9 @@ export const wechatDirectProject = {
   plainExample: "例如我问：“查一下项目群里对方最后确认的交付时间，并说明他回复的是哪条、附件关系是否可用。”工具先在主号、副号中解析唯一群；若两边都匹配就返回候选而不是猜。随后读取有界窗口，补回引用目标；语音可精确打开，其他附件当前只保留资源关系和不可打开缺口。若我说“以后持续保留这个群”，才为这个群建立首次完整本地档案，后续再次运行同一命令自动合并增量。",
   result: "我会得到两种清楚分开的结果：一次问题得到带账号、对象、实际时间范围、发送者、回复和媒体缺口的小上下文；长期保留得到可搜索的人类档案、给 AI 的小上下文、完整结构记录、当前可打开的语音媒体、来源指纹、游标、哈希清单和最近运行回执。无法唯一选账号、目标不存在、非语音附件打不开或来源在读取时变化，都会明确说明。恢复从最后一个完整提交点开始；首次硬崩溃留下的半成品仍是当前具名缺口。",
   readerStates: {
-    pass: "唯一账号与对象已经绑定，所需窗口可读，回复与影响答案的媒体关系可核对；结果明确实际范围，不把小窗口冒充全历史。",
+    pass: "一次查询交回已绑定账号、对象和实际范围的可读上下文，不把小窗口冒充全历史。更新具名档案时交回新增/更新结果；即使来源没变，也先核对清单与状态、结构记录和两份全文，全部一致才报告没有变化。",
     problem: "账号或联系人重名、引用目标不在当前窗口、媒体暂时打不开、群成员标签缺失或来源正在变化时，返回候选和具体 gaps，只扩大会改变答案的范围。",
-    unavailable: "配置、身份承诺、本地数据库、索引或导出状态不成立时停止对应读取；保留已有导出和恢复点，不换账号、不扫整个目录、不从文件名或上下文补猜。"
+    unavailable: "配置、身份承诺、本地数据库、索引或导出状态不成立时停止对应读取；来源没变但本地档案损坏也不会报告成功。保留已有导出和恢复点，不换账号、不扫整个目录，也不覆盖不同字节或补猜。"
   },
   stateLabels,
   methodCanvas: {
@@ -130,7 +131,7 @@ export const wechatDirectProject = {
     { title: "准备稳定的只读快照", detail: "直接读取本机配置中的加密来源，复制并解密到临时目录、合并数据库写入日志，再做完整性检查和只读查询；源持续变化就停止。" },
     { title: "还原消息与媒体语义", detail: "解析正文、发送者、群成员、引用目标和媒体关系；控制载荷、未知类型和不可打开项目都保留为明确缺口。" },
     { title: "生成小上下文或档案", detail: "一次问题返回有界结构结果；归档同时生成给 AI 的小窗口、人类完整档案、结构记录、当前可打开语音、增量状态与完整性清单。" },
-    { title: "再次执行只合并变化", detail: "来源未变走无正文快速路径；变化时按排序游标或默认 1 天时间重叠抓取。当前可打开的语音媒体按内容哈希复用。" },
+    { title: "再次执行只合并变化", detail: "来源未变时不重新扫描源库消息，但仍核对已导出全文、结构记录、清单和状态绑定；变化时按排序游标或默认 1 天时间重叠抓取。当前可打开的语音媒体按内容哈希复用。" },
     { title: "完整性清单先于增量状态", detail: "记录、档案和 AI 小上下文先原子写入，完整性清单先发布，增量状态再成为下一次续作点；来源中途变化时不提交。" },
     { title: "需要时验真、重核或补缓存", detail: "已有导出可以独立重算哈希和数量；旧历史或媒体缺口显式执行全量重核；朋友圈未缓存时只提示在同一账号手动打开目标后重试。" }
   ],
@@ -271,19 +272,19 @@ export const wechatDirectModules = [
       intents: ["首次导出一个微信联系人或群", "重复命令自动合并微信增量", "给 AI 最近小上下文而保留完整档案", "重新核对一个对象全部本地历史"],
       entities: ["sync-contact", "messages.jsonl", "context.md", "ai-context.md", "state.json", "manifest.json", "sortSeq"],
       relations: ["首次运行绑定完整本地历史", "后续运行绑定同一账号对象输出目录", "messages.jsonl 合并新旧消息", "state 在 manifest 发布后提交"],
-      failureRecovery: ["从最后完整 manifest/state 重放", "身份或对象变化时拒绝续写", "来源未变时走无正文快速路径", "旧历史变化时显式 full reconcile", "首次硬崩溃无 state 半成品与陈旧锁不自动修复"]
+      failureRecovery: ["从最后完整 manifest/state 重放", "身份或对象变化时拒绝续写", "来源未变仍校验完整导出文本与状态绑定", "旧历史变化时显式 full reconcile", "首次硬崩溃无 state 半成品与陈旧锁不自动修复"]
     },
     teaser: "sync-contact 第一次保存该对象当前设备可见的完整本地历史；以后重复同一命令会自动重放并合并增量。",
-    status: "首次全量、增量、无变化快速路径、来源变化和原子提交均有合成回归；未读取真实档案",
+    status: "首次全量、增量、无变化快速路径、来源变化和提交顺序均有合成回归；本页未读取真实档案正文",
     statusTone: "mixed",
     value: "长期合作对象的聊天可以持续更新，而不需要每次全量导出、复制旧媒体或把完整历史交给 AI。",
     why: "只保存一次会漏掉后续内容；每次全量重做又慢、重复且容易在中断时留下半成品。真正可用的归档需要知道自己处理到哪里、来源是否变化、哪些是新增或更新，以及怎样验证提交完成。",
     example: "我说“把供应商群持续保存下来”。第一次不接受时间截断，保存当前可见完整历史；下周重复同一命令，只抓游标与重叠窗口内的候选，合并新消息和后来可用的媒体。",
     result: "得到一个稳定目录：完整人类档案、AI 小上下文、messages.jsonl、当前可打开的语音、manifest、state 和 last-run；每次回执说明模式、新增/更新/总数、媒体复用、发送者缺口和增量覆盖边界。恢复从最后完整 manifest/state 开始，首次硬崩溃半成品不冒充可续跑。",
     readerStates: {
-      pass: "账号、对象、已有状态和来源一致；增量合并完成，manifest 与 state 指向同一完整结果。",
+      pass: "有变化时完成增量合并，manifest 与 state 指向同一完整结果；无变化时也先验证清单自哈希、账号/对象/来源绑定、JSONL 哈希和数量、两份全文的哈希与字节数，再返回 noChange 并更新运行回执。",
       problem: "多分片、无时间旧消息、历史修改或媒体后来可用时，普通增量只说明覆盖边界，并提示 full reconcile。",
-      unavailable: "输出目录未初始化、身份不一致、并发或陈旧锁、来源在读取时变化或 manifest/state 不一致时停止提交；没有旧 state 时需要人工核对半成品。"
+      unavailable: "输出目录未初始化、身份不一致、并发或陈旧锁、来源在读取时变化、导出全文损坏或 manifest/state 不一致时停止提交；不覆盖不同字节来强行修好快速路径，没有旧 state 时需要人工核对半成品。"
     },
     stateLabels,
     decisionImpact: [
@@ -300,15 +301,16 @@ export const wechatDirectModules = [
       "state.json 固定 wechat-direct-contact-sync.v1、账号身份承诺、联系人原生身份、游标、水位、来源指纹和消息数量。",
       "messages.jsonl 用 server id；没有 server id 时用本地 id、时间、sortSeq 与发送者计算稳定合并键。",
       "默认 overlapSeconds=86400，允许 0 到 31 天；单分片且目录不变时使用 sortSeqReplayFloor。",
-      "来源指纹未变时仍先重验 manifest 自身哈希、manifest/state 绑定，以及 context.md、ai-context.md、messages.jsonl 的声明哈希、大小和记录数；全部一致才走 sourceMetadataFastPath 并只更新 last-run。",
+      "来源指纹未变时先再取一次指纹确认稳定，重验 manifest 自哈希及其与 state 的账号、身份承诺、联系人、来源指纹和数量绑定；messages.jsonl 核对 SHA-256 与记录数，context.md 和 ai-context.md 分别核对完整 SHA-256 与字节数。全部一致才返回 sourceMetadataFastPath/noChange 并只更新 last-run。",
       "档案和 AI 小上下文原子写入，manifest 先于 state；state 是下一次增量的提交标记。",
       ".sync.lock 阻止两个写者同时更新同一输出目录；当前不会自动判断或清除陈旧锁。",
-      "无变化快速路径核对必要文件和 manifest/state 数量关系，但完整哈希仍应另跑 verify-export。"
+      "快速返回已经包含导出全文与结构记录的完整哈希核对，不只是看文件存在或数量；独立 verify-export 另核整个导出的路径、媒体与派生关系，不应把两者的覆盖范围混为一谈。"
     ],
     flow: [
       "首次解析账号与对象，拒绝带 since / until 的伪完整导出。",
       "建立输出目录锁并计算与该对象相关的来源指纹。",
       "选择 full、incremental 或 explicit full_reconcile 模式。",
+      "无变化候选先复核来源指纹、清单/状态绑定及已导出全文和记录；通过则只更新 last-run，不重扫源库消息。",
       "抓取候选，按稳定消息键合并现有 JSONL。",
       "只复制新增、更新或需要重试且当前真正 openable 的语音，已存在哈希文件直接复用。",
       "生成完整 context.md 与有界 ai-context.md。",
@@ -318,7 +320,7 @@ export const wechatDirectModules = [
       { term: "First full snapshot（首次完整快照）", explanation: "第一次保存该对象当前设备可见的全部本地历史；它仍不等于微信远端全历史。" },
       { term: "sortSeq cursor（排序游标）", explanation: "单一消息来源下按 WeChat 排序序号继续，能包含没有 createTime 的新增消息。" },
       { term: "Overlap window（重叠窗口）", explanation: "从上次最后时间向前回看一段，默认 1 天，用于吸收迟到或变化记录。" },
-      { term: "Source metadata fast path（来源元数据快速路径）", explanation: "相关源文件指纹没变时不打开聊天正文，直接确认无变化并更新运行回执。" }
+      { term: "Source metadata fast path（来源元数据快速路径）", explanation: "相关源文件指纹重复核对未变时，不重新扫描源库消息；先重验本地导出全文、结构记录、清单与状态绑定，全部一致后才确认无变化并更新回执。" }
     ],
     boundaries: [
       "权限只覆盖用户点名的一个联系人或群，不扩到全账号。",
@@ -332,6 +334,7 @@ export const wechatDirectModules = [
       { condition: "账号、联系人或状态身份不一致", response: "返回 sync_identity_mismatch，保留原档案并要求使用原对象或新目录。" },
       { condition: "同一目录已有运行锁", response: "返回 sync_already_running_or_stale_lock；先确认旧进程与锁状态，不并发写。" },
       { condition: "来源在读取期间发生变化", response: "返回 source_changed_during_sync_retry，不提交新 state；下次从旧完整状态重试。" },
+      { condition: "来源没变，但本地导出文本、记录或清单绑定漂移", response: "按实际位置返回 sync_context_sha256_mismatch、sync_ai_context_sha256_mismatch、sync_records_sha256_mismatch 或 sync_manifest_state_mismatch 等精确错误；不返回 noChange，也不默默覆盖不同字节。" },
       { condition: "需要覆盖旧历史变化", response: "用户显式使用 --full-reconcile，重新核对该对象全部本地可见历史。" },
       { condition: "首次同步硬崩溃后有文件但没有 state", response: "返回 sync_output_not_initialized；当前必须人工核对或移走半成品后重建。" },
       { condition: ".sync.lock 来自已退出进程", response: "当前仍按锁冲突停止；不能无条件删除，也没有自动陈旧锁修复。" }
@@ -347,6 +350,7 @@ export const wechatDirectModules = [
       "test_contact_sync_changed_source_replays_indexed_cursor_and_merges 验证来源变化后的游标合并。",
       "test_manifest_is_published_before_state_commit_marker 验证提交顺序。",
       "test_contact_sync_does_not_commit_when_source_changes_during_read 验证漂移失败关闭。",
+      "test_contact_fast_path_rejects_hash_size_count_and_state_drift 覆盖无变化候选的清单自哈希、全文字节、记录数与状态绑定漂移；CLI 回归另验证 context、ai-context 和 JSONL 内容变化不能返回 noChange。",
       "当前没有硬杀进程后半成品自动恢复测试，因为该能力尚未实现。"
     ],
     relation: "它消费“聊天上下文”同一账号与对象语义，调用“回复与媒体关系”复制当前可打开的语音并保留其他媒体缺口；完整提交点、增量重放、全量重核和崩溃恢复缺口都由本模块统一说明。"

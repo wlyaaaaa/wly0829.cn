@@ -41,7 +41,7 @@ export const systemScenarios = [
     title: "在现有项目里，把一个真实需求做到可用",
     request: "“给现有网站补上项目内全文搜索：项目外只搜项目，进入项目后只搜这个项目的内容。保留别人还没提交的修改，桌面和手机都按真实路径验收。”",
     systems: ["通用 AI 与智能体能力", "AI 协作规则与能力中心（.agents）", "目标项目的规则", "项目身份总账（GitHub 总索引）", "目标项目", "自然语言能力入口（Skills）与工具"],
-    rules: "先确认真实项目和现有修改；项目拥有业务做法；并行不能覆盖别人；源码、测试、安装、发布和用户可用分别验证。",
+    rules: "先明确用户要的结果和现有修改，把用户原意与可替换方案分开；实质长程节点由独立子代理检查是否偷加目标或复杂层，但不能砍掉用户功能。并行不覆盖别人，源码、发布与实际可用分别说明。",
     result: "根因、实现改动、相关测试、真实使用结果、仍未闭合的部分、提交或恢复位置。",
     value: "调查、研究、实现、测试和真实使用属于同一个目标；只有这项需求确实需要时，才继续提交、发布或外部交付。",
     stages: [
@@ -86,9 +86,9 @@ export const systemScenarios = [
     title: "用一段记忆，找到最可能的照片、录音或文件原件",
     request: "“找去年在餐厅拍的那组照片，还有我忘了放在哪的延保合同。先给少量最可能的原件，不要全盘扫描，也不要复制或移动文件。”",
     systems: ["通用 AI 与智能体能力", "个人媒体定位（personal-media）", "非媒体原件定位（personal-materials）", "当前目录与索引", "真实原件"],
-    rules: "先把时间、地点、人物、文件角色和内容线索拆开；已有精确路径直接读原件。媒体按目录与预览证据核对，非媒体在位置未知时先给隐藏路径的候选，只有选中后才重算大小和 SHA-256；零匹配只说明本轮没找到。",
-    result: "媒体得到带预览或原件入口的少量候选；非媒体先得到隐藏真实路径的候选卡，选中后才交回通过大小与 SHA-256 验真的原件位置、匹配依据、实际检查范围和覆盖缺口。",
-    value: "系统帮助从模糊记忆回到原件；个人材料项目只保留最小 locator/metadata SQLite（定位与元数据数据库），不复制原件、不建立跨领域中央资料库，也不把候选冒充已经验真的原件。",
+    rules: "先把时间、地点、人物、文件角色和内容线索拆开；已有精确路径直接读原件。媒体按目录与预览证据核对，非媒体在位置未知时先给隐藏路径的候选，只有选中后才重算大小和 SHA-256；零匹配只说明本轮没找到。可信文件管理器中原件不存在则代表本人已删除，正确产品不应从旧索引或恢复副本复活。",
+    result: "媒体得到带预览、精选或原件入口的少量候选；非媒体先得到隐藏真实路径的候选卡，选中后才交回通过大小与 SHA-256 验真的原件位置、匹配依据、实际检查范围和覆盖缺口。本人在可信文件管理器删除原件后，两套来源都会在下一次日常同步精确退役登记与派生恢复状态，不再返回待恢复候选。",
+    value: "系统帮助从模糊记忆回到原件，也尊重本人在可信文件管理器做出的删除决定；个人材料项目只保留最小 locator/metadata SQLite（定位与元数据数据库），不复制原件、不建立跨领域中央资料库，也不把候选冒充已经验真的原件。",
     stages: [
       {
         number: "01",
@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 15,
+  detailedPageCount: 16,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
-  mappingSha256: "sha256:dadeabb4131e78c159946dabe6a8ba68c2a964b21791d79fe4069d352d312bac",
-  description: "49 个身份已经由当前 GitHub Owner baseline 与现场回读闭合：27 个 PUBLIC、22 个 PRIVATE。项目目录现在提供十五个可深入阅读的完整参考；日常偏好与个性化推荐已从只有 Skill 入口的系统资产进入完整项目页。其余资产继续在系统版图中保持可读，网站源码仓库计入总账，但不作为系统资产卡展示。"
+  mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供十六个完整参考页，其中媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -584,7 +584,7 @@ export const systemProjectDomains = [
     title: "AI 协作与能力运行",
     summary: "把一句自然需求送进正确的 AI 工作入口，组织规则、工具、后端与协作者，再把结果交回同一目标。",
     ordinaryRequest: "“把这项工作做完；能独立调查的并行，但不要互相覆盖，失败也不要静默换一条路线。”",
-    collaboration: "规则与能力中心先收窄目标和边界，合适的工作入口负责执行，主任务统一比较证据、合并结果并处理失败。",
+    collaboration: "规则与能力中心先明确用户目标和边界，合适的工作入口负责执行，主任务比较证据、合并结果并处理失败，不借技术方案缩小用户需求。",
     delivery: "明确的能力路线、可追踪执行、失败分类、统一验收和可以继续的任务位置。",
     unavailable: "某个入口不可用时只停止依赖它的支路，保留已经完成的工作并说明缺口；不静默换路线冒充原结果。",
     assets: [
@@ -623,16 +623,17 @@ export const systemProjectDomains = [
     number: "03",
     title: "材料、微信与原件",
     summary: "让聊天、录音、扫描件和文件有界进入当前工作，同时一直保留它们与真实原件的关系。",
-    ordinaryRequest: "“找回那份材料，把这段微信和录音整理清楚；人名、数字和没听清的地方不要猜。”",
+    ordinaryRequest: "“找回那份材料，把这段微信和录音整理清楚；我在可信文件管理器删掉的原件就当本人不要，不要再从索引或恢复包复活。”",
     collaboration: "材料与微信入口先找到有界原件，语音和扫描项目保留时间、页码与风险，通用 AI 再把多种材料组织成同一项工作。",
     delivery: "可打开的原件、回复与媒体关系、带时间位置的文字、版面结构、引用和待确认项。",
     unavailable: "原件不在当前覆盖、附件丢失或识别失败时明确实际检查范围与待确认项，不用摘要补齐缺失事实。",
     assets: [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，而不是只吐一段无法回听的稿。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: projectLedgerHref },
-      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "用普通描述先查已登记定位；位置确实未知时只看获准目录的名称与 stat（文件状态），选中一项后才核对大小和 SHA-256 并打开。", kind: "资料入口", href: "/projects/personal-materials" },
+      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "当前 36 个登记来源覆盖 43,916 个非媒体路径条目：34 个已精确登记，其余 43,882 个按请求有界发现；选中一项后才核对大小和 SHA-256 并打开。来源根可访问而本人已删除精确 locator 时，下一次日常同步只退役该 occurrence，并由现有外键级联退出仅属于它的关系和绑定文字。", kind: "资料入口", href: "/projects/personal-materials" },
+      { id: "personal-media", title: "个人媒体整理与恢复", role: "管理 20,154 张照片、376 个视频和 3,830 个音频；精选为 1,145 张照片、37 个视频，已全部进入手机包与云候选。手机新文件先双盘备份再离线分类；自己删原件后，查询跳过，现有日常任务更新清单、G 镜像与恢复包，不自动上传云。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
       { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
-      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文，保留回复、媒体和可重放增量关系；完成态可继续增量，硬崩溃半成品仍明确保留为缺口。", kind: "资料入口", href: "/projects/wechat-direct" }
+      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
   },
   {
@@ -660,9 +661,7 @@ export const systemProjectDomains = [
     delivery: "分阶段材料、问题与选择、当前证据、反馈后的修订，以及明确由本人决定的下一步。",
     unavailable: "缺少原件、当前状态或本人反馈时，只保留该领域的未知和待办，不跨领域复制资料或替本人推进。",
     assets: [
-      { id: "ai-coach", title: "AI 学习协作", repo: "ai-coach", role: "先读原始材料，再按用户实际反馈继续，避免反复从零讲或自动推进。它与公开的通用学习方法有关，但不是同一个项目身份。", kind: "长期协作", href: projectLedgerHref },
-      { id: "ai-llm-job-prep", title: "学习材料库", repo: "ai-llm-job-prep", role: "把课程原件、总结和可打印知识地图组织成可复核的学习底稿。", kind: "学习资料", href: projectLedgerHref },
-      { id: "career-development", title: "个人发展协作", role: "把方向、学习、项目表达和长期准备放在同一条可持续推进的工作线上；私人事实不进入首页。", kind: "长期协作", href: projectLedgerHref },
+      { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
       { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人最新明示、多来源行为事实和可纠正推定分开保管，按一次问题只取相关证据，再把历史变成熟悉、相邻和新鲜选择；不把买过写成喜欢，也不建立中央画像。", kind: "私人日常协作项目", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" }
@@ -718,8 +717,6 @@ export const systemProjectDomains = [
     assets: [
       { id: "health-longevity", title: "健康协作早期方案", repo: "HealthLongevity", role: "保留早期健康工程结构与交付模板，现行健康协作由独立入口承接。", kind: "历史参考", href: projectLedgerHref },
       { id: "human-alignment-dataset", title: "加密时间胶囊", repo: "human-alignment-dataset-001", role: "保留一份不可读的加密时间胶囊，不参与日常 AI 工作，也不从文件名推断内容。", kind: "历史参考", href: projectLedgerHref },
-      { id: "personal-knowledge-base", title: "中央知识库迁移参考", repo: "PersonalKnowledgeBase", role: "保留早期集中式方案的教训和迁移结论，提醒当前系统直接走健康、材料、微信、语音和扫描等独立入口。", kind: "迁移参考", href: projectLedgerHref },
-      { id: "personal-os-retired", title: "个人系统历史设计参考", repo: "PersonalOS-Retired", role: "保留曾经的系统设计、问题教训和未来重新评估条件，不作为当前运行入口。", kind: "历史参考", href: projectLedgerHref },
       { id: "wechat-direct-private-archive", title: "微信读取工具早期版本", role: "保留公开前版本与迁移依据，现行能力由微信工作材料入口承接。", kind: "迁移参考", href: projectLedgerHref }
     ]
   }
@@ -732,14 +729,15 @@ const privateProjectSourceDigests = {
   "ai-memory-backup-b": "c52d549dad47c53914941e3df71dbcc76c687c895a13a1faab73c90760c4f549",
   "ai-memory-backup-c": "2f2561db3b4df99fbf11e8e54f5159369d32b3845ead50544e29dad9bba1d502",
   "openclaw-backup": "ee7ee37eb61d9452cd1c4dc1f2bbf6dc9e392bc8b1961cb3b841defc7a909ec3",
-  "wechat-direct-private-archive": "f914c90f659820612b0ce431fecdf4050589e1bc94230f268d519fc96e239fcb"
+  "wechat-direct-private-archive": "f914c90f659820612b0ce431fecdf4050589e1bc94230f268d519fc96e239fcb",
+  "personal-media": "eaedb81b012a77f6da303c361b862aad4a4a8faac66b7e2618cbed36e5e8d72f"
 };
 
 export const systemProjectSourceMap = systemProjectDomains.flatMap((domain) => domain.assets.map((asset) => ({
   assetId: asset.id,
   domainId: domain.id,
   sourceIdentity: asset.repo ? `repo:${asset.repo}` : `sha256:${privateProjectSourceDigests[asset.id]}`,
-  evidence: "GitHub 总索引与项目当前 README / AGENTS",
+  evidence: asset.id === "personal-media" ? "本地项目当前验收回执与源码承诺" : "GitHub 总索引与项目当前 README / AGENTS",
   observedAt: systemProjectInventory.observedAt
 })));
 
@@ -1067,17 +1065,21 @@ export const systemDependencyNodes = [
       { href: "/skills/personal-materials", label: "Skill：非媒体原件查找" }
     ],
     searchHref: "/projects/personal-materials",
-    searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里"],
-    detail: "项目拥有最小 locator/metadata SQLite（定位与元数据数据库），只保存来源、定位、版本、hash、打开状态、原生关系和与原件绑定的可重建文字；不保存原件字节、人物事件或跨领域资料。Skill 负责把位置未知或旧定位失效的普通请求送入登记查询或有界发现：候选阶段隐藏真实路径，只有选中后才重新核对大小和 SHA-256。用户已经给出附件或可靠路径时仍直接读取原件，不先经过本入口。"
+    searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里", "材料在文件管理器删了", "我自己删的文件不用恢复"],
+    detail: "当前 36 个登记来源在 12 层产品范围内有 43,916 个非媒体路径条目；34 个拥有精确 locator，可直接 find/inspect/open，其余 43,882 个只在请求真正需要时进入最多 8 个来源、2500 个文件、8 秒的有界发现。项目不保存原件字节、人物事件或跨领域资料；候选阶段隐藏真实路径，只有选中后才重新核对大小和 SHA-256。来源根可访问而本人已删除精确 locator 时，现有每日任务调用 sync-current 清理失效项及其独有文字/关系；查询与状态不触发同步，缺失候选也不占结果上限。"
   },
   {
     id: "media",
     lane: "inputs",
-    title: "个人媒体原件定位",
-    subtitle: "按自然线索找到照片、视频、录音或临时浏览目录",
-    href: "/skills/personal-media",
-    linkLabel: "Skill：个人媒体原件定位",
-    detail: "只负责找到、打开或建立不复制原件字节的临时浏览目录；不移动、分类、删除或上传媒体，也不把未来整理与恢复能力冒充成本入口已经做到。"
+    title: "个人媒体整理、检索与恢复",
+    subtitle: "项目负责完整媒体生命周期，Skill 负责从一句普通请求进入查找入口",
+    links: [
+      { href: "/projects/personal-media", label: "进入个人媒体整理与恢复完整项目页" },
+      { href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }
+    ],
+    searchHref: "/projects/personal-media",
+    searchAliases: ["个人媒体整理与恢复", "找照片视频音频", "精选照片和视频", "媒体在文件管理器删了", "删除原件后退出手机恢复包和云候选", "手机照片双盘保全", "手机恢复包", "云端候选"],
+    detail: "完整项目当前管理 20,154 张照片、376 个视频和 3,830 个音频（3,823 段录音、6 个音乐、1 个铃声），唯一精选入口含 1,145 张照片和 37 个视频；还拥有单一可重建目录、视觉分类、独立本地接入、手机 E/G 双盘保全、低于 60 GB 的手机恢复包和 upload=0 云候选。Skill 只负责自然语言检索/浏览；1,182 项精选已全部进入手机包和云候选，手机包约 57.0 GB。用户删原件后，查询只跳过缺失项，既有每日任务更新清单、镜像 G 并同步实际包，不增加删除保护或恢复系统。"
   },
   {
     id: "wechat-bridge",
@@ -1097,7 +1099,7 @@ export const systemDependencyNodes = [
       { href: "/projects/wechat-direct", label: "进入 WeChatDirect 完整项目页" },
       { href: "/skills/wechat-direct", label: "Skill：微信上下文与单会话归档" }
     ],
-    detail: "当前问题只读取明确联系人或群的有界窗口；需要长期保存时才为该具名对象建立首次归档、完整性清单和显式触发的增量重放。所有媒体保留与原消息的关系，当前可实际打开的字节主要是语音；不后台同步整个账号。"
+    detail: "当前已有 3 个完成态具名归档，共保存 6032 条消息、3 个原始语音文件和 3 个派生文件，3/3 独立验真通过；三份都保留明确 gap。一次问题仍只读取明确联系人或群的有界窗口，需要长期保存时才更新该具名归档；不后台同步整个账号，也不把本地可见范围冒充微信远端全历史。"
   },
   {
     id: "localocr",

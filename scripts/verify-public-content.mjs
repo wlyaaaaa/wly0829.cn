@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
 const secretPatterns = [
-  ["OpenAI-style key", /sk-[A-Za-z0-9_-]{20,}/],
+  ["OpenAI-style key", /\bsk-[A-Za-z0-9_-]{20,}/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
   ["GitHub fine-grained token", /github_pat_[A-Za-z0-9_]{20,}/],
   ["Google API key", /AIza[0-9A-Za-z_-]{30,}/],

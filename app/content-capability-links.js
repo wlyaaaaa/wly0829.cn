@@ -76,7 +76,7 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 能力路由" }
   ],
   "personal-media": [
-    { relation: "unlisted-project", label: "对应本地项目尚未收录详情" }
+    { relation: "owned-by-project", projectSlug: "personal-media", moduleSlug: "search-browse", label: "个人媒体整理与恢复项目" }
   ],
   "personal-panel-refresh": [
     { relation: "presentation-infrastructure", label: "由当前网站呈现仓库实现，不作为展示项目" }
@@ -98,6 +98,9 @@ export const skillProjectLinks = {
 export const projectReferenceLinks = {
   agents: [
     { relation: "rules", href: "/rules", label: "查看 5 份现行规则" }
+  ],
+  "personal-media": [
+    { relation: "skill", href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }
   ],
   "personal-materials": [
     { relation: "skill", href: "/skills/personal-materials", label: "Skill：非媒体原件查找" }

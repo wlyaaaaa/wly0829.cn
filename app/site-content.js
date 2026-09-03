@@ -15,7 +15,9 @@ const contentPackages = projectContentPackages;
 function registeredContent(entry) {
   const content = contentPackages.get(entry.id);
   if (!content) throw new Error(`Enabled panel project has no content package: ${entry.id}`);
-  const expectedVisibility = entry.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库";
+  const expectedVisibility = entry.source.kind === "local_managed_source"
+    ? "本地私有项目"
+    : entry.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库";
   const mismatches = [
     content.project.slug !== entry.id && "id",
     content.project.order !== entry.order && "order",

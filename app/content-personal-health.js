@@ -6,13 +6,15 @@ const personalHealthSnapshot = createProjectSnapshot({
   observedAt: "2026-08-31T12:00:18.5444628Z",
   label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
   metrics: [
-    { label: "合成回归", value: "112/112" },
-    { label: "大分页恢复", value: "609 页" },
+    { label: "本页个人材料", value: "未读取" },
+    { label: "账号 / 设备复核", value: "未执行" },
+    { label: "个人健康结论", value: "不展示" },
     { label: "分析窗", value: "14 · 28 · 90 天" }
   ],
   facts: [
+    { label: "本页证据边界", value: "本页只核对产品代码与合成证据，没有读取个人健康材料、运行账号/设备现场复核或形成个人健康结论；现实健康状态不在本页判断，不能把未读取写成没有记录或数值为零。产品已实现 14 / 28 / 90 天证据窗口与离线质量门。" },
     { label: "AI为谁负责", value: "以用户的健康、安全、自主、隐私、现实负担和已表达目标为准；不为流程完成、机构利益、设备活跃度或 AI 自信优化。" },
-    { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任。" },
+    { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任。", hero: false },
     { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见。" },
     { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见。" },
     { label: "当前源码与回归", value: "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；项目有 5 个产品 Python 模块、5 个测试模块；本轮 unittest 112 项全部通过（112/112），内部用时 27.922 秒。" },
@@ -20,6 +22,7 @@ const personalHealthSnapshot = createProjectSnapshot({
     { label: "源码规模", value: "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库。", hero: false },
     { label: "分页上限", value: "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报。", hero: false },
     { label: "离线回执", value: "离线 capture 回执保持 health_owner_review_required=true、current_updated=false、background_work_created=false；合成回归不能证明任何个人健康值。", hero: false },
+    { label: "已保存记录怎么查", value: "具体日期仍未回答时，query/summary 只读取指定清单中一个字段和日期的页面；交回记录或覆盖摘要、缺口与截断状态，API 耗时为 0。查询通过不等于字段已可用于健康判断。", hero: false },
     { label: "运行形态", value: "没有新增服务、数据库、计划任务、后台 watcher 或持续同步节点。", hero: false }
   ],
   gaps: [
@@ -35,8 +38,8 @@ export const personalHealthProject = {
   route: "/projects/personal-health",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "当前证据路由、前台设备刷新链和离线质量门已实现；健康决策原则已明确",
-  cardStatusTone: "pass",
+  cardStatus: "证据路由、前台设备刷新链和离线质量门已实现；本页未读取个人材料或复核账号与设备",
+  cardStatusTone: "mixed",
   ...personalHealthSnapshot,
   kicker: "让健康选择更安全、更自主，也更容易复查",
   searchAliases: [
@@ -130,7 +133,7 @@ export const personalHealthProject = {
     { term: "Fail closed（失败关闭）", meaning: "来源、清单、哈希、质量或凭据边界不成立时停止对应路线，不换路线补猜。" }
   ],
   operatingFlow: [
-    { title: "先判断是否需要新证据", detail: "普通问题只读现行底色；只有新报告、纠正、来源冲突、完整性问题或本人明确设备刷新才进入维护。" },
+    { title: "先判断是否需要新证据", detail: "普通问题先用现行底色；已保全的某日记录仍未回答时，只按一个字段和日期离线窄查。只有新报告、纠正、来源冲突、完整性问题或本人明确设备刷新才进入维护。" },
     { title: "凭据只穿过受保护边界", detail: "首次 OAuth（账号授权协议）使用 PKCE（授权码防截获校验）和回环回调，长期凭据经标准输入进入受保护中心，不生成 token 文件。" },
     { title: "前台入口优先完成离线残余", detail: "已有成功交接时先本地处理；没有待处理结果时才调用固定 Secret Broker 一次，失败不重试或换账号。" },
     { title: "Importer 先保全再解析", detail: "原始页面原样写入本机并记录内容指纹、窗口、记录数和分页链；失败回执只指向唯一精确清单。" },
@@ -143,7 +146,7 @@ export const personalHealthProject = {
     { name: "SOURCES.md", responsibility: "登记已处理来源的定位与处理范围。", implementation: "只在新报告、纠正、冲突、审计或答案关键缺口时读取；网页不公开路径、哈希或个人内容。" },
     { name: "google_health_enroll.py", responsibility: "完成一次桌面 OAuth 授权并安全存入长期凭据。", implementation: "只读 scope、PKCE、回环 callback、stdin secret、恢复副本与 lookup read-back；不生成 token 文件。" },
     { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时固定 Secret Broker 调用一次，输出有界且不含秘密，超时终止整棵进程树。" },
-    { name: "google_health_import.py", responsibility: "保全 provider 原始响应并维护可续跑清单。", implementation: "连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；唯一接触网络和凭据的模块。" },
+    { name: "google_health_import.py", responsibility: "保全 provider 原始响应、维护可续跑清单，并提供已保全记录的离线窄查。", implementation: "在线分支负责连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；query/summary 分支在构造客户端之前返回，只读精确清单与选中页面，不访问网络或凭据。" },
     { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；本地证据闭合并持久化后消费 pointer，再把结果交给 Health Owner 审阅，不更新 CURRENT.md。" },
     { name: "google_health_brief.py", responsibility: "生成字段级 decision_ready / blocked / inventory-only 结果。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；API 与 credential access 均为 false。" }
   ],
@@ -155,6 +158,7 @@ export const personalHealthProject = {
     { ask: "更新一下穿戴设备数据。", effect: "在当前任务里完成一次明确发起的更新。中断时保留已取得内容并从原处继续；数据完整、来源清楚且与当前问题相关后，才进入人工复核，不建立后台同步。", moduleSlug: "protected-foreground-refresh" },
     { ask: "设备导出有几百页，中断后还要从头下载吗？", effect: "不用。分页恢复会按固定间隔原子记录 checkpoint；恢复时只续缺页，并在登记的页数、体积和记录数上限内重新核对完整性。", moduleSlug: "raw-preservation-resume" },
     { ask: "这么多设备字段，哪些真的能用于这次判断？", effect: "先验 complete 清单与页面指纹，只读取和当前问题有关且质量达门的四类默认字段；其余只保留 inventory_only 清单。", moduleSlug: "offline-decision-brief" },
+    { ask: "上周三的步数有没有保存？不用重新同步。", effect: "如果现行底色还不能回答，就在已经完成的精确导出清单中只查步数字段和那一天；返回实际记录、覆盖日期和缺口，不重新授权或下载，也不把没查到记录说成走了零步。", moduleSlug: "offline-decision-brief" },
     { ask: "有记录为 0 和完全没有记录，是一回事吗？", effect: "不是。真实零、无记录、缺字段、结构残缺和来源未知分别标注；只有 decision_ready 才能进入当前问题，blocked 不能被消费。", moduleSlug: "evidence-three-state" },
     { ask: "今天先停，别再给我加健康任务。", effect: "停止当前非紧急工作，只保留恢复这次判断所需的最小断点；不打卡、不追问、不评分，也不把沉默解释成继续授权。", moduleSlug: "health-owner-boundary" }
   ],
@@ -176,6 +180,8 @@ export const personalHealthProject = {
     { name: "普通个人健康入口", command: "Skill: personal-health", purpose: "从现行健康底色回答；不重复读取 SOURCES、原件、旧项目或 Codex 记忆。" },
     { name: "前台设备刷新", command: "python google_health_refresh.py", purpose: "本人明确发起时调用一次 Secret Broker 并完成离线采集；不会创建后台任务。" },
     { name: "离线清单验真", command: "python google_health_brief.py --verify-for-health-brief <manifest>", purpose: "重验决策字段页面的哈希和分页闭环；不访问网络或凭据。" },
+    { name: "离线查某日记录", command: "python google_health_import.py --query-manifest <manifest> --field activity.steps --start-date <YYYY-MM-DD> --through-date <同日>", purpose: "只查精确清单中的一个字段和日期，返回 records、summary、gaps 与 truncated；默认和硬上限均为 100 页、32 MiB、10,000 条，不联网或读取凭据。" },
+    { name: "只看离线覆盖摘要", command: "python google_health_import.py --summary-manifest <manifest> --field activity.steps --start-date <YYYY-MM-DD> --through-date <同日>", purpose: "使用相同字段、日期和预算，只返回数量、覆盖日期与缺口，不返回 records 正文，也不计算数值总和、极值或医学结论。" },
     { name: "完整回归", command: "python -m unittest discover -s tests -p 'test_*.py' -v", purpose: "验证五个产品模块的 112 项合成测试；它不代表真实账号或医学 E2E。" },
     { name: "仓库身份", command: "git status --short --branch", purpose: "确认 PRIVATE main、同步和工作树状态；网页不公开本机 source locator。" }
   ]
@@ -422,24 +428,24 @@ export const personalHealthModules = [
     slug: "offline-decision-brief",
     shortTitle: "筛选可用信息",
     title: "先检查数据是否完整，再只取与问题有关的部分",
-    searchAliases: ["哪些设备数据能用于这次判断", "为什么不读取全部健康字段", "decision_ready健康字段", "inventory_only健康数据", "健康brief离线验真", "14天80%覆盖门"],
+    searchAliases: ["哪些设备数据能用于这次判断", "为什么不读取全部健康字段", "decision_ready健康字段", "inventory_only健康数据", "健康brief离线验真", "14天80%覆盖门", "某天步数有没有保存", "不用重新同步查某日记录", "query-manifest离线窄查"],
     searchProjection: {
-      intents: ["从完整导出中只选与当前问题有关的字段", "判断一个字段能否进入当前健康判断", "只看资料清单而不读取高噪声正文", "离线核对覆盖窗口哈希和来源"],
-      entities: ["success handoff", "complete manifest", "verification receipt", "decision_ready_fields", "blocked_fields", "inventory_only", "14/28/90 day windows"],
-      relations: ["先验证完整交接与页面指纹再读取字段", "默认 decision context 只包含四类低噪声字段", "inventory_only 只读取清单而不读取 raw 正文", "字段自身 ready 且与问题相关才交给 Health Owner"],
-      failureRecovery: ["来源无法证明时默认判断字段全部 provenance_blocked", "页面哈希漂移时在解释前停止", "空缺或 malformed 字段进入 blocked_fields", "页数字节或记录预算超限时不扩大读取"]
+      intents: ["从完整导出中只选与当前问题有关的字段", "判断一个字段能否进入当前健康判断", "只看资料清单而不读取高噪声正文", "离线核对覆盖窗口哈希和来源", "按一个字段和日期查已保存记录而不重新同步"],
+      entities: ["success handoff", "complete manifest", "verification receipt", "decision_ready_fields", "blocked_fields", "inventory_only", "14/28/90 day windows", "query-manifest", "summary-manifest", "gaps", "truncated"],
+      relations: ["先验证完整交接与页面指纹再读取字段", "默认 decision context 只包含四类低噪声字段", "inventory_only 只读取清单而不读取 raw 正文", "字段自身 ready 且与问题相关才交给 Health Owner", "具体日期问题复用精确manifest并按字段日期窄选页面"],
+      failureRecovery: ["来源无法证明时默认判断字段全部 provenance_blocked", "页面哈希漂移时在解释前停止", "空缺或 malformed 字段进入 blocked_fields", "页数字节或记录预算超限时不扩大读取", "离线query部分覆盖返回partial与gaps而不推断零", "非法日期字段或预算返回明确失败而不转在线下载"]
     },
     teaser: "设备能提供很多数据，但当前判断只采用来源清楚、质量足够、确实相关的最小部分；其余只记录存在或暂时不用。",
     status: "capture/brief 无网络和凭据路线，字段选择、14/28/90 天窗口、80% 覆盖门与 inventory-only 有 33 项回归；当前个人数据未读取",
     statusTone: "pass",
-    value: "保全“可能以后有用的数据”和允许它进入健康判断是两件事；默认摘要只读现实上稳定、低噪声且能影响当前问题的最小范围。",
+    value: "保全“可能以后有用的数据”和允许它进入健康判断是两件事；默认摘要只读稳定、低噪声且能影响当前问题的最小范围。若只想知道某一天有没有保存某类记录，还能直接查已保全内容，不必重新同步全部设备数据。",
     why: "设备 API 能读的字段很多。若把高频心率、位置、营养目录、空日志和估算噪声全部常驻，不仅扩大私人数据面，也会让低质量信号压过真正相关证据。",
-    example: "complete 清单包含多类数据。capture 先重验成功 handoff、manifest 与页面指纹；brief 只读取睡眠、步数、活动分钟和已记录运动事件。某字段近期覆盖不足或结构残缺，就进入 blocked_fields；其他字段只进入 inventory_only。",
-    result: "得到一份确定性、字段级决策简报：decision_ready_fields、blocked_fields、质量原因、14/28/90 天窗口和明确 interpretation limits；没有原始全量载荷。",
+    example: "complete 清单包含多类数据。capture 先重验成功 handoff、manifest 与页面指纹；brief 只读取睡眠、步数、活动分钟和已记录运动事件。某字段近期覆盖不足或结构残缺，就进入 blocked_fields；其他字段只进入 inventory_only。如果我另问“上周三的步数有没有保存”，现行底色又没有这项细节，就按 activity.steps 和那一天离线窄查同一份已完成清单，不重下全量。",
+    result: "用于判断时，得到字段级决策简报：decision_ready_fields、blocked_fields、质量原因、14/28/90 天窗口和 interpretation limits（解释边界）。只查某日时，得到那一字段的原始记录、数量、覆盖日期、重复数量、gaps（缺口）、truncated（是否截断）及本地耗时；只要摘要就不返回记录正文。查询通过只证明这次选中内容可核对，不自动变成健康结论或写入现行底色。",
     readerStates: {
-      pass: "字段来源、完整性、页面指纹、结构和最近 14 天覆盖门全部通过，可交给 Health Owner 复核。",
-      problem: "某个字段有记录但重复、重叠、结构残缺或覆盖不足，仅该字段标为 partial 并禁止下游消费。",
-      unavailable: "success handoff、complete manifest、verification receipt 或选中 raw page 任一不一致，在解释数据前停止。"
+      pass: "决策简报的字段来源、完整性、页面指纹、结构和最近 14 天覆盖门通过后，可交给 Health Owner 复核；某日查询则返回已核对的选中记录和覆盖摘要，不把 query pass 当成 decision_ready。",
+      problem: "简报中重复、重叠、结构残缺或覆盖不足的字段不能进入判断。某日查询遇到缺页、哈希不符、日期无法识别或预算截断，会返回 partial 和具体缺口；没查到记录不等于真实数值为零。",
+      unavailable: "简报的交接、完整清单、验证回执或选中页面不一致时，在解释前停止。某日查询若清单不可读、字段不在清单内、日期非法或预算不合法，会明确失败；不因此重新下载全量或访问凭据。"
     },
     stateLabels: evidenceStateLabels,
     decisionImpact: [
@@ -447,7 +453,9 @@ export const personalHealthModules = [
       "最近 14 天至少 80% 日期有可解释记录是数据覆盖门，不是健康目标。",
       "比较窗口为 14、28、90 天，并保留长期 90 天块与时间边界。",
       "inventory_only 只读 manifest inventory，不读取 raw 内容。",
-      "具体日期问题才用一个字段+日期的离线 query，不重新下载。"
+      "具体日期仍未回答时，用精确 manifest、一个 --field 与日期离线窄查；不扫描目录、不重新下载。",
+      "--through-date 包含当天，返回的 end_date_exclusive 是次日；睡眠 session 按结束日期归属，跨午夜不会按入睡日误答。",
+      "query/summary 的默认和硬上限均为 100 页、32 MiB、10,000 条，可按问题缩小，不能靠调大越过上限；这与 brief 的预算是两套不同限制。"
     ],
     problem: "解决“API 能读就全部进模型”、高频/高隐私字段常驻、空日志被解释、摘要读取全库和技术覆盖率冒充医学标准。",
     implementation: [
@@ -456,7 +464,10 @@ export const personalHealthModules = [
       "google_health_brief.py 只选择 DECISION_CONTEXT_FIELDS，受 256 页、64 MiB、500k 记录预算约束。",
       "数值和事件字段分别处理真实零、重复、歧义、malformed、无记录和来源缺失。",
       "brief 输出 decision_context 与 inventory_only 两个不混用区域。",
-      "resource_usage 明确 api_access=false、credential_access=false、full_raw_payloads_scanned=false。"
+      "resource_usage 明确 api_access=false、credential_access=false、full_raw_payloads_scanned=false。",
+      "google_health_import.py 的 query_manifest 按字段与日期相交范围选择页面，核对每页 bytes/SHA-256，再按字段专用日期解析记录并去重；清单元数据字节与 raw page 预算分开计数。",
+      "--query-manifest 返回 records 及 summary；--summary-manifest 调用同一查询但 include_records=false。summary 包含记录数、无日期资源数、重复数、页数和 days，不计算 numeric_sum/min/max。",
+      "查询结果单列 manifest 指纹、pages_considered/page_count、bytes_read、record_count、duplicate_record_count、gaps、truncated 和 timing；api_elapsed_seconds 恒为 0，不代表在线账号或设备当前可用。"
     ],
     flow: [
       "读取有界 success handoff 并解析 exact manifest。",
@@ -465,7 +476,8 @@ export const personalHealthModules = [
       "只选择四类判断字段页面。",
       "计算字段质量、近期窗口和 blocked reason。",
       "生成 decision context、inventory-only 和 downstream contract。",
-      "本地 manifest、verification receipt 与 brief 闭合并持久化后消费交接 pointer；Health Owner 随后审阅最小结果并决定是否局部采用。"
+      "本地 manifest、verification receipt 与 brief 闭合并持久化后消费交接 pointer；Health Owner 随后审阅最小结果并决定是否局部采用。",
+      "另有未回答的具体日期问题时，复用已完成的精确 manifest，以一个字段和日期执行 query 或 summary；交回记录与缺口，不启动新的采集。"
     ],
     concepts: [
       { term: "decision_ready（可用于当前判断）", explanation: "字段证据质量足以支持一个明确问题，不代表身体正常或临床结论。" },
@@ -477,23 +489,30 @@ export const personalHealthModules = [
       "不读取高频心率 raw、GPS/TCX、营养参考和其他 inventory-only 正文。",
       "没有记录不证明没有运动、症状或疾病。",
       "80% coverage 不表示健康，也不是目标分数。",
-      "brief 输出不包含 OAuth、token、provider client 或实时网络状态。"
+      "brief 输出不包含 OAuth、token、provider client 或实时网络状态。",
+      "普通 query pass 不是 decision_ready，也不自动更新 CURRENT.md；字段质量、来源与现实相关性仍由 Health Owner 判断。"
     ],
     failures: [
       { condition: "混合第一方来源无法证明 tracker family", response: "四类默认字段全部 provenance_blocked，只保留 inventory。" },
       { condition: "selected raw page 哈希或分页链变化", response: "verification stale，brief 在读取健康解释前失败。" },
       { condition: "字段为空、缺失或 malformed", response: "列入 blocked_fields，不把缺失转成零或正常。" },
-      { condition: "选择页/字节/记录预算超限", response: "返回 health_brief_budget_exceeded，不扩大读取范围。" }
+      { condition: "brief 选择页/字节/记录预算超限", response: "返回 health_brief_budget_exceeded，不扩大读取范围。" },
+      { condition: "某日 query 达到页数、字节或记录上限", response: "保留已读结果并返回 partial、truncated=true 与 query_page_budget_exceeded、query_byte_budget_exceeded 或 query_record_budget_exceeded 缺口；缩小字段或日期后再查，不隐去截断。" },
+      { condition: "某日 query 页面缺失、哈希漂移或记录日期不明", response: "返回 partial，并分别记录 page_unreadable、manifest_page_hash_mismatch 或 record_date_unavailable；未覆盖日期仍列为 gap，不补猜数值。" },
+      { condition: "query 字段不在清单、日期范围非法或预算参数非法", response: "分别返回 query_field_not_in_manifest、invalid_query_date_range 或 query_budget_invalid；不回退到全字段或在线查询。" }
     ],
     sources: [
       { path: "google_health_capture.py", role: "有界 success handoff、离线验证、brief 持久化与 pointer cleanup" },
       { path: "google_health_brief.py", role: "字段解析、窗口、质量门、inventory-only 和 downstream contract" },
+      { path: "google_health_import.py · query_manifest / summarize_manifest", role: "精确字段日期查询、独立读取预算、记录/摘要/缺口与零 API 耗时" },
       { path: "tests/test_google_health_capture.py", role: "离线无凭据/网络、错误交接和安全重试回归" },
-      { path: "tests/test_google_health_brief.py", role: "29 项来源、哈希、覆盖、字段三态、inventory-only 与 CLI 回归" }
+      { path: "tests/test_google_health_brief.py", role: "29 项来源、哈希、覆盖、字段三态、inventory-only 与 CLI 回归" },
+      { path: "tests/test_google_health_import.py · offline query tests", role: "按日期过滤、跨午夜睡眠、重复记录、缺页和预算截断的合成用例" }
     ],
     verification: [
       "4 项 capture 测试证明入口无 OAuth/client/network route，失败保留 success pointer 供离线重试",
       "29 项 brief 测试覆盖 mixed source、真实零、空字段、哈希漂移、分页链、覆盖和 inventory-only",
+      "离线查询源码与合成用例覆盖字段日期过滤、跨午夜睡眠按结束日归属、记录去重、无日期缺口和预算 partial；本页修订只读这些代码，不运行私人 manifest",
       "本轮没有读取任何真实健康数值或生成个人趋势图"
     ],
     relation: "它消费原始保全模块的 complete 证据，向证据三态和 Health Owner 模块提供字段级 ready/blocked 结果。"
