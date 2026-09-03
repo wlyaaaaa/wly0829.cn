@@ -17,6 +17,7 @@ import { project as project_daily_preferences, modules as modules_daily_preferen
 import { project as project_personal_media, modules as modules_personal_media } from "./content-personal-media.js";
 import { project as project_localocr, modules as modules_localocr } from "./content-localocr.js";
 import { project as project_vault_tool, modules as modules_vault_tool } from "./content-vault-tool.js";
+import { project as project_video_scaffold, modules as modules_video_scaffold } from "./content-video-scaffold.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -36,5 +37,6 @@ export const projectContentPackages = new Map([
   ["daily-preferences", { project: project_daily_preferences, modules: modules_daily_preferences, kind: "daily-preferences" }],
   ["personal-media", { project: project_personal_media, modules: modules_personal_media, kind: "personal-media" }],
   ["localocr", { project: project_localocr, modules: modules_localocr, kind: "localocr" }],
-  ["vault-tool", { project: project_vault_tool, modules: modules_vault_tool, kind: "vault-tool" }]
+  ["vault-tool", { project: project_vault_tool, modules: modules_vault_tool, kind: "vault-tool" }],
+  ["video-scaffold", { project: project_video_scaffold, modules: modules_video_scaffold, kind: "video-scaffold" }]
 ]);

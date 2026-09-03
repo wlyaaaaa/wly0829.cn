@@ -394,7 +394,7 @@ export const vaultToolModules = [
     failures: [{ condition: "目标不是现场确认的私有仓库", response: "拒绝密文发布；不会为了完成脚本而改变仓库可见性。" }, { condition: "读取旧路径或 PUT 失败", response: "保留明确错误，停止后续成功标记；非 404 错误不被当成新文件。" }, { condition: "远端回读失败或字节不同", response: "说明可能已写入但尚未完成验证，不把失败自动重试成多次未知提交。" }, { condition: "正文保护被取消或远端版本变化", response: "取消就不写，版本冲突不强推；固定来源与尚未执行的动作分别保留。" }],
     sources: [{ path: `${sourceRoot}\\scripts\\Publish-KeyVaultToGitHub.ps1`, role: "私人密文上传与目标字节核对" }, { path: `${sourceRoot}\\docs\\key-repository-workflow.md`, role: "人工准备、密文与恢复条件" }, { path: `${skillRoot}\\scripts\\Invoke-VaultWorkflow.ps1`, role: "VerifyRemote、PublishVault、预演与结果适配" }, { path: `${skillRoot}\\scripts\\protect_remote_readme.py`, role: "固定远端版本、两次本地确认与单提交正文保护" }, { path: `${skillRoot}\\references\\json-contract.md`, role: "发布、读取与真实效果字段" }, { path: "GitHub REST API：文件内容与 blob", href: "https://docs.github.com/en/rest/git/blobs#get-a-blob", role: "GitHub 官方文件对象读取合同；base64 字节与接口容量边界" }],
     verification: ["来源发布脚本已通过九类隔离mock gh（模拟GitHub命令）验证：PUT失败、非404错误、404创建、正常回读、回读失败、字节不符、预演、非私人目标和扩展名拒绝。", "源库自身已normal-push并从真实main读回，但这不是向私人Key上传的结果。", "真实私人密文发布、密码恢复和换机恢复未在本轮执行。"],
-    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责，Key 不因此变成第十九个项目。"
+    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责，Key 不因此成为独立展示项目。"
   }
 ];
 

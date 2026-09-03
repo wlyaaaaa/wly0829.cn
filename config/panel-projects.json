@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 96,
-    "project_search_index_gzip_budget_kib": 121,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The bounded PCConfig recovery refresh keeps 18 projects and 277 search records. After removing redundant new aliases and repeated example details, shared/all-project search measures 97652/123896 gzip bytes and stays within the existing 96/121 KiB lines. Its per-project shard is 20556 gzip bytes: the source-backed ordinary/protected recovery distinction, 14-set scope, exact entrypoints and evidence terms exceed 20 KiB by 76 bytes, so round only that line to the minimum integer 21 KiB. No other project narrative, interaction JS, CSS, loading architecture, dependency or service changes; preserve 12 KiB shared JS, 21 KiB CSS, native navigation/prefetch and complete professional content",
+    "search_index_gzip_budget_kib": 100,
+    "project_search_index_gzip_budget_kib": 126,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete video-scaffold addition keeps all 19 projects and 284 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 101426/128962 gzip bytes. The required first-use Chinese explanations raised shared search 50 bytes past 99 KiB, so the two lines use the minimum passing integers 100/126 KiB. The video-scaffold shard is 6020 bytes and the existing maximum PCConfig shard remains 20556 bytes within 21 KiB. Shared interaction JavaScript and CSS stay byte-identical at 11596/21082 gzip bytes within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1731,6 +1731,83 @@
           "formatting or internal refactors leave public product behavior unchanged",
           "private vault bytes, passwords, keyfiles or source/decrypted contents change without a public product semantic change",
           "a source test or GUI test double passes without new real-use or restoration evidence"
+        ]
+      }
+    },
+    {
+      "id": "video-scaffold",
+      "order": 19,
+      "title": "video-scaffold",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/video-scaffold",
+      "ai_refresh": {
+        "content_path": "app/content-video-scaffold.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first local video production scaffold with seven source-backed modules: clean project bootstrap and environment readiness; Fish narration, local word timing and artifact identity; reviewed SVG scene authoring; low-cost build/lint/preview gates; deterministic 4K60 chunk rendering with input-safe resume; final audio/cover/chapter delivery and verification; bounded reuse, cleanup and recovery without automatic topic choice, demo generation, upload or background services",
+        "collectors": [
+          "git -C E:\\Projects\\Archives\\video-scaffold status --porcelain=v2 --branch",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/video-scaffold -TargetWorktree E:\\Projects\\Archives\\video-scaffold -ForPublication -Json",
+          "read current README.md, docs, config.py, run.ps1, init_project.py, pipeline, templates, v2lib.py and tests before using any old bespoke example as current product evidence",
+          "pwsh -NoProfile -File E:\\Projects\\Archives\\video-scaffold\\run.ps1 test with task-specific TEMP/TMP/TMPDIR",
+          "pwsh -NoProfile -File E:\\Projects\\Archives\\video-scaffold\\run.ps1 doctor --json; keep local environment readiness separate from Fish network, complete render and video delivery"
+        ],
+        "conditional_collectors": [
+          "doctor-live only when current Fish network compatibility materially changes the page and the exact external probe is authorized; never reveal the configured key",
+          "one explicitly authorized fictional or owner-supplied video through prompts, preview, render, merge, cover, chapters, verify and human viewing only when actual full-pipeline evidence is required; do not invent a topic or demo for an ordinary website refresh",
+          "a tracked background frame or clearly labelled template visualization may be used only when it improves the page without being presented as a completed video; never use SAMPLE GEAR / PLACEHOLDER as project-output proof"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/video-scaffold",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Archives\\video-scaffold"
+      },
+      "displayed_areas": [
+        "product_overview_named_inputs_outputs_principles_and_current_evidence",
+        "seven_source_backed_modules",
+        "clean_project_bootstrap_test_and_local_vs_live_doctor",
+        "Fish_external_narration_local_whisper_word_timing_and_identity",
+        "reviewed_SVG_fragments_real_asset_URIs_cues_and_components",
+        "build_lint_preview_before_expensive_render",
+        "deterministic_seekTime_chunked_AV1_NVENC_and_frame_count_checks",
+        "scene_asset_background_config_identity_and_safe_resume",
+        "narration_BGM_cover_chapters_verify_and_human_viewing",
+        "cleanup_recovery_legacy_example_and_no_upload_boundaries",
+        "current_33_test_fresh_project_10_doctor_and_no_full_video_evidence"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_boundary_bootstrap_and_configuration",
+          "paths": ["README.md", "docs/*.md", "config.py", "run.ps1", "init_project.py", "requirements.txt", "pipeline/doctor.py"]
+        },
+        {
+          "kind": "narration_timing_and_artifact_identity",
+          "paths": ["pipeline/fish_tts.py", "pipeline/transcribe.py", "pipeline/durations.py", "pipeline/artifact_identity.py", "pipeline/indexed_files.py"]
+        },
+        {
+          "kind": "scene_authoring_preview_and_render",
+          "paths": ["pipeline/author.py", "pipeline/build_scene.py", "pipeline/components.py", "pipeline/lint.py", "pipeline/preview.py", "pipeline/render.py", "templates/scene_base.html", "v2lib.py", "background/*"]
+        },
+        {
+          "kind": "delivery_recovery_and_verification",
+          "paths": ["pipeline/merge.py", "pipeline/cover.py", "pipeline/chapters.py", "pipeline/cleanup.py", "pipeline/workflow.py", "build_v2.py", "tests/*.py"]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed project bootstrap, local versus external boundary, narration, timing, cue, scene contract, preview, render, resume, delivery, verify or cleanup behavior changes owner use or expected results",
+          "an artifact identity, stale-reuse refusal, chunk invalidation, source asset binding, frame-count check or legacy-entry bypass becomes implemented, regresses or changes what can safely resume",
+          "current doctor, real Fish, actual preview, full render, final video or human-viewing evidence contradicts the published evidence boundary"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit, package version, passing test count, bounded doctor time or observation timestamp changes while every displayed product capability and evidence interpretation remains true"
+        ],
+        "ignore_when": [
+          "a private script, narration, source image, generated audio, scene, render chunk or final video changes without changing the reusable public product contract",
+          "an old bespoke example or placeholder asset changes while the generic bootstrap and workflow remain unchanged",
+          "formatting, comments or internal refactors leave every displayed capability, failure, recovery and user decision unchanged"
         ]
       }
     }

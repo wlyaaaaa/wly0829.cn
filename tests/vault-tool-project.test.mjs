@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { vaultToolModules, vaultToolProject } from "../app/content-vault-tool.js";
-import { projectCatalog, projects, routePaths } from "../app/site-content.js";
+import { projectCatalog, routePaths } from "../app/site-content.js";
 import { skillProjectLinks } from "../app/content-capability-links.js";
 import { searchPanel } from "../app/search.js";
 
@@ -58,7 +58,7 @@ test("vault-tool is registered as the eighteenth public project with its source 
   assert.equal(vaultToolProject.slug, registration.id);
   assert.equal(vaultToolProject.order, registration.order);
   assert.equal(vaultToolProject.route, registration.route);
-  assert.equal(projectCatalog.at(-1)?.project.slug, "vault-tool");
+  assert.ok(projectCatalog.some((entry) => entry.project.slug === "vault-tool"));
 });
 
 test("vault-tool keeps eight independent module routes and all three reading layers", async () => {
@@ -149,13 +149,11 @@ test("vault-tool uses explicit compact search projections and natural requests r
   }
 });
 
-test("vault-workflow maps to vault-tool while Key remains a private target, not project 19", () => {
+test("vault-workflow maps to vault-tool while Key remains a private target without a project route", () => {
   const relations = skillProjectLinks["vault-workflow"] || [];
   assert.ok(relations.some((item) => item.relation === "owned-by-project" && item.projectSlug === "vault-tool" && item.moduleSlug === "ai-local-interface"), "vault-workflow is not mapped to the vault-tool project");
   assert.ok(relations.some((item) => item.relation === "no-detail-project" && item.systemAssetId === "key"), "vault-workflow lost its Key private-target mapping");
-  assert.equal(projects.length, 18);
-  assert.equal(projects.at(-1)?.slug, "vault-tool");
-  assert.ok(!projects.some((item) => item.slug === "key"), "Key must not become a nineteenth project");
+  assert.ok(!projectCatalog.some((entry) => entry.project.slug === "key"), "Key must not become an independent project");
   assert.ok(!routePaths.some((route) => route.startsWith("/projects/key")), "Key must not receive a project route");
 });
 

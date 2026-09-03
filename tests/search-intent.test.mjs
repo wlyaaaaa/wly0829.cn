@@ -29,7 +29,8 @@ const intents = [
   ["少量问题检验是否理解", "learning"],
   ["不是找照片哈，是那份以前交出去的申请材料，我只记得内容，不记得存哪了。", "personal-materials"],
   ["有几个 AI 同时帮我改东西，怎样避免他们互相覆盖，还能确认最后真的交付了？", "agents"],
-  ["几个 AI 都说活干完了，我想用同一道实际任务检验谁交的东西真的能用。", "cacb"]
+  ["几个 AI 都说活干完了，我想用同一道实际任务检验谁交的东西真的能用。", "cacb"],
+  ["把这份旁白和素材做成先预览再渲染的4K60视频", "video-scaffold"]
 ];
 
 test("natural requests expose the owning project within the first visible results", () => {
@@ -54,7 +55,7 @@ test("the full index and the production compact projection rank the same entries
 });
 
 test("exact project names, existing aliases and commands keep their navigation priority", () => {
-  for (const [query, slug] of [[".agents", "agents"], ["PCConfig", "pcconfig"], ["GitHub 总索引", "github-index"], ["ChineseASR", "chinese-asr"], ["TimeAudit", "timeaudit"], ["PC Panel Hub", "pc-panel-hub"], ["CACB", "cacb"], ["WeChatDirect", "wechat-direct"]]) {
+  for (const [query, slug] of [[".agents", "agents"], ["PCConfig", "pcconfig"], ["GitHub 总索引", "github-index"], ["ChineseASR", "chinese-asr"], ["TimeAudit", "timeaudit"], ["PC Panel Hub", "pc-panel-hub"], ["CACB", "cacb"], ["WeChatDirect", "wechat-direct"], ["video-scaffold", "video-scaffold"]]) {
     assert.equal(searchPanel(query)[0]?.href, `/projects/${slug}`, query);
   }
   assert.equal(searchPanel("ＣｈｉｎｅｓｅＡＳＲ")[0]?.href, "/projects/chinese-asr");

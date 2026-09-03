@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 18,
+  detailedPageCount: 19,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供十七个完整参考页，新增 LocalOCR 的本地文字识别与文档解析详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供十九个完整参考页，当前新增 video-scaffold 的本地视频制作、输入安全复用与分阶段交付详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -648,7 +648,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "用真实规则和大规模仿真寻找更稳策略，再自动生成报告和视频。", kind: "研究制作", href: projectLedgerHref },
       { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: projectLedgerHref },
-      { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把文案、配音、词级时间轴、动画和高分辨率合成串成可重复生产的流程。", kind: "工作能力", href: projectLedgerHref }
+      { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
   },
   {

@@ -14,11 +14,12 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has eighteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has nineteen enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials, work-delivery, daily-preferences, personal-media, LocalOCR and vault-tool in
-  order 1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18. The registry
+  document-materials, work-delivery, daily-preferences, personal-media,
+  LocalOCR, vault-tool and video-scaffold in order
+  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -356,14 +357,14 @@ read-only operating panel; public presentation is secondary.
   real-dashboard project 12, document-materials as real-dashboard project 13,
   work-delivery as real-dashboard project 14, and daily-preferences as
   real-dashboard project 15, followed by personal-media as real-dashboard
-  project 16, then LocalOCR as real-dashboard project 17 and vault-tool as
-  real-dashboard project 18.
+  project 16, then LocalOCR as real-dashboard project 17, vault-tool as
+  real-dashboard project 18 and video-scaffold as real-dashboard project 19.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
   personal-materials, document-materials, work-delivery, daily-preferences,
-  personal-media, LocalOCR and vault-tool, plus the one-page Rules workbench
-  and current public-safe Skills catalog.
+  personal-media, LocalOCR, vault-tool and video-scaffold, plus the one-page
+  Rules workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
   presented within its actual public-content boundary. Exclude only an exact
   project identity or payload that the owner or an applicable higher rule
@@ -387,6 +388,20 @@ read-only operating panel; public presentation is secondary.
   metadata inspection, actual cryptographic round trips, GUI interaction and
   remote recovery are separate evidence layers. No placeholder card or advance
   route is allowed for a later item.
+- Project 19 is video-scaffold, the existing staged local video-production
+  scaffold. It follows the completed vault-tool project and receives one
+  source-first complete product and technical snapshot, necessary source
+  repair, independent content audit, PUBLIC release and read-back. Explain a
+  clean project bootstrap, Fish Audio narration and its external text boundary,
+  local faster-whisper word timing, reviewed SVG fragments and real asset URIs,
+  build/lint/preview before expensive rendering, deterministic `seekTime(t)`
+  frames, AV1 NVENC chunks, input-safe resume, narration/BGM merge, cover,
+  chapters, final verification, cleanup and human viewing. Preserve environment,
+  test, preview, render, delivery and publication as separate evidence layers.
+  Do not invent a topic, script, storyboard, demo video, upload service,
+  browser editor, cloud renderer, daemon, database or a new video format merely
+  to build the page. Placeholder art and old bespoke examples never prove a
+  current finished video.
 - The selected personal-media project has a non-optional content floor:
   automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -551,7 +566,8 @@ read-only operating panel; public presentation is secondary.
   Subsequent registered project and Skill refreshes, including the selected
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
   Remote, personal-health, WeChatDirect, personal-materials, document-materials,
-  work-delivery, daily-preferences, personal-media, LocalOCR and vault-tool additions, are standing-authorized to commit, normal-push existing
+  work-delivery, daily-preferences, personal-media, LocalOCR, vault-tool and
+  video-scaffold additions, are standing-authorized to commit, normal-push existing
   PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -572,7 +588,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current eighteen.
+  to projects added after the current nineteen.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -608,8 +624,8 @@ read-only operating panel; public presentation is secondary.
   reader test, green build or prior page-internal audit cannot waive it.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
-  including WeChatDirect, personal-materials, document-materials, work-delivery
-  daily-preferences, personal-media, LocalOCR and vault-tool:
+  including WeChatDirect, personal-materials, document-materials, work-delivery,
+  daily-preferences, personal-media, LocalOCR, vault-tool and video-scaffold:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or
