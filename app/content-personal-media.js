@@ -102,7 +102,7 @@ const personalMediaProject = {
   repositoryNote: "这是一个本地私有项目，没有公开 GitHub 仓库按钮。公开页完整说明产品、路径、组件、流程、测试、失败和恢复边界；普通个人照片不因来自私人媒体库而默认排除，具体 L3+ 值与可复用秘密仍逐值处理。",
   summary: "按记得的时间、地点、画面或已有文字，找到照片、视频和音频。值得重看的直接移入“精选”，不另存一份，也不为凑数量硬选。手机新文件先在两块盘上备份并核对，再离线分类、去重；备份和手机恢复包跟随现有计划任务更新。你自己删了原件就是删了，不用通知 AI。云端只准备候选，不自动上传。",
   why: "媒体最容易同时出现三种问题：想用时找不到；好照片淹没在分类目录里；换机或手机故障后只剩零散副本。把所有东西复制到第二套库、持续后台同步或自动上传又会制造更多状态。这个项目选择一个可重建目录、两个职责清楚的模块和逐次有界处理；同时把文件管理器中的原件现状当作本人决定，而不是让旧索引或恢复包反过来支配原件。",
-  plainExample: "当前手机接入针对已绑定的小米 15 Pro（Android，设备型号 2410DPN6CC）；通过 ADB（Android 调试连接）读取它已登记的 0/999 两个共享文件区，不是任意手机通用入口。照片、视频和共享文档等在范围内，系统与应用私有数据不在范围内。例如手机新增旅行照片和视频，先把新共享文件逐项写入 E 盘本次副本和 G 盘异卷副本，回读大小与 SHA-256 通过就立即告诉我可以拔线。随后根据画面意义、质量、重复、类别和时间决定保留内容，归入当前照片/视频根，并同步手机恢复包和未上传的云端候选。",
+  plainExample: "我可以说：“先把小米 15 Pro 里这批旅行照片和视频备份到两块盘，确认安全后马上提醒我拔线；再离线整理，不要上传云端。”系统会逐项核对两份副本，明确告诉我手机是否可以断开；随后再判断画面内容、质量和重复关系，把保留原件放回当前照片或视频目录，并更新手机恢复包和仍未上传的云端候选。",
   result: `我得到一组能回到原件的结果：检索候选带着日期、地点、类别和匹配依据；精选入口展示 ${current.selectedImageRows.toLocaleString("zh-CN")} 张值得主动重看的照片和 ${current.selectedVideoRows} 个视频；分类决定说明保留或退出原因；手机保全说明双盘是否完成、手机是否清空；恢复包说明当前可写回范围。云端部分得到面向 Google Photos 的本地候选清单和相册计划；当前项目尚无上传入口，批准候选也不等于这里已经能够上传，更不表示云端已备份。`,
   readerStates: {
     pass: "返回真实现存原件，或完成双盘保全、分类、恢复计划和云候选的对应步骤；每一步只声明自己真正闭合的结果。",
@@ -204,12 +204,12 @@ const personalMediaProject = {
     { artifact: "独立本地文件接入回执", schema: "personal-media-ingest-file-receipt.v1", owner: "ingest-file", boundary: "绑定 source/keeper SHA、canonical/G locator、source retirement 和候选新增数；cloud_upload 固定 0，失败不能冒充完整收口。" }
   ],
   usageExamples: [
-    { ask: "找我在新加坡现场拍的照片。", effect: "用已复核 place 过滤图片，返回少量现存原件、已知日期、类别和匹配依据。", moduleSlug: "search-browse" },
-    { ask: "这批截图哪些该留，哪些是重复或没意义？", effect: "一次机械预检加少量联系表，统一决定 keeper、secondary、类别、时间与精确/高度近重复。", moduleSlug: "classification" },
-    { ask: "把这一个已经看过的本地照片/视频/录音接入媒体库。", effect: "显式核对输入哈希、媒体流、类别和时间，写入 canonical 与 G 恢复副本并同次刷新目录、手机恢复包和 upload=0 云候选；等价视频容器变体只保留恢复副本与关系后退休来源。", moduleSlug: "local-ingest" },
+    { ask: "找我在新加坡现场拍的照片。", effect: "按已经核对的拍摄地点筛选，返回少量仍存在的原件、已知日期、类别和匹配理由。", moduleSlug: "search-browse" },
+    { ask: "这批截图哪些该留，哪些是重复或没意义？", effect: "先排除缓存并整理重复关系，再用少量联系表一起判断主体、信息价值、画质、类别和是否已有更完整版本。", moduleSlug: "classification" },
+    { ask: "把这一个已经看过的本地照片、视频或录音接入媒体库。", effect: "核对文件身份、类别和时间后写入正式原件目录与 G 盘恢复副本，并同步更新目录、手机恢复包和未上传的云端候选；同内容的视频变体只保留恢复关系。", moduleSlug: "local-ingest" },
     { ask: "手机里的新照片先安全拿出来，我要尽快拔线。", effect: "完成 E/G 双盘逐项回读后立即报告可以拔线；手机端是否清空单独说明。", moduleSlug: "phone-preservation" },
     { ask: "现在手机恢复包能恢复多少？", effect: "只读返回当前计划数量、大小、是否低于 60 GB 和缺口；默认不改包。", moduleSlug: "phone-recovery" },
-    { ask: "哪些照片准备以后传 Google Photos？", effect: "读取 upload=0 候选和相册计划；没有查看清单并明确批准就不上传。", moduleSlug: "cloud-candidates" }
+    { ask: "哪些照片准备以后传 Google Photos？", effect: "交回仍未上传的候选和相册计划；我没有查看清单并明确批准前，不会上传。", moduleSlug: "cloud-candidates" }
   ],
   evidenceLayers: [
     { layer: "项目规则与 README", proves: "定义媒体 Owner、双盘保全、分类、三面收口、速度与不自动上传边界。", doesNotProve: "文字说明不证明当前目录、恢复包或设备在线。" },
@@ -399,7 +399,7 @@ const personalMediaModules = [
     statusTone: "pass",
     value: "把“我记得那张照片/那段录音，但不知道在哪”变成少量现存原件和一个可以直接看的临时目录。",
     why: "媒体路径、相册和命名常常与人的记忆方式不同；整库浏览太慢，第二次复制又会扩大容量和重复治理。",
-    example: "说“找我在新加坡现场拍的照片”，系统用已复核 place 过滤图片；说“找图片里写着新加坡的截图”，则用 query，不把文字出现地点冒充拍摄现场。",
+    example: "我可以说：“找我在新加坡现场拍的照片。”系统按已经核对的拍摄地点返回少量原件和匹配理由；如果我说的是“找画面里写着新加坡的截图”，它会改按图片文字查找，不把文字出现地点当成拍摄地点。",
     result: "返回媒体类型、已知日期、地点、类别、匹配依据与原件；需要批量浏览时得到同卷 hardlink 文件夹，清理后原件不受影响。",
     readerStates: {
       pass: "候选 authority locator 指向现存原件；浏览目录的每个链接仍与原件是同一文件。",
@@ -443,7 +443,7 @@ const personalMediaModules = [
     statusTone: "pass",
     value: "让媒体库保留真正有浏览、唯一性或恢复价值的原件，同时不让重复、缓存和失误图淹没查找结果。",
     why: "文件名、目录和拍摄时间不足以判断裁切版、连拍、截图、模糊图和更好版本的关系；纯哈希也只能发现字节完全相同。",
-    example: "一批 19 张普通截图先合并 occurrence、排除技术缓存，再在一张联系表里同时判断主体、信息价值、画质、类别和是否被更完整版本替代。",
+    example: "我可以问：“这批截图哪些值得留，哪些只是缓存、重复图或已经有更完整版本？”系统会先整理重复关系，再把少量候选放在一张联系表里一起判断，交回保留或退出的理由。",
     result: `每个唯一哈希得到 keeper/退出、主类、可选 secondary、时间、描述和重复关系；值得主动重看的原件还能进入唯一精选入口。当前精选为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频，不设配额；成功完成 catalog commit、seed 与 candidate refresh 后，当前目录和两套计划才是一致收口。`,
     readerStates: {
       pass: "review 精确覆盖本批所有唯一哈希，视觉决定完整，事务提交后 keeper 定位与三面计划一致。",
@@ -488,7 +488,7 @@ const personalMediaModules = [
     statusTone: "mixed",
     value: "让 E 卷暂存区或其他同卷位置中、已经人工复核的一个媒体文件，不必伪装成手机批次，也不必为一次接入新建脚本和第二索引。",
     why: "本地新增文件可能已经完成视觉判断，但不属于手机 capture；视频还可能只是同一画面/音轨的另一种容器。若一律当新 keeper，会重复浏览和恢复；若直接删除，又会失去可恢复字节和关系。",
-    example: "例如我已经确认一个本地 MP4 是现有 keeper 的另一种封装。入口先核对输入 SHA-256、现役 keeper 的 E/G 字节和两者 demuxed video stream；相同才把变体复制到 G 的 Variants 恢复区、记录关系并退休来源文件。",
+    example: "我可以说：“这个本地 MP4 看起来只是现有视频的另一种封装，核对后再接入，别重复保存两份正式原件。”系统会比较实际视频内容；确认相同后只把变体留作恢复材料并记录关系，无法确认就不动来源文件。",
     result: "新 keeper 得到 canonical 原件、G 异卷副本、目录记录、重建种子和更新后的手机/云候选；等价视频变体得到 G 恢复副本、与 keeper 的等价关系和已退休来源状态。失败时得到精确停在哪一层。",
     readerStates: {
       pass: "输入仍匹配 expected SHA-256，目标无冲突，canonical/G/目录读回通过，来源退休后种子和候选计划完成刷新。",
@@ -545,7 +545,7 @@ const personalMediaModules = [
     statusTone: "mixed",
     value: "把手机故障和断线风险压到最短时间，同时保留每个共享文件是否已经双重保全、是否已经从手机清理的可核对状态；非媒体不进入媒体 catalog，但不会因此被漏掉保全。",
     why: "边连手机边做视觉分类、全库去重和索引，会让连接时间变长；把‘备份完成’和‘手机清空’混成一个状态，又会制造误删或误报。",
-    example: "223 个 regular files 先用有界批量快照把远端事实往返降到少量批次；逐文件 pull、E/G 回读和删除前最终核对仍保留。图片/视频后续进入视觉批次，文档/ZIP 等只保全后移交各自 Owner。",
+    example: "我可以说：“先把手机这批新文件安全保存到两块盘，确认后马上告诉我可以拔线。”系统会逐项复制并回读；图片和视频之后再离线整理，文档和压缩包只先防丢，再交给对应项目处理。",
     result: "成功时先得到‘可以拔了’；若继续清理，再得到每个精确路径的删除/隔离结果。未开始或未完成删除时明确保留待下次连接。",
     readerStates: {
       pass: "所有纳入分母的新共享文件都有 E/G 两份 bytes 与 SHA-256 回读；可以拔线。手机清理若执行，还要有独立精确结果。",
@@ -589,7 +589,7 @@ const personalMediaModules = [
     statusTone: "pass",
     value: "手机损坏、换机或清空后，能够从一份有容量上限、逐项可核对的包恢复最重要照片和视频，而不是临时挑文件。",
     why: "把全部媒体无差别回灌会超过手机容量，也会把录音、缓存和不再选择的对象带回去；只有目录没有实际字节又不能恢复。",
-    example: "先运行 recovery-status 证明计划结构、项数、字节和 catalog 资格仍成立；再运行 recovery-sync 默认 dry-run，才比较 G 实际包的 size-match 与 missing，确认后加 --execute 补齐缺失文件。",
+    example: "我可以问：“现在这份手机恢复包能恢复多少照片和视频，还缺什么？”系统先只读核对计划、容量和实际文件；确认无误后，只有我明确要求执行才补齐缺失内容。",
     result: "第一层得到计划项数、字节、容量门和 catalog 资格；第二层得到 G 实际包的 existing_size_match/missing 聚合计数与补齐结果。dry-run 不列每个缺失路径；目标冲突才具名 target。两层分开，包外内容保持不动。",
     readerStates: {
       pass: "recovery-status 先证明计划与 catalog 一致且低于 60 GB；recovery-sync dry-run 再证明 G 目标 size-match=全部、missing=0，执行时已有目标还会做 SHA-256 read-back。",
@@ -632,7 +632,7 @@ const personalMediaModules = [
     statusTone: "mixed",
     value: "提前整理哪些照片/视频值得进入 Google Photos 以及放进哪个相册，同时避免后台自动上传错误内容或把网络失败影响本机整理。",
     why: "如果每次分类后自动上传，错误类别、近重复和暂不想公开到云端的内容会立即变成外部状态；完全不做候选又会在需要恢复时临时筛选。",
-    example: "分类完成后先运行 cloud-status，只回读清单结构、候选项数、总字节和 upload_authorized/performed=false。逐项候选与相册计划保存在 cloud-candidates.ndjson，需要用户另外查看该清单；陈旧退出数量在 candidate-refresh.json。",
+    example: "我可以问：“哪些照片准备以后传到 Google Photos，打算放进哪些相册？”系统只交回本地候选数量、容量和相册计划；逐项清单要另外查看，未经我明确批准不会上传。",
     result: "直接命令得到候选项数、字节和当前授权/上传状态；明确查看本地清单后才能看到逐项候选与相册计划。当前项目没有 Google 上传执行器，结论是本地候选已形成、外部上传尚未实现也未发生。",
     readerStates: {
       pass: "本地候选 header/body 与当前 catalog 资格一致，全部 upload=0；cloud-status 只证明清单结构、项数、字节和零上传状态。",

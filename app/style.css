@@ -6405,6 +6405,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 @media (max-width: 359px) {
   .system-home-hero h1 { font-size: 32px; }
   .system-home-hero h2 { font-size: 22px; }
+  .primary-nav { gap: 4px; }
+  .primary-nav a { padding-right: 2px; padding-left: 2px; font-size: 11.5px; }
 }
 
 /* Final responsive header geometry: preserve the complete logo without colliding with centered search. */

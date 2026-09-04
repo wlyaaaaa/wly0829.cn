@@ -61,6 +61,27 @@ read-only operating panel; public presentation is secondary.
   go deeper. Only after the reader can form a real working picture should the
   page lead with architecture, commands, schemas, hashes and implementation
   evidence; adding more words never substitutes for removing mystery copy.
+- Plain-language acceptance is semantic, not lexical. Natural first-person
+  requests, dialogue, metaphors, colloquial wording and moderate exaggeration
+  are welcome when they make the product easier to understand. A fixed opening
+  phrase, global forbidden-word list, tone score or regex coverage percentage
+  never proves quality. Vivid wording must not change a fact, evidence level,
+  operating boundary or current status, or turn an unverified outcome into a
+  guarantee.
+- A wording-only editorial pass uses the latest accepted default branch as its
+  semantic baseline and preserves every capability, fact, state, boundary,
+  evidence level and Unknown. It does not require a source-independent
+  completeness rebuild. If the wording adds, removes, weakens or reinterprets
+  product meaning, only that affected scope becomes a source-backed content
+  refresh. Copy from an older worktree is a proposal: port useful wording onto
+  the current publication Owner result, never merge, cherry-pick or copy it in
+  a way that overwrites later Owner work.
+- Plain-language review covers every visible interaction surface, including
+  project kickers, System requests, Rule and Skill examples, `plainExample`,
+  module `example` and `usageExamples`. A reader-layer example normally leads
+  with one request a person might actually make and the result they would see;
+  commands, fixtures, internal states and proof details stay in the technical
+  layer unless that exact request genuinely needs them.
 - When a project reads, collects or accepts information, its reader layer must
   name the actual devices, services, applications or files and explain the
   concrete data categories it uses, what happens to them and what the owner

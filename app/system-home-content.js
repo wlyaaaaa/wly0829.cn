@@ -354,45 +354,45 @@ export const systemScenarios = [
   },
   {
     id: "remote-continuity",
-    label: "跨设备继续",
-    title: "离开电脑后，仍可从手机接回同一项 AI 工作",
-    request: "“我已经出门了，用手机看看电脑上的任务做到哪；如果它需要决定，我在手机上回答，完成后把结果文件和真实交付状态给我。”",
-    systems: ["通用 AI 与智能体能力", "Codex Remote", "当前项目", "安全接入", "GitHub 总索引"],
-    rules: "必须连接同一个桌面任务、轮次和文件状态；手机不是第二个执行者；审批仍由本人决定；断线和派发不明不自动重放。",
-    result: "同一个任务现在做到哪里、改了哪些文件、正在等什么决定、这一轮完成了什么、下一条要求是否已经排队，以及原项目的真实交付状态。",
-    value: "手机入口、电脑连接、任务同步、身份验证、断线续接和文件操作组成一套个人维护的连续工作产品；它不是另外复制一份聊天。",
+    label: "跨设备（冻结）",
+    title: "Codex Remote 曾让手机接回桌面任务；现在只保留历史设计",
+    request: "比如我问：“现在还能不能用手机继续电脑上的 Codex 任务？”页面会先说清当前答案：入口已经冻结，不能登录、审批、补要求或操作文件；这里展示的是它过去怎样工作、为什么停下，以及恢复前还要重新证明什么。",
+    systems: ["Codex Remote 历史产品", "原桌面任务", "移动端入口设计", "GitHub 总索引"],
+    rules: "历史产品必须连接同一个桌面任务、轮次和文件状态，手机不能变成第二个执行者；当前冻结高于历史能力，网页不调用状态、入口、队列或文件操作。",
+    result: "当前能得到历史产品曾做成的功能、当时怎样保证同一任务、现在为什么不可用，以及若将来恢复必须重新完成哪些真实验收。",
+    value: "这套设计证明手机曾经可以继续同一个桌面任务，而不是复制一份聊天；保留它是为了复用产品经验，不是暗示当前还有可登录的服务。",
     stages: [
       {
         number: "01",
-        kicker: "同一任务身份",
-        title: "先确认手机接的是电脑上那一项工作",
-        body: "打开入口并登录后，手机读取电脑端已经存在的任务和历史；进入时核对任务、当前回复、工作目录和项目，确认接回的是同一项工作，而不是重新创建一份。",
+        kicker: "历史上的同一任务身份",
+        title: "它过去怎样确认手机接对了任务",
+        body: "历史入口登录后，会读取电脑端已经存在的任务并核对当前回复、工作目录和项目；全部一致才继续，避免手机另外创建一份看似相同的任务。当前页面只解释这条设计，不连接真实任务。",
         items: [
-          ["任务", "同一持久任务和当前轮次"],
-          ["项目", "原工作区、文件和真实项目身份"],
-          ["连接", "本人登录，手机和电脑只控制同一份任务状态"]
+          ["任务", "曾核对同一持久任务和当前轮次"],
+          ["项目", "曾核对原工作区、文件和真实项目身份"],
+          ["当前", "不登录、不连接，也不把历史截图当在线状态"]
         ]
       },
       {
         number: "02",
-        kicker: "移动控制与重连",
-        title: "看进展、补要求、审批和处理文件",
-        body: "手机持续接收进展、工具活动、文件变化、待回答问题和审批。可以补充当前要求、停止、排队下一轮或打开指定文件；短暂断线后从最后收到的位置补齐，不必从头开始。",
+        kicker: "历史上的移动控制",
+        title: "它过去怎样看进展、补要求和处理断线",
+        body: "历史产品曾把进展、工具活动、文件变化、问题和审批送到手机，也能补充要求、停止或排队下一轮；断线后按最后位置补齐。当前这些动作全部不可用，只保留已获准的静态证据。",
         items: [
-          ["当前轮", "进展、命令、文件和待处理问题"],
-          ["人类决定", "审批、停止、补充要求和下一轮"],
-          ["断线恢复", "保留草稿和待办，从最后位置继续"]
+          ["曾经可见", "当前轮进展、命令、文件和待处理问题"],
+          ["曾经可做", "审批、停止、补充要求和下一轮"],
+          ["现在不可做", "不发送、不恢复队列，也不读取运行状态"]
         ]
       },
       {
         number: "03",
-        kicker: "回到项目结果",
-        title: "手机只是连续性入口，不替项目证明完成",
-        body: "最终文件、测试、提交和发布仍属于原任务和原项目；如果一条手机要求是否送达无法确认，就先停下来核对，避免重复发送或让两份任务同时改同一件事。",
+        kicker: "当前边界",
+        title: "保留做成过的价值，也直说现在不能用",
+        body: "历史文件、测试、截图和真实手机验收继续证明产品曾运行过；Windows 接管未达到可重复恢复要求，所以当前入口明确冻结。恢复只能由新的独立项目重新实现并完成端到端验收。",
         items: [
-          ["轮次结果", "做成了什么、还缺什么和下一步"],
-          ["项目证据", "真实文件、测试、提交和发布状态"],
-          ["恢复", "桌面继续、入口重连或回到原生本地工作"]
+          ["保留", "真实做成过的功能、设计和验收证据"],
+          ["不冒充", "当前没有可登录、可控制或可恢复的 Remote 服务"],
+          ["恢复条件", "另行启动项目，重做 Windows 接管与真实端到端验收"]
         ]
       }
     ]
@@ -572,7 +572,7 @@ export const systemProjectInventory = {
   detailedPageCount: 22,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十二个完整参考页，当前新增 Sunshine 远程串流的主屏优先、VDD 兜底、窗口守护、IPv6 直连与受限码率运维详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不是一回事。项目目录目前有二十二个完整参考页，其中 Sunshine 远程串流说明主屏优先、VDD 兜底、窗口守护、网络诊断与码率建议，也明确保留手机直连和显示故障转移的待验边界。媒体库是本地项目，不会被凑成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -592,7 +592,7 @@ export const systemProjectDomains = [
       { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
       { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: projectLedgerHref },
       { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: projectLedgerHref },
-      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "从 Telegram 或飞书主动交办工作，并维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
+      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Telegram 与飞书已配置，但本轮消息进出闭环仍是 0/2 未验，Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
       { id: "local-ai-runtime", title: "本地 AI 运行环境", repo: "rtx5090d-ollama-agent-bundle", role: "保存本地推理端点、模型别名、上下文策略和客户端配置的可复现基线；当前精确运行状态仍回到机器事实。", kind: "运行环境", href: projectLedgerHref }
     ]
   },
@@ -600,13 +600,13 @@ export const systemProjectDomains = [
     id: "machine-and-remote",
     number: "02",
     title: "电脑、服务与跨设备",
-    summary: "知道电脑现在怎样、程序怎样启动、故障怎样回放，以及人离开电脑后怎样继续同一项工作。",
-    ordinaryRequest: "“昨晚电脑为什么卡？如果我出门了，怎样继续这项任务；重装后又怎样恢复？”",
+    summary: "知道电脑现在怎样、程序怎样启动、故障怎样回放，也分清哪些跨设备能力可用、待验或已经冻结。",
+    ordinaryRequest: "比如我问：“昨晚电脑为什么卡？出门后有哪些远程能力现在真能用，哪些还待验或已经停用；重装后又该从哪里恢复？”",
     collaboration: "电脑配置中心提供当前机器与恢复事实，历史项目提供过去证据，显示、远程与修复项目分别完成自己的现实动作。",
     delivery: "机器与历史证据、安全修复、实体或远端使用结果，以及不影响当前工作的恢复路径。",
     unavailable: "历史缺采、设备离线或远端未实测时保留 Unknown，不用重启替代诊断，也不把主机运行冒充实体或对端可用。",
     assets: [
-      { id: "codex-local-remote", title: "跨设备继续 AI 任务", repo: "codex-local-remote", role: "在手机浏览器里继续桌面上同一项任务、审批、文件和队列，不复制第二份聊天。", kind: "工作能力", href: "/projects/codex-remote" },
+      { id: "codex-local-remote", title: "跨设备任务连续性的历史产品", repo: "codex-local-remote", role: "曾让手机继续桌面上的同一任务、审批、文件和队列；当前入口已冻结，只保留设计与历史验收证据。", kind: "历史能力", href: "/projects/codex-remote" },
       { id: "emerald-veil", title: "空闲屏幕保护层", repo: "emerald-veil", role: "电脑闲置时使用可逆、点击穿透的原生动态覆盖层，减少静态画面暴露。", kind: "桌面能力", href: projectLedgerHref },
       { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前配对与在线状态另行验证。", kind: "集成能力", href: projectLedgerHref },
       { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
@@ -614,7 +614,7 @@ export const systemProjectDomains = [
       { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "代理异常退出后诊断并清理残留网络状态，让 Windows 回到可验证的直连。", kind: "修复工具", href: projectLedgerHref },
       { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "让内存盘只承载可重建缓存，并在异常占用或结构损坏时安全重建。", kind: "缓存守护", href: projectLedgerHref },
       { id: "scripts", title: "电脑常用动作", repo: "Scripts", role: "把声音、微信双开、卡键、网络和热备等高频小问题收成可重复的一键动作。", kind: "工具集合", href: projectLedgerHref },
-      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "把现成的串流主机、客户端和传输层配置成手机可用的远程工作站，同时守住画质、输入、显示和网络边界。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
+      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
       { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
     ]
   },
@@ -892,12 +892,12 @@ export const systemDependencyNodes = [
   {
     id: "message-ai-gateway",
     lane: "external",
-    title: "消息型 AI 网关（OpenClaw​Gateway）",
-    subtitle: "从 Telegram、飞书或 Google Chat 主动交办工作，由本机网关连接后台任务和受控工具",
+    title: "消息型 AI 网关的运维与渠道验收（OpenClaw​Gateway）",
+    subtitle: "本机网关可以维护；Telegram 与飞书已配置但本轮消息闭环仍是 0/2，Google Chat 当前关闭",
     href: "/projects/openclaw-gateway",
     linkLabel: "查看 OpenClawGateway",
     searchAliases: ["OpenClawGateway", "Telegram 飞书 Google Chat 消息交办"],
-    detail: "这是本人主动发起工作的入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；详情页区分 Telegram ready、飞书 starting、已配置远程路线与本轮未执行的消息或付费 Live，绝不拿源码或端口替代实际结果。"
+    detail: "这是本人主动发起工作的设计入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；当前 Telegram 为 running/starting（运行中/启动中）且 connected=false（未连接），飞书也是 running/starting，两条渠道的消息 E2E 都未完成，付费 Live（真实调用）也没有执行。绝不拿源码或端口替代实际结果。"
   },
   {
     id: "scheduled-events",
@@ -937,13 +937,13 @@ export const systemDependencyNodes = [
   {
     id: "companion-laptop",
     lane: "machine",
-    title: "副驾驶笔记本",
-    subtitle: "台式机的日常副电脑、远程入口和可恢复的应急接管终端",
+    title: "副驾驶笔记本（待实机验收）",
+    subtitle: "登记为台式机的日常副电脑、远程入口和应急接管候选",
     links: [
       { href: "/projects/pcconfig/machine-facts", label: "查看机器事实" },
       { href: "/projects/pcconfig/recovery-backup", label: "查看恢复方法" }
     ],
-    detail: "它有单独的主机清单、只读健康检查和一套可携带的恢复材料；平时承担双机协作，台式机故障时承接必要工作。版本、服务、任务和在线状态只按这台机器当次检查结果判断，不从台式机状态推断。"
+    detail: "已经有单独的主机清单、只读健康入口和恢复源码与材料；但当前在 WLY 台式机上只会得到 host mismatch（主机不匹配），目标笔记本、恢复 U 盘和外置 NVMe 接管都还没有完成真机验收。它现在是一套可检查的接管方案，不能写成已经能替台式机承接工作。"
   },
   {
     id: "cross-device-files",
@@ -1027,10 +1027,10 @@ export const systemDependencyNodes = [
   {
     id: "codex-remote",
     lane: "projects",
-    title: "跨设备继续同一项 AI 任务（Codex Remote）",
-    subtitle: "个人维护的跨设备任务连续性产品",
+    title: "跨设备任务连续性的历史产品（Codex Remote）",
+    subtitle: "曾真实运行；当前入口冻结，只保留设计与证据",
     href: "/projects/codex-remote",
-    detail: "实现移动网页、本机中介、共享任务协调、认证、重连、队列、文件操作和 Windows 运行生命周期；手机继续同一项任务，而不是复制聊天。当前是否在线仍要当次确认；断线或发送结果不明确时保留队列与未知，不自动重发造成重复动作。"
+    detail: "历史版本实现过移动网页、本机中介、共享任务、认证、重连、队列、文件操作和 Windows 运行生命周期；当前控制入口不可用且冻结，网页不做状态探测。若将来恢复，必须另行重建 Windows 接管并完成真实端到端验收。"
   },
   {
     id: "cacb",

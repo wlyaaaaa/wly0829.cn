@@ -127,7 +127,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
     detail: `${project.title}｜${module.teaser}`,
     href: `${project.route}/${module.slug}`,
     aliases: [...(module.searchAliases || []), ...(projectModuleSearchAliases[`${project.slug}/${module.slug}`] || [])],
-    compactSearch: compactSearchTopics([compactSearchTopics(module.searchProjection), module.value, module.result, ...(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect])]),
+    compactSearch: compactSearchTopics([compactSearchTopics(module.searchProjection), module.value, ...(project.usageExamples || []).filter((item) => item.moduleSlug === module.slug).flatMap((item) => [item.ask, item.effect])]),
     search: [
       project.title,
       module.status,
@@ -241,16 +241,16 @@ export function searchScopeById(scopeId) {
     return {
       id: `project:${projectEntry.project.slug}`,
       label: projectEntry.project.title,
-      placeholder: `搜索 ${projectEntry.project.title} 的总览、模块或问题`,
-      help: "可搜本项目的用途、场景、模块、证据或直接描述问题",
+      placeholder: `搜索 ${projectEntry.project.title} 的用途、模块或问题`,
+      help: "可以搜日常用法、真实场景、功能模块和技术证据，也可以直接描述遇到的问题",
       examples: projectEntry.project.searchAliases?.slice(0, 4) || []
     };
   }
-  if (scopeId === "system") return { id: "system", label: "系统", placeholder: "搜索责任、关系或使用入口", help: "可搜谁负责什么、项目怎样协作或出现问题先去哪里", examples: ["昨晚电脑为什么卡", "仓库事实谁负责", "中文录音怎么处理"] };
-  if (scopeId === "rules") return { id: "rules", label: "规则", placeholder: "搜索规则或直接描述约束问题", help: "可搜授权、委派、重大动作、事实责任或能力路由", examples: ["什么时候开子代理", "谁可以修改项目", "这个事实应该去哪里查"] };
-  if (scopeId === "skills") return { id: "skills", label: "Skills", placeholder: "搜索 Skill 名称或直接描述要解决的问题", help: "搜索始终覆盖全部 Skills，不受浏览分类限制", examples: ["找照片", "过去一小时为什么卡", "批量加密文件"] };
-  if (scopeId === "all") return { id: "all", label: "全站", placeholder: "搜索项目、系统、规则或 Skills", help: "可以输入准确名称，也可以直接描述你想解决的问题", examples: ["恢复电脑", "什么时候需要授权", "找录音"] };
-  if (scopeId === "project") return { id: "project", label: "项目", placeholder: "搜索项目名、用途、模块或直接描述问题", help: "结果只落到项目；进入项目后可继续搜索项目内部内容", examples: ["电脑卡顿", "中文录音", "安全发布仓库"] };
+  if (scopeId === "system") return { id: "system", label: "系统", placeholder: "搜索项目怎样配合，或问题该去哪里查", help: "可以搜谁负责什么、各项目怎样协作，以及遇到问题先去哪里", examples: ["昨晚电脑为什么卡", "仓库事实谁负责", "中文录音怎么处理"] };
+  if (scopeId === "rules") return { id: "rules", label: "规则", placeholder: "搜索操作规则，或直接描述不能越过的边界", help: "可以搜授权、委派、重大动作、事实归属和能力选择", examples: ["什么时候开子代理", "谁可以修改项目", "这个事实应该去哪里查"] };
+  if (scopeId === "skills") return { id: "skills", label: "Skills", placeholder: "搜索能力名称，或直接说想做什么", help: "搜索会覆盖全部已公开 Skills，不受当前浏览分类限制", examples: ["找照片", "过去一小时为什么卡", "批量加密文件"] };
+  if (scopeId === "all") return { id: "all", label: "全站", placeholder: "输入想解决的问题、项目名或关键词", help: "可以输入准确名称，也可以用日常说法描述想完成的事", examples: ["恢复电脑", "什么时候需要授权", "找录音"] };
+  if (scopeId === "project") return { id: "project", label: "项目", placeholder: "搜索项目名称、实际用途或使用场景", help: "结果只显示项目；进入项目后还可以继续搜索它的内部内容", examples: ["电脑卡顿", "中文录音", "安全发布仓库"] };
   return null;
 }
 

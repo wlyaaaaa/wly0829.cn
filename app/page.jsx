@@ -156,7 +156,7 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
               <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
                 <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
               </SiteLink>
-            )) : <div className="global-search-empty">{usesPartialAllIndex ? "快速结果没有命中；完整搜索还会检索项目正文。" : "没有匹配结果。可以换成项目用途、现实问题或更短的关键词。"}</div>}
+            )) : <div className="global-search-empty">{usesPartialAllIndex ? "快速结果没找到；按回车查看完整结果，还会继续搜索项目正文。" : "没找到匹配内容。可以换成日常说法、缩短关键词，或切换搜索范围。"}</div>}
             {usesPartialAllIndex || results.length > 9 ? <SiteLink className="global-search-all-results" href={`/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`}>{usesPartialAllIndex ? "查看完整搜索结果" : `查看全部 ${results.length} 条结果`}<ArrowRight size={16} aria-hidden="true" /></SiteLink> : null}
           </> : null}
         </div>
@@ -577,15 +577,15 @@ function HomePage() {
 }
 
 function projectKicker(kind) {
-  if (kind === "agents") return "个人 AI 工作控制项目";
-  if (kind === "pcconfig") return "电脑配置、运行与恢复控制面";
-  if (kind === "github-index") return "Git 与 GitHub 仓库事实控制面";
-  if (kind === "chinese-asr") return "本地中文语音处理与证据项目";
-  if (kind === "timeaudit") return "Windows 工作站时间、性能与故障回放项目";
-  if (kind === "pc-panel-hub") return "Windows 双副屏显示、事件与恢复项目";
-  if (kind === "cacb") return "可复现 Agent 评测产品与证据框架";
-  if (kind === "learning") return "人做主、AI协助的学习方法";
-  if (kind === "codex-remote") return "手机继续同一个 Codex Desktop 任务";
+  if (kind === "agents") return "让 AI 按目标办事：找对事实、守住边界、并行不撞车";
+  if (kind === "pcconfig") return "知道电脑现在怎样、软件怎样启动，出故障后从哪里恢复";
+  if (kind === "github-index") return "确认每个仓库是谁、在哪个分支，是否真正发布完成";
+  if (kind === "chinese-asr") return "把中文录音变成可搜索、可定位、能回听核对的文字";
+  if (kind === "timeaudit") return "电脑黑匣子：事后查清卡顿、发热、掉帧与复制记录";
+  if (kind === "pc-panel-hub") return "两块实体副屏各管一类信息，异常后按真实屏幕身份恢复";
+  if (kind === "cacb") return "用同一批真实任务，判断一种 AI 工作方式到底有没有做成";
+  if (kind === "learning") return "人定方向，AI 查资料、讲明白，再根据反馈继续修正";
+  if (kind === "codex-remote") return "曾让手机接回桌面 AI 任务；当前已冻结，只保留历史证据";
   return "个人项目";
 }
 
@@ -663,13 +663,13 @@ function ValidationMatrix({ compact = false }) {
       {failures.length ? (
         <section className="validation-failures" aria-labelledby="validation-failures-title">
           <h3 id="validation-failures-title">当前失败项与恢复线索</h3>
-          <p>这里不只显示“有失败”。每一项都保留测试身份、位置和本轮失败原因，便于判断该修哪里。</p>
+          <p>这里不只亮一盏红灯。每一项都保留测试身份、文件位置和本轮原因；退出码与耗时只在真实回执提供时显示，方便直接找到该修哪一步。</p>
           {failures.map((failure) => (
             <article key={failure.id}>
               <div><strong>{failure.id}</strong><StatusPill status="repair">{failure.status}</StatusPill></div>
               <dl>
                 <div><dt>测试文件</dt><dd><code>{failure.path}</code></dd></div>
-                <div><dt>退出码 / 耗时</dt><dd>{failure.exitCode ?? "无"} / {failure.durationSeconds} 秒</dd></div>
+                <div><dt>退出码 / 耗时</dt><dd>{failure.exitCode ?? "无"} / {failure.durationSeconds == null ? "无" : `${failure.durationSeconds} 秒`}</dd></div>
                 <div><dt>失败原因</dt><dd>{failure.reason}</dd></div>
               </dl>
             </article>
@@ -1070,24 +1070,24 @@ function ProjectOverview({ entry }) {
 
       <ProjectReadingPanel id="product">
         <MethodCanvas canvas={currentProject.methodCanvas} kind={entry.kind} />
-        {currentProject.productPrinciples?.length ? <section className="document-section"><h2>产品思想与设计核心</h2><div className="product-principle-grid">{currentProject.productPrinciples.map((principle, index) => <article key={principle.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{copy(principle.title)}</h3><p>{copy(principle.detail)}</p></article>)}</div></section> : null}
+        <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p>{item.moduleSlug ? <SiteLink className="usage-module-link" href={`${currentProject.route}/${item.moduleSlug}`}>查看对应模块<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}</article>)}</div></section>
+        <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
         <section className="document-section split-section">
           <div><h2>{isLearning ? "AI协助" : "它负责"}</h2><ul className="plain-list">{currentProject.responsibilities.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
           <div><h2>{isLearning ? "刻意不做" : "它不负责"}</h2><ul className="plain-list">{currentProject.exclusions.map((item) => <li key={item}>{copy(item)}</li>)}</ul></div>
         </section>
-        <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "一条真实工作流"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
-        <section className="document-section"><h2>{isLearning ? "我可以怎样开始" : "我平时怎样使用它"}</h2><div className="usage-table">{currentProject.usageExamples.map((item) => <article key={item.ask}><blockquote>{isLearning ? copy(item.ask) : item.ask}</blockquote><p>{copy(item.effect)}</p>{item.moduleSlug ? <SiteLink className="usage-module-link" href={`${currentProject.route}/${item.moduleSlug}`}>查看对应模块<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}</article>)}</div></section>
+        {currentProject.productPrinciples?.length ? <section className="document-section"><h2>产品思想与设计核心</h2><div className="product-principle-grid">{currentProject.productPrinciples.map((principle, index) => <article key={principle.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{copy(principle.title)}</h3><p>{copy(principle.detail)}</p></article>)}</div></section> : null}
       </ProjectReadingPanel>
 
       <ProjectReadingPanel id="technical">
         <section className="document-section document-section-first"><h2>{isLearning ? "方法状态与证据边界" : "完整项目状态与证据边界"}</h2><ProjectCurrentState entry={entry} /></section>
         <section className="document-section"><h2>来源与公开边界</h2><p>{displayCopy(currentProject.repositoryNote, entry.kind)}</p></section>
         {currentProject.heroFacts?.length ? <section className="document-section"><h2>当前关键技术事实</h2><dl className="project-headline-facts project-headline-facts-technical" aria-label={`${currentProject.title} 当前关键技术事实`}>{currentProject.heroFacts.map((fact) => <div key={fact.label}><dt>{displayCopy(fact.label, entry.kind)}</dt><dd>{displayCopy(fact.value, entry.kind)}</dd></div>)}</dl></section> : null}
+        <section className="document-section"><h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2><p>模块是可直达的技术深入章节，不是另一套产品介绍。</p><div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div></section>
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
         {currentProject.technicalContracts?.length ? <section className="document-section"><h2>当前数据合同与写读边界</h2><div className="component-table" role="table" aria-label={`${currentProject.title} 当前数据合同`}>{currentProject.technicalContracts.map((item, index) => <article role="row" key={item.artifact}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{item.artifact}</strong><p><code>{item.schema}</code></p></div><p role="cell"><strong>{copy(item.owner)}</strong>：{copy(item.boundary)}</p></article>)}</div></section> : null}
         {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section"><h2>公开原图字节身份</h2><p>缩略图只负责首屏性能；下列尺寸、bytes 与 SHA-256 绑定点击后加载的完整原图，构建后的公开文件必须逐项保持一致。</p><div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}><code>{item.src.split("/").at(-1)}</code><p>{item.width} × {item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p></div>)}</div></section> : null}
-        <section className="document-section"><h2>{isLearning ? "继续看每个方法节点" : "项目模块"}</h2><p>模块是可直达的技术深入章节，不是另一套产品介绍。</p><div className="module-index">{currentModules.map((item, index) => <SiteLink href={`${currentProject.route}/${item.slug}`} key={item.slug}><span className="module-number">{String(index + 1).padStart(2, "0")}</span><span className="module-index-copy"><strong>{copy(item.title)}</strong><span>{copy(item.teaser)}</span></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</div></section>
         {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
         <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
         <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
@@ -1852,7 +1852,7 @@ function SearchResultsPage({ search }) {
     <div className="page-frame search-results-page">
       <header><p className="section-kicker">完整搜索结果</p><h1>{query ? `“${query}”` : "输入一个名称或问题"}</h1><p>当前范围：{requestedScope.label}。修改查询或范围请直接使用页头唯一的搜索框。</p></header>
       {!query ? <div className="search-results-empty"><strong>{requestedScope.help}</strong><p>试试：{requestedScope.examples.join(" · ")}</p></div> : null}
-      {query && !results.length ? <div className="search-results-empty"><strong>没有匹配结果</strong><p>可以换成项目用途、现实问题或更短的关键词。</p></div> : null}
+      {query && !results.length ? <div className="search-results-empty"><strong>没找到匹配内容</strong><p>可以换成日常说法、缩短关键词，或在页头切换搜索范围。</p></div> : null}
       {orderedGroups.map(([group, entries]) => <section className="search-result-group" key={group}><div><h2>{group}</h2><span>{entries.length} 项</span></div>{entries.map((entry) => <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`}><span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</section>)}
     </div>
   );
@@ -1881,7 +1881,7 @@ function SkillsPage() {
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
-      <p className="directory-status-line"><strong>描述想完成的事，按用途选择或直接搜索能力</strong><span>每一项都会先说明它能做什么、什么时候用、最后得到什么以及失败时怎样处理。本地预览目录当前收录 {skills.length} 个 Skills（能力入口）：{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有进入本次公开目录，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不以此目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
+      <p className="directory-status-line"><strong>直接说想做什么，按用途找，也可以用日常话搜索</strong><span>每一项先讲它能解决什么麻烦、什么时候用、会交回什么，以及失败时怎样处理。当前公开目录收录 {skills.length} 个 Skills（能力入口）：{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有公开展示，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不拿这份目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
         {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
       </div>
@@ -1967,7 +1967,7 @@ function SkillDetail({ item, search }) {
 }
 
 function NotFound() {
-  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>没有这个页面</h1><p>当前看板由项目 Registry（登记清单）维护，共 {projectCatalog.length} 个项目；可以返回项目清单继续浏览。</p><p className="not-found-easter-egg">啦啦啦，没找到页面啦</p><SiteLink href="/projects"><House size={18} aria-hidden="true" />返回项目</SiteLink></div>;
+  return <div className="page-frame not-found-page"><p className="section-kicker">404</p><h1>你访问的页面不存在</h1><p>当前公开了 {projectCatalog.length} 个项目页面；你可以返回项目列表，或者用页头搜索找到想看的内容。</p><p className="not-found-easter-egg">啦啦啦，没找到页面啦</p><SiteLink href="/projects"><House size={18} aria-hidden="true" />返回项目列表</SiteLink></div>;
 }
 
 function BackToTopButton() {

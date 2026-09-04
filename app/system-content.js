@@ -41,7 +41,7 @@ export const systemSearchEntries = [
     detail: `${domain.summary} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join("、")}`,
     href: `/#system-project-domain-${domain.id}`,
     aliases: [domain.ordinaryRequest],
-    compactSearch: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join(" ")}`,
+    compactSearch: `${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join(" ")}`,
     search: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => `${asset.repo || ""} ${asset.role}`).join(" ")}`
   })),
   ...systemProjectDomains.flatMap((domain) => domain.assets

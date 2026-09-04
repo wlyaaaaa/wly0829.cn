@@ -210,7 +210,10 @@ test("OpenClawGateway first visible labels do not defer core English explanation
   assert.match(openClawGatewayProject.readerStates.problem, /behind（落后目标版）.*starting（启动中）.*warning（警告）/s);
   assert.match(JSON.stringify(openClawGatewayProject.dataSources), /models status\/list（模型状态\/目录）.*status\/update（状态\/更新）/s);
   assert.match(JSON.stringify(openClawGatewayProject.responsibilities), /managed bridge（受控桥接）/);
-  assert.match(openClawGatewayProject.usageExamples.find((item) => item.moduleSlug === "bootstrap-install").effect, /WhatIf（预演）.*ConfigSource（配置来源）.*schema（数据结构）/);
+  const bootstrapText = JSON.stringify(bootstrap);
+  for (const expected of ["WhatIf（预演）", "ConfigSource（配置来源）", "schema（数据结构）"]) {
+    assert.ok(bootstrapText.includes(expected), `bootstrap technical boundary missing: ${expected}`);
+  }
   const backup = openClawGatewayModules.find((item) => item.slug === "backup-restore");
   assert.match(backup.why, /Owner（负责人）/);
   assert.match(backup.readerStates.unavailable, /staged（已暂存）/);
