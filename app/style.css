@@ -4311,6 +4311,17 @@ main {
 }
 
 @media (max-width: 680px) {
+  .skill-document h1 {
+    min-width: 0;
+    max-width: 100%;
+    font-size: clamp(26px, 8vw, 32px);
+    line-height: 1.12;
+    letter-spacing: -0.055em;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    text-wrap: wrap;
+  }
+
   .header-inner {
     grid-template-columns: auto minmax(0, 1fr) auto auto;
     grid-template-rows: var(--header-height);

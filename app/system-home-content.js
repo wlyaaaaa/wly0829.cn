@@ -646,7 +646,7 @@ export const systemProjectDomains = [
     delivery: "可编辑源稿、视觉样式、当前成品、页面或时间轴验收、来源与不能证明的部分。",
     unavailable: "源文件、字体、渲染或媒体链不完整时保留可编辑中间结果和具体问题，不复用旧输出冒充本轮成品。",
     assets: [
-      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "用真实规则和大规模仿真寻找更稳策略，再自动生成报告和视频。", kind: "研究制作", href: projectLedgerHref },
+      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "GitHub 总账中的历史策略与视频流水线资产，不属于 35 个独立项目，不生成项目卡、路由、内容包或未来施工项。", kind: "历史资产", href: projectLedgerHref },
       { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: projectLedgerHref },
       { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
@@ -715,9 +715,9 @@ export const systemProjectDomains = [
     delivery: "可追溯的历史决定、迁移原因、现行入口、恢复材料和明确的当前适用范围。",
     unavailable: "历史材料不完整时只说明已知范围；它不能替当前项目、当前规则或现实运行状态回答。",
     assets: [
-      { id: "health-longevity", title: "健康协作早期方案", repo: "HealthLongevity", role: "保留早期健康工程结构与交付模板，现行健康协作由独立入口承接。", kind: "历史参考", href: projectLedgerHref },
+      { id: "health-longevity", title: "健康协作早期方案", repo: "HealthLongevity", role: "早期项目只保留工程结构与交付经验，不再拥有写入；现役健康协作由 personal-health 与 Health Owner 承接。", kind: "历史参考", href: projectLedgerHref },
       { id: "human-alignment-dataset", title: "加密时间胶囊", repo: "human-alignment-dataset-001", role: "保留一份不可读的加密时间胶囊，不参与日常 AI 工作，也不从文件名推断内容。", kind: "历史参考", href: projectLedgerHref },
-      { id: "wechat-direct-private-archive", title: "微信读取工具早期版本", role: "保留公开前版本与迁移依据，现行能力由微信工作材料入口承接。", kind: "迁移参考", href: projectLedgerHref }
+      { id: "wechat-direct-private-archive", title: "微信读取工具早期版本", role: "PRIVATE 仓库已归档，只保留公开前历史与迁移依据，不生产现役行为；读取、具名归档和恢复由 PUBLIC WeChatDirect 承接。", kind: "迁移参考", href: projectLedgerHref }
     ]
   }
 ];
@@ -1542,38 +1542,73 @@ export const systemSkillFamilies = [
     ]
   },
   {
-    id: "enter-and-refresh-projects",
+    id: "continue-browser-work",
     number: "05",
+    title: "在浏览器里恢复并完成表单工作",
+    requests: [
+      "“这个在线表单已经填了一半，浏览控制刚断了；保留登录态和现有内容，恢复后继续。”",
+      "“这些附件要一个个上传；每个都确认页面真正成功，提交后再从平台记录核对。”"
+    ],
+    inputs: [
+      "当前受管浏览 Provider、已存在标签页和控制会话",
+      "页面实时字段、异步控件依赖和上传成功状态",
+      "用户明确选择的文件与已经授权的外部动作",
+      "真实失败、最小恢复和最终用户可见回读"
+    ],
+    collaboration: "宿主受管浏览能力负责实际页面操作，browser-control-continuity 负责保留标签页、恢复控制、观察异步控件、逐文件确认和提交后回读；页面字段、收件人和业务规则仍由所属项目负责。",
+    delivery: [
+      "恢复或保留的同一已登录页面",
+      "每个上传文件的权威成功态与精确附件数",
+      "提交前字段快照，以及提交后平台记录的实际字段和附件回读",
+      "必要时只补精确缺失文件、可凭回执清理的临时运行兼容恢复"
+    ],
+    willNot: [
+      "不会把文件名、100% 进度或页面跳转冒充成功",
+      "不会为了恢复控制先关闭、刷新或覆盖已有用户状态",
+      "不会用本地 runtime 恢复绕过登录、验证码、上传或最终提交授权",
+      "不会把附件名、标签页正文、平台记录 ID 或页面专属业务规则写进通用 Skill"
+    ],
+    members: [
+      { slug: "browser-control-continuity", name: "浏览器任务恢复、上传与提交回读", technicalName: "browser-control-continuity", summary: "在受管浏览中保留旧标签页，恢复运行缺口，按异步依赖继续操作，逐个核对上传成功，并从最终平台记录验证提交结果。", href: "/skills/browser-control-continuity" }
+    ]
+  },
+  {
+    id: "enter-and-refresh-projects",
+    number: "06",
     title: "安全进入项目，并把结果送到正确位置",
     requests: [
       "“进入网站项目补上全文搜索，保留别人未提交的修改，确认仓库和分支后再发布。”",
-      "“这个项目发布后，如果个人看板因此会说错话，就安排一次对应更新。”"
+      "“这个项目发布后，如果个人看板因此会说错话，就把增量交给正在发布的网站 Owner；没人负责时再开新任务。”"
     ],
     inputs: [
       "准确的仓库身份、目标工作树和准备进行的 Git 动作",
       "当前分支、远端、公开性、同步状态和其他未提交工作",
       "来源项目正式发布后的提交、变化路径和它为何会改变看板事实"
     ],
-    collaboration: "项目入口先提供真实 Git 现场，但不产生发布授权；来源项目正式发布后，只有看板会实质失真时才安排一次独立更新。",
+    collaboration: "项目入口先提供真实 Git 现场，但不产生发布授权；来源正式发布后只判断它的对应快照和直接表面是否会实质失真。网站任务状态精确为 active 且当前 Owner 范围覆盖本次发布时，才把绑定来源、提交、路径、观察时间和活动代际的增量并入同一稳定批次；没有合格 Owner 才安排全新工作。",
     delivery: [
       "明确的继续、先处理再继续或停止判断",
       "保留其他修改后的定向提交和真实远端回读",
-      "达到实质阈值时的一次看板更新；不需要更新时保持网站不变"
+      "达到实质阈值时给现有发布 Owner 的一次对应快照增量，或无 Owner 时的一个新任务",
+      "多个来源增量合并成一个稳定候选，只运行一次最终完整门、正常推送和 Pages/公网回读；不需要更新时保持网站不变"
     ],
     willNot: [
       "不会把仓库检查结果当成用户授权",
       "不会覆盖混合工作树中的其他修改",
       "不会因注释、格式、时间戳或仅指纹变化打扰网站",
-      "不会为同一个项目和同一提交重复安排更新"
+      "不会为同一个项目和同一提交重复安排更新",
+      "不会凭标题、更新时间或历史负责记录复用非 active 任务",
+      "不会在已有合格活动网站发布 Owner 时再开竞争任务，也不会把安排受理冒充完成",
+      "不会把一次来源事件扩成全站复核，或把预览服务当前台长任务等待"
     ],
     members: [
       { slug: "project-entry-gate", name: "Git 项目身份入口", technicalName: "project-entry-gate", summary: "在身份、公开性、分支、远端或同步状态会改变决定时，取得当前仓库真实现场。", href: "/skills/project-entry-gate" },
-      { slug: "personal-panel-refresh", name: "个人看板实质更新判断", technicalName: "personal-panel-refresh", summary: "已登记项目、活动规则或个人 Skill 发布回读后，只有现有页面会实质失真时，才由高质量网站 AI 安排一次独立增量。", href: "/skills/personal-panel-refresh" }
+      { slug: "personal-panel-refresh", name: "个人看板实质刷新与发布合并", technicalName: "personal-panel-refresh", summary: "登记来源发布回读后只判断对应快照；实时 active 且范围覆盖发布的 Owner 合并带五项身份的有界增量，在稳定批次中一次完成最终门，没有合格 Owner 才安排新工作。", href: "/skills/personal-panel-refresh" }
     ]
   },
   {
     id: "use-and-protect-secrets",
-    number: "06",
+    number: "07",
     title: "使用秘密，并保护指定文件",
     requests: [
       "“让程序使用这个账号，不要把密码交给 AI 或写进命令。”",
@@ -1605,7 +1640,7 @@ export const systemSkillFamilies = [
   },
   {
     id: "coordinate-ai-work",
-    number: "07",
+    number: "08",
     title: "让多个 AI 协作，但不失控",
     requests: [
       "“内容、界面和测试可以并行，但不要让多个协作者改同一块，最后由当前任务统一验收。”",

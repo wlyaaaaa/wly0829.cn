@@ -1,43 +1,48 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以直接推荐", "需要分辨", "当前不可用"];
-const sourceMainCommit = "4bcc37c295ba0476d4965eb5cd47244dd4b38654";
-const behaviorCommit = "821ee49ae954549f16dd454a5f9ef81c80be7180";
-const observedAt = "2026-09-01T16:10:23.5268669Z";
+const sourceMainCommit = "0b88ce98561f37299f858f83b8d128216bd0c84a";
+const behaviorCommit = "90c3c28b2c88ee1facc437379476a80575366980";
+const observedAt = "2026-09-04T13:20:03.6766787Z";
 const wrapperCommand = "pwsh -NoProfile -File .\\daily-preferences.ps1";
 
 const dailyPreferencesSnapshot = createProjectSnapshot({
   observedAt,
-  label: "v0.6 源码、40 项回归、10 个来源迁移与 6 个当前推定已经核对",
-  boundary: "这是人工增量的最后核对状态，不是后台实时画像。当前价格、门店、菜单、优惠和未来偏好仍在每次请求时确认；5 类逻辑来源尚未取得，信用卡来源仍有 1 个已知缺月。",
+  label: "v0.6 源码、43 项回归、Steam 独立来源与 12 项来源全景缺口已经核对",
+  boundary: "这是人工增量的最后核对状态，不是后台实时画像。非成功订单只保留交易事实；Steam 只把实际玩过的游戏放入普通偏好上下文，当前免费/付费不等于历史取得方式。当前来源 gap 为 1，另有 12 项未接入逻辑来源；实时价格、门店、菜单、优惠和未来偏好仍按请求确认。",
   metrics: [
-    { label: "当前明示", value: "16 条" },
-    { label: "当前推定", value: "6 条" },
-    { label: "来源实例", value: "11 个" },
-    { label: "源码回归", value: "40/40 pass" }
+    { label: "当前明示", value: "19 条" },
+    { label: "当前推定", value: "7 条" },
+    { label: "来源实例", value: "13 个" },
+    { label: "源码回归", value: "43/43 pass" }
   ],
   facts: [
-    { label: "项目到底保存什么", value: "保存 16 条 current 明示、6 个 current 推定、历史表述、来源实例、行为记录版本与证据关系；不保存一份不可推翻的完整人格。" },
-    { label: "当前数据状态", value: "54,283 个 current（当前）记录键保持不变；61,388 条记录含历史版本；75 份来源制品仍在原处，项目只保留索引与定位。" },
-    { label: "当前来源", value: "11 个来源实例中有 9 个 acquired_verified（来源已取得并核对）、2 个 snapshot_only（只有快照）；10 个非人工来源已收敛到解析版本 daily-preferences.v0.6。" },
-    { label: "当前缺口", value: "bank transactions（银行交易）、京东订单、拼多多订单、美团订单与菜鸟物流 5 类逻辑来源尚未取得；信用卡来源有 1 个已知缺月；最近一次导入没有 failed（失败）或 partial（部分完成）。" },
-    { label: "事实与推定", value: "订单只证明买过或点过，支付只补渠道旁证，行程只证明发生过；用户当前同 key（偏好键）明示优先，推定必须绑定 current 证据并可随来源或纠正失效。" },
+    { label: "项目到底保存什么", value: "保存 19 条 current 明示、7 个 current 推定、历史表述、来源实例、行为记录版本与证据关系；7 个推定共绑定 61 条 current evidence record（当前证据记录），不存在 non-current（非当前）或非成功订单绑定。它不保存一份不可推翻的完整人格。" },
+    { label: "当前数据状态", value: "54,887 个 current（当前）记录键；62,022 条记录含历史版本，FTS 同为 62,022 行；84 份来源制品仍在原处，项目只保留索引与定位。" },
+    { label: "当前来源", value: "13 个来源实例中有 9 个 acquired_verified（来源已取得并核对）、4 个 snapshot_only（只有快照）；12 个非人工来源已收敛到解析版本 daily-preferences.v0.6。" },
+    { label: "当前缺口", value: "当前来源 gap 为 1：Steam 历史取得方式仍 Unknown（未知）。另外 12 项逻辑来源尚未接入：银行交易、京东/拼多多/美团订单、菜鸟物流、哔哩哔哩、浏览活动、YouTube、Google Play、航空、铁路与地图活动；它们分别标明无现行材料、只有个人信息、历史快照可用、历史目录可见或仅有限截图。" },
+    { label: "事实与推定", value: "订单只证明买过或点过，支付只补渠道旁证，行程只证明发生过；退款及平台记作关闭、取消或失败的订单仍可在 facts（事实核对）中作为负状态回读，但普通 evidence（偏好证据）和模型上下文会排除它们，repeat_count（复购计数）也只统计成功记录。本人明确表达仍可独立提供偏好信号。" },
+    { label: "时间只调整排序", value: "来源、语义与状态相当时，近期证据得分更高；久远但仍有效的成功记录、跨时间复购和未被更正的本人明示不会自动过期。低频、长期没买或没有记录只表示证据较弱或 Unknown（未知），不等于不喜欢。", hero: false },
     { label: "接入结果不是推荐结果", value: "ingest 分别返回 completed（本次接入完成）、no_change（没有新解析记录）、partial（部分完成）或 failed（失败），并列出文件/记录计数、gaps 与失效推定数量。接入只更新证据和状态，不自动生成新推荐；新候选仍由 Skill 与 AI 依据有效证据组织。", hero: false },
-    { label: "当前性能", value: "40/40 源码回归通过；真实 54,283 个 current 记录上，证据查询观察约 1.2–1.5 秒，这不是 SLO（服务目标）；中文具体词会检查完整相关来源，不再只看最近 1,000 条。", hero: false },
+    { label: "当前性能", value: "43/43 源码回归通过；真实 54,887 个 current 记录上，本轮购物证据查询约 1.1 秒并返回 10 条，其中非成功订单证据为 0。这是一次观察，不是 SLO（服务目标）；中文具体词会检查完整相关来源，不再只看最近 1,000 条。", hero: false },
+    { label: "2026-09-04 增量", value: "淘宝处理 121 条（37 new、19 updated、65 duplicate），淘宝闪购 80 条（23 new、57 duplicate），支付宝 589 条（263 new、7 updated、319 duplicate），微信支付 46 条（15 new、4 updated、27 duplicate），信用卡新增 2 份月份记录；五类来源抽样制品哈希均已回读。", hero: false },
+    { label: "偏好增量怎样才算完成", value: "保存材料或运行 ingest 都只是中间步骤；还要回读覆盖与缺口，判断偏好新增、增强、减弱或仍未知，重建仍有充分证据的失效快照，并用普通自然问题核对现行明示、快照和证据。若语义无变化，也必须明确报告这个结论。", hero: false },
     { label: "v0.6 数据修正", value: "1,749 条微信支付 Excel 本地时间全部纠正，其中 841 条回到正确日历日；迁移前后 current 键零增零减，数据库 integrity_check=ok、外键 finding=0。" },
-    { label: "数据与整页时间", value: "CURRENT 数据层最后写于 2026-09-01T14:20:46.3506127Z；整页 observedAt 是后来完成 source main、实现盲请求、内容接线与终审的时间，两者不互相冒充。", hero: false },
+    { label: "Steam 独立来源", value: "四个登录账号按 AppID 合并为一个人的库，同时保留账号观察边。Steam 本地事实 132 条、商店当前分类 132 条、精确关联 132 条；当前分类为 110 付费、21 免费、1 当前不可购买且历史既销售又限时免费。普通 Steam 游戏查询只返回 12 个实际玩过的游戏：10 当前付费、2 当前免费，未玩项目和应用均为 0。", hero: false },
+    { label: "来源全景盘点", value: "一次性只读检查退役 PersonalOS 来源目录与现有独立原件，发现此前漏报的哔哩哔哩、浏览/搜索、YouTube、Google Play、航空、铁路和地图来源。项目只把它们转成当前独立缺口或消费现有原件，不恢复旧数据库、全景运行时或中央画像。", hero: false },
+    { label: "数据与整页时间", value: "CURRENT 数据层最后写于 2026-09-04T13:11:29.6279609Z；数据库最后写于 2026-09-04T13:15:31.5729828Z。整页 observedAt 是后来完成 source main、当前聚合回读、内容接线与终审的时间，三者不互相冒充。", hero: false },
     { label: "索引清洗边界", value: "本地索引在特定支付、信用卡与行程字段中掩码 email（邮箱）、独立 7–19 位数字和支付方式末四位；它不是全局匿名化，普通商品、平台、时间与偏好事实继续保真。", hero: false },
     { label: "公开展示边界", value: "公开普通产品思想、聚合状态、具体的普通 L2 偏好样例、代码、命令、失败与缺口；不复制原始聊天、账号、商家—金额—时间组合、行程起终点、原件路径或凭据。", hero: false }
   ],
   gaps: [
-    "旅行、住宿、娱乐、数字消费、服务、工具和审美已经能自然路由并使用明示/通用证据，但专门 parser（解析器）、排序权重与同等回归目前只有吃喝、购物、支付和出行。",
+    "Steam 游戏已有专门 parser（解析器）、多账号合并、游玩时长排序、商店分类与回归；旅行、住宿、哔哩哔哩、浏览/搜索、YouTube、Google Play、航空/铁路/地图、服务、工具和审美仍只有明示、通用证据、已盘点快照或有限材料，没有同等专门查询。",
     "Gemini 快照进入来源覆盖和版本状态，但记录标为 mixed_activity（混合活动），当前 evidence（证据查询）会过滤它；不能把它写成已经参与推荐。",
     "ChatGPT ZIP 会在制品 SHA-256 后继续核消息 content hash 并返回对应原文；PDF 从同字节制品重新抽取后还会掩码邮箱与 7–19 位数字，因此不是逐字原文。XLSX、CSV、TXT 和 Gemini 明确返回已验制品的缓存片段。",
     "支付与详细订单可以按精确 correlation key（关联键）建立关系，但推荐证据当前仍由 Skill 与 AI 判断其旁证角色；没有把付款计入订单 repeat_count（重复次数）。",
     "权威 full（完整快照）若解析为零记录会失败关闭并保留旧 current；尚未为每个平台证明‘有效空快照’的独立语义。",
     "历史已经按时间相邻区间保存，但没有面向用户的 history（历史查询）或 withdraw（撤回）命令。",
     "ingest、record 和 snapshot 都先提交 SQLite，再刷新 CURRENT.md。缓存写入失败可能发生在业务数据已经提交之后；当前没有明确的 db_committed/cache_stale 分层回执，不能把错误当作整次未记录后盲目重复写入。",
-    "75 份现存来源制品足以重放非人工记录层；CURRENT 只能从尚存 SQLite 重建。用户明示、推定及其历史没有独立恢复输入，完整 SQLite 丢失恢复尚未建立；项目也没有正式导出、备份或跨机器迁移入口。"
+    "84 份现存来源制品足以重放非人工记录层；CURRENT 只能从尚存 SQLite 重建。用户明示、推定及其历史没有独立恢复输入，完整 SQLite 丢失恢复尚未建立；项目也没有正式导出、备份或跨机器迁移入口。"
   ]
 });
 
@@ -49,7 +54,7 @@ const dailyPreferencesProject = {
   visibility: "私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
-  cardStatus: "v0.6 已闭合来源、证据、纠正和可推翻推定；推荐继续由当前 AI 组织，实时平台信息按次确认",
+  cardStatus: "Steam 多账号库与商店分类已接入；13 个来源实例、12 项未接入来源和 1 个现行 gap 均已说明",
   cardStatusTone: "mixed",
   ...dailyPreferencesSnapshot,
   kicker: "让每次选择记得我，但不把过去变成固定答案",
@@ -59,18 +64,20 @@ const dailyPreferencesProject = {
     "偏好变了怎么纠正",
     "推荐为什么适合我",
     "订单和支付怎么算证据",
+    "很久没买不等于不喜欢",
+    "材料保存不等于偏好增量完成",
     "准备投递增量",
     "薄快照为什么过期",
     "不建中央画像"
   ],
-  repositoryNote: `实现位于 PRIVATE（私有）仓库 daily-preferences，当前 main 为 ${sourceMainCommit}；v0.6 行为闭合于 ${behaviorCommit}，随后四个 docs-only（仅文档）提交只保存当前验收、修正格式、澄清动态 main/窄索引清洗/只读边界，并保留三条 evaluator（验收代理）的宿主回执边界。公开页保留产品判断、解析版本、聚合状态、命令、数据关系、40 项测试、v0.6 迁移、失败和恢复缺口；具体偏好只选一个会改变理解的普通 L2 事实链，不复制原始私人正文或 L3+ 载荷。`,
-  summary: "这个项目保存的不是一份“我是什么样的人”的总画像，而是：我现在明确说了什么，哪些行为事实支持或反驳某个判断，这条推定何时应该失效。普通问题先读一份很小的当前快照，需要解释时才查相关证据。推荐同时给熟悉稳妥、相邻探索和有依据的新鲜尝试，我可以随时用一句纠正改变后续排序。",
-  why: "没有这条能力，AI 要么每次从零猜，要么把旧订单、付款和对话压成永久标签。买过不等于喜欢，同一订单的付款也不等于又买了一次，曾经喜欢更不代表现在。这个项目把事实、推定、当前表达和未知分开，让连续性不会牺牲可纠正性。",
-  plainExample: "我先提供已经导出的淘宝与淘宝闪购（饿了么）详细订单、支付宝/微信支付账单、招商银行信用卡账单、滴滴网约车记录，以及 ChatGPT/Gemini 对话；也可以直接说出新偏好。项目从这些本地材料整理商品、口味或规格、交易状态、时间、支付和行程证据，不自动登录平台取数或持续监听账号。例如我问“今晚吃什么”，并补一句“最近不想太辣”，能力入口先以这句最新明示为准，再分别补查吃喝证据；需要解释复购理由时，才核对商品、成功与关闭次数、时间和文本变体，给出熟悉、相邻和有依据的新鲜选择。需要当前门店、菜单或优惠时，再附合适平台和可复制关键词。",
-  result: "推荐时，我得到一组可以自己选择的候选，写清具体内容、适合理由、关键取舍与推测，必要时附搜索接力。补来源时得到的则是接入状态、处理计数、缺口和已失效推定数量，不是一份新菜单；表达或改主意被成功记录后，下一次推荐才按新的 current 排序，旧表述留作历史。",
+  repositoryNote: `实现位于 PRIVATE（私有）仓库 daily-preferences，当前 main 为 ${sourceMainCommit}；v0.6 当前行为闭合于 ${behaviorCommit}，该基线包含 Steam 多账号统一个人库、商店当前价格分类、实际游玩证据筛选、12 项来源全景缺口，以及此前的非成功订单过滤、时间排序和偏好增量完成合同；随后 ${sourceMainCommit.slice(0, 7)} 原位更新当前验收。公开页保留产品判断、解析版本、聚合状态、命令、数据关系、43 项测试、v0.6 迁移、来源增量、失败和恢复缺口；不复制账号、游戏完整清单、游玩细节、原始私人正文或 L3+ 载荷。`,
+  summary: "这个项目保存的不是一份“我是什么样的人”的总画像，而是：我现在明确说了什么，哪些行为事实支持或反驳某个判断，这条推定何时应该失效。普通问题先读一份很小的当前快照，需要解释时才查相关证据。Steam 四个登录账号按 AppID 合成同一个人的游戏库，但只有实际玩过的游戏进入普通偏好上下文；当前免费/付费只说明今天的商店分类，不猜历史怎样取得。非成功订单只留交易事实，时间只调整同等证据排序，没有记录也不等于不喜欢。",
+  why: "没有这条能力，AI 要么每次从零猜，要么把旧订单、付款、对话和游戏库压成永久标签；还会把已有 parser（解析器）误当成来源全集。买过、安装过或仅在库中都不等于喜欢，未成功订单和没记录也不能反推喜恶。这个项目把事实、推定、当前表达、来源缺口和 Unknown 分开，让连续性不会牺牲可纠正性。",
+  plainExample: "我先提供已经导出的订单、支付、信用卡、网约车和 AI 对话，也可以直接说出新偏好；Steam 则读取现有多账号统一库快照和官方商店公开分类。例如我问“我玩过哪些 Steam 游戏，接下来想试什么”，入口只返回实际有游玩记录的游戏，按游玩时长和近期程度排序并附当前免费/付费分类；未玩库项目和应用不混入。AI 再把这些事实与当前明示分开，给熟悉、相邻和新鲜候选。账号、完整游戏清单、具体游玩细节、历史取得方式和原件路径不会出现在公开页。",
+  result: "推荐时，我得到一组可以自己选择的候选，写清具体内容、适合理由、关键取舍与推测；Steam 场景还带当前商店分类，但不伪造历史购买方式。补来源时，Python 先交回接入、覆盖和缺口；完整偏好增量继续判断新增/增强/减弱/未知、重建快照并用普通问题回验。全景盘点只把发现变成独立现行来源或明确缺口，不恢复退役系统。",
   readerStates: {
-    pass: "推荐请求由 Skill/AI 根据当前明示和有效证据交付熟悉、相邻与新鲜候选；记录或接入请求则交回 recorded/recorded_historical 或 completed/no_change 及具体计数。保存证据、更新缓存与生成推荐是不同结果，不互相冒充。",
-    problem: "接入部分完成或失败时列出已处理记录、gaps 与失效推定，不把 acquired_verified 来源标签当作本轮导入成功。新旧表达、事实或推定冲突时分开解释，失效推定不继续用于当前推荐。",
+    pass: "推荐请求由 Skill/AI 根据当前明示和有效证据交付熟悉、相邻与新鲜候选；记录请求交回 recorded/recorded_historical。材料增量只有在覆盖/缺口、偏好变化、快照和普通问题回验全部收敛，或明确证明语义无变化后才完成；保存证据、ingest、更新缓存与生成推荐不互相冒充。",
+    problem: "接入部分完成或失败时列出已处理记录、gaps 与失效推定，不把 acquired_verified 来源标签当作本轮导入成功。新旧表达、事实或推定冲突时分开解释；退款、关闭、取消和失败订单只保留交易事实，失效推定与非成功订单都不继续进入当前推荐上下文。",
     unavailable: "查询入口不可用时只依据本轮表达给临时候选；写入出错则先区分数据库未提交还是提交后缓存刷新失败，保留已发生结果并核对原记录，不盲重写。不把缺快照说成没有偏好，也不扩大扫描。"
   },
   stateLabels,
@@ -96,13 +103,17 @@ const dailyPreferencesProject = {
   productPrinciples: [
     { title: "现在说的优先", detail: "用户当前同 key 的明示高于旧表述、订单和推定；回顾过去不会偷偷覆盖现在。" },
     { title: "事实准确，推定主动但可推翻", detail: "来源、时间、账号和记录身份必须准确；偏好判断可以大胆提出，但必须说明依据并接受纠正。" },
-    { title: "买过不等于喜欢", detail: "订单、支付、行程和聊天各自只证明自己能证明的事；支付旁证不进入订单重复次数。" },
+    { title: "买过不等于喜欢", detail: "订单、支付、行程和聊天各自只证明自己能证明的事；退款及平台记作关闭、取消或失败的订单只保留交易事实，不进入普通偏好证据、模型上下文或复购计数，支付旁证也不重复计算已有订单。" },
     { title: "具体语义高于宽泛标签", detail: "优先保留商品、菜品、口味和规格原名；不能把农夫山泉苏打天然水/苏打水泛化成矿泉水。" },
     { title: "普通问题走快路径", detail: "先用薄快照；只有理由、冲突、过度概括、索引过期或原件细节会改变答案时才补证。" },
+    { title: "时间排序，不让事实过期", detail: "其他条件相同时近期证据更靠前；久远有效成功记录和未更正明示继续保留，低频、长期未买或没有记录都不能反推不喜欢。" },
     { title: "历史负责排序，不建立白名单", detail: "熟悉选择之外必须给相邻和合理新鲜路线，不能把数据源变成只能重复购买的围栏。" },
     { title: "最终决定留给用户", detail: "除非明确要求只给一个，AI 不替用户定唯一套餐、下单或付款。" },
     { title: "实时信息用搜索接力", detail: "没有稳定比价或门店 API 不算能力失败；给最相关的 1–2 个平台和可复制关键词，不冒充权威最低价。" },
     { title: "人工增量，不持续监控", detail: "普通推荐不顺便扫描或导入；只有用户准备补材料时才逐来源说明范围、缺口和模式。" },
+    { title: "接入不是偏好结论", detail: "材料保全和 ingest 只是中间步骤；还要判断偏好语义、重建相关快照并回验普通问题，或明确证明语义无变化。" },
+    { title: "解析器清单不是来源全景", detail: "每个已承接偏好领域都要检查真实行为源或明确缺口；退役 PersonalOS 只作一次性发现线索，发现后的来源必须转成独立现行入口或缺口。" },
+    { title: "Steam 按人合并、按行为取证", detail: "四个已确认登录账号按 AppID 合成同一个人的库，但只让实际玩过的游戏进入普通偏好上下文；仅观察、安装、未玩和应用都不冒充游戏偏好。" },
     { title: "只清洗无消费者标识，不模糊普通事实", detail: "本地索引对特定字段里的邮箱、长数字和支付末四位做窄掩码；这不是全局匿名化，也不能成为删掉普通商品、平台、时间或偏好语义的理由。" },
     { title: "边界按真实 Owner 分开", detail: "健康、资产、真实付款、正式材料、关系对象、媒体和工作执行继续走各自项目；偏好项目不建中央个人数据库。" }
   ],
@@ -110,9 +121,12 @@ const dailyPreferencesProject = {
   responsibilities: [
     "保存用户 current 与 historical 表述，并让相关旧推定失效",
     "人工接入订单、支付、行程和 AI 对话来源，保留制品哈希、导入和记录版本",
+    "在材料接入后闭合覆盖、缺口、偏好语义变化、快照重建和普通自然问题回验",
+    "按偏好领域维护来源全景，发现漏项时转成独立现行来源或带 availability/evidence 的明确缺口",
+    "把 Steam 多账号库按 AppID 合并，并把实际游玩、当前商店分类与未知历史取得方式分层",
     "按自然问题取相关 current 明示、有效快照和行为证据",
-    "核对具体商品的正向/负向状态、时间范围、文本变体和重复观察",
-    "维护 11 个来源实例的覆盖、缺口、材料和补包模式",
+    "核对具体商品的正向/负向状态、时间范围、文本变体和重复观察，并让退款、关闭、取消与失败订单只保留交易事实",
+    "维护 13 个来源实例的覆盖、缺口、材料和补包模式，并逐项报告 12 个未接入逻辑来源",
     "在特定支付、信用卡和行程索引字段中掩码邮箱、独立长数字与支付末四位，同时保留普通偏好语义",
     "在打开内容前核对原件制品 SHA-256，并区分真实重读与缓存片段",
     "为 Skill 与当前 AI 提供事实，不在 Python 内伪装成推荐模型"
@@ -120,9 +134,13 @@ const dailyPreferencesProject = {
   exclusions: [
     "不建立统一人格、中央认知、事件图、向量数据库或第二数据库",
     "不后台同步、轮询、监控账号，也不在普通推荐时顺便导入",
+    "不把材料已保存或 ingest 成功冒充偏好增量已完成",
+    "不恢复退役 PersonalOS 的数据库、全景运行时或中央画像；旧目录只可作一次性历史发现线索",
     "不保证实时价格、最低价、门店、菜单、优惠或库存",
     "不替用户下单、付款、选择唯一套餐或修改外部平台",
-    "不把订单、付款、行程或 AI 对话自动升级成喜欢或满意",
+    "不把订单、付款、行程或 AI 对话自动升级成喜欢或满意，也不从退款、关闭、取消或失败订单反推任何偏好",
+    "不因记录久远、次数少、长期没买或没有记录而自动判定过期或不喜欢",
+    "不把 Steam 仅在库中、仅安装、未玩项目或应用混入普通游戏偏好，也不从当前商店分类猜历史取得方式",
     "不接管原件；照片、视频、音频、材料、健康、资产和正式文书由各自 Owner 保管",
     "不把扩展领域的自然路由写成已有同等 parser、权重和测试"
   ],
@@ -131,6 +149,12 @@ const dailyPreferencesProject = {
     { term: "historical（历史）", meaning: "过去曾经有效、但不再代表现在的表述或记录版本；可解释变化，不覆盖 current。" },
     { term: "Preference snapshot（偏好快照）", meaning: "绑定来源修订和 current 证据的可重建推定；来源或用户明示变化后会 stale。" },
     { term: "Evidence role（证据角色）", meaning: "订单观察、支付旁证、行程观察和本人表达分别说明自己能证明什么，不能横向等权。" },
+    { term: "Nonpositive order（非成功订单）", meaning: "退款及平台记作关闭、取消或失败的交易记录；仍保留在 facts 的负状态计数中，但不进入普通偏好 evidence、模型上下文或成功复购计数。" },
+    { term: "Recency signal（近期排序信号）", meaning: "来源、语义和状态相当时给近期记录更高分；它不删除久远有效事实，也不能把低频或无记录改写成负向偏好。" },
+    { term: "Semantic completion（偏好语义闭环）", meaning: "材料接入后继续完成覆盖/缺口回读、偏好变化判断、快照重建与普通问题回验；无变化也要明确报告。" },
+    { term: "AppID（Steam 应用标识）", meaning: "Steam 内容的稳定编号；多账号看到同一 AppID 时合并成一个人的统一项目，同时保留账号观察边。" },
+    { term: "game observation（游戏行为观察）", meaning: "实际有游玩时长的 Steam 游戏证据；只说明行为强弱，不自动证明喜欢、所有权或历史取得方式。" },
+    { term: "store price class（商店当前分类）", meaning: "Steam 官方商店在观察时给出的当前付费、免费或不可购买状态；不是历史直购、礼物、激活码、限免或家庭共享结论。" },
     { term: "full / incremental / snapshot / manual", meaning: "完整权威快照、普通增量、只能说明某个截面的快照、用户直接表达四种接入模式。" },
     { term: "Source revision（来源修订）", meaning: "与某个偏好领域有关的 current 记录、来源状态、解析版本、缺口和明示共同形成的哈希。" },
     { term: "verified_artifact_cached_excerpt（制品已验真的缓存片段）", meaning: "原文件仍存在且 SHA-256 一致，但当前入口没有逐行重解析，只返回绑定到该制品的索引片段。" }
@@ -138,11 +162,11 @@ const dailyPreferencesProject = {
   operatingFlow: [
     { title: "直接表达或提问", detail: "自然说偏好、纠正、过去日期或本次选择问题，不需要用户知道偏好键和命令。" },
     { title: "先取 current 快路径", detail: "读取当前明示与有效快照；缺失或 stale 时继续最小证据，不把缺快照写成没有偏好。" },
-    { title: "按问题补证", detail: "吃喝、购物、支付、出行按专门轴；旅行住宿等扩展域先用明示和通用证据，不冒充专门解析器。" },
-    { title: "需要原因时核对 facts", detail: "具体商品按品牌与品类词返回匹配、正向/负向状态、首末时间与变体；模板和赠品过滤。" },
+    { title: "按问题补证", detail: "吃喝、购物、支付、出行和 Steam 游戏按专门轴；普通 Steam 游戏查询只取实际玩过的 game/demo 并连接当前商店分类，旅行住宿等其余扩展域先用明示、通用证据或明确缺口。" },
+    { title: "需要原因时核对 facts", detail: "具体商品按品牌与品类词返回匹配、正向/负向状态、首末时间与变体；模板和赠品过滤，退款、关闭、取消与失败订单保留为负状态事实但不进入普通推荐证据、模型上下文或复购计数。" },
     { title: "必要时有界回原件", detail: "先核对制品存在和 SHA-256；ChatGPT 再核消息 hash 并返回对应原文，PDF 重新抽取后做窄掩码，其他类型明确返回已验制品的缓存片段。" },
     { title: "组织选择菜单", detail: "Skill 与 AI 返回熟悉、相邻、新鲜候选；每项说明理由、取舍和推测，实时信息走搜索接力。" },
-    { title: "纠正或准备增量", detail: "新的明示更新 current；准备补数据时，status 只读返回覆盖、缺口、材料、重叠起点和模式。实际 ingest 后另报完成/无变化/部分完成/失败、计数和失效推定，不把准备清单或接入成功写成新推荐已生成。" }
+    { title: "纠正或准备增量", detail: "新的明示更新 current；准备补数据时，status 只读返回覆盖、缺口、材料、重叠起点和模式。实际 ingest 后还要判断新增/增强/减弱/未知，重建仍有充分证据的相关快照并用普通自然问题回验；语义无变化也要明确报告。" }
   ],
   components: [
     { name: "daily-preferences Skill", responsibility: "从自然偏好、纠正、推荐和增量请求进入正确流程。", implementation: "拥有推荐菜单、搜索接力、领域边界和用户选择权；不复制 SQLite 实现。" },
@@ -150,23 +174,25 @@ const dailyPreferencesProject = {
     { name: "PowerShell wrapper（PowerShell 启动入口）", responsibility: "让自然路由和人工维护从项目根使用同一个 Windows 入口，而不要求用户寻找 Python。", implementation: "先使用 PATH 中的 python，再查 LocalAppData 下最新 Python*，最后查 bundled runtime（随工作区提供的运行时）；三处都不存在时明确抛出 Python runtime not found，不静默换执行器。" },
     { name: "SQLite / FTS5（本地数据库 / 全文索引）", responsibility: "保存来源实例、制品、导入、记录版本、明示、推定与证据关系。", implementation: "schema v1、WAL、外键、STRICT 表和 current 唯一索引；没有第二数据库或后台进程。" },
     { name: "CURRENT.md", responsibility: "让普通推荐快速读取 current 明示、有效推定和来源覆盖。", implementation: "SQLite 提交后，再通过临时文件与 os.replace 原子替换缓存；文件替换不和数据库构成同一事务，失败时数据库可能已更新而缓存仍旧。它可重建，不是原件或数据库备份。" },
-    { name: "Profile parsers（来源解析器）", responsibility: "把 9 类已实现导出格式转成稳定记录。", implementation: "淘宝、淘宝闪购/饿了么、支付宝、微信支付、信用卡、滴滴网约车、ChatGPT、Gemini JSON 与 Gemini HTML；旁系 Didi 导出不冒充支持。" },
+    { name: "Profile parsers（来源解析器）", responsibility: "把 11 类已实现导出或快照格式转成稳定记录。", implementation: "淘宝、淘宝闪购/饿了么、支付宝、微信支付、信用卡、滴滴网约车、ChatGPT、Gemini JSON/HTML、Steam 多账号统一库和 Steam 商店分类；旁系 Didi 导出与未接入来源不冒充支持。" },
+    { name: "Steam 库与商店关联", responsibility: "把同一人的多账号游戏行为与当前公开商店分类连接，而不猜历史购买来源。", implementation: "library.jsonl 与 store appdetails JSONL 均按 AppID 建 current 记录；steam_app:<appid> 形成精确关联。游玩分钟取对数加分，普通游戏查询过滤未玩记录与 application。" },
     { name: "窄索引清洗", responsibility: "让本地检索不需要保存某些无产品价值的联系方式和长标识，同时不牺牲普通偏好事实。", implementation: "scrub_sensitive 把邮箱和独立 7–19 位数字替换为占位；scrub_payment_method 再掩码括号内末四位。它只用于选定 parser 字段，不是全库、原件或公开页面的统一脱敏器。" },
     { name: "原件验真", responsibility: "防止缓存片段继续指向已经缺失或变字节的来源。", implementation: "先核 artifact SHA-256；ChatGPT 再核消息 content hash，PDF 重读失败明确返回不可读，其余类型标明缓存片段。" }
   ],
   usageExamples: [
     { ask: "我现在不太想吃辣，以后按这个推荐。", effect: "记录新的 current，旧同 key 表述进入历史，相关推定 stale。", moduleSlug: "current-corrections" },
-    { ask: "准备投递增量，逐个来源告诉我现在到哪里。", effect: "不扫描、不导入，也不改业务数据或 SQLite 主文件；只读连接可能更新 -shm mtime。随后返回 11 个来源实例的覆盖、缺口、材料、重叠起点和模式。", moduleSlug: "source-coverage" },
+    { ask: "准备投递增量，逐个来源告诉我现在到哪里。", effect: "不扫描、不导入，也不改业务数据或 SQLite 主文件；只读连接可能更新 -shm mtime。随后返回 13 个来源实例的覆盖/缺口/材料/模式，以及 12 项未接入逻辑来源的 availability/evidence。", moduleSlug: "source-coverage" },
     { ask: "今晚吃什么？吃和喝都看，不要只复述旧订单。", effect: "分别取吃喝相关明示、快照和行为事实，不读取整库私人正文。", moduleSlug: "evidence-query" },
-    { ask: "为什么觉得我喜欢这个？先核对具体复购事实。", effect: "分开订单、支付旁证和本人表达，返回状态、时间与文本变体，不把一次购买升级成喜欢。", moduleSlug: "fact-verification" },
+    { ask: "为什么觉得我喜欢这个？先核对具体复购事实。", effect: "分开成功订单、非成功订单、支付旁证和本人表达，返回状态、时间与文本变体；非成功订单仍可核对交易事实，但不进入普通偏好证据、模型上下文或复购计数。", moduleSlug: "fact-verification" },
     { ask: "给我熟悉、相邻和没买过但可能适合的新东西。", effect: "Skill 与 AI 组织三类选择，标出推测、取舍与搜索接力，最终决定留给用户。", moduleSlug: "recommendation-choice" }
   ],
   evidenceLayers: [
-    { layer: "PRIVATE 源码 main", proves: `当前 main ${sourceMainCommit} 包含 current acceptance（当前验收）；v0.6 行为 commit ${behaviorCommit} 拥有入口、数据关系、失败语义和 40 项回归。`, doesNotProve: "源码与验收文档存在不证明公开页已经部署，也不替代本轮数据库和自然请求现场回读。" },
-    { layer: "40 项原生回归", proves: "覆盖导入幂等/回滚、Didi 错格式防误退、覆盖与缺口、乱序历史、中文旧记录召回、AI 表达过滤、快照证据和原件漂移。", doesNotProve: "合成夹具不能证明每个平台未来导出格式、每类偏好或每个推荐都正确。" },
-    { layer: "当前 v0.6 数据迁移", proves: "10 个非人工来源迁移成功；54,283 个 current 键零漂移，1,749 条微信时间纠正，6 个推定按新证据重建，integrity_check=ok、外键 0。", doesNotProve: "一次迁移不是正式备份恢复产品，也不证明未来增量始终可取得。" },
-    { layer: "当前来源与事实核对", proves: "11 个来源实例、75 份制品、1 个已知缺月和 5 类未取得来源被明确区分；具体苏打水事实链由订单状态、时间、变体与用户纠正共同形成。", doesNotProve: "订单成功不等于每次满意，付款旁证不等于再次购买。" },
-    { layer: "当前三条实现盲自然请求", proves: "宿主回执把三条 evaluator 固定为 gpt-5.6-sol / max / child、fork_turns=none，三条均收到 terminal final；公开页不展示 task id 或原始私人输出。它们未获 Skill、命令、路径或内部路线提示，分别自主完成吃喝推荐、逐来源增量准备和苏打水事实核对：推荐交付熟悉/相邻/新鲜菜单与搜索接力；增量列出 11 个来源和 5 个未取得来源，不扫描、不导入、不改业务数据或 SQLite 主文件；事实核对把 51 条订单、44 成功、7 关闭、支付生命周期旁证和本人表达分开。", doesNotProve: "这三条请求不证明所有偏好域、未来平台导出、实时价格、门店可用性、严格的文件系统零写或每次 AI 判断都正确；SQLite 只读连接可能更新 -shm mtime，事实核对也只能证明长期成功复购支持高可能推定，不能升级为本人已经明确说喜欢。" },
+    { layer: "PRIVATE 源码 main", proves: `当前 main ${sourceMainCommit} 包含 current acceptance（当前验收）；v0.6 行为 commit ${behaviorCommit} 拥有 Steam 库/商店解析、来源全景缺口、非成功订单过滤、时间排序与偏好增量完成合同，以及 43 项回归。`, doesNotProve: "源码与验收文档存在不证明公开页已经部署，也不替代本轮数据库和自然请求现场回读。" },
+    { layer: "43 项原生回归", proves: "覆盖导入幂等/回滚、Didi 错格式防误退、覆盖与缺口、Steam 多账号合并/游玩过滤/商店关联、中文召回、AI 表达过滤、非成功订单仅作事实、近期优先但久远成功记录不消失、快照证据和原件漂移。", doesNotProve: "合成夹具不能证明每个平台未来导出格式、每类偏好或每个推荐都正确。" },
+    { layer: "2026-09-01 v0.6 数据迁移", proves: "10 个非人工来源迁移成功；54,283 个 current 键零漂移，1,749 条微信时间纠正，6 个推定当时按新证据重建，integrity_check=ok、外键 0。", doesNotProve: "这是一层历史迁移证据，不代表 2026-09-04 仍有 6 个 current 推定，也不是正式备份恢复产品。" },
+    { layer: "2026-09-04 增量与推断回读", proves: "当前为 54,887 个 current 键、62,022 条记录、84 份制品与来源 gap 1；19 条明示、7 个 current 推定共绑定 61 条 current 证据，不存在 non-current 或非成功订单绑定。购物查询返回 10 条且非成功订单为 0；Steam 游戏查询返回 12 个实际玩过的游戏，应用与未玩项目为 0。数据库 integrity_check=ok、外键 0。", doesNotProve: "实际玩过或成功购买不能单独证明喜欢；Steam 当前商店分类不能证明历史取得方式，也没有为这些新语义新增实现盲 AI 推荐验收。" },
+    { layer: "当前来源与事实核对", proves: "13 个来源实例、84 份制品、1 个 Steam 取得方式 gap 和 12 项未接入来源被明确区分；Steam 本地/商店各 132 条并有 132 条精确关联，当前分类 110/21/1；当前苏打水 facts 为 52/45/7。", doesNotProve: "来源盘点不等于对应 parser 已实现，商店分类不证明历史取得方式；订单或游玩事实也不等于每次满意。" },
+    { layer: "2026-09-01 三条实现盲自然请求", proves: "宿主回执把三条 evaluator 固定为 gpt-5.6-sol / max / child、fork_turns=none，三条均收到 terminal final；公开页不展示 task id 或原始私人输出。它们未获 Skill、命令、路径或内部路线提示，分别自主完成吃喝推荐、逐来源增量准备和苏打水事实核对：推荐交付熟悉/相邻/新鲜菜单与搜索接力；增量列出 11 个来源和 5 个未取得来源，不扫描、不导入、不改业务数据或 SQLite 主文件；事实核对把 51 条订单、44 成功、7 关闭、支付生命周期旁证和本人表达分开。", doesNotProve: "这三条请求早于 2026-09-04 的退款过滤，不是退款场景的 fresh E2E；它们也不证明所有偏好域、未来平台导出、实时价格、门店可用性、严格文件系统零写或每次 AI 判断都正确。" },
     { layer: "公开页面", proves: "只展示产品判断、聚合状态、普通 L2 样例和技术证据，没有复制原始聊天、账号、财务组合、行程路线、locator 或秘密。", doesNotProve: "公开内容不是实时个人推荐结果，也不是来源数据库副本。" }
   ],
   operationalEntrypoints: [
@@ -180,7 +206,8 @@ const dailyPreferencesProject = {
     { name: "有界回看记录", command: `${wrapperCommand} original --record-id <id> --json`, purpose: "先核对原件制品，再区分真正重读、缓存片段、缺失、漂移或不可读。" }
   ],
   evolution: [
-    { date: "2026-08-31—09-01", commit: `3860c61–${sourceMainCommit.slice(0, 7)}`, result: `建立本地人工增量偏好证据项目，并在 ${behaviorCommit.slice(0, 7)} 把错误 full 默认、Didi 误退、时间时区、覆盖缺口、回滚、中文召回、AI 表达、历史区间、快照证据和原件验真收敛到 v0.6；随后迁移 10 个来源、重建 6 个推定并在 current acceptance 原位保存聚合验收。` }
+    { date: "2026-08-31—09-01", commit: "3860c61–4bcc37c", result: "建立本地人工增量偏好证据项目，把错误 full 默认、Didi 误退、时间时区、覆盖缺口、回滚、中文召回、AI 表达、历史区间、快照证据和原件验真收敛到 v0.6；随后迁移 10 个来源、重建 6 个推定并在 current acceptance 原位保存聚合验收。" },
+    { date: "2026-09-04", commit: `ec12e20–${sourceMainCommit.slice(0, 7)}`, result: `完成五类来源增量与 Steam 多账号库/商店分类，把非成功订单排除出普通偏好上下文，明确时间只排序且材料接入须闭合语义；在 ${behaviorCommit.slice(0, 7)} 补齐 12 项来源全景缺口与 Steam 价格/游玩边界。当前为 19 条明示、7 个推定、61 条 current 证据和 43/43 测试。` }
   ],
   snapshotUpdateNote: "本页只在 daily-preferences 项目或 Skill 正式发布并回读后产生实质产品变化时更新。普通偏好数据增量若不改变公开产品能力、边界、证据解释或用户决策，只更新本地状态，不制造网站任务或公开消费日记。"
 };
@@ -200,7 +227,7 @@ const dailyPreferencesModules = [
       failureRecovery: ["旧日期不覆盖现在", "同时间最后写入胜出", "数据库不可写时不冒充记录成功", "没有history命令时技术层保留缺口"]
     },
     teaser: "用户不需要学习命令或偏好键；一句自然纠正就应比几年前的订单和旧推定更重要。",
-    status: "v0.6 已让每个精确偏好键形成相邻、不重叠的历史区间；16 条明示 current，6 个推定 current",
+    status: "v0.6 已让每个精确偏好键形成相邻、不重叠的历史区间；19 条明示 current，7 个推定 current，共绑定 61 条 current 证据",
     statusTone: "pass",
     value: "让推荐连续记得过去，又允许用户随时改变主意，不被旧标签锁住。",
     why: "只追加记录而不分 current/history，会让矛盾表述同时生效；只覆盖旧值又无法解释偏好何时变化。",
@@ -252,43 +279,54 @@ const dailyPreferencesModules = [
   commonModuleShape({
     slug: "source-coverage",
     shortTitle: "来源与人工增量",
-    title: "按来源实例手动增量，先把覆盖和缺口说清",
-    searchAliases: ["准备投递增量", "每个来源到哪天", "ChatGPT两个账号", "Gemini快照", "full incremental 区别", "缺哪个月", "订单导入", "来源覆盖"],
+    title: "按来源实例手动增量，再把偏好语义闭合",
+    searchAliases: ["准备投递增量", "材料保存不等于偏好增量完成", "ingest完成以后还要做什么", "Steam多账号统一库", "遗漏了哪些偏好来源", "每个来源到哪天", "ChatGPT两个账号", "Gemini快照", "full incremental 区别", "缺哪个月", "订单导入", "来源覆盖"],
     searchProjection: {
-      intents: ["查看来源覆盖", "准备人工增量", "选择full或incremental", "分开账号和快照"],
-      entities: ["source instance", "profile", "artifact", "import run", "coverage", "gap"],
-      relations: ["source instance绑定provider和account alias", "artifact由SHA-256识别", "import run记录mode和health", "coverage与gap共同决定快照修订"],
-      failureRecovery: ["错误扩展名在建库前拒绝", "partial不退出旧current", "incremental不缩覆盖", "完整快照可回到旧artifact"]
+      intents: ["查看来源覆盖", "准备人工增量", "检查来源全景遗漏", "接入Steam多账号库和商店分类", "选择full或incremental", "分开账号和快照"],
+      entities: ["source instance", "profile", "artifact", "import run", "source gap detail", "Steam AppID", "coverage", "gap"],
+      relations: ["source instance绑定provider和account alias", "artifact由SHA-256识别", "Steam库和商店按AppID精确关联", "import run记录mode和health", "coverage与gap共同决定快照修订", "未接入来源绑定availability和evidence"],
+      failureRecovery: ["错误扩展名在建库前拒绝", "partial不退出旧current", "Steam历史取得方式保持Unknown", "parser清单漏来源时回到领域盘点", "incremental不缩覆盖", "完整快照可回到旧artifact"]
     },
-    teaser: "用户说准备补数据以后，系统先做不扫描、不导入、不改业务数据的状态答复；不同账号、不同快照和不同缺口从不合并成一句‘已经全了’。",
-    status: "11 个来源实例；9 个来源已取得核对、2 个只有快照；10 个非人工来源已迁移到 v0.6，最近导入没有失败",
+    teaser: "用户说准备补数据以后，系统先做不扫描、不导入、不改业务数据的状态答复；材料到齐后也不能停在保全或 ingest，而要继续判断偏好变化、重建快照并用普通问题回验。",
+    status: "13 个来源实例：9 acquired_verified、4 snapshot_only；12 个非人工来源为 v0.6，最近导入 10 success、1 partial、1 no_change，当前 gap 为 1",
     statusTone: "mixed",
     value: "知道每个来源真实到哪里、缺什么、该准备什么和怎样补，不靠模糊的‘最近同步过’做决定。",
     why: "把不同账号或补包混在一起，会让覆盖日期、缺口和去重身份失真；默认 full 更可能把未随补包提供的旧记录误判为消失。",
-    example: "用户说准备投递增量。status 分别列 ChatGPT 两个账号、Gemini 两个快照、订单、支付、信用卡与滴滴，并给每个实例的材料、截止、缺口、重叠起点和模式；现在不扫描或写入。",
-    result: "准备阶段得到逐来源的清单和缺口，不发生接入；用户提供材料后才 ingest。实际接入回执列 completed/no_change/partial/failed、文件与记录计数、gaps、退出旧记录和失效推定数量。普通补包默认 incremental，完整权威快照才显式 full；失效旧推定不等于已生成新推定或推荐。",
+    example: "用户说准备投递增量。status 分别列人工表达、订单、支付、信用卡、滴滴、两个 ChatGPT、两个 Gemini、Steam 统一库与商店分类，并给每个实例的材料、截止、缺口、重叠起点和模式；再单列 12 项未接入来源及 availability/evidence。现在不扫描或写入。",
+    result: "准备阶段得到逐来源清单和缺口，不发生接入；用户提供材料后才 ingest。Python 回执列技术接入状态与计数，随后 Skill/AI 继续判断偏好新增、增强、减弱或未知，重建仍有充分证据的快照并用普通问题回验；若语义无变化也明确报告。普通补包默认 incremental，完整权威快照才显式 full。",
     readerStates: {
-      pass: "完成本轮接入返回 completed；复用同版本制品且符合无变化条件时返回 no_change。两者都要看 counts、gaps 和 invalidated_snapshots；no_change 仍可记录导入与刷新缓存，不等于零写入，也不表示推荐菜单已经更新。",
-      problem: "有解析缺口且取得部分记录时返回 partial，没有取得记录则为 failed；回执保留已处理计数和具体 gaps。部分有效记录仍可能入库并使旧推定失效，只是不因不完整 full 把本次缺失的旧 current 退出。",
+      pass: "完成本轮 ingest 返回 completed；复用同版本制品时可返回 no_change。偏好增量只有在覆盖/缺口、语义变化、快照重建和普通问题回验闭合，或明确证明语义无变化后才完成；技术回执本身不等于推荐已经更新。",
+      problem: "有解析缺口且取得部分记录时返回 partial，没有取得记录则为 failed；回执保留已处理计数和具体 gaps。部分有效记录仍可能入库并使旧推定失效，不能把材料已保存、部分导入或缓存已写成偏好增量完成。",
       unavailable: "格式、来源身份、原件或依赖不成立时在相应阶段停止，不换来源或扫描其他目录。数据库已提交、随后 CURRENT 刷新失败时，接入状态可能已经保存，须先核对而非重导；不能一律说旧状态完全没变。"
     },
     stateLabels: ["完成或无新记录", "部分完成或失败", "入口或缓存不可用"],
     decisionImpact: [
-      "当前 11 个来源实例：9 acquired_verified、2 snapshot_only；另有 5 类逻辑来源尚未取得。",
-      "5 类来源分别是 bank_transactions、jd_orders、pinduoduo_orders、meituan_orders 与 cainiao_logistics；页面直接给出名字，不把‘5 类’留成谜语。",
+      "当前 13 个来源实例：9 acquired_verified、4 snapshot_only；Steam 统一库和商店分类新增为两条 snapshot_only 来源。",
+      "2026-09-04 已完成淘宝、淘宝闪购、支付宝、微信支付与信用卡增量；Steam 两类快照随后接入，来源制品增至 84。信用卡缺月已补齐，当前唯一来源 gap 是 Steam 历史取得方式未知。",
+      "12 项未接入来源分别是 bank_transactions、jd_orders、pinduoduo_orders、meituan_orders、cainiao_logistics、bilibili_activity、browser_activity、youtube_activity、google_play_activity、air_travel_history、rail_travel_history 与 maps_activity。",
+      "每项未接入来源都返回 availability、priority 和 evidence；有历史快照、有限截图、只有个人信息、没有现行数据与未知原件是不同状态，不能统一写成‘没有数据’。",
+      "bank_transactions=no_current_material_confirmed：未核到现行银行交易材料，当前支付偏好已有支付宝、微信支付与信用卡旁证。",
+      "jd_orders=personal_info_only_no_orders：现有材料只有个人信息，没有可消费订单行；不能冒充京东订单已接入。",
+      "pinduoduo_orders 与 meituan_orders=no_current_order_data：当前都未核到可消费订单数据。",
+      "cainiao_logistics=historical_catalog_only：只知道退役来源目录曾记录历史范围，当前独立原件仍未完成定位与核验。",
+      "bilibili_activity、youtube_activity、google_play_activity 与 air_travel_history=archived_snapshot_available：已有可读历史快照，但尚未进入普通偏好查询。",
+      "browser_activity=archived_snapshot_available：历史/书签材料可用，但噪声高，接入前必须先做域过滤与去噪。",
+      "rail_travel_history=limited_screenshot_material：目前只有有限截图，尚未抽取语义字段。",
+      "maps_activity=archived_snapshot_available：地图活动与少量设置可读，但全量历史位置不成立。",
       "普通补包默认 incremental；full 必须显式选择，且有 gap 时不会退出缺失旧 current。",
       "每个 source_id 绑定 logical source、provider 与账号别名，不能换绑。",
       "同制品同版本立即重复为 no_change；A→B→A 会恢复旧权威快照，而不是永久丢失历史版本。",
-      "增量覆盖做 union（并集），无关成功补包不会清掉不可重算 gap；信用卡缺月按 current 月份重新计算，可在补齐后消失。",
+      "增量覆盖做 union（并集），无关成功补包不会清掉不可重算 gap；信用卡缺月按 current 月份重新计算，本轮补齐后已消失。",
       "Didi 目录只选网约车订单 TXT，旁系公交、货运、代驾和个人资料不进入 ride source。",
       "精确输入合同为：淘宝 .xlsx/.blob，淘宝闪购 .xlsx，支付宝 .csv，微信支付 .xlsx，信用卡 .pdf，Didi .txt，ChatGPT/Gemini .zip/.blob；显式文件扩展名不匹配时整体拒绝。",
       "文本按 UTF-8-sig、UTF-16、GB18030 顺序读取；Excel serial 按中国本地时间解释，文件名中的 YYYYMMDD-YYYYMMDD 或 YYYY年M月只在解析成功后补业务覆盖。",
       "最近导入健康与来源已取得状态分开，failed/partial 不会被 acquired_verified 文案掩盖。",
       "接入返回的 counts 含 records、new、updated、duplicate、artifacts 与 artifact_duplicates，另有 exact_links、retired_invalid_records、retired_missing_records 和 invalidated_snapshots；这些数字说明处理和失效，不说明推荐质量。"
+      ,"材料保全与 ingest 只完成事实层；偏好层必须继续区分新增、增强、减弱和 Unknown，重建仍有充分证据的失效快照，再用普通自然问题确认 current 明示、快照和 evidence 可用。"
     ],
     problem: "解决账号混并、覆盖缩短、缺口被无关补包清除、错误 full 误退 current、同制品回滚失败和 unsupported 格式静默成功。",
     implementation: [
-      "9 个 profile 处理淘宝、淘宝闪购/饿了么、支付宝、微信支付、信用卡、Didi 网约车、ChatGPT、Gemini JSON 和 Gemini HTML。",
+      "11 个 profile 处理淘宝、淘宝闪购/饿了么、支付宝、微信支付、信用卡、Didi 网约车、ChatGPT、Gemini JSON/HTML、Steam library.jsonl 与 Steam Store JSONL。",
       "PROFILE_EXTENSIONS 明确允许的扩展名与 .blob 容器；read_text 只走 UTF-8-sig→UTF-16→GB18030，最后才以 replacement fallback（替换字符回退）保留可读片段。",
       "parse_time_us 把 Excel serial 当作 +08:00 本地时间，不再先按 UTC 后多加 8 小时；declared_range_from_name 识别紧凑日期范围和中文月份。",
       "artifacts 保存 SHA-256/bytes/MIME；occurrences 保存出现位置；import_runs 保存 parser version、mode、health、计数和 gap。",
@@ -296,24 +334,30 @@ const dailyPreferencesModules = [
       "collect_paths 对显式错误扩展名整体失败；目录只筛支持类型，Didi 再筛当前真实网约车订单导出。",
       "coverage 只接纳成功解析文件的声明范围；incremental 保留旧覆盖和未解决 gap。",
       "status 返回每个来源的覆盖起止、快照时间、gap、材料、推荐 mode、重叠建议和 latest_import。",
+      "status 还把 12 项未接入逻辑来源映射到 source_gap_details，逐项给 availability、priority 与公开安全证据摘要；parser 列表不再冒充来源全集。",
       "ingest 外层结果有 completed/no_change/partial/failed 四态；单文件 import_runs 另用 success/no_change/partial/failed，不应把来源 acquired_verified、单文件 success 与整次 completed 混写。",
-      "接入完成覆盖重算、关联重建和失效推定标记后先提交数据库，再写 CURRENT.md；write_current 失败不会撤销已提交记录，当前也没有自动生成替代推定或推荐。"
+      "接入完成覆盖重算、关联重建和失效推定标记后先提交数据库，再写 CURRENT.md；write_current 失败不会撤销已提交记录，Python 也不会自动生成替代推定或推荐。"
       ,"特定支付方式先用 scrub_payment_method 掩码邮箱、独立 7–19 位数字和括号内末四位；信用卡正文与 Didi 搜索文本使用 scrub_sensitive。普通商品和偏好语义不因此泛化。"
+      ,"偏好增量完成判断由 Skill/AI 读取 ingest、status、current 快照与自然问题证据后给出；它必须明确列出语义变化或无变化，不能把技术接入状态改名成偏好结论。"
     ],
-    flow: ["用户先说准备增量", "status 只读列来源实例，不改业务数据或 SQLite 主文件", "用户提供精确材料", "按 profile 与 source_id 校验", "计算 artifact SHA-256 并解析", "保存 import 与记录版本", "更新 coverage/gap并使受影响推定stale", "提交SQLite后单独刷新CURRENT", "返回接入四态、计数、缺口与失效推定数量"],
+    flow: ["用户先说准备增量", "status 只读列 13 个来源实例与 12 项未接入来源，不改业务数据或 SQLite 主文件", "用户提供精确材料", "按 profile 与 source_id 校验", "计算 artifact SHA-256 并解析", "Steam 以 AppID 合并多账号库并连接商店分类", "保存 import 与记录版本", "更新 coverage/gap并使受影响推定stale", "提交SQLite后单独刷新CURRENT", "返回接入四态、计数与缺口", "判断偏好新增/增强/减弱/未知", "重建仍有充分证据的相关快照", "用普通自然问题回验或明确报告语义无变化"],
     concepts: [
       { term: "source instance（来源实例）", explanation: "一个明确平台/账号/快照的独立来源身份；两个账号永远分别列。" },
       { term: "incremental（增量）", explanation: "普通带重叠补包；只增加或更新看见的记录，不把本次没带来的旧记录退出。" },
       { term: "full（完整快照）", explanation: "已确认是该来源实例完整权威截面时显式使用；有任何解析 gap 就失败关闭。" },
       { term: "gap（缺口）", explanation: "已知材料、月份、解析或覆盖问题；它与来源已取得状态分开。" }
       ,{ term: "profile input contract（来源输入合同）", explanation: "每个 profile 接受的扩展名、容器、文本编码和时间解释；不匹配时失败，不靠猜格式继续。" }
+      ,{ term: "source gap detail（来源缺口明细）", explanation: "尚未接入的逻辑来源、当前材料可用等级、优先级与证据摘要；它不等于 parser 已实现。" }
     ],
-    boundaries: ["不后台同步。", "普通推荐不导入。", "未取得来源只列缺口，不预建解析器。", "窄索引清洗不是全局匿名化，也不修改或覆盖原件。", "Gemini snapshot 不声称连续增量。", "权威空 full 尚无独立平台语义，当前失败关闭。"],
+    boundaries: ["不后台同步。", "普通推荐不导入。", "材料保全或 ingest 成功不等于偏好增量完成。", "未取得来源只列缺口，不预建解析器。", "退役 PersonalOS 只作一次性来源发现线索，不恢复数据库、全景运行时或中央画像。", "Steam 商店当前分类不证明历史取得方式。", "窄索引清洗不是全局匿名化，也不修改或覆盖原件。", "Gemini snapshot 不声称连续增量。", "权威空 full 尚无独立平台语义，当前失败关闭。"],
     failures: [
       { condition: "显式文件扩展名不属于 profile", response: "在数据库连接和任何写入前整体拒绝；合法文件与错误文件混合也不部分执行。" },
       { condition: "解析有缺口", response: "取得部分记录时整次为 partial，没有取得记录时为 failed；保存已处理计数和精确 gap，不回滚已经接纳的有效记录，full 不因缺失项退出旧 current。" },
       { condition: "source_id 换 provider 或 logical source", response: "返回 source identity conflict，保留原身份。" },
       { condition: "同一旧 artifact 重新成为权威", response: "若旧观察已不是 current 就重新解析并激活对应历史版本；连续 no_change 不清空 seen keys。" },
+      { condition: "材料已经保存或 ingest 返回 completed，但尚未判断偏好语义", response: "保持增量未完成；继续核对覆盖/缺口，判断新增、增强、减弱或未知，重建有充分证据的快照并做普通问题回验，或明确证明语义无变化。" },
+      { condition: "来源全景只按已有 parser 列表生成", response: "视为遗漏；按偏好领域检查现有独立原件或明确缺口，退役目录只给一次性发现线索，不把旧系统恢复成依赖。" },
+      { condition: "Steam 本地库已接入但历史取得方式不可验证", response: "保留 steam_historical_acquisition_method_unverified；可继续用实际游玩形成行为证据，但不声称直购、礼物、激活码、限免或家庭共享。" },
       { condition: "数据库提交后 CURRENT 缓存写入失败", response: "记录、覆盖和失效推定可能已经更新；先只读核对该来源本次 import 与数据库，不将异常当成未导入后盲目重试。当前缺少区分已提交/缓存失败的正式回执。" }
       ,{ condition: "Python 三条发现路线均不存在", response: "PowerShell wrapper 明确抛出 Python runtime not found；不伪装成 status、evidence 或 ingest 成功。" }
     ],
@@ -321,28 +365,28 @@ const dailyPreferencesModules = [
       { path: "daily_preferences.py", role: "实现 profile、collect_paths、ingest、coverage、status 与回滚。" },
       { path: "daily-preferences.ps1", role: "实现 PATH→LocalAppData→bundled runtime 的稳定 Windows 入口和明确失败。" },
       { path: "schema.sql", role: "定义来源、制品、导入、记录、观察与 current 约束。" },
-      { path: "tests/test_daily_preferences.py", role: "覆盖默认增量、格式整体拒绝、Didi 防误退、coverage/gap、三连幂等与 A→B→A。" }
+      { path: "tests/test_daily_preferences.py", role: "覆盖默认增量、格式整体拒绝、Didi 防误退、coverage/gap、Steam 多账号合并/游玩过滤/商店关联、三连幂等与 A→B→A。" }
     ],
-    verification: ["在数据库副本重读全部 10 个非人工来源，current 54,283→54,283、missing/extra 0。", "验证 10 个来源 parser version 均为 v0.6，最近导入无 failed/partial。", "连续三次 full 同 artifact 保持 2 个 current；A→B→A 恢复 A。", "用坏文件名声明大日期范围，确认 failed 不扩大 coverage；补正常 incremental 后旧 gap 仍保留。", "补齐信用卡缺月后确认可重算 gap 消失。"],
+    verification: ["2026-09-01 数据副本迁移保持 current 54,283→54,283、missing/extra 0；这是历史迁移层。", "2026-09-04 五类来源增量后又接入 Steam 两类快照，现场回读 current 54,887、总记录 62,022、制品 84、13 个来源实例和来源 gap 1。", "验证 12 个非人工来源 parser version 均为 v0.6；最近导入为 10 success、Steam 本地库 1 partial、Steam Store 1 no_change。", "Steam 本地与商店各 132 条 current、132 条精确关联；商店分类 110 paid、21 free、1 unavailable。", "12 项未接入来源按六类 availability 返回，Steam 已从遗漏清单退出。", "连续三次 full 同 artifact 保持 2 个 current；A→B→A 恢复 A。", "用坏文件名声明大日期范围，确认 failed 不扩大 coverage；补正常 incremental 后旧 gap 仍保留。", "补齐信用卡缺月后确认可重算 gap 消失。"],
     relation: "它向证据查询提供来源身份、current 记录和缺口；只有来源修订真实变化，相关推定才失效。"
   }),
   commonModuleShape({
     slug: "evidence-query",
     shortTitle: "自然问题与最小证据",
     title: "用一句自然问题，只取会改变这次选择的证据",
-    searchAliases: ["我喜欢喝什么的证据", "根据我的偏好怎样取证", "薄快照过期", "最小证据", "为什么订单比聊天靠前", "自然问题怎么搜索"],
+    searchAliases: ["我喜欢喝什么的证据", "我玩过哪些Steam游戏", "Steam游戏不要混入应用", "根据我的偏好怎样取证", "薄快照过期", "最小证据", "为什么订单比聊天靠前", "很久没买是不是不喜欢", "旧记录会自动过期吗", "自然问题怎么搜索"],
     searchProjection: {
-      intents: ["按自然问题查偏好证据", "分开吃和喝", "过滤无关AI对话", "召回较老中文记录"],
-      entities: ["query", "domain", "axis", "current statements", "current snapshots", "evidence role"],
-      relations: ["query识别domain和axis", "domain选择logical sources", "source weight与term match排序", "current context按domain过滤"],
-      failureRecovery: ["快照缺失继续证据查询", "无匹配保留Unknown", "扩展域只用明示/通用证据", "只读连接不修改数据库"]
+      intents: ["按自然问题查偏好证据", "分开吃和喝", "只取实际玩过的Steam游戏", "过滤无关AI对话", "召回较老中文记录"],
+      entities: ["query", "domain", "axis", "current statements", "current snapshots", "game observation", "store price class", "evidence role"],
+      relations: ["query识别domain和axis", "domain选择logical sources", "Steam游戏按AppID连接商店分类", "source weight与term match排序", "current context按domain过滤"],
+      failureRecovery: ["快照缺失继续证据查询", "Steam未玩和应用不进入游戏结果", "历史取得方式保持Unknown", "无匹配保留Unknown", "扩展域只用明示/通用证据", "只读连接不修改数据库"]
     },
-    teaser: "普通推荐不需要把 61,388 条记录塞进上下文；先用 current 快照，再只取与这次问题有关的明示、推定和行为事实。",
-    status: "真实 54,283 个 current 记录上观察约 1.2–1.5 秒（不是 SLO）；中文不再截断最近 1,000 条，AI 对话只保留本人现实偏好候选",
+    teaser: "普通推荐不需要把 62,022 条记录塞进上下文；先用 current 快照，再只取与这次问题有关的明示、推定和行为事实。",
+    status: "真实 54,887 个 current 记录上，购物 evidence 约 1.1 秒且非成功订单为 0；Steam 游戏查询返回 12 个实际玩过的游戏，应用和未玩项目均为 0",
     statusTone: "pass",
     value: "让 AI 看见足够的连续性，而不是被整库订单、付款和聊天淹没。",
     why: "只看 top hits 会漏掉吃/喝、复购/新类别等不同轴；无条件返回全部 current 语句又会把技术取舍、增量说明和购物偏好塞进晚餐问题。",
-    example: "“今晚吃什么”识别 food 域，返回 food 与真正跨请求的 current 上下文、有效 food 推定和订单事实；shopping/payment 特定 current 不进入本轮。",
+    example: "“我玩过哪些 Steam 游戏”识别 entertainment 域，只取有实际游玩时长的 game/demo；同 AppID 连接当前商店分类。仅在库中、仅安装、未玩项目和 application 不进入游戏结果，账号引用也不出现在可读文本。",
     result: "得到有范围的 evidence JSON：查询词、相关明示、有效推定、带角色的候选、时间、重复次数和 locator；AI 再判断事实与推测。",
     readerStates: {
       pass: "识别到专门域时按域选来源和 current 上下文，相关旧中文具体记录仍可召回；数据库字节不变。",
@@ -351,69 +395,81 @@ const dailyPreferencesModules = [
     },
     stateLabels: ["已取得相关证据", "覆盖仍有边界", "证据入口不可用"],
     decisionImpact: [
-      "food、shopping、payment、ride 有专门词、来源与权重；beverage 另有吃喝分轴。",
-      "travel、stay、entertainment、digital、service、tool、aesthetic 已能识别并用明示/通用证据，但没有同等专门 parser。",
+      "food、shopping、payment、ride 与 Steam entertainment 有专门词、来源与权重；beverage 另有吃喝分轴。",
+      "Steam entertainment/digital 会读取 steam_games；普通游戏查询只保留 record_type 以 _played 结尾的 game/demo，application 与未玩观察退出。",
+      "travel、stay、其他 entertainment/digital、service、tool、aesthetic 已能识别并用明示/通用证据或明确缺口，但没有同等专门 parser。",
       "current statements/snapshots 按查询域过滤；无域问题才保留全量 current 上下文。",
       "ai_assistant_locator 与 Gemini mixed_activity 不参与 evidence。",
       "AI 用户消息只有通过本人现实偏好候选规则才标 user_expression；假设、替他人和普通疑问过滤。",
+      "淘宝和淘宝闪购/饿了么的退款、关闭、取消与失败订单在 evidence 阶段直接排除，不参与普通偏好上下文或 repeat_count；facts 仍能回读其负状态交易事实。",
+      "recency（近期程度）只在来源、语义和状态相当时增加最多 1 分；六年前的有效单次成功记录仍可返回，未被更正的 current 明示也不会因时间自动过期。",
+      "次数少、长期未买或没有记录只表示证据较弱或 Unknown；只有本人当前明确拒绝、纠正或其他直接反证才能形成负向偏好。",
       "中文查询扫描完整相关来源，>1,000 条之后的旧精确命中不会消失；当前实测仍低于 2 秒。",
-      "真实订单权重高于长 AI 文本，每类来源仍有结果上限。"
+      "真实订单权重高于长 AI 文本；Steam 实际游玩按来源权重、近期程度和 log10(playtime_minutes+1) 加分，娱乐域最多返回 12 条 Steam 事实。"
     ],
     problem: "解决上下文膨胀、无关 current 污染、中文旧记录漏召回、AI 疑问误标表达和宽泛 top hits 冒充完整偏好。",
     implementation: [
       "query_terms 从自然问题抽取中文片段/ASCII 词并补专门域词；扩展域没有词表时安全返回空补充而不崩溃。",
-      "query_domains 识别 11 个当前域；relevant_logical_sources 只选择需要的来源类型。",
+      "query_domains 识别 11 个当前域；Steam/游戏进入 entertainment，数字游戏也可进入 digital；relevant_logical_sources 只选择需要的来源类型。",
       "SQLite read-only URI 与 query_only 保证业务表和主文件不被查询修改；busy_timeout 只等待现有锁。只读连接仍可能更新 -shm mtime，因此不宣称严格文件系统零写。",
-      "记录按 term match、source weight、recency、状态和饮料轴加权；结果按来源限额与事实文本去重。",
+      "记录先排除淘宝与淘宝闪购/饿了么全部非成功订单，再按 term match、source weight、recency、状态和饮料轴加权；recency=1/(1+age_days/365)，只加排序分，不设过期门槛。",
+      "Steam 先过滤未玩记录；查询明确写游戏时再排除 application。playtime_minutes 取对数加分，同 AppID 从 steam_store_metadata 补当前 store_price_class。",
       "当前仍保留 FTS5 表，但中文精确召回不依赖最近 1,000 条或向量库。"
     ],
-    flow: ["读取 CURRENT 快路径", "识别自然问题的域和轴", "选择相关来源", "读取 current 明示/有效推定", "扫描并排序相关记录", "过滤无关AI内容和模板", "返回少量证据给 Skill/AI"],
+    flow: ["读取 CURRENT 快路径", "识别自然问题的域和轴", "选择相关来源", "读取 current 明示/有效推定", "扫描并排序相关记录", "过滤非成功订单、无关AI内容和模板", "Steam过滤未玩/应用并连接当前商店分类", "返回少量证据给 Skill/AI"],
     concepts: [
       { term: "domain（领域）", explanation: "本次问题属于吃喝、购物、支付、出行或扩展偏好的哪一类，用来缩小来源与 current 上下文。" },
       { term: "axis（选择轴）", explanation: "同一开放问题里会改变答案的独立方向，例如美食中的吃与喝。" },
       { term: "query-scoped context（按问题限定的上下文）", explanation: "只返回与当前域有关的明示和推定，再保留少量真正跨领域的交互原则。" }
+      ,{ term: "game observation（游戏行为观察）", explanation: "Steam 有实际游玩时长的 game/demo 记录；游玩强度可参与排序，但不自动证明喜欢或历史取得方式。" }
     ],
-    boundaries: ["不是向量检索或通用语义模型。", "命中顺序不自动等于喜欢强度。", "扩展域覆盖不与四个专门域等同。", "Gemini 当前不参与推荐证据。", "没有命中保持 Unknown，不造人格标签。"],
+    boundaries: ["不是向量检索或通用语义模型。", "命中顺序、游玩时长和近期程度都不自动等于喜欢强度。", "Steam 未玩项目、应用和账号引用不进入普通游戏上下文。", "当前商店分类不证明历史取得方式。", "非成功订单不进入普通偏好 evidence、模型上下文或复购计数。", "时间只排序，不让久远有效记录或未更正明示自动过期。", "低频、长期未买和没有记录都不等于不喜欢。", "扩展域覆盖不与专门域等同。", "Gemini 当前不参与推荐证据。", "没有命中保持 Unknown，不造人格标签。"],
     failures: [
       { condition: "扩展域没有 DOMAIN_TERMS", response: "使用空补充词而不是 KeyError；仍返回该域明示/通用证据。" },
       { condition: "AI 消息是疑问、假设或替他人询问", response: "不标 user_expression，也不进入当前候选。" },
+      { condition: "订单状态表示退款、关闭、取消或失败", response: "保留记录供事实核对，但从普通偏好 evidence、模型上下文与 repeat_count 排除，不反推喜欢或不喜欢。" },
+      { condition: "记录很久、次数少或本轮没有命中", response: "降低或缺少排序证据，但保留有效成功记录与未更正明示；没有直接反证时保持 Unknown，不自动写成不喜欢。" },
+      { condition: "Steam 项目只有观察/安装、没有实际游玩，或内容类型是应用", response: "不进入普通 Steam 游戏偏好结果；仍可留在事实层，不反推喜欢或不喜欢。" },
+      { condition: "Steam 商店当前分类存在但历史取得方式不明", response: "返回当前 store_price_class，同时保持历史 acquisition Unknown，不猜直购、礼物、激活码、限免或家庭共享。" },
       { condition: "相关中文记录早于最近 1,000 条", response: "完整扫描相关来源并按命中排序；不以截断冒充无证据。" },
       { condition: "数据库不可读", response: "只报告入口不可用，不修改数据库或改走中央画像。" }
     ],
     sources: [
       { path: "daily_preferences.py", role: "实现 query terms/domains/axis、只读检索、上下文过滤、排序和证据输出。" },
-      { path: "tests/test_daily_preferences.py", role: "覆盖真实订单优先、ASCII、中文 >1000、扩展域与 AI 本人表达过滤。" },
+      { path: "tests/test_daily_preferences.py", role: "覆盖真实订单优先、非成功证据排除、Steam 多账号/游玩/应用过滤与商店关联、ASCII、中文 >1000、扩展域与 AI 本人表达过滤。" },
       { path: "SKILL.md", role: "拥有开放题补轴、最小证据和最终推荐解释。" }
     ],
-    verification: ["构造 1,001 条较新占位与第 1,002 条旧中文目标，确认旧目标仍返回。", "购物查询同时放本人明确表达与替朋友疑问，只保留前者为 user_expression。", "7 个扩展域自然问题逐一运行 evidence，不崩溃并保持域标识。", "真实库多域查询观察约 1.2–1.5 秒，current 记录与数据库主文件 bytes 在只读前后保持一致；该观察不是 SLO。"],
+    verification: ["构造 1,001 条较新占位与第 1,002 条旧中文目标，确认旧目标仍返回。", "合成同类近期与六年前成功记录，确认近期分数更高、旧记录仍返回且 repeat_count=1；facts 仍为 1 正向/0 负向。", "购物查询同时放本人明确表达与替朋友疑问，只保留前者为 user_expression。", "退款与关闭淘宝夹具在 facts 中返回 2 条负状态事实，在 evidence 中返回 0 条。", "Steam 合成回归合并多账号 AppID，保留实际游玩，过滤未玩项目和 application，并连接商店分类。", "真实 Steam 游戏查询返回 12 条已玩游戏，当前分类 10 paid/2 free，未玩和非游戏均为 0。", "7 个扩展域自然问题逐一运行 evidence，不崩溃并保持域标识。", "本轮真实购物查询约 1.1 秒，返回 10 条证据且非成功订单证据为 0；该观察不是 SLO。"],
     relation: "它消费来源模块的 current 事实，并把最小证据交给具体事实核对或推荐菜单；本模块不生成最终建议。"
   }),
   commonModuleShape({
     slug: "fact-verification",
     shortTitle: "具体事实与原件",
     title: "把买过、付过和真正喜欢分开，再核对具体事实",
-    searchAliases: ["买过就是喜欢吗", "付款会不会重复计算", "为什么说我喜欢这个", "复购次数", "成功关闭订单", "农夫山泉苏打水不是矿泉水", "模板赠品会不会算偏好"],
+    searchAliases: ["买过就是喜欢吗", "付款会不会重复计算", "为什么说我喜欢这个", "复购次数", "退款关闭取消失败算偏好吗", "没有记录是不是不喜欢", "农夫山泉苏打水不是矿泉水", "模板赠品会不会算偏好"],
     searchProjection: {
       intents: ["核对具体商品事实", "区分订单与付款", "统计成功关闭和变体", "有界回看原件"],
       entities: ["facts", "order_observation", "payment_observation", "user_expression", "artifact SHA-256", "locator"],
       relations: ["具体term聚合记录组", "订单repeat_count来自订单", "支付只作旁证", "original先验artifact再返回内容"],
       failureRecovery: ["模板赠品过滤", "原件missing或changed不返旧片段", "ChatGPT核content hash", "非重读类型标缓存片段"]
     },
-    teaser: "项目敢于推测，但不允许把一次购买、一次付款或一句疑问直接写成长期喜欢；具体结论先回到具体商品和记录状态。",
-    status: "facts 可核对 51 条农夫山泉苏打水观察、44 条正向状态、7 条关闭、2023-07—2026-07 与 10 种文本/规格变体",
+    teaser: "项目敢于推测，但不允许把一次购买、一次付款、一次非成功订单或没有记录直接写成长期喜欢/不喜欢；具体结论先回到商品、状态与本人表达。",
+    status: "当前 facts 可核对 52 条农夫山泉苏打水观察、45 条正向状态、7 条非成功状态与 10 种返回文本/规格变体",
     statusTone: "pass",
     value: "给‘为什么适合我’一个能复核的事实基础，同时保留订单状态不等于满意的边界。",
-    why: "商品标题含营销词、赠品和未选口味，支付账单又可能重复同一订单。只看次数会把模板、关闭订单和付款旁证都误算成喜欢。",
-    example: "“农夫山泉苏打天然水/苏打水”按品牌+品类核到 51 条淘宝订单观察，其中 44 条为正向交易状态、7 条关闭，覆盖三年并有 10 种规格变体；再结合用户明确纠正，才形成强推定。",
+    why: "商品标题含营销词、赠品和未选口味，支付账单又可能重复同一订单，退款还可能只是凑单后的撤回。只看次数会把模板、非成功订单和付款旁证都误算成喜欢；反过来，次数少或很久没买也不能自动写成不喜欢。",
+    example: "当前“农夫山泉苏打天然水/苏打水”按品牌+品类核到 52 条淘宝订单观察，其中 45 条为正向交易状态、7 条为非成功状态，并返回 10 种文本/规格变体；这些事实支持高可能推定，但仍不能冒充本人明确说喜欢。",
     result: "得到分证据角色的事实组：匹配、正向/负向、首末时间、文本变体和代表记录；仍然明确哪些事实不能证明满意。",
     readerStates: {
       pass: "具体词命中详细订单与用户现实表达时，返回事实组和时间/状态/变体，必要时在原件 SHA 一致后有界回看。",
-      problem: "只有付款、关闭订单、模板、赠品或疑问时保持旁证/负向/无结论，不升级喜欢。",
+      problem: "只有付款、非成功订单、模板、赠品或疑问时保持旁证、交易负状态或无结论，不升级喜欢；次数少、长期未买或没有记录也不升级成不喜欢。",
       unavailable: "原件缺失、字节变化、内容定位变化或不可读时返回明确状态，text 为空；不继续输出旧缓存冒充原文。"
     },
     stateLabels: ["已核对事实", "证据不能升级", "原件核对不可用"],
     decisionImpact: [
-      "order_observation 只证明买过/点过；repeat_count 只来自详细订单的相同事实文本。",
+      "order_observation 只证明买过/点过；repeat_count 只来自详细订单中相同事实文本的成功记录，退款不计入。",
+      "退款、关闭、取消和失败订单继续出现在 facts 的 matched/negative 状态中，便于核对交易事实；普通 evidence 直接排除，不能反推任何偏好。",
+      "久远成功记录继续计入 facts 与可返回证据；低频、长期未买和没有记录都不是负向事实，只有本人当前拒绝/纠正或其他直接反证才支持负向偏好。",
       "payment_observation 只补支付渠道与消费链，不进入订单重复次数。",
       "user_expression 只有本人现实表达候选才成立，AI 仍做最终语义判断。",
       "淘宝营销前缀、饿了么商家模板、赠品和未选‘三选一’过滤。",
@@ -421,10 +477,11 @@ const dailyPreferencesModules = [
       "公开真实 L2 样例保留具体苏打水语义，不公开商家、金额、账号、路径或原始聊天。",
       "original 先核制品 SHA；ChatGPT 再核消息 content hash，PDF 重新抽取后做窄掩码，其他类型标 verified_artifact_cached_excerpt。"
     ],
-    problem: "解决买过=喜欢、付款=第二次购买、关闭=成功、商品标题泛化、模板/赠品混入和原件漂移后继续输出旧片段。",
+    problem: "解决买过=喜欢、付款=第二次购买、非成功订单=复购、无记录=不喜欢、商品标题泛化、模板/赠品混入和原件漂移后继续输出旧片段。",
     implementation: [
       "preference_fact_text 清理淘宝营销前缀，并从饿了么商品串中筛掉非偏好模板。",
-      "facts 扫描 current 记录，按 evidence role/source 分组，统计匹配、正向、负向、时间和文本变体。",
+      "facts 扫描 current 记录，按 evidence role/source 分组，统计匹配、正向、负向、时间和文本变体；所有非成功订单仍作为负状态交易事实出现。",
+      "evidence 在排序前排除淘宝与淘宝闪购/饿了么的退款、关闭、取消和失败行，repeat_count 只累计 is_positive_observation 为真的订单。",
       "record_links 只在不同来源 correlation_key 完全一致且长度足够时建立 same_consumption_chain。",
       "original 从 records 定位 artifact，先核存在和 SHA-256；ChatGPT 再定位 conversation/node 并核 content SHA。",
       "PDF 重读异常返回 original_unreadable；XLSX/CSV/TXT/Gemini 返回已验真制品的缓存片段。"
@@ -432,41 +489,44 @@ const dailyPreferencesModules = [
     flow: ["先用 evidence 找候选", "确定品牌/品类词", "facts 全量核对具体记录", "分订单/付款/表达角色", "统计状态/时间/变体", "只有细节改变结论时调用 original", "向 AI 返回事实和不能证明项"],
     concepts: [
       { term: "order observation（订单观察）", explanation: "平台记录显示买过或点过；不自动表示喜欢、满意或本人使用。" },
+      { term: "nonpositive observation（非成功观察）", explanation: "退款、关闭、取消或失败订单只说明交易状态；保留于事实层，不进入普通偏好证据、模型上下文、成功复购计数或喜恶推定。" },
       { term: "payment observation（支付旁证）", explanation: "说明支付链或渠道发生过；已有详细订单时不能再当一笔购买。" },
       { term: "artifact verification（制品验真）", explanation: "重新计算原文件 SHA-256，先证明 locator 仍指向导入时同一字节。" }
     ],
-    boundaries: ["正向交易状态不等于满意。", "payment link 当前不自动压制候选，只由 Skill/AI解释旁证。", "variant_count 当前是返回变体数，超过 limit 的总数命名待改。", "不公开 locator、原始对话或财务组合。", "不为一次事实核对扫描新目录。"],
+    boundaries: ["正向交易状态不等于满意。", "非成功交易事实不等于喜欢或不喜欢，也不进入普通偏好 evidence。", "没有记录、次数少或长期未买都不等于不喜欢。", "payment link 当前不自动压制候选，只由 Skill/AI解释旁证。", "variant_count 当前是返回变体数，超过 limit 的总数命名待改。", "不公开 locator、原始对话或财务组合。", "不为一次事实核对扫描新目录。"],
     failures: [
       { condition: "商家模板、赠品或未选项混入", response: "从 preference_fact_text 过滤；没有可用商品时不造事实。" },
+      { condition: "订单退款、关闭、取消或失败", response: "facts 保留 matched/negative 交易事实；普通 evidence、模型上下文和 repeat_count 排除，不能据此生成喜恶推定。" },
+      { condition: "记录久远、低频或没有命中", response: "保留久远有效成功事实；低频或无记录只表示证据较弱/未知，没有直接反证时不生成负向偏好。" },
       { condition: "原件文件不存在", response: "返回 original_missing、text=null，不输出缓存。" },
       { condition: "原件 SHA-256 变化", response: "返回 artifact_changed、text=null；要求重新 ingest。" },
       { condition: "ChatGPT 消息定位或 content hash 变化", response: "返回 record_content_changed，不冒充同一原话。" }
     ],
     sources: [
       { path: "daily_preferences.py", role: "实现事实清理、facts 分组、证据角色、精确链接和 original 验真。" },
-      { path: "tests/test_daily_preferences.py", role: "覆盖具体苏打水语义、模板/赠品、订单/支付角色和原件 missing/changed/valid。" },
+      { path: "tests/test_daily_preferences.py", role: "覆盖具体苏打水语义、模板/赠品、订单/退款/支付角色和原件 missing/changed/valid。" },
       { path: "CURRENT.md", role: "提供当前推定中的公开普通事实摘要；原始正文不进入网页。" }
     ],
-    verification: ["真实 facts 返回 51/44/7、三年范围与 10 个当前返回变体。", "合成淘宝记录验证活动价前缀、量勺和 QQ 糖不会混入苏打水事实。", "合成饿了么记录验证模板和三选一过滤。", "修改/删除已导入 XLSX，original 分别返回 artifact_changed/original_missing 且 text=null。", "有效 ChatGPT ZIP 重新打开并核消息 content hash。"],
+    verification: ["当前真实 facts 返回 52/45/7 与 10 个返回变体；2026-09-01 实现盲验收的 51/44/7 只保留为历史证据。", "合成退款与关闭淘宝记录在 facts 返回 2 条负状态、在 evidence 返回 0 条；真实购物查询返回 10 条且非成功订单证据为 0。", "六年前的单次成功记录仍可返回，facts 为 1 正向/0 负向，证明时间不等于过期或不喜欢。", "合成淘宝记录验证活动价前缀、量勺和 QQ 糖不会混入苏打水事实。", "合成饿了么记录验证模板和三选一过滤。", "修改/删除已导入 XLSX，original 分别返回 artifact_changed/original_missing 且 text=null。", "有效 ChatGPT ZIP 重新打开并核消息 content hash。"],
     relation: "它把证据查询的候选变成可核对事实；推荐模块只能在这个事实边界内解释，不得升级证明力。"
   }),
   commonModuleShape({
     slug: "recommendation-choice",
     shortTitle: "推荐菜单与选择权",
     title: "把历史变成排序和探索，不变成白名单或唯一答案",
-    searchAliases: ["今晚吃什么", "给我熟悉和新鲜的选择", "不要只复述订单", "购物推荐", "旅行住宿推荐", "数字消费与服务工具", "审美偏好", "去哪里搜什么词", "没有比价API还能推荐吗"],
+    searchAliases: ["今晚吃什么", "给我熟悉和新鲜的选择", "不要只复述订单", "根据我玩过的Steam游戏推荐", "Steam免费游戏和付费游戏怎么选", "很久没买还能推荐吗", "没有记录不要猜不喜欢", "购物推荐", "旅行住宿推荐", "数字消费与服务工具", "审美偏好", "去哪里搜什么词", "没有比价API还能推荐吗"],
     searchProjection: {
-      intents: ["生成开放式推荐菜单", "保留新鲜探索", "给平台搜索接力", "用户保留最终决定"],
-      entities: ["熟悉稳妥", "相邻探索", "合理新鲜", "search handoff", "Skill", "AI"],
-      relations: ["历史只排序候选", "相邻项连接已知偏好轴", "新鲜项标推测", "实时信息交给平台搜索"],
-      failureRecovery: ["证据不足标Unknown", "无实时API仍给搜索词", "用户未要求单选不替决定", "项目入口不可用只用本轮明示"]
+      intents: ["生成开放式推荐菜单", "基于实际玩过的Steam游戏探索", "保留新鲜探索", "给平台搜索接力", "用户保留最终决定"],
+      entities: ["熟悉稳妥", "相邻探索", "合理新鲜", "game observation", "store price class", "search handoff", "Skill", "AI"],
+      relations: ["历史只排序候选", "Steam实际游玩连接偏好轴", "当前商店分类帮助选择但不解释历史取得", "相邻项连接已知偏好轴", "新鲜项标推测", "实时信息交给平台搜索"],
+      failureRecovery: ["证据不足标Unknown", "Steam未玩和应用不进入游戏偏好", "历史取得方式保持Unknown", "无实时API仍给搜索词", "用户未要求单选不替决定", "项目入口不可用只用本轮明示"]
     },
     teaser: "真正的个性化不是把旧订单再念一遍：熟悉选择提供稳妥，相邻选择扩展边界，新鲜选择保留好奇心，用户自己决定。",
     status: "三类菜单、搜索接力和选择权由 daily-preferences Skill 与当前 AI 拥有；Python 项目提供事实，不内置推荐模型、比价 API 或下单执行器",
     statusTone: "mixed",
     value: "推荐既有连续性，也不会越用越窄；信息不足时仍交付可执行的搜索下一步。",
-    why: "只从历史挑同款会把数据变成白名单；只给一个综合最优又把用户的场景、好奇心和最终选择权藏在模型里。",
-    example: "购物问题不只列复购品：同时给熟悉补给、基于少维护/可立即使用轴的相邻新品，以及没买过但有合理邻接的新类别；每项说明理由、取舍和搜索词。",
+    why: "只从历史挑同款会把数据变成白名单；把旧记录自动过期或把没记录解释成不喜欢，又会制造假的负向偏好。只给一个综合最优还会把用户的场景、好奇心和最终选择权藏在模型里。",
+    example: "Steam 游戏问题先用 12 个实际玩过的游戏形成熟悉轴，再给玩法/节奏相邻和明确标成推测的新鲜选择；当前免费/付费分类帮助比较眼下成本，但不会把未玩库项目、应用或未知历史取得方式写成偏好。",
     result: "得到一份可以比较的菜单，而不是一句命令：具体内容、熟悉/相邻/推测身份、为什么适合、关键取舍、必要的粗略价格/场景和搜索接力。",
     readerStates: {
       pass: "明示与证据足够时，Skill/AI 生成至少 3 个熟悉、3 个相邻、3 个合理新鲜候选；仍有显著路线时继续列。",
@@ -476,6 +536,9 @@ const dailyPreferencesModules = [
     decisionImpact: [
       "3+3+3 是 Skill/AI 回答结构，不是 Python 代码自动生成的 UI 或算法。",
       "熟悉稳妥来自高把握明示/行为；相邻探索说明与哪些偏好轴相邻；新鲜项允许未出现在来源中但必须标推测。",
+      "退款、关闭、取消和失败订单不进入熟悉或相邻候选的偏好证据，也不能增加复购强度；它们只留在需要核对时可见的交易事实层。",
+      "时间只在其他条件相同时调整候选顺序；久远有效成功记录和未更正明示仍可支撑熟悉/相邻选择，低频或无记录保持 Unknown。",
+      "Steam 熟悉证据只来自实际游玩；四账号按 AppID 合并后仍保留行为强弱，当前 10 paid/2 free 的查询结果只描述商店现状，不证明历史怎样取得。",
       "每个候选比只报名词细一档：具体内容、理由、取舍，以及必要价格、场景或关键词。",
       "没有京东、淘宝、拼多多稳定比价 API 不等于无法建议；最终实时价格与跨平台比较由用户查看。",
       "餐厅优先给候选，再按需求推荐大众点评、淘宝闪购/饿了么或美团中的少量平台。",
@@ -484,8 +547,9 @@ const dailyPreferencesModules = [
     ],
     problem: "解决推荐只复述历史、同款变体凑数量、模型替用户单选、没有实时 API 就停工和平台无差别罗列。",
     implementation: [
-      "Skill 先读 current 快照，按会改变选择的轴调用 evidence/facts，必要时有界 original。",
+      "Skill 先读 current 快照，按会改变选择的轴调用 evidence/facts，必要时有界 original；Python evidence 已排除全部非成功订单，facts 仍保留其交易负状态。",
       "AI 将来源事实、current 明示、推定和 Unknown 分层，再生成三类候选。",
+      "Steam 游戏候选先经过 played-only 与 application 过滤，再把 store_price_class 作为当前选择条件；历史 acquisition 保持 Unknown。",
       "搜索接力按品类选 1–2 个平台与可复制关键词，不遍历所有平台。",
       "Python CLI 不生成候选菜单、不搜索实时价格、不调用模型 API，也不执行下单；ingest 的 completed 和 invalidated_snapshots 只报告证据接入与旧推定失效。",
       "snapshot 保存的是 AI 已明确给定的推定文本及当前证据绑定，不是 Python 自动推导；它同样先提交 SQLite 再写 CURRENT，saved 回执与缓存写入失败须按真实阶段解释。",
@@ -498,10 +562,14 @@ const dailyPreferencesModules = [
       { term: "合理新鲜", explanation: "可能从未出现于历史，但与已知偏好或决策方式有可解释连接，并明确标成推测。" },
       { term: "search handoff（搜索接力）", explanation: "把实时门店、菜单、优惠、库存或价格交给最相关平台，并给用户可复制关键词。" }
     ],
-    boundaries: ["不冒充 Python 推荐算法。", "不承诺实时最低价。", "不替用户下单付款。", "不把历史变成白名单。", "不为扩展域虚构专门来源能力。", "用户未要求单选时保留选择权。"],
+    boundaries: ["不冒充 Python 推荐算法。", "Steam 仅观察/安装/未玩和应用不进入普通游戏偏好，当前商店分类不证明历史取得方式。", "非成功订单不进入普通偏好证据、模型上下文或复购计数。", "久远、低频、长期未买或无记录都不自动等于过期/不喜欢。", "不承诺实时最低价。", "不替用户下单付款。", "不把历史变成白名单。", "不为扩展域虚构专门来源能力。", "用户未要求单选时保留选择权。"],
     failures: [
       { condition: "没有实时平台 API", response: "仍可根据偏好给候选、估计与经验判断，再交付 1–2 个平台和搜索词。" },
       { condition: "证据只能证明买过", response: "候选理由写成行为相邻或待探索，不写成已确认喜欢。" },
+      { condition: "记录显示退款、关闭、取消或失败", response: "不进入候选上下文、复购计数或喜恶推定；只有需要解释交易时才作为负状态事实回读。" },
+      { condition: "偏好很久没出现或来源里没有记录", response: "降低把握或保持 Unknown；不自动写成不喜欢，除非用户当前明确拒绝、纠正或存在其他直接反证。" },
+      { condition: "Steam 项目只在库中、仅安装、未玩或属于应用", response: "不作为普通游戏候选依据；保留事实层，不用库存在性代替实际行为。" },
+      { condition: "只知道 Steam 当前免费/付费", response: "可用于眼下成本比较；历史直购、礼物、激活码、限免或家庭共享继续 Unknown。" },
       { condition: "没有合理新鲜项", response: "继续寻找不同偏好轴或明确本轮证据不足；不能用同款口味变体凑数。" },
       { condition: "用户要求只给一个", response: "在现有候选和取舍上做单选，并说明决定依据；仍不执行购买。" }
     ],
@@ -510,7 +578,7 @@ const dailyPreferencesModules = [
       { path: "daily_preferences.py", role: "提供 current、evidence、facts、status、snapshot 与 original 事实接口。" },
       { path: "AGENTS.md", role: "定义历史只排序、不替用户决定和无中央画像边界。" }
     ],
-    verification: ["实现盲自然请求必须在没有点名 Skill/命令/路径时自行选路，并交付三类菜单而非唯一答案。", "核对每个新鲜项都有邻接依据和推测标签。", "核对搜索接力只给相关平台与可复制词，不冒充最低价。", "核对输出没有写入偏好、扫描来源、下单或付款。"],
+    verification: ["实现盲自然请求必须在没有点名 Skill/命令/路径时自行选路，并交付三类菜单而非唯一答案；2026-09-01 三条旧验收早于 Steam，不冒充其 fresh E2E。", "当前 Steam 普通游戏查询只返回 12 个实际玩过的游戏，10 paid/2 free，未玩和应用为 0。", "核对每个新鲜项都有邻接依据和推测标签。", "核对搜索接力只给相关平台与可复制词，不冒充最低价。", "核对输出没有写入偏好、扫描来源、下单或付款。"],
     relation: "它消费前四个模块的 current、来源、证据和具体事实；输出仍是 AI 协助的选择菜单，用户决定后才可能回到 current-corrections。"
   })
 ];

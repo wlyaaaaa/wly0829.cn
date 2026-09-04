@@ -143,6 +143,7 @@ export const wechatDirectProject = {
     { name: "accounts.json", responsibility: "保存 primary / secondary 两个隔离槽位的本机来源入口与身份承诺。", implementation: "不保存微信密钥明文；真实文件留在本机并限制 ACL，示例只提供占位结构。" },
     { name: "联系人导出", responsibility: "保存一个对象的可搜索全档、AI 小上下文、结构记录、当前可打开媒体、清单、状态和运行回执。", implementation: "messages.jsonl 是合并事实层；context.md 面向人；ai-context.md 最多 80 条和 128 KiB；当前可打开的语音按 SHA-256 去重复用，其他媒体保留关系与缺口。" },
     { name: "朋友圈导出", responsibility: "保存一个明确账号当前本机可见的朋友圈缓存快照。", implementation: "重复刷新会加入、更新或删除与当前缓存不再一致的条目；状态始终写明 current_local_cache_only。" },
+    { name: "WeChatDirect-private-archive（公开前历史档案）", responsibility: "只保存公开版本形成前的历史与迁移依据；该 PRIVATE 仓库已经归档。", implementation: "它不生产当前读取、具名归档、增量或恢复行为，也不再是现役消费者或独立项目卡。现在这些能力只由 PUBLIC WeChatDirect 负责。" },
     { name: "测试与公开命令合同", responsibility: "验证来源读取、CLI、公开 Doctor/验真、增量、回复、媒体、账号隔离和恢复边界。", implementation: "3 个测试模块当前完成 50 项测试与 2 个子测试；它们使用合成数据，不包含真实聊天正文。" }
   ],
   usageExamples: [
@@ -163,7 +164,7 @@ export const wechatDirectProject = {
     { layer: "Live named-object E2E（具名对象现场验收）", proves: "只有用户点名对象后的真实 context / sync / media / verify 回执，才能证明该次本地可见范围和输出。", doesNotProve: "一个对象成功不能证明全账号或微信远端全历史完整。" }
   ],
   evolution: [
-    { date: "2026-08-30", commit: "7f9488f—7da69ae", result: "发布 PUBLIC v0.1.0，并补齐未知消息缺口、跨分片身份冲突和私聊身份加载性能：本机只读上下文、朋友圈、语音媒体、单对象增量归档、保全、验真和失败关闭形成初始公开基线。" },
+    { date: "2026-08-30", commit: "7f9488f—7da69ae", result: "WeChatDirect-private-archive 已归档为只保留公开前历史与迁移依据的旧库，不再生产现役行为；读取、具名归档与恢复语义转由 PUBLIC WeChatDirect 承接。随后发布 PUBLIC v0.1.0，并补齐未知消息缺口、跨分片身份冲突和私聊身份加载性能：本机只读上下文、朋友圈、语音媒体、单对象增量归档、保全、验真和失败关闭形成初始公开基线。" },
     { date: "2026-09-01", commit: "4883536", result: "修正非语音媒体与崩溃恢复的公开边界，并让联系人无变化快速路径在返回成功前重验 manifest 自哈希、manifest/state 绑定、档案文件哈希/大小和记录数。" }
   ],
   operationalEntrypoints: [

@@ -14,7 +14,7 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - `config/final-project-order.json` is the sole authority for the fixed
-  one-through-thirty-six total-value ranking, the next project to build and the
+  one-through-thirty-five total-value ranking, the next project to build and the
   status of non-card explanations. `config/panel-projects.json` contains only
   enabled, published project packages; every enabled package must use the same
   fixed rank as its `order`. The current published and planned counts, exact
@@ -351,7 +351,7 @@ read-only operating panel; public presentation is secondary.
 - The owner accepted the four-project public MVP on 2026-08-30 and later
   completed twenty-two project pages in a historical construction sequence.
   Historical construction numbers are no longer display ranks. The fixed
-  thirty-six-project value order in `config/final-project-order.json` is now
+  thirty-five-project value order in `config/final-project-order.json` is now
   authoritative; the current twenty-two published packages remain enabled at
   their fixed, possibly non-contiguous ranks, alongside the one-page Rules
   workbench and current public-safe Skills catalog.
@@ -571,26 +571,64 @@ read-only operating panel; public presentation is secondary.
 - Do not add a daemon, watcher, scheduled task, polling service or public live
   dependency merely to keep the panel current.
 - Cross-project refresh is event-driven and thresholded. A matching changed path
-  is only an impact candidate; create a fresh independent website task only when
-  the source task has determined that a displayed fact, explanation, boundary,
-  maturity or user decision would otherwise become materially wrong. Small
+  is only an impact candidate; route website work only when the source task has
+  determined that a displayed fact, explanation, boundary, maturity or user
+  decision would otherwise become materially wrong. If one active website
+  release Owner already exists, send that Owner one bounded follow-up with the
+  newer source read-back and merge the delta into its pending release; only when
+  no active website release Owner exists may the source create one fresh
+  independent projectless website task. Small
   refactors, timestamps, formatting, blocked candidates and hash-only drift may
   wait for the next material refresh.
+- Each source event resolves to exactly one corresponding registered snapshot
+  plus only the directly derived Project, Rules, Skills or System surfaces that
+  would otherwise become wrong. It must not enumerate unrelated projects, run
+  `refresh:ai -- --all` or turn the event into the scheduled whole-site review.
+- Bind each accepted source delta to source identity, published read-back commit,
+  changed paths, observation time and active generation. Reuse evidence only
+  while its source inputs, E identity, Registry revision and owned surface still
+  match. A descendant commit for the same source changes evidence rather than
+  responsibility; it replaces only the same-source delta it actually includes.
+- Keep one stable source-snapshot implementation scope and one publication scope.
+  Finish one coherent edit batch and its focused checks before freezing a stable
+  publication batch; then run one final complete test/build/public-content gate
+  and one final browser acceptance. A later material delta stays with the same
+  publisher as the next bounded batch instead of restarting the closing batch.
+- When the same failure class recurs twice without a source, input, code or
+  environment change, diagnose the shared cause before another patch. Run any
+  development or preview server in a controllable background session with a
+  bounded readiness deadline, and stop only its owned process/session on success,
+  failure or timeout; never await it as an ordinary foreground command.
 - An enabled project with `ai_refresh.mode=manual_owner_only` is outside the
   event-driven handoff set. `assess-panel-impact` must always return no website
   task for it, even when paths or commits change and even when a source caller
   claims materiality. It enters a targeted or full refresh only when the owner
   explicitly asks to update it; the refresh plan and result must carry that
   manual-owner-request fact. This rule creates no Skill, watcher or Source hook.
-- The owner has standing-authorized that one necessary fresh website task for
-  registered rule, Skill and project sources. Once the material threshold and
-  duplicate check pass, do not ask again whether a new conversation may be
-  opened. This authorization does not cover non-material changes, duplicate
-  tasks, unregistered sources or broader website work.
-- That handoff follows the active global default and is projectless unless the
-  owner explicitly selected a project. It is asynchronous: a returned task id
-  is the creation receipt, a creation error is reported to the owner, and the
-  source conversation never waits for or polls website-task progress.
+- The owner has standing-authorized one necessary website handoff for registered
+  rule, Skill and project sources: reuse the current active website release Owner
+  when one exists, otherwise create one fresh website task. Once the material
+  threshold, duplicate check and live Owner resolution pass, do not ask again
+  whether the bounded follow-up or new conversation may be sent. This
+  authorization does not cover non-material changes, duplicate tasks,
+  unregistered sources or broader website work.
+- Resolve reuse from the live task list immediately before dispatch. A reusable
+  website publisher must have task status exactly `active` and a current Owner
+  scope covering the `wly0829.cn` publication transaction. Title similarity,
+  recency, an old handoff, a historical binding or the source conversation is
+  insufficient; `notLoaded`, idle, archived, completed, interrupted, failed,
+  unavailable and every other non-active state do not count. The qualifying
+  publisher may have been created by another source or already be refreshing a
+  different registered panel project.
+- An existing-Owner handoff contains only the source identity, formal read-back
+  commit, changed paths, assessor reasons, materiality rationale and affected
+  public surfaces. Delivery acceptance does not prove that Owner read, merged or
+  completed it; the source reports the handoff result and never waits or polls.
+  A failed send must not create a competing website task. When no active Owner
+  exists, creation follows the active global projectless default unless the
+  owner explicitly selected a project; a returned task id is the creation receipt,
+  and a creation error is reported without blind retry.
+- A newly created website task is projectless unless the owner explicitly selected a project.
 - Default is no website change. AI updates a project only when leaving the page
   unchanged would make a displayed capability, boundary, current state, usage
   or user decision materially wrong. Small source updates never trigger a
@@ -636,7 +674,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to every project in the fixed thirty-six-project plan.
+  to every project in the fixed thirty-five-project plan.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

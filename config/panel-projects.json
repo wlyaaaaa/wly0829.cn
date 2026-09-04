@@ -10,12 +10,12 @@
     "non_trigger": "implementation_change_that_does_not_change_any_displayed_fact",
     "website_repo": "wlyaaaaa/wly0829.cn",
     "website_project_type": "projectless",
-    "website_task_rule": "create one asynchronous projectless website task for one material refresh goal; task-id return is the dispatch receipt; never block the source conversation or reuse a completed task",
+    "website_task_rule": "for one material refresh goal, resolve only that source's corresponding registered snapshot and directly derived surfaces; never enumerate unrelated projects or turn the event into an all-project review. Inspect the live task list and reuse only the website publisher whose status is exactly active and whose current Owner scope covers this publication transaction; title, recency, old handoff, historical binding, source conversation, notLoaded, idle, archived, completed, interrupted, failed, unavailable and every other non-active state are insufficient. Send that publisher one bounded delta bound to source identity, published read-back commit, changed paths, observedAt and active generation even when another source created it or it is refreshing another panel snapshot; only when none qualifies create one asynchronous projectless website task. Reuse evidence only while source inputs, E identity, Registry revision and owned surface match; close one coherent edit batch with focused checks, then one final complete gate and controllable background preview per stable publication batch. Follow-up acceptance or task-id return is only the dispatch receipt; never block or poll from the source conversation, reuse a non-active task, or create a competing task after an existing-Owner send failure",
     "full_refresh_rule": "the current website AI task iterates enabled published projects by the final rank projected into registry order; unchanged projects remain byte-identical",
     "fact_collector_boundary": "scripts and providers collect evidence and verify contracts; they never write narrative content or decide materiality",
-    "publication_boundary": "source project publication completes first; website refresh is a separate asynchronous post-publication task and cannot block or roll back the source transaction",
+    "publication_boundary": "source project publication completes first; website refresh is a separate asynchronous post-publication handoff to an existing release Owner or, when none exists, a fresh task. It cannot block or roll back the source transaction",
     "publication_mode": "after the accepted four-project MVP, verified registered refreshes automatically commit, normal-push existing PUBLIC main, wait for Pages and read back the deployed commit unless the owner explicitly holds publication",
-    "task_creation_threshold": "create a website task only when the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
+    "task_creation_threshold": "route work to an active website release Owner, or create a fresh task only when none exists, after the source owner confirms a material displayed fact or explanation would become wrong; path matches alone are candidates",
     "small_change_policy": "do not create an asynchronous task for formatting, refactors, timestamps, hash-only drift, blocked candidates already shown accurately, or other changes that do not alter a user decision",
     "default_change_policy": "no website change unless the existing page would make a material user judgment wrong",
     "anti_append_policy": "replace, merge or remove current content in place; never append refresh logs, duplicate sections, cards or timeline entries because a refresh ran",
@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 113,
-    "project_search_index_gzip_budget_kib": 143,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 36-project value plan still renders only 22 published projects and 303 compact search records. Reordering that published subset and refreshing the active E100 explanation changes compression sequence without adding project narratives; shared/all-project search now measures 115515/145898 gzip bytes, so the two lines use the minimum passing integers 113/143 KiB. The sunshine-remote-streaming shard remains bounded and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "search_index_gzip_budget_kib": 115,
+    "project_search_index_gzip_budget_kib": 144,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 35-project value plan still renders only 22 published projects, while one source-backed browser Skill, the material daily-preferences Steam/source-panorama update and active-publisher panel convergence increase the compact search projection from 303 to 304 records. The current shared/all-project search measures 117262/147201 gzip bytes, so the two lines use the minimum passing integers 115/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -82,8 +82,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 13,
-        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E100 Rules plus 29 active Skill intents and 28 displayed Skill entries, mandatory post-publication panel impact closeout, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-implementation guards, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation and fixes exact-turn continuation, while E100 makes anti-bloat validation current-repository scoped and prevents budgets or necessary complexity from becoming product stop gates",
+        "semantic_revision": 15,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E100 Rules plus 29 active Skill intents and 29 displayed Skill entries including browser-control-continuity, mandatory post-publication panel impact closeout that resolves one corresponding snapshot, reuses only a live status=active website publisher whose current Owner scope covers the publication transaction, merges bounded source deltas into one stable publication batch, reuses only matching evidence and keeps preview sessions controllable before creating a fresh projectless task, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-implementation guards, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation and fixes exact-turn continuation, while E100 makes anti-bloat validation current-repository scoped and prevents budgets or necessary complexity from becoming product stop gates",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -104,6 +104,9 @@
         "working_tree_hot_mirror_recovery",
         "active_rules",
         "skills_catalog",
+        "browser_control_continuity",
+        "active_website_release_owner_first_panel_handoff",
+        "corresponding_snapshot_stable_publication_batch",
         "validation_matrix",
         "evolution_and_operating_entries",
         "user_intent_over_implementation",
@@ -172,6 +175,7 @@
             "config/personal-skill-supply.json",
             "skills",
             "skills/**/SKILL.md",
+            "skills/**/scripts/**",
             "plugins",
             "plugins/*/skills/**/SKILL.md",
             "docs/personal-skill-supply-recovery.md"
@@ -1447,12 +1451,12 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 2,
-        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation, per-instance manual source coverage and import health, natural-query scoped evidence, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff; ingest completion states, gaps and invalidated recommendations, with committed data distinct from later cache refresh",
+        "semantic_revision": 3,
+        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation; thirteen per-instance sources, eleven parser profiles, twelve individually classified unconnected logical sources and panorama-gap governance without reviving retired PersonalOS; manual source coverage and import health followed by semantic change assessment, relevant snapshot rebuild and ordinary-query readback; Steam multi-account AppID unification, played-game-only preference evidence, public current store price classification, exact game/store links and unknown historical acquisition; natural-query scoped evidence with all nonpositive orders excluded from preference context and successful repeat counts while retained as negative transaction facts, recency ranking without automatic expiry or absence-as-dislike, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff; ingest completion states, gaps and invalidated recommendations, with committed data distinct from later cache refresh",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
           "read current AGENTS.md, README.md, schema.sql, daily_preferences.py, PowerShell wrapper and source-owned tests; distinguish Python evidence/state behavior from Skill/AI recommendation behavior",
-          "run the source-owned test suite, py_compile, read-only status/evidence/facts performance checks and database integrity/foreign-key checks without copying private payload",
+          "run the source-owned test suite, py_compile, read-only status/evidence/facts performance checks including aggregate nonpositive-evidence, Steam played-game/store-class/link counts, missing-source availability classes, current snapshot-evidence bindings, and database integrity/foreign-key checks without copying private payload",
           "read only public-safe aggregates and owner-selected ordinary L2 examples from the current local snapshot; never publish source ids tied to accounts, raw statements, merchant/amount/time combinations, routes, locators, hashes or original private material",
           "review current implementation-blind natural requests for recommendation, per-source zero-write increment preparation and exact fact separation; preserve what each proves and cannot prove"
         ],
@@ -1470,15 +1474,16 @@
       "displayed_areas": [
         "project_overview_product_principles_current_boundary_and_user_choice",
         "current_historical_statement_timeline_and_correction_invalidation",
-        "eleven_source_instances_manual_increment_coverage_gap_and_import_health",
-        "nine_parser_profiles_v06_record_versioning_and_fail_closed_full_semantics",
-        "natural_query_domain_axis_scoped_context_chinese_recall_and_ai_expression_filtering",
-        "specific_order_payment_expression_fact_roles_and_public_l2_soda_example",
+        "thirteen_source_instances_twelve_unconnected_sources_manual_increment_panorama_gap_import_health_and_semantic_completion",
+        "eleven_parser_profiles_v06_record_versioning_and_fail_closed_full_semantics",
+        "steam_multi_account_appid_unified_library_played_game_evidence_store_price_classes_exact_links_and_unknown_historical_acquisition",
+        "natural_query_domain_axis_scoped_context_chinese_recall_ai_expression_filtering_steam_game_filter_and_recency_without_expiry",
+        "specific_order_nonpositive_payment_expression_fact_roles_absence_unknown_and_public_l2_soda_example",
         "artifact_hash_original_readback_and_cached_excerpt_boundary",
         "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
-        "current_54283_keys_1749_time_corrections_six_rebuilt_snapshots_40_tests",
-        "named_missing_sources_credit_gap_specialized_domain_limits_and_recovery_gaps",
-        "ingest_states_and_post_commit_cache_gap"
+        "current_54887_keys_62022_versions_84_artifacts_19_statements_7_snapshots_61_evidence_43_tests_one_source_gap_and_zero_nonpositive_evidence",
+        "twelve_named_missing_sources_six_availability_classes_specialized_domain_limits_and_recovery_gaps",
+        "ingest_states_post_commit_cache_gap_and_semantic_completion_after_material_preservation"
       ],
       "impact_sources": [
         {
@@ -1507,9 +1512,9 @@
       ],
       "refresh_rules": {
         "semantic_review_required_when": [
-          "a displayed domain boundary, source profile, import mode, current/history rule, evidence role, query scope, fact interpretation, snapshot invalidation, original verification state, recommendation menu, search handoff, failure behavior or recovery gap changes meaning",
+          "a displayed domain boundary, source panorama, source profile, Steam account/library/store relation, played-game filter, current price or historical-acquisition boundary, missing-source availability class, import mode, current/history rule, evidence role, nonpositive-order treatment, recency/expiry/absence semantics, repeat-count semantics, preference-increment completion, query scope, fact interpretation, snapshot invalidation, original verification state, recommendation menu, search handoff, failure behavior or recovery gap changes meaning",
           "a false-PASS path, destructive full-import path, source-identity conflict, coverage/gap drift, stale snapshot error, AI-expression misclassification, Chinese recall truncation or original-drift failure becomes implemented, regresses or changes the user's next action",
-          "a current implementation-blind recommendation, increment-preparation, exact-fact or source-migration acceptance changes what the owner should trust without exposing private payload"
+          "a current implementation-blind recommendation, increment-preparation or semantic completion, temporal-evidence, exact-fact or source-migration acceptance changes what the owner should trust without exposing private payload"
         ],
         "snapshot_only_when": [
           "the clean PRIVATE main commit, parser version, aggregate current/source/snapshot/test count, bounded timing or observation time changes without altering product meaning"

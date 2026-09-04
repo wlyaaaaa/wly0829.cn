@@ -1,8 +1,8 @@
-# 当前网站验收：固定 36 项价值顺序与 Sunshine 远程串流
+# 当前网站验收：固定 35 项价值顺序与 Sunshine 远程串流
 
 ## 结果与范围
 
-当前最终规划固定 36 个独立项目的综合净价值顺序：22 个项目已经发布，14 个项目仍待建设；现有页面使用固定总名次并允许缺号，未建项目没有卡片、路由或占位内容。最高未建项为 `#12 devconfig-backup`，以后只从同一份 `config/final-project-order.json` 选择最低未完成名次，一次完成一个。排序调整沿用现有 Registry（登记表）、React、Vite 与 GitHub Pages 静态生成链，没有新增网站运行时、服务、数据库、守护进程、图片或点击后正文加载。
+当前最终规划固定 35 个独立项目的综合净价值顺序：22 个项目已经发布，13 个项目仍待建设；现有页面使用固定总名次并允许缺号，未建项目没有卡片、路由或占位内容。最高未建项为 `#12 devconfig-backup`，以后只从同一份 `config/final-project-order.json` 选择最低未完成名次，一次完成一个。`md-triple-tactics-talent-solver` 只保留为 System 中的历史 GitHub 总账资产，不是独立项目或未来施工项，也没有项目卡、路由或内容包。排序调整沿用现有 Registry（登记表）、React、Vite 与 GitHub Pages 静态生成链，没有新增网站运行时、服务、数据库、守护进程、图片或点击后正文加载。
 
 Sunshine 远程串流仍保留已验收的完整产品页、五个源项目边界决定的详情模块、专项测试及必要的通用移动端压缩。其历史建设序号不再等于当前价值名次；页面现在只按最终规划中的固定名次显示。
 
@@ -44,10 +44,11 @@ Gemini 的优势应保留：它用“远程端只剩壁纸”“拔掉主屏线�
 ## 网站测试、构建与浏览器
 
 - `npm test`：最终规划、排序投影、页面、搜索与既有项目回归共 138/138，0 失败；Sunshine 专项 12/12。
-- 最终静态构建生成 198 个 HTML 路由和 303 条紧凑搜索记录；PUBLIC gate 扫描在最终提交前再次执行，必须保持 0 finding。
-- 共享 JavaScript gzip 11,596 B（阈值 12 KiB）；共享 CSS gzip 21,164 B（阈值 21 KiB）。
-- 全站紧凑搜索 gzip 115,515 B（阈值 113 KiB）；全部项目模块搜索 145,898 B（阈值 143 KiB）。排序与 E100 说明改变压缩顺序后只把后者提高到最小通过整数，没有复制正文、依赖或新加载层。
+- 最终静态构建生成 199 个完整静态页面和 304 条紧凑搜索记录；PUBLIC gate 扫描 524 个源文件与生产文件，保持 0 finding。
+- 共享 JavaScript gzip 11,592 B（阈值 12 KiB）；共享 CSS gzip 21,195 B（阈值 21 KiB）。
+- 全站紧凑搜索 gzip 117,262 B（阈值 115 KiB）；全部项目模块搜索 147,201 B（阈值 144 KiB）。daily-preferences、浏览连续性与面板发布合并语义增加了真实搜索内容，因此只把两条预算提高到最小通过整数，没有复制正文、依赖或新加载层。
 - Chromium 在 1440、390、320 三档直接打开总览与五个详情，共 18 次均返回 200；页面级横向溢出、console error、page error 与 request failure 均为 0。
+- 本轮最终候选另外在真实 Chromium 390 px 模拟视口直接打开 `/skills/browser-control-continuity/`：页面标题与 H1 均为 `browser-control-continuity`，视口、document 与 body scrollWidth 都是 390，正文和 H1 的 clientWidth/scrollWidth 都是 358/358，标题两行高 70 px；console、page 与 request error 均为 0。对应快照、WeChatDirect、personal-health、System 和项目索引五条直接路由均返回 200，已移除项目没有静态详情路由。
 - 速览、产品、技术三层的鼠标与键盘切换通过；禁用 JavaScript 后总览三层全部展开，五个详情仍有完整静态正文。
 - 320 宽详情页原先要到 y=819.7 才看到模块标题，且面包屑被裁切。通用移动端修复不再重复项目 lead，保留项目身份卡；五个详情标题均提前到 y=564.2，面包屑 `clientWidth=scrollWidth=288`，标题也不再留下单字孤行。
 - 本地 Vite preview（预览服务器）对未知路径会回退首页，不能冒充真实 404；最终 404 必须在 Pages 发布后公网回读。

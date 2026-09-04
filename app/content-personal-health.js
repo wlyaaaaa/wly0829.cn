@@ -162,7 +162,8 @@ export const personalHealthProject = {
     { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时固定 Secret Broker 调用一次，输出有界且不含秘密，超时终止整棵进程树。" },
     { name: "google_health_import.py", responsibility: "从 Google Health API 取回 Fitbit Air 默认范围的记录、profile 与可用 TCX，保全原件并维护可续跑清单；也提供已保全记录的离线窄查。", implementation: "在线分支负责连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；query/summary 分支在构造客户端之前返回，只读精确清单与选中页面，不访问网络或凭据。" },
     { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；本地证据闭合并持久化后消费 pointer，再把结果交给 Health Owner 审阅，不更新 CURRENT.md。" },
-    { name: "google_health_brief.py", responsibility: "把睡眠、步数、活动分钟与已记录运动变成统计、比较和质量说明，并区分可采用、被阻断、仅保全的数据。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；其他字段只读清单元数据。API 与 credential access 均为 false。" }
+    { name: "google_health_brief.py", responsibility: "把睡眠、步数、活动分钟与已记录运动变成统计、比较和质量说明，并区分可采用、被阻断、仅保全的数据。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；其他字段只读清单元数据。API 与 credential access 均为 false。" },
+    { name: "HealthLongevity（早期项目）", responsibility: "只作为早期工程结构与交付经验的历史参考，不再拥有任何写入。", implementation: "现役健康协作由 personal-health 与 Health Owner 承接。网页没有读取 HealthLongevity、CURRENT.md、SOURCES.md、报告或任何健康记录、诊断、数值和私人正文。" }
   ],
   usageExamples: [
     { ask: "医生建议一项重大治疗，但我没听懂为什么一定要做。", effect: "先确认是否紧急，再把医生的依据、适用前提、主要收益和风险、合理替代、暂不处理的后果与复查条件讲清；解释仍不足时，帮助准备独立第二意见。", moduleSlug: "health-owner-boundary" },
@@ -185,7 +186,7 @@ export const personalHealthProject = {
     { layer: "Health Owner（健康资料责任源）+ 当前权威医学指导", proves: "某条合格证据是否与当前问题相关、是否值得局部采用，以及高风险建议是否符合当前权威指导。", doesNotProve: "自动 brief 不能替代人工判断、查体、诊断或处方。" }
   ],
   evolution: [
-    { date: "2026-08-24", commit: "ace3596–a222a85", result: "建立最小现行健康底色、一次性有界设备保全与不落 token 文件的 OAuth enrollment（授权登记）。" },
+    { date: "2026-08-24", commit: "ace3596–a222a85", result: "HealthLongevity 作为早期项目退出写入责任，现役个人健康问答、证据维护与前台设备刷新由 personal-health 承接；本页只说明这条交接，不读取或公开任何个人健康正文。同期建立最小现行健康底色、一次性有界设备保全与不落 token 文件的 OAuth enrollment（授权登记）。" },
     { date: "2026-08-24—08-25", commit: "0f42703–98f514a", result: "把处理后的底色设为普通回答权威入口，补全原始响应保全、离线窄查、分页闭包、预算与精确中断续跑。" },
     { date: "2026-08-25", commit: "50131b3–377cbe9", result: "加入确定性离线 brief、Fitbit tracker family 来源边界、decision-ready 质量门、inventory-only 分流、前台链解耦和 Health Owner 最终审阅。" },
     { date: "2026-08-30—08-31", commit: "48d5a5b", result: "把前台刷新收到的 complete capture 结果纳入失败关闭，并用合成回归覆盖字段收敛、大分页 checkpoint 与选择上限；Owner review、CURRENT 未更新和无后台工作必须同时一致。" }

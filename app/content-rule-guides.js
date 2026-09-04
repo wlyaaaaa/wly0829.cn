@@ -109,7 +109,7 @@ export const ruleGuides = {
           item("秘密有固定 Owner", "SecretRef 走本地 Secret Broker；Vault 和 Key 走独立 Vault 工作流。BitLocker 全量恢复的敏感结果不能进入聊天、stdout、JSON 或剪贴板。"),
           item("人类文档不是动态权威", "README、操作指南和恢复教程必须人话且保持最新，但只有用户明确询问、维护或它是具名验收证据时才读取。"),
           item("Personal Skill 只有一份 source", "Canonical source 位于 E 盘 skills 与 plugins，唯一清单是 personal-skill-supply.json，用户目录只放事务 installer 创建的 junction。"),
-          item("发布后必须回看个人面板", "已登记项目、活动 E Rule 或个人 Skill 完成发布和正式回读后，来源任务必须进入 personal-panel-refresh。路径、commit 和 hash 只定位候选；Source Owner 用产品与技术语义判断页面是否会说错。只有实质变化才异步安排一次独立网站任务，其余 no-op，不阻塞来源发布。", "例如一个新 Skill 已完成 PRIVATE main 回读：来源任务先判断当前 Skills、Rules、项目或 System 是否会遗漏新增能力；只有确实会误导使用时才安排网站 AI 更新。"),
+          item("发布后必须回看个人面板", "来源发布回读后进入 personal-panel-refresh，由 Source Owner 判断页面是否会实质说错。创建前必须从 live task list（实时任务列表）确认网站 publication Owner 的状态精确为 active，且 current Owner scope 覆盖本次发布；标题、recent timestamp、old handoff、historical binding 和 source conversation 都不充分，notLoaded、idle、archived、completed、interrupted、failed、unavailable 及其他 non-active 状态全部排除。", "存在合格 Owner 时只发送一次来源提交、路径、评估原因、实质理由和受影响表面，由它合并到同一最终发布；另一个来源创建它或它正在刷新别的登记项目都不影响复用。没有合格 Owner 才创建 fresh projectless 任务。发送受理不证明已读或完成，失败不另开竞争任务，来源不等待、不轮询。"),
           item("新规则原位升级", "根规则只放跨项目元规则和真实硬边界；专项 SOP 放合同、Skill 或项目；触发 metadata 只在 catalog 维护；字符预算由配置和测试执行。")
         ]
       }
@@ -436,7 +436,7 @@ export const ruleGuides = {
           item("可演化代码的优先级", "内聚、单一事实源、显式接口、确定行为和版本化迁移。没有真实变化轴不建框架。"),
           item("模型和厂商变化用窄 adapter", "Provider config 归 Owner，Consumer 只依赖最小稳定接口，不镜像内部源码和文件清单。"),
           item("路径和 hash 记录要有退出条件", "必须有 Owner、Consumer 和 exit condition，不能永久复制动态事实。"),
-          item("仓库膨胀治理", "活动 HEAD（当前提交）只留现行 source（源码）、contract（合同）、config（配置）和行为回归；计划、复盘和旧设计由 Git 留史。预算只测实现表面，默认只验当前仓库；其他 Owner 的既有超额不阻断当前交付。"),
+          item("仓库膨胀治理", "活动 HEAD（当前提交）只留现行 source（源码）、contract（合同）、config（配置）和行为回归；计划、复盘和旧设计由 Git 留史。预算只测实现表面，Test-RepositoryBloatGovernance 默认只验当前仓库，只有显式 `-AllRepositories` 才跨 Owner 审计；其他仓库既有超额单列交回，不阻断当前交付。"),
           item("Change-surface validation", "验证强度由现实风险和当前 diff 的已知影响面决定；小而已知的改动跑直接语义/合同/预算和生效回读，未知映射、运行时/权限/身份边界或失败漂移自动转标准路径。"),
           item("实现反膨胀按改动规模执行", "大设计审查源码、服务/任务/进程、队列/数据库、状态机、Owner/worktree、用户点击、上下文和墙钟；它不是需求、产品范围、交付、授权或跨仓库强门，普通小改只做轻量判断。"),
           item("长程实质节点独立审查", "实质范围/方案变更、压缩后重规划、同类失败循环及阶段交付前，必须用一路独立子代理审查原意/更正、提议结果、自加目标/流程/假设、现有能力是否足够和可删实现。保留完整用户目标，不把自造验收交给审查者循环证明。"),

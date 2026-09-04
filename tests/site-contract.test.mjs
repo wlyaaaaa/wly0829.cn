@@ -380,7 +380,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to every project in the fixed thirty-six-project plan/);
+  assert.match(projectRules, /applies equally\s+to every project in the fixed thirty-five-project plan/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -530,8 +530,8 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 113);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 143);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 115);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 144);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -669,8 +669,9 @@ test("the maintenance registry drives exactly the twenty-two accepted project pa
   assert.equal(registry.refresh_policy.semantic_writer, "website_ai_task_only");
   assert.match(registry.refresh_policy.semantic_model_policy, /Sol-family.*stronger future native model.*economy routing/i);
   assert.equal(registry.refresh_policy.website_project_type, "projectless");
-  assert.match(registry.refresh_policy.website_task_rule, /asynchronous projectless/);
-  assert.match(registry.refresh_policy.website_task_rule, /task-id return is the dispatch receipt/);
+  assert.match(registry.refresh_policy.website_task_rule, /status is exactly active.*current Owner scope.*only when none qualifies.*asynchronous projectless/s);
+  assert.match(registry.refresh_policy.website_task_rule, /Follow-up acceptance or task-id return is only the dispatch receipt/);
+  assert.match(registry.refresh_policy.website_task_rule, /create a competing task after an existing-Owner send failure/);
   assert.match(registry.refresh_policy.publication_mode, /automatically commit, normal-push existing PUBLIC main/);
   assert.match(registry.refresh_policy.full_refresh_rule, /unchanged projects remain byte-identical/);
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
@@ -2455,31 +2456,59 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   const publicText = JSON.stringify({ project: dailyPreferencesProject, modules: dailyPreferencesModules });
   assert.doesNotMatch(publicText, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "daily-preferences leaks an absolute local locator");
   assert.doesNotMatch(publicText, /chatgpt\.account-|credit\.cmb|wechat-pay\.primary|taobao\.primary|eleme\.primary|didi\.primary/i, "daily-preferences leaks a private source instance");
+  assert.doesNotMatch(publicText, /observed_account_refs|played_account_refs|account-\d+/i, "daily-preferences leaks Steam account references");
   assert.doesNotMatch(publicText, /苏打水是农夫山泉的。并非气泡水|总不能不干净/, "daily-preferences publishes raw private conversation text");
   for (const expected of [
-    /4bcc37c295ba0476d4965eb5cd47244dd4b38654/,
-    /821ee49ae954549f16dd454a5f9ef81c80be7180/,
+    /0b88ce98561f37299f858f83b8d128216bd0c84a/,
+    /90c3c28b2c88ee1facc437379476a80575366980/,
     /daily-preferences\.v0\.6/,
-    /40\/40/,
-    /54,283/,
-    /61,388/,
+    /43\/43/,
+    /19 条.*(?:current )?明示|19 条明示.*current/s,
+    /7 个.*current 推定|7 个 current 推定/s,
+    /61 条.*current.*证据|61 条 current 证据/s,
+    /54,887/,
+    /62,022/,
     /1,749/,
     /841/,
-    /11 个来源实例|11 个来源/,
-    /5 类逻辑来源|5 个未取得来源/,
+    /13 个来源实例|13 个来源/,
+    /12 项.*未接入|12 个未取得来源/,
     /bank_transactions/,
     /jd_orders/,
     /pinduoduo_orders/,
     /meituan_orders/,
     /cainiao_logistics/,
-    /1 个已知缺月|1 个已知.*缺月/,
+    /bilibili_activity/,
+    /browser_activity/,
+    /youtube_activity/,
+    /google_play_activity/,
+    /air_travel_history/,
+    /rail_travel_history/,
+    /maps_activity/,
+    /bank_transactions=no_current_material_confirmed/,
+    /jd_orders=personal_info_only_no_orders/,
+    /pinduoduo_orders.*meituan_orders=no_current_order_data/s,
+    /cainiao_logistics=historical_catalog_only/,
+    /bilibili_activity.*youtube_activity.*google_play_activity.*air_travel_history=archived_snapshot_available/s,
+    /rail_travel_history=limited_screenshot_material/,
+    /来源 gap 为 1|来源 gap 1|当前 gap 为 1/,
+    /Steam.*132.*132.*132/s,
+    /110.*21.*1/s,
+    /12 个.*实际玩过.*10.*付费.*2.*免费.*未玩.*0.*应用.*0/s,
+    /AppID.*多账号|多账号.*AppID/s,
+    /历史取得方式.*(?:Unknown|未知)|(?:Unknown|未知).*历史取得方式/s,
+    /PersonalOS.*一次性.*(?:不恢复|不依赖)/s,
+    /52 条.*45.*7|52\/45\/7/s,
     /51 条.*44.*7|51\/44\/7/s,
-    /10 个非人工来源|10 个来源.*v0\.6/s,
-    /6 个.*推定|6 个.*快照/,
+    /12 个非人工来源|12 个来源.*v0\.6/s,
+    /6 个.*(?:当时|历史|重建).*(?:推定|快照)|重建 6 个推定/s,
     /integrity_check=ok/,
     /外键.*0/,
     /最新.*明示|现在说的优先/,
     /买过不等于喜欢/,
+    /退款.*关闭.*取消.*失败.*(?:不进入|排除).*(?:偏好|模型上下文).*(?:复购|repeat_count)/s,
+    /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s,
+    /低频.*(?:没有记录|无记录).*不.*喜欢/s,
+    /材料.*(?:保全|保存).*ingest.*(?:不等于|不能).*完成.*覆盖.*(?:快照|自然问题)/s,
     /熟悉.*相邻.*新鲜/s,
     /Skill.*AI.*Python|Python.*Skill.*AI/s,
     /不是.*推荐模型|不内置推荐模型/,
@@ -2495,7 +2524,7 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /\.blob/,
     /Excel serial/,
     /YYYYMMDD-YYYYMMDD/,
-    /75 份.*非人工记录层.*CURRENT.*尚存 SQLite/s,
+    /84 份.*非人工记录层.*CURRENT.*尚存 SQLite/s,
     /PDF.*重新抽取.*不是逐字原文/s,
     /Gemini.*mixed_activity|mixed_activity.*Gemini/s,
     /旅行.*住宿.*娱乐.*数字消费.*服务.*工具.*审美/s,
@@ -2522,6 +2551,10 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   const registration = registry.projects.find((item) => item.id === "daily-preferences");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-daily-preferences.js");
+  assert.equal(registration.ai_refresh.semantic_revision, 3);
+  assert.match(registration.ai_refresh.scope, /all nonpositive orders excluded from preference context and successful repeat counts/);
+  assert.match(registration.ai_refresh.scope, /recency ranking without automatic expiry or absence-as-dislike/);
+  assert.match(registration.ai_refresh.scope, /semantic change assessment.*snapshot rebuild.*ordinary-query readback/);
   assert.equal(registration.source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
@@ -2550,9 +2583,13 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   for (const [query, href] of [
     ["我改主意了", "/projects/daily-preferences/current-corrections"],
     ["准备投递增量", "/projects/daily-preferences/source-coverage"],
+    ["材料保存不等于偏好增量完成", "/projects/daily-preferences/source-coverage"],
     ["为什么订单比聊天靠前", "/projects/daily-preferences/evidence-query"],
+    ["很久没买是不是不喜欢", "/projects/daily-preferences/evidence-query"],
+    ["我玩过哪些Steam游戏", "/projects/daily-preferences/evidence-query"],
     ["买过就是喜欢吗", "/projects/daily-preferences/fact-verification"],
-    ["给我熟悉和新鲜的选择", "/projects/daily-preferences/recommendation-choice"]
+    ["给我熟悉和新鲜的选择", "/projects/daily-preferences/recommendation-choice"],
+    ["根据我玩过的Steam游戏推荐", "/projects/daily-preferences/recommendation-choice"]
   ]) assert.equal(searchPanel(query, "project:daily-preferences")[0]?.href, href, `daily-preferences search misroutes: ${query}`);
   const naturalRecommendationResults = searchPanel("吃什么");
   assert.equal(naturalRecommendationResults[0]?.href, "/projects/daily-preferences/recommendation-choice");
@@ -2935,7 +2972,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDailyPreferences.status, "ready_for_ai");
   assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
   assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
-  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 2);
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 3);
   assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
@@ -3237,7 +3274,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 13);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 15);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -3361,8 +3398,8 @@ test("each current rule tells an ordinary reader how it applies without manual i
   assert.match(capabilityRule.example, /未知|不能确认/);
 });
 
-test("the Skills catalog contains the selected usable capabilities in value order", () => {
-  assert.equal(skills.length, 28);
+test("the Skills catalog contains the selected usable capabilities in value order", async () => {
+  assert.equal(skills.length, 29);
   assert.deepEqual(skills.map((item) => item.slug), [
     "personal-media",
     "personal-materials",
@@ -3381,6 +3418,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     "pdf-render-safe",
     "mojibake-doctor",
     "file-intake-router",
+    "browser-control-continuity",
     "media-person-self",
     "local-secret-broker",
     "authorization-file-broker",
@@ -3442,7 +3480,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     assert.ok(skillGuides[item.slug]?.glossary.length >= 3, `${item.slug} lacks term translations`);
     assert.ok(skillGuides[item.slug]?.failures.length >= 2, `${item.slug} lacks failure and recovery rules`);
   }
-  assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 26);
+  assert.equal(skills.filter((item) => item.sourceKind === "personal_install").length, 27);
   assert.equal(skills.filter((item) => item.sourceKind === "host_integrated").length, 2);
   assert.equal(new Set(skills.map((item) => item.slug)).size, skills.length);
   const localOcr = skills.find((item) => item.slug === "localocr");
@@ -3465,9 +3503,27 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(dailyPreferences.sourcePath, "E:\\.agents\\skills\\daily-preferences\\SKILL.md");
   assert.ok(Number.isInteger(dailyPreferences.sourceBytes) && dailyPreferences.sourceBytes > 3000);
   assert.match(dailyPreferences.sourceSha256, /^[a-f0-9]{64}$/);
-  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /逐.*(?:source instance|来源实例).*覆盖截止|覆盖截止.*来源实例/s, /snapshot.*时间|快照时间/i, /full.*incremental/s, /821ee49/, /v0\.6/, /40\/40/, /实现盲/, /54,283/, /1,749/, /11 个来源(?:实例)?/, /5 个未取得/, /熟悉.*相邻.*新鲜/s, /零扫描.*不改业务数据|不改业务数据/, /51.*44.*7/s, /82 条支付/, /2 个消息节点/, /不等于本人已明确说喜欢/]) {
+  assert.doesNotMatch(dailyPreferencesText, /V:\\\\Personal\\\\Projects\\\\daily-preferences|E:\\\\PersonalData\\\\日常偏好/, "daily-preferences Skill publishes a private project or data locator");
+  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /逐.*(?:source instance|来源实例).*覆盖截止|覆盖截止.*来源实例/s, /snapshot.*时间|快照时间/i, /full.*incremental/s, /90c3c28/, /v0\.6/, /43\/43/, /19 条.*7 个.*61 条/s, /退款.*关闭.*取消.*失败.*(?:不进入|排除).*(?:偏好|模型上下文).*(?:复购|repeat count|repeat_count)/s, /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s, /低频.*(?:没有记录|无记录).*不.*喜欢/s, /材料.*(?:保全|保存).*ingest.*(?:不等于|不能).*完成.*覆盖.*(?:快照|自然问题)/s, /Steam.*AppID.*(?:已玩|实际玩)|实际玩.*Steam/s, /未玩.*应用.*不.*(?:混入|进入)/s, /110.*21.*1/s, /12 个.*已玩.*10.*paid.*2.*free/s, /历史取得方式.*Unknown|Unknown.*历史取得方式/s, /12 项未接入|12 个未取得/s, /实现盲/, /54,887/, /62,022/, /84 份制品/, /来源 gap (?:为 )?1/, /13 个来源(?:实例)?/, /熟悉.*相邻.*新鲜/s, /零扫描.*不改业务数据|不改业务数据/, /2026-09-01.*(?:早于|不冒充).*Steam.*fresh/s]) {
     assert.match(dailyPreferencesText, expected, `daily-preferences omits product boundary: ${expected}`);
   }
+  const browserContinuity = skills.find((item) => item.slug === "browser-control-continuity");
+  const browserContinuityText = JSON.stringify({ entry: browserContinuity, guide: skillGuides["browser-control-continuity"], outcome: skillOutcomes["browser-control-continuity"] });
+  assert.equal(browserContinuity.sourcePath, "E:\\.agents\\skills\\browser-control-continuity\\SKILL.md");
+  assert.equal(browserContinuity.sourceBytes, 6276);
+  assert.equal(browserContinuity.sourceSha256, "43efbbb0f8e05d5c7d90d567bc57bd62f53ea0bc13406e7f388ff9a2d0c7d283");
+  for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /browser-service\.mjs.*browser-accessibility\.wasm\.br.*zxing_reader\.wasm/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复.*用户可见 E2E.*退休条件/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /0cfef9e/, /6922fd8/, /29 个 active install intent/, /41\/41/]) {
+    assert.match(browserContinuityText, expected, `browser-control-continuity omits durable behavior: ${expected}`);
+  }
+  assert.deepEqual(skillProjectLinks["browser-control-continuity"], [{ relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 浏览器连续性能力" }]);
+  const browserFamily = systemSkillFamilies.find((family) => family.id === "continue-browser-work");
+  assert.deepEqual(browserFamily?.members.map((item) => item.slug), ["browser-control-continuity"]);
+  assert.equal(searchPanel("浏览器上传到100%为什么还没成功", "skills")[0]?.title, "browser-control-continuity");
+  assert.equal(searchPanel("Codex 更新后浏览控制断了，保留旧标签页继续", "skills")[0]?.title, "browser-control-continuity");
+  const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
+  assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.skill-document h1\s*\{[\s\S]*?max-width:\s*100%;[\s\S]*?overflow-wrap:\s*anywhere;[\s\S]*?word-break:\s*break-all;[\s\S]*?text-wrap:\s*wrap;/, "long Skill names can overflow the mobile viewport");
+  const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
+  assert.match(pageSource, /item\.name\.split\("-"\)[\s\S]*?<wbr \/>/, "hyphenated Skill names lack explicit mobile break opportunities");
   assert.doesNotMatch(JSON.stringify(skills), /codex-local-remote-control/);
   for (const item of skills.filter((entry) => Object.hasOwn(entry, "sourceBytes") || Object.hasOwn(entry, "sourceSha256"))) {
     assert.ok(Number.isInteger(item.sourceBytes) && item.sourceBytes > 0, item.slug + ".sourceBytes is invalid");
@@ -4080,11 +4136,12 @@ test("E100 panel preserves user intent while keeping anti-bloat scoped to implem
     "自造复杂度失败先删层",
     "预算只测当前仓库的实现表面",
     "默认只验当前仓库",
+    "-AllRepositories",
     "没有等价小实现时接受必要复杂度",
     "按实测净增量调整基线"
   ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 minimum architecture semantics omit: ${expected}`);
-  for (const expected of ["发布后必须回看个人面板", "personal-panel-refresh", "Source Owner 用产品与技术语义判断", "只有实质变化才异步安排一次独立网站任务"]) {
-    assert.ok(ruleGuideSource.includes(expected), `E98 panel closeout semantics omit: ${expected}`);
+  for (const expected of [/发布后必须回看个人面板/, /personal-panel-refresh/, /Source Owner.*页面是否会.*说错/, /live task list.*(?:status|状态).*active.*current Owner scope/s, /notLoaded.*idle.*archived.*completed.*interrupted.*failed.*unavailable/s, /合格 Owner.*发送一次.*合并.*同一最终发布/s, /没有合格 Owner.*fresh projectless/s, /发送受理不证明已读或完成/, /失败不另开竞争任务/]) {
+    assert.match(ruleGuideSource, expected, `E100 panel closeout semantics omit: ${expected}`);
   }
   assert.match(`${coreSource}\n${ruleGuideSource}`, /功能、流程、状态.*不能.*反膨胀.*(?:删除|降级)|反膨胀.*不能.*删功能/s);
   assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*(?:完整验收|完整功能|真实质量).*(?:现有入口|现有能力|短路线|最小增量)/s);
@@ -4098,6 +4155,9 @@ test("E100 panel preserves user intent while keeping anti-bloat scoped to implem
     outcome: skillOutcomes["personal-panel-refresh"]
   });
   assert.ok(panelRefresh, "public personal-panel-refresh entry is missing");
+  assert.equal(panelRefresh.sourceBytes, 12037);
+  assert.equal(panelRefresh.sourceSha256, "c5286475e8c1f3e24bacf40a4ba5ff1e1846febf2261b27c6249a28977284e9c");
+  assert.match(panelRefresh.sourceState, /e2cc7e9.*正式回读.*安装/);
   assert.doesNotMatch(
     panelRefreshText,
     /create_thread|threadId|clientThreadId|task_required|handoff|lifecycle|archive|projectless|dispatch-unconfirmed|setup-pending|successor|follow-up|任务 ID|派发回执|派发分类/i,
@@ -4105,20 +4165,37 @@ test("E100 panel preserves user intent while keeping anti-bloat scoped to implem
   );
   for (const expected of [
     /来源项目.*发布.*正式回读/,
-    /只有.*页面.*实质失真.*安排一次.*独立.*网站更新/,
-    /告诉来源.*已经安排.*安排失败/,
+    /页面.*实质失真.*活动网站发布 Owner.*有界增量/s,
+    /状态.*精确.*active.*Owner.*范围.*发布/s,
+    /标题.*更新时间.*(?:不够|不充分)/s,
+    /其他状态.*排除/s,
+    /另一来源.*别的登记(?:项目|快照).*复用/s,
+    /没有.*合格.*Owner.*全新.*网站工作/s,
+    /受理.*不证明.*已读.*完成/s,
     /来源.*立即继续/,
-    /同一次.*不重复安排/,
+    /同一次.*不重复.*(?:发送|安排|派发)/,
     /不等待.*不轮询/,
     /网站负责人.*内容.*构建.*公开检查/,
     /正常推送.*现有 PUBLIC main.*Pages.*公网回读/,
     /产品与技术.*新增.*修改.*退役\/替代.*Unknown/,
     /Project.*Rules.*Skills.*System/,
     /Sol 家族.*更强未来模型/,
-    /安排失败.*不盲目重试/,
+    /发送失败.*不.*竞争.*不盲目重试|失败.*不另开竞争.*不盲目重试/s,
     /新公网目标.*付费.*秘密暴露.*force-push/
   ]) {
     assert.match(panelRefreshText, expected, `public personal-panel-refresh omits stable workflow semantics: ${expected}`);
+  }
+  for (const expected of [
+    /对应快照.*不.*全站复核/s,
+    /来源身份.*回读提交.*改动路径.*观察时间.*活动代际/s,
+    /同源后继提交.*替换.*同源证据.*其他.*来源增量.*保留/s,
+    /来源输入.*E 代际.*Registry revision.*负责表面.*匹配.*复用/s,
+    /同源新提交.*不.*责任范围/s,
+    /稳定发布批次.*一次完整测试.*构建.*公开内容门.*浏览验收/s,
+    /同一失败类别.*重复两次.*共同原因/s,
+    /预览服务.*可控后台.*就绪期限.*关闭.*本任务.*进程|可控预览.*后台会话.*就绪期限.*关闭.*本任务/s
+  ]) {
+    assert.match(panelRefreshText, expected, `public personal-panel-refresh omits e2cc7e9 bounded execution semantics: ${expected}`);
   }
 });
 

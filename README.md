@@ -10,9 +10,9 @@
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-最终规模固定为 36 个独立项目：22 个已经发布，14 个仍待建设。名次是整个项目集合的总价值顺序，不再按历史建设先后压缩编号；所以当前目录允许缺号，未建项目不会提前出现卡片、路由或占位文案。当前最高未建项是 `#12 devconfig-backup`；完成一个项目的来源重建、三层页面、测试、构建、PUBLIC 发布和公网回读后，再由同一份最终顺序选择下一个最低未完成名次。
+最终规模固定为 35 个独立项目：22 个已经发布，13 个仍保持 planned（规划中）。名次是整个项目集合的总价值顺序，不再按历史建设先后压缩编号；所以当前目录允许缺号，未建项目不会提前出现卡片、路由或占位文案。当前最高未建且可施工的是 `#12 devconfig-backup`；完成一个项目的来源重建、三层页面、测试、构建、PUBLIC 发布和公网回读后，再选择下一个最低 planned 名次。`md-triple-tactics-talent-solver` 只保留为 System（系统）里的历史 GitHub 总账资产，不属于独立项目规划，不生成项目卡、路由、内容包或未来施工项。
 
-排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。10 个不单独成卡的关系说明中已有 8 个完成，剩余 2 个只作为现有页面 TODO（待办）维护。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -36,7 +36,7 @@ npm run verify:public
 
 ## AI 快速刷新
 
-网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复安全问题并原位更新内容。小改默认不更新，全量复核也允许全部项目保持字节不变。来源发布造成实质快照漂移时，`personal-panel-refresh` 异步创建一个 projectless 网站任务；任务 ID 是派发成功回执，来源对话不等待。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
+网页正文由 AI 更新。用户只需要说“刷新个人看板里的 PCConfig”或“全部更新一下”；AI 读取 Registry 和真实 Owner、形成独立产品判断、自动修复安全问题并原位更新内容。小改默认不更新，全量复核也允许全部项目保持字节不变。来源发布造成实质快照漂移时，`personal-panel-refresh` 每次只处理这个来源的对应快照与直接表面，不把事件扩成全站复核；它先现场确认网站任务状态精确为 active 且当前 Owner 范围覆盖本次发布，再把绑定来源、提交、路径、观察时间与活动代际的增量并入同一稳定批次。仍匹配的证据才复用，批次稳定后只运行一次最终完整门；预览服务在可控后台会话中限时运行。没有合格活动 Owner 时才异步创建一个新网站任务。受理只证明安排成功，来源对话不等待。网站门通过后自动发布到现有 PUBLIC `main` 并完成 Pages 回读。
 
 AI 内部可先取得定向或全量刷新计划：
 
@@ -85,7 +85,7 @@ npm run impact -- --project agents --path AGENTS.md
 npm run impact -- --project agents --path AGENTS.md --material-change
 ```
 
-路径命中只表示影响候选；只有 Source Owner 确认页面会实质失真并显式传入 `--material-change`，才要求创建新的独立网站任务。
+路径命中只表示影响候选；只有 Source Owner 确认页面会实质失真并显式传入 `--material-change`，才要求路由网站工作。已有活动网站发布 Owner 时合并增量，没有时才创建新的独立 projectless 网站任务。
 
 ## 事实来源
 
@@ -109,4 +109,4 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 只拥有固定 36 项名次、施工顺序和非卡说明待办，不复制模块数、Skill 数或项目快照状态。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 只拥有固定 35 项名次、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。

@@ -75,6 +75,9 @@ export const skillProjectLinks = {
   "file-intake-router": [
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 能力路由" }
   ],
+  "browser-control-continuity": [
+    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 浏览器连续性能力" }
+  ],
   "personal-media": [
     { relation: "owned-by-project", projectSlug: "personal-media", moduleSlug: "search-browse", label: "个人媒体整理与恢复项目" }
   ],

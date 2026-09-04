@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-09-04",
-  "target_project_count": 36,
+  "target_project_count": 35,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -46,8 +46,7 @@
     { "final_rank": 32, "id": "ramdisk-guardian", "title": "RamdiskGuardian", "state": "planned", "source": "wlyaaaaa/RamdiskGuardian" },
     { "final_rank": 33, "id": "rtx5090d-ollama-agent-bundle", "title": "RTX 5090D Ollama Agent Bundle", "state": "planned", "source": "wlyaaaaa/rtx5090d-ollama-agent-bundle" },
     { "final_rank": 34, "id": "cacb", "title": "CACB Agent 能力基准", "state": "published" },
-    { "final_rank": 35, "id": "codex-remote", "title": "Codex Remote", "state": "published" },
-    { "final_rank": 36, "id": "md-triple-tactics-talent-solver", "title": "大师决斗三战之才策略与视频流水线", "state": "planned", "source": "wlyaaaaa/md-triple-tactics-talent-solver" }
+    { "final_rank": 35, "id": "codex-remote", "title": "Codex Remote", "state": "published" }
   ],
   "non_card_explanations": [
     { "id": "website-presentation-infrastructure", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#wly0829-cn" },
@@ -58,8 +57,9 @@
     { "id": "public-project-private-companion", "owner_surface": "system-and-agents", "status": "done" },
     { "id": "private-key-ciphertext-target", "owner_surface": "vault-tool", "status": "done" },
     { "id": "encrypted-alignment-time-capsule", "owner_surface": "system", "status": "done" },
-    { "id": "wechat-pre-public-private-archive", "owner_surface": "wechat-direct", "status": "todo", "requirement": "explain that the private archive preserves pre-public history while the current PUBLIC WeChatDirect owns active behavior" },
-    { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "todo", "requirement": "explain that the early health project no longer owns writes and current health collaboration is handled by personal-health without exposing health records" }
+    { "id": "md-triple-tactics-ledger-asset", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver" },
+    { "id": "wechat-pre-public-private-archive", "owner_surface": "wechat-direct", "status": "done", "evidence": "app/content-wechatdirect.js#evolution" },
+    { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "done", "evidence": "app/content-personal-health.js#evolution" }
   ],
   "private_exclusion_boundary": {
     "excluded_project_count": 4,

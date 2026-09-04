@@ -1864,7 +1864,7 @@ const skillCategoryDefinitions = [
   { id: "understand", label: "理解与转换", slugs: ["chinese-asr", "localocr", "file-intake-router", "media-person-self", "md-to-pdf", "pdf-render-safe", "mojibake-doctor"] },
   { id: "personal", label: "个人事务", slugs: ["personal-health", "daily-preferences"] },
   { id: "deliver", label: "文书与交付", slugs: ["document-materials", "work-delivery", "documents", "pdf"] },
-  { id: "diagnose", label: "电脑与系统", slugs: ["timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
+  { id: "diagnose", label: "电脑与系统", slugs: ["browser-control-continuity", "timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
   { id: "ai", label: "AI 协作", slugs: ["llm-backend-toolkit", "native-economy-routing", "token-budget-advisor"] }
@@ -1917,11 +1917,12 @@ function SkillDetail({ item, search }) {
   const back = "/skills";
   const guide = skillGuides[item.slug];
   const outcome = skillOutcomes[item.slug];
+  const nameParts = item.name.split("-");
   return (
     <div className="page-frame detail-page">
       <article className="standalone-document skill-document">
         <Breadcrumbs items={[{ label: "Skills", href: back }, { label: item.name }]} />
-        <header><p className="section-kicker">{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</p><h1>{item.name}</h1><p className="skill-human-title">{annotateTerms(item.title)}</p><p className="standfirst">{annotateTerms(outcome.value)}</p><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></header>
+        <header><p className="section-kicker">{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</p><h1>{nameParts.map((part, index) => <span key={`${part}-${index}`}>{part}{index < nameParts.length - 1 ? <>-<wbr /></> : null}</span>)}</h1><p className="skill-human-title">{annotateTerms(item.title)}</p><p className="standfirst">{annotateTerms(outcome.value)}</p><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></header>
         <CapabilityLinkBar title="项目与系统关系" items={skillConnectionItems(item.slug)} />
         <section className="skill-outcome">
           <p className="section-kicker">先说人话</p>
