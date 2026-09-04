@@ -5,11 +5,11 @@
 ## 当前内容
 
 - 项目清单：`config/panel-projects.json`
-- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI 协作学习、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找、文书和材料制作、工作交付副驾驶、日常偏好与个性化推荐、个人媒体整理与恢复、LocalOCR、vault-tool、video-scaffold、AI CLI Profile Manager、OpenClawGateway（1–21）
+- 当前项目顺序：`.agents`、PCConfig、GitHub 总索引、ChineseASR、TimeAudit、PC Panel Hub、CACB、AI 协作学习、Codex Remote、个人健康证据与安全决策、WeChatDirect、个人材料查找、文书和材料制作、工作交付副驾驶、日常偏好与个性化推荐、个人媒体整理与恢复、LocalOCR、vault-tool、video-scaffold、AI CLI Profile Manager、OpenClawGateway、Sunshine 远程串流（1–22）
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-单项目、三项目本地版和四项目 PUBLIC MVP 已验收；第 5–20 项也已按本人选择依次完成。当前只建设第 21 项 OpenClawGateway：完整说明 Telegram/飞书入口、Gateway 常驻与心跳、模型成本态势、受控更新、官方备份与只暂存恢复、公开 bootstrap（引导安装）、私人路径分离、CodeG/Cline MCP（模型上下文协议）接入和当前证据边界；不为网页发消息、调用付费模型、更新或重启运行时、激活恢复、安装插件、建设后台服务或创建第 22–25 项占位。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余项目默认 `real_dashboard`。项目仍由 Registry 驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
+单项目、三项目本地版和四项目 PUBLIC MVP 已验收；第 5–22 项也已按本人选择依次完成。第 22 项 Sunshine 远程串流完整说明物理主屏优先与唯一健康 MTT1337 VDD 兜底、窗口拉回、VDD 独立参数、显示与 GPU 稳定边界、传输诊断、码率建议、远程开机取舍、日常巡检，以及源码、测试、配置、服务、对端路径、手机串流、物理故障转移和冷开机之间不能互相代证的边界；其当前捕获目标不一致与未测 E2E 仍作为明确缺口展示。第 23–25 项尚未创建占位。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余项目默认 `real_dashboard`。项目仍由 Registry 驱动，`.agents` 固定 `order=1`，每个项目按真实产品边界决定模块数量。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
 ## 项目模式
 
@@ -65,7 +65,7 @@ npm run verify:ai-refresh -- --bundle <ai-result.json>
 这些项目的全量计划只返回 `manual_owner_request_required`，不会收集证据或创建网站
 任务；只有本人明确要求的网站任务才可携带该标记继续。
 
-当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值以 Registry 的当前实测线为准；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript。本轮二十一项目构建后的实际 gzip 数值记录在 `design-qa.md`，README 不把一次构建数字固化成永久事实。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
+当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值以 Registry 的当前实测线为准；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript。本轮二十二项目构建后的实际 gzip 数值记录在 `design-qa.md`，README 不把一次构建数字固化成永久事实。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
 
 刷新 `.agents` 的活动规则/Skill 结构化证据：
 

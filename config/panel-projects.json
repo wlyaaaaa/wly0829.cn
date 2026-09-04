@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 112,
+    "search_index_gzip_budget_kib": 113,
     "project_search_index_gzip_budget_kib": 142,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete sunshine-remote-streaming addition keeps all 22 projects and 303 compact search records. Its five modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 114640/144795 gzip bytes, so the two lines use the minimum passing integers 112/142 KiB. The sunshine-remote-streaming shard is compact and the existing maximum PCConfig shard is 20556 bytes, still within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete sunshine-remote-streaming addition keeps all 22 projects and 303 compact search records. Its five modules use explicit bounded search projections without copying narrative bodies; after correcting evidence overclaims and adding the current GPU blocker, shared/all-project search measures 115025/145121 gzip bytes, so the two lines use the minimum passing integers 113/142 KiB. The sunshine-remote-streaming shard is 5875 bytes and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1985,7 +1985,7 @@
       "ai_refresh": {
         "content_path": "app/content-sunshine-remote-streaming.js",
         "semantic_revision": 1,
-        "scope": "complete product-first Windows Sunshine and Moonlight remote streaming operations snapshot: physical primary display priority with verified MTT1337 VDD fallback; Win32 window geometry journaling, border tolerance and automatic restoration to physical primary; independent VDD resolution, refresh rate, scaling and HDR profile management without topology mutation or mirroring; decoupling of streaming layer from Tailscale transport layer with end-to-end IPv6 direct P2P connection avoiding overseas DERP relays; restricted cellular uplink bandwidth bitrate budgeting with CBR 18-20 Mbps and AV1 hardware encoding/decoding; remote wake-up trade-offs between WoL and smart plug AC power recovery; idempotent network binding and service repair with daily lightweight path verification scheduled task; strict GPU stability fail-closed gates protecting physical screens and Lian Li HS2 displays",
+        "scope": "complete product-first Windows Sunshine and Moonlight remote streaming operations snapshot: physical primary display priority with verified MTT1337 VDD fallback; Win32 window geometry journaling, border tolerance and conditional restoration to physical primary; independent VDD resolution, refresh rate, scaling and HDR profile management without topology mutation or mirroring; manual emergency headless configuration separated from the normal main-first guard; decoupling of streaming from Tailscale transport with current peer route classified only by live direct or DERP evidence; documented 32 Mbps uplink budgeting and CBR 18-20 Mbps plus AV1 client guidance separated from stream telemetry; remote wake-up design trade-offs separated from unverified physical cold-start acceptance; idempotent network binding and service repair with the installed daily fallback verification task; strict GPU stability fail-closed gates protecting physical screens and Lian Li HS2 displays",
         "collectors": [
           "git -C E:\\Projects\\Tools\\sunshine-remote-streaming status --porcelain=v2 --branch and git rev-parse HEAD",
           "read current AGENTS.md, README.md, failover module, native VDD display adapter, headless config, verify-path and repair scripts before trusting older operational claims",
@@ -2012,13 +2012,14 @@
         "window_geometry_journaling_border_tolerance_and_automatic_pullback_to_physical_main",
         "independent_VDD_2880x1800_HDR_60Hz_150_profile_and_preflight_CDS_TEST_protection",
         "prohibition_of_system_mirroring_and_display_topology_linkage_to_protect_LIAN_LI_and_HS2",
-        "transport_decoupling_with_end_to_end_IPv6_P2P_direct_connection_avoiding_overseas_DERP",
+        "transport_decoupling_with_live_peer_direct_DERP_or_unknown_classification",
         "tailscale_unattended_mode_and_removal_of_fixed_proxy_port_service_environment",
-        "restricted_32Mbps_cellular_uplink_budgeting_with_CBR_18_to_20Mbps_and_AV1_codec",
-        "rejection_of_CQP_variable_bitrate_to_prevent_severe_remote_stutter",
-        "remote_wake_tradeoffs_smart_plug_AC_power_on_vs_wired_2_5GbE_WoL_and_unreliable_Wi_Fi_WoWLAN",
+        "documented_32Mbps_uplink_budget_with_CBR_18_to_20Mbps_and_AV1_client_starting_point",
+        "CQP_vs_CBR_guidance_without_claiming_enforced_client_configuration_or_measured_stability",
+        "remote_wake_design_tradeoffs_smart_plug_AC_power_on_vs_wired_2_5GbE_WoL_and_unreliable_Wi_Fi_WoWLAN_with_physical_acceptance_unknown",
+        "manual_emergency_headless_configuration_with_backup_and_explicit_return_to_main_first_guard",
         "idempotent_repair_stream_and_daily_verify_path_lite_scheduled_task",
-        "current_boot_GPU_instability_fail_closed_gate_blocked_by_gpu_stability",
+        "current_boot_GPU_instability_fail_closed_gate_with_BugCheck_nvlddmkm_and_matching_WER_evidence",
         "source_tests_runtime_observations_service_facts_and_named_unknowns"
       ],
       "impact_sources": [

@@ -598,7 +598,7 @@ function ProjectHero({ entry, module }) {
   return (
     <>
       <Breadcrumbs items={breadcrumbItems} />
-      <section className="project-hero">
+      <section className={`project-hero${module ? " project-hero-module" : ""}`}>
         <div className="project-hero-main">
           <div className="project-hero-copy">
             <p className="section-kicker">{currentProject.kicker || projectKicker(entry.kind)}</p>

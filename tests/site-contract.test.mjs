@@ -222,6 +222,9 @@ test("project hero stays product-first and technical prose wraps on mobile", asy
   assert.match(styleSource, /\.project-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\) minmax\(230px, 300px\);[\s\S]*?align-items:\s*start;/);
   assert.match(styleSource, /\.plain-list li,[\s\S]*?overflow-wrap:\s*anywhere;/);
   assert.match(styleSource, /\.failure-list dt,[\s\S]*?overflow-wrap:\s*anywhere;/);
+  assert.match(pageSource, /project-hero\$\{module \? " project-hero-module" : ""\}/, "direct module routes must expose a compact mobile hero hook");
+  assert.match(styleSource, /\.project-hero-module \.project-lead\s*\{\s*display:\s*none;/, "mobile module routes must not repeat the full project lead before module content");
+  assert.match(styleSource, /\.project-hero-module \.project-entry-card\s*\{[\s\S]*?display:\s*flex;/, "the compact module entry card must retain visible repository status");
 });
 
 test("the project card exposes visible module links instead of a dropdown", async () => {
@@ -376,7 +379,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current twenty-one/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current twenty-two/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -526,7 +529,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 112);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 113);
   assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 142);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
@@ -658,7 +661,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the twenty-one accepted project packages", async () => {
+test("the maintenance registry drives exactly the twenty-two accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");

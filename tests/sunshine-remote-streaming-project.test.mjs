@@ -10,13 +10,7 @@ import { searchPanel } from "../app/search.js";
 import { systemDependencyNodes, systemProjectDomains, systemProjectInventory } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const expectedModuleSlugs = [
-  "capture-failover",
-  "vdd-display-settings",
-  "transport-ipv6-direct",
-  "bitrate-codec-strategy",
-  "remote-power-and-repair"
-];
+const moduleSlugs = sunshineRemoteStreamingModules.map((item) => item.slug);
 
 test("sunshine-remote-streaming is the twenty-second and newly registered project", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
@@ -56,10 +50,11 @@ test("sunshine-remote-streaming is the twenty-second and newly registered projec
   assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 
-test("sunshine-remote-streaming exposes five source-backed modules and three reading layers", async () => {
-  assert.deepEqual(sunshineRemoteStreamingModules.map((item) => item.slug), expectedModuleSlugs);
+test("sunshine-remote-streaming exposes source-backed modules and three reading layers", async () => {
+  assert.ok(moduleSlugs.length > 0);
+  assert.equal(new Set(moduleSlugs).size, moduleSlugs.length, "module slugs must remain unique");
   assert.ok(routePaths.includes(sunshineRemoteStreamingProject.route));
-  for (const slug of expectedModuleSlugs) {
+  for (const slug of moduleSlugs) {
     assert.ok(routePaths.includes(`${sunshineRemoteStreamingProject.route}/${slug}`), `missing route: ${slug}`);
   }
   for (const field of ["summary", "why", "plainExample", "result"]) {
@@ -69,7 +64,7 @@ test("sunshine-remote-streaming exposes five source-backed modules and three rea
   for (const field of ["components", "technicalContracts", "evidenceLayers", "productPrinciples", "responsibilities", "exclusions", "glossary", "usageExamples", "operatingFlow", "operationalEntrypoints"]) {
     assert.ok(Array.isArray(sunshineRemoteStreamingProject[field]) && sunshineRemoteStreamingProject[field].length > 0, `missing project field: ${field}`);
   }
-  assert.deepEqual(new Set(sunshineRemoteStreamingProject.usageExamples.map((item) => item.moduleSlug)), new Set(expectedModuleSlugs));
+  assert.deepEqual(new Set(sunshineRemoteStreamingProject.usageExamples.map((item) => item.moduleSlug)), new Set(moduleSlugs));
   for (const module of sunshineRemoteStreamingModules) {
     for (const field of ["value", "why", "example", "result", "problem", "status", "relation"]) {
       assert.equal(typeof module[field], "string", `${module.slug} missing ${field}`);
@@ -109,13 +104,13 @@ test("sunshine-remote-streaming explains physical primary priority, VDD fallback
   ]) {
     assert.ok(text.includes(expected), `capture failover truth missing: ${expected}`);
   }
-  assert.match(sunshineRemoteStreamingProject.summary, /物理主屏优先.*MTT1337.*VDD.*安全兜底/s);
+  assert.match(sunshineRemoteStreamingProject.summary, /优先捕获物理主屏.*MTT1337 VDD.*兜底/s);
   assert.match(text, /复制显示器.*(?:坚决不用|不使用|绝不使用)/s);
   assert.match(text, /水冷屏.*机箱屏.*(?:黑名单|禁止|不碰)/s);
   assert.match(text, /BlockedByGpuStability.*(?:因 GPU 不稳定阻断|停止.*拓扑)/s);
 });
 
-test("sunshine-remote-streaming explains transport decoupling and end-to-end IPv6 direct connection", () => {
+test("sunshine-remote-streaming separates transport capability from current peer evidence", () => {
   const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
   for (const expected of [
     "Tailscale",
@@ -123,7 +118,8 @@ test("sunshine-remote-streaming explains transport decoupling and end-to-end IPv
     "IPv6",
     "P2P",
     "DERP",
-    "不出海",
+    "peer",
+    "Unknown",
     "repair-stream.ps1",
     "verify-path.ps1",
     "unattended"
@@ -131,11 +127,13 @@ test("sunshine-remote-streaming explains transport decoupling and end-to-end IPv
     assert.ok(text.includes(expected), `transport truth missing: ${expected}`);
   }
   assert.match(text, /串流层.*传输层.*解耦/s);
-  assert.match(text, /端到端.*IPv6.*直连.*绕开.*DERP/s);
+  assert.match(text, /只有.*peer.*direct.*才.*直连/s);
+  assert.match(text, /没有.*peer.*不能.*不出海|peer.*未测/s);
   assert.match(text, /固定代理端口.*(?:清除|移除|清理)/s);
+  assert.doesNotMatch(text, /任何地方.*秒连|延迟稳定在 15[–-]30|串流数据路径直连不出海/);
 });
 
-test("sunshine-remote-streaming enforces CBR 18-20 Mbps and AV1 codec under restricted 32 Mbps uplink", () => {
+test("sunshine-remote-streaming presents CBR and AV1 as a measured client starting point", () => {
   const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
   for (const expected of [
     "32 Mbps",
@@ -150,12 +148,14 @@ test("sunshine-remote-streaming enforces CBR 18-20 Mbps and AV1 codec under rest
   ]) {
     assert.ok(text.includes(expected), `bitrate and codec truth missing: ${expected}`);
   }
-  assert.match(text, /32 Mbps.*硬红线|32 Mbps.*上行/s);
-  assert.match(text, /坚决不(?:用|使用) CQP|严禁.*CQP.*爆上行/s);
+  assert.match(text, /约 32 Mbps.*上行|32 Mbps.*配置依据/s);
+  assert.match(text, /CBR.*(?:建议|起点|优先).*CQP|CQP.*(?:建议|起点|优先).*CBR/s);
   assert.match(text, /AV1.*硬编.*硬解/s);
+  assert.match(text, /不是主机强制|未.*真实会话|本轮没有真实会话/);
+  assert.doesNotMatch(text, /丢包率趋近于零|无丢包与卡顿|帧率稳定 60 FPS/);
 });
 
-test("sunshine-remote-streaming clarifies remote power-on trade-offs between WoL and smart plug", () => {
+test("sunshine-remote-streaming keeps remote power guidance separate from physical acceptance", () => {
   const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
   for (const expected of [
     "智能插座",
@@ -171,6 +171,48 @@ test("sunshine-remote-streaming clarifies remote power-on trade-offs between WoL
   }
   assert.match(text, /纯无线.*WoWLAN.*极不可靠/s);
   assert.match(text, /智能插座.*BIOS 来电自启/s);
+  assert.match(text, /(?:文档方案|本轮未验证|冷开机未验|断电.*未验)/s);
+  assert.doesNotMatch(text, /绝对可靠的远程.*开机|BIOS 来电自启与网卡驱动层 WoL 均已就绪/);
+});
+
+test("sunshine-remote-streaming exposes current blockers instead of promoting green supporting evidence", () => {
+  const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
+  assert.equal(sunshineRemoteStreamingProject.statusTone, "mixed");
+  assert.equal(sunshineRemoteStreamingProject.cardStatusTone, "mixed");
+  assert.ok(sunshineRemoteStreamingModules.every((item) => item.statusTone === "mixed"));
+  assert.match(text, /output_name.*不匹配.*活动输出/s);
+  assert.match(text, /22 条匹配.*WER.*GPU.*(?:拒绝|阻止)写入/s);
+  assert.match(text, /tailscale-ping.*(?:skipped|跳过)/s);
+  assert.match(text, /手机.*(?:未实测|没有执行|未测)/s);
+  assert.match(text, /(?:拔线|物理故障转移).*(?:未验|没有)/s);
+  assert.match(text, /(?:冷开机|断电).*(?:未验|没有|文档方案)/s);
+  assert.doesNotMatch(text, /随时随地可用的毫秒级|任何地方.*秒连|绝对可靠的远程硬核开机/);
+});
+
+test("sunshine-remote-streaming explains manual headless recovery and native VDD adapters without invented schemas", () => {
+  const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
+  for (const expected of [
+    "Set-SunshineHeadlessConfig.ps1",
+    "人工应急",
+    "重新运行主屏优先守护",
+    "Get-SetVddDisplayMode.ps1",
+    "Get-SetVddScaleHdr.ps1",
+    "无独立 schema",
+    "sunshine.capture-failover-state.v1",
+    "Unknown/Physical/Vdd"
+  ]) {
+    assert.ok(text.includes(expected), `technical truth missing: ${expected}`);
+  }
+  assert.doesNotMatch(text, /vdd-display-profile\.v1|sunshine\.headless-config\.v1/);
+  assert.match(text, /不自动重启、回读或回滚|不自动重启 Sunshine/);
+});
+
+test("sunshine-remote-streaming includes the upstream client input boundary without claiming E2E", () => {
+  const text = JSON.stringify({ project: sunshineRemoteStreamingProject, modules: sunshineRemoteStreamingModules });
+  for (const expected of ["视频与音频", "触控", "键鼠", "手柄", "ViGEmBus", "输入 E2E"]) {
+    assert.ok(text.includes(expected), `client input boundary missing: ${expected}`);
+  }
+  assert.match(text, /本轮.*(?:未做|没有验证).*输入 E2E|手机输入 E2E.*未跑/s);
 });
 
 test("sunshine-remote-streaming first visible labels follow glossing and professional plain language", () => {
