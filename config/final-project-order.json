@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-09-04",
-  "target_project_count": 35,
+  "target_project_count": 34,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -10,6 +10,7 @@
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
   "display_rule": "render only published projects at their fixed final_rank; missing ranks remain absent and never create placeholder cards or routes",
+  "rank_retirement_rule": "an owner-removed independent project leaves its original final_rank unused; surviving projects keep their accepted ranks and are never silently renumbered",
   "construction_rule": "build exactly one planned project at a time, always selecting the smallest final_rank still marked planned; complete source-first content, tests, build, publication and public read-back before starting the next",
   "projects": [
     { "final_rank": 1, "id": "personal-media", "title": "个人媒体整理与恢复", "state": "published" },
@@ -26,7 +27,6 @@
     { "final_rank": 12, "id": "devconfig-backup", "title": "DevConfig Backup", "state": "published", "source": "wlyaaaaa/devconfig-backup" },
     { "final_rank": 13, "id": "vault-tool", "title": "vault-tool", "state": "published" },
     { "final_rank": 14, "id": "ai-cli-profile-manager", "title": "AI CLI Profile Manager", "state": "published" },
-    { "final_rank": 15, "id": "scripts", "title": "Windows 常用动作工具集", "state": "planned", "source": "wlyaaaaa/Scripts" },
     { "final_rank": 16, "id": "work-delivery", "title": "工作交付副驾驶", "state": "published" },
     { "final_rank": 17, "id": "daily-preferences", "title": "日常偏好与个性化推荐", "state": "published" },
     { "final_rank": 18, "id": "wechat-direct", "title": "WeChatDirect", "state": "published" },
@@ -59,7 +59,8 @@
     { "id": "encrypted-alignment-time-capsule", "owner_surface": "system", "status": "done" },
     { "id": "md-triple-tactics-ledger-asset", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver" },
     { "id": "wechat-pre-public-private-archive", "owner_surface": "wechat-direct", "status": "done", "evidence": "app/content-wechatdirect.js#evolution" },
-    { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "done", "evidence": "app/content-personal-health.js#evolution" }
+    { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "done", "evidence": "app/content-personal-health.js#evolution" },
+    { "id": "scripts-capabilities-absorbed-by-owning-projects", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#scripts" }
   ],
   "private_exclusion_boundary": {
     "excluded_project_count": 4,

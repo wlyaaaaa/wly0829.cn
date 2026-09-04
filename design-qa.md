@@ -1,8 +1,8 @@
-# 当前网站验收：E101、daily-preferences 与 DevConfig Backup
+# 当前网站验收：E101、daily-preferences、DevConfig Backup 与最终项目规划
 
 ## 结论与范围
 
-当前候选以已发布并回读的 `be722bc` 为事实基底：保留 E101、320px Rules 换行与既有项目，再新增固定 35 项价值顺序中的 `#12 devconfig-backup`，并按活动发布 Owner 收到的精确 handoff 合并 `daily-preferences` v0.9.1 与对应 Skill 增量。最终规划仍是 35 个独立项目；本次完成后为 23 个已发布项目、12 个待建设项目，下一个仍是 `#15 scripts`。没有提前生成下一项目卡片、内容或路由，非项目卡 TODO 仍为 0。
+当前候选以已发布并回读的 `a1af496` 为事实基底：E101、320px Rules 换行、`daily-preferences` v0.9.1、对应 Skill 增量与 `#12 DevConfig Backup` 均已进入 PUBLIC 主线。本批次只落实用户对最终规划的修正：保留 34 个独立项目并继续占用原 1–35 价值槽位，rank 15 永久留空，其余名次不重排；当前为 23 个已发布项目、11 个待建设项目，下一个是 `#19 ProxyClean`。Scripts 的能力由对应项目承接，网站只保留 System 总账事实，不生成独立卡片、路由、内容包、TODO 或未来施工项。非项目卡说明为 12 项 done、0 项 TODO；这里的 done 只表示网站归类闭合，不冒充另一个 Owner 正在执行的底层源码吸收与退役已经完成。
 
 ## 继承的 E101 与 daily-preferences 事实
 
@@ -29,6 +29,7 @@
 - DevConfig 源项目完成并发布；8 个 PowerShell 测试脚本通过，18 个 PowerShell 源文件解析通过。daily-preferences 来源 Owner 与独立审查者回读 73/73 Python、7/7 Node；两个 PRIVATE source main 均 clean 并与 origin/main 一致。
 - E101 snapshot PASS：`.agents source=a3ed133` 且 clean，active release 仍为 `E101/c5684d7`，5 条规则、29 个 displayed Skills 与 29 个 active install intent 一致。个人 Skill 供应现场为 source/install PASS、41/41 事务终态。
 - `npm run build` 与 `npm run test:built` 通过：生成 204 个完整静态页面、308 条紧凑搜索记录；PUBLIC gate 扫描 191 个 source、341 个 dist，共 532 个文件，0 finding；全站 147/147 测试通过。
-- gzip 实测为共享 JavaScript 11,562 B / 12 KiB、共享 CSS 20,943 B / 21 KiB、全站搜索 120,748 B / 118 KiB、项目模块搜索 139,481 B / 144 KiB；没有新增运行依赖、服务、数据库或点击时加载。
+- gzip 实测为共享 JavaScript 11,596 B / 12 KiB、共享 CSS 21,218 B / 21 KiB、全站搜索 120,787 B / 118 KiB、项目模块搜索 139,533 B / 144 KiB；没有新增运行依赖、服务、数据库或点击时加载。
 - 1440、390、320 三档真实浏览器检查 DevConfig 项目目录/Overview/4 模块，以及 daily-preferences Overview/来源/证据/事实模块与 Skill：所有路由 200，document/body 宽度等于视口，H1 未裁切，console/page error 为 0，阅读层与原生项目导航可用。
+- Scripts 规划修正后再次用真实 Chrome 检查项目目录：三档视口均为 23 个项目 Overview 入口、无横向溢出或 H1 裁切，Scripts 与尚未验收的 ProxyClean 均无卡片/路由入口；System 的 Scripts 历史工具来源可见，键盘 Tab 焦点、DevConfig 三层页面、静态 404 文档与浏览器控制台均正常。生成目录也没有 `/projects/scripts/` 或 `/projects/proxyclean/`。
 - DevConfig 独立 source-first 审查修复 5 个 P0 与 6 个 P1 后，最终网页盲读为 P0=0、P1=0；daily-preferences 精确 delta 的 source-first 与纯网页盲读终审均为 P0=0、P1=0、P2=0。盲读者能正确解释全额退款/Unknown、B 站 current set/窗口流、移除不等于不喜欢、3 个 current 与 12 个失效推定，以及 E101 与更晚 source main 的区别。最终 GitHub Pages 与公网回读仍以本批次 normal push 后的 deployment head 为准，本地候选不能替代发布。

@@ -19,37 +19,49 @@ const designQa = await readFile(path.join(projectRoot, "design-qa.md"), "utf8");
 
 test("the final project plan fixes one complete value order without placeholder projects", () => {
   assert.equal(plan.schema, "wly.personal-panel-final-project-order.v1");
-  assert.equal(plan.target_project_count, 35);
+  assert.equal(plan.target_project_count, 34);
   assert.match(plan.ranking_basis, /consensus total net value for a broad rational audience/);
   assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
   assert.match(plan.display_rule, /missing ranks remain absent.*never create placeholder cards or routes/);
+  assert.match(plan.rank_retirement_rule, /owner-removed independent project.*final_rank unused.*never silently renumbered/);
   assert.match(plan.construction_rule, /smallest final_rank still marked planned.*publication and public read-back/);
   assert.doesNotMatch(plan.construction_rule, /construction_hold|held project|removes the hold/);
   assert.equal(plan.ranking_rules.length, 4);
 
-  assert.equal(plan.projects.length, 35);
-  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 35 }, (_, index) => index + 1));
-  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 35);
+  assert.equal(plan.projects.length, 34);
+  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 35 }, (_, index) => index + 1).filter((rank) => rank !== 15));
+  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 34);
 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
   assert.equal(published.length, 23);
-  assert.equal(planned.length, 12);
+  assert.equal(planned.length, 11);
   assert.equal(planned[0].final_rank, Math.min(...planned.map((item) => item.final_rank)));
-  assert.equal(planned[0].final_rank, 15);
+  assert.equal(planned[0].final_rank, 19);
+  assert.equal(planned[0].id, "proxyclean");
   assert.equal(typeof planned[0].source, "string");
-  assert.ok(readme.includes(`#${planned[0].final_rank} ${planned[0].id}`), "README next project drifted from the final plan");
+  assert.ok(readme.includes(`#${planned[0].final_rank} ${planned[0].title}`), "README next project drifted from the final plan");
   assert.equal(plan.projects.some((item) => Object.hasOwn(item, "construction_hold")), false);
   assert.equal(plan.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(registry.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(projectCatalog.some((entry) => entry.registration.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(routePaths.includes("/projects/md-triple-tactics-talent-solver"), false);
   assert.doesNotMatch(generatedIndex, /\/projects\/md-triple-tactics-talent-solver/);
-  assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 35 个独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
+  assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 34 个保留独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, new RegExp(`固定 35 项价值顺序.*35 个独立项目.*${published.length} 个已发布项目.*${planned.length} 个待建设项目`, "s"));
+  assert.match(designQa, new RegExp(`保留 34 个独立项目.*原 1–35 价值槽位.*${published.length} 个已发布项目.*${planned.length} 个待建设项目.*#19 ProxyClean`, "s"));
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
+  assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
+  assert.equal(registry.projects.some((item) => item.id === "scripts"), false);
+  assert.equal(projectCatalog.some((entry) => entry.registration.id === "scripts"), false);
+  assert.equal(routePaths.includes("/projects/scripts"), false);
+  assert.doesNotMatch(generatedIndex, /\["scripts"|\/projects\/scripts/);
+  assert.match(systemSource, /id: "scripts".*repo: "Scripts".*历史工具来源.*projectLedgerHref/s);
+  assert.equal(registry.projects.some((item) => item.id === "proxyclean"), false);
+  assert.equal(projectCatalog.some((entry) => entry.registration.id === "proxyclean"), false);
+  assert.equal(routePaths.includes("/projects/proxyclean"), false);
+  assert.doesNotMatch(generatedIndex, /\["proxyclean"|\/projects\/proxyclean/);
 
   const planById = new Map(plan.projects.map((item) => [item.id, item]));
   const enabled = registry.projects.filter((item) => item.enabled).sort((left, right) => left.order - right.order);
@@ -71,12 +83,13 @@ test("the final project plan fixes one complete value order without placeholder 
 });
 
 test("non-card explanations keep only real remaining work and private exclusions stay non-public", () => {
-  assert.equal(plan.non_card_explanations.length, 11);
-  assert.equal(plan.non_card_explanations.filter((item) => item.status === "done").length, 11);
+  assert.equal(plan.non_card_explanations.length, 12);
+  assert.equal(plan.non_card_explanations.filter((item) => item.status === "done").length, 12);
   assert.equal(plan.non_card_explanations.filter((item) => item.status === "todo").length, 0);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "md-triple-tactics-ledger-asset" && item.status === "done"), true);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "wechat-pre-public-private-archive" && item.status === "done"), true);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "health-longevity-early-project" && item.status === "done"), true);
+  assert.equal(plan.non_card_explanations.some((item) => item.id === "scripts-capabilities-absorbed-by-owning-projects" && item.status === "done" && item.evidence === "app/system-home-content.js#scripts"), true);
   assert.match(wechatDirectSource, /WeChatDirect-private-archive.*公开前.*PRIVATE 仓库已经归档.*不生产.*现役.*PUBLIC WeChatDirect/s);
   assert.match(personalHealthSource, /HealthLongevity.*早期项目.*不再拥有任何写入.*personal-health.*Health Owner.*没有读取.*健康记录、诊断、数值和私人正文/s);
   assert.match(systemSource, /WeChatDirect-private-archive|wechat-direct-private-archive/);

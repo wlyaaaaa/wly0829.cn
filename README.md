@@ -6,11 +6,11 @@
 
 - 最终项目价值顺序与后续施工顺序：`config/final-project-order.json`
 - 已发布项目 Registry（登记表）：`config/panel-projects.json`
-- 当前有 22 个项目已发布，并按固定总名次显示；未建设的名次保持空缺
+- 当前有 23 个项目已发布，并按固定总名次显示；未建设和已移除的名次保持空缺
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-最终规模固定为 35 个独立项目：23 个已经发布，12 个仍保持 planned（规划中）。名次是整个项目集合的总价值顺序，不再按历史建设先后压缩编号；所以当前目录允许缺号，未建项目不会提前出现卡片、路由或占位文案。当前最高未建且可施工的是 `#15 scripts`；完成一个项目的来源重建、三层页面、测试、构建、PUBLIC 发布和公网回读后，再选择下一个最低 planned 名次。`md-triple-tactics-talent-solver` 只保留为 System（系统）里的历史 GitHub 总账资产，不属于独立项目规划，不生成项目卡、路由、内容包或未来施工项。
+最终规划保留 34 个独立项目，继续使用原价值名次 1–35：23 个已经发布，11 个仍保持 planned（规划中）。用户已决定让 `#15 Scripts` 的能力由对应项目直接吸收，因此 rank 15 永久留空，其他项目不重排；Scripts 只留在 System（系统）的 GitHub 总账中，不生成独立卡片、路由、内容包、TODO 或未来施工项。当前最低未建且可施工的是 `#19 ProxyClean`。未建项目同样不会提前出现占位；完成一个项目的来源重建、三层页面、测试、构建、PUBLIC 发布和公网回读后，再选择下一个最低 planned 名次。`md-triple-tactics-talent-solver` 也只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
 
 排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
@@ -68,7 +68,7 @@ npm run verify:ai-refresh -- --bundle <ai-result.json>
 这些项目的全量计划只返回 `manual_owner_request_required`，不会收集证据或创建网站
 任务；只有本人明确要求的网站任务才可携带该标记继续。
 
-当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值以 Registry 的当前实测线为准；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript。本轮二十二项目构建后的实际 gzip 数值记录在 `design-qa.md`，README 不把一次构建数字固化成永久事实。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
+当前每条路由都在构建时生成完整静态正文，禁用 JavaScript 仍可阅读；浏览器只加载一个小型共享增强脚本，使用原生目录页面导航，并最多预取下一条非兼容路由。共享交互 JavaScript、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 审查阈值以 Registry 的当前实测线为准；它们是防膨胀审查线，不是永久内容上限。搜索在构建时从项目快照与模块、规则、Skills、System 节点的审过字段生成有界自然短语，只保留搜索语义，不把完整正文复制进公共 JavaScript。当前完整构建的实际 gzip 数值记录在 `design-qa.md`，README 不把一次构建数字固化成永久事实。不得用点击后正文加载、fetch（网络读取）、spinner、骨架屏、空白或删减专业正文换取体积；图片画廊仍可使用轻量缩略图，并只在用户打开后解码完整图片。
 
 刷新 `.agents` 的活动规则/Skill 结构化证据：
 
@@ -109,4 +109,4 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 只拥有固定 35 项名次、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 只拥有 34 个保留项目在原 1–35 价值槽位中的名次、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。

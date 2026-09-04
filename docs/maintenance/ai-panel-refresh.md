@@ -124,7 +124,7 @@ Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读
 
 ## 40+ 项目扩展
 
-`config/final-project-order.json` 是固定 35 个独立项目、价值顺序和施工状态的唯一清单；Registry 只登记已经发布的项目包。自动施工选择 `state=planned` 的最低名次，当前仍是 `#12 devconfig-backup`。`md-triple-tactics-talent-solver` 已从独立项目规划彻底移除，只可作为 System 中的历史 GitHub 总账资产出现，不生成项目卡、路由、内容包或未来施工项。新增项目进入 Registry 时必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint，并沿用最终清单中的固定名次。
+`config/final-project-order.json` 是 34 个保留独立项目、价值顺序和施工状态的唯一清单；它们继续占用原 1–35 名次，用户移除的 rank 15 永久留空，其余项目不重排。Registry 只登记已经发布的 23 个项目包。自动施工选择 `state=planned` 的最低名次，当前是 `#19 ProxyClean`。Scripts 的日常动作能力由所属项目吸收，只在 System 中保留 GitHub 总账事实，不生成独立项目卡、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 同样只作为 System 历史总账资产。新增项目进入 Registry 时必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint，并沿用最终清单中的固定名次。
 
 Registry 中当前启用的已发布项目为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并最多预取下一条非兼容路由。共享脚本、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 防膨胀审查阈值分别读取 Registry 的四个对应 budget 字段，而不是在本文复制动态数值；这些阈值不是永久内容上限。每次增加项目后都从本轮构建产物重新记录实际 gzip 数值，不把旧项目数和旧模块数继续写成当前事实。超过当前阈值时仍先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并调整审查线。禁止把完整正文重新塞入公共 JS，也禁止点击后加载正文、fetch、spinner、骨架屏、空白或以删除专业正文换体积；图片画廊可先显示轻量缩略图，并在用户打开后解码完整图片。派生搜索索引只能保留类型、标题、短摘要、链接、明确 aliases（别名）和有界搜索短语，由权威正文在构建时投影，不能成为第二份语义正文。
 

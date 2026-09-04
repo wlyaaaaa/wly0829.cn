@@ -13,14 +13,17 @@ read-only operating panel; public presentation is secondary.
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
-- `config/final-project-order.json` is the sole authority for the fixed
-  one-through-thirty-five total-value ranking, the next project to build and the
-  status of non-card explanations. `config/panel-projects.json` contains only
+- `config/final-project-order.json` is the sole authority for the 34 retained
+  project identities in the original one-through-thirty-five value slots, the
+  next project to build and the status of non-card explanations.
+  `config/panel-projects.json` contains only
   enabled, published project packages; every enabled package must use the same
   fixed rank as its `order`. The current published and planned counts, exact
   ranks and next project are derived from that file rather than copied here.
-  Missing ranks are deliberate while their projects remain unbuilt and never
-  create placeholder cards, routes or copy. Each project owns its real module count and module
+  Missing ranks are deliberate while their projects remain unbuilt or after the
+  owner removes an independent project. A removed rank stays unused; surviving
+  projects are not silently renumbered, and no missing rank creates placeholder
+  cards, routes or copy. Each project owns its real module count and module
   boundaries; visual symmetry is never a reason to force every project into
   the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
@@ -371,9 +374,11 @@ read-only operating panel; public presentation is secondary.
 
 - The owner accepted the four-project public MVP on 2026-08-30 and later
   completed twenty-two project pages in a historical construction sequence.
-  Historical construction numbers are no longer display ranks. The fixed
-  thirty-five-project value order in `config/final-project-order.json` is now
-  authoritative; the current twenty-two published packages remain enabled at
+  Historical construction numbers are no longer display ranks. The 34 retained
+  project identities keep their accepted slots in the original 1–35 value order
+  from `config/final-project-order.json`; rank 15 is permanently unused after
+  the owner moved Scripts capabilities into their owning projects. The current
+  twenty-three published packages remain enabled at
   their fixed, possibly non-contiguous ranks, alongside the one-page Rules
   workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
@@ -695,7 +700,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to every project in the fixed thirty-five-project plan.
+  to every retained project in the fixed value plan.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
