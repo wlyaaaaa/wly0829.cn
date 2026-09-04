@@ -2461,19 +2461,17 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   assert.doesNotMatch(publicText, /observed_account_refs|played_account_refs|account-\d+/i, "daily-preferences leaks Steam account references");
   assert.doesNotMatch(publicText, /苏打水是农夫山泉的。并非气泡水|总不能不干净/, "daily-preferences publishes raw private conversation text");
   for (const expected of [
-    /0b88ce98561f37299f858f83b8d128216bd0c84a/,
-    /90c3c28b2c88ee1facc437379476a80575366980/,
-    /daily-preferences\.v0\.6/,
-    /43\/43/,
-    /19 条.*(?:current )?明示|19 条明示.*current/s,
-    /7 个.*current 推定|7 个 current 推定/s,
-    /61 条.*current.*证据|61 条 current 证据/s,
-    /54,887/,
-    /62,022/,
-    /1,749/,
-    /841/,
-    /13 个来源实例|13 个来源/,
-    /12 项.*未接入|12 个未取得来源/,
+    /d7f53b8ca0d54b9a61719499af669e216e083f15/,
+    /daily-preferences\.v0\.8/,
+    /64.*Python.*4.*Node|64\/64.*4\/4/s,
+    /26 条.*(?:current )?明示|26 条明示.*current/s,
+    /3 条.*historical.*明示|3 条历史明示/s,
+    /15 个.*current.*快照|15 个有效快照/s,
+    /119,382/,
+    /160,574/,
+    /41,192/,
+    /18 个来源实例|18 个来源/,
+    /7 项.*未取得|7 类逻辑来源/s,
     /bank_transactions/,
     /jd_orders/,
     /pinduoduo_orders/,
@@ -2490,19 +2488,20 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /jd_orders=personal_info_only_no_orders/,
     /pinduoduo_orders.*meituan_orders=no_current_order_data/s,
     /cainiao_logistics=historical_catalog_only/,
-    /bilibili_activity.*youtube_activity.*google_play_activity.*air_travel_history=archived_snapshot_available/s,
-    /rail_travel_history=limited_screenshot_material/,
-    /来源 gap 为 1|来源 gap 1|当前 gap 为 1/,
-    /Steam.*132.*132.*132/s,
-    /110.*21.*1/s,
-    /12 个.*实际玩过.*10.*付费.*2.*免费.*未玩.*0.*应用.*0/s,
+    /bilibili_activity.*当前|当前.*bilibili_activity/s,
+    /Google Play.*航空.*12306.*人工快照/s,
+    /Chrome.*Steam.*哔哩哔哩.*(?:按需|自动增量)/s,
+    /3,375.*719.*20.*2.*5.*277/s,
+    /118.*已玩游戏.*6.*已玩应用.*8.*未玩游戏.*33.*应用/s,
+    /游玩时长.*不参与.*评分|时长不评分/s,
+    /免费.*0\.5/s,
     /AppID.*多账号|多账号.*AppID/s,
     /历史取得方式.*(?:Unknown|未知)|(?:Unknown|未知).*历史取得方式/s,
     /PersonalOS.*一次性.*(?:不恢复|不依赖)/s,
-    /52 条.*45.*7|52\/45\/7/s,
-    /51 条.*44.*7|51\/44\/7/s,
-    /12 个非人工来源|12 个来源.*v0\.6/s,
-    /6 个.*(?:当时|历史|重建).*(?:推定|快照)|重建 6 个推定/s,
+    /138 条.*117.*21|138\/117\/21/s,
+    /12.*acquired_verified.*6.*snapshot_only/s,
+    /conversation.on.demand|对话内按需|新对话.*同步刷新/s,
+    /no_change.*零新增.*零更新|三源均 no_change/s,
     /integrity_check=ok/,
     /外键.*0/,
     /最新.*明示|现在说的优先/,
@@ -2515,7 +2514,7 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /Skill.*AI.*Python|Python.*Skill.*AI/s,
     /不是.*推荐模型|不内置推荐模型/,
     /不.*中央.*画像/,
-    /不.*后台同步|人工增量/,
+    /按需自动.*不.*持续监控|自动增量.*不.*后台/s,
     /verified_artifact_cached_excerpt/,
     /邮箱.*7–19 位数字.*末四位/s,
     /不是全局匿名化|非全局匿名化/,
@@ -2526,14 +2525,14 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /\.blob/,
     /Excel serial/,
     /YYYYMMDD-YYYYMMDD/,
-    /84 份.*非人工记录层.*CURRENT.*尚存 SQLite/s,
+    /PersonalData.*自动备份.*不.*(?:灾难恢复|第二套备份)|自动备份.*跨机器/s,
     /PDF.*重新抽取.*不是逐字原文/s,
     /Gemini.*mixed_activity|mixed_activity.*Gemini/s,
     /旅行.*住宿.*娱乐.*数字消费.*服务.*工具.*审美/s,
     /专门.*parser|专门.*解析/s,
     /实现盲.*自然请求/,
-    /gpt-5\.6-sol.*max.*child.*fork_turns=none.*terminal final/s,
-    /不改业务数据或 SQLite 主文件/
+    /现有登录.*Chrome|当前已登录.*Chrome/s,
+    /同一.*Takeout ZIP.*Chrome.*Google Play.*occurrence/s
   ]) assert.match(publicText, expected, `daily-preferences omits current truth: ${expected}`);
   assert.ok(dailyPreferencesProject.operationalEntrypoints.every((item) => item.command.startsWith("pwsh -NoProfile -File .\\daily-preferences.ps1")), "daily-preferences exposes a non-runnable wrapper command");
 
@@ -2553,10 +2552,12 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   const registration = registry.projects.find((item) => item.id === "daily-preferences");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-daily-preferences.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 3);
-  assert.match(registration.ai_refresh.scope, /all nonpositive orders excluded from preference context and successful repeat counts/);
-  assert.match(registration.ai_refresh.scope, /recency ranking without automatic expiry or absence-as-dislike/);
+  assert.equal(registration.ai_refresh.semantic_revision, 4);
+  assert.match(registration.ai_refresh.scope, /all refund\/closed\/cancelled\/failed\/revoked transactions excluded from preference context and repeat counts/);
+  assert.match(registration.ai_refresh.scope, /recency without expiry or absence-as-dislike/);
   assert.match(registration.ai_refresh.scope, /semantic change assessment.*snapshot rebuild.*ordinary-query readback/);
+  assert.match(registration.ai_refresh.scope, /conversation-triggered synchronous on-demand refresh/);
+  assert.match(registration.ai_refresh.scope, /playtime excluded from scoring/);
   assert.equal(registration.source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
@@ -2974,7 +2975,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDailyPreferences.status, "ready_for_ai");
   assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
   assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
-  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 3);
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 4);
   assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
@@ -3276,7 +3277,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 15);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 16);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -3508,7 +3509,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.ok(Number.isInteger(dailyPreferences.sourceBytes) && dailyPreferences.sourceBytes > 3000);
   assert.match(dailyPreferences.sourceSha256, /^[a-f0-9]{64}$/);
   assert.doesNotMatch(dailyPreferencesText, /V:\\\\Personal\\\\Projects\\\\daily-preferences|E:\\\\PersonalData\\\\日常偏好/, "daily-preferences Skill publishes a private project or data locator");
-  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /逐.*(?:source instance|来源实例).*覆盖截止|覆盖截止.*来源实例/s, /snapshot.*时间|快照时间/i, /full.*incremental/s, /90c3c28/, /v0\.6/, /43\/43/, /19 条.*7 个.*61 条/s, /退款.*关闭.*取消.*失败.*(?:不进入|排除).*(?:偏好|模型上下文).*(?:复购|repeat count|repeat_count)/s, /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s, /低频.*(?:没有记录|无记录).*不.*喜欢/s, /材料.*(?:保全|保存).*ingest.*(?:不等于|不能).*完成.*覆盖.*(?:快照|自然问题)/s, /Steam.*AppID.*(?:已玩|实际玩)|实际玩.*Steam/s, /未玩.*应用.*不.*(?:混入|进入)/s, /110.*21.*1/s, /12 个.*已玩.*10.*paid.*2.*free/s, /历史取得方式.*Unknown|Unknown.*历史取得方式/s, /12 项未接入|12 个未取得/s, /实现盲/, /54,887/, /62,022/, /84 份制品/, /来源 gap (?:为 )?1/, /13 个来源(?:实例)?/, /熟悉.*相邻.*新鲜/s, /零扫描.*不改业务数据|不改业务数据/, /2026-09-01.*(?:早于|不冒充).*Steam.*fresh/s]) {
+  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /full.*incremental/s, /d7f53b8/, /v0\.8/, /64\/64.*4\/4|64.*Python.*4.*Node/s, /26 条.*3 条.*15 个/s, /18 个来源/, /7 项.*未取得/, /119,382/, /160,574/, /退款.*关闭.*取消.*失败.*撤销.*(?:不进入|退出).*(?:偏好|模型上下文).*(?:复购|repeat count|repeat_count)/s, /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s, /低频.*(?:没有记录|无记录).*不.*喜欢/s, /一次成功.*(?:耐用品|软件|行程).*不.*(?:降为|变成).*不喜欢/s, /conversation.on.demand|对话内.*按需|新对话.*刷新/s, /当前.*Chrome.*哔哩哔哩|哔哩哔哩.*当前.*Chrome/s, /播放.*收藏.*稍后.*点赞.*投币.*追番/s, /3,375.*719.*5.*20.*2.*277/s, /Google Play.*航空.*12306.*人工快照/s, /Steam.*AppID.*(?:已玩|实际玩)|实际玩.*Steam/s, /游玩.*时长.*不.*评分|时长不评分/s, /免费.*0\.5/s, /未玩.*应用.*不.*(?:混入|进入)/s, /历史取得方式.*Unknown|Unknown.*历史取得方式/s, /实现盲/, /no_change/, /自动备份.*不.*(?:跨机恢复|第二套备份)|PersonalData.*自动备份/s, /熟悉.*相邻.*新鲜/s]) {
     assert.match(dailyPreferencesText, expected, `daily-preferences omits product boundary: ${expected}`);
   }
   const browserContinuity = skills.find((item) => item.slug === "browser-control-continuity");
@@ -3516,7 +3517,7 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   assert.equal(browserContinuity.sourcePath, "E:\\.agents\\skills\\browser-control-continuity\\SKILL.md");
   assert.equal(browserContinuity.sourceBytes, 6276);
   assert.equal(browserContinuity.sourceSha256, "43efbbb0f8e05d5c7d90d567bc57bd62f53ea0bc13406e7f388ff9a2d0c7d283");
-  for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /browser-service\.mjs.*browser-accessibility\.wasm\.br.*zxing_reader\.wasm/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复.*用户可见 E2E.*退休条件/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /0cfef9e/, /6922fd8/, /29 个 active install intent/, /41\/41/]) {
+  for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /browser-service\.mjs.*browser-accessibility\.wasm\.br.*zxing_reader\.wasm/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复.*用户可见 E2E.*退休条件/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /0cfef9e/, /c5684d7/, /E101/, /29 个 active install intent/, /41\/41/]) {
     assert.match(browserContinuityText, expected, `browser-control-continuity omits durable behavior: ${expected}`);
   }
   assert.deepEqual(skillProjectLinks["browser-control-continuity"], [{ relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 浏览器连续性能力" }]);
@@ -4059,16 +4060,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E100 panel preserves user intent while keeping anti-bloat scoped to implementation", async () => {
+test("E101 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E100");
-  assert.equal(bindings.ruleset_sha256, "11892dc849fd2dda05acf6ef19a87e9a1b6f542d055561e24b39be00c89eafbb");
-  assert.equal(panelSnapshot.authority.releaseId, "E100");
-  assert.equal(panelSnapshot.authority.gitCommit, "6922fd8aa252b1774b67d4a6ba704a7fe2ee6872");
-  assert.equal(panelSnapshot.authority.pointerRevision, 8);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E99");
+  assert.equal(bindings.semantic_release_id, "E101");
+  assert.equal(bindings.ruleset_sha256, "f79057f023ba55f76995f696a29b51adb1dd0b213fdb19b3126cd25fd4d6d465");
+  assert.equal(panelSnapshot.authority.releaseId, "E101");
+  assert.equal(panelSnapshot.authority.gitCommit, "c5684d7060a3276f3abd2cc49a5950569726998b");
+  assert.equal(panelSnapshot.authority.pointerRevision, 9);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E100");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",
@@ -4144,8 +4145,14 @@ test("E100 panel preserves user intent while keeping anti-bloat scoped to implem
     "没有等价小实现时接受必要复杂度",
     "按实测净增量调整基线"
   ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E98 minimum architecture semantics omit: ${expected}`);
+  for (const expected of [
+    "codex_command_blocked_delete_fallback",
+    "blocked by policy",
+    "Windows 回收站",
+    "文件占用、Windows 权限、路径错误或进程启动后的普通失败不自动触发"
+  ]) assert.ok(`${coreSource}\n${ruleGuideSource}`.includes(expected), `E101 delete fallback semantics omit: ${expected}`);
   for (const expected of [/发布后必须回看个人面板/, /personal-panel-refresh/, /Source Owner.*页面是否会.*说错/, /live task list.*(?:status|状态).*active.*current Owner scope/s, /notLoaded.*idle.*archived.*completed.*interrupted.*failed.*unavailable/s, /合格 Owner.*发送一次.*合并.*同一最终发布/s, /没有合格 Owner.*fresh projectless/s, /发送受理不证明已读或完成/, /失败不另开竞争任务/]) {
-    assert.match(ruleGuideSource, expected, `E100 panel closeout semantics omit: ${expected}`);
+    assert.match(ruleGuideSource, expected, `E101 panel closeout semantics omit: ${expected}`);
   }
   assert.match(`${coreSource}\n${ruleGuideSource}`, /功能、流程、状态.*不能.*反膨胀.*(?:删除|降级)|反膨胀.*不能.*删功能/s);
   assert.match(`${coreSource}\n${ruleGuideSource}`, /同一.*(?:完整验收|完整功能|真实质量).*(?:现有入口|现有能力|短路线|最小增量)/s);
@@ -4161,7 +4168,7 @@ test("E100 panel preserves user intent while keeping anti-bloat scoped to implem
   assert.ok(panelRefresh, "public personal-panel-refresh entry is missing");
   assert.equal(panelRefresh.sourceBytes, 12037);
   assert.equal(panelRefresh.sourceSha256, "c5286475e8c1f3e24bacf40a4ba5ff1e1846febf2261b27c6249a28977284e9c");
-  assert.match(panelRefresh.sourceState, /e2cc7e9.*正式回读.*安装/);
+  assert.match(panelRefresh.sourceState, new RegExp(`${panelSnapshot.sourceCommit.slice(0, 7)}.*正式回读.*安装`));
   assert.doesNotMatch(
     panelRefreshText,
     /create_thread|threadId|clientThreadId|task_required|handoff|lifecycle|archive|projectless|dispatch-unconfirmed|setup-pending|successor|follow-up|任务 ID|派发回执|派发分类/i,

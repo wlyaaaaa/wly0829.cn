@@ -82,8 +82,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 15,
-        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E100 Rules plus 29 active Skill intents and 29 displayed Skill entries including browser-control-continuity, mandatory post-publication panel impact closeout that resolves one corresponding snapshot, reuses only a live status=active website publisher whose current Owner scope covers the publication transaction, merges bounded source deltas into one stable publication batch, reuses only matching evidence and keeps preview sessions controllable before creating a fresh projectless task, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-implementation guards, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation and fixes exact-turn continuation, while E100 makes anti-bloat validation current-repository scoped and prevents budgets or necessary complexity from becoming product stop gates",
+        "semantic_revision": 16,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E101 Rules plus 29 active Skill intents and 29 displayed Skill entries including browser-control-continuity, conversation-triggered daily-preferences and active-publisher personal-panel-refresh; mandatory post-publication panel impact closeout that resolves one corresponding snapshot, reuses only a live status=active website publisher whose current Owner scope covers the publication transaction, merges bounded source deltas into one stable publication batch, reuses only matching evidence and keeps preview sessions controllable before creating a fresh projectless task; user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-implementation guards, command-policy-only recycle-bin fallback after a pre-launch blocked delete, and PUBLIC private-companion migration; E100 made anti-bloat validation current-repository scoped, while E101 activates the bounded panel/daily-preferences Skills and adds the exact Codex-blocked delete fallback without turning ordinary deletion failures into policy blocks",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -105,6 +105,8 @@
         "active_rules",
         "skills_catalog",
         "browser_control_continuity",
+        "conversation_triggered_daily_preferences",
+        "codex_blocked_delete_recycle_bin_fallback",
         "active_website_release_owner_first_panel_handoff",
         "corresponding_snapshot_stable_publication_batch",
         "validation_matrix",
@@ -1451,14 +1453,14 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 3,
-        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation; thirteen per-instance sources, eleven parser profiles, twelve individually classified unconnected logical sources and panorama-gap governance without reviving retired PersonalOS; manual source coverage and import health followed by semantic change assessment, relevant snapshot rebuild and ordinary-query readback; Steam multi-account AppID unification, played-game-only preference evidence, public current store price classification, exact game/store links and unknown historical acquisition; natural-query scoped evidence with all nonpositive orders excluded from preference context and successful repeat counts while retained as negative transaction facts, recency ranking without automatic expiry or absence-as-dislike, specific fact/original verification, and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff; ingest completion states, gaps and invalidated recommendations, with committed data distinct from later cache refresh",
+        "semantic_revision": 4,
+        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation; conversation-triggered synchronous on-demand refresh with no background runtime; direct local Chrome History/Bookmarks and Steam collection, current logged-in Chrome Bilibili history/favorites/watch-later/likes/coins/bangumi collection, and manual Google Play/air/rail snapshots; eighteen source instances, fifteen current preference snapshots and seven individually classified missing logical sources without reviving retired PersonalOS; source artifact occurrences, import health, semantic change assessment, relevant snapshot rebuild and ordinary-query readback; Steam multi-account AppID unification with played-game-only evidence, playtime excluded from scoring, current-free slightly downweighted and historical acquisition unknown; all refund/closed/cancelled/failed/revoked transactions excluded from preference context and repeat counts, one successful durable/software/trip observation retained as positive without repurchase, recency without expiry or absence-as-dislike; specific fact/original verification and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
-          "read current AGENTS.md, README.md, schema.sql, daily_preferences.py, PowerShell wrapper and source-owned tests; distinguish Python evidence/state behavior from Skill/AI recommendation behavior",
-          "run the source-owned test suite, py_compile, read-only status/evidence/facts performance checks including aggregate nonpositive-evidence, Steam played-game/store-class/link counts, missing-source availability classes, current snapshot-evidence bindings, and database integrity/foreign-key checks without copying private payload",
+          "read current AGENTS.md, CURRENT_ACCEPTANCE.md, README.md, schema.sql, daily_preferences.py, live_increment.py, source_snapshots.py, bilibili_browser_collect.mjs, PowerShell wrapper and source-owned tests; distinguish collectors, database evidence/state behavior and Skill/AI recommendation behavior",
+          "run the 64-test Python suite, 4-test Node suite, py_compile and Node syntax check; read only aggregate status/evidence/facts including Bilibili stream counts, Steam played/unplayed/application classes, missing-source availability, current snapshots, artifact occurrences and database integrity/foreign-key checks",
           "read only public-safe aggregates and owner-selected ordinary L2 examples from the current local snapshot; never publish source ids tied to accounts, raw statements, merchant/amount/time combinations, routes, locators, hashes or original private material",
-          "review current implementation-blind natural requests for recommendation, per-source zero-write increment preparation and exact fact separation; preserve what each proves and cannot prove"
+          "review the current implementation-blind natural update request, immediate idempotent no-change refresh, Bilibili-scoped question, tool-domain question, travel question and exact fact separation; preserve what each proves and cannot prove"
         ],
         "conditional_collectors": [
           "one owner-selected new ordinary L2 preference example only when it materially improves product explanation; omit its private source payload and locator",
@@ -1474,16 +1476,19 @@
       "displayed_areas": [
         "project_overview_product_principles_current_boundary_and_user_choice",
         "current_historical_statement_timeline_and_correction_invalidation",
-        "thirteen_source_instances_twelve_unconnected_sources_manual_increment_panorama_gap_import_health_and_semantic_completion",
-        "eleven_parser_profiles_v06_record_versioning_and_fail_closed_full_semantics",
-        "steam_multi_account_appid_unified_library_played_game_evidence_store_price_classes_exact_links_and_unknown_historical_acquisition",
-        "natural_query_domain_axis_scoped_context_chinese_recall_ai_expression_filtering_steam_game_filter_and_recency_without_expiry",
+        "conversation_triggered_on_demand_refresh_without_background_tasks_services_queues_or_watchers",
+        "eighteen_source_instances_fifteen_current_snapshots_seven_missing_sources_and_manual_snapshot_boundaries",
+        "live_chrome_history_bookmarks_and_steam_collection_with_anonymous_account_edges",
+        "current_logged_in_chrome_bilibili_history_favorites_watch_later_likes_coins_bangumi_and_visible_window_limits",
+        "google_takeout_chrome_and_play_occurrences_umetrip_and_rail_manual_snapshot_parsers",
+        "steam_multi_account_appid_unified_library_played_game_evidence_no_playtime_score_slight_current_free_downweight_and_unknown_historical_acquisition",
+        "natural_query_domain_axis_scoped_context_bilibili_isolation_chinese_recall_ai_expression_filtering_and_recency_without_expiry",
         "specific_order_nonpositive_payment_expression_fact_roles_absence_unknown_and_public_l2_soda_example",
         "artifact_hash_original_readback_and_cached_excerpt_boundary",
         "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
-        "current_54887_keys_62022_versions_84_artifacts_19_statements_7_snapshots_61_evidence_43_tests_one_source_gap_and_zero_nonpositive_evidence",
-        "twelve_named_missing_sources_six_availability_classes_specialized_domain_limits_and_recovery_gaps",
-        "ingest_states_post_commit_cache_gap_and_semantic_completion_after_material_preservation"
+        "current_119382_records_160574_versions_41192_history_26_current_statements_3_historical_statements_15_snapshots_18_sources_64_python_4_node_tests",
+        "seven_named_missing_sources_platform_visible_window_limits_and_manual_source_freshness",
+        "refresh_and_ingest_states_post_commit_cache_gap_semantic_completion_and_existing_personaldata_backup_scope"
       ],
       "impact_sources": [
         {
@@ -1499,6 +1504,9 @@
           "kind": "source_identity_ingest_evidence_snapshot_and_original_implementation",
           "paths": [
             "daily_preferences.py",
+            "live_increment.py",
+            "source_snapshots.py",
+            "bilibili_browser_collect.mjs",
             "schema.sql",
             "requirements.txt"
           ]
@@ -1506,15 +1514,19 @@
         {
           "kind": "behavior_and_regression_evidence",
           "paths": [
-            "tests/test_daily_preferences.py"
+            "tests/test_daily_preferences.py",
+            "tests/test_live_increment.py",
+            "tests/test_refresh_increment.py",
+            "tests/test_source_snapshots.py",
+            "tests/test_bilibili_browser_collect.mjs"
           ]
         }
       ],
       "refresh_rules": {
         "semantic_review_required_when": [
-          "a displayed domain boundary, source panorama, source profile, Steam account/library/store relation, played-game filter, current price or historical-acquisition boundary, missing-source availability class, import mode, current/history rule, evidence role, nonpositive-order treatment, recency/expiry/absence semantics, repeat-count semantics, preference-increment completion, query scope, fact interpretation, snapshot invalidation, original verification state, recommendation menu, search handoff, failure behavior or recovery gap changes meaning",
-          "a false-PASS path, destructive full-import path, source-identity conflict, coverage/gap drift, stale snapshot error, AI-expression misclassification, Chinese recall truncation or original-drift failure becomes implemented, regresses or changes the user's next action",
-          "a current implementation-blind recommendation, increment-preparation or semantic completion, temporal-evidence, exact-fact or source-migration acceptance changes what the owner should trust without exposing private payload"
+          "a displayed domain boundary, automatic-versus-manual source mode, Chrome/Steam/Bilibili collector, browser login path, Bilibili stream/range, source panorama, artifact occurrence, Steam account/library/store relation, playtime/free scoring, missing-source availability, import mode, current/history rule, evidence role, nonpositive-order treatment, recency/expiry/absence semantics, repeat-count semantics, one-off durable purchase semantics, preference-increment completion, query scope, snapshot invalidation, backup/recovery boundary, recommendation menu or failure behavior changes meaning",
+          "a false-PASS path, destructive full-import path, source-identity or Bilibili account conflict, coverage/gap drift, stale snapshot error, AI-expression misclassification, cross-domain evidence leak, original-drift failure or collector partial result becomes implemented, regresses or changes the user's next action",
+          "a current implementation-blind update/recommendation, immediate idempotent refresh, exact-fact, source-migration or natural-query acceptance changes what the owner should trust without exposing private payload"
         ],
         "snapshot_only_when": [
           "the clean PRIVATE main commit, parser version, aggregate current/source/snapshot/test count, bounded timing or observation time changes without altering product meaning"

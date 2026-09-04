@@ -91,6 +91,7 @@ export const ruleGuides = {
           item("普通 Git 先看 status", "只有仓库身份、visibility、remote、分支、worktree、同步、恢复或发布事实会改变决定时才调用 Git Owner。"),
           item("绝不覆盖未知改动", "混合工作树只处理本任务文件，定向 stage，禁止破坏性清理和 git add 全部文件。"),
           item("实现默认包含正常 Git 收口", "用户授权仓库实施后，验证、定向 commit 和 normal push 到已有 upstream 默认成立；force-push 从不默认授权。"),
+          item("codex_command_blocked_delete_fallback（命令阻断删除后备）", "精确路径、授权、Owner、Git 和唯一内容边界都已核验后，先用正常删除；只有 Codex 在进程启动前明确返回 blocked by policy（被策略阻断）或 Rejected（已拒绝）时，才对同一目标改用 Windows 回收站并回读原路径消失。文件占用、Windows 权限、路径错误或进程启动后的普通失败不自动触发这个后备路径，也不能误称为用户设置。"),
           item("个人仓库完成必须到默认分支", "目标提交要从实际 default branch 可达，normal push 后远端 read-back 仍包含它。只存在于 AI branch 或 worktree 不算完成。"),
           item("Worktree 只是短期隔离", "最终必须整合后删除、证明冗余后删除，或有真实用途和退出条件地保留；不能当任务台账。"),
           item("证据层独立", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）、E2E（端到端验证）互不代替。缺失、陈旧或 unknown（证据不足）不能升为 PASS（通过）。"),

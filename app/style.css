@@ -4132,6 +4132,11 @@ main {
   font-size: 13px;
 }
 
+.rules-page .guide-item h5 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .guide-item p {
   margin: 0;
   color: var(--muted-strong);

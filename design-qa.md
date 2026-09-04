@@ -1,51 +1,37 @@
-# 当前网站验收：全站专业人话化
+# 当前网站验收：daily-preferences 按需自动增量快照
 
 ## 结论与范围
 
-本轮从已经发布并回读的 `730d3e84ad46e73b48f15f2720c26ff9fe10db3c` 开始施工，没有用旧工作树覆盖新主线。固定 35 项价值顺序仍然有效：最终规划包含 35 个独立项目，22 个项目已经发布，13 个项目仍待建设；第 36 项没有恢复，非项目卡说明 TODO 仍为 0。E100、29 个 Skills、浏览器任务恢复、单来源对应快照、发布 Owner 合并、daily-preferences 新事实，以及 WeChatDirect / personal-health 的历史归属说明都完整保留。
+本轮从已经发布并回读的 `f960f3a99df07c9397220ccf5e7f57669295c460` 开始，主体只更新已登记项目 `daily-preferences` 的对应快照，以及直接展示同一能力且不更新就会错误的 Skill 说明与指南。来源是 PRIVATE `wlyaaaaa/daily-preferences`，本地 `main`、`origin/main` 与远端 `refs/heads/main` 均回读为 `d7f53b8ca0d54b9a61719499af669e216e083f15`。
 
-人话审计覆盖 System 的 10 条真实工作、5 份现行规则、29 个 Skill 首屏、22 个项目总览、142 个项目模块和 230 条项目使用示例。这里的“人话”不是书面化或禁用俚语：真实对话、比喻和适度夸张只要帮助理解就保留；只有它改变事实、边界、当前状态，或把未验结果写成保证时才修。
+最终门禁运行期间，活动规则从 E100 升级到 E101；E101 同时正式激活本轮使用的对话触发 `daily-preferences` 与活动发布 Owner 合并式 `personal-panel-refresh`，旧 E100 生成事实因此被 snapshot gate 正确拒绝。当前发布者只合并了这项发布前硬依赖：更新 E101 五文件/供应快照、`.agents` 当前说明、两个直接相关 Skill 的来源状态，以及根规则新增的 `codex_command_blocked_delete_fallback`。这个后备路径只在 Codex 命令层于进程启动前明确拒绝删除时改走 Windows 回收站；普通文件占用、权限或路径失败不触发。
 
-## 对 Gemini 成果的真实验收
+System、其他 21 个项目、项目排序、路由结构、视觉组件和交互代码保持不变。固定 35 项价值顺序仍然有效：35 个独立项目中 22 个项目已经发布、13 个项目仍待建设。两个 Registry 计划都只是定向单项目计划，没有运行 `--all`。当前页面不再把 E100、v0.6 人工增量、13 个来源、7 个快照、43 项测试和“Chrome / 哔哩哔哩 / Google Play / 航空 / 铁路未接入”当作现状。
 
-Gemini 的 26 个提交共修改 26 个文件，形成 507 行新增、494 行删除。它最有价值的三点已经保留：示例从真实第一人称请求开始；搜索提示更接近日常说法；项目“产品”层先展示怎样使用和真实流程，再展示职责与产品原则。
+## 来源事实与语义变化
 
-“全站 100% 完成”的自报不能直接采用：
+- 当前产品是由新对话自然触发的同步按需自动增量。Chrome 历史/书签与 Steam 从本机读取；哔哩哔哩复用用户当前已登录的 Chrome，采集当前可见的播放、收藏、稍后看、点赞、投币和追番/追剧。它不是后台同步，不创建服务、队列、定时器或 watcher。
+- Google Play、航旅纵横和 12306 保持人工快照；没有新包时不伪装实时刷新。银行交易、京东、拼多多、美团、菜鸟、YouTube 与地图活动仍是 7 项明确未取得来源。
+- 当前数据库为 schema v2：119,382 条 current、160,574 条总记录版本、41,192 条历史记录；18 个来源实例中 12 个 `acquired_verified`、6 个 `snapshot_only`；26 条 current 明示、3 条 historical 明示与 15 个 current 偏好快照。`integrity_check=ok`，外键 finding 为 0。
+- 哔哩哔哩当前聚合为 3,375 条播放、719 条收藏关系、5 条稍后再看、20 条点赞、2 条投币和 277 条追番/追剧。平台不返回的更早范围仍明确 Unknown。
+- Steam 当前为 118 条已玩游戏、6 条已玩应用、8 条未玩游戏观察和 33 条其他应用观察。累计启动时长只保留为事实、不参与评分；当前免费游戏只在其他条件相同时低 0.5 分；当前商店分类不能证明历史取得方式。
+- 退款、关闭、取消、失败和撤销继续完全退出普通偏好证据与复购计数。一次成功的耐用品、软件或行程仍是正向事实，不因没有复购被降成不喜欢；时间只排序，无记录也不反推不喜欢。
+- 数据根、用户投递原件和哔哩哔哩实时快照处于现有 PersonalData 自动备份范围；这不冒充已经验收过的独立导出、跨机迁移或灾难恢复产品。
 
-- Gemini 分支从旧共同基点 `ce0817305d07e20ae164cb29939700d04f93ca6f` 分出，仍绑定 E99、28 个 Skills 和旧项目状态；当前发布基线已经是 E100、29 个 Skills 与 35 项规划。
-- 排除 Sunshine 后实际是 137 个项目模块，不是报告中的 169 个；21 个顶层示例、137 个模块示例、28 个旧 Skill 示例、5 条规则示例和 23 条 System 请求的固定前缀检查本身属实，但只能证明字符串格式。
-- `app/content-skills.js` 与 `app/content-rule-guides.js` 没有被 Gemini 修改；“第 22 项零影响”也只核对了一个内容文件，忽略共享页面顺序与项目副标题同样会改变 Sunshine 的呈现。
-- 133 项旧测试可以通过，但完整发布构建会因旧 E99 快照被当前 E100 正确阻断。机械通过不能替代读者理解和事实一致。
+## 内容与公开边界
 
-因此本轮没有整体合并、整批挑取提交或复制旧文件，而是在最新发布结果上逐段迁移有价值表达。
+项目总览和五个既有模块在原位更新，没有新增卡片、重复模块或刷新日志。Skill 页同步更新了 `daily-preferences` 的触发条件、输入输出、自动/人工来源分层、当前测试与 E2E；`personal-panel-refresh` 和 `browser-control-continuity` 只把 source main / 活动 E 代际改为现场值。Rules 只补 E101 新增删除后备语义，System 现有概括仍然准确，因此保持字节不变。
 
-## 实际产品改进
+公开页只使用聚合数量、普通 L2 事实样例、源码/测试身份和行为边界。它不公开账号 ref、浏览 URL、完整游戏或播放清单、商家—金额—时间组合、行程起终点、原件定位、原始聊天或凭据。Skill 当前源码的公开供应指纹已回读为 10,183 bytes / `eebbdb9bfc8f8e5380458a483e6c2c7a61eb60f929f7b2e9502d4beea140c04a`。
 
-- 22 个项目的首屏继续先说用途、问题、一次现实请求、用户得到什么，以及正常、出错和不可用时会怎样。项目副标题改成能直接说明价值的短句。
-- 21 个需要润色的项目逐条重写总览、使用示例与模块示例；Sunshine 保留发布 Owner 修正后的真实状态，并参与最终全站阅读验收。
-- 产品页顺序改为先看“我平时怎样使用它”和“一条真实工作流”，再看职责与设计原则；技术页把模块入口提前，精确命令、版本、哈希、测试和恢复证据仍完整保留。
-- `.agents` 的 18 条使用示例与 7 个模块都从普通请求讲起，同时保留 E100、授权、并发、五层 Skill 证据、发布合并和 G 盘热镜像 Unknown 等精确边界。
-- PCConfig、GitHub 总索引与 ChineseASR 吸收了 Gemini 更有画面感的表达，但修回“一秒回滚”、未验真机接管、零写查询、联网与 fetch 区别、时间戳条件、本地/云路线、离线恢复和人工真值等证据边界。
-- TimeAudit、PC Panel Hub、CACB、学习、Codex Remote、健康、微信、材料、文书、工作交付、日常偏好、媒体、OCR、加密库、视频、AI CLI 与 OpenClaw 的读者示例不再把多个互不相干的任务、内部状态码或测试夹具塞进一句话。
-- Codex Remote 在 System、项目总览和详情中统一为“曾经做成、当前冻结”；没有登录、控制或恢复入口。
-- OpenClawGateway 明确区分“网关健康”和“消息可用”：当前 Telegram 为 running/starting 且未连接，飞书为 running/starting，消息 E2E 为 0/2；任何渠道都没有被写成稳定回发。
-- ChineseASR 明确默认正文不承诺时间戳或说话人分组；所选模式支持时才提供时间位置，需要时才提供匿名说话人线索。普通录音默认本地，重要录音还需本次上传授权。
-- 副驾驶笔记本统一标为待实机验收的应急接管候选；TimeAudit 也直说逐进程自然语言查询尚未验收，需要点名进程或退出码时仍进入本机 Grafana 明细。
-- 搜索空态改成可行动的日常提示；“删掉的材料别恢复”等自然请求能直接命中所属项目。全项目紧凑搜索删除了重复的 `module.result`，页面正文不删，搜索投影仍保留用途、自然请求、用户结果和模块语义。
+## 验证
 
-## 项目规则与后续 13 项
+- 来源仓库：64/64 Python 回归与 4/4 Node 回归通过；Python 编译、Node 语法、`git diff --check`、SQLite 完整性和外键检查通过。
+- 当前数据：只读聚合回读了来源、状态、记录、明示、快照、哔哩哔哩流、Steam 分类和普通苏打水事实；没有把私人正文或 locator 写入网页。
+- E101 snapshot：release `c5684d7060a3276f3abd2cc49a5950569726998b`、ruleset `f79057f023ba55f76995f696a29b51adb1dd0b213fdb19b3126cd25fd4d6d465`、pointer revision 9、previous=E100，五文件与 release descriptor 匹配；`.agents` source 的 1 个并发 dirty 候选与活动 release 分层，不冒充 current。
+- 语义 bundle：`wly.ai-panel-refresh-verification.v2` 为 PASS；`daily-preferences` 项目、authority、Rules 与 Skills changed，System unchanged，0 blocker。
+- 聚焦合同：`daily-preferences` 项目合同、Skills catalog 合同、E101 Rule binding 合同与所有项目统一 snapshot 投影合同通过。
+- 本地浏览器：项目索引、daily-preferences 总览/来源/证据模块、daily-preferences Skill、`.agents` 总览、Rules 与 personal-panel-refresh Skill 在 1440、390、320 三档检查；无整页横向溢出、H1 裁切或 console/page error，canonical 均为 Pages 实际使用的尾斜杠 URL。
+- 最终全站门禁：`npm run build` 与 `npm run test:built` 通过，生成 199 个完整静态页面和 304 条紧凑搜索记录；snapshot、PUBLIC 内容、全部 138 项测试均为 PASS。
 
-项目规则新增三项长期边界：人话验收看语义而不是词表；纯表达润色以最新已验收主线为基底，不要求重建全部源项目；所有可见交互面都要接受真实阅读检查。固定“比如我”开头、禁词清零、字符数量和测试全绿都只能作辅助证据，不能成为内容通过条件。
-
-后续 13 个项目从第一次建设就按“用途 → 一次真实请求 → 用户可见结果 → 出错或不可用 → 技术细节”完成，不再先写一套工程说明、最后统一翻译。源项目全貌与事实完整性仍在新项目建设或语义改变时审查；只改表达时不重新制造一轮全项目调查。
-
-## 本地产品验收
-
-- `npm run build` 已通过 E100 snapshot binding、静态站点构建和 PUBLIC 内容门；PUBLIC gate 扫描 524 个源文件与生产文件，0 finding。
-- 站点生成 199 个完整静态页面、304 条紧凑搜索记录；22 个项目总览加 System 首页的 23 条直接路由均返回 200，并命中各自静态 route 身份。
-- 全站测试共 138 项。旧测试里“每条规则都必须出现你不需要”“任何语境都不能出现包装”“读者示例必须保留内部状态码”等词法过拟合已改成等价语义断言；项目状态、证据层、公开边界和技术身份没有放宽。
-- gzip 实测：共享 JavaScript 11,596 B / 12 KiB；共享 CSS 21,208 B / 21 KiB；全站搜索 117,010 B / 115 KiB；项目模块搜索 134,911 B / 144 KiB。项目模块搜索通过去除重复投影获得约 12 KiB 余量，没有提高预算。
-- Chromium 在 1440、390 与 320 三档检查 System、Skills、.agents、PCConfig、ChineseASR、daily-preferences、OpenClawGateway 与 Codex Remote；document/body 宽度均等于视口，无整页横向溢出，H1 没有裁切，console / page error 为 0。320px 顶部导航的 4px 内部裁切已用现有小屏断点最小修复。
-- 全新 Sol-family 盲读者只看真实预览，读取 5 条规则、29 个 Skill、22 个项目及各类代表详情后给出 `PASS`：P0=0、P1=0。它能复述每页解决什么、怎样请求、会得到什么、当前是否真的可用，以及失败或未验时会怎样。
-
-本文记录发布前稳定候选。最终 Git、Pages 与公网状态以 normal push 后的远端 `main`、Pages head SHA 和公开页面回读为准。
+本文记录发布前稳定候选。最终 Git、Pages 与公网状态以 normal push 后的远端 `main`、Pages deployment head SHA 和公开页面回读为准。

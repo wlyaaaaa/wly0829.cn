@@ -87,7 +87,7 @@ const agentsSnapshot = createProjectSnapshot({
     { label: "合同覆盖边界", value: "当前覆盖闭合不代表未来合同自动通过；规则、授权、能力、Git 与机器事实继续由各自责任源解释" },
     { label: "产品能力", value: "自然语言目标可接到真实项目、规则、Skills 与工具；源码、测试、安装、发布、恢复和用户结果分层回读" },
     { label: "当前规则与源码分层", value: `活动规则仍是 ${panelSnapshot.authority.releaseId} release commit=${panelSnapshot.authority.gitCommit}；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}，五规则 ruleset=${panelSnapshot.authority.rulesetSha256}。当前源码 main=${panelSnapshot.sourceCommit}，branch=${panelSnapshot.sourceBranch}，${panelSnapshot.sourceSync}；源码 main 不能冒充尚未发布的下一代 E release。`, hero: false },
-    { label: "当前聚焦验证与历史完整回归", value: `当前 ${panelSnapshot.authority.releaseId} commit ${panelSnapshot.authority.gitCommit} 已由活动 release Inspect、五文件哈希和专用 release validator 验证；本代把反膨胀收敛为实现形态约束，仓库预算默认只验当前 Owner，并明确必要复杂度没有等价小实现时按实测净增量调整基线继续。没有重跑整个 Local 测试集。最近完整观察仍为 ${localOwnerObservation.observedAt} 的 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 12)}：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项跨责任源跳过；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。历史结果不升级为 ${panelSnapshot.authority.releaseId} 全量通过，短时验收也不证明长程永不偏离。`, hero: false },
+    { label: "当前聚焦验证与历史完整回归", value: `当前 ${panelSnapshot.authority.releaseId} commit ${panelSnapshot.authority.gitCommit} 已由活动 release Inspect、五文件哈希和专用 release validator 验证；本代正式激活对话触发的 daily-preferences、活动发布 Owner 合并式 personal-panel-refresh，并增加仅在 Codex 命令层启动前明确拒绝删除时使用 Windows 回收站的窄后备路径。没有重跑整个 Local 测试集。最近完整观察仍为 ${localOwnerObservation.observedAt} 的 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 12)}：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项跨责任源跳过；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。历史结果不升级为 ${panelSnapshot.authority.releaseId} 全量通过，短时验收也不证明长程永不偏离。`, hero: false },
     { label: "Skill 供应快照", value: `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent、${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`, hero: false },
     { label: "工作树热备", value: "工作树热备 source/合同存在；2026-08-31T21:24:42Z 只读观察确认 G 卷 Healthy/OK，且 G:\\80_Backup\\ControlPlane\\agents-hot-mirror-status.json 存在。该回执最后镜像时间为 2026-07-30T20:30:07-07:00、robocopy exit=1，当时记录 source HEAD=c96dbf1、dirty=21。", hero: false }
   ],
@@ -131,6 +131,7 @@ export const project = {
     { title: "并行提高质量，但不覆盖别人", detail: "互不依赖的工作可以并行；重叠写入用最小施工范围协调，已有改动始终保留。" },
     { title: "完成必须分层证明", detail: "源码、测试、安装、发布和用户真正可用各自证明不同事情，任何一层都不能冒充整件事完成。" },
     { title: "来源发布后，只看对应快照会不会说错", detail: "已登记项目、活动 E Rule 或个人 Skill 完成 source 发布和正式回读后，personal-panel-refresh 只判断对应快照及直接派生页面是否出现实质偏差，不扩成全站复核。已有网站任务必须实时为 active，且当前 Owner scope 正在负责这次发布，才接收带来源、提交、路径、观察时间和活动代际的增量；没有这样的 Owner，才新建 projectless 任务。" },
+    { title: "删除被 Codex 命令层拦截时只换执行通道", detail: "精确目标、授权、Owner、Git 与唯一内容边界先照常核验。只有命令在进程启动前明确被策略拒绝，才对同一目标改用 Windows 回收站并回读原路径消失；文件占用、权限或路径错误仍按普通失败处理，不能误称为用户设置。" },
     { title: "Git 历史与工作树热备各保一层", detail: "PRIVATE Git 保存提交历史，G 盘 hot mirror（热镜像）保存当前工作树和未提交状态；两者互补，但热镜像不复制 .git、不触碰 H 冷备，也不冒充完整仓库备份。它在目标原地覆盖和删除，不是保留上一版的事务快照；复制中途失败时必须重新核对 G 的实际文件。" },
     { title: "不知道就保留未知", detail: "证据不足只停止受影响步骤，说明缺什么和怎样恢复；不依赖该问题的安全工作继续。" },
     { title: "先审是不是用户要的，再审怎样实现", detail: "长程任务在实质方案变化、压缩后重规划、同类失败循环和阶段交付前，复用一路独立子代理检查需求来源及可删实现；只拦自加目标、流程或假设，不砍真实功能，不靠缩权、限制代理或反复让用户审批工程选择治复杂化。" },
@@ -267,7 +268,7 @@ export const project = {
     { date: "2026-08-26", commit: "472ab3a", result: "CoreGoal 授权进入保护消费者，四类人类因子统一。" },
     { date: "2026-08-29", commit: "157060f–31009aa", result: "退役 C 盘规则 Publisher/Authority 生产链，建立 E release、跨项目 coordination、差异驱动快速验证和分阶段墙钟回执；运行根迁移已进入 staging 与兼容修复阶段，但尚未完成 junction、唯一副本和新运行时回读。" },
     { date: "2026-08-30", commit: "464564b–185503e", result: "E91 统一 PUBLIC L1–L5 分级、私人账号等价可信与 english_chinese_gloss；E92 正式化耐久授权、真实调用一次和来源任务归档；E93 明确长期任务保留与接续；E94 保证 RecoverReleaseClaim 继承 predecessor 的非空 coordination，并让 Repartition 把当前冻结 coordination 写入全部 replacement bindings，避免跨项目目标在恢复或重分区时丢失身份。" },
-    { date: "2026-08-31—09-04", commit: "d32210b–e2cc7e9", result: "E95 建立可信本地安全闭集、注意力、实现盲测和自然意图路由；E96 把产品复杂度与技术复杂度分轴；E97 让旧 root 的用户确认跨 E 代际继续有效并归一物理 CODEX_HOME；E98 把登记来源发布回读接到 personal-panel-refresh；E99 让所有对话与后代守住用户原意、按长程节点独立审查需求膨胀并修复续写回合定位；0cfef9e 新增跨项目 browser-control-continuity 并安装验收；E100 将反膨胀限定为实现形态约束；ca68c10 让面板刷新只复用实时 active 且 scope 覆盖发布的现有 Owner；e2cc7e9 再把一次事件限定为对应快照，绑定增量身份、复用仍匹配的证据，以稳定批次一次完成最终门，并让预览后台可控。" }
+    { date: "2026-08-31—09-04", commit: "d32210b–c5684d7", result: "E95 建立可信本地安全闭集、注意力、实现盲测和自然意图路由；E96 分开产品与技术复杂度，E97 保留跨代身份并归一物理 CODEX_HOME，E98 建立发布后对应快照，E99 固定用户原意与需求膨胀审查，E100 把仓库验证限定到当前 Owner。E101 正式激活只复用实时 active 发布 Owner 的 personal-panel-refresh 与对话触发 daily-preferences，并增加只在 Codex 命令层启动前明确拒绝删除时改走 Windows 回收站的窄后备路径；普通文件失败不冒充策略拦截。" }
   ],
   operationalEntrypoints: [
     { name: "活动 E 规则", command: "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json", purpose: "唯一证明 current/previous E release、commit、ruleset、五文件路径和 pointer。" },
@@ -480,7 +481,7 @@ export const modules = [
       "NativeEconomyRoutingGate 验证 UserPromptSubmit/SubagentStart 的判断前注入、E identity 先行、家族/effort 上限与 PreToolUse 创建前复核",
       "AgentRuntimeCompatibility 验证官方同主体更新以稳定 package/signature/event/capability 连续，app version 和 versioned path 不参与准入",
       "AgentAutonomyPolicy 与 AttentionFidelityPolicy 验证模型主动识别盲测、提示不泄露路线、route_selected_without_hint 和 directed_execution_test 的证据边界",
-      `当前 ${panelSnapshot.authority.releaseId} 根规则与能力合同已在 ${panelSnapshot.authority.gitCommit} 发布激活；本轮快照重新运行活动 release validator、合同覆盖和 Skill 供应验证。E100 只改变反膨胀与仓库验证边界，没有重跑完整 Local 回归，不把 ${localOwnerObservation.releaseId} 38/0 当作本代全量通过。`,
+      `当前 ${panelSnapshot.authority.releaseId} 根规则与能力合同已在 ${panelSnapshot.authority.gitCommit} 发布激活；本轮快照重新运行活动 release validator、合同覆盖和 Skill 供应验证。E101 激活对应快照发布合并、对话触发 daily-preferences 与命令策略拒绝删除时的回收站后备路径，没有重跑完整 Local 回归，不把 ${localOwnerObservation.releaseId} 38/0 当作本代全量通过。`,
       "2026-09-02 安装 Inspect 回读 active_verified；runtime SHA-256=a67b98955b854bad5f2c22ba057d621bf6ae0e1598181bf2eaa8301002b9a530，UserPromptSubmit/SubagentStart/PreToolUse 三事件 trusted、enabled 且 additionalContextLimit=0。现有提醒已到达真实子代理，不代表所有长程任务从此不会偏离。",
       "implementation-blind fresh E2E 只有在 fresh evaluator 未获得 diff、根因或路线提示，并真实走完用户路径后才成立",
       "natural-intent blind routing E2E 必须同时证明 AI 自己选择了正确路线和用户可见结果正确；只命中工具或只得到答案都不完整",
@@ -614,7 +615,7 @@ export const modules = [
       "Invoke-EAgentRulesRelease.ps1 是唯一 activator/reader，current-rules.json 记录 current/previous、pointer revision 和 release record commitment。",
       `每代 release 固定五份 logical id、relative path、bytes、SHA、PRIVATE main commit 和 ruleset SHA；当前 ${panelSnapshot.authority.releaseId} 绑定 ${panelSnapshot.authority.gitCommit.slice(0, 7)} 与 ${panelSnapshot.authority.rulesetSha256.slice(0, 8)}…。`,
       "release 目录和 pointer 关闭 ACL 继承，由 SYSTEM 拥有；普通/管理员编辑器只读执行，Activator 临时写后恢复封闭 ACL。",
-      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91 建立 PUBLIC 个人数据唯一 L1–L5 表、私人账号空间等价可信与项目收紧授权窄例外；E92–E94 正式化耐久授权、真实调用、Owner 生命周期与 coordination 延续；E95 建立可信本地安全闭集、注意力和实现盲测；E96 把产品复杂度与技术复杂度分轴；E97 让旧 root 的用户确认跨 E 代际保持有效并归一物理运行根；E98 强制已登记来源发布回读后评估个人面板实质影响；E99 加入用户原意与反需求膨胀审查；E100 把反膨胀和仓库验证收敛为不阻断产品结果的实现约束。",
+      "E82 新增英文中文括注、系统级反膨胀、语义保真和 projectless 默认；E83 增加 coordination_id 跨项目精确 scope；E84–E86 增加 change-surface validation、FastRelease 确定性回执与分阶段墙钟预算；E87 完成运行根与任务临时目录迁移语义；E88 扩展未来模型家族和 Ultra 路由；E89 明确 CI 只在影响交付、发布、兼容或用户决策时运行；E90 增加 PUBLIC 项目 ignored 私有伴随材料的 PRIVATE 收敛链；E91–E100 建立公开分级、耐久授权、Owner 生命周期、可信本地安全、注意力、用户原意、对应快照与不阻断产品的反膨胀边界；E101 激活合并式面板刷新和对话内 daily-preferences，并加入命令策略拒绝删除时的回收站后备路径。",
       "普通规则文本、目录、预算及对应测试可走 FastRelease：只跑变更闭集关键回归，但复用同一 Git、五哈希、pointer CAS、UAC activator 和 fresh Inspect；触及保护合同、Activator、ACL、Hook、Owner Registry、身份/授权或其他代码时必须回标准路径。",
       "E rules release 的机器侧 Git 收口、激活和回读目标为 180 秒内；回执分列 focused tests、commit、push/readback 与 UAC activation 墙钟，网络或用户处理 UAC 的等待单列。",
       "e81-retirement-dispositions 证明旧 C production reader count=0，退役未新增 background service、queue、database 或 task；Secret Broker 等独立产品保留。",
@@ -828,7 +829,7 @@ export const modules = [
     verification: [
       "FourBaseDecisionContext 当前验证两个视图、三个 owner、五规则闭包和无退役基座",
       "2026-09-02T19:55:45Z 真实只读运行Doctor -Owner git -CheckId project_admission_index：仅调用该1项，freshness=cached、write_mode=zero_write、health=warn、convergence=warn，原因cached_observation；没有运行Live或修复。Test-ControlPlaneDoctorScope另有health=warn/convergence=block与未选Owner零调用的隔离回归，本次未重跑该测试。",
-      "E100 将 Test-RepositoryBloatGovernance 默认限定为当前仓库；只有显式 `-AllRepositories` 才检查其他 Owner，其他仓库既有超额单列交还，不再阻断当前交付。预算只测实现表面，必要功能没有等价小实现时按实测净增量最小调整基线继续。",
+      "E100 将 Test-RepositoryBloatGovernance 默认限定为当前仓库；E101 保留该边界并新增 codex_command_blocked_delete_fallback：只有命令层在进程启动前明确拒绝删除才对同一目标改走 Windows 回收站，普通文件占用、权限和路径失败不触发。",
       "Cross-control coverage（跨控制面覆盖）在项目当前快照中闭合且无 finding；以后新增合同仍必须单独回归",
       `refresh snapshot 没有重跑当前 source 的 full Local 回归；验证矩阵中的完整 38/0 仍只属于 ${localOwnerObservation.releaseId} 历史观察。当前 ${panelSnapshot.authority.releaseId} 由五文件 release identity、source/remote 与正式 pointer 回读证明，二者不能互相替代。`
     ],
