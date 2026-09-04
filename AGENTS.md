@@ -14,12 +14,13 @@ read-only operating panel; public presentation is secondary.
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
 - Project entries are maintained in `config/panel-projects.json`. The current
-  target has twenty enabled entries: `.agents`, PCConfig, GitHub 总索引,
+  target has twenty-one enabled entries: `.agents`, PCConfig, GitHub 总索引,
   ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
   Codex Remote, personal-health, WeChatDirect, personal-materials and
   document-materials, work-delivery, daily-preferences, personal-media,
-  LocalOCR, vault-tool, video-scaffold and AI CLI Profile Manager in order
-  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20. The registry
+  LocalOCR, vault-tool, video-scaffold, AI CLI Profile Manager and
+  OpenClawGateway in order
+  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21. The registry
   remains extensible, and `.agents` always has order 1. Each project owns its
   real module count and module boundaries; visual symmetry is never a reason to
   force every project into the same number of modules.
@@ -359,12 +360,14 @@ read-only operating panel; public presentation is secondary.
   real-dashboard project 15, followed by personal-media as real-dashboard
   project 16, then LocalOCR as real-dashboard project 17, vault-tool as
   real-dashboard project 18, video-scaffold as real-dashboard project 19 and
-  AI CLI Profile Manager as real-dashboard project 20.
+  AI CLI Profile Manager as real-dashboard project 20 and OpenClawGateway as
+  real-dashboard project 21.
   The current target therefore contains
   `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
   CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
   personal-materials, document-materials, work-delivery, daily-preferences,
-  personal-media, LocalOCR, vault-tool, video-scaffold and AI CLI Profile Manager,
+  personal-media, LocalOCR, vault-tool, video-scaffold, AI CLI Profile Manager
+  and OpenClawGateway,
   plus the one-page
   Rules workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
@@ -420,7 +423,28 @@ read-only operating panel; public presentation is secondary.
   fingerprinted receipts never become current merely because the page exists.
   Do not add a GUI, TUI, PTY or chat shell, a new Provider or model Profile,
   paid Live calls, a second run ledger, a daemon, database, dynamic website
-  runtime or placeholder routes for projects 21–25 merely to build the page.
+  runtime or placeholder routes for projects 22–25 merely to build the page.
+- Project 21 is OpenClawGateway, the existing public-safe Windows operations
+  layer for an OpenClaw message gateway. It follows the completed AI CLI
+  Profile Manager project and receives one source-first complete product and
+  technical snapshot, necessary source repair, independent content audit,
+  PUBLIC release and read-back. Explain Telegram and Feishu ingress separately
+  from real message E2E; official Gateway lifecycle, loopback health, heartbeat
+  and Windows task history; catalog-backed local versus remote model and cost
+  posture; manual controlled updates across stable, extended-stable, beta and
+  dev; official verified backup, fresh staging restore and separate offline
+  activation; the four distinct current Codex/Gemini/Claude/OpenClaw private
+  backup consumers with their local/G/private-Git outputs and different
+  failure semantics; the exact three-task/four-consumer schedule, including
+  shared Claude-then-OpenClaw execution and first-nonzero result propagation;
+  PUBLIC repository auto-archive; public bootstrap and
+  private runtime settings; and the managed
+  CodeG/Cline MCP bridge. Keep configured, running, connected, loaded, route,
+  auth, tests, actual model output and final reply as separate evidence. Do not
+  expose account ids, tokens, private hostnames, private repository locations,
+  message bodies or raw logs. Do not send a message, make a paid model call,
+  update/restart the runtime, activate a restore, create another gateway,
+  install a plugin or prebuild projects 22–25 merely for the page.
 - The selected personal-media project has a non-optional content floor:
   automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -586,7 +610,7 @@ read-only operating panel; public presentation is secondary.
   TimeAudit, PC Panel Hub, manually requested CACB, learning-method, Codex
   Remote, personal-health, WeChatDirect, personal-materials, document-materials,
   work-delivery, daily-preferences, personal-media, LocalOCR, vault-tool,
-  video-scaffold and AI CLI Profile Manager additions, are standing-authorized to commit, normal-push
+  video-scaffold, AI CLI Profile Manager and OpenClawGateway additions, are standing-authorized to commit, normal-push
   existing PUBLIC `main`, wait for Pages and read back the deployed commit automatically
   after all content, test, build and public gates pass.
   Do not ask for another publication approval. A new public destination, paid
@@ -607,7 +631,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current twenty.
+  to projects added after the current twenty-one.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -645,7 +669,7 @@ read-only operating panel; public presentation is secondary.
   is non-blocking for ordinary registered refreshes and selected new projects,
   including WeChatDirect, personal-materials, document-materials, work-delivery,
   daily-preferences, personal-media, LocalOCR, vault-tool, video-scaffold and
-  AI CLI Profile Manager:
+  AI CLI Profile Manager and OpenClawGateway:
   open the project index, Overview and representative detail, notify the owner,
   then continue to the already authorized PUBLIC release unless the owner says
   to hold. Preview never substitutes for content reading, tests, Pages or

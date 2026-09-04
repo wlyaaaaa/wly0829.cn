@@ -109,11 +109,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly twenty projects and four navigation areas", async () => {
+test("the accepted panel has exactly twenty-one projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager"]);
-  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+  assert.deepEqual(projects.map((item) => item.slug), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway"]);
+  assert.deepEqual(projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]);
   assert.equal(project.slug, "agents");
   assert.deepEqual(primaryNav.map((item) => item.label), ["系统", "项目", "规则", "Skills"]);
   assert.equal(primaryNav[0].href, "/");
@@ -376,7 +376,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Do not reduce final quality merely to conserve an ample model quota/);
   assert.match(projectRules, /actual number from independent work\s+surfaces and net quality gain/);
   assert.match(projectRules, /zero remains valid/);
-  assert.match(projectRules, /applies equally\s+to projects added after the current twenty/);
+  assert.match(projectRules, /applies equally\s+to projects added after the current twenty-one/);
   assert.match(projectRules, /Administrator or SYSTEM for this read-only snapshot/);
   assert.match(projectRules, /must not downgrade to a partial ordinary-user view/);
   assert.match(projectRules, /refresh-route defect[\s\S]{0,260}does not[\s\S]{0,120}blanket MAP release/);
@@ -526,13 +526,13 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 104);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 132);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 108);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 137);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 20);
+  assert.equal(enabledProjectCount, 21);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -547,7 +547,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
-  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager)/, "browser runtime must not import narrative packages");
+  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
@@ -658,7 +658,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the twenty accepted project packages", async () => {
+test("the maintenance registry drives exactly the twenty-one accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -681,9 +681,9 @@ test("the maintenance registry drives exactly the twenty accepted project packag
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager"]);
-  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
-  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery", "/projects/daily-preferences", "/projects/personal-media", "/projects/localocr", "/projects/vault-tool", "/projects/video-scaffold", "/projects/ai-cli-profile-manager"]);
+  assert.deepEqual(registry.projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway"]);
+  assert.deepEqual(registry.projects.map((item) => item.order), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]);
+  assert.deepEqual(registry.projects.map((item) => item.route), ["/projects/agents", "/projects/pcconfig", "/projects/github-index", "/projects/chinese-asr", "/projects/timeaudit", "/projects/pc-panel-hub", "/projects/cacb", "/projects/learning", "/projects/codex-remote", "/projects/personal-health", "/projects/wechat-direct", "/projects/personal-materials", "/projects/document-materials", "/projects/work-delivery", "/projects/daily-preferences", "/projects/personal-media", "/projects/localocr", "/projects/vault-tool", "/projects/video-scaffold", "/projects/ai-cli-profile-manager", "/projects/openclaw-gateway"]);
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), registry.projects.map((item) => item.id));
   for (const item of registry.projects) {
     assert.equal(item.enabled, true);
@@ -705,7 +705,7 @@ test("the maintenance registry drives exactly the twenty accepted project packag
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway"]);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
@@ -2048,7 +2048,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 3);
   assert.match(registration.ai_refresh.collectors.join("\n"), /manifest\.json, state\.json and last-run\.json.*completed archive count.*total messages.*never read contact identity, chat body/s);
-  assert.equal(systemProjectInventory.detailedPageCount, 20);
+  assert.equal(systemProjectInventory.detailedPageCount, 21);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.match(wechatAsset.role, /3 个完成态归档.*6032 条消息.*3\/3/);
@@ -2171,7 +2171,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 20);
+  assert.equal(systemProjectInventory.detailedPageCount, 21);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.match(materialAsset.role, /36 个登记来源.*43,916.*34 个已精确登记.*43,882/);
@@ -2289,7 +2289,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 20);
+  assert.equal(systemProjectInventory.detailedPageCount, 21);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2436,7 +2436,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
-  assert.equal(systemProjectInventory.detailedPageCount, 20);
+  assert.equal(systemProjectInventory.detailedPageCount, 21);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
   assert.equal(asset.href, "/projects/work-delivery");
   assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));
@@ -2832,7 +2832,7 @@ test("impact assessment creates tasks only for confirmed material changes", () =
 
 test("AI refresh planner supports targeted and full refresh without writing narrative content", async () => {
   const script = path.join(projectRoot, "scripts", "prepare-ai-panel-refresh.mjs");
-  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/content-daily-preferences.js", "app/content-personal-media.js", "app/content-localocr.js", "app/content-vault-tool.js", "app/content-video-scaffold.js", "app/content-ai-cli-profile-manager.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
+  const contentPaths = ["app/content-core.js", "app/content-pcconfig.js", "app/content-github-index.js", "app/content-chinese-asr.js", "app/content-timeaudit.js", "app/content-pc-panel-hub.js", "app/content-cacb.js", "app/content-learning.js", "app/content-codex-remote.js", "app/content-personal-health.js", "app/content-wechatdirect.js", "app/content-personal-materials.js", "app/content-document-materials.js", "app/content-work-delivery.js", "app/content-daily-preferences.js", "app/content-personal-media.js", "app/content-localocr.js", "app/content-vault-tool.js", "app/content-video-scaffold.js", "app/content-ai-cli-profile-manager.js", "app/content-openclaw-gateway.js", "app/panel-facts.generated.js", "app/content-rule-guides.js", "app/content-skills.js", "app/content-skill-guides.js", "app/content-capability-links.js", "app/system-home-content.js"];
   const before = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
   const run = (args) => JSON.parse(execFileSync(process.execPath, [script, ...args], { cwd: projectRoot, encoding: "utf8", windowsHide: true }));
   const targeted = run(["--project", "pcconfig"]);
@@ -2856,6 +2856,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   const targetedVaultTool = run(["--project", "vault-tool"]);
   const targetedVideoScaffold = run(["--project", "video-scaffold"]);
   const targetedAiCliProfileManager = run(["--project", "ai-cli-profile-manager"]);
+  const targetedOpenClawGateway = run(["--project", "openclaw-gateway"]);
   const fullWithoutOwner = run(["--all"]);
   const full = run(["--all", "--manual-owner-request"]);
   const after = await Promise.all(contentPaths.map((item) => readFile(path.join(projectRoot, item), "utf8")));
@@ -3009,11 +3010,20 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedAiCliProfileManager.selected_projects[0].source.local_root, "E:\\Projects\\Tools\\ai-cli-profile-manager");
   assert.equal(targetedAiCliProfileManager.selected_projects[0].semantic_revision, 1);
   assert.ok(targetedAiCliProfileManager.selected_projects[0].impact_sources.length >= 3);
+  assert.equal(targetedOpenClawGateway.status, "ready_for_ai");
+  assert.deepEqual(targetedOpenClawGateway.selected_projects.map((item) => item.id), ["openclaw-gateway"]);
+  assert.equal(targetedOpenClawGateway.selected_projects[0].content_path, "app/content-openclaw-gateway.js");
+  assert.equal(targetedOpenClawGateway.selected_projects[0].source.repo, "wlyaaaaa/OpenClawGateway");
+  assert.equal(targetedOpenClawGateway.selected_projects[0].source.visibility, "PUBLIC");
+  assert.equal(targetedOpenClawGateway.selected_projects[0].source.default_branch, "main");
+  assert.equal(targetedOpenClawGateway.selected_projects[0].source.local_root, "E:\\Projects\\Tools\\OpenClawGateway");
+  assert.equal(targetedOpenClawGateway.selected_projects[0].semantic_revision, 1);
+  assert.ok(targetedOpenClawGateway.selected_projects[0].impact_sources.length >= 3);
   assert.equal(fullWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(fullWithoutOwner.manual_project_ids, ["cacb", "learning", "codex-remote", "personal-health"]);
   assert.equal(full.mode, "all");
   assert.equal(full.status, "ready_for_ai");
-  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager"]);
+  assert.deepEqual(full.selected_projects.map((item) => item.id), ["agents", "pcconfig", "github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "cacb", "learning", "codex-remote", "personal-health", "wechat-direct", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway"]);
   assert.match(full.materiality.default, /no website change/i);
   assert.match(full.anti_bloat.content_update, /never append refresh logs/i);
   assert.match(full.boundaries.rule_refresh, /verified current E release/i);

@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 104,
-    "project_search_index_gzip_budget_kib": 132,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete AI CLI Profile Manager addition keeps all 20 projects and 291 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 105656/134905 gzip bytes, so the two lines use the minimum passing integers 104/132 KiB. The AI CLI Profile Manager shard is 6860 bytes and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript and CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "search_index_gzip_budget_kib": 108,
+    "project_search_index_gzip_budget_kib": 137,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete OpenClawGateway addition keeps all 21 projects and 298 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 110325/140005 gzip bytes, so the two lines use the minimum passing integers 108/137 KiB. The OpenClawGateway shard is 6121 bytes and the existing maximum PCConfig shard is 20556 bytes, still within 21 KiB. Shared interaction JavaScript/CSS remain 11596/21082 bytes within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1888,6 +1888,90 @@
           "a user Profile, SecretRef, OAuth payload, private endpoint or run event changes without changing the reusable public product contract",
           "a Provider publishes an unadopted model or a proxy publishes an unapproved artifact while the page already names that gap accurately",
           "formatting, comments or internal refactors leave every displayed capability, failure, recovery and user decision unchanged"
+        ]
+      }
+    },
+    {
+      "id": "openclaw-gateway",
+      "order": 21,
+      "title": "OpenClawGateway",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/openclaw-gateway",
+      "ai_refresh": {
+        "content_path": "app/content-openclaw-gateway.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first Windows OpenClaw Gateway operations snapshot: Telegram and Feishu message ingress with explicit E2E gaps; official Gateway lifecycle, loopback health and scheduled-task evidence; catalog-backed local versus remote model and cost posture; manual controlled updates across all four official channels; verified official backup with staging-only restore and separate activation; four distinct current Codex, Gemini, Claude and OpenClaw private backup consumers carried by three scheduled tasks, including shared Claude-then-OpenClaw execution and first-error propagation, with local, G-hot, private-Git, retention and failure differences; PUBLIC repository auto-archive; public-safe bootstrap and private-path separation; managed CodeG/Cline MCP upsert with handshake still unverified",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\OpenClawGateway status --porcelain=v2 --branch and git rev-parse HEAD",
+          "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/OpenClawGateway -TargetWorktree E:\\Projects\\Tools\\OpenClawGateway -ForPublication -Json",
+          "read current AGENTS.md, README.md, docs, api.ps1, bootstrap, lifecycle, status, update, backup/restore, CodeG bridge, private-backup settings adapter and tests before trusting older operational claims",
+          "read the three current memory backup scheduled tasks and their hidden wrappers without returning private path values; distinguish four consumers, trigger times, shared execution order and final exit-code meaning",
+          "run all isolated PowerShell test entrypoints plus the Pester managed-component suite with task-specific TEMP/TMP, then parse every PowerShell file and run the project public-content gate",
+          "read current OpenClaw version, config validation, Gateway RPC/health, model status/catalog, channel accounts, selected plugin states, Windows scheduled tasks, Funnel posture, managed update status and Cline bridge shape without returning secrets or account identifiers"
+        ],
+        "conditional_collectors": [
+          "send a Telegram or Feishu test only with an exact recipient and message authorization; configured, running, connected or ready never substitutes for inbound-agent-reply E2E",
+          "run a remote model Live request only with exact Provider, expected charge and authorization; route or auth presence never proves a paid response",
+          "run the local 27B model only through the current GPU owner path when it will not disrupt another workload; catalog local=true proves placement, not natural-language output",
+          "perform update, restart, Gateway repair, disaster-recovery activation, real private backup task or CodeG MCP tool call only when that exact machine effect is in scope, then report it as a separate evidence layer"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/OpenClawGateway",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\OpenClawGateway"
+      },
+      "displayed_areas": [
+        "product_purpose_named_channels_inputs_outputs_principles_and_ordinary_requests",
+        "source_independent_gateway_channel_model_update_recovery_bootstrap_and_CodeG_modules",
+        "Telegram_ready_Feishu_starting_GoogleChat_disabled_and_no_message_E2E",
+        "official_gateway_health_loopback_listener_heartbeat_task_and_historical_task_receipt_separation",
+        "catalog_local_default_fallback_utility_image_selectable_remote_auth_and_session_cron_cost_boundaries",
+        "truthful_read_only_cost_posture_and_retired_false_API_toggle",
+        "stable_and_extended_stable_controlled_update_relation_backup_partial_and_no_auto_update",
+        "official_verified_archive_staging_only_restore_offline_activation_and_real_recovery_gap",
+        "four_current_private_backup_consumers_inputs_local_G_private_Git_retention_and_failure_differences",
+        "three_scheduled_tasks_four_consumers_trigger_order_continue_after_failure_and_first_nonzero_receipt",
+        "PUBLIC_repository_auto_archive_staged_secret_divergence_and_remote_OID_contract",
+        "public_bootstrap_schema_WhatIf_atomic_rollback_and_private_auth_boundary",
+        "CodeG_Cline_managed_MCP_upsert_other_server_preservation_and_unverified_handshake",
+        "public_source_private_runtime_settings_separation_and_current_task_consumers",
+        "source_tests_runtime_observations_external_effects_publication_and_named_unknowns"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_boundary_public_bootstrap_and_user_guides",
+          "paths": ["AGENTS.md", "README.md", "docs/*.md", "bootstrap/openclaw.template.json", "bootstrap/setup.ps1"]
+        },
+        {
+          "kind": "gateway_status_lifecycle_channels_and_cost",
+          "paths": ["api.ps1", "openclaw_heartbeat.ps1", "openclaw_silent_boot_guardian.ps1", "tools/_common.ps1", "tools/status.ps1"]
+        },
+        {
+          "kind": "controlled_update_backup_restore_and_private_consumers",
+          "paths": ["openclaw_update.ps1", "tools/_update_lib.ps1", "tools/managed-component.ps1", "tools/backup-config.ps1", "tools/restore-config.ps1", "tools/private-backup-settings.ps1", "tools/backup-*.ps1"]
+        },
+        {
+          "kind": "CodeG_public_content_and_behavioral_verification",
+          "paths": ["tools/setup-codeg-bridge.ps1", "tools/auto-archive-push.ps1", "tools/git-cloud-sync.ps1", "tools/test*.ps1"]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed channel lifecycle, message result, Gateway health, listener, scheduled task, self-heal or failure behavior changes owner use or expected results",
+          "a default, fallback, utility, image, selectable remote, catalog-local, authentication or session/cron cost boundary changes the truthful cost posture",
+          "an update channel, target relation, backup, partial state, restart, plugin convergence, restore staging or activation contract changes",
+          "bootstrap, private-path separation, CodeG MCP configuration, public-content boundary or current source/runtime evidence contradicts the published page"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit, current OpenClaw/target version, passing test count, task timestamp or observation time changes while every displayed behavior and evidence interpretation remains true"
+        ],
+        "ignore_when": [
+          "private credentials, account identifiers, message bodies, hostnames, private repository paths or runtime logs change without altering the reusable public product contract",
+          "a route, plugin or channel is merely configured without new runtime or E2E evidence",
+          "formatting, comments or internal refactors leave every displayed capability, failure, recovery and owner decision unchanged"
         ]
       }
     }

@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 20,
+  detailedPageCount: 21,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十个完整参考页，当前新增 AI CLI Profile Manager 的原生 CLI 启动、精确 Profile、分层验证与可恢复运行详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十一个完整参考页，当前新增 OpenClawGateway 的消息入口、Gateway 常驻、模型成本、受控更新、备份恢复和 CodeG 接入详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -592,7 +592,7 @@ export const systemProjectDomains = [
       { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
       { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: projectLedgerHref },
       { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: projectLedgerHref },
-      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "从 Telegram、飞书或 Google Chat 主动交办工作，并维护本机网关的启动、自愈、版本和受控更新边界。", kind: "集成与运维", href: projectLedgerHref },
+      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "从 Telegram 或飞书主动交办工作，并维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
       { id: "local-ai-runtime", title: "本地 AI 运行环境", repo: "rtx5090d-ollama-agent-bundle", role: "保存本地推理端点、模型别名、上下文策略和客户端配置的可复现基线；当前精确运行状态仍回到机器事实。", kind: "运行环境", href: projectLedgerHref }
     ]
   },
@@ -894,10 +894,10 @@ export const systemDependencyNodes = [
     lane: "external",
     title: "消息型 AI 网关（OpenClaw​Gateway）",
     subtitle: "从 Telegram、飞书或 Google Chat 主动交办工作，由本机网关连接后台任务和受控工具",
-    href: "#system-project-asset-message-ai-gateway",
-    linkLabel: "查看项目版图",
+    href: "/projects/openclaw-gateway",
+    linkLabel: "查看 OpenClawGateway",
     searchAliases: ["OpenClawGateway", "Telegram 飞书 Google Chat 消息交办"],
-    detail: "这是本人主动发起工作的入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、版本和受控更新；源码和配置存在不证明当前渠道在线，在线、凭据和工具连接仍须回到机器现场验证。"
+    detail: "这是本人主动发起工作的入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；详情页区分 Telegram ready、飞书 starting、已配置远程路线与本轮未执行的消息或付费 Live，绝不拿源码或端口替代实际结果。"
   },
   {
     id: "scheduled-events",

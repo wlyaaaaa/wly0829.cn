@@ -55,7 +55,7 @@ test("video-scaffold is registered as the nineteenth public project", async () =
   assert.equal(videoScaffoldProject.slug, registration.id);
   assert.equal(videoScaffoldProject.order, registration.order);
   assert.equal(projectCatalog.find((entry) => entry.project.slug === "video-scaffold")?.project.order, 19);
-  assert.equal(systemProjectInventory.detailedPageCount, 20);
+  assert.equal(systemProjectInventory.detailedPageCount, 21);
 });
 
 test("video-scaffold exposes seven source-backed modules and all three reading layers", async () => {
