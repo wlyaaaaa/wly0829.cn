@@ -1,14 +1,14 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const devconfigBackupSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-04T17:03:00Z",
+  observedAt: "2026-09-04T18:09:30Z",
   label: "本地与 G 盘最近成功；配置 Drive 日任务失败后探针已恢复，但远端仍落后一代；H 当前不可用并正常跳过",
   boundary: "这是 PUBLIC（公开）源码、任务与备份元数据的只读核对。当前包、G 盘和探针结果不等于新电脑已恢复，也不等于 Drive 已补齐或 H 冷备已完成",
   metrics: [
     { label: "当前配置包", value: "1,911.3 MB" },
     { label: "G 盘微信热备", value: "41.89 GB" },
-    { label: "本仓库四任务", value: "3 成功 · 1 失败" },
-    { label: "临时云监控", value: "已禁用" }
+    { label: "配置 Drive", value: "落后 1 代" },
+    { label: "H 冷备本轮", value: "skipped（已跳过）" }
   ],
   facts: [
     { label: "它真正解决的事", value: "真到重装或换机时，不必再去几十个工具目录里考古。它把 AI 工具配置、GPG（GNU 隐私保护）私钥、SSH（安全外壳协议）会话、环境变量、编辑器设置和重装清单收成一份恢复候选包；当前包为 1,911.3 MB。安装本体、插件、node_modules（代码依赖包）和常见缓存继续排除，恢复时再按版本、兼容性和现场状态选择性回填。" },
@@ -18,14 +18,16 @@ const devconfigBackupSnapshot = createProjectSnapshot({
     { label: "微信原应用数据独立增量流水线", value: "当前 G 盘有 41.89 GB、142,693 个微信原应用文件。Backup-WeChat.ps1 用 robocopy（Windows 健壮文件复制工具）先刷新静态副本，再让 rclone copy --checksum（按内容校验）只传变化文件；8G 单次传输上限避免一次异常重传失控，SQLite（轻量嵌入式数据库）的 WAL（预写式日志）、SHM（共享内存索引）和 journal 伴生文件不会被过滤，但运行中复制仍不等于数据库一致快照。" },
     { label: "微信热备给冷备留下可核对交接单", value: "G 盘热备成功后会原子写入并回读 wechat.hot-backup-receipt.v1 回执，只记录完成时间、目标绑定、robocopy 退出码和排除项数量，不输出文件名或正文。PCConfig 用不超过 36 小时的回执判断热备够不够新，再决定人工冷备窗口能否继续。" },
     { label: "新机恢复先看现场再动手", value: "Restore-WeChat.ps1 默认只读预检；确认官方客户端关闭后才显式执行。目标非空时必须选择 -ReplaceExisting，原目录会先保留为 .pre-restore-* 回滚点。复制结束只返回 COPY_COMPLETE_AWAITING_HUMAN_ACCEPTANCE（复制完成待人工验收），还要登录官方微信确认历史。Documents 需要重新指向 E:\\Documents；用户名可以沿用 10979，也可以在恢复后重映射硬编码路径。" },
-    { label: "四个常规任务，临时监控已经退场", value: "当前四个常规任务都已注册：配置本地/G 盘、配置 Drive、微信 G 盘和微信 Drive；最近结果是 3 个成功、配置 Drive 1 个失败。用于首次云端补齐的 WeChatDrive-Monitor-Hourly 不是第五个常规任务，当前已禁用；无窗口 Drive 任务会继承当前用户的 Windows 代理，失败时返回非零交给任务重试。" }
+    { label: "任务时间与三种不同的“成功”", value: "本机时区当前为 America/Los_Angeles。配置本地/G 每日 21:05（另有登录后 20 分钟）、配置 Drive 每日 22:00、微信 G 盘每日 18:30、微信 Drive 周日 20:00；PCConfig 冷备每日 23:30 机会式检查。四个本仓库任务最近是 3 个返回 0、配置 Drive 返回 1；其中微信 Drive 的 0 来自 2026-08-30 20:00，本轮没有重列远端微信对象。返回码、制品是否最新、应用是否恢复必须分开看。首次云端补齐的小时监控当前已禁用。" },
+    { label: "包本身不加密，介质保护各自负责", value: "DevConfig 生成的 zip 本身可能含明文凭据，脚本没有给它再套一层加密。H 盘由 BitLocker 保护；Drive 依赖用户的私人账号与登录保护。本轮没有重新证明本地包或 G 盘的静态加密状态，所以页面不把“能访问”写成“包已加密”。" }
   ],
   gaps: [
-    "最近一次 DevConfigBackup-Drive-Daily 返回 1；2026-09-04 17:31Z 只读预检已经恢复可达，但远端 latest 仍对应 9 月 2 日完整包，比本地/G 的 9 月 3 日新代落后一代。本轮没有上传或修改云端对象。",
+    "最近一次 DevConfigBackup-Drive-Daily 返回 1；2026-09-04 17:57Z 只读预检再次确认可达，但远端 latest 仍对应 9 月 2 日完整包，比本地/G 的 9 月 3 日新代落后一代。本轮没有上传或修改云端对象。",
     "8 个源码测试脚本通过，但本轮因官方微信正在运行，原生恢复测试的合成 Execute（执行）分支按设计跳过；测试不能替代真实恢复。",
     "微信备份的 rclone check 仅证明云端与本地文件哈希一致，不证明运行中复制时微信无底层未提交写入，也不替代官方微信客户端实际登录检验。",
     "系统导出的 20+ 计划任务 XML 严禁在新电脑通配批量导入，必须配合 PCConfig 重建手册与验证工具逐项审查恢复。",
-    "PCConfig 的 AIRecoveryColdSync-Daily 已启用；最近一次因 H_unavailable 返回 skipped。H 人工解锁后仍要满足 Hot context 不超过 48 小时、DevConfig/微信热备各不超过 36 小时、介质身份、100 GiB 停写线和写锁等条件。"
+    "PCConfig 的 AIRecoveryColdSync-Daily 已启用；最近一次因 H_unavailable 返回 skipped。H 人工解锁后仍要满足 Hot context 不超过 48 小时、DevConfig/微信热备各不超过 36 小时、介质身份、100 GiB 停写线和写锁等条件。",
+    "当前 state/latest.sha256 只留在原工作目录，没有作为可携带 sidecar 随 G/Drive 包发布。原 state 仍在时可比 SHA-256；彻底丢失时 7z t 只能证明 zip 内部 CRC 可读，强来源哈希仍是明确缺口。"
   ]
 });
 
@@ -33,11 +35,11 @@ export const devconfigBackupProject = {
   order: 12,
   slug: "devconfig-backup",
   title: "DevConfig Backup",
-  kicker: "开发配置、微信热备与选择性换机恢复 · 2026-09-04 核对",
+  kicker: "开发配置、微信热备与选择性换机恢复",
   route: "/projects/devconfig-backup",
   visibility: "公开仓库",
   statusTone: "warn",
-  cardStatus: "本地/G 最近成功；Drive 可达但落后一代，H 当前不可用并跳过；完整换机未实机验收",
+  cardStatus: "本地/G 最近成功；配置 Drive 可达但落后一代，H 当前不可用并跳过；完整换机未实机验收",
   cardStatusTone: "warn",
   ...devconfigBackupSnapshot,
   searchAliases: [
@@ -59,12 +61,10 @@ export const devconfigBackupProject = {
   searchProjection: {
     intents: [
       "重装电脑后怎么快速还原开发环境和凭据",
-      "换新电脑一键恢复开发配置和微信数据",
       "只备份不可再生配置而不备份几十G插件和缓存",
       "把开发配置备份到本地和Google Drive云端",
       "微信几十G聊天记录和媒体怎么增量备份防丢失",
       "排查备份计划任务没有按时运行或代理连不上",
-      "避免全盘镜像几十G的大垃圾",
       "重装系统后Documents路径和用户名坑怎么避开"
     ],
     entities: [
@@ -74,32 +74,23 @@ export const devconfigBackupProject = {
       "Restore-WeChat.ps1",
       "Backup-Status.ps1",
       "Initialize-BackupNetwork.ps1",
-      "rclone 1.68+",
       "robocopy",
       "G:\\80_Backup",
       "已绑定的 Google Drive remote alias（远端别名）",
       "xwechat_files（当前约 41.89 GB）",
-      "SQLite WAL / SHM",
-      "10979 用户名"
+      "SQLite WAL / SHM"
     ],
     relations: [
-      "sources.psd1清单驱动Backup-DevConfig生成当前约1.91GB选择性恢复候选包",
-      "本地out目录生成当前约1.91GB恢复候选包并复制到G盘在线热备",
       "DevConfig每个新代完整上传日期zip和latest对象，微信才用checksum逐文件增量",
-      "Backup-WeChat通过robocopy快照和rclone逐文件增量备份当前约41.89GB微信数据",
-      "微信G盘热备成功后发布无文件名和正文的有界回执供PCConfig判断冷备前置条件",
-      "Restore-WeChat默认只读预检并在覆盖前生成回滚保护目录",
-      "PCConfig统一管理H盘离线冷备，本项目计划任务只写本地与G盘，绝不接触或写入H盘"
+      "微信G盘热备成功后发布无文件名和正文的有界回执供PCConfig判断冷备前置条件"
     ],
     failureRecovery: [
-      "Google Drive远端binding损坏或代理不可达时失败关闭并重试",
       "微信单次调用达到8G上限时停止但计划任务重试累计流量另算",
       "微信目标目录非空时拒绝直接覆盖并强制生成pre-restore备份",
-      "wscript隐藏启动器优先Program Files下的PowerShell7且缺失时选择5.1",
       "换新电脑后重定向Documents至E盘且保持10979用户名防止路径失效"
     ]
   },
-  repositoryNote: "devconfig-backup 是 PUBLIC（公开）工具仓库。仓库内严格禁止提交任何真实备份包、注册表敏感导出、密钥、微信数据库或运行日志；由 tests/Assert-NoBackupArtifacts.ps1 机械执行提交前安全门禁。",
+  repositoryNote: "devconfig-backup 是 PUBLIC（公开）工具仓库。规则禁止提交真实备份包、注册表敏感导出、密钥、微信数据库或运行日志；当前 Git 文件候选通过 Assert-NoBackupArtifacts 的已知目录、扩展名和路径检查，任意正文零秘密仍由发布前公开内容门另行核对。",
   summary: "这是给系统重装和换机留后路的工具：它不做整机镜像，而是把难重建的开发配置、凭据、系统导出和安装清单收进恢复候选包，同时把当前 41.89 GB 的微信原应用数据放到独立增量通道。明显可重下的插件、依赖、缓存与 Docker 大盘继续排除，但当前配置包已是 1,911.3 MB，不能再沿用早期 65 MB 的宣传数字。",
   why: "电脑真坏时，安装软件并不难，难的是找回散在几十个目录里的配置、密钥、环境变量、Wi-Fi、终端会话和应用数据。这个项目把采集、打包、热备、云端尝试、任务重建和微信回填顺序写清并自动化；恢复时仍要按版本、兼容性和现场状态选择材料，不能把旧系统原样倒进新系统。",
   plainExample: "比如我准备重装电脑：先查看本地和 G 盘哪份包最新，再按清单装回软件、选择性回填 home 与 AppData、重新映射 Documents 和硬编码用户名；微信先跑只读预检，确认没有运行中客户端和覆盖冲突后才复制，最后由我登录官方微信验收。",
@@ -111,7 +102,7 @@ export const devconfigBackupProject = {
   },
   dataSources: {
     title: "系统从哪里采集配置，如何保障边界安全",
-    intro: "系统通过 sources.psd1 数据驱动清单枚举本机配置文件、注册表环境与系统配置，并调用 rclone/robocopy 执行分层分发；公开仓库绝不包含任何真实备份包、密钥、注册表导出或聊天数据库。",
+    intro: "系统通过 sources.psd1 数据驱动清单枚举本机配置文件、注册表环境与系统配置，并调用 rclone/robocopy 执行分层分发；公开仓库的规则禁止真实备份包、密钥、注册表导出和聊天数据库，当前已知文件候选检查通过。",
     rows: [
       { source: "用户主目录与 AppData（sources.psd1）", data: "按清单采集 .gnupg、.docker、AI/Agent 配置、VS Code/JetBrains 用户设置与终端会话；剔除 node_modules、缓存与 plugins。", result: "最近一次 History=False 任务从 5,657.16 MB staging 生成 1,911.3 MB 包；它是较完整的恢复候选，不是固定数十 MB 的极简包。" },
       { source: "Windows 系统注册表与网络配置", data: "运行时导出 HKCU/HKLM 环境变量、系统 PATH、白名单计划任务 XML、Wi-Fi 配置文件（含密码）与 Xshell 注册表。", result: "这些材料供恢复时逐项核对并导入；计划任务 XML 不能通配批量恢复。" },
@@ -119,7 +110,7 @@ export const devconfigBackupProject = {
       { source: "微信原生应用目录（xwechat_files）", data: "当前 G 盘副本为 41.89 GB、142,693 个文件，包含数据库、图片与音视频媒体，WAL/SHM/journal 伴生文件不被过滤。", result: "G 盘热备成功后还会发布不含文件名或正文的回执；Drive 路线按内容 checksum 逐文件同步，并有 8G 单次传输上限。" },
       { source: "rclone 远端配置与 Windows 代理环境", data: "读取非秘密的 rclone-remote-binding.json 绑定固定远端别名，无窗口任务继承当前用户系统代理。", result: "绑定损坏时不会改投其他远端；最近日任务虽失败，当前只读预检已恢复，但远端 latest 仍落后本地/G 一代。" }
     ],
-    note: "本仓库严格遵守公开安全红线，所有 out/、staging/、state/、logs/ 目录与 *.zip、*.reg、*.kdbx 敏感文件均受 .gitignore 与 Assert-NoBackupArtifacts 机械保护。"
+    note: "out/、staging/、state/、logs/ 与 *.zip、*.reg、*.kdbx 受 .gitignore 和文件候选检查约束；这能拦已知制品类型，不证明任意源码正文绝无秘密。"
   },
   responsibilities: [
     "负责从 sources.psd1 数据驱动采集开发配置、凭据与系统设置；当前生成约 1.91 GB 的选择性恢复候选包。",
@@ -133,7 +124,7 @@ export const devconfigBackupProject = {
     "不将 Docker Desktop 的 VHDX 虚拟磁盘（如 docker_data.vhdx）、镜像层或容器运行态数据库打入配置包。",
     "本仓库脚本与四个任务不写 H；PCConfig 日任务只在人工解锁窗口且新鲜度、介质、容量和写锁门通过时执行冷拷贝。",
     "不把 rclone 或 robocopy 复制成功冒充微信官方客户端已经验收通过，不自动关闭或启动官方微信。",
-    "公开 Git 仓库绝不收纳任何真实 zip 包、注册表敏感导出、API Key、GPG 密钥或微信聊天数据。"
+    "公开 Git 规则禁止真实 zip、注册表敏感导出、API Key、GPG 密钥和微信聊天数据；当前已知文件候选检查通过，任意正文仍走独立公开门。"
   ],
   productPrinciples: [
     {
@@ -199,12 +190,17 @@ export const devconfigBackupProject = {
     { moduleSlug: "recovery-and-tasks", ask: "新电脑可以直接把备份里的任务计划 XML 全部导入吗？", effect: "严禁通配批量导入；旧任务中可能含有历史已退役的路径或 H 盘写入脚本，必须参照 PCConfig 的恢复手册逐项核对后重建。" }
   ],
   evidenceLayers: [
-    { layer: "Source（源码与规则）", proves: "PUBLIC main 提交 a067b58；包含采集、系统导出、微信增量、网络代理、恢复脚本、sources.psd1 以及与当前行为一致的人类恢复入口。", doesNotProve: "源码提交不证明新机器已完成端到端灾难恢复演练，也不证明云端或 H 的对象已经补齐。" },
+    { layer: "Source（源码与规则）", proves: "PUBLIC main 提交 8460be6；包含采集、系统导出、微信增量、网络代理、恢复脚本、sources.psd1，以及 PCConfig 获取条件和当前哈希缺口都写清的人类恢复入口。", doesNotProve: "源码提交不证明新机器已完成端到端灾难恢复演练，也不证明云端或 H 的对象已经补齐。" },
     { layer: "Tests（隔离自动化测试）", proves: "8 个 PowerShell 测试脚本返回通过，覆盖公开仓库文件候选、Docker 采集范围、H 盘隔离、任务代理、事务化任务注册和微信增量/恢复合同。", doesNotProve: "本轮官方微信正在运行，原生恢复测试的合成 Execute 分支按设计跳过；测试也不模拟真实硬盘损坏或完整换机。" },
     { layer: "Runtime（当前系统运行态）", proves: "2026-09-04 回读本地与 G:\\80_Backup\\DevConfig 各 7 份日期包，latest.zip 为 1,911.3 MB；G 盘微信热备为 41.89 GB，Hot 回执为 complete；四个常规任务最近 3 成功/1 失败，临时监控已禁用。随后只读 Drive preflight 已恢复可达，但远端 latest 仍是 9 月 2 日，落后本地/G 一代。", doesNotProve: "网络探针可达不证明新代已上传；本地和 G 盘成功也不证明新电脑恢复已经完成。" },
     { layer: "Recovery（恢复与容灾边界）", proves: "源码与隔离测试定义了默认只读预检、路径冲突拒绝、.pre-restore-* 回滚点和失败后的原目录恢复；PCConfig 冷备任务当前因 H_unavailable 明确跳过。", doesNotProve: "本轮没有执行微信复制、DriveOnly、H 冷拷贝或完整新机恢复，也不证明官方客户端登录后能看到预期历史。" }
   ],
   operationalEntrypoints: [
+    { name: "空白新机取得恢复工具", command: "git clone https://github.com/wlyaaaaa/devconfig-backup.git E:\\Projects\\Backups\\devconfig-backup", purpose: "从公开仓库取得脚本与当前 README；这一步只取得工具，不包含任何私人备份包。" },
+    { name: "检查 G 盘候选代", command: "Get-ChildItem G:\\80_Backup\\DevConfig\\devconfig-*.zip | Sort-Object LastWriteTime -Descending", purpose: "先看日期、大小和文件名；原 state/latest.sha256 仍在时再用 Get-FileHash 比 SHA-256，否则运行 7z t 只验 zip CRC。哈希/CRC 不通过就换上一代或停止。" },
+    { name: "取得 PRIVATE PCConfig", command: "git clone https://github.com/wlyaaaaa/PCConfig.git E:\\PCConfig", purpose: "先恢复 GitHub 私有仓库访问再 clone；拿不到时暂停机器级设置、任务与 H 冷备阶段，不把缺失路径当入口。" },
+    { name: "进入 PCConfig 恢复总入口", command: "Get-Content E:\\PCConfig\\docs\\recovery\\START_RECOVERY.md", purpose: "PCConfig 已取得后，读取机器路径、系统设置、计划任务与 H 冷备的唯一当前恢复顺序。" },
+    { name: "验证计划任务重建方案", command: "node E:\\PCConfig\\tools\\validate_scheduled_task_rebuild_plan.mjs", purpose: "在注册四个项目任务前先检查现行重建方案，不通配导入旧 XML。" },
     { name: "手动执行本地与 G 盘热备", command: "powershell -File .\\Backup-DevConfig.ps1 -Tier Local,Hot", purpose: "生成本地 latest.zip，并把日期包与 latest.zip 复制到 G 盘在线热备目录。" },
     { name: "手动触发 Google Drive 上传", command: "powershell -File .\\Backup-DevConfig.ps1 -Tier Drive", purpose: "把 latest.sha256 指向的完整日期 zip 上传为日期包和 latest.zip；同一对象已验证一致时才跳过。" },
     { name: "微信数据热备增量同步", command: "powershell -File .\\Backup-WeChat.ps1 -Target Hot", purpose: "通过 robocopy /E 快速向 G:\\80_Backup\\WeChat 刷新原生目录，零流量保全原应用数据。" },
@@ -216,10 +212,10 @@ export const devconfigBackupProject = {
   ],
   evolution: [
     { date: "2026-06-23—2026-07-08", commit: "基础架构与清单数据驱动", result: "建立 sources.psd1 数据驱动采集核心，分离可重下软件，建立本地、G 盘与 Google Drive 三层备份体系。" },
-    { date: "2026-07-09—2026-07-27", commit: "安全防泄露门禁与冷备隔离", result: "建立 Assert-NoBackupArtifacts 机械门禁杜绝密钥进仓库；明确 H 盘为冷备介质并禁止计划任务直写；引入无窗口代理继承。" },
+    { date: "2026-07-09—2026-07-27", commit: "公开制品门与冷备隔离", result: "建立 Assert-NoBackupArtifacts 文件候选门，拦截已知备份目录、归档/密钥容器扩展名和微信数据库路径；明确本仓库不写 H，并引入无窗口代理继承。" },
     { date: "2026-08-27—2026-08-31", commit: "微信恢复、远端失败关闭与热备回执", result: "实现 Restore-WeChat 只读预检与 .pre-restore-* 回滚保护，强化 rclone 远端 binding 失败关闭，并让 G 盘 Hot 成功后发布供 PCConfig 消费的有界回执。" }
   ],
-  snapshotUpdateNote: "本页绑定 2026-09-04 的 PUBLIC 源提交 a067b58、只读运行态回读与 8 个测试脚本证据。后续仅在备份源范围、分层架构、微信增量策略、任务启动链或恢复边界发生实质变动时刷新；本仓库不收录任何真实密钥或备份压缩包。"
+  snapshotUpdateNote: "本页绑定 2026-09-04 的 PUBLIC 源提交 8460be6、只读运行态回读与 8 个测试脚本证据。后续仅在备份源范围、分层架构、微信增量策略、任务启动链或恢复边界发生实质变动时刷新；本仓库不收录任何真实密钥或备份压缩包。"
 };
 
 export const devconfigBackupModules = [
@@ -232,7 +228,7 @@ export const devconfigBackupModules = [
     statusTone: "warn",
     relation: "这是整套灾备的介质层：先把能离线完成的本地与 G 盘副本落稳，再单独尝试云端；H 盘冷备不归这个仓库直接写。",
     value: "断网或远端出问题时，本地热备不会陪着一起失败；查看状态时也能直接知道是本地、G 盘、Drive 还是 PCConfig 冷备卡住。",
-    why: "若只把备份存本地，电脑硬盘损坏时全军覆没；若每次备份都无脑往海外云盘上传，每天几十上百兆的重复数据极耗带宽且容易因网络波动中断；若直接把冷备移动硬盘常挂在系统上，又面临勒索病毒与误删风险。",
+    why: "只存本地会把恢复材料和故障盘绑在一起，所以还要 G、Drive 与 H。这里没有假装配置包省流量：每个新代通常把约 1.91 GB 的同一 zip 分别上传为日期名和 latest 两个对象，这是用更直白的版本保留换取带宽；真正的逐文件增量只属于微信路线。H 则用人工解锁窗口换取长期隔离。",
     example: "比如我问“昨晚备份到底成没成”：状态页会告诉我 Local/Hot 任务为 0、本地和 G 盘各有 7 份日期包；同时明确告诉我 Drive 日任务为 1，而不是用“绑定存在”把云端写成正常。",
     result: "得到彼此独立的本地、G 盘、Drive 和 PCConfig 冷备结果。当前可依赖的是本地/G 新代；Drive 能连但尚未补齐，H 没解锁所以没有执行冷拷贝。",
     problem: "防止网络离线或海外云盘受阻导致本地热备无法完成，同时防止冷备介质暴露在日常自动化写入中导致损坏。",
@@ -436,7 +432,7 @@ export const devconfigBackupModules = [
     shortTitle: "微信原生增量",
     title: "41.89 GB 微信热备、逐文件增量与可核对交接回执",
     teaser: "微信原应用数据不走整包压缩；robocopy 刷新静态副本，rclone 按内容增量并限制单次 8G。WAL/SHM/journal 不漏掉，但运行中复制仍不是一致快照。",
-    status: "G 盘 Hot 最近成功并发布回执；微信 Drive 周任务最近返回 0，云端恢复未验收",
+    status: "G 盘 Hot 于 9 月 3 日成功并发布回执；微信 Drive 周任务 8 月 30 日返回 0，本轮未重列远端对象，云端恢复未验收",
     statusTone: "good",
     relation: "把体积大、变化快的微信原应用目录从配置包里拆出来单独维护；热备结果再用有界回执交给 PCConfig 判断冷备前置条件。",
     value: "不必每次把几十 GB 重新压成一个大包；没变化的文件会跳过，单次云传输也有上限。代价是文件级副本仍需官方客户端做最终可用性验收。",
@@ -504,7 +500,8 @@ export const devconfigBackupModules = [
       "tests/Assert-WeChatIncrementalIntegrity.ps1 PASS，验证 checksum 的同大小同时间内容变化用例，以及 Hot 回执所需字段存在。",
       "8G 上限、DbOnly/DriveFull 范围与 WAL/SHM 保留只有脚本/静态合同证据；本轮没有真的传满 8G，也没有运行 SQLite 一致性测试。",
       "G:\\80_Backup\\WeChat\\xwechat_files 当前为 41.89 GB / 142,693 文件；本轮没有重新证明它与正在运行的源目录逐项一致。",
-      "Hot 回执完成时间为 2026-09-03 18:30（本机时区），目标匹配 G 盘微信路径，robocopy_exit 为 3。"
+      "Hot 回执完成时间为 2026-09-03 18:30（本机时区），目标匹配 G 盘微信路径，robocopy_exit 为 3。",
+      "WeChatBackup-Drive-Weekly 最近一次为 2026-08-30 20:00、返回 0；本轮没有重新执行远端目录列表或 rclone check，因此当前云端新鲜度保持 Unknown（未知）。"
     ],
     searchAliases: [
       "微信备份",
@@ -554,7 +551,7 @@ export const devconfigBackupModules = [
     statusTone: "warn",
     relation: "把备份材料变成一套可以逐层检查的恢复顺序；它负责工具脚本，机器路径、任务恢复次序和 H 盘冷备仍由 PCConfig 决定。",
     value: "真出事时不必凭记忆乱拷：先装基础工具，再选择性回填配置，单独处理系统导出和微信，最后重建任务并逐项看结果。",
-    why: "系统崩溃或新装机后，很多人不知道先装什么后回填什么，导致环境变量冲突；更常见的是忽视了路径陷阱：重装后 Documents 默认指向 C 盘导致大量软件读不到工程，或者新机器换了用户名导致所有硬编码绝对路径全部失效；微信直接无脑覆盖更有冲掉最新数据的风险。",
+    why: "系统崩溃或新装机后，最容易乱的是先装什么、哪些配置适合回填、哪些系统项要重新建立。Documents 回到 C 盘会让依赖旧位置的软件读到空目录；换用户名也会让部分硬编码旧路径失效。微信若直接覆盖非空目标，还可能冲掉新现场。",
     example: "比如我换到一台干净电脑：先用清单补软件，再检查哪些 home/AppData 配置与新版本兼容；Documents 重新指向 E:\\Documents，用户名不同就重映射旧绝对路径。微信先预检，复制后再登录官方客户端；计划任务最后按 PCConfig 清单逐项重建。",
     result: "得到一条可暂停、可回滚、可逐层验收的恢复路径。它避免盲目覆盖，但没有承诺固定耗时，也没有把文档步骤、合成测试或文件复制冒充整机恢复成功。",
     problem: "防止重装新系统后盲目覆盖导致已有数据丢失，防止因 Documents 路径或用户名不一致导致软件配置失效。",
@@ -580,13 +577,13 @@ export const devconfigBackupModules = [
       "tests/Assert-WeChatNativeRecovery.ps1 验证默认预检、路径/目标保护和人工验收状态；本轮客户端运行时不会强行执行合成复制。"
     ],
     flow: [
-      "新电脑安装 Scoop、Winget、VS Code、PowerShell 与 rclone。",
-      "取回 latest.zip 解压，按新系统版本与现场兼容性选择性回填 home/ 与 appdata/。",
-      "重定向“文档”到 E:\\Documents；用户名不同则先规划旧绝对路径的重映射或替换。",
-      "按 PCConfig 恢复手册逐项审查环境变量、Xshell、Wi-Fi 与其他系统导出，不通配导入旧任务 XML。",
-      "微信源可以是默认 G 热备，也可以通过 -BackupRoot 明确指定本地/USB 原生目录；-DriveOnly 仍属于未完成真实联网验收的兼容路径。",
-      "运行 Restore-WeChat.ps1 只读预检，确认源/目标路径安全且微信关闭后显式回填，再登录官方客户端核对历史。",
-      "运行 Setup-ScheduledTasks.ps1 挂上日常定时任务，恢复自动化运行。"
+      "空机先安装 Git，再从本页公开入口 clone devconfig-backup。恢复 GitHub 私有仓库访问后，再 clone wlyaaaaa/PCConfig 到 E:\\PCConfig；拿不到 PCConfig 时，机器级设置、任务和 H 冷备阶段明确暂停。",
+      "先选备份代：当前优先 G:\\80_Backup\\DevConfig\\latest.zip；H 只能在 PCConfig 冷备已真实完成且人工解锁时使用；配置 Drive 当前比本地/G 落后一代，不能盲拿 remote latest 当最新。原 state/latest.sha256 仍在时比 SHA-256；否则 7z t 只能验内部 CRC，强来源哈希保持缺口。",
+      "解压到独立的 E:\\restore\\devconfig，不直接覆盖用户目录；先用 _manifests/scoop.json、winget.json 和扩展清单补回可下载软件。",
+      "按新系统版本选择性把 home/、appdata-roaming/、appdata-local/ 与 extra/Scoop-persist/ 映射到对应目录；Documents 指回 E:\\Documents，用户名不同就重映射旧绝对路径。",
+      "环境变量、Xshell、Wi-Fi、hosts 和计划任务按 E:\\PCConfig\\docs\\recovery\\START_RECOVERY.md 与 scheduled_tasks_rebuild.md 逐项处理；先跑 validate_scheduled_task_rebuild_plan.mjs，不通配导入旧 XML。",
+      "微信先用默认 G 源或明确的 -BackupRoot 本地/USB 目录做只读预检；确认路径与客户端状态后才 Execute，最后登录官方客户端验收。-DriveOnly 仍是未完成真实联网验收的兼容路径。",
+      "Local 打包时会把已有的 state/rclone-remote-binding.json 复制进包内 _manifests（只含非秘密别名，不含 OAuth/token）。新机重新执行 rclone config 后，再把这份别名选择回填到 state，运行 Setup-ScheduledTasks.ps1 并逐项查看四任务状态。"
     ],
     concepts: [
       { term: "Idempotent Task Registration（幂等任务注册）", explanation: "无论运行多少次，只更新或确保计划任务处于正确配置，不产生重复实例或脏状态。" },
@@ -599,6 +596,7 @@ export const devconfigBackupModules = [
       "Restore-WeChat.ps1 在未经用户显式确认官方微信关闭前严禁写入，目标非空必须保留回滚副本。",
       "备份源与目标不能是盘根、同一路径、互为父子目录或经过重解析点；这些条件任何一个不清楚就不执行。",
       "-DriveOnly 只说明存在兼容实现，本轮没有真实联网下载恢复证据，不能替代已验的本地/G 路线。",
+      "彻底丢失原 state/latest.sha256 时，当前 G/Drive 包没有可携带的预期 SHA-256；7z t 只能检查 zip 内部 CRC，不能冒充来源哈希闭环。",
       "文件复制完成仅标记 COPY_COMPLETE_AWAITING_HUMAN_ACCEPTANCE，严禁冒充微信恢复成功。"
     ],
     failures: [

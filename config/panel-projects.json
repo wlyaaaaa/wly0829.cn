@@ -25,7 +25,7 @@
     "shared_css_gzip_budget_kib": 21,
     "search_index_gzip_budget_kib": 118,
     "project_search_index_gzip_budget_kib": 144,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 35-project value plan renders 23 published projects after adding DevConfig Backup, bringing the compact search projection to 308 records. The current shared/all-project search measures 120521/138876 gzip bytes, so the two lines use the minimum passing integers 118/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 35-project value plan renders 23 published projects after adding DevConfig Backup, bringing the compact search projection to 308 records. The current shared/all-project search measures 120748/139481 gzip bytes, so the two lines use the minimum passing integers 118/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1453,12 +1453,12 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 4,
-        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation; conversation-triggered synchronous on-demand refresh with no background runtime; direct local Chrome History/Bookmarks and Steam collection, current logged-in Chrome Bilibili history/favorites/watch-later/likes/coins/bangumi collection, and manual Google Play/air/rail snapshots; eighteen source instances, fifteen current preference snapshots and seven individually classified missing logical sources without reviving retired PersonalOS; source artifact occurrences, import health, semantic change assessment, relevant snapshot rebuild and ordinary-query readback; Steam multi-account AppID unification with played-game-only evidence, playtime excluded from scoring, current-free slightly downweighted and historical acquisition unknown; all refund/closed/cancelled/failed/revoked transactions excluded from preference context and repeat counts, one successful durable/software/trip observation retained as positive without repurchase, recency without expiry or absence-as-dislike; specific fact/original verification and Skill/AI-owned familiar-adjacent-novel recommendation menus with user choice and search handoff",
+        "semantic_revision": 5,
+        "scope": "complete public-safe overview and five source-backed modules covering current/historical statements and correction-driven invalidation; conversation-triggered synchronous on-demand refresh with no background runtime; direct local Chrome History/Bookmarks and Steam collection, current logged-in Chrome Bilibili streams, and manual Google Play/air/rail snapshots; eighteen source instances, three current preference inferences, twelve deliberately invalidated inferences awaiting a later deep review, and seven individually classified missing logical sources without reviving retired PersonalOS; source artifact occurrences, import health, semantic change assessment, evidence-bound snapshot rebuild and ordinary-query readback; full-refund effective outcomes propagated through reliable same-order chains while original order/payment/refund facts remain, partial/grouped/ambiguous cases stay Unknown, and payment/card observations never duplicate a purchase; Bilibili favorites/watch-later/bangumi current-set retirement only with complete account/schema/range/pagination/count/unique-member proof, while play/like/coin remain window streams and removal never implies dislike; Steam played-game-only evidence, no playtime score and unknown historical acquisition; one successful durable/software/trip observation retained as positive without repurchase, recency only ranks and absence never implies dislike; specific fact/original verification and Skill/AI-owned familiar-adjacent-novel menus",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
           "read current AGENTS.md, CURRENT_ACCEPTANCE.md, README.md, schema.sql, daily_preferences.py, live_increment.py, source_snapshots.py, bilibili_browser_collect.mjs, PowerShell wrapper and source-owned tests; distinguish collectors, database evidence/state behavior and Skill/AI recommendation behavior",
-          "run the 64-test Python suite, 4-test Node suite, py_compile and Node syntax check; read only aggregate status/evidence/facts including Bilibili stream counts, Steam played/unplayed/application classes, missing-source availability, current snapshots, artifact occurrences and database integrity/foreign-key checks",
+          "run the 73-test Python suite, 7-test Node suite, py_compile and Node syntax check; read only aggregate status/evidence/facts including full-refund outcomes, Bilibili database versus current-window counts and current-set retirement, Steam classes, missing-source availability, three current inferences, artifact occurrences and database integrity/foreign-key checks",
           "read only public-safe aggregates and owner-selected ordinary L2 examples from the current local snapshot; never publish source ids tied to accounts, raw statements, merchant/amount/time combinations, routes, locators, hashes or original private material",
           "review the current implementation-blind natural update request, immediate idempotent no-change refresh, Bilibili-scoped question, tool-domain question, travel question and exact fact separation; preserve what each proves and cannot prove"
         ],
@@ -1477,16 +1477,16 @@
         "project_overview_product_principles_current_boundary_and_user_choice",
         "current_historical_statement_timeline_and_correction_invalidation",
         "conversation_triggered_on_demand_refresh_without_background_tasks_services_queues_or_watchers",
-        "eighteen_source_instances_fifteen_current_snapshots_seven_missing_sources_and_manual_snapshot_boundaries",
+        "eighteen_source_instances_three_current_inferences_twelve_invalidated_for_later_deep_review_seven_missing_sources_and_manual_snapshot_boundaries",
         "live_chrome_history_bookmarks_and_steam_collection_with_anonymous_account_edges",
-        "current_logged_in_chrome_bilibili_history_favorites_watch_later_likes_coins_bangumi_and_visible_window_limits",
+        "current_logged_in_chrome_bilibili_3382_database_plays_1349_current_window_719_favorites_4_watch_later_277_typed_bangumi_20_likes_2_coins_and_complete_current_set_retirement_rules",
         "google_takeout_chrome_and_play_occurrences_umetrip_and_rail_manual_snapshot_parsers",
         "steam_multi_account_appid_unified_library_played_game_evidence_no_playtime_score_slight_current_free_downweight_and_unknown_historical_acquisition",
         "natural_query_domain_axis_scoped_context_bilibili_isolation_chinese_recall_ai_expression_filtering_and_recency_without_expiry",
-        "specific_order_nonpositive_payment_expression_fact_roles_absence_unknown_and_public_l2_soda_example",
+        "full_refund_same_order_chain_effective_outcome_original_fact_retention_partial_grouped_unknown_payment_card_no_duplicate_and_specific_fact_roles",
         "artifact_hash_original_readback_and_cached_excerpt_boundary",
         "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
-        "current_119382_records_160574_versions_41192_history_26_current_statements_3_historical_statements_15_snapshots_18_sources_64_python_4_node_tests",
+        "current_120869_records_163089_versions_42220_history_26_current_statements_3_historical_statements_3_inferences_18_sources_73_python_7_node_tests",
         "seven_named_missing_sources_platform_visible_window_limits_and_manual_source_freshness",
         "refresh_and_ingest_states_post_commit_cache_gap_semantic_completion_and_existing_personaldata_backup_scope"
       ],
@@ -1524,7 +1524,7 @@
       ],
       "refresh_rules": {
         "semantic_review_required_when": [
-          "a displayed domain boundary, automatic-versus-manual source mode, Chrome/Steam/Bilibili collector, browser login path, Bilibili stream/range, source panorama, artifact occurrence, Steam account/library/store relation, playtime/free scoring, missing-source availability, import mode, current/history rule, evidence role, nonpositive-order treatment, recency/expiry/absence semantics, repeat-count semantics, one-off durable purchase semantics, preference-increment completion, query scope, snapshot invalidation, backup/recovery boundary, recommendation menu or failure behavior changes meaning",
+          "a displayed domain boundary, automatic-versus-manual source mode, Chrome/Steam/Bilibili collector, browser login path, Bilibili stream/range/current-set completeness or retirement, source panorama, artifact occurrence, Steam account/library/store relation, missing-source availability, import mode, current/history rule, evidence role, full-refund/partial/grouped effective outcome, payment duplication, repeat-count semantics, recency/absence semantics, preference-increment completion, query scope, snapshot invalidation, backup/recovery boundary, recommendation menu or failure behavior changes meaning",
           "a false-PASS path, destructive full-import path, source-identity or Bilibili account conflict, coverage/gap drift, stale snapshot error, AI-expression misclassification, cross-domain evidence leak, original-drift failure or collector partial result becomes implemented, regresses or changes the user's next action",
           "a current implementation-blind update/recommendation, immediate idempotent refresh, exact-fact, source-migration or natural-query acceptance changes what the owner should trust without exposing private payload"
         ],
@@ -2114,7 +2114,7 @@
       "ai_refresh": {
         "content_path": "app/content-devconfig-backup.js",
         "semantic_revision": 1,
-        "scope": "project overview and four source-backed modules covering current local/G/Drive/H results, full-object DevConfig generations, data-driven recovery candidates and plaintext-payload boundary, WeChat Hot/Local/Drive/DbOnly modes with per-invocation 8G limit and bounded Hot receipt, selective local/USB/unverified-Drive recovery with path and rollback guards, Documents/username compatibility, and transactionally restored wscript tasks whose wrappers prefer PowerShell 7 and fall back to 5.1",
+        "scope": "project overview and four source-backed modules covering current local/G/Drive/H results, full-object DevConfig generations, data-driven recovery candidates and plaintext-payload boundary, WeChat Hot/Local/Drive/DbOnly modes with per-invocation 8G limit and bounded Hot receipt, blank-machine PUBLIC tool plus authenticated PRIVATE PCConfig acquisition, selective local/USB/unverified-Drive recovery with path and rollback guards, the non-portable latest.sha256 gap and 7z CRC fallback limit, Documents/username compatibility, and transactionally restored wscript tasks whose wrappers prefer PowerShell 7 and fall back to 5.1",
         "collectors": [
           "git -C E:\\Projects\\Backups\\devconfig-backup status --porcelain=v2 --branch",
           "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-NoBackupArtifacts.ps1",
@@ -2159,6 +2159,8 @@
         "sqlite_wal_shm_journal_non_exclusion_and_per_invocation_8G_limit_without_consistency_or_cumulative_quota_guarantees",
         "bounded_wechat_hot_receipt_without_payload_names_or_content_and_PCConfig_freshness_consumption",
         "seven_step_disaster_recovery_runbook_with_documents_e_drive_and_10979_username_traps",
+        "blank_machine_public_devconfig_and_authenticated_private_PCConfig_acquisition_with_explicit_stop_when_PCConfig_is_unavailable",
+        "latest_sha256_is_not_portable_to_G_or_Drive_and_7z_CRC_does_not_prove_source_hash",
         "restore_wechat_local_USB_and_unverified_DriveOnly_sources_with_drive_root_overlap_reparse_precheck_pre_restore_failed_restore_rollback_and_human_acceptance_boundaries",
         "task_scheduler_wscript_hidden_launch_PowerShell_7_preference_5_1_fallback_and_unattended_network_proxy_inheritance",
         "transactional_four_task_registration_with_non_owner_conflict_rejection_exact_XML_preimages_and_rollback",

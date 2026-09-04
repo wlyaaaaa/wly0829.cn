@@ -2,17 +2,15 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-09-05 01:34（中国时间）",
-  "sourceCommit": "c5684d7060a3276f3abd2cc49a5950569726998b",
+  "observedAt": "2026-09-05 02:19（中国时间）",
+  "sourceCommit": "a3ed133d38386edbb93ad6c0ccdf68d5d0bf02da",
   "sourceBranch": "main",
-  "sourceWorktreeClean": false,
-  "sourceDirtyCount": 1,
-  "sourceDirtyPaths": [
-    "skills/daily-preferences/SKILL.md"
-  ],
+  "sourceWorktreeClean": true,
+  "sourceDirtyCount": 0,
+  "sourceDirtyPaths": [],
   "sourceAhead": 0,
   "sourceBehind": 0,
-  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树有 1 项未激活修改",
+  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树干净",
   "repositoryVisibility": "私有",
   "repositoryVisibilityEvidence": "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   "ruleBinding": [
@@ -126,8 +124,8 @@ export const generatedPanelFacts = {
       {
         "layer": "Source checkout（候选源码工作树）",
         "status": "repair",
-        "label": "1 项未激活施工",
-        "detail": "source HEAD=c5684d7060a3，origin/main=c5684d7060a3，active release commit=c5684d7060a3。未提交路径：skills/daily-preferences/SKILL.md。 Source 不等于 active release 时只作候选施工，不会覆盖 E101。"
+        "label": "main 已进入下一候选提交",
+        "detail": "source HEAD=a3ed133d3838，origin/main=a3ed133d3838，active release commit=c5684d7060a3。工作树干净。 Source 不等于 active release 时只作候选施工，不会覆盖 E101。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
@@ -159,6 +157,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "ed45a96bd567d85b95204784e7d59e590d04771da2ed224f49df3fdb71a3641d"
+    "payloadSha256": "daf96bf61d119ac49d31d699bd711c2c979b82c33540a0115cf23cf67a9dd764"
   }
 };

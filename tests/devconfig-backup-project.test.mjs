@@ -165,7 +165,10 @@ test("devconfig-backup explains disaster recovery runbook and two critical traps
     "COPY_COMPLETE_AWAITING_HUMAN_ACCEPTANCE",
     "wscript.exe",
     "PowerShell 7",
-    "Setup-ScheduledTasks.ps1"
+    "Setup-ScheduledTasks.ps1",
+    "wlyaaaaa/PCConfig",
+    "7z t",
+    "强来源哈希"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits recovery runbook keyword: ${expected}`);
   }
@@ -198,7 +201,7 @@ test("System links its devconfig-backup asset to the new detail page", () => {
 
 test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
-  assert.match(text, /3 成功 · 1 失败/);
+  assert.match(text, /3 个返回 0[^。]{0,80}配置 Drive 返回 1/);
   assert.match(text, /临时云监控[^。]{0,40}已禁用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
   assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
   assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);

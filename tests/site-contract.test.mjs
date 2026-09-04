@@ -140,7 +140,7 @@ test("project quick metrics lead with product reality instead of implementation 
     ["document-materials", ["3 类", "1 页 · 10 文件", "Unknown（未知）", "未执行"]],
     ["work-delivery", ["6 个文件", "0", "0", "0"]],
     ["personal-media", ["20,154 张", "376 个", "3,830 个", "1,182 项"]],
-    ["devconfig-backup", ["1,911.3 MB", "41.89 GB", "3 成功 · 1 失败", "已禁用"]]
+    ["devconfig-backup", ["1,911.3 MB", "41.89 GB", "落后 1 代", "skipped（已跳过）"]]
   ]);
   for (const [slug, values] of expected) {
     const candidate = projects.find((item) => item.slug === slug);
@@ -2458,15 +2458,15 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   assert.doesNotMatch(publicText, /observed_account_refs|played_account_refs|account-\d+/i, "daily-preferences leaks Steam account references");
   assert.doesNotMatch(publicText, /苏打水是农夫山泉的。并非气泡水|总不能不干净/, "daily-preferences publishes raw private conversation text");
   for (const expected of [
-    /d7f53b8ca0d54b9a61719499af669e216e083f15/,
-    /daily-preferences\.v0\.8/,
-    /64.*Python.*4.*Node|64\/64.*4\/4/s,
+    /3275ca76cec37a3c799acbf14a336b31f333cdc1/,
+    /daily-preferences\.v0\.9\.1/,
+    /73.*Python.*7.*Node|73\/73.*7\/7/s,
     /26 条.*(?:current )?明示|26 条明示.*current/s,
     /3 条.*historical.*明示|3 条历史明示/s,
-    /15 个.*current.*快照|15 个有效快照/s,
-    /119,382/,
-    /160,574/,
-    /41,192/,
+    /3 个.*current.*推定|3 个 current 推定/s,
+    /120,869/,
+    /163,089/,
+    /42,220/,
     /18 个来源实例|18 个来源/,
     /7 项.*未取得|7 类逻辑来源/s,
     /bank_transactions/,
@@ -2488,14 +2488,14 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /bilibili_activity.*当前|当前.*bilibili_activity/s,
     /Google Play.*航空.*12306.*人工快照/s,
     /Chrome.*Steam.*哔哩哔哩.*(?:按需|自动增量)/s,
-    /3,375.*719.*20.*2.*5.*277/s,
+    /3,382.*1,349.*719.*4.*277.*20.*2/s,
     /118.*已玩游戏.*6.*已玩应用.*8.*未玩游戏.*33.*应用/s,
     /游玩时长.*不参与.*评分|时长不评分/s,
     /免费.*0\.5/s,
     /AppID.*多账号|多账号.*AppID/s,
     /历史取得方式.*(?:Unknown|未知)|(?:Unknown|未知).*历史取得方式/s,
     /PersonalOS.*一次性.*(?:不恢复|不依赖)/s,
-    /138 条.*117.*21|138\/117\/21/s,
+    /1,287.*192.*32/s,
     /12.*acquired_verified.*6.*snapshot_only/s,
     /conversation.on.demand|对话内按需|新对话.*同步刷新/s,
     /no_change.*零新增.*零更新|三源均 no_change/s,
@@ -2504,6 +2504,13 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /最新.*明示|现在说的优先/,
     /买过不等于喜欢/,
     /退款.*关闭.*取消.*失败.*(?:不进入|排除).*(?:偏好|模型上下文).*(?:复购|repeat_count)/s,
+    /全额退款.*(?:同订单链|订单链).*refunded_full.*(?:原.*事实|事实.*保留).*退出.*(?:偏好|evidence).*(?:复购|repeat_count).*快照/s,
+    /部分退款.*组单.*(?:关联不唯一|Unknown)|partial.*Unknown/s,
+    /信用卡.*(?:旁证|支付).*不.*(?:重复|第二次购买)|支付.*信用卡.*不.*重复/s,
+    /收藏.*稍后.*追番.*(?:同账号|Schema).*分页.*计数.*(?:成员|唯一).*缺失.*退出 current/s,
+    /播放.*点赞.*投币.*窗口.*不.*(?:清退|退役)/s,
+    /移除.*不.*喜欢|不.*由移除.*喜欢/s,
+    /12 个.*失效.*(?:下一轮|深度审查)/s,
     /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s,
     /低频.*(?:没有记录|无记录).*不.*喜欢/s,
     /材料.*(?:保全|保存).*ingest.*(?:不等于|不能).*完成.*覆盖.*(?:快照|自然问题)/s,
@@ -2531,6 +2538,7 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
     /现有登录.*Chrome|当前已登录.*Chrome/s,
     /同一.*Takeout ZIP.*Chrome.*Google Play.*occurrence/s
   ]) assert.match(publicText, expected, `daily-preferences omits current truth: ${expected}`);
+  assert.doesNotMatch(publicText, /d7f53b8|daily-preferences\.v0\.8|119,382|160,574|41,192|15 个 (?:current|有效)快照|3,375|5 条稍后再看|64\+4/);
   assert.ok(dailyPreferencesProject.operationalEntrypoints.every((item) => item.command.startsWith("pwsh -NoProfile -File .\\daily-preferences.ps1")), "daily-preferences exposes a non-runnable wrapper command");
 
   const moduleSlugs = new Set(dailyPreferencesModules.map((item) => item.slug));
@@ -2549,12 +2557,12 @@ test("daily-preferences separates current truth, evidence, inference and AI-owne
   const registration = registry.projects.find((item) => item.id === "daily-preferences");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-daily-preferences.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 4);
-  assert.match(registration.ai_refresh.scope, /all refund\/closed\/cancelled\/failed\/revoked transactions excluded from preference context and repeat counts/);
-  assert.match(registration.ai_refresh.scope, /recency without expiry or absence-as-dislike/);
-  assert.match(registration.ai_refresh.scope, /semantic change assessment.*snapshot rebuild.*ordinary-query readback/);
+  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.match(registration.ai_refresh.scope, /full-refund effective outcomes propagated through reliable same-order chains/);
+  assert.match(registration.ai_refresh.scope, /partial\/grouped\/ambiguous cases stay Unknown/);
+  assert.match(registration.ai_refresh.scope, /Bilibili.*current-set retirement only with complete account\/schema\/range\/pagination\/count\/unique-member proof/);
   assert.match(registration.ai_refresh.scope, /conversation-triggered synchronous on-demand refresh/);
-  assert.match(registration.ai_refresh.scope, /playtime excluded from scoring/);
+  assert.match(registration.ai_refresh.scope, /no playtime score|playtime excluded from scoring/);
   assert.equal(registration.source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
@@ -2972,7 +2980,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDailyPreferences.status, "ready_for_ai");
   assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
   assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
-  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 4);
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 5);
   assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
@@ -3503,10 +3511,36 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const dailyPreferences = skills.find((item) => item.slug === "daily-preferences");
   const dailyPreferencesText = JSON.stringify({ entry: dailyPreferences, guide: skillGuides["daily-preferences"], outcome: skillOutcomes["daily-preferences"] });
   assert.equal(dailyPreferences.sourcePath, "E:\\.agents\\skills\\daily-preferences\\SKILL.md");
-  assert.ok(Number.isInteger(dailyPreferences.sourceBytes) && dailyPreferences.sourceBytes > 3000);
-  assert.match(dailyPreferences.sourceSha256, /^[a-f0-9]{64}$/);
+  assert.equal(dailyPreferences.sourceBytes, 11084);
+  assert.equal(dailyPreferences.sourceSha256, "b0ddad277748ce8f2118e515ae29ddc6e5532a8a32d0d29d5463062c793df948");
   assert.doesNotMatch(dailyPreferencesText, /V:\\\\Personal\\\\Projects\\\\daily-preferences|E:\\\\PersonalData\\\\日常偏好/, "daily-preferences Skill publishes a private project or data locator");
-  for (const expected of [/最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i, /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/, /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/, /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s, /full.*incremental/s, /d7f53b8/, /v0\.8/, /64\/64.*4\/4|64.*Python.*4.*Node/s, /26 条.*3 条.*15 个/s, /18 个来源/, /7 项.*未取得/, /119,382/, /160,574/, /退款.*关闭.*取消.*失败.*撤销.*(?:不进入|退出).*(?:偏好|模型上下文).*(?:复购|repeat count|repeat_count)/s, /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s, /低频.*(?:没有记录|无记录).*不.*喜欢/s, /一次成功.*(?:耐用品|软件|行程).*不.*(?:降为|变成).*不喜欢/s, /conversation.on.demand|对话内.*按需|新对话.*刷新/s, /当前.*Chrome.*哔哩哔哩|哔哩哔哩.*当前.*Chrome/s, /播放.*收藏.*稍后.*点赞.*投币.*追番/s, /3,375.*719.*5.*20.*2.*277/s, /Google Play.*航空.*12306.*人工快照/s, /Steam.*AppID.*(?:已玩|实际玩)|实际玩.*Steam/s, /游玩.*时长.*不.*评分|时长不评分/s, /免费.*0\.5/s, /未玩.*应用.*不.*(?:混入|进入)/s, /历史取得方式.*Unknown|Unknown.*历史取得方式/s, /实现盲/, /no_change/, /自动备份.*不.*(?:跨机恢复|第二套备份)|PersonalData.*自动备份/s, /熟悉.*相邻.*新鲜/s]) {
+  for (const expected of [
+    /最新.*明示|明确表达.*优先/, /薄快照|最小.*证据/, /facts|事实核对/i,
+    /理由/, /可纠正|可以.*推翻/, /不.*中央.*画像/, /不.*后台同步/,
+    /健康/, /资产/, /付款|凭据/, /他人偏好/, /工作.*执行|工作.*设计/,
+    /旅行|住宿/, /数字消费|服务工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s,
+    /full.*incremental/s, /3275ca7/, /a3ed133/, /E101.*c5684d7|c5684d7.*E101/s,
+    /v0\.9\.1/, /73\/73.*7\/7|73.*Python.*7.*Node/s,
+    /26 条.*3 条.*3 个/s, /18 个来源/, /7 项.*未取得/, /120,869/, /163,089/,
+    /全额退款.*(?:订单链|refunded_full).*(?:事实.*保留|保留.*事实).*(?:退出|不进入).*(?:偏好|evidence).*(?:复购|repeat)/s,
+    /部分退款.*组单.*Unknown|partial.*Unknown/s,
+    /支付.*信用卡.*(?:旁证|不重复)|信用卡.*(?:旁证|不重复)/s,
+    /收藏.*稍后.*追番.*current set.*(?:缺失|退役).*不.*喜欢/s,
+    /时间.*排序.*不.*(?:过期|消失)|近期.*更靠前.*久远.*仍/s,
+    /低频.*(?:没有记录|无记录).*不.*喜欢/s,
+    /一次成功.*(?:耐用品|软件|行程).*不.*(?:降为|变成).*不喜欢/s,
+    /conversation.on.demand|当前对话.*同步刷新|自然.*更新意图.*刷新/s,
+    /当前.*Chrome.*哔哩哔哩|哔哩哔哩.*当前.*Chrome/s,
+    /3,382.*1,349.*719.*4.*277.*20.*2/s,
+    /Google Play.*航空.*12306.*人工快照/s,
+    /Steam.*AppID.*(?:已玩|实际玩)|实际玩.*Steam/s,
+    /游玩.*时长.*不.*评分|时长不评分/s, /免费.*0\.5/s,
+    /未玩.*应用.*不.*(?:混入|进入)/s,
+    /历史取得方式.*Unknown|Unknown.*历史取得方式/s,
+    /实现盲/, /no_change/, /12 个.*失效.*(?:下一轮|深度审查)/s,
+    /自动备份.*不.*(?:跨机恢复|第二套备份)|PersonalData.*自动备份/s,
+    /熟悉.*相邻.*新鲜/s
+  ]) {
     assert.match(dailyPreferencesText, expected, `daily-preferences omits product boundary: ${expected}`);
   }
   const browserContinuity = skills.find((item) => item.slug === "browser-control-continuity");
