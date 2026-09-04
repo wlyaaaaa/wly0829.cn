@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 46,
   remoteOnlyCount: 3,
-  detailedPageCount: 21,
+  detailedPageCount: 22,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十一个完整参考页，当前新增 OpenClawGateway 的消息入口、Gateway 常驻、模型成本、受控更新、备份恢复和 CodeG 接入详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
+  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不同。项目目录提供二十二个完整参考页，当前新增 Sunshine 远程串流的主屏优先、VDD 兜底、窗口守护、IPv6 直连与受限码率运维详情；媒体库是本地项目，不被虚构成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只承担呈现，不再套一层项目介绍。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -614,7 +614,7 @@ export const systemProjectDomains = [
       { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "代理异常退出后诊断并清理残留网络状态，让 Windows 回到可验证的直连。", kind: "修复工具", href: projectLedgerHref },
       { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "让内存盘只承载可重建缓存，并在异常占用或结构损坏时安全重建。", kind: "缓存守护", href: projectLedgerHref },
       { id: "scripts", title: "电脑常用动作", repo: "Scripts", role: "把声音、微信双开、卡键、网络和热备等高频小问题收成可重复的一键动作。", kind: "工具集合", href: projectLedgerHref },
-      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "把现成的串流主机、客户端和传输层配置成手机可用的远程工作站，同时守住画质、输入、显示和网络边界。", kind: "集成与运维", href: projectLedgerHref },
+      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "把现成的串流主机、客户端和传输层配置成手机可用的远程工作站，同时守住画质、输入、显示和网络边界。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
       { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
     ]
   },
@@ -959,8 +959,10 @@ export const systemDependencyNodes = [
     lane: "machine",
     title: "远程使用高性能电脑（Sunshine / Moonlight）",
     subtitle: "从手机或笔记本接入台式机画面、输入和高性能应用",
+    href: "/projects/sunshine-remote-streaming",
+    linkLabel: "查看 Sunshine 远程串流",
     links: [
-      { href: "#system-project-asset-sunshine-remote-streaming", label: "查看远程工作站项目" },
+      { href: "/projects/sunshine-remote-streaming", label: "查看 Sunshine 远程串流项目" },
       { href: "/skills/tailscale-safe-exposure", label: "Skill：具名设备的最小远程接入" }
     ],
     detail: "主机、客户端、显示、输入、网络路径和真实交互分别验收；配置存在或设备在线不等于画面、控制和应用已经可用。它不同于设备间文件传输，也不同于 Codex Remote 的任务级连续性。"

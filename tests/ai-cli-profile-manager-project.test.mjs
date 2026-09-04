@@ -78,7 +78,7 @@ test("AI CLI Profile Manager is registered as the twentieth public project", asy
   assert.equal(aiCliProfileManagerProject.slug, registration.id);
   assert.equal(aiCliProfileManagerProject.order, registration.order);
   assert.equal(projectCatalog.find((entry) => entry.project.slug === "ai-cli-profile-manager")?.project.order, 20);
-  assert.equal(systemProjectInventory.detailedPageCount, 21);
+  assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 
 test("AI CLI Profile Manager exposes seven source-backed modules and all three reading layers", async () => {

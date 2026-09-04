@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 108,
-    "project_search_index_gzip_budget_kib": 137,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete OpenClawGateway addition keeps all 21 projects and 298 compact search records. Its seven modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 110325/140005 gzip bytes, so the two lines use the minimum passing integers 108/137 KiB. The OpenClawGateway shard is 6121 bytes and the existing maximum PCConfig shard is 20556 bytes, still within 21 KiB. Shared interaction JavaScript/CSS remain 11596/21082 bytes within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "search_index_gzip_budget_kib": 112,
+    "project_search_index_gzip_budget_kib": 142,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete sunshine-remote-streaming addition keeps all 22 projects and 303 compact search records. Its five modules use explicit bounded search projections without copying narrative bodies; shared/all-project search measures 114640/144795 gzip bytes, so the two lines use the minimum passing integers 112/142 KiB. The sunshine-remote-streaming shard is compact and the existing maximum PCConfig shard is 20556 bytes, still within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -1972,6 +1972,117 @@
           "private credentials, account identifiers, message bodies, hostnames, private repository paths or runtime logs change without altering the reusable public product contract",
           "a route, plugin or channel is merely configured without new runtime or E2E evidence",
           "formatting, comments or internal refactors leave every displayed capability, failure, recovery and owner decision unchanged"
+        ]
+      }
+    },
+    {
+      "id": "sunshine-remote-streaming",
+      "order": 22,
+      "title": "Sunshine 远程串流",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/sunshine-remote-streaming",
+      "ai_refresh": {
+        "content_path": "app/content-sunshine-remote-streaming.js",
+        "semantic_revision": 1,
+        "scope": "complete product-first Windows Sunshine and Moonlight remote streaming operations snapshot: physical primary display priority with verified MTT1337 VDD fallback; Win32 window geometry journaling, border tolerance and automatic restoration to physical primary; independent VDD resolution, refresh rate, scaling and HDR profile management without topology mutation or mirroring; decoupling of streaming layer from Tailscale transport layer with end-to-end IPv6 direct P2P connection avoiding overseas DERP relays; restricted cellular uplink bandwidth bitrate budgeting with CBR 18-20 Mbps and AV1 hardware encoding/decoding; remote wake-up trade-offs between WoL and smart plug AC power recovery; idempotent network binding and service repair with daily lightweight path verification scheduled task; strict GPU stability fail-closed gates protecting physical screens and Lian Li HS2 displays",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\sunshine-remote-streaming status --porcelain=v2 --branch and git rev-parse HEAD",
+          "read current AGENTS.md, README.md, failover module, native VDD display adapter, headless config, verify-path and repair scripts before trusting older operational claims",
+          "run all four isolated PowerShell test suites with task-specific TEMP/TMP, AST parse every PowerShell file and verify zero syntax errors",
+          "read current SunshineService and Tailscale service status, start mode, codec mask and scheduled tasks without returning private IP, Tailnet or device identifiers",
+          "read current capture failover runtime state and verify-lite logs without modifying system display topology or现役 Sunshine configuration"
+        ],
+        "conditional_collectors": [
+          "run active display mode mutation or Apply only with explicit user authorization; preflight and test mode never substitute for live monitor changes",
+          "perform real streaming connection or disconnect test only when an interactive client session is authorized; service running never proves interactive stream quality",
+          "perform Tailscale unattended or IPv6 binding repair only when actual network failure occurs and authorization is given"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/sunshine-remote-streaming",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\sunshine-remote-streaming"
+      },
+      "displayed_areas": [
+        "product_purpose_workstation_streaming_inputs_outputs_principles_and_ordinary_requests",
+        "source_independent_capture_failover_display_settings_transport_bitrate_and_wol_modules",
+        "physical_primary_priority_with_verified_MTT1337_VDD_fallback_and_RTSP_idle_gate",
+        "window_geometry_journaling_border_tolerance_and_automatic_pullback_to_physical_main",
+        "independent_VDD_2880x1800_HDR_60Hz_150_profile_and_preflight_CDS_TEST_protection",
+        "prohibition_of_system_mirroring_and_display_topology_linkage_to_protect_LIAN_LI_and_HS2",
+        "transport_decoupling_with_end_to_end_IPv6_P2P_direct_connection_avoiding_overseas_DERP",
+        "tailscale_unattended_mode_and_removal_of_fixed_proxy_port_service_environment",
+        "restricted_32Mbps_cellular_uplink_budgeting_with_CBR_18_to_20Mbps_and_AV1_codec",
+        "rejection_of_CQP_variable_bitrate_to_prevent_severe_remote_stutter",
+        "remote_wake_tradeoffs_smart_plug_AC_power_on_vs_wired_2_5GbE_WoL_and_unreliable_Wi_Fi_WoWLAN",
+        "idempotent_repair_stream_and_daily_verify_path_lite_scheduled_task",
+        "current_boot_GPU_instability_fail_closed_gate_blocked_by_gpu_stability",
+        "source_tests_runtime_observations_service_facts_and_named_unknowns"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_boundary_failover_and_user_manual",
+          "paths": [
+            "AGENTS.md",
+            "README.md"
+          ]
+        },
+        {
+          "kind": "capture_failover_and_window_guard",
+          "paths": [
+            "sunshine-capture-failover.psm1",
+            "Invoke-SunshineCaptureFailover.ps1",
+            "Invoke-SunshineCaptureFailover-Hidden.vbs",
+            "Install-SunshineCaptureFailoverTask.ps1"
+          ]
+        },
+        {
+          "kind": "vdd_display_settings_and_native_adapter",
+          "paths": [
+            "sunshine-vdd-display-settings.psm1",
+            "Set-SunshineVddDisplayProfile.ps1",
+            "Get-SetVddDisplayMode.ps1",
+            "Get-SetVddScaleHdr.ps1"
+          ]
+        },
+        {
+          "kind": "transport_path_verification_and_repair",
+          "paths": [
+            "verify-path-lite.ps1",
+            "verify-path.ps1",
+            "repair-stream.ps1",
+            "register-sunshine-verify-task.ps1",
+            "Set-SunshineHeadlessConfig.ps1",
+            "sunshine-headless-config.psm1"
+          ]
+        },
+        {
+          "kind": "isolated_test_suites",
+          "paths": [
+            "tests/Test-SunshineCaptureFailover.ps1",
+            "tests/Test-SunshineHeadlessConfig.ps1",
+            "tests/Test-SunshineVddDisplaySettings.ps1",
+            "tests/Test-SunshineVddNativeAdapter.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a displayed capture failover policy, window migration rule, GPU stability gate or display fallback changes owner use or expected results",
+          "a VDD profile, resolution, refresh rate, HDR or scaling contract changes",
+          "a transport path, IPv6 direct routing, Tailscale unattended mode, bitrate budgeting or codec strategy changes",
+          "remote power-on guidance, scheduled verification task or idempotent repair contract changes",
+          "source tests, runtime observations or evidence boundaries contradict the published page"
+        ],
+        "snapshot_only_when": [
+          "the clean PRIVATE main commit, passing test count, scheduled task timestamp or observation time changes while every displayed behavior and evidence interpretation remains true"
+        ],
+        "ignore_when": [
+          "private IP addresses, Tailnet names, device identifiers, credentials or transient log timestamps change without altering the public product contract",
+          "a display mode or streaming setting is merely preflighted without live application",
+          "formatting, comments or internal test refactors leave every displayed capability, failure, recovery and owner decision unchanged"
         ]
       }
     }

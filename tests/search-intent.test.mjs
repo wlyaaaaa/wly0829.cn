@@ -32,7 +32,8 @@ const intents = [
   ["几个 AI 都说活干完了，我想用同一道实际任务检验谁交的东西真的能用。", "cacb"],
   ["把这份旁白和素材做成先预览再渲染的4K60视频", "video-scaffold"],
   ["切换Codex和Claude模型但不要污染官方登录", "ai-cli-profile-manager"],
-  ["从飞书交给OpenClaw但先看网关和模型成本状态", "openclaw-gateway"]
+  ["从飞书交给OpenClaw但先看网关和模型成本状态", "openclaw-gateway"],
+  ["用手机通过Sunshine远程连家里电脑但不要把窗口丢到虚拟屏", "sunshine-remote-streaming"]
 ];
 
 test("natural requests expose the owning project within the first visible results", () => {
@@ -57,7 +58,7 @@ test("the full index and the production compact projection rank the same entries
 });
 
 test("exact project names, existing aliases and commands keep their navigation priority", () => {
-  for (const [query, slug] of [[".agents", "agents"], ["PCConfig", "pcconfig"], ["GitHub 总索引", "github-index"], ["ChineseASR", "chinese-asr"], ["TimeAudit", "timeaudit"], ["PC Panel Hub", "pc-panel-hub"], ["CACB", "cacb"], ["WeChatDirect", "wechat-direct"], ["video-scaffold", "video-scaffold"], ["ai-cli-profile-manager", "ai-cli-profile-manager"], ["OpenClawGateway", "openclaw-gateway"]]) {
+  for (const [query, slug] of [[".agents", "agents"], ["PCConfig", "pcconfig"], ["GitHub 总索引", "github-index"], ["ChineseASR", "chinese-asr"], ["TimeAudit", "timeaudit"], ["PC Panel Hub", "pc-panel-hub"], ["CACB", "cacb"], ["WeChatDirect", "wechat-direct"], ["video-scaffold", "video-scaffold"], ["ai-cli-profile-manager", "ai-cli-profile-manager"], ["OpenClawGateway", "openclaw-gateway"], ["Sunshine 远程串流", "sunshine-remote-streaming"]]) {
     assert.equal(searchPanel(query)[0]?.href, `/projects/${slug}`, query);
   }
   assert.equal(searchPanel("ＣｈｉｎｅｓｅＡＳＲ")[0]?.href, "/projects/chinese-asr");

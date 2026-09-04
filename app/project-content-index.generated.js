@@ -20,6 +20,7 @@ import { project as project_vault_tool, modules as modules_vault_tool } from "./
 import { project as project_video_scaffold, modules as modules_video_scaffold } from "./content-video-scaffold.js";
 import { project as project_ai_cli_profile_manager, modules as modules_ai_cli_profile_manager } from "./content-ai-cli-profile-manager.js";
 import { project as project_openclaw_gateway, modules as modules_openclaw_gateway } from "./content-openclaw-gateway.js";
+import { project as project_sunshine_remote_streaming, modules as modules_sunshine_remote_streaming } from "./content-sunshine-remote-streaming.js";
 
 export const projectContentPackages = new Map([
   ["agents", { project: project_agents, modules: modules_agents, kind: "agents" }],
@@ -42,5 +43,6 @@ export const projectContentPackages = new Map([
   ["vault-tool", { project: project_vault_tool, modules: modules_vault_tool, kind: "vault-tool" }],
   ["video-scaffold", { project: project_video_scaffold, modules: modules_video_scaffold, kind: "video-scaffold" }],
   ["ai-cli-profile-manager", { project: project_ai_cli_profile_manager, modules: modules_ai_cli_profile_manager, kind: "ai-cli-profile-manager" }],
-  ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }]
+  ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }],
+  ["sunshine-remote-streaming", { project: project_sunshine_remote_streaming, modules: modules_sunshine_remote_streaming, kind: "sunshine-remote-streaming" }]
 ]);

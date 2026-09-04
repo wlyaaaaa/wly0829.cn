@@ -52,10 +52,10 @@ test("OpenClawGateway is the twenty-first and only newly registered project", as
       localRoot: "E:\\Projects\\Tools\\OpenClawGateway"
     }
   );
-  assert.equal(registry.projects.length, 21);
-  assert.equal(registry.projects.filter((item) => item.order >= 22).length, 0);
-  assert.equal(projectCatalog.at(-1)?.project.slug, "openclaw-gateway");
-  assert.equal(systemProjectInventory.detailedPageCount, 21);
+  assert.equal(registry.projects.length, 22);
+  assert.equal(registry.projects.filter((item) => item.order >= 23).length, 0);
+  assert.ok(projectCatalog.some((item) => item.project.slug === "openclaw-gateway"));
+  assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 
 test("OpenClawGateway exposes seven source-backed modules and three reading layers", async () => {

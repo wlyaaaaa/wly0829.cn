@@ -25,6 +25,7 @@ import { vaultToolProject } from "../app/content-vault-tool.js";
 import { videoScaffoldProject } from "../app/content-video-scaffold.js";
 import { aiCliProfileManagerProject } from "../app/content-ai-cli-profile-manager.js";
 import { openClawGatewayProject } from "../app/content-openclaw-gateway.js";
+import { sunshineRemoteStreamingProject } from "../app/content-sunshine-remote-streaming.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const packages = [
@@ -48,10 +49,11 @@ const packages = [
   [vaultToolProject, "app/content-vault-tool.js"],
   [videoScaffoldProject, "app/content-video-scaffold.js"],
   [aiCliProfileManagerProject, "app/content-ai-cli-profile-manager.js"],
-  [openClawGatewayProject, "app/content-openclaw-gateway.js"]
+  [openClawGatewayProject, "app/content-openclaw-gateway.js"],
+  [sunshineRemoteStreamingProject, "app/content-sunshine-remote-streaming.js"]
 ];
 
-test("all twenty-one project surfaces are deterministic projections of one currentSnapshot", () => {
+test("all twenty-two project surfaces are deterministic projections of one currentSnapshot", () => {
   for (const [candidate] of packages) {
     const snapshot = candidate.currentSnapshot;
     assert.ok(snapshot && typeof snapshot === "object", `${candidate.slug} has no currentSnapshot`);
