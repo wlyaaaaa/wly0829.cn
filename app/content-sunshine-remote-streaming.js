@@ -35,7 +35,7 @@ const sunshineRemoteStreamingSnapshot = createProjectSnapshot({
 });
 
 export const sunshineRemoteStreamingProject = {
-  order: 22,
+  order: 23,
   slug: "sunshine-remote-streaming",
   title: "Sunshine 远程串流",
   kicker: "高性能电脑远程运维层 · 主屏优先与 VDD（虚拟显示器）兜底 · 2026-09-04 核对",

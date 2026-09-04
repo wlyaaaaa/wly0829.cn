@@ -23,14 +23,13 @@ const expectedModuleSlugs = [
 ];
 const snapshotSourcePath = path.join(projectRoot, "app", "content-vault-tool.js");
 
-test("vault-tool is registered as the eighteenth public project with its source identity", async () => {
+test("vault-tool is registered as a published project in the final plan with its source identity", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "vault-tool");
   assert.ok(registration, "vault-tool registry entry is missing");
   assert.deepEqual(
     {
       id: registration.id,
-      order: registration.order,
       title: registration.title,
       enabled: registration.enabled,
       presentation_mode: registration.presentation_mode,
@@ -43,7 +42,6 @@ test("vault-tool is registered as the eighteenth public project with its source 
     },
     {
       id: "vault-tool",
-      order: 18,
       title: "vault-tool",
       enabled: true,
       presentation_mode: "real_dashboard",
@@ -64,7 +62,6 @@ test("vault-tool is registered as the eighteenth public project with its source 
 test("vault-tool keeps eight independent module routes and all three reading layers", async () => {
   assert.deepEqual(vaultToolModules.map((item) => item.slug), expectedModuleSlugs);
   assert.equal(new Set(expectedModuleSlugs).size, 8);
-  assert.equal(vaultToolProject.order, 18);
   assert.equal(vaultToolProject.route, "/projects/vault-tool");
   assert.ok(routePaths.includes(vaultToolProject.route), "vault-tool overview route is missing");
 

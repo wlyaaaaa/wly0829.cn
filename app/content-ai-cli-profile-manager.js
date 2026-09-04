@@ -35,7 +35,7 @@ const aiCliProfileManagerSnapshot = createProjectSnapshot({
 });
 
 export const aiCliProfileManagerProject = {
-  order: 20,
+  order: 14,
   slug: "ai-cli-profile-manager",
   title: "AI CLI Profile Manager",
   kicker: "Windows 11 原生 AI 命令行入口 · 0.3.12 main · 2026-09-03 23:03 UTC 核对",
@@ -45,7 +45,7 @@ export const aiCliProfileManagerProject = {
   cardStatus: "源码、安装与离线功能通过；远程 Live（真实调用）仍待同指纹重验",
   cardStatusTone: "mixed",
   ...aiCliProfileManagerSnapshot,
-  searchAliases: ["AI CLI Profile Manager", "ai-cli-profile-manager", "aicli", "切换Codex和Claude配置", "AI命令行Profile管理", "检查模型入口为什么不能用", "恢复中断的Codex任务", "导出原生CLI启动配方", "第20项目"],
+  searchAliases: ["AI CLI Profile Manager", "ai-cli-profile-manager", "aicli", "切换Codex和Claude配置", "AI命令行Profile管理", "检查模型入口为什么不能用", "恢复中断的Codex任务", "导出原生CLI启动配方", "第14项目"],
   repositoryNote: "AI CLI Profile Manager 是 PUBLIC（公开）源码项目。网页只解释当前产品、命令、边界和最后一次核对结果，不接收访客 API Key、OAuth 数据、Profile 或任务正文，也不会从浏览器启动本机 CLI。个人 SecretRef、原始运行事件和私有端点不进入页面。",
   summary: "这是 Windows 11 的 aicli 配置与启动层：用 Profile（运行配置档）启动原生 Codex、Claude Code、Qwen Code、OpenCode 或 Rust Open Interpreter。交互式 start 先核对配置与数据去向，权限由原生 CLI 管；程序化 Codex run 还回读实际模型、Provider（模型服务接入定义）与完全访问权限，不一致即停止。当前源码与离线检查通过，本机安装载荷匹配；远程 Live（真实调用）未重验。它不是新的聊天软件或 Agent（智能体）。",
   why: "同一台电脑上同时用官方登录、第三方 API 和本地模型时，最容易发生的事故不是命令记不住，而是旧环境变量把请求送错地方、同名模型实际换了版本、失败后悄悄走了别的线路，或只因 CLI 能打开就误判任务可用。aicli 把每次选择写成可检查的运行计划，让秘密只进入目标进程，再把静态检查、真实调用和任务结果分开报告。",

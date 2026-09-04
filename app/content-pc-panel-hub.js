@@ -54,7 +54,7 @@ const pcPanelHubSnapshot = createProjectSnapshot({
 });
 
 export const pcPanelHubProject = {
-  order: 6,
+  order: 29,
   slug: "pc-panel-hub",
   title: "PC Panel Hub",
   route: "/projects/pc-panel-hub",

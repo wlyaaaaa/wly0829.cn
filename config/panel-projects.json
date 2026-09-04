@@ -11,7 +11,7 @@
     "website_repo": "wlyaaaaa/wly0829.cn",
     "website_project_type": "projectless",
     "website_task_rule": "create one asynchronous projectless website task for one material refresh goal; task-id return is the dispatch receipt; never block the source conversation or reuse a completed task",
-    "full_refresh_rule": "the current website AI task iterates enabled projects in registry order; unchanged projects remain byte-identical",
+    "full_refresh_rule": "the current website AI task iterates enabled published projects by the final rank projected into registry order; unchanged projects remain byte-identical",
     "fact_collector_boundary": "scripts and providers collect evidence and verify contracts; they never write narrative content or decide materiality",
     "publication_boundary": "source project publication completes first; website refresh is a separate asynchronous post-publication task and cannot block or roll back the source transaction",
     "publication_mode": "after the accepted four-project MVP, verified registered refreshes automatically commit, normal-push existing PUBLIC main, wait for Pages and read back the deployed commit unless the owner explicitly holds publication",
@@ -24,8 +24,8 @@
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
     "search_index_gzip_budget_kib": 113,
-    "project_search_index_gzip_budget_kib": 142,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The source-complete sunshine-remote-streaming addition keeps all 22 projects and 303 compact search records. Its five modules use explicit bounded search projections without copying narrative bodies; after correcting evidence overclaims and adding the current GPU blocker, shared/all-project search measures 115025/145121 gzip bytes, so the two lines use the minimum passing integers 113/142 KiB. The sunshine-remote-streaming shard is 5875 bytes and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "project_search_index_gzip_budget_kib": 143,
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 36-project value plan still renders only 22 published projects and 303 compact search records. Reordering that published subset and refreshing the active E100 explanation changes compression sequence without adding project narratives; shared/all-project search now measures 115515/145898 gzip bytes, so the two lines use the minimum passing integers 113/143 KiB. The sunshine-remote-streaming shard remains bounded and the existing maximum PCConfig shard remains within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -75,15 +75,15 @@
   "projects": [
     {
       "id": "agents",
-      "order": 1,
+      "order": 2,
       "title": ".agents",
       "enabled": true,
       "presentation_mode": "real_dashboard",
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 12,
-        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E99 Rules and 28-Skill evidence, mandatory post-publication panel impact closeout, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-architecture hard gates, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation, reuses independent requirement-inflation review at long-task decision nodes and resolves exact-turn continuation transcripts",
+        "semantic_revision": 13,
+        "scope": "project overview, seven product-defined modules including an independent fixed E-to-G working-tree hot-mirror recovery lifecycle, current E100 Rules plus 29 active Skill intents and 28 displayed Skill entries, mandatory post-publication panel impact closeout, user-attested routing continuity across E releases, physical CODEX_HOME lifecycle resolution, product-vs-technical complexity authority, complete acceptance and minimum-sufficient-implementation guards, and PUBLIC private-companion migration; E99 separates confirmed user intent from replaceable implementation and fixes exact-turn continuation, while E100 makes anti-bloat validation current-repository scoped and prevents budgets or necessary complexity from becoming product stop gates",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -214,7 +214,7 @@
     },
     {
       "id": "pcconfig",
-      "order": 2,
+      "order": 3,
       "title": "PCConfig",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -367,7 +367,7 @@
     },
     {
       "id": "github-index",
-      "order": 3,
+      "order": 5,
       "title": "GitHub 总索引",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -457,7 +457,7 @@
     },
     {
       "id": "chinese-asr",
-      "order": 4,
+      "order": 8,
       "title": "ChineseASR",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -587,14 +587,14 @@
     },
     {
       "id": "timeaudit",
-      "order": 5,
+      "order": 10,
       "title": "TimeAudit",
       "enabled": true,
       "presentation_mode": "real_dashboard",
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 6,
+        "semantic_revision": 7,
         "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
@@ -735,7 +735,7 @@
     },
     {
       "id": "pc-panel-hub",
-      "order": 6,
+      "order": 29,
       "title": "PC Panel Hub",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -878,7 +878,7 @@
     },
     {
       "id": "cacb",
-      "order": 7,
+      "order": 34,
       "title": "CACB Agent 能力基准",
       "enabled": true,
       "presentation_mode": "curated_packaging",
@@ -931,7 +931,7 @@
     },
     {
       "id": "learning",
-      "order": 8,
+      "order": 9,
       "title": "AI 协作学习",
       "enabled": true,
       "presentation_mode": "curated_packaging",
@@ -984,7 +984,7 @@
     },
     {
       "id": "codex-remote",
-      "order": 9,
+      "order": 35,
       "title": "Codex Remote",
       "enabled": true,
       "presentation_mode": "curated_packaging",
@@ -1038,7 +1038,7 @@
     },
     {
       "id": "personal-health",
-      "order": 10,
+      "order": 11,
       "title": "个人健康证据与安全决策",
       "enabled": true,
       "presentation_mode": "curated_packaging",
@@ -1093,7 +1093,7 @@
     },
     {
       "id": "wechat-direct",
-      "order": 11,
+      "order": 18,
       "title": "WeChatDirect",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1179,7 +1179,7 @@
     },
     {
       "id": "personal-materials",
-      "order": 12,
+      "order": 7,
       "title": "个人材料查找",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1260,7 +1260,7 @@
     },
     {
       "id": "document-materials",
-      "order": 13,
+      "order": 6,
       "title": "文书和材料制作",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1347,7 +1347,7 @@
     },
     {
       "id": "work-delivery",
-      "order": 14,
+      "order": 16,
       "title": "工作交付副驾驶",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1440,7 +1440,7 @@
     },
     {
       "id": "daily-preferences",
-      "order": 15,
+      "order": 17,
       "title": "日常偏好与个性化推荐",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1523,7 +1523,7 @@
     },
     {
       "id": "personal-media",
-      "order": 16,
+      "order": 1,
       "title": "个人媒体整理与恢复",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1614,7 +1614,7 @@
     },
     {
       "id": "localocr",
-      "order": 17,
+      "order": 4,
       "title": "LocalOCR",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1676,7 +1676,7 @@
     },
     {
       "id": "vault-tool",
-      "order": 18,
+      "order": 13,
       "title": "vault-tool",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1736,7 +1736,7 @@
     },
     {
       "id": "video-scaffold",
-      "order": 19,
+      "order": 22,
       "title": "video-scaffold",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1813,7 +1813,7 @@
     },
     {
       "id": "ai-cli-profile-manager",
-      "order": 20,
+      "order": 14,
       "title": "AI CLI Profile Manager",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1893,7 +1893,7 @@
     },
     {
       "id": "openclaw-gateway",
-      "order": 21,
+      "order": 26,
       "title": "OpenClawGateway",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -1977,7 +1977,7 @@
     },
     {
       "id": "sunshine-remote-streaming",
-      "order": 22,
+      "order": 23,
       "title": "Sunshine 远程串流",
       "enabled": true,
       "presentation_mode": "real_dashboard",

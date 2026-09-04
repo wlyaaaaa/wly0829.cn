@@ -13,17 +13,16 @@ read-only operating panel; public presentation is secondary.
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
-- Project entries are maintained in `config/panel-projects.json`. The current
-  target has twenty-two enabled entries: `.agents`, PCConfig, GitHub 总索引,
-  ChineseASR, TimeAudit, PC Panel Hub, CACB, the curated learning method,
-  Codex Remote, personal-health, WeChatDirect, personal-materials and
-  document-materials, work-delivery, daily-preferences, personal-media,
-  LocalOCR, vault-tool, video-scaffold, AI CLI Profile Manager,
-  OpenClawGateway and Sunshine remote streaming in order
-  1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22. The registry
-  remains extensible, and `.agents` always has order 1. Each project owns its
-  real module count and module boundaries; visual symmetry is never a reason to
-  force every project into the same number of modules.
+- `config/final-project-order.json` is the sole authority for the fixed
+  one-through-thirty-six total-value ranking, the next project to build and the
+  status of non-card explanations. `config/panel-projects.json` contains only
+  enabled, published project packages; every enabled package must use the same
+  fixed rank as its `order`. The current published and planned counts, exact
+  ranks and next project are derived from that file rather than copied here.
+  Missing ranks are deliberate while their projects remain unbuilt and never
+  create placeholder cards, routes or copy. Each project owns its real module count and module
+  boundaries; visual symmetry is never a reason to force every project into
+  the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
   architecture, failures and evidence. Only a project explicitly designated by
   the owner as `curated_packaging` may use packaging copy or exclusions. A
@@ -349,38 +348,25 @@ read-only operating panel; public presentation is secondary.
 
 ## Project expansion gate
 
-- The owner accepted the four-project public MVP on 2026-08-30, then explicitly
-  authorized TimeAudit as project 5, PC Panel Hub as project 6, CACB as the
-  curated manual-only project 7 and the AI-assisted learning method as the
-  curated manual-only project 8, followed by Codex Remote as the curated
-  manual-only project 9 and personal-health as curated manual-only project 10,
-  then WeChatDirect as real-dashboard project 11, personal-materials as
-  real-dashboard project 12, document-materials as real-dashboard project 13,
-  work-delivery as real-dashboard project 14, and daily-preferences as
-  real-dashboard project 15, followed by personal-media as real-dashboard
-  project 16, then LocalOCR as real-dashboard project 17, vault-tool as
-  real-dashboard project 18, video-scaffold as real-dashboard project 19 and
-  AI CLI Profile Manager as real-dashboard project 20, OpenClawGateway as
-  real-dashboard project 21 and Sunshine remote streaming as real-dashboard
-  project 22.
-  The current target therefore contains
-  `.agents`, PCConfig, GitHub 总索引, ChineseASR, TimeAudit, PC Panel Hub,
-  CACB, the learning method, Codex Remote, personal-health, WeChatDirect,
-  personal-materials, document-materials, work-delivery, daily-preferences,
-  personal-media, LocalOCR, vault-tool, video-scaffold, AI CLI Profile Manager
-  OpenClawGateway and Sunshine remote streaming,
-  plus the one-page
-  Rules workbench and current public-safe Skills catalog.
+- The owner accepted the four-project public MVP on 2026-08-30 and later
+  completed twenty-two project pages in a historical construction sequence.
+  Historical construction numbers are no longer display ranks. The fixed
+  thirty-six-project value order in `config/final-project-order.json` is now
+  authoritative; the current twenty-two published packages remain enabled at
+  their fixed, possibly non-contiguous ranks, alongside the one-page Rules
+  workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
   presented within its actual public-content boundary. Exclude only an exact
   project identity or payload that the owner or an applicable higher rule
   actually excludes; a private source, technical depth, long page or the need
   to omit one L3+ value never excludes the remaining project. Add projects in
-  owner-selected value order, one completed project at a time; do not create
-  placeholder cards or delay a selected project's construction by making agents
-  vote on the entire future backlog.
-- Project 18 is vault-tool, the existing local file-encryption and recovery
-  product. It follows the completed LocalOCR project and receives one
+  the fixed value order, always selecting the smallest still-planned rank and
+  completing one project at a time. Do not create placeholder cards or re-vote
+  the backlog after each delivery; change the fixed order only when the owner
+  explicitly corrects it or material project truth makes the value judgment
+  wrong.
+- vault-tool is the existing local file-encryption and recovery product. It
+  receives one
   source-first complete product and technical snapshot, necessary source
   repair, independent content audit, PUBLIC release and read-back. Explain
   selected files and directories, archive creation versus merge, local viewing
@@ -394,8 +380,8 @@ read-only operating panel; public presentation is secondary.
   metadata inspection, actual cryptographic round trips, GUI interaction and
   remote recovery are separate evidence layers. No placeholder card or advance
   route is allowed for a later item.
-- Project 19 is video-scaffold, the existing staged local video-production
-  scaffold. It follows the completed vault-tool project and receives one
+- video-scaffold is the existing staged local video-production scaffold. It
+  receives one
   source-first complete product and technical snapshot, necessary source
   repair, independent content audit, PUBLIC release and read-back. Explain a
   clean project bootstrap, Fish Audio narration and its external text boundary,
@@ -408,10 +394,10 @@ read-only operating panel; public presentation is secondary.
   browser editor, cloud renderer, daemon, database or a new video format merely
   to build the page. Placeholder art and old bespoke examples never prove a
   current finished video.
-- Project 20 is AI CLI Profile Manager, the existing Windows 11 PowerShell
+- AI CLI Profile Manager is the existing Windows 11 PowerShell
   product for launching and operating native Codex CLI, Claude Code, Qwen Code,
   OpenCode and the current Rust Open Interpreter through explicit Profiles. It
-  follows the completed video-scaffold project and receives one source-first
+  receives one source-first
   complete product and technical snapshot, necessary source repair, independent
   content audit, PUBLIC release and read-back. Explain Profile creation and
   selection, `start` / `native` / `eject`, exact Provider and no-fallback
@@ -424,10 +410,9 @@ read-only operating panel; public presentation is secondary.
   fingerprinted receipts never become current merely because the page exists.
   Do not add a GUI, TUI, PTY or chat shell, a new Provider or model Profile,
   paid Live calls, a second run ledger, a daemon, database, dynamic website
-  runtime or unrelated later-project placeholder routes merely to build the page.
-- Project 21 is OpenClawGateway, the existing public-safe Windows operations
-  layer for an OpenClaw message gateway. It follows the completed AI CLI
-  Profile Manager project and receives one source-first complete product and
+  runtime or unrelated planned-project placeholder routes merely to build the page.
+- OpenClawGateway is the existing public-safe Windows operations layer for an
+  OpenClaw message gateway. It receives one source-first complete product and
   technical snapshot, necessary source repair, independent content audit,
   PUBLIC release and read-back. Explain Telegram and Feishu ingress separately
   from real message E2E; official Gateway lifecycle, loopback health, heartbeat
@@ -445,10 +430,9 @@ read-only operating panel; public presentation is secondary.
   expose account ids, tokens, private hostnames, private repository locations,
   message bodies or raw logs. Do not send a message, make a paid model call,
   update/restart the runtime, activate a restore, create another gateway,
-  install a plugin or prebuild projects 23–25 merely for the page.
-- Project 22 is sunshine-remote-streaming, the existing PRIVATE Windows
-  operations layer for Sunshine and Moonlight remote streaming. It follows the
-  completed OpenClawGateway project and receives one source-first complete
+  install a plugin or prebuild another planned project merely for the page.
+- sunshine-remote-streaming is the existing PRIVATE Windows operations layer
+  for Sunshine and Moonlight remote streaming. It receives one source-first complete
   product and technical snapshot, necessary source repair, independent content
   audit, PUBLIC release and read-back. Explain physical-primary capture with a
   uniquely verified MTT1337 VDD fallback; window-placement recovery; independent
@@ -464,7 +448,7 @@ read-only operating panel; public presentation is secondary.
   Tailnet names, device names, endpoints or credentials. Do not run `-Apply`,
   change MTT VDD or physical-display state, alter host HDR/resolution/refresh/
   topology or Sunshine configuration, restart services, disturb ToDesk, or
-  prebuild projects 23–25 merely for the page.
+  prebuild another planned project merely for the page.
 - The selected personal-media project has a non-optional content floor:
   automatic increments, classification, cloud and
   phone recovery bundles, dual preservation/read-back, and fail-closed controls
@@ -652,7 +636,7 @@ read-only operating panel; public presentation is secondary.
   aliases cannot replace these semantic roles. Deterministic tests may remain
   tools rather than agents. Choose the actual number from independent work
   surfaces and net quality gain; zero remains valid. This floor applies equally
-  to projects added after the current twenty-two.
+  to every project in the fixed thirty-six-project plan.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an

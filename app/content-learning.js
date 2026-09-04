@@ -37,7 +37,7 @@ const learningSnapshot = createProjectSnapshot({
 });
 
 export const learningProject = {
-  order: 8,
+  order: 9,
   slug: "learning",
   title: "AI 协作学习",
   route: "/projects/learning",

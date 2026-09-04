@@ -41,7 +41,7 @@ const openClawGatewaySnapshot = createProjectSnapshot({
 });
 
 export const openClawGatewayProject = {
-  order: 21,
+  order: 26,
   slug: "openclaw-gateway",
   title: "OpenClawGateway",
   kicker: "给 AI 调用的 Windows OpenClaw 运维层 · 默认本地模型 · 2026-09-04 核对",

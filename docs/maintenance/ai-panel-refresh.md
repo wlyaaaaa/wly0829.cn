@@ -77,7 +77,7 @@ Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 
 
 ## 全量刷新流程
 
-运行 `npm run refresh:ai -- --all`。当清单包含 manual-only 项目时，只有 owner 明确要求全量复核才追加 `--manual-owner-request`；否则计划停在 `manual_owner_request_required`。AI 按 Registry 的 1…N 顺序建立计划，并可根据当前原生并发槽位分批取证。每个项目仍独立判断：
+运行 `npm run refresh:ai -- --all`。当清单包含 manual-only 项目时，只有 owner 明确要求全量复核才追加 `--manual-owner-request`；否则计划停在 `manual_owner_request_required`。AI 只刷新 Registry 中已经发布的项目，并按 `config/final-project-order.json` 投影出的固定名次排序；缺号保持缺号，未建项目不进入刷新计划。AI 可根据当前原生并发槽位分批取证，每个项目仍独立判断：
 
 ```text
 enabled = changed + unchanged + blocked
@@ -122,9 +122,9 @@ Rules 只根据 `Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json` 正式回读
 
 ## 40+ 项目扩展
 
-Registry 是唯一项目清单。新增项目必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint。
+`config/final-project-order.json` 是固定项目集合、价值顺序和施工状态的唯一清单；Registry 只登记已经发布的项目包。新增项目进入 Registry 时必须提供唯一内容包、轻量卡片信息、Owner collectors、impact sources 和独立 observedAt/fingerprint，并沿用最终清单中的固定名次。
 
-当前十三项目为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并最多预取下一条非兼容路由。共享脚本、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 防膨胀审查阈值分别为 12 KiB、21 KiB、64 KiB 和 64 KiB；这些数字不是永久内容上限。每次增加项目后都从本轮构建产物重新记录实际 gzip 数值，不把旧项目数和旧模块数继续写成当前事实。64 KiB 为未来几十个项目保留合理增长空间，同时仍能抓住把完整正文重复塞进全局索引的回归。超过当前阈值时仍先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并调整审查线。禁止把完整正文重新塞入公共 JS，也禁止点击后加载正文、fetch、spinner、骨架屏、空白或以删除专业正文换体积；图片画廊可先显示轻量缩略图，并在用户打开后解码完整图片。派生搜索索引只能保留类型、标题、短摘要、链接、明确 aliases（别名）和有界搜索短语，由权威正文在构建时投影，不能成为第二份语义正文。
+Registry 中当前启用的已发布项目为每条路由生成含完整正文的静态 HTML；共享 JavaScript 只负责菜单、搜索、规则选择、背景与画廊等增强，路由使用原生目录页面导航，并最多预取下一条非兼容路由。共享脚本、共享 CSS、全站紧凑搜索和全部项目模块搜索的 gzip 防膨胀审查阈值分别读取 Registry 的四个对应 budget 字段，而不是在本文复制动态数值；这些阈值不是永久内容上限。每次增加项目后都从本轮构建产物重新记录实际 gzip 数值，不把旧项目数和旧模块数继续写成当前事实。超过当前阈值时仍先审真实重复、依赖和公网墙钟，只有无法无损压缩且仍满足流畅性时才记录证据并调整审查线。禁止把完整正文重新塞入公共 JS，也禁止点击后加载正文、fetch、spinner、骨架屏、空白或以删除专业正文换体积；图片画廊可先显示轻量缩略图，并在用户打开后解码完整图片。派生搜索索引只能保留类型、标题、短摘要、链接、明确 aliases（别名）和有界搜索短语，由权威正文在构建时投影，不能成为第二份语义正文。
 
 ## 完成标准
 

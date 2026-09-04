@@ -93,7 +93,7 @@ const personalMaterialsSnapshot = createProjectSnapshot({
 });
 
 const personalMaterialsProject = {
-  order: 12,
+  order: 7,
   slug: "personal-materials",
   title: "个人材料查找",
   route: "/projects/personal-materials",

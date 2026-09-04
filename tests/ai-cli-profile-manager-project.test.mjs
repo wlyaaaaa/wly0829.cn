@@ -43,14 +43,13 @@ const expectedPublicProfileIds = [
   "opencode-ollama-qwen3-8-27b"
 ];
 
-test("AI CLI Profile Manager is registered as the twentieth public project", async () => {
+test("AI CLI Profile Manager is registered as a published project in the final plan", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "ai-cli-profile-manager");
   assert.ok(registration, "AI CLI Profile Manager registry entry is missing");
   assert.deepEqual(
     {
       id: registration.id,
-      order: registration.order,
       title: registration.title,
       enabled: registration.enabled,
       presentation_mode: registration.presentation_mode,
@@ -63,7 +62,6 @@ test("AI CLI Profile Manager is registered as the twentieth public project", asy
     },
     {
       id: "ai-cli-profile-manager",
-      order: 20,
       title: "AI CLI Profile Manager",
       enabled: true,
       presentation_mode: "real_dashboard",
@@ -77,7 +75,7 @@ test("AI CLI Profile Manager is registered as the twentieth public project", asy
   );
   assert.equal(aiCliProfileManagerProject.slug, registration.id);
   assert.equal(aiCliProfileManagerProject.order, registration.order);
-  assert.equal(projectCatalog.find((entry) => entry.project.slug === "ai-cli-profile-manager")?.project.order, 20);
+  assert.ok(projectCatalog.some((entry) => entry.project.slug === "ai-cli-profile-manager"));
   assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 

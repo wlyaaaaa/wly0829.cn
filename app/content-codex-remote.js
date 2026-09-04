@@ -45,7 +45,7 @@ const codexRemoteSnapshot = createProjectSnapshot({
 });
 
 export const codexRemoteProject = {
-  order: 9,
+  order: 35,
   slug: "codex-remote",
   title: "Codex Remote",
   route: "/projects/codex-remote",

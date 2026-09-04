@@ -26,14 +26,12 @@ test("LocalOCR exposes its selected project identity and six ordered modules", (
   assert.deepEqual(
     {
       slug: localOcrProject.slug,
-      order: localOcrProject.order,
       title: localOcrProject.title,
       route: localOcrProject.route,
       visibility: localOcrProject.visibility
     },
     {
       slug: "localocr",
-      order: 17,
       title: "LocalOCR",
       route: "/projects/localocr",
       visibility: "公开仓库"
@@ -51,7 +49,6 @@ test("LocalOCR module routes and snapshot projections stay aligned with the regi
   assert.deepEqual(
     {
       id: entry.registration.id,
-      order: entry.registration.order,
       title: entry.registration.title,
       route: entry.registration.route,
       repo: entry.registration.source.repo,
@@ -61,7 +58,6 @@ test("LocalOCR module routes and snapshot projections stay aligned with the regi
     },
     {
       id: "localocr",
-      order: 17,
       title: "LocalOCR",
       route: "/projects/localocr",
       repo: "wlyaaaaa/LocalOCR",

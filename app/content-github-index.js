@@ -30,7 +30,7 @@ const githubIndexSnapshot = createProjectSnapshot({
 });
 
 export const githubIndexProject = {
-  order: 3,
+  order: 5,
   slug: "github-index",
   title: "GitHub 总索引",
   route: "/projects/github-index",

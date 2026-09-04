@@ -32,7 +32,7 @@ const personalHealthSnapshot = createProjectSnapshot({
 });
 
 export const personalHealthProject = {
-  order: 10,
+  order: 11,
   slug: "personal-health",
   title: "个人健康证据与安全决策",
   route: "/projects/personal-health",

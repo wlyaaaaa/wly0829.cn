@@ -32,7 +32,7 @@ const wechatDirectSnapshot = createProjectSnapshot({
 });
 
 export const wechatDirectProject = {
-  order: 11,
+  order: 18,
   slug: "wechat-direct",
   title: "WeChatDirect",
   route: "/projects/wechat-direct",

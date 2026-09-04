@@ -34,7 +34,7 @@ const videoScaffoldSnapshot = createProjectSnapshot({
 });
 
 export const videoScaffoldProject = {
-  order: 19,
+  order: 22,
   slug: "video-scaffold",
   title: "video-scaffold",
   kicker: "本地视频制作流水线 · 源修复已发布 · 2026-09-03 20:29 UTC 核对",
@@ -44,7 +44,7 @@ export const videoScaffoldProject = {
   cardStatus: "工具链就绪；真实成片仍按每期内容验收",
   cardStatusTone: "pass",
   ...videoScaffoldSnapshot,
-  searchAliases: ["video-scaffold", "本地视频制作流水线", "旁白和动画同步", "4K60视频制作", "视频渲染断点续作", "做视频先预览再渲染", "第19项目"],
+  searchAliases: ["video-scaffold", "本地视频制作流水线", "旁白和动画同步", "4K60视频制作", "视频渲染断点续作", "做视频先预览再渲染", "第22项目"],
   repositoryNote: "video-scaffold 是公开的视频生产脚手架，源码负责本地场景、时间轴、渲染和交付检查；Fish Audio 是标准配音阶段的外部服务。网站只解释工具链与最后一次核对结果，不接收访客脚本、素材、密钥或视频，也不提供在线编辑与渲染。",
   summary: "video-scaffold 把已经确定的旁白文案、图片素材和场景设计接成一条可分段检查的视频生产线。每场旁白先生成音频和词级时间轴，人或 AI 再把审阅后的 SVG（可缩放矢量图）画面绑定到真实说出的词；长渲染开始前先构建、查越界并打开动态预览。确认后，浏览器逐帧给出画面，FFmpeg（音视频处理工具）与 NVENC（显卡硬件编码器）合成 4K60（4K、每秒 60 帧）视频，最后补旁白、可选背景音乐、封面和章节。它不替我决定选题、脚本或分镜，也不自动投稿。本轮已修复旧产物误复用问题，但没有为网页专门生成一条演示视频。",
   why: "视频制作最浪费时间的不是写一个文件，而是几分钟甚至更久的渲染完成后才发现文字越界、关键词踩点错了，或中断续作把旧场景和新场景拼在一起。这套脚手架把昂贵步骤拆开：能在浏览器里早看就先看，能用词级证据对齐就不靠目测猜秒数，需要重跑时只复用身份仍匹配的产物；任何关键层不成立，就停在对应阶段而不是交出一条看似完成的视频。",

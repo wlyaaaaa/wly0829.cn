@@ -20,14 +20,13 @@ const expectedModuleSlugs = [
   "recovery-reuse"
 ];
 
-test("video-scaffold is registered as the nineteenth public project", async () => {
+test("video-scaffold is registered as a published project in the final plan", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "video-scaffold");
   assert.ok(registration, "video-scaffold registry entry is missing");
   assert.deepEqual(
     {
       id: registration.id,
-      order: registration.order,
       title: registration.title,
       enabled: registration.enabled,
       presentation_mode: registration.presentation_mode,
@@ -40,7 +39,6 @@ test("video-scaffold is registered as the nineteenth public project", async () =
     },
     {
       id: "video-scaffold",
-      order: 19,
       title: "video-scaffold",
       enabled: true,
       presentation_mode: "real_dashboard",
@@ -54,7 +52,7 @@ test("video-scaffold is registered as the nineteenth public project", async () =
   );
   assert.equal(videoScaffoldProject.slug, registration.id);
   assert.equal(videoScaffoldProject.order, registration.order);
-  assert.equal(projectCatalog.find((entry) => entry.project.slug === "video-scaffold")?.project.order, 19);
+  assert.ok(projectCatalog.some((entry) => entry.project.slug === "video-scaffold"));
   assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 

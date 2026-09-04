@@ -47,7 +47,7 @@ const cacbSnapshot = createProjectSnapshot({
 });
 
 export const cacbProject = {
-  order: 7,
+  order: 34,
   slug: "cacb",
   title: "CACB Agent 能力基准",
   route: "/projects/cacb",

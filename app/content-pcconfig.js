@@ -55,7 +55,7 @@ const pcconfigSnapshot = createProjectSnapshot({
 });
 
 export const pcconfigProject = {
-  order: 2,
+  order: 3,
   slug: "pcconfig",
   title: "PCConfig",
   route: "/projects/pcconfig",

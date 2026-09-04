@@ -39,7 +39,7 @@ const workDeliverySnapshot = createProjectSnapshot({
 });
 
 const workDeliveryProject = {
-  order: 14,
+  order: 16,
   slug: "work-delivery",
   title: "工作交付副驾驶",
   route: "/projects/work-delivery",

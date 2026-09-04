@@ -42,7 +42,7 @@ const dailyPreferencesSnapshot = createProjectSnapshot({
 });
 
 const dailyPreferencesProject = {
-  order: 15,
+  order: 17,
   slug: "daily-preferences",
   title: "日常偏好与个性化推荐",
   route: "/projects/daily-preferences",

@@ -33,7 +33,7 @@ const documentMaterialsSnapshot = createProjectSnapshot({
 });
 
 const documentMaterialsProject = {
-  order: 13,
+  order: 6,
   slug: "document-materials",
   title: "文书和材料制作",
   route: "/projects/document-materials",

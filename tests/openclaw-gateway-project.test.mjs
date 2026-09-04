@@ -20,14 +20,13 @@ const expectedModuleSlugs = [
   "codeg-bridge"
 ];
 
-test("OpenClawGateway is the twenty-first and only newly registered project", async () => {
+test("OpenClawGateway is registered as a published project in the final plan", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "openclaw-gateway");
   assert.ok(registration);
   assert.deepEqual(
     {
       id: registration.id,
-      order: registration.order,
       title: registration.title,
       enabled: registration.enabled,
       presentationMode: registration.presentation_mode,
@@ -40,7 +39,6 @@ test("OpenClawGateway is the twenty-first and only newly registered project", as
     },
     {
       id: "openclaw-gateway",
-      order: 21,
       title: "OpenClawGateway",
       enabled: true,
       presentationMode: "real_dashboard",
@@ -53,7 +51,6 @@ test("OpenClawGateway is the twenty-first and only newly registered project", as
     }
   );
   assert.equal(registry.projects.length, 22);
-  assert.equal(registry.projects.filter((item) => item.order >= 23).length, 0);
   assert.ok(projectCatalog.some((item) => item.project.slug === "openclaw-gateway"));
   assert.equal(systemProjectInventory.detailedPageCount, 22);
 });

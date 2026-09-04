@@ -12,14 +12,13 @@ import { systemDependencyNodes, systemProjectDomains, systemProjectInventory } f
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = sunshineRemoteStreamingModules.map((item) => item.slug);
 
-test("sunshine-remote-streaming is the twenty-second and newly registered project", async () => {
+test("sunshine-remote-streaming is registered as a published project in the final plan", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "sunshine-remote-streaming");
   assert.ok(registration);
   assert.deepEqual(
     {
       id: registration.id,
-      order: registration.order,
       title: registration.title,
       enabled: registration.enabled,
       presentationMode: registration.presentation_mode,
@@ -32,7 +31,6 @@ test("sunshine-remote-streaming is the twenty-second and newly registered projec
     },
     {
       id: "sunshine-remote-streaming",
-      order: 22,
       title: "Sunshine 远程串流",
       enabled: true,
       presentationMode: "real_dashboard",
@@ -45,8 +43,7 @@ test("sunshine-remote-streaming is the twenty-second and newly registered projec
     }
   );
   assert.equal(registry.projects.length, 22);
-  assert.equal(registry.projects.filter((item) => item.order >= 23).length, 0, "must not build items 23-25 in advance");
-  assert.equal(projectCatalog.at(-1)?.project.slug, "sunshine-remote-streaming");
+  assert.ok(projectCatalog.some((item) => item.project.slug === "sunshine-remote-streaming"));
   assert.equal(systemProjectInventory.detailedPageCount, 22);
 });
 

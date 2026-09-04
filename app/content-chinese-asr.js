@@ -43,7 +43,7 @@ const chineseAsrSnapshot = createProjectSnapshot({
 });
 
 export const chineseAsrProject = {
-  order: 4,
+  order: 8,
   slug: "chinese-asr",
   title: "ChineseASR",
   route: "/projects/chinese-asr",

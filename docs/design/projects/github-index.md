@@ -1,12 +1,14 @@
 # GitHub 总索引项目内容设计
 
-## 交付状态
+> 本文保留 2026-08-29 三项目建设阶段的设计与验收记录，不拥有当前仓库数量、工作树状态、发布状态或项目名次。当前产品事实看 `app/content-github-index.js`，固定项目名次看 `config/final-project-order.json`，实际公网提交与 Pages 状态以每次发布后的正式回读为准。
 
-本文件和 `app/content-github-index.js` 已进入本地看板；三项目版已经完成用户验收，但仍不是公网发布回执。
+## 历史交付状态（2026-08-29）
+
+本文件和 `app/content-github-index.js` 已进入现行公开看板；实际公网版本、提交与 Pages 状态仍以每次发布后的正式回读为准，不由本设计文档固定。
 
 - 已完成：项目总览、六个真实模块、术语、工作流、组件、失败恢复、验证层、阶段时间线和维护入口；内容对象与三态字段已进入项目 Registry、可见路由、通用项目页面和网站合同测试。
 - 已通过：JavaScript import（导入）、字段闭包、六个唯一模块、readerStates（三态）和项目隔离约束。
-- 三项目 Owner 浏览器验收已经完成；整站 commit（提交）、push（推送）、Pages（静态站）发布和公网回读仍未执行。
+- 在当时的三项目建设阶段，Owner 浏览器验收已经完成；整站 commit（提交）、push（推送）、Pages（静态站）发布和公网回读当时尚未执行，后来已由后续发布流程完成。
 - 接入边界：规则与 Skills 仍是 `.agents` 拥有的全局页面，GitHub 总索引只使用自己的总览与六模块。
 - 并发边界：创建本包时，wly0829.cn 和 GitHub 总索引都已有其他任务的 dirty work（未提交修改）；后续只在网站内容包与设计文档内修正，不触碰来源仓库的并发施工。
 
@@ -96,7 +98,7 @@ export const githubIndexModules = [ /* 六个项目自有模块 */ ];
 
 渲染顺序固定为 `value → why → example → result → readerStates`；只有三态说明完成后才进入 `decisionImpact` 和技术层。`statusTone` 使用 `pass / problem / unknown / mixed`，页面不得从中文状态关键词猜颜色。
 
-`site-content.js` 现在从 `config/panel-projects.json` 读取启用状态并校验内容包；GitHub 总索引已按 `order=3` 进入 `/projects/github-index` 与六模块路由。Registry 仍是顺序和启用状态的唯一来源。
+`site-content.js` 从 `config/panel-projects.json` 读取启用状态并校验内容包；GitHub 总索引按 `config/final-project-order.json` 的固定名次进入 `/projects/github-index` 与六模块路由。最终顺序和施工状态只由最终顺序文件拥有，Registry（登记表）只保留已发布项目所需的名次投影。
 
 ## 专业详细说人话
 
@@ -142,9 +144,9 @@ export const githubIndexModules = [ /* 六个项目自有模块 */ ];
 - `app/content-github-index.js`：原生 ESM（JavaScript 模块）import 成功；项目必需字段、六个唯一 module slug（模块标识）及每模块完整字段校验通过。
 - 两个新文件的 `git diff --no-index --check` 未报告空白错误；命令因“空文件对新文件”按预期返回差异码 1，并提示本机 Git 将来会按仓库设置把 LF（换行）转为 CRLF（Windows 换行）。两个源文件当前均为 UTF-8 无 BOM（字节顺序标记）。
 
-当前本地 build 和合同测试已经覆盖本包、Registry 与可见路由；三项目浏览器/Owner 验收已经完成，但仍不构成 Pages（公网部署）验收，把本地接入通过称为网站上线会违反证据分层。
+当时的本地 build 和合同测试已经覆盖本包、Registry 与可见路由；三项目浏览器/Owner 验收已经完成，但在那个建设节点仍不构成 Pages（公网部署）验收。该句只记录当时为何不能把本地接入冒充网站上线，不描述当前发布状态。
 
-## 本地接入状态与后续验收
+## 历史本地接入状态与当时后续验收
 
 本地接入已经完成：
 
@@ -154,4 +156,4 @@ export const githubIndexModules = [ /* 六个项目自有模块 */ ];
 4. 页面渲染 `why`、`result`、`readerStates` 与 `currentState`，真实缺口未被静默丢失；
 5. 站点 contract、build、53 条直接路由和公开内容门已进入自动验证。
 
-尚余步骤是 current E release / PCConfig / GitHub / ChineseASR 快照的最终浏览器 QA、commit、normal push、Pages deployment 与公网 read-back；未完成前仍不称公开交付。
+当时尚余步骤是 current E release / PCConfig / GitHub / ChineseASR 快照的最终浏览器 QA、commit、normal push、Pages deployment 与公网 read-back；这些步骤后来由后续发布流程完成，当前是否公开交付仍只看最新正式回读。

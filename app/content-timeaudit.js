@@ -49,7 +49,7 @@ const timeAuditSnapshot = createProjectSnapshot({
 });
 
 export const timeAuditProject = {
-  order: 5,
+  order: 10,
   slug: "timeaudit",
   title: "TimeAudit",
   route: "/projects/timeaudit",
@@ -655,7 +655,7 @@ export const timeAuditModules = [
       "collector.pyw 创建隐藏 Win32 消息窗口，以 AddClipboardFormatListener / WM_CLIPBOARDUPDATE 事件驱动采集，不轮询、不装键盘 hook（钩子）、DLL、驱动或 Session 0 服务。",
       "读取时遵守 Windows 来源格式：ExcludeClipboardContentFromMonitorProcessing 或 CanIncludeInClipboardHistory=0 会阻止本地保存；CanUploadToCloudClipboard=0 只禁止云剪贴板，不阻止本机历史。",
       "SQLite schema v1 包含 meta、blobs、events、content_fts 与 adapter_events_v1；WAL + synchronous=FULL，events/blobs 由 trigger（触发器）保持 append-only（只追加）。",
-      "同一内容 SHA-256 映射到一个 blob；每次复制仍生成独立 event_id。再次复制写 `PersonalOS.ClipboardHistory.RestoreV1` marker（标记），只有 marker 与原事件正文一致才记录 lineage。",
+      "同一内容 SHA-256 映射到一个 blob；每次复制仍生成独立 event_id。再次复制写 versioned restore marker（版本化恢复标记），只有 marker 与原事件正文一致才记录 lineage。",
       "viewer.pyw 使用 mode=ro 与 query_only=ON，在 Tkinter 桌面窗口按关键词、UTC+8 日期、类型和分页查询；FTS5 缺失时明确失败。",
       "adapter_stdio.py 提供 timeaudit.clipboard-export.request.v1 / response.v1 的 JSON/stdio 只读接口；checkpoint 是 `(observed_at_utc,event_id)`，没有 HTTP API、浏览器依赖或固定端口。",
       "backup.py 使用 SQLite Online Backup（在线一致备份），保存大小、计数、integrity 与 SHA-256 清单；恢复前验证副本，只写入空目标目录。"
@@ -682,7 +682,7 @@ export const timeAuditModules = [
       "当前合同只覆盖 Windows 电脑；手机来源是另一 source instance（来源实例），不能在 collector 内猜测合并。",
       "clipboard_sequence 只在同一 Windows clipboard station（剪贴板站）相邻事实中解释，不能当作跨启动、会话或设备的全局顺序。",
       "增量合同存在不等于下游消费者已上线；本轮只验证无 payload 的 adapter 形状，没有验证实际下游提交。",
-      "`PersonalOS.ClipboardHistory.RestoreV1` 与合同文件名只保留现有协议/lineage 标识，不表示已退役中央系统仍是当前产品或消费者。"
+      "版本化恢复标记和增量合同的内部文件名不进入公开页面；它们只连接再次复制与原事件，不表示另一个中央系统是当前产品或消费者。"
     ],
     failures: [
       { condition: "来源明确禁止、格式不支持、内容超限或剪贴板暂时锁定", response: "保存无 payload 的 skip/gap 原因；不把缺失内容猜回数据库。" },
@@ -697,7 +697,6 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\clipboard_history\\viewer.pyw", role: "本机搜索、预览、暂停与再次复制" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\clipboard_history\\adapter_stdio.py", role: "版本化 JSON/stdio 只读增量出口" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\clipboard_history\\backup.py", role: "在线一致备份、校验与空目录恢复" },
-      { path: "E:\\Projects\\Tools\\TimeAudit\\clipboard_history\\PERSONALOS_ADAPTER_CONTRACT.md", role: "source identity、事件映射、checkpoint 与 lineage 合同" },
       { path: "E:\\PCConfig\\tools\\Test-TimeAuditClipboardHistory.ps1", role: "任务、ACL、心跳、schema、计数与无正文 adapter 验收" },
       { path: "E:\\PCConfig\\docs\\recovery\\timeaudit_clipboard_history.md", role: "机器路径类别、三任务、近线备份与恢复顺序" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_clipboard_history.py", role: "模型、存储、查看、lineage、adapter 与备份回归" }

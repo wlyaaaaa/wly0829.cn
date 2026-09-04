@@ -74,7 +74,7 @@ const personalMediaSnapshot = createProjectSnapshot({
 const stateLabels = ["成功时", "发现问题时", "入口不可用时"];
 
 const personalMediaProject = {
-  order: 16,
+  order: 1,
   slug: "personal-media",
   title: "个人媒体整理与恢复",
   route: "/projects/personal-media",

@@ -43,7 +43,7 @@ const localOcrSnapshot = createProjectSnapshot({
 });
 
 export const localOcrProject = {
-  order: 17,
+  order: 4,
   slug: "localocr",
   title: "LocalOCR",
   kicker: "本地文字识别与文档解析 · 2026-09-03 03:42 UTC 样例观察",
@@ -53,7 +53,7 @@ export const localOcrProject = {
   cardStatus: "本地提字、文档结构解析与可复核结果已经实现",
   cardStatusTone: "pass",
   ...localOcrSnapshot,
-  searchAliases: ["LocalOCR", "本地文字识别", "图片提字", "扫描件转文字", "表格识别", "复杂文档解析", "OCR结果怎么看", "第17项目"],
+  searchAliases: ["LocalOCR", "本地文字识别", "图片提字", "扫描件转文字", "表格识别", "复杂文档解析", "OCR结果怎么看", "第4项目"],
   repositoryNote: "LocalOCR 是独立的公开本机工具，源码位于 wlyaaaaa/LocalOCR。模型推理由本机 Windows 与 WSL 中的环境完成，网站只展示产品、实际使用方式和最后一次核对的证据，不接收访客文件，也不是在线 OCR 服务。公开样例使用项目的合成材料，不代表私人文件或任意文档的识别效果。",
   summary: "LocalOCR 把截图、扫描件和复杂 PDF 变成可复制、可搜索、可回到原图核对的文字与文档结构。我指定一个文件或文件夹，说明要提字还是保留表格和版面，它在本机选择相应识别方式，交回按页文字、表格或公式结构、位置与识别状态。读不清、处理不全和没有检测到文字会分开说明。本轮采购表已读出行列和合计，但仍有标题遗漏和字符错读，不能把处理完成当成逐字正确。",
   why: "图片里的字不能直接复制；扫描表格即使被读成一长串文字，也可能丢掉行列关系。LocalOCR 把提字和结构解析做成可重复的本机流程，同时留下原件、页码、位置与质量依据，让我能继续整理资料，并知道哪些地方还必须自己核对。",
