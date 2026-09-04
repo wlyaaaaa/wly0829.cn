@@ -23,9 +23,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 115,
+    "search_index_gzip_budget_kib": 118,
     "project_search_index_gzip_budget_kib": 144,
-    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 35-project value plan still renders only 22 published projects, while one source-backed browser Skill, the material daily-preferences Steam/source-panorama update and active-publisher panel convergence increase the compact search projection from 303 to 304 records. The current shared/all-project search measures 117262/147201 gzip bytes, so the two lines use the minimum passing integers 115/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
+    "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The fixed 35-project value plan renders 23 published projects after adding DevConfig Backup, bringing the compact search projection to 308 records. The current shared/all-project search measures 120521/138876 gzip bytes, so the two lines use the minimum passing integers 118/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -2100,6 +2100,116 @@
         "ignore_when": [
           "private IP addresses, Tailnet names, device identifiers, credentials or transient log timestamps change without altering the public product contract",
           "a display mode or streaming setting is merely preflighted without live application",
+          "formatting, comments or internal test refactors leave every displayed capability, failure, recovery and owner decision unchanged"
+        ]
+      }
+    },
+    {
+      "id": "devconfig-backup",
+      "order": 12,
+      "title": "DevConfig Backup",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/devconfig-backup",
+      "ai_refresh": {
+        "content_path": "app/content-devconfig-backup.js",
+        "semantic_revision": 1,
+        "scope": "project overview, four source-backed modules including tiered distribution, data-driven source catalog, WeChat native incremental backup with WAL preservation and 8G fuse, disaster recovery runbook with Documents and 10979 traps, and PowerShell 5.1 task scheduling bus",
+        "collectors": [
+          "git -C E:\\Projects\\Backups\\devconfig-backup status --porcelain=v2 --branch",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-NoBackupArtifacts.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-HDriveSafety.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\Backup-Status.ps1 -NoDrive"
+        ],
+        "conditional_collectors": [
+          "perform real Google Drive upload or WeChat sync only when network connectivity and task authorization are present",
+          "perform Restore-WeChat Execute only during explicit manual recovery tests with user authorization; default to read-only preflight",
+          "inspect Task Scheduler states using powershell.exe without modifying existing registered triggers"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/devconfig-backup",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Backups\\devconfig-backup"
+      },
+      "displayed_areas": [
+        "product_purpose_disaster_recovery_quick_rebuild_inputs_outputs_principles_and_ordinary_requests",
+        "source_independent_tiered_distribution_source_catalog_wechat_native_backup_and_recovery_modules",
+        "tiered_distribution_local_zero_traffic_hot_G_drive_and_checksum_verified_Google_Drive",
+        "strict_PCConfig_H_cold_drive_segregation_and_absence_of_direct_cold_write_scheduled_tasks",
+        "data_driven_sources_psd1_with_PowerToys_JetBrains_and_Docker_cache_exclusions",
+        "dynamic_system_export_registry_env_machine_path_and_20_task_xml_manifests",
+        "wechat_native_application_data_incremental_pipeline_with_robocopy_and_rclone_checksum",
+        "sqlite_wal_shm_preservation_and_8G_transfer_fuse_safeguard",
+        "seven_step_disaster_recovery_runbook_with_documents_e_drive_and_10979_username_traps",
+        "restore_wechat_read_only_precheck_pre_restore_rollback_and_human_acceptance_boundary",
+        "task_scheduler_powershell_5_1_compatibility_and_unattended_network_proxy_inheritance",
+        "public_repository_credential_and_artifact_leakage_prevention_guards"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_boundary_and_user_manual",
+          "paths": [
+            "AGENTS.md",
+            "README.md",
+            "sources.psd1"
+          ]
+        },
+        {
+          "kind": "tiered_backup_and_distribution",
+          "paths": [
+            "Backup-DevConfig.ps1",
+            "Backup-DevConfig-Hidden.vbs",
+            "Initialize-BackupNetwork.ps1",
+            "Backup-Status.ps1"
+          ]
+        },
+        {
+          "kind": "wechat_native_backup_and_recovery",
+          "paths": [
+            "Backup-WeChat.ps1",
+            "Backup-WeChat-Hidden.vbs",
+            "Restore-WeChat.ps1",
+            "WeChat-Recovery.Common.ps1",
+            "Monitor-WeChatDrive.ps1",
+            "Install-WeChatDriveMonitor.ps1"
+          ]
+        },
+        {
+          "kind": "scheduled_task_registration_bus",
+          "paths": [
+            "Setup-ScheduledTasks.ps1",
+            "ScheduledTask-Registration.Common.ps1"
+          ]
+        },
+        {
+          "kind": "isolated_test_suites",
+          "paths": [
+            "tests/Assert-CloudBackupIntegrity.ps1",
+            "tests/Assert-DockerScope.ps1",
+            "tests/Assert-HDriveSafety.ps1",
+            "tests/Assert-NoBackupArtifacts.ps1",
+            "tests/Assert-ScheduledDriveProxy.ps1",
+            "tests/Assert-ScheduledTaskRegistrationSafety.ps1",
+            "tests/Assert-WeChatIncrementalIntegrity.ps1",
+            "tests/Assert-WeChatNativeRecovery.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a tiered distribution policy, cloud verification logic or cold drive boundary changes",
+          "a sources.psd1 selection rule, exclusion pattern or secret handling contract changes",
+          "a WeChat native incremental strategy, 8G fuse or SQLite persistence handling changes",
+          "a disaster recovery flow, path trap warning or Restore-WeChat rollback contract changes",
+          "scheduled task execution wrappers, proxy inheritance or test suite assertions change"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit, passing test count, scheduled task execution timestamp or observation time changes while every displayed behavior remains true"
+        ],
+        "ignore_when": [
+          "private rclone remote names, transient upload timestamps or local log lines change without altering the public product contract",
           "formatting, comments or internal test refactors leave every displayed capability, failure, recovery and owner decision unchanged"
         ]
       }

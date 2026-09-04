@@ -23,7 +23,7 @@
     { "final_rank": 9, "id": "learning", "title": "AI 协作学习", "state": "published" },
     { "final_rank": 10, "id": "timeaudit", "title": "TimeAudit", "state": "published" },
     { "final_rank": 11, "id": "personal-health", "title": "个人健康证据与安全决策", "state": "published" },
-    { "final_rank": 12, "id": "devconfig-backup", "title": "DevConfig Backup", "state": "planned", "source": "wlyaaaaa/devconfig-backup" },
+    { "final_rank": 12, "id": "devconfig-backup", "title": "DevConfig Backup", "state": "published", "source": "wlyaaaaa/devconfig-backup" },
     { "final_rank": 13, "id": "vault-tool", "title": "vault-tool", "state": "published" },
     { "final_rank": 14, "id": "ai-cli-profile-manager", "title": "AI CLI Profile Manager", "state": "published" },
     { "final_rank": 15, "id": "scripts", "title": "Windows 常用动作工具集", "state": "planned", "source": "wlyaaaaa/Scripts" },

@@ -109,10 +109,10 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly twenty-two projects and four navigation areas", async () => {
+test("the accepted panel has exactly twenty-three projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.equal(projects.length, 22);
+  assert.equal(projects.length, 23);
   assert.equal(new Set(projects.map((item) => item.slug)).size, projects.length);
   assert.ok(projects.every((item, index) => index === 0 || projects[index - 1].order < item.order));
   assert.equal(project.slug, "agents");
@@ -139,7 +139,8 @@ test("project quick metrics lead with product reality instead of implementation 
     ["personal-materials", ["43,916", "34", "43,882", "36"]],
     ["document-materials", ["3 类", "1 页 · 10 文件", "Unknown（未知）", "未执行"]],
     ["work-delivery", ["6 个文件", "0", "0", "0"]],
-    ["personal-media", ["20,154 张", "376 个", "3,830 个", "1,182 项"]]
+    ["personal-media", ["20,154 张", "376 个", "3,830 个", "1,182 项"]],
+    ["devconfig-backup", ["约 65 MB", "约 38 GB", "本地 · G 盘 · Drive", "4 个定时 + 1 个自愈"]]
   ]);
   for (const [slug, values] of expected) {
     const candidate = projects.find((item) => item.slug === slug);
@@ -530,13 +531,13 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 115);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 118);
   assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 144);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 22);
+  assert.equal(enabledProjectCount, 23);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -551,7 +552,7 @@ test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS r
   const runtimeSource = await readFile(path.join(projectRoot, "static-site", "main.jsx"), "utf8");
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
-  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway)/, "browser runtime must not import narrative packages");
+  assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway|devconfig-backup)/, "browser runtime must not import narrative packages");
   assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
@@ -662,7 +663,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the twenty-two accepted project packages", async () => {
+test("the maintenance registry drives exactly the twenty-three accepted project packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -686,7 +687,7 @@ test("the maintenance registry drives exactly the twenty-two accepted project pa
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.equal(registry.projects.length, 22);
+  assert.equal(registry.projects.length, 23);
   assert.equal(new Set(registry.projects.map((item) => item.id)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.order)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.route)).size, registry.projects.length);
@@ -712,7 +713,7 @@ test("the maintenance registry drives exactly the twenty-two accepted project pa
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway"]);
+  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup"]);
   assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming"]);
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
@@ -2029,7 +2030,7 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 3);
   assert.match(registration.ai_refresh.collectors.join("\n"), /manifest\.json, state\.json and last-run\.json.*completed archive count.*total messages.*never read contact identity, chat body/s);
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.match(wechatAsset.role, /3 个完成态归档.*6032 条消息.*3\/3/);
@@ -2153,7 +2154,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.match(materialAsset.role, /36 个登记来源.*43,916.*34 个已精确登记.*43,882/);
@@ -2270,7 +2271,7 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2416,7 +2417,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
   assert.equal(asset.href, "/projects/work-delivery");
   assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));

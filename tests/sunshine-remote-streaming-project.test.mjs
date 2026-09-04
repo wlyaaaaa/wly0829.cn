@@ -42,9 +42,9 @@ test("sunshine-remote-streaming is registered as a published project in the fina
       localRoot: "E:\\Projects\\Tools\\sunshine-remote-streaming"
     }
   );
-  assert.equal(registry.projects.length, 22);
+  assert.equal(registry.projects.length, 23);
   assert.ok(projectCatalog.some((item) => item.project.slug === "sunshine-remote-streaming"));
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("sunshine-remote-streaming exposes source-backed modules and three reading layers", async () => {

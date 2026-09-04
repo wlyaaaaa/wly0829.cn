@@ -33,10 +33,10 @@ test("the final project plan fixes one complete value order without placeholder 
 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
-  assert.equal(published.length, 22);
-  assert.equal(planned.length, 13);
+  assert.equal(published.length, 23);
+  assert.equal(planned.length, 12);
   assert.equal(planned[0].final_rank, Math.min(...planned.map((item) => item.final_rank)));
-  assert.equal(planned[0].final_rank, 12);
+  assert.equal(planned[0].final_rank, 15);
   assert.equal(typeof planned[0].source, "string");
   assert.ok(readme.includes(`#${planned[0].final_rank} ${planned[0].id}`), "README next project drifted from the final plan");
   assert.equal(plan.projects.some((item) => Object.hasOwn(item, "construction_hold")), false);

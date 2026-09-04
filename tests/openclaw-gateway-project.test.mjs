@@ -50,9 +50,9 @@ test("OpenClawGateway is registered as a published project in the final plan", a
       localRoot: "E:\\Projects\\Tools\\OpenClawGateway"
     }
   );
-  assert.equal(registry.projects.length, 22);
+  assert.equal(registry.projects.length, 23);
   assert.ok(projectCatalog.some((item) => item.project.slug === "openclaw-gateway"));
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("OpenClawGateway exposes seven source-backed modules and three reading layers", async () => {

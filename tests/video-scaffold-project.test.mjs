@@ -53,7 +53,7 @@ test("video-scaffold is registered as a published project in the final plan", as
   assert.equal(videoScaffoldProject.slug, registration.id);
   assert.equal(videoScaffoldProject.order, registration.order);
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "video-scaffold"));
-  assert.equal(systemProjectInventory.detailedPageCount, 22);
+  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("video-scaffold exposes seven source-backed modules and all three reading layers", async () => {

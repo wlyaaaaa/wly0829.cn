@@ -10,6 +10,7 @@ import { project as project_chinese_asr, modules as modules_chinese_asr } from "
 import { project as project_learning, modules as modules_learning } from "./content-learning.js";
 import { project as project_timeaudit, modules as modules_timeaudit } from "./content-timeaudit.js";
 import { project as project_personal_health, modules as modules_personal_health } from "./content-personal-health.js";
+import { project as project_devconfig_backup, modules as modules_devconfig_backup } from "./content-devconfig-backup.js";
 import { project as project_vault_tool, modules as modules_vault_tool } from "./content-vault-tool.js";
 import { project as project_ai_cli_profile_manager, modules as modules_ai_cli_profile_manager } from "./content-ai-cli-profile-manager.js";
 import { project as project_work_delivery, modules as modules_work_delivery } from "./content-work-delivery.js";
@@ -34,6 +35,7 @@ export const projectContentPackages = new Map([
   ["learning", { project: project_learning, modules: modules_learning, kind: "learning" }],
   ["timeaudit", { project: project_timeaudit, modules: modules_timeaudit, kind: "timeaudit" }],
   ["personal-health", { project: project_personal_health, modules: modules_personal_health, kind: "personal-health" }],
+  ["devconfig-backup", { project: project_devconfig_backup, modules: modules_devconfig_backup, kind: "devconfig-backup" }],
   ["vault-tool", { project: project_vault_tool, modules: modules_vault_tool, kind: "vault-tool" }],
   ["ai-cli-profile-manager", { project: project_ai_cli_profile_manager, modules: modules_ai_cli_profile_manager, kind: "ai-cli-profile-manager" }],
   ["work-delivery", { project: project_work_delivery, modules: modules_work_delivery, kind: "work-delivery" }],
