@@ -572,7 +572,7 @@ export const systemProjectInventory = {
   detailedPageCount: 23,
   identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
   mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "这次项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不是一回事。项目目录目前有二十三个完整参考页，其中 DevConfig Backup 说明本地与 G 盘热备、Google Drive 云端校验和分层、微信原应用数据增量保全与新电脑避坑恢复。媒体库是本地项目，不会被凑成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只负责呈现。"
+  description: "2026-09-01 的项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不是一回事。网页目录现在有二十三个完整参考页。新增的 DevConfig Backup 直说本地/G 盘最近成功、配置 Drive 最近失败、微信增量与选择性换机恢复边界。媒体库是本地项目，不会被凑成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -696,7 +696,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "ai-memory-backup-a", title: "项目记忆备份", role: "保存跨项目持久记忆的私人恢复副本，不保存原始会话。", kind: "恢复资产", href: projectLedgerHref },
       { id: "ai-memory-backup-b", title: "AI 工作配置、能力与记忆备份", role: "把选定配置、Skills、记忆与能力入口保存在本地热备和私人远端，供换机恢复。", kind: "恢复资产", href: projectLedgerHref },
-      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "只收真正不可再生的配置、凭据与恢复清单，结合本地、G 盘在线热备与 Google Drive 校验和上云，并以预检回滚保障微信数据恢复。", kind: "恢复资产", href: "/projects/devconfig-backup" },
+      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据与恢复清单收成可选择回填的候选包，并分别维护本地、G 盘和 Drive 结果；微信回填先预检并保留回滚点，官方客户端是否可用仍由人工验收。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "ai-memory-backup-c", title: "AI 工作区配置与可读笔记备份", role: "保存外部 AI 工作区的选定配置和人类可读笔记，不复制原始对话。", kind: "恢复资产", href: projectLedgerHref },
       { id: "key", title: "加密密钥备份", repo: "Key", role: "只保存密文，让关键恢复材料有独立私人副本；首页不读取或解密内容。", kind: "加密备份", href: projectLedgerHref },
       { id: "openclaw-backup", title: "消息智能体恢复备份", role: "把消息型智能体网关的配置与工作区保存在独立私人恢复链里。", kind: "恢复资产", href: projectLedgerHref },

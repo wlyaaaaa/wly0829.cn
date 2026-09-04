@@ -1,37 +1,29 @@
-# 当前网站验收：daily-preferences 按需自动增量快照
+# 当前网站验收：E101、daily-preferences 与 DevConfig Backup
 
 ## 结论与范围
 
-本轮从已经发布并回读的 `f960f3a99df07c9397220ccf5e7f57669295c460` 开始，主体只更新已登记项目 `daily-preferences` 的对应快照，以及直接展示同一能力且不更新就会错误的 Skill 说明与指南。来源是 PRIVATE `wlyaaaaa/daily-preferences`，本地 `main`、`origin/main` 与远端 `refs/heads/main` 均回读为 `d7f53b8ca0d54b9a61719499af669e216e083f15`。
+当前候选以已发布并回读的 `be722bc` 为事实基底：保留该提交中的 E101、`daily-preferences` 按需自动增量快照、相关 Skills 和 320px Rules 换行修复，再新增固定价值顺序 `#12 devconfig-backup`。最终规划仍是 35 个独立项目；本次完成后为 23 个已发布项目、12 个待建设项目，下一个仍是 `#15 scripts`。没有提前生成下一项目卡片、内容或路由，非项目卡 TODO 仍为 0。
 
-最终门禁运行期间，活动规则从 E100 升级到 E101；E101 同时正式激活本轮使用的对话触发 `daily-preferences` 与活动发布 Owner 合并式 `personal-panel-refresh`，旧 E100 生成事实因此被 snapshot gate 正确拒绝。当前发布者只合并了这项发布前硬依赖：更新 E101 五文件/供应快照、`.agents` 当前说明、两个直接相关 Skill 的来源状态，以及根规则新增的 `codex_command_blocked_delete_fallback`。这个后备路径只在 Codex 命令层于进程启动前明确拒绝删除时改走 Windows 回收站；普通文件占用、权限或路径失败不触发。
+## 继承的 E101 与 daily-preferences 事实
 
-System、其他 21 个项目、项目排序、路由结构、视觉组件和交互代码保持不变。固定 35 项价值顺序仍然有效：35 个独立项目中 22 个项目已经发布、13 个项目仍待建设。两个 Registry 计划都只是定向单项目计划，没有运行 `--all`。当前页面不再把 E100、v0.6 人工增量、13 个来源、7 个快照、43 项测试和“Chrome / 哔哩哔哩 / Google Play / 航空 / 铁路未接入”当作现状。
+- 活动规则为 E101：release commit `c5684d7060a3276f3abd2cc49a5950569726998b`，ruleset `f79057f023ba55f76995f696a29b51adb1dd0b213fdb19b3126cd25fd4d6d465`，previous=E100。新增删除后备只在 Codex 命令层于进程启动前明确拒绝时使用 Windows 回收站；普通文件占用、权限或路径错误不触发。
+- `daily-preferences` 来源仍绑定 PRIVATE main `d7f53b8ca0d54b9a61719499af669e216e083f15`。当前数据库为 schema v2：119,382 条 current、160,574 条总记录版本、41,192 条历史记录；18 个来源实例中 12 个 `acquired_verified`、6 个 `snapshot_only`。
+- Chrome 与 Steam 走本机读取，哔哩哔哩复用当前已登录 Chrome；Google Play、航旅纵横和 12306 保持人工快照，另有 7 项来源明确未取得。它不是后台同步，不新增 watcher、服务、队列或定时器。
+- `daily-preferences` 的公开聚合、Skill 触发和来源边界保持 `be722bc` 的验收结果；本次 DevConfig 施工不改写这些事实。
 
-## 来源事实与语义变化
+## DevConfig Backup 的 Gemini 审查与修正
 
-- 当前产品是由新对话自然触发的同步按需自动增量。Chrome 历史/书签与 Steam 从本机读取；哔哩哔哩复用用户当前已登录的 Chrome，采集当前可见的播放、收藏、稍后看、点赞、投币和追番/追剧。它不是后台同步，不创建服务、队列、定时器或 watcher。
-- Google Play、航旅纵横和 12306 保持人工快照；没有新包时不伪装实时刷新。银行交易、京东、拼多多、美团、菜鸟、YouTube 与地图活动仍是 7 项明确未取得来源。
-- 当前数据库为 schema v2：119,382 条 current、160,574 条总记录版本、41,192 条历史记录；18 个来源实例中 12 个 `acquired_verified`、6 个 `snapshot_only`；26 条 current 明示、3 条 historical 明示与 15 个 current 偏好快照。`integrity_check=ok`，外键 finding 为 0。
-- 哔哩哔哩当前聚合为 3,375 条播放、719 条收藏关系、5 条稍后再看、20 条点赞、2 条投币和 277 条追番/追剧。平台不返回的更早范围仍明确 Unknown。
-- Steam 当前为 118 条已玩游戏、6 条已玩应用、8 条未玩游戏观察和 33 条其他应用观察。累计启动时长只保留为事实、不参与评分；当前免费游戏只在其他条件相同时低 0.5 分；当前商店分类不能证明历史取得方式。
-- 退款、关闭、取消、失败和撤销继续完全退出普通偏好证据与复购计数。一次成功的耐用品、软件或行程仍是正向事实，不因没有复购被降成不喜欢；时间只排序，无记录也不反推不喜欢。
-- 数据根、用户投递原件和哔哩哔哩实时快照处于现有 PersonalData 自动备份范围；这不冒充已经验收过的独立导出、跨机迁移或灾难恢复产品。
+- Gemini 的四模块、三层阅读、System 链接与排序方向可复用，但原候选把早期 65 MB / 38 GB、Drive 就绪、五个现役任务、固定 PowerShell 5.1 和半小时恢复写成当前事实，因此没有原样发布。
+- 源项目 `wlyaaaaa/devconfig-backup` 已把人类入口修到当前行为并发布为 `a067b587aa293b5d2bd611c23d8fbd0246f240fe`。8 个 PowerShell 测试脚本与 18 个 PowerShell 源文件解析通过；原生恢复测试因官方微信运行而按设计跳过合成 Execute 分支，不能冒充真实恢复。
+- 当前配置 `latest.zip` 为 1,911.3 MB；本地与 `G:\80_Backup\DevConfig` 各有 7 份日期包。G 盘微信热备为 41.89 GB / 142,693 文件，Hot 回执为 `complete` 且不输出 payload 文件名或正文。
+- 四个本仓库常规任务最近为 3 个成功、配置 Drive 日任务 1 个失败；当前只读 preflight 已恢复可达，但远端 `latest.zip` 仍对应 9 月 2 日，本地/G 已到 9 月 3 日，本轮没有上传。配置包每个新代上传完整日期 zip 和同内容 `latest.zip`，不是包内差量。
+- PCConfig 的 `AIRecoveryColdSync-Daily` 已启用；最近返回 0，但有界回执明确为 `status=skipped` / `H_unavailable`，没有发生冷拷贝。H 只有在人工解锁、整体 Hot context 不超过 48 小时、DevConfig/微信各不超过 36 小时、介质身份、100 GiB 停写线与写锁全部通过时才执行 `additive_no_mirror`，且不自动重锁。
+- 微信 Drive 支持 Hot / Local / Drive、完整数据、临时 `DbOnly`、`DriveFull` 兼容覆盖和人工看守下的 `MaxTransfer 0`。默认 8G 只限制一次进程；任务重试的累计流量另算。WAL/SHM/journal 不被过滤，但运行中逐文件复制仍不是一致数据库快照。
+- Restore-WeChat 支持默认 G、本地/USB `BackupRoot` 与尚未真实联网验收的 `DriveOnly`。预检拒绝盘根、源目标重叠/父子关系和重解析点；复制失败时把部分结果移到 `.failed-restore-*`，再恢复 `.pre-restore-*`。复制完成仍需登录官方微信验收。
+- 四个常规任务的 Action 是 `wscript.exe`；隐藏 VBS 优先 Program Files 下的 PowerShell 7，缺失时才选择 Windows PowerShell 5.1。事务注册会拒绝非本项目同名任务、保存精确 XML 前像、逐项回读并在失败时恢复原定义。
 
-## 内容与公开边界
+## 当前验证状态
 
-项目总览和五个既有模块在原位更新，没有新增卡片、重复模块或刷新日志。Skill 页同步更新了 `daily-preferences` 的触发条件、输入输出、自动/人工来源分层、当前测试与 E2E；`personal-panel-refresh` 和 `browser-control-continuity` 只把 source main / 活动 E 代际改为现场值。Rules 只补 E101 新增删除后备语义，System 现有概括仍然准确，因此保持字节不变。
-
-公开页只使用聚合数量、普通 L2 事实样例、源码/测试身份和行为边界。它不公开账号 ref、浏览 URL、完整游戏或播放清单、商家—金额—时间组合、行程起终点、原件定位、原始聊天或凭据。Skill 当前源码的公开供应指纹已回读为 10,183 bytes / `eebbdb9bfc8f8e5380458a483e6c2c7a61eb60f929f7b2e9502d4beea140c04a`。
-
-## 验证
-
-- 来源仓库：64/64 Python 回归与 4/4 Node 回归通过；Python 编译、Node 语法、`git diff --check`、SQLite 完整性和外键检查通过。
-- 当前数据：只读聚合回读了来源、状态、记录、明示、快照、哔哩哔哩流、Steam 分类和普通苏打水事实；没有把私人正文或 locator 写入网页。
-- E101 snapshot：release `c5684d7060a3276f3abd2cc49a5950569726998b`、ruleset `f79057f023ba55f76995f696a29b51adb1dd0b213fdb19b3126cd25fd4d6d465`、pointer revision 9、previous=E100，五文件与 release descriptor 匹配；`.agents` source 的 1 个并发 dirty 候选与活动 release 分层，不冒充 current。
-- 语义 bundle：`wly.ai-panel-refresh-verification.v2` 为 PASS；`daily-preferences` 项目、authority、Rules 与 Skills changed，System unchanged，0 blocker。
-- 聚焦合同：`daily-preferences` 项目合同、Skills catalog 合同、E101 Rule binding 合同与所有项目统一 snapshot 投影合同通过。
-- 本地浏览器：项目索引、daily-preferences 总览/来源/证据模块、daily-preferences Skill、`.agents` 总览、Rules 与 personal-panel-refresh Skill 在 1440、390、320 三档检查；无整页横向溢出、H1 裁切或 console/page error，canonical 均为 Pages 实际使用的尾斜杠 URL。
-- 最终全站门禁：`npm run build` 与 `npm run test:built` 通过，生成 199 个完整静态页面和 304 条紧凑搜索记录；snapshot、PUBLIC 内容、全部 138 项测试均为 PASS。
-
-本文记录发布前稳定候选。最终 Git、Pages 与公网状态以 normal push 后的远端 `main`、Pages deployment head SHA 和公开页面回读为准。
+- DevConfig 源项目完成并发布；网站候选的 4 个模块、23 项固定排序、搜索、统一 snapshot 投影和相关聚焦测试已经通过。
+- 候选在 1440、390、320 三档检查项目目录、Overview 和 4 个模块：所有路由返回 200，document/body 宽度等于视口，H1 未裁切，浏览器 console/page error 为 0；项目卡原生导航可直达 Overview。
+- 最终 E101 snapshot、全站测试、PUBLIC 内容门、精确 gzip、独立盲读、GitHub Pages 与公网回读会在合并到最新主线后重新运行并在本节更新；本地候选结果不能替代最终发布。

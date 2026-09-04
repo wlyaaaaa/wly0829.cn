@@ -48,7 +48,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 35 个独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, /固定 35 项价值顺序.*35 个独立项目.*22 个项目已经发布.*13 个项目仍待建设/s);
+  assert.match(designQa, new RegExp(`固定 35 项价值顺序.*35 个独立项目.*${published.length} 个已发布项目.*${planned.length} 个待建设项目`, "s"));
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
 
   const planById = new Map(plan.projects.map((item) => [item.id, item]));

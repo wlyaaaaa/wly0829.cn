@@ -14,6 +14,7 @@ import { cacbProject } from "../app/content-cacb.js";
 import { learningProject } from "../app/content-learning.js";
 import { codexRemoteProject } from "../app/content-codex-remote.js";
 import { personalHealthProject } from "../app/content-personal-health.js";
+import { devconfigBackupProject } from "../app/content-devconfig-backup.js";
 import { wechatDirectProject } from "../app/content-wechatdirect.js";
 import { personalMaterialsProject } from "../app/content-personal-materials.js";
 import { documentMaterialsProject } from "../app/content-document-materials.js";
@@ -39,6 +40,7 @@ const packages = [
   [learningProject, "app/content-learning.js"],
   [codexRemoteProject, "app/content-codex-remote.js"],
   [personalHealthProject, "app/content-personal-health.js"],
+  [devconfigBackupProject, "app/content-devconfig-backup.js"],
   [wechatDirectProject, "app/content-wechatdirect.js"],
   [personalMaterialsProject, "app/content-personal-materials.js"],
   [documentMaterialsProject, "app/content-document-materials.js"],
@@ -53,7 +55,7 @@ const packages = [
   [sunshineRemoteStreamingProject, "app/content-sunshine-remote-streaming.js"]
 ];
 
-test("all twenty-two project surfaces are deterministic projections of one currentSnapshot", () => {
+test("all published project surfaces are deterministic projections of one currentSnapshot", () => {
   for (const [candidate] of packages) {
     const snapshot = candidate.currentSnapshot;
     assert.ok(snapshot && typeof snapshot === "object", `${candidate.slug} has no currentSnapshot`);

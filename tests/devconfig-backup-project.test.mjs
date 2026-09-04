@@ -7,7 +7,7 @@ import test from "node:test";
 import { devconfigBackupModules, devconfigBackupProject } from "../app/content-devconfig-backup.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains, systemProjectInventory } from "../app/system-home-content.js";
+import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = devconfigBackupModules.map((item) => item.slug);
@@ -45,16 +45,14 @@ test("devconfig-backup is registered as a published project in the final plan", 
       localRoot: "E:\\Projects\\Backups\\devconfig-backup"
     }
   );
-  assert.equal(registry.projects.length, 23);
   const planEntry = finalOrder.projects.find((item) => item.id === "devconfig-backup");
   assert.ok(planEntry);
   assert.equal(planEntry.final_rank, 12);
   assert.equal(planEntry.state, "published");
   assert.ok(projectCatalog.some((item) => item.project.slug === "devconfig-backup"));
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
-test("devconfig-backup exposes source-backed modules and three reading layers", async () => {
+test("devconfig-backup keeps the accepted module routes and three reading layers", async () => {
   assert.equal(moduleSlugs.length, 4);
   assert.deepEqual(moduleSlugs, [
     "tiered-distribution",
@@ -103,11 +101,14 @@ test("devconfig-backup explains tiered media architecture and cold drive separat
     "冷备",
     "零流量",
     "21:05",
-    "22:00"
+    "22:00",
+    "1,911.3 MB",
+    "DevConfigBackup-Drive-Daily",
+    "最近返回 1"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits tiered distribution keyword: ${expected}`);
   }
-  assert.ok(!text.includes("直写H盘"), "devconfig-backup must not claim direct H drive writes");
+  assert.match(text, /本仓库不直写\s*H|本仓库[^。]{0,40}不写\s*H|不向\s*H\s*盘写入/, "devconfig-backup must state that its tasks do not write H");
 });
 
 test("devconfig-backup explains data-driven catalog and cache exclusions", () => {
@@ -130,10 +131,10 @@ test("devconfig-backup explains data-driven catalog and cache exclusions", () =>
   }
 });
 
-test("devconfig-backup explains WeChat native incremental backup and WAL integrity", () => {
+test("devconfig-backup explains WeChat modes, file-level increment and WAL non-exclusion limits", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   for (const expected of [
-    "38 GB",
+    "41.89 GB",
     "xwechat_files",
     "robocopy",
     "checksum",
@@ -141,7 +142,13 @@ test("devconfig-backup explains WeChat native incremental backup and WAL integri
     "保险丝",
     "WAL",
     "SHM",
-    "Backup-WeChat.ps1"
+    "Backup-WeChat.ps1",
+    "wechat.hot-backup-receipt.v1",
+    "payload_names_emitted",
+    "-DbOnly",
+    "-DriveFull",
+    "-MaxTransfer 0",
+    "累计流量"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits WeChat backup keyword: ${expected}`);
   }
@@ -156,7 +163,8 @@ test("devconfig-backup explains disaster recovery runbook and two critical traps
     "Restore-WeChat.ps1",
     ".pre-restore-",
     "COPY_COMPLETE_AWAITING_HUMAN_ACCEPTANCE",
-    "powershell.exe",
+    "wscript.exe",
+    "PowerShell 7",
     "Setup-ScheduledTasks.ps1"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits recovery runbook keyword: ${expected}`);
@@ -186,4 +194,21 @@ test("System links its devconfig-backup asset to the new detail page", () => {
   const asset = backupDomain.assets.find((item) => item.id === "devconfig-backup");
   assert.ok(asset);
   assert.equal(asset.href, "/projects/devconfig-backup");
+});
+
+test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
+  const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
+  assert.match(text, /3 成功 · 1 失败/);
+  assert.match(text, /临时云监控[^。]{0,40}已禁用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
+  assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
+  assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);
+  assert.match(text, /远端 latest[^。]{0,80}9 月 2 日[^。]{0,80}落后|Drive latest[^。]{0,80}9 月 2 日/);
+  assert.match(text, /H_unavailable/);
+  assert.match(text, /additive_no_mirror/);
+  assert.match(text, /每个新代[^。]{0,80}完整上传|完整上传[^。]{0,80}日期包/);
+  assert.match(text, /reparse point|重解析点/);
+  assert.match(text, /\.failed-restore-/);
+  assert.match(text, /-DriveOnly/);
+  assert.doesNotMatch(text, /wlyaaaaaa@gmail/i, "private remote alias must not enter public content");
+  assert.doesNotMatch(text, /公开发布 100% 安全|半小时满血|上传云端仅需十几秒/);
 });

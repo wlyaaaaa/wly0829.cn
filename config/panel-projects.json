@@ -2114,17 +2114,29 @@
       "ai_refresh": {
         "content_path": "app/content-devconfig-backup.js",
         "semantic_revision": 1,
-        "scope": "project overview, four source-backed modules including tiered distribution, data-driven source catalog, WeChat native incremental backup with WAL preservation and 8G fuse, disaster recovery runbook with Documents and 10979 traps, and PowerShell 5.1 task scheduling bus",
+        "scope": "project overview and four source-backed modules covering current local/G/Drive/H results, full-object DevConfig generations, data-driven recovery candidates and plaintext-payload boundary, WeChat Hot/Local/Drive/DbOnly modes with per-invocation 8G limit and bounded Hot receipt, selective local/USB/unverified-Drive recovery with path and rollback guards, Documents/username compatibility, and transactionally restored wscript tasks whose wrappers prefer PowerShell 7 and fall back to 5.1",
         "collectors": [
           "git -C E:\\Projects\\Backups\\devconfig-backup status --porcelain=v2 --branch",
           "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-NoBackupArtifacts.ps1",
           "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-HDriveSafety.ps1",
-          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\Backup-Status.ps1 -NoDrive"
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-CloudBackupIntegrity.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-DockerScope.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-ScheduledDriveProxy.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-ScheduledTaskRegistrationSafety.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-WeChatIncrementalIntegrity.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-WeChatNativeRecovery.ps1",
+          "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\Backup-Status.ps1 -NoDrive",
+          "pwsh -NoProfile -ExecutionPolicy Bypass -File E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json",
+          "read only LocalApplicationData\\PCConfig\\core-recovery\\cold-last.json fields schema, mode, completed_utc, status, warnings, G_write_performed, H_relocked and cloud_write_performed",
+          "Get-ScheduledTask and Get-ScheduledTaskInfo for DevConfigBackup-Local, DevConfigBackup-Drive-Daily, WeChatBackup-Hot-Daily, WeChatBackup-Drive-Weekly, WeChatDrive-Monitor-Hourly and AIRecoveryColdSync-Daily without mutations",
+          "read only local/G DevConfig package names, counts, sizes and times plus bounded wechat-hot-last.json fields without opening any backup payload",
+          "run a read-only rclone preflight and list only DevConfig zip object names, sizes and MD5 values without emitting the private remote alias"
         ],
         "conditional_collectors": [
-          "perform real Google Drive upload or WeChat sync only when network connectivity and task authorization are present",
-          "perform Restore-WeChat Execute only during explicit manual recovery tests with user authorization; default to read-only preflight",
-          "inspect Task Scheduler states using powershell.exe without modifying existing registered triggers"
+          "never perform a real Google Drive upload, WeChat sync or H cold copy merely to refresh the website; inspect existing task results, bounded receipts and owner metadata",
+          "never perform Restore-WeChat Execute as a website collector; real recovery remains a separate explicitly selected operation and the website may use only read-only preflight evidence",
+          "inspect Task Scheduler states using powershell.exe without registering, starting, disabling or modifying existing tasks",
+          "read H cold-backup meaning and status only through PCConfig; do not execute or duplicate its maintenance flow"
         ]
       },
       "source": {
@@ -2137,15 +2149,20 @@
         "product_purpose_disaster_recovery_quick_rebuild_inputs_outputs_principles_and_ordinary_requests",
         "source_independent_tiered_distribution_source_catalog_wechat_native_backup_and_recovery_modules",
         "tiered_distribution_local_zero_traffic_hot_G_drive_and_checksum_verified_Google_Drive",
-        "strict_PCConfig_H_cold_drive_segregation_and_absence_of_direct_cold_write_scheduled_tasks",
+        "current_local_and_G_success_DevConfig_Drive_failure_and_disabled_temporary_monitor_state",
+        "full_object_DevConfig_generation_upload_and_exact_remote_object_skip_boundary",
+        "strict_PCConfig_H_ownership_with_enabled_opportunistic_daily_task_current_H_unavailable_skip_48h_context_36h_set_freshness_media_capacity_write_lock_additive_no_mirror_and_no_relock",
         "data_driven_sources_psd1_with_PowerToys_JetBrains_and_Docker_cache_exclusions",
         "dynamic_system_export_registry_env_machine_path_and_20_task_xml_manifests",
         "wechat_native_application_data_incremental_pipeline_with_robocopy_and_rclone_checksum",
-        "sqlite_wal_shm_preservation_and_8G_transfer_fuse_safeguard",
+        "wechat_Hot_Local_Drive_full_DbOnly_DriveFull_and_manually_monitored_MaxTransfer_zero_modes",
+        "sqlite_wal_shm_journal_non_exclusion_and_per_invocation_8G_limit_without_consistency_or_cumulative_quota_guarantees",
+        "bounded_wechat_hot_receipt_without_payload_names_or_content_and_PCConfig_freshness_consumption",
         "seven_step_disaster_recovery_runbook_with_documents_e_drive_and_10979_username_traps",
-        "restore_wechat_read_only_precheck_pre_restore_rollback_and_human_acceptance_boundary",
-        "task_scheduler_powershell_5_1_compatibility_and_unattended_network_proxy_inheritance",
-        "public_repository_credential_and_artifact_leakage_prevention_guards"
+        "restore_wechat_local_USB_and_unverified_DriveOnly_sources_with_drive_root_overlap_reparse_precheck_pre_restore_failed_restore_rollback_and_human_acceptance_boundaries",
+        "task_scheduler_wscript_hidden_launch_PowerShell_7_preference_5_1_fallback_and_unattended_network_proxy_inheritance",
+        "transactional_four_task_registration_with_non_owner_conflict_rejection_exact_XML_preimages_and_rollback",
+        "actual_backup_plaintext_credential_boundary_and_public_repository_artifact_candidate_guards"
       ],
       "impact_sources": [
         {

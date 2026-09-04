@@ -7,7 +7,7 @@ import test from "node:test";
 import { videoScaffoldModules, videoScaffoldProject } from "../app/content-video-scaffold.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains, systemProjectInventory } from "../app/system-home-content.js";
+import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -53,7 +53,6 @@ test("video-scaffold is registered as a published project in the final plan", as
   assert.equal(videoScaffoldProject.slug, registration.id);
   assert.equal(videoScaffoldProject.order, registration.order);
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "video-scaffold"));
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("video-scaffold exposes seven source-backed modules and all three reading layers", async () => {

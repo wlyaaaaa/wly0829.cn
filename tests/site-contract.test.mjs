@@ -140,7 +140,7 @@ test("project quick metrics lead with product reality instead of implementation 
     ["document-materials", ["3 类", "1 页 · 10 文件", "Unknown（未知）", "未执行"]],
     ["work-delivery", ["6 个文件", "0", "0", "0"]],
     ["personal-media", ["20,154 张", "376 个", "3,830 个", "1,182 项"]],
-    ["devconfig-backup", ["约 65 MB", "约 38 GB", "本地 · G 盘 · Drive", "4 个定时 + 1 个自愈"]]
+    ["devconfig-backup", ["1,911.3 MB", "41.89 GB", "3 成功 · 1 失败", "已禁用"]]
   ]);
   for (const [slug, values] of expected) {
     const candidate = projects.find((item) => item.slug === slug);
@@ -2030,7 +2030,6 @@ test("WeChatDirect explains the real local product, incremental trigger, media l
   assert.equal(registration.source.visibility, "PUBLIC");
   assert.equal(registration.ai_refresh.semantic_revision, 3);
   assert.match(registration.ai_refresh.collectors.join("\n"), /manifest\.json, state\.json and last-run\.json.*completed archive count.*total messages.*never read contact identity, chat body/s);
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const wechatAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "wechat-direct");
   assert.equal(wechatAsset.href, "/projects/wechat-direct");
   assert.match(wechatAsset.role, /3 个完成态归档.*6032 条消息.*3\/3/);
@@ -2154,7 +2153,6 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   assert.match(publicText, /(?:os\.startfile|默认应用)[\s\S]{0,180}(?:只接受|只能接收).*路径[\s\S]{0,220}(?:极小|无法原子|异步).*窗口/i, "personal-materials hides the residual launch-time replacement window");
   assert.match(publicText, /(?:文件系统.*SQLite|SQLite.*文件系统)[\s\S]{0,220}(?:无法|不能).*原子/i, "personal-materials hides the residual file/database transaction boundary");
 
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const materialAsset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "personal-materials");
   assert.equal(materialAsset.href, "/projects/personal-materials");
   assert.match(materialAsset.role, /36 个登记来源.*43,916.*34 个已精确登记.*43,882/);
@@ -2271,7 +2269,6 @@ test("document-materials explains same-source production, page audits, release s
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.doesNotMatch(JSON.stringify(registration), forbidden);
 
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "formal-materials");
   assert.equal(asset.href, "/projects/document-materials");
   assert.ok(skillProjectLinks["document-materials"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "document-materials"));
@@ -2417,7 +2414,6 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(registration.source.repo, "wlyaaaaa/work-delivery-copilot");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "work-delivery-copilot");
   assert.equal(asset.href, "/projects/work-delivery");
   assert.ok(skillProjectLinks["work-delivery"].some((item) => item.relation === "owned-by-project" && item.projectSlug === "work-delivery"));

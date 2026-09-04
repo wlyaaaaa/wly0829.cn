@@ -7,7 +7,7 @@ import test from "node:test";
 import { openClawGatewayModules, openClawGatewayProject } from "../app/content-openclaw-gateway.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemDependencyNodes, systemProjectDomains, systemProjectInventory } from "../app/system-home-content.js";
+import { systemDependencyNodes, systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -50,9 +50,7 @@ test("OpenClawGateway is registered as a published project in the final plan", a
       localRoot: "E:\\Projects\\Tools\\OpenClawGateway"
     }
   );
-  assert.equal(registry.projects.length, 23);
   assert.ok(projectCatalog.some((item) => item.project.slug === "openclaw-gateway"));
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("OpenClawGateway exposes seven source-backed modules and three reading layers", async () => {

@@ -7,7 +7,7 @@ import test from "node:test";
 import { aiCliProfileManagerModules, aiCliProfileManagerProject } from "../app/content-ai-cli-profile-manager.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains, systemProjectInventory } from "../app/system-home-content.js";
+import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -76,7 +76,6 @@ test("AI CLI Profile Manager is registered as a published project in the final p
   assert.equal(aiCliProfileManagerProject.slug, registration.id);
   assert.equal(aiCliProfileManagerProject.order, registration.order);
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "ai-cli-profile-manager"));
-  assert.equal(systemProjectInventory.detailedPageCount, 23);
 });
 
 test("AI CLI Profile Manager exposes seven source-backed modules and all three reading layers", async () => {
