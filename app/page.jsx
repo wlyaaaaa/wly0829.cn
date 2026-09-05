@@ -580,7 +580,7 @@ function projectKicker(kind) {
   if (kind === "agents") return "让 AI 按目标办事：找对事实、守住边界、并行不撞车";
   if (kind === "pcconfig") return "知道电脑现在怎样、软件怎样启动，出故障后从哪里恢复";
   if (kind === "github-index") return "确认每个仓库是谁、在哪个分支，是否真正发布完成";
-  if (kind === "chinese-asr") return "把中文录音变成可搜索、可定位、能回听核对的文字";
+  if (kind === "chinese-asr") return "Win+H 说话打字，已有录音生成能回听核对的文字";
   if (kind === "timeaudit") return "电脑黑匣子：事后查清卡顿、发热、掉帧与复制记录";
   if (kind === "pc-panel-hub") return "两块实体副屏各管一类信息，异常后按真实屏幕身份恢复";
   if (kind === "cacb") return "用同一批真实任务，判断一种 AI 工作方式到底有没有做成";

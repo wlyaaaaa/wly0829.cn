@@ -628,7 +628,7 @@ export const systemProjectDomains = [
     delivery: "可打开的原件、回复与媒体关系、带时间位置的文字、版面结构、引用和待确认项。",
     unavailable: "原件不在当前覆盖、附件丢失或识别失败时明确实际检查范围与待确认项，不用摘要补齐缺失事实。",
     assets: [
-      { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，而不是只吐一段无法回听的稿。", kind: "工作能力", href: "/projects/chinese-asr" },
+      { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "当前 36 个登记来源覆盖 43,916 个非媒体路径条目：34 个已精确登记，其余 43,882 个按请求有界发现；选中一项后才核对大小和 SHA-256 并打开。来源根可访问而本人已删除精确 locator 时，下一次日常同步只退役该 occurrence，并由现有外键级联退出仅属于它的关系和绑定文字。", kind: "资料入口", href: "/projects/personal-materials" },
       { id: "personal-media", title: "个人媒体整理与恢复", role: "管理 20,154 张照片、376 个视频和 3,830 个音频；精选为 1,145 张照片、37 个视频，已全部进入手机包与云候选。手机新文件先双盘备份再离线分类；自己删原件后，查询跳过，现有日常任务更新清单、G 镜像与恢复包，不自动上传云。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
@@ -1148,10 +1148,10 @@ export const systemDependencyNodes = [
   {
     id: "chinese-asr",
     lane: "personal",
-    title: "中文语音处理与结果包（ChineseASR）",
-    subtitle: "带时间位置、风险审计和断点续跑的中文转写包",
+    title: "中文录音转写与桌面听写（ChineseASR）",
+    subtitle: "录音生成可复核结果包，Win+H 听写逐停顿输入",
     href: "/projects/chinese-asr",
-    detail: "处理长音频、多路线分歧、可疑句和局部失败；姓名、数字、承诺和争议语句仍以原音频为准。"
+    detail: "文件路线处理长音频、分歧与局部失败；听写不自动发送，焦点变化后停输并可手动复制。个人麦克风实测待完成；关键内容仍由本人核对。"
   },
   {
     id: "chinese-asr-skill",

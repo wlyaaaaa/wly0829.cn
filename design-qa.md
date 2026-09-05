@@ -1,35 +1,29 @@
-# 当前网站验收：E101、daily-preferences、DevConfig Backup 与最终项目规划
+# ChineseASR 定向快照候选验收
 
-## 结论与范围
+## 当前结论
 
-当前候选以已发布并回读的 `a1af496` 为事实基底：E101、320px Rules 换行、`daily-preferences` v0.9.1、对应 Skill 增量与 `#12 DevConfig Backup` 均已进入 PUBLIC 主线。本批次只落实用户对最终规划的修正：保留 34 个独立项目并继续占用原 1–35 价值槽位，rank 15 永久留空，其余名次不重排；当前为 23 个已发布项目、11 个待建设项目，下一个是 `#19 ProxyClean`。Scripts 的能力由对应项目承接，网站只保留 System 总账事实，不生成独立卡片、路由、内容包、TODO 或未来施工项。非项目卡说明为 12 项 done、0 项 TODO；这里的 done 只表示网站归类闭合，不冒充另一个 Owner 正在执行的底层源码吸收与退役已经完成。
+ChineseASR 网页增量已完成，尚未发布。204 个静态页面、公开内容检查及 147/147 网站测试通过，Chrome 产品验收通过；完整 npm run build 仍被既有规则快照门禁阻断。网站保存 E101，本机活动规则为 E112，verify:snapshot 返回 9 项 snapshot_live_*_drift。没有跳过、修改或模拟该检查，没有刷新其他来源，没有 push 或触发 Pages。
 
-## 继承的 E101 与 daily-preferences 事实
+## 来源与语义增量
 
-- 活动规则为 E101：release commit `c5684d7060a3276f3abd2cc49a5950569726998b`，ruleset `f79057f023ba55f76995f696a29b51adb1dd0b213fdb19b3126cd25fd4d6d465`，previous=E100。新增删除后备只在 Codex 命令层于进程启动前明确拒绝时使用 Windows 回收站；普通文件占用、权限或路径错误不触发。
-- `daily-preferences` 来源绑定 PRIVATE main `3275ca76cec37a3c799acbf14a336b31f333cdc1`。当前数据库为 schema v2：120,869 条 current、163,089 条总记录版本、42,220 条历史记录；18 个来源实例中 12 个 `acquired_verified`、6 个 `snapshot_only`，26/3 条明示不变，current 推定由 15 个收敛为 3 个。
-- Chrome 与 Steam 走本机读取，哔哩哔哩复用当前已登录 Chrome；Google Play、航旅纵横和 12306 保持人工快照，另有 7 项来源明确未取得。它不是后台同步，不新增 watcher、服务、队列或定时器。
-- v0.9.1 让可靠同订单链全额退款退出普通偏好/复购/快照支持但保留原始事实，partial/组单/关联不唯一保持 Unknown；信用卡只作支付旁证。B 站数据库 current 播放为 3,382，本次窗口 1,349，current set 为 719 收藏、4 稍后看、277 带类型追番/追剧，点赞 20、投币 2 仍是窗口观察。
-- `.agents` source main 已到 `a3ed133d38386edbb93ad6c0ccdf68d5d0bf02da`，daily-preferences Skill 为 11,084 bytes / `b0ddad277748ce8f2118e515ae29ddc6e5532a8a32d0d29d5463062c793df948`；活动规则仍严格是 E101 / `c5684d7`，没有冒充新 E release。
+- 来源 PUBLIC wlyaaaaa/ChineseASR main：5c7b7da9b4bc4852124e76b5895fe6990abccfcf，2026-09-05 21:03 UTC 正式远端回读；它是 6c239e850ac6fee573fbb3e7a9e54b93d65a212c 的直接后继，只补正 README 的 FunASR 版本。本任务依据 E112 / 429e1f183a2e7d1670dd406fabe20e2ffc5a7f1b 执行。
+- 来源路径：AGENTS.md、README.md、configs/dictation.yaml、requirements-core.txt、requirements-dictation.txt、scripts/dictation.ps1、src/zh_asr/dictation.py、src/zh_asr/dictation_audio.py、src/zh_asr/dictation_windows.py、tests/test_config.py、tests/test_dictation.py、tests/test_dictation_audio.py、tests/test_dictation_windows.py。
+- 新产品含义：Win+H 托盘听写、逐停顿输入、Esc 取消未输入部分、焦点变化停输与主动复制、不自动回车发送、退出或暂停交还系统快捷键、登录自启及停启/卸载入口。
+- 新技术含义：原 Qwen3-ASR-1.7B 单模型预载内存，录音期间申请 LocalGpuBroker，空闲释放显存与租约；16 kHz、600 ms 停顿、240 ms 最短语音、20 秒分段上限；指定设备缺失不换麦克风；音频与正文无历史文件，日志只记错误、耗时、字数。
+- 依赖更新：FunASR 1.4.14 + NumPy 1.26.4；Qwen ASR 0.0.6、Torch/TorchAudio 2.11.0+cu128、Transformers 4.57.6 维持。兼容依赖可自主更新，模型新增/替换须有可靠中文效果、速度与兼容改进证据，不因版本或宣传换模，没有定时下载服务。
+- 保留原文件转写、审计、说话人、云边界与离线恢复产品含义；未受影响的模型工件、WSL、环境和离线包检查保留 2026-08-31 观察边界，没有访问私人录音或重跑模型。
+- Unknown：DJI Mic Mini 未连接，个人语音与真实按键端到端体验待本人完成。来源 376 项全套与最终 33 项定向测试不相加。官方 5.5 秒中文样本正确转写、预热单次解码约 0.47 秒，不代表整体耗时、个人准确率或零延迟。
+- 表面：ChineseASR 总览、入口/模型/安装/运行模块、标题引导文案、Registry 对应来源，以及 System 直接派生的两处 ChineseASR 简介。Rules、Skills、PCConfig 和其他项目快照未刷新；未运行 --all。
 
-## DevConfig Backup 的 Gemini 审查与修正
+## 验证
 
-- Gemini 的四模块、三层阅读、System 链接与排序方向可复用，但原候选把早期 65 MB / 38 GB、Drive 就绪、五个现役任务、固定 PowerShell 5.1 和半小时恢复写成当前事实，因此没有原样发布。
-- 源项目 `wlyaaaaa/devconfig-backup` 已把人类入口修到当前行为并发布为 `8460be6e9a281f7030f1756cb610678254a49c19`。8 个 PowerShell 测试脚本与 18 个 PowerShell 源文件解析通过；原生恢复测试因官方微信运行而按设计跳过合成 Execute 分支，不能冒充真实恢复。
-- 当前配置 `latest.zip` 为 1,911.3 MB；本地与 `G:\80_Backup\DevConfig` 各有 7 份日期包。G 盘微信热备为 41.89 GB / 142,693 文件，Hot 回执为 `complete` 且不输出 payload 文件名或正文。
-- 四个本仓库常规任务最近为 3 个成功、配置 Drive 日任务 1 个失败；当前只读 preflight 已恢复可达，但远端 `latest.zip` 仍对应 9 月 2 日，本地/G 已到 9 月 3 日，本轮没有上传。配置包每个新代上传完整日期 zip 和同内容 `latest.zip`，不是包内差量。
-- PCConfig 的 `AIRecoveryColdSync-Daily` 已启用；最近返回 0，但有界回执明确为 `status=skipped` / `H_unavailable`，没有发生冷拷贝。H 只有在人工解锁、整体 Hot context 不超过 48 小时、DevConfig/微信各不超过 36 小时、介质身份、100 GiB 停写线与写锁全部通过时才执行 `additive_no_mirror`，且不自动重锁。
-- 微信 Drive 支持 Hot / Local / Drive、完整数据、临时 `DbOnly`、`DriveFull` 兼容覆盖和人工看守下的 `MaxTransfer 0`。默认 8G 只限制一次进程；任务重试的累计流量另算。WAL/SHM/journal 不被过滤，但运行中逐文件复制仍不是一致数据库快照。
-- 空白新机先安装 Git、取得 PUBLIC devconfig-backup，恢复 GitHub 私有访问后再取得 PRIVATE PCConfig；PCConfig 不存在时机器级设置、任务与 H 阶段明确暂停。Restore-WeChat 支持默认 G、本地/USB `BackupRoot` 与尚未真实联网验收的 `DriveOnly`。预检拒绝盘根、源目标重叠/父子关系和重解析点；复制失败时把部分结果移到 `.failed-restore-*`，再恢复 `.pre-restore-*`。
-- 当前 `state/latest.sha256` 没有作为可携带 sidecar 随 G/Drive 包发布。原 state 存活时可比 SHA-256；完全丢失时 `7z t` 只能证明 zip 内部 CRC 可读，强来源哈希保持明确缺口，不能用日期和大小冒充完整性证明。
-- 四个常规任务的 Action 是 `wscript.exe`；隐藏 VBS 优先 Program Files 下的 PowerShell 7，缺失时才选择 Windows PowerShell 5.1。事务注册会拒绝非本项目同名任务、保存精确 XML 前像、逐项回读并在失败时恢复原定义。
+- build:site 生成 204 个完整静态页面、308 条紧凑搜索记录；路由数量不变。
+- verify:public 扫描 191 个来源文件和 341 个生产文件，共 532 项，0 finding。
+- 最终 test:built：147/147 通过。历史长音频 4/4 指标仍绑定历史事实，未冒充本次重跑。
+- 共享搜索 gzip 从既有约 120,787 B 增至约 121,151 B；原 118 KiB 仅余约 45 B。增长来自本次真实听写说明与技术检索词，无新运行依赖、点击时加载或重复模块。保留原专业内容，只把共享搜索预算增加最小整数 1 KiB 至 119 KiB；JS、CSS、项目搜索与分片预算不变，测试仍检查产物真实字节。
+- Chrome：项目目录、总览和四个受影响模块，在 1440、390、320 宽度共 18 个组合无横向溢出，移动端截图已视觉检查；阅读层、键盘 Tab、原生跳转、System 对应简介和自定义 404 正常，console error/warn=0。
+- 完整 npm run build：BLOCK；未受本次修改的 E101 网站规则快照与 E112 本机活动规则不一致。静态构建、公开门和单元测试不豁免该失败。
 
-## 当前验证状态
+## 剩余义务
 
-- DevConfig 源项目完成并发布；8 个 PowerShell 测试脚本通过，18 个 PowerShell 源文件解析通过。daily-preferences 来源 Owner 与独立审查者回读 73/73 Python、7/7 Node；两个 PRIVATE source main 均 clean 并与 origin/main 一致。
-- E101 snapshot PASS：`.agents source=a3ed133` 且 clean，active release 仍为 `E101/c5684d7`，5 条规则、29 个 displayed Skills 与 29 个 active install intent 一致。个人 Skill 供应现场为 source/install PASS、41/41 事务终态。
-- `npm run build` 与 `npm run test:built` 通过：生成 204 个完整静态页面、308 条紧凑搜索记录；PUBLIC gate 扫描 191 个 source、341 个 dist，共 532 个文件，0 finding；全站 147/147 测试通过。
-- gzip 实测为共享 JavaScript 11,596 B / 12 KiB、共享 CSS 21,218 B / 21 KiB、全站搜索 120,787 B / 118 KiB、项目模块搜索 139,533 B / 144 KiB；没有新增运行依赖、服务、数据库或点击时加载。
-- 1440、390、320 三档真实浏览器检查 DevConfig 项目目录/Overview/4 模块，以及 daily-preferences Overview/来源/证据/事实模块与 Skill：所有路由 200，document/body 宽度等于视口，H1 未裁切，console/page error 为 0，阅读层与原生项目导航可用。
-- Scripts 规划修正后再次用真实 Chrome 检查项目目录：三档视口均为 23 个项目 Overview 入口、无横向溢出或 H1 裁切，Scripts 与尚未验收的 ProxyClean 均无卡片/路由入口；System 的 Scripts 历史工具来源可见，键盘 Tab 焦点、DevConfig 三层页面、静态 404 文档与浏览器控制台均正常。生成目录也没有 `/projects/scripts/` 或 `/projects/proxyclean/`。
-- DevConfig 独立 source-first 审查修复 5 个 P0 与 6 个 P1 后，最终网页盲读为 P0=0、P1=0；daily-preferences 精确 delta 的 source-first 与纯网页盲读终审均为 P0=0、P1=0、P2=0。盲读者能正确解释全额退款/Unknown、B 站 current set/窗口流、移除不等于不喜欢、3 个 current 与 12 个失效推定，以及 E101 与更晚 source main 的区别。本批次已经 normal push，并由 GitHub Pages 成功部署和公网读回；完成判断始终以发布 Owner 对当前 remote `main` 与 deployment head 的外部回读为准，本文件不写入会因自身提交而变化的 SHA。
+完整构建门、PUBLIC main push、Pages deployment 和公网新版本回读未完成。候选保存在独立本地分支 codex/chinese-asr-dictation-snapshot-20260905；主线仍是已发布的 50307b908249aae9dd7a72c5c9a50c962a20e366。继续发布前须在规则快照自身的授权范围解决 E101/E112 阻断，再验证合并后的最终批次。本任务没有将单来源请求扩大成规则或全站刷新。

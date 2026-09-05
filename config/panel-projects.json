@@ -23,7 +23,7 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 12,
     "shared_css_gzip_budget_kib": 21,
-    "search_index_gzip_budget_kib": 118,
+    "search_index_gzip_budget_kib": 119,
     "project_search_index_gzip_budget_kib": 144,
     "bundle_budget_semantics": "these are measured anti-bloat review thresholds, not permanent content ceilings; audit duplication and user-visible latency before the smallest justified increase. The value plan retains 34 project identities in their original 1-35 slots, leaves owner-removed rank 15 unused, and renders 23 published projects; the compact search projection currently contains 308 records. The current shared/all-project search measures 120787/139533 gzip bytes, so the two lines use the minimum passing integers 118/144 KiB. Required narratives remain in route-specific static HTML rather than shared JavaScript; the sunshine-remote-streaming shard and existing maximum PCConfig shard remain within 21 KiB. Shared interaction JavaScript/CSS remain within 12/21 KiB; no route runtime, click-time loading, dependency, service, database or presentation-layer change",
     "detail_loading_mode": "route_specific_static_native_document",
@@ -470,8 +470,8 @@
       "route": "/projects/chinese-asr",
       "ai_refresh": {
         "content_path": "app/content-chinese-asr.js",
-        "semantic_revision": 6,
-        "scope": "project overview and seven modules covering task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy; consistent contextual evidence may support reversible inferred speaker attribution without pretending acoustic certainty",
+        "semantic_revision": 7,
+        "scope": "project overview and seven modules covering Windows Win+H single-Qwen tray dictation, pause-delimited typing, Esc cancellation, focus guard/manual copy, login lifecycle, CPU preload/GPU lease release and evidence-based model maintenance; file task routing, models/modes, installation/model-artifact identity/offline recovery, long audio, dual-ASR audit evidence plus optional default-off local Ollama uncertain-only arbitration, speaker attribution and runtime/privacy; consistent contextual evidence may support reversible inferred speaker attribution without pretending acoustic certainty",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ChineseASR status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ChineseASR -RefreshRefs -Json",
@@ -492,6 +492,7 @@
       },
       "displayed_areas": [
         "project_overview",
+        "windows_tray_dictation_and_evidence_based_model_maintenance",
         "seven_modules",
         "installation_model_artifacts_and_offline_recovery",
         "model_and_mode_routing",
@@ -516,6 +517,11 @@
         {
           "kind": "task_runtime_and_routing",
           "paths": [
+            "configs/dictation.yaml",
+            "scripts/dictation.ps1",
+            "src/zh_asr/dictation.py",
+            "src/zh_asr/dictation_audio.py",
+            "src/zh_asr/dictation_windows.py",
             "scripts/asr-smart.ps1",
             "scripts/transcribe-folder.ps1",
             "src/zh_asr/service.py",
@@ -546,6 +552,7 @@
           "paths": [
             "pyproject.toml",
             "requirements-core.txt",
+            "requirements-dictation.txt",
             "requirements-qwen.txt",
             "requirements-firered.txt",
             "scripts/setup-core.ps1",
