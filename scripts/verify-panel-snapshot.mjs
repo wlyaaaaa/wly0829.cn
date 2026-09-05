@@ -5,10 +5,16 @@ import { generatedPanelFacts } from "../app/panel-facts.generated.js";
 import { rulesSnapshot } from "../app/content-core.js";
 import { skills } from "../app/content-skills.js";
 import documentedRuleBindings from "../config/panel-rule-bindings.json" with { type: "json" };
+import { fileURLToPath } from "node:url";
+import { inspectRetainedRuleSnapshot, canRetainRuleObservation } from "./retained-rule-snapshot.mjs";
 
 const failures = [];
+const liveDrift = [];
 function requireFact(condition, code, detail) {
   if (!condition) failures.push({ code, detail });
+}
+function compareLiveFact(condition, code, detail) {
+  if (!condition) liveDrift.push({ code, detail });
 }
 
 const payload = JSON.parse(JSON.stringify(generatedPanelFacts));
@@ -63,10 +69,10 @@ requireFact(documentedRuleBindings.semantic_release_id === authority.releaseId, 
 requireFact(documentedRuleBindings.ruleset_sha256 === authority.rulesetSha256, "documented_ruleset_drift", `${documentedRuleBindings.ruleset_sha256}/${authority.rulesetSha256}`);
 if (shouldReadLiveRelease) {
   requireFact(liveReleaseResult.status === 0 && liveRelease?.status === "pass" && liveRelease?.reason === "e_rules_active_verified", "live_e_release_not_verified", `${liveReleaseResult.status}/${liveRelease?.status}/${liveRelease?.reason}`);
-  requireFact(liveRelease?.verified_current?.release_id === authority.releaseId, "snapshot_live_release_id_drift", `${authority.releaseId}/${liveRelease?.verified_current?.release_id}`);
-  requireFact(liveRelease?.verified_current?.git_commit === authority.gitCommit, "snapshot_live_release_commit_drift", `${authority.gitCommit}/${liveRelease?.verified_current?.git_commit}`);
-  requireFact(liveRelease?.verified_current?.ruleset_sha256 === authority.rulesetSha256, "snapshot_live_ruleset_drift", `${authority.rulesetSha256}/${liveRelease?.verified_current?.ruleset_sha256}`);
-  requireFact(liveRelease?.pointer_sha256 === authority.pointerSha256, "snapshot_live_pointer_drift", `${authority.pointerSha256}/${liveRelease?.pointer_sha256}`);
+  compareLiveFact(liveRelease?.verified_current?.release_id === authority.releaseId, "snapshot_live_release_id_drift", `${authority.releaseId}/${liveRelease?.verified_current?.release_id}`);
+  compareLiveFact(liveRelease?.verified_current?.git_commit === authority.gitCommit, "snapshot_live_release_commit_drift", `${authority.gitCommit}/${liveRelease?.verified_current?.git_commit}`);
+  compareLiveFact(liveRelease?.verified_current?.ruleset_sha256 === authority.rulesetSha256, "snapshot_live_ruleset_drift", `${authority.rulesetSha256}/${liveRelease?.verified_current?.ruleset_sha256}`);
+  compareLiveFact(liveRelease?.pointer_sha256 === authority.pointerSha256, "snapshot_live_pointer_drift", `${authority.pointerSha256}/${liveRelease?.pointer_sha256}`);
 }
 
 const documentedRules = new Map(rulesSnapshot.rules.map((rule) => [rule.logicalId, rule]));
@@ -84,7 +90,7 @@ for (const [logicalId, rule] of documentedRules) {
   requireFact(Boolean(documentedDescriptor?.sourcePath), "documented_rule_source_missing", logicalId);
   if (shouldReadLiveRelease) {
     const liveDescriptor = liveRelease?.verified_current?.files?.find((item) => item.logical_id === logicalId);
-    requireFact(liveDescriptor?.sha256 === bound?.sha256 && Number(liveDescriptor?.bytes) === Number(bound?.bytes), "snapshot_live_rule_descriptor_drift", logicalId);
+    compareLiveFact(liveDescriptor?.sha256 === bound?.sha256 && Number(liveDescriptor?.bytes) === Number(bound?.bytes), "snapshot_live_rule_descriptor_drift", logicalId);
   }
 }
 requireFact(authority.releaseId === rulesSnapshot.releaseId, "snapshot_release_id_mismatch", `${authority.releaseId}/${rulesSnapshot.releaseId}`);
@@ -106,6 +112,16 @@ if (releaseValidatorRow?.status === "repair") requireFact(payload.validation.fai
 const sourceRow = payload.validation?.rows?.find((row) => row.layer.startsWith("Source checkout"));
 if (payload.sourceDirtyCount > 0 || payload.sourceCommit !== authority.gitCommit) requireFact(sourceRow?.status === "repair", "snapshot_dirty_source_not_disclosed", sourceRow?.status);
 
+const retainedEvidence = liveDrift.length ? inspectRetainedRuleSnapshot({
+  websiteRoot: fileURLToPath(new URL("../", import.meta.url)),
+  sourceRoot: "E:\\.agents",
+  authority,
+  ruleBinding: payload.ruleBinding || [],
+  documentedRules: documentedRuleBindings.rules
+}) : null;
+const retainedObservation = canRetainRuleObservation(authority, liveRelease, retainedEvidence);
+if (liveDrift.length && !retainedObservation) failures.push(...liveDrift, ...(retainedEvidence?.failures || []));
+
 const report = {
   schema: "wly.panel-snapshot-binding.v2",
   status: failures.length ? "block" : "pass",
@@ -119,6 +135,10 @@ const report = {
   active_install_intent_count: payload.skills.activeInstallIntent,
   payload_sha256: actualPayloadSha256,
   live_release_checked: shouldReadLiveRelease,
+  live_release_id: liveRelease?.verified_current?.release_id || null,
+  observation_relation: retainedObservation ? "retained_published_observation" : liveDrift.length ? "unverified_drift" : shouldReadLiveRelease ? "matches_live_release" : "portable_snapshot_integrity_only",
+  retained_evidence: retainedEvidence,
+  live_drift: liveDrift,
   finding_count: failures.length,
   findings: failures
 };
