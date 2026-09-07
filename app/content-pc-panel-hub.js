@@ -2,48 +2,53 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const pcPanelHubSnapshot = createProjectSnapshot({
   observedAt: "2026-09-07",
-  label: "TURZX 发送进程当前缺席，最后心跳为设备发送失败并已过期；HS2 与壁纸进程仍在，实体画面未重验",
-  boundary: "最新源码f883b7d已发布，仅对齐两处窗口保护说明；运行机制继续以7144da5为证据。9月7日只读核对依赖、进程和有界心跳：TURZX发送链不能称当前健康；8月31日测试/运行数字和8月30日实体观察仍属历史证据。没有打开COM、切显示模式、重启USB、L-Connect或壁纸",
+  label: "TURZX 已恢复每秒发送，本人已确认实体屏正常刷新；自动接回和人工停止也已实测",
+  boundary: "9月7日已修好发送链和看门狗退出后的自动接回，并实际验证停止、软件重新启动和异常退出恢复；随后本人确认TURZX实体屏已正常刷新。HS2浮层目前未运行，睡眠唤醒和断电开机仍需各自的现场证据",
   metrics: [
     { label: "显示面", value: "2" },
-    { label: "最后发送帧", value: "60139 / 60140" },
-    { label: "最后发送失败", value: "1 · 心跳已过期" },
-    { label: "当前发送进程", value: "0" }
+    { label: "本次恢复后发送", value: "285 / 285" },
+    { label: "本次发送失败", value: "0 · 心跳新鲜" },
+    { label: "当前发送进程", value: "1" }
   ],
   facts: [
     { label: "两块显示面", value: "TURZX 480×1920 显示密集遥测；HS2 2288×1048 在动态壁纸上显示网易云曲目/封面、Steam 本次时长与退出总结、手机电量、通知/来电/验证码、任务与告警，最多 6 张事件卡" },
-    { label: "刷新配置与当前状态", value: "安装配置保留1 Hz Hybrid（混合）刷新，command 200全帧基线+204增量；最新发送心跳已过期且发送进程缺席，配置节拍不能冒充当前实际刷新" },
-    { label: "数据与恢复节拍", value: "主周期 1000 ms；最近 fetch/render/send 59/10/35 ms；第 60/120/180 帧与每 900 帧重建会话或补全帧，进程排行约 3 秒" },
+    { label: "刷新配置与当前状态", value: "已恢复约每秒发送；沿用1 Hz Hybrid（混合）刷新，command 200全帧基线加204增量，没有更换发送协议。23:24观察周期1010 ms、失败0次；随后本人直接确认TURZX实体屏上的时间或数字已正常变化" },
+    { label: "数据与恢复节拍", value: "主周期1000 ms；23:24观察取数/渲染/发送为46/8/22 ms。第60/120/180帧与每900帧重建会话或补全帧，进程排行约3秒；看门狗自己异常退出时，同一隐藏入口等待30秒再启动替代进程" },
     { label: "显示拓扑恢复", value: "只观察活动显示器身份与唯一主屏归属；15 秒探测、30 秒稳定、900 秒冷却，恰好三屏且 MTT/HS2 绑定健康时才通过当前用户 shell 对既有 Wallpaper Engine 发一次 stop/play" },
-    { label: "运行快照", value: "9月7日依赖ready；TURZX发送进程0个，最后心跳停在9月5日fatal、60139/60140、failed=1。HS2与壁纸各1进程，不能替代实体像素与落点验收" },
-    { label: "源码、回归与边界", value: "2026-08-31 旧验收记录：PUBLIC main=8c217ead；本地、origin 与实时远端一致且工作树干净，84 项指标、8 项天气及原生检查通过；为保护 COM7 跳过写入测试，command 204 无设备 ACK，仍不能代替实体像素观察" },
+    { label: "运行快照", value: "9月7日依赖齐全；TURZX发送进程1个，心跳新鲜、285/285帧、失败0次。强制结束看门狗后63.33秒自动恢复；明确停止后观察34.69秒没有自行启动。本人已确认TURZX实体屏正常刷新；HS2浮层0个、壁纸进程1个，HS2实屏与落点仍需另验" },
+    { label: "源码、回归与边界", value: "9月7日PUBLIC main=a4d8e22，本地与远端一致；87项指标、8项天气及渲染、HTTP、电源、节拍、可靠性、4个真实VBS行为和公开ZIP检查通过。生产串口另做有界恢复实测；command 204没有设备像素确认，软件通过不能替代实体观察" },
     { label: "已验证发布基线", value: "2026-08-31 Git Owner 回读 wlyaaaaa/PC-Panel-Hub 为 PUBLIC（公开）仓库，默认 main（默认主分支）；当时 8c217eadf76e6849c382c909b407d9dc436f9005 的本地 HEAD、origin/main 与实时远端 main 一致，工作树干净、ahead/behind 为 0/0。下列原生测试和运行数字仍绑定这一历史观察，不用于证明后续代码已发布或加载。", hero: false },
-    { label: "当前源码补核", value: "2026-09-02 本地 HEAD=7144da589119fa59d5eb56bbaa921d2bf3af8484；HS2 产品文档、StartSideScreenWatchdog、Invoke-HS2StartupWindowGuard 与窗口策略没有未提交改动。普通窗口保护在控制器恢复前启动，每 250 ms 检查、默认覆盖启动最初 180 秒，随父 watchdog 退出；完整浮层仍等待 Secondary 模式与绑定双样本验收。本次只读取源码和测试定义。", hero: false },
+    { label: "当前源码补核", value: "2026-09-07 PUBLIC main、HEAD、origin/main与实时远端均为a4d8e22219f304ec7d4540f4e7612510cc70bf8e，工作树干净。本次修补既有隐藏VBS入口对watchdog退出的处理和IncludeWatchdog停止边界；7144da5的普通窗口保护继续每250 ms检查、覆盖启动前180秒并随父退出，完整浮层仍需Secondary模式与绑定双样本通过。", hero: false },
     { label: "运行依赖", value: "项目 runtime check（运行依赖检查）确认 Python 3.11、.NET Framework C# 编译器、RJCP 串口库、既有 TURZX 运行文件和主 stack（运行栈）入口均存在；检查没有安装或改动任务。", hero: false },
-    { label: "原生回归", value: "8c217ead 上项目原生 test.ps1 -SkipStreamWhenRunning 通过：指标 84/84、天气 8/8，并完成 renderer、HTTP、PowerWatchdog、shortcut、refresh default、cadence、runtime reliability 与 public release ZIP 检查；检测到新鲜生产 heartbeat 后保护性跳过 TestVideoStream，未打开 COM7。", hero: false },
+    { label: "原生回归", value: "a4d8e22的scripts/test.ps1 -SkipStreamWhenRunning通过：指标87/87、天气8/8，渲染、HTTP、PowerWatchdog、快捷方式、刷新默认值、节拍、运行可靠性及公开ZIP检查通过；新增4个真实VBS行为用例不接触硬件。套件只跳过TestVideoStream以免抢占生产串口，真实停止/启动/异常恢复由另一次精确设备实测完成。", hero: false },
     { label: "拓扑资格", value: "8c217ead 新增显示拓扑恢复：看门狗每 15 秒只读活动显示器设备名与唯一主屏归属；HDR-only 变化和没有形成新活动显示器/主屏身份的波动不触发。只有恰好三块活动屏、唯一 DISPLAY\\MTT1337\\* 与 Root\\MttVDD 设备/后端健康、HS2 已为 Secondary 且既有 8091/AD23/MI_00/LED 绑定健康，变化稳定 30 秒后才有资格重绑。", hero: false },
     { label: "壁纸重绑动作", value: "恢复时先从当前 session（会话）中唯一 wallpaper64 进程取得安装目录，再要求同目录唯一 wallpaper32.exe 与当前 session 的 explorer shell；Highest watchdog 通过 Shell.Application 依次分派 `-control stop`、等待 1500 ms、再分派 `-control play`，不启动高权限常驻渲染进程、不打开 GUI、不写场景或配置。", hero: false },
     { label: "事件与冷却", value: "同一拓扑事件最多消费一次，重绑后进入 900 秒冷却；控制客户端、用户 shell 或 COM 分派不可用时返回具名状态并记日志。失败分派也会消费当前事件并更新基线，避免同一显示变化形成 stop/play 循环；只有后续真实拓扑变化并跨过冷却才会得到新机会。", hero: false },
     { label: "硬件失败关闭", value: "绑定的 LIAN LI Hub、AD23、MI_00 或 LED 若出现 Code 10，恢复链立即失败关闭并提示关机后检查 HS2 USB 排针、线缆和辅助供电；不会自动重启 Hub、移除设备、扫描 PnP 或形成重试循环。", hero: false },
-    { label: "源码与运行态分层", value: "上述 8c217ead 事实属于 source/test（源码/测试）层。本轮没有重启或重新安装已经运行的 watchdog，也没有制造显示拓扑变化、执行真实 wallpaper32 stop/play 或读取实体像素，因此不能推断当前内存中的长期进程已经加载新恢复代码。", hero: false },
+    { label: "源码与运行态分层", value: "9月7日已通过既有任务入口重新启动，并验证同一VBS在watchdog异常退出后拉起替代进程；这证明新启动恢复机制已实际执行。没有制造显示拓扑变化或执行Wallpaper Engine stop/play；8c217ead的壁纸重绑仍只有源码/测试和既有历史证据，不能借本次TURZX恢复升级为实体通过。", hero: false },
     { label: "并发采样保护", value: "当前 main 的 metrics agent 新增 snapshot build lock，防止并发 `/snapshot` 请求同时推进共享采样基线。", hero: false },
     { label: "公开构建", value: "新的公开 ZIP 真实构建并解包通过：双屏源码完整包含 HS2，机器 JSON、厂商二进制和生成目录均被排除；只保留无实际天气坐标和网卡值的 config.example.json，本机 config.json 已保留实体文件但停止 Git 跟踪。", hero: false },
     { label: "公开源码范围", value: "当前 PUBLIC main 同时包含 clean clone 安装入口、只读 runtime check、启动任务安装/卸载脚本、HS2 拓扑绑定、显示拓扑/壁纸重绑逻辑、Win+F1/Win+F2 控制和 Publish-HS2Task.ps1 生产者入口；本机私有 config、厂商运行文件和 out 下的 HS2 绑定不属于公开源码。", hero: false },
     { label: "主动任务协议", value: "HS2 主动任务协议使用本机 `HS2.CrystalOverlay.Tasks` 命名管道：Id、标题、详情、进度、预计剩余与状态被独立校验；活动任务默认五分钟租约，同 Id 重开会先清旧完成卡，completed 显示一次完成提示，cancelled 清除活动与完成状态。", hero: false },
-    { label: "运行快照详情", value: "2026-09-07读取的最新心跳完成于2026-09-05T14:51:11.259584Z，status=fatal（致命错误）、frame=60140、sent=60139、failed=1，错误为 InvalidOperationException: DIFF EXCEPTION - IOException: Device Error。最后走diff_204，period_ms=1000、full_resync_every_frames=900；这份心跳已过期约53小时，不能证明循环仍在推进。", hero: false },
+    { label: "运行快照详情", value: "2026-09-07T23:24:15.5631385Z心跳为status=ok、snapshot_status=fresh、frame=285、sent=285、failed=0、consecutive_send_failures=0；transport_mode=hybrid_diff_204_full_200，frame_transport=diff_204，period_ms=1010、last_full_frame=180、full_resync_every_frames=900。该样本已晚于23:19异常退出恢复时的第5帧，证明发送继续推进。", hero: false },
+    { label: "这次为何一直停着", value: "9月5日看门狗先发生RTSSHooks64.dll原生崩溃，数小时后sender因InvalidOperationException: DIFF EXCEPTION - IOException: Device Error退出，留下60139/60140、failed=1的过期心跳；负责恢复的进程已不在。现有隐藏入口改为同步等watchdog结束，非0退出等待30秒再试、0退出结束；不依赖Task Scheduler单独兜底，也不增加第二个任务或服务。原Device Error的设备侧触发原因未独立复现。", hero: false },
+    { label: "启动与停止实测", value: "9月7日生产链验证：显式停止并观察34.69秒，watchdog、sender与隐藏入口均保持0；随后软件重新启动31.06秒恢复约1 Hz；强制结束watchdog后63.33秒由同一VBS自动恢复，旧sender已退出，新心跳fresh/ok、failed=0。这里的重新启动是软件启动，不是重启Windows或断电冷开机。", hero: false },
+    { label: "RTSS应用检测设置", value: "PCConfig已发布并回读6fdaf0084700ac621249c5b11ef5e0e1b19a6af9，仅安装powershell.exe单个Profile（应用配置）的[Hooking] EnableHooking=0；官方SDK回读AppDetectionLevel=0。游戏与壁纸配置保留；已注入进程中的DLL仍可能驻留，所以不据此声称原生崩溃永不再现。", hero: false },
     { label: "产品信息面", value: "HS2 的 10 类信息有各自来源和寿命：网易云播放常驻、切歌扩展 8 秒；Steam 运行时显示本次时长、退出总结 60 个可见秒；双来源手机电量按证据新鲜度择优；普通通知/动态状态 60 个可见秒、连接提示 5 秒、验证码 15 秒，来电/活动传输随源结束且有 5 分钟失联保护。全局最多 6 卡，15 个纯软件 demo 不冒充当前事件或实体验收。", hero: false },
     { label: "恢复节拍", value: "恢复节拍按第 60/120/180 帧与每 900 帧分层，用于重建会话或补全帧；这些数字是帧数而不是秒数，任何阈值只处理对应链路，不重启整机。", hero: false },
-    { label: "当前进程", value: "9月7日只读观察 TURZX.SideScreen.Stream 为0个，HS2.CrystalOverlay 与 wallpaper64 各1个；运行依赖检查 ready=true、missing=[]。依赖齐全或其他显示进程存在不证明 TURZX 恢复，也不证明 HS2 实体像素与目标落点。", hero: false },
+    { label: "当前进程", value: "9月7日23:24只读观察TURZX.SideScreen.Stream为1个、HS2.CrystalOverlay为0个、wallpaper64为1个；依赖检查ready=true、missing=[]。常规启动发现active-display-count=2，按既有资格判断停止旧HS2浮层并等待显示链；未重置USB、修改显示模式或调用L-Connect，不能称HS2当前实体显示已恢复。", hero: false },
     { label: "浮层落点", value: "2026-08-31T04:19:33Z 项目窗口落点策略回读 DISPLAY31 为非主 2288×1048，OverlayPlacementStatus=healthy、visible=1、misplaced=0、actions=0；证明透明浮层当前位于目标副屏。", hero: false },
-    { label: "历史实体确认", value: "2026-08-30 显示缓冲区截图由本人当次确认同画面已在 HS2 实体屏生效；该历史物理验收与 2026-08-31 当前浮层落点证据分层保留。", hero: false },
-    { label: "主机侧含义", value: "本轮已确认 TURZX 最后一轮发送失败、心跳过期且发送进程缺席；故障根因和实机恢复尚未完成。8月31日2748/2748、0失败保留为旧验收，不能覆盖当前异常。未读取私人通知正文，也未读取实体像素。", hero: false }
+    { label: "本人现场观察", value: "9月7日在主机发送和自动恢复测试完成后，本人直接确认TURZX实体小屏“能看到，已正常刷新”。这是当次现场观察；脚本先前记录physical_pixels_verified=false表示脚本本身没有观察实体屏，后续本人确认单独补上这一证据。", hero: false },
+    { label: "历史实体确认", value: "2026-08-30 显示缓冲区截图由本人当次确认同画面已在 HS2 实体屏生效；该历史物理验收与2026-08-31浮层落点证据分层保留，不作为本次HS2当前状态。", hero: false },
+    { label: "主机与实体含义", value: "TURZX主机发送、异常退出后自动接回、明确停止后不反弹，均有本次生产链实测；本人也已确认实体屏正常刷新。设备没有逐像素ACK，未做新睡眠、Windows重启或断电冷开机；8月31日2748/2748和8月30日HS2实体观察仍是历史证据。", hero: false }
   ],
   gaps: [
-    "TURZX 当前没有发送进程；最近心跳记录 diff_204 的 IOException: Device Error，之后没有新鲜发送回读。仅凭这一错误不能判定是设备、串口还是恢复链根因；本轮没有触碰设备或重启，恢复仍需来源工程在精确硬件授权范围内完成。",
-    "7144da5 的前置普通窗口保护及信息来源/寿命经过源码复核；没有重跑来源设备测试、真实播放/切歌、启动 Steam、接收通知、读取手机电量或验证登录期窗口迁移。2026-09-07 的 f883b7d 已把源规则与 HS2 概述对齐前置普通窗口保护，并保留完整浮层验收门；四路 Git 回读一致只证明这次文档闭合，不重验登录期实机窗口迁移。",
-    "本轮没有打开、重启或写入 COM7，也没有主动操作 HS2、L-Connect、USB、显示模式或 Wallpaper Engine 控制客户端；实体屏 1 Hz、冻结恢复、睡眠/唤醒、拓扑重绑和实际位置没有重新验收。",
+    "TURZX主机发送和异常退出恢复已通过本次实测，本人随后确认实体屏正常刷新。原Device Error的设备侧触发原因没有独立复现，自动接回通过也不能保证硬件永不再报错。",
+    "7144da5的前置普通窗口保护及信息来源/寿命继续保留，f883b7d已对齐源规则与HS2概述；本次软件回归没有代替HS2真实播放/切歌、Steam、通知、手机电量或登录期窗口迁移验收，完整浮层仍有独立启动条件。",
+    "本轮已在精确TURZX设备确认后恢复生产发送并测试软件启停，且有本人实体刷新确认；没有重置USB、修改显示模式或调用L-Connect、Wallpaper Engine控制客户端。睡眠/唤醒、Windows重启、断电冷开机和壁纸拓扑重绑没有重新验收。",
     "command 204 没有设备 ACK；定期重开串口并补 command 200 全帧只能限制主机侧恢复间隔，不能量化实体冻结时间。",
-    "本轮Runtime（运行）层仅确认依赖齐全、TURZX发送进程缺席、HS2/壁纸进程存在及过期失败心跳；未重新读取HS2落点、加载字节或实体像素。8月30日实体确认和8月31日浮层落点均保留为历史证据。",
+    "本轮Runtime（运行）层确认TURZX发送恢复、285帧全部成功和新鲜心跳；HS2浮层当前0个，不能延用恢复前的进程存在结论。未重新验收HS2落点或实体像素，8月30日实体确认和8月31日浮层落点均为历史证据。",
+    "RTSS的powershell.exe应用检测已按官方SDK回读为0，但进程中已驻留DLL不代表已经卸载。强制退出后的自动接回测试通过，不等于已复现原RTSS原生崩溃或证明它永不复发。",
     "没有注入“stop 已成功而 play 分派失败”的真实故障。源码对此不做同事件自动 rollback（回滚）或紧密重试：它保留原 Wallpaper Engine 配置与场景、消费该事件并进入冷却；若背景没有恢复，Windows 当前静态背景仍是视觉降级，后续由 Wallpaper Engine 自身的用户控制或下一次真实拓扑事件处理。",
     "本轮没有在另一台机器或重装后的 Windows 上执行 clean clone、合法厂商文件补齐、私有配置重建、双屏换绑、启动任务和自然启动的完整 E2E；当前主机安装健康不能替代换机验收。",
     "本轮没有在当前交互桌面真实按下 Win+F1/Win+F2，也没有用真实长任务生产者跑完 active→completed/cancelled 与异常退出租约回收；源码和纯逻辑测试不能冒充这条用户可见 E2E。",
@@ -61,7 +66,7 @@ export const pcPanelHubProject = {
   route: "/projects/pc-panel-hub",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "TURZX 发送进程缺席，最后心跳为设备错误且已过期；HS2/壁纸进程存在，实体画面未重验",
+  cardStatus: "TURZX 已恢复，本人确认实体屏正常刷新；异常退出后能自动接回，HS2浮层目前未运行",
   cardStatusTone: "mixed",
   ...pcPanelHubSnapshot,
   searchAliases: ["机箱副屏冻住怎么办", "HS2水冷屏通知浮层", "副屏睡眠后恢复", "显示器变化后动态壁纸不恢复", "A108端点不见了怎么接线", "双副屏遥测和事件", "新电脑怎么安装双副屏", "换机后怎么恢复副屏绑定", "Win+F1清理HS2通知", "Win+F2切换HS2时钟", "怎么把长任务显示到HS2"],
@@ -211,7 +216,7 @@ export const pcPanelHubProject = {
     { title: "按当前刷新合同发送", detail: "启动先建立 command 200 全帧基线，再以 command 204 增量维持 1 Hz；60、120、180 和每 900 帧重开会话并补全帧。" },
     { title: "在动态壁纸上独立组织和控制 HS2 事件", detail: "底层背景由动态壁纸应用负责；透明浮层从本地媒体、命名管道任务、Windows 通知和硬件状态形成最多六张卡。Win+F1 清理可清内容并抑制同一中继内容复活，Win+F2 持久切换时钟。" },
     { title: "由一个看门狗协调电源和恢复", detail: "看门狗拥有启动、睡眠、关机和恢复；先证明旧串口写入者退出。显示器身份或主屏归属变化时先等待 30 秒并确认三屏绑定健康，再通过当前用户 shell 对既有 Wallpaper Engine 做一次 stop/play，不修改拓扑或壁纸设置。" },
-    { title: "分层验收并诚实标注", detail: "源码、测试、安装、运行、演示、协议与实体观察分别记录；8c217ead 只升级源码/测试层，实体动态壁纸仍只沿用 2026-08-30 本人历史确认，其余实体情景继续保留真实缺口，不用软件回执替代像素观察。" }
+    { title: "分层验收并诚实标注", detail: "源码、测试、安装、运行、演示、协议与实体观察分别记录；9月7日TURZX软件启停、异常退出恢复已实测，本人随后确认实体屏正常刷新。HS2动态壁纸仍只沿用8月30日本人历史确认，睡眠、断电和拓扑重绑没有借这次恢复升级为通过。" }
   ],
   components: [
     { name: "公开源码包与 private config（私有配置）", responsibility: "把可公开重建的源码/示例与每台机器的串口、物理网卡、天气、厂商运行文件和 HS2 拓扑绑定分开。", implementation: "公开 ZIP 只允许 config.example.json；config.json、vendor EXE/DLL、out、bin、obj 与设备绑定保持在 Git 外。" },
@@ -226,13 +231,14 @@ export const pcPanelHubProject = {
     { name: "Publish-HS2Task.ps1 + task pipe（任务管道）", responsibility: "让复制、下载、渲染或安装脚本显式发布标题、详情、进度、预计剩余和结束状态。", implementation: "命名管道逐条接收有界 JSON；同 Id 更新，默认五分钟租约，静默生产者到期自动清卡。" },
     { name: "动态壁纸 / Windows 背景层", responsibility: "在 HS2 浮层下方提供连续背景，动态壁纸应用退出时由 Windows 当前静态背景降级。", implementation: "这是独立显示内容提供者；PC Panel Hub 不修改壁纸资产或设置，也不把背景资源打进仓库。显示拓扑真实变化后只通过既有 wallpaper32 控制客户端请求一次渲染重绑。" },
     { name: "StartSideScreenWatchdog.ps1", responsibility: "统一管理 stream、HS2、电源事件、串口所有权、模式保留、三屏拓扑观察和故障恢复。", implementation: "串口链连续三次失败进入 30 秒熔断；壁纸链使用 15 秒探测、30 秒稳定、900 秒冷却与一次 stop/play 分派，不因一次失败退出长期 Owner 或形成循环重启。" },
-    { name: "Windows startup task（启动任务）", responsibility: "在交互用户登录后以 Highest 运行无可见控制台的长期看门狗。", implementation: "wscript 父适配器保持任务 Running；旧 resume 任务被禁用，不形成第二恢复 Owner。" },
+    { name: "Windows startup task（启动任务）", responsibility: "在交互用户登录后以Highest运行无可见控制台的长期看门狗；看门狗自己崩溃时也能接回。", implementation: "同一wscript入口同步等watchdog退出，非0退出等30秒再启动，0退出则结束；IncludeWatchdog明确停止也结束该入口，旧resume任务继续禁用，不增加并行恢复者。" },
     { name: "纯软件测试与 demo", responsibility: "验证指标口径、渲染、HTTP、节拍、浮层布局、恢复合同和公开发布边界。", implementation: "fixture 值和 demo 场景不触碰设备，也不会被标成实体屏证据。" }
   ],
   usageExamples: [
     { moduleSlug: "installation-binding-migration", ask: "新电脑第一次怎么把两块副屏装回来？", effect: "按当前机器重新确认两块屏、串口、网络和天气来源，依赖齐全后才设置自动启动；最后分别验证电脑确实在发送，以及两块实体屏真的显示正确。" },
     { moduleSlug: "installation-binding-migration", ask: "重装 Windows 后能直接复制旧的 HS2 绑定吗？", effect: "旧配置只能作为线索，不能当答案；系统会重新识别眼前的设备和显示拓扑，确认唯一且稳定后才保存，换机时尤其不会照搬旧编号。" },
     { moduleSlug: "serial-transport", ask: "机箱屏是不是又冻住了？", effect: "先确认是不是只有一个程序在写屏、最近是否真的发送成功，再做一次有边界的恢复；最终还要看实体屏上的时钟是否重新跳动。" },
+    { moduleSlug: "power-recovery", ask: "负责恢复小屏的程序自己也退出了怎么办？", effect: "原来的隐藏启动入口会等30秒再把它接回，替代程序先确认旧发送者已退出；如果是我明确停止整条链，连这个入口一起停，不会刚关掉又自己跑起来。" },
     { moduleSlug: "telemetry-trust", ask: "为什么网络数字和任务管理器不一样？", effect: "确认项目只统计物理公网出口，TUN、Tailscale、Hyper-V 和 VMware 等虚拟接口不会叠加。" },
     { moduleSlug: "telemetry-trust", ask: "没开游戏为什么 FPS 是空的？", effect: "数据新鲜且电脑确实空闲时，屏幕直接显示正在等待游戏帧；若游戏已经在渲染却收不到帧，就明确提示采集异常，不把所有空值都说成正常。" },
     { moduleSlug: "case-panel-rendering", ask: "机箱屏上的长名称把版面挤坏了怎么办？", effect: "长名称会在固定竖屏里换行或有界截断，核心数字和状态仍清楚可读；诊断预览再慢也不会拖住实体屏刷新。" },
@@ -249,13 +255,13 @@ export const pcPanelHubProject = {
     { moduleSlug: "power-recovery", ask: "A108 或显示端点不见了，物理接线怎么恢复？", effect: "先关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时补 SATA。改线后只在唯一 8091、port 2 controller、port 3 LED 拓扑连续两次健康时重新绑定；这条顺序来自项目合同，本页没有执行实体接线实测。" }
   ],
   evidenceLayers: [
-    { layer: "Source（源码）", proves: "2026-08-31 旧验收记录：PUBLIC main=8c217ead 定义两块屏、数据来源、渲染、协议边界、Win+F1/Win+F2、任务生产者协议、安装/换机，以及以活动显示器/主屏指纹、MTT/HS2 绑定、当前用户 Wallpaper Engine 进程身份、稳定窗和冷却组成的有界恢复。", doesNotProve: "源码已被当前长期进程重新加载、stop/play 已真实分派、壁纸已恢复或实体设备正常。" },
-    { layer: "Tests（测试）", proves: "8c217ead 的完整原生检查通过：指标 84、天气 8，以及渲染、HTTP、热键/任务、电源、快捷方式、节拍、运行可靠性与公开 ZIP；PowerWatchdog 还覆盖 HDR-only 不触发、唯一 MTT/Root\\MttVDD、三屏健康、30 秒稳定、900 秒冷却、一次控制分派及禁止修改配置/启动常驻渲染器。", doesNotProve: "真实 topology change（拓扑变化）、当前用户 shell、wallpaper32 stop/play、正在使用的 COM 或实体像素实际恢复。" },
-    { layer: "Installation contract（安装合同）", proves: "公开 ZIP 可解包，缺厂商文件时 runtime check 失败关闭，私有配置/绑定不进包，启动任务只在依赖通过后注册；新启动的 watchdog 会从当前源码加载恢复函数。", doesNotProve: "本轮没有重启或重装现有任务，因此不能证明正在运行的 PowerShell 已加载 8c217ead；也不证明另一台电脑、系统重装或新硬件拓扑已完成自然启动和双屏实体 E2E。" },
-    { layer: "Runtime（运行）", proves: "11:19 快照观察到任务、唯一 stream、新鲜发送 heartbeat、2288×1048 HS2、wallpaper64 和 HS2 浮层进程同时存在，失败计数为 0；本轮测试开始时生产 heartbeat 仍新鲜。", doesNotProve: "没有拓扑故障注入、重绑日志或进程重载证据；仅凭进程不能证明 8c217ead 已生效、动态壁纸运动、透明像素、通知内容或所有传感器值正确。" },
+    { layer: "Source（源码）", proves: "9月7日PUBLIC main=a4d8e22219f304ec7d4540f4e7612510cc70bf8e，本地和实时远端一致；在两屏数据、协议、热键/任务、安装/换机及8c217ead有界拓扑恢复上，补齐同一隐藏入口接回崩溃watchdog和明确停止不反弹。", doesNotProve: "源码提交本身不证明设备像素、睡眠、壁纸stop/play或新电脑恢复。" },
+    { layer: "Tests（测试）", proves: "a4d8e22完整原生检查通过：指标87、天气8，以及渲染、HTTP、电源、快捷方式、刷新默认值、节拍、运行可靠性、4个真实VBS行为和公开ZIP；保留HDR-only、唯一MTT/Root\\MttVDD、三屏健康、稳定/冷却等原有合同。生产流存在时跳过TestVideoStream，另做精确生产链恢复测试。", doesNotProve: "纯软件用例不证明真实显示拓扑变化、wallpaper32 stop/play、HS2事件或像素级确认。" },
+    { layer: "Installation contract（安装合同）", proves: "公开ZIP可解包且不带厂商文件或私有绑定；本机既有任务已重新启动，并实际执行新VBS异常退出恢复。PCConfig安装powershell.exe单个RTSS应用配置，官方SDK回读AppDetectionLevel=0。", doesNotProve: "配置回读不证明已驻留DLL被卸载，也不保证原生崩溃永不复发；另一台电脑、系统重装、新硬件或断电后的自然启动仍未验收。" },
+    { layer: "Runtime（运行）", proves: "9月7日显式停止观察34.69秒不反弹；软件重新启动31.06秒恢复；强制结束watchdog后63.33秒由同一VBS接回，旧sender退出。23:24心跳285/285、failed=0、period=1010ms、唯一sender存在，HS2浮层0、wallpaper64为1。", doesNotProve: "强制结束测试没有复现原RTSSHooks64.dll崩溃或Device Error；这不是Windows重启、断电、睡眠、壁纸拓扑重绑或HS2实体恢复测试。" },
     { layer: "Demo / render（演示 / 渲染）", proves: "软件能在固定合成数据上生成机箱屏版面，并能用 HS2 场景检查六卡、缺项、重排和长文本。", doesNotProve: "截图来自实体硬件或当前机器现场。" },
     { layer: "Protocol observation（协议观察）", proves: "command 200 全帧和 command 123 亮度路径有本机验证；混合刷新有主机侧有界实现。", doesNotProve: "command 204 是厂商保证的通用协议或有设备 ACK。" },
-    { layer: "Physical / Owner observation（实体 / 本人现场观察）", proves: "本人于 2026-08-30 确认显示缓冲区同画面已在 HS2 实体屏生效。", doesNotProve: "不证明 2026-08-31 当前像素、8c217ead 拓扑重绑、1 Hz、冻结恢复、睡眠/唤醒、透明性能或异常断电后的自然启动。" }
+    { layer: "Physical / Owner observation（实体 / 本人现场观察）", proves: "9月7日恢复测试后，本人直接回答“能看到，已正常刷新”，确认TURZX实体屏上的时间或数字正常变化；8月30日HS2显示缓冲区同画面曾由本人确认在实体屏生效，仍保留为历史。", doesNotProve: "本人当前观察不提供设备逐像素ACK，不证明长期无故障、睡眠唤醒、断电开机、HS2当前像素或壁纸拓扑重绑。" }
   ],
   evolution: [
     { date: "2026-07-04—07-08", commit: "5e552b7–2bafc57", result: "发布 TURZX 机箱屏源码，建立天气、低干扰刷新、睡眠/关机恢复、无闪窗启动和迁移后的真实路径。" },
@@ -276,6 +282,7 @@ export const pcPanelHubProject = {
     { name: "查看拓扑恢复状态", command: "Get-Content .\\tools\\turzx_side_screen\\out\\side-screen-watchdog.log -Tail 80", purpose: "查看 Wallpaper Engine 恢复的 Baseline、Stabilizing、WaitForHealth、Cooldown、Rebind 或具名分派失败；日志是主机侧诊断，不是实体壁纸验收。" },
     { name: "查看主机侧健康", command: "Get-Content .\\tools\\turzx_side_screen\\out\\stream\\stream-heartbeat*.json", purpose: "读取节拍、发送动作、失败数、transport 和全帧基线；不把它当实体 ACK。" },
     { name: "有界修复", command: "pwsh -NoProfile -File .\\scripts\\repair-panel.ps1", purpose: "仅在需要且符合项目设备边界时，核对精确 COM 设备、唯一写入者和 1 Hz Hybrid heartbeat 后修复。" },
+    { name: "明确停止整条链", command: "pwsh -NoProfile -File .\\tools\\turzx_side_screen\\StopSideScreenStack.ps1 -IncludeWatchdog", purpose: "同时停止本项目的发送者、看门狗和精确隐藏VBS入口，使人工停止不会被自动接回。" },
     { name: "HS2 软件演示", command: "HS2.CrystalOverlay.exe --demo=max-six", purpose: "用合成数据检查 2288×1048 满载六卡布局；不读取私人通知，也不证明实体屏。" },
     { name: "源码发布包", command: "pwsh -NoProfile -File .\\scripts\\build-release.ps1", purpose: "生成不含厂商二进制、日志和本机配置的公开源码包。" }
   ]
@@ -287,7 +294,7 @@ export const pcPanelHubModules = [
     shortTitle: "指标与可信度",
     title: "一秒指标、物理来源与可信度边界",
     teaser: "把硬件、物理公网、磁盘、天气、FPS、前台和进程排行汇成带新鲜度与 trust（可信度）的本地快照，来源不确定时失败关闭。",
-    status: "8 月 31 日 84 项指标测试和依赖检查通过；本次只读核对 RTSS/PresentMon 消费状态，未重验实时指标",
+    status: "9月7日87项指标回归和依赖检查通过；实时采集值仍由各来源负责，未逐项对照外部仪表",
     statusTone: "mixed",
     searchAliases: ["为什么网络数字和任务管理器不一样", "没开游戏FPS为什么空", "副屏指标是不是旧数据", "物理公网出口怎么选"],
     searchProjection: {
@@ -349,7 +356,7 @@ export const pcPanelHubModules = [
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\docs\\architecture.md", role: "数据来源与节拍合同" }
     ],
     verification: [
-      "8 月 31 日 test_metrics_agent.py 运行 84 项并通过；本次只读核对当前帧状态映射，没有重跑来源测试。",
+      "9月7日a4d8e22完整软件回归中，test_metrics_agent.py运行87项并通过；8月31日84项为较早历史验收。",
       "check-runtime 确认 Python 3.11 与 TimeAudit 读取依赖就绪。",
       "没有逐项对照实体传感器或外部仪表，真实值准确度仍按来源解释。"
     ],
@@ -360,7 +367,7 @@ export const pcPanelHubModules = [
     shortTitle: "机箱屏渲染",
     title: "480×1920 机箱屏的信息密度与流畅渲染",
     teaser: "把可信 snapshot（快照）排成适合竖屏远读的时钟、CPU/GPU、FPS、内存、网络、磁盘和进程卡片，并让慢 HTTP 或 PNG 预览不阻塞真实发送。",
-    status: "8 月 31 日 renderer、HTTP pipeline 与 preview 回归通过；gallery 使用合成预览，不是当前实体照片",
+    status: "9月7日渲染、HTTP与预览回归通过，本人确认TURZX实体屏正常刷新；画廊仍是各自标注日期的预览与历史发送帧",
     statusTone: "mixed",
     searchAliases: ["机箱屏长文字怎么显示", "480×1920面板怎么渲染", "快照超时屏幕会卡住吗", "PNG预览能证明实体屏吗"],
     searchProjection: {
@@ -423,7 +430,7 @@ export const pcPanelHubModules = [
     verification: [
       "本轮 TestRenderer 与 TestHttpPipeline 通过并生成 480×1920 PNG。",
       "preview 文件约 80 KiB，测试输出可重复读取。",
-      "未拍摄实体机箱屏，本模块 Physical 证据仍 Unknown。"
+      "9月7日本人确认TURZX实体屏正常刷新；本轮没有逐像素拍摄或独立仪表对照，不把可见刷新扩大为所有数据准确。"
     ],
     relation: "消费指标模块的快照，把位图交给串口传输；画廊展示其软件输出。"
   },
@@ -432,7 +439,7 @@ export const pcPanelHubModules = [
     shortTitle: "串口与刷新",
     title: "唯一串口写入者、1 Hz 混合刷新与全帧恢复",
     teaser: "以 command 200 建完整画面基线、command 204 做有界增量，并用唯一写入者、发送上限、定期重开会话和 heartbeat 限制静默冻结。",
-    status: "当前TURZX发送进程为0；9月5日最后心跳fatal/failed=1并已过期。本轮没有触碰COM7，设备错误根因与恢复尚未验收",
+    status: "9月7日已恢复约1 Hz发送，285/285帧、失败0；本人确认实体屏正常刷新，异常退出后自动接回已实测",
     statusTone: "mixed",
     searchAliases: ["机箱屏是不是冻住了", "1Hz混合刷新", "command 200和204区别", "串口写成功等于屏幕正常吗"],
     searchProjection: {
@@ -493,9 +500,9 @@ export const pcPanelHubModules = [
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\TestRuntimeReliability.ps1", role: "唯一 writer、heartbeat 和超时回归" }
     ],
     verification: [
-      "2026-08-31T11:19:19Z heartbeat frame=2748、sent=2748、period=1000 ms、send_ms=35、failed=0、last_full_frame=2700。",
-      "StreamCadence 与 RuntimeReliability 本轮通过。",
-      "TestVideoStream 被保护性跳过，实体面板未由本轮写入。"
+      "2026-09-07T23:24:15Z heartbeat为285/285、failed=0、period=1010 ms、send_ms=22、last_full_frame=180；晚于异常退出恢复时第5帧，发送继续推进。8月31日2748/2748保留为历史。",
+      "9月7日StreamCadence与RuntimeReliability通过；生产链实测软件启动31.06秒恢复，强制结束watchdog后63.33秒由原VBS接回并确认旧sender退出。",
+      "套件的TestVideoStream因已有生产流而跳过；来源工程另行完成精确设备下的真实恢复，本人随后确认实体屏正常刷新。command 204仍没有设备逐像素ACK。"
     ],
     relation: "安装与换机模块先确认当前串口和本地 runtime；本模块接收 renderer 位图，失败由电源与恢复模块处理，实体结果进入分层验收。"
   },
@@ -504,7 +511,7 @@ export const pcPanelHubModules = [
     shortTitle: "HS2 事件浮层",
     title: "2288×1048 OLED 的事件优先级、全局控制与任务接入",
     teaser: "在唯一非主 2288×1048 显示器的动态壁纸上，以透明卡片显示媒体、任务、手机、音量、游戏和告警；Win+F1 清场、Win+F2 切换时钟，长任务由发起脚本显式登记。",
-    status: "音乐、Steam、双来源电量与通知寿命仍按7144da5；9月7日HS2与壁纸进程各1，落点/实体像素仍沿用8月历史证据，真实事件未重演",
+    status: "音乐、Steam、双来源电量与通知寿命仍按7144da5；9月7日恢复后HS2浮层0、壁纸进程1，当前显示资格不足；HS2落点/实体像素仍只有8月历史证据",
     statusTone: "mixed",
     searchAliases: ["来通知HS2会不会塞满", "HS2浮层跑到主屏怎么办", "动态壁纸和事件卡是什么关系", "2288×1048六卡布局", "HS2网易云歌名封面", "Steam本次时长退出总结", "手机电量小米妙享手机连接", "HS2来电验证码多久消失", "Win+F1清理HS2通知", "Win+F2关闭HS2时钟", "怎么把长任务显示到HS2", "HS2任务卡片为什么自动消失"],
     searchProjection: {
@@ -622,7 +629,7 @@ export const pcPanelHubModules = [
     ],
     verification: [
       "源码列出 max-six 等 15 类纯软件 demo 场景，并明确全部使用合成数据。",
-      "当前 main 的 GlobalHotkeyGestureStateTests 与 OverlaySchedulerTests 覆盖物理 Win+F1 一次触发、注入/冲突组合透传、活动媒体/游戏/任务/来电/传输/告警保留及同一手机中继内容不复活；项目原生整套检查于本轮快照中通过。",
+      "当前main的GlobalHotkeyGestureStateTests与OverlaySchedulerTests覆盖物理Win+F1一次触发、注入/冲突组合透传、活动媒体/游戏/任务/来电/传输/告警保留及同一手机中继内容不复活；其既有测试证据不由本次TURZX恢复冒充为新的HS2实机验收。",
       "ImportantTaskProtocolTests、ImportantTaskProjectionTests 与 BoundedLineReaderTests 覆盖明确进度单位、completed/cancelled、同 Id 重开、五分钟租约续报、并发到期、静默客户端超时和下一客户端恢复；本轮未用真实生产任务做用户可见 E2E。",
       "2026-09-02 只读核对 NeteaseLocalMedia、SteamGameTracking、PhoneBattery、PhoneNotificationReconciler、PhoneNotificationClassification 与 OverlayScheduler 对应源码/测试定义；本次没有重跑这些来源测试，也没有读取真实媒体、手机电量或通知。",
       "8 月 31 日历史回读曾确认 2288×1048 HS2、wallpaper64 和 HS2.CrystalOverlay 同时在线及浮层落点；实体动态壁纸只沿用 2026-08-30 本人历史确认，没有读取通知正文。",
@@ -635,7 +642,7 @@ export const pcPanelHubModules = [
     shortTitle: "安装、绑定与换机",
     title: "从干净源码到双副屏本机安装态",
     teaser: "把 clean clone（干净克隆）、合法取得的厂商运行文件、每台机器自己的串口/物理网卡/天气配置和双屏绑定按顺序组装；依赖未齐时不装启动任务，主机通过后仍单独看实体像素。",
-    status: "源码安装合同与 8 月 31 日公开 ZIP/主机证据保留；本次未刷新安装态，clean clone（干净克隆）、换机和重装 E2E 未执行",
+    status: "9月7日公开ZIP和本机既有任务重新启动已验证；clean clone（干净克隆）、换机、系统重装和新硬件双屏验收仍未执行",
     statusTone: "mixed",
     searchAliases: ["新电脑第一次怎么装双副屏", "换机后怎么恢复PC Panel Hub", "重装Windows后副屏怎么重新绑定", "config.json为什么不进Git", "厂商TURZX文件放在哪里", "计划任务怎么安装", "旧HS2绑定能不能复制", "clean clone怎么验收"],
     searchProjection: {
@@ -723,9 +730,9 @@ export const pcPanelHubModules = [
     ],
     verification: [
       "8 月 31 日 2026-08-31 旧验收记录：PUBLIC main=8c217eadf76e6849c382c909b407d9dc436f9005，本地 HEAD、origin/main 与实时远端 main 当时一致且源工作树干净；该次公开发布测试构建并解包 ZIP，确认 config.example、双屏源码和安装脚本存在，厂商二进制、本机 JSON 与生成目录不存在。",
-      "2026-08-31T11:19:19Z 当前主机 check-runtime 为 ready、missing=0，TURZX SideScreen 任务为 Running/Highest，唯一 stream 与新鲜 Hybrid heartbeat 存在；这些只证明现有安装态。",
+      "9月7日现有主机依赖ready、missing=0；既有TURZX任务已重新启动，新隐藏入口的异常退出恢复实际执行，唯一stream与新鲜Hybrid心跳存在。a4d8e22公开ZIP构建并解包通过；这些只证明现有机器与源码包。",
       "当前源码的 runtime checker 回归同时验证：缺 RJCP/TURZX 时失败，补齐要求的 runtime 与 stack 后才 ready；安装器自身也会在注册任务前调用该门。",
-      "本轮没有在 clean clone、另一台电脑或重装后的 Windows 上重建 private config、重新绑定两块屏、安装任务并完成自然启动；TURZX 与 HS2 实体像素、睡眠/恢复和异常断电验收保持 Unknown。"
+      "本轮没有在clean clone、另一台电脑或重装后的Windows上重建private config、重新绑定两块屏、安装任务并完成自然启动。本机TURZX当前刷新已有本人确认；换机、HS2当前实体画面、睡眠和异常断电仍未验收。"
     ],
     relation: "本模块把公开源码变成当前机器可运行的前置安装态，为指标、渲染、串口和 HS2 浮层提供私有配置与双屏绑定；安装完成后的睡眠、冻结、端点消失和运行期自愈仍由电源恢复模块负责。"
   },
@@ -734,7 +741,7 @@ export const pcPanelHubModules = [
     shortTitle: "电源与自愈",
     title: "启动、睡眠、关机、显示拓扑与有界自愈",
     teaser: "由一个长期 watchdog（看门狗）协调两块屏：保留已成功枚举的模式、证明旧 owner 退出、限制 Secondary 尝试；显示器身份或唯一主屏归属变化后，只有目标三屏与背景进程身份都健康，才让既有 Wallpaper Engine 做一次有界渲染重绑。",
-    status: "7144da5 的前置窗口保护与保留模式已只读核对；8c217ead 测试/任务为 8 月 31 日基线，本次未启动 watchdog、触发恢复、控制壁纸或操作 USB",
+    status: "9月7日同VBS异常退出接回与明确停止已实测，本人确认TURZX正常刷新；睡眠、断电、HS2和壁纸拓扑恢复仍分别待验",
     statusTone: "mixed",
     searchAliases: ["A108端点不见了怎么接线", "随附一分二Hub能不能带LCD", "OLED供电不足要接SATA吗", "8091端口2控制器端口3LED", "改接线后为什么要连续两次健康", "睡眠回来副屏没恢复", "显示器切换后动态壁纸不动", "Wallpaper Engine怎么有界重绑"],
     searchProjection: {
@@ -743,10 +750,10 @@ export const pcPanelHubModules = [
       relations: ["随附一分二Hub不支持LCD而官方EDGE HUB可承载目标链路", "供电不足时由SATA补充供电", "只有唯一8091与port 2 controller和port 3 LED拓扑连续两次健康才重新绑定", "活动显示器设备名和主屏归属共同形成拓扑指纹", "唯一MTT后端与HS2 Secondary绑定健康后才允许壁纸重绑", "当前会话wallpaper64定位同目录wallpaper32并由explorer shell分派stop/play"],
       failureRecovery: ["端点缺失时先关机断电再检查物理接线", "拓扑歧义或健康检查不连续时保持未绑定", "HDR波动和未改变活动屏身份的DXGI波动不触发壁纸恢复", "控制客户端或用户shell缺失时记录具名状态并停止", "失败分派消费本次拓扑事件且不形成stop/play循环", "实体恢复未执行时保留Unknown而不拿源码或进程冒充"]
     },
-    value: "刚登录时，即使完整 HS2 浮层还在等设备验证，误入水冷屏的普通应用也能先被搬回安全屏，不必卡在那里等启动结束。后续副屏异常只修受影响链路：串口有熔断、HS2 模式有 epoch（周期）边界，动态壁纸只在真实三屏变化稳定后重绑一次。",
+    value: "负责恢复小屏的看门狗自己异常退出时，原来的隐藏启动入口也能把它接回；明确停止整条链则不会自动反弹。刚登录时，误入水冷屏的普通应用可先搬回安全屏，不必等完整HS2浮层验证。后续异常只修受影响链路：串口有熔断、HS2模式有epoch（周期）边界，动态壁纸只在真实三屏变化稳定后重绑一次。",
     why: "电源事件和设备重枚举容易产生双 watchdog、串口未释放、Windows 窗口被困小屏或每几十秒重建 GPU 拓扑。主屏、HS2 或 MTT 虚拟屏断开再回来时，Wallpaper Engine 进程还在也不等于它已把现有场景重新绑定到新的显示渲染面；只看进程会把静止或黑色背景误判为健康。",
     example: "远程虚拟屏退出又回来后，HS2 浮层位置没错，动态壁纸却像一张海报一样不动了。看门狗会先等显示拓扑稳定并确认三块屏身份都对，再让原来的壁纸重绑一次；条件少一项就不折腾屏幕，只保留静态背景并写清原因。",
-    result: "满足条件时，用户应看到原有 Wallpaper Engine 场景在 HS2 透明浮层下恢复渲染，而不需要打开 GUI、重选壁纸或改显示布局；主机日志会给出 Baseline、Stabilizing、WaitForHealth、Cooldown、Rebind 或具体分派失败。条件不全时保持现状和 Windows 静态背景降级；源码/测试已证明决策合同，但本页没有真实触发 stop/play 或完成实体恢复 E2E（端到端验证）。",
+    result: "9月7日TURZX已在看门狗异常退出后由同一入口自动接回，本人确认小屏正常刷新；人工停止也已验证不会反弹。壁纸分支另有自己的条件：符合三屏绑定、稳定和冷却时应恢复原有Wallpaper Engine场景，并记录Baseline、Stabilizing、WaitForHealth、Cooldown、Rebind或分派失败。条件不全则等待并保留静态背景；本次没有真实触发stop/play或完成HS2壁纸实体恢复。",
     readerStates: {
       pass: "首次健康观察只建立壁纸拓扑基线；之后指纹真的变化、稳定满 30 秒、三屏/MTT/HS2 绑定健康且离上次分派至少 900 秒时，只分派一次 stop/play 并记录结果。任务、精确进程、heartbeat、控制器模式与绑定仍分别验收。",
       problem: "拓扑仍在变化或任一绑定不健康时等待；串口假活进入熔断；Wallpaper Engine 分派失败时消费本事件、保留现有配置并停止紧密重试，避免把一次恢复变成循环闪屏。",
@@ -754,6 +761,7 @@ export const pcPanelHubModules = [
     },
     decisionImpact: [
       "只有一个长期 watchdog 处理 resume；旧事件任务保持禁用。",
+      "同一隐藏VBS同步等待watchdog；非0退出等待30秒再启动，0退出结束。StopSideScreenStack -IncludeWatchdog同时停止精确VBS，人工停止不会触发自动接回；不增加任务、服务或并行看门狗。",
       "普通窗口保护和完整浮层启动是两道门：前者在识别到 2288×1048 目标后即可执行，不等控制器、浮层进程或完整三屏验证；后者仍要求 Secondary 模式与保存绑定连续两次健康，不能把已搬回窗口当成 HS2 Active。",
       "登录启动的前 180 秒用独立 250 ms 窗口保护循环覆盖阻塞恢复期，循环随父 watchdog 退出；它只搬移普通窗口，无其他安全屏时先最小化，永不搬动 HS2 浮层、Wallpaper Engine 或桌面外壳。",
       "已有 Secondary 绝不先降级，native 每 epoch 只尝试一次提升。",
@@ -771,7 +779,9 @@ export const pcPanelHubModules = [
     ],
     problem: "解决双恢复 Owner、显示模式抖动、串口竞争、任务假成功退出、睡眠后窗口乱跑、拓扑变化后 Wallpaper Engine 仍绑定旧渲染面、只看进程的假健康，以及过度 USB/PnP 修复。",
     implementation: [
-      "计划任务由 wscript 无窗口父适配器启动长期 PowerShell watchdog。",
+      "计划任务由既有wscript无窗口父适配器启动长期PowerShell watchdog。StartSideScreenWatchdog-Hidden.vbs使用shell.Run(command, 0, True)同步等待，非0退出经WScript.Sleep 30000后再启动、0退出结束；替代watchdog仍先走原有旧sender退出与独占串口检查。",
+      "StopSideScreenStack.ps1带-IncludeWatchdog时也结束精确的本项目隐藏VBS入口，避免人工停止在30秒后被接回；普通退出保持最终结束，不把任务计划程序的RestartOnFailure当作唯一兜底。",
+      "Windows事件若把RTSSHooks64.dll标为原生崩溃模块，由PCConfig维护powershell.exe单个RTSS Profile：[Hooking] EnableHooking=0，并通过官方SDK回读AppDetectionLevel=0。此设置不更改游戏/壁纸配置，也不保证已经驻留的DLL立刻卸载。",
       "StartSideScreenWatchdog 在 Set-ActiveDisplayState 的阻塞恢复前先启动 `Invoke-HS2StartupWindowGuard.ps1` 并立即执行普通窗口保护。子循环绑定父 PID 与创建时间，默认 DurationSeconds=180、PollMilliseconds=250；父退出或时限到就结束，并输出有界 hs2-startup-window-guard.json 与启动错误证据。",
       "`Get-HS2ExclusiveWindowGuardPlan` 不要求已有浮层 PID：优先已知目标，再按 2288×1048 几何优先选择非主屏；安全落点优先已知安全屏/主屏，再取其他屏最大工作区，无可用落点才最小化。窗口按可见性、cloaked（隐藏合成状态）、有效尺寸和排除进程过滤，无激活迁移；这不是完整控制器拓扑认证。",
       "WMI 电源订阅统一处理 suspend/resume，与 live process/COM owner 合并。",
@@ -784,7 +794,7 @@ export const pcPanelHubModules = [
       "任何 probe（探测）或控制错误只写有界状态日志；失败分派也更新 baseline 与 lastRebind，因而不在同一拓扑上循环。没有持久配置变更可撤销；若 stop 后 play 未恢复，原场景/设置仍归 Wallpaper Engine，Windows 静态背景与其用户控制是回退面。"
     ],
     flow: [
-      "登录后启动唯一 watchdog。",
+      "登录后由原隐藏VBS启动唯一watchdog，并同步等待它的退出结果；异常退出等30秒后进入同一启动流程，正常退出结束。",
       "在控制器恢复可能阻塞前启动 250 ms / 180 秒的普通窗口保护并立即检查一次；即使浮层还不存在也能处理误入小屏的普通应用。",
       "检查当前控制器模式、设备绑定和旧 owner。",
       "已有 Secondary 原位验证；实际 native 稳定 30 秒后至多提升一次。完整模式/绑定双样本通过才启动浮层，失败则保留模式、停止旧浮层并等待，不主动降级。",
@@ -817,7 +827,7 @@ export const pcPanelHubModules = [
       "内部 USB 排针不得带电插拔。",
       "随附一分二 Hub 不支持 LCD；只能使用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，供电不足时才补 SATA。",
       "接线改变后的单次枚举不够；唯一 8091、port 2 controller、port 3 LED 拓扑必须连续两次健康才换绑。",
-      "上述接线、拓扑和壁纸重绑来自项目 source contract（源码合同）；本轮未关机、拔插、改线、重启当前 watchdog、制造拓扑变化或执行物理恢复，不能写成已安装或实体实测通过。",
+      "本轮已重新启动TURZX软件链并实测watchdog异常退出接回；本人确认TURZX正常刷新。上述接线、拓扑和壁纸重绑仍来自源码合同，本轮未关机、拔插、改线或制造显示拓扑变化，不能称这些分支也已实体验收。",
       "这里处理已安装机器的运行期端点消失和接线修正，不代替 clean clone、换机或系统重装验收。",
       "服务/进程回读不等于实体显示恢复。"
     ],
@@ -833,9 +843,14 @@ export const pcPanelHubModules = [
       { condition: "随附一分二 Hub 上看不到 LCD", response: "不继续重试该 Hub；它不支持 LCD。改用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，若供电不足再接 SATA。" },
       { condition: "改线后出现多个 8091 或端口角色不一致", response: "保持旧绑定失效，不启动浮层；只在唯一 8091、port 2 controller、port 3 LED 连续两次健康后重新绑定。" },
       { condition: "Secondary 提升失败", response: "停止旧浮层、保留当前或请求的 Secondary 模式并等待自然显示链恢复；不发送原生模式命令，本 epoch 不再尝试提升。" },
-      { condition: "watchdog 子进程反复失败", response: "保留长期循环，30 秒熔断后只启动一次新 stack。" }
+      { condition: "watchdog 子进程反复失败", response: "保留长期循环，30 秒熔断后只启动一次新 stack。" },
+      { condition: "watchdog自身非0退出或原生崩溃", response: "原隐藏VBS等30秒再启动替代watchdog；后者先确认旧sender退出，不依赖任务计划程序单独恢复，也不并发创建第二个写入者。" },
+      { condition: "本人明确停止整条链或watchdog正常退出", response: "IncludeWatchdog连同精确VBS一起停止；0退出让VBS结束，不把人工停止解释为需要自动接回。" }
     ],
     sources: [
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\StartSideScreenWatchdog-Hidden.vbs", role: "隐藏启动、同步等待退出、异常退出30秒后接回与正常退出结束" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\StopSideScreenStack.ps1", role: "IncludeWatchdog显式停止时同时结束精确隐藏入口" },
+      { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\TestWatchdogLauncherRecovery.ps1", role: "真实VBS退出、恢复与停止行为的无硬件回归" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\StartSideScreenWatchdog.ps1", role: "长期进程、电源 Owner、Wallpaper Engine 进程身份解析、用户 shell 分派和有界恢复状态" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\Invoke-HS2StartupWindowGuard.ps1", role: "控制器验证前的 250 ms 窗口保护、180 秒寿命与父进程存活绑定" },
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\HS2ActiveRecoveryPolicy.ps1", role: "拓扑指纹、MTT/HS2 健康门、30 秒稳定、900 秒冷却、Code 10 失败关闭与重绑决策" },
@@ -848,12 +863,12 @@ export const pcPanelHubModules = [
       { path: "E:\\Projects\\Tools\\TURZX-SideScreen\\scripts\\TestRuntimeReliability.ps1", role: "恢复与假活回归" }
     ],
     verification: [
-      "Source：2026-09-02 本地 HEAD=7144da589119fa59d5eb56bbaa921d2bf3af8484；前置窗口保护与模式保留已在当前代码和 TestPowerWatchdog 断言中核对。本次没有执行来源测试或新现场；8c217ead 的 PUBLIC main/远端一致性和下述测试仍保留为 8 月 31 日历史证据。",
-      "Tests：8c217ead 上完整 test.ps1 -SkipStreamWhenRunning 通过；84 项指标、8 项天气、TestPowerWatchdog、TestRefreshDefaults、TestRuntimeReliability、cadence 与公开 ZIP 均通过，生产流新鲜时保护性跳过 TestVideoStream。",
-      "Installation：现有计划任务观察时为 Running / Highest，唯一 stream 与新鲜 heartbeat 存在；本轮没有重启/重装任务或回读运行进程加载的函数版本，因此 8c217ead installed（已安装）状态保持 Unknown。",
+      "Source：9月7日a4d8e22219f304ec7d4540f4e7612510cc70bf8e的HEAD、origin/main与实时远端一致，源码工作树干净；修补VBS异常退出接回和IncludeWatchdog停止边界，原有窗口保护、模式保留与独占串口合同不变。",
+      "Tests：a4d8e22的test.ps1 -SkipStreamWhenRunning通过，指标87、天气8，PowerWatchdog、刷新默认值、可靠性、节拍、4个真实VBS无硬件行为及公开ZIP通过；只跳过会占用生产串口的TestVideoStream。",
+      "Installation / Runtime：既有任务已重新启动；显式停止34.69秒未反弹，软件启动31.06秒恢复，强制结束watchdog后63.33秒由原VBS自动接回，旧sender退出；23:24心跳285/285、failed=0。RTSS单应用配置经官方SDK回读AppDetectionLevel=0，未另建任务或服务。",
       "Runtime：没有制造显示器拔插、主屏切换、MTT 重枚举、Code 10、控制客户端缺失或 stop/play 半失败；没有看到真实 Rebind 日志或 Wallpaper Engine 渲染恢复。",
       "接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。",
-      "Physical：2026-08-30 本人只确认当时显示缓冲区同画面已在 HS2 实体屏生效；本轮未重验动态运动、拓扑重绑、睡眠、关机、驱动故障或异常启动，真实恢复 E2E 未通过。"
+      "Physical：9月7日本人确认TURZX实体小屏正常刷新；脚本先前physical_pixels_verified=false与后续本人观察分开保留。HS2仅有8月30日本人历史确认，本轮睡眠、关机、断电、壁纸拓扑重绑和HS2实屏未验收。"
     ],
     relation: "接收安装与换机模块已经验证的本机配置和双屏绑定，监管运行期机箱屏传输、HS2 显示状态与既有 Wallpaper Engine 的渲染重绑；它不拥有 clean clone、首次安装、壁纸资产或场景设置，总览中的分层证据决定源码、测试、安装、运行事实能否升级为实体结论。"
   }

@@ -794,8 +794,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 7,
-        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the 8c217ead bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay; September 7 runtime evidence distinguishes zero TURZX senders and an expired September 5 fatal heartbeat with one Device Error from earlier physical and software evidence; existing HS2 and wallpaper processes do not prove current physical output",
+        "semantic_revision": 8,
+        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay; September 7 published a4d8e22 and production recovery evidence: the existing hidden launcher waits for watchdog nonzero exit, retries after 30 seconds, and honors explicit stop without a new task or service; fresh one-hertz TURZX sending and recovery are verified and the owner separately confirms normal physical refresh; original RTSS/Device Error history, current absent HS2 overlay, and untested sleep/cold-power/topology branches remain distinct",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -868,6 +868,8 @@
             "tools/turzx_side_screen/config.example.json",
             "tools/turzx_side_screen/StartSideScreenStack.ps1",
             "tools/turzx_side_screen/StartSideScreenWatchdog.ps1",
+            "tools/turzx_side_screen/StartSideScreenWatchdog-Hidden.vbs",
+            "tools/turzx_side_screen/StopSideScreenStack.ps1",
             "tools/turzx_side_screen/README_protocol.md",
             "tools/turzx_side_screen/design/*.svg",
             "tools/turzx_weather_shim/*.py",

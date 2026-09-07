@@ -131,7 +131,7 @@ test("the accepted panel has exactly twenty-three projects and four navigation a
 test("project quick metrics lead with product reality instead of implementation trivia", () => {
   const expected = new Map([
     ["timeaudit", ["3660", "5234", "3478 / 3600 秒", "6 · 78"]],
-    ["pc-panel-hub", ["2", "60139 / 60140", "1 · 心跳已过期", "0"]],
+    ["pc-panel-hub", ["2", "285 / 285", "0 · 心跳新鲜", "1"]],
     ["cacb", ["0", "10", "24", "8 ↔ 10"]],
     ["codex-remote", ["0", "0", "v0.1.5", "20"]],
     ["personal-health", ["Fitbit Air", "21 类设备数据", "睡眠 · 活动", "14 · 28 · 90 天"]],
@@ -1399,7 +1399,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
     assert.ok(Array.isArray(pcPanelHubProject[key]) && pcPanelHubProject[key].length >= 3, `PC Panel Hub overview ${key} is incomplete`);
   }
   const heroText = pcPanelHubProject.heroFacts.map((item) => item.value).join("\n");
-  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "8c217ead"]) {
+  for (const fact of ["480×1920", "2288×1048", "1 Hz", "command 200", "command 204", "a4d8e22"]) {
     assert.ok(heroText.includes(fact), `PC Panel Hub first viewport hides ${fact}`);
   }
   assert.match(publicText, /软件(?:设计|演示)|demo/);
@@ -1408,7 +1408,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
   assert.match(publicText, /% Processor Utility/);
   assert.match(publicText, /等待游戏帧/);
   assert.match(publicText, /2026-08-30.*本人.*确认.*HS2 实体屏/s);
-  assert.match(publicText, /本轮Runtime.*TURZX发送进程缺席.*HS2\/壁纸进程存在.*未重新读取HS2落点/s);
+  assert.match(publicText, /本轮Runtime.*TURZX发送恢复.*HS2浮层当前0个.*未重新验收HS2落点/s);
   assert.match(publicText, /wallpaper64/);
   assert.ok(!pcPanelHubModules.some((item) => item.slug === "acceptance-evidence"));
   assert.equal(pcPanelHubModules.length, 6);
@@ -1693,7 +1693,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   assert.equal(packages.flatMap((entry) => entry.modules).length, 20);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" ? 7 : project.slug === "cacb" ? 7 : 5;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 8 : project.slug === "cacb" ? 7 : 5;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -1726,7 +1726,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   }
 
   const panelRecovery = JSON.stringify(pcPanelHubModules.find((module) => module.slug === "power-recovery"));
-  for (const pattern of [/关机.*断开整机电源/, /USB 2\.0 9-pin/, /EDGE HUB/, /一分二 Hub.*不支持 LCD/, /SATA/, /唯一 8091.*port 2 controller.*port 3 LED.*连续两次/, /source contract.*未.*实测|源码.*没有实际.*实体恢复/]) {
+  for (const pattern of [/关机.*断开整机电源/, /USB 2\.0 9-pin/, /EDGE HUB/, /一分二 Hub.*不支持 LCD/, /SATA/, /唯一 8091.*port 2 controller.*port 3 LED.*连续两次/, /接线、拓扑和壁纸重绑.*源码合同.*本轮未关机、拔插、改线或制造显示拓扑变化/]) {
     assert.match(panelRecovery, pattern, `PC Panel Hub physical recovery journey is incomplete: ${pattern}`);
   }
 
@@ -2922,7 +2922,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 7);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 8);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);
