@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const openClawGatewaySnapshot = createProjectSnapshot({
-  observedAt: "2026-09-04",
-  label: "网关当前健康并默认走本地模型；消息 E2E 为 0/2，飞书仍在 starting（启动中），Telegram 未连接；稳定版更新与灾备激活也未执行",
-  boundary: "这是对 PUBLIC（公开）源码 aa4f9f1 和截至 2026-09-04 01:56 的脱敏本机实测合并快照；配置、loaded（已加载）、端口、任务状态和自动化测试都不能替代真实消息、模型、更新、重启或灾备验收",
+  observedAt: "2026-09-07",
+  label: "网关最后RPC回读健康；Telegram未运行并在恢复中，飞书仍启动中；消息E2E 0/2，自动归档已有后续自然调度成功",
+  boundary: "源码aa4f9f1未变。9月7日只读更新Gateway、渠道与任务：整合面板先报RPC不可用，随后官方精确入口回读rpc.ok=true；Telegram处于恢复中。其余模型目录、插件、测试与备份/灾备事实继续绑定9月4日各自证据，不发消息、更新或重启",
   metrics: [
     { label: "运行版 / 稳定目标", value: "2026.8.1 / Unknown（未知）" },
     { label: "自动远程 / 可选远程", value: "0 / 21" },
@@ -13,10 +13,10 @@ const openClawGatewaySnapshot = createProjectSnapshot({
   facts: [
     { label: "它真正解决的事", value: "我可以从 Telegram 或飞书把任务交给家里 Windows 电脑上的 OpenClaw；Gateway（网关）接住消息，按明确模型路线执行，再把结果送回原渠道。它负责把这条现有链路运行稳、看得懂、能更新和能恢复，不另造一个聊天产品。" },
     { label: "当前怎样选择模型", value: "默认模型是 ollama5090d/qwen3.8:27b；OpenClaw 官方模型目录以 local=true 证明它是本地路线。fallback（自动回退）为空，utility（辅助模型）和图像模型未设置，所以已列出的自动远程路线为 0；仍可手选 Qwen 11 条、DeepSeek 2 条、Z.AI 8 条，共 21 条远程路线。" },
-    { label: "当前渠道", value: "三次只读回读一致：Telegram 是 running/starting（运行中/启动中）且 connected=false（未连接），飞书是 running/starting；两者没有报告 lastError（最近错误），但本轮 lastInbound/lastOutbound（最近入站/最近出站）都为空，也没有发送测试消息。Google Chat 插件 disabled（停用）。因此消息 E2E（端到端收发）仍是 0/2，当前不能称任一渠道就绪。", hero: false },
-    { label: "当前 Gateway", value: "OpenClaw 2026.8.1 的 config valid（配置合法）、Gateway RPC（网关远程调用）和 health（健康）均通过；端口 18789 只有一个 loopback（本机回环）监听者。Gateway 任务由开机触发，当前 Running（运行中），2026-09-02 20:09:31 的历史 LastTaskResult（上次任务结果）为 0x800710E0；当前健康与历史非零码分别保留。Heartbeat（心跳任务）由开机触发并每 15 分钟复查，观察时最近为 Ready（就绪）/0x00000000。Update（更新任务）保留每周日 13:00、最多随机延迟 15 分钟的定义，但任务 Disabled（停用），所以不会自动更新；它没有有意义的最近运行时间，历史码为 0x00041303。", hero: false },
-    { label: "当前版本关系", value: "stable（稳定）通道当前 2026.8.1；三次只读目标探针都没有得到 target（目标版），所以 relation=unknown（版本关系未知），但 health=healthy（当前健康）。这表示当前网关仍健康、现在不能判断是否有更新；本轮没有更新或重启。更新器仍支持 stable、extended-stable（延长稳定支持）、beta（测试）和 dev（开发）四个官方通道。", hero: false },
-    { label: "成本边界", value: "远程认证来源有 5 个，global_zero_cost_enforced=false；默认本地不能证明所有既有 session（会话）与 cron（定时任务）都零费用，因为这两类覆盖本轮未核对。旧 api on/off/toggle 已退役并返回 exit 2；新 api status 只读报告已验证的路线与认证事实。", hero: false },
+    { label: "当前渠道", value: "9月7日官方channels status分别回读：Telegram configured=true（已配置）、running=false（未运行）、recovering（恢复中）、connected=false（未连接），最近错误为channel stop timed out after 5000ms（停止操作5秒超时）；飞书configured/running=true、starting（启动中），未报告最近错误。两者收发字段仍为空，消息E2E为0/2。状态读取缺字段不解释为配置被删除。", hero: false },
+    { label: "当前 Gateway", value: "9月7日OpenClaw 2026.8.1配置合法，Gateway任务Running（运行中）、Heartbeat（心跳）Ready（就绪）、Update（更新）仍Disabled（停用）。tools/status.ps1先以gateway_rpc_unavailable退出1；随后官方gateway status --require-rpc --json回读exit0、rpc.ok=true、version=2026.8.1、service running。保留这次短暂失败，不把最后健康或任务Running写成连续稳定。", hero: false },
+    { label: "版本关系的原观察", value: "2026-09-04稳定通道当前2026.8.1，三次目标探针未取得target（目标版），relation=unknown；9月7日只重验当前运行版本2026.8.1与RPC，没有重新探测更新目标。更新器继续支持stable、extended-stable、beta和dev四个通道，未更新或重启。", hero: false },
+    { label: "成本边界", value: "9月4日原成本快照有5个远程认证来源；9月7日只读入口仍确认默认ollama5090d/qwen3.8:27b与global_zero_cost_enforced=false，没有把旧认证计数冒充新采集。session（会话）与cron（定时任务）覆盖未核对，所以默认本地不保证全局零费用；api status只读取证，旧on/off/toggle继续拒绝。", hero: false },
     { label: "插件与外部入口", value: "脱敏插件矩阵为 Telegram 2026.8.1 loaded（已加载）、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled（停用）、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues（兼容问题）=0。版本标签不同不等于故障，也不等于调用通过。Funnel（Tailscale 外部路由）为 active（活动），但不公开 hostname（主机名）或 URL。", hero: false },
     { label: "备份与恢复", value: "真实 OpenClaw 官方备份归档为 224,287,339 bytes（字节），备份封装脚本与独立 backup verify（备份验证）都通过；恢复只到了 fresh staging（全新暂存目录），没有激活、替换现役配置或证明灾备切换完成。", hero: false },
     { label: "验证结果", value: "14 个非 Pester 脚本测试入口全部 exit 0（退出码 0），受控更新 Pester 为 30/30；34 个 PowerShell 文件解析 0 错，PUBLIC gate（公开内容门）通过。独立 Codex 备份 Owner（负责人）的完整回归也通过。OpenClaw doctor（诊断）为 30 run（执行）、29 skipped（跳过）、3 warning（警告）。", hero: false },
@@ -26,7 +26,7 @@ const openClawGatewaySnapshot = createProjectSnapshot({
     { label: "今晚备份故障与修复回执", value: "20:05、20:10、20:20 的自然调度都先完成了本地与 G 热备，却在私人 Git fetch（读取远端）遇到同一 TLS（传输层安全）瞬断并返回 0x00000001。现有任务重启设置没有产生第二次实例，因此修复放进 Git 同步层：只对网络/TLS 错误按 30/120/300/900 秒有界退避；认证错误、远端落后或分叉仍立即停止。先完成三项手动生产回归；随后 22:05、22:10、22:20 的下一轮自然调度也全部为 Ready（就绪）/0x00000000，四个私人 Git 工作区干净且远端 OID（对象标识）一致。", hero: false },
     { label: "7 个相关计划任务", value: "开机触发 Gateway；开机后每 15 分钟运行 Heartbeat；Update 保留周日 13:00 加最多 15 分钟随机延迟但当前停用；Codex 每日 20:05/22:05；Gemini 每日 20:10/22:10；共享 Claude→OpenClaw 每日 20:20/22:20；PUBLIC 自动归档每日 21:15。这里是 7 个任务，不把共享任务的两个消费者误算成两个任务。", hero: false },
     { label: "共享任务顺序与退出码", value: "OpenClaw Memory Backup 先跑 Claude、再跑 OpenClaw；Claude 失败也继续尝试 OpenClaw，最终优先返回 Claude 的首个非零，否则返回 OpenClaw 结果。共享任务非零时必须查看两段脱敏日志，不能只凭任务码猜哪段失败。", hero: false },
-    { label: "PUBLIC 自动归档", value: "OpenClawGateway AutoPush 每日 21:15 触发。21:15 自然运行证明把长退避按每个 Git 操作重新计算会累计超过任务的 15 分钟时限，最终被调度器终止为 0x00041306。源 aa4f9f1 删除 AutoPush 的跨时间等待：每个远端操作只做直接连接和当前系统代理的一次即时尝试，网络失败就返回非零并保留工作区；2 小时时限的私人备份仍保留长退避。2026-09-04 01:19:59 启动、01:20:04 完成，真实结果 Ready/0x00000000，约 5.4 秒且 PUBLIC main 与远端 OID 一致；下一次 21:15 自然调度尚未到时。", hero: false },
+    { label: "PUBLIC 自动归档", value: "AutoPush每日21:15；aa4f9f1已删除累计超出任务15分钟时限的长等待，每个远端操作只即时尝试直接连接和当前系统代理，网络失败返回非零。9月4日手动真实重跑0之后，9月6日21:15自然调度也为Ready/0；本轮再读源main与远端OID一致，补齐旧快照尚未到时的自然调度证据。私人备份仍按自身2小时时限保留长退避。", hero: false },
     { label: "公开源码", value: "PUBLIC 仓库 wlyaaaaa/OpenClawGateway 当前 main=origin/main=aa4f9f1390c68605b5d8135f4077967bf86e0708，工作区干净且源远端 OID 已回读。该代际让备份长退避、自动归档失败快返各守自己的时限，删除没有生产消费者且能力落后的 Codex 备份副本，明确 Codex 由独立 Owner 承载，并把主要使用者定为 AI Agent（智能体）；OpenCode、CodeG 或终端都不是人必须长期操作的前提。", hero: false }
   ],
   gaps: [
@@ -35,8 +35,8 @@ const openClawGatewaySnapshot = createProjectSnapshot({
     "本地 qwen3.8:27b 没有做自然语言推理或 GPU（图形处理器）实跑；local=true 只证明目录分类。",
     "没有执行真实更新、Gateway 重启、灾备激活、全新 Windows 安装或 -Repair 故障自愈。",
     "CodeG MCP（模型上下文协议）没有完成 initialize、tools/list 或工具调用，端口探活不能补齐握手证据。",
-    "截至 01:56，Telegram 未连接且两条渠道都停在 starting（启动中）；稳定版 target（目标版）探针也不可用。没有在证据不足时重启、发消息或更新。",
-    "三项备份已通过下一轮自然调度；AutoPush 的失败快返修复已通过真实手动任务，但下一次 21:15 自然调度尚未到时。本页不把一次成功提升为未来永不失败。"
+    "9月7日Telegram仍未连接且running=false/recovering，停止操作曾超时5000ms；飞书仍starting。一次RPC读取失败后精确回读通过，但消息与连续稳定性未验收。没有在证据不足时重启、发消息或更新。",
+    "三项私人备份和PUBLIC AutoPush最近的9月6日自然任务均返回0；这只证明对应那轮任务完成，不证明未来无失败，也不替代任一恢复点的实际激活或消息交付。"
   ]
 });
 
@@ -44,11 +44,11 @@ export const openClawGatewayProject = {
   order: 26,
   slug: "openclaw-gateway",
   title: "OpenClawGateway",
-  kicker: "给 AI 调用的 Windows OpenClaw 运维层 · 默认本地模型 · 2026-09-04 核对",
+  kicker: "给AI调用的Windows OpenClaw运维层 · 默认本地模型 · 运行态按9月7日证据分层",
   route: "/projects/openclaw-gateway",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "网关当前健康且默认本地；消息 E2E 0/2，飞书仍在 starting（启动中），Telegram 未连接",
+  cardStatus: "Gateway（网关）最后一次 RPC（远程过程调用）回读健康；Telegram 恢复中且未运行，飞书启动中；消息 E2E（端到端收发）0/2",
   cardStatusTone: "mixed",
   ...openClawGatewaySnapshot,
   searchAliases: ["OpenClawGateway", "OpenClaw Gateway", "Telegram交办电脑任务", "飞书交办OpenClaw", "OpenClaw本地模型", "OpenClaw备份恢复", "7个计划任务"],
@@ -81,7 +81,7 @@ export const openClawGatewayProject = {
       { source: "Claude 项目 memory（记忆）目录", data: "按已配置项目选择各自 memory 目录，每个项目仍保持自己的可读恢复边界。", result: "本地最近 30 份、G 盘 SHA-256 热备和私人 Git 镜像/OID 回读；云端失败时任务失败，但已完成的本地与 G 盘副本继续可用。" },
       { source: "OpenClaw config（配置）与 workspace（工作区）", data: "保护可能包含凭据的配置和工作区；工作区排除 node_modules、.git 等可重建或不应镜像的内容。", result: "本地最近 30 份、G 盘 SHA-256 热备和私人 Git/OID 回读；云端失败时任务失败，本地与 G 盘恢复点仍保留。" },
       { source: "3 个私人备份计划任务", data: "独立 Codex Owner 在 20:05/22:05 跑 Codex；本仓库在 20:10/22:10 跑 Gemini，并在 20:20/22:20 共享承载 Claude→OpenClaw。", result: "两个独立任务传播各自脚本退出码；共享任务即使 Claude 失败也继续跑 OpenClaw，最后优先传播 Claude 首个非零，否则传播 OpenClaw 结果。2026-09-03 修复后真实重跑三项均为 0。" },
-      { source: "PUBLIC 自动归档", data: "每日 21:15 只接收干净的公开仓库候选：已有 staged（暂存）改动、禁止路径或通用凭据形态会在提交前拒绝；fetch 后发现 behind（落后）或 diverged（分叉）也停止。", result: "21:15 自然运行暴露逐操作长退避累计超过 15 分钟并留下 0x00041306；aa4f9f1 取消跨时间等待，01:19:59—01:20:04 真实重跑返回 0 且远端 OID 一致。" },
+      { source: "PUBLIC 自动归档", data: "每日 21:15 只接收干净的公开仓库候选：已有 staged（暂存）改动、禁止路径或通用凭据形态会在提交前拒绝；fetch 后发现 behind（落后）或 diverged（分叉）也停止。", result: "既有21:15超时暴露逐操作长退避问题；aa4f9f1删除跨时间等待后，9月4日手动重跑0、9月6日21:15自然任务也0，源远端OID独立回读一致。" },
       { source: "CodeG/Cline 的 MCP（模型上下文协议）配置", data: "只在明确配置文件中保留未知根键与其他 MCP Server（模型上下文协议服务），再插入 openclaw-bridge；Gateway 密码由受控启动器在子进程注入。", result: "可刷新、启用和继续做 initialize（初始化）/tools/list（工具列表）的无明文桥接配置；脚本不声称握手已经发生。" },
       { source: "PUBLIC 源码与隔离测试", data: "读取 aa4f9f1 的脚本、文档、模板、测试与公开内容门；测试夹具不发送消息、不调用付费模型、不更新运行时。", result: "AI-first（AI 优先）源码合同、备份长退避与 AutoPush 失败快返、真实 Owner 边界、退役边界和自动回归证据；源远端 OID 已回读，但仍与消息、模型、更新和网页发布分开。" }
     ],
@@ -187,7 +187,7 @@ export const openClawGatewayProject = {
     { layer: "Channel / Model / MCP E2E", proves: "只有真实消息往返、目标模型实际响应、或 CodeG initialize/tools/list/工具调用才能证明相应链路。", doesNotProve: "本轮这些都未执行；不存在可继承的当前 PASS。" },
     { layer: "Backup 与 Recovery（恢复）", proves: "224,287,339-byte 官方归档经封装脚本与独立 verify，通过并能恢复到 fresh staging。", doesNotProve: "没有激活暂存状态、重启 Gateway 或证明完整灾备恢复。" },
     { layer: "私人备份生产回执", proves: "20:05/20:10/20:20 自然调度暴露 TLS 瞬断后，两个 Owner 都补了有界网络重试；先手动回归，再由 22:05/22:10/22:20 下一轮自然调度证明三项均为 0，本地/G/私人 Git 四条链分别回读。", doesNotProve: "未来调度永不失败，也不公开私人路径、私库坐标或日志正文。" },
-    { layer: "PUBLIC 自动归档回执", proves: "21:15 自然运行以 0x00041306 暴露逐操作退避累计超过任务时限；aa4f9f1 删除跨时间等待后，01:19:59—01:20:04 真实任务为 0，PUBLIC main 与远端一致。", doesNotProve: "下一次自然 21:15 一定成功、任意 Git 子进程有仓库内硬性总超时，或自动归档可以接管并发工作、绕过门禁、在分叉时强推。" },
+    { layer: "PUBLIC 自动归档回执", proves: "aa4f9f1取消逐操作长退避后，9月4日手动重跑返回0；9月6日21:15自然调度也返回0。本轮源main与remote main一致。", doesNotProve: "以后每次都成功、所有Git子进程都有仓库内总超时，或可以接管并发修改、在分叉时强推。" },
     { layer: "Update / Repair / Install（变更动作）", proves: "脚本与夹具定义了备份、预检、更新、后验、-Repair 和 bootstrap 回退合同。", doesNotProve: "本轮没更新、重启、-Repair、故障自愈或在全新 Windows 安装。" },
     { layer: "Git 与网站发布", proves: "源 main 与 origin/main 同为 aa4f9f1390c68605b5d8135f4077967bf86e0708，且源远端 OID 已回读，证明公开源码代际已推送。", doesNotProve: "网站仍需页面自己的 commit、Pages 和公网回读；源仓库发布、本机运行和最终消息任务彼此不能替代。" }
   ],
@@ -209,7 +209,7 @@ export const openClawGatewayProject = {
     { date: "2026-08-30—2026-08-31", commit: "65d5e07—f19f325", result: "模型、会话、认证和生命周期回归 OpenClaw 2.0 官方命令；公开仓库转为状态、运维、恢复和接入层，不继续复制内部 SQLite 或凭据目录。" },
     { date: "2026-09-03—2026-09-04", commit: "f89fb14—aa4f9f1", result: "重建 7 个产品模块并修正成本、生命周期、更新与恢复；删除无消费者 Codex 副本、明确独立 Owner，为备份加入有界网络重试。下一轮三项自然备份均为 0；AutoPush 的逐操作退避超过 15 分钟时限后，最终删除跨时间等待并完成约 5.4 秒真实 0 回执。文档定位为 AI 主动调用、人只在有影响边界授权。" }
   ],
-  snapshotUpdateNote: "本页代表截至 2026-09-04 01:20 对 PUBLIC main aa4f9f1、脱敏运行状态与真实任务回执的明确快照。后续只有渠道、模型路线、Gateway 生命周期、更新、恢复、可选 CodeG、私人备份消费者或证据边界出现实质变化时刷新；不会后台读取消息、账号、秘密、日志或恢复归档。"
+  snapshotUpdateNote: "本页将9月7日只读运行态与PUBLIC源码aa4f9f1合并；源码测试、模型目录、插件和备份/灾备证据仍保留原时刻。状态异常不触发网页任务自动重启、发消息、付费调用或恢复激活。"
 };
 
 export const openClawGatewayModules = [
@@ -218,13 +218,13 @@ export const openClawGatewayModules = [
     searchAliases: ["Telegram交办OpenClaw", "飞书交办电脑任务", "lastInbound为空", "lastOutbound为空", "Google Chat disabled", "Funnel active", "渠道E2E", "插件版本矩阵", "compat issues 0"],
     searchProjection: { intents: ["从手机给电脑发任务", "确认Telegram是否真能收发", "确认飞书启动状态", "查看渠道插件版本", "查看外部路由"], entities: ["Telegram 2026.8.1", "Feishu 2026.6.8", "Google Chat 2026.6.6", "lastInbound", "lastOutbound", "Funnel", "compat issues"], relations: ["消息进入Gateway", "Agent执行后回原渠道", "插件loaded与消息E2E分离", "Funnel提供外部路由"], failureRecovery: ["enabled不等于收发", "starting不冒充ready", "版本不同不冒充故障", "空收发记录保持未验", "不公开外部URL"] },
     teaser: "它保留用户已经在用的消息入口，不要求改用新的网页或聊天壳。",
-    status: "Telegram 运行中、启动中且未连接；飞书运行中、启动中；本轮两者都未做真实消息端到端收发", statusTone: "mixed",
+    status: "Telegram未运行、恢复中且未连接；飞书运行中、启动中；两者未完成真实消息端到端收发", statusTone: "mixed",
     value: "我可以在手机或现有工作聊天里交办，而电脑上的 OpenClaw 负责执行；不用再打开一个专门的远控聊天产品。",
     why: "渠道配置打开、连接探测正常和一次消息真正往返是三件事。只有把它们分开，才不会在关键任务时把“看起来在线”误判成“确实交付成功”。",
     example: "我可以问：“Telegram 和飞书现在真的能交办并收到回复吗？先不要发消息。”当前答案是消息 E2E 0/2：飞书仍在启动中，Telegram 未连接，两条渠道都没有本轮真实收发证据。",
     result: "成功时得到带明确渠道的入站、执行与回发闭环；发现问题时知道停在配置、连接、启动、入站还是出站；未发消息时就只得到运行态，不生成假的端到端结论。",
-    readerStates: { pass: "目标渠道完成真实入站、智能体执行和原渠道回发。", problem: "Telegram 当前运行但未连接并停在启动中；飞书也停在启动中。两者都无消息活动，需要继续观察，各自保留真实状态。", unavailable: "渠道停用、连接失败、无入站或无回发时，只标记该渠道未通过；不切换到另一渠道冒充成功。" },
-    decisionImpact: ["三次只读回读均为 Telegram running/starting（运行中/启动中）、connected=false（未连接），飞书 running/starting；当前不能说任一渠道已就绪或完成真实交办。", "插件矩阵是 Telegram 2026.8.1 loaded（已加载）、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled（停用）、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues（兼容问题）=0。", "版本标签不同不等于故障；loaded 和 compat issues=0 也不等于消息或模型调用通过。", "Google Chat disabled 是明确停用，不作为第三条可用入口。", "Funnel（Tailscale 外部路由）active（活动）说明外部路线存在，但不公开地址，也不证明渠道消息成功。", "本轮若要补证据，必须实际发送一条受控消息；这是外部动作，不能由只读状态检查代替。"],
+    readerStates: { pass: "目标渠道完成真实入站、智能体执行和原渠道回发。", problem: "Telegram当前未运行、恢复中且未连接，最近停止操作5000ms超时；飞书仍启动中。两者没有本轮收发证据，分别保留状态。", unavailable: "渠道停用、连接失败、无入站或无回发时，只标记该渠道未通过；不切换到另一渠道冒充成功。" },
+    decisionImpact: ["9月7日Telegram running=false/recovering（未运行/恢复中）、connected=false，停止操作5000ms超时；飞书running/starting（运行中/启动中）。当前不能称任一渠道已完成真实交办。", "插件矩阵是 Telegram 2026.8.1 loaded（已加载）、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled（停用）、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues（兼容问题）=0。", "版本标签不同不等于故障；loaded 和 compat issues=0 也不等于消息或模型调用通过。", "Google Chat disabled 是明确停用，不作为第三条可用入口。", "Funnel（Tailscale 外部路由）active（活动）说明外部路线存在，但不公开地址，也不证明渠道消息成功。", "本轮若要补证据，必须实际发送一条受控消息；这是外部动作，不能由只读状态检查代替。"],
     problem: "避免把 enabled（已启用）、running（运行中）、connected（已连接）、ready（就绪）或外部路由中的任意一个状态，误写成完整消息交付。",
     implementation: ["OpenClaw channels status（渠道状态）--json 提供各渠道的 configured（已配置）、running（运行中）、lifecycle（生命周期）、connected（已连接）与最近收发字段。", "tools/status.ps1 只读显示 Telegram、飞书、Google Chat，不保存账号或机器人标识。", "脱敏插件清单分别保留 exact version（精确版本）、loaded/disabled（已加载/停用）和 compat issues（兼容问题）；不把版本差异压成一个总版本。", "消息处理和回发仍由 OpenClaw 网关与渠道插件拥有；PUBLIC 仓库只解释脱敏状态。"],
     flow: ["确认目标渠道的私人配置已经完成。", "只读查看 configured（已配置）、running（运行中）、lifecycle（生命周期）和 connected（已连接）。", "明确需要验收时，从目标应用发送一条受控测试消息。", "确认入站、Agent（智能体）执行和同渠道回发。", "分别记录 Telegram 与飞书结果，不互相代替。"],
@@ -232,7 +232,7 @@ export const openClawGatewayModules = [
     boundaries: ["不公开账号、机器人身份、allowlist（允许列表）、token（令牌）、正文或原始日志。", "不因本页建设发送真实消息。", "不把一个渠道的 PASS（通过）推广到另一个渠道。"],
     failures: [{ condition: "渠道显示 enabled/running，但没有收发记录", response: "保持“已配置运行、本轮 E2E 未验”，不升级结论。" }, { condition: "飞书停在 starting", response: "保留 starting；检查插件与渠道状态，但不伪造 ready。" }, { condition: "外部路由存在但消息失败", response: "分别排查 Funnel、渠道连接与 Gateway，不把端口在线当回发成功。" }],
     sources: [{ path: "docs/USAGE.md", role: "从手机交办与消息 E2E 解释" }, { path: "docs/DEPLOY.md", role: "渠道从 disabled 模板到私人配置的流程" }, { path: "tools/status.ps1", role: "渠道和 Funnel 脱敏状态入口" }],
-    verification: ["01:55—01:56 三次回读一致：Telegram=running/starting、connected=false，飞书=running/starting；两者 lastError 均为空。", "插件矩阵为 Telegram 2026.8.1 loaded、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues=0。", "Telegram 与飞书本轮 lastInbound/lastOutbound 为空且未发测试消息。", "Funnel 只确认 active；没有公开或核对 hostname/URL。"],
+    verification: ["9月7日直接官方channels status返回Telegram=running false/recovering、connected=false，lastError为channel stop timed out after 5000ms；飞书running/starting、lastError为空。未发测试消息。", "插件矩阵为 Telegram 2026.8.1 loaded、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues=0。", "Telegram 与飞书本轮 lastInbound/lastOutbound 为空且未发测试消息。", "Funnel 只确认 active；没有公开或核对 hostname/URL。"],
     relation: "渠道模块定义请求从哪里来、结果回哪里；模型模块决定执行路线，网关常驻模块负责中间运行。"
   },
   {
@@ -240,7 +240,7 @@ export const openClawGatewayModules = [
     searchAliases: ["OpenClaw默认本地模型", "qwen3.8 27b", "api status", "api on off退役", "远程模型路线21", "远程认证5", "global_zero_cost_enforced"],
     searchProjection: { intents: ["判断默认模型是否本地", "查看远程付费风险", "手选远程模型", "解释旧API开关为什么删除"], entities: ["ollama5090d/qwen3.8:27b", "Qwen", "DeepSeek", "Z.AI", "api.ps1 status", "local=true"], relations: ["官方目录证明本地", "默认与可选路线分离", "认证来源不等于调用"], failureRecovery: ["目录缺local证据不猜", "会话与cron未核对保持未知", "旧actions exit2", "不自动fallback"] },
     teaser: "它回答“现在默认走哪里、还可以走哪里、哪些地方可能花钱”，而不是提供一个假的总开关。",
-    status: "默认本地、自动远程 0；远程可选 21、认证来源 5；任何远程真实调用未测", statusTone: "mixed",
+    status: "9月7日默认仍本地；9月4日目录/认证快照为自动远程0、可选21、认证来源5。全局零费用未强制，远程调用未验", statusTone: "mixed",
     value: "我能继续把普通新任务默认交给本地 27B 模型，同时保留明确手选 Qwen、DeepSeek、Z.AI 的能力，并知道页面不能承诺全局零费用。",
     why: "OpenClaw 2.0 的认证可能来自多处，会话和定时任务也可能固定自己的模型。旧脚本只查一个过期文件并强行启停任务，给出了比证据更强的成本结论。",
     example: "我可以问：“新会话默认用本地模型吗，会不会失败后自动花远程费用？”系统会说明默认路线、自动回退和可手选远程模型；这次只读检查不会删除凭据或调用远程模型。",
@@ -284,7 +284,7 @@ export const openClawGatewayModules = [
     searchAliases: ["OpenClaw更新", "2026.8.1 target unknown", "relation unknown healthy", "stable", "extended-stable", "beta", "dev", "managed-component", "partial更新", "ahead完整后验", "Update Disabled"],
     searchProjection: { intents: ["只查看新版本", "选择稳定或测试通道", "人工更新OpenClaw", "判断behind是否故障", "ahead时完整后验", "处理部分完成"], entities: ["stable", "extended-stable", "beta", "dev", "--channel extended-stable", "managed_component_status.v1", "managed_component_update_receipt.v1", "partial"], relations: ["状态检查不更新", "behind先备份", "extended-stable不用tag", "ahead不降级但完整验收", "版本改变后独立后验"], failureRecovery: ["unknown不开始", "channel mismatch不开始", "ahead不降级", "partial不自动回滚"] },
     teaser: "更新是一条由 AI 编排、人在影响边界授权且带恢复点的事务，不是后台自动追新。",
-    status: "稳定通道当前 2026.8.1；目标探针连续三次不可用，版本关系未知但运行健康；本轮未更新或重启", statusTone: "mixed",
+    status: "运行版本仍2026.8.1；更新目标关系沿用9月4日探针不可用的原观察，9月7日未重新查询目标或执行更新", statusTone: "mixed",
     value: "我能先知道“有新版本但当前仍健康”，再选择合适窗口和官方通道更新；如果版本已经改变而后验失败，回执会诚实保留“部分完成”。",
     why: "自动追新可能在无人在场时改变插件、任务和网关。相反，只看版本安装成功又会漏掉配置、远程调用、模型和任务损坏。",
     example: "我可以说：“先只读告诉我稳定版目标，今天不要更新。”当前目标版本无法取得时只报告未知；以后明确更新时，才会先备份并在完成后重新核对配置、网关、模型和任务。",

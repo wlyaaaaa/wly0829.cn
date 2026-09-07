@@ -3,7 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const evidenceStateLabels = ["可用于当前判断", "需要复核", "本轮不可用"];
 
 const personalHealthSnapshot = createProjectSnapshot({
-  observedAt: "2026-08-31T12:00:18.5444628Z",
+  observedAt: "2026-09-07T20:52:45.4152792Z",
   label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
   metrics: [
     { label: "设备入口", value: "Fitbit Air" },
@@ -13,11 +13,15 @@ const personalHealthSnapshot = createProjectSnapshot({
   ],
   facts: [
     { label: "本页证据边界", value: "本页只核对产品代码与合成证据，没有读取个人健康材料、运行账号/设备现场复核或形成个人健康结论；现实健康状态不在本页判断，不能把未读取写成没有记录或数值为零。产品已实现 14 / 28 / 90 天证据窗口与离线质量门。" },
+    { label: "前台更新和离线回读", value: "每次前台刷新最多 5000 个新逻辑请求；仅对本轮同一 exact manifest 且累计请求数有进展的预算停止继续，绑定/因子/权限失败不重试换路。capture --latest 从固定 .last-capture.json 核对 manifest、验证回执与 brief 的文件哈希，只有同一完成采集的完整三件套才返回；不触网、不重新生成。", hero: false },
+    { label: "按问题选择日期", value: "离线 brief 支持 --start / --through 指定含首尾的完整中国日，用 requested_period 返回该时段的覆盖与 decision_ready；默认 14/28/90 天窗口不再代替用户指定范围。", hero: false },
+    { label: "睡眠和覆盖的真实含义", value: "可定位的坏记录只影响对应日期，日期无法恢复才影响该请求页；主睡眠与小睡标签并存但区间和时长可信时列入 multiple_roles，总时长只计一次，不猜分类、不进入主睡眠时间推断。有记录日不等于全天覆盖，设备睡眠分钟不等于完整真实睡眠。", hero: false },
+    { label: "共用背景，健康判断独立", value: "只有问题需要时才取用个人理解库的共同背景；新本人认识可按既有接口回写。测量、报告、药物和专业建议留在健康项目，不整包复制，网页只说明这一产品关系。", hero: false },
     { label: "AI为谁负责", value: "以用户的健康、安全、自主、隐私、现实负担和已表达目标为准；不为流程完成、机构利益、设备活跃度或 AI 自信优化。" },
     { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任。", hero: false },
     { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见。" },
     { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见。" },
-    { label: "当前源码与回归", value: "PRIVATE main=48d5a5b84226aac94c9567ed563e685c69915933；项目有 5 个产品 Python 模块、5 个测试模块；本轮 unittest 112 项全部通过（112/112），内部用时 27.922 秒。" },
+    { label: "当前源码与回归", value: "PRIVATE main=59f77e5ae2fc0c7f8cb093d3100bc355b5c033aa 已回读；5 个产品 Python 模块与 5 个测试模块。本轮 126 项合成回归及 46 个子测试通过，不含设备、账号或个人健康结论验收。" },
     { label: "证据结构与恢复", value: "源码登记 39 类 API 数据类型，当前前台采集从中选择适配 Fitbit Air 的 21 类，并保全历史起点资料和有可用运动标识时的 TCX 运动文件；不是把 39 类归一成 21 类。默认摘要只展开睡眠、步数、活动分钟、已记录运动四类，比较 14 / 28 / 90 天窗口。大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint，中断后只续缺页。" },
     { label: "源码规模", value: "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库。", hero: false },
     { label: "分页上限", value: "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报。", hero: false },
@@ -56,7 +60,7 @@ export const personalHealthProject = {
   summary: "这个项目把本人描述、检查报告、医生意见与 Google Fitbit Air（无屏健身手环）的记录整理成可复查的健康依据。手环通过手机上的 Google Health 应用同步；我明确要求更新时，项目取回睡眠、步数、活动、心率、血氧、呼吸和皮温等记录，默认先汇总睡眠、步数、活动分钟与已记录运动，并标清缺失和质量问题。AI站在用户一边，但不是一味迎合：它核对证据、解释未知、比较真实选项，也会劝阻危险行为。医生、设备和 AI 都不是自动正确；非紧急情况下，最终知情选择属于本人。",
   why: "健康决定常把几件不同的事混在一起：报告看到了什么、医生怎样解释、机构或个人可能受什么限制、AI依据什么资料、用户真正重视什么，以及不行动会怎样。若只听身份最高或声音最肯定的一方，容易把专业能力误当成永远正确，也可能忽略替代方案、利益冲突、现实负担和可逆空间。",
   plainExample: "我可以说：“更新一下 Fitbit Air 的记录，看看近两周睡眠和日常活动有没有变化，先告诉我数据够不够。”项目只为这次请求更新一次，先核对来源、日期和完整性，再把睡眠、步数、活动分钟和已记录运动的变化与缺口交给我；数据不够时就明确说不能下结论，不把缺记录写成身体异常。",
-  result: "设备方面，我得到最近 14 / 28 / 90 天的睡眠时长、每日步数、活动分钟和已记录运动次数；另有最近 14 / 90 天的睡觉与起床时段，以及覆盖日期、变化和缺口。健康决定方面，我得到可复查的事实、未知、选项及其收益、风险、负担和退出条件，知道什么时候必须就医、什么时候值得取得第二意见；不是身体总分、自动诊断或替我下命令的答案。",
+  result: "设备方面，默认得到最近 14 / 28 / 90 天的睡眠时长、每日步数、活动分钟和已记录运动次数，以及相应的睡眠时段、覆盖与缺口。我也可以指定已经采集的完整中国日起止范围；项目会离线按所选日期统计，并用这一范围自己的覆盖和质量判断能否采用，不拿最近两周代答。健康决定方面，我得到可复查的事实、未知、选项及其收益、风险、负担和退出条件，知道何时必须就医、何时值得取得第二意见；不是身体总分、自动诊断或替我下命令的答案。",
   dataSources: {
     title: "具体读什么、从哪里来、拿来做什么",
     intro: "这是代码支持的输入与采集范围，不是本次个人记录。设备入口是 Fitbit Air，经 Google Health API v4 读取 google-wearables（Google/Fitbit 追踪设备家族），不含手工输入或手机估算。家族标识不能逐条证明唯一机型；当前授权、同步情况和记录质量仍需当次核对。",
@@ -181,7 +185,7 @@ export const personalHealthProject = {
     { layer: "Project rules（项目规则）", proves: "普通问答、来源维护、设备刷新、红旗与低打扰边界已经明确。", doesNotProve: "任何当前个人健康事实、诊断或医疗建议正确。" },
     { layer: "Source code（源码）", proves: "授权、前台刷新、导入、精确续跑、离线验真、字段质量门和 Owner 审阅合同真实存在。", doesNotProve: "当前账号可用、provider 在线或本轮取得了真实记录。" },
     { layer: "112 tests", proves: "合成夹具下的凭据不落盘、一次调用、原始保全、分页/哈希、续跑、capture 结果闭合、决策门、inventory-only 和失败语义通过。", doesNotProve: "真实 OAuth、真实当前设备、网络兼容或医学结论。" },
-    { layer: "PRIVATE 仓库身份", proves: "main=48d5a5b 与远端同步、工作树干净，网页内容绑定精确源码版本。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
+    { layer: "PRIVATE 仓库身份", proves: "main=59f77e5 与远端同步、工作树干净，网页内容绑定精确源码版本。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
     { layer: "Live provider/runtime（现场数据提供方与运行链）", proves: "只有本轮真实前台刷新和回读才能证明账号、设备、交接与记录质量。", doesNotProve: "历史成功、源码或单测不能替它证明当前可用。" },
     { layer: "Health Owner（健康资料责任源）+ 当前权威医学指导", proves: "某条合格证据是否与当前问题相关、是否值得局部采用，以及高风险建议是否符合当前权威指导。", doesNotProve: "自动 brief 不能替代人工判断、查体、诊断或处方。" }
   ],
@@ -372,7 +376,7 @@ export const personalHealthModules = [
       failureRecovery: ["重复 token 或分页断裂时在下一次请求前停止", "预算耗尽时写精确 resume manifest", "哈希变化或额外 orphan 不匹配时拒绝续跑", "活进程仍持锁时拒绝第二个 writer"]
     },
     teaser: "已经取得的原始内容先安全保留；下次从同一次更新的准确位置继续，对不上就停止，不猜最近目录。",
-    status: "原子写、分页闭环、哈希、请求预算、锁、孤儿收敛和 exact resume 有源码与 57 项 import 测试；真实本轮导入未运行",
+    status: "原子写、分页闭环、哈希、请求预算、锁、孤儿收敛和 exact resume 有源码与合成回归；本轮五模块共 126 项及 46 个子测试通过，真实导入未运行",
     statusTone: "mixed",
     value: "网络或解析中途失败时，已取得的原始证据仍可核对；恢复不会重新下载完成页面，也不会误选另一批文件。",
     why: "目录里有文件不等于导入完成。若恢复逻辑按时间猜最近目录、把缺页当零或忽略分页 token 循环，后续统计会把不完整证据冒充为完整趋势。",
@@ -457,21 +461,24 @@ export const personalHealthModules = [
       failureRecovery: ["来源无法证明时默认判断字段全部 provenance_blocked", "页面哈希漂移时在解释前停止", "空缺或 malformed 字段进入 blocked_fields", "页数字节或记录预算超限时不扩大读取", "离线query部分覆盖返回partial与gaps而不推断零", "非法日期字段或预算返回明确失败而不转在线下载"]
     },
     teaser: "设备能提供很多数据，但当前判断只采用来源清楚、质量足够、确实相关的最小部分；其余只记录存在或暂时不用。",
-    status: "capture/brief 无网络和凭据路线，字段选择、14/28/90 天窗口、80% 覆盖门与 inventory-only 有 33 项回归；当前个人数据未读取",
+    status: "capture/brief 无网络和凭据路线；新增指定日期窗口、按日质量隔离与 multiple_roles，五模块合成回归 126 项及 46 个子测试通过；个人数据未读取",
     statusTone: "pass",
-    value: "保全“可能以后有用的数据”和允许它进入健康判断是两件事；默认摘要只读稳定、低噪声且能影响当前问题的最小范围。若只想知道某一天有没有保存某类记录，还能直接查已保全内容，不必重新同步全部设备数据。",
+    value: "保全数据与采用数据是两件事。默认摘要比较最近 14 / 28 / 90 天；我指定一段已经采集的完整中国日时，就离线统计这一段，并独立判断其覆盖和质量。只查某一天是否保存记录也可沿原导出窄查，不必重新同步全部设备数据。",
     why: "设备 API 能读的字段很多。若把高频心率、位置、营养目录、空日志和估算噪声全部常驻，不仅扩大私人数据面，也会让低质量信号压过真正相关证据。",
     example: "我问“上周三的步数有没有保存？不用重新同步。”系统只在已经完成的那份导出里查这一天，告诉我找到几条、覆盖到什么时间；没找到只代表这份记录里没有，不能顺手说成那天一步都没走。",
-    result: "用于判断时，得到字段级决策简报：decision_ready_fields、blocked_fields、质量原因、14/28/90 天窗口和 interpretation limits（解释边界）。只查某日时，得到那一字段的原始记录、数量、覆盖日期、重复数量、gaps（缺口）、truncated（是否截断）及本地耗时；只要摘要就不返回记录正文。查询通过只证明这次选中内容可核对，不自动变成健康结论或写入现行底色。",
+    result: "得到字段级决策简报：decision_ready_fields、blocked_fields、质量原因和解释边界；默认展示 14/28/90 天，指定起止日期则另给 requested_period（所选日期范围）的统计、覆盖及 decision_ready，首尾日都包含。只查某日时，返回该字段的记录或仅摘要、重复数量、gaps、truncated 与耗时。查询通过不自动变成健康结论或写入现行底色。",
     readerStates: {
-      pass: "决策简报的字段来源、完整性、页面指纹、结构和最近 14 天覆盖门通过后，可交给 Health Owner 复核；某日查询则返回已核对的选中记录和覆盖摘要，不把 query pass 当成 decision_ready。",
+      pass: "字段来源、完整性、页面指纹和结构通过后，默认按最近 14 天覆盖判断；指定日期时改用 requested_period 自己的覆盖、质量和 decision_ready，再交给 Health Owner 复核。单日原始查询只交回选中记录与覆盖，不把 query pass 当成可用于健康判断。",
       problem: "简报中重复、重叠、结构残缺或覆盖不足的字段不能进入判断。某日查询遇到缺页、哈希不符、日期无法识别或预算截断，会返回 partial 和具体缺口；没查到记录不等于真实数值为零。",
       unavailable: "简报的交接、完整清单、验证回执或选中页面不一致时，在解释前停止。某日查询若清单不可读、字段不在清单内、日期非法或预算不合法，会明确失败；不因此重新下载全量或访问凭据。"
     },
     stateLabels: evidenceStateLabels,
     decisionImpact: [
       "默认 decision context 只有睡眠、步数、活动分钟和已记录运动事件。",
-      "最近 14 天至少 80% 日期有可解释记录是数据覆盖门，不是健康目标。",
+      "默认最近 14 天至少 80% 日期有可解释记录是数据覆盖门，不是健康目标；指定日期使用 requested_period 自己的覆盖与 decision_ready。",
+      "用户指定范围时使用 brief --start / --through，含首尾且只接受已采集的完整中国日；requested_period 的质量和 decision_ready 单独判断，不能拿默认窗口代答。",
+      "质量按字段、日期和可回答的量分别判断；坏记录日期明确就只影响该日，日期不明才保守影响整页对应日期。",
+      "已处理成功且时长/区间可信的主睡眠加小睡双标签记录归入 multiple_roles，时长只计一次，不参与主睡眠起止推断；不重复计算、不擅自归类。",
       "比较窗口为 14、28、90 天，并保留长期 90 天块与时间边界。",
       "inventory_only 只读 manifest inventory，不读取 raw 内容。",
       "具体日期仍未回答时，用精确 manifest、一个 --field 与日期离线窄查；不扫描目录、不重新下载。",
@@ -480,6 +487,7 @@ export const personalHealthModules = [
     ],
     problem: "解决“API 能读就全部进模型”、高频/高隐私字段常驻、空日志被解释、摘要读取全库和技术覆盖率冒充医学标准。",
     implementation: [
+      "capture --latest 读取最多 16 KiB 的固定指针，要求同一采集目录下的规范 manifest、验证回执与 brief，并核对 schema、complete 和文件 SHA-256；缺失、越界或漂移返回 latest_capture_*，不扫描替代目录。",
       "google_health_capture.py 只读固定 success handoff，验证 exact manifest path、status 与 SHA-256。",
       "create_verification_receipt 重验 profile、manifest、selected page chain 与文件 stat commitment。",
       "google_health_brief.py 只选择 DECISION_CONTEXT_FIELDS，受 256 页、64 MiB、500k 记录预算约束。",

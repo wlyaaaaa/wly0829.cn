@@ -330,7 +330,10 @@ read-only operating panel; public presentation is secondary.
   narrower private-domain identity, internal source route or personal result.
   Public copy presents the usable product directly and never exposes
   "packaging" as a maintenance label.
-- The selected `work-delivery` project is presented as “工作交付副驾驶”.
+- The selected `work-delivery` project is presented as “工作支持与交付”,
+  following its current source product name. It supports ordinary work matters,
+  communication, decisions and reviews directly; a persistent delivery package
+  is used only when selected changing sources and consistent outputs need it.
   Explain package entry and explicitly selected sources, evidence and typed
   facts, append-only reviews and the canonical quality gate, the exact six
   current deliverables, precise source rebound/stale behavior, and the
@@ -538,11 +541,14 @@ read-only operating panel; public presentation is secondary.
   content in professional plain language, validates it and presents a preview.
   Deterministic scripts may collect facts and verify contracts, but never write
   narrative content or decide materiality.
-- Automatic semantic refresh, retirement judgment and content acceptance use a
-  Sol-family or stronger future native model selected through the active native
-  economy-routing contract. The current concrete model id and effort are runtime
-  configuration, not a permanent product identity or ceiling. Lower model
-  families may not replace that semantic judgment.
+- Website content refresh, retirement judgment, design and creative review, and
+  content acceptance default to Astra Max (`gpt-6-astra`, `max`), as explicitly
+  requested by the owner. `config/panel-projects.json` records the current
+  semantic model and effort defaults; refresh plans expose them to the executor.
+  Apply the active native economy-routing identity and parent/root limits.
+  Do not silently substitute Sol, Terra, Luna or a local model for these roles;
+  report an unavailable requested model without claiming an Astra execution.
+  An explicit later owner choice can replace this default.
 - A targeted refresh touches only the named project. A full refresh iterates all
   enabled projects but may leave most or all files byte-identical. It is a
   revalidation request, not permission to rewrite every page.
@@ -694,12 +700,12 @@ read-only operating panel; public presentation is secondary.
   page. Do not reduce final quality merely to conserve an ample model quota,
   and do not create subagents just to reach a fixed count.
 - Every native subagent that performs website semantic judgment, writing or
-  content acceptance, at every descendant depth, must meet the same Sol-family
-  floor or use a stronger future native model selected by the active economy
-  route. Do not hard-code today's exact model id or effort; Luna, Terra and local
-  aliases cannot replace these semantic roles. Deterministic tests may remain
-  tools rather than agents. Choose the actual number from independent work
-  surfaces and net quality gain; zero remains valid. This floor applies equally
+  content acceptance, at every descendant depth, uses the owner's Astra Max
+  default, including design, creative and independent source-content review.
+  The active economy route still verifies actual identity, available slots and
+  parent/root limits; a task name never proves the model that ran. Deterministic
+  tests may remain tools rather than agents. Choose the actual number from independent work
+  surfaces and net quality gain; zero remains valid. This default applies equally
   to every retained project in the fixed value plan.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
@@ -728,7 +734,7 @@ read-only operating panel; public presentation is secondary.
   glossary or a passing assertion.
 - Content completeness is a separate, source-first acceptance gate. Before a
   new project, full refresh or completeness repair may PASS, an independent
-  reviewer meeting the current Sol-family-or-stronger economy-routing floor receives the current source entrypoints and the candidate
+  Astra Max reviewer receives the current source entrypoints and the candidate
   page without being given the page's module list as the expected answer. It
   must reconstruct important product capabilities and technical subsystems,
   compare both layers with the page and report any absent source-backed axis.

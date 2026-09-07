@@ -20,7 +20,7 @@ export const skillProjectLinks = {
     { relation: "uses-project", projectSlug: "personal-health", moduleSlug: "protected-foreground-refresh", label: "设备前台更新" }
   ],
   "daily-preferences": [
-    { relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "recommendation-choice", label: "日常偏好与个性化推荐项目" }
+    { relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "personal-understanding", label: "个人理解库项目" }
   ],
   "local-secret-broker": [
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }
@@ -55,7 +55,7 @@ export const skillProjectLinks = {
     { relation: "no-detail-project", systemAssetId: "key", label: "私有发布目标：Key" }
   ],
   "work-delivery": [
-    { relation: "owned-by-project", projectSlug: "work-delivery", moduleSlug: "package-sources", label: "工作交付副驾驶项目" }
+    { relation: "owned-by-project", projectSlug: "work-delivery", moduleSlug: "package-sources", label: "工作支持与交付项目" }
   ],
   documents: [
     { relation: "host-integrated", href: "/#system-node-documents-skill", label: "宿主集成文档能力" }

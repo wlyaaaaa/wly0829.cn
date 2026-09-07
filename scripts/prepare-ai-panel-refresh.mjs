@@ -93,6 +93,8 @@ const result = {
   manual_project_ids: manualSelected.map((item) => item.id),
   semantic_writer: registry.refresh_policy.semantic_writer,
   semantic_model_policy: registry.refresh_policy.semantic_model_policy,
+  semantic_model: registry.refresh_policy.semantic_model,
+  semantic_reasoning_effort: registry.refresh_policy.semantic_reasoning_effort,
   selected_project_count: projects.length,
   selected_projects: projects,
   global_surfaces: globalSurfaces,

@@ -94,9 +94,11 @@ test("OpenClawGateway tells the real message journey without claiming message E2
 
 test("OpenClawGateway separates catalog-backed local placement from cost guarantees", () => {
   const text = JSON.stringify({ project: openClawGatewayProject, modules: openClawGatewayModules });
-  for (const expected of ["ollama5090d/qwen3.8:27b", "local=true", "fallback", "utility", "图像模型", "自动远程路线为 0", "21 条远程路线", "Qwen 11", "DeepSeek 2", "Z.AI 8", "远程认证来源有 5 个", "global_zero_cost_enforced=false", "session", "cron", "exit 2"]) {
+  for (const expected of ["ollama5090d/qwen3.8:27b", "local=true", "fallback", "utility", "图像模型", "自动远程路线为 0", "21 条远程路线", "Qwen 11", "DeepSeek 2", "Z.AI 8", "global_zero_cost_enforced=false", "session", "cron", "exit 2"]) {
     assert.ok(text.includes(expected), `cost boundary missing: ${expected}`);
   }
+  const costFact = openClawGatewayProject.currentSnapshot.facts.find((item) => item.label === "成本边界");
+  assert.match(costFact.value, /9月4日原成本快照有5个远程认证来源.*9月7日.*没有把旧认证计数冒充新采集/s);
   assert.match(text, /默认本地.*不(?:能|等于).*全局零费用/s);
   assert.doesNotMatch(text, /global_zero_cost_enforced=true|全局零费用(?:已经|已)(?:启用|通过)|(?:已经|已)实现全局零费用/);
 });
@@ -157,7 +159,7 @@ test("OpenClawGateway explains four distinct private backup consumers and PUBLIC
   for (const expected of ["3 个备份任务", "4 个消费者", "7 个相关计划任务", "20:05", "22:05", "20:10", "22:10", "20:20", "22:20", "21:15", "先 Claude", "首个非零"]) {
     assert.ok(text.includes(expected), `scheduled backup topology missing: ${expected}`);
   }
-  for (const expected of ["每 15 分钟", "周日 13:00", "0x800710E0", "0x00041303", "22:05", "22:10", "22:20", "0x00041306", "01:19:59"]) {
+  for (const expected of ["每 15 分钟", "周日 13:00", "gateway_rpc_unavailable", "rpc.ok=true", "running=false", "recovering", "22:05", "22:10", "22:20", "0x00041306", "01:19:59"]) {
     assert.ok(text.includes(expected), `scheduled task receipt missing: ${expected}`);
   }
   assert.match(text, /Claude.*失败.*(?:仍|继续).*OpenClaw/s);
@@ -188,10 +190,11 @@ test("OpenClawGateway names all update channels and the exact plugin matrix with
 });
 
 test("OpenClawGateway first visible labels do not defer core English explanations to a glossary", () => {
-  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-04");
-  assert.match(openClawGatewayProject.kicker, /2026-09-04/);
-  assert.doesNotMatch(openClawGatewayProject.kicker, /Windows Gateway|\bRPC\b|\bhealth\b|\bFunnel\b|\bOwner\b/);
-  assert.doesNotMatch(openClawGatewayProject.cardStatus, /\bGateway\b|\bRPC\b|\bhealth\b|\bFunnel\b|\bOwner\b/);
+  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-07");
+  assert.match(openClawGatewayProject.kicker, /2026-09-07|9\s*月\s*7\s*日/);
+  const unexplainedCoreTerm = /\b(?:Gateway|RPC|health|Funnel|Owner)\b(?!（[^）]+）)/;
+  assert.doesNotMatch(openClawGatewayProject.kicker, unexplainedCoreTerm);
+  assert.doesNotMatch(openClawGatewayProject.cardStatus, unexplainedCoreTerm);
   const gateway = openClawGatewayModules.find((item) => item.slug === "gateway-runtime");
   const bootstrap = openClawGatewayModules.find((item) => item.slug === "bootstrap-install");
   const codeg = openClawGatewayModules.find((item) => item.slug === "codeg-bridge");

@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const localOcrSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-03T03:42:35.8277553Z",
-  label: "公开源码、安装元数据、普通回归与一个真实结构样例已核对；样例错漏与服务回读边界仍明确保留",
-  boundary: "本轮采购表结构识别完成，但正文漏标题、原始行将 PO 读成 P0；质量仍为未知。服务曾响应健康检查，后续回读不可达，不声称持续在线",
+  observedAt: "2026-09-07T20:39:14.3218381Z",
+  label: "Windows路径与拖拽入口修复已发布，24项入口回归及隔离启动链通过；识别样例、全量回归和服务边界保留9月3日证据",
+  boundary: "9月7日只更新Windows入口：没有启动真实WSL、OCR或GPU。9月3日采购表样例漏标题、PO/P0错读、首次测试ConnectionResetError与服务后续不可达均保留，不因入口修复升级识别质量或持续在线结论",
   metrics: [
     { label: "识别路线", value: "3 条" },
     { label: "正式输出", value: "TXT · MD · JSON" },
@@ -14,17 +14,17 @@ const localOcrSnapshot = createProjectSnapshot({
     { label: "日常提字", value: "ocr → ppocrv6-medium：PP-OCRv6_medium；保留方向与文本行处理，平面截图默认关闭形变矫正。" },
     { label: "困难文档", value: "vl → paddleocr-vl-1.6：PaddleOCR-VL-1.6；复杂 PDF 可直接进入，普通识别的空结果或明显低置信度可触发本地增强。" },
     { label: "结构化解析", value: "structure → pp-structure-v3：PP-StructureV3 + PP-OCRv5；表格、公式、印章和区域处理需显式选择，图表识别当前关闭。" },
-    { label: "当前源码", value: "PUBLIC（公开）仓库 wlyaaaaa/LocalOCR，main=e0a2fff37ac289b43b5643002a8b49351a27e8bb；2026-09-03 03:25 UTC 本地主检出干净，与 origin/main 为 0/0。", hero: false },
+    { label: "当前源码", value: "PUBLIC（公开）仓库wlyaaaaa/LocalOCR；main=origin/main=376a777c298ffb1aa33bf91da350e4c966adf95c，2026-09-07T20:39:14.3218381Z真实远端main同值、工作区干净。本次修复Windows路径转换与真实批处理启动链。", hero: false },
     { label: "项目依赖声明", value: "项目版本 0.6.0；pyproject.toml 固定 PaddlePaddle GPU 3.3.1 与 PaddleOCR 3.7.0；WSL（Windows 的 Linux 子系统）安装脚本使用 cu129 包源，Python 环境位于 /root/localocr-venv。声明、安装和真实推理分别核验。", hero: false },
-    { label: "执行入口", value: "Windows 调用入口 ocr_smart.ps1、直接 API 入口 ocr_once.ps1 与单次 start.ps1 / localocr.cli；CLI（命令行入口）与 API 共用 OCRService、自动增强、执行监管和输出合同。", hero: false },
+    { label: "执行入口", value: "Windows有界入口为ocr_smart.ps1，直接API入口为ocr_once.ps1；拖入start.bat或调用start.ps1通过PowerShell 7.3+的pwsh进入localocr.cli。中文/空格路径转换为WSL路径，批处理固定Windows CRLF行尾。CLI（命令行）与API继续共用OCRService、自动增强、执行监管和输出合同。", hero: false },
     { label: "服务与资源", value: "固定本机 127.0.0.1:18665；一个可替换的 warm worker（温热推理进程）；同模型复用、换模型回收。默认整次请求期限 300 秒，最大 7200 秒，服务进程树内存上限 30,000,000,000 字节。", hero: false },
     { label: "当前模型配置", value: "localocr/model_profiles.json 声明 3 个具体 profile（模型配置档），由 model_registry.py 解析；显式模型选择不被自动分流改写。普通 OCR 配置的能力标签含形变矫正，但 use_doc_unwarping=false，不能把支持标签当成已开启。", hero: false },
     { label: "正式结果身份", value: "每次请求绑定输入内容、请求语义、模型配置、分流策略与输出目录；正式 TXT/MD/JSON 和 media.objective-result.v1 客观结果文件使用请求隔离路径。无哈希的同名文件只是兼容显示副本。", hero: false },
     { label: "坐标含义", value: "JSON 保留页码、块类型、阅读顺序、分数及 bbox/polygon；PDF 页默认按 render_scale=2.0 渲染，坐标属于渲染图片像素，不能直接当成原 PDF 点坐标。", hero: false },
     { label: "没有文字的判断", value: "生产者可根据独立证据形成 no_text_detected，但未保存时仍不是可采纳的持久验真结果；调用方只有在完成、完整、充分及证据保存/字节/身份复验均成立后，才把它作为已验证的无字结论。内置证据主要限于近乎均匀图片。", hero: false },
-    { label: "本机安装元数据", value: "本轮在 WSL 通过安装元数据读取：Python 3.12.3、paddlepaddle-gpu 3.3.1、paddleocr 3.7.0、pypdfium2 5.11.0、fastapi 0.139.0、uvicorn 0.50.0、python-multipart 0.0.32、psutil 7.2.2、httpx 0.28.1、starlette 1.3.1；该读取未导入模型。", hero: false },
+    { label: "本机安装元数据", value: "2026-09-03在WSL读取安装元数据：Python 3.12.3、paddlepaddle-gpu 3.3.1、paddleocr 3.7.0、pypdfium2 5.11.0、fastapi 0.139.0、uvicorn 0.50.0、python-multipart 0.0.32、psutil 7.2.2、httpx 0.28.1、starlette 1.3.1；未导入模型。9月7日没有刷新这些依赖或模型运行结果。", hero: false },
     { label: "模型配置字节", value: "3 个模型配置档；model_profiles.json SHA-256=17211f1206f022f7dcb4e2ec07bb8fc61ab87f9c1daf5d681c76c12a97fd74b9。配置存在不证明三条路线都在本轮完成推理。", hero: false },
-    { label: "普通回归与波动", value: "unittest discover 第二次完整运行共 147 项：146 通过、1 跳过，内部 38.953 秒、外层墙钟 46.268 秒。第一次 147 项中出现 1 个 RSS 恢复测试 ConnectionResetError、1 跳过；该测试随后聚焦通过，完整复验也通过，没有改源码或隐去首次错误。", hero: false },
+    { label: "普通回归与波动", value: "2026-09-03完整unittest共147项：第二次146通过/1跳过，内部38.953秒、外层46.268秒；第一次出现1个RSS恢复测试ConnectionResetError并有1跳过，聚焦与全量复验随后通过。9月7日376a777仅定向完成24/24 Windows调用回归4.210秒及真实batch→pwsh→wsl.exe替身传参0.458秒；不合并成新的全量或OCR验收。", hero: false },
     { label: "实际结构样例", value: "2026-09-03 经 ocr_smart.ps1 对合成 sample_table.png 显式运行 structure / pp-structure-v3；1/1 页、六列五条商品记录与合计 112,500.00 元已对照。job 记录从 03:29:10.964 UTC 到 03:29:38 UTC，约 27 秒，不含完整外层启动等待。", hero: false },
     { label: "样例不是无错证书", value: "本次实际结果为 completed、coverage=complete、text_detected，但 quality=unknown / confidence_unavailable。标题被标为 figure_title 后进入 excluded_regions，最终 Markdown 没有标题；text_lines[0] 将原图 PO-2026-0712 读成 P0-2026-0712。页面完成不表示正文逐字完整。", hero: false },
     { label: "样例输出字节", value: "原图 67,474 B，SHA-256=a4715280b4818eaad9d11361e77eb1698cb7c47dc06da66d97fbcae580938410；实际 Markdown 1,030 B，SHA-256=08bee52074af89a00b503d2f89e77ec8bc75fb3ff7e190e95c64c0f4341e86d3；正式 JSON 71,158 B，SHA-256=9166e6012c0e30e9e392367e4dfb08ee6a8c9290d8e07cfd3e4cedcb1d695527。", hero: false },
@@ -156,7 +156,7 @@ export const localOcrProject = {
   ],
   operationalEntrypoints: [
     { name: "日常本机入口", command: "E:\\Projects\\Tools\\LocalOCR\\ocr_smart.ps1 '<明确文件或目录>' -Engine auto", purpose: "正常先看服务与任务状态，再提交有界识别；需要结构时显式 -Engine structure，需要具体模型时指定 -Model。" },
-    { name: "一次性命令行", command: "E:\\Projects\\Tools\\LocalOCR\\start.ps1 '<明确文件或目录>' --engine auto --timeout-sec 300", purpose: "与 API 共用 OCRService 和正式结果语义；退出时关闭自己的执行服务。" },
+    { name: "一次性命令行", command: "pwsh -NoProfile -File E:\\Projects\\Tools\\LocalOCR\\start.ps1 '<明确文件或目录>' --engine auto --timeout-sec 300", purpose: "拖拽/单次入口要求PowerShell 7.3+；与API共用OCRService和正式输出，退出时关闭自己的执行服务。" },
     { name: "只看服务状态", command: "GET http://127.0.0.1:18665/health", purpose: "核对本服务身份、active_jobs、驻留模型与显卡探测状态；active_jobs 缺失视为未知。" },
     { name: "查询或取消指定任务", command: "GET /jobs/<job_key> ; POST /jobs/<job_key>/cancel", purpose: "两条均使用本机 18665；先按返回标识定位，取消只针对明确任务，不能当成停止其他服务的入口。" },
     { name: "普通回归", command: "scripts/run_in_wsl.sh -m unittest discover -s tests -q", purpose: "验证非重型逻辑；需要跨模型真实集成时才单独评估 tests/run_tests.py --allow-heavy，不能把它当健康检查。" },
@@ -182,14 +182,14 @@ export const localOcrModules = [
     example: "我可以说：“把这份多栏 PDF 的文字读出来并保留版面，文件留在本机。”系统会固定这一个输入并选择合适路线；如果给的是文件夹，也只处理本次明确要求的范围。",
     result: "返回对应文件的结果路径、实际引擎与模型、选择原因，以及是否发生增强。遇到不支持的文件、模型冲突、活跃任务或服务身份不符，会说明原因，不交回来自另一条未知路线的结果。",
     readerStates: { pass: "输入范围与路线明确，按请求执行并返回实际模型和输出。", problem: "自动提字不足时可以本地增强；增强失败保留首轮初步证据，但不标完成。", unavailable: "原件不可读、模型冲突或服务不是 LocalOCR 时停止相应请求，不抢端口、不换云服务。" },
-    decisionImpact: ["普通看图不强制 OCR，数字文档有文字层时优先原生读取。", "复杂 PDF 首轮分流看文件名关键词，不是先理解全部版面。", "显式模型优先；结构解析需要单独选择，不是自动增强的第三级。"],
+    decisionImpact: ["普通看图不强制 OCR，数字文档有文字层时优先原生读取。", "复杂 PDF 首轮分流看文件名关键词，不是先理解全部版面。", "显式模型优先；结构解析需要单独选择，不是自动增强的第三级。", "文件名或目录含中文、空格时仍用同一拖拽入口；它需要PowerShell 7.3+，旧Windows PowerShell 5.1不属于该入口的支持环境。入口传参已通过隔离检查，文字能否读全、读准仍需核对实际结果。"],
     problem: "防止范围不明的批处理、轻重模型误用、显式选择被改写，以及客户端调用脚本与真实服务行为不一致。",
     implementation: [
       "router.py 枚举支持的图片和 PDF；是否递归由 recursive 参数决定，不默认扩大目录范围。",
       "smart_router.py 对普通图片与 PDF 先选 ocr；复杂 PDF 文件名出现 table/formula/layout/multi/论文/公式/表格/多栏/课件 等提示时可直接选 vl。",
       "service.py 在 auto 且未指定 model 时检查普通 OCR 的空结果和低置信度；difficulty.py 提供困难度依据，触发本地 VL 增强。",
       "model_registry.py 解析 profile（具体模型配置），核对引擎匹配；显式模型不被自动选择覆盖。",
-      "CLI 与 API 共用 OCRService，因此 start.ps1 / localocr.cli 同样使用当前增强与执行监管；这不是调用脚本独有能力。",
+      "start.bat使用pwsh，start.ps1声明PowerShell 7.3+；路径回调将Windows盘符转换为/mnt/<盘符>，Git固定start.bat为CRLF，避免中文批处理被异常解析。其后的localocr.cli继续共用OCRService、增强与输出合同，模型路线没有改变。",
       "ocr_smart.ps1 预览路线并验证服务健康，以 active_jobs 作为忙碌依据；缺字段为 readiness_unknown，不能当空闲。"
     ],
     flow: ["固定本次文件、目录递归范围与希望得到的结果。", "优先检查原生可读内容；需要图片文字证据时进入 LocalOCR。", "核对路径、类型、明确引擎与模型配置。", "普通提字或复杂文档路线执行，必要时根据首轮结果增强。", "交回实际路线与文件，不把预检建议当最终模型身份。"],
@@ -197,7 +197,7 @@ export const localOcrModules = [
     boundaries: ["支持的是明确文件和目录，不是私人库后台扫描。", "仅需场景描述时由原生视觉处理；全本地要求下不向外部视觉服务发送像素。", "普通 OCR、VL 和 Structure 的适用范围不能互相冒充。"],
     failures: [{ condition: "输入不支持或不可读", response: "返回明确的输入或读取错误，不制造空白成功结果。" }, { condition: "显式引擎与模型不匹配", response: "拒绝该组合，让调用方修正配置；不私自换模型。" }, { condition: "本地增强失败", response: "保留首轮 partial（初步结果）与失败原因，整体仍为失败，不能写入成功缓存。" }, { condition: "端口是另一个服务", response: "报告 non-LocalOCR service，停止提交；不把 18666 当自动后备。" }],
     sources: [{ path: "E:\\Projects\\Tools\\LocalOCR\\localocr\\router.py", role: "支持类型与输入枚举" }, { path: "E:\\Projects\\Tools\\LocalOCR\\localocr\\smart_router.py", role: "自动与显式路线" }, { path: "E:\\Projects\\Tools\\LocalOCR\\localocr\\difficulty.py", role: "困难度依据" }, { path: "E:\\Projects\\Tools\\LocalOCR\\localocr\\service.py", role: "实际增强与统一执行" }, { path: "E:\\Projects\\Tools\\LocalOCR\\ocr_smart.ps1", role: "Windows 有界入口与服务识别" }],
-    verification: ["来源独立审查已核对 e0a2fff 的 CLI/API 共用路径、显式选择和增强条件。", "模型注册、分流与调用脚本行为有独立单元测试；当前机器测试与运行证据见总览技术层。", "文件名提示只是规则信号，不是复杂版面准确识别的实测证据。"],
+    verification: ["2026-09-07，376a777的24项Windows调用回归通过，4.210秒；另经真实start.bat、pwsh与已确认wsl.exe替身验证中文空格路径完整传递，0.458秒。检查在模型执行前结束，没有重验OCR效果或服务在线。原CLI/API共用、显式选择和增强合同继续保留。", "模型注册、分流与调用脚本行为有独立单元测试；当前机器测试与运行证据见总览技术层。", "文件名提示只是规则信号，不是复杂版面准确识别的实测证据。"],
     relation: "这个模块决定如何进入任务；表格与版面模块解释结构需求，结果与复核模块解释如何读返回值，任务与运行模块处理复用和故障。"
   },
   {
@@ -298,15 +298,15 @@ export const localOcrModules = [
     status: "监督执行与回收已实现", statusTone: "pass",
     value: "我可以连续识别几份材料而不让模型每次冷启动，也可以在明确任务卡住时让它结束。显卡、内存和等待时间都有可解释的边界，不会因为一个识别请求顺手停掉其他本地工作。",
     why: "只限制窗口等待会留下后台推理，只看进程存在又不知道任务是否健康。这个运行层把服务、推理进程、显卡资格和任务期限分开管理，并把冲突、超期、取消与模型错误交回调用方。",
-    example: "我可以说：“这次识别卡住了，取消它，但别影响其他模型。”系统只取消这一个已确认任务；如果显卡正被别的工作使用，就说明冲突并等待，不结束未知程序来抢资源。",
+    example: "我可以说：“这次识别卡住了，取消它，但别影响听写。”系统只取消这个已确认任务。PCConfig允许OCR和ASR各一份跨类并行；已有同类OCR或Ollama占用时才报告冲突，不自动排队、不结束其他程序抢资源。",
     result: "正常时复用当前模型；故障时返回明确错误与任务定位，并回收对应推理进程。服务健康、显卡已探测、模型已驻留、文件已识别四件事分别展示，不合成一盏含糊的总绿灯。",
     readerStates: { pass: "获得资源后在期限内处理，同模型可复用已加载进程。", problem: "取消、超期、内存越界或显卡资格丢失时结束对应执行，保留具体状态。", unavailable: "资源协调器不可用或端口不是本服务时停止依赖路径，不静默转 CPU、换端口或终止其他服务。" },
-    decisionImpact: ["health.active_jobs 是忙碌事实源，缺失即未知。", "300 秒默认期限覆盖整次请求和加载，不是每页或每文件各给 300 秒。", "显卡未探测、模型未驻留和显卡不可用不能混写。"],
+    decisionImpact: ["health.active_jobs 是忙碌事实源，缺失即未知。", "300 秒默认期限覆盖整次请求和加载，不是每页或每文件各给 300 秒。", "显卡未探测、模型未驻留和显卡不可用不能混写。", "当前机器调度策略允许一份OCR与一份ASR同时持有资格；两份OCR仍互斥，Ollama与这两类外部任务互斥。不据此推断任意模型都可并行或全都互斥，也不把源码策略冒充本轮真实并发验收。"],
     problem: "防止冷启动反复、模型抢资源、调用端退出后遗留推理，以及粗暴停止服务误伤其他任务。",
     implementation: [
       "server.py 默认只监听 127.0.0.1:18665；18666 已有其他产品用途，不是可猜测的后备端口。",
       "runtime.py 维护一个受监督 warm worker（温热推理进程）；同模型复用，模型切换时重建，协调层不直接导入 Paddle。",
-      "gpu_broker.py 在 GPU 探测、模型导入、加载与推理前要求现有 LocalGpuBroker 资格；失去租约时终止相应执行。",
+      "gpu_broker.py在GPU探测、模型导入、加载和推理前向现有LocalGpuBroker申请localocr/localocr-cli租约，失去资格只结束相应执行。PCConfig 912b1af的broker.py把OCR与ASR分成两个固定家族，跨家族可并行，同家族及Ollama会话/请求与外部租约互斥；本轮没有启动模型重测该并发路径。",
       "DEFAULT_TIMEOUT_SEC=300，MAX_TIMEOUT_SEC=7200；DEFAULT_MEMORY_LIMIT_BYTES=30_000_000_000，限制本服务进程树而不是整机其他程序。",
       "执行监管处理明确取消、期限、进程异常和后代回收；服务重用不是新增持久队列，重复请求冲突不自动排队。",
       "HTTP 400 表示输入/配置错误，409 表示活跃任务或资源冲突，503 表示协调器或租约失败，504 表示执行期限；必须保留 detail 和任务定位。"
@@ -337,7 +337,7 @@ export const localOcrModules = [
       "scripts/install_wsl.sh 在 WSL Ubuntu 中安装系统包、创建 /root/localocr-venv，从指定包源安装 cu129 Paddle 与 PaddleOCR，并以可编辑方式安装项目。",
       "该脚本最终调用 download_models.py --allow-heavy 预热 OCR、VL、Structure；预热通过现有监督执行与显卡资格串行运行，不是下载文件列表就算完成。",
       "模型缓存入口为 /root/.paddlex/official_models/，具体模型/profile 的唯一项目配置为 localocr/model_profiles.json。恢复时要区分缓存文件与运行时已驻留模型。",
-      "scripts/run_in_wsl.sh 设置当前 WSL 所需运行环境，再执行 CLI 或普通单元测试；Windows 调用脚本保留启动与等待的分层超时。",
+      "scripts/run_in_wsl.sh设置WSL运行环境再执行CLI或普通单元测试；Windows拖拽启动链另需PowerShell 7.3+的pwsh与CRLF批处理。恢复后先用明确输入验证传参，再验服务与真实识别，不能用入口测试替代模型结果。",
       "当前没有能由本轮证据证明的完整离线重建包，也没有把所有 Python 依赖、WSL 系统和模型权重打成已验收的单个恢复工件。"
     ],
     flow: ["核对当前机器、源码位置和依赖声明，不先重装。", "区分缺代码、缺环境、缺模型和服务异常。", "确需重建时采用现有安装路径，缺网络或工件就说明。", "先普通回归与健康，再按明确范围验证真实样例。", "记录本次可用路线与未验证边界，保留后续恢复所需原始工件。"],

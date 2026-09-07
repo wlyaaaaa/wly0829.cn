@@ -1,11 +1,11 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以继续制作", "需要修正", "当前不可用"];
-const sourceCommit = "3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc";
+const sourceCommit = "b7d33e5f735bfd46fca241b5a3f33559f4068604";
 
 const documentMaterialsSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-01T08:34:22.061Z",
-  label: "2.0.1 源码、全仓回归、隔离 wheel 与完全虚构生成链已核对；本轮未读取真实个人材料，也未执行任何外部递送",
+  observedAt: "2026-09-07T20:52:45.4152792Z",
+  label: "本轮核对当前源码、中文成品名与 32 项通用文书回归；全仓、隔离 wheel 和虚构样张保留 2026-09-01 观察，未读取真实材料或执行递送",
   boundary: "本页没有读取真实事项正文、原件载荷、签名图或个人结果；实际事项数量与外部递送状态保持 Unknown（未知），未读取不等于数量为 0。公开安全的产品状态、已核实数量、路径类别、组件、哈希机制、命令、测试、失败和恢复事实正常展示，只逐值省略具体命中 L3+ 或可复用秘密的载荷。",
   metrics: [
     { label: "正式成品", value: "3 类" },
@@ -17,9 +17,12 @@ const documentMaterialsSnapshot = createProjectSnapshot({
     { label: "当前产品结果", value: "当前可生成 3 类正式成品：可编辑 DOCX、同源 PDF 和自包含附件包。完全虚构链已验收 1 页与 10 文件包；本轮未读取真实事项，也未执行外部递送，不能据此判断现实事项或递送总数。" },
     { label: "什么时候使用", value: "已经有明确目标、接收对象和必要原件，需要形成合同、说明、申请、通知、回复、售后材料或附件包时进入；只改单文件、只找原件或持续维护工作交付时直接分流。" },
     { label: "当前本地能力", value: "严格输入经过 plan、build、verify 后生成 3 类同源成品：DOCX、PDF、附件包和对应逐页审计；当前通用 CLI 只自动推进 produced（已生成）、signed（本人已签）与 ready_for_delivery（已具备递送条件），始终 delivered（已递送）=false。" },
+    { label: "能直接辨认的交付文件", value: "通用文书按用途输出中文名，例如 正式说明.docx/PDF、合同协议.docx/PDF；附件使用 附件01_标题.扩展名，保留中文并替换 Windows 禁用字符，标题片段最长 80 字符。原件名称和字节不被改写。" },
+    { label: "本轮增量验证", value: "b7d33e5 的通用文书实现与 32 项合成回归已核对；旧 2.0.1 全仓、隔离 wheel、1 页/10 文件示例仍保留 2026-09-01 观察时间。本轮没有生成真实材料或执行外部递送。", hero: false },
+    { label: "本人背景与事实归属", value: "相关共同背景按需取自个人理解库，可靠更正在当前任务回写；文书采用的字段仍绑定本次明确输入，父库更正不追改已签署、已递送的版本或历史证据。" },
     { label: "当前完整性", value: "v3 release 封存规范化输入、文档、附件、结构审计、逐页彩色/灰度渲染和所需签名快照；精确文件集合复制到空目录后仍可独立 verify。" },
     { label: "现实状态", value: "已生成、本人已签、已具备递送条件、已递送、已收件、已处理必须分别回读；对方签回是另一条独立事实，前一步不能自动推出后一步。" },
-    { label: "当前版本证据", value: `PRIVATE main ${sourceCommit}；产品版本 2.0.1；全仓 526 项通过、6 项环境性跳过、101 个子测试通过，其中通用文书 32 pass，Ruff 通过。`, hero: false },
+    { label: "当前版本证据", value: `PRIVATE main ${sourceCommit}；产品版本 2.0.1。本轮通用文书 32 项通过；526 项全仓通过、6 项环境跳过、101 个子测试与 Ruff 是 2026-09-01 的已验基线，没有重贴为当前提交全仓结果。`, hero: false },
     { label: "安装后虚构验收", value: "隔离 wheel 的两个控制台入口均真实携带 Word 导出资源，并用 Microsoft Word + Poppler 完成完全虚构的 plan → build → verify；1/1 页彩色和灰度审计通过，材料包状态为已具备递送条件，但没有发生递送。" }
   ],
   gaps: [
@@ -54,7 +57,7 @@ const documentMaterialsProject = {
     "材料制作中断后继续"
   ],
   repositoryNote: "实现位于 PRIVATE（私有）仓库。本公开页保留版本、命令语义、文件结构、状态、失败、测试和完全虚构样张；不提供匿名源码跳转，也不公开真实个人载荷或内部维护入口。",
-  summary: "当我已经知道要做什么、交给谁，也有了必要原件，就用这个项目把它们整理成合同、说明、申请、通知、回复、售后材料或附件包；只改单个 Word/PDF 时直接绕过，只找原件时进入个人材料查找。它从当前事项和最小原件开始，生成同源 DOCX 与 PDF，核对内容、附件、签名资产、页码、灰度和版本，并提供逐页渲染结果。最终签名是否清楚、位置是否正确仍须看实际页面，不能只看图片数量；已生成、本人已签、可递送、已递送、已收件、已处理与对方签回分别记录。",
+  summary: "当我已经知道要做什么、交给谁，也有了必要原件，就用这个项目把它们整理成合同、说明、申请、通知、回复、售后材料或附件包；只改单个 Word/PDF 时直接绕过，只找原件时进入个人材料查找。它从当前事项和最小原件开始，生成同源、按用途中文命名的 DOCX 与 PDF，核对内容、附件、签名资产、页码、灰度和版本，并提供逐页渲染结果。最终签名是否清楚、位置是否正确仍须看实际页面，不能只看图片数量；已生成、本人已签、可递送、已递送、已收件、已处理与对方签回分别记录。",
   why: "同一事项往往同时存在原始记录、旧草稿、核对后的成品、签名版、递送版、回执和对方返回版本。只按文件名继续会用错版本；把“文件生成成功”写成现实进展，又会造成漏签、重复递送或错误判断。这个项目把原件、成品、完整性证据和现实步骤拆开，发生中断时仍能从最近一次核对状态继续。",
   plainExample: "我可以说：“维修服务没有按约完成，请把购买记录、沟通事实和退款要求整理成可编辑申请、PDF 和附件清单；不确定的地方先列出来。”项目会先核对原件和冲突，再交给我一份可继续修改的文书、一份同内容 PDF 和附件清单。它会说明材料是否需要签名、现在能否递送；没有真实发送和收件证据时，不会说对方已经收到。",
   result: "我会得到可继续编辑的 DOCX、同一内容版本的 PDF、核对过的附件与自包含材料包，以及当前精确状态、下一步和恢复点。若原件、内容、签名、版面或现实回读不足，我得到的是保留下来的旧版本、具体失败位置、真正未知和一个需要决定的问题，而不是一份看似完整但无法使用的成品。",
@@ -107,7 +110,7 @@ const documentMaterialsProject = {
       proves: "证明当前通用管线曾真实生成可读的一页正式材料，页码、正文和页面边缘验收通过。",
       doesNotProve: "不证明任何真实个人事项、真实签名、全部材料类型、外部递送或处理结果。",
       observedAt: "2026-09-01",
-      sourceCommit
+      sourceCommit: "3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc"
     }
   ],
   responsibilities: [
@@ -166,7 +169,7 @@ const documentMaterialsProject = {
   evidenceLayers: [
     { layer: "Source（源码）", proves: `PRIVATE main ${sourceCommit} 定义 2.0.1 的输入、生成、审计、签名和 v2/v3 verify 语义。`, doesNotProve: "不证明任何真实原件、真实签名、接收渠道或现实结果可用。" },
     { layer: "Focused tests（聚焦回归）", proves: "32 项通用文书回归覆盖四类材料、输入漂移、closure、灰度页、v2兼容、wheel资源和不可覆盖。", doesNotProve: "合成 fixture 不能证明真实内容质量或外部动作。" },
-    { layer: "Full repository tests（全仓回归）", proves: "526 项通过、6 项环境性跳过、101 个子测试通过，说明现有兼容功能未因本轮修复回退。", doesNotProve: "跳过项、真实设备和外部平台仍需各自验收。" },
+    { layer: "Full repository tests（全仓回归）", proves: "2026-09-01 基线 526 项通过、6 项环境性跳过、101 个子测试通过；本轮只重跑通用文书 32 项，不宣称当前提交全仓已复验。", doesNotProve: "跳过项、真实设备和外部平台仍需各自验收。" },
     { layer: "Installed wheel synthetic E2E（隔离安装虚构端到端）", proves: "2.0.1 wheel 的两个入口都携带真实资源，并用 Microsoft Word + Poppler 完成虚构 plan/build/verify。", doesNotProve: "不证明离线依赖恢复、真实用户材料或外部递送。" },
     { layer: "Gallery（画廊）", proves: "一页完全虚构样张来自当前生成器，并已完成彩色/灰度逐页审计。", doesNotProve: "不证明全部材料类型、真实签名或整篇语义已经由本人接受。" },
     { layer: "Real matter E2E（真实事项端到端）", proves: "若未来执行，可证明当前原件、语义审阅、签名、材料包和现实状态真实成立。", doesNotProve: "本轮没有运行，因此当前状态是 not_run。" }
@@ -178,7 +181,7 @@ const documentMaterialsProject = {
   ],
   evolution: [
     { date: "2026-08-31", commit: "fe7edc3", result: "形成中性正式事项 v2 的 plan/build/verify、DOCX/PDF、签名和 ready_for_delivery 主链。" },
-    { date: "2026-09-01", commit: sourceCommit, result: "升级 2.0.1：封闭输出字段漂移、wheel Word 资源、页码与彩色/灰度验收、自包含 v3 release、空目录复验和 v2 限制兼容；全仓 526 项通过。" }
+    { date: "2026-09-01", commit: "3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc", result: "升级 2.0.1：封闭输出字段漂移、wheel Word 资源、页码与彩色/灰度验收、自包含 v3 release、空目录复验和 v2 限制兼容；全仓 526 项通过。" }
   ],
   snapshotUpdateNote: "本页是 2026-09-01 首次 source-first 全量快照。以后只有用途、输入/输出、签名、审计、release、状态、恢复或真实 E2E 发生会改变用户判断的实质变化时才原位更新；私人材料变化、普通重构、时间戳和哈希漂移不生成更新日志。"
 };

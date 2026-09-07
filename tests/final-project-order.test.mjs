@@ -57,7 +57,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(projectCatalog.some((entry) => entry.registration.id === "scripts"), false);
   assert.equal(routePaths.includes("/projects/scripts"), false);
   assert.doesNotMatch(generatedIndex, /\["scripts"|\/projects\/scripts/);
-  assert.match(systemSource, /id: "scripts".*repo: "Scripts".*历史工具来源.*projectLedgerHref/s);
+  assert.doesNotMatch(systemSource, /id:\s*"scripts"\s*,\s*repo:\s*"Scripts"/, "a retired source repository must not remain a System asset");
   assert.equal(registry.projects.some((item) => item.id === "proxyclean"), false);
   assert.equal(projectCatalog.some((entry) => entry.registration.id === "proxyclean"), false);
   assert.equal(routePaths.includes("/projects/proxyclean"), false);
@@ -89,7 +89,7 @@ test("non-card explanations keep only real remaining work and private exclusions
   assert.equal(plan.non_card_explanations.some((item) => item.id === "md-triple-tactics-ledger-asset" && item.status === "done"), true);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "wechat-pre-public-private-archive" && item.status === "done"), true);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "health-longevity-early-project" && item.status === "done"), true);
-  assert.equal(plan.non_card_explanations.some((item) => item.id === "scripts-capabilities-absorbed-by-owning-projects" && item.status === "done" && item.evidence === "app/system-home-content.js#scripts"), true);
+  assert.equal(plan.non_card_explanations.some((item) => item.id === "scripts-capabilities-absorbed-by-owning-projects" && item.status === "done" && item.owner_surface === "pcconfig-and-owning-projects" && item.evidence === "app/content-pcconfig.js#runtime-startup"), true);
   assert.match(wechatDirectSource, /WeChatDirect-private-archive.*公开前.*PRIVATE 仓库已经归档.*不生产.*现役.*PUBLIC WeChatDirect/s);
   assert.match(personalHealthSource, /HealthLongevity.*早期项目.*不再拥有任何写入.*personal-health.*Health Owner.*没有读取.*健康记录、诊断、数值和私人正文/s);
   assert.match(systemSource, /WeChatDirect-private-archive|wechat-direct-private-archive/);

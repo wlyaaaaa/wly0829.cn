@@ -1,12 +1,12 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以正式构建", "需要确认", "当前不可用"];
-const sourceMainCommit = "73f92f1e57869628380e72aad14ceec8e0400c7d";
+const sourceMainCommit = "57bf3c621dcf47f733fb4894cd6ee1287f26556c";
 const implementationCommit = "c815ea3daa04d4012200419fa989a9808ab7be36";
 
 const workDeliverySnapshot = createProjectSnapshot({
-  observedAt: "2026-09-01T12:09:08.138Z",
-  label: "0.2.0 源码、37 项回归、Ruff、隔离 wheel、两套完全合成 Office 验收与当前实现盲自然路由 E2E 已核对；真实工作价值仍待首个现实事项",
+  observedAt: "2026-09-07T20:52:45.4152792Z",
+  label: "工作支持与交付的当前合同已核对；交付引擎保持 0.2.0，37 项回归、隔离安装、合成 Office 与实现盲路线证据保留 2026-09-01，真实价值仍待首个现实事项",
   boundary: "本页证明当前 0.2.0 的确定性状态、质量门和完全合成输出；没有第一项真实工作、第一次真实来源变化、同模型同质量直接基线或数据库恢复验收，时间价值仍是 baseline_required（需要基线）。",
   metrics: [
     { label: "正式输出", value: "6 个文件" },
@@ -16,7 +16,8 @@ const workDeliverySnapshot = createProjectSnapshot({
   ],
   facts: [
     { label: "当前现实结果", value: "产品固定生成 6 个正式文件；当前现实工作包为 0，真实来源变化 E2E 为 0，导出备份与数据库丢失恢复验收为 0。现有证据来自两套完全合成 Office 场景，时间价值仍是 baseline_required。" },
-    { label: "什么时候进入", value: "一个持续工作事项有 2–5 份本人明确选择的资料，并且需要多种一致交付物，或本轮只做 PRD 但来源确定还会继续变化时进入。" },
+    { label: "什么时候进入", value: "真实工作中的材料理解、沟通、决策、评审与交付都可进入既有项目。轻量支持直接完成；只有明确选入 2–5 份会继续变化的来源，且需要一致产物或持续维护 PRD 时，才建立交付包。" },
+    { label: "共用本人背景", value: "相关时从个人理解库读取真实经历、生活重点与取舍；有依据的新本人认识在当前任务回写并回读。工作资料、业务事实、事项和交付仍由本项目负责，个人背景不能冒充已确认业务证据。" },
     { label: "当前正式输出", value: "只有 PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx、执行跟踪表.xlsx 六个文件；当前没有现成项目计划、周报或汇报产物。" },
     { label: "质量与一致性", value: "SQLite（本地状态库）拥有当前事实修订与 build；正式 Office 入口重建 canonical manifest（规范清单）并拒绝手写 ready、事实漂移、过期 build 和跨目录覆盖。" },
     { label: "失败时已经写入什么", value: "事实确认后的确定性 batch 以 15 秒为时间门，分别在状态提交、核心文件生成和 Office 生成后检查。超时表示时间验收失败，不自动撤销已经提交的包或文件；同一 build 的文件逐个替换，也不是跨文件原子事务。", hero: false },
@@ -41,7 +42,7 @@ const workDeliverySnapshot = createProjectSnapshot({
 const workDeliveryProject = {
   order: 16,
   slug: "work-delivery",
-  title: "工作交付副驾驶",
+  title: "工作支持与交付",
   route: "/projects/work-delivery",
   visibility: "私有仓库",
   repositoryUrl: null,
@@ -58,13 +59,13 @@ const workDeliveryProject = {
     "PRD评审PPT执行跟踪同一事实版本",
     "交付包来源追溯和过期判断"
   ],
-  repositoryNote: `实现位于 PRIVATE（私有）仓库 work-delivery-copilot，当前 main 为 ${sourceMainCommit}；0.2.0 行为实现在 ${implementationCommit} 闭合，后一个 docs-only（仅文档）提交记录当前实现盲自然路由 E2E。公开页保留产品合同、数据关系、CLI（命令行入口）、版本、测试、失败、恢复缺口和完全合成图片；不公开任何真实公司资料、工作数据库或交付包。`,
-  summary: "当一项工作同时依赖几份会继续变化的需求说明、会议记录、规则或表格，我不用再分别手改每份成品。工作交付副驾驶先把本人明确选中的来源冻结成版本，分开事实、假设、冲突和未知，只让我处理真正需要决定的地方，再从同一事实修订版生成产品需求文档、项目评审和执行跟踪表。来源改变后，它说明什么仍有效、什么已经过期，以及下一版只需要处理什么。",
+  repositoryNote: `实现位于 PRIVATE（私有）仓库 work-delivery-copilot，当前 main 为 ${sourceMainCommit}；0.2.0 行为实现在 ${implementationCommit} 闭合，73f92f1 记录原有实现盲自然路由 E2E，57bf3c6 将既有项目明确为工作支持与交付，并接入相关本人背景；没有改变 0.2.0 交付引擎字节，旧合成验证保持原观察时间。公开页保留产品合同、数据关系、CLI（命令行入口）、版本、测试、失败、恢复缺口和完全合成图片；不公开任何真实公司资料、工作数据库或交付包。`,
+  summary: "工作中的资料理解、沟通、决策、评审和交付都由这个既有项目承接。一个普通工作问题可以直接讨论、判断并交付结果；不需要为了得到一封回复或一份文件先建交付包。当一项工作依赖几份持续变化的需求说明、会议记录、规则或表格时，再进入已有交付引擎：冻结来源版本，分开事实、假设、冲突与未知，从同一事实修订版生成一致成品，来源变化后只复核真正受影响的部分。相关本人背景从个人理解库按需取用，业务事实仍来自当前选定工作资料。",
   why: "分别维护需求文档、评审材料和执行表时，同一个日期、范围、负责人、指标或验收口径很容易出现多个版本。更危险的是来源已经变化，旧成品看起来仍然完整，却没人知道它引用了失效证据。这个项目把来源版本、决定理由、正式构建和变更影响放在一条可核对的本地链里。",
   plainExample: "我可以说：“用这份立项说明、评审纪要和执行计划做一套交付材料；先把互相冲突的日期、范围和负责人列出来，这一轮只生成 PRD。”项目会先告诉我三份来源覆盖了什么、哪些事实可以采用、哪些仍要决定；确认后只生成本轮需要的 PRD 和追溯清单，不提前制作评审演示或执行表。",
-  result: "完整请求会得到六个可追溯且口径一致的文件：PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx 和执行跟踪表.xlsx；只要 PRD 时不等待另外两类 Office 文件。不同事实版本各用自己的目录，同一版本可以重新生成，不会互相覆盖。我还会知道来源、已确认事实、假设与冲突、哪些结果已经过期，以及本轮真正写到了哪一步。",
+  result: "轻量工作支持直接交回分析、沟通建议或本轮请求的单件文件。进入交付包并请求完整输出时，得到六个可追溯且口径一致的文件：PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx 和执行跟踪表.xlsx；只要 PRD 时不等待另外两类 Office 文件。不同事实版本各用自己的目录，同一版本可以重新生成，不会互相覆盖。我还会知道来源、已确认事实、假设与冲突、哪些结果已经过期，以及本轮真正写到了哪一步。",
   readerStates: {
-    pass: "事实与质量通过、规范清单和 SQLite 一致后，按请求生成同一修订版的文件：built 表示所请求 Office 文件已生成，core 表示只生成三类核心文件。每次只声明实际完成的格式与检查，不把状态验真当作整套 Office 视觉验收。",
+    pass: "轻量支持先交回可以使用的工作结果，不要求建包；交付包在事实、质量、规范清单与 SQLite 一致后按请求生成同一修订版文件：built 表示所请求 Office 文件已生成，core 表示只生成三类核心文件。每次只声明实际完成的格式与检查，不把状态验真当作整套 Office 视觉验收。",
     problem: "关键事实缺来源、冲突、未确认或过期时，返回 draft 和待确认草稿，不启动正式 Office 构建。若失败的是 15 秒时间门或文件替换，包、核心文件甚至 Office 文件可能已经写入；先核对原包与当前构建，不能把非零退出当成整次未发生。",
     unavailable: "入口或 SQLite 在写入前不可用时保留原件与请求；Office 运行时在后续阶段不可用时，已提交的来源、事实和核心文件仍可能存在。返回精确阶段并核对恢复点，不重复新建同一包、不扫描更多资料，也不把预览冒充正式成品。"
   },
@@ -74,7 +75,7 @@ const workDeliveryProject = {
     headline: "只选当前资料，只确认一次事实，再让每种交付物使用同一修订版",
     description: "产品把 AI 分析与确定性产品分开：AI 在项目外帮助理解材料，项目负责保存来源、证据、决定、质量状态、正式文件和变化后的恢复点。",
     steps: [
-      { actor: "先判入口", title: "一次性单文件直接绕过", detail: "只有持续来源版本关系，并且需要多种一致交付物或明确后续更新时才建立交付包。" },
+      { actor: "先判入口", title: "先解决工作问题，再判断是否需要交付包", detail: "轻量理解、沟通和决策直接完成；单文件使用现有制品能力。只有持续来源版本关系与一致交付需求成立时才建包。" },
       { actor: "我选来源", title: "明确选择 2–5 份当前资料", detail: "只读取本次点名的文本、Markdown 或 CSV；不枚举同目录、账号、仓库和旧对话。" },
       { actor: "AI 协助", title: "交回覆盖、事实、冲突和结构", detail: "约五分钟内先给会改变判断的分析或准确 ETA；缺口不靠模板补猜。" },
       { actor: "我做决定", title: "只处理冲突、假设和待确认项", detail: "每次确认、驳回或退回都追加前后状态、证据和理由；已有事实不重复录入。" },
@@ -142,7 +143,8 @@ const workDeliveryProject = {
     "建立稳定交付包并冻结本人明确选择的来源版本",
     "保存来源哈希、证据片段、结构化事实与追加决定历史",
     "计算正式质量状态并拒绝手写 ready、过期事实和未解决冲突",
-    "从同一事实修订版生成六个固定交付文件",
+    "先以最小有用方式完成真实工作理解、沟通、决策和评审；满足持续来源条件时才使用交付包",
+    "从同一事实修订版生成本轮请求的固定交付文件",
     "来源更新后区分自动重新绑定、真正过期与未受影响事实",
     "让旧 build 明确 stale，并交回下一版唯一需要决定的问题",
     "只读核对持久化 manifest 与 SQLite 当前规范事实"
@@ -167,7 +169,7 @@ const workDeliveryProject = {
     { term: "baseline_required（需要基线）", meaning: "功能可以通过，但没有同模型同质量直接处理对照，不能声称已经节省总时间。" }
   ],
   operatingFlow: [
-    { title: "判断是否需要交付包", detail: "一次性单文件绕过；持续来源 + 多种交付物，或确定会更新的 PRD 才进入。" },
+    { title: "判断是否需要交付包", detail: "普通工作支持直接完成，单文件调用对应制品能力；只有持续来源 + 多种交付物，或确定会更新的 PRD 才进入包引擎。" },
     { title: "创建稳定 package", detail: "一次 batch 提交稳定 ID、标题、目标、2–5 份来源、候选事实和本轮所需格式；重复 ID 在写入前拒绝。" },
     { title: "冻结来源与证据", detail: "保存字节、SHA-256、来源版本和系统计算定位；未选文件不被枚举或读取。" },
     { title: "确认事实与理由", detail: "事实、假设、冲突和未知分别处理；每次真实状态变化追加审阅事件。" },
@@ -193,7 +195,7 @@ const workDeliveryProject = {
   ],
   evidenceLayers: [
     { layer: "源码与产品合同", proves: `PRIVATE main ${sourceMainCommit} 确认 0.2.0 的数据关系、统一入口、质量门、正式输出和明确不做项；行为实现闭合于 ${implementationCommit}。`, doesNotProve: "源码存在不证明当前安装、Office 运行时、真实工作或 Pages 已生效。" },
-    { layer: "37 项源码回归与 Ruff", proves: "本轮加载 Office 运行时后 37/37 测试通过，Ruff 通过，覆盖核心、质量门、CLI、不可覆盖、安装闭包和构建失败语义。", doesNotProve: "测试样本不能证明任意公司材料都能被正确分析。" },
+    { layer: "37 项源码回归与 Ruff", proves: "2026-09-01 加载 Office 运行时后 37/37 测试通过，Ruff 通过，覆盖核心、质量门、CLI、不可覆盖、安装闭包和构建失败语义。", doesNotProve: "测试样本不能证明任意公司材料都能被正确分析。" },
     { layer: "隔离 wheel", proves: "安装包脱离源码目录仍携带稳定 CLI、schema、两个样本和三个正式 builder。", doesNotProve: "wheel 不能恢复已有真实 SQLite，也不证明自然语言一定选对入口。" },
     { layer: "两套合成 Office E2E", proves: "两个完全合成场景都从 SQLite current build 生成 DOCX/PPTX/XLSX，并完成重导入、几何和公式检查。", doesNotProve: "合成场景不证明真实工作价值、真实来源变化或真人采用。" },
     { layer: "当前实现盲自然路由 E2E", proves: "fresh Sol Max 未获 Skill、工具或内部路线提示，自主选择 work-delivery，只读 3/3 指定来源，建立唯一 package，确认 27 条事实与 39 条追溯；5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成三个 core files，Office builder 为 0，current build verify 通过且旧 build stale。", doesNotProve: "约 12 分 12 秒可见墙钟和 0.043 秒成功 batch 核心不证明真实工作提速；本次也没有正式 DOCX/PPTX/XLSX E2E。" },
@@ -428,7 +430,7 @@ const workDeliveryModules = [
       problem: "quality 不 ready、生成失败、来源 stale 或清单漂移时分别报告草稿或失败阶段。15 秒门在状态、核心文件和 Office 阶段之后检查，失败可能已有新写入；逐文件替换也可能部分完成，须核对实际恢复点。真实时间价值不达标再按产品合同收窄，不能把任一种报错都写成未发生。",
       unavailable: "SQLite 丢失且没有备份时明确真实工作包不可恢复；不从 Git、图片或旧 Office 文件反向伪造状态库。"
     },
-    decisionImpact: ["37/37 测试与 Ruff 本轮通过。", "隔离 wheel 脱离源码目录完成安装闭包。", "两套合成 Office E2E 证明三类文件、重导入、几何与公式检查。", "当前实现盲自然路由 E2E 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。", "5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E。", "约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。", "首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。", "同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍。", "如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。", "没有同模型同质量直接基线，时间状态必须 baseline_required。", "没有真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移。"],
+    decisionImpact: ["37/37 测试与 Ruff 在 2026-09-01 基线通过；本轮仅合同改动，没有重跑 Office。", "隔离 wheel 脱离源码目录完成安装闭包。", "两套合成 Office E2E 证明三类文件、重导入、几何与公式检查。", "当前实现盲自然路由 E2E 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。", "5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E。", "约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。", "首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。", "同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍。", "如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。", "没有同模型同质量直接基线，时间状态必须 baseline_required。", "没有真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移。"],
     problem: "解决把源码、测试、安装、合成输出、真实价值和恢复能力互相冒充的问题。",
     implementation: ["acceptance.py 分开 functional、complexity、timing 和 per-scenario checks。", "没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。", "run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15 秒抛 MechanicalStageTimeoutError，CLI 非零退出，不补做事务或文件回滚。", "ArtifactBuild 保存 current/stale、semantic hash、fact revision 与 output directory。", "verify 只读比较当前 SQLite 与 persisted manifest，不检查每种 Office 成品的全部像素或语义。", "builder 生成阶段使用 staging，正式文件逐个替换；跨文件中断恢复仍依赖原包和实际文件核对。", "当前没有 export/backup/restore command、后台镜像或跨机器迁移。"],
     flow: ["读取current package", "检查facts与quality", "verify current build", "生成请求artifacts", "分别记录test/install/E2E", "核对首轮1.25倍/变更轮0.75倍/累计人工时间", "判断继续窄工作流、确定性流程或单产物路线", "报告real work状态", "交回恢复点或不可恢复结论"],

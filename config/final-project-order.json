@@ -27,8 +27,8 @@
     { "final_rank": 12, "id": "devconfig-backup", "title": "DevConfig Backup", "state": "published", "source": "wlyaaaaa/devconfig-backup" },
     { "final_rank": 13, "id": "vault-tool", "title": "vault-tool", "state": "published" },
     { "final_rank": 14, "id": "ai-cli-profile-manager", "title": "AI CLI Profile Manager", "state": "published" },
-    { "final_rank": 16, "id": "work-delivery", "title": "工作交付副驾驶", "state": "published" },
-    { "final_rank": 17, "id": "daily-preferences", "title": "日常偏好与个性化推荐", "state": "published" },
+    { "final_rank": 16, "id": "work-delivery", "title": "工作支持与交付", "state": "published" },
+    { "final_rank": 17, "id": "daily-preferences", "title": "个人理解库", "state": "published" },
     { "final_rank": 18, "id": "wechat-direct", "title": "WeChatDirect", "state": "published" },
     { "final_rank": 19, "id": "proxyclean", "title": "ProxyClean", "state": "planned", "source": "wlyaaaaa/ProxyClean" },
     { "final_rank": 20, "id": "codex-memory", "title": "Codex Memory Backup", "state": "planned", "source": "PRIVATE_MANAGED_SOURCE" },
@@ -60,7 +60,7 @@
     { "id": "md-triple-tactics-ledger-asset", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver" },
     { "id": "wechat-pre-public-private-archive", "owner_surface": "wechat-direct", "status": "done", "evidence": "app/content-wechatdirect.js#evolution" },
     { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "done", "evidence": "app/content-personal-health.js#evolution" },
-    { "id": "scripts-capabilities-absorbed-by-owning-projects", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#scripts" }
+    { "id": "scripts-capabilities-absorbed-by-owning-projects", "owner_surface": "pcconfig-and-owning-projects", "status": "done", "evidence": "app/content-pcconfig.js#runtime-startup" }
   ],
   "private_exclusion_boundary": {
     "excluded_project_count": 4,

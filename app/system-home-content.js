@@ -117,7 +117,7 @@ export const systemScenarios = [
         number: "03",
         kicker: "直接可用的原件",
         title: "交回能打开的东西，而不是一段猜测",
-        body: "媒体结果可以按需打开或建立不复制原件字节的临时浏览目录；非媒体只有在明确选择后才核对来源根、路径边界、大小和 SHA-256，通过后返回真实路径并打开。没有找到时说明真正查过哪里和下一条最有价值线索。",
+        body: "媒体结果可以按需打开或建立不复制原件字节的临时浏览目录；非媒体选中后由只读 inspect 核对来源根、路径、大小和 SHA-256，交回已验证定位供 AI 阅读，只有本人明确要在桌面看时才打开。已选定文档还能定位有关段落，已选定录音可复用既有转写返回时间段；没有命中或缺少时间信息时保留具体缺口。",
         items: [
           ["媒体入口", "预览、真实路径或临时浏览目录"],
           ["非媒体入口", "选中一项后才返回通过 stat 与 SHA-256 验真的真实路径"],
@@ -141,7 +141,7 @@ export const systemScenarios = [
         number: "01",
         kicker: "具名上下文与原件",
         title: "先把聊天和附件关系找对",
-        body: "WeChatDirect 只读取明确联系人或群的有界窗口，保留消息顺序、方向、回复关系，以及图片、语音和文件与原消息的关系；当前只直接打开与消息唯一绑定的 VoiceInfo 语音，图片和文件没有另行取得可访问原件时保留缺口。",
+        body: "WeChatDirect 读取明确联系人或群的有界窗口，保留原生发送方向、回复目标和每次媒体出现的位置；图片、表情、语音、视频与文件只有原生索引、字节身份和实际解码通过才交付。默认上下文只读本机；显式导出或打开具名表情时才可沿该消息已有 CDN 取回并核验，也可要求全本地。",
         items: [
           ["消息", "原生顺序、发送方向与回复关系"],
           ["媒体", "语音、图片和文件与消息精确绑定"],
@@ -152,7 +152,7 @@ export const systemScenarios = [
         number: "02",
         kicker: "语音与版面理解",
         title: "转写、识别并建立复核队列",
-        body: "ChineseASR 规范化音频、处理长录音、保留时间位置和分歧；LocalOCR 读取扫描页、表格和版面。通用 AI 再把文本、语音和附件放回同一时间线。",
+        body: "先检查是否已有绑定原音的转写与时间段，能够复用就不重跑模型。需要新处理时由 ChineseASR 转写并保留时间位置和分歧；LocalOCR 读取扫描页、表格和版面。通用 AI 再把文字、语音与附件放回原消息关系中，时间未提供时不猜时间戳。",
         items: [
           ["语音", "正文、时间位置、可疑句和待回听项"],
           ["扫描件", "页码、表格、坐标与无法确认的版面"],
@@ -556,23 +556,23 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "个人系统网页快照更新",
       focus: "先从项目、Rules 和 Skills 各自的事实来源取得本轮已验证、可发布的状态；需要本人明确启动的页面没有新请求时，保留上次已验证快照。再判断 System 总览是否仍真实；Git 记录只提示可能受影响的位置。",
-      process: "由活动经济路由选出的 Sol 家族或更强未来 AI，先分别判断产品与技术的新增、修改、退役/替代和 Unknown，再闭合 Project、Rules、Skills、System；提交、路径、时间戳或哈希只定位候选，不能决定正文。",
+      process: "遵从本人当前明确选择的模型与思考强度，并由活动经济路由核对实际执行身份。先分别判断产品与技术的新增、修改、退役/替代和 Unknown，再闭合 Project、Rules、Skills、System；提交、路径、时间戳或哈希只定位候选，不能决定正文。",
       delivery: "交回明确的“无需修改”，或四类页面各自 changed、unchanged、blocked 的闭包、已验证新快照、发布结果与公网回读。"
     }
   ]
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-09-01 09:54（中国时间）",
-  total: 49,
-  publicCount: 27,
+  observedAt: "2026-09-07T20:18:48.4400642Z",
+  total: 48,
+  publicCount: 26,
   privateCount: 22,
-  localCloneCount: 46,
+  localCloneCount: 45,
   remoteOnlyCount: 3,
   detailedPageCount: 23,
-  identitySha256: "sha256:83d40d9fc30fa1601ea1f3783ae116428d249070f31603c3dae7a61f0638aae9",
-  mappingSha256: "sha256:201b3cb9ab202124b5c0fbca98aa6dad6b1cc7db98aa583dc4f8ed3a95c73a33",
-  description: "2026-09-01 的项目账本记录了 49 个 Git 仓库：27 个公开、22 个私有；仓库总数与网页选定的展示范围不是一回事。网页目录现在有二十三个完整参考页。新增的 DevConfig Backup 直说本地/G 盘最近成功、配置 Drive 最近失败、微信增量与选择性换机恢复边界。媒体库是本地项目，不会被凑成第 50 个仓库。下方按用途展示已选定的系统资产，网站自身只负责呈现。"
+  identitySha256: "sha256:97f5c6ba178da1062ba329c59b7fd46e859524546c9c433bb0921b80733b6602",
+  mappingSha256: "sha256:6597bf109f04bd76fe02aa9b3ba17012c41b3b16ea2ba85cb1a1aa0176fa784b",
+  description: "2026-09-07 的有界来源记录 48 个 Git 仓库：26 个公开、22 个私有，45 个已验证本地副本与 3 个仅远端；仓库总账和网站选定范围分别说明。网页目录仍有二十三个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -613,7 +613,6 @@ export const systemProjectDomains = [
       { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复。", kind: "核心基座", href: "/projects/pcconfig" },
       { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "代理异常退出后诊断并清理残留网络状态，让 Windows 回到可验证的直连。", kind: "修复工具", href: projectLedgerHref },
       { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "让内存盘只承载可重建缓存，并在异常占用或结构损坏时安全重建。", kind: "缓存守护", href: projectLedgerHref },
-      { id: "scripts", title: "电脑常用动作", repo: "Scripts", role: "声音、微信双开、卡键、网络和热备等日常动作现在由各自所属项目维护；这里保留历史工具来源供总账查阅。", kind: "历史工具来源", href: projectLedgerHref },
       { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
       { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
     ]
@@ -630,8 +629,8 @@ export const systemProjectDomains = [
     assets: [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
-      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "当前 36 个登记来源覆盖 43,916 个非媒体路径条目：34 个已精确登记，其余 43,882 个按请求有界发现；选中一项后才核对大小和 SHA-256 并打开。来源根可访问而本人已删除精确 locator 时，下一次日常同步只退役该 occurrence，并由现有外键级联退出仅属于它的关系和绑定文字。", kind: "资料入口", href: "/projects/personal-materials" },
-      { id: "personal-media", title: "个人媒体整理与恢复", role: "管理 20,154 张照片、376 个视频和 3,830 个音频；精选为 1,145 张照片、37 个视频，已全部进入手机包与云候选。手机新文件先双盘备份再离线分类；自己删原件后，查询跳过，现有日常任务更新清单、G 镜像与恢复包，不自动上传云。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
+      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 7 日只读盘点完成 37 个登记来源，记录 45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
+      { id: "personal-media", title: "个人媒体整理与恢复", role: "9 月 5 日目录记录 20,312 张照片、376 个视频和 3,851 个音频；精选 1,145 张照片、37 个视频都在手机包与云候选中。本地保留、云候选和手机资格分别决定，普通新增不自动进手机。电脑端手机包已恢复为 6,262 项，手机曾多写的 163 项仍待下次连接后精确清理。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
       { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
@@ -664,7 +663,7 @@ export const systemProjectDomains = [
       { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "日常偏好与个性化推荐", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人最新明示、多来源行为事实和可纠正推定分开保管，按一次问题只取相关证据，再把历史变成熟悉、相邻和新鲜选择；不把买过写成喜欢，也不建立中央画像。", kind: "私人日常协作项目", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" }
+      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。按当前问题决定读取深度，事实与推定分开；工作、学习、文书和健康仍各自负责专业事实与行动，有依据的新本人认识可以回写。日常推荐是它的一个用途。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" }
     ]
   },
   {
@@ -679,7 +678,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "codex-agent-model-benchmark", title: "真实任务能力基准（CACB）", repo: "codex-agent-model-benchmark", role: "用同一任务和可复核结果比较不同 AI 工作方式，不把一次回答或当前有问题的评分当结论。", kind: "研究验证", href: "/projects/cacb" },
       { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
-      { id: "work-delivery-copilot", title: "工作交付副驾驶", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "把用户明确选中的需求、会议记录、规则和表格，整理成来源可追溯、跨文档口径一致、来源变化后能说明影响范围的交付包；当前六个正式文件、质量门和真实恢复缺口都在详情页分层说明。", kind: "本地优先的持续工作交付工具", href: "/projects/work-delivery" },
+      { id: "work-delivery-copilot", title: "工作支持与交付", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "支持真实工作中的理解、沟通、决策、评审与交付；轻量事项直接完成，需要持续来源版本和一致产物时才建立交付包。相关本人背景由个人理解库提供，业务事实与工作结果仍由本项目负责；六个正式文件、质量门、现实价值与恢复缺口分别说明。", kind: "真实工作支持与持续交付", href: "/projects/work-delivery" },
       { id: "wly0829-cn", title: "当前网站呈现仓库", repo: "wly0829.cn", role: "只负责把项目、规则、Skills 和公开安全事实呈现成当前网站；它计入总账，但不作为一个被介绍的项目。", kind: "呈现基础设施", href: "/", presentationOnly: true },
       { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: projectLedgerHref }
     ]
@@ -870,7 +869,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 当前有 14 组计划，H 尚未返回。BIOS 记录、启动介质、任务 Ready 和复制都只是中间证据，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 有 14 组来源，H 在 9 月 5 日已完成首次备份验收，现在离线，新增量等待下一次冷备。BIOS 记录、启动介质、任务 Ready 和复制都是分层证据，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -987,13 +986,13 @@ export const systemDependencyNodes = [
   {
     id: "work-delivery",
     lane: "projects",
-    title: "工作交付副驾驶",
-    subtitle: "让需求、会议记录、规则和表格在 PRD、评审材料和执行表之间保持同一事实版本",
+    title: "工作支持与交付",
+    subtitle: "支持眼前的工作事项，需要持续来源版本时再形成一致交付包",
     links: [
       { href: "/projects/work-delivery", label: "查看完整项目" },
-      { href: "/skills/work-delivery", label: "Skill：工作交付副驾驶" }
+      { href: "/skills/work-delivery", label: "Skill：工作支持与交付" }
     ],
-    detail: "项目保存来源版本、结构化事实、追加审阅、质量状态、六个固定文件和来源变化后的影响；Skill 只负责把持续工作请求送进项目。缺少目标、范围、验收条件，或仍有未解决的关键冲突时，只交回明确标注问题的草稿；质量未就绪时不生成正式 Office 成品，项目入口不可用时报告精确缺口，不另造替代项目。一次性单文件仍直接使用对应文件能力，不扫描未选资料。"
+    detail: "真实工作中的理解、沟通、判断、评审和交付都能进入现有项目，轻量支持直接完成；需要持续来源版本和一致产物时，才保存选定来源、结构化事实、审阅与质量状态，形成六个固定文件。相关本人背景可来自个人理解库，业务事实仍由工作项目负责。关键冲突未解决时保留草稿，质量未就绪不生成正式 Office 成品；一次性单文件直接使用相应能力，不扫描未选资料。"
   },
   {
     id: "ai-cli-entry",
@@ -1068,7 +1067,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-materials",
     searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里", "材料在文件管理器删了", "我自己删的文件不用恢复"],
-    detail: "当前 36 个登记来源在 12 层产品范围内有 43,916 个非媒体路径条目；34 个拥有精确 locator，可直接 find/inspect/open，其余 43,882 个只在请求真正需要时进入最多 8 个来源、2500 个文件、8 秒的有界发现。项目不保存原件字节、人物事件或跨领域资料；候选阶段隐藏真实路径，只有选中后才重新核对大小和 SHA-256。来源根可访问而本人已删除精确 locator 时，现有每日任务调用 sync-current 清理失效项及其独有文字/关系；查询与状态不触发同步，缺失候选也不占结果上限。"
+    detail: "9 月 7 日有界只读盘点完成 37/37 个来源、45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现；没有读取正文、计算原件哈希或写库。8,310 个媒体文件和 2,591 个更深目录按范围跳过。有界发现仍最多 8 个来源、2500 个文件、8 秒。候选隐藏路径，选中后只读验真并交回定位，明确要求桌面查看才打开；locate-content 可定位已选文档的有关段落。查询不触发同步，日常任务负责精确退役本人已删除的原件记录。"
   },
   {
     id: "media",
@@ -1081,7 +1080,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-media",
     searchAliases: ["个人媒体整理与恢复", "找照片视频音频", "精选照片和视频", "媒体在文件管理器删了", "删除原件后退出手机恢复包和云候选", "手机照片双盘保全", "手机恢复包", "云端候选"],
-    detail: "完整项目当前管理 20,154 张照片、376 个视频和 3,830 个音频（3,823 段录音、6 个音乐、1 个铃声），唯一精选入口含 1,145 张照片和 37 个视频；还拥有单一可重建目录、视觉分类、独立本地接入、手机 E/G 双盘保全、低于 60 GB 的手机恢复包和 upload=0 云候选。Skill 只负责自然语言检索/浏览；1,182 项精选已全部进入手机包和云候选，手机包约 57.0 GB。用户删原件后，查询只跳过缺失项，既有每日任务更新清单、镜像 G 并同步实际包，不增加删除保护或恢复系统。"
+    detail: "9 月 5 日目录记录 20,312 张照片、376 个视频和 3,851 个音频（3,844 段录音、6 个音乐、1 个铃声），精选 1,145 张照片和 37 个视频。项目拥有可重建目录、视觉分类、本地接入、手机 E/G 双盘保全、6,262 项且低于 60 GB 的手机包与 6,500 项 upload=0 云候选；本地保留、云候选和手机资格分别决定。locate-audio 可验真已选原音并复用既有转写定位时间段。电脑端包已纠正，手机多出的 163 项仍待连接后清理；不把计划或源码通过当作手机已经完成。"
   },
   {
     id: "wechat-bridge",
@@ -1182,12 +1181,12 @@ export const systemDependencyNodes = [
   {
     id: "daily-preferences-skill",
     lane: "personal",
-    title: "日常偏好自然请求入口（daily-preferences）",
-    subtitle: "最新明示优先，事实核对后给熟悉、相邻和新鲜选择",
+    title: "个人理解库入口（daily-preferences）",
+    subtitle: "按当前问题理解本人，事实、推定和纠正分开",
     href: "/skills/daily-preferences",
-    linkLabel: "Skill：日常偏好与个性化推荐",
-    searchAliases: ["吃什么", "购物", "支付习惯", "出行旅行", "住宿推荐", "数字消费", "服务工具", "审美偏好", "娱乐", "我改主意"],
-    detail: "处理用户本人尚未由专门领域拥有的偏好，包括吃喝、购物、支付消费、出行旅行与住宿、娱乐和数字消费、服务工具、审美与日常决策方式；具体复购或原因先核对事实，旧记录只帮助排序，当前纠正可以立即推翻推定。它不建设中央画像或后台同步，也不替代健康、资产、凭据付款、文书材料、他人偏好和工作执行入口。"
+    linkLabel: "Skill：个人理解库",
+    searchAliases: ["了解我", "本人背景", "真实经历", "生活重点", "价值取舍", "认知", "吃什么", "购物", "出行旅行", "审美偏好", "我改主意"],
+    detail: "查询、补充和纠正本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好。先按合同选择最小必要阅读，重要判断再深入相关依据；明确事实和可推翻推定分开，不把行为直接写成喜欢。它为工作、学习、文书、健康及未来独立领域提供本人背景，并接收有依据的回写；专业事实和现实行动仍由对应领域负责，不成为跨领域控制器或后台同步系统。"
   },
   {
     id: "verification",
@@ -1460,7 +1459,7 @@ export const systemSkillFamilies = [
       { slug: "localocr", name: "图像场景与精确文字分工", technicalName: "localocr", summary: "按请求选择原生视觉、LocalOCR 或两路独立执行；分开保留场景观察、精确文字、识别状态、坐标、空结果语义与冲突。", href: "/skills/localocr" },
       { slug: "media-person-self", name: "具名媒体中的本人判断", technicalName: "media-person-self", summary: "只判断指定照片或录音中是否支持本人候选，并返回可复核的位置、覆盖范围和未知。", href: "/skills/media-person-self" },
       { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" },
-      { slug: "daily-preferences", name: "日常偏好与个性化推荐", technicalName: "daily-preferences", summary: "当前明示优先，用薄快照、事实核对和最小证据给出可纠正的消费、旅行住宿、娱乐、数字服务、工具、审美与其他日常建议。", href: "/skills/daily-preferences" }
+      { slug: "daily-preferences", name: "个人理解库", technicalName: "daily-preferences", summary: "按问题读取本人的基本信息、经历、重点、价值取舍与认知；真实事实、推定和纠正分开，给独立领域提供本人背景，有依据的新认识可以回写。日常推荐仍保留。", href: "/skills/daily-preferences" }
     ]
   },
   {
@@ -1500,7 +1499,7 @@ export const systemSkillFamilies = [
       "不会把私人正文和个人结果带进公开页面"
     ],
     members: [
-      { slug: "work-delivery", name: "工作交付副驾驶", technicalName: "work-delivery", summary: "把明确选中的需求、会议记录、规则和表格整理成来源可追溯、跨文档口径一致的交付包；Skill 只发现和路由，完整产品、质量门、六个固定文件与恢复缺口进入项目页。", href: "/skills/work-delivery" },
+      { slug: "work-delivery", name: "工作支持与交付", technicalName: "work-delivery", summary: "支持真实工作中的沟通、判断、评审和交付；需要持续来源版本与一致产物时才建交付包。Skill 负责路由，完整产品、质量门、六个固定文件与恢复缺口进入项目页。", href: "/skills/work-delivery" },
       { slug: "document-materials", name: "文书和材料制作", technicalName: "document-materials", summary: "从当前事项和必要原件生成同源 DOCX/PDF、逐页证据与自包含材料包，并把本人签名、可递送、递送、收件、处理和对方签回分别记录。", href: "/skills/document-materials" },
       { slug: "documents", name: "可编辑 Word 文书", technicalName: "documents", summary: "创建、修订、批注或导入 DOCX，并在每次有意义编辑后逐页检查真实版面。", href: "/skills/documents" },
       { slug: "pdf", name: "PDF 读写、表单与逐页验收", technicalName: "pdf", summary: "同时核对 PDF 内容结构、表单字段、页面控件、显示外观和逐页版面。", href: "/skills/pdf" },

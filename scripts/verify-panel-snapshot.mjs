@@ -110,7 +110,9 @@ requireFact(Array.isArray(payload.validation?.failures), "snapshot_validation_fa
 const releaseValidatorRow = payload.validation?.rows?.find((row) => row.layer.startsWith("E release validator"));
 if (releaseValidatorRow?.status === "repair") requireFact(payload.validation.failures.length > 0, "snapshot_failed_tests_not_named", releaseValidatorRow?.status);
 const sourceRow = payload.validation?.rows?.find((row) => row.layer.startsWith("Source checkout"));
-if (payload.sourceDirtyCount > 0 || payload.sourceCommit !== authority.gitCommit) requireFact(sourceRow?.status === "repair", "snapshot_dirty_source_not_disclosed", sourceRow?.status);
+const sourceNeedsReconciliation = payload.sourceDirtyCount > 0 || payload.sourceAhead > 0 || payload.sourceBehind > 0 || !authority.sourceMatchesRelease;
+if (sourceNeedsReconciliation) requireFact(sourceRow?.status === "repair", "snapshot_dirty_source_not_disclosed", sourceRow?.status);
+else requireFact(sourceRow?.status === "pass", "snapshot_matching_published_source_misclassified", sourceRow?.status);
 
 const retainedEvidence = liveDrift.length ? inspectRetainedRuleSnapshot({
   websiteRoot: fileURLToPath(new URL("../", import.meta.url)),
