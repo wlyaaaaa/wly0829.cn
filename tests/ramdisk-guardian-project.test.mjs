@@ -51,7 +51,7 @@ test("snapshot keeps observed WARN separate from task success and unperformed re
   const facts = project.currentSnapshot.facts.map((item) => item.value).join("\n");
   assert.ok(facts.includes(sourceCommit));
   assert.match(facts, /12个明确目录/);
-  assert.match(facts, /1\.5GiB低于4GiB/);
+  assert.match(facts, /3GiB低于4GiB/);
   assert.match(facts, /10个隔离恢复场景/);
   assert.match(project.snapshotBoundary, /没有重建实盘或重启电脑/);
   assert.ok(project.currentSnapshot.gaps.some((gap) => gap.includes("使用约定") && gap.includes("误放")));
