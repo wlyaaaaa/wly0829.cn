@@ -2475,7 +2475,7 @@ test("daily-preferences shares correctable personal understanding while domain d
   assert.doesNotMatch(publicText, /observed_account_refs|played_account_refs|account-\d+/i, "daily-preferences leaks Steam account references");
   assert.doesNotMatch(publicText, /苏打水是农夫山泉的。并非气泡水|总不能不干净/, "daily-preferences publishes raw private conversation text");
   for (const expected of [
-    /7e5fe1b9d8a44819c2b01a1b4f55adcd07e071aa/,
+    /490a6c13ca66f0416b09d3f17146e186bd4f19e0/,
     /daily-preferences\.v0\.12\.0/,
     /185.*Python.*14.*子测试.*7.*Node/s,
     /72 条.*current.*明示|current.*明示.*72/s,
@@ -2484,7 +2484,7 @@ test("daily-preferences shares correctable personal understanding while domain d
     /190,266/,
     /232,496/,
     /42,230/,
-    /73 个来源实例|73 个来源/,
+    /104 个来源实例|104 个来源/,
     /5 项.*(?:尚缺|来源缺口)|5 类.*缺口/s,
     /bank_transactions/,
     /jd_orders/,
@@ -2584,7 +2584,7 @@ test("daily-preferences shares correctable personal understanding while domain d
   const registration = registry.projects.find((item) => item.id === "daily-preferences");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-daily-preferences.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 7);
+  assert.equal(registration.ai_refresh.semantic_revision, 8);
   assert.match(registration.ai_refresh.scope, /full-refund chain semantics/);
   assert.match(registration.ai_refresh.scope, /meaningful unmatched payment facts without duplicate purchase evidence/);
   assert.match(registration.ai_refresh.scope, /Bilibili on-demand refresh.*complete-current-set retirement/);
@@ -3021,7 +3021,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedDailyPreferences.status, "ready_for_ai");
   assert.deepEqual(targetedDailyPreferences.selected_projects.map((item) => item.id), ["daily-preferences"]);
   assert.equal(targetedDailyPreferences.selected_projects[0].content_path, "app/content-daily-preferences.js");
-  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 7);
+  assert.equal(targetedDailyPreferences.selected_projects[0].semantic_revision, 8);
   assert.equal(targetedDailyPreferences.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedDailyPreferences.selected_projects[0].source.repo, "wlyaaaaa/daily-preferences");
   assert.equal(Object.hasOwn(targetedDailyPreferences.selected_projects[0].source, "local_root"), false);
@@ -3555,8 +3555,8 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const dailyPreferences = skills.find((item) => item.slug === "daily-preferences");
   const dailyPreferencesText = JSON.stringify({ entry: dailyPreferences, guide: skillGuides["daily-preferences"], outcome: skillOutcomes["daily-preferences"] });
   assert.equal(dailyPreferences.sourcePath, "E:\\.agents\\skills\\daily-preferences\\SKILL.md");
-  assert.equal(dailyPreferences.sourceBytes, 19746);
-  assert.equal(dailyPreferences.sourceSha256, "a47c4789347852155aca13588effd55f85893a59a4515da065685b03d58a9723");
+  assert.equal(dailyPreferences.sourceBytes, 22203);
+  assert.equal(dailyPreferences.sourceSha256, "2236b6b450a5a26b79b26b9fa61ce52e41c9938716d140e5ab9dc99624cf29c3");
   assert.doesNotMatch(dailyPreferencesText, /V:\\\\Personal\\\\Projects\\\\daily-preferences|E:\\\\PersonalData\\\\日常偏好/, "daily-preferences Skill publishes a private project or data locator");
   for (const expected of [
     /个人理解库/, /基本情况.*真实经历.*生活重点.*价值取舍/s,
@@ -3570,9 +3570,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
     /理由/, /可纠正|可以.*推翻/, /付款|凭据/,
     /旅行|住宿/, /数字消费|工具|审美/, /3 个熟悉.*3 个相邻.*3 个.*新鲜/s,
     /incremental.*完整权威快照才 full|完整权威快照.*full/s,
-    /7e5fe1b/, /E121/, /v0\.12\.0/,
+    /490a6c13/, /E121/, /v0\.12\.0/,
     /185.*Python.*14.*子测试.*7.*Node/s,
-    /73 个来源实例/, /72\/67/, /48\/194\/152/,
+    /104 个来源实例/, /72\/67/, /48\/194\/152/,
     /5 项尚缺.*YouTube\/Maps.*明确排除/s, /190,266/, /232,496/, /42,230/,
     /同订单链全额退款.*退出.*偏好.*复购.*原事实保留/s,
     /部分退款.*组单.*Unknown|partial.*Unknown/s,

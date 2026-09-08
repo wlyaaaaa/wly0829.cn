@@ -1,24 +1,27 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以用于当前帮助", "需要分辨", "当前不可用"];
-const sourceMainCommit = "7e5fe1b9d8a44819c2b01a1b4f55adcd07e071aa";
-const observedAt = "2026-09-08T08:16:40.132457Z";
+const sourceMainCommit = "490a6c13ca66f0416b09d3f17146e186bd4f19e0";
+const observedAt = "2026-09-08T15:31:59.5799859Z";
 const wrapperCommand = "pwsh -NoProfile -File .\\daily-preferences.ps1";
 
 const dailyPreferencesSnapshot = createProjectSnapshot({
   observedAt,
-  label: "共同本人理解、可靠领域回写与两份手机同源阅读文件已实现；73 个来源、48 张当前认知卡已聚合核对，真实理解质量仍按具体问题判断",
-  boundary: "来源冻结到 2026-09-08T08:00:42Z，实际只读聚合于 08:16:40Z 采集；相关数据最后更新均早于截止。本页核对代码、合同和来源提供的有界验收，没有读取 CURRENT、PROFILE、私人原话或健康个体值。手机文件已由源任务完成云端正文哈希回读，不能据此声称手机设备操作或全量私人材料理解已验收。",
+  label: "共用本人理解、按提示词更新微信与新导出、受影响认识复核和手机同源阅读已形成完整流程；104 个来源实例已只读核对",
+  boundary: "手机阅读文件已更新到同一云端来源。消息收齐、AI 实际读过和理解是否有用分别判断；未读媒体、缺失引用和平台只返回部分历史的范围仍保留。各项数字按技术页标注的观察时间展示。",
   metrics: [
-    { label: "当前明示", value: "72 条" },
-    { label: "当前认知卡", value: "48 张" },
-    { label: "来源实例", value: "73 个" },
+    { label: "按需更新", value: "微信 · 新导出" },
+    { label: "认识读取", value: "概括 · 详述 · 原文" },
+    { label: "来源实例", value: "104 个" },
     { label: "手机阅读", value: "2 份同源文件" }
   ],
   facts: [
-    { label: "项目到底形成什么", value: "形成可修正、能直接用于帮助本人的基本背景、真实经历、生活重点、价值取舍、认知和偏好。当前 72 条明示、67 条历史明示与 48 张 current 认知卡；旧认知有 194 张历史、152 张 stale。这些是存储状态，不是人格定论、阅读覆盖或理解质量分数。" },
+    { label: "项目到底形成什么", value: "形成可修正、能直接用于帮助本人的基本背景、真实经历、生活重点、价值取舍、认知和偏好。2026-09-08 08:16:40 UTC 聚合为 72 条现行明示、67 条历史明示与 48 张 current 认知卡；旧认知有 194 张历史、152 张 stale。这些是该次存储状态，不是人格定论、阅读覆盖或理解质量分数。" },
     { label: "当前数据状态", value: "2026-09-08 08:16:40 UTC 只读聚合：190,266 条 current 记录、232,496 条总版本、42,230 条历史版本；schema 6、quick_check=ok、外键问题 0。记录、明示与认知卡的最后更新时间分别为 9/7 06:05:24、9/8 04:47:34、9/8 07:38:38 UTC，均早于本批截止；未展开记录正文，不把数据量当作已理解的材料量。" },
-    { label: "当前来源", value: "73 个来源实例中 12 个 acquired_verified（来源已取得并核对）、61 个 snapshot_only（只有快照），涵盖 16 类逻辑来源。新增加的已核引用仍保留其微信原生、ASR 派生或附件身份；来源实例数量不等于独立经历、完整阅读或新事实。" },
+    { label: "当前来源", value: "2026-09-08 15:31:59 UTC 回读 104 个来源实例：12 个 acquired_verified（来源已取得并核对）、92 个 snapshot_only（只有快照），涵盖 16 类逻辑来源。微信原生消息、ASR 派生和附件各保留出处；来源实例数量不等于独立经历、完整阅读或新事实。" },
+    { label: "微信增量怎样变成新的理解", value: "说“结合最近的微信更新一下对我的理解”，即可在本次任务检查指定账号的新变化，固定本轮会话范围并取齐消息，沿实际阅读位置继续。AI 阅读必要原话和上下文后，修订受影响认识或说明没有变化，再保存读到哪里；收齐消息不会自动被算成已经读懂。" },
+    { label: "只读真正需要的范围", value: "可先看指定账号或会话的阅读位置、只查数量，再决定读什么。大群可先取本人发言，需要时补对方上下文；本人身份尚不能确定的消息会保留待核。确实未取得的引用目标及实际只读到的范围会留下说明，不能据此称全群、全历史或全部媒体已读。" },
+    { label: "更新也会带回需要重看的旧认识", value: "导入和刷新同时给出变化记录、退出当前的记录及新失效卡片。profile --pending-review 提供原有详述供 AI 比较新旧依据，保留未被推翻的有效内容；只有显式复核和回写才恢复使用，程序不自动把旧结论重新标成有效。" },
     { label: "先形成有用理解", value: "summary 先讲典型经历的意义、核心取舍、明确评价及对当前判断的影响；detail 展开经历、推理、反例和限制；evidence 保留出处。核实是校准理解的手段，不能让默认入口只剩流程记录。" },
     { label: "按问题展开", value: "profile --index 提供摘要导航和原文候选短预览，--key 可一次读取多张完整卡与相关明示；已知键或已有足够背景时直接使用，重要矛盾才补原文。索引命中、引用关系、片段和完整阅读分别说明。" },
     { label: "领域使用与回写", value: "工作、学习、文书和健康需要本人背景时按需使用这里；有依据且可复用的新本人认识在当前任务回写并回读。专业事实、行动、对象和动态状态仍属于独立领域，未来社交与财务不因此提前建空项目。" },
@@ -38,8 +41,8 @@ const dailyPreferencesSnapshot = createProjectSnapshot({
     { label: "Steam 行为边界", value: "2026-09-04 专项观察有 118 条已玩游戏、6 条已玩应用、8 条未玩游戏观察和 33 条其他应用观察；本轮未刷新 Steam。已分类但未玩或仅安装的游戏可作较弱的库内选择证据，observed 比同条件 played 低 1 分；游戏查询排除 application 与类型未知项，明确问未玩时过滤已玩记录。累计启动时长不加分，当前免费同条件低 0.5 分。", hero: false },
     { label: "具体事实回读", value: "facts 现在既能说明曾下单/支付，也能回读后来可靠全额退款及 full_refund_count；普通偏好只消费仍有效结局。部分退款、组单、跨渠道同号或关联不唯一保持 partial/Unknown。", hero: false },
     { label: "来源制品与备份", value: "Chrome 与 Google Play 可由同一 Google Takeout ZIP 派生为两个独立来源 occurrence（来源出现关系）；用户投递原件和哔哩哔哩实时快照进入 PersonalData 材料库的来源投递区。数据根与这些原件都处在现有 PersonalData 自动备份范围，不另建第二套备份服务。", hero: false },
-    { label: "源码验证", value: "冻结 PRIVATE main=7e5fe1b，解析版本 daily-preferences.v0.12.0、schema 6；实际远端 main 同值。185 项 Python、14 个子测试与 7 项 Node 是 2026-09-07 基线回归；本批只复验手机导出、精确卡片读取与 Steam 选择证据的相关测试，不冒充新全量或本人的真实建议取用验收。", hero: false },
-    { label: "本批聚焦回归", value: "2026-09-08 在冻结源码上运行 15 项虚构测试，全部通过，unittest 内部 1.452 秒：手机导出 6 项、精确卡片读取 7 项、Steam 2 项。测试没有读取私人正文、刷新账号或更新云文件；这不是整库理解质量、全量来源回归或真实手机使用验收。", hero: false },
+    { label: "源码验证", value: "PRIVATE main 回读为 490a6c13，解析版本仍为 daily-preferences.v0.12.0、schema 6。43a2d596 改进查询耗时；490a6c13补齐按提示词微信更新、导入后复核和读取范围。发送者筛选、阅读位置及引用缺口说明另核同日工作树实现，不计入该主线提交或测试证据。185 项 Python、14 个子测试与 7 项 Node 保留 2026-09-07 基线日期；手机等 15 项聚焦回归保留 08:16 批次，不扩称这些后来改动的完整实用性验收。", hero: false },
+    { label: "手机与精确读取回归", value: "2026-09-08 08:16 批次在 7e5fe1b 源码上运行 15 项虚构测试，全部通过，unittest 内部 1.452 秒：手机导出 6 项、精确卡片读取 7 项、Steam 2 项。测试没有读取私人正文、刷新账号或更新云文件；不代表后来微信更新改动的回归，也不是整库理解质量或真实手机使用验收。", hero: false },
     { label: "索引清洗边界", value: "本地索引在特定支付、信用卡与行程字段中掩码 email（邮箱）、独立 7–19 位数字和支付方式末四位；它不是全局匿名化，普通商品、平台、时间与偏好事实继续保真。", hero: false },
     { label: "公开展示边界", value: "公开普通产品思想、聚合状态、具体的普通 L2 偏好样例、代码、命令、失败与缺口；不复制原始聊天、账号、商家—金额—时间组合、行程起终点、访问 URL、原件路径或凭据。", hero: false }
   ],
@@ -60,7 +63,7 @@ const dailyPreferencesProject = {
   visibility: "私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
-  cardStatus: "共同本人理解、领域回写和手机同源阅读已实现；73 个来源、48 张当前卡，理解质量按真实问题验收",
+  cardStatus: "共用本人背景、按提示词吸收微信与新导出、修正认识和手机同源阅读；104 个来源实例",
   cardStatusTone: "mixed",
   ...dailyPreferencesSnapshot,
   kicker: "记住经历的意义和真实取舍，让每次帮助有依据、也能被纠正",
@@ -103,6 +106,7 @@ const dailyPreferencesProject = {
       { actor: "现在优先", title: "按真实语义保存表达变化", detail: "分清补充、临时取舍、事实更正与撤回；历史原话仍可能支持经复核且限定语境的认识。" },
       { actor: "推荐分支", title: "普通推荐按问题读取相关依据", detail: "保留小快照、明示和行为事实的推荐路径；没有更新意图时不扫描账号和原件，快照缺失或失效也不等于没有偏好。" },
       { actor: "按需刷新", title: "一句自然话同步更新自动来源", detail: "明确更新时复用本机 Chrome、Steam 与当前登录的哔哩哔哩；人工快照没有新包就保持原状。" },
+      { actor: "动态材料", title: "从微信实际读到的地方接着理解", detail: "按请求检查账号和会话变化，取齐选定消息并读必要上下文；将新认识和反例纳入原详述，修订后保存实际阅读范围。新导出也沿相同的阅读与复核原则处理。" },
       { actor: "按需补证", title: "只查会改变这次选择的轴", detail: "吃和喝分开，具体商品需要解释时才核对次数、状态、时间与文本变体。" },
       { actor: "推荐结果", title: "需要选东西时返回三类候选", detail: "熟悉、相邻和新鲜选择继续保留；新鲜项可以没买过，但要说明依据并标成推测，不靠同款变体凑数。" },
       { actor: "用户决定", title: "选择、拒绝或再次纠正", detail: "最终比价、购买和下单留给用户；新的明确表达进入下一次排序。" }
@@ -140,7 +144,8 @@ const dailyPreferencesProject = {
     "在用户明确更新时同步刷新 Chrome、Steam 与当前 Chrome 中的哔哩哔哩，不建立后台同步",
     "人工接入订单、支付、Google Play、航空、铁路与 AI 对话快照，保留制品哈希、导入和记录版本",
     "在材料接入后闭合覆盖、缺口、偏好语义变化、快照重建和普通自然问题回验",
-    "维护 73 个来源实例、16 类逻辑来源与 5 项尚未取得来源；明确拒绝的两类退出待办，来源数量不冒充阅读或理解质量",
+    "维护已核对的 104 个来源实例、16 类逻辑来源与 5 项尚未取得来源；明确拒绝的两类退出待办，来源数量不冒充阅读或理解质量",
+    "按提示词检查微信动态材料和新导出，保留账号、发送者、分页、实际阅读范围与未读媒体边界，并复核受影响的旧认识",
     "把 Steam 多账号库按 AppID 合并，并把实际游玩、当前商店分类与未知历史取得方式分层",
     "把哔哩哔哩播放、收藏、稍后看、点赞、投币和追番分成不同证据强度，并保留平台可见范围",
     "按自然问题取相关 current 明示、有效快照和行为证据",
@@ -298,7 +303,7 @@ const dailyPreferencesModules = [
     boundaries: ["不复制原始聊天、完整媒体、病历、账本或领域计划到公开页面。", "不靠全库 100%、逐卡确认或问卷把交流推迟。", "不把模拟、包装、转贴或旧 AI 建议自动当成本人经历。", "既有历史原件与正式成果保留，更正主要影响后续使用。", "未来领域首次实际需要时再落实，不因产品关系图提前建空项目。"],
     failures: [{ condition: "索引有命中但重要主题未被回答", response: "沿相关完整原文与上下文补读，修正认识和取用，不让用户重述已存在材料。" }, { condition: "引用的原件或派生结果变化", response: "复核同一来源身份和当前版本，相关卡重新审阅；不把旧片段带到新结果。" }, { condition: "专业内容只停在交接意向", response: "回到独立领域的正常入口，核对实际接收结果；未闭合就明确保留缺口。" }],
     sources: [{ path: "DOMAIN_CONTRACT.md", role: "理解、证据取舍、领域职责与可靠回写" }, { path: "daily_preferences.py / schema.sql", role: "认知卡、索引、原文候选、引用角色和版本" }, { path: "source_snapshots.py", role: "已核引文接入与稳定原生身份" }, { path: "tests/test_personal_background.py / test_profile_index.py / test_reviewed_citations.py / test_source_materials.py", role: "本人背景、索引、引文与原文召回合成回归" }],
-    verification: ["2026-09-07 基线套件为 185 项 Python、14 个子测试与 7 项 Node 通过；本批只重验精确读取、手机导出及 Steam 相关范围。", "只读状态与计数验证 73 来源、48 当前卡、quick_check=ok 和外键 0，没有读私人卡片。", "真实理解质量必须另以自然问题确认典型经历、评价、限制与当前帮助；本次网页测试不冒充该项完成。"],
+    verification: ["2026-09-07 基线套件为 185 项 Python、14 个子测试与 7 项 Node 通过；9 月 8 日 08:16 批次在 7e5fe1b 重验精确读取、手机导出及 Steam 相关范围。", "2026-09-08 08:16 只读聚合为 73 来源、48 当前卡、quick_check=ok 和外键 0；15:31 来源数量已更新为 104，没有读私人卡片。", "真实理解质量必须另以自然问题确认典型经历、评价、限制与当前帮助；本次网页测试不冒充该项完成。"],
     relation: "本模块形成默认可使用的认识；下面的表达、来源、取证、原件和推荐模块继续提供版本与依据。"
   }),
   commonModuleShape({
@@ -329,7 +334,7 @@ const dailyPreferencesModules = [
   commonModuleShape({
     slug: "source-coverage",
     shortTitle: "来源与按需增量",
-    title: "新对话同步刷新自动来源，人工快照不伪装实时",
+    title: "在新对话里接着读新材料，更新对我的理解",
     searchAliases: ["更新我的个人偏好", "自动增量", "B站历史收藏稍后看点赞投币追番", "准备投递增量", "材料保存不等于偏好增量完成", "ingest完成以后还要做什么", "Steam多账号统一库", "遗漏了哪些偏好来源", "每个来源到哪天", "Google Play航空12306人工快照", "full incremental 区别", "来源覆盖"],
     searchProjection: {
       intents: ["对话内自动增量", "查看来源覆盖", "复用当前Chrome采集哔哩哔哩", "准备人工快照", "检查来源全景遗漏", "选择full或incremental"],
@@ -337,13 +342,13 @@ const dailyPreferencesModules = [
       relations: ["Chrome和Steam由本机采集", "哔哩哔哩复用当前Chrome", "人工快照没有新包就保持不变", "同一Takeout制品可绑定两个来源occurrence", "import run记录mode和health", "coverage与gap共同决定快照修订"],
       failureRecovery: ["B站登录失效请用户在同一Chrome登录", "一个来源失败不阻塞其他来源", "partial不退出旧current", "Steam历史取得方式保持Unknown", "incremental不缩覆盖", "重复refresh返回no_change"]
     },
-    teaser: "用户不需要准备工程命令：一句“更新偏好”会在当前对话同步刷新可直接取得的来源；需要用户提供的包仍保持人工快照，任何导入都必须继续闭合偏好语义。",
-    status: "73 个来源实例：12 acquired_verified、61 snapshot_only；16 类已接入逻辑来源，5 类尚未取得、2 类明确排除；自动与人工来源各保留原刷新边界",
+    teaser: "直接说“结合最近微信和新导出，更新一下对我的理解”：先取本轮需要的新材料，再阅读、补充或纠正原有认识，最后保存实际读到哪里。可直接取得的来源在当前对话处理，需要新数据包的来源仍由本人提供。",
+    status: "104 个来源实例：12 个已取得并核对，92 个保留快照；微信按需更新并记录实际阅读位置，人工来源按所提供材料更新",
     statusTone: "mixed",
     value: "知道每个来源真实到哪里、缺什么、该准备什么和怎样补，不靠模糊的‘最近同步过’做决定。",
-    why: "把不同账号、浏览器 profile、行为流或人工补包混在一起，会让覆盖范围、缺口和去重身份失真；反过来，把所有来源都写成“手动导入”又会隐藏当前已经可用的本机和浏览器自动增量。",
-    example: "我可以说：“更新我的个人偏好。”系统会读取本机 Chrome 历史/书签和 Steam 观察，复用已登录 Chrome 取得 B 站六类行为流，再逐来源去重导入；Google Play、航空和 12306 没有新包时会明确保持旧快照。",
-    result: "得到逐来源的 collection（采集）、ingest（导入）、变化计数、范围限制和 no_change/partial/failed 状态；随后再判断偏好新增、增强、减弱或无变化，重建相关快照并用普通问题回验。人工包仍按 incremental/full 合同处理。",
+    why: "新材料可能补充旧认识，也可能推翻它。只把消息存下来，或只看最新一句话，都容易漏掉经历和上下文。按实际读过的范围接续，既能避免反复读，也能知道哪些认识需要重新判断。",
+    example: "我可以说：“结合最近微信和这次新导出，更新一下对我的理解。”AI 先看指定账号哪些会话有新内容，从实际阅读位置接续；阅读必要原话、引用和上下文，说明哪些认识补充了、需要改或仍然不确定。若还要求刷新偏好行为，再处理 Chrome、Steam 和 B 站；没有新包的 Google Play、航空和 12306 维持原快照。",
+    result: "得到基于新材料修订过的认识、变化依据和仍未读的范围；以后从已经读到的位置继续。来源没有变化、只取得部分材料或读取失败会分别说明，导入成功不会被当成已经理解。",
     readerStates: {
       pass: "refresh 对自动来源逐项返回 completed 或 no_change；人工包 ingest 也保留自己的结果。只有覆盖/缺口、语义变化、快照重建和普通问题回验闭合，或明确证明无语义变化后，偏好增量才完成。",
       problem: "一个来源 partial、平台只返回可见窗口或人工来源没有新包时，精确保留该来源状态；其他来源继续。部分有效记录可能入库并使旧快照失效，技术回执不能冒充推荐已更新。",
@@ -351,7 +356,13 @@ const dailyPreferencesModules = [
     },
     stateLabels: ["完成或无新记录", "部分完成或失败", "入口或缓存不可用"],
     decisionImpact: [
-      "当前 73 个来源实例：12 acquired_verified、61 snapshot_only；覆盖本人表达、订单/支付、AI 对话、已核引用、Steam、哔哩哔哩、浏览、Google Play、航空和铁路等 16 类逻辑来源。",
+      "2026-09-08 15:31:59 UTC 回读 104 个来源实例：12 acquired_verified、92 snapshot_only；覆盖本人表达、订单/支付、AI 对话、已核引用、Steam、哔哩哔哩、浏览、Google Play、航空和铁路等 16 类逻辑来源。",
+      "微信由 WeChatDirect 提供原生变化和消息；每轮先固定账号、会话及时间边界，取齐选中范围的全部分页。没有新消息可以不重读，首次出现的联系人或时间不明内容不能自动当成已读。",
+      "changes 根据当前会话元数据发现变化，不能证明所有旧补入、撤回或已经消失的历史都已发现；完整取得本轮窗口也不等于平台全历史完整。",
+      "程序保存的消息取得位置与 AI 实际阅读位置分开。AI 阅读、整合认识或明确判断无变化后才记完成；尚未读的消息、媒体或对方上下文保留原边界。",
+      "大群可以按原生发送者只取本人发言与仍需判定的消息，按需补上下文；发送者未定时不能把这一范围记成阅读完成。只查数量或阅读位置不会推进阅读状态。",
+      "引用目标确实不可取得、但已有正文和上下文足够时，AI 可以记录引用缺口理由及实际阅读范围后完成这一较窄范围；未取齐分页、正文不可读或发送者不明仍不能跳过。",
+      "保留被引用的每一版采集材料，以后可以找到当时读的是哪一份。网页或直播间后来换了标题，也不能把现在看到的标题倒填成过去访问时的标题。",
       "Chrome 历史与书签从可发现 profile 直接采集；打开中的 History 会连同 WAL/SHM 做临时只读快照，Chrome 不需要退出。",
       "本机 Chrome 记录进入 browser_activity；同一 Takeout 包中的 Google Play 记录进入 google_play_activity，两类来源各自保留身份和覆盖。",
       "Steam 直接读取本机多账号观察并按 AppID 合并；只输出匿名账号 ref，不读 token、Cookie、密码或 license cache，历史取得方式继续 Unknown。",
@@ -379,6 +390,10 @@ const dailyPreferencesModules = [
     ],
     problem: "解决账号混并、覆盖缩短、缺口被无关补包清除、错误 full 误退 current、同制品回滚失败和 unsupported 格式静默成功。",
     implementation: [
+      "tools/wechat_update.py 的 plan 调用 WeChatDirect 变化发现并比较实际阅读位置；collect 取齐本轮选定分页；complete 只记录已经阅读且整合或确认无变化的范围。",
+      "本机采集投影按内容哈希保留版本，更新不覆盖旧引用；直播间标题带采集快照时间，与旧访问时间分别保存。",
+      "status --account 指定账号，查看某一会话时同时传 --contact；status --summary 只看各账号数量。collect --self-only 筛选本人发言与未定发送者；complete --reader-scope / --quote-gap-note 保留实际范围与未取得引用，不放宽分页、正文或发送者检查。",
+      "ingest/refresh 的 changed_records、retired_record_ids、newly_stale_card_keys 指出本轮影响；profile --pending-review 返回待复核旧详述。AI 重新判断、显式回写并回读，程序不自动恢复 stale 卡。",
       "daily_preferences.py 的 refresh 在一次明确对话中串联 Chrome、Steam 与本次浏览器生成的哔哩哔哩快照；返回 conversation_on_demand 且 background_started=false。",
       "live_increment.py 只采集 Chrome History/Bookmarks 与非秘密 Steam 本机元数据，返回内存记录，不调度、不持久化项目数据库。",
       "bilibili_browser_collect.mjs 通过现有标签页 CDP 调用平台 API，分页保存六类行为流；source_snapshots.py 再把浏览器快照、Takeout、航空和铁路材料转成统一记录。",
@@ -424,6 +439,8 @@ const dailyPreferencesModules = [
     ],
     sources: [
       { path: "daily_preferences.py", role: "实现 profile、ingest、status、conversation-on-demand refresh、来源身份与回滚。" },
+      { path: "tools/wechat_update.py", role: "串起微信变化发现、固定范围、分页取得和实际阅读完成，保留发送者、引用缺口和阅读位置。" },
+      { path: "tests/test_wechat_update.py", role: "验证范围、分页、来源身份和阅读位置；测试源码与真实消息阅读结果分开。" },
       { path: "live_increment.py", role: "实现 Chrome/Steam 本机只读采集、匿名账号边和无后台状态。" },
       { path: "bilibili_browser_collect.mjs", role: "复用当前 Chrome 标签页采集哔哩哔哩六类行为流并写出有界快照。" },
       { path: "source_snapshots.py", role: "解析哔哩哔哩、Google Takeout、航空和铁路快照。" },
@@ -446,12 +463,12 @@ const dailyPreferencesModules = [
       failureRecovery: ["快照缺失继续证据查询", "B站问题不混入Steam或全库噪声", "未玩游戏保留较弱依据，应用不当游戏", "历史取得方式保持Unknown", "无匹配保留Unknown", "只读连接不修改数据库"]
     },
     teaser: "普通推荐不需要把 232,496 条记录版本塞进上下文；先用与问题相关的现行理解，必要时再取明示、行为事实和原文候选，避免噪声挤掉重要经历。",
-    status: "当前全库 190,266 条 current 记录、48 张有效认知卡；查询按题取相关内容，旧 B 站/Steam 专项自然回读保留 2026-09-04 观察，不能代替本轮真实建议验收",
+    status: "查询先按问题缩小候选范围，再校验相关认识；08:16 聚合为 190,266 条 current 记录、48 张有效认知卡，旧专项自然回读保留其观察日期",
     statusTone: "pass",
     value: "让 AI 看见足够的连续性，而不是被整库订单、付款和聊天淹没。",
     why: "只看 top hits 会漏掉吃/喝、复购/新类别等不同轴；无条件返回全部 current 语句又会把技术取舍、增量说明和购物偏好塞进晚餐问题。",
     example: "我可以问：“我平时喜欢看什么类型的 B 站内容？”结果只纳入相关的哔哩哔哩行为、明示与有效认知。Steam、购物和整库 AI 对话不会混进来。",
-    result: "得到有范围的 evidence JSON：查询词、相关明示、有效推定、带角色的候选、时间、重复次数和 locator；AI 再判断事实与推测。",
+    result: "得到与问题相关的明示、有效认识、证据候选和出处；返回数量及是否还有未展示内容一并说明，AI 再判断事实与推测。少量命中不会被当成已经读过所有材料。",
     readerStates: {
       pass: "识别到专门域时按域选来源和 current 上下文，相关旧中文具体记录仍可召回；数据库字节不变。",
       problem: "扩展域没有专门 parser/权重时只用用户明示与 AI 对话候选，明确不声称同等覆盖。",
@@ -481,7 +498,9 @@ const dailyPreferencesModules = [
       "记录先按 effective outcome 过滤非成功与 refunded_full 订单链，再按 term match、source weight、recency、状态和饮料轴加权；recency=1/(1+age_days/365)，只加排序分，不设过期门槛。",
       "Steam 接受已分类 played/observed，observed 在同条件下减 1 分；明确未玩查询过滤 played，明确游戏查询排除 application。playtime_minutes 不加分，同 AppID 去重并关联 store_price_class，current_free 同条件减 0.5。",
       "Bilibili 按行为类型增加不同排序权重，并排除已失效视频；单次播放比收藏、点赞、投币、稍后看和追番更弱。",
-      "当前仍保留 FTS5 表，但中文精确召回不依赖最近 1,000 条或向量库。"
+      "当前仍保留 FTS5 表，但中文精确召回不依赖最近 1,000 条或向量库。",
+      "普通主题查询先缩小候选卡片，再校验相关来源；跨领域需要 source_revision 时，一次读取同一数据库快照并批量计算，保留原有修订摘要语义，减少重复查询。",
+      "evidence_has_more 说明证据结果是否还有未展示项；facts 的 total_variant_count 与 variants_has_more 分开表示全部变体数量和本次展示范围。截断不会被解释成不存在。"
     ],
     flow: ["读取 CURRENT 快路径", "识别自然问题的域和轴", "选择相关来源", "读取 current 明示/有效推定", "扫描并排序相关记录", "过滤非成功订单、无关AI内容和模板", "B站按行为强度排序", "Steam区分游玩/库内选择并连接当前商店分类", "返回少量证据给 Skill/AI"],
     concepts: [

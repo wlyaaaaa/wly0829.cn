@@ -1721,8 +1721,8 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 7,
-        "scope": "Public-safe overview and seven modules: add reusable personal background, real experiences, priorities, values, cognition and preference understanding as a shared input to independent domains, without central scheduling or duplicated domain state; summary/detail/evidence and same-source CURRENT/PROFILE views; model-selected index, exact multi-card and original-source reading; source-material candidate boundaries, author-bound Gemini input and reviewed native-message/retained-ASR/attachment citations; supplement/temporary/correction/withdrawal, supports/contradicts/context, reliable delivery identity and expected-current-version checks; retain Chrome/Steam/current-browser Bilibili on-demand refresh, manual source snapshots, source identity/history, complete-current-set retirement, full-refund chain semantics, meaningful unmatched payment facts without duplicate purchase evidence, classified Steam games with played evidence and weaker observed library evidence, explicit unplayed-library filtering, without playtime scores, concrete facts/original verification, recency without expiry and AI-owned familiar/adjacent/novel menus; current 73-source/48-card counts are aggregates, not reading or cognition quality; 5 missing source types and 2 explicitly excluded types remain distinct; 2026-09-04 platform/blind-route evidence is not relabeled current v0.12.0 E2E; same-source mobile two-document export, complete source preservation, manifest and citation transplant, exact existing Drive update and full-byte readback, partial reader corrections and separate device-use evidence; time/role/context/counterexample judgment stays with AI rather than vocabulary guards; current 72 statements and 67 historical statements retain evidence dates",
+        "semantic_revision": 8,
+        "scope": "Public-safe overview and seven modules: add reusable personal background, real experiences, priorities, values, cognition and preference understanding as a shared input to independent domains, without central scheduling or duplicated domain state; summary/detail/evidence and same-source CURRENT/PROFILE views; model-selected index, exact multi-card and original-source reading; source-material candidate boundaries, author-bound Gemini input and reviewed native-message/retained-ASR/attachment citations; supplement/temporary/correction/withdrawal, supports/contradicts/context, reliable delivery identity and expected-current-version checks; retain Chrome/Steam/current-browser Bilibili on-demand refresh, manual source snapshots, source identity/history, complete-current-set retirement, full-refund chain semantics, meaningful unmatched payment facts without duplicate purchase evidence, classified Steam games with played evidence and weaker observed library evidence, explicit unplayed-library filtering, without playtime scores, concrete facts/original verification, recency without expiry and AI-owned familiar/adjacent/novel menus; 08:16 observed 73-source/48-card counts are dated aggregates, not reading or cognition quality; 5 missing source types and 2 explicitly excluded types remain distinct; 2026-09-04 platform/blind-route evidence is not relabeled current v0.12.0 E2E; same-source mobile two-document export, complete source preservation, manifest and citation transplant, exact existing Drive update and full-byte readback, partial reader corrections and separate device-use evidence; time/role/context/counterexample judgment stays with AI rather than vocabulary guards; current 72 statements and 67 historical statements retain evidence dates; prompt-driven WeChat changes and new exports, fixed account windows and full pagination, actual reader positions, self-participation with necessary reply context and declared quote gaps, explicit post-increment review of old details, batch source revision validation and output truncation signals; 104 sources at 2026-09-08T15:31:59Z while record/card counts retain the earlier dated observation",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
           "read current AGENTS.md, CURRENT_ACCEPTANCE.md, README.md, schema.sql, daily_preferences.py, live_increment.py, source_snapshots.py, bilibili_browser_collect.mjs, PowerShell wrapper and source-owned tests; distinguish collectors, database evidence/state behavior and Skill/AI recommendation behavior",
@@ -1762,7 +1762,8 @@
         "author_bound_gemini_and_reviewed_native_asr_attachment_citations",
         "statement_transition_evidence_roles_and_reliable_versioned_writeback",
         "same_source_mobile_two_document_export_existing_drive_update_and_byte_readback_with_separate_device_use_boundary",
-        "temporal_context_roles_counterexamples_and_exact_key_only_validation"
+        "temporal_context_roles_counterexamples_and_exact_key_only_validation",
+        "prompt_driven_wechat_window_collection_actual_reading_position_self_participation_quote_gap_and_post_increment_pending_review"
       ],
       "impact_sources": [
         {
@@ -1784,7 +1785,8 @@
             "bilibili_browser_collect.mjs",
             "schema.sql",
             "requirements.txt",
-            "tools/export_mobile_context.py"
+            "tools/export_mobile_context.py",
+            "tools/wechat_update.py"
           ]
         },
         {
@@ -1805,7 +1807,8 @@
             "tests/test_source_filters.py",
             "tests/test_source_materials.py",
             "tests/test_writeback.py",
-            "tests/test_mobile_context_export.py"
+            "tests/test_mobile_context_export.py",
+            "tests/test_wechat_update.py"
           ]
         }
       ],

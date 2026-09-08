@@ -660,7 +660,7 @@ export const systemProjectDomains = [
       { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。旧说法先结合发生时间和当时角色判断，有依据的新认识可以回写；手机端可拿到同一来源生成的两份阅读文件，更新后再核对正文。工作、学习、文书和健康仍各自负责专业判断。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
+      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人的经历、生活重点和真实取舍整理成能补充、纠正的共用背景。说一句“结合最近微信和新资料更新一下”，就从已读位置继续，读过必要上下文后修订认识，保留仍未读的范围。手机使用同源的两份阅读文件；工作、学习、文书和健康各自负责专业判断。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
       { id: "personal-expression", title: "个人表达：讲明白和拟消息", repo: "personal-expression", visibility: "PRIVATE", role: "把事情讲给我听，也帮我把已经确定的意思写成自然消息。指出难懂或别扭之处后，先改好当前回答，再保留有用反馈供下次参考。专业判断和沟通策略仍由当前任务负责；这里只讲解或拟稿，不发送。", kind: "解释与表达支持", href: "/projects/personal-expression" }
     ]
   },
@@ -1466,7 +1466,7 @@ export const systemSkillFamilies = [
       { slug: "localocr", name: "图像场景与精确文字分工", technicalName: "localocr", summary: "按请求选择原生视觉、LocalOCR 或两路独立执行；分开保留场景观察、精确文字、识别状态、坐标、空结果语义与冲突。", href: "/skills/localocr" },
       { slug: "media-person-self", name: "具名媒体中的本人判断", technicalName: "media-person-self", summary: "只判断指定照片或录音中是否支持本人候选，并返回可复核的位置、覆盖范围和未知。", href: "/skills/media-person-self" },
       { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" },
-      { slug: "daily-preferences", name: "个人理解库", technicalName: "daily-preferences", summary: "按问题读取本人的基本信息、经历、重点、价值取舍与认知；真实事实、推定和纠正分开，给独立领域提供本人背景，有依据的新认识可以回写。日常推荐仍保留。", href: "/skills/daily-preferences" }
+      { slug: "daily-preferences", name: "个人理解库", technicalName: "daily-preferences", summary: "按问题使用本人的经历和真实取舍，也能按提示词吸收微信等动态材料与新导出，复核受影响认识并从实际阅读位置继续。事实、推定和纠正分开，日常推荐与领域回写继续保留。", href: "/skills/daily-preferences" }
     ]
   },
   {
