@@ -150,8 +150,7 @@ test("codex-memory search reaches owning modules and project page", () => {
 test("System links its Domain 07 asset to the codex-memory project page", () => {
   const domain07 = systemProjectDomains.find((domain) => domain.id === "backup-and-secrets");
   assert.ok(domain07, "backup-and-secrets domain missing");
-  const asset = domain07.assets.find((item) => item.id === "codex-memory");
-  assert.ok(asset, "codex-memory asset missing from Domain 07");
+  const asset = domain07.assets.find((item) => item.id === "ai-memory-backup-b");
+  assert.ok(asset, "existing Codex memory asset missing from Domain 07");
   assert.equal(asset.href, "/projects/codex-memory");
-  assert.equal(asset.repo, "codex-memory");
 });

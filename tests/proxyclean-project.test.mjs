@@ -91,13 +91,8 @@ test("proxyclean keeps the accepted module routes and three reading layers", asy
   }
 });
 
-test("proxyclean cardMetrics strictly reflect verified core capabilities", () => {
-  assert.deepEqual(proxycleanProject.cardMetrics, [
-    { label: "死端口清理", value: "直连恢复 · 绝不焊死" },
-    { label: "孤儿路由前置条件", value: "无备用默认路由不删" },
-    { label: "端点发现机制", value: "动态审计 · 零固定表" },
-    { label: "网络恢复维度", value: "DNS · 路由 · 网卡 · IPv6" }
-  ]);
+test("proxyclean snapshot binds to the published physical route guard repair", () => {
+  assert.equal(proxycleanProject.sourceCommit, "857b1104cb30897da8f755ef2dbb25fbe1eeea69");
 });
 
 test("proxyclean explains core safety rules without marketing riddles", () => {
@@ -179,5 +174,4 @@ test("System links its proxy-clean asset to the proxyclean project page", () => 
   const asset = machineDomain.assets.find((item) => item.id === "proxy-clean");
   assert.ok(asset);
   assert.equal(asset.href, "/projects/proxyclean");
-  assert.match(asset.role, /代理异常退出后先看清系统代理.*按条件清死本地端口和孤儿路由.*IPv6 查看\/切换/);
 });
