@@ -1881,7 +1881,7 @@ const skillCategoryDefinitions = [
   { id: "diagnose", label: "电脑与系统", slugs: ["browser-control-continuity", "timeaudit-diagnostics", "control-plane-doctor", "tailscale-safe-exposure"] },
   { id: "git", label: "Git 与发布", slugs: ["project-entry-gate", "personal-panel-refresh"] },
   { id: "protect", label: "安全与恢复", slugs: ["local-secret-broker", "authorization-file-broker", "vault-workflow"] },
-  { id: "ai", label: "AI 协作", slugs: ["llm-backend-toolkit", "native-economy-routing", "token-budget-advisor"] }
+  { id: "ai", label: "AI 协作", slugs: ["explain-to-me", "reply-as-me", "llm-backend-toolkit", "native-economy-routing", "token-budget-advisor"] }
 ];
 
 function skillCategoryIds(slug) {

@@ -72,7 +72,7 @@ const localOwnerObservation = Object.freeze({
 const agentsSnapshot = createProjectSnapshot({
   observedAt: panelSnapshot.observedAt.replace("（中国时间）", ":00+08:00").replace(" ", "T"),
   label: `${panelSnapshot.authority.releaseId} 活动规则与能力供应；${localOwnerObservation.releaseId} 历史完整回归`,
-  boundary: `当前活动规则为 ${panelSnapshot.authority.releaseId}；完整本地回归 ${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail 只属于 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 7)}，另 ${localOwnerObservation.crossOwnerSkipped} 项为 cross-owner skip（跨责任源跳过）。本次聚焦验证与历史完整回归分层，不把旧结果继承给 ${panelSnapshot.authority.releaseId}`,
+  boundary: `本批来源选择截止为2026-09-08T08:00:42Z，采集时间另列；当前活动规则为 ${panelSnapshot.authority.releaseId}。完整本地回归 ${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail 只属于 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 7)}，另 ${localOwnerObservation.crossOwnerSkipped} 项为 cross-owner skip（跨责任源跳过）；不把旧结果继承给 ${panelSnapshot.authority.releaseId}`,
   metrics: [
     { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
     { label: "能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 项` },
@@ -89,10 +89,11 @@ const agentsSnapshot = createProjectSnapshot({
     { label: "当前规则与源码分层", value: `活动规则仍是 ${panelSnapshot.authority.releaseId} release commit=${panelSnapshot.authority.gitCommit}；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}，五规则 ruleset=${panelSnapshot.authority.rulesetSha256}。当前源码 main=${panelSnapshot.sourceCommit}，branch=${panelSnapshot.sourceBranch}，${panelSnapshot.sourceSync}；源码 main 不能冒充尚未发布的下一代 E release。`, hero: false },
     { label: "当前聚焦验证与历史完整回归", value: `当前 ${panelSnapshot.authority.releaseId} commit ${panelSnapshot.authority.gitCommit} 已由活动 release Inspect、五文件哈希和专用 release validator 验证；E118 已覆盖四档原生模型、独立责任型顶层任务、局部 Owner CAS、七输入精确规则发布、外部 Chrome 与短时流程及时跟进；本人理解库和浏览恢复则来自独立更新的 Skill source。没有重跑整个 Local 测试集。最近完整观察仍为 ${localOwnerObservation.observedAt} 的 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 12)}：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项跨责任源跳过；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。历史结果不升级为 ${panelSnapshot.authority.releaseId} 全量通过，短时验收也不证明长程永不偏离。`, hero: false },
     { label: "Skill 供应快照", value: `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent、${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`, hero: false },
+    { label: "供给与展示口径", value: "本批源清单有46个注册项：31个安装意图、15个停装项，另列8个已退役入口。公开目录选29个个人入口和2个宿主集成能力，共31项；另外2个已安装个人入口未展示，其中包含明确冻结的运行入口。安装、展示与真实可用数量不能互相代换。", hero: false },
     { label: "工作树热备", value: "工作树热备 source/合同存在；2026-09-07 只读观察确认 G 卷 Healthy/OK，且 G:\\80_Backup\\ControlPlane\\agents-hot-mirror-status.json 存在。该回执最后镜像时间为 2026-07-30T20:30:07-07:00、robocopy exit=1，当时记录 source HEAD=c96dbf1、dirty=21。", hero: false }
   ],
   gaps: [
-    "当前会话没有观察到 AgentsHotMirror-Daily 计划任务；现有状态回执也明显早于当前 source main。页面只能证明热备合同和历史镜像存在，不能声称每日自动热备当前已安装、正在运行或已覆盖最新工作树。"
+    "2026-09-08T08:12:57Z管理员完整观察与PCConfig登记89/89一致，但均没有AgentsHotMirror-Daily或Sync-AgentsHotMirror动作。该名称仍只出现在.agents可选installer中；此镜像最后回执早于当前source，最新覆盖未证，不推断其他现役备份失败，也不自动安装旧入口。"
   ]
 });
 
@@ -123,6 +124,7 @@ export const project = {
     unavailable: "拿不到关键现场证据时，对应结论明确写成 Unknown（证据不足）；不猜路径、不脑补授权，也不拿本地成功冒充远端或用户可用。"
   },
   productPrinciples: [
+    { title: "把任务留下的文件也收好", detail: "下载、生成、解包或复制文件时先知道用途和去向；做完后检查本任务所有落点，只保留确实还要本机使用的成品、维护资产或恢复材料。归位优先移动，临时图、失败输出和 Codex 自有目录也不能漏。原件、他人文件、在用状态不动；清理受阻继续处理并说明精确残留，不把主产物成功说成已经收完。" },
     { title: "理解真实原意，也敢指出错误前提", detail: "错字、口误和转写误差能从上下文还原时直接继续；只有会改变结果的歧义才问。AI 可以据证质疑不合适的中间要求并提出更好办法，但不能借此覆盖本人更正或删掉已经确认的功能。" },
     { title: "短时流程在有效窗口内办完", detail: "验证码将到、登录正在确认时，AI 留在当前流程主动跟进可读来源，收到后趁有效继续。等待方式由真实能力和窗口决定；不会刚开始等就设一个任意延后的任务后离开，窗口结束或来源不可读则说明真实缺口。" },
     { title: "临时绕通不等于依赖已修好", detail: "如果目标确实依赖另一个项目的缺陷，当前页面或应用跑通后，AI 仍应在已有授权与精确施工范围内修复或正式交接那个依赖。没有修好时，告诉我具体影响和接手状态，不把内部报告当成收敛。" },
@@ -188,7 +190,7 @@ export const project = {
     { term: "threadId / clientThreadId（真实任务标识 / 创建中回执）", meaning: "只有真实 threadId 可用于任务管理和归档；clientThreadId 只证明创建已受理。" },
     { term: "Complete goal（已完成目标）", meaning: "goal 的关闭状态；它不再构成 open residual，但仍须分别确认 queue、pending transaction、Owner 和 follow-up 都已收口。" },
     { term: "Scope（施工范围）", meaning: "Owner 认领的最小文件、模块或责任边界。不同活动任务的 scope 不能重叠。" },
-    { term: "CAS（比较后交换）", meaning: "只有 registry revision 仍等于预期值时才提交 Owner 变更，避免并发覆盖。" },
+    { term: "CAS（比较后交换）", meaning: "只有所选比较条件仍一致才提交变更。普通 Owner 变更优先比较本项目 bindings 指纹，恢复仍按精确全局 revision；动作核对精确 binding，避免无关项目变化造成误失效或并发覆盖。" },
     { term: "Registered target（已登记目标）", meaning: "持久 reference 说明目标是谁，现场 resolution 说明它现在是否活动、允许做什么和怎样回读。" },
     { term: "External effect（外部现实动作）", meaning: "会改变外部系统或现实状态的动作，例如发消息、公开、部署、删除或付费。" },
     { term: "Read-back（正式回读）", meaning: "动作执行后，从真实 Owner 再读取结果；命令返回成功不能替代。" },
@@ -215,7 +217,7 @@ export const project = {
   components: [
     { name: "全局根规则", responsibility: "跨项目优先级、E rules authority、事实 Owner、授权、Git 与验证总原则。", implementation: `${panelSnapshot.authority.releaseId} release AGENTS.md 是当前默认入口；dirty source 不是活动规则。` },
     { name: "合同 Catalog", responsibility: "根据触发 metadata 找到正确合同、Owner、Provider、schema 和 validator。", implementation: "Catalog 只做路由，不加载正文、不运行 Provider，也不决定是否授权。" },
-    { name: "三控制面上下文", responsibility: "跨 .agents、Git 和 PCConfig 时提供最小 metadata 视图。", implementation: "两个零正文视图，先返回路径、SHA、大小和 Owner，再按影响展开。" },
+    { name: "三控制面上下文", responsibility: "跨 .agents、Git 和 PCConfig 时提供最小 metadata 视图。", implementation: "按 Owner/DocumentId 选择 documents（主选文档）与 conditional_documents（条件文档）；条件项不预读正文或哈希，明确选择后才提升。旧视图只作兼容导航，不是两道必经门。" },
     { name: "E rules activator", responsibility: "证明并激活 current/previous E release。", implementation: "测试、PRIVATE main commit/remote readback、五哈希、UAC expected-pointer CAS、ACL 和正式回读；不创建后台组件。" },
     { name: "E release store", responsibility: "只保存当前和上一代两份已验证规则，以便原子激活与回退。", implementation: `当前 store 仅保留 current=${panelSnapshot.authority.releaseId} 与 previous=${panelSnapshot.authority.previous?.release_id || "无"}；更早 E 代留在 PRIVATE Git 历史，不在活动 store 堆积。release record、current pointer 与两代目录由 SYSTEM-owned 封闭 ACL 保护。` },
     { name: "运行与临时目录", responsibility: "让 AI 工作台的唯一运行根、数据库和任务临时文件位于 E 数据/缓存盘，同时保留旧入口兼容。", implementation: "当前唯一 Codex 根是 E:\\Data\\AppData\\Codex；C:\\Users\\10979\\.codex 已是指向该根的 junction（目录联接），不是第二副本。任务 temp 使用 E:\\Cache\\Codex\\Temp\\<task-id>。" },
@@ -355,10 +357,10 @@ export const modules = [
     teaser: "我只需说清要做成什么；AI 自己选工具、方法和并行度，既不把临时方案变成新需求，也不借“简化”砍掉产品功能。",
     status: "已落地；身份门禁与路由回归通过",
     statusTone: "pass",
-    value: "我不用背 Skill（能力入口）、插件或代理名称。AI 会先确认目标，再复用现成能力、选择实现和安排并行；计划、代码、测试和审查都不能反过来给我加要求。",
+    value: "我不用背 Skill（能力入口）、插件或代理名称。AI 会先确认目标，再复用现成能力、选择实现和安排并行；计划、代码、测试和审查都不能反过来给我加要求。任务下载或生成的文件也由它负责归位和清理，不让我收拾无意义的副本。",
     why: "任务一长，临时方案很容易被越写越像硬需求；但一味压缩实现，又可能把真正要用的功能一起删掉。这套路由只拦没有依据的新增层，保留 AI 自主研究、补功能、修复、重建和委派的空间。",
     example: "一次真实请求可以是：“继续把这个项目做完整，别把你临时想到的数据库重构变成我的额外要求；能独立验收的工作就并行。”AI 会先分清目标与方案，无论任务长短，只要独立支路的并行净收益为正就可以派子代理；长程关键节点再由独立审查找出自加目标和可删结构。现成入口够用就直接做，自造层导致失败就先删层。",
-    result: "我拿到完整功能、可信并行和满足同一验收底线的最小充分实现，而不是被审查砍残的产品，或被推回来的工程选择。缺身份只会关闭委派，缺能力只会关闭对应路线；最终会说清实际成果、证据和真实缺口。",
+    result: "我拿到完整功能、可信并行和满足同一验收底线的最小充分实现，而不是被审查砍残的产品，或被推回来的工程选择。任务文件只保留确实还有用途的部分，清理受阻会继续处理并说明精确残留；缺身份只会关闭委派，缺能力只会关闭对应路线，最终成果、证据和缺口分别说清。",
     readerStates: { pass: "原意、授权和质量边界清楚后，AI 自主完善、修复、重建并选择 0–10 个子代理；同样能完整验收时，采用总成本更低的实现。", problem: "新增目标或技术层没有用户意图、必要实现或真实质量依据时，只移除那部分并换简单路线；主目标继续，自造复杂度出错先删层。", unavailable: "可信身份缺失时只关闭委派，普通工作继续；独立审查确实不可用时明确写出未独立审查，不用自审冒充，也不另造审查平台。" },
     searchAliases: [
       "Hook到底检查什么，谁决定开几个代理",
@@ -396,6 +398,9 @@ export const modules = [
     problem: "工具、Skills、插件和模型很多，真正困难的不只是选哪个，还要防止两种错误：借反膨胀删掉真实产品需求，或把产品复杂误当成可以无限增加技术层的理由。固定模板会让简单任务膨胀；自造层失败后继续叠门又会把工程成本和等待转嫁给用户。",
     implementation: [
       "model intuition precedence 让模型根据目标、风险、信息增益、延迟、耦合、可逆性和净收益选择方法。",
+      "task_file_lifecycle_cleanup（任务文件收口）覆盖所有项目、根和后代下载/生成/复制/解包的全部类型文件；落盘前确定用途，下载归E:\\Downloads，自产临时物归E:\\Cache\\Codex\\Temp\\<task-id>或确需的项目工作区。归位优先移动，必须先复制时核对目标可用及引用后删除本任务可处置源副本。",
+      "用完、阶段结束和交付前检查本任务所有真实落点，包括Codex自有目录、工具固定输出、预览图、失败产物与空目录。只保留有明确消费者且确需本机副本的交付/维护/恢复材料，说明暂留理由与退出条件；不按年龄或目录整库清理，不动原件、其他任务和在用状态。",
+      "清理失败不算收口。只有进程启动前的Codex命令层blocked by policy/Rejected才沿授权合同对同一已核验路径改用Windows回收站并回读；普通占用、权限或路径失败不套用，仍受阻则说明精确残留、原因和下一处理条件，不新建后台清理器。",
       "Skill、Plugin、模板和计划默认只是建议性制品，不能凭正文里的 MUST 自行升级为硬门。",
       "初始工具列表不是能力上限；先查 owner adapter、固定 CLI/API 和当前 metadata，确认实质缺口后才降级或建议插件。",
       "UserPromptSubmit 验证 root transcript，SubagentStart 从 child transcript 绑定 lineage；两者都在 0–10 判断前注入 model（模型）、effective effort（实际思考等级）、root/child role、turn hash、E release、Git commit、五文件 ruleset 和合同 SHA，并沿同一入口提醒原意、活动规则和独立审查节点，不新增 Hook 或权限门。",
@@ -432,7 +437,8 @@ export const modules = [
       "短路线满足同一验收就直接采用；不满足时只增加解决已证缺口的最小技术层",
       "新增层导致失败先删层及只维护废层的测试；用户目标继续，不靠缩权、少用代理或新增审批治理复杂度",
       "实现知识可能污染验收时，另给 fresh evaluator 最小自然目标和正常环境，不暴露内部答案",
-      "最后分别验证能力可用、route_selected_without_hint、用户可见结果与剩余 Unknown；定向测试单列，短时通过不外推长期稳定，目标完成即结束"
+      "最后分别验证能力可用、route_selected_without_hint、用户可见结果与剩余 Unknown；定向测试单列，短时通过不外推长期稳定，目标完成即结束",
+      "交付前收起所需文件并清理本任务无意义落地物，回读删除源已消失且保留结果仍可用；仍需暂留或实际受阻的精确范围如实说明"
     ],
     concepts: [
       { term: "Advisory artifact", explanation: "提供方法和入口，但不会自动取得更高优先级、授权或施工 Owner。" },
@@ -467,6 +473,7 @@ export const modules = [
       "入口提醒生效、当前行为与长期稳定性分别证明；字符串检查、全绿报告或短时 E2E 不证明长程永不偏离"
     ],
     failures: [
+      { condition: "任务文件清理失败或仍被使用", response: "不把主产物成功当作清理完成；保留在用和必要恢复材料，继续处理可处置项。命令层启动前明确拒绝才用同目标回收站后备，真实残留给出路径、理由与下一条件。" },
       { condition: "委派身份不可验证", response: "停止 spawn，但继续本地调查、实现、测试和答复。" },
       { condition: "PreToolUse 发现身份、家族、effort、参数或 fork 已漂移", response: "取消这一次 spawn，回到当前身份和任务范围重判，不扩大授权。" },
       { condition: "旧 root 没有 Hook，且同一任务中不存在用户对 model/effort 的明确自然语言确认", response: "不建立对话绑定、不猜身份；主任务继续，只有委派不可用。" },
@@ -504,7 +511,7 @@ export const modules = [
     shortTitle: "授权与 Owner",
     title: "用户授权、CoreGoal 与执行 Owner",
     teaser: "给过的授权在同一目标里继续有效，紧急优先只留在当前对话的 24 小时窗口；多个任务各改各的，既不反复追问，也不越过现场拒绝。",
-    status: "E98 授权合同已生效，Owner registry 回归通过；紧急窗口的合同与入口已核对，本次没有开启或重验真人因子链",
+    status: `当前 ${panelSnapshot.authority.releaseId} 授权合同已验证；Owner与紧急窗口的历史回归分别保留，本次没有开启或重验真人因子链`,
     statusTone: "pass",
     value: "它同时解决两个麻烦：已经明确允许的事不必每一步重新问；并发任务又不能因为拿到大目标，就随意扩大到别的文件、账号或外部动作。",
     why: "“把网站发布好”不等于任何子代理都能改任何仓库。两项任务若碰到同一文件，还可能互相覆盖、各自声称完成，或者在交接时把未收尾的义务丢掉。",
@@ -528,7 +535,7 @@ export const modules = [
       "PCConfig 的 Invoke-CoreGoalV2.ps1 提供 approval-request --operation grant_emergency、grant-emergency、check-emergency --scope <enum> 与 revoke-emergency --grant-id <id>。前两步绑定同一规范请求及运行身份；生产 router 从当前宿主环境取得 CODEX_THREAD_ID，拒绝调用者传 --thread-id，不接受测试 proof、测试根或时间覆盖。",
       "紧急 subject（批准对象）固定四项 closed scope set（封闭范围集合）：core_recovery、protected_data_action、protection_handover、protected_rule_override。check-emergency 检查当前线程、范围、到期和撤销；通过也返回 explicit_user_prompt_required=true、effect_authority_granted=false，真实 effect 仍须走对应 Owner 的签名、执行与正式回读。",
       "每个现实步骤使用短时、单次、防重放的步骤能力，绑定 effect、目标、pre/post、回滚和 executor。",
-      "scoped execution owner（范围化施工责任）用 expected revision CAS（预期修订号比较后交换）认领最小 scope（施工范围）；纯只读审计不需要排他绑定。",
+      "scope（施工范围）按实际负责的工作划分；scoped execution owner（范围化施工责任）先Inspect，普通Claim/Add/Expand等优先用ExpectedProjectFingerprint比较本项目完整bindings；AuthorizeAction按ExpectedBindingId回验当前task/project/scope/action，返回v2单次封装。旧revision兼容，恢复仍要求精确全局CAS；纯只读审计不需要排他绑定。",
       "Owner 冲突先由固定 Codex lifecycle resolver 证明 active 或 terminal；resolver 读取物理 CODEX_HOME，只有验证 C 盘 compatibility junction 指向同一 E 根后才归一 rollout 路径，绝不把兼容目录当成第二 authority。普通非长期或已归档且 clean 的 terminal predecessor 无残留时逐 scope RecoverRelease，有 checkpoint/residual 才 RecoverReleaseClaim 给真实 successor。未归档 long_term_task 只接续或正式退役。",
       "来源创建的顶层任务只有取得真实 threadId，且正式完成/停止后无 follow-up、queue、pending transaction 或 Owner residual，才由来源可逆归档；complete goal 已关闭，不算 open residual。",
       "当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，私人账号空间与本机、workspace 和 BitLocker 盘同属 default trusted target（默认可信目标）；可信不等于已授权写入。",
@@ -596,7 +603,7 @@ export const modules = [
       `${panelSnapshot.authority.releaseId} release descriptor 确认授权合同路径、SHA 和 bytes 来自同一 ruleset`,
       "ExecutionOwnerRegistry 聚焦回归验证 Claim/Add/Transfer/Release、RecoverRelease/RecoverReleaseClaim、complete goal 与 archived lifecycle 语义",
       "2026-09-02 只读核对 E98 授权合同、CoreGoal V2 owning contract、生产 router、Models.cs 与 Program.cs：24小时常量、四项scope、禁止替换thread、单次grant、check与revoke一致；未开启真实紧急会话，也未重跑安装态真人因子E2E，这些层不由源码检查代替。",
-      "E98 活动授权合同继续把 PUBLIC companion 迁移绑定为 PRIVATE 远端先完成 default-branch/hash 回读、随后才替换原件并验证 local link 继续 ignored；失败恢复原件，不接受半完成。",
+      `当前 ${panelSnapshot.authority.releaseId} 授权合同保留 PUBLIC companion 迁移：PRIVATE 远端先完成 default-branch/hash 回读，随后才替换原件并验证 local link 继续 ignored；失败恢复原件，不接受半完成。本批未执行实际迁移。`,
       "Git 结果必须另由 Git owner 现场确认 default branch、remote 和 push read-back"
     ],
     relation: "这个模块决定谁被允许做哪一步；能力路由只推荐方法，保护策略只证明重大动作使用哪一代规则。"
@@ -682,7 +689,7 @@ export const modules = [
       `${panelSnapshot.authority.releaseId} Inspect 返回 pass/e_rules_active_verified、pointer revision ${panelSnapshot.authority.pointerRevision}、previous ${panelSnapshot.authority.previous?.release_id || "无"}`,
       `${panelSnapshot.authority.releaseId} commit=${panelSnapshot.authority.gitCommit}，ruleset=${panelSnapshot.authority.rulesetSha256}`,
       "五份 release 文件路径、bytes 和 SHA 与 current descriptor 闭合",
-      "E98活动保护合同明确要求四类完整生产等价演练；本次内容核对没有针对新重大动作候选运行演练或打开真人窗口，因此不把规则生效、本地单测或旧候选证据写成该候选已通过。",
+      `当前 ${panelSnapshot.authority.releaseId} 保护合同要求四类完整生产等价演练；本次内容核对没有针对新重大动作候选运行演练或打开真人窗口，因此不把规则生效、本地单测或旧候选证据写成该候选已通过。`,
       currentValidationDetail("E release validator"),
       currentValidationDetail("Full local tests"),
       "原生路由先验证宿主 model、effort、root/child 与同一 E release identity，再按任务语义选择 0–10 条支路；某次任务的代理数量只属于该次回执，不是持续项目状态"
@@ -707,7 +714,7 @@ export const modules = [
       relations: ["Registry 声明安装意图而 junction 只负责发现", "canonical source 与用户发现目录不是两份源码", "source、install、current task、fresh task 和 E2E 分层证明", "浏览 Skill 调用宿主管理的 Provider 而不复制浏览器客户端", "插件可以供应 Skill 但二者不是同一层"],
       failureRecovery: ["Source 映射漂移时不从用户目录反向复制", "安装事务中断时按 recovery capsule rollback 或 reconcile", "浏览控制重置时先恢复同一标签页并重新读页面", "上传进度不等于成功时读取权威状态和最终记录", "当前任务无回执时保持 Unknown", "退役残留只清理发现路径而不恢复能力"]
     },
-    decisionImpact: ["Source（源码）、quick validation（快速校验）、junction（目录联接）和 transaction（安装事务）全部通过才算安装层健康。", "Current task（当前任务）、Fresh task（全新任务验证）和 E2E（端到端验证）没证据时显示 Unknown（证据不足）。", "当前 29 个 active install intent 与 29 个公开条目分开回读；browser-control-continuity 已安装并完成 fresh 自然路由，网站任务没有重放未来任意浏览场景。", "安装中断时按 recovery capsule（恢复胶囊）回滚或 reconcile（收敛修复）。", "退役 Skill 的目录或旧测试不能让它重新出现。"],
+    decisionImpact: ["Source（源码）、quick validation（快速校验）、junction（目录联接）和 transaction（安装事务）全部通过才算安装层健康。", "Current task（当前任务）、Fresh task（全新任务验证）和 E2E（端到端验证）没证据时显示 Unknown（证据不足）。", `当前${panelSnapshot.skills.activeInstallIntent}个安装意图与${panelSnapshot.skills.selectedPublicCount}个公开条目分别回读；公开项中个人入口${panelSnapshot.skills.personalSelectedCount}个、宿主集成${panelSnapshot.skills.hostIntegratedCount}个。browser-control-continuity的既有fresh自然路由只证明当时场景，不证明未来任意浏览任务。`, "安装中断时按 recovery capsule（恢复胶囊）回滚或 reconcile（收敛修复）。", "退役 Skill 的目录或旧测试不能让它重新出现。"],
     problem: "Skill 源码、用户目录可发现性、当前任务注入和真实自然语言 E2E 是不同事实。如果只看文件存在或 junction 存在就声称能力可用，最终会得到一份看起来很满、实际无法判断的清单。",
     implementation: [
       "E:\\.agents\\skills 与 plugins 是 canonical source；personal-skill-supply.json 是名称、来源和 install 意图的唯一 registry。",
@@ -851,11 +858,11 @@ export const modules = [
     shortTitle: "工作树热备",
     title: ".agents 工作树 E→G 热镜像与恢复",
     teaser: "PRIVATE Git 保存已提交历史；G 盘热镜像补充保存工作树和未提交文件，但当前最新覆盖仍是 Unknown，也不等于实时或完整仓库备份。",
-    status: "热镜像源码与测试合同存在；G 卷 Healthy/OK 且有历史状态回执，但当前未观察到每日任务，最新工作树覆盖 Unknown",
+    status: "可选热镜像源码与历史状态存在；受管任务当前无此入口，最新这份镜像覆盖未证",
     statusTone: "mixed",
     searchAliases: ["未提交的agents工作树怎样热备", "G盘agents热镜像", "AgentsHotMirror任务", "热备和Git历史有什么不同", "从G盘恢复agents工作树"],
     value: "Git 负责已经提交的历史；G 盘镜像在成功执行并有新鲜回执时，能再提供一份当前工作树文件。恢复时两者可以互补，但本页没有证据证明每日任务正在跑，也不能保证最新改动已经进去。",
-    why: "PRIVATE Git 本来就不保存未提交内容，E 盘故障可能让正在写的修改消失；可如果连 .git 或 H 冷备也一起镜像，又会制造第二规则权威并扩大故障影响，所以复制范围必须固定且受限。",
+    why: "PRIVATE Git 本来就不保存未提交内容，E 盘故障可能让正在写的修改消失；这条工作树镜像刻意排除.git与H冷备，让提交历史、当前文件和冷备各自按所属入口恢复；复制范围固定，不把镜像当规则权威。",
     example: "遇到故障，我会问：“我那批还没提交的规则修改，G 盘现在到底还能找回哪些？”系统先核对 G 卷、镜像时间、日志和实际文件，再从 PRIVATE Git 取回提交历史，只把确认过的 G 工作树文件叠加进去。我得到的是可用文件清单和不确定项，不是“实时备份、完整恢复”的空头保证。",
     result: "一次成功镜像会在固定 G 路径留下工作树文件和 `agents.hot-mirror-status.v1` 回执，但它只证明那一次命令。复制若中途失败，G 里可能已经部分覆盖、复制或删除，旧成功回执也不能证明当前完整；E 源保持不动，恢复前必须核对日志和实际文件。最新覆盖与每日任务当前仍为 Unknown。",
     readerStates: { pass: "G 卷健康、取得互斥且 robocopy 退出码低于 8 时，写入本次状态回执；它只证明这次镜像，不证明实时同步、Git 历史或下一次覆盖。", problem: "复制失败或中断后，G 可能只更新了一部分，旧成功回执也可能还在；先看日志和实际文件，不能声称旧恢复点原样保留。", unavailable: "固定路径、G 卷或互斥等前置条件没通过时不启动复制，也不改用 H；任务缺失或回执陈旧时，最新覆盖保持 Unknown。" },
@@ -865,7 +872,7 @@ export const modules = [
       relations: ["PRIVATE Git保存提交历史而G热镜像保存当前工作树", "热镜像排除.git和临时附件", "G热备不触碰H冷备", "状态回执不证明任务已安装"],
       failureRecovery: ["热备任务缺失或回执陈旧时保持Unknown", "G卷不健康或互斥超时且未开始复制时不改镜像文件", "robocopy退出码>=8或中断时G可能已部分覆盖或删除，保留E源并检查日志和实际目标", "旧成功状态不证明失败后的G完整，恢复先核对实际文件再叠加"]
     },
-    decisionImpact: ["固定 source/destination 之外不允许 /MIR。", "PRIVATE Git 与 G 热镜像互不冒充；H 不在自动链中。", "原地/MIR不是原子代际切换，也没有previous或自动rollback；开始复制后的失败可能已覆盖或删除目标文件。", "旧状态回执不能证明当前工作树已覆盖，也不能证明失败后的旧G镜像完整。", "每日任务是可选安装层，源码和测试通过不能证明它当前存在。"],
+    decisionImpact: ["固定 source/destination 之外不允许 /MIR。", "PRIVATE Git 与 G 热镜像互不冒充；H 不在自动链中。", "原地/MIR不是原子代际切换，也没有previous或自动rollback；开始复制后的失败可能已覆盖或删除目标文件。", "旧状态回执不能证明当前工作树已覆盖，也不能证明失败后的旧G镜像完整。", "每日任务是可选安装层，当前受管登记无此名称或动作；不据旧installer恢复任务，源码/测试存在也不能证明当前安装。"],
     problem: "解决未提交工作只有一个故障域、镜像目标漂移、并发镜像互相覆盖、陈旧回执冒充当前覆盖，以及热备越界复制 Git 历史或 H 冷备的问题。",
     implementation: [
       "Sync-AgentsHotMirror.ps1 只接受固定 E:\\.agents 与 G:\\80_Backup\\ControlPlane\\.agents，先验证 G 卷 Healthy/OK，再取得 Global\\CodexAgentsHotMirrorLock，最多等待 30 分钟。",
@@ -894,7 +901,7 @@ export const modules = [
     ],
     verification: [
       "Test-AgentsHotMirror.ps1 验证固定E/G路径、/MIR与.git排除、任务网络独立/错过补跑/3次重试/不唤醒/2小时上限、隐藏launcher与不触碰H。",
-      "2026-09-07 只读现场：G 卷 Healthy/OK，历史 status 存在；未观察到 AgentsHotMirror-Daily 任务。",
+      "2026-09-08零写核对：G卷Healthy/OK，历史status仍在；源installer的精确任务名确为AgentsHotMirror-Daily。PCConfig当前89个登记项既无此名称，也无Sync-AgentsHotMirror动作；08:12:57Z管理员完整观察与89/89定义一致，不是由普通权限单次未找到推断全机状态。",
       "历史 status 最后镜像时间为 2026-07-30、HEAD=c96dbf1、dirty=21；因此当前安装和最新工作树覆盖保持 Unknown。"
     ],
     relation: "Git 历史由 PRIVATE 仓库负责；本模块只补未提交工作树恢复层。context-evidence 模块负责判断这份回执属于哪一证据层，PCConfig 机器备份和 H 冷备不由本模块替代。"
@@ -925,11 +932,11 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("agents_root_rules").lines,
       sourcePath: "E:\\.agents\\AGENTS.md",
       releaseRelativePath: "AGENTS.md",
-      purpose: "所有任务的默认总入口。它定义 E 规则权威、用户原意与实现的分层、长程反需求膨胀审查、指令优先级、事实 Owner、模型自治、english_chinese_gloss、耐久授权、Owner lifecycle、Git 与验证习惯、发布后看板收口及私人领域路由。",
-      plainLanguage: "在系统和开发者边界内遵从用户原意及最近项目规则；AI可以换方案、补功能、修复和重建，但不能把计划、代码、测试或审查变成用户没要的目标。仓库、机器、业务和授权事实仍分别找真正负责它们的来源。",
+      purpose: "所有任务的默认总入口。它定义 E 规则权威、用户原意与实现的分层、长程反需求膨胀审查、指令优先级、事实 Owner、模型自治、english_chinese_gloss、耐久授权、Owner lifecycle、Git 与验证习惯、本任务文件归位清理、发布后看板收口及私人领域路由。",
+      plainLanguage: "在系统和开发者边界内遵从用户原意及最近项目规则；AI可以换方案、补功能、修复和重建，但不能把计划、代码、测试或审查变成用户没要的目标。仓库、机器、业务和授权事实各找其来源；任务产生的文件也要归位清理，保护原件与他人状态，只保留确实还有用途的部分。",
       why: "同一任务里常同时出现用户新要求、项目自己的做法、通用习惯和旧笔记。顺序不清时，AI 容易沿用过时计划、改错项目，或用通用习惯覆盖项目真实验收。",
       example: "你不需要手动调用这条规则。只要说“帮我把网站修好，保留别人已有改动，能自动完成的直接做，最后告诉我真实缺口”，它就会先找对项目、Git 和机器事实，再选择方法和验证层。",
-      result: "AI 会按明确顺序理解要求、找到正确项目和事实来源，再继续实施；遇到无法同时满足的冲突，只暂停受影响部分并说明原因、保留内容和继续办法。",
+      result: "AI 会按明确顺序理解要求、找到正确项目和事实来源，再继续实施；遇到冲突只暂停受影响部分。交付前也检查本任务文件落点，清理无用途副本并回读；必要暂留或清理受阻时说明精确位置、原因和继续办法。",
       readerStates: { pass: "当前要求、项目做法和事实来源一致时，按项目真实流程继续。", problem: "要求或规则互相冲突时，暂停受影响动作并说明冲突、责任来源和恢复入口。", unavailable: "必要规则或事实来源不可读时，不用旧笔记补猜；只暂停依赖它的部分，其他安全工作继续。" },
       scope: ["所有项目任务和无项目任务", "root（根代理）、全部 child（子代理）与后代", "新对话、续作和压缩恢复", "具体项目规则之外的跨项目元规则"],
       decisions: [
@@ -942,17 +949,18 @@ export const rulesSnapshot = {
         "durable explicit user authorization 为什么跨轮次、压缩、root、后代和新顶层任务有效，何时必须真实调用一次",
         "terminal/archived Owner 怎样 RecoverRelease 或 RecoverReleaseClaim，以及来源任务何时可逆归档",
         "什么工作直接推进，什么动作需要授权或进入受保护合同",
-        "怎样保留已有改动、分层验证并收口个人仓库",
+        "怎样保留已有改动、分层验证并收口个人仓库", "本任务哪些文件确需保留、何时清理、受阻怎样处理并回读",
         "已登记来源发布并回读后，何时把增量合并给活动网站 Owner、何时新建 projectless 刷新、何时保持 no-op",
         "健康、微信、录音、扫描件、秘密和 Vault 应走哪条窄入口"
       ],
       allowed: ["范围内低风险本机工作直接推进", "按完整目标自主研究、完善产品功能、修复、重建和委派", "E identity 可信时按净收益选择 0–10 个原生代理", "长期明确授权覆盖精确动作且前提成立时真实调用一次", "授权已明确时完成验证、发布和回读", "来源发布回读后只在看板会实质说错时路由刷新；活动网站 Owner 优先合并，无 Owner 才新建 projectless 任务", "保留 dirty work 并定向提交"],
       forbidden: ["让模型的计划、代码、测试或审查制造新需求", "用缩权、限制代理或让用户逐项审批工程选择来治复杂化", "读取 C 盘历史作为规则权威或准入", "用全局规则覆盖项目业务，或让项目自写 PUBLIC 个人数据限制冒充用户授权", "让项目、Skill 或历史把既有长期授权降为 absent 或要求同轮重述", "把历史报告或记忆当活动权威", "无可信身份时委派", "仅因路径、commit、hash 或普通重构就强制改写个人看板", "删掉有用英文来规避中文括注", "用测试或字段冒充产品结果及长期稳定性", "恢复已退役中央个人上下文"],
-      process: ["任务开始、续作或压缩恢复时 Inspect 当前 E release；同任务同版本已读且未压缩可复用正文", "读取最近项目规则，恢复用户目标、更正与授权并区分可换方案", "确定事实 Owner，按触发读取专项合同", "Owner 冲突时先解析 lifecycle 并收敛 exact scopes", "长程实质节点独立审查需求来源和最小实现，主线继续不冲突工作", "实施并分层验证", "已登记来源发布回读后用 personal-panel-refresh 只判断对应快照的实质漂移，并把多个有界增量收进一个稳定发布批次", "用人话报告真实结果；不以自造改进项继续已完成目标"],
+      process: ["任务开始、续作或压缩恢复时 Inspect 当前 E release；同任务同版本已读且未压缩可复用正文", "读取最近项目规则，恢复用户目标、更正与授权并区分可换方案", "确定事实 Owner，按触发读取专项合同", "Owner 冲突时先解析 lifecycle 并收敛 exact scopes", "长程实质节点独立审查需求来源和最小实现，主线继续不冲突工作", "实施并分层验证", "归位所需文件，清理本任务各落点无意义副本，回读并说明真实暂留或受阻项", "已登记来源发布回读后用 personal-panel-refresh 只判断对应快照的实质漂移，并把多个有界增量收进一个稳定发布批次", "用人话报告真实结果；不以自造改进项继续已完成目标"],
       failure: ["规则冲突无法同时满足时停止并说清冲突", "委派身份缺失只关闭委派，主任务继续", "授权不清时停止外部 effect，但继续安全调查", "长期授权已覆盖时以真实 tool call 的 unavailable/deny/error 等结果为准", "Git 未收口时分别报告业务和 Git 状态"],
       sections: [
         { title: "优先级与事实 Owner（责任源）", paragraphs: ["活动规则只来自同一 E release：递增 E 代号、PRIVATE main commit、五文件 bytes/SHA 和 ruleset SHA。dirty source 与 C 盘历史都不是活动规则。"], items: [".agents：Agent（智能体）行为、授权、E rules release、能力路由和个人 Skills（能力入口）", "Git 控制面：仓库身份、可见性、分支、同步和发布；它消费授权合同的 PUBLIC 分级结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份和恢复", "AI 工作台唯一运行根与数据库位于 E:\\Data\\AppData\\Codex，C:\\Users\\10979\\.codex 只是兼容 junction；任务 temp 位于 E:\\Cache\\Codex\\Temp\\<task-id>", "具体项目：业务、领域数据、启动和测试；项目收紧 L1/L2 默认须有真实需要与用户精确授权"] },
         { title: "模型自治与复杂度", paragraphs: ["用户原意、更正和真实质量高于可替换方案；模型自主研究、完善、修复、重建与委派，计划、代码、测试和审查不能制造目标。长程实质节点独立审查需求来源与可删实现，只拦自加增量，不砍功能或缩权。"], items: ["先问是不是用户要的结果，再比较同完整验收下的最小充分实现", "完善项目包含补产品功能；实施中指出 bug 默认修复，明确只问或不改时除外", "压缩、交接、更正、反复失败或扩架构前先恢复原意，不只续写清单", "原生委派在 E identity 可信后自主选择 0–10、家族与 effort", "english_chinese_gloss 保留有用英文，首现英文自然词或短语紧跟简短中文括注；常见缩写和精确标识除外", "不得为免括注删除、回避或全中文替代有用英文", "Skill（能力入口）和模板默认是建议，不是硬门", "官方 App 版本和 versioned path 不得成为准入", "只抽象真实重复和 owner（责任方）边界；自造复杂度失败先删层及维护废层的测试", "恢复服从用户语义，不撤销本人已确认的操作；短时 E2E 不证明长程永不漂移", "现有状态分开保留用户目标与方案，简单工作不制造文档或台账"] },
+        { title: "文件归位与完成", paragraphs: ["E121明确本任务所有下载、生成、复制和解包文件的生命周期；交付本体成功不抵消清理义务。只保留确需以后本机使用的交付、维护或恢复材料。"], items: ["归位优先移动；必须先复制时核对目标与引用后移除本任务可处置源副本", "用完、阶段结束和交付前检查下载、工作区、Codex自有目录、工具固定输出和临时根，失败输出与空目录也要收口", "不动原件、其他任务、归属未知、在用文件和必要恢复材料，不按年龄整库清理", "命令层启动前明确拒绝删除时，按授权合同对同一已核验目标走回收站后备；普通失败另行诊断", "仍需暂留或受阻时说明路径、理由和下一条件，回读原路径消失且保留结果可用，不另造清理服务"] },
         { title: "授权、Git 与验证", paragraphs: ["本机可逆工作直接做；外部 effect（现实动作）需要明确授权。durable grant（耐久授权）不要求同轮重述，但不会覆盖上位 deny、证据、目标或不可逆边界。用户私人账号空间在默认私人且没有 public/share 信号时与本机私密目标等价可信，但信任不产生写授权。"], items: ["长期明确授权在冻结 goal/scope 内跨 root、child、压缩和 successor 持续有效；前提成立须真实调用一次", "实际 unavailable、deny、step_up、needs_evidence、action-time confirmation、error、身份/CAS/target/read-back 失败仍按现场结果处理", "PUBLIC 个人数据唯一 L1–L5 表由授权合同拥有：L1/L2 不受个人数据限制，L3+ 才进入可能敏感审查", "项目收紧 L1/L2 默认必须有真实项目需要和用户对精确项目、范围、限制的明确授权", "普通非长期或已归档且 clean 的 terminal predecessor 无 residual 用 RecoverRelease；有 residual 用 RecoverReleaseClaim；未归档 long_term_task 只接续或正式退役", "只有真实 threadId 可归档", "E release 激活是 UAC expected-preimage CAS，不经过旧 Publisher、人类因子或 CoreGoal", "不覆盖用户已有改动", "force-push（强制推送）不在默认授权内", "source（源码）、test（测试）、install（安装）、publish（发布）、fresh task（全新任务验证）与 E2E（端到端验证）独立", "个人仓库必须由远端默认分支回读"] },
         { title: "私人领域、供应与发布后看板", paragraphs: ["中央个人知识入口已退役；持续需求通过健康、微信、原件、录音、OCR、秘密和 Vault 等小型独立入口处理。登记来源发布后，个人看板只在其对应快照会实质失真时跟进。"], items: ["Personal Skills 的 source 只在 E:\\.agents\\skills 和 plugins", "用户目录只是 discovery junction", "动态事实由真实 owner 现场提供", "项目、活动 Rule 或个人 Skill 发布并正式回读后，personal-panel-refresh 只评估它的对应快照与直接派生表面，不转成全站复核", "实质影响先交给活动网站发布 Owner，以来源、提交、路径、观察时间和活动代际绑定后合并成稳定批次；没有活动 Owner 才创建 projectless 网站任务", "仍匹配的证据才复用；同源新提交不制造 scope 抖动，批次稳定后一次运行最终完整门，预览在可控后台会话中限时运行", "派发受理不等于已读或完成；来源不等待、不轮询，发送失败不另开竞争任务", "非实质、重复、需要本人明确启动的页面或未登记来源均不安排更新", "新规则原位升级，不堆补丁"] }
       ],
@@ -980,7 +988,7 @@ export const rulesSnapshot = {
       allowed: ["E current 验证后继续普通工作", "dirty source 存在时继续使用已验证 release", "测试和 PRIVATE main 回读后用 UAC 激活新 E 代", "验证 current↔previous 后回退", "普通本地编辑、测试、定向 commit 和 normal push"],
       forbidden: ["读取 C 盘旧规则作为权威或 fallback", "复用 E 代号或覆盖 E80 bootstrap", "由关键词、路径或 effect 名称机械推导 human required", "用 mock/stub 冒充四类生产等价 rehearsal", "把 UAC 当用户授权或人类因子"],
       process: ["验证 source 测试", "PRIVATE main commit 与 remote readback", "计算五文件描述符和 ruleset SHA", "以 expected pointer SHA 做 CAS", "UAC 原子切 current/previous 并恢复封闭 ACL", "Inspect 与 fresh root/child/spawn read-back"],
-      failure: ["dirty source：不激活，current 保持不变", "五文件任一漂移：拒绝新 release", "stale pointer CAS：拒绝覆盖并重读", "激活失败：保留 current/previous", "E identity 缺失：只关闭委派/受保护动作，普通任务继续", "C Authority unavailable：忽略为历史，不形成 blocker"],
+      failure: ["七个真实激活输入有dirty：不激活，current保持；无关Skill改动不阻断", "五文件任一漂移：拒绝新 release", "stale pointer CAS：拒绝覆盖并重读", "激活失败：保留 current/previous", "E identity 缺失：只关闭委派/受保护动作，普通任务继续", "C Authority unavailable：忽略为历史，不形成 blocker"],
       sections: [
         { title: "判断边界", paragraphs: ["最高权限智能体结合真实意图、目标、范围和可恢复性作语义判断；机械层只验证 principal、schema、签名/nonce、目标、事实和 effect 边界。"], items: ["人类因子：Passkey、TOTP、Recovery、Account", "Google 与 Microsoft 只是 Account provider", "取消、超时和失败只暂停", "E release activation 明确不属于人类因子路径"] },
         { title: "E 规则唯一活动权威", paragraphs: ["一个 release 唯一绑定递增 E 代号、PRIVATE main commit、五份规范 bytes/SHA 和 ruleset SHA。E80 是不可变 bootstrap，E81 及后续必须新 commit、新代号。"], items: ["dirty 工作区不是活动规则", "current-rules.json 位于受保护 releases 父目录", "current/previous 原子切换", "普通/管理员编辑器直接改写或删除必须失败"] },
@@ -1042,15 +1050,15 @@ export const rulesSnapshot = {
       result: "任务会得到一份足够当前判断的最小事实组合，每条结论都能回到负责它的来源；某一处不可读，只影响依赖它的结论。",
       readerStates: { pass: "所需来源都可读时，组合最小必要事实并继续。", problem: "不同来源给出矛盾事实时，分别保留并交给真正负责的一方复核，不强行合成一个答案。", unavailable: "某个必要来源不可读或数据结构无效时，只停止依赖它的跨项目结论，不用旧中央资料补猜。" },
       scope: ["跨控制面架构评审", "运行治理", "全局演化", "Owner 关系和合同覆盖"],
-      decisions: ["当前需要哪个控制面的事实", "是否只需 metadata 还是要展开正文", "Git 是否只提供 visibility 与候选内容事实，而没有越权建立或收紧 PUBLIC 个人数据等级", "设计、Git、机器和 external receipt 应怎样分开验证", "是否真的出现需要新基座的稳定需求"],
+      decisions: ["当前需要哪个控制面的事实", "是否只需 metadata 还是要展开正文", "Git 是否只提供 visibility 与候选内容事实，而没有越权建立或收紧 PUBLIC 个人数据等级", "设计、Git、机器和 external receipt 应怎样分开验证"],
       allowed: ["零写获取 metadata", "从 E current release 读取规则路径与 SHA", "按影响展开 owner 正文", "必要时联动三个 Owner"],
       forbidden: ["把兼容名称理解成第四控制面", "让 Git 控制面另建或收紧 PUBLIC 个人数据等级", "读取 C 盘旧 authority/generation/Publisher/epoch", "恢复已退役中央上下文", "复制私人正文和巨大快照", "用 dirty source 冒充 E current", "用合同设计证明 runtime"],
       process: ["确认跨 Owner（责任源）事实会改变决定", "列出视图和 owner（责任方）", "只选会改变决定的 Owner 或 DocumentId，必要时用兼容视图", "读取 primary metadata（主要元数据）", "按影响展开 conditional（条件内容）", "独立验证各层"],
-      failure: ["schema 无效：BLOCK", "E release 五规则闭包不完整：BLOCK", "required owner 缺失：BLOCK", "primary 不可读：BLOCK", "修正确 Owner，不回退 C 盘或历史中央系统"],
+      failure: ["所选schema或必需Owner不可读：只停止依赖它的结论", "选择E文档且五规则闭包失败：不猜活动规则；无关项目元数据继续", "条件项尚未展开不等于失败，也不预读其正文/哈希", "修正确Owner，不回退C盘或历史中央系统"],
       sections: [
         { title: "现行边界", paragraphs: ["现行控制面只有 .agents、Git 总索引和 PCConfig；具体项目继续拥有业务语义。文件名里的 four-base 只是兼容标识。"], items: [".agents：Agent 行为、授权、能力路由及 PUBLIC 个人数据唯一分级", "Git：仓库身份、可见性、分支、同步、发布；只向 .agents 提供事实并消费分级/授权结论，不另建等级", "PCConfig：机器路径、运行时、任务、备份、恢复", "具体项目：业务和产品结果"] },
         { title: "入口与证据", paragraphs: ["入口只返回 Owner（责任源）、E release path、content SHA、大小和 Token（模型计数单位）估算；不复制无关正文、不运行动态 Provider（现场读取器）、不建共享数据库。"], items: ["先 metadata（元数据）后正文，documents 与 conditional_documents 分开", "条件文档不预读正文或哈希，显式 Owner/DocumentId 才提升选择", "只有选中 E 文档才触发唯一 Resolve，五文件共同校验不等于加载五份正文", "活动规则从同一 E release 解析", "dirty source 不是 current", "设计、Git（版本管理系统）、机器和 Adapter receipt（适配器回执）分开验证", "普通单项目任务不机械进入全景"] },
-        { title: "退役边界", paragraphs: ["历史中央系统及其冻结文档不是控制面、默认个人上下文或运行产品。备份对象存在也不会恢复它。"], items: ["不调用旧 context、beacon 或 probe", "不读取历史私人数据库和媒体", "历史命名不是新基座理由", "新基座必须有独立稳定 owner、生命周期和恢复边界"] }
+        { title: "退役边界", paragraphs: ["历史中央系统及其冻结文档不是控制面、默认个人上下文或运行产品。备份对象存在也不会恢复它。"], items: ["不调用旧 context、beacon 或 probe", "不读取历史私人数据库和媒体", "历史命名不是新基座理由"] }
       ],
       relation: "它只选择跨 Owner 证据，不提供业务答案、不授权 effect，也不证明发布完成。"
     },
@@ -1065,21 +1073,22 @@ export const rulesSnapshot = {
       lines: currentRuleBinding("capability_routing_contract").lines,
       sourcePath: "E:\\.agents\\docs\\contracts\\agents.capability-routing.md",
       releaseRelativePath: "docs\\contracts\\agents.capability-routing.md",
-      purpose: "唯一拥有方法选择、用户原意与可换方案分层、反需求膨胀审查、english_chinese_gloss、上下文与读者路由、复杂度治理、动态配置、原生经济委派和按需插件语义的合同。",
-      plainLanguage: "用户不用背工具名或逐项决定工程方法。AI自主选择能力、补齐产品功能、修复和并行；长程关键节点让独立审查检查是不是偷加了目标，再检查实现是否最小充分，既不做用户没要的事，也不砍用户要的功能。",
+      purpose: "唯一拥有方法选择、用户原意与可换方案分层、反需求膨胀审查、english_chinese_gloss、上下文与读者路由、任务文件收口、复杂度治理、动态配置、原生经济委派和按需插件语义的合同。",
+      plainLanguage: "用户不用背工具名或逐项决定工程方法。AI自主选择能力、补齐产品功能、修复和并行；长程关键节点独立检查自加目标及可删实现，保留完整功能。下载和生成文件时先确定用途，做完后归位并清理无意义副本，原件、他人文件和仍在使用的内容保留。",
       why: "不同任务需要的工具和并行程度不同。机械套同一流程会用错能力、重复安装工具，或开出很多代理却没有人负责最终结果。",
       example: "你不需要指定 Skill、工具或子代理。只要说“把聊天附件、录音、扫描件和合同原件核对后整理成可编辑文书和逐页验收 PDF；不能确认的事实单列”，系统会自己选择原件、转写、识别、文书和 PDF 验收能力，并把未知保留到成品。",
-      result: "任务会使用真正有帮助的工具、资料和并行数量，最后由当前任务统一合并和验收；用户拿到的是可用结果、依据和仍然存在的缺口。",
+      result: "当前任务统一合并和验收工具、资料与并行成果，也核对本任务各处文件是否收好：只留确需本机使用的结果，删除后回读；清理仍受阻就说明精确残留、原因和下一条件。用户拿到可用结果、依据和真实缺口。",
       readerStates: { pass: "能力可用、范围清楚且能独立验收时，选择合适工具或并行协作并继续。", problem: "出现写入冲突、资源争用、无法独立验收或并行收益不足时，减少并发或改为串行。", unavailable: "目标能力不可用时，只停止这条路线，继续其他安全工作并说明缺少什么、怎样继续。" },
-      scope: ["所有项目、对话和后代的能力选择", "用户原意、长程审查与状态重建", "README 与项目规则路由", "动态配置设计", "原生委派和插件缺口"],
-      decisions: ["当前任务值不值得使用某项能力", "英文自然词或短语是否需要按 english_chinese_gloss 在首次出现后紧跟中文括注", "PUBLIC 内容判断是否需要按需读取授权合同的唯一分级表", "项目规则是否在定义客观 precondition，还是错误地降级既有长期授权", "应读多少上下文", "是否安装运行时或建议插件", "可信 model/effort/role/E release identity 是否成立", "应并行 0–10 个代理以及选择 Luna/Terra/Sol/Astra 哪个家族；未分类型号只保留同一精确 ID 后代，已有明确能力顺序才跨型号比较", "当前验收是否会被实现知识污染，需不需要 implementation-blind fresh E2E", "自然请求是否在没有路线提示时自主选对能力并交付正确可见结果", "Codex 官方更新是否仍是稳定主体且现场 event/capability 可用", "顶层 task 的真实创建调用返回 success、unavailable、failed 还是 dispatch-unconfirmed", "怎样保持代码和仓库不过度膨胀"],
+      scope: ["所有项目、对话和后代的能力选择", "用户原意、长程审查与状态重建", "下载、生成、复制、解包文件的归位与清理", "README 与项目规则路由", "动态配置设计", "原生委派和插件缺口"],
+      decisions: ["当前任务值不值得使用某项能力", "英文自然词或短语是否需要按 english_chinese_gloss 在首次出现后紧跟中文括注", "PUBLIC 内容判断是否需要按需读取授权合同的唯一分级表", "项目规则是否在定义客观 precondition，还是错误地降级既有长期授权", "应读多少上下文", "是否安装运行时或建议插件", "可信 model/effort/role/E release identity 是否成立", "应并行 0–10 个代理以及选择 Luna/Terra/Sol/Astra 哪个家族；未分类型号只保留同一精确 ID 后代，已有明确能力顺序才跨型号比较", "当前验收是否会被实现知识污染，需不需要 implementation-blind fresh E2E", "自然请求是否在没有路线提示时自主选对能力并交付正确可见结果", "Codex 官方更新是否仍是稳定主体且现场 event/capability 可用", "顶层 task 的真实创建调用返回 success、unavailable、failed 还是 dispatch-unconfirmed", "怎样保持代码和仓库不过度膨胀", "怎样收起任务文件、保护原件与并发状态，并完成清理回读"],
       allowed: ["按净收益选择方法", "需要时安装官方稳定运行时", "verified 身份下委派", "需要时用最小自然意图和正常产品环境执行 implementation-blind fresh E2E", "durable explicit user authorization 在 root/全部 child/后代和新顶层 task 中持续满足精确用户允许门", "前提成立时真实调用一次 create_thread 并按 trackable id 分类", "真实能力缺口时提醒精确插件", "复杂任务建立可重建 checkpoint"],
       forbidden: ["把 Skill 指令升级成硬门", "项目规则或模板把既有长期授权降为 absent 或要求同轮重述", "用通用工具说明或历史失败预判 create_thread 不可用", "为规避中文括注而删除、回避或全中文替代有用英文", "在非 PUBLIC 决策中无差别加载个人数据分级表", "已有入口仍提示插件", "在 blind routing 提示中点名 Skill、tool、plugin、provider、内部路径或预期路线", "把 directed_execution_test 冒充 route_selected_without_hint", "用 app version、build 或 versioned path 作为官方更新准入", "无身份 spawn", "固定默认 child 模型", "派出高于父级 effort 或超过 Ultra 绝对上限的后代", "用顶层 task 绕过 native 拒绝", "因 C Authority unavailable 关闭 E rules 委派", "为假想未来建动态配置平台", "把 README 当默认 AI 上下文"],
-      process: ["恢复自然语言目标、更正和真实质量，区分可换方案；长程实质节点独立审查自加目标与最小实现", "查 Owner、原生入口和当前能力 metadata", "确认 durable user authorization 与其他上位门的交集", "root 经 UserPromptSubmit、child 经 SubagentStart 取得原意提醒与可信 model/effort/role/E identity", "完整读取同 E release 的原生经济路由节；同任务同版本未压缩可复用", "AI 按任务语义、净收益、冲突和 slots 决定 0–10、家族与 scope，root 继续不冲突工作", "每次真实 spawn 前由 PreToolUse 复核 TOCTOU、家族/effort 上限、参数和 fork", "只有独立成果、责任必要、净收益与精确无现役 Owner 条件成立时，才真实调用一次顶层 task 创建工具；能否 Claim 不单独决定", "缺能力再装 runtime 或建议插件；官方更新按稳定 package family、signer/principal 与当前 event/capability 发现保持连续并局部降级", "实现知识可能污染验收时，用不泄露路线的 fresh evaluator 同时验证 route_selected_without_hint 和用户可见结果", "root 与 child 分层验证并由 root 最终集成；短时通过不外推长期不漂移"],
+      process: ["恢复自然语言目标、更正和真实质量，区分可换方案；长程实质节点独立审查自加目标与最小实现", "查 Owner、原生入口和当前能力 metadata", "确认 durable user authorization 与其他上位门的交集", "root 经 UserPromptSubmit、child 经 SubagentStart 取得原意提醒与可信 model/effort/role/E identity", "完整读取同 E release 的原生经济路由节；同任务同版本未压缩可复用", "AI 按任务语义、净收益、冲突和 slots 决定 0–10、家族与 scope，root 继续不冲突工作", "每次真实 spawn 前由 PreToolUse 复核 TOCTOU、家族/effort 上限、参数和 fork", "只有独立成果、责任必要、净收益与精确无现役 Owner 条件成立时，才真实调用一次顶层 task 创建工具；能否 Claim 不单独决定", "缺能力再装 runtime 或建议插件；官方更新按稳定 package family、signer/principal 与当前 event/capability 发现保持连续并局部降级", "实现知识可能污染验收时，用不泄露路线的 fresh evaluator 同时验证 route_selected_without_hint 和用户可见结果", "root 与 child 分层验证并由root最终集成；交付前收口各落点任务文件，暂留有用途，受阻有精确说明；短时通过不外推长期不漂移"],
       failure: ["无可信身份：只关闭委派", "E identity 变化或压缩：重读 11 条强门禁", "PreToolUse 发现身份、上限或参数漂移：取消本次 spawn 并重判", "blind routing 提示泄露内部路线：降为 directed_execution_test，用新的纯自然意图重测", "官方更新后精确 event/capability 缺失：只关闭对应能力，普通项目继续", "create_thread 实际缺失或 deny：unavailable；工具 error：failed；无 trackable id：dispatch-unconfirmed，均不盲重试", "Provider（服务入口）缺失：报告受限，不造第二 Provider", "child（子代理）中断：优先恢复原 session（会话）", "C Authority unavailable：不影响此路径", "catalog schema（目录数据结构）无效：失败关闭"],
       sections: [
         { title: "短时流程、真实原意与依赖责任", paragraphs: ["验证码、登录确认等短窗口内，AI 在当前任务主动跟进真正可读取的来源并趁有效继续；普通时效问题不因此变成长期轮询。理解错字和口误时依据真实上下文，必要时据证质疑错误前提，保留本人更正与已确认功能。"], items: ["只有歧义会改变目标、授权或结果才问关键问题", "已证 B 依赖缺陷不因 A 局部成功消失，按最小范围修复或正式交接", "未修时披露具体影响、原因和接手状态，报告不代替已授权修复", "默认外部 Chrome；本地 HTML 首次导航使用有界 HTTP 开发/预览路线"] },
         { title: "方法与能力自治", paragraphs: ["目标、信息增益、延迟、耦合和可逆性决定方法。Skill、Plugin、模板和计划只是候选能力，不会扩大授权。"], items: ["english_chinese_gloss 保留有用英文；除 AI/LLM/API/URL/JSON 等常见缩写和精确标识外，英文自然词或短语首次出现后紧跟简短中文括注", "不得为免括注删除、回避或全中文替代有用英文", "先找 owner adapter、CLI/API 和 metadata", "实证缺失才降级", "任务必需 runtime 可从官方路径安装", "既有项目服从 lock、版本和 CI"] },
+        { title: "任务文件生命周期", paragraphs: ["下载进E盘下载目录，自产中间物进当前任务临时根或确需的工作区，落盘前确定用途和去向；不以outputs、缓存、备份或图片名义永久留下无用途副本。"], items: ["适用于所有项目、root和全部后代，不按文件类型排除", "归位默认移动；复制保留须有原件、现役消费者或备份理由", "及时清理无意义下载包、预览、日志、中间和失败输出；排查恢复仍需要的最小材料可暂留", "检查本任务所有落点，包括Codex自有目录；正常配置、会话和活数据库不因位置成为垃圾", "保护原件、他人及在用状态，不全盘或按年龄清空", "清理失败继续处理；命令层启动前明确拒绝才使用授权合同的同目标回收站路线", "实际残留公开说明精确路径、原因和下一条件；主结果通过不能替代清理回读"] },
         { title: "耐久状态、需求审查与代码", paragraphs: ["现有状态分开保留用户结果、更正、授权、可推翻方案和剩余结果。长程实质范围/方案变更、压缩重规划、同类失败循环及阶段交付前必须一路独立子代理审查；只拦自加目标，不缩权、不砍功能或将工程判断交回用户。"], items: ["先问用户是否要求这个结果，再问实现是否最小充分；计划、代码、测试和审查不造需求", "完善项目包含自主补功能，实施中指出 bug 默认修复；明确只问或不改除外", "压缩或扩架构前恢复原意；简单工作不新增台账、数据库、服务或逐工具回执", "自造层引发失败先删除/绕开，同步删除只维护废层的测试文档；不以恢复名义撤销用户操作", "完整产品与真实质量不减，现有能力充分就用；审查也不制造额外验收目标", "Consumer 只依赖最小接口，代码保留内聚、显式接口和确定行为", "配置按真实需求逐级准入，秘密只用 SecretRef", "完成计划和旧复盘由 Git 留史；短时 E2E 不证明长程永不偏离"] },
         { title: "Reader routing（读者路由）", paragraphs: ["人类 README（说明文档）要保持人话和最新，但不是动态权威；项目规则只承载该项目真正更具体的语义。"], items: ["用户明确询问或验收需要时才读操作指南", "只有目标明确 PUBLIC 或正在决定公开内容时，才读取授权合同的 PUBLIC 个人数据唯一分级表", "Git 与项目提供 visibility、候选内容和业务事实，不复制或改写等级", "项目收紧 L1/L2 默认须满足授权合同的项目需要与用户精确授权", "项目可定义客观 precondition，但不能制造授权、降级既有 durable grant 或要求同轮重述", "过期文档是待修缺陷", "嵌套规则只在子树语义不同才存在", "现场代码、测试和 Provider（事实入口）决定实现事实"] },
         { title: "原生经济委派与顶层任务", paragraphs: ["现行 11 条规则先绑定 model、effective effort、root/child role 与 E release/commit/ruleset/合同 SHA，再做 0 到 10 决策；durable grant 对全部后代持续满足用户允许，但身份、slot 与真实工具结果仍现场证明。"], items: ["gpt-5.6-luna：封闭可验、读重和确定性工作", "gpt-5.6-terra：强耦合实现、深调试和架构审查", "gpt-5.6-sol：复杂实现、战略判断与终审", "gpt-6-astra：关键路径最高难度、最易返工或最快正确收敛，按质量与总成本决定是否值得", "其它 verified 型号是 unclassified（未分类），仍可派同一精确 ID 后代；不得按价格、版本或 UI 顺序猜强弱", "各型号档位取宿主实际可用集；Luna/Terra Max 是常用基线而非硬下限；后代模型与 effort 受根/直接父双上限且不超过 ultra", "家族与 effort 只能向下收窄，Root 持续负责目标、风险和最终集成", "顶层 Owner task 需 live scope 无 Owner、独立成果/责任必要和正净收益；能否 Claim 只说明施工路径，projectless 是默认", "create_thread 只真实调用一次；threadId/clientThreadId 表示受理，clientThreadId 仍不能用于归档"] },

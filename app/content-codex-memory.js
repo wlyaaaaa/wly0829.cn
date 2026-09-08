@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-07T23:40:00Z",
-  "label": "两条日常备份任务最近执行成功；G 最新对话点已发布，H 当前离线",
-  "boundary": "本轮重跑三个源测试套件并检查任务与元数据。最新 G 点创建于 2026-09-07T04:15:09Z，清单为 6,838 文件、76,810,464,735 字节；23:37 的活动源盘点为 6,863 文件、76,972,556,004 字节，两者不是同一快照。本轮没有重新抓取生产 VSS、全量重验这 71.54 GiB 对象或做新机器恢复。",
+  "observedAt": "2026-09-08T08:17:27Z",
+  "label": "日常备份已生成新点；G 与 H 保存同一份 6,898 文件的对话恢复点",
+  "boundary": "源码截止2026-09-08T08:00:42Z；实际只读采集在08:11—08:17Z。最新点创建于04:15:08Z，6,898文件、77,376,044,970字节，H于06:44Z完成独立校验。采集时活动源另有6,923文件，两者不是同一时间点。三个源测试套件沿用9月7日验收；本轮没有重抓VSS、重新读取全部72.06GiB对象或做新机器恢复。",
   "metrics": [
     {
       "label": "配置与记忆",
@@ -11,7 +11,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "最新对话备份点",
-      "value": "6,838 文件 · 71.54 GiB"
+      "value": "6,898 文件 · 72.06 GiB"
     },
     {
       "label": "历史存储",
@@ -25,15 +25,15 @@ const baseSnapshot = createProjectSnapshot({
   "facts": [
     {
       "label": "源版本与本轮修复",
-      "value": "PRIVATE（私有）main 8e50e19b8e406e7875a83b50117ca486b32959c3 已正常推送并由远端回读。源恢复说明已由旧 C 盘改为实际 CODEX_HOME 所在卷（当前 E:）；运行实现沿用已存在的 E 卷快照路径。"
+      "value": "冻结PRIVATE（私有）main为77c1a4011c8cd49dfd06f69614cbb9cb0ef034f1，远端回读同值、工作区干净。相对8e50e19的两个提交只有例行备份载荷变化；工具与恢复文档未变，仍从实际CODEX_HOME所在的E卷捕获，不把载荷更新写成程序升级。"
     },
     {
       "label": "小文件源清单",
-      "value": "2026-09-07 本轮 DryRun（试运行）选中 243 文件、2,655,887 字节（2.53 MiB）。这些是当前待采集的小文件，不是私有库完整历史的大小，也不是永远固定的容量上限。"
+      "value": "2026-09-08T08:16:34Z的DryRun（试运行）选中243文件、2,656,388字节（2.53MiB）。这是采集时待备份的小文件，不是08:00:42Z的冻结正文，也不是私有库完整历史或固定容量上限。当前仓库MANIFEST保留历史后为713文件、5,711,701字节，与当次源清单分别计算。"
     },
     {
       "label": "G 最新会话点与活动源不同",
-      "value": "G current.json 指向 20260907T041509Z-994e8a77。该点 manifest.json 为 6,838 文件、76,810,464,735 字节（71.54 GiB）；当前活动源 Inspect 为 6,863 文件、76,972,556,004 字节（71.69 GiB）。Inspect 枚举源数据，不核验已备份对象；新产生的文件要等待下次热备。"
+      "value": "G current.json指向20260908T041508Z-d14c3a16，04:20:33Z发布；manifest为6,898文件、77,376,044,970字节（72.06GiB）。08:11Z的活动源Inspect为6,923文件、77,555,687,374字节（72.23GiB）。Inspect只盘点活动源，不核验已备份对象；快照后新增或变化内容要等下一次热备。"
     },
     {
       "label": "两条备份管道各自保留历史",
@@ -49,16 +49,16 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "实际任务状态",
-      "value": "Codex Memory Backup 以当前用户普通权限每日 20:05、22:05 执行，最近 2026-09-07T05:05:01Z 返回 0。CodexConversationBackup-Hot-Daily 每日 21:15 以 Highest（最高权限）执行，最近 2026-09-07T04:15:01Z 返回 0；任务规格回读通过。日期按 UTC 表示，调度时刻按本机时区。"
+      "value": "Codex Memory Backup以当前用户普通权限每日20:05、22:05执行，最近2026-09-08T05:05:01Z返回0。CodexConversationBackup-Hot-Daily每日21:15以Highest（最高权限）执行，最近04:15:01Z返回0；任务规格回读通过。PCConfig冷任务06:30:01Z启动、返回0，06:54:56Z完成。日期按UTC表示，调度时刻按本机时区。"
     },
     {
       "label": "H 冷盘与数据边界",
-      "value": "H 盘当前不可用。已有 PCConfig AIRecoveryColdSync-Daily 负责增量复制 cold-payload；本项目 FinalizeCold 验证 H 闭包后才更新 H 指针。只读 Inspect 的 h_available=false 只证明介质缺席，不能证明本轮冷任务已执行。auth.json、缓存及原始会话不进入轻量 Git 路径；这不等于对任何用户正文作了自动秘密识别。"
+      "value": "H当前可读。06:44:26Z的原生cold回执为complete、readback_verified=true，指向与G相同的20260908T041508Z-d14c3a16。网页本轮另比对两端manifest与closure：SHA-256分别同为40bb55a5b4955cc8f5dd39b4efb3d976bfe9218abbed011f798165f4b9b84e74、7d00b1bb033b41e7bc56c64a68416b7e9e6a150ef3fce9f08cddbf020fab516a。完整对象验证是原任务证据，本轮只重读小元数据；auth.json、缓存与原始会话仍不进入轻量Git路径。"
     }
   ],
   "gaps": [
-    "H 当前未连接，本轮未核验 H 上已有历史副本，也未将最新 G 点同步到 H。",
-    "本轮通过的是合成数据去重与隔离恢复、白名单/Git 异常分支和任务规格测试；没有新做生产 VSS 捕获、全量对象重验或换机后打开 Codex 的验收。",
+    "G/H已经追平04:15:08Z这一点，不包含之后新产生的会话；H日后离线时仍会按原有调度跳过，不承诺实时同步。",
+    "9月7日合成数据去重/隔离恢复、白名单/Git异常分支与任务规格测试保留为原日期证据。本轮读取自然备份的正式回执和元数据，没有重抓生产VSS、全量对象重验或换机后打开Codex。",
     "raw_memories 大小保护仅避免较小当前文件覆盖私有仓库的大版本；同等或更大的错误正文仍需人判断，轻量 G 快照保存的是当次源内容。",
     "会话对象没有自动清理策略，变化后的大型数据库会形成新对象，长期容量仍会增长。",
     "会话 Restore 先生成文件副本；轻量恢复按文档把配置、记忆和技能放回运行根。两者都不自动注册服务、设置全局环境或恢复登录，新机器是否可用仍需应用层验证。"
@@ -69,19 +69,19 @@ export const codexMemorySnapshot = Object.freeze({
   ...baseSnapshot,
   ...{
   "generation": "Codex 配置记忆与会话分流备份",
-  "sourceCommit": "8e50e19b8e406e7875a83b50117ca486b32959c3",
+  "sourceCommit": "77c1a4011c8cd49dfd06f69614cbb9cb0ef034f1",
   "sourceRoot": "E:\\Projects\\Backups\\codex-memory",
   "physicalCodexHome": "E:\\Data\\AppData\\Codex",
   "hotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\Codex",
   "conversationHotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\CodexConversations",
   "conversationColdRoot": "H:\\80_自动备份区\\ControlPlane\\AIMemory\\CodexConversations\\cold-payload",
-  "currentPointId": "20260907T041509Z-994e8a77",
-  "conversationFileCount": 6838,
-  "conversationTotalSizeBytes": 76810464735,
-  "liveSourceFileCount": 6863,
-  "liveSourceTotalSizeBytes": 76972556004,
+  "currentPointId": "20260908T041508Z-d14c3a16",
+  "conversationFileCount": 6898,
+  "conversationTotalSizeBytes": 77376044970,
+  "liveSourceFileCount": 6923,
+  "liveSourceTotalSizeBytes": 77555687374,
   "memoryFileCount": 243,
-  "memoryTotalSizeBytes": 2655887,
+  "memoryTotalSizeBytes": 2656388,
   "scheduledTasks": [
     {
       "taskName": "Codex Memory Backup",
@@ -89,7 +89,7 @@ export const codexMemorySnapshot = Object.freeze({
       "launcher": "tools/codex_memory_backup_hidden.vbs",
       "script": "tools/backup-codex-memory.ps1",
       "runLevel": "Limited（普通权限）",
-      "lastRunUtc": "2026-09-07T05:05:01Z",
+      "lastRunUtc": "2026-09-08T05:05:01Z",
       "lastResult": 0
     },
     {
@@ -98,7 +98,7 @@ export const codexMemorySnapshot = Object.freeze({
       "launcher": "tools/codex_conversation_hot_hidden.vbs",
       "script": "tools/Invoke-CodexConversationBackup.ps1 -Mode Hot -Execute -Json",
       "runLevel": "Highest（最高权限）",
-      "lastRunUtc": "2026-09-07T04:15:01Z",
+      "lastRunUtc": "2026-09-08T04:15:01Z",
       "lastResult": 0
     },
     {
@@ -106,8 +106,8 @@ export const codexMemorySnapshot = Object.freeze({
       "owner": "PCConfig",
       "trigger": "既有冷备调度",
       "mode": "增量复制 cold-payload；由 FinalizeCold 校验 H 后发布指针",
-      "currentHAvailable": false,
-      "lastRunResult": "本轮未重读该任务"
+      "currentHAvailable": true,
+      "lastRunResult": "2026-09-08T06:30:01Z启动返回0；06:54:56Z complete，H对话点06:44:26Z完成独立回读"
     }
   ]
 },
@@ -124,7 +124,7 @@ export const codexMemoryProject = {
   "route": "/projects/codex-memory",
   "visibility": "私有仓库",
   "statusTone": "accent",
-  "cardStatus": "日常备份在运行；G 盘已有对话恢复点，H 盘当前未连接",
+  "cardStatus": "日常备份正常 · G/H已保存同一对话点",
   "cardStatusTone": "accent",
   "cardMetrics": [
     {
@@ -133,7 +133,7 @@ export const codexMemoryProject = {
     },
     {
       "label": "最新对话备份点",
-      "value": "6,838 文件 · 71.54 GiB"
+      "value": "6,898 文件 · 72.06 GiB"
     },
     {
       "label": "历史存储",
@@ -189,13 +189,13 @@ export const codexMemoryProject = {
     ]
   },
   "repositoryNote": "源仓库 wlyaaaaa/codex-memory 为 PRIVATE（私有），存放备份脚本和选定的小文件历史；网页只解释产品、拓扑与元数据，不发布记忆正文、历史会话或登录文件。原始会话对象仅进入登记的本地 G/H 备份路径，GitHub 不是会话数据中转站。",
-  "summary": "这套工具替我保留两类东西：规则、配置、记忆和已安装技能放进私有 GitHub 与 G 盘的小文件快照；历史对话、附件、生成图片和数据库另存到 G 盘。备份对话时可以继续使用 Codex。找回历史对话时，先恢复到单独空目录；换机要还原配置、记忆和技能时，则按原相对路径把选定的小文件副本放回实际 CODEX_HOME，再核对应用是否可用。H 盘冷备是第三份副本，目前没有连接，不能算本轮已经更新。",
+  "summary": "这套工具替我保留两类东西：规则、配置、记忆和已安装技能放进私有 GitHub 与 G 盘的小文件快照；历史对话、附件、生成图片和数据库另存到 G 盘。备份对话时可以继续使用 Codex。找回历史对话时，先恢复到单独空目录；换机要还原配置、记忆和技能时，则按原相对路径把选定的小文件副本放回实际 CODEX_HOME，再核对应用是否可用。H盘冷备是第三份副本；9月8日的既有冷任务已把同一对话点复制并独立校验，快照以后新增的内容仍要等下一次。",
   "why": "只保存配置，换机后还找不到旧对话；直接复制正在写入的整个 Codex 目录，又会混入缓存、登录文件，并可能得到不同时间的数据库和索引。项目把小文件版本历史与大体积会话快照分开维护，并让本地备份、云端同步、冷盘复制各自给出结果。",
   "plainExample": "我想把上周一段对话找回来，又不想动现在正在工作的 Codex。工具可以把选定备份点还原到一个空文件夹，保留原来的目录和文件名，并核对文件哈希。这个结果是一份可检查的历史文件副本；它不会自动替换当前环境，也不代表新机器已经登录或能立即继续原对话。",
   "result": "得到小文件版本、明确时间的对话恢复点，以及可先检查的历史副本。恢复方式分两条：会话脚本还原到空目录；轻量配置、记忆和技能按文档复制回实际运行根。每条链分别显示是否完成，登录和应用能否继续使用另外核验。恢复速度取决于数据量和磁盘。",
   "readerStates": {
     "pass": "我能看到小文件版本和明确时间的会话备份点，各自标明是否完成。会话恢复交回已核验的空目录副本；轻量恢复则把选定配置、记忆和技能放回运行根，再确认应用加载结果。",
-    "problem": "H 盘没有连接，最新冷备未完成；源文件继续变化时，当前源清单会大于上一备份点。",
+    "problem": "H不可用时当轮冷备明确未完成；源文件继续变化时，活动源清单与上一备份点分别列出，不把当前源数量当成已经备份的数量。",
     "unavailable": "Hot（热备）和 VssProbe（卷影探测）需要管理员权限及 -Execute。Restore（恢复）需 -Execute 和专用空目录，不能覆盖活动 CODEX_HOME 及其子目录。"
   },
   "productPrinciples": [
@@ -341,23 +341,23 @@ export const codexMemoryProject = {
   "evidenceLayers": [
     {
       "layer": "当前源与文档修复",
-      "proves": "PRIVATE main 8e50e19 已远端回读；E 卷快照、白名单、对象池和恢复入口真实存在。",
+      "proves": "冻结PRIVATE main 77c1a40已远端回读；工具与文档仍为8e50e19代码输入，后续两个提交只有备份载荷。E卷快照、白名单、对象池和恢复入口真实存在。",
       "doesNotProve": "源码和文档不证明本轮又执行过生产备份或应用恢复。"
     },
     {
       "layer": "三套源回归",
-      "proves": "243 文件 DryRun、G 快照、五类 Git 同步分支，以及 3 点 dedup_verified/restore_verified 和任务计划测试通过。",
-      "doesNotProve": "合成点恢复不证明真实 71.54 GiB 数据已在新电脑打开，也不证明零卡顿或恢复速度。"
+      "proves": "9月7日完成G快照、五类Git同步分支、3点dedup_verified/restore_verified与任务计划测试；本次仅重新盘点243文件源清单和任务规格。",
+      "doesNotProve": "合成点恢复不证明真实72.06GiB数据已在新电脑打开，也不证明零卡顿或恢复速度。"
     },
     {
       "layer": "任务与生产元数据",
-      "proves": "两条日常任务最近返回 0；G 指针指向已发布点，清单为 6838 文件；活动源另为 6863 文件。",
+      "proves": "9月8日两条日常任务最近返回0；G/H指向同一6898文件点，活动源采集时另为6923文件。",
       "doesNotProve": "未重新哈希全部生产对象，也未检测应用打开恢复内容的结果。"
     },
     {
       "layer": "H 介质状态",
-      "proves": "本次 Inspect 看到 h_available=false。",
-      "doesNotProve": "不证明本轮冷任务已经执行，更不证明 H 最新副本已更新。"
+      "proves": "本次Inspect为h_available=true；H原生cold回执complete/readback_verified=true，与G清单和闭包哈希一致。",
+      "doesNotProve": "完整对象校验属于06:44Z原任务；本次小元数据比较不证明新机器应用恢复，也不代表未来点已同步。"
     }
   ],
   "operationalEntrypoints": [
@@ -475,7 +475,7 @@ export const codexMemoryModules = [
     "subtitle": "当前源快照与私有仓库历史分别维护",
     "teaser": "备份小文件，保留历史记忆，并核对私有 Git 推送",
     "order": 1,
-    "status": "本轮白名单/G 快照/Git 分支回归通过；日常轻量任务最近返回 0",
+    "status": "9月7日白名单/G快照/Git分支回归通过；9月8日日常轻量任务最近返回0",
     "statusTone": "accent",
     "relation": "负责配置、安装技能和记忆文件；长期规则的规范源仍是 E:\\.agents。",
     "value": "把选定的小文件保存在 G 快照与私有 Git 历史里。需要恢复配置或找旧记忆时有明确版本，不把庞大会话库混进这条链。",
@@ -548,8 +548,8 @@ export const codexMemoryModules = [
       }
     ],
     "verification": [
-      "本轮两个版本的备份调用和本地 fixture（合成输入）验证通过：G 快照、ahead-clean、behind、diverged、push-rejected、post-receive-rewind。",
-      "本轮 DryRun 为 243 文件、2,655,887 字节；没有触发新生产备份。"
+      "9月7日两个版本的备份调用和本地 fixture（合成输入）验证通过：G 快照、ahead-clean、behind、diverged、push-rejected、post-receive-rewind。",
+      "9月8日08:16Z的DryRun为243文件、2,656,388字节；没有触发新生产备份。"
     ],
     "searchAliases": [
       "轻量白名单同步",
@@ -589,7 +589,7 @@ export const codexMemoryModules = [
     "subtitle": "从登记 E 卷的 VSS 副本捕获会话及状态",
     "teaser": "继续使用 Codex，也能形成明确时间的会话备份点",
     "order": 2,
-    "status": "最近 G 点为 6838 文件/71.54 GiB；本轮读取元数据与任务，没有重抓生产 VSS",
+    "status": "G/H最新点为6898文件/72.06GiB；本轮读取自然任务回执与元数据，没有重抓生产VSS",
     "statusTone": "accent",
     "relation": "负责原始对话、附件、生成图像和应用状态，与轻量配置备份分开。",
     "value": "不强制关闭 Codex，从同一卷影副本采集会话数据，并把已校验文件组成一个可恢复点。",
@@ -660,8 +660,8 @@ export const codexMemoryModules = [
       }
     ],
     "verification": [
-      "本轮 G point manifest：6838 文件、76810464735 字节；当前源 Inspect：6863 文件、76972556004 字节，两者分别标注。",
-      "三个人工点验证去重和文件恢复，任务规格回读 matches_spec=true；不把这些当作本轮生产 VSS 或应用恢复证据。"
+      "9月8日G/H点manifest为6898文件、77376044970字节；08:11Z活动源Inspect为6923文件、77555687374字节，两者分别标注。",
+      "9月7日三个人工点验证去重和文件恢复，本次任务规格回读 matches_spec=true；不把这些当作本轮生产 VSS 或应用恢复证据。"
     ],
     "searchAliases": [
       "VSS热快照",
@@ -700,7 +700,7 @@ export const codexMemoryModules = [
     "subtitle": "按完整文件内容复用对象，各介质分别校验",
     "teaser": "相同对象复用；H 没连接就明确冷备未完成",
     "order": 3,
-    "status": "本轮合成点去重/恢复通过；G 最新点元数据已读取，H 不可用",
+    "status": "9月7日合成点去重/恢复通过；9月8日G/H最新点相同，H正式完成回执已读回",
     "statusTone": "accent",
     "relation": "负责 G/H 会话数据的存储与核验，跨盘复制由已有 PCConfig 冷任务执行。",
     "value": "相同内容只存一份，每个历史点保留自己的文件清单；H 在可用时独立校验，避免复制了指针却没有完整对象。",
@@ -771,8 +771,8 @@ export const codexMemoryModules = [
       }
     ],
     "verification": [
-      "本轮三个人工点的 dedup_verified 与 restore_verified 均为 true。",
-      "本轮读取 G 点元数据和 H 不可用状态，没有重新校验全部生产对象或执行 H 冷同步。"
+      "9月7日三个人工点的dedup_verified与restore_verified均为true，代码输入未变化。",
+      "本轮读取G/H相同点、清单/闭包哈希与06:44Z正式cold完成回执；没有重新哈希全部生产对象，也没有另外执行冷同步。"
     ],
     "searchAliases": [
       "内容寻址存储",
@@ -817,7 +817,7 @@ export const codexMemoryModules = [
     "value": "找回历史对话时，先还原到空目录，保留正在使用的 Codex。要恢复配置、记忆和技能，则使用单独的小文件复制说明放回运行根；两条恢复路径有不同输入和写入范围。",
     "why": "直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场并明确恢复结果。",
     "example": "我指定 -PointId latest 和一个专用空目录，执行 -Mode Restore -Execute。工具先验证完整点，随后按原路径还原并回读文件；耗时受对象数量、体积和磁盘速度影响。",
-    "result": "会话 Restore 返回明确点位的目录树与恢复回执，不覆盖活动 CODEX_HOME。轻量恢复则按文档将 config.toml、memories 和 skills 等选定小文件放回运行根。两者都需要进一步确认应用能否使用，本轮仅做了合成会话文件恢复测试。",
+    "result": "会话 Restore 返回明确点位的目录树与恢复回执，不覆盖活动 CODEX_HOME。轻量恢复则按文档将 config.toml、memories 和 skills 等选定小文件放回运行根。两者都需要进一步确认应用能否使用；合成会话恢复为9月7日证据，本次只重读状态。",
     "problem": "防止历史文件直接覆盖当前运行根，防止与备份池/状态目录混写。",
     "readerStates": {
       "pass": "选定点完整核验，目标文件还原与回读完成，返回恢复回执。",

@@ -108,7 +108,7 @@ test("AI CLI Profile Manager keeps source, install, runtime and Live evidence se
   assert.deepEqual(aiCliProfileManagerProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(aiCliProfileManagerProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: aiCliProfileManagerProject, modules: aiCliProfileManagerModules });
-  for (const expected of ["88f72e668bcfc8499b89f390343bae909e50db1c", "385 / 385", "0.153.0", "21 个", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "ccp 0.1.15", "cliproxy 7.2.72", "本轮没有执行任何付费或远程模型 Live Test"]) {
+  for (const expected of ["88f72e668bcfc8499b89f390343bae909e50db1c", "385 / 385", "0.153.4", "21 个", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "ccp 0.1.15", "cliproxy 7.2.72", "本次没有重新安装、启动模型或执行Live"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits current evidence or boundary: ${expected}`);
   }
   assert.match(text, /交互式 start.*上游权限.*machine run.*danger-full-access/s);
@@ -122,6 +122,13 @@ test("AI CLI Profile Manager exposes all 21 public Profile identities without up
   for (const id of expectedPublicProfileIds) assert.ok(matrix.includes(id), `public Profile matrix misses ${id}`);
   assert.equal(expectedPublicProfileIds.length, 21);
   assert.match(matrix, /source\/static.*installed\/runtime.*当前 Live/s);
+  const continuity = JSON.stringify({ example: engines.example, result: engines.result, flow: engines.flow, implementation: engines.implementation, verification: engines.verification });
+  for (const expected of ["LaunchPlan.continuityPolicy", "existing-project-state", "secondFactSource=false", "git status", "git diff", "983616", "20000", "16384", "prune=false"]) {
+    assert.ok(continuity.includes(expected), `third-party continuity explanation misses ${expected}`);
+  }
+  assert.match(engines.result, /AICLI只附策略与窗口设置，不自动写/);
+  assert.match(engines.result, /官方OpenAI Codex和Anthropic Claude保持自己的原生/);
+  assert.ok(aiCliProfileManagerProject.usageExamples.some((item) => item.moduleSlug === engines.slug && item.ask.includes("上下文")));
   assert.match(matrix, /machine-only=是.*start=否.*exact resume=否/s);
   assert.match(matrix, /Rust Open Interpreter.*0\.0\.40/s);
   assert.match(JSON.stringify(engines), /旧 Python 0\.4\.x.*(?:拒绝|不支持)/s);

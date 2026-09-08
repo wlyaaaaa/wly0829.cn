@@ -377,9 +377,9 @@ read-only operating panel; public presentation is secondary.
 
 - The owner accepted the four-project public MVP on 2026-08-30 and later
   completed twenty-two project pages in a historical construction sequence.
-  Historical construction numbers are no longer display ranks. The 32 retained
-  project identities keep their accepted slots in the revised 1–33 value order
-  from `config/final-project-order.json`; rank 15 is permanently unused after
+  Historical construction numbers are no longer display ranks. Retained
+  project identities keep their accepted slots in the value order
+  from `config/final-project-order.json`; rank 15 is unused after
   the owner moved Scripts capabilities into their owning projects. The current
   complete packages in Registry remain enabled at
   their fixed, possibly non-contiguous ranks, alongside the one-page Rules
@@ -394,8 +394,8 @@ read-only operating panel; public presentation is secondary.
   wait for Astra's acceptance, UI implementation, integration or publication.
   Astra runs design, content, source-project acceptance, necessary repairs and
   package integration in parallel with distinct ownership, then combines them
-  for final local verification. The current owner request holds website
-  publication until the local version has been reviewed. Do not create
+  for final local verification. Publication follows the owner's current
+  release authorization and the final verification gates. Do not create
   placeholder cards or re-vote the backlog after each delivery; change the fixed order only when the owner
   explicitly corrects it or material project truth makes the value judgment
   wrong.

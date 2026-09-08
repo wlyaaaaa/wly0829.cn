@@ -2,28 +2,31 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-09-08 04:35（中国时间）",
-  "sourceCommit": "7a7fbda85b24988b0dc9cc10fc448f85ac5db5a3",
+  "observedAt": "2026-09-08 17:00（中国时间）",
+  "sourceCommit": "6f964c8677ffa177f5d8e0b4880d18670ddb8148",
   "sourceBranch": "main",
-  "sourceWorktreeClean": true,
-  "sourceDirtyCount": 0,
-  "sourceDirtyPaths": [],
+  "sourceWorktreeClean": false,
+  "sourceDirtyCount": 2,
+  "sourceDirtyPaths": [
+    "skills/daily-preferences/SKILL.md",
+    "skills/wechat-direct/SKILL.md"
+  ],
   "sourceAhead": 0,
   "sourceBehind": 0,
-  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树干净",
+  "sourceSync": "联网刷新后，HEAD 与 origin/main 为 0/0；工作树有 2 项未激活修改",
   "repositoryVisibility": "私有",
   "repositoryVisibilityEvidence": "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   "ruleBinding": [
     {
       "logicalId": "agents_root_rules",
-      "sha256": "63cee7a0c10cfc8d64d933226364b87e16e41bc57134395aa240675a416357d4",
-      "bytes": 6084,
-      "characters": 3000,
-      "lines": 16,
-      "sourceSha256": "63cee7a0c10cfc8d64d933226364b87e16e41bc57134395aa240675a416357d4",
-      "sourceBytes": 6084,
+      "sha256": "d9e1b43c14e4242d8965a43127b0839e70b8deed07459230f8e576bcc01bc518",
+      "bytes": 6415,
+      "characters": 3117,
+      "lines": 17,
+      "sourceSha256": "d9e1b43c14e4242d8965a43127b0839e70b8deed07459230f8e576bcc01bc518",
+      "sourceBytes": 6415,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E118\\AGENTS.md"
+      "releasePath": "E:\\.agents\\releases\\E121\\AGENTS.md"
     },
     {
       "logicalId": "protected_major_actions_contract",
@@ -34,7 +37,7 @@ export const generatedPanelFacts = {
       "sourceSha256": "53c0876ad9323a9e62c661eb5c7ee99a356d466603140ea75f2a99460671a924",
       "sourceBytes": 9311,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E118\\docs\\contracts\\agents.protected-major-actions.md"
+      "releasePath": "E:\\.agents\\releases\\E121\\docs\\contracts\\agents.protected-major-actions.md"
     },
     {
       "logicalId": "authorization_delegation_contract",
@@ -45,7 +48,7 @@ export const generatedPanelFacts = {
       "sourceSha256": "673a0ebe2983ad9da156448031bc27e32e2f49dfb3273757b3c0360deeb9d48c",
       "sourceBytes": 32788,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E118\\docs\\contracts\\agents.authorization-delegation.md"
+      "releasePath": "E:\\.agents\\releases\\E121\\docs\\contracts\\agents.authorization-delegation.md"
     },
     {
       "logicalId": "four_base_decision_context_contract",
@@ -56,39 +59,39 @@ export const generatedPanelFacts = {
       "sourceSha256": "1a0a7109d156887da9915231f26aaa68bf86704728f053aa0066bf7bd9a2e392",
       "sourceBytes": 3720,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E118\\docs\\contracts\\agents.four-base-decision-context.md"
+      "releasePath": "E:\\.agents\\releases\\E121\\docs\\contracts\\agents.four-base-decision-context.md"
     },
     {
       "logicalId": "capability_routing_contract",
-      "sha256": "59a45c2bc4e781ec48f9dc96d3f4d9186b2d8b9f46b77d98ea83fb7fa9698c1d",
-      "bytes": 38436,
-      "characters": 18118,
-      "lines": 123,
-      "sourceSha256": "59a45c2bc4e781ec48f9dc96d3f4d9186b2d8b9f46b77d98ea83fb7fa9698c1d",
-      "sourceBytes": 38436,
+      "sha256": "d0d475ce2b72d2f1e5939c8cad992ee598cff7996cce31ccdbbbb1a70496ab99",
+      "bytes": 41438,
+      "characters": 19234,
+      "lines": 133,
+      "sourceSha256": "d0d475ce2b72d2f1e5939c8cad992ee598cff7996cce31ccdbbbb1a70496ab99",
+      "sourceBytes": 41438,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E118\\docs\\contracts\\agents.capability-routing.md"
+      "releasePath": "E:\\.agents\\releases\\E121\\docs\\contracts\\agents.capability-routing.md"
     }
   ],
   "skills": {
-    "activeInstallIntent": 29,
-    "personalSelectedCount": 27,
+    "activeInstallIntent": 31,
+    "personalSelectedCount": 29,
     "hostIntegratedCount": 2,
     "hostIntegratedDiscovery": "not_rerun_by_agents_snapshot_refresh",
-    "selectedPublicCount": 29,
-    "transactionCampaignCount": 43
+    "selectedPublicCount": 31,
+    "transactionCampaignCount": 44
   },
   "authority": {
     "status": "e_rules_active_verified",
-    "statusLabel": "E118 活动规则已验证",
-    "generation": "E118",
-    "generationId": "E118",
-    "releaseId": "E118",
-    "gitCommit": "59f2728aca72881f627ef57dfea2e9e9f4f9cb11",
-    "rulesetSha256": "9245e0d7672d20f4a2b968cc5ec16a29c787814d9b9e738d55603cc7770b7899",
-    "releaseRecordSha256": "fa3ea943086192c4909e8d432ec22bd6e67e2d9465269b9307890b15158b710c",
-    "releaseRecordPath": "E:\\.agents\\releases\\E118\\release.json",
-    "releaseCreatedAtUtc": "2026-09-06T12:58:39.2486297+00:00",
+    "statusLabel": "E121 活动规则已验证",
+    "generation": "E121",
+    "generationId": "E121",
+    "releaseId": "E121",
+    "gitCommit": "6f964c8677ffa177f5d8e0b4880d18670ddb8148",
+    "rulesetSha256": "81a42d4ac1a1621ea888c684ef739991b87a8972f5cd6dfe8df8cad04afc2d54",
+    "releaseRecordSha256": "41a1babecce7d7df7e1357b2c0e40987e4b1f9146eeebef52942969a1832a850",
+    "releaseRecordPath": "E:\\.agents\\releases\\E121\\release.json",
+    "releaseCreatedAtUtc": "2026-09-08T05:16:29.8223343+00:00",
     "releaseRecordSchema": "agents.e-rules-release.v2",
     "releaseSourceWorktreeClean": null,
     "releaseSourceInputsClean": true,
@@ -102,14 +105,14 @@ export const generatedPanelFacts = {
       "tools/Invoke-EAgentRulesRelease.ps1"
     ],
     "remoteMainContainsCommit": true,
-    "pointerRevision": 26,
-    "pointerSha256": "110b0c705d84bfeea261375d00e3882ee43ab3d2c424968cc7512d143031a1cd",
-    "activatedAtUtc": "2026-09-06T12:58:39.2574638+00:00",
+    "pointerRevision": 29,
+    "pointerSha256": "aa52137082b8a8e948cb2428d7ef7d6eed4db7916e8a14e5db7bcce5ba05917a",
+    "activatedAtUtc": "2026-09-08T05:16:29.8313455+00:00",
     "previous": {
-      "git_commit": "cc6fcaf9b9f47f4401fb0e9ef05cc7020f56874b",
-      "release_id": "E117",
-      "release_record_sha256": "c20a5bd75f2bba6491b07778398b1e1e5cb98c574b80cca91bc895e0d97ee139",
-      "ruleset_sha256": "4f8067ff70080cbf785c8b2b1ab34990ff30b54746bc71c5e7bef2107246c943"
+      "git_commit": "d8d6a3f6c581f30fb15863e7fca8c8f40d4264d7",
+      "release_id": "E120",
+      "release_record_sha256": "3fa787f3a1c6ac94f30cdf8b27ed8efb49572ac5cbd787c3dbd4a7ffc703a3b3",
+      "ruleset_sha256": "48770582ef90d252d725bbed3a6f853d7a8d452189a90226279adeb7e49bbd0c"
     },
     "activationVerified": true,
     "requiredRulesVerified": true,
@@ -117,44 +120,44 @@ export const generatedPanelFacts = {
     "legacyCState": "retired_recovery_only"
   },
   "validation": {
-    "label": "还有 1 层未闭合",
-    "summary": "E rules 活动且五规则闭包通过，但仍有 1 个独立验证层没有通过。",
+    "label": "还有 2 层未闭合",
+    "summary": "E rules 活动且五规则闭包通过，但仍有 2 个独立验证层没有通过。",
     "rows": [
       {
         "layer": "E rules current（E 规则当前指针）",
         "status": "pass",
         "label": "通过",
-        "detail": "E118 已从 PRIVATE main commit 59f2728aca72 激活；pointer revision 26，previous=E117。历史 C 盘材料只作恢复证据。"
+        "detail": "E121 已从 PRIVATE main commit 6f964c8677ff 激活；pointer revision 29，previous=E120。历史 C 盘材料只作恢复证据。"
       },
       {
         "layer": "Rule closure（五规则闭包）",
         "status": "pass",
         "label": "通过",
-        "detail": "五份规则位于同一 E118 release，ruleset SHA-256=9245e0d7672d20f4a2b968cc5ec16a29c787814d9b9e738d55603cc7770b7899；页面 logical id、bytes 和 SHA 与 release descriptor 一致。"
+        "detail": "五份规则位于同一 E121 release，ruleset SHA-256=81a42d4ac1a1621ea888c684ef739991b87a8972f5cd6dfe8df8cad04afc2d54；页面 logical id、bytes 和 SHA 与 release descriptor 一致。"
       },
       {
         "layer": "Source checkout（源码工作树）",
-        "status": "pass",
-        "label": "已发布源码；五规则与活动版本一致",
-        "detail": "source HEAD=7a7fbda85b24，origin/main=7a7fbda85b24，active release commit=59f2728aca72。工作树干净。 五规则源码与 E118 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。"
+        "status": "repair",
+        "label": "2 项未提交修改",
+        "detail": "source HEAD=6f964c8677ff，origin/main=6f964c8677ff，active release commit=6f964c8677ff。未提交路径：skills/daily-preferences/SKILL.md、skills/wechat-direct/SKILL.md。 五规则源码与 E121 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
         "status": "pass",
         "label": "通过",
-        "detail": "Test-EAgentRulesRelease.ps1 已重新验证 E118 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。"
+        "detail": "Test-EAgentRulesRelease.ps1 已重新验证 E121 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。"
       },
       {
         "layer": "Full local tests（当前源码全量回归）",
         "status": "unknown",
         "label": "快速刷新未重跑",
-        "detail": "网页刷新没有再次运行整个 .agents 本地测试集。它只证明 E118 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。"
+        "detail": "网页刷新没有再次运行整个 .agents 本地测试集。它只证明 E121 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。"
       },
       {
         "layer": "Skill supply（能力供应）",
         "status": "pass",
         "label": "通过",
-        "detail": "29 个 personal active install intent；公开目录含 27 个已选择 personal Skill 与 2 个 host-integrated Skill，共 29 个；另有 2 个现役个人意图未进入本次公开目录，不等于不可用。personal source/install/transaction 通过，43 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
+        "detail": "31 个 personal active install intent；公开目录含 29 个已选择 personal Skill 与 2 个 host-integrated Skill，共 31 个；另有 2 个个人安装意图未进入本次公开目录；未展示不决定可用性，冻结的运行时仍不可调用。personal source/install/transaction 通过，44 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
       },
       {
         "layer": "Contract coverage（跨控制面合同覆盖）",
@@ -168,6 +171,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "e573be9059b122f67b3e58458a668aea5bdfe2524c96e5ae11a3612d78f207a0"
+    "payloadSha256": "e2802ecaf57bf5415944334642c0a4e27441f85af3942e7fde890cf0ffa451cf"
   }
 };

@@ -45,15 +45,15 @@ test("the expanded Cold plan preserves native scope and exact copy boundaries", 
   assert.match(technical, /不是对所有普通文件逐个做 SHA-256/);
 });
 
-test("accepted first H backup, current offline state and unverified machine restore remain distinct", () => {
+test("accepted first H backup, current completed Cold and unverified machine restore remain distinct", () => {
   assert.match(recovery.status, /11 个任务、14 组 G 来源、9 个必需集合/);
-  assert.match(recovery.status, /9 月 5 日 H 首次备份已验收，现在离线/);
+  assert.match(recovery.status, /9 月 5 日 H 首次备份已验收.*06:54 UTC冷备也已完成/);
   assert.match(recovery.status, /新机恢复.*仍未验收/);
   assert.match(technical, /本轮只读复核对应源码与测试范围/);
   assert.match(technical, /整体\/镜像 complete.*五映射 post_verified=true/s);
   assert.match(technical, /Media\/Packages 排除/);
   assert.match(reader, /专用手机包、云候选和精选分类保持原分工/);
-  assert.match(JSON.stringify(pcconfigProject.currentState.gaps), /H 在 2026-09-05 已完成回盘与首次冷备验收.*当前介质离线.*不证明之后 G 的增量已进入 H.*新机恢复.*仍未验收/s);
+  assert.match(JSON.stringify(pcconfigProject.currentState.gaps), /H 在 2026-09-05 已完成回盘与首次冷备验收.*H已可读.*Cold回执complete.*不保证之后G的增量已进入H.*新机恢复.*仍未验收/s);
   assert.doesNotMatch(recovery.status, /H 尚未返回|首次 H.*尚未验收/);
   assert.doesNotMatch(recovery.status, /9 个备份集合|10 个任务/);
 });
@@ -64,7 +64,8 @@ test("the System recovery explanation keeps the same ordinary/protected distinct
   assert.match(node.detail, /只有真正凭据和受保护载荷/);
   assert.match(node.detail, /14 组/);
   assert.match(node.detail, /H.*首次.*(?:已验|验收|完成)/);
-  assert.match(node.detail, /(?:当前|现在|目前).*离线/);
+  assert.match(node.detail, /9 月 8 日.*冷备.*完成/);
+  assert.match(node.detail, /之后的新增量.*另次备份/);
   assert.doesNotMatch(node.detail, /H 尚未返回|首次 H.*尚未验收/);
   assert.match(node.detail, /应用真正看见数据/);
 });

@@ -44,16 +44,17 @@ test("all five source-backed RamdiskGuardian axes have direct routes and linked 
   assert.equal(domain.assets.find((item) => item.id === project.slug)?.href, project.route);
 });
 
-test("snapshot keeps observed WARN separate from task success and unperformed recovery", () => {
+test("snapshot keeps current OK and historical WARN separate from task success and unperformed recovery", () => {
   assert.equal(project.currentState.observedAt, project.currentSnapshot.observedAt);
   assert.deepEqual(project.cardMetrics, project.currentSnapshot.metrics);
-  assert.match(project.cardStatus, /WARN/);
+  assert.match(project.cardStatus, /自然巡检OK/);
   const facts = project.currentSnapshot.facts.map((item) => item.value).join("\n");
   assert.ok(facts.includes(sourceCommit));
   assert.match(facts, /12个明确目录/);
-  assert.match(facts, /3GiB低于4GiB/);
+  assert.match(facts, /08:07:32Z为OK：提交余量9.3GiB/);
+  assert.match(facts, /03:37Z的低余量WARN已不再是本轮状态/);
   assert.match(facts, /10个隔离恢复场景/);
-  assert.match(project.snapshotBoundary, /没有重建实盘或重启电脑/);
+  assert.match(project.snapshotBoundary, /没有重建实盘或重启/);
   assert.ok(project.currentSnapshot.gaps.some((gap) => gap.includes("使用约定") && gap.includes("误放")));
   const recovery = modules.find((item) => item.slug === "unaccounted-watchdog-and-driver-auto-release");
   assert.ok(recovery.failures.some((item) => item.condition === "init失败" && item.response.includes("不调用save")));

@@ -25,9 +25,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 14,
     "shared_css_gzip_budget_kib": 23,
-    "search_index_gzip_budget_kib": 143,
-    "project_search_index_gzip_budget_kib": 166,
-    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The local candidate has 33 complete projects at fixed ranks 1-34 with rank 15 unused. Emerald Veil, personal-expression and their directly related System explanations are accepted additions, not duplicate routes. Search data has no identical records; narrative remains in complete static HTML with no new runtime dependency or click-time content loading. Measured gzip bytes are 14267 for shared JS, 23362 for CSS, 146368 for shared search, 169851 for all-project search and 20083 for the largest project shard. Use the smallest justified increase to 143/166 KiB for the two search review lines; shared JS/CSS remain 14/23 KiB and project shards remain 21 KiB. Preserve product meaning and directly visible information; remeasure after material changes.",
+    "search_index_gzip_budget_kib": 146,
+    "project_search_index_gzip_budget_kib": 169,
+    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The final frozen candidate has 33 complete projects, 196 modules and 31 Skills. Two personal-expression Skills, the source-backed mobile-context module, AICLI continuity and corrected existing product explanations are required content. Both search indexes contain zero identical records. Narrative remains complete static HTML, with no new client runtime dependency or click-time content loading. Shared JS/CSS remain 14267/23362 gzip bytes within 14/23 KiB. Final search measurements are 149164/172283 gzip bytes, so the smallest justified increase is 146/169 KiB. The largest project shard is PCConfig at 20385 bytes within the unchanged 21 KiB review line. Preserve semantic completeness and reject avoidable duplication.",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -84,8 +84,8 @@
       "route": "/projects/personal-media",
       "ai_refresh": {
         "content_path": "app/content-personal-media.js",
-        "semantic_revision": 6,
-        "scope": "Complete existing six-module local-private media project, retaining classification, exact/near-duplicate choices, sole strict selected entry, local ingest, equivalent video variants, phone E/G preservation, under-60GB recovery package, upload-zero cloud candidates and trusted file-manager retirement; add read-only selected-recording time localization via existing hash-bound ASR results, per-term text coverage and query provenance separation; separate local keeper, cloud candidate and phone eligibility, with zero selected/phone increment allowed and ordinary new keeper not automatically in the phone package; exclude phone gallery trash as already-deleted originals; current 24539 media, 6262 computer recovery items and 6500 cloud candidates remain distinct from the 163 erroneous phone additions still awaiting exact cleanup on a future connection; preserve unknown historical eligibility-versus-selected gaps, existing original gallery and dated OCR/selected-byte evidence; no small-latency completion gate and no query-time deletion framework",
+        "semantic_revision": 7,
+        "scope": "Complete existing six-module local-private media project, retaining classification, exact/near-duplicate choices, sole strict selected entry, local ingest, equivalent video variants, phone E/G preservation, under-60GB recovery package, upload-zero cloud candidates and trusted file-manager retirement; add read-only selected-recording time localization via existing hash-bound ASR results, per-term text coverage and query provenance separation; separate local keeper, cloud candidate and phone eligibility, with zero selected/phone increment allowed and ordinary new keeper not automatically in the phone package; exclude phone gallery trash as already-deleted originals; current 24539 media, 6262 computer recovery items and 6500 cloud candidates remain distinct from the 163 erroneous phone additions still awaiting exact cleanup on a future connection; preserve unknown historical eligibility-versus-selected gaps, existing original gallery and dated OCR/selected-byte evidence; no small-latency completion gate and no query-time deletion framework; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result",
         "collectors": [
           "read the local managed project's current AGENTS.md, README.md, personal_media.py, phone_file_preserve_clear.py, two test modules and current acceptance receipt; expose public-safe product, implementation, path, state, failure, test and named-gap facts without inventing a Git repository",
           "read current catalog, recovery and cloud aggregates only through the current acceptance receipt or bounded product commands; ordinary personal photos are L2 and must not be excluded merely because the source is private",
@@ -180,8 +180,8 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 17,
-        "scope": "Existing seven-module project and independent E-to-G working-tree mirror, five verified E118 rules, 29 installed intents and 29 displayed Skills; four-family Luna/Terra/Sol/Astra native routing and unclassified same-ID lineage, exact user model choices, parent/root caps, one main goal and evidence-based independent top-level tasks; durable authorization, local project-fingerprint CAS and binding-id v2 envelopes, seven-input clean E-release v2 and selected-path fast release; conditional control-plane document reading, short-window task continuity, minimum-sufficient implementation and necessary dependency repair; source-current Skill-only commits remain distinct from rule-byte candidates; personal-understanding and same-task domain writeback, selected-original content/audio localization, native WeChat reading packages, official Chrome recovery and bounded one-snapshot publication handoff retain complete product, technical and Unknown layers",
+        "semantic_revision": 18,
+        "scope": "Existing seven-module project and independent E-to-G working-tree mirror, five verified E121 rules, 31 installed intents and 31 displayed Skills (29 personal and 2 host-integrated); four-family Luna/Terra/Sol/Astra native routing and unclassified same-ID lineage, exact user model choices, parent/root caps, one main goal and evidence-based independent top-level tasks; durable authorization, local project-fingerprint CAS and binding-id v2 envelopes, seven-input clean E-release v2 and selected-path fast release; conditional control-plane document reading, short-window task continuity, minimum-sufficient implementation, necessary dependency repair and complete task-file lifecycle cleanup; source-current Skill-only commits remain distinct from rule-byte candidates; personal-understanding and same-task domain writeback, selected-original content/audio localization, native WeChat reading packages, official Chrome recovery and bounded one-snapshot publication handoff retain complete product, technical and Unknown layers",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
           "E:\\.agents\\tools\\Invoke-EAgentRulesRelease.ps1 -Mode Inspect -Json",
@@ -332,8 +332,8 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 12,
-        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data; current machine/runtime identity, main-workstation startup, Password Center lifecycle, Google Workspace limits and partial-effect semantics, actual protected-data maturity, and the existing daily personal backup coordinating indexes and the phone package; source-backed independent registered-carrier recovery with partial backup and single-carrier retry; confirmed historical first H backup versus current offline state; owned Documents, Downloads and personal-replica hot backups remain distinct from the E working-tree mirror; current Windows day-to-day entrypoints, precise impact lookup and stale receipt rejection, nine-stage fifty-six-task recovery plan, and one OCR plus one ASR coexistence with same-family and Ollama exclusion",
+        "semantic_revision": 13,
+        "scope": "project overview and nine product-defined modules covering machine facts plus bounded TimeAudit anomaly-cursor consumption and independent stable-fact recheck, runtime/startup, drift/acceptance, WLY replacement/reinstall, secondary-laptop dual-host operation and recovery, SecretRef/fixed providers, an independent authorized-file encrypt-resume-verify-recovery lifecycle, the active PersonalDataReplica E-to-G current-copy task, completed Codex Home migration with retired tooling, protected actions and protected data; current machine/runtime identity, main-workstation startup, Password Center lifecycle, Google Workspace limits and partial-effect semantics, actual protected-data maturity, and the existing daily personal backup coordinating indexes and the phone package; source-backed independent registered-carrier recovery with partial backup and single-carrier retry; confirmed historical first H backup, current completed Cold readback and separately unverified new-machine recovery; owned Documents, Downloads and personal-replica hot backups remain distinct from the E working-tree mirror; current fourteen-project/151-key map, 23 startup entries and complete Administrator 89-task inspection, RTSS PowerShell exclusion and Emerald Veil background recovery anchors; current Windows day-to-day entrypoints, precise impact lookup and stale receipt rejection, nine-stage fifty-six-task recovery plan, and one OCR plus one ASR coexistence with same-family and Ollama exclusion; source-owned 38-dependency/six-retired-task classification verification, existing Hot context synchronization after guide repair, and legacy SafeSwitch installed-format/source mismatch are distinct from protected-platform upgrade",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
           "SYSTEM/Administrator read-only: E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json; require a bounded receipt with principal and tasks.live_match.complete_visibility=true",
@@ -447,7 +447,9 @@
             "tools/CursorSchemeGuard/**",
             "tools/Invoke-DisplayTopologyRecovery.ps1",
             "tools/Invoke-XiaomiShareWatchdog.ps1",
-            "tools/PrimaryOledBlackout/**"
+            "tools/PrimaryOledBlackout/**",
+            "tools/rtss-powershell.cfg",
+            "docs/recovery/runtime_restore_order.md"
           ]
         },
         {
@@ -623,8 +625,8 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 9,
-        "scope": "project overview and six modules covering the 48-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation a1b2023e and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability; current 48 identities, 26 PUBLIC and 22 PRIVATE, 45 clones and 3 remote-only; generation a1b2023e and eight-file 20888-byte readback; bounded three-line 512-character diagnostics and independent broker reasons, detached-worktree root guidance, read-only Hook checks, and only one same-argument retry for exit 128 with the precise TLS EOF signature; the stale three-attempt source contract is corrected in 2bad541",
+        "semantic_revision": 10,
+        "scope": "project overview and six modules covering the 48-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 284f02f9 and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability; current 48 identities, 25 PUBLIC and 23 PRIVATE, 44 clones and 4 remote-only; generation 284f02f9 and eight-file 25235-byte readback; bounded three-line 512-character diagnostics and independent broker reasons, detached-worktree root guidance, read-only Hook checks, and only one same-argument retry for exit 128 with the precise TLS EOF signature; the stale fetch wording and over-broad content-type restriction are corrected in source; archived repositories remain in the actual Git inventory",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
@@ -802,8 +804,8 @@
       "route": "/projects/personal-materials",
       "ai_refresh": {
         "content_path": "app/content-personal-materials.js",
-        "semantic_revision": 6,
-        "scope": "Complete existing four-module non-media original finder, retaining source-routed bounded filename discovery, exact intake and trusted file-manager retirement through existing scheduled sync; distinguish current source inventory path entries from exact locators and on-demand discovery; AI defaults to read-only inspect/inspect-discovered without registration or desktop launch, with find match evidence and exact indexed-text coverage; locate-content reads only one selected verified original and returns hash/version-bound PDF text-layer pages, DOCX top-level paragraphs/cells or TXT/MD lines, bounded snippets, extraction coverage and single-item OCR gaps; explicit desktop open retains its own registration/state and launcher behavior; no original copying or broad body scan",
+        "semantic_revision": 7,
+        "scope": "Complete existing four-module non-media original finder, retaining source-routed bounded filename discovery, exact intake and trusted file-manager retirement through existing scheduled sync; distinguish current source inventory path entries from exact locators and on-demand discovery; AI defaults to read-only inspect/inspect-discovered without registration or desktop launch, with find match evidence and exact indexed-text coverage; locate-content reads only one selected verified original and returns hash/version-bound PDF text-layer pages, DOCX top-level paragraphs/cells or TXT/MD lines, bounded snippets, extraction coverage and single-item OCR gaps; explicit desktop open retains its own registration/state and launcher behavior; no original copying or broad body scan; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-materials; expose only repository identity, visibility, clean/sync state and commit, never the private local source locator",
           "read tracked AGENTS.md, README.md, materials.py, schema.sql and tests/test_materials.py from the admitted clean main; run the explicit read-only status and inventory commands against the current default database to publish only source count, current depth-bounded non-media path entries, exact locator count, on-demand discovery count, media skips, relation/text counts, errors and cutoff semantics; never read titles, body text, candidates, payloads, exact locators or file fingerprints",
@@ -1083,8 +1085,8 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 7,
-        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states",
+        "semantic_revision": 8,
+        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states; rejected frozen-window invalid GPU telemetry remains historical, while source-owned NVML validation/reinitialization and LHM-or-null fallback recover new valid samples; separate 180-second recovery acceptance, startup gap, unknown initial trigger and no-game FPS evidence",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
@@ -1289,8 +1291,8 @@
       "route": "/projects/devconfig-backup",
       "ai_refresh": {
         "content_path": "app/content-devconfig-backup.js",
-        "semantic_revision": 2,
-        "scope": "project overview and four source-backed modules covering current local/G/Drive/H results, full-object DevConfig generations, data-driven recovery candidates and plaintext-payload boundary, WeChat Hot/Local/Drive/DbOnly modes with per-invocation 8G limit and bounded Hot receipt, blank-machine PUBLIC tool plus authenticated PRIVATE PCConfig acquisition, selective local/USB/unverified-Drive recovery with path and rollback guards, the non-portable latest.sha256 gap and 7z CRC fallback limit, Documents/username compatibility, and transactionally restored wscript tasks whose wrappers prefer PowerShell 7 and fall back to 5.1; September 7 local/G/Drive configuration packages have matching generation, size and MD5, while four September 6 task successes do not prove complete WeChat cloud or native-app recovery; historical H first-backup acceptance remains distinct from the current unavailable-volume skip",
+        "semantic_revision": 3,
+        "scope": "project overview and four source-backed modules covering current local/G/Drive/H results, full-object DevConfig generations, data-driven recovery candidates and plaintext-payload boundary, WeChat Hot/Local/Drive/DbOnly modes with per-invocation 8G limit and bounded Hot receipt, blank-machine PUBLIC tool plus authenticated PRIVATE PCConfig acquisition, selective local/USB/unverified-Drive recovery with path and rollback guards, the non-portable latest.sha256 gap and 7z CRC fallback limit, Documents/username compatibility, and transactionally restored wscript tasks whose wrappers prefer PowerShell 7 and fall back to 5.1; September 7 local/G/Drive configuration packages have matching generation, size and MD5, while four September 6 task successes do not prove complete WeChat cloud or native-app recovery; historical H first-backup acceptance and the September 8 completed Cold are distinct from unverified application/new-machine recovery",
         "collectors": [
           "git -C E:\\Projects\\Backups\\devconfig-backup status --porcelain=v2 --branch",
           "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Backups\\devconfig-backup\\tests\\Assert-NoBackupArtifacts.ps1",
@@ -1504,8 +1506,8 @@
       "route": "/projects/ai-cli-profile-manager",
       "ai_refresh": {
         "content_path": "app/content-ai-cli-profile-manager.js",
-        "semantic_revision": 1,
-        "scope": "complete product-first Windows 11 AI CLI operations layer with seven source-backed modules: explicit Profile selection and native CLI launch; exact Provider and model identities with no fallback; DPAPI SecretRef and target-process isolation; Doctor and text/tool/Agent evidence separation; recoverable Codex machine runs with exact thread identity, permissions, budgets and managed public search; local models and optional third-party proxies; CurrentUser install, upgrade, retirement recovery, uninstall, transparent native/eject output and Chinese manuals",
+        "semantic_revision": 2,
+        "scope": "complete product-first Windows 11 AI CLI operations layer with seven source-backed modules: explicit Profile selection and native CLI launch; exact Provider and model identities with no fallback; DPAPI SecretRef and target-process isolation; Doctor and text/tool/Agent evidence separation; recoverable Codex machine runs with exact thread identity, permissions, budgets and managed public search; local models and optional third-party proxies; CurrentUser install, upgrade, retirement recovery, uninstall, transparent native/eject output and Chinese manuals; third-party Codex/Claude/OpenCode continuity policy attached to LaunchPlan, existing project-state handoff before and after compaction, official-provider native behavior, exact configured context/output/reserve controls, and separate unverified real compaction behavior",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ai-cli-profile-manager status --porcelain=v2 --branch and git describe --tags --always",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/ai-cli-profile-manager -TargetWorktree E:\\Projects\\Tools\\ai-cli-profile-manager -ForPublication -Json",
@@ -1567,7 +1569,8 @@
             "src/AiCliProfileManager/Private/SecretStore.ps1",
             "src/AiCliProfileManager/Private/LaunchPlan.ps1",
             "src/AiCliProfileManager/Private/Redaction.ps1",
-            "src/AiCliProfileManager/Private/*Adapter.ps1"
+            "src/AiCliProfileManager/Private/*Adapter.ps1",
+            "src/AiCliProfileManager/Private/ContextManagement.ps1"
           ]
         },
         {
@@ -1580,7 +1583,8 @@
             "src/AiCliProfileManager/Private/ChildProcess.ps1",
             "src/AiCliProfileManager/Private/LocalGpuBrokerSession.ps1",
             "src/AiCliProfileManager/Support/*",
-            "tests/*"
+            "tests/*",
+            "tests/Unit/ContextManagement.Tests.ps1"
           ]
         },
         {
@@ -1717,8 +1721,8 @@
       "route": "/projects/daily-preferences",
       "ai_refresh": {
         "content_path": "app/content-daily-preferences.js",
-        "semantic_revision": 6,
-        "scope": "Public-safe overview and six modules: add reusable personal background, real experiences, priorities, values, cognition and preference understanding as a shared input to independent domains, without central scheduling or duplicated domain state; summary/detail/evidence and same-source CURRENT/PROFILE views; model-selected index, exact multi-card and original-source reading; source-material candidate boundaries, author-bound Gemini input and reviewed native-message/retained-ASR/attachment citations; supplement/temporary/correction/withdrawal, supports/contradicts/context, reliable delivery identity and expected-current-version checks; retain Chrome/Steam/current-browser Bilibili on-demand refresh, manual source snapshots, source identity/history, complete-current-set retirement, full-refund chain semantics, meaningful unmatched payment facts without duplicate purchase evidence, played-game-only Steam evidence without playtime scores, concrete facts/original verification, recency without expiry and AI-owned familiar/adjacent/novel menus; current 73-source/48-card counts are aggregates, not reading or cognition quality; 5 missing source types and 2 explicitly excluded types remain distinct; 2026-09-04 platform/blind-route evidence is not relabeled current v0.12.0 E2E",
+        "semantic_revision": 7,
+        "scope": "Public-safe overview and seven modules: add reusable personal background, real experiences, priorities, values, cognition and preference understanding as a shared input to independent domains, without central scheduling or duplicated domain state; summary/detail/evidence and same-source CURRENT/PROFILE views; model-selected index, exact multi-card and original-source reading; source-material candidate boundaries, author-bound Gemini input and reviewed native-message/retained-ASR/attachment citations; supplement/temporary/correction/withdrawal, supports/contradicts/context, reliable delivery identity and expected-current-version checks; retain Chrome/Steam/current-browser Bilibili on-demand refresh, manual source snapshots, source identity/history, complete-current-set retirement, full-refund chain semantics, meaningful unmatched payment facts without duplicate purchase evidence, classified Steam games with played evidence and weaker observed library evidence, explicit unplayed-library filtering, without playtime scores, concrete facts/original verification, recency without expiry and AI-owned familiar/adjacent/novel menus; current 73-source/48-card counts are aggregates, not reading or cognition quality; 5 missing source types and 2 explicitly excluded types remain distinct; 2026-09-04 platform/blind-route evidence is not relabeled current v0.12.0 E2E; same-source mobile two-document export, complete source preservation, manifest and citation transplant, exact existing Drive update and full-byte readback, partial reader corrections and separate device-use evidence; time/role/context/counterexample judgment stays with AI rather than vocabulary guards; current 72 statements and 67 historical statements retain evidence dates",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/daily-preferences; expose only public-safe repository identity, visibility, clean/sync state, parser version and commits",
           "read current AGENTS.md, CURRENT_ACCEPTANCE.md, README.md, schema.sql, daily_preferences.py, live_increment.py, source_snapshots.py, bilibili_browser_collect.mjs, PowerShell wrapper and source-owned tests; distinguish collectors, database evidence/state behavior and Skill/AI recommendation behavior",
@@ -1745,18 +1749,20 @@
         "live_chrome_history_bookmarks_and_steam_collection_with_anonymous_account_edges",
         "current_logged_in_chrome_bilibili_3382_database_plays_1349_current_window_719_favorites_4_watch_later_277_typed_bangumi_20_likes_2_coins_and_complete_current_set_retirement_rules",
         "google_takeout_chrome_and_play_occurrences_umetrip_and_rail_manual_snapshot_parsers",
-        "steam_multi_account_appid_unified_library_played_game_evidence_no_playtime_score_slight_current_free_downweight_and_unknown_historical_acquisition",
+        "steam_multi_account_appid_classified_played_and_observed_game_evidence_unplayed_library_choice_no_playtime_score_and_unknown_historical_acquisition",
         "natural_query_domain_axis_scoped_context_bilibili_isolation_chinese_recall_ai_expression_filtering_and_recency_without_expiry",
         "full_refund_same_order_chain_effective_outcome_original_fact_retention_partial_grouped_unknown_payment_card_no_duplicate_and_specific_fact_roles",
         "artifact_hash_original_readback_and_cached_excerpt_boundary",
         "skill_ai_familiar_adjacent_novel_menu_search_handoff_and_no_ordering",
-        "current_190266_records_232496_versions_42230_history_71_current_statements_32_historical_statements_48_cards_73_sources_185_python_14_subtests_7_node_tests",
+        "current_190266_records_232496_versions_42230_history_72_current_statements_67_historical_statements_48_cards_73_sources_dated_185_python_7_node_and_current_15_focused_tests",
         "five_missing_and_two_explicitly_excluded_sources_platform_window_limits_and_manual_freshness",
         "refresh_and_ingest_states_post_commit_cache_gap_semantic_completion_and_existing_personaldata_backup_scope",
         "personal_understanding_summary_detail_evidence_and_domain_use",
         "profile_index_multi_key_cards_and_unintegrated_source_materials",
         "author_bound_gemini_and_reviewed_native_asr_attachment_citations",
-        "statement_transition_evidence_roles_and_reliable_versioned_writeback"
+        "statement_transition_evidence_roles_and_reliable_versioned_writeback",
+        "same_source_mobile_two_document_export_existing_drive_update_and_byte_readback_with_separate_device_use_boundary",
+        "temporal_context_roles_counterexamples_and_exact_key_only_validation"
       ],
       "impact_sources": [
         {
@@ -1777,7 +1783,8 @@
             "source_snapshots.py",
             "bilibili_browser_collect.mjs",
             "schema.sql",
-            "requirements.txt"
+            "requirements.txt",
+            "tools/export_mobile_context.py"
           ]
         },
         {
@@ -1797,7 +1804,8 @@
             "tests/test_reviewed_citations.py",
             "tests/test_source_filters.py",
             "tests/test_source_materials.py",
-            "tests/test_writeback.py"
+            "tests/test_writeback.py",
+            "tests/test_mobile_context_export.py"
           ]
         }
       ],
@@ -2059,7 +2067,7 @@
       "route": "/projects/codex-memory",
       "ai_refresh": {
         "content_path": "app/content-codex-memory.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "Current CODEX_HOME whitelist configuration, installed skills and memory backup; current-source local/G snapshots and distinct private-repository ProtectHistory behavior; 30-lightweight-snapshot rotation; independent Git fetch, finite dynamic-proxy retry and remote readback; E-volume VSS conversation capture with explicit crash-consistent limits; actual source inventory distinguished from immutable point manifests; file-content CAS reuse and additive conversation history; existing PCConfig H copy and separate FinalizeCold verification; manual lightweight config/memory/skills restore by original relative paths to the physical CODEX_HOME excluding .git, tools, .local-snapshots and logs; separate isolated conversation file restore distinct from application recovery; real task specifications, execution switches and named evidence gaps.",
         "collectors": [
           "git -C E:\\Projects\\Backups\\codex-memory status --porcelain=v2 --branch",
@@ -3167,7 +3175,7 @@
       "route": "/projects/ramdisk-guardian",
       "ai_refresh": {
         "content_path": "app/content-ramdisk-guardian.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "Project overview and five source-backed modules: bounded cache admission and retired backup role; drive arrival, twelve explicit directories and guide repair; host memory health and silent WARN; conditional Primo recovery with unique disk mapping and checked command results; installation, existing scheduled task, Chrome cache junctions, image and natural reboot boundaries.",
         "collectors": [
           "git -C E:\\Projects\\Tools\\RamdiskGuardian status --porcelain=v2 --branch",

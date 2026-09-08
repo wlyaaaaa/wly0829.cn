@@ -102,7 +102,7 @@ test("devconfig-backup explains tiered media architecture and cold drive separat
     "零流量",
     "21:05",
     "22:00",
-    "2,114.5 MiB",
+    "2,166.3 MiB",
     "-Tier Drive",
     "MD5一致"
   ]) {
@@ -134,7 +134,7 @@ test("devconfig-backup explains data-driven catalog and cache exclusions", () =>
 test("devconfig-backup explains WeChat modes, file-level increment and WAL non-exclusion limits", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   for (const expected of [
-    "41.97 GiB",
+    "42.05 GiB",
     "xwechat_files",
     "robocopy",
     "checksum",
@@ -202,16 +202,17 @@ test("System links its devconfig-backup asset to the new detail page", () => {
 test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   const snapshotText = JSON.stringify(devconfigBackupProject.currentSnapshot);
-  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-07T20:34:42Z");
-  assert.match(snapshotText, /9月6日四个本仓库任务均返回0/);
-  assert.match(snapshotText, /本地、G、Drive的latest均为9月6日代、2,217,191,580字节、MD5一致/);
-  assert.match(JSON.stringify(devconfigBackupProject.evidenceLayers), /MD5=595b1c3672f79ad80692608d90148b29/);
+  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-08T08:17:27Z");
+  assert.match(snapshotText, /四项均返回0/);
+  assert.match(snapshotText, /三路latest与devconfig-20260907-210501.zip：2,271,564,569字节/);
+  assert.match(JSON.stringify(devconfigBackupProject.evidenceLayers), /MD5=b8ac7753719d963bcda19f90d9a4460b/);
   assert.match(snapshotText, /微信Drive.*本轮.*只读任务结果.*应用恢复仍未验收/s);
   assert.match(text, /小时监控仍停用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
   assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
   assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);
-  assert.match(snapshotText, /远端另留9月4\/5\/6日三份日期包/);
-  assert.match(snapshotText, /H已有首次备份历史，现在离线/);
+  assert.match(snapshotText, /远端留9月5\/6\/7日三份日期包/);
+  assert.match(snapshotText, /06:54:56Z报告complete、warnings为空/);
+  assert.doesNotMatch(devconfigBackupProject.cardStatus, /目前离线|未追平/);
   assert.match(snapshotText, /没有重新列出其远端全量对象.*没有证明云端应用恢复/s);
   assert.doesNotMatch(snapshotText, /配置 Drive 返回 1|远端 latest.*9 月 2 日.*落后/);
   assert.match(text, /H_unavailable/);

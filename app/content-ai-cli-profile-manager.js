@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const aiCliProfileManagerSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-03T23:03:45.000Z",
-  label: "源修复已发布；385 项回归、离线发行检查与本机安装载荷 73/73 通过，远程 Live 未重验",
-  boundary: "本轮没有执行任何付费或远程模型 Live Test；源码、已安装模块、当前 CLI/服务、历史 Live 回执和网页发布是彼此独立的证据层",
+  observedAt: "2026-09-08T08:55:09.416Z",
+  label: "本机安装载荷73/73匹配，Codex CLI已到0.153.4；385项源码回归保留9月3日证据，Live未重验",
+  boundary: "源码冻结于2026-09-08T08:00:42Z仍为88f72e6；模块字节与Doctor实际采集于08:30Z，08:55Z另通过7项上下文策略合成回归。完整385项和发行检查仍是9月3日证据；本次没有重新安装、启动模型或执行Live（真实调用），未验真实长任务压缩，历史回执不替代当前协议验收",
   metrics: [
     { label: "当前源码版本", value: "0.3.12 · +7提交" },
     { label: "公开 Profile", value: "21 个 · 5 类引擎" },
@@ -15,18 +15,18 @@ const aiCliProfileManagerSnapshot = createProjectSnapshot({
     { label: "普通输入与结果", value: "我选择项目目录和一个明确的 Profile；需要第三方云服务时再配置对应凭据。结果是原生 CLI 新进程、脱敏启动计划、静态体检、按需真实验收回执，或不再依赖 aicli 的无秘密导出配方。" },
     { label: "当前来源", value: "PUBLIC（公开）仓库 wlyaaaaa/ai-cli-profile-manager；本机维护目录 E:\\Projects\\Tools\\ai-cli-profile-manager；main=origin/main=88f72e668bcfc8499b89f390343bae909e50db1c，工作区干净。", hero: false },
     { label: "源码与 Release", value: "产品常量仍是 0.3.12；GitHub Release v0.3.12 指向 4522906634a209b807731d7c9892fd8843cfd6dd，当前 main 另有 7 个 Unreleased（未发布）修复。版本号相同不表示发行包和 main 字节相同。", hero: false },
-    { label: "当前本机运行环境", value: "2026-09-03 Doctor（静态体检）看到 Windows 11 10.0.26200 x64、PowerShell 7.6.4、Codex CLI 0.153.0、Claude Code 2.1.251、Rust Open Interpreter 0.0.40 与 Ollama 可执行文件；这些是当前依赖身份，不是所有 Profile 的 Live 通过。", hero: false },
-    { label: "当前公开入口", value: "profile list --available 返回 21 个公开 Profile，覆盖 codex、claude、interpreter、opencode、qwen-code 五类引擎；19 个本机已有配置但全部仍显示“可用但有限制”，另 2 个未配置而不可用。", hero: false },
+    { label: "当前本机运行环境", value: "2026-09-08T08:30:50Z的Doctor（静态体检）看到 Windows 11 10.0.26200 x64、PowerShell 7.6.4、Codex CLI 0.153.4、Claude Code 2.1.251、Rust Open Interpreter 0.0.40 与 Ollama 可执行文件；这些是当前依赖身份，不是所有 Profile 的 Live 通过。", hero: false },
+    { label: "公开入口与配置观察日期", value: "源码有21个公开Profile、5类引擎。9月3日profile list --available回读19个本机已配置且有限制、2个未配置而不可用；这份用户Profile状态未在本批重新读取。9月8日只重新确认模块字节与Doctor依赖，不能把19个已配置写成当前现场。", hero: false },
     { label: "当前 Doctor 边界", value: "通用 Doctor 共 13 项：平台、PowerShell、三套 CLI 版本与 Claude 设置等 9 项通过；父终端存在 OPENAI_BASE_URL、两个可选代理未运行、Ollama 默认 11434 不可达共 4 项有限制。官方 Profile 会在子进程清除冲突变量。", hero: false },
-    { label: "当前测试", value: "最终 PUBLIC main 完整 Pester 为 385/385，耗时 146.232 秒；scripts/Test-Release.ps1 离线发行检查 exit 0，耗时 6.606 秒。它们覆盖命令、Profile、秘密、适配器、Doctor、Live/Agent 验收、恢复、代理、安装与文档合同，但不发真实付费请求。", hero: false },
-    { label: "当前安装修复", value: "开始施工时，已安装 0.3.12 的 73 个模块文件只有 72 个与 main 相同，缺少 255c300 的损坏 Profile 拒绝修复；首次 -Force 安装又被 .codex 兼容 Junction（目录连接）误拦。88f72e6 让退役预检优先真实 CODEX_HOME，旧单跳 state 别名只作严格等价比对；实际重装成功，安装载荷现为 73/73，损坏 JSON 与非对象 JSON 的 show/list 都以 exit 4 拒绝。", hero: false },
+    { label: "9月3日源码测试", value: "当日最终 PUBLIC main 完整 Pester 为 385/385，耗时 146.232 秒；scripts/Test-Release.ps1 离线发行检查 exit 0，耗时 6.606 秒。它们覆盖命令、Profile、秘密、适配器、Doctor、Live/Agent 验收、恢复、代理、安装与文档合同，但不发真实付费请求。", hero: false },
+    { label: "安装修复与本次字节回读", value: "9月3日开始施工时，已安装 0.3.12 的 73 个模块文件只有 72 个与 main 相同，缺少 255c300 的损坏 Profile 拒绝修复；首次 -Force 安装又被 .codex 兼容 Junction（目录连接）误拦。88f72e6 让退役预检优先真实 CODEX_HOME，旧单跳 state 别名只作严格等价比对；实际重装成功，9月8日08:30Z再次比较仍为73/73；9月3日损坏JSON 与非对象 JSON 的 show/list 都以 exit 4 拒绝。", hero: false },
     { label: "精确路线而非模型大杂烩", value: "Qwen 云端只开放 qwen3.7-max-2026-06-08 与 qwen3.8-max 两个 Workspace 按量 Responses Profile；DeepSeek Codex 只开放 Flash 0731 与 Pro 0813。模型、Provider（模型服务接入定义）、线路或 fallback（失败后自动改投）漂移都会停止。", hero: false },
     { label: "程序化 Codex 权限", value: "交互式 start 保留上游权限界面；aicli run 的 Codex harness（程序化执行层）则对所有模型固定 danger-full-access 和 approvalPolicy=never，并现场回读实际模型、Provider 与权限。--no-web-search 只关闭受管公共搜索，不降低本机权限。", hero: false },
     { label: "当前外部变化", value: "2026-09-03 官方资料仍支持 Codex Responses 自定义 Provider；DeepSeek 已另列 vision-exp 实验模型，但 AICLI 当前没有开放它。代理源内仍只批准 ccp 0.1.15 与 cliproxy 7.2.72，而上游最新标签已分别到 0.1.35 与 7.2.149；新标签没有批准摘要时不会自动执行。", hero: false }
   ],
   gaps: [
     "本轮没有执行云端 Qwen、DeepSeek、官方 Codex/Claude 或代理订阅链路的付费 Live；2026-08-15 兼容矩阵中的旧结果只按原版本、Profile 指纹和日期保留。",
-    "Codex CLI 当前已是 0.153.0，旧 0.147.0 Live 回执不能自动晋升；必须由同一最终安装、同一 Profile 和实际运行身份重新验收后，才可把对应路线写成当前可用。",
+    "Codex CLI 当前已是 0.153.4，旧 0.147.0 Live 回执不能自动晋升；必须由同一最终安装、同一 Profile 和实际运行身份重新验收后，才可把对应路线写成当前可用。",
     "Ollama 默认 127.0.0.1:11434 本轮不可达，两个可选代理已安装但未运行；没有做新的本地模型任务、OAuth 登录或代理端到端验收。",
     "当前 source main 比公开 v0.3.12 Release 多 7 个提交；发行包、main 与本机安装必须逐层说明，不能只看 0.3.12 字样。",
     "代理批准清单落后于上游最新标签；这表示当前只允许旧的已审版本，不表示新版本不可用，也不授权绕过摘要校验。",
@@ -38,7 +38,7 @@ export const aiCliProfileManagerProject = {
   order: 14,
   slug: "ai-cli-profile-manager",
   title: "AI CLI Profile Manager",
-  kicker: "Windows 11 原生 AI 命令行入口 · 0.3.12 main · 2026-09-03 23:03 UTC 核对",
+  kicker: "选清配置，再启动原生 AI 命令行",
   route: "/projects/ai-cli-profile-manager",
   visibility: "公开仓库",
   statusTone: "mixed",
@@ -135,6 +135,7 @@ export const aiCliProfileManagerProject = {
     { moduleSlug: "profiles-launch", ask: "我已经在 OpenClaw 里配过 DeepSeek，先预览能导入什么；确认后只生成 Codex Flash/Pro、Claude Flash 和 OI Flash，别碰 Qwen。", effect: "先核对配置确实来自 DeepSeek 官方地址并只做预览；确认后才生成四个 Profile，明文 Key 不写进配置，同名项也不直接覆盖。" },
     { moduleSlug: "profiles-launch", ask: "把这个不用的用户 Profile 删掉；先告诉我是否会删最后一个秘密引用，不要影响官方登录。", effect: "删除前先说明影响；只有它是最后一个引用时才删除本工具保存的对应密文，内置模板和官方登录保留。" },
     { moduleSlug: "engines-providers", ask: "这次精确用 Qwen3.8 Max Workspace；失败就报错，不要换 Qwen3.7、Token Plan 或本地模型。", effect: "本次运行会绑定明确的模型、服务、地域、协议和思考档位；任一项不一致就停止，不自动换路线。" },
+    { moduleSlug: "engines-providers", ask: "用第三方模型把这段工作做完，上下文快满时也别忘了目标、授权和别人未提交的改动。", effect: "启动计划附上连续性要求；执行AI先把最小续作记录写进项目已有状态，压缩后重读规则、状态和git status/diff。AICLI不自动代写记录，本次也未用真实长任务证明模型会遵循。" },
     { moduleSlug: "secrets-isolation", ask: "复用同一个 DeepSeek Key，但不要让它出现在参数、日志或别的终端里。", effect: "两个 Profile 只复用同一秘密引用，真正 Key 只在目标进程启动时短暂解开；查看计划和导出配方仍不显示明文。" },
     { moduleSlug: "doctor-validation", ask: "先检查这个 Profile 为什么不能用，不要现在发送付费请求。", effect: "先说明缺的是程序、配置、凭据、服务还是旧证据；只有我随后明确选择真实测试，才发送模型请求。" },
     { moduleSlug: "recoverable-runs", ask: "这个 Codex 文件任务中断了；只有还能恢复同一个任务身份才继续，否则明确告诉我需要从头重跑。", effect: "继续前会核对原任务、工作区、Profile、模型、服务和权限；任何身份变化都停止，不把旧输出拼进新任务。" },
@@ -143,7 +144,7 @@ export const aiCliProfileManagerProject = {
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "PUBLIC main 88f72e6 包含当前命令、Profile、适配器、Doctor、恢复、代理与安装修复，并比 v0.3.12 tag 多 7 个提交。", doesNotProve: "本机已安装相同字节、当前 CLI 协议仍兼容、模型能调用或网页已发布。" },
-    { layer: "Tests（自动回归）", proves: "最终 main 的 385 项 Pester 和离线发行检查通过，包括损坏 Profile 拒绝、恢复协议、秘密脱敏、Junction 兼容与发行命令面。", doesNotProve: "真实账号、Provider、OAuth、GPU 模型或长期进程当前可用。" },
+    { layer: "Tests（自动回归）", proves: "9月3日最终main的385项Pester和离线发行检查通过，包括损坏 Profile 拒绝、恢复协议、秘密脱敏、Junction 兼容与发行命令面。", doesNotProve: "真实账号、Provider、OAuth、GPU 模型或长期进程当前可用。" },
     { layer: "Install（安装态）", proves: "只有原子安装后逐文件回读与固定 aicli 入口测试，才能证明这台机器实际运行的是最终源码。", doesNotProve: "某个云端模型、代理或本地服务已经 Live 通过。" },
     { layer: "Doctor 与 Runtime（运行条件）", proves: "当前 Windows、PowerShell、CLI 版本、父环境、代理状态和 Ollama 端点能被真实读取。", doesNotProve: "Doctor 不发模型请求；依赖存在也不等于一个 Agent 任务完成。" },
     { layer: "Live 与 Agent 验收", proves: "同版本、同 Profile 指纹、同实际模型/Provider/权限下的文本、工具或确定性文件任务在观察时通过。", doesNotProve: "旧回执不能覆盖新 CLI；一个 Profile 也不能代表所有模型、账号或未来运行。" },
@@ -172,7 +173,7 @@ export const aiCliProfileManagerProject = {
     { date: "2026-08-28—2026-08-30", commit: "3eb9e69—255c300", result: "补齐安装原子切换、临时目录清理、版本/更新来源核对、非 Codex 一次性 run，并让损坏用户 Profile 不再静默退回内置模板。" },
     { date: "2026-09-03", commit: "88f72e6", result: "让安装退役预检使用真实 CODEX_HOME，并只把严格闭合到它的历史单跳 Junction 状态路径视为等价；兼容目录不再假阻断，未知或损坏对象仍在变更前停止。" }
   ],
-  snapshotUpdateNote: "本页代表 2026-09-03 对 PUBLIC main 88f72e6、本机安装与运行条件、官方动态资料和旧 Live 边界的明确核对。后续只在 Profile、Provider、权限、恢复、安装、代理或证据解释发生实质变化时刷新；不会后台读取用户 Profile、秘密、OAuth 或任务正文。"
+  snapshotUpdateNote: "本页源码截止2026-09-08T08:00:42Z，PUBLIC main仍为88f72e6；08:30Z复核本机73文件和Doctor，Codex CLI为0.153.4。官方动态资料、385项源码回归与离线发行检查仍绑定9月3日，旧Live按各自原日期保留。后续只在 Profile、Provider、权限、恢复、安装、代理或证据解释发生实质变化时刷新；不会后台读取用户 Profile、秘密、OAuth 或任务正文。"
 };
 
 export const aiCliProfileManagerModules = [
@@ -204,25 +205,29 @@ export const aiCliProfileManagerModules = [
     searchProjection: { intents: ["选择一个精确模型入口", "比较交互和机器路线", "避免失败后换模型", "查看未开放路线"], entities: ["Codex", "Claude Code", "Rust Open Interpreter", "Qwen Code", "OpenCode", "Responses"], relations: ["Profile绑定Provider和模型", "requested effort映射effective effort", "公开与machine-only分组"], failureRecovery: ["模型覆盖拒绝", "旧Profile不迁移", "Chat端点不冒充Responses", "新上游模型不自动开放"] },
     teaser: "五类 CLI 共用一个入口，但不会被抹平成同一种能力。",
     status: "21 个公开 Profile 可发现；当前 Live 状态按每条指纹分别保留", statusTone: "mixed",
-    value: "我能在官方订阅、云端 Qwen/DeepSeek、本地 Ollama 和可选代理之间明确选择，同时知道哪些只能程序调用、哪些旧入口已退役、哪些当前只是静态就绪。",
+    value: "我能在官方订阅、云端Qwen/DeepSeek、本地Ollama和可选代理间明确选择，知道每条路线的真实窗口与证据。第三方Codex、Claude和OpenCode还会在启动计划里附上连续工作策略：接近窗口压力时，先把目标、授权、改动归属和未完成项写到项目已有状态，压缩后按原文件接着做，防止长任务忘掉约束或覆盖别人的改动。",
     why: "“支持 Qwen”或“支持 DeepSeek”太模糊：别名、版本、计费线路和协议不同，实际行为和费用都可能不同。产品只开放经过明确设计的组合。",
-    example: "我可以说：“只用 qwen3.7-max-2026-06-08 的北京 Workspace 按量 Responses（响应式模型协议）；我的 max 可以映射 xhigh，但不要接受通用 alias（模型别名）或 fallback（自动回退）。”任何身份或线路不一致都会在启动前停止。",
-    result: "profile show 与启动回执会同时给出引擎、Provider、模型、线路、地域以及 requested/effective effort（请求/有效思考档）。当前组合不成立就失败，而不是换成看起来相近的路线。",
+    example: "我可以说：“只用qwen3.7-max-2026-06-08的北京Workspace按量Responses（响应式模型协议）做这段重构；我的max可映射xhigh，不要换模型。上下文快满时，先把目标、已改文件和别人留下的改动写回项目记录，压缩后重新看规则和diff，别只凭摘要继续。”启动计划会说明身份、窗口和这套工作要求；真正落盘并接续仍要由执行它的AI完成并核验。",
+    result: "profile show和启动回执给出引擎、Provider、模型、线路、地域及requested/effective effort（请求/有效思考档）。第三方计划还带continuityPolicy（上下文连续性策略）与说明：上层AI应留下项目原位checkpoint（续作记录），之后从规则、状态和工作树恢复。AICLI只附策略与窗口设置，不自动写这份记录，也不保证模型已经遵循；官方OpenAI Codex和Anthropic Claude保持自己的原生会话行为。",
     readerStates: { pass: "模板、用户 Profile、模型目录和启动计划组成同一个精确身份。", problem: "上游新增模型、版本更新或旧证据失效时保留有限制，并要求该路线重新接入或验收。", unavailable: "Chat Completions（聊天补全协议）、未登记别名、退役 Profile 或模型/Provider 覆盖被拒绝，不自动迁移。" },
     decisionImpact: ["Codex、Claude Code、Open Interpreter 的协议和权限不同，不能只换模型名。", "Qwen Code / OpenCode 当前公开本地路线是 machine-only（仅程序化运行）。", "Open Interpreter 只支持当前 Rust 0.0.21+ 世代；旧 Python 0.4.x 会由 Doctor 识别并拒绝，云端 Key 还会从它的 Shell（命令执行环境）工具环境中排除。", "DeepSeek 官方新增 vision-exp 不等于 AICLI 已支持；当前仍只有 Flash 0731 与 Pro 0813 Codex 精确路线。"],
     problem: "防止模糊品牌名掩盖实际请求路径，或失败时把另一个模型的输出冒充用户原先选择。",
     implementation: [
-      "23 个 Manifest（配置清单）文件中，hidden=true 的内部模板不会进入公开 Profile 清单。下面 21 条来自 2026-09-03 安装态 profile list、当前 Manifest 和 2026-08-15 兼容矩阵；证据图例为 source/static（源码/静态实现）、installed/runtime（安装/运行态）、Live（真实调用）和 exact resume（精确恢复）。“已配置”不等于当前 Live 通过。",
+      "23 个 Manifest（配置清单）文件中，hidden=true 的内部模板不会进入公开 Profile 清单。下面21条的Profile配置状态来自2026-09-03安装态profile list、未变化的Manifest和2026-08-15兼容矩阵；只有73个模块字节与CLI身份在9月8日再次核对，未重读全部用户Profile；证据图例为 source/static（源码/静态实现）、installed/runtime（安装/运行态）、Live（真实调用）和 exact resume（精确恢复）。“已配置”不等于当前 Live 通过。",
       "Qwen3.7 06-08、Qwen3.8 Max、DeepSeek Flash/Pro 与本地模型各有独立目录和 Profile 指纹。CodexAdapter 只接受 Responses；模型、Provider 与 fallback 冲突在计划生成前拒绝。",
-      "ContextManagement 只为已知第三方模型声明窗口，未知 Claude 模型清除继承变量而不猜容量。所有 Codex Profile 的程序化 run 支持 exact resume；其他引擎只是一性 run，不支持同线程恢复。",
-      "codex-official｜Codex / OpenAI / gpt-5.6-sol｜官方登录｜交互式 start=是；Codex run exact resume=是｜source/static=已实现；installed/runtime=0.3.12 与 CLI 0.153.0 已回读；当前 Live=未重验，状态为可用但有限制（2026-09-03）。",
-      "codex-qwen3-7-max-paygo｜Codex / 阿里云百炼 / qwen3.7-max-2026-06-08｜北京 Workspace 按量 API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=待 0.153.0 同指纹重验，状态为可用但有限制。",
+      "ContextManagement.ps1的Get-AiCliThirdPartyContinuityPolicy只覆盖第三方codex/claude/opencode；codex+openai、claude+anthropic及其他引擎返回null。Add-AiCliThirdPartyContinuityPolicy实际把aicli.third-party-continuity.v1附到LaunchPlan.continuityPolicy和notes：mode=loss-aware、manualCompaction=defer-until-window-pressure、oneMilestonePerSession=true，提示会话聚焦内聚里程碑、等窗口压力再考虑手动压缩。它没有自动写checkpoint或运行压缩的执行器。",
+      "preCompactionCheckpoint要求目标和验收、约束/授权/owner、规则与关键文件、changed-files-and-dirty-ownership、决定及理由、tests-and-live-gaps、阻塞风险和下一步写到existing-project-state。postCompactionRead重读AGENTS.md或CLAUDE.md、已有状态、git status和git diff；summaryIsHint=true、restoreFromSource=true、secondFactSource=false。摘要只提供找回原件的线索，不另建状态库。",
+      "两个Qwen云端Codex目录都固定context_window/max_context_window=983616、effective_context_window_percent=95、auto_compact_token_limit=262144；用户max映射xhigh。它们与本地Qwen目录分开，不从模型别名猜窗口，也不因窗口配置存在就宣称压缩无损。",
+      "OpenCode的qwen-main-v1配置为262144上下文/8192输出；aicli-qwen3.8-27b-256k:2026-08-14为262144/32768。两者共用compactionReserveTokens=20000、preserveRecentTokens=16384、tailTurns=4和prune=false，进入一次性machineRuntime配置；缺modelMetadata时拒绝启动，不猜容量。",
+      "第三方Claude只为已知modelMetadata设置CLAUDE_CODE_MAX_CONTEXT_TOKENS与CLAUDE_CODE_AUTO_COMPACT_WINDOW；清除提前百分比覆盖与DISABLE_AUTO_COMPACT/DISABLE_COMPACT，不禁用溢出保护。未知模型还会清除继承的窗口与压缩控制，保留Claude自身默认。Codex exact resume证明同一任务身份，和这份有损压缩后的项目连续性策略分别验收。",
+      "codex-official｜Codex / OpenAI / gpt-5.6-sol｜官方登录｜交互式 start=是；Codex run exact resume=是｜source/static=已实现；installed/runtime=0.3.12 与 CLI 0.153.4 已回读；当前 Live=未重验，状态为可用但有限制（CLI身份2026-09-08，Profile状态2026-09-03）。",
+      "codex-qwen3-7-max-paygo｜Codex / 阿里云百炼 / qwen3.7-max-2026-06-08｜北京 Workspace 按量 API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=待 0.153.4 同指纹重验，状态为可用但有限制。",
       "codex-qwen3-8-max-paygo｜Codex / 阿里云百炼 / qwen3.8-max｜北京 Workspace 按量 API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=旧回执不能继承，状态为可用但有限制。",
-      "codex-deepseek｜Codex / DeepSeek / deepseek-v4-flash（Flash 0731）｜API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=本版本与 CLI 0.153.0 未重验，状态为可用但有限制。",
-      "codex-deepseek-v4-pro｜Codex / DeepSeek / deepseek-v4-pro（Pro 0813）｜API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=本版本与 CLI 0.153.0 未重验，状态为可用但有限制。",
+      "codex-deepseek｜Codex / DeepSeek / deepseek-v4-flash（Flash 0731）｜API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=本版本与 CLI 0.153.4 未重验，状态为可用但有限制。",
+      "codex-deepseek-v4-pro｜Codex / DeepSeek / deepseek-v4-pro（Pro 0813）｜API Key｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=本版本与 CLI 0.153.4 未重验，状态为可用但有限制。",
       "codex-ollama-main｜Codex / LocalGpuBroker-Ollama / qwen-main-v1｜无云端秘密｜start=是；exact resume=是｜source/static 与 installed=已实现；runtime Profile 已配置；当前 Live=旧 CLI 回执已失效，状态为可用但有限制。",
       "codex-ollama-review｜Codex / LocalGpuBroker-Ollama / qwen-main-v1（Qwen3.6 35B 交叉入口）｜无云端秘密｜start=是；exact resume=是｜source/static 与 installed=已实现；模型切换后没有当前 Live，状态为可用但有限制。",
-      "codex-ollama-qwen3-8-27b｜Codex / LocalGpuBroker-Ollama / aicli-qwen3.8-27b-256k:2026-08-14｜无云端秘密｜start=是；exact resume=是｜source/install/runtime/Agent 在 2026-08-15 曾通过，但当时 CLI 为 0.147.0；当前 0.153.0 Live 已失效，状态为可用但有限制。",
+      "codex-ollama-qwen3-8-27b｜Codex / LocalGpuBroker-Ollama / aicli-qwen3.8-27b-256k:2026-08-14｜无云端秘密｜start=是；exact resume=是｜source/install/runtime/Agent 在 2026-08-15 曾通过，但当时 CLI 为 0.147.0；当前 0.153.4 Live 已失效，状态为可用但有限制。",
       "codex-spark-xhigh｜Codex / OpenAI / gpt-5.3-codex-spark｜官方登录｜start=是；exact resume=是｜source/static 与 installed=已实现；历史写入权限通过但能力样本为 2/9，当前未重验，状态为可用但有限制。",
       "claude-official｜Claude Code / Anthropic｜官方登录｜交互式 start=是；一性 run=是；exact resume=否｜source/static 与 installed=已实现；runtime 2.1.251 已发现；2026-08-15 记录为未登录 401，当前 Live 未重验，状态为可用但有限制。",
       "claude-deepseek｜Claude Code / DeepSeek / deepseek-v4-flash｜API Key｜start=是；一性 run=是；exact resume=否｜source/static 与 installed=已实现；runtime Profile 已配置；旧 Pro 指纹不能继承，当前 Flash Live 未重验，状态为可用但有限制。",
@@ -237,13 +242,13 @@ export const aiCliProfileManagerModules = [
       "opencode-ollama-main｜OpenCode / LocalGpuBroker-Ollama / qwen-main-v1｜无云端秘密｜machine-only=是；start=否；exact resume=否｜source/static 与 installed=已实现；2026-08-15 pure runtime 配置曾回读，当前模型 Live 未重验，状态为可用但有限制。",
       "opencode-ollama-qwen3-8-27b｜OpenCode / LocalGpuBroker-Ollama / aicli-qwen3.8-27b-256k:2026-08-14｜无云端秘密｜machine-only=是；start=否；exact resume=否｜source/static 与 installed=已实现；Desktop 目录和 256K 参数曾回读，当前模型 Live 未重验，状态为可用但有限制。"
     ],
-    flow: ["从 21 个公开 Profile 中按引擎和数据去向选择。", "读取精确模型、地域、线路和当前状态。", "配置必要 SecretRef。", "生成模型目录与一次性计划。", "实际运行后回读模型、Provider 和有效 effort。"],
+    flow: ["从21个公开Profile按引擎、数据去向和观察日期选择；配置必要SecretRef。", "生成精确模型目录与启动计划，检查模型、Provider、有效effort；官方OpenAI/Anthropic原生路线不附第三方压缩策略。", "第三方codex/claude/opencode接近窗口压力时，上层AI先把目标与验收、授权/owner、规则关键文件、改动与dirty归属、决定理由、测试/Live缺口、阻塞风险和下一步写到项目已有状态。", "压缩后把摘要当线索，重新读AGENTS.md或CLAUDE.md、已有项目状态、git status与git diff；状态缺失或矛盾时先核对原文件，不把摘要升级为第二事实源。", "继续原目标并验收实际产物；启动计划附策略只证明配置已携带要求，真实压缩前落盘、压缩后恢复和长任务结果需要独立运行证据。"],
     concepts: [{ term: "Responses（响应式模型协议）", explanation: "当前 Codex 第三方 Provider 使用的上游协议；普通 Chat Completions 不能只改 URL 伪装成它。" }, { term: "requested/effective effort（请求/有效思考档）", explanation: "用户选择的统一档位与供应商实际接受的档位；例如 Qwen 的 max 映射 xhigh。" }, { term: "machine-only（仅程序化运行）", explanation: "可由 aicli run 调用，但不作为日常交互式 start 入口。" }],
-    boundaries: ["不宣称 21 个 Profile 当前全部 Live 可用。", "不开放任意自定义 Codex Provider 为公共一键模板。", "不支持旧 Python Open Interpreter 0.4.x，也不把 Rust 版的权限语义套到其他 CLI。", "不因上游文档出现新模型就自动扩大产品范围。"],
+    boundaries: ["continuityPolicy是启动计划实际携带的工作要求，不是自动保存checkpoint、无损摘要或长任务已成功的证明。官方OpenAI Codex/Anthropic Claude不受这份第三方策略改写。", "不宣称 21 个 Profile 当前全部 Live 可用。", "不开放任意自定义 Codex Provider 为公共一键模板。", "不支持旧 Python Open Interpreter 0.4.x，也不把 Rust 版的权限语义套到其他 CLI。", "不因上游文档出现新模型就自动扩大产品范围。"],
     failures: [{ condition: "模型、Provider 或 endpoint 漂移", response: "指纹与计划拒绝，要求重新配置和验收。" }, { condition: "旧 Qwen3.7 或 fallback 参数", response: "命中退役门并停止，不重路由到 06-08 或 Qwen3.8。" }, { condition: "检测到旧 Python Open Interpreter 0.4.x", response: "Doctor 标为不支持，并给出当前 Rust 安装方向；不走旧参数兼容层。" }, { condition: "不同引擎能力不等价", response: "在对应适配器保留实际权限、工具和恢复边界，不伪装统一。" }],
-    sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\providers", role: "无执行能力的 Provider Manifest" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\model-catalogs", role: "精确 Codex 模型目录" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\ManifestService.ps1", role: "公开过滤、schema 与退役门" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\docs\\compatibility\\VERIFIED-COMPATIBILITY.md", role: "按指纹分层的最后验证矩阵" }],
-    verification: ["profile list --available --json 当前回读 21 个公开条目、5 类引擎。", "全量回归覆盖 exact Qwen/DeepSeek、本地模型、hidden 模板与模型覆盖拒绝。", "官方资料核对确认 Responses、自定义 Provider 与上游新增项；没有把新增项写成 AICLI 已实现。"],
-    relation: "本模块回答“能选什么”；配置档模块负责怎样启动，验证模块负责当前是否真的可用。"
+    sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\ContextManagement.ps1", role: "第三方连续性计划、压缩前后项目状态与Claude窗口边界" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\tests\\Unit\\ContextManagement.Tests.ps1", role: "七项合成策略与原生基线回归" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\providers", role: "无执行能力的 Provider Manifest" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\model-catalogs", role: "精确 Codex 模型目录" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\ManifestService.ps1", role: "公开过滤、schema 与退役门" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\docs\\compatibility\\VERIFIED-COMPATIBILITY.md", role: "按指纹分层的最后验证矩阵" }],
+    verification: ["2026-09-08T08:55Z原生ContextManagement.Tests.ps1七项合成回归通过，覆盖实际LaunchPlan附策略、原生基线不变、Claude已知/未知处理与OpenCode限制传入。没有创建模型run或触发真实压缩。", "2026-09-03的profile list --available --json回读21条/5类引擎；本次未重读全部用户Profile。", "全量回归覆盖 exact Qwen/DeepSeek、本地模型、hidden 模板与模型覆盖拒绝。", "官方资料核对确认 Responses、自定义 Provider 与上游新增项；没有把新增项写成 AICLI 已实现。"],
+    relation: "本模块回答能选什么、第三方窗口怎样配置，以及压缩前后怎样靠项目状态继续；配置档模块负责启动，验证模块分别核对真实模型与长任务行为。"
   },
   {
     slug: "secrets-isolation", shortTitle: "秘密与隔离", title: "配置可以复用，明文秘密只在目标进程需要时出现",
@@ -278,15 +283,15 @@ export const aiCliProfileManagerModules = [
     example: "我可以说：“检查 codex-qwen3-8-max-paygo 现在缺什么；不要先扣费。静态条件都对以后，再由我决定是否做真实文本或任务测试。”我会先得到具体缺项和证据日期。",
     result: "Doctor 给稳定 check ID、状态与下一步；text 要求严格 PONG，tool 只暴露 nonce 工具，agent 要求真实读写确定性 fixture 并由独立 verifier 验收。",
     readerStates: { pass: "当前所选层的实际入口、身份、结果和清理全部通过。", problem: "静态可用但 Live 未跑、工具隔离不足或旧回执过期时保留“可用但有限制”。", unavailable: "真实 CLI 非零退出、模型不符、工具越界、verifier 失败或清理未确认时不可用。" },
-    decisionImpact: ["all 只运行 text+tool，不会暗中启动更长的 agent。", "agent 只支持 Codex，且 Codex harness 是完全访问；明确授权后才能运行。", "当前 Codex 0.153.0 使旧 0.147.0 Live 失去当前性，但不否定源码回归。"],
+    decisionImpact: ["all 只运行 text+tool，不会暗中启动更长的 agent。", "agent 只支持 Codex，且 Codex harness 是完全访问；明确授权后才能运行。", "当前 Codex 0.153.4 使旧 0.147.0 Live 失去当前性，但不否定源码回归。"],
     problem: "防止静态配置、历史回执和当前真实能力被压成一个模糊绿色状态。",
     implementation: ["DoctorService 读取平台、CLI、Profile、秘密引用、配置层、代理和本地服务，不自行发模型请求。", "LiveTestService 在随机临时目录调用真实目标 CLI，并绑定 Profile 指纹与实际版本。", "文本层要求最终正文严格等于 PONG；首个非预期工具事件使 Codex 文本测试失败。", "AgentAcceptance 构造确定性文件任务，独立计算排序、去重、频次、总和与 SHA-256，不接受模型自述。"],
     flow: ["运行 Doctor。", "按 check ID 修静态问题。", "阅读 Provider、数据去向与额度提示。", "明确选择 text、tool、agent 或 all。", "在临时目录运行目标 CLI。", "核对实际身份、输出、工具、清理和回执。"],
     concepts: [{ term: "PONG（严格文本回执）", explanation: "最小连通测试要求的唯一最终正文；提示回显或多余文字不能刷绿。" }, { term: "nonce tool（一次性随机工具）", explanation: "工具层唯一暴露的单用途验证入口，不接受任意命令或路径。" }, { term: "verifier（独立验证器）", explanation: "不相信模型的“完成了”，直接按 fixture 计算预期文件结果。" }],
-    boundaries: ["Doctor 不证明模型连通。", "单个 Profile 的 Live 不代表其他模型或账号。", "本轮只跑免费本机检查与测试，没有为网页刷新云端证据。"],
+    boundaries: ["Doctor 不证明模型连通。", "单个 Profile 的 Live 不代表其他模型或账号。", "本轮只复核模块字节与Doctor；源码测试沿用9月3日，没有为网页刷新云端证据。"],
     failures: [{ condition: "工具无法证明与私人配置隔离", response: "跳过 tool 并降为有限制，不冒充完整工具能力。" }, { condition: "版本或 Profile 指纹变化", response: "旧回执失效，保持待验收。" }, { condition: "临时目录或进程树未确认清理", response: "保留原失败和残留定位，不标成功。" }],
     sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\DoctorService.ps1", role: "静态检查与状态闭集" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\LiveTestService.ps1", role: "文本与工具 Live" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\AgentAcceptance.ps1", role: "确定性 Agent fixture 与 verifier" }],
-    verification: ["最终 main Pester 385/385，146.232 秒。", "Test-Release.ps1 exit 0，6.606 秒，保持离线。", "当前通用 Doctor 13 项中 9 项通过、4 项有限制；未将它写成 Live。"],
+    verification: ["9月3日最终main Pester 385/385，146.232秒；源码输入未变。", "9月3日Test-Release.ps1 exit 0，6.606秒，保持离线。", "当前通用 Doctor 13 项中 9 项通过、4 项有限制；未将它写成 Live。"],
     relation: "本模块判断证据到了哪一层；引擎模块提供被测 Profile，可恢复运行模块承载 Codex agent 路径。"
   },
   {
@@ -305,10 +310,10 @@ export const aiCliProfileManagerModules = [
     implementation: ["RecoveryService 为每个 run 保存 stateHash、前向 journal、不可变 attempt 事件与回执；正文不持久化。", "CodexAppServerBridge 使用 thread/start、turn/start 与 thread/resume，逐条绑定 thread/turn/item 生命周期。", "CommandRouter 硬限制 timeout、steps、tool calls、output chars 与最多三次 resume，并让 background 只用于 Codex start/resume。", "PublicWebSearch 只访问固定 HTTPS Bing RSS，拒绝重定向、Cookie、任意 URL/Header/Key；公开事件不含 query/result。", "桥接器结束时必须确认 app-server 与后代进程树清理，失败不会被成功正文覆盖。"],
     flow: ["任务正文从 stdin 进入。", "创建持久 run 与独占 CODEX_HOME。", "后台控制器返回 run id。", "观察公开进度、工具、搜索与上下文事件。", "中断时分类额度、瞬态或硬失败。", "符合条件时 thread/resume；否则停止。", "终态写回执并确认进程树清理。"],
     concepts: [{ term: "thread/session（线程/会话身份）", explanation: "app-server 返回的原生对话执行身份；resume 必须仍是同一个。" }, { term: "hard budget（硬执行上限）", explanation: "达到墙钟、行动步数、工具次数或输出上限会实际终止进程树，不只是提示。" }, { term: "event projection（公开事件投影）", explanation: "只保留可给观察器看的进度、工具类别、上下文和终态；隐藏推理与工具载荷丢弃。" }],
-    boundaries: ["恢复账本不是通用聊天历史。", "AICLI 不判断低级模型是否胜任，也不自动换到更强模型。", "当前 0.153.0 CLI 需要新的同指纹 Live 才能刷新真实协议兼容。"],
+    boundaries: ["恢复账本不是通用聊天历史。", "AICLI 不判断低级模型是否胜任，也不自动换到更强模型。", "当前 0.153.4 CLI 需要新的同指纹 Live 才能刷新真实协议兼容。"],
     failures: [{ condition: "控制器或 app-server 中断", response: "等待 writer 关闭并对账；只有明确瞬态且身份闭合才最多恢复三次。" }, { condition: "恢复返回新 thread 或权限变化", response: "resumeSupported=false，要求新工作区全量重跑。" }, { condition: "事件写入失败但模型已完成", response: "标记观察层 degraded，不自动重跑造成重复副作用。" }],
     sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\RecoveryService.ps1", role: "run 状态、分段证据与恢复" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Support\\CodexAppServerBridge.ps1", role: "app-server 协议、身份、预算与事件" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Support\\PublicWebSearch.ps1", role: "固定公共搜索工具" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\docs\\user\\MACHINE-RUN.md", role: "用户可读机器运行合同" }],
-    verification: ["恢复、事件生命周期、权限、预算、用量和清理均在 385 项回归中有覆盖。", "历史 0.3.12 Qwen3.8-27B Agent Live 证明过正常文件任务；本轮没有把它晋升为 0.153.0 当前 Live。", "本轮未创建一个新的模型 run。"],
+    verification: ["恢复、事件生命周期、权限、预算、用量和清理均在 385 项回归中有覆盖。", "历史 0.3.12 Qwen3.8-27B Agent Live 证明过正常文件任务；本轮没有把它晋升为 0.153.4 当前 Live。", "本轮未创建一个新的模型 run。"],
     relation: "本模块承载程序化 Codex 任务；Doctor/Agent 验收消费它，本地模型与代理模块提供部分运行目标。"
   },
   {
@@ -330,7 +335,7 @@ export const aiCliProfileManagerModules = [
     boundaries: ["本轮不启动 Ollama、GPU 模型或代理。", "不下载或执行上游最新标签。", "logout --purge-local-auth 只处理本地目录，远程授权需在账号侧确认。"],
     failures: [{ condition: "默认 Ollama 11434 不可达", response: "当前公共默认路线有限制；不改投 32100 或云端，除非用户选择对应 exact Profile。" }, { condition: "端口被未知进程占用", response: "换受控候选，绝不结束未知占用者或改系统端口范围。" }, { condition: "代理版本未批准", response: "update-check 只给来源和批准状态，不执行新版。" }],
     sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\LocalGpuBrokerSession.ps1", role: "本地模型身份与租约消费" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\ProxyService.ps1", role: "代理安装、启动、登录、退出和身份" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\ports\\managed-proxy-ports.json", role: "候选端口与验证日期" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\proxy-artifacts\\approved-windows-artifacts.json", role: "可执行代理版本与摘要" }],
-    verification: ["代理端口、制品、路径逃逸、监听和 PID 复用均有离线回归。", "2026-09-03 Doctor 当前读到两个代理已安装未运行、Ollama 默认端点不可达。", "GitHub 最新标签只用于指出清单差距，没有下载、执行或标成已批准。"],
+    verification: ["代理端口、制品、路径逃逸、监听和 PID 复用均有离线回归。", "2026-09-08T08:30Z的Doctor仍读到两个代理已安装未运行、Ollama默认端点不可达。", "GitHub 最新标签只用于指出清单差距，没有下载、执行或标成已批准。"],
     relation: "本模块提供可选运行目标；引擎模块定义 Profile，验证模块决定该目标在当前是否真正可用。"
   },
   {

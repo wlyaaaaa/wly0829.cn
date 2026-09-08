@@ -563,13 +563,13 @@ export const systemActiveAutomations = {
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-09-08T01:48:26.1632219Z",
-  total: 47,
+  observedAt: "2026-09-08T08:08:28.3009473Z",
+  total: 48,
   publicCount: 25,
-  privateCount: 22,
+  privateCount: 23,
   localCloneCount: 44,
-  remoteOnlyCount: 3,
-  identitySha256: "sha256:a64b11cae7096076e14ebe743b3883e4bd71c7d6cbc3572be6b00a684ee0d34b",
+  remoteOnlyCount: 4,
+  identitySha256: "sha256:f297cc2e22be69ce91f35c30604e004917429ae6fcdb52e9ccb9e93277a3ab4e",
   mappingSha256: "sha256:b030641ac6c11bea9118f27552d7cd889bbf24c4f7f45bdabc9fc861dbaabb26",
   description: "仓库数量对应上面的观察时间，不代表实时变化。本地媒体项目单独介绍，不增加 Git 仓库数；有完整项目页、仅有系统说明和保留历史参考是不同状态。网站自身只负责呈现。"
 };
@@ -660,7 +660,7 @@ export const systemProjectDomains = [
       { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。按当前问题决定读取深度，事实与推定分开；工作、学习、文书和健康仍各自负责专业事实与行动，有依据的新本人认识可以回写。日常推荐是它的一个用途。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
+      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。旧说法先结合发生时间和当时角色判断，有依据的新认识可以回写；手机端可拿到同一来源生成的两份阅读文件，更新后再核对正文。工作、学习、文书和健康仍各自负责专业判断。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
       { id: "personal-expression", title: "个人表达：讲明白和拟消息", repo: "personal-expression", visibility: "PRIVATE", role: "把事情讲给我听，也帮我把已经确定的意思写成自然消息。指出难懂或别扭之处后，先改好当前回答，再保留有用反馈供下次参考。专业判断和沟通策略仍由当前任务负责；这里只讲解或拟稿，不发送。", kind: "解释与表达支持", href: "/projects/personal-expression" }
     ]
   },
@@ -867,7 +867,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 有 14 组来源，H 在 9 月 5 日已完成首次备份验收，现在离线，新增量等待下一次冷备。BIOS 记录、启动介质、任务 Ready 和复制都是分层证据，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 有 14 组来源，H 在 9 月 5 日已完成首次备份验收，9 月 8 日的冷备也已完成。之后的新增量仍要另次备份。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -894,7 +894,7 @@ export const systemDependencyNodes = [
     href: "/projects/openclaw-gateway",
     linkLabel: "查看 OpenClawGateway",
     searchAliases: ["OpenClawGateway", "Telegram 飞书 Google Chat 消息交办"],
-    detail: "这是本人主动发起工作的设计入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；当前 Telegram 为 running/starting（运行中/启动中）且 connected=false（未连接），飞书也是 running/starting，两条渠道的消息 E2E 都未完成，付费 Live（真实调用）也没有执行。绝不拿源码或端口替代实际结果。"
+    detail: "这是本人主动发起工作的设计入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；当前Telegram渠道未运行、处于recovering（恢复中）且connected=false（未连接），飞书为running/starting（运行中/启动中），两条渠道的消息 E2E 都未完成，付费 Live（真实调用）也没有执行。绝不拿源码或端口替代实际结果。"
   },
   {
     id: "scheduled-events",
@@ -1184,7 +1184,7 @@ export const systemDependencyNodes = [
     href: "/skills/daily-preferences",
     linkLabel: "Skill：个人理解库",
     searchAliases: ["了解我", "本人背景", "真实经历", "生活重点", "价值取舍", "认知", "吃什么", "购物", "出行旅行", "审美偏好", "我改主意"],
-    detail: "查询、补充和纠正本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好。先按合同选择最小必要阅读，重要判断再深入相关依据；明确事实和可推翻推定分开，不把行为直接写成喜欢。它为工作、学习、文书、健康及未来独立领域提供本人背景，并接收有依据的回写；专业事实和现实行动仍由对应领域负责，不成为跨领域控制器或后台同步系统。"
+    detail: "查询、补充和纠正本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好。按问题决定读取深度，旧材料结合发生时间和当时角色判断；明确事实和可推翻推定分开，不把行为直接写成喜欢。手机端使用同一来源生成的两份阅读文件，并在更新后核对正文。它为独立领域提供本人背景，接收有依据的回写；专业判断和现实行动仍由对应领域负责。"
   },
   {
     id: "personal-expression",
@@ -1674,6 +1674,34 @@ export const systemSkillFamilies = [
       { slug: "native-economy-routing", name: "原生代理协作路由", technicalName: "native-economy-routing", summary: "Hook 先在任务进入和创建前核对宿主身份与活动规则；随后按独立性、写冲突和真实收益决定是否并行，主任务继续负责集成。", href: "/skills/native-economy-routing" },
       { slug: "llm-backend-toolkit", name: "额外 AI 后端工具箱", technicalName: "llm-backend-toolkit", summary: "只把范围封闭、可独立验收的任务交给当前登记的额外后端，并保存任务与结果回执。", href: "/skills/llm-backend-toolkit" },
       { slug: "token-budget-advisor", name: "配额与文本计量", technicalName: "token-budget-advisor", summary: "仅在用户明确询问时读取权威配额或文本计量；官方入口不可得时返回未知，不自行换算或猜测。", href: "/skills/token-budget-advisor" }
+    ]
+  },
+  {
+    id: "explain-and-draft",
+    number: "09",
+    title: "把事情讲明白，把消息写自然",
+    requests: [
+      "“我还是没听懂。按我现在的问题，把发生了什么、和我有什么关系讲清楚。”",
+      "“意思已经确定了，帮我写成一条自然的微信消息，我看过再发。”"
+    ],
+    inputs: [
+      "当前要解释的事情，或已经确定的回复意思和策略",
+      "与这次沟通有关的理解反馈、本人表达和对方语境；缺少时直接说明"
+    ],
+    collaboration: "当前任务负责事实和专业判断。解释时参考我怎样更容易理解；拟消息时参考当前场景有关的本人表达。两类参考分开使用，个人理解库和微信项目各自保留原有职责。",
+    delivery: [
+      "能理解当前事情、影响和下一步的解释",
+      "保持既定意思、自然且可修改的消息草稿",
+      "先用于改好本次结果、再供下次参考的有价值反馈"
+    ],
+    willNot: [
+      "解释不等于模仿我的聊天口吻，拟稿不代替当前任务决定策略",
+      "不会把AI草稿保存成本人原话，也不会自动发送消息",
+      "读取和反馈机制存在，不等于已证明后续每次都能主动补读或长期自动学习"
+    ],
+    members: [
+      { slug: "explain-to-me", name: "向我解释", technicalName: "explain-to-me", summary: "结合理解反馈把当前事情讲明白；先改好这次解释，再保留有用教训。", href: "/skills/explain-to-me" },
+      { slug: "reply-as-me", name: "替我拟回复", technicalName: "reply-as-me", summary: "按已经确定的意思和策略，参考有关表达写出自然、可改的消息；不自动发送。", href: "/skills/reply-as-me" }
     ]
   }
 ];

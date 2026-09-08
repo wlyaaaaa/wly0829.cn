@@ -2,6 +2,12 @@
 // linked only when current project evidence proves implementation ownership or
 // a real runtime dependency. Source location inside .agents is never enough.
 export const skillProjectLinks = {
+  "explain-to-me": [
+    { relation: "owned-by-project", projectSlug: "personal-expression", moduleSlug: "explain-to-me", label: "个人表达：向本人讲明白" }
+  ],
+  "reply-as-me": [
+    { relation: "owned-by-project", projectSlug: "personal-expression", moduleSlug: "reply-as-me", label: "个人表达：替本人拟消息" }
+  ],
   "chinese-asr": [
     { relation: "owned-by-project", projectSlug: "chinese-asr", moduleSlug: "task-routing", label: "ChineseASR 项目" }
   ],
@@ -20,7 +26,8 @@ export const skillProjectLinks = {
     { relation: "uses-project", projectSlug: "personal-health", moduleSlug: "protected-foreground-refresh", label: "设备前台更新" }
   ],
   "daily-preferences": [
-    { relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "personal-understanding", label: "个人理解库项目" }
+    { relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "personal-understanding", label: "个人理解库项目" },
+    { relation: "uses-project", projectSlug: "daily-preferences", moduleSlug: "mobile-context-delivery", label: "同源手机上下文交付" }
   ],
   "local-secret-broker": [
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }

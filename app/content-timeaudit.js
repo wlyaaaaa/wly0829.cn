@@ -1,48 +1,47 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const timeAuditSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-02T19:56:46Z",
-  label: "当前源码已核对 RTSS 优先帧链；001cee0 的发布、测试和现场结果保留为 8 月 31 日证据，未重新验收当前运行或有效游戏帧",
-  boundary: "2026-09-02 只读源码复核到 c3ca677：帧率优先读取 RTSS 共享内存，映射不可用才启动 PresentMon 后备。下列样本、剪贴板计数、001cee0 发布/测试与 LHM 单 owner（单一责任方）现场均仍是 2026-08-31 的已验证基线，不代表当前进程已加载新帧链；有效游戏帧、故障恢复、Grafana 和整库恢复 E2E（端到端验证）未重新执行",
+  observedAt: "2026-09-08T08:41:41.415Z",
+  label: "GPU异常读数已修复，三分钟180个新样本有效；历史坏值保留，游戏帧仍未验收",
+  boundary: "源码冻结08:00:42Z，发现GPU越界后以本批必要修复e5459ce例外收口；运行验收在08:39Z完成，网页08:41:41Z独立重读。当前GPU数据仅指08:35:40—08:38:40Z窗口；8月31日大盘/剪贴板/完整回归仍为历史证据，真实游戏、Grafana和整库恢复E2E（端到端验证）未重做",
   metrics: [
-    { label: "硬件样本", value: "3660" },
-    { label: "剪贴板事件", value: "5234" },
-    { label: "活动覆盖", value: "3478 / 3600 秒" },
+    { label: "新窗口硬件样本", value: "180" },
+    { label: "GPU有效样本", value: "180 / 180" },
+    { label: "新窗口活动覆盖", value: "180 / 180 秒" },
     { label: "大盘", value: "6 · 78" }
   ],
   facts: [
     { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
     { label: "帧率来源与空闲", value: "当前源码优先读取 RTSS（RivaTuner Statistics Server 帧率工具）的共享内存；按前台进程、RTSS 最近前台、已启用的 Wallpaper 桌面渲染器和唯一新鲜帧源选择。映射可用但无有效帧为正常 gated_idle；映射不可用才启用 PresentMon 后备，不能把所有零值都当正常等待。" },
     { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
-    { label: "安全聚合快照", value: "2026-08-31T21:45:19Z：3660 个硬件样本、age 0.129 秒、max gap 1.086 秒；活动记录覆盖 3478/3600 秒、未覆盖 122 秒；CPU 65.4/71.4°C、GPU hotspot（热点）最高 64°C、磁盘 p95/max 0.235/10.87 ms" },
-    { label: "运行现场", value: "3 个容器运行、入库器 healthy；LHM 独立任务与 18085 端点在线，主引擎已加载只读 worker（采集工作单元）；no_game_frames；packet-loss 信号 17 次、活动状态重叠 36 秒，仅表示需复核" },
-    { label: "发布与验证", value: "PUBLIC（公开）main（默认主分支）=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，工作树 clean（干净）；完整回归 182 passed（通过）+ 11 subtests（子测试），LHM/Watchdog 定向断言 10/10、只读现场健康 21/21" },
-    { label: "独立剪贴板历史", value: "WM_CLIPBOARDUPDATE 事件采集 + SQLite schema v1 / WAL / FTS5；当前 5234 事件、2312 个 blob（正文对象）、3406 条全文索引，3 个任务与无正文 adapter（适配出口）验证通过，专属 11 项测试通过" },
+    { label: "修复前后分窗核对", value: "08:10:55Z读取截止前(07:00:42Z,08:00:42Z]的3600样本，全部telemetry_out_of_bounds：GPU核心293°C、利用率47435%，不能当真实高温。补救后(08:35:40Z,08:38:40Z]的180样本在08:39:07Z验收、08:41:41Z独立重读：GPU均值/峰值52.306/54°C、10.05/31%、97.495/138.237W，signals为空；窗口覆盖180/180秒，最大间隙1.121秒。" },
+    { label: "本次受管换代与空档", value: "08:34:28Z仅停止已核对身份的旧采集worker，由既有TimeAudit_Watchdog拉起新launcher 57708→worker 61904（08:34:50Z）。首个新样本08:35:19Z，启动窗口前沿有51.03秒缺口。随后三分钟GPU占用/温度/功率/核心和显存时钟180/180非空且物理有效；不新增服务、不改历史样本，也未重启电脑或GPU驱动。" },
+    { label: "冻结来源与必要修复例外", value: "源码截止2026-09-08T08:00:42Z为PUBLIC main b64fafe2f23c82e2c1e668ba058b4634e590faff。本批发现真实读数故障后，必要修复e5459ce9e67608e2d9dbe92a18cc34c0a21b4f3e于08:35Z提交并正常推送、远端默认main回读同值。39项相关回归通过；同批必要说明修复f3d210e9023c4547cf60bb2ea4a173ad4a3578d0于09:34Z从远端默认main回读，使用手册及21页PDF已一致修正过强判断，78面板、字段和代码块保留。监测线索不自动成为确定诊断；文档更新未改变采集器或重采窗口。这些是截止后明列的修复，不混入无关新提交，也不把8月31日182项完整回归称为本轮重跑。" },
+    { label: "独立剪贴板历史 · 8月31日证据", value: "WM_CLIPBOARDUPDATE事件采集与SQLite schema v1/WAL/FTS5独立工作。8月31日为5234事件、2312个blob（正文对象）、3406条全文索引，3个任务与无正文adapter（适配出口）验证通过、专属11项测试通过；本次未重读当前正文或计数。" },
     { label: "已验证发布基线", value: "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），当时 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。这是下列发布、测试与现场证据的固定版本，不用它冒充后续源码的发布证明。", hero: false },
-    { label: "当前帧链源码", value: "2026-09-02 本地源码 HEAD=c3ca677c289aed835f6620d6b3b4f675777e5cec，hardware_worker.py、README 与两份帧链合同测试没有未提交改动。RTSSSharedMemoryV2 为只读首选，2 秒新鲜度与双读一致性过滤旧帧；fps_capture_status / fps_capture_detail 随硬件样本入库。本次仅复核源码与测试定义，没有运行采集器、查询新现场或重新确认远端发布。", hero: false },
+    { label: "现役源码的帧链与坏值处理", value: "e5459ce保留RTSSSharedMemoryV2只读首选、2秒新鲜度、双读一致性和fps_capture_status/detail入库；只有映射不可用才考虑PresentMon。新增NVML成功返回但核心指标非有限或越界时，按既有失败路径清句柄并重新初始化，当前拍只接受真实LHM回退或NULL，不把坏值裁成0。README已改为四worker、新实例退让，以及映射不可用才后备。", hero: false },
     { label: "LHM 单 Owner 源码", value: "44a842e..001cee0 的 6 文件变更已成为正式 source（源码）：LibreHardwareMonitor 的运行 owner 收敛到独立 `LibreHardwareMonitor` 计划任务，`telemetry_watchdog.ps1` 是登记的自动恢复路径，hardware_worker.py 对运行中的 LHM 只读本机 18085，端点不可用时留空而不自行拉起、结束或替换 LHM；缺少二进制时的 prepare（文件准备）线程仍只负责取得组件文件。", hero: false },
     { label: "8 月 31 日运行字节加载", value: "当次 hardware_worker.py blob 为 9cfc397，与 001cee0 完全一致；文件在 16:56:22Z 落盘，项目 `.venv` 的 main.py 逻辑进程在 17:10:05Z 启动，证明当时主引擎在该 worker 字节落盘后加载，不证明已采用后来的 c3ca677 帧链。Windows 中可见的 `.venv` launcher（启动器）与其 Python 3.11 子进程是一个父子运行链，不是两个独立 collector。", hero: false },
-    { label: "LHM 与 Watchdog 现场", value: "`LibreHardwareMonitor` 任务为 Interactive Highest（交互式最高权限）、IgnoreNew（忽略重复实例）且 action（动作）精确指向项目 exe；观察时 1 个 46-thread（线程）实例运行并由 18085 返回 HTTP 200，另有 3 个零线程 stopped（已停止）的 crash ghost（崩溃残影），新健康检查不会把残影冒充在线。`TimeAudit_Watchdog` 每分钟 + 登录触发、IgnoreNew、3 次/1 分钟任务级重试、3 分钟上限，最近一轮结果为 0；任务清单中只有这两个入口引用 LHM / telemetry_watchdog。", hero: false },
-    { label: "容器与数据库现场", value: "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器为 healthy（健康），PostgreSQL 暴露本机 45432，Grafana 13.0.2 暴露本机 53000；只读现场健康脚本 21/21 通过，近 2 分钟 120/120 条硬件样本均有 LHM GPU 电压与 CPU Vcore，最新写入年龄 0.8 秒。", hero: false },
-    { label: "完整回归", value: "001cee0 完整回归为 182 passed（通过）、11 subtests passed（子测试通过）、49.01 秒；另对 LHM/Watchdog 的单 owner、精确身份、睡眠/启动宽限、数据库断线延后、零线程残影和短命 wrapper（封装器）执行 10/10 定向断言。runner（测试运行器）来自本机 Python 3.11，项目依赖优先取 `.venv`，没有安装或改写生产依赖。", hero: false },
-    { label: "剪贴板 Sidecar", value: "剪贴板 sidecar 的当前 PCConfig 有界验证为 passed（通过）：TimeAudit_ClipboardCollector 为 Running，TimeAudit_ClipboardWatchdog 与 TimeAudit_ClipboardNearlineBackup 为 Ready，三任务均为普通用户 Limited（受限）运行级别；无正文 heartbeat 年龄 2824 ms、数据库 integrity=ok、schema_version=1，计数为 5234 个事件 / 2312 个正文对象 / 3406 条 FTS 索引，adapter（适配出口）返回 v1 且 payload（正文载荷）缺省。专属 11 项合成回归另在 0.806 秒内通过。", hero: false },
-    { label: "一小时诊断", value: "`timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T21:45:19Z 返回 schema=timeaudit.diagnostic-summary.v1、owner=timeaudit:diagnostic-history、status=ok、coverage=fresh、3660 个硬件样本，最新样本年龄 0.129 秒、最大 gap 1.086 秒；活动记录覆盖 3478/3600 秒，未覆盖 122 秒。CPU 均值/峰值 65.4/71.4°C、GPU hotspot 最高 64°C、磁盘 p95 0.235 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 17 次、活动状态重叠 36 秒都只进入复核边界。", hero: false },
+    { label: "8月31日LHM与Watchdog现场", value: "`LibreHardwareMonitor` 任务为 Interactive Highest（交互式最高权限）、IgnoreNew（忽略重复实例）且 action（动作）精确指向项目 exe；观察时 1 个 46-thread（线程）实例运行并由 18085 返回 HTTP 200，另有 3 个零线程 stopped（已停止）的 crash ghost（崩溃残影），新健康检查不会把残影冒充在线。`TimeAudit_Watchdog` 每分钟 + 登录触发、IgnoreNew、3 次/1 分钟任务级重试、3 分钟上限，最近一轮结果为 0；任务清单中只有这两个入口引用 LHM / telemetry_watchdog。", hero: false },
+    { label: "8月31日容器与数据库现场", value: "audit-postgres、audit-ingester、audit-grafana 三个容器运行，入库器为 healthy（健康），PostgreSQL 暴露本机 45432，Grafana 13.0.2 暴露本机 53000；只读现场健康脚本 21/21 通过，近 2 分钟 120/120 条硬件样本均有 LHM GPU 电压与 CPU Vcore，最新写入年龄 0.8 秒。", hero: false },
+    { label: "8月31日完整回归", value: "001cee0完整回归为182 passed（通过）、11 subtests passed（子测试通过）、49.01秒；另有LHM/Watchdog的10/10定向断言。当前e5459ce只重跑与NVML、FPS选择/状态和诊断摘要有关的39项；没有重跑旧182项，也没有安装或改写生产依赖。", hero: false },
+    { label: "8月31日剪贴板Sidecar", value: "8月31日剪贴板sidecar的PCConfig有界验证为 passed（通过）：TimeAudit_ClipboardCollector 为 Running，TimeAudit_ClipboardWatchdog 与 TimeAudit_ClipboardNearlineBackup 为 Ready，三任务均为普通用户 Limited（受限）运行级别；无正文 heartbeat 年龄 2824 ms、数据库 integrity=ok、schema_version=1，计数为 5234 个事件 / 2312 个正文对象 / 3406 条 FTS 索引，adapter（适配出口）返回 v1 且 payload（正文载荷）缺省。专属 11 项合成回归另在 0.806 秒内通过。", hero: false },
+    { label: "8月31日一小时诊断", value: "`timeaudit_diagnostic_summary.py --hours 1` 在 2026-08-31T21:45:19Z 返回 schema=timeaudit.diagnostic-summary.v1、owner=timeaudit:diagnostic-history、status=ok、coverage=fresh、3660 个硬件样本，最新样本年龄 0.129 秒、最大 gap 1.086 秒；活动记录覆盖 3478/3600 秒，未覆盖 122 秒。CPU 均值/峰值 65.4/71.4°C、GPU hotspot 最高 64°C、磁盘 p95 0.235 ms，没有有效游戏帧被正确标为 no_game_frames。packet-loss 信号 17 次、活动状态重叠 36 秒都只进入复核边界。", hero: false },
     { label: "采集可靠性", value: "当前源码的 RTSS 分支以系统 tick（启动计时）判断帧年龄并复核共享内存一致性；PresentMon 后备仍用单调时钟判断新鲜度，避免墙钟回拨让旧帧存活。`psutil.net_connections()` 进入可重启隔离进程，并避开 Windows `cpu_stats()` 原生崩溃路径。", hero: false },
     { label: "运行依赖", value: "生产 Python 依赖已经收敛到项目 `.venv`；启动器与 Watchdog 不依赖全局 Python 包。", hero: false },
     { label: "容量合同", value: "保留与备份审计按约 2 GB/周、330 GB/三年和 1200 天保留估算；数据库与 Grafana 每类备份轮转上限为 14 份。这是容量与轮转合同，不证明任一备份已完成隔离整库恢复。", hero: false },
-    { label: "已根治的采集误差", value: "本轮源码修复已消除 172 个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。", hero: false },
+    { label: "已根治的采集误差", value: "历史源码修复已消除172个正常系统进程误报，修正一小时窗中的 138 对重叠以避免 1 小时被算成 1.5 小时，并把占采集耗时 86% 的父进程解析替换为同一快照映射。", hero: false },
     { label: "聚合接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
   ],
   gaps: [
-    "本次未查询原始数据库行、窗口标题、实际进程、远端地址或个人统计，不能证明某段具体历史已被正确解释。",
+    "网页使用官方有界摘要；源修复只额外核对精确采集进程与GPU有效计数。没有读取窗口、聊天或剪贴板正文，不能据此解释某段私人活动或具体程序根因。",
     "001cee0 的 182 项完整源码回归与 21 项现场健康检查已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与测试都不能证明历史数据全绿。",
-    "LHM 单 owner 的 source、任务 action、运行中主引擎加载时序、单一活实例、18085 端点和 Watchdog 最近成功均已核对；本次坚持只读，没有结束 LHM、阻断端点或等待真实崩溃，因此“故障后由 telemetry_watchdog 唯一恢复”的生产故障注入 E2E 仍未验证。",
+    "本次已通过既有Watchdog真实换代TimeAudit采集器，保留约51.03秒启动前沿空档；LHM进程崩溃或18085端点故障的恢复没有重新注入，不能把采集器换代当作所有依赖故障都已验收。",
     "8 月 31 日的一小时诊断窗口没有有效游戏帧，因此没有 FPS、1% Low 与 frametime 结论。no_game_frames 只说明该摘要没有可分析帧；判断正常空闲还必须同时看新鲜度和明确的 gated_idle，不能掩盖 waiting_frames、error 或来源不可用。",
-    "c3ca677 的 RTSS 优先、桌面渲染器候选与状态分支仅经本次源码复核；未读取当前共享内存、重跑来源测试、重启采集器或进行真实游戏 E2E。允许 Wallpaper 桌面帧时，正 FPS 也不能自动解释成某个游戏的性能。",
+    "新三分钟窗口有133个正帧样本，全部因有效性检查拒绝，status=no_game_frames；没有可采用的FPS、1% Low或帧时结论。本次未启动游戏；即便以后有有效Wallpaper桌面帧，也不能自动解释为游戏性能。",
     "本次没有打开 Grafana 做 index→Overview→代表模块的用户可见路径验收；容器运行、聚合查询和历史截图不能替代当前浏览器 E2E。",
     "diagnostic summary v1 最长查询 168 小时且仅聚合；需要更长趋势或逐进程/路径/窗口明细时，应建立有明确价值并按实际值判断敏感性的另一条路线，不能把缺失字段猜出来。",
-    "使用手册仍有把相关性写成查毒、黑客、键盘监听、内存泄漏确诊或精确物理归因的过强旧措辞；当前 provider 与网页继续只给候选、相关性和人工核查，源文档需由 TimeAudit Owner 单独修正。",
-    "README@001cee0 仍写 `main.py + 5 个 worker`，但当前 main.py 只导入 activity/context/hardware/lifecycle 四个 worker，源码树也只有这四条；本页按代码与测试展示四个，并把 README 数量视为待 Owner 修正的源文档漂移。",
+    "已证旧长寿命进程内NVML返回失真，最初触发原因仍未知。新进程使用当前库与显式旧DLL均正常，旧DLL版本不是已证根因；三分钟新样本正常不证明永不复发，历史坏值没有自动删除或重算。",
     "剪贴板专属 11 项单元测试与 PCConfig 无正文运行验证通过，但本次没有执行会写入合成剪贴板内容的真机 smoke test（回环测试），也没有从 G 盘近线副本恢复到空目录；任务结果 0 与备份根存在都不能证明最新副本已完成端到端恢复。",
     "备份任务结果为 0、定向恢复测试通过，但本次未从最新 dump 和 Grafana 备份做隔离整套恢复。"
   ]
@@ -55,7 +54,7 @@ export const timeAuditProject = {
   route: "/projects/timeaudit",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "本机性能与复制历史可回放；RTSS 优先源码已核对，运行数字保留为 8 月 31 日基线",
+  cardStatus: "GPU异常读数已修复 · 新窗口180/180有效 · 历史与游戏边界保留",
   cardStatusTone: "mixed",
   ...timeAuditSnapshot,
   searchAliases: [
@@ -74,7 +73,7 @@ export const timeAuditProject = {
   summary: "TimeAudit 给这台 Windows 工作站留下两种可找回的本机历史：一条对齐性能、程序、功耗和使用时间，解释某个时刻电脑发生了什么；另一条独立保存新发生的文本、网址与文件路径复制，供本机搜索和再次复制。两条链各自有存储、状态与恢复边界，任何记录都不自动等于用户意图。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等现场很快消失；剪贴板内容也会被下一次复制覆盖。TimeAudit 让偶发故障可以事后按时间对齐，让曾复制的资料可以按关键词、日期和类型找回，同时明确区分观察事实、估算、空档和未知。",
   plainExample: "我可以问：“昨晚游戏突然卡了两秒，到底是显卡、磁盘，还是后台程序在抢资源？”TimeAudit 会先告诉我那段时间有没有足够记录；有的话就把帧率、温度、磁盘和前后台变化对到同一时刻，给出最值得继续查的方向，没有证据的地方直接留空，不靠重启电脑碰运气。",
-  result: "我得到一套只读本机诊断面和一套独立的本机复制找回面：前者回看整机与程序状态、能耗和使用时间，后者搜索、预览、再次复制并可按版本化游标增量输出。每条链都说明记录是否继续、问题在哪里和哪些结论不能推出；它们不自动结束程序、修改系统或监控用户意图。",
+  result: "我得到一套只读本机诊断面和一套独立的本机复制找回面：前者回看整机与程序状态、能耗和使用时间，后者搜索、预览、再次复制并可按版本化游标增量输出。每条链都说明记录是否继续、问题在哪里和哪些结论不能推出；诊断不会据异常信号处置其他应用或推断用户意图；采集器自身按既有看门狗合同恢复。",
   readerStates: {
     pass: "主时间线和剪贴板 sidecar 各自推进时，前者返回可对齐的硬件、程序、前台与生灭视图，后者在本机返回可搜索、可再次复制的历史；无正文心跳只证明对应记录链仍活着。",
     problem: "发现采样空档、指标越界、剪贴板跳过/缺口、后台争抢、崩溃或查询口径异常时，指出受影响组件与恢复入口，不把异常或复制动作直接解释成硬件故障、恶意行为或用户意图。",
@@ -99,11 +98,11 @@ export const timeAuditProject = {
     { title: "空白也有不同原因", detail: "没有游戏帧、没有采到和采集器故障是三种状态，不能都显示成零或正常。" },
     { title: "实测、估算、推导和未知分开", detail: "能耗、电费、签名风险和因果判断都有边界，界面必须说明每个值来自哪里、能证明什么。" },
     { title: "先看有界摘要，再决定是否深挖", detail: "快速查询先确认覆盖和方向，只有真正需要时才进入详细大盘，不让每次诊断都临时拼查询。" },
-    { title: "只记录和解释，不自动处置", detail: "项目不结束进程、不修改系统，也不把相关性、异常路径或无签名直接升级成安全结论。" },
+    { title: "只记录和解释，不自动处置", detail: "异常摘要不自动处置其他应用或修改系统配置；采集器自身仍由既有看门狗按精确身份恢复。相关性、异常路径和无签名都不能直接升级成安全结论。" },
     { title: "复制事实不等于用户意图", detail: "剪贴板 sidecar 只证明某次复制被本机观察到；它不证明用户读过、同意、执行或打算使用其中内容。" },
     { title: "私密正文留在本机", detail: "搜索、完整预览与再次复制都在桌面查看器内完成；公开面只展示 schema（结构版本）、组件、状态和计数，不展示原始正文、内容 hash（哈希）、私密窗口或凭据。" },
     { title: "独立能力独立失效", detail: "剪贴板历史不依赖 PostgreSQL、Grafana 或主采集器；一条链出问题时不把另一条链误报为不可用。" },
-    { title: "运行健康不等于数据真理", detail: "心跳证明链路继续推进，不证明每个传感器值正确，也不证明历史没有空档。" },
+    { title: "运行健康不等于数据真理", detail: "心跳只证明链路继续推进。NVML即使返回成功，只要核心数值越界仍按失败处理，交给已有重新初始化与真实LHM后备；没有可靠来源就留空，不用一个活进程保证所有数值正确。" },
     { title: "备份成功不等于恢复完成", detail: "数据库、面板和任务都要在隔离环境恢复并回读结果，不能用备份任务退出码冒充可恢复。" }
   ],
   responsibilities: [
@@ -174,13 +173,13 @@ export const timeAuditProject = {
     { moduleSlug: "backup-recovery", ask: "换电脑时，能把 TimeAudit 和以前的历史一起恢复吗？", effect: "先确认这是带历史换机，再重建运行环境、恢复选定备份并逐层验收；最后我能看到旧历史、新记录继续写入，以及备份后仍然缺少的那一段。" }
   ],
   evidenceLayers: [
-    { layer: "Source（源码）", proves: "live（实时） Git 回读确认已发布 001cee0；44a842e 后的 6 文件已经正式收口，定义 LHM 独立任务 owner、telemetry_watchdog 唯一自动恢复和 hardware worker（硬件采集工作单元）只读 18085，同时保留主采集、表、口径、备份与完整剪贴板 sidecar。", doesNotProve: "本机任务已指向这些文件、运行进程已经重新加载或故障恢复已经真实发生。" },
-    { layer: "Install / task（安装 / 任务）", proves: "LHM 任务 action（动作）精确指向项目 exe，Watchdog 精确指向隐藏 launcher（启动器）；两者均为 Interactive Highest、IgnoreNew，Watchdog 每分钟 + 登录触发并保留有界重试/执行上限。", doesNotProve: "任务当前端点健康、主引擎使用新 worker，或恢复动作能成功。" },
-    { layer: "Tests（测试）", proves: "001cee0 完整回归 182 项 + 11 个子测试通过；LHM/Watchdog 定向断言 10/10、只读现场健康 21/21、剪贴板专属 11/11。", doesNotProve: "真实游戏负载、LHM 故障注入、剪贴板真机消息回环、长期全库性能或浏览器用户路径。" },
-    { layer: "Runtime（运行）", proves: "主引擎在新 worker 字节落盘后从项目 `.venv` 启动；观察时 3 个容器运行、入库器 healthy、1 个 LHM 活实例与 18085 HTTP 200，Watchdog 最近结果 0；剪贴板 collector Running、watchdog/backup Ready、无正文 heartbeat 新鲜且 SQLite integrity=ok。", doesNotProve: "历史无空档、LHM 死端点可恢复、样本或剪贴板正文正确，或复制代表用户意图。" },
-    { layer: "Aggregate（聚合）", proves: "本轮一小时诊断摘要有 3660 个硬件样本、覆盖新鲜、no_game_frames，并保留温度、磁盘、packet-loss、未覆盖与活动重叠信号。", doesNotProve: "内核 DPC、硬件故障、具体进程原因、网络根因或持续压力。" },
+    { layer: "Source（源码）", proves: "截止来源为b64fafe；必要补救e5459ce已正常推送并回读默认main。现役仍为LHM独立任务、telemetry_watchdog唯一自动恢复和hardware worker（硬件采集工作单元）只读18085；新增NVML越界拒收复用原有重初始化/后备，没有新服务。", doesNotProve: "本机任务已指向这些文件、运行进程已经重新加载或故障恢复已经真实发生。" },
+    { layer: "Install / task（安装 / 任务）", proves: "8月31日回读LHM任务action（动作）指向项目exe、Watchdog指向隐藏launcher（启动器）；两者均为Interactive Highest、IgnoreNew，Watchdog 每分钟 + 登录触发并保留有界重试/执行上限。", doesNotProve: "任务当前端点健康、主引擎使用新 worker，或恢复动作能成功。" },
+    { layer: "Tests（测试）", proves: "8月31日001cee0完整回归182项+11子测试、LHM/Watchdog10/10、现场健康21/21、剪贴板11/11；本次e5459ce另通过39项相关回归，两个日期不互相替代。", doesNotProve: "真实游戏负载、LHM 故障注入、剪贴板真机消息回环、长期全库性能或浏览器用户路径。" },
+    { layer: "Runtime（运行）", proves: "本次精确停止旧采集worker，既有Watchdog拉起新launcher/worker并持续入库；开始有51.03秒前沿缺口，之后三分钟180个GPU样本有效。8月31日容器/LHM/剪贴板运行与完整性记录仍按原日期保留，没有把本次GPU验收扩为全链重验。", doesNotProve: "历史无空档、LHM 死端点可恢复、样本或剪贴板正文正确，或复制代表用户意图。" },
+    { layer: "Aggregate（聚合）", proves: "08:41:41Z独立重读(08:35:40Z,08:38:40Z]：180硬件样本、180秒活动覆盖、无异常信号；GPU均值52.306°C/10.05%/97.495W。133个正帧样本全部拒绝，no_game_frames，不给FPS结论。截止前一小时的3600个GPU越界样本仍保留。", doesNotProve: "内核 DPC、硬件故障、具体进程原因、网络根因或持续压力。" },
     { layer: "Gallery / dashboard contract（图片 / 大盘合同）", proves: "11 张获准截图展示真实界面；固定数据源与恢复结构有回归。", doesNotProve: "图片瞬时值可公开推广或全部 SQL 性能达标。" },
-    { layer: "Recovery（恢复）", proves: "主链与剪贴板近线备份任务最近结果为 0，SQLite Online Backup、清单校验与空目录恢复有单元测试。", doesNotProve: "本次已从最新 PostgreSQL/Grafana 或 G 盘剪贴板副本完成隔离端到端恢复。" }
+    { layer: "Recovery（恢复）", proves: "8月31日主链与剪贴板近线备份任务结果为0；SQLite Online Backup、清单校验与空目录恢复有原日期单元测试。本次没有重读这些备份或执行还原。", doesNotProve: "本次已从最新 PostgreSQL/Grafana 或 G 盘剪贴板副本完成隔离端到端恢复。" }
   ],
   evolution: [
     { date: "2026-06-08", commit: "e4c49fd–bf69c85", result: "建立 Windows 遥测、PostgreSQL 数据仓库和多仪表盘，从一次性查看变成可回放黑匣子。" },
@@ -219,7 +218,7 @@ export const timeAuditModules = [
       failureRecovery: ["慢扫描超时只跳慢拍", "数据库断线后退避重连", "spool 失败保留源段", "睡眠或关机空档不冒充健康"]
     },
     teaser: "用 1 秒硬件/FPS 快车道、3 秒进程慢车道和独立 AHK 区间管线，把不同频率与语义的数据写入 PostgreSQL，并保留来源、空值、睡眠和重试边界。",
-    status: "8 月 31 日基线：001cee0 已发布、主链运行且 21/21 只读现场健康通过；本次未重验当前运行或读取原始行",
+    status: "8月31日001cee0全链健康21/21保留；本次e5459ce已部署采集worker并验证180个新GPU样本，未重验全部链路",
     statusTone: "mixed",
     value: "系统会把硬件、进程、前台和生命周期按合适节拍留底，并告诉我数据来自哪条管线、是否估算、哪里有空档。",
     why: "把全进程扫描、传感器和窗口切换塞进一个同步循环会互相阻塞；两条历史管线边界不清又会重复统计。",
@@ -294,15 +293,15 @@ export const timeAuditModules = [
       failureRecovery: ["新鲜且明确gated_idle时正常等待", "waiting_frames或缺采集状态时不冒充健康idle", "探针掉线只留对应字段空值", "混入旧帧时拒绝性能结论", "摘要覆盖 stale 时先补现场证据", "Docker或PostgreSQL不可用时返回有界unavailable且不重启服务"]
     },
     teaser: "硬件真值与 RTSS 优先帧链对齐到同一时间轴；PresentMon 仅作后备，并明确区分正常等待、启动中、有负载无帧与采集故障。",
-    status: "c3ca677 的 RTSS 优先链与合同测试定义已只读核对；001cee0 的 LHM/现场回归是 8 月 31 日历史证据，当前帧链运行、故障注入和游戏 E2E 未重验",
+    status: "e5459ce已拒收NVML坏值并真实换代；180/180新GPU样本有效，133个正帧全被拒绝，游戏E2E仍未验收",
     statusTone: "mixed",
     value: "我能先用最长 168 小时的有界 summary（摘要）确认覆盖、硬件、有效游戏帧和压力方向，再进入 Grafana 对齐同刻的帧时、CPU/GPU、磁盘、网络和后台压力。面对“FPS 一直等游戏帧”，产品还会说明是在正常桌面空闲、刚启动帧源，还是已有渲染却没有收到匹配帧，不让一片空白变成错误诊断。PCConfig 可另按游标取不含原始数据的异常 digest（摘要），判断是否值得重查稳定机器事实。",
     why: "平均 FPS 会掩盖短暂卡顿；混入核显/虚拟显示器会错报显存，跨不同负载比较温度也会制造伪老化。反过来，若 PCConfig 直接读取原始时序或把一次高温当成硬件配置已经改变，就会让短暂负载污染长期机器基线；所以 TimeAudit 只交付聚合异常和是否建议重查，不替 PCConfig 下配置结论。",
-    example: "我问“没开游戏，为什么 FPS 一直是空的？”如果电脑确实在桌面待机，页面会直接写“正在等游戏帧”；如果游戏已经在渲染却一直收不到帧，它就改为提示采集异常，绝不会拿一个 0 FPS 糊弄我。",
+    example: "我问“没开游戏，为什么还有帧率，显卡温度又高得离谱？”若启用了Wallpaper桌面帧，必须说明它不是游戏成绩；NVML返回293°C这种越界值时按探针失败处理，尝试重新初始化并用真实LHM值后备。两条来源都不足就留空，不给我一份假的高温或0FPS结论。",
     result: "先得到一份覆盖质量、硬件聚合、有效游戏帧、状态时长和解释限制清楚的诊断摘要；若它指出值得深挖，再得到 Grafana 中的硬件时间线、FPS 对比、卡顿标记、CPU/GPU 瓶颈、网络/磁盘压力和同负载散热趋势。给 PCConfig 的独立 digest 只返回窗口、样本与 coverage（覆盖）、异常 id / severity / count / first-last、阈值引用和一次稳定配置重查建议；不返回原始时序、进程、窗口标题、网络/机器标识或秘密，也不能证明配置变化。",
     readerStates: {
       pass: "取得新鲜一致帧时显示硬件、FPS 与帧时；没有帧但明确为 gated_idle（正常空闲）且数据新鲜时显示等待，不判掉帧。PCConfig 的有效窗口另返回可推进游标的聚合摘要。",
-      problem: "starting（启动中）仅是有界宽限；waiting_frames（已有渲染但无匹配帧）、error（采集错误）、状态缺失或数据陈旧不能当健康等待。单探针越界只影响对应字段，阈值仍不直接证明根因或配置变化。",
+      problem: "starting（启动中）仅是有界宽限；waiting_frames（已有渲染但无匹配帧）、error（采集错误）、状态缺失或数据陈旧不能当健康等待。NVML非核心字段失败局部隔离；核心利用率、温度、功率或时钟失败/越界时整组NVML不可用，走已有重初始化和真实LHM后备，无源则NULL。阈值不直接证明根因或配置变化。",
       unavailable: "帧源、Docker、PostgreSQL 或有效窗口不可用时明确标注来源不足；不凭 GPU 负载或零 FPS 猜正常，也不为网页查询启动 RTSS、PresentMon、游戏或恢复服务。"
     },
     decisionImpact: [
@@ -317,13 +316,13 @@ export const timeAuditModules = [
     ],
     problem: "解决平均值遮蔽卡顿、GPU 混淆、探针故障级联、FPS 归属错误和伪老化趋势。",
     implementation: [
-      "c3ca677 的 hardware_worker 组合 NVML、PDH、LHM 与 RTSS 优先帧链；LHM 分支仍只读 18085，端点不可用时把对应真值留空并只记录一次告警，不自行拉起、结束或替换 LHM。",
+      "e5459ce的hardware_worker组合NVML、PDH、LHM与RTSS优先帧链。NVML核心利用率0—100%、核心温度0—120°C、板功率0—2000W、核心/显存时钟0—100000MHz之外或非有限值均拒收；显存温度仅接受0—150°C。这些是宽泛有效性边界，不是正常负载推荐值。失败后清NVML句柄并走既有重初始化；当拍仅合并真实LHM后备，否则NULL。LHM仍只读18085，不另建进程恢复路径。",
       "`_read_rtss_fps_snapshot` 只读 `RTSSSharedMemoryV2`：先精确 Windows 前台 PID，再 RTSS 最近前台 PID，再已启用的 wallpaper32.exe / wallpaper64.exe 桌面渲染候选，最后只接受一个唯一新鲜来源；布局与关键字段双读不一致、帧龄超过 2000 ms 或候选仍多解时拒绝该帧，不按最高 FPS 猜归属。",
       "RTSS 映射可用即抑制 PresentMon 启动；映射不可用时，`_presentmon_needed` 还检查真实渲染门与最近 RTSS 帧的 3 秒抑制窗。后备由项目内单 owner 管理 `TimeAuditPresentMon` 会话，RTSS 本身只读、不由 TimeAudit 启停。",
       "`_resolve_fps_capture_state` 把 active、gated_idle、starting、waiting_frames、source_unavailable、error 六种状态及原因写进 `fact_system_hardware.fps_capture_status / fps_capture_detail`。RTSS 有帧写 rtss_shared_memory_frame、可读无帧写 rtss_no_active_frame；PresentMon 启动宽限 10 秒，过后仍无匹配帧写 waiting_frames。",
       "`_auto_prepare_lhm_async` 在项目 exe 缺失时仍可下载并解压组件文件；这是文件准备，不是运行实例 ownership（所有权）或第二条恢复路径。",
       "独立 `LibreHardwareMonitor` 计划任务是唯一运行 owner，`telemetry_watchdog.ps1` 是登记的唯一自动恢复路径；任务现场分别指向项目 exe 与隐藏 Watchdog launcher。",
-      "8 月 31 日的运行回读证明当时 hardware_worker blob 与 001cee0 一致，main.py 在该文件落盘后启动；现场 1 个 LHM 活实例与 3 个零线程残影被正确区分。该证据不证明现在已加载 c3ca677。",
+      "8 月 31 日的运行回读证明当时 hardware_worker blob 与 001cee0 一致，main.py 在该文件落盘后启动；现场 1 个 LHM 活实例与 3 个零线程残影被正确区分。该历史证据不替代本次e5459ce的进程换代与新窗口验收。",
       "activity_worker 用 NVIDIA vendor id 锁独显 LUID。",
       "Grafana 对齐 FPS、帧时、瓶颈与前台焦点。",
       "pcconfig_anomaly_digest.py 通过现有 audit-postgres 容器的本地 PostgreSQL socket 对 fact_system_hardware 做索引聚合，窗口固定为 `(after_utc, until_utc]` 且最长 168 小时。",
@@ -359,7 +358,7 @@ export const timeAuditModules = [
     ],
     failures: [
       { condition: "LHM 连续不可达", response: "hardware worker 只留 CPU/GPU 对应真值字段为空；外部 telemetry_watchdog 先宽限 15 秒，再通过独立 LHM 任务做一次有界端点恢复。" },
-      { condition: "单个 NVML 调用异常", response: "隔离字段，不清零整块 GPU。" },
+      { condition: "NVML调用异常或核心指标越界", response: "显存温度、降频原因、PCIe等非核心读取失败局部隔离；核心利用率、温度、功率或时钟失败/越界时source_available=false并重新初始化，整组转用真实LHM或NULL，不把坏值清零伪装正常。" },
       { condition: "样本新鲜且 RTSS 映射可读、没有有效帧，或后备明确处于渲染门空闲", response: "显示 gated_idle / 正常等待；不启动第二个帧源、不造游戏负载。" },
       { condition: "后备已检测渲染但 10 秒启动宽限后仍没有匹配帧", response: "报告 waiting_frames 与 no_fresh_foreground_frame；这是收帧问题，不冒充正常桌面空闲。" },
       { condition: "帧状态缺失、采样陈旧、source_unavailable 或 error", response: "分别报告合同缺失、新鲜度、来源或具体采集错误；保留其他有效硬件字段，不以零 FPS 掩盖。" },
@@ -384,10 +383,10 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_grafana_dashboard_contract.py", role: "大盘合同回归" }
     ],
     verification: [
-      "2026-09-02 只读核对 c3ca677 的 RTSS/PresentMon 选择、六态入库及对应测试定义；本次未执行来源测试或采集入口，这一层只证明源码已实现，不证明当前运行或发布。",
+      "2026-09-08的e5459ce已发布并生效；39项相关回归覆盖坏值、非有限/越界、真实LHM后备、无源NULL、恢复有效读数，以及既有RTSS选择/状态和官方诊断摘要。",
       "001cee0 的 182 项 + 11 个子测试完整回归通过；LHM/Watchdog 定向断言另为 10/10。",
-      "现场健康 21/21：项目任务的单一 LHM 活实例、18085、GPU 电压、近 2 分钟 120/120 条 GPU/Vcore 真值与持续写库均通过。",
-      "diagnostic summary provider 合同进入完整回归；一小时真实窗口 coverage=fresh、3660 样本，且 no_game_frames 没有被误报成掉帧。",
+      "8月31日现场健康21/21：当时的单一LHM、18085、GPU电压与120/120条GPU/Vcore真值通过，不等于本批重验全链。",
+      "8月31日一小时摘要3660样本是历史基线；本次独立重读修复后三分钟180样本，无GPU越界。133个正帧全拒绝，no_game_frames不冒充有效游戏或掉帧结论。",
       "test_pcconfig_anomaly_digest.py 覆盖窗口、聚合规则、privacy flags（载荷省略标记）与 unavailable；本页本轮没有把该单测冒充 PCConfig consumer 或 live projection E2E。",
       "Grafana 容器运行，授权截图显示真实界面。",
       "本轮未结束 LHM 或阻断 18085，不能把健康现场冒充恢复故障注入；也未启动游戏，FPS E2E 未形成。"
@@ -406,7 +405,7 @@ export const timeAuditModules = [
       failureRecovery: ["进程已退出时保留已有生命周期", "未知路径保持 unknown", "逐进程入口未验收时不猜名字", "单一安全信号不自动处置"]
     },
     teaser: "保存进程资源、签名、提权、父进程、START / EXIT、退出码和卡死状态，回答谁占资源、谁闪退、哪些信号需人工核查。",
-    status: "进程采集和未知路径有源码/回归；本次刷新未读取实际进程、标题或连接",
+    status: "进程采集和未知路径有历史源码回归；本批仅核对采集器身份，未读取用户进程、标题或连接明细",
     statusTone: "mixed",
     value: "我能回答“谁刚才闪退、谁在写盘、谁在联网”这类自然问题，但分两步：timeaudit-diagnostics 只先确认窗口覆盖和资源方向，不返回进程名；需要点名时再进入本机 Grafana 的资源盘或取证盘，回看具体程序、启动/退出、提权、退出码与路径。",
     why: "同名进程可来自不同路径，PID 会复用，退出后信息消失；单凭无签名或端口定罪又会误报。",
@@ -465,9 +464,9 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\使用手册.md", role: "资源/取证大盘说明" }
     ],
     verification: [
-      "unknown path 回归纳入本次定向测试并通过。",
-      "没有读取任何实际进程、路径、标题或连接。",
-      "进程采集、生命周期和未知路径逻辑进入本次完整回归；本轮没有读取实际进程明细，因此产品现场仍保持 mixed。"
+      "unknown path回归属于8月31日001cee0已通过的基线，本批39项并未重新覆盖该模块。",
+      "未读取用户活动进程、路径、标题或连接明细；本批源修复仅核对受管采集器自身身份。",
+      "进程采集、生命周期和未知路径逻辑属于8月31日完整回归；本批只核对采集器自身身份，未读用户进程明细，该产品现场仍保持mixed。"
     ],
     relation: "把进程事实转成资源与取证视角，并与硬件卡顿时间对齐。"
   },
@@ -539,7 +538,7 @@ export const timeAuditModules = [
     ],
     verification: [
       "screen-time-focus、power-cost 等授权截图展示真实界面。",
-      "一小时 diagnostic summary 返回 active=2417 秒、idle=1114 秒、recorded coverage=3531 秒、uncovered=69 秒且 cross-state overlap=0；这些是 03:10Z 快照，不是永久使用习惯。",
+      "本次独立摘要窗口(2026-09-08T08:35:40Z,08:38:40Z]返回active=0、idle=180秒、recorded coverage=180秒、uncovered=0、cross-state overlap=0；只说明这三分钟的记录，不推断用户意图或长期习惯。",
       "文档记录区间裁剪、并集、空集归零与日界修复。",
       "本轮未重新查询完整个人时长或能耗明细，因此这些数值没有被升级为当前验证事实。"
     ],
@@ -557,7 +556,7 @@ export const timeAuditModules = [
       failureRecovery: ["native crash 按组件重启", "false alive 由陈旧 heartbeat 发现", "交互会话不可用时不伪造前台采集", "在线状态不覆盖历史缺口"]
     },
     teaser: "用单例、无 payload heartbeat、外部 Watchdog、退避、睡眠宽限和精确身份，把 native 崩溃、假活、探针掉线与数据库重连限制在受影响组件。",
-    status: "8 月 31 日基线：001cee0 的容器、heartbeat、LHM 与 Watchdog 现场及测试通过；当前帧链只做源码补核，未重验运行或主动故障恢复",
+    status: "8月31日容器/LHM/全链测试保留；本次已精确停止旧采集worker并由既有Watchdog真实换代，新窗口180个GPU样本有效",
     statusTone: "mixed",
     value: "系统不因进程仍显示 Running 就假定它工作，而以最近成功写入判断真假健康。",
     why: "native 崩溃会带走进程，进程也可能仍在却停写；仅检查存在会留下静默空档或双写。",
@@ -613,10 +612,10 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_ingest_resilience.py", role: "入库恢复回归" }
     ],
     verification: [
-      "三条 heartbeat 新鲜、3 个容器运行、ingester healthy、LHM 18085 为 HTTP 200、Watchdog 最近结果 0。",
-      "运行与入库回归纳入 001cee0 的 182 项 + 11 个子测试通过结果；LHM/Watchdog 定向断言 10/10。",
-      "hardware_worker blob 与 cutoff 一致且早于当前 main.py 运行链启动；LHM 现场只有 1 个有线程活实例，零线程残影不会阻止恢复。",
-      "只读现场健康 21/21，但未主动杀进程、阻断 18085、断库或模拟睡眠，因此恢复 E2E 仍明确缺失。"
+      "8月31日基线：三条heartbeat新鲜、3容器运行、ingester healthy、LHM18085返回HTTP200、Watchdog结果0。",
+      "8月31日运行/入库回归纳入001cee0的182项+11子测试，LHM/Watchdog定向10/10；本批e5459ce另验证39项相关回归。",
+      "8月31日的hardware_worker字节/进程时序与LHM单一活实例是历史证明；本次e5459ce换代后的worker61904与新样本窗口另列，两个运行时代不能混用。",
+      "8月31日21/21只读健康没有做故障注入；本批已真实停止旧采集worker并通过既有Watchdog恢复，但未阻断LHM18085、断库或模拟睡眠，其他恢复E2E仍缺。"
     ],
     relation: "监管采集和探针持续性；备份模块处理持久恢复。"
   },
@@ -703,8 +702,8 @@ export const timeAuditModules = [
     ],
     verification: [
       "Source（源码）：已发布 001cee0 包含完整 clipboard_history 实现与合同；44a842e..001cee0 没有修改 clipboard_history 或 test_clipboard_history.py，LHM 收口不改变这条独立产品轴。",
-      "Tests（测试）：本任务使用 Python 3.11 `-B -m unittest -v test_clipboard_history.py`，11 项全部通过，用时 0.806 秒；单元测试包含 SQLite Online Backup 到空目录的合成读回。",
-      "Runtime（运行）：PCConfig 无正文验证 status=passed；collector Running、watchdog/nearline task Ready、heartbeat age 2824 ms、state=running、integrity=ok、schema v1，5234 events / 2312 blobs / 3406 FTS rows。",
+      "Tests（测试）：8月31日使用Python3.11 `-B -m unittest -v test_clipboard_history.py`，11 项全部通过，用时 0.806 秒；单元测试包含 SQLite Online Backup 到空目录的合成读回。",
+      "Runtime（运行）：8月31日PCConfig无正文验证status=passed；collector Running、watchdog/nearline task Ready、heartbeat age 2824 ms、state=running、integrity=ok、schema v1，5234 events / 2312 blobs / 3406 FTS rows。",
       "Contract（合同）：adapter 返回 timeaudit.clipboard-export.response.v1、source profile `src.timeaudit.windows_clipboard`、1 个事件且 payload_absent=true；这验证接口形状，不验证实际下游消费。",
       "Gap（缺口）：本次未运行会写入唯一合成内容的 smoke_test.py，未把最新 G 盘副本恢复到空目录，也未验收实际下游 writer；不能声称真机 lineage 或端到端灾难恢复已经完成。"
     ],
@@ -801,7 +800,7 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py", role: "分区查询审计" }
     ],
     verification: [
-      "DailyBackup 最近结果为 0。",
+      "8月31日回读的DailyBackup结果为0，本批未刷新该项。",
       "备份、恢复与大盘合同纳入定向测试并通过。",
       "README 与 setup_runtime.ps1 当前证明运行环境应在目标机重建、Watchdog 为每分钟检查；它们不证明某次换机已经完成。",
       "未从最新 dump 做隔离 pg_restore，也未完整走三场景任一真实换机旅程，恢复 E2E 仍缺。"
