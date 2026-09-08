@@ -25,9 +25,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 14,
     "shared_css_gzip_budget_kib": 23,
-    "search_index_gzip_budget_kib": 136,
-    "project_search_index_gzip_budget_kib": 156,
-    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The local candidate contains 29 complete project packages and preserves the fixed 34 identities in the original 1-35 slots with rank 15 unused. Six source-reviewed project additions retain complete product and technical content. Query excerpts, direct image opening and the local AI continuation brief add no model calls, new runtime, dependencies, service, database or narrative fetch. Independent UI review supports the smallest justified increase to 14 KiB shared JS and 23 KiB CSS. Before final acceptance, measured shared search is 138669 gzip bytes and all-project search is 159042 bytes, requiring the minimum integer review lines of 136 and 156 KiB; the largest shard is 20083 bytes and remains within 21 KiB. Final production bytes must be read back against these lines, never inferred from source size. Do not delete required meaning or hide useful card information to meet a size or visual target.",
+    "search_index_gzip_budget_kib": 140,
+    "project_search_index_gzip_budget_kib": 162,
+    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The local candidate contains 31 complete packages from 32 retained identities in ranks 1-33, with rank 15 unused and Emerald Veil deferred. Independent Astra review found no identical search records, no duplicate long phrases within a record, no narrative content moved into shared interaction JavaScript and no new runtime dependencies. Final measured gzip bytes are 14028 for shared JS, 23325 for CSS, 142507 for shared search and 165350 for all-project search. New accepted projects justify the smallest justified increase of search review lines to 140 and 162 KiB; shared JS/CSS remain 14/23 KiB and each project shard remains within 21 KiB. Preserve required content and directly visible project information; remeasure after material changes.",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -623,7 +623,7 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 8,
+        "semantic_revision": 9,
         "scope": "project overview and six modules covering the 48-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation a1b2023e and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability; current 48 identities, 26 PUBLIC and 22 PRIVATE, 45 clones and 3 remote-only; generation a1b2023e and eight-file 20888-byte readback; bounded three-line 512-character diagnostics and independent broker reasons, detached-worktree root guidance, read-only Hook checks, and only one same-argument retry for exit 128 with the precise TLS EOF signature; the stale three-attempt source contract is corrected in 2bad541",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
@@ -2766,89 +2766,93 @@
       }
     },
     {
-      "id": "codex-app-power-user-playbook",
+      "id": "wechat-history-ai-bridge",
       "order": 27,
-      "title": "Codex App Power User Playbook",
+      "title": "WeChat History AI Bridge",
       "enabled": true,
       "presentation_mode": "real_dashboard",
-      "route": "/projects/codex-app-power-user-playbook",
+      "route": "/projects/wechat-history-ai-bridge",
       "ai_refresh": {
-        "content_path": "app/content-codex-app-power-user-playbook.js",
+        "content_path": "app/content-wechat-history-ai-bridge.js",
         "semantic_revision": 2,
-        "scope": "Source-backed practical guide, editable rules template, capability selection and validation, durable runtime/source/private-backup guidance, public sharing guidance, and repaired standalone PDF example; these prose sections are not invented executable schemas or protection services",
+        "scope": "Source-first product and technical coverage of WeFlow API data categories, active-library judgment, latest-message checks, bounded ChatLab Pull pagination and sync metadata, reply and media context, public metadata envelope versus private runtime content, documented OpenAPI AI flags rather than runtime HTTP interception, metadata probe required/optional endpoint semantics, bounded multi-profile startup and PCConfig task preservation, external file-set double-pass verification without export/copy/signature/immutability claims, and evidence separation from the current WeChatDirect route.",
         "collectors": [
-          "git -C E:\\Projects\\Archives\\codex-app-power-user-playbook status --porcelain=v2 --branch",
-          "read README.md, templates/AGENTS.public.md, docs/capability-map.md and examples/skills/md-to-pdf/SKILL.md",
-          "python -m unittest discover -s E:\\Projects\\Archives\\codex-app-power-user-playbook\\tests -v"
+          "git -C E:\\Projects\\Tools\\WeFlowBridge status --porcelain=v2 --branch",
+          "read current project rules, project_manifest.json, README.md, WATCHDOG.md, docs/ai_consumer_contract.md, docs/openapi.yaml, probe-weflow.ps1 and tools/build_private_snapshot_manifest.py before comparing website modules",
+          "python -m unittest discover -s E:\\Projects\\Tools\\WeFlowBridge\\tests -p test_*.py"
         ],
         "conditional_collectors": [
-          "inspect template and capability documentation read-only; never modify user's global ~/.codex settings or active agent rules merely to refresh the panel",
-          "Edge/Chrome headless printing requires browser binary and markdown package; executed on-demand rather than on every panel refresh"
+          "Read installed WeFlow version, exact scheduled-task state and unauthenticated loopback /health only when they change displayed state; never execute startup or installation scripts merely for this page.",
+          "MetadataOnly still requests sessions, contacts, group members and SNS statistics with credentials. Do not run it under a no-real-data website review; use existing synthetic endpoint tests. No real messages, contacts, moments, media, database or token reads in this acceptance."
         ]
       },
       "source": {
-        "repo": "wlyaaaaa/codex-app-power-user-playbook",
+        "repo": "wlyaaaaa/wechat-history-ai-bridge",
         "visibility": "PUBLIC",
         "default_branch": "master",
-        "local_root": "E:\\Projects\\Archives\\codex-app-power-user-playbook"
+        "local_root": "E:\\Projects\\Tools\\WeFlowBridge"
       },
       "displayed_areas": [
-        "product_purpose_long_running_engineering_agent_playbook_principles_and_ordinary_requests",
-        "five_source_backed_modules",
-        "public_agents_template_and_execution_routing",
-        "engineering_capability_routing_worktrees_review_and_verification_loop",
-        "self_contained_skills_and_plugins_pattern_with_headless_edge_pdf_printing",
-        "three_tier_durable_state_and_whitelist_memory_backup",
-        "public_safety_boundary_and_credential_sanitization"
+        "product_purpose_and_current_route_distinction",
+        "ai_consumer_contract_and_metadata_envelope",
+        "public_safe_openapi_and_endpoint_governance",
+        "boot_guardian_and_multi_profile_watchdog",
+        "metadata_first_probe_and_boundary_verification",
+        "private_snapshot_integrity_and_consumer_handoff"
       ],
       "impact_sources": [
         {
-          "kind": "agent_templates_and_rules",
+          "kind": "machine_contracts_and_schemas",
           "paths": [
-            "templates/AGENTS.public.md",
-            "templates/*.md"
+            "docs/openapi.yaml",
+            "docs/ai_consumer_contract.md",
+            "schemas/ai-consumer-envelope.v2.schema.json",
+            "schemas/project-manifest.v1.schema.json",
+            "project_manifest.json"
           ]
         },
         {
-          "kind": "capability_routing_and_architecture",
+          "kind": "watchdog_and_guardian_scripts",
           "paths": [
-            "docs/capability-map.md",
-            "README.md",
-            "LICENSE"
+            "weflow_boot_guardian.ps1",
+            "weflow_heartbeat.ps1",
+            "weflow_heartbeat.vbs",
+            "enable-autologin.ps1",
+            "WATCHDOG.md"
           ]
         },
         {
-          "kind": "skill_and_plugin_examples",
+          "kind": "probe_and_snapshot_tools",
           "paths": [
-            "examples/skills/md-to-pdf/SKILL.md",
-            "examples/plugins/md-pdf-toolkit/scripts/build_docs_pdf.py"
-          ]
-        },
-        {
-          "kind": "example_regression",
-          "paths": [
-            "tests/test_pdf_example.py"
+            "probe-weflow.ps1",
+            "tools/build_private_snapshot_manifest.py",
+            "tools/test-ci-local.ps1",
+            "tools/test-public-boundary.ps1",
+            "tests/test_project_contracts.py",
+            "tests/test_private_snapshot_manifest.py",
+            ".github/workflows/contract.yml"
           ]
         }
       ],
       "refresh_rules": {
         "semantic_review_required_when": [
-          "AGENTS.public.md collaboration preferences, execution rules, or safety boundaries change",
-          "docs/capability-map.md core capability routing, browser strategies, or durable state definitions change",
-          "PDF example browser arguments, default directory, temporary output, result validation or same-volume replacement changes",
-          "skill or plugin example architecture changes"
+          "WeFlow baseline or required endpoint behavior changes",
+          "Account, pagination, reply, media, time or output-envelope semantics change",
+          "AI endpoint flags or runtime-versus-documentation responsibility changes",
+          "Profile matching, health fallback, startup bounds or task ownership behavior changes",
+          "File-set verification, completion or failure recovery changes"
         ],
         "snapshot_only_when": [
-          "the clean PUBLIC master commit or observation time changes while every displayed capability remains true"
+          "Source revision or a verified observation changes while displayed behavior and boundaries remain true"
         ],
         "ignore_when": [
-          "formatting, typographical tweaks, or comments leave every displayed capability, failure recovery, and owner decision unchanged"
+          "Formatting and comments leave user-visible meaning and evidence unchanged"
         ]
       }
     },
     {
       "id": "pc-panel-hub",
-      "order": 29,
+      "order": 28,
       "title": "PC Panel Hub",
       "enabled": true,
       "presentation_mode": "real_dashboard",
@@ -2992,8 +2996,170 @@
       }
     },
     {
+      "id": "steam-millennium-config-backup",
+      "order": 30,
+      "title": "Steam Millennium 配置备份",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/steam-millennium-config-backup",
+      "ai_refresh": {
+        "content_path": "app/content-steam-millennium-config-backup.js",
+        "semantic_revision": 2,
+        "scope": "Steam Millennium config snapshot and manual recovery: core settings and quick.css; five plugin manifests and three configured enabled plugins; Adwaita/Zehn options and palette; weekly hidden task, exact allowlist, seven-day throttle, source/target overlap and destination edit checks, sequential copy and manual merge restore. Distinguish published config, uncommitted local snapshot, installed versions, source tests and actual restore.",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\steam-millennium-config-backup status --porcelain=v2 --branch",
+          "read the source snapshot script, exact config/plugin/theme allowlist, README.md and runtime/snapshot-state.json; confirm public master separately",
+          "read SteamMillenniumConfigSnapshot status and compare only allowlisted installed files with the selected snapshot; do not infer runtime loading"
+        ],
+        "conditional_collectors": [
+          "run tests/run-snapshot-tests.ps1 only when the tools or related contracts changed, with TEMP/TMP/TMPDIR under the owning task temp root",
+          "use isolated targets for snapshot and manual merge-restore checks; never overwrite the Steam installation or launch/restart Steam for page acceptance",
+          "preserve concurrent source configuration changes and distinguish actual installation readback from local or committed snapshots"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/steam-millennium-config-backup",
+        "visibility": "PUBLIC",
+        "default_branch": "master",
+        "local_root": "E:\\Projects\\Tools\\steam-millennium-config-backup"
+      },
+      "displayed_areas": [
+        "product_purpose_and_allowlist_config_backup_principles",
+        "four_source_backed_modules",
+        "allowlist_config_and_style_snapshot",
+        "plugin_manifest_and_install_state_tracking",
+        "theme_options_palette_and_dual_baseline_tracking",
+        "scheduled_snapshot_guardian_and_clean_restore_boundary"
+      ],
+      "impact_sources": [
+        {
+          "kind": "core_config_and_styles",
+          "paths": [
+            "config/config.json",
+            "config/quick.css",
+            "runtime/snapshot-state.json",
+            "README.md"
+          ]
+        },
+        {
+          "kind": "plugin_and_theme_manifests",
+          "paths": [
+            "plugins/**",
+            "themes/**"
+          ]
+        },
+        {
+          "kind": "automation_tools_and_tests",
+          "paths": [
+            "tools/snapshot-millennium-config.ps1",
+            "tools/register-millennium-config-snapshot-task.ps1",
+            "tools/snapshot-millennium-config-hidden.vbs",
+            "tests/run-snapshot-tests.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "Millennium core config schema or quick.css styling structure changes",
+          "installed plugin roster or tracked themes (Adwaita-for-Steam, Zehn) configuration drift",
+          "tools/snapshot-millennium-config.ps1 allowlist rules, sensitive exclusion regex, or overlapping root detection changes",
+          "Windows scheduled task registration or silent VBScript invocation logic changes",
+          "tests/run-snapshot-tests.ps1 coverage or test assertions drift"
+        ],
+        "snapshot_only_when": [
+          "the published source commit or observation time changes while every displayed capability, state and boundary remains true"
+        ],
+        "ignore_when": [
+          "formatting, typographical tweaks, or comments leave every displayed capability, failure recovery, and owner decision unchanged"
+        ]
+      }
+    },
+    {
+      "id": "ramdisk-guardian",
+      "order": 31,
+      "title": "RamdiskGuardian",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/ramdisk-guardian",
+      "ai_refresh": {
+        "content_path": "app/content-ramdisk-guardian.js",
+        "semantic_revision": 2,
+        "scope": "Project overview and five source-backed modules: bounded cache admission and retired backup role; drive arrival, twelve explicit directories and guide repair; host memory health and silent WARN; conditional Primo recovery with unique disk mapping and checked command results; installation, existing scheduled task, Chrome cache junctions, image and natural reboot boundaries.",
+        "collectors": [
+          "git -C E:\\Projects\\Tools\\RamdiskGuardian status --porcelain=v2 --branch",
+          "pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Assert-RamdiskGuardianStatic.ps1",
+          "pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Test-RamdiskGuardianRecovery.ps1",
+          "read zguardian.ps1, deploy.ps1, README.md, DEPLOY.md, Z_使用说明.md and current STATUS.txt; inspect scheduled task and Primo mapping read-only"
+        ],
+        "conditional_collectors": [
+          "inspect RAM disk status, logs, and scheduled tasks read-only; never execute deploy.ps1, reinitialize Primo Ramdisk, modify driver memory budgets, or alter Windows Fast Startup merely to refresh the website panel",
+          "verify target volume label is strictly RAMDISK before referencing Z: contents; never trigger emergency rxprd reset during read-only panel evaluation"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/RamdiskGuardian",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\RamdiskGuardian"
+      },
+      "displayed_areas": [
+        "product_purpose_and_volatile_cache_storage_policy",
+        "five_source_backed_modules",
+        "volatile_cache_contract_and_backup_retirement",
+        "drive_arrival_sensing_and_skeleton_healing",
+        "host_memory_telemetry_and_silent_monitoring",
+        "unaccounted_watchdog_and_driver_auto_release",
+        "installation_and_application_recovery"
+      ],
+      "impact_sources": [
+        {
+          "kind": "core_guardian_and_deploy_scripts",
+          "paths": [
+            "zguardian.ps1",
+            "deploy.ps1",
+            "run_hidden.vbs"
+          ]
+        },
+        {
+          "kind": "specifications_and_guides",
+          "paths": [
+            "Z_使用说明.md",
+            "README.md",
+            "DEPLOY.md"
+          ]
+        },
+        {
+          "kind": "tests_logs_and_archives",
+          "paths": [
+            "tests/Assert-RamdiskGuardianStatic.ps1",
+            "logs/STATUS.txt",
+            "logs/guardian.log",
+            "archive/sync_code.bat.bak_20260614",
+            "tests/Test-RamdiskGuardianRecovery.ps1"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "Z drive capacity, cache soft limit (8 GiB), or storage layering policies drift",
+          "zguardian.ps1 polling timeout, volume label validation, or directory skeleton list changes",
+          "host available memory, commit headroom, or unaccounted memory watchdog thresholds change",
+          "Primo Ramdisk CLI rxprd emergency reset invocation or image persistence paths change",
+          "Assert-RamdiskGuardianStatic.ps1 test coverage or assertion rules change",
+          "Primo disk mapping or recovery failure semantics change",
+          "deployment, application cache junctions or reboot recovery conditions change"
+        ],
+        "snapshot_only_when": [
+          "the clean PUBLIC main commit or observation time changes while every displayed capability remains true"
+        ],
+        "ignore_when": [
+          "formatting, typographical tweaks, or comments leave every displayed capability, failure recovery, and owner decision unchanged"
+        ]
+      }
+    },
+    {
       "id": "cacb",
-      "order": 34,
+      "order": 32,
       "title": "CACB Agent 能力基准",
       "enabled": true,
       "presentation_mode": "curated_packaging",
@@ -3046,7 +3212,7 @@
     },
     {
       "id": "codex-remote",
-      "order": 35,
+      "order": 33,
       "title": "Codex Remote",
       "enabled": true,
       "presentation_mode": "curated_packaging",

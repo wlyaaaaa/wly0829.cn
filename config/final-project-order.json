@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-09-04",
-  "target_project_count": 34,
+  "target_project_count": 32,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -10,57 +10,280 @@
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
   "display_rule": "render only published projects at their fixed final_rank; missing ranks remain absent and never create placeholder cards or routes",
-  "rank_retirement_rule": "an owner-removed independent project leaves its original final_rank unused; surviving projects keep their accepted ranks and are never silently renumbered",
+  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused.",
   "construction_rule": "Gemini selects the smallest final_rank still marked planned after the owner reports its latest completed project; the next assignment does not wait for Astra acceptance, UI work, integration or publication. Astra works on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership. Combine results for final local acceptance and respect the current website publication hold.",
   "projects": [
-    { "final_rank": 1, "id": "personal-media", "title": "个人媒体整理与恢复", "state": "published" },
-    { "final_rank": 2, "id": "agents", "title": ".agents", "state": "published" },
-    { "final_rank": 3, "id": "pcconfig", "title": "PCConfig", "state": "published" },
-    { "final_rank": 4, "id": "localocr", "title": "LocalOCR", "state": "published" },
-    { "final_rank": 5, "id": "github-index", "title": "GitHub 总索引", "state": "published" },
-    { "final_rank": 6, "id": "document-materials", "title": "文书和材料制作", "state": "published" },
-    { "final_rank": 7, "id": "personal-materials", "title": "个人材料查找", "state": "published" },
-    { "final_rank": 8, "id": "chinese-asr", "title": "ChineseASR", "state": "published" },
-    { "final_rank": 9, "id": "learning", "title": "AI 协作学习", "state": "published" },
-    { "final_rank": 10, "id": "timeaudit", "title": "TimeAudit", "state": "published" },
-    { "final_rank": 11, "id": "personal-health", "title": "个人健康证据与安全决策", "state": "published" },
-    { "final_rank": 12, "id": "devconfig-backup", "title": "DevConfig Backup", "state": "published", "source": "wlyaaaaa/devconfig-backup" },
-    { "final_rank": 13, "id": "vault-tool", "title": "vault-tool", "state": "published" },
-    { "final_rank": 14, "id": "ai-cli-profile-manager", "title": "AI CLI Profile Manager", "state": "published" },
-    { "final_rank": 16, "id": "work-delivery", "title": "工作支持与交付", "state": "published" },
-    { "final_rank": 17, "id": "daily-preferences", "title": "个人理解库", "state": "published" },
-    { "final_rank": 18, "id": "wechat-direct", "title": "WeChatDirect", "state": "published" },
-    { "final_rank": 19, "id": "proxyclean", "title": "ProxyClean", "state": "published", "source": "wlyaaaaa/ProxyClean" },
-    { "final_rank": 20, "id": "codex-memory", "title": "Codex Memory Backup", "state": "published", "source": "PRIVATE_MANAGED_SOURCE" },
-    { "final_rank": 21, "id": "meshclip-kit", "title": "MeshClip Kit", "state": "published", "source": "wlyaaaaa/meshclip-kit" },
-    { "final_rank": 22, "id": "video-scaffold", "title": "video-scaffold", "state": "published" },
-    { "final_rank": 23, "id": "sunshine-remote-streaming", "title": "Sunshine 远程串流", "state": "published" },
-    { "final_rank": 24, "id": "llm-backend-toolkit", "title": "LLM Backend Toolkit", "state": "published", "source": "wlyaaaaa/llm-backend-toolkit" },
-    { "final_rank": 25, "id": "typora-theme-pack", "title": "Typora Theme Pack", "state": "published", "source": "wlyaaaaa/typora-theme-pack" },
-    { "final_rank": 26, "id": "openclaw-gateway", "title": "OpenClawGateway", "state": "published" },
-    { "final_rank": 27, "id": "codex-app-power-user-playbook", "title": "Codex App Power User Playbook", "state": "published", "source": "wlyaaaaa/codex-app-power-user-playbook" },
-    { "final_rank": 28, "id": "wechat-history-ai-bridge", "title": "WeChat History AI Bridge", "state": "planned", "source": "wlyaaaaa/wechat-history-ai-bridge" },
-    { "final_rank": 29, "id": "pc-panel-hub", "title": "PC Panel Hub", "state": "published" },
-    { "final_rank": 30, "id": "emerald-veil", "title": "Emerald Veil", "state": "planned", "source": "wlyaaaaa/emerald-veil" },
-    { "final_rank": 31, "id": "steam-millennium-config-backup", "title": "Steam Millennium 配置备份", "state": "planned", "source": "wlyaaaaa/steam-millennium-config-backup" },
-    { "final_rank": 32, "id": "ramdisk-guardian", "title": "RamdiskGuardian", "state": "planned", "source": "wlyaaaaa/RamdiskGuardian" },
-    { "final_rank": 33, "id": "rtx5090d-ollama-agent-bundle", "title": "RTX 5090D Ollama Agent Bundle", "state": "planned", "source": "wlyaaaaa/rtx5090d-ollama-agent-bundle" },
-    { "final_rank": 34, "id": "cacb", "title": "CACB Agent 能力基准", "state": "published" },
-    { "final_rank": 35, "id": "codex-remote", "title": "Codex Remote", "state": "published" }
+    {
+      "final_rank": 1,
+      "id": "personal-media",
+      "title": "个人媒体整理与恢复",
+      "state": "published"
+    },
+    {
+      "final_rank": 2,
+      "id": "agents",
+      "title": ".agents",
+      "state": "published"
+    },
+    {
+      "final_rank": 3,
+      "id": "pcconfig",
+      "title": "PCConfig",
+      "state": "published"
+    },
+    {
+      "final_rank": 4,
+      "id": "localocr",
+      "title": "LocalOCR",
+      "state": "published"
+    },
+    {
+      "final_rank": 5,
+      "id": "github-index",
+      "title": "GitHub 总索引",
+      "state": "published"
+    },
+    {
+      "final_rank": 6,
+      "id": "document-materials",
+      "title": "文书和材料制作",
+      "state": "published"
+    },
+    {
+      "final_rank": 7,
+      "id": "personal-materials",
+      "title": "个人材料查找",
+      "state": "published"
+    },
+    {
+      "final_rank": 8,
+      "id": "chinese-asr",
+      "title": "ChineseASR",
+      "state": "published"
+    },
+    {
+      "final_rank": 9,
+      "id": "learning",
+      "title": "AI 协作学习",
+      "state": "published"
+    },
+    {
+      "final_rank": 10,
+      "id": "timeaudit",
+      "title": "TimeAudit",
+      "state": "published"
+    },
+    {
+      "final_rank": 11,
+      "id": "personal-health",
+      "title": "个人健康证据与安全决策",
+      "state": "published"
+    },
+    {
+      "final_rank": 12,
+      "id": "devconfig-backup",
+      "title": "DevConfig Backup",
+      "state": "published",
+      "source": "wlyaaaaa/devconfig-backup"
+    },
+    {
+      "final_rank": 13,
+      "id": "vault-tool",
+      "title": "vault-tool",
+      "state": "published"
+    },
+    {
+      "final_rank": 14,
+      "id": "ai-cli-profile-manager",
+      "title": "AI CLI Profile Manager",
+      "state": "published"
+    },
+    {
+      "final_rank": 16,
+      "id": "work-delivery",
+      "title": "工作支持与交付",
+      "state": "published"
+    },
+    {
+      "final_rank": 17,
+      "id": "daily-preferences",
+      "title": "个人理解库",
+      "state": "published"
+    },
+    {
+      "final_rank": 18,
+      "id": "wechat-direct",
+      "title": "WeChatDirect",
+      "state": "published"
+    },
+    {
+      "final_rank": 19,
+      "id": "proxyclean",
+      "title": "ProxyClean",
+      "state": "published",
+      "source": "wlyaaaaa/ProxyClean"
+    },
+    {
+      "final_rank": 20,
+      "id": "codex-memory",
+      "title": "Codex Memory Backup",
+      "state": "published",
+      "source": "PRIVATE_MANAGED_SOURCE"
+    },
+    {
+      "final_rank": 21,
+      "id": "meshclip-kit",
+      "title": "MeshClip Kit",
+      "state": "published",
+      "source": "wlyaaaaa/meshclip-kit"
+    },
+    {
+      "final_rank": 22,
+      "id": "video-scaffold",
+      "title": "video-scaffold",
+      "state": "published"
+    },
+    {
+      "final_rank": 23,
+      "id": "sunshine-remote-streaming",
+      "title": "Sunshine 远程串流",
+      "state": "published"
+    },
+    {
+      "final_rank": 24,
+      "id": "llm-backend-toolkit",
+      "title": "LLM Backend Toolkit",
+      "state": "published",
+      "source": "wlyaaaaa/llm-backend-toolkit"
+    },
+    {
+      "final_rank": 25,
+      "id": "typora-theme-pack",
+      "title": "Typora Theme Pack",
+      "state": "published",
+      "source": "wlyaaaaa/typora-theme-pack"
+    },
+    {
+      "final_rank": 26,
+      "id": "openclaw-gateway",
+      "title": "OpenClawGateway",
+      "state": "published"
+    },
+    {
+      "final_rank": 27,
+      "id": "wechat-history-ai-bridge",
+      "title": "WeChat History AI Bridge",
+      "state": "published",
+      "source": "wlyaaaaa/wechat-history-ai-bridge"
+    },
+    {
+      "final_rank": 28,
+      "id": "pc-panel-hub",
+      "title": "PC Panel Hub",
+      "state": "published"
+    },
+    {
+      "final_rank": 29,
+      "id": "emerald-veil",
+      "title": "Emerald Veil",
+      "state": "deferred",
+      "construction_note": "Owner deferred construction on 2026-09-07 because this project has incremental changes; resume only when the owner brings it back into the queue.",
+      "source": "wlyaaaaa/emerald-veil"
+    },
+    {
+      "final_rank": 30,
+      "id": "steam-millennium-config-backup",
+      "title": "Steam Millennium 配置备份",
+      "state": "published",
+      "source": "wlyaaaaa/steam-millennium-config-backup"
+    },
+    {
+      "final_rank": 31,
+      "id": "ramdisk-guardian",
+      "title": "RamdiskGuardian",
+      "state": "published",
+      "source": "wlyaaaaa/RamdiskGuardian"
+    },
+    {
+      "final_rank": 32,
+      "id": "cacb",
+      "title": "CACB Agent 能力基准",
+      "state": "published"
+    },
+    {
+      "final_rank": 33,
+      "id": "codex-remote",
+      "title": "Codex Remote",
+      "state": "published"
+    }
   ],
   "non_card_explanations": [
-    { "id": "website-presentation-infrastructure", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#wly0829-cn" },
-    { "id": "github-profile-discovery-entry", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#wlyaaaaa" },
-    { "id": "gemini-readable-state-backup", "owner_surface": "openclaw-gateway", "status": "done" },
-    { "id": "claude-project-memory-backup", "owner_surface": "openclaw-gateway", "status": "done" },
-    { "id": "openclaw-private-restore", "owner_surface": "openclaw-gateway", "status": "done" },
-    { "id": "public-project-private-companion", "owner_surface": "system-and-agents", "status": "done" },
-    { "id": "private-key-ciphertext-target", "owner_surface": "vault-tool", "status": "done" },
-    { "id": "encrypted-alignment-time-capsule", "owner_surface": "system", "status": "done" },
-    { "id": "md-triple-tactics-ledger-asset", "owner_surface": "system", "status": "done", "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver" },
-    { "id": "wechat-pre-public-private-archive", "owner_surface": "wechat-direct", "status": "done", "evidence": "app/content-wechatdirect.js#evolution" },
-    { "id": "health-longevity-early-project", "owner_surface": "personal-health", "status": "done", "evidence": "app/content-personal-health.js#evolution" },
-    { "id": "scripts-capabilities-absorbed-by-owning-projects", "owner_surface": "pcconfig-and-owning-projects", "status": "done", "evidence": "app/content-pcconfig.js#runtime-startup" }
+    {
+      "id": "website-presentation-infrastructure",
+      "owner_surface": "system",
+      "status": "done",
+      "evidence": "app/system-home-content.js#wly0829-cn"
+    },
+    {
+      "id": "github-profile-discovery-entry",
+      "owner_surface": "system",
+      "status": "done",
+      "evidence": "app/system-home-content.js#wlyaaaaa"
+    },
+    {
+      "id": "gemini-readable-state-backup",
+      "owner_surface": "openclaw-gateway",
+      "status": "done"
+    },
+    {
+      "id": "claude-project-memory-backup",
+      "owner_surface": "openclaw-gateway",
+      "status": "done"
+    },
+    {
+      "id": "openclaw-private-restore",
+      "owner_surface": "openclaw-gateway",
+      "status": "done"
+    },
+    {
+      "id": "public-project-private-companion",
+      "owner_surface": "system-and-agents",
+      "status": "done"
+    },
+    {
+      "id": "private-key-ciphertext-target",
+      "owner_surface": "vault-tool",
+      "status": "done"
+    },
+    {
+      "id": "encrypted-alignment-time-capsule",
+      "owner_surface": "system",
+      "status": "done"
+    },
+    {
+      "id": "md-triple-tactics-ledger-asset",
+      "owner_surface": "system",
+      "status": "done",
+      "evidence": "app/system-home-content.js#md-triple-tactics-talent-solver"
+    },
+    {
+      "id": "wechat-pre-public-private-archive",
+      "owner_surface": "wechat-direct",
+      "status": "done",
+      "evidence": "app/content-wechatdirect.js#evolution"
+    },
+    {
+      "id": "health-longevity-early-project",
+      "owner_surface": "personal-health",
+      "status": "done",
+      "evidence": "app/content-personal-health.js#evolution"
+    },
+    {
+      "id": "scripts-capabilities-absorbed-by-owning-projects",
+      "owner_surface": "pcconfig-and-owning-projects",
+      "status": "done",
+      "evidence": "app/content-pcconfig.js#runtime-startup"
+    }
   ],
   "private_exclusion_boundary": {
     "excluded_project_count": 4,

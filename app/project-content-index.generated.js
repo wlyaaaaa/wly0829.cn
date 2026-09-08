@@ -24,8 +24,10 @@ import { project as project_sunshine_remote_streaming, modules as modules_sunshi
 import { project as project_llm_backend_toolkit, modules as modules_llm_backend_toolkit } from "./content-llm-backend-toolkit.js";
 import { project as project_typora_theme_pack, modules as modules_typora_theme_pack } from "./content-typora-theme-pack.js";
 import { project as project_openclaw_gateway, modules as modules_openclaw_gateway } from "./content-openclaw-gateway.js";
-import { project as project_codex_app_power_user_playbook, modules as modules_codex_app_power_user_playbook } from "./content-codex-app-power-user-playbook.js";
+import { project as project_wechat_history_ai_bridge, modules as modules_wechat_history_ai_bridge } from "./content-wechat-history-ai-bridge.js";
 import { project as project_pc_panel_hub, modules as modules_pc_panel_hub } from "./content-pc-panel-hub.js";
+import { project as project_steam_millennium_config_backup, modules as modules_steam_millennium_config_backup } from "./content-steam-millennium-config-backup.js";
+import { project as project_ramdisk_guardian, modules as modules_ramdisk_guardian } from "./content-ramdisk-guardian.js";
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
 
@@ -55,8 +57,10 @@ export const projectContentPackages = new Map([
   ["llm-backend-toolkit", { project: project_llm_backend_toolkit, modules: modules_llm_backend_toolkit, kind: "llm-backend-toolkit" }],
   ["typora-theme-pack", { project: project_typora_theme_pack, modules: modules_typora_theme_pack, kind: "typora-theme-pack" }],
   ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }],
-  ["codex-app-power-user-playbook", { project: project_codex_app_power_user_playbook, modules: modules_codex_app_power_user_playbook, kind: "codex-app-power-user-playbook" }],
+  ["wechat-history-ai-bridge", { project: project_wechat_history_ai_bridge, modules: modules_wechat_history_ai_bridge, kind: "wechat-history-ai-bridge" }],
   ["pc-panel-hub", { project: project_pc_panel_hub, modules: modules_pc_panel_hub, kind: "pc-panel-hub" }],
+  ["steam-millennium-config-backup", { project: project_steam_millennium_config_backup, modules: modules_steam_millennium_config_backup, kind: "steam-millennium-config-backup" }],
+  ["ramdisk-guardian", { project: project_ramdisk_guardian, modules: modules_ramdisk_guardian, kind: "ramdisk-guardian" }],
   ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
   ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }]
 ]);

@@ -1,4 +1,5 @@
 import "../app/style.css";
+import "../app/personal-media-gallery.css";
 import { searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
 import "../app/continuation-brief.css";
 import { initializeContinuationBriefs } from "../app/continuation-brief.js";
@@ -426,6 +427,7 @@ function initializeSkillCategories() {
   const items = Array.from(document.querySelectorAll(".skill-directory-item[data-skill-categories]"));
   if (!rail || !items.length) return;
   const buttons = Array.from(rail.querySelectorAll("button[data-skill-category]"));
+  const resultCount = document.querySelector("[data-skill-result-count]");
   function activate(category, focus = false) {
     const selected = buttons.some((button) => button.dataset.skillCategory === category) ? category : "all";
     for (const button of buttons) {
@@ -435,6 +437,7 @@ function initializeSkillCategories() {
       if (active && focus) button.focus();
     }
     for (const item of items) item.hidden = selected !== "all" && !String(item.dataset.skillCategories || "").split(/\s+/).includes(selected);
+    if (resultCount) resultCount.textContent = selected === "all" ? `${items.length} 项能力` : `当前 ${items.filter((item) => !item.hidden).length} 项 · 共 ${items.length} 项`;
   }
   buttons.forEach((button, index) => {
     button.addEventListener("click", () => activate(button.dataset.skillCategory));
@@ -469,7 +472,7 @@ function initializeProjectReadingLayers() {
     };
     restore();
   }
-  function activate(id, { updateUrl = false, focus = false } = {}) {
+  function activate(id, { updateUrl = false, focus = false, preserveScroll = true } = {}) {
     const previousY = window.scrollY;
     const selected = ids.includes(id) ? id : "quick";
     for (const tab of tabs) {
@@ -485,7 +488,7 @@ function initializeProjectReadingLayers() {
       next.hash = `project-reading-panel-${selected}`;
       window.history.pushState({ preserveScroll: true }, "", `${next.pathname}${next.search}${next.hash}`);
     }
-    restoreReadingScroll(previousY);
+    if (preserveScroll) restoreReadingScroll(previousY);
   }
   tabs.forEach((tab, index) => {
     tab.addEventListener("click", (event) => {
@@ -504,7 +507,9 @@ function initializeProjectReadingLayers() {
     });
   });
   window.addEventListener("popstate", () => activate(idFromHash()));
-  activate(idFromHash());
+  const initialTarget = document.getElementById(idFromHash());
+  activate(initialTarget?.closest("[data-project-reading-panel]")?.dataset.projectReadingPanel || idFromHash(), { preserveScroll: !initialTarget });
+  if (initialTarget) window.requestAnimationFrame(() => initialTarget.scrollIntoView({ block: "start" }));
 }
 
 function initializeSystemHome() {

@@ -563,16 +563,16 @@ export const systemActiveAutomations = {
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-09-07T20:18:48.4400642Z",
-  total: 48,
-  publicCount: 26,
+  observedAt: "2026-09-08T01:48:26.1632219Z",
+  total: 47,
+  publicCount: 25,
   privateCount: 22,
-  localCloneCount: 45,
+  localCloneCount: 44,
   remoteOnlyCount: 3,
-  detailedPageCount: 29,
-  identitySha256: "sha256:97f5c6ba178da1062ba329c59b7fd46e859524546c9c433bb0921b80733b6602",
-  mappingSha256: "sha256:6597bf109f04bd76fe02aa9b3ba17012c41b3b16ea2ba85cb1a1aa0176fa784b",
-  description: "2026-09-07 的有界来源记录 48 个 Git 仓库：26 个公开、22 个私有，45 个已验证本地副本与 3 个仅远端；仓库总账和网站选定范围分别说明。当前网页候选包含二十九个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
+  detailedPageCount: 31,
+  identitySha256: "sha256:a64b11cae7096076e14ebe743b3883e4bd71c7d6cbc3572be6b00a684ee0d34b",
+  mappingSha256: "sha256:d1693038775fb6c591a2abc5bd08f943a27d365d20cacca8e033ee1e297ca49c",
+  description: "2026-09-08 的实时完整集合为 47 个 Git 仓库：25 个公开、22 个私有，44 个已验证本地副本与 3 个仅远端；仓库集合与导航已在来源收口。当前网页候选包含二十八个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -590,10 +590,8 @@ export const systemProjectDomains = [
     assets: [
       { id: "agents", title: "AI 协作规则与能力中心", repo: ".agents", role: "让 AI 知道听谁的、能做什么、该用哪种能力、多个协作者怎样不互相覆盖，以及何时需要停下来交给人。", kind: "核心基座", href: "/projects/agents" },
       { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
-      { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: "/projects/codex-app-power-user-playbook" },
       { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: "/projects/llm-backend-toolkit" },
       { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Telegram 与飞书已配置，但本轮消息进出闭环仍是 0/2 未验，Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
-      { id: "local-ai-runtime", title: "本地 AI 运行环境", repo: "rtx5090d-ollama-agent-bundle", role: "保存本地推理端点、模型别名、上下文策略和客户端配置的可复现基线；当前精确运行状态仍回到机器事实。", kind: "运行环境", href: projectLedgerHref }
     ]
   },
   {
@@ -612,7 +610,7 @@ export const systemProjectDomains = [
       { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
       { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复。", kind: "核心基座", href: "/projects/pcconfig" },
       { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "诊断代理退出后的残留设置，默认只清失效的本机端口；明确选择直连时才清理所列活动代理。没有健康物理默认出口时保留路由。", kind: "修复工具", href: "/projects/proxyclean" },
-      { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "让内存盘只承载可重建缓存，并在异常占用或结构损坏时安全重建。", kind: "缓存守护", href: projectLedgerHref },
+      { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "恢复缓存盘目录、记录内存与空间状态，并在既定阈值下重建驱动缓存；重建会清空缓存，不保护误放的唯一文件。当前定时任务运行，提交余量偏低的警告保留。", kind: "缓存守护", href: "/projects/ramdisk-guardian" },
       { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
       { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
     ]
@@ -631,7 +629,7 @@ export const systemProjectDomains = [
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 7 日只读盘点完成 37 个登记来源，记录 45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
       { id: "personal-media", title: "个人媒体整理与恢复", role: "9 月 5 日目录记录 20,312 张照片、376 个视频和 3,851 个音频；精选 1,145 张照片、37 个视频都在手机包与云候选中。本地保留、云候选和手机资格分别决定，普通新增不自动进手机。电脑端手机包已恢复为 6,262 项，手机曾多写的 163 项仍待下次连接后精确清理。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
-      { id: "wechat-history-ai-bridge", title: "微信记录安全接入", repo: "wechat-history-ai-bridge", role: "把现成本地微信接口整理成 AI 可有界读取、可探活、可校验的接入层。", kind: "集成能力", href: projectLedgerHref },
+      { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "为 WeFlow 提供账号与消息读取契约、接口自检和有界静默启动；现役微信日常入口仍由独立 WeChatDirect 承担。健康响应不等于真实聊天读取通过。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
   },
@@ -645,7 +643,7 @@ export const systemProjectDomains = [
     delivery: "可编辑源稿、视觉样式、当前成品、页面或时间轴验收、来源与不能证明的部分。",
     unavailable: "源文件、字体、渲染或媒体链不完整时保留可编辑中间结果和具体问题，不复用旧输出冒充本轮成品。",
     assets: [
-      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "GitHub 总账中的历史策略与视频流水线资产，不属于 34 个保留独立项目，不生成项目卡、路由、内容包或未来施工项。", kind: "历史资产", href: projectLedgerHref },
+      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "GitHub 总账中的历史策略与视频流水线资产，不属于 32 个保留独立项目，不生成项目卡、路由、内容包或未来施工项。", kind: "历史资产", href: projectLedgerHref },
       { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: "/projects/typora-theme-pack" },
       { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
@@ -680,7 +678,7 @@ export const systemProjectDomains = [
       { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
       { id: "work-delivery-copilot", title: "工作支持与交付", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "支持真实工作中的理解、沟通、决策、评审与交付；轻量事项直接完成，需要持续来源版本和一致产物时才建立交付包。相关本人背景由个人理解库提供，业务事实与工作结果仍由本项目负责；六个正式文件、质量门、现实价值与恢复缺口分别说明。", kind: "真实工作支持与持续交付", href: "/projects/work-delivery" },
       { id: "wly0829-cn", title: "当前网站呈现仓库", repo: "wly0829.cn", role: "只负责把项目、规则、Skills 和公开安全事实呈现成当前网站；它计入总账，但不作为一个被介绍的项目。", kind: "呈现基础设施", href: "/", presentationOnly: true },
-      { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: projectLedgerHref }
+      { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: "https://github.com/wlyaaaaa", entryLabel: "打开 GitHub 主页" }
     ]
   },
   {
@@ -700,7 +698,7 @@ export const systemProjectDomains = [
       { id: "key", title: "加密密钥备份", repo: "Key", role: "只保存密文，让关键恢复材料有独立私人副本；首页不读取或解密内容。", kind: "加密备份", href: projectLedgerHref },
       { id: "openclaw-backup", title: "消息智能体恢复备份", role: "把消息型智能体网关的配置与工作区保存在独立私人恢复链里。", kind: "恢复资产", href: projectLedgerHref },
       { id: "public-project-private-backup", title: "公开项目的私有文件备份", repo: "public-project-private-backup", role: "把不能公开但值得恢复的本地文件，连同指纹和清单保存到独立私人备份库。", kind: "恢复资产", href: projectLedgerHref },
-      { id: "steam-millennium-config-backup", title: "Steam 个性化配置备份", repo: "steam-millennium-config-backup", role: "为重装保留主题、插件清单和关键界面配置的公开安全快照。", kind: "恢复资产", href: projectLedgerHref },
+      { id: "steam-millennium-config-backup", title: "Steam 个性化配置备份", repo: "steam-millennium-config-backup", role: "每周保存白名单中的界面配置、插件清单和主题选项；重装后手工合并恢复，插件私有设置与程序资源另行处理。", kind: "恢复资产", href: "/projects/steam-millennium-config-backup" },
       { id: "vault-tool", title: "本地文件加密与恢复", repo: "vault-tool", role: "把明确文件和子目录加密保存，按需在本机查看或取回；区分合并、密码与密钥文件、库维护、双密码层、图片载体和私人密文备份。", kind: "加密工具", href: "/projects/vault-tool" }
     ]
   },
@@ -1007,8 +1005,8 @@ export const systemDependencyNodes = [
     id: "local-ai-runtime",
     lane: "projects",
     title: "本地 AI 运行环境",
-    subtitle: "保存本机推理端点、模型别名、上下文策略和客户端配置的可复现基线",
-    href: "#system-project-asset-local-ai-runtime",
+    subtitle: "由 PCConfig 管理本机推理入口、启动恢复与显卡资源调度",
+    href: "/projects/pcconfig/runtime-startup",
     linkLabel: "查看本地运行环境",
     detail: "它提供机器上的本地推理能力和客户端接入事实；配置文件或模型文件存在不证明服务此刻在线、性能合格或特定任务适用，精确状态仍回到机器现场。"
   },
@@ -1085,11 +1083,11 @@ export const systemDependencyNodes = [
   {
     id: "wechat-bridge",
     lane: "inputs",
-    title: "微信记录接入桥（wechat-history-ai-bridge）",
-    subtitle: "把现成本地微信接口变成可探活、有边界、可校验的读取通道",
-    href: "#system-project-asset-wechat-history-ai-bridge",
+    title: "WeFlow 微信接口接入（wechat-history-ai-bridge）",
+    subtitle: "显式使用 WeFlow 时，按账号、范围和返回证据正确取数",
+    href: "/projects/wechat-history-ai-bridge",
     linkLabel: "查看微信接入项目",
-    detail: "它只负责确认本地接口是否可用、读取范围是否明确、返回结果是否符合接入合同；不拥有聊天语义、归档状态或转写结果。接口存在不等于具名会话已经读取成功。"
+    detail: "WeFlow 提供本地数据与 HTTP 服务，本项目提供取数契约、自检和有界静默启动；并有只核验已取得文件集的回读工具。当前日常微信 Skill 走独立 WeChatDirect。两条路线不能互证，接口健康不等于具名会话已读取。"
   },
   {
     id: "wechat-direct",

@@ -492,7 +492,8 @@ function projectConnectionItems(projectSlug) {
       kindLabel: relation.relation === "uses-project" ? "相关 Skill" : "能力入口"
     });
   }
-  return [...(projectReferenceLinks[projectSlug] || []), ...relatedSkills.values()];
+  const explicit = projectReferenceLinks[projectSlug] || [];
+  return [...explicit, ...[...relatedSkills.values()].filter((item) => !explicit.some((link) => link.href && canonicalPath(link.href) === canonicalPath(item.href)))];
 }
 
 function systemAssetSkillItems(asset) {
@@ -913,6 +914,7 @@ function ProjectGallery({ title, images, presentation = {} }) {
           <button
             className="project-gallery-card"
             type="button"
+            style={image.width > 0 && image.height > 0 ? { "--photo-ratio": image.width / image.height } : undefined}
             onClick={(event) => openImage(index, event)}
             key={image.src}
             aria-label={`打开大图：${image.alt}`}
@@ -925,7 +927,7 @@ function ProjectGallery({ title, images, presentation = {} }) {
             data-gallery-does-not-prove={image.doesNotProve || ""}
             data-gallery-category-label={image.categoryLabel || ""}
           >
-            <img src={image.thumbnail || image.src} alt={image.alt} loading="lazy" decoding="async" style={image.thumbnailPosition ? { objectPosition: image.thumbnailPosition } : undefined} />
+            <img src={image.thumbnail || image.src} alt={image.alt} width={image.width || undefined} height={image.height || undefined} loading="lazy" decoding="async" style={image.thumbnailPosition ? { objectPosition: image.thumbnailPosition } : undefined} />
             <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : image.categoryLabel ? <b>{image.categoryLabel}</b> : null}{image.caption}</span></span>
           </button>
         ))}
@@ -1090,7 +1092,7 @@ function ProjectOverview({ entry }) {
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
         {currentProject.technicalContracts?.length ? <section className="document-section"><h2>当前数据合同与写读边界</h2><div className="component-table" role="table" aria-label={`${currentProject.title} 当前数据合同`}>{currentProject.technicalContracts.map((item, index) => <article role="row" key={item.artifact}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{item.artifact}</strong><p><code>{item.schema}</code></p></div><p role="cell"><strong>{copy(item.owner)}</strong>：{copy(item.boundary)}</p></article>)}</div></section> : null}
-        {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section"><h2>公开原图字节身份</h2><p>缩略图只负责首屏性能；下列尺寸、bytes 与 SHA-256 绑定点击后加载的完整原图，构建后的公开文件必须逐项保持一致。</p><div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}><code>{item.src.split("/").at(-1)}</code><p>{item.width} × {item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p></div>)}</div></section> : null}
+        {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section"><h2>照片原件与显示版本</h2><p>缩略图用于快速浏览。JPEG 照片直接打开原件；浏览器不能直接显示的格式使用完整尺寸的显示副本，原文件仍按原字节保留。转换说明与两种文件的身份分别列出。</p><div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}><a href={item.originalSrc || item.src} download>{(item.originalSrc || item.src).split("/").at(-1)}</a><p>{item.originalWidth || item.width} × {item.originalHeight || item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p>{item.originalSrc ? <p>{item.displayNote} 显示尺寸 {item.width} × {item.height} · {item.displayBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.displaySha256}</code></p> : null}</div>)}</div></section> : null}
         {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
         <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
         <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
@@ -1690,18 +1692,20 @@ function SystemProjectAssetCard({ asset }) {
   const detailedProject = projectCatalog.find((entry) => entry.project.route === asset.href);
   const entryLabel = detailedProject ? (asset.entryLabel || "进入完整项目页") : asset.entryLabel;
   const referenceItems = detailedProject ? (projectReferenceLinks[detailedProject.project.slug] || []) : [];
+  const external = /^https?:\/\//.test(asset.href || "");
+  const Card = external ? "a" : "article";
   return (
-    <article className="system-project-asset-card" id={anchorId}>
+    <Card className={`system-project-asset-card${external ? " system-project-external-card" : ""}`} id={anchorId} {...(external ? { href: asset.href, target: "_blank", rel: "noopener noreferrer", "aria-label": `${asset.title}（在新标签页打开）` } : {})}>
       <span>{asset.kind}{asset.visibility ? ` · ${asset.visibility}` : ""}</span>
       <strong>{asset.title}</strong>
       {asset.repo ? <code>{asset.repo}</code> : null}
       <p>{asset.role}</p>
-      {entryLabel || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
+      {external ? <span className="system-project-external-destination">{asset.entryLabel || "打开外部页面"}<span aria-hidden="true">↗</span></span> : entryLabel || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
         {entryLabel ? <SiteLink href={asset.href}>{entryLabel}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
         {referenceItems.map((item) => <SiteLink href={item.href} key={`${item.relation}-${item.href}`}>{item.label}<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
         {skillItems.map((item) => <SiteLink href={item.href} key={item.href}>Skill：{item.label}<ArrowRight size={14} aria-hidden="true" /></SiteLink>)}
       </div> : null}
-    </article>
+    </Card>
   );
 }
 
@@ -1884,17 +1888,13 @@ function skillCategoryIds(slug) {
 }
 
 function SkillsPage() {
-  const personalSkillCount = skills.filter((item) => item.sourceKind === "personal_install").length;
-  const hostIntegratedCount = skills.filter((item) => item.sourceKind === "host_integrated").length;
-  const unlistedPersonalCount = panelSnapshot.skills.activeInstallIntent - personalSkillCount;
   return (
     <div className="page-frame directory-page skills-page">
       <h1 className="visually-hidden">Skills（能力）</h1>
-      <p className="directory-status-line"><strong>直接说想做什么，按用途找，也可以用日常话搜索</strong><span>每一项先讲它能解决什么麻烦、什么时候用、会交回什么，以及失败时怎样处理。当前公开目录收录 {skills.length} 个 Skills（能力入口）：{personalSkillCount} 个来自个人能力供应，{hostIntegratedCount} 个由当前宿主直接集成；个人供应清单另有 {unlistedPersonalCount} 个现役意图没有公开展示，这不等于它们无法使用。插件中的非现役入口和其他按需能力也不拿这份目录冒充全量。收录项按现实用途、不可替代性、成熟度、真实 E2E（端到端验证）和失败成本综合排序。</span></p>
       <div className="skill-category-rail" role="toolbar" aria-label="按用途浏览 Skills">
         {skillCategoryDefinitions.map((category) => <button type="button" className={category.id === "all" ? "is-current" : undefined} aria-pressed={category.id === "all"} data-skill-category={category.id} key={category.id}>{category.label}{category.id === "all" ? ` ${skills.length}` : ""}</button>)}
       </div>
-      <p className="skill-category-note">分类只影响浏览；页头搜索始终覆盖全部 Skills。</p>
+      <div className="skill-category-summary"><p className="skill-category-note">分类只影响浏览；页头搜索始终覆盖全部 Skills。</p><p className="skill-result-count" data-skill-result-count="" role="status" aria-live="polite">{skills.length} 项能力</p></div>
       <div className="skill-directory">
           {skills.map((item, index) => (
             <SiteLink className="skill-directory-item" href={`/skills/${item.slug}`} data-skill-categories={skillCategoryIds(item.slug).join(" ")} key={item.slug}>

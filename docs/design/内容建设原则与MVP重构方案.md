@@ -131,7 +131,7 @@
 
 ## 9. 项目和 Skills 顺序
 
-- 34 个保留项目在原 1–35 价值槽位中的顺序、完成状态和下一施工项目只来自 `config/final-project-order.json`；用户移除的 rank 15 永久留空，其余项目不重排。`config/panel-projects.json` 只投影已经发布的项目及其固定 rank（名次），缺号不压缩也不补占位。Scripts 的能力由所属项目承接，只保留 System 总账事实；`md-triple-tactics-talent-solver` 同样只保留为 System 历史总账资产。两者都不是独立项目或未来施工项。
+- 32 个保留项目在修订后 1–33 价值槽位中的顺序、完成状态和下一施工项目来自 `config/final-project-order.json`；rank 15 留空，用户本轮明确删除 Playbook 并将后续名次减一，其余顺序不变。Gemini 按用户最新交付与暂缓指示继续下一项，Astra 并行验收、修复与整合。`config/panel-projects.json` 只投影完整内容包，不补占位；本轮只做本地候选。Scripts 的能力由所属项目承接；`md-triple-tactics-talent-solver` 只保留为 System 历史总账资产，两者都不是独立项目或未来施工项。
 - Skills 不建设分类详情页或分类内容副本；目录仍按实际价值排序，并可用一条单行用途栏做纯浏览筛选。
 - “供应清单数量”和“公开面板收录数量”分别从当前快照与内容目录读取；本文不硬编码数量，筛选结果也不能冒充完整供应面。
 - 价值综合使用频率、不可替代性、成熟度、真实 E2E 和失败成本。

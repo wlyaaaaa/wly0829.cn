@@ -19,7 +19,7 @@ const designQa = await readFile(path.join(projectRoot, "design-qa.md"), "utf8");
 
 test("the final project plan fixes one complete value order without placeholder projects", () => {
   assert.equal(plan.schema, "wly.personal-panel-final-project-order.v1");
-  assert.equal(plan.target_project_count, 34);
+  assert.equal(plan.target_project_count, 32);
   assert.match(plan.ranking_basis, /consensus total net value for a broad rational audience/);
   assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
   assert.match(plan.display_rule, /missing ranks remain absent.*never create placeholder cards or routes/);
@@ -30,29 +30,31 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.doesNotMatch(plan.construction_rule, /construction_hold|held project|removes the hold/);
   assert.equal(plan.ranking_rules.length, 4);
 
-  assert.equal(plan.projects.length, 34);
-  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 35 }, (_, index) => index + 1).filter((rank) => rank !== 15));
-  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 34);
+  assert.equal(plan.projects.length, 32);
+  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 33 }, (_, index) => index + 1).filter((rank) => rank !== 15));
+  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 32);
 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
-  assert.equal(published.length, 29);
-  assert.equal(planned.length, 5);
-  assert.equal(planned[0].final_rank, Math.min(...planned.map((item) => item.final_rank)));
-  assert.equal(planned[0].final_rank, 28);
-  assert.equal(planned[0].id, "wechat-history-ai-bridge");
-  assert.equal(typeof planned[0].source, "string");
-  assert.ok(readme.includes(`#${planned[0].final_rank} ${planned[0].title}`), "README next project drifted from the final plan");
+  assert.equal(published.length, 31);
+  assert.equal(planned.length, 0);
+  assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "deferred");
+  assert.ok(readme.includes("没有待建项目"));
+  for (const retired of ["codex-app-power-user-playbook", "rtx5090d-ollama-agent-bundle"]) {
+    assert.ok(!plan.projects.some((item) => item.id === retired));
+    assert.ok(!registry.projects.some((item) => item.id === retired));
+    assert.ok(!routePaths.some((route) => route.startsWith(`/projects/${retired}`)));
+  }
   assert.equal(plan.projects.some((item) => Object.hasOwn(item, "construction_hold")), false);
   assert.equal(plan.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(registry.projects.some((item) => item.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(projectCatalog.some((entry) => entry.registration.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(routePaths.includes("/projects/md-triple-tactics-talent-solver"), false);
   assert.doesNotMatch(generatedIndex, /\/projects\/md-triple-tactics-talent-solver/);
-  assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 34 个保留独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
+  assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 32 个保留独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, /保留 34 个独立项目.*原 1–35 价值槽位/s);
+  assert.match(designQa, /保留 32 个独立项目.*1–33 价值槽位/s);
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
   assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
   assert.equal(registry.projects.some((item) => item.id === "scripts"), false);
@@ -75,7 +77,7 @@ test("the final project plan fixes one complete value order without placeholder 
   }
 
   const registeredIds = new Set(registry.projects.map((item) => item.id));
-  for (const item of planned) {
+  for (const item of plan.projects.filter((item) => item.state !== "published")) {
     assert.equal(registeredIds.has(item.id), false, `${item.id} entered the published registry before construction`);
     assert.equal(routePaths.includes(`/projects/${item.id}`), false, `${item.id} received a placeholder route`);
     assert.equal(generatedIndex.includes(`["${item.id}"`), false, `${item.id} entered the generated content index`);

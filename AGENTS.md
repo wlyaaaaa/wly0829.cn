@@ -13,15 +13,15 @@ read-only operating panel; public presentation is secondary.
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
-- `config/final-project-order.json` is the sole authority for the 34 retained
-  project identities in the original one-through-thirty-five value slots, the
+- `config/final-project-order.json` is the sole authority for the 32 retained
+  project identities in the original one-through-thirty-three value slots, the
   next project to build and the status of non-card explanations.
   `config/panel-projects.json` contains only
   enabled, published project packages; every enabled package must use the same
   fixed rank as its `order`. The current published and planned counts, exact
   ranks and next project are derived from that file rather than copied here.
   Missing ranks are deliberate while their projects remain unbuilt or after the
-  owner removes an independent project. A removed rank stays unused; surviving
+  owner removes an independent project. The earlier removed rank 15 stays unused; the owner explicitly removed Playbook at rank 27 and later retired the RTX bundle at rank 32, decrementing later ranks once after each removal. Other surviving
   projects are not silently renumbered, and no missing rank creates placeholder
   cards, routes or copy. Each project owns its real module count and module
   boundaries; visual symmetry is never a reason to force every project into
@@ -377,8 +377,8 @@ read-only operating panel; public presentation is secondary.
 
 - The owner accepted the four-project public MVP on 2026-08-30 and later
   completed twenty-two project pages in a historical construction sequence.
-  Historical construction numbers are no longer display ranks. The 34 retained
-  project identities keep their accepted slots in the original 1–35 value order
+  Historical construction numbers are no longer display ranks. The 32 retained
+  project identities keep their accepted slots in the revised 1–33 value order
   from `config/final-project-order.json`; rank 15 is permanently unused after
   the owner moved Scripts capabilities into their owning projects. The current
   complete packages in Registry remain enabled at

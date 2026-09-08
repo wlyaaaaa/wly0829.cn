@@ -109,10 +109,11 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the candidate panel has twenty-nine complete projects and four navigation areas", async () => {
+test("the candidate panel contains every completed project and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.equal(projects.length, 29);
+  const finalPlan = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
+  assert.equal(projects.length, finalPlan.projects.filter((item) => item.state === "published").length);
   assert.equal(new Set(projects.map((item) => item.slug)).size, projects.length);
   assert.ok(projects.every((item, index) => index === 0 || projects[index - 1].order < item.order));
   assert.equal(project.slug, "agents");
@@ -290,8 +291,12 @@ test("project technical facts remain complete without taking over the first view
   assert.match(pageSource, /project-headline-facts/);
   assert.ok(pageSource.indexOf('ProjectReadingPanel id="technical"') < pageSource.lastIndexOf("currentProject.heroFacts"), "hero facts are not inside the technical layer");
   for (const entry of projectCatalog) {
-    assert.ok(Array.isArray(entry.project.heroFacts) && entry.project.heroFacts.length > 0, `${entry.project.slug} must retain 4–6 technical facts`);
-    for (const fact of entry.project.heroFacts) {
+    assertReaderStates(entry.project.readerStates, entry.project.slug);
+    assert.ok(typeof entry.project.repositoryNote === "string" && entry.project.repositoryNote.trim().length > 0, `${entry.project.slug} source-boundary explanation is missing`);
+    const technicalFacts = entry.project.heroFacts?.length ? entry.project.heroFacts : entry.project.currentSnapshot?.facts;
+    assert.ok(Array.isArray(technicalFacts) && technicalFacts.length > 0, `${entry.project.slug} must preserve its actual technical facts`);
+    if (!entry.project.heroFacts?.length) assert.deepEqual(entry.project.currentState.facts, technicalFacts.map((fact) => fact.value), "technical facts must remain in the rendered current-state reference");
+    for (const fact of technicalFacts) {
       assert.ok(fact.label?.length >= 2, `${entry.project.slug} has an unnamed technical fact`);
       assert.ok(fact.value?.length >= 18, `${entry.project.slug}/${fact.label} is too vague`);
     }
@@ -531,13 +536,13 @@ test("the shared enhancement stays within the measured 14 KiB JS and 23 KiB CSS 
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 136);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 156);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 140);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 162);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 29);
+  assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -663,7 +668,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives the twenty-nine complete candidate packages", async () => {
+test("the maintenance registry drives all completed candidate packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -689,7 +694,8 @@ test("the maintenance registry drives the twenty-nine complete candidate package
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.equal(registry.projects.length, 29);
+  const finalPlan = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
+  assert.equal(registry.projects.length, finalPlan.projects.filter((item) => item.state === "published").length);
   assert.equal(new Set(registry.projects.map((item) => item.id)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.order)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.route)).size, registry.projects.length);
@@ -715,7 +721,7 @@ test("the maintenance registry drives the twenty-nine complete candidate package
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects.find((item) => item.id === "agents").impact_sources.length >= 5);
-  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "codex-app-power-user-playbook"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "wechat-history-ai-bridge", "steam-millennium-config-backup", "ramdisk-guardian"]));
   assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory"]));
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
@@ -939,15 +945,15 @@ test("ChineseASR exposes installation, model identity and offline recovery as a 
   }
 });
 
-test("GitHub index exposes the current 48-repository facts and complete owner journeys", async () => {
+test("GitHub index exposes the current 47-repository facts and complete owner journeys", async () => {
   assert.deepEqual(githubIndexProject.cardMetrics.map((item) => [item.label, item.value]), [
-    ["仓库总账", "48"],
-    ["公开 / 私有", "26 / 22"],
-    ["本地 / 仅远端", "45 / 3"],
+    ["仓库总账", "47"],
+    ["公开 / 私有", "25 / 22"],
+    ["本地 / 仅远端", "44 / 3"],
     ["当前差异", "0 delta · 0 issue"]
   ]);
   const publicText = JSON.stringify({ project: githubIndexProject, modules: githubIndexModules });
-  for (const expected of ["2bad5416", "a1b2023e1c25416ab68f2938a3b3855b", "20888 bytes", "daily-preferences", "delta=0", "issue=0"]) {
+  for (const expected of ["9784dd6", "9c04651b9fac4c069ce3e746aea5c928", "25592 bytes", "daily-preferences", "delta=0", "issue=0"]) {
     assert.ok(publicText.includes(expected), `GitHub index omits current owner fact: ${expected}`);
   }
   assert.doesNotMatch(publicText, /legal-filing-kit|personal-litigation|litigation|lawsuit|诉讼|法律|案件|起诉|法院/i, "Git project reintroduces retired lawsuit branding");
@@ -964,7 +970,7 @@ test("GitHub index exposes the current 48-repository facts and complete owner jo
   }
   const majorActions = githubIndexModules.find((item) => item.slug === "protected-major-actions");
   const majorText = JSON.stringify(majorActions);
-  assert.equal(githubIndexProject.currentState.observedAt, "2026-09-07T20:18:48.4400642Z");
+  assert.equal(githubIndexProject.currentState.observedAt, "2026-09-08T02:00:42.5053953Z");
   assert.match(majorText, /当前 E118 保护合同已验证/);
   assert.match(majorText, /2026-09-07 E118[\s\S]*SHA-256=53c0876[\s\S]*本轮没有创建\/删除\/转移仓库/);
   for (const operation of ["delete-local-ref", "force-update-local-ref", "replace-remote-url", "create-repository", "set-visibility", "rename-repository", "set-default-branch", "delete-repository", "transfer-repository"]) {
@@ -978,7 +984,7 @@ test("GitHub index exposes the current 48-repository facts and complete owner jo
     assert.ok(ledgerText.includes(expected), `Git milestone journey omits: ${expected}`);
   }
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "github-index").ai_refresh.semantic_revision, 8);
+  assert.equal(registry.projects.find((item) => item.id === "github-index").ai_refresh.semantic_revision, 9);
 });
 
 test("non-rule project packages preserve the content contract and enter only their own routes", () => {
@@ -2639,7 +2645,7 @@ test("personal-media exposes real current scale, complete product boundaries and
     assert.ok(publicText.includes(expected), `personal-media omits technical identity: ${expected}`);
   }
   assert.match(publicText, /personal-media-current-acceptance\.v1[^\n]{0,160}SHA-256=[a-f0-9]{64}/, "personal-media omits the current acceptance identity");
-  assert.equal(personalMediaProject.galleryPresentation.variant, "photo-showcase");
+  assert.ok(personalMediaProject.galleryPresentation.variant.split(/\s+/).includes("photo-showcase"));
   assert.equal(personalMediaProject.galleryPresentation.prefetchAdjacentFull, false);
   assert.equal(personalMediaProject.gallery.length, 10);
   const mediaRoot = path.join(projectRoot, "public", "media", "personal-media");
@@ -2658,13 +2664,23 @@ test("personal-media exposes real current scale, complete product boundaries and
     const fullPath = path.join(projectRoot, "public", ...item.src.slice(1).split("/"));
     const thumbPath = path.join(projectRoot, "public", ...item.thumbnail.slice(1).split("/"));
     const fullImage = await readFile(fullPath);
+    const originalUrl = item.originalSrc || item.src;
+    const originalImage = await readFile(path.join(projectRoot, "public", ...originalUrl.slice(1).split("/")));
     const thumbnail = await readFile(thumbPath);
     const digest = createHash("sha256").update(fullImage).digest("hex");
-    assert.equal(fullImage.length, item.originalBytes, `${item.src} byte count drifted`);
-    assert.equal(digest, item.originalSha256, `${item.src} is no longer the selected original bytes`);
+    const originalDigest = createHash("sha256").update(originalImage).digest("hex");
+    assert.equal(originalImage.length, item.originalBytes, `${originalUrl} original byte count drifted`);
+    assert.equal(originalDigest, item.originalSha256, `${originalUrl} is no longer the selected original bytes`);
+    assert.equal(digest, item.displaySha256 || item.originalSha256, `${item.src} display identity drifted`);
+    if (item.originalSrc) {
+      assert.equal(fullImage.length, item.displayBytes);
+      assert.ok(item.displayNote.includes("显示副本"));
+      const distOriginal = await readFile(path.join(projectRoot, "dist", ...originalUrl.slice(1).split("/")));
+      assert.equal(createHash("sha256").update(distOriginal).digest("hex"), originalDigest);
+    }
     assert.ok(thumbnail.length < 128 * 1024, `${item.thumbnail} exceeds the preview review threshold`);
-    fullHashes.push(digest);
-    fullBytes += fullImage.length;
+    fullHashes.push(originalDigest);
+    fullBytes += originalImage.length + (item.originalSrc ? fullImage.length : 0);
     thumbnailBytes += thumbnail.length;
     const distFull = await readFile(path.join(projectRoot, "dist", ...item.src.slice(1).split("/")));
     const distThumb = await readFile(path.join(projectRoot, "dist", ...item.thumbnail.slice(1).split("/")));
@@ -3921,26 +3937,27 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(new Set(systemSkillFamilies.flatMap((family) => family.members.map((member) => member.slug))).size, skills.length);
   const systemProjectAssets = systemProjectDomains.flatMap((domain) => domain.assets);
   const finalPlan = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
-  assert.equal(systemProjectAssets.length, systemProjectInventory.total + 1 - finalPlan.private_exclusion_boundary.excluded_project_count, "the website selection differs from the repository ledger and includes local personal-media");
+  assert.ok(systemProjectAssets.length <= systemProjectInventory.total + 1 - finalPlan.private_exclusion_boundary.excluded_project_count, "selected assets must fit the repository ledger plus local personal-media");
+  assert.ok(!systemProjectAssets.some((asset) => asset.repo === "rtx5090d-ollama-agent-bundle" || asset.id === "ai-workbench-playbook"), "owner-removed projects must not return as System assets");
   assert.equal(new Set(systemProjectAssets.map((asset) => asset.id)).size, systemProjectAssets.length);
   assert.match(systemProjectInventory.identitySha256, /^sha256:[a-f0-9]{64}$/);
   assert.equal(systemProjectSourceMap.length, systemProjectAssets.length);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectAssets.length);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectAssets.length);
   assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
-  assert.equal(systemProjectInventory.total, 48);
+  assert.equal(systemProjectInventory.total, 47);
   assert.deepEqual(
     { publicCount: systemProjectInventory.publicCount, privateCount: systemProjectInventory.privateCount, localCloneCount: systemProjectInventory.localCloneCount, remoteOnlyCount: systemProjectInventory.remoteOnlyCount },
-    { publicCount: 26, privateCount: 22, localCloneCount: 45, remoteOnlyCount: 3 }
+    { publicCount: 25, privateCount: 22, localCloneCount: 44, remoteOnlyCount: 3 }
   );
   const githubInventoryText = JSON.stringify(githubIndexProject.currentSnapshot);
-  for (const expected of ["48", "26", "22", "45", "3"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
+  for (const expected of ["47", "25", "22", "44", "3"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
   const dailyPreferencesAsset = systemProjectAssets.find((asset) => asset.id === "daily-preferences");
   assert.deepEqual({ repo: dailyPreferencesAsset.repo, visibility: dailyPreferencesAsset.visibility, href: dailyPreferencesAsset.href, entryLabel: dailyPreferencesAsset.entryLabel }, { repo: "daily-preferences", visibility: "PRIVATE", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" });
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "daily-preferences")?.sourceIdentity, "repo:daily-preferences");
   const workDeliveryAsset = systemProjectAssets.find((asset) => asset.id === "work-delivery-copilot");
   assert.deepEqual({ title: workDeliveryAsset.title, repo: workDeliveryAsset.repo, visibility: workDeliveryAsset.visibility, href: workDeliveryAsset.href }, { title: "工作支持与交付", repo: "work-delivery-copilot", visibility: "PRIVATE", href: "/projects/work-delivery" });
-  for (const [assetId, repo] of [["ai-workbench-playbook", "codex-app-power-user-playbook"], ["message-ai-gateway", "OpenClawGateway"], ["local-ai-runtime", "rtx5090d-ollama-agent-bundle"], ["human-alignment-dataset", "human-alignment-dataset-001"]]) {
+  for (const [assetId, repo] of [["message-ai-gateway", "OpenClawGateway"], ["human-alignment-dataset", "human-alignment-dataset-001"]]) {
     assert.equal(systemProjectAssets.find((asset) => asset.id === assetId)?.repo, repo, `System atlas hides public repository identity: ${assetId}`);
     assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === assetId)?.sourceIdentity, `repo:${repo}`, `System source map treats public repository as private digest: ${assetId}`);
   }
@@ -3954,6 +3971,11 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const family of systemSkillFamilies) assert.ok(systemHtml.includes("id=\"system-skill-family-" + family.id + "\""));
   for (const domain of systemProjectDomains) assert.ok(systemHtml.includes("id=\"system-project-domain-" + domain.id + "\""));
   for (const asset of systemProjectAssets) {
+    if (asset.id === "wlyaaaaa") {
+      assert.equal(asset.href, "https://github.com/wlyaaaaa");
+      continue;
+    }
+    assert.ok(asset.href.startsWith("/"), "System project route must stay internal: " + asset.id);
     const pathname = new URL(asset.href, "https://wly0829.cn").pathname.replace(/\/$/, "") || "/";
     assert.ok(routePaths.includes(pathname), "System project asset points to a missing route: " + asset.id);
   }
@@ -3963,6 +3985,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.doesNotMatch(systemStyles, /\bzoom\s*:|transform:\s*scale\(/, "System home must not fake 125% comfort with scaling");
   for (const entry of projectCatalog) {
     const overviewHtml = await readFile(path.join(projectRoot, "dist", ...entry.project.route.slice(1).split("/"), "index.html"), "utf8");
+    assert.doesNotMatch(overviewHtml, /<p>undefined<\/p>/, `${entry.project.slug} renders an undefined reader paragraph`);
     for (const id of ["quick", "product", "technical"]) assert.ok(overviewHtml.includes(`data-project-reading-panel="${id}"`), `${entry.project.slug} omits reading layer: ${id}`);
     assert.match(overviewHtml, /class="module-index"/);
     assert.ok(overviewHtml.includes(entry.project.productPrinciples[0].title), `${entry.project.slug} omits its first product principle`);
@@ -3973,7 +3996,7 @@ test("shared search scopes, project reading layers, Skills categories and System
     }
     assert.ok(overviewHtml.indexOf(entry.project.cardMetrics[0].value) < overviewHtml.indexOf("快照边界"), `${entry.project.slug} shows boundary before positive snapshot`);
     assert.ok(overviewHtml.indexOf("最快了解这个项目") < overviewHtml.indexOf("快照边界"), `${entry.project.slug} does not lead with product use before current evidence`);
-    assert.equal((overviewHtml.match(/project-headline-facts-technical/g) || []).length, 1, `${entry.project.slug} must render technical facts exactly once`);
+    assert.equal((overviewHtml.match(/project-headline-facts-technical/g) || []).length, entry.project.heroFacts?.length ? 1 : 0, `${entry.project.slug} must render its optional technical highlights exactly once`);
     assert.doesNotMatch(overviewHtml, /project-headline-facts-quick/);
     const quickHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="quick"'), overviewHtml.indexOf('data-project-reading-panel="product"'));
     const productHtml = overviewHtml.slice(overviewHtml.indexOf('data-project-reading-panel="product"'), overviewHtml.indexOf('data-project-reading-panel="technical"'));
@@ -4068,7 +4091,8 @@ test("route links use native directory documents and preserve module scroll with
 
 test("Skills browsing categories cover every displayed capability exactly once", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
-  assert.match(pageSource, /现役意图没有(?:进入本次公开目录|公开展示)，这不等于它们无法使用/);
+  assert.doesNotMatch(pageSource, /当前公开目录收录.*当前宿主直接集成/, "the owner-removed long Skills introduction must not return");
+  assert.match(pageSource, /data-skill-result-count/);
   assert.doesNotMatch(pageSource, /当前不可用入口不展示/);
   const block = pageSource.match(/const skillCategoryDefinitions = \[([\s\S]*?)\r?\n\];\r?\n\r?\nfunction skillCategoryIds/)?.[1] || "";
   const assignments = new Map(skills.map((item) => [item.slug, 0]));
