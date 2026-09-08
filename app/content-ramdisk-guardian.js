@@ -38,6 +38,7 @@ export const ramdiskGuardianProject = {
   lead: "让 Z 盘专心放缓存，缺目录就补，内存异常有记录",
   route: "/projects/ramdisk-guardian",
   visibility: "公开仓库",
+  repositoryNote: "公开仓库保存守护与部署脚本、使用说明和回归测试。本机运行日志、Primo镜像及应用缓存不随代码入库；网页根据本轮只读回读展示状态，不是实时控制台。",
   statusTone: "accent",
   badge: "工具 / 缓存守护",
   summary: "把电脑的12 GiB内存盘当作可重建缓存区使用：登录后和每15分钟补齐缓存目录、更新使用说明，并检查空间与内存余量。遇到符合条件的驱动内存异常时，尝试重建缓存盘；普通WARN只记日志，真正的ERROR状态变化才提醒。",
@@ -54,9 +55,9 @@ export const ramdiskGuardianProject = {
     relations: ["PCConfig规定E/V/Z存储放置，RamdiskGuardian执行缓存盘守护", "Chrome通过目录连接使用Z缓存，Primo负责磁盘和镜像"]
   },
   readerStates: {
-    quick: "它把Z当成有上限的缓存区，自动补目录和说明，记录空间与内存异常。正式文件另存，所以丢缓存可以重建。",
-    product: "日常由现有计划任务运行。普通资源不足静默记录；盘缺失、对象不匹配或重建失败会报错。缓存生产者仍负责自己的清理。",
-    technical: "下面分别列出准入约定、目录恢复、健康阈值、驱动重建和安装恢复；运行快照与代码测试不能互相代替。"
+    pass: "盘已出现且卷标正确，守护器补好缓存目录和根说明；资源没有触及警告条件时记录OK。缓存内容仍由应用自己生成，正式资料留在持久磁盘。",
+    problem: "当前提交余量3GiB低于4GiB，记录静默WARN，任务最近返回0。达到重建条件时才尝试恢复；失败会记录具体原因，不把任务返回值当成健康全绿。",
+    unavailable: "盘等待超时、卷标不匹配，或Primo目标无法确定、命令执行失败时，记录ERROR并停止相应操作。守护器不能替Primo凭空建盘，也不能恢复误放在Z里的唯一资料。"
   },
   components: [
     { name: "Primo Ramdisk", responsibility: "提供内存盘和镜像加载/保存", implementation: "本机12288 MB动态内存盘、非临时、NTFS、RAMDISK卷标；镜像位于E:\\RamdiskImage\\Z.vdf。守护器使用其rxprd命令，不实现另一个磁盘驱动。" },
