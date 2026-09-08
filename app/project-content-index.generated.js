@@ -26,10 +26,12 @@ import { project as project_typora_theme_pack, modules as modules_typora_theme_p
 import { project as project_openclaw_gateway, modules as modules_openclaw_gateway } from "./content-openclaw-gateway.js";
 import { project as project_wechat_history_ai_bridge, modules as modules_wechat_history_ai_bridge } from "./content-wechat-history-ai-bridge.js";
 import { project as project_pc_panel_hub, modules as modules_pc_panel_hub } from "./content-pc-panel-hub.js";
+import { project as project_emerald_veil, modules as modules_emerald_veil } from "./content-emerald-veil.js";
 import { project as project_steam_millennium_config_backup, modules as modules_steam_millennium_config_backup } from "./content-steam-millennium-config-backup.js";
 import { project as project_ramdisk_guardian, modules as modules_ramdisk_guardian } from "./content-ramdisk-guardian.js";
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
+import { project as project_personal_expression, modules as modules_personal_expression } from "./content-personal-expression.js";
 
 export const projectContentPackages = new Map([
   ["personal-media", { project: project_personal_media, modules: modules_personal_media, kind: "personal-media" }],
@@ -59,8 +61,10 @@ export const projectContentPackages = new Map([
   ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }],
   ["wechat-history-ai-bridge", { project: project_wechat_history_ai_bridge, modules: modules_wechat_history_ai_bridge, kind: "wechat-history-ai-bridge" }],
   ["pc-panel-hub", { project: project_pc_panel_hub, modules: modules_pc_panel_hub, kind: "pc-panel-hub" }],
+  ["emerald-veil", { project: project_emerald_veil, modules: modules_emerald_veil, kind: "emerald-veil" }],
   ["steam-millennium-config-backup", { project: project_steam_millennium_config_backup, modules: modules_steam_millennium_config_backup, kind: "steam-millennium-config-backup" }],
   ["ramdisk-guardian", { project: project_ramdisk_guardian, modules: modules_ramdisk_guardian, kind: "ramdisk-guardian" }],
   ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
-  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }]
+  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }],
+  ["personal-expression", { project: project_personal_expression, modules: modules_personal_expression, kind: "personal-expression" }]
 ]);

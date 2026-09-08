@@ -25,9 +25,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 14,
     "shared_css_gzip_budget_kib": 23,
-    "search_index_gzip_budget_kib": 140,
-    "project_search_index_gzip_budget_kib": 162,
-    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The local candidate contains 31 complete packages from 32 retained identities in ranks 1-33, with rank 15 unused and Emerald Veil awaiting its next accepted package. Independent Astra review found no identical search records, no duplicate long phrases within a record, no narrative content moved into shared interaction JavaScript and no new runtime dependencies. Final measured gzip bytes are 14267 for shared JS, 23362 for CSS, 142507 for shared search and 165350 for all-project search. New accepted projects justify the smallest justified increase of search review lines to 140 and 162 KiB; shared JS/CSS remain 14/23 KiB and each project shard remains within 21 KiB. Preserve required content and directly visible project information; remeasure after material changes.",
+    "search_index_gzip_budget_kib": 143,
+    "project_search_index_gzip_budget_kib": 166,
+    "bundle_budget_semantics": "These are measured anti-bloat review thresholds, not permanent content ceilings. The local candidate has 33 complete projects at fixed ranks 1-34 with rank 15 unused. Emerald Veil, personal-expression and their directly related System explanations are accepted additions, not duplicate routes. Search data has no identical records; narrative remains in complete static HTML with no new runtime dependency or click-time content loading. Measured gzip bytes are 14267 for shared JS, 23362 for CSS, 146368 for shared search, 169851 for all-project search and 20083 for the largest project shard. Use the smallest justified increase to 143/166 KiB for the two search review lines; shared JS/CSS remain 14/23 KiB and project shards remain 21 KiB. Preserve product meaning and directly visible information; remeasure after material changes.",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -2996,6 +2996,90 @@
       }
     },
     {
+      "id": "emerald-veil",
+      "order": 29,
+      "title": "Emerald Veil",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/emerald-veil",
+      "ai_refresh": {
+        "content_path": "app/content-emerald-veil.js",
+        "semantic_revision": 2,
+        "scope": "Project overview and four source-backed modules: independent static Windows desktop/lock-screen recovery; native Bubbles idle, input, display and process lifecycle; Wallpaper Engine and external blackout coexistence with accepted rain-experiment boundary; installation, tray controls, exact screen-saver restore and remote compatibility. Product explanations and technical reference remain complete; actual source, test, install, running and visual evidence are separate.",
+        "collectors": [
+          "git -C V:\\Personal\\Projects\\emerald-veil status --porcelain=v2 --branch",
+          "dotnet test V:\\Personal\\Projects\\emerald-veil\\tests\\EmeraldVeil.Core.Tests\\EmeraldVeil.Core.Tests.csproj -c Release",
+          "powershell.exe -NoProfile -ExecutionPolicy Bypass -File V:\\Personal\\Projects\\emerald-veil\\scripts\\Set-WindowsBackground.ps1 -Action Verify",
+          "pwsh -NoProfile -File V:\\Personal\\Projects\\emerald-veil\\scripts\\Set-NativeBubbles.ps1 -Action Verify",
+          "pwsh -NoProfile -File V:\\Personal\\Projects\\emerald-veil\\scripts\\Install-EmeraldVeil.ps1 -Action Verify"
+        ],
+        "conditional_collectors": [
+          "Read current source rules, product-design, windows-background, supported scripts and code before describing runtime. Inspect enabled setting, process and exact installation separately; investigate real failures under existing source repair authorization. Never force preview, lock the session, switch accepted wallpaper or inject idle merely to collect website evidence.",
+          "Preserve existing untracked rejected cat experiments; they are neither current features nor permission for cleanup. Use the two actual project background assets with lightweight thumbnails and complete originals."
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/emerald-veil",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "V:\\Personal\\Projects\\emerald-veil"
+      },
+      "displayed_areas": [
+        "product_purpose_and_screen_protection_philosophy",
+        "four_source_backed_modules",
+        "windows_desktop_and_lockscreen_background",
+        "native_bubbles_idle_overlay",
+        "wallpaper_engine_coexistence_and_rain_experiment",
+        "reversibility_preimage_and_remote_compatibility"
+      ],
+      "impact_sources": [
+        {
+          "kind": "core_scripts_and_tools",
+          "paths": [
+            "scripts/Set-WindowsBackground.ps1",
+            "scripts/Set-NativeBubbles.ps1",
+            "scripts/Install-EmeraldVeil.ps1"
+          ]
+        },
+        {
+          "kind": "architecture_and_design_docs",
+          "paths": [
+            "docs/product-design.md",
+            "docs/windows-background.md",
+            "experiments/verdant-rain/ART_DIRECTION.md",
+            "README.md",
+            "AGENTS.md"
+          ]
+        },
+        {
+          "kind": "assets_and_tests",
+          "paths": [
+            "assets/windows-background.json",
+            "assets/verdant-rain-4k.png",
+            "assets/emerald-veil-background.jpg",
+            "tests/EmeraldVeil.Core.Tests/**",
+            "src/**"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "selected 4K still frame or SHA-256 hash in assets/windows-background.json changes",
+          "idle threshold (360 seconds), polling rate (50ms), or narrow mouse filter logic drifts",
+          "Job Object lifecycle or WPF double-layer window overlay contract changes",
+          "Wallpaper Engine transient pause coordination or ExternalProtectionPause mutex contract changes",
+          "native-bubbles-preimage.json schema or Set-NativeBubbles.ps1 registry keys change",
+          "EmeraldVeil.Core unit test suite coverage or assertion rules change"
+        ],
+        "snapshot_only_when": [
+          "source commit or observation time changes while every displayed capability and evidence level remains true"
+        ],
+        "ignore_when": [
+          "formatting, typographical tweaks, or comments leave every displayed capability, failure recovery, and owner decision unchanged"
+        ]
+      }
+    },
+    {
       "id": "steam-millennium-config-backup",
       "order": 30,
       "title": "Steam Millennium 配置备份",
@@ -3261,6 +3345,80 @@
           "all source commits, tags, releases, tests, rules, Skills, screenshots and runtime changes without an explicit owner refresh request",
           "all current online or installed-runtime state because this page has no automatic probe and the frozen runtime must not be invoked",
           "any source-side materiality claim because this project has no automatic website handoff"
+        ]
+      }
+    },
+    {
+      "id": "personal-expression",
+      "order": 34,
+      "title": "个人表达与沟通支持",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/personal-expression",
+      "ai_refresh": {
+        "content_path": "app/content-personal-expression.js",
+        "semantic_revision": 1,
+        "scope": "说明与代拟两方向、当前 AI 的反馈合并和回读、按需近期历史语料补充、媒体上下文、作者与状态标签、只读接口、私有备份和实际恢复边界；真实效果与跨任务主动使用分别保留待验。",
+        "collectors": [
+          "git -C V:\\Personal\\Projects\\personal-expression status --porcelain=v2 --branch",
+          "git -C V:\\Personal\\Projects\\personal-expression rev-parse HEAD",
+          "在 personal-expression 源目录以本任务临时目录运行 python -B -m unittest discover -s tests -v；仅使用测试内虚构资料"
+        ],
+        "conditional_collectors": [
+          "网页验收只读公开安全的源码、规则、产品说明、技能入口与虚构测试，不默认执行会读取私人资料的 explain/scenes/reply/validate。",
+          "真实任务已经产生新的补读、反馈写回、媒体或恢复验收时，读取该来源任务提供的公开安全结论；不为网页制造真人试写、真实微信调用或恢复演练。"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/personal-expression",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "public_identity": "private-personal-expression-product-source",
+        "locator_owner": "ignored-private-content-rules"
+      },
+      "displayed_areas": [
+        "explanation_and_reply_directions",
+        "current_task_context_and_media_contract",
+        "feedback_consolidation_and_readback",
+        "authorship_and_reference_status_distinction",
+        "recent_and_historical_context_selection",
+        "read_only_standard_library_interface",
+        "private_version_backup_and_restore",
+        "source_install_and_real_usage_evidence"
+      ],
+      "impact_sources": [
+        {
+          "kind": "product_and_public_contract",
+          "paths": [
+            "AGENTS.md",
+            "README.md"
+          ]
+        },
+        {
+          "kind": "cli_and_implementation",
+          "paths": [
+            "expression.py"
+          ]
+        },
+        {
+          "kind": "test_verification",
+          "paths": [
+            "tests/test_expression.py"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "说明、代拟、反馈更新、媒体或语料补充职责发生实质变化",
+          "作者与状态筛选、数据格式或备份恢复方法改变",
+          "真实理解、拟稿、动画上下文或后续任务主动补读取得可公开的实际验收结果"
+        ],
+        "snapshot_only_when": [
+          "已发布源版本或实际测试证据改变但产品语义未变"
+        ],
+        "ignore_when": [
+          "没有改变公开产品含义的格式和内部重构",
+          "私人样本或反馈正文的普通增量本身"
         ]
       }
     }

@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-09-04",
-  "target_project_count": 32,
+  "target_project_count": 33,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -186,7 +186,7 @@
       "final_rank": 29,
       "id": "emerald-veil",
       "title": "Emerald Veil",
-      "state": "planned",
+      "state": "published",
       "construction_note": "Owner requested the wallpaper project prompt on 2026-09-07, resuming rank29 for Gemini website construction. Source remains read-only for Gemini; Astra accepts and repairs after delivery.",
       "source": "wlyaaaaa/emerald-veil"
     },
@@ -215,6 +215,13 @@
       "id": "codex-remote",
       "title": "Codex Remote",
       "state": "published"
+    },
+    {
+      "final_rank": 34,
+      "id": "personal-expression",
+      "title": "个人表达与沟通支持",
+      "state": "published",
+      "source": "wlyaaaaa/personal-expression"
     }
   ],
   "non_card_explanations": [

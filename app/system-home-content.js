@@ -88,13 +88,13 @@ export const systemScenarios = [
     systems: ["通用 AI 与智能体能力", "个人媒体定位（personal-media）", "非媒体原件定位（personal-materials）", "当前目录与索引", "真实原件"],
     rules: "先把时间、地点、人物、文件角色和内容线索拆开；已有精确路径直接读原件。媒体按目录与预览证据核对，非媒体在位置未知时先给隐藏路径的候选，只有选中后才重算大小和 SHA-256；零匹配只说明本轮没找到。可信文件管理器中原件不存在则代表本人已删除，正确产品不应从旧索引或恢复副本复活。",
     result: "媒体得到带预览、精选或原件入口的少量候选；非媒体先得到隐藏真实路径的候选卡，选中后才交回通过大小与 SHA-256 验真的原件位置、匹配依据、实际检查范围和覆盖缺口。本人在可信文件管理器删除原件后，两套来源都会在下一次日常同步精确退役登记与派生恢复状态，不再返回待恢复候选。",
-    value: "系统帮助从模糊记忆回到原件，也尊重本人在可信文件管理器做出的删除决定；个人材料项目只保留最小 locator/metadata SQLite（定位与元数据数据库），不复制原件、不建立跨领域中央资料库，也不把候选冒充已经验真的原件。",
+    value: "只说记得的时间、地点或内容，先得到少量最可能的照片或文件，再核对原件。没找到会说明查过哪里；本人已经删除的文件不会被旧索引重新当成待恢复文件。材料项目只保留查找所需的位置、版本和文件信息，不复制原件，也不建立跨领域的中央资料库。",
     stages: [
       {
         number: "01",
         kicker: "自然线索",
         title: "先弄清记得的到底是什么",
-        body: "把一句模糊描述拆成时间范围、地点、人物关系、媒体类型、文件角色和可能出现的文字；已经知道路径时不再启动发现流程。",
+        body: "先分清要找的是照片、录音还是文档，再整理记得的时间、地点、画面或文件里的关键词。已经知道文件位置时直接读取，不再绕一遍查找。",
         items: [
           ["时间与地点", "去年、某个月、餐厅、旅行或设备来源"],
           ["对象与角色", "照片、录音、合同、报告或附件"],
@@ -105,7 +105,7 @@ export const systemScenarios = [
         number: "02",
         kicker: "候选与原件核对",
         title: "让索引缩小范围，再回到真实文件",
-        body: "媒体入口可以按现有目录、时间与预览关系缩小候选；非媒体 find 或 discover 先返回隐藏路径的候选，其中 discover 只看名称、原生目录和 stat（文件状态），不预读正文或计算哈希。",
+        body: "照片和录音按已有目录、时间、说明与预览缩小范围。文档位置未知时先看名称、所属目录、版本和文件状态，给出少量候选；这一步不预读正文、不计算文件校验值，也先不展开真实路径。",
         items: [
           ["候选", "只返回最有区分力的少量结果"],
           ["媒体核对", "目录、时间、类型、已有说明和必要预览"],
@@ -117,10 +117,10 @@ export const systemScenarios = [
         number: "03",
         kicker: "直接可用的原件",
         title: "交回能打开的东西，而不是一段猜测",
-        body: "媒体结果可以按需打开或建立不复制原件字节的临时浏览目录；非媒体选中后由只读 inspect 核对来源根、路径、大小和 SHA-256，交回已验证定位供 AI 阅读，只有本人明确要在桌面看时才打开。已选定文档还能定位有关段落，已选定录音可复用既有转写返回时间段；没有命中或缺少时间信息时保留具体缺口。",
+        body: "选中文档候选后，再确认原件确实存在、来自正确位置，核对大小与 SHA-256，交回可用的文件位置供 AI 阅读；本人明确要在桌面看文档时才打开。媒体按需预览或打开，照片也可以放进不复制原件字节的临时浏览目录。已选文档能继续找有关段落，录音可用已有转写定位到时间段；缺少内容或时间信息时说清具体缺口。",
         items: [
           ["媒体入口", "预览、真实路径或临时浏览目录"],
-          ["非媒体入口", "选中一项后才返回通过 stat 与 SHA-256 验真的真实路径"],
+          ["非媒体入口", "选中后核对文件状态、大小与 SHA-256，再返回真实位置"],
           ["匹配理由", "哪条记忆线索被哪项事实支持"],
           ["下一步", "本人确认、接入离线介质或补一个更具体线索"]
         ]
@@ -313,13 +313,13 @@ export const systemScenarios = [
     title: "把病历、报告、设备数据和沟通记录组织成可行动的健康协作",
     request: "“结合我现有病历、这次检查、设备趋势和医生沟通，帮我看哪些变化值得处理、两个方案怎样比较、下一次该问什么。”",
     systems: ["通用 AI 与智能体能力", "个人健康证据与安全决策", "健康协作入口（personal-health）", "材料与扫描入口", "受保护凭据入口", "权威资料研究"],
-    rules: "急症和红旗优先；报告事实、医生意见、本人陈述、外部资料和 AI 分析分开；新数据先保全和验证，不能自动改写当前健康底色；最终选择属于本人。",
+    rules: "急症和红旗优先；报告事实、医生意见、本人陈述、外部资料和 AI 分析分开。新数据先完整保存并核对，不能未经判断就改掉已经确认的健康资料；最终选择属于本人。",
     result: "健康时间线、变化与趋势、证据质量、方案收益与风险、停止或复查条件、待问医生的问题、仍缺资料和最低成本下一步。",
     value: "它不把健康协作缩成一次“第二意见”，而是让低频、分散、质量不同的个人证据在需要时进入同一项决策。",
     stages: [
       {
         number: "01",
-        kicker: "当前健康底色与新证据",
+        kicker: "已有健康资料与新证据",
         title: "先用已有事实，再决定是否刷新",
         body: "普通问题先使用已处理的当前健康事实。只有新报告、设备数据、病历、医嘱或录音会改变判断时，才读取原件或明确启动一次前台刷新。",
         items: [
@@ -331,8 +331,8 @@ export const systemScenarios = [
       {
         number: "02",
         kicker: "保全、验证与研究",
-        title: "外部数据先退出网络，再进入判断",
-        body: "明确刷新已登记设备时，凭据只穿过受保护入口；取得数据后先完整保全原始页、清单与哈希，再离线核对来源、分页、时间覆盖和质量。通用 AI 随后结合当前权威资料解释变化、风险和真实选项。",
+        title: "先完整保存新数据，再检查能不能用于判断",
+        body: "需要取新设备数据时，使用已登记的账号连接，凭据不进入聊天。数据先完整保存，再离线核对来源、有没有漏页、覆盖哪段时间以及质量是否足够；AI 随后结合当前权威资料，解释变化、风险和可选做法。",
         items: [
           ["原始保全", "分页、清单、大小、哈希和精确续跑"],
           ["证据三态", "可用于当前判断、需要复核、本轮不可用"],
@@ -548,16 +548,16 @@ export const systemActiveAutomations = {
       title: "三基座与 GitHub 持续治理",
       focus: "核对 .agents、PCConfig、GitHub 总索引和全部仓库的责任、规则、机器事实、分支、同步、发布与既有备份回执。",
       process: "证据新鲜且没有变化就保持不变；只展开新增、变化、失败、未知或公开暴露风险，并在责任明确、可分离、可验证时做最小修复。",
-      delivery: "按责任源给出 PASS、ATTENTION、BLOCK，说明证据新鲜度、实际修复、保留的并发工作、复杂度取舍和下一次真实触发点。"
+      delivery: "告诉我哪些地方正常、哪里有问题、这次修了什么、依据是什么时候的，以及还卡在哪里、是否需要我操作。保留别人正在做的工作，说明为何采用这次修法。"
     },
     {
       id: "website-snapshot",
       group: "computer",
       cadence: "每周",
       title: "个人系统网页快照更新",
-      focus: "先从项目、Rules 和 Skills 各自的事实来源取得本轮已验证、可发布的状态；需要本人明确启动的页面没有新请求时，保留上次已验证快照。再判断 System 总览是否仍真实；Git 记录只提示可能受影响的位置。",
-      process: "遵从本人当前明确选择的模型与思考强度，并由活动经济路由核对实际执行身份。先分别判断产品与技术的新增、修改、退役/替代和 Unknown，再闭合 Project、Rules、Skills、System；提交、路径、时间戳或哈希只定位候选，不能决定正文。",
-      delivery: "交回明确的“无需修改”，或四类页面各自 changed、unchanged、blocked 的闭包、已验证新快照、发布结果与公网回读。"
+      focus: "先核对项目、规则和能力的实际变化。网页说明仍准确就不改；用途、状态或限制变了，才更新相关说明，再检查系统总览是否需要一起改。必须由本人点名更新的页面继续遵守原约定。",
+      process: "按本人选择的模型和思考强度执行，并核对实际使用的身份。分别查清新增、改变、退出或仍不确定的产品与技术事实，在原位置更新受影响的项目、规则、能力和系统说明。提交记录和文件变化只帮助找到线索，不替 AI 判断该写什么。",
+      delivery: "说明改了哪些页、哪些保持不变、哪些因证据不足暂未改，并交回核对过的快照。只有符合本人当前发布安排时才上线，并重新打开网站确认；否则保留本地候选。"
     }
   ]
 };
@@ -569,10 +569,9 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 44,
   remoteOnlyCount: 3,
-  detailedPageCount: 31,
   identitySha256: "sha256:a64b11cae7096076e14ebe743b3883e4bd71c7d6cbc3572be6b00a684ee0d34b",
-  mappingSha256: "sha256:d1693038775fb6c591a2abc5bd08f943a27d365d20cacca8e033ee1e297ca49c",
-  description: "2026-09-08 的实时完整集合为 47 个 Git 仓库：25 个公开、22 个私有，44 个已验证本地副本与 3 个仅远端；仓库集合与导航已在来源收口。当前网页候选包含二十八个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
+  mappingSha256: "sha256:b030641ac6c11bea9118f27552d7cd889bbf24c4f7f45bdabc9fc861dbaabb26",
+  description: "仓库数量对应上面的观察时间，不代表实时变化。本地媒体项目单独介绍，不增加 Git 仓库数；有完整项目页、仅有系统说明和保留历史参考是不同状态。网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -605,7 +604,7 @@ export const systemProjectDomains = [
     unavailable: "历史缺采、设备离线或远端未实测时保留 Unknown，不用重启替代诊断，也不把主机运行冒充实体或对端可用。",
     assets: [
       { id: "codex-local-remote", title: "跨设备任务连续性的历史产品", repo: "codex-local-remote", role: "曾让手机继续桌面上的同一任务、审批、文件和队列；当前入口已冻结，只保留设计与历史验收证据。", kind: "历史能力", href: "/projects/codex-remote" },
-      { id: "emerald-veil", title: "空闲屏幕保护层", repo: "emerald-veil", role: "电脑闲置时使用可逆、点击穿透的原生动态覆盖层，减少静态画面暴露。", kind: "桌面能力", href: projectLedgerHref },
+      { id: "emerald-veil", title: "桌面壁纸与空闲屏幕保护", repo: "emerald-veil", role: "保存选定的 Windows 桌面与锁屏背景，便于重装后恢复；电脑空闲六分钟时显示原生泡泡，输入后退出。壁纸恢复、泡泡运行和远程使用分别核对，实际屏幕与远程体验尚未全部验收。", kind: "桌面能力", href: "/projects/emerald-veil" },
       { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前没有可用 KDE 对端，真实双机传输尚未验收。", kind: "集成能力", href: "/projects/meshclip-kit" },
       { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
       { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复。", kind: "核心基座", href: "/projects/pcconfig" },
@@ -643,7 +642,7 @@ export const systemProjectDomains = [
     delivery: "可编辑源稿、视觉样式、当前成品、页面或时间轴验收、来源与不能证明的部分。",
     unavailable: "源文件、字体、渲染或媒体链不完整时保留可编辑中间结果和具体问题，不复用旧输出冒充本轮成品。",
     assets: [
-      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "GitHub 总账中的历史策略与视频流水线资产，不属于 32 个保留独立项目，不生成项目卡、路由、内容包或未来施工项。", kind: "历史资产", href: projectLedgerHref },
+      { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "保留规则仿真、策略报告和早期视频制作流程的历史参考；已有材料不代表当前仍在持续运行。", kind: "历史资产", href: projectLedgerHref },
       { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: "/projects/typora-theme-pack" },
       { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
@@ -656,12 +655,13 @@ export const systemProjectDomains = [
     ordinaryRequest: "“先读我真正提供的材料，再结合当前资料帮我推进；没有我的反馈，不要假设已经理解或自动替我决定。”",
     collaboration: "每个领域项目独立保存自己的事实与证据，通用 AI 负责研究、解释和比较，最终方向、采用与停止仍由本人决定。",
     delivery: "分阶段材料、问题与选择、当前证据、反馈后的修订，以及明确由本人决定的下一步。",
-    unavailable: "缺少原件、当前状态或本人反馈时，只保留该领域的未知和待办，不跨领域复制资料或替本人推进。",
+    unavailable: "缺少必要原件或当前事实时，说明哪些判断还不能做。已经说清并授权的工作继续完成；只有需要本人选择、反馈或实际操作的那一步才等待，并说清在等什么。各领域的私人资料仍分别管理。",
     assets: [
       { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。按当前问题决定读取深度，事实与推定分开；工作、学习、文书和健康仍各自负责专业事实与行动，有依据的新本人认识可以回写。日常推荐是它的一个用途。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" }
+      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "组织本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好，形成能查询、补充和纠正的共用背景。按当前问题决定读取深度，事实与推定分开；工作、学习、文书和健康仍各自负责专业事实与行动，有依据的新本人认识可以回写。日常推荐是它的一个用途。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
+      { id: "personal-expression", title: "个人表达：讲明白和拟消息", repo: "personal-expression", visibility: "PRIVATE", role: "把事情讲给我听，也帮我把已经确定的意思写成自然消息。指出难懂或别扭之处后，先改好当前回答，再保留有用反馈供下次参考。专业判断和沟通策略仍由当前任务负责；这里只讲解或拟稿，不发送。", kind: "解释与表达支持", href: "/projects/personal-expression" }
     ]
   },
   {
@@ -693,7 +693,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "ai-memory-backup-a", title: "项目记忆备份", role: "保存跨项目持久记忆的私人恢复副本，不保存原始会话。", kind: "恢复资产", href: projectLedgerHref },
       { id: "ai-memory-backup-b", title: "Codex 配置、记忆与会话备份", role: "配置、Skills 和记忆进入轻量本地及私人远端备份；完整会话另有 G 盘快照与 H 盘离线副本。两条恢复路径分别核对，不把当前源文件清单当成已备份内容。", kind: "恢复资产", href: "/projects/codex-memory" },
-      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据与恢复清单收成可选择回填的候选包，并分别维护本地、G 盘和 Drive 结果；微信回填先预检并保留回滚点，官方客户端是否可用仍由人工验收。", kind: "恢复资产", href: "/projects/devconfig-backup" },
+      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据和恢复清单整理成可选择回填的备份包，分别维护本地、G 盘和 Drive 结果。配置包已核对三处同代、MD5一致；微信回填先预检并保留回滚点，云端与原生恢复各自验收，官方客户端是否可用仍需实际确认。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "ai-memory-backup-c", title: "AI 工作区配置与可读笔记备份", role: "保存外部 AI 工作区的选定配置和人类可读笔记，不复制原始对话。", kind: "恢复资产", href: projectLedgerHref },
       { id: "key", title: "加密密钥备份", repo: "Key", role: "只保存密文，让关键恢复材料有独立私人副本；首页不读取或解密内容。", kind: "加密备份", href: projectLedgerHref },
       { id: "openclaw-backup", title: "消息智能体恢复备份", role: "把消息型智能体网关的配置与工作区保存在独立私人恢复链里。", kind: "恢复资产", href: projectLedgerHref },
@@ -949,7 +949,7 @@ export const systemDependencyNodes = [
     subtitle: "在自己的 Windows 笔记本和台式机之间传递剪贴板内容与明确文件",
     href: "#system-project-asset-meshclip-kit",
     linkLabel: "查看跨设备文件项目",
-    detail: "它只证明当前 Windows 笔记本与台式机之间的文字或文件通道可以传输，并保留来源、目标和失败边界；Android 与手机仍是未来验证，不冒充当前可用。它不传桌面画面，也不证明远程控制、高性能应用或同一项 AI 任务已经接续。"
+    detail: "用于在自己的 Windows 笔记本与台式机之间传递文字和文件，保留发送方、接收方和失败说明。当前没有可用 KDE 对端，本轮尚未验证真实双机传输；Android 与手机也仍待验证。文件通道不传桌面画面，也不能证明远程控制、高性能应用或同一项 AI 任务已经接续。"
   },
   {
     id: "remote-workstation",
@@ -1187,6 +1187,15 @@ export const systemDependencyNodes = [
     detail: "查询、补充和纠正本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好。先按合同选择最小必要阅读，重要判断再深入相关依据；明确事实和可推翻推定分开，不把行为直接写成喜欢。它为工作、学习、文书、健康及未来独立领域提供本人背景，并接收有依据的回写；专业事实和现实行动仍由对应领域负责，不成为跨领域控制器或后台同步系统。"
   },
   {
+    id: "personal-expression",
+    lane: "personal",
+    title: "个人表达：讲给我听与替我拟消息",
+    subtitle: "解释参考理解反馈，拟稿参考与当前场景有关的本人表达",
+    href: "/projects/personal-expression",
+    searchAliases: ["把事情讲明白", "我没听懂", "替我拟消息", "帮我回一句", "explain-to-me", "reply-as-me"],
+    detail: "两种用途使用分开的参考资料：解释要让我理解，不模仿聊天口吻；拟消息先由当前任务确定意思和策略，再写出自然、可改的草稿。本人原话、他人语境、AI 草稿和本人修改分清保存，有价值的反馈先用于改好当前结果，再供下一次参考。本人背景仍由个人理解库提供，微信原件仍由微信项目负责。读取和反馈机制已实现；后续真实任务主动补充资料并再次用好，以及动画上下文效果，仍需真实使用验证；不等于已经证明长期自动学习，也不会自动发送。"
+  },
+  {
     id: "verification",
     lane: "evidence",
     title: "如何确认工作真的完成",
@@ -1202,7 +1211,7 @@ export const systemDependencyNodes = [
     subtitle: "验收、纠正、改变方向、继续或停止",
     href: "#evidence-human",
     linkLabel: "查看用户验收说明",
-    detail: "系统把结果和依据交回来；人保留目标、价值取舍和高风险选择，不因没有反馈而被自动推进。"
+    detail: "系统交回结果和依据，本人保留目标、价值取舍和重要选择。已经明确授权的工作继续做；遇到需要本人选择、反馈或实际操作的步骤，才停下说明具体在等什么。健康、学习等任务各自明确的停止条件继续有效。"
   }
 ];
 
@@ -1234,8 +1243,8 @@ export const systemRuleStories = [
       "用户当前要求决定方向，目标项目决定具体做法",
       "AI 协作规则与能力中心只补充通用授权、协作和验证边界",
       "注意力先保留目标、现有工作、关键未知和真实验收",
-      "先固定功能、好用程度、正确性、恢复、维护和已经证明的扩展需要；满足同一完整验收时，强制选择更小、更快、节点更少的实现",
-      "新增服务、状态机、数据库、施工责任或验证层前，必须有当前证据说明更短路线具体缺哪一项"
+      "先保留这次真正需要的功能、用法、正确性、恢复和维护要求；已经证明的扩展需要也不能遗漏。能用更少组件完成同样结果时，选择更直接的做法",
+      "增加服务、数据库、状态记录或验证步骤前，先指出现有做法具体缺什么；没有实际缺口就不加"
     ],
     delivery: [
       "进入正确项目后的最小必要改动",
@@ -1288,7 +1297,7 @@ export const systemRuleStories = [
     id: "authorization-and-ownership",
     ruleId: "authorization_delegation_contract",
     number: "03",
-    title: "授权可以持续，施工范围必须收窄",
+    title: "已经允许的工作继续做，多人协作不互相覆盖",
     summary: "用户已经说清楚的目标不会因为换一轮对话或增加协作者而失效；但每个协作者只能处理自己负责的最小范围，不能顺手扩大目标。",
     ordinaryRequest: "“这个网站通过检查后直接发布，别反复问同一件事；但不要覆盖别人正在做的修改。”",
     inputs: [
@@ -1297,8 +1306,8 @@ export const systemRuleStories = [
       "真实仓库、远端、公开属性和发布目标"
     ],
     collaboration: [
-      "第一次专属写入前认领最小施工范围，每次写入再次核对动作、任务、范围、绑定和登记表修订号",
-      "重叠时只停止冲突写入；无残余就释放，有断点或未完义务就连同检查点正式移交或恢复",
+      "修改前先确认谁负责哪些范围，每次动手仍要核对当前授权和负责关系，不能拿旧登记去覆盖别人的工作",
+      "只有相互冲突的修改需要停下，其他工作照常继续。完成后交还责任；没做完的部分连同断点、已有结果和下一步正式交接",
       "外部发布、消息、删除或其他现实动作仍使用对应的明确授权",
       "执行完成后从真实远端或目标重新读取，而不是只相信命令成功"
     ],
@@ -1361,10 +1370,10 @@ export const systemRuleStories = [
     ],
     collaboration: [
       "通用 AI 负责理解、推理、研究和组织结果",
-      "对应 Skill 或项目提供有边界的真实读取、执行与失败语义",
-      "先固定本次完整验收；现有或原生入口已经满足时，不增加第二套适配器、服务、状态或验证链",
+      "对应能力或项目负责实际读取和操作，说明能处理哪些对象、失败时会发生什么",
+      "先明确怎样才算这件事真正办好。现有或原生入口已经满足时，直接使用，不增加另一套连接程序、服务、状态记录或验证流程",
       "只有支路独立、可验且不会互相覆盖时才并行，主任务统一验收",
-      "实现者知道内部答案可能干扰判断时，另开一个不知道修法的新任务，只给自然要求和正常能力环境"
+      "需要确认普通新任务也会用时，让不知道修法的另一个 AI 按正常请求实际试一次，只给它正常可见的能力，不提前告诉正确路线"
     ],
     delivery: [
       "已经选中的能力路线和实际完成结果",
@@ -1414,7 +1423,7 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "personal-media", name: "个人媒体定位", technicalName: "personal-media", summary: "按自然线索找到照片、视频和录音原件，也能建立不复制原件字节的临时浏览目录。", href: "/skills/personal-media" },
-      { slug: "personal-materials", name: "非媒体原件定位", technicalName: "personal-materials", summary: "先查项目登记的定位与版本；位置确实未知时只做有界名称与文件状态发现，候选隐藏路径，选中后才重算大小和 SHA-256 并打开。", href: "/skills/personal-materials" },
+      { slug: "personal-materials", name: "非媒体原件定位", technicalName: "personal-materials", summary: "先查项目登记的位置与版本；位置未知时，在获准范围内找少量候选。选中后才核对原件大小和 SHA-256，交回经过核对的文件位置；明确要在桌面查看时才打开。", href: "/skills/personal-materials" },
       { slug: "wechat-direct", name: "具名微信上下文", technicalName: "wechat-direct", summary: "读取一个明确联系人或群的小段上下文、回复关系和相关媒体；明确需要时才做单对象增量归档。", href: "/skills/wechat-direct" },
       { slug: "google-workspace-direct", name: "固定办公账号入口", technicalName: "google-workspace-direct", summary: "通过登记的同一账号读取邮件、云盘和日历；明确写入只使用现有的精确操作。", href: "/skills/google-workspace-direct" }
     ]
@@ -1547,10 +1556,10 @@ export const systemSkillFamilies = [
       "“这些附件要一个个上传；每个都确认页面真正成功，提交后再从平台记录核对。”"
     ],
     inputs: [
-      "当前受管浏览 Provider、已存在标签页和控制会话",
-      "页面实时字段、异步控件依赖和上传成功状态",
+      "已经填到一半的网页、现有标签页和登录状态",
+      "这次要填写的内容、上传的附件，以及哪些步骤已完成",
       "用户明确选择的文件与已经授权的外部动作",
-      "真实失败、最小恢复和最终用户可见回读"
+      "当前遇到的问题和最终要完成的操作；技术连接信息由 AI 自行检查"
     ],
     collaboration: "宿主受管浏览能力负责实际页面操作，browser-control-continuity 负责保留标签页、恢复控制、观察异步控件、逐文件确认和提交后回读；页面字段、收件人和业务规则仍由所属项目负责。",
     delivery: [
@@ -1575,14 +1584,14 @@ export const systemSkillFamilies = [
     title: "安全进入项目，并把结果送到正确位置",
     requests: [
       "“进入网站项目补上全文搜索，保留别人未提交的修改，确认仓库和分支后再发布。”",
-      "“这个项目发布后，如果个人看板因此会说错话，就把增量交给正在发布的网站 Owner；没人负责时再开新任务。”"
+      "“这个项目升级了，如果网页说明因此不准确，也一起更新；已有任务正在改网页时合到一起，别重复做。”"
     ],
     inputs: [
       "准确的仓库身份、目标工作树和准备进行的 Git 动作",
       "当前分支、远端、公开性、同步状态和其他未提交工作",
       "来源项目正式发布后的提交、变化路径和它为何会改变看板事实"
     ],
-    collaboration: "项目入口先提供真实 Git 现场，但不产生发布授权；来源正式发布后只判断它的对应快照和直接表面是否会实质失真。网站任务状态精确为 active 且当前 Owner 范围覆盖本次发布时，才把绑定来源、提交、路径、观察时间和活动代际的增量并入同一稳定批次；没有合格 Owner 才安排全新工作。",
+    collaboration: "AI先查清仓库、分支和已有改动，是否发布仍按本人授权。来源更新后，只检查对应说明和直接受影响的系统内容；如果已有任务确实正在更新网站并负责本次发布，就交给它合并。没有合适的任务才另行安排。每份更新保留来源、版本、变化文件、观察时间和生效代际，安排已接收也不代表更新已完成。",
     delivery: [
       "明确的继续、先处理再继续或停止判断",
       "保留其他修改后的定向提交和真实远端回读",
@@ -1600,7 +1609,7 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "project-entry-gate", name: "Git 项目身份入口", technicalName: "project-entry-gate", summary: "在身份、公开性、分支、远端或同步状态会改变决定时，取得当前仓库真实现场。", href: "/skills/project-entry-gate" },
-      { slug: "personal-panel-refresh", name: "个人看板实质刷新与发布合并", technicalName: "personal-panel-refresh", summary: "登记来源发布回读后只判断对应快照；实时 active 且范围覆盖发布的 Owner 合并带五项身份的有界增量，在稳定批次中一次完成最终门，没有合格 Owner 才安排新工作。", href: "/skills/personal-panel-refresh" }
+      { slug: "personal-panel-refresh", name: "个人看板实质刷新与发布合并", technicalName: "personal-panel-refresh", summary: "来源发布并确认后，只检查它对应的网页说明。已经负责本次网站更新的活动任务合并处理，保留来源和版本依据；没人负责时才另行安排，收到任务不等于网页已经更新。", href: "/skills/personal-panel-refresh" }
     ]
   },
   {
@@ -1670,14 +1679,14 @@ export const systemSkillFamilies = [
 ];
 
 export const systemEvidenceLayers = [
-  { id: "source", title: "原件与来源", proves: "输入、事实和引用能回到真实来源。", doesNotProve: "不证明处理过程和最终结论正确。", searchAliases: ["原始来源能证明什么"] },
-  { id: "test", title: "项目测试", proves: "行为在明确的测试条件下符合预期。", doesNotProve: "不证明已经安装、接入、真实运行或网页已经发布。", searchAliases: ["源码或构建通过能不能证明网页发布", "测试通过不等于发布"] },
-  { id: "install", title: "安装与接入", proves: "目标环境已经接入这项能力。", doesNotProve: "不证明新的自然任务会自动找到它。" },
-  { id: "fresh", title: "新任务发现", proves: "新的普通请求能够找到并正确选择入口。", doesNotProve: "不证明真实对象已经产出预期结果。" },
-  { id: "runtime", title: "现实运行", proves: "真实对象、工具或服务产生了预期输出。", doesNotProve: "不证明完整用户路径已经闭合。" },
-  { id: "e2e", title: "真实端到端", proves: "从自然请求到最终结果的整条现实路径能够完成。", doesNotProve: "不自动覆盖其他环境、账号或任务类型。" },
-  { id: "publish", title: "按需发布与回读", proves: "需要发布时，结果已进入正确目标并重新读取。", doesNotProve: "本地任务不必经过此层，也不等于用户已经满意。", searchAliases: ["网页发布与公网回读", "发布后怎样确认真的更新"] },
-  { id: "human", title: "用户验收", proves: "本次结果和体验真正满足当前目标。", doesNotProve: "不代表它对所有人、所有场景都成立。" }
+  { id: "source", title: "原件与来源", proves: "输入、事实和引用能回到真实来源。", doesNotProve: "处理过程和最终结论也正确。", searchAliases: ["原始来源能证明什么"] },
+  { id: "test", title: "项目测试", proves: "行为在明确的测试条件下符合预期。", doesNotProve: "程序已经安装、真实运行，或网页已经发布。", searchAliases: ["源码或构建通过能不能证明网页发布", "测试通过不等于发布"] },
+  { id: "install", title: "安装与接入", proves: "目标环境已经接入这项能力。", doesNotProve: "新的自然请求能自动找到并选用它。" },
+  { id: "fresh", title: "新任务发现", proves: "新的普通请求能够找到并正确选择入口。", doesNotProve: "真实对象已经产出预期结果。" },
+  { id: "runtime", title: "现实运行", proves: "真实对象、工具或服务产生了预期输出。", doesNotProve: "从提出要求到拿到可用结果的每一步都成功。" },
+  { id: "e2e", title: "真实端到端", proves: "从自然请求到最终结果的整条现实路径能够完成。", doesNotProve: "换一个环境、账号或任务类型仍会得到同样结果。" },
+  { id: "publish", title: "按需发布与回读", proves: "需要发布时，结果已进入正确目标并重新读取；仅本地任务不必经过此层。", doesNotProve: "本人已经满意结果。", searchAliases: ["网页发布与公网回读", "发布后怎样确认真的更新"] },
+  { id: "human", title: "用户验收", proves: "本次结果和体验真正满足当前目标。", doesNotProve: "换个人或换个场景仍满足需求。" }
 ];
 
 export const systemDirectoryIntroductions = [

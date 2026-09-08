@@ -13,8 +13,8 @@ read-only operating panel; public presentation is secondary.
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must
   first let the owner recover the complete operating picture.
-- `config/final-project-order.json` is the sole authority for the 32 retained
-  project identities in the original one-through-thirty-three value slots, the
+- `config/final-project-order.json` is the sole authority for retained
+  project identities and their fixed value slots, the
   next project to build and the status of non-card explanations.
   `config/panel-projects.json` contains only
   enabled, published project packages; every enabled package must use the same

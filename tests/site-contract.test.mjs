@@ -293,6 +293,9 @@ test("project technical facts remain complete without taking over the first view
   for (const entry of projectCatalog) {
     assertReaderStates(entry.project.readerStates, entry.project.slug);
     assert.ok(typeof entry.project.repositoryNote === "string" && entry.project.repositoryNote.trim().length > 0, `${entry.project.slug} source-boundary explanation is missing`);
+    for (const term of entry.project.glossary || []) {
+      assert.ok(typeof term.meaning === "string" && term.meaning.trim(), `${entry.project.slug}/${term.term} has no explanation in the rendered glossary field`);
+    }
     const technicalFacts = entry.project.heroFacts?.length ? entry.project.heroFacts : entry.project.currentSnapshot?.facts;
     assert.ok(Array.isArray(technicalFacts) && technicalFacts.length > 0, `${entry.project.slug} must preserve its actual technical facts`);
     if (!entry.project.heroFacts?.length) assert.deepEqual(entry.project.currentState.facts, technicalFacts.map((fact) => fact.value), "technical facts must remain in the rendered current-state reference");
@@ -447,7 +450,7 @@ test("the deployed System content explains generic AI productivity and long-runn
   assert.equal(systemSkillFamilies.flatMap((family) => family.members).length, skills.length);
   for (const entry of projectCatalog) assert.ok(systemText.includes(entry.project.route), `System content omits project entry: ${entry.project.slug}`);
   for (const item of skills) assert.ok(systemText.includes(`/skills/${item.slug}`), `System content omits Skill: ${item.slug}`);
-  for (const phrase of ["施工责任（Execution Owner）", "重叠时只停止对应写入", "登记表修订号", "连同检查点正式移交", "长任务状态与断点接续", "满足同一完整验收时", "自造复杂度导致失败时先删除或绕开"]) assert.ok(systemText.includes(phrase), `System content omits long-running mechanism: ${phrase}`);
+  for (const phrase of ["施工责任（Execution Owner）", "重叠时只停止对应写入", "登记表修订号", "连同检查点正式移交", "长任务状态与断点接续", "能用更少组件完成同样结果时", "自造复杂度导致失败时先删除或绕开"]) assert.ok(systemText.includes(phrase), `System content omits long-running mechanism: ${phrase}`);
   const documentMaterialsSurface = JSON.stringify({
     asset: systemProjectDomains.flatMap((domain) => domain.assets).find((asset) => asset.id === "formal-materials"),
     node: systemDependencyNodes.find((node) => node.id === "document-materials-skill"),
@@ -536,8 +539,8 @@ test("the shared enhancement stays within the measured 14 KiB JS and 23 KiB CSS 
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 140);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 162);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 143);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 166);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
@@ -721,8 +724,8 @@ test("the maintenance registry drives all completed candidate packages", async (
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects.find((item) => item.id === "agents").impact_sources.length >= 5);
-  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "wechat-history-ai-bridge", "steam-millennium-config-backup", "ramdisk-guardian"]));
-  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "wechat-history-ai-bridge", "steam-millennium-config-backup", "ramdisk-guardian", "emerald-veil"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory", "personal-expression"]));
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -3912,8 +3915,8 @@ test("shared search scopes, project reading layers, Skills categories and System
     }
   }
   const systemNodeIds = new Set(systemDependencyNodes.map((node) => node.id));
-  assert.equal(systemDependencyNodes.length, 49, "System composition must retain all 49 independently reviewed responsibility cards");
-  for (const expected of ["direct-input", "mixed-file-intake", "mojibake-repair", "execution-owner", "durable-task-state", "message-ai-gateway", "work-delivery", "ai-cli-entry", "local-ai-runtime", "llm-backend-job", "cross-device-files", "remote-workstation", "wechat-bridge", "wechat-direct", "companion-laptop", "career-development", "daily-preferences-skill"]) assert.ok(systemNodeIds.has(expected), `System composition omits necessary node: ${expected}`);
+  assert.equal(systemDependencyNodes.length, 50, "System composition retains existing responsibilities and the new personal-expression project");
+  for (const expected of ["direct-input", "mixed-file-intake", "mojibake-repair", "execution-owner", "durable-task-state", "message-ai-gateway", "work-delivery", "ai-cli-entry", "local-ai-runtime", "llm-backend-job", "cross-device-files", "remote-workstation", "wechat-bridge", "wechat-direct", "companion-laptop", "career-development", "daily-preferences-skill", "personal-expression"]) assert.ok(systemNodeIds.has(expected), `System composition omits necessary node: ${expected}`);
   const dailyPreferencesNode = systemDependencyNodes.find((node) => node.id === "daily-preferences-skill");
   assert.deepEqual({ lane: dailyPreferencesNode.lane, href: dailyPreferencesNode.href, linkLabel: dailyPreferencesNode.linkLabel }, { lane: "personal", href: "/skills/daily-preferences", linkLabel: "Skill：个人理解库" });
   assert.match(`${dailyPreferencesNode.title}\n${dailyPreferencesNode.subtitle}\n${dailyPreferencesNode.detail}`, /个人理解库[\s\S]*事实[\s\S]*推定[\s\S]*纠正/);
@@ -3922,7 +3925,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.doesNotMatch(JSON.stringify(systemScenarios.map((scenario) => scenario.systems)), /材料库|媒体库/, "Scenario contracts must name direct originals instead of imaginary material libraries");
   assert.equal(systemDependencyNodes.find((node) => node.id === "materials")?.title, "位置未知时的非媒体原件查找");
   assert.match(systemDependencyNodes.find((node) => node.id === "work-delivery")?.detail || "", /质量未就绪(?:时)?不生成正式 Office 成品/);
-  assert.match(JSON.stringify(systemRuleStories.find((story) => story.id === "intent-to-capability")), /现有或原生入口已经满足时[\s\S]*不增加第二套适配器[\s\S]*自造复杂度导致失败时先删除或绕开/);
+  assert.match(JSON.stringify(systemRuleStories.find((story) => story.id === "intent-to-capability")), /现有或原生入口已经满足时[\s\S]*不增加另一套连接程序[\s\S]*自造复杂度导致失败时先删除或绕开/);
   assert.doesNotMatch(systemHtml, /data-system-scenarios=|data-system-node-state|本次使用|本次未用|上方场景会用到|其他场景按需使用/);
   assert.doesNotMatch(runtimeSource, /node\.classList\.toggle\("is-used"/);
   assert.match(styleSource, /\.system-dependency-node\s*\{[^}]*border:\s*2px solid var\(--green\);[^}]*background:\s*var\(--surface-green\);/);

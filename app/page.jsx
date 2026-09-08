@@ -1345,6 +1345,7 @@ const inlineTermTranslations = [
   ["objective", "客观状态"],
   ["containment", "隔离处置"],
   ["route", "处理路线"],
+  ["Job Object", "作业对象"],
   ["job", "任务记录"],
   ["effort", "思考等级"],
   ["spawn", "创建子代理"],
@@ -1620,7 +1621,7 @@ function SystemActiveAutomationList() {
       <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">7 个已启用的定时任务</h2><p>5 个云端任务和 2 个电脑端任务已登记为当前持续协作；这里说明它们计划何时运行、处理什么和交回什么。任务定义或 ACTIVE 状态不等于最近一次运行成功，也不证明通知已经送达；频率观察于 {systemActiveAutomations.observedAt}，私有提示词与任务 ID 不公开。</p></div>
       <div className="system-active-automation-groups">{systemActiveAutomations.groups.map((group) => (
         <section key={group.id}>
-          <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />已启用</small></header>
+          <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />记录时已启用</small></header>
           <div className="system-active-automation-grid">
             {systemActiveAutomations.items.filter((item) => item.group === group.id).map((item) => {
               const number = systemActiveAutomations.items.findIndex((candidate) => candidate.id === item.id) + 1;
@@ -1729,13 +1730,13 @@ function SystemProjectAtlas() {
     <section className="system-frame system-project-atlas" id="system-project-atlas" aria-labelledby="system-project-atlas-title">
       <div className="system-home-section-heading">
         <h2 id="system-project-atlas-title">全部项目怎样组成个人 AI 协作系统</h2>
-        <p>系统不是项目目录的合集。全部 GitHub 项目按现实作用进入能力版图；可深入阅读的项目继续进入完整参考，其他项目仍提供能力、事实、研究、备份、恢复或历史依据。</p>
+        <p>这些项目分别承担 AI 工作、电脑运行与恢复、资料读取、文档制作和个人事务。每一组说明它们怎样分工、交付什么；历史项目保留有用的参考，不代表还在运行。</p>
       </div>
       <div className="system-project-inventory">
         <div><span>本次总账快照</span><strong>{systemProjectInventory.total}</strong><small>个 GitHub 项目</small></div>
         <div><span>公开 / 私人</span><strong>{systemProjectInventory.publicCount} / {systemProjectInventory.privateCount}</strong><small>公开属性不决定产品价值</small></div>
         <div><span>本地 / 仅远端</span><strong>{systemProjectInventory.localCloneCount} / {systemProjectInventory.remoteOnlyCount}</strong><small>都计入项目资产</small></div>
-        <div><span>完整项目页</span><strong>{systemProjectInventory.detailedPageCount}</strong><small>只是当前已补齐的入口</small></div>
+        <div><span>完整项目页</span><strong>{projectCatalog.length}</strong><small>已完成详细说明的项目</small></div>
       </div>
       <p className="system-project-inventory-note">观察于 {systemProjectInventory.observedAt}。{systemProjectInventory.description}</p>
       <div className="system-project-domain-list">
@@ -1783,7 +1784,7 @@ function SystemPage() {
         <p className="section-kicker">我的工作入口</p>
         <h1>{systemHomeHero.eyebrow}</h1>
         <h2>{systemHomeHero.title}</h2>
-        <p className="daily-home-intro">找回资料，了解项目，继续手头的工作。输入想解决的问题，或从下面的入口开始。</p>
+        <p className="daily-home-intro">在这里找到项目、能力和使用说明，再把具体任务交给 AI 继续处理。可以直接搜索，也可以从下面的入口开始。</p>
         <div id="home-search" className="daily-home-search"><GlobalSearch path="/" className="hero-search-control" resultId="home-global-search-results" /></div>
         <div className="daily-entry-links">
           <SiteLink href="/projects"><span>继续一个项目</span><small>{projectCatalog.length} 个项目 · 用途、成果与完整说明</small><ArrowRight size={20} aria-hidden="true" /></SiteLink>
@@ -1796,7 +1797,7 @@ function SystemPage() {
       <SystemSectionNavigation />
 
       <section className="system-frame system-workflows" id="system-workflows" aria-labelledby="system-workflows-title">
-        <div className="system-home-section-heading"><h2 id="system-workflows-title">AI 如何协助我把一件真实工作办成</h2><p>材料可以直接随提示词、附件或已知路径进入；只有非媒体原件位置未知或定位失效时才调用材料查找。切换场景，输入、处理、依赖和交付会一起变化。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-workflows-title">AI 如何协助我把一件真实工作办成</h2><p>下面用 {systemScenarios.length} 件日常工作说明：我提供什么、AI 怎样处理、最后拿到什么。已有文件可以直接附上或给出位置；想不起来放在哪，再先查找。</p></div>
         <div className="system-workflow-tabs" role="tablist" aria-label="选择真实工作场景">
           {systemScenarios.map((scenario, index) => <button type="button" role="tab" id={`system-scenario-tab-${scenario.id}`} aria-controls={`system-scenario-${scenario.id}`} aria-selected={index === 0} tabIndex={index === 0 ? 0 : -1} data-system-scenario-tab={scenario.id} className={index === 0 ? "is-current" : undefined} key={scenario.id}>{scenario.label}</button>)}
         </div>
@@ -1805,7 +1806,7 @@ function SystemPage() {
       </section>
 
       <section className="system-frame system-dependencies" id="system-dependencies" aria-labelledby="system-dependencies-title">
-        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>这里画长期职责和使用入口，不重复列仓库清单；同一个项目可以承担多项职责，下方项目版图再按全部资产身份与主要归属完整展开。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-dependencies-title">这套系统实际由什么组成</h2><p>查资料、理解内容、操作电脑、制作文件和检查结果，各有合适的工具与项目。这里说明它们分别负责什么、怎样接上；一个项目也可以承担几种工作。</p></div>
         <div className="system-dependency-map">
           {systemDependencyLanes.map((lane) => {
             const laneNodes = systemDependencyNodes
@@ -1828,12 +1829,12 @@ function SystemPage() {
       <SystemProjectAtlas />
 
       <section className="system-frame system-rule-stories" id="system-rule-stories" aria-labelledby="system-rule-stories-title">
-        <div className="system-home-section-heading"><h2 id="system-rule-stories-title">五条规则，实际改变 AI 怎样工作</h2><p>规则不是让人背的合同。它们分别决定从哪里取事实、什么动作可以继续、多人怎样不互相覆盖、跨项目问题怎样组合证据，以及一句普通要求怎样进入正确能力。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-rule-stories-title">做事时遵循哪些规则</h2><p>从哪里核对事实、哪些工作可以直接继续、多人怎样不互相覆盖，以及需要本人决定时在哪里停下。这些规则落实到下面的实际做法。</p></div>
         <div className="system-rule-story-list">{systemRuleStories.map((story) => <SystemRuleStory story={story} key={story.id} />)}</div>
       </section>
 
       <section className="system-frame system-skill-families" id="system-skill-families" aria-labelledby="system-skill-families-title">
-        <div className="system-home-section-heading"><h2 id="system-skill-families-title">按想完成的事找到能力入口</h2><p>完整目录仍保留每个 Skill 的触发、流程和技术边界；这里先把 {systemSkillFamilies.flatMap((family) => family.members).length} 个入口按七类现实动作解释清楚，每个入口只出现一次。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-skill-families-title">按想完成的事找到能力入口</h2><p>这里按 {systemSkillFamilies.length} 类实际用途介绍 {systemSkillFamilies.flatMap((family) => family.members).length} 项能力：什么时候用、需要什么、会得到什么。每项能力的完整用法和技术细节留在对应详情里。</p></div>
         <div className="system-skill-family-list">{systemSkillFamilies.map((family) => <SystemSkillFamily family={family} key={family.id} />)}</div>
       </section>
 
@@ -1845,7 +1846,7 @@ function SystemPage() {
       </section>
 
       <section className="system-frame system-directories" aria-labelledby="system-directories-title">
-        <div className="system-home-section-heading"><h2 id="system-directories-title">下一步去哪里看完整细节</h2><p>System 负责让人先看懂整套协作关系；想了解某个产品、判断规则或直接执行能力时，再进入对应的成熟页面。</p></div>
+        <div className="system-home-section-heading"><h2 id="system-directories-title">下一步去哪里看完整细节</h2><p>先在系统页看懂各部分怎样配合；想了解某个产品、做事规则或能力的使用方法，再进入对应详情。</p></div>
         {systemDirectoryIntroductions.map((item, index) => <article id={`system-directory-${item.id}`} key={item.id}><span>{String(index + 1).padStart(2, "0")} / {item.label}</span><h3>{item.title}</h3><p>{item.body}</p><SiteLink href={item.href}>进入{item.label}<ArrowRight size={17} aria-hidden="true" /></SiteLink></article>)}
       </section>
     </div>

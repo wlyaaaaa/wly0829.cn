@@ -49,6 +49,7 @@ test("Emerald Veil renders its real reader-state and glossary fields without mis
   }
   assert.ok(emeraldVeilProject.repositoryNote.trim());
   const overview = await readFile(path.join(root, "dist/projects/emerald-veil/index.html"), "utf8");
+  assert.doesNotMatch(overview, /Job（任务记录）\s*Object/, "Windows Job Object must remain one technical term");
   for (const term of emeraldVeilProject.glossary) {
     assert.ok(term.meaning?.trim(), `missing visible glossary meaning: ${term.term}`);
     assert.ok(overview.includes(term.meaning.slice(0, 12)), `missing rendered glossary: ${term.term}`);
@@ -57,6 +58,7 @@ test("Emerald Veil renders its real reader-state and glossary fields without mis
 
 test("Emerald Veil keeps static-background recovery separate from Bubbles install and restore", () => {
   const commands = emeraldVeilProject.operationalEntrypoints;
+  assert.ok(commands.every((entry) => !entry.command.includes("\n")), "each visible operational entry is one complete command");
   const publish = commands.find((entry) => entry.command.startsWith("dotnet publish"));
   assert.ok(publish.command.endsWith("-o .\\artifacts\\publish\\win-x64"));
   assert.ok(commands.some((entry) => entry.command.includes("Install-EmeraldVeil.ps1 -Action Install")));
