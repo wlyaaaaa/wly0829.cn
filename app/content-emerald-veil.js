@@ -116,7 +116,7 @@ export const emeraldVeilProject = {
     prefetchAdjacentFull: false
   },
   gallery: [
-    { src: "/media/emerald-veil/verdant-rain-4k.png", thumbnail: "/media/emerald-veil/thumbs/verdant-rain-4k.webp", width: 3840, height: 2160, evidenceLabel: "桌面与锁屏选图", alt: "青雨第二幕选定的雨林猫咪静帧", caption: "青雨 · 第二幕：Windows桌面和真正系统锁屏使用这张静帧，动态雨幕不会一起安装。", originalSha256: selectedImageHash, originalBytes: 7780115 },
+    { src: "/media/emerald-veil/verdant-rain-4k.webp", thumbnail: "/media/emerald-veil/thumbs/verdant-rain-4k.webp", width: 3840, height: 2160, evidenceLabel: "桌面与锁屏选图", alt: "青雨第二幕选定的雨林猫咪静帧", caption: "青雨 · 第二幕：Windows桌面和真正系统锁屏使用这张静帧，动态雨幕不会一起安装。", originalSha256: selectedImageHash, originalBytes: 7780115, displayBytes: 4487986, displaySha256: "ef2859f4c264448cacd93ba59bb86e578c92bd4ffb8b63e421985d58bc05ec37", displayNote: "WebP（网页图像格式）无损显示副本；保持 3840×2160 尺寸，解码后的 RGBA（红绿蓝及透明度）像素与来源 PNG 逐字节相同。来源身份仍保留原 PNG 的 SHA-256 和字节数。" },
     { src: "/media/emerald-veil/emerald-veil-background.jpg", thumbnail: "/media/emerald-veil/thumbs/emerald-veil-background.webp", width: 3840, height: 2160, evidenceLabel: "泡泡专属背景资产", alt: "Emerald Veil原生泡泡覆盖层使用的独立背景图", caption: "原生泡泡出现时，程序在泡泡下面显示这张嵌入背景；它与当前Windows壁纸是两份独立资产。", originalSha256: "e0db6b29758b81f3ce70a75a25266eaa206be1d1b78ce83f205263337291c9f4", originalBytes: 2339467 }
   ],
   glossary: [

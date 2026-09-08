@@ -106,7 +106,7 @@ const workDeliveryProject = {
   ],
   gallery: [
     {
-      src: "/media/work-delivery/fictional-prd-page.png",
+      src: "/media/work-delivery/fictional-prd-page.webp",
       alt: "完全虚构的内部审批效率优化项目产品需求文档代表页",
       caption: "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。",
       evidenceLevel: "E1",
@@ -117,7 +117,7 @@ const workDeliveryProject = {
       sourceCommit: implementationCommit
     },
     {
-      src: "/media/work-delivery/fictional-review-slide.png",
+      src: "/media/work-delivery/fictional-review-slide.webp",
       alt: "完全虚构的项目评审关键事实页",
       caption: "完全虚构的项目评审页：10 条事实、确认状态和同一事实修订版集中呈现。",
       evidenceLevel: "E1",
@@ -128,7 +128,7 @@ const workDeliveryProject = {
       sourceCommit: implementationCommit
     },
     {
-      src: "/media/work-delivery/fictional-execution-tracker.png",
+      src: "/media/work-delivery/fictional-execution-tracker.webp",
       alt: "完全虚构的执行跟踪表工作表",
       caption: "完全虚构的执行跟踪表：执行事项、负责人、日期、状态、关联事实和验收备注来自同一 build。",
       evidenceLevel: "E1",

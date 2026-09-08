@@ -102,7 +102,7 @@ const documentMaterialsProject = {
   ],
   gallery: [
     {
-      src: "/media/document-materials/fictional-after-sales-page.png",
+      src: "/media/document-materials/fictional-after-sales-page.webp",
       alt: "完全虚构的售后处理与退款申请单页生成演示",
       caption: "完全虚构，仅作生成与排版演示：2.0.1 通过 Microsoft Word 生成同源 DOCX/PDF，并由 Poppler 渲染后完成 1/1 页彩色与灰度检查。",
       evidenceLevel: "E1",

@@ -882,7 +882,7 @@ function createButton(className, label, text) {
 function initializeGallery(gallery) {
   const cards = Array.from(gallery.querySelectorAll(".project-gallery-card[data-gallery-src]"));
   if (!cards.length) return;
-  const prefetchAdjacent = gallery.dataset.galleryPrefetchAdjacentFull !== "false";
+  const prefetchAdjacent = gallery.dataset.galleryPrefetchAdjacentFull === "true";
   const images = cards.map((card) => ({
     src: card.dataset.gallerySrc,
     thumbnail: card.querySelector("img")?.currentSrc || card.querySelector("img")?.getAttribute("src") || card.dataset.gallerySrc,

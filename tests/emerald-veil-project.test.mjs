@@ -70,14 +70,14 @@ test("Emerald Veil keeps static-background recovery separate from Bubbles instal
   assert.ok(emeraldVeilModules[0].boundaries.some((text) => text.includes("Windows设置")));
 });
 
-test("Emerald Veil serves byte-identical 4K assets with separate lightweight previews", async () => {
+test("Emerald Veil serves verified 4K display assets with separate source identities and lightweight previews", async () => {
   assert.equal(emeraldVeilProject.gallery.length, 2);
   assert.notEqual(emeraldVeilProject.gallery[0].src, emeraldVeilProject.gallery[1].src);
   for (const item of emeraldVeilProject.gallery) {
     const original = await readFile(path.join(root, "public", item.src.slice(1)));
     const thumbnail = await readFile(path.join(root, "public", item.thumbnail.slice(1)));
-    assert.equal(original.length, item.originalBytes);
-    assert.equal(createHash("sha256").update(original).digest("hex"), item.originalSha256.toLowerCase());
+    assert.equal(original.length, item.displayBytes || item.originalBytes);
+    assert.equal(createHash("sha256").update(original).digest("hex"), (item.displaySha256 || item.originalSha256).toLowerCase());
     assert.equal(item.width, 3840);
     assert.equal(item.height, 2160);
     assert.ok(thumbnail.length < original.length / 10);

@@ -19,11 +19,12 @@ test("Typora pack uses the fixed rank and all existing module routes", async () 
   for (const usage of project.usageExamples) assert.ok(slugs.has(usage.moduleSlug));
 });
 
-test("Typora actual PDF gallery points to local PNG artifacts with evidence boundaries", async () => {
+test("Typora actual PDF gallery points to lossless display images with evidence boundaries", async () => {
   assert.equal(project.gallery.length, 3);
   for (const item of project.gallery) {
     const bytes = await readFile(new URL(`../public${item.src}`, import.meta.url));
-    assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+    assert.equal(bytes.toString("ascii", 0, 4), "RIFF");
+    assert.equal(bytes.toString("ascii", 8, 12), "WEBP");
     assert.ok(item.proves && item.doesNotProve && item.observedAt);
   }
 });

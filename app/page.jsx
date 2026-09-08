@@ -515,7 +515,7 @@ function ProjectMetrics({ items, kind }) {
   return <dl className="project-metrics">{items.map((item) => <div key={item.label}><dt>{displayCopy(item.label, kind)}</dt><dd>{displayCopy(item.value, kind)}</dd></div>)}</dl>;
 }
 
-function ProjectCard({ entry }) {
+function ProjectCard({ entry, number }) {
   const { project: currentProject, modules: currentModules } = entry;
   const moduleOptions = [
     { label: "总览", href: currentProject.route },
@@ -539,7 +539,7 @@ function ProjectCard({ entry }) {
         <span className="project-visibility project-private-status"><LockKey size={15} aria-hidden="true" />{currentProject.visibility}</span>
       )}
       <SiteLink className="featured-project" href={currentProject.route} aria-labelledby={headingId}>
-        <span className="project-index" aria-hidden="true"><strong>{String(currentProject.order).padStart(2, "0")}</strong><span /></span>
+        <span className="project-index" aria-hidden="true"><strong>{String(number).padStart(2, "0")}</strong><span /></span>
         <div className="project-card-body">
           <div className="project-card-header">
             <div className="project-title-row"><span className="project-mark" aria-hidden="true" /><h2 id={headingId}>{currentProject.title}</h2></div>
@@ -573,7 +573,7 @@ function HomePage() {
     <div className="page-frame home-page">
       <h1 className="visually-hidden">个人项目</h1>
       <div className="project-grid">
-        {projectCatalog.map((entry) => <ProjectCard entry={entry} key={entry.project.slug} />)}
+        {projectCatalog.map((entry, index) => <ProjectCard entry={entry} number={index + 1} key={entry.project.slug} />)}
       </div>
     </div>
   );
@@ -733,7 +733,7 @@ function ProjectGallery({ title, images, presentation = {} }) {
   const zoomRef = useRef(1);
   const fullImageRequestsRef = useRef(new Map());
   const fullRequestTokenRef = useRef(0);
-  const prefetchAdjacent = presentation.prefetchAdjacentFull !== false;
+  const prefetchAdjacent = presentation.prefetchAdjacentFull === true;
   zoomRef.current = zoom;
   const isOpen = activeIndex !== null;
   const hasStructuredEvidence = images.every((image) => image.evidenceLevel && image.evidenceLabel && image.proves && image.doesNotProve);
@@ -1092,7 +1092,17 @@ function ProjectOverview({ entry }) {
         <section className="document-section compact-terms"><h2>{isLearning ? "这套方法里的关键说法" : "本页用到的名词"}</h2><p>英文第一次出现时已经补了中文；这里再集中说明它在 {currentProject.title} {isLearning ? "方法" : "项目"}里的准确含义。</p><dl className="project-glossary-grid">{currentProject.glossary.map((item) => <div key={item.term}><dt>{item.term}</dt><dd>{item.meaning}</dd></div>)}</dl></section>
         <section className="document-section"><h2>{isLearning ? "方法由什么组成" : "系统里实际有什么"}</h2><p>{isLearning ? "下面把协作方法拆成可以单独检查的部分；这不是监督系统，也不代表个人学习进度。" : "下面是当前产品组件，不是概念分类。每一项都对应真实文件、入口或验证链。"}</p><div className="component-table" role="table" aria-label={`${currentProject.title} 当前组件`}>{currentProject.components.map((item, index) => <article role="row" key={item.name}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{copy(item.name)}</strong><p>{copy(item.responsibility)}</p></div><p role="cell">{copy(item.implementation)}</p></article>)}</div></section>
         {currentProject.technicalContracts?.length ? <section className="document-section"><h2>当前数据合同与写读边界</h2><div className="component-table" role="table" aria-label={`${currentProject.title} 当前数据合同`}>{currentProject.technicalContracts.map((item, index) => <article role="row" key={item.artifact}><span role="cell">{String(index + 1).padStart(2, "0")}</span><div role="cell"><strong>{item.artifact}</strong><p><code>{item.schema}</code></p></div><p role="cell"><strong>{copy(item.owner)}</strong>：{copy(item.boundary)}</p></article>)}</div></section> : null}
-        {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section"><h2>照片原件与显示版本</h2><p>缩略图用于快速浏览。JPEG 照片直接打开原件；浏览器不能直接显示的格式使用完整尺寸的显示副本，原文件仍按原字节保留。转换说明与两种文件的身份分别列出。</p><div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}><a href={item.originalSrc || item.src} download>{(item.originalSrc || item.src).split("/").at(-1)}</a><p>{item.originalWidth || item.width} × {item.originalHeight || item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p>{item.originalSrc ? <p>{item.displayNote} 显示尺寸 {item.width} × {item.height} · {item.displayBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.displaySha256}</code></p> : null}</div>)}</div></section> : null}
+        {currentProject.gallery?.some((item) => item.originalSha256 && item.originalBytes && item.width && item.height) ? <section className="document-section">
+          <h2>照片原件与显示版本</h2>
+          <p>缩略图用于快速浏览，点开后才加载大图。经过转换或压缩的显示副本与来源原件分别标明，下面可下载网页使用的大图。</p>
+          <div className="source-list">{currentProject.gallery.map((item) => <div key={item.src}>
+            <a href={item.src} download>{item.src.split("/").at(-1)}</a>
+            <p>显示尺寸 {item.width} × {item.height} · {(item.displayBytes || item.originalBytes).toLocaleString("en-US")} B · SHA-256 <code>{item.displaySha256 || item.originalSha256}</code></p>
+            {item.displaySha256 ? <p>来源原件 {item.originalWidth || item.width} × {item.originalHeight || item.height} · {item.originalBytes.toLocaleString("en-US")} B · SHA-256 <code>{item.originalSha256}</code></p> : null}
+            {item.displayNote ? <p>{item.displayNote}</p> : null}
+            {item.originalSrc ? <a href={item.originalSrc} download>下载来源原件</a> : null}
+          </div>)}</div>
+        </section> : null}
         {entry.kind === "agents" ? <section className="document-section"><h2>验证不是一盏总绿灯</h2><p>{annotateTerms(panelSnapshot.validation.summary)}</p><ValidationMatrix /></section> : null}
         <section className="document-section"><h2>{isLearning ? "参考与依据" : `${currentProject.evidenceLayers.length} 层证据分别证明什么`}</h2><div className="evidence-table">{currentProject.evidenceLayers.map((item) => <article key={item.layer}><strong>{copy(item.layer)}</strong><p><span>能证明：</span>{copy(item.proves)}</p><p><span>不能证明：</span>{copy(item.doesNotProve)}</p></article>)}</div></section>
         <section className="document-section"><h2>{isLearning ? "直接怎么用" : "维护入口"}</h2><div className="source-list">{currentProject.operationalEntrypoints.map((item) => <div key={item.name}><code>{item.command}</code><p><strong>{copy(item.name)}</strong>：{copy(item.purpose)}</p></div>)}</div></section>
@@ -1692,14 +1702,16 @@ function SystemProjectAssetCard({ asset }) {
   const skillItems = systemAssetSkillItems(asset);
   const detailedProject = projectCatalog.find((entry) => entry.project.route === asset.href);
   const entryLabel = detailedProject ? (asset.entryLabel || "进入完整项目页") : asset.entryLabel;
-  const referenceItems = detailedProject ? (projectReferenceLinks[detailedProject.project.slug] || []) : [];
+  const referenceItems = detailedProject ? (projectReferenceLinks[detailedProject.project.slug] || []).filter((item) => !skillItems.some((skill) => canonicalPath(skill.href) === canonicalPath(item.href))) : [];
   const external = /^https?:\/\//.test(asset.href || "");
   const Card = external ? "a" : "article";
   return (
     <Card className={`system-project-asset-card${external ? " system-project-external-card" : ""}`} id={anchorId} {...(external ? { href: asset.href, target: "_blank", rel: "noopener noreferrer", "aria-label": `${asset.title}（在新标签页打开）` } : {})}>
-      <span>{asset.kind}{asset.visibility ? ` · ${asset.visibility}` : ""}</span>
-      <strong>{asset.title}</strong>
-      {asset.repo ? <code>{asset.repo}</code> : null}
+      <header>
+        <span>{asset.kind}{asset.visibility ? ` · ${asset.visibility}` : ""}</span>
+        <strong>{asset.title}</strong>
+        {asset.repo ? <code>{asset.repo}</code> : null}
+      </header>
       <p>{asset.role}</p>
       {external ? <span className="system-project-external-destination">{asset.entryLabel || "打开外部页面"}<span aria-hidden="true">↗</span></span> : entryLabel || skillItems.length || referenceItems.length ? <div className="system-project-asset-actions">
         {entryLabel ? <SiteLink href={asset.href}>{entryLabel}<ArrowRight size={14} aria-hidden="true" /></SiteLink> : null}
@@ -1713,12 +1725,11 @@ function SystemProjectAssetCard({ asset }) {
 function SystemProjectAtlas() {
   function assetColumnCount(domain) {
     const count = domain.assets.filter((asset) => !asset.presentationOnly).length;
-    return count === 3 ? 3 : Math.min(count, 4);
+    return count % 3 === 0 || count % 4 === 1 ? 3 : Math.min(count, 4);
   }
 
   function assetColumnRemainder(domain) {
-    const count = domain.assets.filter((asset) => !asset.presentationOnly).length;
-    return count % assetColumnCount(domain);
+    return domain.assets.filter((asset) => !asset.presentationOnly).length % assetColumnCount(domain);
   }
 
   function assetCountLabel(domain) {
@@ -1754,7 +1765,7 @@ function SystemProjectAtlas() {
               <section><h4>最后交回什么</h4><p>{domain.delivery}</p></section>
               <section><h4>入口不可用时</h4><p>{domain.unavailable}</p></section>
             </div>
-            <div className="system-project-asset-grid" data-asset-remainder={assetColumnRemainder(domain)} style={{ "--asset-columns": assetColumnCount(domain) }}>
+            <div className="system-project-asset-grid" data-asset-remainder={assetColumnRemainder(domain)} style={{ "--asset-span": 12 / assetColumnCount(domain) }}>
               {domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => <SystemProjectAssetCard asset={asset} key={asset.id} />)}
             </div>
           </article>

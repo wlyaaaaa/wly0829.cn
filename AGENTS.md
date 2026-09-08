@@ -20,10 +20,11 @@ read-only operating panel; public presentation is secondary.
   enabled, published project packages; every enabled package must use the same
   fixed rank as its `order`. The current published and planned counts, exact
   ranks and next project are derived from that file rather than copied here.
-  Missing ranks are deliberate while their projects remain unbuilt or after the
-  owner removes an independent project. The earlier removed rank 15 stays unused; the owner explicitly removed Playbook at rank 27 and later retired the RTX bundle at rank 32, decrementing later ranks once after each removal. Other surviving
-  projects are not silently renumbered, and no missing rank creates placeholder
-  cards, routes or copy. Each project owns its real module count and module
+  These internal value slots determine relative order, not visible card numbers.
+  Project cards show consecutive numbers from 1 through the displayed project
+  count, as the owner corrected on 2026-09-08. Retired internal slots never leave
+  a gap in those visible numbers or create placeholder cards, routes or copy.
+  Each project owns its real module count and module
   boundaries; visual symmetry is never a reason to force every project into
   the same number of modules.
 - A registry entry defaults to `real_dashboard`: publish dense, current facts,
@@ -382,8 +383,9 @@ read-only operating panel; public presentation is secondary.
   from `config/final-project-order.json`; rank 15 is unused after
   the owner moved Scripts capabilities into their owning projects. The current
   complete packages in Registry remain enabled at
-  their fixed, possibly non-contiguous ranks, alongside the one-page Rules
-  workbench and current public-safe Skills catalog.
+  their fixed, possibly non-contiguous internal ranks; visible project-card
+  numbers remain consecutive. They sit alongside the one-page Rules workbench
+  and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
   presented within its actual public-content boundary. Exclude only an exact
   project identity or payload that the owner or an applicable higher rule
@@ -495,8 +497,11 @@ read-only operating panel; public presentation is secondary.
   restore request: publish catalog/seed/G/phone-package/cloud-candidate
   convergence only after the source implementation and tests prove it, and
   otherwise show the source blocker explicitly. Its Overview also contains 10–20 owner-authorized,
-  aesthetically selected original photos with byte-identical full images and
-  lightweight previews; ordinary personal photos are not excluded merely because
+  aesthetically selected real photos with lightweight thumbnails and clearly
+  sharper, size-optimized display images loaded only when selected. The owner
+  requested this web delivery on 2026-09-08; preserve framing, orientation and
+  color, keep source originals in the media library, and distinguish compressed
+  display files from source originals. Ordinary personal photos are not excluded merely because
   their source is private. The completed document-materials project directly
   explains entry bypass, current matter and original inputs, same-source
   DOCX/PDF, page/color/grayscale verification, signature and ready versioning,

@@ -241,7 +241,9 @@ test("the project card exposes visible module links instead of a dropdown", asyn
   assert.match(styleSource, /\.project-card-foot\s*\{[\s\S]*?margin-top:\s*auto/);
   assert.match(styleSource, /\.home-page \.project-summary[\s\S]*?-webkit-line-clamp:\s*4/);
   assert.match(styleSource, /\.home-page \.project-card-snapshot-boundary dd[\s\S]*?-webkit-line-clamp:\s*3/);
-  assert.match(pageSource, /projectCatalog\.map\(\(entry\) => <ProjectCard/);
+  const projectsHtml = await readFile(path.join(projectRoot, "dist", "projects", "index.html"), "utf8");
+  const visibleNumbers = [...projectsHtml.matchAll(/class="project-index"[^>]*><strong>(\d+)<\/strong>/g)].map((match) => Number(match[1]));
+  assert.deepEqual(visibleNumbers, Array.from({ length: projectCatalog.length }, (_, index) => index + 1), "visible project numbers must stay consecutive even when internal ranks contain retired slots");
   assert.match(pageSource, /currentProject\.route/);
   assert.match(pageSource, /project-repository-button/);
   assert.match(pageSource, /project-hero-repository-link/);
@@ -1340,10 +1342,10 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
   ];
   assert.ok(Array.isArray(timeAuditProject.gallery));
   assert.equal(timeAuditProject.gallery.length, expectedGalleryFiles.length);
-  assert.deepEqual(timeAuditProject.gallery.map((item) => path.posix.basename(item.src)), expectedGalleryFiles);
+  assert.deepEqual(timeAuditProject.gallery.map((item) => path.posix.parse(item.src).name), expectedGalleryFiles.map((file) => path.posix.parse(file).name));
   for (const item of timeAuditProject.gallery) {
-    assert.match(item.src, /^\/media\/timeaudit\/[a-z0-9-]+\.png$/);
-    assert.equal(item.thumbnail, `/media/timeaudit/thumbs/${path.posix.basename(item.src, ".png")}.webp`);
+    assert.match(item.src, /^\/media\/timeaudit\/[a-z0-9-]+\.(?:png|webp)$/);
+    assert.equal(item.thumbnail, `/media/timeaudit/thumbs/${path.posix.parse(item.src).name}.webp`);
     assert.ok(item.alt?.trim().length >= 8, `${item.src} alt is missing`);
     assert.ok(item.caption?.trim().length >= 12, `${item.src} caption is missing`);
     for (const key of ["evidenceLevel", "evidenceLabel", "observedAt", "sourceCommit", "proves", "doesNotProve"]) assert.ok(item[key]?.trim().length >= 2, `${item.src} ${key} is missing`);
@@ -1354,7 +1356,7 @@ test("TimeAudit keeps collectors bounded without blanket-banning useful technica
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)
     .sort();
-  assert.deepEqual(mediaFiles, [...expectedGalleryFiles].sort(), "TimeAudit media directory must contain only the registered PNGs");
+  assert.deepEqual(mediaFiles, timeAuditProject.gallery.map((item) => path.posix.basename(item.src)).sort(), "TimeAudit media directory must contain only the registered display files");
   let totalBytes = 0;
   for (const file of mediaFiles) {
     const bytes = (await stat(path.join(mediaRoot, file))).size;
@@ -1441,9 +1443,9 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
     "hs2-placement-recovery-design.png"
   ];
   assert.equal(pcPanelHubProject.gallery.length, expectedGalleryFiles.length);
-  assert.deepEqual(pcPanelHubProject.gallery.map((item) => path.posix.basename(item.src)), expectedGalleryFiles);
+  assert.deepEqual(pcPanelHubProject.gallery.map((item) => path.posix.parse(item.src).name), expectedGalleryFiles.map((file) => path.posix.parse(file).name));
   for (const item of pcPanelHubProject.gallery) {
-    assert.match(item.src, /^\/media\/pc-panel-hub\/[a-z0-9-]+\.(?:png|jpg)$/);
+    assert.match(item.src, /^\/media\/pc-panel-hub\/[a-z0-9-]+\.(?:png|jpg|webp)$/);
     const stem = path.posix.basename(item.src, path.posix.extname(item.src));
     assert.equal(item.thumbnail, `/media/pc-panel-hub/thumbs/${stem}.webp`);
     assert.ok(item.alt?.trim().length >= 8, `${item.src} alt is missing`);
@@ -1458,7 +1460,7 @@ test("PC Panel Hub keeps software demos, full images and previews bounded and ev
 
   const mediaRoot = path.join(projectRoot, "public", "media", "pc-panel-hub");
   const mediaFiles = (await readdir(mediaRoot, { withFileTypes: true })).filter((entry) => entry.isFile()).map((entry) => entry.name).sort();
-  assert.deepEqual(mediaFiles, [...expectedGalleryFiles].sort(), "PC Panel Hub media directory must contain only registered PNGs");
+  assert.deepEqual(mediaFiles, pcPanelHubProject.gallery.map((item) => path.posix.basename(item.src)).sort(), "PC Panel Hub media directory must contain only registered display files");
   let totalBytes = 0;
   for (const file of mediaFiles) {
     const bytes = (await stat(path.join(mediaRoot, file))).size;
@@ -2407,9 +2409,9 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assert.equal(new Set(workDeliveryProject.gallery.map((item) => item.caption)).size, 3);
   assert.equal(new Set(workDeliveryProject.gallery.map((item) => `${item.proves}|${item.doesNotProve}`)).size, 3);
   const galleryExpected = new Map([
-    ["fictional-prd-page.png", "69c333fcf8c34037e51438800ceed968228d94878bf16523b4c5b2c38cb2a4da"],
-    ["fictional-review-slide.png", "d02c74e85870aab2c2061859d79009c5ca43dcef51fc98cd4ec973a6a35fd420"],
-    ["fictional-execution-tracker.png", "0c8133cc06e695a496b6f57bc22c5d821ecb242bf0695a1e529f71419cd99b5e"]
+    ["fictional-prd-page.webp", "0aab6c2a0188f5ce2a587dfd52c180dc91aa1e266c4cf014c58be96a50230f57"],
+    ["fictional-review-slide.webp", "f653b498b01cb5d72a706606f2293ff7b37c9a085adfbab32098fb08b5dd6869"],
+    ["fictional-execution-tracker.webp", "9002a19f8c674fe9c55b9829286755519c7161522ec7f8514affc01b8e5badac"]
   ]);
   for (const item of workDeliveryProject.gallery) {
     assert.equal(item.thumbnail, undefined, "the three owner-selected images must not create duplicate thumbnails");
@@ -2630,7 +2632,7 @@ test("daily-preferences shares correctable personal understanding while domain d
   assert.equal(searchPanel("根据我的偏好怎样取证")[0]?.href, "/projects/daily-preferences/evidence-query");
 });
 
-test("personal-media exposes real current scale, complete product boundaries and ten byte-identical original photos", async () => {
+test("personal-media preserves its current product snapshot and delivers ten optimized photos with distinct source identities", async () => {
   assert.equal(personalMediaProject.slug, "personal-media");
   assert.equal(personalMediaProject.route, "/projects/personal-media");
   assert.equal(personalMediaProject.title, "个人媒体整理与恢复");
@@ -2661,29 +2663,26 @@ test("personal-media exposes real current scale, complete product boundaries and
   let fullBytes = 0;
   let thumbnailBytes = 0;
   for (const item of personalMediaProject.gallery) {
-    assert.match(item.src, /^\/media\/personal-media\/[0-9]{2}-[a-z0-9-]+\.jpg$/);
+    assert.match(item.src, /^\/media\/personal-media\/[0-9]{2}-[a-z0-9-]+\.webp$/);
     assert.match(item.thumbnail, /^\/media\/personal-media\/thumbs\/[0-9]{2}-[a-z0-9-]+\.webp$/);
     assert.ok(item.categoryLabel && item.alt && item.caption && item.originalSha256 && item.originalBytes > 0);
     const fullPath = path.join(projectRoot, "public", ...item.src.slice(1).split("/"));
     const thumbPath = path.join(projectRoot, "public", ...item.thumbnail.slice(1).split("/"));
     const fullImage = await readFile(fullPath);
-    const originalUrl = item.originalSrc || item.src;
-    const originalImage = await readFile(path.join(projectRoot, "public", ...originalUrl.slice(1).split("/")));
     const thumbnail = await readFile(thumbPath);
     const digest = createHash("sha256").update(fullImage).digest("hex");
-    const originalDigest = createHash("sha256").update(originalImage).digest("hex");
-    assert.equal(originalImage.length, item.originalBytes, `${originalUrl} original byte count drifted`);
-    assert.equal(originalDigest, item.originalSha256, `${originalUrl} is no longer the selected original bytes`);
-    assert.equal(digest, item.displaySha256 || item.originalSha256, `${item.src} display identity drifted`);
-    if (item.originalSrc) {
-      assert.equal(fullImage.length, item.displayBytes);
-      assert.ok(item.displayNote.includes("显示副本"));
-      const distOriginal = await readFile(path.join(projectRoot, "dist", ...originalUrl.slice(1).split("/")));
-      assert.equal(createHash("sha256").update(distOriginal).digest("hex"), originalDigest);
-    }
+    assert.equal(fullImage.toString("ascii", 0, 4), "RIFF");
+    assert.equal(fullImage.toString("ascii", 8, 12), "WEBP");
+    assert.equal(digest, item.displaySha256, `${item.src} display identity drifted`);
+    assert.equal(fullImage.length, item.displayBytes);
+    assert.ok(item.displayBytes < item.originalBytes, `${item.src} does not reduce the source file size`);
+    assert.ok(item.displayNote.includes("显示副本"));
+    assert.equal(item.originalSrc, undefined, "the web gallery must not ship a second heavy original download");
+    assert.ok(Math.max(item.width, item.height) >= Math.min(1920, Math.max(item.originalWidth, item.originalHeight)), `${item.src} is too small for a clearly sharper large image`);
+    assert.ok(Math.abs(item.width / item.height - item.originalWidth / item.originalHeight) < 0.01, `${item.src} changed the selected framing or orientation`);
     assert.ok(thumbnail.length < 128 * 1024, `${item.thumbnail} exceeds the preview review threshold`);
-    fullHashes.push(originalDigest);
-    fullBytes += originalImage.length + (item.originalSrc ? fullImage.length : 0);
+    fullHashes.push(item.originalSha256);
+    fullBytes += fullImage.length;
     thumbnailBytes += thumbnail.length;
     const distFull = await readFile(path.join(projectRoot, "dist", ...item.src.slice(1).split("/")));
     const distThumb = await readFile(path.join(projectRoot, "dist", ...item.thumbnail.slice(1).split("/")));
@@ -2691,12 +2690,13 @@ test("personal-media exposes real current scale, complete product boundaries and
     assert.equal(createHash("sha256").update(distThumb).digest("hex"), createHash("sha256").update(thumbnail).digest("hex"), `${item.thumbnail} changed during build`);
   }
   assert.equal(new Set(fullHashes).size, 10, "personal-media gallery repeats original bytes");
-  assert.ok(fullBytes <= 128 * 1024 * 1024, "ten selected originals exceed the 128 MiB review threshold");
+  assert.ok(fullBytes <= 10 * 1024 * 1024, "ten optimized display images exceed the 10 MiB review threshold");
   assert.ok(thumbnailBytes <= 768 * 1024, "personal-media previews exceed the 768 KiB review threshold");
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "personal-media", "index.html"), "utf8");
   assert.match(overviewHtml, /data-static-route="\/projects\/personal-media"/);
   assert.match(overviewHtml, /project-gallery photo-showcase/);
   assert.match(overviewHtml, /data-gallery-prefetch-adjacent-full="false"/);
+  assert.doesNotMatch(overviewHtml, /\/media\/personal-media\/[^"\s<>]+\.(?:jpg|heic)/, "the optimized gallery still links to heavy legacy assets");
   assert.equal((overviewHtml.match(/class="project-gallery-card"/g) || []).length, 10);
   for (const item of personalMediaProject.gallery) {
     assert.ok(overviewHtml.includes(item.originalSha256), `${item.src} hash is not visible in the technical layer`);
@@ -2729,6 +2729,10 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(pageSource, /(?:gallery|images)\.map\([\s\S]{0,1400}onClick=/, "gallery images must open on click");
   assert.match(pageSource, /loading="lazy"/);
   assert.match(pageSource, /image\.thumbnail \|\| image\.src/, "gallery cards must use light previews while the dialog keeps the full image");
+  for (const { project: currentProject } of projectCatalog.filter((entry) => entry.project.gallery?.length)) {
+    const html = await readFile(path.join(projectRoot, "dist", ...currentProject.route.slice(1).split("/"), "index.html"), "utf8");
+    assert.match(html, /data-gallery-prefetch-adjacent-full="false"/, `${currentProject.slug} starts adjacent large-image requests by default`);
+  }
   assert.match(pageSource, /可视化证据/);
   assert.match(pageSource, /image\.evidenceLevel/);
   assert.match(pageSource, /activeImage\.proves/);
@@ -3709,6 +3713,13 @@ test("project and Skill links come from one explicit ownership map", async () =>
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   assert.doesNotMatch(systemHtml, /<a(?:\s|>)[^>]*class="system-project-asset-card"/, "System project cards must not nest project and Skill anchors");
   assert.match(systemHtml, /class="system-project-asset-actions"/);
+  for (const card of systemHtml.matchAll(/<article class="system-project-asset-card"[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/article>/g)) {
+    const destinations = [...card[2].matchAll(/<a\s[^>]*href="([^"]+)"/g)].map((link) => link[1]);
+    assert.equal(new Set(destinations).size, destinations.length, `${card[1]} repeats a navigation destination`);
+    if (card[1] === "system-project-asset-formal-materials") {
+      assert.deepEqual(new Set(destinations), new Set(["/projects/document-materials/", "/projects/personal-materials/registered-lookup/", "/skills/document-materials/"]), "the document card must preserve its three distinct destinations");
+    }
+  }
   assert.ok(systemHtml.includes('href="/skills/work-delivery/"'), "System work-delivery asset does not link to its Skill");
   assert.ok(systemHtml.includes("Skill：工作支持与交付"), "System Skill actions must show the full Skill name");
   assert.ok(systemHtml.includes('href="/projects/work-delivery/"'), "System work-delivery asset does not link to its project page");

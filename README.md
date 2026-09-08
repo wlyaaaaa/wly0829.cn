@@ -10,7 +10,7 @@
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-最终规划保留 33 个独立项目，使用 1–34 价值名次，rank 15 留空。当前版本有33个完整内容包，包括 `#29 Emerald Veil` 和新增第 34 项个人表达与沟通支持；已有项目不因新增而改编号，CACB 与 Codex Remote 仍为 32、33。Playbook 与 RTX 5090D Ollama 项目已退出展示。Astra 负责来源验收、必要修复与网页整合，Gemini 负责指定网页建设。本轮来源截止为2026-09-08T08:00:42Z；全部33项及manual-only范围已获明确复核授权。来源、运行观察、历史验收分别标时；截止后的必要源修复单独说明，无关后续增量留待下一次。终审通过后按既有授权发布到main并完成Pages回读。Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
+最终规划保留 33 个独立项目，包括 Emerald Veil 和个人表达与沟通支持。项目卡片按现有顺序连续显示 1–33；内部价值槽位只决定相对顺序，不作为页面编号。Playbook 与 RTX 5090D Ollama 项目已退出展示。Astra 负责来源验收、必要修复与网页整合，Gemini 负责指定网页建设。本轮来源截止为2026-09-08T08:00:42Z；全部33项及manual-only范围已获明确复核授权。来源、运行观察、历史验收分别标时；截止后的必要源修复单独说明，无关后续增量留待下一次。该冻结版本已发布；其后的卡片排版、连续编号和画廊体积优化按本人最新要求只在本地修复，等待发布。Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
 
 排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 
@@ -109,4 +109,4 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 - 远端 `main`、Pages deployment 和公网 read-back 指向同一提交；
 - 直接路由、自定义 404、robots、sitemap 与 SEO 全部核对。
 
-当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 只拥有 33 个保留项目在 1–34 价值槽位中的名次、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。
+当前产品边界、模块规则和发布合同以 [项目规则](AGENTS.md)、[项目 Registry](config/panel-projects.json) 与实际内容对象为准；[最终项目顺序](config/final-project-order.json) 拥有保留项目的内部价值顺序、施工顺序和已闭合的非卡归类证据，不复制模块数、Skill 数或项目快照状态。页面编号按实际展示列表连续生成。长期内容原则见 [看板内容建设原则](docs/design/内容建设原则与MVP重构方案.md)。

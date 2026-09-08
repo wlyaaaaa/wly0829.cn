@@ -22,7 +22,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(plan.target_project_count, 33);
   assert.match(plan.ranking_basis, /consensus total net value for a broad rational audience/);
   assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
-  assert.match(plan.display_rule, /missing ranks remain absent.*never create placeholder cards or routes/);
+  assert.match(plan.display_rule, /consecutive visible card numbers from 1.*missing internal ranks never create placeholder cards or routes/);
   assert.match(plan.rank_retirement_rule, /owner-removed independent project.*final_rank unused.*never silently renumbered/);
   assert.match(plan.construction_rule, /smallest final_rank still marked planned/);
   assert.match(plan.construction_rule, /does not wait.*publication/);
@@ -41,7 +41,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "published");
   assert.equal(plan.projects.find((item) => item.id === "personal-expression").final_rank, 34);
   assert.equal(plan.projects.find((item) => item.id === "personal-expression").state, "published");
-  assert.ok(readme.includes("#29 Emerald Veil"));
+  assert.ok(readme.includes("Emerald Veil"));
   for (const retired of ["codex-app-power-user-playbook", "rtx5090d-ollama-agent-bundle"]) {
     assert.ok(!plan.projects.some((item) => item.id === retired));
     assert.ok(!registry.projects.some((item) => item.id === retired));
@@ -56,7 +56,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.match(systemSource, /md-triple-tactics-talent-solver.*规则仿真、策略报告.*历史参考.*不代表当前仍在持续运行/s);
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, /保留 33 个独立项目.*1–34 价值槽位/s);
+  assert.match(designQa, /保留 33 个独立项目.*连续显示 1–33/s);
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
   assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
   assert.equal(registry.projects.some((item) => item.id === "scripts"), false);

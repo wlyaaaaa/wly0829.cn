@@ -51,9 +51,9 @@ export const typoraThemePackProject = {
     { title: "只安装自己的主题文件", detail: "只处理两份 Verdant 文件，旧版先备份，不清空整个 themes 目录，也不修改 Typora 授权。" }
   ],
   gallery: [
-    { src: "/assets/typora-theme-pack/original-pdf.png", alt: "同一公开简报的原版 PDF", caption: "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 original 样式生成了该页面。", doesNotProve: "不是 Typora 原生窗口截图，也不证明所有长文的分页。", observedAt: "2026-09-07T23:42:44Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" },
-    { src: "/assets/typora-theme-pack/personal-pdf.png", alt: "同一公开简报的个人版 PDF", caption: "个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 personal 样式生成了该页面。", doesNotProve: "不证明用户当前编辑器已经选用该主题。", observedAt: "2026-09-07T23:42:45Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" },
-    { src: "/assets/typora-theme-pack/company-pdf.png", alt: "同一公开简报的公司版 PDF", caption: "公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 company 样式生成了该页面。", doesNotProve: "不等于任意公司模板或打印机的验收。", observedAt: "2026-09-07T23:42:46Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" }
+    { src: "/assets/typora-theme-pack/original-pdf.webp", alt: "同一公开简报的原版 PDF", caption: "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 original 样式生成了该页面。", doesNotProve: "不是 Typora 原生窗口截图，也不证明所有长文的分页。", observedAt: "2026-09-07T23:42:44Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" },
+    { src: "/assets/typora-theme-pack/personal-pdf.webp", alt: "同一公开简报的个人版 PDF", caption: "个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 personal 样式生成了该页面。", doesNotProve: "不证明用户当前编辑器已经选用该主题。", observedAt: "2026-09-07T23:42:45Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" },
+    { src: "/assets/typora-theme-pack/company-pdf.webp", alt: "同一公开简报的公司版 PDF", caption: "公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。", evidenceLevel: "E2", evidenceLabel: "本次实际 PDF", proves: "已配置转换器用 company 样式生成了该页面。", doesNotProve: "不等于任意公司模板或打印机的验收。", observedAt: "2026-09-07T23:42:46Z", sourceCommit: "cf6d71051c6707d8cc08bac6693970958f76779e" }
   ],
   dataSources: {
     title: "一份正文、两类样式和一个转换器",

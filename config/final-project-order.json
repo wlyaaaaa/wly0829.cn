@@ -9,7 +9,7 @@
     "count audience and transferability once; do not repeatedly punish a project for being specialized",
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
-  "display_rule": "render only published projects at their fixed final_rank; missing ranks remain absent and never create placeholder cards or routes",
+  "display_rule": "render only published projects in final_rank order, with consecutive visible card numbers from 1 through the displayed project count; missing internal ranks never create placeholder cards or routes",
   "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused.",
   "construction_rule": "Gemini selects the smallest final_rank still marked planned after the owner reports its latest completed project; the next assignment does not wait for Astra acceptance, UI work, integration or publication. Astra works on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership. Combine results for final local acceptance and respect the current website publication hold.",
   "projects": [

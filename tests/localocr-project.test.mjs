@@ -111,24 +111,33 @@ function sha256(bytes) {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
-function pngDimensions(bytes) {
-  assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], "gallery asset is not a PNG");
-  return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+function imageDimensions(bytes) {
+  if (bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) {
+    return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+  }
+  assert.equal(bytes.toString("ascii", 0, 4), "RIFF");
+  assert.equal(bytes.toString("ascii", 8, 12), "WEBP");
+  if (bytes.toString("ascii", 12, 16) === "VP8X") {
+    return { width: bytes.readUIntLE(24, 3) + 1, height: bytes.readUIntLE(27, 3) + 1 };
+  }
+  assert.equal(bytes.toString("ascii", 12, 16), "VP8L", "the OCR sample must use lossless WebP");
+  const dimensions = bytes.readUInt32LE(21);
+  return { width: (dimensions & 0x3fff) + 1, height: ((dimensions >>> 14) & 0x3fff) + 1 };
 }
 
-test("LocalOCR public sample gallery preserves declared bytes, hashes, and PNG dimensions", async () => {
+test("LocalOCR public sample gallery preserves source identities and verified display bytes and dimensions", async () => {
   assert.ok(Array.isArray(localOcrProject.gallery) && localOcrProject.gallery.length >= 1);
   for (const item of localOcrProject.gallery) {
     const relativePath = item.src.replace(/^\//, "");
     const publicBytes = await readFile(path.join(projectRoot, "public", relativePath));
     const distBytes = await readFile(path.join(projectRoot, "dist", relativePath));
-    assert.equal(publicBytes.length, item.originalBytes, `${item.src} public byte count drifted`);
-    assert.equal(sha256(publicBytes), item.originalSha256, `${item.src} public SHA-256 drifted`);
-    assert.equal(distBytes.length, item.originalBytes, `${item.src} dist byte count drifted`);
-    assert.equal(sha256(distBytes), item.originalSha256, `${item.src} dist SHA-256 drifted`);
+    assert.equal(publicBytes.length, item.displayBytes || item.originalBytes, `${item.src} public byte count drifted`);
+    assert.equal(sha256(publicBytes), item.displaySha256 || item.originalSha256, `${item.src} public SHA-256 drifted`);
+    assert.equal(distBytes.length, item.displayBytes || item.originalBytes, `${item.src} dist byte count drifted`);
+    assert.equal(sha256(distBytes), item.displaySha256 || item.originalSha256, `${item.src} dist SHA-256 drifted`);
     assert.deepEqual([...distBytes], [...publicBytes], `${item.src} dist bytes differ from the public source asset`);
-    assert.deepEqual(pngDimensions(publicBytes), { width: item.width, height: item.height }, `${item.src} declared PNG dimensions drifted`);
-    assert.deepEqual(pngDimensions(distBytes), { width: item.width, height: item.height }, `${item.src} dist PNG dimensions drifted`);
+    assert.deepEqual(imageDimensions(publicBytes), { width: item.width, height: item.height }, `${item.src} declared dimensions drifted`);
+    assert.deepEqual(imageDimensions(distBytes), { width: item.width, height: item.height }, `${item.src} dist dimensions drifted`);
   }
 
   const rawArtifacts = [

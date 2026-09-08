@@ -105,7 +105,7 @@ export const pcPanelHubProject = {
       sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
-      src: "/media/pc-panel-hub/turzx-live-frame-current.png",
+      src: "/media/pc-panel-hub/turzx-live-frame-current.webp",
       thumbnail: "/media/pc-panel-hub/thumbs/turzx-live-frame-current.webp",
       alt: "PC Panel Hub 480×1920 机箱副屏当前生产发送帧",
       caption: "2026-08-30 从当前生产发送循环取得的 480×1920 无损帧：frame 32986 已通过 command 204 差分路径写入 COM7，sent 32986、failed 0，PNG 比同帧 heartbeat（心跳）晚约 7.8 ms 落盘。公开版仅遮盖精确天气地点与前台应用名，其余像素来自同一实时帧；这不是设计稿或测试 fixture（固定演示数据）。",
@@ -117,7 +117,7 @@ export const pcPanelHubProject = {
       sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
-      src: "/media/pc-panel-hub/turzx-renderer-current.png",
+      src: "/media/pc-panel-hub/turzx-renderer-current.webp",
       thumbnail: "/media/pc-panel-hub/thumbs/turzx-renderer-current.webp",
       alt: "PC Panel Hub 当前 Renderer 使用公开安全数据生成的 480×1920 确定性预览",
       caption: "当前 Renderer 代码使用公开安全 fixture（固定演示数据）直接生成的 480×1920 确定性输出：CPU、GPU、FPS、内存、网络、磁盘和进程层级都来自现役版式，不再使用旧 SVG 设计稿冒充实际渲染结果。",
@@ -129,7 +129,7 @@ export const pcPanelHubProject = {
       sourceCommit: "2717ecb4c37bd9e3a0e4a635384ee5a2458c8399"
     },
     {
-      src: "/media/pc-panel-hub/hs2-max-six-demo.png",
+      src: "/media/pc-panel-hub/hs2-max-six-demo.webp",
       thumbnail: "/media/pc-panel-hub/thumbs/hs2-max-six-demo.webp",
       alt: "HS2 曲面 OLED 六卡满载软件演示",
       caption: "HS2 max-six 软件演示：媒体、游戏、系统音量和三条合成通知在 2288×1048 曲面分区内密集排布，验证六卡容量、优先级与补位；不是应用实拍或实体 OLED 验收。",
@@ -141,7 +141,7 @@ export const pcPanelHubProject = {
       sourceCommit: "271ffd25aae11e2f216993ec5595648167ab84bb"
     },
     {
-      src: "/media/pc-panel-hub/hs2-hardware-alert-demo.png",
+      src: "/media/pc-panel-hub/hs2-hardware-alert-demo.webp",
       thumbnail: "/media/pc-panel-hub/thumbs/hs2-hardware-alert-demo.webp",
       alt: "HS2 高优先级硬件告警软件演示",
       caption: "HS2 高优先级硬件告警演示；96°C 与持续 30 秒都是测试 fixture（固定演示数据），不读取本机传感器，也不证明实体屏已显示。",
@@ -153,7 +153,7 @@ export const pcPanelHubProject = {
       sourceCommit: "271ffd25aae11e2f216993ec5595648167ab84bb"
     },
     {
-      src: "/media/pc-panel-hub/hs2-placement-recovery-design.png",
+      src: "/media/pc-panel-hub/hs2-placement-recovery-design.webp",
       thumbnail: "/media/pc-panel-hub/thumbs/hs2-placement-recovery-design.webp",
       alt: "HS2 浮层落点状态与完整恢复策略设计图",
       caption: "浮层落点策略图区分 healthy、drifted、not-visible 与 recovered；只有真实错位请求完整重建，隐藏辅助窗口不触发循环回收。这是代码策略设计，不是当前机器回读。",
