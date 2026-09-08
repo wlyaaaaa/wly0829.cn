@@ -37,9 +37,10 @@ test("the final project plan fixes one complete value order without placeholder 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
   assert.equal(published.length, 31);
-  assert.equal(planned.length, 0);
-  assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "deferred");
-  assert.ok(readme.includes("没有待建项目"));
+  assert.equal(planned.length, 1);
+  assert.equal(planned[0].id, "emerald-veil");
+  assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "planned");
+  assert.ok(readme.includes("#29 Emerald Veil"));
   for (const retired of ["codex-app-power-user-playbook", "rtx5090d-ollama-agent-bundle"]) {
     assert.ok(!plan.projects.some((item) => item.id === retired));
     assert.ok(!registry.projects.some((item) => item.id === retired));

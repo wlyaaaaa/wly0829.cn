@@ -305,7 +305,7 @@ function Header({ path, search = "" }) {
             >{item.label}</SiteLink>
           ))}
         </nav>
-        {path === "/" ? <a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
+        {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
@@ -346,7 +346,7 @@ function Header({ path, search = "" }) {
             ))}
           </nav>
         </div>
-        <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}><GlobalSearch path={path} search={search} autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /></div>
+        <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}>{path !== "/" ? <GlobalSearch path={path} search={search} autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /> : null}</div>
         </div>
       </header>
       <button className="menu-backdrop" type="button" tabIndex={-1} aria-label="关闭顶部浮层背景" onClick={() => { setMenuOpen(false); setSearchOpen(false); }} hidden={!menuOpen && !searchOpen} />

@@ -10,7 +10,7 @@
 - 五份活动规则：同一 `/rules` 工作台内切换
 - Skills：按当前实际价值排序，每项包含意义、决策影响、当前规则、术语、失败恢复和验证
 
-最终规划保留 32 个独立项目，使用修订后的 1–33 价值名次，rank 15 留空；用户本轮移除 Playbook 后明确将后续编号减一，其余顺序不变。目前本地候选有 31 个完整内容包；第 27 项 WeChat History AI Bridge 已完成源修复与内容验收并接入候选，第 30、31 项也已完成源修正并接入，第 29 项 Emerald Veil 因有增量由用户暂缓。Gemini 当前没有待建项目，另 1 项暂缓。RTX 5090D Ollama 项目按用户要求退出清单，CACB 与 Codex Remote 分别改为 32、33。Gemini 的下一项无需等待 Astra 验收、界面或发布；Astra 的设计、内容、实际项目验收、自动修复和吸收并行推进，最终合并验证。本轮网站只保留本地候选供本人查看，不自动发布。Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
+最终规划保留 32 个独立项目，使用修订后的 1–33 价值名次，rank 15 留空；用户本轮移除 Playbook 后明确将后续编号减一，其余顺序不变。目前本地候选有 31 个完整内容包；第 27 项 WeChat History AI Bridge 已完成源修复与内容验收并接入候选，第 30、31 项也已完成源修正并接入，用户现已重新要求 `#29 Emerald Veil` 壁纸项目的建设提示词，当前待建1项；收到交付后由Astra验收、修复并吸收。RTX 5090D Ollama 项目按用户要求退出清单，CACB 与 Codex Remote 分别改为 32、33。Gemini 的下一项无需等待 Astra 验收、界面或发布；Astra 的设计、内容、实际项目验收、自动修复和吸收并行推进，最终合并验证。本轮网站只保留本地候选供本人查看，不自动发布。Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、内容包、TODO 或未来施工项；`md-triple-tactics-talent-solver` 只保留为 System 的历史 GitHub 总账资产，不属于独立项目规划，也不生成项目卡、路由、内容包或未来施工项。
 
 排序按理性多数认可的综合净价值判断：既看普适直接收益和防损，也给已有真实消费者的控制面有限乘数，再按成熟度修正兑现概率并扣除采用、维护、复杂度和副作用成本；不会把下游价值重复相加，也不因本人当前使用频率、历史建设顺序或个人偏好加分。所有不单独成卡的关系说明都已在现有项目或 System 中闭合，当前没有非卡说明 TODO（待办）。CACB、学习方法、Codex Remote 和 personal-health 是 owner 明确指定的 `curated_packaging + manual_owner_only` 项目；其余已发布项目默认 `real_dashboard`。规则页始终读取 verified current E release。现有 PUBLIC 目标已获长期授权：已登记刷新和选定项目通过内容、测试、构建、公开门与预览后，默认自动 normal-push `main`、等待 Pages 并公网回读。
 

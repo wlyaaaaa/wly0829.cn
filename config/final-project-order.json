@@ -186,8 +186,8 @@
       "final_rank": 29,
       "id": "emerald-veil",
       "title": "Emerald Veil",
-      "state": "deferred",
-      "construction_note": "Owner deferred construction on 2026-09-07 because this project has incremental changes; resume only when the owner brings it back into the queue.",
+      "state": "planned",
+      "construction_note": "Owner requested the wallpaper project prompt on 2026-09-07, resuming rank29 for Gemini website construction. Source remains read-only for Gemini; Astra accepts and repairs after delivery.",
       "source": "wlyaaaaa/emerald-veil"
     },
     {

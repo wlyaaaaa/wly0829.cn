@@ -6538,6 +6538,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 }
 
 /* Daily entry and project reading hierarchy. The background field is unchanged. */
+.home-search-dock { grid-column: 3; grid-row: 1; align-self: center; min-width: 0; }
+@media (max-width: 741px) { .home-search-dock { display: none; } }
 .desktop-home-search {
   display: inline-flex;
   grid-column: 3;
@@ -6568,8 +6570,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 .daily-home-hero > h1 { font-size: clamp(38px, 4vw, 60px); line-height: 1.15; letter-spacing: -0.04em; }
 .daily-home-hero > h2 { margin-top: 14px; font-size: 24px; font-weight: 500; }
 .daily-home-intro { max-width: 780px; margin: 13px 0 24px; color: var(--muted-strong); font-size: 16px; }
-.daily-home-search { max-width: 850px; scroll-margin-top: calc(var(--header-height) + 24px); }
-.daily-home-search .global-search-form { min-height: 62px; border: 1px solid #91c9a4; border-bottom: 2px solid var(--green); padding: 10px 18px; background: #fff; }
+.daily-home-search { --home-search-height: 62px; min-height: var(--home-search-height); max-width: 850px; scroll-margin-top: calc(var(--header-height) + 24px); }
+.daily-home-search .global-search-form { min-height: var(--home-search-height); border: 1px solid #91c9a4; border-bottom: 2px solid var(--green); padding: 10px 18px; background: #fff; }
 .daily-home-search .global-search-form input { font-size: 16px; }
 .daily-home-search .global-search-results { z-index: 45; }
 .system-project-external-card { text-decoration: none; }
@@ -6638,7 +6640,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
   .daily-home-hero > h1 { font-size: 36px; }
   .daily-home-hero > h2 { font-size: 19px; margin-top: 12px; }
   .daily-home-intro { font-size: 14px; margin-bottom: 20px; }
-  .daily-home-search .global-search-form { min-height: 54px; padding: 8px 12px; }
+  .daily-home-search { --home-search-height: 54px; }
+  .daily-home-search .global-search-form { padding: 8px 12px; }
   .daily-home-search .global-search-form input { font-size: 14px; }
   .daily-entry-links { grid-template-columns: 1fr; gap: 8px; margin: 17px 0; }
   .daily-entry-links > a { padding: 12px 15px; gap: 2px 10px; }

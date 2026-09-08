@@ -251,6 +251,33 @@ function searchScopePresentation(scope) {
   return { label: "全站", placeholder: "搜索项目、系统、规则或 Skills", help: "搜索全部公开内容" };
 }
 
+function initializeHomeSearchDock() {
+  const home = document.getElementById("home-search");
+  const dock = document.querySelector(".home-search-dock");
+  const search = home?.querySelector(".global-search");
+  if (!home || !dock || !search) return;
+  const header = document.querySelector(".site-header");
+  const mobile = document.getElementById("mobile-site-search");
+  const shortcut = dock.querySelector("a");
+  const mobileButton = document.querySelector(".mobile-search-button");
+  const update = () => {
+    const desktop = getComputedStyle(dock).display !== "none";
+    const above = home.getBoundingClientRect().bottom <= header.getBoundingClientRect().bottom;
+    const target = desktop ? (above ? dock : home) : (mobile.hidden ? home : mobile);
+    if (search.parentElement === target) return;
+    const focused = search.contains(document.activeElement) ? document.activeElement : null;
+    search.classList.toggle("desktop-search", target === dock);
+    search.classList.toggle("mobile-search-control", target === mobile);
+    target.append(search);
+    shortcut.hidden = target === dock;
+    if (focused) (target === home && above && !desktop ? mobileButton : focused).focus({ preventScroll: true });
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  document.addEventListener("header-search-change", update);
+  update();
+}
+
 function normalizedSearchScope(value) {
   if (["all", "project", "system", "rules", "skills"].includes(value)) return value;
   if (value?.startsWith("project:")) {
@@ -364,6 +391,7 @@ function initializeHeader() {
     searchButton.setAttribute("aria-expanded", String(searchOpen));
     menuButton.setAttribute("aria-label", menuOpen ? "关闭外部链接" : "打开外部链接");
     searchButton.setAttribute("aria-label", searchOpen ? "关闭搜索" : "打开搜索");
+    document.dispatchEvent(new Event("header-search-change"));
     if (searchOpen) window.requestAnimationFrame(() => searchPanelElement.querySelector("input")?.focus());
     if (returnFocus && prior) (prior === "search" ? searchButton : menuButton).focus();
   }
@@ -1278,6 +1306,7 @@ initializeContinuationBriefs();
 initializeSearchResultsPage();
 document.querySelectorAll(".project-gallery").forEach(initializeGallery);
 initializeHeader();
+initializeHomeSearchDock();
 initializeRulesWorkbench();
 initializeSkillCategories();
 initializeProjectReadingLayers();
