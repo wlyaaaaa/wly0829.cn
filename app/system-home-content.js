@@ -569,10 +569,10 @@ export const systemProjectInventory = {
   privateCount: 22,
   localCloneCount: 45,
   remoteOnlyCount: 3,
-  detailedPageCount: 23,
+  detailedPageCount: 29,
   identitySha256: "sha256:97f5c6ba178da1062ba329c59b7fd46e859524546c9c433bb0921b80733b6602",
   mappingSha256: "sha256:6597bf109f04bd76fe02aa9b3ba17012c41b3b16ea2ba85cb1a1aa0176fa784b",
-  description: "2026-09-07 的有界来源记录 48 个 Git 仓库：26 个公开、22 个私有，45 个已验证本地副本与 3 个仅远端；仓库总账和网站选定范围分别说明。网页目录仍有二十三个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
+  description: "2026-09-07 的有界来源记录 48 个 Git 仓库：26 个公开、22 个私有，45 个已验证本地副本与 3 个仅远端；仓库总账和网站选定范围分别说明。当前网页候选包含二十九个完整参考页。DevConfig Backup 的配置包已核对本地/G/Drive 同代与 MD5 一致，微信云端与原生恢复继续保留自己的验收边界。媒体库是本地项目，单独说明而不增加 Git 仓库数；网站自身只负责呈现。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -590,8 +590,8 @@ export const systemProjectDomains = [
     assets: [
       { id: "agents", title: "AI 协作规则与能力中心", repo: ".agents", role: "让 AI 知道听谁的、能做什么、该用哪种能力、多个协作者怎样不互相覆盖，以及何时需要停下来交给人。", kind: "核心基座", href: "/projects/agents" },
       { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
-      { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: projectLedgerHref },
-      { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: projectLedgerHref },
+      { id: "ai-workbench-playbook", title: "AI 工作台使用手册", repo: "codex-app-power-user-playbook", role: "把 Skills、插件、浏览器、工作树和长期任务的实测方法整理成可复用说明。", kind: "使用指南", href: "/projects/codex-app-power-user-playbook" },
+      { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: "/projects/llm-backend-toolkit" },
       { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Telegram 与飞书已配置，但本轮消息进出闭环仍是 0/2 未验，Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
       { id: "local-ai-runtime", title: "本地 AI 运行环境", repo: "rtx5090d-ollama-agent-bundle", role: "保存本地推理端点、模型别名、上下文策略和客户端配置的可复现基线；当前精确运行状态仍回到机器事实。", kind: "运行环境", href: projectLedgerHref }
     ]
@@ -608,10 +608,10 @@ export const systemProjectDomains = [
     assets: [
       { id: "codex-local-remote", title: "跨设备任务连续性的历史产品", repo: "codex-local-remote", role: "曾让手机继续桌面上的同一任务、审批、文件和队列；当前入口已冻结，只保留设计与历史验收证据。", kind: "历史能力", href: "/projects/codex-remote" },
       { id: "emerald-veil", title: "空闲屏幕保护层", repo: "emerald-veil", role: "电脑闲置时使用可逆、点击穿透的原生动态覆盖层，减少静态画面暴露。", kind: "桌面能力", href: projectLedgerHref },
-      { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前配对与在线状态另行验证。", kind: "集成能力", href: projectLedgerHref },
+      { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前没有可用 KDE 对端，真实双机传输尚未验收。", kind: "集成能力", href: "/projects/meshclip-kit" },
       { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
       { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复。", kind: "核心基座", href: "/projects/pcconfig" },
-      { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "代理异常退出后诊断并清理残留网络状态，让 Windows 回到可验证的直连。", kind: "修复工具", href: projectLedgerHref },
+      { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "诊断代理退出后的残留设置，默认只清失效的本机端口；明确选择直连时才清理所列活动代理。没有健康物理默认出口时保留路由。", kind: "修复工具", href: "/projects/proxyclean" },
       { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "让内存盘只承载可重建缓存，并在异常占用或结构损坏时安全重建。", kind: "缓存守护", href: projectLedgerHref },
       { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
       { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
@@ -646,7 +646,7 @@ export const systemProjectDomains = [
     unavailable: "源文件、字体、渲染或媒体链不完整时保留可编辑中间结果和具体问题，不复用旧输出冒充本轮成品。",
     assets: [
       { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "GitHub 总账中的历史策略与视频流水线资产，不属于 34 个保留独立项目，不生成项目卡、路由、内容包或未来施工项。", kind: "历史资产", href: projectLedgerHref },
-      { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: projectLedgerHref },
+      { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: "/projects/typora-theme-pack" },
       { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
   },
@@ -694,7 +694,7 @@ export const systemProjectDomains = [
     unavailable: "密钥、恢复因子、原备份或目标身份不足时停止精确恢复，不显示秘密、不覆盖冲突文件，也不声称备份可用。",
     assets: [
       { id: "ai-memory-backup-a", title: "项目记忆备份", role: "保存跨项目持久记忆的私人恢复副本，不保存原始会话。", kind: "恢复资产", href: projectLedgerHref },
-      { id: "ai-memory-backup-b", title: "AI 工作配置、能力与记忆备份", role: "把选定配置、Skills、记忆与能力入口保存在本地热备和私人远端，供换机恢复。", kind: "恢复资产", href: projectLedgerHref },
+      { id: "ai-memory-backup-b", title: "Codex 配置、记忆与会话备份", role: "配置、Skills 和记忆进入轻量本地及私人远端备份；完整会话另有 G 盘快照与 H 盘离线副本。两条恢复路径分别核对，不把当前源文件清单当成已备份内容。", kind: "恢复资产", href: "/projects/codex-memory" },
       { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据与恢复清单收成可选择回填的候选包，并分别维护本地、G 盘和 Drive 结果；微信回填先预检并保留回滚点，官方客户端是否可用仍由人工验收。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "ai-memory-backup-c", title: "AI 工作区配置与可读笔记备份", role: "保存外部 AI 工作区的选定配置和人类可读笔记，不复制原始对话。", kind: "恢复资产", href: projectLedgerHref },
       { id: "key", title: "加密密钥备份", repo: "Key", role: "只保存密文，让关键恢复材料有独立私人副本；首页不读取或解密内容。", kind: "加密备份", href: projectLedgerHref },

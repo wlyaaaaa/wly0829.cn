@@ -54,6 +54,8 @@ import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { capabilityRelationLabels, projectReferenceLinks, skillProjectLinks } from "./content-capability-links.js";
 import { searchPanel, searchScopeById, searchScopeForPath, searchScopeOptionsForPath } from "./search.js";
 import { createTermAnnotator } from "./term-annotator.js";
+import { searchResultExcerpt } from "./compact-search.js";
+import { ProjectContinuation } from "./continuation-brief.jsx";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -154,7 +156,7 @@ function GlobalSearch({ path = "/", search = "", autoFocus = false, className = 
             <p aria-live="polite">{usesPartialAllIndex ? (results.length ? `显示最相关的前 ${Math.min(results.length, 9)} 项` : "快速结果未命中") : (results.length > 9 ? `找到 ${results.length} 项，显示前 9 项` : `找到 ${results.length} 项`)}</p>
             {results.length ? results.slice(0, 9).map((entry) => (
               <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`} onNavigate={() => { setOpen(false); setQuery(""); }}>
-                <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={16} aria-hidden="true" />
+                <span>{entry.type}</span><span><strong>{entry.title}</strong><small>{searchResultExcerpt(entry, query)}</small></span><ArrowRight size={16} aria-hidden="true" />
               </SiteLink>
             )) : <div className="global-search-empty">{usesPartialAllIndex ? "快速结果没找到；按回车查看完整结果，还会继续搜索项目正文。" : "没找到匹配内容。可以换成日常说法、缩短关键词，或切换搜索范围。"}</div>}
             {usesPartialAllIndex || results.length > 9 ? <SiteLink className="global-search-all-results" href={`/search/?q=${encodeURIComponent(query)}&scope=${encodeURIComponent(scope)}`}>{usesPartialAllIndex ? "查看完整搜索结果" : `查看全部 ${results.length} 条结果`}<ArrowRight size={16} aria-hidden="true" /></SiteLink> : null}
@@ -303,7 +305,7 @@ function Header({ path, search = "" }) {
             >{item.label}</SiteLink>
           ))}
         </nav>
-        <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />
+        {path === "/" ? <a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
@@ -527,7 +529,7 @@ function ProjectCard({ entry }) {
   const repositoryUrl = publicRepositoryUrl(entry);
 
   return (
-    <article className={`project-card-shell${entry.kind === "learning" ? " learning-project-card" : ""}`}>
+    <article className={`project-card-shell reader-project-card${entry.kind === "learning" ? " learning-project-card" : ""}`}>
       {repositoryUrl ? (
         <a className="project-visibility project-repository-button" href={repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={`打开 ${currentProject.title} 的公开 GitHub 仓库`}>
           <SiGithub size={15} aria-hidden="true" /><span>GitHub 仓库</span>
@@ -1052,6 +1054,7 @@ function ProjectOverview({ entry }) {
       <ProjectReadingNav />
 
       <ProjectReadingPanel id="quick" selected>
+        {currentProject.gallery?.length ? <a className="project-result-preview" href={currentProject.gallery[0].src} data-project-gallery-preview=""><img src={currentProject.gallery[0].thumbnail || currentProject.gallery[0].src} alt={currentProject.gallery[0].alt} loading="lazy" decoding="async" /><span><small>{currentProject.gallery[0].evidenceLabel || currentProject.gallery[0].categoryLabel || "项目图示"}</small><strong>先看图示与结果</strong><span>{copy(currentProject.gallery[0].caption)}</span><b>打开大图 <ArrowRight size={15} aria-hidden="true" /></b></span></a> : null}
         <section className="document-section document-section-first">
           <p className="section-kicker">先说产品与现实用途</p>
           <h2>最快了解这个项目</h2>
@@ -1417,6 +1420,7 @@ function ProjectPage({ entry, module }) {
   return (
     <div className={`page-frame project-page${entry.kind === "learning" ? " learning-project-page" : ""}${entry.kind === "daily-preferences" ? " daily-preferences-project-page" : ""}`}>
       <ProjectHero entry={entry} module={module} />
+      <ProjectContinuation entry={entry} module={module} />
       <div className="project-layout"><ProjectNav entry={entry} current={module?.slug} />{module ? <ModuleDetail entry={entry} module={module} /> : <ProjectOverview entry={entry} />}</div>
     </div>
   );
@@ -1771,13 +1775,18 @@ function SystemSectionNavigation() {
 function SystemPage() {
   return (
     <div className="system-home">
-      <header className="system-frame system-home-hero" id="general-ai">
+      <header className="system-frame system-home-hero daily-home-hero" id="general-ai">
+        <p className="section-kicker">我的工作入口</p>
         <h1>{systemHomeHero.eyebrow}</h1>
         <h2>{systemHomeHero.title}</h2>
-        <div className="system-home-hero-copy">{systemHomeHero.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
-        <div className="system-home-role-grid">
-          {systemHomeHero.roles.map((role, index) => <article key={role.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{role.title}</strong><p>{role.body}</p></article>)}
+        <p className="daily-home-intro">找回资料，了解项目，继续手头的工作。输入想解决的问题，或从下面的入口开始。</p>
+        <div id="home-search" className="daily-home-search"><GlobalSearch path="/" className="hero-search-control" resultId="home-global-search-results" /></div>
+        <div className="daily-entry-links">
+          <SiteLink href="/projects"><span>继续一个项目</span><small>{projectCatalog.length} 个项目 · 用途、成果与完整说明</small><ArrowRight size={20} aria-hidden="true" /></SiteLink>
+          <SiteLink href="/skills"><span>找到可用能力</span><small>找资料、做文档、处理电脑问题</small><ArrowRight size={20} aria-hidden="true" /></SiteLink>
+          <a href="#system-workflows"><span>从一件具体事情开始</span><small>看看输入、过程与最后的结果</small><ArrowRight size={20} aria-hidden="true" /></a>
         </div>
+        <details className="system-home-about"><summary>了解这套系统怎样工作</summary><div className="system-home-hero-copy">{systemHomeHero.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="system-home-role-grid">{systemHomeHero.roles.map((role, index) => <article key={role.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{role.title}</strong><p>{role.body}</p></article>)}</div></details>
       </header>
 
       <SystemSectionNavigation />
@@ -1853,7 +1862,7 @@ function SearchResultsPage({ search }) {
       <header><p className="section-kicker">完整搜索结果</p><h1>{query ? `“${query}”` : "输入一个名称或问题"}</h1><p>当前范围：{requestedScope.label}。修改查询或范围请直接使用页头唯一的搜索框。</p></header>
       {!query ? <div className="search-results-empty"><strong>{requestedScope.help}</strong><p>试试：{requestedScope.examples.join(" · ")}</p></div> : null}
       {query && !results.length ? <div className="search-results-empty"><strong>没找到匹配内容</strong><p>可以换成日常说法、缩短关键词，或在页头切换搜索范围。</p></div> : null}
-      {orderedGroups.map(([group, entries]) => <section className="search-result-group" key={group}><div><h2>{group}</h2><span>{entries.length} 项</span></div>{entries.map((entry) => <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`}><span>{entry.type}</span><span><strong>{entry.title}</strong><small>{entry.detail}</small></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</section>)}
+      {orderedGroups.map(([group, entries]) => <section className="search-result-group" key={group}><div><h2>{group}</h2><span>{entries.length} 项</span></div>{entries.map((entry) => <SiteLink href={entry.href} key={`${entry.type}-${entry.href}`}><span>{entry.type}</span><span><strong>{entry.title}</strong><small>{searchResultExcerpt(entry, query, 140)}</small></span><ArrowRight size={18} aria-hidden="true" /></SiteLink>)}</section>)}
     </div>
   );
 }

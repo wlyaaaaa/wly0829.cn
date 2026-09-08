@@ -82,7 +82,7 @@ test("scope filtering, href deduplication and empty or unrelated queries remain 
   assert.deepEqual(searchPanel("   "), []);
   assert.deepEqual(searchPanel("zzzxqv79802"), []);
   assert.ok(searchPanel("卡顿", "project").every((entry) => entry.type === "项目"));
-  assert.equal(searchPanel("ProxyClean", "project")[0]?.href, "/#system-project-asset-proxy-clean");
+  assert.equal(searchPanel("ProxyClean", "project")[0]?.href, "/projects/proxyclean");
 });
 
 test("corrections drop rejected topics without dropping an inherited action", () => {
@@ -103,6 +103,29 @@ test("adding unrelated technical detail does not penalize an existing match", ()
   const entry = { type: "项目", title: "资料查找", detail: "找回以前保存的资料", href: "/find", search: "查找 资料" };
   const expanded = { ...entry, search: `${entry.search} ${"unused-technical-command ".repeat(100)}` };
   assert.equal(compactSearchScore(entry, "帮我找回那份资料"), compactSearchScore(expanded, "帮我找回那份资料"));
+});
+
+test("Chinese word boundaries do not invent topics while split nouns remain searchable", () => {
+  const entries = [
+    { type: "项目", title: "口令管理", detail: "将口令列表导出", href: "/export", search: "" },
+    { type: "项目", title: "出口指示", detail: "指向离开房间的方向", href: "/exit", search: "" },
+    { type: "项目", title: "桌面小屏", detail: "显示运行状态", href: "/small-screen", search: "" },
+    { type: "项目", title: "大屏控制", detail: "显示运行状态", href: "/large-screen", search: "" }
+  ];
+  assert.deepEqual(searchCompactEntries(entries, "导出口令列表").map((entry) => entry.href), ["/export"]);
+  assert.equal(searchCompactEntries(entries, "桌边小屏的运行状态")[0]?.href, "/small-screen");
+});
+
+test("lookup verb variants cannot outweigh the requested object through rarity alone", () => {
+  const entries = [
+    { type: "项目", title: "日志归档", detail: "找到以前保存的日志", href: "/logs", search: "" },
+    { type: "项目", title: "数据质量", detail: "找出数据中的错误", href: "/data", search: "" },
+    ...Array.from({ length: 8 }, (_, index) => ({ type: "Skill", title: `格式工具 ${index}`, detail: "日志格式转换", href: `/format-${index}`, search: "" }))
+  ];
+  for (const verb of ["找出", "查找", "寻找", "搜索", "检索", "找到", "找回"]) {
+    const query = `请${verb}去年六月的日志`;
+    assert.equal(searchCompactEntries(entries, query)[0]?.href, "/logs", query);
+  }
 });
 
 test("short Chinese words and known technical identifiers do not dissolve into unrelated fragments", () => {

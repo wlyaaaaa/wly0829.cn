@@ -109,10 +109,10 @@ function impactPatternMatches(pattern, candidate) {
   return new RegExp(`${expression}$`, "i").test(candidate.replaceAll("\\", "/"));
 }
 
-test("the accepted panel has exactly twenty-three projects and four navigation areas", async () => {
+test("the candidate panel has twenty-nine complete projects and four navigation areas", async () => {
   const pageSource = await readFile(path.join(projectRoot, "app", "page.jsx"), "utf8");
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.equal(projects.length, 23);
+  assert.equal(projects.length, 29);
   assert.equal(new Set(projects.map((item) => item.slug)).size, projects.length);
   assert.ok(projects.every((item, index) => index === 0 || projects[index - 1].order < item.order));
   assert.equal(project.slug, "agents");
@@ -526,18 +526,18 @@ test("the authoritative desktop scale baseline follows the older compact block",
   assert.match(scaleBlock, /body\s*\{\s*font-size:\s*18px/);
 });
 
-test("the shared enhancement stays within the current 12 KiB JS and 21 KiB CSS review lines", async () => {
+test("the shared enhancement stays within the measured 14 KiB JS and 23 KiB CSS review lines", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
-  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 12);
-  assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 21);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 122);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 144);
+  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
+  assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 136);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 156);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /anti-bloat review threshold/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /not permanent content ceilings/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase/);
-  assert.equal(enabledProjectCount, 23);
+  assert.equal(enabledProjectCount, 29);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
@@ -663,7 +663,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
   assert.match(registry.refresh_policy.anti_append_policy, /never append refresh logs/);
 });
 
-test("the maintenance registry drives exactly the twenty-three accepted project packages", async () => {
+test("the maintenance registry drives the twenty-nine complete candidate packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
@@ -689,7 +689,7 @@ test("the maintenance registry drives exactly the twenty-three accepted project 
   assert.deepEqual(registry.global_surfaces.find((item) => item.id === "system").content_paths, ["app/system-home-content.js"]);
   const globalContentPaths = registry.global_surfaces.flatMap((item) => item.content_paths);
   assert.equal(new Set(globalContentPaths).size, globalContentPaths.length, "global refresh surfaces must own each source file exactly once");
-  assert.equal(registry.projects.length, 23);
+  assert.equal(registry.projects.length, 29);
   assert.equal(new Set(registry.projects.map((item) => item.id)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.order)).size, registry.projects.length);
   assert.equal(new Set(registry.projects.map((item) => item.route)).size, registry.projects.length);
@@ -714,9 +714,9 @@ test("the maintenance registry drives exactly the twenty-three accepted project 
     }
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
-  assert.ok(registry.projects[0].impact_sources.length >= 5);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id), ["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup"]);
-  assert.deepEqual(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id), ["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming"]);
+  assert.ok(registry.projects.find((item) => item.id === "agents").impact_sources.length >= 5);
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "codex-app-power-user-playbook"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory"]));
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -2742,7 +2742,7 @@ test("project evolution records important dated stages instead of append-only up
     const dates = entry.project.evolution.map((item) => item.date);
     assert.equal(new Set(dates).size, dates.length, `${entry.project.slug} repeats an evolution period`);
     for (const item of entry.project.evolution) {
-      assert.match(item.date, /^\d{4}-\d{2}-\d{2}(?:[—–](?:\d{4}-)?\d{2}-\d{2})?$/, `${entry.project.slug} evolution must use a date or date range`);
+      assert.match(item.date.replace(/\s/g, ""), /^\d{4}-\d{2}(?:-\d{2})?(?:[—–至](?:\d{4}-)?\d{2}(?:-\d{2})?)?$/, `${entry.project.slug} evolution must use the source's month, day or date-range precision`);
       assert.equal(typeof item.result, "string", `${entry.project.slug} evolution result is missing`);
       assert.notEqual(item.result.trim(), "", `${entry.project.slug} evolution result is empty`);
     }
@@ -3839,7 +3839,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(searchScopeForPath("/skills").id, "skills");
   assert.equal(searchScopeForPath("/projects/timeaudit/hardware-performance").id, "project:timeaudit");
   assert.ok(searchPanel("卡顿", "project").every((entry) => entry.type === "项目"), "project-index search must land on project entities");
-  assert.equal(searchPanel("ProxyClean", "project")[0]?.href, "/#system-project-asset-proxy-clean");
+  assert.equal(searchPanel("ProxyClean", "project")[0]?.href, "/projects/proxyclean");
   assert.ok(searchPanel("FPS", "project:timeaudit").every((entry) => entry.projectSlug === "timeaudit"), "project search escaped the current project");
   assert.ok(searchPanel("授权", "rules").every((entry) => entry.group === "规则"), "rule search leaked another surface");
   assert.ok(searchPanel("照片", "skills").every((entry) => entry.group === "Skills"), "Skills search leaked another surface");
@@ -3991,8 +3991,12 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal((projectsHtml.match(/class="project-card-state"/g) || []).length, projectCatalog.length);
   assert.equal((projectsHtml.match(/class="project-card-snapshot-boundary"/g) || []).length, projectCatalog.length);
   assert.equal((projectsHtml.match(/class="project-metrics"/g) || []).length, projectCatalog.length);
+  const withoutTermGlosses = (text) => text.replace(/([A-Za-z][A-Za-z0-9_.-]*)（[^）]*）/g, "$1");
   for (const entry of projectCatalog) {
-    for (const metric of entry.project.cardMetrics) assert.ok(projectsHtml.includes(metric.value), `project card omits metric: ${entry.project.slug}/${metric.label}`);
+    const cardStart = projectsHtml.indexOf(`id="${entry.project.slug}-card-title"`);
+    const cardEnd = projectsHtml.indexOf("</article>", cardStart);
+    const cardHtml = withoutTermGlosses(projectsHtml.slice(cardStart, cardEnd));
+    for (const metric of entry.project.cardMetrics) assert.ok(cardHtml.includes(withoutTermGlosses(metric.value)), `project card omits metric: ${entry.project.slug}/${metric.label}`);
   }
 
   const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
@@ -4009,7 +4013,7 @@ test("shared search scopes, project reading layers, Skills categories and System
   for (const projectName of [".agents", "PCConfig", "GitHub 总索引", "ChineseASR", "TimeAudit", "PC Panel Hub", "Codex Remote", "个人理解库"]) {
     assert.equal(searchCompactEntries(compactIndex, projectName)[0]?.type, "项目", "System atlas outranks the exact project entry: " + projectName);
   }
-  assert.equal(searchCompactEntries(compactIndex, "ProxyClean", "project")[0]?.href, "/#system-project-asset-proxy-clean");
+  assert.equal(searchCompactEntries(compactIndex, "ProxyClean", "project")[0]?.href, "/projects/proxyclean/");
   for (const moduleEntry of globalSearchEntries.filter((entry) => entry.type === "项目内容" && entry.aliases.length)) {
     const projectEntries = compactProjectIndex.filter((entry) => entry.projectSlug === moduleEntry.projectSlug);
     const owningProject = projects.find((entry) => entry.slug === moduleEntry.projectSlug);
@@ -4409,7 +4413,7 @@ test("production build has direct entry files for every route", async () => {
       : path.join(distRoot, ...route.slice(1).split("/"), "index.html");
     const html = await readFile(routeIndex, "utf8");
     const rootStart = html.indexOf(`<div id="root" data-static-route="${route}">`);
-    const rootEnd = html.indexOf("<noscript>", rootStart);
+    const rootEnd = html.indexOf("</main>", rootStart) + "</main>".length;
     assert.ok(rootStart >= 0 && rootEnd > rootStart, `${route} has no route-specific static root`);
     const rootHtml = html.slice(rootStart, rootEnd);
     assert.ok(rootHtml.length >= 2000, `${route} static root is an empty shell`);

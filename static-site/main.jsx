@@ -1,5 +1,7 @@
 import "../app/style.css";
-import { searchCompactEntries } from "../app/compact-search.js";
+import { searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
+import "../app/continuation-brief.css";
+import { initializeContinuationBriefs } from "../app/continuation-brief.js";
 
 const searchEntries = [
   ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),
@@ -183,7 +185,7 @@ function initializeSearch(container) {
         const title = document.createElement("strong");
         title.textContent = entry.title;
         const detail = document.createElement("small");
-        detail.textContent = entry.detail;
+        detail.textContent = searchResultExcerpt(entry, query);
         copy.append(title, detail);
         const arrow = document.createElement("span");
         arrow.setAttribute("aria-hidden", "true");
@@ -257,7 +259,7 @@ function normalizedSearchScope(value) {
   return "all";
 }
 
-function createFullResultLink(entry) {
+function createFullResultLink(entry, query) {
   const link = document.createElement("a");
   link.href = entry.href;
   const type = document.createElement("span");
@@ -266,7 +268,7 @@ function createFullResultLink(entry) {
   const title = document.createElement("strong");
   title.textContent = entry.title;
   const detail = document.createElement("small");
-  detail.textContent = entry.detail;
+  detail.textContent = searchResultExcerpt(entry, query, 140);
   copy.append(title, detail);
   const arrow = document.createElement("span");
   arrow.setAttribute("aria-hidden", "true");
@@ -313,7 +315,7 @@ function initializeSearchResultsPage() {
       const count = document.createElement("span");
       count.textContent = `${entries.length} 项`;
       header.append(title, count);
-      section.append(header, ...entries.map(createFullResultLink));
+      section.append(header, ...entries.map((entry) => createFullResultLink(entry, query)));
       page.append(section);
     }
   }
@@ -1120,6 +1122,15 @@ function initializeGallery(gallery) {
   nextButton.addEventListener("click", () => showImage(activeIndex + 1));
   overlay.addEventListener("mousedown", (event) => { if (event.target === overlay) close(); });
   cards.forEach((card, index) => card.addEventListener("click", () => open(index, card)));
+  document.querySelectorAll("a[data-project-gallery-preview]").forEach((trigger) => {
+    const index = images.findIndex((image) => image.src === trigger.getAttribute("href"));
+    if (index < 0) return;
+    trigger.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      open(index, trigger);
+    });
+  });
 }
 
 function initializeFlowField() {
@@ -1258,6 +1269,7 @@ function centerCurrentProjectNavigation() {
 
 document.documentElement.dataset.enhanced = "true";
 document.querySelectorAll(".global-search").forEach(initializeSearch);
+initializeContinuationBriefs();
 initializeSearchResultsPage();
 document.querySelectorAll(".project-gallery").forEach(initializeGallery);
 initializeHeader();

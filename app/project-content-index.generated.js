@@ -16,9 +16,15 @@ import { project as project_ai_cli_profile_manager, modules as modules_ai_cli_pr
 import { project as project_work_delivery, modules as modules_work_delivery } from "./content-work-delivery.js";
 import { project as project_daily_preferences, modules as modules_daily_preferences } from "./content-daily-preferences.js";
 import { project as project_wechat_direct, modules as modules_wechat_direct } from "./content-wechatdirect.js";
+import { project as project_proxyclean, modules as modules_proxyclean } from "./content-proxyclean.js";
+import { project as project_codex_memory, modules as modules_codex_memory } from "./content-codex-memory.js";
+import { project as project_meshclip_kit, modules as modules_meshclip_kit } from "./content-meshclip-kit.js";
 import { project as project_video_scaffold, modules as modules_video_scaffold } from "./content-video-scaffold.js";
 import { project as project_sunshine_remote_streaming, modules as modules_sunshine_remote_streaming } from "./content-sunshine-remote-streaming.js";
+import { project as project_llm_backend_toolkit, modules as modules_llm_backend_toolkit } from "./content-llm-backend-toolkit.js";
+import { project as project_typora_theme_pack, modules as modules_typora_theme_pack } from "./content-typora-theme-pack.js";
 import { project as project_openclaw_gateway, modules as modules_openclaw_gateway } from "./content-openclaw-gateway.js";
+import { project as project_codex_app_power_user_playbook, modules as modules_codex_app_power_user_playbook } from "./content-codex-app-power-user-playbook.js";
 import { project as project_pc_panel_hub, modules as modules_pc_panel_hub } from "./content-pc-panel-hub.js";
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
@@ -41,9 +47,15 @@ export const projectContentPackages = new Map([
   ["work-delivery", { project: project_work_delivery, modules: modules_work_delivery, kind: "work-delivery" }],
   ["daily-preferences", { project: project_daily_preferences, modules: modules_daily_preferences, kind: "daily-preferences" }],
   ["wechat-direct", { project: project_wechat_direct, modules: modules_wechat_direct, kind: "wechat-direct" }],
+  ["proxyclean", { project: project_proxyclean, modules: modules_proxyclean, kind: "proxyclean" }],
+  ["codex-memory", { project: project_codex_memory, modules: modules_codex_memory, kind: "codex-memory" }],
+  ["meshclip-kit", { project: project_meshclip_kit, modules: modules_meshclip_kit, kind: "meshclip-kit" }],
   ["video-scaffold", { project: project_video_scaffold, modules: modules_video_scaffold, kind: "video-scaffold" }],
   ["sunshine-remote-streaming", { project: project_sunshine_remote_streaming, modules: modules_sunshine_remote_streaming, kind: "sunshine-remote-streaming" }],
+  ["llm-backend-toolkit", { project: project_llm_backend_toolkit, modules: modules_llm_backend_toolkit, kind: "llm-backend-toolkit" }],
+  ["typora-theme-pack", { project: project_typora_theme_pack, modules: modules_typora_theme_pack, kind: "typora-theme-pack" }],
   ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }],
+  ["codex-app-power-user-playbook", { project: project_codex_app_power_user_playbook, modules: modules_codex_app_power_user_playbook, kind: "codex-app-power-user-playbook" }],
   ["pc-panel-hub", { project: project_pc_panel_hub, modules: modules_pc_panel_hub, kind: "pc-panel-hub" }],
   ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
   ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }]

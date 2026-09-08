@@ -5,6 +5,8 @@ const queryFillers = new Set("我 你 您 他 她 它 我们 你们 的 了 呢 
 const preparedIndexes = new WeakMap();
 const normalize = (value) => String(value || "").normalize("NFKC").toLowerCase().trim().replace(/\s+/g, " ");
 const naturalTerms = [
+  [/查找|寻找|搜索|检索|找出|找到|找回/g, "找"],
+  [/怎么看|怎样看|看看|看一看/g, "查看"],
   [/\bagents?\b/g, "ai"],
   [/签字|签署/g, "签名"],
   [/不记得|记不清|忘了/g, "忘记"],
@@ -25,6 +27,19 @@ export function createCompactSearchEntry(entry, href = entry.href) {
     aliases: [...new Set(entry.aliases || [])],
     search: entry.compactSearch ?? entry.search ?? ""
   };
+}
+
+// Present an excerpt of the original explanation without changing ranking or
+// manufacturing a sentence from the keyword-only search projection.
+export function searchResultExcerpt(entry, query, limit = 94) {
+  const detail = String(entry.detail || "").trim();
+  if (detail.length <= limit) return detail;
+  const terms = queryTerms(normalize(query));
+  const sentences = detail.match(/[^。！？；;]+[。！？；;]?/gu) || [detail];
+  const score = (text) => terms.reduce((total, item) => total + (normalizeMeaning(normalize(text)).includes(item.term) ? item.weight : 0), 0);
+  const selected = sentences.reduce((best, sentence) => score(sentence) > score(best) ? sentence : best, sentences[0]).trim();
+  const prefix = detail.startsWith(selected) ? "" : "…";
+  return `${prefix}${selected.slice(0, limit - prefix.length)}${selected.length + prefix.length > limit || !detail.endsWith(selected) ? "…" : ""}`;
 }
 
 function prepareEntry(entry) {
@@ -51,8 +66,9 @@ function queryTerms(normalized) {
   if (/^\p{Script=Han}{1,2}$/u.test(focused)) return [{ term: focused, weight: 1 }];
   const hanRuns = focused.match(/\p{Script=Han}+/gu) || [];
   const standaloneHan = new Set(hanRuns.filter((run) => run.length === 1));
-  const words = wordSegmenter
-    ? [...wordSegmenter.segment(focused)].filter((part) => part.isWordLike).map((part) => part.segment)
+  const segments = wordSegmenter ? [...wordSegmenter.segment(focused)] : null;
+  const words = segments
+    ? segments.filter((part) => part.isWordLike).map((part) => part.segment)
     : (focused.match(/[a-z0-9_.:/-]+|\p{Script=Han}+/gu) || []).flatMap((part) => /^\p{Script=Han}{3,}$/u.test(part)
       ? Array.from({ length: part.length - 1 }, (_, index) => part.slice(index, index + 2))
       : [part]);
@@ -62,8 +78,12 @@ function queryTerms(normalized) {
     if (term && !queryFillers.has(term)) terms.set(term, /^\p{Script=Han}$/u.test(term) && !standaloneHan.has(term) ? 0.2 : 1);
   }
   // Native Chinese segmentation can split ordinary nouns into single characters.
-  // Keep adjacent pairs too, without inventing pairs across punctuation or Latin.
-  for (const run of hanRuns) {
+  // Keep pairs within words or consecutive single-character segments. Crossing a
+  // recognized word boundary invents unrelated hints, such as 出去 in 找出/去年.
+  const gramRuns = segments
+    ? segments.map(({ segment }) => /^\p{Script=Han}{2,}$/u.test(segment) ? ` ${segment} ` : segment).join("").match(/\p{Script=Han}+/gu) || []
+    : hanRuns;
+  for (const run of gramRuns) {
     for (let index = 0; index < run.length - 1; index += 1) {
       const gram = run.slice(index, index + 2);
       if (![...gram].some((character) => queryFillers.has(character)) && !queryFillers.has(gram)) {

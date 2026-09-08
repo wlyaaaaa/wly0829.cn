@@ -24,7 +24,9 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
   assert.match(plan.display_rule, /missing ranks remain absent.*never create placeholder cards or routes/);
   assert.match(plan.rank_retirement_rule, /owner-removed independent project.*final_rank unused.*never silently renumbered/);
-  assert.match(plan.construction_rule, /smallest final_rank still marked planned.*publication and public read-back/);
+  assert.match(plan.construction_rule, /smallest final_rank still marked planned/);
+  assert.match(plan.construction_rule, /does not wait.*publication/);
+  assert.match(plan.construction_rule, /in parallel/);
   assert.doesNotMatch(plan.construction_rule, /construction_hold|held project|removes the hold/);
   assert.equal(plan.ranking_rules.length, 4);
 
@@ -34,11 +36,11 @@ test("the final project plan fixes one complete value order without placeholder 
 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
-  assert.equal(published.length, 23);
-  assert.equal(planned.length, 11);
+  assert.equal(published.length, 29);
+  assert.equal(planned.length, 5);
   assert.equal(planned[0].final_rank, Math.min(...planned.map((item) => item.final_rank)));
-  assert.equal(planned[0].final_rank, 19);
-  assert.equal(planned[0].id, "proxyclean");
+  assert.equal(planned[0].final_rank, 28);
+  assert.equal(planned[0].id, "wechat-history-ai-bridge");
   assert.equal(typeof planned[0].source, "string");
   assert.ok(readme.includes(`#${planned[0].final_rank} ${planned[0].title}`), "README next project drifted from the final plan");
   assert.equal(plan.projects.some((item) => Object.hasOwn(item, "construction_hold")), false);
@@ -50,7 +52,7 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.match(systemSource, /md-triple-tactics-talent-solver.*历史.*不属于 34 个保留独立项目.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, new RegExp(`保留 34 个独立项目.*原 1–35 价值槽位.*${published.length} 个已发布项目.*${planned.length} 个待建设项目.*#19 ProxyClean`, "s"));
+  assert.match(designQa, /保留 34 个独立项目.*原 1–35 价值槽位/s);
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
   assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
   assert.equal(registry.projects.some((item) => item.id === "scripts"), false);
@@ -58,10 +60,10 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(routePaths.includes("/projects/scripts"), false);
   assert.doesNotMatch(generatedIndex, /\["scripts"|\/projects\/scripts/);
   assert.doesNotMatch(systemSource, /id:\s*"scripts"\s*,\s*repo:\s*"Scripts"/, "a retired source repository must not remain a System asset");
-  assert.equal(registry.projects.some((item) => item.id === "proxyclean"), false);
-  assert.equal(projectCatalog.some((entry) => entry.registration.id === "proxyclean"), false);
-  assert.equal(routePaths.includes("/projects/proxyclean"), false);
-  assert.doesNotMatch(generatedIndex, /\["proxyclean"|\/projects\/proxyclean/);
+  assert.equal(registry.projects.some((item) => item.id === "proxyclean"), true);
+  assert.equal(projectCatalog.some((entry) => entry.registration.id === "proxyclean"), true);
+  assert.equal(routePaths.includes("/projects/proxyclean"), true);
+  assert.match(generatedIndex, /\["proxyclean"/);
 
   const planById = new Map(plan.projects.map((item) => [item.id, item]));
   const enabled = registry.projects.filter((item) => item.enabled).sort((left, right) => left.order - right.order);

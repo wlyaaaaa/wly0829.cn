@@ -381,7 +381,7 @@ read-only operating panel; public presentation is secondary.
   project identities keep their accepted slots in the original 1–35 value order
   from `config/final-project-order.json`; rank 15 is permanently unused after
   the owner moved Scripts capabilities into their owning projects. The current
-  twenty-three published packages remain enabled at
+  complete packages in Registry remain enabled at
   their fixed, possibly non-contiguous ranks, alongside the one-page Rules
   workbench and current public-safe Skills catalog.
 - The intended end state includes essentially every real project that can be
@@ -389,9 +389,14 @@ read-only operating panel; public presentation is secondary.
   project identity or payload that the owner or an applicable higher rule
   actually excludes; a private source, technical depth, long page or the need
   to omit one L3+ value never excludes the remaining project. Add projects in
-  the fixed value order, always selecting the smallest still-planned rank and
-  completing one project at a time. Do not create placeholder cards or re-vote
-  the backlog after each delivery; change the fixed order only when the owner
+  the fixed value order, choosing Gemini's next still-planned project after
+  the owner's latest delivery notification. Gemini's next assignment does not
+  wait for Astra's acceptance, UI implementation, integration or publication.
+  Astra runs design, content, source-project acceptance, necessary repairs and
+  package integration in parallel with distinct ownership, then combines them
+  for final local verification. The current owner request holds website
+  publication until the local version has been reviewed. Do not create
+  placeholder cards or re-vote the backlog after each delivery; change the fixed order only when the owner
   explicitly corrects it or material project truth makes the value judgment
   wrong.
 - vault-tool is the existing local file-encryption and recovery product. It

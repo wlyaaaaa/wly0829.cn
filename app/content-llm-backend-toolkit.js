@@ -13,14 +13,14 @@ const baseSnapshot = createProjectSnapshot({
   facts: [
     { label: "当前默认模型", value: "local-default 解析到 aicli-qwen3.8-27b-256k:2026-08-14，基座 qwen3.8:27b，Q4_K_M，262144 上下文；默认开启 thinking（推理模式）。本次模型 digest 与登记值一致，Ollama 版本 0.33.1；元数据读取不生成模型回答。" },
     { label: "任务和资料", value: "submit 建立异步任务，job 读取进展与结果；invoke 也进入同一任务、输入校验和清理链。UTF-8 文本可按路径引用并检索片段，媒体走原生视觉或专项工具，长结果保存在本地制品中。" },
-    { label: "当前路由证据", value: "local-default 的 codex-cli / data_factory 以 2026-08-15 的非平凡 Agent（可使用工具的执行方式）历史回执为基础；本次 status 返回身份匹配的 current。它不是本次重新完成的模型任务，也不把不同 CLI 版本的兼容性自动视为已验证。" },
+    { label: "当前路由证据", value: "local-default 的 codex-cli / data_factory 以 2026-08-15 的非平凡 Agent（可使用工具的执行方式）历史回执为基础，对应 AICLI 0.3.12、Codex CLI 0.147.0；本次 status 返回身份匹配的 current。它不是本次重新完成的模型任务，也不把不同 CLI 版本的兼容性自动视为已验证。" },
     { label: "离线验证", value: "在项目 .venv 下运行完整 unittest：370/370 通过，99.642 秒。覆盖请求、注册表、输入文件、缓存、工作区观察、媒体适配、界面投影和 Windows 启动器；真实云端请求不进入自动化测试。" },
-    { label: "源码身份", value: "PUBLIC wlyaaaaa/llm-backend-toolkit，main：24f0cc105666ff97a55f0523118c6ff83f0be589，远端已回读。该提交纠正观察台的外部责任说明；运行代码仍是本次完成回归的 bec4c6e。" }
+    { label: "源码身份", value: "PUBLIC wlyaaaaa/llm-backend-toolkit，main：6248a12b7cb562665dea891fe37bb11a6772c268，2026-09-08T00:20:30Z 远端已回读。该源码包含观察台责任与续问输入说明纠错；运行代码仍是本次完成回归的 bec4c6e，本地模型元数据观察时间仍为本页所列时间。" }
   ],
   gaps: [
     "local-crosscheck-35b 的 direct（直接模型调用）路线有实现，但本次未生成回答；其 codex-cli 在 2026-08-21 重新验收时出现 aicli.recovery.capture_exception，仍为 unverified / pending_reacceptance，不可借用 27B 的通过结果。",
     "local-default 的 Claude Code、Qwen Code、OpenCode 路线，以及两个 reserved（保留但不可选择）的云端 Qwen agent 条目没有当前有效 Agent 验收；已登记并不等于可执行。",
-    "cloud-qwen-flash、cloud-deepseek-v4-flash 的协议和错误分支使用 mock（替身响应）验证；fast-middle-agent 的 Spark 有注明版本的历史证据。本次未验证任何云端额度、凭据、模型输出或延迟。",
+    "cloud-qwen-flash、cloud-deepseek-v4-flash 的协议和错误分支使用 mock（替身响应）验证；fast-middle-agent 的 Spark 在 2026-07-29 冻结题上达到 81/80 步后硬停，只得 2/9，保留为显式候选而非自动推荐。本次未验证任何云端额度、凭据、模型输出或延迟。",
     "LocalAsyncWorker 是另一条受控本地工作单 API：start/wait/cancel/result 合同已实现，但初始 configured_unverified；没有完整运行绑定时保持 not_ready。它不是原生子代理，也不与普通 submit 的可用性混为一谈。",
     "本次未打开生产观察台运行一个新模型任务；源码测试和既有历史页面验收不能证明当前任务栏图标、整场真实多轮表现或所有设备状态。",
     "带声明的外部输入在非 Windows 系统缺少等价不可变路径绑定时会拒绝运行；没有强行扩成跨平台通用文件保护方案。"
@@ -30,7 +30,7 @@ const baseSnapshot = createProjectSnapshot({
 export const llmBackendToolkitSnapshot = Object.freeze({
   ...baseSnapshot,
   generation: "异步额外模型工具 · 显式后端 · 可查阅结果",
-  sourceCommit: "24f0cc105666ff97a55f0523118c6ff83f0be589",
+  sourceCommit: "6248a12b7cb562665dea891fe37bb11a6772c268",
   sourceRoot: "V:\\Personal\\Projects\\llm-backend-toolkit",
   runtimeFacts: {
     pythonTestsPassed: 370, pythonTestsFailed: 0,
@@ -152,7 +152,7 @@ export const llmBackendToolkitModules = [
       "default_backends.json 使用 llm-backend-toolkit.backends.v1；LLM_TOOLKIT_BACKEND_REGISTRY 可指定机器注册表。alias、backend、adapter、model、route、runner 和 AICLI Profile 分开。",
       "local-default 与 local-hard-reasoning 均为 aicli-qwen3.8-27b-256k:2026-08-14；后者要求 reasoning.mode=on。参数为 temperature 0.6、top_p 0.95、top_k 20、min_p 0、presence_penalty 0、repeat_penalty 1、num_ctx 262144、num_predict 32768。",
       "请求 alias qwen-main-v1 指向 27B local-default；local-crosscheck-35b / qwen-crosscheck-35b 才选模型名为 qwen-main-v1 的 Qwen3.6 35B。两个命名层不能混用。",
-      "fast-middle-agent 是 gpt-5.3-codex-spark 的显式 Agent 角色；cloud-qwen-flash 使用 qwen3.7-flash，cloud-deepseek-v4-flash 使用 deepseek-v4-flash，两者 direct-only（仅直接 API 调用）。",
+      "fast-middle-agent 精确绑定 codex-spark-xhigh / gpt-5.3-codex-spark / xhigh。2026-07-29 冻结代码修复题达到 81/80 步硬停、2/9，只保留显式候选，不作自动推荐；选择时须明确 backend 与 cloud_allowed。cloud-qwen-flash 使用 qwen3.7-flash，cloud-deepseek-v4-flash 使用 deepseek-v4-flash，两者 direct-only（仅直接 API 调用）。",
       "云端 openai-chat 只用 HTTPS，密钥以环境变量名引用。reasoning_request 以 JSON 路径配置 enable_thinking 或 thinking.type；隐藏 reasoning_content 在提供方边界丢弃。"
     ],
     flow: ["解析请求和 alias", "读注册表与本地/云端边界", "Agent 路线匹配精确证据", "调用指定 adapter 或返回具体错误"],
