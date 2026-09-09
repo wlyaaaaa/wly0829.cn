@@ -1,26 +1,26 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const chineseAsrSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-07T20:52:45.4152792Z",
-  label: "文件转写与 Windows 托盘听写已实现；个人麦克风与真实按键体验待试用",
-  boundary: "Win+H 听写已部署并读回就绪；DJI Mic Mini 尚未连接，个人语音和真实按键端到端验收未完成。其余环境、模型工件与离线恢复检查保留 2026-08-31 的观察边界。",
+  observedAt: "2026-09-09T03:38:22Z",
+  label: "文件转写与双屏听写已实现；开始菜单可唤起原进程，个人语音与按键仍需实测",
+  boundary: "9月9日只读确认听写任务运行、中文听写开始菜单入口与图标绑定正确，45项听写回归通过；没有开麦、注入文字或重做个人语音及真实按键验收。其余环境、模型工件与离线恢复检查保留各自原观察边界。",
   metrics: [
     { label: "登记 / 可执行", value: "6 / 5" },
-    { label: "本轮定向回归", value: "71 通过 · 1 跳过" },
+    { label: "本轮听写回归", value: "45 通过" },
     { label: "真实长音频", value: "4/4" }
   ],
   facts: [
     { label: "桌面听写", value: "Win+H / Ctrl+Win+H 显示并录音、再次隐藏并暂停；PHLC34B 主屏与 MTT1337 VDD 按硬件型号各显示同一次录音的小窗。约 600 ms 停顿、20 秒上限或手动暂停时提交整段，尚非逐字流式；Esc 取消未输入部分，不自动发送。" },
-    { label: "听写部署证据", value: "2026-09-05 来源任务回读 ChineseASR Dictation 登录任务已安装、running=true，停止/重启成功，最新日志 ready（就绪）；DJI Mic Mini 未连接，个人语音与真实按键端到端验收仍待完成。", hero: false },
+    { label: "听写部署证据", value: "2026-09-09T03:38Z只读Status确认ChineseASR Dictation已安装且Running，中文听写.lnk存在、目标归属正确且图标匹配。开始菜单与托盘共用绿色图标；再次启动会通知同一进程执行显示/录音切换，避免被任务IgnoreNew（忽略重复实例）静默丢弃。9月5日停止/重启及ready日志仍是历史证据；本轮没有触发这些操作。", hero: false },
     { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
     { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
     { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
     { label: "云候选的两种用途", value: "Qwen Audio 3.0 ASR Flash；Important（重要录音）与 QualityReview（存疑转写质量复核）二选一，均须本次上传授权。普通质量复核保持 purpose=quality_review，不被伪装成重要录音。" },
     { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512 可显式执行；Whisper Large V3 只登记为 fallback/comparison，当前禁止直接转写" },
-    { label: "本轮快照", value: "PUBLIC main=643fb7a；2026-09-07 定向运行听写、VAD、Windows 控制、云入口、worker 与转写回读共 72 项，71 通过、1 跳过。376 项全套及公开短音频的旧证据仍属于 2026-09-05，不叠加为本轮全套。", hero: false },
+    { label: "本轮快照", value: "PUBLIC main=12eb64e；2026-09-09定向运行test_dictation、test_dictation_audio、test_dictation_windows共45项，全部通过，内部耗时1.225秒。9月7日71通过/1跳过、9月5日376项全套及公开短音频仍属于原日期，不叠加为本轮全套。", hero: false },
     { label: "复用已有转写", value: "transcript-readback 以原音 SHA-256 读取已完成的本地任务及 outputs/cloud-jobs 中保留的云结果；不读原音、不启动模型、不重新上传。云结果只证明块级范围，timestamp_granularity=chunk、quality.status=unknown，不冒充逐句时间或逐字正确。", hero: false },
     { label: "模型路线", value: "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。", hero: false },
-    { label: "当前源码", value: "PUBLIC（公开）main=643fb7aad97c47b2b7c9b302cd4a88a6fab5eb85；2026-09-07 已从远端 main 回读。新增多屏同步听写控件、轻量语音活动检测、存疑转写云质量复核与已保存云结果的只读复用。", hero: false },
+    { label: "当前源码", value: "PUBLIC（公开）main=12eb64e93586b8fce8a4d2b9750c4d097b78ae5a；2026-09-09T03:36Z远端main回读同值、工作树干净。保留双屏听写、VAD、云质量复核与已存结果复用，新增同进程启动通知、原生采样率采音后转16kHz，以及开始菜单与图标安装回读。", hero: false },
     { label: "完整回归", value: "2026-09-05 来源任务先完成 376 项全套测试，最终修改另跑 33 项定向测试，均通过；不能将重叠测试计为 409 项。文件转写既有配置、流水线、安装恢复、长音频、批量、服务、写入、审计、GPU 协调、云入口和说话人回归继续保留，新增听写音频与 Windows 输入保护覆盖。", hero: false },
     { label: "本机环境", value: "2026-08-31 Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 616.56、32607 MiB 显存；WinHTTP 为直连，代理环境干净。", hero: false },
     { label: "运行依赖", value: "Windows 核心依赖更新为 FunASR 1.4.14、NumPy 1.26.4，满足 FunASR 的 NumPy <2 兼容约束。Qwen ASR 0.0.6、Torch/TorchAudio 2.11.0+cu128、Transformers 4.57.6 维持；Python 3.11.9 与 ModelScope 1.38.1 继承 2026-08-31 环境观察。听写额外依赖 sounddevice 0.5.6、pystray 0.19.5、Pillow >=10。", hero: false },
@@ -34,7 +34,7 @@ const chineseAsrSnapshot = createProjectSnapshot({
     { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，4/4 段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
   ],
   gaps: [
-    "DJI Mic Mini 当前未连接；指定设备缺失时提示连接，不偷偷换麦克风。Computer Use 对临时窗口存在桌面观测缺口，不能将登录任务就绪或公开样本解码说成真实按键与个人语音已端到端验收。",
+    "9月9日只读音频设备枚举已发现DJI输入端点，取代9月5日未连接的旧观察；没有打开麦克风或采集声音，因此仍未验个人语音与真实按键。指定设备缺失时仍提示连接、不换其他麦克风；入口和图标属性正确也不等于个人使用已通过。",
     "GPU、模型回执、FireRed WSL、18 项安装脚本回归、离线工件缺口与旧工作树说明继承 2026-08-31 的已发布观察，本次没有重新采集这些未受影响的现场。",
     "本次网站任务只回读已发布源码与来源任务的听写证据，没有访问私人录音或重跑文件 strict / FireRed smoke。5.5 秒公开样本仅证明指定集成及一次预热解码，不代表个人准确率、整段耗时或按键到上屏延迟。",
     "当前 offline\\manifests 只有占位文件，没有 requirements-lock.txt、wheelhouse.sha256 或 wheelhouse.json，offline\\wheelhouse 也不存在；因此当前只有恢复脚本和回归，不存在可直接拿走的本轮离线依赖包，也没有运行 install-offline smoke。",
@@ -229,7 +229,7 @@ export const chineseAsrModules = [
     teaser: "桌面按 Win+H 说话并逐停顿输入，焦点改变就停下自动输入；已有录音则把提交、查进度、取消、超时和服务重启后的续作收进同一任务入口，避免因为等得久就把一段大录音重复跑好几份。",
     status: "Win+H 托盘听写已部署就绪，个人麦克风与按键实测待完成；文件 Smart API、任务生命周期和缓存完整性保留既有证据",
     statusTone: "mixed",
-    value: "想直接打字时，在普通应用输入框按 Win+H 或 Ctrl+Win+H 显示并录音，再按隐藏并暂停；约 600 ms 停顿、20 秒上限或手动暂停会提交整段文字。不会自动回车发送；Esc 保留已输入文字，只取消还未输入部分。切换窗口或输入焦点后停止自动输入，可主动复制最近完整文本。指定的 DJI Mic Mini 未连接时会提示连接，不切换其他设备。已有文件仍使用独立任务入口：无论是短语音、两小时录音还是一整个文件夹，都能先拿到一个稳定任务身份。后续查进度、恢复或取消只认这一项，不用盯着黑窗口猜后台还活不活，也不会因为客户端等超时就顺手再开一份。",
+    value: "想直接打字时，在普通应用输入框按Win+H或Ctrl+Win+H显示并录音，再按隐藏并暂停；也能从开始菜单点“中文听写”通知同一个托盘进程，不必退出重开。所选麦克风不支持模型的16kHz时，可按设备原生采样率录音，再转换整句，仍不换另一支麦克风。约600ms停顿、20秒上限或手动暂停会提交整段文字；不自动回车发送，Esc只取消尚未输入部分，焦点改变后停止自动输入并可主动复制完整结果。已有文件继续使用独立任务入口：短语音、长录音或文件夹都先返回稳定任务身份，后续按同一项查进度、恢复或取消，不因等待超时另开重复任务。",
     why: "ASR 可能要加载数 GB 模型并跑上几分钟。若调用端一超时就直接重发，两份任务很容易同时抢 GPU、覆盖输出，甚至把其实仍在处理的任务误判成失败。任务身份和终态必须独立于那次等待窗口保存下来。",
     example: "比如我问“服务重启后，这段录音会不会自己重新跑？”系统会明确告诉我：原来排队或运行中的任务会留下“服务已重启”的失败终态，不会在后台偷偷复活。我确认需要继续后再显式重试，新任务仍按同一音频内容与请求指纹找到稳定输出目录，并复用长音频里已经验证有效的分段。",
     result: "得到一条与音频内容和请求绑定、跨服务重启仍可查询的任务记录：当前阶段、开始与更新时间、稳定输出位置、错误、缓存状态、是否中断、是否需要显式重试，以及最终正文与证据文件。旧终态能回读，但陈旧队列不会自动执行。",
@@ -250,11 +250,11 @@ export const chineseAsrModules = [
     ],
     problem: "解决重模型任务阻塞调用方、重复提交、任务身份丢失、缓存错配、调用端超时被误判为服务端失败，以及后台进程失联后无法恢复的问题。",
     implementation: [
-      "桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc、焦点检查和文字注入。",
+      "桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc、焦点检查和文字注入。开始菜单中文听写.lnk经Start-Dictation.vbs隐藏调用Start；已运行时用同会话Start事件通知原窗口执行快捷键同一动作，未运行时由现有任务启动并最多等待30秒，不另建实例。",
       "configs/dictation.yaml：16 kHz、silence_ms=600、min_speech_ms=240、max_chunk_sec=20；默认指定 DJI Mic Mini，input_device: null 才跟随 Windows 默认输入。hotwords 当前为空，避免不清晰声音触发术语复读；轻量 WebRTC VAD（语音活动检测）保留语句前后缓冲，无有效语音或空识别时不输入。",
       "dictation_windows.py 维护 160×60 实际像素白绿胶囊；两个目标显示器按 PHLC34B / MTT1337 硬件型号定位，共享录音、暂停、隐藏和设备选择，接入/断开及分辨率变化会重定位，未接入的目标不显示。",
       "麦克风按钮只切录音/暂停，×隐藏并暂停且完成尾句；小箭头或右键显示设备刷新和复制入口。登录只预载内存，不自动开麦；暂停保留内存模型并释放 GPU，真正退出才释放模型。",
-      "设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。",
+      "设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。若同一设备不接受16kHz，尝试它报告的原生采样率；按实际采样率分句，再用resample_poly把完整语句转成模型要求的16kHz。采音丢帧或采样率未准备好时取消尚未输入内容，不把坏声音当成功。",
       "scripts/asr-smart.ps1 负责本地入口、轻量健康检查、提交和有界等待。",
       "src/zh_asr/service.py 维护 job 状态、队列、期限、状态查询与 observer projection。",
       "job key 绑定音频绝对路径、内容 SHA-256、模式、已解析引擎、模型配置、设备、切片参数和调用方绑定，缓存命中前验证关键制品。",
