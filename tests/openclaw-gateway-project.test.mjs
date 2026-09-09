@@ -124,7 +124,8 @@ test("OpenClawGateway keeps runtime, update, backup and recovery evidence separa
     "34 个 PowerShell",
     "3 条 warning"
   ]) assert.ok(text.includes(expected), `evidence boundary missing: ${expected}`);
-  assert.match(text, /RPC.*已恢复[\s\S]*历史任务结果非零|历史任务结果非零[\s\S]*RPC.*已恢复/);
+  assert.match(text, /RPC.*(?:已恢复|自行恢复)|(?:已恢复|自行恢复).*RPC/);
+  assert.match(text, /历史任务结果非零|LastTaskResult=1|历史失败/);
   assert.match(text, /恢复.*暂存.*(?:没有|未).*激活/s);
   assert.match(text, /本轮没有更新或重启|真实更新.*未执行/s);
 });
@@ -190,7 +191,7 @@ test("OpenClawGateway names all update channels and the exact plugin matrix with
 });
 
 test("OpenClawGateway first visible labels do not defer core English explanations to a glossary", () => {
-  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-09T03:55Z");
+  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-09T22:07Z");
   assert.match(openClawGatewayProject.kicker, /运维层/);
   const unexplainedCoreTerm = /\b(?:Gateway|RPC|health|Funnel|Owner)\b(?!（[^）]+）)/;
   assert.doesNotMatch(openClawGatewayProject.kicker, unexplainedCoreTerm);

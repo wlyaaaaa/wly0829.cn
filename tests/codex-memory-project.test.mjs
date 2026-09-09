@@ -95,14 +95,14 @@ test("codex-memory distinguishes current source inventory from the published bac
   assert.equal(codexMemoryProject.currentPointId, "20260909T041508Z-68deef6b");
   assert.equal(codexMemoryProject.conversationFileCount, 7016);
   assert.equal(codexMemoryProject.conversationTotalSizeBytes, 47388350429);
-  assert.equal(codexMemoryProject.liveSourceFileCount, 7011);
-  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 47352579296);
+  assert.equal(codexMemoryProject.liveSourceFileCount, 7067);
+  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 48020575000);
   assert.notEqual(codexMemoryProject.conversationFileCount, codexMemoryProject.liveSourceFileCount);
   const hotEntry = codexMemoryProject.operationalEntrypoints.find((item) => item.command.includes("-Mode Hot"));
   assert.ok(hotEntry && hotEntry.command.includes("-Execute"), "real Hot capture requires the source execution switch");
   assert.match(codexMemoryProject.currentSnapshot.boundary, /未打开备份正文或执行备份\/恢复/);
-  assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, true);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /G新Codex点7016文件.*H仍是9月8日旧点/);
+  assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, false);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /G仍为7016文件[\s\S]*活动源已到7067文件[\s\S]*H当前不可用/);
 });
 
 test("codex-memory explains core safety rules without marketing riddles", () => {

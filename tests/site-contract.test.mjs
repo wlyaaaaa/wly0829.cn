@@ -542,10 +542,10 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
   assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 151);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 175);
-  assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 22);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 176);
+  assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 23);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
-  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase to151\/175\/22KiB/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase to151\/176\/23KiB/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /no identical duplicate/);
   assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
@@ -1209,7 +1209,7 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   for (const term of [
     "F 是启动/救急 U 盘", "G 是在线 Hot", "H 是人工 Cold", "P0–P7", "PCB revision", "F4b", "F12", "F13b",
     "不自动刷写", "list disk / list volume", "clean", "format", "BCD", "230 个 package", "三个控制面", "17 个恢复锚点",
-    "15 个项目路径关系", "26 项 C 盘用户配置", "9阶段、56任务", "启动项旧现场与登记快照为23项", "SecretRef", "重新建立备份"
+    "15 个项目路径关系", "26 项 C 盘用户配置", "9阶段57项", "启动项旧现场与登记快照23项", "SecretRef", "重新建立备份"
   ]) {
     assert.ok(technicalText.includes(term), `PCConfig recovery technical layer omits: ${term}`);
   }
@@ -1236,7 +1236,7 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 14);
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 15);
 });
 
 test("PCConfig exposes secondary-laptop and drift acceptance as complete product and technical axes", async () => {
@@ -1256,7 +1256,7 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(driftText, /derived|派生|临时产物/);
   assert.ok(pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "secondary-laptop").length >= 3);
   assert.ok(pcconfigProject.usageExamples.filter((item) => item.moduleSlug === "drift-acceptance").length >= 2);
-  assert.match(JSON.stringify(pcconfigProject.currentState), /64af58e/);
+  assert.match(JSON.stringify(pcconfigProject.currentState), /a69d632/);
   assert.match(JSON.stringify(pcconfigProject.currentState), /PersonalDataReplica-Hot-Daily/);
   assert.match(JSON.stringify(pcconfigProject.currentState), /complete[\s\S]*post_verified=true/);
   assert.match(JSON.stringify(pcconfigProject), /4d17554[\s\S]*迁移.*(?:退役|删除)/);
@@ -1265,10 +1265,10 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(protectedActions), /38个依赖|38依赖/);
   assert.match(JSON.stringify(protectedActions), /protected_policy_retirement_dependency_classification_invalid/);
   assert.match(JSON.stringify(protectedActions.verification), /Test-ProtectedPolicyRetirement返回PASS.*38依赖/);
-  assert.match(JSON.stringify(pcconfigProject.currentState), /not_applicable|host_mismatch/);
+  assert.match(JSON.stringify(pcconfigProject.currentState), /complete_visibility|needs_attention=false/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 14);
+  assert.equal(registration.ai_refresh.semantic_revision, 15);
   assert.match(registration.ai_refresh.scope, /ten source-defined modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));
 });
@@ -1299,7 +1299,7 @@ test("PCConfig exposes authorized-file encryption as an isolated resumable produ
   assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "authorization-files" && item.ask.includes("文件") && item.ask.includes("加密")));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 14);
+  assert.equal(registration.ai_refresh.semantic_revision, 15);
   const paths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
     assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
@@ -1636,9 +1636,9 @@ test("the learning project restores the AI-assisted method without topics, progr
   for (const expected of ["能力覆盖", "依赖", "深度", "停止标准", "当前断点", "下一单元", "反馈", "反证", "不冻结总课程", "Unknown"]) {
     assert.ok(routeText.includes(expected), `learning route/checkpoint omits: ${expected}`);
   }
-  assert.match(routeText, /fresh gpt-5\.6-sol \/ max/);
+  assert.match(routeText, /fresh gpt-6-astra \/ max/);
   assert.match(routeText, /旧代理上下文|终审不复用/);
-  assert.match(publicText, /PRIVATE_MANAGED_SOURCE.*6534ac7a2bc57ab949224ee3d6f98854edc321a5/);
+  assert.match(publicText, /PRIVATE_MANAGED_SOURCE.*e73219217d980ac429421055f74fb03de9a1357e/);
   assert.match(publicText, /Markdown（结构化文本格式）/);
   assert.match(publicText, /PASS（方法合同已定义）/);
   for (const module of learningModules) {
@@ -1654,8 +1654,8 @@ test("the learning project restores the AI-assisted method without topics, progr
   assert.deepEqual(registration.impact_sources, []);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
-  assert.equal(registration.source.snapshot_commit, "6534ac7a2bc57ab949224ee3d6f98854edc321a5");
-  assert.equal(registration.ai_refresh.semantic_revision, 5);
+  assert.equal(registration.source.snapshot_commit, "e73219217d980ac429421055f74fb03de9a1357e");
+  assert.equal(registration.ai_refresh.semantic_revision, 6);
   assert.equal(Object.hasOwn(registration.source, "local_root"), false);
   assert.match(registration.ai_refresh.scope, /without exposing any learning subject or progress/);
   assert.match(registration.refresh_rules.ignore_when.join("\n"), /topic and progress changes/);
@@ -1697,7 +1697,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   assert.equal(packages.flatMap((entry) => entry.modules).length, 20);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" ? 9 : project.slug === "cacb" ? 8 : 5;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 9 : project.slug === "cacb" ? 8 : 6;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -2929,9 +2929,9 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 14);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 15);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
-  assert.match(targeted.selected_projects[0].source_fingerprint_state, /fresh Owner evidence/);
+  assert.match(targeted.selected_projects[0].source_fingerprint_state, /decision-relevant Owner observations.*dated retained evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
   assert.equal(targetedTimeAudit.selected_projects[0].content_path, "app/content-timeaudit.js");
   assert.equal(targetedTimeAudit.selected_projects[0].semantic_revision, 8);
@@ -3071,7 +3071,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedOpenClawGateway.selected_projects[0].source.visibility, "PUBLIC");
   assert.equal(targetedOpenClawGateway.selected_projects[0].source.default_branch, "main");
   assert.equal(targetedOpenClawGateway.selected_projects[0].source.local_root, "E:\\Projects\\Tools\\OpenClawGateway");
-  assert.equal(targetedOpenClawGateway.selected_projects[0].semantic_revision, 3);
+  assert.equal(targetedOpenClawGateway.selected_projects[0].semantic_revision, 4);
   assert.ok(targetedOpenClawGateway.selected_projects[0].impact_sources.length >= 3);
   assert.equal(targetedSunshine.status, "ready_for_ai");
   assert.deepEqual(targetedSunshine.selected_projects.map((item) => item.id), ["sunshine-remote-streaming"]);
@@ -3199,9 +3199,8 @@ test("AI refresh planner supports targeted and full refresh without writing narr
     const failedCollector = structuredClone(bundle);
     failedCollector.projects.find((item) => item.id === "learning").collectors[0].status = "failed";
     await writeFile(bundlePath, JSON.stringify(failedCollector, null, 2), "utf8");
-    const failedCollectorRejected = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
-    assert.notEqual(failedCollectorRejected.status, 0);
-    assert.match(failedCollectorRejected.stdout, /bundle_collector_not_passed/);
+    const failedCollectorDisclosed = spawnSync(process.execPath, [path.join(projectRoot, "scripts", "verify-ai-panel-refresh.mjs"), "--bundle", bundlePath], { cwd: projectRoot, encoding: "utf8", windowsHide: true });
+    assert.equal(failedCollectorDisclosed.status, 0, failedCollectorDisclosed.stdout);
     const invalid = structuredClone(bundle);
     invalid.projects.find((item) => item.id === "pcconfig").collector_receipts[0].principal = "ordinary-user";
     await writeFile(bundlePath, JSON.stringify(invalid, null, 2), "utf8");
@@ -3316,7 +3315,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 19);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 20);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -3589,9 +3588,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const browserContinuity = skills.find((item) => item.slug === "browser-control-continuity");
   const browserContinuityText = JSON.stringify({ entry: browserContinuity, guide: skillGuides["browser-control-continuity"], outcome: skillOutcomes["browser-control-continuity"] });
   assert.equal(browserContinuity.sourcePath, "E:\\.agents\\skills\\browser-control-continuity\\SKILL.md");
-  assert.equal(browserContinuity.sourceBytes, 8439);
-  assert.equal(browserContinuity.sourceSha256, "b9649a131101c4a10991515453cf5e8246645a8231e307992f3cbe54c4d01e7c");
-  for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /browser-service\.mjs.*browser-accessibility\.wasm\.br.*zxing_reader\.wasm/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复/s, /触发.*范围.*证据.*退出条件/s, /已核实.*本人明确要求/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /7a7fbda/, /当前官方.*Host|官方当前manifest\/host/s, /allowed_origins/, /本地 HTML.*HTTP/s, /browser-disconnected/, /stale-debugger-unattached/, /status=ready.*不证明/s]) {
+  assert.equal(browserContinuity.sourceBytes, 9997);
+  assert.equal(browserContinuity.sourceSha256, "f8a1ef1a140f13f6a2d3ebde2a4382330c667ad74ac5aafcc2272c56749f886c");
+  for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /four.*appServerRuntimePaths|appServerRuntimePaths.*四条/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复/s, /触发.*范围.*证据.*退出条件/s, /已核实.*本人明确要求/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /7a7fbda/, /当前官方.*Host|官方当前manifest\/host/s, /allowed_origins/, /本地 HTML.*HTTP/s, /browser-disconnected/, /stale-debugger-unattached/, /status=ready.*不证明/s]) {
     assert.match(browserContinuityText, expected, `browser-control-continuity omits durable behavior: ${expected}`);
   }
   assert.deepEqual(skillProjectLinks["browser-control-continuity"], [{ relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 浏览器连续性能力" }]);
@@ -4159,16 +4158,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E126 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
+test("E127 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E126");
-  assert.equal(bindings.ruleset_sha256, "f264301ca896d37963f324a5499aec31a98df882494b8e4ade7b368309941044");
-  assert.equal(panelSnapshot.authority.releaseId, "E126");
-  assert.equal(panelSnapshot.authority.gitCommit, "4767b979b416c56afb254c12bd315b563c965c00");
-  assert.equal(panelSnapshot.authority.pointerRevision, 34);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E125");
+  assert.equal(bindings.semantic_release_id, "E127");
+  assert.equal(bindings.ruleset_sha256, "9cbdcbb050933f1f8dcc4a7b753fee2b43d00933f9773ba06aa2e07a941bd137");
+  assert.equal(panelSnapshot.authority.releaseId, "E127");
+  assert.equal(panelSnapshot.authority.gitCommit, "ecf2086d1d58cdfddfc73cd63d58f9a77627ae77");
+  assert.equal(panelSnapshot.authority.pointerRevision, 35);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E126");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",

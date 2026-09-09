@@ -629,6 +629,10 @@ function initializeSystemHome() {
   document.fonts?.ready?.then(updateScenarioScrollIndicator);
   activateScenario(idFromHash() || ids[0]);
   updateScenarioScrollIndicator();
+  // Enhancement collapses the other static scenarios after native fragment
+  // navigation; align the requested section again against the final layout.
+  const initialTarget = document.getElementById(window.location.hash.slice(1));
+  if (initialTarget && home.contains(initialTarget) && performance.getEntriesByType("navigation")[0]?.type === "navigate") window.requestAnimationFrame(() => initialTarget.scrollIntoView({ block: "start", behavior: "instant" }));
 }
 
 function initializeSystemSectionNavigation() {

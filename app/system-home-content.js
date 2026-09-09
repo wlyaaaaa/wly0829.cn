@@ -490,10 +490,10 @@ export const systemScenarios = [
 ];
 
 export const systemActiveAutomations = {
-  observedAt: "2026-08-31",
+  observedAt: "2026-09-10",
   groups: [
     { id: "mobile", label: "01–05", title: "云端定时协作（手机接收）", description: "云端定时或事件任务持续整理、监控并提醒，手机是接收结果和继续协作的入口。" },
-    { id: "computer", label: "06–07", title: "电脑端自动治理（本机执行）", description: "电脑端任务进入真实项目、规则、Git 与发布现场，持续治理和更新。" }
+    { id: "computer", label: "06–08", title: "电脑端治理与恢复（两台电脑）", description: "主机核对项目、规则和网页，副驾驶检查自己的恢复胶囊；各自在实际设备上执行并汇报结果。" }
   ],
   items: [
     {
@@ -557,7 +557,16 @@ export const systemActiveAutomations = {
       title: "个人系统网页快照更新",
       focus: "先核对项目、规则和能力的实际变化。网页说明仍准确就不改；用途、状态或限制变了，才更新相关说明，再检查系统总览是否需要一起改。必须由本人点名更新的页面继续遵守原约定。",
       process: "按本人选择的模型和思考强度执行，并核对实际使用的身份。分别查清新增、改变、退出或仍不确定的产品与技术事实，在原位置更新受影响的项目、规则、能力和系统说明。提交记录和文件变化只帮助找到线索，不替 AI 判断该写什么。",
-      delivery: "说明改了哪些页、哪些保持不变、哪些因证据不足暂未改，并交回核对过的快照。只有符合本人当前发布安排时才上线，并重新打开网站确认；否则保留本地候选。"
+      delivery: "逐项告诉我哪个页面从什么状态变成了什么、修复了哪些问题，以及哪些内容未变或仍不确定；本次和每周都汇报。按本人发布安排上线并重新打开网站确认，没有实质变化也明确说明核对范围。"
+    },
+    {
+      id: "secondary-recovery-capsule",
+      group: "computer",
+      cadence: "每周",
+      title: "副驾驶恢复胶囊与每周巡检",
+      focus: "检查备用笔记本的恢复说明、已选文件、本地副本和 U 盘胶囊，确认换机或重装时知道从哪里恢复。",
+      process: "笔记本每天 09:00、21:00 检查是否到期，本地和 U 盘各按 7 天周期更新；每周一 10:00（北京时间）由 AI 只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。",
+      delivery: "只有新的可行动问题才通知，说明影响、最近可用世代和该怎样处理；正常未插 U 盘不当故障。本地与 U 盘各自保留成功时间和覆盖范围，不能把一份成功算成两份；胶囊不替代 Windows 重装、重新登录或真实换机验收。"
     }
   ]
 };
@@ -607,7 +616,7 @@ export const systemProjectDomains = [
       { id: "emerald-veil", title: "桌面壁纸与空闲屏幕保护", repo: "emerald-veil", role: "保存选定的 Windows 桌面与锁屏背景，便于重装后恢复；电脑空闲六分钟时显示原生泡泡，输入后退出。壁纸恢复、泡泡运行和远程使用分别核对，实际屏幕与远程体验尚未全部验收。", kind: "桌面能力", href: "/projects/emerald-veil" },
       { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前没有可用 KDE 对端，真实双机传输尚未验收。", kind: "集成能力", href: "/projects/meshclip-kit" },
       { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
-      { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复；电脑 MCP 也让手机或云端 AI 使用这台电脑的文件、命令和桌面。", kind: "核心基座", href: "/projects/pcconfig" },
+      { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复；电脑 MCP 让手机或云端 AI 调用电脑，也让主机和副驾驶互相维护。两台电脑各自保留运行与恢复边界。", kind: "核心基座", href: "/projects/pcconfig" },
       { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "诊断代理退出后的残留设置，默认只清失效的本机端口；明确选择直连时才清理所列活动代理。没有健康物理默认出口时保留路由。", kind: "修复工具", href: "/projects/proxyclean" },
       { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "恢复缓存盘目录、记录内存与空间状态，并在既定阈值下重建驱动缓存；重建会清空缓存，不保护误放的唯一文件。当前定时任务运行，提交余量偏低的警告保留。", kind: "缓存守护", href: "/projects/ramdisk-guardian" },
       { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
@@ -657,7 +666,7 @@ export const systemProjectDomains = [
     delivery: "分阶段材料、问题与选择、当前证据、反馈后的修订，以及明确由本人决定的下一步。",
     unavailable: "缺少必要原件或当前事实时，说明哪些判断还不能做。已经说清并授权的工作继续完成；只有需要本人选择、反馈或实际操作的那一步才等待，并说清在等什么。各领域的私人资料仍分别管理。",
     assets: [
-      { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
+      { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；已了解的共用背景按需读取，教学反馈仍由学习项目处理。这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
       { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人的经历、生活重点和真实取舍整理成能补充、纠正的共用背景。说一句“结合最近微信和新资料更新一下”，就从已读位置继续，读过必要上下文后修订认识，保留仍未读的范围。手机和云端通过已接通的电脑 MCP 读写同一份理解库；需要离线或转交时才导出。有具体疑点时，也可只读相关背景辅助核对；资料不能认证身份，待验证的新说法不自动改写原有认识。工作、学习、文书和健康各自负责专业判断。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
@@ -968,7 +977,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体可用已核验的原生 G/H 副本，只有真正凭据和受保护载荷才走各自正式加密恢复入口；G→H 有 14 组来源，H 在 9 月 5 日已完成首次备份验收，9 月 9 日 03:10 UTC 的冷备也已完成。之后的新增量仍要另次备份。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体先确认可访问的 G/H 备份，凭据和受保护载荷再走各自正式恢复入口。G→H 已登记 15 组来源，H 在 9 月 5 日完成首次备份验收；最近冷备于 9 月 9 日 06:55 UTC 完成，但本轮主机 H 不可用，当前内容不能回读。后来新增的内容仍需下一次备份。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -1035,21 +1044,21 @@ export const systemDependencyNodes = [
   {
     id: "remote-computer-mcp",
     lane: "machine",
-    title: "手机与云端操作电脑（电脑 MCP）",
-    subtitle: "让正在聊天的 AI 使用这台 Windows 电脑",
+    title: "手机与双机协作（电脑 MCP）",
+    subtitle: "让正在聊天的 AI 调用实际电脑的文件、命令和桌面",
     href: "/projects/pcconfig/remote-computer-mcp",
-    detail: "手机发出要求，ChatGPT 等客户端负责推理，电脑执行文件、文档片段、脚本与桌面操作，再返回实际结果。电脑需开机联网并登录，桌面操作还需解锁；复用当前电脑规则与个人 Skill，能力和权限按真实接口判断。"
+    detail: "手机或云端 AI 理解要求，电脑执行并交回结果；主机与副驾驶也能通过各自入口互相维护。已安装的开机服务承接维护，普通用户工具和桌面仍由实际登录用户执行；断连后可以查询原任务结果，避免重复操作。双机调用已回读，物理冷启动及每种手机界面另验。各机按自己的规则、身份和真实权限工作。"
   },
   {
     id: "companion-laptop",
     lane: "machine",
-    title: "副驾驶笔记本（待实机验收）",
-    subtitle: "登记为台式机的日常副电脑、远程入口和应急接管候选",
+    title: "副驾驶笔记本",
+    subtitle: "日常远控、独立轻量工作与备用恢复",
     links: [
       { href: "/projects/pcconfig/machine-facts", label: "查看机器事实" },
       { href: "/projects/pcconfig/recovery-backup", label: "查看恢复方法" }
     ],
-    detail: "已经有单独的主机清单、只读健康入口和恢复源码与材料；但当前在 WLY 台式机上只会得到 host mismatch（主机不匹配），目标笔记本、恢复 U 盘和外置 NVMe 接管都还没有完成真机验收。它现在是一套可检查的接管方案，不能写成已经能替台式机承接工作。"
+    detail: "双向电脑 MCP 已从两台实机回读，笔记本本地与 U 盘胶囊也已完成同一世代的完整校验。平时远控台式机；主机不可达时，保留自己的网络、Codex、规则和按需项目入口。胶囊保存恢复配方和已选文件，Documents 仍有明确跳过项；它不是台式机镜像，新机、跨品牌恢复和外置 NVMe 接管仍需分别实测。"
   },
   {
     id: "cross-device-files",
@@ -1341,7 +1350,7 @@ export const systemRuleStories = [
     ruleId: "agents_root_rules",
     number: "01",
     title: "先听当前目标和项目规则",
-    summary: "当前要求决定方向，目标项目决定具体业务做法，活动规则补上跨项目边界。系统先保住目标、禁止项和已有工作，再选择方法。",
+    summary: "当前要求决定方向，目标项目决定具体业务做法，活动规则补上跨项目边界。系统先保住目标、禁止项和已有工作，再选择方法；我的提议可以改进，真正想完成的结果不能被旧方案绑住。",
     ordinaryRequest: "“把这个网站修好，保留别人已有的修改；能自动完成的直接做，最后告诉我真实缺口。”",
     inputs: [
       "本轮真正要完成的目标、优先级和不能破坏的东西",
@@ -1353,7 +1362,7 @@ export const systemRuleStories = [
       "AI 协作规则与能力中心只补充通用授权、协作和验证边界",
       "注意力先保留目标、现有工作、关键未知和真实验收",
       "先保留这次真正需要的功能、用法、正确性、恢复和维护要求；已经证明的扩展需要也不能遗漏。能用更少组件完成同样结果时，选择更直接的做法",
-      "增加服务、数据库、状态记录或验证步骤前，先指出现有做法具体缺什么；没有实际缺口就不加"
+      "增加服务、数据库、状态记录或验证步骤前，先指出现有做法具体缺什么；没有实际缺口就不加", "本人已有工具或项目坏了，就修好或正式换成能承接它的方案，并接回日常入口验收；不能临时绕过去后，把坏掉的能力留给我"
     ],
     delivery: [
       "进入正确项目后的最小必要改动",

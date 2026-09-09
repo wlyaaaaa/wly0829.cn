@@ -591,6 +591,12 @@ read-only operating panel; public presentation is secondary.
   identity is the rule-version boundary; the weekly review does not make every
   displayed fact live, and the site must not claim background freshness beyond
   the evidence and observation time it actually read back.
+- Every owner-requested and weekly refresh ends with a plain-language report of
+  the concrete changes: affected project or page, what changed in use or state,
+  repairs, publication result and unresolved gaps. A no-op reports the checked
+  scope and why no update was needed. Counts and passing tests do not replace
+  this explanation. Report in the task reply, without adding a website update
+  feed, duplicate cards or another scheduled task.
 - The fast project function must provide `targeted` and `all` AI refresh plans
   from `config/panel-projects.json`, including the current content path, source
   identity, evidence collectors and existing snapshot fingerprint. Plans are

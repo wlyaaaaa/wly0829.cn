@@ -1628,7 +1628,7 @@ function SystemDependencyNode({ node }) {
 function SystemActiveAutomationList() {
   return (
     <section className="system-frame system-active-automations" id="system-automations" aria-labelledby="system-active-automations-title">
-      <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">7 个已启用的定时任务</h2><p>5 个云端任务和 2 个电脑端任务已登记为当前持续协作；这里说明它们计划何时运行、处理什么和交回什么。任务定义或 ACTIVE 状态不等于最近一次运行成功，也不证明通知已经送达；频率观察于 {systemActiveAutomations.observedAt}，私有提示词与任务 ID 不公开。</p></div>
+      <div className="system-home-section-heading system-active-automations-heading"><h2 id="system-active-automations-title">{systemActiveAutomations.items.length} 个已启用的定时任务</h2><p>{systemActiveAutomations.items.filter((item) => item.group === "mobile").length} 个云端任务和 {systemActiveAutomations.items.filter((item) => item.group === "computer").length} 个电脑端任务已登记为当前持续协作；这里说明它们计划何时运行、处理什么和交回什么。任务定义或 ACTIVE 状态不等于最近一次运行成功，也不证明通知已经送达；各项频率按来源分别保留观察时间，本轮更新于 {systemActiveAutomations.observedAt}。私有提示词与任务 ID 不公开。</p></div>
       <div className="system-active-automation-groups">{systemActiveAutomations.groups.map((group) => (
         <section key={group.id}>
           <header><span>{group.label}</span><h3>{group.title}</h3><p>{group.description}</p><small><i aria-hidden="true" />记录时已启用</small></header>

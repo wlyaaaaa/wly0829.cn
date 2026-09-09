@@ -54,7 +54,7 @@ for (const registration of selected) {
     source_fingerprint: null,
     source_fingerprint_state: registration.ai_refresh.mode === "manual_owner_only"
       ? "Fresh Owner evidence is allowed only after an explicit owner refresh request"
-      : "AI must populate from fresh Owner evidence after collectors complete",
+      : "AI must populate from the selected decision-relevant Owner observations and dated retained evidence; registered collectors are candidate entrypoints, not a mandatory full-run checklist",
     observed_at: isAgents ? panelSnapshot.observedAt : entry.project.currentState?.observedAt || null,
     current_gap_count: isAgents
       ? panelSnapshot.validation.rows.filter((row) => row.status !== "pass").length
