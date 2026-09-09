@@ -46,8 +46,8 @@ test("the expanded Cold plan preserves native scope and exact copy boundaries", 
 });
 
 test("accepted first H backup, current completed Cold and unverified machine restore remain distinct", () => {
-  assert.match(recovery.status, /11 个任务、14 组 G 来源、9 个必需集合/);
-  assert.match(recovery.status, /9 月 5 日 H 首次备份已验收.*06:54 UTC冷备也已完成/);
+  assert.match(JSON.stringify(pcconfigProject), /11 个核心恢复任务.*14 组 G 来源.*9 个必需集合/s);
+  assert.match(technical, /H已有2026-09-05首次备份与卷身份验收.*2026-09-09 03:10:46 UTC冷备也已完成且H可读/s);
   assert.match(recovery.status, /新机恢复.*仍未验收/);
   assert.match(technical, /本轮只读复核对应源码与测试范围/);
   assert.match(technical, /整体\/镜像 complete.*五映射 post_verified=true/s);
@@ -64,7 +64,7 @@ test("the System recovery explanation keeps the same ordinary/protected distinct
   assert.match(node.detail, /只有真正凭据和受保护载荷/);
   assert.match(node.detail, /14 组/);
   assert.match(node.detail, /H.*首次.*(?:已验|验收|完成)/);
-  assert.match(node.detail, /9 月 8 日.*冷备.*完成/);
+  assert.match(node.detail, /9 月 9 日.*冷备.*完成/);
   assert.match(node.detail, /之后的新增量.*另次备份/);
   assert.doesNotMatch(node.detail, /H 尚未返回|首次 H.*尚未验收/);
   assert.match(node.detail, /应用真正看见数据/);

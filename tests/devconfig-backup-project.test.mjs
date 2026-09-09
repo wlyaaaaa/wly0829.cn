@@ -102,7 +102,7 @@ test("devconfig-backup explains tiered media architecture and cold drive separat
     "零流量",
     "21:05",
     "22:00",
-    "2,166.3 MiB",
+    "2,465.9 MiB",
     "-Tier Drive",
     "MD5一致"
   ]) {
@@ -202,18 +202,18 @@ test("System links its devconfig-backup asset to the new detail page", () => {
 test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   const snapshotText = JSON.stringify(devconfigBackupProject.currentSnapshot);
-  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-08T08:17:27Z");
-  assert.match(snapshotText, /四项均返回0/);
-  assert.match(snapshotText, /三路latest与devconfig-20260907-210501.zip：2,271,564,569字节/);
-  assert.match(JSON.stringify(devconfigBackupProject.evidenceLayers), /MD5=b8ac7753719d963bcda19f90d9a4460b/);
-  assert.match(snapshotText, /微信Drive.*本轮.*只读任务结果.*应用恢复仍未验收/s);
+  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-09T03:43:00Z");
+  assert.match(snapshotText, /均返回0/);
+  assert.match(snapshotText, /两端latest均为2,585,641,706字节[\s\S]*Drive仍留9月5\/6\/7日三代[\s\S]*2,271,564,569字节/);
+  assert.match(snapshotText, /MD5=b8ac7753719d963bcda19f90d9a4460b/);
+  assert.match(snapshotText, /微信Drive.*03:00Z.*均返回0/s);
   assert.match(text, /小时监控仍停用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
   assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
   assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);
-  assert.match(snapshotText, /远端留9月5\/6\/7日三份日期包/);
-  assert.match(snapshotText, /06:54:56Z报告complete、warnings为空/);
+  assert.match(snapshotText, /Drive仍留9月5\/6\/7日三代/);
+  assert.match(snapshotText, /03:10:46Z记录complete、warnings为空/);
   assert.doesNotMatch(devconfigBackupProject.cardStatus, /目前离线|未追平/);
-  assert.match(snapshotText, /没有重新列出其远端全量对象.*没有证明云端应用恢复/s);
+  assert.match(snapshotText, /文件一致和任务成功.*不等于.*微信应用恢复/s);
   assert.doesNotMatch(snapshotText, /配置 Drive 返回 1|远端 latest.*9 月 2 日.*落后/);
   assert.match(text, /H_unavailable/);
   assert.match(text, /additive_no_mirror/);

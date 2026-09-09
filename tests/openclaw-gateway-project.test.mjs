@@ -84,7 +84,7 @@ test("OpenClawGateway exposes seven source-backed modules and three reading laye
 
 test("OpenClawGateway tells the real message journey without claiming message E2E", () => {
   const text = JSON.stringify({ project: openClawGatewayProject, modules: openClawGatewayModules });
-  for (const expected of ["Telegram", "飞书", "running/starting", "connected=false", "Google Chat", "disabled", "lastInbound/lastOutbound", "0/2", "Funnel", "active（活动）"]) {
+  for (const expected of ["Telegram", "飞书", "running/starting", "connected=true", "Google Chat", "disabled", "lastInbound/lastOutbound", "0/2", "Funnel", "active（活动）"]) {
     assert.ok(text.includes(expected), `channel truth missing: ${expected}`);
   }
   assert.match(openClawGatewayProject.summary, /Telegram.*飞书.*Gateway.*本地模型.*远程模型.*原渠道/s);
@@ -124,7 +124,7 @@ test("OpenClawGateway keeps runtime, update, backup and recovery evidence separa
     "34 个 PowerShell",
     "3 条 warning"
   ]) assert.ok(text.includes(expected), `evidence boundary missing: ${expected}`);
-  assert.match(text, /当前健康.*历史 LastTaskResult 非零|历史 LastTaskResult 非零.*当前.*健康/s);
+  assert.match(text, /RPC.*已恢复[\s\S]*历史任务结果非零|历史任务结果非零[\s\S]*RPC.*已恢复/);
   assert.match(text, /恢复.*暂存.*(?:没有|未).*激活/s);
   assert.match(text, /本轮没有更新或重启|真实更新.*未执行/s);
 });
@@ -159,7 +159,7 @@ test("OpenClawGateway explains four distinct private backup consumers and PUBLIC
   for (const expected of ["3 个备份任务", "4 个消费者", "7 个相关计划任务", "20:05", "22:05", "20:10", "22:10", "20:20", "22:20", "21:15", "先 Claude", "首个非零"]) {
     assert.ok(text.includes(expected), `scheduled backup topology missing: ${expected}`);
   }
-  for (const expected of ["每 15 分钟", "周日 13:00", "gateway_rpc_unavailable", "rpc.ok=true", "running=false", "recovering", "22:05", "22:10", "22:20", "0x00041306", "01:19:59"]) {
+  for (const expected of ["每 15 分钟", "周日 13:00", "gateway_rpc_unavailable", "rpc.ok=true", "ready/connected", "starting", "22:05", "22:10", "22:20", "0x00041306", "01:19:59"]) {
     assert.ok(text.includes(expected), `scheduled task receipt missing: ${expected}`);
   }
   assert.match(text, /Claude.*失败.*(?:仍|继续).*OpenClaw/s);
@@ -190,8 +190,8 @@ test("OpenClawGateway names all update channels and the exact plugin matrix with
 });
 
 test("OpenClawGateway first visible labels do not defer core English explanations to a glossary", () => {
-  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-07");
-  assert.match(openClawGatewayProject.kicker, /2026-09-07|9\s*月\s*7\s*日/);
+  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-09T03:55Z");
+  assert.match(openClawGatewayProject.kicker, /运维层/);
   const unexplainedCoreTerm = /\b(?:Gateway|RPC|health|Funnel|Owner)\b(?!（[^）]+）)/;
   assert.doesNotMatch(openClawGatewayProject.kicker, unexplainedCoreTerm);
   assert.doesNotMatch(openClawGatewayProject.cardStatus, unexplainedCoreTerm);

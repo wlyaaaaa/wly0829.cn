@@ -74,7 +74,7 @@ test("personal-expression provides reader content and renders every glossary mea
 test("personal-expression distinguishes verified source from untested personal outcomes", () => {
   const snapshot = personalExpressionProject.currentSnapshot;
   assert.ok(Number.isFinite(Date.parse(snapshot.observedAt)));
-  assert.ok(snapshot.facts.some((item) => item.value.includes("9b174a94375119ee7578b5eb4eaa8e74dabc33f5")));
+  assert.ok(snapshot.facts.some((item) => item.value.includes("cb9d635d9dbf606a8f729f9746b46227b2737ac1")));
   assert.ok(snapshot.gaps.some((item) => item.includes("后续真实任务") && item.includes("实际使用验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("真实微信动画") && item.includes("未完成验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("换机恢复") && item.includes("未进行")));
