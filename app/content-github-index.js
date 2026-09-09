@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const githubIndexSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-08T08:08:28.3009473Z",
+  observedAt: "2026-09-09T04:10:36.6382468Z",
   label: "48 个仓库身份已闭合，44 个本地副本已验证；当前无身份差异，4 个仓库仅在远端",
-  boundary: "本批来源截止为 2026-09-08 08:00:42 UTC；身份在 08:08 UTC 只读核对，公开 generation（不可变投影）284f02f9…形成于 03:15 UTC。归档仓库仍计入真实总账；身份一致不等于全部项目已同步或运行正常",
+  boundary: "2026-09-09 04:10 UTC 的只读身份核对为48/48、无差异；04:00 UTC 的来源分页与44个本地副本闭合。公开 generation（不可变投影）284f02f9…仍是9月8日的已接受快照，身份一致不等于全部项目已同步或运行正常",
   metrics: [
     { label: "仓库总账", value: "48" },
     { label: "公开 / 私有", value: "25 / 23" },
@@ -13,14 +13,14 @@ const githubIndexSnapshot = createProjectSnapshot({
   facts: [
     { label: "仓库闭合口径", value: "baseline=48、observed=48、delta=0、issue=0；已接受的来源变化留在 previous→current 历史，不用目录名补齐" },
     { label: "本地副本语义", value: "44 个 clone occurrence（本地副本记录）逐一验证 origin，其余 4 个明确为 remote-only（仅远端）；一个仓库多个 worktree（工作树）不重复算仓库" },
-    { label: "冻结源仓库", value: "PUBLIC 仓库 wlyaaaaa/github-local-index 截止时的 main=origin/main=3b3606fd73e77ec5cf8a1a1852e3201d37f18e47，工作区干净；bfc9f3f保留为准入重试、诊断和精确工作树机制证据" },
+    { label: "冻结源仓库", value: "PUBLIC 仓库 wlyaaaaa/github-local-index 本轮 main=origin/main=de1aa3f827809ddf8795eac7e73921d67e3bf1d6、工作区干净；de1aa3f 使公开指南按实际内容而非文件类型判断，bfc9f3f 仍是准入重试、诊断和精确工作树机制证据" },
     { label: "公开 generation", value: "current=284f02f94edf4c5584c4f51f680d4f7a；8 份文档闭合，共 25235 bytes（字节）；投影完整不冒充实时来源新鲜度" },
     { label: "已接受的过渡", value: "Owner baseline（基线）已接受本轮仓库集合变化；当前 48 个身份闭合、delta=0、issue=0。历史提醒不表示还有一个未处理问题" },
-    { label: "公开表达边界", value: "普通仓库名、路径、提交和失败事实可按价值展示；PRIVATE 不生成猜测链接，可复用秘密和真实 L3+ 私人载荷仍禁止公开" },
-    { label: "源仓库同步", value: "截止时来源3b3606f已发布；本轮验收另修正人类指南按文件类型一刀切的旧表述，发布为de1aa3f827809ddf8795eac7e73921d67e3bf1d6，HEAD/origin/main、ls-remote与GitHub API回读同值、工作区干净。普通内容按实际值判断，可复用秘密与真实L3+边界保留；没有改变执行机制，也未重跑重大动作全链。", hero: false },
+    { label: "公开表达边界", value: "普通仓库名、路径、提交和失败事实可按价值展示；PRIVATE 不生成猜测链接，可复用秘密不得公开；L3+ 只进入实际损害与授权审查，按结论处理具体值，L3 不等于自动阻断" },
+    { label: "源仓库同步", value: "2026-09-09当前来源de1aa3f827809ddf8795eac7e73921d67e3bf1d6，main与origin/main相同、工作区干净。机制未变，本轮未重复重大动作全链；页面纠正L3+一律删除的旧表述，按活动分级让L3进入精确审查，保留可复用秘密禁令。", hero: false },
     { label: "公开投影闭包", value: "current=284f02f94edf4c5584c4f51f680d4f7a，previous=9c04651b9fac4c069ce3e746aea5c928；manifest（清单）与8份 generation 文档、兼容投影的 SHA-256/bytes 在2026-09-08T08:11:28Z逐项回读一致，共25235字节。投影自身的观察时间为2026-09-08T03:15:32.7525421Z。", hero: false },
-    { label: "仓库与本地副本", value: "本轮有界 source（来源）返回48个仓库身份：25 PUBLIC、23 PRIVATE；分页闭合，44个已验证本地副本、4个仅远端。identity coverage（身份覆盖）与 clone coverage（本地副本覆盖）均 complete（完整）。", hero: false },
-    { label: "现场读取方式", value: "2026-09-08T08:08:28Z 的 Get-GitOwnerStatus 零写入、no fetch（不抓取远端引用）返回 completed/current、baseline=48、observed=48、delta=0、issue=0。它只核对身份事实，不证明所有仓库已同步或发布。", hero: false },
+    { label: "仓库与本地副本", value: "2026-09-09T04:00:07Z有界source（来源）返回48个仓库身份：25 PUBLIC、23 PRIVATE；分页闭合，44个已验证本地副本、4个仅远端。identity coverage（身份覆盖）与clone coverage（本地副本覆盖）均complete（完整）。", hero: false },
+    { label: "现场读取方式", value: "2026-09-09T04:10:36.6382468Z 的Get-GitOwnerStatus零写入、no fetch（不抓取远端引用）返回completed/current、baseline=48、observed=48、delta=0、issue=0。它只核对身份、可见性和默认分支事实，不证明所有仓库已同步、部署或运行正常。", hero: false },
     { label: "过渡历史", value: "history（历史）为 continuous（连续），previous→current 已接受本次仓库集合变化，仅保留 owner_baseline_transition_recorded（基线过渡已记录）提醒。当前无未处理差异，不把这项提醒变成故障。", hero: false },
   ],
   gaps: [
@@ -55,7 +55,7 @@ export const githubIndexProject = {
     { title: "看全工作树和分支，别只盯当前窗口", detail: "未提交修改、独有提交和仍被别的任务使用的工作树都要保留，不能拿当前目录干净替它们作证。" },
     { title: "网络传输、公开内容与授权三层分开", detail: "网络能推不等于内容适合公开，内容适合公开也不等于当前任务已经拿到授权。" },
     { title: "远端默认分支回读才算真正交付", detail: "功能分支对自己的上游显示为零远远不够；目标提交必须能从远端真实默认分支到达，并再次回读。" },
-    { title: "公开判断看实际内容，不看文件标签", detail: "日志、数据库、路径和个人来源不因类型自动敏感；只有真实 L3+ 正面证据才限制具体值，可复用秘密始终阻断。" },
+    { title: "公开判断看实际内容，不看文件标签", detail: "日志、数据库、路径和个人来源不因类型自动敏感；只有真实 L3+ 正面证据才进入敏感性审查，再按实际结论处理具体值；L3 不自动阻断，可复用秘密始终阻断。" },
     { title: "证据不全时只拦高影响动作", detail: "仓库身份、可见性或远端不清时停止发布、删除和迁移，但安全的本地工作与只读诊断仍可继续。" },
     { title: "一次完整刷新把总账收拢", detail: "只有仓库身份、可见性、远端、默认分支或长期治理变化才更新总账。正常完整刷新先更新公开快照与本机导航，再推进已有有效基线并回读；零写状态查询只报告差异，不改基线，也没有后台监视或自动删仓库。" },
     { title: "清理前先证明没有唯一内容", detail: "分支或工作树只有在内容已整合并证明确实冗余，或已有明确保留用途和退出条件时，才进入退役。" }
@@ -134,7 +134,7 @@ export const githubIndexProject = {
     { moduleSlug: "project-admission", ask: "这个目录最后会推到哪里？", effect: "现场读取 origin 地址、Git 共享目录、当前分支和上游，再对照 GitHub 身份；目录名或缓存与现场冲突时只做定位诊断，不继续写。" },
     { moduleSlug: "worktree-sync", ask: "这个分支已经推了，算完成吗？", effect: "除了看它和自己上游是否同步，还检查目标提交能否从远端真实默认分支到达；没进入默认分支就仍是未完成行动项。" },
     { moduleSlug: "worktree-sync", ask: "这个工作树能删吗？", effect: "检查未提交修改、独有提交、默认分支可达性、可修剪标记、必要保留和活动依赖；证据不足就保留，不把未知当作可删。" },
-    { moduleSlug: "publication-gate", ask: "公开仓库里什么能发？", effect: "按实际候选逐项判断：有用的仓库名、普通路径、提交、失败原因与技术事实可以公开，PRIVATE 仓库不生成猜测链接；可复用秘密和真实 L3+ 私人载荷必须移除。网络能推送仍不等于内容适合公开。" },
+    { moduleSlug: "publication-gate", ask: "公开仓库里什么能发？", effect: "按实际候选逐项判断：有用的仓库名、普通路径、提交、失败原因与技术事实可以公开，PRIVATE 仓库不生成猜测链接；可复用秘密必须移除，L3+ 内容则按实际审查结论处理具体值，不能仅凭等级整类删除。网络能推送仍不等于内容适合公开。" },
     { moduleSlug: "snapshot-recovery", ask: "索引刷新中断了怎么恢复？", effect: "先确认旧 current（当前指针）仍指向完整旧代，再检查未完成的新代、清单和投影；只有新代全部生成并完成哈希与字节回读后才切指针，绝不把半成品拼进旧快照。" },
     { moduleSlug: "repository-ledger", ask: "总索引现在还是最新的吗？有变化就正常完整刷新。", effect: "先用零写查询比较完整责任源基线、现场身份、本地副本和仅远端仓库，发现差异也不自行改基线。只有事实完整并明确进入正常完整刷新时，才更新公开代际与导航、推进已有有效基线并回读到零差异；基线缺失、损坏或远端证据不足时只说明精确缺口。" },
     { moduleSlug: "repository-ledger", ask: "这次发布是真正里程碑，给总账留一条记录。", effect: "只有外层交付已经确认仓库、分支、提交和公开安全理由时才追加记录；稳定键重复不会重复写，普通推送也不冒充里程碑。最多只读返回当前 50 条，并明确历史窗口缺口，不伪装成完整 Git 历史。" }
@@ -210,7 +210,7 @@ export const githubIndexModules = [
       "总索引自身 origin identity 不符时先 blocked，且不读取 baseline、registry、GitHub 或本地 root。",
       "GitHub CLI 或远端元数据执行失败属于 execution error，不伪造 domain conclusion（领域结论）。",
       "普通 commit/push 不写里程碑；只有真实、已确认且有公开安全理由的发布节点才显式记录。helper 返回 changed 只表示记录文件变化，不代表 Git commit/push 已完成。",
-      "PUBLIC 页面按决策价值选择仓库明细或聚合计数；PUBLIC/PRIVATE 都按具体值判断，只省略真实 L3+ 内容、凭据和不影响判断的噪声。"
+      "PUBLIC 页面按决策价值选择仓库明细或聚合计数；PUBLIC/PRIVATE 都按具体值判断，只省略经实际审查需要保留的 L3+ 具体值、可复用凭据和不影响判断的噪声。"
     ],
     problem: "人类需要可读总账，机器需要结构化完整身份，而页面不应为了完整性把所有动态路径和低价值明细全部铺开。若把公开 Markdown 当完整权威，新仓库会被漏掉；若把本机目录当仓库身份，旧 clone、重命名和 origin 错配会制造假事实。",
     implementation: [
@@ -460,7 +460,7 @@ export const githubIndexModules = [
     searchProjection: {
       intents: ["判断一批候选内容能否进入公开仓库", "区分普通技术事实与可复用秘密", "确认 PRIVATE identity 是否能按实际值说明", "核对 transport 内容安全和授权三层"],
       entities: ["candidate commits", "paths / content", "PUBLIC / PRIVATE", "L3+", "reusable secret", "publication authorization"],
-      relations: ["transport proceed 不推出 publication safe", "仓库名路径提交和失败按实际值判断", "PRIVATE 技术事实可说明但不生成猜测链接", "可复用秘密与真实 L3+ 载荷阻断公开"],
+      relations: ["transport proceed 不推出 publication safe", "仓库名路径提交和失败按实际值判断", "PRIVATE 技术事实可说明但不生成猜测链接", "可复用秘密阻断公开，L3+ 按实际审查结论处理"],
       failureRecovery: ["候选范围不清时只暂存精确文件", "visibility 不新鲜时停止发布", "命中秘密时移除或改成安全摘要", "授权未覆盖时保留本地结果"]
     },
     teaser: "网络能推、内容适合当前公开面、本轮已经获授权，是三道彼此独立的门，缺一不可。",
@@ -468,7 +468,7 @@ export const githubIndexModules = [
     statusTone: "pass",
     value: "既防止把私钥、令牌或私人正文错推到公开仓库，也避免因为目标是 PRIVATE（私有）就胡乱改写恢复所需的精确内容。判断始终落在这次真实候选上，不拿“仓库是公开/私有”一个标签替代内容检查。",
     why: "Git 只知道目标和引用能不能传，不理解聊天、数据库、密钥或机器快照是否应该公开；简单的 secret scanner（秘密扫描器）也只能拦一部分可疑形状，证明不了语义是否合适，更不能制造用户授权。三件事必须分开给答案。",
-    example: "比如我问“公开仓库里什么能发？”系统不会因为看见 PRIVATE 字样就整类抹掉：能改变判断的仓库名、普通路径、提交哈希、版本、失败原因和架构事实，可以按实际值说明；PRIVATE 仓库不生成猜测或不可访问的链接。真正要拦的是可复用凭据与经活动分级确认的 L3+ 私人载荷，之后还要核对这批精确候选是否得到本轮发布授权。",
+    example: "比如我问“公开仓库里什么能发？”系统不会因为看见 PRIVATE 字样就整类抹掉：能改变判断的仓库名、普通路径、提交哈希、版本、失败原因和架构事实，可以按实际值说明；PRIVATE 仓库不生成猜测或不可访问的链接。可复用凭据必须阻断；L3+ 私人载荷进入精确审查后按实际结论处理，L3 本身不是禁令，之后还要核对这批精确候选是否得到本轮发布授权。",
     result: "得到三个独立答案：Git 目标与分支能否传输、实际候选是否适合当前公开面、这一次操作是否已经获授权。三道门都成立才会推送并从远端回读；任何一道不成立，只阻断对应步骤并说明缺口。",
     readerStates: {
       pass: "传输目标与分支正确、实际发布候选适合公开且本轮已有明确发布授权时，才正常推送并从公开远端回读。",
