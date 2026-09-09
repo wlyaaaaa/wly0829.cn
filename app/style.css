@@ -425,7 +425,10 @@ main {
 }
 
 .eyebrow,
-.section-kicker {
+.section-kicker,
+.document-section .section-kicker,
+.standalone-document > section .section-kicker,
+.rule-detail > section .section-kicker {
   margin: 0;
   color: var(--green-dark);
   font-family: var(--mono);
@@ -916,6 +919,7 @@ main {
 .document-section h2,
 .module-heading h2 {
   margin: 0 0 18px;
+  color: var(--green-dark);
   font-size: clamp(24px, 2.1vw, 29px);
   font-weight: 680;
   line-height: 1.25;
@@ -956,6 +960,7 @@ main {
 }
 
 .component-table strong {
+  color: var(--green-dark);
   font-size: 13px;
 }
 
@@ -1156,6 +1161,7 @@ main {
 }
 
 .boundary-note strong {
+  color: var(--green-dark);
   font-size: 14px;
 }
 
@@ -1576,6 +1582,7 @@ main {
 
 .rule-detail > section h3 {
   margin: 0 0 14px;
+  color: var(--green-dark);
   font-size: 20px;
   letter-spacing: -0.025em;
 }
@@ -3286,7 +3293,7 @@ main {
 .module-outcome > p:not(.section-kicker) {
   max-width: 900px;
   margin: 0 0 15px;
-  color: var(--ink);
+  color: var(--muted-strong);
   font-size: 14px;
   line-height: 1.75;
 }
@@ -3299,7 +3306,7 @@ main {
 .skill-outcome > p:not(.section-kicker) {
   max-width: 920px;
   margin-bottom: 15px !important;
-  color: var(--ink) !important;
+  color: var(--muted-strong) !important;
   font-size: 15px !important;
   line-height: 1.75 !important;
 }
@@ -3349,14 +3356,20 @@ main {
 
 .outcome-state-grid article:nth-child(1) {
   box-shadow: inset 0 3px 0 var(--green);
+  background: var(--surface-green);
+  color: var(--green-dark);
 }
 
 .outcome-state-grid article:nth-child(2) {
   box-shadow: inset 0 3px 0 #d9a441;
+  background: #fff8df;
+  color: #76570d;
 }
 
 .outcome-state-grid article:nth-child(3) {
   box-shadow: inset 0 3px 0 #899089;
+  background: var(--surface);
+  color: var(--muted-strong);
 }
 
 .outcome-state-grid h3 {
@@ -4093,6 +4106,7 @@ main {
 
 .guide-section h4 {
   margin: 0;
+  color: var(--green-dark);
   font-size: 18px;
   letter-spacing: -0.02em;
 }
@@ -4244,6 +4258,7 @@ main {
 .standalone-document > section h2,
 .skill-detail-pair h2 {
   margin: 0 0 11px;
+  color: var(--green-dark);
   font-size: 19px;
 }
 
@@ -5558,8 +5573,8 @@ body:has(.learning-project-page) { min-width: 0; }
 
 .project-quick-state > div { display: grid; gap: 8px; padding: 16px; border-left: 1px solid var(--line); }
 .project-quick-state > div:first-child { border-left: 0; }
-.project-quick-state dt { color: var(--muted); font-size: 11px; font-weight: 700; }
-.project-quick-state dd { margin: 0; color: var(--ink); font-size: 13px; line-height: 1.55; }
+.project-quick-state dt { color: var(--green-dark); font-size: 11px; font-weight: 700; }
+.project-quick-state dd { margin: 0; color: var(--muted-strong); font-size: 13px; line-height: 1.55; }
 .project-quick-state dd { min-width: 0; overflow-wrap: anywhere; }
 .project-quick-state > div:nth-child(2) { background: #fff8df; }
 .project-quick-state > div:nth-child(2) dt,
@@ -5570,7 +5585,7 @@ body:has(.learning-project-page) { min-width: 0; }
 .product-principle-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line-strong); border-left: 1px solid var(--line); }
 .product-principle-grid article { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 6px 12px; padding: 18px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .product-principle-grid article > span { grid-row: 1 / 3; color: var(--green); font-family: var(--mono); font-size: 11px; }
-.product-principle-grid h3 { margin: 0; font-size: 17px; }
+.product-principle-grid h3 { margin: 0; color: var(--green-dark); font-size: 17px; }
 .product-principle-grid p { margin: 0; color: var(--muted-strong); line-height: 1.7; }
 
 .skill-category-rail {
@@ -5941,7 +5956,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 
 .system-workflow-summary > span { color: var(--green-dark); font-family: var(--mono); font-size: 12px; }
 .system-workflow-summary h3 { margin: 12px 0 16px; font-size: 25px; line-height: 1.32; letter-spacing: -.025em; }
-.system-workflow-summary blockquote { margin: 0; padding: 16px 0; border-top: 1px solid #cadbce; border-bottom: 1px solid #cadbce; font-size: 16px; font-weight: 650; }
+.system-workflow-summary blockquote { margin: 0; padding: 16px 0; border-top: 1px solid #cadbce; border-bottom: 1px solid #cadbce; color: var(--green-dark); font-size: 16px; font-weight: 600; }
 .system-workflow-summary > p { margin: auto 0 0; padding-top: 20px; color: var(--green-dark); font-size: 14px; font-weight: 650; }
 
 .system-workflow-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -5952,7 +5967,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 .system-workflow-stage > p { min-height: 145px; margin: 0; color: var(--muted-strong); font-size: 14px; line-height: 1.72; }
 .system-workflow-stage-items { margin-top: 18px; border-top: 1px solid var(--line); }
 .system-workflow-stage-items > div { padding: 12px 0; border-bottom: 1px solid var(--line); }
-.system-workflow-stage-items strong { display: block; font-size: 14px; }
+.system-workflow-stage-items strong { display: block; color: var(--green-dark); font-size: 14px; }
 .system-workflow-stage-items small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.55; }
 
 .system-workflow-contract {
@@ -6047,7 +6062,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 .system-project-domain-use h4 { margin: 0 0 8px; color: var(--green-dark); font-size: 12px; }
 .system-project-domain-use blockquote,
 .system-project-domain-use p { margin: 0; font-size: 13px; line-height: 1.7; }
-.system-project-domain-use blockquote { color: var(--ink); font-weight: 650; }
+.system-project-domain-use blockquote { color: var(--green-dark); font-weight: 600; }
 .system-project-domain-use p { color: var(--muted-strong); }
 .system-project-asset-grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); align-items: stretch; }
 .system-project-asset-grid[data-asset-remainder="2"] > .system-project-asset-card:nth-last-child(-n+2) { grid-column: span 6; }
@@ -6139,7 +6154,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 .system-skill-family h3 { margin: 0; font-size: 23px; line-height: 1.3; letter-spacing: -.02em; }
 .system-rule-story > header > p { margin: 0; color: var(--muted-strong); font-size: 14px; line-height: 1.7; }
 .system-rule-story > header > a { display: inline-flex; min-height: 44px; align-items: center; justify-content: flex-end; gap: 6px; color: var(--green-dark); font-size: 13px; font-weight: 700; }
-.system-rule-story > blockquote { margin: 0; padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--surface-green); font-size: 16px; font-weight: 650; }
+.system-rule-story > blockquote { margin: 0; padding: 18px 24px; border-bottom: 1px solid var(--line); background: var(--surface-green); color: var(--green-dark); font-size: 16px; font-weight: 600; }
 
 .system-rule-story-grid {
   display: grid;
@@ -6151,9 +6166,9 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 .system-rule-story-grid > section:first-child,
 .system-skill-family-story > section:first-child { border-left: 0; }
 .system-rule-story-grid h4,
-.system-skill-family-story h4 { margin: 0 0 10px; font-size: 14px; }
+.system-skill-family-story h4 { margin: 0 0 10px; color: var(--green-dark); font-size: 14px; line-height: 1.5; }
 .system-rule-story-grid ul,
-.system-skill-family-story ul { margin: 0; padding-left: 18px; color: var(--muted-strong); font-size: 13px; line-height: 1.65; }
+.system-skill-family-story ul { margin: 0; padding-left: 18px; color: var(--muted-strong); font-size: 13px; line-height: 1.75; }
 .system-rule-story-grid li + li,
 .system-skill-family-story li + li { margin-top: 7px; }
 
@@ -6174,7 +6189,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 
 .system-skill-family > header > p { margin: 0; color: var(--green-dark); font-family: var(--mono); font-size: 12px; }
 .system-skill-family-story { display: grid; grid-template-columns: 1.2fr repeat(4, minmax(0,1fr)); border-bottom: 1px solid var(--line-strong); }
-.system-skill-family-story blockquote { margin: 0; color: var(--ink); font-size: 13px; font-weight: 650; line-height: 1.65; }
+.system-skill-family-story blockquote { margin: 0; color: var(--green-dark); font-size: 13px; font-weight: 600; line-height: 1.75; }
 .system-skill-family-story blockquote + blockquote { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
 .system-skill-family-story > section > p { margin: 0; color: var(--muted-strong); font-size: 13px; line-height: 1.7; }
 
