@@ -35,7 +35,7 @@ test("codex-memory is registered as a published project in the final plan", asyn
     {
       id: "codex-memory",
       order: 20,
-      title: "Codex Memory Backup",
+      title: "AI 工作区备份与恢复",
       enabled: true,
       presentationMode: "real_dashboard",
       route: "/projects/codex-memory",
@@ -54,12 +54,15 @@ test("codex-memory is registered as a published project in the final plan", asyn
 });
 
 test("codex-memory keeps the accepted module routes and three reading layers", async () => {
-  assert.equal(moduleSlugs.length, 4);
+  assert.equal(moduleSlugs.length, 7);
   assert.deepEqual(moduleSlugs, [
     "config-memory-whitelist-sync",
     "vss-conversation-hot-backup",
     "content-addressed-storage-cold-sync",
-    "isolated-disaster-recovery"
+    "isolated-disaster-recovery",
+    "gemini-workspace-memory",
+    "claude-project-memory",
+    "openclaw-workspace-recovery"
   ]);
   assert.equal(new Set(moduleSlugs).size, moduleSlugs.length, "module slugs must remain unique");
   assert.ok(routePaths.includes(codexMemoryProject.route));
@@ -89,17 +92,17 @@ test("codex-memory keeps the accepted module routes and three reading layers", a
 });
 
 test("codex-memory distinguishes current source inventory from the published backup point", () => {
-  assert.equal(codexMemoryProject.currentPointId, "20260908T041508Z-d14c3a16");
-  assert.equal(codexMemoryProject.conversationFileCount, 6898);
-  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 77376044970);
-  assert.equal(codexMemoryProject.liveSourceFileCount, 6923);
-  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 77555687374);
+  assert.equal(codexMemoryProject.currentPointId, "20260909T041508Z-68deef6b");
+  assert.equal(codexMemoryProject.conversationFileCount, 7016);
+  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 47388350429);
+  assert.equal(codexMemoryProject.liveSourceFileCount, 7011);
+  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 47352579296);
   assert.notEqual(codexMemoryProject.conversationFileCount, codexMemoryProject.liveSourceFileCount);
   const hotEntry = codexMemoryProject.operationalEntrypoints.find((item) => item.command.includes("-Mode Hot"));
   assert.ok(hotEntry && hotEntry.command.includes("-Execute"), "real Hot capture requires the source execution switch");
-  assert.ok(codexMemoryProject.currentSnapshot.boundary.includes("没有重抓VSS"));
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /未打开备份正文或执行备份\/恢复/);
   assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, true);
-  assert.match(JSON.stringify(codexMemoryProject.currentSnapshot.facts), /06:44:26Z.*readback_verified=true/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /G新Codex点7016文件.*H仍是9月8日旧点/);
 });
 
 test("codex-memory explains core safety rules without marketing riddles", () => {

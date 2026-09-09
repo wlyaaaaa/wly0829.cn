@@ -1,8 +1,8 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以用于当前帮助", "需要分辨", "当前不可用"];
-const sourceMainCommit = "3bd9c8eafbfb1e7327ce544d393d9eed19fa333d";
-const observedAt = "2026-09-09T03:40:09.6632921Z";
+const sourceMainCommit = "1aae7f7c7d5d462c620e555f92bcaf66ea17984e";
+const observedAt = "2026-09-09T04:36:00.8374198Z";
 const wrapperCommand = "pwsh -NoProfile -File .\\daily-preferences.ps1";
 
 const dailyPreferencesSnapshot = createProjectSnapshot({
@@ -41,7 +41,7 @@ const dailyPreferencesSnapshot = createProjectSnapshot({
     { label: "Steam 行为边界", value: "2026-09-04 专项观察有 118 条已玩游戏、6 条已玩应用、8 条未玩游戏观察和 33 条其他应用观察；本轮未刷新 Steam。已分类但未玩或仅安装的游戏可作较弱的库内选择证据，observed 比同条件 played 低 1 分；游戏查询排除 application 与类型未知项，明确问未玩时过滤已玩记录。累计启动时长不加分，当前免费同条件低 0.5 分。", hero: false },
     { label: "具体事实回读", value: "facts 现在既能说明曾下单/支付，也能回读后来可靠全额退款及 full_refund_count；普通偏好只消费仍有效结局。部分退款、组单、跨渠道同号或关联不唯一保持 partial/Unknown。", hero: false },
     { label: "来源制品与备份", value: "Chrome 与 Google Play 可由同一 Google Takeout ZIP 派生为两个独立来源 occurrence（来源出现关系）；用户投递原件和哔哩哔哩实时快照进入 PersonalData 材料库的来源投递区。数据根与这些原件都处在现有 PersonalData 自动备份范围，不另建第二套备份服务。", hero: false },
-    { label: "源码验证", value: "2026-09-09 回读 PRIVATE main=3bd9c8e，工作树干净，解析版本仍为 daily-preferences.v0.12.0、schema 6。微信发送者筛选、按账号/会话读取位置、实际阅读范围和引用缺口说明已经进入 main；最新合同改为电脑 MCP 同库使用。此次 18 项微信增量与 6 项导出合成测试通过；185 项 Python、14 个子测试与 7 项 Node 仍是 2026-09-07 基线，不冒充本次完整回归或实际手机使用。", hero: false },
+    { label: "源码验证", value: "2026-09-09 回读 PRIVATE main=1aae7f7，工作树干净，解析版本仍为 daily-preferences.v0.12.0、schema 6。微信发送者筛选、按账号/会话读取位置、实际阅读范围和引用缺口说明已经进入 main；当前合同包括电脑 MCP 同库使用与操作者可信核对的按需只读背景；后者不触发增量或回写。此次 18 项微信增量与 6 项导出合成测试通过；185 项 Python、14 个子测试与 7 项 Node 仍是 2026-09-07 基线，不冒充本次完整回归或实际手机使用。", hero: false },
     { label: "手机与精确读取回归", value: "2026-09-08 08:16 批次在 7e5fe1b 源码上运行 15 项虚构测试，全部通过，unittest 内部 1.452 秒：手机导出 6 项、精确卡片读取 7 项、Steam 2 项。测试没有读取私人正文、刷新账号或更新云文件；不代表后来微信更新改动的回归，也不是整库理解质量或真实手机使用验收。", hero: false },
     { label: "索引清洗边界", value: "本地索引在特定支付、信用卡与行程字段中掩码 email（邮箱）、独立 7–19 位数字和支付方式末四位；它不是全局匿名化，普通商品、平台、时间与偏好事实继续保真。", hero: false },
     { label: "公开展示边界", value: "公开普通产品思想、聚合状态、具体的普通 L2 偏好样例、代码、命令、失败与缺口；不复制原始聊天、账号、商家—金额—时间组合、行程起终点、访问 URL、原件路径或凭据。", hero: false }
@@ -119,6 +119,7 @@ const dailyPreferencesProject = {
     ]
   },
   productPrinciples: [
+    { title: "有具体疑点时，再参考相关背景", detail: "日常聊天也可能出现与已知经历或当前语境明显对不上的说法。先判断是不是误会、现有信息是否够用，确实需要时才读取相关旧背景；不用每轮查库，也不把某种问法固定成警报。背景能帮助理解疑点，但不能证明当前操作者是谁；待本人验证时，新的说法也不会自动改写原有认识。" },
     { title: "行动与认识分开判断", detail: "当前明确决定约束行动；喜好、外部事实和稳定价值判断分别比较语境、长期取舍与反例，不把最新自述或行为设为全部认识的最高证据。current/historical 是版本状态，不等于真假。" },
     { title: "事实准确，推定主动但可推翻", detail: "来源、时间、账号和记录身份必须准确；偏好判断可以大胆提出，但必须说明依据并接受纠正。" },
     { title: "不把过去倒填成现在，也不编造转折", detail: "表达时间、事情发生的时期、当时选择与后来反省分别看；声称“开始”或“不再”需要前后依据。模型误读引起的反复纠错不是本人执着，岗位职责也不能自动解释成私人善意。角色、时期或反例会改变含义时，概括和详述都保留。" },
@@ -221,6 +222,7 @@ const dailyPreferencesProject = {
     { ask: "我现在用手机上的 ChatGPT，结合你对我的了解帮我判断；这次的新想法也记回去。", effect: "通过已接通的电脑 MCP 读取同一理解库，只取相关背景；有依据的新内容沿既有回写入口保存并回读。真实失败时说明具体步骤并从已完成内容接续，不要求先更新两份云文件。", moduleSlug: "mobile-context-delivery" }
   ],
   evidenceLayers: [
+    { layer: "按需只读的背景辅助", proves: "2026-09-09 已回读 PRIVATE main 1aae7f7 的 DOMAIN_CONTRACT：上游按活动 E 保护合同判断是否需要补充背景，复用 profile、evidence、facts、original，保留时间、语境及事实/推断区别。该用途不执行 record、snapshot、snapshot-batch 或 refresh；待验证的新说法不自动进入本人基准。", doesNotProve: "理解库不判断操作者身份，不提供认证因子，也不拥有触发阈值、暂停、恢复或处置时限；未命中不证明经历不存在。没有新增身份识别服务或准确率验收。" },
     { layer: "PRIVATE 源码 main", proves: `当前 main=${sourceMainCommit} 已从远端回读；v0.12.0 包含本人理解、认知卡、可靠回写、原文候选与已核引用，原有退款和 B 站集合语义继续保留。`, doesNotProve: "源码和测试不证明私人材料已充分阅读、理解已覆盖全部经历或每个领域均完成实际采用。" },
     { layer: "2026-09-07 基线回归", proves: "185 项 Python、14 个子测试与 7 项 Node 通过，覆盖认知、引用、来源过滤、可靠回写、平台增量与旧功能。本批新增聚焦检查单列，不把旧全量重新标成当前提交已跑。", doesNotProve: "检索正确、字段一致和来源数量不能代替真实自然问题中的理解与帮助。" },
     { layer: "当前 SQLite 聚合", proves: "2026-09-08 08:16:40 UTC：190,266 条当前记录、232,496 总版本、72 条当前明示、67 条历史明示、48 张当前认知卡；73 来源、quick_check=ok、外键 0。相关最新更新时间早于 08:00:42 UTC 冻结点。", doesNotProve: "卡片、记录、引用和完整性计数都不证明阅读覆盖、认知质量或领域接收完成。" },

@@ -70,7 +70,7 @@ test("Emerald Veil keeps static-background recovery separate from Bubbles instal
   assert.ok(emeraldVeilModules[0].boundaries.some((text) => text.includes("Windows设置")));
 });
 
-test("Emerald Veil serves verified 4K display assets with separate source identities and lightweight previews", async () => {
+test("Emerald Veil serves distinct desktop and phone wallpapers with verified lossless displays and previews", async () => {
   assert.equal(emeraldVeilProject.gallery.length, 2);
   assert.notEqual(emeraldVeilProject.gallery[0].src, emeraldVeilProject.gallery[1].src);
   for (const item of emeraldVeilProject.gallery) {
@@ -78,13 +78,15 @@ test("Emerald Veil serves verified 4K display assets with separate source identi
     const thumbnail = await readFile(path.join(root, "public", item.thumbnail.slice(1)));
     assert.equal(original.length, item.displayBytes || item.originalBytes);
     assert.equal(createHash("sha256").update(original).digest("hex"), (item.displaySha256 || item.originalSha256).toLowerCase());
-    assert.equal(item.width, 3840);
-    assert.equal(item.height, 2160);
+    assert.ok(item.width > 0 && item.height > 0);
+    assert.match(item.displayNote, /无损/);
     assert.ok(thumbnail.length < original.length / 10);
     assert.equal(thumbnail.subarray(8, 12).toString("ascii"), "WEBP");
     const built = await readFile(path.join(root, "dist", item.src.slice(1)));
     assert.deepEqual(built, original);
   }
+  assert.ok(emeraldVeilProject.gallery[0].width > emeraldVeilProject.gallery[0].height, "desktop wallpaper must stay landscape");
+  assert.ok(emeraldVeilProject.gallery[1].height > emeraldVeilProject.gallery[1].width, "phone wallpaper must stay portrait");
 });
 
 test("ordinary wallpaper and Bubbles questions reach Emerald Veil", () => {

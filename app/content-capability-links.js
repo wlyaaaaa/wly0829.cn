@@ -27,7 +27,7 @@ export const skillProjectLinks = {
   ],
   "daily-preferences": [
     { relation: "owned-by-project", projectSlug: "daily-preferences", moduleSlug: "personal-understanding", label: "个人理解库项目" },
-    { relation: "uses-project", projectSlug: "daily-preferences", moduleSlug: "mobile-context-delivery", label: "同源手机上下文交付" }
+    { relation: "uses-project", projectSlug: "daily-preferences", moduleSlug: "mobile-context-delivery", label: "手机与云端使用同一理解库" }
   ],
   "local-secret-broker": [
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }

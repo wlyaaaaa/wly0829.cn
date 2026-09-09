@@ -126,7 +126,7 @@
     {
       "final_rank": 20,
       "id": "codex-memory",
-      "title": "Codex Memory Backup",
+      "title": "AI 工作区备份与恢复",
       "state": "published",
       "source": "PRIVATE_MANAGED_SOURCE"
     },

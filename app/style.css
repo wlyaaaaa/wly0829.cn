@@ -4826,6 +4826,8 @@ main {
   position: relative;
   display: grid;
   width: min(100%, 1440px);
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   height: min(920px, calc(100svh - 24px));
   max-height: calc(100svh - 24px);
   grid-template-rows: auto minmax(0, 1fr);
@@ -4960,6 +4962,8 @@ main {
 .project-lightbox-stage {
   position: relative;
   display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   min-height: 0;
 }
 
@@ -4968,6 +4972,7 @@ main {
   width: 100%;
   min-width: 0;
   min-height: 0;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 10px;
   margin: 0;
@@ -4985,22 +4990,6 @@ main {
 
   .project-lightbox-dialog {
     height: calc(100svh - 24px);
-  }
-
-  .project-lightbox-dialog[data-image-orientation="landscape"] {
-    height: auto;
-  }
-
-  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-stage {
-    overflow: hidden;
-  }
-
-  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-stage figure {
-    grid-template-rows: auto auto;
-  }
-
-  .project-lightbox-dialog[data-image-orientation="landscape"] .project-lightbox-viewport {
-    max-height: calc(100svh - 260px);
   }
 
 }
@@ -5802,6 +5791,8 @@ body:has(.learning-project-page) { min-width: 0; }
   content: "";
 }
 
+.system-home [id^="system-node-"],
+.system-home [id^="system-lane-"],
 .system-home [id="general-ai"],
 .system-home [id="system-workflows"],
 .system-home [id="system-automations"],
@@ -6124,6 +6115,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 }
 
 @media (min-width: 1001px) and (max-width: 1199px) {
+  .system-dependency-lane[data-system-lane="capability"] .system-dependency-node { grid-column: span 3; }
   .system-dependency-node-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .system-dependency-node { grid-column: span 2; }
   .system-dependency-node-grid[data-node-mod-3="1"] > .system-dependency-node:last-child { grid-column: 1 / -1; }

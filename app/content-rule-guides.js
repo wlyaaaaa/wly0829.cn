@@ -28,7 +28,7 @@ export const ruleGuides = {
           },
           {
             "title": "全场景语境判断",
-            "detail": "当前E125把普通聊天也纳入具体身份疑点判断：先结合当前语境与已有背景，只在补证会改变结论时取最小相关材料。正常帮助继续，不每轮查库，也不按某句问话机械定性；当前生效来源与五文件绑定一致。"
+            "detail": "当前E126把普通聊天也纳入具体身份疑点判断：先结合当前语境与已有背景，只在补证会改变结论时取最小相关材料。正常帮助继续，不每轮查库，也不按某句问话机械定性；当前生效来源与五文件绑定一致。"
           }
         ]
       },
@@ -176,7 +176,7 @@ export const ruleGuides = {
           },
           {
             "title": "明确规则与来源证据层",
-            "detail": "全场景解释已包含在E125活动五文件中；规则、源码、测试与物理执行状态仍分别验证，不能由规则生效外推每个场景已完成。"
+            "detail": "全场景解释已包含在E126活动五文件中；规则、源码、测试与物理执行状态仍分别验证，不能由规则生效外推每个场景已完成。"
           }
         ]
       },
@@ -501,6 +501,7 @@ export const ruleGuides = {
           item("Metadata 不强制正文", "metadata 只提升候选注意力，是否读 Skill、Plugin、模板、计划或文档仍由当前净收益决定。"),
           item("Skill 中的 MUST 不是平台门", "只有上位指令、活动规则、项目硬边界或宿主机械门能成为不可越过的 gate。"),
           item("先查现有能力", "优先 owner adapter、固定 CLI/API、当前 metadata 和原生 tools；工具初始列表不是上限。"),
+          item("以前用过的小工具怎样找", "询问已有工具、图片超分或本机做法时，先查 E:\\Tools\\LocalToolbox\\catalog.json；按用途检索使用同目录 Find-LocalTool.ps1。清单返回用途、真实入口、验证与备份，查询本身不执行工具。E126 的 local_tool_catalog_route 只保留稳定指针，具体工具事实继续由清单和所属项目维护。"),
           item("能力发现不扩权", "找到一个工具、账号或插件不代表允许调用它执行 external effect。"),
           item("Effect schema 和 executor 分开", "有类型化 operation 但缺实现时，由对应 Owner 补窄 executor 和测试；已有等价入口时不提示插件。"),
           item("缺环境时优先官方原生安装", "在任务必需、可逆和兼容边界内安装 runtime/SDK/CLI/build tool；既有项目服从 lock 和 CI。"),

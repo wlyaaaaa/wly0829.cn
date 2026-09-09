@@ -1607,8 +1607,8 @@ function SystemScenarioPanel({ scenario, index }) {
 
 function SystemDependencyNode({ node }) {
   const primaryHref = node.href || node.links?.[0]?.href;
-  const defaultLinkLabel = node.linkLabel || (primaryHref.startsWith("#") ? "查看本页说明" : /^https?:\/\//.test(primaryHref) ? "查看官方说明" : (primaryHref === "/skills" || primaryHref.startsWith("/skills/")) ? "进入 Skill" : primaryHref === "/rules" ? "进入规则" : "进入项目");
-  const links = node.links?.length ? node.links : [{ href: primaryHref, label: defaultLinkLabel }];
+  const defaultLinkLabel = node.linkLabel || (primaryHref?.startsWith("#") ? "查看本页说明" : /^https?:\/\//.test(primaryHref) ? "查看官方说明" : (primaryHref === "/skills" || primaryHref?.startsWith("/skills/")) ? "进入 Skill" : primaryHref === "/rules" ? "进入规则" : "进入项目");
+  const links = node.links?.length ? node.links : primaryHref ? [{ href: primaryHref, label: defaultLinkLabel }] : [];
   return (
     <article
       className="system-dependency-node"
@@ -1620,7 +1620,7 @@ function SystemDependencyNode({ node }) {
         <span>{node.subtitle}</span>
         <p>{node.detail}</p>
       </div>
-      <div className="system-dependency-node-footer"><div className="system-dependency-node-actions">{links.map((link) => <SiteLink href={link.href} key={`${link.href}-${link.label}`}>{link.label}<ArrowRight size={15} aria-hidden="true" /></SiteLink>)}</div></div>
+      {links.length > 0 && <div className="system-dependency-node-footer"><div className="system-dependency-node-actions">{links.map((link) => <SiteLink href={link.href} key={`${link.href}-${link.label}`}>{link.label}<ArrowRight size={15} aria-hidden="true" /></SiteLink>)}</div></div>}
     </article>
   );
 }

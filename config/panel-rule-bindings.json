@@ -1,7 +1,7 @@
 {
   "schema": "wly.panel-rule-bindings.v2",
-  "semantic_release_id": "E125",
-  "ruleset_sha256": "336216631dcca0ac61b4fd6cbbd6499d536448950b645ade93ff7d9cba0bd627",
+  "semantic_release_id": "E126",
+  "ruleset_sha256": "f264301ca896d37963f324a5499aec31a98df882494b8e4ade7b368309941044",
   "rules": [
     {
       "logicalId": "agents_root_rules",

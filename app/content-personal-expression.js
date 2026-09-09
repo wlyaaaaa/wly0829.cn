@@ -1,12 +1,12 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
-const sourceCommit = "9b174a94375119ee7578b5eb4eaa8e74dabc33f5";
+const sourceCommit = "cb9d635d9dbf606a8f729f9746b46227b2737ac1";
 const stateLabels = ["正常完成时", "发现问题时", "资料不可用时"];
 
 export const personalExpressionSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-08T06:10:06Z",
+  observedAt: "2026-09-09T04:08:09.214Z",
   label: "两条表达入口和本地读取器已具备；后续效果随真实任务验收",
-  boundary: "本次核对源码、技能入口和虚构测试；实际理解、拟稿满意度与跨任务主动更新仍需真实使用确认。",
+  boundary: "本轮核对最新源码与按需只读样本合同，6 项虚构回归保留 9 月 8 日验收日期；没有读取私人语料或进行真人表达与身份判断。实际理解、拟稿满意度与跨任务主动更新仍需真实使用确认。",
   metrics: [
     { label: "说明与代拟", value: "2 个方向，各用对应资料" },
     { label: "日常资料", value: "2 份指南、1 份样本文件" },
@@ -54,6 +54,7 @@ export const personalExpressionProject = {
     failureRecovery: ["无匹配样本仍可按既定意图拟稿", "资料无法读取时不伪称已引用", "选择已有私有备份检查和恢复"]
   },
   productPrinciples: [
+    { title: "表达样本可以辅助理解疑点，不能认证身份", detail: "当当前对话确有与既有语境不符的地方，具备判断资格的上游可按需参考相关旧表达。先看现有信息是否足够，不要求每轮取样，也不靠口头禅或相似度认人。本人原话、本人修订和 AI 草稿始终分开；待本人验证时，当前说法、反馈或改稿不自动变成新的本人样本。" },
     { title: "先分清谁在对谁说话", detail: "AI 向本人说明时，根据理解反馈讲清楚；替本人对外发言时，才参考匹配的本人表达。聊天习惯不直接等于讲解偏好。" },
     { title: "保留意思，措辞可以改善", detail: "既定事实、意图、承诺和关系分寸要保留。样本只是参考，允许改进旧说法，不靠口头禅数量或相似度打分判断效果。重要含义确实拿不准才问具体问题，普通措辞由 AI 判断。" },
     { title: "当前事情由当前 AI 办完", detail: "复用原对话中的真实背景、原话和已经看过的媒体，不把它们压成仅剩策略的一段摘要。技能负责入口，领域负责专业判断，本项目负责表达，不提供发送功能。" },
@@ -87,6 +88,7 @@ export const personalExpressionProject = {
     { name: "运行虚构回归", command: "python -B -m unittest discover -s tests -v", purpose: "在临时目录验证程序行为，不接触真实微信或私人表达资料；不用于模拟真人表达效果。" }
   ],
   technicalContracts: [
+    { artifact: "AGENTS.md / reply-as-me/SKILL.md", schema: "操作者可信核对的按需只读用途", owner: "上游合格判断者；触发和处置由活动 E 保护合同负责", boundary: "复用 scenes / reply 取得相关既有参考，保留实际 author 和语境，必要时按既有来源核对 source。AI 代拟、他人、引用和转贴不作本人独立表达，本人修订也不证明整段原创。此用途不进入拟稿、补语料或纠正学习；正式恢复后再按通常证据规则处理新信息。" },
     { artifact: "explain-to-me.md / reply-guide.md", schema: "UTF-8 Markdown", owner: "当前任务中的 AI 依所属方向维护", boundary: "两份指南分别用于说明与拟稿。普通读取不会自行写回；validate 检查它们非空，读取命令不自动执行一次完整 validate。" },
     { artifact: "reply-samples.jsonl", schema: "JSONL（逐行保存 JSON 对象）：id / scene / author / status / source / context / messages / use_note", owner: "表达项目维护精选样本，原件由原来源拥有", boundary: "每条必须是对象且标识不重复；messages 必须是非空文字列表。author 接受 self_message、user_revision、ai_draft；status 接受 reference、pending、retired。标签合法不证明实际作者正确，出处与归属仍由取样 AI 核对。" },
     { artifact: "reply 输出 examples", schema: "id / author / context / messages / use_note", owner: "expression.py 的 available_samples 与 read_direction", boundary: "只选 status=reference 且 author 不是 ai_draft 的条目，再按 scene 精确匹配。输出省略原件定位用 source 字段，但上下文和文字仍可能是私人内容，不是自动脱敏。" },
@@ -95,7 +97,7 @@ export const personalExpressionProject = {
   ],
   evidenceLayers: [
     { layer: "源实现与私有 Git", proves: `已核对项目规则、产品说明、expression.py、虚构测试；${sourceCommit} 已推送到现有 PRIVATE main 并远端回读。`, doesNotProve: "源码发布不等于已经用真实聊天补充了一批资料，也不证明换机恢复完成。" },
-    { layer: "本机虚构测试：6 / 6", proves: "本轮实际执行，覆盖读取分流、参考筛选、无匹配样本、格式错误拒绝与 unavailable 返回。", doesNotProve: "不评价真人表达，不证明语料来源真实、本人满意或长期稳定使用。" },
+    { layer: "本机虚构测试：6 / 6", proves: "2026-09-08 实际执行，覆盖读取分流、参考筛选、无匹配样本、格式错误拒绝与 unavailable 返回。", doesNotProve: "不评价真人表达，不证明语料来源真实、本人满意或长期稳定使用。" },
     { layer: "技能安装与当前入口读取", proves: "本轮读到用户发现目录中的两个 SKILL.md；入口都指向当前 personal-expression 源目录，无独立读取器安装副本。", doesNotProve: "文件可读和当前 metadata（能力说明）可见，不等于一个全新自然语言任务已无提示选中入口并产出合适结果。" },
     { layer: "真实使用与本人认可", proves: "源项目已选择随真实问题和真实聊天验收，并规定由处理实际任务的 AI 同步有价值教训。", doesNotProve: "本轮没有进行这层验收；真实动画拟回复、后续任务主动补读和完整写回链仍是已知待验项。" },
     { layer: "私人资料与恢复", proves: "源码提供指定资料目录和读取私有快照的接口，现有规则明确日常目录、备份目录及恢复方法。", doesNotProve: "未读取私人文件，未验证当前样本数量、备份逐字一致或恢复结果；validate 通过本身也不比较两个目录。" }

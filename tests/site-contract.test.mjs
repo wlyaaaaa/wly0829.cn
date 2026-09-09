@@ -445,7 +445,7 @@ test("the deployed System content explains generic AI productivity and long-runn
   for (const capability of ["理解自然语言", "推理", "研究", "图片与文档", "使用工具", "代码", "浏览器", "并行协作"]) {
     assert.ok(systemText.includes(capability), `System content omits generic capability: ${capability}`);
   }
-  for (const phrase of ["外部生产力", "不是个人项目开发出来的基础智能", "个人 AI 协作系统", "全部项目", "5 份现行规则", "自然语言能力入口"]) {
+  for (const phrase of ["外部生产力", "个人项目负责把它们接到实际工作里", "个人 AI 协作系统", "全部项目", "5 份现行规则", "自然语言能力入口"]) {
     assert.ok(systemText.includes(phrase), `System content omits product boundary: ${phrase}`);
   }
   assert.equal(systemRuleStories.length, 5);
@@ -541,12 +541,12 @@ test("the shared enhancement and search indices stay within their measured revie
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 148);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 172);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 151);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 175);
   assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 22);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
-  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest whole-KiB thresholds are 148\/172\/22/);
-  assert.match(registry.refresh_policy.bundle_budget_semantics, /Preserve complete meaning; reject avoidable duplication/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase to151\/175\/22KiB/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /no identical duplicate/);
   assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
   const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
@@ -976,8 +976,8 @@ test("GitHub index exposes the current 49-repository facts and complete owner jo
   const majorActions = githubIndexModules.find((item) => item.slug === "protected-major-actions");
   const majorText = JSON.stringify(majorActions);
   assert.equal(githubIndexProject.currentState.observedAt, "2026-09-09T05:12:19.7074638Z");
-  assert.match(majorText, /当前 E125 保护合同已验证/);
-  assert.match(majorText, /2026-09-09 E125[\s\S]*SHA-256=c40181f/);
+  assert.match(majorText, /当前 E126 保护合同已验证/);
+  assert.match(majorText, /2026-09-09 E126[\s\S]*SHA-256=c40181f/);
   for (const operation of ["delete-local-ref", "force-update-local-ref", "replace-remote-url", "create-repository", "set-visibility", "rename-repository", "set-default-branch", "delete-repository", "transfer-repository"]) {
     assert.ok(majorText.includes(operation), `Git major actions omit typed operation: ${operation}`);
   }
@@ -2629,7 +2629,7 @@ test("personal-media preserves its current product snapshot and delivers ten opt
   assert.equal(personalMediaProject.slug, "personal-media");
   assert.equal(personalMediaProject.route, "/projects/personal-media");
   assert.equal(personalMediaProject.title, "个人媒体整理与恢复");
-  assert.equal(personalMediaProject.visibility, "本地私有项目");
+  assert.equal(personalMediaProject.visibility, "GitHub 私有仓库");
   assert.equal(personalMediaProject.repositoryUrl, null);
   assert.deepEqual(personalMediaProject.cardMetrics.map((item) => item.label), ["照片", "视频", "音频", "精选"]);
   assert.deepEqual(personalMediaProject.cardMetrics.slice(0, 3).map((item) => item.value), ["20,312 张", "376 个", "3,851 个"]);
@@ -2709,9 +2709,9 @@ test("personal-media preserves its current product snapshot and delivers ten opt
   assert.deepEqual(projectReferenceLinks["personal-media"], [{ relation: "skill", href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }]);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "personal-media");
-  assert.equal(registration.ai_refresh.semantic_revision, 7);
-  assert.equal(registration.source.kind, "local_managed_source");
-  assert.equal(registration.source.repo, "PRIVATE_MANAGED_SOURCE");
+  assert.equal(registration.ai_refresh.semantic_revision, 8);
+  assert.equal(registration.source.visibility, "PRIVATE");
+  assert.equal(registration.source.repo, "wlyaaaaa/personal-media");
 });
 
 test("the generic project gallery supports click, keyboard navigation and lazy images", async () => {
@@ -2749,8 +2749,8 @@ test("the generic project gallery supports click, keyboard navigation and lazy i
   assert.match(staticSource, /dialog\.dataset\.imageOrientation = fitSize\.naturalWidth > fitSize\.naturalHeight/);
   assert.match(staticSource, /zoom === 1 \? height : Math\.max\(fitSize\.viewportHeight, height\)/);
   const styleSource = await readFile(path.join(projectRoot, "app", "style.css"), "utf8");
-  assert.match(styleSource, /project-lightbox-dialog\[data-image-orientation="landscape"\][\s\S]*?height:\s*auto/);
-  assert.match(styleSource, /project-lightbox-dialog\[data-image-orientation="landscape"\][\s\S]*?max-height:\s*calc\(100svh - 260px\)/);
+  assert.doesNotMatch(styleSource, /project-lightbox-dialog\[data-image-orientation="landscape"\][\s\S]*?height:\s*auto/, "image sizing must not feed back into an auto-height measured viewport");
+  assert.match(styleSource, /\.project-lightbox-viewport\s*\{[^}]*min-width:\s*0[^}]*overflow:\s*auto/s, "zoomed content stays inside the image scroll region");
 });
 
 test("project evolution records important dated stages instead of append-only update logs", () => {
@@ -3022,10 +3022,10 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedPersonalMedia.status, "ready_for_ai");
   assert.deepEqual(targetedPersonalMedia.selected_projects.map((item) => item.id), ["personal-media"]);
   assert.equal(targetedPersonalMedia.selected_projects[0].content_path, "app/content-personal-media.js");
-  assert.equal(targetedPersonalMedia.selected_projects[0].semantic_revision, 7);
-  assert.equal(targetedPersonalMedia.selected_projects[0].source.kind, "local_managed_source");
+  assert.equal(targetedPersonalMedia.selected_projects[0].semantic_revision, 8);
   assert.equal(targetedPersonalMedia.selected_projects[0].source.visibility, "PRIVATE");
-  assert.equal(targetedPersonalMedia.selected_projects[0].source.repo, "PRIVATE_MANAGED_SOURCE");
+  assert.equal(targetedPersonalMedia.selected_projects[0].source.visibility, "PRIVATE");
+  assert.equal(targetedPersonalMedia.selected_projects[0].source.repo, "wlyaaaaa/personal-media");
   assert.equal(Object.hasOwn(targetedPersonalMedia.selected_projects[0].source, "local_root"), false);
   assert.ok(targetedPersonalMedia.selected_projects[0].impact_sources.length >= 3);
   assert.equal(targetedLocalOcr.status, "ready_for_ai");
@@ -3901,13 +3901,13 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.match(styleSource, /\.skill-category-rail\s*\{[\s\S]*?display:\s*flex;[\s\S]*?overflow-x:\s*auto/);
   assert.match(styleSource, /\.project-card-snapshot-boundary[\s\S]*?background:\s*#fff8df/);
   assert.match(styleSource, /\.search-results-page h1\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*word-break:\s*break-word;/);
-  assert.match(pageSource, /primaryHref === "\/skills" \|\| primaryHref\.startsWith\("\/skills\/"\)/);
+  assert.match(pageSource, /primaryHref === "\/skills" \|\| primaryHref\?\.startsWith\("\/skills\/"\)/);
   assert.match(runtimeSource, /if \(id\) activateScenario\(id\);/);
   assert.match(runtimeSource, /activateScenario\(idFromHash\(\) \|\| ids\[0\]\)/);
 
   const systemHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
   assert.match(systemHtml, /class="system-home"/);
-  for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "通用 AI 与智能体能力", "各层验证分别能证明什么", "下一步去哪里看完整细节"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
+  for (const text of [systemHomeHero.eyebrow, systemHomeHero.title, "图像创作", "各层验证分别能证明什么", "下一步去哪里看完整细节"]) assert.ok(systemHtml.includes(text), `System home omits: ${text}`);
   assert.equal((systemHtml.match(/data-system-scenario-tab=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-scenario-panel=/g) || []).length, systemScenarios.length);
   assert.equal((systemHtml.match(/data-system-dependency-node=/g) || []).length, systemDependencyNodes.length);
@@ -3922,7 +3922,7 @@ test("shared search scopes, project reading layers, Skills categories and System
     }
   }
   const systemNodeIds = new Set(systemDependencyNodes.map((node) => node.id));
-  assert.equal(systemDependencyNodes.length, 51, "System composition retains existing responsibilities and the new personal-expression project");
+  assert.equal(systemDependencyNodes.length, 58, "System composition keeps existing responsibilities and separates eight general capabilities");
   for (const expected of ["direct-input", "mixed-file-intake", "mojibake-repair", "execution-owner", "durable-task-state", "message-ai-gateway", "work-delivery", "ai-cli-entry", "local-ai-runtime", "llm-backend-job", "cross-device-files", "remote-workstation", "wechat-bridge", "wechat-direct", "companion-laptop", "career-development", "daily-preferences-skill", "personal-expression"]) assert.ok(systemNodeIds.has(expected), `System composition omits necessary node: ${expected}`);
   const dailyPreferencesNode = systemDependencyNodes.find((node) => node.id === "daily-preferences-skill");
   assert.deepEqual({ lane: dailyPreferencesNode.lane, href: dailyPreferencesNode.href, linkLabel: dailyPreferencesNode.linkLabel }, { lane: "personal", href: "/skills/daily-preferences", linkLabel: "Skill：个人理解库" });
@@ -3955,13 +3955,13 @@ test("shared search scopes, project reading layers, Skills categories and System
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.assetId)).size, systemProjectAssets.length);
   assert.equal(new Set(systemProjectSourceMap.map((entry) => entry.sourceIdentity)).size, systemProjectAssets.length);
   assert.ok(systemProjectSourceMap.every((entry) => !entry.sourceIdentity.endsWith("undefined")));
-  assert.equal(systemProjectInventory.total, 48);
+  assert.equal(systemProjectInventory.total, 49);
   assert.deepEqual(
     { publicCount: systemProjectInventory.publicCount, privateCount: systemProjectInventory.privateCount, localCloneCount: systemProjectInventory.localCloneCount, remoteOnlyCount: systemProjectInventory.remoteOnlyCount },
-    { publicCount: 25, privateCount: 23, localCloneCount: 44, remoteOnlyCount: 4 }
+    { publicCount: 25, privateCount: 24, localCloneCount: 45, remoteOnlyCount: 4 }
   );
   const githubInventoryText = JSON.stringify(githubIndexProject.currentSnapshot);
-  for (const expected of ["48", "25", "23", "44", "4"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
+  for (const expected of ["49", "25", "24", "45", "4"]) assert.ok(githubInventoryText.includes(expected), `GitHub project snapshot omits current System inventory value: ${expected}`);
   const dailyPreferencesAsset = systemProjectAssets.find((asset) => asset.id === "daily-preferences");
   assert.deepEqual({ repo: dailyPreferencesAsset.repo, visibility: dailyPreferencesAsset.visibility, href: dailyPreferencesAsset.href, entryLabel: dailyPreferencesAsset.entryLabel }, { repo: "daily-preferences", visibility: "PRIVATE", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" });
   assert.equal(systemProjectSourceMap.find((entry) => entry.assetId === "daily-preferences")?.sourceIdentity, "repo:daily-preferences");
@@ -4159,16 +4159,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E125 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
+test("E126 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E125");
-  assert.equal(bindings.ruleset_sha256, "336216631dcca0ac61b4fd6cbbd6499d536448950b645ade93ff7d9cba0bd627");
-  assert.equal(panelSnapshot.authority.releaseId, "E125");
-  assert.equal(panelSnapshot.authority.gitCommit, "77655694c3fe29dbb1cf3ce16b4dcd7460bcd97e");
-  assert.equal(panelSnapshot.authority.pointerRevision, 33);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E124");
+  assert.equal(bindings.semantic_release_id, "E126");
+  assert.equal(bindings.ruleset_sha256, "f264301ca896d37963f324a5499aec31a98df882494b8e4ade7b368309941044");
+  assert.equal(panelSnapshot.authority.releaseId, "E126");
+  assert.equal(panelSnapshot.authority.gitCommit, "4767b979b416c56afb254c12bd315b563c965c00");
+  assert.equal(panelSnapshot.authority.pointerRevision, 34);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E125");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",

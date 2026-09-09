@@ -464,8 +464,8 @@ export const codexMemoryProject = {
     },
     {
       "layer": "H 介质状态",
-      "proves": "本次Inspect为h_available=true；H原生cold回执complete/readback_verified=true，与G清单和闭包哈希一致。",
-      "doesNotProve": "完整对象校验属于06:44Z原任务；本次小元数据比较不证明新机器应用恢复，也不代表未来点已同步。"
+      "proves": "本次Inspect为h_available=true；H仍保存9月8日旧点，该点原生cold回执为complete/readback_verified=true。G已在9月9日产生7016文件新点，当前G/H不属于同一点。",
+      "doesNotProve": "H的完整对象校验属于9月8日06:44Z原任务；本次小元数据读取不证明G的新点已进入H，也不证明新机器应用恢复。"
     },
     {
       "layer": "官方归档与应用恢复",
@@ -922,7 +922,7 @@ export const codexMemoryModules = [
     ],
     "verification": [
       "9月7日三个人工点的dedup_verified与restore_verified均为true，代码输入未变化。",
-      "本轮读取G/H相同点、清单/闭包哈希与06:44Z正式cold完成回执；没有重新哈希全部生产对象，也没有另外执行冷同步。"
+      "9月8日曾读回G/H相同点、清单/闭包哈希与06:44Z正式cold完成回执；9月9日G已形成新点，H仍是旧点。本轮只读元数据，没有重新哈希全部生产对象或执行冷同步。"
     ],
     "searchAliases": [
       "内容寻址存储",

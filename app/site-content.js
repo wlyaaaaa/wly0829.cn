@@ -18,12 +18,15 @@ function registeredContent(entry) {
   const expectedVisibility = entry.source.kind === "local_managed_source"
     ? "本地私有项目"
     : entry.source.visibility === "PRIVATE" ? "私有仓库" : "公开仓库";
+  const visibilityMatches = content.project.visibility === expectedVisibility
+    || (expectedVisibility === "私有仓库" && entry.source.repo?.includes("/")
+      && content.project.visibility === "GitHub 私有仓库");
   const mismatches = [
     content.project.slug !== entry.id && "id",
     content.project.order !== entry.order && "order",
     content.project.title !== entry.title && "title",
     content.project.route !== entry.route && "route",
-    content.project.visibility !== expectedVisibility && "visibility",
+    !visibilityMatches && "visibility",
     !panelRegistry.refresh_policy.allowed_presentation_modes.includes(entry.presentation_mode) && "presentation_mode"
   ].filter(Boolean);
   if (mismatches.length) throw new Error(`Panel project registry/content mismatch for ${entry.id}: ${mismatches.join(",")}`);
