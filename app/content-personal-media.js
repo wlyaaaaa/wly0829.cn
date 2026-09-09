@@ -1,6 +1,8 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const OBSERVED_AT = "2026-09-05T10:39:36.6907174+00:00";
+const SOURCE_MAIN_COMMIT = "383eb85421048a9812902f4c5f2d098cbff1f8a5";
+const SOURCE_OBSERVED_AT = "2026-09-09T04:59:04.9572845Z";
 const SOURCE_RECEIPT = "personal-media-current-acceptance.v1";
 const SOURCE_RECEIPT_SHA256 = "d2fa41ac8b23ea382502ca222482c87660b8299f5a61e2f2b4a89fa00a89b6be";
 
@@ -33,9 +35,9 @@ const current = Object.freeze({
 const bytesToGiB = (value) => `${(value / 1024 ** 3).toFixed(1)} GiB`;
 
 const personalMediaSnapshot = createProjectSnapshot({
-  observedAt: OBSERVED_AT,
+  observedAt: SOURCE_OBSERVED_AT,
   label: `${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频、${current.audioRows.toLocaleString("zh-CN")} 个音频可检索；精选 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频；手机恢复包低于 60 GB；云端仍为 upload=0`,
-  boundary: `本页读取了 ${SOURCE_RECEIPT}、项目规则、人类入口、两个生产模块和测试结构，并把用户明确授权的实拍原图作为画廊。${current.skipped} 项需要指定真机的受保护清理测试本轮未运行；因此源码与当前目录通过不冒充手机已经连接、清空或云端已经上传。`,
+  boundary: `GitHub 私有仓库与 main 已回读；源码和整理元数据有私人版本保存，媒体原件仍在本地与异卷副本中。媒体数量和 ${current.tests} 项测试沿用 ${SOURCE_RECEIPT} 的原观察日期，新增元数据导出另有 4 项合成回归；本页未连接手机、执行清理或上传 Google Photos，10 张画廊资源保持不变。`,
   metrics: [
     { label: "照片", value: `${current.imageRows.toLocaleString("zh-CN")} 张` },
     { label: "视频", value: `${current.videoRows.toLocaleString("zh-CN")} 个` },
@@ -54,10 +56,12 @@ const personalMediaSnapshot = createProjectSnapshot({
     { label: "云端候选", value: `${current.cloudCandidates.toLocaleString("zh-CN")} 项、${bytesToGiB(current.cloudBytes)}；upload=0，当前没有上传授权，也没有发生上传。` },
     { label: "检索与耗时边界", value: "查询直接使用 SQLite 条件/FTS，返回逐词命中字段、有限片段与范围；当前 source 明确取消 750/250 ms 硬门，不为几秒级耗时牺牲 AI 所需含义和证据。旧精确查询 239 ms 仅是历史观测，不是当前验收阈值。" },
     { label: "源码边界", value: `只有 personal_media.py 与 phone_file_preserve_clear.py 两个生产模块；无服务、队列、后台任务或第二数据库。`, hero: false },
-    { label: "验收", value: `${current.tests} 项测试 0 失败、0 错误；${current.skipped} 项指定真机清理测试跳过；验收绑定的 ${current.sourceFiles} 个源码文件当前哈希仍一致。`, hero: false },
+    { label: "GitHub 私有仓库", value: `wlyaaaaa/personal-media，repository id=1362211796，PRIVATE、默认 main。${SOURCE_OBSERVED_AT} 通过 Git Owner 的实时可见性元数据和 GitHub ref API 核对，本地干净 HEAD 与远端 main 均为 ${SOURCE_MAIN_COMMIT}。`, hero: false },
+    { label: "私人版本保存什么", value: "源码、测试、说明与 metadata/current.zip 的无损元数据快照进入 PRIVATE Git；快照保留重建种子、清单、分类、标签、描述、原路径和内容 SHA-256。照片、视频、音频、活动 SQLite 与缓存不进入 Git，仍由原有本地与异卷恢复路径负责。", hero: false },
+    { label: "验收", value: `2026-09-05 的 ${current.tests} 项媒体验收为 0 失败/错误、${current.skipped} 项真机测试跳过；它不覆盖后来新增的 Git 元数据导出。2026-09-09 在 ${SOURCE_MAIN_COMMIT.slice(0, 8)} 上另跑 4 项 MetadataSnapshotTests 合成回归通过，未读取或导出真实私人元数据。`, hero: false },
     { label: "当前代承诺", value: `${SOURCE_RECEIPT} completed=${OBSERVED_AT}，SHA-256=${SOURCE_RECEIPT_SHA256}；catalog=2268d65ca0ce83c4cc7157dd3346993bbd01863fa6eb9bc8dc7e966f41e38636，seed=7745e2a9fbe7872b51f1e0d751436c1aaba694077e6209f8360b21ab339f78f0，phone-plan=3f406f31af445ac2226ff61a33c87df7f0758a2a555cb2513954f5746b85ba7a，cloud-plan=d897ab66d54baae235831ce30359030e5a3c5f1621af2430684e7cea805fb607。以上数据制品摘要来自该次封印；本轮只读 status 核对 24,539 行与 quick_check=ok，不声称全库原件逐项重验。`, hero: false },
     { label: "当前技术路径", value: "catalog=E:\\Media\\_manifests\\personal-media-current\\catalog.sqlite3；seed=E:\\Media\\_manifests\\personal-media-current\\seed\\keeper-search-index.ndjson；phone-plan=E:\\Media\\_manifests\\personal-media-current\\phone-recovery-plan.ndjson；cloud-plan=E:\\Media\\_manifests\\personal-media-current\\cloud-candidates.ndjson；phone-runs=E:\\Media\\_manifests\\phone-shared-full-preserve-successor-v2\\runs；phone-E=E:\\Media\\PhoneSharedFullPreserve；phone-G=G:\\80_Backup\\PersonalMedia\\PhoneSharedFullPreserve；phone-package=G:\\80_Backup\\PersonalMedia\\PhoneMediaRecovery\\2026-08-25；G canonical mirrors=G:\\80_Backup\\PersonalMedia\\Pictures、G:\\80_Backup\\PersonalMedia\\Videos、G:\\80_Backup\\PersonalMedia\\Music\\录音、G:\\80_Backup\\PersonalMedia\\Music\\音乐、G:\\80_Backup\\PersonalMedia\\Music\\铃声。", hero: false },
-    { label: "七份源文件承诺", value: "AGENTS.md=eea75e071354233adb8780c5639959eb696067e16197945d6378a19bda1be903；README.md=dd60c27ceeac7edc75d2275786442e41220949a098703aaffb27278211e4e7a9；personal_media.py=7bba1e85cd5a7b3ec085191027cbc7bea63824411c8cf2ddf4314191f6506283；phone_file_preserve_clear.py=0ee1b280c5bad9d27dbc483e35faaa5089d6e5c82d1ec791d315dd47dc1200bc；test_personal_media.py=a44d7f3bd4eb30380fe3b356dc4aafdacb10b6cea9ba60310e53a8894a074523；test_phone_file_preserve_clear.py=edc51d9e12a5c1b873852161e8349328ad2a4a7edfa2092c5a68b73416320c34；acceptance.ps1=57b6898cb7063f7d1f7428f55b6acb0221679195a262cf37e3d9a31e00e20a4e。2026-09-07 七份源码承诺逐项核对一致；README 当前 20,288 字节，仅备份范围说明于 21:13:44 UTC 更新。回执保留 9/5 原验收时间和全部其余代码、目录、手机/云承诺，不能据文档更新推定新运行。", hero: false },
+    { label: "历史七份源文件承诺", value: "AGENTS.md=eea75e071354233adb8780c5639959eb696067e16197945d6378a19bda1be903；README.md=dd60c27ceeac7edc75d2275786442e41220949a098703aaffb27278211e4e7a9；personal_media.py=7bba1e85cd5a7b3ec085191027cbc7bea63824411c8cf2ddf4314191f6506283；phone_file_preserve_clear.py=0ee1b280c5bad9d27dbc483e35faaa5089d6e5c82d1ec791d315dd47dc1200bc；test_personal_media.py=a44d7f3bd4eb30380fe3b356dc4aafdacb10b6cea9ba60310e53a8894a074523；test_phone_file_preserve_clear.py=edc51d9e12a5c1b873852161e8349328ad2a4a7edfa2092c5a68b73416320c34；acceptance.ps1=57b6898cb7063f7d1f7428f55b6acb0221679195a262cf37e3d9a31e00e20a4e。这七份承诺在 2026-09-07 核对一致，README 当时为 20,288 字节。2026-09-09 新增私有 Git 与元数据导出后，现行源码以新的 main 提交为准；这份旧回执继续证明其原版本，不再声称与当前全部源码哈希一致。", hero: false },
     { label: "回收站与来源退役", value: "手机相册 .globalTrash 是本人已删除原件，既不计入新共享文件保全，也不因图片看起来有用而重新入库或加入手机/云候选。本人在文件管理器删除正式原件后，查询只跳过，既有每日任务再同步目录与恢复面。", hero: false },
     { label: "现有每日备份关系", value: "PCConfig 已发布源 912b1af 的当前映射是 E:\\Media → G:\\80_Backup\\PersonalMedia\\Media，明确排除 Packages；G:\\80_Backup\\PersonalMedia\\Packages 属于个人媒体的专用恢复路径，不能把主镜像成功当作它已经同步。任务先维护两库清单，再执行五组镜像，最后运行媒体 recovery-sync；不连接手机或上传云。2026-09-07 已将 README 的旧范围说明对齐这份 PCConfig 映射；仅文档和其承诺更新，9/5 代码测试、目录、恢复计划及实机日期保持不变。", hero: false },
     { label: "备份任务与现有回执", value: "2026-09-07T20:16:52Z 的 PCConfig Inspect 回读该日常任务 enabled / Ready、最近结果 0；既有回执完成于 2026-09-07T02:14:53.7634544-07:00，五映射 post_verified=true、errors=[]，Media 源/目标各 66,538 条且差额 0。此处复用既有有界回执，本轮未运行备份；五映射通过也不能覆盖另一步 failed/partial。", hero: false }
@@ -83,7 +87,7 @@ const personalMediaProject = {
   slug: "personal-media",
   title: "个人媒体整理与恢复",
   route: "/projects/personal-media",
-  visibility: "本地私有项目",
+  visibility: "GitHub 私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
   cardStatus: `${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频、${current.audioRows.toLocaleString("zh-CN")} 个音频已形成可检索目录`,
@@ -104,7 +108,7 @@ const personalMediaProject = {
     "原件不见了就当我不要了",
     "删除原件后退出手机恢复包和云候选"
   ],
-  repositoryNote: "这是一个本地私有项目，没有公开 GitHub 仓库按钮。公开页完整说明产品、路径、组件、流程、测试、失败和恢复边界；普通个人照片不因来自私人媒体库而默认排除，具体 L3+ 值与可复用秘密仍逐值处理。",
+  repositoryNote: `PRIVATE wlyaaaaa/personal-media，默认 main；源码、测试、说明与无损元数据快照已有 GitHub 私人版本保存，本地和远端已回读 ${SOURCE_MAIN_COMMIT}。媒体原件与大体积恢复包仍由本地和 G 盘保管，私有仓库不显示面向未知访客的 GitHub 跳转按钮。网页只说明公开安全的产品与技术事实，不复制私人元数据正文；既有 10 张授权照片资源保持不变。`,
   summary: "按记得的时间、地点、画面或已有文字，找到照片、视频和音频。值得重看的直接移入“精选”，不另存一份，也不为凑数量硬选。手机新文件先在两块盘上备份并核对，再离线分类、去重；备份和手机恢复包跟随现有计划任务更新。你自己删了原件就是删了，不用通知 AI。云端只准备候选，不自动上传。",
   why: "媒体最容易同时出现三种问题：想用时找不到；好照片淹没在分类目录里；换机或手机故障后只剩零散副本。把所有东西复制到第二套库、持续后台同步或自动上传又会制造更多状态。这个项目选择一个可重建目录、两个职责清楚的模块和逐次有界处理；同时把文件管理器中的原件现状当作本人决定，而不是让旧索引或恢复包反过来支配原件。",
   plainExample: "我可以说：“先把小米 15 Pro 里这批旅行照片和视频备份到两块盘，确认安全后马上提醒我拔线；再离线整理，不要上传云端。”系统会逐项核对两份副本，明确告诉我手机是否可以断开；随后再判断画面内容、质量和重复关系，把保留原件放回当前照片或视频目录，并更新手机恢复包和仍未上传的云端候选。",
@@ -192,7 +196,7 @@ const personalMediaProject = {
     { title: "让备份和恢复包跟随当前文件", detail: "sync-current 维护 SQLite、重建种子和既有候选；原 E→G 备份负责镜像，recovery-sync 维护固定手机包和现存视频的格式变体。读取入口不做这些写入，离线后下次从当前集合重新同步即可。" }
   ],
   components: [
-    { name: "personal_media.py", responsibility: "当前目录、检索、临时浏览、分类、独立本地接入、批次应用、恢复包与云候选。", implementation: "目录与状态核心使用 Python stdlib + SQLite/FTS；图片打开/缩略使用 Pillow，视频/音频使用 ffmpeg/ffprobe。项目不新增常驻进程；现有 PersonalDataReplica-Hot-Daily 调用维护和恢复包同步入口。" },
+    { name: "personal_media.py", responsibility: "当前目录、检索、临时浏览、分类、独立本地接入、批次应用、恢复包、云候选与按需元数据导出。", implementation: "目录与状态核心使用 Python stdlib + SQLite/FTS；图片打开/缩略使用 Pillow，视频/音频使用 ffmpeg/ffprobe。snapshot-metadata 只读选定元数据、只写无损 ZIP，不上传或改动原件。项目不新增常驻进程；现有 PersonalDataReplica-Hot-Daily 调用维护和恢复包同步入口，不触发 Git 推送。" },
     { name: "phone_file_preserve_clear.py", responsibility: "手机共享文件捕获、E/G 双盘保全、逐项回读和精确清理。", implementation: "只处理明确共享边界；删除前再次核对精确路径、大小和哈希，不递归删目录。" },
     { name: "catalog.sqlite3", responsibility: "保存可重建的当前媒体定位与检索字段。", implementation: "当前 24,539 个媒体原件记录；数据库不保存照片、视频或录音字节。" },
     { name: "按代原子替换的 current seed 与计划", responsibility: "重建目录，并分别表达手机恢复与云端候选。", implementation: "keeper-search-index.ndjson 会在增量收口时原子重写并推进 current_seed SHA，不是跨增量字节不变；它只作当前代重建种子，手机/云 NDJSON 是外部计划，三者都不参与日常查询或成为第二 current 索引。" },
@@ -218,15 +222,18 @@ const personalMediaProject = {
     { ask: "哪些照片准备以后传 Google Photos？", effect: "交回仍未上传的候选和相册计划；我没有查看清单并明确批准前，不会上传。", moduleSlug: "cloud-candidates" }
   ],
   evidenceLayers: [
+    { layer: "GitHub 私有来源与元数据快照", proves: `Git Owner 实时元数据和 GitHub ref API 于 ${SOURCE_OBSERVED_AT} 确认 PRIVATE main=${SOURCE_MAIN_COMMIT}，与干净本地一致；4 项虚构导出回归通过。`, doesNotProve: "没有执行真实快照导出或从远端恢复演练；Git 保存元数据不证明媒体原件已备份到 GitHub，也不能从 SHA-256 还原丢失图片。" },
     { layer: "项目规则与 README", proves: "定义媒体 Owner、双盘保全、分类、三面收口、速度与不自动上传边界。", doesNotProve: "文字说明不证明当前目录、恢复包或设备在线。" },
     { layer: "两个生产模块", proves: "现行源码实现目录、检索、浏览、批次视觉决定、双盘回读、恢复计划与精确清理。", doesNotProve: "代码存在不证明本轮连接了手机或执行了外部动作。" },
     { layer: "独立本地文件接入", proves: "ingest-file 为新 keeper 和同视频流容器变体分别定义输入、E/G read-back、目录事务、来源退休与三面候选刷新。", doesNotProve: "入口存在不证明任意未复核文件都应接入，也不证明一次中断可以自动回滚所有外部文件动作。" },
-    { layer: SOURCE_RECEIPT, proves: `${current.tests} 项测试 0 失败/错误、精确查询 ${current.queryWallMs} ms、恢复包 ${current.recoveryItems} 项且低于 60 GB、云候选 ${current.cloudCandidates} 项且未授权上传。`, doesNotProve: `${current.skipped} 项指定真机测试本轮未运行；回执也不证明所有原件今天仍可打开。` },
-    { layer: "当前源码与代际哈希回读", proves: `本轮 ${current.sourceFiles} 个源码/规则/测试文件重新计算的哈希与 SHA-256=${SOURCE_RECEIPT_SHA256} 的 ${SOURCE_RECEIPT} 一致。该回执绑定 catalog/current seed/phone plan/cloud plan，status 另核对 24,539 行与 quick_check=ok。`, doesNotProve: "封印摘要不证明本轮每个原件均重新打开或逐项哈希；手机在线、163 项清理和云端上传仍未验收。" },
+    { layer: SOURCE_RECEIPT, proves: `2026-09-05 的 ${current.tests} 项测试 0 失败/错误、精确查询 ${current.queryWallMs} ms、恢复包 ${current.recoveryItems} 项且低于 60 GB、云候选 ${current.cloudCandidates} 项且未授权上传。`, doesNotProve: `${current.skipped} 项指定真机测试未运行；旧回执不证明新增元数据导出、当前 Git 版本的完整回归或所有原件今天仍可打开。` },
+    { layer: "既有媒体数据与历史源码承诺", proves: `2026-09-09 03:40 的只读核对中，${current.sourceFiles} 个旧源码文件仍与 SHA-256=${SOURCE_RECEIPT_SHA256} 的回执一致，status 为 24,539 行与 quick_check=ok。后来新增 Git 元数据能力的源码由 ${SOURCE_MAIN_COMMIT} 单独定位。`, doesNotProve: "不把旧源码承诺继承为新增能力的完整验收；手机在线、163 项清理和 Google Photos 上传仍未验收。" },
     { layer: "用户授权的实拍画廊", proves: "当前选择的原图真实存在，能够展示旅行、日常和其他视觉类别的画面质量。", doesNotProve: "少量好照片不证明整个媒体库均已逐张人工审美验收。" },
     { layer: "真机与云端动作", proves: "实际设备双盘保全、精确清理、恢复写回或云上传在对应动作后分别有结果。", doesNotProve: "任何一层不能替代另一层，也不能由页面或测试预先宣布完成。" }
   ],
   operationalEntrypoints: [
+    { name: "按需保存整理元数据", command: "py -3 personal_media.py snapshot-metadata --output metadata/current.zip", purpose: "只读重建种子及清单、手机计划、云候选和存在时的候选刷新/手机待清理清单，以 personal-media-metadata-snapshot.v1 保存每文件字节与 SHA-256。原文保真、同内容输出字节不变；源在读取中变化或压缩包超过 100 MiB 时保留旧快照并报错。命令不联网，定向提交和 PRIVATE Git 推送是后续独立动作。" },
+    { name: "从所选元数据版本重建目录", command: "py -3 personal_media.py catalog-build --seed <恢复目录>/seed/keeper-search-index.ndjson --db <恢复目录>/catalog.sqlite3", purpose: "先在空目录解压所需 Git 版本的 metadata/current.zip，按 snapshot.json 核对文件；换目录时只调整恢复副本 index-manifest.json 的 index.path。确认原件根可访问并核对重建查询后才切现行目录，不覆盖更新数据、不自动执行旧清理清单。移动或改名不改变未修改文件的哈希；编辑或重编码可能改变，单凭哈希不能恢复媒体字节。" },
     { name: "按线索搜索", command: "py -3 personal_media.py search --place <现场地点> --media-type image --limit 12", purpose: "返回少量可读候选；普通请求不用 all，也不扫描整盘。" },
     { name: "建立临时浏览目录", command: "py -3 personal_media.py browse <过滤条件> --browse-root <受管同卷根> --name <任务名> --limit <数量>", purpose: "创建同卷 hardlink 供浏览，不复制原件字节。" },
     { name: "清理临时浏览目录", command: "py -3 personal_media.py clean --folder <精确受管目录>", purpose: "只删除该浏览入口；目录混入非受管内容时拒绝。" },
@@ -575,7 +582,7 @@ const personalMediaModules = [
       { condition: "目录提交后 seed/候选刷新失败", response: "保留已经读回的 canonical/G 字节和具名失败位置；按当前目录与 receipt 恢复，不把部分状态冒充完整收口。" }
     ],
     sources: [{ path: "personal_media.py", role: "ingest-file、新 keeper、等价容器变体、seed 与候选刷新" }, { path: "test_personal_media.py", role: "隔离临时根中的新 keeper、E/G、catalog、来源退休、候选刷新与等价视频容器专项回归" }, { path: "README.md", role: "精确命令、输入、回读、半状态恢复与依赖说明" }],
-    verification: ["源码和 README 均要求 --execute、一个 source、description 与可选 expected SHA-256。", "专项回归证明新 keeper 的 E canonical、G 副本、catalog、source 退休、current seed、手机计划和 cloud plan 同次刷新。", "专项回归证明等价视频的 E/G keeper、相同 demuxed stream、G 原始容器变体、关系写回和 source 退休。", `本轮正式 ${SOURCE_RECEIPT} 运行 ${current.tests} 项测试、0 失败/错误，且所有 current commitments 重新闭合。`],
+    verification: ["源码和 README 均要求 --execute、一个 source、description 与可选 expected SHA-256。", "专项回归证明新 keeper 的 E canonical、G 副本、catalog、source 退休、current seed、手机计划和 cloud plan 同次刷新。", "专项回归证明等价视频的 E/G keeper、相同 demuxed stream、G 原始容器变体、关系写回和 source 退休。", `2026-09-05 的 ${SOURCE_RECEIPT} 运行 ${current.tests} 项测试、0 失败/错误，并闭合当时代承诺；不继承为后来 Git 元数据能力的完整回归。`],
     relation: "它是手机之外的单文件入口；完成后仍回到同一个当前目录、手机恢复候选和 upload=0 云候选，不建立第二套媒体库。"
   }),
   commonModule({
