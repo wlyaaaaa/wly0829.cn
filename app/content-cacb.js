@@ -28,8 +28,8 @@ const cacbSnapshot = createProjectSnapshot({
     { label: "额度费用探针", value: "config/probes 当前有 1 题短版和 10 题完整版两份固定提示词；每份都把执行与删除拆成两条消息，使用独立固定 namespace，不生成测量回执、不写账本，也不进入分数或排名。", hero: false },
     { label: "最终选择合同", value: "final_selection_release 当前要求机械证据、盲审证据、source commitment、host receipt 与 bundle/rubric generation（合同代）彼此兼容；部分覆盖只保留 pending，不得通过 best-of 或拼接不同尝试生成正式次序。", hero: false },
     { label: "方法合同冲突", value: "当前 V11R1 README 与 AGENTS 要求 24 个 canonical Codex slots、每次 C1–C10 全部终态；PRODUCT_DESIGN 仍写八案例，MODEL_EVIDENCE_SEMANTICS/ROUTING_DECISION_FRAMEWORK 仍固定 case_count=8 与八条 per_case_scores。REPORTING_STANDARD 已对齐 ordered ten-row、case_count=10、weight=0.1；其中 other eight 是除 C5/C7 两个联网例外以外的八个离线案例，legacy bridge 明确 unranked。当前设计/评分合同仍未完全统一。", hero: false },
-    { label: "24 槽身份矩阵", value: "V11R1 的 24-slot Registry 公开安全身份矩阵包括 OpenAI/Codex 原生 Luna、Terra、Sol 的多种 effort 与四条编排路线，本地 Codex CLI 的 qwen3.6:35b/27b，Codex CLI/Responses 的 qwen3.8-max 设计槽，以及 DeepSeek V4 Flash/Pro 云端槽；本页不附任何运行结果、分数或名次。", hero: false },
-    { label: "首报采样策略", value: "first-report sampling policy 对每个 canonical slot 取 first valid sample；唯一例外是已完成三份有效证据的 Luna Max slot，按机械分中位数选一份代表，只盲审和报告该代表，另两份保留为 audit-only。外部 Antigravity/OpenCode cohorts 后续独立补充，不进入24-slot阻断条件。", hero: false },
+    { label: "三类执行身份", value: "原生任务、本地异步作业和云 API 异步作业分别保留请求、实际和宿主证明的身份。模型、思考等级、运行框架、提供方和传输绑定必须与冻结任务一致；配置存在不等于已经接入或形成有效样本。这里说明身份验证方法，不列受测配置名单。", hero: false },
+    { label: "首报采样策略", value: "first-report sampling policy（首报采样规则）预先固定每种配置采用第一份有效样本，或按明定规则取中位代表。额外有效尝试保留供审查，不事后挑最高结果，也不拼接部分尝试；其他执行框架的补充结果保持独立范围。", hero: false },
     { label: "当前验证边界", value: "当前提交最新四个 GitHub CI job 全部失败，失败门位于 lint；因此当前 commit 的完整测试结论保持 Unknown（证据不足）。", hero: false },
     { label: "公开证据范围", value: "PRIVATE 源保留冻结任务、私有验证与原始证据；公开页完整说明产品、提交、验证范围和明确缺口，但不复制受测配置或比较结果。", hero: false }
   ],
@@ -516,14 +516,9 @@ export const cacbModules = [
     implementation: [
       "evidence.py 与 model_evidence.py 管证据结构与状态。",
       "model-evidence-card schema 把 executor_kind 固定为 native_managed、local_async_job 或 cloud_api_async_job，并分别约束 lineage applicability。",
-      "V11R1 slots 01–03：native-luna-max-single=gpt-5.6-luna/max/codex/native/OpenAI；native-terra-max-single=gpt-5.6-terra/max/codex/native/OpenAI；native-sol-max-single=gpt-5.6-sol/max/codex/native/OpenAI。",
-      "slots 04–05：native-sol-max-orchestrated=gpt-5.6-sol/max + 0–4 Sol Max children；native-sol-economy-orchestrated=gpt-5.6-sol/max root + 0–4 Sol/Terra/Luna Max children；两者均为 codex/native/OpenAI，结果与 single-worker 分开。",
-      "slots 06–08：local-35b-max-codex=qwen3.6:35b/max/codex-cli/Responses/provider codex-ollama-main；local-27b-max-codex=qwen3.6:27b/max/codex-cli/Responses/provider codex-ollama-review；cloud-qwen3-8-max-agent=qwen3.8-max/max/codex-cli/Responses/provider codex-qwen3-8-max-paygo，当前仅 design-only。",
-      "Registry launch state 分层：native slots=ready 只表示配置准入，不是有效样本；local 35B/27B=prelaunch-pending；qwen3.8=design-only；DeepSeek V4 Flash/Pro=prelaunch-pending。当前方法/评分冲突未解决，因此任一状态都不能形成当前比较结论。",
-      "slots 09–15：native-luna-xhigh-single、native-terra-xhigh-single、native-sol-medium/high/xhigh-single 均为对应 gpt-5.6 模型/codex/native/OpenAI；native-luna-max-orchestrated 为 Luna Max root + Luna Max children；native-terra-adaptive-orchestrated 为 Terra Max root + Terra/Luna Max children。",
-      "slots 16–22：native-sol-low-single；native-luna-low/medium/high-single；native-terra-low/medium/high-single，均为精确 gpt-5.6 model + 对应 effort、codex/native/OpenAI、fallback=false。",
-      "slots 23–24：cloud-deepseek-v4-flash-0731-codex=deepseek-v4-flash/max/codex-cli/Responses/provider deepseek-responses-0731；cloud-deepseek-v4-pro-0813-codex=deepseek-v4-pro/max/codex-cli/Responses/provider deepseek-responses-0813；两者当前 prelaunch-pending。",
-      "first report 每槽取 first valid sample；Luna Max 已有三份有效机械证据时只按中位数选一份代表进入盲审，另外两份 audit-only。Antigravity 与 OpenCode 是后续独立 supplement，不改变 24-slot 阻断边界。",
+      "config/arms/v11.registry.json 把每个执行配置的 model、effort、harness、provider、transport 与 fallback=false 绑定在一起；单工作者与根编排分别定义，不把多模型合作算成某个模型的独立能力。",
+      "配置准入、本机接入、正式样本和可采用结论是不同阶段。当前方法/评分冲突未解决，任何启动配置都不能单独形成比较结论；公开页不列受测名单或逐配置状态。",
+      "首报代表按冻结的 first-valid 或中位代表规则选择，额外尝试只作审查证据；禁止事后挑高、拼接不完整尝试或把其他框架的补充结果混入原比较范围。",
       "native_managed 选择于要测真实宿主原生 Codex 行为且宿主能提供权威 rollout 时；host receipt 绑定 model、effort、agent_type、provider、harness、parent/spawn/child 与 turn context，用户得到原生 task handle、artifact 和终态/清理回执。",
       "local_async_job 选择于要测精确本机模型制品及其 Codex 工具循环时；Toolkit job id 与 AICLI machine events 绑定 backend/profile/model、artifact digest、quantization、tokenizer/chat template、serving engine、loopback transport、sandbox、LocalGpuBroker lease 和 fallback=false，用户得到本地 artifact、verifier 摘要与完整清理 receipt。",
       "cloud_api_async_job 选择于非原生模型必须在指定 provider API 下接受同一 Codex harness 时；Toolkit/AICLI job 与 receipt id 绑定 provider/profile/model/revision、endpoint class/path fingerprint、Responses transport、request/stream id、machine events、privacy policy 和 fallback=false，用户得到本地 artifact、sanitized report（净化报告）与请求/终态证据。",
@@ -583,12 +578,12 @@ export const cacbModules = [
       { path: "PRIVATE source · schemas/episode-manifest.schema.json", role: "Episode manifest 合同" },
       { path: "PRIVATE source · schemas/worker-receipt.schema.json", role: "执行回执合同" },
       { path: "PRIVATE source · config/arms/v11.registry.json", role: "24 canonical slots、C1–C10、精确模型/effort/harness/provider 与 launch state" },
-      { path: "PRIVATE source · config/formal-sampling.v1.json", role: "first-valid 与 Luna Max median representative 的首份报告采样政策" }
+      { path: "PRIVATE source · config/formal-sampling.v1.json", role: "第一份有效样本与固定中位代表的首报采样规则" }
     ],
     verification: [
       "model evidence workflow 与 worker contract focused tests 在 e6f7581 历史观察代曾通过；该证据不继承到当前 59b0b5c。",
       "current cross-executor design contract 与 schemas 在源码层显式区分 native_managed、local_async_job、cloud_api_async_job，并要求 requested/effective/attested identity；这不证明任何具体配置已完成本机接入。",
-      "v11.registry.json 当前 nominal_slot_count=24、episode.case_count=10；页面逐组列出全部24个精确 identity binding，但不读取或发布候选结果。",
+      "v11.registry.json 当前 nominal_slot_count=24、episode.case_count=10；这里只公开配置绑定方法、十案例合同与验证边界，不展示受测身份矩阵或候选结果。",
       "完整 native identity envelope 测试当前存在跨代失败，页面没有升级为全绿。",
       "未读取或复制任何真实原始执行日志。"
     ],
