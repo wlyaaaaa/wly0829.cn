@@ -120,6 +120,7 @@ export const vaultToolProject = {
     { name: "密文发布和远端材料保护", responsibility: "向现场确认的私人目标写入密文、核对字节，并独立处理明确请求的远端 README 保护。", implementation: "Publish-KeyVaultToGitHub.ps1；vault-workflow 的 VerifyRemote、PublishVault 和 protect_remote_readme.py，不克隆整个 Key 作为执行前提。" }
   ],
   usageExamples: [
+    { moduleSlug: "private-backup", ask: "Key里的恢复材料，怎样和最高权限体系一起保管？", effect: "Key使用VAULT03和独立密码保护；最高权限体系与Vault分别保管一部分恢复材料。取回时分别满足各自解锁条件，单靠其中一边不等于掌握完整恢复材料，两边互不替代。这个分开保管安排属于独立密码库，不并入AI工作区备份。" },
     { moduleSlug: "files-encryption", ask: "把这三份文件加进原来的库，其他文件不要丢。", effect: "先走明确合并入口并说明同名处理；直接 encrypt 不会自动合并旧库，也不自动保留另一密码对应的层。" },
     { moduleSlug: "view-extract", ask: "我只想看清单里的一段文字，不要把全部附件解压出来。", effect: "先用内存查看和内容搜索；必须用外部程序的文件才按明确名称提取，并说明磁盘残留和清理条件。" },
     { moduleSlug: "passwords-formats", ask: "我记得密码，为什么换电脑还是打不开？", effect: "核对容器格式、密钥文件是否同一份以及对应依赖；不能把知道密码等同于恢复条件齐全，也不能擅自换派生算法。" },
@@ -394,7 +395,7 @@ export const vaultToolModules = [
     failures: [{ condition: "目标不是现场确认的私有仓库", response: "拒绝密文发布；不会为了完成脚本而改变仓库可见性。" }, { condition: "读取旧路径或 PUT 失败", response: "保留明确错误，停止后续成功标记；非 404 错误不被当成新文件。" }, { condition: "远端回读失败或字节不同", response: "说明可能已写入但尚未完成验证，不把失败自动重试成多次未知提交。" }, { condition: "正文保护被取消或远端版本变化", response: "取消就不写，版本冲突不强推；固定来源与尚未执行的动作分别保留。" }],
     sources: [{ path: `${sourceRoot}\\scripts\\Publish-KeyVaultToGitHub.ps1`, role: "私人密文上传与目标字节核对" }, { path: `${sourceRoot}\\docs\\key-repository-workflow.md`, role: "人工准备、密文与恢复条件" }, { path: `${skillRoot}\\scripts\\Invoke-VaultWorkflow.ps1`, role: "VerifyRemote、PublishVault、预演与结果适配" }, { path: `${skillRoot}\\scripts\\protect_remote_readme.py`, role: "固定远端版本、两次本地确认与单提交正文保护" }, { path: `${skillRoot}\\references\\json-contract.md`, role: "发布、读取与真实效果字段" }, { path: "GitHub REST API：文件内容与 blob", href: "https://docs.github.com/en/rest/git/blobs#get-a-blob", role: "GitHub 官方文件对象读取合同；base64 字节与接口容量边界" }],
     verification: ["来源发布脚本已通过九类隔离mock gh（模拟GitHub命令）验证：PUT失败、非404错误、404创建、正常回读、回读失败、字节不符、预演、非私人目标和扩展名拒绝。", "源库自身已normal-push并从真实main读回，但这不是向私人Key上传的结果。", "真实私人密文发布、密码恢复和换机恢复未在本轮执行。"],
-    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责，Key 不因此成为独立展示项目。"
+    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责。实际使用例子是PRIVATE（私有）Key：用户明确采用VAULT03与独立密码，并让最高权限体系和Vault分别保管一部分恢复材料。分别解锁、互不替代，单边不能代表完整材料；两处保管的材料分别满足各自取回条件；本轮未读取真实密文、密码或恢复码，也未试解密，实际恢复仍需独立验证。它与AI工作区中的配置和记忆备份分别使用。"
   }
 ];
 
