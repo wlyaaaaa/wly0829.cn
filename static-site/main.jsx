@@ -819,12 +819,14 @@ function initializeBackToTop() {
 }
 
 function initializeFooterEmailCopy() {
-  document.querySelectorAll("[data-footer-email-copy]").forEach((row) => {
-    const button = row.querySelector("[data-footer-email-copy-button]");
-    const label = row.querySelector("[data-footer-email-copy-label]");
-    const status = row.querySelector("[data-footer-email-copy-status]");
-    const value = row.dataset.footerEmailCopy;
+  document.querySelectorAll("[data-copy-value]").forEach((row) => {
+    const button = row.querySelector("button");
+    const label = button?.querySelector("span");
+    const status = row.querySelector('[role="status"]');
+    const value = row.dataset.copyValue;
     if (!button || !label || !status || !value) return;
+    const originalLabel = label.textContent;
+    const valueName = row.dataset.copyName || "邮箱地址";
     let resetTimer = 0;
     let copying = false;
 
@@ -862,12 +864,12 @@ function initializeFooterEmailCopy() {
       }
       window.clearTimeout(resetTimer);
       label.textContent = success ? "已复制" : "复制失败";
-      status.textContent = success ? "邮箱地址已复制" : "邮箱地址复制失败";
+      status.textContent = valueName + label.textContent;
       copying = false;
       button.removeAttribute("aria-busy");
       if (restoreFocus) window.requestAnimationFrame(() => button.focus({ preventScroll: true }));
       resetTimer = window.setTimeout(() => {
-        label.textContent = "复制";
+        label.textContent = originalLabel;
         status.textContent = "";
       }, 1800);
     });

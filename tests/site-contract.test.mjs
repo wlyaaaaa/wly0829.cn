@@ -179,7 +179,7 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.brand-logo\s*\{[^}]*width:\s*clamp\(190px, 15vw, 260px\);[^}]*height:\s*auto;/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.brand-logo\s*\{\s*display:\s*block;\s*width:\s*110px;[\s\S]*?\.brand-text\s*\{\s*display:\s*none;/);
   assert.match(styleSource, /@media \(max-width: 420px\)[\s\S]*?\.brand-logo\s*\{\s*width:\s*90px;/);
-  assert.match(styleSource, /@media \(min-width: 901px\) and \(max-width: 1180px\)[\s\S]*?grid-template-columns:\s*150px max-content minmax\(180px, 220px\) auto;/);
+  assert.match(styleSource, /@media \(min-width: 901px\) and \(max-width: 1180px\)[\s\S]*?grid-template-columns:\s*135px max-content minmax\(140px, 1fr\) auto;/);
   const brandAssetPath = path.join(projectRoot, "public", "media", "brand", "wuleyang-logo-full.png");
   assert.ok((await stat(brandAssetPath)).size > 100_000, "Full transparent wordmark asset is missing or unexpectedly truncated");
   assert.equal((await readFile(brandAssetPath))[25], 6, "Wordmark PNG must retain an RGBA alpha channel");
@@ -197,7 +197,7 @@ test("the mobile header keeps primary navigation outside and uses a dedicated se
   assert.match(styleSource, /\.mobile-search-button\s*\{[\s\S]*?align-self:\s*center;[\s\S]*?border-color:\s*transparent;[\s\S]*?background:\s*transparent;/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.header-inner\s*\{\s*grid-template-columns:\s*max-content minmax\(0,1fr\) auto auto;[\s\S]*?\.primary-nav\s*\{\s*grid-column:\s*2;\s*justify-content:\s*center;/);
   assert.match(styleSource, /@media \(max-width: 680px\)[\s\S]*?\.mobile-search-button\s*\{\s*grid-column:\s*3;[\s\S]*?\.menu-button\s*\{\s*grid-column:\s*4;/);
-  assert.match(styleSource, /@media \(min-width: 681px\) and \(max-width: 741px\)[\s\S]*?\.desktop-search\s*\{\s*display:\s*none;[\s\S]*?\.mobile-search-button,[\s\S]*?\.menu-button\s*\{\s*display:\s*inline-flex/);
+  assert.match(styleSource, /@media \(min-width: 681px\) and \(max-width: 900px\)[\s\S]*?\.desktop-search\s*\{\s*display:\s*none;[\s\S]*?\.mobile-search-button,[\s\S]*?\.menu-button\s*\{\s*display:\s*inline-flex/);
 });
 
 test("the desktop global search is geometrically centered without changing mobile search", async () => {
@@ -4419,7 +4419,7 @@ test("the public gate allows ordinary labels and blocks a constructed credential
 
 test("every public route is unique and has useful metadata", () => {
   assert.equal(new Set(routePaths).size, routePaths.length);
-  assert.equal(routePaths.length, 6 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
+  assert.equal(routePaths.length, 7 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
   for (const route of routePaths) {
     const meta = routeMeta(route);
     assert.match(meta.title, /吴乐阳/);
@@ -4435,6 +4435,19 @@ test("every public route is unique and has useful metadata", () => {
   assert.match(routeMeta("/projects/codex-remote/nope/same-task-control").title, /页面不存在/);
   assert.match(routeMeta("/projects/personal-health/nope/current-evidence-route").title, /页面不存在/);
   assert.match(routeMeta("/projects/wechat-direct/nope/bounded-chat-context").title, /页面不存在/);
+});
+
+test("the MCP directory is a complete authenticated-use guide without adding PC or page-style dependencies to home", async () => {
+  const html = await readFile(path.join(projectRoot, "dist", "mcp", "index.html"), "utf8");
+  const home = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
+  assert.match(html, /我的电脑连接/);
+  assert.match(html, /仅限本人及已授权客户端使用/);
+  assert.match(html, /复制地址不会获得电脑操作权限/);
+  assert.match(html, /data-copy-value="https:\/\/[^\"]+\/mcp"/);
+  assert.match(html, /data-mcp-access/);
+  assert.doesNotMatch(home, /data-mcp-access/);
+  assert.equal(searchScopeForPath("/mcp/").id, "all");
+  assert.ok(globalSearchEntries.some((entry) => entry.href === "/mcp" && entry.aliases.includes("连接电脑")));
 });
 
 test("production build has direct entry files for every route", async () => {

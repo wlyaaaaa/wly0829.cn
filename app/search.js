@@ -153,6 +153,13 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
 ]);
 
 export const globalSearchEntries = [
+  {
+    type: "连接入口", group: "系统", scopes: ["system"],
+    title: "我的电脑连接", detail: "主机、副机的 MCP 接入说明与认证。", href: "/mcp",
+    aliases: ["连接电脑", "MCP", "主机", "副机"],
+    compactSearch: "智能体 AI 自动化 配置",
+    search: "智能体 AI 自动化 配置"
+  },
   ...projectSearchEntries,
   ...systemSearchEntries.map((entry) => ({ ...entry, group: entry.group || "系统", scopes: entry.scopes || ["system"] })),
   ...rulesSnapshot.rules.map((rule) => {
@@ -259,7 +266,7 @@ export function searchScopeForPath(pathname) {
   const normalized = path === "/" ? "/" : path;
   const projectEntry = projectCatalog.find((entry) => normalized === entry.project.route || normalized.startsWith(`${entry.project.route}/`));
   if (projectEntry) return searchScopeById(`project:${projectEntry.project.slug}`);
-  if (normalized === "/") return searchScopeById("all");
+  if (normalized === "/" || normalized === "/mcp") return searchScopeById("all");
   if (normalized === "/projects") return searchScopeById("project");
   if (normalized === "/system") return searchScopeById("system");
   if (normalized === "/rules") return searchScopeById("rules");

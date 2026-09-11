@@ -101,12 +101,19 @@ export const routePaths = [
   "/system",
   "/rules",
   "/search",
+  "/mcp",
   "/skills",
   ...skills.map((item) => `/skills/${item.slug}`)
 ];
 
 export function routeMeta(pathname) {
   const path = normalizePath(pathname);
+  if (path === "/mcp") {
+    return {
+      title: `连接电脑 · MCP｜${site.name}`,
+      description: "选择主机或副机，复制 MCP 连接地址，接入支持远程 MCP 的智能体、桌面应用或自动化工具；查看认证说明与最近验收。"
+    };
+  }
   if (path === "/") {
     return {
       title: `个人 AI 协作系统｜${site.name}`,

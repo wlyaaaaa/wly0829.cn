@@ -1,0 +1,72 @@
+.mcp-page { width: min(1184px, calc(100% - 64px)); margin: 0 auto; padding: 54px 0 56px; }
+.mcp-intro { max-width: 780px; margin-bottom: 32px; }
+.mcp-intro .section-kicker { margin: 0 0 16px; color: var(--green-dark); font-size: 12px; letter-spacing: .08em; }
+.mcp-intro h1 { margin: 0; font-size: clamp(34px, 4.2vw, 52px); font-weight: 700; letter-spacing: -.035em; line-height: 1.22; }
+.mcp-intro > p:not(.section-kicker) { margin: 18px 0 0; color: var(--muted-strong); font-size: 15px; line-height: 1.9; }
+.mcp-intro > .mcp-use-note { margin-top: 7px !important; color: var(--muted) !important; font-size: 13px !important; }
+.mcp-access-boundary { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 13px !important; }
+.mcp-access-boundary svg { color: var(--green-dark); flex-shrink: 0; }
+.mcp-access-boundary strong { color: var(--green-dark); font-weight: 600; }
+.mcp-device-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.mcp-device-card { min-width: 0; padding: 26px; border: 1px solid var(--line-strong); border-top: 3px solid var(--green); background: rgba(255,255,255,.97); }
+.mcp-device-heading { display: flex; align-items: center; gap: 14px; }
+.mcp-device-icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; color: var(--green-dark); background: var(--surface-green); }
+.mcp-device-heading p { margin: 0 0 2px; color: var(--muted); font-size: 11px; }
+.mcp-device-heading h2 { margin: 0; font-size: 26px; line-height: 1.25; }
+.mcp-protocol { margin-left: auto; align-self: flex-start; padding: 3px 7px; border: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 10px; }
+.mcp-device-summary { margin: 18px 0 22px; font-size: 14px; color: var(--muted-strong); }
+.mcp-address-block { padding: 16px; border: 1px solid var(--line); background: #f7faf7; }
+.mcp-field-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 11px; }
+.mcp-endpoint { display: block; min-width: 0; min-height: 48px; overflow-wrap: anywhere; font-family: var(--mono); font-size: 13px; line-height: 1.8; color: var(--ink); user-select: all; }
+.mcp-copy-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; min-height: 44px; padding: 9px 17px; border: 1px solid var(--green-dark); border-radius: 4px; background: var(--green-dark); color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.mcp-copy-button:hover { background: #09672c; border-color: #09672c; }
+.mcp-copy-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; }
+.mcp-copy-address { background: transparent; border-color: var(--line-strong); color: var(--muted-strong); font-weight: 500; }
+.mcp-copy-address:hover { background: #eaf3ec; border-color: var(--green-dark); }
+.mcp-copy-help { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.85; }
+.mcp-permission { display: flex; align-items: flex-start; gap: 7px; margin: 17px 0; color: var(--muted-strong); font-size: 12px; line-height: 1.75; }
+.mcp-permission svg { flex-shrink: 0; margin-top: 3px; color: var(--green-dark); }
+.mcp-verified { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px 12px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+.mcp-start { padding: 34px 0 28px; }
+.mcp-start > h2 { margin: 0 0 20px; font-size: 18px; }
+.mcp-start ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin: 0; padding: 0; list-style: none; }
+.mcp-start li { display: flex; align-items: flex-start; gap: 12px; }
+.mcp-start li > span { margin-top: 2px; color: var(--green-dark); font-family: var(--mono); font-size: 12px; }
+.mcp-start h3 { margin: 0 0 6px; font-size: 14px; }
+.mcp-start p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.85; }
+.mcp-details { border-top: 1px solid var(--line-strong); background: rgba(255,255,255,.75); }
+.mcp-details > details { border-bottom: 1px solid var(--line-strong); }
+.mcp-details summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 19px 0; font-size: 14px; font-weight: 600; cursor: pointer; list-style: none; }
+.mcp-details summary::-webkit-details-marker { display: none; }
+.mcp-details summary > span { color: var(--green-dark); font-size: 19px; font-weight: 400; }
+.mcp-details details[open] summary > span { transform: rotate(45deg); }
+.mcp-detail-body { max-width: 860px; padding: 0 0 22px; color: var(--muted-strong); font-size: 13px; line-height: 1.9; }
+.mcp-detail-body p { margin: 0 0 12px; }
+.mcp-detail-body dl { margin: 17px 0; }
+.mcp-detail-body dl > div { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 15px; padding: 11px 0; border-top: 1px solid var(--line); }
+.mcp-detail-body dt { color: var(--ink); font-weight: 600; }
+.mcp-detail-body dd { margin: 0; }
+.mcp-detail-body a { display: inline-flex; align-items: center; gap: 3px; color: var(--green-dark); text-underline-offset: 3px; }
+.mcp-detail-body section h3 { margin: 18px 0 8px; font-size: 14px; color: var(--ink); }
+.mcp-technical-note { color: var(--muted); }
+.mcp-back-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; color: var(--muted); font-size: 12px; text-decoration: none; }
+.mcp-back-link:hover { color: var(--green-dark); }
+.mcp-copy-button:focus-visible, .mcp-details summary:focus-visible, .mcp-back-link:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+@media (max-width: 900px) {
+  .mcp-page { width: calc(100% - 40px); padding-top: 34px; }
+  .mcp-device-card { padding: 20px; }
+  .mcp-start ol { gap: 20px; }
+}
+@media (max-width: 600px) {
+  .mcp-page { width: calc(100% - 32px); padding-top: 28px; }
+  .mcp-intro { margin-bottom: 25px; }
+  .mcp-intro h1 { font-size: 34px; }
+  .mcp-intro > p:not(.section-kicker) { font-size: 14px; line-height: 1.85; }
+  .mcp-device-grid { grid-template-columns: minmax(0,1fr); gap: 18px; }
+  .mcp-device-card { padding: 20px 16px; }
+  .mcp-endpoint { min-height: 0; font-size: 12px; }
+  .mcp-copy-button { width: 100%; }
+  .mcp-start ol { grid-template-columns: minmax(0,1fr); gap: 18px; }
+  .mcp-start p { font-size: 13px; }
+  .mcp-detail-body dl > div { grid-template-columns: minmax(0,1fr); gap: 4px; }
+}

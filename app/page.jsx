@@ -7,10 +7,12 @@ import {
   BookOpenText,
   CheckCircle,
   CopySimple,
+  Desktop,
   EnvelopeSimple,
   House,
   Info,
   List,
+  Laptop,
   LockKey,
   MagnifyingGlass,
   Minus,
@@ -56,6 +58,7 @@ import { searchPanel, searchScopeById, searchScopeForPath, searchScopeOptionsFor
 import { createTermAnnotator } from "./term-annotator.js";
 import { searchResultExcerpt } from "./compact-search.js";
 import { ProjectContinuation } from "./continuation-brief.jsx";
+import { mcpDevices, mcpSetupNote } from "./content-mcp-access.js";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -306,6 +309,8 @@ function Header({ path, search = "" }) {
           ))}
         </nav>
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
+        <div className="header-utilities">
+        <SiteLink className="header-connect" href="/mcp" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
@@ -345,6 +350,7 @@ function Header({ path, search = "" }) {
               </a>
             ))}
           </nav>
+        </div>
         </div>
         <div className={`mobile-search-panel${searchOpen ? " is-open" : ""}`} id="mobile-site-search" hidden={!searchOpen}>{path !== "/" ? <GlobalSearch path={path} search={search} autoFocus={searchOpen} className="mobile-search-control" resultId="mobile-global-search-results" /> : null}</div>
         </div>
@@ -2002,7 +2008,7 @@ function BackToTopButton() {
 
 function FooterEmailLink({ item }) {
   return (
-    <div className="site-footer-email-row" data-footer-email-copy={site.email}>
+    <div className="site-footer-email-row" data-footer-email-copy={site.email} data-copy-value={site.email}>
       <a href={item.href}><SocialIcon name={item.icon} /><strong>{item.label}</strong><code>{item.href}</code></a>
       <button type="button" data-footer-email-copy-button aria-label="复制邮箱地址"><CopySimple size={15} aria-hidden="true" /><span data-footer-email-copy-label>复制</span></button>
       <span className="visually-hidden" data-footer-email-copy-status role="status" aria-live="polite" />
@@ -2040,6 +2046,52 @@ function SiteFooter() {
   );
 }
 
+function McpAccessPage() {
+  return (
+    <div className="mcp-page">
+      <header className="mcp-intro">
+        <p className="section-kicker">电脑连接 · MCP</p>
+        <h1>我的电脑连接</h1>
+        <p>为自己使用的智能体、桌面应用或自动化工具，配置主机与副机的 MCP（模型上下文协议）连接。</p>
+        <p className="mcp-access-boundary"><LockKey size={17} aria-hidden="true" /><strong>仅限本人及已授权客户端使用。</strong>需要有效凭据或 OAuth 授权，复制地址不会获得电脑操作权限。</p>
+        <p className="mcp-use-note">配置连接或找地址时来这里。连接完成后，直接在原来的客户端使用。</p>
+      </header>
+
+      <section className="mcp-device-grid" aria-label="选择要连接的电脑">
+        {mcpDevices.map((device) => {
+          const DeviceIcon = device.id === "main" ? Desktop : Laptop;
+          return <article className="mcp-device-card" key={device.id} aria-labelledby={`mcp-${device.id}-title`}>
+            <div className="mcp-device-heading"><span className="mcp-device-icon"><DeviceIcon size={31} weight="regular" aria-hidden="true" /></span><div><p>{device.label}</p><h2 id={`mcp-${device.id}-title`}>{device.name}</h2></div><span className="mcp-protocol">MCP</span></div>
+            <p className="mcp-device-summary">{device.summary}</p>
+            <div className="mcp-address-block">
+              <span className="mcp-field-label">连接地址</span>
+              <code className="mcp-endpoint">{device.endpoint}</code>
+              <div className="mcp-copy-actions">
+                <div data-copy-value={mcpSetupNote(device)} data-copy-name={`${device.name}接入说明`}><button className="mcp-copy-button" type="button" data-copy-button aria-label={`复制给 AI 的${device.name}接入说明`}><CopySimple size={17} aria-hidden="true" /><span data-copy-label>复制给 AI 的说明</span></button><span className="visually-hidden" data-copy-status role="status" aria-live="polite" /></div>
+                <div data-copy-value={device.endpoint} data-copy-name={`${device.name}连接地址`}><button className="mcp-copy-button mcp-copy-address" type="button" data-copy-button aria-label={`复制${device.name}连接地址`}><span data-copy-label>只复制地址</span></button><span className="visually-hidden" data-copy-status role="status" aria-live="polite" /></div>
+              </div>
+              <p className="mcp-copy-help">不熟悉配置时，把接入说明交给能配置工具的 AI；已有 MCP 设置入口时，直接填地址。</p>
+            </div>
+            <p className="mcp-permission"><LockKey size={15} aria-hidden="true" />{device.permissionNote}</p>
+            <div className="mcp-verified"><span>最近普通调用验收</span><time dateTime={device.verifiedAt}>{device.verifiedLabel}</time></div>
+          </article>;
+        })}
+      </section>
+
+      <section className="mcp-start" aria-labelledby="mcp-start-title">
+        <h2 id="mcp-start-title">三步，开始使用</h2>
+        <ol><li><span>01</span><div><h3>选电脑，复制说明</h3><p>把接入说明交给能配置工具的 AI，或自己在应用中添加远程 MCP。</p></div></li><li><span>02</span><div><h3>完成认证</h3><p>在应用的认证设置中使用有效凭据，或按提示完成 OAuth 授权。</p></div></li><li><span>03</span><div><h3>确认连通，再使用</h3><p>先检查连接的是哪台电脑，再让 AI 使用它的文件、命令和桌面工具。</p></div></li></ol>
+      </section>
+
+      <div className="mcp-details">
+        <details><summary>接入方式与认证<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>需要支持远程 MCP 的客户端。不同工具的设置位置、认证方式和能力支持不同；地址本身不包含操作权限。</p><dl><div><dt>OAuth 登录授权</dt><dd>适用于当前已登记的客户端。首次连接时，按客户端提示完成授权。</dd></div><div><dt>Bearer 凭据</dt><dd>已有兼容方式，供支持此认证的客户端使用。凭据在私下配置，不会展示在网页上。</dd></div><div><dt>已验收的示例</dt><dd>ChatGPT 已完成真实工具调用验收。可在<a href="https://chatgpt.com/plugins" target="_blank" rel="noopener noreferrer">插件设置 <ArrowRight size={13} aria-hidden="true" /></a>添加或管理连接。其他客户端仍需各自完成接入验证。</dd></div></dl><p>如果新工具无法完成认证，应先确认它支持哪种方式，再配置对应授权。</p></div></details>
+        <details><summary>技术与最近验收<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>这里显示最近一次验收记录，不代表电脑此刻在线。页面本身是静态网页，打开时不请求两台电脑。</p>{mcpDevices.map((device) => <section key={device.id}><h3>{device.name}</h3><p>{device.evidence}</p><p className="mcp-technical-note">当前入口：{device.transport}</p></section>)}<p>普通命令验收不等于每一种文件和桌面操作都已复测。电脑需要开机、联网且服务运行，客户端才能调用工具。</p></div></details>
+      </div>
+      <SiteLink className="mcp-back-link" href="/"><ArrowLeft size={16} aria-hidden="true" />回到个人 AI 协作系统</SiteLink>
+    </div>
+  );
+}
+
 export default function Page({ initialPathname = "/", initialSearch = "" } = {}) {
   const location = useLocationState(initialPathname, initialSearch);
   const path = location.pathname;
@@ -2071,6 +2123,7 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
   else if (path === "/projects") content = <HomePage />;
   else if (path === "/system") content = <SystemPage />;
   else if (path === "/search") content = <SearchResultsPage search={location.search} />;
+  else if (path === "/mcp") content = <McpAccessPage />;
   else if (currentProjectEntry) {
     if (path === currentProjectEntry.project.route) content = <ProjectPage entry={currentProjectEntry} />;
     else {

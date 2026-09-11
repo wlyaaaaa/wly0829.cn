@@ -6423,7 +6423,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 }
 
 @media (min-width: 901px) and (max-width: 1180px) {
-  .header-inner { grid-template-columns: 150px max-content minmax(180px, 220px) auto; gap: 12px; }
+  .header-inner { grid-template-columns: 135px max-content minmax(140px, 1fr) auto; gap: 12px; }
+  .header-utilities { gap: 12px; }
   .primary-nav { gap: 16px; }
   .social-nav { gap: 12px; }
 }
@@ -6455,9 +6456,9 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
   .brand-logo { width: 260px; }
 }
 
-/* Close the 681–741px header gap: use the proven compact header before the
-   four-column desktop header has enough room for search and external links. */
-@media (min-width: 681px) and (max-width: 741px) {
+/* Use the existing compact menus across tablet widths; final row placement
+   below also keeps the connection entry visible. */
+@media (min-width: 681px) and (max-width: 900px) {
   :root { --header-height: 64px; }
   .header-inner {
     grid-template-columns: max-content minmax(0,1fr) auto auto;
@@ -6662,4 +6663,26 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 @media (prefers-reduced-motion: reduce) {
   .daily-entry-links > a { transition: none; }
   .daily-entry-links > a:hover { transform: none; }
+}
+
+/* A static connection directory, sharing the site's existing visual language. */
+.header-utilities { grid-column: 4; grid-row: 1; display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
+.header-connect { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; white-space: nowrap; color: var(--green-dark); font-size: 13px; font-weight: 650; text-decoration: none; }
+.header-connect:hover, .header-connect[aria-current="page"] { text-decoration: underline; text-underline-offset: 5px; }
+@media (max-width: 900px) {
+  :root { --header-height: 104px; }
+  .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 62px 42px; gap: 0 12px; align-items: center; padding: 0 20px; }
+  .header-inner .brand { grid-column: 1; grid-row: 1; margin-right: 0; min-height: 62px; }
+  .header-inner .primary-nav { grid-column: 1 / -1; grid-row: 2; display: flex; align-items: center; justify-content: flex-start; gap: 28px; min-height: 42px; padding: 0; }
+  .header-inner .primary-nav > a { display: inline-flex; align-items: center; min-height: 42px; margin: 0; font-size: 13px; }
+  .header-inner .desktop-search, .header-inner .home-search-dock { display: none; }
+  .header-utilities { grid-column: 2; grid-row: 1; gap: 5px; }
+  .header-connect { margin-right: 5px; font-size: 12px; }
+  .header-utilities .mobile-search-button, .header-utilities .menu-button { display: inline-flex; width: 34px; height: 40px; align-items: center; justify-content: center; border: 0; background: transparent; }
+}
+@media (max-width: 600px) {
+  .header-inner { padding: 0 16px; gap: 0 8px; }
+  .header-connect { gap: 4px; margin-right: 0; }
+  .header-utilities { gap: 2px; }
+  .header-utilities .mobile-search-button, .header-utilities .menu-button { width: 29px; }
 }
