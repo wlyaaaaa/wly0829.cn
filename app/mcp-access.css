@@ -27,6 +27,15 @@
 .mcp-permission { display: flex; align-items: flex-start; gap: 7px; margin: 17px 0; color: var(--muted-strong); font-size: 12px; line-height: 1.75; }
 .mcp-permission svg { flex-shrink: 0; margin-top: 3px; color: var(--green-dark); }
 .mcp-verified { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px 12px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+.mcp-fallback { margin-top: 20px; border: 1px solid var(--line-strong); background: rgba(255,255,255,.97); }
+.mcp-fallback summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 24px; list-style: none; cursor: pointer; }
+.mcp-fallback summary::-webkit-details-marker { display: none; }
+.mcp-fallback summary strong { display: block; color: var(--green-dark); font-size: 14px; }
+.mcp-fallback summary small { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+.mcp-fallback-toggle { color: var(--green-dark); font-size: 22px; }
+.mcp-fallback[open] .mcp-fallback-toggle { transform: rotate(45deg); }
+.mcp-fallback-body { padding: 0 24px 22px; font-size: 13px; line-height: 1.9; color: var(--muted-strong); }
+.mcp-fallback summary:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
 .mcp-start { padding: 34px 0 28px; }
 .mcp-start > h2 { margin: 0 0 20px; font-size: 18px; }
 .mcp-start ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; margin: 0; padding: 0; list-style: none; }

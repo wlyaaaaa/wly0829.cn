@@ -58,7 +58,7 @@ import { searchPanel, searchScopeById, searchScopeForPath, searchScopeOptionsFor
 import { createTermAnnotator } from "./term-annotator.js";
 import { searchResultExcerpt } from "./compact-search.js";
 import { ProjectContinuation } from "./continuation-brief.jsx";
-import { mcpDevices, mcpSetupNote } from "./content-mcp-access.js";
+import { mcpDevices, mcpMainFallback, mcpSetupNote } from "./content-mcp-access.js";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -2078,6 +2078,23 @@ function McpAccessPage() {
         })}
       </section>
 
+      <details className="mcp-fallback">
+        <summary><span><strong>主机的备用连接</strong><small>主入口确认故障时，经副机连回主机。</small></span><span className="mcp-fallback-toggle" aria-hidden="true">＋</span></summary>
+        <div className="mcp-fallback-body">
+          <p>文件和命令仍在主机上执行，使用主机原有凭据与权限。两台电脑都需要开机联网；副机自己的连接不受这次切换影响。</p>
+          <div className="mcp-address-block">
+            <span className="mcp-field-label">主机备用地址 · 经副机转接</span>
+            <code className="mcp-endpoint">{mcpMainFallback.endpoint}</code>
+            <div className="mcp-copy-actions">
+              <div data-copy-value={mcpSetupNote(mcpMainFallback)} data-copy-name="主机备用接入说明"><button className="mcp-copy-button" type="button" data-copy-button aria-label="复制给 AI 的主机备用接入说明"><CopySimple size={17} aria-hidden="true" /><span data-copy-label>复制备用接入说明</span></button><span className="visually-hidden" data-copy-status role="status" aria-live="polite" /></div>
+              <div data-copy-value={mcpMainFallback.endpoint} data-copy-name="主机备用地址"><button className="mcp-copy-button mcp-copy-address" type="button" data-copy-button aria-label="复制主机备用地址"><span data-copy-label>只复制地址</span></button><span className="visually-hidden" data-copy-status role="status" aria-live="polite" /></div>
+            </div>
+          </div>
+          <p className="mcp-copy-help">“密码或授权不正确”应先处理认证。操作超时、结果未知时，先核实是否已执行，再决定是否重试。备用入口不会自动切换或重复执行任务。</p>
+          <p className="mcp-copy-help">已完成主隧道断开演练：经副机公网调用主机 3/3 成功。<time dateTime={mcpMainFallback.verifiedAt}>{mcpMainFallback.verifiedLabel}</time>。</p>
+        </div>
+      </details>
+
       <section className="mcp-start" aria-labelledby="mcp-start-title">
         <h2 id="mcp-start-title">三步，开始使用</h2>
         <ol><li><span>01</span><div><h3>选电脑，复制说明</h3><p>把接入说明交给能配置工具的 AI，或自己在应用中添加远程 MCP。</p></div></li><li><span>02</span><div><h3>完成认证</h3><p>在应用的认证设置中使用有效凭据，或按提示完成 OAuth 授权。</p></div></li><li><span>03</span><div><h3>确认连通，再使用</h3><p>先检查连接的是哪台电脑，再让 AI 使用它的文件、命令和桌面工具。</p></div></li></ol>
@@ -2085,7 +2102,7 @@ function McpAccessPage() {
 
       <div className="mcp-details">
         <details><summary>接入方式与认证<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>需要支持远程 MCP 的客户端。不同工具的设置位置、认证方式和能力支持不同；地址本身不包含操作权限。</p><dl><div><dt>OAuth 登录授权</dt><dd>适用于当前已登记的客户端。首次连接时，按客户端提示完成授权。</dd></div><div><dt>Bearer 凭据</dt><dd>已有兼容方式，供支持此认证的客户端使用。凭据在私下配置，不会展示在网页上。</dd></div><div><dt>已验收的示例</dt><dd>ChatGPT 已完成真实工具调用验收。可在<a href="https://chatgpt.com/plugins" target="_blank" rel="noopener noreferrer">插件设置 <ArrowRight size={13} aria-hidden="true" /></a>添加或管理连接。其他客户端仍需各自完成接入验证。</dd></div></dl><p>如果新工具无法完成认证，应先确认它支持哪种方式，再配置对应授权。</p></div></details>
-        <details><summary>技术与最近验收<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>这里显示最近一次验收记录，不代表电脑此刻在线。页面本身是静态网页，打开时不请求两台电脑。</p>{mcpDevices.map((device) => <section key={device.id}><h3>{device.name}</h3><p>{device.evidence}</p><p className="mcp-technical-note">当前入口：{device.transport}</p></section>)}<p>普通命令验收不等于每一种文件和桌面操作都已复测。电脑需要开机、联网且服务运行，客户端才能调用工具。</p></div></details>
+        <details><summary>技术与最近验收<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>这里显示最近一次验收记录，不代表电脑此刻在线。页面本身是静态网页，打开时不请求两台电脑。</p>{mcpDevices.map((device) => <section key={device.id}><h3>{device.name}</h3><p>{device.evidence}</p><p className="mcp-technical-note">当前入口：{device.transport}</p></section>)}<section><h3>主机备用入口 · 故障演练</h3><p>{mcpMainFallback.evidence}</p><p>这证明主机隧道断开时可以经副机公网连接主机，不代表已经模拟 Cloudflare 全球故障。备用通路仍依赖两台电脑、副机公网入口、两机私网连接和主机 MCP 服务。</p></section><p>普通命令验收不等于每一种文件和桌面操作都已复测。电脑需要开机、联网且服务运行，客户端才能调用工具。</p></div></details>
       </div>
       <SiteLink className="mcp-back-link" href="/"><ArrowLeft size={16} aria-hidden="true" />回到个人 AI 协作系统</SiteLink>
     </div>
