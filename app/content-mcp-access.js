@@ -7,10 +7,10 @@ export const mcpDevices = [
     label: "桌面电脑",
     endpoint: "https://mcp.wly0829.cn/mcp",
     summary: "连接主机上的文件、命令和桌面工具。",
-    permissionNote: "日常操作按客户端授权执行。维护权限单独开放。",
-    verifiedAt: "2026-09-11T05:43:11Z",
-    verifiedLabel: "2026-09-11 13:43（北京时间）",
-    evidence: "自有域名入口已通过通用 MCP 客户端验收：20 次只读命令调用全部成功，返回主机身份；本轮单次耗时 0.70–0.77 秒。未认证请求返回 401。ChatGPT 旧入口曾完成验收，新地址的独立登录尚未完成。",
+    permissionNote: "已授权普通操作、管理员与 SYSTEM 维护，均有实际调用验收。",
+    verifiedAt: "2026-09-11T08:54:47Z",
+    verifiedLabel: "2026-09-11 16:54（北京时间）",
+    evidence: "ChatGPT 在新域名完成 OAuth 授权，普通命令返回主机 WLY；17:15–17:16（北京时间）管理员与 SYSTEM 维护均返回正确 Windows 身份、退出码 0，令牌自动刷新返回 200。此前通用 MCP 客户端的 20 次只读命令全部成功，本轮耗时 0.70–0.77 秒；未认证请求返回 401。",
     transport: "Cloudflare Named Tunnel，自有域名入口；原电脑凭据保持不变。"
   },
   {
@@ -19,10 +19,10 @@ export const mcpDevices = [
     label: "笔记本电脑",
     endpoint: "https://laptop-e48n0drj.tailbe620b.ts.net/computer/mcp",
     summary: "独立连接副机，使用它自己的文件与工具。",
-    permissionNote: "拥有独立授权；当前 ChatGPT 也已通过维护调用验收。",
+    permissionNote: "独立授权；普通操作、管理员与 SYSTEM 维护均已验收。",
     verifiedAt: "2026-09-11T03:28:08Z",
     verifiedLabel: "2026-09-11 11:28（北京时间）",
-    evidence: "ChatGPT 普通命令调用 8/8 成功；SYSTEM 维护调用成功，返回退出码 0。",
+    evidence: "ChatGPT 普通命令调用 8/8 成功，SYSTEM 维护返回退出码 0。17:49（北京时间）通用 MCP 客户端使用副机原凭据完成管理员与 SYSTEM 调用，两次均返回副机身份与退出码 0。",
     transport: "Tailscale Funnel，保留独立入口。"
   }
 ];
@@ -32,9 +32,9 @@ export const mcpMainFallback = {
   label: "经副机的备用连接",
   endpoint: "https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp",
   fallback: true,
-  verifiedAt: "2026-09-11T08:29:08Z",
-  verifiedLabel: "2026-09-11 16:29（北京时间）",
-  evidence: "主动停止主机 Cloudflare 隧道后，主入口实际返回 530 / Tunnel 错误 1033。客户端强制连接副机的公网入口，连续 3 次命令均返回主机 WLY，且确认 Cloudflare 服务已停止；单次耗时 2.75–3.15 秒。随后恢复主入口。此项使用已有凭据的通用 MCP 客户端完成，ChatGPT 备用连接尚未单独授权。"
+  verifiedAt: "2026-09-11T09:44:42Z",
+  verifiedLabel: "2026-09-11 17:44（北京时间）",
+  evidence: "主动停止主机 Cloudflare 隧道，主入口实际返回 530 / Tunnel 错误 1033。通用客户端强制连接副机公网入口，普通命令 3/3 成功；随后另轮验收以管理员回读主机停止状态，再以 SYSTEM 成功启动 Cloudflare，主入口恢复。副机自己的 Codex 也完成独立 OAuth 和全新任务验收，返回主机 WLY 与 SYSTEM 身份。日常 ChatGPT 保留主、副两个插件，备用地址按需接入。"
 };
 
 export function mcpSetupNote(device) {

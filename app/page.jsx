@@ -2091,7 +2091,7 @@ function McpAccessPage() {
             </div>
           </div>
           <p className="mcp-copy-help">“密码或授权不正确”应先处理认证。操作超时、结果未知时，先核实是否已执行，再决定是否重试。备用入口不会自动切换或重复执行任务。</p>
-          <p className="mcp-copy-help">已完成主隧道断开演练：经副机公网调用主机 3/3 成功。<time dateTime={mcpMainFallback.verifiedAt}>{mcpMainFallback.verifiedLabel}</time>。</p>
+          <p className="mcp-copy-help">已完成断开与恢复演练：经副机公网调用主机，并以 SYSTEM 成功恢复主入口。<time dateTime={mcpMainFallback.verifiedAt}>{mcpMainFallback.verifiedLabel}</time>。</p>
         </div>
       </details>
 
