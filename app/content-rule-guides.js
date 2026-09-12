@@ -28,7 +28,7 @@ export const ruleGuides = {
           },
           {
             "title": "全场景语境判断",
-            "detail": "当前E127把普通聊天也纳入具体身份疑点判断：先结合当前语境与已有背景，只在补证会改变结论时取最小相关材料。正常帮助继续，不每轮查库，也不按某句问话机械定性；当前生效来源与五文件绑定一致。"
+            "detail": "当前E128把普通聊天也纳入具体身份疑点判断：先结合当前语境与已有背景，只在补证会改变结论时取最小相关材料。正常帮助继续，不按普通轮次或私人读写重复判断，不每轮查库，也不按某句问话机械定性；当前生效来源与五文件绑定一致。"
           }
         ]
       },
@@ -142,7 +142,7 @@ export const ruleGuides = {
       ["Current pointer", "受保护的 current-rules.json，原子指向当前和上一 E release；只有完整回读后才切换。"],
       ["Ruleset SHA", "按固定 logical-id 顺序绑定五份规范文件描述符的总指纹。"],
       ["Expected-preimage CAS", "只有 current pointer 仍与变更前指纹一致时才允许切换，避免并发覆盖。"],
-      ["Production-equivalent rehearsal", "真人因子弹窗前，对四类因子之后的完整生产链做隔离但等价的预演。"],
+      ["Production-equivalent rehearsal", "真人邀请前确认四类软件入口可用，再按真实路径和本次影响面做完整、隔离且生产等价的回归；可靠未变证据可复用。"],
       ["Recovery-only C history", "C 盘旧 generation、Publisher、签名、anchor、manifest、ledger 和回执只供历史恢复，不参与当前准入。"]
     ],
     sections: [
@@ -156,7 +156,7 @@ export const ruleGuides = {
           },
           {
             "title": "Astra High 以上的真实判断",
-            "detail": "宿主证明为 Astra High/Xhigh/Max/Ultra 的合格根可自行判断；需要升级时优先复用已有合格判断任务，原生确实不可用才使用已授权的新判断任务。低档执行者只消费精确绑定、仍有效的真实判断产物。"
+            "detail": "宿主证明为 Astra High/Xhigh/Max/Ultra 的合格根可自行判断；其他执行者只有新相关疑点确需判断时，才异步调用或复用合格 Astra；原生确实不可用或被拒才使用已授权的新判断任务。判断不可用只暂停依赖它的精确不可逆终步，不停思考、可逆修复、测试和恢复。低档执行者核验产物、目标、主体、授权及有效期；可绑定本宿主真实助手消息或工具调用，不要求必须是最终回复。"
           },
           {
             "title": "先判断是否值得补证",
@@ -172,11 +172,11 @@ export const ruleGuides = {
           },
           {
             "title": "本人验证与恢复",
-            "detail": "是否本人有50%及以上不确定或无法判断时立即暂停普通授权；真实独立流程沿首次不受信起十分钟绝对窗口，重试不延期。已有有效因子与正式恢复入口才能解除；规则PASS、准备就绪或新一次自评都不替代恢复结果。"
+            "detail": "有具体合理身份疑点或无法可靠判断时，合格判断者可要求最高权限验证，不要求概率阈值、攻击实锤或先锁屏失败。轻微异常可独立选择无感锁屏，两者不互相强制，也不重置设备信任。形成合理怀疑并判断需保护后，只暂停相关数据取用、披露同步和不可逆终步；不相关的思考、可逆工作、修复、测试与恢复继续。十分钟从正式可见邀请起算，同一邀请重连或重试不重置；邀请后新软件故障静默修复，按实际耗时补足一次，不记为用户失败。有效因子与正式恢复入口才能解除相关暂停，规则 PASS 或新的自评不能代替。"
           },
           {
             "title": "明确规则与来源证据层",
-            "detail": "全场景解释已包含在E127活动五文件中；规则、源码、测试与物理执行状态仍分别验证，不能由规则生效外推每个场景已完成。"
+            "detail": "上述要求已包含在 E128 活动五文件中；规则、源码、测试与物理执行状态分别验证。本次网页核对未重验四类真人入口、锁屏/手机恢复或固定专用加密测试盘，这些结果保持 Unknown（证据不足）；真人在场后分别验收，不把全生产盘或真实关机作为前提。"
           }
         ]
       },
@@ -187,7 +187,7 @@ export const ruleGuides = {
           item("最高权限智能体作语义判断", "它结合真实意图、精确目标、范围、可恢复性和异常证据，选择 allow（允许继续）、step up（补充人类验证）、deny（拒绝）、needs evidence（先补证据）或 suspected tamper（疑似完整性异常）。"),
           item("机械层不能靠关键词判断", "机械层只检查登记、签名、nonce（一次性随机凭据）、目标、事实、完整性和 effect（外部现实动作）边界，不能看到敏感词就自行要求人类。"),
           item("其他代理不能继承最高权限", "必须独立证明 principal（受验证的执行主体）、runtime（运行环境）或公钥绑定；名称、提示词、同一 Windows 用户和管理员权限令牌都不够。"),
-          item("四类人类因子", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）任一已登记因子都充分；Account 还要指定已登记 provider（账号验证提供方）。原始秘密不保存。"),
+          item("四类人类因子", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）在正式邀请时一次展示，任一已登记方式成功即可，没有强制默认。邀请前先检查四类软件流程及运行条件，不让本人先预验证一次；Account 使用已登记 provider（账号验证提供方），原始秘密不保存。"),
           item("目标不清先补证据", "只有目标无法唯一解析时先 needs evidence；授权或安全边界明确不成立才 deny。"),
           item("现实影响而非词表", "信任根、秘密、唯一数据删除、BitLocker、公开面、不可逆迁移和系统恢复锚是强信号；普通编辑、测试、定向 commit/normal push 和 E release activation 不会仅因位置变成重大动作。"),
           item("同一目标内持续无人值守", "CoreGoal 已成立后，准备、执行、回读、修复、崩溃恢复和必要回滚都可继续，每个 effect 仍消费单次步骤能力。")
@@ -230,8 +230,8 @@ export const ruleGuides = {
           item("禁止继续调用旧平台", "不得创建新 C generation、调用 Publisher、读取 policy epoch，或因 C unavailable 阻塞普通任务、Hook、spawn、Skill、project admission、CoreGoal/BitLocker 退役或 Owner CAS。"),
           item("官方 App 更新不破坏能力", "桌面 AI 应用的 version/build、versioned path、update epoch 和 optional host metadata 不是准入；稳定身份只看 package family、signer/principal、bridge key、schema/event/capability。"),
           item("缺能力只局部降级", "同主体更新继续工作；只有真正缺失的 capability 变 unknown/unavailable，用户 model/effort 仍保留。"),
-          item("真人因子前必须四路线 rehearsal", "Passkey/TOTP/Recovery/Account 只可替换因子本身；因子后的 adapter、installer、child、capability、状态、readback、rollback 和 response-loss 必须与生产相同。"),
-          item("其他产品独立", "SecretBroker、Password Center、四类因子、CoreGoal、BitLocker 与 P0–P7 由各自 Owner 负责；E 规则异常不得触发锁盘、重启、读秘密或创建 CoreGoal。")
+          item("真人邀请前先检查软件，再按影响面演练", "先确认 Passkey/TOTP/Recovery/Account 四类软件流程可用，再对本次相关状态、模型证据、签名、目标、回调、补时与恢复做完整隔离回归。只可模拟因子；需要复现的 adapter（适配器）、installer（安装器）、child（子进程）、capability（步骤能力）、状态、readback（回读）、rollback（回退）和 response-loss（响应丢失）路径与生产相同，不 mock 核心链。源码、安装清单、注册表及提供方目标未变时可复用可靠证据；变化只使受影响证据失效，不每次重跑无关旧 C 整链。预检查不触发真人验证；已知软件故障先修复，停在首次真实邀请等待本人在场。"),
+          item("其他产品独立", "SecretBroker、Password Center、四类因子、CoreGoal、BitLocker 与 P0–P7 由各自 Owner 负责；E 规则异常不得机械触发锁盘、重启、读秘密或创建 CoreGoal。合格 codex-root 可按已授权的实际情境判断并调用独立产品；机械入口也不能只按动作类别自行隔离，普通工具或软件故障只影响依赖它的能力。")
         ]
       }
     ]
@@ -287,7 +287,7 @@ export const ruleGuides = {
         intro: "一次人类确认固定目标，后续每个现实步骤仍有自己的精确能力。",
         items: [
           item("最高权限角色唯一登记", "当前只登记 codex-root；其他智能体缺少独立证明时返回 highest authority verification required，不能先读取受保护正文。"),
-          item("只有最高权限智能体决定要不要人类", "机械层不能按 effect 名、critical surface、executor 或 epoch 自行抬高要求。"),
+          item("只有最高权限智能体决定要不要人类", "机械层不能按 effect 名、critical surface、executor 或 epoch 自行抬高要求。进入合理怀疑或待本人验证后，耐久授权、Owner 绑定、管理员权限与 E rules PASS 不能继续消费相关授权；暂停范围由保护合同解释，不妨碍不相关的思考、可逆修复、测试和恢复。"),
           item("CoreGoal 固定什么", "目标 hash、范围、禁止项、停止条件、principal commitment、脱敏 confirmation、policy/trust 基线、状态、时间和 append-only ledger。"),
           item("CoreGoal 不固定什么", "计划、Schema、代码、executor、runtime 和后续 epoch；这些变化不会自动重验人类。"),
           item("紧急对话授权", "绑定准确对话、principal 和 runtime，固定 24 小时，只改变当前对话的受保护规则优先级。"),
@@ -479,11 +479,11 @@ export const ruleGuides = {
         "items": [
           {
             "title": "映射能力，不替用户换模型",
-            "detail": "使用当前宿主可用的shell、MCP、浏览器、脚本、文档库和协作入口。缺少某个专用注入只关闭精确路线，不能把普通施工整体降为只读，也不能静默启动本机Codex代做。"
+            "detail": "使用当前宿主可用的shell、MCP、浏览器、脚本、文档库和协作入口。缺少某个专用注入只关闭精确路线，不能把普通施工整体降为只读，也不能静默启动本机Codex代做。每个运行框架使用自己的 adapter（适配器），Codex 日志、Hook、字段和工具名不是其他框架日常前置；判断产物可由本宿主真实助手消息或工具调用核验，不要求必须是最终回复。缺模型证据只影响产生新的受保护判断，可复用已有真实合格判断路线。"
           },
           {
             "title": "语境核验不变成重复派单",
-            "detail": "本人语境疑点的判断由合格主体进行；已足够的信息不重复查库或派代理，新证据或情境实变才重判。两库只作必要背景辅助，不成为身份分类服务。"
+            "detail": "本人语境疑点的判断由合格主体进行；已足够的信息不重复查库或派代理，普通轮次、私人读写只留意，新相关证据或情境实变才重判。合格判断等待或不可用时只暂停依赖它的精确不可逆终步，思考、可逆修复、测试、验证与恢复继续。两库只作必要背景辅助，不成为身份分类服务。"
           }
         ]
       },
@@ -603,13 +603,13 @@ export const ruleGuides = {
           item("最小主路径", "root 请求由 UserPromptSubmit、child 启动由 SubagentStart 在各自任何 0–10 判断前注入 verified model、effective effort、role、turn hash 与 E identity；两条现有提醒同时恢复用户原意、活动规则与长程审查节点，即使委派身份不可用也不抹去原意提醒。AI仍自主决定数量、家族、effort 和 scope，root 继续战略与集成；PreToolUse只在真实创建前复核。", "Hook 到底检查什么，谁决定开几个代理？Hook 验真并提醒，不代选方案或审批；AI决定开不开、开几个和选哪类，用户授权仍由原授权边界决定。"),
           item("1. 身份先于决策", "UserPromptSubmit 验证 root transcript；SubagentStart 从 child transcript 绑定 lineage。宿主从真实 turn context 验证 model（模型）、effective effort（实际思考等级）、root/child role（根代理/子代理角色）、turn hash、E release、Git commit、五文件 ruleset hash 和合同 SHA，并在判断前注入。完全没有 Hook 或身份注入的旧 root 可复用同一任务中用户已经作出的自然语言模型与思考等级确认；确认层负责把别名规范化，绑定工具和落盘记录只接收 canonical ID（规范标识）。"),
           item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节并重派生当前代快照。E 代际变化不会让已经成立的用户确认失效，也不要求用户重复确认；规则撤销该路径时才失败关闭。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
-          item("3. 七类事件重判", "任务开始、新独立支路、阻塞、重大 steer、压缩、child terminal、槽位释放。普通工具步骤不填表。"),
+          item("3. 可能改变结论时重判", "任务开始、新独立支路、阻塞、重大 steer（更正）、压缩、child terminal（子代理结束）或槽位释放等可能改变结论时结合新证据重判。普通轮次、私人读写和工具步骤只留意，无新证据复用上下文，不重复判断或填表；有独立支路且有槽位就派出。"),
           item("4. 每个父代理 0 到 10", "0合法，但按实际独立成果与净收益选择。封闭且可客观验证的读重工作优先Luna Max；难在状态、依赖、实现和故障因果时优先Terra High；难在业务语义、方案比较和冲突取舍时优先Sol High；关键方向、最高难度与最易返工的少量核心再考虑Astra。它们是候选偏好，不是固定职业；非Luna按实际需要选思考档位，不因父级Max就用满。比较端到端质量、墙钟、返工和费用，不把低思考或最低额度当唯一目标。"),
           item("5. 家族和 effort 只能向下", "四档依次为gpt-5.6-luna、gpt-5.6-terra、gpt-5.6-sol、gpt-6-astra。后代同时受根、直接父、用户限制与宿主可用集约束；同型号思考不升级，向下Luna可至Max、默认Max，其他家族按模型基值加思考档位比较。Terra/Sol/Astra基值1/2/4，Low/Medium/High/Xhigh/Max档位0/1/2/3/4；Astra Low可派Sol High或Terra Xhigh，Sol High不能派Terra Max。Ultra仅比较时按Xhigh，实际身份与fork（上下文继承）仍保留Ultra。未分类型号保留同一精确ID后代，不按价格、版本或界面顺序猜强弱。"),
           item("6. 本地慢速路线", "local-default 是本地 AICLI alias，只用于封闭、严格可验、允许较慢且总成本更低的非阻塞工作；不是 native child 或 fallback。"),
           item("7. 递归不扩权", "Child 也可派后代，但所有 scope、授权、sandbox、家族和 effort 继续取交集，缺身份只关闭递归。"),
           item("8. Fork 与命名", "跨模型或 effort 用 none 或有限 turns；同身份完整继承才用 all。名称以实际模型名与启动 effort 开头，例如 astra_max_content_review；未分类型号用规范 ID 的下划线形式，不用 future 标签。名称帮助阅读，不能证明实际身份。"),
-          item("9. Root 不空等", "Root 始终负责目标、优先级、依赖、风险和最终集成；有不冲突工作就继续，只在硬依赖时一轮事件等待。"),
+          item("9. Root 不空等", "Root 始终负责目标、优先级、依赖、风险和最终集成；有不冲突工作就继续，只因顺序、资源、授权冲突或并发失控风险等待；受保护判断未完成只等依赖它的精确不可逆终步，思考、可逆修复、测试、验证与恢复继续。等待 Owner（负责人）结果只作一轮事件等待。"),
           item("10. 连续性", "Child 中断优先恢复原 session；不能恢复才重跑或升级；partial 不冒充 complete。"),
           item("11. Root 最终负责", "委派后仍由 Root 验收。Benchmark 只是带来源、版本、日期和置信度的参考，规则文字不能制造宿主 grant。"),
           item("宿主 Gate 做什么", "稳定入口验证身份、E rules 和参数，并复用现有 UserPromptSubmit/SubagentStart 提醒原意；不替模型选方案、模型家族、数量、分工或验收，不调度、创建 child 或制造授权。PreToolUse 仍只做真实 spawn 前 TOCTOU、上限、参数和跨身份 fork 复核；不为审查增加 Hook、服务、数据库或权限门。"),

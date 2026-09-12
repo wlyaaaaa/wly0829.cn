@@ -92,7 +92,22 @@ for (const result of projectResults) {
   const registration = registryById.get(result.id);
   requireFact(Boolean(registration), "bundle_project_unregistered", result.id);
   if (!registration) continue;
-  if (registration.ai_refresh?.mode === "manual_owner_only") {
+  const retainedManualSnapshot = result.retained_manual_snapshot === true;
+  if (retainedManualSnapshot) {
+    requireFact(registration.ai_refresh?.mode === "manual_owner_only", "bundle_retained_manual_project_invalid", result.id);
+    requireFact(result.status === "unchanged", "bundle_retained_manual_status_invalid", result.id);
+    requireFact(bundle.manual_owner_request === false || bundle.manual_owner_request === undefined, "bundle_retained_manual_bundle_request_invalid", result.id);
+    requireFact(result.manual_owner_request === false || result.manual_owner_request === undefined, "bundle_retained_manual_project_request_invalid", result.id);
+    requireFact(result.old_content_sha256 === result.new_content_sha256, "bundle_retained_manual_content_drift", result.id);
+    requireFact(result.old_semantic_revision === result.new_semantic_revision, "bundle_retained_manual_semantic_drift", result.id);
+    requireFact(result.material === false && result.semantic_change === false, "bundle_retained_manual_change_claimed", result.id);
+    requireFact(Array.isArray(result.collectors) && result.collectors.length === 0, "bundle_retained_manual_collectors_present", result.id);
+    requireFact(Array.isArray(result.collector_receipts) && result.collector_receipts.length === 0, "bundle_retained_manual_receipts_present", result.id);
+    requireFact(result.source_fingerprint === null, "bundle_retained_manual_source_fingerprint_invalid", result.id);
+    const retainedDelta = sourceDeltas.find((delta) => delta?.project_id === result.id);
+    requireFact(["product", "technical"].every((axis) => semanticBuckets.every((bucket) => Array.isArray(retainedDelta?.[axis]?.[bucket]) && retainedDelta[axis][bucket].length === 0)), "bundle_retained_manual_semantic_delta_present", result.id);
+    requireFact(Array.isArray(retainedDelta?.affected_surfaces) && retainedDelta.affected_surfaces.length === 0, "bundle_retained_manual_affected_surfaces_present", result.id);
+  } else if (registration.ai_refresh?.mode === "manual_owner_only") {
     requireFact(bundle.manual_owner_request === true, "bundle_manual_owner_request_missing", result.id);
     requireFact(result.manual_owner_request === true, "bundle_project_manual_owner_request_missing", result.id);
   }
@@ -159,7 +174,7 @@ for (const result of projectResults) {
     requireFact(result.material === false, "bundle_unchanged_material", result.id);
     requireFact(result.old_content_sha256 === result.new_content_sha256, "bundle_unchanged_content_drift", result.id);
     requireFact(result.old_semantic_revision === result.new_semantic_revision, "bundle_unchanged_semantic_drift", result.id);
-    requireFact(validSha(result.source_fingerprint), "bundle_unchanged_source_fingerprint_missing", result.id);
+    if (!retainedManualSnapshot) requireFact(validSha(result.source_fingerprint), "bundle_unchanged_source_fingerprint_missing", result.id);
   }
   if (result.status === "changed") {
     requireFact(result.material === true, "bundle_changed_not_material", result.id);

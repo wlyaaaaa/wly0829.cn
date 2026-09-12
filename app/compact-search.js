@@ -25,7 +25,7 @@ export function createCompactSearchEntry(entry, href = entry.href) {
     detail: entry.detail.slice(0, detailLimit),
     href,
     aliases: [...new Set(entry.aliases || [])],
-    search: entry.compactSearch ?? entry.search ?? ""
+    search: normalize(entry.compactSearch ?? entry.search ?? "")
   };
 }
 

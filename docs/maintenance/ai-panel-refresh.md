@@ -79,6 +79,8 @@ AI 在改正文前必须先交付一份简洁语义差分：产品与技术分�
 
 Verifier 检查 changed/unchanged/blocked 闭包、当前内容 SHA、每项目 source fingerprint、materiality、semantic revision，以及项目、Rules、Skills、System 的逐文件 no-op 字节不变性。它只检查 AI 差分与实际改动是否闭合，绝不替 AI 判断新增、修改或退役语义是否正确。
 
+每周复核可使用自动项目各自的 targeted 计划取证，再合并为一个 `all` v2 结果，统一使用本轮真实基线与最终文件 SHA 闭合全局表面；这不把缺少手动请求的 `--all` 计划改为可执行。未请求更新的 `manual_owner_only` 页面以 `status=unchanged`、`retained_manual_snapshot=true` 保留，两个 `manual_owner_request` 字段均为 false 或省略，旧/新内容 SHA 与 semantic revision 相同，`material=false`、`semantic_change=false`、`source_fingerprint=null`，collectors、collector_receipts、产品/技术六个差分桶及 affected_surfaces 均为空。保留原 observedAt，并在 reason 说明只核对网站快照字节、未读取或更新来源；这是保留旧快照，不是新鲜来源复核。其余手动刷新仍须明确 owner 请求；自动项目不能使用该保留标记。
+
 ## 全量刷新流程
 
 运行 `npm run refresh:ai -- --all`。当清单包含 manual-only 项目时，只有 owner 明确要求全量复核才追加 `--manual-owner-request`；否则计划停在 `manual_owner_request_required`。AI 只刷新 Registry 中已经发布的项目，并按 `config/final-project-order.json` 投影出的固定名次排序；缺号保持缺号，未建项目不进入刷新计划。AI 可根据当前原生并发槽位分批取证，每个项目仍独立判断：
@@ -143,4 +145,4 @@ Registry 中当前启用的已发布项目为每条路由生成含完整正文�
 
 文件存在、脚本成功、hash 一致或测试通过都不能单独代替内容准确、专业、详细且人话的阅读验收。
 
-自动刷新任务的语义判断和正文写入使用活动原生经济路由选出的 Sol 家族或更强未来模型；不把当前某个精确 model id 或固定 effort 写成永久产品身份。机械收集、hash 与测试可以由工具完成，但不能由较低质量路线代替语义差分、内容取舍或最终阅读验收。
+网页语义判断、正文写入、设计与内容验收使用 Astra High 或以上，适用于所有后代和独立审查者。Registry 保留 Astra Max 默认；Max 不是最低门槛。按本人当前选择和活动原生经济路由核验实际身份、宿主可用性与父/根上限，不静默换成其他模型或本地路线。机械收集、hash 与测试只提供证据，不替代语义差分、内容取舍或最终阅读验收。

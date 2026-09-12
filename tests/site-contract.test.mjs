@@ -418,7 +418,7 @@ test("project rules require professional, detailed and plain-language content", 
   assert.match(projectRules, /Decide module boundaries only after the source-to-page difference/);
   assert.match(projectRules, /auditing only the page's existing fields is circular/);
   assert.match(projectRules, /Content completeness is a separate, source-first acceptance gate/);
-  assert.match(projectRules, /independent[\s\S]{0,140}Astra Max reviewer/);
+  assert.match(projectRules, /independent[\s\S]{0,140}Astra reviewer at High or higher/);
   assert.match(projectRules, /without being given the page's module list as the expected answer/);
   assert.match(projectRules, /One P0 capability omission blocks content acceptance and publication/);
   assert.match(projectRules, /Each project owns its\s+real module count/);
@@ -541,11 +541,11 @@ test("the shared enhancement and search indices stay within their measured revie
   const enabledProjectCount = registry.projects.filter((item) => item.enabled).length;
   assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 14);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 23);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 151);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 152);
   assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 176);
-  assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 23);
+  assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 24);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
-  assert.match(registry.refresh_policy.bundle_budget_semantics, /smallest justified increase to151\/176\/23KiB/);
+  assert.match(registry.refresh_policy.bundle_budget_semantics, /Smallest reviewed thresholds152\/176\/24KiB/);
   assert.match(registry.refresh_policy.bundle_budget_semantics, /no identical duplicate/);
   assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
@@ -1236,7 +1236,7 @@ test("PCConfig recovery is one complete replacement and reinstall journey instea
   assert.doesNotMatch(publicText, /ready_with_warnings|8 个 backup set|9 个任务、8 个 backup set|稳定投影为版本 5|当前 Registry 为版本 5|当前可读取版本 5|13 个项目/);
 
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 15);
+  assert.equal(registry.projects.find((item) => item.id === "pcconfig").ai_refresh.semantic_revision, 16);
 });
 
 test("PCConfig exposes secondary-laptop and drift acceptance as complete product and technical axes", async () => {
@@ -1248,7 +1248,7 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   for (const expected of [
     "LAPTOP-E48N0DRJ", "主工作站", "副驾驶", "ToDesk", "Tailscale", "FlyingBird", "SSH 22", "RDP 3389", "7892", "45432", "1455",
     "WSL2", "Docker", "Get-SecondaryLaptopHealth", "CodexRecovery-SecondaryLaptop", "restore_pending", "restored_unaccepted", "writer_activated",
-    "7 天", "2 个", "BitLocker", "Desktop", "Documents", "Downloads", "NVMe", "GM7000", "ReFS", "host_mismatch", "Unknown"
+    "7 天", "保留2个", "BitLocker", "Desktop", "Documents", "Downloads", "NVMe", "GM7000", "ReFS", "host_mismatch", "Unknown"
   ]) assert.ok(laptopText.includes(expected), `secondary-laptop omits: ${expected}`);
   for (const expected of [
     "status", "evidence_status", "check id", "selector", "bounded", "zero-write", "Test-PCConfigDrift", "Invoke-PCConfigAcceptance", "pass", "warn", "block", "unknown"
@@ -1268,7 +1268,7 @@ test("PCConfig exposes secondary-laptop and drift acceptance as complete product
   assert.match(JSON.stringify(pcconfigProject.currentState), /complete_visibility|needs_attention=false/);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 15);
+  assert.equal(registration.ai_refresh.semantic_revision, 16);
   assert.match(registration.ai_refresh.scope, /ten source-defined modules/);
   assert.ok(registration.ai_refresh.conditional_collectors.some((item) => item.includes("Get-SecondaryLaptopHealth") && item.includes("host_mismatch")));
 });
@@ -1293,13 +1293,13 @@ test("PCConfig exposes authorized-file encryption as an isolated resumable produ
     "domain root", "bundle key", "file key", "resume state", "index.enc", "receipt", "selection digest", "already_complete",
     "source_changed", "AuthorizationFileVerify", "AuthorizationFileDecrypt", "restore_conflict", "already_restored", "opaque asset"
   ]) assert.ok(text.includes(expected), `PCConfig authorized-file workflow omits: ${expected}`);
-  for (const expected of ["来源文件", "始终保留", "不读取", "正文", "不覆盖", "中断", "继续", "没有独立 preview", "runtime", "E2E", "not_run"]) {
+  for (const expected of ["来源文件", "始终保留", "不读取", "正文", "不覆盖", "中断", "继续", "AuthorizationFileView", "AuthorizationFileEdit", "runtime", "E2E"]) {
     assert.ok(text.includes(expected), `PCConfig authorized-file product boundary omits: ${expected}`);
   }
   assert.ok(pcconfigProject.usageExamples.some((item) => item.moduleSlug === "authorization-files" && item.ask.includes("文件") && item.ask.includes("加密")));
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "pcconfig");
-  assert.equal(registration.ai_refresh.semantic_revision, 15);
+  assert.equal(registration.ai_refresh.semantic_revision, 16);
   const paths = registration.impact_sources.flatMap((source) => source.paths || []);
   for (const expected of ["tools/authorization_file_broker.py", "tools/authorization_file_broker.test.py", "docs/contracts/pcconfig.password-center-m2.md"]) {
     assert.ok(paths.includes(expected), `PCConfig authorized-file source missing from Registry: ${expected}`);
@@ -1697,7 +1697,7 @@ test("PC Panel Hub, CACB and learning expose complete journeys through bounded m
   assert.equal(packages.flatMap((entry) => entry.modules).length, 20);
 
   for (const { project, modules } of packages) {
-    const expectedRevision = project.slug === "pc-panel-hub" ? 9 : project.slug === "cacb" ? 8 : 6;
+    const expectedRevision = project.slug === "pc-panel-hub" ? 10 : project.slug === "cacb" ? 8 : 6;
     assert.equal(registry.projects.find((item) => item.id === project.slug).ai_refresh.semantic_revision, expectedRevision, `${project.slug} semantic revision did not advance`);
     const moduleSlugs = new Set(modules.map((module) => module.slug));
     for (const usage of project.usageExamples) {
@@ -2148,7 +2148,7 @@ test("personal-materials explains direct lookup, bounded discovery, verified ope
   const registration = registry.projects.find((item) => item.id === "personal-materials");
   assert.equal(registration.presentation_mode, "real_dashboard");
   assert.equal(registration.ai_refresh.content_path, "app/content-personal-materials.js");
-  assert.equal(registration.ai_refresh.semantic_revision, 7);
+  assert.equal(registration.ai_refresh.semantic_revision, 8);
   assert.equal(registration.source.repo, "wlyaaaaa/personal-materials");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.default_branch, "main");
@@ -2631,7 +2631,7 @@ test("personal-media preserves its current product snapshot and delivers ten opt
   assert.equal(personalMediaProject.title, "个人媒体整理与恢复");
   assert.equal(personalMediaProject.visibility, "GitHub 私有仓库");
   assert.equal(personalMediaProject.repositoryUrl, null);
-  assert.deepEqual(personalMediaProject.cardMetrics.map((item) => item.label), ["照片", "视频", "音频", "精选"]);
+  assert.deepEqual(personalMediaProject.cardMetrics.map((item) => item.label), ["照片（9/5）", "视频（9/5）", "音频（9/5）", "精选（9/5）"]);
   assert.deepEqual(personalMediaProject.cardMetrics.slice(0, 3).map((item) => item.value), ["20,312 张", "376 个", "3,851 个"]);
   const publicText = JSON.stringify({ project: personalMediaProject, modules: personalMediaModules });
   for (const expected of ["24,539", "20,312", "376", "3,851", "3,844", "6 个音乐", "1 个铃声", "15,829", "1,927", "863", "713", "424", "396", "57", "1,145", "37 个视频", "1,182", "23.4 GiB", "精选", "6,440", "4,287", "LocalOCR", "文件管理器删除", "sync-current", "6,262", "6,500", "56,999,686,276", "67.6 GiB", "upload=0", "55 项测试", "E:\\\\Pictures", "E:\\\\Videos", "E:\\\\Music\\\\录音", "ingest-file", "equivalent-keeper-sha256", "demuxed video stream", "可以拔了", "双盘", "60 GB", "Google Photos", "不递归删除", "不恢复出厂设置"]) {
@@ -2709,7 +2709,7 @@ test("personal-media preserves its current product snapshot and delivers ten opt
   assert.deepEqual(projectReferenceLinks["personal-media"], [{ relation: "skill", href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }]);
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "personal-media");
-  assert.equal(registration.ai_refresh.semantic_revision, 8);
+  assert.equal(registration.ai_refresh.semantic_revision, 9);
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.repo, "wlyaaaaa/personal-media");
 });
@@ -2929,7 +2929,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.deepEqual(targeted.selected_projects[0].collector_requirements[0].required_principals, ["SYSTEM", "Administrator"]);
   assert.equal(targeted.selected_projects[0].collector_requirements[0].required_evidence.complete_visibility, true);
   assert.match(targeted.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
-  assert.equal(targeted.selected_projects[0].semantic_revision, 15);
+  assert.equal(targeted.selected_projects[0].semantic_revision, 16);
   assert.equal(targeted.selected_projects[0].source_fingerprint, null);
   assert.match(targeted.selected_projects[0].source_fingerprint_state, /decision-relevant Owner observations.*dated retained evidence/);
   assert.deepEqual(targetedTimeAudit.selected_projects.map((item) => item.id), ["timeaudit"]);
@@ -2938,7 +2938,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.match(targetedTimeAudit.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.deepEqual(targetedPcPanelHub.selected_projects.map((item) => item.id), ["pc-panel-hub"]);
   assert.equal(targetedPcPanelHub.selected_projects[0].content_path, "app/content-pc-panel-hub.js");
-  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 9);
+  assert.equal(targetedPcPanelHub.selected_projects[0].semantic_revision, 10);
   assert.match(targetedPcPanelHub.selected_projects[0].content_sha256, /^[a-f0-9]{64}$/);
   assert.equal(targetedCacbWithoutOwner.status, "manual_owner_request_required");
   assert.deepEqual(targetedCacbWithoutOwner.manual_project_ids, ["cacb"]);
@@ -2990,7 +2990,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedPersonalMaterials.status, "ready_for_ai");
   assert.deepEqual(targetedPersonalMaterials.selected_projects.map((item) => item.id), ["personal-materials"]);
   assert.equal(targetedPersonalMaterials.selected_projects[0].content_path, "app/content-personal-materials.js");
-  assert.equal(targetedPersonalMaterials.selected_projects[0].semantic_revision, 7);
+  assert.equal(targetedPersonalMaterials.selected_projects[0].semantic_revision, 8);
   assert.equal(targetedPersonalMaterials.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedPersonalMaterials.selected_projects[0].source.repo, "wlyaaaaa/personal-materials");
   assert.equal(Object.hasOwn(targetedPersonalMaterials.selected_projects[0].source, "local_root"), false);
@@ -3022,7 +3022,7 @@ test("AI refresh planner supports targeted and full refresh without writing narr
   assert.equal(targetedPersonalMedia.status, "ready_for_ai");
   assert.deepEqual(targetedPersonalMedia.selected_projects.map((item) => item.id), ["personal-media"]);
   assert.equal(targetedPersonalMedia.selected_projects[0].content_path, "app/content-personal-media.js");
-  assert.equal(targetedPersonalMedia.selected_projects[0].semantic_revision, 8);
+  assert.equal(targetedPersonalMedia.selected_projects[0].semantic_revision, 9);
   assert.equal(targetedPersonalMedia.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedPersonalMedia.selected_projects[0].source.visibility, "PRIVATE");
   assert.equal(targetedPersonalMedia.selected_projects[0].source.repo, "wlyaaaaa/personal-media");
@@ -3315,7 +3315,7 @@ test("the .agents capability route explains Hook timing, blind acceptance and of
   assert.ok(rule.forbidden.some((item) => item.includes("directed_execution_test") && item.includes("route_selected_without_hint")));
   assert.ok(rule.forbidden.some((item) => /app version.*build.*versioned path/.test(item)));
 
-  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 20);
+  assert.equal(projectCatalog.find((item) => item.project.slug === "agents").registration.ai_refresh.semantic_revision, 21);
 });
 
 test("authorization content explains PUBLIC private companion migration as a recoverable product journey", () => {
@@ -3588,8 +3588,8 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const browserContinuity = skills.find((item) => item.slug === "browser-control-continuity");
   const browserContinuityText = JSON.stringify({ entry: browserContinuity, guide: skillGuides["browser-control-continuity"], outcome: skillOutcomes["browser-control-continuity"] });
   assert.equal(browserContinuity.sourcePath, "E:\\.agents\\skills\\browser-control-continuity\\SKILL.md");
-  assert.equal(browserContinuity.sourceBytes, 9997);
-  assert.equal(browserContinuity.sourceSha256, "f8a1ef1a140f13f6a2d3ebde2a4382330c667ad74ac5aafcc2272c56749f886c");
+  assert.equal(browserContinuity.sourceBytes, 10683);
+  assert.equal(browserContinuity.sourceSha256, "ce87f29cb7da0e22615897b9864eb913070184de495122105390ef135269f04d");
   for (const expected of [/managed browser Provider|受管浏览 Provider/i, /同一.*标签页|旧标签页/, /官方刷新.*Inspect.*Repair.*Cleanup/s, /four.*appServerRuntimePaths|appServerRuntimePaths.*四条/s, /file chooser|文件选择器/i, /100%.*不.*成功|不是.*成功/s, /authoritative success|权威成功态/i, /提交前.*附件.*提交后.*平台记录/s, /失败.*恢复/s, /触发.*范围.*证据.*退出条件/s, /已核实.*本人明确要求/s, /不.*授权.*(?:登录|上传|提交)|本地恢复不授权/s, /7a7fbda/, /当前官方.*Host|官方当前manifest\/host/s, /allowed_origins/, /本地 HTML.*HTTP/s, /browser-disconnected/, /stale-debugger-unattached/, /status=ready.*不证明/s]) {
     assert.match(browserContinuityText, expected, `browser-control-continuity omits durable behavior: ${expected}`);
   }
@@ -4158,16 +4158,16 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
-test("E127 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
+test("E128 panel preserves bounded source refresh and the command-policy-only delete fallback", async () => {
   const bindings = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-rule-bindings.json"), "utf8"));
   const coreSource = await readFile(path.join(projectRoot, "app", "content-core.js"), "utf8");
   const ruleGuideSource = await readFile(path.join(projectRoot, "app", "content-rule-guides.js"), "utf8");
-  assert.equal(bindings.semantic_release_id, "E127");
-  assert.equal(bindings.ruleset_sha256, "9cbdcbb050933f1f8dcc4a7b753fee2b43d00933f9773ba06aa2e07a941bd137");
-  assert.equal(panelSnapshot.authority.releaseId, "E127");
-  assert.equal(panelSnapshot.authority.gitCommit, "ecf2086d1d58cdfddfc73cd63d58f9a77627ae77");
-  assert.equal(panelSnapshot.authority.pointerRevision, 35);
-  assert.equal(panelSnapshot.authority.previous.release_id, "E126");
+  assert.equal(bindings.semantic_release_id, "E128");
+  assert.equal(bindings.ruleset_sha256, "d5c13983a3a3d4caec3ba5dd59807de2c527ac05a273307c7b049ab1487896cf");
+  assert.equal(panelSnapshot.authority.releaseId, "E128");
+  assert.equal(panelSnapshot.authority.gitCommit, "f66b600f77469c4152e0ad373251e1ca3c859f0d");
+  assert.equal(panelSnapshot.authority.pointerRevision, 36);
+  assert.equal(panelSnapshot.authority.previous.release_id, "E127");
   for (const expected of [
     "物理 CODEX_HOME",
     "compatibility junction",
@@ -4264,9 +4264,9 @@ test("E127 panel preserves bounded source refresh and the command-policy-only de
     outcome: skillOutcomes["personal-panel-refresh"]
   });
   assert.ok(panelRefresh, "public personal-panel-refresh entry is missing");
-  assert.equal(panelRefresh.sourceBytes, 8374);
-  assert.equal(panelRefresh.sourceSha256, "da27e3d130b31ad65d584ca992c3f4b414b32ea485c724aec1de04e2e5b22519");
-  assert.match(panelRefresh.sourceState, /6f964c8.*发布/);
+  assert.equal(panelRefresh.sourceBytes, 8549);
+  assert.equal(panelRefresh.sourceSha256, "220e3382a39a0871e999d4541501243122f85018bb3a80bcfbcf8bd16512c224");
+  assert.match(panelRefresh.sourceState, /b4f2bba.*发布/);
   assert.doesNotMatch(
     panelRefreshText,
     /create_thread|threadId|clientThreadId|task_required|handoff|lifecycle|archive|projectless|dispatch-unconfirmed|setup-pending|successor|follow-up|任务 ID|派发回执|派发分类/i,
@@ -4288,7 +4288,7 @@ test("E127 panel preserves bounded source refresh and the command-policy-only de
     /正常推送.*现有 PUBLIC main.*Pages.*公网回读/,
     /产品与技术.*新增.*修改.*退役\/替代.*Unknown/,
     /Project.*Rules.*Skills.*System/,
-    /Astra Max.*历史 Sol.*不覆盖/s,
+    /Astra High 或以上.*Max.*默认/s,
     /发送失败.*不.*竞争.*不盲目重试|失败.*不另开竞争.*不盲目重试/s,
     /新公网目标.*付费.*秘密暴露.*force-push/
   ]) {

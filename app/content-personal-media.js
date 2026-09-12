@@ -36,30 +36,32 @@ const bytesToGiB = (value) => `${(value / 1024 ** 3).toFixed(1)} GiB`;
 
 const personalMediaSnapshot = createProjectSnapshot({
   observedAt: SOURCE_OBSERVED_AT,
-  label: `${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频、${current.audioRows.toLocaleString("zh-CN")} 个音频可检索；精选 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频；手机恢复包低于 60 GB；云端仍为 upload=0`,
-  boundary: `GitHub 私有仓库与 main 已回读；源码和整理元数据有私人版本保存，媒体原件仍在本地与异卷副本中。媒体数量和 ${current.tests} 项测试沿用 ${SOURCE_RECEIPT} 的原观察日期，新增元数据导出另有 4 项合成回归；本页未连接手机、执行清理或上传 Google Photos，10 张画廊资源保持不变。`,
+  label: `9月5日规模基线：${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频、${current.audioRows.toLocaleString("zh-CN")} 个音频可检索；精选 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频；手机恢复包低于 60 GB；旧数据观察的云候选为 upload=0；当前正式阶段见下方说明`,
+  boundary: `GitHub 私有仓库与 main 已回读；源码和整理元数据有私人版本保存，媒体原件仍在本地与异卷副本中；本页规模与恢复数量是下述原观察，未重新盘点当前整理后的全库。媒体数量和 ${current.tests} 项测试沿用 ${SOURCE_RECEIPT} 的原观察日期，新增元数据导出另有 4 项合成回归；本页未连接手机、执行清理或上传 Google Photos，10 张画廊资源保持不变。`,
   metrics: [
-    { label: "照片", value: `${current.imageRows.toLocaleString("zh-CN")} 张` },
-    { label: "视频", value: `${current.videoRows.toLocaleString("zh-CN")} 个` },
-    { label: "音频", value: `${current.audioRows.toLocaleString("zh-CN")} 个` },
-    { label: "精选", value: `${current.selectedRows.toLocaleString("zh-CN")} 项` }
+    { label: "照片（9/5）", value: `${current.imageRows.toLocaleString("zh-CN")} 张` },
+    { label: "视频（9/5）", value: `${current.videoRows.toLocaleString("zh-CN")} 个` },
+    { label: "音频（9/5）", value: `${current.audioRows.toLocaleString("zh-CN")} 个` },
+    { label: "精选（9/5）", value: `${current.selectedRows.toLocaleString("zh-CN")} 项` }
   ],
   facts: [
-    { label: "当前目录", value: `一个可删除重建的 SQLite 目录当前合计定位 ${current.catalogRows.toLocaleString("zh-CN")} 个原件：${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频和 ${current.audioRows.toLocaleString("zh-CN")} 个音频；音频按 authority locator 分为 ${current.recordingRows.toLocaleString("zh-CN")} 段录音、${current.musicRows} 个音乐文件、${current.ringtoneRows} 个铃声。数据库不保存媒体字节。` },
-    { label: "当前精选", value: `产品只有一个“精选”入口，物理上分别落在 E:\\Pictures\\精选与 E:\\Videos\\精选两个同类型主文件夹，不混装、不设数量上限或下限，也没有子目录。当前为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片、${current.selectedVideoRows} 个视频，共 ${current.selectedRows.toLocaleString("zh-CN")} 项、${bytesToGiB(current.selectedBytes)}；E/G 两盘 ${current.selectedRows.toLocaleString("zh-CN")}/${current.selectedRows.toLocaleString("zh-CN")} 逐项 SHA-256 与 catalog 一致。` },
+    { label: "本地实施与未完范围", value: "来源Owner确认7990eed包含普通视频52件E/G扁平归位、图片首轮19,851→4,186的本地原件删除检查点，不代表四库全部处理完成。后续数据仍在推进，尚未更新正式metadata基线；最近完整G回读为2026-09-12T01:32:06Z，此后定向退出与实际G手机包变化仍待最终metadata和全镜像收口，不能称旧ZIP载荷全部清除。手机清空/回写未验，163项旧待清仍须重连。", hero: false },
+    { label: "正式源码与当前阶段", value: "2026-09-12 04:22 UTC 回读 PRIVATE main=7990eed73c68d0bd1f827ee99015622423ec2754。正式合同已转入四库本地分批去留、必要文字承接及索引/备份收口；独立命名/目录迁移暂停但未取消，云端真删除/重传另阶段，不连接手机。代码已有跨库哈希复用、就地登记和Photos/Drive执行入口，不能再把旧零上传观察说成永远没有上传能力。另有未发布改动，不进入本页能力。", hero: false },
+    { label: "9月5日目录基线", value: `9月5日一个可删除重建的 SQLite 目录合计定位 ${current.catalogRows.toLocaleString("zh-CN")} 个原件：${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频和 ${current.audioRows.toLocaleString("zh-CN")} 个音频；音频按 authority locator 分为 ${current.recordingRows.toLocaleString("zh-CN")} 段录音、${current.musicRows} 个音乐文件、${current.ringtoneRows} 个铃声。数据库不保存媒体字节。` },
+    { label: "精选的旧观察与新边界", value: `9月5日旧精选观察为照片/视频两处入口： ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片、${current.selectedVideoRows} 个视频，共 ${current.selectedRows.toLocaleString("zh-CN")} 项、${bytesToGiB(current.selectedBytes)}；当时E/G两盘逐项SHA-256与catalog一致。现行合同保留照片精选，普通视频归E:\\Videos根目录，不再设视频精选目录；普通视频52件E/G扁平归位已由来源确认，照片独立目录迁移仍暂停。` },
     { label: "截图文字与画面认知", value: `截图细项保留 2026-09-02 观察：${current.screenshotImageRows.toLocaleString("zh-CN")} 张中，${current.screenshotOcrEvidenceRows.toLocaleString("zh-CN")} 张带 OCR 证据，${current.screenshotVisibleTextRows.toLocaleString("zh-CN")} 张有 visible_text；这不是本轮新增截图覆盖率。当前检索已把确认的处理链/旧路径/哈希移回 provenance（来源说明），真实技术文字与不确定文本保留，避免内部痕迹污染内容召回。` },
     { label: "三种保留分别决定", value: "本地 keeper（保留原件）、Google Photos 云候选和手机携带/恢复资格分别审查。普通新增不会自动进入手机包；严格精选沿用既有资格，普通内容须明确 phone-recovery 及理由。本轮没有合格精选或手机增量为 0 都是正常结果。" },
-    { label: "当前手机真实缺口", value: "电脑端恢复包已恢复原有 6,262 项；此前误将本地 keeper 自动当作手机增量，手机曾写到 6,425 项。多出的 163 项已固定为下次连接时按精确路径、大小和 SHA-256 清理，当前未连接、未执行，不能声称手机已经纠正。" },
-    { label: "候选集合不自动补齐", value: "当前手机资格 6,385 项中计划选入 6,262，123 项未选原因 Unknown；云资格 6,589 项中选入 6,500，89 项未选原因 Unknown。已有 1,182 项精选都在两种计划中；历史差额不自动补齐，也不把它们猜成无价值。" },
+    { label: "当前手机真实缺口", value: "9月5日电脑端恢复包曾纠正为6,262项，之后本地清理继续改变实际包；此前误将本地keeper自动当作手机增量，手机曾写到6,425项。多出的 163 项已固定为下次连接时按精确路径、大小和 SHA-256 清理，当前未连接、未执行，不能声称手机已经纠正。" },
+    { label: "候选集合不自动补齐", value: "9月5日手机资格6,385项中计划选入6,262，123项未选原因Unknown；云资格6,589项中选入6,500，89项未选原因Unknown。当时1,182项精选均在两种计划中；这些历史差额不自动补齐、不猜成无价值，也不当作整理后现行资格。" },
     { label: "录音片段定位", value: "选定录音后，locate-audio 复核原音 SHA-256，复用 ChineseASR 已保留的时间段，返回原音起点下的起止时间、逐词覆盖和有限片段；查询不播放、不启动模型、不写库。缺时间时只给单件本地 ASR 接续，视频内部定位仍未提供。" },
-    { label: "手机恢复包", value: `${current.recoveryItems.toLocaleString("zh-CN")} 项、${bytesToGiB(current.recoveryBytes)}，仍低于 60 GB 产品上限；录音不进入手机最小恢复包。` },
-    { label: "云端候选", value: `${current.cloudCandidates.toLocaleString("zh-CN")} 项、${bytesToGiB(current.cloudBytes)}；upload=0，当前没有上传授权，也没有发生上传。` },
+    { label: "9月5日手机恢复包", value: `${current.recoveryItems.toLocaleString("zh-CN")} 项、${bytesToGiB(current.recoveryBytes)}，仍低于 60 GB 产品上限；录音不进入手机最小恢复包。` },
+    { label: "云端候选", value: `${current.cloudCandidates.toLocaleString("zh-CN")} 项、${bytesToGiB(current.cloudBytes)}；这是9月5日upload=0历史基线；不用于判断后续上传是否发生。当前正式源码已有执行入口，云全量与手机闭环未在本页验收。` },
     { label: "检索与耗时边界", value: "查询直接使用 SQLite 条件/FTS，返回逐词命中字段、有限片段与范围；当前 source 明确取消 750/250 ms 硬门，不为几秒级耗时牺牲 AI 所需含义和证据。旧精确查询 239 ms 仅是历史观测，不是当前验收阈值。" },
     { label: "源码边界", value: `只有 personal_media.py 与 phone_file_preserve_clear.py 两个生产模块；无服务、队列、后台任务或第二数据库。`, hero: false },
     { label: "GitHub 私有仓库", value: `wlyaaaaa/personal-media，repository id=1362211796，PRIVATE、默认 main。${SOURCE_OBSERVED_AT} 通过 Git Owner 的实时可见性元数据和 GitHub ref API 核对，本地干净 HEAD 与远端 main 均为 ${SOURCE_MAIN_COMMIT}。`, hero: false },
     { label: "私人版本保存什么", value: "源码、测试、说明与 metadata/current.zip 的无损元数据快照进入 PRIVATE Git；快照保留重建种子、清单、分类、标签、描述、原路径和内容 SHA-256。照片、视频、音频、活动 SQLite 与缓存不进入 Git，仍由原有本地与异卷恢复路径负责。", hero: false },
     { label: "验收", value: `2026-09-05 的 ${current.tests} 项媒体验收为 0 失败/错误、${current.skipped} 项真机测试跳过；它不覆盖后来新增的 Git 元数据导出。2026-09-09 在 ${SOURCE_MAIN_COMMIT.slice(0, 8)} 上另跑 4 项 MetadataSnapshotTests 合成回归通过，未读取或导出真实私人元数据。`, hero: false },
-    { label: "当前代承诺", value: `${SOURCE_RECEIPT} completed=${OBSERVED_AT}，SHA-256=${SOURCE_RECEIPT_SHA256}；catalog=2268d65ca0ce83c4cc7157dd3346993bbd01863fa6eb9bc8dc7e966f41e38636，seed=7745e2a9fbe7872b51f1e0d751436c1aaba694077e6209f8360b21ab339f78f0，phone-plan=3f406f31af445ac2226ff61a33c87df7f0758a2a555cb2513954f5746b85ba7a，cloud-plan=d897ab66d54baae235831ce30359030e5a3c5f1621af2430684e7cea805fb607。以上数据制品摘要来自该次封印；本轮只读 status 核对 24,539 行与 quick_check=ok，不声称全库原件逐项重验。`, hero: false },
+    { label: "当前代承诺", value: `${SOURCE_RECEIPT} completed=${OBSERVED_AT}，SHA-256=${SOURCE_RECEIPT_SHA256}；catalog=2268d65ca0ce83c4cc7157dd3346993bbd01863fa6eb9bc8dc7e966f41e38636，seed=7745e2a9fbe7872b51f1e0d751436c1aaba694077e6209f8360b21ab339f78f0，phone-plan=3f406f31af445ac2226ff61a33c87df7f0758a2a555cb2513954f5746b85ba7a，cloud-plan=d897ab66d54baae235831ce30359030e5a3c5f1621af2430684e7cea805fb607。以上数据制品摘要来自该次封印；9月9日只读 status 核对24,539行与quick_check=ok，不声称全库原件逐项重验。`, hero: false },
     { label: "当前技术路径", value: "catalog=E:\\Media\\_manifests\\personal-media-current\\catalog.sqlite3；seed=E:\\Media\\_manifests\\personal-media-current\\seed\\keeper-search-index.ndjson；phone-plan=E:\\Media\\_manifests\\personal-media-current\\phone-recovery-plan.ndjson；cloud-plan=E:\\Media\\_manifests\\personal-media-current\\cloud-candidates.ndjson；phone-runs=E:\\Media\\_manifests\\phone-shared-full-preserve-successor-v2\\runs；phone-E=E:\\Media\\PhoneSharedFullPreserve；phone-G=G:\\80_Backup\\PersonalMedia\\PhoneSharedFullPreserve；phone-package=G:\\80_Backup\\PersonalMedia\\PhoneMediaRecovery\\2026-08-25；G canonical mirrors=G:\\80_Backup\\PersonalMedia\\Pictures、G:\\80_Backup\\PersonalMedia\\Videos、G:\\80_Backup\\PersonalMedia\\Music\\录音、G:\\80_Backup\\PersonalMedia\\Music\\音乐、G:\\80_Backup\\PersonalMedia\\Music\\铃声。", hero: false },
     { label: "历史七份源文件承诺", value: "AGENTS.md=eea75e071354233adb8780c5639959eb696067e16197945d6378a19bda1be903；README.md=dd60c27ceeac7edc75d2275786442e41220949a098703aaffb27278211e4e7a9；personal_media.py=7bba1e85cd5a7b3ec085191027cbc7bea63824411c8cf2ddf4314191f6506283；phone_file_preserve_clear.py=0ee1b280c5bad9d27dbc483e35faaa5089d6e5c82d1ec791d315dd47dc1200bc；test_personal_media.py=a44d7f3bd4eb30380fe3b356dc4aafdacb10b6cea9ba60310e53a8894a074523；test_phone_file_preserve_clear.py=edc51d9e12a5c1b873852161e8349328ad2a4a7edfa2092c5a68b73416320c34；acceptance.ps1=57b6898cb7063f7d1f7428f55b6acb0221679195a262cf37e3d9a31e00e20a4e。这七份承诺在 2026-09-07 核对一致，README 当时为 20,288 字节。2026-09-09 新增私有 Git 与元数据导出后，现行源码以新的 main 提交为准；这份旧回执继续证明其原版本，不再声称与当前全部源码哈希一致。", hero: false },
     { label: "回收站与来源退役", value: "手机相册 .globalTrash 是本人已删除原件，既不计入新共享文件保全，也不因图片看起来有用而重新入库或加入手机/云候选。本人在文件管理器删除正式原件后，查询只跳过，既有每日任务再同步目录与恢复面。", hero: false },
@@ -68,11 +70,11 @@ const personalMediaSnapshot = createProjectSnapshot({
   ],
   gaps: [
     "本人删除原件后，查询只跳过不存在的结果；现有每日备份任务依次更新两库清单、完成 E→G 镜像、同步实际手机包。源根或卷不可访问时不按全库已删除处理，恢复连接后使用同一路径继续；没有新增删除保护、恢复队列或计划任务。",
-    "电脑端恢复包已纠正，手机仍有 163 项错误新增待下次连接精确清理；双盘保全成功不代表这一端已经清空或恢复到正确范围。",
+    "电脑端恢复包曾于9月5日纠正，现行包继续随本地清理收敛；手机仍有163项错误新增待下次连接精确清理；双盘保全成功不代表这一端已经清空或恢复到正确范围。",
     "本轮没有连接手机；双盘保全、精确清理和恢复写回只展示已实现合同与现行回执，不宣称当前设备动作已经发生。",
     "手机 backup receipt 当前固定 h_cold_backup=not_used_current_h_health_warning；双盘只指 E/G 两份异卷回读，不表示 H 冷备或第三份离线副本已经参与。",
-    "云候选清单仍是 upload=0；页面不把候选、相册名或恢复计划冒充 Google Photos 已上传结果。",
-    "当前项目没有 Google Photos 上传执行器、账号连接或外部回读；自动增量只处理本次允许的 new_hashes，不自动补齐历史歧义候选。",
+    "9月5日云候选清单的upload=0保留原观察；页面不据此推断后续账号状态，也不把候选、相册名或恢复计划冒充Google Photos已上传结果。",
+    "正式源码7990eed已有cloud-reconcile与cloud-sync，通过现有PCConfig提供者处理Photos及Drive；默认预览不调用提供者。当前阶段在本地实施，云真删/重传后续；未读取账号或云端状态，不把代码存在冒充全量完成。",
     "当前目录没有全库人物证据；只能在用户选定少量原图后回答可逆的 person:self 问题，不能宣传人物搜索。",
     "phone-apply 的 review 覆盖、pre-commit 回滚和 post-commit seed/candidate 恢复目前缺少直接 fault-injection 专项回归；三份候选/receipt 文件也不是跨文件原子事务。",
     "无法打开、内容意义不明或近重复关系不确定的对象保留为待复核，不因自动化或页面美观直接退出原件。",
@@ -90,7 +92,7 @@ const personalMediaProject = {
   visibility: "GitHub 私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
-  cardStatus: `${current.imageRows.toLocaleString("zh-CN")} 张照片、${current.videoRows.toLocaleString("zh-CN")} 个视频、${current.audioRows.toLocaleString("zh-CN")} 个音频已形成可检索目录`,
+  cardStatus: "四库本地整理持续推进；图片首轮已完成，最终目录、G副本与历史载荷收口仍未完",
   cardStatusTone: "mixed",
   ...personalMediaSnapshot,
   kicker: "让照片、视频与音频真正可找、可看、可精选、能恢复，也尊重本人删除",
@@ -109,10 +111,10 @@ const personalMediaProject = {
     "删除原件后退出手机恢复包和云候选"
   ],
   repositoryNote: `PRIVATE wlyaaaaa/personal-media，默认 main；源码、测试、说明与无损元数据快照已有 GitHub 私人版本保存，本地和远端已回读 ${SOURCE_MAIN_COMMIT}。媒体原件与大体积恢复包仍由本地和 G 盘保管，私有仓库不显示面向未知访客的 GitHub 跳转按钮。网页只说明公开安全的产品与技术事实，不复制私人元数据正文；既有 10 张授权照片资源保持不变。`,
-  summary: "按记得的时间、地点、画面或已有文字，找到照片、视频和音频。值得重看的直接移入“精选”，不另存一份，也不为凑数量硬选。手机新文件先在两块盘上备份并核对，再离线分类、去重；备份和手机恢复包跟随现有计划任务更新。你自己删了原件就是删了，不用通知 AI。云端只准备候选，不自动上传。",
-  why: "媒体最容易同时出现三种问题：想用时找不到；好照片淹没在分类目录里；换机或手机故障后只剩零散副本。把所有东西复制到第二套库、持续后台同步或自动上传又会制造更多状态。这个项目选择一个可重建目录、两个职责清楚的模块和逐次有界处理；同时把文件管理器中的原件现状当作本人决定，而不是让旧索引或恢复包反过来支配原件。",
-  plainExample: "我可以说：“先把小米 15 Pro 里这批旅行照片和视频备份到两块盘，确认安全后马上提醒我拔线；再离线整理，不要上传云端。”系统会逐项核对两份副本，明确告诉我手机是否可以断开；随后再判断画面内容、质量和重复关系，把保留原件放回当前照片或视频目录，并更新手机恢复包和仍未上传的云端候选。",
-  result: `我得到一组能回到原件的结果：检索候选带着日期、地点、类别和匹配依据；精选入口展示 ${current.selectedImageRows.toLocaleString("zh-CN")} 张值得主动重看的照片和 ${current.selectedVideoRows} 个视频；分类决定说明保留或退出原因；手机保全说明双盘是否完成、手机是否清空；恢复包说明当前可写回范围。云端部分得到面向 Google Photos 的本地候选清单和相册计划；当前项目尚无上传入口，批准候选也不等于这里已经能够上传，更不表示云端已备份。`,
+  summary: "按记得的时间、地点、画面或已有文字，找到照片、视频和音频。值得重看的直接移入“精选”，不另存一份，也不为凑数量硬选。手机新文件先在两块盘上备份并核对，再离线分类、去重；备份和手机恢复包跟随现有计划任务更新。你自己删了原件就是删了，不用通知 AI。本地候选、Photos照片/视频与Drive录音分别管理；当前先完成本地整理，云端真删/重传后续。",
+  why: "媒体最容易同时出现三种问题：想用时找不到；好照片淹没在分类目录里；换机或手机故障后只剩零散副本。把所有东西复制到第二套库、持续后台同步或自动上传又会制造更多状态。这个项目选择一个可重建目录、职责清楚的既有模块和逐次有界处理；同时把文件管理器中的原件现状当作本人决定，而不是让旧索引或恢复包反过来支配原件。",
+  plainExample: "我可以说：“先把小米 15 Pro 里这批旅行照片和视频备份到两块盘，确认安全后马上告诉我；连接还在时优先清空和已经就绪的差异回写，其余离线整理，不要上传云端。”系统逐项核对两份副本，分别说明数据安全、手机是否可拔及未完成项；再判断画面、质量和重复关系，把保留原件放回当前目录，并更新手机恢复包和本地云候选。",
+  result: `我得到一组能回到原件的结果：检索候选带着日期、地点、类别和匹配依据；照片精选提供值得主动重看的原件入口，普通视频归视频根，不再设视频精选目录；分类决定说明保留或退出原因；手机保全说明双盘是否完成、手机是否清空；恢复包说明当前可写回范围。云端部分得到面向 Google Photos 的本地候选清单和相册计划；正式源码已有默认预览、显式执行的Photos/Drive入口；当前云端阶段未完成验收，执行能力不等于云端已备份。`,
   readerStates: {
     pass: "返回真实现存原件，或完成双盘保全、分类、恢复计划和云候选的对应步骤；每一步只声明自己真正闭合的结果。",
     problem: "重复、画面意义、质量、时间、地点、来源或恢复责任有歧义时保留候选与证据，缩小到需要人工判断的少量对象，不扩大成整库重做。",
@@ -128,7 +130,7 @@ const personalMediaProject = {
       { actor: "原件目录", title: "返回少量可核对候选", detail: "SQLite 条件与全文索引定位照片、视频和录音；authority locator 必须仍指向现存原件。" },
       { actor: "本地新增", title: "精确接入一个已复核文件", detail: "新 keeper source 目前必须能与 E canonical 建 hardlink（实践上同为 E 卷）；ingest-file 核对 SHA-256、媒体探测、类别和时间，写 G 恢复副本。等价视频容器变体另走 stream 等价合同。" },
       { actor: "视觉整理", title: "一次判断保留、类别与近重复", detail: "小批量最多 25 个对象组成一张联系表，把注意力留给画面意义、质量和主版本选择。" },
-      { actor: "手机入口", title: "E/G 双盘逐项保全", detail: "两个异卷副本 bytes 与 SHA-256 回读通过后立即结束手机占用；清空状态另行报告。" },
+      { actor: "手机入口", title: "E/G 双盘逐项保全", detail: "两个异卷副本bytes与SHA-256回读通过后及时报告数据安全；连接仍在时优先精确清空和已就绪差异回写，分别报告可拔与未完项。" },
       { actor: "三面收口", title: "本机、手机恢复包与云候选一起更新", detail: "keeper 进入当前目录；手机包保持不超过 60 GB；云端只写 upload=0 候选。" }
     ],
     columnsAriaLabel: "用户、个人媒体项目与外部目标之间的责任边界",
@@ -140,22 +142,22 @@ const personalMediaProject = {
   },
   productPrinciples: [
     { title: "原件优先，不建第二相册", detail: "SQLite 只保存可重建定位与检索字段；照片、视频、录音字节继续留在 E:\\Pictures、E:\\Videos 与 E:\\Music\\录音。" },
-    { title: "一个精选入口，照片和视频仍各归其库", detail: `精选不是第二份媒体，也不是固定配额。${current.selectedImageRows.toLocaleString("zh-CN")} 张照片直接移动到 E:\\Pictures\\精选，${current.selectedVideoRows} 个视频直接移动到 E:\\Videos\\精选；只按好看、独特回忆或不可替代价值判断，近重复取强者。` },
+    { title: "一个精选入口，照片和视频仍各归其库", detail: `精选不是第二份媒体，也不是固定配额。照片保留 E:\\Pictures\\精选，普通视频归视频根；9月5日的照片/视频精选数量是旧观察。本人手筛留下者保留，其他取舍继续按实际价值与近重复证据，不借精选标准删除手筛保留件。` },
     { title: "文件管理器删除就是本人决定", detail: "原件删了就是删了，无须通知 AI。查询与状态只读；现有 PersonalDataReplica-Hot-Daily 依次调用两库 sync-current、五组 E→G 镜像和 recovery-sync --execute，让索引、备份与恢复包跟随当前文件，不从旧副本恢复原件。" },
     { title: "媒体库拥有统一检索，OCR 只是证据提供者", detail: "画面中的场景、事件和审美价值由视觉认知负责，逐字文字由 LocalOCR 负责；两类证据进入同一媒体条目与 SQLite/FTS，而不是再建一个 OCR 库。现有截图文字已能支持真实查询，老库只应按真实查询缺口增量补齐。" },
     { title: "私人来源不是公开禁区", detail: "普通个人照片按活动公开分级属于 L2；页面逐值处理真实 L3+ 与秘密，不因来源是个人媒体库就整类删除。" },
     { title: "本地新增一次只接一个已复核文件", detail: "ingest-file 必须显式 --execute，并可绑定 expected SHA-256；新 keeper 与等价视频容器变体使用不同合同，不从任意目录自动扩张来源。" },
-    { title: "音频沿用既有分类与 ASR 定位", detail: "3,851 个音频按真实 locator 分为 E:\\Music\\录音 3,844、E:\\Music\\音乐 6、E:\\Music\\铃声 1；目录直接消费既有分类、时间、原件和可用 ASR 文字，不为接管所有权重新分类或重跑 ASR。对应 G 异卷副本继续保留。" },
-    { title: "先保全，再整理", detail: "手机连接最昂贵的是占用设备和丢失风险；双盘回读完成就先结束连接，视觉判断与索引重建全部离线继续。" },
+    { title: "音频沿用既有分类与 ASR 定位", detail: "9月5日3,851个音频按真实locator分为E:\\Music\\录音3,844、E:\\Music\\音乐6、E:\\Music\\铃声1；此后录音持续清理，旧数不代表现行规模。目录直接消费既有分类、时间、原件和可用 ASR 文字，不为接管所有权重新分类或重跑 ASR。对应 G 异卷副本继续保留。" },
+    { title: "先保全，再整理", detail: "手机连接最昂贵的是占用设备和丢失风险；双盘回读完成先报告数据安全，连接仍在时优先完成精确清空和已就绪差异回写，再离线做视觉判断与索引重建。提前拔线留下精确待办，不把备份完成当成手机全流程完成。" },
     { title: "分类必须回答内容意义", detail: "移动到目录不是分类。画面意义、质量、精确/高度近重复、时间和类别必须先形成决定；无法判断就保留待复核。" },
     { title: "三个产品面同次收口", detail: "一次成功验收的全局增量会依次更新本机目录、G 盘手机恢复计划和 Google Photos upload=0 候选；这三份文件不是跨文件原子事务，中途失败时以 candidate-refresh、plan-status 与 acceptance 识别半状态并重跑缺失刷新。" },
     { title: "可以拔了不等于清空了", detail: "双盘保全与手机端删除是两种独立状态；任何答复都必须准确说明哪一步完成。" },
-    { title: "云端永远需要单独批准", detail: "项目可以生成候选与相册名，但没有用户查看清单并明确授权，就不会上传。" },
+    { title: "云操作跟随实际授权阶段", detail: "本地保留、手机携带与云端集合分别决定。当前只在本地实施，云端真删除/重传另阶段；后续已获准范围内的正常增量不重复索要每批批准，扩大账号、来源或公开面仍须另行处理。" },
     { title: "速度约束技术复杂度", detail: "小批量普通归档不为一次批次新建模块、schema、状态机或全库回归；19 张普通截图从保全到可检索目标低于 4 分钟。" }
   ],
   responsibilities: [
     "按地点、文字、描述、类别、媒体类型与日期组合查找真实照片、视频和录音",
-    `维护唯一精选入口：当前 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片与 ${current.selectedVideoRows} 个视频直接位于各自媒体库的“精选”主文件夹`,
+    "保留照片精选；普通视频在视频根，特殊视频独立一层；本人手筛留下者不因不够精选再删除",
     "创建同卷 hardlink 临时浏览目录，并只清理受管浏览链接，不删除原件",
     "通过 ingest-file 接入一个已经人工复核的本地照片、视频或录音，或证明并退休一个内容等价的视频容器变体",
     "对新增媒体做可打开性、画面意义、质量、精确/高度近重复、类别与时间判断",
@@ -179,26 +181,26 @@ const personalMediaProject = {
     { term: "Near duplicate（高度近重复）", meaning: "画面或内容非常接近但字节不同；必须根据主体、清晰度、裁切、时间和版本价值人工判断。" },
     { term: "Contact sheet（联系表）", meaning: "把最多 25 个视觉对象排成一张总览，让一次视觉判断覆盖整批，而不是逐张重复打开。" },
     { term: "Hardlink browse folder（硬链接浏览目录）", meaning: "同卷下指向同一原件字节的临时浏览入口；创建和清理都不复制或删除原件。" },
-    { term: "精选", meaning: "值得本人主动重看的照片或视频集合；照片与视频各自留在自己的媒体库主文件夹，产品上只有一个入口，不设数量配额，也不复制原件。" },
+    { term: "精选", meaning: "值得本人主动重看的照片一级分类，不设数量配额、不另存副本。现行合同不再设置视频精选目录；历史两类精选计数保留原观察日期。" },
     { term: "File-manager deletion（文件管理器删除）", meaning: "用户自己删原件即生效；查询跳过失效路径，既有计划任务维护清单与派生副本，不增加确认、保护或自动恢复流程。" },
-    { term: "upload=0", meaning: "只进入云端候选清单，当前没有上传授权，也没有实际上传。" }
+    { term: "upload=0", meaning: "只进入云端候选清单，表示该清单观察时没有执行上传，不代表永久缺少上传能力或后续状态。" }
   ],
   operatingFlow: [
     { title: "先判查询类型", detail: "现场拍摄地点用 place；图片中出现的地名、文件名、录音文字和普通描述用 query；类型、分类与日期按用户线索叠加。" },
     { title: "直接查当前目录", detail: "SQLite 条件与全文索引返回少量结果；普通请求不读取完整 NDJSON，不扫描整盘。" },
     { title: "需要浏览才建临时目录", detail: "在 E 盘受管 browse 根创建 task-unique hardlink；原件仍只有一份，目录可精确清理。" },
-    { title: "本地独立文件走显式 ingest", detail: "输入必须位于三个 canonical 根之外并携带描述；可选绑定 expected SHA-256。新 keeper 写入 canonical 与 G 恢复副本，等价视频变体先核对 E/G keeper 和 demuxed stream。" },
+    { title: "本地独立文件走显式 ingest", detail: "普通暂存输入位于三个canonical根之外；--register-existing可对中心内明确原件就地登记。两条路线均携带描述并可绑定expected SHA-256。新 keeper 写入 canonical 与 G 恢复副本，等价视频变体先核对 E/G keeper 和 demuxed stream。" },
     { title: "手机先做双盘保全", detail: "只取得尚未由其他来源负责的新共享文件；分别写入 E 与 G，逐项回读 bytes/SHA-256。" },
     { title: "离线做视觉决定", detail: "机械预检合并 occurrence、检查可打开性和技术缓存；联系表一次决定 keeper、类别、时间、描述和近重复关系。" },
-    { title: "把值得重看的原件移入精选", detail: "照片和视频分别进入各自库的精选主文件夹，按可靠时间与已确认信息重命名；不复制、不设配额，仍由同一 catalog 定位。" },
+    { title: "把值得重看的原件移入精选", detail: "照片精选不设配额，普通视频留在视频根；本人手筛留下者保留，不因不够精选再删除。独立命名和目录迁移当前暂停，完成与否单独回读。" },
     { title: "事务应用本批决定", detail: "phone-apply 要求 review 精确覆盖本批唯一哈希；失败回滚数据库并清理本批新建链接。" },
-    { title: "同步三面计划", detail: "刷新本机目录、G 手机恢复包与 Google Photos upload=0 候选；恢复同步默认 dry-run，云端仍等待单独授权。" },
+    { title: "同步三面计划", detail: "刷新本机目录、G手机恢复包与本地云候选；恢复同步默认dry-run。当前本地阶段不做云操作，后续既有授权范围内的增量不逐批重复索要批准。" },
     { title: "让备份和恢复包跟随当前文件", detail: "sync-current 维护 SQLite、重建种子和既有候选；原 E→G 备份负责镜像，recovery-sync 维护固定手机包和现存视频的格式变体。读取入口不做这些写入，离线后下次从当前集合重新同步即可。" }
   ],
   components: [
     { name: "personal_media.py", responsibility: "当前目录、检索、临时浏览、分类、独立本地接入、批次应用、恢复包、云候选与按需元数据导出。", implementation: "目录与状态核心使用 Python stdlib + SQLite/FTS；图片打开/缩略使用 Pillow，视频/音频使用 ffmpeg/ffprobe。snapshot-metadata 只读选定元数据、只写无损 ZIP，不上传或改动原件。项目不新增常驻进程；现有 PersonalDataReplica-Hot-Daily 调用维护和恢复包同步入口，不触发 Git 推送。" },
     { name: "phone_file_preserve_clear.py", responsibility: "手机共享文件捕获、E/G 双盘保全、逐项回读和精确清理。", implementation: "只处理明确共享边界；删除前再次核对精确路径、大小和哈希，不递归删目录。" },
-    { name: "catalog.sqlite3", responsibility: "保存可重建的当前媒体定位与检索字段。", implementation: "当前 24,539 个媒体原件记录；数据库不保存照片、视频或录音字节。" },
+    { name: "catalog.sqlite3", responsibility: "保存可重建的当前媒体定位与检索字段。", implementation: "9月5日基线有24,539个媒体原件记录，后续清理持续改变目录；数据库不保存照片、视频或录音字节。" },
     { name: "按代原子替换的 current seed 与计划", responsibility: "重建目录，并分别表达手机恢复与云端候选。", implementation: "keeper-search-index.ndjson 会在增量收口时原子重写并推进 current_seed SHA，不是跨增量字节不变；它只作当前代重建种子，手机/云 NDJSON 是外部计划，三者都不参与日常查询或成为第二 current 索引。" },
     { name: "联系表与 review.json", responsibility: "把一批视觉判断压成一个完整、可复核决定。", implementation: "每张最多 25 个对象；状态必须为 PASS_NATIVE_VISUAL_REVIEW，且覆盖本批全部唯一哈希。" },
     { name: "受管画廊与浏览目录", responsibility: "让人查看真实结果但不复制媒体库。", implementation: "网页画廊使用用户授权的实拍原图和轻量缩略图；本机临时浏览使用同卷 hardlink。" }
@@ -209,7 +211,7 @@ const personalMediaProject = {
     { artifact: "手机视觉决定与应用", schema: "personal-media-phone-review.v1 / personal-media-phone-apply-receipt.v1", owner: "phone-prepare 生成 review；AI/用户补决定；phone-apply 消费", boundary: "review 必须 PASS_NATIVE_VISUAL_REVIEW 并覆盖本批唯一哈希；pre-commit 可回滚，post-commit seed/候选刷新不是跨文件原子事务。" },
     { artifact: "手机捕获、冻结删除与回执", schema: "phone-shared-user-files-capture.v2 / frozen-delete-plan.v2 / backup-verification.v2 / deletion-receipt.v2", owner: "phone_file_preserve_clear.py", boundary: "绑定 model、serial hash、profile、fresh run、manifest/plan hash、E/G read-back；stale artifact、残留 quarantine 或身份漂移均不能 PASS。" },
     { artifact: "手机恢复计划与同步", schema: "personal-media-phone-recovery-current.v1 / personal-media-recovery-sync-receipt.v1", owner: "candidate refresh 写计划；recovery-status 验结构/catalog；recovery-sync 比实际包", boundary: "低于 60 GB；录音不进入；execute 按当前清单补齐、更新并清理固定 Images/Videos 桶，不碰 E 原件或桶外内容。" },
-    { artifact: "云候选与刷新回执", schema: "personal-media-cloud-candidate-manifest.v1 / cloud-candidate-current.v1 / product-candidate-refresh.v1", owner: "refresh_product_candidates 写；cloud-status 只读", boundary: "header 固定 upload_authorized/performed=false；命令只返回聚合，逐项/相册在 NDJSON，当前没有上传执行器。" },
+    { artifact: "云候选与刷新回执", schema: "personal-media-cloud-candidate-manifest.v1 / cloud-candidate-current.v1 / product-candidate-refresh.v1", owner: "refresh_product_candidates 写；cloud-status 只读", boundary: "旧候选header的upload_authorized/performed=false只描述该本地清单。正式源码另有同一SQLite中的cloud_object/cloud_membership和cloud-sync状态，不能由候选零上传字段推断账号侧从未上传。" },
     { artifact: "独立本地文件接入回执", schema: "personal-media-ingest-file-receipt.v1", owner: "ingest-file", boundary: "绑定 source/keeper SHA、canonical/G locator、source retirement 和候选新增数；cloud_upload 固定 0，失败不能冒充完整收口。" }
   ],
   usageExamples: [
@@ -217,9 +219,9 @@ const personalMediaProject = {
     { ask: "在刚才选中的录音里，找一下谈到交付时间的那段，告诉我从几分几秒开始。", effect: "先核对同一原音，再复用已有转写时间段，交回起止时间、有限片段与覆盖缺口；没有可用时间戳就明确说明，不能按文字长度猜时间，也不会因查询自动重跑识别。", moduleSlug: "search-browse" },
     { ask: "这批截图哪些该留，哪些是重复或没意义？", effect: "先排除缓存并整理重复关系，再用少量联系表一起判断主体、信息价值、画质、类别和是否已有更完整版本。", moduleSlug: "classification" },
     { ask: "把这一个已经看过的本地照片、视频或录音接入媒体库。", effect: "核对文件身份、类别和时间后写入正式原件目录与 G 盘恢复副本，并同步更新目录、手机恢复包和未上传的云端候选；同内容的视频变体只保留恢复关系。", moduleSlug: "local-ingest" },
-    { ask: "手机里的新照片先安全拿出来，我要尽快拔线。", effect: "完成 E/G 双盘逐项回读后立即报告可以拔线；手机端是否清空单独说明。", moduleSlug: "phone-preservation" },
+    { ask: "手机里的新照片先安全拿出来，我要尽快拔线。", effect: "先复用两库已有可靠字节并补齐E/G，及时报告数据安全；连接期间优先精确清空与已就绪差异回写，分别报告可拔和未完项。", moduleSlug: "phone-preservation" },
     { ask: "现在手机恢复包能恢复多少？", effect: "只读返回当前计划数量、大小、是否低于 60 GB 和缺口；默认不改包。", moduleSlug: "phone-recovery" },
-    { ask: "哪些照片准备以后传 Google Photos？", effect: "交回仍未上传的候选和相册计划；我没有查看清单并明确批准前，不会上传。", moduleSlug: "cloud-candidates" }
+    { ask: "哪些照片准备以后传 Google Photos？", effect: "先预览选定集合与相册关系，不调用提供者；实际云操作按后续已获准阶段进行，当前本地实施不做云删上传。", moduleSlug: "cloud-candidates" }
   ],
   evidenceLayers: [
     { layer: "GitHub 私有来源与元数据快照", proves: `Git Owner 实时元数据和 GitHub ref API 于 ${SOURCE_OBSERVED_AT} 确认 PRIVATE main=${SOURCE_MAIN_COMMIT}，与干净本地一致；4 项虚构导出回归通过。`, doesNotProve: "没有执行真实快照导出或从远端恢复演练；Git 保存元数据不证明媒体原件已备份到 GitHub，也不能从 SHA-256 还原丢失图片。" },
@@ -232,6 +234,9 @@ const personalMediaProject = {
     { layer: "真机与云端动作", proves: "实际设备双盘保全、精确清理、恢复写回或云上传在对应动作后分别有结果。", doesNotProve: "任何一层不能替代另一层，也不能由页面或测试预先宣布完成。" }
   ],
   operationalEntrypoints: [
+    { name: "就地登记已有媒体原件", command: "py -3 personal_media.py ingest-file --source <已在媒体中心的原件> --register-existing --expected-sha256 <SHA-256> --category <类别> --description <说明> --execute", purpose: "只用于已明确复核的中心内文件，保留原件位置；不可与等价变体退休合用，E/G与目录结果仍分别核对。" },
+    { name: "预览云端期望集合", command: "py -3 personal_media.py cloud-reconcile [--full] [--execute]", purpose: "按当前集合计算Photos和Drive期望对象及相册关系；execute只维护本地状态，不调用云提供者。" },
+    { name: "预览或执行选定云端工作", command: "py -3 personal_media.py cloud-sync --target <photos|drive|all> [--limit 100] [--execute]", purpose: "默认只预览，execute才通过PCConfig提供者工作。当前本地阶段不消费云写授权；代码存在不证明云全量完成。" },
     { name: "按需保存整理元数据", command: "py -3 personal_media.py snapshot-metadata --output metadata/current.zip", purpose: "只读重建种子及清单、手机计划、云候选和存在时的候选刷新/手机待清理清单，以 personal-media-metadata-snapshot.v1 保存每文件字节与 SHA-256。原文保真、同内容输出字节不变；源在读取中变化或压缩包超过 100 MiB 时保留旧快照并报错。命令不联网，定向提交和 PRIVATE Git 推送是后续独立动作。" },
     { name: "从所选元数据版本重建目录", command: "py -3 personal_media.py catalog-build --seed <恢复目录>/seed/keeper-search-index.ndjson --db <恢复目录>/catalog.sqlite3", purpose: "先在空目录解压所需 Git 版本的 metadata/current.zip，按 snapshot.json 核对文件；换目录时只调整恢复副本 index-manifest.json 的 index.path。确认原件根可访问并核对重建查询后才切现行目录，不覆盖更新数据、不自动执行旧清理清单。移动或改名不改变未修改文件的哈希；编辑或重编码可能改变，单凭哈希不能恢复媒体字节。" },
     { name: "按线索搜索", command: "py -3 personal_media.py search --place <现场地点> --media-type image --limit 12", purpose: "返回少量可读候选；普通请求不用 all，也不扫描整盘。" },
@@ -252,7 +257,7 @@ const personalMediaProject = {
     { name: "同步当前清单", command: "py -3 personal_media.py sync-current", purpose: "现有每日备份任务调用的本地维护：只按当前原件清理索引、种子和既有候选，不连接手机、不上传云、不自动填补其他历史候选。" },
     { name: "查看手机恢复状态", command: "py -3 personal_media.py recovery-status", purpose: "只读返回当前封印计划、数量、大小与缺口。" },
     { name: "同步手机恢复包", command: "py -3 personal_media.py recovery-sync [--execute]", purpose: "默认只预览；执行才补齐或更新计划内文件、移除固定 Images/Videos 桶内过时派生文件，不碰 E 原件或包外文件。" },
-    { name: "查看云候选聚合状态", command: "py -3 personal_media.py cloud-status", purpose: "只读验证本地清单并返回 items/bytes/upload_authorized/upload_performed 聚合；逐项和相册在清单文件中，命令不上传。" },
+    { name: "查看云候选聚合状态", command: "py -3 personal_media.py cloud-status", purpose: "只读汇总本地Photos/Drive期望对象及集合关系的synced、pending、unknown、failed、paused数量、上传/待传字节及退出状态；provider_status_source=local_state_only，不访问账号、不上传，不能替代远端回读。" },
     { name: "重建当前目录", command: "py -3 personal_media.py catalog-build --replace", purpose: "从当前代原子 seed 重建可删除 SQLite，并由 acceptance.ps1 重新验收。" }
   ],
   evolution: [
@@ -445,11 +450,11 @@ const personalMediaModules = [
     searchProjection: {
       intents: ["按现场地点找照片", "按文字描述或截图 OCR 找媒体", "按画面语义找图片", "查看精选照片和视频", "本人删除原件后退出目录与恢复面", "按日期类别和类型过滤", "建立可清理的临时浏览目录"],
       entities: ["catalog.sqlite3", "authority_locator", "place", "query", "category", "media_type", "browse_root"],
-      relations: ["现场地点使用已复核 place", "可见文字和普通描述使用 query", "SQLite 结果必须仍有现存原件", `唯一精选入口当前包含 ${current.selectedRows.toLocaleString("zh-CN")} 项`, "可信 canonical 原件缺失应表示本人主动退役", "browse hardlink 与原件共享字节"],
+      relations: ["现场地点使用已复核 place", "可见文字和普通描述使用 query", "SQLite 结果必须仍有现存原件", `9月5日历史精选观察为${current.selectedRows.toLocaleString("zh-CN")}项；现行不再设视频精选目录`, "可信 canonical 原件缺失应表示本人主动退役", "browse hardlink 与原件共享字节"],
       failureRecovery: ["地点未登记不降级成文字猜测", "零命中只说明当前过滤与目录覆盖", "失效候选不占结果上限，查询不写库；清单与备份由现有计划维护", "混入非受管内容的浏览目录拒绝清理"]
     },
     teaser: "不需要记路径，也不需要把全部媒体复制进另一套库；地点、描述、类别、类型和日期足够把结果缩成一小组原件。",
-    status: `${current.catalogRows.toLocaleString("zh-CN")} 个 keeper 的当前目录已核对；旧查询 ${current.queryWallMs} ms 仅为历史观测，当前无几秒级耗时完成门；浏览目录使用同卷 hardlink`,
+    status: `9月5日目录基线${current.catalogRows.toLocaleString("zh-CN")}个keeper已核对，后续清理继续改变目录；旧查询 ${current.queryWallMs} ms 仅为历史观测，当前无几秒级耗时完成门；浏览目录使用同卷 hardlink`,
     statusTone: "pass",
     value: "把“我记得那张照片/那段录音，但不知道在哪”变成少量现存原件和一个可以直接看的临时目录。选定一段录音后，还能借助已有转写定位其中的话，拿到可回听的起止时间。",
     why: "媒体路径、相册和命名常常与人的记忆方式不同；整库浏览太慢，第二次复制又会扩大容量和重复治理。",
@@ -460,9 +465,9 @@ const personalMediaModules = [
       problem: "结果达到上限、地点未登记、日期未知或私密标记未被本次请求包含时，说明实际范围。录音片段低置信、只覆盖部分或有线索未命中时保留缺口，不把零命中当作从未说过。",
       unavailable: "目录、原件或浏览链接不可用时只停止对应动作。选定录音没有可复用时间戳时，只说明单件本地转写接续；当前查询不自动重跑识别，也不提供视频内部定位。"
     },
-    decisionImpact: ["普通请求默认返回小结果；只有用户明确要求完整集合才用 all。", "取消几秒级耗时硬门；先保证命中依据、内容、来源、时间和未知足够让 AI 正确判断，只有纯性能优化才以显著减少端到端耗时为目标。", "place 只表示已复核的现场地点，不能从文件名或图片文字推断。", `2026-09-02 截图观察的 OCR 证据 ${current.screenshotOcrEvidenceRows.toLocaleString("zh-CN")}/${current.screenshotImageRows.toLocaleString("zh-CN")}，结构化 visible_text ${current.screenshotVisibleTextRows.toLocaleString("zh-CN")}/${current.screenshotImageRows.toLocaleString("zh-CN")}；空值不等于没有文字。`, "LocalOCR 负责精确文字，视觉认知负责场景与意义；当前真实文字查询已经可用，所以不对 1.58 万张截图无差别重跑。以后只对新截图和真实未命中的有界候选补齐，并继续写回同一媒体条目。", "当前没有人物证据，不能用 person 做全库检索。", "3,851 个音频分为 3,844 段录音、6 个音乐和 1 个铃声；目录直接消费各自既有分类、时间、原件与可用 ASR 定位，不重新分类或重跑 ASR。", "音频缺少 ASR 时只降低文字 query 召回，不影响按类型、日期、既有分类或原件定位，也不把缺文字写成音频不存在。", "默认 search 只验 authority locator 当前存在，不计算 SHA-256；精确字节身份需要对选中原件单项计算并与返回的 content_sha256 比较。", "browse --verify-hash 只证明 source 与新 hardlink 字节相同，不自动把两者与 catalog content_sha256 比较。", "浏览目录只是入口，原件字节不复制。"],
+    decisionImpact: ["普通请求默认返回小结果；只有用户明确要求完整集合才用 all。", "取消几秒级耗时硬门；先保证命中依据、内容、来源、时间和未知足够让 AI 正确判断，只有纯性能优化才以显著减少端到端耗时为目标。", "place 只表示已复核的现场地点，不能从文件名或图片文字推断。", `2026-09-02 截图观察的 OCR 证据 ${current.screenshotOcrEvidenceRows.toLocaleString("zh-CN")}/${current.screenshotImageRows.toLocaleString("zh-CN")}，结构化 visible_text ${current.screenshotVisibleTextRows.toLocaleString("zh-CN")}/${current.screenshotImageRows.toLocaleString("zh-CN")}；空值不等于没有文字。`, "LocalOCR 负责精确文字，视觉认知负责场景与意义；当前真实文字查询已经可用，所以不对 1.58 万张截图无差别重跑。以后只对新截图和真实未命中的有界候选补齐，并继续写回同一媒体条目。", "当前没有人物证据，不能用 person 做全库检索。", "9月5日基线的3,851个音频分为3,844段录音、6个音乐和1个铃声；当前录音数量随本地清理变化。目录直接消费各自既有分类、时间、原件与可用 ASR 定位，不重新分类或重跑 ASR。", "音频缺少 ASR 时只降低文字 query 召回，不影响按类型、日期、既有分类或原件定位，也不把缺文字写成音频不存在。", "默认 search 只验 authority locator 当前存在，不计算 SHA-256；精确字节身份需要对选中原件单项计算并与返回的 content_sha256 比较。", "browse --verify-hash 只证明 source 与新 hardlink 字节相同，不自动把两者与 catalog content_sha256 比较。", "浏览目录只是入口，原件字节不复制。"],
     problem: "解决自然记忆与文件路径不一致、整库浏览成本高、临时导出重复占空间和旧 locator 指向缺失文件。",
-    implementation: ["SQLite 保存结构化日期、地点、类别、类型、描述、visible_text 与全文索引。", "search 直接使用条件/FTS，不加载完整 NDJSON。", "历史截图文字来自 exact_localocr、逐项证据和少量原生视觉文字；2,184 条旧 OCR 结果仍在 description，其中 sufficient 982、low_confidence 1,202。LocalOCR objective sidecar 尚未成为全库统一绑定。", "录音行消费既有分类与 ASR 绑定文字，不触发音频模型；ASR 缺失时其他结构化轴继续可查。", "候选返回前要求 source.authority_locator 是现存本地文件。", "browse 在 E 盘受管根创建 task-unique hardlink，可选对小集合逐项核对哈希。", "clean 只接受精确受管目录并拒绝非受管内容。"],
+    implementation: ["SQLite 保存结构化日期、地点、类别、类型、描述、visible_text 与全文索引。", "search 直接使用条件/FTS，不加载完整 NDJSON。", "历史截图文字来自 exact_localocr、逐项证据和少量原生视觉文字；原观察中2,184条旧OCR结果位于description，其中sufficient 982、low_confidence 1,202；此后原件清理改变现行条目，不能当作最新覆盖数量。LocalOCR objective sidecar 尚未成为全库统一绑定。", "录音行消费既有分类与 ASR 绑定文字，不触发音频模型；ASR 缺失时其他结构化轴继续可查。", "候选返回前要求 source.authority_locator 是现存本地文件。", "browse 在 E 盘受管根创建 task-unique hardlink，可选对小集合逐项核对哈希。", "clean 只接受精确受管目录并拒绝非受管内容。"],
     flow: ["压缩成最小可靠过滤条件", "执行 SQLite 条件/FTS", "确认原件仍存在", "返回少量候选", "需要时创建同卷 hardlink", "使用后精确清理浏览目录"],
     concepts: [
       { term: "place（现场地点）", explanation: "已人工复核为实际拍摄现场的地点证据。" },
@@ -493,20 +498,20 @@ const personalMediaModules = [
       failureRecovery: ["不可打开对象保留缺口", "视觉不确定不自动退出", "review 漏项拒绝应用", "事务失败回滚数据库和本批链接"]
     },
     teaser: "分类不是把文件移动到一个目录；它必须说明画面是什么、是否值得留、哪个版本更好，以及退出后还能从哪里恢复。",
-    status: `${current.visualRows.toLocaleString("zh-CN")} 个照片/视频 keeper；其中唯一精选入口为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频。普通分类还包括屏幕截图 15,829，旅行与活动 1,927，日常生活 863，收藏与娱乐 713，工作与学习 424，文档与凭证 396，创作与编辑 57；另有“色情图片”“成人视频”两个真实分类能力，具体个人载荷与当前数量不在公开页复制`,
+    status: `9月5日分类基线：${current.visualRows.toLocaleString("zh-CN")} 个照片/视频 keeper；当时精选入口为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频。普通分类还包括屏幕截图 15,829，旅行与活动 1,927，日常生活 863，收藏与娱乐 713，工作与学习 424，文档与凭证 396，创作与编辑 57；另有“色情图片”“色情视频”两个真实分类能力，具体个人载荷与当前数量不在公开页复制`,
     statusTone: "pass",
-    value: "让媒体库保留真正有浏览、唯一性或恢复价值的原件，同时不让重复、缓存和失误图淹没查找结果。",
+    value: "让媒体库保留真正值得再看、使用或承载回忆的原件。当前四库分别是媒体、非媒体材料、个人理解与个人表达：有用文字可可靠交给原有领域或后两库，原图没有独立价值时可以退出；没有新增意义就不硬建卡，也不将混入图库的他人内容当作本人经历。各库保持独立，手筛图片和全部视频的保留边界不变。",
     why: "文件名、目录和拍摄时间不足以判断裁切版、连拍、截图、模糊图和更好版本的关系；纯哈希也只能发现字节完全相同。",
     example: "我可以问：“这批截图哪些值得留，哪些只是缓存、重复图或已经有更完整版本？”系统会先整理重复关系，再把少量候选放在一张联系表里一起判断，交回保留或退出的理由。",
-    result: `每个唯一哈希得到 keeper/退出、主类、可选 secondary、时间、描述和重复关系；值得主动重看的原件还能进入唯一精选入口。当前精选为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频，不设配额；成功完成 catalog commit、seed 与 candidate refresh 后，当前目录和两套计划才是一致收口。`,
+    result: `每个唯一哈希得到 keeper/退出、主类、可选 secondary、时间、描述和重复关系；值得主动重看的原件还能进入唯一精选入口。9月5日精选观察为 ${current.selectedImageRows.toLocaleString("zh-CN")} 张照片和 ${current.selectedVideoRows} 个视频；现行只保留照片精选入口，不设配额；成功完成 catalog commit、seed 与 candidate refresh 后，当前目录和两套计划才是一致收口。`,
     readerStates: {
       pass: "review 精确覆盖本批所有唯一哈希，视觉决定完整，事务提交后 keeper 定位与三面计划一致。",
       problem: "画面看不清、近重复关系不确定、唯一性或恢复责任未证明时保留原件/候选并只打开少量原图复核。",
       unavailable: "文件不可打开、联系表缺失或 review 状态不对时不开始应用；SQLite commit 前失败会 rollback 并清理本批新 E/G links。commit 后 seed 或 candidate refresh 失败会保留已验 keeper 与已提交 catalog，必须重跑刷新和 acceptance，不能声称全流程原子回滚。"
     },
-    decisionImpact: ["精确重复退出仍要核对唯一性、引用和恢复责任。", "高度近重复是视觉判断，不由相似分数自动删除。", "精选不设上下限；好看、独特回忆或不可替代价值任一足够强即可，视频没有合适内容时可以为 0。", "精选只移动原件，不复制；照片和视频仍分别位于自己的精选主文件夹。", "phone-apply 的 near_duplicate_of 只允许本批 group，并要求指向本批 keeper；不能直接把新文件关联到既有 catalog keeper。", "跨批近重复需要另行人工核对并通过现有精确入口处理，当前没有同等自动关系命令。", "默认小批量快速路径只适用于不超过 100 个可打开对象；每张联系表最多 25 个，只重验本批变化。超过 100 时重新按真实规模规划，不能沿用 4 分钟目标。", "分类完成前不把移动到根目录称为完成。", "“色情图片”“成人视频”两个分类身份公开保留，具体个人载荷与当前数量逐值处理。"],
+    decisionImpact: ["照片已采用精选、生活与回忆、收藏与作品、资料原图、色情图片五入口方案；独立命名和目录迁移暂停，资料原图不是无意义截图兜底库。", "保留的色情图片全部进入本地手机包，色情视频不进，普通视频按需选择；这三种规则不混成统一keeper资格。", "精确重复退出仍要核对唯一性、引用和恢复责任。", "高度近重复是视觉判断，不由相似分数自动删除。", "照片精选不设上下限；好看、独特回忆或不可替代价值须有实际依据。本人手筛的图片及全部视频留下者保留，不用精选门槛二次淘汰。", "照片精选只移动原件、不复制；普通视频归视频根，不再设精选视频入口。本人手筛留下者优先保留；独立目录迁移暂停，不能写成全库已迁完。", "phone-apply 的 near_duplicate_of 只允许本批 group，并要求指向本批 keeper；不能直接把新文件关联到既有 catalog keeper。", "跨批近重复需要另行人工核对并通过现有精确入口处理，当前没有同等自动关系命令。", "默认小批量快速路径只适用于不超过 100 个可打开对象；每张联系表最多 25 个，只重验本批变化。超过 100 时重新按真实规模规划，不能沿用 4 分钟目标。", "分类完成前不把移动到根目录称为完成。", "“色情图片”“色情视频”两个分类身份公开保留，具体个人载荷与当前数量逐值处理。"],
     problem: "解决精确重复、裁切/连拍近重复、缓存、模糊失误、类别混乱和只移动不理解内容。",
-    implementation: ["机械预检按 SHA-256 合并 occurrence 并检查可打开性与技术缓存。", "contact sheet 每张最多 25 个对象，避免逐文件重复工具调用。", "review.json 要求 PASS_NATIVE_VISUAL_REVIEW 并精确覆盖本批唯一哈希。", "phone-apply 在 SQLite commit 前异常时 rollback 并清理本批新 E/G hardlink；commit 后再原子刷新 current seed、phone plan、cloud plan 与 receipt，这些文件之间不构成单一事务。", "只对联系表看不清的个别原图单开。"],
+    implementation: ["机械预检按 SHA-256 合并 occurrence 并检查可打开性与技术缓存。", "contact sheet 每张最多 25 个对象，避免逐文件重复工具调用。", "review.json 要求 PASS_NATIVE_VISUAL_REVIEW 并精确覆盖本批唯一哈希。", "phone-apply 在 SQLite commit 前异常时 rollback 并清理本批新 E/G hardlink；commit 后再原子刷新 current seed、phone plan、cloud plan 与 receipt，这些文件之间不构成单一事务。", "只对联系表看不清的个别原图单开。必要文字承接复用所属领域与理解/表达库的既有入口，不复制中央库；正式原件退出、手机包派生退出、旧ZIP/硬链接路径清理与物理空间释放分别记录。最近完整G回读后仍有定向退出，最终metadata、全量G与旧载荷收口各自待完成。"],
     flow: ["机械预检", "合并 occurrence", "隔离技术缓存", "生成联系表", "一次视觉决定", "补看少量原图", "事务应用", "增量验证目录与计划"],
     concepts: [
       { term: "Occurrence（出现位置）", explanation: "同一内容在来源或暂存中的一个路径；多个 occurrence 不等于多个不同原件。" },
@@ -538,7 +543,7 @@ const personalMediaModules = [
       failureRecovery: ["输入哈希变化立即停止", "keeper E/G 读回失败不退休变体", "目标冲突不覆盖", "文件系统与 SQLite 非原子步骤保留精确失败位置"]
     },
     teaser: "手机不是唯一入口。一个已经人工看过的本地照片、视频或录音，可以单独接入；同一视频流的另一种容器也能保留恢复副本后退出浏览库。",
-    status: "现行 ingest-file 只接受 canonical 根之外的一个现存文件并强制 --execute；新 keeper 与等价视频容器变体有两套独立合同，本轮网页建设没有执行真实接入",
+    status: "ingest-file强制--execute；普通输入在canonical根外，新增--register-existing可将媒体根内明确原件就地登记，不能同时退休等价变体。本轮只核对正式代码，未执行真实接入",
     statusTone: "mixed",
     value: "让 E 卷暂存区或其他同卷位置中、已经人工复核的一个媒体文件，不必伪装成手机批次，也不必为一次接入新建脚本和第二索引。",
     why: "本地新增文件可能已经完成视觉判断，但不属于手机 capture；视频还可能只是同一画面/音轨的另一种容器。若一律当新 keeper，会重复浏览和恢复；若直接删除，又会失去可恢复字节和关系。",
@@ -553,7 +558,7 @@ const personalMediaModules = [
       "命令必须显式 --execute；没有只写计划后自动接入的后台路径。",
       "整理顺序在新增、复查和续作中相同：无意义退出，精确/高度近重复择优，再按全库统一严格标准判断精选；不因一批新媒体要交付就凑精选。",
       "裁剪、压缩、水印、边框和轻微界面变化不自动构成独立价值；不同凭据状态、重要文字或场景信息仍须保留。",
-      "输入必须在 E:\\Pictures、E:\\Videos 与 E:\\Music\\录音之外，且新 keeper 必须能与 E canonical 建 hardlink；现行实现不支持 C/G 等异卷 source 直接接入。",
+      "普通输入须在E媒体中心之外并可与目标建hardlink；--register-existing仅对中心内已选择原件就地登记，不能退休等价变体。两者均不支持C/G异卷source直接接入。",
       "新 keeper 需要 category；日期可明确选择，也可保留时间未知。普通新增默认不进入手机包，明确 --phone-recovery 与 --phone-recovery-reason 才赋予普通内容手机资格。",
       "等价视频变体必须绑定现役 keeper SHA-256，并证明 demuxed video stream 完全相同。",
       "新 keeper 分别刷新本地目录、手机计划与 upload=0 云候选；计划变化按各自资格判断，普通 keeper 不自动增加手机项，录音不进入手机包。",
@@ -561,7 +566,7 @@ const personalMediaModules = [
     ],
     problem: "解决非手机本地新增、一次性脚本膨胀、同视频流容器重复、源文件退休无恢复副本和目录/恢复计划不同步。",
     implementation: [
-      "解析 source 并拒绝 canonical 根内文件；计算 size/SHA-256，expected_sha256 存在时必须匹配。",
+      "解析source并核对E同卷；普通路线拒绝canonical根内文件，--register-existing则要求原件已在媒体根内且不与等价变体参数并用。计算size/SHA-256，expected_sha256存在时必须匹配；就地登记保留原件路径。",
       "ffprobe 判断 video/audio；新 keeper 用 category、secondary 和可选 formation-date 选择 canonical 目录。",
       "新 keeper 用 os.link 在 E canonical 建 hardlink，因此 source 必须与目标同卷；随后向 G 精确复制并回读，事务写入 media/meta 后退休 source。",
       "等价变体先核对 keeper 当前存在、keeper E/G SHA-256 与两边 demuxed stream；再把变体精确复制到 G Variants、记录关系、退休 source 并更新 retired 状态。",
@@ -573,7 +578,7 @@ const personalMediaModules = [
       { term: "Demuxed video stream（解复用视频流）", explanation: "从容器中抽出的实际视频流哈希；相同才支持‘只是容器不同’的等价判断。" },
       { term: "Content-equivalent variant（内容等价变体）", explanation: "字节和容器不同，但已证明视频流与现役 keeper 相同；保留恢复副本和关系，不再作为第二个 keeper 浏览。" }
     ],
-    boundaries: ["不批量扫描目录。", "不接入 canonical 根内文件。", "新 keeper 不支持跨卷 source copy fallback。", "不靠文件名宣布视频等价。", "不把 --execute 扩张成云上传或手机删除授权。", "不声称跨 E/G/SQLite 的绝对原子回滚。"],
+    boundaries: ["不批量扫描目录。", "普通暂存接入不接受canonical根内文件；已在媒体中心的明确原件可以 --register-existing 就地登记，不移动原件。", "新 keeper 不支持跨卷 source copy fallback。", "不靠文件名宣布视频等价。", "不把 --execute 扩张成云上传或手机删除授权。", "不声称跨 E/G/SQLite 的绝对原子回滚。"],
     failures: [
       { condition: "输入 SHA-256 与预期不同", response: "在创建 canonical/G/目录状态前失败，要求重新确认当前字节。" },
       { condition: "新 keeper source 与 E canonical 不同卷", response: "os.link 失败并保留 source；当前先把已复核文件放到 E 卷明确暂存位置再重试，不能把异卷 copy 说成已支持。" },
@@ -601,17 +606,17 @@ const personalMediaModules = [
     statusTone: "mixed",
     value: "把手机故障和断线风险压到最短时间，同时保留每个共享文件是否已经双重保全、是否已经从手机清理的可核对状态；非媒体不进入媒体 catalog，但不会因此被漏掉保全。",
     why: "边连手机边做视觉分类、全库去重和索引，会让连接时间变长；把‘备份完成’和‘手机清空’混成一个状态，又会制造误删或误报。",
-    example: "我可以说：“先把手机这批新文件安全保存到两块盘，确认后马上告诉我可以拔线。”系统会逐项复制并回读；图片和视频之后再离线整理，文档和压缩包只先防丢，再交给对应项目处理。",
-    result: "成功时先得到‘可以拔了’；若继续清理，再得到每个精确路径的删除/隔离结果。未开始或未完成删除时明确保留待下次连接。",
+    example: "我可以说：“先把手机这批新文件安全保存到两块盘，确认后马上告诉我可以拔线。”系统先按内容核验并复用媒体/材料库已有原件，只补缺少的E/G字节，再逐项回读；连接仍在时优先精确清空与已就绪差异回写。图片视频离线整理，文档和压缩包交给对应项目；可拔、清空和回写分别说明。",
+    result: "双盘完成后及时得到数据安全结果；连接仍在时优先完成已保全来源的精确清空和已就绪恢复包差异回写，再分别说明可拔、清空与回写状态。提前断开或本批判断未就绪才留下精确待办，不能用备份完成替代另外两项。",
     readerStates: {
-      pass: "所有纳入分母的新共享文件都有 E/G 两份 bytes 与 SHA-256 回读；可以拔线。手机清理若执行，还要有独立精确结果。",
+      pass: "所有纳入范围内容都有E/G字节回读；数据安全、精确清空、已就绪差异回写和可拔状态分别报告。连接仍在时优先完成手机依赖步骤，提前断开才留精确待办。",
       problem: "副本缺失、哈希不一致、远端变化或删除中断时保留已取得副本和精确路径状态，不继续扩大删除。",
       unavailable: "手机、ADB、目标异卷或来源边界不可用时停止捕获/清理；不动现有本地原件，不用恢复出厂设置替代。"
     },
-    decisionImpact: ["固定设备 model=2410DPN6CC，serial SHA-256=0a1ebafeb85915caf5f0181167f15ed264f6d9776215c183df0d9fb9dcb34a0b；共享 profile 固定为 0 / 999。", "由另一来源 Owner 负责的共享根、恢复包 Images/Videos、Android/应用私有/系统边界和 .nomedia 不进入保全分母；其他 regular files 包括非媒体与技术 cache 先保全。", "每次 capture 分配 fresh、不可复用 run-id；manifest 与 frozen delete plan 互相绑定哈希。", "最多尝试 3 个稳定 generation；远端事实漂移或 stale artifact 要求 fresh capture。", "双盘回读完成就先通知可以拔线；清空是第二个结果，不能由保全推断。", "当前 h_cold_backup=not_used_current_h_health_warning；E/G 双保全不冒充 H 冷备或三副本。", "删除只允许精确文件，不递归目录；单一全局锁和 no-clobber 文件写入阻止并发/覆盖旧代。", "phone-prepare 只消费 manifest 中图片/视频 kind=media；文档不进视觉批次，手机录音自动归位/索引当前仍未证明。"],
+    decisionImpact: ["固定设备 model=2410DPN6CC，serial SHA-256=0a1ebafeb85915caf5f0181167f15ed264f6d9776215c183df0d9fb9dcb34a0b；共享 profile 固定为 0 / 999。", "由另一来源 Owner 负责的共享根、恢复包 Images/Videos、Android/应用私有/系统边界和 .nomedia 不进入保全分母；其他 regular files 包括非媒体与技术 cache 先保全。", "每次 capture 分配 fresh、不可复用 run-id；manifest 与 frozen delete plan 互相绑定哈希。", "最多尝试 3 个稳定 generation；远端事实漂移或 stale artifact 要求 fresh capture。", "双盘回读完成及时通知数据安全；清空、已就绪差异回写与可拔状态分别报告，优先完成仍依赖手机的步骤，不能默认为下次。", "当前 h_cold_backup=not_used_current_h_health_warning；E/G 双保全不冒充 H 冷备或三副本。", "删除只允许精确文件，不递归目录；单一全局锁和 no-clobber 文件写入阻止并发/覆盖旧代。", "phone-prepare 只消费 manifest 中图片/视频 kind=media；文档不进视觉批次，手机录音自动归位/索引当前仍未证明。"],
     problem: "解决长时间占用手机、单盘副本假安全、备份与清空混淆、系统边界误收和递归删除风险。",
-    implementation: ["Device 要求唯一在线设备、model=2410DPN6CC、serial SHA-256=0a1ebafeb85915caf5f0181167f15ed264f6d9776215c183df0d9fb9dcb34a0b 与 profile 0/999 均匹配。", "REMOTE_FACT_SCRIPT 用 NUL framing 返回 path/status/size/mtime/hash，并按 64 项与 24 KiB 命令上限分批，避免路径字符破坏解析。", "capture 对所有纳入分母的 regular files 最多获取 3 代稳定远端事实；每个文件 pull 到 fresh run 的 E 副本并冻结 manifest/delete plan。", "protect-to-g 写 G 异卷；verify-backup 把 manifest、delete plan、设备身份、E/G bytes/SHA 全部绑定到 receipt。", "delete 要求同一当前设备、有效 backup receipt、精确 run-id 与 --execute，再核对路径/大小/哈希后逐文件删除；不删除目录。", "全局 lock、防覆盖 write_json_once 与 fresh run root 共同避免并发和旧 artifact 被静默复用。"],
-    flow: ["识别手机共享边界", "排除其他 Owner 与系统区域", "批量取得远端事实", "写 E 副本", "写 G 副本", "逐项回读", "报告可以拔线", "按独立授权精确清理"],
+    implementation: ["Device 要求唯一在线设备、model=2410DPN6CC、serial SHA-256=0a1ebafeb85915caf5f0181167f15ed264f6d9776215c183df0d9fb9dcb34a0b 与 profile 0/999 均匹配。", "REMOTE_FACT_SCRIPT 用 NUL framing 返回 path/status/size/mtime/hash，并按 64 项与 24 KiB 命令上限分批，避免路径字符破坏解析。", "capture对纳入分母的regular files最多取得3代稳定远端事实，先按SHA-256合并出现位置并查询媒体/材料库已核验原件；已有内容复用并补E/G缺口，每个真正新增哈希只pull一次。每个来源仍保留自己的路径、时间和精确清空责任，manifest/delete plan继续绑定本次run。", "protect-to-g 写 G 异卷；verify-backup 把 manifest、delete plan、设备身份、E/G bytes/SHA 全部绑定到 receipt。", "delete 要求同一当前设备、有效 backup receipt、精确 run-id 与 --execute，再核对路径/大小/哈希后逐文件删除；不删除目录。", "全局 lock、防覆盖 write_json_once 与 fresh run root 共同避免并发和旧 artifact 被静默复用。"],
+    flow: ["识别手机共享边界", "排除其他 Owner 与系统区域", "批量取得远端事实", "写 E 副本", "写 G 副本", "逐项回读", "及时报告数据安全", "优先精确清空与已就绪差异回写", "分别报告可拔与未完项"],
     concepts: [
       { term: "Preservation denominator（保全分母）", explanation: "本次真正由手机共享来源负责、尚未由其他来源承担的新文件集合。" },
       { term: "Dual preservation（双重保全）", explanation: "同一文件在 E/G 两个异卷上都完成 bytes 与 SHA-256 回读。" },
@@ -641,9 +646,9 @@ const personalMediaModules = [
       failureRecovery: ["超过 60GB 阻断封印", "缺项先 dry-run", "普通无关包外文件不自动删除", "本人删除后由既有日常任务按当前集合退出恢复项，不加删除确认或恢复台账"]
     },
     teaser: "恢复不是把整个媒体库塞回手机；它只封装照片和视频中的当前选择，并把容量、缺项和不承担范围说清。",
-    status: `${current.recoveryItems.toLocaleString("zh-CN")} 项、${bytesToGiB(current.recoveryBytes)}，under_60gb=true`,
+    status: `9月5日恢复包基线${current.recoveryItems.toLocaleString("zh-CN")}项、${bytesToGiB(current.recoveryBytes)}，当时under_60gb=true；当前包随本地清理变化，最终收口未完`,
     statusTone: "pass",
-    value: "手机损坏、换机或清空后，能够从一份有容量上限、逐项可核对的包恢复最重要照片和视频，而不是临时挑文件。",
+    value: "手机损坏、换机或清空后，从有容量上限、逐项可核对的包恢复当前选定照片和视频。保留的色情图片全部加入，色情视频不加入，普通视频按需；文档和录音不加入。包随最终保留集增删，实际手机还要在下次连接后单独清理与回写。",
     why: "把全部媒体无差别回灌会超过手机容量，也会把录音、缓存和不再选择的对象带回去；只有目录没有实际字节又不能恢复。",
     example: "我可以问：“现在这份手机恢复包能恢复多少照片和视频，还缺什么？”系统先只读核对计划、容量和实际文件；确认无误后，只有我明确要求执行才补齐缺失内容。",
     result: "第一层得到计划项数、字节、容量门和 catalog 资格；第二层得到 G 实际包的 existing_size_match/missing 聚合计数与补齐结果。dry-run 不列每个缺失路径；目标冲突才具名 target。两层分开，包外内容保持不动。",
@@ -652,7 +657,7 @@ const personalMediaModules = [
       problem: "缺项时 dry-run 返回 aggregate missing 计数，目标已存在但 size 冲突时具名 target 并失败；计划/资格漂移由 recovery-status 收敛或失败关闭。本人删除原件时，只退出与该 catalog 哈希、固定目标和同一文件身份精确匹配的恢复项；不匹配实体保留为冲突。",
       unavailable: "G 盘、计划或选定原件不可用时停止恢复同步；保留已有恢复包，不用旧成功回执冒充当前。"
     },
-    decisionImpact: ["恢复包只含选定照片/视频。", "录音从不进入手机最小恢复包。", "60 GB 是当前产品上限。", "recovery-sync 默认 dry-run。", "固定包目录跟随当前清单，包外内容和 E 原件不动；用户删原件无需由 AI 代删或通知 AI。"],
+    decisionImpact: ["恢复包只含按实际规则选择的照片/视频；保留的色情图片全部加入、色情视频全部排除、普通视频按需，文档与录音不加入。", "录音从不进入手机最小恢复包。", "60 GB 是当前产品上限。", "recovery-sync 默认 dry-run。", "固定包目录跟随当前清单，包外内容和 E 原件不动；用户删原件无需由 AI 代删或通知 AI。"],
     problem: "解决换机前临时挑选、恢复包超容量、录音与手机职责混淆、计划和实际文件分离以及同步误删。",
     implementation: ["phone-recovery-plan.ndjson 保存当前选定照片/视频的唯一哈希、大小、源路径、目标路径和相册；总量仍须 <=60GB。", "recovery-status 只核对计划格式、计数、当前目录资格，不证明实际 G 包齐全。", "recovery-sync 默认预览现存、缺项与过时文件，--execute 才同步固定 G 包。", "未变化文件按大小和修改时间复用；新建/变化项核对原件与落地哈希，优先使用 G 标准副本硬链接，再原子替换目标。", "目标集合来自当前计划；只清固定 Images/Videos 桶内不再需要的派生文件，保留桶外内容，不删除 E 原件。", "正式当前库按现存视频引用清理 G 格式变体，不保存独立退役队列。", "现有每日任务先维护两库清单、再镜像 E→G、最后同步手机包；维护失败不会倒改已经成功的镜像结果。"],
     flow: ["从 keeper 选择照片/视频", "计算容量并生成计划", "recovery-status 验计划和 catalog", "recovery-sync dry-run 比较 G 实际包", "按需 execute 补齐", "对已有/新文件做哈希回读", "重新报告"],
@@ -663,57 +668,74 @@ const personalMediaModules = [
     ],
     boundaries: ["不恢复文档、联系人、短信、聊天、账号或应用数据。", "不把录音放进手机包。", "不删除固定桶外的文件或 E 原件。", "用户删除原件后，由既有任务按当前文件与计划同步退出对应恢复项。", "不把计划存在冒充实际文件齐全，更不冒充手机已写回。"],
     failures: [
-      { condition: "一个新增候选会让包超过 60 GB", response: "只跳过该新增项，并在 candidate-refresh receipt 记录 phone_skipped_capacity；保持现行封印包，不为纳入它删除未知原件。若既有/最终计划本身已经越界，status/refresh 才整体失败。" },
+      { condition: "一个新增候选会让包超过 60 GB", response: "只跳过该新增项，并在 candidate-refresh receipt 记录 phone_skipped_capacity；保持现行封印包，不为纳入它删除未知原件。若既有/最终计划本身已经越界，status/refresh才整体失败。已明确全部纳入的色情图片若与容量发生真实冲突，须说明实际数量和处理方案，不能用自动跳过把“全部”改成抽选；当前未声明出现这一冲突。" },
       { condition: "计划项缺失", response: "dry-run 只返回 missing 聚合数；--execute 对全部缺项逐一核验 source 后补齐。需要具体路径时从已授权的 plan/目标范围另行有界查看。" },
       { condition: "G 盘不可用", response: "返回 unavailable，保留 E 原件和现有计划；不声称恢复包当前可用。" },
       { condition: "包外文件存在", response: "保持原样并单独报告，不作为同步删除目标。" }
     ],
     sources: [{ path: "personal_media.py", role: "recovery-status 与 recovery-sync" }, { path: "phone-recovery-plan.ndjson", role: "当前恢复计划" }, { path: SOURCE_RECEIPT, role: "项数、字节与 60 GB 验收" }],
-    verification: [`现行计划 ${current.recoveryItems.toLocaleString("zh-CN")} 项、${current.recoveryBytes.toLocaleString("en-US")} B，under_60gb=true；${current.selectedRows} 项精选全部覆盖，原有候选未减少。`, "真实执行已将精选名称同步到包内，并移除旧分类别名；随后以同一清单重复同步检查无额外复制或删除。", "隔离回归覆盖预览/执行、变化项哈希、只清固定桶、空计划、重复运行及源离线。实际 G 包就绪仍不代表已写回手机。"],
+    verification: [`9月5日计划${current.recoveryItems.toLocaleString("zh-CN")}项、${current.recoveryBytes.toLocaleString("en-US")} B，under_60gb=true；当时${current.selectedRows}项精选全部覆盖，不能据此承诺清理后的现行包数量。`, "真实执行已将精选名称同步到包内，并移除旧分类别名；随后以同一清单重复同步检查无额外复制或删除。", "隔离回归覆盖预览/执行、变化项哈希、只清固定桶、空计划、重复运行及源离线。实际 G 包就绪仍不代表已写回手机。"],
     relation: "它消费分类后的照片/视频 keeper；不拥有云端上传，也不改变本机 canonical 原件。"
   }),
   commonModule({
     slug: "cloud-candidates",
-    shortTitle: "云端候选",
-    title: "先把候选与相册计划讲清，再单独决定是否上传",
-    searchAliases: ["Google Photos", "云端候选", "删掉原件后退出云候选", "我自己删的媒体不要上云", "upload=0", "相册计划", "cloud-status", "不自动上传"],
+    shortTitle: "云端候选与同步",
+    title: "本地期望、云端对象与相册关系分别核对",
+    searchAliases: ["Google Photos", "Google Drive录音", "云端候选", "cloud-reconcile", "cloud-sync", "upload=0", "相册异常消失"],
     searchProjection: {
-      intents: ["查看准备上传的媒体", "确认当前没有上传", "理解相册候选与旧候选退出", "决定是否需要另行批准"],
-      entities: ["cloud-candidates.ndjson", "upload=0", "album", "candidate", "Google Photos", "authorization"],
-      relations: ["分类 keeper 生成云候选", "候选绑定计划相册名", "upload=0 表示未授权未上传", "本人删除 canonical 原件后候选应退出", "不再满足选择条件的候选退出"],
-      failureRecovery: ["候选漂移先更新清单", "用户删除原件由既有每日维护退出目录与旧候选，不在查询时执行删除", "未明确授权不上传", "云端不可用不影响本机目录", "上传结果必须独立回读"]
+      intents: ["预览媒体上云还差什么", "分别核对Photos照片视频和Drive录音", "解释相册消失或部分上传为什么暂停"],
+      entities: ["cloud-reconcile", "cloud-sync", "cloud_object", "cloud_membership", "Google Photos", "Google Drive", "upload=0"],
+      relations: ["本地候选不等于云端对象", "对象字节和相册关系分别维护", "当前本地阶段不做云删上传"],
+      failureRecovery: ["已建相册ID消失保留未知不重建", "上传身份未知先回读而不清零", "部分结果和配额暂停各自保留"]
     },
-    teaser: "云端在这套产品里是一个等待决定的恢复面，不是默认同步目标；候选生成和真正上传始终隔着一次人工查看与明确授权。",
-    status: `${current.cloudCandidates.toLocaleString("zh-CN")} 项、${bytesToGiB(current.cloudBytes)}；cloud_upload_authorized=false，cloud_upload_performed=false`,
+    teaser: "照片视频到Photos、录音到Drive；先预览选定工作，再按当前授权阶段执行，部分成功和未知远端身份各自保留。",
+    status: "7990eed正式源码已有执行入口；当前本地阶段，云真删/重传及全量结果未在本页验收",
     statusTone: "mixed",
-    value: "提前整理哪些照片/视频值得进入 Google Photos 以及放进哪个相册，同时避免后台自动上传错误内容或把网络失败影响本机整理。",
-    why: "如果每次分类后自动上传，错误类别、近重复和暂不想公开到云端的内容会立即变成外部状态；完全不做候选又会在需要恢复时临时筛选。",
-    example: "我可以问：“哪些照片准备以后传到 Google Photos，打算放进哪些相册？”系统只交回本地候选数量、容量和相册计划；逐项清单要另外查看，未经我明确批准不会上传。",
-    result: "直接命令得到候选项数、字节和当前授权/上传状态；明确查看本地清单后才能看到逐项候选与相册计划。当前项目没有 Google 上传执行器，结论是本地候选已形成、外部上传尚未实现也未发生。",
+    value: "本地整理不被云故障打断。整理后的照片和视频以Google Photos恢复集加“其他归档”覆盖本地保留集，PSD明确排除；录音进入Google Drive“我的云端硬盘”根目录的“录音”，沿用本地分类，不再把照片视频复制到Drive。需要云端恢复时，分清计划内容、已传字节、缺失关系和当前不能继续的步骤；本轮仍不执行云操作。",
+    why: "本地候选不是账号侧备份，上传了字节也不等于已经进入正确相册。网络中断后若把未知对象当作没上传，或在旧相册消失时直接重建，容易产生重复和错误外部状态。",
+    example: "我说“先看看这批整理后的照片和录音上云还差什么”。系统预览Photos与Drive各自工作，不调用上传；进入获准云阶段后再按选定范围执行，遇到已建相册消失就明确暂停相关部分，不擅自重建补传。",
+    result: "得到本地期望集合、云对象、相册关系与实际执行结果的分层说明。旧候选清单仍可只读查看；云端全量、真删除/重传和手机回写是否完成分别以对应实测为准。",
     readerStates: {
-      pass: "本地候选 header/body 与当前 catalog 资格一致，全部 upload=0；cloud-status 只证明清单结构、项数、字节和零上传状态。",
-      problem: "旧候选不再满足选择条件、相册名冲突或清单漂移时原位修正候选，不触发上传；本人直接删除规范原件后，对应 upload=0 本地候选在下一次维护收敛中退出。",
-      unavailable: "本地候选文件、header/body 或 catalog 资格不成立时 cloud-status 失败；当前项目本来就没有 Google 账号/网络上传执行器，不能把该缺失写成一次偶发运行故障。"
+      pass: "预览返回选定范围与待办而不调用提供者；获准执行时分别记录对象和相册关系结果，已上传对象先补关系，再处理新字节。",
+      problem: "部分成功、配额暂停、对象身份未知或已建相册异常消失时保存精确缺口，不把整批当成功，也不盲目重传。",
+      unavailable: "本地期望不完整、来源不可读或现有PCConfig提供者不可用时，只停止受影响步骤；不猜账号、不另建云入口，不让云故障改动本机原件。"
     },
-    decisionImpact: ["cloud-status 只读且只返回聚合状态，不返回逐项/相册。", "逐项候选与相册计划在 cloud-candidates.ndjson；陈旧退出计数在 candidate-refresh.json。", "本人在可信文件管理器删除 canonical 原件后，对应 upload=0 候选应自动退出且不需要另行通知；现有日常同步已经覆盖。", "新增只来自本次显式复核的 new_hashes 与候选标记，不自动回填其他历史歧义空缺；历史来源类不会否决已经复核的精选。", "upload=0 是候选状态，不是失败。", "当前项目没有上传执行器；未来外部上传必须先看清单、精确授权并回读。"],
-    problem: "解决自动上传越界、分类错误立即外部化、云端与本机故障耦合、旧候选无限累积和候选冒充已上传。",
-    implementation: ["cloud-candidates.ndjson 保存 header、逐项候选和相册计划。", "只对本次明确复核的 new_hashes 与候选标记新增条目，不自动回填其他历史歧义项；已精选照片和视频均可加入，旧来源类别不额外拦截。", "现有每日任务维护失效条目与相册，计数在 candidate-refresh.json；没有另建常驻同步器。", "cloud-status 只读验证 header/body 与 catalog，并输出 status/items/bytes/path/zero-upload 聚合。", "生产项目没有 Google 上传命令或账号连接，本轮没有任何云端写入。"],
-    flow: ["完成分类/去重", "筛选本次允许 new_hashes", "生成或退出本地候选", "写相册计划与 refresh receipt", "cloud-status 回读聚合", "用户另行查看逐项清单", "若未来建立外部上传路线则重新授权与回读"],
+    decisionImpact: [
+      "当前正式阶段是本地去留与索引/备份收口；云端真删除和重传后续，不在网页刷新时执行。",
+      "后续已获准范围内的正常云增量不逐批重复索要批准；扩大来源、账号或公开面仍按真实授权处理。",
+      "照片/视频走Photos恢复集与其他归档，PSD排除且不另投Drive或自动转码；两类色情保留内容全部归云端恢复集的同名相册，不按季度拆。录音走Drive根目录的录音集合并沿用本地分类，不进手机恢复包或Photos。旧Photos清除不顺带删除Drive录音；音乐、铃声和文档不扩入本次云范围。",
+      "本地保留、手机资格与云端资格分别判断，不能用一个keeper标记自动填满所有集合。",
+      "可信原件删除仍由现有本地维护收敛候选；云端真实删除不是本地索引删除的同义词。",
+      "旧upload=0字段只说明对应本地候选观察，不证明后续账号侧从未发生上传。"
+    ],
+    problem: "解决候选冒充备份、对象与相册混为一谈、部分上传中断后重复传输、旧相册身份丢失以及云故障拖住本地整理。",
+    implementation: [
+      "cloud-candidates.ndjson继续保存本地逐项候选与相册计划，candidate-refresh记录本地刷新；cloud-status只读，不启动同步。",
+      "cloud-reconcile根据当前目录和选定范围建立本地期望对象与关系；--execute也只写本地SQLite，不调用提供者。",
+      "cloud-sync默认返回DRY_RUN_PROVIDER_NOT_CALLED；显式--execute才经现有PCConfig提供者工作，并先拒绝缺失或不完整的本地期望状态。",
+      "同一SQLite内的cloud_object与cloud_membership分别保存内容对象和集合关系，不新建第二媒体库。已有上传身份不因相册消失而清零。",
+      "Photos先核对远端对象与已存相册ID，先补已上传对象的相册关系，再按相册分组处理小文件，批次大小1至50；保留每项部分结果，配额限制暂停受影响工作。",
+      "已建相册ID不存在或歧义时记unknown并阻塞该集合，不自行重建补传；上传身份不明时保留不确定性，先回读而非猜未上传。",
+      "云操作使用可复用的提供者会话并在结束关闭；cloud-reconcile、候选更新、上传字节、相册归属和真实删除各有不同效果。"
+    ],
+    flow: ["完成本地分类与去重", "按真实范围预览期望集合", "当前阶段允许时写本地期望", "预览云工作且不调用提供者", "进入获准云阶段后回读远端身份", "先补已有对象的集合关系，再有界处理新字节", "分别报告完成、部分、暂停与未知"],
     concepts: [
-      { term: "Cloud candidate（云端候选）", explanation: "本地计划中可能上传的媒体，不表示账号侧已经存在。" },
-      { term: "Album plan（相册计划）", explanation: "候选未来进入的相册分组；需要在上传前由用户检查。" },
-      { term: "External read-back（外部回读）", explanation: "真实上传后从目标账号重新确认结果；本地清单和命令成功不能替代。" }
+      { term: "Cloud candidate（云端候选）", explanation: "本地计划，不等于目标账号已有字节。" },
+      { term: "Desired state（期望状态）", explanation: "本次范围内应存在的内容对象及集合关系，先在本地表达。" },
+      { term: "Membership（集合关系）", explanation: "已上传对象与相册的关联，和对象字节分别维护。" },
+      { term: "External read-back（外部回读）", explanation: "从现有目标提供者核对真实对象与相册身份；本地清单和命令成功不能代替。" }
     ],
-    boundaries: ["不自动上传。", "不把 upload=0 写成失败。", "不让云端故障改变本机原件。", "不在网页复制候选原始清单。"],
+    boundaries: ["预览不上传。", "本次网页核对不连接账号或执行云动作。", "不把旧零上传记录写成永久产品限制。", "不让云故障改变本机原件。", "不在网页复制候选原始清单。", "当前实现存在不证明云端全量和手机恢复完成。"],
     failures: [
-      { condition: "没有明确上传授权", response: "保持 upload=0，正常结束候选更新。" },
-      { condition: "候选与 keeper 漂移", response: "刷新/退出候选并重新回读，不把陈旧清单继续使用。" },
-      { condition: "本地候选 header/body 或 catalog 资格漂移", response: "cloud-status 失败，先刷新本地清单；不触发任何外部动作。" },
-      { condition: "用户希望真正上传", response: "当前项目返回 uploader_not_implemented（上传器未实现）的产品缺口；不得把 upload=0 清单或未来设计冒充已具备上传能力。" }
+      { condition: "本地期望缺失或不完整", response: "cloud-sync执行前拒绝，先通过现有cloud-reconcile核对该范围。" },
+      { condition: "已建相册ID消失或存在多个身份", response: "保留unknown与现有上传身份，暂停相关集合，不盲目重建或补传。" },
+      { condition: "配额、网络或部分对象失败", response: "保留逐项结果和暂停原因；已上传对象先核对关系，不把整个批次重传或报告全部完成。" },
+      { condition: "候选与原件漂移", response: "本地维护先收敛清单；真实云删除/重传按独立阶段与实际能力处理。" }
     ],
-    sources: [{ path: "personal_media.py", role: "cloud-status 与候选刷新" }, { path: "cloud-candidates.ndjson", role: "upload=0 外部计划" }, { path: SOURCE_RECEIPT, role: "候选项数、字节与零 external effect" }],
-    verification: [`现行本地清单 ${current.cloudCandidates.toLocaleString("zh-CN")} 项、${current.cloudBytes.toLocaleString("en-US")} B。`, "验收回执 cloud_upload_authorized=false、cloud_upload_performed=false。", "plan_status 回归覆盖 header/body/catalog 漂移；当前没有上传执行器或真实云端回读。"],
-    relation: "它是分类后的可选外部恢复面；没有人类决定时仍保持本地计划，不接管本机目录或手机恢复。"
+    sources: [{ path: "AGENTS.md / USER_REQUIREMENTS.md", role: "当前用户阶段、集合用途与实际授权边界" }, { path: "personal_media.py", role: "候选、cloud-reconcile、cloud-sync与同库状态" }, { path: "cloud-candidates.ndjson", role: "本地外部计划，非账号侧回读" }, { path: SOURCE_RECEIPT, role: "9月5日候选数量和零上传历史证据" }],
+    verification: [`9月5日本地候选${current.cloudCandidates.toLocaleString("zh-CN")}项、${current.cloudBytes.toLocaleString("en-US")} B及upload=0仅保留原观察。`, "2026-09-12只读核对7990eed正式函数、CLI分流和用户阶段；没有执行提供者或真实云端回读。", "当前工作树未发布的cloud_upload相关改动不属于本页已发布能力；云全量、相册最终收敛和手机实际回写仍需来源各自验收。"],
+    relation: "它消费媒体整理后的集合，与本地原件和手机恢复分开；当前阶段先完成本地工作，云端结果按实际后续动作核验。"
+
   })
 ];
 

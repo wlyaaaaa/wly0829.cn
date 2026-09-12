@@ -1,7 +1,7 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["正常工作", "发现问题", "暂不可用"];
-const sourceCommit = "5a2f8d73d8b2e19d90a3d67f5166e4fe12b6b453";
+const sourceCommit = "ff010e738234179fcba52a5db1f2cfc32e0e9db4";
 const selectedImageHash = "FA8D1FDC7799D537864D2784B5718E8BA15B77775D246C019179084B0F0239E7";
 
 export const emeraldVeilSnapshot = createProjectSnapshot({
@@ -15,7 +15,8 @@ export const emeraldVeilSnapshot = createProjectSnapshot({
     { label: "本机配置", value: "0.1.27 / 核对通过" }
   ],
   facts: [
-    { label: "源版本与工作区", value: `PUBLIC main ${sourceCommit} 已通过 GitHub main 接口回读；App 0.1.27 将已选雨林黑猫底图统一用于 Windows 各显示器、锁屏与泡泡。未跟踪的猫姿态实验原样保留，不进入本次已发布能力。` },
+    { label: "Windows 11 兼容边界", value: "源码 0.1.28 把 Windows 显示图片放到用户图片目录，前像仍保存在应用数据目录；统一通过 IDesktopWallpaper 设置和读取共同及逐屏壁纸。自动屏保关闭时，系统可能回读运行超时 0，只有 active=false 时接受；保存值仍须为360秒，项目自己按六分钟空闲计时。", hero: false },
+    { label: "源版本与工作区", value: `2026-09-12 04:22 UTC 回读 PUBLIC main ${sourceCommit}，源码版本 0.1.28：修正 Windows 11 壁纸路径与屏保运行超时回读。以下 0.1.27 安装、图片与37项测试保留原观察日期，不证明 0.1.28 已安装或实机验收。未跟踪猫姿态实验不进入已发布能力。` },
     { label: "电脑上共用同一张底图", value: `assets/verdant-rain-4k.png 为雨林黑猫 · 更绿版，3840×2160、sRGB SDR（标准动态范围），SHA-256 ${selectedImageHash}。Windows 桌面、锁屏和泡泡使用同一幅图；泡泡将它嵌入程序，运行时仍不截取桌面，也不依赖 Wallpaper Engine 当前选图。` },
     { label: "静态背景现场回读", value: "0.1.27 对应的 Set-WindowsBackground.ps1 -Action Verify 返回 verified：desktop.matches=true，三块当前显示器逐项 matches=true，lockScreen.matches=true，锁屏解码图像平均像素差0，changedSurfaces为空。脚本也能核对Windows仍记得的离线显示器，未改变连接或排列；本轮没有应用图片或进入真实锁屏。" },
     { label: "泡泡安装与当前运行", value: "现有安装器只读 Verify 通过，已安装程序版本0.1.27、190135964字节、SHA-256=1a9fe476aeeb6fd0a176f106c022ac8277c59957a780a08ffff8cfd95b3c1a83；文件 ProductVersion 的编译标识仍含 f6e134f，不能把它当成本轮重新编译证明。唯一启动项指向已安装 WinExe，本轮未强制显示泡泡或重启程序。" },
@@ -76,8 +77,8 @@ export const emeraldVeilProject = {
     { ask: "暂时不要泡泡，或者以后彻底卸载。", effect: "临时暂停可在托盘里切换；Disable关闭自动泡泡，Restore按原始记录还原屏保参数，Remove删除项目启动项与可执行文件。三种操作的结果不同，原始记录仍留作恢复依据。", moduleSlug: "reversibility-preimage-and-remote-compatibility" }
   ],
   components: [
-    { name: "Set-WindowsBackground.ps1", responsibility: "恢复Windows桌面与系统锁屏图片", implementation: "读取选图清单和PNG，核对SHA-256，通过SystemParametersInfoW和Windows.System.UserProfile.LockScreen设置并回读。PowerShell 7自动转到Windows自带64位Windows PowerShell运行WinRT接口。" },
-    { name: "EmeraldVeil.App", responsibility: "在当前用户桌面等待空闲，显示与收起泡泡", implementation: ".NET 10 Windows WinExe（不弹控制台的应用），WPF（Windows界面框架）承载嵌入背景，托盘提供预览、暂停、登录启动和退出。当前源码与安装版本0.1.27。" },
+    { name: "Set-WindowsBackground.ps1", responsibility: "恢复Windows桌面与系统锁屏图片", implementation: "读取选图清单和PNG，核对SHA-256，通过IDesktopWallpaper与Windows.System.UserProfile.LockScreen设置并回读。PowerShell 7自动转到Windows自带64位Windows PowerShell运行WinRT接口。" },
+    { name: "EmeraldVeil.App", responsibility: "在当前用户桌面等待空闲，显示与收起泡泡", implementation: ".NET 10 Windows WinExe（不弹控制台的应用），WPF（Windows界面框架）承载嵌入背景，托盘提供预览、暂停、登录启动和退出。当前源码0.1.28；安装0.1.27仍是9月9日观察，未在本轮重验。" },
     { name: "EmeraldVeil.Core", responsibility: "区分可靠空闲、活动、暂停和恢复时机", implementation: "IdleTimeline处理计时、回绕与不可靠采样；InputActivityFilter只在内存判断活动；VeilActivationPolicy和VeilModeReconciler决定显示/隐藏及1秒恢复退避。" },
     { name: "NativeBubblesLauncher / VeilWindow", responsibility: "管理原生泡泡进程和两层画面", implementation: "会话租约防止重复启动，Job Object（作业对象）关闭时结束子进程。原生泡泡窗口使用黑色色键透明；不透明的项目背景窗口紧贴其下，两者都不接管用户输入。" },
     { name: "WallpaperEngineQuiescence / ExternalProtectionPause", responsibility: "和已有壁纸、外部黑罩协调", implementation: "唯一识别当前会话wallpaper64，再用同目录wallpaper32控制stop/play；外部暂停只看会话内命名标记是否仍被持有，不识别远程产品或记录输入。" },
@@ -105,7 +106,7 @@ export const emeraldVeilProject = {
   ],
   evidenceLayers: [
     { layer: "手机壁纸仓库备份", proves: "用户明确提供并要求备份的手机PNG在PUBLIC main 5a2f8d7中，路径assets/mobile-wallpaper/emerald-elf-1440x3200.png；远端原文件回读1440×3200、12114553字节，SHA-256=f87bdb1cff2f8885fc80ef02a0edff0eff2c18e76a63af63edca1e1d60c42eed，与输入字节相同。", doesNotProve: "保存图片不代表已经在手机设置为壁纸，网页生成原图与实际使用成品是不同尺寸；本轮未修改手机设置。" },
-    { layer: "源码与历史37项测试", proves: "当前0.1.27源码和手机壁纸备份已回读；37项核心与控制命令回归保留9月8日日期，不作为本次新测试。", doesNotProve: "不启动真实渲染器，不能证明实际泡泡像素、窗口层级、Job Object崩溃清理或完整六分钟自然触发。" },
+    { layer: "源码与历史37项测试", proves: "2026-09-12只读回读0.1.28远端源码及Windows 11兼容差分；手机壁纸备份保留原证据，37项核心与控制命令回归仍为9月8日，不是0.1.28新测试。", doesNotProve: "不启动真实渲染器，不能证明实际泡泡像素、窗口层级、Job Object崩溃清理或完整六分钟自然触发。" },
     { layer: "本机静态图片回读", proves: "0.1.27的Verify确认三块当前显示器与锁屏引用共同持久图片，desktop.matches和逐屏matches为true，锁屏解码平均像素差0。", doesNotProve: "不是实际锁屏目视，也不是第二台电脑上的应用验证；不证明HDR或任意显示器裁剪效果。" },
     { layer: "本机泡泡安装和运行状态", proves: "安装器只读Verify通过，安装版本0.1.27和实际文件大小/哈希已回读；六分钟配置与常驻恢复沿用9月8日实际记录，没有在本轮重新启停。", doesNotProve: "配置与常驻恢复不证明本轮已看到自然触发的泡泡，也不证明原退出原因已根治。" },
     { layer: "真实使用与远端画面", proves: "只有实际看到空闲触发、输入退出和远端连接，才证明对应会话和显示组合的使用结果。", doesNotProve: "本轮未重新执行这些实机操作；设计机制、历史截图或测试数量不能补成当前PASS。" }
@@ -179,7 +180,7 @@ export const emeraldVeilProject = {
     { date: "2026-08-31—09-05", commit: "f243bce", result: "把专属背景、窗口层级维护、Wallpaper Engine初始化协调与外部黑罩让位组合成日常桌面共存方案。" },
     { date: "2026-09-07", commit: "cf77883", result: "保留已认可的青雨静帧，增加Windows桌面/锁屏的独立恢复入口；动态雨幕留在实验中，未接受的猫分层不进入产品。" }
   ],
-  snapshotUpdateNote: "本页于2026-09-09核对0.1.27源码、电脑各屏和锁屏图片、安装版本与手机壁纸备份。37项回归和启用恢复保留9月8日日期；本轮没有重新安装、触发泡泡或进入锁屏。"
+  snapshotUpdateNote: "2026-09-12只读回读0.1.28远端源码并补入Windows 11壁纸和超时兼容；电脑各屏、锁屏、安装版本与手机壁纸仍保留9月9日0.1.27观察，37项回归和启用恢复仍为9月8日。本轮没有安装、触发泡泡或进入锁屏。"
 };
 
 export const emeraldVeilModules = [
@@ -200,12 +201,12 @@ export const emeraldVeilModules = [
     decisionImpact: ["只恢复图片无需安装泡泡或.NET SDK，64位Windows自带PowerShell即可。", "恢复新机器使用项目原图；原电脑的before-first-apply记录只用于撤回原电脑，不是新机器的设置来源。", "脚本不会在后台争抢。以后主动打开Wallpaper Engine的覆盖系统壁纸/锁屏选项可能再改原生图片，需要时按需重跑。"],
     concepts: [
       { term: "雨林黑猫 · 更绿版", explanation: "已选用的3840×2160电脑底图，由1672×941生成原图放大；是sRGB SDR，不宣称恢复了未知细节、HDR或10位输出。" },
-      { term: "持久图片副本", explanation: "复制到%LOCALAPPDATA%\\EmeraldVeil\\windows-background的图，Windows引用它而非可移动的项目目录。" },
+      { term: "持久图片副本", explanation: "Windows显示文件复制到用户图片目录的EmeraldVeil子目录；前像与原图备份仍在%LOCALAPPDATA%\\EmeraldVeil\\windows-background。Windows引用持久图片而非项目目录。" },
       { term: "解码后比较", explanation: "Windows可能重新编码锁屏缓存，脚本比较画面而非只比缓存文件字节，避免编码变化被误判为换图。" }
     ],
     implementation: [
       "读取assets/windows-background.json核对PNG的SHA-256；PowerShell 7或32位宿主转到64位Windows PowerShell，使用系统现成WinRT投影。",
-      "桌面使用SystemParametersInfoW设置共同底图，并通过IDesktopWallpaper清除每屏旧图、读取当前及Windows记忆中的离线显示器。desktop.monitors逐项报告连接状态、图片引用与matches；锁屏使用Windows.System.UserProfile.LockScreen.SetImageFileAsync。它不更改显示器连接、编号或排列。",
+      "桌面统一通过IDesktopWallpaper设置和读取共同底图，清除每屏旧图并核对当前及Windows记忆中的离线显示器；逐屏设置后再次设共同路径，避免单屏覆盖清空共同引用。不再把冗余SystemParametersInfoW设置作为前置条件。desktop.monitors逐项报告连接状态、图片引用与matches；锁屏使用Windows.System.UserProfile.LockScreen.SetImageFileAsync。它不更改显示器连接、编号或排列。",
       "三个每用户选择器BackgroundType、RotatingLockScreenEnabled、SlideshowEnabled都明确设为DWORD 0，以采用固定图片。",
       "首次应用前保存原桌面图（可读取时）、每屏选图、原锁屏图与选择器状态；已有记录仅补入尚未采集的每屏设置，不覆盖原恢复信息。临时写入再移动前像文件，图片引用必须在持久目录且源哈希匹配。",
       "锁屏图像检查宽高比后缩为128×72比较RGB均值，容差为3；本轮实际平均误差0。只有确有漂移才用带哈希前缀和新GUID的文件名重设，避开缓存旧图。"
@@ -302,7 +303,7 @@ export const emeraldVeilModules = [
       "Install默认读取artifacts/publish/win-x64/EmeraldVeil.exe，复制到%LOCALAPPDATA%\\Programs\\EmeraldVeil；使用暂存文件与哈希检查，再设置唯一Emerald Veil Native Bubbles Run值。源码构建目标net10.0-windows。",
       "Set-NativeBubbles保存emerald-veil.native-bubbles-preimage.v2，其中runtime含active/timeout_seconds/secure，registry_values逐项记录受影响值，含enabled与旧启动元数据；兼容v1。",
       "Enable配置360秒、非安全退出、Windows自动触发关闭与项目enabled。它核对已有Run项，不负责安装该项；先安装再启用。",
-      "登录启动时若项目启用，常驻程序修正Windows运行时false/360/false；随后每30秒检查并修正运行时漂移，不重写全部注册表参数。",
+      "登录启动时若项目启用，常驻程序检查保存的REG_SZ超时360及运行active/timeout/secure，每30秒按需修正。仅当active=false时接受运行timeout=0，项目自己的六分钟计时不变；Verify分别输出timeout_seconds、runtime_timeout_seconds与runtime_timeout_effective，不把运行0误报成保存设置错误。",
       "Disable匹配系统路径的原生泡泡进程并停止，清除enabled并维持active=false；Restore停止泡泡后按前像回填相关状态，并在操作失败时尝试恢复本次操作前状态。",
       "不安装通用键盘记录器；输入分类只保留有限内存状态，点击穿透和不激活让普通输入继续送往当前应用。"
     ],

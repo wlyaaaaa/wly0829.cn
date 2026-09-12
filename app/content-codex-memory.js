@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-09T22:08Z",
-  "label": "四套AI工作区分别备份；G会话点已核对，H当前不可用",
-  "boundary": "9月9日22:07—22:08Z只读核对活动源、任务和G小元数据，未打开备份正文或执行备份/恢复。G仍为7016文件、47,388,350,429字节；活动源已到7067文件、48,020,575,000字节，两者不是同一时刻。H当前不可用，本轮不能回读它的点；旧H记录只保留为历史，不能称当前G/H同代。完整会话仅由Codex专线提供，OpenClaw官方归档不含工作区。",
+  "observedAt": "2026-09-12T04:25:15Z",
+  "label": "次机Codex定时备份与USB同点已回读；有隔离读取旧证据，桌面G/H仍为9月9日观察",
+  "boundary": "9月12日正式源码回读及04:27Z次机PCConfig只读状态表明：已安装引擎字节匹配，自然任务返回0，热/USB冷点相同，安全云支路引用一致；本轮未重跑捕获、全对象哈希或恢复。9月10日旧恢复回执证明隔离副本可列出并读取一项任务，未启动新回合。桌面G/H运行证据仍为9月9日22:07—22:08Z，不能用次机结果替它更新；OpenClaw官方归档仍不含工作区。",
   "metrics": [
     {
       "label": "AI工具",
@@ -40,8 +40,20 @@ const baseSnapshot = createProjectSnapshot({
       "value": "定时backup-openclaw.ps1保存config与workspace；backup-config.ps1则调用官方backup create --no-include-workspace --verify，保存含私人状态的官方归档。9月3日224,287,339字节归档和暂存恢复是历史证据；没有自动激活，也没有把工作区暗算进该归档。"
     },
     {
+      "label": "次机安装、自动备份与冷介质",
+      "value": "2026-09-12T04:27Z由PCConfig既有Manage-CodexDataBackup.ps1 Status -ReadOnly回读：ready，已安装来源c7e02a79b7922780eeae37a312d159319422c9ac且文件摘要匹配；09:00原定时任务Ready、最近返回0。热与USB冷点同为20260912T010007Z-79c363c0，323文件、407,005,388字节，readback_verified=true、cold_matches_hot=true。本轮读取既有元数据，未重新哈希全部对象。"
+    },
+    {
+      "label": "次机安全云支路",
+      "value": "同次Owner回读：安全层31文件、266,762字节；backup/secondary-laptop的远端引用dcff123c91b40ab9f9c6ddc5b2a5eea809325011与本地一致。它只保存安全配置投影、规则参考、记忆与自定义技能；该引用不证明云端含原始会话或全部私人配置。"
+    },
+    {
+      "label": "次机恢复副本已有可读证据",
+      "value": "9月10日既存pcconfig.codex-data-restore-test.v1回执为pass，来源点20260910T035042Z-acd75878：验证209个session文件、208条thread记录并重映射208个路径；隔离app-server列出139项，选定任务读到12轮，read_from_isolated_copy=true。未启动新回合、未复制凭据、未输出私人正文，探针与测试副本已清理。本轮只读该旧回执，不升级为登录或新回合续作通过。"
+    },
+    {
       "label": "源版本与本轮修复",
-      "value": "展示合并为AI工作区备份与恢复，现有源仓库与任务分别保留。Codex由PRIVATE（私有）codex-memory拥有，当前本地HEAD=772482dc680120a4c6e859e892eb567327de8b39；相对0f04831只有例行备份载荷，tools与恢复文档无变化。Gemini、Claude和OpenClaw的定时脚本由PUBLIC（公开）OpenClawGateway aa4f9f1390c68605b5d8135f4077967bf86e0708拥有。没有物理合仓、迁移数据或新建调度器。",
+      "value": "Codex由PRIVATE（私有）codex-memory拥有；9月12日04:25Z本地HEAD与真实远端main均为9246a088170bb7f37bd4d2959b170aaa487a6a5f，工作树干净。相对772482d已新增显式主机配置档、安全云投影、冷热点选择与次机有界保留。Gemini、Claude和OpenClaw脚本来源OpenClawGateway的aa4f9f1390c68605b5d8135f4077967bf86e0708也已远端回读，代码未变；四套来源与任务保持独立。",
       "hero": true
     },
     {
@@ -56,7 +68,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "两条备份管道各自保留历史",
-      "value": "轻量备份先把当前选中文件写成本地快照并在 G 盘核验，再同步私有 GitHub。只有复制到私有仓库时启用 ProtectHistory：较小的 memories/raw_memories.md 不覆盖已有大版本，已有 rollout_summaries 文件不被就地覆盖，backup-only 记忆历史保留。当前源快照仍可记录缩小后的文件；大小比较不能判断正文是否正确。",
+      "value": "桌面轻量备份先写当前本地/G快照并核验，再同步私有GitHub；仅桌面仓库复制启用ProtectHistory，保留指定较大raw_memories、已有rollout_summaries与backup-only历史。次机profile保存精确当前选中版本及删除，默认保留2份安全快照；云失败不抹掉已校验的新本地结果，也不推进云成功回执。",
       "hero": true
     },
     {
@@ -66,7 +78,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "去重、校验与保留期限",
-      "value": "会话文件按 SHA-256（安全哈希算法 256 位）存入 CAS（内容寻址存储）对象池，单个对象按内容复用；每个点有 manifest、closure，引用对象校验通过才切换 current.json。会话点与对象只增不自动 GC（垃圾回收）；轻量本地与 G 快照保留 30 份，内容相同的 G 快照复用。两条保留策略不同。",
+      "value": "会话文件按 SHA-256（安全哈希算法 256 位）存入 CAS（内容寻址存储）对象池，单个对象按内容复用；每个点有 manifest、closure，引用对象校验通过才切换 current.json。桌面无 profile（设备配置档）路径的会话点与对象只增不自动 GC（垃圾回收），轻量本地与 G 快照保留 30 份；副驾驶配置档保留当前及前一点，先校验引用闭包再清过期点和无引用对象。内容相同的 G 快照仍复用，设备与备份类型各按自己的保留策略。",
       "hero": true
     },
     {
@@ -84,7 +96,7 @@ const baseSnapshot = createProjectSnapshot({
     "Codex的G是9月9日04:15点；H本轮不可读，9月8日旧点只作为上次观察，不判断当前已追平或仍落后。完整会话只涵盖该专线的选定文件，四套工具并没有共同的全量历史承诺。",
     "本轮只读脚本、任务与小元数据；Codex9月7日合成去重/隔离恢复、OpenClaw既有脚本与官方归档/暂存证据保留原日期。没有重新执行生产VSS、完整对象重验、四套工具的新机恢复或登录。",
     "raw_memories 大小保护仅避免较小当前文件覆盖私有仓库的大版本；同等或更大的错误正文仍需人判断，轻量 G 快照保存的是当次源内容。",
-    "会话对象没有自动清理策略，变化后的大型数据库会形成新对象，长期容量仍会增长。",
+    "桌面无 profile 路径的会话对象没有自动清理策略，大型数据库变化会形成新对象；副驾驶已接入两点保留与无引用对象清理，不能把桌面边界外推到副驾驶。",
     "会话 Restore 先生成文件副本；轻量恢复按文档把配置、记忆和技能放回运行根。两者都不自动注册服务、设置全局环境或恢复登录，新机器是否可用仍需应用层验证。",
     "Gemini与Claude当前没有专用自动还原器，按选定版本及原相对路径恢复文件后，仍要重新核对应用、项目路径与登录；Claude云副本仅Markdown，不能用它代替本地/G中memory目录的全部文件。",
     "Gemini与Claude在云同步阶段会再读当前来源，且Claude的云选择范围更窄；不能把G的SHA-256回读扩成三层同一时刻同一字节。OpenClaw云复制才明确使用已完成的本地/G快照。",
@@ -96,7 +108,7 @@ export const codexMemorySnapshot = Object.freeze({
   ...baseSnapshot,
   ...{
   "generation": "四套AI工作区的分层备份与恢复",
-  "sourceCommit": "772482dc680120a4c6e859e892eb567327de8b39",
+  "sourceCommit": "9246a088170bb7f37bd4d2959b170aaa487a6a5f",
   "sourceRoot": "E:\\Projects\\Backups\\codex-memory",
   "physicalCodexHome": "E:\\Data\\AppData\\Codex",
   "hotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\Codex",
@@ -159,7 +171,7 @@ export const codexMemorySnapshot = Object.freeze({
     {
       "role": "Codex小型状态与完整会话",
       "root": "E:\\Projects\\Backups\\codex-memory",
-      "codeObservation": "tools与恢复文档相对0f04831无变化"
+      "codeObservation": "相对772482d新增次机主机配置档、安全配置投影、独立冷点复制、只读点校验和有界保留；正式main已回读，真实次机部署与恢复另验"
     },
     {
       "role": "Gemini、Claude、OpenClaw定时备份及OpenClaw官方恢复",
@@ -181,7 +193,7 @@ export const codexMemoryProject = {
   "route": "/projects/codex-memory",
   "visibility": "私有仓库",
   "statusTone": "warn",
-  "cardStatus": "四套分别备份 · G会话点已核对、H当前不可用 · 应用恢复分别验收",
+  "cardStatus": "四套分别备份 · Codex新增次机配置档 · 桌面G/H为9月9日观察",
   "cardStatusTone": "warn",
   "searchAliases": [
     "codex-memory",
@@ -251,7 +263,7 @@ export const codexMemoryProject = {
   "readerStates": {
     "pass": "各来源先完成自己的文件选择和本地/G回读，私有Git与H另有结果。恢复后的文件可核对，应用、登录和实际工作继续通过各自验收才称可用。",
     "problem": "某一层网络失败或H落后时保留已经完成的本地/G副本，并说明具体时间与覆盖。旧点可能因内容相同被复用，任务0也不单独证明正文完整或应用可恢复。",
-    "unavailable": "缺少对应来源、专用私有目标或准确配置时停止那一套；Codex会话需要管理员与Execute，恢复拒绝活动根或非空目标，OpenClaw官方恢复要求全新目录。不会改投其他工具的仓库或静默覆盖现役数据。"
+    "unavailable": "缺少对应来源、专用私有目标或准确配置时停止那一套；Codex的VSS捕获需要管理员与Execute，只读校验和隔离恢复不要求旧主机身份。恢复仍拒绝活动根或非空目标，OpenClaw官方恢复要求全新目录，不改投其他工具的仓库。"
   },
   "productPrinciples": [
     {
@@ -260,11 +272,19 @@ export const codexMemoryProject = {
     },
     {
       "title": "配置和对话分别保存",
-      "detail": "小文件适合 Git 版本历史，大体积会话和数据库走本地快照。两条备份可以各自成功或失败，结果分开报告。"
+      "detail": "桌面小文件适合Git版本历史，大体积会话和数据库走本地快照。次机云端只收安全文本投影，完整私有配置与会话走已绑定本地/冷介质；两层可各自成功或失败。安全投影不能代替原始配置无损恢复。"
     },
     {
       "title": "较小记忆不轻易覆盖历史",
-      "detail": "私有仓库保留较大的 raw_memories.md 和已有 rollout_summaries；这是有限的保留规则，不把文件更大当成内容一定更正确。"
+      "detail": "桌面无配置档的私有仓库保留较大的raw_memories.md和已有rollout_summaries，不把更大当成更正确。次机配置档保存当前选中的准确版本，删除会进入最新树；旧版本由Git历史和有限旧点保存，不能把已删内容并回最新恢复。"
+    },
+    {
+      "title": "另一台电脑使用自己的备份配置",
+      "detail": "笔记本复用同一引擎，但由机器负责人绑定自己的物理来源、热存储、冷介质和独立云支路。主机或卷身份不匹配、目录重叠时停止该次写入；不会把桌面E/G/H当成另一台机器的默认目标。"
+    },
+    {
+      "title": "旧点留得有界，最新删除保持有效",
+      "detail": "次机当前点加前一保留点先完整核验，再回收过期点及不被保留点引用的对象。清理与捕获、冷同步串行，校验不成立就不删。旧点仍可选，但最新恢复按最新清单生成，不把源中已删文件重新并入。桌面无配置档不自动套用该策略。"
     },
     {
       "title": "备份时继续工作",
@@ -272,7 +292,7 @@ export const codexMemoryProject = {
     },
     {
       "title": "先恢复副本，再决定启用",
-      "detail": "会话 Restore 只写独立空目录，拒绝活动运行根和备份/状态目录。轻量恢复沿用文档，把选定的小文件副本按相对路径复制回运行根。两种路径都把文件还原与应用实际可用分开验收。"
+      "detail": "会话Restore只写独立空目录，拒绝活动运行根和备份/状态目录。可先只读校验Hot（热存储）或Cold（冷存储）中的指定点。桌面轻量恢复按原路径回填；次机config.safe.json是人工参考，完整配置要选私有恢复点。文件还原、登录和应用可用分别验收。"
     },
     {
       "title": "冷盘未到就明确未完成",
@@ -285,8 +305,8 @@ export const codexMemoryProject = {
   ],
   "responsibilities": [
     "按白名单备份配置、安装技能与记忆，保留私有 Git 的历史记忆并验证远端提交。",
-    "从 E 卷 VSS 副本捕获原始会话、附件和状态，用 CAS 去重写入 G。",
-    "维护点清单、闭包、原子指针与独立 H 校验入口；跨盘复制由已有 PCConfig 冷任务负责。",
+    "桌面从E卷VSS副本捕获会话、附件和状态并去重写G；次机通过自己的主机配置档绑定物理来源卷和热/冷存储，不套用桌面的盘符。",
+    "维护点清单、闭包、原子指针与独立冷校验；现有PCConfig任务拥有调度，共享引擎可追加复制选定完整热备点再验证冷副本。次机配置档另有显式有界保留，桌面不自动套用。",
     "将选定会话点还原到独立空目录，核验文件而不替换活动应用。",
     "复用现有3个轻量计划任务承载4套备份，Codex完整会话与PCConfig冷同步各有既有任务；不增加统一服务或另一个写入者。",
     "分别保存Gemini配置与可读成果、Claude项目记忆、OpenClaw配置和工作区；保持选择范围、保留策略与恢复位置可追溯。"
@@ -368,7 +388,7 @@ export const codexMemoryProject = {
     {
       "name": "g-hot-snapshot.ps1",
       "responsibility": "当前小文件快照与 G 回读",
-      "implementation": "Publish-GHotSnapshot 计算清单与 SHA-256，复用相同快照、更新 ai-memory.g-hot-current.v1 指针；本地与 G 轻量快照保留 30 份。"
+      "implementation": "Publish-GHotSnapshot计算清单与SHA-256，复用相同快照并更新ai-memory.g-hot-current.v1指针；桌面保留30份，次机配置档保留当前及前一份。先完成并核对本地热快照，再尝试云端同步。"
     },
     {
       "name": "Invoke-CodexConversationBackup.ps1",
@@ -425,13 +445,31 @@ export const codexMemoryProject = {
       "artifact": "校验、恢复和运行进度",
       "schema": "codex.conversation-backup.validation.v1 / codex.conversation-backup.receipt.v1 / codex.conversation-backup.progress.v1",
       "owner": "Invoke-CodexConversationBackup.ps1",
-      "boundary": "Validate 读取并哈希对象，同时写本地进度；Restore 需要 -Execute，目标不能是活动根或备份/状态根及其子目录，已有目标必须为空且不是 reparse point。"
+      "boundary": "Validate读取并哈希指定Hot或Cold点；加-ReadOnly不写进度且无需提权。Restore需要-Execute与显式空目录，拒绝活动根、备份/状态根及其子目录和reparse point（重解析点）；旧主机身份不是只读核验和隔离恢复的前提。"
     },
     {
       "artifact": "H 冷备",
       "schema": "cold-payload + H current.json + cold-last.json",
       "owner": "PCConfig AIRecoveryColdSync-Daily / 本项目 FinalizeCold",
       "boundary": "已有冷任务负责增量复制；H 上闭包与对象校验通过才发布 H 指针，不直接复制 G 指针。H 不可用不等于最新冷备完成。"
+    },
+    {
+      "artifact": "Codex次机主机配置档",
+      "schema": "codex.memory-backup.profile.v1 / codex.conversation-backup.profile.v1",
+      "owner": "backup-codex-memory.ps1 / Invoke-CodexConversationBackup.ps1；机器绑定由PCConfig管理",
+      "boundary": "显式-ConfigPath绑定主机、用户、物理Codex根、独立hot/cold/state路径与卷唯一ID。轻量云支路必须为backup/<profile_id>并保持纯数据；会话profile不能同时覆盖CodexHome/HotRoot/ColdRoot/StateRoot/PCConfigManifestPath。"
+    },
+    {
+      "artifact": "次机安全配置与回执",
+      "schema": "codex.safe-config-projection.v1 / codex.memory-backup.manifest.v1 / codex.memory-backup.receipt.v1",
+      "owner": "project-safe-codex-config.py / backup-codex-memory.ps1",
+      "boundary": "Python3.11+标准库解析TOML，只保留已允许字段，未知内容仅列omitted_key_paths；残余疑似秘密使投影失败。清单保留原/备份相对路径、restore_mode、length及sha256；完整成功回执须本地热快照已核验且新读远端引用等于HEAD。"
+    },
+    {
+      "artifact": "次机会话点有界清理",
+      "schema": "codex.conversation-backup.receipt.v1；mode=prune",
+      "owner": "Invoke-CodexConversationBackup.ps1",
+      "boundary": "Prune需profile及-Execute，KeepPoints范围2–1000、默认2。先核验当前和保留点、标准目录形态与未变指针，再删除过期点及未引用对象；与Hot/SyncCold互斥。回执给删除点/对象数与字节，不重写current指针。"
     },
     {
       "artifact": "Gemini/Claude/OpenClaw路径适配",
@@ -449,7 +487,7 @@ export const codexMemoryProject = {
   "evidenceLayers": [
     {
       "layer": "当前源与文档修复",
-      "proves": "Codex本地源码参考772482d，相对0f04831的tools与恢复文档未变；OpenClawGateway公开源码aa4f9f1提供Gemini、Claude、OpenClaw三套现役脚本。VSS会话、白名单、对象池、官方归档和各自恢复入口均由原来源实现。",
+      "proves": "Codex正式main=9246a08，9月12日远端回读一致；次机主机配置档、安全云投影、额外私有配置捕获、冷点复制及有界清理已有源码与对应合成测试实现。OpenClawGateway正式main=aa4f9f1未变，继续提供其他三套脚本；本轮未运行这些测试。",
       "doesNotProve": "源码和文档不证明本轮又执行过生产备份或应用恢复。"
     },
     {
@@ -507,12 +545,27 @@ export const codexMemoryProject = {
     {
       "name": "完整核验最新 G 点",
       "command": "pwsh -NoProfile -File .\\tools\\Invoke-CodexConversationBackup.ps1 -Mode Validate -Json",
-      "purpose": "逐一读取哈希对象；不改备份对象，但会写本地 validate-progress.json。"
+      "purpose": "逐一读取指定点的哈希对象；默认写本地validate-progress.json，加-ReadOnly则不写进度。可用-PayloadStore Cold选择冷副本，不因指针存在就跳过完整核验。"
     },
     {
       "name": "恢复到空目录",
       "command": "pwsh -NoProfile -File .\\tools\\Invoke-CodexConversationBackup.ps1 -Mode Restore -PointId latest -DestinationRoot <专用空目录> -Execute -Json",
       "purpose": "核验点后恢复原目录与文件名，再校验结果；不切换活动应用。"
+    },
+    {
+      "name": "次机安全文本备份",
+      "command": "pwsh -NoProfile -File .\\tools\\backup-codex-memory.ps1 -ConfigPath <memory-profile.json> -ReceiptPath <receipt.json>",
+      "purpose": "使用机器负责人已绑定的配置档，先形成本地已验快照，再更新独立安全云支路；这是实际备份入口，网页刷新不执行。"
+    },
+    {
+      "name": "只读核验指定冷点",
+      "command": "pwsh -NoProfile -File .\\tools\\Invoke-CodexConversationBackup.ps1 -ConfigPath <conversation-profile.json> -Mode Validate -PayloadStore Cold -ReadOnly -Json",
+      "purpose": "逐对象哈希核对完整冷点，不写进度。恢复时可换为-Mode Restore并指定新的空目录与-Execute；不要求旧主机身份，仍须先识别真实介质路径。"
+    },
+    {
+      "name": "次机冷复制与有界保留",
+      "command": "在既有PCConfig入口使用SyncCold；需要明确清理时调用-Mode Prune -PayloadStore Hot|Cold -KeepPoints 2 -Execute并提供同一-ConfigPath",
+      "purpose": "SyncCold追加并核验完整点后最后发布冷指针；Prune仅清理过期点和保留点不再引用的对象。两者都是实际写入，由已有机器Owner调度或精确调用，不因网页检查自动执行。"
     },
     {
       "name": "Gemini选择预检",
@@ -550,7 +603,7 @@ export const codexMemoryProject = {
     },
     {
       "term": "小文件不覆盖大文件",
-      "meaning": "本项目只对私有仓库 memories/raw_memories.md 实施大小保留，不是所有文件、所有备份层的通用完整性保证。"
+      "meaning": "桌面无profile路径仅对私有仓库memories/raw_memories.md实施大小保留；次机配置档保存当前选中版本。这不是所有文件、备份层的通用完整性保证。"
     },
     {
       "term": "fail-closed（失败关闭）",
@@ -575,7 +628,7 @@ export const codexMemoryProject = {
       "result": "Git 临时传输失败支持读取当时系统代理并按 30/120/300/900 秒间隔有限重试，不固定代理端口。"
     }
   ],
-  "snapshotUpdateNote": "四套现有备份在同一页说明，codex-memory的稳定网址保留。来源脚本与有界状态按9月9日观察，旧Codex测试、规模和OpenClaw官方归档保留原日期；不因展示合并创建新的仓库、服务或自动恢复承诺。",
+  "snapshotUpdateNote": "9月12日合并Codex正式源码的次机配置档、安全投影、独立冷点复制、只读校验与有界保留；主电脑运行数、旧测试与OpenClaw官方归档保留各自原日期。次机9月12日安装、自然备份、云支路和USB同点由PCConfig回读，隔离任务读取保留9月10日回执；未验新回合续作。原四套仓库与任务保持独立。",
   "dataSources": {
     "title": "具体保存什么，分别放在哪里",
     "intro": "按工具取最小充分的恢复材料，实际来源根各由本机配置与所属项目解析。规范规则和个人能力仍归E:\\.agents，应用状态和备份结果分别归自己的Owner（负责人）。",
@@ -583,12 +636,12 @@ export const codexMemoryProject = {
       {
         "source": "Codex 规则、配置、安装技能与记忆文件",
         "data": "AGENTS.md、config.toml、version.json、Chrome 原生宿主配置、browser/computer-use 配置、选定 vendor_imports、memories 和 skills。",
-        "result": "当前源快照写入本地与 G；私有 Git 历史另保留较大的 raw_memories 和已存在的 rollout_summaries。"
+        "result": "桌面当前源快照写本地与G，私有Git另保留指定历史。次机云支路仅收global-policy.md、config.safe.json、agent-definitions、选定memories及custom-skills；未知配置只记录被省略的字段路径，完整私有配置由本地恢复点承担。"
       },
       {
         "source": "Codex 原始会话和应用状态",
         "data": "sessions、archived_sessions、thread backups、附件、听写历史、会话 JSONL 索引、非诊断日志 SQLite 数据、生成图片/visualizations 和自动化状态；排除 reparse point、auth、cache、plugins、worktrees 和诊断日志数据库。",
-        "result": "从同一次 E 卷 VSS 快照取数，按文件内容写入 G 的对象池并生成恢复点；不推送 GitHub。"
+        "result": "桌面从同次E卷VSS取数写G对象池。次机从配置档绑定的物理卷取数，额外纳入选定config.toml、agents、memories、skills及浏览器/电脑工具配置；不含auth和安装身份，不推送GitHub，也不是整个运行根镜像。"
       },
       {
         "source": "备份清单、指针与任务状态",
@@ -620,15 +673,15 @@ export const codexMemoryModules = [
     "slug": "config-memory-whitelist-sync",
     "shortTitle": "白名单与防截断",
     "title": "Codex配置、技能和记忆的白名单备份",
-    "subtitle": "当前源快照与私有仓库历史分别维护",
+    "subtitle": "桌面历史保留与次机安全文本投影分别维护",
     "teaser": "备份小文件，保留历史记忆，并核对私有 Git 推送",
     "order": 1,
-    "status": "9月7日白名单/G快照/Git分支回归通过；9月8日日常轻量任务最近返回0",
+    "status": "9月12日次机已安装字节、安全层31文件与独立云引用已回读；旧桌面测试保留原日期",
     "statusTone": "accent",
     "relation": "负责配置、安装技能和记忆文件；长期规则的规范源仍是 E:\\.agents。",
     "value": "把选定的小文件保存在 G 快照与私有 Git 历史里。需要恢复配置或找旧记忆时有明确版本，不把庞大会话库混进这条链。",
     "why": "配置和记忆小、适合版本对比；会话数据库大且持续变化，需要另一条快照路径。保留分工可避免某一条链失败时误报全部完成。",
-    "example": "我今天改了 Codex 设置，晚间任务先保存当次源文件，再更新私有仓库。若 raw_memories 变小，仓库保留旧大版本并在日志注明；G 当次快照仍记录当前源内容。",
+    "example": "我说“这台笔记本也要备份Codex，别混进主电脑”。先使用机器负责人绑定的主机配置档，安全配置和记忆进入独立云支路，完整私有配置留在本地恢复层。云网络失败时，本轮已校验的新本地点仍可使用，但不会报告云端成功。桌面原有raw_memories历史保留继续独立生效。",
     "result": "得到当次源快照、带历史保留的小文件仓库和独立 Git 远端回读。换机或重装需要还原这些内容时，按相对路径将选定的配置、memories 和 skills 复制回实际 CODEX_HOME，排除 .git、tools、.local-snapshots、logs；文件放回不等于登录和应用使用已验收。",
     "problem": "避免把数据库/缓存塞入 Git，同时减少较小 raw_memories 覆盖私有历史的风险。",
     "readerStates": {
@@ -645,15 +698,15 @@ export const codexMemoryModules = [
     "implementation": [
       "轻量恢复沿用 README.md Restore 的手工复制说明：从选定私有仓库版本恢复相对路径到实际物理 CODEX_HOME，排除 .git、tools、.local-snapshots、logs。这个路径没有会话恢复器的活动根阻断；覆盖前先核对当前目标与选定版本。",
       "Copy-SelectedFiles 第一次写 .local-snapshots 不带 ProtectHistory，随后 Publish-GHotSnapshot 写 G 并回读。",
-      "复制到仓库时才用 ProtectHistory：较小 raw_memories 不覆盖，已有 rollout_summaries 不覆盖，backup-only 记忆不删。",
-      "本地/G 轻量快照保留 30 份，相同 G 内容复用；会话对象池的只增策略不适用于此处。",
-      "Get-CurrentSystemGitProxyUri 仅为当前 Git 调用读取系统代理；NetworkRetryDelaysSeconds 为 30/120/300/900 秒。"
+      "桌面复制到仓库时才用ProtectHistory：较小raw_memories和已有rollout_summaries不覆盖，backup-only记忆不删。次机配置档精确保存当前白名单及删除，不启用这条历史并入规则。",
+      "桌面本地/G轻量快照保留30份，相同内容复用。次机profile（主机配置档）保留2份安全快照，精确暂存本轮输出及删除；与profile会话点的显式Prune（清理）分别管理。",
+      "Get-CurrentSystemGitProxyUri只为当前Git调用读取系统代理，不持久化端口；桌面重试为30/120/300/900秒，次机配置档默认2/5秒并从首次网络请求使用当前系统代理。"
     ],
     "flow": [
-      "解析登记 E 盘来源，按白名单挑选文件。",
+      "桌面解析登记E盘来源；次机显式-ConfigPath验证主机、用户、现存物理Codex根与backup/<profile_id>支路，再按各自白名单选文件。",
       "把当前文件写成本地快照、G 快照并核验。",
-      "复制到私有仓库时实施历史保留，移除已被跟踪但违反白名单的运行缓存。",
-      "fetch 检查分支，behind/diverged 停止提交与推送；G 已完成的快照仍保留。",
+      "本地热快照先核验，随后检查Git远端状态；桌面仓库实施历史保留，次机用精确输出集更新专用数据支路；并发已暂存内容会使本次操作停止。",
+      "fetch检查分支，behind/diverged或云端网络失败时停止对应云动作，已校验的新本地热快照保留；只有fresh remote（新读远端引用）匹配HEAD才更新次机完整成功回执。",
       "有实质变更才提交；已有本地超前提交即使无新文件变化也推送，ls-remote 必须与 HEAD 一致。"
     ],
     "concepts": [
@@ -667,7 +720,7 @@ export const codexMemoryModules = [
       }
     ],
     "boundaries": [
-      "2.53 MiB/243 文件是9月8日源清单，没有 5MB 或 2.5MB 永久限制。",
+      "2.53 MiB/243文件是9月8日桌面清单，不是其容量上限。次机安全云投影另有明确准入：允许文本扩展名、单文件至多5MiB、总选中文件至多25MiB；完整私有恢复层不因此被视为云端已保存。",
       "大小比较只保护指定记忆文件的私有仓库副本，不能判断等大/更大正文正确性。",
       "auth.json 与原始会话不在白名单；文件名过滤不等于自动检查所有正文里的秘密。"
     ],
@@ -693,11 +746,15 @@ export const codexMemoryModules = [
       {
         "path": "tools\\test-codex-memory-backup.ps1",
         "role": "白名单准入、黑名单剔除与 Git 边界回归测试"
+      },
+      {
+        "path": "tools\\project-safe-codex-config.py",
+        "role": "次机TOML安全投影；未知字段不进入云配置参考"
       }
     ],
     "verification": [
       "9月7日两个版本的备份调用和本地 fixture（合成输入）验证通过：G 快照、ahead-clean、behind、diverged、push-rejected、post-receive-rewind。",
-      "9月8日08:16Z的DryRun为243文件、2,656,388字节；没有触发新生产备份。"
+      "9月8日08:16Z桌面DryRun为243文件、2,656,388字节。次机9月12日Owner回读安全层31文件、266,762字节及独立云支路引用一致；本轮未触发新生产备份。"
     ],
     "searchAliases": [
       "轻量白名单同步",
@@ -734,12 +791,12 @@ export const codexMemoryModules = [
     "slug": "vss-conversation-hot-backup",
     "shortTitle": "VSS会话热备",
     "title": "Codex运行期会话快照与 G 热备",
-    "subtitle": "从登记 E 卷的 VSS 副本捕获会话及状态",
+    "subtitle": "从各自主机配置绑定的物理卷捕获会话及状态",
     "teaser": "继续使用 Codex，也能形成明确时间的会话备份点",
     "order": 2,
     "status": "9月9日22:07Z G点7016文件/44.13GiB，H当前不可读；只读元数据，没有重抓生产VSS",
     "statusTone": "accent",
-    "relation": "负责原始对话、附件、生成图像和应用状态，与轻量配置备份分开。",
+    "relation": "负责原始对话、附件、生成图像和应用状态。桌面与轻量配置分线；次机profile额外纳入选定私有配置、agents、memories和skills，云端安全投影仍独立。",
     "value": "不强制关闭 Codex，从同一卷影副本采集会话数据，并把已校验文件组成一个可恢复点。 同时触发第二次热备时会明确拒绝重复运行；上次卷影清理没有完成时先保留问题，不继续创建更多快照。",
     "why": "活动目录中的数据库、WAL、索引会同时变化，直接逐个复制可能时点不齐，也可能遇到共享冲突。VSS 提供时间点视图，但仍须标明崩溃一致性。",
     "example": "我继续写代码，已有夜间任务从 E 卷创建 VSS 副本，把新增或变化文件写入 G 对象池。只有点和对象校验通过，current 才指向新点；快照之后新增的对话要等下一次。",
@@ -754,7 +811,7 @@ export const codexMemoryModules = [
       "捕获语义明确为 vss_crash_consistent，不能升级为数据库事务和应用全部正常。",
       "覆盖 sessions、archived_sessions、thread backups、attachments、dictation、状态数据库、会话索引、生成图像/visualizations 与自动化状态。",
       "排除诊断日志库、临时缓存、插件、worktrees 和 auth，不为日志体积增大扩大备份范围。",
-      "G 是登记、已解锁的完整 BitLocker 加密卷；文件写入是否成功另做哈希回读。"
+      "桌面G是登记、已解锁的完整BitLocker加密卷；次机profile核对自己的来源/热/冷卷唯一身份、所需加密状态及路径隔离。主机不匹配、介质不符或目录重叠时停止，不写到桌面默认路径。"
     ],
     "implementation": [
       "Hot使用Global\\CodexConversationBackupV1互斥锁并立即尝试取得；已有运行返回conversation_backup_already_running。创建VSS前检查vss-active.json，创建后登记准确shadow_id与卷；finally只清除此卷影及匹配记录，清理失败继续报错，并释放本次互斥锁。",
@@ -811,7 +868,7 @@ export const codexMemoryModules = [
     ],
     "verification": [
       "9月9日22:07Z G点为7016文件、47388350429字节，H当前不可用；05:05Z的H为9月8日6898文件点仅作历史，本轮未重验全部对象。",
-      "9月7日三个人工点验证去重和文件恢复，9月8日任务规格回读 matches_spec=true；不把这些当作本轮生产 VSS 或应用恢复证据。"
+      "9月7日三个人工点及9月8日任务规格为旧桌面证据。次机9月12日PCConfig只读回执为已安装字节匹配、自然任务0、热/USB冷点相同323文件；本轮未重新创建VSS或哈希全部对象。"
     ],
     "searchAliases": [
       "VSS热快照",
@@ -852,7 +909,7 @@ export const codexMemoryModules = [
     "order": 3,
     "status": "9月7日合成去重/恢复保留通过；9月9日G已有新点，H保留上一点，不冒充同代",
     "statusTone": "accent",
-    "relation": "负责 G/H 会话数据的存储与核验，跨盘复制由已有 PCConfig 冷任务执行。",
+    "relation": "负责会话点的存储与核验；PCConfig拥有既有跨盘调度，引擎的FinalizeCold/SyncCold可追加复制完整热备点，再独立校验冷点。次机profile另有明确的有界清理。",
     "value": "相同内容只存一份，每个历史点保留自己的文件清单；H 在可用时独立校验，避免复制了指针却没有完整对象。",
     "why": "重复保存未变化的大文件会浪费空间。文件内容寻址能复用相同对象，但数据库一旦变化会产生新对象，容量仍增长。",
     "example": "两次快照引用同一张附件图片时复用同一对象。H 未连接时冷任务按设计跳过；连接后等现有调度或明确执行同步，先复制 cold-payload，再验证 H 闭包并发布 H 指针。",
@@ -866,14 +923,14 @@ export const codexMemoryModules = [
     "decisionImpact": [
       "去重粒度是完整文件；相同字节复用，变化后的大数据库会占新空间。",
       "点清单发布后不由正常备份就地修改，哈希用于检出差异，不是对所有损坏的免疫保证。",
-      "会话对象/点没有自动 GC；轻量快照的 30 份保留是另一条策略。",
+      "桌面无profile路径没有自动GC（对象回收）。次机配置档可显式Prune，默认保留当前及前一完整点，只删除过期点和不被保留点引用的对象；不会把已删源文件并回最新恢复。",
       "H 不可用时跳过；连接介质本身不会新增即时触发器。"
     ],
     "implementation": [
       "Get-ObjectPath 使用 SHA-256 哈希前两位分目录，其余哈希定位对象。",
       "Test-CodexConversationPoint 核对 schema、清单/闭包哈希、计数/字节和每个独有对象。",
-      "Validate 范围是选定点引用的对象，不是全盘检查；它写本地进度但不修改对象。",
-      "FinalizeCold 在 H 独立哈希全部引用对象，通过后才写 H current.json 与 cold-last.json。"
+      "Validate范围是选定Hot或Cold点引用的对象，不是全盘检查；默认写本地进度，-ReadOnly则不写进度，两者均不修改对象。",
+      "FinalizeCold/SyncCold先核验热备点，追加或复用其所需对象及点文件，再在冷存储独立哈希，清单和闭包一致才最后发布cold current.json与cold-last.json；较新捕获失败不妨碍复制已有完整旧点。"
     ],
     "flow": [
       "按完整文件内容算 SHA-256。",
@@ -893,7 +950,7 @@ export const codexMemoryModules = [
       }
     ],
     "boundaries": [
-      "会话对象只增会持续占空间，容量是现实边界。",
+      "桌面无profile的会话对象只增，容量仍是现实边界；次机Prune仅适用于匹配的已绑定存储，保留点先完整验证，目录形态、指针或清单变化则拒绝清理。",
       "H 写入阶段允许存在尚未完成的复制，只有全部校验完成才把指针设为可用；不是“任何半成品都不会写盘”。"
     ],
     "failures": [
@@ -921,7 +978,7 @@ export const codexMemoryModules = [
       }
     ],
     "verification": [
-      "9月7日三个人工点的dedup_verified与restore_verified均为true，代码输入未变化。",
+      "9月7日三个人工点的dedup_verified与restore_verified均为true，仅作旧测试证据；9月12日正式源码已新增冷点复制与profile清理，本轮未运行新测试或生产对象核验。",
       "9月8日曾读回G/H相同点、清单/闭包哈希与06:44Z正式cold完成回执；9月9日22:07Z G仍为新点，H当前不可用，当前点未知。本轮只读元数据，没有重新哈希全部生产对象或执行冷同步。"
     ],
     "searchAliases": [
@@ -929,7 +986,7 @@ export const codexMemoryModules = [
       "CAS会话去重",
       "不可变闭包清单",
       "H盘冷备管道",
-      "纯增量零GC"
+      "桌面增量存储与次机有界回收"
     ],
     "searchProjection": {
       "intents": [
@@ -961,10 +1018,10 @@ export const codexMemoryModules = [
     "subtitle": "点校验、文件还原与当前环境分别处理",
     "teaser": "保留现在的 Codex，先检查历史文件副本",
     "order": 4,
-    "status": "合成点隔离文件恢复与任务规格验证通过；未做新机器应用验收",
+    "status": "9月10日次机隔离副本可列任务并读12轮；未启动新回合，9月12日只读旧回执",
     "statusTone": "accent",
     "relation": "把选定会话点重建为可检查的文件副本，不自动切换或启动恢复后的 Codex。",
-    "value": "找回历史对话时，先还原到空目录，保留正在使用的 Codex。要恢复配置、记忆和技能，则使用单独的小文件复制说明放回运行根；两条恢复路径有不同输入和写入范围。",
+    "value": "找回历史对话时，先选热或冷存储中的完整点，还原到空目录，保留正在使用的Codex。次机也可从私有点找回选定原配置；云端config.safe.json只供人工参考，global-policy.md需按恢复映射处理。先核对文件再决定应用启用。",
     "why": "直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场并明确恢复结果。",
     "example": "我指定 -PointId latest 和一个专用空目录，执行 -Mode Restore -Execute。工具先验证完整点，随后按原路径还原并回读文件；耗时受对象数量、体积和磁盘速度影响。",
     "result": "会话 Restore 返回明确点位的目录树与恢复回执，不覆盖活动 CODEX_HOME。轻量恢复则按文档将 config.toml、memories 和 skills 等选定小文件放回运行根。两者都需要进一步确认应用能否使用；合成会话恢复为9月7日证据，本次只重读状态。",
@@ -978,13 +1035,13 @@ export const codexMemoryModules = [
       "Restore 要求 -Execute 与显式 DestinationRoot。",
       "拒绝当前活动根及子目录、Hot/Cold/State 根及子目录；已有目录须为空且非 reparse point。",
       "先完整核验点，再写目标文件，写后核验；未完成的目标不能算恢复成功。",
-      "日常调度仍是原有两任务：轻量 20:05/22:05、会话 21:15，通过 VBS 隐藏启动。"
+      "桌面仍由原有轻量20:05/22:05与会话21:15任务经VBS隐藏启动。次机配置、安装与既有隐藏调度归PCConfig的Manage-CodexDataBackup.ps1，不在备份引擎另建服务。"
     ],
     "implementation": [
       "Resolve-PointId 选择指定点或 latest，Test-CodexConversationPoint 校验点与对象。",
-      "Invoke-RestorePoint 拒绝受保护目标，验证后重新读取 manifest 防止读入变化。",
+      "Invoke-RestorePoint拒绝受保护目标，验证后重读manifest防止读入变化。只读校验及隔离恢复不要求旧主机身份；仍须现场确定实际介质路径并保持目录隔离，不能把原盘符当成新机已绑定。",
       "Copy-ObjectToFile 按清单恢复原始相对路径与内容并校验。",
-      "恢复进度写本地 restore-progress.json，采用 codex.conversation-backup.progress.v1。"
+      "恢复进度写本地restore-progress.json，采用codex.conversation-backup.progress.v1；返回includes_configuration明确该点是否包含profile私有配置。不会把配置文件存在等同登录或新回合续作。"
     ],
     "flow": [
       "提供点位、空目标和 -Execute。",
@@ -1004,8 +1061,8 @@ export const codexMemoryModules = [
       }
     ],
     "boundaries": [
-      "会话 Restore 只重建本点纳入的文件；不恢复轻量管道全部配置，不安装程序/注册服务/设置全局变量。",
-      "新机器仍需重新登录并验证 Codex 能读恢复内容；本轮没有这项 E2E（端到端）结果。"
+      "Restore只重建选中Hot或Cold点纳入的文件；桌面点不包含轻量管道全部配置，次机profile可含选定私有配置。它不安装程序、注册服务、设置全局变量或恢复登录；安全云投影也不能原样替代config.toml。",
+      "次机9月10日旧回执证明隔离副本可列出139项任务并读选定任务12轮；未复制凭据或启动新回合。当前新机登录、新回合续作仍未验，不用文件可读替代全部E2E（端到端验证）。"
     ],
     "failures": [
       {

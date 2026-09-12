@@ -124,3 +124,78 @@ test("AI refresh evidence accepts bounded declared collectors and requires recei
     await rm(tempRoot, { recursive: true, force: true });
   }
 });
+
+test("AI refresh all closure retains unrequested manual snapshots without claiming fresh source evidence", async () => {
+  const plan = JSON.parse(execFileSync(process.execPath, [planner, "--all"], {
+    cwd: projectRoot,
+    encoding: "utf8",
+    windowsHide: true
+  }));
+  const bundle = unchangedBundle(plan);
+  bundle.mode = "all";
+  bundle.projects = plan.selected_projects.map((item) => {
+    const result = unchangedBundle({ ...plan, selected_projects: [item] }).projects[0];
+    result.collectors = [];
+    if (item.refresh_mode === "manual_owner_only") {
+      Object.assign(result, {
+        retained_manual_snapshot: true,
+        manual_owner_request: false,
+        source_fingerprint: null,
+        observed_at: item.observed_at,
+        reason: "retained the previous website snapshot without reading or refreshing its source"
+      });
+    }
+    return result;
+  });
+  bundle.source_deltas = plan.selected_projects.map((item) => ({ ...structuredClone(bundle.source_deltas[0]), project_id: item.id }));
+  const manualIndex = bundle.projects.findIndex((item) => item.retained_manual_snapshot === true);
+  const automaticIndex = bundle.projects.findIndex((item) => item.retained_manual_snapshot !== true);
+  assert.ok(manualIndex >= 0 && automaticIndex >= 0);
+  const tempRoot = await mkdtemp(path.join(tmpdir(), "wly-ai-refresh-retained-"));
+  const bundlePath = path.join(tempRoot, "bundle.json");
+  try {
+    const accepted = await verify(bundlePath, bundle);
+    assert.equal(accepted.status, 0, accepted.stdout);
+    assert.equal(JSON.parse(accepted.stdout).project_count, plan.selected_projects.length);
+
+    const omittedRequests = structuredClone(bundle);
+    delete omittedRequests.manual_owner_request;
+    for (const item of omittedRequests.projects.filter((item) => item.retained_manual_snapshot)) delete item.manual_owner_request;
+    const omittedAccepted = await verify(bundlePath, omittedRequests);
+    assert.equal(omittedAccepted.status, 0, omittedAccepted.stdout);
+
+    const cases = [
+      ["missing retention marker", (value) => { delete value.projects[manualIndex].retained_manual_snapshot; }, /bundle_manual_owner_request_missing/],
+      ["automatic project marked retained", (value) => { value.projects[automaticIndex].retained_manual_snapshot = true; }, /bundle_retained_manual_project_invalid/],
+      ["changed manual project", (value) => { value.projects[manualIndex].status = "changed"; }, /bundle_retained_manual_status_invalid/],
+      ["blocked manual project", (value) => { value.projects[manualIndex].status = "blocked"; }, /bundle_retained_manual_status_invalid/],
+      ["bundle request conflicts with retention", (value) => { value.manual_owner_request = true; }, /bundle_retained_manual_bundle_request_invalid/],
+      ["project request conflicts with retention", (value) => { value.projects[manualIndex].manual_owner_request = true; }, /bundle_retained_manual_project_request_invalid/],
+      ["content drift", (value) => { value.projects[manualIndex].old_content_sha256 = "0".repeat(64); }, /bundle_retained_manual_content_drift/],
+      ["semantic revision drift", (value) => { value.projects[manualIndex].old_semantic_revision -= 1; }, /bundle_retained_manual_semantic_drift/],
+      ["materiality claim", (value) => { value.projects[manualIndex].material = true; }, /bundle_retained_manual_change_claimed/],
+      ["semantic change claim", (value) => { value.projects[manualIndex].semantic_change = true; }, /bundle_retained_manual_change_claimed/],
+      ["collector claim", (value) => { value.projects[manualIndex].collectors = [{ command: plan.selected_projects[manualIndex].collectors[0], status: "pass", duration_seconds: 0.1 }]; }, /bundle_retained_manual_collectors_present/],
+      ["receipt claim", (value) => { value.projects[manualIndex].collector_receipts = [{ id: "unrequested-evidence" }]; }, /bundle_retained_manual_receipts_present/],
+      ["fabricated source fingerprint", (value) => { value.projects[manualIndex].source_fingerprint = sha256("unread source"); }, /bundle_retained_manual_source_fingerprint_invalid/],
+      ["missing explicit null source fingerprint", (value) => { delete value.projects[manualIndex].source_fingerprint; }, /bundle_retained_manual_source_fingerprint_invalid/],
+      ["manual attribution to a global surface", (value) => { value.source_deltas[manualIndex].affected_surfaces = [plan.global_surfaces[0].id]; }, /bundle_retained_manual_affected_surfaces_present/]
+    ];
+    for (const axis of ["product", "technical"]) {
+      for (const bucket of ["added", "changed", "retired"]) {
+        cases.push([`${axis} ${bucket} source claim`, (value) => {
+          value.source_deltas[manualIndex][axis][bucket] = [{ summary: "unrequested source conclusion", evidence: "no source observation was authorized" }];
+        }, /bundle_retained_manual_semantic_delta_present/]);
+      }
+    }
+    for (const [label, mutate, expected] of cases) {
+      const invalid = structuredClone(bundle);
+      mutate(invalid);
+      const rejected = await verify(bundlePath, invalid);
+      assert.notEqual(rejected.status, 0, `${label}: ${rejected.stdout}`);
+      assert.match(rejected.stdout, expected, label);
+    }
+  } finally {
+    await rm(tempRoot, { recursive: true, force: true });
+  }
+});

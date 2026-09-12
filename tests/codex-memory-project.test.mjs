@@ -100,9 +100,9 @@ test("codex-memory distinguishes current source inventory from the published bac
   assert.notEqual(codexMemoryProject.conversationFileCount, codexMemoryProject.liveSourceFileCount);
   const hotEntry = codexMemoryProject.operationalEntrypoints.find((item) => item.command.includes("-Mode Hot"));
   assert.ok(hotEntry && hotEntry.command.includes("-Execute"), "real Hot capture requires the source execution switch");
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /未打开备份正文或执行备份\/恢复/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /本轮未重跑捕获、全对象哈希或恢复/);
   assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, false);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /G仍为7016文件[\s\S]*活动源已到7067文件[\s\S]*H当前不可用/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /桌面G\/H运行证据仍为9月9日[\s\S]*不能用次机结果替它更新/);
 });
 
 test("codex-memory explains core safety rules without marketing riddles", () => {

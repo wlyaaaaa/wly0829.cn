@@ -565,7 +565,7 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "副驾驶恢复胶囊与每周巡检",
       focus: "检查备用笔记本的恢复说明、已选文件、本地副本和 U 盘胶囊，确认换机或重装时知道从哪里恢复。",
-      process: "笔记本每天 09:00、21:00 检查是否到期，本地和 U 盘各按 7 天周期更新；每周一 10:00（北京时间）由 AI 只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。",
+      process: "笔记本每天 09:00、21:00 检查：普通恢复胶囊按 7 天周期；独立 Codex 历史按 12 小时周期形成本地恢复点并向在场 U 盘复制，各保留当前和前一份。每周一 10:00（北京时间）AI 只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。",
       delivery: "只有新的可行动问题才通知，说明影响、最近可用世代和该怎样处理；正常未插 U 盘不当故障。本地与 U 盘各自保留成功时间和覆盖范围，不能把一份成功算成两份；胶囊不替代 Windows 重装、重新登录或真实换机验收。"
     }
   ]
@@ -636,7 +636,7 @@ export const systemProjectDomains = [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 7 日只读盘点完成 37 个登记来源，记录 45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
-      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "9 月 5 日目录记录 20,312 张照片、376 个视频和 3,851 个音频；精选 1,145 张照片、37 个视频都在手机包与云候选中。本地保留、云候选和手机资格分别决定，普通新增不自动进手机。电脑端手机包已恢复为 6,262 项，手机曾多写的 163 项仍待下次连接后精确清理。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
+      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "目前按四库分批整理本地原件、必要文字承接、索引与 G 盘副本，用户手筛图片和全部视频保留；52 个普通视频已在 E/G 扁平归位。旧目录、手机包与云候选有各自历史观察，不能再当作整理后的总量。本轮云端清旧重传和手机回写延期，163 项手机旧待清记录保留，最终元数据与全量 G 收口仍未完成。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
       { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "为 WeFlow 提供账号与消息读取契约、接口自检和有界静默启动；现役微信日常入口仍由独立 WeChatDirect 承担。健康响应不等于真实聊天读取通过。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
@@ -700,7 +700,7 @@ export const systemProjectDomains = [
     delivery: "不含秘密的使用结果、分层备份、完整清单与指纹、远端回读和不覆盖冲突的恢复位置。",
     unavailable: "密钥、恢复因子、原备份或目标身份不足时停止精确恢复，不显示秘密、不覆盖冲突文件，也不声称备份可用。",
     assets: [
-      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "把 Codex、Gemini、Claude 与 OpenClaw 的四套现有备份放在一起查阅：各自保存配置、记忆、可读成果或工作区，恢复时仍按各自范围和入口执行。Codex 完整会话另有 G/H 恢复点；同页展示不表示四套数据被合成一份备份。", kind: "恢复资产", href: "/projects/codex-memory" },
+      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "把 Codex、Gemini、Claude 与 OpenClaw 的四套现有备份放在一起查阅：各自保存配置、记忆、可读成果或工作区，恢复时仍按各自范围和入口执行。主机 Codex 完整会话另有 G/H 恢复点；副驾驶按自己的设备配置保留本地与 U 盘历史恢复点，仅安全设置投影进入独立云分支。隔离副本能读取历史与真实新回合续作分别验收；同页展示不表示四套数据被合成一份备份。", kind: "恢复资产", href: "/projects/codex-memory" },
       { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据和恢复清单整理成可选择回填的备份包，分别维护本地、G 盘和 Drive 结果。本地与 G 盘已有同一新包，Drive 仍保留上一代，各自按真实备份时间核对；微信回填先预检并保留回滚点，云端与原生恢复各自验收，官方客户端是否可用仍需实际确认。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "key", title: "Key：分开保管的另一份恢复材料", repo: "Key", role: "用 VAULT03 和独立密码加密保管敏感密钥、恢复码、备用码等材料。最高权限体系与 Key 各保管一部分，分别解锁、互不替代；单拿一边不等于掌握全部恢复材料。这是两条保管线组成的双保险。", kind: "密码加密与私人备份", href: "/projects/vault-tool/private-backup", entryLabel: "了解密文备份与恢复" },
       { id: "public-project-private-backup", title: "公开项目的私有文件备份", repo: "public-project-private-backup", role: "公开项目的源码照常发布，已排除出公开 Git、但确有恢复价值的本地配置或材料另存私人备份。每份副本保留对应项目、原相对位置和指纹，恢复时能找回正确文件；它不是把整个公开仓库再复制一遍。有持续用途的小工具另由本机轻量工具清单按用途找回；源码、必要依赖与恢复说明已保存到 G 盘备份。现有正式能力只保留指针，由所属项目继续维护；一次性过程文件仍清理。", kind: "恢复资产", href: projectLedgerHref },
@@ -1196,7 +1196,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-media",
     searchAliases: ["个人媒体整理与恢复", "找照片视频音频", "精选照片和视频", "媒体在文件管理器删了", "删除原件后退出手机恢复包和云候选", "手机照片双盘保全", "手机恢复包", "云端候选"],
-    detail: "9 月 5 日目录记录 20,312 张照片、376 个视频和 3,851 个音频（3,844 段录音、6 个音乐、1 个铃声），精选 1,145 张照片和 37 个视频。项目拥有可重建目录、视觉分类、本地接入、手机 E/G 双盘保全、6,262 项且低于 60 GB 的手机包与 6,500 项 upload=0 云候选；本地保留、云候选和手机资格分别决定。locate-audio 可验真已选原音并复用既有转写定位时间段。电脑端包已纠正，手机多出的 163 项仍待连接后清理；不把计划或源码通过当作手机已经完成。"
+    detail: "项目仍拥有分类、原件检索、录音段落定位和恢复包；当前正式阶段改为四库本地分批留存、必要文字承接、索引与 G 盘收口。52 个普通视频已在 E/G 扁平归位；图片首轮筛选是局部检查点，历史目录数量保留在项目技术层。云端清旧与重传、手机清空与回写都延后；163 项手机旧待清及最终元数据/全量 G 闭包仍待处理。本地文件、云端对象和手机结果分别验收，已发布代码不代替真实云端或手机完成。"
   },
   {
     id: "wechat-bridge",

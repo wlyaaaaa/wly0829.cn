@@ -3,8 +3,8 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 // These three values are replaced only after the parallel source repair has
 // finished and its current evidence has been read back. Keeping them loud
 // prevents a provisional source state from becoming a published snapshot.
-const SOURCE_COMMIT = "1425c7f3641d29cbc4a75e0185a605ee60718481";
-const TEST_RESULT = "2026-09-07 本轮 66 项合成回归通过；Ruff 静态检查通过";
+const SOURCE_COMMIT = "df7a9ad7f691904bc14977d506130be983f73bf0";
+const TEST_RESULT = "2026-09-07 基线 66 项合成回归与 Ruff 通过；不覆盖后来新增的 lookup-content";
 
 // Product limits live together so a future source-backed change can be
 // calibrated once instead of being hunted through the narrative.
@@ -43,6 +43,7 @@ const personalMaterialsSnapshot = createProjectSnapshot({
     { label: "登记来源", value: inventory.registeredSources.toLocaleString("zh-CN") }
   ],
   facts: [
+    { label: "按内容复用原件", value: "2026-09-12 04:22 UTC 回读 PRIVATE main df7a9ad：新增 lookup-content。AI 可用最多 1000 个不同 SHA-256 查询已登记非媒体文件，再复算所有精确命中的原件大小和哈希，返回可复用位置；不扫描目录、写索引或复制原件。本轮只核对代码与虚构测试定义，规模与运行证据仍保留 9 月 7 日日期。", hero: false },
     {
       label: "当前实际规模",
       value: `37 个登记来源当前包含 ${inventory.nonMediaPathEntries.toLocaleString("zh-CN")} 个可发现非媒体文件路径；其中 35 个已经拥有精确 locator（定位记录），其余 ${inventory.onDemandEntries.toLocaleString("zh-CN")} 个只在用户真正需要时进入有界发现。另有 ${inventory.mediaSkipped.toLocaleString("zh-CN")} 个媒体文件按产品边界跳过并交给 personal-media。`
@@ -135,7 +136,7 @@ const personalMaterialsProject = {
   stateLabels: ["找到并选中时", "没有合适候选或原件变化时", "来源或验证入口不可用时"],
   methodCanvas: {
     kicker: "原件查找画布",
-    headline: "先走最短路线；只有位置未知时才找，只有选中一项后才读字节",
+    headline: "先走最短路线；按描述找位置，或按内容核对已有原件",
     description: "这条流程把“找到候选”和“证明它仍是那份原件”分开。用户只需描述目标并在歧义时选择；项目负责限制范围、保留版本差异和在打开前重新验真。",
     steps: [
       { actor: "先判入口", title: "已有可靠定位就直接打开", detail: "当前业务已经知道原件在哪里时不绕行；照片、视频、录音和其他视听媒体统一交给 personal-media。" },
@@ -166,6 +167,7 @@ const personalMaterialsProject = {
     { title: "最小本地索引不是中央知识库", detail: "项目内 SQLite（轻量数据库）只承载来源、定位、版本、原生关系和绑定文字；没有跨领域画像、后台同步、事件图或所有私人问题的统一入口。" }
   ],
   responsibilities: [
+    "已获准消费者可按内容哈希复核现有索引的精确命中，返回可复用原件；没有登记不等于全盘不存在",
     "用自然语言在已登记非媒体索引中返回少量、可区分的原件候选",
     "没有合适登记候选且位置确实未知时，在获准来源内做一次有文件数、深度、时间和来源数上限的即时发现",
     "在候选阶段隐藏真实路径和内部标识，保留来源、容器、时间、版本角色与原生关系",
@@ -232,6 +234,7 @@ const personalMaterialsProject = {
     { layer: "User acceptance（用户验收）", proves: "返回的确实是用户要找、可继续使用的那份原件，范围和等待成本也可接受。", doesNotProve: "不会把一次个人确认外推为全部来源的永久正确性。" }
   ],
   operationalEntrypoints: [
+    { name: "按内容核对现有原件", command: "python materials.py lookup-content --hashes-json <UTF-8哈希数组.json>", purpose: "也可小批量重复传 --sha256；最多 1000 个不同值，只复算现有非媒体索引命中，返回 verified、unverified 或 not_indexed，不写库或复制原件。" },
     { name: "初始化最小索引", command: "python materials.py init", purpose: "只在项目索引尚不存在时建立空 schema；已有合法索引会原样返回 ready，外部或损坏数据库不会被覆盖。" },
     { name: "读取当前来源规模", command: "python materials.py inventory", purpose: "显式按需枚举登记根的文件元数据，返回来源范围文件、精确 locator、按需发现条目、媒体跳过、错误与 cutoff；不读正文、不算文件哈希、不写数据库。" },
     { name: "查已登记材料", command: "python materials.py find --text \"<普通描述>\" --limit 4", purpose: "优先从已登记非媒体索引返回少量候选，不遍历原件目录。" },
@@ -447,7 +450,7 @@ const personalMaterialsModules = [
     teaser: "登记候选与发现候选都先只读核验；选定原件可继续返回页、段落、单元格或行位置，桌面打开保留为用户明确要求的独立动作。",
     status: `本轮 inventory 确认 ${inventory.exactLocators} 个精确 locator 位于已盘点来源内；没有重新读取它们的状态或哈希，没有启动默认应用或打开真实原件正文。复核、变化检测、身份冲突回滚和启动失败状态由 ${TEST_RESULT} 支持。`,
     statusTone: "mixed",
-    value: "先确认选中的确实是当前这份原件，再按需要核对里面的话在哪页、哪段或哪一行；只有要求在桌面查看时才启动阅读器。文件变化会明确停止，旧定位不会悄悄指向另一份内容。",
+    value: "先确认选中的确实是当前这份原件，再按需要核对里面的话在哪页、哪段或哪一行；只有要求在桌面查看时才启动阅读器。准备接入一批文件时，也可先按内容哈希核对电脑是否已有可靠原件，避免重复保存；文件变化会明确停止，旧定位不会悄悄指向另一份内容。",
     why: "候选生成与用户选择之间，文件可能被移动、替换或改写；来源根也可能重新挂载到别的位置。若只在发现时记一个路径，之后直接打开，用户得到的可能已不是当时看到的那一项。",
     example: "我说“在刚选的合同里找到交付期限，告诉我在哪页或哪一段”。系统只核对并读取这一份原件，给出位置和相关片段；我再说“打开给我看”时才启动默认阅读器。若期间文件换了版本，就停止旧结果并说明变化。",
     result: "核验结果带出原件标题、来源、版本、大小、SHA-256 和核验时间；内容定位还返回 PDF 可提取文字层页码、Word 顶层正文段落或表格单元格、TXT/MD 行号与有限片段。Word 段落不是固定打印页，扫描图像及未提取区域不冒充已读；桌面是否已启动另行说明。",
@@ -470,6 +473,7 @@ const personalMaterialsModules = [
     ],
     problem: "解决候选到打开之间的时间差、来源根替换、路径逃逸、文件中途修改、登记身份冲突和默认应用启动失败。",
     implementation: [
+      "lookup-content 接收互斥的 --hashes-json / 可重复 --sha256，规范化并去重后最多 1000 项，以最多 900 个参数分批查询现有材料索引。只对精确命中的非媒体原件重新读取大小和 SHA-256；同内容的多个已验证位置都返回。缺失、不可读和内容漂移留在 unverified；not_indexed 只表示当前登记切片没有该哈希。命令不扫描目录、登记、复制或启动阅读器。",
       "inspect 与 inspect-discovered 使用只读数据库连接，按选中身份验证当前 locator、来源根、大小与 SHA-256；缺失或漂移只返回 gap。open / open-discovered 才保留状态写回和登记事务。",
       "locate-content 接收互斥的 --id / --token，在同一个已核验的原件上提取文字并匹配有限片段；读取结束再次验证大小、文件身份和 SHA-256，变化时拒绝旧片段。",
       "PDF 仅提取文字层；DOCX 遍历顶层正文段落和顶层表格单元格，明确排除嵌套表格、页眉页脚、文本框与嵌入对象；TXT/MD 返回行号和编码覆盖。整份 PDF 无可提取文字时返回单件 OCR 接续，命令本身不启动 OCR。",
@@ -500,7 +504,7 @@ const personalMaterialsModules = [
       { term: "open_state", explanation: "unverified、verified、not_openable、missing 或 hash_mismatch；每种状态对应不同恢复动作。" }
     ],
     boundaries: [
-      "只读取用户或上层流程已经明确选中的一项，不批量为所有候选计算哈希；locate-content 最多返回 10 个位置、每段最多 280 字符，并保留截断。",
+      "inspect、inspect-discovered 与 locate-content 只读取用户或上层流程已经明确选中的一项，不批量为普通候选计算哈希；locate-content 最多返回 10 个位置、每段最多 280 字符并保留截断。独立的 lookup-content 接收已选内容哈希批次，只复核现有索引精确命中。",
       "路径必须留在登记来源根内，不接受绝对路径、上级跳转或链接逃逸。",
       "发现候选在成功提交前仍不是登记材料，也不能在搜索结果中冒充已核验。",
       "默认应用启动不等于用户阅读完成，更不等于提交、签署或平台收到。",
@@ -509,6 +513,7 @@ const personalMaterialsModules = [
       "SQLite 提交与外部文件系统变化不能组成一个原子事务；发现路线用提交前身份检查、提交后启动前重哈希和后续每次 open 复核收窄风险，但不宣称数学上的零窗口。"
     ],
     failures: [
+      { condition: "内容哈希没有已验证命中", response: "精确索引行缺失、不可读或字节漂移时返回 unverified 与原因；没有登记行则为 not_indexed，不能据此判断其他磁盘或未登记来源不存在。" },
       { condition: "登记 locator 在可访问可信根中已不存在", response: "inspect 返回 locator_missing，不改索引、不猜相邻路径、不恢复文件；清单在日常 sync-current 中跟随删除。" },
       { condition: "大小或 SHA-256 漂移", response: "只读检查返回 size_match/hash_match 与精确 gap，不改索引；明确打开动作才写回 hash_mismatch。旧版本不打开，重新发现后再选定。" },
       { condition: "选定原件没有可提取文字或只部分覆盖", response: "返回格式、区域、编码和截断范围；整份 PDF 无文字层时指出单件 OCR 缺口，不把部分零命中当成整份原件不存在该内容。" },

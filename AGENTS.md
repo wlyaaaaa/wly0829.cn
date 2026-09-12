@@ -555,6 +555,8 @@ read-only operating panel; public presentation is secondary.
   content acceptance default to Astra Max (`gpt-6-astra`, `max`), as explicitly
   requested by the owner. `config/panel-projects.json` records the current
   semantic model and effort defaults; refresh plans expose them to the executor.
+  Astra High or higher is sufficient for these roles; Max is a default, not a
+  minimum requirement, as the owner clarified on 2026-09-12.
   Apply the active native economy-routing identity and parent/root limits.
   Do not silently substitute Sol, Terra, Luna or a local model for these roles;
   report an unavailable requested model without claiming an Astra execution.
@@ -716,8 +718,9 @@ read-only operating panel; public presentation is secondary.
   page. Do not reduce final quality merely to conserve an ample model quota,
   and do not create subagents just to reach a fixed count.
 - Every native subagent that performs website semantic judgment, writing or
-  content acceptance, at every descendant depth, uses the owner's Astra Max
-  default, including design, creative and independent source-content review.
+  content acceptance, at every descendant depth, uses Astra at High or higher,
+  including design, creative and independent source-content review. The
+  Registry's Max default is not a minimum requirement.
   The active economy route still verifies actual identity, available slots and
   parent/root limits; a task name never proves the model that ran. Deterministic
   tests may remain tools rather than agents. Choose the actual number from independent work
@@ -750,7 +753,7 @@ read-only operating panel; public presentation is secondary.
   glossary or a passing assertion.
 - Content completeness is a separate, source-first acceptance gate. Before a
   new project, full refresh or completeness repair may PASS, an independent
-  Astra Max reviewer receives the current source entrypoints and the candidate
+  Astra reviewer at High or higher receives the current source entrypoints and the candidate
   page without being given the page's module list as the expected answer. It
   must reconstruct important product capabilities and technical subsystems,
   compare both layers with the page and report any absent source-backed axis.

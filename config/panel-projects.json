@@ -3,7 +3,7 @@
   "refresh_policy": {
     "mode": "ai_managed_on_demand",
     "semantic_writer": "website_ai_task_only",
-    "semantic_model_policy": "default website content, design, creativity and independent semantic acceptance to Astra Max (gpt-6-astra, max), as explicitly chosen by the owner; apply active native economy routing identity and parent/root limits without silently substituting another model; a later explicit owner choice may replace this default",
+    "semantic_model_policy": "default website content, design, creativity and independent semantic acceptance to Astra Max (gpt-6-astra, max); Astra High or higher is sufficient for all these roles, including descendants and independent reviewers, as explicitly clarified by the owner; Max is a default, not a minimum; apply active native economy routing identity and parent/root limits without silently substituting another model; a later explicit owner choice may replace this default",
     "semantic_model": "gpt-6-astra",
     "semantic_reasoning_effort": "max",
     "targeted_refresh_prompt": "刷新个人看板中的<project-id>",
@@ -25,9 +25,9 @@
     "rule_refresh_boundary": "Rules use only the verified current E release; dirty or unreleased source never overwrites it and does not block unrelated project refreshes",
     "shared_interaction_gzip_budget_kib": 14,
     "shared_css_gzip_budget_kib": 23,
-    "search_index_gzip_budget_kib": 151,
+    "search_index_gzip_budget_kib": 152,
     "project_search_index_gzip_budget_kib": 176,
-    "bundle_budget_semantics": "Measured anti-bloat review thresholds, not content ceilings. The accepted 33 projects, 200 modules, 31 Skills and eight direct-reading general AI cards remain. This incremental release adds one existing weekly automation and source-backed dual-machine MCP/recovery explanations. Actual shared/all-project indexes are 154497/179888 bytes gzip with 167/200 distinct records and no identical duplicate; largest PCConfig shard23455B. This requires the smallest justified increase to151/176/23KiB; shared JS14KiB and CSS23KiB remain unchanged, narratives stay complete static HTML with no click-time content loading.",
+    "bundle_budget_semantics": "Measured anti-bloat review thresholds, not content ceilings. Keep the accepted 33 projects, 200 modules, 31 Skills and eight general AI cards. This semantic batch measured shared/all-project/PCConfig search gzip 156178/181705/24511 bytes with no identical duplicate. Applying the matcher's existing NFKC, lowercase and whitespace normalization only to hidden search text preserves matching and reduces them to154866/178009/23670. Smallest reviewed thresholds152/176/24KiB preserve full static narratives, query terms and native routes. Shared JS14KiB, CSS23KiB and all-project176KiB remain; no click-time content loading.",
     "detail_loading_mode": "route_specific_static_native_document",
     "bundle_scaling_policy": "build every route with complete narrative HTML before enhancement; keep shared interaction JavaScript, shared CSS and the generated search projection bounded; emit at most the next non-compatibility route as a static document prefetch, retain pointer/focus intent prefetch, and use native directory-document navigation; never delete required content, add click-time imports or fetches, or shift rendering latency to clicks",
     "allowed_presentation_modes": [
@@ -36,7 +36,7 @@
     ],
     "default_presentation_mode": "real_dashboard",
     "only_private_document": "docs/design/private-content-rules.md",
-    "project_search_shard_gzip_budget_kib": 23
+    "project_search_shard_gzip_budget_kib": 24
   },
   "global_surfaces": [
     {
@@ -84,7 +84,7 @@
       "route": "/projects/personal-media",
       "ai_refresh": {
         "content_path": "app/content-personal-media.js",
-        "semantic_revision": 8,
+        "semantic_revision": 9,
         "scope": "Complete existing six-module private-source media project, retaining classification, exact/near-duplicate choices, sole strict selected entry, local ingest, equivalent video variants, phone E/G preservation, under-60GB recovery package, upload-zero cloud candidates and trusted file-manager retirement; add read-only selected-recording time localization via existing hash-bound ASR results, per-term text coverage and query provenance separation; separate local keeper, cloud candidate and phone eligibility, with zero selected/phone increment allowed and ordinary new keeper not automatically in the phone package; exclude phone gallery trash as already-deleted originals; current 24539 media, 6262 computer recovery items and 6500 cloud candidates remain distinct from the 163 erroneous phone additions still awaiting exact cleanup on a future connection; preserve unknown historical eligibility-versus-selected gaps, existing original gallery and dated OCR/selected-byte evidence; no small-latency completion gate and no query-time deletion framework; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result; PRIVATE Git preserves source, tests, instructions and lossless metadata/current.zip through snapshot-metadata; original media bytes, active SQLite and caches stay local, and a hash cannot reconstruct an original photo",
         "collectors": [
           "Read current PRIVATE Git identity and default main, project AGENTS/README, personal_media.py, phone_file_preserve_clear.py and current acceptance; distinguish metadata/current.zip from original media bytes, read only bounded public-safe source/state evidence and never run a real media mutation merely for the page",
@@ -181,7 +181,7 @@
       "route": "/projects/agents",
       "ai_refresh": {
         "content_path": "app/content-core.js",
-        "semantic_revision": 20,
+        "semantic_revision": 21,
         "scope": "Existing seven-module project and independent E-to-G working-tree mirror, five verified E121 rules, 31 installed intents and 31 displayed Skills (29 personal and 2 host-integrated); four-family Luna/Terra/Sol/Astra native routing and unclassified same-ID lineage, exact user model choices, parent/root caps, one main goal and evidence-based independent top-level tasks; durable authorization, local project-fingerprint CAS and binding-id v2 envelopes, seven-input clean E-release v2 and selected-path fast release; conditional control-plane document reading, short-window task continuity, minimum-sufficient implementation, necessary dependency repair and complete task-file lifecycle cleanup; source-current Skill-only commits remain distinct from rule-byte candidates; personal-understanding and same-task domain writeback, selected-original content/audio localization, native WeChat reading packages, official Chrome recovery and bounded one-snapshot publication handoff retain complete product, technical and Unknown layers",
         "collectors": [
           "git -C E:\\.agents status --porcelain=v2 --branch",
@@ -333,7 +333,7 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 15,
+        "semantic_revision": 16,
         "scope": "Project overview and ten source-defined modules: machine facts and bounded TimeAudit evidence; runtime and startup; drift and acceptance; WLY reinstall and secondary-device recovery; SecretRef and fixed providers; authorized-file encryption and recovery; protected actions and protected-data state; current-copy, Hot and Cold recovery; and remote computer MCP. Preserve physical devices, runtime identities, path/config impact, independent source/install/live evidence, actual unavailable or stale snapshots and named gaps. Remote computer MCP owns authenticated mobile/cloud access to the same Windows files, commands, documents and desktop, verified E context, existing Skill reuse, cross-harness owner continuity, startup/keep-awake and precise recovery. Chat reasoning and local tool execution are separate; Chat usage is distinct from Work/Codex, and model/account/device availability remains evidence-bound.",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
@@ -477,6 +477,12 @@
             "tools/Invoke-SecretBroker.ps1",
             "tools/authorization_file_broker.py",
             "tools/authorization_file_broker.test.py",
+          "tools/authorization_file_local_ui.py",
+          "tools/authorization_file_local_ui.test.py",
+          "tools/authorization_file_entry.test.py",
+          "tools/Invoke-GooglePhotosProvider.ps1",
+          "tools/GooglePhotosDirectProvider.psm1",
+          "tools/invoke_google_photos_provider.test.ps1",
             "registries/google_workspace_provider.json",
             "tools/Invoke-GoogleWorkspaceProvider.ps1",
             "tools/Start-GoogleWorkspaceMcp.ps1",
@@ -816,7 +822,7 @@
       "route": "/projects/personal-materials",
       "ai_refresh": {
         "content_path": "app/content-personal-materials.js",
-        "semantic_revision": 7,
+        "semantic_revision": 8,
         "scope": "Complete existing four-module non-media original finder, retaining source-routed bounded filename discovery, exact intake and trusted file-manager retirement through existing scheduled sync; distinguish current source inventory path entries from exact locators and on-demand discovery; AI defaults to read-only inspect/inspect-discovered without registration or desktop launch, with find match evidence and exact indexed-text coverage; locate-content reads only one selected verified original and returns hash/version-bound PDF text-layer pages, DOCX top-level paragraphs/cells or TXT/MD lines, bounded snippets, extraction coverage and single-item OCR gaps; explicit desktop open retains its own registration/state and launcher behavior; no original copying or broad body scan; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-materials; expose only repository identity, visibility, clean/sync state and commit, never the private local source locator",
@@ -2083,7 +2089,7 @@
       "route": "/projects/codex-memory",
       "ai_refresh": {
         "content_path": "app/content-codex-memory.js",
-        "semantic_revision": 5,
+        "semantic_revision": 6,
         "scope": "A combined reader entry for four existing, independent Codex, Gemini, Claude and OpenClaw workspace backup/recovery paths. Preserve all four original Codex modules, including lightweight selected state, VSS conversation points, content-aware reuse, G/H separation, proxy retry and exact restore boundaries; add one source-backed recovery module for each other workspace. Explain selected configurations, readable results, memory/workspace scope, local/G/private Git or archive outputs, independent freshness and recovery gaps. No physical repository merger, new backup service, model session migration guarantee or new source authority.",
         "collectors": [
           "git -C E:\\Projects\\Backups\\codex-memory status --porcelain=v2 --branch",
@@ -2896,7 +2902,7 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 9,
+        "semantic_revision": 10,
         "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay; September 7 published a4d8e22 and production recovery evidence: the existing hidden launcher waits for watchdog nonzero exit, retries after 30 seconds, and honors explicit stop without a new task or service; fresh one-hertz TURZX sending and recovery are verified and the owner separately confirms normal physical refresh; original RTSS/Device Error history, current absent HS2 overlay, and untested sleep/cold-power/topology branches remain distinct",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
@@ -3041,7 +3047,7 @@
       "route": "/projects/emerald-veil",
       "ai_refresh": {
         "content_path": "app/content-emerald-veil.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "Project overview and four source-backed modules: independent static Windows desktop/lock-screen recovery; native Bubbles idle, input, display and process lifecycle; Wallpaper Engine and external blackout coexistence with accepted rain-experiment boundary; installation, tray controls, exact screen-saver restore and remote compatibility. Product explanations and technical reference remain complete; actual source, test, install, running and visual evidence are separate.",
         "collectors": [
           "git -C V:\\Personal\\Projects\\emerald-veil status --porcelain=v2 --branch",

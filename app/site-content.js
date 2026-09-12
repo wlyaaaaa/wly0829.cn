@@ -30,7 +30,10 @@ function registeredContent(entry) {
     !panelRegistry.refresh_policy.allowed_presentation_modes.includes(entry.presentation_mode) && "presentation_mode"
   ].filter(Boolean);
   if (mismatches.length) throw new Error(`Panel project registry/content mismatch for ${entry.id}: ${mismatches.join(",")}`);
-  return { ...content, registration: entry };
+  const project = content.project.visibility === expectedVisibility
+    ? content.project
+    : { ...content.project, visibility: expectedVisibility };
+  return { ...content, project, registration: entry };
 }
 
 export const projectCatalog = panelRegistry.projects

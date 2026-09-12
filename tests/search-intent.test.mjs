@@ -11,6 +11,21 @@ const canonicalHref = (href) => {
 const projectedEntries = globalSearchEntries.map((entry) => createCompactSearchEntry(entry, canonicalHref(entry.href)));
 const quickEntries = projectedEntries.filter((entry) => entry.type !== "项目内容");
 const browserEntries = [...quickEntries, ...projectedEntries.filter((entry) => entry.type === "项目内容")];
+
+test("compact search canonicalizes only the hidden search field with the existing matcher normalization", () => {
+  const normalize = (value) => String(value || "").normalize("NFKC").toLowerCase().trim().replace(/\s+/g, " ");
+  for (const entry of globalSearchEntries) {
+    const compact = createCompactSearchEntry(entry);
+    assert.equal(compact.search, normalize(entry.compactSearch ?? entry.search ?? ""));
+    assert.equal(compact.title, entry.title);
+    assert.deepEqual(compact.aliases, [...new Set(entry.aliases || [])]);
+  }
+  const entry = { type: "项目", group: "项目", title: "原始 Photos 标题", detail: "公开摘要保持原样", href: "/projects/example", aliases: [], search: "  ＧＯＯＧＬＥ Photos\n  Drive 64MiB  " };
+  const compact = createCompactSearchEntry(entry);
+  for (const query of ["Google Photos", "Drive 64MiB", "ＧＯＯＧＬＥ", "公开摘要"]) {
+    assert.equal(compactSearchScore(entry, query), compactSearchScore(compact, query));
+  }
+});
 const belongsToProject = (entry, slug) => {
   const parts = new URL(entry.href, "https://wly0829.cn").pathname.split("/");
   return parts[1] === "projects" && parts[2] === slug;
