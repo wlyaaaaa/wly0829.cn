@@ -2331,7 +2331,7 @@ test("work-delivery explains the current six-file product, quality gate, precise
   assertNoCredentialValues(publicText);
   assert.doesNotMatch(publicText, /(?:^|[^A-Za-z])[A-Za-z]:[\\/]/m, "work-delivery leaks an absolute local locator");
   for (const expected of [
-    /PRIVATE main 57bf3c621dcf47f733fb4894cd6ee1287f26556c/,
+    /PRIVATE main 76521682176b00333fdf579746d4fbcfea88103e/,
     /c815ea3daa04d4012200419fa989a9808ab7be36/,
     /0\.2\.0/,
     /37\/37/,
@@ -3643,9 +3643,9 @@ test("the Skills catalog contains the selected usable capabilities in value orde
   const workDelivery = skills.find((item) => item.slug === "work-delivery");
   const workDeliveryText = JSON.stringify({ entry: workDelivery, guide: skillGuides["work-delivery"], outcome: skillOutcomes["work-delivery"] });
   assert.equal(workDelivery.sourcePath, "E:\\.agents\\skills\\work-delivery\\SKILL.md");
-  assert.equal(workDelivery.sourceBytes, 6155);
-  assert.equal(workDelivery.sourceSha256, "306951bda50a0597ed464f698514d6fe7f32e1fc1452d805786fa1d46eb0d80c");
-  for (const expected of [/明确选择|明确选中/, /事实.*假设.*冲突.*未知/, /同一事实(?:版本|修订版)/, /work-delivery\.batch\.v1/, /package ID/, /重复.*错误|已存在.*拒绝/, /SQLite/, /canonical manifest/, /quality\.status=ready/, /手写 ready.*拒绝|手写.*ready.*拒绝/, /PRD\.md/, /manifest\.json/, /traceability\.csv/, /产品需求文档\.docx/, /项目评审\.pptx/, /执行跟踪表\.xlsx/, /没有现成项目计划.*周报.*汇报/, /5 分钟/, /同模型.*同质量|同模型\/同质量/, /15 秒/, /唯一原文.*(?:rebound|重新绑定)/, /stale|过期/, /actor/, /事实.*整个 build|事实.*整 build/, /输入.*文本.*Markdown.*CSV/, /AI 分析.*项目外/, /baseline_required/, /37 项测试/, /2026-09-01.*历史/s, /两套.*Office E2E/, /无.*路线提示|未获.*路线提示/, /3\/3/, /27 条事实/, /39 条追溯/, /5 条待确认/, /4 条阻断/, /quality.*draft/, /Office builder.*0/, /来源更新.*唯一原文.*重新绑定.*旧 build.*过期/s, /不证明.*实际价值.*真实总用时/s, /没有.*导出.*备份.*恢复/]) {
+  assert.equal(workDelivery.sourceBytes, 3706);
+  assert.equal(workDelivery.sourceSha256, "8c8c389f350fdad9f92c5c546c7cdf0f69cd130cbdcacdd30cdf068373b288a1");
+  for (const expected of [/明确选择|明确选中/, /事实.*假设.*冲突.*未知/, /同一事实(?:版本|修订版)/, /work-delivery\.batch\.v1/, /package ID/, /重复.*错误|已存在.*拒绝/, /SQLite/, /canonical manifest/, /quality\.status=ready/, /手写 ready.*拒绝|手写.*ready.*拒绝/, /PRD\.md/, /manifest\.json/, /traceability\.csv/, /产品需求文档\.docx/, /项目评审\.pptx/, /执行跟踪表\.xlsx/, /没有现成项目计划.*周报.*汇报/, /尽早.*(?:覆盖|事实)/, /有依据.*区间 ETA|有依据.*时间区间/, /长期明确授权.*精确目标与动作/, /同模型.*同质量|同模型\/同质量/, /15 秒/, /唯一原文.*(?:rebound|重新绑定)/, /stale|过期/, /actor/, /事实.*整个 build|事实.*整 build/, /输入.*文本.*Markdown.*CSV/, /AI 分析.*项目外/, /baseline_required/, /37 项测试/, /2026-09-01.*历史/s, /两套.*Office E2E/, /无.*路线提示|未获.*路线提示/, /3\/3/, /27 条事实/, /39 条追溯/, /5 条待确认/, /4 条阻断/, /quality.*draft/, /Office builder.*0/, /来源更新.*唯一原文.*重新绑定.*旧 build.*过期/s, /不证明.*实际价值.*真实总用时/s, /没有.*导出.*备份.*恢复/]) {
     assert.match(workDeliveryText, expected, `work-delivery omits its product contract: ${expected}`);
   }
   const firstUseCases = [
