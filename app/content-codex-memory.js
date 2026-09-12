@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-12T04:25:15Z",
-  "label": "次机Codex定时备份与USB同点已回读；有隔离读取旧证据，桌面G/H仍为9月9日观察",
-  "boundary": "9月12日正式源码回读及04:27Z次机PCConfig只读状态表明：已安装引擎字节匹配，自然任务返回0，热/USB冷点相同，安全云支路引用一致；本轮未重跑捕获、全对象哈希或恢复。9月10日旧恢复回执证明隔离副本可列出并读取一项任务，未启动新回合。桌面G/H运行证据仍为9月9日22:07—22:08Z，不能用次机结果替它更新；OpenClaw官方归档仍不含工作区。",
+  "observedAt": "2026-09-12T05:41:13Z",
+  "label": "桌面Codex G/H当前同点已回读；次机保留独立恢复证据，应用续作仍另验",
+  "boundary": "9月12日05:41Z只读核对桌面G/H当前指针、闭包、清单指纹及原生冷回执：两盘同为04:15点，H于05:22Z完成校验并发布。04:27Z次机安装、自然任务与热/USB同点是另一设备的独立证据；9月10日隔离副本读取旧任务未启动新回合。本次读者未重跑捕获、全对象哈希或恢复；桌面旧9月9日观察保留历史，OpenClaw官方归档仍不含工作区。",
   "metrics": [
     {
       "label": "AI工具",
@@ -63,7 +63,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "G 最新会话点与活动源不同",
-      "value": "9月9日22:07Z读取G指针与闭包：20260909T041508Z-68deef6b，04:20:05Z发布，7016文件、47,388,350,429字节（44.13GiB），closure_sha256=cd5549c97b6713ed4f2b5723a3c460c85addde1a6d2f9637d0ecc57a4070a373，指针与闭包哈希匹配。当前活动源Inspect为7067文件/48,020,575,000字节、status=ready；它比G点更新，不能与备份点混算，也未重新哈希全部对象。",
+      "value": "9月12日05:41Z读取G当前点20260912T041508Z-8cec9794，04:20:00Z发布，7167文件、49,655,464,859字节；closure_sha256=5c91d9e48222258aae5fd54d8adcdf4f37ad697fc63d21ef2710f57bb1fc7acc，指针与实际闭包哈希匹配。同期活动源Inspect为7199文件/50,145,072,191字节、ready；活动源与恢复点不是同一时刻，不能混算。9月9日旧点7016文件、47,388,350,429字节仅作历史，本次未重新哈希全部对象。",
       "hero": true
     },
     {
@@ -88,12 +88,12 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "H 冷盘与数据边界",
-      "value": "9月9日22:07Z H根不可用，Inspect返回h_available=false，本轮没有取得H指针或闭包。05:05Z曾读到20260908T041508Z-d14c3a16、closure_sha256=7d00b1bb033b41e7bc56c64a68416b7e9e6a150ef3fce9f08cddbf020fab516a，这只是最后一次逐点历史观察；PCConfig另有06:55:23Z complete冷备回执，不能在H离线时据此猜测当前点或声称新G点已复制。",
+      "value": "9月12日05:41Z H可读，当前指针同G为20260912T041508Z-8cec9794；两盘闭包与清单的实际SHA-256一致，清单为a6094e36f882ea98cbf1fa18b75df27fe000044ba4ec5b809454634c6ebf9623。H原生cold-last于05:22:41Z complete、readback_verified=true，7167文件/49,655,464,859字节。9月9日H不可读及9月8日旧点只保留历史；本次小元数据回读不冒充重新全量对象校验。",
       "hero": true
     }
   ],
   "gaps": [
-    "Codex的G是9月9日04:15点；H本轮不可读，9月8日旧点只作为上次观察，不判断当前已追平或仍落后。完整会话只涵盖该专线的选定文件，四套工具并没有共同的全量历史承诺。",
+    "Codex桌面G/H当前均为9月12日04:15恢复点；之后新增的活动源内容仍要等下一次捕获。完整会话只涵盖该专线选定文件，当前两盘同点不证明新机登录、应用续作或四套工具共享全量历史。",
     "本轮只读脚本、任务与小元数据；Codex9月7日合成去重/隔离恢复、OpenClaw既有脚本与官方归档/暂存证据保留原日期。没有重新执行生产VSS、完整对象重验、四套工具的新机恢复或登录。",
     "raw_memories 大小保护仅避免较小当前文件覆盖私有仓库的大版本；同等或更大的错误正文仍需人判断，轻量 G 快照保存的是当次源内容。",
     "桌面无 profile 路径的会话对象没有自动清理策略，大型数据库变化会形成新对象；副驾驶已接入两点保留与无引用对象清理，不能把桌面边界外推到副驾驶。",
@@ -114,11 +114,11 @@ export const codexMemorySnapshot = Object.freeze({
   "hotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\Codex",
   "conversationHotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\CodexConversations",
   "conversationColdRoot": "H:\\80_自动备份区\\ControlPlane\\AIMemory\\CodexConversations\\cold-payload",
-  "currentPointId": "20260909T041508Z-68deef6b",
-  "conversationFileCount": 7016,
-  "conversationTotalSizeBytes": 47388350429,
-  "liveSourceFileCount": 7067,
-  "liveSourceTotalSizeBytes": 48020575000,
+  "currentPointId": "20260912T041508Z-8cec9794",
+  "conversationFileCount": 7167,
+  "conversationTotalSizeBytes": 49655464859,
+  "liveSourceFileCount": 7199,
+  "liveSourceTotalSizeBytes": 50145072191,
   "memoryFileCount": 243,
   "memoryTotalSizeBytes": 2656388,
   "scheduledTasks": [
@@ -145,8 +145,8 @@ export const codexMemorySnapshot = Object.freeze({
       "owner": "PCConfig",
       "trigger": "既有冷备调度",
       "mode": "增量复制 cold-payload；由 FinalizeCold 校验 H 后发布指针",
-      "currentHAvailable": false,
-      "lastRunResult": "PCConfig已有9月9日06:55:23Z complete冷备回执；22:07Z H不可用，当前H点未知，05:05Z逐点回读仅作历史"
+      "currentHAvailable": true,
+      "lastRunResult": "9月12日05:41Z逐盘回读确认G/H同为20260912T041508Z-8cec9794；Codex原生H冷回执于05:22:41Z complete/readback_verified=true。9月9日H不可读是旧观察，不再作当前状态；本次未重读任务定义或重新执行冷备。"
     },
     {
       "taskName": "Gemini Memory Backup",
@@ -193,7 +193,7 @@ export const codexMemoryProject = {
   "route": "/projects/codex-memory",
   "visibility": "私有仓库",
   "statusTone": "warn",
-  "cardStatus": "四套分别备份 · Codex新增次机配置档 · 桌面G/H为9月9日观察",
+  "cardStatus": "四套分别备份 · 桌面Codex G/H同点已回读 · 应用恢复独立验收",
   "cardStatusTone": "warn",
   "searchAliases": [
     "codex-memory",
@@ -439,7 +439,7 @@ export const codexMemoryProject = {
       "artifact": "会话 current.json",
       "schema": "codex.conversation-backup.pointer.v1",
       "owner": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json",
-      "boundary": "point_id、closure_sha256、published_utc、capture_semantics；9月9日G点闭包为cd5549c97b6713ed4f2b5723a3c460c85addde1a6d2f9637d0ecc57a4070a373；H本轮离线，当前点必须连接后逐介质解析。"
+      "boundary": "point_id、closure_sha256、published_utc、capture_semantics；9月12日05:41Z G/H均指向20260912T041508Z-8cec9794，两盘实际闭包SHA-256同为5c91d9e48222258aae5fd54d8adcdf4f37ad697fc63d21ef2710f57bb1fc7acc，清单哈希也逐盘匹配。"
     },
     {
       "artifact": "校验、恢复和运行进度",
@@ -497,13 +497,13 @@ export const codexMemoryProject = {
     },
     {
       "layer": "任务与生产元数据",
-      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务均Ready/enabled/0；四套G小元数据可读，Codex仍为7016文件点，H当前不可用。三套私有Git引用保留05:05Z的独立回读日期，不外推本轮再次远端校验，未读正文。",
+      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务Ready/enabled/0、四套G元数据及当时H不可用均保留为历史。9月12日05:41Z只补充桌面Codex G/H当前同点7167文件的指针、清单和闭包回读；其他三套任务、Git引用及备份观察日期不更新，未读正文。",
       "doesNotProve": "未重新哈希全部生产对象，也未检测应用打开恢复内容的结果。"
     },
     {
       "layer": "H 介质状态",
-      "proves": "22:07Z Inspect为h_available=false，当前H点未知；上次读到9月8日旧点及该点原生cold complete/readback_verified=true仅作历史。G点已实际回读，不能推定离线H现在的点或两盘是否同代。",
-      "doesNotProve": "H的完整对象校验属于9月8日06:44Z原任务；本次小元数据读取不证明G的新点已进入H，也不证明新机器应用恢复。"
+      "proves": "9月12日05:41Z Inspect为h_available=true、cold_store_status=present；逐盘指针同为20260912T041508Z-8cec9794，实际清单与闭包哈希各自匹配。H原生cold-last于05:22:41Z complete/readback_verified=true，7167文件、49,655,464,859字节；不是仅凭PCConfig十五组总体完成推断两盘同点。",
+      "doesNotProve": "完整对象校验由05:22Z原生冷回执报告；本次读者只哈希指针引用的小元数据，没有重读全部对象，也不证明新机器登录、应用恢复或新回合续作。"
     },
     {
       "layer": "官方归档与应用恢复",
@@ -628,7 +628,7 @@ export const codexMemoryProject = {
       "result": "Git 临时传输失败支持读取当时系统代理并按 30/120/300/900 秒间隔有限重试，不固定代理端口。"
     }
   ],
-  "snapshotUpdateNote": "9月12日合并Codex正式源码的次机配置档、安全投影、独立冷点复制、只读校验与有界保留；主电脑运行数、旧测试与OpenClaw官方归档保留各自原日期。次机9月12日安装、自然备份、云支路和USB同点由PCConfig回读，隔离任务读取保留9月10日回执；未验新回合续作。原四套仓库与任务保持独立。",
+  "snapshotUpdateNote": "9月12日保留次机配置档、安全投影、冷点复制与有界保留的已验内容；05:41Z新增桌面Codex G/H当前点及原生冷回执回读，替代旧H不可读的当前判断。其他三套任务、旧测试、隔离恢复与官方归档保留各自原日期，未验新回合续作。原四套仓库与任务保持独立。",
   "dataSources": {
     "title": "具体保存什么，分别放在哪里",
     "intro": "按工具取最小充分的恢复材料，实际来源根各由本机配置与所属项目解析。规范规则和个人能力仍归E:\\.agents，应用状态和备份结果分别归自己的Owner（负责人）。",
@@ -794,7 +794,7 @@ export const codexMemoryModules = [
     "subtitle": "从各自主机配置绑定的物理卷捕获会话及状态",
     "teaser": "继续使用 Codex，也能形成明确时间的会话备份点",
     "order": 2,
-    "status": "9月9日22:07Z G点7016文件/44.13GiB，H当前不可读；只读元数据，没有重抓生产VSS",
+    "status": "9月12日05:41Z G/H同为04:15点，7167文件/49,655,464,859字节；只读元数据，未重抓VSS",
     "statusTone": "accent",
     "relation": "负责原始对话、附件、生成图像和应用状态。桌面与轻量配置分线；次机profile额外纳入选定私有配置、agents、memories和skills，云端安全投影仍独立。",
     "value": "不强制关闭 Codex，从同一卷影副本采集会话数据，并把已校验文件组成一个可恢复点。 同时触发第二次热备时会明确拒绝重复运行；上次卷影清理没有完成时先保留问题，不继续创建更多快照。",
@@ -867,7 +867,7 @@ export const codexMemoryModules = [
       }
     ],
     "verification": [
-      "9月9日22:07Z G点为7016文件、47388350429字节，H当前不可用；05:05Z的H为9月8日6898文件点仅作历史，本轮未重验全部对象。",
+      "9月12日05:41Z G/H当前点同为20260912T041508Z-8cec9794，7167文件、49,655,464,859字节；指针、清单与闭包逐盘回读匹配。9月9日G旧点7016文件及当时H不可用均为历史；本次未重验全部对象。",
       "9月7日三个人工点及9月8日任务规格为旧桌面证据。次机9月12日PCConfig只读回执为已安装字节匹配、自然任务0、热/USB冷点相同323文件；本轮未重新创建VSS或哈希全部对象。"
     ],
     "searchAliases": [
@@ -907,7 +907,7 @@ export const codexMemoryModules = [
     "subtitle": "按完整文件内容复用对象，各介质分别校验",
     "teaser": "相同对象复用；H 没连接就明确冷备未完成",
     "order": 3,
-    "status": "9月7日合成去重/恢复保留通过；9月9日G已有新点，H保留上一点，不冒充同代",
+    "status": "9月12日桌面G/H当前同点及原生冷完成回执已回读；9月7日合成测试保留原日期",
     "statusTone": "accent",
     "relation": "负责会话点的存储与核验；PCConfig拥有既有跨盘调度，引擎的FinalizeCold/SyncCold可追加复制完整热备点，再独立校验冷点。次机profile另有明确的有界清理。",
     "value": "相同内容只存一份，每个历史点保留自己的文件清单；H 在可用时独立校验，避免复制了指针却没有完整对象。",
@@ -979,7 +979,7 @@ export const codexMemoryModules = [
     ],
     "verification": [
       "9月7日三个人工点的dedup_verified与restore_verified均为true，仅作旧测试证据；9月12日正式源码已新增冷点复制与profile清理，本轮未运行新测试或生产对象核验。",
-      "9月8日曾读回G/H相同点、清单/闭包哈希与06:44Z正式cold完成回执；9月9日22:07Z G仍为新点，H当前不可用，当前点未知。本轮只读元数据，没有重新哈希全部生产对象或执行冷同步。"
+      "9月12日05:41Z G/H当前指针同为20260912T041508Z-8cec9794，实际清单/闭包哈希分别匹配；H原生cold-last于05:22:41Z complete/readback_verified=true，7167文件/49,655,464,859字节。9月8日同点和9月9日H不可用仅保留历史；本次只读小元数据，没有重复全对象校验或执行冷同步。"
     ],
     "searchAliases": [
       "内容寻址存储",

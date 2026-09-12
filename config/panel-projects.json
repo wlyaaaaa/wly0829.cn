@@ -333,7 +333,7 @@
       "route": "/projects/pcconfig",
       "ai_refresh": {
         "content_path": "app/content-pcconfig.js",
-        "semantic_revision": 16,
+        "semantic_revision": 17,
         "scope": "Project overview and ten source-defined modules: machine facts and bounded TimeAudit evidence; runtime and startup; drift and acceptance; WLY reinstall and secondary-device recovery; SecretRef and fixed providers; authorized-file encryption and recovery; protected actions and protected-data state; current-copy, Hot and Cold recovery; and remote computer MCP. Preserve physical devices, runtime identities, path/config impact, independent source/install/live evidence, actual unavailable or stale snapshots and named gaps. Remote computer MCP owns authenticated mobile/cloud access to the same Windows files, commands, documents and desktop, verified E context, existing Skill reuse, cross-harness owner continuity, startup/keep-awake and precise recovery. Chat reasoning and local tool execution are separate; Chat usage is distinct from Work/Codex, and model/account/device availability remains evidence-bound.",
         "collectors": [
           "git -C E:\\PCConfig status --porcelain=v2 --branch",
@@ -2089,7 +2089,7 @@
       "route": "/projects/codex-memory",
       "ai_refresh": {
         "content_path": "app/content-codex-memory.js",
-        "semantic_revision": 6,
+        "semantic_revision": 7,
         "scope": "A combined reader entry for four existing, independent Codex, Gemini, Claude and OpenClaw workspace backup/recovery paths. Preserve all four original Codex modules, including lightweight selected state, VSS conversation points, content-aware reuse, G/H separation, proxy retry and exact restore boundaries; add one source-backed recovery module for each other workspace. Explain selected configurations, readable results, memory/workspace scope, local/G/private Git or archive outputs, independent freshness and recovery gaps. No physical repository merger, new backup service, model session migration guarantee or new source authority.",
         "collectors": [
           "git -C E:\\Projects\\Backups\\codex-memory status --porcelain=v2 --branch",
