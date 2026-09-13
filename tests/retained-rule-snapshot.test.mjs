@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { inspectRetainedRuleSnapshot, canRetainRuleObservation, ruleSnapshotPaths } from "../scripts/retained-rule-snapshot.mjs";
+import { inspectRetainedRuleSnapshot, canRetainRuleObservation, normaliseContentCore, normalisePanelFacts, ruleSnapshotPaths } from "../scripts/retained-rule-snapshot.mjs";
 
 function fixture(t) {
   const root = mkdtempSync(path.join(tmpdir(), "retained-rules-"));
@@ -33,7 +33,7 @@ function fixture(t) {
   });
   const authority = { releaseId: "E101", gitCommit: commit(sourceRoot) };
   git(sourceRoot, "update-ref", "refs/remotes/origin/main", "HEAD");
-  for (const file of ruleSnapshotPaths) write(websiteRoot, file, "unchanged observed snapshot\n");
+  for (const file of [...ruleSnapshotPaths, "app/panel-facts.generated.js", "app/content-core.js"]) write(websiteRoot, file, "unchanged observed snapshot\n");
   commit(websiteRoot);
   git(websiteRoot, "update-ref", "refs/remotes/origin/main", "HEAD");
   write(websiteRoot, "chinese-asr.txt", "dictation\n");
@@ -77,4 +77,19 @@ test("a present published commit cannot excuse mismatched or unavailable origina
   const evidence = inspectRetainedRuleSnapshot(f);
   assert.equal(evidence.status, "block");
   assert.deepEqual(evidence.failures.map((item) => item.detail), ["rule_0", "rule_1"]);
+});
+
+test("Skill supply normalization cannot hide an adjacent decision-impact edit", () => {
+  const baseline = [
+    '{ label: "Skill 供应快照", value: `供应状态`, hero: false },',
+    '{ label: "供给与展示口径", value: "展示状态", hero: false },',
+    'decisionImpact: [`当前${panelSnapshot.skills.activeInstallIntent}个安装意图与${panelSnapshot.skills.selectedPublicCount}个公开条目分别回读；普通说明。`],'
+  ].join("\n");
+  const candidate = baseline.replace("普通说明。", "被篡改说明。");
+  assert.notEqual(normaliseContentCore(baseline), normaliseContentCore(candidate));
+});
+
+test("Skill supply normalization preserves generated-file prefixes", () => {
+  const body = `// observed facts\nexport const generatedPanelFacts = ${JSON.stringify({ sourceWorktreeClean: true, skills: {}, validation: { rows: [{ layer: "Skill supply（能力供应）", status: "pass", label: "通过", detail: "old" }] }, integrity: { schema: "wly.panel-facts-integrity.v1", algorithm: "sha256", payloadSha256: "a" } })};\n`;
+  assert.notEqual(normalisePanelFacts(body), normalisePanelFacts(`// changed prefix\n${body}`));
 });

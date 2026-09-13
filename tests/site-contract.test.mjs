@@ -4130,20 +4130,18 @@ test("dynamic snapshot facts are separated from partial validation", () => {
     assert.ok(panelSnapshot.validation.failures.length >= 1, "failed release validation must name the failing checks");
   }
   assert.match(panelSnapshot.sourceCommit, /^[a-f0-9]{40}$/);
-  assert.equal(typeof panelSnapshot.sourceWorktreeClean, "boolean");
+  assert.equal(typeof panelSnapshot.sourcePublicWorktreeClean, "boolean");
   assert.ok(Number.isInteger(panelSnapshot.sourceDirtyCount));
   assert.equal(panelSnapshot.sourceDirtyCount, panelSnapshot.sourceDirtyPaths.length);
   assert.equal(panelSnapshot.skills.selectedPublicCount, skills.length);
   assert.equal(panelSnapshot.skills.personalSelectedCount, skills.filter((item) => item.sourceKind === "personal_install" && item.availability === "available").length);
   assert.equal(panelSnapshot.skills.hostIntegratedCount, skills.filter((item) => item.sourceKind === "host_integrated" && item.availability === "available").length);
   assert.equal(panelSnapshot.skills.selectedPublicCount, panelSnapshot.skills.personalSelectedCount + panelSnapshot.skills.hostIntegratedCount);
-  const unlistedActiveIntentCount = panelSnapshot.skills.activeInstallIntent - panelSnapshot.skills.personalSelectedCount;
-  assert.ok(Number.isInteger(unlistedActiveIntentCount) && unlistedActiveIntentCount >= 0);
-  assert.ok(Number.isInteger(panelSnapshot.skills.transactionCampaignCount) && panelSnapshot.skills.transactionCampaignCount >= panelSnapshot.skills.activeInstallIntent);
-  assert.ok(skills.filter((item) => item.sourceKind === "personal_install").every((item) => item.transactionState.includes(`${panelSnapshot.skills.transactionCampaignCount} 个供应事务`)));
+  assert.ok(Number.isInteger(panelSnapshot.skills.publicInstallIntentCount) && panelSnapshot.skills.publicInstallIntentCount >= panelSnapshot.skills.personalSelectedCount);
+  assert.equal(Object.hasOwn(panelSnapshot.skills, "transactionCampaignCount"), false);
+  assert.ok(skills.filter((item) => item.sourceKind === "personal_install").every((item) => item.transactionState.includes("供应事务检查通过")));
   assert.ok(skills.filter((item) => item.sourceKind === "host_integrated").every((item) => item.transactionState.includes("不经过个人 Skill 安装事务")));
-  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`${panelSnapshot.skills.activeInstallIntent} 个 personal active install intent`)));
-  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`另有 ${unlistedActiveIntentCount} 个个人安装意图未进入本次公开目录`)));
+  assert.ok(panelSnapshot.validation.rows.some((row) => row.layer.startsWith("Skill supply") && row.detail.includes(`已发布的供应观察覆盖 ${panelSnapshot.skills.personalSelectedCount} 个公开个人 Skill`)));
   assert.equal(panelSnapshot.ruleBinding.length, 5);
   for (const binding of panelSnapshot.ruleBinding) {
     assert.match(binding.sourceSha256, /^[a-f0-9]{64}$/);
@@ -4153,8 +4151,8 @@ test("dynamic snapshot facts are separated from partial validation", () => {
   }
   const agentsCurrentText = JSON.stringify(project.currentState);
   assert.ok(agentsCurrentText.includes(panelSnapshot.sourceCommit), "agents current state omits current source main");
-  assert.ok(agentsCurrentText.includes(`${panelSnapshot.skills.activeInstallIntent} 个 active install intent`));
-  assert.ok(agentsCurrentText.includes(`${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction`));
+  assert.ok(agentsCurrentText.includes(`公开范围内 ${panelSnapshot.skills.publicInstallIntentCount} 个 active install intent`));
+  assert.doesNotMatch(agentsCurrentText, /未进入本次公开目录|terminal transaction/);
   assert.doesNotMatch(agentsCurrentText, /PRIVATE main=d32210b|25 项 active|37\/37.*transaction/);
 });
 
@@ -4333,8 +4331,9 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /"-z"/);
   assert.match(verifier, /split\("\\0"\)/);
   assert.match(refresher, /const sourceRoot = "E:\\\\.agents"/);
-  assert.match(refresher, /function publicSafeSourcePath/);
-  assert.match(refresher, /Y29kZXg=/);
+  assert.match(refresher, /function isWebsiteExcludedSkill/);
+  assert.match(refresher, /personal_website/);
+  assert.match(refresher, /--porcelain=v1", "-z/);
   assert.match(refresher, /Invoke-EAgentRulesRelease\.ps1/);
   assert.match(refresher, /e_rules_active_verified/);
   assert.doesNotMatch(refresher, /Get-ProtectedPolicyAuthorityStatus|policy_epoch|production_activation|candidate_pending/);

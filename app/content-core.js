@@ -30,13 +30,15 @@ if (
   || generatedPanelFacts.ruleBinding.some((binding) => !/^[a-f0-9]{64}$/.test(binding?.sourceSha256 || "") || !Number.isInteger(binding?.sourceBytes) || typeof binding?.sourceMatchesRelease !== "boolean" || !binding?.releasePath)
   || !Array.isArray(generatedPanelFacts?.validation?.rows)
   || !Array.isArray(generatedPanelFacts?.validation?.failures)
-  || !Number.isInteger(generatedPanelFacts?.skills?.activeInstallIntent)
+  || !Number.isInteger(generatedPanelFacts?.skills?.publicInstallIntentCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.publicRegisteredCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.publicInactiveIntentCount)
+  || !Number.isInteger(generatedPanelFacts?.skills?.retiredSkillCount)
   || !Number.isInteger(generatedPanelFacts?.skills?.personalSelectedCount)
   || !Number.isInteger(generatedPanelFacts?.skills?.hostIntegratedCount)
   || !Number.isInteger(generatedPanelFacts?.skills?.selectedPublicCount)
   || generatedPanelFacts.skills.selectedPublicCount !== generatedPanelFacts.skills.personalSelectedCount + generatedPanelFacts.skills.hostIntegratedCount
   || generatedPanelFacts.skills.hostIntegratedDiscovery !== "not_rerun_by_agents_snapshot_refresh"
-  || !Number.isInteger(generatedPanelFacts?.skills?.transactionCampaignCount)
   || !generatedPanelFacts?.integrity?.payloadSha256
 ) {
   throw new Error("panel facts are missing or invalid; run npm run refresh:snapshot before build");
@@ -75,7 +77,7 @@ const agentsSnapshot = createProjectSnapshot({
   boundary: `本轮按各来源的实际观察时间核对，当前活动规则为 ${panelSnapshot.authority.releaseId}。完整本地回归 ${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail 只属于 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 7)}，另 ${localOwnerObservation.crossOwnerSkipped} 项为 cross-owner skip（跨责任源跳过）；不把旧结果继承给 ${panelSnapshot.authority.releaseId}`,
   metrics: [
     { label: "活动规则", value: `${panelSnapshot.authority.releaseId} · ${activeRuleCount}/${activeRuleCount}` },
-    { label: "能力供应", value: `${panelSnapshot.skills.activeInstallIntent} 项` },
+    { label: "能力供应", value: `${panelSnapshot.skills.publicInstallIntentCount} 项` },
     { label: "全量回归", value: "未重跑" },
     { label: "合同覆盖", value: panelSnapshot.validation.rows.find((row) => row.layer.startsWith("Contract coverage"))?.status === "pass" ? "已验证" : "未闭合" }
   ],
@@ -89,8 +91,8 @@ const agentsSnapshot = createProjectSnapshot({
     { label: "全场景本人判断的来源", value: `当前 ${panelSnapshot.authority.releaseId} 已包含全场景本人语境判断：普通聊天也先判断具体异常与信息是否足够，必要才最小补证；两库只辅助，异常核验不回写。五文件的sourceMatchesRelease与独立测试/安装/真实场景证据分别展示，规则生效不等于每个场景都已验收。`, hero: false },
     { label: "当前规则与源码分层", value: `活动规则仍是 ${panelSnapshot.authority.releaseId} release commit=${panelSnapshot.authority.gitCommit}；current pointer revision ${panelSnapshot.authority.pointerRevision}，previous=${panelSnapshot.authority.previous?.release_id || "无"}，五规则 ruleset=${panelSnapshot.authority.rulesetSha256}。当前源码 main=${panelSnapshot.sourceCommit}，branch=${panelSnapshot.sourceBranch}，${panelSnapshot.sourceSync}；源码 main 不能冒充尚未发布的下一代 E release。`, hero: false },
     { label: "当前聚焦验证与历史完整回归", value: `当前 ${panelSnapshot.authority.releaseId} commit ${panelSnapshot.authority.gitCommit} 已由活动 release Inspect、五文件哈希和专用 release validator 验证；当前活动规则还明确跨运行框架的能力映射、独立最高权限登记、Astra High 以上受保护判断，以及正式可见邀请起算的十分钟本人验证窗口；模型和思考强度按语义组合上限选择。规则语义、安装检查与真实场景验收分别成立；本人理解库和浏览恢复仍来自独立更新的 Skill source。没有重跑整个 Local 测试集。最近完整观察仍为 ${localOwnerObservation.observedAt} 的 ${localOwnerObservation.releaseId} commit ${localOwnerObservation.gitCommit.slice(0, 12)}：${localOwnerObservation.passed} pass、${localOwnerObservation.failed} fail、${localOwnerObservation.timedOut} timeout，另 ${localOwnerObservation.crossOwnerSkipped} 项跨责任源跳过；合同覆盖 ${localOwnerObservation.contractPassed}/${localOwnerObservation.contractTotal}、finding ${localOwnerObservation.findings}。历史结果不升级为 ${panelSnapshot.authority.releaseId} 全量通过，短时验收也不证明长程永不偏离。`, hero: false },
-    { label: "Skill 供应快照", value: `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读 ${panelSnapshot.skills.activeInstallIntent} 个 active install intent、${panelSnapshot.skills.transactionCampaignCount}/${panelSnapshot.skills.transactionCampaignCount} 个 terminal transaction；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`, hero: false },
-    { label: "供给与展示口径", value: "本批源清单有46个注册项：31个安装意图、15个停装项，另列8个已退役入口。公开目录选29个个人入口和2个宿主集成能力，共31项；另外2个已安装个人入口未展示，其中包含明确冻结的运行入口。安装、展示与真实可用数量不能互相代换。", hero: false },
+    { label: "Skill 供应快照", value: `当前 Skill 供应快照于 ${panelSnapshot.observedAt} 回读公开范围内 ${panelSnapshot.skills.publicInstallIntentCount} 个 active install intent；selected public=${panelSnapshot.skills.selectedPublicCount}。Source/install/transaction 通过仍不替代 current task、fresh task 或领域 E2E。`, hero: false },
+    { label: "供给与展示口径", value: `公开范围登记${panelSnapshot.skills.publicRegisteredCount}项：${panelSnapshot.skills.publicInstallIntentCount}个安装意图、${panelSnapshot.skills.publicInactiveIntentCount}个停装项，另列${panelSnapshot.skills.retiredSkillCount}个已退役入口。公开目录选${panelSnapshot.skills.personalSelectedCount}个个人入口和${panelSnapshot.skills.hostIntegratedCount}个宿主集成能力，共${panelSnapshot.skills.selectedPublicCount}项。安装、展示与真实可用数量不能互相代换。`, hero: false },
     { label: "工作树热备", value: "工作树热备 source/合同存在；2026-09-07 只读观察确认 G 卷 Healthy/OK，且 G:\\80_Backup\\ControlPlane\\agents-hot-mirror-status.json 存在。该回执最后镜像时间为 2026-07-30T20:30:07-07:00、robocopy exit=1，当时记录 source HEAD=c96dbf1、dirty=21。", hero: false }
   ],
   gaps: [
@@ -737,7 +739,7 @@ export const modules = [
       relations: ["Registry 声明安装意图而 junction 只负责发现", "canonical source 与用户发现目录不是两份源码", "source、install、current task、fresh task 和 E2E 分层证明", "浏览 Skill 调用宿主管理的 Provider 而不复制浏览器客户端", "插件可以供应 Skill 但二者不是同一层"],
       failureRecovery: ["Source 映射漂移时不从用户目录反向复制", "安装事务中断时按 recovery capsule rollback 或 reconcile", "浏览控制重置时先恢复同一标签页并重新读页面", "上传进度不等于成功时读取权威状态和最终记录", "当前任务无回执时保持 Unknown", "退役残留只清理发现路径而不恢复能力"]
     },
-    decisionImpact: ["Source（源码）、quick validation（快速校验）、junction（目录联接）和 transaction（安装事务）全部通过才算安装层健康。", "Current task（当前任务）、Fresh task（全新任务验证）和 E2E（端到端验证）没证据时显示 Unknown（证据不足）。", `当前${panelSnapshot.skills.activeInstallIntent}个安装意图与${panelSnapshot.skills.selectedPublicCount}个公开条目分别回读；公开项中个人入口${panelSnapshot.skills.personalSelectedCount}个、宿主集成${panelSnapshot.skills.hostIntegratedCount}个。browser-control-continuity的既有fresh自然路由只证明当时场景，不证明未来任意浏览任务。`, "安装中断时按 recovery capsule（恢复胶囊）回滚或 reconcile（收敛修复）。", "退役 Skill 的目录或旧测试不能让它重新出现。"],
+    decisionImpact: ["Source（源码）、quick validation（快速校验）、junction（目录联接）和 transaction（安装事务）全部通过才算安装层健康。", "Current task（当前任务）、Fresh task（全新任务验证）和 E2E（端到端验证）没证据时显示 Unknown（证据不足）。", `当前公开范围内${panelSnapshot.skills.publicInstallIntentCount}个安装意图与${panelSnapshot.skills.selectedPublicCount}个公开条目分别回读；公开项中个人入口${panelSnapshot.skills.personalSelectedCount}个、宿主集成${panelSnapshot.skills.hostIntegratedCount}个。browser-control-continuity的既有fresh自然路由只证明当时场景，不证明未来任意浏览任务。`, "安装中断时按 recovery capsule（恢复胶囊）回滚或 reconcile（收敛修复）。", "退役 Skill 的目录或旧测试不能让它重新出现。"],
     problem: "Skill 源码、用户目录可发现性、当前任务注入和真实自然语言 E2E 是不同事实。如果只看文件存在或 junction 存在就声称能力可用，最终会得到一份看起来很满、实际无法判断的清单。",
     implementation: [
       "E:\\.agents\\skills 与 plugins 是 canonical source；personal-skill-supply.json 是名称、来源和 install 意图的唯一 registry。",

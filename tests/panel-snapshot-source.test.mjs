@@ -38,7 +38,7 @@ async function executeScript(name, globals) {
   return { report: JSON.parse(output.join("")), exitCode: sandbox.process.exitCode || 0 };
 }
 
-async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false } = {}) {
+async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false, excludedFixture = null, retiredFixtures = [] } = {}) {
   const sourceRoot = "E:\\.agents";
   const sourceCommit = "b".repeat(40);
   const activeCommit = "a".repeat(40);
@@ -72,12 +72,23 @@ async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false 
     pointer_sha256: "d".repeat(64),
     pointer: { current, previous: null, pointer_revision: 26, activated_at_utc: "2026-09-06T12:58:39Z" }
   };
-  const skills = [{ slug: "fixture-skill", sourceKind: "personal_install", sourcePath: "fixture/SKILL.md" }];
+  const publicFixture = { name: "public-fixture", source: "skills/public-fixture", install: true };
+  const registrySkills = [publicFixture];
+  write(path.join(sourceRoot, publicFixture.source, "SKILL.md"), "---\nname: public-fixture\ndescription: Public fixture\n---\n");
+  if (excludedFixture) {
+    const excluded = { name: "excluded-fixture", source: "skills/excluded-fixture", install: true };
+    registrySkills.push(excluded);
+    write(path.join(sourceRoot, excluded.source, "SKILL.md"), `---\nname: excluded-fixture\ndescription: Excluded fixture\nmetadata:\n  personal_website: excluded\n---\n${excludedFixture}`);
+  }
+  for (const retired of retiredFixtures) {
+    write(path.join(sourceRoot, retired.source, "SKILL.md"), `---\nname: ${retired.name}\ndescription: Retired fixture\n${retired.excluded ? "metadata:\n  personal_website: excluded\n" : ""}---\n`);
+  }
+  const skills = [{ slug: "public-fixture", registryName: "public-fixture", sourceKind: "personal_install", sourcePath: "skills/public-fixture/SKILL.md" }];
   const read = async (file, encoding) => {
     let bytes = files.get(key(file));
     if (path.basename(file) === "panel-projects.json") bytes = Buffer.from(JSON.stringify({ projects: [{ id: "agents", enabled: true, source: { visibility: "PRIVATE" } }] }));
     if (path.basename(file) === "panel-rule-bindings.json") bytes = Buffer.from(JSON.stringify(documentedRules));
-    if (path.basename(file) === "personal-skill-supply.json") bytes = Buffer.from(JSON.stringify({ skills: [{ name: "fixture-skill", install: true }] }));
+    if (path.basename(file) === "personal-skill-supply.json") bytes = Buffer.from(JSON.stringify({ skills: registrySkills, retired_skills: retiredFixtures.map(({ name, source }) => ({ name, source })) }));
     assert.ok(bytes, "Unexpected fixture read: " + file);
     return encoding ? bytes.toString(encoding) : bytes;
   };
@@ -92,7 +103,7 @@ async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false 
         "rev-parse origin/main": sourceCommit,
         "branch --show-current": "main",
         "rev-list --left-right --count HEAD...origin/main": ahead + "\t" + behind,
-        "status --porcelain": dirty
+        "status --porcelain=v1 -z": dirty
       };
       stdout = command.startsWith("merge-base --is-ancestor ") ? "" : responses[command];
       assert.notEqual(stdout, undefined, "Unexpected Git call: " + command);
@@ -103,7 +114,10 @@ async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false 
         stdout = JSON.stringify(release);
       } else if (entry === "Test-ControlPlaneContractCoverage.ps1") stdout = JSON.stringify({ status: "pass" });
       else if (entry === "Test-EAgentRulesRelease.ps1") stdout = "fixture validator passed";
-      else if (entry === "Test-PersonalSkillSupply.ps1") stdout = JSON.stringify({ source: { status: "pass" }, install: { status: "pass" }, transaction: { status: "pass", campaign_count: 1 } });
+      else if (entry === "Test-PersonalSkillSupply.ps1") {
+        assert.equal(args[args.indexOf("-SkillName") + 1], "public-fixture", "only public fixture supply is checked");
+        stdout = JSON.stringify({ source: { status: "pass" }, install: { status: "pass" }, transaction: { status: "pass", campaign_count: 1 } });
+      }
       else assert.fail("Unexpected process entry: " + entry);
     }
     return { status: 0, stdout, stderr: "" };
@@ -151,8 +165,43 @@ test("later published Skill commits retain a passing five-rule source relation a
   assert.ok((await verify(rejected)).report.findings.some((item) => item.code === "snapshot_matching_published_source_misclassified"));
 });
 
+test("excluded fixture metadata leaves the public snapshot unchanged while public entries still disclose changes", async () => {
+  const baseline = await collect();
+  const excluded = await collect({
+    dirty: " M skills/excluded-fixture/SKILL.md\0",
+    excludedFixture: "modified privately"
+  });
+  const projection = (facts) => ({
+    sourcePublicWorktreeClean: facts.sourcePublicWorktreeClean,
+    sourceDirtyCount: facts.sourceDirtyCount,
+    sourceDirtyPaths: facts.sourceDirtyPaths,
+    sourceSync: facts.sourceSync,
+    skills: facts.skills,
+    validation: facts.validation
+  });
+  assert.deepEqual(projection(excluded), projection(baseline));
+  assert.doesNotMatch(JSON.stringify(excluded), /excluded-fixture|Excluded fixture|modified privately/);
+
+  const publicChange = await collect({ dirty: " M skills/public-fixture/SKILL.md\0" });
+  assert.equal(publicChange.sourceDirtyCount, 1);
+  assert.deepEqual(publicChange.sourceDirtyPaths, ["skills/public-fixture/SKILL.md"]);
+  assert.equal(publicChange.validation.rows.find((row) => row.layer.startsWith("Source checkout")).status, "repair");
+
+  const renamedAcrossBoundary = await collect({ dirty: "R  skills/excluded-fixture/SKILL.md\0skills/public-fixture/SKILL.md\0", excludedFixture: "modified privately" });
+  assert.equal(renamedAcrossBoundary.sourceDirtyCount, 1);
+  assert.deepEqual(renamedAcrossBoundary.sourceDirtyPaths, ["skills/public-fixture/SKILL.md"]);
+});
+
+test("retired Skill statistics use retired_skills and omit only explicitly excluded fixtures", async () => {
+  const facts = await collect({ retiredFixtures: [
+    { name: "retired-public-fixture", source: "skills/retired-public-fixture" },
+    { name: "retired-excluded-fixture", source: "skills/retired-excluded-fixture", excluded: true }
+  ] });
+  assert.equal(facts.skills.retiredSkillCount, 1);
+});
+
 for (const [name, state] of [
-  ["dirty source", { dirty: " M skills/fixture-skill/SKILL.md\n" }],
+  ["dirty source", { dirty: " M skills/public-fixture/SKILL.md\0" }],
   ["unpublished commits", { ahead: 1 }],
   ["remote changes", { behind: 1 }],
   ["unactivated rule bytes", { ruleChanged: true }]

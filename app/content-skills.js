@@ -10,7 +10,7 @@ function skill(definition) {
     statusTone: "mixed",
     sourceState: `当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)} 中的唯一源码已核对`,
     installState: "canonical junction 已安装",
-    transactionState: `${generatedPanelFacts.skills.transactionCampaignCount} 个供应事务全部终态；0 个坏事务`,
+    transactionState: "供应事务检查通过；0 个坏事务",
     currentTaskState: "本轮宿主回执未知",
     freshTaskState: "新任务回执未知",
     endToEndState: "按场景验收",
@@ -288,7 +288,7 @@ export const skills = [
     flow: ["判断是否应进入本项目", "读取当前事项并只取必要原件", "分开事实、来源说明、未知和本人决定", "冻结DOCX/PDF、附件、签名和渠道方案", "生成同源成品", "重读正文并逐页检查彩色/灰度页面", "形成自包含ready_for_delivery材料包", "现实动作完成后分别回读递送、收件、处理和对方签回", "中断后先核对最近材料包再继续", "相关本人背景来自个人理解库；形成有依据的新本人信息或更正时按同一合同回写与回读"],
     boundaries: ["私人事实、原件、草稿、签名、成品和回执不进入公开 Git", "整包输入固定不等于每条事实来源已机械闭合，真正未知继续保留", "自动字段/页面验收不等于整篇语义和语气已审完", "本人签名与对方签回相互独立", "ready_for_delivery 明确 delivered=false", "不建立数据库、后台服务、队列或第二套材料系统", "正式文书字段绑定本次明确输入；本人理解库后续更正不追改已经签署、递送或保留为证据的历史成果", "具体事项与处理状态仍由文书项目维护，不复制另一份现行本人档案"],
     dependencies: ["受保护的当前材料状态与原件", "正式文书与材料生成、逐页渲染和校验入口", "必要时的原件定位、消息上下文、录音转写或扫描识别能力"],
-    tests: `Skill 快速校验、canonical junction（规范目录联接）与 ${generatedPanelFacts.skills.transactionCampaignCount}/${generatedPanelFacts.skills.transactionCampaignCount} 供应事务通过；2026-09-01 的 2.0.1 基线保留 526 pass、6 skip、101 subtests，以及隔离 wheel 两个入口用 Microsoft Word + Poppler 完成的虚构 plan/build/verify。本轮只重跑通用文书 32 pass，没有运行真实个人材料或外部递送 E2E。`,
+    tests: "Skill 快速校验、canonical junction（规范目录联接）与供应事务检查通过；2026-09-01 的 2.0.1 基线保留 526 pass、6 skip、101 subtests，以及隔离 wheel 两个入口用 Microsoft Word + Poppler 完成的虚构 plan/build/verify。本轮只重跑通用文书 32 pass，没有运行真实个人材料或外部递送 E2E。",
     sourceLocatorVisibility: "withheld",
     sourcePath: "withheld:document-materials",
     publicSourceLabel: "个人 Skill 供应链中的“文书和材料制作”入口",
@@ -300,7 +300,7 @@ export const skills = [
     freshTaskState: "安装后的全新 Sol Max 任务已发现“文书和材料制作”入口；发现通过不等于真实事项执行通过",
     evidenceObservedAt: `当前供应链：${generatedPanelFacts.observedAt}；实现与隔离安装验收：2026-09-01`,
     evidenceSourceCommit: generatedPanelFacts.sourceCommit,
-    evidenceBasis: `文书和材料制作 Skill 当前说明、.agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${currentERules.releaseId}、${generatedPanelFacts.skills.activeInstallIntent} 个 active install intent、${generatedPanelFacts.skills.transactionCampaignCount}/${generatedPanelFacts.skills.transactionCampaignCount} 终态事务、实现项目 PRIVATE main 3ab7fb4、全仓/聚焦回归与隔离 wheel 虚构验收；供应、实现和真实事项证据保持分层。`,
+    evidenceBasis: `文书和材料制作 Skill 当前说明、.agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${currentERules.releaseId}、公开范围内 ${generatedPanelFacts.skills.publicInstallIntentCount} 个 active install intent、供应事务检查通过、实现项目 PRIVATE main 3ab7fb4、全仓/聚焦回归与隔离 wheel 虚构验收；供应、实现和真实事项证据保持分层。`,
     endToEndState: "PASS（完全虚构安装后 plan/build/verify）；真实个人材料、真实签名和外部递送 E2E 为 not_run"
   }),
   skill({

@@ -700,7 +700,7 @@ function ProjectCurrentState({ entry }) {
         <div><dt>规则身份</dt><dd><code>{panelSnapshot.authority.gitCommit.slice(0, 12)}</code><small>ruleset {panelSnapshot.authority.rulesetSha256}</small></dd></div>
         <div><dt>前一代</dt><dd>{panelSnapshot.authority.previous?.release_id || "无"}<small>{panelSnapshot.authority.previous?.git_commit?.slice(0, 12) || "无 previous commit"}</small></dd></div>
         <div><dt>源码与 release</dt><dd>{panelSnapshot.authority.sourceMatchesRelease ? "五份 canonical source 与活动 release 一致" : `当前 source 有 ${panelSnapshot.sourceDirtyCount || 0} 项未激活施工；活动规则仍是 frozen ${panelSnapshot.authority.releaseId}`}</dd></div>
-        <div><dt>Skills（能力入口）</dt><dd>面板收录 {skills.length} / 当前供应 {panelSnapshot.skills.activeInstallIntent}</dd></div>
+        <div><dt>Skills（能力入口）</dt><dd>面板收录 {skills.length} / 当前供应 {panelSnapshot.skills.publicInstallIntentCount}</dd></div>
       </dl>
     );
   }

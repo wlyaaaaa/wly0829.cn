@@ -104,7 +104,7 @@ requireFact(payload.skills.personalSelectedCount === personalSelectedCount, "sna
 requireFact(payload.skills.hostIntegratedCount === hostIntegratedCount, "snapshot_host_skill_count_mismatch", `${payload.skills.hostIntegratedCount}/${hostIntegratedCount}`);
 requireFact(payload.skills.hostIntegratedDiscovery === "not_rerun_by_agents_snapshot_refresh", "snapshot_host_skill_discovery_boundary_missing", String(payload.skills.hostIntegratedDiscovery));
 requireFact(payload.skills.selectedPublicCount === personalSelectedCount + hostIntegratedCount, "snapshot_skill_source_split_invalid", `${payload.skills.selectedPublicCount}/${personalSelectedCount + hostIntegratedCount}`);
-requireFact(payload.skills.activeInstallIntent >= payload.skills.personalSelectedCount, "snapshot_skill_supply_count_invalid", `${payload.skills.activeInstallIntent}/${payload.skills.personalSelectedCount}`);
+requireFact(payload.skills.publicInstallIntentCount >= payload.skills.personalSelectedCount, "snapshot_skill_supply_count_invalid", `${payload.skills.publicInstallIntentCount}/${payload.skills.personalSelectedCount}`);
 requireFact(Array.isArray(payload.validation?.rows) && payload.validation.rows.length >= 5, "snapshot_validation_rows_invalid", String(payload.validation?.rows?.length));
 requireFact(Array.isArray(payload.validation?.failures), "snapshot_validation_failures_invalid", typeof payload.validation?.failures);
 const releaseValidatorRow = payload.validation?.rows?.find((row) => row.layer.startsWith("E release validator"));
@@ -134,7 +134,7 @@ const report = {
   ruleset_sha256: authority.rulesetSha256,
   rule_binding_count: boundRules.size,
   selected_skill_count: payload.skills.selectedPublicCount,
-  active_install_intent_count: payload.skills.activeInstallIntent,
+  public_install_intent_count: payload.skills.publicInstallIntentCount,
   payload_sha256: actualPayloadSha256,
   live_release_checked: shouldReadLiveRelease,
   live_release_id: liveRelease?.verified_current?.release_id || null,

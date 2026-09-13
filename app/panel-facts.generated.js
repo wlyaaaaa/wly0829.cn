@@ -5,7 +5,7 @@ export const generatedPanelFacts = {
   "observedAt": "2026-09-12 12:51（中国时间）",
   "sourceCommit": "028d8161e53ec85aa497ac05749c5aaedbcf142b",
   "sourceBranch": "main",
-  "sourceWorktreeClean": true,
+  "sourcePublicWorktreeClean": true,
   "sourceDirtyCount": 0,
   "sourceDirtyPaths": [],
   "sourceAhead": 0,
@@ -71,12 +71,14 @@ export const generatedPanelFacts = {
     }
   ],
   "skills": {
-    "activeInstallIntent": 31,
+    "publicRegisteredCount": 46,
+    "publicInstallIntentCount": 31,
+    "publicInactiveIntentCount": 15,
+    "retiredSkillCount": 8,
     "personalSelectedCount": 29,
     "hostIntegratedCount": 2,
     "hostIntegratedDiscovery": "not_rerun_by_agents_snapshot_refresh",
-    "selectedPublicCount": 31,
-    "transactionCampaignCount": 44
+    "selectedPublicCount": 31
   },
   "authority": {
     "status": "e_rules_active_verified",
@@ -154,7 +156,7 @@ export const generatedPanelFacts = {
         "layer": "Skill supply（能力供应）",
         "status": "pass",
         "label": "通过",
-        "detail": "31 个 personal active install intent；公开目录含 29 个已选择 personal Skill 与 2 个 host-integrated Skill，共 31 个；另有 2 个个人安装意图未进入本次公开目录；未展示不决定可用性，冻结的运行时仍不可调用。personal source/install/transaction 通过，44 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
+        "detail": "本次已发布的供应观察覆盖 29 个公开个人 Skill 与 2 个宿主集成 Skill；source/install/transaction 通过，宿主集成项保留各卡片已有的 observed source snapshot。本轮没有逐项重跑，Current/Fresh/E2E 继续按各项证据分别说明。"
       },
       {
         "layer": "Contract coverage（跨控制面合同覆盖）",
@@ -168,6 +170,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "f108b7e5eac86b5f17c3dd20287b374bc466cbebc46ddd263949f3a0597994f5"
+    "payloadSha256": "50162e935094ece362bbe4c4208aaaf07065cc050ff308009bb0aeb74dd0d9bc"
   }
 };

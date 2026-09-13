@@ -112,10 +112,35 @@ const privateSourcePathTerms = ["Y29kZXg="].map((value) => Buffer.from(value, "b
 
 function publicSafeSourcePath(value, index) {
   const normalized = String(value).replaceAll("\\", "/").toLowerCase();
-  if (privateSourcePathTerms.some((term) => normalized.includes(term))) {
-    return `[workbench-local metadata ${index + 1}]`;
-  }
+  if (privateSourcePathTerms.some((term) => normalized.includes(term))) return `[workbench-local metadata ${index + 1}]`;
   return value;
+}
+
+function sourceRelativePath(value) {
+  const normalized = String(value || "").replaceAll("\\", "/").replace(/^\.\/+|\/+$/g, "");
+  if (!normalized || normalized.split("/").includes("..")) throw new Error("skill registry source path is invalid");
+  return normalized;
+}
+
+function isWebsiteExcludedSkill(skillText) {
+  const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(skillText)?.[1];
+  if (!frontmatter) return false;
+  const metadata = /(?:^|\r?\n)metadata:\s*\r?\n((?:[ \t]+[^\r\n]*(?:\r?\n|$))*)/.exec(frontmatter)?.[1];
+  return Boolean(metadata && /^[ \t]+personal_website:\s*["']?excluded["']?\s*(?:#.*)?$/m.test(metadata));
+}
+
+function parseDirtyEntries(output) {
+  const records = String(output || "").split("\0");
+  const entries = [];
+  for (let index = 0; index < records.length; index += 1) {
+    const record = records[index];
+    if (!record) continue;
+    const status = record.slice(0, 2);
+    const paths = [record.slice(3)];
+    if (/[RC]/.test(status) && records[index + 1]) paths.push(records[++index]);
+    entries.push({ status, paths });
+  }
+  return entries;
 }
 
 function releaseIdentity(value) {
@@ -183,12 +208,25 @@ const sourceCommit = git(["rev-parse", "HEAD"]);
 const trackedMain = git(["rev-parse", "origin/main"]);
 const sourceBranch = git(["branch", "--show-current"]);
 const [sourceAhead, sourceBehind] = git(["rev-list", "--left-right", "--count", "HEAD...origin/main"]).split(/\s+/).map(Number);
-const dirtyResult = run("git", ["status", "--porcelain"], { cwd: sourceRoot });
+const dirtyResult = run("git", ["status", "--porcelain=v1", "-z"], { cwd: sourceRoot });
 if (dirtyResult.exitCode !== 0) throw new Error(`git status --porcelain failed: ${dirtyResult.stderr.trim()}`);
-const dirty = dirtyResult.stdout.trimEnd();
-const sourceDirtyPaths = dirty
-  ? dirty.split(/\r?\n/).filter(Boolean).map((line, index) => publicSafeSourcePath(line.slice(3).trim(), index))
-  : [];
+const registry = JSON.parse(await readFile(path.join(sourceRoot, "config", "personal-skill-supply.json"), "utf8"));
+const registrySkills = await Promise.all(registry.skills.map(async (item) => {
+  const source = sourceRelativePath(item.source);
+  const skillText = await readFile(path.join(sourceRoot, source, "SKILL.md"), "utf8");
+  return { ...item, source, websiteExcluded: isWebsiteExcludedSkill(skillText) };
+}));
+const excludedSkillSources = new Set(registrySkills.filter((item) => item.websiteExcluded).map((item) => item.source));
+const isExcludedSkillPath = (value) => {
+  const normalized = String(value || "").replaceAll("\\", "/").replace(/^\.\/+/, "");
+  return [...excludedSkillSources].some((source) => normalized === source || normalized.startsWith(`${source}/`));
+};
+const dirtyEntries = parseDirtyEntries(dirtyResult.stdout);
+const publicDirtyEntries = dirtyEntries
+  .map((entry) => ({ ...entry, publicPath: entry.paths.find((item) => !isExcludedSkillPath(item)) }))
+  .filter((entry) => entry.publicPath);
+const sourceDirtyPaths = publicDirtyEntries.map((entry, index) => publicSafeSourcePath(entry.publicPath, index));
+const dirty = publicDirtyEntries.length > 0;
 const initialSourceFingerprint = sha256(Buffer.from(JSON.stringify({
   sourceTopLevel,
   sourceCommit,
@@ -231,17 +269,34 @@ if (
 
 const coverage = runPowerShellJson(path.join(sourceRoot, "tools", "Test-ControlPlaneContractCoverage.ps1"), [], sourceRoot);
 const releaseValidation = run(powershell, ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", path.join(sourceRoot, "tests", "Test-EAgentRulesRelease.ps1")], { cwd: sourceRoot });
-const skillSupply = runPowerShellJson(path.join(sourceRoot, "tools", "Test-PersonalSkillSupply.ps1"), ["-RequireInstalled", "-NoExternalEvidence"], sourceRoot);
-const registry = JSON.parse(await readFile(path.join(sourceRoot, "config", "personal-skill-supply.json"), "utf8"));
-const registryByName = new Map(registry.skills.map((item) => [item.name, item]));
-const activeInstallIntentCount = registry.skills.filter((item) => item.install).length;
 const personalSelectedSkills = skills.filter((item) => item.sourceKind === "personal_install");
 const hostIntegratedSkills = skills.filter((item) => item.sourceKind === "host_integrated");
+const registryByName = new Map(registrySkills.map((item) => [item.name, item]));
+const publicInstallIntentCount = registrySkills.filter((item) => item.install && !item.websiteExcluded).length;
+const publicInactiveIntentCount = registrySkills.filter((item) => !item.install && !item.websiteExcluded).length;
+const publicRegisteredCount = publicInstallIntentCount + publicInactiveIntentCount;
+const retiredSkillCount = (await Promise.all((registry.retired_skills || []).map(async (item) => {
+  if (item.personal_website === "excluded") return 0;
+  try {
+    const skillText = await readFile(path.join(sourceRoot, sourceRelativePath(item.source), "SKILL.md"), "utf8");
+    return isWebsiteExcludedSkill(skillText) ? 0 : 1;
+  } catch {
+    return 1;
+  }
+}))).reduce((total, value) => total + value, 0);
 const missingSelectedSkills = personalSelectedSkills
   .map((item) => ({ publicSlug: item.slug, registryName: item.registryName || item.slug }))
-  .filter((item) => !registryByName.get(item.registryName)?.install)
+  .filter((item) => {
+    const registryItem = registryByName.get(item.registryName);
+    return !registryItem?.install || registryItem.websiteExcluded;
+  })
   .map((item) => `${item.publicSlug}->${item.registryName}`);
 if (missingSelectedSkills.length) throw new Error(`selected Skills are not active install intent: ${missingSelectedSkills.join(", ")}`);
+const skillSupply = personalSelectedSkills.map((item) => runPowerShellJson(
+  path.join(sourceRoot, "tools", "Test-PersonalSkillSupply.ps1"),
+  ["-RequireInstalled", "-NoExternalEvidence", "-SkillName", item.registryName || item.slug],
+  sourceRoot
+));
 const invalidHostIntegratedEvidenceShape = hostIntegratedSkills.filter((item) => item.availability !== "available" || !item.sourcePath || !/^[a-f0-9]{64}$/.test(item.sourceSha256 || ""));
 if (invalidHostIntegratedEvidenceShape.length) throw new Error(`host-integrated Skill snapshot evidence is malformed: ${invalidHostIntegratedEvidenceShape.map((item) => item.slug).join(", ")}`);
 
@@ -249,7 +304,7 @@ const postSourceCommit = git(["rev-parse", "HEAD"]);
 const postTrackedMain = git(["rev-parse", "origin/main"]);
 const postSourceBranch = git(["branch", "--show-current"]);
 const [postSourceAhead, postSourceBehind] = git(["rev-list", "--left-right", "--count", "HEAD...origin/main"]).split(/\s+/).map(Number);
-const postDirtyResult = run("git", ["status", "--porcelain"], { cwd: sourceRoot });
+const postDirtyResult = run("git", ["status", "--porcelain=v1", "-z"], { cwd: sourceRoot });
 if (postDirtyResult.exitCode !== 0) throw new Error(`post-validation git status --porcelain failed: ${postDirtyResult.stderr.trim()}`);
 const postSourceFingerprint = sha256(Buffer.from(JSON.stringify({
   sourceTopLevel: path.resolve(git(["rev-parse", "--show-toplevel"])),
@@ -275,7 +330,7 @@ const failedTests = releaseValidationPassed ? [] : [{
   durationSeconds: null,
   reason: summarizeTestOutput(`${releaseValidation.stdout}\n${releaseValidation.stderr}`)
 }];
-const supplyPassed = skillSupply.exitCode === 0 && skillSupply.data.source?.status === "pass" && skillSupply.data.install?.status === "pass" && skillSupply.data.transaction?.status === "pass";
+const supplyPassed = skillSupply.every((result) => result.exitCode === 0 && result.data.source?.status === "pass" && result.data.install?.status === "pass" && result.data.transaction?.status === "pass");
 const coveragePassed = coverage.exitCode === 0 && coverage.data.status === "pass";
 
 const ruleBinding = await Promise.all(documentedRuleBindings.rules.map(async (rule) => {
@@ -305,10 +360,10 @@ const sourceRulesMatchRelease = ruleBinding.every((item) => item.sourceMatchesRe
 const rows = [
   validationRow("E rules current（E 规则当前指针）", "pass", "通过", `${current.release_id} 已从 PRIVATE main commit ${current.git_commit.slice(0, 12)} 激活；pointer revision ${release.pointer.pointer_revision}，previous=${release.pointer.previous?.release_id || "无"}。历史 C 盘材料只作恢复证据。`),
   validationRow("Rule closure（五规则闭包）", "pass", "通过", `五份规则位于同一 ${current.release_id} release，ruleset SHA-256=${current.ruleset_sha256}；页面 logical id、bytes 和 SHA 与 release descriptor 一致。`),
-  validationRow("Source checkout（源码工作树）", dirty || sourceAhead || sourceBehind || !sourceRulesMatchRelease ? "repair" : "pass", dirty ? `${sourceDirtyPaths.length} 项未提交修改` : sourceAhead || sourceBehind ? `HEAD/origin 为 ${sourceAhead}/${sourceBehind}` : !sourceRulesMatchRelease ? "五规则源码存在未激活差异" : "已发布源码；五规则与活动版本一致", `source HEAD=${sourceCommit.slice(0, 12)}，origin/main=${trackedMain.slice(0, 12)}，active release commit=${current.git_commit.slice(0, 12)}。${dirty ? `未提交路径：${sourceDirtyPaths.join("、")}。` : "工作树干净。"} ${sourceRulesMatchRelease ? `五规则源码与 ${current.release_id} 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。` : `五规则源码与活动 release 存在字节差异，只作为未激活候选，不覆盖 ${current.release_id}。`}`),
+  validationRow("Source checkout（源码工作树）", dirty || sourceAhead || sourceBehind || !sourceRulesMatchRelease ? "repair" : "pass", dirty ? `公开范围内 ${sourceDirtyPaths.length} 项未提交修改` : sourceAhead || sourceBehind ? `HEAD/origin 为 ${sourceAhead}/${sourceBehind}` : !sourceRulesMatchRelease ? "五规则源码存在未激活差异" : "公开范围工作树无未提交修改；五规则与活动版本一致", `source HEAD=${sourceCommit.slice(0, 12)}，origin/main=${trackedMain.slice(0, 12)}，active release commit=${current.git_commit.slice(0, 12)}。${dirty ? `公开范围未提交路径：${sourceDirtyPaths.join("、")}。` : "公开范围工作树无未提交修改。"} ${sourceRulesMatchRelease ? `五规则源码与 ${current.release_id} 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。` : `五规则源码与活动 release 存在字节差异，只作为未激活候选，不覆盖 ${current.release_id}。`}`),
   validationRow("E release validator（活动版本验证器）", releaseValidationPassed ? "pass" : "repair", releaseValidationPassed ? "通过" : "失败", releaseValidationPassed ? `Test-EAgentRulesRelease.ps1 已重新验证 ${current.release_id} 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。` : `活动版本验证器退出码 ${releaseValidation.exitCode}：${failedTests[0].reason}`),
   validationRow("Full local tests（当前源码全量回归）", "unknown", "快速刷新未重跑", `网页刷新没有再次运行整个 .agents 本地测试集。它只证明 ${current.release_id} 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。`),
-  validationRow("Skill supply（能力供应）", supplyPassed ? "pass" : "repair", supplyPassed ? "通过" : "未闭合", supplyPassed ? `${activeInstallIntentCount} 个 personal active install intent；公开目录含 ${personalSelectedSkills.length} 个已选择 personal Skill 与 ${hostIntegratedSkills.length} 个 host-integrated Skill，共 ${skills.length} 个；另有 ${activeInstallIntentCount - personalSelectedSkills.length} 个个人安装意图未进入本次公开目录；未展示不决定可用性，冻结的运行时仍不可调用。personal source/install/transaction 通过，${skillSupply.data.transaction.campaign_count} 个事务 campaign 全部 terminal；host-integrated 只记录各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。` : `source=${skillSupply.data.source?.status} install=${skillSupply.data.install?.status} transaction=${skillSupply.data.transaction?.status}`),
+  validationRow("Skill supply（能力供应）", supplyPassed ? "pass" : "repair", supplyPassed ? "通过" : "未闭合", supplyPassed ? `公开目录中的 ${personalSelectedSkills.length} 个个人 Skill 已分别通过 source/install/transaction 检查；${hostIntegratedSkills.length} 个宿主集成 Skill 保留各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。` : "公开目录中的个人 Skill 有 source、install 或 transaction 检查未闭合。"),
   validationRow("Contract coverage（跨控制面合同覆盖）", coveragePassed ? "pass" : "repair", coveragePassed ? "通过" : "BLOCK", coveragePassed ? "现行三个控制面的合同 catalog 与入口覆盖通过；任何入口不得再读取 C 盘规则 authority、Publisher 或 policy epoch。" : `coverage 状态 ${coverage.data.status}，finding ${coverage.data.finding_count ?? "unknown"} 项。`)
 ];
 
@@ -321,7 +376,7 @@ const generated = {
   observedAt: chinaTime(),
   sourceCommit,
   sourceBranch,
-  sourceWorktreeClean: !dirty,
+  sourcePublicWorktreeClean: !dirty,
   sourceDirtyCount: sourceDirtyPaths.length,
   sourceDirtyPaths,
   sourceAhead,
@@ -330,7 +385,7 @@ const generated = {
   repositoryVisibility: sourceRegistration.source.visibility === "PRIVATE" ? "私有" : sourceRegistration.source.visibility === "PUBLIC" ? "公开" : "未知",
   repositoryVisibilityEvidence: "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   ruleBinding,
-  skills: { activeInstallIntent: activeInstallIntentCount, personalSelectedCount: personalSelectedSkills.length, hostIntegratedCount: hostIntegratedSkills.length, hostIntegratedDiscovery: "not_rerun_by_agents_snapshot_refresh", selectedPublicCount: skills.length, transactionCampaignCount: skillSupply.data.transaction.campaign_count },
+  skills: { publicRegisteredCount, publicInstallIntentCount, publicInactiveIntentCount, retiredSkillCount, personalSelectedCount: personalSelectedSkills.length, hostIntegratedCount: hostIntegratedSkills.length, hostIntegratedDiscovery: "not_rerun_by_agents_snapshot_refresh", selectedPublicCount: skills.length },
   authority: {
     status: "e_rules_active_verified",
     statusLabel: `${current.release_id} 活动规则已验证`,
