@@ -4,23 +4,23 @@ const stateLabels = ["正常工作", "发现问题", "暂不可用"];
 const sourceCommit = "c12821ac26c0ede830d8ddb1cbc00d56e57dbdb3";
 
 export const ramdiskGuardianSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-08T08:10:37.648Z",
+  observedAt: "2026-09-14T04:20:46.4369877Z",
   label: "缓存盘和定时任务正常运行；最近自然巡检已恢复 OK",
-  boundary: "源码冻结于2026-09-08T08:00:42Z；08:10:37Z实际采集了08:07:32Z的自然任务结果。Z只放可再生成缓存，重建可能让应用重新加载；隔离恢复测试沿用03:43Z验收，本轮没有重建实盘或重启。",
+  boundary: "2026-09-14只读核对Z卷、目录、说明、镜像大小及自然任务状态，最新STATUS为04:03:49Z的OK。9月8日静态及隔离恢复测试、Primo映射和Chrome连接保留原日期；本次没有重建实盘或专门重启。",
   metrics: [
     { label: "内存盘", value: "12 GiB · 8 GiB 缓存软上限" },
-    { label: "当前空间", value: "已用 0.1 GiB · 空闲 11.9 GiB" },
+    { label: "当前空间", value: "已用0.2 GiB · 空闲11.8 GiB" },
     { label: "自动巡检", value: "登录后 · 每 15 分钟" },
     { label: "最近状态", value: "OK · 任务返回 0" }
   ],
   facts: [
     { label: "源版本", value: `PUBLIC main ${sourceCommit} 已正常推送并远端回读，源工作区干净。修复了旧容量提示、自定义盘符仍重建0号盘，以及驱动命令失败却报告完成的问题。` },
-    { label: "实际磁盘与镜像", value: "Windows 当前识别 Z: / RAMDISK / NTFS，总量12883849216字节、剩余12782698496字节。Primo只读列表确认0号盘对应Z，设置12288 MB、SCSI、DMM（动态内存管理）、非临时盘；镜像E:\\RamdiskImage\\Z.vdf启用Load & Save（加载和保存）与Shutdown Save（关机保存）。当前镜像12874547712字节，不能沿用2026-07-23清理后约0.1GiB的历史大小。" },
-    { label: "任务与健康分别读取", value: "RAMDisk_Code_Backup 当前Ready（等待下次运行），以登录触发并每PT15M重复，Interactive（用户登录会话）/Highest（最高权限）、IgnoreNew（忽略重叠运行）、执行上限PT10M。最近启动2026-09-08T08:07:28Z、返回0；STATUS在08:07:32Z为OK：提交余量9.3GiB、可用内存12.1GiB、不可归属内存估算-2.1GiB。03:37Z的低余量WARN已不再是本轮状态。" },
+    { label: "实际磁盘与镜像", value: "2026-09-14只读识别Z: / RAMDISK / Healthy（健康），总12883849216字节、剩余12695658496字节；镜像E:\\RamdiskImage\\Z.vdf仍12874547712字节。Primo的0号Z映射、12288MB、SCSI、DMM（动态内存管理）、非临时及Load & Save（加载和保存）/Shutdown Save（关机保存）设置保留9月8日证据，本次未重证映射。" },
+    { label: "任务与健康分别读取", value: "RAMDisk_Code_Backup当前Ready（等待下次运行），最近2026-09-14T04:03:44Z返回0；STATUS在04:03:49Z为OK：Z已用0.2GiB、空闲11.8GiB，主机可用30.3GiB、提交余量17.2GiB、不可归属估算-9.6GiB。登录后每15分钟、Interactive（用户登录会话）/Highest（最高权限）、IgnoreNew（忽略重叠运行）及10分钟上限保留既有任务配置证据。" },
     { label: "目录与应用接入", value: "守护器维护12个明确目录：Caches及Personal、Work、ChromeCache、ChromeCodeCache、ChromeGPUCache、360zip_temp、WeFlow，Scratch及Personal、Work，以及TEMP。Chrome的Cache、Code Cache、GPUCache现场均为指向对应Z目录的junction（目录连接）。WeFlow目录存在不单独证明其当前进程已使用该缓存。" },
     { label: "说明与自然定时运行", value: "修复后现有任务自然执行，Z:\\使用说明.md与仓库Z_使用说明.md的SHA-256同为8557ED61B35E48E522C8354A5F5CC0550903EFA2D807D92D53D573F35F6CADC9。无需复制另一套安装代码，隐藏启动器直接使用当前仓库脚本。" },
     { label: "源码与行为验证", value: "15项原生静态断言，以及10个隔离恢复场景，均在PowerShell 7和Windows PowerShell 5.1通过。旧脚本在初始化失败时仍报告完成的场景已复现；修复后初始化、保存、目录/说明恢复或Primo缺失均报ERROR，且不继续报告完成。目录恢复失败和初始化失败都不会继续保存镜像。" },
-    { label: "启动证据边界", value: "快速启动HiberbootEnabled=0，Primo非临时盘和镜像设置已回读。最近系统启动为2026-09-03T03:06:55.5Z；本轮没有自然重启后的完整恢复演练，不能用当前盘存在或测试通过代替该证据。" }
+    { label: "启动证据边界", value: "最近系统启动为2026-09-14T00:33:06.5Z；启动后已观察自然任务OK、卷标签正确、12目录及说明一致。快速启动关闭和Primo镜像设置保留9月8日观察；本次没有专门重启，也未验每项应用缓存和完整Primo保存恢复流程。" }
   ],
   gaps: [
     "cache-only（仅缓存）是使用约定，不是文件拦截器。误放进去的唯一数据仍可能丢失；守护器不备份、不恢复个人文件，也不会审查每个缓存的内容。",
@@ -82,7 +82,7 @@ export const ramdiskGuardianProject = {
   ],
   evidenceLayers: [
     { layer: "源码与隔离回归", proves: "已验证源提交、15项静态约定、10种生产恢复分支夹具，并复现修复前的假完成。", doesNotProve: "不证明真实驱动重建耗时、释放内存量或活动应用恢复效果。" },
-    { layer: "当前安装与只读实机状态", proves: "Primo的Z映射、12GiB容量、镜像设置、Chrome三个目录连接、任务和08:07Z最新OK均已回读；先前静默WARN是03:37Z历史状态。", doesNotProve: "不证明没有其他进程内存问题，也不证明任意新应用已接入Z。" },
+    { layer: "当前安装与只读实机状态", proves: "9月14日已回读Z卷容量、12目录、说明、镜像大小及04:03Z自然任务OK；Primo映射/镜像选项和Chrome三个连接仍为9月8日历史证据。", doesNotProve: "不证明没有其他进程内存问题，也不证明任意新应用已接入Z。" },
     { layer: "修复后的自然任务运行", proves: "现有任务直接调用当前仓库脚本，03:37轮自然执行返回0，更新后的盘根说明与源哈希一致。", doesNotProve: "该轮没有触发紧急重建，也不是一次重启恢复演练。" },
     { layer: "源码发布与网页", proves: `源main ${sourceCommit}已远端回读；README/DEPLOY对应PDF已重新生成、提取文字并逐页视觉检查。`, doesNotProve: "源仓库发布本身不证明网页部署；两种发布分别回读。" }
   ],
@@ -140,7 +140,7 @@ export const ramdiskGuardianProject = {
     { date: "2026-07-23", commit: "a7aee97", result: "本机DMM高水位故障后，容量从32GiB降到12GiB，并加入资源阈值与不可归属内存估算驱动的恢复。" },
     { date: "2026-08 至 2026-09", commit: sourceCommit, result: "保留静默WARN，补盘符/卷标检查，再让恢复使用实际Primo编号并如实处理失败；部署和恢复说明回到当前12GiB配置。" }
   ],
-  snapshotUpdateNote: "源码冻结于2026-09-08T08:00:42Z；08:10:37Z读到08:07:32Z自然巡检OK，03:37Z的WARN保留为历史。隔离恢复是03:43Z已验收证据；本次没有重建实盘或自然重启，不把任务0、健康OK和重启恢复混为一件事。"
+  snapshotUpdateNote: "9月14日本次只读确认04:03:49Z自然巡检OK及本次启动后的Z卷、目录和说明状态；9月8日03:37Z的WARN及03:43Z隔离恢复保留历史日期。未重建实盘、专门重启或重验完整应用恢复，不把任务0、健康OK和完整重启恢复混为一件事。"
 };
 
 export const ramdiskGuardianModules = [
@@ -193,20 +193,20 @@ export const ramdiskGuardianModules = [
     title: "资源紧张有记录，普通警告不弹窗", shortTitle: "健康与静默提醒", kicker: "任务执行成功和资源充足，是两件不同的事",
     teaser: "记录空间、内存和提交余量；WARN静默，进入ERROR时提醒。",
     value: "保留排查资源问题的线索，避免普通内存波动反复打断当前工作。",
-    status: "08:07Z自然巡检OK；WARN仍按设计静默", statusTone: "accent",
+    status: "9月14日04:03Z自然巡检OK；WARN仍按设计静默", statusTone: "accent",
     why: "内存盘占用系统真实RAM。只看计划任务返回0会漏掉内存紧张；每次警告都弹窗又会干扰使用。项目把执行结果和健康状态分开，并保留警告日志。",
-    example: "“我刚才看到WARN，现在还要处理吗？”先看最近一轮：这次提交余量已回到9.3GiB，状态为OK。旧告警说明当时余量偏小，不证明Primo坏了，也不是一直有效的清盘指令。",
+    example: "“我刚才看到WARN，现在还要处理吗？”先看最近一轮：9月14日04:03Z这次提交余量已回到17.2GiB，状态为OK。旧告警说明当时余量偏小，不证明Primo坏了，也不是一直有效的清盘指令。",
     result: "STATUS.txt显示最近状态和数值，guardian.log保留过程；WARN不新增弹窗，ERROR从上一状态转入时才尝试通过msg.exe提醒一次。",
     problem: "任务返回0只能表明脚本结束。已有部分早期ERROR路径也会返回0，必须同时读取健康状态；新修复的紧急恢复失败明确返回非零。",
     readerStates: { pass: "本轮指标没有触发警告，记录OK。", problem: "资源达到提醒阈值或采集部分失败，记录具体WARN，不自动杀应用。", unavailable: "卷查询失败记录WARN；系统内存查询失败也记录WARN；不可归属计数器读取失败返回未知，不能把缺值当正常。" }, stateLabels,
     decisionImpact: ["可用内存<8GiB、提交余量<4GiB、Z空闲<2GiB或已用>8GiB会提醒。", "WARN写STATUS、.lasthealth和guardian.log；只有进入ERROR才写alerts.log并调用msg.exe。", "不自动关闭高内存应用，不调整分页文件；若满足紧急条件，另进入驱动重建分支。"],
     concepts: [{ term: "提交余量", explanation: "CommitLimit减CommittedBytes，是新内存申请的剩余预算，不等同于磁盘空闲或物理可用内存。" }, { term: "状态变化提醒", explanation: "上次不是ERROR、本次是ERROR才尝试提醒，包括WARN转ERROR；持续同一ERROR不重复弹。" }],
-    implementation: ["Win32_PerfFormattedData_PerfOS_Memory提供AvailableMBytes、CommitLimit、CommittedBytes。", "Read-RamDiskSpace优先Get-Volume，必要时用System.IO.DriveInfo，最多尝试3次。", "guardian.log超过1MiB时轮换到guardian.log.1；这是运行日志，不是用户文件备份。", "当前08:07:32Z记录：Z已用0.1GiB/空闲11.9GiB，可用内存12.1GiB、提交余量9.3GiB、不可归属估算-2.1GiB。"],
+    implementation: ["Win32_PerfFormattedData_PerfOS_Memory提供AvailableMBytes、CommitLimit、CommittedBytes。", "Read-RamDiskSpace优先Get-Volume，必要时用System.IO.DriveInfo，最多尝试3次。", "guardian.log超过1MiB时轮换到guardian.log.1；这是运行日志，不是用户文件备份。", "2026-09-14T04:03:49Z记录：Z已用0.2GiB/空闲11.8GiB，可用内存30.3GiB、提交余量17.2GiB、不可归属估算-9.6GiB。"],
     flow: ["任务进入一轮巡检并采集空间。", "读取系统内存和相关估算，汇总触发的阈值。", "写入最近健康与日志，仅按ERROR状态变化发出提醒。"],
     boundaries: ["定期采样不是实时监控，电脑关机或未满足用户会话条件时不会照常执行。", "无窗启动代码和日志不单独证明每次实际桌面都从未出现窗口。"],
     failures: [{ condition: "长期提交余量偏低", response: "结合其他系统工具查实际占用；守护器不从一个数值猜进程，也不自行改系统内存配置。" }, { condition: "采样返回未知", response: "保留采集失败与缺值，不能把旧数或0顶上去宣称健康。" }],
     sources: [{ path: "zguardian.ps1", role: "空间采样、内存阈值与Set-Health。" }, { path: "logs/STATUS.txt", role: "最近一次健康快照。" }, { path: "run_hidden.vbs", role: "隐藏运行并等待退出。" }],
-    verification: ["03:43Z已验收的15项静态检查保留WARN静默断言，代码输入未变，本次不机械重跑。", "计划任务08:07Z自然执行返回0，STATUS另行回读为OK；此前03:37Z返回0但STATUS为WARN，两种证据始终分开。"],
+    verification: ["03:43Z已验收的15项静态检查保留WARN静默断言，代码输入未变，本次不机械重跑。", "9月14日04:03Z自然任务返回0，STATUS另行回读为OK；9月8日03:37Z曾返回0但STATUS为WARN，任务结果与健康状态分别判断。"],
     searchProjection: { intents: ["内存盘WARN别弹窗", "任务返回0但STATUS是WARN", "查看Z盘提交余量"], entities: ["WARN", "ERROR", "STATUS.txt", "guardian.log", "Commit Headroom", "msg.exe"], relations: ["任务执行记录与健康记录需要一起读"], failureRecovery: ["根据具体指标排查，不能把WARN直接当成清盘指令"] },
     relation: "这些读数既用于日常解释，也为下一模块的有条件驱动恢复提供输入。"
   },
@@ -250,7 +250,7 @@ export const ramdiskGuardianModules = [
     boundaries: ["本轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统。", "Primo配置检查、自然周期执行和冷启动验收是不同证据。"],
     failures: [{ condition: "任务存在但Z尚未创建", response: "部署会说明部分完成；先恢复Primo配置，再执行所需后续步骤。" }, { condition: "Chrome正使用缓存目录", response: "跳过连接调整；不要为了网页展示关闭用户浏览器。" }, { condition: "任务返回0但健康ERROR", response: "以STATUS具体故障为准排查，不能只验任务返回值。" }],
     sources: [{ path: "DEPLOY.md / DEPLOY.pdf", role: "当前12GiB部署、检查与回退说明。" }, { path: "deploy.ps1 / run_hidden.vbs", role: "实际安装与调用链。" }, { path: "docs/primo_setup.png", role: "历史界面参考，容量以当前文档和实机为准。" }],
-    verification: ["当前Primo为0号Z、12288MB、非临时、镜像启用，快速启动关闭；任务和三个Chrome连接已回读。", "README/DEPLOY PDF分别3页/2页，本轮重新生成并核对文字、渲染页面和源哈希。", "完整自然重启恢复未在本轮重做，保留该边界。"],
+    verification: ["9月8日已回读Primo为0号Z、12288MB、非临时、镜像启用、快速启动关闭及三个Chrome连接；9月14日本次仅重证卷、目录、说明、镜像大小与自然任务状态。", "README/DEPLOY PDF分别3页/2页，本轮重新生成并核对文字、渲染页面和源哈希。", "完整自然重启恢复未在本轮重做，保留该边界。"],
     searchProjection: { intents: ["重装后恢复RamdiskGuardian", "Chrome缓存连接到Z", "恢复RAMDisk_Code_Backup计划任务", "停止内存盘守护"], entities: ["deploy.ps1", "run_hidden.vbs", "ChromeCache", "ChromeCodeCache", "ChromeGPUCache", "Primo", "HiberbootEnabled"], relations: ["Primo建盘和加载镜像，任务补骨架，Chrome通过连接使用缓存"], failureRecovery: ["未建盘先恢复Primo，Chrome运行则跳过连接；停用任务不会自动删盘"] },
     relation: "这是其余四个模块的实际运行入口，也界定驱动、脚本和应用分别负责的恢复步骤。"
   }

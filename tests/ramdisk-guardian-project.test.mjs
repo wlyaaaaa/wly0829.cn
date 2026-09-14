@@ -51,10 +51,11 @@ test("snapshot keeps current OK and historical WARN separate from task success a
   const facts = project.currentSnapshot.facts.map((item) => item.value).join("\n");
   assert.ok(facts.includes(sourceCommit));
   assert.match(facts, /12个明确目录/);
-  assert.match(facts, /08:07:32Z为OK：提交余量9.3GiB/);
-  assert.match(facts, /03:37Z的低余量WARN已不再是本轮状态/);
+  assert.match(facts, /04:03:49Z为OK：Z已用0\.2GiB.*提交余量17\.2GiB/);
+  const memoryModule = modules.find((item) => item.slug === "host-memory-telemetry-and-silent-monitoring");
+  assert.ok(memoryModule.verification.some((item) => /9月8日03:37Z曾返回0但STATUS为WARN/.test(item)));
   assert.match(facts, /10个隔离恢复场景/);
-  assert.match(project.snapshotBoundary, /没有重建实盘或重启/);
+  assert.match(project.snapshotBoundary, /没有重建实盘或专门重启/);
   assert.ok(project.currentSnapshot.gaps.some((gap) => gap.includes("使用约定") && gap.includes("误放")));
   const recovery = modules.find((item) => item.slug === "unaccounted-watchdog-and-driver-auto-release");
   assert.ok(recovery.failures.some((item) => item.condition === "init失败" && item.response.includes("不调用save")));

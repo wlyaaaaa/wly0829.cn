@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-08T00:21:26.3156207Z",
-  "label": "设备计数误报已修复；本机网络就绪，KDE 当前没有可用对端",
-  "boundary": "本轮修复本地化摘要被误计为设备的问题，66项源测试通过。一次既有 --refresh 发现刷新后，KDE仍是Known=1、Available=0：知道1台设备，但没有同时已配对且可达的对端。doctor为20 PASS、2 WARN，另一项是Including passwords（包含密码）人工检查。因缺少可用KDE对端，本轮未执行真实复制或文件传输；没有新配对、修改网络或重启设备。",
+  "observedAt": "2026-09-14T04:19:00Z",
+  "label": "本机网络和守护正常；KDE已有1个可用对端，真实跨机传输仍未重验",
+  "boundary": "2026-09-14只读doctor为20 PASS（通过）、2 WARN（提醒），KDE汇总Known=1、Available=1；网络、精确防火墙和单实例新鲜心跳均通过。两端配对身份及Including passwords（包含密码）开关仍需人工核对。本次没有复制、传文件、主动刷新发现或重启；9月8日66项源测试保留原日期。",
   "metrics": [
     {
       "label": "使用场景",
@@ -49,7 +49,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "诊断的两项 WARN",
-      "value": "KDE peer availability现在准确报告没有同时已配对且可达的设备；Clipboard password sharing仍提示人工检查密码开关。Known=1不等于已配对，Available=0是本轮跨机传输的实际缺口。Windows云剪贴板未检测到启用；doctor只报告，不修改插件、网络或防火墙。"
+      "value": "KDE当前列出1台已配对且可达的设备，doctor仍提醒人工确认两端配对身份；Clipboard password sharing（剪贴板密码共享）继续要求人工核对密码开关。Windows云剪贴板未检测到启用。当前不再缺少可用KDE对端，但本次没有测量真实传输结果。"
     },
     {
       "label": "能力与未做的验收",
@@ -57,7 +57,7 @@ const baseSnapshot = createProjectSnapshot({
     }
   ],
   "gaps": [
-    "本轮已调用一次既有设备发现刷新，KDE仍无可用对端，因而无法开展真实复制或文件双向传输/哈希核对；不新建配对来绕过这个条件。自然重启也未重验。",
+    "本次只做只读诊断，Known=1、Available=1，没有执行复制或文件传输；现有可用对端不替代真实结果与人工身份核对。9月8日发现刷新后为0是历史状态，自然重启未重验。",
     "配对身份与 Including passwords 关闭仍需两端人工确认。即使关闭，也不能保证任意被复制的普通文本里没有秘密。",
     "在线尽力而为同步没有强一致顺序、离线补发、并发复制合并或文件断点续传保证。图像应作为文件发送。",
     "Android 平板是后续 P1 目标，本轮只接受 Windows 双机。Windows 登录前不支持剪贴板或收文件；已经登录后的锁屏不等于退出会话，睡眠时不唤醒设备。",
@@ -106,7 +106,7 @@ export const meshclipKitProject = {
   "route": "/projects/meshclip-kit",
   "visibility": "公开仓库",
   "statusTone": "accent",
-  "cardStatus": "本机网络就绪；KDE 当前无可用对端，传输还不能验收",
+  "cardStatus": "本机网络就绪；KDE有1个可用对端，真实传输未重验",
   "cardStatusTone": "accent",
   "cardMetrics": [
     {
@@ -336,7 +336,7 @@ export const meshclipKitProject = {
     {
       "layer": "本次 doctor 20 PASS / 2 WARN",
       "proves": "本机 Tailscale、KDE、登录启动、看门狗、精确入站与待完成事务检查结果。",
-      "doesNotProve": "KDE当前无可用设备，密码开关仍需人工确认；诊断成功不等于实际复制或文件送达。"
+      "doesNotProve": "KDE当前有1个可用设备，两端配对身份与密码开关仍需人工确认；诊断成功不等于实际复制或文件送达。"
     },
     {
       "layer": "本次 tailscale ping",
@@ -682,7 +682,7 @@ export const meshclipKitModules = [
     "kicker": "双向人工配对核验与尽力而为传输边界",
     "route": "/projects/meshclip-kit/kde-connect-pairing-sync",
     "statusTone": "accent",
-    "status": "本机KDE运行且配置存在；一次发现刷新后，可用对端仍为0",
+    "status": "本机KDE运行且配置存在；当前Known=1、Available=1，真实传输未重验",
     "summary": "customDevices帮助KDE跨子网找到对端；配对要在两端确认，Including passwords由人关闭。两端在线时同步纯文本和发送文件；通常<2秒、100次无回环、1GB文件是源验收目标，不是本轮实测。",
     "problem": "设备可ping通但未配对时仍不能正常传输；中断后要重新发送，不承诺断点续传。",
     "why": "网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。",
@@ -755,7 +755,7 @@ export const meshclipKitModules = [
     ],
     "verification": [
       "本轮66项源测试含配置保留、旧版修复和14项真实进程设备计数回归；本地化零设备摘要不再产生假设备。",
-      "一次--refresh后仍为Known=1、Available=0，doctor明确没有同时已配对且可达的设备；该现实条件阻止本轮复制与文件验收，没有读取真实数据。"
+      "9月14日只读设备汇总Known=1、Available=1；没有执行复制、发送文件或读取真实内容。9月8日一次--refresh后可用数为0保留为历史，不能作为当前无法传输的结论。"
     ],
     "relation": "这一层才是用户真正复制和发送的位置，结果不能由底层网络或脚本测试代替。",
     "searchAliases": [

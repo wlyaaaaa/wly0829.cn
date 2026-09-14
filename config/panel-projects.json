@@ -650,8 +650,8 @@
       "route": "/projects/github-index",
       "ai_refresh": {
         "content_path": "app/content-github-index.js",
-        "semantic_revision": 11,
-        "scope": "project overview and six modules covering the 48-repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 284f02f9 and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability; current 48 identities, 25 PUBLIC and 23 PRIVATE, 44 clones and 4 remote-only; generation 284f02f9 and eight-file 25235-byte readback; bounded three-line 512-character diagnostics and independent broker reasons, detached-worktree root guidance, read-only Hook checks, and only one same-argument retry for exit 128 with the precise TLS EOF signature; the stale fetch wording and over-broad content-type restriction are corrected in source; archived repositories remain in the actual Git inventory",
+        "semantic_revision": 12,
+        "scope": "project overview and six modules covering the current repository owner ledger, bounded milestone records, admission, worktree completion and cleanup, publication, all nine typed major actions including the completed daily-preferences private-repository creation and first default-branch convergence, immutable generation 284f02f9 and interruption recovery; baseline auto-advance and the distinction between major-action history and current unverified availability; read current identity totals, PUBLIC/PRIVATE split, clone coverage and remote-only counts independently of source commits; generation 284f02f9 and eight-file 25235-byte readback; bounded three-line 512-character diagnostics and independent broker reasons, detached-worktree root guidance, read-only Hook checks, and only one same-argument retry for exit 128 with the precise TLS EOF signature; the stale fetch wording and over-broad content-type restriction are corrected in source; archived repositories remain in the actual Git inventory",
         "collectors": [
           "git -C E:\\GitHub总索引 status --porcelain=v2 --branch",
           "E:\\GitHub总索引\\tools\\Get-GitOwnerStatus.ps1 -Json",
@@ -829,8 +829,8 @@
       "route": "/projects/personal-materials",
       "ai_refresh": {
         "content_path": "app/content-personal-materials.js",
-        "semantic_revision": 8,
-        "scope": "Complete existing four-module non-media original finder, retaining source-routed bounded filename discovery, exact intake and trusted file-manager retirement through existing scheduled sync; distinguish current source inventory path entries from exact locators and on-demand discovery; AI defaults to read-only inspect/inspect-discovered without registration or desktop launch, with find match evidence and exact indexed-text coverage; locate-content reads only one selected verified original and returns hash/version-bound PDF text-layer pages, DOCX top-level paragraphs/cells or TXT/MD lines, bounded snippets, extraction coverage and single-item OCR gaps; explicit desktop open retains its own registration/state and launcher behavior; no original copying or broad body scan; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result",
+        "semantic_revision": 9,
+        "scope": "Read current status and inventory independently of Git: distinguish registered rows, per-material text coverage, available roots and lower bounds from full totals and fresh original verification. Complete source-defined non-media original finder, retaining source-routed bounded filename discovery, exact intake and trusted file-manager retirement through existing scheduled sync; distinguish current source inventory path entries from exact locators and on-demand discovery; AI defaults to read-only inspect/inspect-discovered without registration or desktop launch, with find match evidence and exact indexed-text coverage; locate-content reads only one selected verified original and returns hash/version-bound PDF text-layer pages, DOCX top-level paragraphs/cells or TXT/MD lines, bounded snippets, extraction coverage and single-item OCR gaps; explicit desktop open retains its own registration/state and launcher behavior; no original copying or broad body scan; reader examples directly explain locating passages inside one selected original, the returned position and the no-timestamp/no-text-layer/coverage-gap result",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/personal-materials; expose only repository identity, visibility, clean/sync state and commit, never the private local source locator",
           "read tracked AGENTS.md, README.md, materials.py, schema.sql and tests/test_materials.py from the admitted clean main; run the explicit read-only status and inventory commands against the current default database to publish only source count, current depth-bounded non-media path entries, exact locator count, on-demand discovery count, media skips, relation/text counts, errors and cutoff semantics; never read titles, body text, candidates, payloads, exact locators or file fingerprints",
@@ -1110,8 +1110,8 @@
       "route": "/projects/timeaudit",
       "ai_refresh": {
         "content_path": "app/content-timeaudit.js",
-        "semantic_revision": 8,
-        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states; rejected frozen-window invalid GPU telemetry remains historical, while source-owned NVML validation/reinitialization and LHM-or-null fallback recover new valid samples; separate 180-second recovery acceptance, startup gap, unknown initial trigger and no-game FPS evidence",
+        "semantic_revision": 9,
+        "scope": "project overview and seven product-defined modules covering collection, hardware/FPS analysis and visualization plus bounded PCConfig anomaly-digest delivery, runtime reliability, Windows clipboard history, actual-value sensitivity, and recovery; RTSS shared-memory FPS precedence, freshness and explicit idle/waiting/fallback states; rejected frozen-window invalid GPU telemetry remains historical, while source-owned NVML validation/reinitialization and LHM-or-null fallback recover new valid samples; separate 180-second recovery acceptance, startup gap, unknown initial trigger, dated no-game FPS evidence and current valid/rejected frame aggregates without assuming the frame source",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TimeAudit status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/TimeAudit -RefreshRefs -Json",
@@ -1531,7 +1531,7 @@
       "route": "/projects/ai-cli-profile-manager",
       "ai_refresh": {
         "content_path": "app/content-ai-cli-profile-manager.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "complete product-first Windows 11 AI CLI operations layer with seven source-backed modules: explicit Profile selection and native CLI launch; exact Provider and model identities with no fallback; DPAPI SecretRef and target-process isolation; Doctor and text/tool/Agent evidence separation; recoverable Codex machine runs with exact thread identity, permissions, budgets and managed public search; local models and optional third-party proxies; CurrentUser install, upgrade, retirement recovery, uninstall, transparent native/eject output and Chinese manuals; third-party Codex/Claude/OpenCode continuity policy attached to LaunchPlan, existing project-state handoff before and after compaction, official-provider native behavior, exact configured context/output/reserve controls, and separate unverified real compaction behavior",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ai-cli-profile-manager status --porcelain=v2 --branch and git describe --tags --always",
@@ -1651,7 +1651,7 @@
       "route": "/projects/work-delivery",
       "ai_refresh": {
         "content_path": "app/content-work-delivery.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "Existing work-support project and five retained delivery-engine modules: lightweight real work understanding, communication, decisions and review complete directly without forcing packages; only selected continuing source-version relationships trigger the existing evidence/typed-fact/review/quality engine, six same-build deliverables and precise rebound/stale handling; relevant shared personal background is read and evidence-backed new personal understanding written back through its owning interface, never promoted to confirmed business facts or copied work state; preserve post-commit timing, per-file replacement, installation/Office evidence and honest baseline/recovery gaps at their original observation times",
         "collectors": [
           "Git Owner live admission and default-branch readback for PRIVATE wlyaaaaa/work-delivery-copilot; expose only public-safe repository identity, visibility, clean/sync state, version and commits",
@@ -1863,7 +1863,7 @@
       "route": "/projects/wechat-direct",
       "ai_refresh": {
         "content_path": "app/content-wechatdirect.js",
-        "semantic_revision": 5,
+        "semantic_revision": 6,
         "scope": "Complete existing six-module project, preserving dated archive aggregates, named-contact incremental archives, completed-state replay and explicit crash gaps, local Moments and account/source identity; add bounded context cursors, around-time ordering and per-page versus requested-window search semantics; structured ordered reading packages with optional HTML; exact native image/emoji/voice/video/file materialization, DAT and bounded WXGF decoding, original/thumbnail and static/animated quality, explicit same-message native emoji CDN with local-only option; per-shard sender identity including openim and string native IDs; transfer/red-packet native projections; next-same-contact sender_identity_reconcile with unrechecked retained-message gaps; validate exported media and derived WAV before normal increment and noChange; no real chat/media or frozen runtime execution for website refresh",
         "collectors": [
           "git -C E:\\Projects\\Tools\\WeChatDirect status --porcelain=v2 --branch",
@@ -1967,7 +1967,7 @@
       "route": "/projects/proxyclean",
       "ai_refresh": {
         "content_path": "app/content-proxyclean.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "project overview and six source-backed modules covering default-mode dead-loopback-port cleanup without welding a new endpoint versus explicit Direct clearing of listed active/remote user and Git proxies plus WinINET; exact orphan-default-route preconditions requiring explicit HardwareInterface true, Up state and nonzero non-fake-ip gateway; virtual, absent or unknown adapters cannot authorize deletion and the postcheck reuses the same predicate; User32/WinINET notification plus the existing-process environment limit; read-only dynamic listener/fake-ip-route/Docker/manual-pin/exit-IP evidence; best-effort targeted port PID and named-shell stopping even without a listener, whole-string proxy cleanup, wildcard-listener risk, the subsequent broader ProxyClean cleanup and final readback; WiFi Diagnose/SoftReset/Disable-then-Enable recovery with exit 2/3/4/5; physical-interface-only IPv6 status and any-on-off-all/otherwise-on-all group toggle without per-adapter preimage rollback while preserving natpierce/Tailscale/WSL/virtual adapters; one-click UAC entrypoints; one-primary-TUN-path prevention posture and multi-path warning without automatic selection; control-plane versus data-plane troubleshooting; browser-versus-App evidence boundaries; and retired DIRECT-only fallback material",
         "collectors": [
           "git -C E:\\Projects\\Tools\\ProxyClean status --porcelain=v2 --branch",
@@ -2202,7 +2202,7 @@
       "route": "/projects/meshclip-kit",
       "ai_refresh": {
         "content_path": "app/content-meshclip-kit.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "Windows two-device Tailscale and KDE Connect integration with direct-or-relay transport, exact approved online Windows peer resolution, exact daemon/interface/peer/port firewall rules and explicit reversible handling of conflicting rules; preserved KDE configuration and known legacy duplicate repair; manual pairing and password-plugin confirmation; best-effort online text/file use with user-performed file hash verification; documented latency/copy-count/1GB acceptance goals distinguished from measurements; silent session watchdog and limited existing supervisor task with realistic scheduling delays; read-only diagnostic PASS/WARN/UNKNOWN; project-owned uninstall and interrupted-transaction recovery; Android future and pre-login boundaries. Device diagnostics count validated KDE IDs from stdout only, exclude localized stderr summaries, and return Unknown/null on malformed output or command failure; Known does not imply paired, diagnostic Status Available does not imply available device count; one existing discovery refresh distinguishes stale discovery from an actual unavailable KDE peer.",
         "collectors": [
           "git -C V:\\Personal\\Projects\\meshclip-kit status --porcelain=v2 --branch",
@@ -2407,7 +2407,7 @@
       "route": "/projects/sunshine-remote-streaming",
       "ai_refresh": {
         "content_path": "app/content-sunshine-remote-streaming.js",
-        "semantic_revision": 1,
+        "semantic_revision": 2,
         "scope": "complete product-first Windows Sunshine and Moonlight remote streaming operations snapshot: physical primary display priority with verified MTT1337 VDD fallback; Win32 window geometry journaling, border tolerance and conditional restoration to physical primary; independent VDD resolution, refresh rate, scaling and HDR profile management without topology mutation or mirroring; manual emergency headless configuration separated from the normal main-first guard; decoupling of streaming from Tailscale transport with current peer route classified only by live direct or DERP evidence; documented 32 Mbps uplink budgeting and CBR 18-20 Mbps plus AV1 client guidance separated from stream telemetry; remote wake-up design trade-offs separated from unverified physical cold-start acceptance; idempotent network binding and service repair with the installed daily fallback verification task; strict GPU stability fail-closed gates protecting physical screens and Lian Li HS2 displays",
         "collectors": [
           "git -C E:\\Projects\\Tools\\sunshine-remote-streaming status --porcelain=v2 --branch and git rev-parse HEAD",
@@ -2909,8 +2909,8 @@
       "route": "/projects/pc-panel-hub",
       "ai_refresh": {
         "content_path": "app/content-pc-panel-hub.js",
-        "semantic_revision": 10,
-        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay; September 7 published a4d8e22 and production recovery evidence: the existing hidden launcher waits for watchdog nonzero exit, retries after 30 seconds, and honors explicit stop without a new task or service; fresh one-hertz TURZX sending and recovery are verified and the owner separately confirms normal physical refresh; original RTSS/Device Error history, current absent HS2 overlay, and untested sleep/cold-power/topology branches remain distinct",
+        "semantic_revision": 11,
+        "scope": "project overview with layered physical/visual evidence, plus six project-defined modules covering the case-panel data/render/transport path, HS2 event overlay and external producer/hotkey controls, clean installation/private binding/migration, power/recovery ownership, physical A108/OLED wiring and the bounded display-topology/Wallpaper Engine render-rebind recovery chain; HS2 music, Steam and dual-phone event lifetimes plus ordinary-window startup guard before full overlay; September 7 published a4d8e22 and production recovery evidence: the existing hidden launcher waits for watchdog nonzero exit, retries after 30 seconds, and honors explicit stop without a new task or service; read current one-hertz TURZX heartbeat and HS2 process state separately from dated recovery and owner physical confirmation; original RTSS/Device Error history, current HS2 presence without fresh placement proof, and untested sleep/cold-power/topology branches remain distinct",
         "collectors": [
           "git -C E:\\Projects\\Tools\\TURZX-SideScreen status --porcelain=v2 --branch; reduce to branch, ahead/behind and dirty counts before website use",
           "E:\\GitHub总索引\\tools\\Get-ProjectAdmission.ps1 -Repo wlyaaaaa/PC-Panel-Hub -RefreshRefs -Json",
@@ -3138,7 +3138,7 @@
       "route": "/projects/steam-millennium-config-backup",
       "ai_refresh": {
         "content_path": "app/content-steam-millennium-config-backup.js",
-        "semantic_revision": 2,
+        "semantic_revision": 3,
         "scope": "Steam Millennium config snapshot and manual recovery: core settings and quick.css; five plugin manifests and three configured enabled plugins; Adwaita/Zehn options and palette; weekly hidden task, exact allowlist, seven-day throttle, source/target overlap and destination edit checks, sequential copy and manual merge restore. Distinguish published config, uncommitted local snapshot, installed versions, source tests and actual restore.",
         "collectors": [
           "git -C E:\\Projects\\Tools\\steam-millennium-config-backup status --porcelain=v2 --branch",
@@ -3217,7 +3217,7 @@
       "route": "/projects/ramdisk-guardian",
       "ai_refresh": {
         "content_path": "app/content-ramdisk-guardian.js",
-        "semantic_revision": 3,
+        "semantic_revision": 4,
         "scope": "Project overview and five source-backed modules: bounded cache admission and retired backup role; drive arrival, twelve explicit directories and guide repair; host memory health and silent WARN; conditional Primo recovery with unique disk mapping and checked command results; installation, existing scheduled task, Chrome cache junctions, image and natural reboot boundaries.",
         "collectors": [
           "git -C E:\\Projects\\Tools\\RamdiskGuardian status --porcelain=v2 --branch",

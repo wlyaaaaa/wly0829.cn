@@ -3,16 +3,17 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const stateLabels = ["可直接使用", "需要确认", "当前不可用"];
 
 const wechatDirectSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-09T03:40:00Z",
-  label: "变化候选发现、本人参与筛选与原生系统事件已实现；本轮45项及6个子测试通过，私人归档保留原观察",
+  observedAt: "2026-09-14T04:23:52.908757Z",
+  label: "本轮只读核对4个完成态归档、7934条消息；来源能力与旧测试保留原日期，当前媒体和验真边界分开",
+  boundary: "2026-09-14只读清单与文件元数据：4个归档、7934条消息、12个PNG，未见语音或派生WAV；四份均有缺口。没有读取聊天正文或重新验真，9月1日3/3及9月9日源码测试各保留原日期",
   metrics: [
-    { label: "完成态归档", value: "3 个" },
-    { label: "已保存消息", value: "6032 条" },
-    { label: "语音 / 派生", value: "3 + 3 个文件" },
-    { label: "独立验真", value: "3 / 3" }
+    { label: "完成态归档", value: "4 个" },
+    { label: "已保存消息", value: "7934 条" },
+    { label: "当前物化媒体", value: "12 个 PNG · 语音未见" },
+    { label: "独立验真", value: "历史 3/3 · 本轮未重跑" }
   ],
   facts: [
-    { label: "上次归档聚合", value: "2026-09-01 已核对 3 个完成态具名联系人归档，合计 6032 条消息、3 个原始语音文件和 3 个派生文件；3/3 verify-export 成功，三份均保留 gap，最新 manifest 为 2026-08-25T22:23:16.8259403Z。本轮没有读取这些档案，不能把这组历史聚合称为当前全量。" },
+    { label: "当前归档聚合", value: "2026-09-14只读登记导出根的4份manifest/state/last-run：合计7934条消息，4份最近回执success且manifest绑定一致，最新清单修改时间2026-09-10T09:31:53Z。4份均有缺口，unavailableMediaCount合计2329，未标名群成员消息合计1925，unknownSenderCount为0。文件元数据共12个PNG，未见原始语音或派生WAV；未读消息、联系人或媒体内容，也未新跑verify-export。9月1日6032条、3个语音+3个派生及3/3验真的历史证据不改写为本次结果。" },
     { label: "当前公开版本", value: "WeChatDirect v0.1.0；PUBLIC main=3faf4d206f74af60827020e376ab7c9cc0c52d4b，2026-09-09T03:36Z远端main回读同值，工作树干净。", hero: false },
     { label: "当前环境体检", value: "Windows + Python 3.14 的无正文 Doctor 成功；两个账号槽位、两个来源配置文件、两个本地状态文件、加密依赖、压缩依赖与语音解码器均报告可用。" },
     { label: "聊天读取边界", value: "一次只解析一个明确联系人或群的有界窗口；最多扫描 500 条、返回 80 条，保留消息方向、群成员标签、回复目标、媒体关系、实际时间范围与可见历史缺口。" },
@@ -44,7 +45,7 @@ export const wechatDirectProject = {
   visibility: "公开仓库",
   repositoryUrl: "https://github.com/wlyaaaaa/WeChatDirect",
   statusTone: "mixed",
-  cardStatus: "变化发现、本人参与筛选与阅读包已实现；45项/6子测试通过，真实会话与远端全历史仍分开验收",
+  cardStatus: "4个归档、7934条消息；当前缺口明示，旧验真与本轮清单回读分开",
   cardStatusTone: "pass",
   ...wechatDirectSnapshot,
   kicker: "把微信上下文、回复和附件变成可核对的工作材料",
@@ -186,9 +187,9 @@ export const wechatDirectProject = {
     { name: "明确保全", command: "wechat-direct preserve --account primary --contact \"<对象>\" --lookback-days 1 --output \"<目录>\"", purpose: "生成一个自包含聊天窗口、回复关系、媒体和哈希清单。" },
     { name: "无正文环境体检", command: "py -3.14 wechat_cli.py doctor", purpose: "检查平台、Python、依赖、配置入口和语音解码器，不打开聊天数据库或输出路径。" },
     { name: "导出验真", command: "wechat-direct verify-export --output \"<导出目录>\"", purpose: "不打开源数据库，重算 v1 联系人或朋友圈导出的清单、状态、文件和媒体关系。" },
-    { name: "开发回归", command: "py -3.14 -m pytest -q", purpose: "这是源码验证入口，不是产品命令；运行当前合成回归；本页本轮定向45项与6个子测试通过，不读取真实微信数据。" }
+    { name: "开发回归", command: "py -3.14 -m pytest -q", purpose: "这是源码验证入口，不是产品命令；运行当前合成回归；本页保留2026-09-09定向45项与6个子测试通过证据，不读取真实微信数据。" }
   ],
-  snapshotUpdateNote: "本页在2026-09-09从公开源码3faf4d2补入changes候选发现、本人参与筛选、群内精确引用和原生系统事件；Doctor与定向回归现场通过，归档规模仍为9月1日历史聚合。只合并会改变使用判断的事实，普通提交、时间戳或私人聊天变化不自动改写网页。"
+  snapshotUpdateNote: "2026-09-14只读刷新归档规模与Doctor（环境体检）：2个账号配置有效、依赖和语音解码器可用。9月9日changes候选发现、本人参与筛选、群内精确引用、原生系统事件及45项/6子测试仍保留原日期；本轮未打开聊天数据库、读取私人正文或执行归档同步。"
 };
 
 export const wechatDirectModules = [

@@ -589,6 +589,17 @@ read-only operating panel; public presentation is secondary.
   entry points and reader decisions are unchanged, System remains byte-identical.
   A `manual_owner_only` page without a fresh explicit owner request keeps its
   last verified published snapshot; weekly review does not manufacture newer facts.
+- An unchanged source commit does not establish an unchanged snapshot. For each
+  reviewed project, distinguish published implementation, local uncommitted
+  changes and decision-relevant non-Git state such as inventories, indexed-text
+  coverage, installed configuration and runtime receipts. Read the existing
+  bounded read-only Owner entrypoints for displayed current facts even when
+  Git is clean. Describe uncommitted behavior as a candidate, never as released.
+  Refresh material state or coverage changes in place; retain dated historical
+  test evidence without implying it was rerun. A cutoff, unavailable source or
+  missing observation remains a named gap or lower bound, never an exact total
+  or a fresh unchanged conclusion. Do not create a new collector, polling
+  service or business-data mutation merely to obtain a website snapshot.
 - The published site represents the last verified and released state. E release
   identity is the rule-version boundary; the weekly review does not make every
   displayed fact live, and the site must not claim background freshness beyond

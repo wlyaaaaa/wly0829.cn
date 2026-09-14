@@ -98,7 +98,7 @@ test("meshclip-kit preserves manual checks and distinguishes diagnostics from tr
   assert.equal(meshclipKitProject.runtimeFacts.kdeAvailableDevices, 0);
   assert.equal(meshclipKitProject.runtimeFacts.crossDeviceBlocker, "no_paired_and_reachable_kde_device");
   const pairing = meshclipKitModules.find((item) => item.slug === "kde-connect-pairing-sync");
-  assert.ok(pairing.verification.some((item) => item.includes("阻止本轮复制与文件验收")));
+  assert.ok(pairing.verification.some((item) => item.includes("没有执行复制、发送文件或读取真实内容")));
   assert.ok(meshclipKitProject.currentSnapshot.facts.some((item) => item.value.includes("中继承载加密流量")));
 });
 

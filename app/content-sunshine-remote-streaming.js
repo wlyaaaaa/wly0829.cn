@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const sunshineRemoteStreamingSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-04",
-  label: "Sunshine 与 Tailscale 服务和捕获守护任务在线；每日巡检最近一次返回 0。当前启动周期的 GPU 稳定门已阻断配置修复，本轮没有发起手机串流、显示器插拔或断电开机验收",
-  boundary: "这是 PRIVATE（私有）源码、2026-09-03 23:30 每日巡检和 2026-09-04 现场只读回读的合并快照。服务在线、配置存在、编码能力和自动化测试都不能替代手机端到端串流、当前 peer（对端）直连、弱网、物理故障转移或冷开机实测",
+  observedAt: "2026-09-14T04:20:46.4369877Z",
+  label: "Sunshine与Tailscale服务及捕获守护任务运行；WLAN当前未见非链路本地IPv6，捕获一致性与手机端到端仍待核实",
+  boundary: "2026-09-14只读核对服务、任务、WLAN地址计数和捕获状态；最新自然巡检为9月13日06:30Z。9月4日捕获不匹配与GPU阻断保留为旧启动周期证据，源码测试沿用历史日期。服务、状态文件与编码能力不能替代手机串流、直连、弱网、物理故障转移或冷开机验收。",
   metrics: [
     { label: "物理主屏 / VDD（虚拟显示器）配置目标", value: "4K 240Hz / 2880×1800 HDR（高动态范围）" },
     { label: "文档上行依据 / 客户端起点", value: "约 32 Mbps / CBR（恒定码率）18–20 Mbps" },
@@ -14,22 +14,22 @@ const sunshineRemoteStreamingSnapshot = createProjectSnapshot({
     { label: "它真正解决的事", value: "为 RTX 5090 D + Ryzen 9 9950X3D 主机提供一套 Sunshine 运维层：识别应该捕获哪块屏、在主屏确实离线时规划 VDD 兜底、把漂入虚拟屏的普通窗口拉回，并把网络、编码与远程开机问题拆成可诊断的步骤。" },
     { label: "主屏优先与 VDD 兜底", value: "实现约定是 4K 240Hz 活动物理主屏优先，主屏正常时不改它的分辨率或排列。只有物理主屏稳定缺失 15 秒且串流连续空闲 5 秒时，守护器才允许把捕获目标切到唯一健康的 2880×1800 HDR MTT1337 VDD（虚拟显示驱动）并迁移普通窗口；本轮没有用真机连接或拔线验证这条生产路径。" },
     { label: "应急固定 VDD 不是日常模式", value: "Set-SunshineHeadlessConfig.ps1 只在本人明确决定暂时固定 VDD 时使用。默认只生成候选；-Apply 前再次核对唯一 VDD，再原子替换 7 个受管配置键并留下备份。它不重启 Sunshine、不做写后回读，也不证明手机看见画面；恢复日常使用要重新运行主屏优先守护。" },
-    { label: "当前捕获配置不一致", value: "2026-09-04 只读选择器只找到一个健康 VDD，但现役 sunshine.conf 的 output_name 与该 VDD、也与当时所有活动输出都不匹配；旧状态文件仍为 Mode=Vdd、PendingTargetKind=Physical。修复范围已经正规接管，但当前启动周期有 22 条匹配的 WER 图形故障记录，GPU 稳定门拒绝写入，因此配置和服务保持原样。" },
+    { label: "捕获状态与历史故障", value: "9月4日曾发现output_name与活动输出不匹配，当次启动有22条匹配WER图形故障记录，GPU稳定门拒绝修复。本机已于2026-09-14T00:33:06.5Z重启；本次捕获状态更新于04:20:38Z，Mode=Vdd、PendingTargetKind=Physical。当前捕获选择、GPU稳定门及手机画面没有重新验收，不能跨启动周期继承旧结论。" },
     { label: "严禁拓扑联动与镜像", value: "不使用 Windows“复制显示器”，不开启 Sunshine 的 ensure_only_display（仅确保单显示器）或自动分辨率改写；VDD 参数与物理主屏分开，避免本项目因多屏联动增加黑屏或显卡驱动故障风险。" },
     { label: "水冷屏与机箱屏保护", value: "LIAN LI（联力）水冷屏与 HS2 机箱屏是本项目的禁止目标与禁止区域：捕获选择和本项目发起的窗口迁移动作不选它们。Windows 或其他应用自行放置窗口不在这项代码保证内。" },
     { label: "GPU（图形处理器）稳定性故障关闭", value: "若当前系统启动已记录 Kernel-Power 41、BugCheck、nvlddmkm 或匹配的 WER 1001/1019 图形故障事件，系统进入 BlockedByGpuStability（因 GPU 不稳定阻断）状态，停止捕获源修改、模式切换与主屏到 VDD 的窗口迁移，只允许经严格验证的单向拉回主屏。用户实际看到黑屏或整机卡死时同样应停止操作，不能靠事件查询冒充视觉检测。" },
-    { label: "传输层与直连证据", value: "Sunshine/Moonlight 串流层与 Tailscale 传输层可以分别替换和诊断。当前 Tailscale 为 Running（运行中）、online（在线）、unattended（无人值守）且本机网络探针报告 IPv6 可用；每日任务没有传入手机 peer，因此当前究竟是 IPv6 直连还是 DERP（中继服务器）仍未验证。" },
+    { label: "传输层与直连证据", value: "Sunshine/Moonlight串流层与Tailscale传输层分别诊断。本次Tailscale仍Running（运行中）、online（在线）且unattended（无人值守）；2026-09-14T04:20:46Z回读WLAN非链路本地IPv6地址数为0。没有指定手机peer（对端）探测，当前直连或DERP（中继服务器）路线仍未验证；不能把一个接口的地址数推广成整机网络不可用。" },
     { label: "受限上行带宽建议", value: "README 以约 32 Mbps 上行为依据，建议手机客户端先从 CBR（恒定码率）18–20 Mbps 起步，并为 FEC（前向纠错）与音频留余量。这是配置建议，不是主机强制策略；本轮没有串流遥测证明 24.5 Mbps 峰值、无丢包或不卡顿。" },
     { label: "AV1 能力与真实协商", value: "RTX 5090 D 与小米 15 Pro 骁龙 8 Elite 具备 AV1 硬件能力，Sunshine 回环接口也报告 AV1 Main10（10 位色深配置）；真实会话是否协商到 AV1、画质是否优于 HEVC（高效视频编码），仍要由手机端连接与统计数据确认。" },
     { label: "远程唤醒是方案，不是现成结果", value: "纯无线 Wi-Fi WoWLAN（无线局域网唤醒）不适合作为可靠关机唤醒路径。仓库给出“智能插座 + BIOS 来电自启”与有线 Realtek 2.5GbE WoL（有线网络唤醒）两种选择，但本轮没有读取 BIOS、触发魔术包或做断电上电循环。" },
     { label: "幂等修复与每日巡检", value: "repair-stream.ps1 可在真实网络故障时恢复 IPv6 绑定、清理固定代理端口残留并固化 Tailscale 无人值守偏好；SunshineRemote-VerifyPath-Daily 最近一次自然运行返回 0，但 peer ping（对端探测）被跳过，并提示本机另有用户配置的 Funnel（公网入口），未证明它属于 Sunshine。" }
   ],
   gaps: [
-    "配置修复已经取得精确执行范围，但当前 GPU 稳定门为 BlockedByGpuStability；没有执行 -Apply、服务重启或实机串流。",
+    "9月4日的配置修复曾因当次GPU稳定门阻断。9月14日已是新的启动周期，本次未重验捕获配置与GPU稳定门，也没有执行-Apply、服务重启或实机串流。",
     "本轮未发起从小米 15 Pro 手机端的真机交互式远程串流连接验收；服务常驻与编码掩码正常不代表真机操控体验。当前巡检也没有指定 peer，不能判断 direct（直连）还是 DERP 中继。",
     "未做拔掉物理显示器线缆或硬件关屏的破坏性 failover（故障转移）真实演练；去抖与窗口迁移由经过验证的 67 项自动化测试保障。",
     "未进行外网断电后通过智能插座远程冷开机的实物验证；WoL 与 AC（交流电）来电自启目前是文档方案，不能称硬件已经就绪。",
-    "捕获守护任务显示 Running，但状态文件与日志最后更新于 2026-09-03；它证明任务仍在，不证明循环刚刚完成了一轮健康决策。",
+    "捕获守护任务当前Running（运行中）；状态文件于2026-09-14T04:20:38Z更新，Mode=Vdd、PendingTargetKind=Physical。它证明状态仍在更新，不证明捕获目标正确或本轮切换成功。",
     "每日巡检看到一项用户配置的 Tailscale Funnel 公网入口；当前证据没有把它归因于 Sunshine，也不能把整台主机描述成零公网暴露。"
   ]
 });
@@ -42,7 +42,7 @@ export const sunshineRemoteStreamingProject = {
   route: "/projects/sunshine-remote-streaming",
   visibility: "私有仓库",
   statusTone: "mixed",
-  cardStatus: "服务与任务在线、源码测试通过；捕获目标不匹配且被 GPU 门阻断，手机与硬件 E2E 未测",
+  cardStatus: "服务与守护任务运行；WLAN当前未见非链路本地IPv6，捕获一致性与手机端到端仍待核实",
   cardStatusTone: "mixed",
   ...sunshineRemoteStreamingSnapshot,
   searchAliases: [
@@ -106,8 +106,8 @@ export const sunshineRemoteStreamingProject = {
   plainExample: "我人在外面准备打开 Artemis（阿西西）前，可以先确认服务、网络和编码能力；如果物理主屏确实离线，守护器只有在身份唯一、GPU（图形处理器）稳定且串流空闲时才允许 VDD 接手。等我回家，普通窗口应被拉回物理主屏。最后两步仍需要一次真实连接、断开和显示器前后对照才能算验收。",
   result: "已经得到可运行的主屏/VDD 守护、独立 VDD 参数入口、网络诊断修复和每日巡检；当前还没有把它们提升为“手机一定直连、一定不卡、窗口一定回迁或一定能远程冷开机”的现实保证。",
   readerStates: {
-    pass: "当前已证的是 Sunshine/Tailscale 服务保持 Auto（自动启动）并处于 Running（运行中）、捕获守护任务在运行、每日巡检最近返回 0、配置保持自动显示联动关闭，四套源码测试通过。",
-    problem: "当前已发现 Sunshine output_name 与唯一健康 VDD/活动输出不匹配；执行范围已接管，但本次启动有 22 条匹配 WER 图形故障记录，GPU 门拒绝写入和重启。网络代理残留另有修复入口。",
+    pass: "本次已证Sunshine/Tailscale服务为Auto（自动启动）且Running（运行中）、捕获守护任务运行，最新每日巡检返回0。自动显示联动配置及四套源码测试保留历史证据，本次未重验配置或测试。",
+    problem: "9月4日曾发现output_name不匹配并被当次GPU稳定门阻断；重启后当前捕获一致性与稳定门未重验。WLAN当前未见非链路本地IPv6，但Tailscale仍在线；手机路径要另查指定对端。",
     unavailable: "当物理主屏与 VDD 均无法证明健康、出现未识别的虚拟显示器、或检测到严重显卡崩溃时，执行 fail-closed（失败关闭），严禁盲目写入配置破坏现场。"
   },
   dataSources: {
@@ -118,7 +118,7 @@ export const sunshineRemoteStreamingProject = {
       { source: "Win32 窗口几何与 Placement（窗口放置）", data: "在切换至 VDD 前保存正常窗口的 HWND（窗口句柄）、PID（进程标识）、进程启动时间与位置矩形；识别相邻屏幕 11–13 像素的不可见边框容差。", result: "为主屏恢复时的窗口回迁提供计划，并避免把阴影边框当成真正跨屏；是否实际成功仍要写后回读。" },
       { source: "Windows 系统事件日志（System Log）", data: "只读查询当前开机周期内的 Kernel-Power 41、BugCheck、nvlddmkm 14/153，以及匹配图形故障特征的 WER（Windows 错误报告）1001/1019。", result: "命中后阻断捕获修改与服务重启；用户看到黑屏或整机卡死时仍须直接停手，事件日志不能替代视觉判断。" },
       { source: "Tailscale 本地网络探针与服务管理", data: "只读探测 PC 本地 IPv6 能力、unattended（无人值守）偏好、后台服务和可选 peer（对端）路径；不输出真实 Tailnet（Tailscale 私有网络）与 IP。", result: "返回本机与传输层状态；只有显式指定并验证目标 peer 后，才能区分 direct（直连）、DERP（中继服务器）或不可达。" },
-      { source: "Sunshine Loopback（本机回环）接口", data: "通过 127.0.0.1 绕过外部代理请求 serverinfo；获取当前编码能力掩码（mask=0x70301）与 RTSP（实时流会话）活动状态。", result: "为切换前的空闲门提供输入；它不证明手机已经连接、协商到哪种编码或画面可交互。" },
+      { source: "Sunshine Loopback（本机回环）接口", data: "通过 127.0.0.1 绕过外部代理请求 serverinfo；获取当前编码能力掩码（mask=0x1F0301（2026-09-13自然巡检））与 RTSP（实时流会话）活动状态。", result: "为切换前的空闲门提供输入；它不证明手机已经连接、协商到哪种编码或画面可交互。" },
       { source: "手机端输入与主机端画面", data: "Moonlight/Artemis 接收 Sunshine 的视频与音频，并把触控、键鼠或手柄输入送回主机；手柄兼容由 Sunshine 与 ViGEmBus（虚拟手柄总线）等上游组件承担。", result: "本项目只维护主机显示、网络和运维边界，不记录屏幕内容，也没有在本轮验证手机输入或手柄映射。" }
     ],
     note: "所有网络地址均以 100.x.y.z 与 2xxx:: 占位符脱敏展示；状态收集不改系统配置，verify-path-lite.ps1 只追加脱敏巡检日志。"
@@ -126,7 +126,7 @@ export const sunshineRemoteStreamingProject = {
   productPrinciples: [
     { title: "物理主屏优先，虚拟屏仅作兜底", detail: "平时远程目标是活动物理主屏，不让用户对着只有壁纸的虚拟扩展屏；只有主屏经实时证据确认缺失时才考虑 VDD，并在主屏恢复后规划拉回窗口。" },
     { title: "不碰物理硬件拓扑，严禁系统镜像", detail: "远程无论需要何种分辨率，均通过 Sunshine 编码器缩放；绝不使用 Windows 复制模式，绝不修改物理屏、机箱屏与水冷屏的硬件分辨率与刷新率。" },
-    { title: "直连是目标，路径只认现场探测", detail: "IPv6 P2P 直连建立后可以绕开 DERP 中继；但本机 IPv6 可用不等于指定手机已经直连。页面必须保留 peer ping 被跳过这一事实。" },
+    { title: "直连是目标，路径只认现场探测", detail: "IPv6 P2P（点对点）直连建立后可以绕开DERP（中继服务器）；能否直连只认指定对端的现场探测。本次WLAN未见非链路本地IPv6，手机peer探测仍未执行。" },
     { title: "带宽建议先留余量，再看客户端统计", detail: "以文档记录的约 32 Mbps 上行为起点，先试 CBR 18–20 Mbps，并为 FEC 与音频留空间；真实丢包、帧率和延迟由客户端会话决定。" },
     { title: "硬件不稳定即失败关闭（Fail-Closed）", detail: "一旦显卡驱动出现过崩溃记录，停止本项目的捕获改动和服务重启，宁可暂时无法远程，也不继续增加系统蓝屏或本地工作受扰的风险。" },
     { title: "自动守护是默认，应急固定必须能退回", detail: "日常由主屏优先守护决定目标；只有本人明确选择时才把 Sunshine 暂时固定到 VDD。备份只提供恢复材料，不等于自动回滚或配置已经生效。" },
@@ -197,8 +197,8 @@ export const sunshineRemoteStreamingProject = {
   evidenceLayers: [
     { layer: "Source（源码与配置）", proves: "PRIVATE main 与 origin/main 已对齐到 70d65059ce122b5a872b97c2f5130ab3e824fab7；该提交补齐 BugCheck 与匹配 WER 1019 的 GPU 事件门，并保留捕获守护、VDD 原生适配器、网络修复与测试。", doesNotProve: "源码提交不证明现役 output_name 已正确、真实硬件切换成功，也不证明手机操控的延迟、画质或弱网稳定性。" },
     { layer: "Tests（隔离自动化测试）", proves: "4 套独立 PowerShell 测试套件通过全部 101 项以上断言，覆盖 GUID 唯一绑定、窗口阴影边框容差、GPU 崩溃门禁与原子写入。", doesNotProve: "测试不模拟硬件显卡真正拔线、屏幕物理掉电或真实的 Windows 蓝屏事件。" },
-    { layer: "Runtime（当前系统运行态）", proves: "2026-09-04 回读 Sunshine 2026.516.143833 与 Tailscale 1.102.2；两项服务均为 Auto 自动启动并处于 Running，捕获守护任务为 Running，每日巡检最近返回 0；编码掩码 0x70301 支持 HEVC/AV1 Main10。只读选择器发现唯一健康 VDD，但现役 output_name 不匹配任何活动输出；当前 GPU 门因 22 条匹配 WER 记录返回 BlockedByGpuStability。", doesNotProve: "22 是匹配日志记录数，不等于 22 次独立崩溃；状态文件最后更新于 2026-09-03，也不证明手机会话可交互。门已阻断写入，本轮配置哈希与服务状态保持不变。" },
-    { layer: "Transport（传输与网络）", proves: "2026-09-04 本机 netcheck 报告 IPv6 可用，Tailscale 1.102.2 为 Running、online 且 unattended=true；每日巡检没有指定 peer。", doesNotProve: "当前手机路线是 direct 还是 DERP、串流数据经过哪里、延迟和丢包均为 Unknown（未知）。巡检还提示另有用户配置的 Funnel，但未把它归因于 Sunshine。" }
+    { layer: "Runtime（当前系统运行态）", proves: "2026-09-14两项服务均Auto且Running，捕获任务Running、状态文件04:20:38Z更新。每日巡检最近2026-09-13T06:30:01Z返回0，同次日志编码掩码0x1F0301、HEVC/AV1 Main10均true。Sunshine版本及9月4日选择器/GPU阻断结论保留原日期，本次未重验。", doesNotProve: "9月4日22条是匹配日志记录数，不是22次独立崩溃；本机9月14日已重启，旧GPU判断不跨启动周期继承。状态文件更新也不证明手机可交互。" },
+    { layer: "Transport（传输与网络）", proves: "2026-09-14只读诊断确认Tailscale 1.102.2运行、在线且无人值守；WLAN非链路本地IPv6地址数为0。最新每日巡检未指定手机peer（对端）。", doesNotProve: "当前手机路线是 direct 还是 DERP、串流数据经过哪里、延迟和丢包均为 Unknown（未知）。巡检还提示另有用户配置的 Funnel，但未把它归因于 Sunshine。" }
   ],
   operationalEntrypoints: [
     { name: "只读运行态路径轻量验证", command: "pwsh -NoProfile -File .\\verify-path-lite.ps1", purpose: "以只读方式检查本机 IPv6、服务状态、Sunshine 编码能力掩码与 Tailscale 无人值守状态，写入 runtime 日志。" },
@@ -213,7 +213,7 @@ export const sunshineRemoteStreamingProject = {
     { date: "2026-08-05—2026-08-08", commit: "传输与登录前边界", result: "移除固定 Tailscale 代理端口，补强无人值守、HDR 与登录前检查；同时明确服务 Running 不等于登录前画面可捕获。" },
     { date: "2026-08-10—2026-09-02", commit: "主屏优先、窗口恢复与 VDD 参数", result: "从 VDD 隔离演进为物理主屏优先的捕获守护，连续补齐空闲门、普通窗口恢复、边框容差、GPU 事件门和 VDD 独立首选参数；真实手机与物理显示 E2E 仍单列。" }
   ],
-  snapshotUpdateNote: "本页绑定 2026-09-04 的 PRIVATE 源提交 70d65059ce122b5a872b97c2f5130ab3e824fab7、脱敏服务/任务/配置回读与测试结果；运行态时间分别标注，Unknown 不从旧日志补齐。后续仅在串流拓扑、显示边界、传输合同或核心参数发生实质变化时刷新；不采集私人聊天、屏幕画面或凭据。"
+  snapshotUpdateNote: "本次于2026-09-14只读核对服务、任务、WLAN地址计数及捕获状态，最新自然每日巡检为9月13日06:30Z。源码、测试及9月4日捕获不匹配/GPU阻断各保留原日期，重启后当前捕获选择和稳定门仍待核实；没有发起手机串流或修改显示。"
 };
 
 export const sunshineRemoteStreamingModules = [
@@ -262,7 +262,7 @@ export const sunshineRemoteStreamingModules = [
       ]
     },
     teaser: "它处理“远程端只剩壁纸、窗口落在看不见的虚拟屏”这类事故：先确认物理主屏真的离线，再决定是否允许 failover（故障转移）。",
-    status: "守护任务 Running、测试 67/67；现役 output_name 不匹配活动输出，真实切换未验",
+    status: "守护任务Running（运行中）、状态文件更新；捕获一致性与真实切换未重验，67项测试保留历史日期",
     statusTone: "mixed",
     value: "目标体验仍很直白：在家用物理屏，主屏确实离线时才让 VDD 兜底，主屏回来后把普通窗口拉回；现在已经有实现和测试，但还不能把这段目标场景说成真机成功。",
     why: "多屏扩展下，Windows 可能把新开或失去焦点的窗口放到看不见的扩展屏；如果盲目开启“系统镜像”，又可能打乱物理屏高刷与 HDR（高动态范围）。因此需要一套先核对身份、再决定是否动作的窗口与捕获目标守护器。",
@@ -270,7 +270,7 @@ export const sunshineRemoteStreamingModules = [
     result: "已交付身份校验、去抖、空闲门、窗口迁移计划和失败关闭；尚未证明真实拔线后手机画面不中断、窗口全部回迁或水冷屏视觉状态不变。",
     readerStates: {
       pass: "源码测试已证明主屏/VDD 身份、去抖、RTSP（实时流会话）空闲门与窗口几何计划按预期分支；真实生产通过仍需连接/断开和显示器前后对照。",
-      problem: "当前现场问题是 output_name 与唯一健康 VDD/活动输出不匹配；执行范围已接管，但 GPU 门因 22 条匹配 WER 图形故障记录阻止写入。",
+      problem: "9月4日曾发现output_name不匹配且被当次GPU稳定门阻断；9月14日重启后的捕获选择与GPU稳定门没有重验，不能把旧故障结论当作当前现场。",
       unavailable: "若系统中出现多个无法区分的虚拟屏、或未能检测到健康的 MTT1337 驱动实例，系统失败关闭，拒绝盲目绑定。"
     },
     decisionImpact: [
@@ -319,7 +319,7 @@ export const sunshineRemoteStreamingModules = [
     ],
     verification: [
       "自动化测试 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；它们是合成分支，不是物理串流。",
-      "capture-failover-state.json 使用 sunshine.capture-failover-state.v1，并保留 Mode=Vdd、PendingTargetKind=Physical 的最后状态；更新时间为 2026-09-03，不冒充当前一轮健康回读。",
+      "capture-failover-state.json沿用sunshine.capture-failover-state.v1；本次UpdatedAtUtc为2026-09-14T04:20:38.1960156Z，Mode=Vdd、PendingTargetKind=Physical。状态新鲜不证明捕获选择或窗口迁移已通过。",
       "系统计划任务 SunshineCaptureFailover-Interactive 保持 Running 状态。"
     ],
     relation: "为整个远程串流系统提供坚固的显示可用性基石；与 VDD 独立显示参数管理及传输层紧密协作。"
@@ -462,7 +462,7 @@ export const sunshineRemoteStreamingModules = [
       ]
     },
     teaser: "它不把“服务在线”当成“手机已直连”：先看本机网络，再对指定手机做 peer 探测，最后才说是 direct（直连）、DERP 中继还是不可达。",
-    status: "Tailscale 1.102.2 正在运行且无人值守；本机 IPv6 可用；手机 peer 本轮未测",
+    status: "Tailscale 1.102.2运行且无人值守；WLAN未见非链路本地IPv6，手机peer（对端）未测",
     statusTone: "mixed",
     value: "人在外面连不上时，不必把 Sunshine、光猫和 Tailscale 混成一个问题：这套入口能先定位本机有没有 IPv6、服务是否登录，再用同一台手机证明当前到底直连还是中继。",
     why: "移动家宽与蜂窝网络可能叠加 CGNAT（运营商级网络地址转换）和多层 NAT，IPv4 打洞并不稳定；IPv6 让点对点直连成为可能，但最终路线仍受手机当时网络、UDP（用户数据报协议）可达性与 Tailscale 协商影响，不能从本机一侧提前宣布成功。",
@@ -513,7 +513,7 @@ export const sunshineRemoteStreamingModules = [
       { path: "verify-path-lite.ps1", role: "每日无感知路径与编码能力巡检任务" }
     ],
     verification: [
-      "2026-09-03 23:30 的 verify-lite.log 证明 Tailscale 为 Running、start-mode=Auto，状态命令 exit=0。",
+      "2026-09-13T06:30:05Z自然巡检日志记录Tailscale Running、start-mode=Auto、状态命令exit=0；9月14日服务只读复核仍为Running/Auto。",
       "2026-09-04 回读 Tailscale 1.102.2 为 online，且 tailscale-unattended=true。",
       "同一每日巡检明确记录 tailscale-ping skipped，因为没有提供 peer；当前直连/DERP 路线未证。",
       "巡检提示存在用户配置的 Funnel；没有输出端点，也没有证据把它归为 Sunshine。"
@@ -607,7 +607,7 @@ export const sunshineRemoteStreamingModules = [
       { path: "verify-path-lite.ps1", role: "主机硬件编码能力掩码只读验证" }
     ],
     verification: [
-      "主机运行态编码能力掩码 0x70301，回读确认 hevc-main10=true 且 av1-main10=true。",
+      "2026-09-13T06:30:05Z自然巡检记录编码能力掩码0x1F0301，hevc-main10=true且av1-main10=true；未建立手机会话。",
       "Sunshine 配置文件固化高质量 NVENC P5/双遍参数。"
     ],
     relation: "决定了远程可交互体验的实际质感；与下层网络通道及上层显示配置紧密相连。"
@@ -703,7 +703,7 @@ export const sunshineRemoteStreamingModules = [
     verification: [
       "系统服务 SunshineService 与 Tailscale 均正在运行，启动模式为自动。",
       "计划任务 SunshineRemote-VerifyPath-Daily 正常存在且状态为 Ready。",
-      "2026-09-03 23:30 的 verify-lite.log 完成且任务结果为 0；它没有运行 peer ping，也不证明冷开机或登录前捕获。"
+      "每日任务最近于2026-09-13T06:30:01Z运行并返回0，同次日志06:30:05Z完成；手机peer探测被跳过，不证明冷开机或登录前捕获。"
     ],
     relation: "把离线开机、Windows 服务启动和在线故障修复拆成三段；当前只有服务与巡检段有现场证据。"
   }

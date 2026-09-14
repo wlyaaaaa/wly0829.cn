@@ -133,7 +133,7 @@ const result = {
     manualSelected.length && !manualOwnerRequest
       ? "Stop before evidence collection: a manual_owner_only project is selected without an explicit owner refresh request."
       : "Read this plan and the current project content before collecting evidence.",
-    "Run only the selected project collectors and any decision-relevant Owner readbacks.",
+    "Run only the selected project collectors and any decision-relevant Owner readbacks. An unchanged Git commit does not establish unchanged current state: separately inspect relevant local candidate changes and existing bounded read-only inventory, text-coverage, configuration or runtime receipts. Never promote uncommitted behavior to released capability; keep unavailable observations, cutoffs and lower bounds explicit.",
     "Before editing, let the selected AI compare current Owner evidence with the published meaning and record product and technical additions, changes, retirements or replacements; Git paths and hashes are locators, never the semantic decision.",
     "Map that semantic delta to the project, Rules, Skills and System surfaces; default every unaffected surface to byte-identical no-op.",
     "Repair safe, reversible, in-scope source defects through their real Owner when independently verifiable.",

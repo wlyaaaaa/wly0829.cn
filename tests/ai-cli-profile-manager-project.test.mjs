@@ -108,7 +108,7 @@ test("AI CLI Profile Manager keeps source, install, runtime and Live evidence se
   assert.deepEqual(aiCliProfileManagerProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(aiCliProfileManagerProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: aiCliProfileManagerProject, modules: aiCliProfileManagerModules });
-  for (const expected of ["88f72e668bcfc8499b89f390343bae909e50db1c", "385 / 385", "0.153.4", "21 个", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "ccp 0.1.15", "cliproxy 7.2.72", "本次没有重新安装、启动模型或执行Live"]) {
+  for (const expected of ["88f72e668bcfc8499b89f390343bae909e50db1c", "385 / 385", "0.154.0-alpha.6.2", "21 个", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "ccp 0.1.15", "cliproxy 7.2.72", "本次没有重装、启动模型或执行Live"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits current evidence or boundary: ${expected}`);
   }
   assert.match(text, /交互式 start.*上游权限.*machine run.*danger-full-access/s);

@@ -5,25 +5,25 @@ const sourceMainCommit = "76521682176b00333fdf579746d4fbcfea88103e";
 const implementationCommit = "c815ea3daa04d4012200419fa989a9808ab7be36";
 
 const workDeliverySnapshot = createProjectSnapshot({
-  observedAt: "2026-09-12T11:54:00Z",
-  label: "工作支持与交付的当前合同已核对；交付引擎保持 0.2.0，37 项回归、隔离安装、合成 Office 与实现盲路线证据保留 2026-09-01，真实价值仍待首个现实事项",
-  boundary: "本页证明当前 0.2.0 的确定性状态、质量门和完全合成输出；没有第一项真实工作、第一次真实来源变化、同模型同质量直接基线或数据库恢复验收，时间价值仍是 baseline_required（需要基线）。",
+  observedAt: "2026-09-14T04:25:13.404623Z",
+  label: "交付引擎保持 0.2.0；现实工作包总数未知，37项回归、隔离安装、合成Office与实现盲路线证据保留2026-09-01，现实价值尚无新验收",
+  boundary: "现有合成证据证明0.2.0的确定性状态、质量门和输出。来源CLI按选定交付包和数据库工作，没有全局工作包总账；本轮未读取真实包，默认目录不存在也不能推出全局数量为0。9月1日验收未包含真实工作、真实来源变化、同模型同质量直接基线或数据库恢复，时间价值仍是baseline_required（需要基线）。",
   metrics: [
     { label: "正式输出", value: "6 个文件" },
-    { label: "现实工作包", value: "0" },
-    { label: "真实来源变化", value: "0" },
-    { label: "备份恢复验收", value: "0" }
+    { label: "现实工作包总数", value: "Unknown（未知）" },
+    { label: "历史真实变化验收", value: "0" },
+    { label: "历史恢复验收", value: "0" }
   ],
   facts: [
-    { label: "当前现实结果", value: "产品固定生成 6 个正式文件；当前现实工作包为 0，真实来源变化 E2E 为 0，导出备份与数据库丢失恢复验收为 0。现有证据来自两套完全合成 Office 场景，时间价值仍是 baseline_required。" },
+    { label: "现实结果与历史验收", value: "产品固定生成6个正式文件；本轮没有全局真实工作包数量证据，总数保持Unknown（未知）。9月1日两套完全合成Office场景中的真实来源变化E2E和备份恢复验收均为0，这是验收范围，不代表现实没有工作包；时间价值仍是baseline_required。" },
     { label: "什么时候进入", value: "真实工作中的材料理解、沟通、决策、评审与交付都可进入既有项目。轻量支持直接完成；只有明确选入 2–5 份会继续变化的来源，且需要一致产物或持续维护 PRD 时，才建立交付包。" },
     { label: "共用本人背景", value: "相关时从个人理解库读取真实经历、生活重点与取舍；有依据的新本人认识在当前任务回写并回读。工作资料、业务事实、事项和交付仍由本项目负责，个人背景不能冒充已确认业务证据。" },
     { label: "当前正式输出", value: "只有 PRD.md、manifest.json、traceability.csv、产品需求文档.docx、项目评审.pptx、执行跟踪表.xlsx 六个文件；当前没有现成项目计划、周报或汇报产物。" },
     { label: "质量与一致性", value: "SQLite（本地状态库）拥有当前事实修订与 build；正式 Office 入口重建 canonical manifest（规范清单）并拒绝手写 ready、事实漂移、过期 build 和跨目录覆盖。" },
     { label: "失败时已经写入什么", value: "事实确认后的确定性 batch 以 15 秒为时间门，分别在状态提交、核心文件生成和 Office 生成后检查。超时表示时间验收失败，不自动撤销已经提交的包或文件；同一 build 的文件逐个替换，也不是跨文件原子事务。", hero: false },
     { label: "来源变化", value: "新版本中原文仍唯一存在就自动 rebound（重新绑定）；原文消失或匹配不唯一才把事实标为 stale（已过期），引用变化的旧 build 同时过期。" },
-    { label: "当前证据", value: `PRIVATE main ${sourceMainCommit}；0.2.0 实现 ${implementationCommit}；37/37 测试与 Ruff 通过；隔离 wheel、两套合成 Office E2E 和当前实现盲自然路由 E2E 已分层核对。`, hero: false },
-    { label: "价值与缺口", value: "合成场景证明功能、质量和安装闭包，不证明真实工作节省时间；当前没有同模型同质量直接处理基线、真实工作包、真实来源变化、导出备份或数据库丢失恢复。" },
+    { label: "源码与历史验收", value: `PRIVATE main ${sourceMainCommit}；0.2.0 实现 ${implementationCommit}。2026-09-01历史验收：37/37测试与Ruff通过，隔离wheel、两套合成Office E2E和实现盲自然路由已分层核对；本轮未重跑。`, hero: false },
+    { label: "价值与缺口", value: "合成场景证明功能、质量和安装闭包，不证明真实工作节省时间；现有验收没有覆盖同模型同质量直接处理基线、真实工作包、真实来源变化、导出备份或数据库丢失恢复。本轮不扫描私人工作包补计总数。" },
     { label: "中国工作默认", value: "默认简体中文、Asia/Shanghai、YYYY-MM-DD 与人民币 CNY；使用需求方、产品、研发、测试、负责人、评审人等角色，并按背景、目标、范围、角色与流程、需求、指标、异常、验收、待确认组织 PRD。", hero: false }
   ],
   gaps: [
@@ -34,7 +34,7 @@ const workDeliverySnapshot = createProjectSnapshot({
     "公开 artifacts 调用负责核对 current build 并生成文件；Office 重新导入、PPT 几何重叠、XLSX 公式和全部页面/工作表查看属于合成验收与测试证据，不是每次 builder 调用自动执行的产品门。",
     "15 秒时间门在各阶段已写入后检查，不提供整次回滚；核心与 Office 文件也逐个替换，没有跨文件原子事务。超时或替换中断后必须核对实际已提交状态，不能从非零退出推断全部未发生。",
     "时间结论仍为 baseline_required：没有同模型、同思考强度、相近输入和同质量的直接处理基线。",
-    "没有第一项真实工作，也没有第一次真实来源变化 E2E；两套完全合成 Office 场景不能替代现实价值和真人判断。",
+    "9月1日验收没有包含真实工作或真实来源变化E2E；本轮未取得新的现实验收，不能据此断言现实没有工作。两套完全合成Office场景不能替代现实价值和真人判断。",
     "没有交付包导出、SQLite 备份、数据库丢失恢复或跨机器迁移入口；Git 只能恢复源码，不能恢复真实工作包。"
   ]
 });
@@ -47,7 +47,7 @@ const workDeliveryProject = {
   visibility: "私有仓库",
   repositoryUrl: null,
   statusTone: "mixed",
-  cardStatus: "0.2.0 的一致交付、质量门与来源变化闭环已在合成场景验证；真实工作价值仍待首个现实事项",
+  cardStatus: "0.2.0一致交付与质量门已在合成场景验证；现实工作包总数未知，真实价值尚无新验收",
   cardStatusTone: "mixed",
   ...workDeliverySnapshot,
   kicker: "让一组会继续变化的资料，只形成一版事实和一组一致交付物",
@@ -430,7 +430,7 @@ const workDeliveryModules = [
       problem: "quality 不 ready、生成失败、来源 stale 或清单漂移时分别报告草稿或失败阶段。15 秒门在状态、核心文件和 Office 阶段之后检查，失败可能已有新写入；逐文件替换也可能部分完成，须核对实际恢复点。真实时间价值不达标再按产品合同收窄，不能把任一种报错都写成未发生。",
       unavailable: "SQLite 丢失且没有备份时明确真实工作包不可恢复；不从 Git、图片或旧 Office 文件反向伪造状态库。"
     },
-    decisionImpact: ["37/37 测试与 Ruff 在 2026-09-01 基线通过；本轮仅合同改动，没有重跑 Office。", "隔离 wheel 脱离源码目录完成安装闭包。", "两套合成 Office E2E 证明三类文件、重导入、几何与公式检查。", "当前实现盲自然路由 E2E 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。", "5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E。", "约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。", "首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。", "同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍。", "如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。", "没有同模型同质量直接基线，时间状态必须 baseline_required。", "没有真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移。"],
+    decisionImpact: ["37/37 测试与 Ruff 在 2026-09-01 基线通过；本轮仅合同改动，没有重跑 Office。", "隔离 wheel 脱离源码目录完成安装闭包。", "两套合成 Office E2E 证明三类文件、重导入、几何与公式检查。", "当前实现盲自然路由 E2E 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。", "5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E。", "约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。", "首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。", "同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍。", "如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。", "没有同模型同质量直接基线，时间状态必须 baseline_required。", "9月1日验收未覆盖真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移；不代表这些现实对象全局不存在。"],
     problem: "解决把源码、测试、安装、合成输出、真实价值和恢复能力互相冒充的问题。",
     implementation: ["acceptance.py 分开 functional、complexity、timing 和 per-scenario checks。", "没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。", "run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15 秒抛 MechanicalStageTimeoutError，CLI 非零退出，不补做事务或文件回滚。", "ArtifactBuild 保存 current/stale、semantic hash、fact revision 与 output directory。", "verify 只读比较当前 SQLite 与 persisted manifest，不检查每种 Office 成品的全部像素或语义。", "builder 生成阶段使用 staging，正式文件逐个替换；跨文件中断恢复仍依赖原包和实际文件核对。", "当前没有 export/backup/restore command、后台镜像或跨机器迁移。"],
     flow: ["读取current package", "检查facts与quality", "verify current build", "生成请求artifacts", "分别记录test/install/E2E", "核对首轮1.25倍/变更轮0.75倍/累计人工时间", "判断继续窄工作流、确定性流程或单产物路线", "报告real work状态", "交回恢复点或不可恢复结论"],

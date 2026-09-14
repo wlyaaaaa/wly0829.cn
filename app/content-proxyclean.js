@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-08T00:13:09.891Z",
+  "observedAt": "2026-09-14T04:23:52.9215269Z",
   "label": "物理网卡保护已修复并发布；本轮双 PowerShell 回归通过，现有代理保持开启",
-  "boundary": "本轮只读检查保持系统代理开启：1个WinINET发布本地端口、1条fake-ip TUN默认路由、2条IPv4默认路由；独立TCP连接确认18091可连接，独立进程调用的ProxyStatus看到4个监听候选与单一ClashVerge家族。未执行网络清理、关代理、网卡/IPv6切换或公网出口探测。 本轮另完成物理路由判定与IPv6输出的源代码修复和隔离测试；修复前后网络状态指纹一致，实机网络没有被重置。",
+  "boundary": "2026-09-14 ProxyStatus只读且SkipExitProbe：系统代理仍开启、1个发布本地端口、1条TUN路由、2条默认路由；当前3个监听候选，来源将进程归为tailscaled与FlyingBird，不能把两种进程名自动解释为两个公网代理冲突。Docker运行证据为system、没有本地手动钉死或pending_apply。未做出口探测、网络清理或设置变更；9月8日源修复和隔离测试保留原日期。",
   "metrics": [
     {
       "label": "源项目",
@@ -426,7 +426,7 @@ export const proxycleanProject = {
     },
     {
       "layer": "2026-09-07 只读运行状态",
-      "proves": "独立 ProxyStatus 进程看到系统代理开启、1个发布本地端口、4个监听候选、1条fake-ip TUN默认路由和2条IPv4默认路由；ClashVerge单一客户端家族，系统代理与TUN同时存在。Docker没有本地手工钉死或待应用提示。",
+      "proves": "2026-09-14T04:23:52Z独立ProxyStatus只读看到系统代理开启、1个发布本地端口、3个监听候选、1条TUN和2条默认路由；进程分组为tailscaled与FlyingBird，这不自动证明两个公网代理冲突。Docker运行日志为system，没有本地手工钉死或待应用提示；未探公网出口。",
       "doesNotProve": "没有运行任何清理、关端口、WiFi、IPv6 切换或外网探测，不证明当前代理出口健康、直连成功、WiFi 恢复或 IPv6 没有绕行。"
     }
   ],

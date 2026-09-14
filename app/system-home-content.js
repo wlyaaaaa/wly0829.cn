@@ -572,15 +572,15 @@ export const systemActiveAutomations = {
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-09-09T05:12:19.7074638Z",
-  total: 49,
+  observedAt: "2026-09-14T04:17:15.4124752Z",
+  total: 50,
   publicCount: 25,
-  privateCount: 24,
-  localCloneCount: 45,
+  privateCount: 25,
+  localCloneCount: 46,
   remoteOnlyCount: 4,
   identitySha256: "sha256:2f38a7e1fb9383c4990dd8fc1c4aaefcd84f2143b5682c45c333fad8a76a158f",
   mappingSha256: "sha256:19448212b9b07ad63637149f476ab2f9c9f1997be0d15cdd603a6ba7406bfb1a",
-  description: "本轮 GitHub 共 49 个仓库，媒体项目已纳入私有 Git；原有 44 个本地副本加上已核对的媒体仓库为 45 个，4 个仍仅在远端。一份展示页可以整理多个实际来源，展示项目数与仓库数不相等；这里记录观察时刻，不声称后台实时更新。网站自身只负责呈现这些信息。"
+  description: "2026-09-14只读Owner来源共50个仓库：25公开、25私有，46个本地副本、4个仅远端；当前基线已对齐、差异0、问题0。展示项目数与实际仓库数不同。identitySha256与mappingSha256保留9月9日历史摘要，本轮没有重新计算，不能验证当前50个集合；计数来自本轮分页闭合回读，网站不声称后台实时更新；网站自身只负责呈现这些信息。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -635,10 +635,10 @@ export const systemProjectDomains = [
     assets: [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
-      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 7 日只读盘点完成 37 个登记来源，记录 45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
+      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 14 日状态回读有 46 个来源、115 条精确登记、4 条关系、14 份绑定文字；盘点尝试全部来源，43 个完成、3 个不可达，已见至少 233,156 个非媒体路径，保留下限。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
       { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "按四库整理本地原件、必要文字和索引，并保留独立恢复副本。当前 4,230 项、96.18 GB 已完成云端上传与分类：照片和视频进入 Google Photos，录音、音乐与铃声进入 Drive；全量回读通过，重复运行没有再次写入。Photos 的 116 段视频中 115 段已完成平台处理、1 段仍在处理；手机实际回写、全部格式播放和从云端零起点恢复仍分别未验。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
       { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "为 WeFlow 提供账号与消息读取契约、接口自检和有界静默启动；现役微信日常入口仍由独立 WeChatDirect 承担。健康响应不等于真实聊天读取通过。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
-      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
+      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；2026-09-14清单聚合为4个完成态归档、7934条消息，四份均有媒体或成员标签缺口；旧3/3独立验真保留原日期，本轮未重跑。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
   },
   {
@@ -1183,7 +1183,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-materials",
     searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里", "材料在文件管理器删了", "我自己删的文件不用恢复"],
-    detail: "9 月 7 日有界只读盘点完成 37/37 个来源、45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现；没有读取正文、计算原件哈希或写库。8,310 个媒体文件和 2,591 个更深目录按范围跳过。有界发现仍最多 8 个来源、2500 个文件、8 秒。候选隐藏路径，选中后只读验真并交回定位，明确要求桌面查看才打开；locate-content 可定位已选文档的有关段落。查询不触发同步，日常任务负责精确退役本人已删除的原件记录。"
+    detail: "9 月 14 日只读状态为 46 个来源、115 条精确定位、4 条关系、14 份绑定文字；其余 101 份登记材料没有绑定文字。一次扩额盘点未截止，43/46 根完成、3 根不可达，已见至少 233,156 个非媒体路径、至少 233,041 个未精确登记路径；5,867 个媒体项跳过。未读正文、重算原件哈希或写库；不可达来源不当作空来源，登记状态不当作当前验真。有界发现仍最多 8 个来源、2500 个文件、8 秒。候选隐藏路径，选中后只读验真并交回定位，明确要求桌面查看才打开；locate-content 可定位已选文档的有关段落。查询不触发同步，日常任务负责精确退役本人已删除的原件记录。"
   },
   {
     id: "media",
@@ -1216,7 +1216,7 @@ export const systemDependencyNodes = [
       { href: "/projects/wechat-direct", label: "进入 WeChatDirect 完整项目页" },
       { href: "/skills/wechat-direct", label: "Skill：微信上下文与单会话归档" }
     ],
-    detail: "当前已有 3 个完成态具名归档，共保存 6032 条消息、3 个原始语音文件和 3 个派生文件，3/3 独立验真通过；三份都保留明确 gap。一次问题仍只读取明确联系人或群的有界窗口，需要长期保存时才更新该具名归档；不后台同步整个账号，也不把本地可见范围冒充微信远端全历史。"
+    detail: "2026-09-14只读清单为4个完成态具名归档、7934条消息；现有文件元数据见12个PNG，未见语音和派生WAV，四份均保留明确gap。四份最近运行回执成功且清单绑定一致，本轮未读正文或重跑独立验真；9月1日3/3验真及语音/派生数量只作历史证据。一次问题仍只读取明确联系人或群的有界窗口，需要长期保存时才更新该具名归档；不后台同步整个账号，也不把本地可见范围冒充微信远端全历史。"
   },
   {
     id: "localocr",
