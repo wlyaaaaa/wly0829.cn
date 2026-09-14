@@ -1,6 +1,6 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
-const sourceCommit = "cb9d635d9dbf606a8f729f9746b46227b2737ac1";
+const sourceCommit = "d9df118edb6055a3da6463ca77289c57ceb46456";
 const stateLabels = ["正常完成时", "发现问题时", "资料不可用时"];
 
 export const personalExpressionSnapshot = createProjectSnapshot({
@@ -91,12 +91,12 @@ export const personalExpressionProject = {
     { artifact: "AGENTS.md / reply-as-me/SKILL.md", schema: "操作者可信核对的按需只读用途", owner: "上游合格判断者；触发和处置由活动 E 保护合同负责", boundary: "复用 scenes / reply 取得相关既有参考，保留实际 author 和语境，必要时按既有来源核对 source。AI 代拟、他人、引用和转贴不作本人独立表达，本人修订也不证明整段原创。此用途不进入拟稿、补语料或纠正学习；正式恢复后再按通常证据规则处理新信息。" },
     { artifact: "explain-to-me.md / reply-guide.md", schema: "UTF-8 Markdown", owner: "当前任务中的 AI 依所属方向维护", boundary: "两份指南分别用于说明与拟稿。普通读取不会自行写回；validate 检查它们非空，读取命令不自动执行一次完整 validate。" },
     { artifact: "reply-samples.jsonl", schema: "JSONL（逐行保存 JSON 对象）：id / scene / author / status / source / context / messages / use_note", owner: "表达项目维护精选样本，原件由原来源拥有", boundary: "每条必须是对象且标识不重复；messages 必须是非空文字列表。author 接受 self_message、user_revision、ai_draft；status 接受 reference、pending、retired。标签合法不证明实际作者正确，出处与归属仍由取样 AI 核对。" },
-    { artifact: "reply 输出 examples", schema: "id / author / context / messages / use_note", owner: "expression.py 的 available_samples 与 read_direction", boundary: "只选 status=reference 且 author 不是 ai_draft 的条目，再按 scene 精确匹配。输出省略原件定位用 source 字段，但上下文和文字仍可能是私人内容，不是自动脱敏。" },
+    { artifact: "reply 输出 examples", schema: "id / author / source / context / messages / use_note", owner: "expression.py 的 available_samples 与 read_direction", boundary: "只选 status=reference 且 author 不是 ai_draft 的条目，再按 scene 精确匹配。输出保留 source（样本出处）字段，供当前任务回查作者、时间和原消息；出处、上下文和文字仍可能是私人内容，不是自动脱敏。" },
     { artifact: "CLI 结果与失败", schema: "JSON；正常退出码 0，捕获的数据读取错误退出码 1", owner: "expression.py 的 main（命令行入口函数）", boundary: "文件缺失、JSON 格式错误、错误记录形状等读取问题返回 status=unavailable 与 error；reference_limited 表示没有匹配样本，不是文件损坏或拒绝拟稿。" },
     { artifact: "data-backup/", schema: "两份 Markdown 与一份 JSONL 的私有 Git 快照", owner: "当前维护资料的 AI 在正常 Git 收口时同步", boundary: "只备份三份精选资料及项目代码，不复制全部微信。恢复须明确选用版本和目标，普通文件还原后再校验与按方向回读。" }
   ],
   evidenceLayers: [
-    { layer: "源实现与私有 Git", proves: `已核对项目规则、产品说明、expression.py、虚构测试；${sourceCommit} 已推送到现有 PRIVATE main 并远端回读。`, doesNotProve: "源码发布不等于已经用真实聊天补充了一批资料，也不证明换机恢复完成。" },
+    { layer: "源实现与私有 Git", proves: `已核对项目规则、产品说明、expression.py、虚构测试；当前本地 main 与跟踪分支同为 ${sourceCommit}；本轮读取公开安全代码差分，未重跑真实表达或备份。`, doesNotProve: "源码发布不等于已经用真实聊天补充了一批资料，也不证明换机恢复完成。" },
     { layer: "本机虚构测试：6 / 6", proves: "2026-09-08 实际执行，覆盖读取分流、参考筛选、无匹配样本、格式错误拒绝与 unavailable 返回。", doesNotProve: "不评价真人表达，不证明语料来源真实、本人满意或长期稳定使用。" },
     { layer: "技能安装与当前入口读取", proves: "本轮读到用户发现目录中的两个 SKILL.md；入口都指向当前 personal-expression 源目录，无独立读取器安装副本。", doesNotProve: "文件可读和当前 metadata（能力说明）可见，不等于一个全新自然语言任务已无提示选中入口并产出合适结果。" },
     { layer: "真实使用与本人认可", proves: "源项目已选择随真实问题和真实聊天验收，并规定由处理实际任务的 AI 同步有价值教训。", doesNotProve: "本轮没有进行这层验收；真实动画拟回复、后续任务主动补读和完整写回链仍是已知待验项。" },
@@ -128,7 +128,7 @@ export const personalExpressionProject = {
   snapshotUpdateNote: "本次只更新本项目的源码与叶包证据。私人原话、反馈正文、真实微信以及换机恢复未在网页验收中读取或执行；说明约定、已执行动作与本人认可分别陈述。",
   responsibilities: ["协助把事情向本人讲明白", "按既定意思与分寸拟写自然消息", "由当前 AI 将有价值反馈合入对应资料", "按用途补充有来源的表达参考", "提供本地只读接口与私有版本恢复方法"],
   exclusions: ["不替领域维护专业事实、关系策略或另一份本人画像", "不发送消息，发送由调用方和其现有授权处理", "不把正式文书正文按聊天口吻重写", "不训练或克隆人格，不以相似度分冒充本人认可", "不建后台监听、全账号采集或独立反馈队列", "网页不展示私人样本、反馈原文或具体关系语境"],
-  repositoryNote: `PRIVATE wlyaaaaa/personal-expression，默认 main；源目录 V:\\Personal\\Projects\\personal-expression。源提交 ${sourceCommit} 已完成本机虚构回归、定向提交、正常推送与远端回读。网页是该项目的只读说明，私有仓库没有面向未知访客的代码跳转按钮。`
+  repositoryNote: `PRIVATE wlyaaaaa/personal-expression，默认 main；源目录 V:\\Personal\\Projects\\personal-expression。旧基线已完成本机虚构回归、定向提交、正常推送与远端回读。网页是该项目的只读说明，私有仓库没有面向未知访客的代码跳转按钮。`
 };
 
 export const personalExpressionModules = [
@@ -180,12 +180,12 @@ export const personalExpressionModules = [
     },
     decisionImpact: ["首次拟稿或处理纠正先读 reply-guide.md；已读且未更新可复用，需要样本时再选场景。", "当前真实上下文、原话和相关本人语料要保留，不只给一个策略摘要。", "媒体可使用已经看过的上下文、原始图片或看过后的描述，保留谁发、前后消息、微信类型及实际动静状态；取媒体仍由微信项目负责。", "真实微信动画拟回复仍待验收，不把媒体约定写成已经解码动画或理解成功。"],
     concepts: [{ term: "场景匹配", explanation: "scenes 返回当前可用参考的场景与数量，reply 按指定场景精确选取；不是相似度检索或自动判断关系。" }, { term: "参考有限", explanation: "没有匹配样本时仍返回指南和空 examples，不阻断 AI 按已定意思拟稿。" }, { term: "媒体上下文", explanation: "由调用方保留实际看过的内容、消息类型和动静状态；读取器本身不读取微信或解码媒体。" }],
-    implementation: ["available_samples 只保留 reference 状态且作者不是 ai_draft 的条目；pending 与 retired 不进入场景统计或拟稿参考。", "reply 返回 direction=user_to_other、scene、status、guidance 和 examples；每条参考只投影 id、author、context、messages、use_note。", "省略 source 原件定位字段不代表消息已脱敏；这些结果仍限于获准的当前任务上下文。"],
+    implementation: ["available_samples 只保留 reference 状态且作者不是 ai_draft 的条目；pending 与 retired 不进入场景统计或拟稿参考。", "reply 返回 direction=user_to_other、scene、status、guidance 和 examples；每条参考投影 id、author、source、context、messages、use_note；来源与文字一同返回，避免拟稿丢掉出处。", "source 原件定位不进入公开网页；实际读取结果仍限于获准的当前任务上下文。"],
     flow: ["当前任务已经定好策略并保留相关原话", "读取拟稿指南，需要时用 scenes 选择适合场景", "读取 reply 参考或明确无匹配样本", "当前 AI 拟稿，重要含义不清则问具体问题", "有表达反馈时进入现有教训合并流程"],
     boundaries: ["不自定关系策略，不擅加承诺、道歉、邀约或亲密程度。", "旧人名、日期、地点、情感和事件不能直接搬到新回复。", "不用于正式文书正文，不把某种关系中的口吻套到普通办事场景。", "不提供消息发送、模型训练或人格克隆。"],
     failures: [{ condition: "场景没有匹配样本", response: "返回 reference_limited、指南和空 examples；当前 AI 如实说明后继续拟稿。" }, { condition: "关键意思或分寸不清", response: "回到那件具体事情询问，不预设让本人选一套话术立场。" }, { condition: "媒体没看过或动静状态不确定", response: "不猜图中含义或动画内容，由调用方取得足够上下文，并保持未验状态。" }],
     sources: [{ path: "expression.py / available_samples / read_direction", role: "场景筛选与有限参考的真实实现。" }, { path: "reply-as-me/SKILL.md", role: "既定意图、语境复用和首次指南读取。" }, { path: "AGENTS.md / README.md", role: "媒体输入边界与真实验收缺口。" }],
-    verification: ["本机虚构测试确认不同场景不串用、AI 草稿和待定项不作参考、source 定位不进入默认回复结果。", "无匹配样本测试确认返回 reference_limited、空 examples 与非空指南。", "本轮未读取真实微信、未生成真实回复、未发送消息，动画效果未验。"],
+    verification: ["当前 source 合成测试断言不同场景不串用、AI 草稿和待定项不作参考，并保留 source 出处；本轮只读该测试，未冒称重新执行。", "无匹配样本测试确认返回 reference_limited、空 examples 与非空指南。", "本轮未读取真实微信、未生成真实回复、未发送消息，动画效果未验。"],
     searchProjection: { intents: ["帮我把已经定好的回复写自然", "没有对应样本也能拟回复吗", "图片表情和动画怎么作为回复背景"], entities: ["reply-as-me", "reply-guide.md", "reference_limited", "scenes", "微信媒体"], relations: ["既定意图先于措辞", "媒体由调用方取得", "匹配样本只是参考"], failureRecovery: ["无样本仍能拟稿", "重要意思不清问具体问题", "媒体未看过不猜测"] }
   },
   {

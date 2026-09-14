@@ -137,6 +137,7 @@ export const chineseAsrProject = {
     { term: "E2E（端到端验证）", meaning: "使用真实音频从入口跑到最终文件并检查用户可见结果；单元测试和 Doctor 不能替代它。" }
   ],
   operatingFlow: [
+    { title: "先分清直接听写还是处理录音", detail: "直接说话打字走独立桌面听写：点好输入框、唤起小窗、录音与停顿输入，焦点冲突时主动复制；不生成文件任务。以下持久任务与证据步骤用于已有录音文件。" },
     { title: "先确认运行环境", detail: "正常任务先核对 Python/CUDA、模型配置和固定回执；新机、断网或环境损坏时先进入安装与恢复路线，不用半残环境直接跑录音。" },
     { title: "再确认输入和目标", detail: "固定音频文件、输入指纹、语言、普通或重要录音、快速或严格模式，以及是否需要时间线和说话人线索。" },
     { title: "做音频预处理和任务去重", detail: "检查格式与可读性，必要时规范为 16 kHz 单声道；根据输入和请求生成 job key，已有相同任务时复用而不重复跑模型。" },
@@ -147,6 +148,7 @@ export const chineseAsrProject = {
     { title: "交付并说明边界", detail: "返回可打开文件、任务状态、复核清单和恢复入口；环境重建另交付依赖与模型身份检查结果，关键事实仍要求回到原音频核听。" }
   ],
   components: [
+    { name: "桌面听写", responsibility: "在指定麦克风采音，双屏共用控制，并把整句文字送入经过核对的应用焦点。", implementation: "dictation.py、dictation_audio.py、dictation_vad.py和dictation_windows.py消费独立configs/dictation.yaml；不进入文件Smart API队列，音频与最近文本仅留内存。" },
     { name: "模型 Registry", responsibility: "集中声明引擎、版本、能力、运行方式和默认角色。", implementation: "configs/models.yaml 是唯一配置面；quick/strict 默认和显式 profile 不由脚本临时改写。" },
     { name: "安装与恢复工件", responsibility: "重建 Windows Python/CUDA 环境、固定模型身份和可选 FireRed WSL 运行时。", implementation: "setup/download 脚本、dependency lock、wheelhouse checksum 与 MODEL_RECEIPT 分层工作；离线依赖包不冒充模型备份。" },
     { name: "音频前端", responsibility: "读取、校验和规范音频，为不同引擎提供一致输入。", implementation: "src/zh_asr/audio_frontend.py 负责格式、语音区间和输入身份。" },
@@ -162,7 +164,7 @@ export const chineseAsrProject = {
     { name: "专业云入口", responsibility: "为明确的重要录音或已选定的存疑本地转写提供一次受控云候选。", implementation: "asr-professional-cloud.ps1 要求 Important / QualityReview 用途二选一及 CloudUploadAuthorized，密钥由 SecretRef 注入固定 worker。" }
   ],
   usageExamples: [
-    { moduleSlug: "task-routing", ask: "我想在输入框里直接说话打字，换窗口时别输错地方。", effect: "按 Win+H 或 Ctrl+Win+H 显示并录音、再次隐藏并暂停；停顿提交整段文字，尚无逐字流式输出。Esc 取消尚未输入部分，切换焦点后停止自动输入，托盘可复制最近完整文本；检查文字后由本人决定是否发送。" },
+    { moduleSlug: "desktop-dictation", ask: "我想在输入框里直接说话打字，换窗口时别输错地方。", effect: "按 Win+H 或 Ctrl+Win+H 显示并录音、再次隐藏并暂停；停顿提交整段文字，尚无逐字流式输出。Esc 取消尚未输入部分，切换焦点后停止自动输入，托盘可复制最近完整文本；检查文字后由本人决定是否发送。" },
     { moduleSlug: "models-modes", ask: "把这段微信语音转成文字。", effect: "使用本地日常转写，返回可读正文、原始结果和风险提示；普通请求不会触发云上传。" },
     { moduleSlug: "installation-recovery", ask: "新电脑没有网络，怎样把原来的 ChineseASR 环境恢复起来？", effect: "先核对预存依赖包与完整性，再重建 Windows 环境；模型缓存、模型回执和 FireRed WSL 分开确认。最后必须实际跑一次模型，才会告诉我哪条转写路线真的可用。" },
     { moduleSlug: "audit-evidence", ask: "这段会议很重要，尽量降低看似通顺的错话。", effect: "使用严格双路转写，保留两份结果的分歧、风险标记和需要回听的句段；必要时再明确选择更重的证据路线。" },
@@ -215,30 +217,228 @@ export const chineseAsrProject = {
 
 export const chineseAsrModules = [
   {
-    slug: "task-routing",
-    shortTitle: "入口与任务",
-    title: "Win+H 听写、文件入口与可恢复任务",
-    searchAliases: [      "Win+H语音输入怎么用", "听写时切换窗口会不会输错", "Esc会撤销已经输入的文字吗",
-"服务重启后录音任务会自动重跑吗", "ASR任务中断后去哪看", "长录音重试会不会换输出目录", "同一个录音为什么没有重复跑", "转写任务超时要不要重新提交"],
-    searchProjection: {
-      intents: ["提交一段录音并稍后查进度", "恢复中断的转写任务", "判断超时后是否应该重提", "取消一条仍在运行的任务"],
-      entities: ["Smart API", "job id", "jobs.json", "request fingerprint", "稳定输出目录"],
-      relations: ["音频内容 SHA-256 与请求语义生成 fingerprint", "fingerprint 绑定 job key 和长音频恢复目录", "持久任务历史记录终态但不恢复可执行队列"],
-      failureRecovery: ["服务重启把未完成任务标成 service_restarted", "interrupted 任务不自动重跑", "长音频失败或取消后显式重试复用原目录", "等待超时先查原 job 而不是再提交"]
+    "slug": "desktop-dictation",
+    "shortTitle": "桌面听写",
+    "title": "Win+H 桌面听写、双屏小窗与输入保护",
+    "searchAliases": [
+      "Win+H语音输入怎么用",
+      "Ctrl+Win+H",
+      "中文听写开始菜单",
+      "听写时切换窗口会不会输错",
+      "Esc会撤销已经输入的文字吗",
+      "DJI麦克风不支持16kHz",
+      "听写双屏小窗",
+      "听写暂停后释放显存"
+    ],
+    "searchProjection": {
+      "intents": [
+        "在Windows输入框说话打字",
+        "从开始菜单唤起已有听写小窗",
+        "切换麦克风并继续听写",
+        "暂停听写并取回最近文字"
+      ],
+      "entities": [
+        "Win+H",
+        "Ctrl+Win+H",
+        "DJI Mic Mini",
+        "Qwen3-ASR-1.7B",
+        "PHLC34B",
+        "MTT1337",
+        "ChineseASR Dictation"
+      ],
+      "relations": [
+        "两个目标屏共用一次采音和识别",
+        "停顿后整句识别再核对原输入焦点",
+        "暂停保留内存模型并释放GPU租约"
+      ],
+      "failureRecovery": [
+        "焦点改变时停止自动输入并保留主动复制",
+        "指定麦克风缺席时不换另一设备",
+        "Esc取消未输入部分且保留已输入文字",
+        "停止或退出后沿同一入口重新启动，不恢复旧录音历史"
+      ]
     },
-    teaser: "桌面按 Win+H 说话并逐停顿输入，焦点改变就停下自动输入；已有录音则把提交、查进度、取消、超时和服务重启后的续作收进同一任务入口，避免因为等得久就把一段大录音重复跑好几份。",
-    status: "Win+H 托盘听写已部署就绪，个人麦克风与按键实测待完成；文件 Smart API、任务生命周期和缓存完整性保留既有证据",
-    statusTone: "mixed",
-    value: "想直接打字时，在普通应用输入框按Win+H或Ctrl+Win+H显示并录音，再按隐藏并暂停；也能从开始菜单点“中文听写”通知同一个托盘进程，不必退出重开。所选麦克风不支持模型的16kHz时，可按设备原生采样率录音，再转换整句，仍不换另一支麦克风。约600ms停顿、20秒上限或手动暂停会提交整段文字；不自动回车发送，Esc只取消尚未输入部分，焦点改变后停止自动输入并可主动复制完整结果。已有文件继续使用独立任务入口：短语音、长录音或文件夹都先返回稳定任务身份，后续按同一项查进度、恢复或取消，不因等待超时另开重复任务。",
-    why: "ASR 可能要加载数 GB 模型并跑上几分钟。若调用端一超时就直接重发，两份任务很容易同时抢 GPU、覆盖输出，甚至把其实仍在处理的任务误判成失败。任务身份和终态必须独立于那次等待窗口保存下来。",
-    example: "比如我问“服务重启后，这段录音会不会自己重新跑？”系统会明确告诉我：原来排队或运行中的任务会留下“服务已重启”的失败终态，不会在后台偷偷复活。我确认需要继续后再显式重试，新任务仍按同一音频内容与请求指纹找到稳定输出目录，并复用长音频里已经验证有效的分段。",
-    result: "得到一条与音频内容和请求绑定、跨服务重启仍可查询的任务记录：当前阶段、开始与更新时间、稳定输出位置、错误、缓存状态、是否中断、是否需要显式重试，以及最终正文与证据文件。旧终态能回读，但陈旧队列不会自动执行。",
-    readerStates: {
-      pass: "输入和服务可用时返回稳定 job id，任务在后台受监管运行，完成后输出完整文件清单。",
-      problem: "客户端等待超时但服务端任务仍在时继续查询；任务期限、租约或子进程失败时结束对应任务并保留具体错误。",
-      unavailable: "服务、音频或模型配置无法建立任务时在启动前阻断，不生成假 job，也不盲目回退到未声明模型。"
+    "teaser": "点好输入框再按快捷键说话，停顿后把整句文字放进原位置。两个小窗控制同一次录音；切换焦点、取消和缺少麦克风各有明确结果。",
+    "status": "9月9日任务、开始菜单入口和45项听写回归已有证据；个人语音、真实快捷键和双屏像素未在本轮实测",
+    "statusTone": "mixed",
+    "value": "我可以先点普通应用的输入框，再按Win+H或Ctrl+Win+H显示小窗并录音；再次按下便隐藏并暂停。主屏和远程虚拟屏的小窗共用同一次录音，任一边暂停或换设备都同步。约600ms停顿、最长20秒或手动暂停时提交整段文字，我检查后再决定是否发送。",
+    "why": "说话打字最怕文字落进另一个窗口、麦克风被悄悄切换，或点了收起却仍在录音。这个入口将显示、采音、识别和输入落点分开，让本人能随时暂停和取消；它不为追求顺口而自动润色或回车发送。",
+    "example": "我说“把这段说明直接输入到正在编辑的文档里”。点好输入位置并唤起听写后，我说一段、停一下，整句文字进入文档；若这时切到另一个应用，迟到结果不会自动输入新窗口，我可以从托盘主动复制最近完整文本，再选好位置粘贴。",
+    "result": "得到当前输入框里的文字，或因焦点变化而保留在内存中的最近完整文本，供本人主动复制。这里不创建文件转写的job（任务记录）或审计文件包，不保存录音历史；已输入文字不会因Esc被撤回，程序退出后也不能从任务目录恢复这次听写。",
+    "readerStates": {
+      "pass": "录音按钮变绿表示正在采音；有效语句识别完成、原焦点仍合适时输入整句文字。本人控制下一段、暂停和最后发送。",
+      "problem": "焦点变化或管理员窗口拒绝输入时停止自动输入，保留托盘复制入口；Esc取消未输入内容，已输入部分继续留在应用里。",
+      "unavailable": "指定麦克风缺席、采音丢帧、模型或GPU资源不可用时显示具体问题，不改用另一麦克风或云端，不把空识别和坏声音送进输入框。"
     },
-    decisionImpact: [
+    "decisionImpact": [
+      "开始菜单“中文听写”通知同一个托盘进程，已有实例时不会再开一份。",
+      "麦克风按钮只切录音与暂停；×隐藏并暂停、继续完成尾句；托盘退出才真正结束程序。",
+      "录音和最近文本只留内存，主动复制才写剪贴板；需要持久文件、逐段审计或恢复历史时使用文件转写路线。",
+      "登录预载模型不自动开麦；暂停保留内存模型但释放显存及租约，再次唤起仍须等待实际资源就绪。",
+      "单个Qwen3-ASR-1.7B用于听写，不改变文件quick/strict的模型选择，不承诺逐字流式或固定端到端延迟。"
+    ],
+    "problem": "避免双屏重复采音、迟到文字输入错误焦点、缺设备时误录其他麦克风，以及收起后仍无意继续录音。",
+    "implementation": [
+      "桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc、焦点检查和文字注入。开始菜单中文听写.lnk经Start-Dictation.vbs隐藏调用Start；已运行时用同会话Start事件通知原窗口执行快捷键同一动作，未运行时由现有任务启动并最多等待30秒，不另建实例。",
+      "configs/dictation.yaml：16 kHz、silence_ms=600、min_speech_ms=240、max_chunk_sec=20；默认指定 DJI Mic Mini，input_device: null 才跟随 Windows 默认输入。hotwords 当前为空，避免不清晰声音触发术语复读；轻量 WebRTC VAD（语音活动检测）保留语句前后缓冲，无有效语音或空识别时不输入。",
+      "dictation_windows.py 维护 160×60 实际像素白绿胶囊；两个目标显示器按 PHLC34B / MTT1337 硬件型号定位，共享录音、暂停、隐藏和设备选择，接入/断开及分辨率变化会重定位，未接入的目标不显示。",
+      "麦克风按钮只切录音/暂停，×隐藏并暂停且完成尾句；小箭头或右键显示设备刷新和复制入口。登录只预载内存，不自动开麦；暂停保留内存模型并释放 GPU，真正退出才释放模型。",
+      "设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。若同一设备不接受16kHz，尝试它报告的原生采样率；按实际采样率分句，再用resample_poly把完整语句转成模型要求的16kHz。采音丢帧或采样率未准备好时取消尚未输入内容，不把坏声音当成功。",
+      "听写直接使用Qwen3-ASR-1.7B，不做双模型等待或LLM润色；模型预载内存，录音推理时通过LocalGpuBroker申请ASR租约，暂停将模型放回内存并释放显存。",
+      "音频和最近文本不保存为历史；outputs/dictation/runtime.log仅记录错误、耗时和字数，preferences.json只保存本机麦克风选择。",
+      "scripts/dictation.ps1的Install安装依赖、创建ChineseASR Dictation登录任务并启动；Status只读状态，Start/Stop控制现有进程，Uninstall移除登录自启但保留项目和模型。"
+    ],
+    "flow": [
+      "本人点好输入框，从快捷键或开始菜单唤起同一听写进程。",
+      "重新枚举指定麦克风；设备支持时以16kHz采音，否则使用同设备原生采样率，再把整句转为16kHz。",
+      "主屏与VDD同步显示160×60实际像素小窗；采音留内存，VAD（语音活动检测）判断有效语句。",
+      "约600ms停顿、20秒上限或手动暂停后，以单个Qwen模型识别整句。",
+      "输入前再次核对焦点与取消状态；不合适就停下自动输入，保留最近完整文本供主动复制。",
+      "暂停或隐藏后停录并处理允许的尾句，释放显存；退出结束程序并交还快捷键，下一次重新开始。"
+    ],
+    "concepts": [
+      {
+        "term": "VAD（语音活动检测）",
+        "explanation": "判断这一段是否含有效语音，保留句内及前后缓冲；无语音或空识别不会输入文字。"
+      },
+      {
+        "term": "原生采样率",
+        "explanation": "麦克风实际支持的采音频率；同设备不接受16kHz时先按支持值录制，再转换完整语句。"
+      },
+      {
+        "term": "双屏小窗",
+        "explanation": "PHLC34B主屏与MTT1337虚拟屏各有一个控制窗口，共享同一次录音和选择，并非两个模型任务。"
+      },
+      {
+        "term": "最近完整文本",
+        "explanation": "只为本次主动复制保留在内存中的识别结果，不是跨退出保存的聊天或录音档案。"
+      }
+    ],
+    "boundaries": [
+      "默认指定DJI Mic Mini，input_device=null才跟随Windows默认输入；没有设备时不静默换麦。",
+      "尚无逐字流式输出，不做自动润色、双模型复核或自动发送。",
+      "×隐藏并暂停与退出程序不同；Esc不撤销已经送进应用的文字。",
+      "两个显示器按硬件型号而非DISPLAY编号选择，未接入目标不显示；这不改变显示拓扑。",
+      "9月9日DJI端点被枚举到不等于已经开麦、验证个人口音或测得按键到上屏延迟。"
+    ],
+    "failures": [
+      {
+        "condition": "听写焦点变化或管理员窗口拒绝输入",
+        "response": "停止自动输入，不把迟到文字送到新焦点；通过托盘主动复制最近文本，再由本人选择粘贴位置。"
+      },
+      {
+        "condition": "听写按 Esc 或退出",
+        "response": "取消尚未输入部分并停麦克风，已输入文字保留；退出交还系统 Win+H。"
+      },
+      {
+        "condition": "指定麦克风未连接",
+        "response": "提示连接指定设备，不切换到其他麦克风；检查配置或连接后再开始。"
+      },
+      {
+        "condition": "同一麦克风不接受16kHz",
+        "response": "尝试该设备报告的原生采样率，再转换整句；采音丢帧或采样率未准备好时取消未输入内容。"
+      },
+      {
+        "condition": "模型或GPU租约不可用",
+        "response": "保留明确错误和当前控制入口，不绕过显卡协调器、换模型或上传云端。"
+      },
+      {
+        "condition": "屏幕接回、断开或分辨率改变",
+        "response": "按硬件型号重新定位目标小窗，同一次录音与选择继续共享；未接入的目标不显示。"
+      },
+      {
+        "condition": "真正退出或程序中断",
+        "response": "结束本次内存会话；沿Start或开始菜单重开，旧录音和文字没有可恢复的文件任务记录。"
+      }
+    ],
+    "sources": [
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\scripts\\dictation.ps1",
+        "role": "听写安装、自启动与停启状态"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation.py",
+        "role": "采音分句、推理、焦点保护与取消"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation_windows.py",
+        "role": "Windows 快捷键、托盘与文字注入"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\configs\\dictation.yaml",
+        "role": "独立听写模型、设备、分句和双屏配置"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation_audio.py",
+        "role": "设备枚举、采音、原生采样率与重采样"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation_vad.py",
+        "role": "有效语音检测与缓冲"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\tests\\test_dictation_windows.py",
+        "role": "输入保护和双屏控制回归"
+      }
+    ],
+    "verification": [
+      "PUBLIC main=12eb64e93586b8fce8a4d2b9750c4d097b78ae5a，本次只读远端回读仍同值；新增网页模块不代表新增源码能力。",
+      "2026-09-09原观察：ChineseASR Dictation已安装且Running，开始菜单中文听写.lnk目标与图标匹配，DJI输入端点可枚举；未打开麦克风。",
+      "2026-09-09三个听写测试模块45项通过、1.225秒；9月7日71通过/1跳过、9月5日完整376项及公开短音频各保留原日期，不叠加为新全套。",
+      "个人口音、麦克风采音、真实快捷键、双屏像素、焦点切换与管理员窗口实际输入、本轮完整按键到上屏延迟均未重验；静态入口和自动回归不替代这些结果。"
+    ],
+    "relation": "桌面听写负责实时采音和应用输入；文件入口与任务模块负责已有录音、持久任务和文件结果。二者复用已有模型适配器与GPU协调，但输入、输出和恢复生命周期分别验收。"
+  },
+  {
+    "slug": "task-routing",
+    "shortTitle": "入口与任务",
+    "title": "录音文件入口与可恢复任务",
+    "searchAliases": [
+      "服务重启后录音任务会自动重跑吗",
+      "ASR任务中断后去哪看",
+      "长录音重试会不会换输出目录",
+      "同一个录音为什么没有重复跑",
+      "转写任务超时要不要重新提交"
+    ],
+    "searchProjection": {
+      "intents": [
+        "提交一段录音并稍后查进度",
+        "恢复中断的转写任务",
+        "判断超时后是否应该重提",
+        "取消一条仍在运行的任务"
+      ],
+      "entities": [
+        "Smart API",
+        "job id",
+        "jobs.json",
+        "request fingerprint",
+        "稳定输出目录"
+      ],
+      "relations": [
+        "音频内容 SHA-256 与请求语义生成 fingerprint",
+        "fingerprint 绑定 job key 和长音频恢复目录",
+        "持久任务历史记录终态但不恢复可执行队列"
+      ],
+      "failureRecovery": [
+        "服务重启把未完成任务标成 service_restarted",
+        "interrupted 任务不自动重跑",
+        "长音频失败或取消后显式重试复用原目录",
+        "等待超时先查原 job 而不是再提交"
+      ]
+    },
+    "teaser": "已有录音把提交、查进度、取消、超时和服务重启后的续作收进同一任务入口，避免因为等得久就把一段大录音重复跑好几份。",
+    "status": "文件 Smart API（智能任务接口）、任务生命周期和缓存完整性保留既有证据；真实转写仍按具体输入验收",
+    "statusTone": "mixed",
+    "value": "已有短语音、长录音或文件夹先返回稳定任务身份，后续按同一项查进度、恢复或取消，不因等待超时另开重复任务。桌面听写有独立的小窗和输入流程，不进入这里的文件任务队列。",
+    "why": "ASR 可能要加载数 GB 模型并跑上几分钟。若调用端一超时就直接重发，两份任务很容易同时抢 GPU、覆盖输出，甚至把其实仍在处理的任务误判成失败。任务身份和终态必须独立于那次等待窗口保存下来。",
+    "example": "比如我问“服务重启后，这段录音会不会自己重新跑？”系统会明确告诉我：原来排队或运行中的任务会留下“服务已重启”的失败终态，不会在后台偷偷复活。我确认需要继续后再显式重试，新任务仍按同一音频内容与请求指纹找到稳定输出目录，并复用长音频里已经验证有效的分段。",
+    "result": "得到一条与音频内容和请求绑定、跨服务重启仍可查询的任务记录：当前阶段、开始与更新时间、稳定输出位置、错误、缓存状态、是否中断、是否需要显式重试，以及最终正文与证据文件。旧终态能回读，但陈旧队列不会自动执行。",
+    "readerStates": {
+      "pass": "输入和服务可用时返回稳定 job id，任务在后台受监管运行，完成后输出完整文件清单。",
+      "problem": "客户端等待超时但服务端任务仍在时继续查询；任务期限、租约或子进程失败时结束对应任务并保留具体错误。",
+      "unavailable": "服务、音频或模型配置无法建立任务时在启动前阻断，不生成假 job，也不盲目回退到未声明模型。"
+    },
+    "decisionImpact": [
       "先查询任务状态，再决定等待、恢复或重新提交。",
       "request fingerprint（请求指纹）包含音频内容 SHA-256 与请求语义；只改修改时间不改变它，内容改变即使大小和时间相同也会改变它。",
       "相同输入和请求复用验证过的结果；输入内容、模型或请求身份改变时必须新建任务。",
@@ -248,13 +448,8 @@ export const chineseAsrModules = [
       "取消、期限和租约丢失会回收完整子进程树。",
       "外部观察只返回有界状态，不公开私人正文或内部目录扫描结果。"
     ],
-    problem: "解决重模型任务阻塞调用方、重复提交、任务身份丢失、缓存错配、调用端超时被误判为服务端失败，以及后台进程失联后无法恢复的问题。",
-    implementation: [
-      "桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc、焦点检查和文字注入。开始菜单中文听写.lnk经Start-Dictation.vbs隐藏调用Start；已运行时用同会话Start事件通知原窗口执行快捷键同一动作，未运行时由现有任务启动并最多等待30秒，不另建实例。",
-      "configs/dictation.yaml：16 kHz、silence_ms=600、min_speech_ms=240、max_chunk_sec=20；默认指定 DJI Mic Mini，input_device: null 才跟随 Windows 默认输入。hotwords 当前为空，避免不清晰声音触发术语复读；轻量 WebRTC VAD（语音活动检测）保留语句前后缓冲，无有效语音或空识别时不输入。",
-      "dictation_windows.py 维护 160×60 实际像素白绿胶囊；两个目标显示器按 PHLC34B / MTT1337 硬件型号定位，共享录音、暂停、隐藏和设备选择，接入/断开及分辨率变化会重定位，未接入的目标不显示。",
-      "麦克风按钮只切录音/暂停，×隐藏并暂停且完成尾句；小箭头或右键显示设备刷新和复制入口。登录只预载内存，不自动开麦；暂停保留内存模型并释放 GPU，真正退出才释放模型。",
-      "设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。若同一设备不接受16kHz，尝试它报告的原生采样率；按实际采样率分句，再用resample_poly把完整语句转成模型要求的16kHz。采音丢帧或采样率未准备好时取消尚未输入内容，不把坏声音当成功。",
+    "problem": "解决重模型任务阻塞调用方、重复提交、任务身份丢失、缓存错配、调用端超时被误判为服务端失败，以及后台进程失联后无法恢复的问题。",
+    "implementation": [
       "scripts/asr-smart.ps1 负责本地入口、轻量健康检查、提交和有界等待。",
       "src/zh_asr/service.py 维护 job 状态、队列、期限、状态查询与 observer projection。",
       "job key 绑定音频绝对路径、内容 SHA-256、模式、已解析引擎、模型配置、设备、切片参数和调用方绑定，缓存命中前验证关键制品。",
@@ -263,7 +458,7 @@ export const chineseAsrModules = [
       "process_control.py 维护子进程树和终止边界，避免只结束父进程留下 GPU worker。",
       "状态投影不反射调用方任意标识，也不暴露提示、音频或转写正文。"
     ],
-    flow: [
+    "flow": [
       "规范并验证输入路径，计算输入身份和请求语义。",
       "检查服务健康和当前活跃任务，不以进程名代替 job 状态。",
       "计算 job key；命中已验证完成结果时返回 cache hit。",
@@ -273,48 +468,93 @@ export const chineseAsrModules = [
       "完成后校验输出并把状态原子更新为 succeeded、failed、canceled 或 blocked。",
       "若服务重启，回读终态供查询；遗留未完成记录只标 interrupted，不恢复执行，长音频必须由调用方显式重试后在稳定目录内续跑。"
     ],
-    concepts: [
-      { term: "Smart API", explanation: "把预检、任务提交、短等待和状态观察组合成一个稳定入口。" },
-      { term: "job key", explanation: "绑定输入与请求语义的幂等键，防止同一重任务重复运行。" },
-      { term: "request fingerprint（请求指纹）", explanation: "由音频内容 SHA-256、模型与请求参数等组成；不是只看文件大小或修改时间。" },
-      { term: "terminal history（终态历史）", explanation: "把 succeeded、failed、canceled、blocked 等任务保存到 jobs.json 供重启后查询，但不把旧队列重新执行。" },
-      { term: "stable recovery directory（稳定恢复目录）", explanation: "long-strict 按请求指纹固定的输出目录；显式重试可验证并复用其中已完成分段。" },
-      { term: "observer projection", explanation: "只返回上层决策所需状态，不暴露私人正文和内部实现细节。" },
-      { term: "lease（租约）", explanation: "证明当前 worker 仍拥有任务的短时状态；丢失后不能继续写结果。" }
+    "concepts": [
+      {
+        "term": "Smart API",
+        "explanation": "把预检、任务提交、短等待和状态观察组合成一个稳定入口。"
+      },
+      {
+        "term": "job key",
+        "explanation": "绑定输入与请求语义的幂等键，防止同一重任务重复运行。"
+      },
+      {
+        "term": "request fingerprint（请求指纹）",
+        "explanation": "由音频内容 SHA-256、模型与请求参数等组成；不是只看文件大小或修改时间。"
+      },
+      {
+        "term": "terminal history（终态历史）",
+        "explanation": "把 succeeded、failed、canceled、blocked 等任务保存到 jobs.json 供重启后查询，但不把旧队列重新执行。"
+      },
+      {
+        "term": "stable recovery directory（稳定恢复目录）",
+        "explanation": "long-strict 按请求指纹固定的输出目录；显式重试可验证并复用其中已完成分段。"
+      },
+      {
+        "term": "observer projection",
+        "explanation": "只返回上层决策所需状态，不暴露私人正文和内部实现细节。"
+      },
+      {
+        "term": "lease（租约）",
+        "explanation": "证明当前 worker 仍拥有任务的短时状态；丢失后不能继续写结果。"
+      }
     ],
-    boundaries: [
+    "boundaries": [
       "只监听本机回环地址，不作为带认证的远程服务。",
       "cache hit 只复用相同输入与请求的已验证制品。",
       "调用端超时不自动复制任务。",
       "状态接口不返回私人转写正文或声纹数据。"
     ],
-    failures: [
-      { condition: "听写焦点变化或管理员窗口拒绝输入", response: "停止自动输入，不把迟到文字送到新焦点；通过托盘主动复制最近文本，再由本人选择粘贴位置。" },
-      { condition: "听写按 Esc 或退出", response: "取消尚未输入部分并停麦克风，已输入文字保留；退出交还系统 Win+H。" },
-      { condition: "指定麦克风未连接", response: "提示连接指定设备，不切换到其他麦克风；检查配置或连接后再开始。" },
-      { condition: "客户端等待超时", response: "返回 job id 和查询入口；先读任务状态，不立即重发。" },
-      { condition: "服务在 queued 或 running 时重启", response: "持久记录转成 service_restarted 终态并注明自动重跑关闭；用户或调用方核对后才显式提交新的 job。" },
-      { condition: "long-strict 失败或取消后重试", response: "创建新 job id，但复用同一 request fingerprint 对应的稳定输出目录；manifest 与收据验证通过的分段才跳过。" },
-      { condition: "缓存文件缺失或指纹不一致", response: "缓存失效并重新执行，不返回部分旧结果。" },
-      { condition: "worker 超期、取消或租约丢失", response: "结束任务进程树并记录终态，保留可安全恢复的任务证据。" },
-      { condition: "服务端口被其他程序占用", response: "明确报告身份冲突，不结束未知进程也不抢端口。" }
+    "failures": [
+      {
+        "condition": "客户端等待超时",
+        "response": "返回 job id 和查询入口；先读任务状态，不立即重发。"
+      },
+      {
+        "condition": "服务在 queued 或 running 时重启",
+        "response": "持久记录转成 service_restarted 终态并注明自动重跑关闭；用户或调用方核对后才显式提交新的 job。"
+      },
+      {
+        "condition": "long-strict 失败或取消后重试",
+        "response": "创建新 job id，但复用同一 request fingerprint 对应的稳定输出目录；manifest 与收据验证通过的分段才跳过。"
+      },
+      {
+        "condition": "缓存文件缺失或指纹不一致",
+        "response": "缓存失效并重新执行，不返回部分旧结果。"
+      },
+      {
+        "condition": "worker 超期、取消或租约丢失",
+        "response": "结束任务进程树并记录终态，保留可安全恢复的任务证据。"
+      },
+      {
+        "condition": "服务端口被其他程序占用",
+        "response": "明确报告身份冲突，不结束未知进程也不抢端口。"
+      }
     ],
-    sources: [
-      { path: "E:\\Projects\\Tools\\ChineseASR\\scripts\\dictation.ps1", role: "听写安装、自启动与停启状态" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation.py", role: "采音分句、推理、焦点保护与取消" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation_windows.py", role: "Windows 快捷键、托盘与文字注入" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\scripts\\asr-smart.ps1", role: "日常智能提交、短等待与状态入口" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\service.py", role: "异步 job、状态、期限、缓存和 observer projection" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\process_control.py", role: "子进程树生命周期与终止" },
-      { path: "E:\\Projects\\Tools\\ChineseASR\\tests\\test_service.py", role: "服务、缓存、状态和失败路径回归" }
+    "sources": [
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\scripts\\asr-smart.ps1",
+        "role": "日常智能提交、短等待与状态入口"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\service.py",
+        "role": "异步 job、状态、期限、缓存和 observer projection"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\process_control.py",
+        "role": "子进程树生命周期与终止"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\tests\\test_service.py",
+        "role": "服务、缓存、状态和失败路径回归"
+      }
     ],
-    verification: [
+    "verification": [
       "2026-08-31 的全量 345 项单元测试通过，其中 service、process control、observer projection 和 scripts 均进入回归。",
       "service 回归明确覆盖终态 jobs.json 持久化、遗留未完成任务转 service_restarted 且不自动重跑、long-strict 失败/取消后复用稳定目录，以及同大小同修改时间但内容不同仍产生不同 fingerprint。",
       "Doctor 当前确认代理环境干净、GPU 与模型配置可读。",
       "本次未运行真实 strict smoke，因此模块保持 mixed，不把单测冒充 E2E。"
     ],
-    relation: "本模块决定任务是否被正确创建和监管；模型与模式模块决定跑什么，长音频模块决定怎样分段，审计模块决定怎样解释结果。"
+    "relation": "本模块决定任务是否被正确创建和监管；模型与模式模块决定跑什么，长音频模块决定怎样分段，审计模块决定怎样解释结果。"
   },
   {
     slug: "models-modes",

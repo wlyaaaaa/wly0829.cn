@@ -3,7 +3,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const devconfigBackupSnapshot = createProjectSnapshot({
   observedAt: "2026-09-09T03:43:00Z",
   label: "本地/G最新配置包一致，Drive保留上一代；热备盘临时缺席可有界等待，完整换机未验收",
-  boundary: "9月9日源码2adfba8已回读；本地/G最新包同大小、同SHA-256，Drive仍为上一代，等待后续分时任务。PCConfig冷备03:10Z完成。微信规模保留9月8日盘点；文件一致和任务成功均不等于新机或微信应用恢复",
+  boundary: "9月9日源码2adfba8已回读；本地/G最新包同大小、同SHA-256，Drive仍为上一代，等待后续分时任务。PCConfig冷备2026-09-14 00:11:27Z完成，H按G有效保留集验真后收敛。微信规模保留9月8日盘点；文件一致和任务成功均不等于新机或微信应用恢复",
   metrics: [
     { label: "当前配置包", value: "2,465.9 MiB" },
     { label: "G 盘微信热备", value: "42.05 GiB" },
@@ -12,10 +12,10 @@ const devconfigBackupSnapshot = createProjectSnapshot({
   ],
   facts: [
     { label: "它真正解决的事", value: "重装或换机时，它把AI工具配置、GPG私钥、SSH会话、环境变量、编辑器设置和重装清单收为一份恢复候选包，最新为2,585,641,706 bytes（2,465.9 MiB）。安装本体、插件、node_modules和常见缓存继续排除，恢复时按版本、兼容性与现场状态选择回填。" },
-    { label: "分层介质与职责分工", value: "本地out与G:\\80_Backup\\DevConfig各按7日期包加latest保留。9月9日03:43Z核对两端latest均为2,585,641,706字节，SHA-256=3b1b0e66160afde548a70dacf3b0102ec576be684ff580e64f3dcecf92f6b73f，日期包为devconfig-20260908-193705.zip。Drive仍留9月5/6/7日三代，latest为2,271,564,569字节、MD5=b8ac7753719d963bcda19f90d9a4460b。本仓库不直写H；PCConfig03:10:46Z记录complete、warnings为空。" },
+    { label: "分层介质与职责分工", value: "本地out与G:\\80_Backup\\DevConfig各按7日期包加latest保留。9月9日03:43Z核对两端latest均为2,585,641,706字节，SHA-256=3b1b0e66160afde548a70dacf3b0102ec576be684ff580e64f3dcecf92f6b73f，日期包为devconfig-20260908-193705.zip。Drive仍留9月5/6/7日三代，latest为2,271,564,569字节、MD5=b8ac7753719d963bcda19f90d9a4460b。本仓库不直写H；PCConfig在2026-09-14 00:11:27Z记录15集合complete、warnings为空，DevConfig普通保留集8/8验真后完成源跟随。" },
     { label: "清单数据驱动与避坑边界", value: "备份项由 sources.psd1（PowerShell 数据文件）声明式驱动，不动脚本。它按明确路径取 PowerToys 配置、FinalShell conn\\、PixPin Config、JetBrains 设置和 Docker CLI/Desktop 小配置，排除安装本体、截图历史、插件/JDBC（数据库驱动）、规则数据库、VHDX 虚拟磁盘、镜像层与容器运行态；源码 README 中的体积对比只作早期选型说明。" },
     { label: "系统导出与重装清单自动生成", value: "备份运行时现生成注册表环境变量（用户+机器）、机器 PATH（系统路径）、20+ 自定义计划任务 XML、hosts、Wi-Fi 配置文件（含密码）与 Xshell 注册表；同时导出 scoop、winget、VS Code / Cursor / JetBrains 插件列表，让可重下内容一条命令补回。" },
-    { label: "微信原应用数据独立增量流水线", value: "9月8日08:17Z按文件元数据盘点，G盘微信原应用副本为45,150,205,530 bytes（42.05 GiB）、143,953个文件。Backup-WeChat先用robocopy刷新静态副本，再以rclone copy --checksum只传变化文件；8G限制单次传输，SQLite的WAL/SHM/journal伴生文件继续保留。运行中复制仍不等于数据库一致快照。" },
+    { label: "微信原应用数据独立增量流水线", value: "9月8日08:17Z按文件元数据盘点，G盘微信原应用副本为45,150,205,530 bytes（42.05 GiB）、143,953个文件。Backup-WeChat先用robocopy刷新静态副本，再以rclone copy --checksum只传变化文件；这两条微信G/Drive入口仍只复制新增变化，尚未实现源删除传播，不能套用H冷备的新语义；8G限制单次传输，SQLite的WAL/SHM/journal伴生文件继续保留。运行中复制仍不等于数据库一致快照。" },
     { label: "微信热备给冷备留下可核对交接单", value: "G 盘热备成功后会原子写入并回读 wechat.hot-backup-receipt.v1 回执，只记录完成时间、目标绑定、robocopy 退出码和排除项数量，不输出文件名或正文。PCConfig 用不超过 36 小时的回执判断热备够不够新，再决定人工冷备窗口能否继续。" },
     { label: "新机恢复先看现场再动手", value: "Restore-WeChat.ps1 默认只读预检；确认官方客户端关闭后才显式执行。目标非空时必须选择 -ReplaceExisting，原目录会先保留为 .pre-restore-* 回滚点。复制结束只返回 COPY_COMPLETE_AWAITING_HUMAN_ACCEPTANCE（复制完成待人工验收），还要登录官方微信确认历史。Documents 需要重新指向 E:\\Documents；用户名可以沿用 10979，也可以在恢复后重映射硬编码路径。" },
     { label: "任务时间与三种不同的“成功”", value: "America/Los_Angeles本机时区：配置本地/G每日21:05，Drive每日22:00，微信G每日18:30，微信Drive周日20:00；PCConfig冷备每日23:30机会式检查。9月9日03:38Z回读：配置本地/G最近02:37Z、Drive为9月8日05:00Z、微信G为9月9日01:30Z、微信Drive为9月7日03:00Z，均返回0；小时监控停用。本地/G已有新包不代表稍后运行的Drive已上传。" },
@@ -26,7 +26,7 @@ const devconfigBackupSnapshot = createProjectSnapshot({
     "9月4日8个源码测试脚本通过，当时因官方微信正在运行，原生恢复测试的合成Execute（执行）分支按设计跳过；源码未变，本次未重跑；测试不能替代真实恢复。",
     "微信备份的 rclone check 仅证明云端与本地文件哈希一致，不证明运行中复制时微信无底层未提交写入，也不替代官方微信客户端实际登录检验。",
     "系统导出的 20+ 计划任务 XML 严禁在新电脑通配批量导入，必须配合 PCConfig 重建手册与验证工具逐项审查恢复。",
-    "PCConfig冷备最近于9月9日03:10:46Z完成，warnings为空；G_write_performed、cloud_write_performed、H_relocked均为false。以后H缺席仍跳过；可用时仍检查Hot context不超过48小时、配置/微信热备不超过36小时、介质身份、100GiB停写线和写锁，一次完成不代表未来持续同步。",
+    "PCConfig冷备最后成功为2026-09-14T00:11:27Z，15集合complete、DevConfig源跟随8/8、warnings为空；G_write_performed、cloud_write_performed、H_relocked均为false。以后H缺席仍跳过；可用时仍检查Hot context不超过48小时、配置/微信热备不超过36小时、介质身份、100GiB停写线和写锁，一次完成不代表未来持续同步。",
     "当前 state/latest.sha256 只留在原工作目录，没有作为可携带 sidecar 随 G/Drive 包发布。原 state 仍在时可比 SHA-256；彻底丢失时 7z t 只能证明 zip 内部 CRC 可读，强来源哈希仍是明确缺口。"
   ]
 });
@@ -96,7 +96,7 @@ export const devconfigBackupProject = {
   plainExample: "比如我准备重装电脑：先查看本地和 G 盘哪份包最新，再按清单装回软件、选择性回填 home 与 AppData、重新映射 Documents 和硬编码用户名；微信先跑只读预检，确认没有运行中客户端和覆盖冲突后才复制，最后由我登录官方微信验收。",
   result: "得到可核对的本地包、G 盘在线热备、独立的 Drive 路线、四个常规任务，以及微信热备回执和恢复前回滚点；哪一层失败就明确停在哪一层，不把文件复制、测试通过或绑定存在冒充整机恢复完成。",
   readerStates: {
-    pass: "本轮已证配置包本地/G同大小和SHA-256，Drive上一代可读，四任务最近均0，PCConfig冷备03:10Z complete；热备盘临时/持续缺席的隔离回归通过。9月4日8个源码入口仍是历史证据，均不替代新机恢复。",
+    pass: "本轮已证配置包本地/G同大小和SHA-256，Drive上一代可读，四任务最近均0，PCConfig冷备2026-09-14 00:11:27Z complete、DevConfig源跟随8/8；热备盘临时/持续缺席的隔离回归通过。9月4日8个源码入口仍是历史证据，均不替代新机恢复。",
     problem: "若 rclone 远端绑定损坏或网络代理不可达，Drive 任务将 fail-closed（失败关闭）并触发任务重试；若目标已存在非空微信目录，恢复脚本拒绝覆盖并强制生成 .pre-restore-* 回滚副本。",
     unavailable: "当 G 盘脱机、Google Drive 鉴权失效或本地目标磁盘写保护时，对应层返回未完成；H 未人工解锁时 PCConfig 日任务只写 skipped/H_unavailable，不尝试冷拷贝。"
   },
@@ -192,7 +192,7 @@ export const devconfigBackupProject = {
   evidenceLayers: [
     { layer: "Source（源码与规则）", proves: "PUBLIC main=2adfba880cd0cdcae311010d177a0f8b6b12881e，9月9日远端回读一致；新增热备盘3次/30秒有界等待，隔离回归验证恢复后复制及持续缺席不清理。原采集、系统导出、微信增量、代理和选择性恢复继续保留。", doesNotProve: "源码不证明云端或H已补齐，也不证明新机或微信应用恢复。" },
     { layer: "Tests（隔离自动化测试）", proves: "9月4日8个PowerShell测试脚本返回通过，覆盖公开仓库文件候选、Docker 采集范围、H 盘隔离、任务代理、事务化任务注册和微信增量/恢复合同。", doesNotProve: "9月4日官方微信正在运行，原生恢复测试的合成Execute分支按设计跳过；测试也不模拟真实硬盘损坏或完整换机。" },
-    { layer: "Runtime（当前系统运行态）", proves: "9月9日03:38—03:43Z核对本地/G latest为2,585,641,706字节且SHA-256一致；Drive仍为9月7日代。四任务最近均0；PCConfig冷备03:10Z complete。微信规模继续绑定9月8日盘点。", doesNotProve: "文件和任务结果不证明微信云端全量或新机恢复；H只覆盖既有任务选中的副本。" },
+    { layer: "Runtime（当前系统运行态）", proves: "9月9日03:38—03:43Z核对本地/G latest为2,585,641,706字节且SHA-256一致；Drive仍为9月7日代。四任务最近均0；PCConfig冷备2026-09-14 00:11:27Z complete、DevConfig源跟随8/8。微信规模继续绑定9月8日盘点。", doesNotProve: "文件和任务结果不证明微信云端全量或新机恢复；H只覆盖既有任务选中的副本。" },
     { layer: "Recovery（恢复与容灾边界）", proves: "源码与隔离测试定义了默认只读预检、路径冲突拒绝、.pre-restore-* 回滚点和失败后的原目录恢复；PCConfig冷备本次已有正式complete回执，网页只读消费其结果。", doesNotProve: "网页本轮没有另行执行微信复制、DriveOnly、H冷拷贝或完整新机恢复，也不证明官方客户端登录后能看到预期历史。" }
   ],
   operationalEntrypoints: [
@@ -224,7 +224,7 @@ export const devconfigBackupModules = [
     shortTitle: "分层与云校验",
     title: "本地和 G 盘先落稳，Drive 失败不拖垮热备",
     teaser: "本地和G已有同内容新包，Drive仍保存上一代；热备盘临时缺席会等待，持续失败保留旧副本，各层分别判断。",
-    status: "本地/G为9月8日19:37当地时间新包，SHA-256一致；Drive仍为9月7日代；H最近9月9日03:10Z complete",
+    status: "本地/G为9月8日19:37当地时间新包，SHA-256一致；Drive仍为9月7日代；H最后2026-09-14 00:11:27Z complete、DevConfig源跟随8/8",
     statusTone: "warn",
     relation: "这是整套灾备的介质层：先把能离线完成的本地与 G 盘副本落稳，再单独尝试云端；H 盘冷备不归这个仓库直接写。",
     value: "断网或远端出问题时，本地热备不会陪着一起失败；G盘短暂不可用时最多检查3次、前两次各等30秒，恢复后复制两份包，持续缺席则保留旧副本并报告。状态会分清本地、G、Drive与PCConfig冷备各自卡在哪里。",
@@ -244,7 +244,7 @@ export const devconfigBackupModules = [
       "只有 state、远端目录、日期名与 latest 名都匹配，而且两个远端对象的大小/MD5 都与同一已验证本地包一致时，Drive 才能跳过这个对象。",
       "rclone 上传后必须对带日期包和 latest.zip 分别核对远端大小与 MD5（信息摘要算法），双重一致才算上传成功。",
       "本仓库的任务不写 H；PCConfig 的 AIRecoveryColdSync-Daily 每天机会式检查。H 人工解锁后，还需 Hot context 不超过 48 小时、DevConfig/微信各不超过 36 小时、G/H 介质身份正确、H 剩余空间高于 100 GiB 并取得写锁。",
-      "条件通过时冷拷贝是 additive_no_mirror（只增量添加、不镜像删除），不自动重锁 H；DevConfig 只在新文件复制并通过 SHA-256/大小/存在性核对后，才按 allowlist 清理旧日期包。"
+      "条件通过后PCConfig冷备跟随G当前有效保留集：先复制并核对新增变化，再清理H中已退出的旧副本。源根离线或读不完整不按空源删除，不自动重锁H；DevConfig本地/G日期包仍按既有7份轮转，新包验真后清旧日期包。"
     ],
     implementation: [
       "Push-Hot先检查HotRoot所在盘根；最多3次，前两次缺席各等30秒。写入中因盘根消失才进入同一重试；持续缺席以hot_backup_root_unavailable失败，其他复制错误直接失败。复制两份包成功后才进入旧包清理，独立任务级重试继续保留。",
@@ -281,13 +281,13 @@ export const devconfigBackupModules = [
       { path: "Initialize-BackupNetwork.ps1", role: "代理环境继承与 rclone 远端 binding 安全解析" },
       { path: "Backup-Status.ps1", role: "各级介质新鲜度与计划任务执行状态汇总控制台" },
       { path: "tests/Assert-HDriveSafety.ps1", role: "本仓库 H 目标与退役 Usb 参数的字符串/正则合同检查" },
-      { path: "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1", role: "H 冷备的实际 owner：机会式日任务、新鲜度/介质/容量/写锁门与 additive_no_mirror 复制" }
+      { path: "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1", role: "H 冷备的实际 owner：机会式日任务、新鲜度/介质/容量/写锁门与验真后的有效保留集源跟随" }
     ],
     verification: [
       "tests/Assert-HDriveSafety.ps1 字符串/正则检查通过，确认本仓库没有 H 目标与已退役 Usb 参数。",
       "两端latest.zip均在2026-09-09T02:41:48Z写入，最新日期包devconfig-20260908-193705.zip；2,585,641,706字节，SHA-256=3b1b0e66160afde548a70dacf3b0102ec576be684ff580e64f3dcecf92f6b73f。",
       "9月9日03:41Z按既有绑定和源码定义目录列出Drive的9月5/6/7日三代及latest；latest和9月7日包为2,271,564,569字节、MD5=b8ac7753719d963bcda19f90d9a4460b，是上一代，网页没有上传。",
-      "PCConfig在03:38Z读取cold-last：9月9日03:10:46.1195193Z complete、warnings=[]；G_write_performed/H_relocked/cloud_write_performed均false。热备盘新增隔离回归通过，网页未执行冷备或上传。"
+      "2026-09-14网页只读H cold-last：00:11:27Z、15集合complete、warnings=[]；DevConfig retention=source_follow_verified_prune、8/8。H总回执SHA=0e30feb26c398b32f0983d6ae9bd3485cb669a48e977f4c4a0e2c21f4aca0883；本机00:34后次尝试为H_unavailable跳过，不能覆盖最后成功。网页未执行冷备或上传。"
     ],
     searchAliases: [
       "分层备份架构",
@@ -316,7 +316,7 @@ export const devconfigBackupModules = [
       relations: [
         "本地打包输出zip后通过Copy-Item复制至G盘热备",
         "rclone读取binding并把每个新代完整zip上传为日期包和latest对象",
-        "PCConfig日任务只在人工打开H窗口且全部门通过时执行additive_no_mirror冷拷贝"
+        "PCConfig日任务只在人工打开H窗口且全部门通过时先复制验真，再按G有效保留集清理H旧副本"
       ],
       failureRecovery: [
         "网络离线时Drive任务退出码触发计划任务自动重试",

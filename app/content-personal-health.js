@@ -3,8 +3,8 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const evidenceStateLabels = ["可用于当前判断", "需要复核", "本轮不可用"];
 
 const personalHealthSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-07T20:52:45.4152792Z",
-  label: "PRIVATE main 与回归测试已核对；当前账号、设备数据和个人健康结论未验证",
+  observedAt: "2026-09-14T03:05:00Z",
+  label: "全字段增量与离线历史已核对；当前账号、设备和个人健康结论未验证",
   metrics: [
     { label: "设备入口", value: "Fitbit Air" },
     { label: "采集范围", value: "21 类设备数据" },
@@ -13,7 +13,7 @@ const personalHealthSnapshot = createProjectSnapshot({
   ],
   facts: [
     { label: "本页证据边界", value: "本页只核对产品代码与合成证据，没有读取个人健康材料、运行账号/设备现场复核或形成个人健康结论；现实健康状态不在本页判断，不能把未读取写成没有记录或数值为零。产品已实现 14 / 28 / 90 天证据窗口与离线质量门。" },
-    { label: "前台更新和离线回读", value: "每次前台刷新最多 5000 个新逻辑请求；仅对本轮同一 exact manifest 且累计请求数有进展的预算停止继续，绑定/因子/权限失败不重试换路。capture --latest 从固定 .last-capture.json 核对 manifest、验证回执与 brief 的文件哈希，只有同一完成采集的完整三件套才返回；不触网、不重新生成。", hero: false },
+    { label: "前台更新和离线回读", value: "首次从账号起点采集全历史；此后从上次尚未完整的中国日继续，补齐当天及之后全部21类字段，不重复联网读取已完成历史。每次导入执行最多5000个新逻辑请求；同一前台刷新可以继续下一段，但只接受本轮同一 exact manifest（精确清单）因请求预算停止且累计请求数确有进展的情况，绑定/因子/权限失败不重试换路。capture --latest 从固定 .last-capture.json 核对 manifest、验证回执与 brief 的文件哈希，只有同一完成采集的完整三件套才返回；不触网、不重新生成。", hero: false },
     { label: "按问题选择日期", value: "离线 brief 支持 --start / --through 指定含首尾的完整中国日，用 requested_period 返回该时段的覆盖与 decision_ready；默认 14/28/90 天窗口不再代替用户指定范围。", hero: false },
     { label: "睡眠和覆盖的真实含义", value: "可定位的坏记录只影响对应日期，日期无法恢复才影响该请求页；主睡眠与小睡标签并存但区间和时长可信时列入 multiple_roles，总时长只计一次，不猜分类、不进入主睡眠时间推断。有记录日不等于全天覆盖，设备睡眠分钟不等于完整真实睡眠。", hero: false },
     { label: "共用背景，健康判断独立", value: "只有问题需要时才取用个人理解库的共同背景；新本人认识可按既有接口回写。测量、报告、药物和专业建议留在健康项目，不整包复制，网页只说明这一产品关系。", hero: false },
@@ -21,9 +21,9 @@ const personalHealthSnapshot = createProjectSnapshot({
     { label: "谁值得信任", value: "医生有 AI 没有的查体、诊断和处方能力，但医生、机构、报告、设备和 AI 都要按证据、能力边界、信息缺口和利益关系校准信任。", hero: false },
     { label: "重大决定怎么做", value: "比较收益、风险、合理替代、暂不行动的后果、现实负担和停止或复查条件；高代价、不可逆或意见冲突时支持独立第二意见。" },
     { label: "谁做最后选择", value: "非紧急且本人有决定能力时由本人作知情选择；急症先进入现实医疗，不等待设备更新、AI分析或第二意见。" },
-    { label: "当前源码与回归", value: "PRIVATE main=59f77e5ae2fc0c7f8cb093d3100bc355b5c033aa 已回读；5 个产品 Python 模块与 5 个测试模块。本轮 126 项合成回归及 46 个子测试通过，不含设备、账号或个人健康结论验收。" },
+    { label: "当前源码与回归", value: "2026-09-14 PRIVATE main=760d76fe97d0543a7dcba34c328fd10e10285784已回读；328c772已实现全字段增量、扁平历史和gzip传输。本轮140项离线合成测试通过；旧126项与46个子测试属于9月7日证据，不含当前设备、账号或个人健康结论验收。" },
     { label: "证据结构与恢复", value: "源码登记 39 类 API 数据类型，当前前台采集从中选择适配 Fitbit Air 的 21 类，并保全历史起点资料和有可用运动标识时的 TCX 运动文件；不是把 39 类归一成 21 类。默认摘要只展开睡眠、步数、活动分钟、已记录运动四类，比较 14 / 28 / 90 天窗口。大分页恢复合成回归覆盖 609 页，每 16 页原子记录 checkpoint，中断后只续缺页。" },
-    { label: "源码规模", value: "项目只有 14 个跟踪文件：5 个产品 Python 模块、5 个测试模块、3 个规则/状态文档和 .gitignore；运行代码仅使用 Python 标准库。", hero: false },
+    { label: "源码规模", value: "现有采集、保全、离线简报和前台入口继续分工，新增google_health_history.py只管理固定指针与扁平历史清单，不读取原始响应、不建数据库；运行代码使用Python标准库。", hero: false },
     { label: "分页上限", value: "分页恢复最多接受 1000 页；单次字段选择上限为 256 页、64 MiB 与 50 万条记录，超过任一边界即失败关闭，不把不完整选择交给决策简报。", hero: false },
     { label: "离线回执", value: "离线 capture 回执保持 health_owner_review_required=true、current_updated=false、background_work_created=false；合成回归不能证明任何个人健康值。", hero: false },
     { label: "已保存记录怎么查", value: "具体日期仍未回答时，query/summary 只读取指定清单中一个字段和日期的页面；交回记录或覆盖摘要、缺口与截断状态，API 耗时为 0。查询通过不等于字段已可用于健康判断。", hero: false },
@@ -153,7 +153,7 @@ export const personalHealthProject = {
   operatingFlow: [
     { title: "先判断是否需要新证据", detail: "普通问题先用现行底色；已保全的某日记录仍未回答时，只按一个字段和日期离线窄查。只有新报告、纠正、来源冲突、完整性问题或本人明确设备刷新才进入维护。" },
     { title: "凭据只穿过受保护边界", detail: "首次 OAuth（账号授权协议）使用 PKCE（授权码防截获校验）和回环回调，长期凭据经标准输入进入受保护中心，不生成 token 文件。" },
-    { title: "明确需要时取回 Fitbit 记录", detail: "已有成功导出尚未处理时先离线完成；否则通过固定凭据入口只读请求 Google Health API，取回默认 21 类设备记录、历史起点资料和可用的运动文件，失败不换账号。" },
+    { title: "明确需要时全字段增量取回 Fitbit 记录", detail: "已有成功导出尚未处理时先离线完成；否则通过固定凭据入口只读请求 Google Health API，首次取回默认21类设备记录、历史起点资料和可用运动文件；以后从上次未完整中国日起全字段增量补齐，旧原件和已完成历史不重下，失败不换账号。" },
     { title: "先保存原始记录，再检查完整性", detail: "Importer（导入器）把原始页面与运动附件原样保全，并记下日期、记录数、分页和内容指纹；中断后从同一份导出清单续缺页，不重新猜目录。" },
     { title: "从四类记录形成日常摘要", detail: "Capture（离线验收）核对完整清单与文件指纹后，Brief（摘要生成器）统计睡眠、步数、活动分钟、已记录运动及时间窗变化；覆盖不足、冲突和未记录分别列出，其余字段默认不展开正文。" },
     { title: "Health Owner 做最后一跳", detail: "只消费与当前问题相关且字段自身 decision_ready 的结果；被阻断字段和 inventory_only 内容不进入判断。" }
@@ -163,7 +163,7 @@ export const personalHealthProject = {
     { name: "CURRENT.md", responsibility: "保存处理后的现行健康底色。", implementation: "只由 Health Owner 在证据会改变判断时局部更新；网页只公开它的角色，不读取正文。" },
     { name: "SOURCES.md", responsibility: "登记已处理来源的定位与处理范围。", implementation: "只在新报告、纠正、冲突、审计或答案关键缺口时读取；网页不公开路径、哈希或个人内容。" },
     { name: "google_health_enroll.py", responsibility: "完成一次桌面 OAuth 授权并安全存入长期凭据。", implementation: "只读 scope、PKCE、回环 callback、stdin secret、恢复副本与 lookup read-back；不生成 token 文件。" },
-    { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时固定 Secret Broker 调用一次，输出有界且不含秘密，超时终止整棵进程树。" },
+    { name: "google_health_refresh.py", responsibility: "提供唯一前台设备刷新入口。", implementation: "先离线消费待处理成功交接；必要时调用固定Secret Broker，仅同清单预算停止且累计请求数前进才继续下一段；每次输出有界且不含秘密，超时终止整棵进程树。" },
     { name: "google_health_import.py", responsibility: "从 Google Health API 取回 Fitbit Air 默认范围的记录、profile 与可用 TCX，保全原件并维护可续跑清单；也提供已保全记录的离线窄查。", implementation: "在线分支负责连续窗口、原子写、SHA-256、分页/资产闭包、请求预算、锁与精确 resume manifest；query/summary 分支在构造客户端之前返回，只读精确清单与选中页面，不访问网络或凭据。" },
     { name: "google_health_capture.py", responsibility: "离线消费唯一成功交接。", implementation: "核对 complete manifest 与哈希，生成验证回执和 brief；本地证据闭合并持久化后消费 pointer，再把结果交给 Health Owner 审阅，不更新 CURRENT.md。" },
     { name: "google_health_brief.py", responsibility: "把睡眠、步数、活动分钟与已记录运动变成统计、比较和质量说明，并区分可采用、被阻断、仅保全的数据。", implementation: "默认摘要只读 4 类低噪声字段，计算 14/28/90 天窗口与覆盖质量；其他字段只读清单元数据。API 与 credential access 均为 false。" },
@@ -184,8 +184,8 @@ export const personalHealthProject = {
   evidenceLayers: [
     { layer: "Project rules（项目规则）", proves: "普通问答、来源维护、设备刷新、红旗与低打扰边界已经明确。", doesNotProve: "任何当前个人健康事实、诊断或医疗建议正确。" },
     { layer: "Source code（源码）", proves: "授权、前台刷新、导入、精确续跑、离线验真、字段质量门和 Owner 审阅合同真实存在。", doesNotProve: "当前账号可用、provider 在线或本轮取得了真实记录。" },
-    { layer: "112 tests", proves: "合成夹具下的凭据不落盘、一次调用、原始保全、分页/哈希、续跑、capture 结果闭合、决策门、inventory-only 和失败语义通过。", doesNotProve: "真实 OAuth、真实当前设备、网络兼容或医学结论。" },
-    { layer: "PRIVATE 仓库身份", proves: "main=59f77e5 与远端同步、工作树干净，网页内容绑定精确源码版本。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
+    { layer: "离线合成回归", proves: "2026-09-14本轮140项测试通过，覆盖凭据不落盘、受限预算继续、原始保全、分页/哈希、精确续跑、全字段增量、扁平历史、gzip、离线结果闭合和字段决策门；不与旧126项或46个子测试重复相加。", doesNotProve: "真实 OAuth、真实当前设备、网络兼容或医学结论。" },
+    { layer: "PRIVATE 仓库身份", proves: "2026-09-14回读PRIVATE main=760d76fe97d0543a7dcba34c328fd10e10285784，本地HEAD同值、工作树干净；本页绑定该源码，私人事实后续变化不自动成为网页内容。", doesNotProve: "PRIVATE 仓库外的原始健康资料或 Secret Broker 运行状态。" },
     { layer: "Live provider/runtime（现场数据提供方与运行链）", proves: "只有本轮真实前台刷新和回读才能证明账号、设备、交接与记录质量。", doesNotProve: "历史成功、源码或单测不能替它证明当前可用。" },
     { layer: "Health Owner（健康资料责任源）+ 当前权威医学指导", proves: "某条合格证据是否与当前问题相关、是否值得局部采用，以及高风险建议是否符合当前权威指导。", doesNotProve: "自动 brief 不能替代人工判断、查体、诊断或处方。" }
   ],
@@ -197,11 +197,11 @@ export const personalHealthProject = {
   ],
   operationalEntrypoints: [
     { name: "普通个人健康入口", command: "Skill: personal-health", purpose: "从现行健康底色回答；不重复读取 SOURCES、原件、旧项目或 Codex 记忆。" },
-    { name: "前台设备刷新", command: "python google_health_refresh.py", purpose: "本人明确发起时调用一次 Secret Broker 并完成离线采集；不会创建后台任务。" },
+    { name: "前台设备刷新", command: "python google_health_refresh.py", purpose: "本人明确发起时，通过同一个Secret Broker完成前台更新；仅同一清单因请求预算停止且累计请求数增加时继续，随后完成离线验真与简报，不创建后台任务。" },
     { name: "离线清单验真", command: "python google_health_brief.py --verify-for-health-brief <manifest>", purpose: "重验决策字段页面的哈希和分页闭环；不访问网络或凭据。" },
     { name: "离线查某日记录", command: "python google_health_import.py --query-manifest <manifest> --field activity.steps --start-date <YYYY-MM-DD> --through-date <同日>", purpose: "只查精确清单中的一个字段和日期，返回 records、summary、gaps 与 truncated；默认和硬上限均为 100 页、32 MiB、10,000 条，不联网或读取凭据。" },
     { name: "只看离线覆盖摘要", command: "python google_health_import.py --summary-manifest <manifest> --field activity.steps --start-date <YYYY-MM-DD> --through-date <同日>", purpose: "使用相同字段、日期和预算，只返回数量、覆盖日期与缺口，不返回 records 正文，也不计算数值总和、极值或医学结论。" },
-    { name: "完整回归", command: "python -m unittest discover -s tests -p 'test_*.py' -v", purpose: "验证五个产品模块的 112 项合成测试；它不代表真实账号或医学 E2E。" },
+    { name: "完整回归", command: "python -m unittest discover -s tests -p 'test_*.py' -v", purpose: "验证当前产品代码；2026-09-14本轮140项离线合成测试通过，不代表真实账号、设备或医学验收。" },
     { name: "仓库身份", command: "git status --short --branch", purpose: "确认 PRIVATE main、同步和工作树状态；网页不公开本机 source locator。" }
   ]
 };
@@ -293,18 +293,18 @@ export const personalHealthModules = [
     searchProjection: {
       intents: ["本人明确发起一次穿戴设备刷新", "首次完成只读 OAuth 并安全保存长期凭据", "先消费已有离线结果再决定是否访问 provider", "刷新失败时停止而不换账号或后台重试"],
       entities: ["OAuth", "PKCE", "loopback callback", "Secret Broker", "refresh credential", "success handoff", "foreground refresh"],
-      relations: ["只有本人明确请求才进入设备刷新", "凭据只通过 stdin 穿过固定 Secret Broker", "已有成功交接时优先离线处理", "固定 provider 调用最多一次且不创建后台任务"],
+      relations: ["只有本人明确请求才进入设备刷新", "凭据只通过 stdin 穿过固定 Secret Broker", "已有成功交接时优先离线处理", "固定broker只在同一清单预算停止且累计进展可证明时继续，不创建后台任务"],
       failureRecovery: ["rebind_required 时精确停止且不重复调用", "输出过大或回执不闭合时不进入 capture", "超时或中断时终止登记目标进程树", "账号或设备状态未现场验证时保持 Unknown"]
     },
     teaser: "更新在当前任务里完成；凭据留在受保护位置，不写进普通文件，也不建立定时同步或后台监测。",
-    status: "OAuth、PKCE、Secret Broker 存储/备份/回读、一次调用与进程终止均有源码和合成测试；当前账号未验证",
+    status: "OAuth、PKCE、Secret Broker存储/备份/回读、受限预算继续与进程终止均有源码和合成测试；当前账号未验证",
     statusTone: "mixed",
     value: "设备数据可以更新，但长期凭据不会散落在命令参数、日志、环境或 token 文件里，也不会悄悄变成后台同步。",
     why: "设备 API 需要长期凭据；如果每次刷新都重新授权、把 token 写盘，或让脚本在后台反复重试，既增加打扰，也扩大凭据与误操作风险。",
-    example: "我明确说“现在更新一次 Fitbit Air”。系统先看看上次已经取回但还没整理的结果能不能直接用；确实需要联网时才读取一次凭据并开始这次刷新。账号要重新绑定、请求超时或返回异常，页面就停在这里告诉我，不换账号，也不在后台偷偷重试。",
-    result: "得到一个可审计的前台入口：凭据只在唯一受保护边界使用，输出只保留非秘密完成元数据，失败不会换账号或递归重试。",
+    example: "我明确说“现在更新一次Fitbit Air”。系统先处理已经取回但尚未整理的结果；确需联网时才由固定凭据入口开始更新。若只是本段请求预算用完、同一清单确有进展，就继续下一段；账号需重新绑定、权限或因子失败、无进展或请求超时则停止并说明，不换账号、不转后台重试。",
+    result: "得到一个有明确结果与停止条件的前台更新：凭据只在固定受保护边界使用，输出只保留非秘密完成元数据。普通失败不换账号或盲重试；只有同一清单的预算停止且进展已证明，才在当前流程继续。",
     readerStates: {
-      pass: "受保护调用一次成功，且返回合法的无明文回执，随后进入纯离线 capture。",
+      pass: "受保护导入最终完成且回执合法，随后进入纯离线capture（采集验收），不是把一次调用返回当作全部历史已完成。",
       problem: "已有成功交接尚未处理时完全跳过 Secret Broker，先完成本地验真。",
       unavailable: "需要 rebind、回执非法、输出越界或进程超时时，终止进程树，不开始离线摘要。"
     },
@@ -314,7 +314,7 @@ export const personalHealthModules = [
       "只接受完整只读 scope 与可长期使用的 refresh credential。",
       "client secret 和 refresh token 通过 stdin 送入 Secret Broker。",
       "保存事务、恢复副本和 lookup read-back 全部闭合才称已存储。",
-      "前台 refresh 最多调用固定 Secret Broker 一次，rebind 不自动重试。"
+      "每段执行都使用同一个固定Secret Broker；仅request_budget_exceeded、同一exact manifest和累计请求数进展共同成立才继续，rebind、因子或权限失败不重试换路。"
     ],
     problem: "解决 token 文件散落、凭据出现在 argv/stdout、后台同步扩权、重复授权和 Secret Broker 失败后盲重试。",
     implementation: [
@@ -322,7 +322,7 @@ export const personalHealthModules = [
       "OAuth 使用 state 与 S256 PKCE，回调只监听 127.0.0.1 随机端口。",
       "凭据 bundle 只通过 stdin 交给 Secret Broker，不进入 argv。",
       "Secret Broker receipt 必须证明 local transaction、recovery set、runtime identity 和 plaintext_returned=false。",
-      "google_health_refresh.py 以 64 KiB 合并输出上限和项目自有 watchdog 包住唯一 Secret Broker 调用。",
+      "google_health_refresh.py以64KiB合并输出上限和项目自有watchdog约束每次固定Secret Broker调用；_budget_resume_checkpoint与_has_budget_resume_progress只允许有进展的同清单预算继续。",
       "超时或中断用 taskkill /T /F 终止整棵登记目标进程树。"
     ],
     flow: [
@@ -330,8 +330,8 @@ export const personalHealthModules = [
       "在本机回环完成 OAuth + PKCE 并交换长期凭据。",
       "通过 stdin 存入受保护凭据中心并完成 backup/lookup 回读。",
       "以后本人明确运行前台 refresh。",
-      "若没有待处理成功交接，调用固定 Secret Broker 一次。",
-      "合法 pass 回执后进入离线 capture；其他结果精确失败。"
+      "若没有待处理成功交接，调用固定Secret Broker；同一清单因预算停止且累计请求数增加时继续下一段。",
+      "最终合法pass回执后进入离线capture；除已证明进展的预算停止外，其他结果按具体错误停止。"
     ],
     concepts: [
       { term: "OAuth（账号授权协议）", explanation: "用户明确允许应用以只读 scope 访问设备数据的标准流程。" },
@@ -353,13 +353,13 @@ export const personalHealthModules = [
     ],
     sources: [
       { path: "google_health_enroll.py", role: "桌面 OAuth、PKCE、stdin secret、recovery 和 lookup 回读" },
-      { path: "google_health_refresh.py", role: "唯一前台入口、一次 Secret Broker 调用、输出与超时边界" },
+      { path: "google_health_refresh.py", role: "固定前台入口、同清单预算继续、输出与超时边界" },
       { path: "tests/test_google_health_enroll.py", role: "授权、只读 scope、凭据传输和存储收敛回归" },
-      { path: "tests/test_google_health_refresh.py", role: "一次调用、离线优先、rebind、输出、超时和进程树回归" }
+      { path: "tests/test_google_health_refresh.py", role: "固定入口、预算继续例外、离线优先、rebind、输出、超时和进程树回归" }
     ],
     verification: [
       "10 项 enrollment 测试覆盖 desktop client、PKCE、scope、stdin、backup 与 read-back",
-      "12 项 refresh 测试覆盖一次调用、离线优先、rebind、bounded output、timeout 与 interruption",
+      "本轮140项全套中的refresh回归覆盖固定入口、同清单有进展的预算继续、离线优先、rebind、输出上限、超时与中断；不把重叠用例另外相加",
       "本轮没有触发真实 OAuth、Secret Broker 或 provider，因此当前现场状态保持 Unknown"
     ],
     relation: "它是唯一凭据/网络前台入口；成功后把精确 manifest 交给原始保全和离线判断模块，自己不解释健康。"
@@ -375,15 +375,15 @@ export const personalHealthModules = [
       relations: ["原始页面先原子写入再推进 manifest checkpoint", "完整页面与连续分页链共同定义 resume frontier", "failed running 和 complete 清单不能混用", "空响应只表示未观察到记录而不是零"],
       failureRecovery: ["重复 token 或分页断裂时在下一次请求前停止", "预算耗尽时写精确 resume manifest", "哈希变化或额外 orphan 不匹配时拒绝续跑", "活进程仍持锁时拒绝第二个 writer"]
     },
-    teaser: "已经取得的原始内容先安全保留；下次从同一次更新的准确位置继续，对不上就停止，不猜最近目录。",
-    status: "原子写、分页闭环、哈希、请求预算、锁、孤儿收敛和 exact resume 有源码与合成回归；本轮五模块共 126 项及 46 个子测试通过，真实导入未运行",
+    teaser: "首次完整取得历史；以后只补上次未完整的中国日及之后全部字段。中断沿同一清单续跑，旧原件和完整历史保持不变，对不上就停止。",
+    status: "全字段增量、扁平历史、gzip、分页闭环与精确续跑已实现；2026-09-14全套140项离线合成测试通过，真实导入未运行",
     statusTone: "mixed",
-    value: "网络或解析中途失败时，已取得的原始证据仍可核对；恢复不会重新下载完成页面，也不会误选另一批文件。",
+    value: "日常更新不用反复下载多年的完整记录：首次建立历史，此后仍覆盖全部21类字段，只补上次未完整的中国日及之后。中途失败沿同一清单继续，原件可回读，不误选另一批文件。",
     why: "目录里有文件不等于导入完成。若恢复逻辑按时间猜最近目录、把缺页当零或忽略分页 token 循环，后续统计会把不完整证据冒充为完整趋势。",
     example: "几百页设备记录下载到一半断了。下次继续时，系统先核对已经完成的日期和页面是否仍属于同一次导出；对得上就从下一页接着来，对不上就停下说明冲突，不从头重下，也不把半成品冒充完整数据。",
-    result: "得到一份可验证的 raw evidence（原始证据）闭包：每页字节、字段、日期、页码、记录数与 SHA-256 可回读，complete / failed / running 状态不会混用。",
+    result: "得到一份清单引用的旧原件与新原件：每页字节、字段、日期、页码、记录数与SHA-256都可回读。旧完整日期接到新采集日期前，旧未完整当天由新记录承担，旧原件本身不被覆盖；complete / failed / running状态不会混用。",
     readerStates: {
-      pass: "manifest 为 complete，字段、metadata、TCX、页面数量、分页终点、字节和哈希全部闭合。",
+      pass: "manifest为complete，字段、metadata、TCX、分页和字节哈希闭合；旧完整日期与新日期连续接起，旧未完整当天由新采集替代，查询和趋势不会将这一天算两遍。",
       problem: "运行中断但 exact resume frontier 与现有原始页连续一致，保留证据并从同一清单继续。",
       unavailable: "计划、锁、路径、预算、哈希、分页或孤儿文件不一致时，在任何新网络请求前失败关闭。"
     },
@@ -403,21 +403,22 @@ export const personalHealthModules = [
       "其余默认接口为 oxygen-saturation、daily-oxygen-saturation、daily-respiratory-rate、respiratory-rate-sleep-summary、daily-sleep-temperature-derivations，对应血氧、呼吸与睡眠皮温变化。",
       "日期窗口连续且右开；每个 raw page 记录字段、operation、窗口、page、token、bytes、count 与 SHA-256。",
       "_atomic_write 先写同目录临时文件再原子替换。",
-      "manifest 持续检查 field/metadata/TCX receipt、分页链和 full-history start。",
+      "manifest持续检查field/metadata/TCX回执、分页链和历史起点；history.sources用扁平日期分段引用已完成历史，当天新采集替换原未完整当天，防止重复计算。",
+      "google_health_history.py只核验固定指针与必要manifest元数据；首次同日重复更新可没有完整历史段。响应支持gzip，解压后的原JSON字节继续原样保存并核验。离线brief合并有效历史，query只读对应字段与日期。",
       "OS lock 区分活进程与已退出进程；预算在 token refresh 和 manifest mutation 前验证。",
       "failure handoff 固定小文件，只携带稳定错误和 exact resume 路径，不含原始正文。"
     ],
     flow: [
-      "闭合 profile 历史起点和固定采集计划。",
-      "逐字段、逐连续窗口请求页面。",
-      "原样保存响应并写页面 receipt。",
+      "首次闭合profile历史起点；后续由固定.last-capture.json核验上一完成采集，并从其尚未完整中国日起建立全字段增量计划。",
+      "逐字段、逐连续窗口请求新日期页面；已完成历史通过扁平history.sources分段引用，不重新联网读取。",
+      "普通响应或gzip解压后的原JSON按字节保存，再写页面receipt；压缩损坏、不支持编码或解压前后任一体积超限都会失败。",
       "更新 bounded manifest checkpoint。",
       "中断时写 failure receipt 和 resume frontier。",
       "续跑前核对锁、计划、预算、哈希和 orphan。",
       "全部字段与资产闭合后写 complete 与 success handoff。"
     ],
     concepts: [
-      { term: "Raw evidence（原始证据）", explanation: "provider 返回的原始字节；先保全，解析失败也不会丢失。" },
+      { term: "Raw evidence（原始证据）", explanation: "普通响应或gzip解压后的原JSON字节；保存前不重新序列化，压缩传输字节与保存JSON字节分别计数。原件先保全，解析结果不覆盖它。" },
       { term: "Manifest（运行清单）", explanation: "一次运行唯一的计划、页面、资产、哈希、预算、状态和恢复身份。" },
       { term: "Resume frontier（续跑边界）", explanation: "下一步允许继续的位置，由已完成页面和固定计划共同证明。" },
       { term: "Orphan adoption（孤儿采用）", explanation: "中断后已经写入但还没进入 manifest 的连续页面，在哈希和位置完全匹配时被安全接纳。" }
@@ -425,18 +426,23 @@ export const personalHealthModules = [
     boundaries: [
       "原始健康载荷只留在私有健康原件目录，不进入 Git 或网页。",
       "页面数、字节数、记录数、请求数和 elapsed time 均有边界。",
+      "已完成历史不自动联网回查，因此不承诺主动发现提供方后来补写或修订到旧日期的记录；字段不因此缩减，也不另建定期回查任务。",
       "google-wearables 只证明来自 Google/Fitbit 追踪设备家族，不逐条证明唯一设备型号，也不证明当前配对或在线。",
       "connected GPS（手机协同定位）不是 Air 内置 GPS；运动 TCX 可随原件保全，但默认摘要不分析路线。",
       "通用登记表另有 18 类未纳入默认 Air 采集：心率区间时长与热量、楼层、海拔、活动消耗、活动等级、每日心率区间、血糖、体脂、核心体温、身高、体重、心电图、心律不齐通知、食物目录、食物单位目录、饮水日志、饮食日志。接口有定义不代表正在采集，也不代表设备本身一概不支持。"
     ],
     failures: [
+      { condition: "固定指针损坏、历史哈希不符、分段断裂或时钟回退", response: "返回incremental_pointer_*、incremental_history_*或incremental_clock_rollback，保留旧原件并停止本次增量，不扫描另一份历史凑成功。" },
       { condition: "重复 page token 或分页链不连续", response: "在下一次 fetch 前失败，保留原始页和 terminal receipt。" },
       { condition: "请求预算耗尽", response: "写有界失败回执与 exact resume manifest，不扩大预算或另建 run。" },
       { condition: "raw 文件哈希变化或额外 orphan 超出 frontier", response: "拒绝续跑，不刷新 token。" },
       { condition: "活进程仍持有 run lock", response: "拒绝并发 writer；进程真实退出后才恢复。" }
     ],
     sources: [
-      { path: "google_health_import.py", role: "字段 registry、客户端、原始保全、manifest、验证、query 和 resume 主实现" },
+      { path: "google_health_import.py", role: "字段registry、gzip传输、全字段增量、原始保全、manifest、验证、query与resume" },
+      { path: "google_health_history.py", role: "固定最近采集指针、扁平历史日期分段与去重边界" },
+      { path: "tests/test_google_health_incremental.py", role: "全字段增量、同清单续跑、gzip和离线历史合成验证" },
+      { path: "tests/test_google_health_history.py", role: "固定指针、历史分段、日期与完整性合成验证" },
       { path: "tests/test_google_health_import.py", role: "57 项 import、分页、预算、锁、哈希、query、handoff 与 resume 回归" },
       { path: "AGENTS.md", role: "一次前台更新、精确失败交接和不扫描目录的项目边界" },
       { path: "Google 官方 Fitbit Air 介绍", href: "https://blog.google/products-and-platforms/devices/fitbit/fitbit-air/", role: "核实无屏健身手环及 Google Health 手机应用的产品关系；不证明个人当前设备在线" },
@@ -461,9 +467,9 @@ export const personalHealthModules = [
       failureRecovery: ["来源无法证明时默认判断字段全部 provenance_blocked", "页面哈希漂移时在解释前停止", "空缺或 malformed 字段进入 blocked_fields", "页数字节或记录预算超限时不扩大读取", "离线query部分覆盖返回partial与gaps而不推断零", "非法日期字段或预算返回明确失败而不转在线下载"]
     },
     teaser: "设备能提供很多数据，但当前判断只采用来源清楚、质量足够、确实相关的最小部分；其余只记录存在或暂时不用。",
-    status: "capture/brief 无网络和凭据路线；新增指定日期窗口、按日质量隔离与 multiple_roles，五模块合成回归 126 项及 46 个子测试通过；个人数据未读取",
+    status: "capture/brief无网络和凭据路线；指定日期、按日质量与multiple_roles已有实现，新增本地历史分段合并；2026-09-14全套140项离线合成测试通过，个人数据未读取",
     statusTone: "pass",
-    value: "保全数据与采用数据是两件事。默认摘要比较最近 14 / 28 / 90 天；我指定一段已经采集的完整中国日时，就离线统计这一段，并独立判断其覆盖和质量。只查某一天是否保存记录也可沿原导出窄查，不必重新同步全部设备数据。",
+    value: "保全数据与采用数据是两件事。这次只联网补了新日期，也能继续比较已经保存的完整历史，长期趋势不会缩成最近一次下载。默认摘要比较最近14/28/90天；我指定完整中国日起止范围时，就离线统计这一段并判断其覆盖和质量。只查某一天是否保存记录，也可沿相应原件窄查，不必重新同步全部设备数据。",
     why: "设备 API 能读的字段很多。若把高频心率、位置、营养目录、空日志和估算噪声全部常驻，不仅扩大私人数据面，也会让低质量信号压过真正相关证据。",
     example: "我问“上周三的步数有没有保存？不用重新同步。”系统只在已经完成的那份导出里查这一天，告诉我找到几条、覆盖到什么时间；没找到只代表这份记录里没有，不能顺手说成那天一步都没走。",
     result: "得到字段级决策简报：decision_ready_fields、blocked_fields、质量原因和解释边界；默认展示 14/28/90 天，指定起止日期则另给 requested_period（所选日期范围）的统计、覆盖及 decision_ready，首尾日都包含。只查某日时，返回该字段的记录或仅摘要、重复数量、gaps、truncated 与耗时。查询通过不自动变成健康结论或写入现行底色。",
@@ -482,7 +488,7 @@ export const personalHealthModules = [
       "比较窗口为 14、28、90 天，并保留长期 90 天块与时间边界。",
       "inventory_only 只读 manifest inventory，不读取 raw 内容。",
       "具体日期仍未回答时，用精确 manifest、一个 --field 与日期离线窄查；不扫描目录、不重新下载。",
-      "--through-date 包含当天，返回的 end_date_exclusive 是次日；睡眠 session 按结束日期归属，跨午夜不会按入睡日误答。",
+      "--through-date包含当天，end_date_exclusive是次日；睡眠session的带时区绝对结束时间先转中国时间，再归属醒来日，其余使用可验证的日期字段，避免跨UTC/中国日期边界按错一天。",
       "query/summary 的默认和硬上限均为 100 页、32 MiB、10,000 条，可按问题缩小，不能靠调大越过上限；这与 brief 的预算是两套不同限制。"
     ],
     problem: "解决“API 能读就全部进模型”、高频/高隐私字段常驻、空日志被解释、摘要读取全库和技术覆盖率冒充医学标准。",
@@ -491,6 +497,7 @@ export const personalHealthModules = [
       "google_health_capture.py 只读固定 success handoff，验证 exact manifest path、status 与 SHA-256。",
       "create_verification_receipt 重验 profile、manifest、selected page chain 与文件 stat commitment。",
       "google_health_brief.py 只选择 DECISION_CONTEXT_FIELDS，受 256 页、64 MiB、500k 记录预算约束。",
+      "_verified_history_segments核对扁平历史段、对应manifest哈希和既有验真回执；build_health_brief从各有效分段选四类低噪声决定字段，按_effective_start/_effective_end裁剪日期，排除已由新采集替代的旧当天。query_manifest同样把字段与日期路由到对应原件。",
       "数值和事件字段分别处理真实零、重复、歧义、malformed、无记录和来源缺失。",
       "brief 输出 decision_context 与 inventory_only 两个不混用区域。",
       "resource_usage 明确 api_access=false、credential_access=false、full_raw_payloads_scanned=false。",
@@ -502,7 +509,7 @@ export const personalHealthModules = [
       "读取有界 success handoff 并解析 exact manifest。",
       "验证 complete 状态与 manifest hash。",
       "生成/加载离线 verification receipt。",
-      "只选择四类判断字段页面。",
+      "核对当前清单与扁平history.sources；从各有效日期段只选择四类判断字段页面，按分段边界排除已由新采集替代的旧当天。",
       "计算字段质量、近期窗口和 blocked reason。",
       "生成 decision context、inventory-only 和 downstream contract。",
       "本地 manifest、verification receipt 与 brief 闭合并持久化后消费交接 pointer；Health Owner 随后审阅最小结果并决定是否局部采用。",
@@ -533,6 +540,8 @@ export const personalHealthModules = [
     sources: [
       { path: "google_health_capture.py", role: "有界 success handoff、离线验证、brief 持久化与 pointer cleanup" },
       { path: "google_health_brief.py", role: "字段解析、窗口、质量门、inventory-only 和 downstream contract" },
+      { path: "google_health_history.py", role: "扁平历史段身份、连续日期与清单哈希核对" },
+      { path: "tests/test_google_health_incremental.py", role: "跨采集历史、旧未完整日替代与离线无重计合成验证" },
       { path: "google_health_import.py · query_manifest / summarize_manifest", role: "精确字段日期查询、独立读取预算、记录/摘要/缺口与零 API 耗时" },
       { path: "tests/test_google_health_capture.py", role: "离线无凭据/网络、错误交接和安全重试回归" },
       { path: "tests/test_google_health_brief.py", role: "29 项来源、哈希、覆盖、字段三态、inventory-only 与 CLI 回归" },

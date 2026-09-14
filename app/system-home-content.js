@@ -222,7 +222,7 @@ export const systemScenarios = [
     label: "排查电脑故障",
     title: "电脑现在正常，也能追查昨晚为什么卡",
     request: "“昨晚十点半电脑突然卡了两三次，现在又正常了。帮我判断最可能是什么原因，不要只看当前任务管理器，也不要重启。”",
-    systems: ["通用 AI 与智能体能力", "TimeAudit", "timeaudit-diagnostics", "PCConfig", "Windows 现场工具"],
+    systems: ["通用 AI 与智能体能力", "TimeAudit", "timeaudit-diagnostics", "PCConfig 原生内存故障记录", "Windows 现场工具"],
     rules: "先确认故障时间和数据覆盖；历史相关性、当前现场和原因判断分开；不允许用重启代替诊断；处理前后必须可比较、可回退。",
     result: "故障时段、覆盖质量、多个竞争假设、支持与反对证据、已排除项、安全处理、下次复发应保留的现场。",
     value: "通用 AI 负责形成和比较诊断假设，本地项目提供过去与现在的证据；两者共同工作，避免单看峰值或只给通用建议。",
@@ -242,7 +242,7 @@ export const systemScenarios = [
         number: "02",
         kicker: "假设与交叉检查",
         title: "历史信号、当前现场与推理一起工作",
-        body: "TimeAudit 提供 CPU、GPU、内存、磁盘、网络、帧率和活动状态；PCConfig 与系统现场核对配置、任务、驱动和近期变化；通用 AI 比较内存换页、磁盘延迟、热或功耗限制、网络抖动等解释。",
+        body: "TimeAudit 提供 CPU、GPU、内存、磁盘、网络、帧率和活动状态；PCConfig 与系统现场核对配置、任务、驱动和近期变化；原生内存记录独立于 AI、TimeAudit、Docker 和网络，每 5 秒留下系统提交量、内核池和进程 PID 等线索，故障后可查上一会话尾段。通用 AI 比较内存增长、换页、磁盘延迟、热或功耗限制、网络抖动等解释；硬断电尾部仍可能丢失。",
         items: [
           ["历史证据", "时间对齐的硬件、流畅度和活动信号"],
           ["当前证据", "机器配置、事件、任务和是否仍可复现"],
@@ -565,7 +565,7 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "副驾驶恢复胶囊与每周巡检",
       focus: "检查备用笔记本的恢复说明、已选文件、本地副本和 U 盘胶囊，确认换机或重装时知道从哪里恢复。",
-      process: "笔记本每天 09:00、21:00 检查：普通恢复胶囊按 7 天周期；独立 Codex 历史按 12 小时周期形成本地恢复点并向在场 U 盘复制，各保留当前和前一份。每周一 10:00（北京时间）AI 只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。",
+      process: "笔记本每天 09:00、21:00 检查：普通恢复胶囊按 7 天周期；独立 Codex 历史按 12 小时周期形成本地恢复点并向在场 U 盘复制，各保留当前和前一份。AI 每周只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。2026-09-14 实机任务为北京时间周一 07:15，恢复账本仍写 10:00；原任务仍有旧的固定路径限制，与已安装恢复模板不一致，需由来源任务收敛。",
       delivery: "只有新的可行动问题才通知，说明影响、最近可用世代和该怎样处理；正常未插 U 盘不当故障。本地与 U 盘各自保留成功时间和覆盖范围，不能把一份成功算成两份；胶囊不替代 Windows 重装、重新登录或真实换机验收。"
     }
   ]
@@ -636,7 +636,7 @@ export const systemProjectDomains = [
       { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
       { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
       { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 7 日只读盘点完成 37 个登记来源，记录 45,123 个非媒体路径条目，其中 35 个精确登记、45,088 个按需发现。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
-      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "目前按四库分批整理本地原件、必要文字承接、索引与 G 盘副本，用户手筛图片和全部视频保留；52 个普通视频已在 E/G 扁平归位。旧目录、手机包与云候选有各自历史观察，不能再当作整理后的总量。本轮云端清旧重传和手机回写延期，163 项手机旧待清记录保留，最终元数据与全量 G 收口仍未完成。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
+      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "按四库整理本地原件、必要文字和索引，并保留独立恢复副本。当前 4,230 项、96.18 GB 已完成云端上传与分类：照片和视频进入 Google Photos，录音、音乐与铃声进入 Drive；全量回读通过，重复运行没有再次写入。Photos 的 116 段视频中 115 段已完成平台处理、1 段仍在处理；手机实际回写、全部格式播放和从云端零起点恢复仍分别未验。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
       { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "为 WeFlow 提供账号与消息读取契约、接口自检和有界静默启动；现役微信日常入口仍由独立 WeChatDirect 承担。健康响应不等于真实聊天读取通过。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
       { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；当前 3 个完成态归档共保存 6032 条消息，3/3 独立验真通过，同时保留回复、媒体、可重放增量与显式 gap。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
@@ -700,7 +700,7 @@ export const systemProjectDomains = [
     delivery: "不含秘密的使用结果、分层备份、完整清单与指纹、远端回读和不覆盖冲突的恢复位置。",
     unavailable: "密钥、恢复因子、原备份或目标身份不足时停止精确恢复，不显示秘密、不覆盖冲突文件，也不声称备份可用。",
     assets: [
-      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "把 Codex、Gemini、Claude 与 OpenClaw 的四套现有备份放在一起查阅：各自保存配置、记忆、可读成果或工作区，恢复时仍按各自范围和入口执行。主机 Codex 完整会话另有 G/H 恢复点；副驾驶按自己的设备配置保留本地与 U 盘历史恢复点，仅安全设置投影进入独立云分支。隔离副本能读取历史与真实新回合续作分别验收；同页展示不表示四套数据被合成一份备份。", kind: "恢复资产", href: "/projects/codex-memory" },
+      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "把 Codex、Gemini、Claude 与 OpenClaw 的四套现有备份放在一起查阅：各自保存配置、记忆、可读成果或工作区，恢复时仍按各自范围和入口执行。主机 Codex 完整会话另有 G/H 恢复点，当前双盘同点；G 自动保留当前与前一份，核验后清旧点和无引用对象，H 跟随 G 的有效保留集合。副驾驶按自己的设备配置保留本地与 U 盘历史恢复点，仅安全设置投影进入独立云分支。隔离副本能读取历史与真实新回合续作分别验收；同页展示不表示四套数据被合成一份备份。", kind: "恢复资产", href: "/projects/codex-memory" },
       { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据和恢复清单整理成可选择回填的备份包，分别维护本地、G 盘和 Drive 结果。本地与 G 盘已有同一新包，Drive 仍保留上一代，各自按真实备份时间核对；微信回填先预检并保留回滚点，云端与原生恢复各自验收，官方客户端是否可用仍需实际确认。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "key", title: "Key：分开保管的另一份恢复材料", repo: "Key", role: "用 VAULT03 和独立密码加密保管敏感密钥、恢复码、备用码等材料。最高权限体系与 Key 各保管一部分，分别解锁、互不替代；单拿一边不等于掌握全部恢复材料。这是两条保管线组成的双保险。", kind: "密码加密与私人备份", href: "/projects/vault-tool/private-backup", entryLabel: "了解密文备份与恢复" },
       { id: "public-project-private-backup", title: "公开项目的私有文件备份", repo: "public-project-private-backup", role: "公开项目的源码照常发布，已排除出公开 Git、但确有恢复价值的本地配置或材料另存私人备份。每份副本保留对应项目、原相对位置和指纹，恢复时能找回正确文件；它不是把整个公开仓库再复制一遍。有持续用途的小工具另由本机轻量工具清单按用途找回；源码、必要依赖与恢复说明已保存到 G 盘备份。现有正式能力只保留指针，由所属项目继续维护；一次性过程文件仍清理。", kind: "恢复资产", href: projectLedgerHref },
@@ -832,7 +832,7 @@ export const systemDependencyNodes = [
     "lane": "capability",
     "title": "代码与工具",
     "subtitle": "把重复步骤交给程序",
-    "detail": "编写、运行和修复代码，调用接口、脚本和状态探针，检查结果。以前用过的小工具可以按用途找回，拿到入口、使用条件与备份；找到以后再按任务执行。",
+    "detail": "编写、运行和修复代码，调用接口、脚本和状态探针，检查结果。以前用过的小工具可以按用途找回，拿到入口、使用条件与备份；找到以后再按任务执行。手头工作做完、只差一个后台条件时，可用可见窗口等待并随时停止，就绪、失败或超时只向原任务排一条提醒；排队成功不等于 AI 已接到或工作完成。",
     "searchHref": "#system-node-code-and-tools",
     "searchAliases": [
       "代码执行",
@@ -977,7 +977,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体先确认可访问的 G/H 备份，凭据和受保护载荷再走各自正式恢复入口。G→H 已登记 15 组来源，H 在 9 月 5 日完成首次备份验收；最新冷备于9月12日05:34 UTC完成，15组已选来源与H闭包通过完整回读；Codex会话G/H也已核对为同一点。后来新增内容仍需下一次备份，备份成功不代表整机已恢复。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体先确认可访问的 G/H 备份，凭据和受保护载荷再走各自正式恢复入口。G→H 已登记 15 组来源，H 在 9 月 5 日完成首次备份验收；H 上最近成功冷备为2026-09-14 00:11 UTC，15组来源与H闭包通过回读；00:34 UTC本机另一次尝试因H不可用而跳过，不能覆盖H已有成功记录。H普通冷备跟随G有效保留集的新增、修改和删除，离线不当空源；G各来源仍按自己的实际入口验收，微信G/Drive的删除跟随尚未实现；Codex会话另有独立回执，G/H当前同点，共7,279个文件、51,104,813,027 bytes；G保留当前与前一份，H先复制核验再跟随有效保留点清理旧点和对象。后来新增内容仍需下一次备份，备份成功不代表整机已恢复。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -1196,7 +1196,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-media",
     searchAliases: ["个人媒体整理与恢复", "找照片视频音频", "精选照片和视频", "媒体在文件管理器删了", "删除原件后退出手机恢复包和云候选", "手机照片双盘保全", "手机恢复包", "云端候选"],
-    detail: "项目仍拥有分类、原件检索、录音段落定位和恢复包；当前正式阶段改为四库本地分批留存、必要文字承接、索引与 G 盘收口。52 个普通视频已在 E/G 扁平归位；图片首轮筛选是局部检查点，历史目录数量保留在项目技术层。云端清旧与重传、手机清空与回写都延后；163 项手机旧待清及最终元数据/全量 G 闭包仍待处理。本地文件、云端对象和手机结果分别验收，已发布代码不代替真实云端或手机完成。"
+    detail: "项目拥有分类、原件检索、录音段落定位、必要文字承接和恢复包。来源 Owner（负责人）已完成四库云端分类：Google Photos 有 3,357 张图片和 116 段视频，Drive 有 754 项录音和 3 项音乐/铃声，合计 4,230 项、96,179,188,822 bytes。2026-09-13 23:21 UTC 最后全量回读确认 Photos 对象和九个相册关系、Drive 标识/大小/校验值/目录一致，重复运行写入为零；E/G/H 目录一致另有备份回执。Photos 视频还有 1 段处于处理状态，不能写成全部可播放；手机实际回写、Drive 全格式播放和云端从零恢复仍未验。本地原件、云端对象、播放与手机结果分别判断。"
   },
   {
     id: "wechat-bridge",

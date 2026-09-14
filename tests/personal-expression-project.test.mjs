@@ -74,7 +74,7 @@ test("personal-expression provides reader content and renders every glossary mea
 test("personal-expression distinguishes verified source from untested personal outcomes", () => {
   const snapshot = personalExpressionProject.currentSnapshot;
   assert.ok(Number.isFinite(Date.parse(snapshot.observedAt)));
-  assert.ok(snapshot.facts.some((item) => item.value.includes("cb9d635d9dbf606a8f729f9746b46227b2737ac1")));
+  assert.ok(snapshot.facts.some((item) => item.value.includes("d9df118edb6055a3da6463ca77289c57ceb46456")));
   assert.ok(snapshot.gaps.some((item) => item.includes("后续真实任务") && item.includes("实际使用验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("真实微信动画") && item.includes("未完成验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("换机恢复") && item.includes("未进行")));
@@ -90,6 +90,8 @@ test("personal-expression technical reference retains the four actual reader com
   }
   assert.ok(commands.some((command) => command.startsWith("python expression.py reply --scene ")));
   const contracts = personalExpressionProject.technicalContracts;
+  const replyModule = personalExpressionModules.find((item) => item.slug === "reply-as-me");
+  assert.ok(replyModule.implementation.some((item) => item.includes("source")), "reply references must retain their source field");
   assert.ok(contracts.some((item) => item.artifact === "reply 输出 examples" && item.boundary.includes("不是自动脱敏")));
   assert.ok(contracts.some((item) => item.artifact === "reply-samples.jsonl" && item.boundary.includes("标签合法不证明实际作者正确")));
   assert.ok(contracts.some((item) => item.owner === "expression.py 的 main（命令行入口函数）"));

@@ -2,8 +2,8 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const pcconfigSnapshot = createProjectSnapshot({
   observedAt: "2026-09-09T22:12:59Z",
-  label: "保留整机快照；补充副机独立恢复、文件操作与云端入口",
-  boundary: "整机现场仍保留2026-09-09 21:48–22:12 UTC观察，94项任务、Ollama历史失败及当时H离线不作今日重采。2026-09-12局部核对正式源码、稳定投影v9与副机恢复元数据；新机恢复、物理冷启动和新文件/云端入口的真人E2E仍分别未验",
+  label: "保留整机观察，更新内存取证、可见等待与备份源跟随",
+  boundary: "整机现场仍保留2026-09-09 21:48–22:12 UTC观察，94项任务、Ollama历史失败及当时H离线不作今日重采。2026-09-14局部核对main a88df8e、原生内存记录、G/H有效保留集与副机原任务；新机恢复、物理冷启动和新文件/云端入口的真人E2E仍分别未验",
   metrics: [
     { label: "配置地图", value: "14 项目 · 164 键" },
     { label: "恢复任务", value: "核心恢复 ready · 副机双份完整" },
@@ -21,7 +21,7 @@ const pcconfigSnapshot = createProjectSnapshot({
     { label: "配置与启动规模", value: "2026-09-09源Registry（登记表）为14项目/164配置键，第34代生成于20:17:31.354Z；89环境变量、64段PATH、11受管软件和18恢复锚点。启动快照23项、原观察2026-09-05T20:53:09Z；本轮主机完整现场与正式账本均为94项，定义差异为0。", hero: false },
     { label: "任务登记后续投影", value: "tasks.json已通过正式task-scan管线发布94项，generation_id=task-scan-20260909t221121454-e3f172644f2143e0；恢复计划已于2026-09-09 20:08:17 UTC更新为9阶段57项，与当前用途目录hash一致，validator无错误。34项必需、8项可选、11项安装后手工、3项等待用户、1项只观察；主机MCP两项维护任务由共享Install重建。", hero: false },
     { label: "开发存储回读", value: "开发存储回读 V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过。", hero: false },
-    { label: "核心恢复任务", value: "2026-09-09 21:55 UTC Inspect为ready、warnings=[]，11个关联任务Ready且最近结果0；21:58管理员Drift的recovery.core_contract为pass。15组G来源已登记，新增LocalToolbox；9月12日05:34:31Z来源Owner完成15/15组H冷备与full_chain回读，warnings=[]，本机/H回执SHA相同；本网页只读验收结果，没有重复执行备份，G、cloud、Git载荷写入均false。", hero: false },
+    { label: "核心恢复任务", value: "2026-09-14T00:11:27Z的H回执complete，15组完成、warnings=[]；普通集合retention均complete，Codex对象由Owner单独逐项回读。本机00:34:30Z后次尝试为skipped/H_unavailable，与H最后成功分开保留。网页仅回读结果，未重复备份。", hero: false },
     { label: "秘密恢复回读", value: "既有2026-09-01 Secret恢复证据为10/10项在三条路线一致，G路20份、PRIVATE路65份快照、覆盖33天；本轮核对密码中心15/15安装文件与源一致，没有重新恢复秘密，旧数量不作为今日实测。公开回执不返回秘密原文。", hero: false },
     { label: "稳定机器投影", value: "已发布硬件基线为v9；当前来源登记14个项目与18个恢复锚点，包含Emerald Veil的Windows桌面和锁屏恢复入口。C盘用户配置inventory（清单）有26项；稳定投影于2026-09-10已发布，登记与文件存在都不替代应用可用性。", hero: false },
     { label: "主工作站硬件基线", value: "稳定投影 v9 原观察于 2026-09-10T22:46:30.9789881Z：AMD Ryzen 9 9950X3D（16 核 / 32 线程）、64 GiB 内存（2 × 32 GiB，6200 MT/s）、NVIDIA GeForce RTX 5090 D（nvidia-smi 回读 32607 MiB，驱动 616.64）与 Windows 11 专业工作站版 25H2 / 10.0.26200；这是原基线，不是今日重采。", hero: false },
@@ -45,7 +45,7 @@ const pcconfigSnapshot = createProjectSnapshot({
     "银行卡桥已安装并通过结构回归，本次没有真实支付页面的用户可见 E2E；不能声称真实付款表单已经验收。",
     "授权文件本轮核对新增View/Edit发布源码，2026-09-09安装15/15和此前6/6合成测试保留为历史；没有调用最高权限入口处理真实选择文件。当前runtime（运行链）与自然用户E2E仍未在本轮复核。正式入口没有独立preview/dry-run（预览/只预演）动作，以显式SelectedPath/OutputPath为输入，在执行链内部生成有界计划。",
     "PRIVATE Git 恢复路径已安装且状态就绪，本次没有执行干净新机恢复演练；同机重装、换机、系统盘故障和仅 PE 四条路径因此仍需在真实事件中分别完成端到端回读。",
-    "H 在2026-09-05完成回盘与首次冷备验收，登记容量2,048,593,489,920 bytes（约1907.90 GiB）；最新2026-09-12 05:34:31Z Cold回执complete，15/15 full_chain、无warning且H已回读。该次成功不保证之后G增量已入H，也不证明新机恢复或恢复后的Hot/Cold重建。",
+    "H最后成功为2026-09-14T00:11:27Z，15组完整、无warning；本机稍后00:34:30Z尝试因H_unavailable跳过。离线尝试不否定上次成功，但也不证明之后G增量已入H；新机恢复仍未验。",
     "本轮只读回读确认 C 兼容 junction 精确指向 E 唯一根；4d17554 已删除五个完成使命的 Codex Home 迁移脚本与测试，当前没有可再次调用的迁移产品。历史 cutover（切换）只解释现役落点与恢复依据，未来若要再次迁移必须建立新的具名目标和验收。",
     "PersonalDataReplica-Hot-Daily的最新五映射回执绑定2026-09-09T09:12:07.6331218Z；只证明该轮完成，不证明任务之间持续一致或手机端已经恢复。",
     "SafeSwitch当前Inspect报告install_manifest_invalid：8月23日旧版安装清单缺少现检查器要求的字段，且绑定的是旧registry版本；已装EXE与registry的bytes/hash仍与旧清单一致，未发现文件损坏证据。旧rev68启动记录不能替代新版本安装与恢复验收，不能修改清单来冒充已升级。",
@@ -72,7 +72,7 @@ export const pcconfigProject = {
   cardStatusTone: "mixed",
   ...pcconfigSnapshot,
   repositoryNote: "源代码位于 PRIVATE（私有）GitHub（代码托管平台）仓库；本页完整公开产品思想、机器配置结构、普通技术事实、入口、失败和验证，只排除可复用凭据以及经活动全局分级确认需要保留的 L3+ 具体载荷。",
-  summary: "PCConfig 是我两台 Windows（微软操作系统）电脑的机器事实总账、配置地图和恢复中心。它管着 WLY 主工作站的磁盘、运行时、计划任务、备份、重大机器动作和明确选中文件的授权加密，也负责副驾驶的远控、轻量开发、独立胶囊与故障接管。手机对话可经已接通的电脑 MCP 读取文档、执行脚本和操作桌面，两台电脑还能互相做管理员或 SYSTEM 维护。平时想查“为什么这个任务没启动”“把这些文件加密并确认可恢复”“副机备份到哪一版”或“主机坏了怎样继续工作”，直接问即可。",
+  summary: "PCConfig 是我两台 Windows（微软操作系统）电脑的机器事实总账、配置地图和恢复中心。它管着 WLY 主工作站的磁盘、运行时、计划任务、备份、原生内存故障记录、可见的一次性等待提醒、重大机器动作和明确选中文件的授权加密，也负责副驾驶的远控、轻量开发、独立胶囊与故障接管。手机对话可经已接通的电脑 MCP 读取文档、执行脚本和操作桌面，两台电脑还能互相做管理员或 SYSTEM 维护。平时想查“为什么这个任务没启动”“把这些文件加密并确认可恢复”“副机备份到哪一版”或“主机坏了怎样继续工作”，直接问即可。",
   why: "机器配置散落在文件、注册表、环境变量、服务、计划任务与安装目录里，还会随主机改变。同一个 V 盘、端口或登录入口在台式机与笔记本上可能完全不同；全盘同步会复制错误驱动、登录态和故障，只靠 Git（版本控制）又漏掉普通文件、设备服务与恢复介质。普通文件也不能被当作凭据解析、塞进 Vault（普通加密保险库）或在中断后从头重做。PCConfig 用主机限定事实、选择性恢复、独立授权文件域和逐层回读，把这些机器能力接成可理解、可恢复又不互相污染的系统。",
   plainExample: "比如台式机突然开不了机，而原 NVMe（固态硬盘）完好：副驾驶方案会让笔记本用自己的 Windows 启动，确认硬盘盒能稳定读取原盘后，再只读识别 E/V 工作区，再继续必要的 Git、文档和轻量开发。它同时说清哪些来自 Git、哪些来自原盘、哪些账号要重新登录、哪些重型能力不能继承，以及修好台式机后怎样交回；这条笔记本与原盘接管路线仍须真机演练，不能把源码或离线测试当成已经接管成功。",
   result: "最终得到一份按设备和证据分层的可执行结果：当前主机与角色、路径和端口归属、明确选择的文件怎样形成可续作和可校验的授权包、日常与离线能力、变更的回退入口、重装/丢盘/主机故障该从哪条来源恢复，以及哪些已在现场验证、哪些只有源码或离线测试、哪些仍须真实设备、自然重启或应用内验收。",
@@ -98,6 +98,7 @@ export const pcconfigProject = {
     "维护本机路径、磁盘、目录用途、固定端口、运行时和本地数据源等机器事实",
     "维护 Registry（结构化登记表）、现场 Provider、稳定投影、漂移检查和验收入口",
     "维护 Windows 计划任务、启动项、受管软件、快捷方式和恢复顺序的机器配置",
+    "保留独立于AI与数据库的原生内存故障记录；让明确的后台等待可见、可停止，并按真实结果通知原任务",
     "维护主工作站与副驾驶笔记本的设备角色、主机限定健康入口、双机网络边界和故障接管路线",
     "维护现役路径、核心恢复、热备与冷备衔接、个人数据当前副本、恢复介质和回滚边界",
     "提供 SecretRef（秘密引用标识）、固定账号 Provider 和零明文的秘密使用入口",
@@ -157,7 +158,9 @@ export const pcconfigProject = {
     { name: "项目配置快照", responsibility: "为路径、端口、模型和本地数据源提供跨项目导航。", implementation: "164个登记键使用inspect、期望哈希、dry-run（只预演）、apply（正式应用）和mark-stale（标记陈旧）事务。" },
     { name: "任务与启动链", responsibility: "维护计划任务恢复投影、用途目录、启动快照和无窗口父进程合同。", implementation: "Task Scheduler 是运行权威；任务 XML、原始 Action 和敏感参数不进入公开回执。" },
     { name: "受管软件路由", responsibility: "把组件别名解析到自己的状态与更新 Adapter。", implementation: "当前目录登记 11 个组件；behind 才更新，equal 不重装，ahead 不降级，unknown 直接停止。" },
-    { name: "CoreRecovery（核心恢复）", responsibility: "组织重装或换机时的恢复顺序、热备/冷备衔接、任务重建和选择性验收。", implementation: "Inspect 零正文读取；Hot 原子发布小型上下文；Cold 只消费已验证 Hot，不用镜像删除。" },
+    { name: "原生内存故障记录", responsibility: "在突然卡住前留下可追查的系统提交量、内核池和进程内存趋势。", implementation: "Windows PLA每5秒采样、60秒分段；事件任务维护循环限额和前三次会话尾段。PerfMon与Task Scheduler可查看和停止；不依赖AI或数据库。" },
+    { name: "可见一次性等待", responsibility: "手头工作完成后，让一个明确后台条件有可查看、可停止的等待入口。", implementation: "项目只读probe交给Tkinter窗口；终态最多一次官方queue，runtime记录与单实例锁保留真实投递结果。停止不取消底层业务，排队不等于AI接到。" },
+    { name: "CoreRecovery（核心恢复）", responsibility: "组织重装或换机时的恢复顺序、热备/冷备衔接、任务重建和选择性验收。", implementation: "Inspect 零正文读取；Hot 原子发布小型上下文；Cold只消费已验证Hot，按登记保留集复制验真后清理退出集合的H副本。" },
     { name: "副驾驶笔记本健康与接管", responsibility: "维护备用笔记本的角色、远控、Tailscale、防火墙、运行时和台式机故障接管边界。", implementation: "唯一健康 Provider 只在 LAPTOP-E48N0DRJ 上读取现场；WLY 调用固定返回 host_mismatch，不建立第二份主工作站机器事实。" },
     { name: "副驾驶恢复胶囊", responsibility: "让笔记本重装、换机或丢盘后从独立世代恢复，同时防止空白新机覆盖旧数据。", implementation: "ProgramData 受保护任务、三态 writer 门、7 天周期、2 世代、本地 rollback 与加密 USB 分层；普通文件覆盖 Desktop/Documents/Downloads，排除已确认由主机保全的微信副本；Codex 历史和配置另由同任务接入的 codex-memory 引擎备份。" },
     { name: "双机电脑 MCP", responsibility: "把已授权对话中的文件、脚本、桌面和跨机维护交给实际目标电脑，并回读结果。", implementation: "共享SYSTEM服务前端与监督器、用户会话worker、命名管道和按需Admin/SYSTEM任务；两机独立配置/凭据/部署，断连按原request_id查询，不重放动作。" },
@@ -166,7 +169,7 @@ export const pcconfigProject = {
     { name: "Authorization File Broker（授权文件代理）", responsibility: "把用户明确选择的文件或目录计划成可续作、可校验、可无覆盖恢复的加密包。", implementation: "独立随机域根、包密钥和逐文件密钥；AES-256-GCM 分块对象、加密 state/index、原子输出与无正文 receipt（回执）。不新增服务、数据库或后台任务。" },
     { name: "Browser Bridge（浏览器桥）", responsibility: "把网站登录和银行卡填充限定到用户当前确认的精确网页目标。", implementation: "1.4.0 launcher-verified；AgentCardFill 只对唯一 HTTPS 支付表单使用一次性能力，同时填入卡号、有效期和 CVV，不提交页面。" },
     { name: "Codex 恢复与现役落点", responsibility: "保存对话恢复点，并让应用与恢复工具都解析同一个物理 Codex Home。", implementation: "对话备份使用 VSS、内容寻址、逐对象 SHA-256 与 pointer-last；当前唯一根是 E:\\Data\\AppData\\Codex，C 只保留兼容 junction。迁移已完成，专用迁移脚本和测试在 4d17554 退役，不再作为当前动作入口。" },
-    { name: "个人数据当前副本", responsibility: "用现有每日任务把本人原件、领域清单、G 副本和媒体恢复包按当前状态接起来。", implementation: "PCConfig 的 Sync-PersonalReplicasToG.ps1 先调用资料/媒体各自的 sync-current，再按五映射镜像 E→G，最后调用媒体 recovery-sync；任一步失败保留 partial/failed，五映射完成也不能吞掉领域维护失败。G→H 仍是独立加法复制。" },
+    { name: "个人数据当前副本", responsibility: "用现有每日任务把本人原件、领域清单、G 副本和媒体恢复包按当前状态接起来。", implementation: "PCConfig 的 Sync-PersonalReplicasToG.ps1 先调用资料/媒体各自的 sync-current，再按五映射镜像 E→G，最后调用媒体 recovery-sync；任一步失败保留 partial/failed，五映射完成也不能吞掉领域维护失败。G→H按其登记有效保留集独立复制并回读，确认来源稳定后清理H退出集合的副本；离线或读取失败不当成空源。" },
     { name: "固定 Google Workspace Provider", responsibility: "通过一个固定账号绑定提供邮件、云盘和日历的类型化动作。", implementation: "凭据用 DPAPI 保存；入口没有通用网址、方法或请求体透传，状态检查可做到 zero-network（零网络）。" },
     { name: "Protected-policy retirement", responsibility: "证明旧 C 盘规则运行面、Publisher consumer、worker 与任务已经退役，同时保留历史恢复材料和独立产品。", implementation: "Retirement Registry 当前有 37 个 source dependency，固定状态入口仍为 retired 且零 mutation；当前 validator 因 independent_product_installer 尚未进入分类 allowlist 而失败，不能继续把旧 36 项 PASS 冒充当前。" },
     { name: "受保护数据连续性", responsibility: "提供版本换挡、最高权限因子、加密保险库、恢复载体和隔离恢复设计。", implementation: "P0–P7（八个严格串行阶段）各有独立完成证据；源码、安装、真实数据迁移和重启验收不能互相冒充。" },
@@ -178,6 +181,8 @@ export const pcconfigProject = {
     { moduleSlug: "machine-facts", ask: "我要把一个本地服务换到固定端口。", effect: "先检查动态端口范围、系统排除段、现有监听和登记冲突；通过后立即绑定并回到项目真实配置源验证，不把预检当成预留。" },
     { moduleSlug: "machine-facts", ask: "这个项目准备从 E 盘搬到 V 盘。", effect: "先确认仓库状态、路径消费者、计划任务、快捷方式、回滚和目标盘健康；复制验证后再切引用，不把移动和永久删除混在一起。" },
     { moduleSlug: "secondary-laptop", ask: "PCConfig 里登记了哪些电脑，它们分别做什么？", effect: "先按实时主机身份区分 WLY 主工作站与唯一副驾驶笔记本；只展示各自职责、稳定入口和未知，不把一台机器的盘符、任务或规则套到另一台。" },
+    { moduleSlug: "memory-diagnostics", ask: "电脑突然卡住，重开后正常了，能查卡住前的内存吗？", effect: "按故障时间读取Windows原生内存记录、上一会话尾段与事件，区分应用、内核池和系统提交增长；日志缺口和断电尾部仍明确未知，不结束程序或把最大占用当根因。" },
+    { moduleSlug: "runtime-startup", ask: "这件事只差后台处理完，能在完成时提醒原任务继续吗？", effect: "AI手头工作完成后，可把一个明确只读条件交给可见等待窗口；查看下次检查、立即检查或停止。就绪、失败或超时只尝试一次官方排队通知；停止不影响底层工作，已排队不等于AI已经收到。" },
     { moduleSlug: "runtime-startup", ask: "把本机已登记的开发工具安全升级。", effect: "先告诉我现在装的版本、目标版本和两者关系：已经最新就不动，确实落后才备份、更新并现场回读；来源不明或安装通道不一致时直接停下，不拿猜测升级。" },
     { moduleSlug: "runtime-startup", ask: "为什么某个计划任务没有按预期工作？", effect: "把“任务是否存在、上次是否报错、真正负责的程序有没有完成”分开回答，并指出该修哪一层；任务显示就绪并不等于业务已经成功，也不会把完整执行命令或 XML 一股脑暴露出来。" },
     { moduleSlug: "runtime-startup", ask: "台式机重启停在登录界面，我还能用 ToDesk 连上吗？", effect: "检查主工作站独立的 SYSTEM 开机看门狗、ToDesk 服务启动类型、Session 0 和本次启动回执；不结束 ToDesk 来试错。任务正常只证明机器侧链路，真正登录前接入仍需另一台设备在自然重启后验证。" },
@@ -203,8 +208,8 @@ export const pcconfigProject = {
     { moduleSlug: "authorization-files", ask: "把我选中的这些文件和这个目录加密；中断后接着做，并确认以后能恢复。", effect: "只展开我点名的来源和输出目录，逐文件分块加密并始终保留原件；中断后沿已认证进度继续，完成时返回数量、路径、哈希和具体失败项，正文与密钥都不交给模型。当前没有独立预览动作，也没有真实用户文件的最高权限 E2E。" },
     { moduleSlug: "secrets-providers", ask: "在这个支付页填我选中的银行卡，但不要替我提交。", effect: "确认唯一 HTTPS 页面和一组标准支付字段后，用一次性能力原子盲填卡号、有效期与 CVV；模型看不到值，提交按钮仍由用户决定。" },
     { moduleSlug: "secrets-providers", ask: "两台电脑之间怎样恢复账号和凭据，能不能直接复制登录状态？", effect: "不能复制旧会话、Cookie、Token、密码或设备身份密钥；要在目标电脑重新登录，非秘密配置按新路径重建，秘密只从原本负责它们的凭据入口恢复。" },
-    { moduleSlug: "recovery-backup", ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先核对所选恢复点的闭包和对象哈希，再选择 G 或已验证的 H 历史恢复点。H在9月12日已完成新一轮冷备回读；仍须针对选定点走隔离恢复并确认应用能读取，备份成功不等于系统已经恢复。" },
-    { moduleSlug: "recovery-backup", ask: "把 G 的资料和照片备份到 H，也必须先做加密 Carrier 吗？", effect: "普通G副本保持原生格式，凭据和P0–P7各走正式入口。当前登记15组冷备，含LocalToolbox；9月12日05:34Z最近15组冷备已完成，H介质和闭包已回读；以后仍按介质在场与来源新鲜度决定下一次同步。" },
+    { moduleSlug: "recovery-backup", ask: "系统损坏后把 Codex 对话恢复回来。", effect: "先核对所选恢复点的闭包和对象哈希，再选择 G 或已验证的 H 历史恢复点。当前G/H已回读为同一Codex恢复点；仍须针对选定点走隔离恢复并确认应用能读取，备份成功不等于系统已经恢复。" },
+    { moduleSlug: "recovery-backup", ask: "把 G 的资料和照片备份到 H，也必须先做加密 Carrier 吗？", effect: "普通G副本保持原生格式，凭据和P0–P7各走正式入口。当前登记15组冷备，含LocalToolbox；9月14日00:11Z最近15组冷备已完成，H按G有效保留集验真后收敛；以后仍按介质在场与来源新鲜度决定下一次同步。" },
     { moduleSlug: "remote-computer-mcp", ask: "从副驾驶看看主机哪里出问题，需要管理员权限就用现有维护入口。", effect: "先核对main_desktop目标与规则，用普通工具检查；确需管理员或SYSTEM时走同一连接的维护工具，长任务按原编号取结果。物理冷启动未登录场景仍按单独验收说明。" },
     { moduleSlug: "secondary-laptop", ask: "副机每周到底备份了什么，现在U盘里的那份完整吗？", effect: "从副机当前胶囊回读本地/U盘世代、成功时间、纳入文件和强校验；Documents跳过项、未纳入媒体与同盘回滚边界一并说明。周一语义巡检只报告新的可行动问题，不重复备份。" },
     { moduleSlug: "secrets-providers", ask: "把我点名的这条密码复制到主机，我来粘贴。", effect: "精确验证后显示远控可操作的遮盖面板，报告主机复制次数或取消/到期；先粘贴再关窗，不能把主机剪贴板写入说成另一台设备已经收到。" },
@@ -241,6 +246,7 @@ export const pcconfigProject = {
   ],
   operationalEntrypoints: [
     { name: "电脑 MCP 状态", command: "E:\\PCConfig\\tools\\remote-computer-mcp\\Manage-RemoteComputerMCP.ps1 -Action Status", purpose: "只读核对SYSTEM服务、登录用户worker、回环监听与OAuth；副机使用自身deployment.manager_path及config_path，MaintenanceStatus另读两路按需任务。" },
+    { name: "内存故障记录状态", command: "E:\\PCConfig\\tools\\Invoke-MemoryFreezeDiagnostics.ps1 -Mode Status -Json", purpose: "只读返回原生采样、自动接续、限额、最近维护和界面入口；不读取用户采样数字或启停记录。" },
     { name: "机器事实漂移", command: "E:\\PCConfig\\tools\\Test-PCConfigDrift.ps1 -NoWrite -Json", purpose: "零写入比较登记与现场，并分别给出策略状态和证据状态。" },
     { name: "稳定机器投影", command: "E:\\PCConfig\\tools\\Invoke-StableMachineProjection.ps1 -Action Read -Json", purpose: "读取版本化、公开安全的稳定机器事实，不触发 live publish（现场发布）。" },
     { name: "运行时现场", command: "E:\\PCConfig\\tools\\Get-RuntimeInventory.ps1 -Json", purpose: "读取 PowerShell、系统权限与编码相关的当前运行时事实。" },
@@ -276,7 +282,7 @@ export const pcconfigModules = [
       relations: ["主机身份决定机器事实", "项目配置源投影到 PCConfig", "路径关联项目和任务消费者", "端口同时受系统范围和监听约束", "TimeAudit只给异常摘要和重查建议", "PCConfig live provider独立裁定投影是否变化"],
       failureRecovery: ["host mismatch 不套用另一台机器", "现场不可读保持 Unknown", "快照更新失败标记 stale", "TimeAudit来源不可用或payload非法时游标不推进", "迁移失败保留源路径和回滚"]
     },
-    value: "把散落在磁盘、环境、项目文件和本机服务里的配置，收成一张一目了然又能核验的机器地图。除了“登记了多少项”，我还能看到主工作站的处理器、内存、显卡、Windows 与开发工具精确版本，以及这些结论是哪次观察留下的。TimeAudit 若发现持续硬件压力，只会送来一份有界异常摘要，PCConfig 再决定是否值得重读稳定机器事实，不让一次短暂卡顿改写整台电脑的基线。",
+    value: "把散落在磁盘、环境、项目文件和本机服务里的配置，收成一张一目了然又能核验的机器地图。除了“登记了多少项”，我还能看到主工作站的处理器、内存、显卡、Windows 与开发工具精确版本，以及这些结论是哪次观察留下的。TimeAudit 若发现持续硬件压力，只会送来一份有界异常摘要，PCConfig 再决定是否值得重读稳定机器事实，不让一次短暂卡顿改写整台电脑的基线。突然卡住时的原生内存记录另由内存故障取证模块保存，不混入稳定配置。",
     why: "同一个端口可能同时撞上 Windows 动态范围、系统排除段、现有 listener（监听进程）和项目配置；同一个目录也可能被计划任务、快捷方式或服务引用。没有唯一责任源与依赖导航，搬完目录很容易出现“文件还在，程序却找不到”。短时发热或磁盘延迟同样只是一段时序信号，不能草率当成硬件或配置已经改变。",
     example: "比如我说“把这个本地服务换到一个固定端口”。系统先查动态端口范围、系统排除段、现有监听和其他项目登记；只有没有冲突，才把候选交回项目自己的配置源真正绑定并验证。若现场读不到或发现占用，就直接说清是哪一层挡住，不拿常见端口碰运气。",
     result: "检查通过时得到可用候选和验证入口，冲突时得到具体原因，现场来源不可读时明确保留 Unknown（证据不足）并停止选择。TimeAudit 增量只负责建议是否重查：成功窗口才推进自己的游标，相同边界不重复处理，来源不可用或内容非法时游标不动；最终配置是否保持不变或重新发布，仍只由 PCConfig 当前稳定事实决定。",
@@ -385,6 +391,147 @@ export const pcconfigModules = [
     relation: "这个模块回答“机器配置在哪里、现在是什么”；TimeAudit 增量摘要只提醒它何时值得重新读一次现场，不提供稳定事实本身。运行时与启动模块负责“它怎样启动和运行”，恢复模块负责“故障后怎样重建”，受保护动作模块负责“重大写入怎样获准并回读”。"
   },
   {
+    "slug": "memory-diagnostics",
+    "shortTitle": "内存故障取证",
+    "title": "内存耗尽与突然卡住时，留下可追查的记录",
+    "teaser": "即使AI、数据库或网络不可用，Windows仍按固定间隔留下内存与进程证据；恢复后按故障时间查，而不是只看当前任务管理器。",
+    "status": "2026-09-14 02:55 UTC只读现场：原生收集器运行、自动接续启用、最近维护结果0；自然开机与硬断电尾部仍未验",
+    "statusTone": "mixed",
+    "value": "电脑突然卡住甚至只能断电时，事后再打开任务管理器往往已经看不到当时是谁占用了内存。这项能力让Windows自己记录系统内存、内核池和进程私有内存的变化，故障后按时间与当时PID追查。它独立于Codex、TimeAudit、Docker和网络，既不会杀进程，也不会为了取证重启电脑。",
+    "why": "系统提交量耗尽可能来自某个应用、内核池或其他来源；一个进程此刻占用最多，不能证明它造成了之前的卡死。只扩大分页文件只能增加余量，持续保留故障前后的数字，才能区分真正增长的来源。",
+    "example": "“刚才电脑突然卡住，重开后又正常了。看看卡住前是谁的内存在涨，先别结束程序。”系统先对齐发生时间，读取上一会话留下的尾段、邻近内存记录和Windows事件，比较进程私有字节、系统提交量与内核池变化；日志缺失时说清缺口，不把当前排行榜当根因。",
+    "result": "得到故障时间窗、可读记录覆盖、对应进程与PID、内存增长趋势、支持或反对各解释的证据，以及还需补查的方向。界面能查看并停止记录；停止保留已有日志，不影响业务程序。它帮助定位问题，不保证避免卡死，也不保证硬断电前最后一秒一定保存。",
+    "readerStates": {
+      "pass": "原生收集器持续记录，故障时段已关闭的日志能读出数值，就交回该时段的趋势和当时PID；只有现场证据支持时才判断原因。",
+      "problem": "维护失败时保留最近错误的时间、阶段和代码；日志损坏、内核池突增或覆盖缺口分别指出，不用重启或扩大分页文件代替根因处理。",
+      "unavailable": "没有故障时段、断电尾部丢失或记录不可读时明确Unknown（证据不足），保留现有数据，不猜消费者，也不把一段平稳记录称为问题根治。"
+    },
+    "searchProjection": {
+      "intents": [
+        "电脑突然卡住后追查内存",
+        "查内存耗尽时哪个进程在增长",
+        "停止内存故障记录",
+        "查看断电前的记录",
+        "恢复内存采样"
+      ],
+      "entities": [
+        "PCConfig-MemoryDiagnostics",
+        "PCConfig Memory Diagnostics",
+        "Windows PLA",
+        "BLG",
+        "系统提交量",
+        "内核池",
+        "进程PID",
+        "perfmon",
+        "previous-sessions"
+      ],
+      "relations": [
+        "Windows原生记录独立于AI和TimeAudit",
+        "进程实例结合当时PID归因",
+        "循环日志与上次会话尾段分开保留",
+        "停止收集器与禁用自动接续分别控制"
+      ],
+      "failureRecovery": [
+        "硬断电尾部可能丢失",
+        "安装失败恢复原生配置",
+        "停止后分段回调不复活收集器",
+        "最多三个会话尾段",
+        "缺日志不推断正常"
+      ]
+    },
+    "decisionImpact": [
+      "系统提交量、内核池和进程私有内存共同判断；最高占用不等于内存泄漏。",
+      "采样在Windows原生性能收集器中持续进行，短脚本只做开机接续和分段后的限额清理。",
+      "记录是有界故障证据，不是全机活动库；不读取命令行、窗口标题、聊天或文件正文。",
+      "PerfMon（性能监视器）停止当前记录；要重启后仍停用，使用Stop或同时禁用对应任务。",
+      "4,320段是数量上限，不是保证保留三天；硬断电可能损坏当前段或丢失未落盘尾部。"
+    ],
+    "problem": "故障发生后现场容易消失；把记录放进依赖数据库、网络或AI的链条，还可能与业务一起停止。因此Windows原生收集器保留必要数字，AI在故障发生后才读取和判断，机器稳定配置与诊断时序保持分开。",
+    "implementation": [
+      "tools/Invoke-MemoryFreezeDiagnostics.ps1管理Install、Start、Stop、Status、Uninstall；唯一原生收集器为PCConfig-MemoryDiagnostics，根目录任务为PCConfig Memory Diagnostics。",
+      "PLA（Windows性能日志与警报）每5秒记录Committed Bytes、Commit Limit、Available MBytes、Pool Paged/Nonpaged Bytes、Pages Output/sec、Page Reads/sec、Paging File使用率，以及Process实例的Private Bytes、Working Set、ID Process。",
+      "收集器将BLG（Windows二进制性能日志）写入E:\\Data\\Diagnostics\\MemoryFreeze\\rolling，每60秒或16MiB封存一段，递增序号避免覆盖同名旧段。",
+      "同一SYSTEM任务在开机延迟30秒和分段关闭时运行memory_freeze_maintenance.vbs；无额外轮询器，任务IgnoreNew（忽略重复实例）、限2分钟、失败最多重试3次，不要求用户登录。",
+      "Windows原生DataManager（日志保留管理器）按最旧优先清理，rolling限1024MiB或4320段；当前段、清理过程与文件系统预分配允许少量暂时超额。",
+      "从停止状态启动前，previous-sessions另存上一会话最新15段、最多64MiB，只留最近三个会话；先保留尾段，再清理循环区。后续启动仍可能淘汰超过三份的旧会话。",
+      "维护错误写last-maintenance-error.txt，成功重试不覆盖它；该文件不存在仅表示未记录到维护错误。install-preimage.json保存最近安装前的任务/收集器配置，安装失败按前像恢复，独立于采样数据。",
+      "perfmon.exe的“数据收集器集→用户定义”显示运行状态、间隔和位置；taskschd.msc显示任务启用、最近运行与开机触发。Stop先禁用维护任务，再停止本收集器；完成回调不会复活已停止收集器。",
+      "故障后优先读取previous-sessions与Windows System/Application/Resource-Exhaustion事件，再读rolling邻近关闭段；用relog导出指定计数器，核对数值、时间跨度和PID。Import-Counter曾对有效文件报错，不能据此认定日志已坏。"
+    ],
+    "flow": [
+      "记录异常及断电时刻并统一到UTC",
+      "只读Status确认采样状态与保存位置",
+      "选上一会话尾段和故障邻近已关闭BLG",
+      "用relog读取必要计数器并结合Windows事件",
+      "按当时PID比较私有内存、系统提交与内核池趋势",
+      "交回原因排序、覆盖缺口与有依据的下一步"
+    ],
+    "concepts": [
+      {
+        "term": "System commit（系统提交量）",
+        "explanation": "Windows已承诺提供后备存储的内存总量；应与提交上限和各来源趋势一起看。"
+      },
+      {
+        "term": "Kernel pool（内核池）",
+        "explanation": "内核和驱动使用的内存，分别查看分页池与非分页池，不能全部归因给应用。"
+      },
+      {
+        "term": "BLG（Windows二进制性能日志）",
+        "explanation": "保存计数器随时间变化的原生文件；文件存在不等于数值与故障时段可读。"
+      }
+    ],
+    "boundaries": [
+      "不依赖Codex、TimeAudit、Docker或网络，不读取私人正文。",
+      "不杀进程、不重启电脑、不重置显示；记录不会自动修复内存泄漏。",
+      "硬断电的活跃段和未落盘尾部可能损坏或丢失；不承诺保住最后一秒。",
+      "停止与卸载保留日志；日志清理由具体诊断和已有保留策略负责。",
+      "PID与时间共同归因，进程实例后缀可能复用。",
+      "本轮没有读取用户采样数字、运行relog或进行启停/断电演练。"
+    ],
+    "failures": [
+      {
+        "condition": "原生安装或配置回读失败",
+        "response": "按install-preimage恢复原任务和收集器；回滚失败单独报告，不把部分安装当可用。"
+      },
+      {
+        "condition": "收集器手动停止后收到分段完成事件",
+        "response": "回调保持停止；只有明确Start或仍启用的下一次开机任务才接续。"
+      },
+      {
+        "condition": "维护失败或任务结果非零",
+        "response": "保留最近错误与实际状态，先诊断阶段和代码；无错误文件不能反推没有丢样。"
+      },
+      {
+        "condition": "非分页池突增而应用占用不解释系统提交",
+        "response": "转向内核池与驱动取证，不能把当前进程排行当成原因。"
+      },
+      {
+        "condition": "硬断电后最后日志不可读",
+        "response": "使用已关闭分段和保存的会话尾段，明确缺失范围，不补成正常或根因已找到。"
+      }
+    ],
+    "sources": [
+      {
+        "path": "E:\\PCConfig\\docs\\recovery\\memory-freeze-diagnostics.md",
+        "role": "用途、数据类别、原生GUI、停止语义、限额、断电边界和恢复流程"
+      },
+      {
+        "path": "E:\\PCConfig\\tools\\Invoke-MemoryFreezeDiagnostics.ps1",
+        "role": "配置、安装回滚、Status和独立启停入口"
+      },
+      {
+        "path": "E:\\PCConfig\\tools\\memory_freeze_maintenance.vbs",
+        "role": "一次性事件维护、旧会话尾段保留、限额和最后失败"
+      }
+    ],
+    "verification": [
+      "2026-09-14 02:55 UTC只读Status返回installed=true、collector_state=running、automatic_start_enabled=true、last_maintenance_result=0、last_maintenance_error=null。",
+      "同次现场回读采样5秒、分段60秒、1024MiB和4320段，与源码定义一致；当前日志路径存在于状态输出，但本轮没有读取计数器数值。",
+      "源码与运行状态、关闭段可读、停止不复活、新Start保留尾段、真实开机和硬断电尾部是不同证据。本轮未新验后五项，不把running或任务结果0当成全部通过。"
+    ],
+    "relation": "机器事实模块拥有稳定硬件与配置投影；本模块拥有内存故障时序、采样生命周期及故障后读回。TimeAudit提供更广历史信号，Windows轨迹分析器处理明确选定的ETL；它们不替代本模块独立的原生BLG记录，也不形成第二个监控项目。"
+  },
+  {
     slug: "runtime-startup",
     shortTitle: "运行与启动",
     title: "运行时、受管软件、启动项与计划任务",
@@ -397,7 +544,7 @@ export const pcconfigModules = [
       relations: ["软件状态决定是否更新", "任务定义和业务结果分层", "项目先恢复再注册任务", "启动项依赖当前用户和机器", "ToDesk不依赖交互登录", "微信双开不证明两个账号登录", "WeFlow持久profile不证明命名资料库身份"],
       failureRecovery: ["unknown 不自动安装", "任务 Ready 不冒充业务成功", "任务注册失败恢复 XML preimage", "启动差异只按真实影响处理", "不结束ToDesk验证看门狗", "第二profile缺失不创建空库"]
     },
-    value: "不再停在“软件装着”这一步，而是看正确版本能不能用、启动入口还在不在、计划任务上次怎样结束，以及重装后该按什么顺序接回。主工作站有三条彼此独立的连续性链：ToDesk 在无人登录时维护机器侧远控服务，微信在登录后只补到两个健康实例，WeFlow 保住第二路持久配置与可读接口。出问题时会落到具体任务或组件，而不是一句“电脑环境坏了”。",
+    value: "不再停在“软件装着”这一步，而是看正确版本能不能用、启动入口还在不在、计划任务上次怎样结束，以及重装后该按什么顺序接回。主工作站有三条彼此独立的连续性链：ToDesk 在无人登录时维护机器侧远控服务，微信在登录后只补到两个健康实例，WeFlow 保住第二路持久配置与可读接口。出问题时会落到具体任务或组件，而不是一句“电脑环境坏了”。如果只差一项后台条件完成，还可打开可见等待窗口：看清在等什么、最近与下次检查，随时停止；条件就绪、失败或超时后向原Codex任务排一条提醒。AI仍在工作时会自己适时回看，手头做完才交给窗口等待。",
     why: "运行时路径会变，环境变量可能同时出现在两个作用域，登录启动和计划任务又不是一套机制。只看文件存在，会漏掉执行命令错误、运行身份不对、任务被禁用或最近结果非零；只看任务显示 Ready（就绪），也证明不了微信、远控或消息接口真的可用。",
     example: "比如我问“台式机重启后停在登录界面，我还能用 ToDesk 连回来吗？”系统会检查开机即运行的 SYSTEM 服务、独立看门狗和本次启动回执，并且不会为了试错去结束 ToDesk。即使机器侧链路都正常，也只说明本机准备好了；真正的登录前接入仍要在自然重启后由另一台设备实际连一次才能确认。",
     result: "正常时得到当前运行时、版本关系、启动差异与任务健康摘要；异常时指出是配置漂移、任务结果还是对应责任源的业务回执有问题。来源读不到就保持 Unknown（证据不足），不把“不存在”和“无法读取”混为一谈，也不把机器侧任务正常夸成真实远控已经接通。",
@@ -427,6 +574,12 @@ export const pcconfigModules = [
     ],
     problem: "版本、路径、权限、环境、启动面和任务结果经常被压成一个“环境是否正常”的问题，导致自动重装、误删启动项或用旧任务结果猜当前状态。PCConfig 必须把每个运行面分开，并只让真实 Owner 解释业务结果。",
     implementation: [
+      "一次性等待入口为E:\\PCConfig\\tools\\Invoke-CodexTaskWakeup.ps1 -JobPath <明确job.json>，由codex_task_wakeup.py的Tkinter（Python图形界面）窗口执行；共用层归PCConfig，probe（只读条件检查）及上传、备份等业务仍归所属项目。",
+      "窗口可见后才开始监测，显示条件、运行状态、最近/下次检查、目标任务与结果；立即检查只执行一次probe，停止或关闭只停止监测，不停止底层上传、备份或业务。取消不排队，已提交消息不能撤回。",
+      "Job JSON绑定job_id/title/condition/thread_id/interval_seconds/deadline_utc/probe_command/message；probe_command使用绝对argv数组，返回waiting/ready/failed/cancelled之一。每次probe和queue均限60秒；waiting继续，ready/failed/超时最多尝试一次官方codex queue。",
+      "同名.runtime.json仅存本次状态与投递结果；Windows内核生存期锁只允许一个活动窗口，退出自动释放。已终结、投递失败或回执不明均不自动重试，避免重复通知；业务evidence不复制进共用状态。",
+      "官方queue命令只把说明排入原任务，通知声明它不是新用户指令或授权。排队成功、引导接受、模型收到和业务完成分别判断；当前未接通直接引导，用户已取消该接入建设，不把它列为待做功能。",
+      "LocalToolbox当前将该入口登记为受管指针，代码仍由PCConfig保存，不另建工具项目、服务、端口或定时任务。恢复按原项目入口和清单备份找回；再次启动先读原运行记录，不自动重投已尝试通知。",
       "运行时 Provider 返回 Windows、PowerShell Core（跨平台 PowerShell）和 Windows PowerShell 的路径、版本、架构与编码事实；路径多候选时使用当前 PSHOME 的唯一 executable（可执行文件）。",
       "managed_software_catalog 当前登记 11 个组件，每个条目只给 status/update Adapter，不允许自由命令字符串或缓存 last_observed。",
       "Invoke-ManagedSoftware 只接受本轮 Adapter 的 JSON；空输出返回 invalid_receipt，不再从已有 ResultPath 文件拾取旧成功回执。ResultPath 只是输出镜像，不能证明本次更新发生。",
@@ -500,6 +653,8 @@ export const pcconfigModules = [
     ],
     sources: [
       { path: "E:\\PCConfig\\registries\\runtimes.json", role: "冻结运行时投影" },
+      { path: "E:\\PCConfig\\docs\\runtime\\codex-task-wakeup.md", role: "可见一次性等待、停止、通知与恢复语义" },
+      { path: "E:\\PCConfig\\tools\\codex_task_wakeup.py", role: "窗口、只读probe、单实例状态、一次官方queue投递" },
       { path: "E:\\PCConfig\\registries\\managed_software_catalog.json", role: "11 个受管组件与 Adapter 路由" },
       { path: "E:\\PCConfig\\registries\\env_var_index.json", role: "变量名称、作用域和 PATH 顺序元数据" },
       { path: "E:\\PCConfig\\registries\\startup_snapshot.json", role: "五个登录启动来源面的维护快照" },
@@ -520,6 +675,7 @@ export const pcconfigModules = [
       { path: "E:\\PCConfig\\tools\\local_gpu_broker\\Test-HeavyRuntimeHostCapability.ps1", role: "重型运行前的当前宿主能力门" }
     ],
     verification: [
+      "2026-09-14只读核对任务等待源码、说明及LocalToolbox入口；清单记有可见窗口、停止和官方排队实测，本网页未重新启动检查器或发送消息。投递回执不能证明模型接收；直接引导未实现。",
       "2026-09-01 Get-StartupInventory.ps1 -Json 同次回读 21 个启动项：20 enabled、1 disabled；当时配置 Registry 登记 87 个任务，不能与 2026-09-02 后续 89 项来源投影混成同一观察。",
       "2026-09-01 原快照：10 个核心恢复任务当时均为 Ready、最近结果 0；CoreRecovery 3/3 验收通过。最新备份范围与任务计数见换机与恢复模块，不把旧观察当今日状态。",
       "本轮读到的P0记录仍绑定2026-09-03：rev68为normal、active=LKG、trusted=true、recovery_status=null；该次自然启动61718 ms、deadline_met=true",
@@ -630,7 +786,7 @@ export const pcconfigModules = [
       "2026-08-31T17:49:27Z Test-PCConfigDrift.ps1 -NoWrite -Json 返回 schema=pcconfig.drift.v2、execution_status=completed、summary=6 pass/1 warn/0 block，证据为 6 pass/0 fail/1 unknown",
       "同次唯一 attention 是 tasks.live_match=warn/unknown：registry_count=87、observed_count=84、complete_visibility=false；它是部分可见性，不是已证明任务丢失",
       "同次 tasks.runtime_health、tasks.path_integrity、runtimes.live_match、drives.dev_storage 与 recovery.core_contract 均 pass/pass；两条 Scheduler 状态码未被误分类成失败",
-      "drives.dev_storage 回读 5 pass、0 warn、0 block；CoreRecovery 维护状态 ready、warnings=0、Cold=additive_no_mirror、Git/云 payload 写入禁止",
+      "drives.dev_storage 回读 5 pass、0 warn、0 block；CoreRecovery 维护状态 ready、warnings=0、当时Cold=additive_no_mirror、Git/云payload写入禁止；这是旧观察，当前Cold已按登记有效保留集验真后清理H旧副本",
       "先前精确 core_recovery area 验收返回 manifest_contract、maintenance_inspect、task_contract 三项 PASS；只证明该 area，不代表未选择区域",
       "invoke_acceptance_checks.test.ps1 与 test_pcconfig_drift.test.ps1 分别覆盖 selector 零启动、超时/unknown、有界输出和 drift 双状态；测试证据不替代当前 live Provider"
     ],
@@ -641,7 +797,7 @@ export const pcconfigModules = [
     shortTitle: "换机与恢复",
     title: "换机、重装、备份与恢复",
     teaser: "从主板设置、启动介质和认盘开始，一步步接回项目、账号、开机任务与应用数据；备份只是原料，电脑真正能用才算验收。",
-    status: "2026-09-12 05:34 UTC最新H冷备complete，15组闭包已回读；既有9阶段57项重建计划保留，新机恢复与WEPE/BIOS实机验收仍有缺口",
+    status: "2026-09-14 00:11 UTC最后H冷备complete、15组源跟随闭合；00:34后次尝试因H不可用跳过；既有9阶段57项重建计划保留，新机恢复与WEPE/BIOS实机验收仍有缺口",
     statusTone: "mixed",
     searchAliases: [
       "BIOS", "UEFI", "主板设置", "换机 BIOS", "重装 BIOS", "启动U盘", "WEPE", "WinPE", "Q-Flash Plus", "Windows ISO",
@@ -654,10 +810,10 @@ export const pcconfigModules = [
       relations: ["恢复来源决定可恢复范围", "盘符按现场重新识别", "项目和运行时先于任务", "应用可见性晚于文件复制", "普通恢复不替代 P0–P7"],
       failureRecovery: ["识盘前不 clean 或 format", "驱动不兼容改用官方来源", "H 未返回", "源变化保留旧 H", "应用看不到数据保持未完成", "恢复后重新建立备份"]
     },
-    value: "遇到 Windows 重装、换电脑、系统盘故障或只能进入 PE（预安装环境）时，恢复从手里真正可用的来源开始，并按“不伤原盘”的顺序推进：先认机器和磁盘，再处理主板设置、Windows 与驱动，接回三个控制面、运行时、项目、用户配置、任务和启动项，最后恢复登录与受保护数据并在真实应用里验收。日常备份则把 G 盘现有普通资料、照片和视频的原生字节纳入 H 计划；普通资料不必先做成加密 Carrier（恢复载体）。",
+    value: "遇到 Windows 重装、换电脑、系统盘故障或只能进入 PE（预安装环境）时，恢复从手里真正可用的来源开始，并按“不伤原盘”的顺序推进：先认机器和磁盘，再处理主板设置、Windows 与驱动，接回三个控制面、运行时、项目、用户配置、任务和启动项，最后恢复登录与受保护数据并在真实应用里验收。日常备份则把 G 盘现有普通资料、照片和视频的原生字节纳入 H 计划；普通资料不必先做成加密 Carrier（恢复载体）。备份跟随登记来源的新增、修改和删除：先把本轮仍保留的内容复制并核验，再清理H中已经退出的旧副本；源盘离线、锁定或读不完整就保留旧可用副本，分别交回最后成功与本次尝试结果，不能让过时备份把本人删除的文件重新带回来。",
     why: "手里有 ISO、能进 PE、看见备份目录，或任务显示 Ready，都只证明一小段。真正恢复最容易漏掉主板版本、盘符变化、驱动兼容、项目路径、C 盘用户配置、任务身份、登录因子，以及应用自然启动后能否看到原数据。慌乱中直接格式化、修引导或整包覆盖，反而会先破坏还能取证和回退的来源。",
     example: "比如系统盘损坏，但 E/G 数据盘仍能读取。恢复路线的第一步不是点一键重装，而是在 UEFI 启动的 WEPE/WinPE 中只读认清物理盘、分区、主板版本、当前 BIOS、Windows 目标盘和恢复来源；确认无误后才安装系统与关键驱动，接回已登记的控制面、项目和用户配置。最后逐个自然启动应用、确认原数据可见，再重新建立冷热备份链。",
-    result: "交付一张按层可续作的恢复清单：故障场景、F/G/H/Git 与保护载体各提供什么，哪些设置/数据已回读、哪些应用要重新登录、哪些真机验收还没有发生。H 在9月12日已完成15组完整冷备与回读；新机恢复、WEPE 识盘/网络和 BIOS 保存重启仍不能写成完成。",
+    result: "交付一张按层可续作的恢复清单：故障场景、F/G/H/Git 与保护载体各提供什么，哪些设置/数据已回读、哪些应用要重新登录、哪些真机验收还没有发生。H在9月14日00:11 UTC已完成15组源跟随冷备与回读；新机恢复、WEPE 识盘/网络和 BIOS 保存重启仍不能写成完成。",
     readerStates: {
       pass: "场景、物理磁盘、恢复来源、主板/驱动兼容和回滚入口都已确认时，按依赖顺序恢复；每一层都从真实 Owner 回读，最终用自然启动、应用内数据可见和新备份回执验收。",
       problem: "识盘、兼容、复制、路径、任务、启动、登录或应用可见性任一层失败时，停在该层并保留原盘、旧 current 和已验证结果；不靠后续步骤掩盖前面的失败。",
@@ -669,11 +825,11 @@ export const pcconfigModules = [
       "系统盘故障：先只读确认物理盘、分区、BitLocker 和可用副本；不要因 Windows 起不来就先 clean、format、改分区或修 BCD。",
       "只有 PE：F 只提供 UEFI/WEPE 启动与救急导航，不是完整数据包；先验证内部盘和网络，能进 PE 不能升级成“可恢复”。",
       "GitHub 与官方网络只能重建已发布源码、软件和非秘密默认环境；未推送改动、私人文件、聊天、密码和原样登录态必须来自其他已核验来源。",
-      "G是在线Hot（热备）来源，H是人工解锁窗口中的Cold（冷备）来源。当前15组集合包括PersonalData、PersonalMedia、RecoveryKit与新增LocalToolbox；只复制既有G字节。最新9月12日05:34 UTC冷备complete，15组full_chain、无warning，主机H内容已回读；之后G增量仍等下次冷备。本网页没有重复复制原件。",
+      "G是在线Hot（热备）来源，H是人工解锁窗口中的Cold（冷备）来源。15组包括PersonalData、PersonalMedia、RecoveryKit和LocalToolbox；只消费G中有效备份。2026-09-14 00:11:27 UTC H回执complete、15组无warning；稍后本机尝试因H不可用跳过，不把最后尝试覆盖成最后成功。本网页未复制原件。",
       "重装后要恢复已选桌面和锁屏图片，可从Emerald Veil现有项目入口重新应用并验证；它随项目位置解析图片，换机无需沿用旧盘符。Wallpaper Engine与原有泡泡配置保持各自职责，原电脑的变更前备份只用于本机回滚；图片设置通过仍不等于新机锁屏实看已经验收。",
       "普通资料和媒体可从已核验的原生 G/H 副本选择性恢复，不要求先加密成 Carrier（恢复载体）。真正的 Password Center/SecretBroker（秘密代理）恢复集与 P0–P7 载荷仍走各自正式入口，需要对应完整恢复集与有效因子；普通复制、程序安装或只有因子不能替代这条凭据恢复链。",
-      "同一文件在 G 有多个硬链接入口时，H 只独立复制一份字节，再在 H 内共享；G/H 仍各有自己的数据，不是跨盘链接。Cold 不镜像删除，至少留 100 GiB；暂存复制前后核对源文件，正式替换 H 目标前若检测到来源变化，就保留旧目标、记录 warning（警告）并待来源稳定后重跑。",
-      "G 的个人副本会随 E 当前内容同步覆盖、重命名和删除；H 不按 G 的删除清单清除旧路径，但同名更新不提供上一版文件的版本历史。个人资料和媒体必须有 36 小时内的完整五映射回执，Hot 闭合上下文须在 48 小时内；目录存在或任务退出码为 0 不能代替这些证据。重复 Packages（恢复包目录）已从日常来源排除，专用手机包、云候选和精选分类保持原分工。",
+      "同一文件在 G 有多个硬链接入口时，H 只独立复制一份字节，再在 H 内共享；G/H 仍各有自己的数据，不是跨盘链接。Cold按已登记G有效集合先复制验真、再删除H中已退出的旧副本，不盲镜像整盘，至少留100GiB；暂存复制前后核对源文件，正式替换 H 目标前若检测到来源变化，就保留旧目标、记录 warning（警告）并待来源稳定后重跑。",
+      "G 的个人副本会随 E 当前内容同步覆盖、重命名和删除；H现按G有效保留集清理退出路径；普通同名更新不提供上一版历史。Codex会话与核心恢复上下文各保留当前和上一份，密码恢复集跟随所属入口的14天有效集，不能泛化成删除所有历史。个人资料和媒体必须有 36 小时内的完整五映射回执，Hot 闭合上下文须在 48 小时内；目录存在或任务退出码为 0 不能代替这些证据。重复 Packages（恢复包目录）已从日常来源排除，专用手机包、云候选和精选分类保持原分工。",
       "实际完成必须经过自然启动、应用打开、账号与数据可见、必要业务动作，以及恢复后重新建立备份；复制、hash 或任务 Ready 都只是中间证据。"
     ],
     problem: "过去的恢复说明更像一组名词和入口：知道有 CoreRecovery、BIOS、项目路径和任务计划，却无法从“我现在是同机重装还是换机”一路走到“应用真的能用”。完整恢复必须把场景分流、来源选择、破坏性动作禁区、依赖顺序、证据等级和用户可见验收串成一条连续旅程。",
@@ -694,8 +850,8 @@ export const pcconfigModules = [
       "core_recovery.json当前15组Cold计划为DevConfig、微信、软件环境、AI课程、Documents、Downloads、TimeAudit、Codex记忆、其他AI记忆、Codex对话闭包、Docker自定义镜像、PersonalData、PersonalMedia、RecoveryKit与LocalToolbox。LocalToolbox由既有G:\\80_Backup\\Tools\\LocalToolbox进入H:\\80_自动备份区\\Tools\\LocalToolbox，沿用原冷备任务。Documents保留_SavedGames、Downloads保留非空_AlternateRoots；_PersonalRoots、缓存和登记的_quarantine/_staging、旧救援根不进入有效集合。",
       "PersonalData 与 PersonalMedia 均为 required，共用 PersonalDataReplica-Hot-Daily 的 personal-data.replica-receipt.v1：全局 complete、五映射完整且不超过 36 小时才算 fresh（新鲜）。Hot 将新鲜度冻结进 closure；enforce（强制要求）集合不新鲜时 Cold 在任何 H 载荷写入前停止。其他无独立任务/回执的有效 G 集合仍可机会式复制，存在不等于新鲜。",
       "复制按本次运行内的 NTFS 文件身份识别 hardlink（硬链接）：每组共享字节先在 H 建独立首副本，其他 H 路径再链接到它；映射不跨运行持久保存、不建后台索引，也绝不跨 G/H 链接。暂存复制或建链前后重验源身份、长度、精确修改时间与属性，正式替换 H 目标前检测到来源变化就记 warning，保留旧 H 目标及其外部硬链接；这不是发布后再核验，也不是对所有普通文件逐个做 SHA-256 验真。",
-      "H 中的普通增量与已从 G 删除的旧文件不由 Cold 镜像清除。只有原已登记的 devconfig/timeaudit 两类版本化集合，在 G 当前文件全部通过 H 存在性、大小和 SHA-256 回读且未超删除上限后，才按精确 allowlist（允许清单）裁剪被替代版本；失败时旧文件零删除。",
-      "RecoveryKit 整树从 G 进入 H 的 90_人工保留区，但 CORE_RECOVERY 只走已验证上下文闭包，避免重复；Codex 对话只复制不可变 cold-payload（冷备对象），由其 Owner 逐对象 SHA-256 回读 H closure 后再发布 H current.json。首次 H 恢复还须调用现有 Invoke-PasswordCenterColdBackup.ps1 正式入口处理 RecoverySets，通用 Cold 不作 raw copy（直接字节复制）。",
+      "普通映射使用source_follow_verified_prune：完整读取G当前有效集合，复制新增和变化后，核对H文件存在性、大小、精确修改时间、属性及G源稳定性，再删除H独有旧副本。已登记保留glob（路径匹配规则）与CORE_RECOVERY、AI memory等子集合由各自Owner管理；不按父映射误删。来源变化、读取失败或回读不一致时，该映射零删除并返回warning；内容寻址集合仍由专属闭包入口验真和清理。",
+      "RecoveryKit 整树从 G 进入 H 的 90_人工保留区，但 CORE_RECOVERY 只走已验证上下文闭包，避免重复；Codex 对话由其Owner维护当前与上一恢复点及其有效对象；逐对象SHA-256回读H closure后发布H current.json，再按G有效点/对象清理H旧副本。首次 H 恢复还须调用现有 Invoke-PasswordCenterColdBackup.ps1 正式入口处理 RecoverySets，通用 Cold 不作 raw copy（直接字节复制）。",
       "现役 PersonalDataReplica-Hot-Daily 已由 PCConfig 承接；同步前调用 personal-materials/materials.py sync-current 与 personal-media/personal_media.py sync-current，同步后调用后者 recovery-sync --execute。五个 E→G 映射继续传播覆盖、重命名与删除，Media/Packages 排除。后置复核逐项给出剩余复制量、源/目标数量、额外文件与目录；有缺口就返回具体失败，不用整体 robocopy 退出码掩盖。",
     ],
     flow: [
@@ -736,8 +892,8 @@ export const pcconfigModules = [
       "230 个导出驱动包不保证换板或新系统兼容；关键驱动仍须按目标硬件和官方来源筛选",
       "普通 PersonalData/PersonalMedia 原生 G 副本属于 Cold 范围；通用复制器不接管真正 P0–P7 Carrier 或 Password Center/SecretBroker RecoverySets、因子与正式数据动作",
       "备份存在、任务 exit 0、文件复制或 hash 通过都不单独证明应用恢复",
-      "冷备不使用 /MIR，跨盘必须独立复制；H 内可共享硬链接，仍保留至少 100 GiB。除既有 devconfig/timeaudit 精确允许清单维护外，不因版本多就删除未知历史包",
-      "H已有2026-09-05首次备份与卷身份验收，最新2026-09-12 05:34 UTC冷备完成且H闭包已回读；之后G变化、独立凭据恢复和新机恢复仍需各自证据",
+      "冷备不使用/MIR或裸盘镜像；先完整读取有效保留集、复制并核验新增变化，再按元数据身份/存在性和源稳定性清理H旧副本。源离线、锁定或读不完整不等于空源，失败保留可恢复状态；跨盘独立复制，H内可共享硬链接且至少留100GiB",
+      "H已有2026-09-05首次备份与卷身份验收，最后2026-09-14 00:11 UTC冷备完成且H闭包已回读；之后G变化、独立凭据恢复和新机恢复仍需各自证据",
       "永久删除和秘密恢复按活动 E 规则、既有用户授权与独立产品入口处理，不从操作名称统一追加审批或新 CoreGoal"
     ],
     failures: [
@@ -791,7 +947,7 @@ export const pcconfigModules = [
       "BIOS 文字记录的 E 源、E 镜像与 G 热备三份 SHA-256 均为 2FE3B5C7…B0E21B；F 救急速查存在。20 个引用照片路径只做存在性检查，本次未读取照片",
       "BIOS 核心基线为 present_verified，CPU/内存生效为 user_confirmed；native_profile_status=not_found，PCB revision、保存后自然重启和完整外围菜单仍未独立验证",
       "F 的 UEFI→PE 启动由用户确认；WEPE 隐藏分区仅 present_observed，内部 Windows 磁盘可见和网络可用的 PE smoke 仍未执行",
-      "backup_media_structure.json在d4775b1记录2026-09-05的H首次备份与独立回执。最新Cold于2026-09-12T05:34:31.4826034Z完成，15/15 full_chain、warnings=[]，本机/H回执SHA=0a61087cb37c78e3e26d74a1d21f0fec375b21828ee92762ee354bde2cd69248；G_write_performed、cloud_write_performed、git_payload_backup_performed及H_relocked均false。网页只回读该次已选集合，不把备份完成当作新机恢复完成。",
+      "2026-09-14只读H cold-last.json：完成时间00:11:27.9766678Z，15/15集合complete、warnings=[]、普通retention全部complete，SHA-256=0e30feb26c398b32f0983d6ae9bd3485cb669a48e977f4c4a0e2c21f4aca0883。Codex closure点20260913T112054Z-1d51dc2b、7279文件/51104813027 bytes、readback_verified=true。稍后本机00:34:30Z回执skipped/H_unavailable，哈希不同是不同尝试，不能宣称两份同轮一致；新机恢复未验。",
       "来源工程已通过隔离复制、只读目标替换、硬链接保留与源变化测试；core_recovery_maintenance.test.ps1 同时覆盖 Inspect、Hot、Cold、closure、时效、卷身份和中断回执。本轮只读复核对应源码与测试范围，未重跑Cold或个人数据复制；必要指南修复后另用既有Hot在2026-09-08T08:21:59Z（历史）更新四文件上下文41832字节，context=3ac53e2400b07076403fff1ac5a87d8a2ad99479a7a6fb1d02abc4044edc2498，源指南与G正文哈希一致。这不制造新的H或新机恢复验收",
       "build_scheduled_task_rebuild_plan.test.mjs 与 validate_scheduled_task_rebuild_plan.test.mjs 覆盖任务恢复投影",
       "acceptance runner 的精确 area/check selector、超时、unknown 和有界输出由 invoke_acceptance_checks.test.ps1 验证"
@@ -803,7 +959,7 @@ export const pcconfigModules = [
     shortTitle: "副驾驶笔记本",
     title: "副驾驶笔记本、跨设备接管与独立恢复",
     teaser: "为一台真实登记的 Windows（微软操作系统）副驾驶笔记本划清远控、轻量开发与原 NVMe（固态硬盘）接管路线，并给它自己的健康检查、恢复胶囊和防覆盖流程。",
-    status: "副机双向 MCP、用户工具与 SYSTEM 维护已接通；本地/U 盘当前世代强校验通过。新机恢复、物理冷启动与 NVMe 外置接管仍未演练",
+    status: "副机双向MCP与既有本地/U盘世代有独立验证；2026-09-14原任务的时间/提示词与恢复模板存在漂移。新机恢复、物理冷启动与NVMe接管仍未演练",
     statusTone: "mixed",
     searchProjection: {
       intents: ["查看副驾驶笔记本能做什么", "离开台式机继续工作", "检查笔记本健康", "重装副电脑并恢复", "台式机坏后用笔记本接管", "笔记本丢盘后恢复"],
@@ -814,7 +970,7 @@ export const pcconfigModules = [
     value: "平时在公司用副驾驶远控家里的主工作站，主机提供环境和算力；主机不可达时，笔记本用自己的网络、Codex 登录、规则、文档和按需本地项目继续工作。双向 MCP 已能检查和维护真实电脑。笔记本每周把登记用户文件、恢复配方与窄规则束写入本地和独立 U 盘；Codex 历史、附件、索引、数据库与私有配置另用十二小时恢复点，安全规则和记忆另进专属云分支。空白新机先冻结备份写入；2026-09-12 已回读本机与 U 盘 Codex 同点和云端成功收据，此前独立介质的隔离恢复已读出旧任务。原台式机 NVMe 完好时另有只读接管路线，新机恢复与原盘接管仍须真实演练。",
     why: "主工作站一旦远控失灵、主板或电源故障，工作就可能中断；笔记本自身重装或丢盘也是另一类事故。把两台电脑做成全盘镜像，会把错误驱动、登录态、硬件配置和损坏状态一起复制；只靠 Git 又覆盖不了未入库文件、设备服务、网络边界与恢复写入门。副驾驶需要自己的角色、现场健康、数据范围和恢复生命周期。",
     example: "比如台式机因主板故障无法开机，但原 4 TB NVMe 完好。设计路线会让笔记本用自己的 Windows 启动，把原盘装入已验收的硬盘盒后只读确认分区和 E/V 锚点，再从实际根继续 Git、文档与轻量开发；台式机的驱动、任务、登录态和 GPU 能力一概不继承。修好主机前先提交或备份新增工作，再安全卸载、弹出并装回原盘。这整条接管仍待真实笔记本与 NVMe 外置演练。",
-    result: "得到按实际设备划分的可用能力与恢复准备度：能从哪台电脑维护另一台、哪些工作仍可本地继续、最近本地/U 盘世代的时间、覆盖范围和完整性，以及换机时哪些文件可恢复、哪些账号要重新登录。成功备份不等于整机恢复，Documents 中跳过的内容也不会被 SUCCESS（该次备份成功）吞掉；新机、冷启动和 NVMe 接管的独立未验项继续可见。",
+    result: "得到按实际设备划分的可用能力与恢复准备度：能从哪台电脑维护另一台、哪些工作仍可本地继续、最近本地/U 盘世代的时间、覆盖范围和完整性，以及换机时哪些文件可恢复、哪些账号要重新登录。成功备份不等于整机恢复，Documents 中跳过的内容也不会被 SUCCESS（该次备份成功）吞掉；新机、冷启动和 NVMe 接管的独立未验项继续可见。当前周检实际时间与恢复账本不一致、原提示词与已安装模板冲突，也会作为具名配置缺口交回；备份成功不能盖过它。",
     readerStates: {
       pass: "实时主机身份匹配副驾驶笔记本，远控、Tailscale、防火墙、开发工具、恢复任务、本地世代和在场介质均按合同回读时，分别显示日常可用能力与恢复准备度；整机恢复还要完成用户验收后才能启用 writer。",
       problem: "服务、精确防火墙、任务信任链、世代闭合、存储空间或恢复来源明确不满足时，只阻断对应日常或恢复能力，保留现有数据和 writer 冻结状态，不自动放宽网络或覆盖旧胶囊。",
@@ -830,7 +986,7 @@ export const pcconfigModules = [
       "本地 rollback cache 与笔记本 C: 在同一物理故障域，只帮助同机回滚；只有独立、已绑定且加密的 USB 世代能承担笔记本丢盘/换机介质角色。",
       "台式机 NVMe 外置接管只把原盘作为数据与工作区来源；不从外置盘启动 Windows，不恢复台式机任务/驱动，也不改写 WLY Registry。",
       "需要访问公司或家庭某个服务时，给出明确目标、协议与端口；现有双机维护入口按实际网络接通该目标，并在用完或离开网络后撤销。当前公司通路未启用、未实测，不自动发布整个网段。",
-      "Windows 任务每天 09:00、21:00 检查：普通胶囊本地/U盘各按7天周期，Codex 对话满12小时采集并分别重试云端和USB阶段。每周一10:00北京时间的 Luna Max 语义巡检只看新问题、漂移和恢复覆盖，无变化安静，不触发备份或恢复。",
+      "Windows 任务每天 09:00、21:00 检查：普通胶囊本地/U盘各按7天周期，Codex 对话满12小时采集并分别重试云端和USB阶段。Luna Max 每周语义巡检只看新问题、漂移和恢复覆盖，无变化安静，不触发备份或恢复。2026-09-14原任务实读为北京时间周一07:15；恢复账本仍10:00，原prompt仍有已被新模板替代的固定路径限制，来源配置尚未收敛。",
       "换机按新设备实际架构、用户根、项目盘、显示器与 OEM 能力重建；胶囊不是 Windows 启动盘，先准备可启动系统、网络和账号，不为重装格式化保存唯一胶囊的 U 盘。"
     ],
     problem: "副驾驶不是“装了几个软件的第二台电脑”。它同时涉及两台主机的事实隔离、日常远控、端口和防火墙、可离线的工具基线、跨设备数据来源、笔记本自身灾备、空白新机防覆盖，以及台式机故障时的临时 NVMe 接管。漏掉任一层，都可能把远控可用误写成可恢复，把源码测试误写成设备健康，或让新机第一次备份覆盖唯一旧世代。",
@@ -847,7 +1003,7 @@ export const pcconfigModules = [
       "任务信任链覆盖 ProgramData 祖先、安装根、launcher、Backup 脚本、settings、deployment manifest、runtime receipt、实际 pwsh 和 Windows Task Scheduler 定义；reparse、非可信 Owner 或可替换叶文件都阻断，不能只检查安装根 ACL。",
       "writerState 固定为 restore_pending → restored_unaccepted → writer_activated。新机和重装默认禁用任务；-Force 不能越门。Mark 与 Activate 在两个进程中重新验证同一个 current、generation、manifest、closure、exact set、长度和 SHA-256，最后由用户确认才启用 writer。",
       "普通文件本地与 USB 都用原子世代和 current.json，默认保留2个已验证世代、各满7天更新。新代复用上个已验证备份的未变内容，只复制新增/变化项，不链接活动原件；源删除不进入最新恢复集，过期世代释放无引用内容。USB未接入、未解锁或未绑定正常等待，不推进其成功时间。",
-      "Codex 独立自动化登记为“副电脑恢复胶囊每周语义巡检”，gpt-5.6-luna/max、每周一 10:00、Asia/Shanghai；正文由 CODEX_WEEKLY_AUDIT.md 恢复模板维护。换机完成 Codex 登录、机器绑定与恢复验收后，通过正式自动化入口查同名任务并更新或创建，再回读新机调度和实际模型；不复制旧 automation ID、原始配置或整棵 .codex。",
+      "Codex独立自动化“副电脑恢复胶囊每周语义巡检”的原automation.toml在2026-09-14实读为ACTIVE、gpt-5.6-luna/max、cron、projectless、RRULE周一07:15；本机China Standard Time与Asia/Shanghai同为UTC+8。恢复账本仍登记10:00；Git及已安装CODEX_WEEKLY_AUDIT.md已按当前授权路径集合逐项检查，但原prompt残留固定三条Funnel路径，不能把模板安装称为原任务同步完成。换机完成 Codex 登录、机器绑定与恢复验收后，通过正式自动化入口查同名任务并更新或创建，再回读新机调度和实际模型；不复制旧 automation ID、原始配置或整棵 .codex。",
       "USB 首次绑定只接受 BusType=USB、稳定卷/磁盘身份、BitLocker FullyEncrypted + Protection On 且路径无 reparse；绑定本身不备份，只有 writer_activated 后显式 CreateInitialBackup 才写第一个世代。",
       "胶囊对用户文件只做 Desktop、Documents、Downloads 的非破坏性合并；同名和敏感候选先预览。它不复制整棵 AppData、旧驱动/OEM/电源计划、浏览器或 Codex 登录态、活动 WSL/Docker VHDX、密码、Token、Cookie、私钥或设备身份密钥。",
       "Documents 内的兼容 junction 不会把 Pictures/Music/Videos 自动纳入。2026-09-09 现役世代包含 Desktop 19、Documents 17697、Downloads 279 个文件及 3 个 CodexPolicy 对象；Documents captureState=degraded，按策略跳过 1 项、跳过 reparse 3 项。强校验只证明实际纳入的 17998 个文件、5655187424 bytes 完整，未覆盖位置仍由其来源独立保全。",
@@ -940,6 +1096,7 @@ export const pcconfigModules = [
       "2026-09-12 04:27 UTC 只读副机 Status：installed=true、source_commit=c7e02a79b7922780eeae37a312d159319422c9ac、source_digest=match、ready；自然09:00任务result=0。对话本地与USB同point=20260912T010007Z-79c363c0，323文件/407005388 bytes，USB在场、cold_matches_hot=true；这是现存收据与安装源码核对，本轮没有重新全量散列。",
       "同次现存安全配置收据为31文件/266762 bytes，2026-09-12 01:00:24Z完成，backup/secondary-laptop的local/remote OID均dcff123c91b40ab9f9c6ddc5b2a5eea809325011、fresh_remote_matches_head=true。各层各保留2点，本次观察不替代以后的云端或介质可用性。",
       "2026-09-10 restore-validation.json既有隔离恢复收据pass：来源point=20260910T035042Z-acd75878，209份session文件、208索引路径重映射，隔离app-server列出139任务并读出指定任务12轮；未启动新轮次、未复制凭据、未输出私密正文，探针与物化副本已清理。整机换机、活动程序恢复与原盘接管仍分别未验。",
+      "2026-09-14只读副机原自动化与ProgramData模板：原任务ACTIVE、gpt-5.6-luna/max、周一07:15；账本10:00及原prompt的旧三路径约束尚与新模板冲突。Windows任务仍Ready/S4U/Highest、09:00/21:00；活动settings为7天、2代、writer_activated。只读取配置和任务元数据，未改自动化、未触发备份或新机恢复。",
       "2026-09-12实际任务Ready，09:00/21:00触发、S4U/Highest、writer_activated、普通胶囊7天/2代；独立自动化“副电脑恢复胶囊每周语义巡检”为ACTIVE、gpt-5.6-luna/max、周一10:00。调度、自然备份和历史隔离恢复是三类独立证据。另发现旧周检模板仍只允许三条Funnel映射，与已授权六条冲突；来源Owner已将该口径修正为按正式账本、受保护运行时和relay登记逐项匹配，随21a0fbd发布；随后来源Owner已用既有维护入口原子安装该模板，SHA=f9bf21a3649eec0dafb15d2b379e0647b37d49129fa7dcea475d750a9ff6e3a1，15个manifest文件长度与hash全部通过；任务、服务、路由不变。d1dc393同时修复缺席USB被过早读取的问题，已安装脚本SHA=819feb8e8c8e035e3576c02e8e6ee2b476352d7681446c8d805f39efb6f75650，状态ready_usb_not_connected、source_digest=match、Readiness metadata_consistent且unknowns=[]；未重新运行副机备份。",
       "2026-09-09 21:51:08Z SYSTEM 健康入口内置 Audit v2 完成：classification=NORMAL、needs_attention=false、local_integrity=pass、usb_integrity=pass、usb_state=connected；本地与 USB 同世代 20260910-042501-edddf4ec，CodexPolicy 各 3 项 complete。此次只读，没有触发备份或恢复。",
       "既有最近本地成功时间为 2026-09-09T20:30:25.6890715Z，USB 为 20:35:15.601958Z；各回执确认 17998 文件、5655187424 bytes、sha256-size-presence-exact-set。Documents 仍有具名跳过，不能把这组有效载荷说成整个用户目录。",
@@ -1023,9 +1180,9 @@ export const pcconfigModules = [
       "固定HTTP超时90秒、响应上限67108864 bytes（64 MiB）；Gmail附件和Drive下载仍受限，Drive大于64 MiB或指定SessionStateId时走8 MiB分块续传。会话URL、源身份与已确认偏移存CurrentUser DPAPI，重入先问服务端Range，完成必须远端sha256Checksum匹配本地流式SHA-256；ResumeOnly缺会话不新建。Google Docs export另受10 MiB限制，超限仍返回drive_export_response_oversize。",
       "Photos固定pcconfig-google-photos-direct v1.0.0，google-photos.primary；读Status/AlbumsList/MediaSearch/MediaBatchGet，写EnsureAlbum/EnsureMediaUpload/EnsureMediaUploadBatch/BatchAddMediaItems，移出相册用BatchRemoveMediaItems。写入须ActionAuthorizationConfirmed，移出还须Force，DryRun不解密凭据、不联网、不改变对象。OAuth独立保存在E:\\Data\\PCConfig\\GooglePhotos\\oauth.dpapi，上传会话和token在operations.dpapi，不进入回执。",
       "Photos单项核对SHA-256并断点续传，远端文件名绑定完整哈希；创建结果未知先查本应用含归档媒体的精确哈希文件名，一项绑定、多项失败、过期未知保持未知。批量接受1–50个不同文件，先全部本地预检，仅不大于8 MiB的新项走串行raw上传加一次有序batchCreate；原有未完成操作保留单项恢复。外层pass只表示每项有结果，调用方必须检查每项成功、拒绝、unknown或not_started。",
-      "Photos分页可AllPages并拒绝重复页标记，MediaBatchGet按1–50个已知ID回读逐项状态；两类Provider的StdinJsonLines仅在调用者进程生命周期内复用令牌/连接，不新增常驻服务。Photos只对明确HTTP429按30/60秒重试同请求，传输效果未知不自动重放；ResumeOnly缺已知操作不新上传。",
+      "Photos分页可AllPages并拒绝重复页标记，MediaBatchGet按1–50个已知ID回读逐项状态；两类Provider的StdinJsonLines仅在调用者进程生命周期内复用令牌/连接，不新增常驻服务。Photos对明确HTTP429按30/60秒重试；新源码保留分块上传的已知会话与确认偏移，应对有界传输失败，写入效果未知仍不自动重放；ResumeOnly缺已知操作不新上传。",
       "日历 description（描述）默认不读，显式 IncludeDescription 才返回，单事件 64 KiB、列表合计 256 KiB；正文截断保留元数据。外部 Gmail/Drive/Calendar 内容经 pcconfig.google-workspace-untrusted-content.v1（不可信外部内容封装）进入 MCP 文本通道，内容不是对本机的指令。",
-      "每个写动作的 -DryRun 都只校验本地参数，不读取 DPAPI、不刷新 token、不联系 Google；实际写超时或上游结果歧义统一 effect_unknown，不能自动重放。OAuth token exchange（令牌交换）本身也只尝试一次。",
+      "每个写动作的 -DryRun 都只校验本地参数，不读取 DPAPI、不刷新 token、不联系 Google；实际写超时或上游结果歧义统一 effect_unknown，不能自动重放。OAuth令牌读取的瞬时传输失败单独分类，不等同账号失效；不能据此自动换账号或重放效果未知的业务写入。",
       "access token（访问令牌）只在当前进程内存在；receipt（执行回执）明确 token_returned=false、client_secret_returned=false。"
     ],
     flow: [
@@ -1501,7 +1658,7 @@ export const pcconfigModules = [
         "恢复只补本服务映射不清空其他 Tailscale 配置"
       ]
     },
-    "value": "离开电脑后，我可以在已经接通电脑 MCP 的对话里查本机文档、运行脚本、打开 Chrome 或填写普通表单；也可以从副驾驶检查主机，或从主机维护副驾驶。模型把动作交给指定电脑，再读回真实文件、命令和页面结果。电脑不必开着 Codex 窗口；Windows 启动但用户未登录时，已部署的系统服务提供维护入口，桌面工具则等待真实用户会话。",
+    "value": "离开电脑后，我可以在已经接通电脑 MCP 的对话里查本机文档、运行脚本、打开 Chrome 或填写普通表单；也可以从副驾驶检查主机，或从主机维护副驾驶。模型把动作交给指定电脑，再读回真实文件、命令和页面结果。电脑不必开着 Codex 窗口；Windows 启动但用户未登录时，已部署的系统服务提供维护入口，桌面工具则等待真实用户会话。当前会话没列出已经配置的MCP工具时，可由现成短期客户端复用原连接继续调用，先核对真实目标，连接失败与结果未知分别说明；已提交却丢回执时先查实际效果，不重放动作。主公网故障时也有经副机的既有备用路线，主机的备用监听现归同一服务恢复，避免旧端口转发丢失后备用入口跟着失联；它不能接通已经关机的主机。",
     "why": "手机本来读不到电脑磁盘，聊天模型也不知道现役规则、脚本和当前桌面。单纯远控又要手动逐步点击。这个入口把现成 Windows 工具、文档片段读取与规则上下文接给对话模型，保留电脑自己的文件、应用和执行事实。",
     "example": "我可以在已开放所需电脑工具的 Chat（聊天）对话里说：“把电脑上这份 DOCX 的第 2 段找出来；如果这里提供执行工具，再运行已有检查脚本，只回报结果。”账号提供 Extra High（极高思考）或 Pro 时可以按任务选用。Chat 用量与 Work/Codex 独立，Chat 自身模型限额仍适用；我可以按任务难度和账号可用额度选择这条路径。",
     "result": "得到来自真实电脑的片段、脚本输出或已核对的界面结果；成功会说明执行位置和读回依据，失败会指出电脑、连接、账号、工具还是具体网站哪一层不成立。涉及发送或提交时仍按本次精确对象与授权执行，任务结束收起自己创建的测试文件、标签页与临时程序。",
@@ -1519,12 +1676,14 @@ export const pcconfigModules = [
       "需要管理员或 SYSTEM 时使用同一连接中的 MaintenancePowerShell（维护命令工具）；长任务返回编号，断线后查原编号，不重复提交。普通工具不暗中提权，MCP 登录或 Windows 系统权限不等于 codex-root。",
       "Git 同步共享源码，部署入口更新真实服务；只拉取代码不能算升级完成。副机独立保存配置、凭据和回滚版本，主机失联不要求先恢复主机密码中心才能普通工作。",
       "GUI（图形界面）连续动作需要多次往返；优先用已有脚本减少无意义点击，没有同任务对照计时就不编造快慢倍数。",
+      "当前会话没有列出已配置的MCP工具时，先核对原连接并通过现有配置调用入口复用官方app-server；工具已提交而结果丢失时保留unknown；已有维护request_id就查询原编号，其他工具先核对原动作结果，不能重复执行。",
       "MCP运行数据目前没有登记的独立备份。应用身份、刷新令牌数据库和客户端登录态不能靠Git恢复；同机用户与SYSTEM两份身份只服务迁移/回滚，不是一份独立备份。数据丢失后需要重新登记和授权。"
     ],
     "problem": "MCP（模型上下文协议）连接成功只证明入口可达，不能证明文件位置、浏览器结果、客户端采纳规则、最高权限或所有网站兼容。页面必须把协议、机器执行、真实任务、客户端选择和恢复分别说明。",
     "implementation": [
-      "机器登记为 registries/remote_computer_mcp.json；源码 E:\\PCConfig\\tools\\remote-computer-mcp，运行根 E:\\Data\\RemoteComputerMCP，临时根 E:\\Cache\\RemoteComputerMCP，专用测试目录 E:\\Data\\RemoteComputerMCP\\Tests。服务只监听 127.0.0.1:18793。2026-09-11 主公网入口改为 https://mcp.wly0829.cn/mcp，由 Cloudflare 固定隧道提供；/mcp/ 连接页提供主、副与主机备用地址，密钥保持不变。",
+      "机器登记为 registries/remote_computer_mcp.json；源码 E:\\PCConfig\\tools\\remote-computer-mcp，运行根 E:\\Data\\RemoteComputerMCP，临时根 E:\\Cache\\RemoteComputerMCP，专用测试目录 E:\\Data\\RemoteComputerMCP\\Tests。主服务监听127.0.0.1:18793；新备用relay在同一service-front生命周期内只绑定登记Tailscale地址/18796、只接受登记副机peer并转发回18793，替代主机旧portproxy，未新增Windows服务；副机自身loopback portproxy与Funnel保持独立原样。Tailscale地址晚到或监听意外关闭时，同一进程按1秒起步、最多30秒退避重新绑定，失败不阻塞主入口；停止会关闭监听及已有转发连接。正式Remove先核对主配置绑定并移除该监听注册，再重载现有服务和清精确防火墙，失败恢复配置与防火墙，不能仅删旧portproxy冒充移除。2026-09-11 主公网入口改为 https://mcp.wly0829.cn/mcp，由 Cloudflare 固定隧道提供；/mcp/ 连接页提供主、副与主机备用地址，密钥保持不变。",
       "主机 PCConfigRemoteComputerMCP 与副机 PCConfigRemoteComputerMCPSecondary 都为 Auto/非延迟/LocalSystem 服务。boot_service.py 监督 Session 0 中的 server.py --service-front；主机在同一进程与监听器内按访问域名提供独立的主、备用 OAuth 认证，复用原维护入口。原登录任务仍为 --session-worker，通过同一命名管道执行普通用户工具，不新增桌面 worker。",
+      "invoke_configured_mcp_tool.py通过短期codex app-server --stdio的mcpServer/tool/call复用当前用户MCP配置/OAuth，不启动模型或新任务、不复制token、不改审批。连接starting仅有界等待，失败保留官方startupStatus及认证原因；调用已提交而回执丢失返回unknown/do_not_replay=true/退出码3，queued或running须以原request_id查结果。源码a88df8e已正式回读，当前任务未借此重启服务或重放维护。",
       "服务复用 Windows-MCP 0.8.5、FastMCP 4.0.3、mcp 2.2.0、authlib 1.8.0 与 uvicorn 0.52.4。ReadDocument 使用 pypdf 6.18.0、python-docx 1.2.0、openpyxl 3.1.5，对文本行、DOCX 段落、PDF 页和 XLSX 指定工作表行作有界读取。",
       "固定 OAuth 客户端 ID 为 https://chatgpt.com/oauth/client.json，client secret（客户端密钥）留空，token endpoint auth method（令牌端点认证方式）为 none，scope（作用域）为 desktop:control；端点由元数据发现。入口密码与 OpenAI 密码独立，由 Password Center 管理，凭据存在 Windows Credential Manager；不返回或复制到聊天、源码。",
       "两端静态 Codex OAuth 客户端分别为 codex-secondary-laptop 与 codex-main-desktop，连接名为 main_desktop 与 secondary_laptop；回调登记 http://127.0.0.1/callback，只允许临时端口变化，换码绑定本次完整回调与 PKCE S256。issuer（令牌签发方）与回调 iss 精确匹配所选入口及末尾斜杠，DCR/CIMD 关闭。2026-09-11，ChatGPT 新主入口完成授权、自动刷新与管理员/SYSTEM 调用；副机 main_desktop 使用经副机中转主机的地址，完成原生 OAuth 和全新任务的普通/SYSTEM 验收。两机也已实际验收原 Bearer 凭据的管理员/SYSTEM 维护。",
@@ -1591,6 +1750,8 @@ export const pcconfigModules = [
       }
     ],
     "sources": [
+      { path: "E:\\PCConfig\\tools\\secondary-laptop-access\\invoke_configured_mcp_tool.py", role: "复用现有配置/OAuth的短期官方app-server调用、原结果查询和禁止重放" },
+      { path: "E:\\PCConfig\\tools\\remote-computer-mcp\\Manage-PrivateRelay.ps1", role: "备用传输状态、旧转发退役、精确监听移除与失败回滚" },
       {
         "path": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md",
         "role": "真实 Work 任务结果、时间样本、客户端边界与维护恢复入口"
@@ -1624,6 +1785,7 @@ export const pcconfigModules = [
       }
     ],
     "verification": [
+      "2026-09-14本次只读Manage-PrivateRelay Status回读WLY/service_front_direct、peer_binding_verified=true、legacy_portproxy_absent=true、direct_listener_present=true、firewall_matches=true、listener_present=true、ip_helper_required=false；peer_acceptance仍requires_remote_probe，只证明本机入口与精确防火墙，未重跑对端业务或故障注入。",
       "源提交 9bfc0d8 实现登录前服务，b3bd30e 修复维护 Unicode 输出，6f211c3/4d50ef1 补齐副机部署、依赖更新与恢复；本轮只读核对这些来源和两机活动服务，没有重启、安装或故障注入。",
       "2026-09-09 21:49 UTC 两机各运行一次 Status/MaintenanceStatus：healthy=true、maintenance_healthy=true、interactive_ready=true，Auto/LocalSystem、Session 0 单监听和用户会话均可回读，两路维护任务 pass、无触发器、WakeToRun=false。",
       "2026-09-09 21:48 UTC 当前 Codex 经 secondary_laptop 的 ComputerContext 返回 LAPTOP-E48N0DRJ、host_scoped_rule_file_verified、S-1-5-18/Session 0；普通 PowerShell 返回 C:\\Users\\wly 的真实用户身份与 PowerShell 7.6.4。随后通过 SYSTEM 维护入口读取副机恢复状态，证明此连接确实执行于目标电脑。",

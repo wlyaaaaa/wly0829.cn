@@ -4654,6 +4654,7 @@ main {
 }
 
 .module-heading .status-pill,
+.validation-matrix .status-pill,
 .skill-document > header .status-pill {
   max-width: 100%;
   justify-content: flex-start;

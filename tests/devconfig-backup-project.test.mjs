@@ -211,12 +211,13 @@ test("devconfig-backup separates current runtime evidence from routes and guaran
   assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
   assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);
   assert.match(snapshotText, /Drive仍留9月5\/6\/7日三代/);
-  assert.match(snapshotText, /03:10:46Z记录complete、warnings为空/);
+  assert.match(snapshotText, /00:11:27Z记录15集合complete、warnings为空/);
   assert.doesNotMatch(devconfigBackupProject.cardStatus, /目前离线|未追平/);
   assert.match(snapshotText, /文件一致和任务成功.*不等于.*微信应用恢复/s);
   assert.doesNotMatch(snapshotText, /配置 Drive 返回 1|远端 latest.*9 月 2 日.*落后/);
   assert.match(text, /H_unavailable/);
-  assert.match(text, /additive_no_mirror/);
+  assert.match(text, /source_follow_verified_prune/);
+  assert.doesNotMatch(text, /additive_no_mirror/);
   assert.match(text, /每个新代[^。]{0,80}完整上传|完整上传[^。]{0,80}日期包/);
   assert.match(text, /reparse point|重解析点/);
   assert.match(text, /\.failed-restore-/);
