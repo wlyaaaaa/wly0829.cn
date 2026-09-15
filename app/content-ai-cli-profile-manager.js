@@ -114,6 +114,83 @@ export const aiCliProfileManagerProject = {
     { title: "只有确需时再做真实验收", detail: "明确选择 text、tool 或 agent，并阅读可能耗额度和产生工具副作用的提示；结果绑定实际 CLI、模型、Provider、权限与 Profile 指纹。" },
     { title: "问题按原路线修，退出时保留边界", detail: "按 check ID 修当前入口，重新开进程后生效。native/eject 帮助脱离工具；卸载先区分保留数据、彻底清理和远程 OAuth 撤销。" }
   ],
+  galleryPresentation: {
+    kicker: "真实使用画面",
+    title: "Qwen3.8 27B 接入 Codex 的桌面版与 CLI",
+    description: "同一条本地模型路线分别进入 Codex 桌面版 harness（运行外壳）和原生 Codex CLI。第一张展示桌面版中的完整任务结果，后四张展示从选择 Profile 到规则读取、访问检查和最终回答的 CLI 过程。"
+  },
+  gallery: [
+    {
+      src: "/media/ai-cli-profile-manager/01-desktop-qwen38-codex-harness.png",
+      alt: "Qwen3.8 27B 接入 Codex 桌面版 harness 并完成中文偏好查询",
+      caption: "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。",
+      evidenceLevel: "E3",
+      evidenceLabel: "真实桌面版使用画面",
+      proves: "证明这条 Profile 曾进入 Codex 桌面版 harness，并完成包含工具调用与中文长回答的一次真实任务。",
+      doesNotProve: "单张界面截图不独立证明底层模型字节、所有工具路线或长期稳定性。",
+      observedAt: "2026-09-15",
+      width: 789,
+      height: 1614,
+      originalBytes: 348739,
+      originalSha256: "b14e9b08314bf160967e207238d2b82958d8cb00b4b6a465e9266d66cd161fea"
+    },
+    {
+      src: "/media/ai-cli-profile-manager/02-cli-profile-selection.png",
+      alt: "aicli 选择本地 Qwen3.8 27B Profile 并启动 Codex CLI",
+      caption: "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
+      evidenceLevel: "E3",
+      evidenceLabel: "真实 CLI 使用画面",
+      proves: "证明 Profile 选择器、启动说明和原生 Codex CLI 能在同一条本地路线中连续出现。",
+      doesNotProve: "画面里的可选 MCP 超时不代表 Qwen 路线失败，也不证明列表中其他 Profile 当前可用。",
+      observedAt: "2026-09-15",
+      width: 1436,
+      height: 1737,
+      originalBytes: 276395,
+      originalSha256: "47f48deac533f446265146975b66aa747f0f259804b563028be061e2b31350b3"
+    },
+    {
+      src: "/media/ai-cli-profile-manager/03-cli-rule-loading.png",
+      alt: "Qwen3.8 27B 在 Codex CLI 中读取活动规则与访问边界",
+      caption: "CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+      evidenceLevel: "E3",
+      evidenceLabel: "真实 CLI 使用画面",
+      proves: "证明本地模型路线能继续使用 Codex 的命令执行与规则读取界面，而不是另造一套聊天壳。",
+      doesNotProve: "截图中的规则文本只是该次任务内容，不表示网页访客获得相同的本机权限。",
+      observedAt: "2026-09-15",
+      width: 1436,
+      height: 1737,
+      originalBytes: 262864,
+      originalSha256: "53f0a3c3fcb8869dd488c6f5f6d46eef54a8599a488614684292cf80b9032bad"
+    },
+    {
+      src: "/media/ai-cli-profile-manager/04-cli-personal-access-check.png",
+      alt: "Qwen3.8 27B 在 Codex CLI 中完成个人数据访问检查",
+      caption: "同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。",
+      evidenceLevel: "E3",
+      evidenceLabel: "真实 CLI 使用画面",
+      proves: "证明该次本地模型任务能够沿现有 Codex 工具与访问流程继续执行多步工作。",
+      doesNotProve: "截图不授予新的访问权限，也不代表其他任务可跳过各自的检查。",
+      observedAt: "2026-09-15",
+      width: 1436,
+      height: 1737,
+      originalBytes: 281515,
+      originalSha256: "f129afcef8686e9a9a7a44699edfd6378b40483d76089eade4852c657651a174"
+    },
+    {
+      src: "/media/ai-cli-profile-manager/05-cli-preference-result.png",
+      alt: "Qwen3.8 27B 在 Codex CLI 中返回中文偏好查询结果",
+      caption: "CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。",
+      evidenceLevel: "E3",
+      evidenceLabel: "真实 CLI 使用画面",
+      proves: "证明该次会话产出了结构清楚的中文结果，并保留了前置工具步骤与来源边界。",
+      doesNotProve: "一次偏好查询不等于所有项目任务、所有上下文长度或长期连续性都已验收。",
+      observedAt: "2026-09-15",
+      width: 1436,
+      height: 1737,
+      originalBytes: 277343,
+      originalSha256: "8e2c0e5a77c7bd64cd2ffa2eaafcb66d4742d74fc10efb04d72d2f14f10168e7"
+    }
+  ],
   components: [
     { name: "命令路由与中文帮助", responsibility: "把 setup、profile、start、run、doctor、test、proxy、update 和 uninstall 变成严格可预期的命令。", implementation: "CommandRouter.ps1、HelpService.ps1、ConsoleUi.ps1；未知参数与缺值返回固定退出码，不猜用户意图。" },
     { name: "Manifest、Profile 与秘密存储", responsibility: "分开产品模板、用户选择和明文秘密，阻止同名或损坏对象回退到错误模板。", implementation: "data/providers、schemas、ManifestService.ps1、ProfileService.ps1、JsonStore.ps1、SecretStore.ps1；Profile 指纹绑定最终选择。" },
