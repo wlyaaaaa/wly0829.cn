@@ -6673,7 +6673,8 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 @media (max-width: 900px) {
   :root { --header-height: 104px; }
   .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 62px 42px; gap: 0 12px; align-items: center; padding: 0 20px; }
-  .header-inner .brand { grid-column: 1; grid-row: 1; margin-right: 0; min-height: 62px; }
+  .header-inner .brand { grid-column: 1; grid-row: 1; margin-right: 0; min-height: 62px; min-width: 0; }
+  .brand-logo { max-width: 100%; }
   .header-inner .primary-nav { grid-column: 1 / -1; grid-row: 2; display: flex; align-items: center; justify-content: flex-start; gap: 28px; min-height: 42px; padding: 0; }
   .header-inner .primary-nav > a { display: inline-flex; align-items: center; min-height: 42px; margin: 0; font-size: 13px; }
   .header-inner .desktop-search, .header-inner .home-search-dock { display: none; }

@@ -21,7 +21,7 @@ import {
   Wrench,
   X
 } from "@phosphor-icons/react";
-import { SiBilibili, SiGithub, SiX } from "@icons-pack/react-simple-icons";
+import { SiBilibili, SiGithub, SiGrafana, SiX } from "@icons-pack/react-simple-icons";
 import {
   excludedSkills,
   canonicalPath,
@@ -310,6 +310,7 @@ function Header({ path, search = "" }) {
         </nav>
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
+        <a className="header-connect" href="https://grafana.wly0829.cn/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开 Grafana"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
         <SiteLink className="header-connect" href="/mcp" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
         <button
           ref={searchButtonRef}
