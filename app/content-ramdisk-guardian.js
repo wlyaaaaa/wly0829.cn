@@ -1,25 +1,25 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["正常工作", "发现问题", "暂不可用"];
-const sourceCommit = "c12821ac26c0ede830d8ddb1cbc00d56e57dbdb3";
+const sourceCommit = "e058a7fd11907dfd6eafea6ee3c9821a4778e5a8";
 
 export const ramdiskGuardianSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-14T04:20:46.4369877Z",
-  label: "缓存盘和定时任务正常运行；最近自然巡检已恢复 OK",
-  boundary: "2026-09-14只读核对Z卷、目录、说明、镜像大小及自然任务状态，最新STATUS为04:03:49Z的OK。9月8日静态及隔离恢复测试、Primo映射和Chrome连接保留原日期；本次没有重建实盘或专门重启。",
+  observedAt: "2026-09-18T12:53:00Z",
+  label: "缓存盘维护正常；重建须持续压力、消费者空闲和冷却通过，窗口可暂停",
+  boundary: "只读回读现行源码/任务/健康：目录和说明一致，最近任务0；没有初始化实盘、压缩镜像或重启。合作式消费者租约不能证明所有旧浏览器均已接入，驱动实际分配内存和速度提升未知。",
   metrics: [
     { label: "内存盘", value: "12 GiB · 8 GiB 缓存软上限" },
-    { label: "当前空间", value: "已用0.2 GiB · 空闲11.8 GiB" },
+    { label: "当前空间", value: "已用0.51 GiB · 空闲11.49 GiB" },
     { label: "自动巡检", value: "登录后 · 每 15 分钟" },
     { label: "最近状态", value: "OK · 任务返回 0" }
   ],
   facts: [
     { label: "源版本", value: `PUBLIC main ${sourceCommit} 已正常推送并远端回读，源工作区干净。修复了旧容量提示、自定义盘符仍重建0号盘，以及驱动命令失败却报告完成的问题。` },
     { label: "实际磁盘与镜像", value: "2026-09-14只读识别Z: / RAMDISK / Healthy（健康），总12883849216字节、剩余12695658496字节；镜像E:\\RamdiskImage\\Z.vdf仍12874547712字节。Primo的0号Z映射、12288MB、SCSI、DMM（动态内存管理）、非临时及Load & Save（加载和保存）/Shutdown Save（关机保存）设置保留9月8日证据，本次未重证映射。" },
-    { label: "任务与健康分别读取", value: "RAMDisk_Code_Backup当前Ready（等待下次运行），最近2026-09-14T04:03:44Z返回0；STATUS在04:03:49Z为OK：Z已用0.2GiB、空闲11.8GiB，主机可用30.3GiB、提交余量17.2GiB、不可归属估算-9.6GiB。登录后每15分钟、Interactive（用户登录会话）/Highest（最高权限）、IgnoreNew（忽略重叠运行）及10分钟上限保留既有任务配置证据。" },
+    { label: "任务与健康分别读取", value: "2026-09-18只读健康为正常，原RAMDisk_Code_Backup任务Ready/最近0，登录与每15分钟检查、源码与当前观察一致；已用0.51GiB、空闲11.49GiB、提交余量31.2GiB，无已登记活动消费者。无已登记消费者不等于所有应用完全没用Z，重建仍先检查合作式租约和实际证据。" },
     { label: "目录与应用接入", value: "守护器维护12个明确目录：Caches及Personal、Work、ChromeCache、ChromeCodeCache、ChromeGPUCache、360zip_temp、WeFlow，Scratch及Personal、Work，以及TEMP。Chrome的Cache、Code Cache、GPUCache现场均为指向对应Z目录的junction（目录连接）。WeFlow目录存在不单独证明其当前进程已使用该缓存。" },
     { label: "说明与自然定时运行", value: "修复后现有任务自然执行，Z:\\使用说明.md与仓库Z_使用说明.md的SHA-256同为8557ED61B35E48E522C8354A5F5CC0550903EFA2D807D92D53D573F35F6CADC9。无需复制另一套安装代码，隐藏启动器直接使用当前仓库脚本。" },
-    { label: "源码与行为验证", value: "15项原生静态断言，以及10个隔离恢复场景，均在PowerShell 7和Windows PowerShell 5.1通过。旧脚本在初始化失败时仍报告完成的场景已复现；修复后初始化、保存、目录/说明恢复或Primo缺失均报ERROR，且不继续报告完成。目录恢复失败和初始化失败都不会继续保存镜像。" },
+    { label: "源码与行为验证", value: "当前正式源码e058a7fd提供持续压力复核、消费者租约、冷却与效率说明；原9月8日双PowerShell静态/隔离Primo测试保留原日期。本网页未重建真实缓存盘、计算速度提升或证明自然重启后全部应用恢复。" },
     { label: "启动证据边界", value: "最近系统启动为2026-09-14T00:33:06.5Z；启动后已观察自然任务OK、卷标签正确、12目录及说明一致。快速启动关闭和Primo镜像设置保留9月8日观察；本次没有专门重启，也未验每项应用缓存和完整Primo保存恢复流程。" }
   ],
   gaps: [
@@ -41,11 +41,11 @@ export const ramdiskGuardianProject = {
   repositoryNote: "公开仓库保存守护与部署脚本、使用说明和回归测试。本机运行日志、Primo镜像及应用缓存不随代码入库；网页根据本轮只读回读展示状态，不是实时控制台。",
   statusTone: "accent",
   badge: "工具 / 缓存守护",
-  summary: "把电脑的12 GiB内存盘当作可重建缓存区使用：登录后和每15分钟补齐缓存目录、更新使用说明，并检查空间与内存余量。遇到符合条件的驱动内存异常时，尝试重建缓存盘；普通WARN只记日志，真正的ERROR状态变化才提醒。",
+  summary: "让12 GiB内存盘只放可重建的缓存，定期补齐目录、更新说明并看空间与内存余量。即使出现压力，也要连续确认、排除活动消费者并通过冷却条件，才尝试重建，避免一时波动就把正在使用的缓存清掉。现有管理窗口能看状态、暂停自动重建或停用守护；真实原件仍放在持久磁盘，工具不替误放的唯一文件做备份。",
   why: "内存盘读写快，但它占用的仍是电脑内存。过去把正式文件放进去并做镜像备份，曾发生空源覆盖备份的问题；本机还遇到过Primo删文件后仍占着历史高水位内存。现在把正式资料留在持久磁盘，只让Z承载可再生成缓存，再用容量上限、巡检和有限的重建流程处理这些具体问题。",
-  plainExample: "“我想把浏览器缓存放在Z盘，重启后别让我自己补文件夹；有点内存紧张也别一直弹窗。”完成Primo和缓存路径配置后，守护器会等待盘出现、补好目录和说明。空间或内存到提醒线时留下可查的WARN；若达到自动重建条件，它会核对实际Primo磁盘再尝试清空重建，失败则明确报错。正式代码和文档一直留在E或V，浏览器缓存可以重新生成。",
+  plainExample: "“浏览器缓存继续用，但今天有长任务，先别自动重建内存盘。”可以在现有管理窗口暂停重建，目录维护和健康检查继续；长任务登记自己的使用租约。恢复自动模式也不清掉冷却时间，程序不会因一条警告就清盘。",
   result: "得到一块有容量预算、目录可恢复、问题有记录的缓存盘。它不接管所有应用的缓存管理，也不会把RAM Disk变成可靠文件仓库；是否值得把新缓存搬进去，要看实际工作负载是否有可感知收益。",
-  cardStatus: "Z盘正常 · 自然巡检OK · 定时任务返回0",
+  cardStatus: "维护正常；自动重建可暂停，活动使用与冷却单独核对",
   cardStatusTone: "accent",
   ...ramdiskGuardianSnapshot,
   searchAliases: ["RamdiskGuardian", "Z盘", "内存盘", "缓存守护", "Primo Ramdisk", "内存不释放", "缓存目录恢复"],
@@ -56,7 +56,7 @@ export const ramdiskGuardianProject = {
   },
   readerStates: {
     pass: "盘已出现且卷标正确，守护器补好缓存目录和根说明；资源没有触及警告条件时记录OK。缓存内容仍由应用自己生成，正式资料留在持久磁盘。",
-    problem: "提交余量等指标达到提醒线时记录静默WARN，任务返回0也不能替代健康状态。只有达到重建条件时才尝试恢复；失败会记录具体原因。",
+    problem: "资源达到提醒线先记静默WARN；重建还需持续压力、当前使用证据、用户开关和冷却全部允许。ERROR返回非零，失败或收益不足保持冷却并说明未恢复项。",
     unavailable: "盘等待超时、卷标不匹配，或Primo目标无法确定、命令执行失败时，记录ERROR并停止相应操作。守护器不能替Primo凭空建盘，也不能恢复误放在Z里的唯一资料。"
   },
   components: [
@@ -72,12 +72,17 @@ export const ramdiskGuardianProject = {
     { name: "执行一次完整守护", command: "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\RamdiskGuardian\\zguardian.ps1", purpose: "这会创建缺失目录、同步说明，并在满足阈值时尝试重建缓存盘。它不是只读健康检查；驱动命令需要管理员权限。" },
     { name: "部署或恢复计划任务", command: "E:\\Projects\\Tools\\RamdiskGuardian\\deploy.ps1", purpose: "在已创建Primo磁盘后以管理员运行；默认Z和15分钟，可选-RamDrive单字母与-IntervalMinutes。会修改快速启动、任务及适用的Chrome缓存链接。" },
     { name: "只读确认Primo磁盘编号", command: "& 'C:\\Program Files\\Primo Ramdisk\\rxprd.exe' ls", purpose: "在管理员上下文查看磁盘编号和盘符；当前0号盘为Z，不把这个编号当成所有机器和自定义盘符的固定值。" },
-    { name: "验证源码和隔离恢复行为", command: "pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Assert-RamdiskGuardianStatic.ps1; pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Test-RamdiskGuardianRecovery.ps1", purpose: "不初始化真实内存盘，检查既有约定与成功、失败、目标不明确等恢复分支。" }
+    { name: "验证源码和隔离恢复行为", command: "pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Assert-RamdiskGuardianStatic.ps1; pwsh -NoProfile -File E:\\Projects\\Tools\\RamdiskGuardian\\tests\\Test-RamdiskGuardianRecovery.ps1", purpose: "不初始化真实内存盘，检查既有约定与成功、失败、目标不明确等恢复分支。" },
+    {
+      "name": "可见维护与重建暂停",
+      "command": "E:\\PCConfig\\tools\\Show-StreamingMaintenance.ps1; Set-RamdiskRecoveryMode.ps1 -Mode Pause -Apply -Json",
+      "purpose": "窗口只读打开；暂停只阻止自动重建，目录与健康仍维护，恢复不清冷却。"
+    },
   ],
   technicalContracts: [
     { artifact: "E/V/Z放置策略", schema: "Markdown规则，无独立schema文件", owner: "E:\\PCConfig\\docs\\governance\\dev_storage_policy.md", boundary: "E是现有稳定层，V是新项目/开发层，Z只接纳有界可再生成热缓存；不是批量搬迁已有项目的命令。" },
-    { artifact: "缓存盘目录与阈值", schema: "zguardian.ps1中的目录数组和数值常量", owner: "RamdiskGuardian", boundary: "12个明确目录；缓存软上限8GiB，可用内存提醒8GiB/重建条件5GiB，提交余量提醒4GiB，不可归属内存提醒4GiB/重建条件8GiB。" },
-    { artifact: "健康与执行结果", schema: "STATUS.txt / .lasthealth / guardian.log / alerts.log", owner: "Set-Health与Windows计划任务", boundary: "记录带时间的状态；WARN静默，进入ERROR时提醒。重建失败返回非零；其余健康错误可能仍返回0，因此必须读STATUS。" },
+    { artifact: "缓存盘目录与阈值", schema: "zguardian.ps1中的目录数组和数值常量", owner: "RamdiskGuardian", boundary: "保留12目录、8GiB缓存软上限及原内存阈值；压力至少10秒取3次连续样本，间隔超过30秒重新确认。活动/未知消费者、暂停或冷却阻止重建，不能只靠一拍低内存触发。" },
+    { artifact: "健康与执行结果", schema: "STATUS.txt / .lasthealth / guardian.log / alerts.log", owner: "Set-Health与Windows计划任务", boundary: "health.json同目录原子替换并保留previous，STATUS.txt兼容；检查任务启用、周期、观察时间、实际源码哈希和卷。WARN可完成并返回0但不是健康PASS，关键ERROR非零，日志有界轮转。" },
     { artifact: "Primo恢复命令", schema: "rxprd ls / init <index> -s / save <index> -s", owner: "Primo命令行与守护器恢复分支", boundary: "唯一盘符映射后才初始化；命令或骨架恢复失败终止本次恢复，不能继续记完成。无新增事务、服务或数据格式。" }
   ],
   evidenceLayers: [
@@ -125,22 +130,27 @@ export const ramdiskGuardianProject = {
     { title: "先配置可丢的缓存使用者", detail: "Primo创建内存盘，应用接入自己的缓存目录；正式资料仍在持久磁盘。" },
     { title: "登录或定时运行", detail: "旧名RAMDisk_Code_Backup的任务通过VBS调用守护脚本，每15分钟一轮，重叠运行被忽略。" },
     { title: "找到盘并补基础目录", detail: "等待最多150秒、检查单字母盘符和RAMDISK卷标，补12个目录、同步说明并写隐藏标记。" },
-    { title: "检查资源与必要恢复", detail: "读取空间和内存；满足重建条件时解析实际Primo编号，初始化、补目录/说明/标记并保存镜像，任一步失败明确记录。" },
+    { title: "检查资源与必要恢复", detail: "读取空间与内存，持续压力复核后检查消费者、暂停、冷却与精确Primo/卷身份；满足条件才重建并回读目录、说明和命令结果，收益不足或未知不宣称有效释放。" },
     { title: "留下可读结果", detail: "STATUS保存最新状态，guardian.log保存过程；WARN静默，进入ERROR时尝试发出一次桌面提示。" }
   ],
   usageExamples: [
     { ask: "这个新缓存值得搬进Z盘吗？", effect: "先确认可重建、体积有界和实际I/O收益；大型包缓存与正式项目仍去持久开发盘。", moduleSlug: "volatile-cache-contract-and-backup-retirement" },
     { ask: "Z盘重新出现了，缓存文件夹和使用说明怎么补回来？", effect: "守护器检查卷标后补目录，用源文件哈希判断是否同步说明；不恢复旧缓存内容。", moduleSlug: "drive-arrival-sensing-and-skeleton-healing" },
     { ask: "最近有内存警告，但别一直弹窗影响我。", effect: "查看STATUS和日志中的具体阈值，WARN保持静默；任务是否执行和资源是否充足分开判断。", moduleSlug: "host-memory-telemetry-and-silent-monitoring" },
-    { ask: "缓存删了，Primo占用的内存却没下来，怎么办？", effect: "检查资源和估算；达到既有条件时，守护器核对对应磁盘并尝试重建，失败明确报错，活动应用可能要重新加载。", moduleSlug: "unaccounted-watchdog-and-driver-auto-release" },
-    { ask: "重装后，把缓存盘和自动巡检恢复好。", effect: "先按12GiB配置Primo，再部署现有任务和适用的缓存链接；下一次自然重启再确认加载链。", moduleSlug: "installation-and-application-recovery" }
+    { ask: "缓存删了，Primo占用的内存却没下来，怎么办？", effect: "先比较真实资源与估算，再检查持续压力、活动消费者和冷却；允许时才尝试重建并量化本次结果。驱动分配量未知或没证明至少1GiB改善，就保留相应未知或更长冷却，不承诺所有应用无感。", moduleSlug: "unaccounted-watchdog-and-driver-auto-release" },
+    { ask: "重装后，把缓存盘和自动巡检恢复好。", effect: "先按12GiB配置Primo，再部署现有任务和适用的缓存链接；下一次自然重启再确认加载链。", moduleSlug: "installation-and-application-recovery" },
+    {
+      "moduleSlug": "volatile-cache-contract-and-backup-retirement",
+      "ask": "镜像文件很大，是不是内存也占了这么多？现在用了内存盘到底快多少？",
+      "effect": "分别显示逻辑容量、文件使用量、镜像文件分配和可取得的驱动内存。没有真实驱动读数或同条件计时就报告未知，不拿镜像大小推内存或给出虚构加速百分比。"
+    },
   ],
   evolution: [
     { date: "2026-06", commit: "ecd7111", result: "停止把内存盘当正式文件来源，退役旧备份通道，转为有界可再生成缓存。" },
     { date: "2026-07-23", commit: "a7aee97", result: "本机DMM高水位故障后，容量从32GiB降到12GiB，并加入资源阈值与不可归属内存估算驱动的恢复。" },
     { date: "2026-08 至 2026-09", commit: sourceCommit, result: "保留静默WARN，补盘符/卷标检查，再让恢复使用实际Primo编号并如实处理失败；部署和恢复说明回到当前12GiB配置。" }
   ],
-  snapshotUpdateNote: "9月14日本次只读确认04:03:49Z自然巡检OK及本次启动后的Z卷、目录和说明状态；9月8日03:37Z的WARN及03:43Z隔离恢复保留历史日期。未重建实盘、专门重启或重验完整应用恢复，不把任务0、健康OK和完整重启恢复混为一件事。"
+  snapshotUpdateNote: "2026-09-18只读健康确认目录、说明、现行源码和原任务正常；9月8日隔离Primo测试保留历史。没有真实重建、镜像压缩或自然重启验收，效率与占用指标按各自证据说明。"
 };
 
 export const ramdiskGuardianModules = [
@@ -157,7 +167,8 @@ export const ramdiskGuardianModules = [
     readerStates: { pass: "对象可完全重建、体积有界，真实计时表明使用Z有价值。", problem: "缓存超软上限会告警，由生产者清理自己的已失效对象。", unavailable: "对象不能承受缓存丢失、盘暂时不可用或没有实际收益，就保持原位。" }, stateLabels,
     decisionImpact: ["E保留既有项目和恢复锚点；新个人项目默认V:\\Personal\\Projects，而不是把现有项目强制全迁到V。", "不放正式Git仓库、唯一资料、数据库、模型和凭据；不迁系统全局TEMP/TMP、Docker/WSL或无界包缓存。", "Personal/Work仅是组织分区，共享内存盘不产生账号或数据隔离。"],
     concepts: [{ term: "cache-only（仅缓存）", explanation: "丢失可以接受，而且应用能重新生成。不是把文件改名叫缓存就满足条件。" }, { term: "缓存生产者", explanation: "实际创建缓存的应用或工具；由它判断哪些代已过期，任务成功、失败或接管时完成清理。" }],
-    implementation: ["源目录数组只包含Caches、Scratch、TEMP及既有子目录，不包含退役的projects/docs/others。", "README与Z_使用说明.md解释准入；静态测试防止旧robocopy和Z_Drive_Backup逻辑重回现役。", "不实现内容分类器或全盘清空计划，8GiB是告警/恢复条件的一部分，不是自动逐文件配额。"],
+    implementation: ["源目录数组只包含Caches、Scratch、TEMP及既有子目录，不包含退役的projects/docs/others。", "README与Z_使用说明.md解释准入；静态测试防止旧robocopy和Z_Drive_Backup逻辑重回现役。", "不实现内容分类器或全盘清空计划，8GiB是告警/恢复条件的一部分，不是自动逐文件配额。",
+      "cache-efficiency入口把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则unknown，不从镜像大小推内存或编造性能倍数。",],
     flow: ["确定正式输入与可再生成输出分别在哪里。", "检查体积上限、失效恢复方式和实际I/O收益。", "只让选中的输出使用Z；生产者结束时清理自己的失效内容。"],
     boundaries: ["Primo可能保存镜像，但任何Z内容都不能因此成为唯一可靠副本。", "缓存重建可能影响正在使用缓存的应用，不能承诺无感。"],
     failures: [{ condition: "发现Z里放了唯一文件", response: "在任何重置前转存并验证持久副本；守护器没有文件版本恢复能力。" }, { condition: "长期超过8GiB软上限", response: "检查各生产者自己的有效缓存和清理规则，不按目录外观盲目整盘删除。" }],
@@ -220,10 +231,11 @@ export const ramdiskGuardianModules = [
     example: "“临时文件删完了，Z占用不大，电脑内存还是紧张。”守护器看到可用内存低于5GiB，或者不可归属内存估算达到8GiB，并确认Z已用不超过8GiB时，才进入恢复。它从Primo列表找准配置盘符对应的编号，初始化后补回目录和说明，再保存镜像；失败说明停在哪一步。",
     result: "得到明确的恢复过程与结果日志。成功后重新采集资源，记录重建发生过；释放多少内存、花多久以及应用是否要重新加载，由实际运行决定。",
     problem: "清空可重建缓存仍可能打断正在使用它的应用。估算的异常不能严格证明某一个驱动泄漏，8GiB占用条件也不证明盘里绝无误放的唯一资料。",
-    readerStates: { pass: "没有达到重建条件，保持缓存并继续记录。", problem: "达到既有条件且目标明确时尝试恢复，完成后记录WARN说明本轮发生重建。", unavailable: "Primo缺失、无权限、列表不能唯一映射、命令或目录恢复失败时，ERROR并非零退出。" }, stateLabels,
-    decisionImpact: ["不可归属估算>=4GiB提醒，>=8GiB是一个重建条件；可用内存<5GiB是另一个，二者为或。", "两种触发都要求盘已用<=8GiB；超上限保留现场并告警，不自动清盘。", "当前0号对应Z只是现场事实；自定义盘符从ls解析，不再硬编码0。同盘出现其他卷或多个匹配时零初始化。"],
+    readerStates: { pass: "没有达到重建条件，保持缓存并继续记录。", problem: "达到持续压力且目标、消费者和冷却条件全部明确才尝试；失败保留1小时冷却，回读不能证明至少1GiB改善则暂缓6小时。", unavailable: "Primo缺失、无权限、列表不能唯一映射、命令或目录恢复失败时，ERROR并非零退出。" }, stateLabels,
+    decisionImpact: ["原资源阈值只产生候选，至少10秒3样本持续压力和其他条件全部通过才允许重建；unaccounted仍是估算，不是驱动泄漏证明。", "两种触发都要求盘已用<=8GiB；超上限保留现场并告警，不自动清盘。", "当前0号对应Z只是现场事实；自定义盘符从ls解析，不再硬编码0。同盘出现其他卷或多个匹配时零初始化。"],
     concepts: [{ term: "不可归属内存估算", explanation: "总已用物理内存扣除工作集、内核池、缓存和修改页等计数；共享页重复计数使健康历史基线约-4GiB，数值可随负载变化。" }, { term: "驱动高水位占用", explanation: "文件已经删去，但驱动仍持有曾经分配的内存；本机有历史证据，不能推断所有Primo版本和所有内存问题都相同。" }],
-    implementation: ["Read-UnaccountedGB读取Available Bytes、Modified Page List Bytes、Cache Bytes、Pool Paged Bytes、Pool Nonpaged Bytes和Process(_Total)/Working Set，再与Win32_OperatingSystem的TotalVisibleMemorySize计算差值；失败返回null。", "重建条件为(available<5GiB 或 unaccounted>=8GiB) 且 used<=8GiB，未知输入不能满足对应判断。", "Resolve-PrimoDiskIndex从rxprd ls的编号行和卷列表解析配置盘符；要求唯一且同盘没有其他卷。", "Invoke-PrimoCommand检查实际退出码。流程为init <index> -s，等待2秒，恢复目录/说明/隐藏标记，再save <index> -s；初始化和骨架失败不继续save，任何失败都不记录release done。", "命令成功后再次读取空间和内存并记录实际值；它不检查一个固定释放量，也没有自建超时服务，现有计划任务总时限为10分钟。"],
+    implementation: ["Read-UnaccountedGB读取Available Bytes、Modified Page List Bytes、Cache Bytes、Pool Paged Bytes、Pool Nonpaged Bytes和Process(_Total)/Working Set，再与Win32_OperatingSystem的TotalVisibleMemorySize计算差值；失败返回null。", "压力谓词仍为(available<5GiB或unaccounted>=8GiB)且used<=8GiB，但触发前至少10秒取得3次连续样本，间隔超过30秒重新确认。消费者活动/证据未知、用户暂停或冷却均拒绝重建，不能用单拍判断。", "Resolve-PrimoDiskIndex从rxprd ls的编号行和卷列表解析配置盘符；要求唯一且同盘没有其他卷。", "Invoke-PrimoCommand检查实际退出码。流程为init <index> -s，等待2秒，恢复目录/说明/隐藏标记，再save <index> -s；初始化和骨架失败不继续save，任何失败都不记录release done。", "命令成功后再次读取空间和内存并记录实际值；它不检查一个固定释放量，也没有自建超时服务，现有计划任务总时限为10分钟。",
+      "尝试至少间隔1小时，失败暂缓1小时；实际回读无法证明至少1GiB内存改善则暂缓6小时。Set-RamdiskRecoveryMode恢复自动模式不清冷却。消费者租约绑定PID、创建时间和期限，与重建共用互斥；只证明已接入者，不承诺所有旧应用占用保护。",],
     flow: ["读取资源，判断两个触发条件与缓存占用。", "查询Primo并确认唯一磁盘编号。", "初始化选中盘，恢复基础结构后保存镜像。", "失败记录ERROR并返回非零；成功采样并记录本轮发生了重建。"],
     boundaries: ["本轮未执行真实init/save；隔离测试不能冒充实盘恢复或自然重启。", "不自动删除其他Owner缓存里的特定内容，也不重置全部系统内存。", "若初始化成功但之后失败，缓存已可能清空；ERROR不意味着所有前步骤已回滚。"],
     failures: [{ condition: "盘符无法唯一映射或同盘包含其他卷", response: "不调用init，不猜编号，保留ERROR供核对配置。" }, { condition: "init失败", response: "不调用save，不宣称完成，记录Primo退出结果。" }, { condition: "目录/说明恢复或save失败", response: "记录失败阶段；目录恢复失败不保存，save失败不宣称镜像已更新。" }],
@@ -245,7 +257,8 @@ export const ramdiskGuardianModules = [
     readerStates: { pass: "Primo和Z可用，任务配置正确，所需应用连接已逐项核实。", problem: "Chrome仍运行时跳过缓存连接；Z未出现时先完成任务等部署，再提示建盘后重新运行。", unavailable: "未安装Primo或没有管理员上下文，部署/驱动操作无法完成；缓存资料不应成为唯一恢复来源。" }, stateLabels,
     decisionImpact: ["当前配置为12GiB，不沿用旧截图或提示中的32GiB；Primo镜像当前为Compact Image（紧凑镜像）和Shutdown Save。", "默认-RamDrive Z、-IntervalMinutes 15；非默认盘符写ramdrive.txt，回Z时清除旧覆盖。", "只在Chrome关闭时处理Default配置的Cache、Code Cache、GPUCache；不宣称自动覆盖所有浏览器Profile。", "撤销RAMDisk_Code_Backup只删除计划任务，不删Primo盘、镜像或缓存。"],
     concepts: [{ term: "非临时盘与镜像", explanation: "Primo保存磁盘配置，并按所选模式加载/保存镜像。缓存可能跨启动保留，但项目仍要求内容可丢。" }, { term: "隐藏启动器", explanation: "VBS以隐藏窗口方式启动PowerShell，等待结束后将退出码交回计划任务，不常驻另一个守护服务。" }],
-    implementation: ["deploy.ps1检查管理员与RAMDISK卷标，设置HiberbootEnabled=0，注册Interactive/Highest、登录触发和重复间隔、IgnoreNew、10分钟执行时限。", "任务调用wscript.exe与仓库run_hidden.vbs；VBS从自身目录定位zguardian.ps1，等待Windows PowerShell退出并WScript.Quit传递结果。", "部署在Z可用时执行一轮完整守护，非零结果停止后续部署；Chrome运行时跳过三个缓存连接，360解压临时目录由用户在其设置中指定。", "本机三个Chrome连接已回读到Z；360设置和WeFlow进程当前实际使用路径本轮未检查，不用目录存在替代。", "回退命令为Unregister-ScheduledTask -TaskName RAMDisk_Code_Backup -Confirm:$false，只在明确停用守护器时使用。"],
+    implementation: ["deploy.ps1检查管理员与RAMDISK卷标，设置HiberbootEnabled=0，注册Interactive/Highest、登录触发和重复间隔、IgnoreNew、10分钟执行时限。", "任务调用wscript.exe与仓库run_hidden.vbs；VBS从自身目录定位zguardian.ps1，等待Windows PowerShell退出并WScript.Quit传递结果。", "部署在Z可用时执行一轮完整守护，非零结果停止后续部署；Chrome运行时跳过三个缓存连接，360解压临时目录由用户在其设置中指定。", "本机三个Chrome连接已回读到Z；360设置和WeFlow进程当前实际使用路径本轮未检查，不用目录存在替代。", "回退命令为Unregister-ScheduledTask -TaskName RAMDisk_Code_Backup -Confirm:$false，只在明确停用守护器时使用。",
+      "Compact-RamdiskImage是明确人工动作，核对唯一Primo编号、镜像和目标，保留候选并验证哈希后原子替换，保留1份可用回退；不为压缩重建实际驱动。自然重启能否采用新镜像仍需另验。PCConfig的Show-StreamingMaintenance显示状态/下次检查/消费者/冷却，关闭窗口不停止任务或改电源显示。",],
     flow: ["按DEPLOY.md先设置Primo驱动盘和镜像。", "管理员部署任务和基础目录，分别处理应用接入前置条件。", "读任务结果、健康日志、目录和连接；下一次自然启动再确认加载。", "若停用，仅按需要撤销任务，盘与应用连接另行处理。"],
     boundaries: ["本轮没有运行deploy.ps1、关闭Chrome、改快速启动或重启系统。", "Primo配置检查、自然周期执行和冷启动验收是不同证据。"],
     failures: [{ condition: "任务存在但Z尚未创建", response: "部署会说明部分完成；先恢复Primo配置，再执行所需后续步骤。" }, { condition: "Chrome正使用缓存目录", response: "跳过连接调整；不要为了网页展示关闭用户浏览器。" }, { condition: "任务返回0但健康ERROR", response: "以STATUS具体故障为准排查，不能只验任务返回值。" }],

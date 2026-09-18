@@ -1,13 +1,13 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-14T04:23:52.9215269Z",
-  "label": "物理网卡保护已修复并发布；本轮双 PowerShell 回归通过，现有代理保持开启",
-  "boundary": "2026-09-14 ProxyStatus只读且SkipExitProbe：系统代理仍开启、1个发布本地端口、1条TUN路由、2条默认路由；当前3个监听候选，来源将进程归为tailscaled与FlyingBird，不能把两种进程名自动解释为两个公网代理冲突。Docker运行证据为system、没有本地手动钉死或pending_apply。未做出口探测、网络清理或设置变更；9月8日源修复和隔离测试保留原日期。",
+  "observedAt": "2026-09-18T19:30:00Z",
+  "label": "预览、精确修复与撤销已完善；配置改变与公网结果分开",
+  "boundary": "本轮读取已发布修复与既有脱敏诊断，不执行真实代理清理、关端口、网卡重置、IPv6切换或出口探测。9月14日的网络样本只保留原日期，不冒充今天所有应用可用。",
   "metrics": [
     {
       "label": "源项目",
-      "value": "857b110 · master 已远端读回"
+      "value": "be5d3f5 · master已回读"
     },
     {
       "label": "当前代理路径",
@@ -38,8 +38,8 @@ const baseSnapshot = createProjectSnapshot({
       "value": "Test-HealthyPhysRoute 现在要求候选路由对应适配器明确 HardwareInterface=true、状态 Up，且 NextHop 非零、不属于198.18/198.19 fake-ip。只有虚拟、未知或缺失网卡时，不放行任何路由删除；删除后的检查复用同一函数。它依据 Windows 硬件接口标记，不额外证明网关或公网可达。"
     },
     {
-      "label": "默认模式保留活与远程代理；Direct 是强制清空",
-      "value": "默认模式会区分本地回环（127.0.0.1、localhost、::1）与远程代理：只清没有监听的本地端点，活端口、远程端点和无法安全解析的混合配置保持原样。显式 -Direct 不走这条保留逻辑：它关闭 WinINET ProxyEnable，清空所列用户代理环境变量，并对 Git http.proxy/https.proxy 执行 --unset-all，活或远程值也会被移除；NO_PROXY 仍不动。",
+      "label": "默认只清失效项；直连模式也有明确范围",
+      "value": "默认仅清确认失效的本地端点，保留活、远程、未知和混合映射的其他部分。Direct明确处理手动WinINET、用户HTTP_PROXY/HTTPS_PROXY/ALL_PROXY、可安全定位的通用全局Git代理及有物理回退保护的IPv4残留路由；PAC、WinHTTP、机器变量、URL专属或来源含糊Git、Docker及其他应用不隐式改变，NO_PROXY保留。",
       "hero": true
     },
     {
@@ -49,12 +49,12 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "按端口停止进程与联动清残留",
-      "value": "Stop-ProxyPort.ps1 接受一个明确端口，只采纳回环地址或通配地址上的 TCP（传输控制协议）监听 PID（进程标识符），逐个调用 Stop-Process -Force，并按端口映射和额外参数再尝试关闭客户端 GUI（图形界面）进程。随后它清理指向该端口的 WinINET、用户环境变量与 Git 代理并调用主清理脚本。每一步都是尽力执行，失败后可能仍有监听，最终输出会明确写 STILL listening，而不是把它包装成原子事务或进程树必然清空。",
+      "value": "Stop-ProxyPort只针对明确端口，执行前后复核监听地址、PID及进程身份；额外关闭进程仅在显式ExtraProcessName时发生。旧端口不再自动联动整类客户端，也不继续运行全机通用路由清理。只移除目标端点的配置，混合映射中其他端点保留；端口关闭和可撤销配置分别返回结果。",
       "hero": true
     },
     {
-      "label": "WiFi 分级恢复与桌面报告",
-      "value": "WifiRebind.ps1 提供 Diagnose（只诊断）、SoftReset（刷新 DNS 并释放/重新获取 DHCP 租约）和 AdapterReset（管理员权限下先 Disable-NetAdapter，再在 finally 中尝试 Enable-NetAdapter）三种模式。每次运行在桌面生成时间戳日志；禁用失败返回 4，重新启用失败返回 5 并给出手工 Enable-NetAdapter 命令。",
+      "label": "WiFi分级恢复与可选报告",
+      "value": "WifiRebind提供Diagnose、SoftReset、AdapterReset；默认脱敏结果不落日志，明确LogPath才保存到新文件。断线或无IPv4时也可指定网卡；静态地址不释放DHCP，释放失败仍尝试续租，禁用成功后始终尝试重新启用。网络重置会中断选中连接，不作为当前远控的无害测试。",
       "hero": true
     },
     {
@@ -64,12 +64,12 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "IPv6 状态与物理网卡整组切换已经归入本项目",
-      "value": "2737328 新增只读 IPv6-Status.ps1 和需要管理员权限的 IPv6-Toggle.ps1。状态入口展示活动网卡的 IPv6 绑定与 ::/0 默认路由；切换入口只选择 HardwareInterface=true 的物理上网网卡并排除虚拟网卡。候选中任一网卡 IPv6 开启时，本次目标是整组关闭；全部关闭时才整组开启。它不保存每块网卡的混合前像，中途失败可能留下部分状态，网页本轮没有实际切换。 本轮修复后，IPv6 状态/切换输出只报告绑定与路由；读不到绑定显示 UNKNOWN，不从关闭 IPv6 推断“流量都走代理”或“Google/VPN稳定”。",
+      "value": "IPv6状态和切换只处理明确的物理网卡，保留虚拟与Tailscale隧道；变更保存实际原值，失败分别回读恢复，不把再次整组切换当精确撤销。绑定状态、默认路由、HTTP可达与代理路径分别判断，本轮未改变任何实际网卡。",
       "hero": true
     },
     {
       "label": "本轮真实源修复与验证",
-      "value": "源 master 857b1104cb30897da8f755ef2dbb25fbe1eeea69 已正常推送并远端回读。原实现的 virtual-up 用例先失败；修复后9个物理/虚拟/未知路由用例和3个实际清理分支用例通过。ProxyClean.test.ps1与Test-WifiRebind.ps1均在PowerShell7及WindowsPowerShell5.1通过。网络状态指纹前后一致，ProxyEnable仍为1；没有执行真实网络清理、代理停止或IPv6切换。"
+      "value": "正式master be5d3f581b5e0ea53fec87015306ab9d3660efe6包括预演、DPAPI前像、逆序恢复、临效果路由核验、精确进程与分层诊断。源码回归使用隔离系统调用，不替代真实网络恢复；9月8日双PowerShell路由修复测试保留为历史。"
     }
   ],
   "gaps": [
@@ -84,7 +84,7 @@ const baseSnapshot = createProjectSnapshot({
 
 export const proxycleanSnapshot = Object.freeze({
   ...baseSnapshot,
-  sourceCommit: "857b1104cb30897da8f755ef2dbb25fbe1eeea69",
+  sourceCommit: "be5d3f581b5e0ea53fec87015306ab9d3660efe6",
   sourceRoot: "E:\\Projects\\Tools\\ProxyClean",
   gaps: baseSnapshot.currentSnapshot.gaps
 });
@@ -162,7 +162,7 @@ export const proxycleanProject = {
     "relations": [
       "ProxyClean在存在HardwareInterface=true且Up且非零非fake-ip物理默认路由时处理候选孤儿路由并清理死端口",
       "ProxyStatus动态发现监听端口并审计Docker本地手动代理钉死",
-      "Stop-ProxyPort按端口逐项停止监听PID和已知外壳并联动清理配置",
+      "指定端口核对实际进程，只清目标端点；可撤销配置与进程停止分别处理",
       "WifiRebind提供轻量刷新与网卡禁用再启用并在桌面生成排错报告",
       "IPv6入口只查看或切换真实硬件网卡并排除natpierce、Tailscale和WSL"
     ],
@@ -174,10 +174,10 @@ export const proxycleanProject = {
     ]
   },
   "repositoryNote": "ProxyClean 是 PUBLIC（公开）工具仓库，不包含可复用订阅链接、令牌或节点凭据。两份历史故障文档保留了已脱敏的设备、端口、拓扑与测量背景；网页只采用会改变产品理解的方法、边界和结论，不把历史现场当成当前运行状态。",
-  "summary": "关掉代理后，浏览器或终端还在找已经不存在的本地端口时，用它检查并清理残留设置。默认入口保留仍在工作的代理，只处理确认失效的本地配置和符合条件的残留路由。另有单独的定向关端口、WiFi诊断/恢复与IPv6查看/切换入口。它会说明做了什么、保留什么，并把“设置已清理”和“公网真的恢复”分开报告。",
+  "summary": "代理退出后，浏览器或终端还连着失效端口时，先看诊断与修复预览，再只清确认失效的配置。操作前保存可撤销原值，发生冲突就保留别人的修改，不把网络越修越乱。单独关端口、WiFi恢复和IPv6调整各有明确入口；控制中心能看、预览、执行与撤销，但打开窗口不会自动改网络。",
   "why": "很多基于 TUN 的代理客户端（如 Clash Verge、Sing-box 等）在强退或断网时，会留下几套彼此独立的状态：路由表可能指着旧网关，注册表可能指着死端口，旧环境变量又只影响部分应用。反复拔网线解决不了这些配置残留。ProxyClean 把诊断、条件清理和最终回读放在同一组明确入口里，让用户知道修了什么、没修什么。",
   "plainExample": "我关掉代理后，浏览器打不开网页，终端也一直报连接旧端口失败。让工具检查后，它会清掉确认失效的本地代理设置；仍在工作的代理保持原样。必要的路由条件不满足时就跳过删除，最后再报告连通性。旧终端可能仍需要重新打开。",
-  "result": "得到一份带结论的处理结果：默认模式下哪些死配置已清、哪些活/远程设置被保留；Direct 模式下哪些代理设置被强制移除；路由删除是否因前置条件而跳过；最终路由与连通性探测怎样。定向关端口、WiFi 恢复和 IPv6 切换各有单独入口，不会被默认清理悄悄触发。",
+  "result": "得到诊断、计划、实际修改与撤销状态，并分别说明配置是否回读、指定端口是否关闭、HTTP是否可达、哪些应用仍未确认。失败已回滚、恢复仍待处理和没有变化不会混成成功；撤销不复活已经关闭的进程，也不撤回DNS刷新或网卡重置。",
   "readerStates": {
     "pass": "我会看到哪些失效设置已清除、哪些活代理被保留、最终路由还剩什么，以及连通性探测是否成功；需要重新打开的旧终端也会得到明确提示。",
     "problem": "若当前找不到一条 HardwareInterface=true、Up、NextHop 非零且非 fake-ip 的物理默认路由，孤儿路由清理将跳过全部删除并打印黄色警告。",
@@ -185,7 +185,7 @@ export const proxycleanProject = {
   },
   "dataSources": {
     "title": "系统从哪里采集网络事实，如何保障清理安全",
-    "intro": "工具通过 Windows 原生 CIM/WMI（Windows 管理接口）、网络注册表与 Win32 API 采集网络状态。自动清理和状态发现不维护客户端固定端口表；显式关端口入口则保留三组批处理端口和对应外壳名称映射。动作前置条件按每个入口分别说明。",
+    "intro": "读取Windows代理、分作用域环境变量、Git配置、监听器、路由和必要Docker配置/日志。动态监听只是候选，不能见到代理进程名就认为每个端口都是HTTP代理；明确关端口时重新核对实际目标，不使用旧端口到整类客户端的隐式映射。",
     "rows": [
       {
         "source": "WinINET 注册表设置（Internet Settings）",
@@ -200,7 +200,7 @@ export const proxycleanProject = {
       {
         "source": "用户环境变量（HKCU:\\Environment）",
         "data": "检查 HTTP_PROXY、HTTPS_PROXY、ALL_PROXY 及其小写变体。",
-        "result": "默认模式只在整项可安全判为本地死端点时清空；-Direct 清空所有列出的值，包括活/远程配置。NO_PROXY 与非代理变量不碰。"
+        "result": "只处理本次计划中的用户代理项与来源可定位的通用全局Git代理；Direct也不扩大到机器变量或URL专属/含糊来源配置，NO_PROXY保持。混合配置中的非目标映射保留。"
       },
       {
         "source": "全局 Git 代理配置（git config --global）",
@@ -233,7 +233,7 @@ export const proxycleanProject = {
   "exclusions": [
     "绝不主动把持久网络设置焊死到某个会消失的端口上，不设全局固定重定向代理。",
     "不删除符合 HardwareInterface=true、Up、非零、非 fake-ip 谓词的物理默认路由；如果一条这样的候选都没有，则不删任何默认路由。",
-    "默认模式不清理远程代理或无法安全解析的混合配置；显式 -Direct 是例外，会清空列出的用户/Git代理并关闭 WinINET。",
+    "默认保留正常、远程与未知配置；Direct也只改变已列出的手动用户代理与受保护IPv4路由范围，不改PAC、WinHTTP、机器变量、专用Git配置或其他应用。",
     "不自动修改或重启正在运行的 Docker Desktop 容器与服务，仅执行只读配置审计。",
     "定向关端口只应在用户明确知道目标端口属于代理时使用；通配监听 0.0.0.0/:: 也会被采纳，不能仅凭地址门把目标身份说成已证明。",
     "IPv6 切换、WiFi AdapterReset 和路由删除都不会由网页刷新或只读状态检查触发。"
@@ -254,7 +254,11 @@ export const proxycleanProject = {
     {
       "title": "分级阶梯自愈，最小干扰优先",
       "detail": "网络恢复按干扰程度分开：主入口按条件清代理配置与 DNS；WiFi SoftReset 刷新 DNS/DHCP；AdapterReset 只有用户明确选择且具备管理员权限时才禁用再启用网卡。用户环境变量变化仍要求旧进程重开。"
-    }
+    },
+    {
+      "title": "先看准确计划，冲突时保留现场",
+      "detail": "改前保存原值、改后回读，失败才按本轮原值恢复；别人后来改过的配置不覆盖。不能靠删除恢复记录、重启电脑或擅自切换代理让结果看起来成功。"
+    },
   ],
   "glossary": [
     {
@@ -301,7 +305,7 @@ export const proxycleanProject = {
     },
     {
       "title": "环境变量与系统代理清洗",
-      "detail": "默认模式发现整项为本地死端点时才清空，并通过 User32 PInvoke 快速通知；-Direct 则清空列出的用户代理变量、关闭 WinINET 并 unset 两个 Git 代理键，活/远程值也不保留。"
+      "detail": "对明确计划逐项保存受保护前像，临写前复核原值，写后回读；失败逆序恢复，外来变化保留并标明仍需恢复。已运行程序的环境副本不会被假称同步刷新。"
     },
     {
       "title": "Git 代理与 DNS 缓存对齐",
@@ -342,7 +346,12 @@ export const proxycleanProject = {
       "ask": "订阅更新失败但已有节点还能上网，我该先修代理、换热点，还是检查浏览器？",
       "effect": "先用状态入口取得本机代理、监听和路由事实；订阅控制面的 :5413/:443 仍要按长期文档执行独立请求，不能由 ProxyStatus 代测。热点恢复、远程观测盲区和浏览器 DNS/WebRTC 与 Codex/Claude App 连通性继续分开。",
       "moduleSlug": "one-click-and-troubleshooting-boundaries"
-    }
+    },
+    {
+      "moduleSlug": "one-click-and-troubleshooting-boundaries",
+      "ask": "先让我看看会清什么，改完不合适还能撤回吗？",
+      "effect": "控制中心先显示准确计划，执行前再核对现场并保存受保护原值；Undo只撤回仍与本轮结果一致的设置。别人后来改过的内容会保留，进程停止与网卡重置不能靠撤销复活。"
+    },
   ],
   "components": [
     {
@@ -358,7 +367,7 @@ export const proxycleanProject = {
     {
       "name": "Stop-ProxyPort.ps1（单端口强杀器）",
       "responsibility": "按端口反查监听 PID，逐项强制停止目标进程和按名称匹配的附加 GUI，再清理命中该端口的残留配置、调用通用主清理并回读目标端口。",
-      "implementation": "通过 Get-NetTCPConnection 只采纳回环或通配监听，Stop-Process 逐项尽力停止，联动处理 WinINET、环境变量、Git 与 DNS；最终调用 ProxyClean -Quiet，所以作用域可能扩到其他死项和候选孤儿路由。"
+      "implementation": "明确端口先预览，再按当前监听与进程身份执行；只清目标端点配置，ExtraProcessName才追加进程。配置使用共享持久前像与恢复原语，不调用通用主清理扩大范围；进程停止不能由配置Undo撤销。"
     },
     {
       "name": "WifiRebind.ps1（WiFi 分级修复与排错器）",
@@ -458,19 +467,29 @@ export const proxycleanProject = {
     },
     {
       "name": "指定端口强杀与清理",
-      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\ProxyClean\\Stop-ProxyPort.ps1 -Port 7890",
-      "purpose": "尽力停止 7890 监听进程与映射的 GUI 外壳，联动清理系统代理并回读端口；-Label 只改显示名，-ExtraProcessName 增加显式附加进程。"
+      "command": "pwsh -File Stop-ProxyPort.ps1 -Port <已确认端口> -Preview",
+      "purpose": "先看具体监听进程和目标配置，确认后去掉Preview；只处理该端口，额外进程须明确指定，旧端口不顺带结束客户端。"
     },
     {
       "name": "WiFi 软刷新（轻量自愈）",
       "command": "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\ProxyClean\\WifiRebind.ps1 -Mode SoftReset",
-      "purpose": "清空 DNS 缓存并重新获取 DHCP 租约，在桌面生成诊断报告；-WaitSeconds 调整等待，-SkipConnectivityChecks 跳过 DNS/HTTP 检查。"
+      "purpose": "对明确网卡刷新DNS/DHCP，静态地址不释放DHCP；默认返回脱敏结果，LogPath才写新文件。操作可能断开网络，不能只看命令结束就认定已恢复。"
     },
     {
       "name": "WiFi 网卡禁用再启用（需管理员）",
       "command": "powershell -NoProfile -ExecutionPolicy Bypass -File E:\\Projects\\Tools\\ProxyClean\\WifiRebind.ps1 -Mode AdapterReset",
       "purpose": "先禁用再重新启用选定 WiFi 网卡；禁用或启用失败会返回明确退出码和手工恢复提示。"
-    }
+    },
+    {
+      "name": "可见控制中心",
+      "command": "ProxyClean控制中心.vbs",
+      "purpose": "诊断、预览、执行、撤销与精确关端口；打开或关闭窗口都不自动修改网络。"
+    },
+    {
+      "name": "修复预览与撤销",
+      "command": "pwsh -File ProxyClean.ps1 -Preview -Json; pwsh -File ProxyClean.ps1 -Undo -Preview",
+      "purpose": "两种预览均不改配置、不生成撤销文件。实际操作使用同一正式入口；恢复待处理时先处理原记录，不覆盖它。"
+    },
   ],
   "snapshotUpdateNote": "本页绑定2026-09-07完成的源修复857b1104cb30897da8f755ef2dbb25fbe1eeea69及master远端回读。物理默认路由条件、IPv6事实输出与隔离回归已更新；此前IPv6入口来源的2737328作为历史保留。实际网络保持原状，未把测试当网络恢复E2E。",
   "evolution": [
@@ -530,7 +549,7 @@ export const proxycleanModules = [
       "unavailable": "若在普通权限终端运行且需要删除系统路由表条目，Remove-NetRoute 将抛出权限异常，需以管理员权限重试。"
     },
     "decisionImpact": [
-      "铁律 1：工具不会写入新的代理端点。默认模式只清本地死端点；显式 -Direct 会清空全部列出的用户/Git代理并关闭 WinINET，包括活或远程值。",
+      "不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动WinINET、用户代理变量、来源明确的通用全局Git代理和满足物理回退条件的IPv4残留路由。",
       "删除候选默认路由前必须至少看到一条 HardwareInterface=true、Up、NextHop 非零且非 fake-ip 的物理默认路由；否则本轮不删除任何路由。",
       "系统代理仅在指向的本地端口已死或显式传 -Direct 时才关闭；活代理只在默认模式交由客户端维护。",
       "PInvoke（平台调用）广播 WM_SETTINGCHANGE（超时 200ms）与 InternetSetOption 负责通知配置变化；已经运行的进程仍可能需要重开才能取得新的用户环境变量。"
@@ -541,7 +560,8 @@ export const proxycleanModules = [
       "Test-PortAlive 通过 IPGlobalProperties.GetActiveTcpListeners 严格检验回环与通配地址监听状态。",
       "Test-HealthyPhysRoute 检查网卡 Status 为 Up 且 NextHop 非 0.0.0.0 且非 198.18/198.19 fake-ip 网段。",
       "Test-LocalProxyDead 解析代理端点，仅在全部端点为本地回环且无活跃监听时才断定为死代理。",
-      "Test-HealthyPhysRoute在删除前与删除后共同检查HardwareInterface=true；信息未知不充当物理路由证据。"
+      "Test-HealthyPhysRoute在删除前与删除后共同检查HardwareInterface=true；信息未知不充当物理路由证据。",
+      "ProxyClean.Operations.ps1在效果前将原值和步骤存入当前用户DPAPI保护的last-operation.dpapi；临写比较preimage，写后回读，失败逆序恢复。外来修改保留为recovery_required并阻止新配置写入；只处理当前轮可撤销对象，文件不是跨设备恢复包。",
     ],
     "flow": [
       "读取 WinINET 注册表与 Get-NetAdapter，检测系统代理发布端口与处于 Up 状态的 fake-ip TUN 路由。",
@@ -568,7 +588,7 @@ export const proxycleanModules = [
     ],
     "boundaries": [
       "若当前没有符合源码谓词的备用默认路由，无论是否指定 -Direct，本轮都不删除任何路由条目。",
-      "默认模式保留远程代理和无法安全解析的混合设置；-Direct 是显式例外，会整项清空对应用户/Git配置并关闭 WinINET。",
+      "Direct不是所有应用直连保证：PAC、WinHTTP、机器变量、URL专属/含糊Git配置、Docker与其他应用不隐式修改；混合映射中的其他端点保留。",
       "NO_PROXY 环境变量包含用户白名单配置，脚本绝对不碰、不清空。",
       "普通用户权限下无法修改系统内核路由表，必须提升为管理员才能执行路由删除动作。"
     ],
@@ -583,7 +603,7 @@ export const proxycleanModules = [
       },
       {
         "condition": "默认模式下 Git 代理同时包含有效远程代理与本地死端口",
-        "response": "脚本打印警告并保持配置不动；若用户改用 -Direct，整个 http.proxy/https.proxy 键会被 unset。"
+        "response": "默认保留无法安全定位的配置，Direct也不越过Git来源边界；先明确可写的通用全局配置，不删除含糊或URL专属项。"
       },
       {
         "condition": "WinINET 活端口与活动 fake-ip TUN 同时存在",
@@ -665,7 +685,8 @@ export const proxycleanModules = [
       "Get-LocalProxyPorts 使用正规表达式提取 127.0.0.1、localhost 与 [::1] 端口，过滤合法范围 1-65535。",
       "Get-DockerProxySnapshot 检查 %APPDATA%\\Docker\\settings-store.json 中的 OverrideProxyHTTP 等覆盖项。",
       "读取 %LOCALAPPDATA%\\Docker\\log\\host\\httpproxy.log 最近 10 分钟运行态日志，核验 Docker 运行时代理模式。",
-      "匹配常见代理核心进程名正则（clash|mihomo|sing-box|xray|v2ray|flyingbird|tag 等）。"
+      "匹配常见代理核心进程名正则（clash|mihomo|sing-box|xray|v2ray|flyingbird|tag 等）。",
+      "分层诊断默认不写日志，Docker只读有界尾部且要求事件本身属于当前运行，文件mtime不替旧事件续期。出口比较只给匿名相同出口分组，不公开出口地址；同出口不证明同一客户端，HTTP成功也不证明绕过TUN。",
     ],
     "flow": [
       "读取注册表获取 WinINET 当前系统代理端点与开启状态。",
@@ -738,47 +759,36 @@ export const proxycleanModules = [
   {
     "slug": "targeted-port-shutdown",
     "shortTitle": "定向关端口",
-    "title": "单端口监听进程停止、客户端外壳退出与残留联动清理",
+    "title": "只关闭指定端口，并清理它自己的配置",
     "subtitle": "先按明确端口停止监听 PID（进程标识符）和已知外壳，再调用通用 ProxyClean 清理其他死项与候选孤儿路由",
     "teaser": "显式强制入口：接受回环或通配监听，尽力停止后回读端口是否仍在监听",
     "order": 3,
     "status": "源码与监听地址筛选测试通过；本轮没有终止真实进程，通配监听不能证明目标身份",
     "statusTone": "accent",
     "relation": "显式强制入口；默认 ProxyClean 不杀进程，只有用户明确选择端口时才进入。停止目标后会继续调用通用主清理，因此副作用范围不只一个端口。",
-    "value": "当我已经确认某个端口属于卡死的代理客户端时，用端口找到监听 PID（进程标识符），逐项尝试停止核心和已知外壳，再清指向该端口的设置。即使端口没有监听，映射/额外进程名仍会被尝试停止；最后的 ProxyClean -Quiet 还可能处理其他本地死代理项和符合条件的候选默认路由。",
+    "value": "某个已确认端口对应的代理卡住时，先看这个端口当前是谁在监听，确认后只关闭它并清掉指向它的配置。客户端换了端口，旧快捷方式不会顺手关闭整个客户端，也不会扩展成全机网络清理。",
     "why": "只杀进程会留下死系统代理，只清配置又不会结束卡死监听。这个入口把步骤顺序串起来，但不是事务：任何一步都可能失败，最后必须以端口回读和逐项日志判断结果。",
-    "example": "比如我已确认 7890 属于要关闭的代理：运行 Stop-ProxyPort.ps1 -Port 7890。脚本只采纳回环或通配监听，逐个 Stop-Process，再无条件按 7890 的名称映射尝试关闭 TAG 的 GUI（图形界面）外壳；随后若代理字符串包含目标本地端点就整项关闭/清空，刷新 DNS，并调用通用主清理。它可能继续清其他死代理项和候选孤儿默认路由，最多等 8 秒后回读目标端口。",
+    "example": "“把我点名的这个代理端口关掉，别影响另一条正在用的线路。”先展示当前监听者和准确配置，确认后再次核对进程身份再执行；其余端点保留，完成后分别报告端口与配置结果。",
     "result": "目标端口结论明确为已关闭、原本已关闭或 STILL listening（仍在监听），并保留每个进程和配置步骤的成功/失败日志；主清理的其他死代理/候选路由结果也一并输出。不保证同名/子进程全部退出，也不保留一个被命中混合字符串里的远程部分。",
     "problem": "防止代理客户端挂死后难以精确定位进程，防止杀掉进程后留下指向死端口的系统代理导致立即断网。",
     "readerStates": {
       "pass": "只有真实执行后端口回读为空，才能说目标监听已关闭；当前页面只证明地址筛选与代理字符串匹配的隔离测试通过。",
-      "problem": "指定端口没有监听时仍会执行内置映射或 -ExtraProcessName 的同名进程停止，再继续配置与通用主清理；no listener（没有监听）不等于无副作用。",
+      "problem": "端口没有监听就报告原本已关闭；不按旧端口映射结束客户端。目标身份变化、配置冲突或部分失败分别保留，不能把已停止进程说成可自动恢复。",
       "unavailable": "若目标进程属于具有高权限保护的系统服务且当前运行在普通权限下，Stop-Process 将报错拒绝。"
     },
     "decisionImpact": [
       "地址门接受 127.0.0.1、::1、0.0.0.0 与 ::；只绑定特定局域网地址的监听不处理，但通配监听覆盖所有接口，仍需用户先确认端口身份。",
-      "附加进程联动：按常见端口映射 Clash Verge、FlyingBird、TAG 等进程名，也允许 -ExtraProcessName；它按名称逐项停止，不遍历父子进程树。",
-      "代理字符串只要包含目标 localhost/127.0.0.1/[::1]:port，WinINET 会整体关闭，对应用户环境变量和 Git 键会整项清空；混合字符串里的远程部分不单独保留。",
+      "没有内置端口到客户端外壳的自动结束表；只有显式ExtraProcessName才追加所列进程，仍需复核当前身份。",
+      "仅移除已确认目标端点，混合映射中的其他协议或远程端点保留，不整串清空。",
       "支持 -ExtraProcessName 允许用户额外指定要停止的同名进程；即使目标端口没有 listener，这一步仍执行。",
-      "端口专用清理结束后无条件调用 ProxyClean -Quiet，可能继续清其他死本地代理项与符合前置条件的候选孤儿默认路由。"
+      "不会在精确端口处理后调用通用主清理或全机路由删除；额外修复必须作为独立明确动作。"
     ],
-    "implementation": [
-      "Test-LocalListenAddress 确保仅在回环地址或通配地址监听时才采纳 OwningProcess。",
-      "Get-ListeningPids 通过 Get-NetTCPConnection 提取指定端口上、且地址满足回环或通配门的唯一监听 PID。",
-      "Stop-Process -Id $pid -Force 终止目标进程，并在外壳进程列表中循环关闭伴生应用。",
-      "依次处理 WinINET、用户环境变量、当前脚本进程环境、Git 代理和 DNS，再调用 ProxyClean -Quiet；过程无事务或回滚。"
-    ],
-    "flow": [
-      "输入目标端口号，调用 Get-ListeningPids 查询正在监听该端口的本地进程 PID。",
-      "若找到监听 PID，逐个调用 Stop-Process -Force 并打印成功或失败；随后最多等待 8 秒观察端口是否消失。",
-      "无论有没有 listener，都根据预设端口映射表或 ExtraProcessName 检查并尝试终止同名 GUI 外壳进程。",
-      "检查 WinINET、用户/当前脚本进程环境与 Git 代理；整串只要命中目标本地端口就关闭或清空对应项。",
-      "刷新整份 DNS 缓存并调用通用 ProxyClean -Quiet；它按主入口规则处理其他死项与候选默认路由，随后再回读目标监听 PID。"
-    ],
+    "implementation": ["共享地址解析区分URI、协议映射、IPv4/IPv6回环与通配；仅同端口但绑定LAN不证明127.0.0.1代理存活，跨地址族未知保持unknown。","预览绑定当前监听器及进程PID、创建身份和可执行来源；执行前重新核对，目标变更时停止，不用旧PID或名字结束新进程。","只有显式ExtraProcessName才补充进程目标；历史快捷方式只操作名称中端口并核对预期客户端，不默认退出整个应用。","配置修改复用持久前像、原值核对、写后回读与逆序恢复，只移除目标端点。进程停止、DNS刷新与网卡重置不属于可撤销设置，分别报告。"],
+    "flow": ["读取明确端口并展示监听进程与本次配置计划。","确认目标后临执行再次核对进程和原配置。","只停止该端口实际监听者；额外进程须另行明确。","只修改该端点配置，保留其他映射，回读设置与端口。","失败时区分设置已回滚、仍待恢复与已发生的不可撤销进程停止，不追加全局清理。"],
     "concepts": [
       {
         "term": "Sequenced Port Cleanup（顺序端口清理）",
-        "explanation": "先尝试停止监听和已知外壳，再清除指向该端口的配置，最后回读端口；步骤相关但没有原子提交或失败回滚。"
+        "explanation": "进程停止与配置修复是两种效果：设置有本轮原值和条件撤销，进程不能自动复活；最终分别核对而非合称原子成功。"
       },
       {
         "term": "Listen Address Gate（监听地址门）",
@@ -794,11 +804,11 @@ export const proxycleanModules = [
     "failures": [
       {
         "condition": "未能停止一个监听 PID 或附加进程",
-        "response": "打印黄色警告后继续后续配置清理，最终若端口仍存在就输出 STILL listening；没有自动回滚。"
+        "response": "报告哪个目标未能关闭，保留当前真实监听与设置结果；配置失败按前像恢复，不把继续运行的监听者冒称已结束。"
       },
       {
         "condition": "查询后进程自行退出或端口原本没有监听",
-        "response": "保留 no listener（没有监听）/ already closed（原本已关闭）语义，但仍尝试停止映射/额外同名进程，清目标配置并运行通用主清理。"
+        "response": "报告没有监听或原本关闭，不结束旧映射客户端；仅执行仍明确授权的目标配置计划，其他端点和路由保持。"
       },
       {
         "condition": "用户给出的通配监听端口属于非代理服务",
@@ -844,15 +854,15 @@ export const proxycleanModules = [
     "shortTitle": "WiFi 恢复",
     "title": "WiFi 诊断、软刷新、网卡禁用再启用与桌面报告",
     "subtitle": "从只读快照到 DNS/DHCP（动态主机配置协议）刷新，再到管理员权限下禁用并重新启用选定 WiFi 网卡",
-    "teaser": "每次先留桌面日志；动作失败保留退出码，启用失败给出立即恢复命令",
+    "teaser": "先只读诊断，再按明确网卡恢复；默认不留日志，重置可能中断连接",
     "order": 4,
     "status": "三种模式与失败恢复已实现；测试为语法/静态合同，本轮没有操作真实 WiFi 网卡",
     "statusTone": "accent",
     "relation": "代理残留清理之外的独立 WiFi 入口，用于区分配置故障和无线网卡/DHCP/DNS 问题。",
-    "value": "代理清理后仍不通时，先只诊断，再选择 DNS/DHCP（动态主机配置协议）软刷新；最后才在管理员权限下禁用并重新启用 WiFi 网卡。每一步都把现场写进桌面日志。",
-    "why": "有些网络故障不仅是代理层的问题，还可能伴随 WiFi 网卡驱动假死、DHCP（动态主机配置协议）租约失效或本地 DNS 解析器死锁。用户需要有一套递进的排错手段，先做不伤大雅的软刷新，不行再重启网卡，同时把网络状态白纸黑字写到桌面日志里。",
+    "value": "先判断故障在代理、DNS还是网卡，再决定是否刷新或禁用重启那块网卡。即使断线或没有IPv4，也可以指定目标；诊断默认只返回结果，需要保存时才生成脱敏新文件。",
+    "why": "网络重置本身会中断连接，不能把所有失败都变成重启网卡。先核对网卡、地址类型和当前远程依赖，再选择必要动作，失败要尽力恢复已禁用网卡并说清未完成项。",
     "example": "比如我退出代理后 WiFi 仍显示无网络：先运行 WifiRebind.ps1 -Mode Diagnose 看处理前快照；再运行 -Mode SoftReset 刷新 DNS 并重签 DHCP（动态主机配置协议），这个批处理入口不请求 UAC（用户账户控制）。只有需要 AdapterReset 时才用自动提权的批处理禁用并重新启用网卡。",
-    "result": "脚本把桌面日志作为主要交付，并用退出状态区分前置失败；动作成功时再从处理后快照、DNS/HTTP（网页传输协议）检查和 IPv4（第四版互联网协议）是否恢复判断结果，不能仅凭脚本结束就说网络已修好。",
+    "result": "返回网卡前后状态、执行结果和独立连通性检查；只有指定LogPath才写脱敏新日志，拒绝覆盖已有文件。网卡启用、HTTP可达和所有应用正常不是同一结论。",
     "problem": "防止物理网卡假死或 DHCP 租约过期时误判为代理故障，提供开箱即用的结构化排错依据。",
     "readerStates": {
       "pass": "桌面生成带时间的网络报告。诊断模式交回当前快照；恢复模式说明是否重新获取 IPv4、DNS/HTTP 检查怎样，以及网卡是否重新启用，便于我判断网络有没有回来。",
@@ -875,7 +885,7 @@ export const proxycleanModules = [
       "解析运行模式（Diagnose / SoftReset / AdapterReset），创建桌面排错日志文件。",
       "查找当前处于 Up 状态且具备有效 IPv4 的 WiFi 网卡，提取别名与 IP 地址。",
       "生成【处理前】完整的系统网络快照，写入排错日志。",
-      "根据模式执行动作：SoftReset 清空 DNS 并重签 DHCP；AdapterReset 检查管理员权限后禁用再启用无线网卡。",
+      "明确选网卡后执行：SoftReset刷新DNS，只有DHCP地址才释放/续租且释放失败仍续租；AdapterReset在禁用成功后始终尝试重新启用。",
       "Diagnose 到处理前快照即结束；另两种模式等待后重新寻找网卡并生成处理后快照，最后提示日志位置。"
     ],
     "concepts": [
@@ -966,7 +976,7 @@ export const proxycleanModules = [
     "status": "源项目 2737328 已发布并通过双 PowerShell 版本测试；网页未执行真实 IPv6 切换",
     "statusTone": "accent",
     "relation": "从 Scripts 吸收进 ProxyClean 的网络路径能力，独立于默认代理残留清理和 WiFi 恢复。",
-    "value": "当应用明明走了 IPv4（第四版互联网协议）代理却仍出现出口不一致时，先看活动网卡 IPv6 绑定和 ::/0 默认路由；确认需要改变后，再只对筛选出的物理上网网卡做整组开/关。这个入口不是逐网卡前像恢复器。",
+    "value": "先看明确物理网卡的IPv6绑定与路由，再决定是否改变。调整保留原值并检查结果；失败按实际前像恢复，保留虚拟与Tailscale通道。关闭IPv6不等于所有流量已经走代理。",
     "why": "IPv6 与 IPv4（第四版互联网协议）有独立默认路由。只接管 IPv4 的代理可能无法解释 IPv6 路径，而一刀切禁用所有网卡又会破坏 Tailscale、WSL 或 natpierce。这个入口把只读判断和显式切换分开，并限定真实硬件接口。",
     "example": "比如我怀疑浏览器走了 IPv6、代理只接管 IPv4：先运行 IPv6-Status.ps1 查看活动绑定和 ::/0；若确实要试验，再以管理员身份运行 IPv6-Toggle.ps1。它只选择 HardwareInterface=true（Windows 标记为真实硬件接口）的物理上网网卡；只要候选中有一块开启就尝试全部关闭，全部关闭才尝试全部开启。",
     "result": "状态入口交回当前绑定和 IPv6 默认路由；切换入口逐网卡交回结果。没有真实执行回执时不声称 IPv6 已关闭、泄漏已消失或网络仍可用；执行中失败时以逐网卡回读为准，不能保证保留原混合状态。",
@@ -985,7 +995,7 @@ export const proxycleanModules = [
     ],
     "implementation": [
       "IPv6-Status.ps1 读取活动网卡 IPv6 绑定与 ::/0 默认路由，不改变配置。",
-      "IPv6-Toggle.ps1 逐个处理筛选后的物理上网网卡：任一候选开启就以整组关闭为目标，否则以整组开启为目标；没有跨网卡事务或回滚。",
+      "IPv6变更只处理明确物理网卡；效果前保存逐项原值，失败按实际已尝试字段恢复与回读，不把再次按整组当前状态切换当成恢复原值。",
       "IPv6状态.bat 提供只读双击入口；IPv6切换.bat 负责管理员权限入口。",
       "状态文本只解释实际绑定和默认路由；切换脚本仍无独立管理员前置检查，权限失败由cmdlet报告，不能把结尾文本当成功。"
     ],
@@ -1008,7 +1018,7 @@ export const proxycleanModules = [
     "boundaries": [
       "网页、测试和普通 ProxyClean 默认入口都不会自动切换 IPv6。",
       "虚拟网卡保持原状；切换范围不因名称相似扩大，但多个物理候选作为一组处理。",
-      "没有保存逐网卡前像、事务或自动回滚；再次执行只是按当前整组状态反向，不是精确恢复原混合状态。",
+      "配置撤销核对实际原值与当前结果，外来变化保留；回滚失败明确报告，不保证所有驱动或断电场景均能自动恢复。",
       "IPv6 开启/关闭只是网络配置事实，不自动证明代理泄漏、DNS 问题或公网质量。"
     ],
     "failures": [
@@ -1022,7 +1032,7 @@ export const proxycleanModules = [
       },
       {
         "condition": "逐网卡执行中途失败",
-        "response": "可能留下部分开启、部分关闭；没有自动回滚。先用状态入口逐项回读，再由用户决定是否重新执行整组动作或手工修正。"
+        "response": "分别回读已尝试字段并按前像恢复；无法恢复或出现外来修改时保留具体未完成项，不重复整组切换掩盖失败。"
       },
       {
         "condition": "切换后应用仍走意外出口",
@@ -1113,7 +1123,8 @@ export const proxycleanModules = [
       "主清理发现 WinINET 活端口与活动 fake-ip TUN 同时存在时只输出多路径告警，不替用户选择或关闭客户端。",
       "2026-06-28 故障文档保存同一订阅在不同出口的 HTTP（网页传输协议）状态/字节证据、:5413 与 :443 分层、手机热点恢复和观测盲区。",
       "Claude Code / Codex App 文档把 TUN/App 连通性和浏览器 DNS/WebRTC（网页实时通信）/时区测试分开，明确不要用终端代理变量修浏览器信号。",
-      "fallback/config.yaml 为 DIRECT-only（仅直连）参考，start-hidden.vbs 与代理状态.bat 仅作历史材料，没有任务或启动项调用。"
+      "fallback/config.yaml 为 DIRECT-only（仅直连）参考，start-hidden.vbs 与代理状态.bat 仅作历史材料，没有任务或启动项调用。",
+      "ControlCenter.ps1提供诊断、修复/撤销预览、已预览执行、精确端口和管理员窗口；改选模式或端口后必须重新预览。打开/关闭窗口不改变网络，无新增常驻修复服务。",
     ],
     "flow": [
       "先选择最小入口：查看当前走哪个；若 WinINET 与 TUN 同时活跃，先由用户决定保留哪条主路径，工具只告警不代选。需要时再修复、直连、WiFi 或明确客户端关停。",

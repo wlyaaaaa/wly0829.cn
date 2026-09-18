@@ -176,7 +176,7 @@ test("sunshine-remote-streaming exposes current blockers instead of promoting gr
   assert.equal(sunshineRemoteStreamingProject.cardStatusTone, "mixed");
   assert.ok(sunshineRemoteStreamingModules.every((item) => item.statusTone === "mixed"));
   assert.match(text, /output_name.*不匹配.*活动输出/s);
-  assert.match(text, /9月4日曾发现output_name与活动输出不匹配.*22条匹配WER图形故障记录.*GPU稳定门拒绝修复/s);
+  assert.match(text, /本次启动命中20条LiveKernel.*BlockedByGpuStability/s);
   assert.match(text, /tailscale-ping.*(?:skipped|跳过)/s);
   assert.match(text, /手机.*(?:未实测|没有执行|未测)/s);
   assert.match(text, /(?:拔线|物理故障转移).*(?:未验|没有)/s);
@@ -189,7 +189,7 @@ test("sunshine-remote-streaming explains manual headless recovery and native VDD
   for (const expected of [
     "Set-SunshineHeadlessConfig.ps1",
     "人工应急",
-    "重新运行主屏优先守护",
+    "原子写入",
     "Get-SetVddDisplayMode.ps1",
     "Get-SetVddScaleHdr.ps1",
     "无独立 schema",
@@ -199,7 +199,7 @@ test("sunshine-remote-streaming explains manual headless recovery and native VDD
     assert.ok(text.includes(expected), `technical truth missing: ${expected}`);
   }
   assert.doesNotMatch(text, /vdd-display-profile\.v1|sunshine\.headless-config\.v1/);
-  assert.match(text, /不自动重启、回读或回滚|不自动重启 Sunshine/);
+  assert.match(text, /不自动重启\s*Sunshine|不重启Sunshine/);
 });
 
 test("sunshine-remote-streaming includes the upstream client input boundary without claiming E2E", () => {
@@ -211,8 +211,8 @@ test("sunshine-remote-streaming includes the upstream client input boundary with
 });
 
 test("sunshine-remote-streaming first visible labels follow glossing and professional plain language", () => {
-  assert.equal(sunshineRemoteStreamingProject.currentSnapshot.observedAt, "2026-09-14T04:20:46.4369877Z");
-  assert.match(sunshineRemoteStreamingProject.kicker, /2026-09-04/);
+  assert.equal(sunshineRemoteStreamingProject.currentSnapshot.observedAt, "2026-09-18T12:53:00Z");
+  assert.match(sunshineRemoteStreamingProject.kicker, /高性能电脑远程运维层/);
   assert.doesNotMatch(sunshineRemoteStreamingProject.kicker, /\bfailover\b|\bprofile\b|\bcodec\b/i);
   const failover = sunshineRemoteStreamingModules.find((item) => item.slug === "capture-failover");
   const display = sunshineRemoteStreamingModules.find((item) => item.slug === "vdd-display-settings");

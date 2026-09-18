@@ -2,8 +2,8 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const pcPanelHubSnapshot = createProjectSnapshot({
   observedAt: "2026-09-14T04:16:39.1257917Z",
-  label: "TURZX主机心跳新鲜、发送失败0；HS2浮层和壁纸进程均已存在，实体与恢复验收保留原日期",
-  boundary: "2026-09-14只读心跳为约1 Hz混合刷新、1605/1605帧、发送失败0；HS2.CrystalOverlay和wallpaper64各1个，并见唯一2288×1048非主屏。进程和显示模式不证明浮层落点、动态画面或实体像素；9月7日TURZX本人确认和恢复实测保留，睡眠/断电仍需独立证据",
+  label: "原生副屏显示保留；普通窗口回迁与仪表/泡泡背景分离，旧实体证据保留日期",
+  boundary: "本轮只读当前源码ac770044与部署合同，修正窗口策略分工。9月14日1605帧/新鲜心跳与9月7日实体确认仍为原日期，本网页未操作串口、启停副屏、搬窗或重新验证像素。",
   metrics: [
     { label: "显示面", value: "2" },
     { label: "最新心跳发送", value: "1605 / 1605" },
@@ -11,7 +11,7 @@ const pcPanelHubSnapshot = createProjectSnapshot({
     { label: "9月7日发送进程", value: "1" }
   ],
   facts: [
-    { label: "显示变化与停止的新源码", value: "2026-09-12 04:22 UTC 回读 PUBLIC main=HEAD=ad171826c76465b82d280c961e67dd75e446ebea，工作树干净。HS2按可用主屏、唯一TUR0000目标与健康USB绑定判断，不再要求恰好三屏；MTT1337仅在参与活动桌面时核验后端。停止指标进程另等PID退出和18765端口释放，失败不冒充停止完成。本轮只读差分，旧实机与测试仍保留原日期。", hero: false },
+    { label: "显示变化与停止的新源码", value: "PUBLIC main ac770044471ad3d7a8dff5dc5fac6c8d1a641f9b：普通窗口策略只依赖已辨明的显示身份，独立于HS2模式和浮层准备；排除原生泡泡、Emerald背景、物理黑罩、仪表浮层、Wallpaper Engine及Shell。空窗口快照是正常无动作，不为搬普通窗口重建显示拓扑。", hero: false },
     { label: "两块显示面", value: "TURZX 480×1920 显示密集遥测；HS2 2288×1048 在动态壁纸上显示网易云曲目/封面、Steam 本次时长与退出总结、手机电量、通知/来电/验证码、任务与告警，最多 6 张事件卡" },
     { label: "刷新配置与当前状态", value: "2026-09-14T04:16:39Z心跳status=ok、snapshot_status=fresh，transport_mode=hybrid_diff_204_full_200，周期1010ms、failed=0。9月7日本人实体确认保留，当前心跳不能替代新实体观察。", hero: false },
     { label: "数据与恢复节拍", value: "主周期1000ms；2026-09-14心跳取数/渲染/发送45/9/22ms，最近恢复全帧900，每900帧恢复全帧基线；既有异常退出接回机制与测试日期保留。", hero: false },
@@ -90,7 +90,11 @@ export const pcPanelHubProject = {
     { title: "恢复必须精确而有界", detail: "同一设备只有一个写入者；串口冻结只修发送链，壁纸恢复只在目标显示路径与进程身份都精确成立后执行一次，不靠重启电脑、重置整棵 USB 树或循环 stop/play 碰运气。" },
     { title: "动态壁纸与事件浮层互不绑架", detail: "浮层透明、低频且可退出；找不到精确副屏时绝不回退到主屏。" },
     { title: "公开源码与本机安装态分开", detail: "Git 只保存可重建的源码、脚本、合同和无真实值示例；厂商运行文件、串口、物理网卡、天气坐标与硬件绑定在每台机器上合法取得或重新确认。" },
-    { title: "人在屏前可以立即收束信息", detail: "Win+F1 只清已结束或短时内容，活动媒体、游戏、任务、传输、来电和硬件告警继续保留；Win+F2 只切换时钟并记住选择。" }
+    { title: "人在屏前可以立即收束信息", detail: "Win+F1 只清已结束或短时内容，活动媒体、游戏、任务、传输、来电和硬件告警继续保留；Win+F2 只切换时钟并记住选择。" },
+    {
+      "title": "拉回工作窗口，不动屏保和仪表",
+      "detail": "显示变化后只处理能确认身份的普通应用窗口。泡泡、黑罩、壁纸和仪表有自己的职责，不能被当作漂移窗口搬走或最小化；窗口策略也不必等待无关浮层启动。"
+    },
   ],
   gallery: [
     {
@@ -253,7 +257,12 @@ export const pcPanelHubProject = {
     { moduleSlug: "power-recovery", ask: "刚登录，普通窗口已经跑进水冷屏，为什么还要等浮层？", effect: "窗口保护会先把误入小屏的普通应用搬回安全屏，不必等完整浮层启动；这一步不抢焦点，也不改主屏和远程虚拟屏配置。" },
     { moduleSlug: "power-recovery", ask: "睡眠回来副屏为什么没恢复？", effect: "先确认副屏现在究竟处于什么模式，拓扑稳定后只尝试一次恢复；失败就收起旧浮层、保留现场并说明原因，不在同一轮里反复切屏。" },
     { moduleSlug: "power-recovery", ask: "显示器切换回来后 HS2 动态壁纸还在但不动，怎么恢复？", effect: "先确认显示器身份真的变化并已经稳定，再核对当前主屏、唯一HS2与参与桌面的MTT绑定；条件齐全时只让原有动态壁纸重新绑定一次，条件不全就保留静态背景并说明卡在哪。" },
-    { moduleSlug: "power-recovery", ask: "A108 或显示端点不见了，物理接线怎么恢复？", effect: "先关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时补 SATA。改线后只在唯一 8091、port 2 controller、port 3 LED 拓扑连续两次健康时重新绑定；这条顺序来自项目合同，本页没有执行实体接线实测。" }
+    { moduleSlug: "power-recovery", ask: "A108 或显示端点不见了，物理接线怎么恢复？", effect: "先关机并断开整机电源，再把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；随附一分二 Hub 不支持 LCD，供电不足时补 SATA。改线后只在唯一 8091、port 2 controller、port 3 LED 拓扑连续两次健康时重新绑定；这条顺序来自项目合同，本页没有执行实体接线实测。" },
+    {
+      "moduleSlug": "power-recovery",
+      "ask": "工作窗口跑到小屏或虚拟屏了，帮我拉回，但别动泡泡、壁纸和仪表。",
+      "effect": "先确认显示和窗口身份，仅回迁符合条件的普通应用。没有窗口就保持不变；屏保、物理黑罩和仪表排除，不能为了回迁重新排列整套显示器。"
+    },
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "9月9日PUBLIC main=9eda10a7bbf0dde8a5de8268a6633b2d6ed1a925，远端同值；保留发送、隐藏入口恢复及两屏原能力，新增普通窗口从MTT1337回到PHLC34B，以及窗口仍归主屏但可见框跨入VDD时的约束。TestPowerWatchdog纯软件回归通过。", doesNotProve: "新源码和软件回归不证明当前窗口搬移、显示拓扑、串流、睡眠或实体像素。" },
@@ -797,7 +806,9 @@ export const pcPanelHubModules = [
       "HS2ActiveRecoveryPolicy.ps1 仅在MTT参与活动桌面时用窄 PnP 查询核对唯一 DISPLAY\\MTT1337\\* 和 ROOT\\DISPLAY\\* 后端，并逐项读取 IsPresent、ProblemCode 与 HardwareIds=Root\\MttVDD；HS2桌面身份和既有USB绑定分别核验。",
       "Get-WallpaperEngineRebindDecision 维护 baseline、pending fingerprint、pendingSince 与 lastRebind；状态机区分 WaitForTopology、Baseline、Healthy、Stabilizing、WaitForHealth、Cooldown 和 Rebind。",
       "Resolve-WallpaperEngineControlExecutable 只接受当前 session 的 wallpaper64，读取其真实路径并解析同目录唯一 wallpaper32.exe；Invoke-WallpaperEngineRenderRebind 要求当前 session 有 explorer，再通过 Shell.Application 隐藏分派 stop/play。",
-      "任何 probe（探测）或控制错误只写有界状态日志；失败分派也更新 baseline 与 lastRebind，因而不在同一拓扑上循环。没有持久配置变更可撤销；若 stop 后 play 未恢复，原场景/设置仍归 Wallpaper Engine，Windows 静态背景与其用户控制是回退面。"
+      "任何 probe（探测）或控制错误只写有界状态日志；失败分派也更新 baseline 与 lastRebind，因而不在同一拓扑上循环。没有持久配置变更可撤销；若 stop 后 play 未恢复，原场景/设置仍归 Wallpaper Engine，Windows 静态背景与其用户控制是回退面。",
+      "指标端点归属与旧进程退出分别核对，不用进程名称或端口存在冒充健康；旧端点死但进程还在时等待18765释放，再在单Owner条件下替换。重复流退出或心跳停滞进入30秒有界冷却，先证明旧COM占用已释放；重启失败作为回执留在长驻Owner中，不让异常直接把任务退成Ready。",
+      "现有共享窗口策略在显示身份明确时独立于HS2 secondary-mode与overlay readiness运行；空快照无动作。排除Bubbles、Emerald背景、blackout、instrument overlay、Wallpaper Engine及shell，防止当作普通窗口搬移或最小化，不修改显示拓扑。策略版本通过原启动入口受控重启加载，不增加周期脚本重载器。",
     ],
     flow: [
       "登录后由原隐藏VBS启动唯一watchdog，并同步等待它的退出结果；异常退出等30秒后进入同一启动流程，正常退出结束。",
@@ -874,7 +885,8 @@ export const pcPanelHubModules = [
       "Installation / Runtime：既有任务已重新启动；显式停止34.69秒未反弹，软件启动31.06秒恢复，强制结束watchdog后63.33秒由原VBS自动接回，旧sender退出；23:24心跳285/285、failed=0。RTSS单应用配置经官方SDK回读AppDetectionLevel=0，未另建任务或服务。",
       "Runtime：没有制造显示器拔插、主屏切换、MTT 重枚举、Code 10、控制客户端缺失或 stop/play 半失败；没有看到真实 Rebind 日志或 Wallpaper Engine 渲染恢复。",
       "接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。",
-      "Physical：9月7日本人确认TURZX实体小屏正常刷新；脚本先前physical_pixels_verified=false与后续本人观察分开保留。HS2仅有8月30日本人历史确认，本轮睡眠、关机、断电、壁纸拓扑重绑和HS2实屏未验收。"
+      "Physical：9月7日本人确认TURZX实体小屏正常刷新；脚本先前physical_pixels_verified=false与后续本人观察分开保留。HS2仅有8月30日本人历史确认，本轮睡眠、关机、断电、壁纸拓扑重绑和HS2实屏未验收。",
+      "ac770044相关纯软件回归拒绝不完整窗口捕获与未知执行；本网页只消费已发布实现，不把单元结果、心跳或命令204写入当实体像素验证。",
     ],
     relation: "接收安装与换机模块已经验证的本机配置和双屏绑定，监管运行期机箱屏传输、HS2 显示状态与既有 Wallpaper Engine 的渲染重绑；它不拥有 clean clone、首次安装、壁纸资产或场景设置，总览中的分层证据决定源码、测试、安装、运行事实能否升级为实体结论。"
   }

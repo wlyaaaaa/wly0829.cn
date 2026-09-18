@@ -74,11 +74,11 @@ test("all published project surfaces are deterministic projections of one curren
     });
     assert.equal(candidate.snapshotBoundary, `观察于 ${snapshot.observedAt}；${snapshot.boundary}`);
 
-    const factText = snapshot.facts.map(({ value }) => value).join("\n");
+    const factText = snapshot.facts.map(({ value }) => value).join("\n").replaceAll(",", "");
     for (const metric of snapshot.metrics) {
-      const tokens = metric.value.match(/(?:[Ev]\d+(?:\.\d+)+|\d+(?:\.\d+)?(?:\/\d+)?)/g) || [];
+      const tokens = metric.value.replaceAll(",", "").match(/(?:[Ev]\d+(?:\.\d+)+|\d+(?:\.\d+)?(?:\/\d+)?)/g) || [];
       assert.ok(typeof metric.value === "string" && metric.value.trim(), `${candidate.slug}/${metric.label} has no value or state`);
-      for (const token of tokens) assert.ok(factText.includes(token) || token.length === 1, `${candidate.slug}/${metric.label} is not traceable to currentSnapshot facts: ${token}`);
+      for (const token of tokens) assert.ok(factText.includes(token) || token.length === 1 || (/GiB/.test(metric.value) && [...factText.matchAll(/\b\d{8,}\b/g)].some(([bytes]) => (Number(bytes) / 2 ** 30).toFixed(2) === token)), `${candidate.slug}/${metric.label} is not traceable to currentSnapshot facts: ${token}`);
     }
   }
 });

@@ -1,13 +1,13 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const timeAuditSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-14T04:18:02.138248Z",
-  label: "最新一小时采样新鲜、未触发硬件阈值；有效帧与拒绝帧并存，真实游戏和历史修复证据分开",
-  boundary: "2026-09-14只读一小时摘要有3599硬件样本、2369个有效帧样本和1229个被拒绝正值；摘要不返回帧源身份，不能确认它们来自真实游戏。9月8日GPU修复后三分钟180样本、133正帧全拒绝，以及8月31日大盘/剪贴板/恢复证据均保留原日期；本轮未重做这些测试或实体观察",
+  observedAt: "2026-09-18T13:14:20Z",
+  label: "共享健康与真实质量字段已接入；历史缺采、缺传感器和备份恢复层分别显示",
+  boundary: "本轮读取正式cbd34b7及共享健康回执：硬件、活动入库新鲜，0待写与写入失败；备份清单形状/长度通过，但未重哈希GB载荷或执行完整恢复。9月14日一小时帧统计、8月31日大盘与剪贴板仍是原日期，不当成本轮重新实测。",
   metrics: [
-    { label: "本轮一小时硬件样本", value: "3599" },
-    { label: "有效 / 拒绝正帧", value: "2369 / 1229" },
-    { label: "本轮活动覆盖", value: "3383 / 3600 秒" },
+    { label: "9月14日一小时硬件样本", value: "3599" },
+    { label: "9月14日有效/拒绝正帧", value: "2369 / 1229" },
+    { label: "9月14日活动覆盖", value: "3383 / 3600 秒" },
     { label: "大盘", value: "6 · 78" }
   ],
   facts: [
@@ -15,9 +15,9 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
     { label: "帧率来源与空闲", value: "当前源码优先读取 RTSS（RivaTuner Statistics Server 帧率工具）的共享内存；按前台进程、RTSS 最近前台、已启用的 Wallpaper 桌面渲染器和唯一新鲜帧源选择。映射可用但无有效帧为正常 gated_idle；映射不可用才启用 PresentMon 后备，不能把所有零值都当正常等待。" },
     { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
-    { label: "当前聚合与历史修复", value: "2026-09-14T04:16:39Z官方一小时摘要为status=ok、coverage=fresh：3599硬件样本，最新年龄0.110秒，最大间隔2秒；活动覆盖3383/3600秒、缺217秒、重叠0。GPU核心均值/峰值58.586/60°C，hotspot最高70°C。04:18:02Z另一个独立一小时anomaly digest为3599样本、新鲜、异常0；窗口不同，不混算。9月8日修复前3600样本全部GPU越界、修复后三分钟180/180有效的对照仍是历史证据。" },
+    { label: "当前共享健康与历史聚合", value: "2026-09-18T13:14Z共享健康正常：AHK约0.87秒、硬件数据库约0.38秒新鲜，待写、写失败和溢出均0，已有contract-2质量来源。数据库备份14份，最近约9.22小时/4162.12MiB，清单/长度通过、full_restore_verified=false；本轮未重哈希或恢复数据库。9月14日3599样本/3383秒活动覆盖仍是历史窗口，不能拿当前心跳覆盖它的217秒缺口。" },
     { label: "9月8日受管换代与空档", value: "2026-09-08T08:34:28Z仅停止已核对身份的旧采集worker，由既有TimeAudit_Watchdog拉起新launcher 57708→worker 61904（08:34:50Z）。首个新样本08:35:19Z，启动窗口前沿有51.03秒缺口。随后三分钟GPU占用/温度/功率/核心和显存时钟180/180非空且物理有效；不新增服务、不改历史样本，也未重启电脑或GPU驱动。" },
-    { label: "冻结来源与必要修复例外", value: "源码截止2026-09-08T08:00:42Z为PUBLIC main b64fafe2f23c82e2c1e668ba058b4634e590faff。本批发现真实读数故障后，必要修复e5459ce9e67608e2d9dbe92a18cc34c0a21b4f3e于08:35Z提交并正常推送、远端默认main回读同值。39项相关回归通过；同批必要说明修复f3d210e9023c4547cf60bb2ea4a173ad4a3578d0于09:34Z从远端默认main回读，使用手册及21页PDF已一致修正过强判断，78面板、字段和代码块保留。监测线索不自动成为确定诊断；文档更新未改变采集器或重采窗口。这些是截止后明列的修复，不混入无关新提交，也不把8月31日182项完整回归称为本轮重跑。" },
+    { label: "当前正式实现与部署边界", value: "PUBLIC main cbd34b737b2573221224f099d1adc317c8b14e8b含可靠采样、活动分段、共享健康、带质量来源的历史摘要和隔离恢复检查。当前新行已携带measurement_quality、collector_instance_id与collector_sample_seq；历史行不重写。源码、实际新行、备份清单、完整恢复和物理断电仍分别证明。" },
     { label: "独立剪贴板历史 · 8月31日证据", value: "WM_CLIPBOARDUPDATE事件采集与SQLite schema v1/WAL/FTS5独立工作。8月31日为5234事件、2312个blob（正文对象）、3406条全文索引，3个任务与无正文adapter（适配出口）验证通过、专属11项测试通过；本次未重读当前正文或计数。" },
     { label: "已验证发布基线", value: "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），当时 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。这是下列发布、测试与现场证据的固定版本，不用它冒充后续源码的发布证明。", hero: false },
     { label: "现役源码的帧链与坏值处理", value: "e5459ce保留RTSSSharedMemoryV2只读首选、2秒新鲜度、双读一致性和fps_capture_status/detail入库；只有映射不可用才考虑PresentMon。新增NVML成功返回但核心指标非有限或越界时，按既有失败路径清句柄并重新初始化，当前拍只接受真实LHM回退或NULL，不把坏值裁成0。README已改为四worker、新实例退让，以及映射不可用才后备。", hero: false },
@@ -71,7 +71,7 @@ export const timeAuditProject = {
     "剪贴板历史怎样增量导出"
   ],
   repositoryNote: "这是吴乐阳个人维护并集成第三方探针/库的 PUBLIC（公开）GitHub 仓库；根目录没有统一 LICENSE，不能仅因公开就称为开源，也不能把 LibreHardwareMonitor、RTSS、PresentMon、Grafana 等外部组件冒充个人原创。进程名、路径、命令行、窗口标题、时间、遥测、机器与网络指标不因字段类型自动保密；本页可在有用时公开这些技术事实。只有实际包含个人敏感正文或密码、令牌、密钥、恢复码等凭据的具体值才隐藏。原始全库不镜像进网页，是因为体积、噪声和解释边界。",
-  summary: "TimeAudit 给这台 Windows 工作站留下两种可找回的本机历史：一条对齐性能、程序、功耗和使用时间，解释某个时刻电脑发生了什么；另一条独立保存新发生的文本、网址与文件路径复制，供本机搜索和再次复制。两条链各自有存储、状态与恢复边界，任何记录都不自动等于用户意图。",
+  summary: "持续留下电脑性能和活动记录，让昨晚卡顿、异常耗电或时间去向能在事后查，而不只看现在任务管理器。没有读到的传感器值就留空，采集空档不猜成休眠或正常；活动记录写入失败会保留待写状态，极端丢失也明确标成未知。查看当前健康、核对数据库备份和在独立环境试恢复各有入口，不会为一次诊断重启电脑或覆盖生产数据。",
   why: "任务管理器只能看此刻，卡顿、过热、异常写盘和闪退等现场很快消失；剪贴板内容也会被下一次复制覆盖。TimeAudit 让偶发故障可以事后按时间对齐，让曾复制的资料可以按关键词、日期和类型找回，同时明确区分观察事实、估算、空档和未知。",
   plainExample: "我可以问：“昨晚游戏突然卡了两秒，到底是显卡、磁盘，还是后台程序在抢资源？”TimeAudit 会先告诉我那段时间有没有足够记录；有的话就把帧率、温度、磁盘和前后台变化对到同一时刻，给出最值得继续查的方向，没有证据的地方直接留空，不靠重启电脑碰运气。",
   result: "我得到一套只读本机诊断面和一套独立的本机复制找回面：前者回看整机与程序状态、能耗和使用时间，后者搜索、预览、再次复制并可按版本化游标增量输出。每条链都说明记录是否继续、问题在哪里和哪些结论不能推出；诊断不会据异常信号处置其他应用或推断用户意图；采集器自身按既有看门狗合同恢复。",
@@ -104,7 +104,11 @@ export const timeAuditProject = {
     { title: "私密正文留在本机", detail: "搜索、完整预览与再次复制都在桌面查看器内完成；公开面只展示 schema（结构版本）、组件、状态和计数，不展示原始正文、内容 hash（哈希）、私密窗口或凭据。" },
     { title: "独立能力独立失效", detail: "剪贴板历史不依赖 PostgreSQL、Grafana 或主采集器；一条链出问题时不把另一条链误报为不可用。" },
     { title: "运行健康不等于数据真理", detail: "心跳只证明链路继续推进。NVML即使返回成功，只要核心数值越界仍按失败处理，交给已有重新初始化与真实LHM后备；没有可靠来源就留空，不用一个活进程保证所有数值正确。" },
-    { title: "备份成功不等于恢复完成", detail: "数据库、面板和任务都要在隔离环境恢复并回读结果，不能用备份任务退出码冒充可恢复。" }
+    { title: "备份成功不等于恢复完成", detail: "数据库、面板和任务都要在隔离环境恢复并回读结果，不能用备份任务退出码冒充可恢复。" },
+    {
+      "title": "不知道就留空，采集失败也留下具体缺口",
+      "detail": "不用CPU负载公式代替温度，也不把写入失败、计时延迟或缺传感器填成0。记录状态、实际入库和历史覆盖一起检查；当前进程活着不能证明昨晚材料完整。"
+    },
   ],
   responsibilities: [
     "在本机连续采集硬件、FPS、活跃进程、前台上下文和进程生命周期",
@@ -171,7 +175,17 @@ export const timeAuditProject = {
     { moduleSlug: "clipboard-history", ask: "刚才复制的长命令被下一次复制覆盖了，怎么找回来？", effect: "在本机按关键词、日期或类型找到原记录，预览无误后再次复制；系统保留这次找回来自哪条记录，但不会把“复制过”解释成“读过、同意过或执行过”。" },
     { moduleSlug: "hardware-performance", ask: "过去一小时电脑为什么偶尔卡？", effect: "先用一份短摘要确认记录覆盖和压力方向；只有确实值得深挖时，才打开具体时刻与程序明细，不把一次温度或丢包信号直接写成根因。" },
     { moduleSlug: "collection-pipeline", ask: "为什么最近一段时间完全没数据？", effect: "先判断那段时间是睡眠、关机，还是采集真的断了，再指出断在哪一层和可恢复入口；空白记录不会被包装成“电脑一切正常”。" },
-    { moduleSlug: "backup-recovery", ask: "换电脑时，能把 TimeAudit 和以前的历史一起恢复吗？", effect: "先确认这是带历史换机，再重建运行环境、恢复选定备份并逐层验收；最后我能看到旧历史、新记录继续写入，以及备份后仍然缺少的那一段。" }
+    { moduleSlug: "backup-recovery", ask: "换电脑时，能把 TimeAudit 和以前的历史一起恢复吗？", effect: "先确认这是带历史换机，再重建运行环境、恢复选定备份并逐层验收；最后我能看到旧历史、新记录继续写入，以及备份后仍然缺少的那一段。" },
+    {
+      "moduleSlug": "backup-recovery",
+      "ask": "先检查备份，再在隔离环境证明能恢复，别碰现在的数据库。",
+      "effect": "轻量检查先核对清单、长度和新鲜度；明确恢复演练才使用独立无网络、无公开端口的临时数据库，读回恢复完成和表后清理本次资源。运行中或客户端断线不冒称恢复成功。"
+    },
+    {
+      "moduleSlug": "runtime-reliability",
+      "ask": "昨晚卡住时记录真的在写吗？别只告诉我进程还活着。",
+      "effect": "同时核对历史覆盖、当前硬件和活动写入、积压及最近守护结果；缺采与真实睡眠分开。需要时结合Windows原生内存记录和事件比较原因，阈值或相关性不直接当根因。"
+    },
   ],
   evidenceLayers: [
     { layer: "Source（源码）", proves: "截止来源为b64fafe；必要补救e5459ce已正常推送并回读默认main。现役仍为LHM独立任务、telemetry_watchdog唯一自动恢复和hardware worker（硬件采集工作单元）只读18085；新增NVML越界拒收复用原有重初始化/后备，没有新服务。", doesNotProve: "本机任务已指向这些文件、运行进程已经重新加载或故障恢复已经真实发生。" },
@@ -202,7 +216,17 @@ export const timeAuditProject = {
     { name: "快速历史诊断", command: "python -B E:\\Projects\\Tools\\TimeAudit\\timeaudit_diagnostic_summary.py --hours <1-168>", purpose: "一次查询返回覆盖、硬件、有效游戏帧、状态时长、信号与解释限制，供 timeaudit-diagnostics Skill 使用。" },
     { name: "打开剪贴板历史", command: "开始菜单：TimeAudit 剪贴板历史", purpose: "在只读桌面查看器中搜索、筛选、预览和再次复制，不经浏览器或固定端口。" },
     { name: "剪贴板有界验收", command: "pwsh -NoProfile -File E:\\PCConfig\\tools\\Test-TimeAuditClipboardHistory.ps1", purpose: "只读检查三任务、无正文心跳、ACL、schema、计数、适配出口与近线根，不输出历史正文。" },
-    { name: "备份 / 恢复预检", command: "powershell -File E:\\Projects\\Tools\\TimeAudit\\backup_all.ps1 ; python E:\\Projects\\Tools\\TimeAudit\\restore_grafana.py --dry-run", purpose: "分层备份，并在实际恢复前验证候选。" }
+    { name: "备份 / 恢复预检", command: "powershell -File E:\\Projects\\Tools\\TimeAudit\\backup_all.ps1 ; python E:\\Projects\\Tools\\TimeAudit\\restore_grafana.py --dry-run", purpose: "分层备份，并在实际恢复前验证候选。" },
+    {
+      "name": "明确隔离恢复演练",
+      "command": "timeaudit_backup.py restore-check; timeaudit_backup.py restore-status; timeaudit_backup.py finish-restore",
+      "purpose": "明确请求下在独立临时数据库验证同一次恢复，完成回读后只清本次资源，不覆盖生产数据库。"
+    },
+    {
+      "name": "共享健康与有界诊断",
+      "command": "timeaudit_health.py; E:\\PCConfig\\tools\\Get-ComputerStutterDiagnostic.ps1 -Minutes 15 -Json",
+      "purpose": "只读核对当前写入与历史/原生记录/事件，缺证据不当正常，不启动恢复。"
+    },
   ]
 };
 
@@ -241,7 +265,8 @@ export const timeAuditModules = [
       "Python 主调度程序建立连接池、单例与双节拍；慢车道在线程中单飞。",
       "四个 worker 各管前台、进程、硬件和生灭。",
       "AHK 写唯一 spool；ingest.py 事务入库并按事件 id 去重。",
-      "schema.sql 定义维度、事实、周/月分区、索引与约束。"
+      "schema.sql 定义维度、事实、周/月分区、索引与约束。",
+      "硬件采样用单调时钟截止点，提前唤醒继续等待，慢处理跳过错过时隙而不追赶堆积；Windows互斥必须真实创建并取得，失败不准第二采集器启动。新行增加可空measurement_quality、collector_instance_id、collector_sample_seq，不重写旧行。",
     ],
     flow: [
       "启动单例、闭合旧会话并确认分区。",
@@ -328,7 +353,8 @@ export const timeAuditModules = [
       "Grafana 对齐 FPS、帧时、瓶颈与前台焦点。",
       "pcconfig_anomaly_digest.py 通过现有 audit-postgres 容器的本地 PostgreSQL socket 对 fact_system_hardware 做索引聚合，窗口固定为 `(after_utc, until_utc]` 且最长 168 小时。",
       "timeaudit.pcconfig-anomaly-digest.v1 返回 Owner/Profile、next cursor、coverage、聚合异常与 `projection_recheck_recommended`；成功的空窗口也可推进，缺 Docker/PostgreSQL 或非法输出则有界 unavailable。",
-      "数据库会话锁定 Asia/Shanghai 本地日界。"
+      "数据库会话锁定 Asia/Shanghai 本地日界。",
+      "CPU封装温度/功率与GPU hotspot只接受真实新鲜传感器或NULL，不以ACPI区域、负载公式、显存温度或核心偏移代替。RTSS current_fps是最近帧倒数，窗口均值另存；历史无来源RTSS行走明确兼容路线，合理极低帧不直接丢弃。缺磁盘/换页/频率计数留NULL，真实0仍保留。",
     ],
     flow: [
       "用 timeaudit-diagnostics 对最短够用窗口做一次有界 summary，先核对 coverage、样本数、最新年龄与最大 gap。",
@@ -505,7 +531,9 @@ export const timeAuditModules = [
       "AHK 写前台和系统状态区间，ingester 幂等入库。",
       "Grafana 用区间交叠、裁剪和 gaps-and-islands（区间并集）。",
       "数据库锁定 Asia/Shanghai 本地日界。",
-      "功耗点采样积分，其他部件/电价模型标为估算。"
+      "功耗点采样积分，其他部件/电价模型标为估算。",
+      "写失败不推进已提交水位，保留有界待写队列；达到上限时详细事件变为明确未知区间，不推断应用使用。ahk_health.json分别记录待写、失败、溢出和分段数；正常活动约30秒或转换时封段，突然断电仍可能丢失当前未封段。",
+      "活动区间统一UTC且状态串行；空闲切换不能倒退已分配区间。时钟跳变/延迟记System_CollectionGap，只有Windows挂起事件证明sleep。AHK用UTF8不可变CSV段：临时写入、flush、原子rename到buffer.csv.ahk.*.processing，现有ingester只在数据库事务提交后移除，内容去重保护重放。",
     ],
     flow: [
       "记录并入库状态区间。",
@@ -580,7 +608,9 @@ export const timeAuditModules = [
       "runtime_health.py 原子写 heartbeat，并提供路径识别与有界退避辅助。",
       "telemetry_watchdog.ps1 每分钟串行检查 main.py、LHM 18085、AHK 与 audit-ingester；全局 mutex（互斥锁）阻止恢复重叠。",
       "LHM 独立任务拥有运行实例；hardware worker 只读，Watchdog 经 15 秒宽限、20 秒启动等待和精确项目路径过滤恢复端点。",
-      "start_all.bat 固定 CRLF、绝对 Python 3.11 和 WorkingDirectory。"
+      "start_all.bat 固定 CRLF、绝对 Python 3.11 和 WorkingDirectory。",
+      "历史摘要只做有界聚合：语句8秒、锁1秒并限客户端输出，拒绝畸形/非有限/意外字段。异常v2依≤2.5秒连续观测与实际持续时间，31秒lookbehind衔接游标；PCConfig在重查下游前持久pending_projection_refresh，失败后即使无新数据也续做，不因游标推进丢掉未完动作。",
+      "GUI状态、AI健康与看门狗消费同一个timeaudit_health.py；core-only排除备份/blackbox/上一守护结果，避免递归。exit2可以是有效degraded/unavailable，心跳、实际持久写入和最后守护结果独立；可选两秒overhead只看精确主采集链子进程，不含独立传感器、Docker与原生记录，RSS相加不是独占内存。",
     ],
     flow: [
       "交互用户会话提权启动。",
@@ -750,7 +780,9 @@ export const timeAuditModules = [
       "backup_db 用 pg_dump；backup_grafana 用一致快照导出 JSON。",
       "restore_grafana 只接受合同通过的 JSON，并支持 dry-run。",
       "PCConfig 重建 AutoStart 与每分钟 Watchdog；DailyBackup 每天 20:40 组合备份并轮转 14 份。",
-      "README 记录当前 `.venv`、每 1 分钟 Watchdog 与运行链；`快速部署.md` 的整树复制、零丢失和每 5 分钟说法是待 Owner 修订的旧说明。"
+      "README 记录当前 `.venv`、每 1 分钟 Watchdog 与运行链；`快速部署.md` 的整树复制、零丢失和每 5 分钟说法是待 Owner 修订的旧说明。",
+      "timeaudit_backup.py restore-check使用已安装固定镜像、无网络/无公开端口、只读归档挂载与独立数据库，绝不导入audit-postgres。原容器完成记录可跨客户端断线保留；restore-status查看同次进度，finish-restore核对退出码、可读表、所有权标签后记录结果并清理本次容器/匿名卷。running/starting不算PASS，未知资源不盲重建或删除。",
+      "backup_db.ps1以合格Python导出到唯一.partial，flush后确认PostgreSQL custom格式、列归档并算SHA-256，再发布.dump及原子.dump.json。至少保留3份完整已验证配对，失败不替换成功档案，无法证明可清理的旧原件保留。健康检查只看清单形状、长度与新鲜度，不重哈希全部载荷。",
     ],
     flow: [
       "先选场景：全新安装没有历史、换机需要带历史，或灾后 / 重装 / 硬盘更换从备份恢复；记录最后可靠备份与预期历史缺口。",
@@ -798,7 +830,11 @@ export const timeAuditModules = [
       { path: "E:\\Projects\\Tools\\TimeAudit\\快速部署.md", role: "三场景旧入口；含已识别的整树复制、零丢失与五分钟 Watchdog 漂移" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_backup_all_script.py", role: "备份回归" },
       { path: "E:\\Projects\\Tools\\TimeAudit\\test_restore_grafana.py", role: "恢复回归" },
-      { path: "E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py", role: "分区查询审计" }
+      { path: "E:\\Projects\\Tools\\TimeAudit\\test_sql_partition_explain.py", role: "分区查询审计" },
+      {
+        "path": "E:\\Projects\\Tools\\TimeAudit\\DIAGNOSTICS_OPERATIONS.md",
+        "role": "质量来源、活动持久化、共享健康、数据库备份与独立恢复的当前合同"
+      },
     ],
     verification: [
       "8月31日回读的DailyBackup结果为0，本批未刷新该项。",

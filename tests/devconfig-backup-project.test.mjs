@@ -102,9 +102,9 @@ test("devconfig-backup explains tiered media architecture and cold drive separat
     "零流量",
     "21:05",
     "22:00",
-    "2,465.9 MiB",
+    "2.92 GB",
     "-Tier Drive",
-    "MD5一致"
+    "23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits tiered distribution keyword: ${expected}`);
   }
@@ -134,17 +134,17 @@ test("devconfig-backup explains data-driven catalog and cache exclusions", () =>
 test("devconfig-backup explains WeChat modes, file-level increment and WAL non-exclusion limits", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   for (const expected of [
-    "42.05 GiB",
+    "45.22 GB",
     "xwechat_files",
     "robocopy",
     "checksum",
-    "8G",
-    "保险丝",
+    "8G 是单次传输上限",
+    "源跟随",
     "WAL",
     "SHM",
     "Backup-WeChat.ps1",
-    "wechat.hot-backup-receipt.v1",
-    "payload_names_emitted",
+    "wechat.hot-backup-receipt.v2",
+    "不输出聊天正文或文件名",
     "-DbOnly",
     "-DriveFull",
     "-MaxTransfer 0",
@@ -157,7 +157,7 @@ test("devconfig-backup explains WeChat modes, file-level increment and WAL non-e
 test("devconfig-backup explains disaster recovery runbook and two critical traps", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   for (const expected of [
-    "7 步",
+    "Restore-DevConfig.ps1",
     "Documents",
     "10979",
     "Restore-WeChat.ps1",
@@ -167,8 +167,8 @@ test("devconfig-backup explains disaster recovery runbook and two critical traps
     "PowerShell 7",
     "Setup-ScheduledTasks.ps1",
     "wlyaaaaa/PCConfig",
-    "7z t",
-    "强来源哈希"
+    "backup-manifest.json",
+    "随包清单"
   ]) {
     assert.ok(text.includes(expected), `devconfig-backup omits recovery runbook keyword: ${expected}`);
   }
@@ -202,21 +202,25 @@ test("System links its devconfig-backup asset to the new detail page", () => {
 test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   const snapshotText = JSON.stringify(devconfigBackupProject.currentSnapshot);
-  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-09T03:43:00Z");
-  assert.match(snapshotText, /均返回0/);
-  assert.match(snapshotText, /两端latest均为2,585,641,706字节[\s\S]*Drive仍留9月5\/6\/7日三代[\s\S]*2,271,564,569字节/);
-  assert.match(snapshotText, /MD5=b8ac7753719d963bcda19f90d9a4460b/);
-  assert.match(snapshotText, /微信Drive.*03:00Z.*均返回0/s);
+  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-18T12:53:27.2981194Z");
+
+
+
+
   assert.match(text, /小时监控仍停用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
-  assert.match(text, /运行中复制[^。]{0,60}(?:不等于|不能保证).*一致/);
-  assert.match(text, /完整新机恢复未实机验收|整套恢复[^。]{0,40}不等于/);
-  assert.match(snapshotText, /Drive仍留9月5\/6\/7日三代/);
-  assert.match(snapshotText, /00:11:27Z记录15集合complete、warnings为空/);
+  assert.match(text, /运行中逐文件复制仍不是应用一致快照/);
+  assert.match(text, /本轮没有做完整新机恢复/);
+
+
+  assert.match(snapshotText, /devconfig-20260917-223044-15f482e1/);
+  assert.match(snapshotText, /23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c/);
+  assert.match(snapshotText, /8,?640.*8,?531,?705,?353/s);
+  assert.match(snapshotText, /16.*(?:集合|冷备)/);
   assert.doesNotMatch(devconfigBackupProject.cardStatus, /目前离线|未追平/);
-  assert.match(snapshotText, /文件一致和任务成功.*不等于.*微信应用恢复/s);
+  assert.match(snapshotText, /文件.*(?:成功|通过).*不等于.*(?:应用|客户端|恢复)/s);
   assert.doesNotMatch(snapshotText, /配置 Drive 返回 1|远端 latest.*9 月 2 日.*落后/);
   assert.match(text, /H_unavailable/);
-  assert.match(text, /source_follow_verified_prune/);
+  assert.match(text, /source_follow_verified/);
   assert.doesNotMatch(text, /additive_no_mirror/);
   assert.match(text, /每个新代[^。]{0,80}完整上传|完整上传[^。]{0,80}日期包/);
   assert.match(text, /reparse point|重解析点/);

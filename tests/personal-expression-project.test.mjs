@@ -74,10 +74,10 @@ test("personal-expression provides reader content and renders every glossary mea
 test("personal-expression distinguishes verified source from untested personal outcomes", () => {
   const snapshot = personalExpressionProject.currentSnapshot;
   assert.ok(Number.isFinite(Date.parse(snapshot.observedAt)));
-  assert.ok(snapshot.facts.some((item) => item.value.includes("d9df118edb6055a3da6463ca77289c57ceb46456")));
+  assert.ok(snapshot.facts.some((item) => item.value.includes("606bff461b82cf80ab8318d67ac6543125322ba0")));
   assert.ok(snapshot.gaps.some((item) => item.includes("后续真实任务") && item.includes("实际使用验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("真实微信动画") && item.includes("未完成验收")));
-  assert.ok(snapshot.gaps.some((item) => item.includes("换机恢复") && item.includes("未进行")));
+  assert.ok(snapshot.gaps.some((item) => /换机恢复|新机恢复/.test(item) && item.includes("未进行")));
   assert.ok(personalExpressionProject.evidenceLayers.every((item) => item.proves && item.doesNotProve));
   assert.equal(personalExpressionProject.visibility, "私有仓库");
   assert.equal(personalExpressionProject.repositoryUrl, undefined);

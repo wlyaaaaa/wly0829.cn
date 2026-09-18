@@ -92,18 +92,18 @@ test("codex-memory keeps the accepted module routes and three reading layers", a
 });
 
 test("codex-memory distinguishes current source inventory from the published backup point", () => {
-  assert.equal(codexMemoryProject.currentPointId, "20260913T112054Z-1d51dc2b");
-  assert.equal(codexMemoryProject.conversationFileCount, 7279);
-  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 51104813027);
-  assert.equal(codexMemoryProject.liveSourceFileCount, 7309);
-  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 51399165305);
+  assert.equal(codexMemoryProject.currentPointId, "20260918T041508Z-8e6dcbc6");
+  assert.equal(codexMemoryProject.conversationFileCount, 1731);
+  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 7738969963);
+  assert.equal(codexMemoryProject.liveSourceFileCount, 1771);
+  assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 7840035917);
   assert.notEqual(codexMemoryProject.conversationFileCount, codexMemoryProject.liveSourceFileCount);
   const hotEntry = codexMemoryProject.operationalEntrypoints.find((item) => item.command.includes("-Mode Hot"));
   assert.ok(hotEntry && hotEntry.command.includes("-Execute"), "real Hot capture requires the source execution switch");
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /未重新全对象哈希或恢复/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /没有本轮逐对象重哈希或恢复/);
   assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, true);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /G\/H指针同为20260913T112054Z-1d51dc2b/);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /source_follow_valid_points/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /G\/H各自current.*point=20260918T041508Z-8e6dcbc6/s);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /cold_readback_verified=true/);
 });
 
 test("codex-memory explains core safety rules without marketing riddles", () => {

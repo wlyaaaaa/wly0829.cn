@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-14T02:57:39Z",
-  "label": "桌面会话保留当前及前一点，H跟随G有效点；两盘原生完成回执已回读，应用续作另验",
-  "boundary": "2026-09-14T02:57Z只读回读G/H指针同为20260913T112054Z-1d51dc2b，closure_sha256=774015bab58ee576e0795f08ea1782d5618dae660b375a60fb91295e1a72fcbd。G原生hot-last于9月13日11:25:44Z complete/readback_verified=true，7279文件、51,104,813,027字节，hot_retention_limit=2、retained=2，实际清18旧点/3780对象；H原生cold-last于23:57:45Z complete/readback_verified=true、source_follow_valid_points、retained=2。本次只读小元数据，未重新全对象哈希或恢复。 次机及其他三套既有观察保留原日期，本轮未重新采集。",
+  "observedAt": "2026-09-18T21:12:47.825Z",
+  "label": "四套备份仍各自恢复；Gemini兼容任务补齐Antigravity桌面与CLI轻量状态，历史介质证据保留日期",
+  "boundary": "本轮只读已发布备份范围与G/H原生指针、清单；Gemini兼容任务新增Antigravity CLI轻量状态，未重跑备份或读取私人正文。2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。 9月9日其他工具与9月14日旧恢复点仍是历史证据。",
   "metrics": [
     {
       "label": "AI工具",
@@ -11,7 +11,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "Codex对话G点",
-      "value": "7,279文件 · 47.59 GiB"
+      "value": "1,731文件 · 7.74 GB"
     },
     {
       "label": "轻量调度",
@@ -63,7 +63,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "G 最新会话点与活动源不同",
-      "value": "2026-09-14T02:57Z只读回读G/H指针同为20260913T112054Z-1d51dc2b，closure_sha256=774015bab58ee576e0795f08ea1782d5618dae660b375a60fb91295e1a72fcbd。G原生hot-last于9月13日11:25:44Z complete/readback_verified=true，7279文件、51,104,813,027字节，hot_retention_limit=2、retained=2，实际清18旧点/3780对象；H原生cold-last于23:57:45Z complete/readback_verified=true、source_follow_valid_points、retained=2。本次只读小元数据，未重新全对象哈希或恢复。 同次活动源Inspect为7309文件、51,399,165,305字节；活动源不是恢复点同一时刻的内容。",
+      "value": "2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。 9月18日12:53 UTC独立源Inspect为1771文件、7840035917字节；这是活动源的另一观察时间，不是恢复点清单，也不是21:17重新采集。",
       "hero": true
     },
     {
@@ -88,12 +88,12 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "H 冷盘与数据边界",
-      "value": "2026-09-14T02:57Z只读回读G/H指针同为20260913T112054Z-1d51dc2b，closure_sha256=774015bab58ee576e0795f08ea1782d5618dae660b375a60fb91295e1a72fcbd。G原生hot-last于9月13日11:25:44Z complete/readback_verified=true，7279文件、51,104,813,027字节，hot_retention_limit=2、retained=2，实际清18旧点/3780对象；H原生cold-last于23:57:45Z complete/readback_verified=true、source_follow_valid_points、retained=2。本次只读小元数据，未重新全对象哈希或恢复。",
+      "value": "2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。",
       "hero": true
     }
   ],
   "gaps": [
-    "Codex桌面G/H当前均为9月13日11:20恢复点；之后新增的活动源内容仍要等下一次捕获。完整会话只涵盖该专线选定文件，当前两盘同点不证明新机登录、应用续作或四套工具共享全量历史。",
+    "Codex桌面G/H当前均指向9月18日04:15 UTC恢复点；网页本轮仅核对指针和清单，不重新读取全部对象。之后新增活动源内容仍要等下一次捕获；两盘同点不证明新机登录、应用续作或四套工具共享完整历史。",
     "本轮只读脚本、任务与小元数据；Codex9月7日合成去重/隔离恢复、OpenClaw既有脚本与官方归档/暂存证据保留原日期。没有重新执行生产VSS、完整对象重验、四套工具的新机恢复或登录。",
     "raw_memories 大小保护仅避免较小当前文件覆盖私有仓库的大版本；同等或更大的错误正文仍需人判断，轻量 G 快照保存的是当次源内容。",
     "桌面会话已实现并实际完成两点保留与无引用对象清理；H只保留G有效点引用的集合。大型数据库仍会产生变化对象，有界历史不等于无限历史或零增长。",
@@ -114,11 +114,11 @@ export const codexMemorySnapshot = Object.freeze({
   "hotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\Codex",
   "conversationHotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\CodexConversations",
   "conversationColdRoot": "H:\\80_自动备份区\\ControlPlane\\AIMemory\\CodexConversations\\cold-payload",
-  "currentPointId": "20260913T112054Z-1d51dc2b",
-  "conversationFileCount": 7279,
-  "conversationTotalSizeBytes": 51104813027,
-  "liveSourceFileCount": 7309,
-  "liveSourceTotalSizeBytes": 51399165305,
+  "currentPointId": "20260918T041508Z-8e6dcbc6",
+  "conversationFileCount": 1731,
+  "conversationTotalSizeBytes": 7738969963,
+  "liveSourceFileCount": 1771,
+  "liveSourceTotalSizeBytes": 7840035917,
   "memoryFileCount": 243,
   "memoryTotalSizeBytes": 2656388,
   "scheduledTasks": [
@@ -256,7 +256,7 @@ export const codexMemoryProject = {
     ]
   },
   "repositoryNote": "这是四套现有备份的统一使用说明，保留codex-memory的既有网址。Codex源由独立PRIVATE仓库维护；Gemini、Claude和OpenClaw的现役备份脚本来自PUBLIC OpenClawGateway，它们的载荷仍进入各自私有目标。页面不复制真实记忆、会话、账号、令牌或备份正文；组合展示不迁移或合并源仓库。",
-  "summary": "我在Codex、Gemini、Claude和OpenClaw里积累的设置、项目记忆和工作成果，各有一条适合它的备份与恢复路线。Codex的小文件进入私有Git历史，原始对话、附件与数据库另走G/H会话快照；Gemini保存配置和可读成果，Claude保存项目记忆，OpenClaw保存配置、工作区及独立官方归档。重装、配置改坏或要找回旧工作时，先选对材料和版本，再按那套工具的恢复方式取回。四套范围不同，不承诺全部聊天、登录和运行状态都能一键回来；原来的仓库、任务和数据保持独立。",
+  "summary": "我在Codex、Gemini、Claude和OpenClaw里积累的设置、项目记忆和工作成果，各有一条适合它的备份与恢复路线。Codex的小文件进入私有Git历史，原始对话、附件与数据库另走G/H会话快照；Gemini兼容备份任务保存配置和Antigravity桌面／CLI的轻量可读成果，不启动已退役的Gemini模型命令，Claude保存项目记忆，OpenClaw保存配置、工作区及独立官方归档。重装、配置改坏或要找回旧工作时，先选对材料和版本，再按那套工具的恢复方式取回。四套范围不同，不承诺全部聊天、登录和运行状态都能一键回来；原来的仓库、任务和数据保持独立。",
   "why": "不同AI工具把重要材料放在不同位置。只备份安装包会漏掉记忆和工作成果，整目录无差别复制又会混进缓存、登录与活动数据库。这里把实际保存范围、每层结果和恢复顺序放在一起解释，让我知道手上的副本能恢复什么，哪一部分还需官方登录、重装依赖或应用验证。",
   "plainExample": "我要换电脑，先把AI工作环境里重要的东西找回来。先恢复Codex配置和技能、Gemini项目清单与可读成果、Claude各项目记忆；OpenClaw配置和工作区按原来源分别回填，官方归档先恢复到新暂存目录。需要旧Codex对话时，再把选定会话点还原到空目录。最终逐个确认应用能加载、路径正确、登录有效和工作可继续，不用“文件已复制”代替全部恢复。",
   "result": "得到按工具与时间区分的小型状态版本、G快照、Codex完整会话恢复点，以及OpenClaw官方归档和可检查的暂存副本。每套都说明本地、G、私有Git或H实际完成到哪里，恢复哪些文件、哪些需重新登录或重装，避免拿错版本和混合覆盖现有工作。",
@@ -497,12 +497,12 @@ export const codexMemoryProject = {
     },
     {
       "layer": "任务与生产元数据",
-      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务Ready/enabled/0、四套G元数据及当时H不可用均保留为历史。9月12日05:41Z曾补充当时桌面G/H同点7167文件；2026-09-14新回读原生回执为同点20260913T112054Z-1d51dc2b、7279文件、51104813027字节，Hot/Cold保留均complete；其他三套任务、Git引用及备份观察日期不更新，未读正文。",
+      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务Ready/enabled/0、四套G元数据及当时H不可用均保留为历史。9月12日05:41Z曾补充当时桌面G/H同点7167文件；2026-09-14新回读原生回执为同点20260913T112054Z-1d51dc2b、7279文件、51104813027字节，Hot/Cold保留均complete；其他三套任务、Git引用及备份观察日期不更新，未读正文。 当前指针与清单另见9月18日局部观察；未重验旧任务或全量载荷。",
       "doesNotProve": "未重新哈希全部生产对象，也未检测应用打开恢复内容的结果。"
     },
     {
       "layer": "H原生冷备回执与历史介质观察",
-      "proves": "9月14日只读H原生cold-last：9月13日23:57:45Z complete/readback_verified=true、7279文件/51104813027字节，current与G同为20260913T112054Z-1d51dc2b，H有效点保留2份。9月12日05:41Z介质在场与7167文件旧点只证明当时结果；当前同点由各盘原生回执证明，不从PCConfig总回执推断。",
+      "proves": "9月14日只读H原生cold-last：9月13日23:57:45Z complete/readback_verified=true、7279文件/51104813027字节，current与G同为20260913T112054Z-1d51dc2b，H有效点保留2份。9月12日05:41Z介质在场与7167文件旧点只证明当时结果；该次同点由各盘原生回执证明，不从PCConfig总回执推断。 当前指针与清单另见9月18日局部观察；未重验旧任务或全量载荷。",
       "doesNotProve": "完整对象校验由所属时点原生冷回执报告；网页本轮只回读指针和小元数据，没有重读全部对象，也不证明新机器登录、应用恢复或新回合续作。"
     },
     {
@@ -794,7 +794,7 @@ export const codexMemoryModules = [
     "subtitle": "从各自主机配置绑定的物理卷捕获会话及状态",
     "teaser": "继续使用 Codex，也能形成明确时间的会话备份点",
     "order": 2,
-    "status": "2026-09-14回读G/H同点20260913T112054Z-1d51dc2b，7279文件；G/H各保留2点，当前副本不等于新机应用续作",
+    "status": "9月18日原生G/H同点清单为1731文件；本轮只读指针与清单，完整对象/新机应用恢复不由它代验",
     "statusTone": "accent",
     "relation": "负责原始对话、附件、生成图像和应用状态。桌面与轻量配置分线；次机profile额外纳入选定私有配置、agents、memories和skills，云端安全投影仍独立。",
     "value": "不强制关闭 Codex，从同一卷影副本采集会话数据，并把已校验文件组成一个可恢复点。 同时触发第二次热备时会明确拒绝重复运行；上次卷影清理没有完成时先保留问题，不继续创建更多快照。",
@@ -1131,7 +1131,7 @@ export const codexMemoryModules = [
     "status": "现役脚本、最近任务0和G元数据已读；本轮未做新机恢复",
     "statusTone": "mixed",
     "relation": "这是Gemini自己的文件选择与恢复边界；与Codex会话库、Claude记忆和OpenClaw状态分别保存。",
-    "value": "换电脑或配置改坏后，找回项目清单、配置、注释与可读的任务成果，不必重新靠记忆整理。它会保存文件的原相对位置；原始聊天、数据库和媒体没有被这条备份收进去，缺的部分会明确指出。",
+    "value": "换电脑或配置改坏后，找回Gemini兼容配置及Antigravity桌面和CLI的项目清单、设置、注释与可读成果。原相对位置随副本保存；原始聊天、登录凭据、数据库和缓存不在这条备份里。任务沿用原名，只复制所选状态，不调用退役Gemini模型命令。",
     "why": "可读成果与原始会话不是同一类材料。把配置、笔记和工作输出保存为小文件，便于检查版本与选择性恢复；把全部应用目录当成已备份，会误以为登录和会话也能回来。",
     "example": "我说“把Gemini和Antigravity里保存的项目说明、笔记与设置找回来”。先选本地/G快照或私有Git版本，按原目录关系复制到目标Gemini根，核对项目路径和应用加载；不会声称恢复了不在清单里的旧聊天。",
     "result": "得到projects.json、config与选定Antigravity可读状态的版本副本；恢复后能否被当前应用识别还要现场确认。",
@@ -1147,8 +1147,8 @@ export const codexMemoryModules = [
       "恢复是按原相对路径复制文件，当前没有Gemini专用自动还原器；先保留现有文件，之后重核安装、项目路径、登录与应用结果。"
     ],
     "implementation": [
-      "backup-gemini-memory.ps1从gemini_memory组读取source_root/snapshot_root/hot_snapshot_root/cloud_repo/log_file。Get-GeminiMemoryFiles选projects.json、config/**、antigravity_state.pbtxt、annotations/*.pbtxt，以及brain下*.md和*.metadata.json。",
-      "排除.system_generated、scratch、tmp、history、antigravity/conversations与db/sqlite/sqlite3/mp4/webm/png/jpg/jpeg/pdf/exe/pb后缀；这是一组明确规则，不是任意敏感信息识别器。",
+      "backup-gemini-memory.ps1读取gemini_memory登记路径。db51ae7保留projects.json、config/**及Antigravity桌面状态，同时纳入antigravity-cli/settings.json、annotations/*.pbtxt，以及桌面/CLI各自brain下的*.md和*.metadata.json。不复制整棵CLI目录。",
+      "选择后排除.system_generated、scratch、tmp、history、原始conversations、db/sqlite/sqlite3/jsonl/log及媒体/二进制；CLI cache、crashes、updater、builtin、bin、implicit、presence、knowledge排除。OAuth、credential/creds、token、secret、auth、google_accounts.json和.env类文件名也排除；这是有界选择规则，不是任意敏感内容识别器，真实载荷不进网页。",
       "先Copy-SelectedFiles形成时间戳本地快照，再Publish-GHotSnapshot逐文件核对G；同内容可复用，最多30份。云阶段先检查main/远端状态，再清理专用工作树并从当前来源再次复制选中文件，写README和MANIFEST。",
       "Git按变更提交，仍会无条件核对或补推已有超前提交；最终远端OID一致才报告云完成。云失败抛出异常，已完成本地/G仍保留。"
     ],
@@ -1200,7 +1200,8 @@ export const codexMemoryModules = [
     ],
     "verification": [
       "9月9日22:07Z任务最近05:10:01Z为Ready/enabled/0；22:08Z G元数据127文件、181152字节与实际目录计数/字节一致，completed_utc=05:10:06Z。",
-      "私有Git本地/远端均为e3413caca7edbcf1ba9cf79d004ed26c080dbcbf；未读取正文、重新备份或还原。"
+      "私有Git本地/远端均为e3413caca7edbcf1ba9cf79d004ed26c080dbcbf；未读取正文、重新备份或还原。",
+      "2026-09-18只读已发布OpenClawGateway db51ae7与同次选择回归定义，确认CLI新增范围和秘密/历史排除；本轮未运行新备份或恢复，不能把9月9日G元数据证明扩大到新增CLI文件。",
     ],
     "searchAliases": [
       "Gemini Memory Backup",

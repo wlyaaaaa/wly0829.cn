@@ -85,10 +85,10 @@ test("video-scaffold snapshot separates verified source and environment from an 
   assert.deepEqual(videoScaffoldProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(videoScaffoldProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: videoScaffoldProject, modules: videoScaffoldModules });
-  for (const expected of ["17040edc0a8f5b2a26116e204d1705cb5d6490ed", "33 / 33", "10 / 10", "3840×2160", "60fps", "s2.1-pro-free", "large-v3", "audio_NN.identity.json", "durations.json.identity.json", "file:///", "final_output.mp4", "没有调用 doctor-live", "没有从脚本走到 final_output.mp4"]) {
+  for (const expected of ["84501b04b918c8a9ec1e175b397764bf1af59bf5", "33/33", "10 PASS、1 UNKNOWN", "3840×2160", "60fps", "s2.1-pro-free", "Qwen3-ForcedAligner-0.6B", "audio_NN.identity.json", "durations.json.identity.json", "file:///", "final_output.mp4", "没有调用 doctor-live", "本轮没有制作或打开一条真实内容视频"]) {
     assert.ok(text.includes(expected), `video-scaffold omits current evidence or boundary: ${expected}`);
   }
-  assert.match(text, /环境就绪.*完整视频完成|环境体检.*不是成片/s);
+  assert.match(text, /体检不是成片|本轮没有制作或打开一条真实内容视频/);
   assert.match(text, /不自动.*选题|不替我决定选题/s);
 });
 

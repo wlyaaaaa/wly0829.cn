@@ -92,7 +92,7 @@ test("proxyclean keeps the accepted module routes and three reading layers", asy
 });
 
 test("proxyclean snapshot binds to the published physical route guard repair", () => {
-  assert.equal(proxycleanProject.sourceCommit, "857b1104cb30897da8f755ef2dbb25fbe1eeea69");
+  assert.equal(proxycleanProject.sourceCommit, "be5d3f581b5e0ea53fec87015306ab9d3660efe6");
 });
 
 test("proxyclean explains core safety rules without marketing riddles", () => {
@@ -114,11 +114,11 @@ test("proxyclean explains core safety rules without marketing riddles", () => {
     "HardwareInterface=true",
     "控制面",
     "数据面",
-    "STILL listening",
+    "ExtraProcessName",
     "-Direct",
     "活/远程",
-    "ProxyClean -Quiet",
-    "anyOn => 全部 OFF",
+    "DPAPI",
+    "原值",
     "System Proxy 默认关闭",
     "DNS 覆写默认关闭",
     "多路径"

@@ -44,10 +44,14 @@ test("Steam Millennium overview and every owned module have complete static docu
     assert.ok(!html.includes("/projects/codex-app-power-user-playbook"));
   }
   const overview = await readFile(path.join(root, "dist", project.route.slice(1), "index.html"), "utf8");
-  assert.ok(overview.includes("b51236216dbe815b945cdcb6be6f80adee9fdb10"));
-  assert.ok(overview.includes("17 个与本地快照字节一致"));
-  assert.ok(overview.includes("不是原子事务"));
-  assert.ok(overview.includes("2026.9.7"));
+  assert.ok(overview.includes("5c65e9499b076ba745d9fe9358d7a72bd7cb2151"));
+  assert.match(overview, /20个配置文件/);
+  assert.match(overview, /millennium.snapshot.v2/);
+  assert.match(overview, /多文件事务/);
+  assert.match(overview, /不是整个文件系统/);
+  assert.match(overview, /RestorePlan/);
+  assert.match(overview, /Rollback/);
+  assert.ok(overview.includes("重新安装后的版本和资源必须"));
 });
 
 test("ordinary Steam backup and recovery searches reach this project within the first three results", () => {

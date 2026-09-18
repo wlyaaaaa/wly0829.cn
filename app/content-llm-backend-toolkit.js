@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-07T23:42:50Z",
-  label: "源码与 370 项离线回归通过；本地模型身份匹配，模型生成仍沿用注明日期的历史验收",
-  boundary: "本次核对了源码、全部离线测试和本地 Broker（资源仲裁服务）返回的模型元数据，没有重新调用本地或云端模型。35B 交叉验证的智能体路线，以及 Claude Code、Qwen Code、OpenCode 的现模型路线仍待重验。",
+  observedAt: "2026-09-18T18:23:11Z",
+  label: "可零写入诊断、只读查看和精确取消；当前模型配置不冒充真实任务验收",
+  boundary: "9月18日只读诊断确认0.9.2实际解释器、包来源、注册表与27B端点，没有联网、读任务材料、创建工作单或调用模型。四种本地模型均按当前目录说明；普通configured（已配置）可进入有界预检与调用，但不是端到端合格证，旧三类CLI路线仍待重验。",
   metrics: [
     { label: "默认调用", value: "本地 Qwen3.8 27B" },
     { label: "任务方式", value: "异步提交 · 按需取结果" },
@@ -11,15 +11,15 @@ const baseSnapshot = createProjectSnapshot({
     { label: "工作过程", value: "桌面只读观察台" }
   ],
   facts: [
-    { label: "当前默认模型", value: "local-default 解析到 aicli-qwen3.8-27b-256k:2026-08-14，基座 qwen3.8:27b，Q4_K_M，262144 上下文；默认开启 thinking（推理模式）。本次模型 digest 与登记值一致，Ollama 版本 0.33.1；元数据读取不生成模型回答。" },
-    { label: "任务和资料", value: "submit 建立异步任务，job 读取进展与结果；invoke 也进入同一任务、输入校验和清理链。UTF-8 文本可按路径引用并检索片段，媒体走原生视觉或专项工具，长结果保存在本地制品中。" },
-    { label: "当前路由证据", value: "local-default 的 codex-cli / data_factory 以 2026-08-15 的非平凡 Agent（可使用工具的执行方式）历史回执为基础，对应 AICLI 0.3.12、Codex CLI 0.147.0；本次 status 返回身份匹配的 current。它不是本次重新完成的模型任务，也不把不同 CLI 版本的兼容性自动视为已验证。" },
-    { label: "离线验证", value: "在项目 .venv 下运行完整 unittest：370/370 通过，99.642 秒。覆盖请求、注册表、输入文件、缓存、工作区观察、媒体适配、界面投影和 Windows 启动器；真实云端请求不进入自动化测试。" },
-    { label: "源码身份", value: "PUBLIC wlyaaaaa/llm-backend-toolkit，main：6248a12b7cb562665dea891fe37bb11a6772c268，2026-09-08T00:20:30Z 远端已回读。该源码包含观察台责任与续问输入说明纠错；运行代码仍是本次完成回归的 bec4c6e，本地模型元数据观察时间仍为本页所列时间。" }
+    { label: "当前默认模型", value: "local-default当前为qwen3.8-27b:256k，基座qwen3.8:27b、Q4_K_M、262144上下文、32768输出，默认推理开启；配置digest为8040835723046ec2631b64b960d44414636ea5147942a7d68eaaa7ccdb492e20。9月18日diagnose读取的是目录与实际包来源，identity_verification=not_checked，不把配置摘要冒充运行时权重回读。" },
+    { label: "任务和资料", value: "submit提交、invoke同步等待，均进入同一任务和输入生命周期；jobs分页列元数据，inspect按编号纯只读看状态和显式请求的结果。兼容job可能恢复或清理，cancel按确切运行句柄请求停止，不能把它们都叫只读查询。" },
+    { label: "当前路由证据", value: "当前27B的data_factory/codex-cli以及普通35B、两种去限制版的Codex路线标为configured、live_verified=false、configuration_sync_no_e2e；允许按现有合同有界使用，但没有通用Live声明。Claude/Qwen Code/OpenCode的旧模型路线继续pending_reacceptance。历史成绩、AICLI桌面成功和注册表配置不能互相替代。" },
+    { label: "离线验证", value: "9月7日370/370、99.642秒为原版本历史；AICLI Owner的9月17日联动归档记录隔离候选Unit442/442与Toolkit408/408、真实合成材料读写回读和取消清理。严格JSON任务带额外说明文字时正确返回partial而不缓存。这是具体调用链证据，本网页未重跑来源套件。" },
+    { label: "源码身份", value: "PUBLIC wlyaaaaa/llm-backend-toolkit，main与远端回读e0d005182265f23ffb9286853b18649f3356cce1。实际.venv解释器与src/llm_backend_toolkit包为0.9.2；9月18日诊断规范化目录SHA-256为f573b017a2d16eb3e1d4a00fda51e41a919363e0621d809bdcf9ea044bfc16b6，zero_write=true，network_performed/model_invoked/materials_read/job_created均为false。" }
   ],
   gaps: [
-    "local-crosscheck-35b 的 direct（直接模型调用）路线有实现，但本次未生成回答；其 codex-cli 在 2026-08-21 重新验收时出现 aicli.recovery.capture_exception，仍为 unverified / pending_reacceptance，不可借用 27B 的通过结果。",
-    "local-default 的 Claude Code、Qwen Code、OpenCode 路线，以及两个 reserved（保留但不可选择）的云端 Qwen agent 条目没有当前有效 Agent 验收；已登记并不等于可执行。",
+    "35B当前模型为qwen3.6-35b:256k，Codex路线仅configured/unverified；8月21日旧qwen-main-v1的capture_exception失败仍是历史，不等于当前重新验收。旧README/专题段落未同步动态标签，当前模型与参数按注册表及诊断读取。",
+    "Claude Code、Qwen Code、OpenCode的旧Agent路线仍pending_reacceptance；旧云端Qwen Agent不在可选目录。普通configured允许有界使用但不是模型能力保证，不能与这些明确待验收路线混同。",
     "cloud-qwen-flash、cloud-deepseek-v4-flash 的协议和错误分支使用 mock（替身响应）验证；fast-middle-agent 的 Spark 在 2026-07-29 冻结题上达到 81/80 步后硬停，只得 2/9，保留为显式候选而非自动推荐。本次未验证任何云端额度、凭据、模型输出或延迟。",
     "LocalAsyncWorker 是另一条受控本地工作单 API：start/wait/cancel/result 合同已实现，但初始 configured_unverified；没有完整运行绑定时保持 not_ready。它不是原生子代理，也不与普通 submit 的可用性混为一谈。",
     "本次未打开生产观察台运行一个新模型任务；源码测试和既有历史页面验收不能证明当前任务栏图标、整场真实多轮表现或所有设备状态。",
@@ -30,12 +30,12 @@ const baseSnapshot = createProjectSnapshot({
 export const llmBackendToolkitSnapshot = Object.freeze({
   ...baseSnapshot,
   generation: "异步额外模型工具 · 显式后端 · 可查阅结果",
-  sourceCommit: "6248a12b7cb562665dea891fe37bb11a6772c268",
+  sourceCommit: "e0d005182265f23ffb9286853b18649f3356cce1",
   sourceRoot: "V:\\Personal\\Projects\\llm-backend-toolkit",
   runtimeFacts: {
-    pythonTestsPassed: 370, pythonTestsFailed: 0,
-    model: "aicli-qwen3.8-27b-256k:2026-08-14", parentModel: "qwen3.8:27b",
-    modelDigest: "e200453f7eea321eab068edbc22c5d38a384a162e46c30ed266c62f0388c4723",
+    pythonTestsPassed: 408, pythonTestsFailed: 0,
+    model: "qwen3.8-27b:256k", parentModel: "qwen3.8:27b",
+    modelDigest: "8040835723046ec2631b64b960d44414636ea5147942a7d68eaaa7ccdb492e20",
     contextWindowTokens: 262144, ollamaVersion: "0.33.1",
     liveCallPerformed: false, defaultPolicy: "danger-full-access", watchdogTimeoutSeconds: 900,
     gpuBrokerEndpoint: "http://127.0.0.1:32100"
@@ -47,17 +47,17 @@ export const llmBackendToolkitProject = {
   order: 24, slug: "llm-backend-toolkit", title: "LLM Backend Toolkit",
   kicker: "把一件明确的工作交给另一个模型，完成后拿回结果",
   route: "/projects/llm-backend-toolkit", visibility: "公开仓库",
-  statusTone: "mixed", cardStatus: "异步调用与观察台可用；部分模型路线待重验", cardStatusTone: "mixed",
+  statusTone: "mixed", cardStatus: "支持零写入诊断与精确取消；配置和真实任务验收分开", cardStatusTone: "mixed",
   ...llmBackendToolkitSnapshot,
   summary: "我正在和主 AI 处理一件事，其中一小部分适合交给本地模型：整理一份长材料、清洗一批虚构数据，或在指定目录里尝试修复代码。这个工具负责把那部分工作交出去、保存输入和进度，完成后把结果与核对依据交回来。主 AI 可以同时继续别的工作，仍由它判断结果是否可用。",
   why: "直接把所有材料塞进主对话会挤占上下文；另开一个模型窗口又容易忘记它用了什么资料、是否真的完成。这里保留明确的任务编号、输入依据、结果和失败原因，让额外模型承担一件可验收的事。它自己不决定总目标，也不会因为某个模型不可用就偷偷换一个。",
   plainExample: "帮我从这份几十页的公开技术说明中找出升级步骤和失败后的恢复办法，给我一张带原文位置的表。主 AI 选好资料和模型后提交任务，先继续做其他部分；稍后取回表格、引用行号、输入摘要和文件位置。模型失败会返回具体原因，主 AI 再决定修正请求、重试或亲自处理。",
-  result: "得到可继续使用的短结果、必要时可打开的完整本地文件，以及说明模型、资料、压缩和执行情况的回执。桌面观察台能展示经筛选的公开工作进度；它不是一个能输入指令、暂停任务或代替主 AI 验收的聊天窗口。",
+  result: "得到短结果、可打开的完整本地文件和模型/输入/执行回执。只看状态可用纯只读入口，确需停止可通过命令请求精确取消，等进程树和GPU释放才算完成。桌面观察台仍只展示公开工作进度，不新增输入、停止或审批按钮，也不代替主AI验收。",
   repositoryNote: "公开仓库包含工具代码、协议、虚构样例和非敏感验收说明。真实任务、输入副本、结果、媒体、提示词和凭据留在各自本地或获准提供方，不进入本网站。明确允许云端时，所选内容会发送到该提供方，不能宣称所有调用都不出本机。",
   readerStates: {
     pass: "所选模型和资料符合请求，任务完成并留下结果；主 AI 取回结果后仍要核对它是否回答了原问题。",
     problem: "模型输出不符、文件变动、额度不足或运行超时会保留对应错误与已存在的依据；不会冒充成功，也不会自动换模型。",
-    unavailable: "路线尚未验收、GPU 被占用、缺少凭据或未允许云端传输时，给出具体不可用原因；调用者决定下一步。"
+    unavailable: "明确待重新验收的路线、缺少凭据、GPU不可用或没有真实云端许可时，返回该项原因。普通configured只说明可按合同有界调用，不证明任务能成功；调用者继续验收。"
   },
   dataSources: {
     title: "它实际读取什么，又把什么交回来",
@@ -66,7 +66,7 @@ export const llmBackendToolkitProject = {
       { source: "本次请求与 UTF-8 文本文件", data: "任务目标、限制、固定保留的文字、选中文件及可选的 SHA-256 和字节数。", result: "挑出相关片段，记录源文件摘要与行号；整理过的输入交给明确选定的后端。" },
       { source: "选中的图片或音频", data: "一般图片、需要精确文字的扫描件，或指定录音。", result: "按选择使用模型原生视觉、LocalOCR 或 ChineseASR；专项识别结果用于本次后续处理，原始私人内容不进入公开观察事件。" },
       { source: "后端注册表与 AICLI", data: "模型、端点、Profile（调用配置）、权限、时间预算与有效验收身份。", result: "决定这一条请求能走哪条已实现路线；缺证据时返回限制，不推断其他路线可用。" },
-      { source: "受管任务与提供方通知", data: "生命周期、公开答复、实际存在的用量、工具活动和上下文配对数值。", result: "供 job 查询和观察台显示；累计用量、当前上下文和输入整理估算分别说明。" }
+      { source: "受管任务与提供方通知", data: "生命周期、公开答复、实际存在的用量、工具活动和上下文配对数值。", result: "供jobs/inspect纯只读查询和观察台显示；兼容job的维护效果另行说明。累计用量、当前上下文和输入整理估算分别报告。" }
     ]
   },
   productPrinciples: [
@@ -79,11 +79,11 @@ export const llmBackendToolkitProject = {
     { title: "划清这一件工作", detail: "主 AI 给出问题、输入、限制、期望结果，选择本地或已明确允许的云端路线。" },
     { title: "提交后继续其他事", detail: "submit 返回 job_id；需要同步等待的旧调用可用 invoke，两者进入同一套受管生命周期。" },
     { title: "固定本次输入并处理资料", detail: "worker（后台执行进程）捕获外部文件，校验声明，整理文本或调用专项媒体工具，再让所选模型处理。" },
-    { title: "取回结果并核对", detail: "job --result 返回终态、短结果和回执；需要完整文件再取 --full-result。可明确续问，也可拒绝这个结果。" }
+    { title: "取回结果并核对", detail: "只看进展用inspect --id，取结果加--result；需要完整输出时用原有job --full-result并明确它可能维护状态。取消走cancel --id，必须等清理确认，不能把受理当作完成。" }
   ],
   usageExamples: [
     { ask: "这件工作用哪个模型？失败时别替我换。", effect: "按注册表选定后端；错误只返回可采取的选项。", moduleSlug: "versioned-backend-registry-routing" },
-    { ask: "把这份资料交给本地模型，做好了我再来取。", effect: "取得任务编号，随后按需查看结果；文件和缓存身份能对应到这次输入。", moduleSlug: "asynchronous-jobs-and-spool-integrity" },
+    { ask: "把这份资料交给本地模型，做好了我再来取。", effect: "取得任务编号后用inspect只读看状态，需要时显式取结果；改变主意可请求cancel，但只有对应执行和显卡租约确认释放才算停止。", moduleSlug: "asynchronous-jobs-and-spool-integrity" },
     { ask: "材料太长，只找和恢复步骤有关的段落；然后接着问一次。", effect: "选取有行号的片段，保留指定文字；续问携带前轮任务编号、结果状态与短预览，不自动附带完整回执。", moduleSlug: "context-sources-and-portable-continuation" },
     { ask: "在这个目录里尝试修复代码，最后把测试结果交回来。", effect: "通过明确的 AICLI 智能体配置运行，权限和时间预算随请求记录。", moduleSlug: "data-factory-agent-execution" },
     { ask: "这份受控本地工作单能开始或取消了吗？", effect: "LocalAsyncWorker 先核对完整绑定；未取得运行证明时保持未就绪，取消也要确认进程树结束和 GPU 释放。", moduleSlug: "data-factory-agent-execution" },
@@ -106,17 +106,17 @@ export const llmBackendToolkitProject = {
     { artifact: "Agent 验收", schema: "aicli.agent.acceptance-receipt.v1", owner: "AICLI", boundary: "Profile 指纹、模型 artifact、运行身份、非平凡任务与独立 verifier（结果检查器）必须对应；换模型不能继承旧证据。" }
   ],
   evidenceLayers: [
-    { layer: "本次源码与 370 项离线测试", proves: "当前受控场景下的请求、路由、文件生命周期和观察台行为通过回归。", doesNotProve: "没有新模型回答，不证明云端额度、外部服务所有状态或用户当前窗口。" },
-    { layer: "本次本地元数据回读", proves: "Broker 可回应、未占用；Ollama 0.33.1 和 27B 模型 digest 与登记值匹配。", doesNotProve: "不会产生回答，也不等于用当前 CLI 再做了一轮智能体任务。" },
+    { layer: "来源回归与具体联动任务", proves: "9月7日370项旧回归与9月17日Owner408项Toolkit隔离候选回归分别留证；具体合成材料读写与取消验证不扩张为全部模型通用能力。", doesNotProve: "没有新模型回答，不证明云端额度、外部服务所有状态或用户当前窗口。" },
+    { layer: "9月18日零写入运行诊断", proves: "0.9.2实际解释器、包、规范化注册表、当前27B/32100配置和configured状态一致；没有联网或读取任务材料。", doesNotProve: "未检查运行时权重、启动模型、创建工作单或提供方回答；不能据此写成GPU空闲、当前任务已完成或全部路线Live通过。" },
     { layer: "注明日期的历史模型与页面验收", proves: "对应模型、CLI、工作单和结果曾通过；观察台已有真实事件/页面验收。", doesNotProve: "不能推广到新版本、35B 或未登记路线；历史搜索调用成功不等于上游返回了有效搜索结果。" }
   ],
   responsibilities: ["接收明确的有界任务并返回可核对结果。", "维护已有模型路线、输入整理、任务和观察台。", "由 AICLI 拥有原生执行，LocalGpuBroker 拥有 GPU，OCR/ASR 项目拥有专项识别。"],
   exclusions: ["不自主制定长期目标，不替主 AI 作最终验收。", "不自动换模型、绕开 Broker 或传送未获准的云端内容。", "不捕获直接运行的 Codex、AICLI 或第三方客户端的全局历史。", "不把原始私人任务、隐藏推理、识别正文或密钥发布到网站。"],
   operationalEntrypoints: [
     { name: "列出模型路线", command: "llm-backend-toolkit backends", purpose: "读取注册表元数据，不生成回答。" },
-    { name: "检查默认模型", command: "llm-backend-toolkit status", purpose: "回读所选后端的安全状态，不生成回答。" },
+    { name: "零写入检查有效入口", command: "llm-backend-toolkit diagnose --backend local-default", purpose: "只读配置、包与接口事实，不联网、不读任务材料、不创建任务或生成回答；status另用于后端的有界现场状态。" },
     { name: "提交任务", command: "llm-backend-toolkit submit --request request.json", purpose: "立即返回编号；--force 明确创建新尝试。" },
-    { name: "取回结果", command: "llm-backend-toolkit job --id <job_id> --result", purpose: "需要完整内容时改用 --full-result。" },
+    { name: "取回结果", command: "llm-backend-toolkit inspect --id <job_id> --result", purpose: "显式纯只读查看本次结果；jobs --limit 50支持返回游标分页，cancel --id请求停止。旧job --full-result仍支持完整输出，但job不是纯只读维护入口。" },
     { name: "打开观察台", command: "pwsh -NoProfile -File scripts/Start-LlmBackendObserver.ps1", purpose: "打开已有只读本机窗口；正式 Skill 在提交前确保观察入口可用。" },
     { name: "移除观察台入口", command: "pwsh -NoProfile -File scripts/Install-LlmBackendObserverShortcut.ps1 -Remove", purpose: "仅删除能证明属于本项目的桌面和开始菜单快捷方式。" }
   ],
@@ -140,7 +140,7 @@ export const llmBackendToolkitModules = [
   {
     id: "versioned-backend-registry-routing", slug: "versioned-backend-registry-routing", order: 1,
     title: "模型选择、配置与证据", shortTitle: "模型与路线", route: "/projects/llm-backend-toolkit/versioned-backend-registry-routing",
-    teaser: "明确用谁、数据去哪里，失败后由调用者决定", kicker: "选择模型", status: "默认身份匹配；部分路线待重验", statusTone: "pass",
+    teaser: "明确用谁、数据去哪里，失败后由调用者决定", kicker: "选择模型", status: "当前四模型目录与零写入诊断闭合；Live单列", statusTone: "pass",
     value: "把模型名字、提供方和执行路线写清，防止换了模型却沿用旧结论。",
     why: "同一个简称可能指向不同模型；某个直接 API 能回答，也不代表它能在 CLI 中调用工具。注册表分别描述这些事实。",
     example: "我想让本地模型处理一份说明，但不能传到云上。省略 backend 就走 local-default；若本地不可用，返回原因，不自动改投云端。",
@@ -150,41 +150,43 @@ export const llmBackendToolkitModules = [
     decisionImpact: ["默认只解析注册表 default_backend，本地 direct 不等于已验收 Agent。", "云端请求必须额外带 privacy.cloud_allowed=true；失败不自动 fallback。", "35B 是显式交叉验证，不进入默认或兜底选择。"],
     implementation: [
       "default_backends.json 使用 llm-backend-toolkit.backends.v1；LLM_TOOLKIT_BACKEND_REGISTRY 可指定机器注册表。alias、backend、adapter、model、route、runner 和 AICLI Profile 分开。",
-      "local-default 与 local-hard-reasoning 均为 aicli-qwen3.8-27b-256k:2026-08-14；后者要求 reasoning.mode=on。参数为 temperature 0.6、top_p 0.95、top_k 20、min_p 0、presence_penalty 0、repeat_penalty 1、num_ctx 262144、num_predict 32768。",
-      "请求 alias qwen-main-v1 指向 27B local-default；local-crosscheck-35b / qwen-crosscheck-35b 才选模型名为 qwen-main-v1 的 Qwen3.6 35B。两个命名层不能混用。",
-      "fast-middle-agent 精确绑定 codex-spark-xhigh / gpt-5.3-codex-spark / xhigh。2026-07-29 冻结代码修复题达到 81/80 步硬停、2/9，只保留显式候选，不作自动推荐；选择时须明确 backend 与 cloud_allowed。cloud-qwen-flash 使用 qwen3.7-flash，cloud-deepseek-v4-flash 使用 deepseek-v4-flash，两者 direct-only（仅直接 API 调用）。",
-      "云端 openai-chat 只用 HTTPS，密钥以环境变量名引用。reasoning_request 以 JSON 路径配置 enable_thinking 或 thinking.type；隐藏 reasoning_content 在提供方边界丢弃。"
+      "local-default/current hard-reasoning使用qwen3.8-27b:256k；后者是要求reasoning.mode=on的隐藏兼容入口。27B参数temperature=1、top_p=.95、top_k=20、min_p=0、presence_penalty=0、repeat_penalty=1、num_ctx=262144、num_predict=32768。",
+      "请求alias qwen-main-v1仍指向27B local-default；显式local-crosscheck-35b/qwen-crosscheck-35b选择qwen3.6-35b:256k。35B temperature=1、presence_penalty=1.5，其余top_p=.95/top_k20/min_p0/repeat1/262144/32768；不能从旧README中的qwen-main-v1模型标签和.6参数恢复当前事实。",
+      "fast-middle-agent固定codex-spark-xhigh/gpt-5.3-codex-spark/xhigh，7月29日旧冻结题81/80步硬停、2/9仍是历史。cloud-qwen-flash使用qwen3.7-flash；cloud-deepseek-v4-flash保留兼容backend ID，但当前模型是deepseek-flash、支持图像，两者没有已激活Agent路线，不自动回退。",
+      "云端openai-chat只用HTTPS和调用进程环境中的密钥引用；privacy.cloud_allowed必须是真正布尔true，先于读取材料检查。拒绝重定向，凭据不改投；本地传输不继承HTTP代理或任意远程端点覆盖。requested、reported、independently verified模型分开，缺报告为null；无法精确匹配的direct答案不作成功缓存。",
+      "显式local-qwen3-6-35b-abliterated与local-qwen3-8-27b-abliterated分别使用同名:256k模型，均非fallback，前者无视觉、后者有视觉；35B参数同普通35B，27B参数同普通27B。相应Codex Profile和配置摘要由当前backends给出，configured/unverified不意味着重新获得Live证明。",
     ],
     flow: ["解析请求和 alias", "读注册表与本地/云端边界", "Agent 路线匹配精确证据", "调用指定 adapter 或返回具体错误"],
     concepts: [{ term: "没有 fallback", explanation: "调用失败不自动换供应商、模型或数据去向。" }, { term: "精确证据", explanation: "一次历史成功只属于对应模型、Profile、CLI 和验证任务。" }],
-    boundaries: ["35B 的 codex-cli 与现模型的三个旧 runner 待重验。", "云端 mock、凭据存在和真实模型回答各自独立。"],
+    boundaries: ["四模型的Codex配置允许按合同预检和有界使用，但不声明通用Live；三个旧CLI路线仍待重验。35B是显式交叉选择，不参与默认或fallback。", "云端 mock、凭据存在和真实模型回答各自独立。"],
     failures: [{ condition: "billing_unavailable、限流或 GPU 占用", response: "返回选项，调用方决定重试或接管。" }, { condition: "backend / Agent 证据不匹配", response: "在调用前拒绝，不借其他模型回执。" }],
     sources: [{ path: "src/llm_backend_toolkit/default_backends.json", role: "可选择模型及证据" }, { path: "src/llm_backend_toolkit/backends.py", role: "解析与校验" }, { path: "docs/local-crosscheck-35b.md", role: "35B 的失败与边界" }],
-    verification: ["本次 status 回读 27B digest、Ollama 0.33.1 与空闲 Broker；live_call_performed=false。", "注册表与提供方测试包含完整 370 项回归。"],
+    verification: ["9月18日18:23:11Z diagnose读取当前0.9.2与目录配置，network_performed=false、model_invoked=false；没有把8月或9月7日的元数据读数晋升为今天的运行时权重证明。", "注册表与提供方测试包含完整 370 项回归。"],
     relation: "后续所有文本、媒体和 Agent 任务共用这次明确选择。",
     searchProjection: { intents: ["本地模型不可用时别改投云端", "35B交叉验证是否能使用工具"], entities: ["local-default", "local-hard-reasoning", "local-crosscheck-35b", "fast-middle-agent", "cloud-qwen-flash", "cloud-deepseek-v4-flash"], relations: ["注册表绑定模型与路线验收"], failureRecovery: ["模型身份变化使旧回执失效", "欠费不自动降级"] }
   },
   {
     id: "asynchronous-jobs-and-spool-integrity", slug: "asynchronous-jobs-and-spool-integrity", order: 2,
     title: "异步任务、输入与结果保存", shortTitle: "任务与输入", route: "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity",
-    teaser: "提交后可以离开；结果仍能对应这次资料", kicker: "任务生命周期", status: "离线回归通过", statusTone: "pass",
-    value: "保存任务编号、当次输入、进展和结果，让主 AI 不必一直等着。",
+    teaser: "可以交出去、只读看进展，也能准确要求停止", kicker: "任务生命周期", status: "离线回归通过", statusTone: "pass",
+    value: "保存任务编号、当次输入、进展和结果，让主AI不必一直等待；回来看状态不会顺手改掉任务，改变主意则用确切运行身份请求停止。",
     why: "提交以后原文件可能被修改，旧结果也可能误当成新结果；执行进程若已死，还需要明确结束并清掉当次临时输入。",
-    example: "我把一个文本文件交给模型，继续整理另一个项目。回来后按编号取结果；若交接期间原文件变化，工具会先报输入不一致，不给出基于另一份材料的成功结果。",
-    result: "拿到可核对的任务终态、短结果和完整文件位置；失败、取消、输入清理各有记录。",
+    example: "我把一份公开说明交给模型后先做另一件事；回来只看进展，不想触发清理。需要中止时明确说“停止这一个任务”，工具发出请求并检查进程和显卡释放；未确认时会如实显示仍待清理，不让我误以为可以安全重跑。",
+    result: "拿到可核对的终态、短结果和完整文件位置，或只读任务元数据。取消受理、进程树结束、GPU租约释放各有独立结果；cleanup_unconfirmed时保留必要句柄和证据。",
     problem: "超期任务会停止建议轮询；只有确认 worker 已死亡才回收，不能因为一段时间没输出就误清活任务。",
     readerStates: { pass: "工作完成且结果、输入摘要和清理记录对应。", problem: "输入有变化或执行失败，保留原因，结果不进入成功缓存。", unavailable: "无法证明进程已死或输入绑定不成立时，不冒险清理或继续调用。" },
     decisionImpact: ["submit 异步返回；invoke 也走受管任务，只是调用方等待结果。", "要求结构化结果时，工具会指出空答复、JSON 格式错误或缺少指定字段；检查通过仍不证明内容正确，主 AI 继续验收。", "未提供文件声明的旧请求仍可捕获执行，但标为未验证，不当成缓存命中依据。", "明确需要重跑时 submit --force，不把旧结果包装成一次新执行。"],
     implementation: [
-      "JobStore 在本地保存请求、lease、状态、事件、结果及 artifact（完整结果文件）。worker 记录 PID 与创建身份；get / cleanup_inputs 只有确认其死亡才原子结束任务并清理 spool。",
+      "JobStore保存请求、lease（执行记录）、状态、事件和完整结果。新jobs/inspect不创建目录、不变更计数、不恢复死worker、不清输入，也不启动观察台；列表只含有界元数据，结果需显式请求，损坏单条不会掩盖其他记录。兼容get/job/cleanup_inputs才可能确认死亡并维护状态。",
       "expected_sha256 与 expected_bytes 必须成对。流式复制时检查原件读取期间变化、摘要、长度和副本回读；Windows 从创建副本起持有 FILE_SHARE_READ 句柄，贯穿实际消费，并验证 canonical containment（规范路径包含关系）。",
-      "缺声明的引用标记 captured_unverified / spooled_unverified；带声明却缺平台等价不可变绑定时拒绝执行。终态清除输入副本与 prepared request，留清理回执；Python JobStore.cancel / cleanup_inputs 是现有精确入口。",
+      "缺声明的引用继续标记captured_unverified/spooled_unverified；带声明却缺平台等价不可变绑定时拒绝。终态清理本次spool与prepared request并留回执；活动取消先保留精确AICLI运行句柄，清理未证时不得销毁恢复所需依据。",
       "无外部引用的相同请求默认复用成功结果；workspace / source / media 默认不缓存。execution.cache_key 仅由调用方提供真实内容与派生版本身份，仍绑定已解析 backend、model、route/profile、privacy、reasoning、媒体和输出协议。",
       "v2 只公开 caller_cache_key_hash，使用 stdlib-json-sort-compact-utf8-v1 规范化；v1 历史仍能按 ID 查询，但不成为新缓存证明。失败和取消不命中。长结果只回短预览与 hash，--full-result 可取完整输出。",
       "Toolkit._check_output 核对 nonempty_output；请求 JSON 时继续核对 valid_json 与 required_keys。返回这些确定性检查，不证明答案事实正确、内容完整或代码符合用户目标，仍需调用者验收。",
-      "recommended_check_utc 和 monitor_until_utc 提供建议时机；过早查询后退避。stale 是需要上层判断的超期状态，不自动换模型或永久等待。"
+      "recommended_check_utc和monitor_until_utc给出建议时机，兼容job仍可维护轮询计数；所有计数更新在同一任务锁下重读，不能把较旧状态覆盖成已终止任务。纯只读jobs/inspect不变更这些计数。stale不自动换模型，也不要求永久等待。",
+      "cancel --id使用模型执行前已经写入的不可变aicli.run-control.v1，固定同一已验证AICLI入口和确切run id发送一次run abort。accepted只表示请求送达；完整进程树清理与GPU会话释放后才终止。模型身份产生前的取消保留not_observed_cancelled/null模型，清理通过不等于模型验收通过；旧runner/direct调用继续协作到真实结束，不另建守护服务。",
     ],
-    flow: ["建立任务编号", "认领执行并固定输入", "完成模型/专项处理", "保存结果与回执", "清理本次输入并等待调用方取回"],
+    flow: ["建立任务编号", "认领执行并固定输入", "完成模型/专项处理", "保存结果与回执", "结束后保存清理证据并取回结果；中途取消必须另核对准确执行已经停止。"],
     concepts: [{ term: "输入声明", explanation: "我明确指定文件的摘要与字节数，工具在真正消费前核对。" }, { term: "结果缓存", explanation: "只在真实内容和模型等条件相同且允许复用时，返回既有成功结果。" }],
     boundaries: ["本地任务材料不进入 PUBLIC Git 或网站。", "文件锁和校验不代表整个工作区属于该 worker 独占。"],
     failures: [{ condition: "输入摘要、长度或路径不对应", response: "在 provider 消费和发布结果缓存前失败。" }, { condition: "worker 死亡", response: "确认进程身份后结束任务，清掉私有输入并留下清理记录。" }],
@@ -210,28 +212,28 @@ export const llmBackendToolkitModules = [
     boundaries: ["不提供无限会话或长期隐式记忆。", "估算节省量不等于 Codex 账单节省量。"],
     failures: [{ condition: "来源读取或格式失败", response: "返回明确错误，改由对应读取器处理后再提供文本。" }, { condition: "续问轮数超限", response: "停止，由主 AI 决定是否形成新的有界任务。" }],
     sources: [{ path: "src/llm_backend_toolkit/context.py", role: "确定性整理" }, { path: "src/llm_backend_toolkit/sources.py", role: "文本片段与出处" }, { path: "src/llm_backend_toolkit/jobs.py", role: "续问链与交付回执" }],
-    verification: ["test_context、test_sources 和 test_jobs 的相关行为纳入本次 370 项回归。"],
+    verification: ["9月7日370项旧回归包含context、sources和续问；当前诊断不重跑模型任务，仍明确有损整理与已读片段边界。"],
     relation: "位于输入固定之后、模型调用之前；续问则使用前轮已完成结果。",
     searchProjection: { intents: ["材料太长只读相关段落", "模型回答后再继续问一次", "保留不能删除的要求"], entities: ["context.pinned", "target_tokens", "top_k", "max_chars", "continuation", "max_turns"], relations: ["文本片段携带行号，续问携带短结果"], failureRecovery: ["有损整理明确披露", "格式不支持不猜原文", "超过轮数停止"] }
   },
   {
     id: "data-factory-agent-execution", slug: "data-factory-agent-execution", order: 4,
     title: "有工具的智能体执行", shortTitle: "智能体执行", route: "/projects/llm-backend-toolkit/data-factory-agent-execution",
-    teaser: "让指定模型在明确目录中做事，再检查产物", kicker: "AICLI 执行路线", status: "精确默认路线有历史验收", statusTone: "pass",
+    teaser: "让指定模型在明确目录中做事，再检查产物", kicker: "AICLI 执行路线", status: "当前精确配置允许有界使用；模型Live与受控工作单另验", statusTone: "pass",
     value: "需要读写文件、运行命令时，使用已有原生 CLI，而不是把一次文本回答当工程完成。",
     why: "能返回一段文字和能做完一个有工具的任务是两种能力；后者必须同时检查模型、执行路线、工具活动、产物和清理。",
     example: "在这个练习目录里修好区间合并函数，运行现有测试，报告修改与仍失败的情况。主 AI 指定工作区和权限，data_factory 按登记的 Codex CLI 配置执行。",
     result: "普通 Agent 返回产物、执行回执和验证结果；主 AI 仍检查功能是否符合原任务。另一条 LocalAsyncWorker（受控本地工作单）入口还需完整运行绑定，不能把普通 Agent 的权限或历史成功直接套过去。",
     problem: "超时、协议字段不完整或旧模型证据不能对应当前配置时，会失败而非降到普通聊天或其他 CLI。",
     readerStates: { pass: "精确路线完成任务，验证与清理都能对应。", problem: "产物可能有用但执行/验证未完成时标注 partial（未完成）。", unavailable: "缺受管入口、配置或验收时，在模型启动前拒绝。" },
-    decisionImpact: ["普通 Agent 默认 execution.policy=danger-full-access，只限已授权可信任务；可显式收窄 read-only / workspace-write。", "普通 Agent 默认 watchdog_only、900 秒，不加默认步数/工具次数上限；bounded 才接受显式硬上限。", "completion_driven 的旧输入仍识别，但当前 AICLI 未声明可续期 idle lease 时提前拒绝，不静默改模式。", "LocalAsyncWorker 只使用隔离 workspace-write 根，提供 start / wait / cancel / result；它不是原生子代理，不继承最高权限或再次委派。", "如果受控工作单没有完整的运行身份证明，就返回 configured_unverified / not_ready。取消必须确认进程树结束且 GPU 租约释放，否则保持 cleanup_unconfirmed，不能伪造 CANCELLED。"],
-    implementation: ["agent_runners.py 通过 LLM_TOOLKIT_AICLI_ENTRY 固定受管入口；正式 Skill 不会因该入口丢失改用旧安装态。", "data_factory 和 codex-cli 默认绑定 codex-ollama-qwen3-8-27b 与精确 artifact；worker-contract 区分非原生工具句柄、运行证明和最终结果。", "受管 Codex 可通过 AICLI 的 public_web_search 使用真实搜索工具；观察台只消费安全 lifecycle，搜索工具调用不等于获得有效结果。", "数据工厂与通用基准使用独立、不可写入候选工作区的 verifier；CLI 完成、产物通过、稳定性与压力测试分别记录。", "LocalAsyncWorker.start 强制 fresh_execution=true / force=true，禁止 cache key。接受 legacy local-default→data_factory→codex-cli，或运行时精确解析的非云 benchmark_only backend；后者网络禁止、搜索关闭、固定 7200 秒 watchdog，均无 fallback。", "受控工作单的 requested binding 涵盖模型/配置/digest、AICLI 与事件协议、工具来源、独占 GPU 租约、沙箱、任务/工作区、检查器和预算。初始 configured_unverified；只有运行期同时提供上下文与保留输出等 observed binding 才可 eligible_after_runtime_proof。result 只读终态，缺字段返回 local_worker_binding_incomplete。", "wait 是建议时机后的一次有界查询，不是循环监视。cancel 依赖宿主注入的 controlled_bridge，须返回 process_tree.confirmed_absent 和 gpu_lease.released；请求本身不能注入取消命令。当前合同和取消桥不等于通用生产适配已就绪。"],
+    decisionImpact: ["按runner_capabilities选择真实权限：Codex程序化入口为danger-full-access，其他CLI使用其声明的workspace-write或read-only；权限宽度不扩大用户授权。", "普通 Agent 默认 watchdog_only、900 秒，不加默认步数/工具次数上限；bounded 才接受显式硬上限。", "completion_driven 的旧输入仍识别，但当前 AICLI 未声明可续期 idle lease 时提前拒绝，不静默改模式。", "LocalAsyncWorker 只使用隔离 workspace-write 根，提供 start / wait / cancel / result；它不是原生子代理，不继承最高权限或再次委派。", "如果受控工作单没有完整的运行身份证明，就返回 configured_unverified / not_ready。取消必须确认进程树结束且 GPU 租约释放，否则保持 cleanup_unconfirmed，不能伪造 CANCELLED。"],
+    implementation: ["agent_runners.py通过调用者的LLM_TOOLKIT_AICLI_ENTRY固定受管入口；preflight用真实参数解析器与能力声明核对请求，不创建任务或读材料。可显式比较另一个安装入口，但比较不允许fallback。", "data_factory/codex-cli当前绑定codex-ollama-main与qwen3.8-27b:256k。configured允许按当前接口预检后有界运行，但没有自动继承旧0.3.12/2026-08-14模型Live；worker-contract仍是另一条非原生工作单证明合同。", "受管 Codex 可通过 AICLI 的 public_web_search 使用真实搜索工具；观察台只消费安全 lifecycle，搜索工具调用不等于获得有效结果。", "数据工厂与通用基准使用独立、不可写入候选工作区的 verifier；CLI 完成、产物通过、稳定性与压力测试分别记录。", "LocalAsyncWorker.start 强制 fresh_execution=true / force=true，禁止 cache key。接受 legacy local-default→data_factory→codex-cli，或运行时精确解析的非云 benchmark_only backend；后者网络禁止、搜索关闭、固定 7200 秒 watchdog，均无 fallback。", "受控工作单的 requested binding 涵盖模型/配置/digest、AICLI 与事件协议、工具来源、独占 GPU 租约、沙箱、任务/工作区、检查器和预算。初始 configured_unverified；只有运行期同时提供上下文与保留输出等 observed binding 才可 eligible_after_runtime_proof。result 只读终态，缺字段返回 local_worker_binding_incomplete。", "wait 是建议时机后的一次有界查询，不是循环监视。cancel 依赖宿主注入的 controlled_bridge，须返回 process_tree.confirmed_absent 和 gpu_lease.released；请求本身不能注入取消命令。当前合同和取消桥不等于通用生产适配已就绪。"],
     flow: ["选择已有 Agent route", "绑定工作区、权限与时间预算", "由原生 CLI 完成工具活动", "核验结果、运行身份与清理"],
     concepts: [{ term: "Harness（执行环境）", explanation: "为模型提供原生工具、权限和会话运行方式的 CLI 环境。" }, { term: "权限不等于目标", explanation: "能写目录外文件并不允许自行扩大用户交给它的任务。" }],
     boundaries: ["当前可选择路线依注册表和精确证据判断，不按 CLI 安装清单猜可用。", "历史成功不证明新版本兼容。"],
     failures: [{ condition: "AICLI 入口不存在或 receipt 不符", response: "调用前关闭该路线。" }, { condition: "预算或原生协议失败", response: "返回具体状态和已有产物，不升格为已完成。" }],
     sources: [{ path: "src/llm_backend_toolkit/agent_runners.py", role: "已有 CLI 的窄适配" }, { path: "docs/agent-data-factory.md", role: "数据工厂任务" }, { path: "docs/aicli-agent-acceptance-contract.md", role: "精确验收" }, { path: "docs/local-async-worker-contract.md", role: "工作单" }],
-    verification: ["本次离线 agent/worker/预算测试通过；没有启动新模型 benchmark。"],
+    verification: ["9月17日Owner联动归档记录真实合成文件读写回读、正常结束和取消清理；这不把当前注册表configured写成通用模型能力通过，也不证明LocalAsyncWorker全部绑定。"],
     relation: "调用身份由注册表拥有，结果进入同一 JobStore 和观察台。",
     searchProjection: { intents: ["让本地模型修代码并运行测试", "智能体默认能写哪些目录", "任务超时该怎么办"], entities: ["AICLI", "data_factory", "codex-cli", "watchdog_only", "danger-full-access", "worker_contract"], relations: ["Profile模型验证对应产物"], failureRecovery: ["旧入口不自动回落", "超时不冒充完成"] }
   },
@@ -246,7 +248,7 @@ export const llmBackendToolkitModules = [
     problem: "专项失败或模型不支持该输入时返回原因，不把文件路径当成模型已经看过文件。",
     readerStates: { pass: "所选路线完成识别或原生附件传递，结果继续用于任务。", problem: "识别存在不确定内容时保留专项说明，不能猜数字。", unavailable: "入口缺失、视觉不支持或 GPU 不可用时停止该阶段。" },
     decisionImpact: ["native 走模型视觉，specialist 走专项工具；auto 对一般图优先视觉，对精确文字/表格/公式优先 OCR，音频走 ASR。", "OCR 使用 -StopAfter，ASR 结束释放 Broker 租约，再进入本地模型阶段。", "云端媒体与识别后文本同样需要明确允许传输。"],
-    implementation: ["media.py 通过 LLM_TOOLKIT_LOCALOCR_ENTRY / LLM_TOOLKIT_CHINESEASR_ENTRY 调用既有 owner 工具，模型只连接 Broker 127.0.0.1:32100，不绕过它直连内部 Ollama。", "Codex CLI 使用原生 --image，OpenCode 使用附件；Qwen Code / Claude Code 的本地图片传递能力有明确限制。", "专项 owner 拥有原始识别数据与状态；Toolkit 记录本次工作阶段，观察事件不包含原始媒体、识别正文或凭据。不能把这一公开事件限制写成整个产品绝不保存本地结果。"],
+    implementation: ["media.py 通过 LLM_TOOLKIT_LOCALOCR_ENTRY / LLM_TOOLKIT_CHINESEASR_ENTRY 调用既有 owner 工具，模型只连接 Broker 127.0.0.1:32100，不绕过它直连内部 Ollama。", "视觉能力由当前所选backend一路传给provider、预检和媒体处理；实际runner支持附件才传原生图像，不支持则明确拒绝。Profile写着images=true或模型会看图，都不能替代当前machine接口是否接受附件的事实。", "专项 owner 拥有原始识别数据与状态；Toolkit 记录本次工作阶段，观察事件不包含原始媒体、识别正文或凭据。不能把这一公开事件限制写成整个产品绝不保存本地结果。"],
     flow: ["明确媒体与精度要求", "选择原生或专项路线", "专项结束释放 GPU", "交给指定后端", "返回媒体与结果依据"],
     concepts: [{ term: "专项识别", explanation: "由 LocalOCR / ChineseASR 完成文字或语音任务，而非让一般模型猜测。" }],
     boundaries: ["本次未处理私人扫描件或录音，也未做新的 GPU 实机识别。", "适配测试不证明任意输入的识别准确率。"],
@@ -273,7 +275,7 @@ export const llmBackendToolkitModules = [
     boundaries: ["正式交互为电脑端最小 1120px 三栏，不维护手机观察台。", "任务栏图标的属性写入不证明 Explorer 最终渲染。"],
     failures: [{ condition: "未收到最终输出或上下文配对", response: "分别显示缺失；上游协议要求不满足时返回明确错误。" }, { condition: "WebView 初始化或导航失败", response: "写有界本机诊断并关闭，不用占位页冒充成功。" }],
     sources: [{ path: "docs/model-observer.md", role: "产品和历史验收" }, { path: "src/llm_backend_toolkit/observer.py", role: "安全结果投影" }, { path: "src/llm_backend_toolkit/observer_ui/app.js", role: "阅读界面" }, { path: "scripts/Start-LlmBackendObserver.ps1", role: "桌面入口" }],
-    verification: ["本次 observer、UI 与 Windows 无窗口启动测试纳入 370 项回归。", "2026-08-13 历史实测覆盖真实公开活动与页面；当次搜索上游不可用，不声称取得有效搜索结果。"],
+    verification: ["9月7日observer、UI与Windows无窗口启动的370项历史回归按原日期保留；9月18日未打开生产观察台跑新任务。", "2026-08-13 历史实测覆盖真实公开活动与页面；当次搜索上游不可用，不声称取得有效搜索结果。"],
     relation: "观察台只消费工作事实，模型、GPU 和专项任务仍归原入口。",
     searchProjection: { intents: ["查看额外模型工作过程", "区分草稿和最终回答", "模型上下文实际用了多少"], entities: ["WinForms", "WebView2", "SSE", "output.completed", "tokenUsage.total", "modelContextWindow"], relations: ["只读观察受管任务，不捕获全局聊天"], failureRecovery: ["没最终输出就明确缺失", "断线有界查询", "图标元数据不作视觉验收"] }
   },
@@ -291,10 +293,10 @@ export const llmBackendToolkitModules = [
     implementation: ["probe --backend <id> --case <case>；vision 需附件，云端还需 --cloud-allowed。支持 --force 明确新尝试。", "run_general_agent_benchmark.py --list 可只列案例；真实运行要求 --aicli-entry 或 LLM_TOOLKIT_AICLI_ENTRY，默认四 runner 串行，结果绑定 suite fingerprint、模型身份、CLI 与沙箱。", "数据工厂、fast-middle 和 local quality 各有独立题目/检查器；正确性先于同分耗时比较。旧日期报告只是历史证据，不据此自动替换本地默认。"],
     flow: ["说明需要验证的能力", "选择最小有界案例", "在既有权限与 GPU 路线运行", "由独立检查器核对产物", "保存版本对应的结论"],
     concepts: [{ term: "独立检查器", explanation: "不让候选模型修改用于判分的程序。" }, { term: "版本绑定", explanation: "结果只适用于记录的任务与执行身份。" }],
-    boundaries: ["370 项离线回归不是模型 benchmark 分数。", "本次没有新增云端或本地模型生成。"],
+    boundaries: ["370项历史和408项后续来源回归都不是模型benchmark（能力评测）分数。", "本次没有新增云端或本地模型生成。"],
     failures: [{ condition: "受管 AICLI 入口缺失", response: "创建输出和调用模型前失败，避免空跑报告。" }],
     sources: [{ path: "src/llm_backend_toolkit/cli.py", role: "有界探测入口" }, { path: "scripts/run_general_agent_benchmark.py", role: "通用代理案例运行" }, { path: "benchmarks/general_agent_v1", role: "三个案例与检查器" }, { path: "docs/fast-middle-agent.md", role: "注明日期的专项历史" }],
-    verification: ["本次 probe 和 benchmark 协议行为通过离线回归；历史模型成绩仅保留来源与适用范围。"],
+    verification: ["probe和benchmark协议的历史离线检查保留对应日期；本轮没有发起新基准或云端调用，也不因为配置同步改变模型排名。"],
     relation: "给注册表与调用者提供证据，不替代主 AI 的任务选择。",
     searchProjection: { intents: ["换模型后做一个小例子检查", "看看模型能不能按JSON回答", "模型评测为何必须记录CLI版本"], entities: ["probe", "instruction", "json", "context", "vision", "general_agent_v1", "verifier"], relations: ["结果绑定模型和执行环境"], failureRecovery: ["基础设施失败不算回答成绩", "缺入口不生成空跑分数"] }
   }

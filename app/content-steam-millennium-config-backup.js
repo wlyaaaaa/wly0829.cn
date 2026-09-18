@@ -1,35 +1,35 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const stateLabels = ["可以怎么用", "需要处理什么", "什么时候不可用"];
-const sourceCommit = "b51236216dbe815b945cdcb6be6f80adee9fdb10";
+const sourceCommit = "5c65e9499b076ba745d9fe9358d7a72bd7cb2151";
 const configCommit = "0b118b09670e0cfbff34cb99e031ea45fac8284f";
 
 const steamMillenniumConfigBackupSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-14T04:16:00Z",
-  label: "最近自动快照返回失败；9月7日成功快照仍保留，安装差异已只读核对",
-  boundary: "本次最近任务返回1，成功记录仍为9月7日；具体失败原因尚未核实，未重跑采集。安装白名单17/20字节一致，3项差异保留；历史隔离测试与回填沿用9月8日证据，真实Steam恢复未验。",
+  observedAt: "2026-09-18T19:27:00Z",
+  label: "完整性快照、受控恢复与回滚已接入；最近任务成功，真实Steam效果仍待验",
+  boundary: "只读核对正式源码、现行任务和快照状态；来源已提供中断恢复、G/H副本和选择性回填。最近任务结果0不代替Steam界面、逐插件加载或新机恢复。",
   metrics: [
     { label: "插件清单", value: "5 款 · 配置启用 3 款" },
     { label: "主题设置", value: "2 套 · 选中 Adwaita" },
-    { label: "本地快照", value: "20 文件 · 44,478 字节" },
-    { label: "最近自动采集", value: "9月14日尝试失败 · 最近成功9月7日" }
+    { label: "本地快照", value: "20 个配置文件 · 独立完整性清单" },
+    { label: "最近自动采集", value: "最近任务成功 · 9月18日快照" }
   ],
   facts: [
-    { label: "来源与发布", value: `PUBLIC（公开）仓库 wlyaaaaa/steam-millennium-config-backup；默认 master 的本地与远端均为 ${sourceCommit}。本次仅修正 README.md 与配套 PDF；配置提交仍沿用 ${configCommit}。` },
-    { label: "本地快照与未提交变化", value: "config、plugins、themes 共 20 个文件、44,478 字节，其中 19 个 JSON 均可解析。原有 7 个未提交改动保留：config/config.json，Adwaita 的 metadata/skin/theme，以及 Zehn 的 metadata/options/skin。未提交状态不等于未安装，也不等于已经发布。" },
-    { label: "实际安装与快照的差异", value: "逐文件读取 Steam/millennium 后，20 个白名单文件中 17 个与本地快照字节一致。不同的是 plugins/hltb-for-millennium/metadata.json、themes/Zehn/metadata.json 与 skin.json。版本号沿用9月8日观察：已安装 Zehn 为 2026.9.7，本地快照为 2026.8.29，已提交配置为 2026.7.24；Adwaita 已安装与本地快照均为 4.4，已提交配置为 4.2。" },
+    { label: "来源与发布", value: "PUBLIC仓库wlyaaaaa/steam-millennium-config-backup，默认master=5c65e9499b076ba745d9fe9358d7a72bd7cb2151已远端回读，工作树干净。当前工具提供采集、只读状态/验证、恢复计划、受控恢复、回滚和独立副本，不再只是文件复制脚本。" },
+    { label: "当前可验证快照", value: "snapshot-manifest.json使用millennium.snapshot.v2，现有20个配置文件各自绑定字节数与SHA-256；状态代号20260918T044109Z-3baa6bc2e6e9，最后采集成功2026-09-18T05:26:00.471186Z，manifest_sha256=29afa8d8f0676565e3a12bfd50560f3008babffc269717a23e9d8325ba6ce28d。这是当前快照记录，不是再次运行采集或Steam内验收。" },
+    { label: "安装观察与备份范围", value: "当前公开快照、源安装和实际Steam外观分开判断；9月8日Zehn/Adwaita版本差异及9月14日17/20字节一致是历史观察，不再当作当前失败。新版只发布明确支持的核心字段与清单，未知核心字段报告名称但不发布其值；插件私有设置、程序、图片和字体仍不在备份中。" },
     { label: "插件与启用配置", value: "快照记录 Extendium 2.0.4、Size on Disk 1.1.0、Easy SteamGrid 4.1.0、HLTB for Steam 2.1.0、Taskbar Download progress 2.3.0。plugins.enabledPlugins 为 size-on-disk、steam-easygrid、extendium；这是配置选择，本轮没有逐插件实际加载验收。" },
     { label: "核心设置", value: "general.accentColor=#00ff00，millenniumUpdateChannel=stable，injectCSS=true、injectJavascript=true；themes.activeTheme=Adwaita-for-Steam。quick.css 定义 4px 滚动条、半透明滑块和透明轨道，实际作用范围取决于 Millennium 的注入与页面对相应 CSS 的支持。" },
-    { label: "现役计划任务", value: "SteamMillenniumConfigSnapshot 为 Ready（就绪），每周日当地时间 19:30，通过 wscript.exe 调用项目 VBS，继而隐藏运行 powershell.exe。要求当前用户已登录；错过时间尽快补跑，失败每 15 分钟重试、最多 3 次，上限 10 分钟，已有实例时忽略新触发。" },
-    { label: "最近真实采集", value: "任务最近于2026-09-14T02:30:00Z尝试并返回1；当前Ready（就绪），下一计划2026-09-21T02:30:00Z。runtime/snapshot-state.json仍记录最后成功2026-09-07T02:30:01.5691614Z、20文件。具体失败原因未证明，本次未重跑采集；成功快照仍保留，采集不自动提交或推送Git。" },
+    { label: "现役计划任务", value: "原SteamMillenniumConfigSnapshot任务保持每周日当地时间19:30、实际交互用户和普通权限；隐藏VBS调用PowerShell7及Python核心，错过补跑、最多3次15分钟重试、10分钟上限、忽略重入。新状态窗口可以刷新、采集和启停未来触发，关闭窗口不取消已登记任务。" },
+    { label: "最近真实采集", value: "2026-09-18只读任务：最近2026-09-17T22:25:58-07:00运行，LastTaskResult=0；下一计划2026-09-20T19:30:00-07:00。成功记录为2026-09-18T05:26:00.471186Z。沿用现有Windows任务，没有为本网页重跑采集、恢复或新增调度器。" },
     { label: "历史验证（9月8日）", value: "2026-09-08的历史验收：源码原有测试实际通过 19 项断言，包含 Windows PowerShell 5.1 调用。隔离采集和回填的 20 文件均与来源 SHA-256 相同，19 个 JSON 可解析，3 个虚构插件程序/私有设置/主题资源保留。源码指南与 3 页 PDF 已修正并在 master 回读；真实 Steam 未重启、未安装或恢复。" }
   ],
   gaps: [
     "没有 Steam、Millennium、插件程序或主题图片/字体包；插件自建 config.json、账号状态与其他私有设置不在当前文件名白名单中。",
-    "当前安装目录的 HLTB 元数据及 Zehn 元数据、皮肤定义与最近本地快照不同。公开配置、本地采集和安装状态分开，不能把任何一层当作另外两层。",
-    "先暂存检查，再依次替换 config、plugins、themes；这不是原子事务，写入中断可能留下部分新快照，也没有自动回滚或自动 Git 提交。",
-    "内容检查只覆盖禁用文件/目录、扩展名、SteamID64 形式及非空代理用户名/密码；不证明能识别所有秘密或私人内容。",
-    "9月8日曾证明隔离目录中的复制与回填；9月14日本次只读确认最新自动尝试失败，具体原因未明，未执行真实Steam界面恢复、逐插件加载或跨版本兼容验收。"
+    "最新记录证明当前快照代号与任务最近成功，不证明每个主题/插件当前界面已恢复。重新安装后的版本和资源必须与所选快照核对，旧版本观察不能充当当前安装。",
+    "新版是有持久前像和显式Recover的多文件事务，不是整个文件系统的全局原子替换。硬中断或外来修改可能留下待恢复记录；不能手删记录制造正常状态，真实断电仍未演练。",
+    "JSON严格解析、支持字段白名单与已知敏感模式只构成有范围的防误发布检查，不是任意私人内容识别器。未知字段与插件私有设置不静默进入公开快照。",
+    "9月8日隔离复制回填属于历史证据；当前来源增加了恢复计划、事务恢复及回滚测试。本网页未向真实Steam目录回填、未启停Steam、未验证全部插件加载或跨版本迁移。"
   ]
 });
 
@@ -41,15 +41,15 @@ const steamMillenniumConfigBackupProject = {
   route: "/projects/steam-millennium-config-backup",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "最近自动快照失败；成功快照仍保留，恢复需手工验收",
+  cardStatus: "最近采集成功；恢复先预检，冲突可保留并回滚",
   cardStatusTone: "mixed",
   ...steamMillenniumConfigBackupSnapshot,
-  summary: "Millennium 用来给 Steam 换主题、加插件。本项目定期保存它的核心设置、自己写的滚动条样式、插件版本清单，以及 Adwaita 和 Zehn 两套主题的选项与配色。重装电脑或改坏界面后，先重新装好程序，再照这份记录恢复设置，少靠记忆重新调整；插件本体和插件自己保存的私有设置不包含在这份快照里。",
+  summary: "定期保留Steam的Millennium核心设置、自写样式、插件清单与主题选择，改坏界面或重装后不必靠记忆重新调整。现在可以先看恢复计划，再只回填支持的设置，保留新机器的网络配置和未知字段；遇到冲突或中断就保留现场，按记录继续或撤回。程序、主题资源和插件私有数据另行安装或恢复，最终仍要打开Steam确认实际效果。",
   why: "Steam 的绿色强调色、圆角、标题栏、插件开关分散在不同配置中，调好一次不代表换电脑后还能找回来。这里保存难以凭记忆重做的选择和安装线索；程序与主题资源另行取得，让备份的范围和恢复时还要做的事情都清楚。",
-  plainExample: "“我重装了 Windows，想把 Steam 调回原来的样子。”先装 Steam、Millennium 和清单中的插件、主题；退出 Steam，留存新机器当前配置，再把备份文件合并复制到对应位置。启动后核对颜色、滚动条、主题和各插件设置。若新主题改了选项或少了资源，继续按实际版本调整，文件复制成功还不算界面恢复成功。",
-  result: "得到一份可用 Git 查版本的配置快照、每周自动采集任务和分步恢复指南。可以知道保存了什么、最近何时采集、哪些插件曾被选中，以及恢复时还缺程序、资源或私有设置中的哪一部分。",
+  plainExample: "“我把Steam界面改乱了，先告诉我恢复上一份配置会改哪些地方，别直接覆盖。”工具先列出可恢复项、版本和资源缺口。确认并退出Steam后才执行，保留回滚点；重新打开后再核对主题、样式和插件，必要时撤回未被后来改动的那一轮。",
+  result: "得到带完整性清单的配置快照、独立副本结果、最近任务状态和可回滚恢复计划。无变化不会重复造一代；源读取不完整、目标被别人修改、G盘不可用或恢复条件不足时分别报告，已成功的本地副本不因另一层失败而被抹掉。",
   readerStates: {
-    pass: "按每周节流规则保存白名单配置和采集状态；重装后先装好 Millennium、插件和主题，再手工合并回填并检查界面。",
+    pass: "当前快照清单与文件验证通过，来源稳定时才更新；恢复计划无阻断且对应实际目标，明确执行后回读受支持配置并保留回滚点。Steam最终显示另行验证。",
     problem: "来源文件变化、目标有手工改动或两边路径重叠时先处理冲突；版本不同要核对实际选项，不把旧快照当作当前安装。",
     unavailable: "Steam 安装目录或需要的程序资源不可用时，本次配置采集或界面恢复不能完成；现有快照仍保留，插件私有设置另行恢复。"
   },
@@ -65,32 +65,20 @@ const steamMillenniumConfigBackupProject = {
     { name: "config/quick.css", responsibility: "保存自己的样式修改", implementation: "::-webkit-scrollbar 定义宽/高 4px，滑块 rgba(0,0,0,0.1)、悬停 0.25，轨道透明。复制文件不证明实际界面所有滚动区域都应用了它。" },
     { name: "plugins/", responsibility: "留下重装插件的线索", implementation: "只保存 plugin.json、metadata.json 和存在时的 install-state.json；清单描述用途、版本、后端类型及上游提交，不包含插件可执行源码。" },
     { name: "themes/", responsibility: "保存主题定义及版本记录", implementation: "Adwaita 保存 metadata/skin/theme；Zehn 保存 metadata/skin/options/waifus。定义中的 CSS 资源路径仍依赖重新安装的主题资源。" },
-    { name: "tools/snapshot-millennium-config.ps1", responsibility: "定位、筛选并采集快照", implementation: "检查来源和目的目录、目标 Git 改动及 7 天节流；暂存允许文件并检查，再逐目录复制，成功后写 snapshot-state.json。" },
+    { name: "tools/millennium_backup.py 与 Invoke-MillenniumBackup.ps1", responsibility: "定位、筛选并采集快照", implementation: "PowerShell7.2+启动Python3.11+标准库核心，严格解析和白名单采集；源前后稳定性、目标清单、固定锁、持久前像、文件回读与清单最后发布共同形成可恢复事务。旧脚本名仅作兼容入口。" },
     { name: "tools/register-millennium-config-snapshot-task.ps1", responsibility: "建立每周任务", implementation: "配置交互登录用户、周日 19:30、错过补跑、3 次间隔 15 分钟重试及 10 分钟上限。重新运行会创建或更新任务。" },
-    { name: "tools/snapshot-millennium-config-hidden.vbs", responsibility: "隐藏调用窗口并传递结果", implementation: "从自己的位置解析仓库与脚本，shell.Run(command, 0, True) 等待 powershell.exe 完成，再 WScript.Quit 返回相同退出码。" },
-    { name: "README.md / README.pdf / tests/run-snapshot-tests.ps1", responsibility: "指导操作并验证关键行为", implementation: "人类指南说明采集、任务、手工恢复和版本差异；原有 19 项隔离断言验证复制、排除、目录重叠、目标改动和 PowerShell 5.1 调用。" }
+    { name: "tools/snapshot-millennium-config-hidden.vbs", responsibility: "隐藏调用窗口并传递结果", implementation: "VBS隐藏启动PowerShell7，等待并传播退出码；WindowsPowerShell5.1仅保留启动兼容，不再执行备份核心。任务与人工运行使用同一固定目标锁。" },
+    { name: "README.md / README.pdf / tests/run-snapshot-tests.ps1", responsibility: "指导操作并验证关键行为", implementation: "现行指南、核心Python回归和Windows集成分别覆盖连续采集、有效删除、读取不完整、冲突、中断、恢复计划、回滚和副本；9月8日19项断言保留为旧版历史，不冒充新版完整验收。" }
   ],
-  technicalContracts: [
-    { artifact: "精确复制范围", schema: "Copy-MillenniumAllowlist", owner: "tools/snapshot-millennium-config.ps1", boundary: "核心仅 config/config.json、config/quick.css；每个插件仅 plugin.json、metadata.json、install-state.json；每个主题仅 metadata.json、skin.json、theme.json、options.json、waifus.json。不是任意 plugins/**/*.json 或 themes/**/*.json。不存在的允许文件跳过；一个也没有则报错。" },
-    { artifact: "选择值与主题定义", schema: "general / plugins.enabledPlugins / themes.conditions / themes.themeColors", owner: "Millennium 配置与主题清单", boundary: "用户选择在 config.json，选项、补丁目标和资源路径在主题定义中。脚本复制原文件，不合并对象、不转换 JSON、不迁移旧选项。未声明新的项目 schema 编号。" },
-    { artifact: "内容检查", schema: "Test-SensitiveStagingContent", owner: "tools/snapshot-millennium-config.ps1", boundary: "只检查暂存文件：禁用名称 id_cache.json/cache.json/debug.log、bin/lib/crashes 目录、非 .json/.css 扩展名、7656119 后接 10 位数字的形式，以及非空 proxyUsername/proxyPassword。命中则抛错；不宣称通用内容识别。" },
-    { artifact: "快照时间记录", schema: "lastSnapshotUtc / sourceRoot / destinationRoot / copiedFiles", owner: "runtime/snapshot-state.json", boundary: "成功复制后写入这四个字段；runtime 被 Git 忽略。没有独立版本 schema，也不把文件数当作恢复成功证明。" },
-    { artifact: "复制方向与失败边界", schema: "SourceRoot → DestinationRoot；RuntimeRoot/staging", owner: "采集脚本与手工恢复指南", boundary: "采集脚本会重建目标中的三个目录；恢复需合并复制白名单文件、保留已安装资源。暂存后仍为逐目录替换，写入期间失败不具备自动事务回滚。" }
-  ],
+  technicalContracts: [{"artifact":"采集范围与公开投影","schema":"millennium.snapshot.v2","owner":"tools/millennium_backup.py","boundary":"核心只保存支持的config.json字段与quick.css，插件/主题只取明确的清单文件。严格JSON拒绝重复键、截断、非有限数字和错误类型；未知核心字段报告但不公开值。源目录完整可读且稳定时才传播正常卸载，缺源不是删除。"},{"artifact":"内容代际与保留","schema":"snapshot-manifest.json / millennium.current.v2","owner":"配置快照核心","boundary":"每份清单绑定文件字节与SHA-256；与上一份生成清单比较，不要求每次采集后Git提交。runtime/snapshots默认4份、Keep允许2–32；无变化仍验证、不生成重复代。每文件8MiB、一次64MiB、最多4096文件。"},{"artifact":"中断事务","schema":"millennium.transaction.v1","owner":"配置快照与Recover入口","boundary":"效果前持久保存原件与计划，逐文件替换、清单最后发布；未完成事务使正式读取拒绝。Recover在固定目标锁内校验原记录并恢复，外来修改保留。不是全文件系统原子操作，未知旧记录不能直接删除。"},{"artifact":"恢复计划与回滚","schema":"millennium.restore-plan.v2 / millennium.restore-rollback.v2","owner":"RestorePlan / Restore / Rollback","boundary":"计划零写入，Restore要求ExpectedPlan仍匹配；真实Steam安装目标须先退出Steam但工具不替人结束进程。只合并支持字段和CSS，保留网络与未知字段，不覆盖安装清单、程序和资源。回滚核对当前目标仍是本轮结果，冲突不覆盖。"},{"artifact":"状态与独立副本","schema":"millennium.snapshot-state.v2 / millennium.replica.v2","owner":"本项目；PCConfig拥有G/H介质绑定","boundary":"last-run记录最近尝试，成功状态绑定代号和清单。G复制当前及保留历史并逐份验证，失败保留本地结果但任务非零；H复用PCConfig冷备。任务、Git、G/H与实际Steam恢复分别验收。"}],
   evidenceLayers: [
     { layer: "源码和远端提交", proves: `工具及公开指南由 master=${sourceCommit} 回读；7 个既有本地配置改动原样保留。`, doesNotProve: "本地新配置已提交，或远端版本就是今天的安装状态。" },
-    { layer: "安装目录只读比对", proves: "9月14日只读比对20个白名单文件均存在、17个与本地快照一致；Zehn已安装2026.9.7、本地2026.8.29的版本号保留9月8日观察日期。", doesNotProve: "这些插件都已加载、界面样式都生效或新旧版本兼容。" },
-    { layer: "计划任务及采集记录", proves: "现役任务Ready（就绪），2026-09-14T02:30Z最近尝试返回1；最后成功记录仍为2026-09-07的20文件采集，失败原因未证明。", doesNotProve: "未来每次执行成功、未登录时也运行，或自动同步到了 GitHub。" },
-    { layer: "原有 19 项隔离断言", proves: "白名单复制/排除、重叠目录和目标手工改动保护，以及 Windows PowerShell 5.1 的基本调用通过。", doesNotProve: "任意凭据识别、全量 JSON schema 校验、真实界面恢复或完整重试故障演练；两项重试断言只是读取注册脚本。" },
+    { layer: "安装目录只读比对", proves: "当前读取正式快照清单及成功状态；9月14日安装17/20一致仍只保留历史日期，不把它延伸为今天的完整安装比对。", doesNotProve: "这些插件都已加载、界面样式都生效或新旧版本兼容。" },
+    { layer: "计划任务及采集记录", proves: "原任务最近结果0，当前状态绑定9月18日快照代号与清单哈希；没有为网页触发任务。", doesNotProve: "未来每次执行成功、未登录时也运行，或自动同步到了 GitHub。" },
+    { layer: "原有 19 项隔离断言", proves: "来源新版测试涵盖连续采集、内容校验、中断恢复、回滚与副本；本网页只读取其合同与测试入口，不冒称重新执行。", doesNotProve: "任意凭据识别、全量 JSON schema 校验、真实界面恢复或完整重试故障演练；两项重试断言只是读取注册脚本。" },
     { layer: "9月8日隔离采集与回填", proves: "20 个文件在采集及回填后分别与来源字节一致，19 个 JSON 可解析；虚构程序、私有设置和主题资源均保留。", doesNotProve: "Steam 实机恢复、插件执行成功或跨版本无损还原。" }
   ],
-  operationalEntrypoints: [
-    { name: "采集一次本机配置", command: "pwsh -NoProfile -File tools/snapshot-millennium-config.ps1", purpose: "按当前白名单更新本地快照；默认 7 天节流，可用 -SourceRoot、-DestinationRoot、-RuntimeRoot 指定目录。" },
-    { name: "忽略时间间隔立即采集", command: "pwsh -NoProfile -File tools/snapshot-millennium-config.ps1 -Force", purpose: "只跳过 7 天节流，仍检查路径、目标改动和暂存内容。不要把源与目标反转当恢复工具。" },
-    { name: "创建或更新每周任务", command: "powershell.exe -NoProfile -File tools/register-millennium-config-snapshot-task.ps1", purpose: "会写入当前用户任务计划；不是只读检查，也不会启动 Steam 或安装插件。" },
-    { name: "只读核对任务结果", command: "Get-ScheduledTaskInfo -TaskName SteamMillenniumConfigSnapshot", purpose: "结合 runtime/snapshot-state.json 和文件差异判断最近实际采集，不以任务存在替代成功记录。" },
-    { name: "运行隔离测试", command: "pwsh -NoProfile -File tests/run-snapshot-tests.ps1", purpose: "使用临时虚构目录验证 19 项断言；不向真实 Steam 恢复配置。" }
-  ],
+  operationalEntrypoints: [{"name":"只读状态与完整性","command":"pwsh -File tools/Invoke-MillenniumBackup.ps1 -Mode Status; pwsh -File tools/Invoke-MillenniumBackup.ps1 -Mode Verify","purpose":"零写入检查，不创建目录或日志，不触发备份。"},{"name":"采集一次配置","command":"pwsh -File tools/Invoke-MillenniumBackup.ps1 -Mode Snapshot","purpose":"核对源、目标和机器绑定后采集；无变化验证后保持，不恢复七天节流或脏工作树绕过。"},{"name":"预检与受控恢复","command":"pwsh -File tools/Invoke-MillenniumBackup.ps1 -Mode RestorePlan -DestinationRoot <备份> -TargetRoot <目标>","purpose":"先取得plan_sha256；实际Restore另传-ExpectedPlan并满足目标版本、资源和Steam退出条件。"},{"name":"精确回滚或中断恢复","command":"pwsh -File tools/Invoke-MillenniumBackup.ps1 -Mode Rollback -DestinationRoot <目标> -RollbackId <本次编号>","purpose":"只撤回仍与本轮结果一致的对象；未完成采集事务使用Recover，不删除前像冒充完成。"},{"name":"可见任务管理","command":"pwsh -File tools/Show-MillenniumBackupStatus.ps1","purpose":"显示本地/G和任务，提供刷新、立即采集与启停未来触发；关闭窗口不停止原任务，H单独核对。"},{"name":"隔离回归","command":"pwsh -File tests/run-snapshot-tests.ps1","purpose":"虚构源与目标，不向真实Steam恢复、不安装插件。"}],
   operatingFlow: [
     { title: "平时把变化留下来", detail: "每周任务定位 Steam/millennium；检查没有覆盖冲突后，筛选文件、暂存检查并更新本地备份。成功时间与文件数写入 runtime，Git 提交另行进行。" },
     { title: "先确定用哪一份恢复", detail: "区分远端提交、本地尚未提交的快照和当前安装。需要恢复哪天的设置，就选那份实际存在的版本；当前机器比快照更新时不要误当成已经备份。" },
@@ -99,7 +87,7 @@ const steamMillenniumConfigBackupProject = {
   ],
   productPrinciples: [
     { title: "优先保存自己的选择", detail: "保存核心配置、样式、插件线索和主题选项；可以重新取得的程序与资源另行安装。因此快照很小，也不能独自重建完整环境。" },
-    { title: "定期采集，冲突时保留现场", detail: "每周运行减少遗漏和干扰，7 天节流避免重复复制。未提交文件与当前源完全相同可以继续；不同的手工修改先报错，不悄悄冲掉。" },
+    { title: "定期采集，冲突时保留现场", detail: "按既有每周任务检查，真正无变化就不生成重复代，不再以七天节流代替内容判断。快照与上一份生成清单比较；手工修改、额外未知文件或Git读取失败会阻止覆盖，普通README修改不会阻断采集。" },
     { title: "备份新不新，要和安装状态比较", detail: "成功采集、Git 提交、实际安装是不同事实。今天的插件更新不能因为昨晚备份成功就被算进那份快照。" },
     { title: "恢复以能用为准", detail: "合并文件只是一步，程序、主题资源、版本适配和插件私有设置都可能影响结果。最终需要看 Steam 界面和插件表现，不把复制成功包装成完整恢复。" }
   ],
@@ -107,17 +95,17 @@ const steamMillenniumConfigBackupProject = {
     "保留 Millennium 核心设置、全局 quick.css、插件清单与主题选项及配色。",
     "按白名单定期采集，避免目录重叠或不同的手工改动被覆盖，并留下成功时间。",
     "记录原来的插件名称、版本、提交及启用选择，供重新安装与比较。",
-    "提供分步手工恢复规程，明确程序资源、插件私有设置及实际验收的责任。"
+    "提供零写入恢复计划、受控回填、精确回滚和中断事务恢复；程序资源、私有设置与应用内验收仍分开。"
   ],
   exclusions: [
     "Steam 和 Millennium 本体、DLL/EXE、插件程序、主题图片/字体/CSS 资源不在配置快照中；全局 quick.css 是明确包含的例外。",
     "id_cache.json、cache.json、日志、崩溃文件和各插件自建私有配置不在文件名白名单中；不备份账号登录状态或游戏存档。",
-    "没有自动安装、自动 Git 推送、一键恢复或跨版本迁移器。手工恢复和实际界面检查仍是完整流程的一部分。"
+    "不会自动安装程序、停止Steam、执行插件代码、Git推送或盲目跨版本转换。已有受控恢复和回滚命令，但它们不等于整机一键恢复。"
   ],
   failures: [
     { condition: "来源不可用或一个允许文件也没有", response: "脚本报错；检查实际 Steam 安装目录或显式 -SourceRoot。缺少部分文件会被跳过，因此文件计数变化仍需检查，不能自动认为快照完整。" },
     { condition: "SourceRoot and DestinationRoot must not overlap", response: "源和目标相同或嵌套，脚本在复制前拒绝。选择不同目录；采集脚本不承担恢复。" },
-    { condition: "Destination git workspace is dirty", response: "有与当前源不同的手工改动或其他脏文件。先检查并保留需要的变化；只有明确允许覆盖时才使用 -AllowDirtyDestination。与源字节一致的快照改动和采集脚本自身改动是已实现的窄例外。" },
+    { condition: "Destination git workspace is dirty", response: "目标和上一份生成清单不符、未知额外文件或Git读取失败时保留现场并停止覆盖；不使用AllowDirtyDestination绕过。普通文档变化不等同快照冲突。" },
     { condition: "暂存内容检查命中", response: "抛错并停止更新目标；按报告检查具体文件。检查发生在 runtime/staging，失败暂存可能仍在本机，但不应提交为公开快照。" },
     { condition: "复制中断或恢复后界面不对", response: "分目录替换可能只完成一部分；保留现场，核对选定快照与上游版本后重做必要文件。需要回退时用实际保留的 Git 版本或目标配置副本；没有自动回滚承诺。" }
   ],
@@ -137,7 +125,7 @@ const steamMillenniumConfigBackupProject = {
   sources: [
     { path: "config/config.json / config/quick.css", role: "核心设置、插件开关、两套主题选择与全局样式。" },
     { path: "plugins/ / themes/", role: "逐项白名单清单、版本、元数据、主题结构与选项。" },
-    { path: "tools/snapshot-millennium-config.ps1", role: "实际采集、节流、目标差异和内容检查、顺序复制实现。" },
+    { path: "tools/snapshot-millennium-config.ps1", role: "现行PowerShell兼容入口；实际采集、恢复、事务与清单由tools/millennium_backup.py维护。" },
     { path: "tools/register-millennium-config-snapshot-task.ps1 / tools/snapshot-millennium-config-hidden.vbs", role: "任务注册、隐藏窗口调用及退出码传递。" },
     { path: "runtime/snapshot-state.json / SteamMillenniumConfigSnapshot", role: "本机最近成功采集与现役任务状态；runtime 不进入 Git。" },
     { path: "tests/run-snapshot-tests.ps1 / README.md / README.pdf", role: "19 项隔离断言，以及已修正并发布的操作与恢复指南。" }
@@ -160,13 +148,13 @@ const steamMillenniumConfigBackupModules = [
     result: "拿到原来的参数和 CSS 文件；对应版本可用且注入正常时，用它们恢复设置，再从界面确认。",
     teaser: "核心开关和全局 quick.css 都保留，文件复制与实际效果分开验证。",
     problem: "只重装主题不能恢复全部个人选择，直接覆盖不兼容的新配置也可能让设置失效。",
-    readerStates: { pass: "核心设置与样式已在快照中，可用于核对或手工回填。", problem: "版本不同先检查实际配置键与选项；样式不生效再查注入开关和当前页面支持。", unavailable: "没有 Millennium、资源未装好或相应注入关闭时，复制 CSS 不会自动建立运行环境。" },
-    decisionImpact: ["只复制原文件，不替用户重写配置或自动转换键名。", "保留核心选择和轻量 CSS，程序、缓存与账号状态不随配置走。", "quick.css 是样式定义；不存在“所有 Steam 窗口已验证生效”的推断。"],
+    readerStates: { pass: "支持的核心设置与CSS已通过清单验证；恢复时按当前计划合并，不替换程序和未知配置。", problem: "版本不同先检查实际配置键与选项；样式不生效再查注入开关和当前页面支持。", unavailable: "没有 Millennium、资源未装好或相应注入关闭时，复制 CSS 不会自动建立运行环境。" },
+    decisionImpact: ["核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制整份配置。", "保留核心选择和轻量 CSS，程序、缓存与账号状态不随配置走。", "quick.css 是样式定义；不存在“所有 Steam 窗口已验证生效”的推断。"],
     concepts: [{ term: "CSS / JavaScript 注入", explanation: "Millennium 把样式或脚本加载到 Steam 页面；开关配置与页面实际执行是两层证据。" }, { term: "quick.css", explanation: "个人全局样式文件，本快照保留滚动条 4px、半透明滑块和透明轨道规则。" }],
-    implementation: ["general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。", "plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。", "Copy-MillenniumAllowlist 只复制核心的 config.json 与 quick.css；不重排或重新序列化 JSON。"],
+    implementation: ["general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。", "plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。", "millennium_backup.py严格解析并选择支持字段，quick.css规范UTF-8换行并检查已知风险；未知键只报告名称。新格式与旧无清单快照不同，AdoptExisting也不能绕过内容或哈希检查。"],
     flow: ["在实际 Millennium 目录找到核心配置与 quick.css。", "与其余白名单文件一起复制到暂存区并检查。", "更新备份 config 目录；恢复时则合并回填所选版本的文件，最后在 Steam 检查效果。"],
-    boundaries: ["快照工具不做通用 JSON schema 校验、CSS 兼容转换或配置自动迁移。", "不覆盖 Steam 原生账号登录、游戏库或存档恢复。"],
-    failures: [{ condition: "配置里存在非空代理用户名或密码", response: "当前内容检查会拒绝更新目标。按具体值处理，不能通过公开提交整个配置来解决采集失败。" }, { condition: "回填后样式或选项没有按预期出现", response: "检查 Millennium、主题版本与注入配置；按需要撤回目标机保留的配置，不宣称清空 quick.css 必然修复所有窗口问题。" }],
+    boundaries: ["有受支持字段的类型与内容检查，不是通用配置迁移器；不转换未知键，不保证全部CSS在所有Steam窗口生效。", "不覆盖 Steam 原生账号登录、游戏库或存档恢复。"],
+    failures: [{ condition: "配置里存在非空代理用户名或密码", response: "代理账号和未知字段不进入公开投影；支持字段中出现已知凭据模式仍拒绝，省略范围与实际值风险分别复核。" }, { condition: "回填后样式或选项没有按预期出现", response: "检查 Millennium、主题版本与注入配置；按需要撤回目标机保留的配置，不宣称清空 quick.css 必然修复所有窗口问题。" }],
     sources: [{ path: "config/config.json", role: "真实参数与选择。" }, { path: "config/quick.css", role: "实际滚动条样式定义。" }, { path: "tools/snapshot-millennium-config.ps1", role: "复制范围及内容检查。" }],
     verification: ["原有测试的 copies config.json 与 copies quick.css 通过。", "9月8日核心文件经隔离采集及回填后与来源SHA-256相同；该历史测试不等于本次真实界面验收。"],
     searchProjection: { intents: ["找回 Steam 绿色强调色和细滚动条", "Millennium quick.css 怎么备份和恢复"], entities: ["config/config.json", "config/quick.css", "general.accentColor", "injectCSS", "injectJavascript", "::-webkit-scrollbar"], relations: ["核心配置保存选择，quick.css 保存样式，Millennium 负责实际加载"], failureRecovery: ["样式不生效时核对注入和主题版本，必要时回到目标机已保留配置"] },
@@ -230,30 +218,24 @@ const steamMillenniumConfigBackupModules = [
   },
   {
     id: "scheduled-snapshot-guardian-and-clean-restore-boundary", slug: "scheduled-snapshot-guardian-and-clean-restore-boundary", order: 4,
-    title: "每周采集与手工恢复", shortTitle: "自动采集与恢复", kicker: "按时留下配置，遇到冲突保留现场，恢复时逐项检查",
-    value: "用每周任务减少忘记备份；根据成功时间、文件差异和恢复规程判断是否已经准备好。",
-    status: "最近自动任务失败；历史成功快照与隔离回填证据保留", statusTone: "mixed", stateLabels,
+    title: "每周采集、可见管理与可回滚恢复", shortTitle: "自动采集与恢复", kicker: "按时留下配置，遇到冲突保留现场，恢复时逐项检查",
+    value: "平时让原任务定期留存配置，需要时打开状态窗口看最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。",
+    status: "最近任务成功；可验证代际和恢复命令已实现，真实Steam效果另验", statusTone: "mixed", stateLabels,
     why: "手工记着备份容易遗漏；采集也不能把正在修改的文件冲掉，更不能误把“有快照”当作已重装好全部程序。",
-    example: "“我想每周自动留一份配置，出问题时照着恢复。”任务在用户登录后按周执行，不显示调用窗口；来源不可用、路径重叠或手工改动冲突时报错。需要恢复时先装程序，再合并配置，最后检查实际界面与插件。",
-    result: "得到本地快照、最近成功记录和可执行的手工步骤；任务失败、备份落后或尚未实机恢复都能分别判断。",
-    teaser: "每周日 19:30 采集，7 天节流；已有手工改动先检查，恢复保留程序与资源。",
+    example: "“恢复上一份Steam配置前，先告诉我会改什么；不合适还能撤回。”先取得只读计划，核对程序版本与资源，确认并退出Steam后再回填；完成后得到回滚编号，打开Steam检查实际效果。",
+    result: "交回当前快照、最近尝试、G副本和任务状态，以及受控恢复结果或冲突。H由既有冷备链单独验证，程序、插件私有设置和界面不被文件成功代替。",
+    teaser: "无变化不重复留代，恢复先预检、保留原值；任务与G/H各自报告",
     problem: "任务存在不代表采集成功，本地采集不等于 GitHub 已更新，文件复制也不等于恢复完成。",
-    readerStates: { pass: "任务最近结果为 0，采集记录有时间与 20 文件；本轮隔离回填逐字节一致。", problem: "不同的手工改动会使脚本报错，写入中断可能只更新部分目录；需检查和处理后再运行。", unavailable: "找不到 Millennium 或当前用户未登录时，不具备同样的采集条件；配置也不能代替缺失的程序资源。" },
-    decisionImpact: ["复用 Windows 任务计划与小 VBS，不增加常驻备份服务。", "7 天节流只是避免重复运行；-Force 不绕过路径、目标改动和内容检查。", "目录替换有明确中断边界，手工恢复用合并复制，不能反向运行快照脚本。", "恢复按现有分步规程进行，用户可选择具体快照，并核对新装程序是否与旧配置对应。"],
-    concepts: [{ term: "ThrottleDays（节流天数）", explanation: "默认 7 天内已有成功采集就跳过；-Force 或非正天数可忽略时间限制。" }, { term: "Interactive Logon（交互登录）", explanation: "现役任务依赖该用户已经登录；不是保证无人登录时运行的服务。" }, { term: "staging（暂存区）", explanation: "先组装和检查允许文件，再逐目录更新备份；它不提供原子替换或自动回滚。" }],
-    implementation: [
-      "来源优先用显式 SourceRoot，否则 HKCU:\\Software\\Valve\\Steam 的 SteamPath，再检查 Program Files 常见路径；找不到时报错。DestinationRoot 默认项目根，RuntimeRoot 默认项目 runtime。",
-      "Test-PathsOverlap 拒绝源与目标相同或包含；Test-DestinationDirty 检查目标 Git。与源字节相同的快照改动及采集脚本自身变化允许继续，其他脏文件阻断，除非明确使用 AllowDirtyDestination。",
-      "读取 snapshot-state.json 判断 7 天节流；记录缺失或无法解析则不节流。按允许文件名采集到 staging，零文件时报错，通过内容检查后顺序重建 config、plugins、themes，最后写成功状态。",
-      "注册脚本设置周日当地时间 19:30、Limited 权限、Interactive 登录、StartWhenAvailable、IgnoreNew、3 次重试、15 分钟间隔和 10 分钟上限。VBS 调用 powershell.exe，隐藏窗口、等待退出并传回退出码。",
-      "恢复规程要求先安装程序和对应资源，再退出 Steam、保留目标配置、合并回填允许文件，检查旧 metadata 与新程序版本是否对应，启动后逐项检查。"
-    ],
-    flow: ["周任务触发或手动采集，解析实际来源。", "检查目录重叠、目标差异和最近成功时间。", "按文件名白名单暂存，检查指定内容模式，再依次更新三个快照目录。", "写入成功时间和文件数；需要远端保存时另行检查差异并提交 Git。", "恢复时选择一份真实快照、重新安装程序资源、合并文件，最后从 Steam 与插件确认结果。"],
-    boundaries: ["任务是本地定期采集，不自动 push、不保存每次未提交改动的历史，也不保证未来每次运行成功。", "暂存检查不做全库扫描或任意秘密检测，顺序复制不具备自动事务回滚。", "恢复没有一键脚本，本轮不启动或重启真实 Steam，也不安装/卸载插件和主题。"],
-    failures: [{ condition: "源与目标重叠或不同的手工改动仍未处理", response: "采集报错并保留现场；先选择分离目录或处理具体差异，不默认传 AllowDirtyDestination 覆盖一切。" }, { condition: "最近采集时间仍在 7 天内", response: "返回正常跳过；确需新快照可用 -Force，仍保留其他检查。" }, { condition: "写入中断或恢复版本不匹配", response: "核对实际目录和选定版本，重做必要复制或回到已有恢复点；无法证明的实际外观与插件结果继续标明未验证。" }],
-    sources: [{ path: "tools/snapshot-millennium-config.ps1", role: "真实采集与失败处理。" }, { path: "tools/register-millennium-config-snapshot-task.ps1", role: "注册及任务参数。" }, { path: "tools/snapshot-millennium-config-hidden.vbs", role: "隐藏调用与退出码传递。" }, { path: "runtime/snapshot-state.json / README.md / tests/run-snapshot-tests.ps1", role: "成功记录、分步恢复指南与 19 项隔离断言。" }],
-    verification: ["原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。", "9月14日只读回读任务Ready、最近结果1；成功记录仍为2026-09-07T02:30:01.5691614Z、20文件，未重跑任务或认定失败原因。", "9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。"],
-    searchProjection: { intents: ["Steam Millennium 最近有没有自动备份", "每周备份 Steam 配置不要弹黑框", "Millennium 重装恢复步骤", "备份脚本提示工作区有改动怎么办"], entities: ["SteamMillenniumConfigSnapshot", "tools/snapshot-millennium-config.ps1", "tools/register-millennium-config-snapshot-task.ps1", "tools/snapshot-millennium-config-hidden.vbs", "tests/run-snapshot-tests.ps1", "runtime/snapshot-state.json", "ThrottleDays", "AllowDirtyDestination"], relations: ["任务调用 VBS，VBS 隐藏运行采集脚本并传回退出码", "快照先检查再顺序复制，恢复另行合并回填"], failureRecovery: ["不同的手工改动先处理再采集", "复制成功后还需要核对界面和插件，不能当作完整恢复"] },
+    readerStates: { pass: "当前清单与字节验证一致，采集无变化就保持；恢复按匹配计划完成并保留回滚点，实际应用另行检查。", problem: "未完成事务、源读取不完整或手工冲突时拒绝覆盖并保留原件；根据同一记录Recover或处理明确冲突，不能清空记录让状态变绿。", unavailable: "找不到 Millennium 或当前用户未登录时，不具备同样的采集条件；配置也不能代替缺失的程序资源。" },
+    decisionImpact: ["复用 Windows 任务计划与小 VBS，不增加常驻备份服务。", "没有七天节流和脏目标绕过；无变化仍验证，默认保留4份已验证代际。", "恢复是单独的RestorePlan/Restore/Rollback流程，不能反向运行采集脚本；中断用原事务Recover。", "恢复按现有分步规程进行，用户可选择具体快照，并核对新装程序是否与旧配置对应。"],
+    concepts: [{"term":"Verified generation（已验证代际）","explanation":"一组文件及对应完整性清单，验证后才成为当前；无变化不创建重复代。"}, { term: "Interactive Logon（交互登录）", explanation: "现役任务依赖该用户已经登录；不是保证无人登录时运行的服务。" }, { term: "staging（暂存区）", explanation: "先保存待发布文件和原值，再逐文件提交、最后发布清单；可恢复中断但不是全文件系统原子切换。" }],
+    implementation: ["PowerShell7.2+调用Python3.11+核心，显式来源或注册表/常见目录定位；只有机器名与实际仓库均匹配才消费PCConfig机器绑定，拒绝在该绑定下替换采集源。","目标与上一份已生成清单比较；手动、定时及其他进程受同一固定目标锁保护。未知文件、真实快照修改或Git读取失败停止覆盖，源或目标/运行根重叠、链接路径拒绝。","支持目录完整且前后稳定才生成候选，先保存持久前像和计划，再逐文件写入，清单最后提交与回读；未完成记录阻断正式读入口，Recover检查记录和当前资源后处理，保留外来改动。","现役任务仍为周日当地19:30、Interactive/Limited、错过补跑、3次15分钟重试、10分钟上限和IgnoreNew；隐藏VBS调用PowerShell7，启停只管理该任务未来触发。","RestorePlan只读验证备份和目标；Restore要求ExpectedPlan，合并支持配置并保留网络/未知字段，资源或版本不匹配停止。真实安装目标需Steam已退出，不自动结束进程、下载或运行插件。","恢复结果带rollback_id，Rollback只撤回仍匹配本轮postimage的修改。恢复历史默认保留4条已完成、回滚或中止记录，未完成记录不自动清掉。","G副本先核验PCConfig卷身份和路径，再复制当前及保留历史并验证；G失败仍保留本地但自动任务非零。H使用原PCConfig冷备集合，无新任务、无自动解锁。"],
+    flow: ["原周任务或明确人工Snapshot进入实际来源与机器绑定。","检查源稳定性、目标清单、固定锁和是否有未完成事务。","生成并验证候选，逐文件写入、最后发布清单；无变化不增加代际。","独立验证G副本并分别报告最近尝试与最近成功；Git发布与H冷备另行执行。","恢复先只读计划，核对版本和资源；明确执行后保留回滚点，最后在Steam内验证。"],
+    boundaries: ["不自动Git提交或推送，采集、G副本、H和实际应用分层判断。","有持久前像的多文件事务不等于任意断电和硬件损坏均已验证；不抹去外部修改或未知旧记录。","受控恢复只回填支持的配置，不安装插件、不启停Steam、不覆盖主题程序和私有数据。"],
+    failures: [{ condition: "源与目标重叠或不同的手工改动仍未处理", response: "保留源与目标，处理精确冲突；当前入口不提供脏目标绕过。" }, {"condition":"本次内容没有变化","response":"验证现有清单和文件后保持，不新建重复代；仍分开检查G副本与任务状态。"}, { condition: "写入中断或恢复版本不匹配", response: "同一事务检查后Recover，恢复版本/资源不匹配则停止回填；已提交恢复若清理失败保持真实提交结果，不回滚掉已成功内容。" }],
+    sources: [{ path: "tools/snapshot-millennium-config.ps1", role: "真实采集与失败处理。" }, { path: "tools/register-millennium-config-snapshot-task.ps1", role: "注册及任务参数。" }, { path: "tools/snapshot-millennium-config-hidden.vbs", role: "隐藏调用与退出码传递。" }, { path: "runtime/snapshot-state.json / README.md / tests/run-snapshot-tests.ps1", role: "现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。" }],
+    verification: ["原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。", "2026-09-18只读回读：任务Ready，最近结果0，成功状态绑定20260918T044109Z-3baa6bc2e6e9及清单哈希；没有再次触发真实采集。", "9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。"],
+    searchProjection: { intents: ["Steam Millennium 最近有没有自动备份", "每周备份 Steam 配置不要弹黑框", "Millennium 重装恢复步骤", "备份脚本提示工作区有改动怎么办"], entities: ["SteamMillenniumConfigSnapshot","millennium_backup.py","snapshot-manifest.json","RestorePlan","ExpectedPlan","Rollback","Recover","Show-MillenniumBackupStatus.ps1"], relations: ["任务调用 VBS，VBS 隐藏运行采集脚本并传回退出码", "清单最后发布、原值先保留；恢复按独立计划合并并可回滚"], failureRecovery: ["不同的手工改动先处理再采集", "复制成功后还需要核对界面和插件，不能当作完整恢复"] },
     relation: "负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。"
   }
 ];

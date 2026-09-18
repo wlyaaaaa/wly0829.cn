@@ -141,7 +141,7 @@ export const systemScenarios = [
         number: "01",
         kicker: "具名上下文与原件",
         title: "先把聊天和附件关系找对",
-        body: "WeChatDirect 读取明确联系人或群的有界窗口，保留原生发送方向、回复目标和每次媒体出现的位置；图片、表情、语音、视频与文件只有原生索引、字节身份和实际解码通过才交付。默认上下文只读本机；显式导出或打开具名表情时才可沿该消息已有 CDN 取回并核验，也可要求全本地。",
+        body: "WeChatDirect读取点名联系人或群的有界窗口，保留发送者、回复与媒体关系。长消息按同一文本版本分段读完，不用预览代替全文；导出分别说明可用内容和缺失附件。默认只用本机，显式导出或打开具名表情才可沿该消息已有CDN补取并核验，全本地要求继续有效。 图片、表情、语音、视频和文件分别核对原消息关系；需要语音转写交给 ChineseASR，不以附件存在冒称可以听清。",
         items: [
           ["消息", "原生顺序、发送方向与回复关系"],
           ["媒体", "语音、图片和文件与消息精确绑定"],
@@ -163,7 +163,7 @@ export const systemScenarios = [
         number: "03",
         kicker: "可复核交付",
         title: "纪要能回到每一份原件",
-        body: "最终材料把结论、待办、引用和未确认项分开。一个识别入口失败时可以降级交付；两个入口都失败时明确写听不清或无法读取。",
+        body: "结论、待办、引用和未确认项分开。包生成和验真不等于材料齐全；后来下载好的本地语音可只补这个具名归档。已知导出中断先检查原事务再决定恢复，未知旧锁和外来文件不直接删除。识别失败则明确听不清或无法读取，不猜人名和数字。",
         items: [
           ["纪要", "重点、决定、责任人和待办"],
           ["引用", "消息位置、录音时间与附件页码"],
@@ -231,7 +231,7 @@ export const systemScenarios = [
         number: "01",
         kicker: "故障与证据质量",
         title: "先证明这段历史能不能用",
-        body: "从自然语言确定最短必要时间窗，检查采集是否覆盖、是否经历睡眠或关机、最大数据空档和帧率样本是否一致。没有历史数据不等于当时健康。",
+        body: "先确定最短必要故障窗口，核对历史覆盖、真实睡眠事件、采集空档与帧来源。当前进程活着不证明昨晚持续写入；缺传感器留空，不把无数据写成健康，也不把采集延迟猜成休眠。",
         items: [
           ["时间窗", "发生时刻、持续时间和主观症状"],
           ["覆盖", "样本、新鲜度、空档与睡眠边界"],
@@ -242,7 +242,7 @@ export const systemScenarios = [
         number: "02",
         kicker: "假设与交叉检查",
         title: "历史信号、当前现场与推理一起工作",
-        body: "TimeAudit 提供 CPU、GPU、内存、磁盘、网络、帧率和活动状态；PCConfig 与系统现场核对配置、任务、驱动和近期变化；原生内存记录独立于 AI、TimeAudit、Docker 和网络，每 5 秒留下系统提交量、内核池和进程 PID 等线索，故障后可查上一会话尾段。通用 AI 比较内存增长、换页、磁盘延迟、热或功耗限制、网络抖动等解释；硬断电尾部仍可能丢失。",
+        body: "TimeAudit留下硬件与活动历史，共享健康入口同时核对进程和实际持久写入；PCConfig的有界卡顿诊断再把它与Windows事件、原生内存记录放到同一时段。原生记录独立于AI、数据库和网络，能提供当时PID与内核池线索；硬断电尾部仍可能丢失。AI比较多个解释，不能把最高占用、单个阈值或相关性当确定原因。",
         items: [
           ["历史证据", "时间对齐的硬件、流畅度和活动信号"],
           ["当前证据", "机器配置、事件、任务和是否仍可复现"],
@@ -276,7 +276,7 @@ export const systemScenarios = [
         number: "01",
         kicker: "资产与恢复前提",
         title: "先认清机器、磁盘和真正可用的恢复来源",
-        body: "先区分同机重装、换机/换板、系统盘故障还是只能进入 PE；核对主板与 BIOS/UEFI、物理磁盘、加密状态、备份时间、仓库身份和恢复因子。只读识盘完成前不格式化，也不沿用旧盘符猜设备。",
+        body: "先区分同机重装、换机、系统盘故障或只能进PE，核对机器、物理盘、加密状态和真正可用的备份。配置、微信、选定WSL材料、数据库与凭据各自有来源；H连接着就不叫物理离线保护。只读认盘完成前不格式化，不沿用旧盘符猜目标。",
         items: [
           ["机器", "主板、BIOS/UEFI、PE、网络、物理磁盘与目标系统盘"],
           ["数据", "文档、下载、微信、存档、应用配置和数据库"],
@@ -298,7 +298,7 @@ export const systemScenarios = [
         number: "03",
         kicker: "分层验收",
         title: "装回去不等于已经恢复",
-        body: "分别验证文件、表结构、数据数量、当前写入、任务身份、应用登录、用户可见结果和回滚入口。需要重启、登录或实体观察的部分保持待验。",
+        body: "先核对文件与清单，再验证程序能否看见数据、数据库能否独立恢复、账号是否登录和任务是否正常。来源已有16组冷备与配置隔离恢复，不等于整机新装已验收；真实应用、自然启动、登录和实体观察继续按各自条件检查。",
         items: [
           ["已可用", "真实运行和用户路径已回读"],
           ["待行动", "需本人登录、授权或自然重启的项目"],
@@ -358,19 +358,19 @@ export const systemScenarios = [
     title: "人在外面，也能让 AI 用自己的电脑办事",
     request: "比如我在手机上说：“找到电脑上的那份方案，读一下第二节，改好后存回去。”ChatGPT 负责理解和推理，电脑 MCP（工具连接协议）把文件、命令和桌面操作交给家里的电脑，结果再回到这段对话。",
     systems: ["手机上的 ChatGPT", "电脑 MCP", "同一套电脑规则与个人 Skills", "电脑上的项目和原件"],
-    rules: "电脑需要开机、联网并登录 Windows，操作桌面还需要解锁。每个任务读取电脑当前规则，写入遵守对应项目的实际负责人和授权；使用另一款客户端不会自动取得最高权限。",
+    rules: "电脑要已启动、联网且对应服务可达；普通桌面工具需要真实用户登录和可交互桌面，登录前维护另由已部署SYSTEM入口承担。每项操作核对目标电脑、当前规则、项目负责人和实际权限；换客户端或选更强模型不会自动扩大授权。",
     result: "收到读到的内容、实际改好的文件、命令结果或操作后的截图；失败会指出断在连接、程序还是具体页面，重新连接后先核对已经完成的部分。",
-    value: "在已开放所需电脑工具的 Chat（聊天）对话里，可以选账号提供的 Extra High（极高）或 Pro 档位。推理使用 Chat 自己的模型用量，不占 Work（工作）与 Codex 的共享额度，也无需为本地工具操作再启动一个 Codex 模型任务；可以把当前支持的查资料等任务放到这里；改文件和执行命令仍以实际开放的工具权限为准。",
+    value: "推理留在正在使用的对话，电脑MCP负责把已开放的文件、命令和桌面工具接到真实电脑，不为一次脚本操作另起本地模型任务。能否使用这些工具取决于具体账号、客户端和当前连接；模型名称、订阅标签或手机能打开聊天，都不单独证明写入与桌面操作已开放。",
     stages: [
       {
         number: "01",
         kicker: "手机提出要求",
         title: "用顺手的聊天界面，接到自己的电脑",
-        body: "在已经接通“电脑 MCP”的账号里选好模型，说清要处理什么。手机可以保留原来的 VPN；OpenAI 服务器通过已认证的 HTTPS 入口调用电脑，Codex 窗口不必一直打开。",
+        body: "在已经接通电脑MCP的实际客户端选择账号提供的模型，再说清要处理什么。请求通过已认证的HTTPS入口到达电脑，Codex窗口不必一直打开；手机原生客户端是否支持建立或使用该连接，仍看实际界面，不将网页连接能力外推到每种手机入口。",
         items: [
           ["入口", "已经连接的 ChatGPT 账号与电脑 MCP"],
-          ["模型", "使用账号实际提供的极高或 Pro 等档位"],
-          ["用量", "Chat 有自己的限制；切换到 Work 后按 Work 计量"]
+          ["模型", "使用账号实际提供的模型与思考档位，不把一次调度配置当永久能力上限"],
+          ["用量", "按当前客户端的实际计量与限制判断，不用套餐名保证无限量或工具可用"]
         ]
       },
       {
@@ -388,7 +388,7 @@ export const systemScenarios = [
         number: "03",
         kicker: "把实际结果带回来",
         title: "看文件和操作结果，卡住就从现场继续",
-        body: "Work 已实际跑通文件读写、命令、文档片段、外部 Chrome 和基础表单；Chat 是否能执行同样的操作，取决于该账号开放的工具。具体模型和手机原生入口以实际界面为准；遇到连接中断，先检查文件和任务状态，再接着完成，避免重做已经成功的操作。",
+        body: "既有Work任务已实测文件、命令、文档片段、外部Chrome和基础表单；双机维护也有各自证据。当前连接缺工具先核对现有配置，不伪造能力；结果丢失先查询原请求或读回文件，避免重做已成功的动作。物理冷启动未登录和每种手机界面仍需单独验收。",
         items: [
           ["成功", "读回文件内容、保存位置、退出码或操作截图"],
           ["中断", "先检查已执行结果，再续做未完成部分"],
@@ -556,7 +556,7 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "个人系统网页快照更新",
       focus: "先核对项目、规则和能力的实际变化。网页说明仍准确就不改；用途、状态或限制变了，才更新相关说明，再检查系统总览是否需要一起改。必须由本人点名更新的页面继续遵守原约定。",
-      process: "按本人选择的模型和思考强度执行，并核对实际使用的身份。分别查清新增、改变、退出或仍不确定的产品与技术事实，在原位置更新受影响的项目、规则、能力和系统说明。提交记录和文件变化只帮助找到线索，不替 AI 判断该写什么。",
+      process: "按本人选择的Astra Max默认和实际宿主身份完成语义判断，运行配置不是产品身份或永久上限。先从来源查清新增、改变、退出与未知，再原地更新受影响的项目、规则和能力，最后判断系统总览是否需要改。提交和文件差异只提供线索，不能代替内容判断；不因模型或工具受限静默换到低档或本地路线。",
       delivery: "逐项告诉我哪个页面从什么状态变成了什么、修复了哪些问题，以及哪些内容未变或仍不确定；本次和每周都汇报。按本人发布安排上线并重新打开网站确认，没有实质变化也明确说明核对范围。"
     },
     {
@@ -565,22 +565,22 @@ export const systemActiveAutomations = {
       cadence: "每周",
       title: "副驾驶恢复胶囊与每周巡检",
       focus: "检查备用笔记本的恢复说明、已选文件、本地副本和 U 盘胶囊，确认换机或重装时知道从哪里恢复。",
-      process: "笔记本每天 09:00、21:00 检查：普通恢复胶囊按 7 天周期；独立 Codex 历史按 12 小时周期形成本地恢复点并向在场 U 盘复制，各保留当前和前一份。AI 每周只读核对恢复内容、实际任务和遗漏项，巡检本身不触发备份或恢复。2026-09-14 实机任务为北京时间周一 07:15，恢复账本仍写 10:00；原任务仍有旧的固定路径限制，与已安装恢复模板不一致，需由来源任务收敛。",
-      delivery: "只有新的可行动问题才通知，说明影响、最近可用世代和该怎样处理；正常未插 U 盘不当故障。本地与 U 盘各自保留成功时间和覆盖范围，不能把一份成功算成两份；胶囊不替代 Windows 重装、重新登录或真实换机验收。"
+      process: "文件备份仍由笔记本原有Windows任务每天09:00、21:00检查：普通胶囊各满7天更新，独立Codex历史满12小时形成恢复点，向在场U盘复制，各保留当前和前一份。AI周检沿用北京时间周一07:15的原任务，恢复范围只读；另按本人明确授权核对双机MCP正式版本，兼容验证通过才顺序更新，失败回退。无新版本不重装、不重启，不另建任务或恢复已暂停的主机任务。",
+      delivery: "只报告新的可行动问题或实际升级/回退，说明影响和最近可用世代。9月18日来源回读本地历史与安全Git成功，U盘未接入，冷备保留9月12日原日期；正常缺席不当故障，也不算已复制。周检与本网页更新是两件事；模板存在不代表新机任务已恢复，胶囊不代替重新登录或真实换机验收。"
     }
   ]
 };
 
 export const systemProjectInventory = {
-  observedAt: "2026-09-14T04:17:15.4124752Z",
-  total: 50,
+  observedAt: "2026-09-18T19:35:47.4014034Z",
+  total: 48,
   publicCount: 25,
-  privateCount: 25,
-  localCloneCount: 46,
+  privateCount: 23,
+  localCloneCount: 44,
   remoteOnlyCount: 4,
-  identitySha256: "sha256:2f38a7e1fb9383c4990dd8fc1c4aaefcd84f2143b5682c45c333fad8a76a158f",
+  identitySha256: "sha256:d3cb69c824ddba911a12e629dab5c694c04ba8e4791263b7366dbac667ab2814",
   mappingSha256: "sha256:19448212b9b07ad63637149f476ab2f9c9f1997be0d15cdd603a6ba7406bfb1a",
-  description: "2026-09-14只读Owner来源共50个仓库：25公开、25私有，46个本地副本、4个仅远端；当前基线已对齐、差异0、问题0。展示项目数与实际仓库数不同。identitySha256与mappingSha256保留9月9日历史摘要，本轮没有重新计算，不能验证当前50个集合；计数来自本轮分页闭合回读，网站不声称后台实时更新；网站自身只负责呈现这些信息。"
+  description: "9月18日只读Git Owner回读：48个仓库，25公开、23私有，44个本地副本、4个仅远端；身份基线与实际集合一致，当前差异0、问题0。完整身份与本地根基线原观察于9月16日，摘要绑定该集合；历史退出记录不算当前故障。展示项目数与仓库数不同，副本存在也不证明所有分支同步或业务运行。 身份摘要绑定Owner仓库集合，映射摘要绑定本页项目与来源关系；网站自身只负责呈现，不成为第四个事实库。"
 };
 
 const projectLedgerHref = "/projects/github-index/repository-ledger";
@@ -597,9 +597,9 @@ export const systemProjectDomains = [
     unavailable: "某个入口不可用时只停止依赖它的支路，保留已经完成的工作并说明缺口；不静默换路线冒充原结果。",
     assets: [
       { id: "agents", title: "AI 协作规则与能力中心", repo: ".agents", role: "让 AI 知道听谁的、能做什么、该用哪种能力、多个协作者怎样不互相覆盖，以及何时需要停下来交给人。", kind: "核心基座", href: "/projects/agents" },
-      { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "把多套 AI 命令行入口的启动、Profile（配置档）、隔离、体检、真实连接测试和可恢复 Codex 任务收在一起。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
-      { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可客观验收的长任务变成可追踪作业，只返回紧凑结果和证据。", kind: "工作能力", href: "/projects/llm-backend-toolkit" },
-      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "维护本机网关的启动、自愈、模型成本、版本、受控更新与恢复边界；Telegram 与飞书已配置，但本轮消息进出闭环仍是 0/2 未验，Google Chat 当前关闭。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
+      { id: "ai-cli-profile-manager", title: "AI 命令行工作入口", repo: "ai-cli-profile-manager", role: "用Profile选择、体检和启动原生CLI，管理可恢复Codex运行，也接通原生桌面模型与同一个OpenAI后台子会话的往返协作。安装、实际加载和模型任务分别验收。", kind: "工作能力", href: "/projects/ai-cli-profile-manager" },
+      { id: "llm-backend-toolkit", title: "额外 AI 长任务执行器", repo: "llm-backend-toolkit", role: "把范围封闭、可独立验收的额外模型任务保存为可查询作业；只读诊断与查询不修任务，取消只发给同一运行，清理完成另有证据，不静默换后端。", kind: "工作能力", href: "/projects/llm-backend-toolkit" },
+      { id: "message-ai-gateway", title: "消息型 AI 网关", repo: "OpenClawGateway", role: "保留消息网关的运维、配置与恢复说明；当前来源冻结，本次不主动探测或升级。既有Telegram/飞书配置和0/2消息闭环未验记录仍按原日期，不能据端口或旧健康记录称当前交办可用。", kind: "集成与运维", href: "/projects/openclaw-gateway" },
     ]
   },
   {
@@ -613,14 +613,14 @@ export const systemProjectDomains = [
     unavailable: "历史缺采、设备离线或远端未实测时保留 Unknown，不用重启替代诊断，也不把主机运行冒充实体或对端可用。",
     assets: [
       { id: "codex-local-remote", title: "跨设备任务连续性的历史产品", repo: "codex-local-remote", role: "曾让手机继续桌面上的同一任务、审批、文件和队列；当前入口已冻结，只保留设计与历史验收证据。", kind: "历史能力", href: "/projects/codex-remote" },
-      { id: "emerald-veil", title: "桌面壁纸与空闲屏幕保护", repo: "emerald-veil", role: "保存选定的 Windows 桌面与锁屏背景，便于重装后恢复；电脑空闲六分钟时显示原生泡泡，输入后退出。壁纸恢复、泡泡运行和远程使用分别核对，实际屏幕与远程体验尚未全部验收。", kind: "桌面能力", href: "/projects/emerald-veil" },
-      { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "把现成的私有组网与跨设备服务配置成可诊断、可恢复的文字和文件通道；当前没有可用 KDE 对端，真实双机传输尚未验收。", kind: "集成能力", href: "/projects/meshclip-kit" },
-      { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把性能、媒体和可操作告警放到两块职责不同的实体副屏上。", kind: "工作能力", href: "/projects/pc-panel-hub" },
+      { id: "emerald-veil", title: "桌面壁纸与空闲屏幕保护", repo: "emerald-veil", role: "静态桌面与锁屏保留雨林黑猫图；空闲泡泡优先使用VDD所选壁纸材料，只显示实体桌面屏，主屏关闭就待命。托盘与快捷键可立即启动，原生动画、远控和自然开机各自验收。", kind: "桌面能力", href: "/projects/emerald-veil" },
+      { id: "meshclip-kit", title: "跨设备剪贴板与文件", repo: "meshclip-kit", role: "让两台Windows电脑共享文字和文件，提供明确对端配置、可见暂停与中断恢复。当前能看见对端，但配对身份、密码共享关闭及实际双机传输仍未完整验收，诊断通过不等于文件已送达。", kind: "集成能力", href: "/projects/meshclip-kit" },
+      { id: "pc-panel-hub", title: "电脑状态副屏", repo: "PC-Panel-Hub", role: "把持续状态放到两块职责不同的实体副屏；普通工作窗口可按身份回迁，泡泡、壁纸、黑罩和仪表排除，不能把软件心跳当成实体像素验收。", kind: "工作能力", href: "/projects/pc-panel-hub" },
       { id: "pcconfig", title: "电脑配置与恢复中心", repo: "PCConfig", role: "回答机器现在怎样、改动会影响什么、程序从哪里启动、重装后怎样恢复；电脑 MCP 让手机或云端 AI 调用电脑，也让主机和副驾驶互相维护。两台电脑各自保留运行与恢复边界。", kind: "核心基座", href: "/projects/pcconfig" },
-      { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "诊断代理退出后的残留设置，默认只清失效的本机端口；明确选择直连时才清理所列活动代理。没有健康物理默认出口时保留路由。", kind: "修复工具", href: "/projects/proxyclean" },
-      { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "恢复缓存盘目录、记录内存与空间状态，并在既定阈值下重建驱动缓存；重建会清空缓存，不保护误放的唯一文件。当前定时任务运行，提交余量偏低的警告保留。", kind: "缓存守护", href: "/projects/ramdisk-guardian" },
-      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理串流主机、显示兜底、窗口回迁和网络诊断；当前不把服务在线冒充手机直连、流畅度、显示故障转移或远程冷开机已经验收。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
-      { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "持续记录电脑状态，让卡顿、耗电、崩溃和时间去向可以事后回放。", kind: "证据系统", href: "/projects/timeaudit" }
+      { id: "proxy-clean", title: "代理断开后的网络修复", repo: "ProxyClean", role: "先预览再清确认失效的代理配置，可按原值撤销；精确关端口不顺带结束整类客户端。保留混合配置其他端点与物理回退路由，不把清设置说成所有应用已直连。", kind: "修复工具", href: "/projects/proxyclean" },
+      { id: "ramdisk-guardian", title: "高速缓存守护", repo: "RamdiskGuardian", role: "维护可重建缓存与健康；持续压力、当前消费者和冷却条件全部通过才重建，窗口可暂停自动重建。当前维护正常，驱动内存释放和实际加速不凭镜像大小猜测。", kind: "缓存守护", href: "/projects/ramdisk-guardian" },
+      { id: "sunshine-remote-streaming", title: "远程使用高性能电脑", repo: "sunshine-remote-streaming", role: "管理远程串流、显示兜底和窗口回迁；当前服务与守护可回读，但本启动周期GPU故障证据阻断捕获切换，客户端状态Unknown。手机画面、直连与物理故障转移仍未验。", kind: "集成与运维", href: "/projects/sunshine-remote-streaming" },
+      { id: "timeaudit", title: "电脑黑匣子", repo: "TimeAudit", role: "记录电脑过去的性能与活动，让故障可追查；缺采和真实睡眠分开，缺传感器不造数。共享健康看实际写入，数据库备份和隔离恢复分别证明。", kind: "证据系统", href: "/projects/timeaudit" }
     ]
   },
   {
@@ -633,12 +633,12 @@ export const systemProjectDomains = [
     delivery: "可打开的原件、回复与媒体关系、带时间位置的文字、版面结构、引用和待确认项。",
     unavailable: "原件不在当前覆盖、附件丢失或识别失败时明确实际检查范围与待确认项，不用摘要补齐缺失事实。",
     assets: [
-      { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "把录音变成可搜索、可定位、可复核的文字，也提供 Win+H 麦克风听写与焦点变化后的输入保护。", kind: "工作能力", href: "/projects/chinese-asr" },
-      { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "把截图、扫描件和复杂 PDF 转成可核对的文字、表格、公式、版面和坐标，并用 display_summary（人话状态摘要）说明覆盖、质量、置信度和警告。", kind: "工作能力", href: "/projects/localocr" },
-      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "9 月 14 日状态回读有 46 个来源、115 条精确登记、4 条关系、14 份绑定文字；盘点尝试全部来源，43 个完成、3 个不可达，已见至少 233,156 个非媒体路径，保留下限。inspect 验真后交回定位供 AI 阅读，明确要求桌面查看才打开；已选定文档可继续定位相关段落。本人删除精确原件后，现有日常同步只退役该出现记录与独有派生内容。", kind: "资料入口", href: "/projects/personal-materials" },
-      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "按四库整理本地原件、必要文字和索引，并保留独立恢复副本。当前 4,230 项、96.18 GB 已完成云端上传与分类：照片和视频进入 Google Photos，录音、音乐与铃声进入 Drive；全量回读通过，重复运行没有再次写入。Photos 的 116 段视频中 115 段已完成平台处理、1 段仍在处理；手机实际回写、全部格式播放和从云端零起点恢复仍分别未验。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
-      { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "为 WeFlow 提供账号与消息读取契约、接口自检和有界静默启动；现役微信日常入口仍由独立 WeChatDirect 承担。健康响应不等于真实聊天读取通过。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
-      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "按指定账号和对象读取本机微信上下文并维护具名归档；2026-09-14清单聚合为4个完成态归档、7934条消息，四份均有媒体或成员标签缺口；旧3/3独立验真保留原日期，本轮未重跑。", kind: "资料入口", href: "/projects/wechat-direct" }
+      { id: "chinese-asr", title: "中文语音理解", repo: "ChineseASR", role: "将录音转成可搜索、可回听复核的文字，也支持桌面听写和已知文稿对时；对齐只证明时间位置，不替给定文稿背书，真人麦克风和全部模式各自验收。", kind: "工作能力", href: "/projects/chinese-asr" },
+      { id: "local-ocr", title: "本地精确文字识别", repo: "LocalOCR", role: "读取截图、扫描页、表格和复杂PDF，按页选择必要路线并保留坐标、文字及质量。部分页失败明确交付已完成部分；普通场景描述直接看原图，不强制跑识别。", kind: "工作能力", href: "/projects/localocr" },
+      { id: "personal-materials", title: "个人材料查找", repo: "personal-materials", role: "47个来源登记154份材料，其中44份有可搜索文字；其余仍可先按位置和版本找原件。选中后验真，不为查找预读所有正文。盘点触及上限，未查范围与3个不可达根保留未知，不从较小下限推断删了文件。", kind: "资料入口", href: "/projects/personal-materials" },
+      { id: "personal-media", title: "个人媒体整理与恢复", repo: "personal-media", visibility: "PRIVATE", role: "当前3485张照片、116个视频、754份录音和3项音乐/铃声，新增具名照片相册而不复制原件或改分类。本地4358项有云端映射记录；上次远端全量回读保留原日期，当前播放、手机回写和从零恢复仍分别未验。", kind: "媒体原件与恢复", href: "/projects/personal-media" },
+      { id: "wechat-history-ai-bridge", title: "WeFlow 微信接口接入", repo: "wechat-history-ai-bridge", role: "保留WeFlow账号、消息读取和有界启动的接入说明；来源当前冻结，本轮不主动调用或维护。日常微信材料走独立WeChatDirect，两条路线和历史健康证据不能互相顶替。", kind: "集成能力", href: "/projects/wechat-history-ai-bridge" },
+      { id: "wechat-direct", title: "微信工作材料入口", repo: "WeChatDirect", role: "读取指定对象聊天和媒体，长文本可按同一版本分段读完；需要长期保存才维护具名归档。部分交付、独立验真和来源完整分开，中断可检查原事务，后来取得的本地附件可定向补。旧4归档/7934消息保留9月14日日期。", kind: "资料入口", href: "/projects/wechat-direct" }
     ]
   },
   {
@@ -653,7 +653,7 @@ export const systemProjectDomains = [
     assets: [
       { id: "md-triple-tactics-talent-solver", title: "规则仿真与策略报告", repo: "md-triple-tactics-talent-solver", role: "保留规则仿真、策略报告和早期视频制作流程的历史参考；已有材料不代表当前仍在持续运行。", kind: "历史资产", href: projectLedgerHref },
       { id: "typora-theme-pack", title: "写作与 PDF 视觉", repo: "typora-theme-pack", role: "让 Markdown 在编辑、个人阅读和专业导出时保持一致的视觉语言。", kind: "写作工具", href: "/projects/typora-theme-pack" },
-      { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "把已确认文案、Fish 配音、本机词级时间轴、审阅后的 SVG、渲染前预览、输入安全的 4K60 分片续作和成片交付串成一条可复核流程。", kind: "工作能力", href: "/projects/video-scaffold" }
+      { id: "video-scaffold", title: "本地视频制作流水线", repo: "video-scaffold", role: "已确认文稿经Fish配音、可靠词级时间轴、审阅SVG与4K60分片渲染形成可续作交付；时间戳缺失时共享ChineseASR对齐，不为视频默认安装第二套转写。Whisper仅是有效旧结果或按需备选，真实云端配音与成片另验。", kind: "工作能力", href: "/projects/video-scaffold" }
     ]
   },
   {
@@ -669,8 +669,8 @@ export const systemProjectDomains = [
       { id: "career-development", title: "AI 协助学习", role: "围绕权威资料、人话解释、交流后重查和少量不计分问题帮助理解；已了解的共用背景按需读取，教学反馈仍由学习项目处理。这里只介绍可复用方法，不展示私人学习主题或进度。", kind: "学习方法", href: "/projects/learning" },
       { id: "formal-materials", title: "文书和材料制作", role: "从当前事项和必要原件生成同源 DOCX/PDF、自包含材料包与逐页证据，并把本人签名、可递送、递送、收件、处理和对方签回分别说明。", kind: "文书与材料", href: "/projects/document-materials" },
       { id: "personal-health", title: "个人健康协作", repo: "personal-health", role: "先用处理后的健康底色回答，需要时才回原件或做一次前台设备更新。", kind: "长期协作", href: "/projects/personal-health" },
-      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "把本人的经历、生活重点和真实取舍整理成能补充、纠正的共用背景。说一句“结合最近微信和新资料更新一下”，就从已读位置继续，读过必要上下文后修订认识，保留仍未读的范围。手机和云端通过已接通的电脑 MCP 读写同一份理解库；需要离线或转交时才导出。有具体疑点时，也可只读相关背景辅助核对；资料不能认证身份，待验证的新说法不自动改写原有认识。工作、学习、文书和健康各自负责专业判断。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
-      { id: "personal-expression", title: "个人表达：讲明白和拟消息", repo: "personal-expression", visibility: "PRIVATE", role: "把事情讲给我听，也帮我把已经确定的意思写成自然消息。指出难懂或别扭之处后，先改好当前回答，再保留有用反馈供下次参考。有具体疑点且需要核对时，也可只读既有表达作参考，不认证身份、不收录待验证的新说法。专业判断和沟通策略仍由当前任务负责；这里只讲解或拟稿，不发送。", kind: "解释与表达支持", href: "/projects/personal-expression" }
+      { id: "daily-preferences", title: "个人理解库", repo: "daily-preferences", visibility: "PRIVATE", role: "把经历、生活重点和真实取舍整理成可补充、纠正的本人背景。可从实际阅读位置吸收新材料，保留事实与可推翻判断；产生新认识的领域任务及时回写有依据的变化。手机与电脑读写同一份库，不将背景用于操作者身份判断，专业决定仍归对应领域。", kind: "共用本人背景", href: "/projects/daily-preferences", entryLabel: "进入完整项目页" },
+      { id: "personal-expression", title: "个人表达：讲明白和拟消息", repo: "personal-expression", visibility: "PRIVATE", role: "帮助把事情讲明白，或把当前任务已确定的意思写成自然消息。先改好这次回答，再保留有用反馈；解释与拟稿分开，不用表达样本识别人，不代定策略、不自动发送，也不宣称已证明长期自动学习。", kind: "解释与表达支持", href: "/projects/personal-expression" }
     ]
   },
   {
@@ -684,7 +684,7 @@ export const systemProjectDomains = [
     unavailable: "缺失的 Git 事实只阻断依赖它的分支、同步或发布；目标已确认且不依赖该缺口的本地工作继续，提交存在不会冒充已经发布。",
     assets: [
       { id: "codex-agent-model-benchmark", title: "真实任务能力基准（CACB）", repo: "codex-agent-model-benchmark", role: "用同一任务和可复核结果比较不同 AI 工作方式，不把一次回答或当前有问题的评分当结论。", kind: "研究验证", href: "/projects/cacb" },
-      { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "先弄清仓库是谁、在哪里、能否公开、工作树和远端怎样，再谈修改与发布。", kind: "核心基座", href: "/projects/github-index" },
+      { id: "github-local-index", title: "项目身份与发布总账", repo: "github-local-index", role: "查清仓库、远端、可见性、工作树与发布，还能按登记找到私有配套说明。Git读取失败不直接判身份冲突，普通dirty不等于有人正在施工，恢复分支也不强迫并回业务主线。", kind: "核心基座", href: "/projects/github-index" },
       { id: "work-delivery-copilot", title: "工作支持与交付", repo: "work-delivery-copilot", visibility: "PRIVATE", role: "支持真实工作中的理解、沟通、决策、评审与交付；轻量事项直接完成，需要持续来源版本和一致产物时才建立交付包。相关本人背景由个人理解库提供，业务事实与工作结果仍由本项目负责；六个正式文件、质量门、现实价值与恢复缺口分别说明。", kind: "真实工作支持与持续交付", href: "/projects/work-delivery" },
       { id: "wly0829-cn", title: "当前网站呈现仓库", repo: "wly0829.cn", role: "只负责把项目、规则、Skills 和公开安全事实呈现成当前网站；它计入总账，但不作为一个被介绍的项目。", kind: "呈现基础设施", href: "/", presentationOnly: true },
       { id: "wlyaaaaa", title: "GitHub 公开入口", repo: "wlyaaaaa", role: "把主要公开项目和个人站点放到 GitHub 首页，负责发现，不承担运行。", kind: "公开入口", href: "https://github.com/wlyaaaaa", entryLabel: "打开 GitHub 主页" }
@@ -700,12 +700,12 @@ export const systemProjectDomains = [
     delivery: "不含秘密的使用结果、分层备份、完整清单与指纹、远端回读和不覆盖冲突的恢复位置。",
     unavailable: "密钥、恢复因子、原备份或目标身份不足时停止精确恢复，不显示秘密、不覆盖冲突文件，也不声称备份可用。",
     assets: [
-      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "把 Codex、Gemini、Claude 与 OpenClaw 的四套现有备份放在一起查阅：各自保存配置、记忆、可读成果或工作区，恢复时仍按各自范围和入口执行。主机 Codex 完整会话另有 G/H 恢复点，当前双盘同点；G 自动保留当前与前一份，核验后清旧点和无引用对象，H 跟随 G 的有效保留集合。副驾驶按自己的设备配置保留本地与 U 盘历史恢复点，仅安全设置投影进入独立云分支。隔离副本能读取历史与真实新回合续作分别验收；同页展示不表示四套数据被合成一份备份。", kind: "恢复资产", href: "/projects/codex-memory" },
-      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置、凭据和恢复清单整理成可选择回填的备份包，分别维护本地、G 盘和 Drive 结果。本地与 G 盘已有同一新包，Drive 仍保留上一代，各自按真实备份时间核对；微信回填先预检并保留回滚点，云端与原生恢复各自验收，官方客户端是否可用仍需实际确认。", kind: "恢复资产", href: "/projects/devconfig-backup" },
+      { id: "ai-memory-backup-b", title: "AI 工作区备份与恢复", role: "四套已有AI工作区备份分别保存自己的配置、记忆或工作现场，不合成一份中央库。Codex完整历史独立按恢复点保存，主机G/H与副机本地/U盘分别核对；副机U盘缺席时本地和安全Git继续，保留旧冷备日期。文件可读、真实续作、登录和换机可用仍分层。", kind: "恢复资产", href: "/projects/codex-memory" },
+      { id: "devconfig-backup", title: "开发环境重装备份", repo: "devconfig-backup", role: "把开发配置和恢复清单保存为可选择回填的备份。来源已验证同一新包在本地、G、Drive和H一致，隔离恢复通过；微信G/H全树核验修复了53个内容不一致文件，选定WSL材料进入原链路。官方应用接受和整机恢复仍需现实验收。", kind: "恢复资产", href: "/projects/devconfig-backup" },
       { id: "key", title: "Key：分开保管的另一份恢复材料", repo: "Key", role: "用 VAULT03 和独立密码加密保管敏感密钥、恢复码、备用码等材料。最高权限体系与 Key 各保管一部分，分别解锁、互不替代；单拿一边不等于掌握全部恢复材料。这是两条保管线组成的双保险。", kind: "密码加密与私人备份", href: "/projects/vault-tool/private-backup", entryLabel: "了解密文备份与恢复" },
       { id: "public-project-private-backup", title: "公开项目的私有文件备份", repo: "public-project-private-backup", role: "公开项目的源码照常发布，已排除出公开 Git、但确有恢复价值的本地配置或材料另存私人备份。每份副本保留对应项目、原相对位置和指纹，恢复时能找回正确文件；它不是把整个公开仓库再复制一遍。有持续用途的小工具另由本机轻量工具清单按用途找回；源码、必要依赖与恢复说明已保存到 G 盘备份。现有正式能力只保留指针，由所属项目继续维护；一次性过程文件仍清理。", kind: "恢复资产", href: projectLedgerHref },
-      { id: "steam-millennium-config-backup", title: "Steam 个性化配置备份", repo: "steam-millennium-config-backup", role: "每周保存白名单中的界面配置、插件清单和主题选项；重装后手工合并恢复，插件私有设置与程序资源另行处理。", kind: "恢复资产", href: "/projects/steam-millennium-config-backup" },
-      { id: "vault-tool", title: "本地文件加密与恢复", repo: "vault-tool", role: "把明确文件和子目录加密保存，按需在本机查看或取回；区分合并、密码与密钥文件、库维护、双密码层、图片载体和私人密文备份。", kind: "加密工具", href: "/projects/vault-tool" }
+      { id: "steam-millennium-config-backup", title: "Steam 个性化配置备份", repo: "steam-millennium-config-backup", role: "保存Steam的核心选择、CSS、插件和主题清单。现在有完整性清单、只读恢复计划、受控回填、回滚与中断恢复，窗口能管理原任务；不恢复程序和插件私有数据，最后仍要打开Steam验证。", kind: "恢复资产", href: "/projects/steam-millennium-config-backup" },
+      { id: "vault-tool", title: "本地文件加密与恢复", repo: "vault-tool", role: "加密保存指定文件，默认保留原件；按需本地查看或无覆盖导出，改密码保留另一槽位，扩容和共享密钥文件变化先做可验证新副本。私人密文上传、字节回读与真正解密恢复分别确认。", kind: "加密工具", href: "/projects/vault-tool" }
     ]
   },
   {
@@ -876,7 +876,7 @@ export const systemDependencyNodes = [
     "lane": "capability",
     "title": "任务协作",
     "subtitle": "让复杂工作持续推进",
-    "detail": "把目标拆成可完成的步骤，安排能独立进行的工作并行处理，保留进度与断点，再汇总和检查结果。主任务始终负责最终交付，按你的反馈调整方向。",
+    "detail": "把目标拆成互不覆盖、可独立检查的支路，再由主任务汇总验收。原生协作者、额外后端作业和第三方父任务的OpenAI子会话不是同一种关系；只用当前实际开放且身份可核验的入口，不为凑并行数量换到未授权路线。",
     "searchHref": "#system-node-task-collaboration",
     "searchAliases": [
       "任务规划",
@@ -936,7 +936,7 @@ export const systemDependencyNodes = [
     href: "/skills/native-economy-routing",
     linkLabel: "Skill：原生代理协作路由",
     searchAliases: ["Hook 创建子代理前核对身份", "宿主钩子怎样让规则生效"],
-    detail: "对话开始或子代理启动时先注入已经核验的身份与当前规则；真正创建协作者前再复核一次。Hook 只验证身份、规则和参数，不替 AI 决定开多少协作者，也不扩大授权；身份或规则无法验证时只关闭本次委派，主任务的普通工作继续。"
+    detail: "在适用宿主中，任务进入和创建前核对真实模型、思考强度、血缘与活动规则，再判断并行价值。普通MCP不会因连接成功继承codex-root；宿主没提供对应证明时不伪造原生身份，只限制依赖它的委派。当前调度参数不是产品的永久模型上限。 在适用原生宿主真正创建协作者前再复核，避免检查后身份或规则变化；普通任务继续，不由Hook替AI调度。"
   },
   {
     id: "skills",
@@ -961,7 +961,7 @@ export const systemDependencyNodes = [
     title: "凭据中心（Password Center）",
     subtitle: "凭据元数据、盲填与盲注入、受控显示和恢复",
     href: "/projects/pcconfig/secrets-providers",
-    detail: "让程序完成登录与调用，又不必把密码或令牌交给普通聊天、命令行和文件。机器安装、备份和恢复事实仍由 PCConfig 提供。"
+    detail: "凭据默认盲用，人工复制也只在明确本地流程；秘密不进普通聊天。个人资料访问另外核对范围与共享状态：必需验证取消或超时冻结私人取用，但不锁磁盘或删除数据。普通隐私、密码显示、设备判断和磁盘保护不是一个按钮，恢复各走原有入口。"
   },
   {
     id: "runtime-startup",
@@ -969,7 +969,7 @@ export const systemDependencyNodes = [
     title: "运行、任务与自启动",
     subtitle: "运行时、受管软件、端口、计划任务和登录启动",
     href: "/projects/pcconfig/runtime-startup",
-    detail: "把软件存在、任务定义、最近运行结果和业务真正完成分开观察；启动链失败时能找到精确任务、身份和恢复入口。"
+    detail: "软件存在、任务定义、最近结果和业务完成分别核对。原有联合维护窗口能显示串流/缓存守护的最近与下次检查、消费者和冷却，并控制后续触发；打开不自动修复，关闭不停止已登记任务，不增加重复后台服务。"
   },
   {
     id: "recovery-backup",
@@ -977,7 +977,7 @@ export const systemDependencyNodes = [
     title: "换机、重装、备份与恢复",
     subtitle: "从 BIOS/UEFI、PE 识盘和驱动，到项目、任务、登录与应用可见",
     href: "/projects/pcconfig/recovery-backup",
-    detail: "先区分同机重装、换机、系统盘故障或仅 PE，再按不破坏原盘的顺序恢复。普通资料与媒体先确认可访问的 G/H 备份，凭据和受保护载荷再走各自正式恢复入口。G→H 已登记 15 组来源，H 在 9 月 5 日完成首次备份验收；H 上最近成功冷备为2026-09-14 00:11 UTC，15组来源与H闭包通过回读；00:34 UTC本机另一次尝试因H不可用而跳过，不能覆盖H已有成功记录。H普通冷备跟随G有效保留集的新增、修改和删除，离线不当空源；G各来源仍按自己的实际入口验收，微信G/Drive的删除跟随尚未实现；Codex会话另有独立回执，G/H当前同点，共7,279个文件、51,104,813,027 bytes；G保留当前与前一份，H先复制核验再跟随有效保留点清理旧点和对象。后来新增内容仍需下一次备份，备份成功不代表整机已恢复。BIOS记录、启动介质、任务Ready和复制分别证明各自一层，最终还要自然启动并确认应用真正看见数据。"
+    detail: "先区分同机重装、换机、系统盘故障或仅PE，再按不伤原盘的顺序恢复。普通资料与媒体使用可访问的G/H原生备份，凭据和受保护载荷走各自正式恢复入口。H在9月5日已有首次验收；9月18日来源Owner完成16组冷备，DevConfig四处同包及隔离还原、微信G/H全树核验、选定WSL材料和数据库备份各有独立证据。普通镜像先复制核验再跟随当前有效集合清理，源不可达不当空目录；H仍连接时不称物理离线或异地。后来新增内容仍需下一次备份，备份通过不等于整机恢复，最后还要自然启动并确认应用真正看见数据。"
   },
   {
     id: "protected-data",
@@ -990,21 +990,21 @@ export const systemDependencyNodes = [
   {
     id: "google-workspace",
     lane: "external",
-    title: "邮件、云盘与日历",
-    subtitle: "固定账号的收件箱、Drive 文件和日历事件可以按需进入任务",
+    title: "固定账号的邮件与云盘",
+    subtitle: "Gmail和Drive按明确范围进入任务；本机Calendar路线已冻结",
     href: "/skills/google-workspace-direct",
-    linkLabel: "Skill：邮件、云盘与日历",
-    detail: "可以直接用普通要求查收件箱、云端硬盘或日历；默认只读，明确授权后只执行入口已支持的精确写入，不静默换账号、浏览器或第二条服务路线。"
+    linkLabel: "Skill：邮件与云盘",
+    detail: "按普通要求找邮件、读正文或操作选定云盘文件；明确写入只走已支持的精确动作，超时先核对对象而不盲重放。本机Calendar冻结，不消费旧实现，也不静默换账号或浏览器；这不表示其他客户端的日历工具都不可用。"
   },
   {
     id: "message-ai-gateway",
     lane: "external",
     title: "消息型 AI 网关的运维与渠道验收（OpenClaw​Gateway）",
-    subtitle: "本机网关可以维护；Telegram 与飞书已配置但本轮消息闭环仍是 0/2，Google Chat 当前关闭",
+    subtitle: "来源当前冻结；保留设计、既有运维方法与消息闭环未验的原始边界",
     href: "/projects/openclaw-gateway",
     linkLabel: "查看 OpenClawGateway",
     searchAliases: ["OpenClawGateway", "Telegram 飞书 Google Chat 消息交办"],
-    detail: "这是本人主动发起工作的设计入口，不是定时任务或结果通知。它维护消息接入、启动、自愈、模型成本、版本、受控更新和恢复；当前Telegram渠道未运行、处于recovering（恢复中）且connected=false（未连接），飞书为running/starting（运行中/启动中），两条渠道的消息 E2E 都未完成，付费 Live（真实调用）也没有执行。绝不拿源码或端口替代实际结果。"
+    detail: "这是本人主动交办消息任务的设计入口，不是网页更新或通知任务。当前来源冻结，本轮不探测、升级或接管；既有Telegram与飞书配置、0/2消息闭环未验及旧运行状态保留原日期。未实测入站、执行和回发，不把端口或旧健康记录冒充当前可用；冻结维护也不代表既有服务已被停止。 既有模型成本、受控更新与恢复方法仍供查看，但不会因本次网页维护重新开启来源施工。"
   },
   {
     id: "scheduled-events",
@@ -1031,7 +1031,7 @@ export const systemDependencyNodes = [
       { href: "/projects/timeaudit", label: "进入项目" },
       { href: "/skills/timeaudit-diagnostics", label: "Skill：有界电脑历史诊断" }
     ],
-    detail: "项目保存过去证据，Skill 把普通故障描述收窄成最短必要时间窗和覆盖质量；通用 AI 再结合当前现场比较原因。没有历史数据只表示证据缺失，不等于电脑当时健康。"
+    detail: "TimeAudit提供历史性能和活动，Skill把问题收窄成必要时段；共享健康同时看实际写入、积压和缺采。统一卡顿诊断再与原生内存记录、Windows事件对齐，缺传感器留空，未观测不当正常。AI比较证据与反证，不用一个阈值判根因。"
   },
   {
     id: "panel-hub",
@@ -1039,7 +1039,7 @@ export const systemDependencyNodes = [
     title: "实体副屏状态与事件（PC Panel Hub）",
     subtitle: "实体副屏上的持续状态、任务和有限事件",
     href: "/projects/pc-panel-hub",
-    detail: "无需打开网页，也能持续看见电脑状态、任务和有限告警；指标代理、可信度、渲染、传输、事件调度、告警恢复和看门狗是个人维护的产品主体。它不替代历史诊断，主机心跳也不能替代实体像素验收。"
+    detail: "两块副屏分别呈现指标与有限事件；主机心跳不能代替实体像素。显示变化时，普通窗口回迁先核对身份，排除泡泡、壁纸、黑罩和仪表，不为拉回窗口改造整套显示拓扑。当前源码、历史屏幕验证和真实睡眠/断电结果分别保留。"
   },
   {
     id: "remote-computer-mcp",
@@ -1047,7 +1047,7 @@ export const systemDependencyNodes = [
     title: "手机与双机协作（电脑 MCP）",
     subtitle: "让正在聊天的 AI 调用实际电脑的文件、命令和桌面",
     href: "/projects/pcconfig/remote-computer-mcp",
-    detail: "手机或云端 AI 理解要求，电脑执行并交回结果；主机与副驾驶也能通过各自入口互相维护。已安装的开机服务承接维护，普通用户工具和桌面仍由实际登录用户执行；断连后可以查询原任务结果，避免重复操作。双机调用已回读，物理冷启动及每种手机界面另验。各机按自己的规则、身份和真实权限工作。"
+    detail: "对话负责理解，指定电脑执行文件、命令和桌面动作；两机也能互相维护。已部署SYSTEM服务可承接登录前维护，桌面操作仍需要真实登录用户。当前源已统一23工具中的关键输出合同，实际可用仍取决于该客户端开放什么。请求丢回执先查原编号或真实结果，不重复写；模型、套餐与MCP登录都不扩大权限，物理冷启动和每种手机界面另验。"
   },
   {
     id: "companion-laptop",
@@ -1058,7 +1058,7 @@ export const systemDependencyNodes = [
       { href: "/projects/pcconfig/machine-facts", label: "查看机器事实" },
       { href: "/projects/pcconfig/recovery-backup", label: "查看恢复方法" }
     ],
-    detail: "双向电脑 MCP 已从两台实机回读，笔记本本地与 U 盘胶囊也已完成同一世代的完整校验。平时远控台式机；主机不可达时，保留自己的网络、Codex、规则和按需项目入口。胶囊保存恢复配方和已选文件，Documents 仍有明确跳过项；它不是台式机镜像，新机、跨品牌恢复和外置 NVMe 接管仍需分别实测。"
+    detail: "平时远控主机，必要时用自己的网络、Codex、规则与轻量项目继续工作。普通恢复胶囊、Codex完整历史和安全云配置是不同层；9月18日本地与安全Git成功，U盘缺席保留9月12日冷备。原周一07:15巡检已与来源模板收敛，正常缺席不当故障；新机、跨品牌与NVMe外置接管仍需单独实测。"
   },
   {
     id: "cross-device-files",
@@ -1067,7 +1067,7 @@ export const systemDependencyNodes = [
     subtitle: "在自己的 Windows 笔记本和台式机之间传递剪贴板内容与明确文件",
     href: "#system-project-asset-meshclip-kit",
     linkLabel: "查看跨设备文件项目",
-    detail: "用于在自己的 Windows 笔记本与台式机之间传递文字和文件，保留发送方、接收方和失败说明。当前没有可用 KDE 对端，本轮尚未验证真实双机传输；Android 与手机也仍待验证。文件通道不传桌面画面，也不能证明远程控制、高性能应用或同一项 AI 任务已经接续。"
+    detail: "通过Tailscale与KDE Connect在两台Windows电脑间传文字和文件。现有对端可见，严格诊断仍要求确认两端配对身份和密码共享关闭，真实传输未验。可见窗口能暂停自动拉起而不关闭现有连接，配置中断按原记录恢复；文件通道不证明桌面串流或同一AI任务已接续。"
   },
   {
     id: "remote-workstation",
@@ -1080,7 +1080,7 @@ export const systemDependencyNodes = [
       { href: "/projects/sunshine-remote-streaming", label: "查看 Sunshine 远程串流项目" },
       { href: "/skills/tailscale-safe-exposure", label: "Skill：具名设备的最小远程接入" }
     ],
-    detail: "主机、客户端、显示、输入、网络路径和真实交互分别验收；配置存在或设备在线不等于画面、控制和应用已经可用。它不同于设备间文件传输，也不同于 Codex Remote 的任务级连续性。"
+    detail: "主机、客户端、捕获、显示、输入和网络分别验收。当前服务与worker新鲜，但本启动周期的GPU故障证据阻止捕获切换，会话Unknown不当空闲；只有证据允许的普通窗口恢复可单独处理。手机画面、直连、流畅度和物理故障转移尚不能由此证明。"
   },
   {
     id: "github-index",
@@ -1088,7 +1088,7 @@ export const systemDependencyNodes = [
     title: "项目身份与发布总账（GitHub 总索引）",
     subtitle: "全部项目身份、公开性、远端、工作树、同步和发布",
     href: "/projects/github-index",
-    detail: "拥有全部仓库身份与本地副本事实，而不是项目目录中的精选入口。能传输、内容适合公开和用户授权发布始终是三个不同判断；动态数量由下方项目版图统一说明。"
+    detail: "拥有完整仓库身份与本地根事实，不是网页精选目录。当前48个仓库、44个本地副本，身份差异0；历史集合退出不当当前故障。能传输、内容适合公开与本人授权分别判断，私有配套说明通过登记发现，不因找到路径就公开正文。"
   },
   {
     id: "project-entry-gate",
@@ -1097,7 +1097,8 @@ export const systemDependencyNodes = [
     subtitle: "只有 Git 事实会改变当前决定时，才做精确入场检查",
     href: "/skills/project-entry-gate",
     linkLabel: "Skill：Git 项目身份入口",
-    detail: "从 GitHub 总索引读取仓库、公开性、默认分支、远端、工作树和同步状态，交回继续、先处理或停止的证据；它不产生提交或发布授权。"
+    searchAliases: ["仓库公开性分支远端工作树同步状态怎么确认", "确认项目的可见性和默认分支", "查清这个工作树会推到哪里"],
+    detail: "Git身份会改变当前动作时读取仓库、默认分支、远端和工作树，也按登记寻找私有配套规则。网络或命令读取失败是未知，不直接判身份冲突；普通未提交修改不等于活动施工Owner，检查结果也不产生提交或发布授权。"
   },
   {
     id: "work-delivery",
@@ -1114,10 +1115,10 @@ export const systemDependencyNodes = [
     id: "ai-cli-entry",
     lane: "projects",
     title: "AI 命令行工作入口（AI CLI Profile Manager）",
-    subtitle: "把多套命令行入口的启动、配置档、隔离、体检和真实连接测试放在一起",
+    subtitle: "选原生CLI或Codex桌面模型，保留配置、原工作现场与可恢复运行",
     href: "/projects/ai-cli-profile-manager",
     linkLabel: "查看 AI 命令行项目",
-    detail: "它负责选择并启动明确的命令行工作入口，保存可恢复的配置和隔离边界；启动成功不等于远端账号、模型或目标任务已经可用，仍要做当次连接和现实任务验证。"
+    detail: "用Profile选择、体检、启动和恢复明确的原生工作入口，也让Codex桌面接入所选模型。GLM/DeepSeek父任务与同一个OpenAI后台子会话已有独立往返验收，不是原生子代理血缘。后继桌面发行虽已安装启用，旧进程仍加载旧版；正常重开后的加载与新保护分支真实厂商调用另验，不称全部Profile可用。"
   },
   {
     id: "local-ai-runtime",
@@ -1137,7 +1138,7 @@ export const systemDependencyNodes = [
       { href: "#system-project-asset-llm-backend-toolkit", label: "查看项目版图" },
       { href: "/skills/llm-backend-toolkit", label: "Skill：额外 AI 后端工具箱" }
     ],
-    detail: "每项任务保留作业、结果和回执，再由主任务用独立标准验收；后端失败不会静默换路线，也不会让后端自报替代最终判断。边界不清、影响高或无法独立验证的工作留在主任务。"
+    detail: "只把范围封闭且能独立验收的任务交给明确后端，保存作业、结果与回执。diagnose、inspect和jobs只读，不顺手修理旧任务；取消绑定原生同一运行，进程与GPU清理未证实就不报完全停止。失败不自动换模型，不用后端自报代替主任务验收。"
   },
   {
     id: "codex-remote",
@@ -1183,7 +1184,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-materials",
     searchAliases: ["个人材料查找", "非媒体原件定位", "忘了文件放在哪里", "材料在文件管理器删了", "我自己删的文件不用恢复"],
-    detail: "9 月 14 日只读状态为 46 个来源、115 条精确定位、4 条关系、14 份绑定文字；其余 101 份登记材料没有绑定文字。一次扩额盘点未截止，43/46 根完成、3 根不可达，已见至少 233,156 个非媒体路径、至少 233,041 个未精确登记路径；5,867 个媒体项跳过。未读正文、重算原件哈希或写库；不可达来源不当作空来源，登记状态不当作当前验真。有界发现仍最多 8 个来源、2500 个文件、8 秒。候选隐藏路径，选中后只读验真并交回定位，明确要求桌面查看才打开；locate-content 可定位已选文档的有关段落。查询不触发同步，日常任务负责精确退役本人已删除的原件记录。"
+    detail: "当前47来源、154份精确登记、4关系、44份检索文字；其余110份材料没有绑定文字。先给少量候选，选中后核对原件，已知位置直接读取；需要桌面查看才打开。有界盘点只尝试25/47根、21完成、3不可达，在200000文件上限截止，已见≥194648非媒体路径。下限不是全盘总量，未查范围不当空来源；日常同步才退役可达根下本人已删原件。"
   },
   {
     id: "media",
@@ -1196,7 +1197,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/personal-media",
     searchAliases: ["个人媒体整理与恢复", "找照片视频音频", "精选照片和视频", "媒体在文件管理器删了", "删除原件后退出手机恢复包和云候选", "手机照片双盘保全", "手机恢复包", "云端候选"],
-    detail: "项目拥有分类、原件检索、录音段落定位、必要文字承接和恢复包。来源 Owner（负责人）已完成四库云端分类：Google Photos 有 3,357 张图片和 116 段视频，Drive 有 754 项录音和 3 项音乐/铃声，合计 4,230 项、96,179,188,822 bytes。2026-09-13 23:21 UTC 最后全量回读确认 Photos 对象和九个相册关系、Drive 标识/大小/校验值/目录一致，重复运行写入为零；E/G/H 目录一致另有备份回执。Photos 视频还有 1 段处于处理状态，不能写成全部可播放；手机实际回写、Drive 全格式播放和云端从零恢复仍未验。本地原件、云端对象、播放与手机结果分别判断。"
+    detail: "当前3485张照片、116个视频、754份录音与3项音乐/铃声，具名相册只增加选定照片的关系，不复制原件或改分类。来源保存4358项云端映射、98,570,051,909字节，本轮读取的是本地状态，不是重新访问平台。9月13日4230项全量回读保留原日期；当时1段视频仍处理，当前播放状态未知，手机回写与云端零起点恢复也分别未验。"
   },
   {
     id: "wechat-bridge",
@@ -1205,7 +1206,7 @@ export const systemDependencyNodes = [
     subtitle: "显式使用 WeFlow 时，按账号、范围和返回证据正确取数",
     href: "/projects/wechat-history-ai-bridge",
     linkLabel: "查看微信接入项目",
-    detail: "WeFlow 提供本地数据与 HTTP 服务，本项目提供取数契约、自检和有界静默启动；并有只核验已取得文件集的回读工具。当前日常微信 Skill 走独立 WeChatDirect。两条路线不能互证，接口健康不等于具名会话已读取。"
+    detail: "WeFlow提供本地数据与HTTP，桥接项目保留取数契约、自检和启动说明；该来源当前冻结，本轮不主动运行或维护。现役日常入口是独立WeChatDirect，两条路线不能互证，历史接口健康不是本轮具名会话已读。"
   },
   {
     id: "wechat-direct",
@@ -1216,7 +1217,7 @@ export const systemDependencyNodes = [
       { href: "/projects/wechat-direct", label: "进入 WeChatDirect 完整项目页" },
       { href: "/skills/wechat-direct", label: "Skill：微信上下文与单会话归档" }
     ],
-    detail: "2026-09-14只读清单为4个完成态具名归档、7934条消息；现有文件元数据见12个PNG，未见语音和派生WAV，四份均保留明确gap。四份最近运行回执成功且清单绑定一致，本轮未读正文或重跑独立验真；9月1日3/3验真及语音/派生数量只作历史证据。一次问题仍只读取明确联系人或群的有界窗口，需要长期保存时才更新该具名归档；不后台同步整个账号，也不把本地可见范围冒充微信远端全历史。"
+    detail: "按明确账号和联系人/群读取小窗口，长字段按同一文本哈希分段读完，必要时维护这个对象的增量归档。包生成、partial、独立验真与源材料完整分开；后来补到的本地媒体可定向repair-media，已知中断先recover-export检查。9月14日4归档/7934消息及媒体缺口仅是历史聚合，不当作本轮重读，也不后台同步整个账号。"
   },
   {
     id: "localocr",
@@ -1227,7 +1228,7 @@ export const systemDependencyNodes = [
       { href: "#system-project-asset-local-ocr", label: "查看项目版图" },
       { href: "/skills/localocr", label: "Skill：图像理解与精确 OCR 分工" }
     ],
-    detail: "只描述场景、物体或活动时直接看原图，不启动 LocalOCR；逐字抄写、小字、坐标、表格、公式、印章、批量或全本地请求进入 LocalOCR。混合请求让视觉与 OCR 独立读取同一原图，再把场景观察、精确文字、识别状态和冲突分开；display_summary 只解释 OCR 状态，不替代原始文字、坐标或客观结果侧车。"
+    detail: "场景、物体与活动直接看原图；逐字小字、坐标、表格、公式或批处理进入LocalOCR，混合请求两路独立读同一原图。按页判断是否需要升级路线，部分失败保留已完成页及具体原因；空结果、置信度和中文状态说明不能替代原文字节与坐标。 display_summary是人话状态说明，场景观察、精确文字、识别状态与冲突仍分开保存。"
   },
   {
     id: "documents-skill",
@@ -1258,7 +1259,7 @@ export const systemDependencyNodes = [
     ],
     searchHref: "/projects/document-materials",
     searchAliases: ["文书和材料制作", "制作DOCX和PDF材料包", "递送收件处理状态", "对方签回哪个版本", "材料生成平台收到接收方处理"],
-    detail: "先核对当前事项、必要原件、事实、来源说明、待确认项和未知，再生成同源 DOCX/PDF、自包含材料包与逐页彩色/灰度证据；produced（已生成）、signed（本人已签）、ready_for_delivery（已具备递送条件）、delivered（已递送）、received（已收件）、handled（已处理）和 counterparty_signed_returned（对方签回）始终分开。"
+    detail: "先核对当前事项、必要原件、事实、来源说明、待确认项和未知，再生成同源 DOCX/PDF、自包含材料包与按使用媒介逐页验收的证据（电子阅读采用彩色，打印才另验灰度；原件和已签历史不改）；produced（已生成）、signed（本人已签）、ready_for_delivery（已具备递送条件）、delivered（已递送）、received（已收件）、handled（已处理）和 counterparty_signed_returned（对方签回）始终分开。"
   },
   {
     id: "chinese-asr",
@@ -1266,7 +1267,7 @@ export const systemDependencyNodes = [
     title: "中文录音转写与桌面听写（ChineseASR）",
     subtitle: "录音生成可复核结果包，Win+H 听写逐停顿输入",
     href: "/projects/chinese-asr",
-    detail: "文件路线处理长音频、分歧与局部失败；听写不自动发送，焦点变化后停输并可手动复制。个人麦克风实测待完成；关键内容仍由本人核对。"
+    detail: "录音路线处理长音频、分歧和局部失败；Win+H听写不自动发送，焦点变化停输。已有文稿只需时间轴时可走known-text alignment，返回真实定位与缺口，不把文稿正确当成已经验证；无需为此在视频项目另建一套默认转写。真人麦克风与全部场景仍分别验收。"
   },
   {
     id: "chinese-asr-skill",
@@ -1275,7 +1276,7 @@ export const systemDependencyNodes = [
     subtitle: "把自然请求送进正确转写、时间位置、说话人或复核模式",
     href: "/skills/chinese-asr",
     linkLabel: "Skill：中文录音任务入口",
-    detail: "项目拥有语音处理实现，Skill 只负责选择本次真正需要的模式、输入和失败语义；两者不能互相冒充。"
+    detail: "从普通录音请求选择转写、时间位置、说话人或复核；文稿已确定时选择对齐而非重新猜词。输入与结果绑定原音频，词句真实性、时间位置和匿名说话人分开，来源项目拥有实现，Skill负责路由，不以入口存在冒充真人验收。"
   },
   {
     id: "personal-health",
@@ -1302,7 +1303,7 @@ export const systemDependencyNodes = [
     href: "/skills/daily-preferences",
     linkLabel: "Skill：个人理解库",
     searchAliases: ["了解我", "本人背景", "真实经历", "生活重点", "价值取舍", "认知", "吃什么", "购物", "出行旅行", "审美偏好", "我改主意"],
-    detail: "查询、补充和纠正本人的基本信息、真实经历、生活重点、价值取舍、认知与偏好。按问题决定读取深度，旧材料结合发生时间和当时角色判断；明确事实和可推翻推定分开，不把行为直接写成喜欢。手机或云端通过已接通的电脑 MCP 查询、补充和纠正同一份理解库；只有确有离线或转交需要时才导出阅读文件。它为独立领域提供本人背景，接收有依据的回写；有具体疑点时只读必要旧背景辅助核对，待验证的新说法不回写。背景不作身份因子，专业判断和现实行动仍由对应领域负责。"
+    detail: "按当前问题使用本人的经历、生活重点与真实取舍，分清明确事实、可推翻判断和纠正；不是只记录消费清单。产生有依据新认识的领域任务及时回写并保留来源与例外，不能等本人抽查。手机与电脑通过现有MCP读写同一份库；背景不参与操作者身份判断，专业结论与现实行动仍由对应领域负责。"
   },
   {
     id: "personal-expression",
@@ -1311,7 +1312,7 @@ export const systemDependencyNodes = [
     subtitle: "解释参考理解反馈，拟稿参考与当前场景有关的本人表达",
     href: "/projects/personal-expression",
     searchAliases: ["把事情讲明白", "我没听懂", "替我拟消息", "帮我回一句", "explain-to-me", "reply-as-me"],
-    detail: "两种用途使用分开的参考资料：解释要让我理解，不模仿聊天口吻；拟消息先由当前任务确定意思和策略，再写出自然、可改的草稿。本人原话、他人语境、AI 草稿和本人修改分清保存，有价值的反馈先用于改好当前结果，再供下一次参考。本人背景仍由个人理解库提供，微信原件仍由微信项目负责。有具体疑点时，上游可只读相关旧表达辅助核对；保留作者和来源，不靠相似口吻认证身份，待验证的新说法、反馈与改稿不写成本人样本。读取和反馈机制已实现；后续真实任务主动补充资料并再次用好，以及动画上下文效果，仍需真实使用验证；不等于已经证明长期自动学习，也不会自动发送。"
+    detail: "解释参考我怎样更容易理解，拟稿参考当前场景有关表达，两份用途分开。先改好本次结果，再保存有价值反馈；本人原话、他人语境、AI草稿和本人修改不能混同。表达样本不参与操作者身份判断，不代定沟通策略、不自动发送；后续任务能否稳定主动补读与利用反馈仍要真实使用验证。"
   },
   {
     id: "verification",
@@ -1337,7 +1338,7 @@ export const systemDependencyLanes = [
   { id: "inputs", number: "01", title: "输入与原件", description: "已知材料直接进入当前任务；位置未知时才查找，扫描件、微信和媒体按内容类型进入专用读取。" },
   { id: "capability", number: "02", title: "通用能力", description: "AI 工作环境自带的模型与工具，也是系统的一部分。它们能与自己的资料、项目配合，按当前接入的能力完成工作。" },
   { id: "governance", number: "03", title: "规则与能力入口", description: "个人规则、Hook 和 Skills 决定能力怎样安全进入真实任务。" },
-  { id: "external", number: "04", title: "外部服务与触发", description: "邮件、云盘、日历、定时与事件把外部现场主动带进任务。" },
+  { id: "external", number: "04", title: "外部服务与触发", description: "邮件、云盘与已接入的定时/事件入口，把需要的外部现场带进任务。具体服务能力仍按当前账号与连接判断。" },
   { id: "machine", number: "05", title: "电脑、运行与恢复", description: "机器、服务、秘密、历史、换机恢复和实体运行事实。" },
   { id: "projects", number: "06", title: "项目、交付与跨设备", description: "全部项目资产、长期产品、工作交付、验证与跨设备连续性。" },
   { id: "personal", number: "07", title: "文档与个人领域", description: "文档、语音、健康与正式材料各自保留原件、事实和决定边界。" },
@@ -1362,7 +1363,8 @@ export const systemRuleStories = [
       "AI 协作规则与能力中心只补充通用授权、协作和验证边界",
       "注意力先保留目标、现有工作、关键未知和真实验收",
       "先保留这次真正需要的功能、用法、正确性、恢复和维护要求；已经证明的扩展需要也不能遗漏。能用更少组件完成同样结果时，选择更直接的做法",
-      "增加服务、数据库、状态记录或验证步骤前，先指出现有做法具体缺什么；没有实际缺口就不加", "本人已有工具或项目坏了，就修好或正式换成能承接它的方案，并接回日常入口验收；不能临时绕过去后，把坏掉的能力留给我"
+      "增加服务、数据库、状态记录或验证步骤前，先指出现有做法具体缺什么；没有实际缺口就不加", "本人已有工具或项目坏了，就修好或正式换成能承接它的方案，并接回日常入口验收；不能临时绕过去后，把坏掉的能力留给我",
+      "当前规则标明冻结的来源不因“全部更新”恢复维护；这里只保留已验证网页和实际边界，新的明确来源需求另由所属Owner处理。",
     ],
     delivery: [
       "进入正确项目后的最小必要改动",
@@ -1383,28 +1385,28 @@ export const systemRuleStories = [
     id: "active-and-recoverable",
     ruleId: "protected_major_actions_contract",
     number: "02",
-    title: "普通工作直接做，确有疑点再核对本人",
-    summary: "已授权的正常工作直接推进。普通聊天中若出现具体疑点，也先判断现有信息是否足够，确有需要才参考相关既有背景与表达；这些资料不能认证身份。需要本人验证时走现有验证入口，规则升级则另有可回退的版本切换。",
-    ordinaryRequest: "“已经允许的工作直接做，不用每次打断我；真有需要核对本人的情况，再按实际情境处理，别靠一句话或口头禅下结论。”",
+    title: "普通工作继续，私人访问与重大保护分开",
+    summary: "已授权的正常工作直接推进，涉及私人资料时按当前范围保护；必需验证取消或超时会冻结私人取用，但不顺手锁磁盘、删数据或停止通用代码工作。个人背景与表达样本不用于辨认操作者。重大动作与独立设备保护仍有自己的真实判断、因子和回退流程。",
+    ordinaryRequest: "“允许的工作继续做；需要我验证时说清具体入口，不要把没验证、程序故障和硬盘危险混成一件事。”",
     inputs: [
       "准备执行的精确动作、目标对象和现实影响",
       "切换前可用状态、恢复材料和明确回退条件",
       "预演结果，以及是否确实需要本人在场验证"
     ],
     collaboration: [
-      "具备判断资格的 AI 先看当前语境和信息缺口；只有补证会改变结论时才查相关本人背景或表达样本，不要求每轮查两库或重复派代理",
+      "普通隐私访问核对真实共享状态、任务或全局有效范围；屏锁、私密资料因子、明文显示与独立设备/磁盘保护各按自己的入口，不逐次重复已经有效的验证。",
       "受保护入口把执行绑定到精确目标、版本和切换前状态",
-      "达到需要本人验证的条件就使用已登记入口，不能为了继续查背景拖延处理；验证前先完成对应的生产等价预演",
+      "必需隐私验证沿已显示界面的五分钟期限，等待本身不抹掉其他有效授权；明确取消或超时才冻结私人访问。独立保护邀请的十分钟流程是另一条边界，软件故障不能冒充人取消或因子通过。",
       "规则升级保留固定版本、指纹、原子切换与回读；这条发布路径不需要真人因子"
     ],
     delivery: [
-      "当前动作已完成，还是需要本人验证的清楚说明",
+      "说明普通工作、私人访问或受保护动作分别到了哪一步，确需本人时给出已有准确入口",
       "完成后的真实回读，以及仍然可用的回退版本",
       "失败时保留的安全旧状态和下一次可重试条件"
     ],
     willNot: [
       "不会因为出现某个关键词就机械升级为重大动作",
-      "不会把相似口吻、知道个人经历或资料未命中当成身份认证，也不会在待验证时将新说法、反馈和改稿写成本人基准",
+      "不会用个人经历、偏好或相似口吻判断来者身份，不把任何背景检索结果当作验证因子",
       "不会把管理员确认当成用户授权或人类验收",
       "不会把 E 规则激活混入真人验证路径",
       "不会让未经核对的草稿、目标或恢复材料进入切换",
@@ -1534,7 +1536,7 @@ export const systemSkillFamilies = [
     delivery: [
       "少量经过核对、可以直接打开的真实原件",
       "带时间、回复关系和媒体关系的聊天上下文",
-      "来自固定账号的邮件、云盘或日历结果",
+      "来自固定账号的邮件与云盘结果；本机日历路线冻结，不用旧实现补答案",
       "没有找到时实际检查过的范围和真实覆盖缺口"
     ],
     willNot: [
@@ -1546,8 +1548,8 @@ export const systemSkillFamilies = [
     members: [
       { slug: "personal-media", name: "个人媒体定位", technicalName: "personal-media", summary: "按自然线索找到照片、视频和录音原件，也能建立不复制原件字节的临时浏览目录。", href: "/skills/personal-media" },
       { slug: "personal-materials", name: "非媒体原件定位", technicalName: "personal-materials", summary: "先查项目登记的位置与版本；位置未知时，在获准范围内找少量候选。选中后才核对原件大小和 SHA-256，交回经过核对的文件位置；明确要在桌面查看时才打开。", href: "/skills/personal-materials" },
-      { slug: "wechat-direct", name: "具名微信上下文", technicalName: "wechat-direct", summary: "读取一个明确联系人或群的小段上下文、回复关系和相关媒体；明确需要时才做单对象增量归档。", href: "/skills/wechat-direct" },
-      { slug: "google-workspace-direct", name: "固定办公账号入口", technicalName: "google-workspace-direct", summary: "通过登记的同一账号读取邮件、云盘和日历；明确写入只使用现有的精确操作。", href: "/skills/google-workspace-direct" }
+      { slug: "wechat-direct", name: "具名微信上下文", technicalName: "wechat-direct", summary: "读取一个指定微信对象、回复和媒体；长文本按同一版本续读，导出部分内容与完整性分开，具名归档可定向补本地附件或检查中断。", href: "/skills/wechat-direct" },
+      { slug: "google-workspace-direct", name: "固定办公账号入口", technicalName: "google-workspace-direct", summary: "使用固定账号查邮件、读取正文与操作选定云盘对象；写超时先回读。本机Calendar冻结，不静默换账号、浏览器或第二条路线。", href: "/skills/google-workspace-direct" }
     ]
   },
   {
@@ -1584,11 +1586,11 @@ export const systemSkillFamilies = [
     ],
     members: [
       { slug: "file-intake-router", name: "混合附件分流", technicalName: "file-intake-router", summary: "先看清 Word、表格、PDF、图片、压缩包或文件夹结构，再交给保留信息最多的读取器。", href: "/skills/file-intake-router" },
-      { slug: "chinese-asr", name: "中文录音理解", technicalName: "chinese-asr", summary: "把中文录音变成带时间位置的文字，保留任务续跑、匿名说话人和本人语音判断的证据边界。", href: "/skills/chinese-asr" },
-      { slug: "localocr", name: "图像场景与精确文字分工", technicalName: "localocr", summary: "按请求选择原生视觉、LocalOCR 或两路独立执行；分开保留场景观察、精确文字、识别状态、坐标、空结果语义与冲突。", href: "/skills/localocr" },
+      { slug: "chinese-asr", name: "中文录音理解", technicalName: "chinese-asr", summary: "将录音转成可回听复核的文字，或给已确定文稿对齐时间；时间定位不证明文稿逐字正确，匿名说话人不作身份认证。", href: "/skills/chinese-asr" },
+      { slug: "localocr", name: "图像场景与精确文字分工", technicalName: "localocr", summary: "按结果选择原生视觉、精确OCR或独立双路；逐页升级与批次部分交付保留真实覆盖、坐标、空结果和冲突，不把失败吞进摘要。", href: "/skills/localocr" },
       { slug: "media-person-self", name: "具名媒体中的本人判断", technicalName: "media-person-self", summary: "只判断指定照片或录音中是否支持本人候选，并返回可复核的位置、覆盖范围和未知。", href: "/skills/media-person-self" },
       { slug: "personal-health", name: "个人健康上下文", technicalName: "personal-health", summary: "用当前个人健康事实回答问题；新报告或设备数据先采集、核对和审核，再决定是否更新。", href: "/skills/personal-health" },
-      { slug: "daily-preferences", name: "个人理解库", technicalName: "daily-preferences", summary: "按问题使用本人的经历和真实取舍，也能按提示词吸收微信等动态材料与新导出，复核受影响认识并从实际阅读位置继续。事实、推定和纠正分开，日常推荐与领域回写继续保留。", href: "/skills/daily-preferences" }
+      { slug: "daily-preferences", name: "个人理解库", technicalName: "daily-preferences", summary: "按问题使用本人的经历和真实取舍，从实际阅读位置吸收新材料，区分事实与可推翻判断；产生新认识的任务及时保存有依据的变化，不用于操作者身份判断。", href: "/skills/daily-preferences" }
     ]
   },
   {
@@ -1664,7 +1666,7 @@ export const systemSkillFamilies = [
       "不会为了远程可用改成公网或全端口暴露"
     ],
     members: [
-      { slug: "timeaudit-diagnostics", name: "有界电脑历史诊断", technicalName: "timeaudit-diagnostics", summary: "用最短必要时间窗读取覆盖质量、性能和状态聚合，辅助诊断但不把相关信号冒充根因。", href: "/skills/timeaudit-diagnostics" },
+      { slug: "timeaudit-diagnostics", name: "有界电脑历史诊断", technicalName: "timeaudit-diagnostics", summary: "用最短必要窗口对齐TimeAudit、Windows事件与原生内存记录，检查覆盖和实际写入，比较可能原因；缺数据不当正常，不为诊断重启。", href: "/skills/timeaudit-diagnostics" },
       { slug: "control-plane-doctor", name: "三个控制面只读体检", technicalName: "control-plane-doctor", summary: "只检查点名的规则、Git 或 PCConfig，把漂移、警告和阻塞交给真正负责的项目。", href: "/skills/control-plane-doctor" },
       { slug: "tailscale-safe-exposure", name: "具名设备的最小远程接入", technicalName: "tailscale-safe-exposure", summary: "只为精确服务、端口和设备建立最小接入，并分别回读配置和真实对端连接。", href: "/skills/tailscale-safe-exposure" }
     ]
@@ -1730,7 +1732,7 @@ export const systemSkillFamilies = [
       "不会把一次来源事件扩成全站复核，或把预览服务当前台长任务等待"
     ],
     members: [
-      { slug: "project-entry-gate", name: "Git 项目身份入口", technicalName: "project-entry-gate", summary: "在身份、公开性、分支、远端或同步状态会改变决定时，取得当前仓库真实现场。", href: "/skills/project-entry-gate" },
+      { slug: "project-entry-gate", name: "Git 项目身份入口", technicalName: "project-entry-gate", summary: "需要Git事实时核对仓库、公开性、分支和同步，也按登记找到私有配套说明；读失败不冒充身份冲突，路径发现不授权公开正文。", href: "/skills/project-entry-gate" },
       { slug: "personal-panel-refresh", name: "个人看板实质刷新与发布合并", technicalName: "personal-panel-refresh", summary: "来源发布并确认后，只检查它对应的网页说明。已经负责本次网站更新的活动任务合并处理，保留来源和版本依据；没人负责时才另行安排，收到任务不等于网页已经更新。", href: "/skills/personal-panel-refresh" }
     ]
   },
@@ -1761,9 +1763,9 @@ export const systemSkillFamilies = [
       "不会覆盖冲突文件、删除源文件或把私有制品发到公开目标"
     ],
     members: [
-      { slug: "local-secret-broker", name: "本地凭据使用", technicalName: "local-secret-broker", summary: "查找、盲填或盲注入本机凭据；只有明确要求并完成验证时才在本地显示一个指定字段。", href: "/skills/local-secret-broker" },
+      { slug: "local-secret-broker", name: "本地凭据使用", technicalName: "local-secret-broker", summary: "让程序盲用凭据或按明确请求在本地复制；个人环境、资料访问与四选一恢复也有独立入口，冻结私人访问不等于锁磁盘。", href: "/skills/local-secret-broker" },
       { slug: "authorization-file-broker", name: "最高权限文件加解密", technicalName: "authorization-file-broker", summary: "只处理用户点名的路径，支持加密、无明文验证、续跑和不覆盖冲突文件的恢复。", href: "/skills/authorization-file-broker" },
-      { slug: "vault-workflow", name: "独立加密库与密钥工作流", technicalName: "vault-workflow", summary: "密码只由本人在本机输入；写入前检查和预演，发布后从私有远端重新核对加密制品。", href: "/skills/vault-workflow" }
+      { slug: "vault-workflow", name: "独立加密库与密钥工作流", technicalName: "vault-workflow", summary: "密码由本人本地输入，默认保留原件，改密保留另一槽；导出不覆盖冲突，扩容先做新副本，私人发布后从远端核对字节，真实恢复另验。", href: "/skills/vault-workflow" }
     ]
   },
   {
@@ -1780,7 +1782,7 @@ export const systemSkillFamilies = [
       "当前可用的协作入口、资源、隐私边界和真实身份",
       "只有用户明确提出的配额或文本计量问题"
     ],
-    collaboration: "原生协作者用于当前任务内部的并行支路；额外 AI 后端只接受封闭且有独立验收器的任务；配额与文本计量是单独的按需查询。",
+    collaboration: "先核验当前宿主与真正可用入口。原生协作者处理独立支路；明确第三方父任务可沿AICLI与同一OpenAI后台会话追问；额外后端只接受范围封闭、能客观验收的任务。三类生命周期、权限与证据分别判断，主任务统一交付，配额只在本人询问时查。",
     delivery: [
       "每条支路的结果、依据、失败和仍需主任务判断的部分",
       "可追踪的额外后端任务和由主任务完成的独立验收",
@@ -1793,8 +1795,8 @@ export const systemSkillFamilies = [
       "不会因为对话看起来很长就自动查配额，也不会用字符或旧记录猜结果"
     ],
     members: [
-      { slug: "native-economy-routing", name: "原生代理协作路由", technicalName: "native-economy-routing", summary: "Hook 先在任务进入和创建前核对宿主身份与活动规则；随后按独立性、写冲突和真实收益决定是否并行，主任务继续负责集成。", href: "/skills/native-economy-routing" },
-      { slug: "llm-backend-toolkit", name: "额外 AI 后端工具箱", technicalName: "llm-backend-toolkit", summary: "只把范围封闭、可独立验收的任务交给当前登记的额外后端，并保存任务与结果回执。", href: "/skills/llm-backend-toolkit" },
+      { slug: "native-economy-routing", name: "原生代理协作路由", technicalName: "native-economy-routing", summary: "先核验实际模型、思考强度与活动规则，再按独立性、冲突和收益选择协作；第三方跨OpenAI走明确子会话入口，普通MCP不继承原生主体。", href: "/skills/native-economy-routing" },
+      { slug: "llm-backend-toolkit", name: "额外 AI 后端工具箱", technicalName: "llm-backend-toolkit", summary: "对明确后端提交封闭任务，零写入诊断、查询同一作业及准确取消；收到取消不等于进程/GPU已清理，失败不自动换道。", href: "/skills/llm-backend-toolkit" },
       { slug: "token-budget-advisor", name: "配额与文本计量", technicalName: "token-budget-advisor", summary: "仅在用户明确询问时读取权威配额或文本计量；官方入口不可得时返回未知，不自行换算或猜测。", href: "/skills/token-budget-advisor" }
     ]
   },

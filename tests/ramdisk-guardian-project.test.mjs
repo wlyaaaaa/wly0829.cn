@@ -10,7 +10,7 @@ import { searchPanel } from "../app/search.js";
 import { systemProjectDomains } from "../app/system-home-content.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const sourceCommit = "c12821ac26c0ede830d8ddb1cbc00d56e57dbdb3";
+const sourceCommit = "e058a7fd11907dfd6eafea6ee3c9821a4778e5a8";
 
 test("RamdiskGuardian keeps its real source identity and rank 31 after retirement renumbering", async () => {
   const registry = JSON.parse(await readFile(path.join(root, "config/panel-projects.json"), "utf8"));
@@ -47,15 +47,15 @@ test("all five source-backed RamdiskGuardian axes have direct routes and linked 
 test("snapshot keeps current OK and historical WARN separate from task success and unperformed recovery", () => {
   assert.equal(project.currentState.observedAt, project.currentSnapshot.observedAt);
   assert.deepEqual(project.cardMetrics, project.currentSnapshot.metrics);
-  assert.match(project.cardStatus, /自然巡检OK/);
+  assert.match(project.cardStatus, /维护正常/);
   const facts = project.currentSnapshot.facts.map((item) => item.value).join("\n");
   assert.ok(facts.includes(sourceCommit));
   assert.match(facts, /12个明确目录/);
-  assert.match(facts, /04:03:49Z为OK：Z已用0\.2GiB.*提交余量17\.2GiB/);
+  assert.match(facts, /2026-09-18.*已用0\.51GiB.*提交余量31\.2GiB/);
   const memoryModule = modules.find((item) => item.slug === "host-memory-telemetry-and-silent-monitoring");
   assert.ok(memoryModule.verification.some((item) => /9月8日03:37Z曾返回0但STATUS为WARN/.test(item)));
-  assert.match(facts, /10个隔离恢复场景/);
-  assert.match(project.snapshotBoundary, /没有重建实盘或专门重启/);
+  assert.match(facts, /9月8日.*隔离Primo测试/);
+  assert.match(project.snapshotBoundary, /没有初始化实盘.*重启/);
   assert.ok(project.currentSnapshot.gaps.some((gap) => gap.includes("使用约定") && gap.includes("误放")));
   const recovery = modules.find((item) => item.slug === "unaccounted-watchdog-and-driver-auto-release");
   assert.ok(recovery.failures.some((item) => item.condition === "init失败" && item.response.includes("不调用save")));

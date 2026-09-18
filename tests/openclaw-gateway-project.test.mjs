@@ -191,7 +191,8 @@ test("OpenClawGateway names all update channels and the exact plugin matrix with
 });
 
 test("OpenClawGateway first visible labels do not defer core English explanations to a glossary", () => {
-  assert.equal(openClawGatewayProject.currentSnapshot.observedAt, "2026-09-09T22:07Z");
+  assert.match(openClawGatewayProject.currentSnapshot.observedAt, /^2026-09-18T/);
+  assert.match(openClawGatewayProject.currentSnapshot.boundary, /db51ae7.*9月9日.*不据新源码冒充重新实测/s);
   assert.match(openClawGatewayProject.kicker, /运维层/);
   const unexplainedCoreTerm = /\b(?:Gateway|RPC|health|Funnel|Owner)\b(?!（[^）]+）)/;
   assert.doesNotMatch(openClawGatewayProject.kicker, unexplainedCoreTerm);

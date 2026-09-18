@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-14T04:19:00Z",
-  "label": "本机网络和守护正常；KDE已有1个可用对端，真实跨机传输仍未重验",
-  "boundary": "2026-09-14只读doctor为20 PASS（通过）、2 WARN（提醒），KDE汇总Known=1、Available=1；网络、精确防火墙和单实例新鲜心跳均通过。两端配对身份及Including passwords（包含密码）开关仍需人工核对。本次没有复制、传文件、主动刷新发现或重启；9月8日66项源测试保留原日期。",
+  "observedAt": "2026-09-18T13:00:05.876951Z",
+  "label": "网络与守护通过，已有可见对端；增加可见暂停和中断恢复，传输仍未验",
+  "boundary": "现有doctor为needs_attention、0失败/0未知/2提醒：两端配对身份及密码共享开关需人工核对，business_acceptance=not_tested。新恢复/暂停入口来自正式源码，本网页不复制剪贴板、不传文件、不重启或改防火墙。",
   "metrics": [
     {
       "label": "使用场景",
@@ -25,7 +25,7 @@ const baseSnapshot = createProjectSnapshot({
   "facts": [
     {
       "label": "源与本轮测试",
-      "value": "PUBLIC（公开）main f39be3f2b9471fec5750bde6f51a21cc635cc6d7已正常推送并远端回读；66项Pester测试通过，新增14项真实子进程标准输出/标准错误/退出码回归。设备计数只接收KDE合法ID；标准错误中的中文“找到 0 个设备”等本地化摘要不计为设备，畸形标准输出或失败退出返回Unknown和null计数。原有配置、规则、任务与WhatIf（变更预览）回归保持通过。"
+      "value": "PUBLIC main 73f6437a655be4c63edd215b11b7b1e390674c96已远端回读：新增持久中断恢复、暂停/恢复控制中心、严格分层诊断和双机验收引导。9月8日66项回归保留为历史，不计为本轮重跑；源码和UI构造不能代替实际跨机传输。"
     },
     {
       "label": "当前网络",
@@ -69,7 +69,7 @@ export const meshclipKitSnapshot = Object.freeze({
   ...baseSnapshot,
   ...{
   "generation": "Windows双机跨网络文字与文件协作",
-  "sourceCommit": "f39be3f2b9471fec5750bde6f51a21cc635cc6d7",
+  "sourceCommit": "73f6437a655be4c63edd215b11b7b1e390674c96",
   "sourceRoot": "V:\\Personal\\Projects\\meshclip-kit",
   "runtimeFacts": {
     "tailscaleVersion": "1.102.2-t6cac91817-g6ff0ddc72",
@@ -179,7 +179,7 @@ export const meshclipKitProject = {
     ]
   },
   "repositoryNote": "MeshClip Kit 是 PUBLIC（公开）脚本与文档仓库。运行配置、配对身份和回滚状态保存在本机，诊断默认对对端地址与身份脱敏；真实剪贴板和传输文件由 KDE Connect/Tailscale 处理，不进入 GitHub。",
-  "summary": "台式机和笔记本不在同一个 WiFi，也可以用它复制文字、互传文件。MeshClip Kit 负责把 Tailscale（虚拟组网工具）和 KDE Connect（跨设备协作工具）配好：网络只向选定对端放行，应用意外退出后尝试自动启动，并提供可读的诊断结果。真正的文字同步和文件传输由 KDE Connect 完成；本轮检查了本机环境和对端可达，没有代替两台电脑上的实际传输验收。",
+  "summary": "台式机和笔记本不在同一个WiFi时，仍可通过Tailscale（虚拟组网工具）与KDE Connect（跨设备协作工具）共享文字、发送文件。项目负责配好指定对端、限制防火墙、守护登录后的托盘，并让暂停和故障恢复看得见：暂停只停止自动拉起，不关闭现有连接。配置中断会保留恢复记录，冲突不覆盖别人改动。当前已有可见对端，但实际双机传输、配对身份和密码共享设置仍需分别确认。",
   "why": "两台电脑换网络后，局域网自动发现可能失效；KDE 托盘退出后，复制也会悄悄停住。项目把对端地址配置、专用入站规则、登录启动和故障诊断补在原有工具周围，不另造剪贴板服务或文件协议。",
   "plainExample": "我在台式机复制一段命令，想拿起笔记本直接粘贴。两端先加入同一 Tailnet（Tailscale 虚拟专用网络）并人工确认 KDE 配对；在线时由 KDE 同步文字。没有收到时先看对端、配对和进程状态；如果只是托盘程序退出，已有看门狗会在下次检查时尝试启动它。",
   "result": "获得两台 Windows 电脑之间的文字与文件通道，以及针对本机启动、对端设置和防火墙的诊断。传完重要文件后，由操作者在两端比较 SHA-256（安全哈希算法 256 位）；脚本不自动做每次文件传输的哈希验收，也不保证每次复制在两秒内完成。",
@@ -251,11 +251,11 @@ export const meshclipKitProject = {
     },
     {
       "title": "恢复日常退出，保留具体故障",
-      "detail": "静默看门狗尝试拉起缺失托盘，计划任务守护看门狗。持续启动失败显示 StartFailed，不靠无限增设启动器掩盖应用故障。"
+      "detail": "复用现有守护任务，窗口能暂停一小时或直到手动恢复；暂停不结束KDE、普通登录启动或Tailscale。旧运行进程不会自动加载新代码，实际部署与源码存在分开。"
     },
     {
       "title": "配置和撤销都保留现场",
-      "detail": "配置先备份、异常回滚；卸载默认预览，只移除本项目拥有且未被改动的资源。Tailscale/KDE 安装和无关配置保留。"
+      "detail": "每次集成变更先持久保存恢复步骤；中断或回滚失败保持待恢复，不让下一次安装覆盖原记录。只恢复仍与本次结果一致的资源，外来变化、已安装第三方软件和配对身份保留。"
     }
   ],
   "components": [
@@ -329,7 +329,7 @@ export const meshclipKitProject = {
   ],
   "evidenceLayers": [
     {
-      "layer": "66 项本地源测试",
+      "layer": "历史源回归与当前专项入口",
       "proves": "配置、旧版重复修复、防火墙、任务和看门狗契约通过；新增14项真实进程回归，排除本地化摘要/标准错误误计数，并区分异常输出与真正零设备。",
       "doesNotProve": "没有真实跨机复制或文件传输，也没有自然重启结果。"
     },
@@ -388,7 +388,22 @@ export const meshclipKitProject = {
       "name": "恢复先前被禁用的规则",
       "command": "pwsh -File .\\scripts\\uninstall.ps1 -Apply -RestoreDisabledBroadKdeFirewallRules",
       "purpose": "显式恢复此前记录且未被改动的规则；发生变化时保留并报告，不强行覆盖。"
-    }
+    },
+    {
+      "name": "严格诊断与双机验收引导",
+      "command": "pwsh -File scripts/doctor.ps1 -Summary -StrictAcceptance; pwsh -File scripts/acceptance.ps1",
+      "purpose": "严格模式警告或未知非零；验收指南使用虚构标记和文件，操作者实际传输后核对接收副本，不读取剪贴板历史。"
+    },
+    {
+      "name": "可见暂停与恢复",
+      "command": "MeshClip控制中心.vbs",
+      "purpose": "暂停自动拉起、恢复、查看诊断和下次检查；关闭窗口不停止守护，暂停不结束已运行KDE。"
+    },
+    {
+      "name": "中断恢复预览",
+      "command": "pwsh -File scripts/recover.ps1 -AsJson",
+      "purpose": "只读展示脱敏恢复记录；-Apply才执行，外来修改保持待协调，不删除未知旧锁或前像。"
+    },
   ],
   "usageExamples": [
     {
@@ -410,7 +425,17 @@ export const meshclipKitProject = {
       "ask": "托盘图标不小心退出了怎么办？",
       "effect": "已安装看门狗下次检查时尝试启动托盘，状态或启动失败可由 doctor 看见。看门狗自己退出则由原有任务下次触发恢复。",
       "moduleSlug": "silent-watchdog-and-session-lifecycle"
-    }
+    },
+    {
+      "moduleSlug": "exact-peer-firewall-hardening",
+      "ask": "刚才配置到一半断了，先看看会恢复什么，别覆盖我后来改过的设置。",
+      "effect": "只读展示原操作留下的恢复记录；确认后只恢复仍匹配本轮结果的资源，冲突保留为待处理。不会因为集成失败卸载已安装的软件或删除配对身份。"
+    },
+    {
+      "moduleSlug": "silent-watchdog-and-session-lifecycle",
+      "ask": "先别自动把KDE Connect拉起来，但保持现在的连接。",
+      "effect": "在控制中心暂停一小时或直到我恢复；下次守护检查停止自动重开，不关闭现有KDE或Tailscale。窗口会显示最近心跳、下次检查和待恢复事项。"
+    },
   ],
   "evolution": [
     {
@@ -592,7 +617,8 @@ export const meshclipKitModules = [
     "implementation": [
       "Get-MeshClipKdeFirewallAudit读取指向可信kdeconnectd.exe的入站规则和过滤条件。",
       "Disable-MeshClipBroadKdeFirewallRules禁用明确冲突规则并记录。",
-      "New-MeshClipFirewallRules创建TCP/UDP两条精确过滤规则；事务失败按记录回滚。"
+      "New-MeshClipFirewallRules创建TCP/UDP两条精确过滤规则；事务失败按记录回滚。",
+      "scripts/MeshClip.Transaction.ps1在集成效果前持久记录带类型恢复步骤；失败和硬中断保留待恢复。recover.ps1默认只预览，Apply反向核对实际资源再恢复；外来改动不覆盖，未完成记录不能被新安装/configure覆写。软件包与KDE配对身份不在该集成事务范围。",
     ],
     "flow": [
       "解析批准对端和可信daemon路径，读取当前规则。",
@@ -622,7 +648,11 @@ export const meshclipKitModules = [
       {
         "condition": "运行缺乏管理员权限",
         "response": "Test-MeshClipAdministrator 检查失败并抛出提权提示，不破坏性部分写入。"
-      }
+      },
+      {
+        "condition": "安装或配置中断、回滚未完成",
+        "response": "保留原操作记录，先只读恢复预览；按记录处理仍匹配的资源，外来修改继续待协调，不删除标记伪造通过。"
+      },
     ],
     "sources": [
       {
@@ -703,7 +733,8 @@ export const meshclipKitModules = [
     "implementation": [
       "Write-MeshClipKdeConfigChange保留编码/注释，变更前备份，异常可回滚。",
       "Repair-MeshClipLegacyDuplicateGeneralLines只接受已知旧版重复形态，其余歧义拒绝。",
-      "文件发送属于KDE原生能力；Get-MeshClipFileHashSafe用于项目内部资源比对，传输验收依文档在两端人工运行Get-FileHash。"
+      "文件发送属于KDE原生能力；Get-MeshClipFileHashSafe用于项目内部资源比对，传输验收依文档在两端人工运行Get-FileHash。",
+      "acceptance.ps1生成100个非秘密标记及有界文件；RecordClipboard保存明确观察、方向和实际延迟，VerifyFile检查不同路径的接收副本SHA-256。配对、密码排除、回环和自然重启要真实观察后RecordCheck；本地哈希相等不证明传输路径，Summary不自动签发业务PASS。",
     ],
     "flow": [
       "两端分别写customDevices并检查精确入站。",
@@ -723,7 +754,8 @@ export const meshclipKitModules = [
     ],
     "boundaries": [
       "剪贴板纯文本流转不接管图像或格式化富文本（图像作为文件传输）。",
-      "大文件传输不包含断点续传能力，网络中断必须重新完整发送。"
+      "大文件传输不包含断点续传能力，网络中断必须重新完整发送。",
+      "测试辅助只生成虚构内容，不读剪贴板历史；清理只删除本次生成且未变化的文件。当前页面没有实际运行这轮双机验收，不把指南存在写成完成。",
     ],
     "failures": [
       {
@@ -793,8 +825,8 @@ export const meshclipKitModules = [
     "id": "silent-watchdog-and-session-lifecycle",
     "slug": "silent-watchdog-and-session-lifecycle",
     "order": 4,
-    "title": "静默看门狗与会话级计划任务守护",
-    "shortTitle": "静默看门狗守护",
+    "title": "可见暂停、会话守护与故障恢复",
+    "shortTitle": "守护与暂停",
     "teaser": "VBS 无窗后台巡检与 Task Scheduler 双层自愈",
     "kicker": "VBS 无窗后台巡检与 Task Scheduler 双层自愈",
     "route": "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle",
@@ -803,9 +835,9 @@ export const meshclipKitModules = [
     "summary": "VBS（Visual Basic 脚本）隐藏启动当前会话看门狗，Mutex（互斥锁）避免重复实例。首次延迟15秒，之后默认每60秒检查托盘；发现缺失尝试启动并等5秒回读。原有计划任务每2分钟尝试恢复看门狗。",
     "problem": "睡眠或尚未登录时没有可用用户会话；持续应用启动失败记录StartFailed。锁屏但仍登录不等于注销。",
     "why": "托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置。",
-    "example": "如果托盘意外退出，看门狗会在下次检查时尝试启动它；自身退出则等待原有任务触发。通过心跳可以确认恢复结果。本轮没有主动结束这些进程来测试。",
+    "example": "“今天先别自动重开KDE，连接还在就继续用。”打开控制中心暂停到手动恢复；这只改变下一次守护检查的拉起意图，关闭窗口不会结束既有守护。",
     "result": "得到周期性进程恢复和Starting/Healthy/Restarted/StartFailed等状态；不保证任意故障均能自动恢复。",
-    "value": "在已登录桌面中减少意外退出后的手工重开；实际恢复时间受调度、首次延迟和应用启动影响。",
+    "value": "托盘意外退出时自动尝试拉起，控制中心同时告诉我最近心跳、下一次检查和正在等什么。暂时不想自动重开时可以暂停，而不用关闭现有KDE连接或Tailscale；真正传输仍由两端应用完成。",
     "readerStates": {
       "pass": "看门狗快捷方式、每 2 分钟计划任务与活动无窗口看门狗进程三项全部正常，心跳新鲜。",
       "problem": "托盘指示器进程退出，看门狗正在处于下一次 60 秒自愈等待周期中。",
@@ -820,7 +852,8 @@ export const meshclipKitModules = [
     "implementation": [
       "watch-kdeconnect.ps1 依托 Mutex 与 60 秒循环实现托盘指示器单实例守护。",
       "watch-kdeconnect-hidden.vbs 调用 WScript.Shell Run(command, 0, False) 彻底隐窗。",
-      "New-MeshClipWatchdogTask 注册有限权限、PT2M 重复周期的计划任务守护者。"
+      "New-MeshClipWatchdogTask 注册有限权限、PT2M 重复周期的计划任务守护者。",
+      "scripts/control-center.ps1显示守护意图、最近心跳、下次预计检查和待恢复记录；暂停一小时、暂停直到恢复和Resume共用当前用户状态，下一轮观察生效。原有低权限Task Scheduler监督器不新增副本，已经运行的旧PowerShell进程需下次启动才加载新函数。",
     ],
     "flow": [
       "用户登录后由既有快捷方式或任务隐藏启动看门狗。",

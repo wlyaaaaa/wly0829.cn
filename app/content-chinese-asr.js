@@ -1,49 +1,54 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const chineseAsrSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-09T03:38:22Z",
-  label: "文件转写与双屏听写已实现；开始菜单可唤起原进程，个人语音与按键仍需实测",
-  boundary: "9月9日只读确认听写任务运行、中文听写开始菜单入口与图标绑定正确，45项听写回归通过；没有开麦、注入文字或重做个人语音及真实按键验收。其余环境、模型工件与离线恢复检查保留各自原观察边界。",
+  observedAt: "2026-09-18T13:30:47.6674815Z",
+  label: "听写有界恢复、文件质量复核与共享文案对齐已实现；默认模型不因升级自动改变",
+  boundary: "9 月 17 日来源完成公开短音频、42 秒分段、双模型、对齐及异常进程回收验收；本轮只读确认听写任务运行、入口匹配和对齐工件存在，没有开麦、注入文字或运行模型。模型一致、完整覆盖和文件回执都不等于逐字准确。",
   metrics: [
     { label: "登记 / 可执行", value: "6 / 5" },
-    { label: "本轮听写回归", value: "45 通过" },
-    { label: "真实长音频", value: "4/4" }
+    { label: "9 月 17 日来源回归", value: "482 项 · 1 跳过" },
+    { label: "历史长音频分段", value: "4/4" }
   ],
   facts: [
-    { label: "桌面听写", value: "Win+H / Ctrl+Win+H 显示并录音、再次隐藏并暂停；PHLC34B 主屏与 MTT1337 VDD 按硬件型号各显示同一次录音的小窗。约 600 ms 停顿、20 秒上限或手动暂停时提交整段，尚非逐字流式；Esc 取消未输入部分，不自动发送。" },
-    { label: "听写部署证据", value: "2026-09-09T03:38Z只读Status确认ChineseASR Dictation已安装且Running，中文听写.lnk存在、目标归属正确且图标匹配。开始菜单与托盘共用绿色图标；再次启动会通知同一进程执行显示/录音切换，避免被任务IgnoreNew（忽略重复实例）静默丢弃。9月5日停止/重启及ready日志仍是历史证据；本轮没有触发这些操作。", hero: false },
-    { label: "日常默认", value: "strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall" },
-    { label: "重要录音本地证据", value: "FireRedASR2-LLM + Qwen3-ASR-1.7B，必须显式选择" },
+    { label: "桌面听写", value: "Win+H / Ctrl+Win+H 显示并录音、再次隐藏并暂停；现在只有一个 200×75 实际像素面板，优先 MTT1337 VDD，未接入时用 PHLC34B 物理主屏，不再同时开两个小窗。约 600 ms 停顿、20 秒上限或手动暂停提交整段，仍非逐字流式；Esc 取消未输入部分，不自动发送。" },
+    { label: "听写部署证据", value: "2026-09-18 13:30 UTC 的 Status 确认 ChineseASR Dictation 已安装且 Running，中文听写.lnk 存在、归属和绿色图标匹配。任务运行不证明模型已准备或麦克风已连上；普通启动任务只加载宿主，用户入口 Start/Restart 才是开始录音动作。本轮未触发任何录音、停启或焦点输入。", hero: false },
+    { label: "日常默认", value: "文件 baseline / strict：Qwen3-ASR-1.7B + SenseVoiceSmall；quick：SenseVoiceSmall；桌面听写单独使用 Qwen3-ASR-1.7B，不加入双模型等待或 LLM 润色。" },
+    { label: "重要录音本地证据", value: "high_quality 文件候选：FireRedASR2-LLM + Qwen3-ASR-1.7B，须显式选择；公开样例通过与安装成功都不自动提升为默认。" },
     { label: "时间线与匿名说话人", value: "Paraformer + CAM++；cluster 不是人物身份" },
     { label: "云候选的两种用途", value: "Qwen Audio 3.0 ASR Flash；Important（重要录音）与 QualityReview（存疑转写质量复核）二选一，均须本次上传授权。普通质量复核保持 purpose=quality_review，不被伪装成重要录音。" },
     { label: "显式 Profile 与恢复", value: "Fun-ASR-Nano-2512 可显式执行；Whisper Large V3 只登记为 fallback/comparison，当前禁止直接转写" },
-    { label: "本轮快照", value: "PUBLIC main=12eb64e；2026-09-09定向运行test_dictation、test_dictation_audio、test_dictation_windows共45项，全部通过，内部耗时1.225秒。9月7日71通过/1跳过、9月5日376项全套及公开短音频仍属于原日期，不叠加为本轮全套。", hero: false },
+    { label: "本轮快照", value: "正式来源为 ed060fa；9 月 17 日来源全套执行 482 项，0 失败、0 错误，1 项因可选公开中文 VAD fixture 缺失而跳过。来源另有公开音频与异常退出验收；本轮只读 Status 和 alignment-info，没有把旧 45 项、376 项或新 482 项计作网页重跑。", hero: false },
     { label: "复用已有转写", value: "transcript-readback 以原音 SHA-256 读取已完成的本地任务及 outputs/cloud-jobs 中保留的云结果；不读原音、不启动模型、不重新上传。云结果只证明块级范围，timestamp_granularity=chunk、quality.status=unknown，不冒充逐句时间或逐字正确。", hero: false },
-    { label: "模型路线", value: "当前日常模型已经固定：quick 使用 SenseVoiceSmall；strict 使用 Qwen3-ASR-1.7B 主引擎加 SenseVoiceSmall 对照。重要录音本地证据路线可显式使用 FireRedASR2-LLM 加 Qwen3-ASR-1.7B；时间线与匿名说话人使用 Paraformer 加 CAM++；明确授权的云候选是 Qwen Audio 3.0 ASR Flash。", hero: false },
-    { label: "当前源码", value: "PUBLIC（公开）main=12eb64e93586b8fce8a4d2b9750c4d097b78ae5a；2026-09-09T03:36Z远端main回读同值、工作树干净。保留双屏听写、VAD、云质量复核与已存结果复用，新增同进程启动通知、原生采样率采音后转16kHz，以及开始菜单与图标安装回读。", hero: false },
-    { label: "完整回归", value: "2026-09-05 来源任务先完成 376 项全套测试，最终修改另跑 33 项定向测试，均通过；不能将重叠测试计为 409 项。文件转写既有配置、流水线、安装恢复、长音频、批量、服务、写入、审计、GPU 协调、云入口和说话人回归继续保留，新增听写音频与 Windows 输入保护覆盖。", hero: false },
+    { label: "模型路线", value: "文件保留 baseline 与显式 high_quality 两套命名配置，显式引擎优先；新增对齐与质量复核不改变桌面听写和 quick。候选只有在同语料、同指标、独立带真值样本比较满足要求后才可明确切换 strict 默认，并保留可回退配置。", hero: false },
+    { label: "当前源码", value: "PUBLIC main=origin/main=ed060fa00d1281b44f691ea4038453fce4f975e8，正式回读工作树干净。现役源码包含有界听写模型进程、单面板、文件质量复核、VAD 边界切分、固定模型生命周期和独立已知文案对齐；不是尚未实现的计划。", hero: false },
+    { label: "完整回归", value: "9 月 17 日来源 482 项回归无失败/错误、1 个可选 fixture 跳过；PCConfig 的 64 项 GPU Broker 与 63 项配置/恢复合同、chinese-asr Skill 供应健康分别通过。9 月 5 日 376 项与 33 项定向、9 月 9 日 45 项听写回归保留原日期，互不相加，也不替代真实推理。", hero: false },
     { label: "本机环境", value: "2026-08-31 Doctor（环境体检）现场识别到 NVIDIA GeForce RTX 5090 D、驱动 616.56、32607 MiB 显存；WinHTTP 为直连，代理环境干净。", hero: false },
     { label: "运行依赖", value: "Windows 核心依赖更新为 FunASR 1.4.14、NumPy 1.26.4，满足 FunASR 的 NumPy <2 兼容约束。Qwen ASR 0.0.6、Torch/TorchAudio 2.11.0+cu128、Transformers 4.57.6 维持；Python 3.11.9 与 ModelScope 1.38.1 继承 2026-08-31 环境观察。听写额外依赖 sounddevice 0.5.6、pystray 0.19.5、Pillow >=10。", hero: false },
-    { label: "安装脚本回归", value: "本轮 tests.test_scripts 的 18 项安装与入口脚本回归全部通过，覆盖核心/Qwen/FireRed setup、固定模型下载、依赖锁导出、wheelhouse 构建与校验、offline install、Smart API 和两类 smoke 脚本的静态合同。", hero: false },
+    { label: "安装脚本回归", value: "2026-08-31 的 tests.test_scripts 共 18 项安装与入口回归通过，覆盖 setup、固定模型下载、依赖锁/wheelhouse、offline install、Smart API 与 smoke 静态合同；这是历史证据，不是本轮重新制备离线工件。", hero: false },
     { label: "Qwen 模型回执", value: "2026-08-31 Qwen MODEL_RECEIPT 观察为 1763 字节、SHA-256=0c43de9dd883adefb65cfa1477ad7156f749868105a554e647b47de73c841ef9，绑定 revision a04930dbe5419bfee073f7cade734f572689a3a8 的 13 个必要文件、合计 4703115105 字节；该次确认文件都存在且大小一致；本轮未重读模型工件。", hero: false },
     { label: "FireRed 模型回执", value: "2026-08-31 FireRed MODEL_RECEIPT 观察为 2124 字节、SHA-256=c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，绑定 revision 2c5e0f415b9afb8f67cb8b00ea4c54959f70e824 的 14 个必要文件、合计 18870501538 字节；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净。", hero: false },
-    { label: "FireRed WSL", value: "FireRed WSL 当前使用 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0 和 NumPy 2.4.2；CUDA 与 BF16 可用，WSL 约 32 GiB RAM + 8 GiB swap，当前可用量高于半精度装载门槛。", hero: false },
+    { label: "FireRed WSL", value: "2026-08-31 FireRed WSL 观察为 Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2，CUDA/BF16 可用，约 32 GiB RAM + 8 GiB swap。9 月 17 日来源真实 FireRed 路线验收另成立；本轮没有重新读取可用内存或加载模型。", hero: false },
     { label: "模型 Registry", value: "当前模型 Registry（登记表）包含 6 个 Profile：FireRedASR2-LLM、Fun-ASR-Nano-2512、Paraformer、Qwen3-ASR-1.7B、SenseVoiceSmall 和 Whisper Large V3；其中前 5 个进入 direct transcription（直接转写）闭集，Whisper 只作 fallback/comparison 登记，pipeline 明确拒绝直接执行。", hero: false },
     { label: "说话人证据", value: "主分支已包含有界说话人证据回读、可撤销 person:self 档案和时间戳通话归属；具体且一致的上下文可在解释反对声学线索后支持 inferred（暂时推断），无法消解的歧义保持未知，profile 撤销后旧声学证据失效。", hero: false },
     { label: "媒体替换保护", value: "最新说话人证据回读会在处理前后再次核对目标媒体快照；文件被替换或改变时失败关闭，不让旧媒体证据落到新文件上。", hero: false },
-    { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，4/4 段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false }
+    { label: "历史真实验收", value: "历史公开验收曾用超过 40 秒的中文电话录音完成四切片 FireRed + Qwen 路线，4/4 段均 verified；相同请求续跑为 0 processed / 4 skipped，默认 strict smoke 也有独立历史通过记录。", hero: false },
+    {
+      "label": "共享已知文案对齐",
+      "value": "2026-09-18 13:30 UTC alignment-info 只读返回 Qwen3-ForcedAligner-0.6B@c7cbfc2048c462b0d63a45797104fc9db3ad62b7、weights_present=true、单场最多300秒；给已确认文案定位，lexical_truth_verified=false，不重新配音或启动双模型。",
+      "hero": false
+    },
   ],
   gaps: [
     "9月9日只读音频设备枚举已发现DJI输入端点，取代9月5日未连接的旧观察；没有打开麦克风或采集声音，因此仍未验个人语音与真实按键。指定设备缺失时仍提示连接、不换其他麦克风；入口和图标属性正确也不等于个人使用已通过。",
-    "GPU、模型回执、FireRed WSL、18 项安装脚本回归、离线工件缺口与旧工作树说明继承 2026-08-31 的已发布观察，本次没有重新采集这些未受影响的现场。",
-    "本次网站任务只回读已发布源码与来源任务的听写证据，没有访问私人录音或重跑文件 strict / FireRed smoke。5.5 秒公开样本仅证明指定集成及一次预热解码，不代表个人准确率、整段耗时或按键到上屏延迟。",
-    "当前 offline\\manifests 只有占位文件，没有 requirements-lock.txt、wheelhouse.sha256 或 wheelhouse.json，offline\\wheelhouse 也不存在；因此当前只有恢复脚本和回归，不存在可直接拿走的本轮离线依赖包，也没有运行 install-offline smoke。",
+    "Qwen/FireRed 大权重和 WSL 精确容量保留原观察；本轮只读确认对齐器固定目录存在、听写任务运行以及离线工件仍缺失，没有重算全部模型哈希或启动推理。",
+    "9 月 17 日公开音频验收覆盖单模型听写、high_quality 短音频、42 秒两切片 FireRed+Qwen、Qwen 对齐、Smart/API 及异常 worker 回收；它证明集成，不是代表性中文准确率评测，也不证明个人麦克风、口音或按键到上屏体验。",
+    "2026-09-18 只读确认 offline/manifests 的 requirements-lock.txt、python-version.txt、wheelhouse.sha256、wheelhouse.json 与 offline/wheelhouse 均不存在；因此仍没有可携带的当前离线依赖包，更没有完成断网新机安装。",
     "2026-08-31 只核对两份模型回执自身 SHA-256、必要文件存在性与声明大小，没有重新计算约 4.7 GB Qwen 和约 18.9 GB FireRed 全部权重文件的 SHA-256，也没有触发模型 loader 的完整身份校验。",
     "现有 wheelhouse 只恢复 Windows Python 依赖，不打包模型权重，也不完整重建 FireRed 的 WSL 源码、Python 环境和模型目录；完全断网的新机还必须事先从可信备份保留这些工件，项目当前没有一键生成并验收完整离线恢复包的脚本。",
     "重要录音的 FireRed + Qwen 证据链 smoke 需要指定真实音频并实际核听，本次没有运行；云入口需明确重要录音或质量复核用途及本次上传授权，本轮没有调用。",
     "Git Owner 仍登记一个已合并、干净、无唯一提交的旧 speaker-attribution 工作树。它不影响 main 的产品状态，但在确认没有外部任务依赖前不自动删除。",
     "模型转写、声纹分数、匿名聚类和回执都不能单独证明真实说话人、外部事实或关键语句正确；需要原音频、上下文和人工复核。",
-    "真实录音 benchmark、模型组合调优和 VAD（语音活动检测）切片校准属于使用期工作，不是当前源码关闭阻断，但会影响特定录音上的实际准确率。"
+    "VAD 边界切分和质量复核已实现；仍缺代表性独立留出语料的模型提升证据。来源公开短样例不满足默认模型切换的质量门，当前 baseline 不变。"
   ]
 });
 
@@ -54,8 +59,8 @@ export const chineseAsrProject = {
   route: "/projects/chinese-asr",
   visibility: "公开仓库",
   statusTone: "mixed",
-  cardStatus: "文件转写与 Win+H 听写已实现，个人麦克风体验待试用",
-  cardStatusTone: "pass",
+  cardStatus: "听写、质量复核和文案对齐已实现；个人体验另验",
+  cardStatusTone: "mixed",
   ...chineseAsrSnapshot,
   searchAliases: [
     "把中文录音变成可复核文字",
@@ -68,10 +73,10 @@ export const chineseAsrProject = {
     "模型文件损坏后怎样核对和重建"
   ],
   repositoryNote: "源代码位于 PUBLIC（公开）GitHub（代码托管平台）仓库；模型权重、私人录音、转写结果、声纹向量、云端请求和本机缓存不进入仓库，也不进入本页。",
-  summary: "ChineseASR 同时把麦克风说话直接输入 Windows 应用，并把已有录音整理为可复核转写包。听写时按 Win+H 或 Ctrl+Win+H 显示并录音、再次隐藏并暂停，主屏与 VDD 的小窗共享一次录音，停顿提交整段文字；切换焦点后停止自动输入，可从托盘复制最近文本，不会自动回车发送。文件转写不是把中文录音丢给模型，再换回一段真假难辨的顺口文字。它交付的是能搜索、能接着处理、还能回到原音频复核的转写包：默认保留正文、原始输出、风险和失败证据；需要逐段时间线、匿名说话人或本人线索时，再明确选择对应路线。Python（运行语言）依赖、固定模型工件和离线重建也分开管理。普通录音默认留在本机；只有明确选择重要录音或存疑转写质量复核，并取得本次上传授权，才会进入独立云候选路线。姓名、数字、承诺和争议语句始终以原音频为准。",
+  summary: "ChineseASR 把麦克风说话直接输入 Windows 应用，也把已有录音整理成能回听核对的文字。听写只有一个随目标屏选择的位置面板，停顿才输入整句，换焦点就停止自动输入，Esc 可取消，没有自动发送或保存录音历史。文件转写保留两路原文和风险，把数字、否定和边界疑点放进带本地音频的复核页，长录音可接着处理。视频已经有确认文案和音频时，还可只借用对齐器寻找词语位置，不重新配音或启动两路识别。新模型先独立评测再明确切换，正常录音不自动上传；姓名、数字和争议语句最终仍以原音频核听为准。",
   why: "中文录音最麻烦的不只是一两个错字。模型可能在静音、杂音、方言、专有名词或长音频交界处“补”出很通顺却不存在的话；机器重装、断网或模型文件损坏，又可能让同一个入口悄悄换了环境。如果不把录音指纹、模型版本、失败证据、依赖锁和模型工件身份绑在结果旁边，事后既找不到疑点，也无法确认恢复或重跑是不是仍走同一条路线。",
   plainExample: "比如我说“把这段两小时会议录音转成可复核文字，中断后别从头来”。系统会按连续分段保存进度，保留已经完成的片段；恢复后只补缺失或失效部分，再交付可读正文、两路原始结果、风险位置和回听入口。它不会因为文字读起来顺，就把缺段或单路失败藏起来。",
-  result: "桌面听写直接得到输入框里的文字，完整最近文本可主动复制，录音和识别结果不保存成历史文件；文件转写与恢复另有两类结果：一类是与原录音绑定的正文、原始 JSON、审计、质量字段和恢复入口；另一类是可核对的运行环境、固定模型工件与离线依赖材料。模型工件是可校验的文件身份，不是凭据。系统能说明“这份结果由哪个输入和流程生成、恢复后是否仍是同一依赖与模型身份”，但下载、安装、回执或模型自信都不能证明真实录音已经转对，关键内容仍要人工回听。",
+  result: "听写直接交回输入框中的整句文字，未输入部分可取消，最近文本仅留内存供主动复制；文件任务交回正文、两路原始结果、审计与局部音频复核页、覆盖和恢复清单。独立对齐交回 word/start/end 及音频/文案/模型身份，不认证文字真伪。模型升级另有比较报告和回退回执；离线包、模型工件、实际推理和人工确认始终分别验收。",
   readerStates: {
     pass: "音频可读、目标模式可用且任务完成时，返回正文和结构化证据包；严格模式保留两路模型结果与风险判断，时间位置只在对应引擎真实提供时出现。",
     problem: "某个引擎失败、两路分歧、检测到疑似幻觉或长音频只有部分完成时，保留可用片段但明确标为 provisional（暂定）或需要复核，不把降级结果冒充完整成功。",
@@ -79,16 +84,20 @@ export const chineseAsrProject = {
   },
   productPrinciples: [
     { title: "听写由本人控制输入落点", detail: "逐停顿输入，不自动润色或回车发送。Esc 只取消还未输入的部分；焦点改变后停下自动输入，保留主动复制入口。已输入文字由本人检查和修改。" },
-    { title: "兼容依赖可更新，换模要有可靠证据", detail: "AI 可自主更新兼容依赖；只有明确可靠的中文效果、速度和兼容改进证据才新增或替换模型，不因版本号或宣传换模，也没有定时模型下载服务。" },
+    { title: "兼容依赖可更新，换模要有可靠证据", detail: "模型升级必须比较同一语料、参考文本和指标，包含字错、关键内容、静音出字、错误放行、复核负担与耗时。不同语料、重复样本、纯合成、缺案例或没有改善的候选不能提升；通过只适用于该样本，不构成普遍准确率保证。" },
     { title: "原音频始终是真相来源", detail: "转写首先是搜索和回听导航，不是录音真实性、说话人身份或法律事实认证。" },
-    { title: "流畅不等于可靠", detail: "模型越能生成通顺文字，越要把不确定、分歧和疑似内容变成可定位的复核清单。" },
+    { title: "流畅不等于可靠", detail: "流畅与高相似度不能掩盖数字、正负号、否定或关键项冲突；质量页把差异、上下文声音和补充识别一起给我，不靠第三票或 LLM 偏好替我定稿。正常说出的“字幕”“点赞”也不能单凭关键词删除。" },
     { title: "交付的是结果包，不是孤立正文", detail: "正文、时间位置、原始结果、风险、失败和恢复入口共同绑定同一音频。" },
     { title: "长录音可以暂停和继续", detail: "每个分段都能核对和恢复，中断只补缺失部分，不把两小时任务当成一次容易超时的命令。" },
-    { title: "默认路线不能被安装变化偷偷改掉", detail: "日常、严格、重要录音和时间线模式各有清楚含义；新增模型必须显式接入，不能改变旧请求。" },
+    { title: "默认路线不能被安装变化偷偷改掉", detail: "baseline 仍是 Qwen 加 SenseVoice，high_quality 必须显式选择。比较通过后的激活只改 strict 两个默认引擎，保存前后配置；回退拒绝覆盖后来已改过的默认值，同时保留无关配置变化。" },
     { title: "恢复能力必须在故障前制备", detail: "依赖 wheelhouse、校验清单和模型缓存都不会在断网后凭空出现；先冻结、校验和保存，再用离线安装与真实 smoke 验收。" },
     { title: "普通录音本地优先", detail: "只有明确选择重要录音或当前存疑转写质量复核，并取得本次上传授权才进入云候选；文件较长或批量不构成上传理由。" },
     { title: "声音线索不等于人物身份", detail: "匿名说话人、本人声学线索和真实身份分开。具体且一致的来源或句义可以支持可撤销推断，即使声学线索相反也须把理由讲清；上下文互相冲突或没有可用依据时才保持未知。" },
-    { title: "部分成功也要诚实有用", detail: "可用片段、暂定结果、失败位置和无法运行分别返回，不把降级或空文本冒充完整成功。" }
+    { title: "部分成功也要诚实有用", detail: "可用片段、暂定结果、失败位置和无法运行分别返回，不把降级或空文本冒充完整成功。" },
+    {
+      "title": "位置、完整性和字词真值分别回答",
+      "detail": "对齐器只为给定文字定位，质量复核只解释差异与需要回听的片段。原始结果完整、两路一致或逐字时间覆盖，都不能代替原音频核听；补充模型不是第三票。"
+    },
   ],
   responsibilities: [
     "提供 Windows 托盘听写、停顿输入、取消、焦点保护、主动复制与登录自启动",
@@ -148,20 +157,25 @@ export const chineseAsrProject = {
     { title: "交付并说明边界", detail: "返回可打开文件、任务状态、复核清单和恢复入口；环境重建另交付依赖与模型身份检查结果，关键事实仍要求回到原音频核听。" }
   ],
   components: [
-    { name: "桌面听写", responsibility: "在指定麦克风采音，双屏共用控制，并把整句文字送入经过核对的应用焦点。", implementation: "dictation.py、dictation_audio.py、dictation_vad.py和dictation_windows.py消费独立configs/dictation.yaml；不进入文件Smart API队列，音频与最近文本仅留内存。" },
+    { name: "桌面听写", responsibility: "从指定麦克风采音，用一个可重定位面板控制，并把整句文字送入经过核对的应用焦点。", implementation: "dictation.py、audio/vad/windows 与 dictation_worker.py 使用独立 configs/dictation.yaml；UI、麦克风与原生模型调用隔离，匿名管道内传音频，模型操作有期限和有限恢复，不写录音/正文历史。" },
     { name: "模型 Registry", responsibility: "集中声明引擎、版本、能力、运行方式和默认角色。", implementation: "configs/models.yaml 是唯一配置面；quick/strict 默认和显式 profile 不由脚本临时改写。" },
-    { name: "安装与恢复工件", responsibility: "重建 Windows Python/CUDA 环境、固定模型身份和可选 FireRed WSL 运行时。", implementation: "setup/download 脚本、dependency lock、wheelhouse checksum 与 MODEL_RECEIPT 分层工作；离线依赖包不冒充模型备份。" },
+    { name: "安装与恢复工件", responsibility: "重建 Windows Python/CUDA 环境、固定模型身份和可选 FireRed WSL 运行时。", implementation: "setup/download、wheelhouse 与模型回执继续分层；model_lifecycle.py 增加固定对齐器恢复、显式上游查询、同口径候选比较及 CAS 配置切换/回退，不自动下载升级。" },
     { name: "音频前端", responsibility: "读取、校验和规范音频，为不同引擎提供一致输入。", implementation: "src/zh_asr/audio_frontend.py 负责格式、语音区间和输入身份。" },
     { name: "转写 Pipeline", responsibility: "组织主引擎、对照引擎、降级、文本和状态。", implementation: "src/zh_asr/pipeline.py 与 adapters 组合模型，不把某个模型写死为全部场景。" },
     { name: "Smart API 与 job 服务", responsibility: "异步提交、状态查询、期限、取消和复用。", implementation: "src/zh_asr/service.py 加 scripts/asr-smart.ps1；调用方短等待，重任务继续由本地服务监管。" },
-    { name: "长音频引擎", responsibility: "连续切片、manifest、分段状态和断点续跑。", implementation: "src/zh_asr/long_audio.py 保证时间线闭合，并把分段结果交给仲裁层。" },
+    { name: "长音频引擎", responsibility: "连续切片、manifest、分段状态和断点续跑。", implementation: "long_audio.py 按 VAD 附近边界切片但保留原完整时间线，实际上下文重叠计入各模型长度上限；身份包含代码、模型锁、配置、输入和调用绑定，旧分段不能静默混用。" },
     { name: "批量转写", responsibility: "按文件组织任务并复用已加载模型。", implementation: "src/zh_asr/batch.py 与 transcribe-folder.ps1 避免每个文件重复冷启动。" },
-    { name: "审计与风险规则", responsibility: "检测分歧、静音出字、模板废话、重复和格式异常。", implementation: "audit.py、risk_rules.py、strict_writer.py 分别保存风险、疑似标记和复核队列。" },
+    { name: "审计与风险规则", responsibility: "检测分歧、静音出字、模板废话、重复和格式异常。", implementation: "audit、risk_rules、strict_writer 保留原文；quality.review.json/html 增加带上下文音频的分歧复核，SenseVoice 仅在不是现有两路且确有待核片段时补听，不改写 raw 或成为第三票。" },
     { name: "客观结果 Sidecar", responsibility: "把执行、覆盖、质量与语音结果分开。", implementation: "audio_outcome.py 生成结构化 sidecar，避免空文本直接被解释为无语音。" },
     { name: "说话人证据", responsibility: "提供匿名聚类、时间线和有边界的本人声音线索。", implementation: "speaker_evidence.py 与 speaker_attribution.py 组合声学、声道和调用方上下文；方向一致可推断，声学冲突可由具体一致的上下文解释，无法消解才 unknown。结果不升为身份确认。" },
     { name: "证据回执", responsibility: "绑定内容文件、指纹、大小、引擎身份和状态。", implementation: "result_writer.py 与 metadata.py 生成自包含一致性清单，但不冒充外部签名。" },
-    { name: "GPU 与进程控制", responsibility: "防止重模型互抢资源，并回收超时或失联进程。", implementation: "gpu_broker.py、process_control.py 和本地任务生命周期共同控制显存与进程树。" },
-    { name: "专业云入口", responsibility: "为明确的重要录音或已选定的存疑本地转写提供一次受控云候选。", implementation: "asr-professional-cloud.ps1 要求 Important / QualityReview 用途二选一及 CloudUploadAuthorized，密钥由 SecretRef 注入固定 worker。" }
+    { name: "GPU 与进程控制", responsibility: "防止重模型互抢资源，并回收超时或失联进程。", implementation: "短租约绑定模型 worker 的 PID 与创建时间，默认 120 秒、20 秒续期；监督进程消失时仅回收该任务模型/WSL 子进程，正常退出不误报租约丢失，不用重启调度器抢占合法任务。" },
+    { name: "专业云入口", responsibility: "为明确的重要录音或已选定的存疑本地转写提供一次受控云候选。", implementation: "asr-professional-cloud.ps1 要求 Important / QualityReview 用途二选一及 CloudUploadAuthorized，密钥由 SecretRef 注入固定 worker。" },
+    {
+      "name": "已知文案对齐",
+      "responsibility": "给现成音频和已确认文字定位逐词时间，供视频等消费者复用。",
+      "implementation": "alignment-info 为只读元数据；align 沿用音频前处理、Qwen固定对齐器和受监督worker，完整覆盖与输入双重哈希通过后才原子交付，不做词汇真实性认证。"
+    },
   ],
   usageExamples: [
     { moduleSlug: "desktop-dictation", ask: "我想在输入框里直接说话打字，换窗口时别输错地方。", effect: "按 Win+H 或 Ctrl+Win+H 显示并录音、再次隐藏并暂停；停顿提交整段文字，尚无逐字流式输出。Esc 取消尚未输入部分，切换焦点后停止自动输入，托盘可复制最近完整文本；检查文字后由本人决定是否发送。" },
@@ -173,16 +187,21 @@ export const chineseAsrProject = {
     { moduleSlug: "speaker-attribution", ask: "告诉我哪一段可能是我说的。", effect: "结合本人声音线索、声道、联系人、对话角色和句义，给出带支持与反对理由的暂时推断；具体一致的上下文可解释声学冲突，依据不足或上下文彼此矛盾才保持未知，任何结果都不是身份认证。" },
     { moduleSlug: "audit-evidence", ask: "这段录音是不是完全没人说话？", effect: "只有处理完整且有规范负向证据时才说没有检测到语音；空文本、缺段或失败都保持无法判断。" },
     { moduleSlug: "task-routing", ask: "模型卡住了，我要不要再提交一次？", effect: "先查询原任务到底还在跑、已经失败还是被服务重启打断；客户端等超时不等于任务失败。只有明确需要时才重试，旧队列不会自动复活，长音频仍沿原稳定输出目录续作。" },
-    { moduleSlug: "runtime-privacy", ask: "这是一段重要录音，本次可以上传云端再给我一个候选。", effect: "只有“确实重要”和“这一次允许上传”同时成立，才打开固定云入口；云门、密钥入口或网络缺失时只关闭云候选，本地证据链和失败记录仍各自保留。" }
+    { moduleSlug: "runtime-privacy", ask: "这是一段重要录音，本次可以上传云端再给我一个候选。", effect: "只有“确实重要”和“这一次允许上传”同时成立，才打开固定云入口；云门、密钥入口或网络缺失时只关闭云候选，本地证据链和失败记录仍各自保留。" },
+    {
+      "moduleSlug": "known-text-alignment",
+      "ask": "这段旁白不重配音，只给确认过的文案标好词语时间。",
+      "effect": "调用共享对齐器交回逐词秒数与原件身份；缺工件、超时或覆盖不足就保留旧词轴，成功后仍听音检查踩点。"
+    },
   ],
   evidenceLayers: [
-    { layer: "听写部署与公开样本", proves: "来源任务回读登录任务运行、停止/重启、ready 日志，以及官方 5.5 秒中文样本正确转写、预热单次解码约 0.47 秒。", doesNotProve: "DJI Mic Mini 已连接、个人口音准确率、真实按键输入已验收、零延迟或整体端到端耗时。" },
+    { layer: "听写部署与公开样本", proves: "本轮 13:30 UTC 只读确认任务 Running、开始菜单和图标归属正确；9 月 17 日来源公开音频验收另含单模型听写与有界异常恢复。", doesNotProve: "DJI Mic Mini 已连接、个人口音准确率、真实按键输入已验收、零延迟或整体端到端耗时。" },
     { layer: "Source（源码层）", proves: "当前 main 中实际存在的模型路由、任务、审计、边界和测试实现。", doesNotProve: "本机已经安装、服务正在运行或真实录音效果正确。" },
-    { layer: "Unit tests（单元测试层）", proves: "来源任务报告 376 项全套通过，最终改动 33 项定向通过；覆盖受控逻辑、结构、听写及输入保护，两组不相加。", doesNotProve: "真实 GPU 模型加载、音频质量、端到端耗时和人工听感。" },
-    { layer: "Doctor（环境体检层）", proves: "GPU、核心依赖、模型配置和本机缓存入口当前可被识别。", doesNotProve: "每个 profile 都完成真实推理，也不证明服务没有运行期故障。" },
+    { layer: "Unit tests（单元测试层）", proves: "9 月 17 日来源全套执行 482 项，0 失败/错误，1 个可选中文 VAD fixture 跳过；本轮未重跑。旧 376、33、45 项保留各自日期，不累加作覆盖规模。", doesNotProve: "真实 GPU 模型加载、音频质量、端到端耗时和人工听感。" },
+    { layer: "Doctor（环境体检层）", proves: "本轮只读 alignment-info 识别到固定 Qwen3-ForcedAligner 目录、工件存在与 300 秒上限；其余 GPU/环境沿原观察，不把文件存在说成此次模型加载成功。", doesNotProve: "每个 profile 都完成真实推理，也不证明服务没有运行期故障。" },
     { layer: "Dependency artifacts（依赖工件层）", proves: "requirements lock、wheelhouse checksum 和离线安装可把一套 Windows Python 依赖重建并通过 pip check/Doctor。", doesNotProve: "模型权重、FireRed WSL 或真实录音推理可用；当前本机也尚未生成这套离线包。" },
     { layer: "Model receipt（模型回执层）", proves: "固定仓库/revision 下必要模型文件的路径、大小与 SHA-256 可逐项核对。", doesNotProve: "权重已被备份、GPU 能装载、输出准确或完整 ASR 场景通过。" },
-    { layer: "Runtime smoke（运行冒烟层）", proves: "指定入口、真实样本、模型和最终文件从头到尾能够完成。", doesNotProve: "对任意录音准确，或所有重要语句已经人工核听。" },
+    { layer: "Runtime smoke（运行冒烟层）", proves: "9 月 17 日来源真实公开音频覆盖 high_quality 短样例、42 秒两片、FireRed+Qwen、强制对齐、正常 Smart/API 以及监督进程异常后的 worker/租约回收。", doesNotProve: "对任意录音准确，或所有重要语句已经人工核听。" },
     { layer: "Historical real E2E（历史真实端到端）", proves: "超过 40 秒中文电话录音的四切片 FireRed + Qwen 路线曾全部 verified，续跑复用了四段结果。", doesNotProve: "本轮模型、任意私人录音或每个字仍然正确。" },
     { layer: "Content receipt（内容回执层）", proves: "输入、模型、输出文件、指纹和状态在一个结果包内一致。", doesNotProve: "外部真实性、可信时间戳、说话人身份或文字事实正确。" },
     { layer: "Benchmark（基准评测层）", proves: "固定语料和 truth（人工真值）下的字错率、风险和模型对比。", doesNotProve: "用户下一段录音具有相同声学条件和准确率。" },
@@ -219,7 +238,7 @@ export const chineseAsrModules = [
   {
     "slug": "desktop-dictation",
     "shortTitle": "桌面听写",
-    "title": "Win+H 桌面听写、双屏小窗与输入保护",
+    "title": "Win+H 单面板听写、输入保护与有限故障恢复",
     "searchAliases": [
       "Win+H语音输入怎么用",
       "Ctrl+Win+H",
@@ -227,7 +246,7 @@ export const chineseAsrModules = [
       "听写时切换窗口会不会输错",
       "Esc会撤销已经输入的文字吗",
       "DJI麦克风不支持16kHz",
-      "听写双屏小窗",
+      "听写面板优先VDD否则主屏",
       "听写暂停后释放显存"
     ],
     "searchProjection": {
@@ -247,7 +266,7 @@ export const chineseAsrModules = [
         "ChineseASR Dictation"
       ],
       "relations": [
-        "两个目标屏共用一次采音和识别",
+        "一个面板优先MTT1337否则PHLC34B",
         "停顿后整句识别再核对原输入焦点",
         "暂停保留内存模型并释放GPU租约"
       ],
@@ -258,8 +277,8 @@ export const chineseAsrModules = [
         "停止或退出后沿同一入口重新启动，不恢复旧录音历史"
       ]
     },
-    "teaser": "点好输入框再按快捷键说话，停顿后把整句文字放进原位置。两个小窗控制同一次录音；切换焦点、取消和缺少麦克风各有明确结果。",
-    "status": "9月9日任务、开始菜单入口和45项听写回归已有证据；个人语音、真实快捷键和双屏像素未在本轮实测",
+    "teaser": "停顿后把整句文字放进原输入框；面板只显示一份，模型卡住有期限和恢复，换焦点或取消不把迟到文字塞进别处。",
+    "status": "本轮只读任务与入口匹配；来源已验单模型公开音频和有界恢复，个人麦克风体验未重验",
     "statusTone": "mixed",
     "value": "我可以先点普通应用的输入框，再按Win+H或Ctrl+Win+H显示小窗并录音；再次按下便隐藏并暂停。主屏和远程虚拟屏的小窗共用同一次录音，任一边暂停或换设备都同步。约600ms停顿、最长20秒或手动暂停时提交整段文字，我检查后再决定是否发送。",
     "why": "说话打字最怕文字落进另一个窗口、麦克风被悄悄切换，或点了收起却仍在录音。这个入口将显示、采音、识别和输入落点分开，让本人能随时暂停和取消；它不为追求顺口而自动润色或回车发送。",
@@ -275,23 +294,25 @@ export const chineseAsrModules = [
       "麦克风按钮只切录音与暂停；×隐藏并暂停、继续完成尾句；托盘退出才真正结束程序。",
       "录音和最近文本只留内存，主动复制才写剪贴板；需要持久文件、逐段审计或恢复历史时使用文件转写路线。",
       "登录预载模型不自动开麦；暂停保留内存模型但释放显存及租约，再次唤起仍须等待实际资源就绪。",
-      "单个Qwen3-ASR-1.7B用于听写，不改变文件quick/strict的模型选择，不承诺逐字流式或固定端到端延迟。"
+      "单个Qwen3-ASR-1.7B用于听写，不改变文件quick/strict的模型选择，不承诺逐字流式或固定端到端延迟。",
+      "模型准备、GPU被合法文件任务占用和指定麦克风断开分别显示；等待保留内存音频，可Esc取消，不能为掩盖争用抢租约或偷偷切换设备。",
     ],
-    "problem": "避免双屏重复采音、迟到文字输入错误焦点、缺设备时误录其他麦克风，以及收起后仍无意继续录音。",
+    "problem": "防止永久停在准备中、模型调用拖住界面、迟到文字进入错误焦点、缺设备误录别的麦克风，以及收起后无意继续录音。",
     "implementation": [
       "桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc、焦点检查和文字注入。开始菜单中文听写.lnk经Start-Dictation.vbs隐藏调用Start；已运行时用同会话Start事件通知原窗口执行快捷键同一动作，未运行时由现有任务启动并最多等待30秒，不另建实例。",
       "configs/dictation.yaml：16 kHz、silence_ms=600、min_speech_ms=240、max_chunk_sec=20；默认指定 DJI Mic Mini，input_device: null 才跟随 Windows 默认输入。hotwords 当前为空，避免不清晰声音触发术语复读；轻量 WebRTC VAD（语音活动检测）保留语句前后缓冲，无有效语音或空识别时不输入。",
-      "dictation_windows.py 维护 160×60 实际像素白绿胶囊；两个目标显示器按 PHLC34B / MTT1337 硬件型号定位，共享录音、暂停、隐藏和设备选择，接入/断开及分辨率变化会重定位，未接入的目标不显示。",
+      "dictation_windows.py 当前面板为 200×75 实际像素；优先 MTT1337 VDD，缺席时用 PHLC34B 物理主屏，只保留一份面板并在显示变化时重定位。旧图层素材自身的 160×60 不代表实际窗口大小。",
       "麦克风按钮只切录音/暂停，×隐藏并暂停且完成尾句；小箭头或右键显示设备刷新和复制入口。登录只预载内存，不自动开麦；暂停保留内存模型并释放 GPU，真正退出才释放模型。",
       "设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。若同一设备不接受16kHz，尝试它报告的原生采样率；按实际采样率分句，再用resample_poly把完整语句转成模型要求的16kHz。采音丢帧或采样率未准备好时取消尚未输入内容，不把坏声音当成功。",
       "听写直接使用Qwen3-ASR-1.7B，不做双模型等待或LLM润色；模型预载内存，录音推理时通过LocalGpuBroker申请ASR租约，暂停将模型放回内存并释放显存。",
       "音频和最近文本不保存为历史；outputs/dictation/runtime.log仅记录错误、耗时和字数，preferences.json只保存本机麦克风选择。",
-      "scripts/dictation.ps1的Install安装依赖、创建ChineseASR Dictation登录任务并启动；Status只读状态，Start/Stop控制现有进程，Uninstall移除登录自启但保留项目和模型。"
+      "scripts/dictation.ps1的Install安装依赖、创建ChineseASR Dictation登录任务并启动；Status只读状态，Start/Stop控制现有进程，Uninstall移除登录自启但保留项目和模型。",
+      "dictation_worker.py 把原生模型调用放入常驻受监督子进程，匿名管道传内存音频；加载180秒、操作60秒、预热40秒、停车20秒。启动最多恢复一次，未返回的一句确认进程已退出后最多重试一次；预热超时重载但不重复预热，反复失败转为可操作错误。",
     ],
     "flow": [
       "本人点好输入框，从快捷键或开始菜单唤起同一听写进程。",
       "重新枚举指定麦克风；设备支持时以16kHz采音，否则使用同设备原生采样率，再把整句转为16kHz。",
-      "主屏与VDD同步显示160×60实际像素小窗；采音留内存，VAD（语音活动检测）判断有效语句。",
+      "在当前选定的一个屏上显示 200×75 面板；采音留内存，VAD 判断有效语句，不重复开两套控制窗。",
       "约600ms停顿、20秒上限或手动暂停后，以单个Qwen模型识别整句。",
       "输入前再次核对焦点与取消状态；不合适就停下自动输入，保留最近完整文本供主动复制。",
       "暂停或隐藏后停录并处理允许的尾句，释放显存；退出结束程序并交还快捷键，下一次重新开始。"
@@ -306,8 +327,8 @@ export const chineseAsrModules = [
         "explanation": "麦克风实际支持的采音频率；同设备不接受16kHz时先按支持值录制，再转换完整语句。"
       },
       {
-        "term": "双屏小窗",
-        "explanation": "PHLC34B主屏与MTT1337虚拟屏各有一个控制窗口，共享同一次录音和选择，并非两个模型任务。"
+        "term": "单面板的显示选择",
+        "explanation": "MTT1337 已接入时优先显示，否则回到 PHLC34B 物理主屏；这是同一次听写的唯一控制窗，不是双屏并行录音。"
       },
       {
         "term": "最近完整文本",
@@ -366,7 +387,7 @@ export const chineseAsrModules = [
       },
       {
         "path": "E:\\Projects\\Tools\\ChineseASR\\configs\\dictation.yaml",
-        "role": "独立听写模型、设备、分句和双屏配置"
+        "role": "独立听写模型、指定设备、分句与单面板显示优先级"
       },
       {
         "path": "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\dictation_audio.py",
@@ -378,14 +399,14 @@ export const chineseAsrModules = [
       },
       {
         "path": "E:\\Projects\\Tools\\ChineseASR\\tests\\test_dictation_windows.py",
-        "role": "输入保护和双屏控制回归"
+        "role": "输入保护、单面板重定位与控制回归"
       }
     ],
     "verification": [
       "PUBLIC main=12eb64e93586b8fce8a4d2b9750c4d097b78ae5a，本次只读远端回读仍同值；新增网页模块不代表新增源码能力。",
       "2026-09-09原观察：ChineseASR Dictation已安装且Running，开始菜单中文听写.lnk目标与图标匹配，DJI输入端点可枚举；未打开麦克风。",
       "2026-09-09三个听写测试模块45项通过、1.225秒；9月7日71通过/1跳过、9月5日完整376项及公开短音频各保留原日期，不叠加为新全套。",
-      "个人口音、麦克风采音、真实快捷键、双屏像素、焦点切换与管理员窗口实际输入、本轮完整按键到上屏延迟均未重验；静态入口和自动回归不替代这些结果。"
+      "个人口音、DJI 麦克风采音、真实快捷键、200×75 实际桌面位置、焦点切换与管理员窗口输入，本轮均未重验；任务 Running 和来源测试不替代使用结果。"
     ],
     "relation": "桌面听写负责实时采音和应用输入；文件入口与任务模块负责已有录音、持久任务和文件结果。二者复用已有模型适配器与GPU协调，但输入、输出和恢复生命周期分别验收。"
   },
@@ -660,12 +681,12 @@ export const chineseAsrModules = [
       failureRecovery: ["缺少lock时先在联网健康环境重新冻结", "wheel缺失或SHA不符时拒绝离线安装", "模型revision大小或SHA漂移时拒绝装载", "WSL容量或当前可用内存不足时装载前阻断", "Doctor通过后仍需模型smoke和真实场景E2E"]
     },
     teaser: "把新机安装、断网重建与模型抢修拆成三组可核对工件：依赖包、固定模型缓存与回执、FireRed WSL（Windows Linux 子系统）运行时；下载完还得跑真实冒烟。",
-    status: "安装/离线脚本、模型工件与 FireRed WSL 保留 2026-08-31 观察，18 项脚本回归也是该基线；本轮没有生成 wheelhouse（离线轮包仓库）、执行 offline install（离线安装）或重跑模型 E2E（端到端验证）",
+    status: "固定模型、候选比较及配置切换/回退已实现；本轮确认对齐权重目录存在，完整离线包仍缺失",
     statusTone: "mixed",
-    value: "电脑重装、换机、断网或模型目录损坏时，我能看出缺的是 Python 依赖、模型工件，还是 FireRed 的 WSL 环境与容量，而不是像无头苍蝇一样把整个项目全部重装。每一层都有自己的产物、校验和下一项验收。",
+    value: "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。",
     why: "ASR 要真正可用，源码、Python 包、CUDA 构建、数十 GB 模型文件和可选 WSL 环境必须同时对得上。只留 Git 仓库会丢模型，只留 wheelhouse（离线轮包仓库）会丢权重；看到 MODEL_RECEIPT（模型回执）也只说明登记的模型身份，不证明文件已经备份。混在一起，往往折腾到最后一步才发现缺件，或让损坏权重继续产出不可复现结果。",
     example: "比如我问“新电脑暂时没网，怎样把 ChineseASR 恢复到能跑严格转写？”系统会先核对预存的依赖锁、离线轮包与校验清单，重建 Windows 虚拟环境；再单独确认 Qwen 模型缓存与回执。若还需要 FireRed，就继续检查 WSL 中的源码、运行时、模型回执和存储容量。最后必须跑默认 strict 冒烟；重要证据路线还要另跑 FireRed + Qwen 冒烟并人工核听。",
-    result: "得到一份分层体检：Windows 中实际安装的 Python/CUDA 依赖、离线包校验、Qwen/FireRed 固定 revision（修订标识）与必要文件身份、FireRed WSL 的存储容量和运行时状态，以及冒烟/E2E 是否真的完成。WSL 容量不是显存，模型工件也不是凭据；缺哪一层就只把对应路线标为 unavailable（不可用），不会拿环境检查冒充转写成功。",
+    result: "得到分层安装状态、固定模型身份、候选质量比较和配置切换/回退回执；对齐器可从不可变锁恢复缺文件。离线 Python 包、模型权重与 FireRed WSL 分开携带，配置回退不等于依赖或驻留内存模型也已回退。",
     readerStates: {
       pass: "依赖 lock 与 wheelhouse 校验一致、离线或在线安装通过 pip check/Doctor、模型回执完整且实际模型 smoke 成功时，才把对应转写路线标为可用；重要录音还要独立 E2E 和人工核听。",
       problem: "依赖、模型或 WSL 只有部分恢复时保留已通过层的证据，精确指出缺件；日常 SenseVoice 或 Qwen 路线可独立成立，不为修 FireRed 改写默认组合。",
@@ -681,7 +702,7 @@ export const chineseAsrModules = [
       "Qwen 和 FireRed 只接受固定 repository/revision 与规范 MODEL_RECEIPT，文件缺失、大小或 SHA-256 漂移都在模型加载前失败关闭。",
       "wheelhouse 只保存 Windows Python wheel，不包含模型权重、私人录音、输出、FireRed WSL venv 或源码 checkout。",
       "setup、download、Doctor、unit test、runtime smoke 与真实录音 E2E 是不同证据层，不能互相代替。",
-      "模型替换后先重建固定身份与工件，再跑 strict、Smart smoke；FireRed 证据路线还需 evidence smoke 与人工核听。"
+      "模型候选先用独立配置跑同语料 baseline/high_quality 评测，比较通过且输入/代码/配置仍匹配后才明确 activate-profile；旧权重和运行依赖独立保留，回退不覆盖后来修改的默认引擎。"
     ],
     problem: "解决代码都在但环境跑不起来、断网后才发现依赖或模型没预存、模型目录部分损坏却仍被加载、FireRed WSL 因版本或存储容量漂移在重载时失败，以及换模型只改配置却没有重新验收真实转写的问题。",
     implementation: [
@@ -695,7 +716,8 @@ export const chineseAsrModules = [
       "export-lock.ps1 从已通过 pip check 的 Windows .venv 运行 pip freeze --exclude-editable，输出 requirements-lock.txt 与 python-version.txt。",
       "build-wheelhouse.ps1 把 torch 系依赖送到 CUDA 12.8 index，其余包送到 PyPI，写出 wheelhouse.sha256 和 wheelhouse.json；后者记录 lock SHA-256、每个文件大小与 SHA-256。",
       "verify-wheelhouse.ps1 对 checksum 清单逐项检查文件存在与 SHA-256；install-offline.ps1 默认先验证，再用 --no-index --find-links 安装精确 lock，安装本地源码并运行 pip check 与 Doctor。",
-      "runtime/firered_worker.py 在哈希大权重和加载前同时验证固定源码 HEAD/干净工作树、模型回执、WSL 配置容量和当前可用容量；半精度与 FP32 使用不同门槛。"
+      "runtime/firered_worker.py 在哈希大权重和加载前同时验证固定源码 HEAD/干净工作树、模型回执、WSL 配置容量和当前可用容量；半精度与 FP32 使用不同门槛。",
+      "model_lifecycle 的 compare 验相同音频/真值/指标、独立样本规模、无重复或无效数据；纯合成、跳过案例或未改善拒绝提升。activate-profile 用当前代码/配置身份只切 strict 两个默认引擎并保存switch.json；rollback拒绝覆盖后来改变的默认值，保留无关设置。权重、运行依赖和驻留进程仍需各自恢复。",
     ],
     flow: [
       "联网健康环境先用 install-torch-cu128-direct.ps1、setup-core.ps1 建立 Windows 基线；需要 strict 时再 setup-qwen.ps1，需要 FireRed 时另建 WSL 隔离环境。",
@@ -723,7 +745,8 @@ export const chineseAsrModules = [
       "verify-wheelhouse 校验清单内文件的存在与 SHA-256，不证明 Python ABI、GPU 驱动或新机器硬件兼容；必须实际 install smoke。",
       "FireRed 半精度至少要求 28 GiB RAM、34 GiB RAM+swap，启动时至少 18 GiB MemAvailable、22 GiB MemAvailable+SwapFree；FP32 对应 40/48 GiB 与 36/44 GiB。",
       "当前 32 GiB WSL RAM + 8 GiB swap 是这台机器的验证配置，不是所有硬件的统一承诺。",
-      "模型下载、环境体检和源码测试都不能替代真实音频 E2E；重要录音还必须人工核听。"
+      "模型下载、环境体检和源码测试都不能替代真实音频 E2E；重要录音还必须人工核听。",
+      "模型目录缺失或损坏时先验真再修复，wheelhouse不包含大型模型权重；源码、安装包和现有样本通过不能声称完整断网恢复已经验收。原权重与运行依赖仍需按模型清单分别准备和核对。",
     ],
     failures: [
       { condition: "断网时没有 requirements-lock 或 wheelhouse", response: "明确判定无法离线重建 Python 环境；回到有网络且已验证的健康环境制备工件，不从未知缓存猜版本。" },
@@ -763,7 +786,7 @@ export const chineseAsrModules = [
       "Model artifacts：Qwen receipt 为 1763 B / SHA-256 0c43de9dd883adefb65cfa1477ad7156f749868105a554e647b47de73c841ef9，13 项声明合计 4703115105 B；FireRed receipt 为 2124 B / SHA-256 c4effd6931c0e09d8b2caaf7f8b9f58bed370fa4a174edfc64b668dd0b48dd01，14 项声明合计 18870501538 B。2026-08-31 确认所有声明路径存在、文件大小一致；本轮不重验模型工件。",
       "FireRed runtime：WSL Python 3.12.3、PyTorch 2.10.0+cu128、Transformers 5.1.0、NumPy 2.4.2，CUDA/BF16 可用；固定源码 HEAD=4e7d9aaf4482a47cec1724807026b9b151926eb5 且工作树干净，当前内存高于半精度门槛。",
       "Unverified：本轮未逐字节重算两组全部权重 SHA-256、未加载模型、未运行 strict/evidence smoke，也未用私人录音做 E2E；MODEL_RECEIPT 当前只到回执自身哈希、路径存在和大小回读。",
-      "Offline gap：offline/manifests 当前只有 .gitkeep，requirements-lock.txt、python-version.txt、wheelhouse.sha256、wheelhouse.json 与 offline/wheelhouse 均不存在；因此未运行 verify-wheelhouse 或 install-offline smoke，不能声称完整断网恢复已就绪。"
+      "2026-09-18 本轮只读确认 requirements-lock.txt、python-version.txt、wheelhouse.sha256、wheelhouse.json 和 offline/wheelhouse 均不存在；没有运行离线安装，也不能把模型工件目录当成可携带离线包。"
     ],
     relation: "本模块承接模型与模式模块的精确 profile，把依赖、权重和 FireRed WSL 恢复成可执行候选；只有再通过入口模块的真实 smoke、长音频执行与审计证据，候选环境才成为可用 ASR 路线。"
   },
@@ -779,7 +802,7 @@ export const chineseAsrModules = [
       failureRecovery: ["chunk 失败保留其他分段", "manifest 身份不一致拒绝续跑", "gap 或越界使完整覆盖失败", "损坏文件不拖垮整个批次"]
     },
     teaser: "长录音切成连续片段稳稳跑完并支持断点续作；批量转写复用已加载模型，但每个文件各算各的，坏一个不拖垮整批。",
-    status: "长音频、仲裁和批量模型复用已有完整单测；本次未运行两小时真实录音",
+    status: "VAD 边界、局部恢复与逐文件隔离已实现；来源已验 42 秒两片，未以此宣称两小时质量通过",
     statusTone: "mixed",
     value: "两小时录音跑到一半中断，不必把前面全部推倒重来；文件夹批量里即使有一个坏文件，其他已经完成的结果也不会跟着消失。我还能看见时间线有没有漏段，而不是只拿到一篇看似完整的长文。",
     why: "模型通常有输入时长或显存上限，硬塞超长音频可能直接失败。若只按固定长度一刀切，又会把句子截断、漏掉交界内容；没有 manifest（分段清单），中断后更分不清哪些片段刚刚完成、哪些还是旧配置留下的结果。",
@@ -799,11 +822,11 @@ export const chineseAsrModules = [
     ],
     problem: "解决模型时长上限、长任务中断重做、切片交界漏字、旧分段错复用、批量重复加载模型，以及单个文件失败拖垮整个批次的问题。",
     implementation: [
-      "long_audio.py 建立分段计划、manifest、续跑和整体状态。",
+      "long_audio.py 按 VAD 附近边界形成连续时间线；general quality 默认最长 60 秒、最短 20 秒、边界搜索 5 秒，FireRed 建议 35 秒、硬上限 40 秒且包含重叠，不删掉未检测到语音的原区间。",
       "arbitration.py 聚合双模型结果与分段风险。",
-      "batch.py 在一个批次内复用模型 runtime，同时为每个输入生成独立上下文。",
+      "batch.py 复用 Qwen 批量输入能力并隔离失败项；短音频正常批处理，长文件转可恢复分段，坏文件不会吞掉邻居结果。",
       "chunk overlap 可配置，但覆盖与边界必须进入结果证据。",
-      "旧输出只有在输入、模型和请求身份一致时才可复用。"
+      "复用绑定输入、模型锁、代码、配置与调用身份；单引擎失败保留 provisional 内容，但不作为完整 strict 缓存。只在文本与重叠音频时间共同支持时去重，不删除真实重复说话。"
     ],
     flow: [
       "读取音频总时长和目标模型上限。",
@@ -842,7 +865,7 @@ export const chineseAsrModules = [
     verification: [
       "long_audio、arbitration、batch 进入2026-08-31 的 345 项通过的全量单测。",
       "覆盖验证测试包含 gap、overlap、子证据和旧 manifest 身份场景。",
-      "真实长音频耗时、切片效果和回听质量本次未重新验收。"
+      "9 月 17 日来源 42 秒两切片 FireRed+Qwen、Qwen 对齐与正常 API 有真实公开音频验收；旧四切片结果保留历史，长篇个人录音与准确率仍未由本轮验证。"
     ],
     relation: "本模块复用入口模块的 job 和模型模块的 profile；最终分段结果必须交给审计证据模块，涉及说话人时再交给归属模块。"
   },
@@ -857,13 +880,13 @@ export const chineseAsrModules = [
       relations: ["strict 正文先读再进入 audit", "audit 分歧生成 review queue", "Ollama只读不确定片段的结构化audit证据", "仲裁只写merged audit和metrics而不覆盖raw", "receipt 绑定路径大小和 SHA-256", "长音频 manifest 和 metrics 解释覆盖与耗时"],
       failureRecovery: ["疑似标记按 review 时间或 chunk 回听原音频", "Ollama未启用或不可用时基础双ASR链照常完成", "仲裁响应无效时保留原始分歧和低置信结论", "听不清保持未知而不改写成静音", "回执不一致使 evidence unavailable"]
     },
-    teaser: "正文、两路原始结果、风险审计与文件回执各司其职；长音频还能按需让本地 Ollama 解释疑点，但它不听音频，也不改原始证据。",
-    status: "审计、objective sidecar 和回执逻辑单测通过；真实录音结论仍需逐条核听",
+    teaser: "先读正文，再点开值得回听的差异；数字、否定和实际声音一起核对，补充模型或可选 LLM 都不能替我改掉原始证据。",
+    status: "本地质量复核页、片段笔记绑定与比较门已实现；原始证据完整不等于文字真值",
     statusTone: "mixed",
     value: "除了正文，我还能迅速找到两路模型听得不一样的地方，分清空白更像无语音还是处理不完整，并核对结果文件有没有被替换或缺失。双 ASR 仍拿不准时，可以明确打开本地 Ollama，让它只解释结构化分歧；它既不读取音频，也不能替我改掉 raw（原始）结果。",
     why: "一段顺滑文字可能来自真实语音，也可能是模型补全；一片空白可能真的没有语音，也可能是解码、模型或覆盖失败。把这些状态压成一个“成功/失败”，错误就会直接溜进后续材料；让 LLM 默认介入或覆盖 raw JSON，又会把一次猜测伪装成原始证据，还让基础转写依赖额外的 GPU 常驻服务。",
     example: "比如我问“转写结果先看哪里？”系统会先给我可读正文；遇到 `[疑似] 150 万` 这样的标记，再展示主引擎、对照引擎各自听成什么。当前路线若有分段时间线，还会给出对应回听位置；默认日常正文并不承诺时间戳。若我为长音频明确开启本地 Ollama，它也只解释被标出的结构化分歧并把意见追加到审计里；最终仍由我回听原音频定稿。",
-    result: "阅读顺序很明确：先看 `*.strict.md` 正文，再看 `*.strict.audit.md` / `*.strict.audit.json` 的两路分歧和依据，以及 `*.strict.review.json` 的复核队列；两路 `*.raw.json` 始终原样保留。长音频另有 `manifest.json` 与 `metrics.json`。评测总会生成 `review.md`，但只有提供人工 truth（真值）时才生成 `benchmark.md` 和 `benchmark.json`。`*.strict.receipt.json` 用路径、大小、SHA-256 与 bundle hash 检查文件是否被换过，不证明文字真实；Ollama 未启用或不可用时，基础双 ASR 仍保留原分歧。",
+    result: "先看 strict 正文、audit 和 review 队列，再在 quality.review.html 听对应本地片段并比较候选；quality.review.json 保留质量结论，笔记导出绑定片段和审计哈希。两路 raw 原样保留；needs_review=null 是没有可用质量结论，不是无需复核。长流程仍有 manifest/metrics，有人工 truth 才生成基准比较。",
     readerStates: {
       pass: "执行、覆盖、质量和内容制品都闭合时返回 verified 的一致性结果；若显式启用仲裁，只对不确定 chunk 追加有来源的解释，人工核听边界不变。",
       problem: "存在分歧、低置信、失败引擎、缺段或可疑模式时列入 review；本地仲裁即使给出偏好，也不能覆盖 raw 证据或自动定稿。",
@@ -883,13 +906,14 @@ export const chineseAsrModules = [
     ],
     problem: "解决流畅幻觉、空文本误判、双模型分歧被隐藏、结果文件被替换后仍显示通过，以及结构化回执被误当成外部真实性证明的问题。",
     implementation: [
-      "risk_rules.py 定义静音出字、模板废话、异常重复、繁体残留和格式风险。",
+      "risk_rules.py 保留静音出字、异常重复、繁体与格式等风险；实际差异比较另保留小数点、正负号、否定与关键项，正常说出的“字幕”“点赞”不单独成为删除或改写理由。",
       "audit.py 汇总主/对照原始结果、错误和风险。",
       "audio_outcome.py 正交表达 execution、coverage、quality 和 objective outcome。",
-      "strict_writer.py 分开写 `*.strict.md`、audit Markdown/JSON、结构化 review JSON、两路 raw JSON、objective sidecar 和 receipt。",
+      "strict_writer 分开写正文、audit、review、raw、客观结果和 receipt；quality.review.json/html 再呈现上下文音频、时间和补充识别。复核失败只降低质量状态，不删除原正文、raw 或原审计。",
       "arbitration.py 从 `configs/models.yaml` 读取默认关闭的 `llm_arbitration`；启用时使用本地 `http://127.0.0.1:11434/api/chat`、主模型 `qwen-main-v1:latest`、fallback `qwen3.6-27b-256k:latest`、`uncertain_only` 与 `keep_alive=0`，仅传结构化分歧证据。",
-      "长音频另写 `manifest.json` 与 `metrics.json` 解释分段覆盖、状态和耗时；评测 / benchmark 另写 `review.md` 与 benchmark 成品，解释优先复核项和 truth 对比。",
-      "metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash。"
+      "长音频 manifest/metrics 记录覆盖、身份和耗时；评测同时分开普通 CER、关键符号错误、静音出字、错误放行与复核负担，不能用整段高相似度掩盖金额或否定差异。",
+      "metadata.py 与回执绑定输入、模型、六项严格内容制品、相对路径、大小、SHA-256 和 bundle hash。",
+      "质量HTML只播放本地音频，SenseVoice仅在不是原两路且有复核片段时补听；笔记导出绑定该片段和审计哈希，不能误用于别的录音。复核失败、quality_result.needs_review=null或lexical_truth_verified=false均保持明确，不伪装为没有疑点。",
     ],
     flow: [
       "日常先打开 `outputs.final` 指向的 `*.strict.md`，阅读正文并保留其中的 `[疑似]` / `[听不清]` 标记。",
@@ -1041,7 +1065,7 @@ export const chineseAsrModules = [
       failureRecovery: ["缺少任一云门就上传前 blocked", "GPU 冲突等待而不抢占", "云失败保持本地证据独立", "broker 身份失败时不取得密钥"]
     },
     teaser: "普通录音默认留在本机，GPU 协调器按工作类型安排租约：OCR 与 ASR 可并行，Ollama 与两者互斥，同类仍串行。只有明确选择重要录音或存疑转写质量复核，并授权这一次上传，才打开云候选入口。",
-    status: "本地依赖与 GPU Doctor 通过；云入口只完成源码与单测验证，本次没有上传或付费调用",
+    status: "短进程租约与异常 worker 回收有来源真实验收；本轮不运行 GPU、云调用或壁纸观测",
     statusTone: "mixed",
     value: "日常录音不会因为更长或想追求更强模型就悄悄上传。我可以明确选择本地证据链，也可以对一段重要录音逐次授权一个云候选，并看清这一次到底有没有离开本机。",
     why: "音频可能含有私人对话，GPU 又是多个本地项目共享的稀缺资源。没有清楚边界，脚本可能擅自上传、把密钥写进参数，或让几个重模型同时抢显存把机器拖垮。这里把本地执行、GPU 排队、云上传和公开仓库边界逐层分开。",
@@ -1062,15 +1086,15 @@ export const chineseAsrModules = [
     ],
     problem: "解决音频隐私边界不清、云上传被默认触发、密钥泄露、GPU 并发冲突、服务进程失控，以及公开仓库误纳入模型权重、用户音频和生成结果的问题。",
     implementation: [
-      "听写启动时将现有 Qwen 模型预载内存，录音期间申请 LocalGpuBroker（本地 GPU 协调器）租约并使用 GPU；空闲把模型移回内存、释放显存和租约。预载不是持续占用显存，也不是零启动延迟承诺。",
+      "听写采用常驻受监督模型子进程，空闲权重留 RAM，录音与推理申请自己的 GPU 租约；加载 180 秒、激活/推理 60 秒、预热 40 秒、停车 20 秒均有上限。准备失败可点麦克风重试，不要求重启 Windows。",
       "听写音频与识别结果不保存为历史文件；outputs/dictation/runtime.log 只记运行错误、耗时与字数，最近完整文本仅供本次托盘主动复制。",
       "默认 pipeline 和 Smart API 使用本机模型与本机回环服务。",
-      "gpu_broker.py 在重模型运行前取得有界租约。",
-      "ChineseASR 适配器按 chineseasr / chineseasr-cli 身份申请和续租；PCConfig Broker 的 _lease_family / _blocking_lease 允许 ocr 与 asr 两类共存，同类或未知类型占用阻断，Ollama 活跃请求/会话在 acquire 前独立阻断。这是源码策略，不冒充本轮并行运行或显存实测。",
+      "ASR 租约最多 120 秒并每 20 秒续租；真实模型 worker 接管 PID/创建时间身份，监督进程消失时 watchdog 清理本任务 WSL 后代。无法查询进程不是已死证明，旧六小时请求也不能重新占用数小时。",
+      "OCR/ASR 可跨族并行、同族串行，Ollama 重型请求与二者互斥；合法文件作业占用时听写保留内存音频并显示真实阻断，可 Esc 取消。辅助进程隐藏，不暂停 Wallpaper Engine 或创建广泛 Python/WSL 播放规则。",
       "FireRed worker 隔离在专用运行环境，不改变默认模型。",
       "asr-professional-cloud.ps1 在读音频前要求 Important / QualityReview 二选一及 CloudUploadAuthorized；重要路线写 importance=important，质量复核写 purpose=quality_review 且不写 importance。",
       "qwen_audio3_broker_worker.py 只接受固定请求结构和 SecretRef 注入，唯一 provider 为 Alibaba Cloud Model Studio（阿里云百炼），同步 API model id 固定 `qwen-audio-3.0-asr-flash`。",
-      "音频先在本机转为 16 kHz mono WAV，再切成最长 180 秒片段，通过 HTTPS Base64 同步接口逐段发送；`qwen-audio-3.0-asr-flash-filetrans` 需要公网文件 URL，当前未接入。",
+      "云音频仍本地转 16 kHz mono 并切成最长 180 秒，通过固定同步 Base64 HTTPS 入口发送；成功块可保存复用，已经发出但结果不明的请求不能盲重试重复计费，filetrans 路线仍未接入。",
       "transcript_readback.py 同时检索已保留本地 job 与完成态云结果，核对 schema、purpose、成功状态、原音哈希、每块范围和输出字节；完整云块只形成 chunk 时间粒度，quality 保持 unknown，不因更新日期更近就优先。",
       "普通质量复核不会自动再启动 FireRed/Qwen 双引擎；只有仍影响理解的分歧才按需要回核原音和本地结果，重要证据路线继续保留本地证据链与人工核听。",
       "outputs、models、私人评测、wheelhouse 和录音由 Git ignore 与公开门排除。"
@@ -1103,7 +1127,7 @@ export const chineseAsrModules = [
       { condition: "缺少用途、同时选两个用途或缺少本次上传授权", response: "在读取和上传前返回 blocked，不调用 broker；普通质量复核不能通过假报重要性绕过用途检查。" },
       { condition: "Secret Broker 或固定 worker 身份失败", response: "不取得密钥、不上传，建议使用本地路线。" },
       { condition: "同类 GPU 租约占用或 Ollama 活跃请求/会话冲突", response: "受影响任务保持 blocked 或等待；OCR 与 ASR 的允许共存不被当成冲突，也不绕过租约。" },
-      { condition: "云网络、限流或 5xx", response: "记录失败并保持本地证据独立；只建议有界重试一次。" }
+      { condition: "云网络、限流或 5xx", response: "保留已成功块与本地证据；先区分未发出、明确失败和结果不明，后者不盲重发。取消就是终止，不自动再申请模型或因子授权。" }
     ],
     sources: [
       { path: "E:\\Projects\\Tools\\ChineseASR\\src\\zh_asr\\gpu_broker.py", role: "GPU 租约与服务协调" },
@@ -1117,11 +1141,135 @@ export const chineseAsrModules = [
       "2026-08-31 Doctor 确认 GPU、代理、FunASR、Qwen ASR、PyTorch 和模型目录可读；本轮只做源码与定向合成回归。",
       "GPU broker、proxy guard、professional cloud script 和 broker worker 回归包含在 2026-08-31 的 345 项通过结果中。",
       "源码与测试固定 Alibaba Cloud Model Studio / qwen-audio-3.0-asr-flash、180 秒本地切片、HTTPS Base64 和一次有界重试；这些静态/测试事实不证明本轮云调用成功。",
-      "2026-09-07 六个定向测试模块 72 项运行，71 通过、1 跳过；覆盖新增面板控制、语音检测、用途拒绝与保存云结果回读。没有本轮完整 GPU、个人麦克风、多屏实际像素或云上传 E2E。",
+      "9 月 17 日来源 482 项回归与真实监督进程异常退出/worker租约回收通过，PCConfig 64 项 Broker 与 63 项配置恢复测试分别通过。本轮仅只读任务和对齐元数据，未把静态壁纸配置审计称为逐帧连续播放证明。",
       "本次没有调用云端、没有上传音频、没有消费密钥或额度，也没有运行重模型真实 smoke。"
     ],
     relation: "安装与恢复模块先提供可执行依赖和模型工件；本模块再为所有路线施加 GPU、进程、网络与隐私边界。它不决定正文质量，但决定某条处理路线是否允许执行、数据去了哪里。"
-  }
+  },
+  {
+    "slug": "known-text-alignment",
+    "shortTitle": "文案与音频对齐",
+    "title": "已有音频和确认文案，只找每个词在声音中的位置",
+    "searchAliases": [
+      "视频旁白怎样生成词语时间",
+      "已有文案不重新识别或配音",
+      "Qwen强制对齐300秒"
+    ],
+    "searchProjection": {
+      "intents": [
+        "把确认文案定位到音频时间",
+        "复用ChineseASR给视频做踩点",
+        "只重对齐不重新配音"
+      ],
+      "entities": [
+        "alignment-info",
+        "zh_asr align",
+        "Qwen3-ForcedAligner-0.6B",
+        "zh_asr.alignment-entry.v1"
+      ],
+      "relations": [
+        "音频与UTF8文案共同绑定逐词秒数",
+        "视频工程复用同一模型而不维护第二份ASR"
+      ],
+      "failureRecovery": [
+        "超300秒按审阅分镜拆场",
+        "输入改变或覆盖不全保留旧成功结果",
+        "取消后不自动重试"
+      ]
+    },
+    "teaser": "视频已经配好旁白，或手头已有确认文本时，只借用一个共享对齐器找踩点。它找位置，不证明稿子真的说对了。",
+    "status": "固定对齐器与共享入口已实现，来源有公开音频验收；本轮只读确认工件存在，未运行模型",
+    "statusTone": "mixed",
+    "value": "我不用为改动画踩点再花一次配音费用，也不用让视频项目安装另一套语音识别。把一段现成音频和已确认文案交过来，就能取得词语出现的秒数，同时知道有没有漏对齐、来源有没有变。",
+    "why": "重新识别可能把已经确认的名字和措辞改掉，按字数平均分配时间又会错过停顿和语速变化。这里把“说了什么”的确认与“这句话在哪一秒”分开，只处理后一个问题。",
+    "example": "我说“这段旁白已经满意，帮我给确认过的稿子标上词语时间，不要重新配音”。系统用原音频与文案对齐，交回 word/start/end 和两份原件的指纹；单场超过五分钟就明确要求按分镜拆分，不编一条比例时间轴。",
+    "result": "交回 zh_asr.alignment-entry.v1 JSON：原音频和 UTF-8 文案 SHA-256、逐词秒数、实际模型身份及覆盖。只有完整成功才替换目标文件；lexical_truth_verified=false 始终保留，对齐、转写真值和说话人身份是不同结论。",
+    "readerStates": {
+      "pass": "原件与固定模型满足条件，逐词覆盖和时间范围通过，末尾再核对两份原件哈希后原子写入结果。",
+      "problem": "文案覆盖不足、时间不合法或输入执行中改变时保留明确错误与上次成功输出，不把部分时间轴当完整。",
+      "unavailable": "缺权重、解释器、GPU租约，或取消/超时，都只阻断这次对齐；不下载、不上传、不启动听写，也不换一个模型替代。"
+    },
+    "decisionImpact": [
+      "这个入口接收已给出的文字，不负责证明声音逐字对应；重要内容仍要另行识别或人工核听。",
+      "单场最长 300 秒，超长按已审阅分镜拆分，不能按字符比例猜时间。",
+      "默认 cuda:0 与既有GPU协调器；CPU必须显式 --device cpu，仍有子进程期限和清理。",
+      "输出不能指向音频或文案原件；失败与取消不覆盖上份成功结果。"
+    ],
+    "problem": "解决视频重复安装语音模型、只改时间却重新付费配音、按字数猜踩点，以及半份或错误来源时间轴覆盖已接受成果的问题。",
+    "implementation": [
+      "命令 python -B -m zh_asr alignment-info 只读配置与路径，不加载模型；align 接收一个音频、UTF-8 --text-file、--output 与 --timeout-sec。",
+      "当前 Qwen/Qwen3-ForcedAligner-0.6B 固定 revision=c7cbfc2048c462b0d63a45797104fc9db3ad62b7，模型位于 models/aligner 对应版本目录，artifact_lock=configs/model-locks/qwen3-forced-aligner-0.6b.json，runtime qwen-asr=0.0.6。",
+      "现有音频前处理在本任务临时目录转 PCM，沿用受监督可终止 worker 和 GPU 短租约，不建立新监听口、后台服务或双模型转写任务。",
+      "先核验模型及对齐覆盖/时间范围，写入前重新核对音频与文本 SHA-256；只有完整成功才原子替换输出。",
+      "fetch-aligner/verify-aligner 由既有 model_lifecycle 明确执行：只从不可变锁恢复缺文件，异常已安装字节不被重新生成哈希批准。"
+    ],
+    "flow": [
+      "确认已经接受的文案和对应音频，单场不超过 300 秒。",
+      "用 alignment-info 查看当前适配和工件；文件存在不等于此次推理通过。",
+      "明确调用 align，取得原件指纹并在独立临时目录准备 PCM。",
+      "核验固定模型，取得合法进程租约，执行有期限的对齐。",
+      "核对覆盖、秒数和两份原件仍未变化，再原子交回 JSON。",
+      "消费者按词轴做预览、动画或字幕，重要词句仍听音验收；失败保留旧成果。"
+    ],
+    "concepts": [
+      {
+        "term": "forced alignment（强制对齐）",
+        "explanation": "给模型声音和已知文字，找文字的位置；不是重新识别，更不认证文字真伪。"
+      },
+      {
+        "term": "lexical_truth_verified=false",
+        "explanation": "这份结果没有证明词汇本身正确，哪怕覆盖完整、哈希一致、时间单调。"
+      },
+      {
+        "term": "原子交付",
+        "explanation": "完整结果先核对，最后一次替换目标；半成品、超时或被修改的输入不能覆盖旧成功文件。"
+      }
+    ],
+    "boundaries": [
+      "不重新生成配音、不启动双模型或桌面听写，不增加另一套模型清单。",
+      "不自动下载或升级权重、不上传音频，不把CPU当GPU失败后的静默退路。",
+      "对齐不替代Paraformer的匿名说话人分离，也不构成人物身份确认。",
+      "模型锁不是权重备份，完整新机恢复仍需相应依赖与模型工件。"
+    ],
+    "failures": [
+      {
+        "condition": "模型或权重缺失",
+        "response": "本次对齐不可用，按现有固定锁恢复流程处理；原音频、文案和旧词轴保持不变。"
+      },
+      {
+        "condition": "单场超过300秒",
+        "response": "明确拒绝，按审阅后的分镜切成真实音频段，不从文字长度伪造分段位置。"
+      },
+      {
+        "condition": "输入改变、覆盖不全或时间异常",
+        "response": "不替换输出，报告具体覆盖/身份问题并保留上次成功成果。"
+      },
+      {
+        "condition": "取消、超时或租约丢失",
+        "response": "终止本次受管worker与相关临时物，不自动重试或占用他人资源。"
+      }
+    ],
+    "sources": [
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\docs\\known-text-alignment.md",
+        "role": "输入、原子输出、词汇真值与300秒边界的当前产品合同"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\docs\\quality-and-model-maintenance.md",
+        "role": "对齐模型生命周期、固定锁、质量与实际验收分层"
+      },
+      {
+        "path": "E:\\Projects\\Tools\\ChineseASR\\configs\\models.yaml",
+        "role": "唯一模型、运行时、对齐目录和时长配置"
+      }
+    ],
+    "verification": [
+      "2026-09-18 13:30:47 UTC 本轮 alignment-info 为 read_only=true，返回固定Qwen对齐器目录、weights_present=true、max_audio_sec=300；未加载或重哈希权重。",
+      "9月17日来源收尾记录真实公开音频Qwen3-ForcedAligner和文件流程验收通过；本轮没有重跑，也不把该短样例视作任意旁白零误差保证。",
+      "取消、输入变化、覆盖检查和进程清理的源码合同与真实音频证据分别成立，最终消费者仍需听音预览。"
+    ],
+    "relation": "本模块让 video-scaffold 等已有音频与确认文案的调用方复用 ChineseASR 对齐能力；模型、原件与时间证据留在此处，画面编排和最终成片验收仍归视频工程。"
+  },
 ];
 
 export const project = chineseAsrProject;

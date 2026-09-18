@@ -26,10 +26,7 @@ export const ruleGuides = {
             "title": "普通能力与最高权限分开",
             "detail": "文件、脚本、文档和桌面可按当前宿主真实能力执行；Codex 专用 Hook、经济绑定或任务 ID 缺失只影响对应路线。MCP 登录与普通 Owner 不产生 codex-root 身份。"
           },
-          {
-            "title": "全场景语境判断",
-            "detail": "现行活动规则把普通聊天也纳入具体身份疑点判断：先结合当前语境与已有背景，只在补证会改变结论时取最小相关材料。正常帮助继续，不按普通轮次或私人读写重复判断，不每轮查库，也不按某句问话机械定性；当前生效来源与五文件绑定一致。"
-          }
+          {"title":"先查共享状态，私人背景不用于辨人","detail":"每次真实输入先核对共享个人环境。本机Codex取用个人偏好前先完成本地锁屏；读聊天、健康、财务或其他档案性私密内容前，通过已登记因子。等待验证本身不冻结已有合法授权，明确取消或可见邀请五分钟超时才冻结；冻结后所有入口停止私人取用、复用、披露与受保护动作，通用思考、修复、测试和最小恢复继续。 独立获准的非Codex客户端和电脑MCP沿各自既有私密访问授权，不重复要求本机Codex的锁屏或因子；共享冻结仍阻断它们。Codex自己借MCP读同一批内容不属于例外。账号连接、模型能力和管理员权限都不自动授予codex-root、秘密明文或磁盘权。 个人理解库、背景经历和表达样本只用于经授权的理解与表达，不再作为操作者身份核验来源，也不能查私人库来判断来者是谁。具体入侵疑虑依据当前言行、任务目的和已知现场，必要时由已登记且型号合格的主体独立处理。"}
         ]
       },
       {
@@ -98,7 +95,7 @@ export const ruleGuides = {
           item("跨项目机械维护是窄例外", "只允许同类、确定、可回退、可独立验证的中低风险小修；业务语义、Schema、权限、依赖大升级和发布不属于该例外。"),
           item("私人账号空间等价可信", "本机、workspace 和 BitLocker 磁盘天然属于 default trusted target（默认可信目标）；当前已认证账号属于用户、目标默认私人且没有 public/share 信号时，Google Drive、Notion、PRIVATE GitHub、Dropbox、OneDrive 等私人账号空间与它们完全等价可信。可信、可见性和写授权仍彼此独立。"),
           item("PUBLIC 个人数据唯一分级", "最终公开载荷按授权合同的 L1–L5 唯一表判断；没有达到 L3+ 的正面证据时默认 L2，L1/L2 不因来源为个人、可以识别或谨慎起见而受限。"),
-          item("人类因子只有四类", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）。Google 和 Microsoft 只是 Account provider（账号验证提供方）。取消、超时或失败只暂停，不自动重试或改变设备信任。"),
+          {"title":"四类因子与两种不同窗口","detail":"Passkey、TOTP、Recovery、Account四类同时可选，Google/Microsoft只是Account提供方。普通隐私因子从可见邀请起5分钟，必需取消/拒绝/超时共享冻结；独立入侵保护10分钟与软件补时另行处理，均不自动改变设备信任。"},
           item("UAC 只解决操作系统权限", "按需管理员能力默认可用；用户明确禁止提权时停用。UAC（Windows 管理员确认）不产生业务授权、Agent（智能体）身份或人类确认。"),
           item("可信本地不另造安全系统", "本机现有用户、文件、进程、软件和私人账号空间默认可信；秘密仍由 Password Center、SecretBroker 或加密 Skill 处理。除非上位要求或用户明确提出精确安全任务，不假设本地攻击者，也不新增身份层、审计链、反篡改状态机、守护进程或安全工作流。")
         ]
@@ -107,7 +104,7 @@ export const ruleGuides = {
         title: "四、Git、验证和 Windows 环境",
         intro: "这一部分规定怎样保护用户改动、怎样收口仓库，以及不同证据能证明什么。",
         items: [
-          item("普通 Git 先看 status", "只有仓库身份、visibility、remote、分支、worktree、同步、恢复或发布事实会改变决定时才调用 Git Owner。"),
+          {"title":"进入维护和公开前发现配套文档","detail":"先看git status与目录规则；进入项目维护或准备公开时，按project-entry-gate向Git Owner发现现存私有配套。只读链接不等于写权；实际修改了哪个仓库，就分别验证、定向提交、正常推送和默认分支回读。"},
           item("绝不覆盖未知改动", "混合工作树只处理本任务文件，定向 stage，禁止破坏性清理和 git add 全部文件。"),
           item("实现默认包含正常 Git 收口", "用户授权仓库实施后，验证、定向 commit 和 normal push 到已有 upstream 默认成立；force-push 从不默认授权。"),
           item("codex_command_blocked_delete_fallback（命令阻断删除后备）", "精确路径、授权、Owner、Git 和唯一内容边界都已核验后，先用正常删除；只有 Codex 在进程启动前明确返回 blocked by policy（被策略阻断）或 Rejected（已拒绝）时，才对同一目标改用 Windows 回收站并回读原路径消失。文件占用、Windows 权限、路径错误或进程启动后的普通失败不自动触发这个后备路径，也不能误称为用户设置。"),
@@ -147,37 +144,19 @@ export const ruleGuides = {
     ],
     sections: [
       {
-        "title": "独立主体、合格判断与全场景本人语境",
-        "intro": "受保护动作与普通交互中的具体身份疑点都要有真实判断依据；强模型、工具登录和执行权限分别成立。",
+        "title": "共享隐私状态、普通验证与独立保护",
+        "intro": "先回答这次能否用私人资料，再处理真正高影响的动作；普通验证不变成高档模型审批，其他客户端也不能穿过共享冻结。",
         "items": [
           {
             "title": "先独立登记，再谈最高权限",
             "detail": "当前登记主体只有 codex-root；其他智能体须由用户明确决定其模型、因子、保护与恢复边界，再通过正式入口登记。角色名、管理员令牌或连接认证不能继承身份。"
           },
-          {
-            "title": "Astra High 以上的真实判断",
-            "detail": "宿主证明为 Astra High/Xhigh/Max/Ultra 的合格根可自行判断；其他执行者只有新相关疑点确需判断时，才异步调用或复用合格 Astra；原生确实不可用或被拒才使用已授权的新判断任务。判断不可用只暂停依赖它的精确不可逆终步，不停思考、可逆修复、测试和恢复。低档执行者核验产物、目标、主体、授权及有效期；可绑定本宿主真实助手消息或工具调用，不要求必须是最终回复。"
-          },
-          {
-            "title": "先判断是否值得补证",
-            "detail": "根发现具体疑点可自主发起或复用合格判断任务，不重复索权；委派以按先后顺序的连续用户原话加必要短背景为主，区分原话、事实与推断，不摘孤立怪句或灌全量两库。根据当前目的、理由、言行、授权、前后语境和已有可靠背景判断。与真实经历明显冲突或无合理来由地套问私人资料只是线索，须与正常核对记忆区分；例子不是封闭清单或关键词分类器。"
-          },
-          {
-            "title": "必要才读最小背景",
-            "detail": "只有补证会改变结论才读取 daily-preferences 的背景经历或 reply-as-me 连接的真实表达样本；需要两者才都读。保留时间、场景、出处、事实/推断及本人原话/修订/AI草稿区别；未加载或未命中本身不是非本人证据。"
-          },
-          {
-            "title": "两库只辅助，验证不污染来源",
-            "detail": "知道经历、口吻相似都不证明当前就是本人；待验证时只读已有材料，不增量、不回写，不把当前说法或改稿写成本人新基准，也不向待验证者回显私人材料与匹配细节。无法用已有受保护通路查证就直接本人验证。"
-          },
-          {
-            "title": "本人验证与恢复",
-            "detail": "有具体合理身份疑点或无法可靠判断时，合格判断者可要求最高权限验证，不要求概率阈值、攻击实锤或先锁屏失败。轻微异常可独立选择无感锁屏，两者不互相强制，也不重置设备信任。形成合理怀疑并判断需保护后，只暂停相关数据取用、披露同步和不可逆终步；不相关的思考、可逆工作、修复、测试与恢复继续。十分钟从正式可见邀请起算，同一邀请重连或重试不重置；邀请后新软件故障静默修复，按实际耗时补足一次，不记为用户失败。有效因子与正式恢复入口才能解除相关暂停，规则 PASS 或新的自评不能代替。"
-          },
-          {
-            "title": "明确规则与来源证据层",
-            "detail": "上述要求已包含在当前活动五文件中；规则、源码、测试与物理执行状态分别验证。本次网页核对未重验四类真人入口、锁屏/手机恢复或固定专用加密测试盘，这些结果保持 Unknown（证据不足）；真人在场后分别验收，不把全生产盘或真实关机作为前提。"
-          }
+          {"title":"普通验证不用先派高档模型","detail":"本机屏锁和明确隐私因子可沿已有入口执行。只有需升级的疑虑复核、设备/磁盘重点判断要求已登记最高权限主体及真实Astra High或以上；合格根自行判断，拿不准才复用或请求复核。缺保护判断只停依赖它的不可逆终步，普通工作继续。"},
+          {"title":"每次真实输入先核对共享环境","detail":"每次真实输入先核对共享个人环境。本机Codex取用个人偏好前先完成本地锁屏；读聊天、健康、财务或其他档案性私密内容前，通过已登记因子。等待验证本身不冻结已有合法授权，明确取消或可见邀请五分钟超时才冻结；冻结后所有入口停止私人取用、复用、披露与受保护动作，通用思考、修复、测试和最小恢复继续。","example":"我取消私人材料验证后，让AI继续排查普通网页构建；私人材料不能再被读或引用，构建工作仍可继续。"},
+          {"title":"个人理解库和表达样本退出身份核验","detail":"个人理解库、背景经历和表达样本只用于经授权的理解与表达，不再作为操作者身份核验来源，也不能查私人库来判断来者是谁。具体入侵疑虑依据当前言行、任务目的和已知现场，必要时由已登记且型号合格的主体独立处理。"},
+          {"title":"独立客户端按自己的授权，但共同遵守冻结","detail":"独立获准的非Codex客户端和电脑MCP沿各自既有私密访问授权，不重复要求本机Codex的锁屏或因子；共享冻结仍阻断它们。Codex自己借MCP读同一批内容不属于例外。账号连接、模型能力和管理员权限都不自动授予codex-root、秘密明文或磁盘权。"},
+          {"title":"取消、超时与恢复都有准确范围","detail":"普通隐私因子邀请从可见时起5分钟，反复提示或重启服务不重置；等待本身不冻结，必需取消、拒绝或超时才冻结。冻结不锁盘、不删数据，也不从旧grant或自评恢复；四选一恢复必须绑定同一freeze_generation。独立入侵保护10分钟和软件补时另行处理，不能混用。"},
+          {"title":"源码、生效和真实场景分开","detail":"state、privacy_gate、privacy_grants三种状态分别记录冻结、输入门和根作用域授权；有效期按配置读取、重启只按仍有效授权恢复。每条输入最多一次挑战，工具前复用有效结果。规则校验或孤立测试不能证明本轮真人、重启、跨客户端和设备恢复场景已验收。"}
         ]
       },
       {
@@ -187,7 +166,7 @@ export const ruleGuides = {
           item("最高权限智能体作语义判断", "它结合真实意图、精确目标、范围、可恢复性和异常证据，选择 allow（允许继续）、step up（补充人类验证）、deny（拒绝）、needs evidence（先补证据）或 suspected tamper（疑似完整性异常）。"),
           item("机械层不能靠关键词判断", "机械层只检查登记、签名、nonce（一次性随机凭据）、目标、事实、完整性和 effect（外部现实动作）边界，不能看到敏感词就自行要求人类。"),
           item("其他代理不能继承最高权限", "必须独立证明 principal（受验证的执行主体）、runtime（运行环境）或公钥绑定；名称、提示词、同一 Windows 用户和管理员权限令牌都不够。"),
-          item("四类人类因子", "Passkey（通行密钥）、TOTP（动态验证码）、Recovery（恢复码）、Account（账号验证）在正式邀请时一次展示，任一已登记方式成功即可，没有强制默认。邀请前先检查四类软件流程及运行条件，不让本人先预验证一次；Account 使用已登记 provider（账号验证提供方），原始秘密不保存。"),
+          {"title":"窗口与动作不可互借","detail":"共享隐私5分钟从可见邀请起算，输入错误或仍在重试不算取消；独立入侵保护保留10分钟与邀请后软件故障的一次实际补时。任何一种成功都不自动授予另一种访问、CoreGoal或设备保护权限。"},
           item("目标不清先补证据", "只有目标无法唯一解析时先 needs evidence；授权或安全边界明确不成立才 deny。"),
           item("现实影响而非词表", "信任根、秘密、唯一数据删除、BitLocker、公开面、不可逆迁移和系统恢复锚是强信号；普通编辑、测试、定向 commit/normal push 和 E release activation 不会仅因位置变成重大动作。"),
           item("同一目标内持续无人值守", "CoreGoal 已成立后，准备、执行、回读、修复、崩溃恢复和必要回滚都可继续，每个 effect 仍消费单次步骤能力。")
@@ -287,7 +266,7 @@ export const ruleGuides = {
         intro: "一次人类确认固定目标，后续每个现实步骤仍有自己的精确能力。",
         items: [
           item("最高权限角色唯一登记", "当前只登记 codex-root；其他智能体缺少独立证明时返回 highest authority verification required，不能先读取受保护正文。"),
-          item("只有最高权限智能体决定要不要人类", "机械层不能按 effect 名、critical surface、executor 或 epoch 自行抬高要求。进入合理怀疑或待本人验证后，耐久授权、Owner 绑定、管理员权限与 E rules PASS 不能继续消费相关授权；暂停范围由保护合同解释，不妨碍不相关的思考、可逆修复、测试和恢复。"),
+          {"title":"授权、私密访问和保护判断分别成立","detail":"机械层不能按effect名称、执行器或版本自行升级保护。长期目标与Owner绑定不产生私密访问许可；等待因子不冻结已有有效授权，明确取消/超时后的共享冻结则停止所有私人取用与受保护动作。只有真正的疑虑升级、设备/磁盘重点判断才需要合格最高权限主体，通用工作与最小恢复继续。"},
           item("CoreGoal 固定什么", "目标 hash、范围、禁止项、停止条件、principal commitment、脱敏 confirmation、policy/trust 基线、状态、时间和 append-only ledger。"),
           item("CoreGoal 不固定什么", "计划、Schema、代码、executor、runtime 和后续 epoch；这些变化不会自动重验人类。"),
           item("紧急对话授权", "绑定准确对话、principal 和 runtime，固定 24 小时，只改变当前对话的受保护规则优先级。"),
@@ -334,11 +313,11 @@ export const ruleGuides = {
           item("Coordination Owner 不获得成员项目写权", "跨项目编排只拥有关系和最终集成。"),
           item("Coordination Owner 的唯一写权例外", "只有用户明确冻结的跨项目目标，才允许同一 coordination_id 逐个取得成员项目精确 scope；它仍不合并授权、effect、验收或 Release。"),
           item("Shared maintenance 的窄边界", "每次只 Claim 一个项目，限机械、确定、可回退的小修；业务语义、Schema、权限、依赖大升级、API 和发布全部禁止。"),
-          item("Release 前处理 residual", "active Owner 无残余才普通 Release，有残余随 checkpoint 原子 Transfer。归档 predecessor，或未登记 long_term_task 的 inactive predecessor，经固定 resolver 证明 clean terminal 时用 RecoverRelease；有 open goal、turn_aborted 或 delivery residual 时必须带 checkpoint 和 residual 用 RecoverReleaseClaim 给真实 successor。"),
+          item("Release 前处理 residual", "active Owner 无残余才普通 Release，有残余随 checkpoint 原子 Transfer。predecessor 经所属运行框架证明真实终止，且无在途命令、事务、未知变更或交付残余时，用 RecoverRelease；long_term_task 也不例外；有 open goal、turn_aborted 或 delivery residual 时必须带 checkpoint 和 residual 用 RecoverReleaseClaim 给真实 successor。"),
           item("恢复孤儿 Owner 的证据", "只接受固定宿主 adapter 的 terminal 或 task-not-found，并核对 project、scope、revision、workspace、checkpoint 和 pending transaction。timeout 和自制 JSON 不成立。"),
           item("归档 predecessor 不唤醒", "旧任务保持归档，不等待、发消息或取消归档；先验证规范 rollout、无 queued work 和 active duplicate。clean 且无 residual 时 RecoverRelease；有 residual 才 RecoverReleaseClaim。"),
           item("来源任务何时自动归档", "来源任务明确停止，或正式 terminal/completed 且无 follow-up、queued work、pending transaction 和未交接 Owner residual 时，来源才用真实 threadId 可逆归档；clientThreadId 不能代替，active、unknown 或 needs-attention 不归档。"),
-          item("长期任务不自动释放", "未归档且 binding 正式登记为 long_term_task（长期任务）的 Owner 不自动释放，即使 resolver 显示 terminal；终态长期任务只能由带 checkpoint/residual 的明确 successor 接续或走正式 retirement（退役）。一旦归档仍没有长期保留例外。"),
+          item("长期职责不永久占用施工范围", "任务已经真正结束且没有 open goal、queued work、pending transaction、unknown mutation 或交付残余时，long_term_task 也须释放。长期业务职责不等于已结束执行单元仍能写入；有残余先交接检查点。租约过期、归档、超时或失联本身不证明在途命令已停。"),
           item("E release scope（施工范围）不能自报", "由同一目标 commit 的五份 descriptor（规则描述符）与 canonical source blob SHA（源码指纹）的封闭映射推导；source/test/Git 后仍须 UAC activation、ACL/hash readback 和 fresh/spawn 验收。")
         ]
       },
@@ -349,7 +328,7 @@ export const ruleGuides = {
           item("默认授权的 Git 动作", "仓库实施已授权时，验证、定向 stage、commit 和 normal push 到已有 upstream 不再询问。"),
           item("停止条件", "未知 repo 或 target、无 upstream、非 fast-forward、sync 冲突或 PUBLIC 暴露检查失败。"),
           item("个人默认分支收敛", "目标提交必须从实际 default branch 可达，push 后远端 read-back 仍包含它。"),
-          item("业务与 Git 分开报告", "Git 是交付本体时未闭合就业务未完成；Git 不是交付本体时可报告业务已完成但 Git blocked，前提是 residual 已移交。"),
+          {"title":"业务与每个实际改动仓库分别收口","detail":"Git是交付本体时未闭合即未完成；其他情形也须如实说明未完成义务。检查所有实际改动的仓库，包括链接指向的PRIVATE配套，各自验证、定向提交、normal push与默认分支回读；没有改动的仓库不制造提交。"},
           item("禁止为表面干净破坏事实", "不能 force-push、泄密、删除未知内容、覆盖 dirty work 或把失败制品推入默认分支。"),
           item("Worktree 最终状态", "整合后删除、证明冗余后删除，或以稳定名字、真实用途和退出条件保留；查不清就 BLOCK。")
         ]
@@ -375,7 +354,7 @@ export const ruleGuides = {
         title: "七、PUBLIC 项目的私有伴随材料",
         intro: "公开仓库旁边可能有被 Git 明确忽略、但对恢复和继续工作有价值的私有配置、脚本或文档。目标是既不把它们推到 PUBLIC，也不因看不见就让它们成为单机唯一副本。",
         items: [
-          item("什么时候用", "例如我问“这个公开项目里被 Git 忽略的本地配置和文档怎样备份，又不泄露到公开仓库”。只有项目当前由 Git Owner 确认 PUBLIC、有本地 worktree，且材料确实 ignored、未跟踪/未暂存并有保留价值时进入。"),
+          {"title":"进入维护或公开前先发现","detail":"项目维护或准备PUBLIC内容时，先通过Git Owner的project-entry-gate定位已有私有配套文档，而不是等丢失后才找。迁移只覆盖当前PUBLIC worktree里Git明确ignored、未跟踪/未暂存且有保留价值的材料；已有配套继续沿原映射消费。"},
           item("什么不进入", "Tracked/unignored 候选继续由公开项目 Owner 决定；已推到来源 GitHub 的版本不重新打开复审。依赖、cache、build/generated/temp、普通日志、可重建下载、活数据库和大制品默认排除，歧义原地保留。"),
           item("最终得到什么", "一个现场仍为 PRIVATE 的唯一 companion 仓库、含来源映射和 hash 的私有 manifest、远端默认分支回读，以及原路径继续可用且仍被 PUBLIC Git 忽略的本地 link；PUBLIC commit 不包含私有映射。"),
           item("完整执行顺序", "copy/hash → PRIVATE manifest、commit 和 normal push → 从远端默认分支回读提交与 hash → 原件同卷 rollback rename → 建立 local-only link → 回读 PUBLIC git status 仍无候选。远端回读成功前不得替换原件。"),
@@ -446,10 +425,10 @@ export const ruleGuides = {
       "Hook到底检查什么，谁决定开几个代理",
       "UserPromptSubmit和SubagentStart分别做什么",
       "PreToolUse为什么只是创建前复核",
-      "没有Hook为什么只是不能委派",
+      "缺委派身份与缺隐私Hook有什么区别",
       "什么时候要做实现盲测",
       "不点名Skill怎么验证AI会自己选路",
-      "Codex官方更新后为什么不看版本号准入",
+      "软件更新后怎样按实际兼容继续工作",
       "功能不删怎样选择最小充分实现"
     ],
     glossary: [
@@ -465,7 +444,7 @@ export const ruleGuides = {
       ["Hook", "宿主在固定事件点注入或复核可信身份、E identity 和参数；它不选择模型或数量、不创建 child，也不产生授权。"],
       ["UserPromptSubmit / SubagentStart", "前者服务 root 请求，后者服务 child 启动；都在各自任何 0–10 判断之前注入本轮可信身份。"],
       ["PreToolUse", "真实 spawn 前的二次现场复核，只检查 TOCTOU、家族/effort 上限、参数和 fork，不能替代判断前身份。"],
-      ["Official update continuity", "Codex 官方同主体更新按稳定 package family、签名、事件和当前能力发现延续，不依赖易变版本号或安装路径。"],
+      ["Official update continuity", "版本、build（构建号）和版本化安装路径用于观察、复现与已测发布，不作为一般软件更新的永久准入门。兼容判断依真实稳定产品身份、签名或主体、公开接口、配置结构、事件和实际能力；更新后只暂停实测缺失的能力，普通工作继续。API或文件格式版本、锁文件、测试夹具以及用户明确选择的固定运行版仍可以严格约束；接口未知不等于通过，也不凭新版本号判失败。"],
       ["Product requirement complexity authority", "用户和业务 Owner 拥有产品功能、流程、状态、规则与体验；反膨胀只能优化技术实现。"],
       ["Complete acceptance floor", "功能、好用、正确、可靠、恢复、性能、可维护、兼容和已证扩展轴组成的完整验收底线。"],
       ["Minimum sufficient implementation", "满足同一完整验收所需的最少技术层、节点、状态和人工步骤；没有等价小实现时接受必要复杂度，不靠删产品语义伪造简单。"],
@@ -483,10 +462,7 @@ export const ruleGuides = {
             "title": "映射能力，不替用户换模型",
             "detail": "使用当前宿主可用的shell、MCP、浏览器、脚本、文档库和协作入口。缺少某个专用注入只关闭精确路线，不能把普通施工整体降为只读，也不能静默启动本机Codex代做。每个运行框架使用自己的 adapter（适配器），Codex 日志、Hook、字段和工具名不是其他框架日常前置；判断产物可由本宿主真实助手消息或工具调用核验，不要求必须是最终回复。缺模型证据只影响产生新的受保护判断，可复用已有真实合格判断路线。"
           },
-          {
-            "title": "语境核验不变成重复派单",
-            "detail": "本人语境疑点的判断由合格主体进行；已足够的信息不重复查库或派代理，普通轮次、私人读写只留意，新相关证据或情境实变才重判。合格判断等待或不可用时只暂停依赖它的精确不可逆终步，思考、可逆修复、测试、验证与恢复继续。两库只作必要背景辅助，不成为身份分类服务。"
-          }
+          {"title":"资料访问不靠查私人库辨人","detail":"个人理解库、背景经历和表达样本只用于经授权的理解与表达，不再作为操作者身份核验来源，也不能查私人库来判断来者是谁。具体入侵疑虑依据当前言行、任务目的和已知现场，必要时由已登记且型号合格的主体独立处理。 独立获准的非Codex客户端和电脑MCP沿各自既有私密访问授权，不重复要求本机Codex的锁屏或因子；共享冻结仍阻断它们。Codex自己借MCP读同一批内容不属于例外。账号连接、模型能力和管理员权限都不自动授予codex-root、秘密明文或磁盘权。 普通屏锁/明确隐私验证不先派高档模型；真实保护判断仍保持独立资格。"}
         ]
       },
       {
@@ -508,8 +484,8 @@ export const ruleGuides = {
           item("Effect schema 和 executor 分开", "有类型化 operation 但缺实现时，由对应 Owner 补窄 executor 和测试；已有等价入口时不提示插件。"),
           item("缺环境时优先官方原生安装", "在任务必需、可逆和兼容边界内安装 runtime/SDK/CLI/build tool；既有项目服从 lock 和 CI。任务确需新软件时，主驾驶默认装到 E 盘现有合适目录；安装器或系统组件必须使用固定位置时沿原生路线并说明，不借此迁移已有安装。"),
           item("兼容层是后选", "容器、旧 runtime 和 shim 只有原生路径不可用或不兼容时采用。付费、账号、重启和信任边界仍单独处理。"),
-          item("Codex 官方更新看稳定主体", "以稳定 PFN/package family、signer/principal、device/bridge key、schema/event/capability 和 current discovery 判断同一产品与能力；app version、build、versioned executable path、update epoch 和 optional metadata 不参与准入。"),
-          item("真实能力缺失才局部降级", "官方同主体更新或 optional metadata 缺失不 step-up/BLOCK。只有现场缺少某个精确 event 或 capability 时，才关闭受影响能力；普通项目继续。"),
+          {"title":"一般软件更新看真实兼容","detail":"版本、build（构建号）和版本化安装路径用于观察、复现与已测发布，不作为一般软件更新的永久准入门。兼容判断依真实稳定产品身份、签名或主体、公开接口、配置结构、事件和实际能力；更新后只暂停实测缺失的能力，普通工作继续。API或文件格式版本、锁文件、测试夹具以及用户明确选择的固定运行版仍可以严格约束；接口未知不等于通过，也不凭新版本号判失败。"},
+          {"title":"只停实际缺失的那项能力","detail":"稳定产品身份与接口成立时保持连续；更新后缺某个模型、事件或字段，只影响依赖它的能力。用户模型选择、秘密引用、Owner与权限边界不静默改写，未知接口不能冒充通过，也不因版本号变化要求重建全部基座。"},
           item("用户原意与可替换方案分开", "所有项目、根代理、后代、新对话和压缩续作遵从用户结果、更正及真实质量。计划、代码、测试、草稿、工具建议和审查不产生新需求；模型自造的企业治理、安全/恢复目标、理论风险和未来需求不属于用户要求。"),
           item("完善项目保留完整自治", "允许自主补齐产品功能，实施中指出 bug（缺陷）默认修复，明确仅询问/审计/不改时除外。保留研究、独立判断、修复、重建和委派，不靠缩权、限代理数或逐项审批解决复杂化。"),
           item("同一完整验收下选择最小实现", "先确认结果是否为用户所需，再比较 complete acceptance floor（完整验收底线）下的总成本；现有能力足够就用。不能以删功能、一次性烂代码、封死真实扩展点或漏验收伪造简单。")
@@ -523,10 +499,10 @@ export const ruleGuides = {
           item("原件未知才用定位能力", "非媒体原件走 personal materials；媒体走 personal media；录音和扫描件分别走 ASR/OCR。"),
           item("照片视频只在明确任务中处理", "不建立后台媒体扫描和统一人物服务。"),
           item("没有独立项目就用最小原件", "只在稳定持续需求和净收益成立并由用户明确启动时建新项目。"),
-          item("Workspace 固定一个 Provider（服务入口）", "Gmail、Drive 和 Calendar 通过 PCConfig 固定 OAuth Provider（账号授权服务入口），默认读取。"),
+          {"title":"Gmail和Drive沿一个既有入口","detail":"本机google-workspace-direct通过既有PCConfig Google授权入口读取Gmail和Drive并使用已暴露写操作。Calendar当前冻结，不调用、不启用、不维护，也不为网页测试它；只有本人明确提出恢复该项目才另行处理。这不是所有客户端日历能力都不可用。"},
           item("写入只用已暴露 operation", "不落库、不自动同步、不换账号，不静默走浏览器、raw provider 或 rclone。"),
           item("Provider 不可用就如实受限", "不制造第二 Provider。删除、公开分享、发送和邀请还要精确 external effect 授权。"),
-          item("读取和写入分别验收", "三项读取全通过后才成为默认自然语言能力；每个写 operation 仍独立验收。")
+          {"title":"每项实际能力单独验收","detail":"Gmail、Drive的读取与各写操作分别证明；连接成功不证明所有操作，冻结Calendar不参与默认自然语言入口或验收。未知目标、额外账号和外部效果仍按精确授权处理。"}
         ]
       },
       {
@@ -607,7 +583,7 @@ export const ruleGuides = {
           item("2. 压缩或 E identity 变化要重读", "同一 task、同一 E release/commit/ruleset/contract hash 可以复用；压缩、identity 变化或加载不确定时完整重读本节并重派生当前代快照。E 代际变化不会让已经成立的用户确认失效，也不要求用户重复确认；规则撤销该路径时才失败关闭。Child 不借父绑定，C Authority unavailable 不影响此路径。"),
           item("3. 可能改变结论时重判", "任务开始、新独立支路、阻塞、重大 steer（更正）、压缩、child terminal（子代理结束）或槽位释放等可能改变结论时结合新证据重判。普通轮次、私人读写和工具步骤只留意，无新证据复用上下文，不重复判断或填表；有独立支路且有槽位就派出。"),
           item("4. 每个父代理 0 到 10", "0合法，但按实际独立成果与净收益选择。封闭且可客观验证的读重工作优先Luna Max；难在状态、依赖、实现和故障因果时优先Terra High；难在业务语义、方案比较和冲突取舍时优先Sol High；关键方向、最高难度与最易返工的少量核心再考虑Astra。它们是候选偏好，不是固定职业；非Luna按实际需要选思考档位，不因父级Max就用满。比较端到端质量、墙钟、返工和费用，不把低思考或最低额度当唯一目标。"),
-          item("5. 家族和 effort 只能向下", "四档依次为gpt-5.6-luna、gpt-5.6-terra、gpt-5.6-sol、gpt-6-astra。后代同时受根、直接父、用户限制与宿主可用集约束；同型号思考不升级，向下Luna可至Max、默认Max，其他家族按模型基值加思考档位比较。Terra/Sol/Astra基值1/2/4，Low/Medium/High/Xhigh/Max档位0/1/2/3/4；Astra Low可派Sol High或Terra Xhigh，Sol High不能派Terra Max。Ultra仅比较时按Xhigh，实际身份与fork（上下文继承）仍保留Ultra。未分类型号保留同一精确ID后代，不按价格、版本或界面顺序猜强弱。"),
+          {"title":"5. 家族、effort与跨谱系许可各有边界","detail":"四档依次为gpt-5.6-luna、gpt-5.6-terra、gpt-5.6-sol、gpt-6-astra。后代同时受根、直接父、用户限制与宿主可用集约束；同型号思考不升级，向下Luna可至Max、默认Max，其他家族按模型基值加思考档位比较。Terra/Sol/Astra基值1/2/4，Low/Medium/High/Xhigh/Max档位0/1/2/3/4；Astra Low可派Sol High或Terra Xhigh，Sol High不能派Terra Max。Ultra仅比较时按Xhigh，实际身份与fork（上下文继承）仍保留Ultra。 未分类型号保留真实自身ID和同型号effort（思考档位）上限，不成为第五档。非OpenAI根还可从当前目录选择可明确证明的同代同谱系Flash；Full可下派对应Flash，Flash不能自动升回Full，歧义或目录缺失退回已证明的自身，不按价格、版本或菜单顺序猜能力。普通跨入OpenAI必须有用户对精确型号/档位或厂商范围的许可，非OpenAI根直接调用openai_child而非spawn_agent，显式传agent_type、model、reasoning_effort、task_name、message且不传fork_turns；授权受理、真实启动和结果分别核验，后代不能扩权。"},
           item("6. 本地慢速路线", "local-default 是本地 AICLI alias，只用于封闭、严格可验、允许较慢且总成本更低的非阻塞工作；不是 native child 或 fallback。"),
           item("7. 递归不扩权", "Child 也可派后代，但所有 scope、授权、sandbox、家族和 effort 继续取交集，缺身份只关闭递归。"),
           item("8. Fork 与命名", "跨模型或 effort 用 none 或有限 turns；同身份完整继承才用 all。名称以实际模型名与启动 effort 开头，例如 astra_max_content_review；未分类型号用规范 ID 的下划线形式，不用 future 标签。名称帮助阅读，不能证明实际身份。"),
@@ -617,7 +593,7 @@ export const ruleGuides = {
           item("宿主 Gate 做什么", "稳定入口验证身份、E rules 和参数，并复用现有 UserPromptSubmit/SubagentStart 提醒原意；不替模型选方案、模型家族、数量、分工或验收，不调度、创建 child 或制造授权。PreToolUse 仍只做真实 spawn 前 TOCTOU、上限、参数和跨身份 fork 复核；不为审查增加 Hook、服务、数据库或权限门。"),
           item("同任务续写怎样找对当前回合", "续写日志可能在原任务 UUID 后附第二 UUID。现行读取器按准确 session_id/turn_id 在规范会话根找到对应 turn_context，并核对会话身份；旧路径没有当前回合时转到精确匹配的续写文件，不用文件时间、历史模型或标题猜身份。"),
           item("旧 root 绑定的窄例外", "只有完全没有 Hook 或身份注入的旧 root，才可把同一任务中用户已经给出的自然语言 model/effort 确认规范化为 canonical ID，写入并回读同一 CODEX_THREAD_ID 的 user_attested_verified。E identity 换代只刷新快照、重读并重派生，不重复索要确认；Child 不继承，宿主 verified 恢复后自动优先，规则撤销或身份冲突不能靠旧绑定绕过。"),
-          item("官方更新不断路", "受管 Hook 只依赖稳定 bridge/runtime、package family、signer/principal、事件和当前能力发现；Codex app version、build、versioned path、update epoch 与 optional host metadata 不是准入条件。"),
+          {"title":"官方更新不靠旧安装路径卡住","detail":"Codex专属Hook保持稳定package family、signer/principal、bridge/runtime和真实事件发现；一般软件遵循同一真实兼容原则。准确版本与hash仍用于复现和已测发行，不是永久上限；接口缺失只关闭相应能力，不静默降型号或制造替代授权。 app version和versioned path（版本化安装路径）用于观察、复现与明确固定版本，不作为一般软件更新的永久准入门。"},
           item("更新后的局部失败", "同一官方主体更新后照常运行。若现场真的缺失某个 UserPromptSubmit、SubagentStart、PreToolUse event 或 spawn capability，只关闭对应委派能力；普通调查、实现、测试和最终答复继续。"),
           item("回执缺失的边界", "回执只用于审计，不能阻塞普通工具和最终答复；不依赖或安装 Stop Hook 作为额外门。")
         ]

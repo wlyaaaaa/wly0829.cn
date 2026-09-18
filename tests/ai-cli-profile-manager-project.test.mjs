@@ -17,26 +17,30 @@ const expectedModuleSlugs = [
   "doctor-validation",
   "recoverable-runs",
   "local-proxies",
-  "install-recovery"
+  "install-recovery",
+  "native-desktop-integration",
+  "background-openai-children"
 ];
 const expectedPublicProfileIds = [
   "codex-official",
   "codex-qwen3-7-max-paygo",
   "codex-qwen3-8-max-paygo",
-  "codex-deepseek",
+  "codex-glm-5-3",
+  "codex-glm-5-3-flash",
+  "codex-deepseek-flash",
   "codex-deepseek-v4-pro",
   "codex-ollama-main",
   "codex-ollama-review",
   "codex-ollama-qwen3-8-27b",
+  "codex-ollama-qwen3-6-35b-abliterated",
+  "codex-ollama-qwen3-8-27b-abliterated",
   "codex-spark-xhigh",
   "claude-official",
-  "claude-deepseek",
   "claude-custom",
   "claude-ollama",
   "claude-ollama-main",
   "claude-chatgpt-ccp",
   "claude-chatgpt-cliproxy",
-  "oi-deepseek",
   "oi-ollama",
   "qwen-code-ollama-main",
   "opencode-ollama-main",
@@ -78,7 +82,7 @@ test("AI CLI Profile Manager is registered as a published project in the final p
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "ai-cli-profile-manager"));
 });
 
-test("AI CLI Profile Manager exposes seven source-backed modules and all three reading layers", async () => {
+test("AI CLI Profile Manager exposes nine source-backed modules and all three reading layers", async () => {
   assert.deepEqual(aiCliProfileManagerModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(aiCliProfileManagerProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -108,20 +112,20 @@ test("AI CLI Profile Manager keeps source, install, runtime and Live evidence se
   assert.deepEqual(aiCliProfileManagerProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(aiCliProfileManagerProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: aiCliProfileManagerProject, modules: aiCliProfileManagerModules });
-  for (const expected of ["88f72e668bcfc8499b89f390343bae909e50db1c", "385 / 385", "0.154.0-alpha.6.2", "21 个", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "ccp 0.1.15", "cliproxy 7.2.72", "本次没有重装、启动模型或执行Live"]) {
+  for (const expected of ["37c7d4713b1324d8371e7c64efb19f0def83b7e1", "385/385", "0.154.0-alpha.6.2", "23份公开", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "本网页没有重发付费调用", "6ef0e67dbff75135", "旧Desktop进程"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits current evidence or boundary: ${expected}`);
   }
-  assert.match(text, /交互式 start.*上游权限.*machine run.*danger-full-access/s);
-  assert.match(text, /source.*安装.*runtime.*Live|源码.*安装态.*当前 CLI.*Live/s);
+  assert.match(text, /交互式 start.*上游权限.*程序化执行层.*danger-full-access/s);
+  assert.match(text, /配置状态.*源码实现.*安装.*实际进程.*Live/s);
   assert.match(text, /不自动.*(?:fallback|回退)|no-fallback/s);
 });
 
-test("AI CLI Profile Manager exposes all 21 public Profile identities without upgrading them to current Live", () => {
+test("AI CLI Profile Manager exposes all 23 public Profile identities without upgrading them to current Live", () => {
   const engines = aiCliProfileManagerModules.find((item) => item.slug === "engines-providers");
   const matrix = engines.implementation.join("\n");
   for (const id of expectedPublicProfileIds) assert.ok(matrix.includes(id), `public Profile matrix misses ${id}`);
-  assert.equal(expectedPublicProfileIds.length, 21);
-  assert.match(matrix, /source\/static.*installed\/runtime.*当前 Live/s);
+  assert.equal(expectedPublicProfileIds.length, 23);
+  assert.match(matrix, /源码.*安装.*真实/s);
   const continuity = JSON.stringify({ example: engines.example, result: engines.result, flow: engines.flow, implementation: engines.implementation, verification: engines.verification });
   for (const expected of ["LaunchPlan.continuityPolicy", "existing-project-state", "secondFactSource=false", "git status", "git diff", "983616", "20000", "16384", "prune=false"]) {
     assert.ok(continuity.includes(expected), `third-party continuity explanation misses ${expected}`);
@@ -129,7 +133,7 @@ test("AI CLI Profile Manager exposes all 21 public Profile identities without up
   assert.match(engines.result, /AICLI只附策略与窗口设置，不自动写/);
   assert.match(engines.result, /官方OpenAI Codex和Anthropic Claude保持自己的原生/);
   assert.ok(aiCliProfileManagerProject.usageExamples.some((item) => item.moduleSlug === engines.slug && item.ask.includes("上下文")));
-  assert.match(matrix, /machine-only=是.*start=否.*exact resume=否/s);
+  assert.match(matrix, /machine-only.*不是交互式start/s);
   assert.match(matrix, /Rust Open Interpreter.*0\.0\.40/s);
   assert.match(JSON.stringify(engines), /旧 Python 0\.4\.x.*(?:拒绝|不支持)/s);
   assert.doesNotMatch(matrix, /21 个.*当前 Live 通过/);
@@ -140,7 +144,9 @@ test("AI CLI Profile Manager explains OpenClaw import, Profile deletion, manuals
   for (const expected of ["Import-FromOpenClaw.ps1", "api.deepseek.com", "-Apply", "-Force", "codex-deepseek-v4-pro", "profile set-default", "profile remove", "最后一个引用", "Rust Open Interpreter", "旧 Python 0.4.x", "AI CLI Profile Manager 使用手册", "Codex、Claude Code 与 Open Interpreter CLI 中文手册", "0=成功", "6=用户取消"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits product lifecycle detail: ${expected}`);
   }
-  assert.match(aiCliProfileManagerProject.summary, /交互式 start.*权限由原生 CLI.*程序化 Codex run.*回读实际模型.*完全访问权限/s);
+  assert.match(aiCliProfileManagerProject.summary, /原生 Codex.*Claude Code.*官方 Codex 桌面/s);
+  assert.match(text, /程序化 Codex 权限.*danger-full-access.*approvalPolicy=never/s);
+  assert.match(text, /现场回读实际模型/);
   assert.doesNotMatch(aiCliProfileManagerProject.summary, /每次运行都核对.*权限/);
 });
 
@@ -171,5 +177,5 @@ test("System links its existing AI CLI asset to the project page", () => {
   const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "ai-cli-profile-manager");
   assert.ok(asset);
   assert.equal(asset.href, "/projects/ai-cli-profile-manager");
-  assert.match(asset.role, /Profile.*体检.*可恢复 Codex/);
+  assert.match(asset.role, /Profile.*体检.*可恢复Codex/s);
 });

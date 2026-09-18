@@ -3,19 +3,19 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 const stateLabels = ["可直接使用", "需要确认", "当前不可用"];
 
 const wechatDirectSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-14T04:23:52.908757Z",
-  label: "本轮只读核对4个完成态归档、7934条消息；来源能力与旧测试保留原日期，当前媒体和验真边界分开",
-  boundary: "2026-09-14只读清单与文件元数据：4个归档、7934条消息、12个PNG，未见语音或派生WAV；四份均有缺口。没有读取聊天正文或重新验真，9月1日3/3及9月9日源码测试各保留原日期",
+  observedAt: "2026-09-18T19:58:00Z",
+  label: "有界阅读、完整文本分段与可恢复导出已完善；旧归档数量和缺口保留原日期",
+  boundary: "本轮从0.2.1正式源码、Skill与环境合同重建差分，没有读取聊天正文或新增归档。4归档/7934消息与12 PNG仍属于9月14日观察；导出文件存在、包完整性与来源内容完整是三层证据。",
   metrics: [
-    { label: "完成态归档", value: "4 个" },
-    { label: "已保存消息", value: "7934 条" },
-    { label: "当前物化媒体", value: "12 个 PNG · 语音未见" },
+    { label: "9月14日完成态归档", value: "4 个" },
+    { label: "9月14日已保存消息", value: "7934 条" },
+    { label: "9月14日物化媒体", value: "12 个 PNG · 语音未见" },
     { label: "独立验真", value: "历史 3/3 · 本轮未重跑" }
   ],
   facts: [
     { label: "当前归档聚合", value: "2026-09-14只读登记导出根的4份manifest/state/last-run：合计7934条消息，4份最近回执success且manifest绑定一致，最新清单修改时间2026-09-10T09:31:53Z。4份均有缺口，unavailableMediaCount合计2329，未标名群成员消息合计1925，unknownSenderCount为0。文件元数据共12个PNG，未见原始语音或派生WAV；未读消息、联系人或媒体内容，也未新跑verify-export。9月1日6032条、3个语音+3个派生及3/3验真的历史证据不改写为本次结果。" },
-    { label: "当前公开版本", value: "WeChatDirect v0.1.0；PUBLIC main=3faf4d206f74af60827020e376ab7c9cc0c52d4b，2026-09-09T03:36Z远端main回读同值，工作树干净。", hero: false },
-    { label: "当前环境体检", value: "Windows + Python 3.14 的无正文 Doctor 成功；两个账号槽位、两个来源配置文件、两个本地状态文件、加密依赖、压缩依赖与语音解码器均报告可用。" },
+    { label: "当前公开版本", value: "WeChatDirect v0.2.1，PUBLIC main 53b7c0b1b460a26a4b04db8d5f0d2278f97dbc36。已安装入口为E:\\Projects\\Tools\\WeChatDirect\\.venv\\Scripts\\wechat-direct.exe；本轮只读源码与已登记入口，不把安装、环境检查或包存在当成真实会话已经读取。", hero: false },
+    { label: "当前环境体检", value: "doctor --environment-only不读取账号设置，分别检查文字、图片/WXGF、语音和实际执行身份；主路线Python3.14，语音通过Python3.11、pilk与FFmpeg/ffprobe。环境可用不是账号资料可读，9月14日两个账号槽位的旧体检保留原日期。" },
     { label: "聊天读取边界", value: "一次只解析一个明确联系人或群的有界窗口；最多扫描 500 条、返回 80 条，保留消息方向、群成员标签、回复目标、媒体关系、实际时间范围与可见历史缺口。" },
     { label: "先发现值得阅读的变化", value: "changes按明确起止时间，从primary、secondary或both的当前SessionTable读取会话候选，不读正文、不复制库。两个账号分列，保留隐藏会话、时间未知项及扫描后继续变化的项，不以条数截断；完整只针对当前会话表，不证明已消失会话或旧消息修订都已检测。" },
     { label: "只看本人参与", value: "context --self-only先按原生发送者筛出本人及归属未定的消息，再解码正文；游标继续固定同一筛选。适合先找自己在大群说过什么，但不等于已读全群；需要别人的前后回应时，再用普通context --around补读。" },
@@ -24,7 +24,7 @@ const wechatDirectSnapshot = createProjectSnapshot({
     { label: "有限网络物化", value: "context 只读本机；显式 export-context / media-open 可使用该条表情消息已有的原生 CDN，核对 MD5、大小与图片解码。--local-only 可禁止网络；归档与保全不自动补取远端表情，不搜索或拼造地址。" },
     { label: "发送方向与消息含义", value: "发送者只按消息所在分片的Name2Id与账号原生身份承诺解释，含@openim非文字消息；长serverId/nativeId以字符串返回。转账、红包、位置分享和系统模板按原生结构投影；撤回只表示发生撤回，不恢复正文。“拍一拍”归为system（系统事件），不计成本人撰写的发言或校准样本。" },
     { label: "回复与媒体", value: "图片、表情、语音、视频和文件都保留每次出现的位置与原消息关系；图片按原生 MD5 / hardlink.db 定位并解码，表情可保留动画，视频和文件仅交付本机原生索引能精确定位的字节。找到路径、可物化与实际可读分别表示。" },
-    { label: "输出与验真", value: "export-context 生成 conversation.json、media/ 与 ai-context.md，HTML 为可选人工查看。具名归档继续保留 JSONL、清单、状态与回执；普通增量和无变化快速路径都重验已声明媒体、派生 WAV、两份正文和清单绑定。" },
+    { label: "输出与验真", value: "export-context与preserve可保留选定窗口完整文本和可用媒体；packageCreated及exit0只证明包生成，必须另看status、delivery、引用媒体/失败WAV和hasMore。partial仍可使用与验真；verify-export不补齐源内容、不把缺失附件说成完整。" },
     { label: "实现规模", value: "2026-09-09核对3faf4d2：28个跟踪文件、7个非测试Python模块、14个tests/*.py与10个公开命令，包含changes及export-context。来源投影与上下文43项/6子测试通过，耗时0.85秒；changes另2项通过，耗时0.49秒；9月7日137项/32子测试仍为原全套证据。主CLI用Python3.14，语音派生默认Python3.11+pilk。", hero: false },
     { label: "注意力边界", value: "日常默认只给 AI 最近最多 80 条、128 KiB 的 ai-context.md；更早事实只搜索 context.md 或 messages.jsonl 的命中附近，不把整份档案反复塞入模型。", hero: false },
     { label: "运行形态", value: "项目直接读取本机数据库快照，不依赖 WeFlow、HTTP helper、第二数据库、服务、队列、daemon、watcher 或计划任务。", hero: false }
@@ -33,7 +33,7 @@ const wechatDirectSnapshot = createProjectSnapshot({
     "本次网页快照没有读取任何真实微信聊天、朋友圈正文或媒体，也没有运行一个具名联系人的现场 E2E；源码、Doctor 和合成回归不能证明当前某段真实历史完整可读。",
     "当前设备可见的本地数据库和朋友圈缓存不是微信远端全历史；旧消息、已清缓存媒体或未缓存朋友圈目标可能真实存在但本轮不可见。",
     "图片、表情、视频和文件只有原生索引、内容身份及实际解码通过才交付；WXGF 复杂分区或透明度关系无法证明时保留缺口，不把首帧冒充完整动图。WeChatDirect 的语音 WAV 派生与 ChineseASR 的转写仍分开。",
-    "完成态档案可以用同一命令重放，来源漂移也会保留上一个完整提交点；但首次同步硬崩溃留下的无 state 半成品、陈旧 .sync.lock 和目录级自动修复尚未实现，verify-export 只验真不修复。"
+    "新导出替换有同级.wechat-transaction与recover-export检查/rollback/complete；两个目录重命名仍有崩溃窗口，不是全文件系统原子事务。未知旧.sync.lock、外来文件或身份冲突不能直接删除；已提交事务不回滚成旧版，硬断电和真实客户端恢复仍另验。"
   ]
 });
 
@@ -45,7 +45,7 @@ export const wechatDirectProject = {
   visibility: "公开仓库",
   repositoryUrl: "https://github.com/wlyaaaaa/WeChatDirect",
   statusTone: "mixed",
-  cardStatus: "4个归档、7934条消息；当前缺口明示，旧验真与本轮清单回读分开",
+  cardStatus: "长文本可读完整，导出缺口可见；中断恢复与定向补媒体已有入口",
   cardStatusTone: "pass",
   ...wechatDirectSnapshot,
   kicker: "把微信上下文、回复和附件变成可核对的工作材料",
@@ -55,10 +55,10 @@ export const wechatDirectProject = {
     "Windows本地只读微信工具"
   ],
   repositoryNote: "源码位于 PUBLIC（公开）仓库 wlyaaaaa/WeChatDirect。页面公开产品设计、命令、数据结构、实现、测试、失败和当前无正文环境体检；不读取或展示真实聊天正文、朋友圈正文、联系人身份、媒体原件、数据库位置、解密材料、账号承诺值、导出目录或凭据。",
-  summary: "当我问“对方上次在微信里怎么说”“这条回复对应哪句话”“语音和附件在哪里”时，WeChatDirect 会在这台电脑已经可见的微信数据中，只读取一个明确联系人或群的小范围上下文，保留消息顺序、谁发的、回复关系和相关媒体。需要长期保留时，它还能只为这个具名对象建立可重放的本地档案；以后我再次要求更新时，命令才自动合并新增内容。它不会同步整个账号，也不会改写微信或猜测缺失内容。",
+  summary: "把指定联系人或群的一段微信聊天，连同回复关系、图片、语音和附件整理成可以继续工作的材料；需要长期保留时才维护这个具名对象的归档。长消息可按同一版本分段读完，不把预览当全文。导出会直说缺了哪些媒体，更新中断能先检查原记录再恢复，后来补到的本地附件也能定向重试，不必重扫整段历史。",
   why: "微信里的工作事实常分散在文字、引用回复、图片、语音和文件之间。只复制几句文字会丢掉“回复的是谁、附件属于哪条消息、当前窗口是不是完整历史”；同时有主号和副号时，按名字随便选一个账号还可能拿错来源。这个项目先把账号、对象、时间范围和原件关系钉牢，再让 AI 处理少量真正相关的内容。",
   plainExample: "我可以问：“项目群里对方最后确认的交付时间是什么？顺便告诉我那句‘可以’到底在回复哪条。”工具会先确认是主号还是副号里的哪个群，再只读取够回答问题的一小段聊天；最后把时间、说话人、原回复和能否打开的语音一起交回来，找不到唯一对象或附件打不开就明说，不拿相邻文件猜。",
-  result: "我会得到两种清楚分开的结果：一次问题得到带账号、对象、实际时间范围、发送者、回复和媒体缺口的小上下文；长期保留得到可搜索的人类档案、给 AI 的小上下文、完整结构记录、当前精确物化且可读的媒体、来源指纹、游标、哈希清单和最近运行回执。无法唯一选账号、目标不存在、非语音附件打不开或来源在读取时变化，都会明确说明。恢复从最后一个完整提交点开始；首次硬崩溃留下的半成品仍是当前具名缺口。",
+  result: "一次阅读得到有账号、对象、时间、发送者、回复与媒体关系的小上下文；导出得到完整选定文本、可用媒体和缺口说明；归档更新有来源指纹、游标与可验证清单。生成、部分完成、独立验真和源内容完整分别报告。断线先看原事务，媒体缺失可只补这一具名归档，不扩成全账号同步。",
   readerStates: {
     pass: "一次查询交回已绑定账号、对象和实际范围的可读上下文，不把小窗口冒充全历史。更新具名档案时交回新增/更新结果；即使来源没变，也先核对清单与状态、结构记录和两份全文，全部一致才报告没有变化。",
     problem: "账号或联系人重名、引用目标不在当前窗口、媒体暂时打不开、群成员标签缺失或来源正在变化时，返回候选和具体 gaps，只扩大会改变答案的范围。",
@@ -94,7 +94,11 @@ export const wechatDirectProject = {
     { title: "有原始字节才谈派生", detail: "媒体先证明属于同一条消息，再核对实际字节、格式和质量；WAV 记录原始 SILK 哈希，图片区分原件和缩略图，表情保留每次出现与动画信息，无法读取则保留缺口。" },
     { title: "输出必须能独立验真", detail: "档案、结构记录、媒体、状态和 manifest（清单）互相绑定；verify-export 会重算哈希、数量、路径和派生关系。" },
     { title: "注意力比全量灌入更值钱", detail: "AI 默认只读最近最多 80 条、128 KiB 的小上下文；旧事实按命中位置局部读取，不让完整档案淹没当前问题。" },
-    { title: "失败时停在可恢复位置", detail: "来源变化、身份冲突、锁冲突或状态不一致会停止提交新状态；已有档案继续保留，下一步由明确重试、重核或补缓存触发。" }
+    { title: "失败时停在可恢复位置", detail: "来源变化、身份冲突、锁冲突或状态不一致会停止提交新状态；已有档案继续保留，下一步由明确重试、重核或补缓存触发。" },
+    {
+      "title": "包做出来，不等于材料已经齐全",
+      "detail": "即使文件能打开、程序返回成功，引用媒体或语音仍可能缺失。结果先列真实覆盖与缺口，再谈完整性；修复只处理点名的归档和实际本地内容，不编造没读到的消息。"
+    },
   ],
   responsibilities: [
     "读取一个具名联系人或群的最小有用聊天上下文，并说明实际时间与本地可见范围",
@@ -138,13 +142,13 @@ export const wechatDirectProject = {
     { title: "还原消息与媒体语义", detail: "解析正文、发送者、群成员、引用目标和媒体关系；控制载荷、未知类型和不可打开项目都保留为明确缺口。" },
     { title: "生成小上下文或档案", detail: "一次问题返回有界结构结果；归档同时生成给 AI 的小窗口、人类完整档案、结构记录、当前可打开语音、增量状态与完整性清单。" },
     { title: "再次执行只合并变化", detail: "来源未变时不重新扫描源库消息，但仍核对已导出全文、结构记录、清单和状态绑定；变化时按排序游标或默认 1 天时间重叠抓取。当前可打开的媒体按内容哈希复用，出现位置不被去重抹掉。" },
-    { title: "完整性清单先于增量状态", detail: "记录、档案和 AI 小上下文先原子写入，完整性清单先发布，增量状态再成为下一次续作点；来源中途变化时不提交。" },
+    { title: "完整性清单先于增量状态", detail: "先在候选目录准备并验证替换结果，保存同级事务记录，再执行目录替换；两次重命名不称全局原子。清单与状态一致后才成为新续作点，异常先检查recover-export而不是删除锁。" },
     { title: "需要时验真、重核或补缓存", detail: "已有导出可以独立重算哈希和数量；旧历史或媒体缺口显式执行全量重核；朋友圈未缓存时只提示在同一账号手动打开目标后重试。" }
   ],
   components: [
     { name: "wechat-direct Skill", responsibility: "把聊天问题、单对象归档、朋友圈和保全请求路由到正确命令。", implementation: "普通问题先读最小窗口；归档权限只覆盖用户点名的一个联系人或群，语音转写转交 ChineseASR。" },
-    { name: "wechat_cli.py", responsibility: "提供10个公开命令、变化候选、账号/对象解析、本人筛选、结果投影、阅读包、导出、增量、保全、Doctor与验真。", implementation: "消息读取限制扫描和输出；changes完整返回当前表的候选。写出使用原子文件替换、目录锁、manifest/state双阶段提交和明确ProductError。" },
-    { name: "wechat_source.py", responsibility: "直接读取 WeChat 本机加密 SQLite 与缓存，并恢复消息、联系人、群成员、朋友圈和媒体关系。", implementation: "DPAPI（Windows 数据保护接口）解开本机配置载体，临时解密数据库与 WAL，quick_check 后以 query_only 查询；不依赖 HTTP helper。" },
+    { name: "wechat_cli.py", responsibility: "提供有界聊天、长字段分段、具名归档、便携阅读包、环境检查、媒体定向修复与离线验真。", implementation: "CLI按字节和消息范围限制输出，message-part沿原哈希/偏移续读；写出保留候选、前像和同级事务，recover-export检查后明确选择完成或回滚，不把包生成和来源完整混同。" },
+    { name: "wechat_source.py", responsibility: "直接读取 WeChat 本机加密 SQLite 与缓存，并恢复消息、联系人、群成员、朋友圈和媒体关系。", implementation: "DPAPI只在本机打开配置，临时解密SQLite并验证WAL校验和，仅合并已提交前缀；query_only查询，不向源库checkpoint或修改WAL。来源改变拒绝拼接不同版本。" },
     { name: "voice_decode.py", responsibility: "把精确绑定的 WeChat SILK 语音派生为 WAV。", implementation: "独立 Python 3.11 + pilk 路径；原始 SILK 不被替换，WAV 记录 derivedFromSha256。" },
     { name: "accounts.json", responsibility: "保存 primary / secondary 两个隔离槽位的本机来源入口与身份承诺。", implementation: "不保存微信密钥明文；真实文件留在本机并限制 ACL，示例只提供占位结构。" },
     { name: "联系人导出", responsibility: "保存一个对象的可搜索全档、AI 小上下文、结构记录、当前可打开媒体、清单、状态和运行回执。", implementation: "messages.jsonl 是合并事实层；context.md 面向人；ai-context.md 最多 80 条和 128 KiB；当前可打开的语音按 SHA-256 去重复用，其他媒体保留关系与缺口。" },
@@ -160,13 +164,23 @@ export const wechatDirectProject = {
     { ask: "看看副号里这个人最近发的朋友圈。", effect: "只读取我点名的副号和这台电脑当前已经缓存的内容；没缓存时提示我在同一个账号里手动打开对方主页后再试，不假装访问了远端完整主页。", moduleSlug: "moments-local-cache" },
     { ask: "主号和副号都有同名联系人，别拿错。", effect: "自动账号选择会返回两个候选并停止；账号身份、联系人原生身份和已有档案状态必须一致，不能按昵称、头像或窗口猜。", moduleSlug: "account-source-identity" },
     { ask: "把昨晚这段聊天、引用关系和当前能打开的语音做成一份保全包。", effect: "生成自包含消息文件、完整性清单和媒体目录；SILK 原始语音与可播放 WAV 分开记录，图片、文件等不可打开项目留在缺口中。", moduleSlug: "preservation-verification" },
-    { ask: "上次完整归档以后又有新消息，怎样继续？", effect: "再次保存同一个对象时，会从最后一次完整结果继续合并新增和更新；账号、来源或旧档案对不上就停止，第一次崩溃留下的半成品也不会冒充可续跑状态。", moduleSlug: "named-chat-archive" }
+    { ask: "上次完整归档以后又有新消息，怎样继续？", effect: "再次保存同一个对象时，会从最后一次完整结果继续合并新增和更新；账号、来源或旧档案对不上就停止，第一次崩溃留下的半成品也不会冒充可续跑状态。", moduleSlug: "named-chat-archive" },
+    {
+      "moduleSlug": "named-chat-archive",
+      "ask": "这个已保存的聊天里有几条语音后来才下载好，只补这些附件，别重扫全历史。",
+      "effect": "对同一账号、对象和归档定向repair-media，可再限定消息和类型；复用本地缓存或派生WAV，保留还未取得的缺口，不去CDN补全整个账号。"
+    },
+    {
+      "moduleSlug": "bounded-chat-context",
+      "ask": "这条很长的消息别只给我开头，把这一条读完整，旁边无关聊天不用展开。",
+      "effect": "先取有界上下文，再按返回的分段位置续读同一条消息，核对完整文字哈希；消息中途变化则重新读取，不拼接两个版本。"
+    },
   ],
   evidenceLayers: [
-    { layer: "PUBLIC source（公开源码）", proves: "10个命令、当前会话候选发现、本人参与筛选、只读快照、账号绑定、上下文、阅读包、增量、朋友圈、媒体、保全和验真机制存在。", doesNotProve: "当前某个真实联系人、群、朋友圈或媒体现在可读。" },
+    { layer: "PUBLIC source（公开源码）", proves: "当前正式源码包含context、message-part、export-context、具名同步、repair-media、recover-export、环境Doctor、临时会话检查与verify-export；机制存在不替代真实账号读取。", doesNotProve: "当前某个真实联系人、群、朋友圈或媒体现在可读。" },
     { layer: "README + Skill（使用合同）", proves: "普通问题、单对象归档、朋友圈、媒体与明确保全的自然语言路线和禁止项已说明。", doesNotProve: "文档本身不能替代代码行为或现场结果。" },
     { layer: "9月7日137 tests + 32 subtests；9月9日45 tests + 6 subtests", proves: "合成数据下的身份冲突、回复、媒体、缓存、增量、原子提交、快速路径完整性、来源漂移和导出验真回归通过。", doesNotProve: "真实微信版本、真实本机数据库结构、当前私有正文或媒体完整性。" },
-    { layer: "Doctor（无正文环境体检）", proves: "当前 Windows、Python 3.14、依赖、两个配置槽位所需文件和语音解码器可用。", doesNotProve: "Doctor 不打开数据库，也不证明账号身份承诺、聊天正文或现场导出成功。" },
+    { layer: "Doctor（无正文环境体检）", proves: "环境检查分别说明文字/图片/WXGF/语音及实际解释器身份；本次未读取账号设置或重测所有真实媒体。", doesNotProve: "Doctor 不打开数据库，也不证明账号身份承诺、聊天正文或现场导出成功。" },
     { layer: "Git Owner（Git 事实责任方）", proves: "PUBLIC main=3faf4d2，2026-09-09默认分支、远端、工作树和发布身份回读一致。", doesNotProve: "Git 同步不能证明当前 WeChat 客户端、缓存或个人内容状态。" },
     { layer: "Live named-object E2E（具名对象现场验收）", proves: "只有用户点名对象后的真实 context / sync / media / verify 回执，才能证明该次本地可见范围和输出。", doesNotProve: "一个对象成功不能证明全账号或微信远端全历史完整。" }
   ],
@@ -187,7 +201,17 @@ export const wechatDirectProject = {
     { name: "明确保全", command: "wechat-direct preserve --account primary --contact \"<对象>\" --lookback-days 1 --output \"<目录>\"", purpose: "生成一个自包含聊天窗口、回复关系、媒体和哈希清单。" },
     { name: "无正文环境体检", command: "py -3.14 wechat_cli.py doctor", purpose: "检查平台、Python、依赖、配置入口和语音解码器，不打开聊天数据库或输出路径。" },
     { name: "导出验真", command: "wechat-direct verify-export --output \"<导出目录>\"", purpose: "不打开源数据库，重算 v1 联系人或朋友圈导出的清单、状态、文件和媒体关系。" },
-    { name: "开发回归", command: "py -3.14 -m pytest -q", purpose: "这是源码验证入口，不是产品命令；运行当前合成回归；本页保留2026-09-09定向45项与6个子测试通过证据，不读取真实微信数据。" }
+    { name: "开发回归", command: "py -3.14 -m pytest -q", purpose: "这是源码验证入口，不是产品命令；运行当前合成回归；本页保留2026-09-09定向45项与6个子测试通过证据，不读取真实微信数据。" },
+    {
+      "name": "无账号环境检查与临时会话检查",
+      "command": "wechat-direct doctor --environment-only; wechat-direct temp-status --root <本任务临时根>",
+      "purpose": "先排除环境依赖问题，不读账号；临时清理另需精确非活动会话及--clean，不跨任务清扫。"
+    },
+    {
+      "name": "具名导出恢复与本地媒体补全",
+      "command": "wechat-direct recover-export --output <明确归档>; wechat-direct repair-media --account <账号> --contact <对象> --output <同一归档>",
+      "purpose": "前者默认只检查，明确complete/rollback才改变；后者只尝试本地媒体，不重扫历史或调用CDN。"
+    },
   ],
   snapshotUpdateNote: "2026-09-14只读刷新归档规模与Doctor（环境体检）：2个账号配置有效、依赖和语音解码器可用。9月9日changes候选发现、本人参与筛选、群内精确引用、原生系统事件及45项/6子测试仍保留原日期；本轮未打开聊天数据库、读取私人正文或执行归档同步。"
 };
@@ -236,7 +260,8 @@ export const wechatDirectModules = [
       "_context_result 校验扫描与返回上限，按 since / until / lookback / around / contains 形成有界窗口。",
       "_sender_receipt 保留 self、other、system、unknown 与群成员标签；文件传输助手只加标签，不改写原生角色。",
       "返回 scannedSenderRoleCounts、returnedSenderRoleCounts、selfObservation、availableHistoryHint 与 gaps。",
-      "Canonical JSON（规范 JSON）计算 manifestSha256；超过 512 KiB 直接 context_output_too_large。"
+      "Canonical JSON（规范 JSON）计算 manifestSha256；超过 512 KiB 直接 context_output_too_large。",
+      "context --byte-limit限制32–512KiB终端JSON，普通continuation负责其余消息；segmentedFields仅是长字段预览，message-part绑定同一显式账号/对象、偏移和whole-text hash续读。source_changed要求重新context，不能跨版本拼接；便携export-context仍保存选定全文。",
     ],
     flow: [
       "读取两个隔离账号槽位的公开安全配置结构。",
@@ -296,7 +321,7 @@ export const wechatDirectModules = [
     value: "长期合作对象的聊天可以持续更新，而不需要每次全量导出、复制旧媒体或把完整历史交给 AI。",
     why: "只保存一次会漏掉后续内容；每次全量重做又慢、重复且容易在中断时留下半成品。真正可用的归档需要知道自己处理到哪里、来源是否变化、哪些是新增或更新，以及怎样验证提交完成。",
     example: "我说“把这个供应商群持续保存下来”。第一次会保存当前设备能看到的完整本地历史；下周再说同一句，档案只补新消息、更新过的内容和后来能在本机打开的媒体，旧内容不会整包重抄。",
-    result: "得到一个稳定目录：完整人类档案、AI 小上下文、messages.jsonl、当前可打开的语音、manifest、state 和 last-run；每次回执说明模式、新增/更新/总数、媒体复用、发送者缺口和增量覆盖边界。恢复从最后完整 manifest/state 开始，首次硬崩溃半成品不冒充可续跑。",
+    result: "得到同一具名对象的消息、阅读档案、可用媒体、清单和增量状态；新替换先准备验证，失败保留原完整档案及事务位置。repair-media能补本地后来可用的媒体，recover-export能检查和处理已知中断；不能恢复微信远端从未取得的内容。",
     readerStates: {
       pass: "有变化时完成增量合并，manifest 与 state 指向同一完整结果；无变化时也先验证清单自哈希、账号/对象/来源绑定、JSONL 哈希和数量、两份全文的哈希与字节数，再返回 noChange 并更新运行回执。",
       problem: "多分片、无时间旧消息、历史修改或媒体后来可用时，普通增量只说明覆盖边界，并提示 full reconcile。",
@@ -310,16 +335,16 @@ export const wechatDirectModules = [
       "AI 只默认读取最近最多 80 条、128 KiB，完整档案仍可按需搜索。",
       "当前可打开的语音按内容哈希复用；后来可用的历史语音可在增量窗口或 full reconcile 中补齐。",
       "full reconcile 会更新或补充同身份记录，但不会把来源里后来消失的旧归档记录自动删除。",
-      "完成态可以确定性重放，但首次硬崩溃无 state、陈旧锁和目录级 repair 尚未实现；verify-export 只验真不修复。"
+      "已知目录替换中断先recover-export只读检查，明确rollback或complete；未知旧锁和外来内容不自动接管。verify-export只验证包，repair-media只补具名本地媒体，不证明微信远端全历史完整。"
     ],
-    problem: "解决一次性导出很快过期、全量重复成本高、来源漂移覆盖旧提交点、身份串档和把完整历史反复灌入模型；同时明确暴露首次硬崩溃恢复仍未闭环。",
+    problem: "避免更新半途毁掉原档案、为了补几条语音重扫全部历史，以及把已生成包误称为资料齐全；冲突保留原状态和明确恢复入口。",
     implementation: [
       "state.json 固定 wechat-direct-contact-sync.v1、账号身份承诺、联系人原生身份、游标、水位、来源指纹和消息数量。",
       "messages.jsonl 用 server id；没有 server id 时用本地 id、时间、sortSeq 与发送者计算稳定合并键。",
       "默认 overlapSeconds=86400，允许 0 到 31 天；单分片且目录不变时使用 sortSeqReplayFloor。",
       "旧说话人语义的完成态档案在下次对同一对象运行 sync-contact 时，先验原档，再以 sender_identity_reconcile 重核当前本机可见历史；其他聊天不扫描、不改写。源中已不存在的旧消息保留正文与原证据，显示身份未重核并计数。",
       "来源指纹未变时先再取一次指纹确认稳定，重验 manifest 自哈希及其与 state 的账号、身份承诺、联系人、来源指纹和数量绑定；messages.jsonl 核对 SHA-256 与记录数，context.md 和 ai-context.md 分别核对完整 SHA-256 与字节数。全部一致才返回 sourceMetadataFastPath/noChange 并只更新 last-run。",
-      "档案和 AI 小上下文原子写入，manifest 先于 state；state 是下一次增量的提交标记。",
+      "sync-contact、sync-moments、repair-media先暂存并验证完整候选，通过同级.wechat-transaction记录准备、前像和替换状态；两次目录rename有独立中断状态。recover-export只读检查后按明确动作complete/rollback，已提交状态不能再回滚，身份或外来修改冲突保留。",
       ".sync.lock 阻止两个写者同时更新同一输出目录；当前不会自动判断或清除陈旧锁。",
       "快速返回已经包含导出全文与结构记录的完整哈希核对，不只是看文件存在或数量；独立 verify-export 另核整个导出的路径、媒体与派生关系，不应把两者的覆盖范围混为一谈。"
     ],
@@ -343,7 +368,7 @@ export const wechatDirectModules = [
       "权限只覆盖用户点名的一个联系人或群，不扩到全账号。",
       "首次本地完整不代表远端完整，也不补设备上已经不存在的历史。",
       "多分片普通增量不能保证抓到没有时间的旧记录；需要 full reconcile。",
-      "没有 resume、repair、restore/import 或恢复回微信命令；首次硬崩溃无 state 目录不会自动接管。",
+      "有具名媒体修复和导出事务恢复，但没有把档案导入回微信的restore/import，也不自动删除未知.sync.lock或接管无依据旧目录。",
       "归档目录留在本机，不进入公开网站或 Git。"
     ],
     failures: [
@@ -368,9 +393,9 @@ export const wechatDirectModules = [
       "test_manifest_is_published_before_state_commit_marker 验证提交顺序。",
       "test_contact_sync_does_not_commit_when_source_changes_during_read 验证漂移失败关闭。",
       "test_contact_fast_path_rejects_hash_size_count_and_state_drift 覆盖无变化候选的清单自哈希、全文字节、记录数与状态绑定漂移；CLI 回归另验证 context、ai-context 和 JSONL 内容变化不能返回 noChange。",
-      "当前没有硬杀进程后半成品自动恢复测试，因为该能力尚未实现。"
+      "0.2.1来源定义了目录替换中断、完成/回滚、媒体修复和冲突回归；本网页未强杀真实归档、重读聊天或演练真实断电。"
     ],
-    relation: "它消费“聊天上下文”同一账号与对象语义，调用“回复与媒体关系”复制当前可打开的语音并保留其他媒体缺口；完整提交点、增量重放、全量重核和崩溃恢复缺口都由本模块统一说明。"
+    relation: "同一账号与对象贯穿上下文、归档与媒体；本模块拥有增量续作、定向本地补媒体与已知事务恢复，原微信数据库始终只读。"
   },
   {
     slug: "reply-media-relations",
@@ -410,7 +435,8 @@ export const wechatDirectModules = [
       "wechat_media.py 沿消息原生索引定位与物化；wechat_image.py 校验 DAT 解码和图片，wechat_wxgf.py 验证封装分区、视频流与帧数，不猜完整动画。",
       "表情远端只使用同条消息已有地址，并核对原生 MD5、声明大小和图片解码；失败保留原 gap，不搜索替代图片。",
       "export-context 使用与 context 相同的范围、锚点和游标，将实际媒体写入新目录，重复字节可复用，每次消息位置不去重。",
-      "wechat_render.py 可选生成引用同一媒体的 HTML；AI 默认读取 JSON/Markdown 与媒体文件，不需要浏览器、服务或源数据库 locator。"
+      "wechat_render.py 可选生成引用同一媒体的 HTML；AI 默认读取 JSON/Markdown 与媒体文件，不需要浏览器、服务或源数据库 locator。",
+      "repair-media只对一个明确账号/contact/output归档补本地媒体或派生WAV，--message-id/--kind进一步收窄；不重扫聊天、不请求CDN，不改原增量游标。单语音派生失败单独记录，不抹掉已可用消息与其他附件。",
     ],
     flow: ["固定账号、对象和查询窗口", "按原生消息顺序读取正文与引用", "验证每条媒体的原生来源", "按请求进行本地或原生表情物化", "核对实际格式、字节与质量", "生成新阅读包并保留逐项缺口", "有后续内容时沿原游标继续"],
     concepts: [
@@ -520,7 +546,7 @@ export const wechatDirectModules = [
       failureRecovery: ["身份承诺不匹配时读取前停止", "账号目录歧义时停止", "源持续变化时放弃快照", "Doctor 失败只报告当前缺失依赖"]
     },
     teaser: "primary / secondary 只是两个严格隔离的配置槽位；每次读取先核对来源身份承诺，再在临时目录准备通过完整性检查的只读快照。",
-    status: "当前无正文 Doctor 成功：Windows、Python 3.14、两个槽位所需文件、加密/压缩依赖和语音解码器可用",
+    status: "环境检查可独立于账号运行；文字/图片与Python3.11语音分别验收",
     statusTone: "pass",
     value: "同名联系人、双开微信和本机加密数据库不会因为“看起来像”而串到另一个账号；源数据库也不会为了读取而被改写。",
     why: "主号、副号可能有相同昵称和联系人；真实数据库仍在写入，直接解密查询也可能得到不一致页面。若身份和快照不先闭合，后面的消息再完整也可能来自错账号或半写状态。",
@@ -544,7 +570,7 @@ export const wechatDirectModules = [
       "accounts.json 固定两个槽位，每个提供 config_path、local_state_path 和两个来源身份承诺。",
       "Windows DPAPI 解开 Local State 中的本机 AES key，再解开 dbPath、decryptKey 与 myWxid。",
       "load_direct_source_identity 只接受一个与原生身份匹配的 db_storage 账号根。",
-      "EncryptedPageCodec 使用 PBKDF2 256000 轮、AES 与 HMAC 准备加密 SQLite 页面并合并已提交 WAL。",
+      "EncryptedPageCodec验证加密页面与WAL校验和，只合并已提交WAL前缀，保留源数据库/WAL只读；不以临时快照成功推断原会话或远端内容完整。",
       "快照复制前后比较源文件大小和 mtime，最多 3 次；通过 PRAGMA quick_check 后只读 query_only。"
     ],
     flow: [
@@ -622,7 +648,7 @@ export const wechatDirectModules = [
     problem: "解决截图式保全缺关系、半完成目录冒充成品、导出文件被替换、state/manifest 串档和派生媒体失去来源。",
     implementation: [
       "preserve 先调用 context 得到账号、对象、窗口、消息、引用和 gaps。",
-      "所有文件写入 <target>.incomplete，完成 messages 与 manifest 后用目录 replace 原子发布。",
+      "包先在具名候选目录写完并验证，再发布；替换已有归档复用明确事务恢复。packageCreated=true和exit0不等于全部所选内容可用，status=partial、delivery与hasMore必须独立读取。",
       "媒体记录 messageNativeId、mediaId、kind、locatorSha256、bytes、sha256 与 derivedPaths。",
       "verify-export 只接受 wechat-direct-contact-export.v1 与 wechat-direct-moments-export.v1，不把 preserve 当增量导出。",
       "验真限制所有相对路径留在导出根，拒绝反斜杠、冒号、..、绝对路径和符号链接逃逸。"
@@ -637,7 +663,7 @@ export const wechatDirectModules = [
     ],
     concepts: [
       { term: "Self-contained bundle（自包含保全包）", explanation: "离开源数据库后仍能理解账号、对象、时间、消息、回复、媒体与缺口。" },
-      { term: ".incomplete", explanation: "尚未完成的临时文件或目录；只有全部写完后才原子替换成正式目标。" },
+      { term: ".incomplete", explanation: "尚未完成的候选目录；只有验证后才可替换正式目标。跨两个目录重命名不是全局原子，已知中断按事务恢复，未知旧目录不自动删除。" },
       { term: "Path containment（路径约束）", explanation: "清单里的每个文件都必须解析在导出根内，不能借相对路径或链接逃出。" },
       { term: "Independent verification（独立验真）", explanation: "不打开微信源，只依赖导出本身重算身份绑定、文件和关系。" }
     ],

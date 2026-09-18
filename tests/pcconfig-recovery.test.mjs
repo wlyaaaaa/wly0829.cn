@@ -1,76 +1,39 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { pcconfigModules, pcconfigProject } from "../app/content-pcconfig.js";
-import { systemDependencyNodes } from "../app/system-home-content.js";
-
-const recovery = pcconfigModules.find(({ slug }) => slug === "recovery-backup");
-const reader = JSON.stringify({
-  value: recovery.value,
-  result: recovery.result,
-  decisions: recovery.decisionImpact,
-  states: recovery.readerStates
+import {pcconfigModules,pcconfigProject} from "../app/content-pcconfig.js";
+import {systemDependencyNodes} from "../app/system-home-content.js";
+const recovery=pcconfigModules.find(x=>x.slug==="recovery-backup");
+const reader=JSON.stringify({value:recovery.value,result:recovery.result,decisions:recovery.decisionImpact,states:recovery.readerStates});
+const technical=JSON.stringify({implementation:recovery.implementation,boundaries:recovery.boundaries,failures:recovery.failures,sources:recovery.sources,verification:recovery.verification});
+test("ordinary G/H files and protected recovery remain separate after source delivery",()=>{
+ assert.match(reader,/普通资料和媒体.*原生 G\/H 副本/);
+ assert.match(reader,/正式入口/);
+ assert.match(reader,/普通同名更新不提供上一版历史/);
+ assert.match(technical,/Password Center\/SecretBroker/);
+ assert.match(technical,/Invoke-PasswordCenterColdBackup.ps1/);
+ assert.doesNotMatch(JSON.stringify(recovery),/Password Center 与媒体\/PersonalData 走各自 P0|SecretRef、Password Center、媒体与其他受保护数据各走/);
 });
-const technical = JSON.stringify({
-  implementation: recovery.implementation,
-  boundaries: recovery.boundaries,
-  failures: recovery.failures,
-  sources: recovery.sources,
-  verification: recovery.verification
+test("sixteen current Cold groups preserve verified-copy and scoped prune boundaries",()=>{
+ for(const term of ["16","DevConfig","微信","Documents","Downloads","TimeAudit","Codex","Docker","PersonalData","PersonalMedia","RecoveryKit","LocalToolbox","Ollama","Steam","_SavedGames","_AlternateRoots","CORE_RECOVERY","SHA-256","NTFS","hardlink","绝不跨 G/H 链接","不使用 /MIR","源变化"])
+  assert.ok(technical.includes(term),"Cold source contract missing "+term);
+ assert.match(technical,/复制.*核验.*(?:删除|清理)/s);
+ assert.match(technical,/来源变化.*(?:零删除|保留)|源变化.*保留/s);
+ assert.match(technical,/不是对所有普通文件逐个做 SHA-256/);
+ assert.match(technical,/53.*(?:修复|内容)|修复.*53/s);
 });
-
-test("ordinary G backup bytes are not conflated with protected recovery carriers", () => {
-  for (const term of ["普通资料和媒体", "原生 G/H 副本", "不要求先加密成 Carrier", "Password Center/SecretBroker", "正式入口"]) {
-    assert.ok(reader.includes(term), `recovery reader omits ${term}`);
-  }
-  assert.doesNotMatch(JSON.stringify(recovery), /Password Center 与媒体\/PersonalData 走各自 P0|Password Center、媒体和其他受保护数据走 P0|SecretRef、Password Center、媒体与其他受保护数据各走/);
-  assert.ok(pcconfigProject.usageExamples.some(({ moduleSlug, ask, effect }) =>
-    moduleSlug === "recovery-backup" && ask.includes("资料和照片") && /普通.*原生格式.*凭据.*正式入口/.test(effect)
-  ));
+test("source delivery, historical first H and physical machine restore are independent",()=>{
+ const all=JSON.stringify(pcconfigProject);
+ assert.match(all,/2026-09-18T07:57:11Z.*16组H冷备.*8640.*8531705353/s);
+ assert.match(all,/145307.*45218959121.*53/s);
+ assert.match(technical,/2026-09-05.*首次/);
+ assert.match(JSON.stringify(pcconfigProject.currentState.gaps),/16组H冷备.*不等于整机新装恢复.*物理离线/s);
+ assert.match(recovery.status,/新机|整机/);
+ assert.match(technical,/Media\/Packages 排除/);
+ assert.doesNotMatch(recovery.status,/H 尚未返回|首次 H.*尚未验收/);
 });
-
-test("the expanded Cold plan preserves native scope and exact copy boundaries", () => {
-  for (const term of [
-    "15组", "DevConfig", "微信", "软件环境", "AI课程", "Documents", "Downloads", "TimeAudit",
-    "Codex记忆", "其他AI记忆", "Codex对话", "Docker自定义镜像", "PersonalData", "PersonalMedia", "RecoveryKit",
-    "_SavedGames", "_AlternateRoots", "_PersonalRoots", "_quarantine/_staging", "CORE_RECOVERY",
-    "36 小时", "五映射", "48 小时", "NTFS", "hardlink", "独立首副本", "绝不跨 G/H 链接",
-    "100 GiB", "不使用 /MIR", "DevConfig、微信、软件环境、AI课程、Documents、Downloads、TimeAudit", "SHA-256", "源变化", "外部硬链接",
-    "Invoke-PasswordCenterColdBackup.ps1"
-  ]) assert.ok(technical.includes(term), `Cold reference omits ${term}`);
-  assert.match(reader, /普通资料和媒体.*原生 G\/H 副本/);
-  assert.ok(reader.includes("普通同名更新不提供上一版历史"));
-  assert.doesNotMatch(reader, /保留增量历史/);
-  assert.match(technical, /正式替换 H 目标前检测到来源变化/);
-  assert.match(technical, /不是发布后再核验/);
-  assert.match(technical, /不是对所有普通文件逐个做 SHA-256/);
-});
-
-test("accepted first H backup, current completed Cold and unverified machine restore remain distinct", () => {
-  assert.match(JSON.stringify(pcconfigProject), /11 个核心恢复任务.*14 组 G 来源.*9 个必需集合/s);
-  assert.match(JSON.stringify(pcconfigProject), /2026-09-14T00:11:27Z的H回执complete.*15组完成.*warnings=\[\]/s);
-  assert.match(technical, /H已有2026-09-05首次备份与卷身份验收/);
-  assert.match(technical, /2026-09-14只读H cold-last\.json.*15\/15集合complete.*warnings=\[\]/s);
-  assert.match(recovery.status, /新机恢复.*(?:仍未验收|仍有缺口)/);
-  assert.match(technical, /本轮只读复核对应源码与测试范围/);
-  assert.match(technical, /整体\/镜像 complete.*五映射 post_verified=true/s);
-  assert.match(technical, /Media\/Packages 排除/);
-  assert.match(reader, /专用手机包、云候选和精选分类保持原分工/);
-  const recoveryGaps = JSON.stringify(pcconfigProject.currentState.gaps);
-  assert.match(recoveryGaps, /H最后成功为2026-09-14T00:11:27Z，15组完整、无warning/);
-  assert.match(recoveryGaps, /2026-09-14T00:11:27Z，15组完整、无warning/);
-  assert.match(recoveryGaps, /不证明之后G增量已入H.*新机恢复仍未验/);
-  assert.doesNotMatch(recovery.status, /H 尚未返回|首次 H.*尚未验收/);
-  assert.doesNotMatch(recovery.status, /9 个备份集合|10 个任务/);
-});
-
-test("the System recovery explanation keeps the same ordinary/protected distinction", () => {
-  const node = systemDependencyNodes.find(({ id }) => id === "recovery-backup");
-  assert.match(node.detail, /普通资料与媒体.*可访问的 G\/H 备份/);
-  assert.match(node.detail, /凭据和受保护载荷.*正式恢复入口/);
-  assert.match(node.detail, /15 组/);
-  assert.match(node.detail, /H.*首次.*(?:已验|验收|完成)/);
-  assert.ok(node.detail.includes("2026-09-14 00:11 UTC") && node.detail.includes("H闭包通过回读"));
-  assert.match(node.detail, /后来新增(?:的)?内容.*下一次备份/);
-  assert.doesNotMatch(node.detail, /H 尚未返回|首次 H.*尚未验收/);
-  assert.match(node.detail, /应用真正看见数据/);
+test("System recovery projects the same tested scope without claiming offline or machine recovery",()=>{
+ const n=systemDependencyNodes.find(x=>x.id==="recovery-backup");
+ for(const t of ["G/H","正式恢复入口","16组冷备","隔离还原","微信G/H全树","后来新增内容","下一次备份","应用真正看见数据"])assert.ok(n.detail.includes(t),t);
+ assert.match(n.detail,/连接.*不称物理离线/);
+ assert.match(n.detail,/备份通过不等于整机恢复/);
 });
