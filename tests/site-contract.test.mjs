@@ -325,7 +325,7 @@ test("project technical facts remain complete without taking over the first view
   assert.ok(agentsFacts.includes(panelSnapshot.authority.releaseId));
   assert.ok(agentsFacts.includes(panelSnapshot.authority.previous.release_id));
   const timeAuditFacts = timeAuditProject.heroFacts.map((fact) => fact.value).join("\n");
-  for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "53000", "6 张仪表盘", "78 个面板"]) {
+  for (const currentFact of ["1 秒", "3 秒", "PostgreSQL 15", "45432", "Grafana 13.0.2", "43000", "6 张仪表盘", "78 个面板"]) {
     assert.ok(timeAuditFacts.includes(currentFact), `TimeAudit technical reference hides: ${currentFact}`);
   }
   assert.match(timeAuditFacts, /本机/);
@@ -817,7 +817,7 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.equal(recovery.shortTitle, "安装与恢复");
   assert.equal(recovery.title, "安装、换机与数据恢复");
   const recoveryText = JSON.stringify(recovery);
-  for (const expected of ["全新安装", "带历史换机", "灾后", "WSL2", "Docker Desktop", "setup_runtime.ps1", ".venv", "PostgreSQL", "audit-ingester", "Grafana", "schema.sql", "dump restore", "二选一", "datasource", "TimeAudit_AutoStart", "TimeAudit_Watchdog", "TimeAudit_DailyBackup", "heartbeat", "真实入库", "有界聚合", "http://localhost:53000", "历史缺口"]) {
+  for (const expected of ["全新安装", "带历史换机", "灾后", "WSL2", "Docker Desktop", "setup_runtime.ps1", ".venv", "PostgreSQL", "audit-ingester", "Grafana", "schema.sql", "dump restore", "二选一", "datasource", "TimeAudit_AutoStart", "TimeAudit_Watchdog", "TimeAudit_DailyBackup", "heartbeat", "真实入库", "有界聚合", "http://localhost:43000", "历史缺口"]) {
     assert.ok(recoveryText.includes(expected), `TimeAudit install/recovery journey omits: ${expected}`);
   }
   assert.match(recoveryText, /快速部署\.md[\s\S]*(?:复制整个项目树|复制整个树)/);
@@ -825,9 +825,9 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(recoveryText, /每 5 分钟[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*每 5 分钟/);
   assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
   assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
-  assert.equal(timeAuditProject.currentState.observedAt, "2026-09-24T04:59:46Z", "TimeAudit source observation drifted");
+  assert.equal(timeAuditProject.currentState.observedAt, "2026-09-24T17:45:00Z", "TimeAudit source observation drifted");
   const timeAuditSnapshotText = JSON.stringify(timeAuditProject.currentState);
-  assert.match(timeAuditSnapshotText, /PUBLIC main 622b66c[\s\S]*新增 76dc57d.*完整时段.*622b66c.*剪贴板同内容分组/);
+  assert.match(timeAuditSnapshotText, /PUBLIC main 9f51f40[\s\S]*既有AutoStart恢复缺失依赖/);
   assert.match(timeAuditSnapshotText, /personal_activity_reader\.py --summary[\s\S]*北京时间逐日/);
   assert.match(timeAuditSnapshotText, /真正再次复制才增加次数[\s\S]*疑似密钥是格式线索/);
   assert.match(timeAuditProject.currentState.gaps.join("\n"), /长寿命进程内NVML返回失真.*最初触发原因仍未知/);

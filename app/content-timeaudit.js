@@ -14,7 +14,7 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "当前帧有效性与历史窗口", value: "2026-09-08修复后三分钟历史窗口的133个正帧全部被拒绝，no_game_frames结论保留。2026-09-14一小时摘要另有3598正帧，其中2369有效、1229拒绝，quality=mixed_valid_and_rejected；有效子集FPS均值222.631、最低172.8，1% Low均值111.272、帧时p95为7.356ms。有效性只证明数值范围及FPS与帧时一致；提供器未给拒绝原因分项或帧源身份，不能推断拒绝来自哪种故障，也不能把这些帧自动称为真实游戏验收。" },
     { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
     { label: "帧率来源与空闲", value: "当前源码优先读取 RTSS（RivaTuner Statistics Server 帧率工具）的共享内存；按前台进程、RTSS 最近前台、已启用的 Wallpaper 桌面渲染器和唯一新鲜帧源选择。映射可用但无有效帧为正常 gated_idle；映射不可用才启用 PresentMon 后备，不能把所有零值都当正常等待。" },
-    { label: "存储与展示", value: "PostgreSQL 15（本机45432）+ Grafana 13.0.2（本机43000）；原公网Grafana地址保持，6张仪表盘、78个面板。" },
+    { label: "存储与展示", value: "PostgreSQL 15（本机45432）+ Grafana 13.0.2（本机43000）；原公网Grafana地址保持，6 张仪表盘、78 个面板。" },
     { label: "当前共享健康与历史聚合", value: "2026-09-18T13:14Z共享健康正常：AHK约0.87秒、硬件数据库约0.38秒新鲜，待写、写失败和溢出均0，已有contract-2质量来源。数据库备份14份，最近约9.22小时/4162.12MiB，清单/长度通过、full_restore_verified=false；本轮未重哈希或恢复数据库。9月14日3599样本/3383秒活动覆盖仍是历史窗口，不能拿当前心跳覆盖它的217秒缺口。" },
     { label: "9月8日受管换代与空档", value: "2026-09-08T08:34:28Z仅停止已核对身份的旧采集worker，由既有TimeAudit_Watchdog拉起新launcher 57708→worker 61904（08:34:50Z）。首个新样本08:35:19Z，启动窗口前沿有51.03秒缺口。随后三分钟GPU占用/温度/功率/核心和显存时钟180/180非空且物理有效；不新增服务、不改历史样本，也未重启电脑或GPU驱动。" },
     { label: "当前正式实现与部署边界", value: "PUBLIC main 9f51f40e729ffd8c0e3c8cebafe331b3cefa00c7 已正常推送。既有AutoStart恢复缺失依赖，正在启动时不重复触发；AHK精确实例与健康容器保留，配置变更只在明确部署时应用。18项Python与8项PowerShell恢复分支测试通过；源码与实际恢复分别回读。" },

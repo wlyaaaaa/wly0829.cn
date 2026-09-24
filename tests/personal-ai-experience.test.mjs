@@ -33,7 +33,7 @@ test("the built highlight keeps personal evidence separate from project results 
   for (const html of [system, agents]) {
     assert.ok(html.includes("1,921.1"));
     assert.ok(html.includes("我的 Codex 五份独立使用记录合计"));
-    assert.ok(html.includes("快照更新于2026年9月24日"));
+    assert.match(html, /快照更新于(?:<!-- -->)?2026年9月24日/);
     assert.ok(html.includes("2026年6月30日被封"));
     assert.ok(html.includes("国产模型这组记录只能展示约一个月"));
     assert.ok(html.includes("我自己的 Codex 工作环境已接入 GLM、DeepSeek、Qwen"));
