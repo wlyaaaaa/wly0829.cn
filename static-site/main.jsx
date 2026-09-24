@@ -6,18 +6,7 @@ import "../app/continuation-brief.css";
 import { initializeContinuationBriefs } from "../app/continuation-brief.js";
 
 if (document.querySelector("[data-computer-access]")) {
-  let keepLegacyResults = false;
-  const selections = new URLSearchParams(window.location.search);
-  if (window.location.origin === "https://wly0829.cn") {
-    try {
-      const savedId = sessionStorage.getItem("p6-request-id");
-      if (!selections.has("request") && !selections.has("request_id") && /^[a-zA-Z0-9_-]{8,100}$/.test(savedId || "")) selections.set("request", savedId);
-      const actions = JSON.parse(sessionStorage.getItem("p6-action-requests") || "[]");
-      keepLegacyResults = !selections.has("request") && !selections.has("request_id") && Array.isArray(actions) && actions.some(item => ["pending", "verifying", "unknown"].includes(item.state));
-    } catch {}
-    if (!keepLegacyResults) window.location.replace(`https://mcp.wly0829.cn/computer-access/${selections.size ? "?" + selections : ""}${window.location.hash}`);
-  }
-  if (window.location.origin !== "https://wly0829.cn" || keepLegacyResults) import("../app/computer-access-client.jsx");
+  import("../app/computer-access-client.jsx");
 }
 
 const searchEntries = [

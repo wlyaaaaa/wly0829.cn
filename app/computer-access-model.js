@@ -1,4 +1,5 @@
 export const HOST_ORIGIN = "https://mcp.wly0829.cn";
+export const SITE_ORIGIN = "https://wly0829.cn";
 export const API_PATH = "/computer-access/api";
 
 export function beijingTime(unix, timeOnly = false) {
@@ -19,13 +20,22 @@ export function unresolvedAction(result) {
   return ["pending", "verifying", "unknown"].includes(result?.state);
 }
 
-export function successfulGrantSnapshot(snapshot, result) {
-  if (result?.state !== "succeeded") return null;
+export function successfulGrantSnapshot(snapshot, result, freshPost = false) {
+  // A stored request describes a past action, never today's authority.
+  if (!freshPost || result?.state !== "succeeded") return null;
   const parts = ["personal_data", "unrestricted"].filter(key => result[key] && result[key].state !== "not_requested");
   if (!parts.length || parts.some(key => result[key].state !== "succeeded" || !Number.isFinite(result[key].expires_at_unix) || result[key].expires_at_unix <= 0)) return null;
   const updated = { ...snapshot, state_version: "" }; // The next action waits for fresh authoritative versioning.
-  for (const key of parts) updated[key] = { ...snapshot?.[key], state: key === "personal_data" ? "unlocked" : "active", expires_at_unix: result[key].expires_at_unix };
+  for (const key of parts) updated[key] = { ...snapshot?.[key], state: result[key].current_state || (key === "personal_data" ? "unlocked" : "active"), expires_at_unix: result[key].expires_at_unix };
   return updated;
+}
+
+export function successfulReductionSnapshot(snapshot, result, freshPost = false) {
+  if (!freshPost || result?.state !== "succeeded") return null;
+  const key = { "personal-data": "personal_data", unrestricted: "unrestricted" }[result.action];
+  const part = result[key];
+  if (!key || !part || part.expires_at_unix !== 0 || !["locked", "closing", "inactive"].includes(part.state)) return null;
+  return { ...snapshot, state_version: "", [key]: { ...snapshot?.[key], ...part } };
 }
 
 export function queryResultUpdate(previous, response, checkedAt, failed = false) {
@@ -77,16 +87,7 @@ export function grantLabel(grant, now) {
 }
 
 export function isHostOrigin(origin) { return origin === HOST_ORIGIN; }
-
-export function hostFormUrl({ purpose, combined, hours, saveDefault = false }) {
-  const url = new URL("/computer-access/", HOST_ORIGIN);
-  url.searchParams.set("purpose", purpose);
-  url.searchParams.set("combined", combined ? "1" : "0");
-  url.searchParams.set("hours", hours);
-  url.searchParams.set("save_default", saveDefault ? "1" : "0");
-  url.hash = "access-form";
-  return url.href;
-}
+export function isAccessOrigin(origin, topLevel = true) { return topLevel && (origin === SITE_ORIGIN || isHostOrigin(origin)); }
 
 export function reading(value, unit = "", digits = 1) {
   const sample = value && typeof value === "object" ? value : { value };

@@ -90,6 +90,11 @@ export function renderDocument(template, pathname, search = "") {
   const prefetchTarget = nextStaticRoute(route);
   const prefetchLinks = prefetchTarget ? `<link rel="prefetch" as="document" href="${escapeAttribute(canonicalPath(prefetchTarget))}" />` : "";
   let html = template;
+  if (route === "/computer-access") {
+    const policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://mcp.wly0829.cn; object-src 'none'; base-uri 'none'; form-action 'self'";
+    html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "");
+    html = html.replace("<head>", `<head>\n    <meta http-equiv="Content-Security-Policy" content="${escapeAttribute(policy)}" />\n    <meta name="referrer" content="no-referrer" />`);
+  }
   html = replaceRequired(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
   html = replaceRequired(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, `<meta name="description" content="${escapeAttribute(meta.description)}" />`);
   html = replaceRequired(html, /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/, `<link rel="canonical" href="${escapeAttribute(canonical)}" />`);

@@ -1,17 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
   const success = { state: "succeeded", personal_data: { state: "succeeded", expires_at_unix: 300 } };
-  const next = successfulGrantSnapshot(before, success);
+  const next = successfulGrantSnapshot(before, success, true);
   assert.equal(next.personal_data.expires_at_unix, 300);
   assert.deepEqual(next.unrestricted, before.unrestricted);
   assert.equal(next.state_version, "");
   assert.equal(before.personal_data.expires_at_unix, 100);
-  for (const invalid of [{ ...success, state: "partial" }, { ...success, state: "unknown" }, { state: "succeeded" }, { state: "succeeded", personal_data: { state: "unknown", expires_at_unix: 300 } }]) assert.equal(successfulGrantSnapshot(before, invalid), null);
+  for (const invalid of [{ ...success, state: "partial" }, { ...success, state: "unknown" }, { state: "succeeded" }, { state: "succeeded", personal_data: { state: "unknown", expires_at_unix: 300 } }]) assert.equal(successfulGrantSnapshot(before, invalid, true), null);
 });
 
 test("reducing actions settle explicit precreate rejection without inventing certainty for lost responses", () => {
@@ -32,14 +32,37 @@ test("hour input uses decimal half-up minutes and rejects out-of-range values be
   for (const input of ["", " ", "0", "-1", "0.49999999", "72.000001", "NaN", "Infinity", "1e2", "1x", "."]) assert.equal(durationMinutes(input), null, input);
 });
 
-test("static page passes selections only to the exact host origin", () => {
-  const target = new URL(hostFormUrl({ purpose: "personal_data", combined: true, hours: "1.23", saveDefault: true }));
-  assert.equal(target.origin, "https://mcp.wly0829.cn");
-  assert.equal(target.pathname, "/computer-access/");
-  assert.equal(target.searchParams.get("hours"), "1.23");
-  assert.equal(target.searchParams.get("save_default"), "1");
+test("only the two exact HTTPS origins may display and submit the verification form", () => {
+  for (const origin of ["https://wly0829.cn", "https://mcp.wly0829.cn"]) {
+    assert.equal(isAccessOrigin(origin), true);
+    assert.equal(isAccessOrigin(origin, false), false, "embedded pages cannot conduct verification");
+  }
   assert.equal(isHostOrigin("https://mcp.wly0829.cn"), true);
-  for (const origin of ["https://wly0829.cn", "http://mcp.wly0829.cn", "https://mcp.wly0829.cn.evil.test", "http://localhost:4179"]) assert.equal(isHostOrigin(origin), false);
+  for (const origin of ["http://wly0829.cn", "http://mcp.wly0829.cn", "https://mcp.wly0829.cn.evil.test", "https://wly0829.cn.evil.test", "http://localhost:4179"]) assert.equal(isAccessOrigin(origin), false);
+});
+
+test("historical grant results never restore current authority and current_state wins on POST", () => {
+  const before = { state_version: "new", unrestricted: { state: "inactive", expires_at_unix: 0 } };
+  const old = { state: "succeeded", unrestricted: { state: "succeeded", expires_at_unix: 9999999999 } };
+  assert.equal(successfulGrantSnapshot(before, old), null);
+  assert.equal(successfulGrantSnapshot(before, { ...old, unrestricted: { ...old.unrestricted, current_state: "revoked" } }, true).unrestricted.state, "revoked");
+});
+
+test("fresh reduction receipts immediately project actual phase, historical receipts never end newer grants", () => {
+  const before = { state_version: "new", personal_data: { state: "unlocked", expires_at_unix: 300 }, unrestricted: { state: "active", expires_at_unix: 300 } };
+  for (const phase of ["locked", "closing"]) {
+    const result = { action: "personal-data", state: "succeeded", personal_data: { state: phase, expires_at_unix: 0 } };
+    const projected = successfulReductionSnapshot(before, result, true);
+    assert.equal(projected.personal_data.state, phase);
+    assert.equal(projected.personal_data.expires_at_unix, 0);
+    assert.equal(projected.state_version, "");
+    assert.deepEqual(projected.unrestricted, before.unrestricted);
+    assert.equal(successfulReductionSnapshot(before, result), null);
+  }
+  const result = { action: "unrestricted", state: "succeeded", unrestricted: { state: "inactive", expires_at_unix: 0 } };
+  assert.equal(successfulReductionSnapshot(before, result, true).unrestricted.state, "inactive");
+  assert.equal(successfulReductionSnapshot(before, result), null);
+  assert.equal(successfulReductionSnapshot(before, { state: "succeeded", action: "windows" }, true), null);
 });
 
 test("hardware adapter preserves missing, disconnected and stale observations", () => {
@@ -202,7 +225,7 @@ test("status reads do not overlap and a late old poll cannot overwrite operation
   assert.deepEqual(seen, ["new-state"]);
 });
 
-test("built route has complete meaningful HTML with no static-site factor field", async () => {
+test("built route preserves the complete static shell and scoped connection policy", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
   for (const text of ["授权与状态", "存储空间", "Windows可用物理总量", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
   assert.ok(!html.includes('id="ca-totp"'));
@@ -213,16 +236,19 @@ test("built route has complete meaningful HTML with no static-site factor field"
   assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
   assert.ok(html.indexOf('id="ca-hardware-title"') < html.indexOf('id="access-form"'));
   assert.ok(!html.includes('class="flow-field"'));
-  assert.match(html, /href="https:\/\/mcp\.wly0829\.cn\/computer-access\/"[^>]*aria-label="授权与状态（新标签）"/);
+  assert.match(html, /href="https:\/\/wly0829\.cn\/computer-access\/"[^>]*aria-label="授权与状态（新标签）"/);
+  assert.match(html, /connect-src 'self' https:\/\/mcp.wly0829.cn/);
+  assert.match(html, /name="referrer" content="no-referrer"/);
   assert.ok(html.indexOf('id="access-form"') < html.indexOf('class="ca-card ca-network-card"'));
   assert.ok(html.indexOf('class="ca-card ca-network-card"') < html.indexOf("</aside>"));
 });
 
-test("legacy website entry redirects before mounting, preserving its selections and request locator", async () => {
+test("website entry mounts in place without redirecting or discarding request locators", async () => {
   const runtime = await readFile(new URL("../static-site/main.jsx", import.meta.url), "utf8");
-  const redirect = runtime.slice(runtime.indexOf('if (document.querySelector("[data-computer-access]"))'), runtime.indexOf("const searchEntries"));
-  const vm = await import("node:vm");
-  let destination;
-  vm.runInNewContext(redirect, { URLSearchParams, document: { querySelector: () => ({}) }, window: { location: { origin: "https://wly0829.cn", search: "?purpose=unrestricted&hours=1.23&request=nonsecret-id", hash: "#access-form", replace: value => { destination = value; } } } });
-  assert.equal(destination, "https://mcp.wly0829.cn/computer-access/?purpose=unrestricted&hours=1.23&request=nonsecret-id#access-form");
+  const entry = runtime.slice(runtime.indexOf('if (document.querySelector("[data-computer-access]"))'), runtime.indexOf("const searchEntries"));
+  assert.ok(entry.includes('import("../app/computer-access-client.jsx")'));
+  assert.ok(!entry.includes("location.replace"));
+  assert.ok(!entry.includes("sessionStorage"));
+  const home = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
+  assert.ok(!home.includes("Content-Security-Policy"));
 });
