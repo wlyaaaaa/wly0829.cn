@@ -7,7 +7,7 @@ import test from "node:test";
 import { sunshineRemoteStreamingModules, sunshineRemoteStreamingProject } from "../app/content-sunshine-remote-streaming.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemDependencyNodes, systemProjectDomains } from "../app/system-home-content.js";
+import { systemDependencyNodes } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = sunshineRemoteStreamingModules.map((item) => item.slug);
@@ -45,7 +45,7 @@ test("sunshine-remote-streaming is registered as a published project in the fina
   assert.ok(projectCatalog.some((item) => item.project.slug === "sunshine-remote-streaming"));
 });
 
-test("sunshine-remote-streaming exposes source-backed modules and three reading layers", async () => {
+test("sunshine-remote-streaming exposes source-backed modules and two reading tabs", async () => {
   assert.ok(moduleSlugs.length > 0);
   assert.equal(new Set(moduleSlugs).size, moduleSlugs.length, "module slugs must remain unique");
   assert.ok(routePaths.includes(sunshineRemoteStreamingProject.route));
@@ -74,9 +74,11 @@ test("sunshine-remote-streaming exposes source-backed modules and three reading 
     overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "sunshine-remote-streaming", "index.html"), "utf8");
   } catch {}
   if (overviewHtml) {
-    for (const layer of ["quick", "product", "technical"]) {
-      assert.match(overviewHtml, new RegExp(`data-project-reading-panel="${layer}"`));
-    }
+    assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2);
+    assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
+    assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
+    assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
+    assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
   }
 });
 
@@ -99,7 +101,7 @@ test("sunshine-remote-streaming explains physical primary priority, VDD fallback
   ]) {
     assert.ok(text.includes(expected), `capture failover truth missing: ${expected}`);
   }
-  assert.match(sunshineRemoteStreamingProject.summary, /优先捕获物理主屏.*MTT1337 VDD.*兜底/s);
+  assert.match(sunshineRemoteStreamingProject.summary, /优先.*物理主屏.*MTT1337 VDD.*兜底/s);
   assert.match(text, /复制显示器.*(?:坚决不用|不使用|绝不使用)/s);
   assert.match(text, /水冷屏.*机箱屏.*(?:黑名单|禁止|不碰)/s);
   assert.match(text, /BlockedByGpuStability.*(?:因 GPU 不稳定阻断|停止.*拓扑)/s);
@@ -145,7 +147,9 @@ test("sunshine-remote-streaming presents CBR and AV1 as a measured client starti
   }
   assert.match(text, /约 32 Mbps.*上行|32 Mbps.*配置依据/s);
   assert.match(text, /CBR.*(?:建议|起点|优先).*CQP|CQP.*(?:建议|起点|优先).*CBR/s);
-  assert.match(text, /AV1.*硬编.*硬解/s);
+  const codec = sunshineRemoteStreamingModules.find((item) => item.slug === "bitrate-codec-strategy");
+  assert.match(codec.decisionImpact[2], /RTX 5090 D.*主机端 AV1 硬件编码.*骁龙 8 Elite.*手机端 AV1 硬件解码/);
+  assert.match(JSON.stringify(codec.failures), /手机没有可用 AV1 硬件解码.*HEVC Main10.*重新连接.*实际编码、解码和延迟统计/);
   assert.match(text, /不是主机强制|未.*真实会话|本轮没有真实会话/);
   assert.doesNotMatch(text, /丢包率趋近于零|无丢包与卡顿|帧率稳定 60 FPS/);
 });
@@ -175,7 +179,9 @@ test("sunshine-remote-streaming exposes current blockers instead of promoting gr
   assert.equal(sunshineRemoteStreamingProject.statusTone, "mixed");
   assert.equal(sunshineRemoteStreamingProject.cardStatusTone, "mixed");
   assert.ok(sunshineRemoteStreamingModules.every((item) => item.statusTone === "mixed"));
-  assert.match(text, /output_name.*不匹配.*活动输出/s);
+  const capture = sunshineRemoteStreamingModules.find((item) => item.slug === "capture-failover");
+  assert.match(JSON.stringify(capture.verification), /2026年9月4日曾发现 output_name 与活动输出不匹配.*当次 GPU 稳定门阻断/);
+  assert.match(JSON.stringify(capture.verification), /不能拿它替代9月18日的当前启动周期证据/);
   assert.match(text, /本次启动命中20条LiveKernel.*BlockedByGpuStability/s);
   assert.match(text, /tailscale-ping.*(?:skipped|跳过)/s);
   assert.match(text, /手机.*(?:未实测|没有执行|未测)/s);
@@ -212,7 +218,7 @@ test("sunshine-remote-streaming includes the upstream client input boundary with
 
 test("sunshine-remote-streaming first visible labels follow glossing and professional plain language", () => {
   assert.equal(sunshineRemoteStreamingProject.currentSnapshot.observedAt, "2026-09-18T12:53:00Z");
-  assert.match(sunshineRemoteStreamingProject.kicker, /高性能电脑远程运维层/);
+  assert.match(sunshineRemoteStreamingProject.kicker, /手机或笔记本.*高性能主机/);
   assert.doesNotMatch(sunshineRemoteStreamingProject.kicker, /\bfailover\b|\bprofile\b|\bcodec\b/i);
   const failover = sunshineRemoteStreamingModules.find((item) => item.slug === "capture-failover");
   const display = sunshineRemoteStreamingModules.find((item) => item.slug === "vdd-display-settings");
@@ -247,11 +253,10 @@ test("sunshine-remote-streaming search reaches the owning modules", () => {
   }
 });
 
-test("System links its remote-workstation asset to the sunshine-remote-streaming project page", () => {
-  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "sunshine-remote-streaming");
+test("System keeps the real remote-workstation project and Skill routes together", () => {
   const node = systemDependencyNodes.find((item) => item.id === "remote-workstation");
-  assert.ok(asset);
   assert.ok(node);
-  assert.equal(asset.href, "/projects/sunshine-remote-streaming");
-  assert.equal(node.href, "/projects/sunshine-remote-streaming");
+  assert.ok(node.links.some((link) => link.href === "/projects/sunshine-remote-streaming"));
+  assert.ok(node.links.some((link) => link.href === "/skills/tailscale-safe-exposure"));
+  assert.match(node.detail, /显示、网络和真实画面分别检查/);
 });

@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { localOcrModules, localOcrProject, modules, project } from "../app/content-localocr.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { skillProjectLinks } from "../app/content-capability-links.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
+import { systemDependencyNodes } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -102,9 +102,12 @@ test("LocalOCR ownership and System project links resolve to its project routes"
   );
   assert.equal(typeof relations[0].label, "string");
 
-  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((candidate) => candidate.id === "local-ocr");
-  assert.ok(asset, "System LocalOCR asset is missing");
-  assert.equal(asset.href, "/projects/localocr");
+  const node = systemDependencyNodes.find((candidate) => candidate.id === "localocr");
+  assert.ok(node, "System LocalOCR role is missing");
+  assert.ok(node.links.some((item) => item.href === "/projects/localocr"));
+  assert.ok(node.links.some((item) => item.href === "/skills/localocr"));
+  assert.match(node.detail, /场景理解和准确抄出文字/);
+  assert.match(node.detail, /两路结果冲突时交回分歧/);
 });
 
 function sha256(bytes) {

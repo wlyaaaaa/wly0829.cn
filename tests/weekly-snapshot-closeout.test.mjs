@@ -14,12 +14,12 @@ test('Antigravity CLI selected recovery does not restart a model or promise logi
  const text=JSON.stringify(memoryModules.find(m=>m.slug==='gemini-workspace-memory'));
  for(const token of ['antigravity-cli/settings.json','annotations','brain','OAuth','jsonl','不调用退役Gemini模型命令'])assert.ok(text.includes(token),token);
  assert.match(text,/旧.*|9月9日/);assert.match(text,/不能.*新增CLI/);
- assert.equal(codexMemorySnapshot.currentPointId,'20260918T041508Z-8e6dcbc6');
- assert.equal(codexMemorySnapshot.conversationFileCount,1731);
- assert.match(memory.currentSnapshot.boundary,/没有本轮逐对象重哈希或恢复/);
+ assert.equal(codexMemorySnapshot.currentPointId,'20260924T041509Z-89eabfd3');
+ assert.equal(codexMemorySnapshot.conversationFileCount,1983);
+ assert.match(memory.currentSnapshot.boundary,/不等于本轮重新逐对象哈希.*实际恢复/);
 });
 test('vault Skill matches actual final readback and no-write stub boundaries',()=>{
  const skill=skills.find(x=>x.slug==='vault-workflow');const text=JSON.stringify({skill,outcome:skillOutcomes['vault-workflow']});
  assert.doesNotMatch(text,/README保护只有|README保护仍只有|后续字节回读另列未实现/);
- assert.match(text,/真实更新后回读分支/);assert.match(text,/安全占位.*无写检查/);assert.match(text,/效果未知不重放/);
+ assert.match(text,/真实更新后回读分支/);assert.match(text,/已存在安全占位只证明占位.*不冒充新密文上传或密码验证/);assert.match(text,/效果未知不重放/);
 });

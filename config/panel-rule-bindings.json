@@ -1,27 +1,47 @@
 {
   "schema": "wly.panel-rule-bindings.v2",
-  "semantic_release_id": "E144",
-  "ruleset_sha256": "e7393555153b42fbe748467537306d8762f44417338be64efbca898210cebfc6",
+  "semantic_release_id": "E171",
+  "ruleset_sha256": "2712b2c4926753fc53a15dccf3c8e73c23b30880b45d5675a52b0e2e5b5a1168",
   "rules": [
     {
       "logicalId": "agents_root_rules",
       "sourcePath": "E:\\.agents\\AGENTS.md"
     },
     {
-      "logicalId": "protected_major_actions_contract",
-      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.protected-major-actions.md"
+      "logicalId": "authorization_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.authorization.md"
     },
     {
-      "logicalId": "authorization_delegation_contract",
-      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.authorization-delegation.md"
+      "logicalId": "capabilities_runtime_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.capabilities-runtime.md"
     },
     {
-      "logicalId": "four_base_decision_context_contract",
-      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.four-base-decision-context.md"
+      "logicalId": "codex_adapter_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.codex-adapter.md"
     },
     {
-      "logicalId": "capability_routing_contract",
-      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.capability-routing.md"
+      "logicalId": "context_sources_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.context-sources.md"
+    },
+    {
+      "logicalId": "engineering_delivery_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.engineering-delivery.md"
+    },
+    {
+      "logicalId": "execution_coordination_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.execution-coordination.md"
+    },
+    {
+      "logicalId": "privacy_data_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.privacy-data.md"
+    },
+    {
+      "logicalId": "protected_actions_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.protected-actions.md"
+    },
+    {
+      "logicalId": "rule_release_contract",
+      "sourcePath": "E:\\.agents\\docs\\contracts\\agents.rule-release.md"
     }
   ]
 }

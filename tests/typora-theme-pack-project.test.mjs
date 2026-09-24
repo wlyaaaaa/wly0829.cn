@@ -7,9 +7,12 @@ import { searchPanel } from "../app/search.js";
 
 test("Typora pack uses the fixed rank and all existing module routes", async () => {
   const registry = JSON.parse(await readFile(new URL("../config/panel-projects.json", import.meta.url), "utf8"));
+  const plan = JSON.parse(await readFile(new URL("../config/final-project-order.json", import.meta.url), "utf8"));
   const entry = registry.projects.find((item) => item.id === project.slug);
-  assert.equal(project.order, 25);
-  assert.equal(entry.order, 25);
+  const planned = plan.projects.find((item) => item.id === project.slug);
+  assert.ok(planned);
+  assert.equal(project.order, planned.final_rank);
+  assert.equal(entry.order, planned.final_rank);
   assert.equal(entry.source.repo, "wlyaaaaa/typora-theme-pack");
   assert.ok(projectCatalog.some((item) => item.project.slug === project.slug));
   assert.ok(routePaths.includes(project.route));

@@ -16,19 +16,21 @@ const moduleSlugs = [
   "corpus-extension-and-private-recovery"
 ];
 
-test("personal-expression integrates as its own private-source package at rank 34", async () => {
+test("personal-expression integrates as its own private-source package at its final-plan rank", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config/panel-projects.json"), "utf8"));
   const plan = JSON.parse(await readFile(path.join(projectRoot, "config/final-project-order.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "personal-expression");
   assert.ok(registration);
+  const planned = plan.projects.find((item) => item.id === "personal-expression");
+  assert.ok(planned);
   assert.equal(registration.enabled, true);
-  assert.equal(registration.order, 34);
+  assert.equal(registration.order, planned.final_rank);
   assert.equal(registration.route, personalExpressionProject.route);
   assert.equal(registration.ai_refresh.content_path, "app/content-personal-expression.js");
   assert.equal(registration.source.repo, "wlyaaaaa/personal-expression");
   assert.equal(registration.source.visibility, "PRIVATE");
   assert.equal(registration.source.default_branch, "main");
-  assert.equal(plan.projects.find((item) => item.id === "personal-expression")?.final_rank, 34);
+  assert.equal(personalExpressionProject.order, planned.final_rank);
   assert.ok(projectCatalog.some((item) => item.project.slug === "personal-expression"));
   // Registration and plan state are local integration facts, never proof of deployment.
 });
@@ -74,7 +76,7 @@ test("personal-expression provides reader content and renders every glossary mea
 test("personal-expression distinguishes verified source from untested personal outcomes", () => {
   const snapshot = personalExpressionProject.currentSnapshot;
   assert.ok(Number.isFinite(Date.parse(snapshot.observedAt)));
-  assert.ok(snapshot.facts.some((item) => item.value.includes("606bff461b82cf80ab8318d67ac6543125322ba0")));
+  assert.ok(snapshot.facts.some((item) => item.value.includes("293a273")));
   assert.ok(snapshot.gaps.some((item) => item.includes("后续真实任务") && item.includes("实际使用验收")));
   assert.ok(snapshot.gaps.some((item) => item.includes("真实微信动画") && item.includes("未完成验收")));
   assert.ok(snapshot.gaps.some((item) => /换机恢复|新机恢复/.test(item) && item.includes("未进行")));

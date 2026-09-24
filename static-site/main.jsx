@@ -8,77 +8,6 @@ const searchEntries = [
   ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),
   ...(Array.isArray(window.__WLY_PROJECT_SEARCH_INDEX__) ? window.__WLY_PROJECT_SEARCH_INDEX__ : [])
 ];
-const preservedScrollKey = "wly-route-scroll-v1";
-
-function restorePreservedScroll() {
-  let record = null;
-  try {
-    record = JSON.parse(window.sessionStorage.getItem(preservedScrollKey) || "null");
-  } catch {
-    return;
-  }
-  const currentTarget = `${window.location.pathname}${window.location.search}`;
-  if (!record || record.target !== currentTarget || !Number.isFinite(record.scrollY) || !Number.isFinite(record.createdAt) || Date.now() - record.createdAt > 15000) return;
-  const priorScrollRestoration = window.history.scrollRestoration;
-  window.history.scrollRestoration = "manual";
-  let complete = false;
-  let frameCount = 0;
-  let timeoutId = null;
-  const restore = () => {
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    window.scrollTo({ top: Math.min(record.scrollY, maxY), behavior: "instant" });
-  };
-  const finish = () => {
-    if (complete) return;
-    complete = true;
-    if (timeoutId) window.clearTimeout(timeoutId);
-    restore();
-    try { window.sessionStorage.removeItem(preservedScrollKey); } catch { /* Navigation remains correct without storage cleanup. */ }
-    window.history.scrollRestoration = priorScrollRestoration;
-  };
-  const stabilize = () => {
-    if (complete) return;
-    restore();
-    frameCount += 1;
-    if (frameCount < 12) window.requestAnimationFrame(stabilize);
-    else if (document.readyState === "complete") finish();
-  };
-  const restoreAfterLoad = () => {
-    if (complete) return;
-    restore();
-    window.requestAnimationFrame(() => {
-      restore();
-      window.requestAnimationFrame(finish);
-    });
-  };
-  restore();
-  window.requestAnimationFrame(stabilize);
-  if (document.readyState === "complete") window.requestAnimationFrame(restoreAfterLoad);
-  else window.addEventListener("load", restoreAfterLoad, { once: true });
-  document.fonts?.ready?.then(() => { if (!complete) window.requestAnimationFrame(restore); });
-  timeoutId = window.setTimeout(finish, 750);
-}
-
-function initializePreservedScrollNavigation() {
-  document.addEventListener("click", (event) => {
-    const anchor = event.target.closest?.("a[data-preserve-scroll='true']");
-    if (!anchor || event.defaultPrevented || event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey || anchor.target) return;
-    const target = new URL(anchor.href, window.location.href);
-    if (target.origin !== window.location.origin) return;
-    try {
-      window.sessionStorage.setItem(preservedScrollKey, JSON.stringify({
-        target: `${target.pathname}${target.search}`,
-        scrollY: window.scrollY,
-        createdAt: Date.now()
-      }));
-    } catch {
-      // Native navigation remains correct when storage is unavailable.
-    }
-  }, { capture: true });
-}
-
-restorePreservedScroll();
-
 function initializeSearch(container) {
   const input = container.querySelector("input");
   const scopeSelect = container.querySelector(".search-scope-select");
@@ -331,21 +260,17 @@ function initializeSearchResultsPage() {
     empty.append(strong, detail);
     page.append(empty);
   } else {
-    const order = ["项目", "系统", "规则", "Skills"];
-    const grouped = new Map();
-    for (const entry of results) grouped.set(entry.group || entry.type, [...(grouped.get(entry.group || entry.type) || []), entry]);
-    for (const [group, entries] of [...grouped.entries()].sort((left, right) => order.indexOf(left[0]) - order.indexOf(right[0]))) {
       const section = document.createElement("section");
       section.className = "search-result-group";
+      section.setAttribute("aria-label", "按相关性排列的搜索结果");
       const header = document.createElement("div");
       const title = document.createElement("h2");
-      title.textContent = group;
+      title.textContent = "找到的内容";
       const count = document.createElement("span");
-      count.textContent = `${entries.length} 项`;
+      count.textContent = `${results.length} 项`;
       header.append(title, count);
-      section.append(header, ...entries.map((entry) => createFullResultLink(entry, query)));
+      section.append(header, ...results.map((entry) => createFullResultLink(entry, query)));
       page.append(section);
-    }
   }
 
   for (const container of document.querySelectorAll(".global-search")) {
@@ -405,49 +330,104 @@ function initializeHeader() {
 }
 
 function initializeRulesWorkbench() {
-  const tabs = Array.from(document.querySelectorAll(".rule-selector-list [role='tab']"));
+  const links = Array.from(document.querySelectorAll(".rule-selector-list a[id^='rule-tab-']"));
   const panels = Array.from(document.querySelectorAll("[data-rule-panel]"));
   const select = document.querySelector(".rule-mobile-select select");
-  if (!tabs.length || !panels.length) return;
-  const ids = tabs.map((tab) => tab.id.replace(/^rule-tab-/, ""));
+  const selector = document.querySelector(".rule-selector-panel");
+  if (!links.length || !panels.length) return;
+  const ids = links.map((link) => link.id.replace(/^rule-tab-/, ""));
+  let aliases = {};
+  try { aliases = JSON.parse(document.querySelector(".rules-workbench")?.dataset.ruleAliases || "{}"); } catch { /* Missing metadata must not break current-topic navigation. */ }
 
-  function activate(logicalId, { updateUrl = false, focus = false } = {}) {
-    const selectedId = ids.includes(logicalId) ? logicalId : ids[0];
-    for (const tab of tabs) {
-      const active = tab.id === `rule-tab-${selectedId}`;
-      tab.classList.toggle("is-selected", active);
-      tab.setAttribute("aria-selected", String(active));
-      tab.tabIndex = active ? 0 : -1;
-      if (active && focus) tab.focus();
+  function normalizedId(logicalId) {
+    const candidate = aliases[logicalId] || logicalId;
+    return ids.includes(candidate) ? candidate : ids[0];
+  }
+
+  function activate(logicalId, { focus = false, scroll = false } = {}) {
+    const selectedId = normalizedId(logicalId);
+    for (const link of links) {
+      const active = link.id === "rule-tab-" + selectedId;
+      link.classList.toggle("is-selected", active);
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+      if (active && focus) link.focus({ preventScroll: true });
     }
     for (const panel of panels) panel.hidden = panel.dataset.rulePanel !== selectedId;
     if (select) select.value = selectedId;
-    if (updateUrl) {
-      const next = new URL(window.location.href);
-      next.pathname = "/rules/";
-      next.searchParams.set("rule", selectedId);
-      window.history.pushState({}, "", `${next.pathname}${next.search}`);
+    const selectedLink = document.getElementById("rule-tab-" + selectedId);
+    if (selector && selectedLink) window.requestAnimationFrame(() => {
+      if (selector.scrollHeight <= selector.clientHeight) return;
+      const offset = selectedLink.getBoundingClientRect().top - selector.getBoundingClientRect().top;
+      if (offset < 0 || offset + selectedLink.offsetHeight > selector.clientHeight) {
+        selector.scrollTop += offset - 12;
+      }
+    });
+
+    const target = document.getElementById("rule-panel-" + selectedId);
+    if (scroll && target) {
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+        target.scrollIntoView({ block: "start" });
+      }));
+    }
+    return selectedId;
+  }
+
+  function selectRule(logicalId, { scroll = false } = {}) {
+    const selectedId = normalizedId(logicalId);
+    const previousY = window.scrollY;
+    const destination = new URL(window.location.href);
+    destination.searchParams.set("rule", selectedId);
+    destination.hash = "rule-panel-" + selectedId;
+    if (destination.href !== window.location.href) window.history.pushState(null, "", destination.href);
+    activate(selectedId, { scroll });
+    if (!scroll) {
+      const restore = () => window.scrollTo({ top: Math.min(previousY, Math.max(0, document.documentElement.scrollHeight - window.innerHeight)), behavior: "instant" });
+      restore();
+      window.requestAnimationFrame(restore);
     }
   }
 
-  for (const [index, tab] of tabs.entries()) {
-    const logicalId = ids[index];
-    tab.addEventListener("click", () => activate(logicalId, { updateUrl: true }));
-    tab.addEventListener("keydown", (event) => {
-      const keys = ["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"];
-      if (!keys.includes(event.key)) return;
+  const scenarioLinks = Array.from(document.querySelectorAll(".rules-reader-scenario-grid a[href]"));
+  for (const link of [...links, ...scenarioLinks]) {
+    link.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target || link.hasAttribute("download")) return;
+      const destination = new URL(link.href, window.location.href);
+      if (destination.origin !== window.location.origin) return;
+      const requested = destination.searchParams.get("rule");
+      if (!requested) return;
       event.preventDefault();
-      let nextIndex = index;
-      if (event.key === "ArrowDown" || event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
-      if (event.key === "ArrowUp" || event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
-      if (event.key === "Home") nextIndex = 0;
-      if (event.key === "End") nextIndex = tabs.length - 1;
-      activate(ids[nextIndex], { updateUrl: true, focus: true });
+      selectRule(requested, { scroll: scenarioLinks.includes(link) });
     });
   }
-  select?.addEventListener("change", () => activate(select.value, { updateUrl: true }));
-  window.addEventListener("popstate", () => activate(new URLSearchParams(window.location.search).get("rule")));
-  activate(new URLSearchParams(window.location.search).get("rule"));
+
+  links.forEach((link, index) => {
+    link.addEventListener("keydown", (event) => {
+      if (!["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let nextIndex = index;
+      if (event.key === "ArrowDown" || event.key === "ArrowRight") nextIndex = (index + 1) % links.length;
+      if (event.key === "ArrowUp" || event.key === "ArrowLeft") nextIndex = (index - 1 + links.length) % links.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = links.length - 1;
+      links[nextIndex].focus();
+    });
+  });
+
+  select?.addEventListener("change", () => {
+    selectRule(select.value);
+  });
+
+  function activateFromLocation({ initial = false } = {}) {
+    const requested = new URLSearchParams(window.location.search).get("rule");
+    const selectedId = normalizedId(requested);
+    const shouldScroll = initial && window.location.hash === "#rule-panel-" + selectedId;
+    activate(selectedId, { scroll: shouldScroll });
+  }
+
+  window.addEventListener("popstate", activateFromLocation);
+  window.addEventListener("hashchange", activateFromLocation);
+  activateFromLocation({ initial: true });
 }
 
 function initializeSkillCategories() {
@@ -489,20 +469,23 @@ function initializeProjectReadingLayers() {
   if (!nav || !panels.length) return;
   const tabs = Array.from(nav.querySelectorAll("[data-project-reading-tab]"));
   const ids = tabs.map((tab) => tab.dataset.projectReadingTab);
-  const idFromHash = () => window.location.hash.replace(/^#(?:project-reading-panel-)?/, "");
-  function restoreReadingScroll(previousY) {
-    let remainingFrames = 3;
-    const restore = () => {
-      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-      window.scrollTo({ top: Math.min(previousY, maxY), behavior: "instant" });
-      remainingFrames -= 1;
-      if (remainingFrames > 0) window.requestAnimationFrame(restore);
-    };
-    restore();
+  const legacyLayers = {
+    quick: "product", "project-reading-panel-quick": "product",
+    product: "product", "module-product": "product",
+    technical: "technical", "module-technical": "technical"
+  };
+
+  function locationTarget() {
+    let hash = window.location.hash.slice(1);
+    try { hash = decodeURIComponent(hash); } catch { /* An invalid hash is not a reading layer. */ }
+    const target = document.getElementById(hash);
+    const layer = target?.closest("[data-project-reading-panel]")?.dataset.projectReadingPanel
+      || legacyLayers[hash] || hash.replace(/^project-reading-panel-/, "");
+    return { id: ids.includes(layer) ? layer : "product", target };
   }
-  function activate(id, { updateUrl = false, focus = false, preserveScroll = true } = {}) {
-    const previousY = window.scrollY;
-    const selected = ids.includes(id) ? id : "quick";
+
+  function show(id, { focus = false } = {}) {
+    const selected = ids.includes(id) ? id : "product";
     for (const tab of tabs) {
       const active = tab.dataset.projectReadingTab === selected;
       tab.classList.toggle("is-current", active);
@@ -511,17 +494,31 @@ function initializeProjectReadingLayers() {
       if (active && focus) tab.focus({ preventScroll: true });
     }
     for (const panel of panels) panel.hidden = panel.dataset.projectReadingPanel !== selected;
-    if (updateUrl) {
-      const next = new URL(window.location.href);
-      next.hash = `project-reading-panel-${selected}`;
-      window.history.pushState({ preserveScroll: true }, "", `${next.pathname}${next.search}${next.hash}`);
-    }
-    if (preserveScroll) restoreReadingScroll(previousY);
+    return panels.find((panel) => panel.dataset.projectReadingPanel === selected);
   }
+
+  function reveal(target) {
+    if (!target) return;
+    ensureOpenAncestors(target);
+    target.scrollIntoView({ block: "start", behavior: "instant" });
+  }
+
+  function select(id, focus = false) {
+    if (panels.some((panel) => panel.dataset.projectReadingPanel === id && !panel.hidden)) {
+      if (focus) tabs.find((tab) => tab.dataset.projectReadingTab === id)?.focus({ preventScroll: true });
+      return;
+    }
+    const panel = show(id, { focus });
+    const hash = `#${panel.id}`;
+    if (window.location.hash !== hash) window.history.pushState({ readingLayer: id }, "", hash);
+    reveal(panel);
+  }
+
   tabs.forEach((tab, index) => {
     tab.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
-      activate(tab.dataset.projectReadingTab, { updateUrl: true });
+      select(tab.dataset.projectReadingTab);
     });
     tab.addEventListener("keydown", (event) => {
       if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
@@ -531,13 +528,23 @@ function initializeProjectReadingLayers() {
       if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
       if (event.key === "Home") nextIndex = 0;
       if (event.key === "End") nextIndex = tabs.length - 1;
-      activate(tabs[nextIndex].dataset.projectReadingTab, { updateUrl: true, focus: true });
+      select(tabs[nextIndex].dataset.projectReadingTab, true);
     });
   });
-  window.addEventListener("popstate", () => activate(idFromHash()));
-  const initialTarget = document.getElementById(idFromHash());
-  activate(initialTarget?.closest("[data-project-reading-panel]")?.dataset.projectReadingPanel || idFromHash(), { preserveScroll: !initialTarget });
-  if (initialTarget) window.requestAnimationFrame(() => initialTarget.scrollIntoView({ block: "start" }));
+
+  function followLocation() {
+    const { id, target } = locationTarget();
+    const panel = show(id);
+    if (window.location.hash) window.requestAnimationFrame(() => reveal(target || panel));
+  }
+  window.addEventListener("popstate", followLocation);
+  window.addEventListener("hashchange", followLocation);
+  window.addEventListener("pageshow", (event) => { if (event.persisted) followLocation(); });
+  followLocation();
+}
+
+function ensureOpenAncestors(target) {
+  for (let disclosure = target?.closest("details"); disclosure; disclosure = disclosure.parentElement?.closest("details")) disclosure.open = true;
 }
 
 function initializeSystemHome() {
@@ -619,9 +626,26 @@ function initializeSystemHome() {
     });
   });
 
+  function revealHashTarget({ scroll = true } = {}) {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (!target || !home.contains(target)) return;
+    ensureOpenAncestors(target);
+    if (scroll) window.requestAnimationFrame(() => target.scrollIntoView({ block: "start", behavior: "instant" }));
+  }
+
+  home.addEventListener("click", (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.altKey || event.ctrlKey || event.shiftKey) return;
+    const anchor = event.target.closest?.("a[href]");
+    if (!anchor || anchor.target || anchor.hasAttribute("download")) return;
+    const url = new URL(anchor.href, window.location.href);
+    if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || url.search !== window.location.search || !url.hash) return;
+    ensureOpenAncestors(document.getElementById(url.hash.slice(1)));
+  });
+
   window.addEventListener("hashchange", () => {
     const id = idFromHash();
     if (id) activateScenario(id);
+    revealHashTarget();
   });
   tabRail?.addEventListener("scroll", updateScenarioScrollIndicator, { passive: true });
   window.addEventListener("resize", updateScenarioScrollIndicator);
@@ -631,8 +655,7 @@ function initializeSystemHome() {
   updateScenarioScrollIndicator();
   // Enhancement collapses the other static scenarios after native fragment
   // navigation; align the requested section again against the final layout.
-  const initialTarget = document.getElementById(window.location.hash.slice(1));
-  if (initialTarget && home.contains(initialTarget) && performance.getEntriesByType("navigation")[0]?.type === "navigate") window.requestAnimationFrame(() => initialTarget.scrollIntoView({ block: "start", behavior: "instant" }));
+  revealHashTarget({ scroll: performance.getEntriesByType("navigation")[0]?.type === "navigate" });
 }
 
 function initializeSystemSectionNavigation() {
@@ -728,6 +751,7 @@ function initializeSystemSectionNavigation() {
     window.clearTimeout(clickLockFallbackTimer);
     setActive(index);
     revealActiveLink(link);
+    ensureOpenAncestors(sections[index]);
     const readingLine = headerHeight() + navigation.getBoundingClientRect().height + 18;
     const targetTop = Math.max(0, Math.ceil(window.scrollY + sections[index].getBoundingClientRect().top - readingLine));
     const next = new URL(window.location.href);
@@ -1323,5 +1347,4 @@ initializeFooterEmailCopy();
 initializeFooterSignature();
 initializeFlowField();
 initializeDocumentPrefetch();
-initializePreservedScrollNavigation();
 centerCurrentProjectNavigation();

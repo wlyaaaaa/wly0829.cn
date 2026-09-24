@@ -7,7 +7,6 @@ import test from "node:test";
 import { proxycleanModules, proxycleanProject } from "../app/content-proxyclean.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = proxycleanModules.map((item) => item.slug);
@@ -17,6 +16,8 @@ test("proxyclean is registered as a published project in the final plan", async 
   const finalOrder = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "proxyclean");
   assert.ok(registration, "proxyclean missing from panel-projects.json");
+  const planEntry = finalOrder.projects.find((item) => item.id === "proxyclean");
+  assert.ok(planEntry);
   assert.deepEqual(
     {
       id: registration.id,
@@ -33,7 +34,7 @@ test("proxyclean is registered as a published project in the final plan", async 
     },
     {
       id: "proxyclean",
-      order: 19,
+      order: planEntry.final_rank,
       title: "ProxyClean",
       enabled: true,
       presentationMode: "real_dashboard",
@@ -45,9 +46,7 @@ test("proxyclean is registered as a published project in the final plan", async 
       localRoot: "E:\\Projects\\Tools\\ProxyClean"
     }
   );
-  const planEntry = finalOrder.projects.find((item) => item.id === "proxyclean");
-  assert.ok(planEntry);
-  assert.equal(planEntry.final_rank, 19);
+  assert.equal(proxycleanProject.order, planEntry.final_rank);
   assert.equal(planEntry.state, "published");
   assert.ok(projectCatalog.some((item) => item.project.slug === "proxyclean"));
 });
@@ -91,16 +90,16 @@ test("proxyclean keeps the accepted module routes and three reading layers", asy
   }
 });
 
-test("proxyclean snapshot binds to the published physical route guard repair", () => {
-  assert.equal(proxycleanProject.sourceCommit, "be5d3f581b5e0ea53fec87015306ab9d3660efe6");
+test("proxyclean snapshot records its current published source identity", () => {
+  assert.match(proxycleanProject.sourceCommit, /^[a-f0-9]{40}$/);
+  assert.ok(proxycleanProject.evolution.some((stage) => stage.date === "2026-09-18" && stage.commit?.startsWith("be5d3f5")), "the physical route guard repair remains attached to its product stage");
 });
 
 test("proxyclean explains core safety rules without marketing riddles", () => {
   const text = JSON.stringify({ project: proxycleanProject, modules: proxycleanModules });
   for (const expected of [
-    "绝不把持久设置焊到一个会消失的端口上",
     "备用默认路由",
-    "动态审计",
+    "审计",
     "零固定端口表",
     "清成直连",
     "198.18",
@@ -116,7 +115,7 @@ test("proxyclean explains core safety rules without marketing riddles", () => {
     "数据面",
     "ExtraProcessName",
     "-Direct",
-    "活/远程",
+    "活或远程",
     "DPAPI",
     "原值",
     "System Proxy 默认关闭",
@@ -125,25 +124,19 @@ test("proxyclean explains core safety rules without marketing riddles", () => {
   ]) {
     assert.ok(text.includes(expected), `ProxyClean missing expected reality fact: ${expected}`);
   }
+  const deadPort = proxycleanModules.find((item) => item.slug === "dead-port-and-route-cleanup");
+  assert.match(JSON.stringify(deadPort), /Test-LocalProxyDead.*全部端点为本地回环且无活跃监听/);
+  assert.match(JSON.stringify(deadPort.boundaries), /NO_PROXY.*绝对不碰|不.*NO_PROXY/);
+  assert.match(JSON.stringify(deadPort.implementation), /原值和步骤.*preimage.*写后回读.*逆序恢复/s);
   for (const forbidden of ["强杀进程树", "Restart-NetAdapter", "所有前台窗口与终端会话立即感知", "两秒内恢复正常上网", "Docker 与终端无缝复活", "切换入口停止或失败，保留原绑定"]) {
     assert.equal(text.includes(forbidden), false, `ProxyClean retains an overclaim: ${forbidden}`);
   }
 });
 
-test("proxyclean first visible labels follow glossing and plain language", () => {
+test("proxyclean preserves public technical names without imposing one global gloss", () => {
   const text = JSON.stringify({ project: proxycleanProject, modules: proxycleanModules });
-  assert.match(text, /TUN（虚拟网卡）|TUN（虚拟网络设备）/);
-  assert.match(text, /fake-ip（伪造 IP 地址）/);
-  assert.match(text, /WinINET（Windows 互联网配置）/);
-  assert.match(text, /PInvoke（平台调用）/);
-  assert.match(text, /DNS（域名解析系统）/);
-  assert.match(text, /DHCP（动态主机配置协议）/);
-  assert.match(text, /Docker Desktop（Docker 桌面版）/);
-  assert.match(text, /PID（进程标识符）/);
-  assert.match(text, /GUI（图形界面）/);
-  assert.match(text, /IPv6（第六版互联网协议）/);
-  assert.match(text, /UAC（用户账户控制）/);
-  assert.match(text, /WebRTC（网页实时通信）/);
+  for (const term of ["TUN", "fake-ip", "WinINET", "PInvoke", "DNS", "DHCP", "Docker Desktop", "PID", "IPv6", "UAC", "WebRTC"]) assert.ok(text.includes(term), `ProxyClean technical identity is missing: ${term}`);
+  assert.match(text, /窗口|图形界面|GUI/);
 });
 
 test("proxyclean search reaches owning modules and project page", () => {
@@ -168,10 +161,6 @@ test("proxyclean search reaches owning modules and project page", () => {
   }
 });
 
-test("System links its proxy-clean asset to the proxyclean project page", () => {
-  const machineDomain = systemProjectDomains.find((item) => item.id === "machine-and-remote");
-  assert.ok(machineDomain);
-  const asset = machineDomain.assets.find((item) => item.id === "proxy-clean");
-  assert.ok(asset);
-  assert.equal(asset.href, "/projects/proxyclean");
+test("ProxyClean stays reachable from its own project route without restoring a System asset catalog", () => {
+  assert.ok(routePaths.includes(proxycleanProject.route));
 });

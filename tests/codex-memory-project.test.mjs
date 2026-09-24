@@ -8,7 +8,6 @@ import test from "node:test";
 import { codexMemoryModules, codexMemoryProject } from "../app/content-codex-memory.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = codexMemoryModules.map((item) => item.slug);
@@ -18,6 +17,8 @@ test("codex-memory is registered as a published project in the final plan", asyn
   const finalOrder = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "codex-memory");
   assert.ok(registration, "codex-memory missing from panel-projects.json");
+  const planEntry = finalOrder.projects.find((item) => item.id === "codex-memory");
+  assert.ok(planEntry);
   assert.deepEqual(
     {
       id: registration.id,
@@ -34,7 +35,7 @@ test("codex-memory is registered as a published project in the final plan", asyn
     },
     {
       id: "codex-memory",
-      order: 20,
+      order: planEntry.final_rank,
       title: "AI 工作区备份与恢复",
       enabled: true,
       presentationMode: "real_dashboard",
@@ -46,9 +47,7 @@ test("codex-memory is registered as a published project in the final plan", asyn
       localRoot: "E:\\Projects\\Backups\\codex-memory"
     }
   );
-  const planEntry = finalOrder.projects.find((item) => item.id === "codex-memory");
-  assert.ok(planEntry);
-  assert.equal(planEntry.final_rank, 20);
+  assert.equal(codexMemoryProject.order, planEntry.final_rank);
   assert.equal(planEntry.state, "published");
   assert.ok(projectCatalog.some((item) => item.project.slug === "codex-memory"));
 });
@@ -92,18 +91,18 @@ test("codex-memory keeps the accepted module routes and three reading layers", a
 });
 
 test("codex-memory distinguishes current source inventory from the published backup point", () => {
-  assert.equal(codexMemoryProject.currentPointId, "20260918T041508Z-8e6dcbc6");
-  assert.equal(codexMemoryProject.conversationFileCount, 1731);
-  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 7738969963);
+  assert.equal(codexMemoryProject.currentPointId, "20260924T041509Z-89eabfd3");
+  assert.equal(codexMemoryProject.conversationFileCount, 1983);
+  assert.equal(codexMemoryProject.conversationTotalSizeBytes, 9112477677);
   assert.equal(codexMemoryProject.liveSourceFileCount, 1771);
   assert.equal(codexMemoryProject.liveSourceTotalSizeBytes, 7840035917);
   assert.notEqual(codexMemoryProject.conversationFileCount, codexMemoryProject.liveSourceFileCount);
   const hotEntry = codexMemoryProject.operationalEntrypoints.find((item) => item.command.includes("-Mode Hot"));
   assert.ok(hotEntry && hotEntry.command.includes("-Execute"), "real Hot capture requires the source execution switch");
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /没有本轮逐对象重哈希或恢复/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /不等于本轮重新逐对象哈希.*实际恢复/);
   assert.equal(codexMemoryProject.scheduledTasks.find((item) => item.owner === "PCConfig").currentHAvailable, true);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /G\/H各自current.*point=20260918T041508Z-8e6dcbc6/s);
-  assert.match(codexMemoryProject.currentSnapshot.boundary, /cold_readback_verified=true/);
+  assert.match(codexMemoryProject.currentSnapshot.boundary, /G 当前点已到 9 月 24 日.*H 冷盘仍在 9 月 23 日/s);
+  assert.match(JSON.stringify(codexMemoryProject.currentSnapshot), /cold_readback_verified=true/);
 });
 
 test("codex-memory explains core safety rules without marketing riddles", () => {
@@ -153,10 +152,6 @@ test("codex-memory search reaches owning modules and project page", () => {
   }
 });
 
-test("System links its Domain 07 asset to the codex-memory project page", () => {
-  const domain07 = systemProjectDomains.find((domain) => domain.id === "backup-and-secrets");
-  assert.ok(domain07, "backup-and-secrets domain missing");
-  const asset = domain07.assets.find((item) => item.id === "ai-memory-backup-b");
-  assert.ok(asset, "existing Codex memory asset missing from Domain 07");
-  assert.equal(asset.href, "/projects/codex-memory");
+test("Codex memory stays reachable from its own project route without the retired System directory", () => {
+  assert.ok(routePaths.includes(codexMemoryProject.route));
 });

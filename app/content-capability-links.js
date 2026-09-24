@@ -16,7 +16,8 @@ export const skillProjectLinks = {
     { relation: "uses-project", projectSlug: "chinese-asr", moduleSlug: "speaker-attribution", label: "ChineseASR 的语音归属能力" }
   ],
   "timeaudit-diagnostics": [
-    { relation: "owned-by-project", projectSlug: "timeaudit", moduleSlug: "hardware-performance", label: "TimeAudit 项目" }
+    { relation: "owned-by-project", projectSlug: "timeaudit", moduleSlug: "hardware-performance", label: "TimeAudit：历史指标与健康技术参考" },
+    { relation: "uses-project", projectSlug: "pcconfig", moduleSlug: "machine-facts", label: "PCConfig：综合卡顿与原生内存证据" }
   ],
   "project-entry-gate": [
     { relation: "owned-by-project", projectSlug: "github-index", moduleSlug: "project-admission", label: "GitHub 总索引" }
@@ -33,13 +34,14 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }
   ],
   "google-workspace-direct": [
-    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 固定办公服务入口" }
+    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig：Gmail、Drive 与 Google Tasks 固定入口" }
   ],
   "authorization-file-broker": [
-    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 最高权限文件入口" }
+    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "authorization-files", label: "PCConfig：文件加密、本地编辑与恢复技术参考" }
   ],
   "native-economy-routing": [
-    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 协作路由" }
+    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 协作路由" },
+    { relation: "rules", href: "/rules/?rule=codex_adapter_contract#rule-panel-codex_adapter_contract", label: "现行 Codex 适配完整规则" }
   ],
   "localocr": [
     { relation: "owned-by-project", projectSlug: "localocr", moduleSlug: "input-routing", label: "LocalOCR 本地文字识别与文档解析" }
@@ -55,7 +57,7 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "document-materials", moduleSlug: "current-matter-sources", label: "文书和材料制作项目" }
   ],
   "llm-backend-toolkit": [
-    { relation: "no-detail-project", systemAssetId: "llm-backend-toolkit", label: "额外 AI 长任务执行器" }
+    { relation: "owned-by-project", projectSlug: "llm-backend-toolkit", moduleSlug: "versioned-backend-registry-routing", label: "LLM Backend Toolkit：任务与模型入口" }
   ],
   "vault-workflow": [
     { relation: "owned-by-project", projectSlug: "vault-tool", moduleSlug: "ai-local-interface", label: "vault-tool 本地文件加密与恢复" },
@@ -92,7 +94,9 @@ export const skillProjectLinks = {
     { relation: "presentation-infrastructure", label: "由当前网站呈现仓库实现，不作为展示项目" }
   ],
   "tailscale-safe-exposure": [
-    { relation: "cross-cutting", label: "跨机器事实、目标服务与远程连接，不设单一项目 Owner" }
+    { relation: "cross-cutting", label: "跨机器事实、目标服务与远程连接，不设单一项目 Owner" },
+    { relation: "uses-project", projectSlug: "sunshine-remote-streaming", label: "Sunshine：串流路径与恢复技术参考" },
+    { relation: "uses-project", projectSlug: "meshclip-kit", label: "meshclip-kit：诊断与中断恢复技术参考" }
   ],
   "control-plane-doctor": [
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "context-evidence", label: ".agents 跨控制面上下文" },
@@ -107,7 +111,10 @@ export const skillProjectLinks = {
 
 export const projectReferenceLinks = {
   agents: [
-    { relation: "rules", href: "/rules", label: "查看 5 份现行规则" }
+    { relation: "rules", href: "/rules", label: "查看现行规则专题" }
+  ],
+  pcconfig: [
+    { relation: "uses-project", href: "/projects/personal-materials/registered-lookup", label: "不知道原件放在哪里：进入个人材料查找" }
   ],
   "personal-media": [
     { relation: "skill", href: "/skills/personal-media", label: "Skill：个人照片、视频与录音检索" }

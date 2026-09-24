@@ -203,7 +203,8 @@ for (const surface of globalSurfaceResults) {
   requireFact(JSON.stringify(files.map((item) => item?.path)) === JSON.stringify(definition.content_paths), "bundle_global_surface_files_invalid", surface.id);
   let changedFileCount = 0;
   for (const file of files) {
-    requireFact(validSha(file?.old_content_sha256), "bundle_global_surface_old_sha_invalid", `${surface.id}:${file?.path}`);
+    const addedFile = file?.change_kind === "added";
+    requireFact(addedFile ? file?.old_content_sha256 === null : validSha(file?.old_content_sha256), addedFile ? "bundle_global_surface_added_old_sha_invalid" : "bundle_global_surface_old_sha_invalid", `${surface.id}:${file?.path}`);
     requireFact(validSha(file?.new_content_sha256), "bundle_global_surface_new_sha_invalid", `${surface.id}:${file?.path}`);
     const contentPath = path.resolve(projectRoot, file?.path || "");
     const relative = path.relative(projectRoot, contentPath);
@@ -211,7 +212,7 @@ for (const surface of globalSurfaceResults) {
     if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) continue;
     const currentSha = sha256(await readFile(contentPath));
     requireFact(currentSha === file.new_content_sha256, "bundle_global_surface_current_content_mismatch", `${surface.id}:${file.path}:${currentSha}`);
-    if (file.old_content_sha256 !== file.new_content_sha256) changedFileCount += 1;
+    if (addedFile || file.old_content_sha256 !== file.new_content_sha256) changedFileCount += 1;
   }
   if (surface.status === "changed") requireFact(changedFileCount > 0, "bundle_global_surface_changed_without_drift", surface.id);
   else requireFact(changedFileCount === 0, "bundle_global_surface_unchanged_with_drift", surface.id);

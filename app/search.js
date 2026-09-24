@@ -1,14 +1,23 @@
 import { ruleGuides } from "./content-rule-guides.js";
+import { ruleReaderGuides, ruleReaderScenarios } from "./content-rule-reader.js";
 import { skillGuides, skillOutcomes } from "./content-skill-guides.js";
 import { projectCatalog, rulesSnapshot, skills, systemSearchEntries } from "./site-content.js";
 import { compactSearchScore, createCompactSearchEntry, searchCompactEntries } from "./compact-search.js";
 
 export const ruleSearchAliases = {
+  authorization_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "本人限时授权", "紧急授权"],
+  execution_coordination_contract: ["谁可以修改这个项目", "不要覆盖未提交修改", "未提交修改怎么保留", "任务结束后释放负责人"],
+  context_sources_contract: ["这个事实应该去哪里查", "仓库事实和机器事实分别谁负责"],
+  capabilities_runtime_contract: ["应该用哪个工具或 Skill", "模型怎么选择能力"],
+  codex_adapter_contract: ["什么时候开子代理", "子代理模型怎么选", "宿主支持哪些能力"],
+  privacy_data_contract: ["取消验证会不会锁住其他任务", "资料解锁有效多久", "0.5到72小时", "个人资料正在关闭"],
+  rule_release_contract: ["dirty source 不能冒充 current release", "current E rules 怎么验证", "C盘规则为什么不能阻塞spawn", "旧Publisher为什么退役", "五份规则的 ruleset 是什么", "candidate 不能冒充 active", "正式专题与完整发布文件集合"],
   agents_root_rules: ["怎么避免全局规则覆盖项目自己的验收方式"],
   protected_major_actions_contract: ["dirty source 不能冒充 current release", "current E rules 怎么验证", "C盘规则为什么不能阻塞spawn", "旧Publisher为什么退役", "五份规则的 ruleset 是什么", "candidate 不能冒充 active"],
   authorization_delegation_contract: ["同一个目标不要反复问我授权", "授权过一次为什么还问", "同一目标不重复索权", "谁可以修改这个项目", "不要覆盖未提交修改", "未提交修改怎么保留"],
   four_base_decision_context_contract: ["这个事实应该去哪里查", "仓库事实和机器事实分别谁负责"],
-  capability_routing_contract: ["什么时候开子代理", "应该用哪个工具或 Skill", "模型怎么选择能力"]
+  capability_routing_contract: ["什么时候开子代理", "应该用哪个工具或 Skill", "模型怎么选择能力"],
+  "engineering_delivery_contract": ["本地构建通过为什么还不能说网站完成","代码、安装、发布和实际使用分别验收","完成项目后还要做哪些收尾"],
 };
 
 const skillSearchAliases = {
@@ -19,16 +28,34 @@ const skillSearchAliases = {
   "daily-preferences": ["吃什么", "今天吃什么", "购物", "购物推荐", "支付", "支付习惯", "出行", "出行推荐", "旅行景点", "住宿推荐", "娱乐", "娱乐推荐", "数字消费", "服务怎么选", "工具习惯", "审美偏好", "我改主意", "我改主意了", "以后按这个推荐", "以后按我的偏好推荐"],
   "work-delivery": ["来源变更后哪些文档要重做", "需求变了怎么同步PRD和执行表"],
   "project-entry-gate": ["提交前为什么要检查仓库", "会不会推错远端", "公开仓库泄露"],
-  "token-budget-advisor": ["这段文字有多少 token", "会不会超过上下文限制"]
+  "token-budget-advisor": ["Codex配额还剩多少", "Codex额度什么时候重置", "这段文字有多少 token", "会不会超过上下文限制"]
 };
 
 const projectModuleSearchAliases = {
-  "agents/context-evidence": ["本地构建通过为什么还不能说网站完成"]
+  "agents/context-evidence": ["本地构建通过为什么还不能说网站完成"],
+  "pcconfig/recovery-backup": ["恢复 Windows 系统", "恢复Windows系统", "重装 Windows 后恢复", "系统盘恢复", "系统镜像恢复"],
+  "personal-materials/verified-open": ["找合同里的那句话", "找合同里那一页", "文档里某句话在哪", "找文件里的内容"],
+  "chinese-asr/task-routing": ["把录音转成文字", "录音转文字", "微信语音转文字", "音频转写"],
+  "learning/plain-language": ["帮我学懂这个概念", "把这个概念讲懂", "教我理解这个概念"],
+  "timeaudit/hardware-performance": ["昨晚电脑为什么卡", "刚才电脑为什么卡", "电脑卡顿原因"],
+  "wechat-direct/bounded-chat-context": ["看昨天微信怎么聊的", "昨天微信聊天", "微信聊天上下文"],
+  "proxyclean/dead-port-and-route-cleanup": ["修复代理残留", "代理退出后没网", "清理代理残留"],
+  "meshclip-kit/kde-connect-pairing-sync": ["两台电脑之间传文件", "两台电脑共享剪贴板", "电脑之间复制文字"],
+  "cacb/deterministic-verification": ["测试 AI 编码能力", "评测 AI 编码能力", "测试 AI 工作方式"]
 };
 
 const projectCompactExtraAliases = {
-  pcconfig: ["Vault V2", "银行卡盲填", "waiting_for_codex_exit"],
-  timeaudit: ["卡顿", "电脑卡顿", "游戏卡顿"]
+  pcconfig: ["Vault V2", "银行卡盲填", "waiting_for_codex_exit", "恢复 Windows 系统", "重装 Windows 后恢复"],
+  "personal-materials": ["找合同里的那句话", "找文档里的内容"],
+  "chinese-asr": ["把录音转成文字", "录音转文字"],
+  learning: ["帮我学懂这个概念", "把概念讲懂"],
+  timeaudit: ["卡顿", "电脑卡顿", "游戏卡顿", "昨晚电脑为什么卡"],
+  "devconfig-backup": ["备份开发配置", "开发配置备份", "重装备份开发环境"],
+  "work-delivery": ["整理这份工作需求", "整理工作需求", "梳理工作需求"],
+  "wechat-direct": ["看昨天微信怎么聊的", "微信聊天上下文"],
+  proxyclean: ["修复代理残留", "代理残留"],
+  "meshclip-kit": ["两台电脑之间传文件", "两台电脑共享剪贴板"],
+  cacb: ["测试 AI 编码能力", "评测 AI 工作方式"]
 };
 
 function compactSearchTopics(projection) {
@@ -53,21 +80,31 @@ function withTechnicalSearchTerms(entry) {
   return { ...entry, compactSearch: [compact.search, ...missing].filter(Boolean).join(" ") };
 }
 
-function projectDataSourceText(project) {
+function projectDataSourceText(project, compact = false) {
   const sources = project.dataSources;
-  return sources ? [sources.intro, ...(sources.rows || []).flatMap((item) => [item.source, item.data, item.result]), sources.note].filter(Boolean).join(" ") : "";
+  if (!sources) return "";
+  const rows = (sources.rows || []).flatMap((item) => compact ? [item.source, item.data] : [item.source, item.data, item.result]);
+  return (compact ? rows : [sources.intro, ...rows, sources.note]).filter(Boolean).join(" ");
+}
+
+function projectChoiceText(project, compact = false) {
+  const choices = project.operatingChoices;
+  if (!choices) return "";
+  return [choices.title, ...(choices.rows || []).flatMap((row) => compact ? [row.need, row.choice] : [row.need, row.choice, row.result, row.boundary])].filter(Boolean).join(" ");
 }
 
 function projectCompactSearchText(project, modules) {
   const heroLatinTokens = (project.heroFacts || []).flatMap((item) => `${item.label} ${item.value}`.toLowerCase().match(/[a-z][a-z0-9_.:/-]*/g) || []);
   return compactSearchTopics([
     project.summary,
-    project.why,
     project.plainExample,
-    projectDataSourceText(project),
+    projectDataSourceText(project, true),
+    projectChoiceText(project, true),
     ...project.responsibilities,
     project.cardStatus,
-    ...(project.usageExamples || []).filter((item) => !item.moduleSlug).map((item) => item.ask),
+    // Header search loads project entries before module shards. Carry each
+    // module's real request to its project, without repeating its full answer.
+    ...(project.usageExamples || []).map((item) => item.ask),
     ...(project.operationalEntrypoints || []).map((item) => item.command),
     compactSearchTopics(project.searchProjection),
     ...heroLatinTokens,
@@ -93,6 +130,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       project.why,
       project.plainExample,
       projectDataSourceText(project),
+      projectChoiceText(project),
       project.result,
       ...Object.values(project.readerStates || {}),
       ...project.responsibilities,
@@ -105,7 +143,7 @@ const projectSearchEntries = projectCatalog.flatMap(({ project, modules }) => [
       ...project.usageExamples.filter((item) => !item.moduleSlug).flatMap((item) => [item.ask, item.effect]),
       ...project.evidenceLayers.flatMap((item) => [item.layer, item.proves, item.doesNotProve]),
       ...project.operationalEntrypoints.flatMap((item) => [item.name, item.command, item.purpose]),
-      ...project.evolution.flatMap((item) => [item.date, item.commit, item.result]),
+      ...project.evolution.flatMap((item) => [item.date, item.title, item.commit, item.result]),
       ...modules.flatMap((module) => [
         module.title,
         module.shortTitle,
@@ -164,17 +202,30 @@ export const globalSearchEntries = [
   ...systemSearchEntries.map((entry) => ({ ...entry, group: entry.group || "系统", scopes: entry.scopes || ["system"] })),
   ...rulesSnapshot.rules.map((rule) => {
     const guide = ruleGuides[rule.logicalId];
+    const reader = ruleReaderGuides[rule.logicalId];
+    const scenarioAliases = ruleReaderScenarios.filter((scenario) => scenario.ruleIds.includes(rule.logicalId)).flatMap((scenario) => [scenario.title, scenario.body]);
     return {
       type: "规则",
       group: "规则",
       scopes: ["rules"],
-      title: rule.title,
-      detail: rule.question,
+      title: reader?.title || rule.title,
+      detail: reader?.answer || rule.question,
       href: `/rules?rule=${rule.logicalId}`,
-      aliases: ruleSearchAliases[rule.logicalId] || [],
-      compactSearch: compactSearchTopics([rule.searchProjection, rule.plainLanguage, rule.example, rule.decisions]),
+      aliases: [...(ruleSearchAliases[rule.logicalId] || []), ...scenarioAliases],
+      compactSearch: compactSearchTopics([reader?.title, reader?.answer, reader?.when, reader?.examples?.map((item) => item.ask), rule.searchProjection, rule.plainLanguage]),
       search: [
+        reader?.title,
+        reader?.technicalTitle,
+        reader?.answer,
+        ...(reader?.when || []),
+        ...(reader?.ai || []),
+        ...(reader?.user || []),
+        ...(reader?.willNot || []),
+        ...(reader?.examples || []).flatMap((item) => [item.ask, item.result]),
+        ...(reader?.sections || []).flatMap((section) => [section.title, ...section.paragraphs, ...section.points]),
+        ...scenarioAliases,
         rule.logicalId,
+        rule.title,
         rule.purpose,
         rule.plainLanguage,
         rule.why,
@@ -186,7 +237,7 @@ export const globalSearchEntries = [
         ...(ruleSearchAliases[rule.logicalId] || []),
         ...guide.glossary.flat(),
         ...guide.sections.flatMap((section) => [section.title, section.intro, ...section.items.flatMap((entry) => [entry.title, entry.detail, entry.example || ""])])
-      ].join(" ")
+      ].filter(Boolean).join(" ")
     };
   }),
   ...skills.map((item) => {
@@ -196,12 +247,13 @@ export const globalSearchEntries = [
       type: "Skill",
       group: "Skills",
       scopes: ["skills"],
-      title: item.slug === "document-materials" ? item.title : item.name,
-      detail: `${item.title}：${outcome.value}`,
+      title: item.title,
+      detail: `Skill · ${item.name}：${outcome.value}`,
       href: `/skills/${item.slug}`,
       aliases: skillSearchAliases[item.slug] || [],
       compactSearch: compactSearchTopics([item.searchProjection, item.useWhen, outcome.example, guide.failures.map((failure) => failure[0])]),
       search: [
+        item.name,
         item.title,
         item.status,
         item.provenance,

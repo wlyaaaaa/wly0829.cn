@@ -7,24 +7,25 @@ import test from "node:test";
 import { ramdiskGuardianProject as project, ramdiskGuardianModules as modules } from "../app/content-ramdisk-guardian.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceCommit = "e058a7fd11907dfd6eafea6ee3c9821a4778e5a8";
 
-test("RamdiskGuardian keeps its real source identity and rank 31 after retirement renumbering", async () => {
+test("RamdiskGuardian keeps its real source identity and final-plan rank", async () => {
   const registry = JSON.parse(await readFile(path.join(root, "config/panel-projects.json"), "utf8"));
   const plan = JSON.parse(await readFile(path.join(root, "config/final-project-order.json"), "utf8"));
   const entry = registry.projects.find((item) => item.id === "ramdisk-guardian");
   assert.ok(entry?.enabled);
-  assert.equal(entry.order, 31);
+  const planned = plan.projects.find((item) => item.id === entry.id);
+  assert.ok(planned);
+  assert.equal(entry.order, planned.final_rank);
   assert.equal(entry.source.repo, "wlyaaaaa/RamdiskGuardian");
   assert.equal(entry.source.visibility, "PUBLIC");
   assert.equal(entry.source.default_branch, "main");
   assert.equal(entry.source.local_root, "E:\\Projects\\Tools\\RamdiskGuardian");
   assert.equal(entry.ai_refresh.content_path, "app/content-ramdisk-guardian.js");
   assert.equal(plan.projects.find((item) => item.id === entry.id)?.state, "published");
-  assert.equal(projectCatalog.find((item) => item.project.slug === entry.id)?.project.order, 31);
+  assert.equal(projectCatalog.find((item) => item.project.slug === entry.id)?.project.order, planned.final_rank);
 });
 
 test("all five source-backed RamdiskGuardian axes have direct routes and linked ordinary uses", () => {
@@ -40,8 +41,7 @@ test("all five source-backed RamdiskGuardian axes have direct routes and linked 
     assert.ok(routePaths.includes(`${project.route}/${module.slug}`));
     assert.ok(project.usageExamples.some((example) => example.moduleSlug === module.slug));
   }
-  const domain = systemProjectDomains.find((item) => item.id === "machine-and-remote");
-  assert.equal(domain.assets.find((item) => item.id === project.slug)?.href, project.route);
+  assert.ok(routePaths.includes(project.route));
 });
 
 test("snapshot keeps current OK and historical WARN separate from task success and unperformed recovery", () => {

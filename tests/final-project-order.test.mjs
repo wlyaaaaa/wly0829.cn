@@ -17,6 +17,44 @@ const personalHealthSource = await readFile(path.join(projectRoot, "app", "conte
 const systemSource = await readFile(path.join(projectRoot, "app", "system-home-content.js"), "utf8");
 const designQa = await readFile(path.join(projectRoot, "design-qa.md"), "utf8");
 
+test("the approved value order places personal-expression after daily-preferences and preserves the remaining order", () => {
+  assert.deepEqual(plan.projects.map((item) => item.id), [
+    "personal-media",
+    "agents",
+    "pcconfig",
+    "localocr",
+    "github-index",
+    "document-materials",
+    "personal-materials",
+    "chinese-asr",
+    "learning",
+    "timeaudit",
+    "personal-health",
+    "devconfig-backup",
+    "vault-tool",
+    "ai-cli-profile-manager",
+    "work-delivery",
+    "daily-preferences",
+    "personal-expression",
+    "wechat-direct",
+    "proxyclean",
+    "codex-memory",
+    "meshclip-kit",
+    "video-scaffold",
+    "sunshine-remote-streaming",
+    "llm-backend-toolkit",
+    "typora-theme-pack",
+    "openclaw-gateway",
+    "wechat-history-ai-bridge",
+    "pc-panel-hub",
+    "emerald-veil",
+    "steam-millennium-config-backup",
+    "ramdisk-guardian",
+    "cacb",
+    "codex-remote"
+  ]);
+});
+
 test("the final project plan fixes one complete value order without placeholder projects", () => {
   assert.equal(plan.schema, "wly.personal-panel-final-project-order.v1");
   assert.equal(plan.target_project_count, 33);
@@ -39,7 +77,6 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(published.length, 33);
   assert.equal(planned.length, 0);
   assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "published");
-  assert.equal(plan.projects.find((item) => item.id === "personal-expression").final_rank, 34);
   assert.equal(plan.projects.find((item) => item.id === "personal-expression").state, "published");
   assert.ok(readme.includes("Emerald Veil"));
   for (const retired of ["codex-app-power-user-playbook", "rtx5090d-ollama-agent-bundle"]) {
@@ -53,10 +90,9 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.equal(projectCatalog.some((entry) => entry.registration.id === "md-triple-tactics-talent-solver"), false);
   assert.equal(routePaths.includes("/projects/md-triple-tactics-talent-solver"), false);
   assert.doesNotMatch(generatedIndex, /\/projects\/md-triple-tactics-talent-solver/);
-  assert.match(systemSource, /md-triple-tactics-talent-solver.*规则仿真、策略报告.*历史参考.*不代表当前仍在持续运行/s);
+  assert.doesNotMatch(systemSource, /id:\s*"md-triple-tactics-talent-solver"|href:\s*"\/projects\/md-triple-tactics-talent-solver"/, "retired historical ledger entries must not return as System project cards");
   assert.match(readme, /md-triple-tactics-talent-solver.*历史 GitHub 总账资产.*不属于独立项目规划.*不生成项目卡、路由、内容包或未来施工项/s);
   assert.doesNotMatch(agentsRules, /construction_hold|Rank 36|thirty-six-project/);
-  assert.match(designQa, /保留 33 个独立项目.*连续显示 1–33/s);
   assert.doesNotMatch(designQa, /固定 36 项|36 个独立项目|14 个项目仍待建设|construction_hold|rank 36|Rank 36/);
   assert.equal(plan.projects.some((item) => item.id === "scripts" || item.final_rank === 15), false);
   assert.equal(registry.projects.some((item) => item.id === "scripts"), false);
@@ -76,6 +112,9 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), published.map((item) => item.id));
   for (const registration of enabled) {
     assert.equal(registration.order, planById.get(registration.id)?.final_rank, `${registration.id} drifted from its fixed final rank`);
+  }
+  for (const { project, registration } of projectCatalog) {
+    assert.equal(project.order, planById.get(registration.id)?.final_rank, `${registration.id} content drifted from its fixed final rank`);
   }
 
   const registeredIds = new Set(registry.projects.map((item) => item.id));
@@ -98,8 +137,7 @@ test("non-card explanations keep only real remaining work and private exclusions
   assert.equal(plan.non_card_explanations.some((item) => item.id === "scripts-capabilities-absorbed-by-owning-projects" && item.status === "done" && item.owner_surface === "pcconfig-and-owning-projects" && item.evidence === "app/content-pcconfig.js#runtime-startup"), true);
   assert.match(wechatDirectSource, /WeChatDirect-private-archive.*公开前.*PRIVATE 仓库已经归档.*不生产.*现役.*PUBLIC WeChatDirect/s);
   assert.match(personalHealthSource, /HealthLongevity.*早期项目.*不再拥有任何写入.*personal-health.*Health Owner.*没有读取.*健康记录、诊断、数值和私人正文/s);
-  assert.match(systemSource, /WeChatDirect-private-archive|wechat-direct-private-archive/);
-  assert.match(systemSource, /HealthLongevity.*不再拥有写入.*personal-health/s);
+  assert.doesNotMatch(systemSource, /WeChatDirect-private-archive|wechat-direct-private-archive|HealthLongevity.*不再拥有写入.*personal-health/s, "owner history remains in the corresponding source project rather than a duplicate System catalog");
   assert.deepEqual(plan.private_exclusion_boundary, {
     excluded_project_count: 4,
     public_todo_forbidden: true,

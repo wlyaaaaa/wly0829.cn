@@ -59,7 +59,7 @@ test("vault-tool is registered as a published project in the final plan with its
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "vault-tool"));
 });
 
-test("vault-tool keeps eight independent module routes and all three reading layers", async () => {
+test("vault-tool keeps eight independent module routes and two reading tabs", async () => {
   assert.deepEqual(vaultToolModules.map((item) => item.slug), expectedModuleSlugs);
   assert.equal(new Set(expectedModuleSlugs).size, 8);
   assert.equal(vaultToolProject.route, "/projects/vault-tool");
@@ -82,9 +82,11 @@ test("vault-tool keeps eight independent module routes and all three reading lay
   }
 
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "vault-tool", "index.html"), "utf8");
-  for (const layer of ["quick", "product", "technical"]) {
-    assert.match(overviewHtml, new RegExp(`data-project-reading-panel="${layer}"`), `vault-tool overview omits ${layer} reading layer`);
-  }
+  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2, "vault-tool overview exposes exactly two reading tabs");
+  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
+  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
+  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
+  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
 });
 
 test("vault-tool project surfaces are derived from one currentSnapshot", async () => {

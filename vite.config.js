@@ -10,6 +10,23 @@ function developmentStaticRoutes() {
     apply: "serve",
     configureServer(server) {
       developmentServer = server;
+      server.middlewares.use(async (request, response, next) => {
+        const pathname = new URL(request.url || "/", "http://local.invalid").pathname;
+        const match = /^\/search-(index|projects|project-([a-z0-9-]+))\.js$/.exec(pathname);
+        if (!match) return next();
+        try {
+          const renderer = await server.ssrLoadModule(rendererModulePath);
+          const asset = match[1] === "index" ? renderer.compactSearchAsset
+            : match[1] === "projects" ? renderer.compactProjectSearchAsset
+              : renderer.compactProjectSearchAssets[match[2]];
+          if (!asset) return next();
+          response.setHeader("Content-Type", "application/javascript; charset=utf-8");
+          response.setHeader("Cache-Control", "no-store");
+          response.end(asset);
+        } catch (error) {
+          next(error);
+        }
+      });
     },
     async transformIndexHtml(html, context) {
       if (!developmentServer) return html;

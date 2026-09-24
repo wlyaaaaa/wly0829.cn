@@ -15,6 +15,7 @@ import { project as project_vault_tool, modules as modules_vault_tool } from "./
 import { project as project_ai_cli_profile_manager, modules as modules_ai_cli_profile_manager } from "./content-ai-cli-profile-manager.js";
 import { project as project_work_delivery, modules as modules_work_delivery } from "./content-work-delivery.js";
 import { project as project_daily_preferences, modules as modules_daily_preferences } from "./content-daily-preferences.js";
+import { project as project_personal_expression, modules as modules_personal_expression } from "./content-personal-expression.js";
 import { project as project_wechat_direct, modules as modules_wechat_direct } from "./content-wechatdirect.js";
 import { project as project_proxyclean, modules as modules_proxyclean } from "./content-proxyclean.js";
 import { project as project_codex_memory, modules as modules_codex_memory } from "./content-codex-memory.js";
@@ -31,7 +32,6 @@ import { project as project_steam_millennium_config_backup, modules as modules_s
 import { project as project_ramdisk_guardian, modules as modules_ramdisk_guardian } from "./content-ramdisk-guardian.js";
 import { project as project_cacb, modules as modules_cacb } from "./content-cacb.js";
 import { project as project_codex_remote, modules as modules_codex_remote } from "./content-codex-remote.js";
-import { project as project_personal_expression, modules as modules_personal_expression } from "./content-personal-expression.js";
 
 export const projectContentPackages = new Map([
   ["personal-media", { project: project_personal_media, modules: modules_personal_media, kind: "personal-media" }],
@@ -50,6 +50,7 @@ export const projectContentPackages = new Map([
   ["ai-cli-profile-manager", { project: project_ai_cli_profile_manager, modules: modules_ai_cli_profile_manager, kind: "ai-cli-profile-manager" }],
   ["work-delivery", { project: project_work_delivery, modules: modules_work_delivery, kind: "work-delivery" }],
   ["daily-preferences", { project: project_daily_preferences, modules: modules_daily_preferences, kind: "daily-preferences" }],
+  ["personal-expression", { project: project_personal_expression, modules: modules_personal_expression, kind: "personal-expression" }],
   ["wechat-direct", { project: project_wechat_direct, modules: modules_wechat_direct, kind: "wechat-direct" }],
   ["proxyclean", { project: project_proxyclean, modules: modules_proxyclean, kind: "proxyclean" }],
   ["codex-memory", { project: project_codex_memory, modules: modules_codex_memory, kind: "codex-memory" }],
@@ -65,6 +66,5 @@ export const projectContentPackages = new Map([
   ["steam-millennium-config-backup", { project: project_steam_millennium_config_backup, modules: modules_steam_millennium_config_backup, kind: "steam-millennium-config-backup" }],
   ["ramdisk-guardian", { project: project_ramdisk_guardian, modules: modules_ramdisk_guardian, kind: "ramdisk-guardian" }],
   ["cacb", { project: project_cacb, modules: modules_cacb, kind: "cacb" }],
-  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }],
-  ["personal-expression", { project: project_personal_expression, modules: modules_personal_expression, kind: "personal-expression" }]
+  ["codex-remote", { project: project_codex_remote, modules: modules_codex_remote, kind: "codex-remote" }]
 ]);

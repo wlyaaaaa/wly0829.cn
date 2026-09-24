@@ -34,17 +34,19 @@ export const emeraldVeilSnapshot = createProjectSnapshot({
 });
 
 export const emeraldVeilProject = {
-  order: 29,
+  order: 30,
   slug: "emerald-veil",
+  usageEntry: "先运行 scripts/Set-WindowsBackground.ps1 -Action Verify/Apply 检查或恢复图片；泡泡另用 scripts/Install-EmeraldVeil.ps1 -Action Install 和 scripts/Set-NativeBubbles.ps1 -Action Enable。",
+  usageInputs: ["想用的项目图片","桌面、锁屏或泡泡的选择","要启用还是恢复原设置"],
   title: "Emerald Veil",
-  kicker: "把喜欢的壁纸带到新电脑，空闲时让原生泡泡飘起来",
+  kicker: "桌面图片可恢复，离开时出现泡泡，回来就退出",
   lead: "把喜欢的壁纸带到新电脑，空闲时让原生泡泡飘起来",
   route: "/projects/emerald-veil",
   visibility: "公开仓库",
   statusTone: "accent",
   badge: "壁纸 / 空闲屏保",
   repositoryNote: "公开仓库保存项目代码、电脑选图、明确备份的手机壁纸和恢复说明。原来的桌面/锁屏图片、注册表备份和本机运行状态留在本机；网站展示一次核对结果，不控制当前桌面。",
-  summary: "保留选好的雨林黑猫4K桌面和锁屏恢复入口；空闲六分钟时，在实体桌面屏上显示Windows原生泡泡，正常输入就退出。泡泡下面优先使用虚拟屏当前选定的壁纸材料，不再固定成黑猫底图；主屏关闭就待命，不跑到虚拟屏或仪表屏。托盘双击、立即启动和Ctrl+Win+E都能直接进入屏保，配置与真实画面分别验收。",
+  summary: "保留我选定的桌面和锁屏图片，离开电脑六分钟后在实体主屏显示 Windows 原生泡泡，正常移动或打字就回到工作。也可以用托盘双击或 Ctrl+Win+E 立即启动。主屏关闭时保持待命，不跑到虚拟屏和仪表屏；图片恢复与屏保程序各自独立。",
   why: "桌面图片不应随着项目目录搬家而丢失，换电脑也不该重新找图、调参数。空闲画面则需要在回来操作时及时退开，不能借屏保把远程桌面锁住，或让旧泡泡进程越积越多。这个项目分别处理图片恢复、空闲触发、窗口共存与停用恢复。",
   plainExample: "“沿用我选好的壁纸，离开电脑一会儿让实体屏出泡泡；主屏关着就别往副屏上跑。”静态恢复和空闲程序独立工作。也可以按Ctrl+Win+E立即显示，松键稳定后才建立退出基线，正常移动或打字就回到工作。",
   result: "得到可恢复的静态图片设置，以及能查看状态、直接启动、预览、停用或卸载的原生泡泡入口。主屏不在时保持待命，不改变虚拟屏和仪表屏；没有实际看见画面时，不把进程或配置通过说成视觉验收完成。",
@@ -71,10 +73,26 @@ export const emeraldVeilProject = {
     { title: "停用、还原和卸载说清楚", detail: "Disable先停止泡泡和自动触发；Restore还原第一次启用前保存的屏保参数；Remove移除项目自启和程序。原壁纸在Windows设置里按保存记录选回，不冒充一个命令能还原电脑所有改动。" }
   ],
   usageExamples: [
-    { ask: "新电脑也想用这张壁纸，锁屏一起设好。", effect: "用项目内图片运行Apply（应用图片），保留原图记录，复制到本用户持久目录，再分别回读桌面与锁屏。图片内容、固定模式和持久路径都正确时不重复设置。", moduleSlug: "windows-desktop-and-lockscreen-background" },
-    { ask: "离开六分钟以后再出泡泡，回来打字就收起。", effect: "常驻程序读取最近输入时间，过滤特定无意义移动，达到阈值才启动原生泡泡；一般输入先隐藏窗口再结束进程。托盘15秒预览是主动看效果，期间不因输入提前结束。", moduleSlug: "native-bubbles-idle-overlay" },
-    { ask: "Wallpaper Engine继续用；主屏黑罩开着时，别再盖一层泡泡。", effect: "泡泡启动时短暂停止并恢复当前会话的Wallpaper Engine播放，不改其选图；外部黑罩的暂停标记生效时，现有泡泡会收起，新的空闲显示和预览都会让位。", moduleSlug: "wallpaper-engine-coexistence-and-rain-experiment" },
-    { ask: "暂时不要泡泡，或者以后彻底卸载。", effect: "不再保留单独的会话暂停与托盘退出驻留。需要关闭自动泡泡用Disable；撤回原屏保设置用Restore，移除程序用Remove。三者分别回读，原静态壁纸按自己的备份恢复。", moduleSlug: "reversibility-preimage-and-remote-compatibility" }
+    {
+      "ask": "新电脑也想用这张壁纸，锁屏一起设好。",
+      "effect": "用项目内图片运行Apply（应用图片），保留原图记录，复制到本用户持久目录，再分别回读桌面与锁屏。图片内容、固定模式和持久路径都正确时不重复设置。",
+      "moduleSlug": "windows-desktop-and-lockscreen-background"
+    },
+    {
+      "ask": "离开六分钟以后再出泡泡，回来打字就收起。",
+      "effect": "常驻程序读取最近输入时间，过滤特定无意义移动，达到阈值才启动原生泡泡；一般输入先隐藏窗口再结束进程。托盘15秒预览是主动看效果，期间不因输入提前结束。",
+      "moduleSlug": "native-bubbles-idle-overlay"
+    },
+    {
+      "ask": "Wallpaper Engine继续用；主屏黑罩开着时，别再盖一层泡泡。",
+      "effect": "泡泡启动时短暂停止并恢复当前会话的Wallpaper Engine播放，不改其选图；外部黑罩的暂停标记生效时，现有泡泡会收起，新的空闲显示和预览都会让位。",
+      "moduleSlug": "wallpaper-engine-coexistence-and-rain-experiment"
+    },
+    {
+      "ask": "暂时不要泡泡，或者以后彻底卸载。",
+      "effect": "不再保留单独的会话暂停与托盘退出驻留。需要关闭自动泡泡停用自动触发；撤回原屏保设置恢复原设置，移除程序卸载程序。三者分别回读，原静态壁纸按自己的备份恢复。",
+      "moduleSlug": "reversibility-preimage-and-remote-compatibility"
+    }
   ],
   components: [
     { name: "Set-WindowsBackground.ps1", responsibility: "恢复Windows桌面与系统锁屏图片", implementation: "读取选图清单和PNG，核对SHA-256，通过IDesktopWallpaper与Windows.System.UserProfile.LockScreen设置并回读。PowerShell 7自动转到Windows自带64位Windows PowerShell运行WinRT接口。" },
@@ -156,13 +174,14 @@ export const emeraldVeilProject = {
     { term: "DWM（桌面窗口合成器）", meaning: "Windows负责组合各个窗口画面的组件。这里等待其完成一轮合成，避免泡泡初始化时使用尚未稳定的背景。" },
     { term: "GetLastInputInfo", meaning: "Windows提供的最近输入时间。项目结合少量内存中的事件分类计算空闲，不保存用户按键、活动日志或截图。" }
   ],
-  operatingFlow: [
+  technicalOperatingFlow: [
     { title: "先恢复喜欢的图片", detail: "从选图清单找到已保存PNG，按需保存原始记录、复制到本用户持久目录并设置Windows桌面和锁屏，最后读取实际结果。" },
     { title: "需要泡泡时再安装启用", detail: "安装单个程序与直接登录启动项，然后用Enable配置六分钟策略；不把一次性图片恢复变成长驻服务。" },
     { title: "等待可靠空闲", detail: "程序每50ms观察输入；无意义鼠标移动不重置计时，暂停、外部黑罩或不可靠读数会阻止自动显示。" },
     { title: "显示并维护两层画面", detail: "和现有壁纸播放做短暂协调，显示专属背景，再启动原生泡泡；维护两层位置，输入或停止操作到来就收起。" },
     { title: "问题按层处理", detail: "仍空闲时可重试意外退出的渲染器；静态背景漂移按需重跑Apply（应用图片）；想撤回时分别处理屏保参数、程序安装和原壁纸。" }
   ],
+  operatingFlow: [{"title":"先恢复选定图片","detail":"Verify 先看当前桌面和锁屏，Apply 保存原设置后只改有漂移的地方。"},{"title":"需要泡泡再启用","detail":"另安装本用户会话程序，可靠空闲六分钟后在实体屏显示，普通输入就收起。"},{"title":"与其他画面协调","detail":"动态壁纸短暂停播，外部黑罩标记出现时让位；主屏关闭时保持待机。"},{"title":"按层撤回","detail":"Disable、Restore、Remove 管泡泡状态，原桌面和锁屏图片按记录在 Windows 设置恢复；实际显示仍需现场观察。"}],
   responsibilities: ["保存并恢复已选Windows桌面/锁屏静帧与换机入口。", "六分钟可靠空闲或明确启动时显示原生泡泡，正常输入收起，实体屏缺席待命。", "让专属背景、原生泡泡、已有Wallpaper Engine和外部黑罩按各自职责共存。", "保存受影响设置的原状态，明确停用、还原、卸载和实际验证的区别。"],
   exclusions: ["不提供安全锁屏，也不改变用户主动锁定电脑的选择。", "不重新分发Windows的Bubbles.scr或微软泡泡素材。", "不添加网络、遥测、持久活动日志、屏幕截图或第二个输入监控系统。", "不接管Wallpaper Engine选图、播放列表或持久配置。", "已拒绝的猫分层草稿不属于现役功能，不作为待办自动恢复。"],
   sources: [
@@ -176,16 +195,54 @@ export const emeraldVeilProject = {
     { path: "tests/EmeraldVeil.Core.Tests", role: "9月8日37项核心、源码约定与控制命令进程回归测试。" }
   ],
   evolution: [
-    { date: "2026-08", commit: "8c7d69e", result: "由原生泡泡承担画面，补齐输入过滤、六分钟空闲触发、渲染器恢复和可停用的用户会话入口。" },
-    { date: "2026-08-31—09-05", commit: "f243bce", result: "把专属背景、窗口层级维护、Wallpaper Engine初始化协调与外部黑罩让位组合成日常桌面共存方案。" },
-    { date: "2026-09-07", commit: "cf77883", result: "保留已认可的青雨静帧，增加Windows桌面/锁屏的独立恢复入口；动态雨幕留在实验中，未接受的猫分层不进入产品。" }
+    {
+      "date": "2026-08",
+      "title": "空闲画面不该打断回来操作",
+      "commit": "",
+      "result": "采用原生泡泡，加入六分钟空闲、输入退出和会话启动；它不是另一个锁屏或身份验证入口。",
+      "evidence": [
+        {
+          "date": "2026-08",
+          "note": "原生泡泡、六分钟空闲、输入退出与会话运行。",
+          "commit": "8c7d69e"
+        }
+      ]
+    },
+    {
+      "date": "2026-08–09",
+      "title": "与已有壁纸和窗口共存",
+      "commit": "",
+      "result": "协调背景、黑罩与窗口层级，静态图片有独立恢复入口；实验画面和已认可图片分开。",
+      "evidence": [
+        {
+          "date": "2026-08-31—09-05",
+          "note": "背景、层级、现有Wallpaper Engine与外部黑罩共存。",
+          "commit": "f243bce"
+        },
+        {
+          "date": "2026-09-07",
+          "note": "静态桌面/锁屏恢复独立，未接受的动态或分层实验不进入交付。",
+          "commit": "cf77883"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "title": "想开就能开，主屏不在就等待",
+      "commit": "b06e530",
+      "result": "托盘与快捷键直接启动，物理屏缺席不改用虚拟屏；当前壁纸材料取代固定底图，暂停和退出按实际入口行为说明。"
+    }
   ],
-  snapshotUpdateNote: "2026-09-12只读回读0.1.28远端源码并补入Windows 11壁纸和超时兼容；电脑各屏、锁屏、安装版本与手机壁纸仍保留9月9日0.1.27观察，37项回归和启用恢复仍为9月8日。本轮没有安装、触发泡泡或进入锁屏。"
+  snapshotUpdateNote: "2026-09-12只读回读0.1.28远端源码并补入Windows 11壁纸和超时兼容；电脑各屏、锁屏、安装版本与手机壁纸仍保留9月9日0.1.27观察，37项回归和启用恢复仍为9月8日。本轮没有安装、触发泡泡或进入锁屏。",
+  "readerBoundary": "泡泡底图优先使用虚拟屏当前选定的壁纸材料，不固定成黑猫图片。配置、进程与实际画面分别验收，未认可的动态雨幕和分层图片不算已交付。",
 };
 
 export const emeraldVeilModules = [
   {
     id: "windows-desktop-and-lockscreen-background", slug: "windows-desktop-and-lockscreen-background", order: 1,
+    usageEntry: "先按选图清单确认图片，运行 scripts/Set-WindowsBackground.ps1 -Action Verify 查看现状；要应用时显式使用 -Action Apply。",
+    usageInputs: ["想使用项目里的哪张图片","只检查还是应用到桌面或锁屏","需要时是否恢复原图"],
+    productFlow: [{"title":"先确认选定图片和现状","detail":"工具核对图片有没有变化，并分别查看当前桌面与锁屏；只检查时不改设置。"},{"title":"明确应用才修改","detail":"先留下原设置，再把图片放在持久位置，只更新有差异的桌面或锁屏。"},{"title":"回看两处画面","detail":"分别核对结果；想换回原图时按保存记录在 Windows 设置中选择。"}],
     title: "桌面与锁屏图片恢复", shortTitle: "桌面锁屏恢复",
     kicker: "同一张选定图片，重装和换机后都能再用",
     teaser: "恢复雨林黑猫4K底图，各显示器和锁屏逐项核对，并保留原有图片记录。",
@@ -193,11 +250,15 @@ export const emeraldVeilModules = [
     status: "本机接口回读通过", statusTone: "accent", stateLabels,
     value: "图片和恢复入口放在一起，新电脑不必重新找图、猜颜色参数或依赖原来的用户名与盘符。",
     why: "只把图片路径指向开发或临时目录，后续搬家容易失效；桌面和锁屏又是两处独立设置。脚本保存已选图、明确分别设置与核对结果，避免看到一处正确就以为两处都好了。",
-    example: "“这台新电脑也用青雨，锁屏一起换好。”带上脚本、清单和原PNG，运行Apply（应用图片）。它先保存这台电脑原有图片与设置，再把新图复制到本用户目录，分别设为桌面和锁屏；只想检查时运行Verify。",
-    result: "返回明确的verified或drift及退出码，指出桌面/锁屏是否一致。原图记录还在，需要撤回时可在Windows个性化设置里选回；真实锁屏的裁剪与观感仍要实际看。",
+    example: "“把已选好的图设为这台电脑的桌面和锁屏背景，保留现在的设置方便恢复。”工具先保存原设置，处理本人选定的目标，再核对 Windows 是否接受；最后还要看实际桌面和锁屏的裁剪效果，不能只凭设置写入成功就说画面已经合适。",
+    result: "分别告诉你桌面和锁屏是否已使用选定图片，哪一处仍有差异或报错。原设置记录保留，必要时可恢复；实际锁屏的裁剪与观感仍要打开画面检查。",
     problem: "接口设置可能只成功一部分；脚本不是桌面与锁屏的原子事务。出现系统错误应按具体失败位置核对，保留已保存的原图记录后再处理。",
     relation: "只管理Windows原生静态图片。Wallpaper Engine可继续显示自己的动画，泡泡专属背景不从此入口加载。",
-    readerStates: { pass: "各屏幕与锁屏都引用正确持久副本且处于固定图片模式时，脚本返回verified；重复Apply（应用图片）不重新设置。", problem: "Windows个性化或其他软件改变选图/模式后，Verify返回drift；想恢复选定图时再运行Apply（应用图片）。", unavailable: "图片缺失、哈希不符或Windows接口不可用时直接报告错误，不生成替代图、不锁定电脑。" },
+    readerStates: {
+      "pass": "各屏幕和锁屏都已引用正确图片时，重复操作不会再改一次。",
+      "problem": "Windows个性化设置或其他软件改变了图片、显示模式时，检查会指出差异；本人选择恢复后再重新设置。",
+      "unavailable": "图片缺失、内容不符或Windows接口不可用时保留错误与原设置，不生成替代图，也不锁定电脑。"
+    },
     decisionImpact: ["只恢复图片无需安装泡泡或.NET SDK，64位Windows自带PowerShell即可。", "恢复新机器使用项目原图；原电脑的before-first-apply记录只用于撤回原电脑，不是新机器的设置来源。", "脚本不会在后台争抢。以后主动打开Wallpaper Engine的覆盖系统壁纸/锁屏选项可能再改原生图片，需要时按需重跑。"],
     concepts: [
       { term: "雨林黑猫 · 更绿版", explanation: "已选用的3840×2160电脑底图，由1672×941生成原图放大；是sRGB SDR，不宣称恢复了未知细节、HDR或10位输出。" },
@@ -220,10 +281,14 @@ export const emeraldVeilModules = [
     ],
     sources: [{ path: "docs/windows-background.md", role: "恢复、换机、原图和现有应用边界。" }, { path: "scripts/Set-WindowsBackground.ps1", role: "真实设置与只读回读实现。" }, { path: "assets/windows-background.json / assets/verdant-rain-4k.png", role: "选图、参数与完整静帧。" }],
     verification: ["本轮Verify为verified，desktop/lockScreen均true、锁屏平均像素差0，没有修改表面。", "脚本会在内容、模式和路径都正确时跳过；它不会主动进入锁屏。", "跨机操作与真实锁屏目视需分别做，本轮未重做；不能用接口结果推定观感完全一致。"],
-    searchProjection: { intents: ["换电脑后恢复桌面壁纸和锁屏", "青雨静帧怎么设置", "壁纸图片移动后失效", "只检查锁屏是否仍是选定图片"], entities: ["Set-WindowsBackground.ps1", "windows-background.json", "verdant-rain-4k.png", "before-first-apply.json", "LockScreen"], relations: ["Apply（应用图片）按需恢复两处静态图，Verify只读核对", "原机器前像用于原机撤回，项目原图用于新机器恢复"], failureRecovery: ["drift后按需重新Apply（应用图片）", "系统错误按部分结果核对，原图手动选回"] }
+    searchProjection: { intents: ["换电脑后恢复桌面壁纸和锁屏", "青雨静帧怎么设置", "壁纸图片移动后失效", "只检查锁屏是否仍是选定图片"], entities: ["Set-WindowsBackground.ps1", "windows-background.json", "verdant-rain-4k.png", "before-first-apply.json", "LockScreen"], relations: ["Apply（应用图片）按需恢复两处静态图，Verify只读核对", "原机器前像用于原机撤回，项目原图用于新机器恢复"], failureRecovery: ["drift后按需重新Apply（应用图片）", "系统错误按部分结果核对，原图手动选回"] },
+    readerStatus: "本机壁纸设置接口的回读通过；锁屏实际裁剪、显示效果与新电脑恢复仍需对应画面确认。"
   },
   {
     id: "native-bubbles-idle-overlay", slug: "native-bubbles-idle-overlay", order: 2,
+    usageEntry: "先运行 scripts/Install-EmeraldVeil.ps1 -Action Install，再运行 scripts/Set-NativeBubbles.ps1 -Action Enable；日常等六分钟空闲，也可用托盘“立即启动”或 15 秒预览。",
+    usageInputs: ["是否启用六分钟空闲泡泡","这次要立即启动还是只做 15 秒预览"],
+    productFlow: [{"title":"启用并待机","detail":"程序观察可靠输入和实体屏，主屏关闭或状态不可信时保持待命。"},{"title":"空闲才显示","detail":"达到 360 秒并无外部暂停时，显示背景和系统原生泡泡。"},{"title":"输入即结束","detail":"活动输入或停止动作收起本轮画面；异常退出可在仍空闲时重试，不能把泡泡当安全锁屏。"}],
     title: "原生泡泡、空闲触发与输入退出", shortTitle: "空闲泡泡",
     kicker: "等真正空闲才显示，正常操作时退开",
     teaser: "六分钟输入判断、两层画面与原生进程恢复，保留Windows自己的泡泡材质和运动。",
@@ -235,7 +300,7 @@ export const emeraldVeilModules = [
     result: "显示原生泡泡及本次选定背景，正常输入后隐藏窗口并结束受管进程；主屏不可用时不显示。源码与配置可核对，实体像素、远控画面和自然开机需单独观察。",
     problem: "本轮修复前发现注册表超时600与运行时360不一致，且常驻程序没有运行；现已恢复。不能由37项测试通过再推定实屏和远端画面也已通过。",
     relation: "泡泡背景优先来自VDD当前Wallpaper Engine材料的一次快照，缺失才用VDD的Windows壁纸；静态黑猫桌面/锁屏恢复是另一条独立能力，不再以固定嵌入图解释全部背景。",
-    readerStates: { pass: "可靠空闲达到360秒时自动显示；正常活动先隐藏窗口，再结束本次泡泡进程。", problem: "原生渲染器意外退出时，仍应显示就按1秒退避重试；用户已经回来则取消恢复。", unavailable: "计时不可靠、暂停或系统组件缺失时不自动显示；已有另一原生实例时拒绝再开，不抢占它。" },
+    readerStates: {"pass":"本人离开六分钟且空闲判断可靠时显示泡泡，正常操作回来就收起。","problem":"泡泡意外退出而本人仍不在时可以稍后再试；本人已回来就不重新盖住屏幕。","unavailable":"输入状态不可靠、本人暂停或系统泡泡组件缺失时不自动显示，也不抢已有实例。"},
     decisionImpact: ["零位移WM_MOUSEMOVE被过滤；孤立的注入移动仍送给应用，只暂不计为空闲活动。250ms内出现第二次注入移动才确认连续活动。", "物理移动、确认连续注入、按钮、滚轮和键盘都算活动；不记录按键内容、坐标历史或工具名单。", "托盘预览15秒刻意不因输入结束；--show-now入口和自然空闲显示会因输入收起，不能把两种体验写成相同。", "Windows主屏的物理矩形决定画面位置；泡泡大小由原生实现决定，显示/DPI（显示缩放）改变后先停止旧实例，再按当前状态重建。"],
     concepts: [{ term: "GetLastInputInfo", explanation: "系统最近一次输入时间，结合窄事件分类计算是否可靠空闲。" }, { term: "Job Object（作业对象）", explanation: "本次启动的泡泡归属一个关闭即杀子进程的系统对象，退出不靠寻找并接管别人的实例。" }, { term: "Color-key（色键透明）", explanation: "只把原生泡泡窗口的黑色设为透明，让紧贴其下的项目图片显露。" }],
     implementation: [
@@ -252,10 +317,14 @@ export const emeraldVeilModules = [
     failures: [{ condition: "原生泡泡缺失或已有实例", response: "缺失报错；重复实例拒绝启动且不接管它。仍满足显示条件时后续可重试。" }, { condition: "输入分类没有及时给出结果", response: "原始变化先挂起一轮，下一次仍未知就计为活动，保持可退出。" }, { condition: "渲染器退出或显示/DPI（显示缩放）改变", response: "停止旧实例；仍需显示则按状态与退避重新建立，不维持两个并存窗口。" }],
     sources: [{ path: "src/EmeraldVeil.Core", role: "空闲、分类、策略和状态协调。" }, { path: "src/EmeraldVeil.App/NativeBubblesLauncher.cs / VeilWindow.cs", role: "真实进程、Job Object及两层窗口。" }, { path: "src/EmeraldVeil.App/VeilController.cs / TrayIconHost.cs", role: "50ms循环、15秒预览与托盘控制。" }, { path: "docs/product-design.md", role: "显示、尺寸、输入和验收边界。" }],
     verification: ["9月8日37项测试通过，含原36项核心/源码约定与新增控制命令非零退出回归；这组记录不改称0.1.27新测试。", "9月8日恢复后只有一个当前会话常驻程序，配置Verify通过；本轮未主动预览、改变空闲时间或注入输入。", "真正的窗口层级、崩溃后无残留和退出延迟仍需对应实机验证，不从单元测试推定。"],
-    searchProjection: { intents: ["电脑空闲六分钟出泡泡", "鼠标没动屏保却退出", "泡泡进程退出后留下后台进程", "托盘预览15秒", "大泡泡数量和缩放"], entities: ["Bubbles.scr", "GetLastInputInfo", "InputActivityFilter", "IdleTimeline", "Job Object", "VeilModeReconciler", "Radius"], relations: ["用户会话程序触发原生/s覆盖层", "独立图片背景在泡泡窗口下，50ms观察输入"], failureRecovery: ["渲染器退出仍空闲则1秒退避", "未知输入第二次采样接受为活动", "显示变化先停旧实例再建立"] }
+    searchProjection: { intents: ["电脑空闲六分钟出泡泡", "鼠标没动屏保却退出", "泡泡进程退出后留下后台进程", "托盘预览15秒", "大泡泡数量和缩放"], entities: ["Bubbles.scr", "GetLastInputInfo", "InputActivityFilter", "IdleTimeline", "Job Object", "VeilModeReconciler", "Radius"], relations: ["用户会话程序触发原生/s覆盖层", "独立图片背景在泡泡窗口下，50ms观察输入"], failureRecovery: ["渲染器退出仍空闲则1秒退避", "未知输入第二次采样接受为活动", "显示变化先停旧实例再建立"] },
+    readerStatus: "六分钟空闲触发配置与常驻程序已恢复；主屏不可用时待命，实际动画与远控画面仍分别验收。"
   },
   {
     id: "wallpaper-engine-coexistence-and-rain-experiment", slug: "wallpaper-engine-coexistence-and-rain-experiment", order: 3,
+    usageEntry: "启用泡泡后，由现有会话程序与 Wallpaper Engine 协调；若外部黑罩标记存在，泡泡让位。独立雨幕仍只是浏览器实验。",
+    usageInputs: ["是否要显示泡泡","看到动态壁纸或外部黑罩冲突时描述现象"],
+    productFlow: [{"title":"先检查占用","detail":"看到外部黑罩标记就不显示泡泡，静态壁纸恢复也不改 Wallpaper Engine。"},{"title":"短暂停播再显示","detail":"能唯一识别播放进程时暂停它，准备背景和原生泡泡。"},{"title":"结束时尝试续播","detail":"收起泡泡后恢复播放并回读；失败报告真实状态，不把独立雨幕实验写成现役屏保。"}],
     title: "和动态壁纸、外部黑罩共存", shortTitle: "壁纸与黑罩共存",
     kicker: "已有壁纸继续用，黑罩需要时泡泡让位",
     teaser: "说明Wallpaper Engine初始化协调、外部暂停标记，以及雨幕实验和系统图片的区别。",
@@ -264,10 +333,10 @@ export const emeraldVeilModules = [
     value: "保留现在用着的动态壁纸，让原生泡泡初始化时得到正确背景；主动黑屏保护开启时，泡泡不会反过来盖在黑罩上。",
     why: "原生泡泡初始化可能撞上动态壁纸的过渡画面，窗口层级也可能让其他桌面层插进来。另一个主动黑罩有自己的显示目的，不能由泡泡抢回来；这些冲突需要在各自入口处理。",
     example: "“动态壁纸别换掉，我打开主屏黑罩时泡泡也别冒出来。”泡泡启动时短暂停止同会话的Wallpaper Engine播放，等专属背景和泡泡窗口就绪后恢复；黑罩持有暂停标记期间，当前泡泡收起，新的空闲显示和主动预览都会让位。",
-    result: "保留Wallpaper Engine的选图和配置；外部黑罩结束或最后持有者退出后保护标记自然消失，恢复当前enabled与空闲策略，不重建会话暂停状态或新增服务。",
+    result: "保留 Wallpaper Engine 原来的图片和设置；泡泡显示时短暂协调当前播放，外部黑罩开启时让位。黑罩结束后仍按本来的空闲规则决定是否显示。",
     problem: "控制器缺失、进程不唯一、命令非零退出或超时会导致本轮初始化失败；本轮没有证明实际暂停/续播画面。",
     relation: "原生泡泡共存是一条运行机制；动态雨幕属于独立实验，Windows桌面与锁屏实际采用已保存的静帧。",
-    readerStates: { pass: "唯一当前会话Wallpaper Engine可协调时，准备背景与泡泡后恢复播放；没有运行该软件就跳过这一步。", problem: "识别不唯一、控制器缺失或初始化失败时收起背景并结束这次尝试，不能继续宣称无冲突。", unavailable: "外部黑罩标记存在时主动让位，不是故障；静态图片恢复仍可独立使用。" },
+    readerStates: {"pass":"能认准当前壁纸播放时，泡泡准备好后尝试恢复播放；没有运行 Wallpaper Engine 就跳过协调。","problem":"播放进程不唯一或恢复失败时报告实际状态，不把泡泡出现当成原壁纸已续播。","unavailable":"外部黑罩正在保护屏幕时泡泡主动让位，静态图片恢复仍可独立使用。"},
     decisionImpact: ["只识别当前会话唯一wallpaper64进程，通过同目录wallpaper32的-control stop/play临时控制，不改播放列表、壁纸选择或持久配置。", "现实现对Wallpaper Engine停止后等待2秒，再完成背景渲染与DWM合成；不是“毫秒级毫无等待”。", "外部黑罩用同会话命名句柄表示仍需保护，退出自动释放，避免一个忘记清理的文件让泡泡永久暂停。", "青雨雨幕参数已认可，不等于猫抠图方案通过；不把未接受的分层草稿当成壁纸新功能。"],
     concepts: [{ term: "DWM（桌面窗口合成器）", explanation: "等待背景确实进入一轮桌面合成后再初始化原生泡泡，减少取到暂态画面的机会。" }, { term: "ExternalProtectionPause（外部保护暂停）", explanation: "黑罩存续时持有的命名句柄；泡泡只读检查存在性，最后句柄关闭后恢复策略。" }, { term: "动态雨幕实验", explanation: "experiments/verdant-rain中的独立浏览器预览；保留已接受雨幕参数，不作为Windows动态壁纸或泡泡渲染器。" }],
     implementation: [
@@ -282,10 +351,14 @@ export const emeraldVeilModules = [
     failures: [{ condition: "多个当前会话渲染器或控制客户端不存在", response: "拒绝猜测并结束本轮显示尝试，不随意停止其他壁纸进程。" }, { condition: "背景/原生窗口初始化或播放控制超时", response: "隐藏背景，finally尝试续播；当前实现没有远端或WE播放状态验收，不承诺画面已恢复。" }, { condition: "外部黑罩持有者崩溃", response: "最后句柄关闭后标记自然消失，恢复已有空闲和暂停策略；不留下持久暂停文件。" }],
     sources: [{ path: "src/EmeraldVeil.App/WallpaperEngineQuiescence.cs", role: "当前会话识别、控制命令与超时。" }, { path: "src/EmeraldVeil.App/VeilWindow.cs / VeilController.cs", role: "两秒等待、背景合成与UI前重查。" }, { path: "src/EmeraldVeil.Core/ExternalProtectionPause.cs", role: "句柄存在性检查。" }, { path: "experiments/verdant-rain/ART_DIRECTION.md / assets/windows-background.json", role: "已接受画面参数和未接受方案边界。" }],
     verification: ["本轮源码核对确认2秒停止等待、3秒控制客户端超时、finally续播和外部标记双重检查。", "外部暂停测试使用随机测试名称验证句柄生命周期，没有持有实际生产黑罩标记。", "Wallpaper Engine现场进程存在，不代表本轮已实测泡泡共存；没有启停它或触发泡泡。"],
-    searchProjection: { intents: ["泡泡屏保与Wallpaper Engine共存", "黑罩开着时让泡泡暂停", "青雨动态雨幕和锁屏静帧什么关系"], entities: ["Wallpaper Engine", "WallpaperEngineQuiescence", "ExternalProtectionPause", "DWM", "verdant-rain"], relations: ["stop之后2秒等待，背景合成与泡泡就绪后尝试play", "外部黑罩句柄优先于空闲和预览"], failureRecovery: ["控制目标不唯一不猜测", "黑罩最后句柄关闭恢复原策略", "初始化失败finally尝试恢复播放"] }
+    searchProjection: { intents: ["泡泡屏保与Wallpaper Engine共存", "黑罩开着时让泡泡暂停", "青雨动态雨幕和锁屏静帧什么关系"], entities: ["Wallpaper Engine", "WallpaperEngineQuiescence", "ExternalProtectionPause", "DWM", "verdant-rain"], relations: ["stop之后2秒等待，背景合成与泡泡就绪后尝试play", "外部黑罩句柄优先于空闲和预览"], failureRecovery: ["控制目标不唯一不猜测", "黑罩最后句柄关闭恢复原策略", "初始化失败finally尝试恢复播放"] },
+    readerStatus: "与动态壁纸及外部黑罩共存的实现已核对；本轮没有触发真实屏幕共存测试。"
   },
   {
     id: "reversibility-preimage-and-remote-compatibility", slug: "reversibility-preimage-and-remote-compatibility", order: 4,
+    usageEntry: "用 scripts/Install-EmeraldVeil.ps1 -Action Install/Remove 管安装，用 scripts/Set-NativeBubbles.ps1 -Action Enable/Disable/Restore 管策略；托盘可立即启动或预览。",
+    usageInputs: ["这次是安装、启用、停用、恢复还是卸载","如有远程显示问题，描述设备和看到的现象"],
+    productFlow: [{"title":"先看当前状态","detail":"安装和首次启用时留下原屏保设置；已经启用过就不覆盖第一次记录。"},{"title":"分别看配置和真实画面","detail":"文件装好、程序运行与人眼看见泡泡是不同结果，远程屏幕还需实际连接验。"},{"title":"按本人目的撤回","detail":"可以只停自动泡泡、还原原屏保参数或卸载程序；原桌面与锁屏图片按另一份记录恢复。"}],
     title: "状态、立即启动、停用与原设置恢复", shortTitle: "启停与恢复",
     kicker: "知道怎么装，也知道怎样停下和撤回",
     teaser: "安装、配置、应急停止和恢复原设置分别处理；远程输入按相同桌面规则工作。",
@@ -297,7 +370,7 @@ export const emeraldVeilModules = [
     result: "留下清楚的原状态与操作结果。泡泡不主动锁屏，因此不会要求用户为退出它再输密码；这不代替Windows锁定，也不证明每个远程客户端都已经测试。",
     problem: "安装验证不会证明自启已经执行，也不能猜出程序为何退出；本轮已恢复现有常驻与360秒配置。缺少或损坏原状态记录时，仍不能猜出第一次启用前的旧配置。",
     relation: "安装器负责程序和Run值，配置脚本负责屏保参数和前像，桌面/锁屏脚本负责图片；这些路径互相不能冒充。",
-    readerStates: { pass: "一个用户会话驻留者保留快捷键和空闲管理，状态/立即启动/停用/还原/卸载分别可用；不把Windows应用重启登记当成每次实际恢复证据。", problem: "配置漂移会让Verify报告具体不一致。Disable采用较小的应急路径，即使非必要泡泡参数漂移也可关闭自动触发。", unavailable: "原状态记录缺失或不支持时Restore报错，不猜测旧值；安装目标冲突或程序制品缺失时也直接报错。" },
+    readerStates: {"pass":"安装、启用、立即启动、停用和恢复各有对应结果；真实画面与远程兼容仍另看。","problem":"设置与预期不符时先指出差异；即使其他参数漂移，仍可先停用自动泡泡。","unavailable":"没有首次启用前的记录就不能猜旧设置来恢复；安装文件缺失或目标冲突也会停止。"},
     decisionImpact: ["托盘查看目标、空闲与错误，立即启动或双击等同Ctrl+Win+E；preview最多15秒，真正屏保直到活动或禁用。不提供单独会话暂停和托盘退出驻留，以免留下没有Owner的快捷键。", "Windows可能在登录或驱动重置后重新打开自己的屏保触发。程序启用且运行时会在启动和每30秒检查并修正运行时的六分钟、非锁屏、关闭自动触发策略，避免Windows另起一套屏保；程序退出后这项维护也停止。", "Enable首次记录runtime和相关注册表值的存在性、类型和值，原子落盘；重复Enable先校验而不覆盖第一次原状态。", "Disable关闭泡泡和自动触发，不还原Radius或旧超时；Restore才按前像恢复，Remove另行删除已装程序与启动项。", "远程兼容靠不主动切换到安全桌面、输入穿透、不抢焦点；实际连接与画面仍由客户端验收，不按软件名称声称全兼容。"],
     concepts: [{ term: "Preimage（变更前状态）", explanation: "第一次Enable前保存的相关配置；记录精确存在性、类型、值和运行时，不是整机镜像。" }, { term: "WinExe（无控制台应用）", explanation: "直接登录启动一个本用户图形程序，无需PowerShell常驻包装、服务或计划任务。" }, { term: "当前交互桌面", explanation: "用户现在操作的桌面，泡泡保持在这里；不会自行进入Windows锁屏或凭据输入桌面。" }],
     implementation: [
@@ -314,7 +387,8 @@ export const emeraldVeilModules = [
     failures: [{ condition: "原状态缺失、损坏或schema不支持", response: "Restore直接报错，无法替用户猜旧设置；Disable不依赖完整前像，可用于先关闭自动泡泡。" }, { condition: "程序制品缺失或已有安装目标冲突", response: "安装器报出具体目标，避免覆盖不属于该安装的文件；不伪造安装完成。" }, { condition: "启用标志和Run值存在，但程序未运行", response: "分开报告安装、配置和运行证据，核对退出原因后再恢复；不能由注册表正常推定六分钟空闲功能正在工作。" }],
     sources: [{ path: "scripts/Install-EmeraldVeil.ps1", role: "Install / Verify / Remove与实际制品路径。" }, { path: "scripts/Set-NativeBubbles.ps1", role: "Enable / Verify / Disable / Restore及v1/v2前像。" }, { path: "src/EmeraldVeil.App/App.xaml.cs / NativeBubblesSettings.cs / TrayIconHost.cs", role: "登录策略修正、托盘控制和30秒运行时维护。" }, { path: "docs/product-design.md", role: "原状态、远程输入、实机验收边界。" }],
     verification: ["本轮只读安装器 Verify 核对0.1.27与唯一直接WinExe启动项；安装文件的实际大小、哈希和编译标识单列，不声称本轮重新构建或安装。", "既有Enable修正超时值后Verify通过：注册表与运行时均360秒，active和secure均false；首次前像哈希未改变。新安装程序在当前会话正常运行。", "没有执行Disable、Restore、锁屏或真实远端验证；原停止原因未有充分证据，不把重新运行写成已证明根治所有退出。"],
-    searchProjection: { intents: ["停用或立即启动EmeraldVeil泡泡", "卸载泡泡并还原Windows原设置", "已安装但泡泡没有运行", "屏保会不会锁住远程桌面"], entities: ["Install-EmeraldVeil.ps1", "Set-NativeBubbles.ps1", "native-bubbles-preimage.json", "Disable", "Restore", "Pause protection"], relations: ["安装器负责程序和Run项，Enable负责屏保策略", "Restore恢复原设置不是Windows默认值，Remove才卸载"], failureRecovery: ["原状态缺失不猜测，先Disable关闭自动泡泡", "配置漂移和运行停止分别核对", "远程客户端实际连接才证明对应使用结果"] }
+    searchProjection: { intents: ["停用或立即启动EmeraldVeil泡泡", "卸载泡泡并还原Windows原设置", "已安装但泡泡没有运行", "屏保会不会锁住远程桌面"], entities: ["Install-EmeraldVeil.ps1", "Set-NativeBubbles.ps1", "native-bubbles-preimage.json", "Disable", "Restore", "Pause protection"], relations: ["安装器负责程序和Run项，Enable负责屏保策略", "Restore恢复原设置不是Windows默认值，Remove才卸载"], failureRecovery: ["原状态缺失不猜测，先Disable关闭自动泡泡", "配置漂移和运行停止分别核对", "远程客户端实际连接才证明对应使用结果"] },
+    readerStatus: "已有安装、立即启动、停用和恢复原设置的入口；原图、屏保参数与程序卸载仍各自处理。"
   }
 ];
 

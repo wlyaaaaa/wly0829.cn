@@ -1,20 +1,20 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
-const sourceCommit = "606bff461b82cf80ab8318d67ac6543125322ba0";
+const sourceCommit = "293a2730482174a4083106763cc48d59f63aad0b";
 const stateLabels = ["正常完成时", "发现问题时", "资料不可用时"];
 
 export const personalExpressionSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-18T18:58:17Z",
+  observedAt: "2026-09-22T06:51:55.2514005Z",
   label: "两条表达入口和本地读取器已具备；后续效果随真实任务验收",
-  boundary: "当前606bff4源码与E144明确先保护再参考个人表达，样本不再用于操作者判断。6项虚构回归保留9月8日日期；没有读取私人语料或进行新真人表达验收。实际理解、拟稿满意度与跨任务主动更新仍须真实使用证明。",
+  boundary: "本轮只读已发布293a273的协作合同，补入一般个人增量入口；expression.py与资料格式没有变化。6项虚构回归保留9月8日日期，没有读取私人语料或进行新真人表达验收。理解、拟稿满意度和跨任务主动效果仍由真实使用证明。",
   metrics: [
     { label: "说明与代拟", value: "2 个方向，各用对应资料" },
     { label: "日常资料", value: "2 份指南、1 份样本文件" },
     { label: "本地工具", value: "4 个只读命令，Python 标准库" },
-    { label: "本机回归", value: "6 项虚构测试通过" }
+    { label: "9月8日回归", value: "6项虚构测试通过" }
   ],
   facts: [
-    { label: "源版本", value: "PRIVATE main 606bff461b82cf80ab8318d67ac6543125322ba0已正式回读；业务先保护、身份辅助退出和现有四模块合同闭合。源码采用现有expression.py与薄Skill入口，不增加身份模型、第二画像库或额外改写服务。", hero: false },
+    { label: "源版本", value: "2026-09-22已正式回读PRIVATE main 293a2730482174a4083106763cc48d59f63aad0b；相对606bff4只有AGENTS.md的个人增量协作约定变化，现有expression.py、资料格式和四模块不变，没有新模型、服务或私人语料取证。", hero: false },
     { label: "两个方向", value: "向本人说明时使用理解与讲解反馈；替本人拟消息时使用表达指南和匹配场景的本人文字。专业事实、已有意图和关系策略由当前任务负责。" },
     { label: "实际运行形式", value: "explain-to-me 与 reply-as-me 是现有技能入口，当前 AI 在原对话完成说明、拟稿和必要更新。expression.py 只读文件并返回 JSON，不调用模型、不访问微信、不写资料。" },
     { label: "当前可验证范围", value: "2026-09-08六项虚构测试覆盖方向分开、场景筛选、草稿与待定项排除、无匹配、重复/非法作者标签、错误记录及消息容器格式；本轮只回读当前源码与资料保护合同，未重跑这些测试，也未进行真人说明、代拟、私人备份或恢复验收。", hero: false },
@@ -24,22 +24,24 @@ export const personalExpressionSnapshot = createProjectSnapshot({
   gaps: [
     "源机制和当前技能入口已存在；后续真实任务能否主动选择微信会话与时间窗口、选入有用表达、合并资料并在下次正常调用用上，仍待实际使用验收。",
     "媒体上下文已有约定；真实微信动画用于拟回复仍未完成验收。",
-    "普通个人表达参考先满足对应保护，私密历史通信先因子；样本不再用于操作者判断，冻结后不复用私人内容。源码合同已明确，真人保护、表达效果与跨任务采用仍分别验收。",
+    "个人表达所需私人资料消费同一共享解锁；取消本次验证不撤回其他有效期，主动锁定或到期后不复用私人内容。样本不参与身份判断；活动资料规则、B2候选运行和自然表达效果分别验收。",
     "本轮未进行干净新机恢复演练；私有Git和本地读取器存在不等于目标设备已恢复或真实表达效果已验收。",
   ]
 });
 
 export const personalExpressionProject = {
-  order: 34,
+  order: 18,
   slug: "personal-expression",
+  usageEntry: "在眼前对话里说“把这件事讲明白”，或在意思已定时说“帮我拟一条自然回复”；现有表达资料由当前 AI 按方向读取。",
+  usageInputs: ["要讲清楚的具体卡点，或已经确定的消息意思", "对外拟稿时的对象和重要分寸", "新的讲法或措辞反馈（如有）"],
   title: "个人表达与沟通支持",
-  kicker: "把事情讲明白，把已定意思写自然",
+  kicker: "解释讲明白，消息忠于已经确定的意思",
   lead: "把事情讲明白，把已定意思写自然",
   route: "/projects/personal-expression",
   visibility: "私有仓库",
   badge: "个人能力 / 表达支持",
   statusTone: "accent",
-  summary: "一边帮助 AI 把事情向本人讲清楚，一边帮助 AI 按已经确定的意思拟写自然、合适的消息。前者参考本人对解释的具体反馈；后者参考表达指南、当前聊天上下文和适合场景的本人文字。两者都由处理眼前事情的 AI 在原对话完成，不需要另开一段对话或再跑一次模型。",
+  summary: "一边帮助AI把事情向本人讲清楚，一边按已经确定的意思拟写自然消息；分别参考讲解反馈、表达指南与必要聊天语境。都由眼前任务的AI在原对话完成。未限定来源的个人更新也会查看新反馈与资料变动，不全量展开私人样本，更不另跑一个改写模型。",
   why: "听不懂一段解释，与觉得一条代拟消息不像自己，是两种问题。把它们混在一起，容易拿聊天口吻指导专业解释，或者只学几个口头禅却改掉原意。这个项目把资料分开，也让有价值的纠正回到对应指南，供以后真正读到时使用。",
   plainExample: "“这段解释太绕，结合眼前这件事讲清楚。”AI 回到具体事实和判断，重新说明。另一种请求是：“意思已经定了，帮我把这条回复写自然。”AI 保留原意和分寸，给出可修改的草稿。你指出具体问题时，当前 AI 先改眼前内容，再把有用教训合入对应资料；只有实际保存并重新读到，才能说下次调用已能带出这条教训。",
   result: "本人收到一段更容易理解的说明，或一条忠于既定意思、可以修改的消息草稿；有价值的反馈会由当前 AI 合入现行资料。是否讲懂、是否自然，仍以真实沟通反馈判断。读取器、规则和测试已经具备，长期使用效果没有被测试结果代替。",
@@ -55,13 +57,34 @@ export const personalExpressionProject = {
     failureRecovery: ["无匹配样本仍可按既定意图拟稿", "资料无法读取时不伪称已引用", "选择已有私有备份检查和恢复"]
   },
   productPrinciples: [
-    {"title":"样本用于表达，不用于辨认操作者","detail":"普通个性化参考先满足本机锁屏，档案性或私密资料先通过已登记因子；不能先读背景或样本来决定是否验证。独立已授权电脑MCP沿自己的私密访问授权，不重复本机因子；本机Codex借MCP不属例外。共享冻结后所有入口都停止取用、复用和披露私人内容，普通工作与最小恢复继续。 本人原话、本人修订和AI草稿分开；待验证、疑虑或冻结期间不把当前说法、反馈或改稿收为新本人基准。正常恋爱协助沿领域例外，不扩展为普通私密档案免验。"},
-    { title: "先分清谁在对谁说话", detail: "AI 向本人说明时，根据理解反馈讲清楚；替本人对外发言时，才参考匹配的本人表达。聊天习惯不直接等于讲解偏好。" },
-    { title: "保留意思，措辞可以改善", detail: "既定事实、意图、承诺和关系分寸要保留。样本只是参考，允许改进旧说法，不靠口头禅数量或相似度打分判断效果。重要含义确实拿不准才问具体问题，普通措辞由 AI 判断。" },
-    { title: "当前事情由当前 AI 办完", detail: "复用原对话中的真实背景、原话和已经看过的媒体，不把它们压成仅剩策略的一段摘要。技能负责入口，领域负责专业判断，本项目负责表达，不提供发送功能。" },
-    { title: "先解决眼前问题，再留下有用教训", detail: "反馈合入对应指南，同类合并、保留场景和例外。本人已指出的问题与 AI 尚未获认可的建议分开；没有新教训就不凑记录。" },
-    { title: "资料随实际用途补充", detail: "最近和历史微信都可按当前需要选用，现有样本不是固定上限。补读由现有微信能力执行，项目只保留有来源、有用途的参考，不设后台采集。" },
-    { title: "程序负责读取，效果交给真实使用", detail: "Python 标准库足够完成当前文件读取和格式检查。资料编辑、语义判断和备份更新由当前 AI 按流程完成；不把规则写好了称作后续每次都会执行。" }
+    {
+      "title": "私人样本只用于表达，不用于辨认人",
+      "detail": "按当前有效的共享资料权限读取本人原话；到期或本人锁定后停止取用。本人原话、本人修订与 AI 草稿分开，没被认可的建议不收成本人样本。"
+    },
+    {
+      "title": "先分清谁在对谁说话",
+      "detail": "向本人解释时看讲解反馈；替本人对外拟稿时才参考对应场景的表达。聊天习惯不直接等于讲解偏好。"
+    },
+    {
+      "title": "保留意思，改进措辞",
+      "detail": "事实、意图、承诺和关系分寸不被旧口头禅改变；只有重要意思确实不清才问，普通措辞由当前 AI 判断。"
+    },
+    {
+      "title": "当前事情在当前对话办完",
+      "detail": "复用已经知道的背景和必要聊天语境，不另跑改写模型；专业事实和关系策略继续由眼前任务负责，本项目不发送。"
+    },
+    {
+      "title": "先解决眼前问题，再留教训",
+      "detail": "反馈有稳定价值才合入对应指南，同类合并并保留适用场景；没有新教训就不凑记录。"
+    },
+    {
+      "title": "参考随真实需求补充",
+      "detail": "近期或历史表达都只在有用时选入，来源与本人认可要分清，不建立后台采集。"
+    },
+    {
+      "title": "读取器可验，效果靠真实反馈",
+      "detail": "程序能检查资料格式与读取方向；是否真正讲懂、拟得自然和下次任务会不会采用，仍要看实际使用。"
+    }
   ],
   readerStates: {
     pass: "拿到清楚的说明或可修改的草稿。若有值得保存的反馈，当前 AI 完成资料更新和回读，并简短说明实际记入了什么。",
@@ -72,7 +95,8 @@ export const personalExpressionProject = {
     { ask: "“这段我没听懂，把眼前的问题、判断和接下来怎么做讲清楚。”", effect: "当前 AI 根据说明方向的反馈重讲，专业判断仍由眼前任务承担。最后是否听懂，要看本人的实际回应。", moduleSlug: "explain-to-me" },
     { ask: "“回复的意思已经定好了，帮我写得自然一些，别多加承诺。”", effect: "复用真实聊天语境，按需参考匹配样本，给出可修改的消息草稿。缺少样本不会阻断拟稿，也不虚称像本人。", moduleSlug: "reply-as-me" },
     { ask: "“刚才这句不合适，我指的是这一次的语境。”", effect: "先改当前内容，再判断是否有值得合入指南的教训；保留适用范围，不把一次纠正变成全场景禁词。", moduleSlug: "feedback-consolidation-and-lessons-sync" },
-    { ask: "“这个新场景可以参考以前的说法；换机后也要能读到已保存的资料。”", effect: "当前 AI 按用途选择近期或历史上下文，只增补有用参考。已有私有版本可指定目录读取；真正恢复要选定版本、还原文件并回读。", moduleSlug: "corpus-extension-and-private-recovery" }
+    { ask: "“这个新场景可以参考以前的说法；换机后也要能读到已保存的资料。”", effect: "当前 AI 按用途选择近期或历史上下文，只增补有用参考。已有私有版本可指定目录读取；真正恢复要选定版本、还原文件并回读。", moduleSlug: "corpus-extension-and-private-recovery" },
+    {"moduleSlug":"feedback-consolidation-and-lessons-sync","ask":"更新一下个人资料，也把最近已经说清楚的表达反馈带进去，别把旧样本全翻一遍。","effect":"先看现有读取/校验状态和实际新反馈，只读需要改变的部分；先改当前解释或草稿，再合并适用教训并校验回读。没有答复不当作认可，未形成可靠教训就不凑记录。"}
   ],
   components: [
     { name: "当前任务中的 AI", responsibility: "说明、拟稿、判断反馈价值及普通文件编辑", implementation: "保留现有事实和聊天语境，读取对应指南，必要时通过现有微信入口补读；更新后校验、重读，并同步私有版本快照。" },
@@ -89,7 +113,7 @@ export const personalExpressionProject = {
     { name: "运行虚构回归", command: "python -B -m unittest discover -s tests -v", purpose: "在临时目录验证程序行为，不接触真实微信或私人表达资料；不用于模拟真人表达效果。" }
   ],
   technicalContracts: [
-    {"artifact":"AGENTS.md / reply-as-me/SKILL.md","schema":"业务资料访问与来源边界","owner":"当前业务任务按活动E合同取用；PCConfig拥有实际保护状态","boundary":"资料访问先满足对应screen/factor，任务和全局时限消费PCConfig单一配置，不随压缩重算。独立授权MCP日常沿既有访问而共守冻结；本机Codex借MCP仍守本机保护。样本完全退出操作者判断；author、source、时间和语境继续保留，AI代拟、引用和转贴不变为本人独立表达。"},
+    {"artifact":"AGENTS.md / reply-as-me/SKILL.md","schema":"业务资料访问与来源边界","owner":"当前业务任务按活动E合同取用；PCConfig拥有实际保护状态","boundary":"资料访问消费同一共享期、原截止和真实视图；旧screen/factor只保留分类，不另颁权限。原文作者、来源、时间与语境保留，代拟和转贴不变成本人独立表达。规则与尚未收口的运行候选明确分层。"},
     { artifact: "explain-to-me.md / reply-guide.md", schema: "UTF-8 Markdown", owner: "当前任务中的 AI 依所属方向维护", boundary: "两份指南分别用于说明与拟稿。普通读取不会自行写回；validate 检查它们非空，读取命令不自动执行一次完整 validate。" },
     { artifact: "reply-samples.jsonl", schema: "JSONL（逐行保存 JSON 对象）：id / scene / author / status / source / context / messages / use_note", owner: "表达项目维护精选样本，原件由原来源拥有", boundary: "每条必须是对象且标识不重复；messages 必须是非空文字列表。author 接受 self_message、user_revision、ai_draft；status 接受 reference、pending、retired。标签合法不证明实际作者正确，出处与归属仍由取样 AI 核对。" },
     { artifact: "reply 输出 examples", schema: "id / author / source / context / messages / use_note", owner: "expression.py 的 available_samples 与 read_direction", boundary: "只选 status=reference 且 author 不是 ai_draft 的条目，再按 scene 精确匹配。输出保留 source（样本出处）字段，供当前任务回查作者、时间和原消息；出处、上下文和文字仍可能是私人内容，不是自动脱敏。" },
@@ -97,7 +121,7 @@ export const personalExpressionProject = {
     { artifact: "data-backup/", schema: "两份 Markdown 与一份 JSONL 的私有 Git 快照", owner: "当前维护资料的 AI 在正常 Git 收口时同步", boundary: "只备份三份精选资料及项目代码，不复制全部微信。恢复须明确选用版本和目标，普通文件还原后再校验与按方向回读。" }
   ],
   evidenceLayers: [
-    { layer: "源实现与私有 Git", proves: "2026-09-18T18:58:17Z本地main与远端回读606bff461b82cf80ab8318d67ac6543125322ba0；当前项目规则和两个规范Skill明确业务保护与取消身份辅助，原有四个产品模块及读取/反馈/恢复能力不变。没有重跑来源测试、私人备份或真实表达。", doesNotProve: "源码发布不等于已经用真实聊天补充了一批资料，也不证明换机恢复完成。" },
+    { layer: "源实现与私有 Git", proves: "2026-09-22回读已发布main 293a2730482174a4083106763cc48d59f63aad0b；606bff4后的增量只有AGENTS.md三段协作约定，补充一般个人更新、及时采用答复与阶段反馈承接。没有改读取器或资料格式，也没有读取私人样本、重跑来源测试或真人表达。", doesNotProve: "源码发布不等于已经用真实聊天补充了一批资料，也不证明换机恢复完成。" },
     { layer: "本机虚构测试：6 / 6", proves: "2026-09-08 实际执行，覆盖读取分流、参考筛选、无匹配样本、格式错误拒绝与 unavailable 返回。", doesNotProve: "不评价真人表达，不证明语料来源真实、本人满意或长期稳定使用。" },
     { layer: "技能安装与当前入口读取", proves: "本轮读到用户发现目录中的两个 SKILL.md；入口都指向当前 personal-expression 源目录，无独立读取器安装副本。", doesNotProve: "文件可读和当前 metadata（能力说明）可见，不等于一个全新自然语言任务已无提示选中入口并产出合适结果。" },
     { layer: "真实使用与本人认可", proves: "源项目已选择随真实问题和真实聊天验收，并规定由处理实际任务的 AI 同步有价值教训。", doesNotProve: "本轮没有进行这层验收；真实动画拟回复、后续任务主动补读和完整写回链仍是已知待验项。" },
@@ -111,9 +135,11 @@ export const personalExpressionProject = {
     { term: "reference_limited（参考有限）", meaning: "所选场景没有匹配的可用样本；指南仍返回，当前 AI 可按既定意思继续拟稿。" },
     { term: "E2E（端到端验收）", meaning: "从自然请求、选用入口、读取资料到用户可见结果的真实路径。它与代码测试、文件可读及本人满意是不同证据。" }
   ],
-  operatingFlow: [
+  operatingFlow: [{"title": "先选表达方向", "detail": "解释面向本人，代拟面向他人；专业事实、关系判断和最终发送仍由眼前任务负责。"}, {"title": "读取相关指导与语境", "detail": "说明时看讲解反馈，代拟时看指南与必要场景样本，不为普通请求全量展开私人语料。"}, {"title": "先改好这一次", "detail": "交付能理解的说明或忠于已定意思的草稿；有价值的新反馈再合入相应资料并重新读取。"}, {"title": "下次沿同一资料继续", "detail": "只有保存并验证过才称教训可复用；没有新教训就结束，不另起改写模型。"}],
+  technicalSections: [{ title: "共享资料保护的当前证据层", paragraphs: ["本机和已认证 MCP 共用活动资料规则的一份 B2 解锁与原截止。PCConfig 的 P1/P2 共享生命周期和统一时长已正式安装复验；P3 真实加密合成实验通过，正式生产 P3、真实私人资料迁移、P4 恢复和实际安全关闭仍为 Unknown。取消本次验证不撤销旧有效期；到期或本人锁定后停止私人取用与交付。"] }],
+  technicalOperatingFlow: [
     { title: "辨认表达方向", detail: "先确定是 AI 向本人说明，还是替本人对外拟消息。当前任务继续负责专业事实、已有意图和关系策略。" },
-    { title: "保留上下文，取对应资料", detail: "说明方向读取讲解反馈；代拟先读拟稿指南，需要样本时再选场景。已读且未变化的内容直接复用，保留所需真实原话和媒体语境。" },
+    { title: "保留上下文，取对应资料", detail: "说明方向读讲解反馈，代拟先读拟稿指南，需要时才取场景样本。一般个人更新先查看当前读取/校验状态和实际新反馈，再读取会改变这次认识的最小范围；已读且未变化内容直接复用，真实原话和媒体语境保留。" },
     { title: "产出当前回答", detail: "讲清楚眼前事情，或把已定意思写成自然草稿。只有会改变含义、承诺或分寸的重要不确定才问具体问题，不逐词要求确认。" },
     { title: "有反馈则改好并沉淀", detail: "当前 AI 先解决眼前表达问题，再合并有价值的教训，校验并重读受影响方向。资料更新后同步既有私有备份；无新教训就结束。" }
   ],
@@ -125,16 +151,39 @@ export const personalExpressionProject = {
     { path: "E:\\.agents\\skills\\explain-to-me\\SKILL.md", role: "现有说明方向的薄技能入口。" },
     { path: "E:\\.agents\\skills\\reply-as-me\\SKILL.md", role: "现有拟稿方向的薄技能入口。" }
   ],
-  evolution: [{ date: "2026-09-07", result: "形成说明与代拟两个入口、三份资料和标准库读取器；把反馈沉淀及按需补语料放回正常任务，后续表达效果只随真实问题与真实聊天验收。" }],
+  evolution: [
+  {
+    "date": "2026-09-07",
+    "title": "把解释不清和拟稿不自然分开",
+    "commit": "",
+    "result": "分别维护向本人解释的反馈与拟消息的参考，当前任务直接完成，不另开一个改写模型。"
+  },
+  {
+    "date": "2026-09-14–09-18",
+    "title": "纠正要先解决眼前问题，再留下有用教训",
+    "commit": "293a273",
+    "result": "解释回到当前事实，拟稿保留已定含义；新反馈由产生结果的任务合入对应资料，原话、草稿和本人认可分开，表达样本不参与操作者身份判断。"
+  }
+],
   snapshotUpdateNote: "本次只更新本项目的源码与叶包证据。私人原话、反馈正文、真实微信以及换机恢复未在网页验收中读取或执行；说明约定、已执行动作与本人认可分别陈述。",
-  responsibilities: ["协助把事情向本人讲明白", "按既定意思与分寸拟写自然消息", "由当前 AI 将有价值反馈合入对应资料", "按用途补充有来源的表达参考", "提供本地只读接口与私有版本恢复方法"],
+  responsibilities: [
+    "把眼前事情向本人讲明白。",
+    "把已经确定的意思写成自然、可修改的消息草稿。",
+    "当前 AI 先修好这次表达，再把确实有价值的反馈并入对应指南。",
+    "只在真实用途需要时补充有来源的表达参考。",
+    "提供查看当前参考和核对私有备份的入口。"
+  ],
   exclusions: ["不替领域维护专业事实、关系策略或另一份本人画像", "不发送消息，发送由调用方和其现有授权处理", "不把正式文书正文按聊天口吻重写", "不训练或克隆人格，不以相似度分冒充本人认可", "不建后台监听、全账号采集或独立反馈队列", "网页不展示私人样本、反馈原文或具体关系语境"],
-  repositoryNote: `PRIVATE wlyaaaaa/personal-expression，默认 main；源目录 V:\\Personal\\Projects\\personal-expression。旧基线已完成本机虚构回归、定向提交、正常推送与远端回读。网页是该项目的只读说明，私有仓库没有面向未知访客的代码跳转按钮。`
+  repositoryNote: `PRIVATE wlyaaaaa/personal-expression，默认 main；源目录 V:\\Personal\\Projects\\personal-expression。旧基线已完成本机虚构回归、定向提交、正常推送与远端回读。网页是该项目的只读说明，私有仓库没有面向未知访客的代码跳转按钮。`,
+  "readerBoundary": "这两个入口不替领域任务决定策略，也不自行发送。反馈保存成功与本人真正理解或认可，是两种验收。",
 };
 
 export const personalExpressionModules = [
   {
     id: "explain-to-me", slug: "explain-to-me", order: 1,
+    usageEntry: "说这段解释太绕，请结合眼前事情讲清楚。",
+    usageInputs: ["这次没听懂的具体位置或问题"],
+    productFlow: [{"title": "系统核对并处理", "detail": "当前 AI 读取说明方向的反馈，回到事实、理由、影响和可执行下一步重讲。"}, {"title": "交付与接续", "detail": "交回可追问的说明；讲法仍不通时按具体反馈继续改，不用删掉必要专业条件。"}],
     title: "向本人讲明白", shortTitle: "向本人讲明白",
     kicker: "回到眼前问题，补上理解所需的事实与背景",
     teaser: "根据本人对说明的具体反馈，把事情讲清楚；专业判断仍由当前任务负责。",
@@ -159,10 +208,14 @@ export const personalExpressionModules = [
     failures: [{ condition: "解释仍然难懂", response: "重新说明原问题中缺失的关系或背景；确实影响结果的不确定再问清。" }, { condition: "指南缺失或不可读", response: "CLI 返回 unavailable 与错误，当前 AI 明确哪些历史反馈没读到。" }, { condition: "指南被清空", response: "validate 可发现 empty guidance；单独 explain 只负责读文件，不会自动执行完整校验。" }],
     sources: [{ path: "expression.py / read_direction", role: "说明分支的实际读文件行为。" }, { path: "explain-to-me/SKILL.md", role: "说明方向的既有技能职责。" }, { path: "AGENTS.md", role: "说明反馈的来源与更新约定。" }],
     verification: ["本机虚构测试删除样本文件后，说明命令仍能读到虚构指南；输出没有 examples。", "已读取当前技能入口；没有开展真实理解效果验收。", "实际使用由处理真人问题的 AI 检查是否讲清楚，不新建模拟表达评分。"],
-    searchProjection: { intents: ["这段我没听懂，结合我的情况讲清楚", "AI 解释太绕怎么办"], entities: ["explain-to-me", "explain-to-me.md", "ai_to_user", "理解反馈"], relations: ["专业事实由当前任务负责", "说明方向不加载聊天样本"], failureRecovery: ["指南不可读时说明参考缺失", "具体背景缺失时继续说明"] }
+    searchProjection: { intents: ["这段我没听懂，结合我的情况讲清楚", "AI 解释太绕怎么办"], entities: ["explain-to-me", "explain-to-me.md", "ai_to_user", "理解反馈"], relations: ["专业事实由当前任务负责", "说明方向不加载聊天样本"], failureRecovery: ["指南不可读时说明参考缺失", "具体背景缺失时继续说明"] },
+    readerStatus: "已有解释与读取反馈的入口；是否真正讲懂，仍由眼前问题和本人的实际回应检验。"
   },
   {
     id: "reply-as-me", slug: "reply-as-me", order: 2,
+    usageEntry: "意思已经定了，请 AI 把给对方的消息写自然。",
+    usageInputs: ["已经确定的意思", "接收对象或场景（尚不明确时）", "特殊分寸要求（如有）"],
+    productFlow: [{"title": "系统核对并处理", "detail": "当前 AI 读取拟稿指南和必要场景，保留原意与承诺边界，只在会改变意思时问具体问题。"}, {"title": "交付与接续", "detail": "交回可修改草稿，不自动发送；原意不清时先核对，不能替本人决定策略。"}],
     title: "替本人拟消息", shortTitle: "替本人拟消息",
     kicker: "意思和分寸已定，再把消息写自然",
     teaser: "复用当前聊天背景和匹配参考，给出自然、可修改的草稿。",
@@ -175,9 +228,9 @@ export const personalExpressionModules = [
     problem: "重要意图、承诺或亲密程度确实拿不准时，问清具体问题。普通用词由 AI 判断，不让本人逐字审批。",
     relation: "当前任务负责事实与策略，表达项目负责把话写合适；本项目不发送消息，发送归调用方及其既有授权。",
     readerStates: {
-      pass: "草稿忠于已有意思与当前语境，供本人修改或由调用方后续处理。",
-      problem: "reference_limited 表示无匹配样本；仍按原意拟稿，不假装有本人原话作依据。",
-      unavailable: "样本或指南读取失败时，明确资料不可用；含义拿不准则先澄清，不能凭空补关系策略。"
+      "pass": "草稿保留已有意思和这次语境，供本人修改；是否发送由当前对话的后续授权决定。",
+      "problem": "没有匹配旧样本仍可按原意拟稿，并说明参考有限。",
+      "unavailable": "指南或参考读不到时说清缺口；关键意思不明则先核对，不凭空补关系策略。"
     },
     decisionImpact: ["首次拟稿或处理纠正先读 reply-guide.md；已读且未更新可复用，需要样本时再选场景。", "当前真实上下文、原话和相关本人语料要保留，不只给一个策略摘要。", "媒体可使用已经看过的上下文、原始图片或看过后的描述，保留谁发、前后消息、微信类型及实际动静状态；取媒体仍由微信项目负责。", "真实微信动画拟回复仍待验收，不把媒体约定写成已经解码动画或理解成功。"],
     concepts: [{ term: "场景匹配", explanation: "scenes 返回当前可用参考的场景与数量，reply 按指定场景精确选取；不是相似度检索或自动判断关系。" }, { term: "参考有限", explanation: "没有匹配样本时仍返回指南和空 examples，不阻断 AI 按已定意思拟稿。" }, { term: "媒体上下文", explanation: "由调用方保留实际看过的内容、消息类型和动静状态；读取器本身不读取微信或解码媒体。" }],
@@ -187,10 +240,14 @@ export const personalExpressionModules = [
     failures: [{ condition: "场景没有匹配样本", response: "返回 reference_limited、指南和空 examples；当前 AI 如实说明后继续拟稿。" }, { condition: "关键意思或分寸不清", response: "回到那件具体事情询问，不预设让本人选一套话术立场。" }, { condition: "媒体没看过或动静状态不确定", response: "不猜图中含义或动画内容，由调用方取得足够上下文，并保持未验状态。" }],
     sources: [{ path: "expression.py / available_samples / read_direction", role: "场景筛选与有限参考的真实实现。" }, { path: "reply-as-me/SKILL.md", role: "既定意图、语境复用和首次指南读取。" }, { path: "AGENTS.md / README.md", role: "媒体输入边界与真实验收缺口。" }],
     verification: ["当前 source 合成测试断言不同场景不串用、AI 草稿和待定项不作参考，并保留 source 出处；本轮只读该测试，未冒称重新执行。", "无匹配样本测试确认返回 reference_limited、空 examples 与非空指南。", "本轮未读取真实微信、未生成真实回复、未发送消息，动画效果未验。"],
-    searchProjection: { intents: ["帮我把已经定好的回复写自然", "没有对应样本也能拟回复吗", "图片表情和动画怎么作为回复背景"], entities: ["reply-as-me", "reply-guide.md", "reference_limited", "scenes", "微信媒体"], relations: ["既定意图先于措辞", "媒体由调用方取得", "匹配样本只是参考"], failureRecovery: ["无样本仍能拟稿", "重要意思不清问具体问题", "媒体未看过不猜测"] }
+    searchProjection: { intents: ["帮我把已经定好的回复写自然", "没有对应样本也能拟回复吗", "图片表情和动画怎么作为回复背景"], entities: ["reply-as-me", "reply-guide.md", "reference_limited", "scenes", "微信媒体"], relations: ["既定意图先于措辞", "媒体由调用方取得", "匹配样本只是参考"], failureRecovery: ["无样本仍能拟稿", "重要意思不清问具体问题", "媒体未看过不猜测"] },
+    readerStatus: "已有场景参考与消息拟稿入口；能否自然贴合当前聊天仍需本人反馈，不代定策略或自动发送。"
   },
   {
     id: "feedback-consolidation-and-lessons-sync", slug: "feedback-consolidation-and-lessons-sync", order: 3,
+    usageEntry: "指出这次解释或草稿哪里不好，并希望下次避免同类问题。",
+    usageInputs: ["这次解释或草稿的具体问题", "教训只适用于某个场景时的说明"],
+    productFlow: [{"title": "系统核对并处理", "detail": "先改当前答复，再判断这条教训是否稳定有用；有价值时合入对应指南并校验读取。"}, {"title": "交付与接续", "detail": "交回当前修订及实际保存结果；未保存或只在本轮改好时不声称长期已学会。"}],
     title: "反馈怎样留到下次", shortTitle: "反馈与教训",
     kicker: "先改当前内容，再把有用教训合回现行资料",
     teaser: "保留反馈语境、合并同类教训，分清本人原话、本人修订和 AI 建议。",
@@ -215,10 +272,14 @@ export const personalExpressionModules = [
     failures: [{ condition: "重复 id、非法作者或错误消息容器", response: "读取器拒绝该资料；CLI 返回 unavailable，由当前维护者修正真实格式问题。" }, { condition: "语义与已有教训冲突", response: "比较实际场景和来源，收窄范围、补例外或据真正更正更新结论。" }, { condition: "本次更新未写入或缓存仍是旧内容", response: "明确未保存或重新读受影响文件，不能声称新教训已经带出。" }],
     sources: [{ path: "AGENTS.md", role: "反馈处理的现有责任与顺序。" }, { path: "expression.py / read_samples", role: "格式验证的能力及局限。" }, { path: "tests/test_expression.py", role: "作者标签、重复标识与错误形状回归。" }],
     verification: ["6 项虚构回归包含错误记录对象与错误 messages 容器；格式错误不会被标为 valid，非对象记录按 unavailable 收束。", "正常更新应由实际任务校验并重读受影响方向；本轮没有读取或写入私人反馈。", "后续任务主动执行、长期稳定使用和本人认可分别等待真实结果，不用模拟试写证明。"],
-    searchProjection: { intents: ["怎样让表达纠正下次还用得上", "AI 的草稿能算我的原话吗", "反馈冲突时怎样处理"], entities: ["self_message", "user_revision", "ai_draft", "read_samples", "messages", "反馈合并"], relations: ["先解决当前表达再保存教训", "标签校验不证明作者真实性", "当前 AI 编辑并重新读取"], failureRecovery: ["未写入不得称已保存", "格式错误先修资料", "场景冲突收窄范围"] }
+    searchProjection: { intents: ["怎样让表达纠正下次还用得上", "AI 的草稿能算我的原话吗", "反馈冲突时怎样处理"], entities: ["self_message", "user_revision", "ai_draft", "read_samples", "messages", "反馈合并"], relations: ["先解决当前表达再保存教训", "标签校验不证明作者真实性", "当前 AI 编辑并重新读取"], failureRecovery: ["未写入不得称已保存", "格式错误先修资料", "场景冲突收窄范围"] },
+    readerStatus: "已有先改当前结果、再保留有价值教训的流程；后续任务是否真的采用仍需真实使用验证。"
   },
   {
     id: "corpus-extension-and-private-recovery", slug: "corpus-extension-and-private-recovery", order: 4,
+    usageEntry: "有新的真实参考场景，或要核对私有表达资料的备份与恢复。",
+    usageInputs: ["来源清楚的参考材料", "使用方向与适用边界", "仅恢复时才指定备份版本"],
+    productFlow: [{"title": "系统核对并处理", "detail": "只补当前需要的样本与指南，核对结构和私有版本；读取备份不会自动覆盖现行资料。"}, {"title": "交付与接续", "detail": "交回可用参考或精确恢复状态；样本通过结构校验不等于实际表达效果已获本人认可。"}],
     title: "补充参考与私有恢复", shortTitle: "语料与恢复",
     kicker: "按当前用途选参考，用已有私有版本保留资料",
     teaser: "最近与历史微信都可按需补充；日常资料与备份版本各有明确位置。",
@@ -243,7 +304,8 @@ export const personalExpressionModules = [
     failures: [{ condition: "微信来源暂不可读或作者不确定", response: "说明缺口，不伪造样本来源；保留当前可用参考，重要归属影响结果时才问清。" }, { condition: "主数据目录不存在", response: "读取失败返回 unavailable；可明确选择已有备份目录用 --data-root 读取，但程序不会自动替换路径或还原。" }, { condition: "备份和日常资料可能不同", response: "比较选定版本与对应文件，再处理需要恢复的内容；validate 通过和数量相等不能证明一致。" }],
     sources: [{ path: "AGENTS.md / README.md", role: "近期历史补读、源归属及私有备份恢复语义。" }, { path: "expression.py / DEFAULT_DATA_ROOT / --data-root", role: "实际目录选择与只读边界。" }, { path: "data-backup/", role: "已登记的私有版本资料目录；本轮未读取其中私人正文。" }],
     verification: ["虚构测试实际使用独立临时资料目录，验证读取器不依赖主数据目录或微信。", "本轮未重新核对当前私有样本总数、场景数量或备份一致性，未进行换机恢复。", "后续真实任务主动完成补读、选入、合并、下次调用用上，以及真实动画拟回复，均保留待验状态。"],
-    searchProjection: { intents: ["怎样补充适合当前用途的微信表达", "最近和历史聊天怎样选择", "换机怎样读取个人表达备份", "validate 能证明备份一致吗"], entities: ["data-backup", "--data-root", "DEFAULT_DATA_ROOT", "reply-samples.jsonl", "微信补读"], relations: ["原始微信归现有来源", "E 数据目录用于日常读写", "私有 Git 保留精选资料版本"], failureRecovery: ["来源不可读不猜出处", "明确选择备份目录", "校验不替代目录比较和恢复回读"] }
+    searchProjection: { intents: ["怎样补充适合当前用途的微信表达", "最近和历史聊天怎样选择", "换机怎样读取个人表达备份", "validate 能证明备份一致吗"], entities: ["data-backup", "--data-root", "DEFAULT_DATA_ROOT", "reply-samples.jsonl", "微信补读"], relations: ["原始微信归现有来源", "E 数据目录用于日常读写", "私有 Git 保留精选资料版本"], failureRecovery: ["来源不可读不猜出处", "明确选择备份目录", "校验不替代目录比较和恢复回读"] },
+    readerStatus: "已有补充参考和读取私有版本的入口；主动补读、实际还原与应用效果仍需分别验收。"
   }
 ];
 

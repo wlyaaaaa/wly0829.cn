@@ -17,7 +17,7 @@ const sunshineRemoteStreamingSnapshot = createProjectSnapshot({
     { label: "捕获状态与历史故障", value: "2026-09-18只读现场属于9月16日开始的启动周期：20条LiveKernelFailure图形故障证据，状态BlockedByGpuStability，worker新鲜、capture=VDD，客户端会话Unknown。捕获切换和显示写入不放行；只有额外满足空闲和来源/目标证据的普通窗口单向拉回可独立判断。旧9月4日22条与9月14日状态各保留历史，不能跨启动周期替换。" },
     { label: "严禁拓扑联动与镜像", value: "不使用 Windows“复制显示器”，不开启 Sunshine 的 ensure_only_display（仅确保单显示器）或自动分辨率改写；VDD 参数与物理主屏分开，避免本项目因多屏联动增加黑屏或显卡驱动故障风险。" },
     { label: "水冷屏与机箱屏保护", value: "LIAN LI（联力）水冷屏与 HS2 机箱屏是本项目的禁止目标与禁止区域：捕获选择和本项目发起的窗口迁移动作不选它们。Windows 或其他应用自行放置窗口不在这项代码保证内。" },
-    { label: "GPU（图形处理器）稳定性故障关闭", value: "若当前系统启动已记录 Kernel-Power 41、BugCheck、nvlddmkm 或匹配的 WER 1001/1019 图形故障事件，系统进入 BlockedByGpuStability（因 GPU 不稳定阻断）状态，停止捕获源修改、模式切换与主屏到 VDD 的窗口迁移，只允许经严格验证的单向拉回主屏。用户实际看到黑屏或整机卡死时同样应停止操作，不能靠事件查询冒充视觉检测。" },
+    { label: "GPU稳定性故障关闭", value: "若当前系统启动已记录 Kernel-Power 41、BugCheck、nvlddmkm 或匹配的 WER 1001/1019 图形故障事件，系统进入 BlockedByGpuStability（因 GPU 不稳定阻断）状态，停止捕获源修改、模式切换与主屏到 VDD 的窗口迁移，只允许经严格验证的单向拉回主屏。用户实际看到黑屏或整机卡死时同样应停止操作，不能靠事件查询冒充视觉检测。" },
     { label: "传输层与直连证据", value: "Sunshine/Moonlight串流层与Tailscale传输层分别诊断。本次Tailscale仍Running（运行中）、online（在线）且unattended（无人值守）；2026-09-14T04:20:46Z回读WLAN非链路本地IPv6地址数为0。没有指定手机peer（对端）探测，当前直连或DERP（中继服务器）路线仍未验证；不能把一个接口的地址数推广成整机网络不可用。" },
     { label: "受限上行带宽建议", value: "README 以约 32 Mbps 上行为依据，建议手机客户端先从 CBR（恒定码率）18–20 Mbps 起步，并为 FEC（前向纠错）与音频留余量。这是配置建议，不是主机强制策略；本轮没有串流遥测证明 24.5 Mbps 峰值、无丢包或不卡顿。" },
     { label: "AV1 能力与真实协商", value: "RTX 5090 D 与小米 15 Pro 骁龙 8 Elite 具备 AV1 硬件能力，Sunshine 回环接口也报告 AV1 Main10（10 位色深配置）；真实会话是否协商到 AV1、画质是否优于 HEVC（高效视频编码），仍要由手机端连接与统计数据确认。" },
@@ -35,10 +35,13 @@ const sunshineRemoteStreamingSnapshot = createProjectSnapshot({
 });
 
 export const sunshineRemoteStreamingProject = {
-  order: 23,
+  order: 24,
   slug: "sunshine-remote-streaming",
+  technicalSections: [{"title":"来源读取与精确判定","paragraphs":["系统通过 Windows 原生活动显示快照、cfgmgr32（Windows 设备管理接口）状态、Win32 窗口位置 API、系统事件日志与 Tailscale/Sunshine 本地管理接口读取状态；只返回公开安全的判断，不输出私人网络标识。","Windows 活动显示快照与 EDID（扩展显示标识数据）：实时枚举物理主屏、MTT1337 VDD 与副屏硬件身份；绕过不稳定的管理接口，以 PnP（即插即用设备）实例 ID 与 EDID 计算 Sunshine UUIDv5（基于命名空间的稳定标识）。；按当前证据选择捕获目标，避免依赖会变化的 DISPLAY 编号，并排除 LIAN LI 水冷屏与未知虚拟屏。","Win32 窗口几何与 Placement（窗口放置）：在切换至 VDD 前保存正常窗口的 HWND（窗口句柄）、PID（进程标识）、进程启动时间与位置矩形；识别相邻屏幕 11–13 像素的不可见边框容差。；为主屏恢复时的窗口回迁提供计划，并避免把阴影边框当成真正跨屏；是否实际成功仍要写后回读。","Windows 系统事件日志（System Log）：只读查询当前开机周期内的 Kernel-Power 41、BugCheck、nvlddmkm 14/153，以及匹配图形故障特征的 WER（Windows 错误报告）1001/1019。；命中后阻断捕获修改与服务重启；用户看到黑屏或整机卡死时仍须直接停手，事件日志不能替代视觉判断。","Tailscale 本地网络探针与服务管理：只读探测 PC 本地 IPv6 能力、unattended（无人值守）偏好、后台服务和可选 peer（对端）路径；不输出真实 Tailnet（Tailscale 私有网络）与 IP。；返回本机与传输层状态；只有显式指定并验证目标 peer 后，才能区分 direct（直连）、DERP（中继服务器）或不可达。","Sunshine Loopback（本机回环）接口：通过 127.0.0.1 绕过外部代理请求 serverinfo；获取当前编码能力掩码（mask=0x1F0301（2026-09-13自然巡检））与 RTSP（实时流会话）活动状态。；为切换前的空闲门提供输入；它不证明手机已经连接、协商到哪种编码或画面可交互。","手机端输入与主机端画面：Moonlight/Artemis 接收 Sunshine 的视频与音频，并把触控、键鼠或手柄输入送回主机；手柄兼容由 Sunshine 与 ViGEmBus（虚拟手柄总线）等上游组件承担。；本项目只维护主机显示、网络和运维边界，不记录屏幕内容，也没有在本轮验证手机输入或手柄映射。","所有网络地址均以 100.x.y.z 与 2xxx:: 占位符脱敏展示；状态收集不改系统配置，verify-path-lite.ps1 只追加脱敏巡检日志。"]}],
+  usageEntry: "在已配置的主机上用 Moonlight/Artemis 发起连接；先查看 Sunshine、显示目标和指定 Tailscale peer 状态，真实画面与输入仍需手机端验收。",
+  usageInputs: ["要连接的主机和手机","希望的画质或远程开机方式","实际遇到的画面、声音或输入问题"],
   title: "Sunshine 远程串流",
-  kicker: "高性能电脑远程运维层 · 主屏优先与 VDD（虚拟显示器）兜底",
+  kicker: "用手机或笔记本看见并操作高性能主机",
   route: "/projects/sunshine-remote-streaming",
   visibility: "私有仓库",
   statusTone: "mixed",
@@ -101,55 +104,15 @@ export const sunshineRemoteStreamingProject = {
     ]
   },
   repositoryNote: "sunshine-remote-streaming 是 PRIVATE（私有）运维项目。公开页面只保留系统架构、产品逻辑、配置原则与脱敏回执，不包含真实内网 IP、Tailnet（Tailscale 私有网络）名称、设备名称、家庭网段、Funnel 真实端点或任何凭据。",
-  summary: "优先捕获物理主屏，主屏确实离线时才考虑MTT1337 VDD（虚拟显示器）兜底，让手机或笔记本使用高性能主机。普通窗口回迁也要先认清来源和目标；当前会话未知或本次启动有GPU图形故障证据时，不改捕获和显示。现有窗口能看健康与控制后续守护，打开它不会重启服务、改网络或强行消除阻断，最终手机画面仍需实际验证。",
+  summary: "工作和游戏仍在主机上运行，手机或笔记本通过 Sunshine／Moonlight 接收画面和声音。平时优先使用物理主屏，主屏确实离线才考虑已核对的 MTT1337 VDD（虚拟显示器）作为兜底；项目还管理窗口回迁、虚拟屏参数和网络诊断。它不会为修远程画面就随意改主屏、重启服务或把正在使用的会话当成空闲。",
   why: "高帧率、HDR（高动态范围）和 3D 场景需要 Sunshine/Moonlight 这类低延迟串流，但多屏主机一旦把捕获目标或窗口留在虚拟屏，远程端可能只看见壁纸；反过来，为了救画面盲改主屏、镜像模式或副屏又可能破坏本地工作。这个项目把“先认准设备、再判断是否允许切换、失败时保持现场”做成脚本和可测试规则。",
-  plainExample: "我人在外面准备打开 Artemis（阿西西）前，可以先确认服务、网络和编码能力；如果物理主屏确实离线，守护器只有在身份唯一、GPU（图形处理器）稳定且串流空闲时才允许 VDD 接手。等我回家，普通窗口应被拉回物理主屏。最后两步仍需要一次真实连接、断开和显示器前后对照才能算验收。",
-  result: "已经得到可运行的主屏/VDD 守护、独立 VDD 参数入口、网络诊断修复和每日巡检；当前还没有把它们提升为“手机一定直连、一定不卡、窗口一定回迁或一定能远程冷开机”的现实保证。",
-  readerStates: {
-    pass: "服务和新鲜worker分别可回读；只有当前GPU、实际会话、唯一显示身份及相应操作条件均通过，才允许对应修改。当前阻断仍明确存在，不以任务运行覆盖它。",
-    problem: "9月4日曾发现output_name不匹配并被当次GPU稳定门阻断；重启后当前捕获一致性与稳定门未重验。WLAN当前未见非链路本地IPv6，但Tailscale仍在线；手机路径要另查指定对端。",
-    unavailable: "当物理主屏与 VDD 均无法证明健康、出现未识别的虚拟显示器、或检测到严重显卡崩溃时，执行 fail-closed（失败关闭），严禁盲目写入配置破坏现场。"
-  },
-  dataSources: {
-    title: "系统从哪里采集状态，如何保障边界安全",
-    intro: "系统通过 Windows 原生活动显示快照、cfgmgr32（Windows 设备管理接口）状态、Win32 窗口位置 API、系统事件日志与 Tailscale/Sunshine 本地管理接口读取状态；只返回公开安全的判断，不输出私人网络标识。",
-    rows: [
-      { source: "Windows 活动显示快照与 EDID（扩展显示标识数据）", data: "实时枚举物理主屏、MTT1337 VDD 与副屏硬件身份；绕过不稳定的管理接口，以 PnP（即插即用设备）实例 ID 与 EDID 计算 Sunshine UUIDv5（基于命名空间的稳定标识）。", result: "按当前证据选择捕获目标，避免依赖会变化的 DISPLAY 编号，并排除 LIAN LI 水冷屏与未知虚拟屏。" },
-      { source: "Win32 窗口几何与 Placement（窗口放置）", data: "在切换至 VDD 前保存正常窗口的 HWND（窗口句柄）、PID（进程标识）、进程启动时间与位置矩形；识别相邻屏幕 11–13 像素的不可见边框容差。", result: "为主屏恢复时的窗口回迁提供计划，并避免把阴影边框当成真正跨屏；是否实际成功仍要写后回读。" },
-      { source: "Windows 系统事件日志（System Log）", data: "只读查询当前开机周期内的 Kernel-Power 41、BugCheck、nvlddmkm 14/153，以及匹配图形故障特征的 WER（Windows 错误报告）1001/1019。", result: "命中后阻断捕获修改与服务重启；用户看到黑屏或整机卡死时仍须直接停手，事件日志不能替代视觉判断。" },
-      { source: "Tailscale 本地网络探针与服务管理", data: "只读探测 PC 本地 IPv6 能力、unattended（无人值守）偏好、后台服务和可选 peer（对端）路径；不输出真实 Tailnet（Tailscale 私有网络）与 IP。", result: "返回本机与传输层状态；只有显式指定并验证目标 peer 后，才能区分 direct（直连）、DERP（中继服务器）或不可达。" },
-      { source: "Sunshine Loopback（本机回环）接口", data: "通过 127.0.0.1 绕过外部代理请求 serverinfo；获取当前编码能力掩码（mask=0x1F0301（2026-09-13自然巡检））与 RTSP（实时流会话）活动状态。", result: "为切换前的空闲门提供输入；它不证明手机已经连接、协商到哪种编码或画面可交互。" },
-      { source: "手机端输入与主机端画面", data: "Moonlight/Artemis 接收 Sunshine 的视频与音频，并把触控、键鼠或手柄输入送回主机；手柄兼容由 Sunshine 与 ViGEmBus（虚拟手柄总线）等上游组件承担。", result: "本项目只维护主机显示、网络和运维边界，不记录屏幕内容，也没有在本轮验证手机输入或手柄映射。" }
-    ],
-    note: "所有网络地址均以 100.x.y.z 与 2xxx:: 占位符脱敏展示；状态收集不改系统配置，verify-path-lite.ps1 只追加脱敏巡检日志。"
-  },
-  productPrinciples: [
-    { title: "物理主屏优先，虚拟屏仅作兜底", detail: "平时远程目标是活动物理主屏，不让用户对着只有壁纸的虚拟扩展屏；只有主屏经实时证据确认缺失时才考虑 VDD，并在主屏恢复后规划拉回窗口。" },
-    { title: "不碰物理硬件拓扑，严禁系统镜像", detail: "远程无论需要何种分辨率，均通过 Sunshine 编码器缩放；绝不使用 Windows 复制模式，绝不修改物理屏、机箱屏与水冷屏的硬件分辨率与刷新率。" },
-    { title: "直连是目标，路径只认现场探测", detail: "IPv6 P2P（点对点）直连建立后可以绕开DERP（中继服务器）；能否直连只认指定对端的现场探测。本次WLAN未见非链路本地IPv6，手机peer探测仍未执行。" },
-    { title: "带宽建议先留余量，再看客户端统计", detail: "以文档记录的约 32 Mbps 上行为起点，先试 CBR 18–20 Mbps，并为 FEC 与音频留空间；真实丢包、帧率和延迟由客户端会话决定。" },
-    { title: "硬件不稳定即失败关闭（Fail-Closed）", detail: "一旦显卡驱动出现过崩溃记录，停止本项目的捕获改动和服务重启，宁可暂时无法远程，也不继续增加系统蓝屏或本地工作受扰的风险。" },
-    { title: "自动守护是默认，应急固定必须能退回", detail: "日常由主屏优先守护决定目标；只有本人明确选择时才把 Sunshine 暂时固定到 VDD。备份只提供恢复材料，不等于自动回滚或配置已经生效。" },
-    { title: "变更默认只读，生产写入必须显式 Apply（应用）", detail: "VDD 入口默认回读身份、当前值和支持模式，显式 -Apply 的事务内才执行 CDS_TEST（显示设置预检）；无头入口在 -Apply 前重验 VDD 并生成同目录候选。" }
-  ],
-  responsibilities: [
-    "在物理主屏经实时身份判断为稳定缺失时，等待串流空闲后才允许把捕获目标交给 2880×1800 HDR 虚拟显示屏，并记录普通窗口位置。",
-    "在物理主屏重新被证明健康后，规划把迁走、新开或漂入 VDD 的普通窗口拉回主屏，再恢复物理捕获目标。",
-    "把 LIAN LI 水冷屏、HS2 机箱副屏和未经验证的虚拟驱动排除在本项目的捕获选择与窗口迁移动作之外。",
-    "提供人工应急固定 VDD 的配置入口，并明确它只改配置文件、保留备份；服务重载、手机画面和恢复日常守护仍是独立步骤。",
-    "把 Tailscale 传输层与 Sunshine 串流层分开诊断，并提供 IPv6、direct/DERP 与无人值守状态的验证入口。",
-    "针对小米 15 Pro 手机与 RTX 5090 D 显卡，给出约 32 Mbps 上行环境下 CBR 18–20 Mbps 与 AV1 的客户端配置起点。",
-    "提供一键排查与幂等修复脚本，快速消除固定代理环境变量对 Tailscale 服务的负面干扰，固化无人值守守护态势。",
-    "沿用现有轻量验证任务和用户停用意图；注册失败如实报告，不默默另建不同触发方式。任务定义、执行与检查结果分开。"
-  ],
-  exclusions: [
-    "不重复开发新的远程串流协议客户端；继续使用优秀的开源生态 Sunshine 与 Moonlight/Artemis。",
-    "不替代 Windows 系统原本的显示设置；VDD 分辨率调整走受控独立接口，不干涉物理主屏的全局拓扑。",
-    "不使用未经证明可靠的纯无线 Wi-Fi WoWLAN 作为生产级开机依赖；坚持插网线或智能插座硬件自启方案。",
-    "不公开包含真实公网 IP、家庭宽带地址、Tailnet 域名、机器名称、Token（访问令牌）或私钥的明文信息。",
-    "不将 Sunshine 管理控制台直接无防护暴露给公共互联网；公网访问必须经过受控鉴权与网络隧道。",
-    "GPU 稳定门、唯一设备身份、无活跃串流或配置 CAS 任一失败时，不执行配置、服务、显示拓扑或显卡驱动变更。"
-  ],
+  plainExample: "“人在外面想用主机玩游戏，先看看为什么只有壁纸，不要乱切家里的显示器。”先区分画面捕获、窗口位置、网络和编码问题；只有设备身份、当前会话与显卡状态允许时才走对应修复，最后用真实客户端画面确认。",
+  result: "主机已有主屏优先的守护、专用虚拟屏调整、网络诊断和定期检查入口。手机能否真正直连、画面是否流畅、窗口能否回到主屏以及关机后能否远程启动，仍需要分别在真实设备上验收。",
+  readerStates: {"pass":"软件能回读服务和守护状态；只有当前显示设备、显卡和串流会话都允许，才执行对应切换。真实画面仍需在手机上确认。","problem":"9 月 18 日记录了本次开机周期的图形故障，所以当时停止捕获切换和显示写入；服务仍运行，手机是否连接不明。9 月 4 日的输出不匹配只是更早的观察。","unavailable":"主屏和专用虚拟屏都辨认不清、出现其他未知虚拟屏或显卡严重故障时，停止显示改动，保留电脑当前画面和配置。"},
+  dataSources: {"title":"主机怎样判断该显示什么、能否连接","intro":"它只读显示设备、窗口、图形故障、网络和串流会话，再决定是否可以修改；公开结果不包含私人网络地址。","rows":[{"source":"Windows 当前显示设备","data":"辨认主屏、专用虚拟屏及其他小屏，避免把会变化的屏幕编号当成固定身份。","result":"选择正确捕获目标；身份不清时停止切换。"},{"source":"普通窗口的位置","data":"在切换前记录符合条件的窗口及原位置。","result":"主屏回来时尝试拉回，并逐窗口检查；不碰桌面底栏、输入法或未知窗口。"},{"source":"本次开机的图形故障","data":"查看 Windows 是否记录显卡或系统图形崩溃。","result":"有严重故障就停止显示改动；本人看到黑屏时也应按实际画面停手。"},{"source":"Tailscale 网络路径","data":"查看两端服务和指定手机到主机的路径。","result":"区分直连、中继或不可达；主机一侧的检查不能代替手机串流。"},{"source":"Sunshine 当前会话","data":"读取本机视频服务是否有人正在串流及可用编码。","result":"有活动或未知会话时不贸然切捕获目标；服务在线不证明手机已看到画面。"},{"source":"手机客户端实际画面与输入","data":"由 Moonlight/Artemis 显示视频和声音，并把触控、键鼠或手柄动作送回主机。","result":"只有实测画面、声音和输入后，才认定远程使用链真正可用。"}],"note":"状态收集不改显示或网络；旧巡检只证明当时观察，不能代替本轮手机体验。"},
+  productPrinciples: [{"title":"物理主屏优先，虚拟屏只兜底","detail":"电脑在正常使用时让手机看到主屏；只有主屏确实离线，才考虑专用虚拟屏。主屏回来还要核对窗口与捕获目标。"},{"title":"不为了远程画面改乱本地屏幕","detail":"远程分辨率由串流过程调整，不把 Windows 改成复制屏，也不改变实体屏幕的高刷新率和布局。"},{"title":"直连要当次证明","detail":"能否绕开中继，要看指定手机与主机当时的路径检查。本轮手机路径尚未实测，不能凭主机网络能力宣布直连。"},{"title":"先留带宽余量，再看客户端统计","detail":"从约 18–20 Mbps 试播，给声音和传输额外开销留空间；实际流畅度按手机客户端的丢包、帧率与延迟决定。"},{"title":"显卡不稳就停手","detail":"检测到本次开机中的严重图形故障，就暂停显示切换和相关服务修改，先保住电脑当前可用状态。"},{"title":"自动守护是日常，应急固定要能退回","detail":"平时由守护器决定捕获目标；本人明确要求时才能暂时固定虚拟屏。留下备份不等于已经自动恢复。"},{"title":"先看状态，明确选择后才改","detail":"专用虚拟屏入口默认只展示身份、当前值和支持的模式；本人选择应用后才预检、修改并回读。"}],
+  responsibilities: ["平时让 Sunshine 捕获正在使用的物理主屏；主屏确实离线、串流空闲且电脑状态允许时，才交给专用虚拟屏。","主屏恢复后，尝试把属于本次范围的普通窗口拉回，再恢复主屏捕获，并逐项回读结果。","识别水冷屏、机箱小屏和未知虚拟屏，避免把它们误当远程桌面或搬动其窗口。","提供本人明确选择的应急固定虚拟屏入口；改配置、服务采用、手机看到画面和恢复自动守护分开核对。","分别检查 Tailscale 网络路径和 Sunshine 视频会话；“能连到电脑”不等于“手机看见画面”。","给手机客户端提供从约 18–20 Mbps 和可用时 AV1 开始的画质试验起点，再按真实卡顿和延迟调整。","在已知代理残留影响网络时，提供有界修复与再检查，不顺手改其他应用的设置。","沿用现有定期检查和本人暂停选择；任务安装、实际运行和检查结果分别报告。"],
+  exclusions: ["继续使用 Sunshine 与 Moonlight/Artemis，不自造另一套远程画面软件。","不通过复制或镜像显示器来救画面；调整专用虚拟屏不改变物理主屏、水冷屏和机箱屏。","无线唤醒未经可靠验证，不把它写成外出开机保证；智能插座或有线唤醒也要实测。","公开页不展示真实家庭网络地址、设备身份或访问凭据。","不会把 Sunshine 管理入口直接无保护地暴露到公网。","显卡状态、屏幕身份、会话空闲或配置未能核对时，不继续写显示配置或重启相关服务。"],
   glossary: [
     { term: "Sunshine", meaning: "安装在 PC 上的自建游戏与桌面串流服务端，支持 NVENC 高性能低延迟硬件编码。" },
     { term: "Moonlight / Artemis", meaning: "运行在手机或客户端上的开源串流接收器，支持超低延迟硬解与手柄触控模拟；Artemis 为国内优秀定制版。" },
@@ -163,7 +126,7 @@ export const sunshineRemoteStreamingProject = {
     { term: "WoWLAN（Wake on Wireless LAN）", meaning: "无线网络唤醒；受限于无线网卡关机省电机制，在实际生产环境中极不可靠。" },
     { term: "ViGEmBus（虚拟手柄总线）", meaning: "Sunshine 客户端输入链可能使用的上游 Windows 虚拟手柄驱动；本项目不实现或记录用户的手柄输入。" }
   ],
-  operatingFlow: [
+  technicalOperatingFlow: [
     { title: "平时在电脑前工作", detail: "设计目标是 Sunshine 捕获活动物理主屏，普通窗口留在主屏工作区，VDD 只作为备用目标；水冷屏与机箱屏不参与。" },
     { title: "主屏确实离线", detail: "关屏不一定等于 Windows 认定显示器离线。只有实时 PnP 与活动输出证据确认主屏稳定缺失 15 秒，守护器才继续判断。" },
     { title: "空闲后允许 VDD 兜底", detail: "若 GPU 稳定门、唯一 VDD 身份和连续 5 秒串流空闲都通过，代码才允许更新捕获目标并迁移符合条件的普通窗口。" },
@@ -171,10 +134,11 @@ export const sunshineRemoteStreamingProject = {
     { title: "用毕断开", detail: "真实客户端断开后，RTSP 会话应释放；是否保持 VDD 捕获以及窗口实际位置要由当时的状态回读决定。" },
     { title: "主屏恢复", detail: "主屏再次被证明健康且串流空闲时，守护器按记录把符合条件的普通窗口拉回并恢复物理捕获；本轮没有做这次前后对照。" }
   ],
+  operatingFlow: [{"title":"先确认主机条件","detail":"检查 Sunshine、Tailscale、物理主屏和唯一虚拟屏；平时优先捕获实体主屏。"},{"title":"手机实际连接","detail":"用 Moonlight/Artemis 选择主机，从保守码率和可用编码开始试；路径诊断与画面、声音、输入分别验。"},{"title":"主屏离线才兜底","detail":"守护器满足缺屏、显卡和空闲条件才切虚拟屏，恢复主屏时再回切并核对窗口位置。"},{"title":"失败按层定位","detail":"服务在线不等于可捕获画面；直连、中继、编码、显示和开机条件分别报告，本轮未实测的不写成通过。"}],
   components: [
     { name: "捕获源与窗口故障转移守护器", responsibility: "主屏优先绑定、VDD 兜底计划、RTSP 会话空闲门与 Win32 窗口位置迁移/拉回。", implementation: "sunshine-capture-failover.psm1 与 Invoke-SunshineCaptureFailover.ps1 实现稳态轮询、身份复核和 GPU 事件门。" },
     { name: "VDD 独立显示参数适配器", responsibility: "提供 2880×1800 60Hz 150% HDR 初始配置、CDS_TEST 预检、缩放/HDR 写后回读与首选项持久化。", implementation: "Set-SunshineVddDisplayProfile.ps1 编排 Get-SetVddDisplayMode.ps1、Get-SetVddScaleHdr.ps1 与 sunshine-vdd-display-settings.psm1；真正的 Win32 调用在两个 Get-Set 脚本中。" },
-    { name: "应急无头模式配置器", responsibility: "在用户明确选择时把 Sunshine output_name 指向已验证 VDD，并管理 6 个 dd_* 显示键；它不替代日常主屏优先守护。", implementation: "Set-SunshineHeadlessConfig.ps1 与 sunshine-headless-config.psm1 负责候选、提交前绑定复核、同目录原子替换和备份；没有服务重启、写后回读或自动回滚，本轮未应用。" },
+    { name: "应急无头模式配置器", responsibility: "在用户明确选择时把 Sunshine output_name 指向已验证 VDD，并管理 6 个 dd_* 显示键；它不替代日常主屏优先守护。", implementation: "Set-SunshineHeadlessConfig.ps1 与 sunshine-headless-config.psm1 负责候选、提交前绑定复核、同目录原子替换、写后回读与有条件回滚；不会自动重启服务，新增 GPU、会话或身份阻断时会保留未恢复项。本轮未应用。" },
     { name: "Sunshine/Moonlight 输入输出链", responsibility: "Sunshine 输出画面与音频，Moonlight/Artemis 把触控、键鼠或手柄输入送回主机。", implementation: "由上游 Sunshine、客户端与可选 ViGEmBus 提供；本仓库只维护显示与运维边界，本轮未做手机输入 E2E。" },
     { name: "传输层验证与网络一键修复", responsibility: "探测光猫与主机 IPv6 SLAAC 状态，清除 Tailscale 服务的固定代理端口环境变量，固化无人值守模式。", implementation: "repair-stream.ps1（幂等修复）与 verify-path.ps1（深度直连与 DERP 路径诊断）。" },
     { name: "轻量计划任务巡检器", responsibility: "检查服务运行态、编码能力掩码（HEVC/AV1 Main10）、无人值守和公网入口提示并写入运行态日志。", implementation: "复用现有轻量验证任务；注册失败不静默另建触发方式，保留用户停用意图。当前每日任务历史记录不当成新版安装证明。" },
@@ -200,9 +164,9 @@ export const sunshineRemoteStreamingProject = {
     },
   ],
   evidenceLayers: [
-    { layer: "Source（源码与配置）", proves: "PRIVATE main 与 origin/main 已对齐到 70d65059ce122b5a872b97c2f5130ab3e824fab7；该提交补齐 BugCheck 与匹配 WER 1019 的 GPU 事件门，并保留捕获守护、VDD 原生适配器、网络修复与测试。", doesNotProve: "源码提交不证明现役 output_name 已正确、真实硬件切换成功，也不证明手机操控的延迟、画质或弱网稳定性。" },
+    { layer: "Source（源码与配置）", proves: "PRIVATE main 与 origin/main 已对齐到 3f3ebed784cd1a7dfccabd09e1b1f7ebb3c5be55；此前 BugCheck/WER GPU 事件门仍保留，后续补齐可见健康、VDD 分阶段事务、写后回读与有条件回滚。", doesNotProve: "源码提交不证明现役 output_name 已正确、真实硬件切换成功，也不证明手机操控的延迟、画质或弱网稳定性。" },
     { layer: "Tests（隔离自动化测试）", proves: "4 套独立 PowerShell 测试套件通过全部 101 项以上断言，覆盖 GUID 唯一绑定、窗口阴影边框容差、GPU 崩溃门禁与原子写入。", doesNotProve: "测试不模拟硬件显卡真正拔线、屏幕物理掉电或真实的 Windows 蓝屏事件。" },
-    { layer: "Runtime（当前系统运行态）", proves: "2026-09-14两项服务均Auto且Running，捕获任务Running、状态文件04:20:38Z更新。每日巡检最近2026-09-13T06:30:01Z返回0，同次日志编码掩码0x1F0301、HEVC/AV1 Main10均true。Sunshine版本及9月4日选择器/GPU阻断结论保留原日期，本次未重验。", doesNotProve: "9月4日22条是匹配日志记录数，不是22次独立崩溃；本机9月14日已重启，旧GPU判断不跨启动周期继承。状态文件更新也不证明手机可交互。" },
+    { layer: "Runtime（当前系统运行态）", proves: "2026-09-18只读健康：Sunshine/Tailscale运行，worker新鲜；9月16日起本次启动周期有20条LiveKernel图形故障记录，BlockedByGpuStability，客户端会话Unknown。9月13日每日巡检与9月14日服务观察仍各保留原日期。", doesNotProve: "旧9月4日22条和9月14日状态不能替代本次启动周期证据；20条是日志记录数，不是20次独立崩溃。worker新鲜、捕获当前为VDD也不证明手机可交互或此时能安全切换。" },
     { layer: "Transport（传输与网络）", proves: "2026-09-14只读诊断确认Tailscale 1.102.2运行、在线且无人值守；WLAN非链路本地IPv6地址数为0。最新每日巡检未指定手机peer（对端）。", doesNotProve: "当前手机路线是 direct 还是 DERP、串流数据经过哪里、延迟和丢包均为 Unknown（未知）。巡检还提示另有用户配置的 Funnel，但未把它归因于 Sunshine。" }
   ],
   operationalEntrypoints: [
@@ -219,16 +183,52 @@ export const sunshineRemoteStreamingProject = {
     },
   ],
   evolution: [
-    { date: "2026-06-26—2026-07-09", commit: "基础串流与路径巡检", result: "建立 Sunshine + Moonlight/Tailscale 运维手册，随后加入任务调度安全、静默启动、Funnel 提示与只读路径检查。" },
-    { date: "2026-08-05—2026-08-08", commit: "传输与登录前边界", result: "移除固定 Tailscale 代理端口，补强无人值守、HDR 与登录前检查；同时明确服务 Running 不等于登录前画面可捕获。" },
-    { date: "2026-08-10—2026-09-02", commit: "主屏优先、窗口恢复与 VDD 参数", result: "从 VDD 隔离演进为物理主屏优先的捕获守护，连续补齐空闲门、普通窗口恢复、边框容差、GPU 事件门和 VDD 独立首选参数；真实手机与物理显示 E2E 仍单列。" }
+    {
+      "date": "2026-06–07",
+      "title": "把远程画面与网络入口接起来",
+      "commit": "",
+      "result": "形成已有串流工具的安装、任务和诊断路线；服务正常与真正收到画面分开。",
+      "evidence": [
+        {
+          "date": "2026-06-26—2026-07-09",
+          "note": "已有串流工具的常驻、任务与路径巡检起点。 原记录的依据标签为“基础串流与路径巡检”，未附Git提交编号。"
+        }
+      ]
+    },
+    {
+      "date": "2026-08–09",
+      "title": "避免修远程端却打乱本地桌面",
+      "commit": "",
+      "result": "物理主屏优先，虚拟屏只在明确条件下兜底；普通窗口回迁、虚拟屏参数和显卡稳定性分别检查，自动拓扑联动保持关闭。",
+      "evidence": [
+        {
+          "date": "2026-08-05—2026-08-08",
+          "note": "传输和登录前边界分开，服务正常不证明画面已经可捕获。 原记录的依据标签为“传输与登录前边界”，未附Git提交编号。"
+        },
+        {
+          "date": "2026-08-10—2026-09-02",
+          "note": "物理主屏优先、窗口恢复、GPU事件限制与VDD参数分工形成；真实手机及物理显示验收独立。 原记录的依据标签为“主屏优先、窗口恢复与 VDD 参数”，未附Git提交编号。"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-18",
+      "title": "切换失败能回到原配置",
+      "commit": "3f3ebed",
+      "result": "可见健康和暂停意图与现有守护配合，配置修改前后核对身份并保留回退；客户端未知不当空闲，未验手机路线不写成保证。"
+    }
   ],
-  snapshotUpdateNote: "2026-09-18只读健康与正式来源3f3ebed核对：worker新鲜，GPU图形故障20条，本次会话Unknown；只更新说明，未Apply、改网络、重启或串流。"
+  snapshotUpdateNote: "2026-09-18只读健康与正式来源3f3ebed核对：worker新鲜，GPU图形故障20条，本次会话Unknown；只更新说明，未Apply、改网络、重启或串流。",
+  "readerBoundary": "服务运行和编码支持不保证手机直连、不卡顿或远程冷开机。当前会话未知或本次启动出现显卡故障时，不冒险切换显示；真实手机与物理显示恢复仍需单独验收。",
 };
 
 export const sunshineRemoteStreamingModules = [
   {
     slug: "capture-failover",
+    usageEntry: "在已配置的 Sunshine 守护环境中查看当前捕获目标；实际切换由守护器在主屏确实离线且串流空闲时进行，本页不能代替真实画面验收。",
+    usageInputs: ["要远程看的主机与屏幕","是否希望主屏离线时使用专用虚拟屏","窗口位置异常时指出现象"],
+    productFlow: [{"title":"先读主机现场","detail":"守护器辨认物理主屏、专用虚拟屏和当前有没有人在串流；主屏正常时优先显示它，并拉回误入虚拟屏的普通窗口。"},{"title":"满足条件才兜底","detail":"主屏稳定离线、显卡状态允许且串流空闲后，才记下窗口位置并切到唯一的专用虚拟屏。"},{"title":"主屏恢复后再读回","detail":"条件允许时尝试把窗口和捕获目标拉回主屏；实际窗口位置与手机画面还要分别检查。"}],
+    readerStatus: "9月18日记录中守护仍在运行，但当前开机周期的显卡故障阻止画面切换；手机画面与真实主屏故障转移仍未验收。",
     shortTitle: "主屏与兜底",
     title: "物理主屏优先，唯一 MTT1337 VDD（虚拟显示器）兜底并守护应用窗口",
     searchAliases: [
@@ -276,13 +276,9 @@ export const sunshineRemoteStreamingModules = [
     statusTone: "mixed",
     value: "目标体验仍很直白：在家用物理屏，主屏确实离线时才让 VDD 兜底，主屏回来后把普通窗口拉回；现在已经有实现和测试，但还不能把这段目标场景说成真机成功。",
     why: "多屏扩展下，Windows 可能把新开或失去焦点的窗口放到看不见的扩展屏；如果盲目开启“系统镜像”，又可能打乱物理屏高刷与 HDR（高动态范围）。因此需要一套先核对身份、再决定是否动作的窗口与捕获目标守护器。",
-    example: "“我拔掉主屏线后想从手机继续工作。”系统应先等 15 秒确认主屏缺失，再等串流空闲，验证唯一 MTT1337 VDD 与 GPU 事件后才切换；插回线后还要用前后快照确认窗口确实回到主屏。",
-    result: "已交付身份校验、去抖、空闲门、窗口迁移计划和失败关闭；尚未证明真实拔线后手机画面不中断、窗口全部回迁或水冷屏视觉状态不变。",
-    readerStates: {
-      pass: "源码测试已证明主屏/VDD 身份、去抖、RTSP（实时流会话）空闲门与窗口几何计划按预期分支；真实生产通过仍需连接/断开和显示器前后对照。",
-      problem: "9月4日曾发现output_name不匹配且被当次GPU稳定门阻断；9月14日重启后的捕获选择与GPU稳定门没有重验，不能把旧故障结论当作当前现场。",
-      unavailable: "若系统中出现多个无法区分的虚拟屏、或未能检测到健康的 MTT1337 驱动实例，系统失败关闭，拒绝盲目绑定。"
-    },
+    example: "“家里的主屏真的不在线了，我想从手机继续看电脑。”守护器先确认屏幕已稳定离线、没人正在串流、显卡状态可用，才切到已认准的虚拟屏；主屏回来还要实际看窗口有没有回去。",
+    result: "已经有屏幕识别、等待、空闲检查和窗口回迁的实现与测试；还没有真实证明拔线后手机画面不中断或所有窗口都能回到原处。",
+    readerStates: {"pass":"代码已覆盖应当保持主屏、何时尝试虚拟屏与如何计划窗口回迁；真实手机画面和拔线前后对照仍未验收。","problem":"9 月 18 日这次开机已有图形故障记录，所以当时停止捕获和显示写入；手机是否连接仍未知，更早的画面观察不能替代本次。","unavailable":"虚拟屏不唯一或驱动身份不清时停止切换，不把画面送到猜测的屏幕。"},
     decisionImpact: [
       "Sunshine 捕获源 output_name 只使用通过 PnP（即插即用设备）/EDID（扩展显示标识数据）计算的 UUIDv5（基于命名空间的稳定标识），不使用容易随热插拔改变的 \\\\.\\DISPLAYN 编号。",
       "物理主屏连续缺失 15 秒（排除瞬时休眠与驱动重置）且串流空闲 5 秒才切到 VDD，防止正常看视频时发生误切。",
@@ -320,7 +316,7 @@ export const sunshineRemoteStreamingModules = [
       { condition: "检测到多于一个同名 VDD 或存在未知虚拟驱动", response: "拒绝推断目标，执行失败关闭，保持当前配置不动并记录错误日志。" },
       { condition: "当前 Windows 启动发生过 Kernel-Power 41、BugCheck、nvlddmkm 或匹配 WER 图形故障", response: "保持BlockedByGpuStability，不切捕获或显示；只有空闲且证明来自VDD、目标是健康物理主屏的普通窗口单向回迁可独立处理，不任意搬窗。" },
       { condition: "单轮显示枚举瞬时失败（如驱动重置）", response: "代码把它记为 cycle-transient-failure 并留待下一轮；自动化测试覆盖了不让该异常直接终止守护器的分支。" },
-      { condition: "人工无头写入前 VDD 身份或原配置变化", response: "拒绝覆盖；若原子替换发生则返回备份路径。工具本身不自动重启 Sunshine，也不把备份冒充自动回滚。" }
+      { condition: "人工无头写入前 VDD 身份或原配置变化", response: "拒绝覆盖；若已写入，仅在当前仍匹配本轮结果且 GPU、会话、身份门允许时回滚，未恢复项单独报告。工具本身不自动重启 Sunshine，也不把备份冒充恢复成功。" }
     ],
     sources: [
       { path: "sunshine-capture-failover.psm1", role: "核心状态机、窗口几何与原子配置读写引擎" },
@@ -330,6 +326,7 @@ export const sunshineRemoteStreamingModules = [
     ],
     verification: [
       "自动化测试 67/67 通过（涵盖设备快照、GUID 绑定、去抖、CAS 写入、BugCheck/WER/GPU 事件门和窗口计划）；它们是合成分支，不是物理串流。",
+      "历史记录：2026年9月4日曾发现 output_name 与活动输出不匹配，并被当次 GPU 稳定门阻断。这是带日期的旧故障；不能拿它替代9月18日的当前启动周期证据，也不能由后来状态文件更新推定真实捕获已通过。",
       "capture-failover-state.json沿用sunshine.capture-failover-state.v1；本次UpdatedAtUtc为2026-09-14T04:20:38.1960156Z，Mode=Vdd、PendingTargetKind=Physical。状态新鲜不证明捕获选择或窗口迁移已通过。",
       "系统计划任务 SunshineCaptureFailover-Interactive 保持 Running 状态。"
     ],
@@ -337,6 +334,10 @@ export const sunshineRemoteStreamingModules = [
   },
   {
     slug: "vdd-display-settings",
+    usageEntry: "用项目的 Set-SunshineVddDisplayProfile.ps1 先只读查看专用虚拟屏；确认目标模式后才显式使用 -Apply。",
+    usageInputs: ["想调整专用虚拟屏的分辨率、刷新率、缩放或 HDR","只查看还是应用改变"],
+    productFlow: [{"title":"只读认准虚拟屏","detail":"先看项目专用虚拟屏现在的画面大小、刷新率和可选范围；主屏和其他小屏不进入修改范围。"},{"title":"本人确认后才调整","detail":"按选定的清晰度、缩放和高动态范围设置预检，再应用；驱动不支持就停。"},{"title":"回读真实显示","detail":"分别查看虚拟屏是否达到目标、主屏是否保持原样；配置成功仍需真实串流画面验收。"}],
+    readerStatus: "已有独立调整虚拟屏参数和失败回退的功能；本轮未应用设置，实际显示和手机画面仍未验收。",
     shortTitle: "虚拟屏参数",
     title: "专用虚拟显示屏 2880×1800 60Hz 150% HDR（高动态范围）独立可调，主屏不受联动干扰",
     searchAliases: [
@@ -378,14 +379,10 @@ export const sunshineRemoteStreamingModules = [
     status: "脚本与隔离测试通过；本轮只读，未执行 Apply（应用）或实时显示回读",
     statusTone: "mixed",
     value: "需要时可以单独给 VDD 设 2880×1800、缩放与 HDR，不应该顺手改掉物理主屏；本轮证明的是入口和保护逻辑，不是这次已经修改成功。",
-    why: "虚拟显示驱动在 Windows 重启或显卡重新枚举时，常常由于缺乏硬件握手而自动回退到厂家列表第一项（通常是 800×600），导致串流画面极小且模糊；同时第三方工具修改显示模式往往全局联动，容易破坏主屏的 4K 240Hz 配置。",
-    example: "“我想把 VDD 调为 2560×1440 144Hz。”先不带 -Apply 查看目标身份、当前值和驱动公布的支持模式；确认后显式应用，事务先跑 CDS_TEST（显示设置预检）再回读 VDD。物理屏不变要单独比较前后快照。",
+    why: "虚拟屏重启后可能退回很小的画面；普通显示工具又容易连带改动主屏。这个入口只认项目专用的虚拟屏，先查看它支持什么，再按本人选择调整。",
+    example: "“把手机用的虚拟屏调成我指定的清晰度和刷新率，别动家里主屏。”先只读查看当前值与可选模式；本人确认后才应用，并分别回读虚拟屏和主屏。",
     result: "已得到独立参数入口、写前预检、写后回读与失败回滚；实时模式、重枚举后的首选项保持和手机 HDR 画面仍未在本轮验收。",
-    readerStates: {
-      pass: "VDD 模式成功应用并通过精确回读，持久化 XML 完成原子替换；物理屏与副屏状态不变只有在独立前后快照一致时才成立。",
-      problem: "若请求的分辨率或刷新率未被 VDD 驱动声明支持，脚本在 CDS_TEST 阶段主动拦截并报错，不执行实际改动。",
-      unavailable: "若未能通过硬件 ID 匹配到真正的 MTT1337 虚拟设备，脚本拒绝执行任何 Win32 改动。"
-    },
+    readerStates: {"pass":"选定模式得到实际应用和读回；物理屏确实未受影响还要比较它的前后状态。","problem":"驱动不支持所选分辨率或刷新率时在修改前停止并说明可选模式。","unavailable":"认不出唯一的项目虚拟屏就拒绝修改任何显示器。"},
     decisionImpact: [
       "项目初始 profile（配置组合）保留 2880×1800、60 Hz、150% 缩放与 HDR；后续显式调整可以覆盖。",
       "持久化首选项会把选定模式写在 VDD 驱动模式列表首位，目的是减少驱动重枚举时回退到 800×600；本轮未做重枚举实测。",
@@ -435,6 +432,10 @@ export const sunshineRemoteStreamingModules = [
   },
   {
     slug: "transport-ipv6-direct",
+    usageEntry: "在两端 Tailscale 在线后，用项目 verify-path 或 verify-path-lite 指定真实 peer 做有界路径检查；之后由 Moonlight/Artemis 建立一次真实串流才验画面。",
+    usageInputs: ["要连接的手机和主机","想诊断直连、中继还是实际串流故障"],
+    productFlow: [{"title":"确认指定手机和主机","detail":"先看两端 Tailscale 是否在线，再对这台手机做当次网络路径检查。"},{"title":"分清直连和中继","detail":"诊断会报告直连、经过 Tailscale 中继或不可达；任何一种都不能单靠主机网络配置猜出来。"},{"title":"实际连接再验画面","detail":"Moonlight/Artemis 连上后再看声音、画面与输入；路径通过仍不等于串流可用。"}],
+    readerStatus: "主机网络服务正在运行，但没有本轮手机对端探测；目前不能确认手机走直连、中继或实际延迟。",
     shortTitle: "传输路径",
     title: "串流层与传输层分开诊断，用指定 peer（对端）探测确认 IPv6 直连或 DERP（中继服务器）",
     searchAliases: [
@@ -477,14 +478,10 @@ export const sunshineRemoteStreamingModules = [
     status: "Tailscale 1.102.2运行且无人值守；WLAN未见非链路本地IPv6，手机peer（对端）未测",
     statusTone: "mixed",
     value: "人在外面连不上时，不必把 Sunshine、光猫和 Tailscale 混成一个问题：这套入口能先定位本机有没有 IPv6、服务是否登录，再用同一台手机证明当前到底直连还是中继。",
-    why: "移动家宽与蜂窝网络可能叠加 CGNAT（运营商级网络地址转换）和多层 NAT，IPv4 打洞并不稳定；IPv6 让点对点直连成为可能，但最终路线仍受手机当时网络、UDP（用户数据报协议）可达性与 Tailscale 协商影响，不能从本机一侧提前宣布成功。",
-    example: "“我在外用 5G 手机连 Moonlight 很慢。”先从已验证的手机 peer 运行 tailscale ping：输出 direct 才记录直连与延迟，输出 DERP 就记录中继；像本轮这样没有 peer 参数，只能停在 Unknown（未知）。",
-    result: "已交付传输层状态、无人值守、代理残留修复和 peer 路径分类入口；当前没有手机 peer 回执，不能声称秒连、不出海或 15–30 ms。",
-    readerStates: {
-      pass: "只有 PC 与已验证手机的现场探测明确返回 direct，并记录当次延迟后，才把该次路径称为直连；延迟数值不预设。",
-      problem: "若两端未成功建立 IPv6 直连，流量暂时回退至 DERP 中继，ping 出现 via DERP 提示，画质与延迟有所下降。",
-      unavailable: "若光猫掉拨号失去 IPv6 前缀、或 Tailscale 服务掉登录变为 NoState，系统提供明确脚本进行一键修复。"
-    },
+    why: "手机网络和家里网络可能各有阻挡。即使主机有 IPv6，也只有指定手机当次探测才能说明走的是直连、中继还是根本连不上。",
+    example: "“我在外面连主机很慢。”先对这台手机和主机检查网络路径：若走中继，就说明这次没有直连；之后还要在 Moonlight/Artemis 真正看画面。",
+    result: "能分别说明本机服务状态和指定手机的连接路径；本轮没有手机端实测回执，所以不承诺直连速度或延迟。",
+    readerStates: {"pass":"指定手机到主机的当次探测确实返回直连，才称这次直连；实际串流体验仍另验。","problem":"只走中继时如实报告，画质和延迟需按手机实测调整。","unavailable":"家里失去网络地址或 Tailscale 没登录时先修连接；恢复后仍需重新探测同一手机。"},
     decisionImpact: [
       "明确“串流层（Sunshine）尽量不换，传输层（Tailscale）随时可换”的解耦原则；未来若替换为皎月连等工具，串流配置无需推翻。",
       "光猫开启 Native（原生）IPv4/IPv6 双栈，Windows 重新启用 WLAN 的 ms_tcpip6 协议绑定并清理 DisabledComponents 注册表限制。",
@@ -534,6 +531,10 @@ export const sunshineRemoteStreamingModules = [
   },
   {
     slug: "bitrate-codec-strategy",
+    usageEntry: "在 Moonlight/Artemis 的串流设置中从约 18–20 Mbps、60 FPS 和可用时 AV1 开始试播，再按真实解码与网络表现调整。",
+    usageInputs: ["希望优先保证清晰、流畅还是低延迟","试播时看到的卡顿、画质或 HDR 问题"],
+    productFlow: [{"title":"选起点","detail":"按约 32 Mbps 上行预算选择保守码率，不把计算预算当测量。"},{"title":"让客户端协商","detail":"Sunshine 暴露多种编码，手机客户端决定实际格式；HDR 还取决于完整链路。"},{"title":"看画面再调","detail":"实际检查延迟、卡顿、画质与音频；本轮没有真实串流，不给出已达成的帧率或码率结论。"}],
+    readerStatus: "主机编码能力已有回读，手机初始码率只是建议；弱网下的画面、帧率与丢包尚未实际验证。",
     shortTitle: "码率与编码",
     title: "以约 32 Mbps 上行为依据，从 CBR（恒定码率）18–20 Mbps 与 AV1 编码开始实测",
     searchAliases: [
@@ -576,18 +577,14 @@ export const sunshineRemoteStreamingModules = [
     status: "NVENC（NVIDIA 硬件编码器）配置与 AV1 Main10（10 位色深配置）能力已回读；18–20 Mbps 是客户端建议，弱网会话未测",
     statusTone: "mixed",
     value: "在外玩游戏或滚动复杂文档时，可以先用 18–20 Mbps 与 AV1 做稳妥起点；如果统计里仍有丢包或排队延迟，就降码率，而不是拿推荐值冒充必然流畅。",
-    why: "README 记录的家庭上行约为 32 Mbps。按文档估算，20 Mbps 视频再加约 20% FEC（前向纠错）与音频约为 24.5 Mbps；这给其他流量留出余量。具体 FEC、瞬时峰值与链路可用带宽仍由真实客户端会话决定。",
+    why: "家里上行带宽要同时装下视频、声音和传输开销。先留余量，再依据手机客户端统计调整，不能从一份旧带宽估计保证今天的帧率。",
     example: "“我先在手机端设 18–20 Mbps、60 FPS（每秒帧数）和 AV1，连接后观察丢包、网络延迟、解码耗时与实际帧率；不稳就退到 12–15 Mbps，稳定后再逐步上调。”",
     result: "已形成可解释的初始参数和回退方法，并确认主机具备 AV1 Main10 能力；当前没有真实会话数据证明零丢包、稳定 60 FPS 或 AV1 画质一定更好。",
-    readerStates: {
-      pass: "真实会话只有在协商到预期编码、综合流量没有压满上行，并且客户端统计显示可接受的丢包、延迟和帧率时才算通过。",
-      problem: "若用户在手机端手动拉高码率超过 25 Mbps 或误选了 CQP，画面在复杂场景下将出现明显抖动与积压延时。",
-      unavailable: "若客户端没有 AV1 硬解或协商失败，可改用 HEVC（高效视频编码）Main10；是否平滑和可用仍由重新连接后的统计确认。"
-    },
+    readerStates: {"pass":"手机真实连上后，编码、画质、丢包和延迟符合本人的使用目标，才算这一档设置可用。","problem":"画面卡顿或排队延迟变大时，先降低码率并重新看统计，不因为推荐过某个数值就坚持它。","unavailable":"手机无法解码首选格式时换一种双方支持的编码，再做同一次真实试播。"},
     decisionImpact: [
       "把 README 记录的约 32 Mbps 上行当作配置依据，而不是永不变化的带宽保证；18–20 Mbps 是带余量的起点。",
       "受限链路优先使用 CBR（恒定码率）而不是 CQP（恒定量化参数），目的是减少复杂画面的码率峰值；客户端并未被本仓库强制锁定。",
-      "RTX 5090 D 与骁龙 8 Elite 都具备 AV1 硬件能力，因此先试 AV1；与 HEVC 的画质和解码延迟差异要看同一会话对照。",
+      "RTX 5090 D 负责主机端 AV1 硬件编码，骁龙 8 Elite 负责手机端 AV1 硬件解码。两端具备能力，因此建议先试 AV1；它不证明真实会话已协商成功，与 HEVC 的画质和解码延迟差异仍须同条件实测。",
       "局域网可以尝试更高分辨率、刷新率和码率，但仍以客户端解码能力、显示刷新率与实时统计为准。"
     ],
     problem: "防止因码率设置不当导致家庭宽带上行被撑爆、画面严重卡死或编码资源浪费。",
@@ -612,6 +609,7 @@ export const sunshineRemoteStreamingModules = [
     ],
     failures: [
       { condition: "手机画面发灰发白", response: "先核对客户端 HDR 与编码协商；保持物理主屏现状，只有在已授权的 VDD 独立路径中才调整其 HDR。" },
+      { condition: "手机没有可用 AV1 硬件解码，或本次 AV1 协商失败", response: "可在客户端尝试 HEVC Main10，重新连接后查看实际编码、解码和延迟统计；更换设置本身不等于串流已经恢复。" },
       { condition: "外网弱网环境下延迟波动加剧", response: "临时在手机端将码率下调至 12–15 Mbps，降低丢包几率。" }
     ],
     sources: [
@@ -626,6 +624,10 @@ export const sunshineRemoteStreamingModules = [
   },
   {
     slug: "remote-power-and-repair",
+    usageEntry: "需要远程开机时先核对 BIOS、智能插座或有线 WoL 条件；日常用现有 verify-path-lite 检查服务，故障再明确运行 repair-stream。",
+    usageInputs: ["想用智能插座还是有线 WoL 开机","本次遇到开机、发现主机还是画面输入故障"],
+    productFlow: [{"title":"先选真正能开机的方式","detail":"智能插座复电要主板支持来电启动；有线网络唤醒也需硬件与路由条件。选好后用真实关机试。"},{"title":"电脑启动后查服务","detail":"再看 Tailscale 和 Sunshine 是否运行、网络能否到达；服务在运行不等于登录前已经有画面。"},{"title":"最后由手机验收","detail":"Moonlight/Artemis 要真正发现、连接、看到画面并试输入；本轮没有完成时保持未知。"}],
+    readerStatus: "软件服务和日常巡检有成功记录；智能插座、主板来电启动和网络唤醒的整条远程开机路径尚未验收。",
     shortTitle: "远程开机与修复",
     title: "比较智能插座 AC（交流电）自启与有线 WoL（网络唤醒），并用脚本修复网络和服务",
     searchAliases: [
@@ -672,11 +674,7 @@ export const sunshineRemoteStreamingModules = [
     why: "无线网卡在关机或睡眠后未必保持可唤醒供电，且 Tailscale 会随主机关机离线；因此不能仅凭在线状态假定外网 WoWLAN 可用。Windows 还可能因代理软件异常退出而留下服务环境变量，让 Tailscale 持续停在离线状态。硬件开机与在线修复必须分开处理。",
     example: "“我想在外地把关机电脑叫醒。”候选流程是智能插座重新上电、BIOS 来电自启、Windows 启动服务，再由手机连接；每一段都要实测。本轮只确认服务与巡检，不代表这条链已经跑通。",
     result: "已交付远程开机选择依据、在线故障修复脚本和当前每日巡检；尚未交付经过实物验证的远程冷启动或手机自动进入桌面。",
-    readerStates: {
-      pass: "当前只通过了软件侧：Sunshine 与 Tailscale 服务为自动启动且正在运行，每日巡检最近一次返回 0。BIOS 与 WoL 状态没有在本轮读取。",
-      problem: "若遇到网卡协议解绑或代理配置残留，repair-stream.ps1 会尝试收敛；后置条件未满足时退出码为 1，并保留明确告警。",
-      unavailable: "若主机物理断网或硬件电源故障，需待现场物理连接恢复后再行介入。"
-    },
+    readerStates: {"pass":"上次软件侧看到两项服务在运行、巡检正常；主机从关机到手机看到画面的整条链仍未验。","problem":"网络设置残留或服务异常时，修复脚本按已识别范围处理并回读；结果不满足就报告失败，不宣称远程已恢复。","unavailable":"主机没电、物理断网或硬件开机条件不存在时，需要先在现场恢复这些基础条件。"},
     decisionImpact: [
       "比较三种远程唤醒路线：优先实测“智能插座 + BIOS 来电自启（Restore on AC Power Loss）”；有线 Realtek 2.5GbE WoL（网络唤醒）是另一候选；纯无线 WoWLAN（无线局域网唤醒）不作为可靠默认。",
       "坚决不默认开启 Windows 自动登录，守住物理主机的本地身份安全底线；串流服务本身具备系统级捕获能力。",

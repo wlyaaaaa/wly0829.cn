@@ -1,6 +1,6 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
-  "finalized_at": "2026-09-04",
+  "finalized_at": "2026-09-22",
   "target_project_count": 33,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
@@ -10,8 +10,8 @@
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
   "display_rule": "render only published projects in final_rank order, with consecutive visible card numbers from 1 through the displayed project count; missing internal ranks never create placeholder cards or routes",
-  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused.",
-  "construction_rule": "Gemini selects the smallest final_rank still marked planned after the owner reports its latest completed project; the next assignment does not wait for Astra acceptance, UI work, integration or publication. Astra works on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership. Combine results for final local acceptance and respect the current website publication hold.",
+  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused. The 2026-09-22 value-order correction places personal-expression after daily-preferences at rank 18; prior ranks 18–33 move down one slot while their relative order is preserved. The unused rank 15 remains unused.",
+  "construction_rule": "The website AI selects the smallest final_rank still marked planned after the owner reports its latest completed project; an independent next assignment does not wait for unrelated acceptance, UI work, integration or publication. Native collaborators may work on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership when useful. Choose actual model and effort through active economy routing, combine results for final acceptance and follow the owner's current publication request.",
   "projects": [
     {
       "final_rank": 1,
@@ -112,78 +112,85 @@
     },
     {
       "final_rank": 18,
+      "id": "personal-expression",
+      "title": "个人表达与沟通支持",
+      "state": "published",
+      "source": "wlyaaaaa/personal-expression"
+    },
+    {
+      "final_rank": 19,
       "id": "wechat-direct",
       "title": "WeChatDirect",
       "state": "published"
     },
     {
-      "final_rank": 19,
+      "final_rank": 20,
       "id": "proxyclean",
       "title": "ProxyClean",
       "state": "published",
       "source": "wlyaaaaa/ProxyClean"
     },
     {
-      "final_rank": 20,
+      "final_rank": 21,
       "id": "codex-memory",
       "title": "AI 工作区备份与恢复",
       "state": "published",
       "source": "PRIVATE_MANAGED_SOURCE"
     },
     {
-      "final_rank": 21,
+      "final_rank": 22,
       "id": "meshclip-kit",
       "title": "MeshClip Kit",
       "state": "published",
       "source": "wlyaaaaa/meshclip-kit"
     },
     {
-      "final_rank": 22,
+      "final_rank": 23,
       "id": "video-scaffold",
       "title": "video-scaffold",
       "state": "published"
     },
     {
-      "final_rank": 23,
+      "final_rank": 24,
       "id": "sunshine-remote-streaming",
       "title": "Sunshine 远程串流",
       "state": "published"
     },
     {
-      "final_rank": 24,
+      "final_rank": 25,
       "id": "llm-backend-toolkit",
       "title": "LLM Backend Toolkit",
       "state": "published",
       "source": "wlyaaaaa/llm-backend-toolkit"
     },
     {
-      "final_rank": 25,
+      "final_rank": 26,
       "id": "typora-theme-pack",
       "title": "Typora Theme Pack",
       "state": "published",
       "source": "wlyaaaaa/typora-theme-pack"
     },
     {
-      "final_rank": 26,
+      "final_rank": 27,
       "id": "openclaw-gateway",
       "title": "OpenClawGateway",
       "state": "published"
     },
     {
-      "final_rank": 27,
+      "final_rank": 28,
       "id": "wechat-history-ai-bridge",
       "title": "WeChat History AI Bridge",
       "state": "published",
       "source": "wlyaaaaa/wechat-history-ai-bridge"
     },
     {
-      "final_rank": 28,
+      "final_rank": 29,
       "id": "pc-panel-hub",
       "title": "PC Panel Hub",
       "state": "published"
     },
     {
-      "final_rank": 29,
+      "final_rank": 30,
       "id": "emerald-veil",
       "title": "Emerald Veil",
       "state": "published",
@@ -191,37 +198,30 @@
       "source": "wlyaaaaa/emerald-veil"
     },
     {
-      "final_rank": 30,
+      "final_rank": 31,
       "id": "steam-millennium-config-backup",
       "title": "Steam Millennium 配置备份",
       "state": "published",
       "source": "wlyaaaaa/steam-millennium-config-backup"
     },
     {
-      "final_rank": 31,
+      "final_rank": 32,
       "id": "ramdisk-guardian",
       "title": "RamdiskGuardian",
       "state": "published",
       "source": "wlyaaaaa/RamdiskGuardian"
     },
     {
-      "final_rank": 32,
+      "final_rank": 33,
       "id": "cacb",
       "title": "CACB Agent 能力基准",
       "state": "published"
     },
     {
-      "final_rank": 33,
+      "final_rank": 34,
       "id": "codex-remote",
       "title": "Codex Remote",
       "state": "published"
-    },
-    {
-      "final_rank": 34,
-      "id": "personal-expression",
-      "title": "个人表达与沟通支持",
-      "state": "published",
-      "source": "wlyaaaaa/personal-expression"
     }
   ],
   "non_card_explanations": [

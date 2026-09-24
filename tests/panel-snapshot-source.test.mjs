@@ -38,7 +38,7 @@ async function executeScript(name, globals) {
   return { report: JSON.parse(output.join("")), exitCode: sandbox.process.exitCode || 0 };
 }
 
-async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false, excludedFixture = null, retiredFixtures = [] } = {}) {
+async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false, excludedFixture = null, retiredFixtures = [], corruptAux = false, omitCatalog = false, duplicatePrimary = false } = {}) {
   const sourceRoot = "E:\\.agents";
   const sourceCommit = "b".repeat(40);
   const activeCommit = "a".repeat(40);
@@ -54,8 +54,18 @@ async function collect({ dirty = "", ahead = 0, behind = 0, ruleChanged = false,
     write(rule.sourcePath, ruleChanged && index === 0 ? Buffer.concat([bytes, Buffer.from("candidate\n")]) : bytes);
     return { logical_id: rule.logicalId, relative_path: relativePath, sha256: sha256(bytes), bytes: bytes.length, releasePath };
   });
+  const topicCount = rules.length;
+  const auxiliary = { logical_id: "codex_entry_template", relative_path: "templates/codex-home/AGENTS.md", sha256: sha256("Fixture template\n"), bytes: Buffer.byteLength("Fixture template\n") };
+  write(path.join(sourceRoot,"releases",releaseId,auxiliary.relative_path), corruptAux ? "Changed template\n" : "Fixture template\n");
+  rules.push(auxiliary);
+  if (!omitCatalog) {
+    const catalog = JSON.stringify({documents:[...documentedRules.rules.map(x=>({logical_id:x.logicalId})), ...(duplicatePrimary ? [{logical_id:documentedRules.rules[0].logicalId}] : [])]});
+    const descriptor = {logical_id:"rules_catalog",relative_path:"rules-catalog.json",sha256:sha256(catalog),bytes:Buffer.byteLength(catalog)};
+    write(path.join(sourceRoot,"releases",releaseId,descriptor.relative_path),catalog);
+    rules.push(descriptor);
+  }
   const releaseRecord = {
-    schema: "agents.e-rules-release.v2", release_id: releaseId, git_commit: activeCommit,
+    schema: "agents.e-rules-release.v3", release_id: releaseId, git_commit: activeCommit,
     ruleset_sha256: documentedRules.ruleset_sha256, source_inputs_clean: true,
     input_paths: expectedInputPaths, remote_main_contains_commit: true,
     created_at_utc: "2026-09-06T12:58:00Z"
@@ -148,12 +158,12 @@ async function verify(facts) {
   });
 }
 
-test("later published Skill commits retain a passing five-rule source relation and exact v2 input evidence", async () => {
+test("later published Skill commits retain a passing primary-topic source relation and complete catalog evidence", async () => {
   const facts = await collect();
   assert.notEqual(facts.sourceCommit, facts.authority.gitCommit);
   assert.equal(facts.authority.sourceMatchesRelease, true);
   assert.equal(facts.validation.rows.find((row) => row.layer.startsWith("Source checkout")).status, "pass");
-  assert.equal(facts.authority.releaseRecordSchema, "agents.e-rules-release.v2");
+  assert.equal(facts.authority.releaseRecordSchema, "agents.e-rules-release.v3");
   assert.equal(facts.authority.releaseSourceWorktreeClean, null);
   assert.equal(facts.authority.releaseSourceInputsClean, true);
   assert.deepEqual(facts.authority.releaseInputPaths, expectedInputPaths);
@@ -213,3 +223,9 @@ for (const [name, state] of [
   sourceRow.status = "pass";
   assert.ok((await verify(facts)).report.findings.some((item) => item.code === "snapshot_dirty_source_not_disclosed"));
 });
+
+for (const [name,options,expected] of [
+ ["a changed non-reader template",{corruptAux:true},/complete release file drift/],
+ ["a missing release catalog",{omitCatalog:true},/catalog is missing/],
+ ["a duplicated primary topic",{duplicatePrimary:true},/material semantic refresh/]
+]) test("collector rejects "+name+" without publishing partial facts",async()=>{await assert.rejects(collect(options),expected);});

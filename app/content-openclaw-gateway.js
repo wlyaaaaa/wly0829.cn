@@ -32,7 +32,7 @@ const openClawGatewaySnapshot = createProjectSnapshot({
   gaps: [
     "Telegram 与飞书都没有完成本轮真实入站、Agent（智能体）执行和原渠道回发；running、connected、ready 或 starting 不能替代消息 E2E。",
     "任何远程付费模型都没有 Live（真实调用）；route、auth、loaded 和 Provider（模型提供方）数量只说明候选路线或配置存在。",
-    "本地 qwen3.8:27b 没有做自然语言推理或 GPU（图形处理器）实跑；local=true 只证明目录分类。",
+    "本地 qwen3.8:27b 没有做自然语言推理或 GPU实跑；local=true 只证明目录分类。",
     "没有执行真实更新、Gateway 重启、灾备激活、全新 Windows 安装或 -Repair 故障自愈。",
     "CodeG MCP（模型上下文协议）没有完成 initialize、tools/list 或工具调用，端口探活不能补齐握手证据。",
     "9月9日Telegram已ready/connected、飞书仍starting；官方网关RPC两次10秒超时后，在03:50Z和03:55Z同一进程自行恢复。响应8.465/9.499秒接近阈值，失响应根因未证；未重启、改配置、调用付费模型或发送消息。",
@@ -41,10 +41,13 @@ const openClawGatewaySnapshot = createProjectSnapshot({
 });
 
 export const openClawGatewayProject = {
-  order: 26,
+  order: 27,
   slug: "openclaw-gateway",
+  technicalSections: [{"title":"来源读取与精确判定","paragraphs":["OpenClaw 拥有会话、消息渠道、模型和工具；AI 通过本仓库读取公开安全状态并调用官方运维动作。消息正文、账号和秘密留在各自私人 Owner（事实负责人），不进入网页或 PUBLIC Git。","Telegram 与飞书：在已完成私人配置的应用里发送任务；本页只读取脱敏运行态、lifecycle（生命周期）和是否出现 lastInbound/lastOutbound，不读取账号、机器人身份或正文。；正常时消息经 Gateway 执行并回原渠道；只有真实入站、执行和回发都出现，才记为消息 E2E。","OpenClaw 官方配置与模型目录：读取 config validate（配置校验）、models status/list（模型状态/目录）和 auth（认证来源）聚合；目录的 local=true 用于判断本地路线，认证只按来源数量和类型脱敏汇总。；默认、fallback（后备路线）、utility（辅助模型）、图像、远程可选路线和成本边界；不输出秘密，也不猜会话或 cron（定时任务）覆盖。","Gateway 与 Windows 计划任务：读取官方 gateway status（网关状态）、health（健康检查）、回环监听者，以及全部 7 个相关任务的触发、当前状态、最近运行时间和独立历史结果。；当前 RPC（远程过程调用）/health、端口拓扑与完整自动化时刻表；任务 State（状态）、LastTaskResult（上次结果）和当前健康各自保留。","官方更新、备份与恢复命令：更新前读取当前版、stable（稳定）目标、通道和 health（健康）；备份只用 official backup（官方备份）create --verify（创建并验证），恢复先 official verify（官方验证）再写全新 staging（暂存目录）。；结构化 status/update（状态/更新）回执、官方归档或未激活暂存目录；不原地覆盖现役状态。","Codex 小型可读状态：由独立 Codex 备份 Owner（负责人）只选小型可读配置、memories（记忆）与 Skills（能力说明）；明确排除 auth（认证材料）、原始 session（会话）、SQLite（数据库）、日志、cache（缓存）和 plugins（插件载荷）。；本地时间戳快照、G 盘 SHA-256 热备和私人 Git 远端 OID（对象标识）都分别回读；云端失败令任务失败，但已完成的本地/G 副本仍可恢复。","Gemini 小型可读状态：只选适合恢复的轻量可读状态；排除原始会话、数据库和媒体，不把大体量或不可读运行材料混进备份。；本地最近 30 份、G 盘 SHA-256 热备和私人 Git 远端 OID（对象标识）回读；云端同步失败会让任务失败，但本地与 G 盘副本仍保留。","Claude 项目 memory（记忆）目录：按已配置项目选择各自 memory 目录，每个项目仍保持自己的可读恢复边界。；本地最近 30 份、G 盘 SHA-256 热备和私人 Git 镜像/OID 回读；云端失败时任务失败，但已完成的本地与 G 盘副本继续可用。","OpenClaw config（配置）与 workspace（工作区）：保护可能包含凭据的配置和工作区；工作区排除 node_modules、.git 等可重建或不应镜像的内容。；本地最近 30 份、G 盘 SHA-256 热备和私人 Git/OID 回读；云端失败时任务失败，本地与 G 盘恢复点仍保留。","3 个私人备份计划任务：独立 Codex Owner 在 20:05/22:05 跑 Codex；本仓库在 20:10/22:10 跑 Gemini，并在 20:20/22:20 共享承载 Claude→OpenClaw。；两个独立任务传播各自脚本退出码；共享任务即使 Claude 失败也继续跑 OpenClaw，最后优先传播 Claude 首个非零，否则传播 OpenClaw 结果。2026-09-03 修复后真实重跑三项均为 0。","PUBLIC 自动归档：每日 21:15 只接收干净的公开仓库候选：已有 staged（暂存）改动、禁止路径或通用凭据形态会在提交前拒绝；fetch 后发现 behind（落后）或 diverged（分叉）也停止。；既有21:15超时暴露逐操作长退避问题；aa4f9f1删除跨时间等待后，9月4日手动重跑0、9月6日21:15自然任务也0，源远端OID独立回读一致。","CodeG/Cline 的 MCP（模型上下文协议）配置：只在明确配置文件中保留未知根键与其他 MCP Server（模型上下文协议服务），再插入 openclaw-bridge；Gateway 密码由受控启动器在子进程注入。；可刷新、启用和继续做 initialize（初始化）/tools/list（工具列表）的无明文桥接配置；脚本不声称握手已经发生。","PUBLIC 源码与隔离测试：读取 aa4f9f1 的脚本、文档、模板、测试与公开内容门；测试夹具不发送消息、不调用付费模型、不更新运行时。；AI-first（AI 优先）源码合同、备份长退避与 AutoPush 失败快返、真实 Owner 边界、退役边界和自动回归证据；源远端 OID 已回读，但仍与消息、模型、更新和网页发布分开。","Funnel 只公开 active（活动）这一脱敏状态；私人配置里承载秘密的字段、备份归档和本机备份设置都不进入网页。"]}],
+  usageEntry: "在已接通本机 OpenClaw 管理入口的 AI 对话中先说明要查状态、交办、更新还是备份；真实聊天从已连接的 Telegram/飞书渠道发送。",
+  usageInputs: ["想交办的事或遇到的故障","要用 Telegram 还是飞书","需要时明确选择模型或维护动作"],
   title: "OpenClawGateway",
-  kicker: "给AI调用的Windows OpenClaw运维层 · 模型成本与运行证据分别说明",
+  kicker: "维护消息网关，不另造一套聊天产品",
   route: "/projects/openclaw-gateway",
   visibility: "公开仓库",
   statusTone: "mixed",
@@ -59,63 +62,15 @@ export const openClawGatewayProject = {
     failureRecovery: ["消息未收发保持未验", "默认本地不冒充全局零费用", "非loopback或多个监听者失败关闭", "更新部分完成不自动降级", "暂存恢复不冒充激活", "MCP端口在线不冒充工具可用"]
   },
   repositoryNote: "OpenClawGateway 是 PUBLIC（公开）源码项目。页面可以说明公共仓库路径、版本、端口、模型与 Provider（模型提供方）名称、脚本合同和脱敏聚合；不会公开账号 ID、机器人身份、token/secret、Tailscale 主机名或 URL、私库坐标、内部路径、消息正文、原始日志或恢复归档内容。",
-  summary: "这是给 AI Agent（智能体）调用的 Windows 运维层：AI 先读取 OpenClaw Gateway（网关）、模型、渠道、计划任务和恢复点，再选择最窄的入口执行或向人确认边界；人不需要经常打开 OpenCode、CodeG 或终端。它的目标是让 Telegram 或飞书交办的任务经 Gateway 选择默认本地模型，或在人明确授权时选择远程模型，并把结果送回原渠道。当前Telegram已连接、飞书仍启动中；22:07Z网关RPC与健康检查均通过。03:40—03:55Z曾两次超时后自行恢复，8.465与9.499秒属于当时的历史样本。消息E2E仍为0/2，失响应原因未证，不能称链路长期稳定。",
-  why: "AI 若只看端口、一个开关或一条测试，也会把“能启动”误写成“消息可用”，把“默认本地”误写成“绝不付费”，或把“归档解开”误写成“灾备完成”。这个项目把消息渠道、Gateway、模型、认证、计划任务和恢复证据分开，让 AI 能先读再动、失败关闭，并只把外部发消息、付费调用、更新、修复注册和灾备激活交给人授权。",
-  plainExample: "我可以问：“OpenClaw现在能正常接活吗？先不要发消息或重启。”这次结果会分开说：官方网关RPC和健康检查现在通过，Telegram已连接，飞书仍启动中；之前出现过超时，当前一次成功不能证明根因已经消除。连接和健康状态都不等于已经完成真实入站、执行和回发。",
-  result: "交回版本、网关、计划任务、模型路线、渠道与恢复点各自的证据。9月9日22:07Z最新RPC与health已通过，仍保留03:40—03:55Z两次超时和自行恢复的历史；Telegram已连接、飞书启动中，消息E2E仍为0/2。更新、备份、修复和恢复继续分别以执行与回读为准。",
-  readerStates: {
-    pass: "最新RPC与health回读通过，事件循环没有报告降级；此前超时和接近阈值的历史响应仍保留。Telegram连接只证明渠道状态，消息E2E仍是0/2，不能据此升级为长期稳定。",
-    problem: "历史任务结果非零、版本 behind（落后目标版）、插件标签不齐、飞书 starting（启动中）或 doctor（环境体检）warning（警告）会保留为具体问题；只影响相应判断，不把整个 Gateway 夸成全坏或全绿。",
-    unavailable: "状态无法读取、监听不唯一或暴露到非回环、备份校验失败、更新关系未知、配置畸形或桥接身份不能确认时失败关闭，并保留最后可验证状态与恢复入口。"
-  },
-  dataSources: {
-    title: "AI 从哪里取得状态，又能把结果交回哪里",
-    intro: "OpenClaw 拥有会话、消息渠道、模型和工具；AI 通过本仓库读取公开安全状态并调用官方运维动作。消息正文、账号和秘密留在各自私人 Owner（事实负责人），不进入网页或 PUBLIC Git。",
-    rows: [
-      { source: "Telegram 与飞书", data: "在已完成私人配置的应用里发送任务；本页只读取脱敏运行态、lifecycle（生命周期）和是否出现 lastInbound/lastOutbound，不读取账号、机器人身份或正文。", result: "正常时消息经 Gateway 执行并回原渠道；只有真实入站、执行和回发都出现，才记为消息 E2E。" },
-      { source: "OpenClaw 官方配置与模型目录", data: "读取 config validate（配置校验）、models status/list（模型状态/目录）和 auth（认证来源）聚合；目录的 local=true 用于判断本地路线，认证只按来源数量和类型脱敏汇总。", result: "默认、fallback（后备路线）、utility（辅助模型）、图像、远程可选路线和成本边界；不输出秘密，也不猜会话或 cron（定时任务）覆盖。" },
-      { source: "Gateway 与 Windows 计划任务", data: "读取官方 gateway status（网关状态）、health（健康检查）、回环监听者，以及全部 7 个相关任务的触发、当前状态、最近运行时间和独立历史结果。", result: "当前 RPC（远程过程调用）/health、端口拓扑与完整自动化时刻表；任务 State（状态）、LastTaskResult（上次结果）和当前健康各自保留。" },
-      { source: "官方更新、备份与恢复命令", data: "更新前读取当前版、stable（稳定）目标、通道和 health（健康）；备份只用 official backup（官方备份）create --verify（创建并验证），恢复先 official verify（官方验证）再写全新 staging（暂存目录）。", result: "结构化 status/update（状态/更新）回执、官方归档或未激活暂存目录；不原地覆盖现役状态。" },
-      { source: "Codex 小型可读状态", data: "由独立 Codex 备份 Owner（负责人）只选小型可读配置、memories（记忆）与 Skills（能力说明）；明确排除 auth（认证材料）、原始 session（会话）、SQLite（数据库）、日志、cache（缓存）和 plugins（插件载荷）。", result: "本地时间戳快照、G 盘 SHA-256 热备和私人 Git 远端 OID（对象标识）都分别回读；云端失败令任务失败，但已完成的本地/G 副本仍可恢复。" },
-      { source: "Gemini 小型可读状态", data: "只选适合恢复的轻量可读状态；排除原始会话、数据库和媒体，不把大体量或不可读运行材料混进备份。", result: "本地最近 30 份、G 盘 SHA-256 热备和私人 Git 远端 OID（对象标识）回读；云端同步失败会让任务失败，但本地与 G 盘副本仍保留。" },
-      { source: "Claude 项目 memory（记忆）目录", data: "按已配置项目选择各自 memory 目录，每个项目仍保持自己的可读恢复边界。", result: "本地最近 30 份、G 盘 SHA-256 热备和私人 Git 镜像/OID 回读；云端失败时任务失败，但已完成的本地与 G 盘副本继续可用。" },
-      { source: "OpenClaw config（配置）与 workspace（工作区）", data: "保护可能包含凭据的配置和工作区；工作区排除 node_modules、.git 等可重建或不应镜像的内容。", result: "本地最近 30 份、G 盘 SHA-256 热备和私人 Git/OID 回读；云端失败时任务失败，本地与 G 盘恢复点仍保留。" },
-      { source: "3 个私人备份计划任务", data: "独立 Codex Owner 在 20:05/22:05 跑 Codex；本仓库在 20:10/22:10 跑 Gemini，并在 20:20/22:20 共享承载 Claude→OpenClaw。", result: "两个独立任务传播各自脚本退出码；共享任务即使 Claude 失败也继续跑 OpenClaw，最后优先传播 Claude 首个非零，否则传播 OpenClaw 结果。2026-09-03 修复后真实重跑三项均为 0。" },
-      { source: "PUBLIC 自动归档", data: "每日 21:15 只接收干净的公开仓库候选：已有 staged（暂存）改动、禁止路径或通用凭据形态会在提交前拒绝；fetch 后发现 behind（落后）或 diverged（分叉）也停止。", result: "既有21:15超时暴露逐操作长退避问题；aa4f9f1删除跨时间等待后，9月4日手动重跑0、9月6日21:15自然任务也0，源远端OID独立回读一致。" },
-      { source: "CodeG/Cline 的 MCP（模型上下文协议）配置", data: "只在明确配置文件中保留未知根键与其他 MCP Server（模型上下文协议服务），再插入 openclaw-bridge；Gateway 密码由受控启动器在子进程注入。", result: "可刷新、启用和继续做 initialize（初始化）/tools/list（工具列表）的无明文桥接配置；脚本不声称握手已经发生。" },
-      { source: "PUBLIC 源码与隔离测试", data: "读取 aa4f9f1 的脚本、文档、模板、测试与公开内容门；测试夹具不发送消息、不调用付费模型、不更新运行时。", result: "AI-first（AI 优先）源码合同、备份长退避与 AutoPush 失败快返、真实 Owner 边界、退役边界和自动回归证据；源远端 OID 已回读，但仍与消息、模型、更新和网页发布分开。" }
-    ],
-    note: "Funnel 只公开 active（活动）这一脱敏状态；私人配置里承载秘密的字段、备份归档和本机备份设置都不进入网页。"
-  },
-  productPrinciples: [
-    { title: "AI 先读再动，人只守关键边界", detail: "日常状态、健康判断、备份核对和安全修复由 AI 编排；外部发消息、付费模型、更新、注册修复和灾备激活才要求人的明确授权。OpenCode、CodeG 和终端都不是人必须长期操作的界面。" },
-    { title: "不造第二个聊天产品", detail: "OpenClaw 继续拥有渠道、会话、Agent、模型和工具；本仓库只把 Windows 运维、可读状态、更新、恢复和外部工具接入做稳。" },
-    { title: "证据分层，不用一个绿灯代替全部", detail: "enabled（已启用）、loaded（已加载）、route（路线）、auth（认证）、端口、任务、RPC、消息 E2E、模型 Live（真实调用）和业务完成各回答不同问题；旧证据也不自动晋升到当前版本。" },
-    { title: "默认只读，改变运行态必须是明确入口", detail: "status、api status 和 guardian 默认不写。-Repair、update、bootstrap（部署引导）应用、恢复激活与真实消息/模型调用都是独立动作，不能由状态检查顺手触发。" },
-    { title: "成本不猜", detail: "官方目录 local=true 才称本地；远程路线和认证仍存在就不承诺全局零费用。会话和 cron 未核对时直接写 Unknown，而不是沿用旧 api on/off 结论。" },
-    { title: "公开源码与私人运行分离", detail: "公开仓库保存脱敏脚本和解释；账号、token（令牌）、私有 URL（网址）、消息、原始日志、恢复归档和机器拓扑由私人 Owner 保存。缺一个私密值不抹去组件的公开身份与作用。" },
-    { title: "失败关闭，但不夸大", detail: "非回环、多监听、未知版本关系、坏 JSON（结构化配置）、缺受控启动器或归档校验失败时停止相应动作；一个入口失败不会被说成整个系统不可用，也不会偷偷切路线。" },
-    { title: "优先官方生命周期和格式", detail: "Gateway start/stop/restart、models、update、backup 与 restore 走 OpenClaw 官方命令；仓库不继续维护内部 SQLite、凭据复制或手工 Node 任务的第二套语义。" }
-  ],
-  responsibilities: [
-    "汇总 OpenClaw 版本、配置、Gateway RPC/health、Windows 任务、模型、渠道和 Funnel 的脱敏状态。",
-    "让 Telegram 或飞书的真实交办仍由 OpenClaw 完成，同时准确区分配置、连接和消息 E2E。",
-    "报告默认、fallback、utility、图像、远程可选路线和认证来源，替代错误的全局 API 开关。",
-    "通过官方生命周期维持单一 loopback（本机回环）Gateway，并提供默认只读、显式 -Repair 的 Windows 常驻入口。",
-    "让 AI 在获得对应授权后执行备份、前检、官方更新、重新拉起与独立后验，保留 partial（部分完成）状态。",
-    "创建官方校验归档并恢复到全新暂存目录，为离线激活保留可信起点。",
-    "用脱敏模板和事务化 bootstrap 支持新机配置；需要时再用 managed bridge（受控桥接）接入可选 CodeG/Cline。",
-    "保留四个现役私人备份消费者各自的选择、三类输出、30 份保留、哈希/OID 验证与失败语义，同时让公开源码不承载私人坐标。",
-    "定时归档 PUBLIC 仓库前检查暂存区、禁止路径、凭据形态和远端分叉，并在无变化、提交或推送后重新读取远端 OID。"
-  ],
-  exclusions: [
-    "不提供新的聊天网页、消息客户端、模型平台、凭据中心、会话数据库或后台 watcher（监视器）。",
-    "不自动发送 Telegram/飞书消息，不自动调用远程付费模型，也不因网页建设执行更新、重启、-Repair、灾备激活或 OAuth。",
-    "不把默认本地模型称为全局零费用，不替用户删除所有远程认证，也不跨 Owner 写模型或内部 SQLite。",
-    "不公开账号 ID、机器人身份、secret、Tailscale 地址、私库坐标、内部路径、消息正文、原始日志或完整恢复材料。",
-    "不把公开脚本测试、端口探活、插件 loaded 或 staging restore 写成真实渠道、模型、MCP、更新或灾备成功。",
-    "不让 PUBLIC 自动归档覆盖已有 staged 工作、提交禁止内容、在 behind/diverged 时继续或用 force-push（强制推送）解决分叉。"
-  ],
+  summary: "我希望从 Telegram 或飞书交办事情，电脑上的 OpenClaw Gateway（网关）默认交给已配置的本地模型，明确选择并允许时才使用远程模型，再把结果送回原渠道。这个项目让 AI 负责 Windows 上的运行检查、更新和备份恢复，我不需要长期打开终端盯着它。它不是第二个聊天机器人；页面保留的运行观察也不等于整条消息链已经实测完成。",
+  why: "网关端口还在，并不说明 Telegram 或飞书消息真的送达；默认选本地模型，也不说明所有会话都不会产生远程费用。这个项目把消息、模型、网关、备份和更新分别检查，让 AI 说明每一层的真实结果，再处理明确的问题。",
+  plainExample: "“OpenClaw现在为什么没回消息？先检查，不要发测试消息或重启。”工具分别查看网关、渠道、模型与任务，说明已知状态和仍缺哪段证据；只看到连接成功，不会说请求已处理或回复已送达。",
+  result: "得到网关、消息渠道、模型选择、后台任务和恢复材料各自的结论，以及对应的下一步。需要更新或恢复时走原有明确流程，先保留现状；技术层完整保留已有观察日期、超时样本和未解决的消息验收缺口。",
+  readerStates: {"pass":"上次网关接口和健康检查通过；Telegram 当时显示已连接，但两条渠道的真实消息往返仍未验收。历史超时不因一次健康结果消失。","problem":"飞书仍在启动、旧网关请求曾超时，或备份任务有旧失败时，分别标出影响哪一层；不会把整个系统写成全好或全坏。","unavailable":"状态读不到、网关监听异常、恢复点损坏或版本关系不清时，停止相关修改，保留最后能证实的状态和恢复材料。"},
+  dataSources: {"title":"AI 从哪里看状态，结果回到哪里","intro":"OpenClaw 自己负责聊天和模型；本项目只汇总公开安全的运行结果。私人消息和账号不进入网页。","rows":[{"source":"Telegram 与飞书","data":"查看所选渠道是否配置和连接；真实消息由本人在原应用发送。","result":"只有收到消息、执行任务并回到原渠道三段都通过，才叫交办完成。"},{"source":"模型目录与选择","data":"查看默认、备用、辅助和图像模型，以及仍可手选的远程路线。","result":"说明哪些可能使用远程费用；不知道某次会话实际选了什么就保留未知。"},{"source":"网关与 Windows 后台任务","data":"分别看网关能否响应、是否健康，以及计划任务有没有运行和失败。","result":"端口、任务状态和实际服务能力分别报告，避免一个绿灯掩盖另一个故障。"},{"source":"官方更新与恢复点","data":"先比较当前版本与目标，再确认备份；恢复演练只写入新暂存位置。","result":"知道更新有没有完成、哪些后验失败；暂存成功不等于现役灾备已激活。"},{"source":"Codex 的私人备份","data":"只选适合恢复的小型可读配置，不把原始会话和认证材料混入。","result":"本地、独立副本和远端各自核对；某层失败不抹掉已完成的那层。"},{"source":"Gemini 的私人备份","data":"只保留适合恢复的轻量资料，排除原始会话和媒体。","result":"分别确认本地、独立副本和远端状态。"},{"source":"Claude 项目资料备份","data":"按已配置项目保存各自可读的资料。","result":"逐项目确认恢复点，不把共享任务一个退出码当成全部结果。"},{"source":"OpenClaw 配置与工作区备份","data":"保存需要恢复的配置和工作区，跳过可再生成或不应镜像的内容。","result":"核对每一层副本，但仍需要另做实际应用恢复。"},{"source":"私人备份任务","data":"读取各任务最近一次结果，并分清共享任务中的 Claude 与 OpenClaw。","result":"指出哪一个备份消费者成功、失败或仍未验证。"},{"source":"公开仓库归档","data":"先检查将提交什么、是否有他人的暂存改动以及远端是否分叉。","result":"条件满足才提交并读回远端；有冲突时保留现场。"},{"source":"CodeG/Cline 可选桥接","data":"先保存不含明文密码的工具连接配置。","result":"真正刷新、列出工具并调用成功后才称客户端接通。"},{"source":"公开源码与隔离测试","data":"检查实现和虚构测试的结果，不把测试当真实渠道消息。","result":"说明代码具备什么、实际运行又验收到了哪一步。"}],"note":"公开页只给脱敏状态；所有渠道、模型、备份和更新结论都绑定各自观察时间。"},
+  productPrinciples: [{"title":"AI 先读再动","detail":"日常状态和故障定位由 AI 查看；发外部消息、选付费模型、更新与恢复现役状态，需要对应明确目标和授权。"},{"title":"不造第二个聊天产品","detail":"Telegram、飞书、会话、模型和工具仍交给 OpenClaw；这里负责本机运行、可读状态和恢复路径。"},{"title":"一个绿灯只说明一层","detail":"渠道连接、网关响应、模型能调用、消息往返和任务完成是不同结果。旧成功也不能自动证明今天仍可用。"},{"title":"状态查看不能偷偷变成修复","detail":"只读查询不会顺便重启、更新或改配置；这些动作各有明确入口和写后回读。"},{"title":"模型费用按实际路线说","detail":"只有目录确认的本地模型才称本地；远程模型仍可手选、会话和定时任务又可能有各自设置，未核的范围直接写未知。"},{"title":"公开说明与私人运行材料分开","detail":"公开仓库只留可读的脚本和结构；账号、消息、原始日志及恢复归档留在私人位置。"},{"title":"有异常就停在对应层","detail":"端口归属不明、版本关系未知、配置坏了或备份校验失败时，停止那一步并交回原因；不把一个故障推广成所有能力都不可用。"},{"title":"尽量用 OpenClaw 原有能力","detail":"启动、更新、模型、备份和恢复使用官方入口，避免另养一套内部数据库或凭据复制流程。"}],
+  responsibilities: ["让 AI 分别查看 OpenClaw 的版本、配置、网关响应、模型、渠道和后台任务，不靠一个端口判断整体健康。","沿用 OpenClaw 原有的 Telegram 与飞书渠道交办，并区分“已配置”“已连接”和“消息确实往返”。","说明默认模型、自动备用路线、辅助与图像模型，以及可手选的远程模型可能带来的费用边界。","用官方入口管理本机唯一的网关；日常先只读查看，明确要求修复时再动作。","更新前核对版本与恢复点，更新后重新检查配置、网关、模型和任务；部分成功就如实报告。","创建和核验官方恢复点，先在全新暂存位置演练，不把演练自动覆盖到现役配置。","用公开模板说明安装结构；私人配置在正确位置准备并预演，可选连接 CodeG/Cline。","分别查看 Codex、Gemini、Claude 和 OpenClaw 的私人备份结果；本地、独立副本和远端各自核对。","公开仓库自动归档前检查别人的未提交工作和远端分支状态，有冲突就停止。"],
+  exclusions: ["不另做聊天客户端、模型平台或密码仓库；消息、会话和模型仍由 OpenClaw 负责。","网页建设不会发送真实消息、调用付费模型、更新网关或激活灾备。","默认本地不等于所有会话免费，也不替本人删除远程模型凭据。","公开页面不展示账号、消息正文、密钥、私人备份位置和完整恢复材料。","脚本测试、端口在线或配置写好，不能当作真实聊天、模型调用或桥接工具已通过。","公开归档遇到他人的暂存改动、禁止内容或远端分叉就停，不靠强行推送覆盖。"],
   glossary: [
     { term: "Gateway（网关）", meaning: "OpenClaw 在本机接收渠道请求、调用 Agent/模型/工具并回送结果的常驻进程；本仓库不重新实现它。" },
     { term: "loopback（本机回环）", meaning: "只允许同一台电脑访问的监听地址；当前端口 18789 只有一个回环监听者。" },
@@ -128,7 +83,7 @@ export const openClawGatewayProject = {
     { term: "partial（部分完成）", meaning: "更新已经改变版本，但重新拉起或后验失败；系统保留真实代际与失败项，不自动降级掩盖。" },
     { term: "MCP（模型上下文协议）", meaning: "CodeG/Cline 通过 stdio bridge 使用 OpenClaw 工具的协议；配置存在和端口在线都早于 initialize 与 tools/list。" }
   ],
-  operatingFlow: [
+  technicalOperatingFlow: [
     { title: "AI 先从只读状态开始", detail: "查看版本、config、Gateway RPC/health、7 个相关任务、模型目录、渠道和 Funnel；把当前值、历史回执与未测项分开。" },
     { title: "在真实渠道交办", detail: "从已私人配置的 Telegram 或飞书发送明确任务；消息由 OpenClaw 接收，公开仓库不接触账号或正文。" },
     { title: "按明确路线选择模型", detail: "默认进入目录证明为 local 的 qwen3.8:27b；需要远程时由用户手选具体 Qwen、DeepSeek 或 Z.AI 路线，不自动 fallback。" },
@@ -138,6 +93,7 @@ export const openClawGatewayProject = {
     { title: "变更后独立回读", detail: "更新或 -Repair 以后重新核对版本、配置、RPC、模型和任务；恢复演练先停在 fresh staging，现役激活另行验收。" },
     { title: "需要 CodeG 时再接桥", detail: "脚本保留其他 MCP Server（模型上下文协议服务），只 upsert（插入或更新）openclaw-bridge；随后在 CodeG/Cline 真实刷新、启用、initialize（初始化）、tools/list（工具列表）和只读工具调用。" }
   ],
+  operatingFlow: [{"title":"先查现役状态","detail":"AI 只读核对 Gateway 配置、RPC、健康、模型目录与目标渠道；端口和任务存在不代表可用。"},{"title":"从已连接渠道交办","detail":"在 Telegram 或飞书发明确任务，再分别核对入站、执行和原渠道回信；渠道未接通时停在状态检查。"},{"title":"变更先有恢复点","detail":"更新或部署须有明确目标，预演或官方备份后执行；随后重新读版本、模型、渠道和任务结果。"},{"title":"故障按真实层级恢复","detail":"分清配置、渠道、模型认证、网关和备份问题；未验收或维护冻结范围保持原观察日期。"}],
   components: [
     { name: "只读状态面板", responsibility: "把版本、Gateway、任务、模型、渠道和 Funnel 放在一屏，但不合并证据层。", implementation: "tools/status.ps1 调用官方 JSON 状态并对关键缺失返回非零；api.ps1 status 用官方模型目录 local 字段生成 cost_posture.v2。" },
     { name: "渠道与插件矩阵", responsibility: "把配置、运行、插件版本和兼容问题分别展示，避免把 loaded 冒充消息或模型调用。", implementation: "Telegram 2026.8.1 loaded、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded；compat issues=0。" },
@@ -205,25 +161,65 @@ export const openClawGatewayProject = {
     { name: "官方模型变更", command: "openclaw models <status|list|set|auth> [...]", purpose: "模型和认证变更回归 OpenClaw 官方 Owner；本仓库不提供跨 Owner 写入开关。" }
   ],
   evolution: [
-    { date: "2026-06-19—2026-06-21", commit: "4e77f2f—e48a7fd", result: "形成 Gateway 常驻、消息渠道、模型脚本、WeFlow 调试、备份与 CodeG 尝试，但同时积累了单文件 API 开关、机器绑定脚本和跨 Owner 写入。" },
-    { date: "2026-08-30—2026-08-31", commit: "65d5e07—f19f325", result: "模型、会话、认证和生命周期回归 OpenClaw 2.0 官方命令；公开仓库转为状态、运维、恢复和接入层，不继续复制内部 SQLite 或凭据目录。" },
-    { date: "2026-09-03—2026-09-04", commit: "f89fb14—aa4f9f1", result: "重建 7 个产品模块并修正成本、生命周期、更新与恢复；删除无消费者 Codex 副本、明确独立 Owner，为备份加入有界网络重试。下一轮三项自然备份均为 0；AutoPush 的逐操作退避超过 15 分钟时限后，最终删除跨时间等待并完成约 5.4 秒真实 0 回执。文档定位为 AI 主动调用、人只在有影响边界授权。" }
+    {
+      "date": "2026-06",
+      "title": "先把消息渠道与电脑模型接起来",
+      "commit": "",
+      "result": "形成Windows网关常驻、模型与消息渠道的运行方案，并留下备份与已有客户端接入路径。",
+      "evidence": [
+        {
+          "date": "2026-06-19—2026-06-21",
+          "note": "早期网关常驻与渠道方案；单文件开关和跨责任源写入是后来退出的旧做法。",
+          "commit": "4e77f2f—e48a7fd"
+        }
+      ]
+    },
+    {
+      "date": "2026-08–09",
+      "title": "让产品回到官方工具各自的职责",
+      "commit": "",
+      "result": "模型、会话和认证交回OpenClaw官方入口；本项目保留状态、生命周期和部署恢复，退出用单一开关冒充全局成本控制的做法。",
+      "evidence": [
+        {
+          "date": "2026-08-30—2026-08-31",
+          "note": "生命周期、模型、会话和认证回归官方入口，不复制另一套内部数据库语义。",
+          "commit": "65d5e07—f19f325"
+        }
+      ]
+    },
+    {
+      "date": "2026-09",
+      "title": "把运行、备份和交付分开证明",
+      "commit": "",
+      "result": "明确各备份消费者的独立结果，云端失败不抹去本地副本；公开归档去掉占满任务时间的长等待，恢复先到新暂存位置，真正激活另验。一次健康检查不抹掉超时历史，也不证明消息已收发。",
+      "evidence": [
+        {
+          "date": "2026-09-03—2026-09-04",
+          "note": "独立备份结果与公开归档分开；删除跨时间长退避，失败及时交回，历史自然运行成功不晋升为当前消息收发验收。",
+          "commit": "f89fb14—aa4f9f1"
+        }
+      ]
+    }
   ],
-  snapshotUpdateNote: "本页将9月7日只读运行态与PUBLIC源码aa4f9f1合并；源码测试、模型目录、插件和备份/灾备证据仍保留原时刻。状态异常不触发网页任务自动重启、发消息、付费调用或恢复激活。"
+  snapshotUpdateNote: "本页将9月7日只读运行态与PUBLIC源码aa4f9f1合并；源码测试、模型目录、插件和备份/灾备证据仍保留原时刻。状态异常不触发网页任务自动重启、发消息、付费调用或恢复激活。",
+  "readerBoundary": "现有证据中Telegram已连接、飞书仍启动中，真实入站到回复的闭环未验；这些是有日期的历史观察，不是本轮重新调用网关的结果。",
 };
 
 export const openClawGatewayModules = [
   {
     slug: "channel-handoff", shortTitle: "渠道交办", title: "从 Telegram 或飞书交办，结果仍回到原来的对话",
+    usageEntry: "在已经配置并连接的 Telegram 或飞书会话直接发送明确任务；若渠道尚未接通，先让 AI 只读检查渠道状态，不能把发送按钮当作已可用。",
+    usageInputs: ["要发到 Telegram 还是飞书","明确任务与希望收到的结果"],
+    productFlow: [{"title":"先看渠道有没有接通","detail":"AI 分别查看所选渠道的配置、运行和连接；飞书和 Telegram 的结果不能互相代替。"},{"title":"从原聊天发任务","detail":"本人在已接通的应用中发送明确任务，由 OpenClaw 接收并执行。"},{"title":"等回复回到原处","detail":"核对消息收到、任务执行和原渠道回信；缺哪一段就报告哪一段，不把“显示在线”当完成。"}],
     searchAliases: ["Telegram交办OpenClaw", "飞书交办电脑任务", "lastInbound为空", "lastOutbound为空", "Google Chat disabled", "Funnel active", "渠道E2E", "插件版本矩阵", "compat issues 0"],
     searchProjection: { intents: ["从手机给电脑发任务", "确认Telegram是否真能收发", "确认飞书启动状态", "查看渠道插件版本", "查看外部路由"], entities: ["Telegram 2026.8.1", "Feishu 2026.6.8", "Google Chat 2026.6.6", "lastInbound", "lastOutbound", "Funnel", "compat issues"], relations: ["消息进入Gateway", "Agent执行后回原渠道", "插件loaded与消息E2E分离", "Funnel提供外部路由"], failureRecovery: ["enabled不等于收发", "starting不冒充ready", "版本不同不冒充故障", "空收发记录保持未验", "不公开外部URL"] },
     teaser: "它保留用户已经在用的消息入口，不要求改用新的网页或聊天壳。",
     status: "Telegram已运行、就绪且连接；飞书仍启动中；最新网关RPC与健康检查通过，早先超时原因未证，真实消息收发未验", statusTone: "mixed",
     value: "我可以在手机或现有工作聊天里交办，而电脑上的 OpenClaw 负责执行；不用再打开一个专门的远控聊天产品。",
     why: "渠道配置打开、连接探测正常和一次消息真正往返是三件事。只有把它们分开，才不会在关键任务时把“看起来在线”误判成“确实交付成功”。",
-    example: "我可以问：“Telegram和飞书现在真的能交办并收到回复吗？先不要发消息。”当前只确认Telegram已连接、飞书启动中，最新RPC与健康检查通过，但早先超时原因仍未查明；没有真实入站、执行和回发证据，不能把连接完成说成消息交付成功。",
+    example: "“先查 Telegram 和飞书能否接任务，别发测试消息。”AI 分别看渠道连接、网关响应和仍缺的消息证据；上次只确认 Telegram 连接，飞书还在启动，没有完整往返结果。",
     result: "成功时得到带明确渠道的入站、执行与回发闭环；发现问题时知道停在配置、连接、启动、入站还是出站；未发消息时就只得到运行态，不生成假的端到端结论。",
-    readerStates: { pass: "目标渠道完成真实入站、智能体执行和原渠道回发。", problem: "Telegram已连接、飞书仍启动中；RPC曾超时后自行恢复，偏慢响应保留为历史样本，连接状态和间歇失响应分开保留，两者均没有本轮消息E2E。", unavailable: "渠道停用、连接失败、无入站或无回发时，只标记该渠道未通过；不切换到另一渠道冒充成功。" },
+    readerStates: {"pass":"目标渠道真实收到任务、执行并把回复送回原对话，才记为这条渠道通过。","problem":"上次 Telegram 已连接、飞书仍在启动；网关曾短暂超时又恢复，不能把连接和消息交付混成一个结论。","unavailable":"这条渠道停用、没收到任务或没送回回复时，只标记它未通过，不用另一渠道的成功代替。"},
     decisionImpact: ["9月9日Telegram running/ready/connected（运行/就绪/连接），飞书running/starting（运行/启动中）；RPC两次10秒超时后已自行恢复，仍不抹掉历史偏慢响应和消息未验的边界。", "插件矩阵是 Telegram 2026.8.1 loaded（已加载）、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled（停用）、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues（兼容问题）=0。", "版本标签不同不等于故障；loaded 和 compat issues=0 也不等于消息或模型调用通过。", "Google Chat disabled 是明确停用，不作为第三条可用入口。", "Funnel（Tailscale 外部路由）active（活动）说明外部路线存在，但不公开地址，也不证明渠道消息成功。", "本轮若要补证据，必须实际发送一条受控消息；这是外部动作，不能由只读状态检查代替。"],
     problem: "避免把 enabled（已启用）、running（运行中）、connected（已连接）、ready（就绪）或外部路由中的任意一个状态，误写成完整消息交付。",
     implementation: ["OpenClaw channels status（渠道状态）--json 提供各渠道的 configured（已配置）、running（运行中）、lifecycle（生命周期）、connected（已连接）与最近收发字段。", "tools/status.ps1 只读显示 Telegram、飞书、Google Chat，不保存账号或机器人标识。", "脱敏插件清单分别保留 exact version（精确版本）、loaded/disabled（已加载/停用）和 compat issues（兼容问题）；不把版本差异压成一个总版本。", "消息处理和回发仍由 OpenClaw 网关与渠道插件拥有；PUBLIC 仓库只解释脱敏状态。"],
@@ -233,20 +229,24 @@ export const openClawGatewayModules = [
     failures: [{ condition: "渠道显示 enabled/running，但没有收发记录", response: "保持“已配置运行、本轮 E2E 未验”，不升级结论。" }, { condition: "飞书停在 starting", response: "保留 starting；检查插件与渠道状态，但不伪造 ready。" }, { condition: "外部路由存在但消息失败", response: "分别排查 Funnel、渠道连接与 Gateway，不把端口在线当回发成功。" }],
     sources: [{ path: "docs/USAGE.md", role: "从手机交办与消息 E2E 解释" }, { path: "docs/DEPLOY.md", role: "渠道从 disabled 模板到私人配置的流程" }, { path: "tools/status.ps1", role: "渠道和 Funnel 脱敏状态入口" }],
     verification: ["9月9日官方channels status：Telegram configured/running/connected=true、ready；飞书configured/running=true、starting。未发测试消息，未重查入站/出站记录。", "插件矩阵为 Telegram 2026.8.1 loaded、Feishu 2026.6.8 loaded、Google Chat 2026.6.6 disabled、Qwen 2026.8.1 loaded、Z.AI 2026.7.1 loaded，compat issues=0。", "9月7日lastInbound/lastOutbound为空是原观察；9月9日没有读取消息记录，也没有发测试消息。", "Funnel 只确认 active；没有公开或核对 hostname/URL。"],
-    relation: "渠道模块定义请求从哪里来、结果回哪里；模型模块决定执行路线，网关常驻模块负责中间运行。"
+    relation: "渠道模块定义请求从哪里来、结果回哪里；模型模块决定执行路线，网关常驻模块负责中间运行。",
+    readerStatus: "上次快照中Telegram已连接、飞书仍启动中；真实消息交办和回发尚未验收，运行状态仍需按当次实际连接确认。"
   },
   {
     slug: "model-cost", shortTitle: "模型与成本", title: "默认本地不等于所有会话永远零费用",
+    usageEntry: "在已接通本机 OpenClaw 管理入口的 AI 对话中说“先只读列出默认模型、可手选远程模型和费用边界”。",
+    usageInputs: ["想了解默认路线还是某次会话费用","是否考虑手选远程模型"],
+    productFlow: [{"title":"看默认与自动备用模型","detail":"AI 读取普通、备用、辅助和图像路线，按模型目录区分本地、远程或尚不清楚。"},{"title":"再看可手选的远程路线","detail":"只说明哪些提供方可用，不展示认证材料或调用付费模型。"},{"title":"按本次用途选择","detail":"默认本地不代表每次会话都免费；定时任务或旧会话未核对时保留未知，修改路线另按本人选择。"}],
     searchAliases: ["OpenClaw默认本地模型", "qwen3.8 27b", "api status", "api on off退役", "远程模型路线21", "远程认证5", "global_zero_cost_enforced"],
     searchProjection: { intents: ["判断默认模型是否本地", "查看远程付费风险", "手选远程模型", "解释旧API开关为什么删除"], entities: ["ollama5090d/qwen3.8:27b", "Qwen", "DeepSeek", "Z.AI", "api.ps1 status", "local=true"], relations: ["官方目录证明本地", "默认与可选路线分离", "认证来源不等于调用"], failureRecovery: ["目录缺local证据不猜", "会话与cron未核对保持未知", "旧actions exit2", "不自动fallback"] },
     teaser: "它回答“现在默认走哪里、还可以走哪里、哪些地方可能花钱”，而不是提供一个假的总开关。",
     status: "9月7日默认仍本地；9月4日目录/认证快照为自动远程0、可选21、认证来源5。全局零费用未强制，远程调用未验", statusTone: "mixed",
-    value: "我能继续把普通新任务默认交给本地 27B 模型，同时保留明确手选 Qwen、DeepSeek、Z.AI 的能力，并知道页面不能承诺全局零费用。",
-    why: "OpenClaw 2.0 的认证可能来自多处，会话和定时任务也可能固定自己的模型。旧脚本只查一个过期文件并强行启停任务，给出了比证据更强的成本结论。",
+    value: "普通新任务可以默认选已配置的本地模型；远程模型仍可明确手选，因此页面只报告真实模型路线和费用可能性，不承诺所有会话都免费。",
+    why: "认证、会话和定时任务都可能各自选模型。只看一个旧开关会漏掉仍可手选的远程路线，也无法说明某次会话是否产生费用。",
     example: "我可以问：“新会话默认用本地模型吗，会不会失败后自动花远程费用？”系统会说明默认路线、自动回退和可手选远程模型；这次只读检查不会删除凭据或调用远程模型。",
-    result: "得到 default（默认模型）/fallback（自动回退）/utility（辅助模型）/image（图像模型）、自动远程数、远程路线与认证来源的只读姿态；无法核对的会话与定时任务覆盖会明确保留。",
-    readerStates: { pass: "官方 catalog（模型目录）的 exact model（精确模型）条目 local=true（本地为真），且已列自动路线无远程项。", problem: "远程路线与认证仍在，或会话/cron（定时任务）未核对，因此不能承诺 global zero cost（全局零费用）。", unavailable: "models status/list（模型状态/目录）无法读取或目录无模型时停止分类，不凭 Provider（模型提供方）名猜本地。" },
-    decisionImpact: ["默认 qwen3.8:27b 的 local=true 是本地分类证据，不是一次自然语言推理或 GPU（图形处理器）成功证据。", "Qwen 11、DeepSeek 2、Z.AI 8 条远程路线仍可手选；不因默认本地删除。", "fallback 空、utility/image unset（未设置）让已列自动远程数为 0，但 session（会话）/cron 仍未核对。", "旧 on/off/toggle（开/关/切换）返回 exit 2（退出码 2）且不改变运行态；模型变更走官方 models/config（模型/配置）命令。"],
+    result: "得到默认模型、自动备用路线、辅助与图像模型，以及仍可手选的远程路线；查不到的会话或定时任务覆盖直接写未知。",
+    readerStates: {"pass":"官方模型目录确认默认和自动路线均为本地，才称这些路线不自动调用远程模型。","problem":"还能手选远程模型，或有会话和定时任务尚未核对，就不能承诺全局零费用。","unavailable":"模型目录读不到时停止分类，不凭提供商名字猜本地或远程。"},
+    decisionImpact: ["默认 qwen3.8:27b 的 local=true 是本地分类证据，不是一次自然语言推理或 GPU成功证据。", "Qwen 11、DeepSeek 2、Z.AI 8 条远程路线仍可手选；不因默认本地删除。", "fallback 空、utility/image unset（未设置）让已列自动远程数为 0，但 session（会话）/cron 仍未核对。", "旧 on/off/toggle（开/关/切换）返回 exit 2（退出码 2）且不改变运行态；模型变更走官方 models/config（模型/配置）命令。"],
     problem: "防止成本判断被一个过期开关简化，也防止为追求“零费用”偷偷删掉用户仍需要的远程路线。",
     implementation: ["api.ps1 status 同时读取 openclaw models status --json 与 models list --json。", "只有 catalog entry.local=true 或一个 Provider 的全部目录条目 local=true 才分类为 local。", "输出 cost_posture.v2，并固定 global_zero_cost_enforced=false、mode_switch_available=false、session_and_job_overrides_checked=false。"],
     flow: ["读取默认、fallback、utility 与 image。", "从官方目录判定每条自动路线 local 或 remote_or_unknown。", "统计 allowed 中仍可手选的远程路线与 Provider。", "脱敏统计远程认证来源。", "说明会话和 cron 未核对，再由用户决定是否通过官方命令变更。"],
@@ -255,19 +255,23 @@ export const openClawGatewayModules = [
     failures: [{ condition: "官方模型目录为空或 exact model 不存在", response: "分类为 remote_or_unknown 或直接失败，不因名字含 ollama 就猜本地。" }, { condition: "用户调用旧 on/off/toggle", response: "解释退役原因，exit 2，不修改状态。" }, { condition: "需要全局零费用保证", response: "必须另行核对会话、cron、全部认证与路由；当前状态页不冒充完成。" }],
     sources: [{ path: "api.ps1", role: "成本姿态 v2 与旧 action 退役" }, { path: "docs/OPENCLAW.md", role: "模型、会话、任务和认证的四轴解释" }, { path: "tools/test-api-status.ps1", role: "本地目录分类、远程路线与失败合同测试" }],
     verification: ["默认 ollama5090d/qwen3.8:27b 由官方 catalog local=true 证明。", "自动远程 0；远程可选 21=Qwen 11+DeepSeek 2+Z.AI 8，认证来源 5。", "任何远程付费 Live（真实调用）、本地 27B 自然语言推理与 GPU 实跑均未执行。"],
-    relation: "模型模块接收渠道或其他客户端交来的任务；更新模块在升级后会重新核对模型目录与默认路线。"
+    relation: "模型模块接收渠道或其他客户端交来的任务；更新模块在升级后会重新核对模型目录与默认路线。",
+    readerStatus: "保留上次默认本地与可手选远程模型的记录；没有核对所有会话和定时调用，不能承诺全系统零费用。"
   },
   {
     slug: "gateway-runtime", shortTitle: "网关常驻", title: "以远程调用和真实健康检查管理 OpenClaw 网关，不把端口存在当健康",
+    usageEntry: "在已接通本机 OpenClaw 管理入口的 AI 对话中说“查 Gateway 健康”；需要恢复时再明确要求按现役入口修复。",
+    usageInputs: ["本次只查健康还是修复故障","看到的具体报错或症状"],
+    productFlow: [{"title":"看网关是不是真的响应","detail":"检查配置、网关回应、健康和后台任务；端口亮着不足以证明能处理任务。"},{"title":"只修已确认的故障","detail":"健康就不动作；不健康时按官方入口启动或安全重启已识别的网关，监听异常先停。"},{"title":"修完再看一遍","detail":"重新检查网关和任务结果；仍失败就交回故障所在层，不强行结束陌生程序。"}],
     searchAliases: ["OpenClaw Gateway健康", "18789 loopback", "Heartbeat任务", "Gateway LastTaskResult", "guardian Repair", "安全重启", "非loopback失败"],
     searchProjection: { intents: ["检查Gateway是否健康", "恢复不健康Gateway", "修复Windows常驻", "解释任务历史非零"], entities: ["RPC", "health", "127.0.0.1:18789", "OpenClaw Gateway", "OpenClaw Heartbeat", "-Repair"], relations: ["health先于恢复", "无监听走start", "单一不健康监听走safe restart", "任务历史与当前健康分离"], failureRecovery: ["多个监听失败关闭", "非loopback失败关闭", "deferred由外部回读", "Repair需要管理员"] },
     teaser: "这条轴负责让一个且仅一个本机网关稳定常驻，并在真正不健康时才恢复。",
     status: "配置、远程调用、健康检查与单一回环端口 18789 通过；网关任务运行中，历史结果非零；心跳最近为 0", statusTone: "mixed",
     value: "我可以知道网关现在是否真的响应，并在故障时使用官方生命周期恢复，而不是见到端口就报好、见到历史非零就盲目重启。",
-    why: "端口可能被错误进程占用，计划任务也可能当前正常但保留旧失败。可靠常驻需要同时看拓扑、远程调用、健康检查、事件循环和任务状态。",
+    why: "端口可能由错误程序占着，旧任务失败也可能已恢复。要判断能否使用，需把网关响应、健康、监听位置和任务结果分开看。",
     example: "我可以说：“只读检查网关，健康就不要动；如果不健康，先告诉我是没启动、重复监听还是对外暴露，再决定怎样修。”系统不会把端口存在直接当成健康。",
-    result: "得到当前 RPC（远程过程调用）/health（健康检查）、端口和任务姿态；需要恢复时得到官方 start/restart（启动/重启）回执和后续健康回读；异常拓扑不会被脚本强杀。",
-    readerStates: { pass: "配置合法、RPC/health 通过、只有一个 loopback（本机回环）监听者且常驻任务未 Disabled（停用）。", problem: "03:40/03:42Z两次RPC超时后同一进程自行恢复；8.465/9.499秒是03:50/03:55Z历史样本。当前健康、间歇失败与历史LastTaskResult（上次任务结果）并列，不能互相覆盖。", unavailable: "非回环、多监听、RPC 失败或任务缺失时停止相应恢复，并给出具体原因。" },
+    result: "交回网关能否响应、是否健康以及后台任务的实际状态；需要恢复时使用官方启动或重启，并再次读回。监听异常时不强行结束陌生进程。",
+    readerStates: {"pass":"配置可读，网关确实响应健康检查，本机监听和常驻任务都符合预期。","problem":"历史上有两次网关请求超时后自行恢复，也有偏慢响应；这份旧样本与当前健康分开保留。","unavailable":"监听位置或数量异常、网关不响应或任务缺失时停止自动恢复，交回具体层级。"},
     decisionImpact: ["Gateway 当前可用结论来自 RPC/health，而不是只看 18789。", "Heartbeat（心跳任务）最近 0 支持其最近一次执行成功，但不能擦除 Gateway 任务历史非零。", "Update Disabled（更新任务停用）是设计状态；不能被 guardian（常驻核对器）当故障修复为启用。", "-Repair 会改变 Windows 注册，本轮没有执行或证明真实故障自愈。"],
     problem: "避免误杀占用端口的其他进程、重复拉起多个 Gateway，或用一次计划任务状态掩盖实际 RPC。",
     implementation: ["tools/_common.ps1 检查监听地址与唯一 PID（进程标识），并用 openclaw health --json --verbose 判断 ok（通过）与事件循环。", "openclaw_heartbeat.ps1 健康时 exit 0（退出码 0）；无监听用 official start（官方启动），单一不健康监听用 official restart --safe（官方安全重启）。", "guardian 默认只读；-Repair 优先 PCConfig 受控启动器，通用环境才走 openclaw gateway install。"],
@@ -277,10 +281,14 @@ export const openClawGatewayModules = [
     failures: [{ condition: "18789 有非 loopback（本机回环）监听", response: "立即失败，不继续启停，避免改变错误或暴露的拓扑。" }, { condition: "存在多个监听 PID（进程标识）", response: "停止并报告 unexpected listener count（监听者数量异常），不按任意 PID 猜主进程。" }, { condition: "safe restart（安全重启）返回 deferred/coalesced（延迟/合并）", response: "结束当前请求并交给独立状态回读，不在调用进程死等。" }],
     sources: [{ path: "tools/_common.ps1", role: "唯一 Gateway 生命周期与 health 实现" }, { path: "openclaw_heartbeat.ps1", role: "按健康与监听拓扑恢复" }, { path: "openclaw_silent_boot_guardian.ps1", role: "只读常驻检查与显式 -Repair" }],
     verification: ["9月9日03:40:41Z和03:42:43Z官方RPC超时；来源03:50Z和03:55Z回读exit0/rpc.ok=true/rpc.kind=read，8.465/9.499秒，同一Gateway PID未动。", "9月7日配置与任务状态保留原日期；9月9日来源只读复核唯一回环监听与服务running，并确认临时health客户端已结束，不把一次恢复说成根治。", "没有做真实重启、-Repair、故障注入或自愈验收。"],
-    relation: "它是渠道与 CodeG 的共同运行底座；更新模块会暂时停止并重新拉起它，备份恢复模块为故障保留状态恢复点。"
+    relation: "它是渠道与 CodeG 的共同运行底座；更新模块会暂时停止并重新拉起它，备份恢复模块为故障保留状态恢复点。",
+    readerStatus: "上次网关健康检查成功，也保留间歇超时；本轮未探测运行状态，旧成功不能证明现在持续可用。"
   },
   {
     slug: "managed-update", shortTitle: "受控更新", title: "有稳定版更新时先备份，再升级，再逐层回读",
+    usageEntry: "在已接通本机 OpenClaw 管理入口的 AI 对话中明确要求检查稳定版；确有落后且获准更新时用 managed update 入口。",
+    usageInputs: ["想检查或更新到哪个通道","是否明确执行更新"],
+    productFlow: [{"title":"先看是否真的需要更新","detail":"比较当前版本、目标通道和健康；目标不明、版本相同或当前版更靠前时不安装。"},{"title":"需要更新时先留恢复点","detail":"先验证官方备份，再按已选通道执行更新。"},{"title":"更新后逐层读回","detail":"重新检查版本、配置、网关、模型和任务；缺一项就报告部分完成或失败，不因为安装命令结束就称成功。"}],
     searchAliases: ["OpenClaw更新", "2026.8.1 target unknown", "relation unknown healthy", "stable", "extended-stable", "beta", "dev", "managed-component", "partial更新", "ahead完整后验", "Update Disabled"],
     searchProjection: { intents: ["只查看新版本", "选择稳定或测试通道", "人工更新OpenClaw", "判断behind是否故障", "ahead时完整后验", "处理部分完成"], entities: ["stable", "extended-stable", "beta", "dev", "--channel extended-stable", "managed_component_status.v1", "managed_component_update_receipt.v1", "partial"], relations: ["状态检查不更新", "behind先备份", "extended-stable不用tag", "ahead不降级但完整验收", "版本改变后独立后验"], failureRecovery: ["unknown不开始", "channel mismatch不开始", "ahead不降级", "partial不自动回滚"] },
     teaser: "更新是一条由 AI 编排、人在影响边界授权且带恢复点的事务，不是后台自动追新。",
@@ -288,8 +296,8 @@ export const openClawGatewayModules = [
     value: "我能先知道“有新版本但当前仍健康”，再选择合适窗口和官方通道更新；如果版本已经改变而后验失败，回执会诚实保留“部分完成”。",
     why: "自动追新可能在无人在场时改变插件、任务和网关。相反，只看版本安装成功又会漏掉配置、远程调用、模型和任务损坏。",
     example: "我可以说：“先只读告诉我稳定版目标，今天不要更新。”当前目标版本无法取得时只报告未知；以后明确更新时，才会先备份并在完成后重新核对配置、网关、模型和任务。",
-    result: "只读时得到 current（当前版）/target（目标版）/channel（通道）/relation（版本关系）/health（健康）；执行时得到分阶段回执、失败检查和 rollback reference（回退参考）。",
-    readerStates: { pass: "版本相同或当前版领先时完成全套后验；版本落后时从备份到验证完整通过。", problem: "目标探针仍沿用旧的不可用观察；当前RPC已通过，早先超时与偏慢响应仍保留为历史，版本关系未知不解释成某次升级已经失败。版本改变但后验失败则返回部分完成。", unavailable: "版本探针失败、通道未知或不一致时不开始事务；备份失败也不继续。" },
+    result: "只读时看到当前版、可取得的目标版、通道和健康；执行后逐项知道备份、安装、网关与模型检查通过了什么。版本变了但后验失败会写成部分完成。",
+    readerStates: {"pass":"版本无需安装时也完成健康与配置后验；确需更新时，备份、更新和所有关键后验均通过才报成功。","problem":"上次目标版本未能取得，不能把未知写成升级失败；若更新后某项检查没通过，就报告部分完成。","unavailable":"目标版本或通道不清、备份未通过时不开始更新。"},
     decisionImpact: ["OpenClaw 支持 stable（稳定）、extended-stable（延长稳定支持）、beta（测试）和 dev（开发）四个官方通道。", "Update（更新）计划任务 Disabled（停用）是 AI 编排、人在边界授权的正常设计；当前 relation=unknown（版本关系未知）来自 target（目标版）探针不可用，不等于网关已坏。", "extended-stable 使用精确 --channel extended-stable，不与 --tag 混用；其余目标按明确版本标签更新。", "ahead（当前版领先）不降级，但仍完整核对 health（健康）、配置、RPC（远程过程调用）、模型和任务；不是只看版本就成功。", "更新器不自动降级；partial（部分完成）要按 installed generation（已安装代际）修复并重新后验。"],
     problem: "避免静默自动升级，也避免“命令返回成功”掩盖新版本无法正常运行。",
     implementation: ["-Status 从 update.channel（更新通道）、openclaw --version（当前版本）、official update status（官方更新状态）和 health（健康）形成状态 v1，并接受 stable、extended-stable、beta、dev。", "relation 只允许 equal、ahead、behind、unknown、channel_mismatch；behind 才改变版本，equal 与 ahead 都执行完整 Invoke-Verify。", "Invoke-Verify 核对目标/已安装版本、配置 schema、Gateway RPC、模型状态与官方目录、默认模型/认证、自动更新开关、Telegram 通配符、18789 监听和 Update 任务 Disabled。", "behind 事务依次执行 backup（备份）/preflight（前检）/update（更新）/wait（等待）/verify（后验验证）。"],
@@ -299,19 +307,23 @@ export const openClawGatewayModules = [
     failures: [{ condition: "backup（备份）或 preflight（前检）失败", response: "不进入更新，返回 failed_checks（失败检查）。" }, { condition: "官方 update（更新）失败但版本未改变", response: "尝试重新拉起原 Gateway，返回 failed（失败）。" }, { condition: "版本改变但 wait（等待）/verify（后验验证）失败", response: "返回 partial（部分完成），不伪造成功、不自动降级。" }],
     sources: [{ path: "tools/managed-component.ps1", role: "状态与更新事务" }, { path: "tools/_update_lib.ps1", role: "版本比较、通道、超时与原子 JSON（结构化配置）" }, { path: "openclaw_update.ps1", role: "人在边界授权后由 AI 调用的更新入口" }],
     verification: ["01:55—01:56 三次状态回读一致：current=2026.8.1、target（目标版）为空、stable、relation=unknown、health=healthy。", "更新状态机 Pester（PowerShell 测试框架）30/30，覆盖 equal/behind/ahead/partial，四通道解析，extended-stable 精确 --channel，以及 ahead 完整后验。", "本轮没有执行真实 update、stop/start 或插件更新后验。"],
-    relation: "更新前依赖备份模块，过程中使用 Gateway 生命周期，完成后重新核对模型和任务。"
+    relation: "更新前依赖备份模块，过程中使用 Gateway 生命周期，完成后重新核对模型和任务。",
+    readerStatus: "已有先备份、更新和分层核对的方法；目标版本仍缺新证据，本轮没有新的版本或更新验收。"
   },
   {
     slug: "backup-restore", shortTitle: "备份与恢复", title: "官方恢复点与现役私人备份，各按自己的合同保存",
+    usageEntry: "在已接通本机 OpenClaw 管理入口的 AI 对话中说清“查官方恢复点”“做隔离恢复演练”或“查现役私人备份”；精确目标与动作分开。",
+    usageInputs: ["想查备份、隔离演练还是现役恢复","要找的日期或版本（不确定可先列出）"],
+    productFlow: [{"title":"先找准确的恢复点","detail":"AI 查后台任务的最近结果和实际备份；计划存在不代表文件可恢复。"},{"title":"在隔离位置验证","detail":"官方归档先校验再恢复到新暂存目录；私人备份分别查本地、独立磁盘和私有远端的结果。"},{"title":"说明还差哪一步","detail":"暂存成功不会自动覆盖现役配置；缺文件、读回不符或认证失败时列出仍可用的恢复点。"}],
     searchAliases: ["OpenClaw备份", "224287339 bytes", "backup verify", "fresh staging", "灾备激活", "Codex Memory Backup 20:05 22:05", "Gemini Memory Backup 20:10 22:10", "OpenClaw Memory Backup 20:20 22:20", "3个备份任务4个消费者", "7个相关计划任务", "Codex独立Owner", "TLS有界重试", "Claude失败仍跑OpenClaw", "共享任务首错传播", "本地G远端OID", "PUBLIC自动归档21:15", "staged拒绝", "behind diverged停止"],
     searchProjection: { intents: ["让AI核对备份", "创建OpenClaw官方备份", "验证归档并演练恢复", "恢复Codex可读配置和Skills", "判断共享任务哪段失败", "定时归档PUBLIC仓库", "解释TLS故障和修复"], entities: ["backup create --verify", "fresh staging", "Codex Memory Backup", "Gemini Memory Backup", "OpenClaw Memory Backup", "3 tasks", "4 consumers", "7 scheduled tasks", "bounded retry", "G SHA-256", "remote OID", "auto-archive-push.ps1"], relations: ["Codex由独立Owner承载", "共享任务先Claude后OpenClaw", "Claude失败仍尝试OpenClaw", "四个消费者都有本地G远端证据", "网络错误重试但认证分叉立即失败", "PUBLIC归档21:15先门禁再回读"], failureRecovery: ["共享任务非零查两段脱敏日志", "云失败保留本地G", "TLS有界退避", "认证或分叉不重试", "已有staged停止"] },
     teaser: "AI 能从一处判断官方恢复点、四条私人备份和 PUBLIC（公开）仓库归档是否真的完成；人只在灾备激活等有影响边界授权。",
     status: "官方归档与全新暂存恢复通过；三项备份的下一轮自然调度均为 0，AutoPush 时限问题修复后真实重跑为 0", statusTone: "mixed",
-    value: "AI 可以自动读取 7 个相关任务、恢复点和远端 OID（对象标识），遇到短时网络故障有界重试，遇到认证、分叉或禁止内容则停止；我不用长期打开 OpenCode、CodeG 或终端盯任务。其中Gemini兼容任务也能保留Antigravity CLI的轻量设置、注释和工作成果，排除登录与原始聊天；它不启动模型程序。范围定义、备份实际完成和应用恢复仍分开判断。",
-    why: "隐藏任务只显示一个返回码时，AI 必须知道哪个 Owner（负责人）、哪一段和哪一种恢复点成功。否则会把本地/G 已成功误写成全部失败，或把云端失败误写成全绿。公开自动归档还必须避开他人的暂存工作和凭据形态。",
+    value: "AI 能分清哪份私人备份在本地、独立副本和远端实际完成，也能指出共享任务中哪一段失败。公网归档遇到冲突会停；检查备份不运行模型或覆盖现役配置。",
+    why: "一个后台任务可能依次保存不同产品。只看总退出码会混淆哪份恢复点可用；远端失败也不能抹掉已完成的本地副本。",
     example: "我可以说：“核对今晚 3 个备份任务和公开归档；共享任务出错时分别告诉我 Claude 与 OpenClaw 哪一段失败，不要让我翻原始日志。”我会得到各自结果和仍可用的恢复点。",
-    result: "AI 返回 3 个备份任务/4 个消费者、7 个相关任务的时刻表、各层恢复点和精确任务码；共享任务按首错规则定位，PUBLIC 归档给出远端身份。截至 2026-09-04，三项自然备份与修复后 AutoPush 的最新回执均为 0；AutoPush 下一次自然 21:15 仍保持未验。",
-    readerStates: { pass: "三项备份任务传播真实结果，四个消费者分别完成本地、G 盘与 Git（版本管理系统）验证；PUBLIC 归档通过门禁并回读远端。", problem: "共享任务非零只能证明至少一段失败，AI 必须分别检查 Claude 与 OpenClaw 的脱敏回执；短时网络故障可重试，认证或分叉不能。", unavailable: "设置缺失、归档损坏、认证失败、远端分叉、PUBLIC 有 staged（已暂存）/禁止项时停止，并说明已保留哪一层恢复点。" },
+    result: "得到各备份任务最近的结果、各产品仍可用的恢复点，以及公开归档是否已读回远端。原页面的具体时间与历史成功保留原观察日期，不代表下一轮自然任务已通过。",
+    readerStates: {"pass":"每个备份产品分别完成应有的本地、独立副本和远端核对；公开归档通过检查后也回读远端。","problem":"共享任务失败时继续分清 Claude 与 OpenClaw 哪段出错；短时网络故障可重试，账号或分支冲突不能靠重复操作解决。","unavailable":"配置或恢复文件缺失、认证失败、远端分叉或待提交内容不安全时停止，报告已保留哪一层副本。"},
     decisionImpact: ["系统有 3 个备份任务承载 4 个消费者：独立 Codex Owner 在 20:05/22:05；本仓库 Gemini 在 20:10/22:10；共享 Claude→OpenClaw 在 20:20/22:20。", "全部 7 个相关任务还包括开机 Gateway、开机后每 15 分钟 Heartbeat、停用但保留周日 13:00+15 分钟随机延迟定义的 Update，以及每日 21:15 AutoPush。", "20:05/20:10/20:20 首轮都在本地/G 成功后遭遇同一 TLS（传输层安全）瞬断并返回 1；两位 Owner 为 2 小时时限的备份加入 30/120/300/900 秒网络退避，认证与分叉仍立即失败。", "手动生产回归通过后，22:05/22:10/22:20 下一轮自然备份均为 Ready（就绪）/0x00000000，四个私人 Git 工作区干净且远端 OID 一致。", "官方归档为 224,287,339 bytes（字节）；include_workspace=false（不包含工作区），仍含私人配置和凭据。恢复只到 activation_performed=false（未激活）的全新暂存，灾备激活仍需另行授权和后验。", "Codex 由独立 Owner 筛选小型可读配置、memories（记忆）和 Skills（能力说明）；Gemini 排除原始会话/数据库/媒体；Claude 按项目 memory（记忆）目录；OpenClaw 保护可能含凭据的 config（配置）与过滤后的 workspace（工作区）。四条都具备本地、G SHA-256 与私人 Git OID。", "AutoPush 21:15 自然运行以 0x00041306 暴露逐操作退避累计超过 15 分钟任务时限；aa4f9f1 删除它的跨时间等待，网络失败会立即返回非零并保留工作区。01:19:59 启动、01:20:04 完成，真实结果 Ready/0x00000000，PUBLIC 远端 OID 一致。"],
     problem: "防止未经校验的复制品成为唯一恢复希望、防止演练覆盖现役，也防止 AI 把测试、任务启动、局部副本或端口在线误写成完整恢复。",
     implementation: ["backup-config.ps1 只调用 openclaw backup create --no-include-workspace --verify --json；restore-config.ps1 再独立 verify（验证），要求新 Target（目标目录）并确认恢复文件。", "本仓库 private-backup-settings.ps1 严格读取 gemini_memory、claude_memory、openclaw 3 组 16 个绝对路径键；Codex 配置由独立 Owner 管理，实际值都不进 PUBLIC。", "独立 Codex Owner 与本仓库三个消费者都执行本地快照、G SHA-256 回读和私人 Git OID 回读；OpenClawGateway 已删除无人使用且能力落后的 Codex 副本。", "git-cloud-sync.ps1 只为备份消费者保留 30/120/300/900 秒网络退避；AutoPush 传入空时间序列，每个远端操作只有直接连接与当前系统代理即时尝试。认证、策略、behind（落后）或 diverged（分叉）都立即失败。", "本仓库两个 hidden wrapper（隐藏封装器）分别承载 Gemini 和共享 Claude→OpenClaw；独立 Codex wrapper 传播自己的脚本退出码。", "auto-archive-push.ps1 每日 21:15 先检查 staged、禁止路径和凭据形态，再 fetch（拉取远端引用）判断同步关系；安全时才提交/推送，并统一回读远端 OID。",
@@ -323,10 +335,14 @@ export const openClawGatewayModules = [
     sources: [{ path: "tools/backup-config.ps1", role: "官方校验归档封装" }, { path: "tools/restore-config.ps1", role: "verify 后的 staging-only 恢复" }, { path: "tools/private-backup-settings.ps1", role: "本仓库三组设置 schema 与严格读取" }, { path: "独立 Codex 备份 Owner", role: "Codex 小型可读状态、本地/G/Git 三层输出；不公开私有坐标" }, { path: "tools/backup-gemini-memory.ps1", role: "Gemini 小型状态、本地/G/Git 三层输出" }, { path: "tools/backup-memory.ps1", role: "Claude 项目 memory、本地/G/Git 三层输出" }, { path: "tools/backup-openclaw.ps1", role: "OpenClaw config/workspace、本地/G/Git 三层输出" }, { path: "tools/git-cloud-sync.ps1", role: "有界网络重试、分叉失败关闭与远端 OID" }, { path: "tools/auto-archive-push.ps1", role: "PUBLIC 21:15 门禁、同步判断和远端 OID 回读" }],
     verification: ["一次真实归档为 224,287,339 bytes，wrapper 与独立 backup verify 均通过；真实 restore 只到 fresh staging。", "OpenClawGateway 14 个脚本入口 exit 0、Pester（PowerShell 测试框架）30/30、34 个 PowerShell 文件解析 0 错；独立 Codex 备份回归通过。", "首轮自然调度真实暴露 TLS 瞬断；手动回归后，22:05/22:10/22:20 下一轮三项自然备份均为 0，四个私人 Git 工作区干净且远端 OID 一致。", "2026-09-09约05:05 UTC只读G元数据：Gemini 127文件、181152字节；Claude 36文件、76727字节；OpenClaw 186文件、2840710字节。Codex G新点为7016文件，H仍是前一日点。元数据回读不等于应用恢复验收。", "AutoPush 21:15 的 0x00041306 暴露逐操作退避累计缺陷；aa4f9f1 删除跨时间等待后，01:19:59—01:20:04 真实任务为 0，PUBLIC 远端 OID 一致。", "没有执行灾备激活、网关重启、远程付费模型、真实渠道消息或 CodeG 工具调用。",
       "9月18日回读PUBLIC main db51ae7c1832c4a852d35928aceaa66b8f1bda70及Gemini选择/排除代码和回归定义；没有重跑备份、读私人内容、调用模型或更新网关，旧任务与介质数值继续保留原日期。",],
-    relation: "这里继续说明OpenClaw官方网关的归档、暂存与激活边界；Codex、Gemini、Claude、OpenClaw四套保存范围及恢复步骤集中见“AI 工作区备份与恢复”（既有/projects/codex-memory）。本仓库仍拥有三个消费者的现役脚本，Codex仍由独立来源维护，展示组合没有物理合仓。CodeG/Cline只是可选客户端。"
+    relation: "这里继续说明OpenClaw官方网关的归档、暂存与激活边界；Codex、Gemini、Claude、OpenClaw四套保存范围及恢复步骤集中见“AI 工作区备份与恢复”（既有/projects/codex-memory）。本仓库仍拥有三个消费者的现役脚本，Codex仍由独立来源维护，展示组合没有物理合仓。CodeG/Cline只是可选客户端。",
+    readerStatus: "官方暂存恢复与各备份任务保留历史成功记录；真实启用、账号与消息回发仍另验，本轮不运行备份。"
   },
   {
     slug: "bootstrap-install", shortTitle: "部署与引导", title: "公开模板只说明结构，私人配置通过部署预演后才写入",
+    usageEntry: "从公开模板复制到私人配置位置，填入真实工作区、模型与渠道；先运行 bootstrap/setup.ps1 -WhatIf，确认后再正式部署。",
+    usageInputs: ["要安装到哪台电脑","希望使用的工作区、模型和渠道","需要的私人凭据由本人在本地配置"],
+    productFlow: [{"title":"准备私人配置","detail":"公开模板只说明结构；本人在私人位置填写工作区、模型和渠道条件，不把凭据交给网页。"},{"title":"先看预演结果","detail":"工具检查还没填的项目、配置是否有效以及准备改什么；缺项就不写入。"},{"title":"正式部署再读回","detail":"成功写入后检查真实配置；是否登记网关常驻要另选，并再看能否响应。"}],
     searchAliases: ["OpenClaw全新Windows安装", "bootstrap setup", "ConfigSource", "WhatIf预演", "占位符拒绝", "配置原子写入", "gateway install"],
     searchProjection: { intents: ["新电脑安装OpenClaw", "预演配置", "填完私人模板", "注册Gateway"], entities: ["bootstrap/openclaw.template.json", "bootstrap/setup.ps1", "ConfigSource", "-WhatIf", "-RegisterGateway"], relations: ["公开模板复制到私人位置", "预检先于副作用", "写后失败回退旧配置"], failureRecovery: ["占位符未填停止", "schema非法停止", "写后校验失败回滚", "注册要求管理员"] },
     teaser: "bootstrap（部署引导）负责让一份私人配置安全落地，不替用户在公开仓库里填写账号和秘密。",
@@ -335,7 +351,7 @@ export const openClawGatewayModules = [
     why: "带占位符的模板若被直接安装，会制造半配置系统；先安装再校验也可能在失败前已经改变机器。",
     example: "我可以说：“先预演把公开模板部署到私人目录；还有任何配置没填就停，不要安装软件或注册任务。”系统会在实际写入前交回缺项和计划。",
     result: "预演时没有副作用；正式运行时得到已校验配置、写后校验与可回退旧副本，可选再显式注册 Gateway（网关）。",
-    readerStates: { pass: "ConfigSource（配置来源）存在、无占位符、候选 schema（数据结构）合法，正式写入后生效配置再次通过。", problem: "依赖缺失会显示将安装什么；注册 Gateway 需要管理员与显式选择。", unavailable: "配置缺失/畸形、占位符未替换、候选校验失败或写后校验失败时停止并回退。" },
+    readerStates: {"pass":"私人配置已填完整且预检通过，正式写入后再确认生效；是否常驻另有明确选择。","problem":"缺依赖时先说明会安装什么，注册常驻任务前再次说明所需权限。","unavailable":"模板仍有占位值、配置损坏或写后验证失败时停止并保留可恢复旧副本。"},
     decisionImpact: ["公开模板的渠道默认 disabled（停用）、allowlist（允许列表）为空、Gateway loopback（网关仅本机回环）、自动更新关闭。", "模板不预设 Gateway 密码或模型秘密；认证走官方 models auth（模型认证）或私人 ConfigSource。", "-WhatIf 不安装、不写配置、不注册、不启动。", "全新 Windows 安装、依赖安装和真实 -RegisterGateway（注册网关）本轮未执行。"],
     problem: "避免把脱敏示例误当可运行配置，也避免失败的 bootstrap 留下半安装机器。",
     implementation: ["Test-BootstrapConfig（部署配置检查器）递归查找 __REPLACE_WITH_*__，且必须在任何 effect（副作用）前运行。", "候选配置通过 OPENCLAW_CONFIG_PATH（OpenClaw 配置路径）送入 official config validate（官方配置校验）。", "Install-BootstrapConfigAtomically（原子部署配置）用同目录临时文件替换；有旧配置时保留 rollback（回退副本），后验失败时恢复。", "注册调用 guardian（常驻核对器）-Repair，不再生成仓库内 VBS（隐藏启动脚本）或写机器级密码环境变量。"],
@@ -345,19 +361,23 @@ export const openClawGatewayModules = [
     failures: [{ condition: "ConfigSource 仍含占位符", response: "在安装、写入、注册和启动前非零退出。" }, { condition: "写后 config validate（配置校验）失败", response: "恢复旧配置；原先不存在则删除新目标。" }, { condition: "RegisterGateway（注册网关）无管理员权限", response: "停止注册，保留已明确完成的前序结果。" }],
     sources: [{ path: "bootstrap/openclaw.template.json", role: "公开脱敏结构模板" }, { path: "bootstrap/setup.ps1", role: "预检、原子安装与回退" }, { path: "docs/DEPLOY.md", role: "从模板到渠道和 Gateway 验收层级" }],
     verification: ["test-bootstrap.ps1 用隔离夹具验证预检先于副作用、WhatIf 和回退。", "34 个 PowerShell 文件解析 0 错包含当前 bootstrap。", "没有在全新 Windows 10/11 完成从依赖安装到真实消息的端到端验收。"],
-    relation: "bootstrap 建立运行基础；guardian 负责可选常驻注册，渠道与模型需要各自继续私人配置和 Live（真实运行）验收。"
+    relation: "bootstrap 建立运行基础；guardian 负责可选常驻注册，渠道与模型需要各自继续私人配置和 Live（真实运行）验收。",
+    readerStatus: "模板部署、预检和回退已有测试；全新Windows实际安装尚未验收，本轮不执行部署。"
   },
   {
     slug: "codeg-bridge", shortTitle: "CodeG / Cline 接入", title: "先写无明文桥接配置，再完成真实协议握手与工具列表验收",
+    usageEntry: "在已安装 CodeG/Cline 的电脑上运行 tools/setup-codeg-bridge.ps1，随后在 CodeG 的 MCP 页面刷新并启用 openclaw-bridge。",
+    usageInputs: ["是否要在 CodeG/Cline 使用 OpenClaw 工具","一个不含私人内容的只读试用问题"],
+    productFlow: [{"title":"保留原有工具连接","detail":"安装入口只加入 OpenClaw 这一项，写入不含明文密码的桥接配置。"},{"title":"在 CodeG 里实际启用","detail":"刷新客户端，确认能看到 OpenClaw 提供的工具列表。"},{"title":"试一次只读工具","detail":"调用成功才算真正接通；文件已写好或网关端口在线都不能代替。"}],
     searchAliases: ["CodeG OpenClaw", "Cline MCP", "openclaw-bridge", "setup-codeg-bridge", "initialize tools/list", "managed launcher", "ACP不兼容"],
     searchProjection: { intents: ["让Cline调用OpenClaw", "配置MCP bridge", "保留其他MCP Server", "验证真实工具列表"], entities: ["CodeG", "Cline", "openclaw-bridge", "stdio", "initialize", "tools/list"], relations: ["Cline通过stdio启动bridge", "受控启动器注入Gateway认证", "bridge连接本机Gateway"], failureRecovery: ["缺启动器停止", "坏JSON不覆盖", "端口在线仍需握手", "ACP直连不冒充可用"] },
     teaser: "这条路线让 CodeG 里的 Cline 使用 OpenClaw 工具，但不把网关密码复制进配置。",
     status: "受控桥接配置已存在，隔离插入/更新测试通过；真实 MCP（模型上下文协议）初始化、工具列表与工具调用未验", statusTone: "mixed",
-    value: "我可以在已有 CodeG/Cline 工作流里调用 OpenClaw 会话与渠道工具，而不是切到不兼容的 ACP（智能体通信协议）直连或复制明文密码。",
-    why: "CodeG 的既有 OpenClaw ACP 组合在握手和逐会话 MCP 上不兼容；仅探活 18789 又只能证明端口存在。",
+    value: "如果本来就在 CodeG/Cline 工作，可以选择接入 OpenClaw 工具；先保存不含明文密码的配置，再在客户端真正刷新、列出工具并试一次只读调用。",
+    why: "过去的直接接法在实际协议握手上不兼容。网关端口在线只说明有程序在听，不能证明 CodeG 已经能调用工具。",
     example: "我可以说：“保留 CodeG 里已有的 MCP Server（模型上下文协议服务），只增加 OpenClaw 桥接，不要把密码写进配置。”刷新后必须真实连通、列出工具并完成一次只读调用；连接失败就不能说接入完成。",
-    result: "先得到幂等、无明文、可恢复的 Cline JSON（结构化配置）；真实通过后再得到实际工具列表与调用结果。当前只完成前一层。",
-    readerStates: { pass: "配置写后回读一致，CodeG 刷新启用后 initialize（初始化）、tools/list（工具列表）和目标工具调用都通过。", problem: "当前只有 managed bridge（受控桥接）与端口探活条件，真实工具轴仍待 CodeG 验收。", unavailable: "受控启动器缺失、JSON（结构化配置）畸形、写后丢键、认证或握手失败时停止，不写明文降级。" },
+    result: "先得到保留其他工具连接的安全配置；只有 CodeG 真正列出并调用工具后，才算桥接完成。目前只验证了前一层。",
+    readerStates: {"pass":"CodeG 刷新后确实列出 OpenClaw 工具，并完成一次本人选定的只读调用。","problem":"目前只有桥接配置和隔离验证，真实客户端工具调用还没有验收。","unavailable":"启动器、配置或身份握手缺失时停止，不把密码明文写进配置凑可用。"},
     decisionImpact: ["当前公开路线是 Cline stdio MCP（标准输入输出模型上下文协议），不把 OpenClaw ACP 直连写成可用。", "配置只保存 loopback（本机回环）Gateway URL（网关地址）；密码由受控启动器注入目标子进程。", "脚本列出的候选工具名只是说明，实际数量和名称以 tools/list 为准。", "消息发送能力若出现仍需单独授权，不能由一次只读工具验收扩权。"],
     problem: "避免破坏已有 Cline 配置、泄露 Gateway 密码，或把网络探活当成 MCP 工具真的可用。",
     implementation: ["脚本要求 PowerShell 7 与 PCConfig managed launcher（受控启动器）都存在，否则先失败。", "解析现有 JSON 并保留未知根键和所有其他 mcpServers（模型上下文协议服务集合），只 upsert（插入或更新）openclaw-bridge。", "首次修改保存稳定 recovery backup（恢复副本），使用 UTF-8（通用文本编码）且无 BOM（字节顺序标记）原子替换，写后按完整 JSON 回读；重复结果不改字节。"],
@@ -367,7 +387,8 @@ export const openClawGatewayModules = [
     failures: [{ condition: "受控启动器不存在", response: "在读取后写入前失败，不降级到明文。" }, { condition: "现有 JSON 畸形", response: "备份与写入前停止，原文件字节不变。" }, { condition: "CodeG initialize/tools/list 失败", response: "保留配置层成功与运行层失败的分离结论，继续查真实握手。" }],
     sources: [{ path: "tools/setup-codeg-bridge.ps1", role: "保留式 upsert、受控启动与原子写" }, { path: "docs/CODEG.md", role: "Cline MCP 路线与真实验收步骤" }, { path: "tools/test-codeg-bridge.ps1", role: "隔离 JSON、幂等与失败关闭测试" }],
     verification: ["现有 managed bridge 配置已确认；端口探活仅作轻量条件。", "test-codeg-bridge.ps1 的 27/27 隔离断言通过，覆盖保留其他 Server、幂等、坏 JSON、不带 BOM 与缺启动器。", "没有运行真实 CodeG/Cline initialize、tools/list 或任何工具调用。"],
-    relation: "它是 Gateway 的一个客户端入口；渠道模块服务 Telegram/飞书，二者共享模型与 Gateway，但验收互不替代。"
+    relation: "它是 Gateway 的一个客户端入口；渠道模块服务 Telegram/飞书，二者共享模型与 Gateway，但验收互不替代。",
+    readerStatus: "桥接配置与隔离更新测试已有证据；实际客户端连接、列出工具和完成调用仍未验收。"
   }
 ];
 

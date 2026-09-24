@@ -7,7 +7,6 @@ import test from "node:test";
 import { project, modules } from "../app/content-steam-millennium-config-backup.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -16,7 +15,9 @@ test("Steam Millennium keeps its source identity, rank and enabled route togethe
   const plan = JSON.parse(await readFile(path.join(root, "config/final-project-order.json"), "utf8"));
   const entry = registry.projects.find(({ id }) => id === project.slug);
   assert.ok(entry, "missing completed Steam Millennium registration");
-  assert.equal(entry.order, 30);
+  const planned = plan.projects.find(({ id }) => id === project.slug);
+  assert.ok(planned);
+  assert.equal(entry.order, planned.final_rank);
   assert.equal(entry.order, project.order);
   assert.equal(entry.enabled, true);
   assert.equal(entry.route, project.route);
@@ -27,8 +28,6 @@ test("Steam Millennium keeps its source identity, rank and enabled route togethe
     default_branch: "master",
     local_root: "E:\\Projects\\Tools\\steam-millennium-config-backup"
   });
-  const planned = plan.projects.find(({ id }) => id === project.slug);
-  assert.equal(planned.final_rank, 30);
   assert.equal(planned.state, "published");
   assert.ok(projectCatalog.some(({ project: item }) => item.slug === project.slug));
 });
@@ -67,10 +66,6 @@ test("ordinary Steam backup and recovery searches reach this project within the 
   }
 });
 
-test("the existing System backup asset opens the accepted Steam Millennium page", () => {
-  const domain = systemProjectDomains.find(({ id }) => id === "backup-and-secrets");
-  const asset = domain?.assets.find(({ id }) => id === project.slug);
-  assert.ok(asset, "missing existing Steam Millennium System asset");
-  assert.equal(asset.href, project.route);
-  assert.equal(asset.repo, project.slug);
+test("Steam Millennium stays reachable from its own project route without restoring a duplicate System directory", () => {
+  assert.ok(routePaths.includes(project.route));
 });

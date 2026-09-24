@@ -99,8 +99,11 @@ export const meshclipKitSnapshot = Object.freeze({
 export const meshclipKitProject = {
   ...meshclipKitSnapshot,
   ...{
-  "order": 21,
+  "order": 22,
   "slug": "meshclip-kit",
+  technicalSections: [{"title":"来源读取与精确判定","paragraphs":["只读取组网、进程、配置、任务和规则来解释通道状态；不读取真实剪贴板或传输文件。诊断检查 Windows 云剪贴板是否启用，而密码插件开关保留人工提示。","Tailscale 状态与首选项（tailscale status --json）：提取 BackendState、SelfOnline、ForceDaemon（无人值守）、shields-up（入站拦截）以及对端机器的 OS、在线状态与 Tailnet IPv4 地址。；严格断言对端处于在线且为 Windows 系统；在输出与日志中将真实 IP（如 100.x.y.z）完全脱敏，仅供网络解析使用。","Windows 防火墙：读取 KDE daemon 相关入站规则和协议、端口、对端地址、程序、接口过滤条件。；比较批准对端的精确规则；报告已有非项目宽泛或未知规则，不修改它们。","本机 KDE Connect config 与 MeshClipKit 状态：读取 General/customDevices、既有配置形态、项目资源身份与待完成事务。；配置时先备份并保留编码/注释；只修复已知旧版重复形态，其他歧义报错，失败回滚。","看门狗心跳与计划任务（watchdog-status.json / Get-ScheduledTask）：读取看门狗进程的 PID、会话 ID、运行状态（Starting/Healthy/Restarted）及计划任务 \\MeshClip Kit\\KDE Connect Watchdog 的触发间隔与权限级别。；断言看门狗以当前会话无窗口运行，仅以受限权限重启指示器，绝不提权，互斥锁杜绝重复多开。"]}],
+  "usageEntry": "两端先运行 scripts/install-windows.ps1 并通过官方浏览器登录 Tailscale，再以 scripts/configure-peer.ps1 指定对端；日常双击“MeshClip控制中心.vbs”看守护状态。",
+  "usageInputs": ["要连接的两台电脑","想传的文字或文件","是否需要暂停自动守护及暂停多久"],
   "title": "MeshClip Kit",
   "kicker": "让两台 Windows 电脑共享文字、互传文件",
   "route": "/projects/meshclip-kit",
@@ -188,33 +191,8 @@ export const meshclipKitProject = {
     "problem": "没有收到文字时分别检查对端是否在线、KDE 是否配对、插件是否启用；doctor 的人工提示不是自动通过。",
     "unavailable": "对端离线、任一端未登录或未配对时不能按正常流程传输；本项目不为离线设备缓存重放。"
   },
-  "dataSources": {
-    "title": "系统从哪里采集设备状态，如何确保网络与剪贴板安全",
-    "intro": "只读取组网、进程、配置、任务和规则来解释通道状态；不读取真实剪贴板或传输文件。诊断检查 Windows 云剪贴板是否启用，而密码插件开关保留人工提示。",
-    "rows": [
-      {
-        "source": "Tailscale 状态与首选项（tailscale status --json）",
-        "data": "提取 BackendState、SelfOnline、ForceDaemon（无人值守）、shields-up（入站拦截）以及对端机器的 OS、在线状态与 Tailnet IPv4 地址。",
-        "result": "严格断言对端处于在线且为 Windows 系统；在输出与日志中将真实 IP（如 100.x.y.z）完全脱敏，仅供网络解析使用。"
-      },
-      {
-        "source": "Windows 防火墙",
-        "data": "读取 KDE daemon 相关入站规则和协议、端口、对端地址、程序、接口过滤条件。",
-        "result": "比较批准对端的精确规则；报告已有非项目宽泛或未知规则，不修改它们。"
-      },
-      {
-        "source": "本机 KDE Connect config 与 MeshClipKit 状态",
-        "data": "读取 General/customDevices、既有配置形态、项目资源身份与待完成事务。",
-        "result": "配置时先备份并保留编码/注释；只修复已知旧版重复形态，其他歧义报错，失败回滚。"
-      },
-      {
-        "source": "看门狗心跳与计划任务（watchdog-status.json / Get-ScheduledTask）",
-        "data": "读取看门狗进程的 PID、会话 ID、运行状态（Starting/Healthy/Restarted）及计划任务 \\MeshClip Kit\\KDE Connect Watchdog 的触发间隔与权限级别。",
-        "result": "断言看门狗以当前会话无窗口运行，仅以受限权限重启指示器，绝不提权，互斥锁杜绝重复多开。"
-      }
-    ]
-  },
-  "operatingFlow": [
+  "dataSources": {"title":"怎样判断两台电脑能否交换内容","intro":"诊断读取组网、程序、配置和任务状态，不读取真实剪贴板文字或传输文件。","rows":[{"source":"Tailscale 的设备状态","data":"查看本机和目标电脑是否在线，以及是否允许连接。","result":"选出准确的 Windows 对端；真实地址只用于本机连接，公开结果不展示。"},{"source":"Windows 防火墙","data":"查看 KDE Connect 是否只允许已批准的对端进入。","result":"规则过宽或身份不明时停止配置，先给出处理选择。"},{"source":"KDE Connect 配置","data":"查看保存的对端、已有配对线索和未完成改动。","result":"只修可识别的项目配置；不明来源保留，必要时按本轮备份恢复。"},{"source":"登录守护与任务","data":"查看托盘是否在当前会话运行、最近心跳和下一次检查。","result":"说明是否正在自动恢复，以及暂停或故障为什么阻止了它。"}]},
+  "technicalOperatingFlow": [
     {
       "title": "两端准备",
       "detail": "安装脚本使用 WinGet 官方包 Tailscale.Tailscale 和 KDE.KDEConnect；登录通过官方浏览器完成，设置 Tailscale 无人值守及登录后 KDE 启动。"
@@ -236,28 +214,8 @@ export const meshclipKitProject = {
       "detail": "uninstall 默认预览；-Apply 删除未变更的项目资源，显式恢复选项用于先前禁用的宽泛规则，不卸载第三方软件。"
     }
   ],
-  "productPrinciples": [
-    {
-      "title": "沿用现成组网和传输工具",
-      "detail": "Tailscale 管跨网络可达，KDE 管配对、复制和文件发送，项目只补配置、启动与诊断。流量可能直连或通过 Tailscale 中继。"
-    },
-    {
-      "title": "对端明确才配置",
-      "detail": "自动选择仅接受唯一在线 Windows 对端；有多台就指定准确名称。配置冲突时暂停该次写入，保留原状态。"
-    },
-    {
-      "title": "共享范围由人确认",
-      "detail": "KDE 配对必须两端人工确认；Including passwords 也由人关闭。诊断会提醒但不会谎称已替人确认。"
-    },
-    {
-      "title": "恢复日常退出，保留具体故障",
-      "detail": "复用现有守护任务，窗口能暂停一小时或直到手动恢复；暂停不结束KDE、普通登录启动或Tailscale。旧运行进程不会自动加载新代码，实际部署与源码存在分开。"
-    },
-    {
-      "title": "配置和撤销都保留现场",
-      "detail": "每次集成变更先持久保存恢复步骤；中断或回滚失败保持待恢复，不让下一次安装覆盖原记录。只恢复仍与本次结果一致的资源，外来变化、已安装第三方软件和配对身份保留。"
-    }
-  ],
+  "operatingFlow": [{"title":"先让两台电脑能互相找到","detail":"两端运行 install-windows.ps1，通过官方登录进入同一 Tailnet，各自选准对端，再检查精确防火墙规则。"},{"title":"在两端亲自配对","detail":"KDE Connect 需要两端确认设备身份；关闭 Including passwords，再用非敏感文字试传。"},{"title":"传文件后核对","detail":"重要文件两端比对哈希；中断时用 doctor 分层看网络、配对和守护。"},{"title":"需要时暂停守护","detail":"双击“MeshClip控制中心.vbs”看心跳和下一检查，可暂停自动重开并明确恢复；暂停不会关闭现有 KDE 或 Tailscale。"}],
+  "productPrinciples": [{"title":"用现成组网和传输工具","detail":"Tailscale 管两端可达，KDE Connect 管配对、文字和文件。本项目补的是准确配置、登录启动与诊断。"},{"title":"先认准另一台电脑","detail":"只有唯一在线的 Windows 对端才能自动选；有多台就让本人指定，冲突时先保留现状。"},{"title":"共享关系由两端本人确认","detail":"KDE 配对和“不包含密码”的剪贴板选项都要人工核对；诊断只提醒，不假装已替人完成。"},{"title":"守护能暂停，也能说明为什么没恢复","detail":"控制中心显示最近检查和下一次动作，可暂时关闭自动拉起而不结束现有连接；故障仍分层报告。"},{"title":"改前留恢复路，外来变化不覆盖","detail":"配置中断时保留恢复记录；撤销只处理仍属于本轮的改动，第三方软件和配对身份保留。"}],
   "components": [
     {
       "name": "MeshClip.Common.psm1",
@@ -344,20 +302,8 @@ export const meshclipKitProject = {
       "doesNotProve": "不证明 KDE 应用配对、剪贴板延迟或文件完整性。"
     }
   ],
-  "responsibilities": [
-    "配置 Windows 双机跨网可达、准确对端与 KDE customDevices。",
-    "配置 KDE daemon 的精确对端入站规则，发现宽泛冲突则停止并提供可逆处理。",
-    "备份并保留已有配置，识别旧版重复 General 问题；异常时回滚自己的事务。",
-    "管理 KDE 登录启动、当前会话静默看门狗与普通权限任务。",
-    "提供只读诊断和人工确认提示；卸载只撤销本项目资源。"
-  ],
-  "exclusions": [
-    "不支持 Windows 登录前（Pre-login）的系统级剪贴板或文件流转支持。",
-    "不支持图像格式剪贴板同步（所有图像必须作为独立文件进行传输）。",
-    "不维护离线剪贴板补发队列或多写者并发冲突解决机制（为在线尽力而为同步）。",
-    "不自动或静默同意 KDE Connect 配对请求（必须由用户双向手动确认）。",
-    "Android 平板目前处于 P1 阶段设计边界，受系统后台限制本轮不承诺后台自动流转。"
-  ],
+  "responsibilities": ["让两台不同网络的 Windows 电脑经 Tailscale 找到准确对端。","只为被批准的那台电脑打开 KDE Connect 所需的入站范围；宽泛旧规则先停止并交回预览。","改配置前保存可恢复状态，遇到中断或外来修改时不继续覆盖。","保持当前登录会话中的 KDE Connect 托盘可用，并在控制中心提供暂停和恢复自动拉起。","把网络、配对、程序和守护任务的故障分开报告；卸载只撤销本项目自己的设置。"],
+  "exclusions": ["两台电脑未登录 Windows 前，不提供系统级剪贴板或文件接收。","剪贴板只同步文字；图片作为独立文件发送。","设备离线时不代存待补发的剪贴板，也不解决多人同时复制的冲突。","配对必须在两端人工确认，不会自动替本人点同意。","Android 平板仍是后续目标，当前不承诺后台自动流转。"],
   "operationalEntrypoints": [
     {
       "name": "安装预览",
@@ -437,16 +383,6 @@ export const meshclipKitProject = {
       "effect": "在控制中心暂停一小时或直到我恢复；下次守护检查停止自动重开，不关闭现有KDE或Tailscale。窗口会显示最近心跳、下次检查和待恢复事项。"
     },
   ],
-  "evolution": [
-    {
-      "date": "2026-08-09—2026-08-10",
-      "result": "建立 Windows 双机组网、customDevices 配置、精确对端防火墙、备份/回滚和只读诊断。"
-    },
-    {
-      "date": "2026-08-11—2026-08-30",
-      "result": "完善静默登录启动、当前会话看门狗与普通权限任务恢复，补齐 WhatIf 不写状态的行为。"
-    }
-  ],
   "glossary": [
     {
       "term": "Tailscale",
@@ -473,16 +409,22 @@ export const meshclipKitProject = {
       "meaning": "操作系统级同步对象，用于保证看门狗进程在同一用户会话中仅存在单一活动实例。"
     }
   ]
-}
+},
+  "kicker": "两台电脑跨网络复制文字、互传文件",
+  "readerBoundary": "两端需要各自联网并完成人工配对；诊断可达不等于文件已收到。暂停只停止自动拉起，不关闭现有KDE连接，登录前剪贴板和收文件不受支持。",
+  "evolution": [{"date":"2026-08-09–08-10","title":"先让不同网络的两台电脑找到彼此","commit":"","result":"复用Tailscale与KDE Connect，配置准确对端和窄防火墙；配对仍由人在两端确认，不另造传输协议。"},{"date":"2026-08-11–08-30","title":"托盘退出后不用总手工重开","commit":"","result":"登录会话里增加应用守护与原有低权限任务，故障分层诊断；不把进程恢复等同于文字和文件传输成功。"},{"date":"2026-09-18","title":"自动恢复也要能暂停和撤回","commit":"73f6437","result":"控制中心显示下一检查与暂停意图，中断配置保留可预览恢复记录；另有虚构素材的双机验收指南，不能从本机哈希相同推断传输已完成。"}],
 };
 
 export const meshclipKitModules = [
   {
     "id": "tailscale-peer-reachability",
     "slug": "tailscale-peer-reachability",
+    "usageEntry": "两台 Windows 电脑分别运行 scripts/install-windows.ps1，经官方浏览器登录；再运行 scripts/configure-peer.ps1 -Peer 指定准确对端，用 scripts/doctor.ps1 查可达性。",
+    "usageInputs": ["要互连的两台 Windows 电脑","本人通过官方浏览器完成 Tailnet 登录"],
+    "productFlow": [{"title":"两端上线","detail":"核对 Tailscale 服务、本机在线和无人值守设置；脚本不会替人登录。"},{"title":"选准对端","detail":"输入准确设备名并检查它在线，避免把相似设备当目标。"},{"title":"单独测网络","detail":"doctor 做有界 ping，报告直连、中继或不可达；网络通过仍要另做 KDE 配对。"}],
     "order": 1,
     "title": "Tailscale 专用组网与端点精准解析",
-    "shortTitle": "Tailnet组网与解析",
+    "shortTitle": "跨网组网与对端发现",
     "teaser": "跨网络加密隧道与单对端安全发现",
     "kicker": "跨网络加密隧道与单对端安全发现",
     "route": "/projects/meshclip-kit/tailscale-peer-reachability",
@@ -491,14 +433,10 @@ export const meshclipKitModules = [
     "summary": "Tailscale 为两台不同网络的 Windows 电脑提供 Tailnet 可达；脚本检查本机服务/在线/无人值守/入站设置，并选出准确在线对端。能直连则直连，必要时经 Tailscale 中继；不是任意网络都保证可达。",
     "problem": "若 Tailscale 未登录、处于 Shields Up 模式，或存在多个同名/离线设备导致无法安全辨别目标，脚本拒绝盲目猜测并终止执行。",
     "why": "跨子网时 KDE 广播发现可能找不到另一台电脑。明确对端地址能让 KDE 主动探测；组网故障和应用配对仍要分开判断。",
-    "example": "在笔记本上执行 configure-peer.ps1，脚本自动发现 Tailnet 中唯一在线的台式机，将对端 IP 提取并写入 KDE Connect 的 customDevices，终端日志仅显示 100.x.y.z 脱敏地址。",
+    "example": "“帮我确认这两台已登记的电脑能不能联系到，先不要传文件。”AI核对选中的两台设备和它们的连接地址，再检查指定连接；交回哪一端可达、哪一段失败和依据。能联系到电脑还不代表剪贴板或文件传输已成功。",
     "result": "得到准确对端地址及连通性诊断，供后续配置使用；ping成功不是剪贴板和文件验收。",
     "value": "通常不需要手工路由器端口映射，通过现有 Tailscale 网络连接批准对端，避免另建中继服务。",
-    "readerStates": {
-      "pass": "Tailscale Windows 服务自动运行，Run Unattended 开启，shields-up 为 false，成功解析唯一在线 Windows 对端并脱敏。",
-      "problem": "Tailnet 中存在多个在线 Windows 对端未指定 -Peer，或目标设备离线，触发自动解析中止。",
-      "unavailable": "Tailscale 后端未运行或未通过浏览器官方流程完成身份认证，停止网络连接尝试。"
-    },
+    "readerStates": {"pass":"两台指定电脑都已加入同一 Tailscale 网络并在线，诊断确认能找到对方；文件传输和 KDE 配对仍另验。","problem":"有多台可能的电脑却没指定目标，或对端离线时停止自动选择，请本人确认要连哪台。","unavailable":"Tailscale 未运行或本人尚未通过官方网页登录时，先完成这一步，不尝试绕过身份。"},
     "decisionImpact": [
       "同一Tailnet中的批准设备才进入配置流程；直连失败可用Tailscale中继，不承诺零公共中继。",
       "自动选择只有一个在线Windows对端时成立；显式名称必须精确匹配。",
@@ -585,11 +523,15 @@ export const meshclipKitModules = [
         "对端离线时终止自动解析",
         "Shields Up开启时阻断配置并提示关闭入站拦截"
       ]
-    }
+    },
+    readerStatus: "本机与批准对端的网络探测通过；这只证明能联系到那台电脑，不证明剪贴板或文件已经传到。"
   },
   {
     "id": "exact-peer-firewall-hardening",
     "slug": "exact-peer-firewall-hardening",
+    "usageEntry": "在两台电脑分别运行 scripts/configure-peer.ps1 -Peer 指定已核实的对端；遇到宽泛旧规则先用 -WhatIf 预览，再明确允许禁用。",
+    "usageInputs": ["批准互连的对端电脑","发现宽泛旧规则时是否接受预览后的定向禁用"],
+    "productFlow": [{"title":"检查已有规则","detail":"逐端核对对端地址、程序及现有入站规则；冲突先停止。"},{"title":"只加精确通路","detail":"明确同意后禁用相关宽泛规则并写入限定端口、协议、程序和接口的新规则。"},{"title":"回读或回滚","detail":"两端分别回读规则；失败尝试恢复本轮改动，doctor 报告未完成事务。"}],
     "order": 2,
     "title": "精确对端防火墙与宽泛规则防御",
     "shortTitle": "对端防火墙收敛",
@@ -601,14 +543,10 @@ export const meshclipKitModules = [
     "summary": "两条项目规则限定协议、端口、程序、Tailscale接口和批准对端地址。已有额外宽泛KDE入站规则会阻断正常配置，必须通过显式选项预览和禁用；不会修改无关应用的规则。",
     "problem": "若缺少 Windows 管理员提权，无法写入防火墙规则；若用户未明确授权加固且存在宽泛规则，脚本安全拒绝推进。",
     "why": "只添加两条窄规则仍可能被旧宽规则抵消，所以必须同时核对现有KDE规则。变更保留原状态，以便撤销项目时恢复。",
-    "example": "我只想配置自己的笔记本。脚本发现旧KDE规则允许Any来源时先停下；我查看-DisableBroadKdeFirewallRules -WhatIf的范围，再执行同一准确变更。",
+    "example": "“我只想让这两台电脑互传，别向别的设备开放。”AI先列出这次连接实际需要的规则和允许设备，展示调整范围；按授权处理后分别检查允许的电脑和其他设备，配对与真实传输另行确认。",
     "result": "KDE流量的项目规则明确限定批准对端；本机其他应用与整个Windows防火墙不属于该结论。",
     "value": "能够说清本项目开放给谁、通过哪个接口和程序，并可逆撤销自己的配置。",
-    "readerStates": {
-      "pass": "项目中两条 TCP/UDP 规则狭窄收敛，未发现非项目的 Any 等宽泛规则，防火墙体检通过。",
-      "problem": "检测到未受管的宽泛 KDE Connect 规则，触发 fail-closed 阻断，等待显式加固授权。",
-      "unavailable": "修改规则需要管理员；只读诊断若无法完整读取会明确 UNKNOWN（未知），不把缺证据当合规。"
-    },
+    "readerStates": {"pass":"只允许已批准的电脑进入 KDE Connect 所需范围，原有宽泛规则也已核对。","problem":"发现其他宽泛规则时先停止，展示将禁用哪些规则并等待本人明确选择。","unavailable":"修改需要管理员权限；只读检查若无法看全规则，就报告未知，不把缺证据当安全通过。"},
     "decisionImpact": [
       "规则同时约束协议、端口、程序、接口与单对端地址，不把0.0.0.0监听地址等同于防火墙远程放行范围。",
       "宽泛非项目规则只在显式选项下禁用，不删除，保留恢复记录。",
@@ -700,14 +638,18 @@ export const meshclipKitModules = [
         "非管理员变更提示提权",
         "通过显式恢复选项恢复此前记录且未改变的规则，冲突保留"
       ]
-    }
+    },
+    readerStatus: "已核对仅面向批准对端的连接规则；两端配对和实际传输仍需自己的结果。"
   },
   {
     "id": "kde-connect-pairing-sync",
     "slug": "kde-connect-pairing-sync",
+    "usageEntry": "先完成两端 Tailscale 与精确防火墙配置，再在两台 KDE Connect 界面核对设备并手工接受配对。",
+    "usageInputs": ["要配对的两台电脑","两端分别确认配对","用于试传的非敏感文字或文件"],
+    "productFlow": [{"title":"发现并配对","detail":"两端配置准确对端后，在 KDE 界面核对身份并分别确认信任。"},{"title":"选择传输内容","detail":"关闭 Including passwords，用非敏感文字试剪贴板；文件单独发送。"},{"title":"核对接收","detail":"重要文件在两端比对哈希；中断的大文件须重新完整发送，不能称自动续传。"}],
     "order": 3,
     "title": "KDE Connect 授信配对与文本文件流转",
-    "shortTitle": "KDE配对与文件流转",
+    "shortTitle": "设备配对与文件传输",
     "teaser": "双向人工配对核验与尽力而为传输边界",
     "kicker": "双向人工配对核验与尽力而为传输边界",
     "route": "/projects/meshclip-kit/kde-connect-pairing-sync",
@@ -716,14 +658,10 @@ export const meshclipKitModules = [
     "summary": "customDevices帮助KDE跨子网找到对端；配对要在两端确认，Including passwords由人关闭。两端在线时同步纯文本和发送文件；通常<2秒、100次无回环、1GB文件是源验收目标，不是本轮实测。",
     "problem": "设备可ping通但未配对时仍不能正常传输；中断后要重新发送，不承诺断点续传。",
     "why": "网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。",
-    "example": "我传一份测试文件到另一台电脑，接收完成后两端分别用Get-FileHash计算SHA-256。只有大小/哈希相符才接受这次文件结果；本轮未执行这个跨机动作。",
+    "example": "“把这份测试文件发到另一台电脑。”两端先亲自确认 KDE 配对；接收完成后分别比较文件内容是否一致。本轮没有重新做这次双机传输验收。",
     "result": "两端配置和人工配对完成后可使用KDE的在线文字与文件通道；每次重要传输的结果需要真实接收证据。",
     "value": "说明谁来配对、谁来传输、谁来核验，避免把安装完成当成文件已经送达。",
-    "readerStates": {
-      "pass": "两端人工配对和设置确认后，实际复制/接收成功才证明通道可用；本轮未新验。",
-      "problem": "KDE知道1台设备，但没有同时已配对且可达的对端；发现刷新后仍为0，保留WARN。",
-      "unavailable": "任一端未登录/离线/未配对或KDE不可用时通道不可正常使用。"
-    },
+    "readerStates": {"pass":"两端已配对且在线，文字在另一台能粘贴，文件确实收到；重要文件再核对内容一致。","problem":"看到设备却无法传输时，分别检查配对、插件、对端在线和当前连接。","unavailable":"任一端未登录、离线或没配对时，不能按正常流程共享。"},
     "decisionImpact": [
       "脚本不静默同意配对，双方核对设备身份后确认。",
       "Including passwords需人关闭；doctor无论实际值如何都会提醒，不能保证所有复制文本不含秘密。",
@@ -819,11 +757,15 @@ export const meshclipKitModules = [
         "配对未确认时通道显示WARN",
         "传输中断需重新发起并比对SHA-256"
       ]
-    }
+    },
+    readerStatus: "当前能发现另一台电脑，但配对状态与真实双机传输仍未完整验收；发现设备不等于已能传文件。"
   },
   {
     "id": "silent-watchdog-and-session-lifecycle",
     "slug": "silent-watchdog-and-session-lifecycle",
+    "usageEntry": "日常双击“MeshClip控制中心.vbs”看心跳、下一检查、暂停和恢复；需要分层排障再运行 scripts/doctor.ps1 -Peer。",
+    "usageInputs": ["想查看哪台电脑的守护状态","是否暂停自动重开及暂停多久","有故障时的大致发生时间"],
+    "productFlow": [{"title":"随登录启动","detail":"现有入口在当前会话启动一次看门狗，重复实例会退出。"},{"title":"控制中心看状态","detail":"打开“MeshClip控制中心.vbs”看最近心跳、下次检查和待恢复事项；可暂停一小时或直到手动恢复，现有 KDE 连接仍在。"},{"title":"失踪时尝试恢复","detail":"未暂停时它按周期检查托盘，缺失才尝试启动并记录是否真的出现。"},{"title":"问题交回","detail":"doctor 区分网络、配对、任务和进程状态；睡眠、未登录或反复崩溃不能被看门狗当作已修复。"}],
     "order": 4,
     "title": "可见暂停、会话守护与故障恢复",
     "shortTitle": "守护与暂停",
@@ -836,13 +778,9 @@ export const meshclipKitModules = [
     "problem": "睡眠或尚未登录时没有可用用户会话；持续应用启动失败记录StartFailed。锁屏但仍登录不等于注销。",
     "why": "托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置。",
     "example": "“今天先别自动重开KDE，连接还在就继续用。”打开控制中心暂停到手动恢复；这只改变下一次守护检查的拉起意图，关闭窗口不会结束既有守护。",
-    "result": "得到周期性进程恢复和Starting/Healthy/Restarted/StartFailed等状态；不保证任意故障均能自动恢复。",
+    "result": "控制中心显示最近检查、下一次检查及暂停状态；托盘意外退出时会尝试恢复，并明确显示已恢复或启动失败。持续故障仍要按原因处理。",
     "value": "托盘意外退出时自动尝试拉起，控制中心同时告诉我最近心跳、下一次检查和正在等什么。暂时不想自动重开时可以暂停，而不用关闭现有KDE连接或Tailscale；真正传输仍由两端应用完成。",
-    "readerStates": {
-      "pass": "看门狗快捷方式、每 2 分钟计划任务与活动无窗口看门狗进程三项全部正常，心跳新鲜。",
-      "problem": "托盘指示器进程退出，看门狗正在处于下一次 60 秒自愈等待周期中。",
-      "unavailable": "用户尚未登录 Windows 桌面，系统处于登录前状态，守护程序按设计不启动。"
-    },
+    "readerStates": {"pass":"当前用户已登录，守护程序与原有任务运行，最近检查有效；这只证明托盘恢复链，不证明文件传输。","problem":"托盘刚退出而下一轮尚未执行时，控制中心显示等待；若已暂停，就按本人选择保持不自动拉起。","unavailable":"电脑尚未进入本人的 Windows 桌面会话时，这条守护链不会在登录前运行。"},
     "decisionImpact": [
       "只处理当前会话托盘缺失，不改Tailscale、防火墙、配对、插件和剪贴板。",
       "既有VBS启动器负责隐藏控制台；普通权限任务不因故障升为Highest。",
@@ -933,7 +871,8 @@ export const meshclipKitModules = [
         "指示器启动失败写回StartFailed状态",
         "计划任务以有限权限运行防止提权越权"
       ]
-    }
+    },
+    readerStatus: "登录后的守护启动与近期心跳已核对；暂停只影响后续自动拉起，现有连接与实际传输仍分别判断。"
   }
 ];
 

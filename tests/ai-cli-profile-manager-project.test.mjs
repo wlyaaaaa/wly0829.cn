@@ -7,7 +7,7 @@ import test from "node:test";
 import { aiCliProfileManagerModules, aiCliProfileManagerProject } from "../app/content-ai-cli-profile-manager.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
+import { systemDependencyNodes } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -82,7 +82,7 @@ test("AI CLI Profile Manager is registered as a published project in the final p
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "ai-cli-profile-manager"));
 });
 
-test("AI CLI Profile Manager exposes nine source-backed modules and all three reading layers", async () => {
+test("AI CLI Profile Manager exposes nine source-backed modules and two reading tabs", async () => {
   assert.deepEqual(aiCliProfileManagerModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(aiCliProfileManagerProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -102,9 +102,11 @@ test("AI CLI Profile Manager exposes nine source-backed modules and all three re
     }
   }
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "ai-cli-profile-manager", "index.html"), "utf8");
-  for (const layer of ["quick", "product", "technical"]) {
-    assert.match(overviewHtml, new RegExp(`data-project-reading-panel="${layer}"`));
-  }
+  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2, "overview exposes exactly two reading tabs");
+  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
+  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
+  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
+  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
 });
 
 test("AI CLI Profile Manager keeps source, install, runtime and Live evidence separate", () => {
@@ -112,9 +114,10 @@ test("AI CLI Profile Manager keeps source, install, runtime and Live evidence se
   assert.deepEqual(aiCliProfileManagerProject.cardMetrics, snapshot.metrics.map(({ label, value }) => ({ label, value })));
   assert.deepEqual(aiCliProfileManagerProject.heroFacts, snapshot.facts.filter((fact) => fact.hero).map(({ label, value }) => ({ label, value })));
   const text = JSON.stringify({ project: aiCliProfileManagerProject, modules: aiCliProfileManagerModules });
-  for (const expected of ["37c7d4713b1324d8371e7c64efb19f0def83b7e1", "385/385", "0.154.0-alpha.6.2", "23份公开", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "本网页没有重发付费调用", "6ef0e67dbff75135", "旧Desktop进程"]) {
+  for (const expected of ["bbaaa9da5afb2afc4c3b54765a528691c82f09e6", "0.3.18", "555/555", "562b29bf4a6ac0af", "ChatGPT.exe", "23份公开", "385/385", "0.154.0-alpha.6.2", "73/73", "danger-full-access", "approvalPolicy=never", "thread/session", "--no-web-search", "DPAPI", "SecretRef", "6ef0e67dbff75135"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits current evidence or boundary: ${expected}`);
   }
+  assert.match(text, /本网页(?:没有重发|未发)付费调用/);
   assert.match(text, /交互式 start.*上游权限.*程序化执行层.*danger-full-access/s);
   assert.match(text, /配置状态.*源码实现.*安装.*实际进程.*Live/s);
   assert.match(text, /不自动.*(?:fallback|回退)|no-fallback/s);
@@ -126,12 +129,14 @@ test("AI CLI Profile Manager exposes all 23 public Profile identities without up
   for (const id of expectedPublicProfileIds) assert.ok(matrix.includes(id), `public Profile matrix misses ${id}`);
   assert.equal(expectedPublicProfileIds.length, 23);
   assert.match(matrix, /源码.*安装.*真实/s);
-  const continuity = JSON.stringify({ example: engines.example, result: engines.result, flow: engines.flow, implementation: engines.implementation, verification: engines.verification });
+  const continuity = JSON.stringify({ example: engines.example, flow: engines.flow, implementation: engines.implementation, verification: engines.verification, boundaries: engines.boundaries });
   for (const expected of ["LaunchPlan.continuityPolicy", "existing-project-state", "secondFactSource=false", "git status", "git diff", "983616", "20000", "16384", "prune=false"]) {
     assert.ok(continuity.includes(expected), `third-party continuity explanation misses ${expected}`);
   }
-  assert.match(engines.result, /AICLI只附策略与窗口设置，不自动写/);
-  assert.match(engines.result, /官方OpenAI Codex和Anthropic Claude保持自己的原生/);
+  assert.match(engines.result, /长任务经历对话压缩.*先留好已完成工作和限制/);
+  assert.match(continuity, /实际把.*附到LaunchPlan\.continuityPolicy/);
+  assert.match(continuity, /continuityPolicy是启动计划实际携带的工作要求/);
+  assert.match(continuity, /官方OpenAI Codex\/Anthropic Claude不受这份第三方策略改写/);
   assert.ok(aiCliProfileManagerProject.usageExamples.some((item) => item.moduleSlug === engines.slug && item.ask.includes("上下文")));
   assert.match(matrix, /machine-only.*不是交互式start/s);
   assert.match(matrix, /Rust Open Interpreter.*0\.0\.40/s);
@@ -144,7 +149,7 @@ test("AI CLI Profile Manager explains OpenClaw import, Profile deletion, manuals
   for (const expected of ["Import-FromOpenClaw.ps1", "api.deepseek.com", "-Apply", "-Force", "codex-deepseek-v4-pro", "profile set-default", "profile remove", "最后一个引用", "Rust Open Interpreter", "旧 Python 0.4.x", "AI CLI Profile Manager 使用手册", "Codex、Claude Code 与 Open Interpreter CLI 中文手册", "0=成功", "6=用户取消"]) {
     assert.ok(text.includes(expected), `AI CLI Profile Manager omits product lifecycle detail: ${expected}`);
   }
-  assert.match(aiCliProfileManagerProject.summary, /原生 Codex.*Claude Code.*官方 Codex 桌面/s);
+  for (const name of ["Codex CLI", "Claude Code", "官方 Codex 桌面"]) assert.ok(aiCliProfileManagerProject.summary.includes(name), name);
   assert.match(text, /程序化 Codex 权限.*danger-full-access.*approvalPolicy=never/s);
   assert.match(text, /现场回读实际模型/);
   assert.doesNotMatch(aiCliProfileManagerProject.summary, /每次运行都核对.*权限/);
@@ -173,9 +178,10 @@ test("AI CLI Profile Manager search uses explicit projections and natural reques
   assert.deepEqual(JSON.parse(match[1]).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/ai-cli-profile-manager/${slug}/`));
 });
 
-test("System links its existing AI CLI asset to the project page", () => {
-  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "ai-cli-profile-manager");
-  assert.ok(asset);
-  assert.equal(asset.href, "/projects/ai-cli-profile-manager");
-  assert.match(asset.role, /Profile.*体检.*可恢复Codex/s);
+test("System keeps the AI CLI route and user-visible startup boundary", () => {
+  const node = systemDependencyNodes.find((item) => item.id === "ai-cli-entry");
+  assert.ok(node);
+  assert.equal(node.href, "/projects/ai-cli-profile-manager");
+  assert.match(node.detail, /保留真实模型与原工作现场.*失败后偷偷换模型/);
+  assert.match(node.detail, /安装成功.*程序已加载配置和模型实际工作分别核对/);
 });

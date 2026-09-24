@@ -7,7 +7,6 @@ import test from "node:test";
 import { videoScaffoldModules, videoScaffoldProject } from "../app/content-video-scaffold.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -55,7 +54,7 @@ test("video-scaffold is registered as a published project in the final plan", as
   assert.ok(projectCatalog.some((entry) => entry.project.slug === "video-scaffold"));
 });
 
-test("video-scaffold exposes seven source-backed modules and all three reading layers", async () => {
+test("video-scaffold exposes seven source-backed modules and two reading tabs", async () => {
   assert.deepEqual(videoScaffoldModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(videoScaffoldProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -75,9 +74,11 @@ test("video-scaffold exposes seven source-backed modules and all three reading l
     }
   }
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "video-scaffold", "index.html"), "utf8");
-  for (const layer of ["quick", "product", "technical"]) {
-    assert.match(overviewHtml, new RegExp(`data-project-reading-panel="${layer}"`));
-  }
+  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2);
+  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
+  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
+  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
+  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
 });
 
 test("video-scaffold snapshot separates verified source and environment from an unrun full video", () => {
@@ -113,9 +114,6 @@ test("video-scaffold module search is explicit and natural requests reach the ow
   assert.deepEqual(JSON.parse(match[1]).map((item) => item.href), expectedModuleSlugs.map((slug) => `/projects/video-scaffold/${slug}/`));
 });
 
-test("System links its existing video-scaffold asset to the new detail page", () => {
-  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "video-scaffold");
-  assert.ok(asset);
-  assert.equal(asset.href, "/projects/video-scaffold");
-  assert.match(asset.role, /词级时间轴.*SVG.*4K60.*续作/);
+test("video-scaffold stays reachable from its own project route without a duplicate System card", () => {
+  assert.ok(routePaths.includes(videoScaffoldProject.route));
 });

@@ -72,9 +72,11 @@ function run(executable, args, options = {}) {
     cwd: options.cwd,
     encoding: "utf8",
     windowsHide: true,
-    maxBuffer: 64 * 1024 * 1024
+    maxBuffer: 64 * 1024 * 1024,
+    timeout: options.timeoutMs,
+    env: { ...process.env, GIT_TERMINAL_PROMPT: "0", GCM_INTERACTIVE: "Never" }
   });
-  return { exitCode: result.status ?? 1, stdout: result.stdout || "", stderr: result.stderr || "" };
+  return { exitCode: result.status ?? 1, stdout: result.stdout || "", stderr: [result.stderr, result.error?.message].filter(Boolean).join("\n") };
 }
 
 function parseJsonOutput(result, label) {
@@ -99,8 +101,8 @@ function gitSucceeds(args) {
 }
 
 function fetchOriginMain() {
-  let result = run("git", ["fetch", "--no-tags", "origin", "main"], { cwd: sourceRoot });
-  if (result.exitCode !== 0) result = run("git", ["fetch", "--no-tags", "origin", "main"], { cwd: sourceRoot });
+  let result = run("git", ["fetch", "--no-tags", "origin", "main"], { cwd: sourceRoot, timeoutMs: 30000 });
+  if (result.exitCode !== 0) result = run("git", ["fetch", "--no-tags", "origin", "main"], { cwd: sourceRoot, timeoutMs: 30000 });
   if (result.exitCode !== 0) throw new Error(`cannot refresh source origin/main after one bounded retry: ${result.stderr.trim()}`);
 }
 
@@ -255,13 +257,25 @@ const releaseRecord = JSON.parse(releaseRecordBytes.toString("utf8"));
 if (releaseRecord.release_id !== current.release_id || releaseRecord.git_commit !== current.git_commit || releaseRecord.ruleset_sha256 !== current.ruleset_sha256) throw new Error("E release record identity does not match verified current");
 
 const descriptors = new Map((current.files || []).map((item) => [item.logical_id, item]));
+const releaseInventory = await Promise.all((current.files || []).map(async (descriptor) => {
+  const location = path.join(sourceRoot, "releases", current.release_id, descriptor.relative_path);
+  const data = await readFile(location);
+  if (data.length !== Number(descriptor.bytes) || sha256(data) !== descriptor.sha256) throw new Error(`complete release file drift: ${descriptor.logical_id}`);
+  return { logicalId: descriptor.logical_id, relativePath: descriptor.relative_path, bytes: Number(descriptor.bytes), sha256: descriptor.sha256 };
+}));
+const catalogDescriptor = descriptors.get("rules_catalog");
+if (!catalogDescriptor) throw new Error("reviewed release catalog is missing");
+const releaseCatalog = JSON.parse(await readFile(path.join(sourceRoot, "releases", current.release_id, catalogDescriptor.relative_path), "utf8"));
+const primaryTopicIds = releaseCatalog.documents.map((item) => item.logical_id);
 const documentedLogicalIds = new Set(documentedRuleBindings.rules.map((rule) => rule.logicalId));
 const descriptorLogicalIds = new Set(descriptors.keys());
 if (
   documentedRuleBindings.schema !== "wly.panel-rule-bindings.v2"
   || documentedRuleBindings.semantic_release_id !== current.release_id
   || documentedRuleBindings.ruleset_sha256 !== current.ruleset_sha256
-  || descriptors.size !== documentedRuleBindings.rules.length
+  || primaryTopicIds.length !== documentedRuleBindings.rules.length
+  || new Set(primaryTopicIds).size !== primaryTopicIds.length
+  || primaryTopicIds.some((logicalId) => !documentedLogicalIds.has(logicalId))
   || [...documentedLogicalIds].some((logicalId) => !descriptorLogicalIds.has(logicalId))
 ) {
   throw new Error(`material semantic refresh required before generating E rules snapshot: semantic=${documentedRuleBindings.semantic_release_id}/${documentedRuleBindings.ruleset_sha256} current=${current.release_id}/${current.ruleset_sha256}`);
@@ -318,7 +332,7 @@ const postSourceFingerprint = sha256(Buffer.from(JSON.stringify({
 if (postSourceFingerprint !== initialSourceFingerprint) throw new Error("source owner Git state changed while the snapshot was being validated; no output was replaced, rerun for one stable observation");
 const postReleaseResult = runPowerShellJson(eRulesEntry, ["-Mode", "Inspect"], sourceRoot);
 if (postReleaseResult.exitCode !== 0 || releaseIdentity(postReleaseResult.data) !== initialReleaseIdentity) {
-  throw new Error("E rules current pointer, previous pointer or five-file descriptors changed during snapshot validation; no output was replaced");
+  throw new Error("E rules current pointer, previous pointer or release file descriptors changed during snapshot validation; no output was replaced");
 }
 
 const releaseValidationPassed = releaseValidation.exitCode === 0;
@@ -359,12 +373,12 @@ const sourceRulesMatchRelease = ruleBinding.every((item) => item.sourceMatchesRe
 
 const rows = [
   validationRow("E rules current（E 规则当前指针）", "pass", "通过", `${current.release_id} 已从 PRIVATE main commit ${current.git_commit.slice(0, 12)} 激活；pointer revision ${release.pointer.pointer_revision}，previous=${release.pointer.previous?.release_id || "无"}。历史 C 盘材料只作恢复证据。`),
-  validationRow("Rule closure（五规则闭包）", "pass", "通过", `五份规则位于同一 ${current.release_id} release，ruleset SHA-256=${current.ruleset_sha256}；页面 logical id、bytes 和 SHA 与 release descriptor 一致。`),
-  validationRow("Source checkout（源码工作树）", dirty || sourceAhead || sourceBehind || !sourceRulesMatchRelease ? "repair" : "pass", dirty ? `公开范围内 ${sourceDirtyPaths.length} 项未提交修改` : sourceAhead || sourceBehind ? `HEAD/origin 为 ${sourceAhead}/${sourceBehind}` : !sourceRulesMatchRelease ? "五规则源码存在未激活差异" : "公开范围工作树无未提交修改；五规则与活动版本一致", `source HEAD=${sourceCommit.slice(0, 12)}，origin/main=${trackedMain.slice(0, 12)}，active release commit=${current.git_commit.slice(0, 12)}。${dirty ? `公开范围未提交路径：${sourceDirtyPaths.join("、")}。` : "公开范围工作树无未提交修改。"} ${sourceRulesMatchRelease ? `五规则源码与 ${current.release_id} 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。` : `五规则源码与活动 release 存在字节差异，只作为未激活候选，不覆盖 ${current.release_id}。`}`),
-  validationRow("E release validator（活动版本验证器）", releaseValidationPassed ? "pass" : "repair", releaseValidationPassed ? "通过" : "失败", releaseValidationPassed ? `Test-EAgentRulesRelease.ps1 已重新验证 ${current.release_id} 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。` : `活动版本验证器退出码 ${releaseValidation.exitCode}：${failedTests[0].reason}`),
-  validationRow("Full local tests（当前源码全量回归）", "unknown", "快速刷新未重跑", `网页刷新没有再次运行整个 .agents 本地测试集。它只证明 ${current.release_id} 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。`),
+  validationRow("Rule closure（正式规则主题闭包）", "pass", "通过", `正式主题和完整发布文件位于同一 ${current.release_id} release，ruleset SHA-256=${current.ruleset_sha256}；页面 logical id、bytes 和 SHA 与 release descriptor 一致。`),
+  validationRow("Source checkout（源码工作树）", dirty || sourceAhead || sourceBehind || !sourceRulesMatchRelease ? "repair" : "pass", dirty ? `公开范围内 ${sourceDirtyPaths.length} 项未提交修改` : sourceAhead || sourceBehind ? `HEAD/origin 为 ${sourceAhead}/${sourceBehind}` : !sourceRulesMatchRelease ? "正式规则主题源码存在未激活差异" : "公开范围工作树无未提交修改；正式规则主题与活动版本一致", `source HEAD=${sourceCommit.slice(0, 12)}，origin/main=${trackedMain.slice(0, 12)}，active release commit=${current.git_commit.slice(0, 12)}。${dirty ? `公开范围未提交路径：${sourceDirtyPaths.join("、")}。` : "公开范围工作树无未提交修改。"} ${sourceRulesMatchRelease ? `正式规则主题源码与 ${current.release_id} 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。` : `正式规则主题源码与活动 release 存在字节差异，只作为未激活候选，不覆盖 ${current.release_id}。`}`),
+  validationRow("E release validator（活动版本验证器）", releaseValidationPassed ? "pass" : "repair", releaseValidationPassed ? "通过" : "失败", releaseValidationPassed ? `Test-EAgentRulesRelease.ps1 已重新验证 ${current.release_id} 的 activator、current/previous、完整发布文件哈希、回退与 C 历史隔离。` : `活动版本验证器退出码 ${releaseValidation.exitCode}：${failedTests[0].reason}`),
+  validationRow("Full local tests（当前源码全量回归）", "unknown", "快速刷新未重跑", `网页刷新没有再次运行整个 .agents 本地测试集。它只证明 ${current.release_id} 活动版本、正式规则主题闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。`),
   validationRow("Skill supply（能力供应）", supplyPassed ? "pass" : "repair", supplyPassed ? "通过" : "未闭合", supplyPassed ? `公开目录中的 ${personalSelectedSkills.length} 个个人 Skill 已分别通过 source/install/transaction 检查；${hostIntegratedSkills.length} 个宿主集成 Skill 保留各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。` : "公开目录中的个人 Skill 有 source、install 或 transaction 检查未闭合。"),
-  validationRow("Contract coverage（跨控制面合同覆盖）", coveragePassed ? "pass" : "repair", coveragePassed ? "通过" : "BLOCK", coveragePassed ? "现行三个控制面的合同 catalog 与入口覆盖通过；任何入口不得再读取 C 盘规则 authority、Publisher 或 policy epoch。" : `coverage 状态 ${coverage.data.status}，finding ${coverage.data.finding_count ?? "unknown"} 项。`)
+  validationRow("Contract coverage（跨控制面合同覆盖）", coveragePassed ? "pass" : "repair", coveragePassed ? "通过" : "BLOCK", coveragePassed ? "现行三个控制面的合同 catalog 与入口覆盖通过；任何入口不得再读取 C 盘规则 authority、Publisher 或 policy epoch。" : `coverage 状态 ${coverage.data.status}，finding ${coverage.data.finding_count ?? "unknown"} 项。${(coverage.data.findings || []).map((finding) => `${finding.kind}：${finding.path}${finding.detail ? `（${finding.detail}）` : ""}`).join("；")}`)
 ];
 
 const unresolved = rows.filter((row) => row.status !== "pass").length;
@@ -385,9 +399,14 @@ const generated = {
   repositoryVisibility: sourceRegistration.source.visibility === "PRIVATE" ? "私有" : sourceRegistration.source.visibility === "PUBLIC" ? "公开" : "未知",
   repositoryVisibilityEvidence: "来自项目 Registry 登记；GitHub 实时可见性仍由 Git Owner 单独回读",
   ruleBinding,
+  releaseInventory,
+  primaryTopicIds,
   skills: { publicRegisteredCount, publicInstallIntentCount, publicInactiveIntentCount, retiredSkillCount, personalSelectedCount: personalSelectedSkills.length, hostIntegratedCount: hostIntegratedSkills.length, hostIntegratedDiscovery: "not_rerun_by_agents_snapshot_refresh", selectedPublicCount: skills.length },
   authority: {
     status: "e_rules_active_verified",
+    primaryTopicCount: primaryTopicIds.length,
+    releaseFileCount: releaseInventory.length,
+    releaseSchema: current.release_schema || releaseRecord.schema,
     statusLabel: `${current.release_id} 活动规则已验证`,
     generation: current.release_id,
     generationId: current.release_id,
@@ -413,7 +432,7 @@ const generated = {
   },
   validation: {
     label: unresolved ? `还有 ${unresolved} 层未闭合` : "全部当前验证层已闭合",
-    summary: unresolved ? `E rules 活动且五规则闭包通过，但仍有 ${unresolved} 个独立验证层没有通过。` : "E rules current、五规则闭包、本地总测、个人能力供应和跨控制面合同覆盖均通过。",
+    summary: unresolved ? `E rules 活动且正式规则主题闭包通过，但仍有 ${unresolved} 个独立验证层没有通过。` : "E rules current、正式规则主题闭包、本地总测、个人能力供应和跨控制面合同覆盖均通过。",
     rows,
     failures: failedTests
   }

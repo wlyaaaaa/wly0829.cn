@@ -8,7 +8,7 @@ import test from "node:test";
 import { meshclipKitModules, meshclipKitProject } from "../app/content-meshclip-kit.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
+import { systemDependencyNodes } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = meshclipKitModules.map((item) => item.slug);
@@ -18,6 +18,8 @@ test("meshclip-kit is registered as a published project in the final plan", asyn
   const finalOrder = JSON.parse(await readFile(path.join(projectRoot, "config", "final-project-order.json"), "utf8"));
   const registration = registry.projects.find((item) => item.id === "meshclip-kit");
   assert.ok(registration, "meshclip-kit missing from panel-projects.json");
+  const planEntry = finalOrder.projects.find((item) => item.id === "meshclip-kit");
+  assert.ok(planEntry);
   assert.deepEqual(
     {
       id: registration.id,
@@ -34,7 +36,7 @@ test("meshclip-kit is registered as a published project in the final plan", asyn
     },
     {
       id: "meshclip-kit",
-      order: 21,
+      order: planEntry.final_rank,
       title: "MeshClip Kit",
       enabled: true,
       presentationMode: "real_dashboard",
@@ -46,9 +48,7 @@ test("meshclip-kit is registered as a published project in the final plan", asyn
       localRoot: "V:\\Personal\\Projects\\meshclip-kit"
     }
   );
-  const planEntry = finalOrder.projects.find((item) => item.id === "meshclip-kit");
-  assert.ok(planEntry);
-  assert.equal(planEntry.final_rank, 21);
+  assert.equal(meshclipKitProject.order, planEntry.final_rank);
   assert.equal(planEntry.state, "published");
   assert.ok(projectCatalog.some((item) => item.project.slug === "meshclip-kit"));
 });
@@ -115,7 +115,7 @@ test("meshclip-kit explains core safety rules without marketing riddles", () => 
     "1714-1764",
     "WhatIf",
     "Android",
-    "Pre-login"
+    "登录前"
   ]) {
     assert.ok(text.includes(expected), `meshclip-kit missing expected reality fact: ${expected}`);
   }
@@ -151,11 +151,10 @@ test("meshclip-kit search reaches owning modules and project page", () => {
   }
 });
 
-test("System links its Domain 02 asset to the meshclip-kit project page", () => {
-  const domain02 = systemProjectDomains.find((domain) => domain.id === "machine-and-remote");
-  assert.ok(domain02, "machine-and-remote domain missing");
-  const asset = domain02.assets.find((item) => item.id === "meshclip-kit");
-  assert.ok(asset, "meshclip-kit asset missing from Domain 02");
-  assert.equal(asset.href, "/projects/meshclip-kit");
-  assert.equal(asset.repo, "meshclip-kit");
+test("System keeps the cross-device files project route and its operating boundary", () => {
+  const node = systemDependencyNodes.find((item) => item.id === "cross-device-files");
+  assert.ok(node);
+  assert.equal(node.href, "/projects/meshclip-kit");
+  assert.match(node.detail, /两台已配对的 Windows 电脑间传文字和指定文件/);
+  assert.match(node.detail, /实际传输仍有未验收项/);
 });

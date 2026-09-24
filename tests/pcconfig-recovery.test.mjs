@@ -31,9 +31,11 @@ test("source delivery, historical first H and physical machine restore are indep
  assert.match(technical,/Media\/Packages 排除/);
  assert.doesNotMatch(recovery.status,/H 尚未返回|首次 H.*尚未验收/);
 });
-test("System recovery projects the same tested scope without claiming offline or machine recovery",()=>{
+test("System recovery explains its four roles and leaves dated evidence with the project",()=>{
  const n=systemDependencyNodes.find(x=>x.id==="recovery-backup");
- for(const t of ["G/H","正式恢复入口","16组冷备","隔离还原","微信G/H全树","后来新增内容","下一次备份","应用真正看见数据"])assert.ok(n.detail.includes(t),t);
- assert.match(n.detail,/连接.*不称物理离线/);
- assert.match(n.detail,/备份通过不等于整机恢复/);
+ for(const t of ["文件有没有备份","Windows 是否有可恢复镜像","AI 能否重新进入","应用能否真正使用找回的数据","具体副本、日期和步骤到项目页核对"])assert.ok(n.detail.includes(t),t);
+ assert.match(n.detail,/首份系统镜像与完整换机仍有未完成项/);
+ assert.doesNotMatch(n.detail,/已经验证物理离线|整机恢复完成/);
+ assert.match(n.detail,/已有文件备份和隔离恢复证据.*首份系统镜像与完整换机仍有未完成项/);
+ assert.doesNotMatch(n.detail,/16组|微信G\/H全树|145,307/);
 });

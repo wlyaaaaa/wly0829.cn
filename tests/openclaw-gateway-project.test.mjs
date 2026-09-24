@@ -7,7 +7,7 @@ import test from "node:test";
 import { openClawGatewayModules, openClawGatewayProject } from "../app/content-openclaw-gateway.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemDependencyNodes, systemProjectDomains } from "../app/system-home-content.js";
+import { systemDependencyNodes } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expectedModuleSlugs = [
@@ -53,7 +53,7 @@ test("OpenClawGateway is registered as a published project in the final plan", a
   assert.ok(projectCatalog.some((item) => item.project.slug === "openclaw-gateway"));
 });
 
-test("OpenClawGateway exposes seven source-backed modules and three reading layers", async () => {
+test("OpenClawGateway exposes seven source-backed modules and two reading tabs", async () => {
   assert.deepEqual(openClawGatewayModules.map((item) => item.slug), expectedModuleSlugs);
   assert.ok(routePaths.includes(openClawGatewayProject.route));
   for (const slug of expectedModuleSlugs) {
@@ -77,9 +77,11 @@ test("OpenClawGateway exposes seven source-backed modules and three reading laye
     }
   }
   const overviewHtml = await readFile(path.join(projectRoot, "dist", "projects", "openclaw-gateway", "index.html"), "utf8");
-  for (const layer of ["quick", "product", "technical"]) {
-    assert.match(overviewHtml, new RegExp(`data-project-reading-panel="${layer}"`));
-  }
+  assert.equal((overviewHtml.match(/data-project-reading-tab=/g) || []).length, 2);
+  assert.match(overviewHtml, /aria-selected="true"[^>]*data-project-reading-tab="product"/);
+  assert.match(overviewHtml, /aria-selected="false"[^>]*data-project-reading-tab="technical"/);
+  assert.match(overviewHtml, /id="project-reading-panel-product"[^>]*data-project-reading-panel="product"[^>]*role="tabpanel"/);
+  assert.match(overviewHtml, /id="project-reading-panel-technical"[^>]*data-project-reading-panel="technical"[^>]*role="tabpanel"[^>]*hidden(?:=""|\s|>)/);
 });
 
 test("OpenClawGateway tells the real message journey without claiming message E2E", () => {
@@ -125,7 +127,9 @@ test("OpenClawGateway keeps runtime, update, backup and recovery evidence separa
     "3 条 warning"
   ]) assert.ok(text.includes(expected), `evidence boundary missing: ${expected}`);
   assert.match(text, /RPC.*(?:已恢复|自行恢复)|(?:已恢复|自行恢复).*RPC/);
-  assert.match(text, /历史任务结果非零|LastTaskResult=1|历史失败/);
+  const runtime = openClawGatewayModules.find((item) => item.slug === "gateway-runtime");
+  assert.match(runtime.status, /网关任务运行中.*历史结果非零/);
+  assert.match(JSON.stringify(runtime.concepts), /LastTaskResult.*历史退出结果.*不是当前 Gateway health/);
   assert.match(text, /恢复.*暂存.*(?:没有|未).*激活/s);
   assert.match(text, /本轮没有更新或重启|真实更新.*未执行/s);
 });
@@ -174,10 +178,11 @@ test("OpenClawGateway explains four distinct private backup consumers and PUBLIC
 
 test("OpenClawGateway is AI-first and does not require the user to operate OpenCode or CodeG", () => {
   const text = JSON.stringify({ project: openClawGatewayProject, modules: openClawGatewayModules });
-  assert.match(openClawGatewayProject.summary, /AI Agent（智能体）.*人不需要经常打开 OpenCode、CodeG 或终端/s);
+  assert.match(openClawGatewayProject.summary, /AI.*(?:我|人).*(?:不需要|不用).*终端/s);
   assert.match(text, /AI 先读再动.*人只守关键边界|AI.*只在.*边界.*授权/s);
   assert.match(text, /CodeG\/Cline.*(?:可选|不是.*前提)/s);
-  assert.match(text, /外部发消息.*付费.*更新.*灾备激活.*授权/s);
+  assert.match(openClawGatewayProject.productPrinciples[0].detail, /发外部消息.*选付费模型.*更新与恢复现役状态.*明确目标和授权/);
+  assert.match(openClawGatewayProject.exclusions[1], /不会发送真实消息.*更新网关.*激活灾备/);
 });
 
 test("OpenClawGateway names all update channels and the exact plugin matrix without publishing review scores", () => {
@@ -193,7 +198,7 @@ test("OpenClawGateway names all update channels and the exact plugin matrix with
 test("OpenClawGateway first visible labels do not defer core English explanations to a glossary", () => {
   assert.match(openClawGatewayProject.currentSnapshot.observedAt, /^2026-09-18T/);
   assert.match(openClawGatewayProject.currentSnapshot.boundary, /db51ae7.*9月9日.*不据新源码冒充重新实测/s);
-  assert.match(openClawGatewayProject.kicker, /运维层/);
+  assert.match(openClawGatewayProject.kicker, /维护消息网关/);
   const unexplainedCoreTerm = /\b(?:Gateway|RPC|health|Funnel|Owner)\b(?!（[^）]+）)/;
   assert.doesNotMatch(openClawGatewayProject.kicker, unexplainedCoreTerm);
   assert.doesNotMatch(openClawGatewayProject.cardStatus, unexplainedCoreTerm);
@@ -207,19 +212,24 @@ test("OpenClawGateway first visible labels do not defer core English explanation
   const update = openClawGatewayModules.find((item) => item.slug === "managed-update");
   assert.match(JSON.stringify(channels), /loaded（已加载）/);
   assert.match(JSON.stringify(channels), /compat issues（兼容问题）/);
-  assert.match(update.result, /current（当前版）\/target（目标版）\/channel（通道）\/relation（版本关系）\/health（健康）/);
-  assert.match(JSON.stringify(update), /backup（备份）\/preflight（前检）\/update（更新）\/wait（等待）\/verify（后验验证）/);
-  assert.match(codeg.example, /MCP Server（模型上下文协议服务）/);
-  assert.match(openClawGatewayProject.readerStates.problem, /behind（落后目标版）.*starting（启动中）.*warning（警告）/s);
-  assert.match(JSON.stringify(openClawGatewayProject.dataSources), /models status\/list（模型状态\/目录）.*status\/update（状态\/更新）/s);
-  assert.match(JSON.stringify(openClawGatewayProject.responsibilities), /managed bridge（受控桥接）/);
+  assert.match(update.result, /只读时看到当前版.*目标版.*通道和健康.*执行后逐项知道备份、安装、网关与模型检查/);
+  assert.match(JSON.stringify(update.implementation), /update\.channel.*openclaw --version.*official update status/);
+  assert.match(JSON.stringify(update.implementation), /relation 只允许 equal、ahead、behind、unknown/);
+  assert.match(JSON.stringify(update.implementation), /backup（备份）\/preflight（前检）\/update（更新）\/wait（等待）\/verify（后验验证）/);
+  assert.match(codeg.example, /保留 CodeG 里已有的 .*只增加 OpenClaw 桥接/);
+  assert.match(JSON.stringify(openClawGatewayProject.technicalSections), /MCP Server（模型上下文协议服务）/);
+  assert.match(openClawGatewayProject.readerStates.problem, /飞书仍在启动.*旧网关请求曾超时.*备份任务有旧失败/);
+  assert.match(JSON.stringify(openClawGatewayProject.dataSources), /查看默认、备用、辅助和图像模型，以及仍可手选的远程路线/);
+  assert.match(JSON.stringify(openClawGatewayProject.technicalSections), /models status\/list.*status\/update/s);
+  assert.match(JSON.stringify(openClawGatewayProject.currentSnapshot.facts), /CodeG.*managed bridge（受控桥接）/);
   const bootstrapText = JSON.stringify(bootstrap);
-  for (const expected of ["WhatIf（预演）", "ConfigSource（配置来源）", "schema（数据结构）"]) {
+  for (const expected of ["WhatIf（预演）", "ConfigSource（配置来源）", "schema"]) {
     assert.ok(bootstrapText.includes(expected), `bootstrap technical boundary missing: ${expected}`);
   }
   const backup = openClawGatewayModules.find((item) => item.slug === "backup-restore");
-  assert.match(backup.why, /Owner（负责人）/);
-  assert.match(backup.readerStates.unavailable, /staged（已暂存）/);
+  assert.match(backup.why, /一个后台任务可能依次保存不同产品.*远端失败也不能抹掉已完成的本地副本/);
+  assert.ok(backup.decisionImpact.some((item) => item.includes("Owner")), "the technical backup ownership remains explicit");
+  assert.match(backup.readerStates.unavailable, /配置或恢复文件缺失.*停止，报告已保留哪一层副本/);
   assert.match(JSON.stringify(backup.decisionImpact), /TLS（传输层安全）/);
 });
 
@@ -248,12 +258,11 @@ test("OpenClawGateway search reaches the owning modules", () => {
   }
 });
 
-test("System links its existing OpenClawGateway asset and node to the project page", () => {
-  const asset = systemProjectDomains.flatMap((domain) => domain.assets).find((item) => item.id === "message-ai-gateway");
+test("System keeps the message gateway project route and its live-state boundary", () => {
   const node = systemDependencyNodes.find((item) => item.id === "message-ai-gateway");
-  assert.ok(asset);
   assert.ok(node);
-  assert.equal(asset.href, "/projects/openclaw-gateway");
   assert.equal(node.href, "/projects/openclaw-gateway");
-  assert.match(`${asset.role} ${node.detail}`, /Telegram.*飞书.*(?:成本|模型).*(?:更新|恢复)/s);
+  assert.match(node.detail, /从 Telegram 或飞书接收请求.*AI 处理后回发结果/);
+  assert.match(node.detail, /两条渠道都还没有完整来回消息的验收/);
+  assert.match(node.detail, /旧配置或运行记录不能证明今天可用/);
 });

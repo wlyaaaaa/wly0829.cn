@@ -7,7 +7,6 @@ import test from "node:test";
 import { devconfigBackupModules, devconfigBackupProject } from "../app/content-devconfig-backup.js";
 import { projectCatalog, routePaths } from "../app/site-content.js";
 import { searchPanel } from "../app/search.js";
-import { systemProjectDomains } from "../app/system-home-content.js";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const moduleSlugs = devconfigBackupModules.map((item) => item.slug);
@@ -102,7 +101,7 @@ test("devconfig-backup explains tiered media architecture and cold drive separat
     "零流量",
     "21:05",
     "22:00",
-    "2.92 GB",
+    "2.87 GB",
     "-Tier Drive",
     "23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c"
   ]) {
@@ -134,11 +133,11 @@ test("devconfig-backup explains data-driven catalog and cache exclusions", () =>
 test("devconfig-backup explains WeChat modes, file-level increment and WAL non-exclusion limits", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   for (const expected of [
-    "45.22 GB",
+    "45.42 GB",
     "xwechat_files",
     "robocopy",
     "checksum",
-    "8G 是单次传输上限",
+    "单次8G",
     "源跟随",
     "WAL",
     "SHM",
@@ -191,31 +190,35 @@ test("devconfig-backup search reaches the owning modules and handles natural req
   }
 });
 
-test("System links its devconfig-backup asset to the new detail page", () => {
-  const backupDomain = systemProjectDomains.find((domain) => domain.id === "backup-and-secrets");
-  assert.ok(backupDomain);
-  const asset = backupDomain.assets.find((item) => item.id === "devconfig-backup");
-  assert.ok(asset);
-  assert.equal(asset.href, "/projects/devconfig-backup");
+test("devconfig-backup stays reachable from its own project route after System directory retirement", () => {
+  assert.ok(routePaths.includes(devconfigBackupProject.route));
 });
 
 test("devconfig-backup separates current runtime evidence from routes and guarantees", () => {
   const text = JSON.stringify({ project: devconfigBackupProject, modules: devconfigBackupModules });
   const snapshotText = JSON.stringify(devconfigBackupProject.currentSnapshot);
-  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-18T12:53:27.2981194Z");
+  assert.equal(devconfigBackupProject.currentSnapshot.observedAt, "2026-09-24T05:02:11.1689322Z");
 
 
 
 
   assert.match(text, /小时监控仍停用|WeChatDrive-Monitor-Hourly[^。]{0,80}当前已禁用/);
-  assert.match(text, /运行中逐文件复制仍不是应用一致快照/);
+  assert.match(text, /VSS.*不证明.*应用事务一致|不证明.*微信已经提交所有应用事务/s);
   assert.match(text, /本轮没有做完整新机恢复/);
 
 
-  assert.match(snapshotText, /devconfig-20260917-223044-15f482e1/);
-  assert.match(snapshotText, /23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c/);
+  assert.match(snapshotText, /devconfig-20260923-210942-0fc73b3a\.zip/);
+  assert.match(snapshotText, /2,870,143,084/);
+  assert.match(text, /devconfig-20260917-223044-15f482e1/);
+  assert.match(text, /23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c/);
   assert.match(snapshotText, /8,?640.*8,?531,?705,?353/s);
   assert.match(snapshotText, /16.*(?:集合|冷备)/);
+  assert.match(snapshotText, /2026-09-24.*2,870,143,084/);
+  assert.match(snapshotText, /微信Hot.*145,544.*45,422,871,529/s);
+  assert.match(snapshotText, /9月23日H冷备.*早于.*9月24日/s);
+  assert.match(snapshotText, /配置Drive当时仍Running/);
+  assert.match(snapshotText, /微信Drive.*9月20日.*(?:失败|哈希).*未发起该次上传/s);
+  assert.match(snapshotText, /云端.*(?:未知|未读)/);
   assert.doesNotMatch(devconfigBackupProject.cardStatus, /目前离线|未追平/);
   assert.match(snapshotText, /文件.*(?:成功|通过).*不等于.*(?:应用|客户端|恢复)/s);
   assert.doesNotMatch(snapshotText, /配置 Drive 返回 1|远端 latest.*9 月 2 日.*落后/);

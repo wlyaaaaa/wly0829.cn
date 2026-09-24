@@ -2,8 +2,8 @@
 export const generatedPanelFacts = {
   "schema": "wly.panel-facts.v2",
   "generatedBy": "scripts/refresh-panel-snapshot.mjs",
-  "observedAt": "2026-09-19 03:06（中国时间）",
-  "sourceCommit": "0ee694ae190a5e870e7e6a8640b0649072e9ff87",
+  "observedAt": "2026-09-24 12:56（中国时间）",
+  "sourceCommit": "e734251081dc48bdd86765372ce225b3929ce9ae",
   "sourceBranch": "main",
   "sourcePublicWorktreeClean": true,
   "sourceDirtyCount": 0,
@@ -16,59 +16,206 @@ export const generatedPanelFacts = {
   "ruleBinding": [
     {
       "logicalId": "agents_root_rules",
-      "sha256": "ec723992acc5c4bcdc536ec251c35ac90d7ce216bb2fbd7268bf121e8243a6d9",
-      "bytes": 7937,
-      "characters": 3799,
-      "lines": 19,
-      "sourceSha256": "cc706fe3d05c192666b632a97d16e394e550b944589dcfde285e664284fae1f4",
-      "sourceBytes": 7954,
-      "sourceMatchesRelease": false,
-      "releasePath": "E:\\.agents\\releases\\E144\\AGENTS.md"
+      "sha256": "f16b1529cd9878ba5b5b098e149e0be38c704a31b1463cb0fd5967b758ea0156",
+      "bytes": 9559,
+      "characters": 3765,
+      "lines": 54,
+      "sourceSha256": "f16b1529cd9878ba5b5b098e149e0be38c704a31b1463cb0fd5967b758ea0156",
+      "sourceBytes": 9559,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\AGENTS.md"
     },
     {
-      "logicalId": "protected_major_actions_contract",
-      "sha256": "b0841f584c5d452922f7dd886037da99e74e267dac0737bd35813d1f68bb7b2f",
-      "bytes": 29780,
-      "characters": 13270,
-      "lines": 117,
-      "sourceSha256": "b0841f584c5d452922f7dd886037da99e74e267dac0737bd35813d1f68bb7b2f",
-      "sourceBytes": 29780,
+      "logicalId": "authorization_contract",
+      "sha256": "5c54be1b7e311f3e7c51c4ce38061059147edcfef88d4a3fcd83b601d2412686",
+      "bytes": 13479,
+      "characters": 6355,
+      "lines": 50,
+      "sourceSha256": "5c54be1b7e311f3e7c51c4ce38061059147edcfef88d4a3fcd83b601d2412686",
+      "sourceBytes": 13479,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E144\\docs\\contracts\\agents.protected-major-actions.md"
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.authorization.md"
     },
     {
-      "logicalId": "authorization_delegation_contract",
-      "sha256": "d85c7001863468bb45b63b9df2e8e6ad6ac3756b8516ccd40f4e01d753d23153",
-      "bytes": 38723,
-      "characters": 20667,
-      "lines": 140,
-      "sourceSha256": "d85c7001863468bb45b63b9df2e8e6ad6ac3756b8516ccd40f4e01d753d23153",
-      "sourceBytes": 38723,
+      "logicalId": "capabilities_runtime_contract",
+      "sha256": "2191dc42caaf12b5514c9f86b2eabc2dd1d9e4cccae1e0c29323132bbcb10fa3",
+      "bytes": 13535,
+      "characters": 5461,
+      "lines": 60,
+      "sourceSha256": "2191dc42caaf12b5514c9f86b2eabc2dd1d9e4cccae1e0c29323132bbcb10fa3",
+      "sourceBytes": 13535,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E144\\docs\\contracts\\agents.authorization-delegation.md"
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.capabilities-runtime.md"
     },
     {
-      "logicalId": "four_base_decision_context_contract",
-      "sha256": "a846f9a0bc24f0ecb5deb4e666847b43750b3537bf47fee086c389c04730ca88",
-      "bytes": 7480,
-      "characters": 3802,
-      "lines": 61,
-      "sourceSha256": "a846f9a0bc24f0ecb5deb4e666847b43750b3537bf47fee086c389c04730ca88",
-      "sourceBytes": 7480,
+      "logicalId": "codex_adapter_contract",
+      "sha256": "dc23ce1eb6e0e518868032d037ba40db3599c15605ef98ec0f71a82a87b0bad0",
+      "bytes": 24198,
+      "characters": 10534,
+      "lines": 90,
+      "sourceSha256": "dc23ce1eb6e0e518868032d037ba40db3599c15605ef98ec0f71a82a87b0bad0",
+      "sourceBytes": 24198,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E144\\docs\\contracts\\agents.four-base-decision-context.md"
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.codex-adapter.md"
     },
     {
-      "logicalId": "capability_routing_contract",
-      "sha256": "57180055a0593d2e16331434b14a1ce0e15d3d4dca5b49afcc99ff4fc79264fc",
-      "bytes": 59046,
-      "characters": 26652,
-      "lines": 169,
-      "sourceSha256": "57180055a0593d2e16331434b14a1ce0e15d3d4dca5b49afcc99ff4fc79264fc",
-      "sourceBytes": 59046,
+      "logicalId": "context_sources_contract",
+      "sha256": "bc562c9d0e561d97c635ca33efd2e377a0411144b16e71b7d27e6d550c29f33d",
+      "bytes": 5828,
+      "characters": 2638,
+      "lines": 52,
+      "sourceSha256": "bc562c9d0e561d97c635ca33efd2e377a0411144b16e71b7d27e6d550c29f33d",
+      "sourceBytes": 5828,
       "sourceMatchesRelease": true,
-      "releasePath": "E:\\.agents\\releases\\E144\\docs\\contracts\\agents.capability-routing.md"
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.context-sources.md"
+    },
+    {
+      "logicalId": "engineering_delivery_contract",
+      "sha256": "25e28cfc2fa49c068b7bbed6b7a80bf83c9d7a8d5522f34267381930340477f9",
+      "bytes": 14240,
+      "characters": 5716,
+      "lines": 72,
+      "sourceSha256": "25e28cfc2fa49c068b7bbed6b7a80bf83c9d7a8d5522f34267381930340477f9",
+      "sourceBytes": 14240,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.engineering-delivery.md"
+    },
+    {
+      "logicalId": "execution_coordination_contract",
+      "sha256": "db48948e6fe5ad6ab01d775be985053da5ee0f77175f793e23f705c07dfe6be9",
+      "bytes": 22032,
+      "characters": 11214,
+      "lines": 86,
+      "sourceSha256": "db48948e6fe5ad6ab01d775be985053da5ee0f77175f793e23f705c07dfe6be9",
+      "sourceBytes": 22032,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.execution-coordination.md"
+    },
+    {
+      "logicalId": "privacy_data_contract",
+      "sha256": "1b208670677bfc3738d6894de8279c3559398b6f1b32a4c393bf1870a475d162",
+      "bytes": 15989,
+      "characters": 7063,
+      "lines": 66,
+      "sourceSha256": "1b208670677bfc3738d6894de8279c3559398b6f1b32a4c393bf1870a475d162",
+      "sourceBytes": 15989,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.privacy-data.md"
+    },
+    {
+      "logicalId": "protected_actions_contract",
+      "sha256": "411b62bc1169ed7fdc0e7d422e0587748e883cbc97e06d0e55fd6e55cc591e9c",
+      "bytes": 17971,
+      "characters": 7173,
+      "lines": 63,
+      "sourceSha256": "411b62bc1169ed7fdc0e7d422e0587748e883cbc97e06d0e55fd6e55cc591e9c",
+      "sourceBytes": 17971,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.protected-actions.md"
+    },
+    {
+      "logicalId": "rule_release_contract",
+      "sha256": "82cba08a02fa18f1768a5d16a10cdbcff305ff6882e2d07667a2ceb85b3abf73",
+      "bytes": 4766,
+      "characters": 1954,
+      "lines": 38,
+      "sourceSha256": "82cba08a02fa18f1768a5d16a10cdbcff305ff6882e2d07667a2ceb85b3abf73",
+      "sourceBytes": 4766,
+      "sourceMatchesRelease": true,
+      "releasePath": "E:\\.agents\\releases\\E171\\docs\\contracts\\agents.rule-release.md"
     }
+  ],
+  "releaseInventory": [
+    {
+      "logicalId": "agents_root_rules",
+      "relativePath": "AGENTS.md",
+      "bytes": 9559,
+      "sha256": "f16b1529cd9878ba5b5b098e149e0be38c704a31b1463cb0fd5967b758ea0156"
+    },
+    {
+      "logicalId": "authorization_contract",
+      "relativePath": "docs/contracts/agents.authorization.md",
+      "bytes": 13479,
+      "sha256": "5c54be1b7e311f3e7c51c4ce38061059147edcfef88d4a3fcd83b601d2412686"
+    },
+    {
+      "logicalId": "capabilities_runtime_contract",
+      "relativePath": "docs/contracts/agents.capabilities-runtime.md",
+      "bytes": 13535,
+      "sha256": "2191dc42caaf12b5514c9f86b2eabc2dd1d9e4cccae1e0c29323132bbcb10fa3"
+    },
+    {
+      "logicalId": "claude_entry_template",
+      "relativePath": "templates/claude-home/CLAUDE.md",
+      "bytes": 875,
+      "sha256": "4c1869ddbc4b21e753093cadf98218ab986ec262d20787ac7ed7a57835cda467"
+    },
+    {
+      "logicalId": "codex_adapter_contract",
+      "relativePath": "docs/contracts/agents.codex-adapter.md",
+      "bytes": 24198,
+      "sha256": "dc23ce1eb6e0e518868032d037ba40db3599c15605ef98ec0f71a82a87b0bad0"
+    },
+    {
+      "logicalId": "codex_entry_template",
+      "relativePath": "templates/codex-home/AGENTS.md",
+      "bytes": 875,
+      "sha256": "4c1869ddbc4b21e753093cadf98218ab986ec262d20787ac7ed7a57835cda467"
+    },
+    {
+      "logicalId": "context_sources_contract",
+      "relativePath": "docs/contracts/agents.context-sources.md",
+      "bytes": 5828,
+      "sha256": "bc562c9d0e561d97c635ca33efd2e377a0411144b16e71b7d27e6d550c29f33d"
+    },
+    {
+      "logicalId": "engineering_delivery_contract",
+      "relativePath": "docs/contracts/agents.engineering-delivery.md",
+      "bytes": 14240,
+      "sha256": "25e28cfc2fa49c068b7bbed6b7a80bf83c9d7a8d5522f34267381930340477f9"
+    },
+    {
+      "logicalId": "execution_coordination_contract",
+      "relativePath": "docs/contracts/agents.execution-coordination.md",
+      "bytes": 22032,
+      "sha256": "db48948e6fe5ad6ab01d775be985053da5ee0f77175f793e23f705c07dfe6be9"
+    },
+    {
+      "logicalId": "privacy_data_contract",
+      "relativePath": "docs/contracts/agents.privacy-data.md",
+      "bytes": 15989,
+      "sha256": "1b208670677bfc3738d6894de8279c3559398b6f1b32a4c393bf1870a475d162"
+    },
+    {
+      "logicalId": "protected_actions_contract",
+      "relativePath": "docs/contracts/agents.protected-actions.md",
+      "bytes": 17971,
+      "sha256": "411b62bc1169ed7fdc0e7d422e0587748e883cbc97e06d0e55fd6e55cc591e9c"
+    },
+    {
+      "logicalId": "rule_release_contract",
+      "relativePath": "docs/contracts/agents.rule-release.md",
+      "bytes": 4766,
+      "sha256": "82cba08a02fa18f1768a5d16a10cdbcff305ff6882e2d07667a2ceb85b3abf73"
+    },
+    {
+      "logicalId": "rules_catalog",
+      "relativePath": "rules-catalog.json",
+      "bytes": 8209,
+      "sha256": "415bf7e0b2bdb45791d1339dc1d054da6683aa9511cfe25761bc1f518ffcb137"
+    }
+  ],
+  "primaryTopicIds": [
+    "agents_root_rules",
+    "authorization_contract",
+    "capabilities_runtime_contract",
+    "codex_adapter_contract",
+    "context_sources_contract",
+    "engineering_delivery_contract",
+    "execution_coordination_contract",
+    "privacy_data_contract",
+    "protected_actions_contract",
+    "rule_release_contract"
   ],
   "skills": {
     "publicRegisteredCount": 46,
@@ -82,75 +229,85 @@ export const generatedPanelFacts = {
   },
   "authority": {
     "status": "e_rules_active_verified",
-    "statusLabel": "E144 活动规则已验证",
-    "generation": "E144",
-    "generationId": "E144",
-    "releaseId": "E144",
-    "gitCommit": "b1f4a5cbd95ab74a9741ade4dfc603f41593e300",
-    "rulesetSha256": "e7393555153b42fbe748467537306d8762f44417338be64efbca898210cebfc6",
-    "releaseRecordSha256": "cbd954fadc1ac1475b636312cf86866e2ee149f88b9024e9bce8707d8a29b073",
-    "releaseRecordPath": "E:\\.agents\\releases\\E144\\release.json",
-    "releaseCreatedAtUtc": "2026-09-18T06:45:31.2475782+00:00",
-    "releaseRecordSchema": "agents.e-rules-release.v2",
+    "primaryTopicCount": 10,
+    "releaseFileCount": 13,
+    "releaseSchema": "agents.e-rules-release.v3",
+    "statusLabel": "E171 活动规则已验证",
+    "generation": "E171",
+    "generationId": "E171",
+    "releaseId": "E171",
+    "gitCommit": "1aa0b0a0b9dbd9f6864d9cb010c04fccdf42e372",
+    "rulesetSha256": "2712b2c4926753fc53a15dccf3c8e73c23b30880b45d5675a52b0e2e5b5a1168",
+    "releaseRecordSha256": "5fcd59645c1504465ad1a196c869283e0a2d1364f1341d414b31eb261e85fd1b",
+    "releaseRecordPath": "E:\\.agents\\releases\\E171\\release.json",
+    "releaseCreatedAtUtc": "2026-09-23T18:44:44.0813256+00:00",
+    "releaseRecordSchema": "agents.e-rules-release.v3",
     "releaseSourceWorktreeClean": null,
     "releaseSourceInputsClean": true,
     "releaseInputPaths": [
       "AGENTS.md",
-      "docs/contracts/agents.protected-major-actions.md",
-      "docs/contracts/agents.authorization-delegation.md",
-      "docs/contracts/agents.four-base-decision-context.md",
-      "docs/contracts/agents.capability-routing.md",
+      "config/control-plane-contract-catalog.json",
+      "docs/contracts/agents.authorization.md",
+      "docs/contracts/agents.capabilities-runtime.md",
+      "docs/contracts/agents.codex-adapter.md",
+      "docs/contracts/agents.context-sources.md",
+      "docs/contracts/agents.engineering-delivery.md",
+      "docs/contracts/agents.execution-coordination.md",
+      "docs/contracts/agents.privacy-data.md",
+      "docs/contracts/agents.protected-actions.md",
+      "docs/contracts/agents.rule-release.md",
+      "templates/claude-home/CLAUDE.md",
       "templates/codex-home/AGENTS.md",
       "tools/Invoke-EAgentRulesRelease.ps1"
     ],
     "remoteMainContainsCommit": true,
-    "pointerRevision": 52,
-    "pointerSha256": "32bd21ac96518b926dfe50607211378725531d1b8ca30889c81f4690ab4f1e52",
-    "activatedAtUtc": "2026-09-18T06:45:31.2560223+00:00",
+    "pointerRevision": 80,
+    "pointerSha256": "6302423cd7aff30bd2d22ab953bdd2abd6f8cc16c39008b6e50bb40594c0899d",
+    "activatedAtUtc": "2026-09-23T18:44:44.0880513+00:00",
     "previous": {
-      "git_commit": "2ff85e1ff5b149992cbfaee53b4f6fc126995621",
-      "release_id": "E143",
-      "release_record_sha256": "0583eb055ef841a334f05bba6fb7331474362be28f8fa0cdf297e785afedc2bf",
-      "ruleset_sha256": "fb92f03dc626010b0247736096149f77d1138689a6f4307c5e445ea5701632cb"
+      "git_commit": "26738ef24230bb42df50891e8a0a59dabd657314",
+      "release_id": "E170",
+      "release_record_sha256": "d6f677dd8dc5bcc15e8cfb680309596e62f37b09d569f05d43cf5c84618c99f4",
+      "ruleset_sha256": "b3ccc13796ce9642d09f626046a81f613771b57455d8079867e307a11498b111"
     },
     "activationVerified": true,
     "requiredRulesVerified": true,
-    "sourceMatchesRelease": false,
+    "sourceMatchesRelease": true,
     "legacyCState": "retired_recovery_only"
   },
   "validation": {
-    "label": "还有 2 层未闭合",
-    "summary": "E rules 活动且五规则闭包通过，但仍有 2 个独立验证层没有通过。",
+    "label": "还有 1 层未闭合",
+    "summary": "E rules 活动且正式规则主题闭包通过，但仍有 1 个独立验证层没有通过。",
     "rows": [
       {
         "layer": "E rules current（E 规则当前指针）",
         "status": "pass",
         "label": "通过",
-        "detail": "E144 已从 PRIVATE main commit b1f4a5cbd95a 激活；pointer revision 52，previous=E143。历史 C 盘材料只作恢复证据。"
+        "detail": "E171 已从 PRIVATE main commit 1aa0b0a0b9db 激活；pointer revision 80，previous=E170。历史 C 盘材料只作恢复证据。"
       },
       {
-        "layer": "Rule closure（五规则闭包）",
+        "layer": "Rule closure（正式规则主题闭包）",
         "status": "pass",
         "label": "通过",
-        "detail": "五份规则位于同一 E144 release，ruleset SHA-256=e7393555153b42fbe748467537306d8762f44417338be64efbca898210cebfc6；页面 logical id、bytes 和 SHA 与 release descriptor 一致。"
+        "detail": "正式主题和完整发布文件位于同一 E171 release，ruleset SHA-256=2712b2c4926753fc53a15dccf3c8e73c23b30880b45d5675a52b0e2e5b5a1168；页面 logical id、bytes 和 SHA 与 release descriptor 一致。"
       },
       {
         "layer": "Source checkout（源码工作树）",
-        "status": "repair",
-        "label": "五规则源码存在未激活差异",
-        "detail": "source HEAD=0ee694ae190a，origin/main=0ee694ae190a，active release commit=b1f4a5cbd95a。公开范围工作树无未提交修改。 五规则源码与活动 release 存在字节差异，只作为未激活候选，不覆盖 E144。"
+        "status": "pass",
+        "label": "公开范围工作树无未提交修改；正式规则主题与活动版本一致",
+        "detail": "source HEAD=e734251081dc，origin/main=e734251081dc，active release commit=1aa0b0a0b9db。公开范围工作树无未提交修改。 正式规则主题源码与 E171 的 bytes/SHA 一致；源码中独立发布的 Skill 或工具更新不等于下一代规则候选。"
       },
       {
         "layer": "E release validator（活动版本验证器）",
         "status": "pass",
         "label": "通过",
-        "detail": "Test-EAgentRulesRelease.ps1 已重新验证 E144 的 activator、current/previous、五文件哈希、回退与 C 历史隔离。"
+        "detail": "Test-EAgentRulesRelease.ps1 已重新验证 E171 的 activator、current/previous、完整发布文件哈希、回退与 C 历史隔离。"
       },
       {
         "layer": "Full local tests（当前源码全量回归）",
         "status": "unknown",
         "label": "快速刷新未重跑",
-        "detail": "网页刷新没有再次运行整个 .agents 本地测试集。它只证明 E144 活动版本、五规则闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。"
+        "detail": "网页刷新没有再次运行整个 .agents 本地测试集。它只证明 E171 活动版本、正式规则主题闭包和专用 release validator；当前 source checkout 的全量回归状态保持 Unknown（证据不足）。发布下一代规则前，源码 Owner 仍必须按实际 change surface（改动影响面）完成聚焦或标准验证。"
       },
       {
         "layer": "Skill supply（能力供应）",
@@ -170,6 +327,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "d4648bfdaddff1970e21b40676f72e1a6b9b7401f0b026666746164767f53f78"
+    "payloadSha256": "0da0cc48d2f237cfa261e8e6d0903c46788c7896ef84ae61a8bcf8ea42224a09"
   }
 };

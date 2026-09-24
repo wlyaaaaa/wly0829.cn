@@ -9,12 +9,14 @@ import { searchPanel } from "../app/search.js";
 const root = new URL("../", import.meta.url);
 const readJson = async (relative) => JSON.parse(await readFile(new URL(relative, root), "utf8"));
 
-test("WeFlow bridge registration preserves source identity and rank 27", async () => {
+test("WeFlow bridge registration preserves source identity and final-plan rank", async () => {
   const registry = await readJson("config/panel-projects.json");
   const plan = await readJson("config/final-project-order.json");
   const registered = registry.projects.find((item) => item.id === project.slug);
   assert.ok(registered?.enabled);
-  assert.equal(registered.order, 27);
+  const planned = plan.projects.find((item) => item.id === project.slug);
+  assert.ok(planned);
+  assert.equal(registered.order, planned.final_rank);
   assert.equal(registered.route, project.route);
   assert.equal(registered.ai_refresh.content_path, "app/content-wechat-history-ai-bridge.js");
   assert.deepEqual(registered.source, {
@@ -23,8 +25,7 @@ test("WeFlow bridge registration preserves source identity and rank 27", async (
     default_branch: "master",
     local_root: "E:\\Projects\\Tools\\WeFlowBridge"
   });
-  const planned = plan.projects.find((item) => item.id === project.slug);
-  assert.equal(planned?.final_rank, 27);
+  assert.equal(project.order, planned.final_rank);
   assert.equal(planned?.state, "published");
   assert.ok(projectCatalog.some((entry) => entry.project.slug === project.slug));
 });

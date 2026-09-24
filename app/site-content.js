@@ -152,7 +152,7 @@ export function routeMeta(pathname) {
   if (path === "/rules") {
     return {
       title: `${rulesSnapshot.releaseId} 当前规则｜${site.name}`,
-      description: `${rulesSnapshot.releaseId} 五份活动 E 规则的完整人话解释、技术语义、文件 SHA、ruleset、current/previous 和验证矩阵。`
+      description: `${rulesSnapshot.releaseId} 的 ${rulesSnapshot.rules.length} 个正式主题：实际用途、授权、资料、协作、工程与恢复；完整发布文件和主题解释分别核验。`
     };
   }
   if (path === "/system") {

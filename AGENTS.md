@@ -2,13 +2,16 @@
 
 This repository is public. Every tracked file must be suitable for an unknown
 visitor to read, clone and quote. The website itself is primarily the owner's
-read-only operating panel; public presentation is secondary.
+personal AI collaboration workspace; public presentation is secondary.
 
 ## Product boundary
 
-- This is a read-only personal project, rules and capabilities panel. It is not
-  a resume, marketing landing page, activity feed, admin console or repository
-  browser.
+- This is a personal project, rules, capabilities and collaboration workspace.
+  It includes reading and discovery, AI continuation instructions and computer
+  connection entrypoints. Describe the actions each existing entry can actually
+  enable; do not label the whole website or system read-only. A dated project
+  snapshot remains distinct from an operation and its verified result. It is not
+  a resume, marketing landing page, activity feed or repository browser.
 - The owner is the primary reader. Do not optimize information density, wording
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must
@@ -96,31 +99,91 @@ read-only operating panel; public presentation is secondary.
   stand in for that explanation. For a method without automatic collection,
   state what the person supplies and what AI produces instead of inventing a
   collector. Readers must not need the owner's private memory to understand it.
-- Every project detail page uses three reading layers: `速览`, `产品` and
-  `技术`. They are a content priority and reading order, not three
-  copies of the same prose, three network loads or a fixed module count.
-  `速览` owns the product essence, the problem, one ordinary example, the
-  result, the project's deliberate choices and its most important boundary.
-  `产品` owns natural requests, realistic flows, success/problem/
-  unavailable behavior, product principles and visual results when they help.
-  `技术` owns current snapshots, exact models and versions, architecture,
+- Every project Overview, project module and Skill detail uses two full-width
+  reading tabs: `产品用法` and `技术与依据`, with product usage visible by
+  default. Reuse the established segmented tab style. Both complete bodies
+  are in the initial HTML; JavaScript only switches visibility and a no-JS
+  reader can still read both. Ordinary navigation to another module starts at
+  its product explanation, never at the previous page's scroll height. Existing
+  product, technical and inner-heading links select the owning tab on direct
+  load, refresh and browser history navigation.
+  `产品用法` owns the product essence, why it matters, actual starting point,
+  necessary inputs, natural requests, complete user steps, results,
+  success/problem/unavailable behavior, principles and useful visual results.
+  An example and result alone do not explain how to use a product. A feature
+  that is only designed or not installed must say what can actually be done
+  now; do not invent a usable interface or turn maintenance evidence into use.
+  `技术与依据` owns current snapshots, exact models and versions, architecture,
   commands, schemas, hashes, source/test/runtime/publish evidence, failures,
-  recovery and evolution. Existing module routes remain the deep technical
-  reference instead of becoming a second product introduction.
+  and recovery. Product evolution belongs to the product layer: explain the
+  original need, the new capability and the practical consequence at each
+  meaningful stage. Each module owns the complete use and technical explanation
+  of that function; Overview keeps an overall journey and linked capability
+  index, without repeating that index or its examples in another chapter.
 - Every project must state its own product principles and design highlights in
   direct language: what it optimizes for, which common default it rejects, who
   decides, what trade-off is deliberate and when it refuses to guess. These
   judgments are part of the product, not optional marketing copy. Their count
   follows the real project; do not force symmetry or pad a quota.
+- The reader must be able to move from an ordinary need to an implemented
+  capability, its actual input, a usable result and the important choice or
+  limit. A module name, translated acronym, checklist or test result does not
+  establish that connection. Where choosing a model or tool changes use, show
+  its actual public-safe name and role in the reader layer after the purpose;
+  keep complete IDs, parameters, versions and evidence in the technical layer.
+  "Do not lead with a stack" is not permission to hide the available choices.
+- Project, module, example, search excerpt and evolution must tell the same
+  current story. Review the whole owning explanation when a capability changes;
+  changing one result field while leaving the request or earlier stage wrong
+  is incomplete. Evolution groups needs and resulting capabilities, not commits.
+  Keep current implementation, accepted future design and unavailable evidence
+  visibly distinct. Do not activate a pending business design from the website.
+- Reader boundaries are short, project-authored statements of the most important
+  decision-changing gap. The complete dated snapshot remains in the reference
+  layer; never delete useful evidence merely to shorten the opening. Optional
+  operating choices belong to their project, not a renderer-owned second story.
 - The product layers must not open with a release id, commit, test count,
   schema, process name, port, model stack or internal component. Those facts
   remain complete in `技术`; they are evidence for the product, not the
   product's identity. A first-time reader must understand the value and use
   without reading the reference layer.
+
+- **Stranger 30-second gate:** a reader with no knowledge of this machine,
+  .agents, PCConfig, Git, model routing or the author's private history must
+  be able to answer, from the default visible layer, what this page is for,
+  what they can ask it to do, what the system will do, what result they get,
+  when the system stops or asks the owner, and what is still unavailable.
+  Passing tests, complete fields or technically correct terminology do not
+  satisfy this gate. If the answer requires understanding Owner, Provider,
+  schema, runtime, ruleset, SHA or logical ids, the reader layer has failed.
+  Professional detail must remain available; move it into an explicit
+  technical/evidence layer instead of deleting it.
+- Rules follow the same reader/technical split as projects. The default Rules
+  experience starts from ordinary situations and shows a plain conclusion,
+  trigger, system behavior, owner action, real example and non-behavior.
+  A second expandable reader layer preserves the important conditions,
+  exceptions, failure handling and recovery from the active source topic.
+  Logical ids, release metadata, hashes, canonical paths, full structured
+  rule summaries and validation matrices belong to a separate technical
+  evidence layer. Rule technical evidence is expanded by default; selecting a
+  Skill's technical tab exposes its full reference without another closed box,
+  and System composition is normal visible content, not a collapsed appendix.
+  A short slogan is not a substitute for a 10k–20k source
+  contract.
+- Skill details lead with when to use the capability, where to start, what to
+  provide, an ordinary request, the actual process, result and recovery.
+  Dependencies and technical identity stay complete in the technical tab.
+  System leads with “what I want to do
+  today”; dependency maps, project atlases, validation layers and system
+  internals remain available but must not dominate the default reading path.
 - Public pages never expose internal presentation or maintenance labels such
   as `curated_packaging`, `manual_owner_only`, “包装内容”, “手动维护” or task
   handoff bookkeeping. These may remain in Registry and tests as implementation
   facts, but the visible product is described by its real usable form.
+  This excludes this website run's internal scheduling and presentation state,
+  not a represented product's public-safe API fields or failure-state names in
+  its technical reference. A product's actual manual maintenance feature is
+  also distinct from the website's internal manual-refresh designation.
 - For every selected project, the public panel is technically complete by
   default. Except for reviewed L3+ values that the active global classification
   actually requires withholding and reusable secrets, retain the details
@@ -135,7 +198,7 @@ read-only operating panel; public presentation is secondary.
   status, the most important snapshot boundary and its observation time in
   plain language. Exact model stacks, recovery/runtime versions, repository and
   worktree facts, commits and test matrices remain complete in `技术`; they
-  must not displace the product's purpose and use from `速览`. A boundary may
+  must not displace the product's purpose and use from `产品用法`. A boundary may
   name one decision-changing gap, but it must distinguish what the project can
   do from what this webpage did not re-verify.
 - If a reviewed L3+ value must be withheld, or a reusable secret is present,
@@ -187,10 +250,13 @@ read-only operating panel; public presentation is secondary.
   being unavailable is still only unavailable. Public copy may claim this only
   after source tests pass; until then it is a named source blocker, never a
   silent restore or a completed capability.
-- The first occurrence of a technical English term must either follow an
-  immediately visible explanation or use `English（中文含义）`. A glossary later
-  on the page cannot excuse unexplained English used earlier. Repeated terms may
-  use the shorter form after the first explanation.
+- Explain an unfamiliar technical term when its meaning is needed to understand
+  the action or result, preferably in the sentence itself; `English（中文含义）`
+  is useful only when that short explanation actually helps. Familiar formats,
+  common names and acronyms such as Markdown, PDF, Git and API do not need
+  automatic parenthetical translations. Do not repeatedly annotate a term
+  throughout a page. A glossary remains available for precise reference, but
+  cannot replace an intelligible product explanation.
 - Automatic term annotation is a single-pass, longest-phrase safety net. It
   must never rewrite text that it already inserted or nest translations inside
   one another. Context-dependent words such as token, source, candidate,
@@ -245,6 +311,11 @@ read-only operating panel; public presentation is secondary.
   date range. Small fixes, tests, refactors, copy changes and individual commits
   never create evolution entries; AI refreshes merge, rewrite or remove old
   stages before considering a new one.
+- Grouping evolution stages must preserve important product transitions and
+  their dated evidence. Keep commit/version references with each product stage,
+  including multiple references when several stages merge; the stage may expose
+  these as optional evidence. Do not create a second evolution chapter in the
+  technical layer. A title needs readable space, never a narrow commit column.
 - Do not impose word targets or maximum lengths on reference pages. Content is
   complete only when the owner can reconstruct the subject without another
   conversation or private memory.
@@ -370,8 +441,10 @@ read-only operating panel; public presentation is secondary.
   architecture. Project-specific judgments live with the project/module that
   gives them context.
 - `/rules` is one rules workbench. It shows the verified current E release,
-  current/previous pointer, PRIVATE main commit, five-file ruleset and exactly
-  five current rules through an in-page selector; do not create rule detail
+  current/previous pointer, PRIVATE main commit and complete verified release
+  inventory. Its in-page selector follows the same release catalog's primary
+  topics; compatibility aliases and entry templates remain in the integrity
+  closure but never become duplicate reading topics. Do not create rule detail
   routes. Historical C material may appear only as recovery-only history.
 
 ## Project expansion gate
@@ -391,12 +464,11 @@ read-only operating panel; public presentation is secondary.
   project identity or payload that the owner or an applicable higher rule
   actually excludes; a private source, technical depth, long page or the need
   to omit one L3+ value never excludes the remaining project. Add projects in
-  the fixed value order, choosing Gemini's next still-planned project after
-  the owner's latest delivery notification. Gemini's next assignment does not
-  wait for Astra's acceptance, UI implementation, integration or publication.
-  Astra runs design, content, source-project acceptance, necessary repairs and
-  package integration in parallel with distinct ownership, then combines them
-  for final local verification. Publication follows the owner's current
+  the fixed value order. Historical Gemini/Astra construction assignments do
+  not constrain current work. Choose authors, implementation and independent
+  review through active economy routing and actual ownership; an authorized
+  whole-site repair may cover its affected projects together. Combine the
+  results for final local verification. Publication follows the owner's current
   release authorization and the final verification gates. Do not create
   placeholder cards or re-vote the backlog after each delivery; change the fixed order only when the owner
   explicitly corrects it or material project truth makes the value judgment
@@ -409,7 +481,7 @@ read-only operating panel; public presentation is secondary.
   and extraction, password/keyfile and format choices, maintenance and recovery,
   dual-password containers, image carriers, AI metadata and local UI boundaries,
   and private ciphertext publication. Keep ordinary scenarios and actual
-  outcomes ahead of algorithms. Preserve the three reading layers and actual
+  outcomes ahead of algorithms. Preserve the two reading tabs and actual
   source module boundaries; do not create a web encryption service, another
   password manager or a new vault format. Verify with isolated fictional files,
   never the owner's real vault, password, keyfile or private plaintext. Tests,
@@ -421,7 +493,8 @@ read-only operating panel; public presentation is secondary.
   source-first complete product and technical snapshot, necessary source
   repair, independent content audit, PUBLIC release and read-back. Explain a
   clean project bootstrap, Fish Audio narration and its external text boundary,
-  local faster-whisper word timing, reviewed SVG fragments and real asset URIs,
+  Fish-native word timing or ChineseASR alignment of confirmed text, reviewed
+  SVG fragments and real asset URIs,
   build/lint/preview before expensive rendering, deterministic `seekTime(t)`
   frames, AV1 NVENC chunks, input-safe resume, narration/BGM merge, cover,
   chapters, final verification, cleanup and human viewing. Preserve environment,
@@ -518,7 +591,7 @@ read-only operating panel; public presentation is secondary.
 - Display an integrated Skill only when it is currently usable, materially
   valuable, sufficiently understood, non-duplicative and safe to publish.
 - Finish content before breadth. `.agents` Overview and all seven project modules, all
-  five current rules, and every displayed Skill must let the owner reconstruct
+  current primary rule topics, and every displayed Skill must let the owner reconstruct
   the subject, its current state, technical design, operating flow, boundaries,
   failures and verification without another conversation.
 - Every enabled Registry project may enter routes and navigation only within
@@ -551,16 +624,17 @@ read-only operating panel; public presentation is secondary.
   content in professional plain language, validates it and presents a preview.
   Deterministic scripts may collect facts and verify contracts, but never write
   narrative content or decide materiality.
-- Website content refresh, retirement judgment, design and creative review, and
-  content acceptance default to Astra Max (`gpt-6-astra`, `max`), as explicitly
-  requested by the owner. `config/panel-projects.json` records the current
-  semantic model and effort defaults; refresh plans expose them to the executor.
-  Astra High or higher is sufficient for these roles; Max is a default, not a
-  minimum requirement, as the owner clarified on 2026-09-12.
-  Apply the active native economy-routing identity and parent/root limits.
-  Do not silently substitute Sol, Terra, Luna or a local model for these roles;
-  report an unavailable requested model without claiming an Astra execution.
-  An explicit later owner choice can replace this default.
+- Website content, design, writing and independent acceptance use the active
+  native economy-routing policy. The owner removed the website-specific
+  Astra-only/model-effort floor on 2026-09-22. Preserve the user's selected root
+  model; choose whether to delegate and the child model/effort from the actual
+  remaining difficulty, quality needs, independent-review value and total cost.
+  Registry records this routing policy rather than a permanent website model.
+  A null semantic_model/semantic_reasoning_effort means selection by the AI
+  executor under that policy, never a literal provider/model name. Record the
+  model and effort that actually ran; do not infer them from titles or defaults.
+  Protected-action judgment qualifications remain governed separately by the
+  active protection contract; ordinary website editing does not acquire them.
 - A targeted refresh touches only the named project. A full refresh iterates all
   enabled projects but may leave most or all files byte-identical. It is a
   revalidation request, not permission to rewrite every page.
@@ -650,7 +724,9 @@ read-only operating panel; public presentation is secondary.
   while its source inputs, E identity, Registry revision and owned surface still
   match. A descendant commit for the same source changes evidence rather than
   responsibility; it replaces only the same-source delta it actually includes.
-- Keep one stable source-snapshot implementation scope and one publication scope.
+- Keep one stable source-snapshot implementation responsibility and one publisher.
+  Ordinary commit and normal push remain in the existing authorized source scope;
+  do not create an otherwise unnecessary publication scope for routine Git closeout.
   Finish one coherent edit batch and its focused checks before freezing a stable
   publication batch; then run one final complete test/build/public-content gate
   and one final browser acceptance. A later material delta stays with the same
@@ -728,15 +804,12 @@ read-only operating panel; public presentation is secondary.
   evidence collection or final audit can materially improve the delivered
   page. Do not reduce final quality merely to conserve an ample model quota,
   and do not create subagents just to reach a fixed count.
-- Every native subagent that performs website semantic judgment, writing or
-  content acceptance, at every descendant depth, uses Astra at High or higher,
-  including design, creative and independent source-content review. The
-  Registry's Max default is not a minimum requirement.
-  The active economy route still verifies actual identity, available slots and
-  parent/root limits; a task name never proves the model that ran. Deterministic
-  tests may remain tools rather than agents. Choose the actual number from independent work
-  surfaces and net quality gain; zero remains valid. This default applies equally
-  to every retained project in the fixed value plan.
+- Choose native subagents, including semantic authors and independent reviewers,
+  through the active economy route and real host capabilities. No website-wide
+  model family or effort minimum is imposed. Use sufficient capability for the
+  remaining task and preserve independent judgment; zero delegates is valid.
+  A task name does not prove actual model/effort, and ordinary tools can perform
+  mechanical collection and tests without becoming semantic decision-makers.
 - One subagent owns one durable goal. A follow-up may clarify, narrow or expand
   the scope, evidence or acceptance criteria of that same goal, including
   continuing it after interruption. It must never replace that goal with an
@@ -764,12 +837,16 @@ read-only operating panel; public presentation is secondary.
   glossary or a passing assertion.
 - Content completeness is a separate, source-first acceptance gate. Before a
   new project, full refresh or completeness repair may PASS, an independent
-  Astra reviewer at High or higher receives the current source entrypoints and the candidate
+  reviewer selected through the active economy route receives the current source entrypoints and the candidate
   page without being given the page's module list as the expected answer. It
   must reconstruct important product capabilities and technical subsystems,
   compare both layers with the page and report any absent source-backed axis.
   One P0 capability omission blocks content acceptance and publication; a
   reader test, green build or prior page-internal audit cannot waive it.
+  When the owner explicitly permits the main task to proceed without subagents
+  and no verified native review interface exists, record the main task's actual
+  source/content review and the independent-review gap separately. Do not invent
+  a reviewer, substitute a local model, or lower the content-completeness floor.
 - After the accepted MVP, local preview remains required product evidence but
   is non-blocking for ordinary registered refreshes and selected new projects,
   including WeChatDirect, personal-materials, document-materials, work-delivery,

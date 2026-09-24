@@ -12,6 +12,15 @@ const projectedEntries = globalSearchEntries.map((entry) => createCompactSearchE
 const quickEntries = projectedEntries.filter((entry) => entry.type !== "项目内容");
 const browserEntries = [...quickEntries, ...projectedEntries.filter((entry) => entry.type === "项目内容")];
 
+test("renamed protection modules remain discoverable by their familiar names", () => {
+  for (const [query, slug] of [["受保护数据", "protected-data"], ["PCConfig受保护数据", "protected-data"], ["加密文件恢复", "protected-data"], ["PCConfig受保护动作", "protected-actions"], ["PCConfig受保护操作", "protected-actions"]]) {
+    const href = `/projects/pcconfig/${slug}`;
+    assert.equal(searchPanel(query, "all")[0]?.href, href, query);
+    assert.equal(searchPanel(query, "project:pcconfig")[0]?.href, href, query);
+    assert.equal(searchCompactEntries(browserEntries, query, "all")[0]?.href, `${href}/`, query);
+  }
+});
+
 test("compact search canonicalizes only the hidden search field with the existing matcher normalization", () => {
   const normalize = (value) => String(value || "").normalize("NFKC").toLowerCase().trim().replace(/\s+/g, " ");
   for (const entry of globalSearchEntries) {
@@ -33,12 +42,15 @@ const belongsToProject = (entry, slug) => {
 const intents = [
   ["昨晚电脑风扇为什么一直很响", "timeaudit"],
   ["找出去年在海边拍的照片", "personal-media"],
+  ["把选中的照片放进周末出游相册", "personal-media"],
   ["截图上写着退货两个字帮我找到那张图", "personal-media"],
   ["我在文件管理器删除了一张照片它还会从备份回来吗", "personal-media"],
   ["记得有一份合同但不知道电脑哪个目录", "personal-materials"],
   ["把正式声明做成能修改和打印签字文件", "document-materials"],
+  ["把材料包复制到另一个目录后，逐页检查它是不是仍然完整", "document-materials"],
   ["多人录音转文字标出不确定", "chinese-asr"],
   ["归档一个微信群之后只补新增消息", "wechat-direct"],
+  ["他这句可以回复的是哪条，语音和附件关系也一起核对", "wechat-direct"],
   ["手机继续电脑AI任务", "codex-remote"],
   ["桌边小屏显示电脑状态", "pc-panel-hub"],
   ["少量问题检验是否理解", "learning"],
@@ -63,6 +75,7 @@ test("polite phrasing and punctuation do not turn a useful request into an empty
   for (const [query, projectSlug] of intents) {
     const sentence = `请问，帮我看看：${query}？`;
     assert.ok(searchPanel(sentence).slice(0, 3).some((entry) => belongsToProject(entry, projectSlug)), sentence);
+    assert.ok(searchCompactEntries(quickEntries, sentence).slice(0, 3).some((entry) => belongsToProject(entry, projectSlug)), `header: ${sentence}`);
   }
 });
 

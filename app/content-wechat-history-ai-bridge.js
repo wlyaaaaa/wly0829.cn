@@ -31,8 +31,10 @@ const wechatHistoryAiBridgeSnapshot = createProjectSnapshot({
 });
 
 const wechatHistoryAiBridgeProject = {
-  order: 27,
+  order: 28,
   slug: "wechat-history-ai-bridge",
+  usageEntry: "明确选择 WeFlow 适配时，在已接通该本机服务的 AI 环境中指定账号、会话和时间范围；日常默认微信读取仍走 WeChatDirect。",
+  usageInputs: ["想查的联系人或会话","问题与时间范围","是否明确选择 WeFlow 路线"],
   title: "WeChat History AI Bridge",
   kicker: "把本机 WeFlow 接口交给 AI 正确使用",
   route: "/projects/wechat-history-ai-bridge",
@@ -57,13 +59,7 @@ const wechatHistoryAiBridgeProject = {
     unavailable: "服务、凭据或本次读取授权不可用时停止并说明原因；健康响应和端口连通不能代替真实聊天读取。"
   },
   repositoryNote: "公开仓库保存 WeFlow 接口契约、自检与启动脚本、文件核验工具和虚构测试。真实聊天、联系人、导出文件及认证凭据保留在调用方的本地环境，不进入网页或公开仓库；服务读取与解密由 WeFlow 本体负责。",
-  productPrinciples: [
-    { title: "先读对，再总结", detail: "账号、会话、时间窗口和最新消息是否一致，会直接改变结论。信息不足就保留缺口，不把空响应或转发内容当成目标会话的完整历史。" },
-    { title: "接口说明与执行能力分清", detail: "WeFlow 提供数据，消费方负责请求和分析，本项目提供约定与检查。OpenAPI 标记不会自动关闭服务端接口，Schema 文件也不会自动替消费者验证结果。" },
-    { title: "日常检查尽量不打扰桌面", detail: "已有任务通过 VBS 静默调用脚本。目标进程缺失时才尝试启动一次；目标已运行却不健康时先留下诊断结果，避免反复开出冲突实例。" },
-    { title: "只保存各自真正需要的结果", detail: "公开仓库保存代码与不含私人正文的示例；实际任务可以在获准的私有位置使用所需内容。公开元数据格式不等于所有私人工作都只能保留数字，也不授权建立全账号归档或后台分析。" },
-    { title: "完整性检查不冒充完整备份", detail: "两遍读取相同文件的结果，可以帮助发现漏文件或变化；它不能替代导出端的完成状态、账号覆盖检查、数据库恢复或长期不可变保存。" }
-  ],
+  productPrinciples: [{"title":"先确认读对来源，再总结","detail":"账号、会话和时间范围错了，结论就可能错。最新消息对不上或读到空白时，先交代缺口。"},{"title":"接口说明不会替人执行","detail":"WeFlow 提供数据，调用方负责请求和分析；本项目说明如何用、如何检查。文档上的“允许读取”标记不自动拦截服务请求，结果格式文件也要由调用方实际验证。"},{"title":"日常检查尽量不打扰桌面","detail":"已有任务安静检查选定的程序；目标缺失才尝试启动一次，已有程序不健康时留下问题，不反复开新实例。"},{"title":"私人内容只进获准的任务","detail":"公开仓库只放代码和虚构样例；真实消息按本次问题在获准位置处理，公开元数据也不等于授权建立全账号档案。"},{"title":"文件核对不冒充完整备份","detail":"两遍读到同一组字节，只说明指定文件集当时稳定；账号覆盖、导出完成和数据库恢复仍要分别验证。"}],
   components: [
     { name: "WeFlow / 微信客户端", responsibility: "实际数据来源", implementation: "微信维护本地数据库，WeFlow 负责访问、解密与 HTTP 服务。本仓库没有实现另一套解密器或微信数据库。" },
     { name: "docs/openapi.yaml", responsibility: "接口地图", implementation: "描述会话、联系人、消息、群成员、朋友圈、健康和推送端点；标出推荐读取项及不默认给 AI 调用的操作。" },
@@ -104,14 +100,15 @@ const wechatHistoryAiBridgeProject = {
     { term: "Boot Guardian（开机守卫）", meaning: "注册登录触发和定期检查任务的脚本；WeFlow 和微信仍需要已登录的交互桌面。" },
     { term: "MetadataOnly（纯元数据探测）", meaning: "跳过消息正文端点，但不等于不访问业务数据，也不等于免凭据。" }
   ],
-  operatingFlow: [
+  technicalOperatingFlow: [
     { title: "按任务选择读取路线", detail: "明确需要 WeFlow HTTP 适配时使用本项目。当前日常微信 Skill 走 WeChatDirect，不为本页将默认路线切回 WeFlow。" },
     { title: "确认来源和可读范围", detail: "调用方检查服务、当前账号库和目标会话，按用户问题选择联系人、群成员、朋友圈或指定消息范围；版本变化后重新核对接口行为。" },
     { title: "读取并保留上下文", detail: "最新消息检查最后时间，历史按 since/end/offset 续页，记录 hasMore、nextSince、nextOffset、watermark；引用和媒体线索与消息一起理解。" },
     { title: "给出结果与缺口", detail: "分析由具体 AI 完成；结果说明来源、范围、消息数与不确定性。公开元数据采用契约格式，私人正文仍留在获准的任务环境。" },
     { title: "运行异常时按证据恢复", detail: "脚本区分配置缺失、接口失败和进程缺失；看门狗不会反复启动已存在的目标实例。文件核验失败则保留未完成状态，不能冒充备份成功。" }
   ],
-  responsibilities: ["说明 WeFlow 的真实接口、版本与读取方式。", "维护账号判断、增量分页、引用和媒体线索的消费契约。", "提供可验证的公开元数据格式和虚构示例。", "提供本地自检、静默启动及多配置有界检查。", "核验已取得的账号级文件集并输出字节清单。"],
+  operatingFlow: [{"title":"先检查本机来源","detail":"明确使用 WeFlow 时，AI 先查服务、当前账号库及目标会话；服务缺失或账号不明就停在实际缺口。日常默认微信 Skill 仍走 WeChatDirect。"},{"title":"限定账号与会话","detail":"按问题取最新、历史或朋友圈资料；历史要续页并保留引用线索。"},{"title":"说明结果和缺口","detail":"AI 给出来源、时间范围和覆盖情况；健康入口有响应不等于真实聊天已读或全量历史完整。"},{"title":"维护另走专门入口","detail":"看门狗、业务探测和私人文件快照按明确目标分别进行，公开页只展示安全的元数据与旧证据日期。"}],
+  responsibilities: ["告诉 AI 选定的 WeFlow 来源能读取什么，以及怎样确认账号与会话。","按问题读取最新或历史消息，保留回复关系和媒体线索，分页不全就说明缺口。","公开结果只留下可检查的来源和范围信息，不放真实聊天正文。","提供本机服务检查、按配置启动和有界恢复入口。","对已经合法取得的文件集核对字节，交给实际使用它的项目继续判断。"],
   exclusions: ["本仓库不实现微信数据库解密或另一套聊天数据库。", "不内置总结模型，不自动发消息、删除朋友圈或同步到云端。", "不在公开仓库保存真实聊天、联系人、媒体、数据库或可复用凭据。", "不以旧下游示例恢复已经退役的中央个人系统。", "不把 WeFlow 健康响应当成 WeChatDirect 的验收结果。"],
   failures: [
     { condition: "服务端口无响应", response: "区分 API 设置、目标进程和配置目录。进程缺失时看门狗只启动一次；已存在时记录异常，不循环重启。" },
@@ -126,11 +123,7 @@ const wechatHistoryAiBridgeProject = {
     { ask: "接口是不是坏了？检查结果别把聊天文字打印出来。", effect: "只看服务可先查 /health；需要业务自检时使用元数据模式，返回端点成功状态、形状和计数，失败明确退出。", moduleSlug: "metadata-first-probe-and-boundary-verification" },
     { ask: "这批已经取得的文件有没有在检查中变动，给我一份清单。", effect: "按指定文件集计算哈希并完整回读，成功给清单与收据；发现不一致则返回失败，不宣称完成备份。", moduleSlug: "private-snapshot-integrity-and-consumer-handoff" }
   ],
-  evolution: [
-    { date: "2026-07-09", result: "形成以 WeFlow 26.7.3 为基线的 AI 消费契约、OpenAPI、公开元数据 Schema 和自检入口。" },
-    { date: "2026-08-05—2026-08-06", result: "补齐多配置静默启动与有界等待；新增外部私有文件集两遍回读工具及输出边界。" },
-    { date: "2026-08-30", result: "自检把必需端点失败落实为失败退出，避免只要健康端点有响应就报告总体成功。" }
-  ],
+  evolution: [{"date":"2026-07-09","title":"先说清 AI 怎样读微信来源","result":"以当时的 WeFlow 版本为基线，说明账号、会话、消息和返回结果该如何检查。"},{"date":"2026-08-05—2026-08-06","title":"兼顾多份配置和已取得文件","result":"登录检查能认准不同配置，已合法取得的私有文件集可做两遍字节核对。"},{"date":"2026-08-30","title":"服务有响应不再等于资料都能读","result":"必需的业务入口失败会明确返回失败，不能只因为健康页面正常就宣布读取完成。"}],
   sources: [
     { path: "README.md / AGENTS.md / project_manifest.json", role: "项目职责、版本、实际入口及机器清单。" },
     { path: "docs/ai_consumer_contract.md / docs/openapi.yaml", role: "账号、消息、联系人、群成员、朋友圈和消费规则。" },
@@ -145,6 +138,9 @@ const wechatHistoryAiBridgeProject = {
 const wechatHistoryAiBridgeModules = [
   {
     id: "ai-consumer-contract-and-metadata-envelope", slug: "ai-consumer-contract-and-metadata-envelope", order: 1,
+    usageEntry: "只有明确选择 WeFlow 适配时，在已接通 WeFlow 的 AI 环境中说出目标会话和时间范围；日常默认微信读取仍走 WeChatDirect。",
+    usageInputs: ["要查的联系人或会话","问题与时间范围","是否明确使用 WeFlow"],
+    productFlow: [{"title":"确认库和会话","detail":"先核对账号、目标及可读范围，证据不足就保留未知。"},{"title":"按问题读取","detail":"最新消息查当前列表；历史分段续页并保留时间、引用与媒体线索。"},{"title":"说明结论和覆盖","detail":"AI 分析后给出来源、范围、数量和缺页状态；公开只留契约元数据，私人正文仍在获准环境。"}],
     title: "AI 消费契约与消息上下文", shortTitle: "AI 消费契约", kicker: "读对账号、时间和回复关系，再形成结论",
     value: "把“找哪段微信记录”拆成能核对的读取步骤：确认当前账号库，选择最新或历史窗口，保留回复关系和媒体线索，并把读取范围与缺口交给 AI。",
     status: "契约与虚构示例已验证", statusTone: "accent",
@@ -153,7 +149,7 @@ const wechatHistoryAiBridgeModules = [
     result: "AI 获得带来源、时间范围和上下文关系的材料；公开保存时另生成不含正文的元数据结果。总结本身由消费方完成，这个仓库没有内置分析模型。",
     teaser: "最新消息自检、历史续页、回复引用和媒体清单各自保留。",
     problem: "一次成功响应只证明取得了这一批数据，不能证明账号正确、历史完整或媒体齐全。",
-    readerStates: { pass: "目标账号与会话匹配，所选窗口已按分页信息读取，结果保留消息数量、来源和引用。", problem: "最新时间不一致或单次为空时记录重试和缺口，必要时调整读取范围。", unavailable: "账号不能确认或目标不在当前库时，只能说明当前来源读不到，不能代替用户切换身份或编造内容。" }, stateLabels,
+    readerStates: {"pass":"当前账号和目标会话吻合，选定时段的消息已按实际页数读取，并保留数量、来源和回复线索。","problem":"最新消息时间对不上或一次读取为空时先查范围与缺页，不编完整总结。","unavailable":"无法确认账号或目标不在当前库时，只说明这份来源读不到，不替本人切换账号。"}, stateLabels,
     decisionImpact: ["最新查询用无日期 limit=100，与 sessions.lastTimestamp 比较，避免日期参数造成错误遗漏。", "历史查询使用 since/end/offset；保存 hasMore、nextSince、nextOffset 与 watermark，不能只记一个水印就宣称分页完整。", "回复、引用和有关媒体可能改变含义，不能只取纯文本摘要。", "公开元数据格式和私人运行中的正文是不同产物，不把格式文件说成自动脱敏器。"],
     concepts: [
       { term: "ChatLab Pull（按页拉取）", explanation: "GET /api/v1/sessions/{id}/messages 返回 chatlab、meta、members、messages、sync；适合指定窗口的历史或增量读取。" },
@@ -168,19 +164,23 @@ const wechatHistoryAiBridgeModules = [
     sources: [{ path: "docs/ai_consumer_contract.md", role: "完整取数和失败语义。" }, { path: "schemas/ai-consumer-envelope.v2.schema.json", role: "公开元数据的机器格式。" }, { path: "docs/examples/ai_consumer_envelope.example.json", role: "不含真实数据的格式示例。" }],
     verification: ["源码 31 项测试中包含契约字段、合法示例和非法格式检查。", "本轮没有执行真实账号判断、历史读取、回复还原或媒体读取。"],
     searchProjection: { intents: ["WeFlow 怎么读取微信群最新消息", "微信历史记录如何分页增量读取", "怎样保留群聊中的回复和引用", "微信接口读错账号或返回空怎么办"], entities: ["AI Consumer Contract v2", "ChatLab Pull", "lastTimestamp", "nextSince", "nextOffset", "sync.watermark", "replyToMessageId", "media_manifest"], relations: ["先核对当前账号库再读取目标会话", "分页位置和回复关系决定材料完整程度"], failureRecovery: ["时间不一致时重试并披露缺口", "当前库未找到不等于会话不存在"] },
-    relation: "使用接口模块中的数据入口，并依靠自检和运行模块确认 WeFlow 是否可服务；分析决定仍由消费方承担。"
+    relation: "使用接口模块中的数据入口，并依靠自检和运行模块确认 WeFlow 是否可服务；分析决定仍由消费方承担。",
+    readerStatus: "微信读取契约与虚构示例已有验证；它指导调用方按范围取数，本轮未读取真实会话或重新核对运行状态。"
   },
   {
     id: "public-safe-openapi-and-endpoint-governance", slug: "public-safe-openapi-and-endpoint-governance", order: 2,
+    usageEntry: "在已接通本机 WeFlow 的 AI 环境中按问题选择会话、联系人、群成员、消息或朋友圈只读接口；普通查询不顺带导出、删除或发送。",
+    usageInputs: ["想查会话、联系人、群成员、消息还是朋友圈","目标与时间范围"],
+    productFlow: [{"title":"AI 定位对应接口","detail":"先用会话索引找到目标，再依问题读取联系人、群成员、消息或朋友圈；接口失败就说清是哪一类。"},{"title":"按范围取页","detail":"最新与历史走对应端点，返回不全就继续分页而非声称全量。"},{"title":"交回边界","detail":"解释哪些是本地可读、哪些仍未知；推送未启用或接口变化时停在实际结果。"}],
     title: "WeFlow 接口地图与调用边界", shortTitle: "接口地图", kicker: "消息、联系人、群成员和朋友圈分别从哪里读",
-    value: "把 WeFlow 能读什么、传什么参数、会返回什么写清楚，让调用者选择对应入口，并区分普通读取、导出、删除、钩子安装和实时原始流。",
+    value: "把会话、联系人、群成员、消息和朋友圈的不同读取入口说明清楚；导出、删除与实时流是另行明确的动作。",
     status: "26.7.3 接口文档与标记已验证", statusTone: "accent",
     why: "查一个群的成员、看指定窗口的消息、看朋友圈时间线是不同问题。仅说“微信 API”会掩盖输入和结果差异，也容易误把导出或删除当成查询。",
     example: "“这个群有哪些成员？顺便确认我需要的讨论能从哪里读取。”群成员接口提供成员及可用角色信息，聊天历史走独立消息接口；如果要看朋友圈，另选时间线或统计，不把它们拼成一套未经验证的完整社交档案。",
-    result: "得到版本明确的 OpenAPI（机器可读接口说明）3.1.0 文档。它指导客户端构造请求，但不是代理服务器，也不会在 HTTP 层拦截请求。",
+    result: "得到当前版本的接口说明，供已接通的调用方选择正确请求。文档本身不会代发请求，也不替服务端拦截越界操作。",
     teaser: "接口用途、鉴权、读取参数、写操作和推流边界一并说明。",
     problem: "同一服务既有只读查询也有产生副作用的操作，不能只根据 GET/POST 或一个成功状态就判断任务含义。",
-    readerStates: { pass: "选择与目标相符的入口，按版本契约传参；联系人、群成员、消息与朋友圈分别返回自己的数据。", problem: "版本变更、401 或响应与文档不符时先核对源服务和契约；旧文档不能证明新版本兼容。", unavailable: "写操作及原始推送流未作为默认 AI 消费入口开放；需要这些能力时不能把文档标记当成已经实施了相应调用。" }, stateLabels,
+    readerStates: {"pass":"调用方按目标选择对应接口，实际返回目标资料及明确范围。","problem":"版本或返回结果与文档不一致时先查来源服务，不拿旧文档保证新版本。","unavailable":"普通 AI 读取不包含删除和原始实时流；文档上的标记不会自动限制服务端。"}, stateLabels,
     decisionImpact: ["/health 无需鉴权，数据接口需要本地有效 token；健康通过不等于数据访问通过。", "只读查询有些支持 GET 和 POST 两种参数形式；POST 本身不等于更改微信数据。", "x-weflowbridge-ai-preferred 是推荐标记，x-weflowbridge-ai-allowed:false 是消费约定；调用方负责执行约定，本仓库没有网络拦截器。", "SSE（服务器推送事件）是实时原始流，不是默认 AI 元数据封套；上游需打开主动推送开关。"],
     concepts: [{ term: "OpenAPI 3.1", explanation: "描述服务地址、端点、参数、鉴权和响应结构的机器文档；不自动实现服务功能。" }, { term: "Bearer token（请求凭据）", explanation: "数据请求推荐使用 Authorization: Bearer <token>；具体值只由本地配置或凭据入口提供。" }, { term: "SSE（服务器推送事件）", explanation: "WeFlow 的 message.new / message.revoke 实时流；浏览器 EventSource 通过查询参数携带凭据，不能将带值 URL 写进公开日志。" }],
     implementation: ["docs/openapi.yaml 以默认 http://127.0.0.1:5031 为服务地址，声明 bearerAuth 与数据模型。", "会话、联系人、messages、group-members 包含 GET/POST 形式；ChatLab 历史消息单独定义 since/end/limit/offset。", "四类写操作标记为 x-weflowbridge-ai-allowed:false：sns/export、sns/post/{id} 删除、block-delete/install、block-delete/uninstall；push 也标为非默认 AI 入口。"],
@@ -190,10 +190,14 @@ const wechatHistoryAiBridgeModules = [
     sources: [{ path: "docs/openapi.yaml", role: "版本化接口、参数与标记。" }, { path: "AGENTS.md / README.md", role: "上游实测注意事项和入口用途。" }, { path: "project_manifest.json", role: "版本基线与职责声明。" }],
     verification: ["自动化测试覆盖必需端点、写操作标记和推流非默认语义。", "本轮只请求两个 /health；没有验证上述真实业务响应。"],
     searchProjection: { intents: ["WeFlow 能读取哪些微信接口", "联系人群成员朋友圈分别怎么查", "OpenAPI 能不能自动阻止删除朋友圈", "WeFlow 推送流返回403是什么原因"], entities: ["docs/openapi.yaml", "OpenAPI 3.1.0", "sessions", "contacts", "group-members", "sns/timeline", "sns/export/stats", "x-weflowbridge-ai-allowed", "SSE"], relations: ["API 文档指导调用而不代理 HTTP 请求", "群成员与朋友圈有独立输入和结果"], failureRecovery: ["401 核对凭据", "版本变化后重新验证接口", "推流未启用不影响普通查询的职责边界"] },
-    relation: "为 AI 取数契约和 probe 脚本提供接口定义，实际数据访问和服务端行为归 WeFlow。"
+    relation: "为 AI 取数契约和 probe 脚本提供接口定义，实际数据访问和服务端行为归 WeFlow。",
+    readerStatus: "已有对应旧版WeFlow的接口说明；文档不提供服务器，也不能证明今天的版本和实际消息读取可用。"
   },
   {
     id: "boot-guardian-and-multi-profile-watchdog", slug: "boot-guardian-and-multi-profile-watchdog", order: 3,
+    usageEntry: "只有明确维护 WeFlow 启动链时，管理员运行 weflow_boot_guardian.ps1 登记默认 5031；其他 profile 由各自配置负责人处理。",
+    usageInputs: ["需要维护哪个 WeFlow 配置","是否明确登记登录后自启"],
+    productFlow: [{"title":"先认准要守护的配置","detail":"默认任务只管默认 WeFlow；本人指定另一份配置时，目录缺失就直接报错。"},{"title":"登录后检查一次","detail":"看目标服务和进程是否可用；已经在运行时不重复启动，缺失才尝试一次。"},{"title":"交回恢复或失败","detail":"短暂等待后报告结果；任务显示就绪不等于下一次冷启动或桌面画面已验收。"}],
     title: "登录启动与多配置看门狗", shortTitle: "开机看门狗", kicker: "缺进程才启动一次，后台检查不反复开窗口",
     value: "登录 Windows 后按已有任务启动 WeFlow，并定期检查选定配置。检查脚本通过 VBS 隐藏窗口运行，支持独立 profile（配置目录），避免其他实例干扰当前实例的判断。",
     status: "已有任务状态正常；本轮未重做冷启动", statusTone: "accent",
@@ -202,7 +206,7 @@ const wechatHistoryAiBridgeModules = [
     result: "得到按配置执行的一次有界恢复尝试与日志。它能处理进程缺失，不承诺修复程序内部卡住、账号失效或错误配置。",
     teaser: "静默包装、配置匹配、30 秒等待、双开任务保留与登录前提。",
     problem: "错误匹配实例会漏启动或重复启动；在用户尚未登录时把 GUI 程序当系统服务，也不能保证实际可用。",
-    readerStates: { pass: "服务检查成功则退出 0；目标缺失时启动一次并在有界时间内确认端口恢复。", problem: "目标主进程存在但检查失败时退出 1，留下日志；不会把繁忙、假死或账号问题擅自归为同一种故障。", unavailable: "显式配置目录不存在时退出 2，拒绝创建空 profile；缺少安装程序或启动后仍不通时返回失败。" }, stateLabels,
+    readerStates: {"pass":"选定配置的服务已响应；缺进程时只尝试启动一次，并确认是否恢复。","problem":"程序还在但接口不通时留下日志，不反复启动第二份程序。","unavailable":"指定配置目录不存在或程序无法启动时停止，并说明是哪个配置。"}, stateLabels,
     decisionImpact: ["默认零参数检查端口 5031 与没有 --user-data-dir 的主实例；独立配置需提供真实已存在目录和其 API 端口。", "HTTP /health 先行、TCP 回退。TCP 成功只说明能连端口，不能证明它返回了有效微信数据。", "PCConfig 标记 owner=pcconfig.wechat-dual-autostart.v1 存在时保留同名微信双开任务；没有标记才按旧独立注册行为处理。", "VBS 隐藏的是脚本窗口；WeFlow 窗口隐藏由 -HiddenLaunch 控制，不能把两者混为一谈。"],
     concepts: [{ term: "Boot Guardian（开机守卫）", explanation: "任务注册器。默认创建 WeFlow Watchdog 登录与每 15 分钟触发任务，并按负责人标记处理 WeChat AutoStart。" }, { term: "Interactive Logon（交互登录）", explanation: "任务在已登录的桌面会话运行；尚未登录不是可宣称完成的无人值守状态。" }, { term: "VBScript（Windows 脚本语言）静默包装", explanation: "WScript.Shell.Run 使用窗口模式 0，等待 PowerShell 完成并回传退出码；参数被逐个引用。" }],
     implementation: ["weflow_heartbeat.ps1 支持 -Port、-UserDataDir、-InstanceName、-LogPath、-NoProxyServer、-HiddenLaunch。", "Get-TargetWeFlowProcess 忽略 Electron 带 --type 的子进程，按完整规范化配置路径进行大小写不敏感匹配；其他 WeFlow 实例不阻止目标启动。", "HTTP 超时 2 秒，TCP 连接等待 1500 毫秒；启动等待基线 30 秒，每次检查后返回明确退出码。单次探测耗时意味着总墙钟不保证恰好 30 秒。", "默认程序路径为 C:\\Program Files\\WeFlow\\WeFlow.exe，微信注册路径为 C:\\Program Files\\Tencent\\Weixin\\Weixin.exe；本轮两路径均存在，不为尚未发生的其他安装布局虚构自动发现能力。", "注册器优先 wscript.exe 调用 VBS，缺 VBS 时用隐藏 PowerShell 参数；微信自启只在登录时触发，没有微信重启看门狗。", "-NoProxyServer 使用 Electron 自身的代理绕过选项，不修改系统代理，也不假设某个代理端口。"],
@@ -212,19 +216,23 @@ const wechatHistoryAiBridgeModules = [
     sources: [{ path: "WATCHDOG.md", role: "部署条件与多配置使用说明。" }, { path: "weflow_heartbeat.ps1 / weflow_heartbeat.vbs", role: "匹配、探测、启动、等待和退出行为。" }, { path: "weflow_boot_guardian.ps1 / enable-autologin.ps1", role: "明确的机器配置入口，读取不等于执行。" }],
     verification: ["源码测试检查参数、进程匹配结构和 PCConfig 任务保留规则；它们不是本轮冷启动实机测试。", "2026-09-08T02:37:25.8272891Z：WeFlow Watchdog 与 WeChat AutoStart 为 Ready、最近结果 0；5031 与 16000 的 /health 为 200。"],
     searchProjection: { intents: ["WeFlow 登录后自动启动", "后台每十五分钟闪黑框", "WeFlow 多配置独立端口看门狗", "WeFlow 进程存在但接口不通怎么办"], entities: ["weflow_heartbeat.ps1", "weflow_heartbeat.vbs", "weflow_boot_guardian.ps1", "UserDataDir", "NoProxyServer", "HiddenLaunch", "pcconfig.wechat-dual-autostart.v1"], relations: ["缺失的目标配置才启动一次", "VBS 脚本隐藏和应用窗口隐藏是两件事", "PCConfig 双开任务保留"], failureRecovery: ["缺目录退出2", "已运行但端口不通退出1", "启动失败保留日志，不循环重启"] },
-    relation: "给显式使用 WeFlow 的调用者提供运行辅助；不接管微信双开配置，也不改变现役 WeChatDirect 路线。"
+    relation: "给显式使用 WeFlow 的调用者提供运行辅助；不接管微信双开配置，也不改变现役 WeChatDirect 路线。",
+    readerStatus: "登录后有界启动的任务保留历史正常记录；本轮没有启动程序或重新验证冷启动。"
   },
   {
     id: "metadata-first-probe-and-boundary-verification", slug: "metadata-first-probe-and-boundary-verification", order: 4,
+    usageEntry: "明确维护 WeFlow 适配时，运行 probe-weflow.ps1 -Json -Mode MetadataOnly -NoMessages；它仍会请求会话等业务元数据，真实正文检查须另选模式与范围。",
+    usageInputs: ["只要服务健康、业务元数据还是确需消息正文","要诊断的故障"],
+    productFlow: [{"title":"先确定要查到哪一层","detail":"只需要知道服务有没有响应就查健康；需要业务自检时才读会话等元数据，默认不读聊天正文。"},{"title":"逐类报告结果","detail":"告诉本人哪些必需入口成功、哪些失败，不把原始消息打印到报告。"},{"title":"按缺口继续","detail":"元数据通过仍不能证明账号匹配或历史齐全；真实账号和虚构测试各自说明。"}],
     title: "元数据自检与项目验证", shortTitle: "接口自检", kicker: "检查接口是否响应，失败就明确失败",
     value: "需要排查 WeFlow 接口时，输出端点成功状态、数据形状、数量和是否带同步信息，避免把消息正文直接打印在终端。需要更窄的观察时，可以只查无需鉴权的健康入口。",
     status: "隔离失败分支通过；真实业务自检未执行", statusTone: "accent",
     why: "只看到程序在运行，并不能说明会话或联系人接口可用。自检也不能因为一个健康端点成功就忽略其他必需接口失败。",
     example: "“接口是不是坏了？检查结果别打印聊天文字。”只问服务就查 /health；如果确实要检查业务接口，元数据模式会请求会话、联系人等数据，再仅输出汇总形状。缺配置、必需端点失败和可选端点失败会分别说明。",
-    result: "得到一份明确的检查结果和退出码。它说明观察到了哪些响应，不证明聊天历史完整，也不以字段名称存在代替完整业务验证。",
+    result: "得到各类接口有没有响应、返回了多少及仍缺什么；默认不打印聊天正文。健康入口通过不能证明目标账号或聊天历史完整。",
     teaser: "无消息正文端点、明确必需项、准确退出码与统一测试入口。",
     problem: "元数据模式若被理解成“不需要凭据”或“不访问任何私人数据”，就会误判它的真实读取范围。",
-    readerStates: { pass: "五个必需端点成功，脚本返回 ok=true；输出形状和数量供查看。", problem: "任一必需项缺失或失败时 ok=false、退出 1；可选项失败单独保留，不伪装全部端点通过。", unavailable: "没有 .env 时 JSON 模式返回 missing_env 和退出 1；没有有效数据凭据也不能用 /health 的成功替代。" }, stateLabels,
+    readerStates: {"pass":"本次明确要求检查的业务入口都返回预期范围，报告只留汇总信息。","problem":"必要入口失败就报告失败；其他可选入口的缺口另外列出。","unavailable":"缺本地配置或数据访问条件时停止业务检查；单独健康检查仍只能说明服务有响应。"}, stateLabels,
     decisionImpact: ["MetadataOnly（纯元数据探测）跳过 messages 和 ChatLab 消息正文请求，但会读取 sessions、contacts、群成员和朋友圈统计的响应后做投影。", "五个必需项是 GET /health、GET sessions?limit=3、GET sessions?format=chatlab、GET contacts?limit=3 和 GET sns/export/stats。", "JSON 输出只记录 shape、count、sync_present 等观察值；脚本不会把响应与完整 OpenAPI Schema 自动逐项比对。", "FullProbe（完整探测）默认模式可能请求真实消息，不能为了本页构建无条件执行。", "现有公开检查只覆盖它实际枚举和解析的文件，不是 Git 历史全量检查，也不是自动安装的提交钩子。"],
     concepts: [{ term: "MetadataOnly（纯元数据探测）", explanation: "不调用消息正文端点；需要本地配置及数据接口凭据，会接触其他业务响应但不将其原样输出。" }, { term: "Shape（返回形状）", explanation: "对象最前面的属性名列表；记录它不等于验证这些字段内容符合全部业务约定。" }, { term: "CI（自动化集成检查）", explanation: "此项目统一用 test-ci-local.ps1 发现并运行 tests/test_*.py，然后执行已有公开边界检查。" }],
     implementation: ["probe-weflow.ps1 读取本地 .env，JSON 模式使用 Invoke-JsonRequest 收集状态，Get-RequiredEndpointFailures 汇总五个必需项。", "每个 HTTP 请求设置 8 秒超时，按需顺序探测；不存在已经证明的毫秒级整体完成承诺。", "Get-Shape 最多记录前 10 个属性名，Get-ResultCount 从 count/total 或已知集合取数量；这些是观察，不是内容真实性验证。", "本地 CI 改为 python -m unittest discover -s tests -p \"test_*.py\"，覆盖 26 项契约和 5 项快照测试；GitHub Actions 不再重复运行旧的 26 项子集。", "test-public-boundary.ps1 检查当前已跟踪路径、忽略规则、文本和 PowerShell 语法；PDF 文本依赖 pdftotext，可缺失而被脚本跳过，必须单列。"],
@@ -234,19 +242,23 @@ const wechatHistoryAiBridgeModules = [
     sources: [{ path: "probe-weflow.ps1", role: "探测范围、输出与退出条件。" }, { path: "tests/test_project_contracts.py", role: "配置缺失、健康失败、必需失败和可选失败的接口替身。" }, { path: "tools/test-ci-local.ps1 / .github/workflows/contract.yml", role: "统一测试入口。" }, { path: "tools/test-public-boundary.ps1", role: "已有公开检查及 PDF 跳过条件。" }],
     verification: ["当前完整 31 项源码测试通过；其中 4 个探测行为场景由 PowerShell 接口替身执行。", "将虚构 test_private_snapshot_manifest.py 设为失败后，实际本地 CI 退出 1，未执行后续边界脚本。", "GitHub Actions 34180971929 对同一 master 提交执行 31 项测试及 PDF 文本检查并成功完成。", "真实 /health 为 200；数据接口与账号并未在本轮访问。"],
     searchProjection: { intents: ["不打印聊天文字检查 WeFlow 接口", "MetadataOnly 是否需要 token", "WeFlow 健康成功但业务接口失败", "WeChat History AI Bridge 本地测试怎么运行"], entities: ["probe-weflow.ps1", "MetadataOnly", "FullProbe", "required_endpoint_failures", "test-ci-local.ps1", "test_private_snapshot_manifest.py"], relations: ["不输出正文不等于不读取业务响应", "必需接口失败落实为失败退出", "本地和远端CI使用同一完整测试入口"], failureRecovery: ["缺配置退出1", "必需失败不得报告总体成功", "跳过PDF文本检查单独说明"] },
-    relation: "为接口维护提供观察和回归验证，不能代替真实任务读取或运行恢复验收。"
+    relation: "为接口维护提供观察和回归验证，不能代替真实任务读取或运行恢复验收。",
+    readerStatus: "错误分支已用隔离测试验证；本轮没有执行真实业务自检，健康端点成功也不能代替业务接口。"
   },
   {
     id: "private-snapshot-integrity-and-consumer-handoff", slug: "private-snapshot-integrity-and-consumer-handoff", order: 5,
+    usageEntry: "在取得合法且稳定的 WeFlow 导出文件后，运行 tools/build_private_snapshot_manifest.py，指定 --source-root、全新外部 --destination 和 --source-instance-id。",
+    usageInputs: ["已经合法取得的稳定导出文件集","新检查结果的保存位置","对应账号或来源的标识"],
+    productFlow: [{"title":"先准备稳定来源","detail":"取得方先完成合法导出，不能把仍在写入的目录当作固定快照。"},{"title":"工具两遍核对","detail":"逐文件记录大小与内容，再重新列目录和读一遍；变化就停并保留未完成结果。"},{"title":"把收据连同原件交接","detail":"消费方取得文件和核对结果；数据库能否真的恢复，还要用对应工具另验。"}],
     title: "私有文件集回读与交接", shortTitle: "文件回读交接", kicker: "核对已取得的文件，不把清单当成备份",
     value: "对已经取得、属于一个明确来源实例的私有文件集，列出每个文件的大小与哈希，再完整读第二遍核对；让消费方知道本次检查是否读到了同一组字节。",
     status: "虚构文件回读测试通过", statusTone: "accent",
     why: "复制或取得一批数据库和媒体文件后，仅看目录存在不能证明文件齐全或检查期间没有变化。另一方面，生成一份清单也不能凭空补全原始导出，所以两者必须分开。",
     example: "“这批已经取得的文件，给我核对一下并留一份清单。”工具逐个计算哈希、重新列目录再读一遍；一致时给出文件数、字节数和回读收据。空目录、已有输出或文件变化时明确失败，源文件保持原样。",
-    result: "得到 files.jsonl、manifest.json、readback-receipt.json 和 progress.json。它们是普通 JSON 检查记录，没有数字签名；原始文件仍位于外部来源目录，不会被这个工具复制成另一份备份。",
+    result: "得到文件清单和两遍核对收据，原始文件仍在取得方的目录。收据只能证明这组文件当时读回一致，不能替代导出完成或数据库恢复。",
     teaser: "文件清单、两遍 SHA-256、失败暂存区与明确的证明范围。",
     problem: "把哈希结果说成“不可变快照”会掩盖源目录仍可变化、导出可能不完整，以及工具并未解密或验证数据库业务内容。",
-    readerStates: { pass: "两遍文件内容和集合检查一致，输出目录由 .incomplete 改成指定最终名称，收据记录 verified（本次核对通过）。", problem: "发现文件集合、大小、时间或哈希不一致时失败；可能保留 .incomplete 供诊断，不自动删除暂存材料。", unavailable: "空源、已存在目标、仓库内输出或源目标相互包含时拒绝；可读来源需要由实际取得它的项目先准备。" }, stateLabels,
+    readerStates: {"pass":"两遍读到同一组文件与内容，才发布本次核对收据。","problem":"文件变动或漏项时留下未完成结果供排查，不自动抹掉现场。","unavailable":"来源为空、目标已存在或来源与目标互相包含时拒绝开始；取得方先准备合法稳定的文件集。"}, stateLabels,
     decisionImpact: ["按一个账号来源实例分别检查；一个账号的一次成功不证明另一个账号也完整。", "工具只读字节，不解析 SQLite、语音或媒体，不负责获取、解密、导出和恢复。", "外部私有目标与本仓库分开，且与源目录不能相互包含；已存在目标不覆盖。", "源目录中的符号链接和重解析项按实现拒绝，避免跨越被选文件集；不要把这一行为扩写成对所有文件系统变动的完整证明。", "导出是否完成、版本是否匹配、账号和覆盖是否正确，需要交接方另外核对，不能由哈希工具单独宣告。"],
     concepts: [{ term: "Readback Receipt（回读收据）", explanation: "普通 JSON 结果，记录文件数、总字节、集合指纹和清单文件哈希；不是数字签名，也不会阻止结果文件被修改。" }, { term: "Reparse Point（重解析点）", explanation: "目录联接或符号链接等文件系统项。本工具不跟随源集合内部这些项，避免把别处文件混入范围。" }, { term: "external_read_only_reference（外部只读引用）", explanation: "结果引用已存在的外部源文件；没有复制数据，所以清单目录不能独立替代原件。" }],
     implementation: ["tools/build_private_snapshot_manifest.py 使用 8 MiB 分块计算 SHA-256；首遍保存相对路径、size_bytes、mtime_ns、sha256。", "输出 weflowbridge.private-snapshot-manifest.v1，记录 source_instance_id、payload_mode、file_count、total_bytes、snapshot_fingerprint 和 files_manifest。", "第二遍重新枚举文件，比较集合与顺序，再逐个重算哈希并检查大小和修改时间；结尾再次比较目录集合与文件标识。", "成功结果为 weflowbridge.private-snapshot-readback-receipt.v1，包含 verification=full_sha256_second_pass 和两份清单哈希。", "每 1000 文件默认更新进度，也可调 progress_interval_files；先写 .incomplete，完成后重命名，失败不把暂存目录当最终交付。"],
@@ -256,7 +268,8 @@ const wechatHistoryAiBridgeModules = [
     sources: [{ path: "tools/build_private_snapshot_manifest.py", role: "文件列举、两遍哈希、进度与完成输出。" }, { path: "tests/test_private_snapshot_manifest.py", role: "5 项虚构文件和目录边界测试。" }, { path: "docs/ai_consumer_contract.md / project_manifest.json", role: "来源、版本、账号与交接责任要求。" }],
     verification: ["5 项既有测试通过：外部虚构文件成功、已有目标保留、仓库内输出拒绝、源目标嵌套拒绝和空源拒绝。", "成功样例的 2 个文件写入清单并完整回读，输出本身不包含虚构原始文件正文。", "没有把这 5 项写成真实数据库解密、恢复或全部并发改动场景都已验证。"],
     searchProjection: { intents: ["已经导出的微信文件怎样核对完整性", "微信文件哈希清单是不是备份", "private snapshot 回读失败怎么处理", "readback receipt 有没有数字签名"], entities: ["tools/build_private_snapshot_manifest.py", "files.jsonl", "readback-receipt.json", "SHA-256", ".incomplete", "external_read_only_reference"], relations: ["文件字节回读与导出完整性各自验证", "收据引用外部源文件，不复制原件"], failureRecovery: ["失败可能保留incomplete目录", "已有输出不覆盖", "空源不能称完成", "源文件变化先解决取得方问题"] },
-    relation: "承接已经取得的私有文件，不替代 WeFlow 数据获取、原始导出或独立消费方的恢复责任。"
+    relation: "承接已经取得的私有文件，不替代 WeFlow 数据获取、原始导出或独立消费方的恢复责任。",
+    readerStatus: "两遍核对选定文件集合的功能已用虚构文件测试；它只写验真记录，不替代原文件备份或应用恢复。"
   }
 ];
 

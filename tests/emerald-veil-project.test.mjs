@@ -16,13 +16,14 @@ test("Emerald Veil registration preserves rank, source and complete module route
   const plan = JSON.parse(await readFile(path.join(root, "config/final-project-order.json"), "utf8"));
   const entry = registry.projects.find((item) => item.id === "emerald-veil");
   assert.ok(entry?.enabled);
-  assert.equal(entry.order, 29);
+  const planned = plan.projects.find((item) => item.id === entry.id);
+  assert.ok(planned);
+  assert.equal(entry.order, planned.final_rank);
   assert.equal(entry.source.repo, "wlyaaaaa/emerald-veil");
   assert.equal(entry.source.default_branch, "main");
   assert.equal(entry.source.visibility, "PUBLIC");
   assert.equal(entry.ai_refresh.content_path, "app/content-emerald-veil.js");
-  const planned = plan.projects.find((item) => item.id === entry.id);
-  assert.equal(planned.final_rank, 29);
+  assert.equal(emeraldVeilProject.order, planned.final_rank);
   assert.equal(planned.state, "published");
   const catalog = projectCatalog.find((item) => item.project.slug === entry.id);
   assert.ok(catalog);

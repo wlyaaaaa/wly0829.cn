@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
-  "observedAt": "2026-09-18T21:12:47.825Z",
+  "observedAt": "2026-09-24T04:52:42Z",
   "label": "四套备份仍各自恢复；Gemini兼容任务补齐Antigravity桌面与CLI轻量状态，历史介质证据保留日期",
-  "boundary": "本轮只读已发布备份范围与G/H原生指针、清单；Gemini兼容任务新增Antigravity CLI轻量状态，未重跑备份或读取私人正文。2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。 9月9日其他工具与9月14日旧恢复点仍是历史证据。",
+  "boundary": "2026-09-24 只读回读发现桌面会话 G 当前点已到 9 月 24 日（1,983 文件），H 冷盘仍在 9 月 23 日（1,928 文件）；需要较新会话时不能把 H 当作与 G 同点。两份指针及所选清单可读，不等于本轮重新逐对象哈希、实际恢复或新机登录通过。Codex 轻量 PRIVATE Git 只更新配置/记忆白名单载荷，备份机制未因快照提交改变；Gemini/Claude/OpenClaw 旧证据保持原日期，未读取冻结项目业务。",
   "metrics": [
     {
       "label": "AI工具",
@@ -11,7 +11,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "Codex对话G点",
-      "value": "1,731文件 · 7.74 GB"
+      "value": "G 当前 1,983 文件 · 9.11 GB"
     },
     {
       "label": "轻量调度",
@@ -53,7 +53,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "源版本与本轮修复",
-      "value": "Codex来源本地干净main=bc574f8，最新远端main=c5914cf1b2ab70232e22b253535636ca5dd8bdcd；GitHub compare只读确认新增离线冷盘路径解析修复，无保留语义变化。bc574f8实现桌面自动两点保留，eeb2158实现H跟G有效点。其他三套既有观察保留原日期，本轮未重新采集；不以该增量声称次机已安装最新字节。",
+      "value": "Codex轻量备份来源本地干净main=4934cada2be8b4baa6b395dc14a0e589eaa312f2，远端同值；相对前次正式来源，新提交只更新配置、记忆与清单等白名单载荷，备份脚本及恢复合同未改。桌面两点保留与H随G有效点收敛仍由旧实现承担；本轮未核次机安装，也未重新采集其他三套工具。",
       "hero": true
     },
     {
@@ -63,7 +63,7 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "G 最新会话点与活动源不同",
-      "value": "2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。 9月18日12:53 UTC独立源Inspect为1771文件、7840035917字节；这是活动源的另一观察时间，不是恢复点清单，也不是21:17重新采集。",
+      "value": "2026-09-24T04:50Z 只读 G current 与所选 manifest：点 20260924T041509Z-89eabfd3，1,983 文件、9,112,477,677 字节，指针于 04:16:22Z 发布，标注 VSS 崩溃一致性。独立源 Inspect 同时见活动源 1,989 文件、9,129,573,276 字节；活动源比恢复点多不等于捕获缺陷，两者时刻与集合不同。本轮未重哈希全部对象或恢复。9 月 18 日旧同点回读仅作历史。",
       "hero": true
     },
     {
@@ -88,12 +88,12 @@ const baseSnapshot = createProjectSnapshot({
     },
     {
       "label": "H 冷盘与数据边界",
-      "value": "2026-09-18T21:17:47Z只读G/H各自current与选中manifest：point=20260918T041508Z-8e6dcbc6、closure=89a9ff4d13437d56f600adf37b649ee1d8a87aff0797022e4e0db25fe58b8c4c，1731文件、7738969963字节，manifest SHA-256两处同为de0e0654e1cbd6d6652790c13007a739942380a147e0d5b9b4b5d60c84bd2624；H原生指针cold_readback_verified=true。没有本轮逐对象重哈希或恢复，不把活动源数量当恢复点数量。",
+      "value": "2026-09-24T04:50Z 只读 H current 与所选 manifest：仍为 20260923T041507Z-44b79c2e，1,928 文件、8,772,433,265 字节，H 指针于 9 月 23 日 06:49:40Z 发布并标注 cold_readback_verified=true。冷盘当前比 G 少一个捕获点；旧 H 点的回读不证明 9 月 24 日 G 点已复制到 H，本轮未同步介质或实做恢复。",
       "hero": true
     }
   ],
   "gaps": [
-    "Codex桌面G/H当前均指向9月18日04:15 UTC恢复点；网页本轮仅核对指针和清单，不重新读取全部对象。之后新增活动源内容仍要等下一次捕获；两盘同点不证明新机登录、应用续作或四套工具共享完整历史。",
+    "Codex桌面 G 当前为 9 月 24 日恢复点，H 冷盘当前为 9 月 23 日恢复点；选较新会话应先核实际介质和点。网页只读指针、选中清单与已有回执，不重新读取全部对象；任一点都不证明新机登录、应用续作或四套工具共享完整历史。",
     "本轮只读脚本、任务与小元数据；Codex9月7日合成去重/隔离恢复、OpenClaw既有脚本与官方归档/暂存证据保留原日期。没有重新执行生产VSS、完整对象重验、四套工具的新机恢复或登录。",
     "raw_memories 大小保护仅避免较小当前文件覆盖私有仓库的大版本；同等或更大的错误正文仍需人判断，轻量 G 快照保存的是当次源内容。",
     "桌面会话已实现并实际完成两点保留与无引用对象清理；H只保留G有效点引用的集合。大型数据库仍会产生变化对象，有界历史不等于无限历史或零增长。",
@@ -108,15 +108,15 @@ export const codexMemorySnapshot = Object.freeze({
   ...baseSnapshot,
   ...{
   "generation": "四套AI工作区的分层备份与恢复",
-  "sourceCommit": "c5914cf1b2ab70232e22b253535636ca5dd8bdcd",
+  "sourceCommit": "4934cada2be8b4baa6b395dc14a0e589eaa312f2",
   "sourceRoot": "E:\\Projects\\Backups\\codex-memory",
   "physicalCodexHome": "E:\\Data\\AppData\\Codex",
   "hotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\Codex",
   "conversationHotRoot": "G:\\80_Backup\\ControlPlane\\AIMemory\\CodexConversations",
   "conversationColdRoot": "H:\\80_自动备份区\\ControlPlane\\AIMemory\\CodexConversations\\cold-payload",
-  "currentPointId": "20260918T041508Z-8e6dcbc6",
-  "conversationFileCount": 1731,
-  "conversationTotalSizeBytes": 7738969963,
+  "currentPointId": "20260924T041509Z-89eabfd3",
+  "conversationFileCount": 1983,
+  "conversationTotalSizeBytes": 9112477677,
   "liveSourceFileCount": 1771,
   "liveSourceTotalSizeBytes": 7840035917,
   "memoryFileCount": 243,
@@ -171,7 +171,7 @@ export const codexMemorySnapshot = Object.freeze({
     {
       "role": "Codex小型状态与完整会话",
       "root": "E:\\Projects\\Backups\\codex-memory",
-      "codeObservation": "远端c5914cf已回读：包含桌面Hot自动两点保留、H随G有效点收敛及离线冷盘配置解析修复；本地仍bc574f8；来源发布、次机已安装字节与真实恢复分别保留证据"
+      "codeObservation": "PRIVATE main=4934cada 已远端回读且本地同值；新提交是白名单配置与记忆载荷快照，没有改会话备份引擎。桌面两点保留、H随G有效点收敛及离线冷盘配置解析属于较早实现；来源发布、次机安装字节与真实恢复分别留证"
     },
     {
       "role": "Gemini、Claude、OpenClaw定时备份及OpenClaw官方恢复",
@@ -184,16 +184,18 @@ export const codexMemorySnapshot = Object.freeze({
 });
 
 export const codexMemoryProject = {
+  usageEntry: "在已接入 AI 工作区备份项目的本机 AI 对话中点名 Codex、Gemini、Claude 或 OpenClaw，并说明要检查备份还是恢复哪类材料；正式恢复先到空目录核对。",
+  usageInputs: ["具体应用与目标机器", "要找的配置、项目记忆或会话", "本地、G、H 或私有 Git 中可用的版本"],
   ...codexMemorySnapshot,
   ...{
-  "order": 20,
+  "order": 21,
   "slug": "codex-memory",
   "title": "AI 工作区备份与恢复",
   "kicker": "Codex、Gemini、Claude与OpenClaw的配置、记忆、工作区与分层恢复",
   "route": "/projects/codex-memory",
   "visibility": "私有仓库",
   "statusTone": "warn",
-  "cardStatus": "四套分别备份 · 桌面Codex G/H同点已回读 · 应用恢复独立验收",
+  "cardStatus": "四套分别备份 · Codex G 比 H 冷盘新一个点 · 应用恢复独立验收",
   "cardStatusTone": "warn",
   "searchAliases": [
     "codex-memory",
@@ -261,64 +263,64 @@ export const codexMemoryProject = {
   "plainExample": "我要换电脑，先把AI工作环境里重要的东西找回来。先恢复Codex配置和技能、Gemini项目清单与可读成果、Claude各项目记忆；OpenClaw配置和工作区按原来源分别回填，官方归档先恢复到新暂存目录。需要旧Codex对话时，再把选定会话点还原到空目录。最终逐个确认应用能加载、路径正确、登录有效和工作可继续，不用“文件已复制”代替全部恢复。",
   "result": "得到按工具与时间区分的小型状态版本、G快照、Codex完整会话恢复点，以及OpenClaw官方归档和可检查的暂存副本。每套都说明本地、G、私有Git或H实际完成到哪里，恢复哪些文件、哪些需重新登录或重装，避免拿错版本和混合覆盖现有工作。",
   "readerStates": {
-    "pass": "各来源先完成自己的文件选择和本地/G回读，私有Git与H另有结果。恢复后的文件可核对，应用、登录和实际工作继续通过各自验收才称可用。",
-    "problem": "某一层网络失败或H落后时保留已经完成的本地/G副本，并说明具体时间与覆盖。旧点可能因内容相同被复用，任务0也不单独证明正文完整或应用可恢复。",
-    "unavailable": "缺少对应来源、专用私有目标或准确配置时停止那一套；Codex的VSS捕获需要管理员与Execute，只读校验和隔离恢复不要求旧主机身份。恢复仍拒绝活动根或非空目标，OpenClaw官方恢复要求全新目录，不改投其他工具的仓库。"
+    "pass": "选中的设置、记忆或会话在相应副本中核对完整后，说明本机、G 盘、私有云或 H 盘分别到哪一步；恢复后还要看应用能不能真正使用。",
+    "problem": "云端失败或冷盘落后时，已经验过的本机副本仍保留；任务显示成功、文件存在或旧日期都不能单独证明新机应用可用。",
+    "unavailable": "某个应用来源、私有备份位置或完整恢复点缺失时，只停这一套恢复；不把另一款 AI 工具的副本混过来，也不覆盖正在使用的目录。"
   },
   "productPrinciples": [
     {
-      "title": "按真实保存范围恢复，不把四套说成一样",
-      "detail": "Codex有完整会话专线；Gemini与Claude保留的主要是可读状态或项目记忆；OpenClaw定时工作区副本与官方状态归档互补。缺失的原始聊天、登录或应用状态不靠其他备份名称补齐。"
+      "title": "每款 AI 工具按真实范围找回",
+      "detail": "Codex 会话有专门的大文件恢复点；Gemini 和 Claude 主要保留可读项目资料；OpenClaw 的日常工作区与官方状态归档互补。缺失的登录或旧聊天不会被其他备份名称补出来。"
     },
     {
-      "title": "配置和对话分别保存",
-      "detail": "桌面小文件适合Git版本历史，大体积会话和数据库走本地快照。次机云端只收安全文本投影，完整私有配置与会话走已绑定本地/冷介质；两层可各自成功或失败。安全投影不能代替原始配置无损恢复。"
+      "title": "小设置和大对话分开保存",
+      "detail": "配置、技能和项目笔记适合版本对比；正在变化的会话与数据库用独立本地恢复点。副机使用自己的备份位置，云端只保存明确选出的安全文本，不能代替完整私有配置。"
     },
     {
-      "title": "较小记忆不轻易覆盖历史",
-      "detail": "桌面无配置档的私有仓库保留较大的raw_memories.md和已有rollout_summaries，不把更大当成更正确。次机配置档保存当前选中的准确版本，删除会进入最新树；旧版本由Git历史和有限旧点保存，不能把已删内容并回最新恢复。"
+      "title": "历史版本留得住，当前删除也算数",
+      "detail": "需要保留的旧记忆可从历史找回；但最新备份要反映真实当前文件，不把本人已删的内容又并进来。旧版更大也不代表内容更正确。"
     },
     {
-      "title": "另一台电脑使用自己的备份配置",
-      "detail": "笔记本复用同一引擎，但由机器负责人绑定自己的物理来源、热存储、冷介质和独立云支路。主机或卷身份不匹配、目录重叠时停止该次写入；不会把桌面E/G/H当成另一台机器的默认目标。"
+      "title": "笔记本不用台式机的备份路径",
+      "detail": "两台电脑各自确认来源磁盘、热副本、冷介质和云端位置；身份或目录重叠时停下，不能照抄另一台机器的盘符。"
     },
     {
-      "title": "旧点留得有界，最新删除保持有效",
-      "detail": "次机当前点加前一保留点先完整核验，再回收过期点及不被保留点引用的对象。清理与捕获、冷同步串行，校验不成立就不删。旧点仍可选，但最新恢复按最新清单生成，不把源中已删文件重新并入。桌面无配置档现由Hot自动采用当前加前一点；次机仍使用其显式配置档入口。"
+      "title": "保留最近点，清理前先验完整",
+      "detail": "当前和前一恢复点先证明确实完整，再收起更旧且无人在用的文件；清理与新备份不能互相抢写。"
     },
     {
-      "title": "备份时继续工作",
-      "detail": "会话热备从 VSS 时间点副本读取，无须强制退出 Codex；会使用磁盘资源，也不承诺应用一致性和零卡顿。"
+      "title": "备份对话时不强制退出 Codex",
+      "detail": "从同一时间点的文件副本读取已选会话，可在工作期间运行；仍会占用磁盘，也不能承诺故障前最后一秒或应用内部事务完全一致。"
     },
     {
-      "title": "先恢复副本，再决定启用",
-      "detail": "会话Restore只写独立空目录，拒绝活动运行根和备份/状态目录。可先只读校验Hot（热存储）或Cold（冷存储）中的指定点。桌面轻量恢复按原路径回填；次机config.safe.json是人工参考，完整配置要选私有恢复点。文件还原、登录和应用可用分别验收。"
+      "title": "先在空目录验副本，再决定启用",
+      "detail": "选定恢复点先核对，再复制到独立空目录。能读旧对话、恢复配置、完成登录和启动新任务是不同结果，逐项回读。"
     },
     {
-      "title": "冷盘未到就明确未完成",
-      "detail": "H 不可用时现有冷任务跳过，保留 G 结果；插盘本身不是触发器，要等原有调度或明确运行冷同步。"
+      "title": "H 盘没接上就说冷备还没完成",
+      "detail": "冷盘不可用时保留 G 盘已有结果；接上磁盘后仍要等原任务或明确同步，再核对 H 盘自己的恢复点。"
     },
     {
-      "title": "旧点可复用，成功仍需说明主语",
-      "detail": "G相同内容复用旧快照，不因日期较早就自动判失败。本地复制、G内容回读、私有Git引用、H闭包和应用恢复各自给出证据，不用一个绿色任务码包办。"
+      "title": "成功要说清是哪一层",
+      "detail": "本地复制、G 盘文件、私有云提交、H 盘副本和应用实际恢复各有自己的时间与结果；同样内容沿用旧点可以合理，但一条绿色任务结果不能代替全部。"
     }
   ],
   "responsibilities": [
-    "按白名单备份配置、安装技能与记忆，保留私有 Git 的历史记忆并验证远端提交。",
-    "桌面从E卷VSS副本捕获会话、附件和状态并去重写G；次机通过自己的主机配置档绑定物理来源卷和热/冷存储，不套用桌面的盘符。",
-    "维护点清单、闭包、原子指针与独立冷校验；现有PCConfig任务拥有调度，共享引擎可追加复制选定完整热备点再验证冷副本。桌面Hot自动保留当前及前一点，次机配置档仍有自己的显式有界保留；H跟随G有效保留集合。",
-    "将选定会话点还原到独立空目录，核验文件而不替换活动应用。",
-    "复用现有3个轻量计划任务承载4套备份，Codex完整会话与PCConfig冷同步各有既有任务；不增加统一服务或另一个写入者。",
-    "分别保存Gemini配置与可读成果、Claude项目记忆、OpenClaw配置和工作区；保持选择范围、保留策略与恢复位置可追溯。"
+    "按明确清单保存 Codex 设置、技能和记忆，并核对本地、G 盘及私有仓库各自结果。",
+    "另存完整 Codex 会话、附件和选定状态，避免与小型设置备份混在一起。",
+    "让会话恢复点可逐文件验证；H 盘可用时由既有冷备任务复制并独立核对。",
+    "恢复会话先写到新的空目录，保留当前正在使用的 Codex。",
+    "使用已有自动备份任务，不再为每款 AI 工具造一套常驻服务。",
+    "分别保存 Gemini 可读项目成果、Claude 项目记忆、OpenClaw 设置和工作区，并写清各自不包含什么。"
   ],
   "exclusions": [
-    "轻量 Git 路径排除 auth.json、installation_id、原始 sessions/JSONL、SQLite/WAL/SHM、运行态、模型和插件缓存。",
-    "会话备份排除诊断日志库、缓存、插件、worktrees 和链接目标；不是整个 CODEX_HOME 的无差别镜像。",
-    "会话 Restore 不复制轻量 Git 管道的全部内容，也不会把当前环境改成恢复版本。",
-    "本轮网页验收只检查生产元数据与任务，不触发大体积生产备份、真实恢复或冷盘挂载。",
-    "Gemini不包含原始会话、数据库和媒体；Claude私有Git只收项目记忆Markdown，不代表完整Claude运行环境或对话。",
-    "OpenClaw官方归档显式不含工作区；定时脚本只收四类配置文件和过滤后的工作区，不替代完整原生状态备份。",
-    "Key的VAULT03密码库与最高权限恢复材料分开保管，属于vault-tool的独立恢复安排，不混入本项目四套AI工作区备份。"
+    "轻量设置备份不包含登录凭据、完整原始会话和大型运行缓存。",
+    "完整会话备份也只覆盖明确选中的文件，不是整个应用目录的无差别复制。",
+    "把文件还原到空目录不会直接替换当前程序或恢复官方登录。",
+    "这次网页只说明已有状态，不触发新的大量备份或实际恢复。",
+    "Gemini 不保原始聊天与媒体；Claude 云端只保项目文字记忆，不是完整应用。",
+    "OpenClaw 日常设置副本与官方状态归档范围不同，恢复后还要另验网关和消息。",
+    "另一套独立密码库和最高权限恢复材料不混进 AI 工作区备份。"
   ],
   "usageExamples": [
     {
@@ -329,12 +331,12 @@ export const codexMemoryProject = {
     {
       "moduleSlug": "vss-conversation-hot-backup",
       "ask": "正在使用 Codex，旧对话还能在后台备份吗？",
-      "effect": "现有最高权限任务从 E 卷 VSS 副本读取原始会话，完成对象回读后发布 G 点；不要求退出前台应用。"
+      "effect": "已登记的备份任务从同一时间点读取选中会话，核对完整后才更新 G 盘恢复点；不用为了备份退出当前工作。"
     },
     {
       "moduleSlug": "content-addressed-storage-cold-sync",
       "ask": "很多备份都有相同附件，能不能少存几份？",
-      "effect": "内容相同的文件复用同一哈希对象。文件变了仍要保存新对象；冷盘连接后由既有冷任务同步并校验。"
+      "effect": "相同附件只保留一份内容，变化的文件仍另存；H 盘副本另等实际连接、复制和核对。"
     },
     {
       "moduleSlug": "isolated-disaster-recovery",
@@ -343,21 +345,39 @@ export const codexMemoryProject = {
     },
     {
       "moduleSlug": "gemini-workspace-memory",
-      "ask": "我说“把Gemini和Antigravity里保存的项目说明、笔记与设置找回来”。先选本地/G快照或私有Git版本，按原目录关系复制到目标Gemini根，核对项目路径和应用加载；不会声称恢复了不在清单里的旧聊天。",
-      "effect": "得到projects.json、config与选定Antigravity可读状态的版本副本；恢复后能否被当前应用识别还要现场确认。"
+      "ask": "把 Gemini 和 Antigravity 里保存的项目说明、笔记与设置找回来。",
+      "effect": "从选定的本地或私有云版本恢复可读文件，核对项目位置和应用能否加载；旧聊天和登录不在这份备份里。"
     },
     {
       "moduleSlug": "claude-project-memory",
-      "ask": "我说“把这个项目之前的Claude记忆找回来”。先定位备份中的项目/memory目录，选版本并保留目标现有文件，再按原项目映射回填。若还需要memory里的非Markdown附件，优先检查本地/G，不能只看云仓库。",
-      "effect": "得到项目各自的记忆副本和版本；恢复后检查项目路径映射及Claude是否实际加载，登录与完整聊天另外确认。"
+      "ask": "把这个 Claude 项目以前保存的长期记忆找回来。",
+      "effect": "先选正确项目和版本，保留新机现有文件后回填；若要非文字附件须查本地或 G 盘，云端文字笔记不代表完整聊天。"
     },
     {
       "moduleSlug": "openclaw-workspace-recovery",
-      "ask": "我说“OpenClaw配置改坏了，先帮我找一份能检查的恢复材料”。先取某次config/workspace快照；若要还原原生状态，先校验官方归档并解到全新暂存目录。当前网关保持不动，检查版本、工作区和登录后再明确执行离线激活。",
-      "effect": "得到按版本分开的config、workspace副本，或activation_performed=false的官方暂存恢复结果；真实网关启动、认证和消息回发另行验收。"
+      "ask": "OpenClaw 设置改坏了，先找一份能检查的恢复材料。",
+      "effect": "日常设置副本与官方状态归档分别找；先恢复到新的空目录，核对版本、登录和工作区，再决定是否让现有网关切换。"
     }
   ],
   "operatingFlow": [
+    {
+      "title": "查清选中应用实际保存了什么",
+      "detail": "系统列出这次能找回的配置、项目记忆或会话，以及哪类登录和原始聊天不在备份里。"
+    },
+    {
+      "title": "选一个可验证版本",
+      "detail": "先看时间、清单、对象完整性及所在介质，网络失败与本地成功分别记录。"
+    },
+    {
+      "title": "恢复到隔离位置",
+      "detail": "先验包或点，再还原到空目录并保留目标现有内容。"
+    },
+    {
+      "title": "回到真实应用验收",
+      "detail": "核对路径、官方登录、应用加载及真实旧任务或消息；文件恢复成功只完成其中一层。"
+    }
+  ],
+  technicalOperatingFlow: [
     {
       "title": "先认工具、材料与恢复目标",
       "detail": "确定是Codex配置/会话、Gemini可读工作成果、Claude项目记忆，还是OpenClaw配置/工作区/官方状态。读取各自来源配置和选定版本，不用统一整目录镜像。"
@@ -487,7 +507,7 @@ export const codexMemoryProject = {
   "evidenceLayers": [
     {
       "layer": "现行源码与历史实现证据",
-      "proves": "2026-09-14已正式回读Codex远端main=c5914cf1b2ab70232e22b253535636ca5dd8bdcd；本地bc574f8已实现桌面两点保留，远端后续补离线冷盘配置解析。9月12日9246a08的次机配置档、云投影及清理是历史实现证据；其他三套脚本保留原观察，未重新核验其源码或运行测试。",
+      "proves": "2026-09-24 已回读 Codex PRIVATE main=4934cada2be8b4baa6b395dc14a0e589eaa312f2，本地同值且干净；本次新提交仅更新白名单配置、记忆与清单载荷，未改备份脚本。9 月 12 日次机配置档与 9 月 14 日离线冷盘解析仍是历史实现证据；其他三套脚本保留原观察。",
       "doesNotProve": "源码和文档不证明本轮又执行过生产备份或应用恢复。"
     },
     {
@@ -497,12 +517,12 @@ export const codexMemoryProject = {
     },
     {
       "layer": "任务与生产元数据",
-      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务Ready/enabled/0、四套G元数据及当时H不可用均保留为历史。9月12日05:41Z曾补充当时桌面G/H同点7167文件；2026-09-14新回读原生回执为同点20260913T112054Z-1d51dc2b、7279文件、51104813027字节，Hot/Cold保留均complete；其他三套任务、Git引用及备份观察日期不更新，未读正文。 当前指针与清单另见9月18日局部观察；未重验旧任务或全量载荷。",
+      "proves": "9月9日22:07—22:08Z的3个轻量任务及Codex会话任务Ready/enabled/0、四套G元数据及当时H不可用均保留为历史。9月12日05:41Z曾补充当时桌面G/H同点7167文件；2026-09-14新回读原生回执为同点20260913T112054Z-1d51dc2b、7279文件、51104813027字节，Hot/Cold保留均complete；其他三套任务、Git引用及备份观察日期不更新，未读正文。当前指针与清单另见9月24日局部观察；未重验旧任务或全量载荷。",
       "doesNotProve": "未重新哈希全部生产对象，也未检测应用打开恢复内容的结果。"
     },
     {
       "layer": "H原生冷备回执与历史介质观察",
-      "proves": "9月14日只读H原生cold-last：9月13日23:57:45Z complete/readback_verified=true、7279文件/51104813027字节，current与G同为20260913T112054Z-1d51dc2b，H有效点保留2份。9月12日05:41Z介质在场与7167文件旧点只证明当时结果；该次同点由各盘原生回执证明，不从PCConfig总回执推断。 当前指针与清单另见9月18日局部观察；未重验旧任务或全量载荷。",
+      "proves": "9月14日只读H原生cold-last：9月13日23:57:45Z complete/readback_verified=true、7279文件/51104813027字节，current与G同为20260913T112054Z-1d51dc2b，H有效点保留2份。9月12日05:41Z介质在场与7167文件旧点只证明当时结果；该次同点由各盘原生回执证明，不从PCConfig总回执推断。当前指针与清单另见9月24日局部观察；未重验旧任务或全量载荷。",
       "doesNotProve": "完整对象校验由所属时点原生冷回执报告；网页本轮只回读指针和小元数据，没有重读全部对象，也不证明新机器登录、应用恢复或新回合续作。"
     },
     {
@@ -614,63 +634,60 @@ export const codexMemoryProject = {
       "meaning": "本项目要求 G 是已登记、已解锁且完整加密的备份卷；磁盘加密与文件是否备份成功分别核验。"
     }
   ],
-  "evolution": [
-    {
-      "date": "2026-07",
-      "result": "建立小文件白名单、静默日任务、私有 Git 版本历史与可回读的 G 快照；明确远端落后/分叉时停止以及只保留近期轻量快照。"
-    },
-    {
-      "date": "2026-08",
-      "result": "会话与轻量配置分流：运行期 VSS、内容寻址 G/H 存储、点校验和隔离恢复形成独立路径；物理来源迁到 E 盘。"
-    },
-    {
-      "date": "2026-09",
-      "result": "Git 临时传输失败支持读取当时系统代理并按 30/120/300/900 秒间隔有限重试，不固定代理端口。"
-    }
-  ],
-  "snapshotUpdateNote": "桌面bc574f8新增Hot自动两点保留，eeb2158让H跟随G有效点；本轮读取原生回执证实保留已执行。旧次机、其他三套工具、测试与恢复证据均保留原日期。源文档开头的additive/no-GC是尚未纠正的旧叙述，不覆盖已发布实现和当前原生回执；轻量Git历史与会话点保留仍分开。",
+  "snapshotUpdateNote": "2026-09-24只读回读：桌面G为9月24日点，H仍为9月23日点，恢复选择应按实际介质和点；当前没有执行冷同步或恢复。桌面bc574f8的Hot自动两点保留、eeb2158的H有效点收敛是较早实现，本轮轻量Git 4934cada仅更新白名单载荷。旧次机、其他三套工具、测试与恢复证据保留原日期；源文档开头的additive/no-GC旧叙述不覆盖已发布实现。",
   "dataSources": {
     "title": "具体保存什么，分别放在哪里",
-    "intro": "按工具取最小充分的恢复材料，实际来源根各由本机配置与所属项目解析。规范规则和个人能力仍归E:\\.agents，应用状态和备份结果分别归自己的Owner（负责人）。",
+    "intro": "先选 Codex、Gemini、Claude 或 OpenClaw，以及想找的设置、项目记忆还是对话；各应用只保存其清单列出的材料，登录与应用效果另验。",
     "rows": [
       {
-        "source": "Codex 规则、配置、安装技能与记忆文件",
-        "data": "AGENTS.md、config.toml、version.json、Chrome 原生宿主配置、browser/computer-use 配置、选定 vendor_imports、memories 和 skills。",
-        "result": "桌面当前源快照写本地与G，私有Git另保留指定历史。次机云支路仅收global-policy.md、config.safe.json、agent-definitions、选定memories及custom-skills；未知配置只记录被省略的字段路径，完整私有配置由本地恢复点承担。"
+        "source": "Codex 设置、技能和记忆",
+        "data": "保存本人选定的程序设置、个人能力和笔记；不把认证凭据与庞大原始对话塞进这份小型备份。",
+        "result": "本机、G 盘和私有仓库分别给版本；副机云端只保允许公开到该私有目标的安全文本，完整私有设置仍从本地恢复。"
       },
       {
-        "source": "Codex 原始会话和应用状态",
-        "data": "sessions、archived_sessions、thread backups、附件、听写历史、会话 JSONL 索引、非诊断日志 SQLite 数据、生成图片/visualizations 和自动化状态；排除 reparse point、auth、cache、plugins、worktrees 和诊断日志数据库。",
-        "result": "桌面从同次E卷VSS取数写G对象池。次机从配置档绑定的物理卷取数，额外纳入选定config.toml、agents、memories、skills及浏览器/电脑工具配置；不含auth和安装身份，不推送GitHub，也不是整个运行根镜像。"
+        "source": "Codex 对话和附件",
+        "data": "选择原始会话、附件与相关应用状态，从同一时间点的文件副本读取，不包含登录凭据或整个运行目录。",
+        "result": "形成可核对的 G 盘恢复点；H 盘可用时另做冷副本，恢复先去空目录。"
       },
       {
-        "source": "备份清单、指针与任务状态",
-        "data": "G 点的文件数/字节数和哈希、当前源 Inspect 汇总、计划任务最后返回码；不读取或展示会话正文。",
-        "result": "分别判断源有多少、已保存多少、任务是否执行以及 H 是否可用。"
+        "source": "每份备份的时间和文件清单",
+        "data": "读取文件数量、完整性与任务最近结果，不打开私人会话正文来展示状态。",
+        "result": "分别知道源文件、已备份文件和 H 盘当前是否可用。"
       },
       {
-        "source": "Gemini / Antigravity",
-        "data": "projects.json、config/**、antigravity_state.pbtxt、annotations/*.pbtxt、brain下Markdown与metadata.json；排除.system_generated、scratch、历史会话、数据库、媒体与二进制。",
-        "result": "保留项目映射、配置和可读成果，按原相对路径恢复；不恢复原始会话数据库、图片或登录。"
+        "source": "Gemini 与 Antigravity 项目成果",
+        "data": "保存项目清单、设置、笔记与可读成果，排除原始聊天、数据库和媒体。",
+        "result": "换机时按项目位置回填并核对应用能否加载，登录另办。"
       },
       {
-        "source": "Claude Code各项目memory目录",
-        "data": "本地/G复制每个项目的memory目录；私有Git按project/memory/*.md保存Markdown，避免多个MEMORY.md重名覆盖。",
-        "result": "恢复项目记忆；非Markdown从本地/G选择，项目代码、完整聊天、CLI安装和登录另行处理。"
+        "source": "Claude 各项目记忆",
+        "data": "本地/G 保存选中项目记忆目录，私有仓库只保文字笔记。",
+        "result": "找回项目记忆；若需要其他附件先查本地副本，完整聊天与程序安装不在其中。"
       },
       {
-        "source": "OpenClaw配置与工作区",
-        "data": "定时选择openclaw.json、auth-profiles.json、config.yml、.env和过滤后的workspace；官方归档由OpenClaw定义状态范围，显式不含workspace。",
-        "result": "定时快照恢复文件，官方归档先还原到新暂存目录；工作区、依赖、状态激活、模型认证与消息链分别确认。"
+        "source": "OpenClaw 设置、工作区与官方归档",
+        "data": "日常保存点名设置和工作区；官方归档按它自己的范围保存原生状态，两者不互相顶替。",
+        "result": "先恢复到独立目录，再核对版本、登录、网关与真实消息。"
       }
     ]
   }
-}
+},
+  "kicker": "找回 AI 工作材料，而不是复制旧登录态",
+  "summary": "换电脑、改坏配置或要找回旧任务时，先知道手里哪份备份能恢复什么。Codex 的设置与完整对话分别保存，Gemini／Antigravity 的轻量设置和成果、Claude 项目记忆、OpenClaw 配置与工作区也各按原有来源备份。这里把几条路线放在一起解释，不合并它们的任务和数据，也不承诺全部聊天、登录和运行状态一键回来。",
+  "readerBoundary": "配置、记忆、附件和数据库的覆盖不同；恢复先到隔离目录并验证，账号在新设备重新登录。本地成功、G／H成功与私有Git成功各自成立。",
+  "evolution": [{"date":"2026-07","title":"先保住容易丢的小文件","commit":"","result":"保存设置、规则和项目记忆，留下私有Git版本与独立G副本，避免换机只剩软件安装包。"},{"date":"2026-08","title":"完整对话不再混进轻量配置备份","commit":"","result":"原始会话、附件与数据库另走一致性恢复点，内容去重后保存到G／H；恢复先到空目录验证，不直接覆盖活动应用。"},{"date":"2026-09","title":"让各套 AI 的恢复范围说得清","commit":"","result":"不同工具仍沿独立来源和任务，云端失败不抹去已完成本地副本；轻量成果纳入Antigravity桌面／CLI，登录、活动程序和整机恢复继续独立验收。"}],
 };
 
 export const codexMemoryModules = [
   {
     "slug": "config-memory-whitelist-sync",
+    usageEntry: "在已接入的 AI 对话中说要备份或找回 Codex 设置、Skills 或记忆，并指出是哪台电脑。",
+    usageInputs: ["目标电脑和 Codex 配置根", "要保护的配置或记忆类别"],
+    productFlow: [
+      { title: "选白名单", detail: "系统按当前主机登记挑选小型配置与记忆，不把认证和庞大会话混进这条线。" },
+      { title: "先存本地与 G", detail: "形成并核对本地/G 副本，再按私有云分支和远端状态处理同步。" },
+      { title: "回读每层", detail: "说明新本地点、云端是否真的收到及排除项；网络失败保留已验本地结果，不说整套 Codex 已备份。" },
+    ],
     "shortTitle": "白名单与防截断",
     "title": "Codex配置、技能和记忆的白名单备份",
     "subtitle": "桌面历史保留与次机安全文本投影分别维护",
@@ -681,13 +698,13 @@ export const codexMemoryModules = [
     "relation": "负责配置、安装技能和记忆文件；长期规则的规范源仍是 E:\\.agents。",
     "value": "把选定的小文件保存在 G 快照与私有 Git 历史里。需要恢复配置或找旧记忆时有明确版本，不把庞大会话库混进这条链。",
     "why": "配置和记忆小、适合版本对比；会话数据库大且持续变化，需要另一条快照路径。保留分工可避免某一条链失败时误报全部完成。",
-    "example": "我说“这台笔记本也要备份Codex，别混进主电脑”。先使用机器负责人绑定的主机配置档，安全配置和记忆进入独立云支路，完整私有配置留在本地恢复层。云网络失败时，本轮已校验的新本地点仍可使用，但不会报告云端成功。桌面原有raw_memories历史保留继续独立生效。",
-    "result": "得到当次源快照、带历史保留的小文件仓库和独立 Git 远端回读。换机或重装需要还原这些内容时，按相对路径将选定的配置、memories 和 skills 复制回实际 CODEX_HOME，排除 .git、tools、.local-snapshots、logs；文件放回不等于登录和应用使用已验收。",
+    "example": "我说：“这台笔记本也要备份 Codex 设置和项目记忆，别混进台式机的副本。”系统按笔记本自己的保存位置先核对本地和 G 盘；云端失败不会抹掉已验本地结果。",
+    "result": "得到这台电脑的设置与记忆副本，以及私有云端是否真的收到的单独结果。换机时选择文件回填后，还要确认 Codex 登录和实际工作能继续。",
     "problem": "避免把数据库/缓存塞入 Git，同时减少较小 raw_memories 覆盖私有历史的风险。",
     "readerStates": {
-      "pass": "白名单扫描完成，大版本尺寸核验通过，G 盘快照写入且 Git 私有库推送成功，ls-remote 回读一致。",
-      "problem": "当前 raw_memories.md 比私有仓库里的版本小，仓库保留旧大版本并写明日志；当次 G 快照仍记录当前源文件，不把两个结果混为一谈。",
-      "unavailable": "若 Git 远端处于落后（Behind）或分叉（Diverged）状态，脚本 fail-closed 退出，提示人工核对冲突。"
+      "pass": "选中的小文件在本地/G 核对后，私有云是否收到另给结论。",
+      "problem": "云端落后或冲突时保留已验本地副本，不拿更大的旧记忆直接覆盖现有内容。",
+      "unavailable": "来源或私有仓库不可读时停对应副本，明确哪些材料仍留在本机。"
     },
     "decisionImpact": [
       "AGENTS.md、config.toml、version.json、Chrome/native/browser/computer-use 配置、选定 vendor_imports、memories/**、skills/** 构成源白名单。",
@@ -785,27 +802,35 @@ export const codexMemoryModules = [
         "出现Git分叉时fail-closed人工核对",
         "记忆文件异常缩水时保持历史备份不动"
       ]
-    }
+    },
+    readerStatus: "配置、技能与记忆已有分机器的备份证据；轻量副本不包含完整对话，应用登录与恢复使用仍另验。"
   },
   {
     "slug": "vss-conversation-hot-backup",
-    "shortTitle": "VSS会话热备",
+    usageEntry: "在已接入的 AI 对话中明确请求检查或执行 Codex 会话热备；执行需要项目已登记的管理员备份入口。",
+    usageInputs: ["目标 Codex 会话来源", "G 盘是否可用", "需要的新点时间"],
+    productFlow: [
+      { title: "先确认执行条件", detail: "检查现有点、G 介质和权限，普通状态查询不新建快照。" },
+      { title: "取得同一时间点文件", detail: "执行时从 E 卷快照读取纳入的会话、附件和状态文件，并写对象与清单。" },
+      { title: "只发布完整点", detail: "所有引用对象校验后才更新 G 当前指针；快照之后的新对话待下次，数据库事务与应用加载仍需另验。" },
+    ],
+    "shortTitle": "使用中也能备份旧会话",
     "title": "Codex运行期会话快照与 G 热备",
     "subtitle": "从各自主机配置绑定的物理卷捕获会话及状态",
     "teaser": "继续使用 Codex，也能形成明确时间的会话备份点",
     "order": 2,
-    "status": "9月18日原生G/H同点清单为1731文件；本轮只读指针与清单，完整对象/新机应用恢复不由它代验",
+    "status": "9月24日 G 当前 1,983 文件，H 仍是9月23日 1,928 文件；指针与清单可读，完整对象及新机应用恢复未在本轮重验",
     "statusTone": "accent",
     "relation": "负责原始对话、附件、生成图像和应用状态。桌面与轻量配置分线；次机profile额外纳入选定私有配置、agents、memories和skills，云端安全投影仍独立。",
-    "value": "不强制关闭 Codex，从同一卷影副本采集会话数据，并把已校验文件组成一个可恢复点。 同时触发第二次热备时会明确拒绝重复运行；上次卷影清理没有完成时先保留问题，不继续创建更多快照。",
-    "why": "活动目录中的数据库、WAL、索引会同时变化，直接逐个复制可能时点不齐，也可能遇到共享冲突。VSS 提供时间点视图，但仍须标明崩溃一致性。",
-    "example": "我继续写代码，已有夜间任务从 E 卷创建 VSS 副本，把新增或变化文件写入 G 对象池。只有点和对象校验通过，current 才指向新点；快照之后新增的对话要等下一次。",
-    "result": "得到一个带创建时间、文件清单与哈希的会话点；它恢复到该点，不保证故障前最后一刻，更没有零卡顿保证。",
+    "value": "Codex 仍可继续工作，夜间任务从同一时间点留下选定对话和附件；文件全部核对后才把新恢复点标成当前，之后的新对话等下次。",
+    "why": "Codex 正在使用时，对话文件和数据库会变化，逐个直接复制可能前后不一致。夜间任务从同一时间点读取所选文件，再核对完整性；它仍只能恢复到那一刻。",
+    "example": "我继续写代码，夜间备份取得当时的会话文件并保存到 G 盘；只有这一点的文件都核对完整，才把它标成最新。之后的新对话要等下一次。",
+    "result": "得到带时间和文件清单的 Codex 会话恢复点。它不保证故障前最后一秒，也不因为文件可复制就证明应用内部所有操作都已保存。",
     "problem": "减少活动数据复制时点不一致和文件占用导致的失败，并保留可检查的失败结果。",
     "readerStates": {
-      "pass": "VSS 创建、对象写入与回读完成后，发布点和 current 指针。",
-      "problem": "Hot 未提供 -Execute 或缺管理员身份时明确拒绝，不会自动换成 Inspect。",
-      "unavailable": "登记 G 卷缺席、未解锁或不符合登记/完整加密条件时停止热备。"
+      "pass": "同一时间点选出的会话文件在 G 盘完整核对后，才发布新的恢复点。",
+      "problem": "执行权限不足时停在检查，不把只读状态查询当成已经备份。",
+      "unavailable": "G 盘缺席或未解锁时这次热备不能进行，旧完整点仍照原状态保留。"
     },
     "decisionImpact": [
       "捕获语义明确为 vss_crash_consistent，不能升级为数据库事务和应用全部正常。",
@@ -898,11 +923,28 @@ export const codexMemoryModules = [
         "非管理员权限运行时安全拒绝并提示提权",
         "G盘未解锁时安全等待杜绝脏写入"
       ]
-    }
+    },
+    readerStatus: "已有运行期间保存完整对话恢复点的功能；9月24日已核对G盘当前指针与清单，H盘仍是较早的恢复点。本轮没有重新验证全部对象或新机应用恢复。"
   },
   {
     "slug": "content-addressed-storage-cold-sync",
-    "shortTitle": "CAS去重与冷备",
+    usageEntry: "在已接入的 AI 对话中查询某个 Codex 会话备份点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务处理。",
+    usageInputs: ["要找的点位或日期", "G 与 H 介质状态"],
+    productFlow: [
+      {
+        "title": "先查 G 盘这份会话是否完整",
+        "detail": "系统核对这份会话用到的每个文件与清单；相同附件可共用一份保存，变动的数据库仍需新副本。"
+      },
+      {
+        "title": "H 可用时再同步",
+        "detail": "现有冷任务复制点所需对象，校验 H 端完整后才发布 H 指针并清理可退役旧对象。"
+      },
+      {
+        "title": "说明真正完成到哪",
+        "detail": "H 未连接时明确跳过；指针更新但清理未完成也只报告已完成阶段。"
+      }
+    ],
+    "shortTitle": "相同文件去重与冷备",
     "title": "Codex会话内容去重、点校验与 H 冷备",
     "subtitle": "按完整文件内容复用对象，各介质分别校验",
     "teaser": "相同对象复用；H 没连接就明确冷备未完成",
@@ -911,14 +953,14 @@ export const codexMemoryModules = [
     "statusTone": "accent",
     "relation": "负责会话点的存储与核验；PCConfig拥有既有跨盘调度，引擎的FinalizeCold/SyncCold可追加复制完整热备点，再独立校验冷点。次机profile另有明确的有界清理。",
     "value": "相同内容只存一份，每个历史点保留自己的文件清单；H 在可用时独立校验，避免复制了指针却没有完整对象。",
-    "why": "重复保存未变化的大文件会浪费空间。文件内容寻址能复用相同对象，但数据库一旦变化会产生新对象，容量仍增长。",
-    "example": "两次快照引用同一张附件图片时复用同一对象。H 未连接时冷任务按设计跳过；连接后等现有调度或明确执行同步，先复制 cold-payload，再验证 H 闭包并发布 H 指针。",
-    "result": "得到能核对文件和历史点的会话对象池，以及在 H 真实校验完成后才成立的冷副本。",
+    "why": "相同附件没必要在每一份会话备份里重存；但变动的数据库仍会占新空间。冷盘上的点只有文件齐全且自己通过核对，才算一份独立副本。",
+    "example": "两份对话都用过同一张图片，G 盘可共用那张图片的保存文件。H 盘没接上就说明冷备未完成；接上后按现有任务复制并检查，不因目录出现就说可以恢复。",
+    "result": "知道 G 盘和 H 盘各有哪些完整会话点；H 盘真实核对通过后才称那处冷副本可用。",
     "problem": "减少重复文件占用，避免不完整对象集被当成可用备份点。",
     "readerStates": {
-      "pass": "点闭包及每个引用对象校验通过；H 完成独立校验后才算该介质完成。",
-      "problem": "H 缺席时保持冷备未完成，不影响已存在的 G 点。",
-      "unavailable": "点/对象缺失或哈希不符，停止该点验证或恢复并报告错误。"
+      "pass": "这份会话所需文件齐全，H 盘再独立核对完成时各自标成功。",
+      "problem": "H 盘未接不影响已验 G 点，只把冷副本标为未完成。",
+      "unavailable": "任何引用文件缺失或损坏时停这份点的恢复，说明具体缺口。"
     },
     "decisionImpact": [
       "去重粒度是完整文件；相同字节复用，变化后的大数据库会占新空间。",
@@ -1009,10 +1051,27 @@ export const codexMemoryModules = [
         "H盘脱机时自动跳过保持静默",
         "哈希不符时抛出异常阻断指针推进"
       ]
-    }
+    },
+    readerStatus: "已有内容去重和冷副本独立核对；最近两块备份盘一致的记录保留原日期，未连接的冷盘不会被当作已更新。"
   },
   {
     "slug": "isolated-disaster-recovery",
+    usageEntry: "在已接入的 AI 对话中指定 Codex 备份 PointId 和全新空目录，要求先恢复副本并查看旧任务。",
+    usageInputs: ["可验证的备份点", "空恢复目录", "要核查的旧对话或设置"],
+    productFlow: [
+      {
+        "title": "先验材料再选择空目录",
+        "detail": "系统确认恢复点所需文件都在、目标是空目录，避免把旧材料盖到现役 Codex 上。"
+      },
+      {
+        "title": "只还原隔离副本",
+        "detail": "按原相对路径恢复并核对文件，不覆盖正在使用的 Codex。"
+      },
+      {
+        "title": "再验应用能力",
+        "detail": "从副本查旧任务并核对登录、配置和新任务能否运行；文件可读不等于应用已全部恢复。"
+      }
+    ],
     "shortTitle": "隔离恢复与调度",
     "title": "Codex先恢复到空目录，再验证应用可用",
     "subtitle": "点校验、文件还原与当前环境分别处理",
@@ -1021,15 +1080,15 @@ export const codexMemoryModules = [
     "status": "9月10日次机隔离副本可列任务并读12轮；未启动新回合，9月12日只读旧回执",
     "statusTone": "accent",
     "relation": "把选定会话点重建为可检查的文件副本，不自动切换或启动恢复后的 Codex。",
-    "value": "找回历史对话时，先选热或冷存储中的完整点，还原到空目录，保留正在使用的Codex。次机也可从私有点找回选定原配置；云端config.safe.json只供人工参考，global-policy.md需按恢复映射处理。先核对文件再决定应用启用。",
+    "value": "找回旧 Codex 对话时先验一份完整恢复点，复制到空目录，原来正在用的程序不被覆盖；文件可读、登录和新任务可继续分别验收。",
     "why": "直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场并明确恢复结果。",
-    "example": "我指定 -PointId latest 和一个专用空目录，执行 -Mode Restore -Execute。工具先验证完整点，随后按原路径还原并回读文件；耗时受对象数量、体积和磁盘速度影响。",
-    "result": "会话 Restore 返回明确点位的目录树与恢复回执，不覆盖活动 CODEX_HOME。轻量恢复则按文档将 config.toml、memories 和 skills 等选定小文件放回运行根。两者都需要进一步确认应用能否使用；合成会话恢复为9月7日证据，本次只重读状态。",
+    "example": "“从最近一份完整对话备份恢复到空目录，先让我确认旧任务能不能找回来。”AI核对恢复点和文件完整性，在隔离目录恢复并用副本列出任务、读回对话；原来正在使用的目录保留。能看到旧对话不等于应用已经登录或新任务能继续运行。",
+    "result": "先得到一个在空目录中可核对的旧对话副本，现役 Codex 目录不被覆盖。能列出旧任务仍不等于应用已经登录，或新电脑可以继续那项工作。",
     "problem": "防止历史文件直接覆盖当前运行根，防止与备份池/状态目录混写。",
     "readerStates": {
-      "pass": "选定点完整核验，目标文件还原与回读完成，返回恢复回执。",
-      "problem": "目标是活动 CODEX_HOME 或其子目录，返回 live_codex_home_restore_forbidden。",
-      "unavailable": "备份点不完整、目标非空/链接或处于受保护备份/状态根内时，停止并说明具体原因。"
+      "pass": "备份点完整，空目录恢复文件并逐项核对后，报告文件层完成；应用是否可用再试。",
+      "problem": "目标恰是正在使用的 Codex 目录时拒绝覆盖，改选独立空目录。",
+      "unavailable": "备份不完整、目标已有文件或链接到受保护位置时停下并指出原因。"
     },
     "decisionImpact": [
       "Restore 要求 -Execute 与显式 DestinationRoot。",
@@ -1120,10 +1179,18 @@ export const codexMemoryModules = [
         "目标为活动根时主动阻断保护现场",
         "非空目录拒绝覆盖防止混合污染"
       ]
-    }
+    },
+    readerStatus: "笔记本曾在隔离副本中列出任务并读回旧对话；没有启动新一轮工作，文件还原不等于应用已完全接续。"
   },
   {
     "slug": "gemini-workspace-memory",
+    usageEntry: "在已接入的 AI 对话中说要找回 Gemini 或 Antigravity 的项目说明、笔记和设置，并指定目标机器。",
+    usageInputs: ["应用和项目", "本地/G 或私有 Git 版本", "新机器目标目录"],
+    productFlow: [
+      { title: "选可读成果", detail: "按登记清单找项目文件，说明原始聊天和媒体是否不在范围。" },
+      { title: "先恢复副本", detail: "挑一个已核验版本，保留新机现有文件后按相对目录回填。" },
+      { title: "确认能接着工作", detail: "核对项目引用、应用加载和官方登录；云上只有可读文件时不承诺整段会话回来。" },
+    ],
     "shortTitle": "Gemini配置与成果",
     "title": "Gemini配置、项目清单与可读工作成果",
     "order": 5,
@@ -1131,15 +1198,15 @@ export const codexMemoryModules = [
     "status": "现役脚本、最近任务0和G元数据已读；本轮未做新机恢复",
     "statusTone": "mixed",
     "relation": "这是Gemini自己的文件选择与恢复边界；与Codex会话库、Claude记忆和OpenClaw状态分别保存。",
-    "value": "换电脑或配置改坏后，找回Gemini兼容配置及Antigravity桌面和CLI的项目清单、设置、注释与可读成果。原相对位置随副本保存；原始聊天、登录凭据、数据库和缓存不在这条备份里。任务沿用原名，只复制所选状态，不调用退役Gemini模型命令。",
+    "value": "换电脑后能找回 Gemini 和 Antigravity 的项目清单、设置与可读工作笔记；原始聊天、媒体和登录状态不在这份副本里。",
     "why": "可读成果与原始会话不是同一类材料。把配置、笔记和工作输出保存为小文件，便于检查版本与选择性恢复；把全部应用目录当成已备份，会误以为登录和会话也能回来。",
     "example": "我说“把Gemini和Antigravity里保存的项目说明、笔记与设置找回来”。先选本地/G快照或私有Git版本，按原目录关系复制到目标Gemini根，核对项目路径和应用加载；不会声称恢复了不在清单里的旧聊天。",
-    "result": "得到projects.json、config与选定Antigravity可读状态的版本副本；恢复后能否被当前应用识别还要现场确认。",
+    "result": "找回 Gemini 或 Antigravity 的项目清单、设置和可读笔记；回填后还要在当前应用里确认能看到。原始聊天和登录状态不在这份材料里。",
     "problem": "防止遗漏小型工作成果、把旧点当新状态，以及用文件备份冒充完整会话或登录恢复。",
     "readerStates": {
-      "pass": "来源清单非空，本地和G完成回读，私有Git默认分支另行确认；恢复后目标路径与应用加载分别通过。",
-      "problem": "云端网络错误时保留已完成的本地/G；G可因内容相同复用旧点。源在云阶段继续变化时，不宣称三层同一时刻一致。",
-      "unavailable": "来源目录、路径配置、专用Git仓库或main分支条件不成立时停止，不猜另一个账户或来源。"
+      "pass": "选中的项目文件在本机/G 有可核对副本，私有云是否收到另算；恢复后应用确实能加载再说可用。",
+      "problem": "云端失败保留本机副本；保存期间来源又变化时说明几个副本并非同一时刻。",
+      "unavailable": "来源目录或选定私有仓库不存在时停这条线，不猜另一个账号。"
     },
     "decisionImpact": [
       "只选当前脚本实现的路径与扩展名，不从“工作区备份”推断全量聊天。",
@@ -1171,6 +1238,7 @@ export const codexMemoryModules = [
     ],
     "boundaries": [
       "不读或发布真实正文、账号和令牌；实际备份保持在原私有目标。",
+      "Gemini 兼容任务沿用原名，只复制所选状态，不调用退役Gemini模型命令；文件备份不等于启动模型、恢复登录或重新运行旧产品。",
       "源文件在本地/G完成后还可能变化，云阶段重新读源，不宣称原子跨介质快照。",
       "新机自动登录、完整聊天恢复和应用兼容未在本轮验收。"
     ],
@@ -1229,10 +1297,27 @@ export const codexMemoryModules = [
         "云失败保留本地G",
         "按原相对路径回填"
       ]
-    }
+    },
+    readerStatus: "脚本、最近任务结果和备份元数据已核对；可恢复的是选定配置与可读成果，新机加载本轮未验收。"
   },
   {
     "slug": "claude-project-memory",
+    usageEntry: "在已接入的 AI 对话中点名 Claude 项目，说明要找哪份项目记忆。",
+    usageInputs: ["具体项目", "本地/G 或私有 Git 版本", "是否需要非 Markdown 附件"],
+    productFlow: [
+      {
+        "title": "按项目找到对应记忆",
+        "detail": "系统在备份中定位这一个 Claude 项目的记忆目录，不混入其他项目。"
+      },
+      {
+        "title": "依介质选材料",
+        "detail": "电脑本地和 G 盘副本可含完整目录；私有云仓库只保存文字笔记，若要找附件仍须检查本地副本。"
+      },
+      {
+        "title": "回填并验收",
+        "detail": "保留目标文件后恢复选定项目，确认 Claude 实际加载；原始聊天和登录不由记忆备份恢复。"
+      }
+    ],
     "shortTitle": "Claude项目记忆",
     "title": "Claude项目记忆按项目保存与恢复",
     "order": 6,
@@ -1241,14 +1326,14 @@ export const codexMemoryModules = [
     "statusTone": "mixed",
     "relation": "Claude记忆在共享OpenClaw Memory Backup任务中先运行，成果仍写自己的快照和私有Git，不混入OpenClaw工作区。",
     "value": "项目目录损坏或换电脑时，能找到Claude为各项目保存的长期说明和记忆，并放回对应项目的位置。它保留项目层级，不把几个同名MEMORY.md堆到一个目录。完整对话、项目源码和官方登录需要各自材料，不能由这份记忆副本代替。",
-    "why": "Claude的项目记忆通常比完整会话小，也更适合人工核对。但本地/G保存整个memory目录，云端只收Markdown；若恢复时不分来源，就会把缺少的非Markdown文件误当成完整恢复。",
+    "why": "Claude 的项目笔记和完整聊天不同。电脑本地可保存整个项目记忆目录，私有云只保文字笔记；只看云端会漏掉其他附件。",
     "example": "我说“把这个项目之前的Claude记忆找回来”。先定位备份中的项目/memory目录，选版本并保留目标现有文件，再按原项目映射回填。若还需要memory里的非Markdown附件，优先检查本地/G，不能只看云仓库。",
-    "result": "得到项目各自的记忆副本和版本；恢复后检查项目路径映射及Claude是否实际加载，登录与完整聊天另外确认。",
+    "result": "得到这个项目的记忆版本，并核对当前 Claude 是否真的加载；附件从本机或 G 盘找，登录和旧聊天另查。",
     "problem": "防止项目间记忆重名覆盖、云副本范围被夸大，以及把共享任务码误当成单个消费者的全部证据。",
     "readerStates": {
-      "pass": "至少找到一个项目memory目录，本地/G完成，私有Git引用另行回读，恢复后应用实际识别目标项目记忆。",
-      "problem": "Claude云失败也会继续运行OpenClaw备份，最终共享任务仍返回首个非零；不能只凭一个任务码判断是哪一套失败。",
-      "unavailable": "项目来源缺失、没有memory目录或私有Git未初始化时明确失败，不创建看似完整的空记忆集。"
+      "pass": "项目记忆确实存在并已保存，恢复后 Claude 能识别这个项目时才称可用。",
+      "problem": "云端失败时本机副本仍可用，共享备份任务其他部分也要分别看结果。",
+      "unavailable": "没有该项目记忆或私有目标不可读时明确说缺少，不创建空目录冒充恢复。"
     },
     "decisionImpact": [
       "本地/G递归复制memory目录；云端只同步*.md，两者不假装同样完整。",
@@ -1332,10 +1417,18 @@ export const codexMemoryModules = [
         "非Markdown从本地G取回",
         "按目标项目映射恢复"
       ]
-    }
+    },
+    readerStatus: "项目记忆的备份元数据和共享任务结果已核对；完整聊天不在此范围，新电脑是否加载记忆仍未验收。"
   },
   {
     "slug": "openclaw-workspace-recovery",
+    usageEntry: "在已接入的 AI 对话中说明 OpenClaw 是配置损坏、工作区丢失还是需要官方状态归档恢复。",
+    usageInputs: ["目标 OpenClaw 环境", "日常快照或官方归档", "当前网关是否仍运行"],
+    productFlow: [
+      { title: "选对恢复材料", detail: "日常配置/工作区快照与官方原生归档分别查，不用小文件冒充完整状态。" },
+      { title: "先解到新暂存目录", detail: "官方归档先验证再恢复到空目录，保留当前环境及其路径。" },
+      { title: "决定是否激活并验消息", detail: "核对版本、认证、网关、模型与渠道后才离线激活；暂存成功或任务退出码不足以证明真实消息可用。" },
+    ],
     "shortTitle": "OpenClaw恢复",
     "title": "OpenClaw配置、工作区与官方归档分别恢复",
     "order": 7,
@@ -1344,14 +1437,14 @@ export const codexMemoryModules = [
     "statusTone": "mixed",
     "relation": "网关、渠道、模型和运行修复仍由OpenClawGateway负责；这里解释备份文件与恢复材料，任务和源仓库保持独立。",
     "value": "改坏设置、重装或迁移OpenClaw时，我可以找回配置和工作区中的人格说明、记忆、技能与脚本；还可以用官方归档恢复原生状态到一个新目录，先检查再决定启用。两种材料各自有范围，官方归档明确不含工作区，不能靠一个“恢复成功”提示把缺的部分略过。",
-    "why": "网关原生状态会随版本变化，自行挑文件不能假装等价于官方归档。定时快照适合保存明确配置和工作区，官方备份负责其声明的原生状态；激活后还需重新核对认证、模型和消息链。",
+    "why": "OpenClaw 的日常设置和工作区，与官方归档保存的应用状态不同。配置损坏时先找对材料、暂存检查，再决定是否激活，免得把仍可用的网关盖掉。",
     "example": "我说“OpenClaw配置改坏了，先帮我找一份能检查的恢复材料”。先取某次config/workspace快照；若要还原原生状态，先校验官方归档并解到全新暂存目录。当前网关保持不动，检查版本、工作区和登录后再明确执行离线激活。",
-    "result": "得到按版本分开的config、workspace副本，或activation_performed=false的官方暂存恢复结果；真实网关启动、认证和消息回发另行验收。",
+    "result": "得到按日期分开的设置和工作区副本，或在全新目录里可检查的官方归档副本。当前网关不会因“文件已解开”就自动切换；登录、模型与消息链另验。",
     "problem": "防止把普通文件复制、官方归档校验、暂存恢复和现役激活混成一项成功。",
     "readerStates": {
-      "pass": "日常快照和G回读完成后，用同一快照更新私有Git并核对引用；官方归档验证通过、全新暂存目录非空后只报告暂存完成。",
-      "problem": "云失败保留本地/G；官方归档不含工作区，缺材料时明确指出。暂存完成但未激活仍不能称网关已恢复。",
-      "unavailable": "配置根、工作区根、专用Git仓库缺失，或归档验证/全新目标条件不成立时停止，不覆盖现役状态。"
+      "pass": "日常副本各自核对；官方归档先验完整并解到空目录，只报告这一层完成。",
+      "problem": "云端失败保留本地副本；官方归档没有工作区时另从日常副本找。",
+      "unavailable": "材料不齐或目标目录不为空时停止恢复，不覆盖当前网关。"
     },
     "decisionImpact": [
       "定时脚本只选择openclaw.json、auth-profiles.json、config.yml和.env，不是config_root全量镜像。",
@@ -1446,7 +1539,8 @@ export const codexMemoryModules = [
         "官方校验先于还原",
         "目标已存在拒绝"
       ]
-    }
+    },
+    readerStatus: "配置和工作区副本已有记录，官方归档可在新目录暂存；本轮没有激活恢复或证明网关重新可用。"
   }
 ];
 

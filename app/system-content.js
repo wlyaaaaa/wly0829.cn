@@ -3,7 +3,6 @@ import {
   systemDependencyNodes,
   systemEvidenceLayers,
   systemHomeHero,
-  systemProjectDomains,
   systemScenarios
 } from "./system-home-content.js";
 
@@ -35,28 +34,6 @@ export const systemSearchEntries = [
     compactSearch: `${item.process} ${item.delivery}`,
     search: `${item.process} ${item.delivery}`
   })),
-  ...systemProjectDomains.map((domain) => ({
-    type: "系统版图",
-    title: domain.title,
-    detail: `${domain.summary} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join("、")}`,
-    href: `/#system-project-domain-${domain.id}`,
-    aliases: [domain.ordinaryRequest],
-    compactSearch: `${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => asset.title).join(" ")}`,
-    search: `${domain.ordinaryRequest} ${domain.delivery} ${domain.assets.filter((asset) => !asset.presentationOnly).map((asset) => `${asset.repo || ""} ${asset.role}`).join(" ")}`
-  })),
-  ...systemProjectDomains.flatMap((domain) => domain.assets
-    .filter((asset) => asset.href.includes("/github-index/repository-ledger"))
-    .map((asset) => ({
-      type: "项目资产",
-      group: "项目",
-      scopes: ["project"],
-      title: asset.title,
-      detail: asset.role,
-      href: `/#system-project-asset-${asset.id}`,
-      aliases: [asset.repo].filter(Boolean),
-      compactSearch: domain.title,
-      search: domain.title
-    }))),
   ...systemDependencyNodes.map((node) => ({
     type: "系统组成",
     title: node.title,

@@ -77,9 +77,24 @@ if (shouldReadLiveRelease) {
 
 const documentedRules = new Map(rulesSnapshot.rules.map((rule) => [rule.logicalId, rule]));
 const boundRules = new Map((payload.ruleBinding || []).map((rule) => [rule.logicalId, rule]));
-requireFact(boundRules.size === documentedRules.size && documentedRules.size === 5, "snapshot_rule_binding_count_invalid", `${boundRules.size}/${documentedRules.size}`);
+requireFact(boundRules.size === documentedRules.size && documentedRules.size === documentedRuleBindings.rules.length, "snapshot_rule_binding_count_invalid", `${boundRules.size}/${documentedRules.size}`);
+const inventory = payload.releaseInventory || [];
+const inventoryById = new Map(inventory.map((item) => [item.logicalId, item]));
+const primaryIds = payload.primaryTopicIds || [];
+requireFact(inventory.length > 0 && inventoryById.size === inventory.length && authority.releaseFileCount === inventory.length, "snapshot_release_inventory_invalid", inventory.length);
+requireFact(primaryIds.length === boundRules.size && new Set(primaryIds).size === primaryIds.length && primaryIds.every((id) => boundRules.has(id)) && authority.primaryTopicCount === primaryIds.length, "snapshot_primary_catalog_drift", primaryIds.length);
+for (const item of inventory) {
+  requireFact(/^[a-f0-9]{64}$/.test(item.sha256 || "") && Number.isInteger(item.bytes) && item.bytes > 0 && !path.win32.isAbsolute(item.relativePath || "") && !(item.relativePath || "").split(/[\\/]/).includes(".."), "snapshot_release_descriptor_invalid", item.logicalId);
+  if (shouldReadLiveRelease) {
+    const live = liveRelease?.verified_current?.files?.find((file) => file.logical_id === item.logicalId);
+    compareLiveFact(live?.sha256 === item.sha256 && Number(live?.bytes) === item.bytes && live?.relative_path === item.relativePath, "snapshot_live_inventory_drift", item.logicalId);
+  }
+}
+if (shouldReadLiveRelease) compareLiveFact(liveRelease?.verified_current?.files?.length === inventory.length, "snapshot_live_inventory_count_drift", inventory.length);
 for (const [logicalId, rule] of documentedRules) {
   const bound = boundRules.get(logicalId);
+  const inventoryRule = inventoryById.get(logicalId);
+  requireFact(inventoryRule?.sha256 === bound?.sha256 && inventoryRule?.bytes === bound?.bytes, "snapshot_primary_inventory_mismatch", logicalId);
   requireFact(bound?.sha256 === rule.sha256 && Number(bound?.bytes) === Number(rule.bytes), "snapshot_rule_binding_mismatch", logicalId);
   requireFact(/^[a-f0-9]{64}$/.test(bound?.sourceSha256 || ""), "snapshot_source_sha_invalid", logicalId);
   requireFact(Number.isInteger(bound?.sourceBytes) && bound.sourceBytes >= 0, "snapshot_source_bytes_invalid", logicalId);
