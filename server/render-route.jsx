@@ -93,7 +93,7 @@ export function renderDocument(template, pathname, search = "") {
   if (route === "/computer-access") {
     const policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://mcp.wly0829.cn; object-src 'none'; base-uri 'none'; form-action 'self'";
     html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "");
-    html = html.replace("<head>", `<head>\n    <meta http-equiv="Content-Security-Policy" content="${escapeAttribute(policy)}" />\n    <meta name="referrer" content="no-referrer" />`);
+    html = html.replace("<head>", `<head>\n    <meta http-equiv="Content-Security-Policy" content="${escapeAttribute(policy)}" />\n    <meta name="referrer" content="no-referrer" />\n    <link rel="preconnect" href="https://mcp.wly0829.cn" crossorigin="use-credentials" />`);
   }
   html = replaceRequired(html, /<title>[^<]*<\/title>/, `<title>${escapeAttribute(meta.title)}</title>`);
   html = replaceRequired(html, /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, `<meta name="description" content="${escapeAttribute(meta.description)}" />`);

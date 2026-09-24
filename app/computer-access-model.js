@@ -2,6 +2,12 @@ export const HOST_ORIGIN = "https://mcp.wly0829.cn";
 export const SITE_ORIGIN = "https://wly0829.cn";
 export const API_PATH = "/computer-access/api";
 
+// Only public hardware observations survive a same-tab reload. Authority never does.
+export function hardwareSnapshot(data) {
+  if (!data?.hardware || typeof data.hardware !== "object" || !Number.isFinite(data.observed_at_unix)) return null;
+  return { hardware: data.hardware, observed_at_unix: data.observed_at_unix };
+}
+
 export function beijingTime(unix, timeOnly = false) {
   if (!Number.isFinite(unix) || unix <= 0) return "时间未知";
   return new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", hour12: false,
@@ -292,17 +298,17 @@ export function createStatusReader(fetchStatus, onSuccess, onFailure) {
   let active = null;
   let generation = 0;
   return {
-    async read({ replace = false } = {}) {
+    async read({ replace = false, refresh = false } = {}) {
       if (active && !replace) return;
       if (active) active.abort();
       const controller = new AbortController();
       const current = ++generation;
       active = controller;
       try {
-        const result = await fetchStatus(controller.signal);
-        if (current === generation) onSuccess(result);
+        const result = await fetchStatus(controller.signal, { refresh });
+        if (current === generation) onSuccess(result, { refresh });
       } catch (error) {
-        if (current === generation && !controller.signal.aborted) onFailure(error);
+        if (current === generation && !controller.signal.aborted) onFailure(error, { refresh });
       } finally { if (current === generation) active = null; }
     },
     invalidate() { generation++; active?.abort(); active = null; },

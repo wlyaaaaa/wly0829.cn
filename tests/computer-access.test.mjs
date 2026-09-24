@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -230,17 +230,18 @@ test("built route preserves the complete static shell and scoped connection poli
   for (const text of ["授权与状态", "存储空间", "Windows可用物理总量", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
   assert.ok(!html.includes('id="ca-totp"'));
   assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
-  assert.match(html, /aria-label="授权与状态（新标签）"/);
+  assert.match(html, /aria-label="授权与状态"/);
   assert.ok(!html.includes("需要结束访问时"));
   assert.match(html, /aria-label="结束无限制授权"/);
   assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
   assert.ok(html.indexOf('id="access-form"') < html.indexOf('id="ca-hardware-title"'));
   assert.ok(!html.includes('class="flow-field"'));
-  assert.match(html, /href="https:\/\/wly0829\.cn\/computer-access\/"[^>]*aria-label="授权与状态（新标签）"/);
+  assert.match(html, /href="\/computer-access\/"[^>]*aria-label="授权与状态"/);
   assert.match(html, /connect-src 'self' https:\/\/mcp.wly0829.cn/);
   assert.match(html, /name="referrer" content="no-referrer"/);
   assert.ok(html.indexOf('id="access-form"') < html.indexOf('class="ca-card ca-network-card"'));
-  assert.ok(html.indexOf('class="ca-card ca-network-card"') < html.indexOf("</aside>"));
+  assert.ok(html.indexOf('class="ca-card ca-network-card"') > html.indexOf("</aside>"));
+  assert.match(html, /rel="preconnect" href="https:\/\/mcp.wly0829.cn"/);
 });
 
 test("website entry mounts in place without redirecting or discarding request locators", async () => {
@@ -261,4 +262,35 @@ test("end buttons reflect actual grant state without conflating pending request 
   }
   for (const state of ["opening", "closing"]) assert.equal(canEndGrant({ state, expires_at_unix: 0 }, 100), true);
   assert.equal(canEndGrant(null, 100), false);
+});
+
+test("manual refresh reaches the status fetch without changing singleflight or generation safety", async () => {
+  const pending = [], seen = [];
+  const reader = createStatusReader((signal, options) => new Promise(resolve => pending.push({ signal, options, resolve })), (data, options) => seen.push({ data, options }), error => { throw error; });
+  const initial = reader.read();
+  await reader.read({ refresh: true });
+  assert.equal(pending.length, 1);
+  assert.equal(pending[0].options.refresh, false);
+  reader.invalidate();
+  const fresh = reader.read({ refresh: true });
+  assert.equal(pending[1].options.refresh, true);
+  pending[1].resolve("fresh"); await fresh;
+  pending[0].resolve("old"); await initial;
+  assert.deepEqual(seen, [{ data: "fresh", options: { refresh: true } }]);
+});
+
+test("reload cache projection strips all authority and request fields", () => {
+  const saved = hardwareSnapshot({ hardware: { cpu: { model: "synthetic", usage_percent: 10 } }, observed_at_unix: 100, personal_data: { state: "unlocked" }, unrestricted: { state: "active" }, state_version: "old", totp: "synthetic", request_id: "old" });
+  assert.deepEqual(Object.keys(saved).sort(), ["hardware", "observed_at_unix"]);
+  assert.equal(hardwareSnapshot(null), null);
+  assert.equal(hardwareSnapshot({ hardware: {} }), null);
+});
+
+test("computer routes stay in the current tab while external links retain their target", async () => {
+  const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
+  for (const name of ["连接电脑", "授权与状态"]) {
+    const tag = html.match(new RegExp(`<a[^>]+aria-label="${name}"[^>]*>`))?.[0];
+    assert.ok(tag, name); assert.ok(!tag.includes('target="_blank"'), tag);
+  }
+  assert.match(html, /href="https:\/\/grafana.wly0829.cn\/"[^>]*target="_blank"/);
 });

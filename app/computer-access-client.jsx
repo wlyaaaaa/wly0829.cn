@@ -7,7 +7,7 @@ if (isHostOrigin(window.location.origin)) {
   function officialLink(link) {
     if (!link) return;
     const href = link.getAttribute("href");
-    if (href?.startsWith("/") && !href.startsWith("/computer-access/")) link.href = new URL(href, "https://wly0829.cn").href;
+    if (href?.startsWith("/")) link.href = new URL(href, "https://wly0829.cn").href;
   }
   for (const link of document.querySelectorAll('a[href^="/"]')) if (!link.closest("[data-computer-access]")) officialLink(link);
   // Search suggestions are created after load; their destinations stay on the website.

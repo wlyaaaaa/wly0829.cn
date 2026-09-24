@@ -304,8 +304,8 @@ function Header({ path, search = "" }) {
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
         <a className="header-connect" href="https://grafana.wly0829.cn/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开 Grafana"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
-        <SiteLink className="header-connect" href="/mcp" target="_blank" rel="noopener noreferrer" aria-label="连接电脑（新标签）" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
-        <SiteLink className="header-connect" href="https://wly0829.cn/computer-access/" target="_blank" rel="noopener noreferrer" aria-label="授权与状态（新标签）" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
+        <SiteLink className="header-connect" href="/mcp" aria-label="连接电脑" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
+        <SiteLink className="header-connect" href="/computer-access/" aria-label="授权与状态" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
