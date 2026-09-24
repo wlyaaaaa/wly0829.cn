@@ -9,6 +9,8 @@ if (document.querySelector("[data-computer-access]")) {
   import("../app/computer-access-client.jsx");
 }
 
+if (document.querySelector("[data-access-summary]")) import("../app/computer-access-summary-client.jsx");
+
 const searchEntries = [
   ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),
   ...(Array.isArray(window.__WLY_PROJECT_SEARCH_INDEX__) ? window.__WLY_PROJECT_SEARCH_INDEX__ : [])

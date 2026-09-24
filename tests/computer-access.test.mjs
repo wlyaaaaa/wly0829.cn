@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, memorySpecification, networkConnection, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -292,5 +292,64 @@ test("computer routes stay in the current tab while external links retain their 
     const tag = html.match(new RegExp(`<a[^>]+aria-label="${name}"[^>]*>`))?.[0];
     assert.ok(tag, name); assert.ok(!tag.includes('target="_blank"'), tag);
   }
-  assert.match(html, /href="https:\/\/grafana.wly0829.cn\/"[^>]*target="_blank"/);
+  assert.match(html, /data-grafana-entry="true"[^>]*href="\/#grafana-status"/);
+});
+
+test("hardware specifications preserve actual inventory and dynamic link evidence", () => {
+  const source = (observed_at_unix) => ({ status: "ok", observed_at_unix, timestamp_basis: "sample" });
+  const status = adaptStatus({ hardware: {
+    memory: { type: "DDR5", data_rate_mt_s: 6200, module_count: 2, module_capacity_bytes: 32 * 1024 ** 3, manufacturer: "Synthetic", timings: null, used_bytes: 1024, sources: { type: source(10), data_rate_mt_s: source(10), manufacturer: source(10), timings: source(10), used_bytes: source(20) } },
+    network: { model: "Synthetic adapter", connection_type: "ethernet", link_speed_bps: 2500000000, sources: { model: source(10), connection_type: source(20), link_speed_bps: source(20) } },
+    volumes: [{ letter: "C:", filesystem: "ReFS", sources: { filesystem: source(10), used_bytes: source(20) } }],
+  } });
+  const memory = memorySpecification(status.hardware.memory);
+  assert.equal(memory.standard, "DDR5-6200"); assert.equal(memory.modules, "2 × 32.0 GiB"); assert.equal(memory.timings, null);
+  assert.equal(memorySpecification({ timings: "36-38-38-80" }).timings, "时序 36-38-38-80");
+  assert.equal(status.hardware.memory.observed_at_unix, 20); assert.equal(status.hardware.memory.type.observed_at_unix, 10);
+  assert.equal(networkConnection(status.hardware.network), "有线以太网 · 2.5 Gbps");
+  assert.equal(networkConnection({ connection_type: "wifi", link_speed_bps: 1200000000 }), "Wi-Fi · 1.2 Gbps");
+  assert.equal(networkConnection({ connection_type: "physical", link_speed_bps: null }), "物理网络 · 链路速率未读取");
+  assert.equal(status.hardware.network.model.observed_at_unix, 10); assert.equal(status.hardware.network.link_speed_bps.observed_at_unix, 20);
+  assert.equal(status.hardware.volumes[0].filesystem.value, "ReFS");
+});
+
+test("processor metrics accept native display fields and retain voltage measurement basis", () => {
+  const source = { status: "ok", observed_at_unix: 123, timestamp_basis: "sample", source: "synthetic sensor" };
+  const adapted = adaptStatus({ hardware: { cpu: { power_w: 65, temperature_c: 52, frequency_mhz: 4800, voltage_v: 1.15, voltage_basis: "VID", sources: { voltage_v: source } }, gpus: [{ power_watts: 80, temperature_celsius: 45, frequency_mhz: 2200, voltage_v: 1.02, voltage_basis: "GPU core voltage" }] } });
+  assert.equal(adapted.hardware.cpu.power_w, 65); assert.equal(adapted.hardware.cpu.temperature_c, 52);
+  assert.equal(adapted.hardware.cpu.voltage_v.value, 1.15); assert.equal(adapted.hardware.cpu.voltage_basis, "VID");
+  assert.equal(adapted.hardware.gpus[0].power_w, 80); assert.equal(adapted.hardware.gpus[0].temperature_c, 45);
+  assert.equal(adapted.hardware.gpus[0].frequency_mhz, 2200);
+});
+
+test("new telemetry groups retain units and per-field observation evidence", () => {
+  const source = { status: "ok", source: "synthetic provider", observed_at_unix: 100, timestamp_basis: "provider_read", sample_time_known: false };
+  const result = adaptStatus({ hardware: {
+    memory: { committed_bytes: 123, commit_limit_bytes: 456, sources: { committed_bytes: source, commit_limit_bytes: source } },
+    display: { model: "Synthetic monitor", width_px: 3840, height_px: 2160, refresh_hz: 144, bits_per_channel: 10, sources: { width_px: source, refresh_hz: source } },
+    network: { latency_ms: 12.5, jitter_ms: 0.8, packet_loss_percent: 1, sources: { latency_ms: source, jitter_ms: source, packet_loss_percent: source } },
+    health: { dpc_usage_percent: 0.3, sources: { dpc_usage_percent: source } },
+  } });
+  assert.equal(result.hardware.memory.committed_bytes.value, 123); assert.equal(result.hardware.memory.commit_limit_bytes.value, 456);
+  assert.equal(result.hardware.display.refresh_hz.value, 144); assert.equal(result.hardware.display.refresh_hz.observed_at_unix, 100);
+  assert.equal(result.hardware.network.latency_ms.value, 12.5); assert.equal(result.hardware.network.packet_loss_percent.value, 1);
+  assert.equal(result.hardware.health.dpc_usage_percent.value, 0.3);
+  assert.equal(result.hardware.health.sources.dpc_usage_percent.sample_time_known, false);
+});
+
+test("HTTP service failure retains status for friendly connection diagnosis without claiming a powered-off PC", async () => {
+  const original = globalThis.fetch;
+  globalThis.fetch = async () => new Response("upstream unavailable", { status: 502 });
+  try { await assert.rejects(apiRequest("", "/status"), error => error.httpStatus === 502); }
+  finally { globalThis.fetch = original; }
+});
+
+test("home and MCP summaries only offer links to the common authority page", async () => {
+  for (const route of ["index.html", "mcp/index.html"]) {
+    const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
+    assert.ok(html.includes("data-access-summary")); assert.ok(html.includes("进入授权与状态")); assert.ok(html.includes('id="grafana-status"'));
+    assert.ok(!html.includes('id="ca-totp"'));
+  }
+  const summary = await readFile(new URL("../app/computer-access-summary.jsx", import.meta.url), "utf8");
+  assert.ok(!summary.includes('method: "POST"'));
 });

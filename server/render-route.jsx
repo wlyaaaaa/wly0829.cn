@@ -3,6 +3,7 @@ import { renderToStaticMarkup, renderToString } from "react-dom/server";
 import Page from "../app/page.jsx";
 import mcpAccessStyles from "../app/mcp-access.css?inline";
 import computerAccessStyles from "../app/computer-access.css?inline";
+import accessSummaryStyles from "../app/computer-access-summary.css?inline";
 import { globalSearchEntries } from "../app/search.js";
 import { createCompactSearchEntry } from "../app/compact-search.js";
 import { canonicalPath, canonicalUrl, projectCatalog, projectEntryForPath, routeMeta, routePaths } from "../app/site-content.js";
@@ -79,7 +80,7 @@ function nextStaticRoute(route) {
 }
 
 export function renderRoute(pathname, search = "") {
-  if (canonicalPath(pathname) === "/computer-access/") return renderToString(<Page initialPathname={pathname} initialSearch={search} />);
+  if (["/", "/system/", "/mcp/", "/computer-access/"].includes(canonicalPath(pathname))) return renderToString(<Page initialPathname={pathname} initialSearch={search} />);
   return renderToStaticMarkup(<Page initialPathname={pathname} initialSearch={search} />);
 }
 
@@ -105,7 +106,8 @@ export function renderDocument(template, pathname, search = "") {
   html = replaceRequired(html, /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:description" content="${escapeAttribute(meta.description)}" />`);
   html = replaceRequired(html, /<div id="root"><\/div>/, `<div id="root" data-static-route="${escapeAttribute(route)}">${renderRoute(route, search)}</div>`);
   const compatibilityRedirect = route === "/system" ? '<meta http-equiv="refresh" content="0; url=/" />\n    ' : "";
-  const pageStyles = route === "/mcp" ? `<style data-mcp-access>${mcpAccessStyles}</style>` : route === "/computer-access" ? `<style data-computer-access-styles>${computerAccessStyles}</style>` : "";
+  const summaryStyles = ["/", "/system", "/mcp", "/computer-access"].includes(route) ? `<style data-access-summary-styles>${accessSummaryStyles}</style>` : "";
+  const pageStyles = summaryStyles + (route === "/mcp" ? `<style data-mcp-access>${mcpAccessStyles}</style>` : route === "/computer-access" ? `<style data-computer-access-styles>${computerAccessStyles}</style>` : "");
   html = html.replace("</head>", `    ${compatibilityRedirect}${prefetchLinks}${pageStyles}\n  </head>`);
   if (!/<script\s+type="module"/.test(html)) throw new Error("HTML template has no client enhancement entry");
   return html.replace(/(<script\s+type="module")/, `${searchIndexScripts(route)}\n    $1`);

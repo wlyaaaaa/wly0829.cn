@@ -125,6 +125,26 @@ export function rate(value) {
   return number === null ? reading(value) : reading({ value: number / 1024 ** 2, state: value?.state }, " MiB/s", 2);
 }
 
+export function memorySpecification(memory = {}) {
+  const value = field => field && typeof field === "object" ? field.value : field;
+  const type = value(memory.type), speed = numeric(memory.data_rate_mt_s);
+  const timings = value(memory.timings);
+  const count = numeric(memory.module_count), size = numeric(memory.module_capacity_bytes);
+  return {
+    standard: type ? `${type}${speed > 0 ? `-${speed}` : ""}` : speed > 0 ? `${speed} MT/s` : null,
+    modules: count > 0 && size > 0 ? `${count} × ${capacity(size)}` : null,
+    manufacturer: value(memory.manufacturer) || null,
+    timings: typeof timings === "string" && timings.trim() ? `时序 ${timings}` : Array.isArray(timings) && timings.length && timings.every(Number.isFinite) ? `时序 ${timings.join("-")}` : null,
+  };
+}
+
+export function networkConnection(network = {}) {
+  const type = network.connection_type && typeof network.connection_type === "object" ? network.connection_type.value : network.connection_type;
+  const speed = numeric(network.link_speed_bps);
+  const link = speed > 0 ? `${(speed / (speed >= 1e9 ? 1e9 : 1e6)).toLocaleString("zh-CN", { maximumFractionDigits: 2 })} ${speed >= 1e9 ? "Gbps" : "Mbps"}` : "链路速率未读取";
+  return `${({ ethernet: "有线以太网", wifi: "Wi-Fi", physical: "物理网络" })[type] || "连接类型未读取"} · ${link}`;
+}
+
 export function hardwareBasis(value, kind) {
   const raw = value && typeof value === "object" ? value.value : value;
   if (!raw || raw === "unavailable") return "暂未取得口径";
@@ -208,10 +228,10 @@ export function adaptStatus(data) {
   function group(raw = {}, aliases = {}) {
     const converted = { ...raw };
     for (const [field, source] of Object.entries(raw.sources || {})) {
-      converted[field] = { value: raw[field], state: source.status, source: source.source, observed_at_unix: source.observed_at_unix, timestamp_basis: source.timestamp_basis };
+      converted[field] = { value: raw[field], state: source.status, source: source.source, observed_at_unix: source.observed_at_unix, timestamp_basis: source.timestamp_basis, sample_time_known: source.sample_time_known };
     }
-    for (const [target, source] of Object.entries(aliases)) converted[target] = converted[source];
-    const staticFields = new Set(["model", "cores", "threads", "installed_bytes", "total_bytes", "vram_total_bytes", "frequency_basis", "basis", "interface_basis", "physical_disks", "type", "letter"]);
+    for (const [target, source] of Object.entries(aliases)) if (Object.hasOwn(converted, source)) converted[target] = converted[source];
+    const staticFields = new Set(["model", "cores", "threads", "installed_bytes", "total_bytes", "vram_total_bytes", "frequency_basis", "basis", "interface_basis", "physical_disks", "type", "letter", "filesystem", "data_rate_mt_s", "module_count", "module_capacity_bytes", "manufacturer", "part_number", "timings", "voltage_basis"]);
     const dynamicSources = Object.entries(raw.sources || {}).filter(([field]) => !staticFields.has(field)).map(([, source]) => source);
     const times = dynamicSources.map(source => source.observed_at_unix).filter(Number.isFinite);
     // The group describes its newest dynamic read, while per-field evidence below
@@ -227,6 +247,8 @@ export function adaptStatus(data) {
     gpus: (hardware.gpus || []).map(gpu => group(gpu, { temperature_c: "temperature_celsius", power_w: "power_watts", memory_used_bytes: "vram_used_bytes", memory_total_bytes: "vram_total_bytes" })),
     memory: group(hardware.memory, { installed_total_bytes: "installed_bytes", usable_total_bytes: "total_bytes" }),
     network: group(hardware.network),
+    display: group(hardware.display),
+    health: group(hardware.health),
     volumes: (hardware.volumes || []).map(volume => ({ ...group(volume), drive: volume.letter, kind: volume.type, state: volume.connected === false ? "disconnected" : volume.state || volume.status,
       mapping: volume.physical_disks?.length ? volume.physical_disks.map(disk => `${disk.model || "型号未知"} · ${capacity(disk.capacity_bytes)}`).join("；") : volume.type === "ramdisk" ? "内存盘 · 不计入物理盘容量" : volume.type === "virtual" ? "虚拟盘 · 底层映射未知" : "物理盘映射未知",
     })),
@@ -280,10 +302,17 @@ export async function apiRequest(base, path, { method = "GET", body, csrf, signa
       headers: { ...(body ? { "Content-Type": "application/json" } : {}), ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
-    const data = await response.json();
+    let data;
+    try { data = await response.json(); }
+    catch {
+      const error = new Error(response.status >= 500 ? "主机连接服务暂时异常。" : "暂时无法读取主机响应。");
+      error.httpStatus = response.status;
+      throw error;
+    }
     if (!response.ok || (data.status === "error" && !data.request_id)) {
       const error = new Error(errorMessages[data.code || (typeof data.error === "string" ? data.error : data.error?.code) || data.reason] || "主机暂未完成此操作，请查看当前状态。");
       error.data = data;
+      error.httpStatus = response.status;
       throw error;
     }
     return data;

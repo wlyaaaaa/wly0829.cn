@@ -466,7 +466,8 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.match(registry.refresh_policy.bundle_budget_semantics, /no new runtime dependency/);
   assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
-  const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js") && !item.startsWith("computer-access-client-"));
+  // The explicit access islands share React only on their requested routes; narrative enhancement stays independent.
+  const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js") && !item.startsWith("computer-access-"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
   const javascriptSources = await Promise.all(javascript.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const gzipBytes = javascriptSources.reduce((total, source) => total + gzipSync(source).length, 0);
@@ -481,8 +482,9 @@ test("the shared enhancement and search indices stay within their measured revie
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway|devconfig-backup)/, "browser runtime must not import narrative packages");
   assert.match(runtimeSource, /if \(document\.querySelector\("\[data-computer-access\]"\)\) \{\s*import\("\.\.\/app\/computer-access-client\.jsx"\)/, "P6 island loads only on its initial route without redirecting away from the stable website");
-  const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-client\.jsx|\.\/computer-access-client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
-  assert.doesNotMatch(narrativeGraph, /\b(?:fetch|import)\s*\(/, "narrative routes must retain native static navigation; only the P6 operational island is dynamic");
+  assert.match(runtimeSource, /if \(document\.querySelector\("\[data-access-summary\]"\)\) import\("\.\.\/app\/computer-access-summary-client\.jsx"\)/, "status summaries load only on their initial DOM island routes");
+  const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-(?:summary-)?client\.jsx|\.\/computer-access-(?:summary-)?client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
+  assert.doesNotMatch(narrativeGraph, /\b(?:fetch|import)\s*\(/, "narrative routes must retain native static navigation; only the explicit access/status islands are dynamic");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
   for (const { project: currentProject } of projectCatalog) {

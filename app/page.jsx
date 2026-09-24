@@ -58,6 +58,7 @@ import { searchResultExcerpt } from "./compact-search.js";
 import { ProjectContinuation } from "./continuation-brief.jsx";
 import { mcpDevices, mcpMainFallback, mcpSetupNote } from "./content-mcp-access.js";
 import ComputerAccess from "./computer-access.jsx";
+import ComputerAccessSummary from "./computer-access-summary.jsx";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -303,7 +304,7 @@ function Header({ path, search = "" }) {
         </nav>
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
-        <a className="header-connect" href="https://grafana.wly0829.cn/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开 Grafana"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
+        <a className="header-connect" data-grafana-entry href="/#grafana-status" aria-label="查看 Grafana 状态"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
         <SiteLink className="header-connect" href="/mcp" aria-label="连接电脑" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
         <SiteLink className="header-connect" href="/computer-access/" aria-label="授权与状态" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
         <button
@@ -1686,6 +1687,7 @@ function SystemPage() {
         <h2>{systemHomeHero.title}</h2>
         <p className="daily-home-intro">找资料、整理微信、做文档、修电脑、远程操作或研究问题，都可以从一个具体需求开始。这里帮你找到项目和能力，带上续作说明交给 AI，或配置电脑连接继续操作；下面也能查看整套系统的分工。</p>
         <div id="home-search" className="daily-home-search"><GlobalSearch path="/" className="hero-search-control" resultId="home-global-search-results" /></div>
+        <div data-access-summary><ComputerAccessSummary /></div>
         <div className="daily-entry-links">
           <SiteLink href="/projects"><span>看看我现在有哪些项目</span><small>{projectCatalog.length} 个项目 · 每个项目先看能做什么</small><ArrowRight size={20} aria-hidden="true" /></SiteLink>
           <SiteLink href="/skills"><span>按需求找到能力</span><small>不用记 Skill 名，直接说想完成什么</small><ArrowRight size={20} aria-hidden="true" /></SiteLink>
@@ -1910,13 +1912,13 @@ function SiteFooter() {
 function McpAccessPage() {
   return (
     <div className="mcp-page">
-      <header className="mcp-intro">
+      <div className="mcp-hero-grid"><header className="mcp-intro">
         <p className="section-kicker">电脑连接 · MCP</p>
         <h1>我的电脑连接</h1>
         <p>为自己使用的智能体、桌面应用或自动化工具，配置主机与副机的 MCP（模型上下文协议）连接。</p>
         <p className="mcp-access-boundary"><LockKey size={17} aria-hidden="true" /><strong>仅限本人及已授权客户端使用。</strong>需要有效凭据或 OAuth 授权，复制地址不会获得电脑操作权限。</p>
         <p className="mcp-use-note">配置连接或找地址时来这里。连接完成后，直接在原来的客户端使用。</p>
-      </header>
+      </header><div data-access-summary><ComputerAccessSummary /></div></div>
 
       <section className="mcp-device-grid" aria-label="选择要连接的电脑">
         {mcpDevices.map((device) => {
@@ -1963,7 +1965,7 @@ function McpAccessPage() {
 
       <div className="mcp-details">
         <details><summary>接入方式与认证<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>需要支持远程 MCP 的客户端。不同工具的设置位置、认证方式和能力支持不同；地址本身不包含操作权限。</p><dl><div><dt>OAuth 登录授权</dt><dd>适用于当前已登记的客户端。首次连接时，按客户端提示完成授权。</dd></div><div><dt>Bearer 凭据</dt><dd>已有兼容方式，供支持此认证的客户端使用。凭据在私下配置，不会展示在网页上。</dd></div><div><dt>已验收的示例</dt><dd>ChatGPT 已完成真实工具调用验收。可在<a href="https://chatgpt.com/plugins" target="_blank" rel="noopener noreferrer">插件设置 <ArrowRight size={13} aria-hidden="true" /></a>添加或管理连接。其他客户端仍需各自完成接入验证。</dd></div></dl><p>如果新工具无法完成认证，应先确认它支持哪种方式，再配置对应授权。</p></div></details>
-        <details><summary>技术与最近验收<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>这里显示最近一次验收记录，不代表电脑此刻在线。页面本身是静态网页，打开时不请求两台电脑。</p>{mcpDevices.map((device) => <section key={device.id}><h3>{device.name}</h3><p>{device.evidence}</p><p className="mcp-technical-note">当前入口：{device.transport}</p></section>)}<section><h3>主机备用入口 · 故障演练</h3><p>{mcpMainFallback.evidence}</p><p>这证明主机隧道断开时可以经副机公网连接主机，不代表已经模拟 Cloudflare 全球故障。备用通路仍依赖两台电脑、副机公网入口、两机私网连接和主机 MCP 服务。</p></section><p>普通命令验收不等于每一种文件和桌面操作都已复测。电脑需要开机、联网且服务运行，客户端才能调用工具。</p></div></details>
+        <details><summary>技术与最近验收<span aria-hidden="true">＋</span></summary><div className="mcp-detail-body"><p>这里显示最近一次验收记录，不代表电脑此刻在线。上方状态卡只读取主机的当前授权状态；副机与下方接入验收记录不会因此变成实时状态。</p>{mcpDevices.map((device) => <section key={device.id}><h3>{device.name}</h3><p>{device.evidence}</p><p className="mcp-technical-note">当前入口：{device.transport}</p></section>)}<section><h3>主机备用入口 · 故障演练</h3><p>{mcpMainFallback.evidence}</p><p>这证明主机隧道断开时可以经副机公网连接主机，不代表已经模拟 Cloudflare 全球故障。备用通路仍依赖两台电脑、副机公网入口、两机私网连接和主机 MCP 服务。</p></section><p>普通命令验收不等于每一种文件和桌面操作都已复测。电脑需要开机、联网且服务运行，客户端才能调用工具。</p></div></details>
       </div>
       <SiteLink className="mcp-back-link" href="/"><ArrowLeft size={16} aria-hidden="true" />回到个人 AI 协作系统</SiteLink>
     </div>
