@@ -34,6 +34,32 @@ export function unresolvedAction(result) {
   return ["pending", "verifying", "unknown"].includes(result?.state);
 }
 
+export const GRANT_STAGE_KEY = "p6-request-stage";
+export function readGrantStage(storage, requestId) {
+  try {
+    const stage = JSON.parse(storage.getItem(GRANT_STAGE_KEY) || "null");
+    return stage?.request_id === requestId && typeof stage.factor_submitted === "boolean" ? stage.factor_submitted : undefined;
+  } catch { return undefined; }
+}
+export function markGrantVerificationSubmitted(storage, requestId) {
+  try { storage.setItem(GRANT_STAGE_KEY, JSON.stringify({ request_id: requestId, factor_submitted: true })); return true; }
+  catch {
+    // A stale false must not survive a failed write and permit unsafe replay after reload.
+    try { storage.removeItem(GRANT_STAGE_KEY); return true; } catch { return false; }
+  }
+}
+export function canRestartUnsubmittedGrant(request, response, failure) {
+  return request?.factor_submitted === false && (response
+    ? response.state === "pending" && response.factor_submitted !== true
+    : failure?.data?.error === "public_request_not_found");
+}
+
+export function grantResultNeedsQuery(result) {
+  if (!result || result.state === "succeeded") return false;
+  const affectedPart = [result.personal_data?.state, result.unrestricted?.state].some(state => ["unknown", "pending", "verifying", "succeeded"].includes(state));
+  return affectedPart || !["failed", "expired", "cancelled"].includes(result.state);
+}
+
 export function successfulGrantSnapshot(snapshot, result, freshPost = false) {
   // A stored request describes a past action, never today's authority.
   if (!freshPost || result?.state !== "succeeded") return null;
@@ -175,8 +201,8 @@ export function canRetryVerification(result) {
 
 // A single user submit retains the server's create -> verify binding. Cancellation
 // waits for create when necessary, and suppresses the old verification response.
-export function createGrantAttempt({ requestId, body, api, onCreated }) {
-  let createdPromise, current, cancelled = false, code = "", cancelPromise;
+export function createGrantAttempt({ requestId, body, api, onCreated, onVerificationStarted = () => {} }) {
+  let createdPromise, current, cancelled = false, code = "", cancelPromise, factorSubmitted = false;
   const rejectedBeforeCreation = failure => new Set([
     "public_state_changed", "public_totp_cooldown", "public_totp_not_ready",
     "public_duration_total_exceeds_72_hours", "personal_access_duration_hours_invalid",
@@ -189,6 +215,7 @@ export function createGrantAttempt({ requestId, body, api, onCreated }) {
     request_created: false, factor_submitted: false, plaintext_returned: false,
   });
   return {
+    get factorSubmitted() { return factorSubmitted; },
     async run(input) {
       code = input;
       createdPromise = api("/requests", { method: "POST", body: { ...body, request_id: requestId } });
@@ -207,6 +234,8 @@ export function createGrantAttempt({ requestId, body, api, onCreated }) {
       }
       const submitted = code;
       code = "";
+      onVerificationStarted(current.request_id);
+      factorSubmitted = true;
       const result = await api(`/requests/${encodeURIComponent(current.request_id)}/verify`, {
         method: "POST", csrf: current.csrf_token, body: { totp: submitted }, timeout: 30000,
       });
@@ -264,6 +293,8 @@ export function adaptStatus(data) {
 }
 
 export const errorMessages = {
+  public_factor_not_submitted: "本次验证码未提交。请重新输入验证码后验证。",
+  public_request_tracking_unavailable: "无法保存本次请求状态，验证码未提交。请重新加载页面后再试。",
   public_state_changed: "授权、开机或配置状态已变化。请查看最新状态，再决定是否重新办理。",
   public_request_expired: "本次请求已到期，已有授权保持原期限。",
   public_totp_format_invalid: "请输入完整的6位动态验证码，保留开头的0。",

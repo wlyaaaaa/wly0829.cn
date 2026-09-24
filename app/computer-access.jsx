@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { SiModelcontextprotocol } from "@icons-pack/react-simple-icons";
 import { GrafanaStatus, ReadIndicator, useGrafanaNavigation } from "./computer-access-summary.jsx";
 import { ArrowClockwise, ArrowRight, CheckCircle, Cpu, Desktop, Gauge, HardDrives, LockKey, Memory, ShieldCheck, User, WarningCircle, X, Infinity as InfinityIcon, WifiHigh } from "@phosphor-icons/react";
-import { HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, capacity, canEndGrant, canRetryVerification, createGrantAttempt, createStatusReader, durationMinutes, errorMessages, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, memorySpecification, minutesLabel, networkConnection, numeric, queryResultUpdate, rate, reading, reductionAction, reductionFailureResult, remainingMinutes, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "./computer-access-model.js";
+import { HOST_ORIGIN, GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, capacity, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, createGrantAttempt, createStatusReader, durationMinutes, errorMessages, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, minutesLabel, networkConnection, numeric, queryResultUpdate, rate, readGrantStage, reading, reductionAction, reductionFailureResult, remainingMinutes, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "./computer-access-model.js";
 
 function SampleTime({ sample }) {
   const observed = sample?.observed_at_unix;
@@ -141,8 +141,21 @@ export default function ComputerAccess({ initialRead = null }) {
     const restoredParams = new URLSearchParams(window.location.search);
     const restoredId = restoredParams.get("request") || restoredParams.get("request_id") || savedId;
     if (restoredId && /^[a-zA-Z0-9_-]{8,100}$/.test(restoredId)) {
-      setRequest({ request_id: restoredId, state: "unknown" }); setLookupOnly(true); setFormOpen(true);
-      apiRequest(onHost ? "" : HOST_ORIGIN, `/requests/${encodeURIComponent(restoredId)}`).then(data => { if (mounted.current) { const action = reductionAction(data); if (action) { acceptAction({ request_id: restoredId, ...data, action }); locateRequest(null); setRequest(null); setLookupOnly(false); } else { acceptResult(data); if (data.state === "succeeded") reader.current?.read({ replace: true }); } } }).catch(() => { if (mounted.current) setError("暂无法取得原请求结果，请手动查询；不要重新提交验证码。"); });
+      let phase;
+      try { phase = readGrantStage(sessionStorage, restoredId); } catch {}
+      const restored = { request_id: restoredId, state: "unknown", ...(phase === undefined ? {} : { factor_submitted: phase }) };
+      setRequest(restored); setLookupOnly(true); setFormOpen(true);
+      apiRequest(onHost ? "" : HOST_ORIGIN, `/requests/${encodeURIComponent(restoredId)}`).then(data => {
+        if (!mounted.current) return;
+        const action = reductionAction(data);
+        if (action) { acceptAction({ request_id: restoredId, ...data, action }); locateRequest(null); setRequest(null); setLookupOnly(false); }
+        else if (canRestartUnsubmittedGrant(restored, data)) returnToUnsubmitted(restoredId);
+        else { acceptResult({ ...restored, ...data }); if (data.state === "succeeded") reader.current?.read({ replace: true }); }
+      }).catch(failure => {
+        if (!mounted.current) return;
+        if (canRestartUnsubmittedGrant(restored, null, failure)) returnToUnsubmitted(restoredId);
+        else setError("暂无法取得原请求结果，请手动查询；不要重新提交验证码。");
+      });
     }
     if (isAccessOrigin(window.location.origin)) {
       const params = new URLSearchParams(window.location.search);
@@ -174,7 +187,6 @@ export default function ComputerAccess({ initialRead = null }) {
     return () => { mounted.current = false; clearTimeout(timer); clearInterval(clock); reader.current.invalidate(); document.removeEventListener("visibilitychange", visible); };
   }, []);
   useEffect(() => { if (!toast) return; const timeout = setTimeout(() => setToast(null), 10000); return () => clearTimeout(timeout); }, [toast]);
-  useEffect(() => { if (error) notify(error, "warning"); }, [error]);
   const available = formAllowed && connection === "online" && Boolean(snapshot?.state_version);
   const minutes = durationMinutes(hours);
   const selectedActive = remainingMinutes(snapshot?.[purpose], now) > 0;
@@ -186,10 +198,20 @@ export default function ComputerAccess({ initialRead = null }) {
   const visibleError = request?.error === "public_totp_cooldown" && !cooling ? "上次提交遇到冷却。现在可重新输入验证码，点击办理按钮后才会重试。" : error;
   const retryable = canRetryVerification(request);
   const requestTerminal = request && ["succeeded", "success", "partial", "failed", "cancelled", "expired"].includes(request.state || request.status);
-  function locateRequest(id) { try { if (id) sessionStorage.setItem("p6-request-id", id); else sessionStorage.removeItem("p6-request-id"); } catch {} const url = new URL(window.location.href); url.search = ""; if (id) url.searchParams.set("request", id); history.replaceState(null, "", url.pathname + url.search + url.hash); }
+  function locateRequest(id, factorSubmitted) {
+    try {
+      if (id) {
+        sessionStorage.setItem("p6-request-id", id);
+        if (typeof factorSubmitted === "boolean") sessionStorage.setItem(GRANT_STAGE_KEY, JSON.stringify({ request_id: id, factor_submitted: factorSubmitted }));
+      } else { sessionStorage.removeItem("p6-request-id"); sessionStorage.removeItem(GRANT_STAGE_KEY); }
+    } catch {}
+    const url = new URL(window.location.href); url.search = ""; if (id) url.searchParams.set("request", id); history.replaceState(null, "", url.pathname + url.search + url.hash);
+  }
+  function returnToUnsubmitted(id, error = "public_factor_not_submitted") {
+    acceptResult({ request_id: id, state: "failed", factor_submitted: false, error });
+  }
   function choose(nextPurpose) { setRequestQuery(null); locateRequest(null); setLookupOnly(false); setPurpose(nextPurpose); setCombined(false); setSaveDefault(false); setFormOpen(true); setResult(null); setError(""); setRequest(null); setTotp(""); touched.current = true; setTimeout(() => formRef.current?.focus({ preventScroll: false }), 0); }
-  const responseSerial = useRef(0), attemptRef = useRef(null);
-  const [cancelling, setCancelling] = useState(false);
+  const responseSerial = useRef(0);
   const [checkingRequest, setCheckingRequest] = useState(false), [requestQuery, setRequestQuery] = useState(null), [queryingActionId, setQueryingActionId] = useState("");
   function acceptResult(value, freshPost = false) {
     if (value.state === "succeeded") {
@@ -209,17 +231,19 @@ export default function ComputerAccess({ initialRead = null }) {
       if (Number.isFinite(value.summary.minutes)) setHours(String(value.summary.minutes / 60));
       setSaveDefault(value.summary.save_default === true); touched.current = true;
     }
-    setRequest(previous => ({ ...previous, ...value, error: value.error }));
+    const needsQuery = grantResultNeedsQuery(value);
+    if (needsQuery || canRetryVerification(value)) setRequest(previous => ({ ...previous, ...value, error: value.error }));
+    else { setRequest(null); locateRequest(null); }
     setResult(value);
-    notify(errorMessages[value.error] || resultStates[value.state] || "结果待确认，请查询原请求。", value.state === "cancelled" ? "info" : "warning");
-    setLookupOnly(!canRetryVerification(value));
+    setLookupOnly(needsQuery);
+    setToast(null);
     setTotp("");
     if (Number.isFinite(value.cooldown_until_unix)) setSnapshot(previous => previous ? { ...previous, factor: { ...previous.factor, cooldown_until_unix: value.cooldown_until_unix } } : previous);
     setError(value.error ? errorMessages[value.error] || "主机暂未完成此操作，请查询本次结果。" : "");
   }
   async function act(action) {
     if (operation.current) return;
-    operation.current = true; setBusy(true); setError(""); notify("正在处理本次请求…"); reader.current.invalidate(); setRefreshing(false);
+    operation.current = true; setBusy(true); setError(""); setToast(null); reader.current.invalidate(); setRefreshing(false);
     const serial = ++responseSerial.current;
     try { await action(serial); }
     catch (failure) {
@@ -234,58 +258,43 @@ export default function ComputerAccess({ initialRead = null }) {
       }
     } finally {
       if (serial === responseSerial.current) {
-        operation.current = false; setBusy(false); attemptRef.current = null;
+        operation.current = false; setBusy(false);
         reader.current.read({ replace: true });
       }
     }
   }
   async function submit(event) {
     event.preventDefault();
-    if (busy || cancelling || actionBusy || !available || minutes === null || overLimit || !factorAvailable || (request && !retryable)) return;
+    if (busy || actionBusy || !available || minutes === null || overLimit || !factorAvailable || (request && !retryable)) return;
     if (!formAllowed) return;
     if (!/^\d{6}$/.test(totp)) { setError("请输入验证器中的6位动态验证码，保留开头的0。"); return; }
     const code = totp;
     setTotp(""); setResult(null); setRequestQuery(null);
     await act(async serial => {
       const id = crypto.randomUUID();
-      setRequest({ request_id: id, state: "pending" }); locateRequest(id);
+      setRequest({ request_id: id, state: "pending", factor_submitted: false }); locateRequest(id, false);
       const attempt = createGrantAttempt({
         requestId: id,
         body: { purpose, combined, save_default: saveDefault, duration_hours: hours, state_version: snapshot.state_version },
         api: (path, options) => apiRequest(base, path, options),
-        onCreated: created => { if (serial === responseSerial.current) setRequest({ ...created, state: "verifying" }); },
+        onCreated: created => { if (serial === responseSerial.current) setRequest({ ...created, state: "verifying", factor_submitted: false }); },
+        onVerificationStarted: requestId => {
+          if (!markGrantVerificationSubmitted(sessionStorage, requestId)) throw Object.assign(new Error("stage unavailable"), { code: "public_request_tracking_unavailable" });
+          if (serial === responseSerial.current) setRequest(previous => ({ ...previous, factor_submitted: true }));
+        },
       });
-      attemptRef.current = attempt;
-      const verified = await attempt.run(code);
-      if (serial === responseSerial.current && verified) acceptResult(verified, true);
+      try {
+        const verified = await attempt.run(code);
+        if (serial === responseSerial.current && verified) {
+          const reportedEffect = [verified.personal_data?.state, verified.unrestricted?.state].some(state => ["succeeded", "unknown", "verifying"].includes(state));
+          if (!attempt.factorSubmitted && grantResultNeedsQuery(verified) && verified.state !== "partial" && !reportedEffect) returnToUnsubmitted(id);
+          else acceptResult(verified, attempt.factorSubmitted);
+        }
+      } catch (failure) {
+        if (serial === responseSerial.current && !attempt.factorSubmitted) { returnToUnsubmitted(id, failure.code === "public_request_tracking_unavailable" ? failure.code : "public_factor_not_submitted"); return; }
+        throw failure;
+      }
     });
-  }
-  async function cancel() {
-    if (!formAllowed || cancelling) return;
-    if (!request || requestTerminal) {
-      locateRequest(null); setLookupOnly(false); setFormOpen(true); setCombined(false); setSaveDefault(false);
-      setTotp(""); setRequest(null); setRequestQuery(null); setResult(null); setError(""); setSuccessNotice("");
-      setHours(String(Number.isFinite(snapshot?.default_minutes) ? snapshot.default_minutes / 60 : 8)); touched.current = false;
-      return;
-    }
-    const serial = ++responseSerial.current;
-    setCancelling(true); setTotp(""); notify("正在取消本次请求…"); reader.current.invalidate(); setRefreshing(false);
-    try {
-      let cancelled;
-      if (attemptRef.current) cancelled = await attemptRef.current.cancel();
-      else {
-        const current = request.csrf_token ? request : await apiRequest(base, `/requests/${encodeURIComponent(request.request_id)}`);
-        cancelled = await apiRequest(base, `/requests/${encodeURIComponent(request.request_id)}/cancel`, { method: "POST", csrf: current.csrf_token, body: {} });
-      }
-      if (serial === responseSerial.current) acceptResult(cancelled);
-    } catch {
-      if (serial === responseSerial.current) { setLookupOnly(true); setRequest(previous => ({ ...previous, state: "unknown" })); setError("取消结果暂无法确认。请查询本次结果，不要重新提交验证码。"); }
-    } finally {
-      if (serial === responseSerial.current) {
-        operation.current = false; attemptRef.current = null; setBusy(false); setCancelling(false);
-        reader.current.read({ replace: true });
-      }
-    }
   }
   async function checkRequest() {
     if (!request || operation.current) return;
@@ -294,11 +303,15 @@ export default function ComputerAccess({ initialRead = null }) {
       await act(async serial => {
         try {
           const status = await apiRequest(base, `/requests/${encodeURIComponent(request.request_id)}`);
-          if (serial === responseSerial.current) { acceptResult(status); if (status.state !== "succeeded") setRequestQuery(queryResultUpdate(request, status, Date.now() / 1000)); }
-        } catch {
           if (serial === responseSerial.current) {
+            if (canRestartUnsubmittedGrant(request, status)) { returnToUnsubmitted(request.request_id); return; }
+            acceptResult(status); if (status.state !== "succeeded") setRequestQuery(queryResultUpdate(request, status, Date.now() / 1000));
+          }
+        } catch (failure) {
+          if (serial === responseSerial.current) {
+            if (canRestartUnsubmittedGrant(request, null, failure)) { returnToUnsubmitted(request.request_id); return; }
             setRequestQuery(queryResultUpdate(request, null, Date.now() / 1000, true));
-            notify("查询未完成，保留原请求；可从操作结果再次查询。", "warning");
+            setToast(null);
           }
         }
       });
@@ -318,7 +331,7 @@ export default function ComputerAccess({ initialRead = null }) {
     setSuccessNotice(freshPost ? (value.action === "personal-data" ? value.personal_data?.state === "closing" ? "资料访问已结束，正在关闭资料。" : "个人资料已锁定。" : value.action === "unrestricted" ? "无限制授权已结束。" : "Windows锁屏已完成。") : "已确认这次操作当时完成，当前状态正在更新。");
   }
   async function lock(kind, priorId = null) {
-    if (actionPending.current || busy || cancelling || (!priorId && request && !requestTerminal)) return;
+    if (actionPending.current || busy || (!priorId && request && !requestTerminal)) return;
     actionPending.current = true; setActionBusy(kind); notify(priorId ? "正在查询原请求…" : "正在处理本次操作…"); setQueryingActionId(priorId || ""); reader.current.invalidate(); setRefreshing(false);
     const id = priorId || crypto.randomUUID();
     if (!priorId) rememberAction({ request_id: id, action: kind, state: "pending" });
@@ -332,7 +345,7 @@ export default function ComputerAccess({ initialRead = null }) {
       reader.current.read({ replace: true });
     }
   }
-  const actionEnabled = kind => available && !busy && !cancelling && !actionBusy && (!request || requestTerminal) && !actionRequests.some(item => item.action === kind && unresolvedAction(item));
+  const actionEnabled = kind => available && !busy && !actionBusy && (!request || requestTerminal) && !actionRequests.some(item => item.action === kind && unresolvedAction(item));
   const host = snapshot?.host || {};
   const observed = snapshot?.observed_at_unix;
   return <div className="ca-page">{connection === "offline" && <section className="ca-offline-panel" aria-label="电脑连接说明"><div><Desktop size={24} /><h2>{connectionProblem === "service" ? "连接服务暂时异常" : "暂时无法连接电脑"}</h2></div><p>{connectionProblem === "service" ? "服务器返回了异常响应，当前无法读取电脑状态；这不表示电脑已经关机。" : "可能是网络、休眠、关机或连接服务问题，目前无法确认原因。"} 已有授权仍按原期限处理，页面不会重放办理操作。</p><p>如需远程开机或恢复连接，可使用已配置的 ToDesk、网易UU 或小米智能插座3路径，再回来重新检查。请先确认实际情况，避免仅凭连接失败反复断电。</p><button className="ca-refresh" type="button" disabled={refreshing} onClick={() => reader.current?.read({ refresh: true })}>重新检查连接</button></section>}<div className="ca-workspace"><div className="ca-overview">
@@ -342,14 +355,19 @@ export default function ComputerAccess({ initialRead = null }) {
     </div><aside className="ca-access" aria-label="本次办理">
       <section className="ca-card ca-form-card" id="access-form" tabIndex={-1} ref={formRef} aria-labelledby="ca-form-title"><h3 id="ca-form-title">{lookupOnly ? "查询本次结果" : formOpen ? purpose === "personal_data" ? selectedActive ? "延长个人资料授权" : "解锁个人资料" : selectedActive ? "延长无限制授权" : "开启无限制授权" : "选择上方功能开始办理"}</h3>{!formAllowed ? <p className="ca-footnote">请从<a href="https://wly0829.cn/computer-access/">正式授权页面</a>办理。</p> : !formOpen ? <p className="ca-footnote">时长可自由填写0.5～72小时。已有授权会在原期限上加时，两项始终各自计时。</p> : <form onSubmit={submit}>
         <p className="ca-form-context">{request && !retryable && !request.summary ? "正在核实原请求，办理内容以查询结果为准。" : <>本次：{selectedKeys.map(key => key === "personal_data" ? "个人资料" : "无限制授权").join(" + ")} · {minutes === null ? "请填写时长" : minutesLabel(minutes)}</>}</p>
-        {formAllowed && <div className="ca-totp"><label className="ca-field-label" htmlFor="ca-totp">TOTP动态验证码</label><input id="ca-totp" type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="off" value={totp} disabled={busy || cancelling || cooling || !available || lookupOnly} onChange={event => setTotp(event.target.value.replace(/\D/g, "").slice(0, 6))} aria-describedby="ca-totp-help" /><p id="ca-totp-help" className="ca-footnote">在验证器中查看6位验证码，本页直接提交到电脑验证。切换应用不会取消办理。</p></div>}
-        <fieldset className="ca-form-selection" disabled={busy || cancelling || Boolean(request && !retryable)}><legend className="visually-hidden">本次办理内容</legend><div className="ca-purpose-buttons"><button type="button" aria-pressed={purpose === "personal_data"} onClick={() => setPurpose("personal_data")}>个人资料</button><button type="button" aria-pressed={purpose === "unrestricted"} onClick={() => setPurpose("unrestricted")}>无限制授权</button></div><label className="ca-combined"><input type="checkbox" role="switch" aria-label="本次同时建立无限制授权和个人资料解锁期" checked={combined} onChange={event => setCombined(event.target.checked)} /><span>同时{purpose === "personal_data" ? "办理无限制授权" : "解锁个人资料"}<small>一次验证，分别办理两项授权。</small></span></label><label className="ca-field-label" htmlFor="ca-hours">本次{selectedKeys.some(key => remainingMinutes(snapshot?.[key], now) > 0) ? "增加" : "授权"}时长 <span>小时</span></label><input className="ca-hours" id="ca-hours" inputMode="decimal" autoComplete="off" value={hours} onChange={event => { touched.current = true; setHours(event.target.value); }} aria-describedby="ca-duration-help" aria-invalid={minutes === null || overLimit} /><div className="ca-shortcuts">{[0.5, 2, 8, 24].map(value => <button type="button" key={value} onClick={() => { touched.current = true; setHours(String(value)); }}>{value}小时</button>)}</div><label className="ca-combined"><input type="checkbox" checked={saveDefault} onChange={event => setSaveDefault(event.target.checked)} /><span>将本次时长设为以后默认<small>本次验证成功后保存，不改变已有授权截止。</small></span></label></fieldset>
-        <section className="ca-form-current" aria-label="当前授权期限"><h4>当前有效期</h4><Facts items={["personal_data", "unrestricted"].map(key => [key === "personal_data" ? "个人资料" : "无限制授权", connection !== "online" ? "当前状态未知" : remainingMinutes(snapshot?.[key], now) > 0 ? beijingTime(snapshot[key].expires_at_unix) : grantLabel(snapshot?.[key], now)])} /><p>已有授权从原截止继续加时；未开启时，从验证成功开始计时。两项各自计算。</p></section>
-        <div className="ca-duration-preview" id="ca-duration-help">{minutes === null ? <p>请输入0.5～72之间的小时数，可用小数，如1.23。</p> : <><p>{Number(hours) * 60 === minutes ? "本次" : "按分钟精度计为"} {minutesLabel(minutes)}（{minutes}分钟）</p>{selectedKeys.map(key => <p className="ca-remaining-preview" key={key}><span>{key === "personal_data" ? "个人资料" : "无限制授权"}办理后预计剩余</span><strong>{connection === "online" ? minutesLabel((remainingMinutes(snapshot?.[key], now) || 0) + minutes) : "恢复连接后计算"}</strong></p>)}{overLimit && <p className="ca-field-error">办理后剩余超过72小时，请减少本次时长。</p>}</>}</div>
+        {formAllowed && <div className="ca-totp"><label className="ca-field-label" htmlFor="ca-totp">TOTP动态验证码</label><input id="ca-totp" type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="off" value={totp} disabled={busy || cooling || !available || lookupOnly} onChange={event => setTotp(event.target.value.replace(/\D/g, "").slice(0, 6))} aria-describedby="ca-totp-help" /><p id="ca-totp-help" className="ca-footnote">在验证器中查看6位验证码，本页直接提交到电脑验证。切换应用不会取消办理。</p></div>}
+        <fieldset className="ca-form-selection" disabled={busy || Boolean(request && !retryable)}><legend className="visually-hidden">本次办理内容</legend><div className="ca-purpose-buttons"><button type="button" aria-pressed={purpose === "personal_data"} onClick={() => setPurpose("personal_data")}>个人资料</button><button type="button" aria-pressed={purpose === "unrestricted"} onClick={() => setPurpose("unrestricted")}>无限制授权</button></div><label className="ca-combined"><input type="checkbox" role="switch" aria-label="本次同时建立无限制授权和个人资料解锁期" checked={combined} onChange={event => setCombined(event.target.checked)} /><span>同时{purpose === "personal_data" ? "办理无限制授权" : "解锁个人资料"}<small>一次验证，分别办理两项授权。</small></span></label><label className="ca-field-label" htmlFor="ca-hours">本次{selectedKeys.some(key => remainingMinutes(snapshot?.[key], now) > 0) ? "增加" : "授权"}时长 <span>小时</span></label><input className="ca-hours" id="ca-hours" inputMode="decimal" autoComplete="off" value={hours} onChange={event => { touched.current = true; setHours(event.target.value); }} aria-describedby="ca-duration-help" aria-invalid={minutes === null || overLimit} /><div className="ca-shortcuts">{[0.5, 2, 8, 24].map(value => <button type="button" key={value} onClick={() => { touched.current = true; setHours(String(value)); }}>{value}小时</button>)}</div><p className={`ca-duration-hint${minutes === null || overLimit ? " ca-field-error" : ""}`} id="ca-duration-help">{minutes === null ? "请输入0.5～72小时，可用小数。" : overLimit ? "办理后剩余超过72小时，请减少本次时长。" : connection !== "online" ? "恢复连接后计算预计结果。" : `预计剩余：${selectedKeys.map(key => `${key === "personal_data" ? "个人资料" : "无限制授权"} ${minutesLabel((remainingMinutes(snapshot?.[key], now) || 0) + minutes)}`).join("；")}，以验证成功后为准。`}</p><label className="ca-combined"><input type="checkbox" checked={saveDefault} onChange={event => setSaveDefault(event.target.checked)} /><span>将本次时长设为以后默认<small>本次验证成功后保存，不改变已有授权截止。</small></span></label></fieldset>
         {cooling && <p className="ca-notice">验证暂不可用（冷却中）。请在 {minutesLabel(Math.ceil((cooldownUntil - now) / 60))} 后重试（{beijingTime(cooldownUntil)}）。已有授权保持；本地验证与公网冷却独立。</p>}
         {available && !snapshot?.factor?.available && !cooling && <p className="ca-notice">主机验证器暂不可用，请稍后重新检查。</p>}
-        <button className="ca-button ca-button-primary" type="submit" disabled={busy || cancelling || Boolean(actionBusy) || lookupOnly || !available || minutes === null || overLimit || !factorAvailable}>{busy ? checkingRequest ? "正在查询…" : "正在办理…" : combined ? "验证并办理两项" : purpose === "personal_data" ? selectedActive ? "验证并延长资料授权" : "验证并解锁资料" : selectedActive ? "验证并延长无限制授权" : "验证并开启无限制授权"}<ArrowRight size={16} /></button>
-        <div className="ca-form-links">{(!request || requestTerminal || formAllowed) && <button type="button" disabled={cancelling} onClick={cancel}>{cancelling ? "正在取消…" : requestTerminal ? "返回填写" : "取消本次办理"}</button>}{request && <button type="button" disabled={busy} onClick={checkRequest}>{checkingRequest ? "查询中…" : "查询本次结果"}</button>}</div><p className="ca-footnote">本人验证后才生效，以主机确认的截止为准。取消只结束本次请求，保留原有效授权。</p>
+        {(request || result || error) && <div className={`ca-inline-request${lookupOnly ? " ca-inline-request-unknown" : ""}`} role="status" aria-live="polite">
+          <strong>{busy ? checkingRequest ? "正在查询本次结果…" : "正在验证，请稍候…" : lookupOnly ? result?.state === "partial" ? "本次部分完成，仍需确认结果" : "本次结果尚未确认" : resultStates[result?.state || request?.state] || "请检查本次输入"}</strong>
+          {lookupOnly && <p>本次请求已保留。请查询同一请求，不要重新提交验证码。</p>}
+          {visibleError && <p>{visibleError}</p>}
+          <QueryFeedback item={requestQuery} loading={checkingRequest} />
+        </div>}
+        <button className="ca-button ca-button-primary" type={lookupOnly ? "button" : "submit"} onClick={lookupOnly ? checkRequest : undefined} disabled={lookupOnly ? busy || Boolean(actionBusy) : busy || Boolean(actionBusy) || !available || minutes === null || overLimit || !factorAvailable} aria-busy={busy}>{busy ? checkingRequest ? "正在查询…" : "正在验证…" : lookupOnly ? "查询本次结果" : combined ? "验证并办理两项" : purpose === "personal_data" ? selectedActive ? "验证并延长资料授权" : "验证并解锁资料" : selectedActive ? "验证并延长无限制授权" : "验证并开启无限制授权"}<ArrowRight size={16} /></button>
+        {actionRequests.some(unresolvedAction) && <p className="ca-inline-action-note">有操作结果仍待确认。<button type="button" onClick={() => setResultsOpen(true)}>查看操作结果</button></p>}
+        <p className="ca-form-about">个人资料与无限制授权分别计时，刷新不会延长期限。验证成功后按主机返回的实际结果生效。</p>
       </form>}</section>
     </aside><div className="ca-hardware-area">
       <Hardware hardware={snapshot?.hardware} host={host} cached={connection !== "online" && Boolean(snapshot?.hardware)} grafana={snapshot?.services?.grafana} connected={connection === "online"} loading={refreshing || connection === "connecting"} onRetry={() => reader.current?.read({ refresh: true })} />

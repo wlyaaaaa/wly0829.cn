@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, memorySpecification, networkConnection, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { GRANT_STAGE_KEY, adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, canRestartUnsubmittedGrant, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, grantResultNeedsQuery, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, markGrantVerificationSubmitted, memorySpecification, networkConnection, readGrantStage, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -394,4 +394,51 @@ test("manual first read cancels unused early GET instead of consuming it", async
   const results = [];
   const reader = createStatusReader(async (_, options) => { fetched++; assert.equal(options.refresh, true); return "fresh"; }, value => results.push(value), error => { throw error; }, { initialRead: { started: 100, promise: Promise.resolve("early"), cancel: () => cancelled++ }, now: () => 200 });
   await reader.read({ refresh: true }); assert.equal(cancelled, 1); assert.equal(fetched, 1); assert.deepEqual(results, ["fresh"]);
+});
+
+test("only definite grant outcomes leave lookup mode; missing or partial responses stay query-only", () => {
+  for (const value of [{ state: "unknown" }, { state: "verifying" }, { state: "pending" }, { state: "partial" }, {}, { state: "failed", personal_data: { state: "succeeded" } }, { state: "failed", unrestricted: { state: "unknown" } }]) assert.equal(grantResultNeedsQuery(value), true);
+  for (const state of ["succeeded", "failed", "cancelled", "expired"]) assert.equal(grantResultNeedsQuery({ state }), false);
+});
+
+test("local stage distinguishes failed preparation from a verification that may have committed", async () => {
+  for (const failAt of ["create", "verify"]) {
+    const attempt = createGrantAttempt({ requestId: "stage-request", body: {}, onCreated() {}, api: async path => {
+      if (path === "/requests" && failAt !== "create") return { request_id: "stage-request", state: "pending", csrf_token: "synthetic" };
+      throw new Error("synthetic response loss");
+    } });
+    await assert.rejects(attempt.run("000000"));
+    assert.equal(attempt.factorSubmitted, failAt === "verify");
+  }
+});
+
+test("same-ID stages are non-secret, old or unreadable stages remain unknown, and stale false is invalidated before verify", () => {
+  const values = new Map([[GRANT_STAGE_KEY, JSON.stringify({ request_id: "current", factor_submitted: false })]]);
+  const storage = { getItem: key => values.get(key), setItem: (key, value) => values.set(key, value), removeItem: key => values.delete(key) };
+  assert.equal(readGrantStage(storage, "current"), false); assert.equal(readGrantStage(storage, "old"), undefined);
+  assert.equal(markGrantVerificationSubmitted(storage, "current"), true); assert.equal(readGrantStage(storage, "current"), true);
+  assert.deepEqual(Object.keys(JSON.parse(values.get(GRANT_STAGE_KEY))).sort(), ["factor_submitted", "request_id"]);
+  values.set(GRANT_STAGE_KEY, JSON.stringify({ request_id: "current", factor_submitted: false }));
+  storage.setItem = () => { throw new Error("quota"); };
+  assert.equal(markGrantVerificationSubmitted(storage, "current"), true); assert.equal(readGrantStage(storage, "current"), undefined);
+  values.set(GRANT_STAGE_KEY, JSON.stringify({ request_id: "current", factor_submitted: false }));
+  storage.removeItem = () => { throw new Error("storage unavailable"); };
+  assert.equal(markGrantVerificationSubmitted(storage, "current"), false);
+  assert.equal(readGrantStage({ getItem() { throw new Error("unavailable"); } }, "current"), undefined);
+});
+
+test("if stale false cannot be replaced or removed no verify request is sent", async () => {
+  const calls = [];
+  const attempt = createGrantAttempt({ requestId: "guarded-request", body: {}, onCreated() {}, onVerificationStarted() { throw new Error("stage write and removal failed"); }, api: async path => { calls.push(path); return { request_id: "guarded-request", state: "pending", csrf_token: "synthetic" }; } });
+  await assert.rejects(attempt.run("000000")); assert.equal(attempt.factorSubmitted, false); assert.deepEqual(calls, ["/requests"]);
+});
+
+test("request-not-found permits fresh input only when this exact request is known not to have sent a factor", () => {
+  const missing = { data: { error: "public_request_not_found" } };
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, null, missing), true);
+  for (const flag of [true, undefined]) assert.equal(canRestartUnsubmittedGrant({ factor_submitted: flag }, null, missing), false);
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "pending" }), true);
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "verifying" }), false);
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, { state: "pending", factor_submitted: true }), false);
+  assert.equal(canRestartUnsubmittedGrant({ factor_submitted: false }, null, { httpStatus: 404 }), false);
 });
