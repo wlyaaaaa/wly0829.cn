@@ -825,9 +825,9 @@ test("ChineseASR and TimeAudit expose complete source-to-result journeys and bou
   assert.match(recoveryText, /每 5 分钟[\s\S]*(?:漂移|旧说明)|(?:漂移|旧说明)[\s\S]*每 5 分钟/);
   assert.match(recoveryText, /README[\s\S]*每 1 分钟/);
   assert.match(recoveryText, /本轮.*未.*最新 dump.*隔离整库恢复/);
-  assert.equal(timeAuditProject.currentState.observedAt, "2026-09-24T17:45:00Z", "TimeAudit source observation drifted");
+  assert.equal(timeAuditProject.currentState.observedAt, "2026-09-24T18:54:37Z", "TimeAudit source observation drifted");
   const timeAuditSnapshotText = JSON.stringify(timeAuditProject.currentState);
-  assert.match(timeAuditSnapshotText, /PUBLIC main 9f51f40[\s\S]*既有AutoStart恢复缺失依赖/);
+  assert.match(timeAuditSnapshotText, /PUBLIC main 9510b97[\s\S]*既有AutoStart恢复缺失依赖/);
   assert.match(timeAuditSnapshotText, /personal_activity_reader\.py --summary[\s\S]*北京时间逐日/);
   assert.match(timeAuditSnapshotText, /真正再次复制才增加次数[\s\S]*疑似密钥是格式线索/);
   assert.match(timeAuditProject.currentState.gaps.join("\n"), /长寿命进程内NVML返回失真.*最初触发原因仍未知/);

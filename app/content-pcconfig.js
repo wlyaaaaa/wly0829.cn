@@ -2,9 +2,9 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 import { pcconfigGallery } from "./pcconfig-gallery.js";
 
 const pcconfigSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-24T17:45:00Z",
+  observedAt: "2026-09-24T18:35:39Z",
   label: "密码中心与公网授权已完成本轮 P1–P6 交付及真人验收；生产资料迁移属于后续 P7",
-  boundary: "9月24日已提交主线 2872d06 对应本轮交付：密码中心、剪贴板日期弹层和公网授权已安装，手机单项、锁定、一次验证组合办理及同一 MCP 消费链已实际通过。E/G/H 为同一已校验程序包；P7 生产资料迁移未启动。755文件整组件只读检查仍有两份 Registry 与源配置不同，安装锚一致；本轮 Presentation 与程序维护配置分别 current，不据此宣称全机或所有配置全部重验。",
+  boundary: "9月24日本轮交付：密码中心、剪贴板日期弹层和公网授权已安装，手机单项、锁定、一次验证组合办理及同一 MCP 消费链已实际通过。E/G/H 为同一已校验程序包；P7 生产资料迁移未启动。安装检查已消除换行和条目顺序造成的误报，755文件整组件与相关四个组件均 current，安装锚匹配；整机和其他历史恢复结论仍各按自己的证据判断。",
   metrics: [
     { label: "配置地图", value: "14 项目 · 164 键" },
     { label: "恢复任务", value: "16组冷备完成 · 副机USB未接" },
@@ -12,7 +12,7 @@ const pcconfigSnapshot = createProjectSnapshot({
     { label: "设备角色", value: "1 主工作站 · 1 副驾驶" }
   ],
   facts: [
-    { label: "来源版本与独立验收", value: "2026-09-24 已提交 PCConfig main=2872d06b476ddc3f34099605646ead88322fe2c7；程序源 d117c05614bf0f38e9ee6f0b332b6e09ce5ac921。Presentation 安装 epoch318、程序维护配置 epoch319 各自回读 current；755文件整组件检查仍是 update_available，差异限于 secret_broker.json、secret_catalog.json，安装锚匹配。P6真人网页操作及已安装普通MCP消费通过；整机任务、硬件历史与其他恢复结论保留自己的观测时间。", hero: false },
+    { label: "来源版本与独立验收", value: "PCConfig已提交修复db6cf2fb4fd1cbd6752342ce3d2d29f9b537d0bd；密码中心程序源d117c05614bf0f38e9ee6f0b332b6e09ce5ac921。Presentation安装epoch318、程序维护配置epoch319；755文件整组件及ClipboardDelivery、CredentialConfiguration、RuntimeConfiguration、ProgramMaintenanceConfiguration只读Inspect均current、锚匹配、零写入。两份Registry只在JSON内容与唯一ID一致时忽略格式/排序差异，安装文件与manifest的字节校验继续保留。P6真人操作及同一安装MCP消费通过；其他历史事实保留原日期。", hero: false },
     { label: "配置地图", value: "本轮源登记14个项目、164个配置键（snapshot_generation=34）、89个环境变量、64段PATH、11个受管软件和18个恢复锚点；23启动项仍是既有登记基线。主机管理员完整读取94项任务，正式账本也已对齐94项；恢复用途计划57项是另一套语义范围。" },
     { label: "开发存储", value: "V 盘 299.9 GiB、Z 盘 12 GiB；17 个恢复锚点的 5/5 检查通过" },
     { label: "恢复任务", value: "2026-09-07历史只读回读：11 个核心恢复任务均 Ready、最近结果 0；14 组 G 来源存在、9 个必需集合 fresh（新鲜）；该次H首次冷备已登记但当时离线；最新H状态见本轮核心恢复回读" },
@@ -36,7 +36,7 @@ const pcconfigSnapshot = createProjectSnapshot({
     { label: "电脑 MCP", value: "主副机MCP均以SYSTEM服务维持各自18793/18794前端，真实桌面由登录用户worker处理；登录前已有SYSTEM维护，不代表可操纵不存在的用户桌面。9月15日共享源码c507f62的23工具、四项输出合同、合成窗口/PNG/错误和两路维护已分别回读；本轮真实主机规则、文件读取与SYSTEM进程检查正常，但不外推到每种手机客户端或物理冷启动。", hero: false },
     { label: "独立保护安装", value: "2026-09-09已有管理员ContainmentInspect为installed、tasks_present=2；本轮完整任务视野仍确认两项存在，密码中心15/15安装一致。源登记production_enabled_untriggered，安装或任务存在不证明本轮触发过物理保护。", hero: false },
     { label: "Password Center", value: "本轮程序源 d117c05 已安装，日期范围弹层点击框外、Esc或取消即关闭且不应用，不再禁用主窗。安装版37项日期交互回归通过。完整包 b6f33a3eb745ea9624e10d4fc1d04bfd4e2e500bfda4088ba7da4381def01408 共2218文件，E/G/H正式更新、再Plan均current，三入口原生检查返回0，原选库与工作副本保持。PRIVATE既有draft提供同版ZIP，完整下载SHA-256一致。", hero: false },
-    { label: "授权文件", value: "2026-09-24T04:59Z 只读安装 Inspect 对 authorization_file_broker.py 与 authorization_file_local_ui.py 分别返回 current=true；本地 UTF-8 查看/编辑实现存在于安装字节。整套 Password Center Inspect 仍是 update_available，不能借两文件一致宣称全套 current；以前 6/6 合成测试保留原日期，本轮未处理真实选中文件或进行真人恢复。", hero: false }
+    { label: "授权文件", value: "2026-09-24T04:59Z只读Inspect对authorization_file_broker.py与authorization_file_local_ui.py分别返回current=true，本地UTF-8查看/编辑存在于安装字节；后续整组件的格式误报已修复，最新完整Inspect为current。以前6/6合成测试保留原日期，本轮没有为检查版本而处理真实选中文件或重复真人恢复。", hero: false }
   ],
   gaps: [
     "电脑MCP运行数据尚无登记的独立备份；Git不包含应用身份、刷新令牌数据库或客户端登录态，同机SYSTEM迁移副本也不是独立备份。数据丢失后需重新登记与授权，本页不把源码部署称为登录恢复。",

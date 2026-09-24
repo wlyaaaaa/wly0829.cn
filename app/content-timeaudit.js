@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const timeAuditSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-24T17:45:00Z",
+  observedAt: "2026-09-24T18:54:37Z",
   label: "Grafana公网入口已恢复，原采集与自动启动已加固；历史空档如实保留",
-  boundary: "本轮已提交 PUBLIC main=9f51f40：恢复既有Docker依赖链，Grafana宿主端口由被Windows保留的53000迁到43000，原公网地址及数据卷保持。完整运行健康回读通过、待入库归零，公网健康接口200；约12:53–16:46 UTC的硬件遥测空档没有回填。活动、帧率、备份和历史图片继续保留各自原观察日期。",
+  boundary: "本轮已提交 PUBLIC main=9510b97，包含Grafana恢复与剪贴板分类修复：既有Docker依赖链已恢复，Grafana宿主端口由被Windows保留的53000迁到43000，原公网地址及数据卷保持。完整运行健康通过、待入库归零，公网健康接口200；约12:53–16:46 UTC的硬件遥测空档没有回填。分类修正由新打开的密码中心会话加载；其他历史记录保留原观察日期。",
   metrics: [
     { label: "9月14日一小时硬件样本", value: "3599" },
     { label: "9月14日有效/拒绝正帧", value: "2369 / 1229" },
@@ -17,9 +17,9 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "存储与展示", value: "PostgreSQL 15（本机45432）+ Grafana 13.0.2（本机43000）；原公网Grafana地址保持，6 张仪表盘、78 个面板。" },
     { label: "当前共享健康与历史聚合", value: "2026-09-18T13:14Z共享健康正常：AHK约0.87秒、硬件数据库约0.38秒新鲜，待写、写失败和溢出均0，已有contract-2质量来源。数据库备份14份，最近约9.22小时/4162.12MiB，清单/长度通过、full_restore_verified=false；本轮未重哈希或恢复数据库。9月14日3599样本/3383秒活动覆盖仍是历史窗口，不能拿当前心跳覆盖它的217秒缺口。" },
     { label: "9月8日受管换代与空档", value: "2026-09-08T08:34:28Z仅停止已核对身份的旧采集worker，由既有TimeAudit_Watchdog拉起新launcher 57708→worker 61904（08:34:50Z）。首个新样本08:35:19Z，启动窗口前沿有51.03秒缺口。随后三分钟GPU占用/温度/功率/核心和显存时钟180/180非空且物理有效；不新增服务、不改历史样本，也未重启电脑或GPU驱动。" },
-    { label: "当前正式实现与部署边界", value: "PUBLIC main 9f51f40e729ffd8c0e3c8cebafe331b3cefa00c7 已正常推送。既有AutoStart恢复缺失依赖，正在启动时不重复触发；AHK精确实例与健康容器保留，配置变更只在明确部署时应用。18项Python与8项PowerShell恢复分支测试通过；源码与实际恢复分别回读。" },
+    { label: "当前正式实现与部署边界", value: "PUBLIC main 9510b97730b7de3219d94788ce9aedba2539b889 已正常推送。既有AutoStart恢复缺失依赖，正在启动时不重复触发；AHK精确实例与健康容器保留，配置变更只在明确部署时应用。原18项Python与8项PowerShell恢复分支测试通过；本轮剪贴板完整19项回归通过，代码、运行中会话与恢复分别说明。" },
     { label: "完整时段个人活动读取", value: "personal_activity_reader.py --summary 可按明确时间窗给完整时段与北京时间逐日概览，分别说明前台和 AHK 记录覆盖、未覆盖、状态及应用排名。开放会话不外推，记录不是本人在场或工作成果；本轮只核源码与测试，未读取生产活动窗口，也未证明 timeaudit-diagnostics Skill 已自动调用新入口。", hero: false },
-    { label: "剪贴板同内容分组", value: "源码 622b66c 对完全相同内容分组；按来源实例、开机、会话和序列排除同一次复制的重复观察，真正再次复制才增加次数。日期、链接、疑似密钥等筛选先于全历史分组和分页；疑似密钥是格式线索，不保证检出。原事件和正文对象保持，实际当前总数本轮未重读。", hero: false },
+    { label: "剪贴板同内容分组", value: "按来源实例、开机、会话和序列排除同一次复制的重复观察，真正再次复制才增加次数。可识别的文件名、版本和模型标识优先归文本，包括PowerShell脚本与模型量化命名；已知密钥前缀、JWT、恢复密钥及混合密码仍按相应规则识别。日期、类别筛选先于分组和分页；疑似密钥是格式线索，不保证检出。原事件和正文保持，已打开的密码中心需要重新打开以加载新分类器。", hero: false },
     { label: "本轮有界运行健康", value: "2026-09-24T16:52:36Z完整TimeAudit健康为healthy，Grafana、数据库、遥测、入库、活动持久化及watchdog均正常；963条积压批次由原入库器处理，pending_files=0。公网Grafana健康接口随后返回200/database=ok；没有重置Docker、删除数据库或重算缺失历史。", hero: false },
     { label: "独立剪贴板历史 · 8月31日证据", value: "WM_CLIPBOARDUPDATE事件采集与SQLite schema v1/WAL/FTS5独立工作。8月31日为5234事件、2312个blob（正文对象）、3406条全文索引，3个任务与无正文adapter（适配出口）验证通过、专属11项测试通过；本次未重读当前正文或计数。" },
     { label: "已验证发布基线", value: "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），当时 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。这是下列发布、测试与现场证据的固定版本，不用它冒充后续源码的发布证明。", hero: false },
@@ -38,6 +38,7 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "聚合接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
   ],
   gaps: [
+    "分类筛选仍按内容组计算，较大历史库的耗时会随组数增加；本轮没有修改数据库或引入分类缓存。",
     "2026-09-24约12:53–16:46 UTC未采集的硬件遥测没有回填。旧53000落入Windows排除范围52954–53053，现改43000；已有但失效的Docker后端仍只报告不可用，不自动重启共享引擎。",
     "网页使用官方有界摘要；源修复只额外核对精确采集进程与GPU有效计数。没有读取窗口、聊天或剪贴板正文，不能据此解释某段私人活动或具体程序根因。",
     "001cee0 的 182 项完整源码回归与 21 项现场健康检查已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与测试都不能证明历史数据全绿。",
