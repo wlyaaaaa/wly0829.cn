@@ -33,11 +33,14 @@ test("the built highlight keeps personal evidence separate from project results 
   for (const html of [system, agents]) {
     assert.ok(html.includes("1,921.1"));
     assert.ok(html.includes("我的 Codex 五份独立使用记录合计"));
-    assert.match(html, /快照更新于(?:<!-- -->)?2026年9月24日/);
-    assert.ok(html.includes("2026年6月30日被封"));
-    assert.ok(html.includes("国产模型这组记录只能展示约一个月"));
-    assert.ok(html.includes("我自己的 Codex 工作环境已接入 GLM、DeepSeek、Qwen"));
-    assert.ok(html.includes("之前已经用了数亿 tokens；这部分没有计入上面的数字"));
+    assert.ok(html.includes("2026年9月24日"));
+    assert.ok(html.includes("非实时统计"));
+    assert.ok(html.includes("Codex × GLM / DeepSeek / Qwen"));
+    assert.ok(html.includes("我自己的 Codex 环境已接入这些模型"));
+    assert.ok(html.includes("ChatGPT × 电脑 MCP"));
+    assert.ok(html.includes("已有 ChatGPT 订阅内使用 GPT-6 Astra Pro"));
+    assert.ok(html.includes("不另付 API 费用 · 不占 Codex 用量"));
+    assert.ok(html.includes("ChatGPT 套餐规则仍适用"));
     assert.equal((html.match(/id="personal-ai-experience"/g) || []).length, 1);
     assert.ok(html.includes('data-gallery-src="/images/personal-ai-experience/codex-521-9.png"'));
   }
@@ -45,9 +48,17 @@ test("the built highlight keeps personal evidence separate from project results 
   assert.ok(system.indexOf('id="personal-ai-experience"') < system.indexOf('class="system-section-navigation"'));
   assert.equal((system.match(/data-gallery-src="\/images\/personal-ai-experience\//g) || []).length, 3);
   assert.ok(system.includes('/projects/agents/#personal-ai-experience'));
+  assert.ok(!system.includes("Claude Code 的历史记录"), "the System summary delegates detailed history to the full records");
   assert.ok(agents.indexOf("最快了解这个项目") < agents.indexOf('id="personal-ai-experience"'));
   assert.ok(agents.indexOf('id="personal-ai-experience"') < agents.indexOf("从哪里开始"));
   assert.equal((agents.match(/data-gallery-src="\/images\/personal-ai-experience\//g) || []).length, 11);
+  assert.ok(agents.includes("2026年6月30日被封"));
+  assert.ok(agents.includes("国产模型这组记录只能展示约一个月"));
+  assert.match(agents, /之前已经用了<strong>数亿 tokens<\/strong>；这部分没有计入上面的数字/);
+  for (const name of ["Grok Build", "Google Antigravity", "OpenCode", "Cline", "Qoder", "OpenClaw"]) assert.ok(agents.includes(name));
+  assert.equal((agents.match(/id="personal-ai-records"/g) || []).length, 1);
+  assert.equal((agents.match(/id="personal-ai-records-title"/g) || []).length, 1);
+  assert.ok(agents.includes("521.9 + 204.4 + 296.5 + 378.2 + 520.1 = 1,921.1"));
   const area = agents.slice(agents.indexOf('id="personal-ai-experience"'), agents.indexOf("从哪里开始"));
   assert.ok(!area.includes("可视化结果"));
   assert.ok(area.includes('loading="lazy"'));

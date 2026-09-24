@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowLeft,
@@ -699,6 +699,8 @@ function ProjectCurrentState({ entry }) {
 }
 
 function ProjectGallery({ title, images, presentation = {} }) {
+  const galleryId = presentation.id || "project-gallery";
+  const Heading = presentation.headingLevel === 3 ? "h3" : "h2";
   const [activeIndex, setActiveIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [fitSize, setFitSize] = useState(null);
@@ -881,13 +883,15 @@ function ProjectGallery({ title, images, presentation = {} }) {
   }
 
   return (
-    <section className={`document-section project-gallery${presentation.variant ? ` ${presentation.variant}` : ""}`} aria-labelledby="project-gallery-title" data-gallery-prefetch-adjacent-full={prefetchAdjacent ? "true" : "false"}>
+    <section id={galleryId} className={`document-section project-gallery${presentation.variant ? ` ${presentation.variant}` : ""}`} aria-labelledby={`${galleryId}-title`} data-gallery-prefetch-adjacent-full={prefetchAdjacent ? "true" : "false"}>
       <div className="project-gallery-heading">
-        <div><p className="section-kicker">{presentation.kicker || (hasStructuredEvidence ? "可视化证据" : "真实界面")}</p><h2 id="project-gallery-title">{presentation.title || `${title} 的${hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}`}</h2></div>
-        <p>{presentation.description || (hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。")}打开后可缩放、滚动查看细节，也可关闭或切换上一张、下一张。</p>
+        <div><p className="section-kicker">{presentation.kicker ?? (hasStructuredEvidence ? "可视化证据" : "真实界面")}</p><Heading id={`${galleryId}-title`}>{presentation.title || `${title} 的${hasStructuredEvidence ? "图片与证据等级" : "可视化结果"}`}</Heading></div>
+        <p>{presentation.description || (hasStructuredEvidence ? "单击图片查看完整大图；每张图同时说明它能证明和不能证明什么。" : "单击图片查看完整大图。")}{!presentation.compactCards && "打开后可缩放、滚动查看细节，也可关闭或切换上一张、下一张。"}</p>
       </div>
       <div className="project-gallery-grid">
         {images.map((image, index) => (
+          <Fragment key={image.src}>
+          {presentation.groups?.filter(group => group.startIndex === index).map(group => <div className="project-gallery-group-heading" key={group.startIndex}><h4>{group.title}</h4><p>{group.description}</p></div>)}
           <button
             className="project-gallery-card"
             type="button"
@@ -905,8 +909,9 @@ function ProjectGallery({ title, images, presentation = {} }) {
             data-gallery-category-label={image.categoryLabel || ""}
           >
             <img src={image.thumbnail || image.src} alt={image.alt} width={image.width || undefined} height={image.height || undefined} loading="lazy" decoding="async" style={image.thumbnailPosition ? { objectPosition: image.thumbnailPosition } : undefined} />
-            <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : image.categoryLabel ? <b>{image.categoryLabel}</b> : null}{image.caption}</span></span>
+            {presentation.compactCards ? <span>{image.value}</span> : <span><strong>{String(index + 1).padStart(2, "0")}</strong><span>{image.evidenceLevel ? <b>{image.evidenceLevel} · {image.evidenceLabel}</b> : image.categoryLabel ? <b>{image.categoryLabel}</b> : null}{image.caption}</span></span>}
           </button>
+          </Fragment>
         ))}
       </div>
       {activeImage ? createPortal((
@@ -1054,7 +1059,7 @@ function ProjectOverview({ entry }) {
     <article className="document-content overview-content">
       <ProjectReadingPanel id="product" selected>
         <span id="project-reading-panel-quick" />
-        {currentProject.gallery?.length ? <a className="project-result-preview" href={currentProject.gallery[0].src} data-project-gallery-preview=""><img src={currentProject.gallery[0].thumbnail || currentProject.gallery[0].src} alt={currentProject.gallery[0].alt} loading="lazy" decoding="async" /><span><small>{currentProject.gallery[0].evidenceLabel || currentProject.gallery[0].categoryLabel || "项目图示"}</small><strong>先看图示与结果</strong><span>{copy(currentProject.gallery[0].caption)}</span><b>打开大图 <ArrowRight size={15} aria-hidden="true" /></b></span></a> : null}
+        {currentProject.gallery?.length ? <div className="project-result-preview"><a className="project-result-preview-image" href={currentProject.gallery[0].src} data-project-gallery-preview="" aria-label={`打开大图：${currentProject.gallery[0].alt}`}><img src={currentProject.gallery[0].thumbnail || currentProject.gallery[0].src} alt={currentProject.gallery[0].alt} loading="lazy" decoding="async" /></a><div className="project-result-preview-copy"><small>{currentProject.gallery[0].evidenceLabel || currentProject.gallery[0].categoryLabel || "项目图示"}</small><strong>先看图示与结果</strong><p>{copy(currentProject.gallery[0].caption)}</p><a className="project-result-gallery-link" href="#project-gallery">查看画廊与说明 <ArrowRight size={15} aria-hidden="true" /></a></div></div> : null}
         <section className="document-section document-section-first">
           <p className="section-kicker">用途与结果</p>
           <h2>最快了解这个项目</h2>

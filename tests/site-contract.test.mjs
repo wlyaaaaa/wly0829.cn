@@ -3812,7 +3812,8 @@ test("shared search scopes, project reading layers, Skills categories and System
   const rulesHtml = await readFile(path.join(projectRoot, "dist", "rules", "index.html"), "utf8");
   for (const rule of rulesSnapshot.rules) assert.ok(rulesHtml.includes(`data-rule-panel="${rule.logicalId}"`), `Rules lost its owning rule body: ${rule.logicalId}`);
   assert.doesNotMatch(systemHtml, /system-skill-family-|system-project-domain-/, "retired duplicate catalogs must not be restored");
-  assert.doesNotMatch(systemHtml, /\bHarness\b|gpt-\d/i, "System home must stay vendor-neutral and model-neutral");
+  const systemIdentityAndWork = systemHtml.replace(/<section id="personal-ai-experience"[\s\S]*?(?=<nav class="system-section-navigation")/, "");
+  assert.doesNotMatch(systemIdentityAndWork, /\bHarness\b|gpt-\d/i, "System identity stays neutral; the owner's separately labelled experience may name the models actually used");
   assert.match(styleSource, /\.system-home\s*\{[\s\S]*?--system-max:\s*1184px/);
   const systemStyles = styleSource.slice(styleSource.indexOf("/* System home v2"));
   assert.doesNotMatch(systemStyles, /\bzoom\s*:|transform:\s*scale\(/, "System home must not fake 125% comfort with scaling");

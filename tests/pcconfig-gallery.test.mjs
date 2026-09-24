@@ -25,3 +25,14 @@ test("gallery explains phone screenshot protection and scopes private browser us
   const html = await readFile(new URL("../dist/projects/pcconfig/index.html", import.meta.url), "utf8");
   for (const image of pcconfigGallery) assert.ok(html.includes(image.src));
 });
+
+test("project preview separates contextual gallery navigation from direct image enlargement", async () => {
+  for (const slug of ["pcconfig", "personal-media", "agents"]) {
+    const html = await readFile(new URL(`../dist/projects/${slug}/index.html`, import.meta.url), "utf8");
+    if (!html.includes('class="project-result-preview"')) continue;
+    assert.match(html, /class="project-result-gallery-link" href="#project-gallery">查看画廊与说明/);
+    assert.match(html, /class="project-result-preview-image" href="\/[^\"]+" data-project-gallery-preview=""/);
+    assert.equal((html.match(/id="project-gallery"/g) || []).length, 1, `${slug} must resolve to its own gallery`);
+    assert.equal((html.match(/id="project-gallery-title"/g) || []).length, 1, `${slug} must have an unambiguous heading`);
+  }
+});
