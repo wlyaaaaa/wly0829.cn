@@ -1,8 +1,11 @@
 import "../app/style.css";
+import "../app/computer-access-header.css";
 import "../app/personal-media-gallery.css";
 import { searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
 import "../app/continuation-brief.css";
 import { initializeContinuationBriefs } from "../app/continuation-brief.js";
+
+if (document.querySelector("[data-computer-access]")) import("../app/computer-access-client.jsx");
 
 const searchEntries = [
   ...(Array.isArray(window.__WLY_SEARCH_INDEX__) ? window.__WLY_SEARCH_INDEX__ : []),

@@ -466,7 +466,7 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.match(registry.refresh_policy.bundle_budget_semantics, /no new runtime dependency/);
   assert.equal(enabledProjectCount, projects.length);
   const assetsRoot = path.join(projectRoot, "dist", "assets");
-  const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js"));
+  const javascript = (await readdir(assetsRoot)).filter((item) => item.endsWith(".js") && !item.startsWith("computer-access-client-"));
   assert.ok(javascript.length >= 1, "production build has no enhancement JavaScript");
   const javascriptSources = await Promise.all(javascript.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const gzipBytes = javascriptSources.reduce((total, source) => total + gzipSync(source).length, 0);
@@ -480,7 +480,9 @@ test("the shared enhancement and search indices stay within their measured revie
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway|devconfig-backup)/, "browser runtime must not import narrative packages");
-  assert.doesNotMatch(clientGraph, /\b(?:fetch|import)\s*\(/, "browser runtime must not use click-time network loading");
+  assert.match(runtimeSource, /if \(document\.querySelector\("\[data-computer-access\]"\)\) import\("\.\.\/app\/computer-access-client\.jsx"\)/, "P6 island loads only on its initial route");
+  const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-client\.jsx|\.\/computer-access-client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
+  assert.doesNotMatch(narrativeGraph, /\b(?:fetch|import)\s*\(/, "narrative routes must retain native static navigation; only the P6 operational island is dynamic");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
   for (const { project: currentProject } of projectCatalog) {
@@ -4115,7 +4117,7 @@ test("the public gate allows ordinary labels and blocks a constructed credential
 
 test("every public route is unique and has useful metadata", () => {
   assert.equal(new Set(routePaths).size, routePaths.length);
-  assert.equal(routePaths.length, 7 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
+  assert.equal(routePaths.length, 8 + skills.length + projectCatalog.reduce((count, entry) => count + 1 + entry.modules.length, 0));
   for (const route of routePaths) {
     const meta = routeMeta(route);
     assert.match(meta.title, /吴乐阳/);

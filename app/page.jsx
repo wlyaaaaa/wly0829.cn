@@ -14,6 +14,7 @@ import {
   List,
   Laptop,
   LockKey,
+  ShieldCheck,
   MagnifyingGlass,
   Minus,
   Plus,
@@ -56,6 +57,7 @@ import { createTermAnnotator } from "./term-annotator.js";
 import { searchResultExcerpt } from "./compact-search.js";
 import { ProjectContinuation } from "./continuation-brief.jsx";
 import { mcpDevices, mcpMainFallback, mcpSetupNote } from "./content-mcp-access.js";
+import ComputerAccess from "./computer-access.jsx";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -302,7 +304,8 @@ function Header({ path, search = "" }) {
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
         <a className="header-connect" href="https://grafana.wly0829.cn/" target="_blank" rel="noopener noreferrer" aria-label="在新窗口打开 Grafana"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
-        <SiteLink className="header-connect" href="/mcp" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
+        <SiteLink className="header-connect" href="/mcp" target="_blank" rel="noopener noreferrer" aria-label="连接电脑（新标签）" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
+        <SiteLink className="header-connect" href="/computer-access" target="_blank" rel="noopener noreferrer" aria-label="授权与状态（新标签）" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
         <button
           ref={searchButtonRef}
           className="mobile-search-button"
@@ -1993,6 +1996,7 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
   else if (path === "/system") content = <SystemPage />;
   else if (path === "/search") content = <SearchResultsPage search={location.search} />;
   else if (path === "/mcp") content = <McpAccessPage />;
+  else if (path === "/computer-access") content = <div data-computer-access><ComputerAccess /></div>;
   else if (currentProjectEntry) {
     if (path === currentProjectEntry.project.route) content = <ProjectPage entry={currentProjectEntry} />;
     else {
@@ -2007,5 +2011,5 @@ export default function Page({ initialPathname = "/", initialSearch = "" } = {})
     content = item && path === `/skills/${item.slug}` ? <SkillDetail item={item} search={location.search} /> : <NotFound />;
   } else content = <NotFound />;
 
-  return <><FlowField /><Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main><SiteFooter /><BackToTopButton /></>;
+  return <>{path === "/computer-access" ? null : <FlowField />}<Header path={path} search={location.search} /><main id="main-content" ref={setMainRef} tabIndex={-1}>{content}</main><SiteFooter /><BackToTopButton /></>;
 }

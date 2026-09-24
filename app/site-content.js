@@ -105,12 +105,14 @@ export const routePaths = [
   "/rules",
   "/search",
   "/mcp",
+  "/computer-access",
   "/skills",
   ...skills.map((item) => `/skills/${item.slug}`)
 ];
 
 export function routeMeta(pathname) {
   const path = normalizePath(pathname);
+  if (path === "/computer-access") return { title: `授权与状态｜${site.name}`, description: "查看主机硬件资源与授权状态，办理个人资料解锁、全局无限制授权，或分别锁定资料与Windows桌面。" };
   if (path === "/mcp") {
     return {
       title: `连接电脑 · MCP｜${site.name}`,

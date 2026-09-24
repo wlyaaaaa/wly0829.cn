@@ -1,0 +1,2 @@
+.header-connect { min-height: 44px; min-width: 44px; }
+@media (max-width: 900px) { .header-utilities { gap: 1px; } .header-connect { width: 44px; min-width: 44px; margin: 0; } .header-connect > span { display: none; } .header-connect svg { width: 20px; height: 20px; } .header-utilities .mobile-search-button, .header-utilities .menu-button { min-width: 44px; min-height: 44px; } }

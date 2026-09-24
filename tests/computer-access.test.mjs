@@ -1,0 +1,189 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, rate, reductionAction, reductionFailureResult, unresolvedAction } from "../app/computer-access-model.js";
+
+test("reducing actions settle explicit precreate rejection without inventing certainty for lost responses", () => {
+  for (const error of ["public_state_changed", "public_lock_disabled", "public_owner_end_disabled", "public_windows_lock_disabled", "public_request_invalid"]) {
+    const result = reductionFailureResult({ data: { error } }, "request-1", "windows");
+    assert.equal(result.state, "failed");
+    assert.equal(result.request_created, false);
+    assert.equal(unresolvedAction(result), false);
+    assert.equal(reductionFailureResult({ data: { error } }, "request-1", "windows", true).state, "unknown");
+  }
+  for (const failure of [new Error("network"), { data: { error: "public_access_unavailable" } }, { data: { error: "public_request_not_found" } }]) {
+    assert.equal(reductionFailureResult(failure, "request-1", "windows").state, "unknown");
+  }
+});
+
+test("hour input uses decimal half-up minutes and rejects out-of-range values before rounding", () => {
+  for (const [input, expected] of [[".5", 30], ["1.", 60], ["0.5", 30], ["1.23", 74], ["2.25", 135], ["6.8", 408], ["17.3", 1038], ["72", 4320], ["1.225", 74], ["1.2249999999999999999999999", 73]]) assert.equal(durationMinutes(input), expected, input);
+  for (const input of ["", " ", "0", "-1", "0.49999999", "72.000001", "NaN", "Infinity", "1e2", "1x", "."]) assert.equal(durationMinutes(input), null, input);
+});
+
+test("static page passes selections only to the exact host origin", () => {
+  const target = new URL(hostFormUrl({ purpose: "personal_data", combined: true, hours: "1.23", saveDefault: true }));
+  assert.equal(target.origin, "https://mcp.wly0829.cn");
+  assert.equal(target.pathname, "/computer-access/");
+  assert.equal(target.searchParams.get("hours"), "1.23");
+  assert.equal(target.searchParams.get("save_default"), "1");
+  assert.equal(isHostOrigin("https://mcp.wly0829.cn"), true);
+  for (const origin of ["https://wly0829.cn", "http://mcp.wly0829.cn", "https://mcp.wly0829.cn.evil.test", "http://localhost:4179"]) assert.equal(isHostOrigin(origin), false);
+});
+
+test("hardware adapter preserves missing, disconnected and stale observations", () => {
+  const adapted = adaptStatus({ hardware: {
+    cpu: { temperature_celsius: 52, sources: { temperature_celsius: { status: "stale", observed_at_unix: 123, timestamp_basis: "sample" } } },
+    memory: { installed_bytes: 64 * 1024 ** 3, total_bytes: 61.6 * 1024 ** 3 },
+    network: { download_bytes_per_second: null },
+    volumes: [{ letter: "H:", connected: false, total_bytes: null, type: "removable" }, { letter: "Z:", type: "ramdisk", total_bytes: 1024 ** 3 }],
+  } });
+  assert.equal(adapted.hardware.cpu.temperature_c.state, "stale");
+  assert.equal(adapted.hardware.cpu.observed_at_unix, 123);
+  assert.equal(capacity(adapted.hardware.memory.installed_total_bytes), "64.0 GiB");
+  assert.equal(adapted.hardware.volumes[0].state, "disconnected");
+  assert.equal(capacity(adapted.hardware.volumes[0].total_bytes), "暂无数据");
+  assert.match(adapted.hardware.volumes[1].mapping, /不计入物理盘容量/);
+  assert.equal(rate(adapted.hardware.network.download_bytes_per_second), "暂无数据");
+  assert.equal(rate({ value: 1024 ** 2, state: "stale" }), "1 MiB/s（已过期）");
+});
+
+test("group time follows the dynamic read while individual static and unknown sample times remain intact", () => {
+  const cpu = adaptStatus({ hardware: { cpu: { model: "synthetic", temperature_celsius: 42, sources: {
+    model: { observed_at_unix: 100, status: "ok", timestamp_basis: "sample" },
+    temperature_celsius: { observed_at_unix: 200, status: "ok", source: "sensor", timestamp_basis: "provider_read" },
+  } } } }).hardware.cpu;
+  assert.equal(cpu.observed_at_unix, 200);
+  assert.equal(cpu.model.observed_at_unix, 100);
+  assert.equal(cpu.temperature_c.timestamp_basis, "provider_read");
+  assert.equal(cpu.temperature_c.source, "sensor");
+  assert.equal(cpu.timestamp_basis, "provider_read");
+  assert.equal(hardwareBasis("LHM core average clock", "frequency"), "各核心当前频率的平均值");
+  assert.match(hardwareBasis("lowest-metric active physical IPv4 default route; tunnels excluded", "network"), /不重复累计隧道/);
+});
+
+test("same-form retry requires a definite pre-commit failure and never retries unknown or partial commit", () => {
+  for (const error of ["totp_verification_failed", "public_totp_cooldown", "public_totp_not_ready"])
+    assert.equal(canRetryVerification({ state: "failed", error }), true);
+  for (const value of [{ state: "pending", error: "public_totp_cooldown" }, { state: "unknown", error: "totp_verification_failed" }, { state: "failed", error: "public_access_response_unknown" }, { state: "failed", error: "totp_verification_failed", personal_data: { state: "succeeded" } }, { state: "partial", error: "totp_verification_failed" }])
+    assert.equal(canRetryVerification(value), false);
+});
+
+function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
+test("one user submit creates then verifies the exact bound request once", async () => {
+  const calls = [];
+  const attempt = createGrantAttempt({ requestId: "synthetic-id", body: { purpose: "personal_data", duration_hours: "1.23", combined: false }, onCreated() {}, api: async (path, options) => {
+    calls.push({ path, options });
+    return path === "/requests" ? { request_id: "synthetic-id", state: "pending", csrf_token: "synthetic-csrf" } : { state: "succeeded" };
+  } });
+  assert.deepEqual(await attempt.run("000000"), { state: "succeeded" });
+  assert.deepEqual(calls.map(call => call.path), ["/requests", "/requests/synthetic-id/verify"]);
+  assert.equal(calls[1].options.csrf, "synthetic-csrf");
+  assert.equal(calls[1].options.body.totp, "000000");
+});
+
+test("unprepared, failed or mismatched create responses never receive the code", async () => {
+  for (const prepared of [{ request_id: "synthetic-id", state: "failed", error: "public_totp_cooldown" }, { request_id: "synthetic-id", state: "unknown" }, { request_id: "another-id", state: "pending", csrf_token: "synthetic-csrf" }]) {
+    const paths = [];
+    const attempt = createGrantAttempt({ requestId: "synthetic-id", body: {}, onCreated() {}, api: async path => { paths.push(path); return prepared; } });
+    await attempt.run("000000");
+    assert.deepEqual(paths, ["/requests"]);
+  }
+});
+
+test("cancel while create is pending cancels that request and never sends a factor", async () => {
+  const created = deferred(), calls = [];
+  const attempt = createGrantAttempt({ requestId: "synthetic-id", body: {}, onCreated() {}, api: async path => {
+    calls.push(path); return path === "/requests" ? created.promise : { state: "cancelled" };
+  } });
+  const running = attempt.run("000000"), cancelling = attempt.cancel();
+  created.resolve({ request_id: "synthetic-id", state: "pending", csrf_token: "synthetic-csrf" });
+  assert.equal(await running, null);
+  assert.deepEqual(await cancelling, { state: "cancelled" });
+  assert.deepEqual(calls, ["/requests", "/requests/synthetic-id/cancel"]);
+});
+
+test("explicit creation rejection racing cancellation is recoverable without a nonexistent saved request", async () => {
+  let reject;
+  const created = new Promise((_, fail) => { reject = fail; });
+  const calls = [];
+  const attempt = createGrantAttempt({ requestId: "synthetic-id", body: {}, onCreated() { throw new Error("not created"); },
+    api: async path => { calls.push(path); return created; } });
+  const running = attempt.run("000000"), cancelling = attempt.cancel();
+  reject(Object.assign(new Error("rejected"), { data: { status: "error", error: "public_state_changed" } }));
+  assert.equal(await running, null);
+  const result = await cancelling;
+  assert.equal(result.state, "cancelled");
+  assert.equal(result.request_created, false);
+  assert.equal(result.factor_submitted, false);
+  assert.deepEqual(calls, ["/requests"]);
+});
+
+test("cancel while verify is pending suppresses late verify and preserves actual cancel readback", async () => {
+  for (const terminal of ["cancelled", "succeeded"]) {
+    const verified = deferred(), started = deferred();
+    const attempt = createGrantAttempt({ requestId: "synthetic-id", body: {}, onCreated() {}, api: async path => {
+      if (path === "/requests") return { request_id: "synthetic-id", state: "pending", csrf_token: "synthetic-csrf" };
+      if (path.endsWith("/verify")) { started.resolve(); return verified.promise; }
+      return { state: terminal };
+    } });
+    const running = attempt.run("000000"); await started.promise;
+    assert.deepEqual(await attempt.cancel(), { state: terminal });
+    verified.resolve({ state: "succeeded" });
+    assert.equal(await running, null);
+  }
+});
+
+test("expired grants never render as active, unknown never means locked", () => {
+  assert.equal(grantLabel({ state: "active", expires_at_unix: 100 }, 101), "已到期 · 等待主机确认");
+  assert.equal(grantLabel(null, 101), "状态未知");
+  assert.equal(grantLabel({ state: "closing" }, 101), "正在关闭资料");
+});
+
+test("all absolute display times use Beijing time regardless of the browser timezone", () => {
+  assert.equal(beijingTime(Date.UTC(2026, 8, 24, 0, 30) / 1000), "2026/09/24 08:30:00 北京时间");
+  assert.equal(beijingTime(Date.UTC(2026, 8, 23, 20, 30) / 1000, true), "04:30:00 北京时间");
+  assert.equal(beijingTime(null), "时间未知");
+});
+
+test("unknown reduction requests remain classified separately from factor requests", () => {
+  assert.equal(reductionAction({ action: "windows", state: "unknown" }), "windows");
+  assert.equal(reductionAction({ error: "public_windows_lock_result_unknown", state: "unknown" }), "windows");
+  assert.equal(reductionAction({ state: "unknown" }), null);
+  assert.equal(unresolvedAction({ state: "unknown" }), true);
+  assert.equal(unresolvedAction({ state: "failed" }), false);
+});
+
+test("a logical API failure in an HTTP 200 response cannot be mistaken for a prepared factor request", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(JSON.stringify({ status: "error", error: "public_state_changed" }), { status: 200 });
+  try { await assert.rejects(apiRequest("", "/requests", { method: "POST", body: {} }), /状态已变化/); }
+  finally { globalThis.fetch = originalFetch; }
+});
+
+test("status reads do not overlap and a late old poll cannot overwrite operation readback", async () => {
+  const pending = [], seen = [];
+  const reader = createStatusReader(signal => new Promise(resolve => pending.push({ resolve, signal })), data => seen.push(data), error => { throw error; });
+  const first = reader.read();
+  await reader.read();
+  assert.equal(pending.length, 1);
+  reader.invalidate();
+  assert.equal(pending[0].signal.aborted, true);
+  const second = reader.read({ replace: true });
+  pending[1].resolve("new-state"); await second;
+  pending[0].resolve("old-state"); await first;
+  assert.deepEqual(seen, ["new-state"]);
+});
+
+test("built route has complete meaningful HTML with no static-site factor field", async () => {
+  const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
+  for (const text of ["授权与状态", "存储空间", "Windows可用物理总量", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
+  assert.ok(!html.includes('id="ca-totp"'));
+  assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
+  assert.match(html, /aria-label="授权与状态（新标签）"/);
+  assert.ok(!html.includes("需要结束访问时"));
+  assert.match(html, /aria-label="结束无限制授权"/);
+  assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
+  assert.ok(html.indexOf('id="ca-hardware-title"') < html.indexOf('id="access-form"'));
+  assert.ok(!html.includes('class="flow-field"'));
+});
