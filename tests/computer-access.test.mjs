@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, memorySpecification, networkConnection, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hardwareSnapshot, isAccessOrigin, isHostOrigin, memorySpecification, networkConnection, queryResultUpdate, rate, reductionAction, reductionFailureResult, resourceReadLabel, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -286,6 +286,34 @@ test("reload cache projection strips all authority and request fields", () => {
   assert.equal(hardwareSnapshot({ hardware: {} }), null);
 });
 
+test("initial page GET is consumed once and cancellation blocks its late result", async () => {
+  let finishEarly, cancelled = 0, fetched = 0;
+  const seen = [];
+  const initialRead = { started: 100, promise: new Promise(resolve => { finishEarly = resolve; }), cancel: () => cancelled++ };
+  const reader = createStatusReader(async () => { fetched++; return "current"; }, data => seen.push(data), error => { throw error; }, { initialRead, now: () => 200 });
+  const first = reader.read();
+  assert.equal(fetched, 0);
+  reader.invalidate();
+  assert.equal(cancelled, 1);
+  await reader.read({ refresh: true });
+  finishEarly("old"); await first;
+  assert.deepEqual(seen, ["current"]);
+  assert.equal(fetched, 1);
+});
+
+test("initial page GET expires during slow hydration and retains service failure classification", async () => {
+  let cancelled = 0, fetched = 0;
+  const seen = [], failures = [];
+  const early = { started: 100, promise: Promise.resolve("old"), cancel: () => cancelled++ };
+  const reader = createStatusReader(async () => { fetched++; return "fresh"; }, value => seen.push(value), error => failures.push(error), { initialRead: early, now: () => 10200 });
+  await reader.read();
+  assert.equal(cancelled, 1); assert.equal(fetched, 1); assert.deepEqual(seen, ["fresh"]);
+  const serviceError = Object.assign(new Error("service"), { httpStatus: 502 });
+  const offline = createStatusReader(async () => { throw new Error("must not double-fetch"); }, value => seen.push(value), error => failures.push(error), { initialRead: { ...early, promise: Promise.reject(serviceError) }, now: () => 200 });
+  await offline.read();
+  assert.equal(failures[0].httpStatus, 502);
+});
+
 test("computer routes stay in the current tab while external links retain their target", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
   for (const name of ["连接电脑", "授权与状态"]) {
@@ -352,4 +380,18 @@ test("home and MCP summaries only offer links to the common authority page", asy
   }
   const summary = await readFile(new URL("../app/computer-access-summary.jsx", import.meta.url), "utf8");
   assert.ok(!summary.includes('method: "POST"'));
+});
+
+test("resource time summary merges shared reads without inventing one timestamp for independent sources", () => {
+  const time = Date.UTC(2026, 8, 24, 0, 30) / 1000;
+  assert.equal(resourceReadLabel({ cpu: { observed_at_unix: time }, memory: { observed_at_unix: time } }), "资源读取于 08:30:00 北京时间");
+  assert.equal(resourceReadLabel({ cpu: { observed_at_unix: time }, memory: { observed_at_unix: time - 60 } }), "最近资源读取于 08:30:00 北京时间 · 各项时间见来源");
+  assert.equal(resourceReadLabel({}), "资源读取时间待提供");
+});
+
+test("manual first read cancels unused early GET instead of consuming it", async () => {
+  let cancelled = 0, fetched = 0;
+  const results = [];
+  const reader = createStatusReader(async (_, options) => { fetched++; assert.equal(options.refresh, true); return "fresh"; }, value => results.push(value), error => { throw error; }, { initialRead: { started: 100, promise: Promise.resolve("early"), cancel: () => cancelled++ }, now: () => 200 });
+  await reader.read({ refresh: true }); assert.equal(cancelled, 1); assert.equal(fetched, 1); assert.deepEqual(results, ["fresh"]);
 });

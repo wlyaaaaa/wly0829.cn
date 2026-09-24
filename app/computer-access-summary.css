@@ -26,3 +26,9 @@
 .grafana-status button { padding: 5px 7px; border: 1px solid #cbdde5; border-radius: 5px; color: #41647b; background: #fff; cursor: pointer; font: inherit; font-size: 12px; }
 .grafana-status small { display: block; margin-top: 6px; color: #687c74; font-size: 12px; line-height: 1.6; }
 .grafana-status-compact { margin: 0; padding: 0; border: 0; }
+
+.ca-read-status { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; padding: 4px 9px; border: 1px solid #bfdfd0; border-radius: 6px; background: #effaf4; color: #176b4d; font-size: 12px; line-height: 1.5; font-weight: 600; vertical-align: middle; }
+.ca-read-status[data-busy="true"] { border-color: #69b995; background: #dcf6e9; color: #075d3e; }
+.ca-read-spinner { width: 12px; height: 12px; flex: 0 0 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: ca-read-spin .8s linear infinite; }
+@keyframes ca-read-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ca-read-spinner { animation: none; } }

@@ -16,6 +16,14 @@ export function beijingTime(unix, timeOnly = false) {
   }).format(new Date(unix * 1000)) + " 北京时间";
 }
 
+export function resourceReadLabel(hardware = {}) {
+  const times = [hardware.cpu, ...(hardware.gpus || []), hardware.memory, hardware.display, hardware.health, ...(hardware.volumes || [])]
+    .map(sample => sample?.observed_at_unix).filter(time => Number.isFinite(time) && time > 0);
+  if (!times.length) return "资源读取时间待提供";
+  const newest = Math.max(...times), distinct = new Set(times.map(Math.floor)).size > 1;
+  return `${distinct ? "最近资源读取于" : "资源读取于"} ${beijingTime(newest, true)}${distinct ? " · 各项时间见来源" : ""}`;
+}
+
 export function reductionAction(result) {
   if (["windows", "personal-data", "unrestricted"].includes(result?.action)) return result.action;
   if (result?.error === "public_windows_lock_result_unknown") return "windows";
@@ -323,7 +331,7 @@ export async function apiRequest(base, path, { method = "GET", body, csrf, signa
 }
 
 // One in-flight status request. An operation invalidates the old read before its readback.
-export function createStatusReader(fetchStatus, onSuccess, onFailure) {
+export function createStatusReader(fetchStatus, onSuccess, onFailure, { initialRead = null, now = () => performance.now() } = {}) {
   let active = null;
   let generation = 0;
   return {
@@ -334,12 +342,25 @@ export function createStatusReader(fetchStatus, onSuccess, onFailure) {
       const current = ++generation;
       active = controller;
       try {
-        const result = await fetchStatus(controller.signal, { refresh });
+        // Consume only this page's in-flight GET, once. Never reuse it after an
+        // operation, a manual refresh, or a slow/paused component download.
+        const early = initialRead;
+        initialRead = null;
+        let result;
+        if (early && !refresh && now() - early.started < 10000) {
+          const cancel = () => early.cancel();
+          controller.signal.addEventListener("abort", cancel, { once: true });
+          try { result = await early.promise; }
+          finally { controller.signal.removeEventListener("abort", cancel); }
+        } else {
+          early?.cancel();
+          result = await fetchStatus(controller.signal, { refresh });
+        }
         if (current === generation) onSuccess(result, { refresh });
       } catch (error) {
         if (current === generation && !controller.signal.aborted) onFailure(error, { refresh });
       } finally { if (current === generation) active = null; }
     },
-    invalidate() { generation++; active?.abort(); active = null; },
+    invalidate() { generation++; active?.abort(); active = null; initialRead?.cancel(); initialRead = null; },
   };
 }

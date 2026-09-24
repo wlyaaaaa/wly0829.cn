@@ -100,7 +100,7 @@ body:has(.ca-page) { background: #f1f7fb; }
 .ca-network-meta .ca-source-details { width: 100%; }
 .ca-update-note { color: #71819a; font-size: 12px; margin: 10px 1px !important; line-height: 1.6; }
 .ca-form-card { flex: 1; display: flex; flex-direction: column; padding: 23px; scroll-margin-top: 100px; }
-.ca-form-card > form { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.ca-form-card > form { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
 .ca-form-card h3 { font-size: 26px; line-height: 1.4; letter-spacing: -.025em; }
 .ca-form-card fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .ca-purpose-buttons { display: flex; gap: 6px; padding: 4px; background: #f2f6fb; border: 1px solid #e4ecf4; border-radius: 8px; margin: 19px 0 13px; }
@@ -296,3 +296,52 @@ body:has(.ca-page) { background: #f1f7fb; }
 .ca-offline-panel h2 { font-size: 20px; }
 .ca-offline-panel p { margin-top: 10px; font-size: 14px; line-height: 1.8; }
 .ca-offline-panel button { margin-top: 14px; }
+
+/* Align information to its meaning, without padding each form item to the column height. */
+.ca-form-card > form { display: flex; flex-direction: column; justify-content: flex-start; gap: 12px; }
+.ca-form-card .ca-totp { margin-top: 0; }
+.ca-form-card .ca-purpose-buttons { margin: 10px 0 8px; }
+.ca-form-card .ca-combined:has([role="switch"]) { margin: 8px 0 12px; }
+.ca-hours, .ca-totp input, .ca-shortcuts button { border-color: #8bc6aa; }
+.ca-shortcuts button { background: #f9fdfb; color: #087747; }
+.ca-hours:focus, .ca-totp input:focus { border-color: #078756; box-shadow: 0 0 0 2px #10956b18; }
+.ca-form-current { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 12px 14px; border: 1px solid #d5e9de; border-radius: 8px; background: #f7fcf9; }
+.ca-form-current h4 { margin: 0; font-size: 14px; color: #285d46; }
+.ca-form-current .ca-facts { margin: 0; font-size: 13px; }
+.ca-form-current .ca-facts > div { align-items: start; }
+.ca-form-current p { font-size: 12px; line-height: 1.7; color: #5b7567; }
+.ca-form-card .ca-duration-preview, .ca-form-card .ca-button-primary, .ca-form-card .ca-form-links { margin-top: 0; }
+.ca-updated { display: inline-flex; align-items: center; min-height: 32px; }
+.ca-dpc-meta { gap: 7px !important; }
+.ca-dpc-meta .ca-source-details { margin: 0; font-size: 12px; }
+.ca-resource-readtime { margin: 0 0 10px !important; font-size: 12px; line-height: 1.6; color: var(--ca-muted); }
+.ca-spec-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 8px; color: #50698b; font-size: 13px; line-height: 1.6; }
+.ca-spec-line > span { white-space: nowrap; max-width: 100%; }
+.ca-spec-line > span:first-child { white-space: normal; }
+.ca-hardware-heading { min-height: 0; }
+.ca-commit > small { display: block; margin-top: 7px; color: var(--ca-muted); font-size: 12px; line-height: 1.6; }
+.ca-volume-columns, .ca-volume > .ca-disclosure-button { grid-template-columns: 54px minmax(70px,.65fr) minmax(72px,.65fr) minmax(160px,1.35fr) minmax(95px,.8fr) minmax(140px,1.5fr) 14px; gap: 12px; }
+.ca-network-card .ca-network-strip { display: grid; grid-template-columns: auto minmax(160px,1fr) minmax(470px,2.4fr) auto; gap: 12px 18px; }
+.ca-network-card .ca-network-quality { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 0; }
+.ca-network-card .ca-network-quality > div { min-width: 0; }
+.ca-network-card .ca-network-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; max-width: 175px; margin: 0; }
+.ca-network-meta .ca-source-details { width: auto; }
+.ca-network-meta .ca-sample { margin: 0; }
+@media (max-width: 1400px) { .ca-volume-columns, .ca-volume > .ca-disclosure-button { grid-template-columns: 46px minmax(58px,.65fr) minmax(64px,.65fr) minmax(135px,1.4fr) minmax(80px,.8fr) minmax(105px,1.25fr) 12px; gap: 8px; } }
+@media (max-width: 1200px) { .ca-network-card .ca-network-strip { grid-template-columns: auto minmax(0,1fr) auto; } .ca-network-card .ca-network-quality { grid-column: 1 / -1; grid-row: 2; } .ca-network-card .ca-network-meta { max-width: none; } }
+@media (max-width: 1100px) { .ca-volume-columns { display: none; } .ca-volume > .ca-disclosure-button { grid-template-columns: 45px minmax(0,1fr) 12px; gap: 6px 9px; } .ca-form-current { flex: initial; } }
+@media (max-width: 780px) { .ca-network-card .ca-network-strip { grid-template-columns: auto minmax(0,1fr); } .ca-network-card .ca-network-quality { grid-template-columns: repeat(2,minmax(0,1fr)); } .ca-network-card .ca-network-meta { grid-column: 1 / -1; } .ca-dpc-meta { flex-wrap: wrap; } .ca-form-card > form { display: flex; } }
+
+@media (min-width: 1101px) {
+  .ca-volume-columns > span:nth-child(4), .ca-volume-columns > span:nth-child(5), .ca-volume-size, .ca-volume-free { text-align: right; }
+}
+
+/* Source controls live beside the card titles instead of reserving empty footer rows. */
+.ca-resource-grid { grid-auto-rows: auto 48px 7px auto auto; }
+.ca-hardware-card { position: relative; grid-row: span 5; }
+.ca-hardware-card > .ca-source-details { position: absolute; top: 8px; right: 10px; grid-row: auto; margin: 0; }
+.ca-hardware-heading h3 { padding-right: 42px; }
+.ca-display-card { position: relative; }
+.ca-display-card h4 { padding-right: 40px; }
+.ca-display-card > .ca-source-details { position: absolute; top: 3px; right: 8px; margin: 0; }
+@media (min-width: 1800px) { .ca-metric-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 6px; } .ca-metric { padding-inline: 7px; } }
