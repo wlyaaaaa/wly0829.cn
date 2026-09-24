@@ -1,6 +1,7 @@
 import "../app/style.css";
 import "../app/computer-access-header.css";
 import "../app/personal-media-gallery.css";
+import "../app/personal-ai-experience.css";
 import { searchCompactEntries, searchResultExcerpt } from "../app/compact-search.js";
 import "../app/continuation-brief.css";
 import { initializeContinuationBriefs } from "../app/continuation-brief.js";

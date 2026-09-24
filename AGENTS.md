@@ -12,6 +12,11 @@ personal AI collaboration workspace; public presentation is secondary.
   enable; do not label the whole website or system read-only. A dated project
   snapshot remains distinct from an operation and its verified result. It is not
   a resume, marketing landing page, activity feed or repository browser.
+- The owner's explicit 2026-09-24 request adds a bounded personal AI experience
+  highlight to System and `.agents`: dated usage screenshots, independent Codex
+  totals and first-person tool experience. Keep it distinct from system/project
+  results, preserve the working entrypoints and complete technical content, and
+  do not expand this exception into a site-wide marketing redesign.
 - The owner is the primary reader. Do not optimize information density, wording
   or project selection for recruiters, salary negotiation or external
   persuasion. A public visitor may read the same material, but the panel must

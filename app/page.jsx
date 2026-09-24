@@ -22,7 +22,7 @@ import {
   Wrench,
   X
 } from "@phosphor-icons/react";
-import { SiBilibili, SiGithub, SiGrafana, SiX } from "@icons-pack/react-simple-icons";
+import { SiBilibili, SiGithub, SiGrafana, SiModelcontextprotocol, SiX } from "@icons-pack/react-simple-icons";
 import {
   excludedSkills,
   canonicalPath,
@@ -59,6 +59,7 @@ import { ProjectContinuation } from "./continuation-brief.jsx";
 import { mcpDevices, mcpMainFallback, mcpSetupNote } from "./content-mcp-access.js";
 import ComputerAccess from "./computer-access.jsx";
 import ComputerAccessSummary from "./computer-access-summary.jsx";
+import PersonalAiExperience from "./personal-ai-experience.jsx";
 
 function useLocationState(initialPathname, initialSearch) {
   const browserLocation = typeof window === "undefined" ? null : window.location;
@@ -305,7 +306,7 @@ function Header({ path, search = "" }) {
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
         <a className="header-connect" data-grafana-entry href="/#grafana-status" aria-label="查看 Grafana 状态"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
-        <SiteLink className="header-connect" href="/mcp" aria-label="连接电脑" aria-current={path === "/mcp" ? "page" : undefined}><Desktop size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
+        <SiteLink className="header-connect" href="/mcp" aria-label="连接电脑" aria-current={path === "/mcp" ? "page" : undefined}><SiModelcontextprotocol size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
         <SiteLink className="header-connect" href="/computer-access/" aria-label="授权与状态" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
         <button
           ref={searchButtonRef}
@@ -1060,6 +1061,7 @@ function ProjectOverview({ entry }) {
           <div className="plain-language-grid"><article><h3>为什么需要它</h3><p>{copy(currentProject.why)}</p></article><article><h3>举个实际例子</h3><p>{copy(currentProject.plainExample)}</p></article><article><h3>最后我会得到什么</h3><p>{copy(currentProject.result)}</p></article></div>
           <ThreeStateSummary {...currentProject.readerStates} kind={entry.kind} labels={currentProject.stateLabels} />
         </section>
+        {currentProject.slug === "agents" ? <PersonalAiExperience Gallery={ProjectGallery} /> : null}
         <UsageStart entry={currentProject.usageEntry} inputs={currentProject.usageInputs} kind={entry.kind} />
         <section className="document-section"><h2>{isLearning ? "这套方法怎样工作" : "从开始到拿到结果"}</h2><ol className="number-list">{currentProject.operatingFlow.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{copy(step.title)}</strong><p>{copy(step.detail)}</p></div></li>)}</ol></section>
         <section className="document-section project-capability-overview">
@@ -1696,6 +1698,7 @@ function SystemPage() {
         <details className="system-home-about"><summary>这套系统到底是什么？</summary><div className="system-home-hero-copy">{systemHomeHero.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="system-home-role-grid">{systemHomeHero.roles.map((role, index) => <article key={role.id}><span>{String(index + 1).padStart(2, "0")}</span><strong>{role.title}</strong><p>{role.body}</p></article>)}</div></details>
       </header>
 
+      <PersonalAiExperience Gallery={ProjectGallery} compact />
       <SystemSectionNavigation />
 
       <section className="system-frame system-workflows" id="system-workflows" aria-labelledby="system-workflows-title">
