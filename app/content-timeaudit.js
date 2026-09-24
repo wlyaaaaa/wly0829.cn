@@ -1,9 +1,9 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const timeAuditSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-24T04:59:46Z",
-  label: "个人活动完整时段摘要与剪贴板同内容分组已进入正式源码；历史运行健康仍保留原日期",
-  boundary: "本轮读回 PUBLIC main=622b66c：完整时段与北京时间逐日活动摘要、剪贴板同内容分组/复制次数已有源码和专项测试；PCConfig 已安装桌面有剪贴板显示回读。04:59Z 的有界主链健康为 healthy 且待写为 0，GPU hotspot 未提供值；本轮未读取私人活动或剪贴板正文、当前剪贴板计数和完整恢复。9月14日一小时帧与8月31日大盘/剪贴板数量仍只保留原日期。",
+  observedAt: "2026-09-24T17:45:00Z",
+  label: "Grafana公网入口已恢复，原采集与自动启动已加固；历史空档如实保留",
+  boundary: "本轮已提交 PUBLIC main=9f51f40：恢复既有Docker依赖链，Grafana宿主端口由被Windows保留的53000迁到43000，原公网地址及数据卷保持。完整运行健康回读通过、待入库归零，公网健康接口200；约12:53–16:46 UTC的硬件遥测空档没有回填。活动、帧率、备份和历史图片继续保留各自原观察日期。",
   metrics: [
     { label: "9月14日一小时硬件样本", value: "3599" },
     { label: "9月14日有效/拒绝正帧", value: "2369 / 1229" },
@@ -14,13 +14,13 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "当前帧有效性与历史窗口", value: "2026-09-08修复后三分钟历史窗口的133个正帧全部被拒绝，no_game_frames结论保留。2026-09-14一小时摘要另有3598正帧，其中2369有效、1229拒绝，quality=mixed_valid_and_rejected；有效子集FPS均值222.631、最低172.8，1% Low均值111.272、帧时p95为7.356ms。有效性只证明数值范围及FPS与帧时一致；提供器未给拒绝原因分项或帧源身份，不能推断拒绝来自哪种故障，也不能把这些帧自动称为真实游戏验收。" },
     { label: "采样与保留", value: "硬件 / FPS / 前台心跳 1 秒，活跃进程 3 秒；约 2 GB/周、330 GB/三年、1200 天保留；数据库与 Grafana 每类备份轮转上限 14 份" },
     { label: "帧率来源与空闲", value: "当前源码优先读取 RTSS（RivaTuner Statistics Server 帧率工具）的共享内存；按前台进程、RTSS 最近前台、已启用的 Wallpaper 桌面渲染器和唯一新鲜帧源选择。映射可用但无有效帧为正常 gated_idle；映射不可用才启用 PresentMon 后备，不能把所有零值都当正常等待。" },
-    { label: "存储与展示", value: "PostgreSQL 15（本机 45432）+ Grafana 13.0.2（本机 53000）；6 张仪表盘、78 个面板" },
+    { label: "存储与展示", value: "PostgreSQL 15（本机45432）+ Grafana 13.0.2（本机43000）；原公网Grafana地址保持，6张仪表盘、78个面板。" },
     { label: "当前共享健康与历史聚合", value: "2026-09-18T13:14Z共享健康正常：AHK约0.87秒、硬件数据库约0.38秒新鲜，待写、写失败和溢出均0，已有contract-2质量来源。数据库备份14份，最近约9.22小时/4162.12MiB，清单/长度通过、full_restore_verified=false；本轮未重哈希或恢复数据库。9月14日3599样本/3383秒活动覆盖仍是历史窗口，不能拿当前心跳覆盖它的217秒缺口。" },
     { label: "9月8日受管换代与空档", value: "2026-09-08T08:34:28Z仅停止已核对身份的旧采集worker，由既有TimeAudit_Watchdog拉起新launcher 57708→worker 61904（08:34:50Z）。首个新样本08:35:19Z，启动窗口前沿有51.03秒缺口。随后三分钟GPU占用/温度/功率/核心和显存时钟180/180非空且物理有效；不新增服务、不改历史样本，也未重启电脑或GPU驱动。" },
-    { label: "当前正式实现与部署边界", value: "PUBLIC main 622b66c66514de6abd48693e3c26f5a758925dbb 已远端回读，保留可靠采样、活动分段、共享健康和隔离恢复检查，并新增 76dc57d 完整时段个人活动摘要与 622b66c 剪贴板同内容分组。当前新行的 measurement_quality、collector_instance_id 和 collector_sample_seq 不倒填历史行；源码、运行中进程、真实资料结果和恢复各自证明。" },
+    { label: "当前正式实现与部署边界", value: "PUBLIC main 9f51f40e729ffd8c0e3c8cebafe331b3cefa00c7 已正常推送。既有AutoStart恢复缺失依赖，正在启动时不重复触发；AHK精确实例与健康容器保留，配置变更只在明确部署时应用。18项Python与8项PowerShell恢复分支测试通过；源码与实际恢复分别回读。" },
     { label: "完整时段个人活动读取", value: "personal_activity_reader.py --summary 可按明确时间窗给完整时段与北京时间逐日概览，分别说明前台和 AHK 记录覆盖、未覆盖、状态及应用排名。开放会话不外推，记录不是本人在场或工作成果；本轮只核源码与测试，未读取生产活动窗口，也未证明 timeaudit-diagnostics Skill 已自动调用新入口。", hero: false },
     { label: "剪贴板同内容分组", value: "源码 622b66c 对完全相同内容分组；按来源实例、开机、会话和序列排除同一次复制的重复观察，真正再次复制才增加次数。日期、链接、疑似密钥等筛选先于全历史分组和分页；疑似密钥是格式线索，不保证检出。原事件和正文对象保持，实际当前总数本轮未重读。", hero: false },
-    { label: "本轮有界运行健康", value: "2026-09-24T04:59:46Z，TimeAudit 自有 timeaudit_health.py --core-only 返回 healthy：遥测与活动心跳约 0.68/0.79 秒、入库器约 4.56 秒，待写事件/文件与写失败均 0；数据库状态 healthy，但 GPU hotspot 当前不可用。该回执不含原始样本、程序、窗口、凭据或机器标识，不证明历史无空档、剪贴板内容或数据库恢复。", hero: false },
+    { label: "本轮有界运行健康", value: "2026-09-24T16:52:36Z完整TimeAudit健康为healthy，Grafana、数据库、遥测、入库、活动持久化及watchdog均正常；963条积压批次由原入库器处理，pending_files=0。公网Grafana健康接口随后返回200/database=ok；没有重置Docker、删除数据库或重算缺失历史。", hero: false },
     { label: "独立剪贴板历史 · 8月31日证据", value: "WM_CLIPBOARDUPDATE事件采集与SQLite schema v1/WAL/FTS5独立工作。8月31日为5234事件、2312个blob（正文对象）、3406条全文索引，3个任务与无正文adapter（适配出口）验证通过、专属11项测试通过；本次未重读当前正文或计数。" },
     { label: "已验证发布基线", value: "Git Owner 在 2026-08-31T21:38:05Z live（实时）回读确认 wlyaaaaa/TimeAudit 为 PUBLIC（公开），当时 main（默认主分支）=本地 HEAD=origin/main=001cee0918f3fc1adbd5eed5145c7ee353038291，ahead/behind（本地领先/落后）均为 0，工作树 clean（干净）。这是下列发布、测试与现场证据的固定版本，不用它冒充后续源码的发布证明。", hero: false },
     { label: "现役源码的帧链与坏值处理", value: "e5459ce保留RTSSSharedMemoryV2只读首选、2秒新鲜度、双读一致性和fps_capture_status/detail入库；只有映射不可用才考虑PresentMon。新增NVML成功返回但核心指标非有限或越界时，按既有失败路径清句柄并重新初始化，当前拍只接受真实LHM回退或NULL，不把坏值裁成0。README已改为四worker、新实例退让，以及映射不可用才后备。", hero: false },
@@ -38,6 +38,7 @@ const timeAuditSnapshot = createProjectSnapshot({
     { label: "聚合接口边界", value: "两个聚合回执为了快速、有界而不返回逐行历史、进程或窗口明细；这是 provider（提供器）的接口范围，不代表这些字段类别禁止公开。阈值信号也只表示相关与出现次数，不证明硬件故障、恶意程序或用户意图。", hero: false }
   ],
   gaps: [
+    "2026-09-24约12:53–16:46 UTC未采集的硬件遥测没有回填。旧53000落入Windows排除范围52954–53053，现改43000；已有但失效的Docker后端仍只报告不可用，不自动重启共享引擎。",
     "网页使用官方有界摘要；源修复只额外核对精确采集进程与GPU有效计数。没有读取窗口、聊天或剪贴板正文，不能据此解释某段私人活动或具体程序根因。",
     "001cee0 的 182 项完整源码回归与 21 项现场健康检查已通过，但没有执行 db_audit.py 的整库数据审计，也没有对全部 Grafana SQL 做当前数据库执行计划验收；在线状态与测试都不能证明历史数据全绿。",
     "2026-09-08曾通过既有Watchdog真实换代TimeAudit采集器，保留约51.03秒启动前沿空档；LHM进程崩溃或18085端点故障的恢复没有重新注入，不能把采集器换代当作所有依赖故障都已验收。",
@@ -52,7 +53,7 @@ const timeAuditSnapshot = createProjectSnapshot({
 });
 
 export const timeAuditProject = {
-  usageEntry: "在浏览器里的 TimeAudit 数据大盘（Grafana）查看电脑历史与性能；需要 AI 解释一段异常时，告诉已接入电脑诊断能力的 AI 症状和时间。复制记录另在本机“TimeAudit 剪贴板历史”窗口查看。",
+  usageEntry: "在TimeAudit数据大盘（Grafana）查看电脑历史与性能；本站首页可先看Grafana状态并进入大盘。需要AI解释一段异常时，说明症状和时间。复制记录在本机“密码中心”的“剪贴板历史”页查看。",
   usageInputs: ["想看的时间范围与异常现象", "是硬件、进程、使用时长还是剪贴板记录", "需要只读分析还是维护恢复"],
   order: 10,
   slug: "timeaudit",
@@ -379,7 +380,7 @@ export const timeAuditProject = {
     }
   ],
   operationalEntrypoints: [
-    { name: "打开大盘", command: "http://localhost:53000", purpose: "从时间范围进入 6 张诊断盘。" },
+    { name: "打开大盘", command: "http://localhost:43000", purpose: "从时间范围进入 6 张诊断盘。" },
     { name: "启动主链", command: "schtasks /run /tn TimeAudit_AutoStart", purpose: "通过交互式提权任务拉起 AHK、Docker 与主引擎。" },
     { name: "查看 Watchdog（看门狗）", command: "Get-ScheduledTaskInfo TimeAudit_Watchdog", purpose: "确认外部恢复任务最近结果，不读遥测正文载荷。" },
     { name: "源码回归", command: "$env:PYTHONPATH='.venv\\Lib\\site-packages'; C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B -m pytest -q", purpose: "让本机 pytest runner 优先使用项目 `.venv` 生产依赖，验证运行、入库、仪表盘、备份、FPS 与原生隔离；pytest 不进入生产依赖。" },
@@ -1042,7 +1043,7 @@ export const timeAuditModules = [
       "安装或确认 WSL2 与 Docker Desktop，取得现行项目源码，运行 `pwsh -File .\\setup_runtime.ps1` 重建项目 `.venv`。",
       "准备凭据后以 compose 拉起 PostgreSQL、audit-ingester、Grafana 三容器，并确认容器身份与 health。",
       "数据库二选一：全新空库执行 `schema.sql`；带历史或灾后候选先校验 dump，再恢复到干净目标库，不额外走空库建表路线。",
-      "确认 Grafana 固定 PostgreSQL datasource，再用合同通过的 JSON 或完整 Grafana 备份恢复 dashboard，并在浏览器打开 `http://localhost:53000`。",
+      "确认 Grafana 固定 PostgreSQL datasource，再用合同通过的 JSON 或完整 Grafana 备份恢复 dashboard，并在浏览器打开 `http://localhost:43000`。",
       "重建并回读 `TimeAudit_AutoStart`、`TimeAudit_Watchdog`、`TimeAudit_DailyBackup`，再手动触发一次受控启动或备份检查。",
       "按三条 heartbeat 推进、真实入库、`timeaudit_diagnostic_summary.py` 聚合覆盖、浏览器六张大盘可读的顺序验收。",
       "最后列出备份后到故障时刻的历史缺口、不可恢复项和未执行的演练；本轮仍未从最新 dump 做隔离整库恢复。"
