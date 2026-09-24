@@ -6,19 +6,23 @@ body:has(.ca-page) { background: #f1f7fb; }
 .ca-page button { cursor: pointer; }
 .ca-page button:disabled { opacity: .45; cursor: not-allowed; }
 .ca-page :is(button,input,a,summary):focus-visible, .ca-form-card:focus-visible { outline: 3px solid #009c77; outline-offset: 3px; }
-.ca-workspace { display: grid; grid-template-columns: minmax(0,2.08fr) minmax(340px,1fr); align-items: start; gap: 18px; }
-.ca-overview, .ca-access { min-width: 0; }
+.ca-workspace { display: grid; grid-template-rows: auto 1fr; grid-template-columns: minmax(0,2.08fr) minmax(340px,1fr); align-items: start; gap: 18px; }
+.ca-overview, .ca-access, .ca-hardware-area { min-width: 0; }
+.ca-overview { grid-column: 1; grid-row: 1; }
+.ca-access { grid-column: 2; grid-row: 1 / span 2; }
+.ca-hardware-area { grid-column: 1; grid-row: 2; }
 .ca-intro { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 14px; min-height: 40px; }
 .ca-intro h1 { font-size: 32px; letter-spacing: -.04em; line-height: 1.3; }
 .ca-connection { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; background: #e5f1f8; color: #53657c; font-size: 14px; border-radius: 20px; white-space: nowrap; }
 .ca-connection-online { background: #e0f7ee; color: #008b60; }
 .ca-connection-offline { background: #fff3dd; color: #8a6328; }
 .ca-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.ca-updated { color: var(--ca-muted); font-size: 12px; line-height: 1.6; }
+.ca-updated { display: flex; flex-wrap: wrap; gap: 2px 8px; color: var(--ca-muted); font-size: 12px; line-height: 1.6; }
+.ca-updated > span { white-space: nowrap; }
 .ca-top-actions { display: flex; gap: 7px; margin-left: auto; }
 .ca-refresh { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px; padding: 8px 11px; border: 1px solid #cbd9e9; border-radius: 8px; background: #fff; color: #314768; font-size: 13px !important; white-space: nowrap; }
 .ca-card { background: #fff; border: 1px solid #e0e9f2; border-radius: 11px; box-shadow: 0 4px 16px #45729404; min-width: 0; }
-.ca-grants { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.ca-grants { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; }
 .ca-grant { display: flex; align-items: center; gap: 12px; padding: 17px 16px; }
 .ca-grant-icon, .ca-icon { display: flex; flex-shrink: 0; align-items: center; justify-content: center; background: #e6f8f0; color: var(--ca-green); border-radius: 50%; }
 .ca-grant-icon { width: 48px; height: 48px; }
@@ -37,7 +41,7 @@ body:has(.ca-page) { background: #f1f7fb; }
 .ca-section-title { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
 .ca-section-title h2 { font-size: 20px; }
 .ca-system-line { display: flex; align-items: center; flex-wrap: wrap; gap: 9px 15px; color: #526a8b; font-size: 13px; }
-.ca-system-line > span { display: inline-flex; align-items: center; gap: 5px; }
+.ca-system-line > span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
 .ca-system-line svg { color: var(--ca-green); }
 .ca-boot-details { position: relative; color: var(--ca-muted); font-size: 12px; margin-bottom: 10px; line-height: 1.6; }
 .ca-boot-details summary { cursor: pointer; padding-block: 5px; width: fit-content; }
@@ -164,3 +168,11 @@ body:has(.ca-page) { background: #f1f7fb; }
 @media (max-width: 780px) { .ca-network-card { padding: 20px; } .ca-network-card .ca-network-strip a { min-height: 44px; } }
 
 .ca-success-notice { padding: 10px 14px; margin: 0 0 14px !important; background: #e6f8ee; color: #087747; border: 1px solid #cde9da; border-radius: 9px; font-size: 14px; line-height: 1.6; }
+
+@media (max-width: 780px) {
+  .ca-overview, .ca-access, .ca-hardware-area { grid-column: 1; grid-row: auto; }
+  .ca-system-line { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .ca-system-line > span { max-width: 100%; }
+}
+
+.ca-page .ca-form-context { margin-top: 12px; color: var(--ca-muted); font-size: 14px; line-height: 1.6; }

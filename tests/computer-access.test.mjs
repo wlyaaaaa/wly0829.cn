@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canEndGrant, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, isAccessOrigin, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, successfulReductionSnapshot, unresolvedAction } from "../app/computer-access-model.js";
 
 test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
   const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
@@ -234,7 +234,7 @@ test("built route preserves the complete static shell and scoped connection poli
   assert.ok(!html.includes("需要结束访问时"));
   assert.match(html, /aria-label="结束无限制授权"/);
   assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
-  assert.ok(html.indexOf('id="ca-hardware-title"') < html.indexOf('id="access-form"'));
+  assert.ok(html.indexOf('id="access-form"') < html.indexOf('id="ca-hardware-title"'));
   assert.ok(!html.includes('class="flow-field"'));
   assert.match(html, /href="https:\/\/wly0829\.cn\/computer-access\/"[^>]*aria-label="授权与状态（新标签）"/);
   assert.match(html, /connect-src 'self' https:\/\/mcp.wly0829.cn/);
@@ -251,4 +251,14 @@ test("website entry mounts in place without redirecting or discarding request lo
   assert.ok(!entry.includes("sessionStorage"));
   const home = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
   assert.ok(!home.includes("Content-Security-Policy"));
+});
+
+test("end buttons reflect actual grant state without conflating pending request cancellation", () => {
+  for (const state of ["locked", "inactive", "expired", "revoked", "unknown"]) assert.equal(canEndGrant({ state, expires_at_unix: 200 }, 100), false);
+  for (const state of ["unlocked", "active"]) {
+    assert.equal(canEndGrant({ state, expires_at_unix: 200 }, 100), true);
+    assert.equal(canEndGrant({ state, expires_at_unix: 100 }, 100), false);
+  }
+  for (const state of ["opening", "closing"]) assert.equal(canEndGrant({ state, expires_at_unix: 0 }, 100), true);
+  assert.equal(canEndGrant(null, 100), false);
 });

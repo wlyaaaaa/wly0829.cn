@@ -79,6 +79,10 @@ export function remainingMinutes(grant, now) {
   return Math.max(0, Math.ceil((grant.expires_at_unix - now) / 60));
 }
 
+export function canEndGrant(grant, now) {
+  return remainingMinutes(grant, now) > 0 || ["opening", "closing"].includes(grant?.state);
+}
+
 export function grantLabel(grant, now) {
   if (!grant) return "状态未知";
   const remaining = remainingMinutes(grant, now);
