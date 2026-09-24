@@ -1,7 +1,18 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, rate, reductionAction, reductionFailureResult, unresolvedAction } from "../app/computer-access-model.js";
+import { adaptStatus, apiRequest, beijingTime, canRetryVerification, capacity, createGrantAttempt, createStatusReader, durationMinutes, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, queryResultUpdate, rate, reductionAction, reductionFailureResult, successfulGrantSnapshot, unresolvedAction } from "../app/computer-access-model.js";
+
+test("only a complete authoritative grant updates remaining time and returns the form to ready", () => {
+  const before = { state_version: "old", personal_data: { state: "unlocked", expires_at_unix: 100 }, unrestricted: { state: "active", expires_at_unix: 200 } };
+  const success = { state: "succeeded", personal_data: { state: "succeeded", expires_at_unix: 300 } };
+  const next = successfulGrantSnapshot(before, success);
+  assert.equal(next.personal_data.expires_at_unix, 300);
+  assert.deepEqual(next.unrestricted, before.unrestricted);
+  assert.equal(next.state_version, "");
+  assert.equal(before.personal_data.expires_at_unix, 100);
+  for (const invalid of [{ ...success, state: "partial" }, { ...success, state: "unknown" }, { state: "succeeded" }, { state: "succeeded", personal_data: { state: "unknown", expires_at_unix: 300 } }]) assert.equal(successfulGrantSnapshot(before, invalid), null);
+});
 
 test("reducing actions settle explicit precreate rejection without inventing certainty for lost responses", () => {
   for (const error of ["public_state_changed", "public_lock_disabled", "public_owner_end_disabled", "public_windows_lock_disabled", "public_request_invalid"]) {
@@ -154,6 +165,22 @@ test("unknown reduction requests remain classified separately from factor reques
   assert.equal(unresolvedAction({ state: "failed" }), false);
 });
 
+test("lookup feedback distinguishes unchanged unknown, new success and query failure without changing old truth", () => {
+  const previous = { request_id: "same-id", action: "windows", state: "unknown", error: "public_windows_lock_result_unknown" };
+  const unchanged = queryResultUpdate(previous, previous, 100);
+  assert.equal(unchanged.state, "unknown");
+  assert.equal(unchanged.query_state, "unchanged");
+  assert.equal(unchanged.queried_at_unix, 100);
+  const succeeded = queryResultUpdate(previous, { request_id: "same-id", state: "succeeded" }, 110);
+  assert.equal(succeeded.query_state, "updated");
+  assert.equal(succeeded.error, undefined);
+  assert.equal(succeeded.action, "windows");
+  const failed = queryResultUpdate(succeeded, null, 120, true);
+  assert.equal(failed.query_state, "failed");
+  assert.equal(failed.state, "succeeded");
+  assert.equal(failed.request_id, "same-id");
+});
+
 test("a logical API failure in an HTTP 200 response cannot be mistaken for a prepared factor request", async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(JSON.stringify({ status: "error", error: "public_state_changed" }), { status: 200 });
@@ -186,4 +213,16 @@ test("built route has complete meaningful HTML with no static-site factor field"
   assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
   assert.ok(html.indexOf('id="ca-hardware-title"') < html.indexOf('id="access-form"'));
   assert.ok(!html.includes('class="flow-field"'));
+  assert.match(html, /href="https:\/\/mcp\.wly0829\.cn\/computer-access\/"[^>]*aria-label="授权与状态（新标签）"/);
+  assert.ok(html.indexOf('id="access-form"') < html.indexOf('class="ca-card ca-network-card"'));
+  assert.ok(html.indexOf('class="ca-card ca-network-card"') < html.indexOf("</aside>"));
+});
+
+test("legacy website entry redirects before mounting, preserving its selections and request locator", async () => {
+  const runtime = await readFile(new URL("../static-site/main.jsx", import.meta.url), "utf8");
+  const redirect = runtime.slice(runtime.indexOf('if (document.querySelector("[data-computer-access]"))'), runtime.indexOf("const searchEntries"));
+  const vm = await import("node:vm");
+  let destination;
+  vm.runInNewContext(redirect, { URLSearchParams, document: { querySelector: () => ({}) }, window: { location: { origin: "https://wly0829.cn", search: "?purpose=unrestricted&hours=1.23&request=nonsecret-id", hash: "#access-form", replace: value => { destination = value; } } } });
+  assert.equal(destination, "https://mcp.wly0829.cn/computer-access/?purpose=unrestricted&hours=1.23&request=nonsecret-id#access-form");
 });

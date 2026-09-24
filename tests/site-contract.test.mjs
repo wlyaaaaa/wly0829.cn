@@ -480,7 +480,7 @@ test("the shared enhancement and search indices stay within their measured revie
   const htmlTemplate = await readFile(path.join(projectRoot, "static-site", "index.html"), "utf8");
   const clientGraph = `${runtimeSource}\n${javascriptSources.join("\n")}`;
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway|devconfig-backup)/, "browser runtime must not import narrative packages");
-  assert.match(runtimeSource, /if \(document\.querySelector\("\[data-computer-access\]"\)\) import\("\.\.\/app\/computer-access-client\.jsx"\)/, "P6 island loads only on its initial route");
+  assert.match(runtimeSource, /if \(document\.querySelector\("\[data-computer-access\]"\)\) \{[\s\S]*?else import\("\.\.\/app\/computer-access-client\.jsx"\)/, "P6 island loads only on its initial route; legacy website origin redirects first");
   const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-client\.jsx|\.\/computer-access-client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
   assert.doesNotMatch(narrativeGraph, /\b(?:fetch|import)\s*\(/, "narrative routes must retain native static navigation; only the P6 operational island is dynamic");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");

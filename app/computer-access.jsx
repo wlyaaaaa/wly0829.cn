@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowClockwise, ArrowRight, Cpu, Desktop, Gauge, HardDrives, LockKey, Memory, ShieldCheck, User, Infinity as InfinityIcon, WifiHigh } from "@phosphor-icons/react";
-import { HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, capacity, canRetryVerification, createGrantAttempt, createStatusReader, durationMinutes, errorMessages, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, minutesLabel, numeric, rate, reading, reductionAction, reductionFailureResult, remainingMinutes, unresolvedAction } from "./computer-access-model.js";
+import { HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, capacity, canRetryVerification, createGrantAttempt, createStatusReader, durationMinutes, errorMessages, grantLabel, hardwareBasis, hostFormUrl, isHostOrigin, minutesLabel, numeric, queryResultUpdate, rate, reading, reductionAction, reductionFailureResult, remainingMinutes, successfulGrantSnapshot, unresolvedAction } from "./computer-access-model.js";
 
 function SampleTime({ sample }) {
   const observed = sample?.observed_at_unix;
@@ -22,7 +22,7 @@ function ReadingSources({ sample, compact = false, note = null }) {
 }
 
 function Hardware({ hardware = {}, host = {} }) {
-  const cpu = hardware.cpu || {}, memory = hardware.memory || {}, network = hardware.network || {};
+  const cpu = hardware.cpu || {}, memory = hardware.memory || {};
   const gpus = hardware.gpus?.length ? hardware.gpus : [{}];
   const volumes = hardware.volumes || [];
   const kindLabel = kind => ({ ssd: "固态", hdd: "机械", removable: "可移动", virtual: "虚拟盘", ramdisk: "内存盘", fixed: "固定卷", network: "网络卷", optical: "光盘" })[kind] || "类型未知";
@@ -37,8 +37,20 @@ function Hardware({ hardware = {}, host = {} }) {
       {volumes.length ? <div className="ca-volume-table"><div className="ca-volume-columns" aria-hidden="true"><span>卷</span><span>类型</span><span>已用 / 总量</span><span>剩余</span><span>占用</span><span /></div>{volumes.map((volume, index) => { const used=numeric(volume.used_bytes), total=numeric(volume.total_bytes); const percent=used !== null && total > 0 ? Math.round(used / total * 100) : null; return <details className="ca-volume" key={volume.drive || index}><summary><strong><HardDrives size={15} />{volume.drive || "未知卷"}</strong><span className="ca-volume-kind">{kindLabel(volume.kind)}{volume.state === "disconnected" ? " · 未连接" : ""}</span><span className="ca-volume-size">{volume.state === "disconnected" ? "暂无容量" : `${capacity(volume.used_bytes)} / ${capacity(volume.total_bytes)}`}</span><span className="ca-volume-free">{volume.state === "disconnected" ? "未知" : capacity(volume.free_bytes)}</span><span className="ca-volume-bar"><Meter used={volume.state === "disconnected" ? null : volume.used_bytes} total={volume.total_bytes} label={`${volume.drive || "卷"}占用`} /><small>{percent === null || volume.state === "disconnected" ? "—" : `${percent}%`}</small></span><span className="ca-chevron" aria-hidden="true">›</span></summary><div className="ca-volume-detail"><p>{volume.mapping || "物理盘映射未知"}</p><div className="ca-inline-stats"><span>温度 {reading(volume.temperature_celsius, " °C")}</span><span>读取 {rate(volume.read_bytes_per_second)}</span><span>写入 {rate(volume.write_bytes_per_second)}</span></div><p className="ca-footnote">同一物理盘上的卷共用物理盘速率，容量不重复累计。</p><SampleTime sample={volume} /><ReadingSources sample={volume} /></div></details>; })}</div> : <p className="ca-empty">尚未取得卷列表。连接后显示全部可见卷及已登记外接盘。</p>}
       <p className="ca-footnote ca-storage-note">容量统一为 GiB / TiB。展开任一卷可查看物理盘映射、温度、读写与来源。</p>
     </section>
+
+  </section>;
+}
+
+function NetworkCard({ network = {} }) {
+  return <section className="ca-card ca-network-card" aria-label="网络状态">
     <section className="ca-network-strip" aria-label="网络"><div><WifiHigh size={19} /><h3>网络</h3></div><span>↑ 上传 <strong>{rate(network.upload_bytes_per_second)}</strong></span><span>↓ 下载 <strong>{rate(network.download_bytes_per_second)}</strong></span><a href="https://grafana.wly0829.cn/" target="_blank" rel="noopener noreferrer">更多历史 · Grafana <ArrowRight size={14} /></a></section><div className="ca-network-meta"><p>{hardwareBasis(network.interface_basis || network.basis, "network")}</p><SampleTime sample={network} /><ReadingSources sample={network} /></div>
   </section>;
+}
+
+function QueryFeedback({ item, loading = false }) {
+  if (loading) return <p className="ca-query-feedback" role="status">正在查询原请求，请稍候…</p>;
+  if (!item?.query_state) return null;
+  return <p className={`ca-query-feedback${item.query_state === "failed" ? " ca-query-failed" : ""}`} role="status">{item.query_state === "failed" ? "本次查询未完成，保留上次结果；可稍后再次查询。" : item.query_state === "unchanged" ? `已查询，结果仍为“${resultStates[item.state] || "结果待确认"}”。` : `已查到新结果：“${resultStates[item.state] || "结果待确认"}”。`}<small>{beijingTime(item.queried_at_unix, true)}</small></p>;
 }
 
 function GrantCard({ title, grant, now, description, onChoose, enabled, purpose, onEnd, endEnabled }) {
@@ -54,11 +66,12 @@ function Result({ result }) {
 }
 
 export default function ComputerAccess() {
-  const [snapshot, setSnapshot] = useState(null), [connection, setConnection] = useState("connecting");
+  const [snapshot, setSnapshot] = useState(null), [connection, setConnection] = useState("connecting"), [refreshing, setRefreshing] = useState(false);
   const [now, setNow] = useState(0), [hostMode, setHostMode] = useState(false);
   const [purpose, setPurpose] = useState("personal_data"), [combined, setCombined] = useState(false), [hours, setHours] = useState("8"), [formOpen, setFormOpen] = useState(true), [saveDefault, setSaveDefault] = useState(false);
   const [totp, setTotp] = useState(""), [request, setRequest] = useState(null), [busy, setBusy] = useState(false), [result, setResult] = useState(null), [error, setError] = useState(""), [lookupOnly, setLookupOnly] = useState(false);
   const [actionRequests, setActionRequests] = useState([]), [actionBusy, setActionBusy] = useState("");
+  const [successNotice, setSuccessNotice] = useState("");
   const actionPending = useRef(false);
   const reader = useRef(null), touched = useRef(false), operation = useRef(false), formRef = useRef(null), mounted = useRef(false);
   const base = hostMode ? "" : HOST_ORIGIN;
@@ -67,10 +80,11 @@ export default function ComputerAccess() {
     const onHost = isHostOrigin(window.location.origin);
     setHostMode(onHost); setNow(Date.now() / 1000);
     let savedId; try { savedId = sessionStorage.getItem("p6-request-id"); const savedActions = JSON.parse(sessionStorage.getItem("p6-action-requests") || "[]"); if (Array.isArray(savedActions)) setActionRequests(savedActions.filter(item => reductionAction(item) && /^[a-zA-Z0-9_-]{8,100}$/.test(item.request_id || ""))); } catch {}
-    const restoredId = new URLSearchParams(window.location.search).get("request") || savedId;
+    const restoredParams = new URLSearchParams(window.location.search);
+    const restoredId = restoredParams.get("request") || restoredParams.get("request_id") || savedId;
     if (restoredId && /^[a-zA-Z0-9_-]{8,100}$/.test(restoredId)) {
       setRequest({ request_id: restoredId, state: "unknown" }); setLookupOnly(true); setFormOpen(true);
-      apiRequest(onHost ? "" : HOST_ORIGIN, `/requests/${encodeURIComponent(restoredId)}`).then(data => { if (mounted.current) { const action = reductionAction(data); if (action) { rememberAction({ request_id: restoredId, ...data, action }); locateRequest(null); setRequest(null); setLookupOnly(false); } else { setRequest({ request_id: restoredId, ...data }); setResult(data); } } }).catch(() => { if (mounted.current) setError("暂无法取得原请求结果，请手动查询；不要重新提交验证码。"); });
+      apiRequest(onHost ? "" : HOST_ORIGIN, `/requests/${encodeURIComponent(restoredId)}`).then(data => { if (mounted.current) { const action = reductionAction(data); if (action) { rememberAction({ request_id: restoredId, ...data, action }); locateRequest(null); setRequest(null); setLookupOnly(false); } else { acceptResult(data); if (data.state === "succeeded") reader.current?.read({ replace: true }); } } }).catch(() => { if (mounted.current) setError("暂无法取得原请求结果，请手动查询；不要重新提交验证码。"); });
     }
     if (onHost) {
       const params = new URLSearchParams(window.location.search);
@@ -81,20 +95,22 @@ export default function ComputerAccess() {
       // Selections are non-secret; clearing them prevents accidental replay on refresh.
       if (window.location.search && !restoredId) history.replaceState(null, "", window.location.pathname + window.location.hash);
     }
-    reader.current = createStatusReader(signal => apiRequest(onHost ? "" : HOST_ORIGIN, "/status", { signal }), data => {
+    reader.current = createStatusReader(signal => { setRefreshing(true); return apiRequest(onHost ? "" : HOST_ORIGIN, "/status", { signal }); }, data => {
       if (!mounted.current) return;
-      setSnapshot(adaptStatus(data)); setConnection("online"); setNow(Date.now() / 1000);
+      setRefreshing(false); setSnapshot(adaptStatus(data)); setConnection("online"); setNow(Date.now() / 1000);
+      if (data.status === "pass") setSuccessNotice("");
       if (!touched.current && Number.isFinite(data.default_minutes)) setHours(String(data.default_minutes / 60));
-    }, () => { if (mounted.current) setConnection("offline"); });
+    }, () => { if (mounted.current) { setRefreshing(false); setConnection("offline"); } });
     let timer;
     const schedule = () => { clearTimeout(timer); if (!document.hidden) timer = setTimeout(async () => { if (!operation.current && !actionPending.current) await reader.current.read(); schedule(); }, 60000); };
-    const visible = () => { clearTimeout(timer); if (document.hidden) reader.current.invalidate(); else { if (!operation.current && !actionPending.current) reader.current.read(); schedule(); } };
+    const visible = () => { clearTimeout(timer); if (document.hidden) { reader.current.invalidate(); setRefreshing(false); } else { if (!operation.current && !actionPending.current) reader.current.read(); schedule(); } };
     reader.current.read(); schedule();
     document.addEventListener("visibilitychange", visible);
     const clock = setInterval(() => { if (!document.hidden) setNow(Date.now() / 1000); }, 15000);
     return () => { mounted.current = false; clearTimeout(timer); clearInterval(clock); reader.current.invalidate(); document.removeEventListener("visibilitychange", visible); };
   }, []);
-  const available = connection === "online";
+  useEffect(() => { if (!successNotice) return; const timeout = setTimeout(() => setSuccessNotice(""), 8000); return () => clearTimeout(timeout); }, [successNotice]);
+  const available = connection === "online" && Boolean(snapshot?.state_version);
   const minutes = durationMinutes(hours);
   const selectedActive = remainingMinutes(snapshot?.[purpose], now) > 0;
   const selectedKeys = combined ? ["personal_data", "unrestricted"] : [purpose];
@@ -106,12 +122,21 @@ export default function ComputerAccess() {
   const retryable = canRetryVerification(request);
   const requestTerminal = request && ["succeeded", "success", "partial", "failed", "cancelled", "expired"].includes(request.state || request.status);
   function locateRequest(id) { try { if (id) sessionStorage.setItem("p6-request-id", id); else sessionStorage.removeItem("p6-request-id"); } catch {} const url = new URL(window.location.href); url.search = ""; if (id) url.searchParams.set("request", id); history.replaceState(null, "", url.pathname + url.search + url.hash); }
-  function choose(nextPurpose) { locateRequest(null); setLookupOnly(false); setPurpose(nextPurpose); setCombined(false); setSaveDefault(false); setFormOpen(true); setResult(null); setError(""); setRequest(null); setTotp(""); touched.current = true; setTimeout(() => formRef.current?.focus({ preventScroll: false }), 0); }
+  function choose(nextPurpose) { setRequestQuery(null); locateRequest(null); setLookupOnly(false); setPurpose(nextPurpose); setCombined(false); setSaveDefault(false); setFormOpen(true); setResult(null); setError(""); setRequest(null); setTotp(""); touched.current = true; setTimeout(() => formRef.current?.focus({ preventScroll: false }), 0); }
   const responseSerial = useRef(0), attemptRef = useRef(null);
   const [cancelling, setCancelling] = useState(false);
+  const [checkingRequest, setCheckingRequest] = useState(false), [requestQuery, setRequestQuery] = useState(null), [queryingActionId, setQueryingActionId] = useState("");
   function acceptResult(value) {
+    const succeeded = successfulGrantSnapshot(snapshot, value);
+    if (succeeded) {
+      setSnapshot(previous => successfulGrantSnapshot(previous, value));
+      setNow(Date.now() / 1000); setTotp(""); setRequest(null); setRequestQuery(null);
+      setResult(null); setLookupOnly(false); setFormOpen(true); setCombined(false); setSaveDefault(false); setError(""); locateRequest(null);
+      setSuccessNotice(value.default_saved === false ? "办理成功，剩余时间已更新；默认时长未保存。" : "办理成功，剩余时间已更新。");
+      return;
+    }
     if (value.request_created === false) locateRequest(null);
-    setRequest(previous => ({ ...previous, ...value }));
+    setRequest(previous => ({ ...previous, ...value, error: value.error }));
     setResult(value);
     setLookupOnly(!canRetryVerification(value));
     setTotp("");
@@ -120,7 +145,7 @@ export default function ComputerAccess() {
   }
   async function act(action) {
     if (operation.current) return;
-    operation.current = true; setBusy(true); setError(""); reader.current.invalidate();
+    operation.current = true; setBusy(true); setError(""); reader.current.invalidate(); setRefreshing(false);
     const serial = ++responseSerial.current;
     try { await action(serial); }
     catch (failure) {
@@ -135,8 +160,8 @@ export default function ComputerAccess() {
       }
     } finally {
       if (serial === responseSerial.current) {
-        await reader.current.read({ replace: true });
-        if (serial === responseSerial.current) { operation.current = false; setBusy(false); attemptRef.current = null; }
+        operation.current = false; setBusy(false); attemptRef.current = null;
+        reader.current.read({ replace: true });
       }
     }
   }
@@ -146,7 +171,7 @@ export default function ComputerAccess() {
     if (!hostMode) { window.location.assign(hostFormUrl({ purpose, combined, hours, saveDefault })); return; }
     if (!/^\d{6}$/.test(totp)) { setError("请输入验证器中的6位动态验证码，保留开头的0。"); return; }
     const code = totp;
-    setTotp(""); setResult(null);
+    setTotp(""); setResult(null); setRequestQuery(null);
     await act(async serial => {
       const id = crypto.randomUUID();
       setRequest({ request_id: id, state: "pending" }); locateRequest(id);
@@ -164,13 +189,13 @@ export default function ComputerAccess() {
   async function cancel() {
     if (cancelling) return;
     if (!request || requestTerminal) {
-      locateRequest(null); setLookupOnly(false); setFormOpen(false); setCombined(false); setSaveDefault(false);
+      locateRequest(null); setLookupOnly(false); setFormOpen(Boolean(requestTerminal)); setCombined(false); setSaveDefault(false);
       setTotp(""); setRequest(null); setError("");
       if (!requestTerminal) setResult({ title: "本次办理已取消", message: "原有授权保持原期限。" });
       return;
     }
     const serial = ++responseSerial.current;
-    setCancelling(true); setTotp(""); reader.current.invalidate();
+    setCancelling(true); setTotp(""); reader.current.invalidate(); setRefreshing(false);
     try {
       let cancelled;
       if (attemptRef.current) cancelled = await attemptRef.current.cancel();
@@ -183,16 +208,24 @@ export default function ComputerAccess() {
       if (serial === responseSerial.current) { setLookupOnly(true); setRequest(previous => ({ ...previous, state: "unknown" })); setError("取消结果暂无法确认。请查询本次结果，不要重新提交验证码。"); }
     } finally {
       if (serial === responseSerial.current) {
-        await reader.current.read({ replace: true });
         operation.current = false; attemptRef.current = null; setBusy(false); setCancelling(false);
+        reader.current.read({ replace: true });
       }
     }
   }
   async function checkRequest() {
-    if (request) await act(async serial => {
-      const status = await apiRequest(base, `/requests/${encodeURIComponent(request.request_id)}`);
-      if (serial === responseSerial.current) acceptResult(status);
-    });
+    if (!request || operation.current) return;
+    setCheckingRequest(true);
+    try {
+      await act(async serial => {
+        try {
+          const status = await apiRequest(base, `/requests/${encodeURIComponent(request.request_id)}`);
+          if (serial === responseSerial.current) { acceptResult(status); setRequestQuery(queryResultUpdate(request, status, Date.now() / 1000)); }
+        } catch {
+          if (serial === responseSerial.current) setRequestQuery(queryResultUpdate(request, null, Date.now() / 1000, true));
+        }
+      });
+    } finally { setCheckingRequest(false); }
   }
   function rememberAction(value) {
     setActionRequests(previous => {
@@ -203,27 +236,29 @@ export default function ComputerAccess() {
   }
   async function lock(kind, priorId = null) {
     if (actionPending.current || busy || cancelling || (!priorId && request && !requestTerminal)) return;
-    actionPending.current = true; setActionBusy(kind); reader.current.invalidate();
+    actionPending.current = true; setActionBusy(kind); setQueryingActionId(priorId || ""); reader.current.invalidate(); setRefreshing(false);
     const id = priorId || crypto.randomUUID();
     if (!priorId) rememberAction({ request_id: id, action: kind, state: "pending" });
     try {
       const response = await apiRequest(base, priorId ? `/requests/${encodeURIComponent(id)}` : `/locks/${kind}`, priorId ? {} : { method: "POST", body: { state_version: snapshot.state_version, request_id: id }, timeout: 15000 });
-      rememberAction({ request_id: id, action: kind, ...response });
+      rememberAction(priorId ? queryResultUpdate(actionRequests.find(item => item.request_id === id), { request_id: id, action: kind, ...response }, Date.now() / 1000) : { request_id: id, action: kind, ...response });
     } catch (failure) {
-      rememberAction(reductionFailureResult(failure, id, kind, Boolean(priorId)));
+      rememberAction(priorId ? queryResultUpdate(actionRequests.find(item => item.request_id === id), null, Date.now() / 1000, true) : reductionFailureResult(failure, id, kind, false));
     } finally {
-      await reader.current.read({ replace: true });
-      actionPending.current = false; setActionBusy("");
+      actionPending.current = false; setActionBusy(""); setQueryingActionId("");
+      reader.current.read({ replace: true });
     }
   }
   const actionEnabled = kind => available && !busy && !cancelling && !actionBusy && (!request || requestTerminal) && !actionRequests.some(item => item.action === kind && unresolvedAction(item));
   const host = snapshot?.host || {};
   const observed = snapshot?.observed_at_unix;
   return <div className="ca-page"><div className="ca-workspace"><div className="ca-overview">
-    <header className="ca-intro"><h1>授权与状态</h1><span className={`ca-connection ca-connection-${connection}`}><span className="ca-dot" />{connection === "online" ? "主机在线" : connection === "connecting" ? "正在连接主机" : "暂时无法连接"}</span><span className="ca-updated">{observed ? `${connection === "offline" ? "上次观测" : "更新于"} ${beijingTime(observed, true)}` : "尚无主机数据"} · 每60秒更新</span><div className="ca-top-actions"><button className="ca-refresh" type="button" disabled={busy || Boolean(actionBusy)} onClick={() => reader.current?.read()}><ArrowClockwise size={17} />{connection === "offline" ? "重新检查" : "刷新状态"}</button><button className="ca-refresh ca-screen-lock" title="仅锁交互桌面，保留资料和无限制授权原期限" type="button" disabled={!actionEnabled("windows") || snapshot?.public_actions?.lock_windows !== true} onClick={() => lock("windows")}><Desktop size={17} />锁定Windows</button></div></header>
+    <header className="ca-intro"><h1>授权与状态</h1><span className={`ca-connection ca-connection-${connection}`}><span className="ca-dot" />{connection === "online" ? "主机在线" : connection === "connecting" ? "正在连接主机" : "暂时无法连接"}</span><span className="ca-updated">{observed ? `${connection === "offline" ? "上次观测" : "更新于"} ${beijingTime(observed, true)}` : "尚无主机数据"} · 每60秒更新</span><div className="ca-top-actions"><button className="ca-refresh" type="button" disabled={busy || Boolean(actionBusy) || refreshing} aria-busy={refreshing} onClick={() => reader.current?.read()}><ArrowClockwise size={17} />{refreshing ? "刷新中…" : connection === "offline" ? "重新检查" : "刷新状态"}</button><button className="ca-refresh ca-screen-lock" title="仅锁交互桌面，保留资料和无限制授权原期限" type="button" disabled={!actionEnabled("windows") || snapshot?.public_actions?.lock_windows !== true} onClick={() => lock("windows")}><Desktop size={17} />锁定Windows</button></div></header>
     {connection === "offline" && <p className="ca-notice" role="status">暂时无法确认主机状态。保留的上次观测不代表此刻状态；远程办理已暂停，请重新检查。</p>}
-    <div className="ca-grants"><GrantCard title="个人资料" grant={snapshot?.personal_data} now={available ? now : snapshot?.observed_at_unix || now} purpose="personal_data" enabled={available && !busy && !actionBusy && (!request || requestTerminal)} onChoose={choose} description="本机与已认证的电脑连接共用" endEnabled={actionEnabled("personal-data") && snapshot?.public_actions?.lock_data === true} onEnd={() => lock("personal-data")} /><GrantCard title="无限制授权" grant={snapshot?.unrestricted} now={available ? now : snapshot?.observed_at_unix || now} purpose="unrestricted" enabled={available && !busy && !actionBusy && (!request || requestTerminal)} onChoose={choose} description="全局授权，与个人资料分别计时" endEnabled={actionEnabled("unrestricted") && snapshot?.public_actions?.end_unrestricted === true} onEnd={() => lock("unrestricted")} /></div>
-    {actionRequests.length > 0 && <section className="ca-action-results" aria-label="操作结果">{actionRequests.map(item => <div className="ca-action-result" key={item.request_id}><div><strong>{({ windows: "Windows锁屏", "personal-data": "锁定个人资料", unrestricted: "结束无限制授权" })[item.action]} · {resultStates[item.state] || "结果待确认"}</strong>{item.error && <p>{errorMessages[item.error] || "本次结果暂无法确认，请查询原请求。"}</p>}{unresolvedAction(item) && <p>保留这次请求等待核实；其他独立操作仍可按当前状态办理。</p>}</div><button type="button" className="ca-refresh" disabled={Boolean(actionBusy) || busy} onClick={() => lock(item.action, item.request_id)}>查询结果</button></div>)}</section>}
+    <div className="ca-grants"><GrantCard title="个人资料" grant={snapshot?.personal_data} now={connection === "online" ? now : snapshot?.observed_at_unix || now} purpose="personal_data" enabled={available && !busy && !actionBusy && (!request || requestTerminal)} onChoose={choose} description="本机与已认证的电脑连接共用" endEnabled={actionEnabled("personal-data") && snapshot?.public_actions?.lock_data === true} onEnd={() => lock("personal-data")} /><GrantCard title="无限制授权" grant={snapshot?.unrestricted} now={connection === "online" ? now : snapshot?.observed_at_unix || now} purpose="unrestricted" enabled={available && !busy && !actionBusy && (!request || requestTerminal)} onChoose={choose} description="全局授权，与个人资料分别计时" endEnabled={actionEnabled("unrestricted") && snapshot?.public_actions?.end_unrestricted === true} onEnd={() => lock("unrestricted")} /></div>
+    {successNotice && <p className="ca-success-notice" role="status">{successNotice}</p>}
+    {!hostMode && actionRequests.some(unresolvedAction) && <p className="ca-notice">此页保留上次操作的查询记录。<a href={`${HOST_ORIGIN}/computer-access/`} target="_blank" rel="noopener noreferrer">打开完整办理页</a></p>}
+    {actionRequests.length > 0 && <section className="ca-action-results" aria-label="操作结果">{actionRequests.map(item => <div className="ca-action-result" key={item.request_id} aria-busy={queryingActionId === item.request_id}><div><strong>{({ windows: "Windows锁屏", "personal-data": "锁定个人资料", unrestricted: "结束无限制授权" })[item.action]} · {resultStates[item.state] || "结果待确认"}</strong>{item.error && <p>{errorMessages[item.error] || (item.state === "failed" ? "主机已确认本次操作未完成，请按当前状态重新办理。" : "本次结果暂无法确认，请查询原请求。")}</p>}{unresolvedAction(item) && <p>保留这次请求等待核实；其他独立操作仍可按当前状态办理。</p>}<QueryFeedback item={item} loading={queryingActionId === item.request_id} />{!hostMode && <a href={`${HOST_ORIGIN}/computer-access/?request=${encodeURIComponent(item.request_id)}`} target="_blank" rel="noopener noreferrer">在主机查询此请求</a>}</div><button type="button" className="ca-refresh" disabled={Boolean(actionBusy) || busy} onClick={() => lock(item.action, item.request_id)}>{queryingActionId === item.request_id ? "查询中…" : "查询结果"}</button></div>)}</section>}
     <Hardware hardware={snapshot?.hardware} host={host} />
     <p className="ca-update-note">仅前台每60秒读取，回到前台立即检查；状态刷新不延长授权。</p>
     </div><aside className="ca-access" aria-label="本次办理">
@@ -233,11 +268,12 @@ export default function ComputerAccess() {
         {cooling && <p className="ca-notice">验证暂不可用（冷却中）。请在 {minutesLabel(Math.ceil((cooldownUntil - now) / 60))} 后重试（{beijingTime(cooldownUntil)}）。已有授权保持；本地验证与公网冷却独立。</p>}
         {available && !snapshot?.factor?.available && !cooling && <p className="ca-notice">主机验证器暂不可用，请稍后重新检查。</p>}
         {hostMode && !lookupOnly && <div className="ca-totp"><label className="ca-field-label" htmlFor="ca-totp">TOTP动态验证码</label><input id="ca-totp" type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="off" value={totp} disabled={busy || cancelling || cooling || !available} onChange={event => setTotp(event.target.value.replace(/\D/g, "").slice(0, 6))} aria-describedby="ca-totp-help" />{visibleError && <p className="ca-notice ca-error" role="alert">{visibleError}</p>}<p id="ca-totp-help" className="ca-footnote">在验证器中查看6位验证码，仅在此主机页面提交。切换应用不会取消办理。</p></div>}
-        {!lookupOnly && <button className="ca-button ca-button-primary" type="submit" disabled={busy || cancelling || Boolean(actionBusy) || !available || minutes === null || overLimit || !factorAvailable}>{busy ? "正在办理…" : !hostMode ? "前往主机验证" : combined ? "验证并办理两项" : purpose === "personal_data" ? selectedActive ? "验证并延长资料授权" : "验证并解锁资料" : selectedActive ? "验证并延长无限制授权" : "验证并开启无限制授权"}<ArrowRight size={16} /></button>}
-        <div className="ca-form-links">{(!request || requestTerminal || hostMode) && <button type="button" disabled={cancelling} onClick={cancel}>{cancelling ? "正在取消…" : requestTerminal ? "结束本次办理" : "取消本次办理"}</button>}{request && <button type="button" disabled={busy} onClick={checkRequest}>查询本次结果</button>}</div><p className="ca-footnote">{hostMode ? "本人验证后才生效；取消只结束本次请求，保留原有效授权。" : "将在当前标签进入主机验证页面。本页不接收验证码。"}</p>
-      </form>}</section>
+        {!lookupOnly && <button className="ca-button ca-button-primary" type="submit" disabled={busy || cancelling || Boolean(actionBusy) || !available || minutes === null || overLimit || !factorAvailable}>{busy ? checkingRequest ? "正在查询…" : "正在办理…" : !hostMode ? "前往主机验证" : combined ? "验证并办理两项" : purpose === "personal_data" ? selectedActive ? "验证并延长资料授权" : "验证并解锁资料" : selectedActive ? "验证并延长无限制授权" : "验证并开启无限制授权"}<ArrowRight size={16} /></button>}
+        <div className="ca-form-links">{(!request || requestTerminal || hostMode) && <button type="button" disabled={cancelling} onClick={cancel}>{cancelling ? "正在取消…" : requestTerminal ? "返回填写" : "取消本次办理"}</button>}{request && <button type="button" disabled={busy} onClick={checkRequest}>{checkingRequest ? "查询中…" : "查询本次结果"}</button>}</div><p className="ca-footnote">{hostMode ? "本人验证后才生效；取消只结束本次请求，保留原有效授权。" : "将在当前标签进入主机验证页面。本页不接收验证码。"}</p>
+      </form>}<QueryFeedback item={requestQuery} loading={checkingRequest} /></section>
       {error && (!hostMode || lookupOnly) && <p className="ca-notice ca-error" role="alert">{error}</p>}{!retryable && <Result result={result} />}
-      <a className="ca-back" href={hostMode ? "https://wly0829.cn/computer-access/" : "/mcp/"}>{hostMode ? "回到固定状态页" : "连接电脑 · 查看MCP接入方式"}<ArrowRight size={15} /></a>
+      <NetworkCard network={snapshot?.hardware?.network} />
+      <a className="ca-back" href="https://wly0829.cn/mcp/">连接电脑 · 查看MCP接入方式<ArrowRight size={15} /></a>
     </aside></div>
   </div>;
 }

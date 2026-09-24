@@ -19,6 +19,22 @@ export function unresolvedAction(result) {
   return ["pending", "verifying", "unknown"].includes(result?.state);
 }
 
+export function successfulGrantSnapshot(snapshot, result) {
+  if (result?.state !== "succeeded") return null;
+  const parts = ["personal_data", "unrestricted"].filter(key => result[key] && result[key].state !== "not_requested");
+  if (!parts.length || parts.some(key => result[key].state !== "succeeded" || !Number.isFinite(result[key].expires_at_unix) || result[key].expires_at_unix <= 0)) return null;
+  const updated = { ...snapshot, state_version: "" }; // The next action waits for fresh authoritative versioning.
+  for (const key of parts) updated[key] = { ...snapshot?.[key], state: key === "personal_data" ? "unlocked" : "active", expires_at_unix: result[key].expires_at_unix };
+  return updated;
+}
+
+export function queryResultUpdate(previous, response, checkedAt, failed = false) {
+  if (failed) return { ...previous, query_state: "failed", queried_at_unix: checkedAt };
+  const unchanged = previous?.state === response?.state && previous?.error === response?.error;
+  return { request_id: previous?.request_id, action: previous?.action, ...response, error: response?.error,
+    query_state: unchanged ? "unchanged" : "updated", queried_at_unix: checkedAt };
+}
+
 export function reductionFailureResult(failure, requestId, action, lookupOnly = false) {
   const code = failure?.data?.error || "public_access_response_unknown";
   const beforeCreation = !lookupOnly && new Set([
@@ -227,6 +243,7 @@ export const errorMessages = {
   interactive_screen_lock_status_unknown: "Windows桌面状态尚不明确，本次未执行锁屏。",
   interactive_screen_lock_session_unknown: "暂时无法确定Windows交互桌面，本次未执行锁屏。",
   public_windows_lock_result_unknown: "Windows锁屏结果暂无法确认。可查询这次结果，其他独立操作仍按当前主机状态办理。",
+  public_windows_lock_not_executed: "主机确认本次没有执行Windows锁屏。请查看当前屏幕状态后再决定是否重试。",
   interactive_screen_lock_noninteractive: "当前没有可锁定的交互桌面，未完成Windows锁屏。",
   interactive_screen_lock_unavailable: "Windows锁屏服务暂不可用，未确认锁屏成功。",
   public_duration_total_exceeds_72_hours: "办理后剩余超过72小时，请减少本次时长。",
