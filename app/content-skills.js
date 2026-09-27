@@ -1321,7 +1321,7 @@ export const skills = [
   "本人明确申请限时授权时，直接运行已安装Invoke-OwnerTakeover.ps1 -Operation Open -Json；Codex只携带当前宿主真实HostTaskId，其他入口不借用。Codex本人验证完成后由宿主沿同一session/request回读消费，其他宿主按实际现役入口核对；不手工串联准备/激活/检查，也不先走下文凭据整链。",
   "网站登录先复用有效会话，或由 browser-control-continuity 选择本地 Chrome 已保存账号；不要因看见登录页就覆盖已填表单或调用密码中心",
   "Password Center 凭据确实需要时才走登记 Browser Bridge 盲填，模型不接收密码且桥本身不提交；该桥不因此获得云端浏览器访问能力",
-  "从已安装的C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1进入；E盘同名入口只是兼容转发，不绕开安装manifest和固定运行时",
+  "从已安装的C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1进入；产品源码归独立 PasswordCenter 仓库，PCConfig 负责正式安装、清单和固定运行时",
   "账号是什么、有没有这项等问题先Lookup，不先List/Discover/Audit；不唯一时只返回最多五个候选名",
   "沿所需reference选择单一动作，复用仍有效的当前身份，不反复预检",
   "Reveal -LocalDisplay需明确字段和一次已登记真人因子；银行卡号、有效期、CVV作为一个加密对象一次显示，不分三次验证",
@@ -1437,7 +1437,7 @@ export const skills = [
       {
         "title": "操作参考与不能混淆的证据",
         "paragraphs": [
-          "单一权限表位于E:\\PCConfig\\docs\\contracts\\pcconfig.secret-broker.md第4.5节；owner takeover、runtime证明与新真人因子分列。按当前请求读Skill references/credential-operations.md、browser-bridge.md、authority-and-trust.md、imports-and-sources.md或bitlocker.md，不把它们串成每次必跑链。",
+          "单一权限表位于E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.secret-broker.md第4.5节；owner takeover、runtime证明与新真人因子分列。按当前请求读Skill references/credential-operations.md、browser-bridge.md、authority-and-trust.md、imports-and-sources.md或bitlocker.md，不把它们串成每次必跑链。",
           "已有精确Set/Update新值只走匿名继承stdin的-AgentSecretFromStdin -AuthorityFactor Runtime，不落命令行、环境变量、文件、剪贴板或日志。其他秘密操作也只给本地或登记目标，不向模型回传。Microsoft默认密码兼为Windows登录密码且never_inject；Google导入、载体恢复、BitLocker查看与三个独立加密域继续遵守原技术边界。",
           "当前活动Codex接管公开路径是一次Open后由Hook自动回读消费；不手工串联Configure/Prepare/Activate/Status/Check，不追加指定模型批准。必要后代沿原请求与截止，业务成功由实际结果证明。独立设备邀请的软件readiness、真实Shown十分钟与普通资料请求五分钟不是同一计时器。"
         ],

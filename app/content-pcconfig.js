@@ -602,10 +602,10 @@ export const pcconfigProject = {
     { name: "启动快照比较", command: "E:\\PCConfig\\tools\\Invoke-StartupSnapshotMaintenance.ps1 -Action Inspect -Json", purpose: "比较五个登录启动 surface（来源面）；差异只作信息，不自动修复。" },
     { name: "核心恢复观察", command: "E:\\PCConfig\\tools\\Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json", purpose: "只读任务和根路径元数据，不枚举个人文件名或内容。" },
     { name: "副驾驶笔记本健康", command: "<当前 PCConfig checkout>\\tools\\Get-SecondaryLaptopHealth.ps1 -Json", purpose: "只在精确副驾驶主机读取远控、网络、工具、任务和恢复状态；其他主机返回 not_applicable/host_mismatch。" },
-    { name: "秘密代理状态", command: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action Status -Json", purpose: "验证安全核心和恢复闭环，回执固定不返回明文。" },
-    { name: "凭据安全查找", command: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action Lookup -Query <明确名称或用途> -Json", purpose: "只定位安全元数据与候选；不 Reveal、不因查到候选就取得写权限。" },
-    { name: "凭据恢复覆盖", command: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action RecoverySetStatus -Json", purpose: "查看恢复集覆盖、载体状态与最近验证，不执行恢复或显示秘密。" },
-    { name: "授权文件工作流", command: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1 -Action <AuthorizationFileEncrypt|AuthorizationFileVerify|AuthorizationFileDecrypt> -Json", purpose: "只对明确选择路径执行加密、无明文落地校验或无覆盖恢复；Encrypt 传 SelectedPath/OutputPath，Verify 传 InputPath，Decrypt 传 InputPath/OutputPath。" },
+    { name: "秘密代理状态", command: "C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1 -Action Status -Json", purpose: "验证安全核心和恢复闭环，回执固定不返回明文。" },
+    { name: "凭据安全查找", command: "C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1 -Action Lookup -Query <明确名称或用途> -Json", purpose: "只定位安全元数据与候选；不 Reveal、不因查到候选就取得写权限。" },
+    { name: "凭据恢复覆盖", command: "C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1 -Action RecoverySetStatus -Json", purpose: "查看恢复集覆盖、载体状态与最近验证，不执行恢复或显示秘密。" },
+    { name: "授权文件工作流", command: "C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\Invoke-SecretBroker.ps1 -Action <AuthorizationFileEncrypt|AuthorizationFileVerify|AuthorizationFileDecrypt> -Json", purpose: "只对明确选择路径执行加密、无明文落地校验或无覆盖恢复；Encrypt 传 SelectedPath/OutputPath，Verify 传 InputPath，Decrypt 传 InputPath/OutputPath。" },
     { name: "Workspace 绑定", command: "E:\\PCConfig\\tools\\Get-GoogleWorkspaceProviderBinding.ps1 -Json", purpose: "零网络读取固定绑定与凭据文件存在性；不解密、不证明远端授权。" },
     { name: "Workspace 动作预演", command: "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1 -Action <已登记写动作> <精确参数> -DryRun -Json", purpose: "本地校验选定Gmail/Drive/Tasks动作，不解密、不刷新令牌、不联网；正式写入另需ActionAuthorizationConfirmed，破坏性动作还需Force。Calendar冻结时在访问凭据和网络前拒绝。" },
     { name: "旧 policy 退役状态", command: "E:\\PCConfig\\tools\\Get-ProtectedPolicyAuthorityStatus.ps1 -Json", purpose: "固定返回 retired、历史保留和 E rules replacement；不再读取 C 盘活动代际。" },
@@ -1784,20 +1784,20 @@ export const pcconfigModules = [
       { condition: "外部逐条凭据 API 不可用", response: "保留 optional gap；不抓浏览器数据库，也不把可发现元数据误作可写来源。" }
     ],
     sources: [
-      { path: "E:\\PCConfig\\registries\\secret_broker.json", role: "SecretRef、运行时和安全边界 Registry" },
-      { path: "E:\\PCConfig\\registries\\secret_source_governance.json", role: "来源 Owner、Provider 保护存储分类、读写能力与发现不授权变更" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\registries\\secret_broker.json", role: "SecretRef、运行时和安全边界 Registry" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\registries\\secret_source_governance.json", role: "来源 Owner、Provider 保护存储分类、读写能力与发现不授权变更" },
       { path: "E:\\PCConfig\\registries\\google_workspace_provider.json", role: "固定 Workspace binding、scope、端点与无秘密元数据" },
-      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.secret-broker.md", role: "秘密使用、恢复、信任与零明文产品合同" },
-      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "Password Center 用户体验、SecretRef、银行卡盲填与产品域隔离合同" },
-      { path: "E:\\PCConfig\\docs\\recovery\\password-center-m2-operations.md", role: "安全查找、完整 CSV、因子生命周期、G/H 与 PRIVATE Git 新设备恢复入口" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.secret-broker.md", role: "秘密使用、恢复、信任与零明文产品合同" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.password-center-m2.md", role: "Password Center 用户体验、SecretRef、银行卡盲填与产品域隔离合同" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\docs\\recovery\\password-center-m2-operations.md", role: "安全查找、完整 CSV、因子生命周期、G/H 与 PRIVATE Git 新设备恢复入口" },
       { path: "E:\\PCConfig\\tools\\Install-PasswordCenterIndependent.ps1", role: "独立密码中心安装态 Inspect（只读回读），不消费旧 C Policy" },
-      { path: "E:\\PCConfig\\tools\\secret_broker.py", role: "凭据生命周期、恢复集与 action_recover_from_private_git 的实际实现" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\secret_broker.py", role: "凭据生命周期、恢复集与 action_recover_from_private_git 的实际实现" },
       { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.google-workspace-provider.md", role: "固定账号 Provider、OAuth 和类型化动作合同" },
       {"path": "E:\\PCConfig\\docs\\contracts\\pcconfig.google-photos-provider.md", "role": "独立Photos账号、应用创建内容范围、单项/批量上传和中断恢复合同"},
       {"path": "E:\\PCConfig\\registries\\google_photos_provider.json", "role": "Photos固定binding、v1.0.0、受管端点、8MiB分块与DPAPI位置"},
       {"path": "E:\\PCConfig\\tools\\Invoke-GooglePhotosProvider.ps1", "role": "Photos类型化读取/写入、ResumeOnly、DryRun与进程内JSONL入口"},
-      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "正式秘密代理与受保护入口" },
-      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.copy-panel.test.ps1", role: "遮盖面板、真实合成剪贴板、原明文窗口与安装入口的隔离回归；不读取生产秘密" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\Invoke-SecretBroker.ps1", role: "正式秘密代理与受保护入口" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\Invoke-SecretBroker.display.test.ps1", role: "遮盖面板、真实合成剪贴板、原明文窗口与安装入口的隔离回归；不读取生产秘密" },
       { path: "E:\\PCConfig\\tools\\Invoke-GoogleWorkspaceProvider.ps1", role: "当前Gmail/Drive/Tasks类型化分发与Calendar前置冻结拒绝" },
       { path: "E:\\PCConfig\\tools\\GoogleWorkspaceDirectProvider.psm1", role: "固定账号读写、输入范围、大小/超时、DryRun 与 effect_unknown 语义" },
       { path: "E:\\PCConfig\\tools\\Start-GoogleWorkspaceMcp.ps1", role: "十个只读 stdio MCP 工具的固定入口" }
@@ -1894,13 +1894,13 @@ export const pcconfigModules = [
       { condition: "恢复目标已有不同内容", response: "返回 restore_conflict 并保留双方；只有大小和 SHA-256 均相同才记 already_restored。" }
     ],
     sources: [
-      { path: "E:\\PCConfig\\tools\\Invoke-SecretBroker.ps1", role: "AuthorizationFileEncrypt/Verify/Decrypt/View/Edit 受保护入口" },
-      {"path": "E:\\PCConfig\\tools\\authorization_file_local_ui.py", "role": "同进程本地UTF-8查看编辑、64MiB边界、验证新加密副本与保留原包"},
-      {"path": "E:\\PCConfig\\tools\\authorization_file_local_ui.test.py", "role": "本地查看编辑的取消、原包保留、二进制拒绝与Win32控件测试定义"},
-      {"path": "E:\\PCConfig\\tools\\authorization_file_entry.test.py", "role": "最高权限入口及有界回执的合成测试定义"},
-      { path: "E:\\PCConfig\\tools\\authorization_file_broker.py", role: "显式计划、AES-GCM 分块、resume/index/receipt、verify 与无覆盖恢复" },
-      { path: "E:\\PCConfig\\tools\\authorization_file_broker.test.py", role: "独立域根、往返、中断续作、幂等恢复、篡改和来源变化合成测试" },
-      { path: "E:\\PCConfig\\docs\\contracts\\pcconfig.password-center-m2.md", role: "最高权限因子复用与授权文件/SecretRef/Key/Vault 域隔离" }
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\Invoke-SecretBroker.ps1", role: "AuthorizationFileEncrypt/Verify/Decrypt/View/Edit 受保护入口" },
+      {"path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\authorization_file_local_ui.py", "role": "同进程本地UTF-8查看编辑、64MiB边界、验证新加密副本与保留原包"},
+      {"path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\authorization_file_local_ui.test.py", "role": "本地查看编辑的取消、原包保留、二进制拒绝与Win32控件测试定义"},
+      {"path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\authorization_file_entry.test.py", "role": "最高权限入口及有界回执的合成测试定义"},
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\authorization_file_broker.py", role: "显式计划、AES-GCM 分块、resume/index/receipt、verify 与无覆盖恢复" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\tools\\authorization_file_broker.test.py", role: "独立域根、往返、中断续作、幂等恢复、篡改和来源变化合成测试" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.password-center-m2.md", role: "最高权限因子复用与授权文件/SecretRef/Key/Vault 域隔离" }
     ],
     verification: [
       "Source：authorization_file_broker.py 实现显式选择、4 MiB AES-256-GCM、独立 keys、加密 state/index、metadata-only receipt、verify 与无覆盖 decrypt。",
@@ -2128,7 +2128,7 @@ export const pcconfigModules = [
     ],
     sources: [
       {
-        "path": "E:\\PCConfig\\docs\\contracts\\pcconfig.secret-broker.md",
+        "path": "E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.secret-broker.md",
         "role": "已发布b08e21f6第96–108行：设备信任、验证邀请、独立磁盘保护与恢复边界；旧资料期口径不覆盖E170"
       },
       {
@@ -2772,11 +2772,11 @@ export const pcconfigModules = [
     ],
     "sources": [
       {
-        "path": "E:\\PCConfig\\tools\\Invoke-OwnerTakeover.ps1",
+        "path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\Invoke-OwnerTakeover.ps1",
         "role": "现行Open/Status、独立窗口与宿主绑定源码"
       },
       {
-        "path": "E:\\PCConfig\\tools\\owner_takeover_runtime.py",
+        "path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\owner_takeover_runtime.py",
         "role": "有限期、取消、撤销与结果状态"
       },
       {

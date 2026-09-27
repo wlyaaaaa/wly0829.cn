@@ -1054,7 +1054,7 @@ export const modules = [
     "role": "Owner claim、冲突、移交和恢复回归"
   },
   {
-    "path": "E:\\PCConfig\\tools\\Invoke-OwnerTakeover.ps1",
+    "path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\Invoke-OwnerTakeover.ps1",
     "role": "本人接管产品的源码定位；当前已安装入口与宿主消费链由PCConfig核验，网页不运行验证或用源码存在证明安装成功。"
   },
   {
@@ -1221,7 +1221,7 @@ export const modules = [
     "role": "活动版本准备、激活、回退与只读校验"
   },
   {
-    "path": "E:\\PCConfig\\tools\\personal_environment.py",
+    "path": "E:\\Projects\\Tools\\PasswordCenter\\tools\\personal_environment.py",
     "role": "资料生命周期实现；本轮仍见未提交候选，不作已安装验收"
   }
 ],
