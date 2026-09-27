@@ -1784,7 +1784,8 @@ export const pcconfigModules = [
       { condition: "外部逐条凭据 API 不可用", response: "保留 optional gap；不抓浏览器数据库，也不把可发现元数据误作可写来源。" }
     ],
     sources: [
-      { path: "E:\\Projects\\Tools\\PasswordCenter\\registries\\secret_broker.json", role: "SecretRef、运行时和安全边界 Registry" },
+      { path: "E:\\Projects\\Tools\\PasswordCenter\\registries\\secret_broker.json", role: "密码中心产品策略与 SecretRef 目标协议" },
+      { path: "E:\\PCConfig\\registries\\password_center_machine.json", role: "本机数据、安装位置和目标程序的机器绑定" },
       { path: "E:\\Projects\\Tools\\PasswordCenter\\registries\\secret_source_governance.json", role: "来源 Owner、Provider 保护存储分类、读写能力与发现不授权变更" },
       { path: "E:\\PCConfig\\registries\\google_workspace_provider.json", role: "固定 Workspace binding、scope、端点与无秘密元数据" },
       { path: "E:\\Projects\\Tools\\PasswordCenter\\docs\\contracts\\pcconfig.secret-broker.md", role: "秘密使用、恢复、信任与零明文产品合同" },
