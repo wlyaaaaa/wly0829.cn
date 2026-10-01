@@ -25,6 +25,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      pages_artifact_id: ${{ steps.pages_artifact.outputs.artifact_id }}
     steps:
       - name: Check out source
         uses: actions/checkout@v6
@@ -74,18 +76,20 @@ jobs:
         uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
+        id: pages_artifact
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
           retention-days: 1
 
-      - name: Attach size and reference report
+      - name: Write size and reference summary
         if: always() && steps.source.outputs.site == 'assembled'
-        uses: actions/upload-artifact@v7
-        with:
-          name: publication-checks
-          path: .publish/size-report.json
-          retention-days: 7
+        run: |
+          if [ -f .publish/size-report.json ]; then
+            printf '\n```json\n' >> "$GITHUB_STEP_SUMMARY"
+            cat .publish/size-report.json >> "$GITHUB_STEP_SUMMARY"
+            printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
 
   deploy:
     environment:
@@ -93,8 +97,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: write
     needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Remove this run's temporary Pages artifact after successful deployment
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGES_ARTIFACT_ID: ${{ needs.build.outputs.pages_artifact_id }}
+        run: gh api --method DELETE "repos/${{ github.repository }}/actions/artifacts/$PAGES_ARTIFACT_ID"
