@@ -99,6 +99,80 @@ class Refs(HTMLParser):
             elif key.endswith('srcset'):
                 self.refs.extend((v.strip().split()[0], False) for v in value.split(',') if v.strip())
 
+class OriginalProse(HTMLParser):
+    """Fingerprint the original prose, excluding version labels and added navigation."""
+    def __init__(self, whole_document=False):
+        super().__init__(convert_charrefs=True)
+        self.whole=whole_document;self.stack=[];self.parts=[];self.literal=[];self.literal_depth=0
+    def handle_starttag(self,tag,attrs):
+        d=dict(attrs);classes=set(d.get('class','').split())
+        active=self.whole or (self.stack[-1][2] if self.stack else False) or 'source-prose' in classes or (tag=='h2' and any('source-heading' in x[1] for x in self.stack))
+        skip=(self.stack[-1][3] if self.stack else False) or 'source-extra' in classes
+        if tag in {'br','hr','img','input','link','meta','source'}:
+            if active and not skip and tag in {'br','hr'}:self.parts.append('\n')
+            return
+        self.stack.append((tag,classes,active,skip))
+        if active and not skip and tag=='a':
+            self.parts.append('[href:'+hashlib.sha256(source_link_target(d.get('href','')).encode()).hexdigest()+']')
+        if active and not skip and tag in {'td','th'}:self.parts.append('[cell]')
+        if active and not skip and tag in {'pre','code'}:
+            self.literal_depth+=1
+        elif active and not skip and tag in {'p','li','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
+    def handle_data(self,data):
+        if self.stack and self.stack[-1][2] and not self.stack[-1][3]:
+            if self.literal_depth:self.literal.append(data)
+            else:self.parts.append(data)
+    def handle_endtag(self,tag):
+        for i in range(len(self.stack)-1,-1,-1):
+            if self.stack[i][0]==tag:
+                entry=self.stack[i]
+                if entry[2] and not entry[3]:
+                    if tag in {'pre','code'} and self.literal_depth:
+                        self.literal_depth-=1
+                        if not self.literal_depth:
+                            self.parts.append('[literal:'+hashlib.sha256(''.join(self.literal).encode()).hexdigest()+']');self.literal=[]
+                    elif tag in {'p','li','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
+                del self.stack[i:];break
+    def digest(self):
+        return hashlib.sha256(' '.join(''.join(self.parts).split()).encode()).hexdigest()
+
+def prose_digest(text,whole_document=False):
+    parser=OriginalProse(whole_document);parser.feed(text);return parser.digest()
+
+def source_link_target(value):
+    path,separator,fragment=value.partition('#');name=Path(path.replace('\\','/')).name
+    if name=='AGENTS.md':return '/rules/charter/'+('#'+fragment if separator else'')
+    if re.fullmatch(r'agents\.[a-z-]+\.md',name):return '/rules/'+name[7:-3]+'/'+('#'+fragment if separator else'')
+    if value.replace('\\','/').lower()=='e:/.agents/tools/find-duplicatecontent.ps1':return '/source-tools/Find-DuplicateContent.ps1'
+    return value
+
+def rule_pin_findings(output,files):
+    pin=json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))
+    findings=[];seen=set()
+    for page in files:
+        if page.suffix!='.html' or page.parent==output/'rules' or not page.is_relative_to(output/'rules'):continue
+        text=page.read_text('utf8');rel=page.relative_to(output).as_posix()
+        match=PAGE_DATA.search(text)
+        rows=[s for s in json.loads(match[2]).get('screens',[]) if s.get('render_mode')=='source_text'] if match else []
+        if not rows:
+            findings.append({'file':rel,'type':'pinned_original_missing'});continue
+        for row in rows:
+            meta=row.get('source_meta') or {};document=meta.get('relative_file');expected=pin['documents'].get(document)
+            correct_document='AGENTS.md' if page.parent.name=='charter' else 'docs/contracts/agents.'+page.parent.name+'.md'
+            if document!=correct_document:findings.append({'file':rel,'type':'rule_page_source_mismatch','document':document,'expected_document':correct_document})
+            seen.add(document)
+            labels=[row.get('source_version','')]+re.findall(r'<p[^>]*class="source-version"[^>]*>(.*?)</p>',text,re.S)
+            versions={v for label in labels for v in re.findall(r'(?<![A-Za-z0-9])E\d+(?!\d)',html.unescape(label))}
+            if meta.get('version')!=pin['version'] or versions!={pin['version']}:
+                findings.append({'file':rel,'type':'rule_version_not_pinned','expected':pin['version'],'observed':sorted(versions|{str(meta.get('version'))})})
+            if not expected or meta.get('source_sha256')!=expected['source_sha256']:
+                findings.append({'file':rel,'type':'rule_source_not_pinned','document':document})
+            if expected and (meta.get('omitted_count')!=expected['approved_omitted_count'] or prose_digest(text)!=expected['rendered_text_sha256']):
+                findings.append({'file':rel,'type':'rule_original_content_mismatch','document':document,'expected':pin['version']})
+    for document in set(pin['documents'])-seen:
+        findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
+    return findings
+
 def nested_refs(value, navigation_enabled=True):
     if isinstance(value, dict):
         for k, v in value.items():
@@ -129,7 +203,7 @@ def resolve_ref(root, owner, ref):
 
 def validate(output, report_path, incomplete=False, input_stats=None):
     files = sorted(p for p in output.rglob('*') if p.is_file())
-    findings = []; missing = []; refs_count = 0
+    findings = rule_pin_findings(output,files); missing = []; refs_count = 0
     total = sum(p.stat().st_size for p in files)
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
     # Conservative bound includes directories and long-path/PAX name records.

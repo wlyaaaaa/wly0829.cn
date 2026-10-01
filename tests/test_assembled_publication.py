@@ -18,7 +18,15 @@ class PublicationGate(unittest.TestCase):
         (self.site/'404.html').write_text('<html>Missing page</html>',encoding='utf8')
         (self.site/'app.js').write_text('void 0;',encoding='utf8')
         (self.site/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
-    # The Windows task owner recycles the dedicated test parent after the run.
+        self.previous_root=builder.ROOT;builder.ROOT=self.root
+        config=self.root/'config';config.mkdir()
+        body='<div class="source-prose"><p>合成原文</p></div>'
+        pin={'version':'E207','documents':{'AGENTS.md':{'source_sha256':'fixture-source','approved_omitted_count':0,'rendered_text_sha256':builder.prose_digest(body)}}}
+        (config/'assembled-rules-pin.json').write_text(json.dumps(pin),encoding='utf8')
+        data={'screens':[{'render_mode':'source_text','source_version':'原文 E207 版','source_meta':{'relative_file':'AGENTS.md','source_sha256':'fixture-source','version':'E207','omitted_count':0}}]}
+        page=self.site/'rules/charter/index.html';page.parent.mkdir(parents=True)
+        page.write_text('<p class="source-version">原文 E207 版</p>'+body+'<script id="page-data">'+json.dumps(data)+'</script>',encoding='utf8')
+    def tearDown(self):builder.ROOT=self.previous_root
     def run_gate(self,block=False):
         with contextlib.redirect_stdout(io.StringIO()):
             if block:
@@ -60,5 +68,32 @@ class PublicationGate(unittest.TestCase):
             self.assertTrue(builder.clean_repo_bindings('owner/demo').startswith('private-project-'))
             with self.assertRaises(ValueError): builder.clean_repo_bindings('https://github.com/owner/demo','page-data.repo_url')
         finally: builder.PRIVATE_REPOS.discard('owner/demo')
+    def test_frozen_rule_checks_label_source_and_actual_prose(self):
+        config=self.root/'config';config.mkdir(exist_ok=True)
+        body='<div class="source-prose"><p>原文字甲 <a href="agents.privacy-data.md">隐私规则</a> <code>tool -a -b</code></p></div>'
+        expected={'version':'E207','documents':{'AGENTS.md':{'source_sha256':'source-proof','approved_omitted_count':0,'rendered_text_sha256':builder.prose_digest(body)}}}
+        (config/'assembled-rules-pin.json').write_text(json.dumps(expected),encoding='utf8')
+        page=self.site/'rules/charter/index.html';page.parent.mkdir(parents=True,exist_ok=True)
+        data={'screens':[{'render_mode':'source_text','source_version':'原文 E207 版','source_meta':{'relative_file':'AGENTS.md','source_sha256':'source-proof','version':'E207','omitted_count':0}}]}
+        def document(label='E207',content=body):
+            return '<p class="source-version">原文 '+label+' 版</p>'+content+'<script id="page-data">'+json.dumps(data)+'</script>'
+        previous=builder.ROOT;builder.ROOT=self.root
+        try:
+            page.write_text(document(),encoding='utf8')
+            self.assertEqual(builder.rule_pin_findings(self.site,[page]),[])
+            page.write_text(document('E206'),encoding='utf8')
+            self.assertIn('rule_version_not_pinned',{x['type']for x in builder.rule_pin_findings(self.site,[page])})
+            page.write_text(document(content=body.replace('原文字甲','原文字乙')),encoding='utf8')
+            self.assertIn('rule_original_content_mismatch',{x['type']for x in builder.rule_pin_findings(self.site,[page])})
+            page.write_text(document(content=body.replace('tool -a -b','tool-a-b')),encoding='utf8')
+            self.assertIn('rule_original_content_mismatch',{x['type']for x in builder.rule_pin_findings(self.site,[page])})
+            page.write_text(document(content=body.replace('agents.privacy-data.md','agents.authorization.md')),encoding='utf8')
+            self.assertIn('rule_original_content_mismatch',{x['type']for x in builder.rule_pin_findings(self.site,[page])})
+        finally:builder.ROOT=previous
+    def test_missing_rule_group_and_table_cell_boundaries(self):
+        (self.site/'rules').rename(self.root/'removed-rules')
+        result=self.run_gate(True)
+        self.assertTrue(any(x['type']=='pinned_rule_page_missing' for x in result['findings']))
+        self.assertNotEqual(builder.prose_digest('<table><tr><td>A</td><td>BC</td></tr></table>',True),builder.prose_digest('<table><tr><td>AB</td><td>C</td></tr></table>',True))
 
 if __name__=='__main__': unittest.main()
