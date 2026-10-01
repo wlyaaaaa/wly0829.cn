@@ -46,6 +46,10 @@ class PublicationGate(unittest.TestCase):
     def test_source_output_disjoint(self):
         with self.assertRaises(ValueError): builder.build(self.site,self.site/'child',self.report,False)
         self.assertFalse((self.site/'child').exists())
+    def test_input_domain_is_never_overwritten(self):
+        (self.site/'CNAME').write_text('different.example\n',encoding='utf8')
+        with self.assertRaises(ValueError): builder.build(self.site,self.root/'output',self.report,False)
+        self.assertFalse((self.root/'output').exists())
     def test_exact_legal_phrase_and_repo_boundaries(self):
         (self.site/'404.html').write_text('<html>正式法律文书仍交 Claude</html>',encoding='utf8');self.run_gate()
         (self.site/'404.html').write_text('<html>正式法律文书仍交 Claude；法律</html>',encoding='utf8')

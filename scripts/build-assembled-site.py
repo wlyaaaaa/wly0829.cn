@@ -226,6 +226,8 @@ def build(source, output, report_path, incomplete):
     source = source.resolve(); output = output.resolve()
     if source == output or output.is_relative_to(source) or source.is_relative_to(output): raise ValueError('Input and output must be disjoint')
     if output.exists(): raise ValueError('Output already exists; choose a fresh output or recycle the old task output first')
+    if (source/'CNAME').exists() and (source/'CNAME').read_text('utf-8-sig').strip()!='wly0829.cn':
+        raise ValueError('Input CNAME disagrees with the existing site domain; refusing to replace it')
     # A compiler may still update the preview while this preparation runs.
     # Freeze a verified private task copy before the slower fallback encoding.
     original_files=sorted(p for p in source.rglob('*') if p.is_file())
@@ -339,7 +341,7 @@ def build(source, output, report_path, incomplete):
     (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8',newline='')
     (output/'.nojekyll').write_text('',encoding='utf8')
     # The custom 404 is provided as a directory page by the B2 compiler.
-    if (output/'404/index.html').is_file():
+    if (output/'404/index.html').is_file() and not (output/'404.html').is_file():
         document=(output/'404/index.html').read_text('utf8')
         document=re.sub(r'(?<![A-Za-z0-9_/-])assets/', '/404/assets/', document)
         (output/'404.html').write_text(document,encoding='utf8',newline='')
