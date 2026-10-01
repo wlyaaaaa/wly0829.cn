@@ -12,7 +12,8 @@ function Checked([string]$Program, [string[]]$Arguments) {
     if ($LASTEXITCODE -ne 0) { throw "$Program failed: exit $LASTEXITCODE" }
 }
 $releaseFolder = Join-Path $repoRoot '.publish'
-$runFolder = Join-Path $releaseFolder ([DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$nowBeijing = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8))
+$runFolder = Join-Path $releaseFolder ($nowBeijing.ToString('yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8))
 $outputFolder = Join-Path $runFolder 'dist'
 if ($Publish) {
     $branch = (& git branch --show-current).Trim()
