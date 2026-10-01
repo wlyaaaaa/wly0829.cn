@@ -110,6 +110,7 @@ jobs:
 
       - name: Remove this run's temporary Pages artifact after successful deployment
         if: success()
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           PAGES_ARTIFACT_ID: ${{ needs.build.outputs.pages_artifact_id }}
