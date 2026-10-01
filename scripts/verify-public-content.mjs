@@ -5,6 +5,9 @@ import { fileURLToPath } from "node:url";
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
+const distArgument = process.argv.indexOf("--dist");
+if (distArgument >= 0 && !process.argv[distArgument + 1]) throw new Error("--dist requires a directory");
+const distRoot = distArgument >= 0 ? path.resolve(process.argv[distArgument + 1]) : path.join(projectRoot, "dist");
 const secretPatterns = [
   ["OpenAI-style key", /\bsk-[A-Za-z0-9_-]{20,}/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
@@ -44,7 +47,7 @@ const sourceFiles = (await Promise.all(sourceCandidates.map(async (file) => {
 const findings = [];
 let distFiles = [];
 try {
-  distFiles = await listDistFiles(path.join(projectRoot, "dist"));
+  distFiles = await listDistFiles(distRoot);
 } catch (error) {
   findings.push({
     file: "dist/",

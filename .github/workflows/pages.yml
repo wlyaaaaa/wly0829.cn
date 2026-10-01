@@ -5,6 +5,12 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      site:
+        description: "auto uses the prepared site; legacy restores the Vite site"
+        type: choice
+        options: [auto, legacy]
+        default: auto
 
 permissions:
   contents: read
@@ -18,6 +24,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check out source
         uses: actions/checkout@v6
@@ -28,14 +35,37 @@ jobs:
           node-version: "22"
           cache: npm
 
+      - name: Select publication source
+        id: source
+        env:
+          REQUESTED_SITE: ${{ inputs.site || 'auto' }}
+        run: |
+          if [ "$REQUESTED_SITE" = legacy ] || [ ! -f site-release/index.html ]; then
+            echo "site=legacy" >> "$GITHUB_OUTPUT"
+          else
+            echo "site=assembled" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
+        if: steps.source.outputs.site == 'legacy'
         run: npm ci
 
       - name: Build and verify public content
+        if: steps.source.outputs.site == 'legacy'
         run: npm run build
 
       - name: Test source and generated routes
+        if: steps.source.outputs.site == 'legacy'
         run: npm run test:built
+
+      - name: Validate prepared static release
+        if: steps.source.outputs.site == 'assembled'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest discover -s tests -p 'test_assembled_publication.py'
+          python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
+          python3 scripts/build-assembled-site.py --verify-only --public-repos-from-github
 
       - name: Reverify final generated artifact
         run: npm run verify:public
@@ -47,12 +77,22 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
+          retention-days: 1
+
+      - name: Attach size and reference report
+        if: always() && steps.source.outputs.site == 'assembled'
+        uses: actions/upload-artifact@v7
+        with:
+          name: publication-checks
+          path: .publish/size-report.json
+          retention-days: 7
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: build
     steps:
       - name: Deploy to GitHub Pages
