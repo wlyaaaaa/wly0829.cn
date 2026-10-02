@@ -143,6 +143,13 @@ def accept_page(approval, status, raw_root, candidate, candidate_proof, verifica
     for filename, old_stat in before.items():
         path = Path(filename)
         if not path.is_file() or [path.stat().st_size, path.stat().st_mtime_ns] != old_stat:
+            # This aggregate also records other pages. Preserve the current
+            # page's actual approved video identity when only those rows change.
+            if url=='/' and path.name=='videos-verdict.json' and path.is_file():
+                rows=read(path);current=next((x for x in reversed(rows)if x.get('id')=='b2-home'),{})if isinstance(rows,list)else{}
+                video=built.get('video_report',{})
+                if current.get('verdict')=='pass' and current.get('video_sha256')==video.get('video_sha256') and current.get('video_path') and digest(current['video_path'])==video['video_sha256']:
+                    continue
             raise ValueError('Verification inputs are stale: '+filename)
     for path in (raw_html, built_path, source):
         if str(path) not in before: raise ValueError('Verification did not bind required input: '+str(path))
