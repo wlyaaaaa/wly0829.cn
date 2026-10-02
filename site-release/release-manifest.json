@@ -1,8 +1,8 @@
 {
   "schema": "wly.hybrid-release.v1",
   "release_id": "810bb62faeab18a369f5111fcd23ed262a1c665349b05b592591801d10f058d9",
-  "prepared_at_beijing": "2026-10-02T23:38:58.294773+08:00",
-  "rollback_ref": "6d63a9e10003e89e8d1dc1c13582c3d2440ad85c",
+  "prepared_at_beijing": "2026-10-03T00:32:31.521438+08:00",
+  "rollback_ref": null,
   "baseline_production_commit": null,
   "baseline_files": {
     "404.html": {
@@ -2585,6 +2585,10 @@
       "sha256": "c1992e7dd32d3987d03bda893a62659c179b7ba727c93b4d3c285794e84b3810",
       "bytes": 252
     },
+    "assets/hero-64ed36342c7b310c-e181492b-mask.png": {
+      "sha256": "e181492ba3ca6e43eee183083cf1349e4bc171dd9ed78edb05c21862496e183c",
+      "bytes": 5411
+    },
     "assets/hero-64ed36342c7b310c-e181492b.mp4": {
       "sha256": "64ed36342c7b310c2b9aceabf079545fa3576177de61134af22ceaf3b733ee70",
       "bytes": 1146349
@@ -4825,234 +4829,9 @@
     "/skills/wechat-direct/",
     "/skills/work-delivery/"
   ],
-  "accepted_pages": {
-    "/": {
-      "approval_sha256": "4e12f83f5c0f8003d927d1f8054eef07f189690a651a6b868fd3f72d5bd7ab41",
-      "source_sha256": "aceeaeaffae64b4856b49b2d12a6aaef72221612d2aa79fe29c83b2a4902aa7c",
-      "build_sha256": "4483d6428c1c0d1ed2690e40cc5f8f2d8c2dc0b46c9223ef47b12cabcc20ec53",
-      "verification_run_sha256": "40ea87dc3bac03b6b1570f685fdaea1c77ed44a02270b31fc32465fd55199f52",
-      "verified_at_beijing": "2026-10-02T23:35:45.088896+08:00",
-      "candidate_html_sha256": "541a35c017efc03491b3558b5a509d9302173ff82d5372b824972fda51415f16"
-    }
-  },
+  "accepted_pages": {},
   "rejected_pages": {},
-  "temporary_href_mappings": [
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how-this-site/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rules/charter/",
-      "temporary_href": "/rules/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rules/charter/",
-      "temporary_href": "/rules/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/projects/remote-control/",
-      "temporary_href": "/projects/"
-    },
-    {
-      "page": "/",
-      "original_href": "/projects/remote-control/",
-      "temporary_href": "/projects/"
-    },
-    {
-      "page": "/",
-      "original_href": "/projects/remote-control/",
-      "temporary_href": "/projects/"
-    },
-    {
-      "page": "/",
-      "original_href": "/projects/remote-control/",
-      "temporary_href": "/projects/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/#case-trip",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/#case-trip",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how-this-site/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rescue/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how-this-site/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rescue/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how-this-site/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rescue/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how-this-site/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/rescue/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/how/",
-      "temporary_href": "/"
-    },
-    {
-      "page": "/",
-      "original_href": "/cockpit/",
-      "temporary_href": "/"
-    }
-  ],
+  "temporary_href_mappings": [],
   "files": {
     "404.html": {
       "sha256": "4625de19fe983f0e9da89393a3d6d4519fa802f7f2f47012533ef995b1431d4b",
