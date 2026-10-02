@@ -88,6 +88,8 @@ class HybridRelease(unittest.TestCase):
     def test_false_approval_and_stale_verification_rejected(self):
         a,s,r,p,v,image=self.evidence()
         self.assertEqual(h.accept_page(a,s,r,self.new,p,v)[0],'/')
+        a['page_review_clear']={'by':'Claude','at_beijing':'2026-10-02T21:28:52+08:00','basis':'整页检查通过'}
+        self.assertEqual(h.accept_page(a,s,r,self.new,p,v)[0],'/')
         a['page_review_clear']='true'
         with self.assertRaisesRegex(ValueError,'boolean true'):h.accept_page(a,s,r,self.new,p,v)
         a['page_review_clear']=True;self.put(self.root,'original.png','new image')

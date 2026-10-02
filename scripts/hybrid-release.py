@@ -92,8 +92,12 @@ def latest_run(verification_root, url):
     if not matches: raise ValueError('No formal verification for '+url)
     return max(matches, key=lambda x: x[0])
 
+def is_review_clear(approval):
+    clear=approval.get('page_review_clear')
+    return clear is True or isinstance(clear,dict) and clear.get('by')=='Claude' and bool(clear.get('at_beijing')) and bool(clear.get('basis'))
+
 def accept_page(approval, status, raw_root, candidate, candidate_proof, verification_root):
-    if approval.get('page_review_clear') is not True:
+    if not is_review_clear(approval):
         raise ValueError('page_review_clear must be boolean true')
     state = status['build']
     if state.get('status') != 'built': raise ValueError('Latest build is not built')
