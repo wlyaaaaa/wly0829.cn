@@ -277,6 +277,7 @@ def verify_release(output):
     return manifest
 
 def validate_content(output, report):
+    output=output.resolve()
     manifest = verify_release(output)
     original = builder.rule_pin_findings
     # The owner keeps old rule pages. Only newly accepted rule pages use current pin.
