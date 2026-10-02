@@ -7,10 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       site:
-        description: "auto uses the prepared site; legacy restores the Vite site"
+        description: "auto deploys the prepared site; legacy rebuilds Vite; rollback restores exact static bytes"
         type: choice
-        options: [auto, legacy]
+        options: [auto, legacy, rollback]
         default: auto
+      restore_ref:
+        description: "Exact commit containing the previous site-release (required for rollback)"
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -30,6 +34,18 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Restore exact static release
+        if: inputs.site == 'rollback'
+        env:
+          RESTORE_REF: ${{ inputs.restore_ref }}
+        run: |
+          test -n "$RESTORE_REF" || { echo 'restore_ref is required'; exit 1; }
+          python3 scripts/hybrid-release.py restore --ref "$RESTORE_REF" --output restored-release
+          if [ -d site-release ]; then mv site-release before-restore-release; fi
+          mv restored-release site-release
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -44,6 +60,8 @@ jobs:
         run: |
           if [ "$REQUESTED_SITE" = legacy ] || [ ! -f site-release/index.html ]; then
             echo "site=legacy" >> "$GITHUB_OUTPUT"
+          elif [ -f site-release/release-manifest.json ]; then
+            echo "site=hybrid" >> "$GITHUB_OUTPUT"
           else
             echo "site=assembled" >> "$GITHUB_OUTPUT"
           fi
@@ -69,6 +87,15 @@ jobs:
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/build-assembled-site.py --verify-only --public-repos-from-github
 
+      - name: Validate byte-preserving hybrid release
+        if: steps.source.outputs.site == 'hybrid'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest discover -s tests -p 'test_hybrid_release.py'
+          python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
+          python3 scripts/hybrid-release.py verify --output dist --content-report hybrid-content-report.json --public-repos-from-github
+
       - name: Reverify final generated artifact
         run: npm run verify:public
 
@@ -90,6 +117,23 @@ jobs:
             cat .publish/size-report.json >> "$GITHUB_STEP_SUMMARY"
             printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"
           fi
+
+      - name: Write exact static release identity
+        if: steps.source.outputs.site == 'hybrid'
+        env:
+          RESTORE_REF: ${{ inputs.restore_ref }}
+          SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          with open('dist/release-manifest.json', encoding='utf8') as stream:
+              manifest = json.load(stream)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf8') as stream:
+              stream.write('\nStatic release: `' + manifest['release_id'] + '`\n')
+              stream.write('\nWorkflow source commit: `' + os.environ['SOURCE_COMMIT'] + '`\n')
+              if os.environ.get('RESTORE_REF'):
+                  stream.write('\nExact bytes restored from: `' + os.environ['RESTORE_REF'] + '`. This dispatch does not change main.\n')
+          PY
 
   deploy:
     environment:

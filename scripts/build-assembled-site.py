@@ -288,7 +288,8 @@ def validate(output, report_path, incomplete=False, input_stats=None):
                   bytes=total,MB=round(total/1e6,3),MiB=round(total/2**20,3),tar_estimated_bytes=tar_bytes,
                   limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-tar_bytes,files=len(files),
                   groups=groups,local_references_checked=refs_count,missing_reference_count=len(missing),missing_references=missing,
-                  required_missing=required,findings=findings,input=input_stats)
+                  required_missing=required,findings=findings,input=input_stats,
+                  output_files={p.relative_to(output).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in files})
     write_json(report_path,result)
     summary={k:result[k] for k in ('status','ready_to_publish','MB','files','missing_reference_count','required_missing')}
     summary.update(finding_count=len(findings),findings=findings[:8])
@@ -316,6 +317,8 @@ def build(source, output, report_path, incomplete):
         if sha(p)!=sha(target): raise ValueError('Source changed during snapshot: '+str(p.relative_to(source)))
     after={p.relative_to(source).as_posix():(p.stat().st_size,p.stat().st_mtime_ns) for p in source.rglob('*') if p.is_file() and not any(x.startswith('.') for x in p.relative_to(source).parts)}
     if signature!=after: raise ValueError('Source changed during snapshot; retry after assembly finishes')
+    source_snapshot_files={p.relative_to(source).as_posix():{'sha256':sha(snapshot/p.relative_to(source)),'bytes':p.stat().st_size} for p in public_inputs}
+    original_source_root=str(source)
     source=snapshot.resolve()
     output.mkdir(parents=True)
     files = sorted(p for p in source.rglob('*') if p.is_file())
@@ -343,15 +346,29 @@ def build(source, output, report_path, incomplete):
             from PIL import Image
             target_dir=output/parent.relative_to(source);target_dir.mkdir(parents=True,exist_ok=True)
             target=target_dir/(stem+'-fallback.webp')
-            with Image.open(fallback) as image:
-                if image.width > 640: image=image.resize((640,round(image.height*640/image.width)),Image.Resampling.LANCZOS)
-                image.save(target,'WEBP',quality=85,method=2)
+            cache_root=ROOT/'.publish/fallback-cache';cache_root.mkdir(parents=True,exist_ok=True)
+            source_sha=sha(fallback);cache_key=hashlib.sha256((source_sha+':640:LANCZOS:webp:q85:method2').encode()).hexdigest()
+            cache_blob=cache_root/(cache_key+'.webp');cache_receipt=cache_root/(cache_key+'.json');cache_hit=False
+            if cache_blob.is_file() and cache_receipt.is_file():
+                try:
+                    cached=json.loads(cache_receipt.read_text('utf8'))
+                    cache_hit=cached.get('source_sha256')==source_sha and cached.get('sha256')==sha(cache_blob)
+                except (OSError,ValueError):pass
+            if cache_hit:shutil.copy2(cache_blob,target)
+            else:
+                with Image.open(fallback) as image:
+                    if image.width > 640: image=image.resize((640,round(image.height*640/image.width)),Image.Resampling.LANCZOS)
+                    image.save(target,'WEBP',quality=85,method=2)
+                temp_cache=cache_root/(cache_key+'.'+uuid.uuid4().hex+'.writing');shutil.copy2(target,temp_cache);temp_cache.replace(cache_blob)
+                cache_receipt.write_text(json.dumps({'source_sha256':source_sha,'sha256':sha(cache_blob),'algorithm':'640:LANCZOS:webp:q85:method2'}),encoding='utf8')
             digest=sha(target);fallback_name=stem+'-fallback640-'+digest[:12]+'.webp'
             target.rename(target.with_name(fallback_name))
-            fallbacks.append({'file':(target.with_name(fallback_name)).relative_to(output).as_posix(),'sha256':digest,'bytes':target.with_name(fallback_name).stat().st_size})
+            fallbacks.append({'file':(target.with_name(fallback_name)).relative_to(output).as_posix(),'sha256':digest,'bytes':target.with_name(fallback_name).stat().st_size,'cache_hit':cache_hit})
         for p in paths:
             m = VARIANT.match(p.name); width=int(m[2]); fmt=m[4]
-            retain = False if fmt == 'webp' else ((parent,stem) in cards or width >= (1280 if stem.endswith('-v') else 1920))
+            portrait_variant = bool(re.search(r'-v(?:$|-)', stem))
+            avif_max_width = max((int(VARIANT.match(q.name)[2]) for q in paths if q.suffix == '.avif'), default=0)
+            retain = False if fmt == 'webp' else ((parent,stem) in cards or width >= (1280 if portrait_variant else 1920) or width == avif_max_width)
             if retain: keep.add(p)
             else:
                 dropped.add(p)
@@ -380,6 +397,8 @@ def build(source, output, report_path, incomplete):
                     # Some source elements list only the large WebP viewer tier.
                     # Repoint that element at its existing small fallback.
                     parts=m[2].split(',')[0].strip().split()
+                    if not parts:
+                        return m[0]
                     q=resolve_ref(source,p,parts[0]); new=replacement.get(q.name) if q else None
                     if not new: raise ValueError('Empty responsive source in '+str(rel)+': '+m[2][:200])
                     url=parts[0].rsplit('/',1)[0]+'/'+new if '/' in parts[0] else new
@@ -412,6 +431,12 @@ def build(source, output, report_path, incomplete):
         else:
             shutil.copy2(p,target);copied[rel.as_posix()]=sha(p)
             if sha(target)!=copied[rel.as_posix()]: raise ValueError('Copy changed bytes: '+str(rel))
+    # 404 排在 _shared 之前，不能依赖文件遍历顺序才拿到共享JS的新名字。
+    for rel in rewritten:
+        html_path=output/rel
+        text=html_path.read_text('utf8')
+        for old,new in script_renames.items(): text=text.replace(old,new)
+        html_path.write_text(text,encoding='utf8',newline='')
     (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8',newline='')
     (output/'.nojekyll').write_text('',encoding='utf8')
     # The custom 404 is provided as a directory page by the B2 compiler.
@@ -419,7 +444,7 @@ def build(source, output, report_path, incomplete):
         document=(output/'404/index.html').read_text('utf8')
         document=re.sub(r'(?<![A-Za-z0-9_/-])assets/', '/404/assets/', document)
         (output/'404.html').write_text(document,encoding='utf8',newline='')
-    stats={**original_stats,'source_snapshot':str(snapshot),'dropped_variant_bytes':sum(p.stat().st_size for p in dropped),
+    stats={**original_stats,'source_snapshot':str(snapshot),'source_root':original_source_root,'source_snapshot_files':source_snapshot_files,'dropped_variant_bytes':sum(p.stat().st_size for p in dropped),
            'dropped_variants':len(dropped),'unchanged_asset_files':len(copied),'unchanged_asset_hashes':copied,'rewritten_html':rewritten,
            'generated_old_browser_fallbacks':fallbacks,'responsive_source_images':len(groups)}
     stats['private_repository_rewrites']=PRIVATE_REPO_REWRITES

@@ -1,74 +1,74 @@
 {
   "schema": "wly.assembled-rules-pin.v1",
-  "version": "E207",
-  "release_record_sha256": "6408362f6827c5c9dd6e367381ba25ec175d88b4ca39597981f955d29bb59500",
-  "release_commit": "9e269f2635aaca847c50c38d1d9338110524145f",
+  "version": "E208",
+  "release_commit": "00e00887bef5b072698c7edb1801d304adfc822f",
+  "release_record_sha256": "45583b5804d698014162eb5bd77fd7bcf9c1a8c6d7ecdf8dbe87d56c27b951aa",
   "documents": {
-    "docs/contracts/agents.authorization.md": {
-      "source_sha256": "01d4bdaaab185ee42676a9c0f32993ff45b21f9a292c05d9743bde282c08d24f",
-      "rendered_text_sha256": "45ae4117f9d7f1a4a76c4983d3287ac4e49bf797cb50d2e5f0ac2ad57ae44073",
-      "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
-    },
-    "docs/contracts/agents.capabilities-runtime.md": {
-      "source_sha256": "40cffa3d87ec1eb241667971f08c4bb6d1a929edef1674ba0a3c80c173b65a3d",
-      "rendered_text_sha256": "511a44c57f97f74ab65f4d013d0cc7f4b710fdad3188feb457dfc69a20cc2f73",
-      "approved_omitted_count": 2,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
-    },
     "AGENTS.md": {
       "source_sha256": "6ed40ab78a469c59d302ba249b5da77ddd3b0e9d03c410867027f292905cdb23",
       "rendered_text_sha256": "becd0b13f8c1951a0ecf7260e2973d6eacc770d2e257215d0a7b969c3cdbbd92",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
+    },
+    "docs/contracts/agents.authorization.md": {
+      "source_sha256": "01d4bdaaab185ee42676a9c0f32993ff45b21f9a292c05d9743bde282c08d24f",
+      "rendered_text_sha256": "45ae4117f9d7f1a4a76c4983d3287ac4e49bf797cb50d2e5f0ac2ad57ae44073",
+      "approved_omitted_count": 0,
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
+    },
+    "docs/contracts/agents.capabilities-runtime.md": {
+      "source_sha256": "ff8f67b6fe5ee8e846a202bf9c54f447e4d3a2c7b64aac837da85e2d30bd6a2a",
+      "rendered_text_sha256": "4af92447c7de3fe48b639a3e6710adc292fe08b93544db977c9a5c33a2174bb2",
+      "approved_omitted_count": 2,
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.claude-adapter.md": {
       "source_sha256": "59b75b20d42472c5518a2d97ae4c8d32a6074b12f806002fcfd993aa35c6da34",
       "rendered_text_sha256": "cc157e042312a5c6f6f4984f16ac113510b45eafd5cd42e60d4c6d10bf7492c3",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.codex-adapter.md": {
       "source_sha256": "6f22153d5ab13623d9343519709d6dc85aae24e282789d8c60fb8917bc0f7e9c",
       "rendered_text_sha256": "e18cab9c519f0fabba054aaa3b6ee75267af290bfa25b923ba024669148b3e68",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.context-sources.md": {
       "source_sha256": "ad3dbcc27bd7ba97f5c7b8008b58cebea74f78e2615ae2535f89cb6fd5098942",
       "rendered_text_sha256": "bad54ccc52b6eb0309bb45fe3a1e6206f32daaff929fe6b9a4e909020b2aa9d3",
       "approved_omitted_count": 4,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.engineering-delivery.md": {
       "source_sha256": "57234c3ce762f9d66484ccd1362139fee24348485bae72c8eeaac4e4457f3b24",
       "rendered_text_sha256": "177de416582e5da5ed8fa872318c88b8179a3c4164bcf15f56c59d71a88605e9",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.execution-coordination.md": {
       "source_sha256": "45ce45c754519525dcc7a95e5d6287b95c68f3791ce7cc34a59647d1bbff06ae",
       "rendered_text_sha256": "25172866c73bad344fb69676120773acf7cdaafb3cda8b6c7c8eeb3e4517ead6",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.privacy-data.md": {
       "source_sha256": "9920fcc37e8eeb9f8b5f377ccd2eb03c68d758c8554514865cd79e1b41e12569",
-      "rendered_text_sha256": "0de0c47d2f3012316d835e210665bc498be7236b59ae7c434576c338436f7240",
-      "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "rendered_text_sha256": "9d10de8e79e429567a0fb85fb1737122927ad20557a7d1ad8a49857ef10c5b33",
+      "approved_omitted_count": 1,
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.protected-actions.md": {
       "source_sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
       "rendered_text_sha256": "7527a1de077949fd68050166d4288f83ff944b64e3a5ad9cc24b673c0236a5aa",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     },
     "docs/contracts/agents.rule-release.md": {
       "source_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
       "rendered_text_sha256": "4f5c765e102801abc45b4e9e22f448403282e22448cfba6bc63feaa810fef98e",
       "approved_omitted_count": 0,
-      "basis": "independent Markdown rendering of E207 source with existing approved exclusions"
+      "basis": "独立从已核对的源Markdown渲染，仅沿用原批准的2/4处省略"
     }
   }
 }
