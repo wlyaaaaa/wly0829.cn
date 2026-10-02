@@ -10,6 +10,7 @@ import shutil
 import sys
 import os
 import uuid
+import subprocess
 from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
 
@@ -74,6 +75,12 @@ def repo_pattern(repo):
     return re.compile(r'(?<![A-Za-z0-9_.-])'+re.escape(repo)+r'(?:\.git)?(?![A-Za-z0-9_.-])',re.I)
 
 def load_public_repos():
+    if shutil.which('gh'):
+        reply=subprocess.run(['gh','api','users/wlyaaaaa/repos?per_page=100','--paginate','--jq','.[].full_name'],capture_output=True,text=True,encoding='utf8',timeout=60,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        if reply.returncode==0:
+            names={line.strip().lower()for line in reply.stdout.splitlines()if line.strip()}
+            if not names:raise ValueError('Public repository inventory is empty; refusing to skip its gate')
+            PUBLIC_REPOS.update(names);return
     for page in range(1,30):
         request=Request('https://api.github.com/users/wlyaaaaa/repos?per_page=100&page='+str(page),headers={'Accept':'application/vnd.github+json','User-Agent':'wly-publication-check'})
         if os.environ.get('GITHUB_TOKEN'): request.add_header('Authorization','Bearer '+os.environ['GITHUB_TOKEN'])
