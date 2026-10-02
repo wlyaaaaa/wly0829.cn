@@ -1,8 +1,8 @@
 {
   "schema": "wly.hybrid-release.v1",
   "release_id": "810bb62faeab18a369f5111fcd23ed262a1c665349b05b592591801d10f058d9",
-  "prepared_at_beijing": "2026-10-03T00:32:31.521438+08:00",
-  "rollback_ref": null,
+  "prepared_at_beijing": "2026-10-03T00:32:41.760405+08:00",
+  "rollback_ref": "44f385bfb909d25836091907a1ae28493d3f1069",
   "baseline_production_commit": null,
   "baseline_files": {
     "404.html": {
@@ -4829,9 +4829,234 @@
     "/skills/wechat-direct/",
     "/skills/work-delivery/"
   ],
-  "accepted_pages": {},
+  "accepted_pages": {
+    "/": {
+      "approval_sha256": "4e12f83f5c0f8003d927d1f8054eef07f189690a651a6b868fd3f72d5bd7ab41",
+      "source_sha256": "aceeaeaffae64b4856b49b2d12a6aaef72221612d2aa79fe29c83b2a4902aa7c",
+      "build_sha256": "8a61587c7bffef8c3e68d6e43210460012a9313e55fcfe29428778c1f26811ba",
+      "verification_run_sha256": "cd5e37961b70a5fc3458636f8fd57788cfcc29273416c91b8dd4352fdc69d363",
+      "verified_at_beijing": "2026-10-03T00:11:33.859247+08:00",
+      "candidate_html_sha256": "541a35c017efc03491b3558b5a509d9302173ff82d5372b824972fda51415f16"
+    }
+  },
   "rejected_pages": {},
-  "temporary_href_mappings": [],
+  "temporary_href_mappings": [
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how-this-site/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rules/charter/",
+      "temporary_href": "/rules/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rules/charter/",
+      "temporary_href": "/rules/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/projects/remote-control/",
+      "temporary_href": "/projects/"
+    },
+    {
+      "page": "/",
+      "original_href": "/projects/remote-control/",
+      "temporary_href": "/projects/"
+    },
+    {
+      "page": "/",
+      "original_href": "/projects/remote-control/",
+      "temporary_href": "/projects/"
+    },
+    {
+      "page": "/",
+      "original_href": "/projects/remote-control/",
+      "temporary_href": "/projects/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/#case-trip",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/#case-trip",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how-this-site/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rescue/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how-this-site/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rescue/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how-this-site/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rescue/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how-this-site/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/rescue/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/how/",
+      "temporary_href": "/"
+    },
+    {
+      "page": "/",
+      "original_href": "/cockpit/",
+      "temporary_href": "/"
+    }
+  ],
   "files": {
     "404.html": {
       "sha256": "4625de19fe983f0e9da89393a3d6d4519fa802f7f2f47012533ef995b1431d4b",
