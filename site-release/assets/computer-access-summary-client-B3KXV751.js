@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/computer-access-summary-hydrate-BpR_2ztC.js","assets/computer-access-summary-CEjtpVTX.js"])))=>i.map(i=>d[i]);
+import{t as e}from"./index-Cgq3wyAK.js";import{t}from"./computer-access-bootstrap-Dj1p3u4g.js";var n=document.querySelector(`[data-access-summary]`);if(n){let r=t();e(()=>import(`./computer-access-summary-hydrate-BpR_2ztC.js`).then(e=>e.mountAccessSummary(r)),__vite__mapDeps([0,1])).catch(()=>{r?.cancel();let e=n.querySelector(`.ca-read-status`);e&&(e.dataset.busy=`false`,e.textContent=`状态组件加载失败`)})}

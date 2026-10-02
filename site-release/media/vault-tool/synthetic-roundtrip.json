@@ -1,0 +1,134 @@
+{
+  "scope": "isolated fictional fixture only; no user vault, keyfile, source, decrypted data, Key clone, or network target was read",
+  "probe_script": "E:/Cache/Codex/Temp/wly-vault18-verification/scratch/verify_real_crypto.py",
+  "crypto_backend": "windows_cng",
+  "kdf_or_aes_stubbed": false,
+  "fixture_files": [
+    {
+      "kind": "Chinese UTF-8 text",
+      "relative_name": "notes/中文说明.txt",
+      "bytes": 61,
+      "sha256": "60df61fa07fab74aa9e53bf851ce32250a435d5b8b21e17d5cb0acbde1cbea88"
+    },
+    {
+      "kind": "CSV",
+      "relative_name": "data/ledger.csv",
+      "bytes": 47,
+      "sha256": "5c96114cd7d5d4a5868a3522ab92bdd539ad3693efb582ca15f5767a2f524e3e"
+    },
+    {
+      "kind": "binary attachment",
+      "relative_name": "attachments/sample.bin",
+      "bytes": 2057,
+      "sha256": "cfed09439eec9c3e3eca6388d4de24d7ffe1c54b22f1da1c349498def0ccd7c3"
+    }
+  ],
+  "normal_encrypt": {
+    "format": "VAULT03",
+    "container_bytes": 65536,
+    "container_sha256": "8beb0744a09695479b6b06ff559fd326fa92c969376618891dc616c99d0276b5",
+    "roundtrip_matches": true,
+    "write_self_check_inferred_passed": true,
+    "wrong_password_rejected": true,
+    "tampered_ciphertext_rejected": true,
+    "elapsed_ms": 3844
+  },
+  "kdf_preservation": {
+    "argon2_available": true,
+    "v1_target": "current_scrypt",
+    "cases": {
+      "scrypt": {
+        "source_kdf": [1, 2, 1, 1],
+        "after_change_kdf": [1, 2, 1, 1],
+        "after_change_content_matches": true,
+        "after_decoy_kdf": [1, 2, 1, 1],
+        "after_decoy_real_content_matches": true,
+        "after_decoy_real_layer": 1,
+        "after_decoy_decoy_layer": 0,
+        "after_decoy_decoy_is_tar": true,
+        "change_elapsed_ms": 7,
+        "decoy_elapsed_ms": 13
+      },
+      "argon2id": {
+        "source_kdf": [2, 1, 8192, 1],
+        "after_change_kdf": [2, 1, 8192, 1],
+        "after_change_content_matches": true,
+        "after_decoy_kdf": [2, 1, 8192, 1],
+        "after_decoy_real_content_matches": true,
+        "after_decoy_real_layer": 1,
+        "after_decoy_decoy_layer": 0,
+        "after_decoy_decoy_is_tar": true,
+        "change_elapsed_ms": 19,
+        "decoy_elapsed_ms": 40
+      }
+    }
+  },
+  "memory_view": {
+    "queried_relative_name": "data/ledger.csv",
+    "decrypted_directory_created": false
+  },
+  "selective_extract": {
+    "filter": "ledger",
+    "selected_relative_name": "data/ledger.csv",
+    "selected_bytes": 47,
+    "selected_sha256": "5c96114cd7d5d4a5868a3522ab92bdd539ad3693efb582ca15f5767a2f524e3e",
+    "cleanup_completed": true
+  },
+  "same_name_merge": {
+    "new_file_present": true,
+    "same_name_new_wins": true,
+    "same_name_result": "new_source_content",
+    "elapsed_ms": 2896
+  },
+  "change_password": {
+    "old_password_rejected": true,
+    "new_password_roundtrip_matches": true,
+    "backup_removed": true,
+    "elapsed_ms": 2904
+  },
+  "legacy_migration": {
+    "format_after": "VAULT03",
+    "source_kdf": [1, 2, 1, 1],
+    "preserved_kdf": [1, 2, 1, 1],
+    "roundtrip_matches": true,
+    "legacy_backup_present": true,
+    "elapsed_ms": 4
+  },
+  "decoy_container": {
+    "format": "VAULT03",
+    "real_layer": 1,
+    "decoy_layer": 0,
+    "real_payload_roundtrip_matches": true,
+    "decoy_payload_is_tar": true,
+    "decoy_source_deleted": true,
+    "elapsed_ms": 1424
+  },
+  "image_container": {
+    "payload_bytes": 65536,
+    "container_bytes": 65619,
+    "extracted_bytes": 65536,
+    "roundtrip_sha256_matches": true,
+    "plain_cover_rejected": true
+  },
+  "metadata_cli": {
+    "invalid_vault_info_exit": 0,
+    "invalid_vault_info_ok": false,
+    "invalid_vault_info_format": "VAULT03",
+    "plan_invalid_with_source_exit": 0,
+    "plan_invalid_with_source_decision": "manual_review",
+    "plan_invalid_without_source_exit": 0,
+    "plan_invalid_without_source_decision": "manual_review",
+    "unknown_command_exit": 2
+  },
+  "visible_error_cli": {
+    "failed_hide_exit": 1,
+    "failed_unhide_exit": 1,
+    "missing_vault_decrypt_exit": 1,
+    "empty_fixture_encrypt_exit": 1,
+    "empty_fixture_migrate_exit": 1,
+    "empty_fixture_passwd_exit": 1,
+    "empty_fixture_decoy_exit": 1,
+    "empty_fixture_info_exit": 1
+  },
+  "elapsed_ms": 23994
+}

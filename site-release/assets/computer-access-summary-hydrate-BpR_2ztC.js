@@ -1,0 +1,1 @@
+import{G as e,W as t,q as n,t as r}from"./computer-access-summary-CEjtpVTX.js";n();var i=e(),a=t();function o(e){let t=document.querySelector(`[data-access-summary]`);t&&(0,i.hydrateRoot)(t,(0,a.jsx)(r,{initialRead:e}))}export{o as mountAccessSummary};
