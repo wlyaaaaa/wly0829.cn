@@ -38,6 +38,12 @@ class HybridRelease(unittest.TestCase):
         self.put(self.new,'index.html','<script src="/assets/legacy.js"></script>')
         self.put(self.new,'assets/legacy.js','different bytes')
         with self.assertRaisesRegex(ValueError,'collision'):self.assemble()
+    def test_video_mask_is_in_the_published_asset_closure(self):
+        self.put(self.new,'index.html','<script id="page-data" type="application/json">{"video":{"src":"assets/hero.mp4","mask":"assets/hero-mask.png"}}</script>')
+        self.put(self.new,'assets/hero.mp4','original video bytes');self.put(self.new,'assets/hero-mask.png','original mask bytes')
+        out,manifest=self.assemble()
+        self.assertEqual((out/'assets/hero-mask.png').read_bytes(),(self.new/'assets/hero-mask.png').read_bytes())
+        self.assertIn('assets/hero-mask.png',manifest['files'])
     def test_candidate_tamper_is_rejected(self):
         proof=h.inventory(self.new);self.put(self.new,'assets/nested.js','replaced')
         with self.assertRaisesRegex(ValueError,'changed after preparation'):self.assemble(candidate_files=proof)
