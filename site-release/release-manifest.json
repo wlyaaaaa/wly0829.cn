@@ -1,7 +1,7 @@
 {
   "schema": "wly.hybrid-release.v1",
   "release_id": "767cb982b6e63f4381bc0decbcae3c270e1b09b45e3cf5cc025316f6b4132d13",
-  "prepared_at_beijing": "2026-10-02T20:53:14.130901+08:00",
+  "prepared_at_beijing": "2026-10-02T22:33:21.169358+08:00",
   "rollback_ref": null,
   "baseline_production_commit": "6f3cb90f79d8dd7632eb3adf0e1cd5028471bf92",
   "baseline_files": {
