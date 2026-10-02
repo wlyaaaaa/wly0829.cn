@@ -4,6 +4,9 @@ $repoRoot=Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $repoRoot
 function Checked([string]$Program,[string[]]$Arguments) {
     & $Program @Arguments
+    if ($Program -eq 'git' -and $Arguments[0] -eq 'fetch') {
+        for($retry=0;$retry -lt 2 -and $LASTEXITCODE -ne 0;$retry++){Start-Sleep -Seconds 3; & $Program @Arguments}
+    }
     if ($LASTEXITCODE -ne 0) { throw "$Program failed: exit $LASTEXITCODE" }
 }
 if (-not $RestoreRef) {
@@ -45,9 +48,12 @@ try {
     $deadline=[DateTimeOffset]::UtcNow.AddMinutes(20)
     $run=$null
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
-        $runs=& gh run list --workflow pages.yml --commit $commit --limit 10 --json databaseId,status,conclusion,headSha
-        if ($LASTEXITCODE -ne 0) { throw 'GitHub authentication or run lookup failed; stopped without login.' }
-        $run=($runs | ConvertFrom-Json) | Where-Object headSha -eq $commit | Select-Object -First 1
+        $runs=& gh api "repos/wlyaaaaa/wly0829.cn/actions/runs?head_sha=$commit&per_page=20" --jq '.workflow_runs | map({databaseId:.id,status,conclusion,headSha:.head_sha,path})' 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            if (($runs -join "`n") -match 'EOF|timed out|TLS connect error') { Start-Sleep -Seconds 10; continue }
+            throw 'GitHub authentication or run lookup failed; stopped without login.'
+        }
+        $run=($runs | ConvertFrom-Json) | Where-Object { $_.headSha -eq $commit -and $_.path -eq '.github/workflows/pages.yml' } | Select-Object -First 1
         if ($run.status -eq 'completed') { break }
         Start-Sleep -Seconds 10
     }
