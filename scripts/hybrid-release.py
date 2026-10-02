@@ -295,13 +295,19 @@ def validate_content(output, report):
         result = read(report)
         selected = {route_file(x) for x in manifest['accepted_pages']}
         retained = {rel for rel in manifest['baseline_files'] if rel not in selected}
-        kept = []; retained_topics = []
+        kept = []; retained_topics = []; retained_findings=[]
         for finding in result['findings']:
-            if finding['type'] in {'excluded_topic','excluded_topic_filename','private_path'} and finding['file'] in retained:
-                retained_topics.append(finding)
+            if finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
+                retained_findings.append(finding)
+                if finding['type']in {'excluded_topic','excluded_topic_filename','private_path'}:retained_topics.append(finding)
             else: kept.append(finding)
         result['findings'] = kept
         result['preserved_baseline_topic_findings'] = retained_topics
+        result['preserved_baseline_findings_outside_current_release']=retained_findings
+        result['preserved_baseline_reference_findings_outside_current_release']=[x for x in result['missing_references']if x['file']in retained]
+        result['missing_references']=[x for x in result['missing_references']if x['file']not in retained]
+        result['missing_reference_count']=len(result['missing_references'])
+        result['content_gate_scope']='Current accepted pages and their assets; direct navigation resolves against all preserved production routes. Exact baseline bytes remain verified separately.'
         result['ready_to_publish'] = not kept and not result['missing_references'] and not result['required_missing']
         result['status'] = 'pass' if result['ready_to_publish'] else 'block'
         write(report, result)
