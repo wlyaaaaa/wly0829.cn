@@ -221,11 +221,72 @@ def rewrite_links(text, root, owner, available, mappings, preserved_root=None, a
         return start+replacement+end
     return pattern.sub(replace, text)
 
-def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None):
+def load_overlay(path, baseline):
+    overlay = read(path)
+    if overlay.get('schema') != 'wly.typeset-release-overlay.v1':
+        raise ValueError('Invalid release overlay schema')
+    entries = overlay.get('files', {})
+    if not entries or any(not rel or rel.startswith('/') or '..' in Path(rel).parts or '\\' in rel for rel in entries):
+        raise ValueError('Invalid release overlay paths')
+    for rel, entry in entries.items():
+        source = Path(entry['source_path'])
+        after = {'sha256': digest(source), 'bytes': source.stat().st_size}
+        if after != entry['after']: raise ValueError('Overlay source changed: '+rel)
+        old = baseline/rel
+        before = {'sha256':digest(old), 'bytes':old.stat().st_size} if old.is_file() else None
+        if before != entry.get('before'): raise ValueError('Overlay baseline differs: '+rel)
+        kind = entry.get('kind')
+        if kind == 'runtime_reference':
+            if rel == 'index.html' or old.suffix != '.html' or not entry.get('replacements'):
+                raise ValueError('Invalid runtime HTML reference overlay')
+            expected = old.read_bytes()
+            for original, replacement in entry['replacements'].items():
+                if not original.startswith('/_typeset/runtime/app-') or not replacement.startswith('/_typeset/runtime/app-') or original.encode() not in expected:
+                    raise ValueError('Runtime overlay must replace an existing app URL')
+                expected = expected.replace(original.encode(), replacement.encode())
+            if source.read_bytes() != expected: raise ValueError('Runtime overlay changed content beyond the app URL: '+rel)
+        elif kind == 'search_index':
+            if not re.fullmatch(r'search-(?:index|projects|project-[a-z0-9-]+)\.js',rel): raise ValueError('Invalid search overlay path')
+            retained = sorted(set(search_record_hashes(old.read_text('utf8'))) & set(search_record_hashes(source.read_text('utf8'))))
+            if retained != entry.get('preserved_record_sha256s'): raise ValueError('Search overlay changed its preserved-record evidence')
+        elif kind == 'runtime_bundle':
+            if before is not None or not re.fullmatch(r'_typeset/runtime/app-[0-9a-f]{20}\.js',rel) or Path(rel).stem != 'app-'+after['sha256'][:20]:
+                raise ValueError('Runtime bundle must use its new content hash')
+        else: raise ValueError('Unknown overlay kind: '+str(kind))
+    for source, proof in overlay.get('inputs', {}).items():
+        source = Path(source)
+        if {'sha256':digest(source),'bytes':source.stat().st_size} != proof: raise ValueError('Overlay input changed: '+str(source))
+    return overlay
+
+
+def search_record_hashes(text):
+    records = json.loads(text[text.index('=')+1:].strip().removesuffix(';'))
+    return [hashlib.sha256(json.dumps(record,ensure_ascii=False,sort_keys=True).encode('utf8')).hexdigest() for record in records]
+
+
+def unchanged_search_finding(output, finding, overlay):
+    if not overlay or overlay.get('kind')!='search_index' or finding.get('type') in {'credential','symlink','git_object_limit'}: return False
+    text=output.read_text('utf8');offset=finding.get('offset')
+    if not isinstance(offset,int): return False
+    decoder=json.JSONDecoder();cursor=text.index('[')+1
+    while cursor<len(text):
+        while text[cursor].isspace() or text[cursor]==',': cursor+=1
+        if text[cursor]==']': break
+        record,end=decoder.raw_decode(text,cursor)
+        if cursor<=offset<end:
+            sha=hashlib.sha256(json.dumps(record,ensure_ascii=False,sort_keys=True).encode('utf8')).hexdigest()
+            return sha in overlay.get('preserved_record_sha256s',[])
+        cursor=end
+    return False
+
+
+def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None):
     baseline = baseline.resolve(); candidate = candidate.resolve(); output = output.resolve()
     if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
         raise ValueError('Choose a fresh, disjoint output directory')
     old, routes = verify_baseline(baseline, baseline_manifest)
+    overlays = overlay.get('files', {}) if overlay else {}
+    if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
     accepted_files = {route_file(x) for x in accepted}
     available = {x for x in old if x.endswith('.html')} | accepted_files
     shutil.copytree(baseline, output)
@@ -233,7 +294,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     # Adding that deployment metadata preserves every captured HTTP byte.
     if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
     # Old release-manifest is replaced by this generation; old content remains exact.
-    mappings = []; pending = list(sorted(accepted_files)); copied = set()
+    mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
     while pending:
         rel = pending.pop()
         if rel in copied: continue
@@ -243,14 +304,14 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
             proof = candidate_files.get(rel)
             expected = proof.get('sha256') if isinstance(proof,dict) else proof
             if expected != digest(path): raise ValueError('Candidate output changed after preparation: '+rel)
-        if path.suffix == '.html' and rel not in accepted_files:
+        if path.suffix == '.html' and rel not in accepted_files and rel not in overlays:
             if rel in old: continue
             raise ValueError('Unapproved HTML dependency: '+rel)
         target = output/rel
         text = None
         if rel in accepted_files:
             text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files)
-        elif rel in old:
+        elif rel in old and rel not in overlays:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)
         if text is None: shutil.copyfile(path, target)
@@ -266,7 +327,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
             if dep in old and not dependency.is_file(): continue
             pending.append(dep)
     for rel, entry in old.items():
-        if rel not in accepted_files and digest(output/rel) != entry['sha256']:
+        if rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
             raise ValueError('Old file changed: '+rel)
     for route in routes:
         if not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
@@ -277,6 +338,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
                 'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_manifest.get('production_commit'),
                 'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
                 'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
+    if overlays: manifest['release_overlay'] = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlays.items()}
     write(output/MANIFEST, manifest)
     verify_release(output)
     return manifest
@@ -288,8 +350,18 @@ def verify_release(output):
     expected_id = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
     if manifest['release_id'] != expected_id: raise ValueError('Release identifier mismatch')
     accepted = {route_file(x) for x in manifest['accepted_pages']}
+    overlays = manifest.get('release_overlay', {})
+    if set(overlays) & accepted: raise ValueError('Overlay overlaps rebuilt pages')
+    for rel, entry in overlays.items():
+        if manifest['files'].get(rel) != entry.get('after') or manifest['baseline_files'].get(rel) != entry.get('before'):
+            raise ValueError('Overlay file identity differs: '+rel)
+        if entry.get('kind') == 'runtime_reference':
+            recovered = (output/rel).read_bytes()
+            for original, replacement in entry['replacements'].items(): recovered = recovered.replace(replacement.encode(),original.encode())
+            if hashlib.sha256(recovered).hexdigest() != entry['before']['sha256']:
+                raise ValueError('Runtime overlay did not preserve original content: '+rel)
     for rel, entry in manifest['baseline_files'].items():
-        if rel not in accepted and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
+        if rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
     for route in manifest['routes']:
         if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
     return manifest
@@ -313,10 +385,12 @@ def validate_content(output, report):
             except SystemExit: pass
         result = read(report)
         selected = {route_file(x) for x in manifest['accepted_pages']}
-        retained = {rel for rel in manifest['baseline_files'] if rel not in selected}
+        changed_content = {rel for rel,entry in manifest.get('release_overlay',{}).items() if entry['kind'] != 'runtime_reference'}
+        retained = {rel for rel in manifest['baseline_files'] if rel not in selected and rel not in changed_content}
         kept = []; retained_topics = []; retained_findings=[]
         for finding in result['findings']:
-            if finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
+            unchanged_record=unchanged_search_finding(output/finding['file'],finding,manifest.get('release_overlay',{}).get(finding['file']))
+            if unchanged_record or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
                 retained_findings.append(finding)
                 if finding['type']in {'excluded_topic','excluded_topic_filename','private_path'}:retained_topics.append(finding)
             else: kept.append(finding)

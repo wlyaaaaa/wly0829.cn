@@ -398,6 +398,58 @@ def prepare(args):
         block("geometry", "Build does not identify the exact geometry snapshot supplied to publication")
     if manifest.get("baseline_files") != old:
         block("baseline", "Release is not bound to the supplied production baseline")
+    overlay_info = build.get('release_overlay')
+    if manifest.get('release_overlay'):
+        try:
+            if not overlay_info: raise ValueError('Build lacks the exact release overlay')
+            overlay_path = Path(overlay_info['path'])
+            bound_file(overlay_path, overlay_info)
+            overlay = hybrid.load_overlay(overlay_path, args.baseline.resolve())
+            public_entries = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlay['files'].items()}
+            if public_entries != manifest['release_overlay'] or overlay_info['files'] != overlay['files']:
+                raise ValueError('Release overlay differs from the reviewed build')
+            runtime = {entry['page']:entry for entry in public_entries.values() if entry['kind']=='runtime_reference'}
+            if runtime:
+                report_path = getattr(args,'runtime_verification',None)
+                if not report_path: raise ValueError('Runtime-reference updates need actual final-artifact rotation verification')
+                proof = read(report_path)
+                if proof.get('schema')!='wly.typeset-reading-check.v1' or proof.get('evidence_mode')!='artifact' or proof.get('release_id')!=release_id or proof.get('status')!='pass' or proof.get('artifact_unchanged') is not True:
+                    raise ValueError('Reading-position evidence is not the actual final artifact')
+                plan_path=getattr(args,'reading_plan',None)
+                if not plan_path or proof.get('build_report_sha256')!=digest(plan_path):
+                    raise ValueError('Reading-position evidence belongs to a different URL plan')
+                plan=read(plan_path)
+                expected_runtime={page:entry['url'] for page,entry in runtime.items()}
+                expected_runtime.update({page:entry['url'] for page,entry in build['pages'].items()})
+                if set(proof['pages'])!=set(expected_runtime) or set(plan['pages'])!=set(expected_runtime):
+                    raise ValueError('Reading-position verification must cover every updated runtime page')
+                reviewed_root=Path(build['output_root']).resolve()
+                if Path(proof['root']).resolve()!=reviewed_root or proof['manifest_sha256']!=digest(reviewed_root/hybrid.MANIFEST):
+                    raise ValueError('Reading-position report is bound to a different reviewed artifact')
+                summary=proof['summary']
+                if summary['resizes']<=0 or summary['navigation_checks']<=0 or any(summary[field] for field in ('failed_resizes','screen_mismatches','failed_navigation','page_errors')):
+                    raise ValueError('Reading-position verification contains real failures')
+                for page,url in expected_runtime.items():
+                    observed=proof['pages'].get(page,{})
+                    relative=hybrid.route_file(url)
+                    if observed.get('url')!=url or plan['pages'][page]['url']!=url or observed.get('html_sha256')!=manifest['files'][relative]['sha256']:
+                        raise ValueError('Reading-position HTML binding differs: '+page)
+                    if not any(case.get('page')==page and case.get('pass') is True for case in proof['cases']):
+                        raise ValueError('Missing actual reading-position cases: '+page)
+                    expected_scripts=[]
+                    for src in re.findall(r'<script\b[^>]*\bsrc=["\']([^"\'<>]+)["\']',(release/relative).read_text('utf8')):
+                        target=urlsplit(urljoin(url,src));rel=target.path.lstrip('/')
+                        expected_scripts.append({'src':src,'url':target.path,'sha256':manifest['files'][rel]['sha256'] if not target.netloc and rel in manifest['files'] else None})
+                    observed_scripts=observed.get('scripts',[])
+                    artifact_scripts=[{key:script.get(key) for key in ('src','url','sha256')} for script in observed_scripts]
+                    if artifact_scripts!=expected_scripts or any(script.get('overridden') is not False or script.get('served_sha256')!=script.get('sha256') for script in observed_scripts):
+                        raise ValueError('Reading-position script set or identity differs: '+page)
+                result['runtime_verification']={'path':str(report_path),'sha256':digest(report_path),'summary':summary,'pages':sorted(expected_runtime),'reading_plan_sha256':digest(plan_path)}
+            result['release_overlay']={'path':str(overlay_path),'sha256':digest(overlay_path),'files':public_entries}
+        except (ValueError, KeyError, OSError, TypeError) as error:
+            block('release_overlay',error)
+    elif overlay_info:
+        block('release_overlay','Build overlay is absent from the release manifest')
     if build.get("files") != manifest["files"]:
         block("build", "Release files differ from the Claude-reviewed build report; rebuild requires new verification")
     if build.get("release_id", release_id) != release_id:
@@ -454,7 +506,7 @@ def prepare(args):
         if rebuilt.get("schema") != "wly.typeset-build.v1":
             block("rebuild", "Rebuild report schema mismatch")
         for field in ("release_id", "inputs", "files", "baseline_root", "baseline_index_sha256",
-                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256"):
+                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay"):
             if rebuilt.get(field) != build.get(field):
                 block("rebuild", "Rebuild changed the reviewed " + field + "; repeat program verification and Claude's publication instruction")
         for page in selected:
@@ -626,6 +678,34 @@ def production_check(args):
     return result
 
 
+def stage_check(args):
+    """Verify copied bytes after the old in-repo baseline has been replaced.
+
+    All producer inputs and instructions were checked in the bound ready receipt
+    before replacement. This step checks the actual copy and allowed metadata.
+    """
+    build=read(args.build_report);prepared=read(args.preparation)
+    manifest=hybrid.verify_release(args.release.resolve())
+    if manifest!=read(args.expected_manifest):
+        raise ValueError('Staged manifest differs from the exact metadata-bearing rebuild')
+    if prepared.get('schema')!='wly.typeset-preparation.v1' or prepared.get('status')!='ready' or prepared.get('blockers'):
+        raise ValueError('Staging requires the completed pre-replacement evidence check')
+    if prepared['build_report_sha256']!=digest(args.build_report) or prepared['release_id']!=manifest['release_id'] or manifest['files']!=build['files']:
+        raise ValueError('Staged artifact differs from the checked rebuild')
+    reviewed=hybrid.verify_release(Path(build['output_root']).resolve())
+    for field in ('baseline_files','release_overlay','routes','rejected_pages','temporary_href_mappings'):
+        if manifest.get(field)!=reviewed.get(field): raise ValueError('Staged manifest changed '+field)
+    expected={prepared['pages'][page]['url']:prepared['pages'][page]['evidence'] for page in prepared['selected_pages']}
+    if manifest['accepted_pages']!=expected or manifest['rollback_ref']!=args.rollback_ref:
+        raise ValueError('Staged publication metadata differs from the checked receipt')
+    result={'schema':'wly.typeset-stage-check.v1','status':'pass','release_id':manifest['release_id'],
+            'checked_at_beijing':now(),'preparation_sha256':digest(args.preparation),
+            'build_report_sha256':digest(args.build_report),'manifest_sha256':digest(args.release/hybrid.MANIFEST),
+            'files':len(manifest['files']),'producer_inputs_checked_before_replacement':True}
+    write(args.output,result)
+    return result
+
+
 def readback(args):
     manifest = hybrid.verify_release(args.release.resolve())
     files = {key: value for key, value in manifest["files"].items() if key != "CNAME"}
@@ -683,6 +763,8 @@ def main(argv=None):
         gate.add_argument("--" + name, type=Path, required=True)
     gate.add_argument("--directive", type=Path, help="Actual Claude publication instruction; omission produces a local publication_instruction blocker")
     gate.add_argument("--rebuilt-report", type=Path, help="Bind a publish-time rebuild's inputs and program contract to the reviewed report")
+    gate.add_argument('--runtime-verification',type=Path,help='Actual artifact rotation checks for the preserved pages whose app references change')
+    gate.add_argument('--reading-plan',type=Path,help='Exact URL plan checked by runtime verification')
     gate.add_argument("--pages", nargs="+")
     production = commands.add_parser("production-check", help="Explicit online check used only by -Publish")
     for name in ("baseline", "baseline-manifest", "output"):
@@ -696,12 +778,16 @@ def main(argv=None):
     wrap = commands.add_parser("wrap-baseline", help="Local exact rollback package using hybrid.assemble")
     for name in ("baseline", "baseline-manifest", "output"):
         wrap.add_argument("--" + name, type=Path, required=True)
+    stage=commands.add_parser('stage-check',help='Check actual staged bytes using the completed pre-replacement evidence receipt')
+    for name in ('release','build-report','preparation','output','expected-manifest'):
+        stage.add_argument('--'+name,type=Path,required=True)
+    stage.add_argument('--rollback-ref',required=True)
     args = parser.parse_args(argv)
     if args.command == "wrap-baseline":
         manifest = hybrid.assemble(args.baseline, args.baseline, args.output, read(args.baseline_manifest), {})
         print(json.dumps({"status": "prepared", "release_id": manifest["release_id"]}))
         return 0
-    result = {"prepare": prepare, "production-check": production_check, "readback": readback}[args.command](args)
+    result = {"prepare": prepare, "production-check": production_check, "readback": readback,'stage-check':stage_check}[args.command](args)
     print(json.dumps({"status": result["status"], "release_id": result.get("release_id"), "report": str(args.output),
                       "blockers": len(result.get("blockers", result.get("issues", [])))}, ensure_ascii=False))
     return 0 if result["status"] in {"ready", "pass"} else 3 if result["status"] == "unknown" else 2

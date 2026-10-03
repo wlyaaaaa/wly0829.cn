@@ -156,7 +156,32 @@ Actions API 的连续读取失败最多重试三次，每次间隔三秒；间�
 
 准备回执的 `local_build_statistics` 引用实际构建报告，列出页数、发布文件数和总字节数。本轮 full-13 记录 84 页、2,844 个文件，构建实际 54.252 秒，两档布局及视频动效检查实际 342.703 秒；复用快照的完整本地流程实际 492.383 秒。完整源快照另测得 140.265 秒，源图重出后的首次无损压缩可能更长。该代仍有真实问题，计时完成不代表发布就绪。只有有限、非负的实测秒数才显示为 `elapsed_seconds`，其余保持未知；耗时统计缺失不会另设发布审批。
 
-Git 上传尚未实际测速，上传时间和总发布时间目前是未知值；字节数也不能直接当作 Git 实际压缩传输量。实际发布会把本轮重建秒数、正常推送秒数写入 `publication-state.json.timings`，以后才可引用同规模实测作参照。Pages 的默认二十分钟是等待上限，不是预计耗时；线上读回也受实际下载速度、文件数和是否需要重试影响。不得把本地程序通过时间写成包含上传、部署和读回的总上线时间。
+2026-10-03 第一批 29 页已实测：重建 28.238 秒、正常推送 72.756 秒，从发布开始到全部线上字节和六档浏览器核验完成约 81.3 分钟。该次完整 HTTP 回读约 32 分钟，网络速度和原整页图片等待明显影响总耗时。字节数不能直接当作 Git 实际压缩传输量；Pages 默认二十分钟是等待上限。以后引用 `publication-state.json.timings` 中的同规模实测，不把本地验收时间写成总上线时间。
+
+## 按页名清单复用入口
+
+后续批次使用 `scripts/Publish-Pages.ps1 -Batch <batch.json>`。批次文件采用 `wly.typeset-batch.v1`：`page_list` 指向 UTF-8 的逐行页名清单；`paths` 包含既有发布参数 `TypesetRoot`、`Inventory`、`Geometry`、`Baseline`、`Release`、`BuildReport`、`Verification`、`LegacySite`。路径相对批次文件所在目录解析；页名不能重复。可选 `AssetCache`、`ReleaseOverlay`、`RuntimeVerification`、`ReadingPlan` 也使用同一口径。
+
+```powershell
+pwsh -NoProfile -File scripts/Publish-Pages.ps1 -Batch '实际批次文件'
+# 实际“发布”指令到达后，在同一批次上执行：
+pwsh -NoProfile -File scripts/Publish-Pages.ps1 -Batch '实际批次文件' `
+  -Directive '实际指令 JSON' -LockHolder 'Codex/实际任务号' -Publish
+```
+
+运行层脚本更新会使已发布页面的脚本地址变化。`ReleaseOverlay` 精确记录每个文件原、新 SHA 及字节数：搜索索引从新定稿重建；旧 HTML 只允许把已有 app 地址改到新内容哈希地址；旧脚本资产继续保留。`RuntimeVerification` 必须是实际成品的通过回执，绑定 `ReadingPlan` 的真实 SHA、完整页名与 URL、每页 HTML 和实际脚本集合，且成品在验收中未变化。诊断用的 HTTP 脚本替换预览不能作为发布证据。
+
+若生产基线就是工作副本的 `site-release`，先在旧包仍原样时完整核验重建、所有源输入、运行层证据和真实指令；复制后用 `stage-check` 核对整份实际清单、文件字节和正式元数据，并绑定已通过的准备回执。此时站点目录已经是新包，不能把它再次当旧基线。
+
+## 当前托管绑定位置
+
+下面仅登记迁移会涉及的接点，不改变托管：
+
+- `.github/workflows/pages.yml`：Pages 权限、`configure-pages`、静态 `dist` 上传、`deploy-pages`、部署任务与临时 artifact 清理。
+- `scripts/publish-typeset.ps1` 和 `rollback-hybrid.ps1`：现有仓库身份、`main`、Pages 工作流路径、Actions API 状态查询和部署等待。
+- `scripts/prepare-typeset-release.py` 的 `SITE`、`check-typeset-online.py` 默认网址和发布脚本的线上清单 URL：线上发布标识、全部字节与浏览器抽查。
+- `site-release/CNAME` 及 `hybrid-release.py` 的域名文件补齐：当前 Pages 自定义域名配置，HTTP 回读明确排除 CNAME。
+- 现有 canonical、Open Graph、搜索 URL 和 sitemap 使用 `wly0829.cn`；迁移时要核对域名及目录路由行为。它们不要求换 Git 仓库，也不在本轮自动改写。
 
 ## 回读与精确恢复
 

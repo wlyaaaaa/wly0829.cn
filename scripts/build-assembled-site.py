@@ -20,7 +20,7 @@ BUDGET = 850_000_000
 VARIANT = re.compile(r'^(.*)-(828|1280|1920|2880)-([a-f0-9]{12})\.(avif|webp)$')
 LOCAL = re.compile(r'(?i)(?<![a-z0-9])[a-z]:[\\/]|file:/|\\\\(?:[^\\\s]+)\\')
 # Publication exclusions are policy checks, never automatic editorial changes.
-PRIVATE = re.compile(r'(?i)(?:[a-z]:[\\/]+Personal[\\/]+(?!Projects(?:[\\/]|$))[^\s<>"\']*|(?:[a-z]:[\\/]+|file:/+)[^\s<>"\']*(?:私人|私密|聊天记录|录音原件|个人文档)[^\s<>"\']*)')
+PRIVATE = re.compile(r'(?i)(?:[a-z]:[\\/]+Personal[\\/]+(?!Projects(?:[\\/]|$))[^\s<>"\'，。；！？（）【】,;!?()]*|(?:[a-z]:[\\/]+|file:/+)[^\s<>"\'，。；！？（）【】,;!?()]*(?:私人|私密|聊天记录|录音原件|个人文档)[^\s<>"\'，。；！？（）【】,;!?()]*)')
 PRIVATE_FILENAME = re.compile(r'聊天记录|(?:私人|私密|个人)[-_ ]*(?:文件|文档|照片|视频|录音)|录音原件|IMG[_-]\d{6,}|(?:WeChat|微信)[_-](?:Image|Video|Audio|\d{8})',re.I)
 EXCLUDED_TOPICS = re.compile(r'打官司|诉讼|起诉|判决|再审|律师|法律|案件|恋爱|求职|薪资|简历包装|课程包装|争执|个人纠纷|(?:personal[-_/](?:litigation|romance))|(?:career[-_]development)|\bOffer\b|PersonalOS(?:-Retired)?|PersonalKnowledgeBase|ai-llm-job-prep|ai-coach',re.I)
 PRIVATE_REPOS = set()

@@ -6,7 +6,7 @@ import computerAccessStyles from "../app/computer-access.css?inline";
 import accessSummaryStyles from "../app/computer-access-summary.css?inline";
 import personalExperienceStyles from "../app/personal-ai-experience.css?inline";
 import { globalSearchEntries } from "../app/search.js";
-import { createCompactSearchEntry } from "../app/compact-search.js";
+import { compactSearchProjection, serializeSearchAsset } from "../app/search-assets.js";
 import { canonicalPath, canonicalUrl, projectCatalog, projectEntryForPath, routeMeta, routePaths } from "../app/site-content.js";
 
 function escapeAttribute(value) {
@@ -20,15 +20,6 @@ function escapeAttribute(value) {
 function replaceRequired(html, matcher, replacement) {
   if (!matcher.test(html)) throw new Error(`Expected HTML pattern was not found: ${matcher}`);
   return html.replace(matcher, replacement);
-}
-
-function canonicalDocumentHref(href) {
-  const target = new URL(href, "https://wly0829.cn");
-  return `${canonicalPath(target.pathname)}${target.search}${target.hash}`;
-}
-
-function compactSearchProjection(entry) {
-  return createCompactSearchEntry(entry, canonicalDocumentHref(entry.href));
 }
 
 export const compactSearchIndex = globalSearchEntries
@@ -46,20 +37,11 @@ export const compactProjectSearchIndices = Object.fromEntries(projectCatalog.map
 
 export const compactSearchRecordCount = compactSearchIndex.length + compactProjectSearchIndex.length;
 
-function jsonForInlineScript(value) {
-  return JSON.stringify(value)
-    .replaceAll("<", "\\u003c")
-    .replaceAll(">", "\\u003e")
-    .replaceAll("&", "\\u0026")
-    .replaceAll("\u2028", "\\u2028")
-    .replaceAll("\u2029", "\\u2029");
-}
-
-export const compactSearchAsset = `window.__WLY_SEARCH_INDEX__=${jsonForInlineScript(compactSearchIndex)};\n`;
-export const compactProjectSearchAsset = `window.__WLY_PROJECT_SEARCH_INDEX__=${jsonForInlineScript(compactProjectSearchIndex)};\n`;
+export const compactSearchAsset = serializeSearchAsset(compactSearchIndex);
+export const compactProjectSearchAsset = serializeSearchAsset(compactProjectSearchIndex, true);
 export const compactProjectSearchAssets = Object.fromEntries(Object.entries(compactProjectSearchIndices).map(([slug, entries]) => [
   slug,
-  `window.__WLY_PROJECT_SEARCH_INDEX__=${jsonForInlineScript(entries)};\n`
+  serializeSearchAsset(entries, true)
 ]));
 
 function searchIndexScripts(route) {

@@ -160,7 +160,7 @@ def rewrite_css(text, owner, rewrite):
 
 
 class Snapshot:
-    def __init__(self, typeset_root, inventory, output, pages=None):
+    def __init__(self, typeset_root, inventory, output, pages=None, page_inputs=None):
         self.typeset_root = typeset_root
         self.pipeline = typeset_root.parent
         self.inventory = inventory
@@ -181,6 +181,10 @@ class Snapshot:
         self.orientation_exceptions = []
         self.pngs = 0
         self.started = time.perf_counter()
+        self.page_inputs = page_inputs or {}
+        self.resource_aliases = {}
+        self.dependency_namespace = None
+        self.current_page = None
 
     def load(self, source):
         source = source.resolve()
@@ -219,7 +223,10 @@ class Snapshot:
 
     def destination(self, source):
         try:
-            return source.relative_to(self.pipeline)
+            relative = source.relative_to(self.pipeline)
+            if self.dependency_namespace and not (len(relative.parts)>1 and relative.parts[0] in {'typeset-out','typeset-assets'} and relative.parts[1]==self.current_page):
+                return Path('resources/frozen-input')/self.dependency_namespace/relative
+            return relative
         except ValueError:
             # Preserve just the actual external resource, never its entire parent tree.
             bucket = digest(str(source).encode('utf8'))[:16]
@@ -327,6 +334,23 @@ class Snapshot:
         frozen_rows = []
         for page in self.pages:
             safe_part(page, 'page')
+            page_input = self.page_inputs.get(page, {})
+            selected_root = Path(page_input.get('typeset_root', self.typeset_root)).resolve()
+            self.pipeline = selected_root.parent
+            self.current_page = page
+            self.dependency_namespace = digest(str(self.pipeline).encode('utf8'))[:16] if page_input else None
+            prior_map = {}
+            if page_input.get('snapshot'):
+                prior_path = Path(page_input['snapshot']).resolve()
+                prior_payload, _ = self.load(prior_path)
+                prior = json.loads(decode(prior_payload))
+                if prior.get('status') != 'pass' or page not in prior.get('pages', []):
+                    raise ValueError('Page input is not a verified frozen snapshot: ' + page)
+                for entry in prior['files']:
+                    if stamp_file(Path(entry['snapshot_path'])) != {'sha256': entry['snapshot_sha256'], 'bytes': entry['snapshot_bytes']}:
+                        raise ValueError('Prior frozen snapshot changed: ' + entry['snapshot_path'])
+                prior_map = prior.get('resource_map', {})
+                self.copy(prior_path, Path('input-evidence') / (page + '-snapshot.json'), transform=False)
             originals = {Path(row['source_path']).resolve() for row in grouped[page]}
             if len(originals) != 1:
                 raise ValueError('Page has multiple source files: ' + page)
@@ -336,7 +360,7 @@ class Snapshot:
             source = json.loads(decode(source_payload))
             if any(row.get('source_sha256') != source_proof['sha256'] for row in grouped[page]):
                 raise ValueError('Inventory source SHA differs from captured source: ' + page)
-            base = self.typeset_root / page
+            base = selected_root / page
             manifest_path = base / 'page-manifest.json'
             self.copy(manifest_path, transform=False)
             manifest_payload, _ = self.load(manifest_path)
@@ -348,7 +372,9 @@ class Snapshot:
                 for screenshot in screen.get('screenshots', []):
                     for field in ('file', 'full'):
                         if screenshot.get(field):
-                            self.copy(Path(screenshot[field]), transform=False)
+                            original_resource = screenshot[field]
+                            frozen_resource = self.copy(Path(prior_map.get(original_resource, original_resource)), transform=False)
+                            self.resource_aliases[original_resource] = str(frozen_resource)
             for row in grouped[page]:
                 frozen_rows.append({**row, 'source_path': str(frozen_source)})
             self.copy(base / 'report.json', transform=False)
@@ -369,6 +395,8 @@ class Snapshot:
                         raise ValueError('Invalid orientation: ' + str(orientation))
                     self.copy(base / 'html' / (sid + '-' + orientation + '.html'))
             print(page + ': captured', flush=True)
+        self.pipeline = self.typeset_root.parent
+        self.dependency_namespace = None
         self.copy(self.pipeline / 'typeset-proto' / 'engine' / 'render.py', transform=False)
         frozen_payload = (''.join(json.dumps(row, ensure_ascii=False, separators=(',', ':')) + '\n'
                                   for row in frozen_rows)).encode('utf8')
@@ -415,7 +443,8 @@ class Snapshot:
             'orientation_exceptions': self.orientation_exceptions,
             'file_count': len(records), 'png_count': sum('png_size' in x for x in records),
             'snapshot_bytes': sum(x['snapshot_bytes'] for x in records),
-            'resource_map': {x['original_path']: x['snapshot_path'] for x in records},
+            'resource_map': {**{x['original_path']: x['snapshot_path'] for x in records}, **self.resource_aliases},
+            'page_inputs': self.page_inputs,
             'source_checks': self.history, 'system_fonts_preserved': sorted(self.fonts),
             'external_dependencies': external,
             'retired_root': str(self.retired_root) if self.retired else None,
@@ -473,8 +502,10 @@ def main():
     for name in ('typeset-root', 'inventory', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--pages', nargs='+', help='Optional pilot subset; default is the complete inventory.')
+    parser.add_argument('--page-inputs', type=Path, help='Exact per-page frozen input roots; preserve previously reviewed page bytes.')
     args = parser.parse_args()
-    snapshot = Snapshot(args.typeset_root.resolve(), args.inventory.resolve(), args.output.resolve(), args.pages)
+    page_inputs = json.loads(args.page_inputs.read_text('utf-8-sig')) if args.page_inputs else None
+    snapshot = Snapshot(args.typeset_root.resolve(), args.inventory.resolve(), args.output.resolve(), args.pages, page_inputs)
     return snapshot.run()
 
 

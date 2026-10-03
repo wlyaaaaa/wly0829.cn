@@ -280,10 +280,13 @@ def bundle(text, candidate, label, suffix):
     name = label+'-'+hashlib.sha256(text.encode('utf8')).hexdigest()[:20]+suffix
     dest = candidate/'_typeset'/'runtime'/name
     dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(text, encoding='utf8')
+    dest.write_bytes(text.encode('utf8'))
     return '/_typeset/runtime/'+name
 
 def patch_app(text):
+    # text_bound preserves raw CRLF; read_text used by overlays normalizes it.
+    # Match the same legacy code and produce the same runtime in both paths.
+    text=text.replace('\r\n','\n')
     runtime = (HERE/'typeset-layout.js').read_text('utf8')
     marker = 'function layout(){'
     if text.count(marker) != 1:
@@ -298,6 +301,22 @@ def patch_app(text):
     text = text.replace("if(!first.has(node.dataset.section))", "if(node.getClientRects().length&&!first.has(node.dataset.section))")
     text = text.replace(" document.body.dataset.statusPhase=phase;", " displayTypesetStatus(last,phase,parse,page);\n document.body.dataset.statusPhase=phase;")
     text = text.replace("s.render_mode==='source_text'||s.render_mode==='text'||s.shape==='card'||!!s.layouts.v", "s.render_mode==='typeset'||s.render_mode==='source_text'||s.render_mode==='text'||s.shape==='card'||!!s.layouts.v")
+    # Replace the legacy one-frame reading restore with the manifest-aware runtime.
+    reading_start=text.index('function rememberReadingPosition(){')
+    # The first occurrence belongs to the inserted runtime; the second is legacy.
+    reading_start=text.index('function rememberReadingPosition(){',reading_start+1)
+    reading_end=text.index('document.fonts.ready.then(()=>window.SiteToc?.update());',reading_start)
+    text=text[:reading_start]+text[reading_end:]
+    text=text.replace('layout();motion();\nfunction scrollToCurrentHash(){',
+                      'layout();motion();rememberReadingPosition();\nfunction scrollToCurrentHash(){const readingRevision=cancelReadingResize();',1)
+    text=text.replace('if(location.hash!==hash||!target.isConnected)return;',
+                      'if(readingRevision!==typesetReadingState.revision||location.hash!==hash||!target.isConnected)return;',1)
+    initial_hash="Promise.all([document.fonts.ready,...[...document.querySelectorAll('#site-header img,.toc img')].map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(scrollToCurrentHash));addEventListener('hashchange',scrollToCurrentHash);\naddEventListener('load',scrollToCurrentHash,{once:true});"
+    if text.count(initial_hash)!=1:raise ValueError('Unsupported legacy initial hash restore')
+    text=text.replace(initial_hash,
+        "const initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision)scrollToCurrentHash();};\n"
+        "Promise.all([document.fonts.ready,...[...document.querySelectorAll('#site-header img,.toc img')].map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(restoreInitialHash));addEventListener('hashchange',scrollToCurrentHash);\n"
+        "addEventListener('load',restoreInitialHash,{once:true});",1)
     sample_start=text.index('/* 已选七项通用动效')
     sample_end=text.index('/* 短续作说明',sample_start)
     samples=text[sample_start:sample_end]
@@ -626,7 +645,9 @@ def build_page(name, records, args, candidate):
             patched=patch_b2(b2_text);bn='b2-typeset-'+hashlib.sha256(patched.encode()).hexdigest()[:16]+'.js'
             dest=candidate/Path(rel).parent/'assets'/bn;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(patched,encoding='utf8')
             text=text.replace(sr,'assets/'+bn)
-    css=bundle((HERE/'typeset-layout.css').read_text('utf8'),candidate,'layout','.css')
+    # Earlier Windows bundles used a LF-derived name but stored CRLF bytes.
+    # A fresh label keeps those immutable published files intact.
+    css=bundle((HERE/'typeset-layout.css').read_text('utf8'),candidate,'typeset-layout','.css')
     data['motion_counts']={key:sum(len(p.get(key,[]))for s in data['screens']for p in s['parts'])for key in ['cards','numbers','dots','arrows']}
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}"></head>')
     label_names=set(re.findall(r'data-label-(?:text|h|v)="([^"]+)"',text))
@@ -664,6 +685,7 @@ def main():
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
+    ap.add_argument('--release-overlay',type=Path,help='Exact approved search and runtime-reference updates bound by old/new hashes')
     args=ap.parse_args()
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
     if args.geometry:args.geometry=args.geometry.resolve()
@@ -695,6 +717,10 @@ def main():
     candidate=args.output.parent/(args.output.name+'-candidate')
     if candidate.exists():raise ValueError('Choose a fresh candidate directory')
     candidate.mkdir(parents=True)
+    overlay = hybrid.load_overlay(args.release_overlay.resolve(), args.baseline) if args.release_overlay else None
+    if overlay:
+        for rel,entry in overlay['files'].items():
+            dest = candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(entry['source_path'],dest)
     states={}
     for n in names:
         try:
@@ -719,7 +745,7 @@ def main():
                 dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
                 accepted[url]={'preview_support':True,'page':n};support.append(n)
     local_deps(candidate,args.legacy_site,args.baseline)
-    manifest=hybrid.assemble(args.baseline,candidate,args.output,read(args.baseline/'release-manifest.json'),accepted)
+    manifest=hybrid.assemble(args.baseline,candidate,args.output,read(args.baseline/'release-manifest.json'),accepted,overlay=overlay)
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -733,6 +759,9 @@ def main():
             'asset_cache':str(ASSET_CACHE),'input_snapshot':{'path':str(args.snapshot_path),**args.snapshot_proof}if args.snapshot_proof else None,
             'seconds':round(time.perf_counter()-started,3),
             'output_root':str(args.output),'candidate_root':str(candidate)}
+    if overlay:
+        report['release_overlay']={'path':str(args.release_overlay.resolve()),**stamp(args.release_overlay.resolve()),'files':overlay['files']}
+        report['inputs'].update({str(args.release_overlay.resolve()):stamp(args.release_overlay.resolve()),**overlay.get('inputs',{}),**{entry['source_path']:entry['after'] for entry in overlay['files'].values()}})
     write(args.report,report)
     print(json.dumps({'built':sum(x['status']=='built'for x in states.values()),'blocked':sum(x['status']=='blocked'for x in states.values()),'missing':sum(x['status']=='missing'for x in states.values()),'home_unchanged':report['home_unchanged'],'release_id':report['release_id']}))
 

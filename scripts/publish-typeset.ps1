@@ -10,6 +10,9 @@ param(
     [string]$Directive,
     [string]$LegacySite,
     [string]$AssetCache,
+    [string]$ReleaseOverlay,
+    [string]$RuntimeVerification,
+    [string]$ReadingPlan,
     [string[]]$Pages,
     [string]$RunRoot,
     [string]$LockHolder,
@@ -35,6 +38,9 @@ else {
     if ($reviewedBuild.asset_cache) { $AssetCache = Absolute $reviewedBuild.asset_cache }
 }
 if ($Directive) { $Directive = Absolute $Directive }
+if ($ReleaseOverlay) { $ReleaseOverlay = Absolute $ReleaseOverlay }
+if ($RuntimeVerification) { $RuntimeVerification = Absolute $RuntimeVerification }
+if ($ReadingPlan) { $ReadingPlan = Absolute $ReadingPlan }
 if ($RunRoot) { $RunRoot = Absolute $RunRoot }
 else {
     $runId = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)
@@ -58,6 +64,8 @@ function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
         '--build-report',$BuildReport,'--verification',$Verification,'--output',$Receipt)
     if ($Directive) { $arguments += @('--directive',$Directive) }
     if ($RebuildReport) { $arguments += @('--rebuilt-report',$RebuildReport) }
+    if ($RuntimeVerification) { $arguments += @('--runtime-verification',$RuntimeVerification) }
+    if ($ReadingPlan) { $arguments += @('--reading-plan',$ReadingPlan) }
     if ($Pages) { $arguments += @('--pages') + $Pages }
     Checked 'python' $arguments
 }
@@ -175,8 +183,15 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
     for ($attempt=1; $attempt -le 3; $attempt++) {
         HoldPublicationLock
         $lastReport = Join-Path $RunRoot "$Prefix-$attempt.json"
-        $arguments = @('scripts/check-typeset-online.py','--build-report',$BuildReport,
+        $domInput = if ($RuntimeVerification -and -not $Legacy) { $RuntimeVerification } else { $BuildReport }
+        $arguments = @('scripts/check-typeset-online.py','--build-report',$domInput,
             '--output',$lastReport,'--task-cache',(Join-Path $RunRoot "$Prefix-browser-cache"))
+        if ($RuntimeVerification -and -not $Legacy) {
+            $runtimePages = (ReadJson $RuntimeVerification).pages.PSObject.Properties.Name
+            $samples = @(@('404','cockpit','localocr','proxyclean','rescue') | Where-Object { $_ -in $runtimePages })
+            $samples += @($receipt.selected_pages | Where-Object { $_ -notin $samples } | Select-Object -First 1)
+            if ($samples.Count) { $arguments += @('--pages') + $samples }
+        }
         if ($Legacy) { $arguments += @('--legacy','--release',$Release) }
         & python @arguments | Out-Host
         $code = $LASTEXITCODE
@@ -324,6 +339,7 @@ try {
         '--baseline',$Baseline,'--legacy-site',$LegacySite,'--output',$rebuilt,'--report',$rebuiltReport)
     if ($Pages) { $buildArguments += @('--pages') + $Pages }
     if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
+    if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
     TimedChecked 'python' $buildArguments 'build_seconds'
     $rebuiltProof = ReadJson $rebuiltReport
     if ($rebuiltProof.geometry_path -ne $Geometry -or $rebuiltProof.geometry_sha256 -cne $receipt.geometry_sha256) {
@@ -363,7 +379,13 @@ try {
     $rebuiltIdentity.accepted_pages = $acceptedEvidence
     SaveJson (Join-Path $rebuilt 'release-manifest.json') $rebuiltIdentity
     ReplaceRelease $rebuilt 'staged-previous-production'
-    Prepare (Join-Path $repoRoot 'site-release') (Join-Path $RunRoot 'staged-preparation.json') $rebuiltReport
+    # The baseline may itself be site-release. Its old bytes have now been
+    # deliberately replaced; producer checks are bound to rebuilt-preparation.
+    Checked 'python' @('scripts/prepare-typeset-release.py','stage-check',
+        '--release',(Join-Path $repoRoot 'site-release'),'--build-report',$BuildReport,
+        '--preparation',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$rollbackRef,
+        '--expected-manifest',(Join-Path $rebuilt 'release-manifest.json'),
+        '--output',(Join-Path $RunRoot 'staged-preparation.json'))
     CommitRelease 'Publish Claude-reviewed typeset static release'
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $state.status = 'push_requested'

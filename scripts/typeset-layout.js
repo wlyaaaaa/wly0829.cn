@@ -1,4 +1,58 @@
 /* Manifest geometry is normalized against each complete PNG, never cropped. */
+const typesetReadingState={width:innerWidth,height:innerHeight,revision:0,saved:null};
+// Layout coordinates exclude entrance/parallax transforms and span all image parts.
+function readingScreenGeometry(el){
+ let top=0;for(let node=el;node;node=node.offsetParent)top+=node.offsetTop;
+ return {top,height:el.offsetHeight};
+}
+function rememberReadingPosition(){
+ // A resize can deliver a scroll event before its resize event. Keep the old
+ // reading point until the new manifest layout has finished replacing it.
+ if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return;
+ const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
+ const el=[...document.querySelectorAll('.screen')].find(s=>{const r=readingScreenGeometry(s);return r.height&&r.top+r.height>scrollY+offset;});
+ if(el){const r=readingScreenGeometry(el);readingPosition={id:el.dataset.screen,fraction:(scrollY+offset-r.top)/r.height,atTop:scrollY<2};}else readingPosition=null;
+}
+function cancelReadingResize(){
+ const revision=++typesetReadingState.revision;
+ if(resizeFrame)cancelAnimationFrame(resizeFrame);resizeFrame=0;
+ if(resizing)layout();
+ resizing=false;typesetReadingState.saved=null;
+ typesetReadingState.width=innerWidth;typesetReadingState.height=innerHeight;
+ return revision;
+}
+function resizeLayout(){
+ if(!resizing){typesetReadingState.saved=readingPosition;resizing=true;}
+ const revision=++typesetReadingState.revision,saved=typesetReadingState.saved;
+ if(resizeFrame)cancelAnimationFrame(resizeFrame);
+ resizeFrame=requestAnimationFrame(()=>{
+  resizeFrame=0;layout();
+  const el=saved&&[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===saved.id);
+  // Manifest aspect ratios reserve dimensions before downloads. Decode the
+  // destination screen, then let shared header/TOC layout settle before placing.
+  const images=el?[...el.querySelectorAll('.typeset-part:not([hidden]) picture img')]:[];
+  Promise.all([document.fonts.ready,...images.map(load)]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+   if(revision!==typesetReadingState.revision)return;
+   if(saved?.atTop)scrollTo({top:0,behavior:'instant'});
+   else if(el&&saved){
+    const r=readingScreenGeometry(el),top=Math.max(0,r.top+r.height*saved.fraction-updateAnchorOffset());
+    const needed=Math.max(0,top+innerHeight-document.documentElement.scrollHeight);
+    if(needed)document.body.style.paddingBottom=(parseFloat(getComputedStyle(document.body).paddingBottom)||0)+Math.ceil(needed)+'px';
+    scrollTo({top,behavior:'instant'});
+   }
+   resizing=false;typesetReadingState.saved=null;
+   typesetReadingState.width=innerWidth;typesetReadingState.height=innerHeight;
+   rememberReadingPosition();window.SiteToc?.update();
+  })));
+ });
+}
+document.addEventListener('click',event=>{
+ const node=event.target instanceof Element?event.target:event.target?.parentElement;
+ const link=node?.closest('a[href]');
+ if(node?.closest('.back-to-top')||(link&&link.hash&&link.hash!=='#menu'&&link.origin===location.origin&&link.pathname===location.pathname))cancelReadingResize();
+},true);
+for(const event of ['wheel','touchstart'])addEventListener(event,cancelReadingResize,{passive:true});
+addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))cancelReadingResize();});
 function installTypeset(section,screen){
  const mobile=innerWidth<768,mode=mobile?'v':'h';
  section.style.aspectRatio='auto';section.style.height='';section.dataset.layout=mode;
