@@ -1,0 +1,16 @@
+/* 仅由 cockpit、computer-access、mcp 的原生控件运行件使用。 */
+.b2-slot[data-state]::before,.b2-slot p[data-state]::before{content:"";display:inline-block;flex-shrink:0;width:.55em;height:.55em;border:1px solid #89958e;border-radius:50%;margin:0 .4em .2em;background:transparent}
+.b2-slot[data-state=ok]::before,.b2-slot p[data-state=ok]::before{background:#4b996c;border-color:#4b996c}
+.b2-slot[data-state=closed]::before,.b2-slot p[data-state=closed]::before{background:#89958e}
+.b2-slot[data-state=warn]::before,.b2-slot[data-state=loading]::before,.b2-slot p[data-state=warn]::before{background:#c79535;border-color:#c79535}
+.b2-slot[data-state=error]::before,.b2-slot p[data-state=error]::before{background:#b04a42;border-color:#b04a42}
+input.b2-slot::before,.b2-slot:has(iframe)::before,.b2-slot:has(p[data-state])::before{display:none}
+.b2-image-action[data-b2-action=submit]{font:inherit;color:#245e49;background:#fff;padding:2px 6px;line-height:1.2}
+.b2-slot[data-state=closed],.b2-slot p[data-state=closed]{color:#68766f}
+.b2-slot p[data-state=warn]{color:#946c16}.b2-slot p[data-state=error]{color:#9d3333}
+.b2-global-toast[data-state=warn]{color:#946c16;border-color:#c79535;background:#fffdf6}
+.b2-global-toast[data-state=error]{color:#9d3333;border-color:#b04a42;background:#fff8f6}
+.b2-global-toast[data-state=unknown]{color:#68766f;background:#f8faf9}
+.b2-slot [data-highlight=true]{outline:2px solid #388961;outline-offset:2px;border-radius:5px}
+.b2-results{position:fixed;inset:0 0 0 auto;margin:0;width:min(700px,calc(100vw - 32px));max-height:100vh;border-radius:18px 0 0 18px}
+.b2-global-toast>button{float:right;margin-left:12px;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}
