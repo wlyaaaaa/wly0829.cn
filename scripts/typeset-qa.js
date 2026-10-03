@@ -26,6 +26,12 @@
   await Promise.race([win.SiteAudit.ready(),sleep(25000).then(()=>{throw Error('image decode timeout');})]);
   await sleep(options.audit===false?0:80);return {win,doc};
  }
+ async function closeDialog(dialog,button){
+  if(!dialog?.open||!button)return;
+  // Native close handlers restore focus/reading position asynchronously.
+  // Finish that real event before the next independent interaction check.
+  await new Promise((resolve,reject)=>{const closed=()=>{clearTimeout(timer);resolve();},timer=setTimeout(()=>{dialog.removeEventListener('close',closed);reject(Error('native dialog close timeout'));},5000);dialog.addEventListener('close',closed,{once:true});button.click();});
+ }
  async function check(url,width){
   const{win,doc}=await load(url,width),issues=[];
   const d=JSON.parse(doc.querySelector('#page-data').textContent);
@@ -102,13 +108,14 @@
   // image decoding runs. Expand the real viewport after attaching observers.
   const {win,doc}=await load(url,width,{audit:false,initialHeight:1}),data=JSON.parse(doc.querySelector('#page-data').textContent),issues=[];
   const observed=new Set(),samples=[],sampleIds=new Set(),rules=cssRules(doc);
-  const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true;
+  const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null;
   const stateObserved={normal_branch:new URL(win.location.href).searchParams.get('audit')!=='1'&&doc.body.dataset.audit!=='true',reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,hidden:doc.hidden};
   if(!data.typeset)issues.push('normal route did not select the current typeset page');
   if(!stateObserved.normal_branch)issues.push('normal branch unexpectedly entered audit mode');
   if(stateObserved.reduced_motion||stateObserved.hidden)issues.push('normal effects require visible page and no reduced motion');
   function capture(){
    const animations=doc.getAnimations().filter(a=>a.playState==='running');running=Math.max(running,animations.length);
+   if(doc.body.dataset.sampleDepth==='on'&&win.SiteSamples?.options.depth&&[...doc.querySelectorAll('.typeset-part:not([hidden])')].some(el=>el.style.getPropertyValue('--sample-y')&&win.getComputedStyle(el).translate!=='none'))observed.add('depth');
    if(doc.querySelector('.ambient-motion .watercolour-wash')?.getAnimations().some(a=>a.playState==='running'))observed.add('ambient');
    for(const el of doc.querySelectorAll('.sample-overlay,.entering,.sample-seam,.sample-updated')){
     let kind=el.classList.contains('sample-card')?'cards':el.classList.contains('number-roll')?'numbers':el.classList.contains('status-pulse')?'dots':el.classList.contains('arrow-flow')?'arrows':el.classList.contains('entering')?'screen_enter':el.classList.contains('sample-seam')?'seam':el.classList.contains('sample-updated')?'update':null;
@@ -152,7 +159,6 @@
      for(const y of unique(positions.map(n=>Math.round(n)))){const b=host.getBoundingClientRect();win.scrollTo({top:Math.max(0,win.scrollY+b.top+y-250),behavior:'instant'});await sleep(100);capture();}
     }
    }
-   if(doc.body.dataset.sampleDepth==='on'&&win.SiteSamples?.options.depth&&[...doc.querySelectorAll('.typeset-part:not([hidden])')].some(el=>el.style.getPropertyValue('--sample-y')&&win.getComputedStyle(el).translate!=='none'))observed.add('depth');
    const slot=doc.querySelector('.typeset-part:not([hidden]) .slot[data-slot],.typeset-part:not([hidden]) .b2-slot[data-b2-slot]:not(input)');
    if(slot){const text=slot.querySelector('span'),previous=text?.textContent,title=slot.getAttribute('title'),marker=doc.createTextNode(' · QA');
     {const b=slot.getBoundingClientRect();win.scrollTo({top:Math.max(0,win.scrollY+b.top-250),behavior:'instant'});await sleep(100);capture();
@@ -166,21 +172,21 @@
    const cards=[...doc.querySelectorAll('.typeset-card-feedback,.raster-card,.typeset-screen.shape-card:has(.card-main)')];
    if(cards.some(card=>feedbackRules(card,rules).some(rule=>rule.transform&&rule.transform!=='none'||rule.outline||rule.box_shadow&&rule.box_shadow!=='none'))&&!doc.body.classList.contains('motion-off'))observed.add('card_feedback');
    const menu=doc.querySelector('#menu'),menuTrigger=doc.querySelector('#open-menu,a[href="#menu"]'),menuClose=doc.querySelector('.close-menu');
-   if(win.SiteToc?.update&&menuTrigger&&menu&&menuClose){menuTrigger.click();const opened=menu.open;menuClose.click();if(opened&&!menu.open&&win.SiteToc.update().entries.length)observed.add('navigation');}
+   if(win.SiteToc?.update&&menuTrigger&&menu&&menuClose){menuTrigger.click();const opened=menu.open;await closeDialog(menu,menuClose);if(opened&&!menu.open&&win.SiteToc.update().entries.length)observed.add('navigation');}
    const viewer=doc.querySelector('#image-viewer'),viewerImage=doc.querySelector('.typeset-part:not([hidden]) picture img');
-   if(win.SiteImageViewer?.openGallery&&viewerImage&&viewer){win.SiteImageViewer.openGallery([{src:viewerImage.src,title:'本地程序验收'}]);const opened=viewer.open&&!!viewer.querySelector('.viewer-stage img').getAttribute('src');viewer.querySelector('.viewer-close')?.click();if(opened&&!viewer.open)observed.add('viewer');}
-   if(win.SiteBrief?.open){win.SiteBrief.open();const brief=doc.querySelector('#ai-brief'),goal=brief?.querySelector('input[name=goal]');if(goal){goal.value='核对当前页面';goal.dispatchEvent(new win.Event('input',{bubbles:true}));if(brief.open&&!brief.querySelector('.brief-copy').disabled&&brief.querySelector('.brief-preview').textContent.length<=150)observed.add('brief');brief.querySelector('.brief-close').click();}}
+   if(win.SiteImageViewer?.openGallery&&viewerImage&&viewer){win.SiteImageViewer.openGallery([{src:viewerImage.src,title:'本地程序验收'}]);const opened=viewer.open&&!!viewer.querySelector('.viewer-stage img').getAttribute('src');await closeDialog(viewer,viewer.querySelector('.viewer-close'));if(opened&&!viewer.open)observed.add('viewer');}
+   if(win.SiteBrief?.open){win.SiteBrief.open();const brief=doc.querySelector('#ai-brief'),goal=brief?.querySelector('input[name=goal]');if(goal){goal.value='核对当前页面';goal.dispatchEvent(new win.Event('input',{bubbles:true}));if(brief.open&&!brief.querySelector('.brief-copy').disabled&&brief.querySelector('.brief-preview').textContent.length<=150)observed.add('brief');await closeDialog(brief,brief.querySelector('.brief-close'));}}
    for(const el of doc.querySelectorAll('.typeset-part:not([hidden]) .typeset-screenshot')){
     const range=el.querySelector('input[type=range]'),trigger=range?el.querySelector('.typeset-compare-open'):el;
     if(range){const value=range.value;range.value='27';range.dispatchEvent(new win.Event('input',{bubbles:true}));if(el.style.getPropertyValue('--compare-position')==='27%')observed.add('compare');range.value=value;range.dispatchEvent(new win.Event('input',{bubbles:true}));}
-    trigger?.click();if(viewer?.open&&viewer.querySelector('.viewer-stage img').getAttribute('src'))observed.add('screenshots');viewer?.querySelector('.viewer-close')?.click();
+    trigger?.click();if(viewer?.open&&viewer.querySelector('.viewer-stage img').getAttribute('src'))observed.add('screenshots');await closeDialog(viewer,viewer?.querySelector('.viewer-close'));
    }
    const footer=doc.querySelector('footer'),signature=doc.querySelector('.footer-signature-trigger');
    if(footer&&signature&&typeof signature.onclick==='function'){win.scrollTo({top:doc.documentElement.scrollHeight,behavior:'instant'});signature.click();for(let n=0;n<20;n++){if(doc.querySelector('.footer-landscape.is-celebrating')||doc.querySelector('.footer-bubble:not([hidden])')){observed.add('footer_signature');break;}await sleep(30);}}
    const top=doc.querySelector('.back-to-top');
-   if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;top.click();for(let n=0;n<45&&win.scrollY>2;n++)await sleep(40);if(before>2&&win.scrollY<=2)observed.add('back_top');}
+   if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<45&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
    capture();win.scrollTo({top:0,behavior:'instant'});
-   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,preserved:[...observed],samples,issues:unique(issues)};
+   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
   }finally{observer.disconnect();}
  }
  async function checkEffects(entry){
@@ -200,27 +206,73 @@
    try{const response=await fetch(url,{cache:'no-store'}),buffer=await response.arrayBuffer();item.http_status=response.status;item.bytes=buffer.byteLength;item.sha256=await hashBytes(buffer);if(response.status===200&&item.bytes===item.expected_bytes&&item.sha256===item.expected_sha256)item.status='pass';}catch(error){item.issue=String(error);}files.push(item);
   }return files;
  }
+ function videoPosition(win,doc,section){
+  const r=section?.getBoundingClientRect();
+  return {scroll_y:win.scrollY,scroll_top:doc.scrollingElement?.scrollTop??null,scroll_height:doc.documentElement.scrollHeight,viewport_width:win.innerWidth,viewport_height:win.innerHeight,section_rect:r?{top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}:null,section_visible:!!r&&!!section.getClientRects().length&&r.bottom>0&&r.top<win.innerHeight};
+ }
+ async function positionVideo(win,doc,section,offscreen){
+  // Resize/layout restoration can run after a fixed timeout, particularly
+  // when several QA tabs decode images together. Exercise real scrolling and
+  // wait for the requested position and rectangle to stay stable instead.
+  const samples=[];let previous=null,stable=0,target=0;
+  for(let n=0;n<30;n++){
+   target=offscreen?Math.max(0,doc.documentElement.scrollHeight-win.innerHeight):0;
+   if(n===0||Math.abs(win.scrollY-target)>1)win.scrollTo({top:target,behavior:'instant'});
+   await sleep(80);const p=videoPosition(win,doc,section);samples.push(p);
+   const placed=p.viewport_height===1000&&Math.abs(p.scroll_y-target)<=1&&(!offscreen||!p.section_visible);
+   const unchanged=previous&&Math.abs(p.scroll_y-previous.scroll_y)<=1&&p.scroll_height===previous.scroll_height&&p.viewport_height===previous.viewport_height&&p.section_rect&&previous.section_rect&&Math.abs(p.section_rect.top-previous.section_rect.top)<=1&&Math.abs(p.section_rect.bottom-previous.section_rect.bottom)<=1;
+   stable=placed?(unchanged?stable+1:1):0;previous=p;
+   if(stable>=3)return {method:'native_scroll_and_stable_geometry',requested_scroll_y:target,stable:true,samples};
+  }
+  return {method:'native_scroll_and_stable_geometry',requested_scroll_y:target,stable:false,samples};
+ }
+ async function waitHeroPlaying(win,doc){
+  for(let n=0;n<180;n++){const v=doc.querySelector('video.hero-video');if(v&&!v.hidden&&!v.paused&&v.readyState>=2&&win.SiteHero?.phase==='playing')return true;await sleep(80);}return false;
+ }
+ async function waitHeroStopped(win,doc){
+  const started=Date.now(),samples=[];
+  for(let n=0;n<30;n++){
+   const v=doc.querySelector('video.hero-video'),phase=win.SiteHero?.phase||null;
+   samples.push({elapsed_ms:Date.now()-started,phase,attached:!!v,video_paused:v?.paused??null,video_hidden:v?.hidden??null,current_time:v?.currentTime||0});
+   if(phase==='image'&&(!v||v.paused&&v.hidden))return {observed:true,samples};
+   await sleep(80);
+  }
+  return {observed:false,samples};
+ }
  async function videoGate(entry,caseName){
   const width=caseName==='below_width'?1023:caseName==='portrait'?390:1440,expectedPlaying=caseName==='desktop';
   const {win,doc}=await load(entry.url,width,{audit:false,initialHeight:1});
   const data=JSON.parse(doc.querySelector('#page-data').textContent),section=doc.querySelector('.typeset-screen .typeset-part[data-orientation=h]')||doc.querySelector('.screen');
-  frame.height='1000';await sleep(180);
-  // The site's real resize handler restores reading position in rAF. Scroll
-  // after that handler, otherwise its restoration can undo the offscreen test.
-  win.scrollTo({top:caseName==='offscreen'?doc.documentElement.scrollHeight:0,behavior:'instant'});
+  frame.height='1000';
+  const visiblePosition=await positionVideo(win,doc,section,false);let beforeScroll=null;
+  if(caseName==='offscreen'){
+   const started=await waitHeroPlaying(win,doc),v=doc.querySelector('video.hero-video');
+   beforeScroll={...videoPosition(win,doc,section),playing:started,phase:win.SiteHero?.phase||null,current_time:v?.currentTime||0,video_paused:v?.paused??null,video_hidden:v?.hidden??null};
+  }
+  const placement=caseName==='offscreen'?await positionVideo(win,doc,section,true):visiblePosition;
   const gate={case:caseName,width:win.innerWidth,height:win.innerHeight,expected_mounted:expectedPlaying,expected_playing:expectedPlaying,mounted:false,playing:false,attached:false,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:false,phase:win.SiteHero?.phase||null,time_advanced:false,status:'fail',issues:[]};
   const spec=entry.video_expected;
+  gate.scroll_placement=placement;gate.before_scroll=beforeScroll;
+  if(!placement.stable)gate.issues.push('native video viewport/scroll geometry did not settle');
+  if(caseName==='offscreen'&&(!beforeScroll?.playing||!beforeScroll.section_visible||beforeScroll.video_paused||beforeScroll.video_hidden))gate.issues.push('offscreen transition did not start from actual visible playback');
   if(!data.video||!equal(data.video.rect,spec.rect)||data.video.src!==spec.src||data.video.mask!==spec.mask)gate.issues.push('normal hero does not bind expected video/mask/geometry');
   const condition=()=>caseName==='reduced_motion'?win.matchMedia('(prefers-reduced-motion:reduce)').matches:caseName==='document_hidden'?doc.hidden:!win.matchMedia('(prefers-reduced-motion:reduce)').matches&&!doc.hidden;
   if(!condition())gate.issues.push('required native browser condition not observed');
-  if(expectedPlaying){for(let n=0;n<180;n++){const video=doc.querySelector('video.hero-video');if(video&&!video.hidden&&!video.paused&&video.readyState>=2&&win.SiteHero?.phase==='playing')break;await sleep(80);}}
-  else await sleep(220);
-  const video=doc.querySelector('video.hero-video'),before=video?.currentTime||0;await sleep(350);
+  if(expectedPlaying)await waitHeroPlaying(win,doc);
+  else{gate.pause_observation=await waitHeroStopped(win,doc);if(!gate.pause_observation.observed)gate.issues.push('native hero pause/hide response was not observed');}
+  const video=doc.querySelector('video.hero-video'),before=video?.currentTime||0;gate.position_before=videoPosition(win,doc,section);
+  const observedAt=Date.now();gate.playback_samples=[{elapsed_ms:0,current_time:before}];
+  await sleep(350);gate.playback_samples.push({elapsed_ms:Date.now()-observedAt,current_time:video?.currentTime||0});
+  // Decoder startup under concurrent page checks may outlast one fixed sample.
+  // Require real playback advancement within a bound; never infer it from play().
+  while(expectedPlaying&&video&&Math.abs(video.currentTime-before)<=.01&&Date.now()-observedAt<2000){await sleep(100);gate.playback_samples.push({elapsed_ms:Date.now()-observedAt,current_time:video.currentTime});}
+  gate.position_after=videoPosition(win,doc,section);
   const rect=section?.getBoundingClientRect();Object.assign(gate,{width:win.innerWidth,height:win.innerHeight,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:!!rect&&!!section.getClientRects().length&&rect.bottom>0&&rect.top<win.innerHeight,attached:!!video,mounted:!!video&&!video.hidden&&win.getComputedStyle(video).display!=='none',playing:!!video&&!video.hidden&&!video.paused&&!video.ended&&video.readyState>=2,phase:win.SiteHero?.phase||null,time_advanced:!!video&&Math.abs(video.currentTime-before)>.01,current_time_before:before,current_time_after:video?.currentTime||0,video_paused:video?video.paused:null,video_hidden:video?video.hidden:null});
   if(gate.mounted!==expectedPlaying||gate.playing!==expectedPlaying||gate.time_advanced!==expectedPlaying||expectedPlaying&&!gate.attached)gate.issues.push('video mount/play result differs from required condition');
   if(!expectedPlaying&&gate.attached&&(!gate.video_paused||!gate.video_hidden))gate.issues.push('disallowed video remained active in the retained DOM');
   if(gate.phase!==(expectedPlaying?'playing':'image'))gate.issues.push('hero runtime phase is unexpected: '+gate.phase);
   if(caseName==='offscreen'&&gate.section_visible)gate.issues.push('hero was not outside the viewport');
+  if(caseName==='offscreen'&&(!gate.position_before.section_rect||!gate.position_after.section_rect||Math.abs(gate.position_after.scroll_y-gate.position_before.scroll_y)>1||Math.abs(gate.position_after.section_rect.top-gate.position_before.section_rect.top)>1||Math.abs(gate.position_after.section_rect.bottom-gate.position_before.section_rect.bottom)>1))gate.issues.push('offscreen scroll/hero rectangle changed during playback observation');
   if(caseName==='desktop'&&(!gate.section_visible||gate.portrait||gate.hidden||gate.reduced_motion))gate.issues.push('desktop condition was not visible 1440 landscape');
   if(caseName==='portrait'&&!gate.portrait)gate.issues.push('portrait media condition was not observed');
   if(!condition())gate.issues.push('native browser condition changed before observation completed');

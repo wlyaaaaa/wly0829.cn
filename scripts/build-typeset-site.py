@@ -153,7 +153,14 @@ def bind_card_feedback(part, old, orientation):
         primary=[card for card in matches if card.get('has_primary')]
         chosen=matches[0]if len(hrefs)==1 and matches else primary[0]if len({c['href']for c in primary})==1 else None
         if chosen:result.append({'id':part['image']+'-card-'+str(len(result)),'rect':box,'href':chosen['href'],'text':chosen.get('text',''),'background':chosen.get('background','#fff')})
-    return result
+    # Producer `.card` rectangles include grouping frames and their closed child
+    # cards. One legacy destination must not create two overlapping whole-card
+    # anchors from those nested rectangles; retain the specific closed card.
+    def contains(outer,inner):
+        return outer[0]-.001<=inner[0] and outer[1]-.001<=inner[1] and inner[0]+inner[2]<=outer[0]+outer[2]+.001 and inner[1]+inner[3]<=outer[1]+outer[3]+.001
+    return [card for card in result if not any(
+        child['href']==card['href'] and child['rect'][2]*child['rect'][3]<card['rect'][2]*card['rect'][3]-.000001
+        and contains(card['rect'],child['rect']) for child in result)]
 
 def video_position(spec, old_screen, illustrations, page, args):
     if not illustrations:raise ValueError('Existing video has no measured illustration slot: '+page)
@@ -161,23 +168,41 @@ def video_position(spec, old_screen, illustrations, page, args):
     video_box=[r[0]*ow+crop[0],r[1]*oh+crop[1],r[2]*ow,r[3]*oh]
     manifest_path=args.typeset_root.parent/'typeset-assets'/page/'manifest.jsonl'
     assets=[json.loads(line)for line in manifest_path.read_text('utf8').splitlines()if line.strip()] if manifest_path.exists()else[]
-    chosen=None;source_box=None
+    chosen=None;matched_asset=None;source_box=None
     for item in illustrations:
         match=next((a for a in assets if a.get('screen_id')==old_screen['id']and a.get('role')=='illustration'and a.get('sha256')==item.get('reference_sha256')),None)
-        if match:chosen=item;source_box=match.get('source_box')or match.get('box');break
+        if match:chosen=item;matched_asset=match;break
     if chosen is None:
-        chosen=max(illustrations,key=lambda x:x['rect'][2]*x['rect'][3])
+        if len(illustrations)!=1:raise ValueError('Existing video has no unique measured illustration slot: '+page)
+        chosen=illustrations[0]
     ir=chosen['rect'];nw,nh=chosen['natural_size'];scale=min(ir[2]/nw,ir[3]/nh)
     content=[ir[0]+(ir[2]-nw*scale)/2,ir[1]+(ir[3]-nh*scale)/2,nw*scale,nh*scale]
+    if matched_asset:
+        candidate_box=matched_asset.get('source_box')or matched_asset.get('box')
+        source_name=Path(matched_asset.get('source_image','')).stem
+        # A reused PNG may have been cut from the portrait design. Its SHA identifies
+        # the artwork, but does not make portrait crop coordinates landscape coordinates.
+        same_orientation=re.search(re.escape(old_screen['id'])+r'-h(?:\d+|-|$)',source_name) is not None
+        if candidate_box and same_orientation:
+            x0,y0,x1,y1=candidate_box
+            if x0<=video_box[0]+1 and y0<=video_box[1]+1 and x1>=video_box[0]+video_box[2]-1 and y1>=video_box[1]+video_box[3]-1:
+                source_box=candidate_box
     if source_box:
         x0,y0,x1,y1=source_box;sx=content[2]/(x1-x0);sy=content[3]/(y1-y0)
         box=[content[0]+(video_box[0]-x0)*sx,content[1]+(video_box[1]-y0)*sy,video_box[2]*sx,video_box[3]*sy]
-        method='Same illustration PNG SHA and original crop box'
-    else:
+        vw,vh=spec.get('size',[video_box[2],video_box[3]])
+        if abs(box[2]/box[3]/(vw/vh)-1)>.01:source_box=None
+        method='Same illustration PNG SHA and landscape crop containing the original video'
+    if not source_box:
         vw,vh=spec.get('size',[video_box[2],video_box[3]]);fit=min(content[2]/vw,content[3]/vh)
         box=[content[0]+(content[2]-vw*fit)/2,content[1]+(content[3]-vh*fit)/2,vw*fit,vh*fit]
         method='Existing video retained in measured new illustration slot, aspect ratio preserved'
-    return box,{'method':method,'illustration_sha256':chosen.get('reference_sha256'),'illustration_rect_px':ir,'video_rect_px':box}
+    # Normalized legacy rectangles have pixel rounding; never stretch the movie to it.
+    fit=min(box[2]/vw,box[3]/vh)
+    box=[box[0]+(box[2]-vw*fit)/2,box[1]+(box[3]-vh*fit)/2,vw*fit,vh*fit]
+    return box,{'method':method,'illustration_sha256':chosen.get('reference_sha256'),'illustration_rect_px':ir,
+                'illustration_content_rect_px':content,'video_rect_px':box,'source_crop_used':source_box,
+                'source_image':matched_asset.get('source_image')if matched_asset else None}
 
 def screenshot(hot, source):
     entries = source.get('screenshots',[])

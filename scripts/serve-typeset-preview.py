@@ -150,7 +150,8 @@ def main():
                 d['summary']={'passed':sum(p.get('status')=='pass'for p in d['pages'].values()),'failed':sum(p.get('status')=='fail'for p in d['pages'].values()),'checked':len(d['pages']),'unverified':[p for p in build['pages']if p not in d['pages']]}
                 result.parent.mkdir(parents=True,exist_ok=True);result.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
             return self.send('{"saved":true}')
-    print('Preview http://127.0.0.1:'+str(args.port)+' ; DOM acceptance /__typeset/qa',flush=True)
-    ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
+    server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
+    print('Preview http://127.0.0.1:'+str(server.server_port)+' ; DOM acceptance /__typeset/qa',flush=True)
+    server.serve_forever()
 
 if __name__=='__main__':main()
