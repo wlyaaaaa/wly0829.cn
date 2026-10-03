@@ -1,0 +1,660 @@
+"""Build manifest-driven image pages over an exact production baseline; never deploy."""
+from __future__ import annotations
+import argparse
+from collections import defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone, timedelta
+import hashlib
+import html
+from html.parser import HTMLParser
+import importlib.util
+import io
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import struct
+import sys
+import time
+import uuid
+from urllib.parse import urlsplit, unquote
+
+HERE = Path(__file__).resolve().parent
+spec = importlib.util.spec_from_file_location('hybrid', HERE/'hybrid-release.py')
+hybrid = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(hybrid)
+DATA = re.compile(r'(<script\b[^>]*\bid="page-data"[^>]*>)(.*?)(</script>)', re.S)
+BJT = timezone(timedelta(hours=8))
+ASSET_CACHE = None
+
+def read(path):
+    return json.loads(Path(path).read_text('utf-8-sig'))
+
+def write(path, value):
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
+
+def stamp(path):
+    path = Path(path)
+    return {'sha256':hybrid.digest(path), 'bytes':path.stat().st_size}
+
+def text_bound(path):
+    payload=Path(path).read_bytes()
+    return payload.decode('utf-8-sig'),{'sha256':hashlib.sha256(payload).hexdigest(),'bytes':len(payload)}
+
+def json_bound(path):
+    text,proof=text_bound(path)
+    return json.loads(text),proof
+
+def png_size(path):
+    with Path(path).open('rb') as stream:
+        header = stream.read(24)
+    if header[:8] != b'\x89PNG\r\n\x1a\n' or header[12:16] != b'IHDR':
+        raise ValueError('Invalid PNG header: '+str(path))
+    return list(struct.unpack('>II', header[16:24]))
+
+class HotMetadata(HTMLParser):
+    """Restore slot sub-parts that the producer omitted from links.json."""
+    def __init__(self, text):
+        super().__init__(convert_charrefs=True)
+        self.groups = defaultdict(list)
+        self.feed(text)
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        if d.get('data-hot'):
+            self.groups[(d['data-hot'], d.get('data-href',''))].append(d)
+
+def quality(path, report, proof):
+    records = report.get('screens', [])
+    fail = [x for x in records if x.get('status') == 'fail' or x.get('pass') is False and x.get('issues')]
+    pending = [x for x in records if x.get('status') == 'incomplete' or x.get('incomplete')]
+    legacy = any('status' not in x for x in records if not x.get('skipped'))
+    state = 'fail' if fail else 'incomplete' if pending or legacy else 'pass'
+    return {'status':state, 'report_path':str(path.resolve()), 'report_sha256':proof['sha256'],
+            'failed_screens':[x.get('screen','')+'-'+x.get('orientation','') for x in fail],
+            'incomplete_screens':[x.get('screen','')+'-'+x.get('orientation','') for x in pending],
+            'legacy_evidence':legacy, 'note':'旧质量记录未按新闸门验证' if legacy else ''}
+
+def action_for(hot, metadata, source, old):
+    key = hot.get('text') or hot['href'].split('::')[-1]
+    matches = [x for x in old.get('layouts',{}).get('h',{}).get('native_actions',[]) if x.get('text') == key]
+    if not matches:
+        matches = [x for x in old.get('layouts',{}).get('v',{}).get('native_actions',[]) if x.get('text') == key]
+    if len(matches) > 1:
+        definitions = source.get('buttons',[])
+        where = metadata.get('data-button-where') or hot['href'].split('::')[0]
+        candidates = [i for i,x in enumerate(definitions) if x.get('text') == key and x.get('where') == where]
+        if len(candidates) == 1:
+            same = [i for i,x in enumerate(definitions) if x.get('text') == key]
+            return matches[same.index(candidates[0])]
+        definitions=[x for x in source.get('buttons',[]) if x.get('text')==key]
+        index=hot.get('occurrence',0)
+        if len(definitions)==len(matches) and index<len(matches):return matches[index]
+        return None
+    return matches[0] if matches else None
+
+def live_key(slot, part):
+    if slot == 'ca-form':
+        return {'duration':'ca-form-hours', 'totp':'ca-form-code', 'preview':'ca-form'}.get(part,slot)
+    if slot == 'cockpit-overall':
+        return 'cockpit-'+part if part.startswith('quick-') else slot
+    if slot == 'cockpit-security':
+        return {'personal-data':'cockpit-security','personal_data':'cockpit-security','unrestricted':'cockpit-security-unrestricted',
+                'windows':'cockpit-security-windows'}.get(part,slot)
+    return slot
+
+def old_effects(data):
+    screens=data.get('screens',[])
+    sampled=[s for s in screens if s.get('render_mode')not in {'source_text','text','card'}]
+    layouts=[lay for s in sampled for lay in s.get('layouts',{}).values()]
+    expected=['ambient','back_top','footer_signature','navigation','viewer','depth']
+    if any(s.get('shape')!='card'for s in screens[1:]):expected.append('screen_enter')
+    if any(s.get('shape')!='card'for s in sampled):expected.append('seam')
+    def floating_card(screen,layout):
+        if screen.get('shape')=='card':return False
+        excluded=[c['rect']for key in ['interactive_cards','card_text_only']for c in layout.get(key,[])]
+        for r in layout.get('cards',[]):
+            if not any(max(0,min(r[0]+r[2],q[0]+q[2])-max(r[0],q[0]))*max(0,min(r[1]+r[3],q[1]+q[3])-max(r[1],q[1]))>min(r[2]*r[3],q[2]*q[3])*.7 for q in excluded):return True
+        return False
+    if any(floating_card(s,l)for s in sampled for l in s.get('layouts',{}).values()):expected.append('cards')
+    for key in ['numbers','dots','arrows']:
+        if any(l.get(key)for l in layouts):expected.append(key)
+    if any(l.get('live')or l.get('native_live')for l in layouts):expected.extend(['live','update'])
+    if any(l.get('screenshots')for l in layouts):expected.append('screenshots')
+    if any(l.get('interactive_cards')for l in layouts)or any(s.get('shape')=='card'and any(link.get('whole')for l in s.get('layouts',{}).values()for link in l.get('links',[]))for s in screens):expected.append('card_feedback')
+    if data.get('kind')in{'project','frozen'}:expected.append('brief')
+    return expected
+
+def motion_part(geometry, image, size, start, padding):
+    result={'cards':[],'numbers':[],'dots':[],'arrows':[]}
+    def convert(r):
+        top=max(r[1],start);bottom=min(r[1]+r[3],start+size[1]-padding)
+        if bottom<=top:return None
+        return [max(0,r[0])/size[0],(top-start+padding)/size[1],min(r[2],size[0]-r[0])/size[0],(bottom-top)/size[1]]
+    for key in ['cards']:
+        for r in geometry.get(key,[]):
+            rect=convert(r)
+            if rect:result[key].append(rect)
+    for key in ['numbers','dots','arrows']:
+        for item in geometry.get(key,[]):
+            rect=convert(item if isinstance(item,list)else item['rect'])
+            if rect:result[key].append(rect if isinstance(item,list)else {**item,'rect':rect})
+    return result
+
+def bind_card_feedback(part, old, orientation):
+    legacy=old.get('layouts',{}).get(orientation,{}).get('interactive_cards',[])
+    result=[]
+    for box in part.get('cards',[]):
+        def inside(hot):
+            r=hot['rect'];return box[0]-.001<=r[0]+r[2]/2<=box[0]+box[2]+.001 and box[1]-.001<=r[1]+r[3]/2<=box[1]+box[3]+.001
+        hrefs={h['href']for h in part['links']if not h.get('invalid')and inside(h)}
+        matches=[card for card in legacy if card.get('href')in hrefs]
+        primary=[card for card in matches if card.get('has_primary')]
+        chosen=matches[0]if len(hrefs)==1 and matches else primary[0]if len({c['href']for c in primary})==1 else None
+        if chosen:result.append({'id':part['image']+'-card-'+str(len(result)),'rect':box,'href':chosen['href'],'text':chosen.get('text',''),'background':chosen.get('background','#fff')})
+    return result
+
+def video_position(spec, old_screen, illustrations, page, args):
+    if not illustrations:raise ValueError('Existing video has no measured illustration slot: '+page)
+    old=old_screen['layouts']['h'];r=spec['rect'];ow,oh=old['size'];crop=old.get('crop',[0,0,ow,oh])
+    video_box=[r[0]*ow+crop[0],r[1]*oh+crop[1],r[2]*ow,r[3]*oh]
+    manifest_path=args.typeset_root.parent/'typeset-assets'/page/'manifest.jsonl'
+    assets=[json.loads(line)for line in manifest_path.read_text('utf8').splitlines()if line.strip()] if manifest_path.exists()else[]
+    chosen=None;source_box=None
+    for item in illustrations:
+        match=next((a for a in assets if a.get('screen_id')==old_screen['id']and a.get('role')=='illustration'and a.get('sha256')==item.get('reference_sha256')),None)
+        if match:chosen=item;source_box=match.get('source_box')or match.get('box');break
+    if chosen is None:
+        chosen=max(illustrations,key=lambda x:x['rect'][2]*x['rect'][3])
+    ir=chosen['rect'];nw,nh=chosen['natural_size'];scale=min(ir[2]/nw,ir[3]/nh)
+    content=[ir[0]+(ir[2]-nw*scale)/2,ir[1]+(ir[3]-nh*scale)/2,nw*scale,nh*scale]
+    if source_box:
+        x0,y0,x1,y1=source_box;sx=content[2]/(x1-x0);sy=content[3]/(y1-y0)
+        box=[content[0]+(video_box[0]-x0)*sx,content[1]+(video_box[1]-y0)*sy,video_box[2]*sx,video_box[3]*sy]
+        method='Same illustration PNG SHA and original crop box'
+    else:
+        vw,vh=spec.get('size',[video_box[2],video_box[3]]);fit=min(content[2]/vw,content[3]/vh)
+        box=[content[0]+(content[2]-vw*fit)/2,content[1]+(content[3]-vh*fit)/2,vw*fit,vh*fit]
+        method='Existing video retained in measured new illustration slot, aspect ratio preserved'
+    return box,{'method':method,'illustration_sha256':chosen.get('reference_sha256'),'illustration_rect_px':ir,'video_rect_px':box}
+
+def screenshot(hot, source):
+    entries = source.get('screenshots',[])
+    if hot['href'].isdigit():
+        i = int(hot['href'])
+        return entries[i:i+1]
+    return [x for x in entries if x.get('compare') == hot['href']]
+
+def encode_png(path, effort=80):
+    """Lossless transport encoding; verify decoded RGBA bytes without viewing an image."""
+    from PIL import Image
+    payload=Path(path).read_bytes()
+    source_hash=hashlib.sha256(payload).hexdigest()
+    encoded=ASSET_CACHE/(source_hash+'.webp')
+    receipt=ASSET_CACHE/(source_hash+'.json')
+    if encoded.is_file() and receipt.is_file():
+        evidence=read(receipt)
+        if evidence.get('source_sha256')==source_hash and evidence.get('encoded_sha256')==hybrid.digest(encoded) and evidence.get('pixel_equal') is True and evidence.get('compression_effort',80)>=effort:return encoded
+    with Image.open(io.BytesIO(payload)) as image:
+        pixels=image.convert('RGBA')
+        if max(pixels.size)>16383:return Path(path)
+        pixel_hash=hashlib.sha256(pixels.tobytes()).hexdigest()
+        temp=ASSET_CACHE/(source_hash+'-'+uuid.uuid4().hex+'.webp')
+        pixels.save(temp,format='WEBP',lossless=True,quality=effort,exact=True,method=6)
+    with Image.open(temp) as decoded:
+        if hashlib.sha256(decoded.convert('RGBA').tobytes()).hexdigest()!=pixel_hash:
+            raise ValueError('Lossless encoding changed pixels: '+str(path))
+    if not encoded.exists() or temp.stat().st_size<encoded.stat().st_size:
+        os.replace(temp,encoded)
+    else:
+        # Keep the smaller verified encoding. This temp is recorded for ordinary task cleanup.
+        (ASSET_CACHE/'discarded').mkdir(exist_ok=True)
+        temp.rename(ASSET_CACHE/'discarded'/temp.name)
+    write(receipt,{'source_sha256':source_hash,'encoded_sha256':hybrid.digest(encoded),
+                   'decoded_rgba_sha256':pixel_hash,'pixel_equal':True,'compression_effort':effort})
+    return encoded
+
+def asset(path, candidate, category='images'):
+    path = Path(path)
+    actual=encode_png(path) if path.suffix.lower()=='.png' else path
+    if actual.stat().st_size>=path.stat().st_size:actual=path
+    name = hybrid.digest(actual)[:20]+'-'+path.stem+actual.suffix
+    rel = Path('_typeset')/category/name
+    dest = candidate/rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if not dest.exists():
+        shutil.copyfile(actual,dest)
+    return '/'+rel.as_posix()
+
+def bundle(text, candidate, label, suffix):
+    name = label+'-'+hashlib.sha256(text.encode('utf8')).hexdigest()[:20]+suffix
+    dest = candidate/'_typeset'/'runtime'/name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(text, encoding='utf8')
+    return '/_typeset/runtime/'+name
+
+def patch_app(text):
+    runtime = (HERE/'typeset-layout.js').read_text('utf8')
+    marker = 'function layout(){'
+    if text.count(marker) != 1:
+        raise ValueError('Unsupported legacy layout entry')
+    text = text.replace(marker,runtime+'\n'+marker,1)
+    needle = 'const section=document.querySelector(\'[data-screen="\'+s.id+\'"]\');'
+    if text.count(needle) != 1:
+        raise ValueError('Unsupported legacy screen selector')
+    text = text.replace(needle,needle+"if(s.render_mode==='typeset'){installTypeset(section,s);continue;}",1)
+    text = text.replace("function orientation(){return mq.matches?'v':'h';}","function orientation(){return page.typeset?(innerWidth<768?'v':'h'):(mq.matches?'v':'h');}")
+    text = text.replace("function offlineNotice(section,texts){", "function offlineNotice(section,texts){if(section.classList.contains('typeset-screen'))return;")
+    text = text.replace("if(!first.has(node.dataset.section))", "if(node.getClientRects().length&&!first.has(node.dataset.section))")
+    text = text.replace(" document.body.dataset.statusPhase=phase;", " displayTypesetStatus(last,phase,parse,page);\n document.body.dataset.statusPhase=phase;")
+    text = text.replace("s.render_mode==='source_text'||s.render_mode==='text'||s.shape==='card'||!!s.layouts.v", "s.render_mode==='typeset'||s.render_mode==='source_text'||s.render_mode==='text'||s.shape==='card'||!!s.layouts.v")
+    sample_start=text.index('/* 已选七项通用动效')
+    sample_end=text.index('/* 短续作说明',sample_start)
+    samples=text[sample_start:sample_end]
+    samples=samples.replace("document.querySelectorAll('.screen')","document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")
+    samples=samples.replace("document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])').forEach(s=>observer.observe(s))","document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part').forEach(s=>observer.observe(s))")
+    samples=samples.replace("s.classList.contains('shape-card')","(s.classList.contains('shape-card')||s.dataset.shape==='card')")
+    samples=samples.replace("s.closest('.screen')","(s.closest('.typeset-part')||s.closest('.screen'))")
+    samples=samples.replace("document.querySelectorAll('.slot[data-slot]')","document.querySelectorAll('.slot[data-slot],.b2-slot[data-b2-slot]')")
+    samples=samples.replace('s.dataset.slot','(s.dataset.slot||s.dataset.b2Slot)')
+    samples=samples.replace('(s.title||s.textContent).trim()',"(s.title||s.textContent||s.getAttribute('aria-label')||'').trim()")
+    samples=samples.replace("{subtree:true,childList:true,characterData:true});","{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['title','aria-label','data-state']});")
+    samples=samples.replace("if(on.dots)(l.dots||[]).forEach((r,i)=>{if(inView(s,r))candidates.push({key:'dot:'+i,rect:r});});","if(on.dots)(l.dots||[]).forEach((item,i)=>{const r=Array.isArray(item)?item:item.rect;if(inView(s,r))candidates.push({...(Array.isArray(item)?{}:item),key:'dot:'+i,rect:r});});")
+    dot_anchor="e.dataset.effectKey=a.key;if(arrow){"
+    dot_style="e.dataset.effectKey=a.key;if(!arrow&&a.shape){e.dataset.markerShape=a.shape;e.style.setProperty('--marker-colour',a.colour||'#198452');}if(arrow){"
+    if dot_anchor not in samples:raise ValueError('Unsupported legacy marker decoration')
+    samples=samples.replace(dot_anchor,dot_style)
+    text=text[:sample_start]+samples+text[sample_end:]
+    hero_start=text.index('/* 只播放人工标注的插画面片')
+    hero=text[hero_start:]
+    hero=hero.replace("section=document.querySelector('.screen'),hero=section?.querySelector('picture img')", "section=document.querySelector('.typeset-screen .typeset-part[data-orientation=h]')||document.querySelector('.screen'),hero=section?.querySelector('picture img')")
+    text=text[:hero_start]+hero
+    return text
+
+def patch_b2(text):
+    text = text.replace("document.querySelectorAll('.screen')", "document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")
+    text = text.replace("el.closest('.screen')", "el.closest('.typeset-part')||el.closest('.screen')")
+    text = text.replace("const section=el.closest('.typeset-part')||el.closest('.screen'),", "const section=(el.closest('.typeset-part')||el.closest('.screen')),")
+    text = text.replace("node.dataset.b2Slot=cell.slot;", "node.dataset.b2Slot=cell.slot;node.dataset.livePart=cell.live_part||'';node.dataset.hotId=cell.hot_id||'';node.dataset.typesetKind='live';")
+    text = text.replace("button.dataset.b2Action=entry.action;", "button.dataset.b2Action=entry.action;button.dataset.baseLabel=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';")
+    # Native lamp sub-parts use the same state provider as the summary, without repeating its copy.
+    text = text.replace("else el.textContent=valueRow.text;", "else if(el.dataset.livePart==='lamp'){el.setAttribute('aria-label',valueRow.text||'状态未知');el.classList.add('typeset-lamp');}else el.textContent=valueRow.text;")
+    text = text.replace("b.disabled=disabled;", "b.disabled=disabled;b.dataset.labelChanging=String(!!b.textContent&&b.textContent!==b.dataset.baseLabel);")
+    return text
+
+def local_deps(candidate, legacy, baseline):
+    """Copy only referenced shared assets, preserving the old release's immutable names."""
+    pending = list(candidate.rglob('*.html'))
+    seen = set()
+    while pending:
+        owner = pending.pop()
+        rel = owner.relative_to(candidate).as_posix()
+        if rel in seen:
+            continue
+        seen.add(rel)
+        for ref, navigation in hybrid.references(owner):
+            target = hybrid.local_reference(candidate,owner,ref)
+            if target is None or navigation and target.suffix == '.html':
+                continue
+            if not target.is_file():
+                original = legacy/target.relative_to(candidate)
+                if not original.is_file():
+                    original = baseline/target.relative_to(candidate)
+                if not original.is_file():
+                    raise ValueError('Referenced asset unavailable: '+str(target.relative_to(candidate)))
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(original,target)
+            if target.suffix in {'.js','.css','.html','.mjs'}:
+                pending.append(target)
+
+def build_page(name, records, args, candidate):
+    source_path = Path(records[0]['source_path'])
+    source,source_proof = json_bound(source_path)
+    url = source.get('url') or source.get('source_url') or ('/404.html' if name == '404' else '/'+name+'/')
+    if url == '/' or name == 'home':
+        raise ValueError('Homepage is excluded')
+    rel = hybrid.route_file(url)
+    base_html = args.legacy_site/rel
+    preview_only = name == 'github-profile'
+    if not base_html.exists() and preview_only:
+        base_html = args.legacy_site/'how-this-site/index.html'
+    templated=False
+    if base_html.exists():
+        initial_text,initial_proof=text_bound(base_html)
+        if DATA.search(initial_text) is None and source.get('kind')=='skill':
+            base_html=args.legacy_site/'skills/localocr/index.html';templated=True
+    if not base_html.exists():
+        raise FileNotFoundError('Page skeleton unavailable: '+str(base_html))
+    text,html_proof = text_bound(base_html)
+    if preview_only or templated:
+        original_assets='/'+base_html.parent.relative_to(args.legacy_site).as_posix()+'/assets/'
+        text=re.sub(r'(?<![\w/])assets/',original_assets,text)
+    text=re.sub(r'<link\b[^>]*\brel="preload"[^>]*\bas="image"[^>]*>','',text)
+    data = json.loads(DATA.search(text)[2])
+    expected_effects=old_effects(data);old_video=data.get('video');video_binding=None
+    if preview_only or templated:
+        expected_effects=['ambient','back_top','footer_signature','navigation','viewer','depth','screen_enter','seam'];old_video=None
+    original = {s['id']:s for s in data['screens']}
+    data.update({'page':name,'kind':source.get('kind',data['kind']),'title':source['title'],
+                 'url':url,'typeset':True,'video':None,'screens':[]})
+    # The current shared renderer uses native header/menu/footer and generic page navigation.
+    # Retired raster component payloads are not inputs to a manifest-driven page.
+    data['shared']['components']={}
+    data['shared'].get('art',{}).pop('source_frames',None)
+    if preview_only or templated:
+        data['neighbors'] = {}; data['project'] = None; data['family'] = 'projects'
+        if templated:data['family']='skills'
+    manifest_path = args.typeset_root/name/'page-manifest.json'
+    manifest,manifest_proof = json_bound(manifest_path)
+    inputs = {str(args.inventory.resolve()):args.inventory_proof,str(source_path.resolve()):source_proof,
+              str(manifest_path.resolve()):manifest_proof,str(base_html.resolve()):html_proof}
+    if args.snapshot_proof:inputs[str(args.snapshot_path)]=args.snapshot_proof
+    geometry_path=args.geometry
+    geometries={}
+    geometry_sha256=None
+    geometry_problem=None
+    if geometry_path and geometry_path.exists():
+        geo,geo_proof=json_bound(geometry_path);inputs[str(geometry_path)]=geo_proof
+        geometry_sha256=geo_proof['sha256']
+        if geo.get('geometry_version')==2:
+            geometries={(x['screen'],x['orientation']):x for x in geo['records']if x['page']==name}
+        else:geometry_problem='缺少生产视口一致的 version 2 动效位置量测'
+        if geo.get('fit_input'):
+            fit_proof=geo['fit_input'];inputs[fit_proof['path']]={'sha256':fit_proof['sha256'],'bytes':fit_proof['bytes']}
+    else:geometry_problem='缺少新排版动效位置量测'
+    issues = []
+    if geometry_problem:issues.append(geometry_problem)
+    video_asset_manifest=args.typeset_root.parent/'typeset-assets'/name/'manifest.jsonl'
+    if old_video and video_asset_manifest.exists():inputs[str(video_asset_manifest.resolve())]=stamp(video_asset_manifest)
+    expected = [s for s in source['screens'] if not s.get('hidden')]
+    if [s['id'] for s in expected] != [s['screen'] for s in manifest['screens']]:
+        issues.append('清单屏顺序/完整性与当前定稿不一致')
+    qpath = args.typeset_root/name/'report.json'
+    if qpath.exists():
+        qr,qp=json_bound(qpath);q=quality(qpath,qr,qp);inputs[str(qpath.resolve())]=qp
+    else:q={'status':'incomplete','note':'缺排版质量记录'}
+    main = []; seen_sections = set(); screen_count = image_count = 0; grid_open=False
+    source_map = {s['id']:s for s in expected}
+    source_anchor_ids={a['id']for s in expected for a in s.get('anchors',[])}
+    extra_anchors=defaultdict(list)
+    normalize=lambda value:re.sub(r'[\s#*〔〕【】`]+','',value)
+    for old_screen in original.values():
+        for alias in old_screen.get('html_anchors',[]):
+            aid=alias['id']
+            if aid in source_anchor_ids:continue
+            heading=re.search(r'<h[1-6]\b[^>]*\bid="'+re.escape(aid)+r'"[^>]*>(.*?)</h[1-6]>',text,re.S)
+            label=html.unescape(re.sub('<[^>]+>','',heading[1])) if heading else ''
+            matches=[s['id']for s in expected if label and normalize(label) in normalize(s.get('text',''))]
+            if old_screen['id']in {s['id']for s in expected}:extra_anchors[old_screen['id']].append(aid)
+            elif matches:extra_anchors[matches[0]].append(aid)
+    if source.get('registry',{}).get('live_anchors'):
+        data['b2_live_anchors']=source['registry']['live_anchors']
+        for a in data['b2_live_anchors']:
+            if a['id'] in source_anchor_ids:continue
+            owner=next((s['id']for s in expected if a.get('lands_on') in s.get('live',[])),None)
+            if owner:extra_anchors[owner].append(a['id'])
+    for entry in manifest['screens']:
+        sid = entry['screen']; src = source_map.get(sid)
+        if src is None:
+            issues.append('未知屏：'+sid); continue
+        old = original.get(sid,{})
+        section = old.get('nav_section') or src.get('nav_section') or src.get('section','top')
+        shape=src.get('shape','screen')
+        if grid_open and shape!='card':main.append('</div>');grid_open=False
+        model = {'id':sid,'title':src.get('title',''),'section':section,'shape':shape,
+                 'render_mode':'typeset','parts':[],'layouts':{'h':{},'v':{}},
+                 'screen_anchors':list(dict.fromkeys([x['id'] for x in src.get('anchors',[])]+extra_anchors[sid]))}
+        whole=next((l for l in old.get('layouts',{}).get('h',{}).get('links',[])if l.get('whole')),None)
+        if whole:model['primary_href']=whole['href']
+        if section not in seen_sections:
+            main.append('<div class="section-anchor" id="'+html.escape(section,quote=True)+'"></div>')
+            seen_sections.add(section)
+        anchor_ids = model['screen_anchors']
+        # Producer does not currently emit anchor coordinates. Keep all named targets on their owning screen.
+        anchors = ''.join('<span class="point-anchor typeset-screen-anchor" id="'+html.escape(a,quote=True)+'" data-anchor-binding="screen"></span>' for a in anchor_ids if a not in seen_sections and a!=sid)
+        seen_sections.update(anchor_ids)
+        queues = {}; occurrences=defaultdict(int)
+        # Metadata order is per complete direction, before portrait continuation splitting.
+        for orient in ['h','v']:
+            hp = args.typeset_root/name/'html'/f'{sid}-{orient}.html'
+            if hp.exists():
+                html_meta,html_meta_proof=text_bound(hp);inputs[str(hp.resolve())] = html_meta_proof
+                queues[orient] = {k:deque(v) for k,v in HotMetadata(html_meta).groups.items()}
+        part_html = []
+        has_v = any(i.get('orientation','v' if '-v' in i['image'] else 'h') == 'v' for i in entry['images'])
+        if not has_v and src.get('shape') != 'card' and not preview_only:
+            issues.append(sid+':缺竖图')
+        source_offsets={'h':0,'v':0};part_indices={'h':0,'v':0}
+        for image in entry['images']:
+            ip = args.typeset_root/name/image['image']; lp = args.typeset_root/name/image['links']
+            hot,links_proof=json_bound(lp)
+            inputs[str(ip.resolve())] = stamp(ip); inputs[str(lp.resolve())] = links_proof
+            size = png_size(ip)
+            orient = image.get('orientation','v' if '-v' in ip.name else 'h')
+            if image.get('hotspots',len(hot)) != len(hot): issues.append(ip.name+':热区数量不符')
+            part = {'image':ip.name,'src':asset(ip,candidate,name),'size':size,'orientation':orient,
+                    'both':not has_v,'hotspots':[],'live':[],'native_live':[],'native_actions':[],
+                    'links':[],'anchors':[],'screenshots':[],'cards':[],'numbers':[]}
+            geometry=geometries.get((sid,orient));padding=30 if part_indices[orient]else 0
+            if geometry:
+                recorded=next((x for x in geometry.get('parts',[])if x['image']==ip.name),None)
+                if geometry.get('issues'):issues.append(sid+'/'+orient+':动效量测失败：'+str(geometry['issues']))
+                elif geometry.get('broken_images'):issues.append(sid+'/'+orient+':参考插画未加载')
+                elif geometry.get('html_sha256')!=inputs.get(str((args.typeset_root/name/'html'/f'{sid}-{orient}.html').resolve()),{}).get('sha256'):
+                    issues.append(sid+'/'+orient+':动效位置不是这一代HTML')
+                elif geometry.get('measured_width')!=size[0] or abs(geometry.get('measured_height',0)-geometry.get('source_height',0))>2:
+                    issues.append(sid+'/'+orient+':动效位置的视口尺寸不符')
+                elif not recorded or recorded['sha256']!=inputs[str(ip.resolve())]['sha256'] or recorded.get('size')!=size:
+                    issues.append(sid+'/'+orient+':动效位置不是这一代PNG')
+                else:part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
+                if old_video and len(data['screens'])==0 and orient=='h' and part_indices[orient]==0 and not issues:
+                    try:
+                        box,video_binding=video_position(old_video,old,geometry.get('illustrations',[]),name,args)
+                        if box[0]<0 or box[1]<0 or box[0]+box[2]>size[0]+1 or box[1]+box[3]>size[1]+1:raise ValueError('视频定位越出首屏图片：'+name)
+                        data['video']={**old_video,'rect':[box[0]/size[0],box[1]/size[1],box[2]/size[0],box[3]/size[1]]}
+                    except ValueError as error:issues.append(str(error))
+            else:issues.append(sid+'/'+orient+':缺少绑定当前PNG与HTML的动效位置')
+            source_offsets[orient]+=size[1]-padding;part_indices[orient]+=1
+            live_allowed = set(src.get('live',[])) | {x.get('slot') for x in source.get('registry',{}).get('live',[])}
+            for index,h in enumerate(hot):
+                h = dict(h)
+                if h.get('kind') not in {'link','button','live','screenshot'}:
+                    issues.append(ip.name+':未知热区类型'); continue
+                rect = [h[k] for k in ['x','y','w','h']]
+                if any(not isinstance(x,(int,float)) for x in rect) or rect[0]<0 or rect[1]<0 or rect[2]<=0 or rect[3]<=0 or rect[0]+rect[2]>size[0]+1 or rect[1]+rect[3]>size[1]+1:
+                    issues.append(ip.name+':热区越界'); continue
+                h.update({'id':sid+'-'+orient+'-'+str(index)+'-'+str(image_count),
+                          'rect':[rect[0]/size[0],rect[1]/size[1],rect[2]/size[0],rect[3]/size[1]],'rect_px':rect})
+                key=(h['kind'],h.get('href','')); queue=queues.get(orient,{}).get(key,deque())
+                # Live frames and buttons have one DOM rect each; links may have multiple text fragments.
+                meta = queue[0] if queue else {}
+                if queue and h['kind'] in {'live','button','screenshot'}: meta = queue.popleft()
+                h['live_part']=meta.get('data-live-part','')
+                if h['kind']=='button':
+                    occurrence_key=(orient,h.get('text') or h.get('href'))
+                    h['occurrence']=occurrences[occurrence_key];occurrences[occurrence_key]+=1
+                if h['kind']=='live':
+                    if h['href'] not in live_allowed:
+                        issues.append(sid+':实时键不属于定稿：'+h['href']); h['invalid']=True
+                    h['slot']=live_key(h['href'],h['live_part'])
+                    if src.get('live') and name in {'cockpit','computer-access','mcp'}:
+                        part['native_live'].append({'slot':h['slot'],'rect':h['rect'],'live_part':h['live_part'],'hot_id':h['id']})
+                    else: part['live'].append({'slot':h['slot'],'rect':h['rect']})
+                elif h['kind']=='button' and not re.match(r'^(?:/|#|https?://)',h['href']):
+                    action = action_for(h,meta,src,old)
+                    if action is None:
+                        issues.append(sid+':按钮动作未唯一绑定：'+h['href']); h['invalid']=True
+                    else:
+                        h['action']=action['action']
+                        part['native_actions'].append({k:v for k,v in action.items() if k in {'action','text','copy_text'}}|{'rect':h['rect'],'hot_id':h['id']})
+                elif h['kind'] in {'link','button'}:
+                    h['original_href']=h['href']
+                    known = {x['href'] for x in src.get('links',[])}
+                    if h['href'] not in known:
+                        issues.append(sid+':链接目标不属于定稿：'+h['href'])
+                    part['links'].append(h)
+                elif h['kind']=='screenshot':
+                    shots = screenshot(h,src)
+                    if not shots:
+                        issues.append(sid+':截图槽未绑定：'+h['href']); h['invalid']=True
+                    h['shots']=[]
+                    for sh in shots:
+                        sp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['file']).resolve())),sh['file'])); inputs[str(sp.resolve())]=stamp(sp)
+                        from PIL import Image
+                        with Image.open(sp) as original_shot: shot_size=list(original_shot.size)
+                        crop=sh.get('crop_'+orient) or sh.get('crop')
+                        if isinstance(crop,dict):crop=[crop['x'],crop['y'],crop['x']+crop['w'],crop['y']+crop['h']]
+                        if crop and (len(crop)!=4 or crop[0]<0 or crop[1]<0 or crop[2]>shot_size[0] or crop[3]>shot_size[1] or crop[2]<=crop[0] or crop[3]<=crop[1]):
+                            issues.append(sid+':截图裁切超出原件');crop=None
+                        bound={'src':asset(sp,candidate,'screenshots'),'caption':sh.get('caption',''),'role':sh.get('role',''),'size':shot_size,'crop':crop}
+                        if sh.get('full'):
+                            fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots')
+                        h['shots'].append(bound)
+                if h['kind'] in {'live','screenshot'} or h.get('action') or h.get('invalid'):
+                    h['target']=h.pop('href')
+                part['hotspots'].append(h)
+            part['interactive_cards']=bind_card_feedback(part,old,orient)if shape!='card'else[]
+            model['parts'].append(part); image_count += 1
+            safe=html.escape(sid+'-'+str(len(model['parts'])),quote=True)
+            part_html.append(f'<div class="typeset-part" data-part="{safe}" data-orientation="{orient}" data-both="{str(not has_v).lower()}" style="aspect-ratio:{size[0]}/{size[1]}"><picture><img data-src="{part["src"]}" width="{size[0]}" height="{size[1]}" alt="{html.escape(src.get("title",sid),quote=True)}" decoding="async" loading="lazy" draggable="false"></picture><div class="overlays"></div></div>')
+        for orient in ['h','v']:
+            ps=[x for x in model['parts'] if x['orientation']==orient or x['both']]
+            provided={x['href'] for p in ps for x in p['links']}
+            for link in src.get('links',[]):
+                if '〔'+link.get('text','')+'〕' in src.get('text','') and link['href'] not in provided:
+                    issues.append(sid+'/'+orient+':缺链接热区：'+link.get('text',''))
+        if shape=='card' and not grid_open:main.append('<div class="card-grid typeset-card-grid">');grid_open=True
+        main.append('<section class="screen typeset-screen shape-'+html.escape(shape,quote=True)+'" data-shape="'+html.escape(shape,quote=True)+'" id="'+html.escape(sid,quote=True)+'" data-screen="'+html.escape(sid,quote=True)+'" data-section="'+html.escape(section,quote=True)+'">'+anchors+''.join(part_html)+'</section>')
+        data['screens'].append(model);screen_count+=1
+    if grid_open:main.append('</div>')
+    if preview_only or templated:
+        text=re.sub(r'<title>.*?</title>','<title>'+html.escape(source['title'])+'</title>',text,flags=re.S)
+        text=re.sub(r'(<link[^>]*rel="canonical"[^>]*href=")[^"]*',r'\g<1>https://wly0829.cn'+url,text)
+        sections={}
+        for s in data['screens']:sections.setdefault(s['section'],s['title'])
+        toc='<nav class="toc" aria-label="本页目录"><div class="toc-inner toc-text">'+''.join('<a class="nav-link" href="#'+html.escape(k,quote=True)+'" data-section="'+html.escape(k,quote=True)+'" data-label-h="'+html.escape(v,quote=True)+'" data-label-v="'+html.escape(v,quote=True)+'">'+html.escape(v)+'</a>'for k,v in sections.items())+'</div></nav>'
+        text=re.sub(r'<nav class="toc".*?</nav>',lambda _:toc,text,flags=re.S)
+    text = re.sub(r'(<main\b[^>]*>).*?(</main>)',lambda m:m[1]+''.join(main)+m[2],text,count=1,flags=re.S)
+    scripts=re.findall(r'<script\b[^>]*src="([^"]+)"',text)
+    for sr in scripts:
+        if sr.startswith('/_shared/app-'):
+            ap=args.legacy_site/sr.lstrip('/');app_text,app_proof=text_bound(ap);inputs[str(ap.resolve())]=app_proof
+            patched=patch_app(app_text);new=bundle(patched,candidate,'app','.js')
+            text=text.replace(sr,new);data['shared']['script_bundle']=new
+        elif 'b2-live-' in sr and sr.endswith('.js'):
+            bp=(base_html.parent/sr).resolve();b2_text,b2_proof=text_bound(bp);inputs[str(bp)]=b2_proof
+            # Place it beside the original imports; imports remain relative to this route's assets.
+            patched=patch_b2(b2_text);bn='b2-typeset-'+hashlib.sha256(patched.encode()).hexdigest()[:16]+'.js'
+            dest=candidate/Path(rel).parent/'assets'/bn;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(patched,encoding='utf8')
+            text=text.replace(sr,'assets/'+bn)
+    css=bundle((HERE/'typeset-layout.css').read_text('utf8'),candidate,'layout','.css')
+    data['motion_counts']={key:sum(len(p.get(key,[]))for s in data['screens']for p in s['parts'])for key in ['cards','numbers','dots','arrows']}
+    text=text.replace('</head>',f'<link rel="stylesheet" href="{css}"></head>')
+    label_names=set(re.findall(r'data-label-(?:text|h|v)="([^"]+)"',text))
+    data['shared']['nav_labels']={k:v for k,v in data['shared'].get('nav_labels',{}).items()if k in {html.unescape(x)for x in label_names}}
+    avif_map=data['shared'].pop('avif_assets',{})
+    probe=DATA.sub(lambda m:m[1]+json.dumps(data,ensure_ascii=False).replace('</',r'<\/')+m[3],text,count=1)
+    refs_parser=hybrid.builder.Refs();refs_parser.feed(probe)
+    actual_refs={r for r,_ in refs_parser.refs}|{r for r,_ in hybrid.builder.nested_refs(data)}
+    data['shared']['avif_assets']={k:v for k,v in avif_map.items()if k in actual_refs}
+    text=DATA.sub(lambda m:m[1]+json.dumps(data,ensure_ascii=False).replace('</',r'<\/')+m[3],text,count=1)
+    dest=candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(text,encoding='utf8')
+    for p,proof in inputs.items():
+        if stamp(p)!=proof: issues.append('构建期间输入变化：'+p)
+    video_expected=None
+    if data.get('video'):
+        vp=(base_html.parent/data['video']['src']).resolve();maskp=(base_html.parent/data['video']['mask']).resolve()
+        inputs[str(vp)]=stamp(vp);inputs[str(maskp)]=stamp(maskp)
+        video_expected={**data['video'],'src_sha256':inputs[str(vp)]['sha256'],'src_bytes':inputs[str(vp)]['bytes'],
+                        'mask_sha256':inputs[str(maskp)]['sha256'],'mask_bytes':inputs[str(maskp)]['bytes'],'binding':video_binding}
+    elif old_video:issues.append('原视频还未重新定位；禁止发布本候选')
+    return {'url':url,'status':'built' if not issues else 'blocked','issues':sorted(set(issues)),
+            'inputs':inputs,'html_sha256':hybrid.digest(dest),'quality':q,'preview_only':preview_only,
+            'effects_expected':expected_effects,'video_expected':video_expected,
+            'geometry_sha256':geometry_sha256,'original_video':old_video,
+            'screens':screen_count,'images':image_count,'template_shell':templated,'anchor_binding':'owning-screen',
+            'anchors':sum(len(x['screen_anchors'])for x in data['screens'])}
+
+def main():
+    global ASSET_CACHE
+    started=time.perf_counter()
+    ap=argparse.ArgumentParser(description=__doc__)
+    for arg in ['typeset-root','inventory','baseline','legacy-site','output','report']:
+        ap.add_argument('--'+arg,type=Path,required=True)
+    ap.add_argument('--pages',nargs='+')
+    ap.add_argument('--geometry',type=Path)
+    ap.add_argument('--asset-cache',type=Path)
+    args=ap.parse_args()
+    for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
+    if args.geometry:args.geometry=args.geometry.resolve()
+    args.snapshot_path=args.typeset_root.parent/'snapshot.json';args.snapshot_proof=None;args.resource_map={};args.external_inputs={}
+    if args.snapshot_path.is_file():
+        snapshot,args.snapshot_proof=json_bound(args.snapshot_path)
+        if snapshot.get('status')!='pass':raise ValueError('Input snapshot is not stable')
+        args.resource_map={os.path.normcase(str(Path(source).resolve())):str(Path(target).resolve())for source,target in snapshot.get('resource_map',{}).items()}
+        args.external_inputs={dependency['original_path']:{'sha256':dependency['sha256'],'bytes':dependency['bytes']}for dependency in snapshot.get('external_dependencies',[])}
+        for path,proof in args.external_inputs.items():
+            if stamp(path)!=proof:raise ValueError('System font changed after the input snapshot: '+path)
+    if args.output.exists():raise ValueError('Choose a fresh output directory')
+    inventory_text,args.inventory_proof=text_bound(args.inventory)
+    rows=[json.loads(x)for x in inventory_text.splitlines()if x.strip()]
+    grouped=defaultdict(list)
+    for row in rows:grouped[row['page']].append(row)
+    names=args.pages or list(grouped)
+    ASSET_CACHE=args.asset_cache.resolve()if args.asset_cache else args.typeset_root.parent/'integration'/'asset-cache'
+    ASSET_CACHE.mkdir(parents=True,exist_ok=True)
+    to_encode=[]
+    for name in names:
+        mp=args.typeset_root/name/'page-manifest.json'
+        if mp.exists():
+            for screen in read(mp).get('screens',[]):
+                to_encode.extend(args.typeset_root/name/im['image']for im in screen.get('images',[])if (args.typeset_root/name/im['image']).is_file())
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        for i,_ in enumerate(pool.map(encode_png,to_encode),1):
+            if i%50==0 or i==len(to_encode):print(f'lossless pixel verification {i}/{len(to_encode)}',flush=True)
+    candidate=args.output.parent/(args.output.name+'-candidate')
+    if candidate.exists():raise ValueError('Choose a fresh candidate directory')
+    candidate.mkdir(parents=True)
+    states={}
+    for n in names:
+        try:
+            states[n]=build_page(n,grouped[n],args,candidate)
+            for attempt in range(2):
+                if not any(x.startswith('构建期间输入变化：')for x in states[n].get('issues',[])):break
+                states[n]=build_page(n,grouped[n],args,candidate)
+        except Exception as e:states[n]={'status':'missing' if isinstance(e,FileNotFoundError)else'blocked','issues':[str(e)]}
+        print(n+':'+states[n]['status'],flush=True)
+    # Blocked pages remain available as labelled local previews; publication uses the independent evidence gate.
+    accepted={s['url']:{'page':n,'preview':True,'build_status':s['status']}for n,s in states.items()if s.get('url')}
+    support=[]
+    if args.pages:
+        # A two-page pilot retains the declared destinations using existing page skeletons.
+        # This is local preview support, explicitly excluded from publication evidence.
+        for n,records in grouped.items():
+            if n in names:continue
+            src=read(records[0]['source_path']);url=src.get('url') or src.get('source_url')
+            if not url or url=='/' or (args.baseline/hybrid.route_file(url)).exists():continue
+            source_html=args.legacy_site/hybrid.route_file(url)
+            if source_html.is_file():
+                dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
+                accepted[url]={'preview_support':True,'page':n};support.append(n)
+    local_deps(candidate,args.legacy_site,args.baseline)
+    manifest=hybrid.assemble(args.baseline,candidate,args.output,read(args.baseline/'release-manifest.json'),accepted)
+    for s in states.values():
+        if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
+    report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
+            'pages':states,'expected_pages':list(grouped),'preview_support_pages':support,'release_id':manifest['release_id'],
+            'baseline_root':str(args.baseline),'baseline_index_sha256':hybrid.digest(args.baseline/'index.html'),
+            'baseline_manifest_sha256':hybrid.digest(args.baseline/'release-manifest.json'),
+            'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs},'files':manifest['files'],
+            'home_unchanged':hybrid.digest(args.output/'index.html')==hybrid.digest(args.baseline/'index.html'),
+            'geometry_path':str(args.geometry)if args.geometry else None,
+            'geometry_sha256':hybrid.digest(args.geometry)if args.geometry and args.geometry.exists()else None,
+            'asset_cache':str(ASSET_CACHE),'input_snapshot':{'path':str(args.snapshot_path),**args.snapshot_proof}if args.snapshot_proof else None,
+            'seconds':round(time.perf_counter()-started,3),
+            'output_root':str(args.output),'candidate_root':str(candidate)}
+    write(args.report,report)
+    print(json.dumps({'built':sum(x['status']=='built'for x in states.values()),'blocked':sum(x['status']=='blocked'for x in states.values()),'missing':sum(x['status']=='missing'for x in states.values()),'home_unchanged':report['home_unchanged'],'release_id':report['release_id']}))
+
+if __name__=='__main__':main()
