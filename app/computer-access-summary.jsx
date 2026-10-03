@@ -30,13 +30,14 @@ export function ReadIndicator({ busy, children }) {
 export default function ComputerAccessSummary({ initialRead = null }) {
   const initialStatusRead = useRef(initialRead);
   const [refreshing, setRefreshing] = useState(true);
-  const [snapshot, setSnapshot] = useState(null), [state, setState] = useState("connecting"), [now, setNow] = useState(0);
+  const [snapshot, setSnapshot] = useState(null), [state, setState] = useState("connecting"), [now, setNow] = useState(0), [lastRead, setLastRead] = useState(0);
   const reader = useRef(null);
   useGrafanaNavigation(state === "online" ? snapshot?.services?.grafana : null);
   useEffect(() => {
     let mounted = true, timer;
+    try{const saved=Number(localStorage.getItem('computer-last-read-v1'));if(Number.isFinite(saved)&&saved>0&&saved<=Date.now()/1000+60)setLastRead(saved);}catch{}
     reader.current = createStatusReader(signal => { setRefreshing(true); return apiRequest(HOST_ORIGIN, "/status", { signal }); }, data => {
-      if (mounted) { setRefreshing(false); setSnapshot(data); setState("online"); setNow(Date.now() / 1000); }
+      if (mounted) { setRefreshing(false); setSnapshot(data); setState("online"); setNow(Date.now() / 1000); setLastRead(Date.now()/1000);try{localStorage.setItem('computer-last-read-v1',String(Date.now()/1000));}catch{} }
     }, error => { if (mounted) { setRefreshing(false); setState(error.httpStatus >= 500 ? "service-error" : "unavailable"); } }, { initialRead: initialStatusRead.current });
     initialStatusRead.current = null;
     const schedule = () => { clearTimeout(timer); if (!document.hidden) timer = setTimeout(async () => { await reader.current.read(); schedule(); }, 60000); };
@@ -53,6 +54,7 @@ export default function ComputerAccessSummary({ initialRead = null }) {
     })}
     <GrafanaStatus service={snapshot?.services?.grafana} connected={state === "online"} loading={refreshing} onRetry={() => reader.current?.read()} />
     <a className="access-summary-entry" href="/computer-access/">进入授权与状态<ArrowRight size={16} /></a>
-    <small>{snapshot?.observed_at_unix ? `${state === "online" ? "读取于" : "上次读取"} ${beijingTime(snapshot.observed_at_unix, true)}` : "状态由主机提供，尚未读取成功。"} · 操作在授权页办理</small>
+    {state!=="online"&&<p role="status">{state==="connecting"?"正在连接电脑。":"读不到电脑：可能电脑不在线，也可能是你这边的网络连不上它。"}{lastRead?`最后读到是 ${beijingTime(lastRead)}。`:"还没读到过。"} <a href="/mcp/">查看连接电脑页的副机备用入口</a></p>}
+    <small>{snapshot?.observed_at_unix ? `${state === "online" ? "读取于" : "上次读取"} ${beijingTime(snapshot.observed_at_unix)}` : "状态由主机提供，尚未读取成功。"} · 操作在授权页办理</small>
   </section>;
 }

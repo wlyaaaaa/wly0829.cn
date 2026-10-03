@@ -330,7 +330,7 @@ export const errorMessages = {
   disabled: "此操作已由主机停用。",
 };
 
-export async function apiRequest(base, path, { method = "GET", body, csrf, signal, timeout = 10000 } = {}) {
+export async function apiRequest(base, path, { method = "GET", body, csrf, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   signal?.addEventListener("abort", abort, { once: true });
@@ -354,6 +354,7 @@ export async function apiRequest(base, path, { method = "GET", body, csrf, signa
       error.httpStatus = response.status;
       throw error;
     }
+    if(path.startsWith('/status')&&(!Number.isFinite(data.observed_at_unix)||data.observed_at_unix>Date.now()/1000+60||Date.now()/1000-data.observed_at_unix>(Number(data.max_age_seconds)||120)))throw new Error('computer_snapshot_expired');
     return data;
   } finally {
     clearTimeout(timer);
@@ -378,7 +379,7 @@ export function createStatusReader(fetchStatus, onSuccess, onFailure, { initialR
         const early = initialRead;
         initialRead = null;
         let result;
-        if (early && !refresh && now() - early.started < 10000) {
+        if (early && !refresh && now() - early.started < 8000) {
           const cancel = () => early.cancel();
           controller.signal.addEventListener("abort", cancel, { once: true });
           try { result = await early.promise; }

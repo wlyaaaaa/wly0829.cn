@@ -1,5 +1,8 @@
 (function(){'use strict';
 const unknown={text:'暂时读不到',state:'unknown'};
+const readTimeoutMs=8000;
+function freshStatus(data,now=Date.now()){const at=Number(data?.observed_at_unix)*1000;return Number.isFinite(at)&&at>0&&at<=now+60000&&now-at<=(Number(data.max_age_seconds)||120)*1000;}
+function connectionText(at,loading=false){const date=Number.isFinite(at)&&at>0?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(at*1000)):null;return (loading?'正在连接电脑。':'读不到电脑：可能电脑不在线，也可能是你这边的网络连不上它。')+(date?'最后读到是 '+date+'（北京时间）。':'还没读到过。');}
 function formatTime(value,now){const t=typeof value==='string'?Date.parse(value):NaN;if(!Number.isFinite(t)||t>now)return null;const parts=d=>Object.fromEntries(new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t),n=parts(now);return (d.year===n.year&&d.month===n.month&&d.day===n.day?'今天':(d.year===n.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;}
 function taskResult(task,now){if(!task)return unknown;const labels={success:'正常',warn:'需要留意',failed:'失败',running:'正在运行',disabled:'已停用'};const t=formatTime(task.last_run_at,now);return t&&Object.hasOwn(labels,task.state)?{text:labels[task.state]+' · '+t,state:task.state==='success'?'ok':task.state}:unknown;}
 function parse(data,slot,project,now=Date.now()){
@@ -56,8 +59,8 @@ function unifyBannerFonts(cells,minimum){
 function cacheKey(page,slot){return `site-live:v1:${page}:${slot}`;}
 function readLast(storage,page,slot,project,now=Date.now()){try{const c=JSON.parse(storage.getItem(cacheKey(page,slot)));return c&&c.project===project&&typeof c.result?.text==='string'&&c.result.state!=='unknown'&&Number.isFinite(c.at)&&c.at<=now+60000?c:null;}catch{return null;}}
 function readCache(storage,page,slot,project,now=Date.now()){const c=readLast(storage,page,slot,project,now);return c&&now-c.at<86400000?c:null;}
-function offlineResult(c,now=Date.now()){return c?{text:c.result.text+' · 上次读到 '+formatTime(new Date(c.at).toISOString(),now)+(now-c.at>=86400000?'（已超过24小时）':''),state:['failed','error','warn','overdue'].includes(c.result.state)?c.result.state:'offline',cached:true}:unknown;}
-const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime};
+function offlineResult(c,now=Date.now()){return c?{text:'读不到电脑 · 当时：'+c.result.text+' · 上次读到 '+formatTime(new Date(c.at).toISOString(),now)+(now-c.at>=86400000?'（已超过24小时）':'')+' · 当前状态未知',state:'offline',cached:true,readAt:c.at/1000}: {text:'读不到电脑 · 还没读到过',state:'offline',cached:false};}
+const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs};
 if(typeof module!=='undefined'&&module.exports){module.exports=helpers;return;}
 window.SiteLiveRuntime=helpers;
 const page=JSON.parse(document.querySelector('#page-data').textContent),loading={text:'读取中',state:'loading'};
@@ -72,9 +75,12 @@ function offlineNotice(section,texts){if(section.classList.contains('typeset-scr
  const children=[...section.querySelector('.overlays').children];section._offlineStyles=children.map(e=>[e,e.style.cssText]);const boxes=children.map(e=>({e,x:e.offsetLeft,y:e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}));section.style.height=(base+extra)+'px';section.style.aspectRatio='auto';picture.style.clipPath=`inset(0 0 ${Math.max(0,base-cut)}px 0)`;section.classList.add('offline-expanded');for(const b of boxes)Object.assign(b.e.style,{left:b.x+'px',top:(b.y+(b.y>=cut?extra:0))+'px',width:b.w+'px',height:b.h+'px'});
 }
 function currentResult(slot){
- const result=phase==='ready'?parse(last,slot,page.project):unknown;
+ const connected=last&&freshStatus(last)&&(phase==='ready'||phase==='loading');
+ const result=connected?parse(last,slot,page.project):unknown;
  if(result.state!=='unknown')return result;
- try{return offlineResult(readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project));}catch{return unknown;}
+ let cached;try{cached=readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project);}catch{}
+ if(connected)return cached?{...offlineResult(cached),text:'此项当前读不到 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:unknown;
+ return offlineResult(cached);
 }
 function display(){
  resetOfflineLayout();
@@ -86,17 +92,27 @@ function display(){
   });
  }
  if(typeof displayTypesetStatus==='function')displayTypesetStatus(last,phase,(_payload,slot)=>currentResult(slot),page);
+ const failed=phase==='error'||phase==='ready'&&!freshStatus(last),waiting=phase==='loading'&&!last;
+ let notice=document.querySelector('[data-computer-read-notice]');
+ if((failed||waiting)&&document.querySelector('main')&&(document.querySelector('[data-slot]')||page.home_living===true)){
+  if(!notice){notice=document.createElement('aside');notice.dataset.computerReadNotice='true';notice.setAttribute('role','status');notice.style.cssText='margin:12px 24px;padding:12px 16px;border:1px solid #d4ddd7;border-radius:8px;background:white;color:#68766f;line-height:1.5';document.querySelector('main')?.prepend(notice);}
+  const times=[...document.querySelectorAll('[data-slot]')].map(cell=>currentResult(cell.dataset.slot).readAt).filter(Number.isFinite);let saved=0;try{saved=Number(localStorage.getItem('computer-last-read-v1'))||0;}catch{}
+  const at=Number(last?.observed_at_unix)|| (times.length?Math.max(...times):saved);
+  notice.textContent=connectionText(at,waiting)+'旧数只表示当时的状态。';
+  const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口';notice.append(' ',link);notice.hidden=false;
+ }else if(notice)notice.hidden=true;
  document.body.dataset.statusPhase=phase;
  const snap={phase,at:performance.now(),elapsedMs:started?performance.now()-started:0,slots:[...document.querySelectorAll('[data-slot]')].map(c=>({slot:c.dataset.slot,text:c.textContent.trim(),cached:false}))};history.push(snap);if(history.length>20)history.shift();
 }
 async function refresh(){
  if(busy||document.hidden||!document.querySelector('[data-slot]'))return;
- busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();const timer=setTimeout(()=>controller.abort(),15000);
+ busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();const timer=setTimeout(()=>controller.abort(),readTimeoutMs);
  try{
   const local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname);
   const response=await fetch(local?'/__status':'https://mcp.wly0829.cn/computer-access/api/status',{credentials:'include',cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP_'+response.status);
-  last=await response.json();phase='ready';document.body.dataset.statusError='';
-  for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=parse(last,slot,page.project);if(result.state!=='unknown')try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify({project:page.project,result,at:Date.now()}));}catch{}}
+  last=await response.json();phase=freshStatus(last)?'ready':'error';document.body.dataset.statusError=phase==='ready'?'':'expired_snapshot';
+  if(phase==='ready')try{localStorage.setItem('computer-last-read-v1',String(Date.now()/1000));}catch{}
+  if(phase==='ready')for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=parse(last,slot,page.project);if(result.state!=='unknown')try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify({project:page.project,result,at:Date.now()}));}catch{}}
  }catch(e){last=null;phase=cancelledForVisibility?'loading':'error';offline=!cancelledForVisibility&&(e.name==='AbortError'||e.name==='TypeError'||/^HTTP_5/.test(e.message||''));document.body.dataset.statusError=e.name==='AbortError'?'timeout':e.message;}
  finally{clearTimeout(timer);busy=false;display();}
 }

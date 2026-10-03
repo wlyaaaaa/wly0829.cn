@@ -34,7 +34,7 @@ function cockpitReadCache(slot,now=Date.now()){
 function cockpitPlainRows(rows){return rows.map(row=>[row.text,row.detail,row.children?cockpitPlainRows(row.children):''].filter(Boolean).join('；')).join('\n');}
 function cockpitHistoricalRows(rows){return rows.map(({state,...row})=>({...row,children:row.children?cockpitHistoricalRows(row.children):undefined}));}
 function rememberCockpitValues(at){
- if(data.kind!=='cockpit')return;
+ if(!['cockpit','mcp','computer-access'].includes(data.kind)||!online())return;
  const selectedTarget=target;target=null;
  try{
   const cells=(data.screens||[]).flatMap(screen=>[...(screen.parts||[]),...Object.values(screen.layouts||{})].flatMap(layout=>layout.native_live||layout.live||[]));
@@ -51,9 +51,11 @@ function rememberCockpitValues(at){
  }finally{target=selectedTarget;}
 }
 function value(slot){
- if(data.kind!=='cockpit'||phase!=='error')return currentValue(slot);
- const c=cockpitReadCache(slot);
- if(!c)return {text:'暂时读不到电脑',state:'unknown',cached:false};
+ if(!['cockpit','mcp','computer-access'].includes(data.kind)||online())return currentValue(slot);
+ const c=cockpitReadLast(slot),at=c?.at/1000||status?.observed_at_unix||lastRead;
+ if(['cockpit-overall','ca-connection','mcp-main'].includes(slot))return {text:offline(at),state:'unknown',cached:!!c,cachedAt:c?.at};
+ if(slot==='cockpit-attention')return {rows:[{text:offline(at)},{text:'若只是主入口故障，可查看连接电脑页的副机备用入口（两台电脑都需开机联网）',href:'/mcp/'},...(c?.result.rows?[{text:'以下是上次读到的待办，当前情况还不能确认'},...cockpitHistoricalRows(c.result.rows)]:[])],state:'unknown',cached:!!c,cachedAt:c?.at};
+ if(!c)return {text:phase==='loading'?'正在连接电脑 · 还没读到过':'读不到电脑 · 还没读到过',state:'unknown',cached:false};
  const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit'}).format(new Date(c.at));
  const label='上次读到 '+time(c.at/1000)+'（'+date+'，北京时间） · 当前状态未知';
  return {...c.result,rows:c.result.rows?[{text:label},...cockpitHistoricalRows(c.result.rows)]:undefined,

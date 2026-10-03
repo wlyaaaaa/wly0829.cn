@@ -1,5 +1,8 @@
 import {HOST_ORIGIN,apiRequest,createStatusReader,createGrantAttempt,durationMinutes,minutesLabel,remainingMinutes,grantLabel,canEndGrant,isAccessOrigin,markGrantVerificationSubmitted,readGrantStage,grantResultNeedsQuery,canRestartUnsubmittedGrant,queryResultUpdate,reductionFailureResult,successfulGrantSnapshot,successfulReductionSnapshot,unresolvedAction,errorMessages,capacity,adaptStatus,reading,numeric,rate,networkConnection,beijingTime} from './b2-access-model.js';
 
+// The owner's cockpit lamp policy; partial reads keep their own unknown state.
+const lampPolicy={computerMaxAge:120,unreadableGrace:600,taskWarnFailures:2,taskErrorFailures:4,backupWarnAge:{daily:36*3600,weekly:9*86400},backupErrorAge:{daily:48*3600,weekly:14*86400},diskWarnFraction:.1,diskErrorFraction:.05,systemDiskMinBytes:15*1024**3};
+
 const data=JSON.parse(document.querySelector('#page-data').textContent);
 
 if(!['cockpit','computer-access','mcp'].includes(data.kind))throw Error('B2运行件只接选定页面');
@@ -34,7 +37,7 @@ const list=key=>historical?rawList(key):blockHealth(key)==='ok'?rawList(key):nul
 const name=x=>x?.plain?.name||x?.name||x?.plain_title||x?.project||'名称暂未提供';
 const stateText=s=>({success:'正常',failed:'失败',error:'出错',warn:'需要留意',stale:'已过期',overdue:'没按时完成',running:'正在运行',disabled:'已停用',unknown:'状态未知',never:'还没运行',unavailable:'暂时读不到'})[s]||'状态未知';
 const cadenceText=s=>({daily:'每天',weekly:'每周',monthly:'每月',hourly:'每小时',manual:'手动运行',on_change:'变更时',on_login:'登录时',on_startup:'开机时'})[s]||'周期说明暂未提供';
-const rowState=rows=>rows?.some(x=>x.enabled!==false&&['failed','error'].includes(x.state))?'error':rows?.some(x=>x.enabled!==false&&['warn','stale','overdue'].includes(x.state))?'warn':!rows||rows.some(x=>x.enabled!==false&&(!['success','running','disabled'].includes(x.state)||x.state==='success'&&!Number.isFinite(Date.parse(x.last_success_at||x.last_run_at))))?'unknown':'ok';
+const rowState=rows=>rows?.some(x=>x.enabled!==false&&['failed','error'].includes(x.state))?'error':rows?.some(x=>x.enabled!==false&&['warn','stale','overdue'].includes(x.state))?'warn':!rows||rows.some(x=>x.enabled!==false&&(!['success','running','disabled','never'].includes(x.state)||x.state==='success'&&!Number.isFinite(Date.parse(x.last_success_at||x.last_run_at))))?'unknown':'ok';
 function hardwareHealth(){
  const hw=status?.hardware;if(!hw||['unknown','unavailable'].includes(hw.state))return 'unknown';
  const unwrapped=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
@@ -50,9 +53,9 @@ function hardwareHealth(){
 }
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
 
-const online=()=>phase==='ready';
+const online=()=>phase==='ready'&&Number.isFinite(status?.observed_at_unix)&&status.observed_at_unix<=clock()+60&&clock()-status.observed_at_unix<=(Number(status.max_age_seconds)||lampPolicy.computerMaxAge);
 
-const offline=()=>lastRead?'暂时读不到电脑 · 上次读到 '+time(lastRead):'暂时读不到电脑';
+const offline=(at=lastRead)=>window.SiteLiveRuntime?.connectionText?.(at,phase==='loading')||((phase==='loading'?'正在连接电脑。':'读不到电脑：可能电脑不在线，也可能是你这边的网络连不上它。')+(at?'最后读到是 '+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(at*1000))+'（北京时间）。':'还没读到过。'));
 
 const stateLabel=(grant,key)=>{
 
@@ -80,26 +83,85 @@ const linkedRequest=new URLSearchParams(location.search).get('request');
 
 if(validRequest(linkedRequest))rememberGrant({request_id:linkedRequest,state:'unknown',factor_submitted:readGrantStage(sessionStorage,linkedRequest)});
 
+const lampReadKey='site-cockpit-read-gaps-v1',lampReads=new Map();
+let lastCompleteLamp=null;
+try{const saved=JSON.parse(localStorage.getItem(lampReadKey));for(const [key,at] of Object.entries(saved?.since||{}))if(Number.isFinite(at)&&at>0&&at<=clock())lampReads.set(key,at);if(['ok','warn','error'].includes(saved?.lamp?.state))lastCompleteLamp=saved.lamp;}catch{}
+const timestamp=v=>Number.isFinite(v)?v:Date.parse(v)/1000;
+const taskInLamp=x=>x.enabled!==false&&x.external!==true&&x.project!=='电脑上别的软件'&&(x.mine??x.plain?.mine)!==false;
+const taskNotConnected=x=>x.availability!=null?x.availability==='not_connected':x.enabled==null&&x.source&&x.source!=='windows';
+const failureCount=x=>Number.isInteger(x.consecutive_failures)&&x.consecutive_failures>=0?x.consecutive_failures:null;
+function projectReadMissing(x){
+ if(['unknown','unavailable','stale'].includes(x.state))return true;
+ if(!(['run_unknown','unknown'].includes(x.overview)||x.run_health==='unknown'))return false;
+ const tasks=list('automation')?.filter(task=>task.project===x.project&&taskInLamp(task));
+ // Unconnected manual entries and never-run tasks are known gaps in results,
+ // not failures to read the project or the Windows scheduler.
+ return !tasks?.length||tasks.some(task=>!taskNotConnected(task)&&task.availability!=='available'&&!['success','running','disabled','never','failed','error','warn','overdue'].includes(task.state));
+}
+function saveLampReads(){try{localStorage.setItem(lampReadKey,JSON.stringify({since:Object.fromEntries(lampReads),lamp:lastCompleteLamp}));}catch{}}
+function readGaps(){
+ const gaps=[],active=new Set();
+ function add(key,label,source,expiredAt){
+  active.add(key);const declared=timestamp(source?.unavailable_since_unix??source?.unavailable_since),previous=lampReads.get(key);
+  const starts=[declared,expiredAt,previous].filter(t=>Number.isFinite(t)&&t>0&&t<=clock());
+  const since=starts.length?Math.min(...starts):clock();lampReads.set(key,since);
+  gaps.push({key,label,since,overGrace:clock()-since>lampPolicy.unreadableGrace});
+ }
+ for(const [key,label] of Object.entries({automation:'自动任务',backups:'备份运行记录',pending:'待处理事项',today:'今天动态',projects:'项目状态',remote_network:'远程和网络',backup_inventory:'备份副本证据'})){
+  const b=status?.[key],health=blockHealth(key),rows=rawList(key);
+  if(health!=='ok'||!rows){const at=blockTime(b);add(key,label,b,health==='stale'&&Number.isFinite(at)?at+(Number(b?.max_age_seconds)||120):undefined);continue;}
+  if(key==='automation'){
+   if(b.missing_count>0)add(key,label,b);
+   for(const x of rows.filter(taskInLamp))if(!taskNotConnected(x)&&(['unavailable','stale'].includes(x.state)||x.availability==='unavailable'||x.state==='unknown'&&x.availability!=='available'))add(key+':'+x.id,'自动任务“'+name(x)+'”',x);
+  }else if(key==='backups'){
+   for(const x of rows.filter(taskInLamp))if(['unknown','unavailable'].includes(x.state)||!Number.isFinite(timestamp(x.last_success_at))&&x.state!=='never')add(key+':'+x.id,'备份“'+name(x)+'”的成功记录',x);
+  }else if(key==='projects'){
+   for(const x of rows.filter(x=>x.frozen!==true))if(projectReadMissing(x))add(key+':'+(x.id||x.project),'项目“'+name(x)+'”的运行状态',x);
+  }else if(key==='remote_network'){
+   const labels={internet:'互联网连接',tailscale:'远程网络',secondary_laptop:'副机在线状态',sunshine:'串流服务',system_proxy:'代理状态',windows_update_restart:'Windows 重启状态'};
+   for(const x of rows)if(['unknown','unavailable','stale'].includes(x.state))add(key+':'+x.id,labels[x.id]||name(x),x);
+  }else if(key==='backup_inventory'){
+   for(const group of rows)for(const x of (group.items||[]).filter(x=>taskInLamp(x)&&x.role!=='original'))if(['unknown','unavailable'].includes(x.protection)||x.destination_state==='unregistered'||['unknown','unavailable'].includes(x.freshness))add(key+':'+x.id,'“'+group.name+'”里的备份“'+name(x)+'”的副本证据',x);
+  }
+ }
+ if(hardwareHealth()!=='ok'){
+  const hw=status?.hardware,rows=[hw?.cpu,hw?.memory,hw?.network,hw?.display,...(hw?.gpus||[]),...(hw?.volumes||[])];
+  const expired=rows.filter(row=>row?.state==='stale').map(row=>blockTime(row)+(Number(row.max_age_seconds||hw?.max_age_seconds)||120)).filter(Number.isFinite);
+  add('hardware','硬件状态',hw,expired.length?Math.min(...expired):undefined);
+ }
+ for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']])if(!status?.[key]?.state||['unknown','unavailable'].includes(status[key].state))add(key,label,status?.[key]);
+ if(!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host);
+ for(const key of lampReads.keys())if(!active.has(key))lampReads.delete(key);
+ saveLampReads();return gaps;
+}
+function backupLamp(x){
+ const at=timestamp(x.last_success_at),age=clock()-at;
+ if(Number.isFinite(at)&&lampPolicy.backupErrorAge[x.cadence]&&age>lampPolicy.backupErrorAge[x.cadence])return 'error';
+ if(Number.isFinite(at)&&lampPolicy.backupWarnAge[x.cadence]&&age>lampPolicy.backupWarnAge[x.cadence])return 'warn';
+ return 'ok';
+}
+function diskLamp(x){
+ if(x.connected===false||x.connected?.value===false)return 'ok';
+ const free=numeric(x.free_bytes),total=numeric(x.total_bytes),drive=x.letter?.value??x.letter??x.drive;
+ if(free===null||!total)return 'ok';
+ if(free/total<lampPolicy.diskErrorFraction||String(drive).toUpperCase()==='C:'&&free<lampPolicy.systemDiskMinBytes)return 'error';
+ return free/total<lampPolicy.diskWarnFraction?'warn':'ok';
+}
 function summary(){
-
- if(!online())return {text:offline(),state:'unknown'};
-
- const tasks=list('automation'),backups=list('backups'),pending=list('pending'),today=list('today'),projects=projectHealth();
-
- const failedTasks=(tasks||[]).filter(x=>x.enabled===true&&x.state==='failed'&&x.mine===true),badBackup=(backups||[]).filter(x=>x.enabled===true&&['failed','stale'].includes(x.state));
-
- if(failedTasks.length||badBackup.length||projects==='error')return {text:[badBackup.length?`${badBackup.length} 项备份要处理`:'',failedTasks.length?`${failedTasks.length} 个任务出错`:'',projects==='error'?'有项目出错':''].filter(Boolean).join('，'),state:'error'};
-
- const volumeWarn=(status?.hardware?.volumes||[]).some(x=>x.connected!==false&&numeric(x.free_bytes)!==null&&numeric(x.total_bytes)>0&&numeric(x.free_bytes)/numeric(x.total_bytes)<.1);
-
- const warn=(tasks||[]).some(x=>x.enabled===true&&(['warn','overdue'].includes(x.state)||x.state==='failed'&&x.mine!==true))||(backups||[]).some(x=>x.enabled===true&&x.state==='warn')||['automation','backups','hardware'].some(k=>status?.[k]?.state==='stale')||[status?.hardware?.cpu,status?.hardware?.memory,status?.hardware?.network,status?.hardware?.display,...(status?.hardware?.gpus||[]),...(status?.hardware?.volumes||[])].some(x=>x?.state==='stale')||volumeWarn;
-
- if(warn||projects==='warn')return {text:'有项目需要留意',state:'warn'};
-
- if(!tasks||!backups||!pending||!today||projects==='unknown'||hardwareHealth()!=='ok'||rowState(tasks)==='unknown'||rowState(backups)==='unknown')return {text:'有状态暂时读不到或已过期',state:'unknown'};
-
- return {text:'都正常',state:'ok'};
-
+ if(!online())return {text:offline(status?.observed_at_unix||lastRead),state:'unknown'};
+ const at=timestamp(status?.observed_at_unix),maxAge=Number(status?.max_age_seconds)||lampPolicy.computerMaxAge;
+ if(!Number.isFinite(at)||at>clock()+60||clock()-at>maxAge)return {text:'电脑状态已停止更新 · 上次更新 '+time(at),state:'unknown'};
+ const gaps=readGaps(),tasks=(list('automation')||[]).filter(taskInLamp),backups=(list('backups')||[]).filter(taskInLamp),disks=(status?.hardware?.volumes||[]).map(diskLamp);
+ const errors=[],warnings=[];
+ for(const x of tasks)if(['failed','error'].includes(x.state)){const count=failureCount(x);if(count>=lampPolicy.taskErrorFailures)errors.push(name(x)+'连续失败 '+count+' 次');else if(count>=lampPolicy.taskWarnFailures)warnings.push(name(x)+'连续失败 '+count+' 次');}
+ for(const x of backups){const lamp=backupLamp(x);if(lamp==='error')errors.push(name(x)+'超过两个备份周期没成功');else if(lamp==='warn')warnings.push(name(x)+'备份超期');}
+ if(disks.includes('error'))errors.push('磁盘空间不足，需要马上处理');else if(disks.includes('warn'))warnings.push('磁盘剩余空间不足 10%');
+ const business={state:errors.length?'error':warnings.length?'warn':'ok',text:errors.length?errors.join('，'):warnings.length?warnings.join('，'):'都正常'};
+ if(!gaps.length){lastCompleteLamp=business;saveLampReads();const count=pendingRows().filter(x=>!x.empty).length;return business.state==='ok'&&count?{text:'灯况正常，有 '+count+' 件事待处理',state:'ok'}:business;}
+ if(gaps.some(x=>x.overGrace))return business.state==='error'?{...business,text:business.text+'；还有状态读不到超过 10 分钟'}:{text:'有状态读不到超过 10 分钟，请查看要我处理的事',state:'warn'};
+ const rank={ok:0,warn:1,error:2};
+ const held=lastCompleteLamp&&rank[lastCompleteLamp.state]>rank[business.state]?lastCompleteLamp:business;
+ return {state:held.state,text:held.state==='ok'?'电脑在线，有状态正在确认（10 分钟内先保持灯况）':held.text+'；还有状态正在确认'};
 }
 
 function rowText(rows,empty){return rows.length?rows: [{text:empty}];}
@@ -108,7 +170,7 @@ function taskRows(tasks,brief){
 
  const problematic=[],groups=new Map(),late=new Map();
 
- for(const x of tasks){const highlight=target?.id==='remote-control'&&['远程操作桌面','远程维护（管理员）','远程维护（系统级）'].includes(x.plain?.name)||target?.id==='sunshine-remote-streaming'&&x.project===target.api_project;const row={key:(x.project||'')+':'+name(x),highlight,text:name(x)+' · '+(({failed:'出错',warn:'要留意',success:'正常',running:'在运行',disabled:'停用',unknown:'读不到',never:'没跑过',overdue:'过期'})[x.state]||'状态读不到')+' · 上次 '+time(Date.parse(x.last_run_at)/1000)+' · 下次 '+time(Date.parse(x.next_run_at)/1000),detail:[x.plain?.what||'还没写说明',x.schedule_zh,x.plain?.stop,x.plain?.impact,x.status_note].filter(Boolean).join('；')};
+ for(const x of tasks){const highlight=target?.id==='remote-control'&&['远程操作桌面','远程维护（管理员）','远程维护（系统级）'].includes(x.plain?.name)||target?.id==='sunshine-remote-streaming'&&x.project===target.api_project;const row={key:(x.project||'')+':'+name(x),highlight,text:name(x)+' · '+(taskNotConnected(x)?'运行记录未接入':x.state==='unknown'&&x.availability==='available'?'运行结果未确认':({failed:'出错',warn:'要留意',success:'正常',running:'在运行',disabled:'停用',unknown:'暂时读不到',never:'还没运行过',overdue:'过期'})[x.state]||'状态暂时读不到')+' · 上次 '+time(Date.parse(x.last_run_at)/1000)+' · 下次 '+time(Date.parse(x.next_run_at)/1000),detail:[x.plain?.what||'还没写说明',x.schedule_zh,x.plain?.stop,x.plain?.impact,x.plain?.status_note||x.status_note].filter(Boolean).join('；')};
 
  if(x.enabled!==false&&x.project!=='电脑上别的软件'&&['failed','warn','overdue','unknown'].includes(x.state)){problematic.push(row);continue;}
 
@@ -122,17 +184,23 @@ function pendingRows(){
 
  const tasks=list('automation'),backups=list('backups'),pending=list('pending'),out=[];
 
- for(const x of tasks||[])if(x.enabled===true&&x.mine===true&&x.state==='failed')out.push({text:name(x)+'：任务出错',href:'#tasks'});
+ for(const x of tasks||[])if(taskInLamp(x)){
+  if(['failed','error'].includes(x.state)){const count=failureCount(x);out.push({text:name(x)+'：任务出错'+(count===null?'，连续失败次数暂未确认':'（连续 '+count+' 次）'),href:'#tasks'});}
+  else if(taskNotConnected(x))out.push({text:name(x)+'：运行记录还没接入，不能确认运行结果',href:'#tasks'});
+  else if(x.state==='unknown'&&x.availability==='available')out.push({text:name(x)+'：记录已读到，运行结果还不能确认',href:'#tasks'});
+ }
 
- for(const x of backups||[])if(x.enabled===true&&['failed','stale','warn'].includes(x.state))out.push({text:name(x)+'：'+({failed:'备份失败',stale:'备份过期',warn:'备份要留意'})[x.state],href:'#backups'});
+ for(const x of backups||[])if(taskInLamp(x)&&(['failed','error','stale','warn'].includes(x.state)||backupLamp(x)!=='ok'))out.push({text:name(x)+'：'+(backupLamp(x)!=='ok'?'备份超期':({failed:'上次备份失败',error:'上次备份出错',stale:'备份记录已过期',warn:'备份要留意'})[x.state]),href:'#backups'});
 
- for(const x of status?.hardware?.volumes||[])if(x.connected!==false&&numeric(x.free_bytes)!==null&&numeric(x.total_bytes)>0&&numeric(x.free_bytes)/numeric(x.total_bytes)<.1)out.push({text:reading(x.letter||x.drive)+' 剩余 '+capacity(x.free_bytes),href:'#pc'});
+ for(const x of status?.hardware?.volumes||[])if(diskLamp(x)!=='ok')out.push({text:reading(x.letter||x.drive)+' 剩余 '+capacity(x.free_bytes),href:'#pc'});
 
  for(const x of pending||[])if(x.who==='me'&&['pending','waiting_user','waiting'].includes(x.state))out.push({text:x.plain_title||x.title||'待本人验收',href:'#projects'});
 
- for(const key of ['automation','backups','pending','today'])if(!list(key))out.push({text:({automation:'自动任务',backups:'备份',pending:'验收',today:'今天动态'})[key]+'暂时读不到'});
+ for(const x of list('projects')||[])if(x.frozen!==true){if(x.failed_count>0||['run_failed','acceptance_failed'].includes(x.overview))out.push({text:name(x)+'：有失败记录待核对',href:'#projects'});else if(!projectReadMissing(x)&&(['run_unknown','unknown'].includes(x.overview)||x.run_health==='unknown'))out.push({text:name(x)+'：运行结果还未确认，请查看未接入的任务记录',href:'#projects'});}
+ for(const x of status?.remote_network?.items||[])if(x.id==='windows_update_restart'&&x.state==='pending')out.push({text:'Windows 更新：等待重启',href:'#remote'});
+ for(const gap of readGaps())out.push({key:'read-gap:'+gap.key,text:gap.label+'暂时读不到；从 '+time(gap.since)+' 起'+(gap.overGrace?'，已经超过 10 分钟':'，10 分钟内先保持灯况'),href:gap.key.startsWith('hardware')?'#pc':gap.key.startsWith('backup')?'#backups':gap.key.startsWith('automation')?'#tasks':gap.key.startsWith('remote')?'#remote':['personal_data','unrestricted','windows'].includes(gap.key)?'#security':gap.key==='today'?'#today':'#projects'});
 
- return rowText(out,'没有要我处理的');
+ return out.length?out:[{text:'没有要我处理的',empty:true}];
 
 }
 
@@ -251,7 +319,7 @@ function value(slot){
  if(slot==='cockpit-grafana'&&health!=='ok')return {text:'曲线暂时打不开',state:'unknown',cached:false};
  if(health==='stale'&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
-  if(old.rows||old.iframe||old.state!=='unknown')return expiredValue(old,slotTime(slot));
+  if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};
  }
  if(health!=='ok'&&['error','warn'].includes(result.state))return {...result,text:result.text?result.text+' · 还有状态暂时读不到':result.text};
  if(slot==='cockpit-pc'&&health==='unknown'&&result.rows){const hw=status?.hardware||{},known=v=>{const raw=v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;return raw!==null&&raw!==undefined&&raw!==''&&!['unknown','unavailable','error','failed','stale'].includes(v?.state);};const readings=[hw.cpu?.model,hw.cpu?.usage_percent,hw.memory?.used_bytes,hw.network?.connected,hw.display?.width_px,...(hw.gpus||[]).flatMap(g=>[g.model,g.usage_percent]),...(hw.volumes||[]).flatMap(v=>[v.letter,v.free_bytes])];return {...result,cacheable:readings.some(known)};}
@@ -440,7 +508,7 @@ function action(key){
 
 }
 
-const reader=createStatusReader((signal,{refresh})=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:10000}),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
+const reader=createStatusReader((signal,{refresh})=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime?.readTimeoutMs||8000}),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
 
 function readStatus(options){if(!formal){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 
