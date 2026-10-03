@@ -1,8 +1,14 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { publicSearchRecord } from "../app/public-search-projection.js";
 
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const projectionUnchanged = (entry) => {
+  const projected = publicSearchRecord(entry);
+  return Object.keys(entry).length === Object.keys(projected).length
+    && Object.entries(entry).every(([key, value]) => JSON.stringify(value) === JSON.stringify(projected[key]));
+};
 const banned = /飞鸟|flyingbird|clash(?:[ -]verge(?:[ -]service)?| for windows)?|mihomo|\bTAG\b/giu;
 const publicRegistryFields = {
   groups: ["name"],
@@ -48,9 +54,10 @@ function recordsForPage(page, project, anchors) {
           .flatMap((row) => fields.map((field) => typeof row[field] === "string" ? row[field] : "")))
     ].filter(Boolean).join(" ")
   }))];
-  const hits = JSON.stringify(records).match(banned) || [];
+  const publicRecords = records.map(({compactSearch, ...record}) => publicSearchRecord({...record, search: compactSearch}));
+  const hits = JSON.stringify(publicRecords).match(banned) || [];
   if (hits.length) throw new Error(`Old brand remains in public search input for ${page.page}: ${hits.join(", ")}`);
-  return records;
+  return publicRecords;
 }
 
 async function readIndex(root, name, project) {
@@ -61,6 +68,33 @@ async function readIndex(root, name, project) {
   const entries = JSON.parse(text.slice(prefix.length, -1));
   if (!Array.isArray(entries)) throw new Error(`Search asset is not an array: ${name}`);
   return { bytes, entries };
+}
+
+async function keepPublishedEntries(root, entries, selected) {
+  const pages = new Map(), invalid = [], kept = [];
+  for (const entry of entries) {
+    if (selected(entry)) continue;
+    const url = new URL(entry.href, 'https://wly0829.cn');
+    const relativePath = decodeURIComponent(url.pathname).replace(/^\//, '');
+    const relative = !relativePath ? 'index.html' : relativePath.endsWith('/') ? relativePath + 'index.html'
+      : path.extname(relativePath) ? relativePath : relativePath + '/index.html';
+    if (url.hostname !== 'wly0829.cn' || relative.split('/').includes('..') || relative.includes('\\')) {
+      invalid.push(entry); continue;
+    }
+    if (!pages.has(relative)) {
+      try {
+        const text = await readFile(path.join(root, relative), 'utf8');
+        pages.set(relative, new Set([...text.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1])));
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+        pages.set(relative, null);
+      }
+    }
+    const anchors = pages.get(relative);
+    if (anchors && (!url.hash || anchors.has(decodeURIComponent(url.hash.slice(1))))) kept.push(entry);
+    else invalid.push(entry);
+  }
+  return { kept, invalid };
 }
 
 export async function generateTypesetSearchOverlay(renderer, configPath) {
@@ -94,9 +128,11 @@ export async function generateTypesetSearchOverlay(renderer, configPath) {
   const selected = (entry) => slugs.has(entry.projectSlug) || standaloneUrls.some((url) => entry.href?.split("#")[0].replace(/\/$/, "") === url.replace(/\/$/, ""));
   const global = await readIndex(baseline, "search-index.js", false);
   const projects = await readIndex(baseline, "search-projects.js", true);
-  const globalEntries = [...global.entries.filter((entry) => !selected(entry)),
+  const publishedGlobal = await keepPublishedEntries(baseline, global.entries, selected);
+  const publishedProjects = await keepPublishedEntries(baseline, projects.entries, selected);
+  const globalEntries = [...publishedGlobal.kept,
     ...pages.flatMap((input) => input.records.filter((entry) => entry.type !== "项目内容"))];
-  const projectEntries = [...projects.entries.filter((entry) => !selected(entry)),
+  const projectEntries = [...publishedProjects.kept,
     ...pages.flatMap((input) => input.records.filter((entry) => entry.type === "项目内容"))];
   const assets = [
     { name: "search-index.js", before: global, entries: globalEntries, project: false },
@@ -107,8 +143,8 @@ export async function generateTypesetSearchOverlay(renderer, configPath) {
     assets.push({ name, before: await readIndex(baseline, name, true),
       entries: projectEntries.filter((entry) => entry.projectSlug === slug), project: true });
   }
-  const unchangedGlobal = global.entries.filter((entry) => !selected(entry));
-  const unchangedProjects = projects.entries.filter((entry) => !selected(entry));
+  const unchangedGlobal = publishedGlobal.kept;
+  const unchangedProjects = publishedProjects.kept;
   if (JSON.stringify(unchangedGlobal) !== JSON.stringify(globalEntries.filter((entry) => !selected(entry)))
       || JSON.stringify(unchangedProjects) !== JSON.stringify(projectEntries.filter((entry) => !selected(entry)))) {
     throw new Error("Unrelated search records changed");
@@ -116,7 +152,7 @@ export async function generateTypesetSearchOverlay(renderer, configPath) {
   await mkdir(output, { recursive: true });
   const files = [];
   for (const asset of assets) {
-    const bytes = Buffer.from(renderer.serializeSearchAsset(asset.entries, asset.project), "utf8");
+    const bytes = Buffer.from(renderer.serializeSearchAsset(asset.entries.map(publicSearchRecord), asset.project), "utf8");
     await writeFile(path.join(output, asset.name), bytes);
     files.push({ path: asset.name, before_sha256: digest(asset.before.bytes), after_sha256: digest(bytes),
       before_bytes: asset.before.bytes.length, after_bytes: bytes.length,
@@ -128,8 +164,16 @@ export async function generateTypesetSearchOverlay(renderer, configPath) {
     inputs: pages.map((input) => ({ page: input.page.page, source: input.source, sha256: input.sha256,
       html_source: input.pagePath, html_sha256: input.html_sha256, unanchored_screens: input.unanchoredScreens,
       records: input.records.length, public_brand_hits: 0 })),
-    unrelated_records_preserved: { global: unchangedGlobal.length, projects: unchangedProjects.length }, files
+    unrelated_records_preserved: {
+      global: unchangedGlobal.filter(projectionUnchanged).length,
+      projects: unchangedProjects.filter(projectionUnchanged).length
+    }, files
   };
+  report.public_projection_updates = assets.flatMap(asset => asset.entries
+    .filter(entry => !projectionUnchanged(entry))
+    .map(entry => ({ asset: asset.name, title: entry.title, href: entry.href })));
+  report.unpublished_records_removed = [...publishedGlobal.invalid, ...publishedProjects.invalid]
+    .map((entry) => ({ title: entry.title, href: entry.href }));
   await writeFile(path.join(output, "search-overlay-manifest.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
   return report;
 }

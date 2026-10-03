@@ -83,6 +83,28 @@ class OssReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Source changed since preparation'):
             oss.verify_local(output)
 
+    def test_share_images_move_with_assets_and_page_identity_stays_on_site(self):
+        page=self.source/'index.html'
+        page.write_text('<meta property="og:image" content="https://wly0829.cn/projects/demo/assets/image.webp">'
+                        '<meta content="/projects/demo/assets/image.avif" name="twitter:image">'
+                        '<meta property="og:url" content="https://wly0829.cn/">'
+                        '<meta name="description" content="原简介完整保留">'
+                        '<link rel="canonical" href="https://wly0829.cn/">',encoding='utf8')
+        manifest=oss.read(self.source/oss.MANIFEST)
+        manifest['files']={key:value for key,value in oss.inventory(self.source).items() if key!=oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST,manifest)
+        output,plan=self.prepare('https://fixture-bucket.oss-cn-shanghai.aliyuncs.com')
+        html=(output/'github/index.html').read_text('utf8')
+        prefix='https://fixture-bucket.oss-cn-shanghai.aliyuncs.com/releases/fixture-001/'
+        self.assertIn('content="'+prefix+'projects/demo/assets/image.webp"',html)
+        self.assertIn('content="'+prefix+'projects/demo/assets/image.avif"',html)
+        self.assertIn('property="og:url" content="https://wly0829.cn/"',html)
+        self.assertIn('name="description" content="原简介完整保留"',html)
+        self.assertIn('rel="canonical" href="https://wly0829.cn/"',html)
+        self.assertTrue(all((output/'oss'/rel).read_bytes()==(self.source/rel).read_bytes()
+                            for rel in plan['objects'] if rel.endswith(('.webp','.avif'))))
+        oss.verify_local(output)
+
     def test_missing_resources_and_new_output_requirement(self):
         p = self.source/'assets/site.css'
         p.write_bytes(b'body{background:url(/missing.webp)}')

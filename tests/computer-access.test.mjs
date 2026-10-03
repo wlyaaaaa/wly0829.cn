@@ -320,7 +320,7 @@ test("computer routes stay in the current tab while external links retain their 
     const tag = html.match(new RegExp(`<a[^>]+aria-label="${name}"[^>]*>`))?.[0];
     assert.ok(tag, name); assert.ok(!tag.includes('target="_blank"'), tag);
   }
-  assert.match(html, /data-grafana-entry="true"[^>]*href="\/#grafana-status"/);
+  assert.match(html, /data-grafana-entry="true"[^>]*href="\/cockpit\/#grafana"/);
 });
 
 test("hardware specifications preserve actual inventory and dynamic link evidence", () => {

@@ -724,7 +724,7 @@
       },
       "source": {
         "repo": "wlyaaaaa/github-local-index",
-        "visibility": "PUBLIC",
+        "visibility": "PRIVATE",
         "default_branch": "main",
         "local_root": "E:\\GitHub总索引"
       },
@@ -2771,7 +2771,7 @@
       },
       "source": {
         "repo": "wlyaaaaa/llm-backend-toolkit",
-        "visibility": "PUBLIC",
+        "visibility": "PRIVATE",
         "default_branch": "main",
         "local_root": "V:\\Personal\\Projects\\llm-backend-toolkit"
       },

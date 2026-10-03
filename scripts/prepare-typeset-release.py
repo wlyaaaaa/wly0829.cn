@@ -25,6 +25,9 @@ EFFECT_NAMES = {"cards", "numbers", "dots", "arrows", "screen_enter", "seam", "d
 spec = importlib.util.spec_from_file_location("typeset_hybrid", ROOT / "scripts/hybrid-release.py")
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
+motion_spec = importlib.util.spec_from_file_location('release_motion', ROOT / 'scripts/prepare-motion-release.py')
+motion = importlib.util.module_from_spec(motion_spec)
+motion_spec.loader.exec_module(motion)
 
 
 def now():
@@ -163,6 +166,7 @@ def geometry_evidence(page, page_root, page_manifest, inputs, snapshot, snapshot
         bound_file(html_path, inputs.get(str(html_path)))
         if record.get("html_sha256") != inputs[str(html_path)]["sha256"]:
             raise ValueError("Geometry producer HTML hash is stale: " + label)
+        motion.dot_evidence(record, html_path.read_text('utf8'))
         parts = record.get("parts")
         if not isinstance(parts, list) or [item.get("image") for item in parts] != expected[identity]:
             raise ValueError("Geometry PNG parts or their order differ from the manifest: " + label)
@@ -244,6 +248,16 @@ def effects_evidence(entry, dom, snapshot_hash):
         observed.update(capabilities)
     if counts != totals or evidence["running_animation_count"] != max(running) or set(preserved) != observed:
         raise ValueError("Effects summary differs from its actual desktop and phone observations")
+    capability = entry.get('effects_capabilities', {}).get('dots')
+    if capability:
+        if capability.get('policy') != motion.DOT_POLICY or capability.get('status') not in {'present', 'no_corresponding_element'}:
+            raise ValueError('Current status-dot capability evidence is incomplete')
+        if (capability['status'] == 'present') != ('dots' in expected) or (capability['status'] == 'present') != (counts['dots'] > 0):
+            raise ValueError('Expected status-dot capability differs from measured active markers')
+    if entry.get('motion_appearance'):
+        for check in checks:
+            if check.get('motion_appearance') != entry['motion_appearance']:
+                raise ValueError('Observed motion appearance differs from the built configuration')
     # Counts describe the current DOM; they are deliberately not compared to old
     # image coordinates or old component counts.
     return {"expected": expected, "preserved": preserved, "new_geometry_bound": True, "geometry_sha256": snapshot_hash}

@@ -21,9 +21,20 @@ import uuid
 from urllib.parse import urlsplit, unquote
 
 HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path: sys.path.insert(0,str(HERE))
+from public_page_contract import public_page_data
+publication_spec=importlib.util.spec_from_file_location('typeset_publication', HERE/'audit-page-publication.py')
+publication=importlib.util.module_from_spec(publication_spec)
+publication_spec.loader.exec_module(publication)
+live_spec=importlib.util.spec_from_file_location('typeset_live_update', HERE/'update-live-release.py')
+live_update=importlib.util.module_from_spec(live_spec)
+live_spec.loader.exec_module(live_update)
 spec = importlib.util.spec_from_file_location('hybrid', HERE/'hybrid-release.py')
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
+motion_spec = importlib.util.spec_from_file_location('motion_preparation', HERE/'prepare-motion-release.py')
+motion_prep = importlib.util.module_from_spec(motion_spec)
+motion_spec.loader.exec_module(motion_prep)
 DATA = re.compile(r'(<script\b[^>]*\bid="page-data"[^>]*>)(.*?)(</script>)', re.S)
 BJT = timezone(timedelta(hours=8))
 ASSET_CACHE = None
@@ -142,7 +153,9 @@ def old_effects(data):
             if not any(max(0,min(r[0]+r[2],q[0]+q[2])-max(r[0],q[0]))*max(0,min(r[1]+r[3],q[1]+q[3])-max(r[1],q[1]))>min(r[2]*r[3],q[2]*q[3])*.7 for q in excluded):return True
         return False
     if any(floating_card(s,l)for s in sampled for l in s.get('layouts',{}).values()):expected.append('cards')
-    for key in ['numbers','dots','arrows']:
+    # Dots are decided from current active-status observations after measuring;
+    # old decorative coordinates are not a capability requirement.
+    for key in ['numbers','arrows']:
         if any(l.get(key)for l in layouts):expected.append(key)
     if any(l.get('live')or l.get('native_live')for l in layouts):expected.extend(['live','update'])
     if any(l.get('screenshots')for l in layouts):expected.append('screenshots')
@@ -344,7 +357,11 @@ def patch_app(text):
     text=text[:hero_start]+hero
     streaming_spec=importlib.util.spec_from_file_location('oss_video_runtime', HERE/'prepare-oss-runtime.py')
     streaming=importlib.util.module_from_spec(streaming_spec);streaming_spec.loader.exec_module(streaming)
-    return streaming.patch_video_runtime(text)
+    text=streaming.patch_video_runtime(text)
+    # selectstart can target a DOM Text node; resolve its owning element first.
+    text=text.replace('e.target.closest(', '(e.target instanceof Element?e.target:e.target?.parentElement)?.closest(')
+    text=live_update.patch_shared_runtime(text)
+    return motion_prep.patch_runtime(text)
 
 def patch_b2(text):
     text = text.replace("document.querySelectorAll('.screen')", "document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")
@@ -355,7 +372,7 @@ def patch_b2(text):
     # Native lamp sub-parts use the same state provider as the summary, without repeating its copy.
     text = text.replace("else el.textContent=valueRow.text;", "else if(el.dataset.livePart==='lamp'){el.setAttribute('aria-label',valueRow.text||'状态未知');el.classList.add('typeset-lamp');}else el.textContent=valueRow.text;")
     text = text.replace("b.disabled=disabled;", "b.disabled=disabled;b.dataset.labelChanging=String(!!b.textContent&&b.textContent!==b.dataset.baseLabel);")
-    return text
+    return live_update.patch_b2_runtime(text)
 
 def local_deps(candidate, legacy, baseline):
     """Copy only referenced shared assets, preserving the old release's immutable names."""
@@ -452,7 +469,7 @@ def build_page(name, records, args, candidate):
     if qpath.exists():
         qr,qp=json_bound(qpath);q=quality(qpath,qr,qp);inputs[str(qpath.resolve())]=qp
     else:q={'status':'incomplete','note':'缺排版质量记录'}
-    main = []; seen_sections = set(); screen_count = image_count = 0; grid_open=False
+    main = []; seen_sections = set(); screen_count = image_count = 0; grid_open=False; transcripts={}
     source_map = {s['id']:s for s in expected}
     source_anchor_ids={a['id']for s in expected for a in s.get('anchors',[])}
     extra_anchors=defaultdict(list)
@@ -520,6 +537,7 @@ def build_page(name, records, args, candidate):
             if hp.exists():
                 html_meta,html_meta_proof=text_bound(hp);inputs[str(hp.resolve())] = html_meta_proof
                 queues[orient] = {k:deque(v) for k,v in HotMetadata(html_meta).groups.items()}
+                transcripts.setdefault(sid,{})[orient]=publication.rendered_text(html_meta)
         part_html = []
         has_v = any(i.get('orientation','v' if '-v' in i['image'] else 'h') == 'v' for i in entry['images'])
         if not has_v and src.get('shape') != 'card' and not preview_only:
@@ -546,7 +564,12 @@ def build_page(name, records, args, candidate):
                     issues.append(sid+'/'+orient+':动效位置的视口尺寸不符')
                 elif not recorded or recorded['sha256']!=inputs[str(ip.resolve())]['sha256'] or recorded.get('size')!=size:
                     issues.append(sid+'/'+orient+':动效位置不是这一代PNG')
-                else:part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
+                else:
+                    try:
+                        current_html=(args.typeset_root/name/'html'/f'{sid}-{orient}.html').read_text('utf8')
+                        part['dot_capability']=motion_prep.dot_evidence(geometry,current_html)
+                        part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
+                    except ValueError as error:issues.append(sid+'/'+orient+':状态点量测证据不完整：'+str(error))
                 if old_video and len(data['screens'])==0 and orient=='h' and part_indices[orient]==0 and not issues:
                     try:
                         box,video_binding=video_position(old_video,old,geometry.get('illustrations',[]),name,args)
@@ -648,10 +671,19 @@ def build_page(name, records, args, candidate):
             patched=patch_b2(b2_text);bn='b2-typeset-'+hashlib.sha256(patched.encode()).hexdigest()[:16]+'.js'
             dest=candidate/Path(rel).parent/'assets'/bn;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(patched,encoding='utf8')
             text=text.replace(sr,'assets/'+bn)
+    for sr in re.findall(r'<link\b[^>]*href="([^\"]*b2-live-[^\"]+\.css)"',text):
+        new=bundle((HERE/'b2-live.css').read_text('utf8'),candidate,'b2-live','.css')
+        text=text.replace(sr,new)
     # Earlier Windows bundles used a LF-derived name but stored CRLF bytes.
     # A fresh label keeps those immutable published files intact.
     css=bundle((HERE/'typeset-layout.css').read_text('utf8'),candidate,'typeset-layout','.css')
     data['motion_counts']={key:sum(len(p.get(key,[]))for s in data['screens']for p in s['parts'])for key in ['cards','numbers','dots','arrows']}
+    # Only this capability changes from the historic image-coordinate inventory.
+    # Missing measurements still block above; absence requires bound observations.
+    if data['motion_counts']['dots']:expected_effects.append('dots')
+    dot_capabilities=[p.get('dot_capability')for s in data['screens']for p in s['parts']]
+    dot_status='present'if data['motion_counts']['dots']else'no_corresponding_element'if dot_capabilities and all(dot_capabilities)else'measurement_missing'
+    data['motion_capabilities']={'dots':{'policy':motion_prep.DOT_POLICY,'status':dot_status,'label':'新版面无对应元素'if dot_status=='no_corresponding_element'else'当前有效状态标记'}}
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}"></head>')
     label_names=set(re.findall(r'data-label-(?:text|h|v)="([^"]+)"',text))
     data['shared']['nav_labels']={k:v for k,v in data['shared'].get('nav_labels',{}).items()if k in {html.unescape(x)for x in label_names}}
@@ -660,7 +692,15 @@ def build_page(name, records, args, candidate):
     refs_parser=hybrid.builder.Refs();refs_parser.feed(probe)
     actual_refs={r for r,_ in refs_parser.refs}|{r for r,_ in hybrid.builder.nested_refs(data)}
     data['shared']['avif_assets']={k:v for k,v in avif_map.items()if k in actual_refs}
+    data=public_page_data(data)
     text=DATA.sub(lambda m:m[1]+json.dumps(data,ensure_ascii=False).replace('</',r'<\/')+m[3],text,count=1)
+    # The exact HTML used for the raster also owns its spoken/text equivalent.
+    text,_=publication.install_transcripts(text,transcripts,url,omit_local_paths=True)
+    if not (candidate/'favicon.svg').exists():
+        favicon=next((root/'favicon.svg' for root in (args.legacy_site,args.baseline) if (root/'favicon.svg').is_file()),None)
+        if favicon:shutil.copyfile(favicon,candidate/'favicon.svg')
+    if url not in {'/404.html','/404/'}:
+        text,_=publication.apply_metadata(text,url,candidate,data,source)
     dest=candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(text,encoding='utf8')
     for p,proof in inputs.items():
         if stamp(p)!=proof: issues.append('构建期间输入变化：'+p)
@@ -673,7 +713,7 @@ def build_page(name, records, args, candidate):
     elif old_video:issues.append('原视频还未重新定位；禁止发布本候选')
     return {'url':url,'status':'built' if not issues else 'blocked','issues':sorted(set(issues)),
             'inputs':inputs,'html_sha256':hybrid.digest(dest),'quality':q,'preview_only':preview_only,
-            'effects_expected':expected_effects,'video_expected':video_expected,
+            'effects_expected':expected_effects,'effects_capabilities':data['motion_capabilities'],'motion_appearance':motion_prep.appearance(),'video_expected':video_expected,
             'geometry_sha256':geometry_sha256,'original_video':old_video,
             'screens':screen_count,'images':image_count,'template_shell':templated,'anchor_binding':'owning-screen',
             'anchors':sum(len(x['screen_anchors'])for x in data['screens'])}

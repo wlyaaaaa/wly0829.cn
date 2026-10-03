@@ -8,10 +8,13 @@ import {searchPanel,globalSearchEntries} from '../app/search.js';
 import {createCompactSearchEntry,searchCompactEntries} from '../app/compact-search.js';
 import {ruleReaderGuides} from '../app/content-rule-reader.js';
 import {systemHomeChapters} from '../app/system-home-content.js';
+import {publicSearchText} from '../app/public-search-projection.js';
 const file=(p)=>readFile(fileURLToPath(new URL('../dist/'+p,import.meta.url)),'utf8');
 const region=(html,id)=>html.split('data-project-reading-panel="'+id+'"')[1]?.split('data-project-reading-panel=')[0]||'';
 const visibleText=(html)=>html.replace(/<[^>]*>/g,'').replaceAll('&quot;','\"').replaceAll('&#x27;',"'").replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>');
-const normalizeAnnotated=(text)=>text.replace(/([A-Za-z0-9_.+/-]+)（[^）]*）/g,'$1').replace(/\s+/g,'');
+// The owner requires local path literals to leave public prose; all other
+// product and reference meaning must still survive the two reading layers.
+const normalizeAnnotated=(text)=>publicSearchText(text).replaceAll('（本机路径）','').replace(/([A-Za-z0-9_.+/-]+)（[^）]*）/g,'$1').replace(/\s+/g,'');
 
 async function createReadingFixture(initialHash){
  const runtime=await readFile(fileURLToPath(new URL('../static-site/main.jsx',import.meta.url)),'utf8');

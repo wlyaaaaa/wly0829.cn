@@ -1,0 +1,58 @@
+{
+  "schema": "wly.motion-appearance.v1",
+  "release_stage": "after-oss-first-release",
+  "selection": "本人要求：默认全效果，速度 2.5 倍；AI建议的幅度2.5倍保留，具体观感待本人验收",
+  "visual_acceptance": "pending_owner_review",
+  "amplitude": 2.5,
+  "speed_multiplier": 2.5,
+  "default_all_effects": true,
+  "baseline": {
+    "parallax_desktop_px": 5,
+    "parallax_phone_px": 2,
+    "parallax_slope": 0.014,
+    "card_enter_px": 32,
+    "screen_enter_px": 40,
+    "hover_px": 2,
+    "card_hover_px": 3,
+    "pulse_scale_delta": 0.5,
+    "seam_scale_delta": 0.05,
+    "ripple_scale_delta": 0.08
+  },
+  "duration_ms": {
+    "cards": 900,
+    "card_stagger": 120,
+    "numbers": 1200,
+    "number_cleanup": 1500,
+    "screen_enter": 800,
+    "pulse": 3000,
+    "arrows": 2800,
+    "seam": 1400,
+    "update": 1800
+  },
+  "duration_basis": "实际首版原时长；JS视觉动画/延迟/清理除以速度倍率，现有CSS动画与过渡的真实时间线播放率设为2.5；受保护视频模块的播放率与准入不改",
+  "stall_insurance": {
+    "selection": "本人最新要求：仅前台且动画正在播放，连续约5秒明显低FPS才退本页静态；AI补充保守的观察窗口和排除办法",
+    "startup_grace_ms": 2000,
+    "scroll_quiet_ms": 1000,
+    "animation_check_ms": 250,
+    "window_ms": 6000,
+    "minimum_observed_ms": 5000,
+    "minimum_frames": 8,
+    "maximum_median_fps": 10,
+    "minimum_slow_fraction": 0.9,
+    "isolated_frame_reset_ms": 1200,
+    "policy": "前台、非减少动态、视口内真实动画正在运行；打开或恢复前2秒、滚动或转屏后1秒均不计。最近6秒连续观察至少5秒、至少8帧，中位数低于10FPS且90%以上帧间隔超过100ms才触发。单次>=1200ms长帧清空观察，宁可不触发；后台和无动画时也清空。触发只保存在当前页面内存，不写浏览器存储、不影响下页，console仅一行给出实测FPS和持续秒数。"
+  },
+  "dot_policy": "current-active-status-v1",
+  "dot_policy_note": "真实在用/正常/运行/有效状态标记呼吸；空圈、叉、停用、待定及装饰注释点不挂。明确保留且绑定原资产的透明状态点仍按实际标记测量。新版面无对应元素不算缺项；量测失败仍阻断。",
+  "acceptance_items": [
+    "桌面纸面视差上限 ±12.5px，手机 ±5px；需要本人判断一眼可见且不晃眼",
+    "卡片进入位移80px、有效360ms，整屏进入100px、有效320ms；需要本人判断节奏与晃动",
+    "呼吸环最大2.25倍、有效1.2秒一周期；箭头光点有效1.12秒，路径仍绑定原标记",
+    "数字滚动有效480ms，圈号始终保持圈号；最终数字不变",
+    "接缝、状态涟漪、水彩及落叶的幅度增加；保持系统减少动态、后台暂停和原交互",
+    "MM-02：恢复正常动态后，视差与尚未播放的数字重新生效；只按真实系统媒体状态验",
+    "MM-03：桌面和手机均默认六条落叶，响应式位置/尺寸适配但不减效果档；逐条检查横向轨迹能进入视口",
+    "速度和幅度分开核实；全开不读设备硬件性能等级，保险只看实际严重卡顿，不添加音乐"
+  ]
+}

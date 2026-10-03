@@ -15,6 +15,8 @@ from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT/'scripts') not in sys.path: sys.path.insert(0,str(ROOT/'scripts'))
+from public_page_contract import public_page_data
 LIMIT = 1_000_000_000
 BUDGET = 850_000_000
 VARIANT = re.compile(r'^(.*)-(828|1280|1920|2880)-([a-f0-9]{12})\.(avif|webp)$')
@@ -47,14 +49,16 @@ def write_json(p, data):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
+def is_topic_word_exception(text, match):
+    if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('正式法律文书仍交 Claude',text)):
+        return True
+    if match[0]=='再审':
+        pattern=re.escape('跨项目认知审计')+r'(?:\\+n|\s)+'+re.escape('给我看的分析按日期存档；再审时先对照上次哪些问题解决了')
+        return any(match.start()==approved.start()+approved[0].index('再审') for approved in re.finditer(pattern,text))
+    return False
+
 def clean_provenance(value):
-    if isinstance(value, dict):
-        return {k: clean_provenance(v) for k, v in value.items()
-                if k not in {'master_local', 'input_path', 'ocr_evidence'}
-                and not (k == 'source' and isinstance(v, str) and LOCAL.search(v))}
-    if isinstance(value, list):
-        return [clean_provenance(v) for v in value]
-    return value
+    return public_page_data(value)
 
 def clean_repo_bindings(value, pointer='page-data', registered_repos=None):
     if registered_repos is None:
@@ -330,7 +334,7 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
         text = raw.decode('utf-8-sig')
         for name, pattern in [('private_path',PRIVATE),('excluded_topic',EXCLUDED_TOPICS)]:
             for m in pattern.finditer(text):
-                if name=='excluded_topic' and m[0]=='法律' and any(a.start()<=m.start() and m.end()<=a.end() for a in re.finditer('正式法律文书仍交 Claude',text)): continue
+                if name=='excluded_topic' and is_topic_word_exception(text,m): continue
                 line=text.count('\n',0,m.start())+1;column=m.start()-text.rfind('\n',0,m.start())
                 findings.append({'file':rel,'type':name,'line':line,'column':column,'offset':m.start(),'matched':m[0]})
         for repo in PRIVATE_REPOS:
@@ -543,6 +547,12 @@ def build(source, output, report_path, incomplete):
            'generated_old_browser_fallbacks':fallbacks,'responsive_source_images':len(groups)}
     stats['private_repository_rewrites']=PRIVATE_REPO_REWRITES
     stats['changed_scripts']=changed_scripts
+    import importlib.util
+    public_spec=importlib.util.spec_from_file_location('assembled_publication_fields',ROOT/'scripts/audit-page-publication.py')
+    public_module=importlib.util.module_from_spec(public_spec);public_spec.loader.exec_module(public_module)
+    public_fields=public_module.finalize_public_fields(output)
+    if public_fields['remaining_local_literals']:raise ValueError('Local/internal literals remain in assembled public fields')
+    stats['public_field_projection']={key:len(public_fields[key]) for key in ('changed_files','omitted_runtime_fields','omitted_local_literals','remaining_local_literals')}
     return validate(output,report_path,incomplete,stats)
 
 def main():

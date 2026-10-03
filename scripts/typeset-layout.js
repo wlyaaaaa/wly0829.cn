@@ -1,3 +1,99 @@
+// Shared appearance helpers also run on the existing homepage runtime.
+function motionNumberToken(text){
+ const ordinary=String(text).match(/[+-]?\d[\d,]*(?:\.\d+)?/);
+ if(ordinary)return {numeric:ordinary[0],value:Number(ordinary[0].replaceAll(',','')),notation:'decimal'};
+ const circled=String(text).match(/[⓪①-⑳]/);
+ return circled?{numeric:circled[0],value:circled[0]==='⓪'?0:circled[0].codePointAt(0)-0x2460+1,notation:'circled'}:null;
+}
+function motionNumberText(number,value,final){
+ if(final)return number.text;
+ const glyph=number.notation==='circled'?(Math.round(value)===0?'⓪':Math.round(value)>=1&&Math.round(value)<=20?String.fromCodePoint(0x2460+Math.round(value)-1):String(Math.round(value))):String(value);
+ return number.text.replace(number.numeric,glyph);
+}
+function motionDotEnabled(marker){
+ if(Array.isArray(marker))return true; // Legacy homepage has only image coordinates.
+ if(marker.policy==='current-active-status-v1')return marker.state==='active';
+ return !['cross','pill'].includes(marker.shape)&&!String(marker.basis||'').includes('annotation pin');
+}
+function motionDuration(name){return SiteMotionAppearance.duration_ms[name]/SiteMotionAppearance.speed_multiplier;}
+function motionDelay(milliseconds){return milliseconds/SiteMotionAppearance.speed_multiplier;}
+function motionLeafPosition(width,gap,index,count){
+ const size=width<600?28:40+index%3*7,drift=(index%2?35:-30)*SiteMotionAppearance.amplitude;
+ const desired=gap>45?(index%2?width-gap*(.25+(index%3)*.24):gap*(.18+(index%3)*.24)):width*(.12+index*.76/Math.max(1,count-1));
+ const low=Math.min(width*.3,Math.max(0,-drift)+size*1.5),high=Math.max(low,width-Math.max(0,drift)-size*1.5);
+ return Math.max(low,Math.min(high,desired));
+}
+function installMotionExperience(config){
+ const accelerated=new WeakSet(),rm=matchMedia('(prefers-reduced-motion:reduce)'),policy=config.stall_insurance;
+ const state={stalled:false,reason:null,slow_frames:0,observed_ms:0,observed_frames:0,median_fps:null,slow_fraction:0,animation_running:false};
+ let frame=0,last=null,eligibleAt=0,animationCheckAt=0;const samples=[];
+ function speedCSS(){
+  for(const animation of document.getAnimations()){
+   if(!(animation instanceof CSSAnimation||animation instanceof CSSTransition)||accelerated.has(animation)||animation.effect?.target?.closest?.('video.hero-video'))continue;
+   animation.updatePlaybackRate(config.speed_multiplier);accelerated.add(animation);
+  }
+ }
+ document.addEventListener('animationstart',speedCSS,true);document.addEventListener('transitionrun',speedCSS,true);
+ speedCSS();
+ const eligible=()=>!document.hidden&&!rm.matches&&!document.body.classList.contains('motion-off')&&!state.stalled;
+ function animationRunning(now){
+  if(now<animationCheckAt)return state.animation_running;
+  animationCheckAt=now+policy.animation_check_ms;
+  state.animation_running=document.getAnimations().some(animation=>{
+   const target=animation.effect?.target;if(animation.playState!=='running'||!target?.isConnected)return false;
+   const rect=target.getBoundingClientRect();if(rect.width<=0||rect.height<=0||rect.bottom<=0||rect.top>=innerHeight||rect.right<=0||rect.left>=innerWidth)return false;
+   const style=getComputedStyle(target);return style.display!=='none'&&style.visibility!=='hidden'&&style.opacity!=='0';
+  });
+  return state.animation_running;
+ }
+ function pauseStalledVideo(){
+  if(!state.stalled)return;
+  for(const video of document.querySelectorAll('video.hero-video')){video.pause();video.hidden=true;video.classList.remove('ready');}
+ }
+ document.addEventListener('play',pauseStalledVideo,true);document.addEventListener('playing',pauseStalledVideo,true);document.addEventListener('site-motion',pauseStalledVideo);
+ function clearWindow(){samples.length=0;state.slow_frames=0;state.observed_ms=0;state.observed_frames=0;state.median_fps=null;state.slow_fraction=0;}
+ function stop(){if(frame)cancelAnimationFrame(frame);frame=0;last=null;state.animation_running=false;clearWindow();}
+ function sample(){
+  const now=performance.now(); // Actual callback delivery, never an accelerated animation clock.
+  frame=0;if(!eligible()){stop();return;}
+  const observing=now>=eligibleAt&&animationRunning(now);
+  if(!observing){last=null;clearWindow();}
+  else if(last!==null){const gap=now-last;
+   // A single decode/GC pause starts a fresh observation. Even sustained gaps
+   // above this ceiling are conservatively left alone instead of guessed at.
+   if(gap>=policy.isolated_frame_reset_ms)clearWindow();
+   else{
+    samples.push({start:last,end:now,gap});while(samples.length&&samples[0].start<now-policy.window_ms)samples.shift();
+    const gaps=samples.map(sample=>sample.gap).sort((a,b)=>a-b),count=gaps.length,mid=Math.floor(count/2);
+    const median=count%2?gaps[mid]:(gaps[mid-1]+gaps[mid])/2;
+    state.observed_frames=count;state.observed_ms=now-samples[0].start;state.median_fps=1000/median;
+    state.slow_frames=gaps.filter(value=>value>1000/policy.maximum_median_fps).length;state.slow_fraction=state.slow_frames/count;
+    if(state.observed_ms>=policy.minimum_observed_ms&&count>=policy.minimum_frames&&state.median_fps<policy.maximum_median_fps&&state.slow_fraction>=policy.minimum_slow_fraction){
+     state.stalled=true;state.reason='severe-frame-stall';
+     console.warn(`[SiteMotionInsurance] 实测 ${state.median_fps.toFixed(1)} FPS，持续 ${(state.observed_ms/1000).toFixed(1)} 秒；本页退回静态。`);
+     document.body.classList.add('motion-stalled');motion();pauseStalledVideo();return;
+    }
+   }
+  }
+  last=observing?now:null;frame=requestAnimationFrame(sample);
+ }
+ function reset(){stop();animationCheckAt=0;if(eligible()){eligibleAt=performance.now()+policy.startup_grace_ms;frame=requestAnimationFrame(sample);
+  for(const section of document.querySelectorAll('.screen')){const rect=section.getBoundingClientRect();if(rect.bottom>0&&rect.top<innerHeight)reveal(section);}
+ }speedCSS();}
+ // Scrolling/resize can briefly drop frames; never count their settling time.
+ const settle=()=>{last=null;clearWindow();animationCheckAt=0;eligibleAt=Math.max(eligibleAt,performance.now()+policy.scroll_quiet_ms);};
+ document.addEventListener('scroll',settle,{passive:true});window.addEventListener('resize',settle,{passive:true});
+ rm.addEventListener('change',reset);document.addEventListener('visibilitychange',reset);reset();
+ window.SiteMotionInsurance={get snapshot(){return {...state,checking:!!frame,observing:!!frame&&state.animation_running&&performance.now()>=eligibleAt,reduced_motion:rm.matches,hidden:document.hidden};}};
+}
+function motionCSSProperties(config){
+ const scale=config.amplitude,b=config.baseline,d=config.duration_ms;
+ return {'--motion-amplitude':String(scale),'--motion-card-enter-y':b.card_enter_px*scale+'px','--motion-screen-enter-y':b.screen_enter_px*scale+'px',
+  '--motion-hover-y':-b.hover_px*scale+'px','--motion-card-hover-y':-b.card_hover_px*scale+'px','--motion-pulse-scale':String(1+b.pulse_scale_delta*scale),
+  '--motion-seam-start':String(1-b.seam_scale_delta*scale),'--motion-ripple-end':String(1+b.ripple_scale_delta*scale),
+  '--motion-card-duration':d.cards+'ms','--motion-screen-duration':d.screen_enter+'ms','--motion-pulse-duration':d.pulse+'ms',
+  '--motion-arrow-duration':d.arrows+'ms','--motion-seam-duration':d.seam+'ms','--motion-update-duration':d.update+'ms'};
+}
 /* Manifest geometry is normalized against each complete PNG, never cropped. */
 const typesetReadingState={width:innerWidth,height:innerHeight,revision:0,saved:null};
 // Layout coordinates exclude entrance/parallax transforms and span all image parts.

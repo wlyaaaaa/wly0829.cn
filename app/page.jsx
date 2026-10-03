@@ -305,7 +305,7 @@ function Header({ path, search = "" }) {
         </nav>
         {path === "/" ? <div className="home-search-dock"><a className="desktop-home-search" href="#home-search"><MagnifyingGlass size={17} aria-hidden="true" />搜索项目与能力</a></div> : <GlobalSearch path={path} search={search} className="desktop-search" resultId="desktop-global-search-results" />}
         <div className="header-utilities">
-        <a className="header-connect" data-grafana-entry href="/#grafana-status" aria-label="查看 Grafana 状态"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
+        <a className="header-connect" data-grafana-entry href="/cockpit/#grafana" aria-label="查看 Grafana 状态"><SiGrafana size={17} color="#F46800" aria-hidden="true" /><span>Grafana</span></a>
         <SiteLink className="header-connect" href="/mcp" aria-label="连接电脑" aria-current={path === "/mcp" ? "page" : undefined}><SiModelcontextprotocol size={17} aria-hidden="true" /><span>连接电脑</span></SiteLink>
         <SiteLink className="header-connect" href="/computer-access/" aria-label="授权与状态" aria-current={path === "/computer-access" ? "page" : undefined}><ShieldCheck size={18} aria-hidden="true" /><span>授权与状态</span></SiteLink>
         <button
@@ -1785,7 +1785,7 @@ function SkillsPage() {
       <div className="skill-category-summary"><p className="skill-category-note">分类只影响浏览；页头搜索始终覆盖全部 Skills。</p><p className="skill-result-count" data-skill-result-count="" role="status" aria-live="polite">{skills.length} 项能力</p></div>
       <div className="skill-directory">
           {skills.map((item, index) => (
-            <SiteLink className="skill-directory-item" href={`/skills/${item.slug}`} data-skill-categories={skillCategoryIds(item.slug).join(" ")} key={item.slug}>
+            <SiteLink id={`skill-${item.slug}`} className="skill-directory-item" href={`/skills/${item.slug}`} data-skill-categories={skillCategoryIds(item.slug).join(" ")} key={item.slug}>
               <span className="directory-index">{String(index + 1).padStart(2, "0")}</span>
               <span className="directory-copy"><span className="skill-card-top"><strong>{annotateTerms(item.title)}</strong><StatusPill status={skillStatusTone(item)}>{annotateTerms(item.status)}</StatusPill></span><span className="skill-plain-title">Skill · {item.name}</span><span>{annotateTerms(skillOutcomes[item.slug].value)}</span><small>{item.provenance} · 成熟度 {item.maturity}（{maturityMeaning(item.maturity)}）</small></span>
               <ArrowRight size={18} aria-hidden="true" />

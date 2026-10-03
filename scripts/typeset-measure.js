@@ -1,3 +1,18 @@
+const TYPESET_DOT_POLICY='current-active-status-v1';
+const TYPESET_DOT_SELECTOR='.dot,.status-dot,.ds-status-dot,.legend-dot,.hub-status-dot,[data-role=status-dot],.feature-status-dot,.mock-status-dot,.legend-color-dot,.hub-status,.ct-point-status';
+function typesetStatusState(el){
+ const owner=el.closest('[data-state],[data-status]'),state=el.dataset.state||el.dataset.status||owner?.dataset.state||owner?.dataset.status||'',label=el.dataset.text||el.getAttribute('aria-label')||el.closest('.hub-status,.ct-point-status')?.textContent||el.parentElement?.textContent||'';
+ if(el.matches('.dot-x,.dot-off,.hub-status-frozen')||['off','unknown','pending','uncertain','unused','ring','failed','error','offline','disabled','loading','paused'].includes(state))return 'inactive';
+ if(el.matches('.dot.dot-on')||['on','ok','active','running','enabled','valid','normal'].includes(state)||el.matches('[data-role=status-dot][data-ct-dot-xywh]'))return 'active';
+ if(/[○✕×]|停用|待定|待验收|待实施|未启用|未运行|没用过|说不准|未知|离线|暂停|冻结/.test(label))return 'inactive';
+ if(/在用|正常|正在运行|已启用|有效/.test(label))return 'active';
+ return 'non_status';
+}
+function typesetNumberToken(text){
+ const match=text.match(/[+-]?\d[\d,]*(?:\.\d+)?/);
+ if(match)return {numeric:match[0],value:Number(match[0].replaceAll(',','')),notation:'decimal'};
+ const circled=text.match(/[⓪①-⑳]/);return circled?{numeric:circled[0],value:circled[0]==='⓪'?0:circled[0].codePointAt(0)-0x2460+1,notation:'circled'}:null;
+}
 (async()=>{
  const params=new URLSearchParams(location.search),selection=(params.get('pages')||params.get('page')||'').split(',').filter(Boolean);
  const plan=(await(await fetch('/__typeset/geometry-plan')).json()).filter(item=>!selection.length||selection.includes(item.page)),existing=await(await fetch('/__typeset/geometry-existing')).json(),records=existing.geometry_version===2?existing.records:[];
@@ -9,7 +24,7 @@
  async function save(complete){return fetch('/__typeset/geometry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({schema:'wly.typeset-geometry.v1',geometry_version:2,fit_input:fit.input,complete,records,measured_at_beijing:new Date().toLocaleString('sv-SE',{timeZone:'Asia/Shanghai'})+'+08:00',method:'Chrome DOM rectangles at producer viewport height 200 with hidden scrollbars and producer FIT_JS; no screenshot or image viewing'})});}
  for(let i=0;i<plan.length;i++){
   const item=plan[i];state.textContent=`量测 ${i+1}/${plan.length}：${item.screen}-${item.orientation}`;
-  const prior=records.find(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v7'&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length);
+  const prior=records.find(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length);
   if(prior)continue;
   if(measured>=limit)break;
   measured++;
@@ -27,31 +42,39 @@
    if(!cards.length)cards=[...doc.querySelectorAll('main#page>.row> .col > :not(.ill):not(.title-wrap),main#page>.c-prose,main#page>.c-text')].map(rect).filter(valid);
    cards=cards.filter(r=>!liveRects.some(l=>Math.max(0,Math.min(r[0]+r[2],l[0]+l[2])-Math.max(r[0],l[0]))*Math.max(0,Math.min(r[1]+r[3],l[1]+l[3])-Math.max(r[1],l[1]))>r[2]*r[3]*.5));
    const normalize=text=>text.replace(/[\s,，]/g,'');const oldNumbers=item.motion_numbers||[];
-   const numbers=oldNumbers.length?[...doc.querySelectorAll('.num,[data-role=num],.dg-number,.feature-number,.dd-chart-number,.hub-number-value,.ct-step-number,.slot-step-number,.ghost,.brushfont,.dg-heading,.hub-heading,.sechead')].map(el=>{
-    const text=el.textContent.trim(),m=text.match(/[+-]?\d[\d,]*(?:\.\d+)?/),legacy=oldNumbers.some(n=>normalize(n.text)===normalize(text)),stat=el.matches('.num,[data-role=num],.dd-chart-number,.hub-number-value');
-    const r=rect(el.matches('.ghost')?el.closest('.title-wrap'):el);return m&&(legacy||stat)?{text,numeric:m[0],value:Number(m[0].replaceAll(',','')),rect:r,basis:legacy?'legacy number text in producer DOM':'current statistic field in producer DOM'}:null;
+   const numbers=oldNumbers.length?[...doc.querySelectorAll('.num,[data-role=num],.dg-number,.feature-number,[data-motion-text=number],.dd-chart-number,.hub-number-value,.ct-step-number,.slot-step-number,.ghost,.brushfont,.dg-heading,.hub-heading,.sechead')].map(el=>{
+    const text=el.textContent.trim(),m=typesetNumberToken(text),legacy=oldNumbers.some(n=>normalize(n.text)===normalize(text)||m?.notation==='circled'&&Number(n.value??n.numeric)===m.value&&normalize(text)===m.numeric),stat=el.matches('.num,[data-role=num],.dd-chart-number,.hub-number-value');
+    const r=rect(el.matches('.ghost')?el.closest('.title-wrap'):el);return m&&(legacy||stat)?{text,...m,rect:r,basis:legacy?'legacy number semantic value in current producer DOM':'current statistic field in producer DOM'}:null;
    }).filter(x=>x&&valid(x.rect)):[];
-   const dots=[...doc.querySelectorAll('.dot,.status-dot,.legend-dot,.hub-status-dot,[data-role=status-dot],.feature-status-dot,.mock-status-dot,.legend-color-dot,.hub-status,.ct-point-status')].map(el=>{
-    const r=rect(el),cs=win.getComputedStyle(el),cross=el.matches('.dot-x,[data-state=off]'),pill=el.matches('.hub-status,.ct-point-status'),crossStyle=cross?win.getComputedStyle(el,'::before'):null;
-    const colour=cross&&crossStyle.backgroundColor!=='rgba(0, 0, 0, 0)'?crossStyle.backgroundColor:pill&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'?cs.backgroundColor:cross?cs.color:cs.backgroundColor!=='rgba(0, 0, 0, 0)'?cs.backgroundColor:cs.color;
-    return {rect:r,shape:cross?'cross':pill?'pill':'circle',colour,basis:'Existing producer DOM marker; preserve its shape and colour'};
-   }).filter(x=>valid(x.rect));
+   const dotIssues=[],dotObservations=[],dots=[];
+   for(const el of doc.querySelectorAll(TYPESET_DOT_SELECTOR)){
+    if(el.matches('.hub-status,.ct-point-status')&&el.querySelector(TYPESET_DOT_SELECTOR))continue;
+    const status=typesetStatusState(el),r=rect(el),cs=win.getComputedStyle(el),measurable=valid(r)&&cs.display!=='none'&&(cs.visibility!=='hidden'||el.hasAttribute('data-ct-dot-xywh'));
+    const observation={selector:el.className||el.getAttribute('data-role'),state:status,measurable,rect:r,placement:el.dataset.ctDotPlacement||null};dotObservations.push(observation);
+    if(status!=='active')continue;
+    if(!measurable||el.dataset.incomplete){dotIssues.push('active status marker is not measurable: '+observation.selector+(el.dataset.incomplete?' '+el.dataset.incomplete:''));continue;}
+    const pill=el.matches('.hub-status,.ct-point-status');
+    if(pill){dotIssues.push('active status capsule lacks a separately measurable dot: '+observation.selector);continue;}
+    const colour=cs.backgroundColor!=='rgba(0, 0, 0, 0)'?cs.backgroundColor:cs.color;
+    dots.push({rect:r,shape:'circle',colour,state:'active',policy:TYPESET_DOT_POLICY,basis:'Current active status marker in producer DOM'});
+   }
+   const dotCapability={policy:TYPESET_DOT_POLICY,status:dots.length?'present':dotIssues.length?'measurement_failed':'no_corresponding_element',active_markers:dotObservations.filter(x=>x.state==='active').length,measured_markers:dots.length,observations:dotObservations};
    const arrows=[...doc.querySelectorAll('.sequence-arrow,.arrow,.flow-arrow,[data-comp=arrow],.ds-source-arrow-glyph,.ds-judgement-arrow-symbol')].map(el=>{const r=rect(el);return {rect:r,direction:r[3]>r[2]?'v':'h'};}).filter(x=>valid(x.rect));
    for(const el of doc.querySelectorAll('.c-sequence .sequence-item,.ds-node,.ds-layer,.ds-pair-connector,.ds-judgement-row,.dd-sample'))for(const pseudo of ['::before','::after']){
     const cs=win.getComputedStyle(el,pseudo),connector=el.closest('.c-sequence')?.dataset.connector,painted=cs.backgroundImage!=='none'||!['transparent','rgba(0, 0, 0, 0)'].includes(cs.backgroundColor)||['borderLeftWidth','borderRightWidth','borderTopWidth','borderBottomWidth'].some(k=>parseFloat(cs[k])>1);
     const pin=el.matches('.dd-sample')&&pseudo==='::after'&&cs.borderRadius==='50%';
-    if(cs.content==='none'||cs.display==='none'||cs.position!=='absolute'||!pin&&!cs.clipPath.includes('polygon')&&!(['arrow','ribbon','line'].includes(connector)&&painted))continue;
+    if(pin||cs.content==='none'||cs.display==='none'||cs.position!=='absolute'||!cs.clipPath.includes('polygon')&&!(['arrow','ribbon','line'].includes(connector)&&painted))continue;
     const proxy=doc.createElement('span');for(const key of ['position','left','top','right','bottom','width','height','transform','transformOrigin','boxSizing','marginLeft','marginTop','marginRight','marginBottom','borderTopWidth','borderRightWidth','borderBottomWidth','borderLeftWidth','borderTopStyle','borderRightStyle','borderBottomStyle','borderLeftStyle'])proxy.style[key]=cs[key];proxy.style.visibility='hidden';proxy.style.pointerEvents='none';el.append(proxy);const r=rect(proxy);proxy.remove();
-    if(valid(r)){if(pin)dots.push({rect:r,shape:'circle',colour:cs.backgroundColor,basis:'Existing producer CSS annotation pin; not a live status lamp'});else arrows.push({rect:r,direction:r[3]>r[2]?'v':'h',basis:'computed '+pseudo+' connector in producer DOM'});}
+    if(valid(r))arrows.push({rect:r,direction:r[3]>r[2]?'v':'h',basis:'computed '+pseudo+' connector in producer DOM'});
    }
    const illustrations=[...doc.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art')].map(im=>({src:im.getAttribute('src'),natural_size:[im.naturalWidth,im.naturalHeight],rect:rect(im)})).filter(x=>valid(x.rect));
-   records.push({...item,measurement_recipe:'producer-components-v7',fit_sha256:fit.input.sha256,measured_height:doc.documentElement.scrollHeight,measured_width:doc.documentElement.clientWidth,overflow_width:doc.documentElement.scrollWidth,
-                 cards,numbers,dots,arrows,illustrations,broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[]});
+   records.push({...item,measurement_recipe:'producer-components-v8',dot_capability:dotCapability,fit_sha256:fit.input.sha256,measured_height:doc.documentElement.scrollHeight,measured_width:doc.documentElement.clientWidth,overflow_width:doc.documentElement.scrollWidth,
+                 cards,numbers,dots,arrows,illustrations,broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:[...dotIssues,...(Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[])]});
   }catch(e){records.push({...item,issues:[String(e)]});}
   if(measured%25===0)await save(false);
  }
  frame.remove();
- const pending=plan.filter(item=>!records.some(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v7'&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length)).length,complete=pending===0;
+ const pending=plan.filter(item=>!records.some(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length)).length,complete=pending===0;
  const response=await save(complete);
  state.dataset.done='true';state.dataset.complete=String(complete);
  state.dataset.pending=String(pending);

@@ -35,7 +35,7 @@ def main():
             if re.match(r'^/[A-Za-z]:',path):path=path[1:]
             return resource_url(Path(path))
         if Path(owner).suffix=='.html':
-            text=re.sub(r'((?:src|href|poster)=["\'])(file:///[^"\'<>]+)',lambda match:match[1]+file_url(match[2]),text)
+            text=re.sub(r'((?:src|href|poster|data-ct-dot-source)=["\'])(file:///[^"\'<>]+)',lambda match:match[1]+file_url(match[2]),text)
         else:text=re.sub(r'file:///[^\s"\'<>\)]+',file_url,text)
         if Path(owner).suffix=='.css':
             def relative_url(match):

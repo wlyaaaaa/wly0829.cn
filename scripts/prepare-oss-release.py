@@ -256,6 +256,10 @@ class Rewriter:
             tag = m.group(0)
             if tag.startswith(('<!--', '<!')):
                 continue
+            meta_image = bool(re.match(r'<meta\b', tag, re.I)) and any(
+                a['name'].lower() in ('property', 'name') and a['value'].lower() in
+                ('og:image', 'og:image:url', 'og:image:secure_url', 'twitter:image', 'twitter:image:src')
+                for a in ATTR.finditer(tag))
             for a in ATTR.finditer(tag):
                 name = a['name'].lower()
                 raw = a['value']
@@ -271,7 +275,7 @@ class Rewriter:
                         if new != s['url']:
                             edits.append((position + s.start('url'), position + s.end('url'), new, 'html_srcset'))
                     continue
-                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src'):
+                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'content' and meta_image:
                     context = 'resource' if name != 'href' or tag.lower().startswith('<link') else 'navigation'
                     new = self.url(raw, owner, context)
                     if new != raw:

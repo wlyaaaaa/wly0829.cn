@@ -474,6 +474,7 @@ function initializeProjectReadingLayers() {
   const nav = document.querySelector(".project-reading-nav");
   const panels = Array.from(document.querySelectorAll("[data-project-reading-panel]"));
   if (!nav || !panels.length) return;
+  if (nav.dataset) nav.dataset.historyRestoration = "native";
   const tabs = Array.from(nav.querySelectorAll("[data-project-reading-tab]"));
   const ids = tabs.map((tab) => tab.dataset.projectReadingTab);
   const legacyLayers = {
@@ -539,15 +540,26 @@ function initializeProjectReadingLayers() {
     });
   });
 
-  function followLocation() {
+  function followLocation({ scroll = true } = {}) {
     const { id, target } = locationTarget();
     const panel = show(id);
-    if (window.location.hash) window.requestAnimationFrame(() => reveal(target || panel));
+    if (scroll && window.location.hash) window.requestAnimationFrame(() => reveal(target || panel));
   }
-  window.addEventListener("popstate", followLocation);
-  window.addEventListener("hashchange", followLocation);
-  window.addEventListener("pageshow", (event) => { if (event.persisted) followLocation(); });
-  followLocation();
+  // Native history owns the saved viewport. Reveal the requested tab without
+  // replacing the browser's restored position with its opening heading.
+  let historyHash = null;
+  window.addEventListener("popstate", () => {
+    historyHash = window.location.hash;
+    followLocation({ scroll: false });
+  });
+  window.addEventListener("hashchange", () => {
+    const fromHistory = historyHash === window.location.hash;
+    historyHash = null;
+    followLocation({ scroll: !fromHistory });
+  });
+  window.addEventListener("pageshow", (event) => { if (event.persisted) followLocation({ scroll: false }); });
+  const navigationType = window.performance?.getEntriesByType?.("navigation")[0]?.type;
+  followLocation({ scroll: navigationType !== "back_forward" });
 }
 
 function ensureOpenAncestors(target) {

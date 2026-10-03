@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
+from html.parser import HTMLParser
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
@@ -20,6 +21,9 @@ MANIFEST = 'release-manifest.json'
 spec = importlib.util.spec_from_file_location('assembled_builder', ROOT/'scripts/build-assembled-site.py')
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
+nav_spec = importlib.util.spec_from_file_location('release_navigation', ROOT/'scripts/repair-release-navigation.py')
+nav_repair = importlib.util.module_from_spec(nav_spec)
+nav_spec.loader.exec_module(nav_repair)
 
 def digest(path):
     with Path(path).open('rb') as f:
@@ -189,7 +193,7 @@ def local_reference(root, owner, reference):
         reference = parts.path + ('?'+parts.query if parts.query else '') + ('#'+parts.fragment if parts.fragment else '')
     return builder.resolve_ref(root, owner, reference)
 
-def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None):
+def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None, navigation_pages=None):
     # Preserve candidate HTML except href values, including href fields in page-data.
     pattern = re.compile(r'(\bhref\s*=\s*["\'])([^"\']+)(["\'])|("href"\s*:\s*")([^"\n]+)(")')
     def replace(match):
@@ -198,6 +202,11 @@ def rewrite_links(text, root, owner, available, mappings, preserved_root=None, a
         target = local_reference(root, owner, decoded)
         if target is None or target.suffix != '.html': return match[0]
         rel = target.relative_to(root).as_posix()
+        if navigation_pages is not None and decoded.startswith('/'):
+            replacement = nav_repair.resolve_navigation(decoded, navigation_pages)
+            if replacement == decoded: return match[0]
+            mappings.append({'page': file_route(owner.relative_to(root).as_posix()), 'original_href': decoded, 'temporary_href': replacement})
+            return start+replacement+end + (' data-original-href="'+html.escape(decoded,quote=True)+'"' if match[1] else '')
         if rel in available:
             fragment = unquote(urlsplit(decoded).fragment)
             preserved = preserved_root/rel if preserved_root else None
@@ -219,7 +228,7 @@ def rewrite_links(text, root, owner, available, mappings, preserved_root=None, a
                 if current == Path('.'): raise ValueError('No available parent page')
                 current = current.parent
         mappings.append({'page': file_route(owner.relative_to(root).as_posix()), 'original_href': decoded, 'temporary_href': replacement})
-        return start+replacement+end
+        return start+replacement+end + (' data-original-href="'+html.escape(decoded,quote=True)+'"' if match[1] else '')
     return pattern.sub(replace, text)
 
 def load_overlay(path, baseline):
@@ -296,6 +305,9 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
     # Old release-manifest is replaced by this generation; old content remains exact.
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
+    navigation_pages = nav_repair.page_inventory(output)
+    for rel in accepted_files:
+        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'))
     while pending:
         rel = pending.pop()
         if rel in copied: continue
@@ -311,7 +323,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         target = output/rel
         text = None
         if rel in accepted_files:
-            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files)
+            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files, navigation_pages)
         elif rel in old and rel not in overlays:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -327,6 +339,10 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
                 continue
             if dep in old and not dependency.is_file(): continue
             pending.append(dep)
+    for rel in nav_repair.restore_pending_links(output, navigation_pages):
+        if rel not in accepted_files:
+            overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),
+                             'after':{'sha256':digest(output/rel),'bytes':(output/rel).stat().st_size}}
     for rel, entry in old.items():
         if rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
             raise ValueError('Old file changed: '+rel)
@@ -375,6 +391,112 @@ def verify_release(output):
     for route in manifest['routes']:
         if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
     return manifest
+
+def topic_units(text):
+    """Keep full authored HTML blocks and JSON strings with their field identity."""
+    units=[]
+    def json_units(body, origin, owner):
+        try: value=json.loads(body)
+        except ValueError: return
+        decoded=[]
+        def walk(item, pointer):
+            if isinstance(item,dict):
+                for key,value in item.items():
+                    decoded.append((pointer+('#key',key),key));walk(value,pointer+(key,))
+            elif isinstance(item,list):
+                for i,value in enumerate(item):
+                    identity=('record',value['href'],value.get('title',''),value.get('type','')) if isinstance(value,dict) and 'href' in value and 'title' in value else ('item',i)
+                    walk(value,pointer+(identity,))
+            elif isinstance(item,str): decoded.append((pointer,item))
+        walk(value,())
+        tokens=list(re.finditer(r'"(?:\\.|[^"\\])*"',body,re.S))
+        if len(tokens)!=len(decoded): return
+        for token,(pointer,plain) in zip(tokens,decoded):
+            if json.loads(token[0])!=plain: return
+            units.append((('json',owner,pointer),plain,origin+token.start(),origin+token.end()))
+    if text.lstrip().startswith('window.'):
+        assignment=text.find('=');body=text[assignment+1:].strip().removesuffix(';')
+        origin=text.find(body,assignment+1)
+        json_units(body,origin,text[:assignment].strip())
+        return units
+    offsets=[0]+[m.end() for m in re.finditer('\n',text)]
+    class Blocks(HTMLParser):
+        def __init__(self):super().__init__(convert_charrefs=False);self.stack=[];self.script=None
+        def index(self):line,column=self.getpos();return offsets[line-1]+column
+        def handle_starttag(self,tag,attrs):
+            start=self.index();attributes=dict(attrs);opening=self.get_starttag_text()
+            if tag=='script':self.script=(start+len(opening),attributes)
+            if tag in {'p','li','dd','dt','blockquote','h1','h2','h3','h4','h5','h6'}:self.stack.append((tag,start))
+            # Attribute-only compatibility ids keep their entire tag, not a word.
+            if tag=='span' and attributes.get('id') and set(attributes)<={'id','class','aria-hidden'}:
+                units.append((('html-tag',tag),opening,start,start+len(opening)))
+        def handle_endtag(self,tag):
+            end=self.index()+len('</'+tag+'>')
+            if tag=='script' and self.script:
+                start,attrs=self.script
+                if attrs.get('type','').lower() in {'application/json','application/ld+json'}:json_units(text[start:self.index()],start,attrs.get('id','json-script'))
+                self.script=None
+            for i in range(len(self.stack)-1,-1,-1):
+                if self.stack[i][0]==tag:
+                    _,start=self.stack.pop(i);units.append((('html-block',tag),text[start:end],start,end));break
+    parser=Blocks();parser.feed(text)
+    return units
+
+def unchanged_topic_text(before, after, finding):
+    """Only the same complete unit in the same field can inherit a topic match."""
+    if finding.get('type') != 'excluded_topic': return False
+    offset=finding.get('offset');matched=finding.get('matched')
+    if not isinstance(offset,int) or not isinstance(matched,str) or after[offset:offset+len(matched)]!=matched:return False
+    old=topic_units(before);new=topic_units(after)
+    matches=[unit for unit in new if unit[2]<=offset and offset+len(matched)<=unit[3]]
+    if not matches:return False
+    authored=[unit for unit in matches if unit[0][0]!='html-tag']
+    if authored:matches=authored
+    owner,plain,_,_=min(matches,key=lambda unit:unit[3]-unit[2])
+    def normalized(value):return value.replace('\r\n','\n').replace('\r','\n')
+    plain=normalized(plain)
+    from public_page_contract import omit_local_literals
+    count_before=sum(1 for key,value,_,_ in old if key==owner and plain in {normalized(value),normalized(omit_local_literals(value)),normalized(omit_local_literals(value,replacement='（本机路径）'))})
+    count_after=sum(1 for key,value,_,_ in new if key==owner and normalized(value)==plain)
+    return count_before>0 and count_after<=count_before
+
+def retained_audit_topic(output, finding, manifest, baseline_cache):
+    if not manifest.get('audit_repair') or finding.get('type')!='excluded_topic': return False
+    ref=manifest.get('baseline_production_commit')
+    rel=finding.get('file','')
+    expected=manifest.get('baseline_files',{}).get(rel,{}).get('sha256')
+    if not isinstance(ref,str) or not re.fullmatch(r'[0-9a-f]{40,64}',ref) or not expected: return False
+    public_snapshot=manifest['audit_repair'].get('baseline_input_kind')=='complete_runtime_staging'
+    published=None
+    if public_snapshot:
+        key=(ref,MANIFEST)
+        if key not in baseline_cache:
+            read_git=subprocess.check_output(['git','show',ref+':site-release/'+MANIFEST],cwd=ROOT,stderr=subprocess.DEVNULL)
+            published=json.loads(read_git)
+            oss_spec=importlib.util.spec_from_file_location('oss_audit_baseline',ROOT/'scripts/prepare-oss-release.py')
+            oss=importlib.util.module_from_spec(oss_spec);oss_spec.loader.exec_module(oss)
+            oss.verify_manifest(published)
+            baseline_cache[key]=published
+        published=baseline_cache[key]
+        entry=published['files'].get(rel) or published['oss']['objects'].get(rel)
+        if not entry:return False
+        expected=entry['sha256']
+    if rel not in baseline_cache:
+        try:
+            if public_snapshot and rel in published['oss']['objects']:
+                obj=published['oss']['objects'][rel]
+                path=ROOT/'.publish/audit-public-baseline'/ref/rel
+                if not path.is_file() or digest(path)!=obj['sha256']:
+                    oss_spec=importlib.util.spec_from_file_location('oss_audit_body',ROOT/'scripts/prepare-oss-release.py')
+                    oss=importlib.util.module_from_spec(oss_spec);oss_spec.loader.exec_module(oss)
+                    oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60,download_to=path)
+                payload=path.read_bytes()
+            else:
+                payload=subprocess.check_output(['git','show',ref+':site-release/'+rel],cwd=ROOT,stderr=subprocess.DEVNULL)
+            baseline_cache[rel]=payload.decode('utf-8-sig') if hashlib.sha256(payload).hexdigest()==expected else None
+        except (subprocess.CalledProcessError,UnicodeError): baseline_cache[rel]=None
+    before=baseline_cache[rel]
+    return before is not None and unchanged_topic_text(before,(output/rel).read_bytes().decode('utf-8-sig'),finding)
 
 def validate_content(output, report):
     output=output.resolve()
@@ -432,20 +554,23 @@ def validate_content(output, report):
         # OSS relocation changes resource URLs in historical HTML. Only the
         # existing topic exceptions carry forward; routes and all credentials
         # still receive the same content checks.
-        kept = []; retained_topics = []; retained_findings=[]
+        kept = []; retained_topics = []; retained_findings=[];audit_topics=[];baseline_cache={}
         for finding in result['findings']:
             if finding['type'] == 'javascript_missing' and manifest.get('oss'):
                 # verify_release has already required sealed full-body GET
                 # evidence for the actual external JavaScript inventory.
                 continue
             unchanged_record=unchanged_search_finding(output/finding['file'],finding,manifest.get('release_overlay',{}).get(finding['file']))
-            if unchanged_record or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
+            audit_retained=retained_audit_topic(output,finding,manifest,baseline_cache)
+            if audit_retained: audit_topics.append(finding)
+            if unchanged_record or audit_retained or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
                 retained_findings.append(finding)
                 if finding['type']in {'excluded_topic','excluded_topic_filename','private_path'}:retained_topics.append(finding)
             else: kept.append(finding)
         result['findings'] = kept
         result['preserved_baseline_topic_findings'] = retained_topics
         result['preserved_baseline_findings_outside_current_release']=retained_findings
+        result['preserved_audit_baseline_topic_findings']=audit_topics
         result['preserved_baseline_reference_findings_outside_current_release']=[x for x in result['missing_references']if x['file']in retained]
         result['missing_references']=[x for x in result['missing_references']if x['file']not in retained]
         result['missing_reference_count']=len(result['missing_references'])

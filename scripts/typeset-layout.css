@@ -43,9 +43,32 @@
 .typeset-part .status-pulse[data-marker-shape]{border-color:var(--marker-colour);background:radial-gradient(ellipse,var(--marker-colour),transparent 70%)}
 .typeset-part .status-pulse[data-marker-shape=pill]{border:1px solid var(--marker-colour);border-radius:999px;background:none}
 .typeset-part .status-pulse[data-marker-shape=cross]{border:0;border-radius:0;background:var(--marker-colour);clip-path:polygon(0 12%,12% 0,50% 38%,88% 0,100% 12%,62% 50%,100% 88%,88% 100%,50% 62%,12% 100%,0 88%,38% 50%)}
-.typeset-part .typeset-live i{animation:pulse 3s ease infinite}
+.typeset-part .typeset-live[data-state=ok] i{animation:pulse var(--motion-pulse-duration,3s) ease infinite}
 .typeset-part .hotspot.card-main{inset:0!important;width:100%!important;height:100%!important;z-index:1}
 .typeset-part .hotspot:not(.card-main){z-index:3}
 .typeset-part .slot,.typeset-part .b2-native,.typeset-part .typeset-screenshot{z-index:5}
 .typeset-screen.shape-card:has([data-card-secondary]:hover){transform:none}
 @media(max-width:767.98px){.paper:has(.typeset-screen){width:100%;max-width:none}.typeset-screen{border-radius:0!important;margin-bottom:8px!important}.typeset-live{padding:1px 3px;border-radius:7px;gap:3px}.typeset-live i{width:5px;height:5px}.typeset-card-grid{grid-template-columns:minmax(0,1fr);gap:10px}}
+
+/* motion-appearance-v1 */
+.screen.entering{animation-duration:var(--motion-screen-duration,1s)}
+@keyframes enter{from{opacity:0;transform:translateY(var(--motion-screen-enter-y,100px))}to{opacity:1;transform:translateY(0)}}
+@keyframes sample-card-in{from{opacity:0;transform:translateY(var(--motion-card-enter-y,80px))}to{opacity:1;transform:none}}
+.status-pulse{animation-duration:var(--motion-pulse-duration,3s)}
+@keyframes pulse{50%{transform:scale(var(--motion-pulse-scale,2.25));opacity:.18}}
+.arrow-flow i{width:10px;height:10px;background:#55e894;box-shadow:0 0 13px #1de777;animation-duration:var(--motion-arrow-duration,2.8s)}
+.sample-seam:before{box-shadow:inset 0 20px 46px #77bd9678;animation-duration:var(--motion-seam-duration,1.6s)}
+@keyframes sample-seam{from{opacity:.9;transform:scaleY(var(--motion-seam-start,.875))}to{opacity:0;transform:scaleY(1)}}
+.sample-updated:after{inset:-6px;border-width:2px;animation-duration:var(--motion-update-duration,1.8s)}
+@keyframes sample-ripple{from{opacity:.85;transform:scale(.97)}to{opacity:0;transform:scale(var(--motion-ripple-end,1.2))}}
+.hotspot:hover{transform:translateY(var(--motion-hover-y,-5px))}
+.shape-card:has(.card-main,.project-main):hover,.raster-card:hover{transform:translateY(var(--motion-card-hover-y,-7.5px))}
+.raster-card:has([data-card-secondary]:hover),.typeset-screen.shape-card:has([data-card-secondary]:hover){transform:none}
+@keyframes watercolour-drift{from{transform:translate(calc(-80px * var(--motion-amplitude,2.5)),calc(-40px * var(--motion-amplitude,2.5))) scale(.88);opacity:.35}to{transform:translate(calc(90px * var(--motion-amplitude,2.5)),calc(65px * var(--motion-amplitude,2.5))) scale(1.16);opacity:.9}}
+@keyframes falling-leaf{0%{transform:translate3d(0,-12vh,0) rotate(calc(-35deg * var(--motion-amplitude,2.5)));opacity:0}10%{opacity:.45}85%{opacity:.38}100%{transform:translate3d(calc(var(--drift) * var(--motion-amplitude,2.5)),112vh,0) rotate(calc(45deg * var(--motion-amplitude,2.5)));opacity:0}}
+.slot[data-state=ok] i,.typeset-part .typeset-lamp[data-state=ok]{animation:pulse var(--motion-pulse-duration,3s) ease infinite}
+.typeset-part .typeset-live:not([data-state=ok]) i{animation:none}
+.motion-off .slot i,.motion-off .typeset-part .typeset-lamp,.motion-off .typeset-part .typeset-live i{animation:none!important}
+.motion-off .hotspot:hover,.motion-off .raster-card:hover,.motion-off .shape-card:has(.card-main,.project-main):hover{transform:none}
+.motion-stalled .hero-video{display:none!important}
+.motion-off *,.motion-off *::before,.motion-off *::after{animation:none!important;transition:none!important}

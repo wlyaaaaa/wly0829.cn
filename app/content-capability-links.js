@@ -67,10 +67,10 @@ export const skillProjectLinks = {
     { relation: "owned-by-project", projectSlug: "work-delivery", moduleSlug: "package-sources", label: "工作支持与交付项目" }
   ],
   documents: [
-    { relation: "host-integrated", href: "/#system-node-documents-skill", label: "宿主集成文档能力" }
+    { relation: "host-integrated", href: "/skills/#skill-documents", label: "宿主集成文档能力" }
   ],
   pdf: [
-    { relation: "host-integrated", href: "/#system-node-pdf-skill", label: "宿主集成 PDF 能力" }
+    { relation: "host-integrated", href: "/skills/#skill-pdf", label: "宿主集成 PDF 能力" }
   ],
   "md-to-pdf": [
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 能力与插件供应" }

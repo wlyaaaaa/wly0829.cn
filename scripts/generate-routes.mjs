@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { canonicalUrl, routePaths } from "../app/site-content.js";
@@ -56,6 +57,10 @@ if (overlayConfig) {
     .join("\n");
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries}\n</urlset>\n`;
   await writeFile(path.join(distRoot, "sitemap.xml"), sitemap, "utf8");
+
+  execFileSync(process.platform === "win32" ? "python" : "python3", [
+    path.join(scriptDirectory, "audit-page-publication.py"), "--release-root", distRoot, "--finalize-only"
+  ], { cwd: projectRoot, stdio: "inherit", windowsHide: true });
 
   console.log(`Generated ${routePaths.length} complete static pages, ${compactSearchRecordCount} compact search records and sitemap.xml.`);
 }

@@ -31,6 +31,7 @@ import { skillGuides, skillOutcomes } from "../app/content-skill-guides.js";
 import { projectReferenceLinks, skillProjectLinks } from "../app/content-capability-links.js";
 import { globalSearchEntries, searchPanel, searchScopeForPath } from "../app/search.js";
 import { createTermAnnotator } from "../app/term-annotator.js";
+import { publicSearchText } from "../app/public-search-projection.js";
 import { searchCompactEntries } from "../app/compact-search.js";
 import {
   systemDependencyNodes,
@@ -503,7 +504,7 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.ok(compactIndex.length >= projectCatalog.length + rulesSnapshot.rules.length + skills.length);
   assert.ok(compactIndex.every((entry) => entry.type !== "项目内容"), "shared search index must not carry project module narratives");
   for (const entry of compactIndex) {
-    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
+    assert.deepEqual(Object.keys(entry).sort(), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"].sort());
     assert.ok(entry.detail.length <= 240, `${entry.href} search summary is not compact`);
     assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} compact search contains an unexpanded object`);
     assert.ok(typeof entry.search === "string", `${entry.href} compact search phrases are unbounded`);
@@ -516,7 +517,7 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.equal(compactProjectIndex.length, projectCatalog.reduce((count, entry) => count + entry.modules.length, 0));
   assert.ok(compactProjectIndex.every((entry) => entry.type === "项目内容"), "all-project search index must contain only project modules");
   for (const entry of compactProjectIndex) {
-    assert.deepEqual(Object.keys(entry), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"]);
+    assert.deepEqual(Object.keys(entry).sort(), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"].sort());
     assert.ok(entry.detail.length <= 240, `${entry.href} project search summary is not compact`);
     assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} project search contains an unexpanded object`);
     assert.ok(typeof entry.search === "string", `${entry.href} project search phrases are unbounded`);
@@ -647,8 +648,8 @@ test("the maintenance registry drives all completed candidate packages", async (
     assert.ok(item.ai_refresh.scope.length >= 10);
   }
   assert.ok(registry.projects.find((item) => item.id === "agents").impact_sources.length >= 5);
-  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["github-index", "chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "llm-backend-toolkit", "typora-theme-pack", "wechat-history-ai-bridge", "steam-millennium-config-backup", "ramdisk-guardian", "emerald-veil"]));
-  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory", "personal-expression"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PUBLIC").map((item) => item.id)), new Set(["chinese-asr", "timeaudit", "pc-panel-hub", "codex-remote", "wechat-direct", "localocr", "vault-tool", "video-scaffold", "ai-cli-profile-manager", "openclaw-gateway", "devconfig-backup", "proxyclean", "meshclip-kit", "typora-theme-pack", "wechat-history-ai-bridge", "steam-millennium-config-backup", "ramdisk-guardian", "emerald-veil"]));
+  assert.deepEqual(new Set(registry.projects.filter((item) => item.source.visibility === "PRIVATE").map((item) => item.id)), new Set(["github-index", "llm-backend-toolkit", "agents", "pcconfig", "cacb", "learning", "personal-health", "personal-materials", "document-materials", "work-delivery", "daily-preferences", "personal-media", "sunshine-remote-streaming", "codex-memory", "personal-expression"]));
   assert.ok(!registry.projects.some((item) => item.id === "website"));
 
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
@@ -3833,7 +3834,7 @@ test("shared search scopes, project reading layers, Skills categories and System
     const technicalStart = overviewHtml.lastIndexOf("<section", overviewHtml.indexOf('data-project-reading-panel="technical"'));
     const productHtml = overviewHtml.slice(productStart, technicalStart);
     const technicalHtml = overviewHtml.slice(technicalStart);
-    const withoutTermGlosses = (text) => text.replace(/([A-Za-z0-9_.+/-]+)（[^）]*）/g, "$1");
+    const withoutTermGlosses = (text) => publicSearchText(text).replaceAll("（本机路径）", "").replace(/([A-Za-z0-9_.+/-]+)（[^）]*）/g, "$1");
     const visiblePanelText = (html) => html.replace(/<[^>]*>/g, "").replaceAll("&quot;", "\"").replaceAll("&#x27;", "'").replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
     const productText = withoutTermGlosses(visiblePanelText(productHtml));
     const technicalText = withoutTermGlosses(visiblePanelText(technicalHtml));

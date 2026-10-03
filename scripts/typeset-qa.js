@@ -108,7 +108,7 @@
   // Start with an empty viewport so first-entry animations cannot finish while
   // image decoding runs. Expand the real viewport after attaching observers.
   const {win,doc}=await load(url,width,{audit:false,initialHeight:1}),data=JSON.parse(doc.querySelector('#page-data').textContent),issues=[];
-  const observed=new Set(),samples=[],sampleIds=new Set(),rules=cssRules(doc);
+  const observed=new Set(),samples=[],sampleIds=new Set(),observedDots=new Set(),rules=cssRules(doc);
   const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null;
   const stateObserved={normal_branch:new URL(win.location.href).searchParams.get('audit')!=='1'&&doc.body.dataset.audit!=='true',reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,hidden:doc.hidden};
   if(!data.typeset)issues.push('normal route did not select the current typeset page');
@@ -130,9 +130,14 @@
      const r=el._motionRect,layout=host?._layout,entries=layout?.[kind]||[];
      bound=!!host&&!host.hidden&&Array.isArray(r)&&entries.some(entry=>equal(rectOf(entry),r));
      if(bound){const h=host._mediaHeight||host.clientHeight,w=host.clientWidth;bound=Math.max(Math.abs(el.offsetLeft-r[0]*w),Math.abs(el.offsetTop-r[1]*h),Math.abs(el.offsetWidth-r[2]*w),Math.abs(el.offsetHeight-r[3]*h))<=2;}
+     if(kind==='dots'&&data.motion_capabilities?.dots?.policy==='current-active-status-v1'&&!entries.some(entry=>equal(rectOf(entry),r)&&entry.state==='active'&&entry.policy==='current-active-status-v1')){bound=false;issues.push('breathing dot is not a current active status marker');}
+     if(kind==='numbers'){
+      const number=entries.find(entry=>equal(rectOf(entry),r));
+      if(number?.notation==='circled'&&el.querySelector('.number-track')?.lastElementChild?.textContent!==number.text){bound=false;issues.push('circled number loses its final original glyph');}
+     }
      if(!bound){binding=false;issues.push('normal effect not bound to current part geometry: '+kind+' '+(host?.dataset.part||''));}
     }
-    if(bound)observed.add(kind);
+    if(bound){observed.add(kind);if(kind==='dots')observedDots.add(host.dataset.part+':'+el.dataset.effectKey);}
     const id=kind+':'+(host?.dataset.part||screen?.dataset.screen||'')+':'+(el.dataset.effectKey||JSON.stringify(el._motionRect)||'');
     if(!sampleIds.has(id)&&samples.length<160){sampleIds.add(id);samples.push({kind,screen:screen?.dataset.screen||null,part:host?.dataset.part||null,rect:el._motionRect||null,layout_bound:bound,running_animations:active.length,animation_name:style.animationName});}
    }
@@ -149,7 +154,7 @@
      const positions=[0];
      for(const key of geometryKeys){const entries=part[key]||[];counts[key]+=entries.length;
       for(const entry of entries){const r=rectOf(entry);if(!Array.isArray(r)||r.length!==4||r.some(n=>!Number.isFinite(n))||r[0]<0||r[1]<0||r[2]<=0||r[3]<=0||r[0]+r[2]>1.002||r[1]+r[3]>1.002){binding=false;issues.push('invalid current motion rectangle: '+host.dataset.part+' '+key);}}
-      if(entries.length)positions.push(rectOf(entries[0])[1]*host._mediaHeight);
+      if(entries.length)positions.push(...(key==='dots'?entries:[entries[0]]).map(entry=>rectOf(entry)[1]*host._mediaHeight));
      }
      const slots=[...host.querySelectorAll('[data-typeset-kind=live]')];
      if(slots.length&&slots.every(el=>el.textContent.trim()||el.tagName==='INPUT'||el.classList.contains('typeset-lamp')||el.dataset.b2Slot==='ca-toast'))observed.add('live');
@@ -158,6 +163,7 @@
       if(!el||el.tagName!=='BUTTON'||el.type!=='button'||el.dataset.b2Action!==hot.action||typeof el.onclick!=='function'){nativeBound=false;issues.push('native action is not bound to a button: '+hot.id);}
      }
      for(const y of unique(positions.map(n=>Math.round(n)))){const b=host.getBoundingClientRect();win.scrollTo({top:Math.max(0,win.scrollY+b.top+y-250),behavior:'instant'});await sleep(100);capture();}
+     if(data.motion_capabilities?.dots?.policy==='current-active-status-v1')for(let i=0;i<(part.dots||[]).length;i++)if(!observedDots.has(host.dataset.part+':dot:'+i))issues.push('active status dot has no normal animation observation: '+host.dataset.part+' '+i);
     }
    }
    const slot=doc.querySelector('.typeset-part:not([hidden]) .slot[data-slot],.typeset-part:not([hidden]) .b2-slot[data-b2-slot]:not(input)');
@@ -187,7 +193,7 @@
    const top=doc.querySelector('.back-to-top');
    if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<45&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
    capture();win.scrollTo({top:0,behavior:'instant'});
-   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
+   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
   }finally{observer.disconnect();}
  }
  async function checkEffects(entry){
@@ -196,6 +202,9 @@
   for(const width of [1440,390])try{checks.push(await normalEffects(entry.url,width));}catch(error){checks.push({width,issues:[String(error)],preserved:[],normal_branch:false,new_geometry_bound:false,hotspot_css_feedback:false,native_buttons_bound:false,geometry_counts:{cards:0,numbers:0,dots:0,arrows:0},running_animation_count:0});}
   const preserved=unique(checks.flatMap(c=>c.preserved)),geometrySha=entry.geometry_sha256||entry.geometry_binding?.sha256||build.geometry_sha256||build.geometry_snapshot?.sha256||null;
   issues.push(...checks.flatMap(c=>c.issues));
+  if(entry.motion_appearance&&checks.some(c=>!equal(c.motion_appearance,entry.motion_appearance)))issues.push('normal runtime uses a different motion appearance');
+  const dots=entry.effects_capabilities?.dots;
+  if(dots&&(dots.policy!=='current-active-status-v1'||!['present','no_corresponding_element'].includes(dots.status)||(dots.status==='present')!==expected.includes('dots')||(dots.status==='present')!==checks.some(c=>c.geometry_counts.dots>0)))issues.push('current active-status capability does not match the expected effects');
   for(const name of expected||[])if(!preserved.includes(name))issues.push('original effect has no normal-branch observation: '+name);
   if(!/^[a-f0-9]{64}$/.test(geometrySha||''))issues.push('current geometry snapshot hash is missing');
   return {status:issues.length?'fail':'pass',expected:expected||[],preserved,issues:unique(issues),evidence:{normal_branch:checks.every(c=>c.normal_branch),new_geometry_bound:checks.every(c=>c.new_geometry_bound),geometry_sha256:geometrySha,geometry_counts:Object.fromEntries(geometryKeys.map(key=>[key,checks.reduce((n,c)=>n+c.geometry_counts[key],0)])),running_animation_count:Math.max(0,...checks.map(c=>c.running_animation_count)),hotspot_css_feedback:checks.every(c=>c.hotspot_css_feedback),native_buttons_bound:checks.every(c=>c.native_buttons_bound),checks}};
