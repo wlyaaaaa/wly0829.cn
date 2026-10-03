@@ -1,14 +1,14 @@
 (async()=>{
- const plan=await(await fetch('/__typeset/geometry-plan')).json(),existing=await(await fetch('/__typeset/geometry-existing')).json(),records=existing.geometry_version===2?existing.records:[];
+ const params=new URLSearchParams(location.search),selection=(params.get('pages')||params.get('page')||'').split(',').filter(Boolean);
+ const plan=(await(await fetch('/__typeset/geometry-plan')).json()).filter(item=>!selection.length||selection.includes(item.page)),existing=await(await fetch('/__typeset/geometry-existing')).json(),records=existing.geometry_version===2?existing.records:[];
  const fit=await(await fetch('/__typeset/geometry-fit')).json();
- const params=new URLSearchParams(location.search),limit=Number(params.get('limit')||100),page=params.get('page');let measured=0;
+ const limit=Number(params.get('limit')||100);let measured=0;
  const state=document.querySelector('#state'),frame=document.createElement('iframe');document.body.append(frame);
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const bounded=async(p,ms,label)=>Promise.race([p,sleep(ms).then(()=>{throw Error(label+' timeout');})]);
  async function save(complete){return fetch('/__typeset/geometry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({schema:'wly.typeset-geometry.v1',geometry_version:2,fit_input:fit.input,complete,records,measured_at_beijing:new Date().toLocaleString('sv-SE',{timeZone:'Asia/Shanghai'})+'+08:00',method:'Chrome DOM rectangles at producer viewport height 200 with hidden scrollbars and producer FIT_JS; no screenshot or image viewing'})});}
  for(let i=0;i<plan.length;i++){
   const item=plan[i];state.textContent=`量测 ${i+1}/${plan.length}：${item.screen}-${item.orientation}`;
-  if(page&&item.page!==page)continue;
   const prior=records.find(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v7'&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length);
   if(prior)continue;
   if(measured>=limit)break;

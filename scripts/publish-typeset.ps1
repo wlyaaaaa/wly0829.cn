@@ -117,23 +117,78 @@ function RemoteMain {
 function WaitPages([string]$Commit) {
     $deadline = [DateTimeOffset]::UtcNow.AddMinutes($PagesTimeoutMinutes)
     $lastLookupError = $null
+    $consecutiveLookupErrors = 0
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
         HoldPublicationLock
         $runs = & gh api "repos/wlyaaaaa/wly0829.cn/actions/runs?head_sha=$Commit&per_page=50" --jq '.workflow_runs | map({id,status,conclusion,head_sha,path})' 2>&1
         if ($LASTEXITCODE -eq 0) {
             try {
                 $run = ($runs | ConvertFrom-Json) | Where-Object { $_.head_sha -eq $Commit -and $_.path -eq '.github/workflows/pages.yml' } | Sort-Object id -Descending | Select-Object -First 1
+                $consecutiveLookupErrors = 0
                 if ($run -and $run.status -eq 'completed') {
                     if ($run.conclusion -notin @('success','failure','timed_out','cancelled','startup_failure','action_required','stale','skipped','neutral')) {
                         return [pscustomobject]@{ status='unknown'; run=$run.id; conclusion=$run.conclusion; message='Pages completed without a reliable workflow conclusion.' }
                     }
                     return [pscustomobject]@{ status=$(if ($run.conclusion -eq 'success') { 'success' } else { 'failed' }); run=$run.id; conclusion=$run.conclusion; message=$null }
                 }
-            } catch { $lastLookupError = $_.Exception.Message }
-        } else { $lastLookupError = ($runs -join "`n") }
-        Start-Sleep -Seconds 10
+            } catch { $lastLookupError = $_.Exception.Message; $consecutiveLookupErrors++ }
+        } else { $lastLookupError = ($runs -join "`n"); $consecutiveLookupErrors++ }
+        if ($consecutiveLookupErrors -ge 3) {
+            return [pscustomobject]@{ status='unknown'; run=$null; conclusion=$null; message=$lastLookupError }
+        }
+        Start-Sleep -Seconds 3
     }
     return [pscustomobject]@{ status='unknown'; run=$null; conclusion=$null; message=$lastLookupError }
+}
+function WaitPublicIdentity([string]$Candidate, [int]$TimeoutSeconds = 1200) {
+    $expected = ReadJson (Join-Path $Candidate 'release-manifest.json')
+    $deadline = [DateTimeOffset]::UtcNow.AddSeconds($TimeoutSeconds)
+    $lastError = $null
+    $observedRelease = $null
+    $attempts = 0
+    $stableMismatch = 0
+    $previousMismatch = $null
+    while ([DateTimeOffset]::UtcNow -lt $deadline) {
+        HoldPublicationLock
+        $attempts++
+        try {
+            $uri = 'https://wly0829.cn/release-manifest.json?typeset_wait=' + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+            $remaining = [Math]::Max(1,[Math]::Min(20,[int]($deadline-[DateTimeOffset]::UtcNow).TotalSeconds))
+            $response = Invoke-WebRequest -Uri $uri -ConnectionTimeoutSeconds $remaining -OperationTimeoutSeconds $remaining -Headers @{ 'Cache-Control'='no-cache'; 'Accept-Encoding'='identity' }
+            $online = $response.Content | ConvertFrom-Json -DateKind String
+            $observedRelease = $online.release_id
+            if ($online.schema -eq 'wly.hybrid-release.v1' -and $observedRelease -ceq $expected.release_id) {
+                return [pscustomobject]@{ status='pass'; attempts=$attempts; release_id=$observedRelease; message=$null }
+            }
+            if ($online.schema -eq 'wly.hybrid-release.v1' -and $observedRelease) {
+                if ($observedRelease -ceq $previousMismatch) { $stableMismatch++ } else { $stableMismatch=1; $previousMismatch=$observedRelease }
+            } else { $stableMismatch=0 }
+        } catch { $lastError = $_.Exception.Message; $stableMismatch=0 }
+        Start-Sleep -Seconds 3
+    }
+    return [pscustomobject]@{ status=$(if ($stableMismatch -ge 3) { 'mismatch' } else { 'unknown' }); attempts=$attempts; release_id=$observedRelease; message=$lastError }
+}
+function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
+    $signature = $null
+    $stableFailures = 0
+    $lastReport = $null
+    for ($attempt=1; $attempt -le 3; $attempt++) {
+        HoldPublicationLock
+        $lastReport = Join-Path $RunRoot "$Prefix-$attempt.json"
+        $arguments = @('scripts/check-typeset-online.py','--build-report',$BuildReport,
+            '--output',$lastReport,'--task-cache',(Join-Path $RunRoot "$Prefix-browser-cache"))
+        if ($Legacy) { $arguments += @('--legacy','--release',$Release) }
+        & python @arguments | Out-Host
+        $code = $LASTEXITCODE
+        $proof = if (Test-Path -LiteralPath $lastReport -PathType Leaf) { ReadJson $lastReport } else { $null }
+        if ($code -eq 0 -and $proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$lastReport } }
+        if ($code -eq 2 -and $proof.status -eq 'fail') {
+            $current = @($proof.checks | Where-Object status -eq 'fail' | Sort-Object page,width | Select-Object page,width,issues) | ConvertTo-Json -Depth 10 -Compress
+            if ($current -ceq $signature) { $stableFailures++ } else { $stableFailures=1; $signature=$current }
+        } else { $stableFailures=0; $signature=$null }
+        if ($attempt -lt 3) { Start-Sleep -Seconds 3 }
+    }
+    return [pscustomobject]@{ status=$(if ($stableFailures -eq 3) { 'confirmed_failure' } else { 'unknown' }); report=$lastReport }
 }
 function ConfirmReadback([string]$Candidate, [string]$Prefix) {
     $previous = $null
@@ -185,7 +240,7 @@ function RecoverConfirmedFailure {
     $recoveryDist = Join-Path $RunRoot 'recovery-dist'
     # The original tool fetches again, requires HEAD == origin/main, restores exact
     # Git bytes, and normal-pushes. A concurrent push cannot be overwritten.
-    & pwsh -NoProfile -File 'scripts/rollback-hybrid.ps1' -RestoreRef $state.rollback_ref -Output $recoveryDist -Publish
+    & pwsh -NoProfile -File 'scripts/rollback-hybrid.ps1' -RestoreRef $state.rollback_ref -Output $recoveryDist -Publish -DeferDeploymentCheck
     $recoveryExit = $LASTEXITCODE
     $recoveryCommit = (& git rev-parse HEAD).Trim()
     $state.rollback.command_exit = $recoveryExit
@@ -200,7 +255,9 @@ function RecoverConfirmedFailure {
     if ((RemoteMain) -ne $recoveryCommit) { throw 'Remote main changed during exact recovery; no additional restore was attempted.' }
     $recoveryDeployment = WaitPages $recoveryCommit
     $state.rollback.pages = $recoveryDeployment
-    if ($recoveryDeployment.status -ne 'success') {
+    $recoveryIdentity = WaitPublicIdentity $recoveryDist $(if ($recoveryDeployment.status -eq 'failed') { 20 } else { $PagesTimeoutMinutes * 60 })
+    $state.rollback.public_identity = $recoveryIdentity
+    if ($recoveryIdentity.status -ne 'pass') {
         $state.status = 'rollback_unconfirmed'
         $state.rollback.status = "pages_$($recoveryDeployment.status)"
         SaveState
@@ -213,6 +270,11 @@ function RecoverConfirmedFailure {
         $state.rollback.status = "readback_$($proof.status)"
         SaveState
         return
+    }
+    $rollbackDom = ConfirmOnlineDom 'rollback-online-dom' -Legacy -Release $recoveryDist
+    $state.rollback.dom = $rollbackDom
+    if ($rollbackDom.status -ne 'pass') {
+        $state.status='rollback_unconfirmed'; $state.rollback.status="dom_$($rollbackDom.status)"; SaveState; return
     }
     if ((RemoteMain) -ne $recoveryCommit) { throw 'A later remote commit superseded recovery during readback; do not roll it back.' }
     $state.status = 'rolled_back'
@@ -317,19 +379,24 @@ try {
         throw 'Push returned, but remote main identity is not confirmed. Keep the release and retry readback without automatic rollback.'
     }
     $deploymentResult = WaitPages $commit
-    if ($deploymentResult.status -eq 'unknown') {
-        $state.status = 'pages_unknown'
-        $state.lookup_error = $deploymentResult.message
-        throw "Pages result is unknown for commit $commit. $($deploymentResult.message) Retry lookup without blind rollback or login changes."
-    }
+    $state.lookup_error = $deploymentResult.message
     $state.pages_run = $deploymentResult.run
     $state.pages_conclusion = $deploymentResult.conclusion
-    if ($deploymentResult.status -eq 'failed') {
+    $state.pages_status = $deploymentResult.status
+    $state.status = 'public_identity_pending'
+    SaveState
+    $publicIdentity = WaitPublicIdentity (Join-Path $repoRoot 'site-release') $(if ($deploymentResult.status -eq 'failed') { 20 } else { $PagesTimeoutMinutes * 60 })
+    $state.public_identity = $publicIdentity
+    if ($publicIdentity.status -eq 'mismatch') {
         $state.status = 'pages_failed'
-        $script:confirmedPublicationFailure = "Pages reported $($deploymentResult.conclusion) for commit $commit."
+        $script:confirmedPublicationFailure = "The public release identity remained different after the bounded wait for commit $commit; Pages status $($deploymentResult.status)."
         throw $script:confirmedPublicationFailure
     }
-    $state.status = 'pages_success_readback_pending'
+    if ($publicIdentity.status -ne 'pass') {
+        $state.status = 'public_identity_unconfirmed'
+        throw "Public deployment identity is not confirmed for commit $commit. Keep the state for bounded readback without login or proxy changes."
+    }
+    $state.status = 'public_identity_confirmed_readback_pending'
     SaveState
     $readback = ConfirmReadback (Join-Path $repoRoot 'site-release') 'online-readback'
     $state.readback = $readback
@@ -340,7 +407,18 @@ try {
     }
     if ($readback.status -ne 'pass') {
         $state.status = 'readback_unconfirmed'
-        throw "Pages succeeded, but the public result is unknown: $($readback.reason) See $($readback.report). Keep this state for Claude's follow-up; no blind rollback was performed."
+        throw "The public result is unknown: $($readback.reason) See $($readback.report). Keep this state for Claude's follow-up; no blind rollback was performed."
+    }
+    $onlineDom = ConfirmOnlineDom 'online-dom'
+    $state.online_dom = $onlineDom
+    if ($onlineDom.status -eq 'confirmed_failure') {
+        $state.status = 'online_dom_failed'
+        $script:confirmedPublicationFailure = 'Public desktop/mobile DOM checks failed; inspect the actual online report.'
+        throw $script:confirmedPublicationFailure
+    }
+    if ($onlineDom.status -ne 'pass') {
+        $state.status = 'online_dom_unconfirmed'
+        throw 'Public browser verification is unavailable or unstable; keep the actual reports without blind rollback.'
     }
     $finalHead = (& git rev-parse HEAD).Trim()
     if ($LASTEXITCODE -ne 0 -or $finalHead -ne $commit -or (RemoteMain) -ne $commit) {

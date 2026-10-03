@@ -47,6 +47,30 @@ def json_bound(path):
     text,proof=text_bound(path)
     return json.loads(text),proof
 
+def original_rule_html(text):
+    """Keep the actual rendered original cards, excluding the version/title wrapper."""
+    class Cards(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=False)
+            self.depth=0;self.parts=[]
+        def handle_starttag(self,tag,attrs):
+            classes=set(dict(attrs).get('class','').split())
+            if self.depth or classes & {'ct-source-body','source-prose'}:
+                self.parts.append(self.get_starttag_text())
+                if tag not in {'br','hr','img','input','link','meta','source','wbr'}:self.depth+=1
+        def handle_startendtag(self,tag,attrs):
+            if self.depth:self.parts.append(self.get_starttag_text())
+        def handle_endtag(self,tag):
+            if self.depth:self.parts.append('</'+tag+'>');self.depth-=1
+        def handle_data(self,value):
+            if self.depth:self.parts.append(value)
+        def handle_entityref(self,name):
+            if self.depth:self.parts.append('&'+name+';')
+        def handle_charref(self,name):
+            if self.depth:self.parts.append('&#'+name+';')
+    cards=Cards();cards.feed(text)
+    return ''.join(cards.parts)
+
 def png_size(path):
     with Path(path).open('rb') as stream:
         header = stream.read(24)
@@ -277,6 +301,10 @@ def patch_app(text):
     sample_start=text.index('/* 已选七项通用动效')
     sample_end=text.index('/* 短续作说明',sample_start)
     samples=text[sample_start:sample_end]
+    # Each orientation and repeated live sub-part owns its actual DOM value.
+    # A shared slot name must not let hidden copies overwrite the visible value.
+    samples=samples.replace('const values=new Map();','const values=new WeakMap();')
+    samples=samples.replace("const key=(s.closest('.screen')?.dataset.screen||'')+':'+s.dataset.slot,","const key=s,")
     samples=samples.replace("document.querySelectorAll('.screen')","document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")
     samples=samples.replace("document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])').forEach(s=>observer.observe(s))","document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part').forEach(s=>observer.observe(s))")
     samples=samples.replace("s.classList.contains('shape-card')","(s.classList.contains('shape-card')||s.dataset.shape==='card')")
@@ -374,6 +402,10 @@ def build_page(name, records, args, candidate):
     manifest,manifest_proof = json_bound(manifest_path)
     inputs = {str(args.inventory.resolve()):args.inventory_proof,str(source_path.resolve()):source_proof,
               str(manifest_path.resolve()):manifest_proof,str(base_html.resolve()):html_proof}
+    registry_path=HERE.parent/'config/panel-projects.json'
+    registry,registry_proof=json_bound(registry_path)
+    inputs[str(registry_path.resolve())]=registry_proof
+    hybrid.builder.bind_registered_repository(data,registry)
     if args.snapshot_proof:inputs[str(args.snapshot_path)]=args.snapshot_proof
     geometry_path=args.geometry
     geometries={}
@@ -430,6 +462,27 @@ def build_page(name, records, args, candidate):
         model = {'id':sid,'title':src.get('title',''),'section':section,'shape':shape,
                  'render_mode':'typeset','parts':[],'layouts':{'h':{},'v':{}},
                  'screen_anchors':list(dict.fromkeys([x['id'] for x in src.get('anchors',[])]+extra_anchors[sid]))}
+        if shape=='source_text' and Path(rel).parts[0]=='rules':
+            based_on=source.get('based_on') or {}
+            model['source_version']=src.get('text','').split('\n',1)[0]
+            document=re.search(r'(AGENTS\.md|docs[/\\]contracts[/\\]agents\.[a-z-]+\.md)$',str(based_on.get('file','')))
+            meta={'relative_file':document[1].replace('\\','/') if document else None,
+                  'version':based_on.get('release'),'omitted_count':based_on.get('omitted_count',0)}
+            model['source_meta']=meta
+            try:
+                original_render=args.typeset_root/name/'html'/f'{sid}-h.html'
+                rendered,render_proof=text_bound(original_render);inputs[str(original_render.resolve())]=render_proof
+                meta['original_html']=original_rule_html(rendered)
+                meta['rendered_input_sha256']=render_proof['sha256']
+                if not meta['original_html']:issues.append(sid+':冻结横版HTML缺原文卡正文')
+                original_path=Path(based_on['file']).resolve()
+                original_proof=stamp(original_path);inputs[str(original_path)]=original_proof
+                meta['source_sha256']=original_proof['sha256']
+                if based_on.get('sha256')!=original_proof['sha256']:
+                    issues.append(sid+':原文声明SHA与实际来源不符')
+                meta['src']=asset(original_path,candidate,'rule-sources')
+            except (KeyError,OSError,ValueError) as error:
+                issues.append(sid+':缺少真实原文来源证据：'+str(error))
         whole=next((l for l in old.get('layouts',{}).get('h',{}).get('links',[])if l.get('whole')),None)
         if whole:model['primary_href']=whole['href']
         if section not in seen_sections:
@@ -608,6 +661,7 @@ def main():
     for arg in ['typeset-root','inventory','baseline','legacy-site','output','report']:
         ap.add_argument('--'+arg,type=Path,required=True)
     ap.add_argument('--pages',nargs='+')
+    ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
     args=ap.parse_args()
@@ -653,7 +707,7 @@ def main():
     # Blocked pages remain available as labelled local previews; publication uses the independent evidence gate.
     accepted={s['url']:{'page':n,'preview':True,'build_status':s['status']}for n,s in states.items()if s.get('url')}
     support=[]
-    if args.pages:
+    if args.pages and args.preview_support:
         # A two-page pilot retains the declared destinations using existing page skeletons.
         # This is local preview support, explicitly excluded from publication evidence.
         for n,records in grouped.items():

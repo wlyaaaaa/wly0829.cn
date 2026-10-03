@@ -188,7 +188,7 @@ def local_reference(root, owner, reference):
         reference = parts.path + ('?'+parts.query if parts.query else '') + ('#'+parts.fragment if parts.fragment else '')
     return builder.resolve_ref(root, owner, reference)
 
-def rewrite_links(text, root, owner, available, mappings):
+def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None):
     # Preserve candidate HTML except href values, including href fields in page-data.
     pattern = re.compile(r'(\bhref\s*=\s*["\'])([^"\']+)(["\'])|("href"\s*:\s*")([^"\n]+)(")')
     def replace(match):
@@ -197,15 +197,26 @@ def rewrite_links(text, root, owner, available, mappings):
         target = local_reference(root, owner, decoded)
         if target is None or target.suffix != '.html': return match[0]
         rel = target.relative_to(root).as_posix()
-        if rel in available: return match[0]
-        current = Path(rel).parent
-        while True:
-            parent = (current/'index.html').as_posix()
-            if parent in available:
-                replacement = file_route(parent)
-                break
-            if current == Path('.'): raise ValueError('No available parent page')
-            current = current.parent
+        if rel in available:
+            fragment = unquote(urlsplit(decoded).fragment)
+            preserved = preserved_root/rel if preserved_root else None
+            new_target = rel in accepted_files if accepted_files is not None else (root/rel).is_file()
+            # New section anchors may not exist in an unchanged production page.
+            # Keep that page exact and make the new link land on its existing body.
+            if not fragment or not preserved or not preserved.is_file() or new_target: return match[0]
+            target_text = preserved.read_text('utf-8-sig')
+            ids = {html.unescape(value) for value in re.findall(r'\bid\s*=\s*["\']([^"\']+)["\']', target_text)}
+            if fragment in ids: return match[0]
+            replacement = file_route(rel)
+        else:
+            current = Path(rel).parent
+            while True:
+                parent = (current/'index.html').as_posix()
+                if parent in available:
+                    replacement = file_route(parent)
+                    break
+                if current == Path('.'): raise ValueError('No available parent page')
+                current = current.parent
         mappings.append({'page': file_route(owner.relative_to(root).as_posix()), 'original_href': decoded, 'temporary_href': replacement})
         return start+replacement+end
     return pattern.sub(replace, text)
@@ -238,7 +249,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         target = output/rel
         text = None
         if rel in accepted_files:
-            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings)
+            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files)
         elif rel in old:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)

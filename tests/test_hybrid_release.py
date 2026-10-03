@@ -53,6 +53,28 @@ class HybridRelease(unittest.TestCase):
         out,manifest=self.assemble({'/':{},'/future/page/':{}},name='second')
         self.assertIn('/future/page/#missing',(out/'index.html').read_text('utf8'))
         self.assertEqual(manifest['temporary_href_mappings'],[])
+    def test_new_anchor_on_retained_page_lands_on_exact_old_page(self):
+        self.put(self.new,'index.html','<a href="/kept/#new-section">New section</a>')
+        out,manifest=self.assemble()
+        self.assertIn('href="/kept/"',(out/'index.html').read_text('utf8'))
+        self.assertEqual((out/'kept/index.html').read_bytes(),(self.old/'kept/index.html').read_bytes())
+        self.assertEqual(manifest['temporary_href_mappings'],[{'page':'/','original_href':'/kept/#new-section','temporary_href':'/kept/'}])
+    def test_existing_retained_anchor_and_new_approved_anchor_are_preserved(self):
+        self.put(self.old,'kept/index.html','<h1 id="existing">Original content</h1>')
+        self.baseline['files']=h.inventory(self.old)
+        self.put(self.new,'index.html','<a href="/kept/#existing">Old section</a><a href="/future/page/#new">New section</a>')
+        self.put(self.new,'future/page/index.html','<h1 id="new">Approved content</h1>')
+        out,manifest=self.assemble({'/':{},'/future/page/':{}})
+        self.assertIn('/kept/#existing',(out/'index.html').read_text('utf8'))
+        self.assertIn('/future/page/#new',(out/'index.html').read_text('utf8'))
+        self.assertEqual(manifest['temporary_href_mappings'],[])
+    def test_unaccepted_candidate_cannot_supply_anchors_for_retained_page(self):
+        self.put(self.new,'index.html','<a href="/kept/#new-section">New section</a>')
+        self.put(self.new,'kept/index.html','<h1 id="new-section">Unaccepted candidate</h1>')
+        out,manifest=self.assemble()
+        self.assertIn('href="/kept/"',(out/'index.html').read_text('utf8'))
+        self.assertEqual((out/'kept/index.html').read_bytes(),(self.old/'kept/index.html').read_bytes())
+        self.assertEqual(manifest['temporary_href_mappings'][0]['temporary_href'],'/kept/')
     def test_modified_baseline_and_missing_route_are_rejected(self):
         self.put(self.old,'kept/index.html','modified')
         with self.assertRaisesRegex(ValueError,'Baseline bytes'):self.assemble()

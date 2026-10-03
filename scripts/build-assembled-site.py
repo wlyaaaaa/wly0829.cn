@@ -56,16 +56,23 @@ def clean_provenance(value):
         return [clean_provenance(v) for v in value]
     return value
 
-def clean_repo_bindings(value, pointer='page-data'):
+def clean_repo_bindings(value, pointer='page-data', registered_repos=None):
+    if registered_repos is None:
+        registry_path=ROOT/'config/panel-projects.json'
+        registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
+        registered_repos={entry['source']['repo'].lower() for entry in registry.get('projects',[])
+                          if '/' in entry.get('source',{}).get('repo','')
+                          and entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}}
     if isinstance(value,dict):
-        return {k:clean_repo_bindings(v,pointer+'.'+k) for k,v in value.items()}
-    if isinstance(value,list): return [clean_repo_bindings(v,pointer+'[]') for v in value]
+        return {k:clean_repo_bindings(v,pointer+'.'+k,registered_repos) for k,v in value.items()}
+    if isinstance(value,list): return [clean_repo_bindings(v,pointer+'[]',registered_repos) for v in value]
     if isinstance(value,str):
         for repo in sorted(PRIVATE_REPOS):
             pattern=repo_pattern(repo)
             if pattern.search(value):
                 if pointer.endswith(('.repo_url','.href')):
                     raise ValueError('Private repository used as an external link: '+pointer)
+                if repo.lower() in registered_repos:continue
                 public_key='private-project-'+hashlib.sha256(repo.lower().encode()).hexdigest()[:12]
                 PRIVATE_REPO_REWRITES.append({'field':pointer,'repository':repo,'public_key':public_key})
                 value=pattern.sub(public_key,value)
@@ -73,6 +80,47 @@ def clean_repo_bindings(value, pointer='page-data'):
 
 def repo_pattern(repo):
     return re.compile(r'(?<![A-Za-z0-9_.-])'+re.escape(repo)+r'(?:\.git)?(?![A-Za-z0-9_.-])',re.I)
+
+def repository_registration(data, registry):
+    """Resolve only an existing concrete Registry identity, never infer visibility."""
+    projects=[entry for entry in registry.get('projects',[])
+              if '/' in entry.get('source',{}).get('repo','')
+              and entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}]
+    repo=(data.get('status_binding') or {}).get('repo')
+    route=(data.get('url') or '').rstrip('/')
+    by_route=[entry for entry in projects if route and entry.get('route','').rstrip('/')==route]
+    if len(by_route)==1:return by_route[0]
+    by_repo=[entry for entry in projects if isinstance(repo,str)
+             and entry['source']['repo'].lower()==repo.lower()]
+    return by_repo[0] if len(by_repo)==1 else None
+
+def bind_registered_repository(data, registry):
+    registration=repository_registration(data,registry)
+    if registration is None:return False
+    source=registration['source'];binding=data.get('status_binding') or {}
+    previous=binding.get('repo')
+    if previous and previous.lower()!=source['repo'].lower():return False
+    data['repository_visibility']=source['visibility']
+    data['repo_url']='https://github.com/'+source['repo'] if source['visibility']=='PUBLIC' else None
+    data['status_binding']={**binding,'repo':source['repo'],'visibility':source['visibility']}
+    return True
+
+def repository_binding_findings(data, registry):
+    binding=data.get('status_binding') or {};repo=binding.get('repo')
+    registration=repository_registration(data,registry)
+    if registration is None:
+        return [{'type':'unpublished_repository_binding','field':'status_binding.repo'}] if isinstance(repo,str) and '/' in repo and data.get('repo_url')!='https://github.com/'+repo else []
+    source=registration['source'];findings=[]
+    if not isinstance(repo,str) or repo.lower()!=source['repo'].lower():
+        findings.append({'type':'repository_binding_mismatch','field':'status_binding.repo','project':registration['id']})
+    for field,value in [('repository_visibility',data.get('repository_visibility')),('status_binding.visibility',binding.get('visibility'))]:
+        if value is not None and value!=source['visibility']:
+            findings.append({'type':'repository_visibility_mismatch','field':field,'expected':source['visibility']})
+    if source['visibility']=='PUBLIC' and data.get('repo_url')!='https://github.com/'+source['repo']:
+        findings.append({'type':'unpublished_repository_binding','field':'repo_url'})
+    if source['visibility']=='PRIVATE' and data.get('repo_url'):
+        findings.append({'type':'private_repository_link','field':'repo_url'})
+    return findings
 
 def load_public_repos():
     if shutil.which('gh'):
@@ -156,25 +204,49 @@ def source_link_target(value):
 def rule_pin_findings(output,files):
     pin=json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))
     findings=[];seen=set()
+    class TypesetOriginal(OriginalProse):
+        def handle_starttag(self,tag,attrs):
+            data=dict(attrs);classes=set(data.get('class','').split())
+            if 'ct-source-body' in classes:attrs=[(k,v) for k,v in attrs if k!='class']+[('class',data['class']+' source-prose')]
+            if tag=='a' and 'href' not in data and 'data-href' in data:attrs=attrs+[('href',data['data-href'])]
+            if tag=='div' and 'ct-heading' in classes:tag='h2'
+            super().handle_starttag(tag,attrs)
+        def handle_endtag(self,tag):
+            if tag=='div' and self.stack and 'ct-heading' in self.stack[-1][1]:tag='h2'
+            super().handle_endtag(tag)
     for page in files:
         if page.suffix!='.html' or page.parent==output/'rules' or not page.is_relative_to(output/'rules'):continue
         text=page.read_text('utf8');rel=page.relative_to(output).as_posix()
         match=PAGE_DATA.search(text)
-        rows=[s for s in json.loads(match[2]).get('screens',[]) if s.get('render_mode')=='source_text'] if match else []
+        rows=[s for s in json.loads(match[2]).get('screens',[]) if s.get('render_mode')=='source_text' or
+              s.get('render_mode')=='typeset' and s.get('shape')=='source_text'] if match else []
         if not rows:
             findings.append({'file':rel,'type':'pinned_original_missing'});continue
+        labels=[row.get('source_version','') for row in rows]+re.findall(r'<p[^>]*class="source-version"[^>]*>(.*?)</p>',text,re.S)
+        versions={v for label in labels for v in re.findall(r'(?<![A-Za-z0-9])E\d+(?!\d)',html.unescape(label))}
+        typeset=[row for row in rows if row.get('render_mode')=='typeset']
+        if typeset:
+            prose=TypesetOriginal()
+            for row in typeset:prose.feed((row.get('source_meta') or {}).get('original_html',''))
+            rendered_digest=prose.digest()
+        else:rendered_digest=prose_digest(text)
         for row in rows:
             meta=row.get('source_meta') or {};document=meta.get('relative_file');expected=pin['documents'].get(document)
             correct_document='AGENTS.md' if page.parent.name=='charter' else 'docs/contracts/agents.'+page.parent.name+'.md'
             if document!=correct_document:findings.append({'file':rel,'type':'rule_page_source_mismatch','document':document,'expected_document':correct_document})
             seen.add(document)
-            labels=[row.get('source_version','')]+re.findall(r'<p[^>]*class="source-version"[^>]*>(.*?)</p>',text,re.S)
-            versions={v for label in labels for v in re.findall(r'(?<![A-Za-z0-9])E\d+(?!\d)',html.unescape(label))}
             if meta.get('version')!=pin['version'] or versions!={pin['version']}:
                 findings.append({'file':rel,'type':'rule_version_not_pinned','expected':pin['version'],'observed':sorted(versions|{str(meta.get('version'))})})
             if not expected or meta.get('source_sha256')!=expected['source_sha256']:
                 findings.append({'file':rel,'type':'rule_source_not_pinned','document':document})
-            if expected and (meta.get('omitted_count')!=expected['approved_omitted_count'] or prose_digest(text)!=expected['rendered_text_sha256']):
+            if row.get('render_mode')=='typeset':
+                try:
+                    original=resolve_ref(output,page,meta.get('src',''))
+                    source_matches=bool(original and original.is_file() and sha(original)==meta.get('source_sha256'))
+                except (OSError,ValueError,TypeError):source_matches=False
+                if not source_matches:
+                    findings.append({'file':rel,'type':'rule_original_source_evidence_mismatch','document':document})
+            if expected and (meta.get('omitted_count')!=expected['approved_omitted_count'] or rendered_digest!=expected['rendered_text_sha256']):
                 findings.append({'file':rel,'type':'rule_original_content_mismatch','document':document,'expected':pin['version']})
     for document in set(pin['documents'])-seen:
         findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
@@ -210,6 +282,14 @@ def resolve_ref(root, owner, ref):
 
 def validate(output, report_path, incomplete=False, input_stats=None):
     files = sorted(p for p in output.rglob('*') if p.is_file())
+    registry_path=ROOT/'config/panel-projects.json'
+    registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
+    registered_repos={entry['source']['repo'].lower() for entry in registry.get('projects',[])
+                      if '/' in entry.get('source',{}).get('repo','')
+                      and entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}}
+    registered_private={entry['source']['repo'].lower() for entry in registry.get('projects',[])
+                        if '/' in entry.get('source',{}).get('repo','')
+                        and entry.get('source',{}).get('visibility')=='PRIVATE'}
     findings = rule_pin_findings(output,files); missing = []; refs_count = 0
     total = sum(p.stat().st_size for p in files)
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
@@ -251,18 +331,18 @@ def validate(output, report_path, incomplete=False, input_stats=None):
                 line=text.count('\n',0,m.start())+1;column=m.start()-text.rfind('\n',0,m.start())
                 findings.append({'file':rel,'type':name,'line':line,'column':column,'offset':m.start(),'matched':m[0]})
         for repo in PRIVATE_REPOS:
+            if repo.lower() in registered_repos:continue
             for m in repo_pattern(repo).finditer(text):
                 findings.append({'file':rel,'type':'private_repository_reference','offset':m.start(),'line':text.count('\n',0,m.start())+1,'matched':repo})
         if PUBLIC_REPOS:
             for m in re.finditer(r'(?<![A-Za-z0-9_.-])wlyaaaaa/[A-Za-z0-9_.-]+',text,re.I):
                 repo=m[0].removesuffix('.git').lower()
-                if repo not in PUBLIC_REPOS:
+                if repo not in PUBLIC_REPOS and repo not in registered_repos:
                     findings.append({'file':rel,'type':'repository_not_public','line':text.count('\n',0,m.start())+1,'offset':m.start(),'matched':m[0]})
         if p.suffix=='.html':
             for match in PAGE_DATA.finditer(text):
-                data=json.loads(match[2]); binding=data.get('status_binding') or {};repo=binding.get('repo')
-                if isinstance(repo,str) and '/' in repo and data.get('repo_url')!='https://github.com/'+repo:
-                    findings.append({'file':rel,'type':'unpublished_repository_binding','field':'status_binding.repo'})
+                data=json.loads(match[2])
+                findings.extend({'file':rel,**finding} for finding in repository_binding_findings(data,registry))
         references = []
         if p.suffix == '.html':
             parser = Refs(); parser.feed(text); references += parser.refs
@@ -274,6 +354,10 @@ def validate(output, report_path, incomplete=False, input_stats=None):
             references += [(m.group(1),False) for m in re.finditer(r'(?:\b(?:from|import)\s*|\bimport\s*\()["\']([^"\']+)["\']',text) if m[1].startswith(('.', '/'))]
             references += [(m.group(1),False) for m in re.finditer(r'\bfetch\s*\(\s*["\']([^"\']+)["\']',text) if not m[1].startswith('/__')]
         for ref, navigation in references:
+            external=urlsplit(ref)
+            repo='/'.join(external.path.strip('/').split('/')[:2]).removesuffix('.git').lower()
+            if external.netloc.lower() in {'github.com','www.github.com'} and repo in registered_private:
+                findings.append({'file':rel,'type':'private_repository_link','reference':ref})
             try: target = resolve_ref(output, p, ref)
             except ValueError as e: findings.append({'file': rel, 'type': str(e)}); continue
             if target is None: continue

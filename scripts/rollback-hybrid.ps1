@@ -1,4 +1,4 @@
-param([string]$RestoreRef, [string]$Output, [switch]$Publish)
+param([string]$RestoreRef, [string]$Output, [switch]$Publish, [switch]$DeferDeploymentCheck)
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $repoRoot
@@ -45,6 +45,10 @@ try {
     Checked 'git' @('commit','-m',"Restore exact production static release from $RestoreRef")
     Checked 'git' @('push','origin','HEAD:main')
     $commit=(& git rev-parse HEAD).Trim()
+    if ($DeferDeploymentCheck) {
+        Write-Output "Exact rollback pushed as $commit; the calling publisher must confirm public identity and bytes."
+        return
+    }
     $deadline=[DateTimeOffset]::UtcNow.AddMinutes(20)
     $run=$null
     while ([DateTimeOffset]::UtcNow -lt $deadline) {

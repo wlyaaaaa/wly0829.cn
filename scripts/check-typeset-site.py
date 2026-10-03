@@ -25,6 +25,7 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--snapshot', type=Path, help='Reuse an already frozen input snapshot; otherwise capture a fresh one')
     parser.add_argument('--jobs', type=int, default=3)
+    parser.add_argument('--pages', nargs='+', help='Only replace and verify the selected page routes')
     args = parser.parse_args()
     run = args.run_root.resolve()
     if run.exists():
@@ -35,7 +36,7 @@ def main():
     environment = {**os.environ, 'TEMP': str(cache), 'TMP': str(cache), 'TMPDIR': str(cache)}
     stages = []
     started = time.monotonic()
-    selection = []
+    selection = ['--pages', *args.pages] if args.pages else []
     report = run / 'build-report.json'
     verification = run / 'verification.json'
     snapshot = args.snapshot.resolve() if args.snapshot else run / 'input-snapshot'

@@ -37,6 +37,7 @@
   const d=JSON.parse(doc.querySelector('#page-data').textContent);
   if(win.innerWidth!==width)issues.push('viewport width '+win.innerWidth);
   if(!d.typeset)issues.push('route did not select typeset page');
+  if(['project','frozen'].includes(d.kind)&&d.repository_visibility==='PUBLIC'&&d.repo_url&&!Array.from(doc.querySelectorAll('a[href]')).some(el=>el.getClientRects().length&&el.getAttribute('href')===d.repo_url))issues.push('registered public repository has no visible link '+d.repo_url);
   if(doc.documentElement.scrollWidth>width+1)issues.push('horizontal overflow '+doc.documentElement.scrollWidth);
   const images=[...doc.images].filter(i=>i.getAttribute('src'));
   for(const im of images)if(!im.complete||!im.naturalWidth)issues.push('image not loaded '+im.getAttribute('src'));
@@ -60,7 +61,7 @@
      if(h.invalid)issues.push(p.image+':unbound target '+(h.href||h.target));
      if(h.kind==='link'||h.kind==='button'){
       if(h.action){if(el.dataset.b2Action!==h.action)issues.push(p.image+':native button target');}
-      else if(!h.invalid){if(el.getAttribute('href')!==(h.original_href||h.href))issues.push(p.image+':link target');targets.push(h.original_href||h.href);}
+      else if(!h.invalid){if(el.getAttribute('href')!==h.href)issues.push(p.image+':link target');targets.push(h.href);}
       hotspots++;
      }else if(h.kind==='live'){
        if(!(el.textContent.trim()||el.tagName==='INPUT'||el.classList.contains('typeset-lamp')||h.slot==='ca-toast'))issues.push(p.image+':empty live slot '+h.slot);

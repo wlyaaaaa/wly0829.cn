@@ -32,12 +32,12 @@ async def main():
             if args.mode=='geometry':
                 last_pending=-1;stable=0
                 for batch in range(12):
-                    suffix=('&page='+args.pages[0]) if args.pages else ''
+                    suffix=('&pages='+','.join(args.pages)) if args.pages else ''
                     await page.goto(args.url+'/__typeset/measure?limit=250'+suffix,wait_until='domcontentloaded')
                     await page.wait_for_function("document.querySelector('#state').dataset.done==='true'",timeout=180000)
                     state=await page.locator('#state').inner_text()
                     print('Batch '+str(batch+1)+': '+state,flush=True)
-                    if await page.locator('#state').get_attribute('data-complete')=='true' or args.pages:break
+                    if await page.locator('#state').get_attribute('data-complete')=='true':break
                     pending=int(await page.locator('#state').get_attribute('data-pending'))
                     stable=stable+1 if pending==last_pending else 0;last_pending=pending
                     if stable>=2:raise RuntimeError('Geometry has stable unresolved issues; inspect recorded differences')
