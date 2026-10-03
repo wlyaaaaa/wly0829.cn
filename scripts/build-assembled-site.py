@@ -269,18 +269,21 @@ def nested_refs(value, navigation_enabled=True):
     elif isinstance(value, list):
         for v in value: yield from nested_refs(v,navigation_enabled)
 
-def resolve_ref(root, owner, ref):
+def resolve_ref(root, owner, ref, asset_prefix=None):
     ref = html.unescape(ref).strip()
     parts = urlsplit(ref)
-    if parts.scheme or parts.netloc or ref.startswith(('data:', 'blob:', 'javascript:')): return None
-    path = unquote(parts.path)
+    if asset_prefix and ref.startswith(asset_prefix):
+        path = '/'+unquote(urlsplit(ref[len(asset_prefix):]).path)
+    else:
+        if parts.scheme or parts.netloc or ref.startswith(('data:', 'blob:', 'javascript:')): return None
+        path = unquote(parts.path)
     if not path: return owner if parts.fragment else None
     target = (root / path.lstrip('/') if path.startswith('/') else owner.parent / path).resolve()
     if not target.is_relative_to(root): raise ValueError('Reference escapes output: ' + ref)
     if path.endswith('/') or target.is_dir(): target /= 'index.html'
     return target
 
-def validate(output, report_path, incomplete=False, input_stats=None):
+def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None):
     files = sorted(p for p in output.rglob('*') if p.is_file())
     registry_path=ROOT/'config/panel-projects.json'
     registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
@@ -351,14 +354,14 @@ def validate(output, report_path, incomplete=False, input_stats=None):
             references += [(m.group(1), False) for m in re.finditer(r'url\(["\']?([^\s)"\']+)', text)]
             references += [(m.group(1), False) for m in re.finditer(r'@import\s+["\']([^"\']+)', text)]
         if p.suffix in {'.html','.js'}:
-            references += [(m.group(1),False) for m in re.finditer(r'(?:\b(?:from|import)\s*|\bimport\s*\()["\']([^"\']+)["\']',text) if m[1].startswith(('.', '/'))]
+            references += [(m.group(1),False) for m in re.finditer(r'(?:\b(?:from|import)\s*|\bimport\s*\()["\']([^"\']+)["\']',text) if m[1].startswith(('.', '/')) or asset_prefix and m[1].startswith(asset_prefix)]
             references += [(m.group(1),False) for m in re.finditer(r'\bfetch\s*\(\s*["\']([^"\']+)["\']',text) if not m[1].startswith('/__')]
         for ref, navigation in references:
             external=urlsplit(ref)
             repo='/'.join(external.path.strip('/').split('/')[:2]).removesuffix('.git').lower()
             if external.netloc.lower() in {'github.com','www.github.com'} and repo in registered_private:
                 findings.append({'file':rel,'type':'private_repository_link','reference':ref})
-            try: target = resolve_ref(output, p, ref)
+            try: target = resolve_ref(output, p, ref, asset_prefix)
             except ValueError as e: findings.append({'file': rel, 'type': str(e)}); continue
             if target is None: continue
             refs_count += 1

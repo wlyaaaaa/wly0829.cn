@@ -10,6 +10,7 @@ import json
 import re
 import shutil
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
@@ -347,6 +348,15 @@ def verify_release(output):
     manifest = read(output/MANIFEST)
     if manifest.get('schema') != 'wly.hybrid-release.v1' or inventory(output) != manifest['files']:
         raise ValueError('Release bytes differ from manifest')
+    if 'oss' in manifest:
+        oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
+        oss = importlib.util.module_from_spec(oss_spec)
+        oss_spec.loader.exec_module(oss)
+        oss.verify_manifest(manifest)
+        for route in manifest['routes']:
+            if route_file(route) not in manifest['files']:
+                raise ValueError('Missing protected route: '+route)
+        return manifest
     expected_id = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
     if manifest['release_id'] != expected_id: raise ValueError('Release identifier mismatch')
     accepted = {route_file(x) for x in manifest['accepted_pages']}
@@ -369,11 +379,43 @@ def verify_release(output):
 def validate_content(output, report):
     output=output.resolve()
     manifest = verify_release(output)
+    asset_prefix = None
+    if manifest.get('oss'):
+        # The existing artifact gate needs actual files, including remote JS
+        # repository references. Materialize verified bodies in the ignored
+        # task/CI cache and run that same gate over the complete release.
+        oss_spec = importlib.util.spec_from_file_location('oss_content', ROOT/'scripts/prepare-oss-release.py')
+        oss = importlib.util.module_from_spec(oss_spec); oss_spec.loader.exec_module(oss)
+        cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
+        cache.mkdir(parents=True, exist_ok=True)
+        for rel in list(manifest['files'])+[MANIFEST]:
+            target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(output/rel,target)
+        def materialize(item):
+            rel,obj=item
+            return rel,oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60,download_to=cache/rel)
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            rows=dict(pool.map(materialize,manifest['oss']['objects'].items()))
+        write(cache.parent/'actual-get.json',{'release_id':manifest['release_id'],'objects':rows,
+                                             'checked_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()})
+        output=cache
+        asset_prefix=manifest['oss']['asset_base_url']+'/'+manifest['oss']['prefix']+'/'
     original = builder.rule_pin_findings
     # The owner keeps old rule pages. Only newly accepted rule pages use current pin.
     def selected_pin(root, files):
         selected = {route_file(x) for x in manifest['accepted_pages']}
-        return [x for x in original(root,[p for p in files if p.relative_to(root).as_posix() in selected]) if x['type'] != 'pinned_rule_page_missing']
+        findings = original(root,[p for p in files if p.relative_to(root).as_posix() in selected])
+        def verified_source(finding):
+            if finding['type'] != 'rule_original_source_evidence_mismatch' or not manifest.get('oss'):
+                return False
+            text = (root/finding['file']).read_text('utf8')
+            match = builder.PAGE_DATA.search(text)
+            objects = {obj['url']: obj for obj in manifest['oss']['objects'].values()}
+            rows = json.loads(match[2]).get('screens', []) if match else []
+            bound = [row.get('source_meta', {}) for row in rows if row.get('source_meta', {}).get('relative_file') == finding.get('document')]
+            return bool(bound) and all(objects.get(meta.get('src'), {}).get('sha256') == meta.get('source_sha256')
+                                       and objects.get(meta.get('src'), {}).get('byte_preserved') is True for meta in bound)
+        return [x for x in findings if x['type'] != 'pinned_rule_page_missing' and not verified_source(x)]
     builder.rule_pin_findings = selected_pin
     try:
         # Topic and engineering-location exclusions govern newly adopted content.
@@ -381,14 +423,21 @@ def validate_content(output, report):
         # The complete artifact
         # still receives every credential, private-repository and resource check.
         with contextlib.redirect_stdout(io.StringIO()):
-            try: builder.validate(output, report)
+            try: builder.validate(output, report, asset_prefix=asset_prefix)
             except SystemExit: pass
         result = read(report)
         selected = {route_file(x) for x in manifest['accepted_pages']}
         changed_content = {rel for rel,entry in manifest.get('release_overlay',{}).items() if entry['kind'] != 'runtime_reference'}
         retained = {rel for rel in manifest['baseline_files'] if rel not in selected and rel not in changed_content}
+        # OSS relocation changes resource URLs in historical HTML. Only the
+        # existing topic exceptions carry forward; routes and all credentials
+        # still receive the same content checks.
         kept = []; retained_topics = []; retained_findings=[]
         for finding in result['findings']:
+            if finding['type'] == 'javascript_missing' and manifest.get('oss'):
+                # verify_release has already required sealed full-body GET
+                # evidence for the actual external JavaScript inventory.
+                continue
             unchanged_record=unchanged_search_finding(output/finding['file'],finding,manifest.get('release_overlay',{}).get(finding['file']))
             if unchanged_record or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
                 retained_findings.append(finding)

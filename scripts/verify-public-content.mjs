@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,21 +59,68 @@ try {
 
 const distHtmlFiles = distFiles.filter((file) => path.extname(file).toLowerCase() === ".html");
 const distJavaScriptFiles = distFiles.filter((file) => path.extname(file).toLowerCase() === ".js");
+let remoteJavaScriptCount = 0;
+let remoteArtifactCount = 0;
+let remoteTextCount = 0;
+let remoteCachedCount = 0;
+const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
+const manifestPath = path.join(distRoot, "release-manifest.json");
+if (distFiles.includes(manifestPath)) {
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  if (manifest.oss) {
+    try {
+      execFileSync(process.platform === "win32" ? "python" : "python3", [
+        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot
+      ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
+      const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
+      const entries = Object.entries(manifest.oss.objects);
+      let cursor = 0;
+      await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
+        while (cursor < entries.length) {
+          const [relative, object] = entries[cursor++];
+          try {
+            let bytes;
+            let response;
+            try {
+              // The preceding original artifact gate has just downloaded and
+              // verified every object here. Reuse those exact bytes for the
+              // all-extension credential scan; no local placeholder exists.
+              bytes = await readFile(path.join(projectRoot, ".publish", "oss-gate", manifest.release_id, "dist", relative));
+              remoteCachedCount++;
+            } catch (error) {
+              if (error.code !== "ENOENT") throw error;
+              response = await fetch(object.url, { headers: { Origin: "https://wly0829.cn", Referer: "https://wly0829.cn/", "Accept-Encoding": "identity" }, signal: AbortSignal.timeout(60000) });
+              bytes = Buffer.from(await response.arrayBuffer());
+            }
+            const hash = createHash("sha256").update(bytes).digest("hex");
+            if (response && response.status !== 200 || bytes.length !== object.bytes || hash !== object.sha256) throw new Error("Remote body differs from sealed release");
+            inspectBytes(bytes, `OSS/${relative}`);
+            remoteArtifactCount++;
+            if (textExtensions.has(path.extname(relative))) remoteTextCount++;
+            if ([".js", ".mjs"].includes(path.extname(relative))) remoteJavaScriptCount++;
+          } catch (error) {
+            findings.push({ file: `OSS/${relative}`, type: "production_remote_asset_unverified", detail: error.message });
+          }
+        }
+      }));
+    } catch (error) {
+      findings.push({ file: "dist/release-manifest.json", type: "production_oss_manifest_invalid", detail: error.message });
+    }
+  }
+}
 if (distFiles.length === 0 && !findings.some((item) => item.type === "production_artifact_missing")) {
   findings.push({ file: "dist/", type: "production_artifact_empty", detail: "dist contains no files" });
 }
 if (distFiles.length && !distHtmlFiles.length) {
   findings.push({ file: "dist/", type: "production_html_missing", detail: "dist contains no HTML entry" });
 }
-if (distFiles.length && !distJavaScriptFiles.length) {
+if (distFiles.length && !distJavaScriptFiles.length && !remoteJavaScriptCount) {
   findings.push({ file: "dist/", type: "production_javascript_missing", detail: "dist contains no JavaScript bundle" });
 }
 
 const files = [...new Set([...sourceFiles, ...distFiles])];
-const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
 
-for (const file of files) {
-  const bytes = await readFile(file);
+function inspectBytes(bytes, relative) {
   const latinText = bytes.toString("latin1");
   let utf8Text = "";
   try {
@@ -81,10 +129,12 @@ for (const file of files) {
     // Binary files still receive the byte-preserving latin1 credential scan.
   }
   const searchableText = `${latinText}\n${utf8Text}`;
-  const relative = path.relative(projectRoot, file).replaceAll("\\", "/");
   for (const [name, pattern] of secretPatterns) {
     if (pattern.test(searchableText)) findings.push({ file: relative, type: "credential_value", pattern: name });
   }
+}
+for (const file of files) {
+  inspectBytes(await readFile(file), path.relative(projectRoot, file).replaceAll("\\", "/"));
 }
 
 const report = {
@@ -95,7 +145,11 @@ const report = {
   dist_total_file_count: distFiles.length,
   production_html_count: distHtmlFiles.length,
   production_javascript_count: distJavaScriptFiles.length,
-  scanned_file_count: files.length,
+  production_remote_javascript_count: remoteJavaScriptCount,
+  production_remote_text_scanned_count: remoteTextCount,
+  production_remote_artifact_scanned_count: remoteArtifactCount,
+  production_remote_verified_cache_used_count: remoteCachedCount,
+  scanned_file_count: files.length + remoteArtifactCount,
   finding_count: findings.length,
   findings
 };

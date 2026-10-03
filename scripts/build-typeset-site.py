@@ -342,7 +342,9 @@ def patch_app(text):
     hero=text[hero_start:]
     hero=hero.replace("section=document.querySelector('.screen'),hero=section?.querySelector('picture img')", "section=document.querySelector('.typeset-screen .typeset-part[data-orientation=h]')||document.querySelector('.screen'),hero=section?.querySelector('picture img')")
     text=text[:hero_start]+hero
-    return text
+    streaming_spec=importlib.util.spec_from_file_location('oss_video_runtime', HERE/'prepare-oss-runtime.py')
+    streaming=importlib.util.module_from_spec(streaming_spec);streaming_spec.loader.exec_module(streaming)
+    return streaming.patch_video_runtime(text)
 
 def patch_b2(text):
     text = text.replace("document.querySelectorAll('.screen')", "document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")
@@ -549,7 +551,8 @@ def build_page(name, records, args, candidate):
                     try:
                         box,video_binding=video_position(old_video,old,geometry.get('illustrations',[]),name,args)
                         if box[0]<0 or box[1]<0 or box[0]+box[2]>size[0]+1 or box[1]+box[3]>size[1]+1:raise ValueError('视频定位越出首屏图片：'+name)
-                        data['video']={**old_video,'rect':[box[0]/size[0],box[1]/size[1],box[2]/size[0],box[3]/size[1]]}
+                        data['video']={**old_video,'rect':[box[0]/size[0],box[1]/size[1],box[2]/size[0],box[3]/size[1]],
+                                       'mount_allowed':False,'compatibility':{'status':'insufficient_evidence','reason':'排版定位只说明槽位；同素材或严格帧匹配证据到齐并核验后再挂载'}}
                     except ValueError as error:issues.append(str(error))
             else:issues.append(sid+'/'+orient+':缺少绑定当前PNG与HTML的动效位置')
             source_offsets[orient]+=size[1]-padding;part_indices[orient]+=1

@@ -637,6 +637,39 @@ def online_file(relative, expected, attempts=3):
     return last
 
 
+def online_oss_file(relative, expected, attempts=3):
+    last = None
+    for attempt in range(attempts):
+        try:
+            headers = {'Origin': SITE, 'Referer': SITE+'/', 'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'}
+            h, count = hashlib.sha256(), 0
+            with urlopen(Request(expected['url'], headers=headers), timeout=60) as response:
+                cors = response.headers.get('Access-Control-Allow-Origin')
+                mime = response.headers.get_content_type()
+                accepted = {expected['content_type']}
+                if expected['content_type'] == 'application/javascript': accepted.add('text/javascript')
+                if response.status != 200 or cors not in ('*', SITE) or mime not in accepted:
+                    raise ValueError('OSS HTTP, CORS or MIME differs')
+                while chunk := response.read(1024*1024):
+                    h.update(chunk); count += len(chunk)
+            actual = {'sha256': h.hexdigest(), 'bytes': count}
+            if actual != {key: expected[key] for key in ('sha256', 'bytes')}:
+                last = {'path': relative, 'status': 'mismatch', 'actual': actual}
+            else:
+                if relative.endswith('.mp4'):
+                    length = min(count, 32); headers['Range'] = f'bytes=0-{length-1}'
+                    with urlopen(Request(expected['url'], headers=headers), timeout=60) as response:
+                        part = response.read(length+1)
+                        if (response.status != 206 or response.headers.get('Content-Range') != f'bytes 0-{length-1}/{count}'
+                                or len(part) != length or hashlib.sha256(part).hexdigest() != expected['range_sha256']):
+                            raise ValueError('OSS video range differs from verified bytes')
+                return {'path': relative, 'status': 'pass', 'attempts': attempt+1, 'bytes': count, 'sha256': h.hexdigest()}
+        except (OSError, ValueError) as error:
+            last = {'path': relative, 'status': 'unknown', 'message': str(error)}
+        if attempt+1 < attempts: time.sleep(2)
+    return last
+
+
 def production_check(args):
     manifest = read(args.baseline_manifest)
     baseline, _ = hybrid.verify_baseline(args.baseline.resolve(), manifest)
@@ -644,7 +677,13 @@ def production_check(args):
     remote_manifest = json.loads(subprocess.check_output(["git", "show", commit + ":site-release/release-manifest.json"], cwd=ROOT))
     if remote_manifest.get("schema") != "wly.hybrid-release.v1":
         raise ValueError("Fetched production commit has no verified hybrid release")
-    remote_id = hashlib.sha256(json.dumps(remote_manifest["files"], sort_keys=True).encode()).hexdigest()
+    if remote_manifest.get('oss'):
+        oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
+        oss = importlib.util.module_from_spec(oss_spec); oss_spec.loader.exec_module(oss)
+        oss.verify_manifest(remote_manifest)
+        remote_id = remote_manifest['release_id']
+    else:
+        remote_id = hashlib.sha256(json.dumps(remote_manifest["files"], sort_keys=True).encode()).hexdigest()
     if remote_id != remote_manifest.get("release_id"):
         raise ValueError("Fetched production release identifier differs from its file inventory")
     remote_files = dict(remote_manifest["files"])
@@ -709,6 +748,11 @@ def stage_check(args):
 def readback(args):
     manifest = hybrid.verify_release(args.release.resolve())
     files = {key: value for key, value in manifest["files"].items() if key != "CNAME"}
+    for relative, obj in manifest.get('oss', {}).get('objects', {}).items():
+        entry = dict(obj)
+        if relative.endswith('.mp4'):
+            entry['range_sha256'] = manifest['oss']['verification']['objects'][relative]['range']['sha256']
+        files['OSS/'+relative] = entry
     retained = {}
     retry_report = getattr(args, "retry_report", None)
     if retry_report:
@@ -722,7 +766,7 @@ def readback(args):
     else:
         pending = files
     with ThreadPoolExecutor(max_workers=6) as pool:
-        current_checks = list(pool.map(lambda item: online_file(*item), sorted(pending.items())))
+        current_checks = list(pool.map(lambda item: online_oss_file(*item) if item[0].startswith('OSS/') else online_file(*item), sorted(pending.items())))
     retained.update({item["path"]: item for item in current_checks})
     checks = [retained[key] for key in sorted(files)]
     identity = None
@@ -730,7 +774,7 @@ def readback(args):
     for attempt in range(3):
         try:
             identity = json.loads(fetch_bytes("release-manifest.json"))
-            if identity.get("release_id") == manifest["release_id"] and identity.get("files") == manifest["files"]:
+            if identity.get("release_id") == manifest["release_id"] and identity.get("files") == manifest["files"] and identity.get('oss') == manifest.get('oss'):
                 identity_issue = None
                 break
             identity_issue = {"path": "release-manifest.json", "status": "mismatch", "message": "Online release identity differs",

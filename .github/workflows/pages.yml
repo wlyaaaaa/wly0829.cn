@@ -93,6 +93,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           python3 -m unittest discover -s tests -p 'test_hybrid_release.py'
+          python3 -m unittest discover -s tests -p 'test_oss_release.py'
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/hybrid-release.py verify --output dist --content-report hybrid-content-report.json --public-repos-from-github
 
