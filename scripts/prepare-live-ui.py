@@ -105,6 +105,10 @@ def prepare(site, library, font=None, sprite=None, label_map=None):
             if re.search(r'/typeset-layout-[0-9a-f]+\.css$',old):text=text.replace(old,layout_css)
             if re.search(r'b2-live-[0-9a-f]+\.css$',old):text=text.replace(old,b2_css)
         data.setdefault('shared',{})['live_status_icons']=icons
+        # Dynamic renderers use string maps and constructed URLs. Declare their
+        # exact dependencies in the existing native src graph before assembly.
+        data['shared']['live_status_asset_dependencies']=[{'src':url}for url in sorted(
+            set(icons.values())|{item['public_path']for item in hardware_icons})]
         text=re.sub(r'(<script\b[^>]*\bid="page-data"[^>]*>).*?(</script>)',lambda m:m[1]+json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')+m[2],text,count=1,flags=re.S)
         text=re.sub(r'<link[^>]*data-live-ui[^>]*>|<script[^>]*data-live-ui[^>]*>.*?</script>','',text,flags=re.S)
         # Older releases merged layout CSS into motion-* rather than linking a
