@@ -296,3 +296,172 @@ def encoded_json_spans(token, decoded, spans, origin):
         boundaries.extend([index] * len(value))
     if cursor != len(decoded): return []
     return [(origin + boundaries[start], origin + boundaries[end]) for start, end in spans]
+
+
+WORKBENCH_SCHEMA = 'wly.rule-original-workbench.v1'
+
+
+def _workbench_module(name, filename):
+    """Use the existing semantic/transcript consumer rather than a new digest."""
+    import importlib.util
+    import sys
+    key = 'rule_original_' + name
+    if key not in sys.modules:
+        spec = importlib.util.spec_from_file_location(key, Path(__file__).with_name(filename))
+        value = importlib.util.module_from_spec(spec); spec.loader.exec_module(value)
+        sys.modules[key] = value
+    return sys.modules[key]
+
+
+def _workbench_dom(text):
+    """Read actual image/transcript nodes, never JSON strings containing HTML."""
+    class Facts(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack = []; self.ids = set(); self.screens = {}; self.hrefs = set()
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if a.get('id'): self.ids.add(a['id'])
+            if tag == 'a' and a.get('href'): self.hrefs.add(a['href'])
+            owner = next((x[1].get('data-rule-excerpt') for x in reversed(self.stack)
+                          if x[1].get('data-rule-excerpt')), None)
+            if a.get('data-rule-excerpt'):
+                owner = a['data-rule-excerpt']
+                self.screens[owner] = {'id': a.get('id'), 'images': set(), 'transcript': []}
+            if owner and tag == 'img':
+                self.screens[owner]['images'].add(a.get('src') or a.get('data-src'))
+            if tag not in {'br', 'hr', 'img', 'input', 'link', 'meta', 'source', 'wbr'}:
+                self.stack.append((tag, a))
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    del self.stack[i:]; break
+        def handle_data(self, value):
+            owner = next((a.get('data-rule-excerpt') for _, a in reversed(self.stack)
+                          if a.get('data-rule-excerpt')), None)
+            if owner and any(a.get('data-rule-original-text') == owner for _, a in self.stack):
+                self.screens[owner]['transcript'].append(value)
+    parser = Facts(); parser.feed(text)
+    return parser
+
+
+def parse_workbench_metadata(text, pin=None):
+    """Return only complete, substantive source bindings present in the real DOM."""
+    match = re.search(r'<script\b[^>]*\bid=["\']rule-workbench-data["\'][^>]*>(.*?)</script>', text, re.S)
+    if not match: return None
+    pin = pin or load_pin(Path(__file__).resolve().parents[1])
+    data = json.loads(match[1]); dom = _workbench_dom(text)
+    if data.get('schema') != WORKBENCH_SCHEMA or data.get('version') != pin['version']:
+        raise ValueError('Rule original workbench version/schema differs from fixed pin')
+    rows = data.get('screens', [])
+    expected = pin['excerpt_contract']['excerpts']
+    if len(rows) != len(expected) or {r.get('source_meta', {}).get('excerpt_id') for r in rows} != set(expected):
+        raise ValueError('Rule original workbench must contain every fixed source excerpt once')
+    topics = data.get('topics', [])
+    if len(topics) != len(pin['documents']) or {t.get('relative_file') for t in topics} != set(pin['documents']):
+        raise ValueError('Rule original workbench must contain all complete fixed source topics')
+    builder = _workbench_module('prose_gate', 'build-assembled-site.py')
+    publication = _workbench_module('transcript_gate', 'audit-page-publication.py')
+    for topic in topics:
+        document = pin['documents'][topic['relative_file']]
+        source = topic.get('src')
+        if (source not in dom.hrefs or topic.get('public_source_sha256') != document['public_source_sha256']
+                or pin['public_source_resources'].get(source, {}).get('relative_file') != topic['relative_file']
+                or 'rule-panel-' + topic['logical_id'] not in dom.ids
+                or 'rule-tab-' + topic['logical_id'] not in dom.ids):
+            raise ValueError('Rule topic lacks its actual full-source reading link: ' + topic['page'])
+    for row in rows:
+        meta = row.get('source_meta', {}); identity = meta['excerpt_id']; excerpt = expected[identity]
+        actual = dom.screens.get(identity); original = meta.get('original_html', '')
+        spans, substantive = source_text_spans(original)
+        topic = next(t for t in topics if t['relative_file'] == excerpt['relative_file'])
+        if (row.get('id') != excerpt['screen'] or row.get('shape') != 'source_text'
+                or row.get('render_mode') != 'typeset' or meta.get('version') != pin['version']
+                or meta.get('relative_file') != excerpt['relative_file']
+                or meta.get('source_sha256') != excerpt['source_sha256']
+                or meta.get('src') != topic['src'] or meta.get('public_source_sha256') != topic['public_source_sha256']
+                or meta.get('public_projection_sha256') != data.get('projection_sha256')
+                or meta.get('excerpt_contract') != CONTRACT or not spans or len(canonical_plain(substantive)) < 100
+                or meta.get('omitted_count') != excerpt['approved_omitted_count']
+                or builder.typeset_prose_digest(original) != excerpt['rendered_text_sha256']
+                or not actual or actual['id'] != row['id'] or not actual['transcript']
+                or {p.get('src') for p in row.get('parts', [])} != actual['images']
+                or {p.get('orientation') for p in row.get('parts', [])} != {'h', 'v'}):
+            raise ValueError('Rule excerpt lacks substantive same-screen original DOM: ' + identity)
+        if sha_bytes(' '.join(''.join(actual['transcript']).split()).encode('utf8')) != row.get('transcript_sha256'):
+            raise ValueError('Rule excerpt actual transcript differs from its binding: ' + identity)
+        if ' '.join(''.join(actual['transcript']).split()) != ' '.join(publication.rendered_text('<body>' + original + '</body>').split()):
+            raise ValueError('Rule excerpt DOM text is not its fixed original: ' + identity)
+    return data
+
+
+def rule_original_fallback(ref, mapping, pages):
+    """Exact same-excerpt fallback; missing/placeholder workbenches never resolve."""
+    facts = pages.get('rules/index.html')
+    data = getattr(facts, 'rule_workbench_metadata', None) if facts else None
+    if not data: return None
+    identity = mapping.get('excerpt_id')
+    row = next((r for r in data['screens'] if r['source_meta']['excerpt_id'] == identity), None)
+    if not row or row['id'] not in facts.ids: return None
+    topic = next(t for t in data['topics'] if t['relative_file'] == row['source_meta']['relative_file'])
+    return '/rules/?rule=' + topic['logical_id'] + '#' + row['id']
+
+
+def rule_topic_original_fallback(ref, pages):
+    """Preserve a missing topic route's owning original and native heading."""
+    from urllib.parse import urlsplit
+    facts = pages.get('rules/index.html')
+    data = getattr(facts, 'rule_workbench_metadata', None) if facts else None
+    if not data: return None
+    parsed = urlsplit(ref)
+    if not parsed.path.startswith('/rules/'): return None
+    slug = parsed.path.strip('/').removeprefix('rules/')
+    topic = next((t for t in data['topics'] if ('charter' if t['page'] == 'charter'
+                 else t['page'].removeprefix('rule-')) == slug), None)
+    if not topic: return None
+    pin = load_pin(Path(__file__).resolve().parents[1])
+    fragment = unquote(parsed.fragment)
+    rows = [r for r in data['screens'] if r['source_meta']['relative_file'] == topic['relative_file']]
+    row = next((r for r in rows if fragment == r['id'] or fragment in
+                pin['excerpt_contract']['excerpts'][r['source_meta']['excerpt_id']].get('heading_aliases', [])), rows[0])
+    return '/rules/?rule=' + topic['logical_id'] + '#' + row['id'] if row['id'] in facts.ids else None
+
+
+def validate_rule_workbench(site_root, pin=None):
+    """Consumer gate: all 11 full sources and all 38 DOM/image/body bindings."""
+    from importlib.util import spec_from_file_location, module_from_spec
+    root = Path(site_root); pin = pin or load_pin(Path(__file__).resolve().parents[1])
+    result = {'seen_documents': [], 'seen_excerpts': [], 'findings': []}
+    try:
+        text = (root / 'rules/index.html').read_text('utf8')
+        data = parse_workbench_metadata(text, pin)
+        if not data: return result
+        if data.get('pin_sha256') != sha_bytes((Path(__file__).resolve().parents[1] / 'config/assembled-rules-pin.json').read_bytes()):
+            raise ValueError('Workbench fixed source pin SHA differs')
+        dom = _workbench_dom(text)
+        spec = spec_from_file_location('workbench_prose_gate', Path(__file__).with_name('build-assembled-site.py'))
+        builder = module_from_spec(spec); spec.loader.exec_module(builder)
+        spec = spec_from_file_location('workbench_transcript_gate', Path(__file__).with_name('audit-page-publication.py'))
+        publication = module_from_spec(spec); spec.loader.exec_module(publication)
+        for topic in data['topics']:
+            source = root / topic['src'].lstrip('/')
+            if not source.is_file() or sha_bytes(source.read_bytes()) != topic['public_source_sha256']:
+                raise ValueError('Workbench complete public source SHA differs: ' + topic['page'])
+        for row in data['screens']:
+            meta = row['source_meta']; expected = pin['excerpt_contract']['excerpts'][meta['excerpt_id']]
+            if (builder.typeset_prose_digest(meta['original_html']) != expected['rendered_text_sha256']
+                    or meta.get('omitted_count') != expected['approved_omitted_count']):
+                raise ValueError('Workbench source excerpt text/range differs: ' + meta['excerpt_id'])
+            actual = ' '.join(''.join(dom.screens[meta['excerpt_id']]['transcript']).split())
+            expected_text = ' '.join(publication.rendered_text('<body>' + meta['original_html'] + '</body>').split())
+            if actual != expected_text:
+                raise ValueError('Workbench DOM text is not its pinned substantive original: ' + meta['excerpt_id'])
+            for part in row['parts']:
+                resource = root / part['src'].lstrip('/')
+                if not resource.is_file() or sha_bytes(resource.read_bytes()) != part['sha256']:
+                    raise ValueError('Workbench original image SHA differs: ' + part['src'])
+        result.update(seen_documents=[t['relative_file'] for t in data['topics']],
+                      seen_excerpts=[r['source_meta']['excerpt_id'] for r in data['screens']])
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        result['findings'].append({'file': 'rules/index.html', 'type': 'rule_original_workbench_invalid', 'reason': str(error)})
+    return result
