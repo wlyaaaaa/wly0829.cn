@@ -166,7 +166,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function plan(cells,height,obstacles=[]){
   const entries=cells.filter(cell=>validRect(cell.rect)&&!isLamp(cell)).map(cell=>({...cell,maskRect:validRect(cell.maskRect)?cell.maskRect:cell.rect})).sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);
   const bands=[];
-  for(const cell of entries){const r=cell.maskRect,large=r[2]>.55&&r[3]*height>=80,padding=large?0:Math.min(.025,Math.max(16/Math.max(1,height),r[3]*.6));bands.push({start:Math.max(0,r[1]-padding),end:Math.min(1,r[1]+r[3]+padding),cells:[cell]});}
+  for(const cell of entries){const r=cell.maskRect,large=r[2]>.55&&r[3]*height>=80,padding=large||cell.compactFrame===true?0:Math.min(.025,Math.max(16/Math.max(1,height),r[3]*.6));bands.push({start:Math.max(0,r[1]-padding),end:Math.min(1,r[1]+r[3]+padding),cells:[cell]});}
   function merge(){
    bands.sort((a,b)=>a.start-b.start);
    for(let i=1;i<bands.length;i++)if(bands[i].start<=bands[i-1].end+.00001){const a=bands[i-1],b=bands[i];a.end=Math.max(a.end,b.end);a.cells.push(...b.cells);bands.splice(i--,1);}
@@ -209,17 +209,24 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const image=document.createElement('img');image.className='typeset-live-flow-image';image.alt='';image.setAttribute('aria-hidden','true');image.decoding='async';image.draggable=false;image.src=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||state.host._layout.src;
   const layer=document.createElement('div');layer.className='typeset-live-flow-layer';tile.append(image,layer);
   tile.dataset.sourceLeft=String(columns[0]);tile.dataset.sourceRight=String(columns[1]);
-  const record={node:tile,image,layer,start,end,masked,columns};state.tiles.push(record);return record;
+  const record={node:tile,image,layer,start,end,masked,columns,state};state.tiles.push(record);return record;
  }
  function mask(tile,width,height){
   const [left,right]=tile.columns,top=tile.start,bottom=tile.end,origin=[left*width,top*height];
+  const removed=tile.masked.map(cell=>cell.maskRect);
+  // Opaque native controls replace their bitmap button/input, including its
+  // antialiased outline. Retaining it produces a second border at the corners.
+  for(const [node,box]of tile.state.boxes)if(node.isConnected&&node.matches('.b2-image-action:disabled,.b2-image-action[data-label-changing=true],.b2-image-action[data-b2-action=submit],input.b2-slot')){
+   const r=box.rect,px=2/width,py=2/height,x=Math.max(left,r[0]-px),y=Math.max(top,r[1]-py),endX=Math.min(right,r[0]+r[2]+px),endY=Math.min(bottom,r[1]+r[3]+py);
+   if(endX>x&&endY>y)removed.push([x,y,endX-x,endY-y]);
+  }
   // Crop only source pixels. Links and motion in the sibling layer may span
   // a cut; clipping the whole tile would make those real targets unreachable.
-  if(!tile.masked.length){tile.image.style.clipPath='inset('+[top,1-right,1-bottom,left].map(value=>value*100+'%').join(' ')+')';return;}
+  if(!removed.length){tile.image.style.clipPath='inset('+[top,1-right,1-bottom,left].map(value=>value*100+'%').join(' ')+')';return;}
   // Even-odd polygons remove only the original live rectangles, retaining all
   // surrounding raster text and decorations. Every tile uses the same source.
   const points=[origin,[right*width,top*height],[right*width,bottom*height],[left*width,bottom*height],origin];
-  for(const cell of tile.masked){const r=cell.maskRect,x=r[0]*width,y=r[1]*height,right=(r[0]+r[2])*width,bottom=(r[1]+r[3])*height;points.push([x,y],[x,bottom],[right,bottom],[right,y],[x,y],origin);}
+  for(const r of removed){const x=r[0]*width,y=r[1]*height,right=(r[0]+r[2])*width,bottom=(r[1]+r[3])*height;points.push([x,y],[x,bottom],[right,bottom],[right,y],[x,y],origin);}
   tile.image.style.clipPath='polygon(evenodd,'+points.map(p=>p[0]+'px '+p[1]+'px').join(',')+')';
  }
  function tileFor(state,rect){
@@ -299,7 +306,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    for(const band of bands){
     if(band.start>cursor+.00001)container.append(makeTile(state,cursor,band.start).node);
     const region=document.createElement('div');region.className='typeset-live-flow-region typeset-live-flow-compact-frame';
-    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',1);region.append(cards);container.append(region);
+    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);
     for(const cell of band.cells)move(cards,cell.node);
     state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true});cursor=band.end;
    }

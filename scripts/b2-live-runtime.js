@@ -434,7 +434,7 @@ function syncChildren(parent,desired){
  }
  for(const node of [...parent.childNodes])if(!used.has(node))node.remove();
 }
-const liveTitles={'cockpit-overall':'这台电脑现在','cockpit-attention':'要我处理的事','cockpit-quick-1':'电脑在线','cockpit-quick-2':'个人资料','cockpit-quick-3':'无限制授权','cockpit-quick-4':'自动任务','cockpit-quick-5':'最近备份','cockpit-remote':'远程和网络','cockpit-grafana':'近24小时曲线','cockpit-tasks':'自动任务','cockpit-backups':'备份和云端','cockpit-security':'个人资料','cockpit-security-unrestricted':'无限制授权','cockpit-security-windows':'Windows锁屏','cockpit-projects':'项目状态','cockpit-today':'今天的动态','ca-personal-data':'个人资料','ca-unrestricted':'无限制授权','ca-windows':'Windows锁屏','ca-connection':'电脑连接','ca-form':'本次办理','ca-toast':'操作提示','ca-results':'办理结果','mcp-main':'主机','mcp-secondary':'副机','mcp-grants':'授权状态'};
+const liveTitles={'cockpit-overall':'这台电脑现在','cockpit-attention':'要我处理的事','cockpit-quick-1':'电脑在线','cockpit-quick-2':'个人资料','cockpit-quick-3':'无限制授权','cockpit-quick-4':'自动任务','cockpit-quick-5':'最近备份','cockpit-remote':'远程和网络','cockpit-grafana':'近24小时曲线','cockpit-tasks':'自动任务','cockpit-backups':'备份和云端','cockpit-security':'个人资料','cockpit-security-unrestricted':'无限制授权','cockpit-security-windows':'Windows锁屏','cockpit-projects':'项目状态','cockpit-today':'今天的动态','ca-personal-data':'个人资料','ca-unrestricted':'无限制授权','ca-windows':'Windows锁屏','ca-connection':'电脑连接','ca-form':'本次办理','ca-toast':'操作提示','ca-results':'办理结果','mcp-main':'主机','mcp-secondary':'副机','mcp-grants':'主机授权'};
 function rectStyle(el,r){el._sourceRect=r;Object.assign(el.style,{position:'absolute',left:r[0]*100+'%',top:r[1]*100+'%',width:r[2]*100+'%',height:r[3]*100+'%',pointerEvents:'auto'});}
 
 function liveGroup(section,cells,className,padding=.012){
@@ -484,7 +484,8 @@ function mount(){
   if(screenId==='cockpit-01'){
    const overview=flowCells.filter(cell=>cell.slot==='cockpit-overall'||cell.slot.startsWith('cockpit-quick-'));
    if(overview.length){flowCells=flowCells.filter(cell=>!overview.includes(cell));flowCells.push(liveGroup(section,overview,'b2-overview-group'));}
-  }else if(screenId==='mcp-01'&&flowCells.length){flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
+  }else if(screenId==='cockpit-02'){for(const cell of flowCells)if(cell.slot==='cockpit-pc'){cell.forceOverlay=true;cell.flowRow=true;}}
+  else if(screenId==='mcp-01'&&flowCells.length){if(layout.compact_live===true){for(const cell of flowCells)cell.compactFrame=true;}else flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
   else if(screenId==='computer-access-01'){
    const grants=flowCells.filter(cell=>['ca-personal-data','ca-unrestricted','ca-windows'].includes(cell.slot));
    if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));const group=liveGroup(section,grants,'b2-authority-group');group.flowRow=true;flowCells.push(group);}
@@ -515,7 +516,7 @@ function render(){
   el.hidden=displayRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
   if(el.hidden){el.replaceChildren();window.TypesetLiveFlow?.request(section);continue;}
 
-  if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
+  if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||!status?.state_version||status?.factor?.available!==true||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
 
   if(slot==='ca-connection'){
    const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':'读不到电脑';stamp.textContent=lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;

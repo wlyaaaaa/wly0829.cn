@@ -51,3 +51,12 @@ test('invalid source geometry does not create an accidental full-page replacemen
  const row=plan([{rect:[.1,.5,.8,.03]}],1000,[[0,0,1,1]])[0];
  assert.ok(row.start>.4&&row.end<.6);
 });
+
+test('compact plain frames cut only their own pixels and retain source labels between rows',()=>{
+ const rows=plan([{rect:[.1,.3,.2,.04],compactFrame:true},{rect:[.1,.4,.2,.04],compactFrame:true}],1000);
+ assert.equal(rows.length,2);
+ assert.equal(rows[0].start,.3);
+ assert.ok(Math.abs(rows[0].end-.34)<1e-10);
+ assert.equal(rows[1].start,.4);
+ assert.ok(Math.abs(rows[1].end-.44)<1e-10);
+});

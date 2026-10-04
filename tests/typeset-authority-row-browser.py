@@ -46,7 +46,21 @@ async def run(args):
           return {retained,compact:next.bands.every(b=>b.compact),unmasked:next.tiles.every(t=>!t.masked.length)};
         }''')
         assert compact == {'retained': True, 'compact': True, 'unmasked': True}, compact
-        print({'fixture_only': True, 'row_growth': result, 'explicit_compact_only': compact, 'screenshots': 0})
+        columns = await page.evaluate('''() => {
+          const host=document.querySelector('#host'),a=host.querySelector('.typeset-live-flow-cards>div'),b=document.createElement('div');b.textContent='Second synthetic slot';host.querySelector('.overlays').append(b);
+          const next=TypesetLiveFlow.apply(host,[{node:a,rect:[.1,.3,.3,.05],compactFrame:true},{node:b,rect:[.6,.3,.3,.05],compactFrame:true}]);
+          return {bands:next.bands.length,columns:next.bands[0].cards.style.getPropertyValue('--typeset-live-columns'),labelsBefore:next.tiles.some(t=>t.end===.3),labelsAfter:next.tiles.some(t=>t.start===.35)};
+        }''')
+        assert columns == {'bands': 1, 'columns': '2', 'labelsBefore': True, 'labelsAfter': True}, columns
+        controls = await page.evaluate('''() => {
+          const host=document.querySelector('#host'),nodes=[...host.querySelectorAll('.typeset-live-flow-cards>div')];TypesetLiveFlow.reset(host);
+          const button=document.createElement('button');button.className='b2-image-action';button.dataset.b2Action='lock-windows';button._sourceRect=[.1,.7,.3,.05];button.disabled=true;host.querySelector('.overlays').append(button);
+          const state=TypesetLiveFlow.apply(host,nodes.map((node,i)=>({node,rect:[.1+i*.5,.3,.3,.05],compactFrame:true})));
+          const tile=state.tiles.find(t=>t.start>.3),disabled=tile.image.style.clipPath.startsWith('polygon');button.disabled=false;TypesetLiveFlow.apply(host,state.cells);
+          return {disabledBitmapRemoved:disabled,enabledBitmapRetained:tile.image.style.clipPath.startsWith('inset'),buttonPreserved:button.isConnected};
+        }''')
+        assert controls == {'disabledBitmapRemoved': True, 'enabledBitmapRetained': True, 'buttonPreserved': True}, controls
+        print({'fixture_only': True, 'row_growth': result, 'explicit_compact_only': compact, 'columns': columns, 'native_controls': controls, 'screenshots': 0})
         await browser.close()
 
 
