@@ -34,7 +34,7 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout,clearTimeout};
  sandbox.window.top=sandbox.window;
- vm.runInNewContext(pure+"\nglobalThis.subject={value,time,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
 
@@ -102,6 +102,39 @@ test('the current public status dashboard field mounts the anonymous chart and r
  data.grafana.public_dashboard_state='unavailable';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
  delete data.grafana.public_dashboard_state;data.grafana.public_url='https://grafana.wly0829.cn/login';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
  data.grafana.public_url=url;data.grafana.checked_at=iso(now-3600000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+});
+
+test('Grafana public observation time is independent of the login probe clock',()=>{
+ const data=fixture(),url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
+ data.grafana={state:'unavailable',checked_at:iso(now-3600000),public_dashboard_state:'reachable',public_dashboard_checked_at:iso(now-180000),public_dashboard_url:url};
+ const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);assert.equal(app.value('cockpit-grafana').state,'ok');assert.equal(app.slotTime('cockpit-grafana'),now/1000-180);
+ data.grafana.checked_at=iso(now);data.grafana.public_dashboard_checked_at=iso(now-301000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);assert.equal(app.value('cockpit-grafana').state,'unknown');assert.equal(app.value('cockpit-grafana').cached,false);assert.equal(app.slotTime('cockpit-grafana'),now/1000-301);
+ data.grafana.public_dashboard_checked_at=iso(now-300000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);
+ data.grafana.max_age_seconds=60;data.grafana.public_dashboard_checked_at=iso(now-61000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+});
+
+test('a present null or invalid public clock never falls back to a fresh login observation',()=>{
+ const url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
+ for(const stamp of [null,'','not-a-date',0,false,{},'2026-10-04T02:00:00']){
+  const data=fixture();data.grafana={state:'reachable',checked_at:iso(now),public_url:url,public_dashboard_state:'reachable',public_dashboard_url:url,public_dashboard_checked_at:stamp};
+  const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);assert.equal(app.value('cockpit-grafana').state,'unknown');assert.equal(app.value('cockpit-grafana').cached,false);assert.equal(Number.isNaN(app.slotTime('cockpit-grafana')),true);
+ }
+});
+
+test('future public observations and explicit public failures cannot mount a chart',()=>{
+ const data=fixture(),url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
+ data.grafana={state:'reachable',checked_at:iso(now),url:'https://grafana.wly0829.cn/',public_url:url,public_dashboard_state:'reachable',public_dashboard_url:url,public_dashboard_checked_at:iso(now+1)};
+ const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+ data.grafana.public_dashboard_checked_at=iso(now);data.grafana.public_dashboard_state='unavailable';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+});
+
+test('legacy Grafana sources without a separate public timestamp retain their original clock',()=>{
+ const data=fixture(),url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
+ data.grafana={state:'reachable',checked_at:iso(now-180000),public_url:url};
+ const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);assert.equal(app.slotTime('cockpit-grafana'),now/1000-180);
+ data.grafana.checked_at=iso(now-301000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+ data.grafana.checked_at=iso(now+30000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);assert.equal(app.slotTime('cockpit-grafana'),now/1000+30);
+ data.grafana.checked_at=iso(now+61000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
 });
 test('cached cockpit and shared results keep values across errors and reloads without green lights',()=>{
  const saved=storage();let app=cockpit(saved);app.set(fixture());app.value('cockpit-backups');

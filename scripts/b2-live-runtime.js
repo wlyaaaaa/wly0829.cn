@@ -30,6 +30,12 @@ const validRequest=id=>/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9
 const grantState=g=>!authorizationFresh(g)?'unknown':remainingMinutes(g,clock())===0?'warn':['unlocked','active'].includes(g?.state)?'ok':['locked','inactive','revoked','expired'].includes(g?.state)?'closed':['opening','closing'].includes(g?.state)?'warn':['error','failed'].includes(g?.state)?'error':'unknown';
 
 const blockTime=b=>Number.isFinite(b?.observed_at_unix)?b.observed_at_unix:Date.parse(b?.observed_at||b?.checked_at)/1000;
+function grafanaTime(){
+ const g=status?.grafana||status?.services?.grafana;
+ if(!Object.hasOwn(g||{},'public_dashboard_checked_at'))return blockTime(g);
+ const at=g.public_dashboard_checked_at;
+ return typeof at==='string'&&/(?:Z|[+-]\d{2}:\d{2})$/i.test(at)?Date.parse(at)/1000:NaN;
+}
 const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
@@ -366,8 +372,9 @@ const slotKeys={
  'cockpit-attention':['automation','backups','projects','pending','hardware'],'cockpit-pc':['hardware'],
  'cockpit-grafana':['grafana'],'cockpit-overall':['automation','backups','projects','pending','today','hardware']
 };
-function slotHealth(slot){const keys=slotKeys[slot];if(!keys)return clock()-lastRead<=120?'ok':'stale';const states=keys.map(k=>k==='hardware'?hardwareHealth():k==='grafana'?(()=>{const g=status?.grafana||status?.services?.grafana,at=blockTime(g);return g&&Number.isFinite(at)&&at<=clock()+60&&clock()-at<=(Number(g.max_age_seconds)||300)?'ok':'stale';})():blockHealth(k));return states.includes('error')?'error':states.includes('unknown')?'unknown':states.includes('stale')?'stale':'ok';}
+function slotHealth(slot){const keys=slotKeys[slot];if(!keys)return clock()-lastRead<=120?'ok':'stale';const states=keys.map(k=>k==='hardware'?hardwareHealth():k==='grafana'?(()=>{const g=status?.grafana||status?.services?.grafana,at=grafanaTime();return g&&Number.isFinite(at)&&at>0&&at<=clock()+(Object.hasOwn(g,'public_dashboard_checked_at')?0:60)&&clock()-at<=(Number(g.max_age_seconds)||300)?'ok':'stale';})():blockHealth(k));return states.includes('error')?'error':states.includes('unknown')?'unknown':states.includes('stale')?'stale':'ok';}
 function slotTime(slot){
+ if(slot==='cockpit-grafana')return grafanaTime();
  const authorityKey=({'ca-personal-data':'personal_data','cockpit-security':'personal_data','cockpit-quick-2':'personal_data','ca-unrestricted':'unrestricted','cockpit-security-unrestricted':'unrestricted','cockpit-quick-3':'unrestricted'})[slot];
  if(authorityKey)return authorizationTime(status?.[authorityKey]);
  if(slot==='ca-windows'||slot==='cockpit-security-windows')return windowsTime();
