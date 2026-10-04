@@ -1050,7 +1050,7 @@ def main():
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
         creative_module=importlib.util.module_from_spec(creative_spec);creative_spec.loader.exec_module(creative_module)
         staged_report=None
-        if creative_scope=='full-pages-creative-2f':
+        if creative_scope in ('full-pages-creative-2f','full-pages-creative-2f-static-home'):
             staged_report=args.output.parent/(args.output.name+'-staged-build-report.json')
             for state in states.values():
                 if state.get('url'):state['html_sha256']=hybrid.digest(raw_output/hybrid.route_file(state['url']))

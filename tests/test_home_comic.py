@@ -41,7 +41,7 @@ class SourceTests(unittest.TestCase):
         self.assertNotIn('getImageData', patched)
         self.assertNotIn('localStorage', patched); self.assertNotIn('sessionStorage', patched)
         subprocess.run(['node', '--check', '-'], input=patched, text=True, encoding='utf8', capture_output=True, check=True)
-        with self.assertRaises(ValueError): comic.patch_engine(patched)
+        self.assertEqual(comic.patch_engine(patched), patched)
 
 
 PROBE = r'''(() => {

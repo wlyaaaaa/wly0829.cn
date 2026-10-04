@@ -674,8 +674,9 @@ def prepare(args):
             bound_file(creative['config']['path'],creative['config'],checked_inputs)
             config=read(creative['config']['path'])
             page_only=config.get('scope')=='page-demo-and-retry'
-            full_2f=config.get('scope')=='full-pages-creative-2f'
-            expected_steps=['demo','retry'] if page_only else ['river','living','comic','album','demo','retry']if full_2f else ['comic','living','album','river','demo','retry']
+            static_2f=config.get('scope')=='full-pages-creative-2f-static-home'
+            full_2f=config.get('scope') in ('full-pages-creative-2f','full-pages-creative-2f-static-home')
+            expected_steps=['demo','retry'] if page_only else ['static-home','river','comic','album','demo','retry']if static_2f else ['river','living','comic','album','demo','retry']if full_2f else ['comic','living','album','river','demo','retry']
             if [step['name'] for step in creative['steps']]!=expected_steps or ((page_only or full_2f) and creative.get('scope')!=config.get('scope')):
                 raise ValueError('Preparation does not replay the actual selected scope')
             if full_2f:
@@ -687,6 +688,10 @@ def prepare(args):
             for step in creative['steps']:
                 if step['before_release_id']!=previous:
                     raise ValueError('Creative preparation release chain is broken')
+                if static_2f:
+                    step_manifest=step['manifest'];bound_file(step_manifest['path'],step_manifest,checked_inputs)
+                    if read(step_manifest['path']).get('release_id')!=step['after_release_id']:
+                        raise ValueError('Static creative step differs from its actual manifest')
                 previous=step['after_release_id']
             if creative['assembled_release_id']!=release_id:
                 raise ValueError('Creative replay final identity differs from the reviewed files')
@@ -717,6 +722,23 @@ def prepare(args):
                     raise ValueError('Page-only preparation changed the existing homepage beyond exact resource recovery')
                 if any(manifest.get(key) for key in ('home_living_preparation','home_comic_preparation','page_flip_preparation','today_river_preparation')):
                     raise ValueError('The delegated four creative pieces entered the page-only batch')
+            elif static_2f:
+                static=manifest['home_static_preparation']
+                bound_file(static['reference']['path'],static['reference'],checked_inputs)
+                if Path(static['reference']['path']).resolve()!=Path(config['static_home_reference']).resolve():
+                    raise ValueError('Static home uses a different original reference')
+                if (static.get('schema')!='wly.static-home-preparation.v1'
+                        or static.get('baseline_release_id')!=creative['raw_release_id']
+                        or static.get('release_id')!=creative['steps'][0]['after_release_id']
+                        or manifest.get('home_living_preparation')):
+                    raise ValueError('Static homepage preparation differs from the actual first replay step')
+                static_spec=importlib.util.spec_from_file_location('typeset_static_home',ROOT/'scripts/prepare-static-home.py')
+                static_module=importlib.util.module_from_spec(static_spec);static_spec.loader.exec_module(static_module)
+                static_module.verify_static_home(release,static)
+                panorama=creative['panorama_source_input'];bound_file(panorama['path'],panorama,checked_inputs)
+                if (staged.get('inputs',{}).get(panorama['path'])!={'sha256':panorama['sha256'],'bytes':panorama['bytes']}
+                        or not panorama['path'].replace('\\','/').endswith('/input-snapshot/sources/how.json')):
+                    raise ValueError('Panorama Source is not the exact native staged frozen input')
             elif not manifest.get('home_living_preparation',{}).get('package_bytes_unchanged'):
                 raise ValueError('Creative homepage lacks the exact approved living package')
             result['creative_preparation']=creative

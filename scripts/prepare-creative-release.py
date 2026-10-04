@@ -10,6 +10,8 @@ HERE = Path(__file__).resolve().parent
 STEPS = ('comic', 'living', 'album', 'river', 'demo', 'retry')
 FULL_2F_SCOPE='full-pages-creative-2f'
 FULL_2F_STEPS=('river','living','comic','album','demo','retry')
+STATIC_2F_SCOPE='full-pages-creative-2f-static-home'
+STATIC_2F_STEPS=('static-home','river','comic','album','demo','retry')
 spec = importlib.util.spec_from_file_location('creative_hybrid', HERE / 'hybrid-release.py')
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
@@ -25,10 +27,14 @@ def recipe(path):
     if data.get('schema') != 'wly.creative-replay.v1':
         raise ValueError('Unsupported creative preparation recipe')
     page_only=data.get('scope')=='page-demo-and-retry'
-    full_2f=data.get('scope')==FULL_2F_SCOPE
-    if data.get('scope') not in (None,'page-demo-and-retry',FULL_2F_SCOPE):
+    static_2f=data.get('scope')==STATIC_2F_SCOPE
+    full_2f=data.get('scope') in (FULL_2F_SCOPE,STATIC_2F_SCOPE)
+    if data.get('scope') not in (None,'page-demo-and-retry',FULL_2F_SCOPE,STATIC_2F_SCOPE):
         raise ValueError('Unknown approved preparation scope')
     required = {'demo_assets','asset_base_url'} if page_only else {'comic_package', 'living_package', 'river_handoff', 'demo_assets', 'asset_base_url'}
+    if static_2f:
+        required.remove('living_package')
+        required.add('static_home_reference')
     if not full_2f and not page_only:required.add('geometry')
     if not required <= data.keys() or (not page_only and not full_2f and not data['geometry']):
         raise ValueError('All six approved preparations need their actual inputs')
@@ -36,12 +42,20 @@ def recipe(path):
     paths['geometry'] = [Path(p).resolve() for p in data.get('geometry',[])]
     inputs = {str(path): stamp(path)}
     # Bind the actual approved packages and implementation used by this fixed replay.
-    for root in [value for key,value in paths.items() if key!='geometry']:
+    for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference')]:
         if not root.is_dir():
             raise ValueError('Missing preparation package: ' + str(root))
         inputs.update({str(p.resolve()): stamp(p) for p in root.rglob('*') if p.is_file()})
     for p in paths['geometry']:
         inputs[str(p)] = stamp(p)
+    if static_2f:
+        reference=paths['static_home_reference']
+        inputs[str(reference)]=stamp(reference)
+        static_spec=importlib.util.spec_from_file_location('creative_static_home',HERE/'prepare-static-home.py')
+        static_module=importlib.util.module_from_spec(static_spec);static_spec.loader.exec_module(static_module)
+        for rel,expected in static_module.reference_data(reference)[2].items():
+            inputs[str((reference.parent/rel).resolve())]=expected
+        inputs[str(HERE/'prepare-static-home.py')]=stamp(HERE/'prepare-static-home.py')
     for pattern in ('prepare-home-*.*', 'home-living-*.*', 'prepare-page-flip.py', 'album-runtime.*',
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
                     'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py'):
@@ -66,8 +80,10 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     old = hybrid.verify_release(baseline)
     if raw.get('baseline_files') != old['files']:
         raise ValueError('Raw five-page build has a different complete production baseline')
-    full_2f=data.get('scope')==FULL_2F_SCOPE
+    static_2f=data.get('scope')==STATIC_2F_SCOPE
+    full_2f=data.get('scope') in (FULL_2F_SCOPE,STATIC_2F_SCOPE)
     staged_proof=None
+    panorama_source=None
     if full_2f:
         if staged_build_report is None:raise ValueError('2f creative replay requires its real native staged build report')
         staged_build_report=Path(staged_build_report).resolve();staged=hybrid.read(staged_build_report)
@@ -79,13 +95,22 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             raise ValueError('Staged native geometry changed before creative replay')
         staged_proof={'path':str(staged_build_report),**stamp(staged_build_report)}
         inputs[str(staged_build_report)]=stamp(staged_build_report)
+        if static_2f:
+            matches=[(Path(p).resolve(),expected) for p,expected in staged.get('inputs',{}).items()
+                     if p.replace('\\','/').endswith('/input-snapshot/sources/how.json')]
+            if len(matches)!=1 or stamp(matches[0][0])!=matches[0][1]:
+                raise ValueError('Static 2f replay requires the exact staged frozen how Source JSON')
+            panorama_source=matches[0][0]
+            inputs[str(panorama_source)]=matches[0][1]
     evidence_root.mkdir(parents=True)
     current = source
     steps = []
-    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else FULL_2F_STEPS if full_2f else STEPS):
+    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else STATIC_2F_STEPS if static_2f else FULL_2F_STEPS if full_2f else STEPS):
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
-        if name == 'comic':
+        if name == 'static-home':
+            args=['prepare-static-home.py','--baseline',current,'--reference',paths['static_home_reference'],'--output',dest,'--report',proof]
+        elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
             args = ['prepare-home-living.py', '--baseline', current, '--package', paths['living_package'], '--output', dest, '--report', proof]
@@ -103,6 +128,10 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             args = ['prepare-today-river.py', '--release', current, '--output', dest, '--handoff', paths['river_handoff']]
         elif name == 'demo':
             args = ['prepare-how-demo.py', '--source', current, '--out', dest, '--assets-dir', paths['demo_assets'], '--evidence', proof]
+            if panorama_source:
+                frozen=inputs[str(panorama_source)]
+                args+=['--panorama-source',panorama_source,'--panorama-source-sha256',frozen['sha256'],
+                       '--panorama-source-bytes',frozen['bytes']]
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
@@ -120,7 +149,9 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 for geometry in report.get('geometry',[]):
                     geometry_path=Path(geometry['path']).resolve();inputs[str(geometry_path)]=stamp(geometry_path)
         after = hybrid.read(dest / hybrid.MANIFEST)['release_id']
-        steps.append({'name': name, 'before_release_id': before, 'after_release_id': after})
+        step={'name': name, 'before_release_id': before, 'after_release_id': after}
+        if static_2f:step['manifest']={'path':str(dest/hybrid.MANIFEST),**stamp(dest/hybrid.MANIFEST)}
+        steps.append(step)
         current = dest
     prepared = hybrid.read(current / hybrid.MANIFEST)
     files = hybrid.inventory(current)
@@ -157,7 +188,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         if rel not in accepted_files or (current/rel).read_bytes().replace(b'\r\n',b'\n')!=(output/rel).read_bytes().replace(b'\r\n',b'\n'):
             raise ValueError('Hybrid assembly changed approved prepared content: '+rel)
         normalization.append(rel)
-    for key in ('home_living_preparation', 'home_comic_preparation', 'page_flip_preparation',
+    for key in ('home_living_preparation', 'home_static_preparation', 'home_comic_preparation', 'page_flip_preparation',
                 'today_river_preparation', 'how_demo_preparation', 'resource_retry_preparation'):
         if key in prepared:
             manifest[key] = prepared[key]
@@ -169,6 +200,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
               'navigation_repairs':navigation_repairs,'pending_link_restorations':pending_link_restorations}
     if data.get('scope'):result['scope']=data['scope']
     if staged_proof:result['staged_build_report']=staged_proof
+    if panorama_source:result['panorama_source_input']={'path':str(panorama_source),**stamp(panorama_source)}
     manifest['creative_preparation'] = result
     hybrid.write(output / hybrid.MANIFEST, manifest)
     for p, expected in inputs.items():
