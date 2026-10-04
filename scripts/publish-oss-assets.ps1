@@ -5,7 +5,8 @@ param(
     [string]$Python = 'python',
     [ValidateRange(1,16)][int]$VerifyWorkers = 4,
     [switch]$Upload,
-    [switch]$VerifyRemote
+    [switch]$VerifyRemote,
+    [switch]$RetryFailedVerification
 )
 $ErrorActionPreference = 'Stop'
 $preparationRoot = [IO.Path]::GetFullPath($Preparation)
@@ -52,7 +53,8 @@ if ($Upload) {
         $planHash = (Get-FileHash -LiteralPath $planPath -Algorithm SHA256).Hash.ToLowerInvariant()
         if ($previousReceipt.plan_sha256 -ceq $planHash) {
             # Only exact same-plan GET proofs may avoid re-uploading successful
-            # objects. The final GET pass still downloads every object again.
+            # objects. Final verification either checks all objects or uses the
+            # explicit same-plan partial-recovery mode selected below.
             $objects = @($objects | Where-Object { $previousReceipt.objects.($_.Name).status -cne 'pass' })
         }
     }
@@ -103,7 +105,9 @@ if ($Upload) {
     # A zero CLI exit is transport evidence only. The full anonymous GET proof
     # below is always required after upload, including video byte ranges.
 }
-Checked $Python @($prepareScript, 'verify-remote', '--output', $preparationRoot, '--workers', [string]$VerifyWorkers)
+$verificationArguments = @($prepareScript, 'verify-remote', '--output', $preparationRoot, '--workers', [string]$VerifyWorkers)
+if ($RetryFailedVerification) { $verificationArguments += '--retry-failed' }
+Checked $Python $verificationArguments
 $receipt = Get-Content -LiteralPath (Join-Path $preparationRoot 'remote-verification.json') -Raw -Encoding utf8 | ConvertFrom-Json -DateKind String
 if (-not $receipt.complete -or -not $receipt.html_ready -or $receipt.release_id -cne $plan.release_id) {
     throw 'Remote body verification is incomplete; HTML is not ready.'
