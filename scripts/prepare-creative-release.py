@@ -22,14 +22,17 @@ def recipe(path):
     data = hybrid.read(path)
     if data.get('schema') != 'wly.creative-replay.v1':
         raise ValueError('Unsupported creative preparation recipe')
-    required = {'comic_package', 'living_package', 'river_handoff', 'demo_assets', 'geometry', 'asset_base_url'}
-    if not required <= data.keys() or not data['geometry']:
+    page_only=data.get('scope')=='page-demo-and-retry'
+    if data.get('scope') not in (None,'page-demo-and-retry'):
+        raise ValueError('Unknown approved preparation scope')
+    required = {'demo_assets','asset_base_url'} if page_only else {'comic_package', 'living_package', 'river_handoff', 'demo_assets', 'geometry', 'asset_base_url'}
+    if not required <= data.keys() or (not page_only and not data['geometry']):
         raise ValueError('All six approved preparations need their actual inputs')
     paths = {key: Path(data[key]).resolve() for key in required - {'geometry', 'asset_base_url'}}
-    paths['geometry'] = [Path(p).resolve() for p in data['geometry']]
+    paths['geometry'] = [Path(p).resolve() for p in data.get('geometry',[])]
     inputs = {str(path): stamp(path)}
     # Bind the actual approved packages and implementation used by this fixed replay.
-    for root in (paths['comic_package'], paths['living_package'], paths['river_handoff'], paths['demo_assets']):
+    for root in [value for key,value in paths.items() if key!='geometry']:
         if not root.is_dir():
             raise ValueError('Missing preparation package: ' + str(root))
         inputs.update({str(p.resolve()): stamp(p) for p in root.rglob('*') if p.is_file()})
@@ -58,7 +61,7 @@ def prepare(source, baseline, config, output, evidence_root):
     evidence_root.mkdir(parents=True)
     current = source
     steps = []
-    for name in STEPS:
+    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else STEPS):
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
         if name == 'comic':
@@ -127,6 +130,7 @@ def prepare(source, baseline, config, output, evidence_root):
               'raw_release_id': raw['release_id'], 'steps': steps, 'files': public_changes,
               'assembled_release_id':manifest['release_id'],'accepted_html_newline_normalization':sorted(normalization),
               'navigation_repairs':navigation_repairs}
+    if data.get('scope'):result['scope']=data['scope']
     manifest['creative_preparation'] = result
     hybrid.write(output / hybrid.MANIFEST, manifest)
     for p, expected in inputs.items():
