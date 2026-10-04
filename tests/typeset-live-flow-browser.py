@@ -197,6 +197,18 @@ async def run(args):
                     assert abs(intervals[0][0]) < 1e-6 and abs(intervals[-1][1] - 1) < 1e-6, part
                     assert all(abs(a[1] - b[0]) < 1e-6 for a, b in zip(intervals, intervals[1:])), part
                     assert all(h['inTile'] for h in part['hotspots']), part
+                hit_checks = await page.evaluate('''async()=>{
+                  const result=[];
+                  for(const link of document.querySelectorAll('.typeset-live-flow-ready:not([hidden]) a[data-typeset-kind="link"],.typeset-live-flow-ready:not([hidden]) a[data-typeset-kind="button"]')){
+                    if(!link.getClientRects().length)continue;
+                    link.scrollIntoView({block:'center',inline:'center',behavior:'instant'});
+                    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+                    const r=link.getBoundingClientRect(),top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+                    result.push({id:link.dataset.hotId,href:link.getAttribute('href'),hit:top===link||link.contains(top)});
+                  }
+                  return result;
+                }''')
+                assert all(item['hit'] for item in hit_checks), (device, entry, hit_checks)
                 screenshot = args.output / (device + '-' + entry['page'] + '.png')
                 await page.evaluate('scrollTo(0,0)')
                 height = await first.evaluate('e=>e.getBoundingClientRect().bottom+scrollY')
@@ -222,7 +234,7 @@ async def run(args):
                 feedback = await page.evaluate("[...document.querySelectorAll('.typeset-live-flow-ready:not([hidden]) .typeset-card-feedback')].map(e=>({size:parseFloat(e.querySelector('.raster-card-visual').style.backgroundSize),width:e.closest('.typeset-part').clientWidth}))")
                 assert all(abs(item['size']-item['width'])<1 for item in feedback), feedback
                 await page.set_viewport_size(options['viewport'])
-                records.append({'device': device, 'entry': entry, 'ready': snapshot, 'offline': cached, 'continuity': continuity, 'details': detail, 'same_orientation_resize': True, 'screenshot': str(screenshot), 'chrome_version': context.browser.version})
+                records.append({'device': device, 'entry': entry, 'ready': snapshot, 'offline': cached, 'continuity': continuity, 'details': detail, 'hotspot_hit_checks':hit_checks, 'same_orientation_resize': True, 'screenshot': str(screenshot), 'chrome_version': context.browser.version})
                 print(json.dumps({'device': device, 'page': entry['page'], 'cards': len(snapshot['cards']), 'status': 'pass'}, ensure_ascii=False), flush=True)
             kind = 'h' if device == 'desktop' else 'v'
             await page.goto('https://wly0829.cn' + large[kind]['path'], wait_until='domcontentloaded')
