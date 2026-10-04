@@ -386,7 +386,10 @@
   }
   const observer=new win.MutationObserver(()=>win.queueMicrotask(capture));observer.observe(doc.querySelector('.paper'),{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],characterData:true});
   try{
-   frame.height='1000';win.scrollTo({top:0,behavior:'instant'});await sleep(180);capture();
+   frame.height='1000';win.scrollTo({top:0,behavior:'instant'});await sleep(180);
+   const layoutDeadline=performance.now()+decodeWait;
+   while(!win.eval("typeof resizing!=='undefined'&&!resizing&&typeof typesetReadingState!=='undefined'&&typesetReadingState.width===innerWidth&&typesetReadingState.height===innerHeight")){if(performance.now()>layoutDeadline)throw Error('normal effects viewport layout did not settle');await sleep(50);}
+   capture();
    const model=new Map(data.screens.map(screen=>[screen.id,screen]));
    for(const section of doc.querySelectorAll('.typeset-screen')){
     const screen=model.get(section.dataset.screen);
