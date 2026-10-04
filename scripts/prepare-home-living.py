@@ -16,6 +16,8 @@ from urllib.parse import urljoin, urlsplit
 
 HERE = Path(__file__).resolve().parent
 BJT = timezone(timedelta(hours=8))
+MODEL_START = '/* Home living actual B2 status model. */'
+MODEL_END = '/* End home living actual B2 status model. */'
 HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活画上层。 */
 #home-01 { position:relative; overflow:hidden; }
 #home-01 > picture, #home-01 > picture > img { display:block; width:100%; height:100%; object-fit:fill; }
@@ -74,18 +76,36 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
     access_text = numeric_bytes.decode('utf8')
     numeric = between(access_text, 'export function reading(', 'export function rate(').replace('export function', 'function')
     adaptation = between(access_text, 'export function adaptStatus(', 'export const errorMessages').replace('export function', 'function')
-    body = r'''
+    clock = between(text, 'const clock=', 'const known=')
+    current = 'function readGaps(){' in text
+    if current:
+        # Explicit current-B2 closure: scheduler/group rendering and access
+        # operations are not dependencies of the homepage lamp.
+        freshness = between(access_text, 'export function freshStatus(', 'export function screenReadTime(').replace('export function', 'function')
+        policy = between(text, 'const lampPolicy=', 'const data=')
+        connection = between(text, 'const online=', 'const offline=')
+        offline = between(text, 'const offline=', 'const lastContact=')
+        lamp = between(text, 'const lampReadKey=', 'function summary(){')
+        pending = between(text, 'function pendingRows(){', 'function liveValue(')
+        extra = freshness + policy + connection + offline + lamp + pending
+    else:
+        extra = (between(text, 'const online=', 'const offline=')
+                 + between(text, 'const offline=', 'const stateLabel='))
+    rules = numeric + adaptation + clock + dependencies + extra + summary
+    body = MODEL_START + r'''
 /* 首页总览规则来自本次完整输入中实际使用的驾驶舱 B2，原函数保持原样。 */
-window.HomeLivingStatusModel = (raw, phase) => {
- const clock=()=>Date.now()/1000;
- const online=()=>phase==='ready';
- const offline=()=> '暂时读不到电脑';
-''' + numeric + adaptation + r'''
- const status=raw?adaptStatus(raw):null;
+window.HomeLivingStatusModel = (() => {
+ let status=null,phase='loading',lastRead=0;
+''' + rules + r'''
+ return (raw, readPhase) => {
+ status=raw?adaptStatus(raw):null;phase=readPhase;
  if(raw&&!raw.hardware)delete status.hardware;
-''' + dependencies + summary + r'''
+ if(raw&&phase==='ready')lastRead=Number.isFinite(raw.observed_at_unix)?raw.observed_at_unix:clock();
  const value=summary();
- if (!online()) return Object.freeze({state:'off',title:'暂时读不到电脑',detail:phase==='loading'?'正在读取电脑状态':'当前连接没有读到结果'});
+ if (!online()) return Object.freeze({state:'off',title:'暂时读不到电脑',detail:value.text});
+''' + (r'''
+ const unread=readGaps().map(gap=>gap.label+'暂时读不到；从 '+time(gap.since)+' 起'+(gap.overGrace?'，已经超过 10 分钟':'，10 分钟内先保持灯况'));
+''' if current else r'''
  const labels={automation:'自动任务',backups:'备份',projects:'项目',pending:'待验收事项',today:'今天的记录'};
  const unread=[];
  for(const [key,label] of Object.entries(labels)) {
@@ -96,19 +116,42 @@ window.HomeLivingStatusModel = (raw, phase) => {
  const hardware=hardwareHealth();
  if(hardware==='stale')unread.push('电脑硬件的记录没有及时更新');
  else if(hardware==='unknown')unread.push('电脑硬件有状态暂时读不到');
+''') + r'''
  const detail=[value.text,...unread].filter((text,index,all)=>all.indexOf(text)===index).join('；');
- return Object.freeze(value.state==='ok'?{state:'ok',title:value.text,detail:'当前读取的状态正常'}:
+ return Object.freeze(value.state==='ok'?{state:'ok',title:value.text,detail}:
   ['warn','error'].includes(value.state)?{state:'warn',title:'有事要处理',detail}:
   {state:'off',title:'暂时读不到电脑',detail:'电脑在线；'+detail});
-};
-'''
+ };
+})();
+''' + MODEL_END
     evidence = {'runtime': {'path': rel, **proof(original)}, 'numeric': {'path': numeric_rel, **proof(numeric_bytes)},
-                'rules_sha256': proof((numeric + adaptation + dependencies + summary).encode())['sha256'],
-                'extraction': 'actual-input-cockpit-b2-verbatim-summary-and-dependencies'}
+                'rules_sha256': proof(rules.encode())['sha256'],
+                'extraction': 'actual-input-cockpit-b2-verbatim-summary-and-dependencies',
+                'model_contract': 'read-gap-policy' if current else 'legacy-summary',
+                'persistent_lamp_closure': current}
     return body, evidence
 
 
 def patch_runtime(text: str, model: str, bridge: str) -> str:
+    # Rebinding the model after the live reader is refreshed must be repeatable.
+    if MODEL_START in text:
+        if text.count(MODEL_START) != 1 or text.count(MODEL_END) != 1:
+            raise ValueError('Homepage model markers changed')
+        start = text.index(MODEL_START)
+        end = text.index(MODEL_END, start) + len(MODEL_END)
+        text = text[:start] + text[end:]
+        text = text.lstrip('\n')
+    elif 'window.HomeLivingStatusModel = (raw, phase) => {' in text:
+        # The previously shipped extractor placed this known legacy wrapper
+        # before the shared app. Its source-owned reader and bridge stay intact.
+        start = text.index('/* 首页总览规则来自本次完整输入中实际使用的驾驶舱 B2，原函数保持原样。 */')
+        end = text.index('\n};', start) + len('\n};')
+        text = (text[:start] + text[end:]).lstrip('\n')
+    if text.endswith('\n' + bridge):
+        text = text[:-len('\n' + bridge)]
+    text = text.rstrip('\n')
+    if "snapshot:livingSnapshot" in text:
+        return model + '\n' + text + '\n' + bridge
     text = replace_once(text, "if(busy||document.hidden||!document.querySelector('[data-slot]'))return;",
                         "if(busy||document.hidden||(!document.querySelector('[data-slot]')&&page.home_living!==true))return;")
     # One observer hook within the existing reader's closure; no second fetch.
