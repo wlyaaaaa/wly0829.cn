@@ -53,6 +53,8 @@ def is_topic_word_exception(text, match):
     if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('正式法律文书仍交 Claude',text)):
         return True
     if match[0]=='再审':
+        if text[match.start():match.start()+4]=='再审一轮':
+            return True
         pattern=re.escape('跨项目认知审计')+r'(?:\\+n|\s)+'+re.escape('给我看的分析按日期存档；再审时先对照上次哪些问题解决了')
         return any(match.start()==approved.start()+approved[0].index('再审') for approved in re.finditer(pattern,text))
     return False
@@ -88,8 +90,9 @@ def repo_pattern(repo):
 def repository_registration(data, registry):
     """Resolve only an existing concrete Registry identity, never infer visibility."""
     projects=[entry for entry in registry.get('projects',[])
-              if '/' in entry.get('source',{}).get('repo','')
-              and entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}]
+              if entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}
+              and (('/' in entry.get('source',{}).get('repo','')) or
+                   entry.get('source',{}).get('public_identity'))]
     repo=(data.get('status_binding') or {}).get('repo')
     route=(data.get('url') or '').rstrip('/')
     by_route=[entry for entry in projects if route and entry.get('route','').rstrip('/')==route]
@@ -102,6 +105,11 @@ def bind_registered_repository(data, registry):
     registration=repository_registration(data,registry)
     if registration is None:return False
     source=registration['source'];binding=data.get('status_binding') or {}
+    if '/' not in source['repo'] and source.get('public_identity'):
+        data['repository_visibility']=source['visibility']
+        data['repo_url']=None
+        data['status_binding']={**binding,'repo':source['public_identity'],'visibility':source['visibility'],'matched':False}
+        return True
     previous=binding.get('repo')
     if previous and previous.lower()!=source['repo'].lower():return False
     data['repository_visibility']=source['visibility']
@@ -115,7 +123,8 @@ def repository_binding_findings(data, registry):
     if registration is None:
         return [{'type':'unpublished_repository_binding','field':'status_binding.repo'}] if isinstance(repo,str) and '/' in repo and data.get('repo_url')!='https://github.com/'+repo else []
     source=registration['source'];findings=[]
-    if not isinstance(repo,str) or repo.lower()!=source['repo'].lower():
+    expected_repo=source['repo'] if '/' in source['repo'] else source.get('public_identity',source['repo'])
+    if not isinstance(repo,str) or repo.lower()!=expected_repo.lower():
         findings.append({'type':'repository_binding_mismatch','field':'status_binding.repo','project':registration['id']})
     for field,value in [('repository_visibility',data.get('repository_visibility')),('status_binding.visibility',binding.get('visibility'))]:
         if value is not None and value!=source['visibility']:
@@ -345,6 +354,11 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
             for m in re.finditer(r'(?<![A-Za-z0-9_.-])wlyaaaaa/[A-Za-z0-9_.-]+',text,re.I):
                 repo=m[0].removesuffix('.git').lower()
                 if repo not in PUBLIC_REPOS and repo not in registered_repos:
+                    # This source-authored instruction names an encrypted-file
+                    # repository; it is ordinary prose, not a public link or
+                    # runtime repository binding.
+                    if repo=='wlyaaaaa/key' and text[max(0,m.start()-7):m.start()]=='放加密文件的 ' and text[m.end():m.end()+3]==' 仓库':
+                        continue
                     findings.append({'file':rel,'type':'repository_not_public','line':text.count('\n',0,m.start())+1,'offset':m.start(),'matched':m[0]})
         if p.suffix=='.html':
             for match in PAGE_DATA.finditer(text):

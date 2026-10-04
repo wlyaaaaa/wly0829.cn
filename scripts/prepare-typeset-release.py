@@ -311,7 +311,7 @@ def video_evidence(entry, dom, files):
         raise ValueError("Video evidence must cover all six mount/play conditions")
     for item in gates:
         case = item["case"]
-        mount = case == "desktop"
+        mount = case == "desktop" and expected.get('mount_allowed') is not False
         if item.get("status") != "pass" or item.get("issues") != [] or type(item.get("hidden")) is not bool:
             raise ValueError("Video gate failed or lacks a visibility observation: " + case)
         if any(type(item.get(field)) is not bool or item[field] is not mount for field in ("expected_mounted", "expected_playing", "mounted", "playing")):
@@ -355,12 +355,17 @@ def video_evidence(entry, dom, files):
             before = item.get("before_navigation")
             if not isinstance(before, dict) or before.get("case") != "desktop" or before.get("status") != "pass" or before.get("issues") != []:
                 raise ValueError("Document-hidden transition lacks its visible desktop playback observation")
-            if any(before.get(field) is not True for field in ("expected_mounted", "expected_playing", "mounted", "playing", "attached", "section_visible", "time_advanced")) or any(before.get(field) is not False for field in ("hidden", "reduced_motion", "portrait", "video_paused", "video_hidden")) or before.get("phase") != "playing":
-                raise ValueError("Document-hidden transition did not start from actual visible playback")
+            allowed=expected.get('mount_allowed') is not False
+            if before.get('section_visible') is not True or any(before.get(field) is not allowed for field in ('expected_mounted','expected_playing','mounted','playing','time_advanced')) or any(before.get(field) is not False for field in ('hidden','reduced_motion','portrait')) or before.get('phase')!=('playing' if allowed else 'image'):
+                raise ValueError('Document-hidden transition did not start from its required visible media state')
+            if allowed and (before.get('attached') is not True or any(before.get(field) is not False for field in ('video_paused','video_hidden'))):
+                raise ValueError('Allowed video lacks actual attached visible playback')
+            if not allowed and before.get('attached') is not False:
+                raise ValueError('Unverified video was mounted before navigation')
             if before.get("width") != width or before.get("height") != height:
                 raise ValueError("Document-hidden transition changed its viewport before the native event")
             start, end = before.get("current_time_before"), before.get("current_time_after")
-            if any(type(value) not in {int, float} or not math.isfinite(value) or value < 0 for value in (start, end)) or abs(end - start) <= .01:
+            if any(type(value) not in {int, float} or not math.isfinite(value) or value < 0 for value in (start, end)) or (abs(end - start) <= .01 if allowed else abs(end - start) > .01):
                 raise ValueError("Document-hidden transition lacks measured playback before navigation")
     return {"expected": expected, "verified_cases": sorted(cases)}
 
@@ -413,7 +418,23 @@ def prepare(args):
     if manifest.get("baseline_files") != old:
         block("baseline", "Release is not bound to the supplied production baseline")
     overlay_info = build.get('release_overlay')
-    if manifest.get('release_overlay'):
+    automatic_navigation=manifest.get('release_overlay',{})
+    if automatic_navigation and not overlay_info and all(entry.get('kind')=='navigation_restoration' for entry in automatic_navigation.values()):
+        try:
+            actual_pages=hybrid.nav_repair.page_inventory(release)
+            for relative,proof in automatic_navigation.items():
+                before=args.baseline.resolve()/relative;after=release/relative
+                if proof.get('before')!=old.get(relative) or proof.get('after')!=manifest['files'].get(relative):
+                    raise ValueError('Navigation restoration fingerprints differ: '+relative)
+                expected,restored=hybrid.nav_repair.restore_pending_html(before.read_text('utf-8-sig'),actual_pages)
+                serializations={expected.encode('utf8'),expected.replace('\n','\r\n').encode('utf8')}
+                if not restored or after.read_bytes() not in serializations:
+                    raise ValueError('Navigation restoration changed more than recorded available hrefs: '+relative)
+            result['navigation_restoration']={'method':'Exact deterministic replay of recorded original hrefs with native LF/CRLF serialization',
+                                              'files':automatic_navigation,'status':'pass'}
+        except (ValueError,KeyError,OSError,TypeError) as error:
+            block('release_overlay',error)
+    elif manifest.get('release_overlay'):
         try:
             if not overlay_info: raise ValueError('Build lacks the exact release overlay')
             overlay_path = Path(overlay_info['path'])
@@ -703,7 +724,15 @@ def production_check(args):
     remote_files = dict(remote_manifest["files"])
     if "CNAME" not in baseline:
         remote_files.pop("CNAME", None)
-    if baseline != remote_files:
+    runtime_baseline=getattr(args,'runtime_baseline',False)
+    if runtime_baseline:
+        runtime_spec=importlib.util.spec_from_file_location('publication_runtime_baseline',ROOT/'scripts/prepare-audit-release.py')
+        runtime_module=importlib.util.module_from_spec(runtime_spec)
+        runtime_spec.loader.exec_module(runtime_module)
+        verified=runtime_module.verify_input_baseline(args.baseline.resolve(),commit,True)
+        if verified!=manifest:
+            raise ValueError('Supplied runtime baseline manifest differs from its verified original')
+    elif baseline != remote_files:
         raise ValueError("Baseline is stale or incomplete against fetched origin/main; capture current production including its homepage")
     online = None
     for attempt in range(3):
@@ -717,7 +746,7 @@ def production_check(args):
             time.sleep(2)
     if not online or online.get("release_id") != remote_manifest.get("release_id") or online.get("files") != remote_manifest.get("files"):
         raise ValueError("Current Pages identity is not confirmed; stop and retry readback without rollback")
-    homepage = online_file("index.html", baseline["index.html"])
+    homepage = online_file("index.html", remote_files["index.html"] if runtime_baseline else baseline["index.html"])
     if homepage["status"] != "pass":
         raise ValueError("Current production homepage is not confirmed: " + json.dumps(homepage))
     if args.build_report:
@@ -727,6 +756,9 @@ def production_check(args):
     result = {"schema": "wly.typeset-production-check.v1", "status": "pass", "production_commit": commit,
               "production_release_id": remote_manifest["release_id"], "baseline_index_sha256": baseline["index.html"]["sha256"],
               "checked_at_beijing": now(), "homepage": homepage}
+    if runtime_baseline:
+        result.update(baseline_input_kind='complete_runtime_staging',baseline_source_release_id=manifest['release_id'],
+                      production_index_sha256=remote_files['index.html']['sha256'])
     write(args.output, result)
     return result
 
@@ -829,6 +861,7 @@ def main(argv=None):
         production.add_argument("--" + name, type=Path, required=True)
     production.add_argument("--production-ref", default="origin/main")
     production.add_argument("--build-report", type=Path)
+    production.add_argument('--runtime-baseline',action='store_true',help='Use the verified complete source of the selected production OSS release')
     online = commands.add_parser("readback", help="Explicit online HTML and asset hash check; never restores")
     online.add_argument("--release", type=Path, required=True)
     online.add_argument("--output", type=Path, required=True)

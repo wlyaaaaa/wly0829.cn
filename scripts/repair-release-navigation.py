@@ -250,31 +250,36 @@ def repair_html(root, pages, manifest):
     return changed, resolved, pending
 
 
+def restore_pending_html(text, pages):
+    """Replay only recorded original hrefs against the actual available targets."""
+    match = PAGE_DATA.search(text)
+    restored = False
+    data = json.loads(match[2]) if match else None
+    for node in visit(data):
+        source = node.get('original_href')
+        if source and node.get('href') != source and target_exists(source, pages):
+            node['href'] = source; restored = True
+    if restored: text = replace_data(text, data)
+    def restore_anchor(m):
+        nonlocal restored
+        tag = m[0]
+        original = re.search(r'\bdata-original-href=["\']([^"\']+)["\']', tag)
+        href = re.search(r'(?<![-\w])href=["\']([^"\']+)["\']', tag)
+        if not original or not href: return tag
+        source = html.unescape(original[1])
+        if source == html.unescape(href[1]) or not target_exists(source, pages): return tag
+        restored = True
+        return tag[:href.start(1)] + html.escape(source, quote=True) + tag[href.end(1):]
+    text = re.sub(r'<a\b[^>]*>', restore_anchor, text)
+    return text, restored
+
+
 def restore_pending_links(root, pages):
     """Restore only known original hrefs when their actual target becomes available."""
     changed = []
     for rel in sorted(pages):
         path = root / rel
-        text = path.read_text('utf-8-sig')
-        match = PAGE_DATA.search(text)
-        restored = False
-        data = json.loads(match[2]) if match else None
-        for node in visit(data):
-            source = node.get('original_href')
-            if source and node.get('href') != source and target_exists(source, pages):
-                node['href'] = source; restored = True
-        if restored: text = replace_data(text, data)
-        def restore_anchor(m):
-            nonlocal restored
-            tag = m[0]
-            original = re.search(r'\bdata-original-href=["\']([^"\']+)["\']', tag)
-            href = re.search(r'(?<![-\w])href=["\']([^"\']+)["\']', tag)
-            if not original or not href: return tag
-            source = html.unescape(original[1])
-            if source == html.unescape(href[1]) or not target_exists(source, pages): return tag
-            restored = True
-            return tag[:href.start(1)] + html.escape(source, quote=True) + tag[href.end(1):]
-        text = re.sub(r'<a\b[^>]*>', restore_anchor, text)
+        text, restored = restore_pending_html(path.read_text('utf-8-sig'), pages)
         if restored:
             path.write_text(text, encoding='utf8'); changed.append(rel)
     return changed

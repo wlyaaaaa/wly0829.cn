@@ -151,13 +151,16 @@ def verify_manifest(manifest, require_remote=True):
 
 
 class Rewriter:
-    def __init__(self, files, base, prefix, origin):
+    def __init__(self, files, base, prefix, origin, version=1):
+        if version not in (1,2):
+            raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
         self.base, self.prefix, self.origin = base, prefix, origin.rstrip('/')
         self.changes = {}
         self.references = {}
         self.missing = []
+        self.version = version
 
     def target(self, rel):
         return self.base + '/' + self.prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
@@ -264,10 +267,10 @@ class Rewriter:
                 name = a['name'].lower()
                 raw = a['value']
                 position = m.start() + a.start('value')
-                if name == 'style':
+                if name == 'style' or self.version>=2 and name=='data-lazy-style':
                     edits += self.css(raw, owner, position)
                     continue
-                if name in ('srcset', 'data-srcset'):
+                if name in ('srcset', 'data-srcset') or self.version>=2 and name=='data-lazy-srcset':
                     if raw.lstrip().startswith('data:'):
                         continue
                     for s in re.finditer(r'(?:^|,)\s*(?P<url>[^\s,]+)', raw):
@@ -348,7 +351,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
-    rewriter = Rewriter(actual, base, prefix, origin)
+    rewriter = Rewriter(actual, base, prefix, origin, version=2)
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source)
     objects, github = {}, {}
@@ -376,12 +379,12 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     release_id = release_identifier(source_manifest['release_id'], base, prefix, github, objects)
     new_manifest = {**source_manifest, 'release_id': release_id, 'files': github,
                     'oss': {'schema': 'wly.oss-assets.v1', 'asset_base_url': base, 'prefix': prefix,
-                            'source_release_id': source_manifest['release_id'], 'objects': objects},
+                            'source_release_id': source_manifest['release_id'], 'objects': objects,'rewriter_version':2},
                     'prepared_at_beijing': stamp()}
     write(output / 'github' / MANIFEST, new_manifest)
     github[MANIFEST] = {'bytes': (output/'github'/MANIFEST).stat().st_size, 'sha256': digest(output/'github'/MANIFEST)}
     plan = {'schema': 'wly.oss-release-plan.v1', 'prepared_at_beijing': stamp(), 'release_id': release_id,
-            'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,
+            'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,'rewriter_version':2,
             'asset_base_url': base, 'prefix': prefix, 'html_origin': origin.rstrip('/'), 'test_only': allow_test,
             'github_files': github, 'objects': objects, 'url_changes': rewriter.changes,
             'closure': {k: sorted(v) for k, v in sorted(rewriter.references.items())},
@@ -418,7 +421,7 @@ def verify_local(output):
     expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items()}
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
-    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'])
+    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1))
     home_bytes,home_proof=current_home_links(source)
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):

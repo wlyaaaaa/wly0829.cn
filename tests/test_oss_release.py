@@ -17,6 +17,17 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_lazy_picture_and_lazy_css_addresses_are_versioned(self):
+        files={'index.html':{},'_shared/a.avif':{},'_shared/b.webp':{}}
+        text=b'<source data-lazy-srcset="/_shared/a.avif 640w"><div data-lazy-style="background:url(\'/ _shared/b.webp\')"></div>'.replace(b'/ _shared',b'/_shared')
+        old=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn')
+        current=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn',version=2)
+        self.assertEqual(old.rewrite(text,'index.html'),text)
+        rewritten=current.rewrite(text,'index.html')
+        self.assertIn(b'data-lazy-srcset="https://example.oss.invalid/releases/one/_shared/a.avif 640w"',rewritten)
+        self.assertIn(b'background:url(\'https://example.oss.invalid/releases/one/_shared/b.webp\')',rewritten)
+        self.assertFalse(current.missing)
+
     def setUp(self):
         # Kept under the task TEMP for the existing recycle-bin closeout tool.
         self.root = Path(os.environ.get('TEMP', ROOT/'.test-tmp')) / ('oss-test-' + uuid.uuid4().hex)

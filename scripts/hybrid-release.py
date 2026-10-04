@@ -290,7 +290,8 @@ def unchanged_search_finding(output, finding, overlay):
     return False
 
 
-def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None):
+def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None,
+             baseline_production_commit=None, baseline_input_kind=None):
     baseline = baseline.resolve(); candidate = candidate.resolve(); output = output.resolve()
     if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
         raise ValueError('Choose a fresh, disjoint output directory')
@@ -352,10 +353,13 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     release_id = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
     manifest = {'schema':'wly.hybrid-release.v1', 'release_id':release_id,
                 'prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),
-                'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_manifest.get('production_commit'),
+                'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_production_commit or baseline_manifest.get('production_commit'),
                 'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
                 'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
     if overlays: manifest['release_overlay'] = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlays.items()}
+    if baseline_input_kind:
+        manifest['baseline_input_kind'] = baseline_input_kind
+        manifest['baseline_source_release_id'] = baseline_manifest.get('release_id')
     write(output/MANIFEST, manifest)
     verify_release(output)
     return manifest
@@ -461,12 +465,13 @@ def unchanged_topic_text(before, after, finding):
     return count_before>0 and count_after<=count_before
 
 def retained_audit_topic(output, finding, manifest, baseline_cache):
-    if not manifest.get('audit_repair') or finding.get('type')!='excluded_topic': return False
+    runtime_snapshot = manifest.get('baseline_input_kind') == 'complete_runtime_staging'
+    if not (manifest.get('audit_repair') or runtime_snapshot) or finding.get('type')!='excluded_topic': return False
     ref=manifest.get('baseline_production_commit')
     rel=finding.get('file','')
     expected=manifest.get('baseline_files',{}).get(rel,{}).get('sha256')
     if not isinstance(ref,str) or not re.fullmatch(r'[0-9a-f]{40,64}',ref) or not expected: return False
-    public_snapshot=manifest['audit_repair'].get('baseline_input_kind')=='complete_runtime_staging'
+    public_snapshot=runtime_snapshot or manifest.get('audit_repair',{}).get('baseline_input_kind')=='complete_runtime_staging'
     published=None
     if public_snapshot:
         key=(ref,MANIFEST)

@@ -46,6 +46,8 @@ python scripts/prepare-oss-release.py prepare `
 
 HTML 的资源属性、srcset（多尺寸图片地址）、内联 CSS 和内联 JSON 都按原页面地址解析。JSON 中 `avif_assets` 的对象键和值同时更新，避免 AVIF 回退映射失配。CSS 的根路径及相对 `url()`、`@import` 按原 CSS 文件解析。JavaScript 的模块 import、动态 import 和 Vite 预加载数组指向同一版本。
 
+当前改写版本2也覆盖 `data-lazy-srcset` 和 `data-lazy-style`，确保懒加载激活后仍使用同代OSS地址。版本号写入计划与发布清单；旧清单没有版本号时按版本1重放。校验旧版来源时不能用新版本替换旧确定性改写。
+
 Vite 共享预加载器原先给数组地址添加 `/`；数组迁成绝对 URL 后，只把这一个 URL 前缀字符串改为空。截图运行时原先给 `shot.src` 添加 `assets/`；页面数据已改成绝对 URL，只移除该 URL 拼接前缀。这两项都完整写入 URL 差异日志，不改业务分支。搜索记录脚本本身保留原 bytes，其中的 HTML 导航和技术正文不替换。
 
 每次本地核验都从源重新执行同一改写并逐字节对照产物；未记录的改动、输入漂移、二进制变化和丢失的本地资源都会失败。准备输出须为全新目录，输入目录永不修改。
@@ -72,6 +74,8 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 外置 CSS 的背景资源使用 CSS 自己的 OSS 地址作为 Referer。桶名单除了本站，还须允许自身默认 HTTPS 域名；否则浏览器背景图会被拒绝。首版先实际回读确认两桶 Referer/CORS 相同，随后仅为上海补上 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/*`，保留禁止空 Referer、其他来源和 CORS 原值；北京不改。此配置修复由负责人持短锁单独执行及回读，不由上传器隐式改桶。
 
+同日07:10的明确指令另外授权两桶 `ResponseVary=true`；这项配置已经单独回读并用同URL普通图片→CORS图片→GL上传测试。北京上述Referer未改。以后是否改配置仍依据真实指令，上传入口不隐式改桶。
+
 远端核验对**每个**计划对象执行匿名完整 GET，带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
 
 全通过后上传入口自动调用 `seal-remote`：回执须绑定当前准备计划，再写入发布清单的 `oss.verification`。GitHub 清单的发布身份同时绑定源版本、选定 origin、版本前缀、GitHub 文件及完整 OSS 对象指纹；历史 `baseline_files` 只作来源证据。未密封的清单、回环地址、不完整或错版本的 GET 回执不能通过生产校验。`hybrid-release.py` 校验当前 GitHub 文件、全部路由及已绑定的 OSS 证明，原未迁移发布仍走既有分支。
@@ -87,3 +91,11 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 本地演练可传 `--test-loopback --asset-base-url http://127.0.0.1:<端口>`，无需生产桶/profile。此计划明确标为 `test_only`，发布入口拒绝上传，也拒绝把其核验当成生产证据。针对性测试通过真实本地 HTTP 服务验证正文指纹、CORS、MIME 和视频 Range；伪造的正确元数据搭配错误正文必须失败。
 
 上传分组副本、演练和失败回执属于当前任务的接续材料。负责人完成发布/恢复验收后，按现有回收站工具回收本次生成目录，不永久删除旧 OSS 前缀。
+
+## 后续排版批次的OSS发布
+
+`Publish-Pages.ps1` 的 batch 可显式提供 `runtime_baseline=true` 及 `OssPreparation`、`OssQaPlan`、`OssVerification`、`OssReading`、`OssCold`。先验完整当前源码与已发布Git split的对应关系，再验排版源码、同代OSS分拆和实际浏览器证据。发布时重建全部源码，输入、HTML、媒体、geometry及产物身份必须与已审版一致；Git只放已验分拆结果，不把完整源码当GitHub成品。
+
+2026-10-04 08:52的裁定允许当前2b/2c的偶发空响应在每资源一次补取、完整body/大小/SHA/MIME/CORS一致后通过，原生首次失败和耗时仍保留。该批通过 `OssRetryProof` 提供真实补取及副机有限直连对照；不把受控HTTPS取回或证据复用冒充原生冷缓存2秒通过，不因此改代理/网络设置。没有此明确适用证明时仍使用原冷加载要求。
+
+`verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。回滚使用发布时实际生产Git提交，旧OSS前缀保留；并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。

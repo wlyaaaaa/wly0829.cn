@@ -13,6 +13,13 @@ param(
     [string]$ReleaseOverlay,
     [string]$RuntimeVerification,
     [string]$ReadingPlan,
+    [string]$OssPreparation,
+    [string]$OssQaPlan,
+    [string]$OssVerification,
+    [string]$OssReading,
+    [string]$OssCold,
+    [string]$OssRetryProof,
+    [switch]$RuntimeBaseline,
     [string[]]$Pages,
     [string]$RunRoot,
     [string]$LockHolder,
@@ -41,6 +48,13 @@ if ($Directive) { $Directive = Absolute $Directive }
 if ($ReleaseOverlay) { $ReleaseOverlay = Absolute $ReleaseOverlay }
 if ($RuntimeVerification) { $RuntimeVerification = Absolute $RuntimeVerification }
 if ($ReadingPlan) { $ReadingPlan = Absolute $ReadingPlan }
+foreach ($name in @('OssPreparation','OssQaPlan','OssVerification','OssReading','OssCold','OssRetryProof')) {
+    $value=Get-Variable -Name $name -ValueOnly
+    if ($value) { Set-Variable -Name $name -Value (Absolute $value) }
+}
+if ($OssPreparation -and (-not $OssQaPlan -or -not $OssVerification -or -not $OssReading -or -not $OssCold)) {
+    throw 'OSS publication requires its exact browser plan, full DOM, reading and cold-browser evidence.'
+}
 if ($RunRoot) { $RunRoot = Absolute $RunRoot }
 else {
     $runId = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0,8)
@@ -69,8 +83,17 @@ function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
     if ($Pages) { $arguments += @('--pages') + $Pages }
     Checked 'python' $arguments
 }
+function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
+    $arguments=@('scripts/verify-typeset-oss.py','--preparation',$OssPreparation,'--build-report',$BuildReport,
+        '--qa-plan',$OssQaPlan,'--verification',$OssVerification,'--reading',$OssReading,'--cold',$OssCold,'--output',$Receipt)
+    if ($RebuiltSource) { $arguments+=@('--rebuilt-source',$RebuiltSource) }
+    if ($Staged) { $arguments+=@('--staged',$Staged,'--preparation-receipt',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$state.rollback_ref) }
+    if ($OssRetryProof) { $arguments+=@('--retry-proof',$OssRetryProof) }
+    Checked 'python' $arguments
+}
 $prepared = Join-Path $RunRoot 'preparation.json'
 Write-Output "Local release evidence: $prepared"
+if ($OssPreparation) { VerifyOss (Join-Path $RunRoot 'oss-preparation.json') }
 Prepare $Release $prepared
 $receipt = ReadJson $prepared
 Write-Output "Publication batch: $($receipt.batch); selected $($receipt.selected_pages.Count), deferred $($receipt.deferred_pages.Count)."
@@ -183,7 +206,7 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
     for ($attempt=1; $attempt -le 3; $attempt++) {
         HoldPublicationLock
         $lastReport = Join-Path $RunRoot "$Prefix-$attempt.json"
-        $domInput = if ($RuntimeVerification -and -not $Legacy) { $RuntimeVerification } else { $BuildReport }
+        $domInput = if ($OssQaPlan -and -not $Legacy) { $OssQaPlan } elseif ($RuntimeVerification -and -not $Legacy) { $RuntimeVerification } else { $BuildReport }
         $arguments = @('scripts/check-typeset-online.py','--build-report',$domInput,
             '--output',$lastReport,'--task-cache',(Join-Path $RunRoot "$Prefix-browser-cache"))
         if ($RuntimeVerification -and -not $Legacy) {
@@ -328,8 +351,10 @@ try {
     Checked 'git' @('merge','--no-edit','origin/main')
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $productionCheck = Join-Path $RunRoot 'production-check.json'
-    Checked 'python' @('scripts/prepare-typeset-release.py','production-check','--baseline',$Baseline,
+    $productionArguments=@('scripts/prepare-typeset-release.py','production-check','--baseline',$Baseline,
         '--baseline-manifest',$BaselineManifest,'--production-ref','origin/main','--build-report',$BuildReport,'--output',$productionCheck)
+    if ($RuntimeBaseline) { $productionArguments+='--runtime-baseline' }
+    Checked 'python' $productionArguments
     $state.production_commit = (ReadJson $productionCheck).production_commit
     SaveState
     $rebuilt = Join-Path $RunRoot 'rebuilt-dist'
@@ -340,6 +365,7 @@ try {
     if ($Pages) { $buildArguments += @('--pages') + $Pages }
     if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
     if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
+    if ($RuntimeBaseline) { $buildArguments+=@('--runtime-baseline','--baseline-ref',$state.production_commit) }
     TimedChecked 'python' $buildArguments 'build_seconds'
     $rebuiltProof = ReadJson $rebuiltReport
     if ($rebuiltProof.geometry_path -ne $Geometry -or $rebuiltProof.geometry_sha256 -cne $receipt.geometry_sha256) {
@@ -358,18 +384,30 @@ try {
     Checked 'python' @('scripts/hybrid-release.py','verify','--output',$rebuilt,
         '--content-report',(Join-Path $RunRoot 'content-report.json'),'--public-repos-from-github')
     Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rebuilt)
-    $rollbackOutput = Join-Path $RunRoot 'previous-production'
-    Checked 'python' @('scripts/prepare-typeset-release.py','wrap-baseline','--baseline',$Baseline,
-        '--baseline-manifest',$BaselineManifest,'--output',$rollbackOutput)
-    Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rollbackOutput)
-    ReplaceRelease $rollbackOutput 'previous-working-release'
-    CommitRelease 'Preserve exact production bytes before typeset publication'
-    $rollbackRef = (& git rev-parse HEAD).Trim()
-    if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve exact rollback commit.' }
+    if ($OssPreparation) {
+        VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt
+        $rollbackRef=$state.production_commit
+    } else {
+        $rollbackOutput = Join-Path $RunRoot 'previous-production'
+        Checked 'python' @('scripts/prepare-typeset-release.py','wrap-baseline','--baseline',$Baseline,
+            '--baseline-manifest',$BaselineManifest,'--output',$rollbackOutput)
+        Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rollbackOutput)
+        ReplaceRelease $rollbackOutput 'previous-working-release'
+        CommitRelease 'Preserve exact production bytes before typeset publication'
+        $rollbackRef = (& git rev-parse HEAD).Trim()
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve exact rollback commit.' }
+    }
     $state.rollback_ref = $rollbackRef
     SaveState
     $drill = Join-Path $RunRoot 'rollback-drill'
     Checked 'python' @('scripts/hybrid-release.py','restore','--ref',$rollbackRef,'--output',$drill)
+    if ($OssPreparation) {
+        $ossDist=Join-Path $RunRoot 'oss-dist'
+        Copy-Item -LiteralPath (Join-Path $OssPreparation 'github') -Destination $ossDist -Recurse
+        $rebuilt=$ossDist
+        $rebuiltIdentity=ReadJson (Join-Path $rebuilt 'release-manifest.json')
+        $state.release_id=$rebuiltIdentity.release_id
+    }
     $rebuiltIdentity.rollback_ref = $rollbackRef
     $acceptedEvidence = [ordered]@{}
     foreach ($pageName in $receipt.selected_pages) {
@@ -381,11 +419,15 @@ try {
     ReplaceRelease $rebuilt 'staged-previous-production'
     # The baseline may itself be site-release. Its old bytes have now been
     # deliberately replaced; producer checks are bound to rebuilt-preparation.
-    Checked 'python' @('scripts/prepare-typeset-release.py','stage-check',
-        '--release',(Join-Path $repoRoot 'site-release'),'--build-report',$BuildReport,
-        '--preparation',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$rollbackRef,
-        '--expected-manifest',(Join-Path $rebuilt 'release-manifest.json'),
-        '--output',(Join-Path $RunRoot 'staged-preparation.json'))
+    if ($OssPreparation) {
+        VerifyOss (Join-Path $RunRoot 'staged-preparation.json') '' (Join-Path $repoRoot 'site-release')
+    } else {
+        Checked 'python' @('scripts/prepare-typeset-release.py','stage-check',
+            '--release',(Join-Path $repoRoot 'site-release'),'--build-report',$BuildReport,
+            '--preparation',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$rollbackRef,
+            '--expected-manifest',(Join-Path $rebuilt 'release-manifest.json'),
+            '--output',(Join-Path $RunRoot 'staged-preparation.json'))
+    }
     CommitRelease 'Publish Claude-reviewed typeset static release'
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $state.status = 'push_requested'

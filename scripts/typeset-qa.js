@@ -101,14 +101,20 @@
  const geometryKeys=['cards','numbers','dots','arrows'];
  const unique=xs=>[...new Set(xs)],equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  function rectOf(item){return Array.isArray(item)?item:item?.rect;}
- function cssRules(doc){const list=[];function visit(rules){for(const rule of rules){if(rule.selectorText)list.push(rule);if(rule.cssRules)visit(rule.cssRules);}}for(const sheet of doc.styleSheets){try{visit(sheet.cssRules);}catch{}}return list;}
+ async function cssRules(doc){const list=[];function visit(rules){for(const rule of rules){if(rule.selectorText)list.push(rule);if(rule.cssRules)visit(rule.cssRules);}}
+  for(const sheet of doc.styleSheets){try{visit(sheet.cssRules);}catch(error){
+   const proof=build.oss_objects?.[sheet.href];if(!proof)throw Error('External CSS has no bound actual object: '+sheet.href);
+   const response=await fetch(sheet.href,{mode:'cors',credentials:'omit'}),buffer=await response.arrayBuffer();
+   if(response.status!==200||buffer.byteLength!==proof.bytes||await hashBytes(buffer)!==proof.sha256)throw Error('External CSS bytes differ: '+sheet.href);
+   const parsed=new doc.defaultView.CSSStyleSheet();parsed.replaceSync(new TextDecoder().decode(buffer));visit(parsed.cssRules);
+  }}return list;}
  function selectorParts(text){let depth=0,start=0;const parts=[];for(let i=0;i<text.length;i++){if(text[i]==='('||text[i]==='[')depth++;else if(text[i]===')'||text[i]===']')depth--;else if(text[i]===','&&depth===0){parts.push(text.slice(start,i));start=i+1;}}parts.push(text.slice(start));return parts;}
  function feedbackRules(el,rules){return rules.filter(rule=>/:(hover|active|focus-visible)/.test(rule.selectorText)&&selectorParts(rule.selectorText).some(selector=>{try{return el.matches(selector.replace(/:(hover|active|focus-visible)/g,'').replace(/::?(before|after)/g,''));}catch{return false;}})).map(rule=>({selector:rule.selectorText,transform:rule.style.transform,opacity:rule.style.opacity,outline:rule.style.outline,box_shadow:rule.style.boxShadow}));}
  async function normalEffects(url,width){
   // Start with an empty viewport so first-entry animations cannot finish while
   // image decoding runs. Expand the real viewport after attaching observers.
   const {win,doc}=await load(url,width,{audit:false,initialHeight:1}),data=JSON.parse(doc.querySelector('#page-data').textContent),issues=[];
-  const observed=new Set(),samples=[],sampleIds=new Set(),observedDots=new Set(),rules=cssRules(doc);
+  const observed=new Set(),samples=[],sampleIds=new Set(),observedDots=new Set(),rules=await cssRules(doc);
   const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null;
   const stateObserved={normal_branch:new URL(win.location.href).searchParams.get('audit')!=='1'&&doc.body.dataset.audit!=='true',reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,hidden:doc.hidden};
   if(!data.typeset)issues.push('normal route did not select the current typeset page');
@@ -250,12 +256,12 @@
   return {observed:false,samples};
  }
  async function videoGate(entry,caseName){
-  const width=caseName==='below_width'?1023:caseName==='portrait'?390:1440,expectedPlaying=caseName==='desktop';
+  const width=caseName==='below_width'?1023:caseName==='portrait'?390:1440,expectedPlaying=caseName==='desktop'&&entry.video_expected.mount_allowed!==false;
   const {win,doc}=await load(entry.url,width,{audit:false,initialHeight:1});
   const data=JSON.parse(doc.querySelector('#page-data').textContent),section=doc.querySelector('.typeset-screen .typeset-part[data-orientation=h]')||doc.querySelector('.screen');
   frame.height='1000';
   const visiblePosition=await positionVideo(win,doc,section,false);let beforeScroll=null;
-  if(caseName==='offscreen'){
+  if(caseName==='offscreen'&&entry.video_expected.mount_allowed!==false){
    const started=await waitHeroPlaying(win,doc),v=doc.querySelector('video.hero-video');
    beforeScroll={...videoPosition(win,doc,section),playing:started,phase:win.SiteHero?.phase||null,current_time:v?.currentTime||0,video_paused:v?.paused??null,video_hidden:v?.hidden??null};
   }
@@ -264,7 +270,7 @@
   const spec=entry.video_expected;
   gate.scroll_placement=placement;gate.before_scroll=beforeScroll;
   if(!placement.stable)gate.issues.push('native video viewport/scroll geometry did not settle');
-  if(caseName==='offscreen'&&(!beforeScroll?.playing||!beforeScroll.section_visible||beforeScroll.video_paused||beforeScroll.video_hidden))gate.issues.push('offscreen transition did not start from actual visible playback');
+  if(caseName==='offscreen'&&entry.video_expected.mount_allowed!==false&&(!beforeScroll?.playing||!beforeScroll.section_visible||beforeScroll.video_paused||beforeScroll.video_hidden))gate.issues.push('offscreen transition did not start from actual visible playback');
   if(!data.video||!equal(data.video.rect,spec.rect)||data.video.src!==spec.src||data.video.mask!==spec.mask)gate.issues.push('normal hero does not bind expected video/mask/geometry');
   const condition=()=>caseName==='reduced_motion'?win.matchMedia('(prefers-reduced-motion:reduce)').matches:caseName==='document_hidden'?doc.hidden:!win.matchMedia('(prefers-reduced-motion:reduce)').matches&&!doc.hidden;
   if(!condition())gate.issues.push('required native browser condition not observed');
@@ -306,7 +312,7 @@
   });
   frame.src='about:blank';
   try{const gate=await observed;await sleep(350);gate.current_time_after=video?.currentTime||0;gate.time_advanced=!!video&&gate.current_time_after>gate.current_time_before+.01;
-   if(before.status!=='pass'||!before.playing||!before.section_visible||before.hidden)gate.issues.push('hidden transition did not start from actual visible playback');
+   if(before.status!=='pass'||entry.video_expected.mount_allowed!==false&&!before.playing||!before.section_visible||before.hidden)gate.issues.push('hidden transition did not start from its required visible media state');
    if(!gate.hidden||gate.visibility_state!=='hidden'||!gate.visibility_event_observed)gate.issues.push('native hidden visibility observation is missing');
    if(gate.mounted||gate.playing||gate.time_advanced||gate.phase!=='image')gate.issues.push('hero did not stop at the native hidden transition');
    if(gate.attached&&(!gate.video_paused||!gate.video_hidden))gate.issues.push('retained hero did not pause/hide before navigation');

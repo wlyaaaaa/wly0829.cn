@@ -405,8 +405,13 @@ def build_page(name, records, args, candidate):
     url = source.get('url') or source.get('source_url') or ('/404.html' if name == '404' else '/'+name+'/')
     if url == '/' or name == 'home':
         raise ValueError('Homepage is excluded')
+    authored_url=url
+    authored_rel=hybrid.route_file(authored_url)
+    alias=hybrid.nav_repair.ALIASES.get(url)
+    if alias and (args.baseline/hybrid.route_file(alias)).is_file():
+        url=alias
     rel = hybrid.route_file(url)
-    base_html = args.legacy_site/rel
+    base_html = args.legacy_site/authored_rel
     preview_only = name == 'github-profile'
     if not base_html.exists() and preview_only:
         base_html = args.legacy_site/'how-this-site/index.html'
@@ -418,7 +423,7 @@ def build_page(name, records, args, candidate):
     if not base_html.exists():
         raise FileNotFoundError('Page skeleton unavailable: '+str(base_html))
     text,html_proof = text_bound(base_html)
-    if preview_only or templated:
+    if preview_only or templated or url!=authored_url:
         original_assets='/'+base_html.parent.relative_to(args.legacy_site).as_posix()+'/assets/'
         text=re.sub(r'(?<![\w/])assets/',original_assets,text)
     text=re.sub(r'<link\b[^>]*\brel="preload"[^>]*\bas="image"[^>]*>','',text)
@@ -443,7 +448,15 @@ def build_page(name, records, args, candidate):
     registry_path=HERE.parent/'config/panel-projects.json'
     registry,registry_proof=json_bound(registry_path)
     inputs[str(registry_path.resolve())]=registry_proof
-    hybrid.builder.bind_registered_repository(data,registry)
+    if url!=authored_url:
+        # The registered canonical route owns this legacy alias's repository.
+        # Keep the authored source and card hrefs intact; only generated routing
+        # and its stale legacy binding move to that established target.
+        data['status_binding']={**data.get('status_binding',{}),'repo':None}
+    registered=hybrid.builder.bind_registered_repository(data,registry)
+    if not registered and data.get('status_binding',{}).get('matched') is False:
+        # An unmatched historical page key is not a verified repository identity.
+        data['status_binding']={**data['status_binding'],'repo':name}
     if args.snapshot_proof:inputs[str(args.snapshot_path)]=args.snapshot_proof
     geometry_path=args.geometry
     geometries={}
@@ -576,7 +589,15 @@ def build_page(name, records, args, candidate):
                         if box[0]<0 or box[1]<0 or box[0]+box[2]>size[0]+1 or box[1]+box[3]>size[1]+1:raise ValueError('视频定位越出首屏图片：'+name)
                         data['video']={**old_video,'rect':[box[0]/size[0],box[1]/size[1],box[2]/size[0],box[3]/size[1]],
                                        'mount_allowed':False,'compatibility':{'status':'insufficient_evidence','reason':'排版定位只说明槽位；同素材或严格帧匹配证据到齐并核验后再挂载'}}
-                    except ValueError as error:issues.append(str(error))
+                    except ValueError as error:
+                        # A missing new illustration slot cannot prove matching.
+                        # Keep every old media field and geometry as evidence;
+                        # the streaming runtime never mounts this unverified spec.
+                        data['video']={**old_video,'mount_allowed':False,
+                                       'compatibility':{'status':'insufficient_evidence',
+                                                        'reason':str(error)+'；原媒体与原坐标保留作退路，未定位到新版画面，不挂载'}}
+                        video_binding={'status':'insufficient_evidence','reason':str(error),
+                                       'original_geometry_retained':True}
             else:issues.append(sid+'/'+orient+':缺少绑定当前PNG与HTML的动效位置')
             source_offsets[orient]+=size[1]-padding;part_indices[orient]+=1
             live_allowed = set(src.get('live',[])) | {x.get('slot') for x in source.get('registry',{}).get('live',[])}
@@ -706,12 +727,14 @@ def build_page(name, records, args, candidate):
         if stamp(p)!=proof: issues.append('构建期间输入变化：'+p)
     video_expected=None
     if data.get('video'):
-        vp=(base_html.parent/data['video']['src']).resolve();maskp=(base_html.parent/data['video']['mask']).resolve()
+        vp=hybrid.builder.resolve_ref(args.legacy_site,base_html,data['video']['src'])
+        maskp=hybrid.builder.resolve_ref(args.legacy_site,base_html,data['video']['mask'])
         inputs[str(vp)]=stamp(vp);inputs[str(maskp)]=stamp(maskp)
         video_expected={**data['video'],'src_sha256':inputs[str(vp)]['sha256'],'src_bytes':inputs[str(vp)]['bytes'],
                         'mask_sha256':inputs[str(maskp)]['sha256'],'mask_bytes':inputs[str(maskp)]['bytes'],'binding':video_binding}
     elif old_video:issues.append('原视频还未重新定位；禁止发布本候选')
     return {'url':url,'status':'built' if not issues else 'blocked','issues':sorted(set(issues)),
+            'authored_url':authored_url,'route_alias_contract':{'original':authored_url,'canonical':url} if url!=authored_url else None,
             'inputs':inputs,'html_sha256':hybrid.digest(dest),'quality':q,'preview_only':preview_only,
             'effects_expected':expected_effects,'effects_capabilities':data['motion_capabilities'],'motion_appearance':motion_prep.appearance(),'video_expected':video_expected,
             'geometry_sha256':geometry_sha256,'original_video':old_video,
@@ -729,8 +752,18 @@ def main():
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
     ap.add_argument('--release-overlay',type=Path,help='Exact approved search and runtime-reference updates bound by old/new hashes')
+    ap.add_argument('--baseline-ref',help='Exact published commit whose OSS source is the complete runtime baseline')
+    ap.add_argument('--runtime-baseline',action='store_true',help='Verify the complete local source against that commit without changing its manifest')
     args=ap.parse_args()
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
+    baseline_manifest=read(args.baseline/'release-manifest.json')
+    if args.runtime_baseline:
+        baseline_spec=importlib.util.spec_from_file_location('typeset_runtime_baseline',HERE/'prepare-audit-release.py')
+        baseline_module=importlib.util.module_from_spec(baseline_spec)
+        baseline_spec.loader.exec_module(baseline_module)
+        baseline_manifest=baseline_module.verify_input_baseline(args.baseline,args.baseline_ref,True)
+    elif args.baseline_ref:
+        raise ValueError('--baseline-ref requires --runtime-baseline')
     if args.geometry:args.geometry=args.geometry.resolve()
     args.snapshot_path=args.typeset_root.parent/'snapshot.json';args.snapshot_proof=None;args.resource_map={};args.external_inputs={}
     if args.snapshot_path.is_file():
@@ -788,7 +821,9 @@ def main():
                 dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
                 accepted[url]={'preview_support':True,'page':n};support.append(n)
     local_deps(candidate,args.legacy_site,args.baseline)
-    manifest=hybrid.assemble(args.baseline,candidate,args.output,read(args.baseline/'release-manifest.json'),accepted,overlay=overlay)
+    manifest=hybrid.assemble(args.baseline,candidate,args.output,baseline_manifest,accepted,overlay=overlay,
+                             baseline_production_commit=args.baseline_ref,
+                             baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -805,6 +840,9 @@ def main():
     if overlay:
         report['release_overlay']={'path':str(args.release_overlay.resolve()),**stamp(args.release_overlay.resolve()),'files':overlay['files']}
         report['inputs'].update({str(args.release_overlay.resolve()):stamp(args.release_overlay.resolve()),**overlay.get('inputs',{}),**{entry['source_path']:entry['after'] for entry in overlay['files'].values()}})
+    if args.runtime_baseline:
+        report.update(baseline_production_commit=args.baseline_ref,baseline_input_kind='complete_runtime_staging',
+                      baseline_source_release_id=baseline_manifest['release_id'])
     write(args.report,report)
     print(json.dumps({'built':sum(x['status']=='built'for x in states.values()),'blocked':sum(x['status']=='blocked'for x in states.values()),'missing':sum(x['status']=='missing'for x in states.values()),'home_unchanged':report['home_unchanged'],'release_id':report['release_id']}))
 

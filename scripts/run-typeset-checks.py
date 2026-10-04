@@ -4,6 +4,7 @@ No screenshot, image inspection, signed-in profile, or publication operation.
 """
 import argparse
 import asyncio
+import json
 from pathlib import Path
 import time
 import uuid
@@ -19,14 +20,19 @@ async def main():
     parser.add_argument('--pages',nargs='+')
     parser.add_argument('--timeout',type=int,default=900)
     parser.add_argument('--jobs',type=int,default=3)
+    parser.add_argument('--network-output',type=Path,help='Actual failed/static-response transport observations, without response bodies')
     args=parser.parse_args()
     profile=args.task_cache.resolve()/('chrome-profile-'+uuid.uuid4().hex)
     profile.mkdir(parents=True)
     print('Temporary profile: '+str(profile),flush=True)
     started=time.monotonic()
+    network={'responses':[],'failed_requests':[]}
     async with async_playwright() as runtime:
         context=await runtime.chromium.launch_persistent_context(str(profile),executable_path=str(args.chrome),headless=True,
                    viewport={'width':1760,'height':1050},device_scale_factor=1,args=['--hide-scrollbars'])
+        if args.network_output:
+            context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
+            context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
         try:
             page=context.pages[0] if context.pages else await context.new_page()
             if args.mode=='geometry':
@@ -69,6 +75,10 @@ async def main():
                 await asyncio.gather(*(drive(names[index::jobs],index+1)for index in range(jobs)))
         finally:
             await context.close()
+            if args.network_output:
+                network['seconds']=round(time.monotonic()-started,3)
+                args.network_output.parent.mkdir(parents=True,exist_ok=True)
+                args.network_output.write_text(json.dumps(network,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print('Headless DOM run seconds: '+str(round(time.monotonic()-started,3)),flush=True)
 
 
