@@ -96,6 +96,6 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 `Publish-Pages.ps1` 的 batch 可显式提供 `runtime_baseline=true` 及 `OssPreparation`、`OssQaPlan`、`OssVerification`、`OssReading`、`OssCold`。先验完整当前源码与已发布Git split的对应关系，再验排版源码、同代OSS分拆和实际浏览器证据。发布时重建全部源码，输入、HTML、媒体、geometry及产物身份必须与已审版一致；Git只放已验分拆结果，不把完整源码当GitHub成品。
 
-2026-10-04 08:52的裁定允许当前2b/2c的偶发空响应在每资源一次补取、完整body/大小/SHA/MIME/CORS一致后通过，原生首次失败和耗时仍保留。该批通过 `OssRetryProof` 提供真实补取及副机有限直连对照；不把受控HTTPS取回或证据复用冒充原生冷缓存2秒通过，不因此改代理/网络设置。没有此明确适用证明时仍使用原冷加载要求。
+2026-10-04 14:52 引导 `8c5b469a-9178-475c-92aa-b59dd6fa5292` 将 08:52 的有界重试裁定明确扩至 2e、2f 和以后各版：本机冷启动空响应和长耗时，每个资源最多重试一次后完整取到且字节一致即通过，不再等稳定 2 秒。`OssRetryProof` 保留首次原生失败、长耗时、实际一次补取及完整 body/大小/SHA/MIME/CORS；网站图片、CSS、动态脚本各一次的真实恢复仍单独验收。受控 HTTPS 取回和证据复用不冒充原生 2 秒通过，不改代理/网络设置。既有 2b/2c 回执继续按原 08:52 指令及其副机直连证据核对。
 
 `verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。回滚使用发布时实际生产Git提交，旧OSS前缀保留；并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。

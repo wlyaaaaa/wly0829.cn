@@ -3,10 +3,11 @@
 'use strict';
 const policy=__RESOURCE_RETRY_POLICY__;
 const delay=1000,key='__wly_resource_retry',pageToken=Math.random().toString(36).slice(2);
-const imageState=new WeakMap(),scriptState=new WeakMap(),dynamicScripts=new WeakSet(),buttons=new Set();
+const imageState=new WeakMap(),scriptState=new WeakMap(),stylesheetState=new WeakMap(),dynamicScripts=new WeakSet(),buttons=new Set();
 const base=location.href,publicOrigins=new Set([location.origin,...policy.origins]);
 const canonical=value=>{try{const u=new URL(value,base);u.searchParams.delete(key);return u.href;}catch{return '';}};
 const dataURLs=new Set(policy.data.map(canonical)),scriptURLs=new Set(policy.scripts.map(canonical));
+const stylesheetURLs=new Set((policy.stylesheets||[]).map(canonical));
 const forbidden=u=>!/^(https?:)$/.test(u.protocol)||/\/(?:api|authorize|authorization)(?:\/|$)|\/__status(?:\/|$)/i.test(u.pathname);
 function imageAllowed(value){try{const u=new URL(value,base);return !forbidden(u)&&publicOrigins.has(u.origin)&&/\.(?:avif|webp|png|jpe?g|gif|svg|ico)$/i.test(u.pathname);}catch{return false;}}
 function retryURL(value,attempt){const u=new URL(canonical(value));u.searchParams.set(key,pageToken+'-'+attempt);return u.href;}
@@ -57,6 +58,24 @@ document.addEventListener('error',event=>{
 },true);
 document.addEventListener('load',event=>{const image=event.target;if(image instanceof HTMLImageElement){const state=imageState.get(image);if(state){clearTimeout(state.timer);state.timer=null;hideButton(state);state.waiting=false;state.reloading=false;if(canonical(selected(image))===state.url)record('image','loaded',state.url,state.auto);}}},true);
 for(const event of ['scroll','resize'])addEventListener(event,()=>{for(const button of buttons)placeButton(button);},{passive:true});
+
+function stylesheetAllowed(link){return link instanceof HTMLLinkElement&&link.rel.toLowerCase().split(/\s+/).includes('stylesheet')&&link.href&&stylesheetURLs.has(canonical(link.href))&&!forbidden(new URL(link.href,base));}
+function recoverStylesheet(link){
+ if(!stylesheetAllowed(link))return;
+ const url=canonical(link.href);let state=stylesheetState.get(link);
+ if(state&&state.url===url){if(state.attempted){record('stylesheet','failed',url,1);}return;}
+ clearTimeout(state?.timer);state={url,waiting:true,attempted:false,timer:null};stylesheetState.set(link,state);
+ link.removeAttribute('data-resource-retry-failed');record('stylesheet','waiting',url,0);
+ state.timer=setTimeout(()=>{state.timer=null;
+  if(!state.waiting||!link.isConnected||!stylesheetAllowed(link)||canonical(link.href)!==state.url)return;
+  state.waiting=false;state.attempted=true;record('stylesheet','retry',url,1);
+  // The same LINK preserves cascade order, attributes and original handlers.
+  link.href=retryURL(state.url,'stylesheet');
+ },delay);
+}
+document.addEventListener('error',event=>{if(event.isTrusted&&event.target instanceof HTMLLinkElement)recoverStylesheet(event.target);},true);
+document.addEventListener('load',event=>{const link=event.target,state=stylesheetState.get(link);if(event.isTrusted&&state){clearTimeout(state.timer);state.timer=null;state.waiting=false;link.removeAttribute('data-resource-retry-failed');if(canonical(link.href)===state.url)record('stylesheet','loaded',state.url,state.attempted?1:0);}},true);
+for(const link of document.querySelectorAll('link[data-resource-retry-stylesheet][data-resource-retry-failed="1"]'))recoverStylesheet(link);
 
 // Initial entries require a captured real element load error. Dynamic entries
 // keep their existing failure/handler semantics; execution errors are not loads.
