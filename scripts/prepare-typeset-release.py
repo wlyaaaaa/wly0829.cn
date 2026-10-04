@@ -428,6 +428,10 @@ def prepare(args):
             block('live_ui_preparation','Missing literal directory assets differ from the blocked page ledger')
         if ui.get('status')!='prepared' or toc.get('status')!='prepared' or missing:
             block('live_ui_preparation','Literal directory image assets remain missing; local preview is not publishable')
+        for asset in ui.get('assets',[])+ui.get('hardware_icons',[]):
+            relative=asset.get('path') or asset['public_path'].lstrip('/')
+            if manifest['files'].get(relative)!={key:asset[key]for key in ('sha256','bytes')}:
+                block('live_ui_preparation','Live UI asset is absent or changed in the exact final manifest: '+relative)
     overlay_info = build.get('release_overlay')
     automatic_navigation=manifest.get('release_overlay',{})
     if automatic_navigation and not overlay_info and all(entry.get('kind')=='navigation_restoration' for entry in automatic_navigation.values()):

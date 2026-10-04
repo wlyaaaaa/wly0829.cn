@@ -1,6 +1,12 @@
 /* Pure presentation of the status reader's public snapshot. No reads or timers. */
 (function (scope) {
   'use strict';
+  const hardwareAssets = Object.freeze({
+    cpu: '/assets/live-hardware/cpu.webp', gpu: '/assets/live-hardware/gpu.webp',
+    storage: '/assets/live-hardware/storage.webp', network: '/assets/live-hardware/network.webp',
+    display: '/assets/live-hardware/display.webp', 'personal-data': '/assets/live-hardware/personal-data.webp',
+    unrestricted: '/assets/live-hardware/unrestricted.webp', windows: '/assets/live-hardware/windows.webp'
+  });
   const unavailable = new Set(['unknown', 'unavailable', 'error', 'failed']);
   const staticFields = new Set(['model', 'cores', 'threads', 'type', 'manufacturer', 'data_rate_mt_s', 'module_count', 'module_capacity_bytes', 'installed_bytes', 'total_bytes', 'vram_total_bytes', 'letter', 'filesystem', 'physical_disks', 'connection_type']);
   const aliases = { temperature_celsius: 'temperature_c', power_watts: 'power_w', vram_used_bytes: 'memory_used_bytes', vram_total_bytes: 'memory_total_bytes', letter: 'drive', total_bytes: 'usable_total_bytes', installed_bytes: 'installed_total_bytes' };
@@ -125,7 +131,7 @@
     function card(title, key, icon) {
       const node = el('section', 'live-hardware-card', null, key);
       const heading = el('div', 'live-hardware-card-heading', null, key + '-heading');
-      if (icon) { const img = el('img', 'live-hardware-icon', null, key + '-icon'); img.src = (options.assetBase || '/assets/live-hardware/') + icon + '.webp'; img.alt = ''; img.width = 44; img.height = 44; heading.append(img); }
+      if (icon) { const img = el('img', 'live-hardware-icon', null, key + '-icon'); img.src = options.assetBase ? options.assetBase + icon + '.webp' : hardwareAssets[icon]; img.alt = ''; img.width = 44; img.height = 44; heading.append(img); }
       heading.append(el('h3', '', title, key + '-title')); node.append(heading); return node;
     }
     function cardTime(node, row, key) {
@@ -236,5 +242,5 @@
     }
     return root;
   }
-  scope.LiveHardwareUI = Object.freeze({ render, observedAt });
+  scope.LiveHardwareUI = Object.freeze({ render, observedAt, assets: hardwareAssets });
 })(typeof window !== 'undefined' ? window : globalThis);
