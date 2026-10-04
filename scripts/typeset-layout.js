@@ -269,6 +269,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function reset(host){
   const state=states.get(host);if(!state)return;
   state.observer?.disconnect();
+  state.resizeObserver?.disconnect();
   for(const [node,box]of state.boxes)if(node.isConnected){move(state.overlay,node);node.style.cssText=box.style;node.classList.remove('typeset-live-flow-repaint-suppressed');}
   for(const cell of state.cells)if(cell.node.isConnected){move(state.overlay,cell.node);cell.node.style.removeProperty('--typeset-live-min-height');}
   state.container.remove();host.classList.remove('typeset-live-flow-ready');delete host.dataset.liveFlowHeight;states.delete(host);hosts.delete(host);
@@ -346,6 +347,10 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   // Place those additions before the next rendering/observation checkpoint.
   state.observer=new MutationObserver(records=>{if(states.get(host)===state&&records.some(record=>record.addedNodes.length))update(state);});
   state.observer.observe(overlay,{childList:true});
+  // Fonts and nested live content can resize a card after its render request.
+  // Keep source-bound controls aligned with that actual height, including shrink.
+  state.resizeObserver=new ResizeObserver(()=>request(host));
+  for(const cell of dynamic)state.resizeObserver.observe(cell.node);
   if(focus?.isConnected&&host.ownerDocument.activeElement!==focus)focus.focus({preventScroll:true});
   return state;
  }
