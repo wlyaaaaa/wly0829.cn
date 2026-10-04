@@ -42,7 +42,7 @@ LAYOUT.update(size=RECT,source_size=RECT,crop=RECT,title_rect=RECT,viewer=VIEWER
               numbers=array(MARK),dots=array(GEOMETRY),arrows=array(GEOMETRY),
               interactive_cards=array(CARD),card_text_only=array(CARD),
               card_uncertain=array(CARD),card_arrow_pending=array(MARK))
-PART = {**LAYOUT,**fields('image src both')}
+PART = {**LAYOUT,**fields('image src both compact_live')}
 PART['hotspots']=array(LINK)
 SCREEN = fields('id title section shape nav_section nav_title render_mode primary_href source_version')
 SCREEN.update(layouts={'h':LAYOUT,'v':LAYOUT},parts=array(PART),screen_anchors=array(S),html_anchors=array(LINK),

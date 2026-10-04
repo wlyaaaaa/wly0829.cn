@@ -110,9 +110,12 @@ class HotMetadata(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=True)
         self.groups = defaultdict(list)
+        self.compact_live = False
         self.feed(text)
     def handle_starttag(self, tag, attrs):
         d = dict(attrs)
+        if d.get('data-comp') == 'live_strip' and d.get('data-live-frame') == 'plain':
+            self.compact_live = True
         if d.get('data-hot'):
             self.groups[(d['data-hot'], d.get('data-href',''))].append(d)
 
@@ -128,7 +131,9 @@ def quality(path, report, proof):
             'legacy_evidence':legacy, 'note':'旧质量记录未按新闸门验证' if legacy else ''}
 
 def action_for(hot, metadata, source, old):
-    key = hot.get('text') or hot['href'].split('::')[-1]
+    # Producer fitting can split a visible button label across lines. The
+    # declared action name uses ordinary word spacing, never layout newlines.
+    key = ' '.join((hot.get('text') or hot['href'].split('::')[-1]).split())
     matches = [x for x in old.get('layouts',{}).get('h',{}).get('native_actions',[]) if x.get('text') == key]
     if not matches:
         matches = [x for x in old.get('layouts',{}).get('v',{}).get('native_actions',[]) if x.get('text') == key]
@@ -692,13 +697,15 @@ def build_page(name, records, args, candidate):
         # Producer does not currently emit anchor coordinates. Keep all named targets on their owning screen.
         anchors = ''.join('<span class="point-anchor typeset-screen-anchor" id="'+html.escape(a,quote=True)+'" data-anchor-binding="screen"></span>' for a in anchor_ids if a not in seen_sections and a!=sid)
         seen_sections.update(anchor_ids)
-        queues = {}; occurrences=defaultdict(int)
+        queues = {}; compact_live = {}; occurrences=defaultdict(int)
         # Metadata order is per complete direction, before portrait continuation splitting.
         for orient in ['h','v']:
             hp = args.typeset_root/name/'html'/f'{sid}-{orient}.html'
             if hp.exists():
                 html_meta,html_meta_proof=text_bound(hp);inputs[str(hp.resolve())] = html_meta_proof
-                queues[orient] = {k:deque(v) for k,v in HotMetadata(html_meta).groups.items()}
+                metadata = HotMetadata(html_meta)
+                queues[orient] = {k:deque(v) for k,v in metadata.groups.items()}
+                compact_live[orient] = metadata.compact_live
                 transcripts.setdefault(sid,{})[orient]=publication.rendered_text(html_meta)
         part_html = []
         has_v = any(i.get('orientation','v' if '-v' in i['image'] else 'h') == 'v' for i in entry['images'])
@@ -715,6 +722,10 @@ def build_page(name, records, args, candidate):
             part = {'image':ip.name,'src':asset(ip,candidate,name),'size':size,'orientation':orient,
                     'both':not has_v,'hotspots':[],'live':[],'native_live':[],'native_actions':[],
                     'links':[],'anchors':[],'screenshots':[],'cards':[],'numbers':[]}
+            # Only the producer's plain strip separates its heading and footer
+            # from the replaceable slots. Legacy framed strips keep their source.
+            if compact_live.get(orient):
+                part['compact_live'] = True
             geometry=geometries.get((sid,orient));padding=30 if part_indices[orient]else 0
             if geometry:
                 recorded=next((x for x in geometry.get('parts',[])if x['image']==ip.name),None)
