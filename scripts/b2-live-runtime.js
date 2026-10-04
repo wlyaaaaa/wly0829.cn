@@ -27,7 +27,7 @@ const known=v=>v===null||v===undefined?'读不到':String(v);
 
 const validRequest=id=>/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id||'');
 
-const grantState=g=>!authorizationFresh()?'unknown':remainingMinutes(g,clock())===0?'warn':['unlocked','active'].includes(g?.state)?'ok':['locked','inactive','revoked','expired'].includes(g?.state)?'closed':['opening','closing'].includes(g?.state)?'warn':['error','failed'].includes(g?.state)?'error':'unknown';
+const grantState=g=>!authorizationFresh(g)?'unknown':remainingMinutes(g,clock())===0?'warn':['unlocked','active'].includes(g?.state)?'ok':['locked','inactive','revoked','expired'].includes(g?.state)?'closed':['opening','closing'].includes(g?.state)?'warn':['error','failed'].includes(g?.state)?'error':'unknown';
 
 const blockTime=b=>Number.isFinite(b?.observed_at_unix)?b.observed_at_unix:Date.parse(b?.observed_at||b?.checked_at)/1000;
 const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
@@ -55,8 +55,8 @@ function hardwareHealth(){
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
 
 const online=()=>phase==='ready'&&freshStatus(status,clock());
-const authorizationTime=()=>status?.display_cache?.collectors?.authorization?.observed_at_unix??status?.observed_at_unix;
-const authorizationFresh=()=>online()&&Number.isFinite(authorizationTime())&&clock()-authorizationTime()<=120&&authorizationTime()<=clock()+60&&status?.display_cache?.collectors?.authorization?.state!=='error';
+const authorizationTime=g=>g?.observed_at_unix??status?.display_cache?.collectors?.authorization?.observed_at_unix??status?.observed_at_unix;
+const authorizationFresh=g=>online()&&Number.isFinite(authorizationTime(g))&&clock()-authorizationTime(g)<=120&&authorizationTime(g)<=clock()+60&&(Number.isFinite(g?.observed_at_unix)||status?.display_cache?.collectors?.authorization?.state!=='error');
 const windowsTime=()=>status?.host?.sources?.screen_state?.observed_at_unix??status?.host?.screen_state?.observed_at_unix??status?.host?.observed_at_unix??(status?.display_cache?null:status?.observed_at_unix);
 const windowsFresh=()=>online()&&Number.isFinite(windowsTime())&&clock()-windowsTime()<=120&&windowsTime()<=clock()+60&&!['unknown','unavailable','error','failed','stale'].includes(status?.host?.sources?.screen_state?.status);
 
@@ -65,7 +65,7 @@ const lastContact=()=>{try{return lastRead||Number(localStorage.getItem('compute
 
 const stateLabel=(grant,key)=>{
 
- if(!authorizationFresh())return status?.display_cache?.collectors?.authorization?.state==='reading'?'正在读取授权状态':'当前状态读不到';
+ if(!authorizationFresh(grant))return status?.display_cache?.collectors?.authorization?.state==='reading'?'正在读取授权状态':'当前状态读不到';
 
  const mins=remainingMinutes(grant,clock());
 
@@ -142,8 +142,8 @@ function readGaps(){
   if(Number.isFinite(hardwareAt)&&clock()-hardwareAt>(Number(hw?.max_age_seconds)||120))expired.push(hardwareAt+(Number(hw?.max_age_seconds)||120));
   add('hardware','硬件状态',collector||hw,expired.length?Math.min(...expired):undefined);
  }
- const authoritySource=status?.display_cache?.collectors?.authorization,authorityAt=authorizationTime(),authorityExpired=Number.isFinite(authorityAt)&&clock()-authorityAt>120?authorityAt+120:undefined;
- for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']])if(!authorizationFresh()||!status?.[key]?.state||['unknown','unavailable'].includes(status[key].state))add(key,label,authoritySource||status?.[key],authorityExpired);
+ const authoritySource=status?.display_cache?.collectors?.authorization;
+ for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']]){const g=status?.[key],at=authorizationTime(g),expired=Number.isFinite(at)&&clock()-at>120?at+120:undefined;if(!authorizationFresh(g)||!g?.state||['unknown','unavailable'].includes(g.state))add(key,label,Number.isFinite(g?.observed_at_unix)?g:authoritySource||g,expired);}
  const screenAt=windowsTime();if(!windowsFresh()||!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host?.sources?.screen_state||status?.host,Number.isFinite(screenAt)&&clock()-screenAt>120?screenAt+120:undefined);
  for(const key of lampReads.keys())if(!active.has(key))lampReads.delete(key);
  saveLampReads();return gaps;
@@ -363,7 +363,12 @@ const slotKeys={
  'cockpit-grafana':['grafana'],'cockpit-overall':['automation','backups','projects','pending','today','hardware']
 };
 function slotHealth(slot){const keys=slotKeys[slot];if(!keys)return clock()-lastRead<=120?'ok':'stale';const states=keys.map(k=>k==='hardware'?hardwareHealth():k==='grafana'?(()=>{const g=status?.grafana||status?.services?.grafana,at=blockTime(g);return g&&Number.isFinite(at)&&at<=clock()+60&&clock()-at<=(Number(g.max_age_seconds)||300)?'ok':'stale';})():blockHealth(k));return states.includes('error')?'error':states.includes('unknown')?'unknown':states.includes('stale')?'stale':'ok';}
-function slotTime(slot){if(slot==='ca-windows'||slot==='cockpit-security-windows')return windowsTime();const times=(slotKeys[slot]||[]).map(k=>k==='hardware'?(status?.hardware_observed_at_unix??status?.display_cache?.collectors?.hardware?.observed_at_unix??Math.min(...[status?.hardware?.cpu,status?.hardware?.memory,status?.hardware?.network,status?.hardware?.display,...(status?.hardware?.gpus||[])].map(blockTime).filter(Number.isFinite))):blockTime(status?.[k]));return times.filter(t=>Number.isFinite(t)&&t>0).length?Math.min(...times.filter(t=>Number.isFinite(t)&&t>0)):authorizationTime();}
+function slotTime(slot){
+ const authorityKey=({'ca-personal-data':'personal_data','cockpit-security':'personal_data','cockpit-quick-2':'personal_data','ca-unrestricted':'unrestricted','cockpit-security-unrestricted':'unrestricted','cockpit-quick-3':'unrestricted'})[slot];
+ if(authorityKey)return authorizationTime(status?.[authorityKey]);
+ if(slot==='ca-windows'||slot==='cockpit-security-windows')return windowsTime();
+ const times=(slotKeys[slot]||[]).map(k=>k==='hardware'?(status?.hardware_observed_at_unix??status?.display_cache?.collectors?.hardware?.observed_at_unix??Math.min(...[status?.hardware?.cpu,status?.hardware?.memory,status?.hardware?.network,status?.hardware?.display,...(status?.hardware?.gpus||[])].map(blockTime).filter(Number.isFinite))):blockTime(status?.[k]));return times.filter(t=>Number.isFinite(t)&&t>0).length?Math.min(...times.filter(t=>Number.isFinite(t)&&t>0)):authorizationTime();
+}
 function expiredValue(result,at){const note='数据已过期 · 上次读到 '+time(at);return {...result,text:result.rows||result.iframe?result.text:result.text+'\n'+note,notice:result.rows||result.iframe?note:null,state:'unknown',cacheable:false,cached:true};}
 function value(slot){
  const result=liveValue(slot);if(data.kind!=='cockpit'||!slot.startsWith('cockpit-')||!online())return result;
@@ -492,7 +497,7 @@ function render(){
   if(el.classList.contains('b2-ui-slot')&&slot!=='cockpit-pc'&&window.LiveStatusUI){
    const headline=valueRow.text||valueRow.rows?.[0]?.text||(valueRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
    const card=window.LiveStatusUI.render(document,{...valueRow,text:headline,readAt:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)},{title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
-   if(valueRow.operation)card.querySelector('.live-status-meta')?.remove();
+   if(valueRow.operation){card.querySelector('.live-status-meta')?.remove();card.title=(liveTitles[slot]||'办理结果')+'：'+headline;}
    if(valueRow.rows||valueRow.iframe){card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
    else content.replaceChildren();
    content.replaceChildren(card);

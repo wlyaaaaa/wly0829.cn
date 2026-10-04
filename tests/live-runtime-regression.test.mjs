@@ -44,6 +44,15 @@ test('authorization result surface distinguishes no request, unknown outcome and
  app.operationRecords({request_id:'request',state:'succeeded'});app.set(null,'error',now/1000);result=app.value('ca-results');assert.match(result.rows[0].text,/已完成/);assert.equal(result.operation,true);assert.notEqual(result.state,'ok');
 });
 
+test('a fresh partial authority readback retains only that field while an expired collector remains a gap',()=>{
+ const data=fixture(),app=cockpit();data.served_at_unix=now/1000;
+ data.display_cache={collectors:{authorization:{state:'error',observed_at_unix:now/1000-900},hardware:{state:'ready',observed_at_unix:now/1000},dashboard:{state:'ready',observed_at_unix:now/1000}}};
+ data.personal_data={state:'locked',observed_at_unix:now/1000};app.set(data);
+ assert.equal(app.value('ca-personal-data').state,'closed');assert.match(app.value('ca-personal-data').text,/锁着/);
+ assert.equal(app.value('ca-unrestricted').state,'unknown');
+ const attention=app.value('cockpit-attention').rows;assert.ok(!attention.some(row=>row.text.includes('个人资料开关状态')));assert.ok(attention.some(row=>row.text.includes('无限制授权状态')));
+});
+
 test('LC-01/02: source-backed drive letters and backup names remain readable Chinese',()=>{
  const app=cockpit();app.set(fixture());
  const pc=app.value('cockpit-pc');assert.ok(pc.rows.some(x=>x.text.startsWith('E：')));assert.ok(!JSON.stringify(pc).includes('[object Object]'));assert.ok(!pc.rows.some(x=>x.text.includes('::')||x.text.includes(':：')));
