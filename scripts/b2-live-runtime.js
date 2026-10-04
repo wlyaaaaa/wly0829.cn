@@ -306,9 +306,13 @@ function liveValue(slot){
 
  if(slot==='cockpit-grafana'){
 
-  const g=status.grafana||status.services?.grafana,publicUrl=g?.public_dashboard_url||g?.public_panel_url;
+  const g=status.grafana||status.services?.grafana,publicUrl=g?.public_dashboard_url||g?.public_panel_url||g?.public_url;
+  // The current public status provider names its anonymous dashboard public_url.
+  // Keep the separately observed legacy state when present; a reachable root
+  // supplies the current provider's public route without inventing a new state.
+  const currentPublicRoute=g?.public_dashboard_state==null&&g?.state==='reachable'&&/^https:\/\/grafana\.wly0829\.cn\/public-dashboards\/[a-f0-9]+(?:[/?#]|$)/i.test(g?.public_url||'');
 
-  if(g?.public_dashboard_state==='reachable'&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
+  if((g?.public_dashboard_state==='reachable'||currentPublicRoute)&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
 
   if(g?.state==='reachable'&&g.url==='https://grafana.wly0829.cn/')return {text:'监控网页已响应 · 打开图表网页',href:g.url,state:'ok'};
 
@@ -373,7 +377,9 @@ function expiredValue(result,at){const note='数据已过期 · 上次读到 '+t
 function value(slot){
  const result=liveValue(slot);if(data.kind!=='cockpit'||!slot.startsWith('cockpit-')||!online())return result;
  const health=slotHealth(slot);
- if(slot==='cockpit-grafana'&&health!=='ok')return {text:'曲线暂时打不开',state:'unknown',cached:false};
+ // Grafana has a 300-second check interval; the general dashboard blocks use
+ // 120 seconds. Do not turn a still-current live iframe into historical data.
+ if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false};
  if((health==='stale'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
   if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};

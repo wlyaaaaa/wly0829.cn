@@ -41,7 +41,7 @@
 .typeset-live[data-state=ok] i{background:#188558}
 .typeset-live[data-state=failed] i,.typeset-live[data-state=error] i{background:#ba4747}
 .typeset-screenshot{display:block;margin:0;padding:0;border:0;background:white;border-radius:9px;overflow:hidden;cursor:zoom-in}
-.typeset-shot-crop{position:absolute;inset:0;display:block;overflow:hidden;background:white}
+.typeset-shot-crop{position:absolute;inset:0;display:block;overflow:hidden;background:#f3f7f4}
 .typeset-shot-stage{position:absolute;display:block;overflow:hidden}
 .typeset-part .typeset-shot-stage img{position:absolute;max-width:none!important;object-fit:fill}
 .typeset-screenshot .compare-before{z-index:1;clip-path:inset(0 calc(100% - var(--compare-position,50%)) 0 0)}

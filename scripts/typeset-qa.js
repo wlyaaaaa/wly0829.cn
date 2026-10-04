@@ -270,7 +270,15 @@
      }else if(h.kind==='screenshot'){
       if(el.querySelectorAll('img').length!==h.shots.length)issues.push(p.image+':screenshot source count');
       if(h.shots.length>1&&!el.querySelector('input[type=range]'))issues.push(p.image+':comparison slider missing');
-      for(let j=0;j<h.shots.length;j++){const sh=h.shots[j],wrap=el.querySelectorAll('.typeset-shot-crop')[j],img=wrap?.querySelector('img');if(!wrap||wrap.dataset.crop!==JSON.stringify(sh.crop||[0,0,...sh.size]))issues.push(p.image+':screenshot crop binding');if(!img||img.getAttribute('src')!==sh.src||img.naturalWidth!==sh.size[0]||img.naturalHeight!==sh.size[1])issues.push(p.image+':screenshot source');}
+      for(let j=0;j<h.shots.length;j++){
+       const sh=h.shots[j],wrap=el.querySelectorAll('.typeset-shot-crop')[j],img=wrap?.querySelector('img');
+       if(!wrap||wrap.dataset.crop!==JSON.stringify([0,0,...sh.size]))issues.push(p.image+':screenshot complete-image binding');
+       if(!img||img.getAttribute('src')!==sh.src||img.naturalWidth!==sh.size[0]||img.naturalHeight!==sh.size[1])issues.push(p.image+':screenshot source');
+       if(wrap&&img){
+        const wr=wrap.getBoundingClientRect(),ir=img.getBoundingClientRect(),scale=Math.min(wr.width/sh.size[0],wr.height/sh.size[1],1.25);
+        if(scale<=0||ir.width<=0||ir.height<=0||Math.abs(ir.width-sh.size[0]*scale)>1.5||Math.abs(ir.height-sh.size[1]*scale)>1.5||ir.left<wr.left-1.5||ir.top<wr.top-1.5||ir.right>wr.right+1.5||ir.bottom>wr.bottom+1.5)issues.push(p.image+':screenshot clipped, stretched or has no visible area');
+       }
+      }
       shots++;
      }
     }

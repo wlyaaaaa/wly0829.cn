@@ -91,6 +91,17 @@ test('a stale live chart cannot be represented or cached as a historical chart',
  const app=cockpit();app.set(data);let chart=app.value('cockpit-grafana');assert.equal(chart.state,'unknown');assert.equal(chart.cached,false);assert.equal(chart.iframe,undefined);
  app.set(null,'error',now/1000);chart=app.value('cockpit-grafana');assert.equal(chart.cached,false);assert.equal(chart.iframe,undefined);
 });
+
+test('the current public status dashboard field mounts the anonymous chart and respects explicit failures',()=>{
+ const data=fixture(),url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
+ data.grafana={state:'reachable',checked_at:iso(now),url:'https://grafana.wly0829.cn/',public_url:url};
+ const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);
+ data.grafana.checked_at=iso(now-180000);app.set(data);const current=app.value('cockpit-grafana');assert.equal(current.iframe,url);assert.equal(current.state,'ok');assert.notEqual(current.cached,true);
+ data.grafana.checked_at=iso(now);
+ data.grafana.public_dashboard_state='unavailable';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+ delete data.grafana.public_dashboard_state;data.grafana.public_url='https://grafana.wly0829.cn/login';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+ data.grafana.public_url=url;data.grafana.checked_at=iso(now-3600000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+});
 test('cached cockpit and shared results keep values across errors and reloads without green lights',()=>{
  const saved=storage();let app=cockpit(saved);app.set(fixture());app.value('cockpit-backups');
  app.set(null,'error',now/1000);let result=app.value('cockpit-backups');assert.equal(result.state,'unknown');assert.match(result.rows[1].text,/中文备份/);assert.match(result.rows[0].text,/上次读到 今天 02:00/);

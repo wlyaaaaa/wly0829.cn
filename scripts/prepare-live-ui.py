@@ -25,7 +25,7 @@ def patch_layout(text):
     start_marker='/* typeset-live-flow-v1 */'; end_marker='/* end-typeset-live-flow-v1 */'
     start=source.index(start_marker); end=source.index(end_marker,start)+len(end_marker)
     flow=source[start:end]
-    install='function installTypeset(section,screen){'; next_function='function fitTypesetShot('
+    install='function installTypeset(section,screen){'; next_function='function displayTypesetStatus('
     if install not in text:return text
     if start_marker in text:
         start=text.index(start_marker); end=text.index(end_marker,start)+len(end_marker)

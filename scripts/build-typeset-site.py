@@ -808,10 +808,9 @@ def build_page(name, records, args, candidate):
                         sp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['file']).resolve())),sh['file'])); inputs[str(sp.resolve())]=stamp(sp)
                         from PIL import Image
                         with Image.open(sp) as original_shot: shot_size=list(original_shot.size)
-                        crop=sh.get('crop_'+orient) or sh.get('crop')
-                        if isinstance(crop,dict):crop=[crop['x'],crop['y'],crop['x']+crop['w'],crop['y']+crop['h']]
-                        if crop and (len(crop)!=4 or crop[0]<0 or crop[1]<0 or crop[2]>shot_size[0] or crop[3]>shot_size[1] or crop[2]<=crop[0] or crop[3]<=crop[1]):
-                            issues.append(sid+':截图裁切超出原件');crop=None
+                        # The owner's screenshot requirement is complete, readable
+                        # originals. Earlier source crop hints are not display bounds.
+                        crop=None
                         bound={'src':asset(sp,candidate,'screenshots'),'caption':sh.get('caption',''),'role':sh.get('role',''),'size':shot_size,'crop':crop}
                         if sh.get('full'):
                             fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots')
