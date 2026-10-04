@@ -23,6 +23,9 @@ SITE = "https://wly0829.cn"
 EXPECTED_PAGE_COUNT = 84
 EFFECT_NAMES = {"cards", "numbers", "dots", "arrows", "screen_enter", "seam", "depth", "update", "ambient",
                 "back_top", "footer_signature", "navigation", "viewer", "brief", "live", "screenshots", "compare", "card_feedback"}
+LAYOUT_INSTRUCTION_ID = "55089fc0-3194-4f5c-8c02-c0eb5f92d220"
+LAYOUT_INSTRUCTION_SHA256 = "5bbcaffcbd83357e5628f4b44c849cef6e80966e68893a5db154282eb91fb264"
+BLANK_ISSUE = ":continuous blank rectangle exceeds 15% of viewport"
 spec = importlib.util.spec_from_file_location("typeset_hybrid", ROOT / "scripts/hybrid-release.py")
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
@@ -384,6 +387,205 @@ def video_evidence(entry, dom, files):
     return {"expected": expected, "verified_cases": sorted(cases)}
 
 
+def layout_acceptance(path, build, build_path, verification, verification_path, selected, qa_plan_path=None):
+    """Accept only the exact deferred layout findings; never rewrite raw QA."""
+    def need(condition, message):
+        if not condition:
+            raise ValueError("Layout acceptance: " + message)
+
+    def keys(value, required, optional=()):
+        need(isinstance(value, dict) and set(required) <= set(value) <= set(required) | set(optional),
+             "missing or unknown fields")
+
+    def unique_fields(pairs):
+        value = {}
+        for key, item in pairs:
+            need(key not in value, "duplicate JSON fields")
+            value[key] = item
+        return value
+
+    def exact_json(path):
+        return json.loads(Path(path).read_text('utf-8-sig'), object_pairs_hook=unique_fields)
+
+    def issue_rows(rows):
+        need(isinstance(rows, list), "missing explicit layout findings")
+        identities = []
+        for row in rows:
+            keys(row, {"page", "url", "width", "issues"})
+            page_token(row["page"]); local_url(row["url"])
+            need(type(row["width"]) is int and row["width"] in {1440, 390}, "unknown width")
+            issues = row["issues"]
+            need(isinstance(issues, list) and issues and all(isinstance(issue, str) and
+                 re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9._-]*\.png" + re.escape(BLANK_ISSUE), issue) for issue in issues)
+                 and len(issues) == len(set(issues)), "only explicit continuous blank rectangles may be accepted")
+            identities.append((row["page"], row["width"]))
+        need(len(identities) == len(set(identities)), "duplicate page/width findings")
+
+    acceptance = exact_json(path)
+    keys(acceptance, {"schema", "instruction", "source_release_id", "source_build_report_sha256", "selected_pages", "source"}, {"oss"})
+    need(acceptance["schema"] == "wly.typeset-layout-acceptance.v1", "unsupported schema")
+    instruction = acceptance["instruction"]
+    keys(instruction, {"id", "path", "sha256"})
+    need(instruction["id"] == LAYOUT_INSTRUCTION_ID and instruction["sha256"] == LAYOUT_INSTRUCTION_SHA256
+         and digest(Path(instruction["path"])) == LAYOUT_INSTRUCTION_SHA256, "wrong or changed original instruction")
+    need(re.fullmatch(r"[0-9a-f]{64}", str(acceptance["source_release_id"])) is not None
+         and acceptance["source_release_id"] == build.get("release_id")
+         and acceptance["source_build_report_sha256"] == digest(build_path), "source generation or build changed")
+    pages = acceptance["selected_pages"]
+    need(isinstance(pages, list) and pages and all(isinstance(page, str) for page in pages)
+         and len(pages) == len(set(pages)) and set(pages) == set(selected), "selected pages differ")
+    for page in pages:
+        page_token(page)
+    keys(acceptance["source"], {"verification_sha256", "accepted_issues"})
+    if "oss" in acceptance:
+        keys(acceptance["oss"], {"release_id", "qa_plan_sha256", "verification_sha256", "accepted_issues"})
+        need(all(re.fullmatch(r'[0-9a-f]{64}', str(acceptance['oss'][key])) for key in ('release_id', 'qa_plan_sha256')),
+             "invalid complete OSS generation or plan hash")
+    for record in [acceptance["source"]] + ([acceptance["oss"]] if "oss" in acceptance else []):
+        need(re.fullmatch(r"[0-9a-f]{64}", str(record["verification_sha256"])) is not None, "invalid raw QA hash")
+        issue_rows(record["accepted_issues"])
+    need(acceptance['source']['accepted_issues'] or acceptance.get('oss', {}).get('accepted_issues'), "no layout findings to accept")
+    domain = "oss" if qa_plan_path else "source"
+    need(domain in acceptance, "missing " + domain + " evidence binding")
+    record = acceptance[domain]
+    need(build == exact_json(build_path) and verification == exact_json(verification_path), "raw report content differs")
+    plan = exact_json(qa_plan_path) if qa_plan_path else build
+    if qa_plan_path:
+        need(plan.get("schema") == "wly.typeset-oss-qa-plan.v1" and plan.get("source_release_id") == build["release_id"]
+             and plan.get("source_build_report_sha256") == digest(build_path)
+             and record["release_id"] == plan.get("release_id") and record["qa_plan_sha256"] == digest(qa_plan_path),
+             "OSS generation or plan changed")
+    need(verification.get("schema") == "wly.typeset-verification.v1"
+         and verification.get("release_id") == plan.get("release_id")
+         and verification.get("build_report_sha256") == digest(qa_plan_path or build_path)
+         and record["verification_sha256"] == digest(verification_path), "raw QA changed or belongs to another generation")
+    need(set(verification.get("pages", {})) == set(pages) == set(plan.get("pages", {})) == set(build.get("pages", {})),
+         "raw QA must cover the exact complete selected batch")
+    summary = verification.get("summary")
+    keys(summary, {"passed", "failed", "checked", "unverified"})
+    need(all(type(summary[key]) is int for key in ("passed", "failed", "checked"))
+         and summary["checked"] == len(pages) and summary["unverified"] == [], "incomplete raw QA summary")
+    actual, raw_pages = [], {}
+    binding_fields = {"policy", "method", "source_html_sha256", "source_png_sha256", "fit_sha256", "measurement_sha256"}
+    check_fields = {"width", "height", "route", "images", "active_parts", "hotspots", "live_slots", "screenshot_slots",
+                    "content_acceptance", "hit_checks", "hit_diagnostics", "geometry_diagnostics", "scroll_width", "ids", "internal_targets", "grids", "issues", "status"}
+    for page in sorted(pages):
+        entry, dom = plan["pages"][page], verification["pages"][page]
+        source_entry = build['pages'][page]
+        keys(dom, {"url", "status", "checks", "effects", "video_checks", "build_issues"})
+        need(entry.get("status") == "built" and entry.get("issues") == [] and dom["build_issues"] == []
+             and dom["url"] == entry.get("url") == build["pages"][page].get("url"), "wrong page URL or build failure: " + page)
+        need(all(entry.get(key) == source_entry.get(key) for key in ('content_occupancy', 'geometry_sha256', 'effects_expected')),
+             'split plan changed the measured source or effects inventory')
+        checks = dom["checks"]
+        need(isinstance(checks, list) and len(checks) == 2 and all(isinstance(check, dict) for check in checks)
+             and {check.get("width") for check in checks} == {1440, 390}, "missing desktop/phone checks: " + page)
+        parts = entry.get("content_occupancy", {}).get("parts", {})
+        need(parts and entry["content_occupancy"].get("policy") == "semantic-content-rects-v1"
+             and all(re.search(r'-(h|v)\d*\.png$', part) for part in parts), "missing source content measurements")
+        raw_checks = []
+        for check in checks:
+            keys(check, check_fields)
+            width = check["width"]
+            need(type(width) is int and check["height"] == 1000 and check["route"] == dom["url"], "wrong viewport or route")
+            need(all(type(check[key]) is int and check[key] >= 0 for key in
+                 ("images", "active_parts", "hotspots", "live_slots", "screenshot_slots", "hit_checks", "scroll_width"))
+                 and check['hit_diagnostics'] == [] and check['geometry_diagnostics'] == [] and check['scroll_width'] <= width + 1,
+                 "missing or failed structural observations")
+            content = check["content_acceptance"]
+            keys(content, {"policy", "viewport", "screenshots", "live_slots", "screens", "issues", "status"})
+            need(content["policy"] == "visible-content-and-continuous-blank-v1"
+                 and content["viewport"] == {"width": width, "height": 1000}, "missing current content evidence")
+            for kind in ("screenshots", "live_slots"):
+                need(isinstance(content[kind], list) and all(isinstance(item, dict) and item.get("status") == "pass"
+                     and not item.get("issues") and isinstance(item.get("probes"), list)
+                     and all(isinstance(probe, dict) and not probe.get("blocker") for probe in item["probes"]) for item in content[kind]),
+                     "failed or missing " + kind + " evidence")
+                for item in content[kind]:
+                    optional = kind == 'live_slots' and item.get('kind') == 'optional_feedback' and item.get('semantic_status') in {
+                        'no_operation_feedback', 'shared_primary_grafana_failure'}
+                    rect = item.get('visible_rect')
+                    need(optional or isinstance(rect, dict) and all(type(rect.get(key)) in {int, float}
+                         and math.isfinite(rect[key]) and rect[key] > 0 for key in ('width', 'height')) and item['probes'],
+                         'missing actual visible screenshot/live probes')
+                    if kind == 'screenshots':
+                        size = item.get('natural_size')
+                        need(isinstance(size, list) and len(size) == 2 and all(type(value) is int and value > 0 for value in size),
+                             'missing actual screenshot dimensions')
+            need(len(content['live_slots']) == check['live_slots'] and len(content['screenshots']) >= check['screenshot_slots'],
+                 "missing screenshot/live observation coverage")
+            screens = content["screens"]
+            orientation = "h" if width == 1440 else "v"
+            expected = {part for part in parts if re.search("-" + orientation + r"\d*\.png$", part)}
+            need(isinstance(screens, list) and expected and len(screens) == len(expected)
+                 and all(isinstance(screen, dict) for screen in screens)
+                 and {screen.get("part") for screen in screens} == expected and check["active_parts"] == len(expected),
+                 "missing source part coverage: " + page)
+            blank = []
+            for screen in screens:
+                part = screen["part"]
+                need(screen.get("issues") == [] and type(screen.get("content_blocks")) is int and screen["content_blocks"] > 0
+                     and screen.get("threshold_fraction") == .15 and type(screen.get("definite_fail")) is bool,
+                     "missing or failed content measurement: " + part)
+                binding = screen.get("source_binding")
+                need(isinstance(binding, dict) and set(binding) == binding_fields
+                     and binding == {key: parts[part].get(key) for key in binding_fields}
+                     and binding["policy"] == "semantic-content-rects-v1" and isinstance(binding["method"], str) and binding["method"]
+                     and all(re.fullmatch(r"[0-9a-f]{64}", str(binding[key])) for key in binding_fields - {"policy", "method"}),
+                     "wrong or incomplete measured source: " + part)
+                rectangle = screen.get("largest_empty_rectangle", {})
+                fraction = rectangle.get("viewport_fraction")
+                need(type(fraction) in {int, float} and math.isfinite(fraction) and fraction >= 0
+                     and screen["definite_fail"] == (fraction > .15), "missing or inconsistent blank observation")
+                if screen["definite_fail"]:
+                    bounds = rectangle.get('bounds')
+                    area = rectangle.get('area_px2')
+                    need(isinstance(bounds, dict) and set(bounds) == {'left', 'top', 'width', 'height'}
+                         and all(type(value) in {int, float} and math.isfinite(value) for value in bounds.values())
+                         and bounds['width'] > 0 and bounds['height'] > 0 and type(area) in {int, float} and math.isfinite(area)
+                         and math.isclose(area, bounds['width'] * bounds['height'], rel_tol=1e-8, abs_tol=1e-5)
+                         and math.isclose(fraction, area / (width * check['height']), rel_tol=1e-8, abs_tol=1e-8),
+                         'missing or inconsistent accepted rectangle dimensions')
+                    blank.append(part + BLANK_ISSUE)
+            expected_status = "fail" if blank else "pass"
+            need(content["issues"] == blank and content["status"] == expected_status
+                 and check["issues"] == blank and check["status"] == expected_status,
+                 "non-layout issue or inconsistent raw status: " + page)
+            if blank:
+                actual.append({"page": page, "url": dom["url"], "width": width, "issues": blank})
+            raw_checks.append({key: check[key] for key in ("width", "status", "issues")})
+        expected_status = "fail" if any(check["status"] == "fail" for check in checks) else "pass"
+        need(dom["status"] == expected_status, "page failed outside the accepted layout checks: " + page)
+        effects_evidence(entry, dom, entry.get("geometry_sha256"))
+        files = dict(plan.get("files", {}))
+        for obj in plan.get("oss_objects", {}).values():
+            files[urlsplit(obj["url"]).path.lstrip("/")] = {key: obj[key] for key in ("sha256", "bytes")}
+        if qa_plan_path:
+            source_video, split_video = source_entry.get('video_expected'), entry.get('video_expected')
+            need(source_video is None and split_video is None or isinstance(source_video, dict) and isinstance(split_video, dict)
+                 and {key: value for key, value in source_video.items() if key not in {'src', 'mask'}} ==
+                     {key: value for key, value in split_video.items() if key not in {'src', 'mask'}}, 'split plan changed original video evidence')
+            for item in dom.get('video_checks', {}).get('files', []):
+                field = 'src' if item.get('kind') == 'video' else 'mask'
+                need(isinstance(split_video, dict) and item.get('url') == split_video.get(field)
+                     and split_video[field] in plan.get('oss_objects', {}), 'wrong OSS video URL')
+        video_evidence(entry, dom, files)
+        raw_pages[page] = {"status": dom["status"], "checks": raw_checks,
+                           "effects_status": dom["effects"]["status"], "video_status": dom["video_checks"]["status"]}
+    need(summary["passed"] == sum(page["status"] == "pass" for page in raw_pages.values())
+         and summary["failed"] == sum(page["status"] == "fail" for page in raw_pages.values()), "raw summary differs from pages")
+    issue_rows(actual)
+    sort_rows = lambda rows: sorted(rows, key=lambda row: (row["page"], row["width"]))
+    need(sort_rows(record["accepted_issues"]) == sort_rows(actual), "accepted findings differ from the actual raw layout failures")
+    need(acceptance == exact_json(path) and record['verification_sha256'] == digest(verification_path)
+         and acceptance['source_build_report_sha256'] == digest(build_path)
+         and (not qa_plan_path or record['qa_plan_sha256'] == digest(qa_plan_path)), "evidence changed during checking")
+    return {"path": str(Path(path).resolve()), "sha256": digest(path), "domain": domain,
+            "instruction": instruction, "release_id": plan["release_id"], "verification_path": str(Path(verification_path).resolve()),
+            "verification_sha256": digest(verification_path), "raw_status": "fail" if summary['failed'] else "pass", "raw_summary": summary,
+            "raw_pages": raw_pages, "accepted_issues": actual}
+
+
 def prepare(args):
     checked_inputs={}
     release = args.release.resolve()
@@ -623,6 +825,20 @@ def prepare(args):
         block("publication_instruction", "Instruction pages must exactly equal this publication batch")
     result.update(batch="partial" if args.pages else "full", expected_pages=expected, selected_pages=selected,
                   deferred_pages=sorted(set(expected) - set(selected)), expected_page_count=EXPECTED_PAGE_COUNT)
+    result['raw_dom_verification'] = {'summary': verification.get('summary'),
+                                      'verification_sha256': result['verification_sha256']}
+    accepted_layout = None
+    if getattr(args, 'layout_acceptance', None):
+        try:
+            accepted_layout = layout_acceptance(args.layout_acceptance, build, args.build_report,
+                                                verification, args.verification, selected)
+            for path, expected_hash in ((args.layout_acceptance, accepted_layout['sha256']),
+                                       (accepted_layout['instruction']['path'], accepted_layout['instruction']['sha256']),
+                                       (args.verification, accepted_layout['verification_sha256']), (args.build_report, build_hash)):
+                bound_file(path, {'sha256': expected_hash, 'bytes': Path(path).stat().st_size}, checked_inputs)
+            result['layout_acceptance'] = accepted_layout
+        except (ValueError, KeyError, OSError, TypeError) as error:
+            block('layout_acceptance', error)
     if args.rebuilt_report:
         rebuilt = read(args.rebuilt_report)
         if rebuilt.get("schema") != "wly.typeset-build.v1":
@@ -711,13 +927,17 @@ def prepare(args):
             except (ValueError, KeyError, OSError, TypeError) as error:
                 block("quality", error, page)
             dom = verification.get("pages", {}).get(page, {})
-            if dom.get("status") != "pass" or dom.get("url") != url:
+            result['pages'][page]['raw_dom_verification'] = {'status': dom.get('status'),
+                'checks': [{key: check.get(key) for key in ('width', 'status', 'issues')} for check in dom.get('checks', [])]}
+            if (dom.get("status") != "pass" and not accepted_layout) or dom.get("url") != url:
                 raise ValueError("DOM verification failed, missing, or targets another URL")
             checks = dom.get("checks", [])
             if not isinstance(checks, list) or len(checks) != 2 or {check.get("width") for check in checks} != {1440, 390}:
                 raise ValueError("DOM evidence must cover both 1440 and 390 pixels")
-            if any(check.get("issues") != [] or check.get("status") != "pass" for check in checks):
+            if not accepted_layout and any(check.get("issues") != [] or check.get("status") != "pass" for check in checks):
                 raise ValueError("DOM checks contain unresolved issues")
+            if accepted_layout:
+                result['pages'][page]['accepted_layout_issues'] = [row for row in accepted_layout['accepted_issues'] if row['page'] == page]
             for kind, validator in (("effects_program", lambda: effects_evidence(entry, dom, geometry_hash)),
                                     ("video_program", lambda: video_evidence(entry, dom, manifest["files"]))):
                 try:
@@ -730,6 +950,8 @@ def prepare(args):
                 "verification_sha256": result["verification_sha256"], "directive_sha256": result["directive_sha256"],
                 "geometry_sha256": geometry_hash,
                 "candidate_html_sha256": entry["html_sha256"]}
+            if accepted_layout:
+                result['pages'][page]['evidence']['layout_acceptance_sha256'] = accepted_layout['sha256']
         except (ValueError, KeyError, OSError, TypeError) as error:
             block("page_evidence", error, page)
         if len(result["blockers"]) == start:
@@ -874,6 +1096,16 @@ def stage_check(args):
         raise ValueError('Staging requires the completed pre-replacement evidence check')
     if prepared['build_report_sha256']!=digest(args.build_report) or prepared['release_id']!=manifest['release_id'] or manifest['files']!=build['files']:
         raise ValueError('Staged artifact differs from the checked rebuild')
+    accepted_layout = prepared.get('layout_acceptance')
+    acceptance_path = getattr(args, 'layout_acceptance', None)
+    if bool(accepted_layout) != bool(acceptance_path):
+        raise ValueError('Staging must explicitly supply the same layout acceptance as the ready receipt')
+    if acceptance_path:
+        verification_path = Path(accepted_layout['verification_path'])
+        current = layout_acceptance(acceptance_path, build, args.build_report, read(verification_path),
+                                    verification_path, prepared['selected_pages'])
+        if current != accepted_layout:
+            raise ValueError('Staged layout acceptance differs from the checked receipt')
     reviewed=hybrid.verify_release(Path(build['output_root']).resolve())
     for field in ('baseline_files','release_overlay','routes','rejected_pages','temporary_href_mappings'):
         if manifest.get(field)!=reviewed.get(field): raise ValueError('Staged manifest changed '+field)
@@ -884,6 +1116,9 @@ def stage_check(args):
             'checked_at_beijing':now(),'preparation_sha256':digest(args.preparation),
             'build_report_sha256':digest(args.build_report),'manifest_sha256':digest(args.release/hybrid.MANIFEST),
             'files':len(manifest['files']),'producer_inputs_checked_before_replacement':True}
+    if accepted_layout:
+        result['layout_acceptance_sha256'] = accepted_layout['sha256']
+        result['raw_dom_status'] = accepted_layout['raw_status']
     write(args.output,result)
     return result
 
@@ -949,6 +1184,7 @@ def main(argv=None):
     for name in ("typeset-root", "inventory", "geometry", "baseline", "baseline-manifest", "release", "build-report", "verification", "output"):
         gate.add_argument("--" + name, type=Path, required=True)
     gate.add_argument("--directive", type=Path, help="Actual Claude publication instruction; omission produces a local publication_instruction blocker")
+    gate.add_argument('--layout-acceptance', type=Path, help='Exact 03:01 deferred layout findings bound to this generation and unchanged raw QA; never publication authority')
     gate.add_argument("--rebuilt-report", type=Path, help="Bind a publish-time rebuild's inputs and program contract to the reviewed report")
     gate.add_argument('--runtime-verification',type=Path,help='Actual artifact rotation checks for the preserved pages whose app references change')
     gate.add_argument('--reading-plan',type=Path,help='Exact URL plan checked by runtime verification')
@@ -970,6 +1206,7 @@ def main(argv=None):
     for name in ('release','build-report','preparation','output','expected-manifest'):
         stage.add_argument('--'+name,type=Path,required=True)
     stage.add_argument('--rollback-ref',required=True)
+    stage.add_argument('--layout-acceptance', type=Path)
     args = parser.parse_args(argv)
     if args.command == "wrap-baseline":
         manifest = hybrid.assemble(args.baseline, args.baseline, args.output, read(args.baseline_manifest), {})

@@ -12,6 +12,8 @@ from urllib.parse import unquote,urljoin,urlsplit,urlunsplit
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location('typeset_oss_release',HERE/'prepare-oss-release.py')
 oss=importlib.util.module_from_spec(spec);spec.loader.exec_module(oss)
+spec=importlib.util.spec_from_file_location('typeset_source_gate',HERE/'prepare-typeset-release.py')
+source_gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(source_gate)
 
 def require(condition,message):
     if not condition:raise ValueError(message)
@@ -96,7 +98,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
             cold_timings.append({key:row[key] for key in ('route','phone','round','seconds','completion_seconds','elapsed_seconds','under_two_seconds')})
     return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin,'checked_at_beijing':report.get('checked_at_beijing'),'verified_at_beijing':report.get('verified_at_beijing'),'raw_failed_requests':raw_failed_requests,'raw_failed_requests_sha256':hashlib.sha256(json.dumps(raw_failed_requests,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf8')).hexdigest(),'canceled_consumers':canceled_consumers}
 
-def bounded_acceptance(manifest,manifest_sha256,instruction,sources):
+def bounded_acceptance(manifest,manifest_sha256,instruction,sources,layout_acceptance=None,build_report=None,qa_plan=None):
     instruction=instruction.resolve();text=instruction.read_text('utf8')
     require(EXTENDED_INSTRUCTION in text and '2e、2f 和以后各版' in text and '最多重试一次' in text,'Bounded acceptance lacks the actual 14:52 extension')
     require(set(sources)=={'cold','network','reading'},'Bounded acceptance requires all three actual reports')
@@ -106,18 +108,29 @@ def bounded_acceptance(manifest,manifest_sha256,instruction,sources):
         retained[role]={'path':str(path),'sha256':oss.digest(path),'release_id':report.get('release_id'),'manifest_sha256':report.get('manifest_sha256'),**bounded_report(report,manifest,manifest_sha256,role)}
     verification_path=Path(sources['network']).resolve().parent/'verification.json'
     verification=oss.read(verification_path)
-    require(verification.get('release_id')==manifest['release_id'] and verification.get('summary',{}).get('failed')==0 and verification.get('summary',{}).get('passed')==len(verification.get('pages',{})) and verification.get('pages'),'Bounded full QA source did not pass')
-    for page in verification['pages'].values():
-        require(page.get('status')=='pass' and len(page.get('checks',[]))==2 and {row.get('width') for row in page['checks']}=={1440,390} and all(row.get('status')=='pass' and row.get('issues')==[] for row in page['checks']),'Bounded full QA lacks its desktop/mobile capability')
-    return {'schema':BOUNDED_SCHEMA,'status':'pass','instruction_id':EXTENDED_INSTRUCTION,'instruction_file':str(instruction),'instruction_sha256':oss.digest(instruction),'release_id':manifest['release_id'],'manifest_sha256':manifest_sha256,'max_get_attempts_per_object_per_run':2,'native_uninterrupted_cold':False,'performance_status':'not_met','persistent_settings_changed':False,'new_body_gets_for_proof':0,'sources':retained,'verification':{'path':str(verification_path),'sha256':oss.digest(verification_path)}}
+    require(verification.get('release_id')==manifest['release_id'],'Bounded full QA generation differs')
+    accepted_layout=None
+    if layout_acceptance:
+        require(build_report and qa_plan,'Layout acceptance requires the same source report and split QA plan')
+        plan=oss.read(qa_plan)
+        require(plan.get('split_manifest_sha256')==manifest_sha256 and plan.get('files')==manifest['files'],'Layout QA plan differs from the bounded split')
+        accepted_layout=source_gate.layout_acceptance(layout_acceptance,oss.read(build_report),build_report,
+            verification,verification_path,list(plan['pages']),qa_plan)
+    else:
+        require(verification.get('summary',{}).get('failed')==0 and verification.get('summary',{}).get('passed')==len(verification.get('pages',{})) and verification.get('pages'),'Bounded full QA source did not pass')
+        for page in verification['pages'].values():
+            require(page.get('status')=='pass' and len(page.get('checks',[]))==2 and {row.get('width') for row in page['checks']}=={1440,390} and all(row.get('status')=='pass' and row.get('issues')==[] for row in page['checks']),'Bounded full QA lacks its desktop/mobile capability')
+    result={'schema':BOUNDED_SCHEMA,'status':'pass','instruction_id':EXTENDED_INSTRUCTION,'instruction_file':str(instruction),'instruction_sha256':oss.digest(instruction),'release_id':manifest['release_id'],'manifest_sha256':manifest_sha256,'max_get_attempts_per_object_per_run':2,'native_uninterrupted_cold':False,'performance_status':'not_met','persistent_settings_changed':False,'new_body_gets_for_proof':0,'sources':retained,'verification':{'path':str(verification_path),'sha256':oss.digest(verification_path)}}
+    if accepted_layout:result['layout_acceptance']=accepted_layout
+    return result
 
-def verify_bounded_acceptance(receipt,manifest,manifest_sha256,cold_path,reading_path,verification_path):
+def verify_bounded_acceptance(receipt,manifest,manifest_sha256,cold_path,reading_path,verification_path,layout_acceptance=None,build_report=None,qa_plan=None):
     sources=receipt.get('sources',{})
     require(set(sources)=={'cold','network','reading'},'Bounded proof source set differs')
     require(Path(sources['cold']['path']).resolve()==cold_path.resolve() and Path(sources['reading']['path']).resolve()==reading_path.resolve(),'Bounded proof is not the selected actual cold/reading reports')
     require(Path(receipt['verification']['path']).resolve()==verification_path.resolve() and oss.digest(verification_path)==receipt['verification']['sha256'],'Bounded proof is not the selected unchanged full QA verification')
     for role,source in sources.items():require(oss.digest(Path(source['path']))==source['sha256'],'Bounded '+role+' source SHA changed')
-    expected=bounded_acceptance(manifest,manifest_sha256,Path(receipt['instruction_file']),{role:source['path'] for role,source in sources.items()})
+    expected=bounded_acceptance(manifest,manifest_sha256,Path(receipt['instruction_file']),{role:source['path'] for role,source in sources.items()},layout_acceptance,build_report,qa_plan)
     require(receipt==expected,'Bounded proof instruction, observations or acceptance metadata changed')
 
 def verify(args):
@@ -142,13 +155,18 @@ def verify(args):
     require(qa_plan['files']==manifest['files'] and set(qa_plan['pages'])==set(build['pages']),'QA split file/page coverage differs')
     verification=oss.read(args.verification)
     require(verification['build_report_sha256']==oss.digest(args.qa_plan) and verification['release_id']==manifest['release_id'],'Browser verification belongs to another split plan')
-    require(verification['summary']['failed']==0 and verification['summary']['passed']==len(build['pages']),'Split DOM verification did not pass every page')
+    acceptance_path=getattr(args,'layout_acceptance',None)
+    accepted_layout=source_gate.layout_acceptance(acceptance_path,build,args.build_report,verification,args.verification,
+        list(build['pages']),args.qa_plan) if acceptance_path else None
+    if not accepted_layout:
+        require(verification['summary']['failed']==0 and verification['summary']['passed']==len(build['pages']),'Split DOM verification did not pass every page')
     require(set(verification['pages'])==set(build['pages']),'Split DOM verification omits pages')
     for page,entry in qa_plan['pages'].items():
         observed=verification['pages'][page]
-        require(observed['status']=='pass' and observed['url']==entry['url'],'Failed split page: '+page)
+        require((accepted_layout or observed['status']=='pass') and observed['url']==entry['url'],'Failed split page: '+page)
         require(len(observed['checks'])==2 and {check['width'] for check in observed['checks']}=={1440,390},'Missing desktop/mobile checks: '+page)
-        require(all(check['status']=='pass' and check['issues']==[] for check in observed['checks']),'Unresolved split DOM checks: '+page)
+        if not accepted_layout:
+            require(all(check['status']=='pass' and check['issues']==[] for check in observed['checks']),'Unresolved split DOM checks: '+page)
     reading=oss.read(args.reading)
     require(reading['status']=='pass' and reading['evidence_mode']=='artifact' and reading['artifact_unchanged'] is True,'Reading check is not the actual unchanged split artifact')
     require(reading['release_id']==manifest['release_id'] and reading['manifest_sha256']==oss.digest(preparation/'github/release-manifest.json'),'Reading check release differs')
@@ -184,7 +202,8 @@ def verify(args):
     retry_receipt=None
     if args.retry_proof and oss.read(args.retry_proof).get('schema')==BOUNDED_SCHEMA:
         retry_receipt=oss.read(args.retry_proof)
-        verify_bounded_acceptance(retry_receipt,manifest,oss.digest(preparation/'github/release-manifest.json'),args.cold,args.reading,args.verification)
+        verify_bounded_acceptance(retry_receipt,manifest,oss.digest(preparation/'github/release-manifest.json'),args.cold,args.reading,args.verification,
+            acceptance_path,args.build_report,args.qa_plan)
     elif args.retry_proof:
         retry_receipt=oss.read(args.retry_proof)
         extended=retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292'
@@ -243,17 +262,29 @@ def verify(args):
         oss.verify_manifest(staged)
         receipt=oss.read(args.preparation_receipt)
         require(receipt['status']=='ready' and receipt['release_id']==build['release_id'],'Staged publication lacks the source publication gate')
+        source_layout=receipt.get('layout_acceptance')
+        require(bool(source_layout)==bool(accepted_layout),'Staged OSS requires the same explicit layout acceptance as the source receipt')
+        if accepted_layout:
+            require(source_layout.get('domain')=='source' and source_layout.get('path')==accepted_layout['path']
+                and source_layout.get('sha256')==accepted_layout['sha256'] and not receipt.get('blockers')
+                and receipt.get('build_report_sha256')==oss.digest(args.build_report),'Source and OSS layout evidence differ')
         accepted={proof['url']:proof['evidence'] for proof in receipt['pages'].values()}
         expected={**manifest,'rollback_ref':args.rollback_ref,'accepted_pages':accepted}
         require(staged==expected,'Staged OSS manifest changed beyond exact rollback/publication evidence')
         require({key:value for key,value in oss.inventory(args.staged).items() if key!='release-manifest.json'}==manifest['files'],'Staged Git files differ from tested OSS HTML')
-    return {'schema':'wly.typeset-oss-publication-check.v1','status':'pass','release_id':manifest['release_id'],
+    result={'schema':'wly.typeset-oss-publication-check.v1','status':'pass','release_id':manifest['release_id'],
             'source_release_id':build['release_id'],'pages':len(build['pages']),
             'plan_sha256':oss.digest(preparation/'oss-plan.json'),'qa_plan_sha256':oss.digest(args.qa_plan),
             'verification_sha256':oss.digest(args.verification),'reading_sha256':oss.digest(args.reading),
             'cold_sha256':oss.digest(args.cold),'retry_proof_sha256':oss.digest(args.retry_proof) if args.retry_proof else None,
             'cold_acceptance':('Actual controlled HTTPS bodies with at most one retry per object per run under the 14:52 extension; first failures and elapsed times retained; native cold/two-second performance not claimed' if retry_receipt.get('schema')==BOUNDED_SCHEMA else ('Actual single post-failure body retry under the 14:52 extension to 2e/2f/future versions; first native failures and timing retained' if retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292' else 'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained')) if retry_receipt else 'All native cold cases pass under two seconds',
             'staged':bool(args.staged),'verified_at_beijing':oss.stamp()}
+    result['raw_dom_verification']={'summary':verification.get('summary'),'verification_sha256':oss.digest(args.verification)}
+    if accepted_layout:
+        require(accepted_layout['sha256']==oss.digest(acceptance_path) and accepted_layout['verification_sha256']==oss.digest(args.verification)
+            and qa_plan['source_build_report_sha256']==oss.digest(args.build_report),'Layout evidence changed during OSS checking')
+        result['layout_acceptance']=accepted_layout
+    return result
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -264,6 +295,7 @@ def main():
     parser.add_argument('--preparation-receipt',type=Path)
     parser.add_argument('--rollback-ref')
     parser.add_argument('--retry-proof',type=Path,help='Actual native bounded retry or controlled 14:52 transfer acceptance; retains source failures and timings')
+    parser.add_argument('--layout-acceptance',type=Path,help='Same precise source/OSS layout acceptance supplied to the source publication gate')
     args=parser.parse_args()
     if args.staged and (not args.preparation_receipt or not args.rollback_ref):parser.error('Staging needs the real source gate receipt and rollback commit')
     result=verify(args);oss.write(args.output,result)

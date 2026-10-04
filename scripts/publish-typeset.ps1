@@ -8,6 +8,7 @@ param(
     [Parameter(Mandatory)][string]$BuildReport,
     [Parameter(Mandatory)][string]$Verification,
     [string]$Directive,
+    [string]$LayoutAcceptance,
     [string]$LegacySite,
     [string]$AssetCache,
     [switch]$ReuseAssetCache,
@@ -49,6 +50,7 @@ else {
     if ($reviewedBuild.asset_cache) { $AssetCache = Absolute $reviewedBuild.asset_cache }
 }
 if ($Directive) { $Directive = Absolute $Directive }
+if ($LayoutAcceptance) { $LayoutAcceptance = Absolute $LayoutAcceptance }
 if ($ReleaseOverlay) { $ReleaseOverlay = Absolute $ReleaseOverlay }
 if ($CreativePreparation) { $CreativePreparation = Absolute $CreativePreparation }
 if ($LiveUiPreparation) { $LiveUiPreparation = Absolute $LiveUiPreparation }
@@ -84,6 +86,7 @@ function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
         '--baseline',$Baseline,'--baseline-manifest',$BaselineManifest,'--release',$Candidate,
         '--build-report',$BuildReport,'--verification',$Verification,'--output',$Receipt)
     if ($Directive) { $arguments += @('--directive',$Directive) }
+    if ($LayoutAcceptance) { $arguments += @('--layout-acceptance',$LayoutAcceptance) }
     if ($RebuildReport) { $arguments += @('--rebuilt-report',$RebuildReport) }
     if ($RuntimeVerification) { $arguments += @('--runtime-verification',$RuntimeVerification) }
     if ($ReadingPlan) { $arguments += @('--reading-plan',$ReadingPlan) }
@@ -96,6 +99,7 @@ function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
     if ($RebuiltSource) { $arguments+=@('--rebuilt-source',$RebuiltSource) }
     if ($Staged) { $arguments+=@('--staged',$Staged,'--preparation-receipt',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$state.rollback_ref) }
     if ($OssRetryProof) { $arguments+=@('--retry-proof',$OssRetryProof) }
+    if ($LayoutAcceptance) { $arguments+=@('--layout-acceptance',$LayoutAcceptance) }
     Checked 'python' $arguments
 }
 $prepared = Join-Path $RunRoot 'preparation.json'
@@ -435,11 +439,13 @@ try {
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'staged-preparation.json') '' (Join-Path $repoRoot 'site-release')
     } else {
-        Checked 'python' @('scripts/prepare-typeset-release.py','stage-check',
+        $stageArguments = @('scripts/prepare-typeset-release.py','stage-check',
             '--release',(Join-Path $repoRoot 'site-release'),'--build-report',$BuildReport,
             '--preparation',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$rollbackRef,
             '--expected-manifest',(Join-Path $rebuilt 'release-manifest.json'),
             '--output',(Join-Path $RunRoot 'staged-preparation.json'))
+        if ($LayoutAcceptance) { $stageArguments += @('--layout-acceptance',$LayoutAcceptance) }
+        Checked 'python' $stageArguments
     }
     CommitRelease 'Publish Claude-reviewed typeset static release'
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
