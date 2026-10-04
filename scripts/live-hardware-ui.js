@@ -57,7 +57,7 @@
     const old = !!at && (at > now + 60 || now - at > maxAge);
     const hardware = status?.hardware || {};
     const collectionState = hardware.collection_state || status?.display_cache?.collectors?.hardware?.state;
-    const context = { now, at, maxAge, cached: !!options.cached || collectionState === 'error', old, collectionState, unavailable: unavailable.has(hardware.state) };
+    const context = { now, at, maxAge, cached: !!options.cached || !!options.hardwareCached || collectionState === 'error', old, collectionState, unavailable: unavailable.has(hardware.state) };
     const get = (row, field) => metric(row, field, context);
     const cpu = hardware.cpu || {}, memory = hardware.memory || {}, network = hardware.network || {}, display = hardware.display || {};
     const cpuUsage = get(cpu, 'usage_percent');
@@ -228,7 +228,13 @@
     screen.append(reading('p', 'live-hardware-model', get(m.display, 'model'), label(get(m.display, 'model')), 'display-model'), reading('strong', 'live-hardware-resolution num', width, resolution, 'display-resolution'));
     const screenMetrics = el('dl', 'live-hardware-metrics', null, 'display-metrics'); screenMetrics.append(pair('刷新率', refresh, label(refresh, ' Hz'), 'display-refresh')); screen.append(screenMetrics);
     cardTime(screen, m.display, 'display');
-    secondary.append(network, screen); root.append(secondary); return root;
+    secondary.append(network, screen); root.append(secondary);
+    if(status?.host){
+      const system=el('details','live-hardware-details',null,'system-info');system.append(el('summary','','系统信息','system-info-title'));
+      const host=status.host,items=[host.windows_version||'Windows版本读不到',Number.isFinite(host.boot_time_unix)?'本次开机：'+beijing(host.boot_time_unix):'开机时间读不到',Number.isFinite(host.uptime_seconds)?'已开机 '+format(host.uptime_seconds/3600,1)+' 小时':'开机时长读不到'];
+      for(let i=0;i<items.length;i++)system.append(el('p','live-hardware-source-note',items[i],'system-info-'+i));root.append(system);
+    }
+    return root;
   }
   scope.LiveHardwareUI = Object.freeze({ render, observedAt });
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -14,7 +14,7 @@
     warn: ['warn', '需要留意'], overdue: ['warn', '需要留意'],
     waiting: ['waiting', '待验收'], pending: ['waiting', '待处理'],
     running: ['running', '正在运行'], loading: ['loading', '读取中'],
-    disabled: ['neutral', '已停用'], paused: ['neutral', '已暂停'],
+    disabled: ['neutral', '已停用'], paused: ['neutral', '已暂停'], closed: ['neutral', '已关闭'],
     expired: ['neutral', '已到期'], none: ['neutral', '尚未开始'],
     not_applicable: ['neutral', '暂无任务'], learning: ['running', '学习中'],
     offline: ['unknown', '读不到电脑'], unknown: ['unknown', '读不到']

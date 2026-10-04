@@ -1,4 +1,4 @@
-import {HOST_ORIGIN,apiRequest,createStatusReader,createGrantAttempt,durationMinutes,minutesLabel,remainingMinutes,grantLabel,canEndGrant,isAccessOrigin,markGrantVerificationSubmitted,readGrantStage,grantResultNeedsQuery,canRestartUnsubmittedGrant,queryResultUpdate,reductionFailureResult,successfulGrantSnapshot,successfulReductionSnapshot,unresolvedAction,errorMessages,capacity,adaptStatus,reading,numeric,rate,networkConnection,beijingTime} from './b2-access-model.js';
+import {HOST_ORIGIN,apiRequest,createStatusReader,createGrantAttempt,durationMinutes,minutesLabel,remainingMinutes,grantLabel,canEndGrant,isAccessOrigin,markGrantVerificationSubmitted,readGrantStage,grantResultNeedsQuery,canRestartUnsubmittedGrant,queryResultUpdate,reductionFailureResult,successfulGrantSnapshot,successfulReductionSnapshot,unresolvedAction,errorMessages,capacity,adaptStatus,reading,numeric,rate,networkConnection,beijingTime,freshStatus,hardwareSnapshot} from './b2-access-model.js';
 
 // The owner's cockpit lamp policy; partial reads keep their own unknown state.
 const lampPolicy={computerMaxAge:120,unreadableGrace:600,taskWarnFailures:2,taskErrorFailures:4,backupWarnAge:{daily:36*3600,weekly:9*86400},backupErrorAge:{daily:48*3600,weekly:14*86400},diskWarnFraction:.1,diskErrorFraction:.05,systemDiskMinBytes:15*1024**3};
@@ -27,9 +27,10 @@ const known=v=>v===null||v===undefined?'读不到':String(v);
 
 const validRequest=id=>/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id||'');
 
-const grantState=g=>!online()?'unknown':remainingMinutes(g,clock())===0?'warn':['unlocked','active'].includes(g?.state)?'ok':['locked','inactive','revoked','expired'].includes(g?.state)?'closed':['opening','closing'].includes(g?.state)?'warn':['error','failed'].includes(g?.state)?'error':'unknown';
+const grantState=g=>!authorizationFresh()?'unknown':remainingMinutes(g,clock())===0?'warn':['unlocked','active'].includes(g?.state)?'ok':['locked','inactive','revoked','expired'].includes(g?.state)?'closed':['opening','closing'].includes(g?.state)?'warn':['error','failed'].includes(g?.state)?'error':'unknown';
 
 const blockTime=b=>Number.isFinite(b?.observed_at_unix)?b.observed_at_unix:Date.parse(b?.observed_at||b?.checked_at)/1000;
+const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
 let historical=false;
@@ -46,20 +47,25 @@ function hardwareHealth(){
  for(const {row,fields} of groups){
   if(!row||['unknown','unavailable','error','failed'].includes(row.state)){unknown=true;continue;}
   if(row.state==='stale')stale=true;
-  for(const field of fields){const metric=row[field],source=row.sources?.[field],actual=unwrapped(metric);if(actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||['unknown','unavailable','error','failed'].includes(metric?.state)||['unknown','unavailable','error','failed'].includes(source?.status))unknown=true;if(metric?.state==='stale'||source?.status==='stale')stale=true;}
+  for(const field of fields){const metric=row[field],source=row.sources?.[field],actual=unwrapped(metric);if(actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||['unknown','unavailable','error','failed'].includes(metric?.state)||['unknown','unavailable','error','failed'].includes(source?.status))unknown=true;if(metric?.state==='stale'||source?.status==='stale')stale=true;const sampled=metric?.observed_at_unix??source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sampled)&&(sampled>clock()+60||clock()-sampled>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;}
   const at=blockTime(row);if(Number.isFinite(at)&&(at>clock()+60||clock()-at>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;
  }
  return stale?'stale':unknown?'unknown':'ok';
 }
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
 
-const online=()=>phase==='ready'&&Number.isFinite(status?.observed_at_unix)&&status.observed_at_unix<=clock()+60&&clock()-status.observed_at_unix<=(Number(status.max_age_seconds)||lampPolicy.computerMaxAge);
+const online=()=>phase==='ready'&&freshStatus(status,clock());
+const authorizationTime=()=>status?.display_cache?.collectors?.authorization?.observed_at_unix??status?.observed_at_unix;
+const authorizationFresh=()=>online()&&Number.isFinite(authorizationTime())&&clock()-authorizationTime()<=120&&authorizationTime()<=clock()+60&&status?.display_cache?.collectors?.authorization?.state!=='error';
+const windowsTime=()=>status?.host?.sources?.screen_state?.observed_at_unix??status?.host?.screen_state?.observed_at_unix??status?.host?.observed_at_unix??(status?.display_cache?null:status?.observed_at_unix);
+const windowsFresh=()=>online()&&Number.isFinite(windowsTime())&&clock()-windowsTime()<=120&&windowsTime()<=clock()+60&&!['unknown','unavailable','error','failed','stale'].includes(status?.host?.sources?.screen_state?.status);
 
 const offline=(at=lastRead)=>window.SiteLiveRuntime?.connectionText?.(at,phase==='loading')||((phase==='loading'?'正在连接电脑。':'读不到电脑：可能电脑不在线，也可能是你这边的网络连不上它。')+(at?'最后读到是 '+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(at*1000))+'（北京时间）。':'还没读到过。'));
+const lastContact=()=>{try{return lastRead||Number(localStorage.getItem('computer-last-read-v1'))||0;}catch{return lastRead;}};
 
 const stateLabel=(grant,key)=>{
 
- if(!online())return '当前状态未知';
+ if(!authorizationFresh())return status?.display_cache?.collectors?.authorization?.state==='reading'?'正在读取授权状态':'当前状态读不到';
 
  const mins=remainingMinutes(grant,clock());
 
@@ -126,11 +132,19 @@ function readGaps(){
  }
  if(hardwareHealth()!=='ok'){
   const hw=status?.hardware,rows=[hw?.cpu,hw?.memory,hw?.network,hw?.display,...(hw?.gpus||[]),...(hw?.volumes||[])];
-  const expired=rows.filter(row=>row?.state==='stale').map(row=>blockTime(row)+(Number(row.max_age_seconds||hw?.max_age_seconds)||120)).filter(Number.isFinite);
-  add('hardware','硬件状态',hw,expired.length?Math.min(...expired):undefined);
+  const expired=[];
+  for(const row of rows.filter(Boolean)){
+   const maxAge=Number(row.max_age_seconds||hw?.max_age_seconds)||120,at=blockTime(row);
+   if(Number.isFinite(at)&&clock()-at>maxAge)expired.push(at+maxAge);
+   for(const [field,source]of Object.entries(row.sources||{})){const sample=source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sample)&&clock()-sample>maxAge)expired.push(sample+maxAge);}
+  }
+  const collector=status?.display_cache?.collectors?.hardware,hardwareAt=status?.hardware_observed_at_unix??collector?.observed_at_unix;
+  if(Number.isFinite(hardwareAt)&&clock()-hardwareAt>(Number(hw?.max_age_seconds)||120))expired.push(hardwareAt+(Number(hw?.max_age_seconds)||120));
+  add('hardware','硬件状态',collector||hw,expired.length?Math.min(...expired):undefined);
  }
- for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']])if(!status?.[key]?.state||['unknown','unavailable'].includes(status[key].state))add(key,label,status?.[key]);
- if(!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host);
+ const authoritySource=status?.display_cache?.collectors?.authorization,authorityAt=authorizationTime(),authorityExpired=Number.isFinite(authorityAt)&&clock()-authorityAt>120?authorityAt+120:undefined;
+ for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']])if(!authorizationFresh()||!status?.[key]?.state||['unknown','unavailable'].includes(status[key].state))add(key,label,authoritySource||status?.[key],authorityExpired);
+ const screenAt=windowsTime();if(!windowsFresh()||!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host?.sources?.screen_state||status?.host,Number.isFinite(screenAt)&&clock()-screenAt>120?screenAt+120:undefined);
  for(const key of lampReads.keys())if(!active.has(key))lampReads.delete(key);
  saveLampReads();return gaps;
 }
@@ -149,8 +163,6 @@ function diskLamp(x){
 }
 function summary(){
  if(!online())return {text:offline(status?.observed_at_unix||lastRead),state:'unknown'};
- const at=timestamp(status?.observed_at_unix),maxAge=Number(status?.max_age_seconds)||lampPolicy.computerMaxAge;
- if(!Number.isFinite(at)||at>clock()+60||clock()-at>maxAge)return {text:'电脑状态已停止更新 · 上次更新 '+time(at),state:'unknown'};
  const gaps=readGaps(),tasks=(list('automation')||[]).filter(taskInLamp),backups=(list('backups')||[]).filter(taskInLamp),disks=(status?.hardware?.volumes||[]).map(diskLamp);
  const errors=[],warnings=[];
  for(const x of tasks)if(['failed','error'].includes(x.state)){const count=failureCount(x);if(count>=lampPolicy.taskErrorFailures)errors.push(name(x)+'连续失败 '+count+' 次');else if(count>=lampPolicy.taskWarnFailures)warnings.push(name(x)+'连续失败 '+count+' 次');}
@@ -166,6 +178,32 @@ function summary(){
 
 function rowText(rows,empty){return rows.length?rows: [{text:empty}];}
 
+/* Today river cockpit count/group fix. */
+function ranToday(x){
+ const at=Date.parse(x.last_run_at),observed=blockTime(status?.automation)*1000;
+ const captured=Number.isFinite(observed)?observed:Number(status?.observed_at_unix)*1000;
+ const day=ms=>Math.floor((ms+28800000)/86400000);
+ return x.enabled===true&&x.state!=='disabled'&&Number.isFinite(at)&&Number.isFinite(captured)&&at<=captured&&day(at)===day(captured);
+}
+function taskGroupName(id){
+ const supplied=status?.automation?.groups?.find(g=>g.id===id)?.name;
+ if(typeof supplied==='string'&&supplied.trim())return supplied;
+ return ({backup:'备份',upkeep:'日常维护',remote:'远程和网络',ai:'AI 自动任务',daily:'日常任务',system:'系统任务',cloud:'云端任务',external:'其他软件的任务'})[id]||(/[\u3400-\u9fff]/.test(id||'')?id:'尚未提供中文组名');
+}
+/* End today river cockpit count/group fix. */
+
+function inventoryRows(){
+ const groups=list('backup_inventory');if(!groups)return [{text:'备份副本证据读不到'}];
+ const protection={verified_copy:'副本已核实',unverified_copy:'副本还未核实',no_copy:'没有副本',unknown:'副本证据读不到',unavailable:'副本证据读不到',original:'原件'};
+ const freshness={within_policy:'在登记期限内',overdue:'已超期',stale:'记录已过期',unknown:'新旧读不到',unavailable:'新旧读不到'};
+ return groups.map(group=>({key:'inventory:'+group.id,text:group.name||'备份位置',children:(group.items||[]).map(x=>({key:x.id||name(x),text:name(x)+' · '+(x.role==='original'?'原件':protection[x.protection]||'副本状态读不到'),detail:[x.role==='original'?'此项是原件登记':freshness[x.freshness]||'新旧读不到',Number.isInteger(x.count)?x.count+' 项':'数量读不到',capacity(x.bytes),x.last_success_at?'最近成功 '+time(timestamp(x.last_success_at)):'最近成功时间读不到',x.next_run_at?'下次 '+time(timestamp(x.next_run_at)):''].filter(Boolean).join('；')}))}));
+}
+function cloudRows(){
+ const rows=list('cloud');if(!rows)return [{text:'云端维护记录读不到'}];
+ const labels={completed:'最近一次已完成',running:'正在处理',idle:'空闲',paused:'已暂停',failed:'出错',error:'出错',unknown:'读不到',unavailable:'读不到'};
+ return rows.map(x=>({key:'cloud:'+x.id,text:name(x)+' · '+(labels[x.state]||'状态读不到'),detail:[x.provider==='google_drive'?'Google云盘':x.provider==='r2'?'云端存储':'云端',x.observed_at?'上次记录 '+time(timestamp(x.observed_at)):'记录时间读不到',x.inventory&&Number.isInteger(x.inventory.uploaded)&&Number.isInteger(x.inventory.total)?'登记库存累计 '+x.inventory.uploaded+'/'+x.inventory.total+' 项（不是本批进度）':'',x.plain?.stop,x.plain?.impact].filter(Boolean).join('；')}));
+}
+
 function taskRows(tasks,brief){
 
  const problematic=[],groups=new Map(),late=new Map();
@@ -176,7 +214,7 @@ function taskRows(tasks,brief){
 
  const lateGroup=x.enabled===false?'停用的任务':x.project==='电脑上别的软件'?'电脑上别的软件':null,key=lateGroup||x.group||'尚未分组',bucket=lateGroup?late:groups;if(!bucket.has(key))bucket.set(key,[]);bucket.get(key).push(row);}
 
- return [{text:brief},...problematic,...[...groups,...late].map(([name,children])=>({key:'group:'+name,text:name+'（'+children.length+'）',children,open:children.some(x=>x.highlight)}))];
+ return [{text:brief},...problematic,...[...groups,...late].map(([name,children])=>({key:'group:'+name,text:(late.has(name)?name:taskGroupName(name))+'（'+children.length+'）',children,open:children.some(x=>x.highlight)}))];
 
 }
 
@@ -216,11 +254,16 @@ function liveValue(slot){
 
  }
 
- if(slot==='ca-toast')return {text:toast||'',state:toast?toastState:'unknown'};
+ if(slot==='ca-toast')return {text:toast||'当前没有新的操作提示',state:toast?toastState:'closed'};
+
+ if(slot==='ca-results'){
+  const records=[grant,...actions].filter(Boolean),labels={succeeded:'已完成',failed:'未完成',pending:'等待处理',verifying:'正在验证',unknown:'结果尚未确认',partial:'部分完成',cancelled:'已取消',expired:'已到期'};
+  if(!records.length)return {text:'当前没有办理记录。办理后可点“查询结果”查看这次的结果。',state:'closed',operation:true};
+  const rows=records.map(item=>({key:item.request_id,text:(({'personal-data':'个人资料锁定',unrestricted:'结束无限制授权',windows:'Windows锁屏'})[item.action]||'本次授权')+' · '+(labels[item.state]||'结果尚未确认'),detail:item.error?(errorMessages[item.error]||'电脑未提供这次错误的说明'):item.state==='unknown'?'请查询这次结果，确认后再办理下一次。':undefined}));
+  return {rows,state:records.some(item=>item.state==='failed')?'error':records.some(item=>['pending','verifying','unknown','partial'].includes(item.state))?'warn':'closed',operation:true};
+ }
 
  if(slot==='ca-form-hours'||slot==='ca-form-code')return {input:true};
-
- if(slot==='mcp-secondary')return {text:'还没接上',state:'unknown'};
 
  if(slot==='ca-connection')return {text:phase==='loading'?'正在连接主机 · 正在读取…':online()?'主机在线 · 读取完成 '+time(lastRead):(problem==='server'?'连接服务异常':'暂时无法连接电脑')+(lastRead?' · 上次读取 '+time(lastRead):' · 尚未读取'),state:online()?'ok':phase==='loading'?'loading':problem==='server'?'error':'unknown'};
 
@@ -228,9 +271,11 @@ function liveValue(slot){
 
  const host=status.host||{},hw=status.hardware||{},tasks=(list('automation')||[]).filter(x=>target?.lands_on!=='cockpit-tasks'||!target?.api_project||x.project===target.api_project),backups=list('backups')||[];
 
- const todayTasks=tasks.filter(x=>x.enabled===true&&x.runs_today===true),failed=todayTasks.filter(x=>x.state==='failed'),next=tasks.filter(x=>x.enabled===true&&Number.isFinite(Date.parse(x.next_run_at))).sort((a,b)=>Date.parse(a.next_run_at)-Date.parse(b.next_run_at))[0];
+ const todayTasks=tasks.filter(ranToday),failed=todayTasks.filter(x=>x.state==='failed'),next=tasks.filter(x=>x.enabled===true&&Number.isFinite(Date.parse(x.next_run_at))).sort((a,b)=>Date.parse(a.next_run_at)-Date.parse(b.next_run_at))[0];
 
  const lastBackup=backups.filter(x=>Number.isFinite(Date.parse(x.last_success_at))).sort((a,b)=>Date.parse(b.last_success_at)-Date.parse(a.last_success_at))[0];
+
+ if(slot==='mcp-secondary'){const peer=list('remote_network')?.find(x=>x.id==='secondary_laptop');return {text:peer?.state==='online'?'副机在线':peer?.state==='offline'?'副机不在线':'副机状态读不到',state:peer?.state==='online'?'ok':peer?.state==='offline'?'closed':'unknown'};}
 
  const taskBrief=`今天跑了 ${todayTasks.length} 个，出错 ${failed.length} 个`+(next?'；下一个 '+name(next)+' '+time(Date.parse(next.next_run_at)/1000):'；下次运行暂时未知');
 
@@ -246,13 +291,18 @@ function liveValue(slot){
 
  if(slot==='cockpit-quick-5')return {text:lastBackup?name(lastBackup)+' 最近成功 '+time(Date.parse(lastBackup.last_success_at)/1000):'最近成功的备份暂时未知',state:rowState(list('backups'))};
 
- if(slot==='ca-windows'||slot==='cockpit-security-windows')return {text:(({locked:'已锁屏',unlocked:'没锁屏',no_session:'没人登录'})[host.screen_state]||'读不到')+(slot==='ca-windows'?'\n已开机 '+(Number.isFinite(host.uptime_seconds)?minutesLabel(Math.floor(host.uptime_seconds/60)):'时长读不到')+' · 本次开机 '+beijingTime(host.boot_time_unix)+'\n'+known(host.windows_version):''),state:host.screen_state==='unlocked'?'ok':['locked','no_session'].includes(host.screen_state)?'closed':'unknown'};
+ if(slot==='ca-windows'||slot==='cockpit-security-windows'){if(!windowsFresh())return {text:'锁屏状态读不到',state:'unknown'};return {text:(({locked:'已锁屏',unlocked:'未锁屏',no_session:'没人登录'})[host.screen_state]||'读不到'),state:host.screen_state==='unlocked'?'ok':['locked','no_session'].includes(host.screen_state)?'closed':'unknown'};}
 
- if(slot==='mcp-grants')return {rows:[{text:'个人资料：'+stateLabel(status.personal_data),state:grantState(status.personal_data)},{text:'无限制授权：'+stateLabel(status.unrestricted),state:grantState(status.unrestricted)}],state:'unknown'};
+ if(slot==='mcp-grants')return {rows:[{text:'个人资料：'+stateLabel(status.personal_data),state:grantState(status.personal_data)},{text:'无限制授权：'+stateLabel(status.unrestricted),state:grantState(status.unrestricted)}],state:authorizationFresh()?'ok':'unknown'};
 
  if(slot==='cockpit-attention')return {rows:pendingRows(),state:summary().state};
 
- if(slot==='cockpit-remote')return {rows:['电脑 MCP','串流','Tailscale','副机','代理和联网','Windows 更新'].map(text=>({text:text+'：还没接上',highlight:target?.id==='remote-control'&&text==='电脑 MCP'||target?.id==='sunshine-remote-streaming'&&text==='串流'})),state:'unknown'};
+ if(slot==='cockpit-remote'){
+  const rows=list('remote_network');if(!rows)return {text:status?.remote_network?.collection_state==='reading'?'正在读取远程和网络':'远程和网络读不到',state:'unknown'};
+  const labels={tailscale:'远程网络',secondary_laptop:'副机',sunshine:'串流服务',system_proxy:'系统代理',internet:'互联网连接',windows_update_restart:'Windows重启'};
+  const states={online:'在线',offline:'不在线',running:'在运行',stopped:'已停止',enabled:'已开启',disabled:'已关闭',ok:'连接正常',not_pending:'没有待重启',pending:'需要重启',unknown:'读不到',unavailable:'读不到',stale:'读数已过期'};
+  return {rows:[{text:'电脑连接服务：在线',state:'ok'},...rows.map(x=>({key:x.id,text:(labels[x.id]||name(x))+'：'+(states[x.state]||'状态读不到'),state:['unknown','unavailable','stale'].includes(x.state)?'unknown':['offline','stopped','pending'].includes(x.state)?'warn':'ok',detail:'北京时间 '+time(timestamp(x.observed_at))+' 读的',highlight:target?.id==='sunshine-remote-streaming'&&x.id==='sunshine'}))],state:rows.some(x=>['unknown','unavailable','stale'].includes(x.state))?'unknown':rows.some(x=>['offline','stopped','pending'].includes(x.state))?'warn':'ok'};
+ }
 
  if(slot==='cockpit-grafana'){
 
@@ -260,13 +310,15 @@ function liveValue(slot){
 
   if(g?.public_dashboard_state==='reachable'&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
 
+  if(g?.state==='reachable'&&g.url==='https://grafana.wly0829.cn/')return {text:'监控网页已响应 · 打开图表网页',href:g.url,state:'ok'};
+
   return {text:'曲线暂时打不开',state:'unknown'};
 
  }
 
- if(slot==='cockpit-pc'&&(!status.hardware||['unavailable','unknown'].includes(status.hardware.state)))return {text:'硬件状态暂时读不到',state:'unknown'};
+ if(slot==='cockpit-pc'&&(!status.hardware||['unavailable','unknown'].includes(status.hardware.state)||status.display_cache?.collectors?.hardware?.state==='reading'&&!hardwareSnapshot(status)))return {text:status.display_cache?.collectors?.hardware?.state==='reading'?'硬件正在读取':'硬件状态暂时读不到',state:'unknown'};
 
- if(slot==='cockpit-pc')return {rows:[{text:'处理器：'+reading(hw.cpu?.model)+' · '+reading(hw.cpu?.usage_percent,'%')+' · '+reading(hw.cpu?.temperature_celsius,'℃')+' · '+reading(hw.cpu?.power_watts,'W')},...(hw.gpus||[]).map(g=>({text:'显卡：'+reading(g.model)+' · '+reading(g.usage_percent,'%')+' · '+reading(g.temperature_celsius,'℃')+' · 显存 '+capacity(g.vram_used_bytes)+' / '+capacity(g.vram_total_bytes)})),{text:'内存：'+capacity(hw.memory?.used_bytes)+' / '+capacity(hw.memory?.total_bytes)},...(hw.volumes||[]).map(v=>({text:reading(v.letter||v.drive||'磁盘')+'：'+(v.connected===false?'没接上':capacity(v.free_bytes)+' / '+capacity(v.total_bytes))})),{text:'网络：'+networkConnection(hw.network)+' · 下行 '+rate(hw.network?.download_bytes_per_second)+' · 上行 '+rate(hw.network?.upload_bytes_per_second)},{text:'屏幕：'+reading(hw.display?.width_px)+' × '+reading(hw.display?.height_px)+' · '+reading(hw.display?.refresh_hz,'Hz')}],state:hardwareHealth()==='ok'?'ok':'unknown'};
+ if(slot==='cockpit-pc')return {hardwareDisplay:hardwareSnapshot(status),cacheable:!!hardwareSnapshot(status),rows:[{text:'处理器：'+reading(hw.cpu?.model)+' · '+reading(hw.cpu?.usage_percent,'%')+' · '+reading(hw.cpu?.temperature_celsius,'℃')+' · '+reading(hw.cpu?.power_watts,'W')},...(hw.gpus||[]).map(g=>({text:'显卡：'+reading(g.model)+' · '+reading(g.usage_percent,'%')+' · '+reading(g.temperature_celsius,'℃')+' · 显存 '+capacity(g.vram_used_bytes)+' / '+capacity(g.vram_total_bytes)})),{text:'内存：'+capacity(hw.memory?.used_bytes)+' / '+capacity(hw.memory?.total_bytes)},...(hw.volumes||[]).map(v=>({text:reading(v.letter||v.drive||'磁盘').replace(/:+$/,'')+'：'+(v.connected===false?'没接上':capacity(v.free_bytes)+' / '+capacity(v.total_bytes))})),{text:'网络：'+networkConnection(hw.network)+' · 下行 '+rate(hw.network?.download_bytes_per_second)+' · 上行 '+rate(hw.network?.upload_bytes_per_second)},{text:'屏幕：'+reading(hw.display?.width_px)+' × '+reading(hw.display?.height_px)+' · '+reading(hw.display?.refresh_hz,'Hz')}],state:hardwareHealth()==='ok'?'ok':'unknown'};
 
  if(slot==='cockpit-tasks'&&!list('automation'))return {text:'自动任务暂时读不到',state:'unknown'};
 
@@ -274,7 +326,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-backups'&&!list('backups'))return {text:'备份暂时读不到',state:'unknown'};
 
- if(slot==='cockpit-backups')return {rows:rowText(backups.map(x=>({key:(x.project||'')+':'+name(x),highlight:!!target?.api_project&&x.project===target.api_project,text:name(x)+' · '+stateText(x.state)+' · 最近成功 '+time(Date.parse(x.last_success_at)/1000),state:rowState([x]),detail:[x.plain?.what,x.destination,x.scope_note,cadenceText(x.cadence)].filter(Boolean).join('；')})),'当前没有登记的备份'),state:rowState(backups)};
+ if(slot==='cockpit-backups')return {rows:[...rowText(backups.map(x=>({key:(x.project||'')+':'+name(x),highlight:!!target?.api_project&&x.project===target.api_project,text:name(x)+' · '+stateText(x.state)+' · 最近成功 '+time(Date.parse(x.last_success_at)/1000),state:rowState([x]),detail:[x.plain?.what,x.destination,x.scope_note,cadenceText(x.cadence)].filter(Boolean).join('；')})),'当前没有登记的备份'),{key:'inventory',text:'副本和保存位置',children:inventoryRows().flatMap(group=>group.children?.length?group.children.map(row=>({...row,text:group.text+' · '+row.text})):[group])},{key:'cloud',text:'云端维护',children:cloudRows()}],state:rowState(backups)};
 
  if(slot==='cockpit-projects'){
 
@@ -306,18 +358,18 @@ function liveValue(slot){
 
 const slotKeys={
  'cockpit-quick-4':['automation'],'cockpit-quick-5':['backups'],'cockpit-tasks':['automation'],
- 'cockpit-backups':['backups'],'cockpit-projects':['projects'],'cockpit-today':['today'],
+ 'cockpit-backups':['backups','backup_inventory','cloud'],'cockpit-projects':['projects'],'cockpit-today':['today'],'cockpit-remote':['remote_network'],
  'cockpit-attention':['automation','backups','projects','pending','hardware'],'cockpit-pc':['hardware'],
  'cockpit-grafana':['grafana'],'cockpit-overall':['automation','backups','projects','pending','today','hardware']
 };
 function slotHealth(slot){const keys=slotKeys[slot];if(!keys)return clock()-lastRead<=120?'ok':'stale';const states=keys.map(k=>k==='hardware'?hardwareHealth():k==='grafana'?(()=>{const g=status?.grafana||status?.services?.grafana,at=blockTime(g);return g&&Number.isFinite(at)&&at<=clock()+60&&clock()-at<=(Number(g.max_age_seconds)||300)?'ok':'stale';})():blockHealth(k));return states.includes('error')?'error':states.includes('unknown')?'unknown':states.includes('stale')?'stale':'ok';}
-function slotTime(slot){const times=(slotKeys[slot]||[]).map(k=>k==='hardware'?Math.min(...[status?.hardware?.cpu,status?.hardware?.memory,status?.hardware?.network,status?.hardware?.display,...(status?.hardware?.gpus||[])].map(blockTime).filter(Number.isFinite)):blockTime(status?.[k]));return times.filter(t=>Number.isFinite(t)&&t>0).length?Math.min(...times.filter(t=>Number.isFinite(t)&&t>0)):lastRead;}
+function slotTime(slot){if(slot==='ca-windows'||slot==='cockpit-security-windows')return windowsTime();const times=(slotKeys[slot]||[]).map(k=>k==='hardware'?(status?.hardware_observed_at_unix??status?.display_cache?.collectors?.hardware?.observed_at_unix??Math.min(...[status?.hardware?.cpu,status?.hardware?.memory,status?.hardware?.network,status?.hardware?.display,...(status?.hardware?.gpus||[])].map(blockTime).filter(Number.isFinite))):blockTime(status?.[k]));return times.filter(t=>Number.isFinite(t)&&t>0).length?Math.min(...times.filter(t=>Number.isFinite(t)&&t>0)):authorizationTime();}
 function expiredValue(result,at){const note='数据已过期 · 上次读到 '+time(at);return {...result,text:result.rows||result.iframe?result.text:result.text+'\n'+note,notice:result.rows||result.iframe?note:null,state:'unknown',cacheable:false,cached:true};}
 function value(slot){
  const result=liveValue(slot);if(data.kind!=='cockpit'||!slot.startsWith('cockpit-')||!online())return result;
  const health=slotHealth(slot);
  if(slot==='cockpit-grafana'&&health!=='ok')return {text:'曲线暂时打不开',state:'unknown',cached:false};
- if(health==='stale'&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
+ if((health==='stale'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
   if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};
  }
@@ -342,17 +394,31 @@ function syncChildren(parent,desired){
  }
  for(const node of [...parent.childNodes])if(!used.has(node))node.remove();
 }
+const liveTitles={'cockpit-overall':'这台电脑现在','cockpit-attention':'要我处理的事','cockpit-quick-1':'电脑在线','cockpit-quick-2':'个人资料','cockpit-quick-3':'无限制授权','cockpit-quick-4':'自动任务','cockpit-quick-5':'最近备份','cockpit-remote':'远程和网络','cockpit-grafana':'近24小时曲线','cockpit-tasks':'自动任务','cockpit-backups':'备份和云端','cockpit-security':'个人资料','cockpit-security-unrestricted':'无限制授权','cockpit-security-windows':'Windows锁屏','cockpit-projects':'项目状态','cockpit-today':'今天的动态','ca-personal-data':'个人资料','ca-unrestricted':'无限制授权','ca-windows':'Windows锁屏','ca-connection':'电脑连接','ca-form':'本次办理','ca-toast':'操作提示','ca-results':'办理结果','mcp-main':'主机','mcp-secondary':'副机','mcp-grants':'授权状态'};
 function rectStyle(el,r){Object.assign(el.style,{position:'absolute',left:r[0]*100+'%',top:r[1]*100+'%',width:r[2]*100+'%',height:r[3]*100+'%',pointerEvents:'auto'});}
+
+function liveGroup(section,cells,className,padding=.012){
+ const top=Math.max(0,Math.min(...cells.map(cell=>cell.rect[1]))-padding),bottom=Math.min(1,Math.max(...cells.map(cell=>cell.rect[1]+cell.rect[3]))+padding);
+ const group=document.createElement('div');group.className='b2-live-group '+className;group.dataset.rowKey=className;
+ const main=document.createElement('div'),quick=document.createElement('div');main.className='b2-overview-main';quick.className='b2-live-group-grid';
+ for(const cell of cells){Object.assign(cell.node.style,{position:'relative',left:'auto',top:'auto',width:'100%',height:'auto'});if(cell.livePart==='lamp'){cell.node.classList.add('b2-overview-lamp');main.prepend(cell.node);}else if(cell.livePart==='summary')main.append(cell.node);else quick.append(cell.node);}
+ if(main.childNodes.length)group.append(main);if(quick.childNodes.length)group.append(quick);
+ section.querySelector('.overlays').append(group);
+ return {node:group,rect:[.02,top,.96,bottom-top],maskRect:[.02,top,.96,bottom-top],forceOverlay:true};
+}
 
 function mount(){
 
  for(const section of document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')){
 
   const layout=section._layout;if(!layout)continue;
+  const screenId=section.dataset.screen||section.closest('[data-screen]')?.dataset.screen;
 
   document.querySelector(`.live-strip[data-screen="${section.dataset.screen}"]`)?.remove();
 
   for(const old of section.querySelectorAll('.b2-native'))old.remove();
+
+  const liveCells=[];
 
   for(const cell of layout.native_live||layout.live||[]){
 
@@ -367,12 +433,28 @@ function mount(){
    }
 
    section.querySelector('.overlays').append(node);
+   if(node.tagName!=='INPUT'&&cell.live_part!=='lamp')node.classList.add('b2-ui-slot');
+   if(cell.slot==='ca-connection')node.classList.add('b2-connection-chip');
+   liveCells.push({node,rect:cell.rect,maskRect:cell.mask_rect,livePart:cell.live_part,slot:cell.slot});
 
   }
 
   for(const entry of layout.native_actions||[]){const button=document.createElement('button');button.className='b2-native b2-image-action';button.type='button';button.dataset.b2Action=entry.action;button.dataset.baseLabel=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';button.setAttribute('aria-label',entry.text);button.title=entry.text;rectStyle(button,entry.rect);button.onclick=()=>{if(entry.copy_text){navigator.clipboard.writeText(entry.copy_text).then(()=>message('已复制。','ok')).catch(()=>message('未能写入剪贴板，请检查浏览器剪贴板权限。','error'));}else action(entry.action);};section.querySelector('.overlays').append(button);}
+  let flowCells=liveCells.filter(cell=>cell.node.tagName!=='INPUT'&&cell.slot!=='ca-connection');
+  if(screenId==='cockpit-01'){
+   const overview=flowCells.filter(cell=>cell.slot==='cockpit-overall'||cell.slot.startsWith('cockpit-quick-'));
+   if(overview.length){flowCells=flowCells.filter(cell=>!overview.includes(cell));flowCells.push(liveGroup(section,overview,'b2-overview-group'));}
+  }else if(screenId==='mcp-01'&&flowCells.length){flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
+  else if(screenId==='computer-access-01'){
+   const grants=flowCells.filter(cell=>['ca-personal-data','ca-unrestricted','ca-windows'].includes(cell.slot));
+   if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));flowCells.push(liveGroup(section,grants,'b2-authority-group'));}
+   else for(const cell of grants)cell.forceOverlay=true;
+  }
+  window.TypesetLiveFlow?.apply(section,flowCells);
 
  }
+
+ if(data.kind==='computer-access'&&!document.querySelector('[data-b2-hardware-summary]')){const summary=document.createElement('div');summary.dataset.b2HardwareSummary='true';summary.className='b2-hardware-summary';document.querySelector('[data-screen="computer-access-01"]')?.after(summary);}
 
  render();
 
@@ -386,22 +468,37 @@ function render(){
 
   const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';
 
-  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
+  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
 
   if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
+
+  if(slot==='ca-connection'){
+   const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':'读不到电脑';stamp.textContent=lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;
+  }
 
   const content=document.createElement('div');
 
   if(target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project){const filter=document.createElement('button');filter.type='button';filter.className='b2-filter';filter.textContent='只看：'+target.site_title+' · 看全部';filter.onclick=()=>{target=null;history.replaceState(null,'',location.pathname+location.search+'#tasks');render();};content.append(filter);}
 
-  if(valueRow.iframe){const frame=document.createElement('iframe');frame.src=valueRow.iframe;frame.title='近24小时硬件曲线';frame.loading='lazy';content.append(frame);}
+  if(slot==='cockpit-pc'&&window.LiveHardwareUI){const displayed=valueRow.hardwareCached?{...status,hardware:valueRow.hardwareDisplay?.hardware,hardware_observed_at_unix:valueRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:valueRow.hardwareDisplay;content.append(window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:valueRow.hardwareCached===true,at:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)}));}
+
+  else if(valueRow.iframe){const frame=document.createElement('iframe');frame.src=valueRow.iframe;frame.title='近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(frame);}
 
   else if(valueRow.rows)for(const row of valueRow.rows){if(row.children){const group=document.createElement('details');group.dataset.rowKey=row.key||row.text;group.open=row.open===true;const title=document.createElement('summary');title.textContent=row.text;group.append(title);for(const child of row.children){const detail=document.createElement('details');detail.dataset.rowKey=child.key||child.text;detail.open=child.highlight===true;if(child.highlight)detail.dataset.highlight='true';const title=document.createElement('summary');title.textContent=child.text;const p=document.createElement('p');p.textContent=child.detail;detail.append(title,p);group.append(detail);}content.append(group);continue;}const item=document.createElement(row.detail?'details':row.href?'a':'p');item.dataset.rowKey=row.key||row.text;if(row.detail){item.open=row.open===true||row.highlight===true;const summary=document.createElement('summary');summary.textContent=row.text;const description=document.createElement('p');description.textContent=row.detail;item.append(summary,description);}else{item.textContent=row.text;if(row.href)item.href=row.href;}if(row.state)item.dataset.state=row.state;if(row.highlight)item.dataset.highlight='true';content.append(item);}
 
   else if(el.dataset.livePart==='lamp'){el.setAttribute('aria-label',valueRow.text||'状态未知');el.classList.add('typeset-lamp');}else content.textContent=valueRow.text;
 
   if(valueRow.notice){const notice=document.createElement('p');notice.className='b2-history-notice';notice.textContent=valueRow.notice;content.append(notice);}
+  if(el.classList.contains('b2-ui-slot')&&slot!=='cockpit-pc'&&window.LiveStatusUI){
+   const headline=valueRow.text||valueRow.rows?.[0]?.text||(valueRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
+   const card=window.LiveStatusUI.render(document,{...valueRow,text:headline,readAt:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)},{title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
+   if(valueRow.operation)card.querySelector('.live-status-meta')?.remove();
+   if(valueRow.rows||valueRow.iframe){card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
+   else content.replaceChildren();
+   content.replaceChildren(card);
+  }
   syncChildren(el,[...content.childNodes]);el.dataset.cached=String(!!valueRow.cached);
+  window.TypesetLiveFlow?.request(section);
  }
 
  for(const b of document.querySelectorAll('[data-b2-action]')){
@@ -420,6 +517,11 @@ function render(){
 
  }
 
+ const hardwareSummary=document.querySelector('[data-b2-hardware-summary]');if(hardwareSummary&&window.LiveHardwareUI){const old=value('cockpit-pc'),displayed=old.hardwareCached?{...status,hardware:old.hardwareDisplay?.hardware,hardware_observed_at_unix:old.hardwareDisplay?.hardware_observed_at_unix}:online()?status:old.hardwareDisplay;syncChildren(hardwareSummary,[window.LiveHardwareUI.render(document,displayed,{mode:'compact',cached:!online(),hardwareCached:old.hardwareCached===true,at:old.cachedAt?old.cachedAt/1000:slotTime('cockpit-pc')})]);}
+ let connectionNotice=document.querySelector('[data-b2-connection-notice]');if(!online()){
+  if(!connectionNotice){connectionNotice=document.createElement('aside');connectionNotice.dataset.b2ConnectionNotice='true';connectionNotice.className='b2-connection-notice';connectionNotice.setAttribute('role','status');document.querySelector('main')?.prepend(connectionNotice);}
+  connectionNotice.textContent=offline(lastContact());const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);connectionNotice.hidden=false;
+ }else if(connectionNotice)connectionNotice.hidden=true;
  document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
 
 }

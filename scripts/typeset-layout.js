@@ -177,7 +177,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    }
   }
   merge();
-  for(const band of bands){band.cells.sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);const mask=band.cells[0].maskRect;band.replace=band.cells.length===1&&mask[2]>.55&&mask[3]*height>=80;}
+  for(const band of bands){band.cells.sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);const mask=band.cells[0].maskRect;band.replace=band.cells.length===1&&(band.cells[0].forceOverlay===true||mask[2]>.55&&mask[3]*height>=80);}
   return bands;
  }
  function move(parent,node){

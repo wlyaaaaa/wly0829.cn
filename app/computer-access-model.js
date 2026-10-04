@@ -9,7 +9,20 @@ export function freshStatus(data, now = Date.now() / 1000) {
   if (!fresh(data?.served_at_unix ?? data?.observed_at_unix)) return false;
   const collectors = Object.values(data?.display_cache?.collectors || {});
   if (!collectors.length) return fresh(data?.observed_at_unix);
-  return collectors.some(source => fresh(source.observed_at_unix) || source.observed_at_unix == null && source.state === 'reading' && fresh(source.refresh_started_at_unix));
+  const screen = data?.host?.screen_state?.value ?? data?.host?.screen_state;
+  if (['locked','unlocked','no_session'].includes(screen) && fresh(data?.host?.sources?.screen_state?.observed_at_unix)) return true;
+  if (['personal_data','unrestricted'].some(key => ['locked','unlocked','active','inactive','expired','revoked','closing'].includes(data?.[key]?.state) && fresh(data[key].observed_at_unix))) return true;
+  return collectors.some(source => fresh(source.observed_at_unix) || source.observed_at_unix == null && source.state === 'reading' && fresh(source.unavailable_since_unix ?? source.refresh_started_at_unix));
+}
+
+export function screenReadTime(data) {
+  return data?.host?.sources?.screen_state?.observed_at_unix ?? data?.host?.screen_state?.observed_at_unix ?? data?.host?.observed_at_unix ?? (data?.display_cache ? null : data?.observed_at_unix);
+}
+
+export function freshScreen(data, now = Date.now() / 1000) {
+  const at = screenReadTime(data), state = data?.host?.screen_state;
+  const status = state && typeof state === 'object' ? state.state : data?.host?.sources?.screen_state?.status;
+  return Number.isFinite(at) && at > 0 && at <= now + 60 && now - at <= 120 && !['unknown','unavailable','error','failed','stale'].includes(status);
 }
 
 // Only public hardware observations survive a same-tab reload. Authority never does.

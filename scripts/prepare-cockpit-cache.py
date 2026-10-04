@@ -35,24 +35,31 @@ function cockpitPlainRows(rows){return rows.map(row=>[row.text,row.detail,row.ch
 function cockpitHistoricalRows(rows){return rows.map(({state,...row})=>({...row,children:row.children?cockpitHistoricalRows(row.children):undefined}));}
 function rememberCockpitValues(at){
  if(!['cockpit','mcp','computer-access'].includes(data.kind)||!online())return;
+ try{localStorage.setItem('computer-last-read-v1',String(Date.now()/1000));}catch{}
  const selectedTarget=target;target=null;
  try{
   const cells=(data.screens||[]).flatMap(screen=>[...(screen.parts||[]),...Object.values(screen.layouts||{})].flatMap(layout=>layout.native_live||layout.live||[]));
   const slots=new Set([...cells.map(cell=>cell.slot),...[...document.querySelectorAll('[data-b2-slot]')].map(el=>el.dataset.b2Slot)]);
+  if(data.kind==='computer-access')slots.add('cockpit-pc');
   for(const slot of slots){
+   if(['ca-form','ca-toast','ca-results','ca-form-hours','ca-form-code'].includes(slot))continue;
    const value=currentValue(slot);
    if(value.iframe||(!['ok','warn','error','closed'].includes(value.state)&&!(value.state==='unknown'&&value.cacheable===true&&Array.isArray(value.rows))))continue;
    const result={...value,text:value.text??(value.rows?cockpitPlainRows(value.rows):'')};
    if(!result.text)continue;
-   const c={project:data.project,result,at};
+   const sampleAt=slotTime(slot),c={project:data.project,result,at:Number.isFinite(sampleAt)&&sampleAt>0?sampleAt*1000:at};
    cockpitLastValues.set(slot,c);
    try{localStorage.setItem(cockpitCacheKey(slot),JSON.stringify(c));}catch{}
   }
  }finally{target=selectedTarget;}
 }
 function value(slot){
- if(!['cockpit','mcp','computer-access'].includes(data.kind)||online())return currentValue(slot);
+ if(['ca-form','ca-toast','ca-results','ca-form-hours','ca-form-code'].includes(slot))return currentValue(slot);
+ if(!['cockpit','mcp','computer-access'].includes(data.kind))return currentValue(slot);
+ const connected=online(),current=connected?currentValue(slot):null;
+ if(connected&&(current.state!=='unknown'||current.rows||current.iframe))return current;
  const c=cockpitReadLast(slot),at=c?.at/1000||status?.observed_at_unix||lastRead;
+ if(connected){if(!c)return current;return {...c.result,text:'此项正在重新读取 · 当时：'+c.result.text,rows:c.result.rows?[{text:'上次读到 '+time(c.at/1000)+'（北京时间）；此项当前还不能确认'},...cockpitHistoricalRows(c.result.rows)]:undefined,state:'unknown',cached:true,cachedAt:c.at,hardwareCached:!!c.result.hardwareDisplay};}
  if(['cockpit-overall','ca-connection','mcp-main'].includes(slot))return {text:offline(at),state:'unknown',cached:!!c,cachedAt:c?.at};
  if(slot==='cockpit-attention')return {rows:[{text:offline(at)},{text:'若只是主入口故障，可查看连接电脑页的副机备用入口（两台电脑都需开机联网）',href:'/mcp/'},...(c?.result.rows?[{text:'以下是上次读到的待办，当前情况还不能确认'},...cockpitHistoricalRows(c.result.rows)]:[])],state:'unknown',cached:!!c,cachedAt:c?.at};
  if(!c)return {text:phase==='loading'?'正在连接电脑 · 还没读到过':'读不到电脑 · 还没读到过',state:'unknown',cached:false};

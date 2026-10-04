@@ -34,13 +34,19 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout,clearTimeout};
  sandbox.window.top=sandbox.window;
- vm.runInNewContext(pure+"\nglobalThis.subject={value,time,summary,set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ vm.runInNewContext(pure+"\nglobalThis.subject={value,time,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
 
+test('authorization result surface distinguishes no request, unknown outcome and an actual receipt, even offline',()=>{
+ const app=cockpit();app.set(fixture());assert.match(app.value('ca-results').text,/当前没有办理记录/);
+ app.operationRecords({request_id:'request',state:'unknown'});let result=app.value('ca-results');assert.equal(result.state,'warn');assert.match(result.rows[0].text,/结果尚未确认/);assert.match(result.rows[0].detail,/请查询/);
+ app.operationRecords({request_id:'request',state:'succeeded'});app.set(null,'error',now/1000);result=app.value('ca-results');assert.match(result.rows[0].text,/已完成/);assert.equal(result.operation,true);assert.notEqual(result.state,'ok');
+});
+
 test('LC-01/02: source-backed drive letters and backup names remain readable Chinese',()=>{
  const app=cockpit();app.set(fixture());
- const pc=app.value('cockpit-pc');assert.ok(pc.rows.some(x=>x.text.startsWith('E:：')));assert.ok(!JSON.stringify(pc).includes('[object Object]'));
+ const pc=app.value('cockpit-pc');assert.ok(pc.rows.some(x=>x.text.startsWith('E：')));assert.ok(!JSON.stringify(pc).includes('[object Object]'));assert.ok(!pc.rows.some(x=>x.text.includes('::')||x.text.includes(':：')));
  const backup=app.value('cockpit-backups');assert.match(backup.rows[0].text,/中文备份 · 正常/);assert.match(backup.rows[0].detail,/每天/);assert.ok(!JSON.stringify(backup).includes('task-backuphash'));
  assert.match(app.value('cockpit-quick-5').text,/中文备份/);
 });
@@ -147,6 +153,37 @@ test('offline: initial loading immediately exposes cached public values and an h
 });
 test('offline: never-seen data says so and the shared read deadline is bounded',()=>{
  const app=cockpit();app.set(null,'error',0);assert.match(app.value('cockpit-overall').text,/还没读到过/);assert.match(live.connectionText(0),/还没读到过/);assert.equal(live.readTimeoutMs,8000);assert.equal(live.freshStatus({observed_at_unix:now/1000-121},now),false);
+});
+
+test('display cache: first warming contact is online, repeated failed empty samples cannot renew it',()=>{
+ const source={state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000-1,unavailable_since_unix:null};
+ const data={served_at_unix:now/1000,observed_at_unix:null,display_cache:{collectors:{authorization:{...source},hardware:{...source},dashboard:{...source}}}};
+ assert.equal(live.freshStatus(data,now),true);assert.equal(model.freshStatus(data,now/1000),true);
+ for(const collector of Object.values(data.display_cache.collectors))collector.unavailable_since_unix=now/1000-900;
+ assert.equal(live.freshStatus(data,now),false);assert.equal(model.freshStatus(data,now/1000),false);
+ const app=cockpit();app.set(data);assert.equal(app.summary().state,'unknown');
+});
+
+test('display cache: expired authorization is a timed yellow gap while fresh WTS remains readable',()=>{
+ const data=fixture();data.served_at_unix=now/1000;data.host.sources={screen_state:{status:'ok',observed_at_unix:now/1000}};
+ data.display_cache={collectors:{authorization:{state:'error',observed_at_unix:now/1000-900,unavailable_since_unix:now/1000-780},hardware:{state:'ready',observed_at_unix:now/1000},dashboard:{state:'ready',observed_at_unix:now/1000}}};
+ const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.equal(app.value('cockpit-security').state,'unknown');assert.equal(app.value('cockpit-security-windows').state,'ok');
+ assert.equal(model.freshScreen(data,now/1000),true);data.host.sources.screen_state.observed_at_unix-=900;assert.equal(model.freshScreen(data,now/1000),false);
+});
+
+test('display cache: old hardware timestamps retain their original expiry across a fresh service reply',()=>{
+ const data=fixture();data.served_at_unix=now/1000;data.hardware_observed_at_unix=now/1000-900;
+ data.host.sources={screen_state:{status:'ok',observed_at_unix:now/1000}};
+ data.display_cache={collectors:{authorization:{state:'ready',observed_at_unix:now/1000},hardware:{state:'error',observed_at_unix:now/1000-900,unavailable_since_unix:now/1000-780},dashboard:{state:'ready',observed_at_unix:now/1000}}};
+ for(const row of [data.hardware.cpu,data.hardware.memory,data.hardware.network,data.hardware.display,...data.hardware.volumes])for(const source of Object.values(row.sources))source.observed_at_unix-=900;
+ const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.equal(app.value('cockpit-pc').state,'unknown');
+});
+
+test('display cache: ready warming replies keep prior public hardware without restoring current certainty',()=>{
+ const app=cockpit();app.set(fixture());
+ const data=fixture();delete data.hardware;data.served_at_unix=now/1000;data.observed_at_unix=null;
+ data.display_cache={collectors:{authorization:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000},hardware:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000},dashboard:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000}}};
+ app.set(data);const value=app.value('cockpit-pc');assert.equal(value.state,'unknown');assert.equal(value.hardwareCached,true);assert.ok(value.hardwareDisplay);assert.match(JSON.stringify(value.rows),/上次读到/);
 });
 test('task reads: declared unavailability wins over legacy manual-entry inference',()=>{
  const data=fixture();data.automation.items[0]={...data.automation.items[0],enabled:null,source:'codex',availability:'unavailable',state:'unknown',unavailable_since:iso(now-15*60000)};

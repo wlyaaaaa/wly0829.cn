@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight, ShieldCheck } from "@phosphor-icons/react";
 import { SiGrafana } from "@icons-pack/react-simple-icons";
-import { HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, createStatusReader, grantLabel, remainingMinutes } from "./computer-access-model.js";
+import { HOST_ORIGIN, adaptStatus, apiRequest, beijingTime, createStatusReader, grantLabel, remainingMinutes, freshScreen } from "./computer-access-model.js";
 import "../scripts/live-hardware-ui.js";
 import "../scripts/live-hardware-ui.css";
 
@@ -11,10 +11,10 @@ export function authorizationCurrent(snapshot, contacted, now) {
   return contacted && typeof at === 'number' && Number.isFinite(at) && at > 0 && at <= now + 60 && now - at <= (Number(snapshot?.max_age_seconds) || 120) && collector?.state !== 'error';
 }
 
-export function screenStateLabel(snapshot, current) {
+export function screenStateLabel(snapshot, contacted, now = Date.now()/1000) {
   const state = snapshot?.host?.screen_state, source = snapshot?.host?.sources?.screen_state;
   const wrapped = state && typeof state === 'object' ? state : {};
-  if (!current || ['unknown', 'unavailable', 'error', 'failed', 'stale'].includes(wrapped.state || source?.status)) return '当前状态读不到';
+  if (!contacted || !freshScreen(snapshot,now) || ['unknown', 'unavailable', 'error', 'failed', 'stale'].includes(wrapped.state || source?.status)) return '当前状态读不到';
   return ({ locked: '已锁屏', unlocked: '未锁屏', no_session: '无交互桌面' })[wrapped.value ?? state] || '当前状态读不到';
 }
 
@@ -22,7 +22,7 @@ export function screenStateLabel(snapshot, current) {
 export function HardwareSummary({ snapshot, cached = false, online = false, now }) {
   const target = useRef(null);
   useEffect(() => {
-    const node = window.LiveHardwareUI.render(document, snapshot, { mode: 'compact', cached, online, now });
+    const node = window.LiveHardwareUI.render(document, snapshot, { mode: 'compact', cached, hardwareCached:snapshot?.hardware_display_cached===true, online, now });
     const previous = target.current?.firstElementChild;
     if (previous?.matches('a.live-hardware-compact')) {
       for (const attr of [...previous.attributes]) if (!node.hasAttribute(attr.name)) previous.removeAttribute(attr.name);
@@ -83,7 +83,7 @@ export default function ComputerAccessSummary({ initialRead = null }) {
       const href = `/computer-access/?purpose=${key}`;
       return <article key={key} data-authority-state={current ? grant?.state || 'unknown' : 'unknown'}><img className="access-authority-icon" src={`/assets/live-hardware/${icon}.webp`} alt="" width="40" height="40" /><div><h3>{label}</h3><p>{current ? active ? key === 'personal_data' ? '已解锁' : '已开启' : grantLabel(grant, now) : "当前状态读不到"}</p>{active && <small>截止 {beijingTime(grant.expires_at_unix)}</small>}</div><nav aria-label={`${label}办理入口`}><a href={href}>{active ? "延长" : key === "personal_data" ? "解锁" : "开启"}</a>{active && <a href={href}>{key === "personal_data" ? "锁定" : "结束"}</a>}</nav></article>;
     })}
-    <article data-authority-state={screenStateLabel(snapshot, current) === '当前状态读不到' ? 'unknown' : snapshot?.host?.screen_state}><img className="access-authority-icon" src="/assets/live-hardware/windows.webp" alt="" width="40" height="40" /><div><h3>Windows 锁屏</h3><p>{screenStateLabel(snapshot, current)}</p></div><nav><a href="/computer-access/">查看与锁屏</a></nav></article>
+    <article data-authority-state={screenStateLabel(snapshot, state === 'online', now) === '当前状态读不到' ? 'unknown' : snapshot?.host?.screen_state}><img className="access-authority-icon" src="/assets/live-hardware/windows.webp" alt="" width="40" height="40" /><div><h3>Windows 锁屏</h3><p>{screenStateLabel(snapshot, state === 'online', now)}</p></div><nav><a href="/computer-access/">查看与锁屏</a></nav></article>
     <HardwareSummary snapshot={snapshot} cached={state !== 'online' && Boolean(snapshot?.hardware)} online={state === 'online'} now={now} />
     <GrafanaStatus service={snapshot?.services?.grafana} connected={state === "online"} loading={refreshing} onRetry={() => reader.current?.read()} />
     <a className="access-summary-entry" href="/computer-access/">进入授权与状态<ArrowRight size={16} /></a>
