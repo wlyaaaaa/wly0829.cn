@@ -106,7 +106,16 @@ function rememberReadingPosition(){
  // reading point until the new manifest layout has finished replacing it.
  if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return;
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
- const el=[...document.querySelectorAll('.screen')].find(s=>{const r=readingScreenGeometry(s);return r.height&&r.top+r.height>scrollY+offset;});
+ const point=scrollY+offset,screens=[...document.querySelectorAll('.screen')];
+ let el=screens.find(s=>{const r=readingScreenGeometry(s);return r.height&&r.top+r.height>point;});
+ // A grid row can contain distinct screens at the same reading line. Keep
+ // the restored screen only while it still shares and covers that row.
+ const preferredId=typesetReadingState.saved?.id||readingPosition?.id;
+ const preferred=preferredId&&screens.find(s=>s.dataset.screen===preferredId);
+ if(el&&preferred&&preferred.parentElement===el.parentElement){
+  const first=readingScreenGeometry(el),r=readingScreenGeometry(preferred);
+  if(r.top===first.top&&r.height&&r.top<=point&&r.top+r.height>point)el=preferred;
+ }
  if(el){const r=readingScreenGeometry(el);readingPosition={id:el.dataset.screen,fraction:(scrollY+offset-r.top)/r.height,atTop:scrollY<2};}else readingPosition=null;
 }
 function cancelReadingResize(){

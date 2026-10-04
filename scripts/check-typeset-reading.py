@@ -24,9 +24,17 @@ POSITION = """() => {
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
  const screens=[...document.querySelectorAll('.screen')];
  function top(el){let y=0;for(let node=el;node;node=node.offsetParent)y+=node.offsetTop;return y;}
- const el=screens.find(s=>s.offsetHeight&&top(s)+s.offsetHeight>scrollY+offset);
+ const point=scrollY+offset;
+ const first=screens.find(s=>s.offsetHeight&&top(s)+s.offsetHeight>point);
+ // The runtime selects a member of an ambiguous grid row. Measure that
+ // member from DOM coordinates, accepting it only within the actual row.
+ // Before/after IDs must still match; two different cards are never equivalent.
+ const row=first?screens.filter(s=>s.parentElement===first.parentElement&&top(s)===top(first)&&
+                              s.offsetHeight&&top(s)<=point&&top(s)+s.offsetHeight>point):[];
+ const el=row.find(s=>s.dataset.screen===readingPosition?.id)||first;
  return {id:el?.dataset.screen,fraction:el?(scrollY+offset-top(el))/el.offsetHeight:null,
-         height:el?.offsetHeight,y:scrollY,offset,width:innerWidth,viewportHeight:innerHeight};
+         height:el?.offsetHeight,y:scrollY,offset,width:innerWidth,viewportHeight:innerHeight,
+         row_candidates:row.map(s=>s.dataset.screen)};
 }"""
 PLACE = """({id,fraction})=>{
  const el=[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===id);
