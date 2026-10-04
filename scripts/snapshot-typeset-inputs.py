@@ -8,6 +8,7 @@ import hashlib
 import html
 from html.parser import HTMLParser
 import json
+import os
 from pathlib import Path
 import re
 import struct
@@ -22,6 +23,17 @@ CSS_REFERENCE = re.compile(
     r'''\burl\s*\(\s*(?:"(?P<double>(?:\\.|[^"\\])*)"|'(?P<single>(?:\\.|[^'\\])*)'|(?P<bare>[^)\s]+))\s*\)'''
     r'''|@import\s+(?:"(?P<import_double>(?:\\.|[^"\\])*)"|'(?P<import_single>(?:\\.|[^'\\])*)')''',
     re.I)
+# Runtime modules loaded by the current registry (including comp-hub's dynamic
+# modules and comp-text's deferred motion helper); exclude demos and audits.
+PRODUCER_COMPONENTS = {
+    'core': ('__init__',),
+    'table': ('__init__', 'table'),
+    'comp-diagram': ('__init__', '_shared', 'sequence', 'structure', 'detail'),
+    'comp-text': ('__init__', 'primitives', 'cards', 'buttons', 'motion_dots'),
+    'comp-slots': ('__init__', 'common', 'shots', 'live', 'controls', 'mocks'),
+    'comp-hub': ('__init__', 'headings', 'feature_status', 'tiles', 'link_stats',
+                 'entry_cards', 'layout_constraints'),
+}
 
 
 def digest(payload):
@@ -160,7 +172,7 @@ def rewrite_css(text, owner, rewrite):
 
 
 class Snapshot:
-    def __init__(self, typeset_root, inventory, output, pages=None, page_inputs=None):
+    def __init__(self, typeset_root, inventory, output, pages=None, page_inputs=None, producer_root=None):
         self.typeset_root = typeset_root
         self.pipeline = typeset_root.parent
         self.inventory = inventory
@@ -185,6 +197,7 @@ class Snapshot:
         self.resource_aliases = {}
         self.dependency_namespace = None
         self.current_page = None
+        self.producer_root = producer_root
 
     def load(self, source):
         source = source.resolve()
@@ -222,6 +235,8 @@ class Snapshot:
         return new_proof
 
     def destination(self, source):
+        if self.producer_root and source.is_relative_to(self.producer_root):
+            return Path('typeset-proto') / source.relative_to(self.producer_root)
         try:
             relative = source.relative_to(self.pipeline)
             if self.dependency_namespace and not (len(relative.parts)>1 and relative.parts[0] in {'typeset-out','typeset-assets'} and relative.parts[1]==self.current_page):
@@ -317,6 +332,102 @@ class Snapshot:
         suffix = ('?' + parsed.query if parsed.query else '') + ('#' + parsed.fragment if parsed.fragment else '')
         return frozen.as_uri() + suffix
 
+    def derived(self, source, rel, payload):
+        """Record a selected manifest through the same input/emission stamps."""
+        source = source.resolve(); rel = Path(rel)
+        _, proof = self.load(source)
+        frozen = self.write_payload(self.output / rel, payload)
+        key = (source, rel); self.active.add(key)
+        self.emissions[key] = {
+            'original_path': str(source), 'original_sha256': proof['sha256'],
+            'original_bytes': proof['bytes'], 'snapshot_path': str(self.output / rel),
+            'snapshot_relative_path': rel.as_posix(), 'snapshot_sha256': frozen['sha256'],
+            'snapshot_bytes': frozen['bytes'], 'transformed': True}
+
+    def producer_resource(self, value):
+        if not isinstance(value, str) or not value:
+            return
+        if value.startswith('proto:'):
+            name = value[6:]; source = self.producer_root / 'assets' / (name if name.endswith('.png') else name + '.png')
+        elif value.startswith('file:'):
+            self.rewrite_reference(value, self.producer_root / 'specs' / 'input.json')
+            return
+        else:
+            source = Path(value)
+            if not source.is_absolute(): source = self.pipeline / 'typeset-assets' / source
+        try:
+            if source.is_file(): self.copy(source, transform=False)
+        except OSError:
+            pass  # Authored prose is not a resource path.
+
+    def freeze_producer(self, screen_ids):
+        root = self.producer_root
+        if root.parent != self.typeset_root.parent or any(self.page_inputs.get(page) for page in self.pages):
+            raise ValueError('Complete producer freeze requires one producer/typeset generation with a shared parent')
+        families = {path.name for path in (root / 'components').iterdir()
+                    if (path / '__init__.py').is_file()}
+        if families != set(PRODUCER_COMPONENTS):
+            raise ValueError('Producer registry families differ from the supported runtime modules')
+        for path in sorted((root / 'engine').glob('*.py')):
+            self.copy(path, Path('typeset-proto/engine') / path.name, transform=False)
+        self.copy(root / 'engine/checks.js', Path('typeset-proto/engine/checks.js'), transform=False)
+        for family, modules in PRODUCER_COMPONENTS.items():
+            for module in modules:
+                self.copy(root / 'components' / family / (module + '.py'),
+                          Path('typeset-proto/components') / family / (module + '.py'), transform=False)
+            style = root / 'components' / family / 'style.css'
+            if style.is_file():
+                self.copy(style, Path('typeset-proto/components') / family / 'style.css')
+        self.copy(root / 'components/comp-diagram/step-ports.js',
+                  Path('typeset-proto/components/comp-diagram/step-ports.js'), transform=False)
+        self.copy(root / 'style/base.css', Path('typeset-proto/style/base.css'))
+        for name in ('typeset_check.js', 'typeset_labels.js', 'typeset_apply.js'):
+            self.copy(root / name, Path('typeset-proto') / name, transform=False)
+        def resources(value):
+            if isinstance(value, dict):
+                for item in value.values(): resources(item)
+            elif isinstance(value, list):
+                for item in value: resources(item)
+            else: self.producer_resource(value)
+        for page in self.pages:
+            path = root / 'specs' / (page + '.json')
+            self.copy(path, Path('typeset-proto/specs') / path.name, transform=False)
+            payload, _ = self.load(path); resources(json.loads(decode(payload)))
+        # assets.manifest() prefers a verified shared-library map. Keep that
+        # branch and row metadata, but only bind selected screens and resources
+        # already referenced by their HTML/specs, never the whole asset tree.
+        asset_root = self.pipeline / 'typeset-assets'
+        marker = asset_root / '_library/REQUESTS-READY.json'
+        mapping = asset_root / '_library/asset-map.jsonl'
+        library = False
+        if marker.is_file() and mapping.is_file():
+            marker_payload, _ = self.load(marker); map_payload, _ = self.load(mapping)
+            ready = json.loads(decode(marker_payload))
+            library = ready.get('status') == 'ready' and ready.get('asset_map_sha256') == digest(map_payload)
+        if not library:
+            mapping = asset_root / 'manifest.jsonl'
+            map_payload, _ = self.load(mapping)
+        bound = {entry['original_path'] for key, entry in self.emissions.items() if key in self.active}
+        rows = []
+        for line in decode(map_payload).splitlines():
+            if not line.strip(): continue
+            row = json.loads(line)
+            if library and (row.get('status') != 'ready' or not row.get('asset')): continue
+            original = Path(row.get('path') or asset_root / row['asset']).resolve() if library else (asset_root / row['asset']).resolve()
+            if row.get('screen_id') not in screen_ids and str(original) not in bound: continue
+            if not original.is_file(): continue  # Same availability rule as assets.manifest().
+            frozen = self.copy(original, transform=False)
+            if library: row['path'] = str(frozen)
+            else: row['asset'] = Path(os.path.relpath(frozen, self.output / 'typeset-assets')).as_posix()
+            rows.append(row)
+        payload = ''.join(json.dumps(row, ensure_ascii=False) + '\n' for row in rows).encode('utf8')
+        rel = Path('typeset-assets/_library/asset-map.jsonl' if library else 'typeset-assets/manifest.jsonl')
+        self.derived(mapping, rel, payload)
+        if library:
+            ready['asset_map_sha256'] = digest(payload)
+            self.derived(marker, 'typeset-assets/_library/REQUESTS-READY.json',
+                         (json.dumps(ready, ensure_ascii=False, indent=2) + '\n').encode('utf8'))
+
     def plan(self):
         self.active = set()
         self.fonts = set()
@@ -332,6 +443,7 @@ class Snapshot:
         if missing:
             raise ValueError('Pages absent from inventory: ' + ', '.join(sorted(missing)))
         frozen_rows = []
+        screen_ids = set()
         for page in self.pages:
             safe_part(page, 'page')
             page_input = self.page_inputs.get(page, {})
@@ -358,6 +470,7 @@ class Snapshot:
             frozen_source = self.copy(original, Path('sources') / (page + '.json'), transform=False)
             source_payload, source_proof = self.load(original)
             source = json.loads(decode(source_payload))
+            screen_ids.update(screen['id'] for screen in source['screens'])
             if any(row.get('source_sha256') != source_proof['sha256'] for row in grouped[page]):
                 raise ValueError('Inventory source SHA differs from captured source: ' + page)
             base = selected_root / page
@@ -397,7 +510,10 @@ class Snapshot:
             print(page + ': captured', flush=True)
         self.pipeline = self.typeset_root.parent
         self.dependency_namespace = None
-        self.copy(self.pipeline / 'typeset-proto' / 'engine' / 'render.py', transform=False)
+        if self.producer_root:
+            self.freeze_producer(screen_ids)
+        else:
+            self.copy(self.pipeline / 'typeset-proto' / 'engine' / 'render.py', transform=False)
         frozen_payload = (''.join(json.dumps(row, ensure_ascii=False, separators=(',', ':')) + '\n'
                                   for row in frozen_rows)).encode('utf8')
         dest = self.output / 'typeset-inventory' / 'screens.jsonl'
@@ -445,6 +561,8 @@ class Snapshot:
             'snapshot_bytes': sum(x['snapshot_bytes'] for x in records),
             'resource_map': {**{x['original_path']: x['snapshot_path'] for x in records}, **self.resource_aliases},
             'page_inputs': self.page_inputs,
+            **({'producer_root': str(self.output / 'typeset-proto'),
+                'original_producer_root': str(self.producer_root)} if self.producer_root else {}),
             'source_checks': self.history, 'system_fonts_preserved': sorted(self.fonts),
             'external_dependencies': external,
             'retired_root': str(self.retired_root) if self.retired else None,
@@ -503,9 +621,12 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--pages', nargs='+', help='Optional pilot subset; default is the complete inventory.')
     parser.add_argument('--page-inputs', type=Path, help='Exact per-page frozen input roots; preserve previously reviewed page bytes.')
+    parser.add_argument('--producer-root', type=Path,
+                        help='Opt in to freeze the complete current producer runtime, selected specs and referenced assets; must share the typeset root parent.')
     args = parser.parse_args()
     page_inputs = json.loads(args.page_inputs.read_text('utf-8-sig')) if args.page_inputs else None
-    snapshot = Snapshot(args.typeset_root.resolve(), args.inventory.resolve(), args.output.resolve(), args.pages, page_inputs)
+    snapshot = Snapshot(args.typeset_root.resolve(), args.inventory.resolve(), args.output.resolve(), args.pages, page_inputs,
+                        args.producer_root.resolve() if args.producer_root else None)
     return snapshot.run()
 
 
