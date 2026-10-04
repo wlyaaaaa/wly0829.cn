@@ -195,7 +195,7 @@ def local_reference(root, owner, reference):
 
 def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None, navigation_pages=None):
     # Preserve candidate HTML except href values, including href fields in page-data.
-    pattern = re.compile(r'(\bhref\s*=\s*["\'])([^"\']+)(["\'])|("href"\s*:\s*")([^"\n]+)(")')
+    pattern = re.compile(r'(\bhref\s*=\s*["\'])([^"\']+)(["\'])|("(?:href|primary_href)"\s*:\s*")([^"\n]+)(")')
     def replace(match):
         start, ref, end = match.group(1,2,3) if match[1] else match.group(4,5,6)
         decoded = json.loads('"'+ref+'"') if match[4] else html.unescape(ref)

@@ -19,6 +19,25 @@ HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name
 <img id="terminal" src="/fixture/terminal.svg" width="120" height="80"><div style="height:18000px"></div><img id="lazy" src="/fixture/lazy.svg" width="120" height="80" loading="lazy"></body></html>'''.encode()
 
 class SourceTests(unittest.TestCase):
+    def test_stylesheet_marker_preserves_handlers_and_rollback_exact_original_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)/'raw';fixture_source(root)
+            (root/'fixture/site.css').write_bytes(b'body{color:green}')
+            link=b'''<link media="screen" onerror="setTimeout(()=>window.originalError=true,10)" crossorigin="anonymous" integrity="sha256-fixture" nonce="fixture-nonce" rel='stylesheet' onload="window.originalLoad=true" href="/fixture/site.css">'''
+            unlisted=b'<link rel="stylesheet" href="https://outside.example/site.css">'
+            preload=b'<link rel="preload" as="style" href="/fixture/site.css">'
+            raw=(root/'index.html').read_bytes().replace(b'</head>',link+unlisted+preload+b'</head>')
+            (root/'index.html').write_bytes(raw);files=prep.inventory(root);manifest={'schema':'wly.hybrid-release.v1','files':files};manifest['release_id']=prep.identity(files,manifest)
+            (root/'release-manifest.json').write_text(json.dumps(manifest),encoding='utf8')
+            output=Path(temporary)/'prepared';prep.prepare(root,output,Path(temporary)/'prepared.json')
+            body=(output/'index.html').read_bytes()
+            self.assertIn(link[:-1]+prep.STYLESHEET_ATTRIBUTE+b'>',body)
+            self.assertEqual(body.count(prep.STYLESHEET_ATTRIBUTE),1)
+            self.assertIn(unlisted,body);self.assertIn(preload,body)
+            restored=Path(temporary)/'restored';prep.rollback(output,restored,Path(temporary)/'rollback.json')
+            self.assertEqual((restored/'index.html').read_bytes(),raw)
+            self.assertTrue(all((restored/rel).read_bytes()==(root/rel).read_bytes() for rel in files))
+
     def test_initial_capture_is_exactly_bounded_and_preparation_rollback_preserves_source_bytes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
@@ -315,6 +334,89 @@ async def run_origin_fixture(args):
         (args.output/'origin-browser-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print(json.dumps({'status':result['status'],'checks':len(result['checks']),'owned_servers_stopped':result['owned_servers_stopped']},ensure_ascii=False))
 
+async def run_stylesheet_fixture(args):
+    """Actual stylesheet error/load, SRI, computed styles and bounded recovery."""
+    import base64
+    from playwright.async_api import async_playwright
+    args.output.mkdir(parents=True,exist_ok=True);args.cache.mkdir(parents=True,exist_ok=True)
+    for name in ('TEMP','TMP','TMPDIR'):os.environ[name]=str(args.cache.resolve())
+    css=b'#probe{width:123px;color:rgb(11,22,33)}';integrity='sha256-'+base64.b64encode(hashlib.sha256(css).digest()).decode()
+    requests=[];counts={};roots={};preparations={};cases=[]
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self,*a):pass
+        def do_GET(self):
+            u=urlsplit(self.path);case=u.path.strip('/').split('/')[0];path='/'+'/'.join(u.path.strip('/').split('/')[1:]);root=roots.get(case)
+            k=(self.server.server_port,case,path);n=counts.get(k,0)+1;counts[k]=n;status=200;body=b'';mime='text/css'
+            if self.server is outside:status=503;body=b'outside-css-error'
+            elif path=='/site.css' and (n==1 or case=='terminal'):status=503;body=b'initial-css-error'
+            elif path=='/not-stylesheet.css':status=503;body=b'non-stylesheet-error'
+            elif root and path=='/':body=(root/'index.html').read_bytes();mime='text/html; charset=utf-8'
+            elif root:
+                target=root/path.lstrip('/')
+                if target.is_file():body=target.read_bytes();mime='text/javascript; charset=utf-8' if path.endswith('.js') else 'text/css'
+                else:status=404;body=b'fixture-missing'
+            if '/_shared/resource-retry-' in path:time.sleep(.12)
+            requests.append({'case':case,'port':self.server.server_port,'raw_url':self.path,'path':path,'count':n,'status':status,'at':time.monotonic(),'body_sha256':hashlib.sha256(body).hexdigest()})
+            self.send_response(status);self.send_header('Content-Type',mime);self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.send_header('Access-Control-Allow-Origin','*');self.end_headers()
+            try:self.wfile.write(body)
+            except(BrokenPipeError,ConnectionResetError):pass
+    main=ThreadingHTTPServer(('127.0.0.1',0),Handler);outside=ThreadingHTTPServer(('127.0.0.1',0),Handler);base=f'http://127.0.0.1:{main.server_port}';other=f'http://127.0.0.1:{outside.server_port}'
+    for case in ('success','terminal','early-success','pending-success'):
+        raw=args.cache/(case+'-raw');raw.mkdir(parents=True)
+        handler='window.cssErrors=(window.cssErrors||0)+1;'
+        if case in ('early-success','pending-success'):
+            pause=60 if case=='early-success' else 400
+            handler+=f'if(!window.recovered){{window.recovered=true;setTimeout(()=>{{this.href=this.href}},{pause})}}'
+        text=(f'<!doctype html><html><head><meta charset="utf-8"><link id="critical-style" rel="stylesheet" media="screen" crossorigin="anonymous" integrity="{integrity}" nonce="fixture-css-nonce" onerror="{handler}" onload="window.cssLoads=(window.cssLoads||0)+1" href="/{case}/site.css">'
+              f'<link rel="stylesheet" href="{other}/{case}/outside.css"><link id="not-style" rel="preload" as="style" href="/{case}/not-stylesheet.css"></head><body><div id="probe">fixture only</div></body></html>')
+        (raw/'index.html').write_text(text,encoding='utf8');(raw/case).mkdir();(raw/case/'site.css').write_bytes(css);(raw/'site.css').write_bytes(css)
+        (raw/case/'not-stylesheet.css').write_bytes(css);(raw/'not-stylesheet.css').write_bytes(css)
+        files=prep.inventory(raw);m={'schema':'wly.hybrid-release.v1','files':files};m['release_id']=prep.identity(files,m);(raw/'release-manifest.json').write_text(json.dumps(m),encoding='utf8')
+        candidate=args.cache/(case+'-candidate');preparations[case]=prep.prepare(raw,candidate,args.output/(case+'-preparation.json'));roots[case]=candidate
+    threads=[];result={'schema':'wly.stylesheet-retry-browser.v1','status':'failed','requests':requests,'cases':cases,'source_runtime_sha256':prep.stamp(ROOT/'scripts/resource-retry-runtime.js')['sha256'],
+                     'source_preparer_sha256':prep.stamp(ROOT/'scripts/prepare-resource-retry.py')['sha256'],'observed_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()}
+    try:
+        for server in (main,outside):t=threading.Thread(target=server.serve_forever,daemon=True);threads.append(t);t.start()
+        async with async_playwright() as pw:
+            context=await pw.chromium.launch_persistent_context(str(args.cache/'chrome'),executable_path=str(args.chrome),headless=True,viewport={'width':412,'height':915},device_scale_factor=3.5)
+            try:
+                for case in roots:
+                    page=await context.new_page();errors=[];page.on('pageerror',lambda error:errors.append(str(error)))
+                    await page.add_init_script("window.cssEvents=[];document.addEventListener('resource-retry',e=>cssEvents.push(e.detail));document.addEventListener('error',e=>{if(e.target.tagName==='LINK')cssEvents.push({kind:'element-error',id:e.target.id,href:e.target.href,trusted:e.isTrusted,at:performance.now()})},true);document.addEventListener('load',e=>{if(e.target.tagName==='LINK'||e.target.dataset?.resourceRetry)cssEvents.push({kind:'element-load',tag:e.target.tagName,id:e.target.id,src:e.target.src,href:e.target.href,trusted:e.isTrusted,at:performance.now()})},true);")
+                    async def route(r):
+                        u=urlsplit(r.request.url)
+                        if u.hostname!='127.0.0.1' or u.port not in (main.server_port,outside.server_port):return await r.abort()
+                        if u.port==main.server_port and u.path.startswith('/_shared/'):return await r.fulfill(response=await context.request.get(base+'/'+case+u.path))
+                        await r.continue_()
+                    await page.route('**/*',route);await page.goto(base+'/'+case+'/',wait_until='load')
+                    await page.evaluate("window.originalStyleNode=document.querySelector('#critical-style');window.initialStyleAttributes=Object.fromEntries([...originalStyleNode.attributes].filter(a=>a.name!=='href'&&!a.name.startsWith('data-resource-retry')).map(a=>[a.name,a.value]));")
+                    await page.wait_for_timeout(1300)
+                    sample=await page.evaluate("(()=>{const l=document.querySelector('#critical-style'),attrs=Object.fromEntries([...l.attributes].filter(a=>a.name!=='href'&&!a.name.startsWith('data-resource-retry')).map(a=>[a.name,a.value])),style=getComputedStyle(document.querySelector('#probe'));return{sameNode:l===originalStyleNode,attributes:attrs,initialAttributes:initialStyleAttributes,nonce:l.nonce,order:[...document.querySelectorAll('link')].map(x=>x.id),href:l.href,width:style.width,color:style.color,errors:window.cssErrors||0,loads:window.cssLoads||0,events:cssEvents}})()")
+                    rows=[r for r in requests if r['port']==main.server_port and r['case']==case and r['path']=='/site.css'];retry=[e for e in sample['events'] if e.get('kind')=='stylesheet' and e.get('state')=='retry']
+                    assert len(rows)==2 and rows[0]['status']==503 and sample['sameNode'] and sample['attributes']==sample['initialAttributes'] and sample['nonce']=='fixture-css-nonce' and sample['order'][0]=='critical-style',sample
+                    assert counts[(outside.server_port,case,'/outside.css')]==1 and counts[(main.server_port,case,'/not-stylesheet.css')]==1
+                    if case in ('early-success','pending-success'):
+                        assert not retry and sample['width']=='123px' and sample['loads']==1,sample
+                        waiting=[e for e in sample['events'] if e.get('kind')=='stylesheet' and e.get('state')=='waiting']
+                        assert bool(waiting)==(case=='pending-success'),sample
+                        if case=='pending-success':
+                            loaded=next(e for e in sample['events'] if e.get('kind')=='stylesheet' and e.get('state')=='loaded')
+                            assert loaded['attempt']==0 and waiting[0]['at']<loaded['at']<waiting[0]['at']+1000,sample
+                    else:
+                        assert len(retry)==1 and retry[0]['attempt']==1 and .9<=(rows[1]['at']-rows[0]['at'])<3,(rows,sample)
+                        if case=='terminal':assert rows[1]['status']==503 and sample['errors']==2 and sample['loads']==0 and sample['width']!='123px',sample
+                        else:assert rows[1]['status']==200 and sample['errors']==1 and sample['loads']==1 and sample['width']=='123px' and sample['color']=='rgb(11, 22, 33)',sample
+                    assert not errors,errors
+                    cases.append({'case':case,'status':'pass','sample':sample,'requests':rows,'stylesheet_policy':preparations[case]['policy']['stylesheets'],'retry_gap_seconds':rows[1]['at']-rows[0]['at']})
+                    await page.close()
+            finally:await context.close()
+        result['status']='pass'
+    finally:
+        for server in (main,outside):server.shutdown();server.server_close()
+        for t in threads:t.join(5)
+        result['servers_stopped']=all(not t.is_alive() for t in threads);(args.output/'stylesheet-browser-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n','utf8')
+    print(json.dumps({'status':result['status'],'cases':len(cases),'servers_stopped':result['servers_stopped']},ensure_ascii=False))
+
 async def run_initial_script_fixture(args):
     """Real element load errors before/after listener installation, not timing guesses."""
     from playwright.async_api import async_playwright
@@ -410,7 +512,11 @@ async def run_initial_script_fixture(args):
 
 if __name__=='__main__':
     import sys
-    if '--initial-script-fixture' in sys.argv:
+    if '--stylesheet-fixture' in sys.argv:
+        ap=argparse.ArgumentParser();ap.add_argument('--stylesheet-fixture',action='store_true')
+        for name in ('output','cache'):ap.add_argument('--'+name,type=Path,required=True)
+        ap.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'));asyncio.run(run_stylesheet_fixture(ap.parse_args()))
+    elif '--initial-script-fixture' in sys.argv:
         ap=argparse.ArgumentParser();ap.add_argument('--initial-script-fixture',action='store_true')
         for name in ('output','cache'):ap.add_argument('--'+name,type=Path,required=True)
         ap.add_argument('--expect-initial',choices=('absent','success'),default='success');ap.add_argument('--initial-cases',default='early-defer,blocking,late-defer')

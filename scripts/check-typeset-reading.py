@@ -130,7 +130,9 @@ async def run(args, base, build):
                                     'response_url':urljoin(base+url,src)})
                 result['pages'][name]={'url':url,'html_sha256':hashlib.sha256(html_body).hexdigest(),'scripts':scripts}
                 await browser_page.set_viewport_size({'width':390,'height':844})
-                await browser_page.goto(base+url,wait_until='domcontentloaded',timeout=90000)
+                response=await browser_page.goto(base+url,wait_until='domcontentloaded',timeout=90000)
+                if response.status!=200 or await response.body()!=html_body:
+                    raise ValueError('Reading server did not return the exact selected artifact: '+url)
                 await browser_page.emulate_media(reduced_motion='reduce')
                 await browser_page.evaluate('document.fonts.ready')
                 await browser_page.wait_for_timeout(100)

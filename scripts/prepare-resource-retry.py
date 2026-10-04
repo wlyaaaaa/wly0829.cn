@@ -10,7 +10,21 @@ from urllib.parse import urljoin,urlsplit
 HERE=Path(__file__).resolve().parent
 MARKER='data-resource-retry="next-2e"'
 INITIAL_ATTRIBUTE=b' data-resource-retry-initial="1"'
-INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial");document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
+STYLESHEET_ATTRIBUTE=b' data-resource-retry-stylesheet="1"'
+INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&((e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial"))||(e.target instanceof HTMLLinkElement&&e.target.rel.toLowerCase().split(/\\s+/).includes("stylesheet")&&e.target.hasAttribute("data-resource-retry-stylesheet")));document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
+
+def mark_initial_stylesheets(raw,rel,policy):
+    allowed={urljoin('https://wly0829.cn/',value) for value in policy['stylesheets']};marked=[]
+    def mark(match):
+        opening=match[0]
+        attrs={key.decode().lower():html.unescape(value.decode('utf8')) for key,_,value in re.findall(br'([\w-]+)\s*=\s*(["\x27])(.*?)\2',opening,re.S)}
+        value=attrs.get('href')
+        if 'stylesheet' not in attrs.get('rel','').lower().split() or not value or urljoin('https://wly0829.cn/'+rel,value) not in allowed:return opening
+        if STYLESHEET_ATTRIBUTE.strip() in opening:raise ValueError('Initial stylesheet already marked')
+        marked.append(value);return opening[:-1]+STYLESHEET_ATTRIBUTE+opening[-1:]
+    # Existing inline handlers can contain `>` (for example an arrow function).
+    # Keep quoted attribute values whole while only adding the recovery marker.
+    return re.sub(br'''<link\b(?:[^"'<>]|"[^"]*"|'[^']*')*>''',mark,raw,flags=re.I),marked
 
 def mark_initial_scripts(raw,rel,policy):
     allowed={urljoin('https://wly0829.cn/',value) for value in policy['scripts']};marked=[]
@@ -50,7 +64,8 @@ def asset_origin(asset_base_url):
     return 'https://'+host+(':'+str(port) if port is not None and port!=443 else '')
 
 def policy_and_observation(baseline,files,asset_base_url=None):
-    policy={'origins':[],'scripts':['/'+p for p in files if p.endswith('.js')],'data':['/'+p for p in files if p.endswith('.json')and not re.search(r'(^|/)(api|status|authorization|authorize)(/|\.)',p)]}
+    policy={'origins':[],'scripts':['/'+p for p in files if p.endswith('.js')],'stylesheets':['/'+p for p in files if p.endswith('.css')],
+            'data':['/'+p for p in files if p.endswith('.json')and not re.search(r'(^|/)(api|status|authorization|authorize)(/|\.)',p)]}
     explicit_origin=asset_origin(asset_base_url)
     origins={explicit_origin} if explicit_origin else set();pages={};dynamic=[]
     for rel in files:
@@ -73,9 +88,10 @@ def policy_and_observation(baseline,files,asset_base_url=None):
         if u.scheme not in ('http','https'):continue
         origins.add(u.scheme+'://'+u.netloc)
         if u.path.endswith('.js'):policy['scripts'].append(url)
+        elif u.path.endswith('.css'):policy['stylesheets'].append(url)
         elif u.path.endswith('.json')and'/api/'not in u.path:policy['data'].append(url)
     policy['origins']=sorted(origins)
-    return policy,{'html_resources':pages,'js_loading_sites':dynamic,'public_static_json_files':policy['data'],'public_static_scripts':len(policy['scripts'])}
+    return policy,{'html_resources':pages,'js_loading_sites':dynamic,'public_static_json_files':policy['data'],'public_static_scripts':len(policy['scripts']),'public_static_stylesheets':policy['stylesheets']}
 def baseline_manifest_objects(root):return json.loads((root/'release-manifest.json').read_text('utf8')).get('oss',{}).get('objects',{}).values()
 def prepare(baseline,output,report,pages=None,asset_base_url=None):
     baseline,output=Path(baseline).resolve(),Path(output).resolve()
@@ -89,13 +105,14 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None):
     runtime=raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))).encode()
     runtime_rel='_shared/resource-retry-'+hashlib.sha256(runtime).hexdigest()[:20]+'.js'
     addition='\n<script '+MARKER+' src="/'+runtime_rel+'"></script>\n'
-    selected=set(pages or observed['html_resources']);changes={};initial_scripts={}
+    selected=set(pages or observed['html_resources']);changes={};initial_scripts={};initial_stylesheets={}
     if not selected<=set(observed['html_resources']):raise ValueError('Selected page missing from complete source')
     for rel in selected:
         raw=(baseline/rel).read_bytes()
         if MARKER.encode()in raw:raise ValueError('Page already has resource recovery')
         if raw.count(b'</head>')!=1:raise ValueError('Expected one head close: '+rel)
         marked,initial_scripts[rel]=mark_initial_scripts(raw,rel,policy)
+        marked,initial_stylesheets[rel]=mark_initial_stylesheets(marked,rel,policy)
         if len(re.findall(br'<head\b[^>]*>',marked,re.I))!=1:raise ValueError('Expected one head opening: '+rel)
         marked=re.sub(br'<head\b[^>]*>',lambda m:m[0]+INITIAL_CAPTURE.encode(),marked,count=1,flags=re.I)
         # The early inline observer only marks genuine element load errors.
@@ -106,9 +123,9 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None):
     for rel,raw in changes.items():(output/rel).write_bytes(raw)
     after=inventory(output)
     assert all(after[rel]==entry for rel,entry in before.items()if rel not in changes)
-    assert all((output/rel).read_bytes().replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'')==(baseline/rel).read_bytes()for rel in changes)
+    assert all((output/rel).read_bytes().replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'').replace(STYLESHEET_ATTRIBUTE,b'')==(baseline/rel).read_bytes()for rel in changes)
     rid=identity(after,manifest);old_rid=manifest['release_id']
-    manifest.update({'files':after,'release_id':rid,'resource_retry_preparation':{'status':'next_2e_prepared_pending_acceptance','baseline_release_id':old_rid,'runtime':runtime_rel,'addition':addition,'initial_capture_addition':INITIAL_CAPTURE,'initial_script_attribute':INITIAL_ATTRIBUTE.decode(),'initial_scripts':initial_scripts,'changed_html':sorted(changes),'old_page_evidence_is_not_new_acceptance':True}})
+    manifest.update({'files':after,'release_id':rid,'resource_retry_preparation':{'status':'next_2e_prepared_pending_acceptance','baseline_release_id':old_rid,'runtime':runtime_rel,'addition':addition,'initial_capture_addition':INITIAL_CAPTURE,'initial_script_attribute':INITIAL_ATTRIBUTE.decode(),'initial_stylesheet_attribute':STYLESHEET_ATTRIBUTE.decode(),'initial_scripts':initial_scripts,'initial_stylesheets':initial_stylesheets,'changed_html':sorted(changes),'old_page_evidence_is_not_new_acceptance':True}})
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(output/runtime_rel),'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
     report=Path(report);report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
@@ -127,6 +144,7 @@ def rollback(baseline,output,report):
             capture=info['initial_capture_addition'].encode()
             if restored.count(capture)!=1:raise ValueError('Review newer initial capture before rollback')
             restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
+            if info.get('initial_stylesheet_attribute'):restored=restored.replace(info['initial_stylesheet_attribute'].encode(),b'')
         bodies[rel]=restored
     shutil.copytree(baseline,output)
     for rel,body in bodies.items():(output/rel).write_bytes(body)

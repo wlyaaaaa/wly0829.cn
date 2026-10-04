@@ -77,7 +77,13 @@ def verify(args):
     retry_receipt=None
     if args.retry_proof:
         retry_receipt=oss.read(args.retry_proof)
-        require(retry_receipt.get('schema')=='wly.oss-bounded-retry.v1' and retry_receipt['instruction_id']=='229e1241-e4a0-4f3a-9490-c039d5439019','Retry acceptance lacks the actual selected instruction')
+        extended=retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292'
+        require(retry_receipt.get('schema')=='wly.oss-bounded-retry.v1' and (extended or retry_receipt['instruction_id']=='229e1241-e4a0-4f3a-9490-c039d5439019'),'Retry acceptance lacks the actual selected instruction')
+        if extended:
+            instruction=Path(retry_receipt['instruction_file'])
+            require(oss.digest(instruction)==retry_receipt['instruction_sha256'],'Extended retry instruction changed')
+            text=instruction.read_text('utf8')
+            require('8c5b469a-9178-475c-92aa-b59dd6fa5292' in text and '2e、2f 和以后各版' in text and '最多重试一次' in text,'Retry proof is not the actual 14:52 extension')
         require(retry_receipt['status']=='pass' and retry_receipt['release_id']==manifest['release_id'] and retry_receipt['manifest_sha256']==oss.digest(preparation/'github/release-manifest.json'),'Retry proof is incomplete or belongs to another split')
         require(retry_receipt['max_post_failure_get_attempts']==1 and retry_receipt['persistent_settings_changed'] is False,'Retry count/settings differ from instruction')
         for row in retry_receipt['objects']:
@@ -90,13 +96,15 @@ def verify(args):
             require(all(failure['failure']=='net::ERR_EMPTY_RESPONSE' for failure in row['failed_requests']),'Cold failure is not an allowed transient empty response')
             require(all(failure['canceled'] is False and failure['error']=='net::ERR_EMPTY_RESPONSE' and failure['url'] in retried for failure in row['network_failures']),'Unresolved cold network failure')
         require(failed_urls<=retried,'One or more cold resources lack their single real retry')
-        require(retry_receipt['new_body_gets']==len(retry_receipt['objects'])==retry_receipt['unique_failed_objects'] and retry_receipt['peer_direct_objects']>0,'Incomplete retry/peer coverage')
-        peer_path=args.retry_proof.parent/'peer-direct-probe.json'
-        if not peer_path.is_file():peer_path=Path(retry_receipt['retained_retry_proof']['original_path']).parent/'peer-direct-probe.json'
-        require(oss.digest(peer_path)==retry_receipt['peer_probe_sha256'],'Peer direct probe changed')
-        peer=oss.read(peer_path)
-        require(peer['persistent_settings_changed'] is False and peer['process_only_no_proxy'] is True and len(peer['objects'])==retry_receipt['peer_direct_objects'],'Peer direct probe scope/settings differ')
-        require(all(row['status']=='pass' and row['curl_exit']==0 and row['http']=='200' and row['remote_ip']==peer['explicit_public_ip'] and row['url'] in remote_by_url and row['bytes']==remote_by_url[row['url']]['bytes'] and row['sha256']==remote_by_url[row['url']]['sha256'] for row in peer['objects']),'Peer direct probe did not retrieve the exact objects')
+        require(retry_receipt['new_body_gets']==len(retry_receipt['objects'])==retry_receipt['unique_failed_objects'],'Incomplete single-retry coverage')
+        if not extended:
+            require(retry_receipt['peer_direct_objects']>0,'Incomplete peer coverage')
+            peer_path=args.retry_proof.parent/'peer-direct-probe.json'
+            if not peer_path.is_file():peer_path=Path(retry_receipt['retained_retry_proof']['original_path']).parent/'peer-direct-probe.json'
+            require(oss.digest(peer_path)==retry_receipt['peer_probe_sha256'],'Peer direct probe changed')
+            peer=oss.read(peer_path)
+            require(peer['persistent_settings_changed'] is False and peer['process_only_no_proxy'] is True and len(peer['objects'])==retry_receipt['peer_direct_objects'],'Peer direct probe scope/settings differ')
+            require(all(row['status']=='pass' and row['curl_exit']==0 and row['http']=='200' and row['remote_ip']==peer['explicit_public_ip'] and row['url'] in remote_by_url and row['bytes']==remote_by_url[row['url']]['bytes'] and row['sha256']==remote_by_url[row['url']]['sha256'] for row in peer['objects']),'Peer direct probe did not retrieve the exact objects')
         raw_failed_urls=set()
         for source in retry_receipt['source_cold_receipts']:
             path=Path(source['path'])
@@ -134,7 +142,7 @@ def verify(args):
             'plan_sha256':oss.digest(preparation/'oss-plan.json'),'qa_plan_sha256':oss.digest(args.qa_plan),
             'verification_sha256':oss.digest(args.verification),'reading_sha256':oss.digest(args.reading),
             'cold_sha256':oss.digest(args.cold),'retry_proof_sha256':oss.digest(args.retry_proof) if args.retry_proof else None,
-            'cold_acceptance':'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained' if retry_receipt else 'All native cold cases pass under two seconds',
+            'cold_acceptance':('Actual single post-failure body retry under the 14:52 extension to 2e/2f/future versions; first native failures and timing retained' if retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292' else 'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained') if retry_receipt else 'All native cold cases pass under two seconds',
             'staged':bool(args.staged),'verified_at_beijing':oss.stamp()}
 
 def main():
@@ -145,7 +153,7 @@ def main():
     parser.add_argument('--staged',type=Path)
     parser.add_argument('--preparation-receipt',type=Path)
     parser.add_argument('--rollback-ref')
-    parser.add_argument('--retry-proof',type=Path,help='Actual 08:52 bounded retry acceptance; retains original native cold failures')
+    parser.add_argument('--retry-proof',type=Path,help='Actual 08:52 or 14:52 extended bounded retry acceptance; retains original native cold failures and timings')
     args=parser.parse_args()
     if args.staged and (not args.preparation_receipt or not args.rollback_ref):parser.error('Staging needs the real source gate receipt and rollback commit')
     result=verify(args);oss.write(args.output,result)

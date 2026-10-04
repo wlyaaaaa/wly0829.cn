@@ -440,8 +440,11 @@ def prepare(args):
             if creative.get('schema')!='wly.creative-replay-result.v1' or creative!=manifest.get('creative_preparation'):
                 raise ValueError('Creative preparation differs from the reviewed final source')
             bound_file(creative['config']['path'],creative['config'])
-            if [step['name'] for step in creative['steps']]!=['comic','living','album','river','demo','retry']:
-                raise ValueError('Creative preparation does not replay the six actual approved steps')
+            config=read(creative['config']['path'])
+            page_only=config.get('scope')=='page-demo-and-retry'
+            expected_steps=['demo','retry'] if page_only else ['comic','living','album','river','demo','retry']
+            if [step['name'] for step in creative['steps']]!=expected_steps or (page_only and creative.get('scope')!='page-demo-and-retry'):
+                raise ValueError('Preparation does not replay the actual selected scope')
             previous=creative['raw_release_id']
             for step in creative['steps']:
                 if step['before_release_id']!=previous:
@@ -455,7 +458,19 @@ def prepare(args):
             for relative,entry in entries.items():
                 if entry.get('kind')!='integrated_preparation' or entry.get('before')!=old.get(relative) or entry.get('after')!=manifest['files'].get(relative):
                     raise ValueError('Creative file is not bound to this production baseline: '+relative)
-            if not manifest.get('home_living_preparation',{}).get('package_bytes_unchanged'):
+            if page_only:
+                info=manifest['resource_retry_preparation'];restored=(release/'index.html').read_bytes()
+                for key in ('addition','initial_capture_addition'):
+                    addition=info[key].encode('utf8')
+                    if restored.count(addition)!=1:raise ValueError('Homepage lacks the exact resource-recovery addition')
+                    restored=restored.replace(addition,b'',1)
+                for key in ('initial_script_attribute','initial_stylesheet_attribute'):
+                    if info.get(key):restored=restored.replace(info[key].encode('utf8'),b'')
+                if restored!=(args.baseline.resolve()/'index.html').read_bytes():
+                    raise ValueError('Page-only preparation changed the existing homepage beyond exact resource recovery')
+                if any(manifest.get(key) for key in ('home_living_preparation','home_comic_preparation','page_flip_preparation','today_river_preparation')):
+                    raise ValueError('The delegated four creative pieces entered the page-only batch')
+            elif not manifest.get('home_living_preparation',{}).get('package_bytes_unchanged'):
                 raise ValueError('Creative homepage lacks the exact approved living package')
             result['creative_preparation']=creative
         except (ValueError,KeyError,OSError,TypeError) as error:
