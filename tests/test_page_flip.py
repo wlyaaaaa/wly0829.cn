@@ -190,6 +190,12 @@ async def main(args):
                 # Project modules are the site's genuine module links.
                 await load('/projects/agents/authorization-owner/')
                 module=page.locator('a[href="/projects/agents/capability-routing/"]:visible')
+                await page.mouse.move(0,0)
+                focus_mark=len(state['documents'])
+                await module.first.focus();await page.wait_for_timeout(200)
+                focused_docs=[r for r in state['documents'][focus_mark:] if r['path']=='/projects/agents/capability-routing/']
+                assert not focused_docs, ('Focus alone issued a document prefetch',focused_docs)
+                results.append({'device':device,'case':'legacy-focus-alone-does-not-prefetch','target_document_requests':len(focused_docs)})
                 await navigate(module,'/projects/agents/capability-routing/','real-project-module-entry',keyboard=True)
                 await load('/skills/')
                 await navigate(page.locator('a[href="/skills/localocr/"]:visible'),'/skills/localocr/','skills-directory-to-detail',keyboard=True)
