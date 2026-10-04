@@ -254,6 +254,7 @@
     for(const h of p.hotspots){
      const el=mounted.find(e=>e.dataset.hotId===h.id);
      if(!el){issues.push(p.image+':hotspot not mounted '+h.kind+' '+(h.href||h.target));continue;}
+     if(h.kind==='live'&&['ca-toast','ca-results'].includes(h.slot)&&el.hidden&&el.dataset.optionalEmpty==='true'){live++;continue;}
      if(mounted.filter(e=>e.dataset.hotId===h.id).length!==1)issues.push(p.image+':duplicate mounted hotspot '+h.id);
      const er=el.getBoundingClientRect(),px=h.rect_px;
      const flowLive=liveGeometry(win,host,el,h,p),want=sourceBox(win,host,[px[0]/p.size[0],px[1]/p.size[1],px[2]/p.size[0],px[3]/p.size[1]]);

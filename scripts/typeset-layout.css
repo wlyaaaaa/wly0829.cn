@@ -19,6 +19,7 @@
 .typeset-part .sample-overlay{pointer-events:none!important}
 .typeset-live-flow-cards>.b2-live-group,.typeset-live-flow .b2-live-group-grid,.typeset-live-flow .b2-overview-main{pointer-events:none}
 .typeset-live-flow-region{position:relative;min-width:0;background:#fff;pointer-events:none}
+.typeset-live-flow-region[hidden],.typeset-live-flow-tile[hidden],.typeset-live-flow-cards>[hidden]{display:none!important}
 .typeset-live-flow-cards{position:relative;z-index:3;display:grid;grid-template-columns:repeat(var(--typeset-live-columns,1),minmax(0,1fr));gap:12px;align-items:start;padding:8px 24px 16px;min-width:0;pointer-events:none}
 .typeset-live-flow-cards>*{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;min-width:0!important;min-height:var(--typeset-live-min-height,94px)!important;max-width:none;align-self:start;margin:0;box-sizing:border-box;pointer-events:auto}
 .typeset-live-flow-replacement>.typeset-live-flow-cards{position:relative;z-index:3;padding:0;background:transparent}

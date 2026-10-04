@@ -39,7 +39,7 @@ function cockpit(saved=storage()) {
 }
 
 test('authorization result surface distinguishes no request, unknown outcome and an actual receipt, even offline',()=>{
- const app=cockpit();app.set(fixture());assert.match(app.value('ca-results').text,/当前没有办理记录/);
+ const app=cockpit();app.set(fixture());assert.equal(app.value('ca-results').empty,true);assert.equal(app.value('ca-toast').empty,true);
  app.operationRecords({request_id:'request',state:'unknown'});let result=app.value('ca-results');assert.equal(result.state,'warn');assert.match(result.rows[0].text,/结果尚未确认/);assert.match(result.rows[0].detail,/请查询/);
  app.operationRecords({request_id:'request',state:'succeeded'});app.set(null,'error',now/1000);result=app.value('ca-results');assert.match(result.rows[0].text,/已完成/);assert.equal(result.operation,true);assert.notEqual(result.state,'ok');
 });

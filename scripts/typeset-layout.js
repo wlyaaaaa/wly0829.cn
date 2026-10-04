@@ -186,7 +186,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    }
   }
   merge();
-  for(const band of bands){band.cells.sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);const mask=band.cells[0].maskRect;band.replace=band.cells.length===1&&(band.cells[0].forceOverlay===true||mask[2]>.55&&mask[3]*height>=80);}
+  for(const band of bands){band.cells.sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);const mask=band.cells[0].maskRect;band.replace=!band.cells.some(cell=>cell.collapseWhenEmpty)&&band.cells.length===1&&(band.cells[0].forceOverlay===true||mask[2]>.55&&mask[3]*height>=80);}
   return bands;
  }
  function move(parent,node){
@@ -236,6 +236,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
    tile.node.style.height=(tile.end-tile.start)*height+'px';Object.assign(tile.image.style,{width:width+'px',height:height+'px',left:-tile.columns[0]*width+'px',top:-tile.start*height+'px'});mask(tile,width,height);
   }
+  for(const band of state.bands)if(band.optional)band.node.hidden=band.cells.every(cell=>cell.node.hidden);
   for(const band of state.bands)if(band.replace&&!band.column&&!band.row){
    const rect=band.cells[0].maskRect,offset=(rect[1]-band.start)*height;
    Object.assign(band.cards.style,{marginTop:-((band.end-band.start)*height-offset)+'px',marginLeft:rect[0]*width+'px',width:rect[2]*width+'px',minHeight:(band.end-rect[1])*height+'px'});
@@ -320,10 +321,10 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     state.bands.push({node:row,cards,start:r[1],end:bottom,cells:[cell],replace:true,row:true});cursor=band.end;continue;
    }
    const region=document.createElement('div');region.className='typeset-live-flow-region';if(band.replace)region.classList.add('typeset-live-flow-replacement');
-   const raster=makeTile(state,band.start,band.end,band.cells);region.append(raster.node);
-   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);
+   const optional=band.cells.every(cell=>cell.collapseWhenEmpty),raster=makeTile(state,band.start,band.end,band.cells);raster.node.hidden=optional;region.append(raster.node);
+   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',optional?1:Math.min(3,band.cells.length));region.append(cards);container.append(region);
    for(const cell of band.cells)move(cards,cell.node);
-   state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:band.replace});cursor=band.end;
+   state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:band.replace,optional});cursor=band.end;
    }
    if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
   }

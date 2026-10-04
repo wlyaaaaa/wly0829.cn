@@ -254,11 +254,11 @@ function liveValue(slot){
 
  }
 
- if(slot==='ca-toast')return {text:toast||'当前没有新的操作提示',state:toast?toastState:'closed'};
+ if(slot==='ca-toast')return {text:toast,state:toast?toastState:'closed',empty:!toast};
 
  if(slot==='ca-results'){
   const records=[grant,...actions].filter(Boolean),labels={succeeded:'已完成',failed:'未完成',pending:'等待处理',verifying:'正在验证',unknown:'结果尚未确认',partial:'部分完成',cancelled:'已取消',expired:'已到期'};
-  if(!records.length)return {text:'当前没有办理记录。办理后可点“查询结果”查看这次的结果。',state:'closed',operation:true};
+  if(!records.length)return {text:'',state:'closed',operation:true,empty:true};
   const rows=records.map(item=>({key:item.request_id,text:(({'personal-data':'个人资料锁定',unrestricted:'结束无限制授权',windows:'Windows锁屏'})[item.action]||'本次授权')+' · '+(labels[item.state]||'结果尚未确认'),detail:item.error?(errorMessages[item.error]||'电脑未提供这次错误的说明'):item.state==='unknown'?'请查询这次结果，确认后再办理下一次。':undefined}));
   return {rows,state:records.some(item=>item.state==='failed')?'error':records.some(item=>['pending','verifying','unknown','partial'].includes(item.state))?'warn':'closed',operation:true};
  }
@@ -446,7 +446,7 @@ function mount(){
    section.querySelector('.overlays').append(node);
    if(node.tagName!=='INPUT'&&cell.live_part!=='lamp')node.classList.add('b2-ui-slot');
    if(cell.slot==='ca-connection')node.classList.add('b2-connection-chip');
-   liveCells.push({node,rect:cell.rect,maskRect:cell.mask_rect,livePart:cell.live_part,slot:cell.slot});
+   liveCells.push({node,rect:cell.rect,maskRect:cell.mask_rect,livePart:cell.live_part,slot:cell.slot,collapseWhenEmpty:['ca-toast','ca-results'].includes(cell.slot)});
 
   }
 
@@ -480,6 +480,8 @@ function render(){
   const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';
 
   const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
+  el.hidden=valueRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
+  if(el.hidden){el.replaceChildren();window.TypesetLiveFlow?.request(section);continue;}
 
   if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
 
