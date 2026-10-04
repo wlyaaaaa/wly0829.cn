@@ -973,11 +973,17 @@ def main():
                 dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
                 accepted[url]={'preview_support':True,'page':n};support.append(n)
     local_deps(candidate,args.legacy_site,args.baseline)
+    workbench=None;workbench_inputs={}
+    if args.rule_public_projection:
+        workbench_spec=importlib.util.spec_from_file_location('typeset_rule_workbench',HERE/'prepare-rule-workbench-originals.py')
+        workbench_module=importlib.util.module_from_spec(workbench_spec);workbench_spec.loader.exec_module(workbench_module)
+        workbench=workbench_module.prepare(candidate,args.rule_projection_path)
+        workbench_inputs=workbench.pop('inputs')
     live_ui=None;live_ui_inputs={}
     if args.live_ui_preparation:
         ui_spec=importlib.util.spec_from_file_location('typeset_live_ui',HERE/'prepare-live-ui.py')
         ui_module=importlib.util.module_from_spec(ui_spec);ui_spec.loader.exec_module(ui_module)
-        live_ui,live_ui_inputs=ui_module.prepare_recipe(candidate,args.live_ui_preparation)
+        live_ui,live_ui_inputs=ui_module.prepare_recipe(candidate,args.live_ui_preparation,pages=[hybrid.route_file(url)for url in accepted])
         for missing in live_ui['toc']['missing_labels']:
             matches=[s for s in states.values()if s.get('url') and hybrid.route_file(s['url'])==missing['page']]
             if len(matches)!=1:raise ValueError('Live UI missing-label page is outside the exact selected scope: '+missing['page'])
@@ -998,6 +1004,9 @@ def main():
             args.output.parent/(args.output.name+'-creative-evidence'))
     if live_ui:
         manifest['live_ui_preparation']=live_ui
+        hybrid.write(args.output/hybrid.MANIFEST,manifest)
+    if workbench:
+        manifest['rule_original_workbench']=workbench
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
@@ -1024,6 +1033,9 @@ def main():
     if live_ui:
         report['live_ui_preparation']=live_ui
         report['inputs'].update(live_ui_inputs)
+    if workbench:
+        report['rule_original_workbench']=workbench
+        report['inputs'].update(workbench_inputs)
     if args.reuse_asset_cache:
         report['asset_cache_reuse']={'mode':'verified-existing-or-original-png','sources':ASSET_CACHE_REUSE,'new_encodings':0}
     write(args.report,report)

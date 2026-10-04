@@ -6,6 +6,7 @@ import html
 import importlib.util
 import json
 import re
+import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote, urlencode
@@ -32,6 +33,9 @@ PUBLIC_SEARCH_FIELDS = ('type', 'group', 'scopes', 'projectSlug', 'title', 'deta
 _public_spec = importlib.util.spec_from_file_location('public_page_contract', Path(__file__).with_name('public_page_contract.py'))
 public_contract = importlib.util.module_from_spec(_public_spec)
 _public_spec.loader.exec_module(public_contract)
+if str(Path(__file__).resolve().parent)not in sys.path:sys.path.insert(0,str(Path(__file__).resolve().parent))
+_rule_spec=importlib.util.spec_from_file_location('navigation_rule_original_contract',Path(__file__).with_name('rule_original_contract.py'))
+rule_contract=importlib.util.module_from_spec(_rule_spec);_rule_spec.loader.exec_module(rule_contract)
 RULE_MAPPING_PATH=Path(__file__).resolve().parents[1]/'config/rule-navigation-mappings.json'
 RULE_REFERENCE_MAPPINGS=json.loads(RULE_MAPPING_PATH.read_text('utf8')).get('entries',{}) if RULE_MAPPING_PATH.is_file() else {}
 
@@ -67,6 +71,7 @@ class PageFacts(HTMLParser):
         self.transcripts = {}
         self.headings = []
         self.stack = []
+        self.rule_workbench_metadata=rule_contract.parse_workbench_metadata(text)
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
@@ -115,11 +120,13 @@ def resolve_navigation(ref, pages):
     parts = local_url(ref)
     if parts is None: return ref
     canonical = normalize_path(parts.path) + ('?' + parts.query if parts.query else '') + ('#' + parts.fragment if parts.fragment else '')
-    if target_exists(canonical, pages): return canonical
     mapping=RULE_REFERENCE_MAPPINGS.get(canonical)
     if mapping:
         if target_exists(mapping['target'],pages):return mapping['target']
+        fallback=rule_contract.rule_original_fallback(canonical,mapping,pages)
+        if fallback and target_exists(fallback,pages):return fallback
         raise ValueError('Mapped rule original screen is unavailable: '+mapping['target'])
+    if target_exists(canonical, pages): return canonical
     if canonical in HOST_CAPABILITIES and target_exists(HOST_CAPABILITIES[canonical], pages):
         return HOST_CAPABILITIES[canonical]
     alias = ALIASES.get(normalize_path(parts.path))
@@ -127,6 +134,8 @@ def resolve_navigation(ref, pages):
         full = alias + ('?' + parts.query if parts.query else '') + ('#' + parts.fragment if parts.fragment else '')
         if target_exists(full, pages): return full
         if target_exists(alias, pages): return alias
+    original_topic=rule_contract.rule_topic_original_fallback(canonical,pages)
+    if original_topic and target_exists(original_topic,pages):return original_topic
     topic = RULE_TOPICS.get(parts.path.strip('/').removeprefix('rules/')) if parts.path.startswith('/rules/') else None
     if topic:
         existing = '/rules/?' + urlencode({'rule': topic}) + '#rule-panel-' + topic
@@ -268,8 +277,8 @@ def restore_pending_html(text, pages):
         precise_source=bool(source and urlsplit(source).fragment and target_exists(source,pages))
         mapped_current=RULE_REFERENCE_MAPPINGS.get(current)
         mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
-        destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and target_exists(mapped_current['target'],pages) else
-                     resolve_navigation(source,pages) if mapped_source and target_exists(mapped_source['target'],pages) else source)
+        destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and (target_exists(mapped_current['target'],pages)or rule_contract.rule_original_fallback(current,mapped_current,pages)) else
+                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else source)
         if destination and current != destination and target_exists(destination, pages):
             node['original_href']=source or current;node['href'] = destination; restored = True
     if restored: text = replace_data(text, data)
@@ -282,8 +291,8 @@ def restore_pending_html(text, pages):
         precise_source=bool(source and urlsplit(source).fragment and target_exists(source,pages))
         mapped_current=RULE_REFERENCE_MAPPINGS.get(current);mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
         if not original and not mapped_current:return tag
-        destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and target_exists(mapped_current['target'],pages) else
-                     resolve_navigation(source,pages) if mapped_source and target_exists(mapped_source['target'],pages) else source)
+        destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and (target_exists(mapped_current['target'],pages)or rule_contract.rule_original_fallback(current,mapped_current,pages)) else
+                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else source)
         if destination is None:return tag
         if destination == html.unescape(href[1]) or not target_exists(destination, pages): return tag
         restored = True

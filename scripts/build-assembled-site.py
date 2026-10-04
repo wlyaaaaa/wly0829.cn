@@ -279,6 +279,9 @@ def rule_excerpt_pin_findings(output,files,pin):
         required={identity for identity,entry in expected_excerpts.items() if entry['page']==page_name}
         if len(rows)!=len(required) or required!={row.get('source_meta',{}).get('excerpt_id') for row in rows}:
             findings.append({'file':rel,'type':'rule_excerpt_coverage_mismatch'})
+    workbench=rule_contract.validate_rule_workbench(output,pin)
+    findings.extend(workbench['findings'])
+    seen_documents.update(workbench['seen_documents']);seen_excerpts.update(workbench['seen_excerpts'])
     for document in set(pin['documents'])-seen_documents:
         findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
     return findings

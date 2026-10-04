@@ -8,14 +8,16 @@ import argparse,hashlib,html,json,re
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 MARKER='data-toc-consistency="uniform-v1"'
-def prepare_toc(site_root, label_map=None):
+def prepare_toc(site_root, label_map=None, pages=None):
  root=Path(site_root).resolve()
  assets={}
  for name in ('toc-consistency.css','toc-consistency.js'):
   payload=(HERE/name).read_bytes();filename=Path(name).stem+'-'+hashlib.sha256(payload).hexdigest()[:20]+Path(name).suffix
   rel='_typeset/runtime/'+filename;target=root/rel;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(payload);assets[Path(name).suffix]='/'+rel
  changes=[];missing=[]
+ page_scope=None if pages is None else {Path(page).as_posix()for page in pages}
  for path in sorted(root.rglob('*.html')):
+  if page_scope is not None and path.relative_to(root).as_posix()not in page_scope:continue
   before=path.read_bytes();text=before.decode('utf8');nav=re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>',text,re.S)
   if not nav:continue
   if MARKER in nav[0]:continue

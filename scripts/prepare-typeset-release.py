@@ -6,6 +6,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import os
 import re
 import struct
 import subprocess
@@ -48,12 +49,25 @@ def digest(path):
     return hybrid.digest(path)
 
 
-def bound_file(path, expected):
-    path = Path(path)
+def input_stat(path):
+    stat=path.stat()
+    return (stat.st_dev,stat.st_ino,stat.st_size,stat.st_mtime_ns,stat.st_ctime_ns)
+
+
+def bound_file(path, expected, checked=None):
+    path = Path(path).resolve()
     if not isinstance(expected, dict) or not path.is_file():
         raise ValueError("Missing recorded input: " + str(path))
-    if expected.get("sha256") != digest(path) or expected.get("bytes") != path.stat().st_size:
+    proof=(expected.get('sha256'),expected.get('bytes'));before=input_stat(path)
+    key=os.path.normcase(str(path))
+    if checked is not None and key in checked:
+        previous,observed=checked[key]
+        if previous!=proof or observed!=before:
+            raise ValueError('Input proof or file changed during preparation: '+str(path))
+        return
+    if proof[0] != digest(path) or proof[1] != before[2] or input_stat(path)!=before:
         raise ValueError("Input changed since build: " + str(path))
+    if checked is not None:checked[key]=(proof,before)
 
 
 def beijing_timestamp(value, field):
@@ -133,12 +147,12 @@ def quality_evidence(quality, inputs, page_manifest):
     return assessment
 
 
-def geometry_evidence(page, page_root, page_manifest, inputs, snapshot, snapshot_path, snapshot_hash, entry):
+def geometry_evidence(page, page_root, page_manifest, inputs, snapshot, snapshot_path, snapshot_hash, entry, checked=None):
     """Bind every measured layout to the HTML and PNG generation being released."""
     if snapshot.get("schema") != "wly.typeset-geometry.v1" or snapshot.get("geometry_version") != 2:
         raise ValueError("Geometry must use the current producer-viewport measurement contract (version 2)")
     snapshot_key = str(snapshot_path.resolve())
-    bound_file(snapshot_path, inputs.get(snapshot_key))
+    bound_file(snapshot_path, inputs.get(snapshot_key),checked)
     if inputs[snapshot_key]["sha256"] != snapshot_hash or entry.get("geometry_sha256") != snapshot_hash:
         raise ValueError("Page build does not bind this exact geometry snapshot")
     expected = {}
@@ -163,7 +177,7 @@ def geometry_evidence(page, page_root, page_manifest, inputs, snapshot, snapshot
         html_path = manifest_input(page_root, "html/" + record["screen"] + "-" + record["orientation"] + ".html")
         if not record.get("html") or Path(record["html"]).resolve() != html_path:
             raise ValueError("Geometry refers to a different producer HTML: " + label)
-        bound_file(html_path, inputs.get(str(html_path)))
+        bound_file(html_path, inputs.get(str(html_path)),checked)
         if record.get("html_sha256") != inputs[str(html_path)]["sha256"]:
             raise ValueError("Geometry producer HTML hash is stale: " + label)
         motion.dot_evidence(record, html_path.read_text('utf8'))
@@ -172,7 +186,7 @@ def geometry_evidence(page, page_root, page_manifest, inputs, snapshot, snapshot
             raise ValueError("Geometry PNG parts or their order differ from the manifest: " + label)
         for part in parts:
             image_path = manifest_input(page_root, part["image"])
-            bound_file(image_path, inputs.get(str(image_path)))
+            bound_file(image_path, inputs.get(str(image_path)),checked)
             with image_path.open("rb") as stream:
                 header = stream.read(24)
             if len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
@@ -371,6 +385,7 @@ def video_evidence(entry, dom, files):
 
 
 def prepare(args):
+    checked_inputs={}
     release = args.release.resolve()
     if args.output.resolve().is_relative_to(release):
         raise ValueError("Preparation receipt must be outside the immutable release")
@@ -454,7 +469,7 @@ def prepare(args):
             creative=build['creative_preparation']
             if creative.get('schema')!='wly.creative-replay-result.v1' or creative!=manifest.get('creative_preparation'):
                 raise ValueError('Creative preparation differs from the reviewed final source')
-            bound_file(creative['config']['path'],creative['config'])
+            bound_file(creative['config']['path'],creative['config'],checked_inputs)
             config=read(creative['config']['path'])
             page_only=config.get('scope')=='page-demo-and-retry'
             expected_steps=['demo','retry'] if page_only else ['comic','living','album','river','demo','retry']
@@ -483,7 +498,7 @@ def prepare(args):
                     if info.get(key):restored=restored.replace(info[key].encode('utf8'),b'')
                 baseline_home=(args.baseline.resolve()/'index.html').read_bytes()
                 if info.get('previous_manifest'):
-                    previous=info['previous_manifest'];bound_file(previous['path'],previous)
+                    previous=info['previous_manifest'];bound_file(previous['path'],previous,checked_inputs)
                     if Path(previous['path']).resolve()!=args.baseline.resolve()/'release-manifest.json':
                         raise ValueError('Recovery predecessor is not this exact baseline manifest')
                     retry_spec=importlib.util.spec_from_file_location('typeset_previous_retry',Path(__file__).resolve().parent/'prepare-resource-retry.py')
@@ -503,7 +518,7 @@ def prepare(args):
         try:
             if not overlay_info: raise ValueError('Build lacks the exact release overlay')
             overlay_path = Path(overlay_info['path'])
-            bound_file(overlay_path, overlay_info)
+            bound_file(overlay_path, overlay_info,checked_inputs)
             overlay = hybrid.load_overlay(overlay_path, args.baseline.resolve())
             public_entries = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlay['files'].items()}
             if public_entries != manifest['release_overlay'] or overlay_info['files'] != overlay['files']:
@@ -607,7 +622,7 @@ def prepare(args):
         if rebuilt.get("schema") != "wly.typeset-build.v1":
             block("rebuild", "Rebuild report schema mismatch")
         for field in ("release_id", "inputs", "files", "baseline_root", "baseline_index_sha256",
-                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation", "live_ui_preparation"):
+                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation", "live_ui_preparation", "rule_original_workbench"):
             if rebuilt.get(field) != build.get(field):
                 block("rebuild", "Rebuild changed the reviewed " + field + "; repeat program verification and Claude's publication instruction")
         for page in selected:
@@ -619,6 +634,9 @@ def prepare(args):
                 if current.get(field) != reviewed.get(field):
                     block("rebuild", "Rebuild changed the reviewed page " + field, page)
     global_inputs = build.get("inputs", {})
+    for path,proof in global_inputs.items():
+        try:bound_file(path,proof,checked_inputs)
+        except (ValueError,KeyError,OSError,TypeError) as error:block('inputs',error)
     inventory_key = str(args.inventory.resolve())
     bound_urls = []
     for page in selected:
@@ -648,8 +666,8 @@ def prepare(args):
             inputs = {str(Path(key).resolve()): value for key, value in {**global_inputs, **entry.get("inputs", {})}.items()}
             if not inputs:
                 raise ValueError("No input hashes in build report")
-            for key, value in inputs.items():
-                bound_file(key, value)
+            for key, value in entry.get('inputs',{}).items():
+                bound_file(key, value,checked_inputs)
             page_root = args.typeset_root / page
             page_manifest_path = (page_root / "page-manifest.json").resolve()
             page_manifest = read(page_manifest_path)
@@ -670,12 +688,14 @@ def prepare(args):
             for row in inventory_pages.get(page, []):
                 source = Path(row["source_path"]).resolve()
                 required.add(str(source))
-                if digest(source) != row["source_sha256"]:
+                source_key=str(source)
+                if source_key not in inputs or inputs[source_key]['sha256']!=row['source_sha256']:
                     raise ValueError("Inventory source hash is stale: " + str(source))
+                bound_file(source,inputs[source_key],checked_inputs)
             if required - set(inputs):
                 raise ValueError("Build does not bind required inputs: " + ", ".join(sorted(required - set(inputs))))
             result["pages"][page]["geometry"] = geometry_evidence(page, page_root, page_manifest, inputs,
-                                                                 geometry, geometry_path, geometry_hash, entry)
+                                                                 geometry, geometry_path, geometry_hash, entry,checked_inputs)
             quality_review = {"source_status": "unverified", "report_sha256": quality.get("report_sha256")}
             try:
                 quality_review = quality_evidence(quality, inputs, page_manifest)
@@ -710,6 +730,11 @@ def prepare(args):
             result["pages"][page]["status"] = "ready"
     if len(bound_urls) != len(set(bound_urls)) or set(manifest.get("accepted_pages", {})) != set(bound_urls):
         block("scope", "accepted_pages must exactly match the selected website URLs")
+    for path,(_,observed) in checked_inputs.items():
+        try:
+            if input_stat(Path(path))!=observed:block('inputs','Input changed after verification: '+path)
+        except OSError as error:block('inputs',error)
+    result['input_verification']={'unique_files_hashed':len(checked_inputs),'scope':'This prepare invocation only; full expected SHA/bytes and unchanged file stat'}
     result["status"] = "ready" if not result["blockers"] else "blocked"
     write(args.output, result)
     return result

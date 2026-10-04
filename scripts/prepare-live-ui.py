@@ -35,9 +35,10 @@ def patch_layout(text):
     source_start=source.index(install); source_end=source.index(next_function,source_start)
     return text[:start]+source[source_start:source_end]+text[end:]
 
-def prepare(site, library, font=None, sprite=None, label_map=None):
+def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
     site = Path(site).resolve(); library = Path(library).resolve()
     changes = []; assets = []
+    page_scope=None if pages is None else {Path(page).as_posix()for page in pages}
     def addressed(stem, suffix, payload):
         rel = '_typeset/runtime/' + stem + '-' + proof(payload)['sha256'][:20] + suffix
         target = site / rel; target.parent.mkdir(parents=True, exist_ok=True)
@@ -81,6 +82,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None):
         p = site/url.lstrip('/') if url.startswith('/') else page.parent/url
         return p.resolve() if p.is_file() else None
     for page in sorted(site.rglob('*.html')):
+        if page_scope is not None and page.relative_to(site).as_posix()not in page_scope:continue
         before = page.read_bytes(); text = before.decode('utf8')
         data_match = re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>', text, re.S)
         if not data_match: continue
@@ -121,11 +123,13 @@ def prepare(site, library, font=None, sprite=None, label_map=None):
     toc = None
     if sprite and label_map:
         target=site/'_shared'/Path(sprite).name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(Path(sprite).read_bytes())
-        toc=module('toc', 'prepare-toc-consistency.py').prepare_toc(site,json.loads(Path(label_map).read_text('utf8')))
-    return {'schema':'wly.live-ui-preparation.v1','site':str(site),'changed_pages':changes,'assets':assets,'hardware_icons':hardware_icons,'toc':toc,'external_write':False,'manifest_action':'Rehash the complete candidate after all owner overlays; this preparation is not a publication.'}
+        toc=module('toc', 'prepare-toc-consistency.py').prepare_toc(site,json.loads(Path(label_map).read_text('utf8')),pages=page_scope)
+    result={'schema':'wly.live-ui-preparation.v1','site':str(site),'changed_pages':changes,'assets':assets,'hardware_icons':hardware_icons,'toc':toc,'external_write':False,'manifest_action':'Rehash the complete candidate after all owner overlays; this preparation is not a publication.'}
+    if page_scope is not None:result['selected_page_paths']=sorted(page_scope)
+    return result
 
 
-def prepare_recipe(site, recipe):
+def prepare_recipe(site, recipe, pages=None):
     """Replay the delivered UI before assembly, with every consumed input bound."""
     recipe = Path(recipe).resolve()
     config = json.loads(recipe.read_text('utf8'))
@@ -145,7 +149,7 @@ def prepare_recipe(site, recipe):
     consumed += [paths['library'] / 'icons' / name for name in
         ('笔记本电脑.png', '硬盘循环.png', '云对勾.png', '打勾清单.png', '日历时钟.png', '工具箱.png')]
     inputs = {str(path): proof(path.read_bytes()) for path in consumed}
-    result = prepare(site, **paths)
+    result = prepare(site, **paths, pages=pages)
     result.pop('site')
     result['status'] = 'prepared' if result['toc']['status'] == 'prepared' else 'needs_assets'
     for path, expected in inputs.items():
