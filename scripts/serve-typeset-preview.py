@@ -25,9 +25,27 @@ def main():
     args=ap.parse_args()
     root=args.root.resolve(); report=args.build_report.resolve(); result=args.verification_out.resolve()
     resource_paths={};resource_hashes={}
+    # Frozen HTML rewrites img.src, while producer coordinate metadata may
+    # retain its original URI. Reconcile only exact byte-identical aliases
+    # recorded by this same snapshot; never consult the mutable original.
+    frozen_aliases={};verified_aliases=set()
+    snapshot_path=args.typeset_root.parent/'snapshot.json'if args.typeset_root else None
+    if snapshot_path and snapshot_path.is_file():
+        snapshot=json.loads(snapshot_path.read_text('utf8'))
+        if snapshot.get('schema')=='wly.typeset-input-snapshot.v1'and snapshot.get('status')=='pass':
+            for entry in snapshot.get('files',[]):
+                if entry.get('original_sha256')==entry.get('snapshot_sha256'):
+                    frozen_aliases[Path(entry['original_path']).resolve()]=(Path(entry['snapshot_path']).resolve(),entry['snapshot_sha256'])
     result_lock=threading.Lock()
     def resource_url(path):
-        path=Path(path).resolve();stat=path.stat()if path.is_file()else None;key=hashlib.sha256((str(path)+(':'+str(stat.st_size)+':'+str(stat.st_mtime_ns)if stat else ':missing')).encode()).hexdigest();resource_paths[key]=path
+        path=Path(path).resolve()
+        if path in frozen_aliases:
+            frozen,digest=frozen_aliases[path]
+            if frozen not in verified_aliases:
+                if hashlib.sha256(frozen.read_bytes()).hexdigest()!=digest:raise ValueError('Frozen resource changed: '+str(frozen))
+                verified_aliases.add(frozen)
+            path=frozen
+        stat=path.stat()if path.is_file()else None;key=hashlib.sha256((str(path)+(':'+str(stat.st_size)+':'+str(stat.st_mtime_ns)if stat else ':missing')).encode()).hexdigest();resource_paths[key]=path
         return '/__typeset/resource/'+key+path.suffix
     def rewrite_resources(text,owner):
         def file_url(match):

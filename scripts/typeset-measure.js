@@ -1,7 +1,18 @@
 const TYPESET_DOT_POLICY='current-active-status-v1';
 const TYPESET_DOT_SELECTOR='.dot,.status-dot,.ds-status-dot,.legend-dot,.hub-status-dot,[data-role=status-dot],.feature-status-dot,.mock-status-dot,.legend-color-dot,.hub-status,.ct-point-status';
+function typesetEmptySplitDotShell(el){
+ // Range.extractContents can leave an empty inline shell when TypesetApply
+ // moves a dot glyph into the adjacent no-wrap tail. Require that real glyph.
+ if(!el.matches('.dot')||el.attributes.length!==1||!el.hasAttribute('class')||el.childElementCount||el.textContent.length)return false;
+ const tail=el.nextSibling,dot=tail?.firstChild;
+ if(tail?.nodeType!==1||!tail.matches('[data-typeset-tail=true]')||dot?.nodeType!==1||dot.className!==el.className||dot.textContent.trim()!=='●')return false;
+ const win=el.ownerDocument.defaultView,empty=el.getBoundingClientRect(),real=dot.getBoundingClientRect(),cs=win.getComputedStyle(el);
+ return empty.width<=1&&real.width>1&&real.height>1&&Math.abs(empty.left-real.left)<1&&Math.abs(empty.top-real.top)<1&&cs.backgroundImage==='none'&&['transparent','rgba(0, 0, 0, 0)'].includes(cs.backgroundColor)&&['borderLeftWidth','borderRightWidth','borderTopWidth','borderBottomWidth'].every(k=>parseFloat(cs[k])===0)&&['::before','::after'].every(p=>['none','normal'].includes(win.getComputedStyle(el,p).content));
+}
 function typesetStatusState(el){
  const owner=el.closest('[data-state],[data-status]'),state=el.dataset.state||el.dataset.status||owner?.dataset.state||owner?.dataset.status||'',label=el.dataset.text||el.getAttribute('aria-label')||el.closest('.hub-status,.ct-point-status')?.textContent||el.parentElement?.textContent||'';
+ // Producer shape-only phone-access decorations carry no active-state claim.
+ if((el.matches('.ct-point-status.deco[aria-hidden=true]')&&!state&&!el.textContent.trim()&&!['data-role','data-text','aria-label','data-ct-dot-xywh'].some(name=>el.hasAttribute(name)))||typesetEmptySplitDotShell(el))return 'non_status';
  if(el.matches('.dot-x,.dot-off,.hub-status-frozen')||['off','unknown','pending','uncertain','unused','ring','failed','error','offline','disabled','loading','paused'].includes(state))return 'inactive';
  if(el.matches('.dot.dot-on')||['on','ok','active','running','enabled','valid','normal'].includes(state)||el.matches('[data-role=status-dot][data-ct-dot-xywh]'))return 'active';
  if(/[○✕×]|停用|待定|待验收|待实施|未启用|未运行|没用过|说不准|未知|离线|暂停|冻结/.test(label))return 'inactive';
