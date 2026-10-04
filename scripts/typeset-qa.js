@@ -45,16 +45,25 @@
  }
  function rectError(actual,expected){return !expected?Infinity:Math.max(Math.abs(actual.left-expected.left),Math.abs(actual.top-expected.top),Math.abs(actual.width-expected.width),Math.abs(actual.height-expected.height));}
  function frozenRect(a,b){return Array.isArray(a)&&Array.isArray(b)&&a.length===4&&b.length===4&&a.every((value,index)=>Number.isFinite(value)&&Math.abs(value-b[index])<=.00001);}
+ function optionalSourceTile(win,host,tile,part){
+  const region=tile.parentElement,cards=region?.querySelector(':scope > .typeset-live-flow-cards'),slots=cards?[...cards.children]:[];
+  if(!tile.hidden||!tile.classList.contains('typeset-live-flow-masked')||!region?.classList.contains('typeset-live-flow-region')||win.getComputedStyle(tile).display!=='none'||tile.getClientRects().length||!slots.length)return false;
+  // Optional feedback replaces its source band completely, even while feedback
+  // is present. Only these two registered cells own an intentionally hidden raster.
+  return slots.every(el=>{const slot=el.dataset.b2Slot||el.dataset.slot,cell=win.TypesetLiveFlow?.liveCell?.(host,el),frozen=(part.native_live||[]).find(entry=>entry.hot_id===el.dataset.hotId)||(part.live||[]).find(entry=>entry.slot===slot);
+   return ['ca-toast','ca-results'].includes(slot)&&cell?.node===el&&cell.collapseWhenEmpty===true&&cell.slot===slot&&frozen?.slot===slot&&frozenRect(cell.rect,frozen.rect);
+  });
+ }
  function sourceImages(win,host,part){
   const flow=host.classList.contains('typeset-live-flow-ready'),images=flow?[...host.querySelectorAll('.typeset-live-flow-image')]:[host.querySelector(':scope > picture > img')],issues=[];
   if(!images.length||images.some(image=>!image))return ['source image missing'];
   const width=host.clientWidth,height=width*part.size[1]/part.size[0],url=new URL(part.src,win.location.href).href;
   for(const image of images){
-   const box=image.getBoundingClientRect();
+   const box=image.getBoundingClientRect(),optional=flow&&optionalSourceTile(win,host,image.parentElement,part);
    if(image.src!==url||image.currentSrc&&image.currentSrc!==url||image.naturalWidth!==part.size[0]||image.naturalHeight!==part.size[1])issues.push('source image identity/dimensions');
-   if(Math.abs(box.width-width)>1||Math.abs(box.height-height)>1)issues.push('source image render scale');
+   if(!optional&&(Math.abs(box.width-width)>1||Math.abs(box.height-height)>1))issues.push('source image render scale');
    if(flow){const tile=image.parentElement,left=Number(tile.dataset.sourceLeft),right=Number(tile.dataset.sourceRight),start=Number(tile.dataset.sourceStart),end=Number(tile.dataset.sourceEnd),frame=tile.getBoundingClientRect();
-    if(![left,right,start,end].every(Number.isFinite)||left<0||right>1||start<0||end>1||right<=left||end<=start||Math.abs(box.left-(frame.left-left*width))>1||Math.abs(box.top-(frame.top-start*height))>1||Math.abs(frame.width-(right-left)*width)>1||Math.abs(frame.height-(end-start)*height)>1)issues.push('source image tile binding');
+    if(![left,right,start,end].every(Number.isFinite)||left<0||right>1||start<0||end>1||right<=left||end<=start||!optional&&(Math.abs(box.left-(frame.left-left*width))>1||Math.abs(box.top-(frame.top-start*height))>1||Math.abs(frame.width-(right-left)*width)>1||Math.abs(frame.height-(end-start)*height)>1))issues.push('source image tile binding');
     const clip=win.getComputedStyle(image).clipPath||'',coordinates=[...clip.matchAll(/([-+]?\d*\.?\d+(?:e[-+]?\d+)?)(%|px)/gi)];let cropped=false;
     if(clip.startsWith('inset(')&&coordinates.every(value=>value[2]==='%')){const values=coordinates.map(value=>Number(value[1])/100),expanded=values.length===1?[values[0],values[0],values[0],values[0]]:values.length===2?[...values,...values]:values.length===3?[...values,values[1]]:values;cropped=expanded.length===4&&expanded.every((value,index)=>Math.abs(value-[start,1-right,1-end,left][index])<=.00001);}
     if(clip.startsWith('polygon(evenodd,')&&coordinates.slice(0,10).every(value=>value[2]==='px')){const outer=[left*width,start*height,right*width,start*height,right*width,end*height,left*width,end*height,left*width,start*height];cropped=coordinates.length>=10&&outer.every((value,index)=>Math.abs(value-Number(coordinates[index][1]))<=1);}
