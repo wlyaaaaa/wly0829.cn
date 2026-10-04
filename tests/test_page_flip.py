@@ -38,6 +38,7 @@ SNAP = """()=>({url:location.href,scroll:{x:scrollX,y:scrollY},history:history.l
  runtimePlaceholders:document.querySelectorAll('script[data-album-runtime]').length,
  videos:[...document.querySelectorAll('video.hero-video,.hero-video video')].map(v=>({src:v.currentSrc,paused:v.paused,readyState:v.readyState,hidden:getComputedStyle(v).visibility==='hidden'})),
  speculation:[...document.querySelectorAll('script[type=speculationrules]')].map(e=>JSON.parse(e.textContent)),
+ links:[...document.querySelectorAll('main a[href]')].map(a=>({href:a.getAttribute('href'),class:a.className,visible:!!a.getClientRects().length})),
  imageCount:[...document.querySelectorAll('main picture img')].filter(e=>e.getClientRects().length).length})"""
 
 
@@ -56,9 +57,11 @@ def assert_clean(snapshot):
 
 async def main(args):
     root = args.release_root.resolve(); args.output_dir.mkdir(parents=True,exist_ok=True)
+    asset_root = args.asset_root.resolve() if args.asset_root else None
     args.temp_dir.mkdir(parents=True,exist_ok=True); os.environ['TEMP']=os.environ['TMP']=str(args.temp_dir.resolve())
     release = json.loads((root/'release-manifest.json').read_text('utf8'))
-    files = release['files']; state = {'missing': [], 'external_blocked': [], 'blocked_non_get': [], 'resources': [], 'slow': None}
+    files = {**release['files'], **(release.get('oss',{}).get('objects',{}) if asset_root else {})}
+    state = {'missing': [], 'external_blocked': [], 'blocked_non_get': [], 'resources': [], 'documents': [], 'slow': None}
     results, page_errors, console_errors, profiles = [], [], [], []
     completed = False
     payload = json.dumps(fixture(),ensure_ascii=False).encode()
@@ -70,12 +73,20 @@ async def main(args):
             if state['slow'] == path:
                 time.sleep(1.1)
             target = (root / path.lstrip('/')).resolve()
-            if not target.is_relative_to(root):
+            if asset_root and target.is_relative_to(root) and not target.exists():
+                candidate=(asset_root/path.lstrip('/')).resolve()
+                if candidate.is_relative_to(asset_root) and candidate.is_file():
+                    target=candidate
+            if path == '/__status':
+                status,body,mime = 200,payload,'application/json'
+            elif not (target.is_relative_to(root) or asset_root and target.is_relative_to(asset_root)):
                 status,body,mime = 403,b'outside strict root','text/plain'
             else:
                 if target.is_dir(): target = target/'index.html'
                 if target.is_file():
                     status,body,mime = 200,target.read_bytes(),mimetypes.guess_type(target)[0] or 'application/octet-stream'
+                    if target.suffix=='.html':
+                        state['documents'].append({'path':path,'at':time.time(),'purpose':self.headers.get('Sec-Purpose') or self.headers.get('Purpose'),'fetch_dest':self.headers.get('Sec-Fetch-Dest')})
                 else:
                     status,body,mime = 404,b'missing','text/plain'; state['missing'].append(path)
             self.send_response(status); self.send_header('Content-Type',mime + ('; charset=utf-8' if mime.startswith('text/') else ''))
@@ -135,6 +146,8 @@ async def main(args):
                     await page.wait_for_url(base+expected,wait_until='commit',timeout=15000)
                     await page.wait_for_timeout(40)
                     during=await page.evaluate(SNAP)
+                    if not all(a['rate']==1 for a in during['animations']):
+                        results.append({'device':device,'case':'clock-rate-failure-'+direction,'during':during})
                     assert all(a['rate']==1 for a in during['animations']),during['animations']
                     results.append({'device':device,'case':'cache-reveal-during-'+direction,'during':during})
                     return await settled()
@@ -149,21 +162,38 @@ async def main(args):
                     during=await page.evaluate(SNAP)
                     after=await settled()
                     relevant=[e for e in after['audit'] if e['epoch']>before['album']['events'][-1]['epoch'] and e['url']==urlsplit(after['url']).path]
+                    selected=[p.get('orientation') for e in relevant if e['type']=='decorate' for p in e.get('participants',[]) if p.get('orientation')]
+                    assert all(o==('v' if options['viewport']['width']<768 else 'h') for o in selected), (device,case,selected)
                     finish=next((e for e in relevant if e['type']=='finished'),None)
                     click=next((e for e in after['audit'][::-1] if e['type']=='native-click'),None)
                     results.append({'device':device,'case':case,'before':before,'during':during,'after':after,'transition':relevant,'elapsed_ms':finish['epoch']-click['epoch'] if finish and click else None})
                     return after
-                initial=await load('/');results.append({'device':device,'case':'first-load','after':initial,'chrome':context.browser.version})
+                startup_mark=len(state['documents'])
+                initial=await load('/')
+                startup_docs=state['documents'][startup_mark:]
+                next_docs=[row for row in startup_docs if row['path'] not in ['/', '/index.html']]
+                assert not next_docs, ('Startup requested a next document without pointer intent',next_docs)
+                results.append({'device':device,'case':'first-load','after':initial,'chrome':context.browser.version,'startup_documents':startup_docs,'startup_next_document_count':len(next_docs)})
                 assert not initial['speculation'], 'No all-page prerender/prefetch'
+                home_intent=page.locator('#home-05 a[href="/projects/"]').first
+                await home_intent.scroll_into_view_if_needed()
+                await home_intent.dispatch_event('pointerover', {'pointerType':'mouse'})
+                await page.wait_for_function('window.SiteAlbum.snapshot.warmedRoutes.includes("/projects/")')
+                await page.wait_for_function('window.SiteAlbum.snapshot.images.some(i=>i.decoded)',timeout=15000)
+                intent=await page.evaluate(SNAP)
+                assert any(i['decoded'] for i in intent['album']['images']), 'Opening artwork is decoded before navigation'
+                assert intent['speculation'] and all(not r.get('prerender') for r in intent['speculation'])
+                assert all(all(urlsplit(u).path=='/projects/' for u in p['urls']) for r in intent['speculation'] for p in r.get('prefetch',[]))
+                results.append({'device':device,'case':'intent-only-document-prefetch','after':intent})
                 await navigate(page.locator('#home-05 a[href="/projects/"]'),'/projects/','original-home-card-to-directory')
-                await navigate(page.locator('a.featured-project[href="/projects/localocr/"]'),'/projects/localocr/','directory-to-project')
+                await navigate(page.locator('main a[href="/projects/localocr/"]:visible'),'/projects/localocr/','directory-to-project')
                 # Project modules are the site's genuine module links.
-                await load('/projects/')
-                module=page.locator('.project-module-links a[href="/projects/agents/authorization-owner/"]')
-                await navigate(module,'/projects/agents/authorization-owner/','directory-to-module',keyboard=True)
+                await load('/projects/agents/authorization-owner/')
+                module=page.locator('a[href="/projects/agents/capability-routing/"]:visible')
+                await navigate(module,'/projects/agents/capability-routing/','real-project-module-entry',keyboard=True)
                 await load('/skills/')
-                await navigate(page.locator('a[href="/skills/localocr/"]'),'/skills/localocr/','skills-directory-to-detail',keyboard=True)
-                await navigate(page.locator('a[href="/projects/localocr/"]'),'/projects/localocr/','same-subject-skill-to-project')
+                await navigate(page.locator('a[href="/skills/localocr/"]:visible'),'/skills/localocr/','skills-directory-to-detail',keyboard=True)
+                await navigate(page.locator('a[href="/projects/localocr/"]:visible'),'/projects/localocr/','same-subject-skill-to-project')
                 await navigate(page.locator('a[href="/rules/"]:visible'),'/rules/','project-to-rules')
                 await load('/')
                 await navigate(page.locator('main a[href="/cockpit/"]'),'/cockpit/','home-to-cockpit')
@@ -184,10 +214,10 @@ async def main(args):
                 assert urlsplit(anchored['url']).fragment and anchored['album']['generation']==prior['album']['generation']
                 results.append({'device':device,'case':anchor_case,'before':prior,'after':anchored})
                 await load('/skills/localocr/')
-                await page.locator('main a[href="/projects/localocr/"]').first.evaluate('(a)=>a.setAttribute("href","/projects/localocr/#usage")')
+                await page.locator('main a[href="/projects/localocr/"]:visible').first.evaluate('(a)=>a.setAttribute("href","/projects/localocr/#usage")')
                 deep=await navigate(page.locator('main a[href="/projects/localocr/#usage"]'),'/projects/localocr/#usage','cross-document-deep-anchor-native')
                 assert not any(e['type']=='ready' for e in deep['album']['events'])
-                external=page.locator('main a[href^="https://github.com/"]')
+                external=page.locator('main a[href^="https://github.com/"]:visible')
                 original=await external.first.evaluate('(a)=>({href:a.href,target:a.target,download:a.download})')
                 assert original['href'].startswith('https://github.com/')
                 external_before=await page.evaluate(SNAP)
@@ -215,6 +245,19 @@ async def main(args):
                     await history_nav('back','/')
                     snap=await history_nav('forward','/projects/')
                 results.append({'device':device,'case':'rapid-history-cleanup','after':snap})
+                # Orientation changes retain native history and clean temporary
+                # layers without replaying a completed page turn.
+                before_rotate=await page.evaluate(SNAP)
+                rotated={'width':915,'height':412} if device=='phone' else {'width':1000,'height':1440}
+                await page.set_viewport_size(rotated)
+                await page.wait_for_timeout(350)
+                landscape=await page.evaluate(SNAP);assert_clean(landscape)
+                assert landscape['album']['generation']==before_rotate['album']['generation']
+                await page.set_viewport_size(options['viewport'])
+                await page.wait_for_timeout(350)
+                portrait=await page.evaluate(SNAP);assert_clean(portrait)
+                assert portrait['album']['generation']==before_rotate['album']['generation']
+                results.append({'device':device,'case':'orientation-does-not-replay-or-leave-layers','before':before_rotate,'landscape':landscape,'after':portrait})
                 # Throttle actual browser CPU; no synthetic busy-loop insurance.
                 await cdp.send('Emulation.setCPUThrottlingRate',{'rate':4})
                 await load('/skills/')
@@ -244,11 +287,12 @@ async def main(args):
         server.shutdown();server.server_close();worker.join(timeout=5)
         for profile in profiles:
             if profile.exists():
-                subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(profile.resolve()),'-AllowedRoot',str(args.temp_dir.resolve()),'-Json'],check=True)
+                subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(profile.resolve()),'-AllowedRoot',str(args.temp_dir.resolve()),'-Json'],check=True,
+                               creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         report={'schema':'wly.album-browser-evidence.v1','observed_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),
-                'release_id':release['release_id'],'complete_candidate':str(root),'strict_served_root':str(root),'port':server.server_port,
+                'release_id':release['release_id'],'complete_candidate':str(root),'strict_served_root':str(root),'assets_served_root':str(asset_root) if asset_root else None,'port':server.server_port,
                 'results':results,'page_errors':page_errors,'console_errors':console_errors,'requests':state,'server_closed':not worker.is_alive(),
-                'boundaries':['Installed Chrome headless DOM and timing only; no image/screenshot/video inspection','412x915 DPR3.5 phone viewport, no physical phone','No real Safari, Edge, Firefox or unsupported browser','Status and graph are local fixtures; no real status or POST'],
+                'boundaries':['Installed Chrome headless DOM and timing only; no image/screenshot/video inspection','412x915 DPR3.5 phone viewport, no physical phone','No real Safari, Edge, Firefox or unsupported browser','Status and graph are local fixtures; no real status or POST','When asset-root is supplied, mapped OSS URLs are served from exact prepared local objects with browser CORS enforcement; no live OSS GET'],
                 'status':'pass' if completed and len(results)>=17*len(devices) and not state['missing'] and not page_errors and not console_errors else 'incomplete'}
         (args.output_dir/'browser-evidence.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n','utf8')
         print(json.dumps({'status':report['status'],'results':len(results),'page_errors':len(page_errors),'missing':len(state['missing']),'output':str(args.output_dir/'browser-evidence.json')},ensure_ascii=False))
@@ -258,6 +302,7 @@ async def main(args):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--release-root',type=Path,required=True)
+    parser.add_argument('--asset-root',type=Path,help='Prepared local OSS objects for the mapped HTML browser rehearsal; never downloads assets')
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--temp-dir',type=Path,required=True)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))

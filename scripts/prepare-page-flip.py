@@ -118,6 +118,49 @@ def fit_script(proof):
                 and any(isinstance(t, ast.Name) and t.id == 'FIT_JS' for t in n.targets))
 
 
+def bound_geometries(paths):
+    """Read geometry identities from the producer's actual per-page inputs.
+
+    Follow only the build's named baseline, never the newest directory or a
+    loose geometry glob. Pixel matching below still binds each current image.
+    """
+    pending, seen, result, proofs = list(paths), set(), {}, []
+    while pending:
+        report_path = pending.pop(0).resolve()
+        if report_path in seen:
+            continue
+        seen.add(report_path)
+        report = read(report_path)
+        inputs = dict(report.get('inputs') or {})
+        for page in (report.get('pages') or {}).values():
+            inputs.update(page.get('inputs') or {})
+        selected = {}
+        for name, receipt in inputs.items():
+            candidate = Path(name)
+            if candidate.suffix == '.json' and 'geometry' in candidate.name:
+                selected[candidate.resolve()] = receipt.get('sha256')
+        if report.get('geometry_path'):
+            selected[Path(report['geometry_path']).resolve()] = report.get('geometry_sha256')
+        accepted = []
+        for candidate, expected in selected.items():
+            if not expected or not candidate.is_file() or digest(candidate) != expected:
+                raise ValueError('Build-bound geometry changed: ' + str(candidate))
+            data = read(candidate)
+            if not data.get('records') or not data.get('fit_input'):
+                continue
+            if candidate in result and result[candidate] != expected:
+                raise ValueError('Conflicting geometry generations: ' + str(candidate))
+            result[candidate] = expected
+            accepted.append({'path': str(candidate), 'sha256': expected})
+        proofs.append({'path': str(report_path), 'sha256': digest(report_path), 'geometry': accepted})
+        baseline = report.get('baseline_root')
+        if baseline:
+            baseline_report = Path(baseline).parent / 'build-report.json'
+            if baseline_report.is_file():
+                pending.append(baseline_report)
+    return list(result), proofs
+
+
 async def titles(records, chrome, profiles, evidence, ownership):
     """Observe existing visible title-image DOM; no invented title_rect field."""
     if not records:
@@ -217,7 +260,9 @@ async def prepare(args, ownership):
         raise ValueError('HTML-only OSS package: restore all manifest OSS objects into a complete inventory-bound local source before replay')
     pages = {k: (source/k).read_bytes().decode('utf8') for k in original if k.endswith('.html')}
     records, geometry_proofs = {}, []
-    for p in args.geometry:
+    report_geometries, report_proofs = bound_geometries(args.build_report)
+    geometry_paths = list(dict.fromkeys(args.geometry + report_geometries))
+    for p in geometry_paths:
         d = read(p); fit = fit_script(d['fit_input']); geometry_proofs.append({'path': str(p.resolve()), 'sha256': digest(p)})
         for r in d.get('records', []):
             if r.get('issues') or r.get('broken_images') or not r.get('parts'):
@@ -240,7 +285,7 @@ async def prepare(args, ownership):
                 asset = local_asset(source, part['src'], rel)
                 first_cards = screens.index(screen) < (2 if orient == 'v' else 4) and not entry
                 if sid == entry or first_cards:
-                    image_rows.append({'src': urljoin('/' + rel, part['src']), 'orientation': orient, 'both': part.get('both', False)})
+                    image_rows.append({'src': urljoin('/' + rel, part['src']), 'orientation': orient, 'both': part.get('both', False), 'widthBased': bool(data.get('typeset'))})
                 if not asset:
                     continue
                 for r in records.get((sid, orient), []):
@@ -353,12 +398,12 @@ async def prepare(args, ownership):
     manifest['files'] = files; manifest['release_id'] = release_id
     manifest['page_flip_preparation'] = {'schema': 'wly.album-preparation.v1', 'status': 'prepared_pending_parent_acceptance',
         'baseline_release_id': read(source/'release-manifest.json')['release_id'], 'source_root': str(source),
-        'motion_ms': 655, 'total_budget_ms': 785, 'runtime': [js_rel,css_rel,index_rel], 'geometry': geometry_proofs,
+        'motion_ms': 655, 'total_budget_ms': 785, 'runtime': [js_rel,css_rel,index_rel], 'geometry': geometry_proofs, 'build_reports': report_proofs,
         'unchanged_source_media_count': len(immutable), 'native_routes': len(models), 'no_corresponding_subject_routes': [k for k,v in models.items() if not any(n['arts'] for n in v['nodes'] if n['screen'] == v['entry'])]}
     write(out/'release-manifest.json', manifest)
     summary = {'status': 'prepared', 'release_id': release_id, 'source_release_id': manifest['page_flip_preparation']['baseline_release_id'],
                'source': str(source), 'candidate': str(out), 'files': len(files), 'html': len(pages), 'changed_html': changed,
-               'delayed_scripts': delayed, 'pixel_bindings': checks, 'title_dom_measurements': evidence,
+               'delayed_scripts': delayed, 'pixel_bindings': checks, 'title_dom_measurements': evidence, 'geometry_build_reports': report_proofs,
                'route_effects': {k: {'entry':v['entry'], 'art_count':sum(len(n['arts']) for n in v['nodes']), 'title_count':sum('title' in n for n in v['nodes'])} for k,v in models.items()},
                'original_media_bytes_preserved': True, 'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat()}
     write(args.evidence, summary)
@@ -370,6 +415,7 @@ def main():
     ap.add_argument('--source', type=Path, required=True)
     ap.add_argument('--out', type=Path, required=True)
     ap.add_argument('--geometry', type=Path, action='append', default=[])
+    ap.add_argument('--build-report', type=Path, action='append', default=[], help='Read hash-bound geometry from actual page inputs, including named baseline build reports')
     ap.add_argument('--asset-baseurl', default='', help='Configured new asset base; omitted for the later OSS mapping stage')
     ap.add_argument('--chrome', type=Path, default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     ap.add_argument('--profile', type=Path, required=True)
@@ -385,7 +431,8 @@ def main():
     finally:
         if ownership.get('profile_created') and args.profile.exists():
             subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1',
-                            '-LiteralPath',str(args.profile.resolve()),'-AllowedRoot',str(args.profile.parent.resolve()),'-Json'], check=True)
+                            '-LiteralPath',str(args.profile.resolve()),'-AllowedRoot',str(args.profile.parent.resolve()),'-Json'], check=True,
+                           creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
 
 
 if __name__ == '__main__':

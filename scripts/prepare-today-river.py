@@ -16,8 +16,6 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 BJT = timezone(timedelta(hours=8))
-MARKER = '/* Today river cockpit count/group fix. */'
-END_MARKER = '/* End today river cockpit count/group fix. */'
 RELAY_MARKER = '/* Relay only the existing cockpit automation read to todayRiver. */'
 MOUNT = '<section class="today-river" data-today-river aria-label="今天的河"></section>'
 
@@ -48,7 +46,8 @@ def once(text: str, before: str, after: str) -> str:
 
 
 def patch_runtime(text: str) -> str:
-    # 全站显示归 cockpit-light；这里仅转送本次输入已经读取的原读数。
+    # The cockpit-light renderer owns task counts, group names and lamp policy.
+    # Only relay its existing automation read; do not revise those decisions.
     if RELAY_MARKER not in text:
         text = once(text, 'function render(){', RELAY + '\nfunction render(){\n relayTodayRiver();')
     return text
@@ -91,7 +90,7 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
             js_ref = 'assets/' + Path(rel).name
         else:
             css_ref = 'assets/' + Path(rel).name
-    assets = handoff / 'assets2'
+    assets = ROOT / 'scripts/today-river-assets2'
     for name in ['river.webp', 'mask.png', *[f'boat{i}.webp' for i in range(4)], *[f'bird-{pose}.webp' for pose in ['idle','look','tilt','sing','sleep']]]:
         additions['cockpit/assets/today-river-assets2/' + name] = (assets / name).read_bytes()
     html = once(html, old_ref, new_ref)
