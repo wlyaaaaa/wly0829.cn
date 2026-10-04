@@ -49,6 +49,10 @@ PLACE = """({id,fraction})=>{
 async def reading_position(browser_page):
     expected=browser_page.viewport_size
     predicate="""expected => {
+      // Album navigation inserts the actual app after DOMContentLoaded.
+      // Wait within the same deadline; never substitute missing runtime state.
+      if(typeof resizing==='undefined'||typeof typesetReadingState==='undefined'||typeof readingPosition==='undefined'||typeof window.SiteAudit?.ready!=='function')return false;
+      if(window.SiteAlbum&&!window.SiteAlbum.snapshot.runtimeLoaded)return false;
       if(innerWidth!==expected.width||innerHeight!==expected.height||resizing||typesetReadingState.width!==expected.width||typesetReadingState.height!==expected.height)return false;
       const current=(POSITION_VALUE)(),tracked=readingPosition;
       return current.id===tracked?.id && (!current.id||Math.abs(current.fraction-tracked.fraction)<1e-8);
@@ -185,7 +189,7 @@ async def run(args, base, build):
         except Exception as error:
             result['errors'].append(str(error))
             result['aborted']=True
-            try:result['failure_observation']=await browser_page.evaluate("()=>({url:location.href,tracked:readingPosition,saved:typesetReadingState.saved,revision:typesetReadingState.revision,resizing,images:[...document.querySelectorAll('.typeset-part:not([hidden]) img')].filter(im=>!im.complete||!im.naturalWidth).map(im=>({src:im.currentSrc||im.src,complete:im.complete,width:im.naturalWidth}))})")
+            try:result['failure_observation']=await browser_page.evaluate("()=>({url:location.href,tracked:typeof readingPosition==='undefined'?null:readingPosition,saved:typeof typesetReadingState==='undefined'?null:typesetReadingState.saved,revision:typeof typesetReadingState==='undefined'?null:typesetReadingState.revision,resizing:typeof resizing==='undefined'?null:resizing,runtime_globals:{readingPosition:typeof readingPosition,typesetReadingState:typeof typesetReadingState,resizing:typeof resizing},audit_ready:typeof window.SiteAudit?.ready==='function',album:window.SiteAlbum?.snapshot||null,images:[...document.querySelectorAll('.typeset-part:not([hidden]) img')].filter(im=>!im.complete||!im.naturalWidth).map(im=>({src:im.currentSrc||im.src,complete:im.complete,width:im.naturalWidth}))})")
             except Exception as observation_error:result['failure_observation_error']=str(observation_error)
         finally:
             if context and args.static_retry_once:await context.unroute_all(behavior='wait')
