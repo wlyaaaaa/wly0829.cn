@@ -176,7 +176,7 @@ def verify(args):
     remote_by_url={entry['url']:entry for entry in manifest['oss']['objects'].values()}
     for page,entry in qa_plan['pages'].items():
         observed=reading['pages'][page]
-        relative=entry['url'].lstrip('/')+'index.html'
+        relative=source_gate.hybrid.route_file(entry['url'])
         expected_html=manifest['files'][relative]['sha256']
         require(observed['url']==entry['url'] and observed['html_sha256']==expected_html,'Reading HTML/page identity differs: '+page)
         documents=[row for row in reading['responses'] if urlsplit(row['url']).path==entry['url']]
