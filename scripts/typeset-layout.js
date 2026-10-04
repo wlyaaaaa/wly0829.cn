@@ -279,7 +279,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const dynamic=entries.filter(cell=>!isLamp(cell));
   if(!dynamic.length){reset(host);return null;}
   let state=states.get(host);
-  const signature=JSON.stringify(entries.map(cell=>[cell.rect,cell.maskRect||cell.rect,isLamp(cell)]));
+  const signature=JSON.stringify(entries.map(cell=>[cell.rect,cell.maskRect||cell.rect,isLamp(cell),cell.forceOverlay===true,cell.flowRow===true,cell.compactFrame===true]));
   if(state&&state.signature===signature&&state.cells.length===entries.length&&entries.every((cell,index)=>cell.node===state.cells[index].node)){update(state);return state;}
   const focus=host.contains(host.ownerDocument.activeElement)?host.ownerDocument.activeElement:null;
   reset(host);
@@ -304,7 +304,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true});cursor=band.end;
    }
    if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
-  }else if(bands.length===1&&bands[0].replace){
+  }else if(bands.length===1&&bands[0].replace&&!bands[0].cells[0].flowRow){
    // A large blank beside an illustration is a column replacement. Keeping
    // the side columns uncut prevents a long static paragraph from being torn
    // at the blank frame's lower edge when the live card grows.
@@ -429,7 +429,7 @@ function installTypeset(section,screen){
   for(const wrap of overlay.querySelectorAll('.typeset-shot-crop'))fitTypesetShot(wrap);
   const flowCells=[...overlay.querySelectorAll('.typeset-live')].map(node=>{
    const hot=part.hotspots.find(hot=>hot.id===node.dataset.hotId),cell=hot||[...(part.live||[]),...(part.native_live||[])].find(cell=>cell.slot===node.dataset.slot);
-   return cell?{node,rect:cell.rect,livePart:cell.live_part||node.dataset.livePart}:null;
+   return cell?{node,rect:cell.rect,livePart:cell.live_part||node.dataset.livePart,compactFrame:part.compact_live===true}:null;
   }).filter(Boolean);
   if(flowCells.length)window.TypesetLiveFlow?.apply(host,flowCells);
  }

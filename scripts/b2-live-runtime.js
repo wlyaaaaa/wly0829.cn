@@ -273,6 +273,11 @@ function liveValue(slot){
 
   if(cool>clock())return {text:`验证暂不可用（冷却中）。请在 ${Math.ceil((cool-clock())/60)} 分钟后重试（${time(cool)}）。已有授权保持`,state:'warn'};
 
+  if(!online())return {text:phase==='loading'?'正在连接电脑，读到状态后才能办理。':'当前读不到电脑，暂时不能办理。请确认电脑已开机联网，再刷新状态。',state:'unknown'};
+  if(!formal)return {text:'当前打开的是本地预览，暂时不能办理。请在网站或电脑自己的授权页上办理。',state:'unknown'};
+  if(!status?.state_version)return {text:'电脑还没有提供本次办理所需的状态，请刷新后再试。',state:'unknown'};
+  if(status?.factor?.available!==true)return {text:'电脑上的验证器暂不可用，当前不能办理。已有授权保持。',state:'unknown'};
+
   return {text:'本次：'+keys.map(k=>k==='personal_data'?'个人资料':'无限制授权').join(' + ')+' · '+(minutes===null?'请填0.5～72小时':minutesLabel(minutes)),state:minutes===null?'warn':'ok'};
 
  }
@@ -474,7 +479,7 @@ function mount(){
 
   }
 
-  for(const entry of layout.native_actions||[]){const button=document.createElement('button');button.className='b2-native b2-image-action';button.type='button';button.dataset.b2Action=entry.action;button.dataset.baseLabel=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';button.setAttribute('aria-label',entry.text);button.title=entry.text;rectStyle(button,entry.rect);button.onclick=()=>{if(entry.copy_text){navigator.clipboard.writeText(entry.copy_text).then(()=>message('已复制。','ok')).catch(()=>message('未能写入剪贴板，请检查浏览器剪贴板权限。','error'));}else action(entry.action);};section.querySelector('.overlays').append(button);}
+  for(const entry of layout.native_actions||[]){const button=document.createElement('button');button.className='b2-native b2-image-action';button.type='button';button.dataset.b2Action=entry.action;button.dataset.baseLabel=entry.text;button.textContent=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';button.setAttribute('aria-label',entry.text);button.title=entry.text;rectStyle(button,entry.rect);button.onclick=()=>{if(entry.copy_text){navigator.clipboard.writeText(entry.copy_text).then(()=>message('已复制。','ok')).catch(()=>message('未能写入剪贴板，请检查浏览器剪贴板权限。','error'));}else action(entry.action);};section.querySelector('.overlays').append(button);}
   let flowCells=liveCells.filter(cell=>cell.node.tagName!=='INPUT'&&cell.slot!=='ca-connection');
   if(screenId==='cockpit-01'){
    const overview=flowCells.filter(cell=>cell.slot==='cockpit-overall'||cell.slot.startsWith('cockpit-quick-'));
@@ -482,8 +487,8 @@ function mount(){
   }else if(screenId==='mcp-01'&&flowCells.length){flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
   else if(screenId==='computer-access-01'){
    const grants=flowCells.filter(cell=>['ca-personal-data','ca-unrestricted','ca-windows'].includes(cell.slot));
-   if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));flowCells.push(liveGroup(section,grants,'b2-authority-group'));}
-   else for(const cell of grants)cell.forceOverlay=true;
+   if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));const group=liveGroup(section,grants,'b2-authority-group');group.flowRow=true;flowCells.push(group);}
+   else for(const cell of grants){cell.forceOverlay=true;cell.flowRow=true;}
   }
   window.TypesetLiveFlow?.apply(section,flowCells);
 
