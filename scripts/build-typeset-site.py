@@ -139,6 +139,13 @@ def live_key(slot, part):
                 'windows':'cockpit-security-windows'}.get(part,slot)
     return slot
 
+def floating_cards(screen, layout):
+    if screen.get('shape')=='card':return []
+    excluded=[c['rect']for key in ['interactive_cards','card_text_only']for c in layout.get(key,[])]
+    return [r for r in layout.get('cards',[]) if not any(
+        max(0,min(r[0]+r[2],q[0]+q[2])-max(r[0],q[0]))*max(0,min(r[1]+r[3],q[1]+q[3])-max(r[1],q[1]))>min(r[2]*r[3],q[2]*q[3])*.7 for q in excluded)]
+
+
 def old_effects(data):
     screens=data.get('screens',[])
     sampled=[s for s in screens if s.get('render_mode')not in {'source_text','text','card'}]
@@ -146,13 +153,7 @@ def old_effects(data):
     expected=['ambient','back_top','footer_signature','navigation','viewer','depth']
     if any(s.get('shape')!='card'for s in screens[1:]):expected.append('screen_enter')
     if any(s.get('shape')!='card'for s in sampled):expected.append('seam')
-    def floating_card(screen,layout):
-        if screen.get('shape')=='card':return False
-        excluded=[c['rect']for key in ['interactive_cards','card_text_only']for c in layout.get(key,[])]
-        for r in layout.get('cards',[]):
-            if not any(max(0,min(r[0]+r[2],q[0]+q[2])-max(r[0],q[0]))*max(0,min(r[1]+r[3],q[1]+q[3])-max(r[1],q[1]))>min(r[2]*r[3],q[2]*q[3])*.7 for q in excluded):return True
-        return False
-    if any(floating_card(s,l)for s in sampled for l in s.get('layouts',{}).values()):expected.append('cards')
+    if any(floating_cards(s,l)for s in sampled for l in s.get('layouts',{}).values()):expected.append('cards')
     # Dots are decided from current active-status observations after measuring;
     # old decorative coordinates are not a capability requirement.
     for key in ['numbers','arrows']:
@@ -162,6 +163,66 @@ def old_effects(data):
     if any(l.get('interactive_cards')for l in layouts)or any(s.get('shape')=='card'and any(link.get('whole')for l in s.get('layouts',{}).values()for link in l.get('links',[]))for s in screens):expected.append('card_feedback')
     if data.get('kind')in{'project','frozen'}:expected.append('brief')
     return expected
+
+def bind_current_toc(text, data, source):
+    """Retain valid legacy navigation; rebuild stale navigation from authored sections."""
+    match=re.search(r'<nav\b[^>]*\bclass="toc"[^>]*>.*?</nav>',text,re.S)
+    if not match:return text,{'status':'absent','previous_invalid_targets':[]}
+    reader=hybrid.builder.Refs();reader.feed(text)
+    nav=hybrid.builder.Refs();nav.feed(match[0])
+    invalid=[href for href,is_link in nav.refs if is_link and href.startswith('#') and unquote(href[1:]) not in reader.ids]
+    if not invalid:return text,{'status':'legacy_targets_preserved','previous_invalid_targets':[]}
+    authored={s['id']:s for s in source['screens'] if not s.get('hidden')};sections={}
+    for screen in data['screens']:
+        src=authored[screen['id']];section=src.get('nav_section') or src.get('section') or screen['section']
+        screen['section']=section
+        sid=html.escape(screen['id'],quote=True);safe=html.escape(section,quote=True)
+        pattern=r'(<section\b[^>]*\bdata-screen="'+re.escape(sid)+r'"[^>]*\bdata-section=")[^"]*(")'
+        text=re.sub(pattern,lambda m:m[1]+safe+m[2],text,count=1)
+        if section not in reader.ids:
+            marker='<div class="section-anchor" id="'+safe+'"></div>'
+            text=re.sub(r'<section\b[^>]*\bdata-screen="'+re.escape(sid)+r'"[^>]*>',lambda m:marker+m[0],text,count=1)
+            reader.ids.add(section)
+        sections.setdefault(section,src.get('nav_title') or screen['title'])
+    links=''.join('<a class="nav-link" href="#'+html.escape(key,quote=True)+'" data-section="'+html.escape(key,quote=True)+'" data-label-h="'+html.escape(title,quote=True)+'" data-label-v="'+html.escape(title,quote=True)+'">'+html.escape(title)+'</a>' for key,title in sections.items())
+    toc='<nav class="toc" aria-label="本页目录"><div class="bar-inner"><div class="toc-inner toc-text">'+links+'</div></div></nav>'
+    text=re.sub(r'<nav\b[^>]*\bclass="toc"[^>]*>.*?</nav>',lambda _:toc,text,count=1,flags=re.S)
+    return text,{'status':'current_sections_rebuilt','previous_invalid_targets':invalid,
+                 'entries':[{'href':'#'+key,'title':title} for key,title in sections.items()]}
+
+
+def current_effects(data, source, previous):
+    """Replace layout-dependent expectations only after current input binding."""
+    keys=('cards','numbers','arrows','screenshots','card_feedback')
+    screens=data['screens'];parts=[p for s in screens for p in s['parts']]
+    complete=bool(parts) and all(p.get('motion_measured') for p in parts)
+    source_shots=all(isinstance(s.get('screenshots'),list) for s in source['screens'] if not s.get('hidden'))
+    if source_shots:
+        source_shots=all(not s['screenshots'] or any(h['kind']=='screenshot' for screen in screens if screen['id']==s['id'] for p in screen['parts'] for h in p['hotspots'])
+                         for s in source['screens'] if not s.get('hidden'))
+    counts={key:{o:0 for o in ('h','v')} for key in keys}
+    for screen in screens:
+        for part in screen['parts']:
+            values={'cards':len(floating_cards(screen,part)),'numbers':len(part['numbers']),'arrows':len(part['arrows']),
+                    'screenshots':sum(h['kind']=='screenshot' for h in part['hotspots']),
+                    'card_feedback':len(part.get('interactive_cards',[]))+int(screen.get('shape')=='card' and bool(screen.get('primary_href')))}
+            for orient in ('h','v'):
+                if part.get('both') or part['orientation']==orient:
+                    for key in keys:counts[key][orient]+=values[key]
+    capabilities={};expected=list(previous);changes=[]
+    for key in keys:
+        count=sum(counts[key].values());measured=complete and (source_shots if key=='screenshots' else True)
+        status=('present' if count else 'no_corresponding_element') if measured else 'measurement_missing'
+        capabilities[key]={'policy':'current-bound-layout-v1','status':status,'count_h':counts[key]['h'],'count_v':counts[key]['v'],
+                           'label':'新版面无对应元素' if status=='no_corresponding_element' else '当前布局元素' if status=='present' else '缺少完整量测'}
+        old=key in previous
+        if measured:
+            expected=[item for item in expected if item!=key]
+            if count:expected.append(key)
+        if old!=(key in expected):changes.append({'effect':key,'previous_expected':old,'current_expected':key in expected,
+            'basis':'Current source, PNG/HTML-bound producer-components-v8 measurements and mounted part model','capability':capabilities[key]})
+    return expected,capabilities,changes
+
 
 def motion_part(geometry, image, size, start, padding):
     result={'cards':[],'numbers':[],'dots':[],'arrows':[]}
@@ -431,6 +492,7 @@ def build_page(name, records, args, candidate):
     expected_effects=old_effects(data);old_video=data.get('video');video_binding=None
     if preview_only or templated:
         expected_effects=['ambient','back_top','footer_signature','navigation','viewer','depth','screen_enter','seam'];old_video=None
+    legacy_effects=list(expected_effects)
     original = {s['id']:s for s in data['screens']}
     data.update({'page':name,'kind':source.get('kind',data['kind']),'title':source['title'],
                  'url':url,'typeset':True,'video':None,'screens':[]})
@@ -580,8 +642,11 @@ def build_page(name, records, args, candidate):
                 else:
                     try:
                         current_html=(args.typeset_root/name/'html'/f'{sid}-{orient}.html').read_text('utf8')
+                        if geometry.get('measurement_recipe')!='producer-components-v8' or any(not isinstance(geometry.get(key),list) for key in ['cards','numbers','dots','arrows']):
+                            raise ValueError('缺少当前生产DOM的完整 cards/numbers/dots/arrows 数组')
                         part['dot_capability']=motion_prep.dot_evidence(geometry,current_html)
                         part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
+                        part['motion_measured']=True
                     except ValueError as error:issues.append(sid+'/'+orient+':状态点量测证据不完整：'+str(error))
                 if old_video and len(data['screens'])==0 and orient=='h' and part_indices[orient]==0 and not issues:
                     try:
@@ -680,6 +745,7 @@ def build_page(name, records, args, candidate):
         toc='<nav class="toc" aria-label="本页目录"><div class="toc-inner toc-text">'+''.join('<a class="nav-link" href="#'+html.escape(k,quote=True)+'" data-section="'+html.escape(k,quote=True)+'" data-label-h="'+html.escape(v,quote=True)+'" data-label-v="'+html.escape(v,quote=True)+'">'+html.escape(v)+'</a>'for k,v in sections.items())+'</div></nav>'
         text=re.sub(r'<nav class="toc".*?</nav>',lambda _:toc,text,flags=re.S)
     text = re.sub(r'(<main\b[^>]*>).*?(</main>)',lambda m:m[1]+''.join(main)+m[2],text,count=1,flags=re.S)
+    text,toc_binding=bind_current_toc(text,data,source)
     scripts=re.findall(r'<script\b[^>]*src="([^"]+)"',text)
     for sr in scripts:
         if sr.startswith('/_shared/app-'):
@@ -699,12 +765,12 @@ def build_page(name, records, args, candidate):
     # A fresh label keeps those immutable published files intact.
     css=bundle((HERE/'typeset-layout.css').read_text('utf8'),candidate,'typeset-layout','.css')
     data['motion_counts']={key:sum(len(p.get(key,[]))for s in data['screens']for p in s['parts'])for key in ['cards','numbers','dots','arrows']}
-    # Only this capability changes from the historic image-coordinate inventory.
-    # Missing measurements still block above; absence requires bound observations.
+    expected_effects,capabilities,effect_changes=current_effects(data,source,expected_effects)
+    if any(item['status']=='measurement_missing' for item in capabilities.values()):issues.append('缺少当前布局效果能力的完整量测')
     if data['motion_counts']['dots']:expected_effects.append('dots')
     dot_capabilities=[p.get('dot_capability')for s in data['screens']for p in s['parts']]
     dot_status='present'if data['motion_counts']['dots']else'no_corresponding_element'if dot_capabilities and all(dot_capabilities)else'measurement_missing'
-    data['motion_capabilities']={'dots':{'policy':motion_prep.DOT_POLICY,'status':dot_status,'label':'新版面无对应元素'if dot_status=='no_corresponding_element'else'当前有效状态标记'}}
+    data['motion_capabilities']={**capabilities,'dots':{'policy':motion_prep.DOT_POLICY,'status':dot_status,'label':'新版面无对应元素'if dot_status=='no_corresponding_element'else'当前有效状态标记'}}
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}"></head>')
     label_names=set(re.findall(r'data-label-(?:text|h|v)="([^"]+)"',text))
     data['shared']['nav_labels']={k:v for k,v in data['shared'].get('nav_labels',{}).items()if k in {html.unescape(x)for x in label_names}}
@@ -736,8 +802,10 @@ def build_page(name, records, args, candidate):
     return {'url':url,'status':'built' if not issues else 'blocked','issues':sorted(set(issues)),
             'authored_url':authored_url,'route_alias_contract':{'original':authored_url,'canonical':url} if url!=authored_url else None,
             'inputs':inputs,'html_sha256':hybrid.digest(dest),'quality':q,'preview_only':preview_only,
-            'effects_expected':expected_effects,'effects_capabilities':data['motion_capabilities'],'motion_appearance':motion_prep.appearance(),'video_expected':video_expected,
+            'effects_expected':expected_effects,'effects_expected_legacy':legacy_effects,'effects_expectation_changes':effect_changes,
+            'effects_capabilities':data['motion_capabilities'],'motion_appearance':motion_prep.appearance(),'video_expected':video_expected,
             'geometry_sha256':geometry_sha256,'original_video':old_video,
+            'toc_binding':toc_binding,
             'screens':screen_count,'images':image_count,'template_shell':templated,'anchor_binding':'owning-screen',
             'anchors':sum(len(x['screen_anchors'])for x in data['screens'])}
 
@@ -752,6 +820,7 @@ def main():
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
     ap.add_argument('--release-overlay',type=Path,help='Exact approved search and runtime-reference updates bound by old/new hashes')
+    ap.add_argument('--creative-preparation',type=Path,help='Fixed six-step 2e preparation recipe; replay before final evidence')
     ap.add_argument('--baseline-ref',help='Exact published commit whose OSS source is the complete runtime baseline')
     ap.add_argument('--runtime-baseline',action='store_true',help='Verify the complete local source against that commit without changing its manifest')
     args=ap.parse_args()
@@ -821,9 +890,18 @@ def main():
                 dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
                 accepted[url]={'preview_support':True,'page':n};support.append(n)
     local_deps(candidate,args.legacy_site,args.baseline)
-    manifest=hybrid.assemble(args.baseline,candidate,args.output,baseline_manifest,accepted,overlay=overlay,
+    if args.creative_preparation and (args.release_overlay or args.preview_support):
+        raise ValueError('Creative replay uses the complete native five-page source without preview support or another overlay')
+    raw_output=args.output.parent/(args.output.name+'-raw') if args.creative_preparation else args.output
+    manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
+    creative=None;creative_inputs={}
+    if args.creative_preparation:
+        creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
+        creative_module=importlib.util.module_from_spec(creative_spec);creative_spec.loader.exec_module(creative_module)
+        manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
+            args.output.parent/(args.output.name+'-creative-evidence'))
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -843,6 +921,9 @@ def main():
     if args.runtime_baseline:
         report.update(baseline_production_commit=args.baseline_ref,baseline_input_kind='complete_runtime_staging',
                       baseline_source_release_id=baseline_manifest['release_id'])
+    if creative:
+        report['creative_preparation']=creative
+        report['inputs'].update(creative_inputs)
     write(args.report,report)
     print(json.dumps({'built':sum(x['status']=='built'for x in states.values()),'blocked':sum(x['status']=='blocked'for x in states.values()),'missing':sum(x['status']=='missing'for x in states.values()),'home_unchanged':report['home_unchanged'],'release_id':report['release_id']}))
 

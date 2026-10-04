@@ -107,9 +107,19 @@ def verify(args):
         require(reading.get('static_transfers') and all(transfer['status']=='pass' and 1<=len(transfer['attempts'])<=2 for transfer in reading['static_transfers']),'Final split execution lacks bounded actual static transfers')
     else:
         require(cold['status']=='pass' and all(row['status']=='pass' and row['under_two_seconds'] and not row['failed_requests'] and not row['network_failures'] for row in cold['checks']),'Cold browser coverage or resource checks failed')
-    video=cold.get('video',{})
-    require(video.get('status')=='pass' and video.get('issues')==[] and video.get('route')=='/' and video.get('seek',{}).get('seeked') is True,'Unchanged homepage lacks actual playback and seek evidence')
-    require(video['before']['src'] in remote_by_url and video['after']['current_src']==video['before']['src'] and video['after']['current_time']>video['before']['current_time'],'Homepage playback does not use the bound real OSS video')
+    if manifest.get('home_living_preparation'):
+        living=cold.get('home_living',{})
+        require(build.get('creative_preparation') and living.get('schema')=='wly.oss-home-living.v1' and living.get('release_id')==manifest['release_id'] and living.get('html_sha256')==manifest['files']['index.html']['sha256'] and living.get('status')=='pass','Living homepage lacks bound actual OSS runtime evidence')
+        require(len(living.get('checks',[]))==3 and {row['case'] for row in living['checks']}=={'desktop','phone','reduced'},'Living homepage runtime cases are incomplete')
+        for row in living['checks']:
+            require(row['status']=='pass' and row['issues']==[] and not row['errors'] and row['responses'] and row.get('shader_time_uniform')=='u_t','Living homepage runtime or resource observations failed')
+            require(all(response.get('verified') is True and response['url'] in remote_by_url and response['bytes']==remote_by_url[response['url']]['bytes'] and response['sha256']==remote_by_url[response['url']]['sha256'] for response in row['responses']),'Living homepage did not execute exact real OSS bodies')
+            if row['case']=='reduced':require(row['after']['draws']==0 and row['after']['diagnostics']['phase']=='static' and row['after']['diagnostics']['reason']=='reduced-motion' and row['after']['diagnostics']['frames']==row['before']['diagnostics']['frames'] and row['after']['image'] and all(image['complete'] and image['width']>0 for image in row['after']['image']),'Living static original and quiet clock/status contract were not observed')
+            else:require(row['after']['draws']>row['before']['draws'] and row['after']['diagnostics']['frames']>row['before']['diagnostics']['frames'] and len(set(row['after']['time_samples']))>=2,'Actual living GL/frame/time did not advance')
+    else:
+        video=cold.get('video',{})
+        require(video.get('status')=='pass' and video.get('issues')==[] and video.get('route')=='/' and video.get('seek',{}).get('seeked') is True,'Unchanged homepage lacks actual playback and seek evidence')
+        require(video['before']['src'] in remote_by_url and video['after']['current_src']==video['before']['src'] and video['after']['current_time']>video['before']['current_time'],'Homepage playback does not use the bound real OSS video')
     if args.staged:
         staged=oss.read(args.staged/'release-manifest.json')
         oss.verify_manifest(staged)

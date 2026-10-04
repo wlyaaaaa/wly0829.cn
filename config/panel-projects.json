@@ -3656,6 +3656,17 @@
           "any source-side materiality claim because this project has no automatic website handoff"
         ]
       }
+    },
+    {
+      "id": "password-center",
+      "title": "密码中心",
+      "route": "/projects/password-center",
+      "source": {
+        "repo": "wlyaaaaa/PasswordCenter",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "local_root": "E:\\Projects\\Tools\\PasswordCenter"
+      }
     }
   ]
 }

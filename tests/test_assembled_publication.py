@@ -47,6 +47,12 @@ class PublicationGate(unittest.TestCase):
     def test_relative_private_filename(self):
         (self.site/'聊天记录-示例.txt').write_text('Synthetic fixture',encoding='utf8')
         result=self.run_gate(True);self.assertTrue(any(x['type']=='private_filename' for x in result['findings']))
+    def test_model_writing_role_does_not_adopt_case_content(self):
+        (self.site/'404.html').write_text('<p>写给我看的文字：网站文案、汇报、方案、法律文书。</p>',encoding='utf8')
+        self.run_gate()
+        (self.site/'404.html').write_text('<p>写给我看的文字：网站文案、汇报、方案、法律文书。</p><p>起诉具体案件。</p>',encoding='utf8')
+        result=self.run_gate(True)
+        self.assertTrue(any(x['type']=='excluded_topic' and x['matched']=='案件' for x in result['findings']))
     def test_binary_credentials_and_domain(self):
         (self.site/'image.png').write_bytes(b'\x00sk-'+b'X'*24+b'\x00')
         (self.site/'CNAME').write_text('wrong.example\n',encoding='utf8')

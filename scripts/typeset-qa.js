@@ -77,30 +77,36 @@
     for(const card of p.interactive_cards||[]){const surface=[...host.querySelectorAll('.typeset-card-feedback')].find(el=>el.dataset.cardId===card.id),main=surface?.querySelector('.raster-card-main');if(!surface||!main||main.getAttribute('href')!==card.href)issues.push(p.image+':new card feedback target '+card.id);else{const er=surface.getBoundingClientRect(),cr=card.rect,want=[r.left+cr[0]*r.width,r.top+cr[1]*r.height,cr[2]*r.width,cr[3]*r.height];if(Math.max(Math.abs(er.left-want[0]),Math.abs(er.top-want[1]),Math.abs(er.width-want[2]),Math.abs(er.height-want[3]))>1.5)issues.push(p.image+':new card feedback geometry '+card.id);targets.push(card.href);}}
    }
   }
+  for(const link of doc.querySelectorAll('.toc a[href]'))targets.push(link.getAttribute('href'));
   for(const h of targets){const u=new URL(h,win.location.href);if(u.origin!==win.location.origin)continue;
    if(u.pathname===win.location.pathname&&u.hash){if(!doc.getElementById(decodeURIComponent(u.hash.slice(1))))issues.push('anchor target missing '+h);}
   }
   // Hit-testing checks the actual top element, including sticky navigation and neighbouring overlays.
-  let hitChecks=0;
+  let hitChecks=0;const hitDiagnostics=[];
   for(const el of doc.querySelectorAll('.typeset-part:not([hidden]) :is(.hotspot,.b2-image-action,.typeset-screenshot)')){
-   const r=el.getBoundingClientRect(),synthetic=!el.dataset.hotId&&(el.dataset.synthetic||el.classList.contains('card-main')||el.classList.contains('raster-card-main'));win.scrollTo(0,win.scrollY+r.top+(synthetic?0:r.height/2)-260);await sleep(0);const b=el.getBoundingClientRect();let measured=0;
+   const synthetic=!el.dataset.hotId&&(el.dataset.synthetic||el.classList.contains('card-main')||el.classList.contains('raster-card-main'));
    const probes=synthetic?[[.1,.1],[.5,.1],[.9,.1],[.1,.5],[.5,.5],[.9,.5],[.1,.9],[.5,.9],[.9,.9]]:[[.5,.5]];
-   for(const [x,y]of probes){const px=b.left+b.width*x,py=b.top+b.height*y;if(px<0||px>=width||py<0||py>=win.innerHeight)continue;const top=doc.elementFromPoint(px,py),part=el.closest('.typeset-part'),internal=synthetic&&top&&part.contains(top)&&top.closest('[data-hot-id],.typeset-live,.b2-native,.typeset-screenshot');
-    if(top!==el&&!el.contains(top)&&!internal)issues.push('hotspot obstructed '+(el.dataset.hotId||el.dataset.synthetic||el.className));hitChecks++;measured++;
+   // Each original card point must be reachable after scrolling. A fixed
+   // back-to-top button can legitimately cover a bottom-viewport point;
+   // move that same document point, never exempt the covering element.
+   for(const [x,y]of probes){const before=el.getBoundingClientRect();win.scrollTo({top:win.scrollY+before.top+before.height*y-260,behavior:'instant'});
+    await new Promise(resolve=>win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)));
+    const b=el.getBoundingClientRect(),px=b.left+b.width*x,py=b.top+b.height*y,top=doc.elementFromPoint(px,py),part=el.closest('.typeset-part'),internal=synthetic&&top&&part.contains(top)&&top.closest('[data-hot-id],.typeset-live,.b2-native,.typeset-screenshot');
+    if(px<0||px>=width||py<0||py>=win.innerHeight||top!==el&&!el.contains(top)&&!internal){issues.push('hotspot obstructed '+(el.dataset.hotId||el.dataset.synthetic||el.className));hitDiagnostics.push({screen:el.closest('[data-screen]')?.dataset.screen,hot_id:el.dataset.hotId||el.dataset.synthetic||null,probe:[px,py],scroll_y:win.scrollY,blocker:top?{tag:top.tagName,class_name:top.className,id:top.id,href:top.getAttribute('href')}:null});}hitChecks++;
    }
-   if(!measured){const current=el.getBoundingClientRect();win.scrollTo(0,win.scrollY+current.top+current.height/2-260);await sleep(0);const centered=el.getBoundingClientRect(),px=centered.left+centered.width/2,py=centered.top+centered.height/2,top=doc.elementFromPoint(px,py),part=el.closest('.typeset-part'),internal=synthetic&&top&&part.contains(top)&&top.closest('[data-hot-id],.typeset-live,.b2-native,.typeset-screenshot');if(px<0||px>=width||py<0||py>=win.innerHeight||top!==el&&!el.contains(top)&&!internal)issues.push('hotspot has no unobstructed viewport probe '+(el.dataset.hotId||el.dataset.synthetic||el.className));hitChecks++;}
   }
   win.scrollTo(0,0);
   for(const s of d.screens)for(const id of s.screen_anchors||[])if(!ids.includes(id))issues.push('source anchor missing '+id);
    const grids=[...doc.querySelectorAll('.typeset-card-grid')].map(g=>{const css=win.getComputedStyle(g),columns=css.gridTemplateColumns.split(' '),gap=parseFloat(css.columnGap)||0,track=(g.clientWidth-(columns.length-1)*gap)/columns.length;return {cards:g.children.length,columns:columns.length,fills_track:[...g.children].every(c=>Math.abs(c.getBoundingClientRect().width-track)<1)};});
    if(d.page==='projects-home'&&(!grids.length||grids.some(g=>g.columns!==(width<768?1:2))))issues.push('project card grid columns');
    if(grids.some(g=>!g.fills_track))issues.push('project card does not fill grid track');
-  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,hit_checks:hitChecks,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
+  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
  }
  const effectNames=new Set(['cards','numbers','dots','arrows','screen_enter','seam','depth','update','ambient','back_top','footer_signature','navigation','viewer','brief','live','screenshots','compare','card_feedback']);
  const geometryKeys=['cards','numbers','dots','arrows'];
  const unique=xs=>[...new Set(xs)],equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  function rectOf(item){return Array.isArray(item)?item:item?.rect;}
+ function floatingCardCount(screen,part){if(screen.shape==='card')return 0;const excluded=[...(part.interactive_cards||[]),...(part.card_text_only||[])].map(c=>c.rect);return(part.cards||[]).filter(r=>!excluded.some(q=>Math.max(0,Math.min(r[0]+r[2],q[0]+q[2])-Math.max(r[0],q[0]))*Math.max(0,Math.min(r[1]+r[3],q[1]+q[3])-Math.max(r[1],q[1]))>Math.min(r[2]*r[3],q[2]*q[3])*.7)).length;}
  async function cssRules(doc){const list=[];function visit(rules){for(const rule of rules){if(rule.selectorText)list.push(rule);if(rule.cssRules)visit(rule.cssRules);}}
   for(const sheet of doc.styleSheets){try{visit(sheet.cssRules);}catch(error){
    const proof=build.oss_objects?.[sheet.href];if(!proof)throw Error('External CSS has no bound actual object: '+sheet.href);
@@ -117,6 +123,7 @@
   const observed=new Set(),samples=[],sampleIds=new Set(),observedDots=new Set(),rules=await cssRules(doc);
   const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null;
   const stateObserved={normal_branch:new URL(win.location.href).searchParams.get('audit')!=='1'&&doc.body.dataset.audit!=='true',reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,hidden:doc.hidden};
+  const capabilityCounts={cards:0,numbers:0,arrows:0,screenshots:0,card_feedback:0};
   if(!data.typeset)issues.push('normal route did not select the current typeset page');
   if(!stateObserved.normal_branch)issues.push('normal branch unexpectedly entered audit mode');
   if(stateObserved.reduced_motion||stateObserved.hidden)issues.push('normal effects require visible page and no reduced motion');
@@ -157,6 +164,9 @@
     for(const host of section.querySelectorAll('.typeset-part:not([hidden])')){
      const part=screen?.parts[[...section.querySelectorAll('.typeset-part')].indexOf(host)],layout=host._layout,im=host.querySelector('picture img');
      if(!part||!layout||!equal(layout,part)||im.getAttribute('src')!==part.src){binding=false;issues.push('normal layout/image binding differs: '+host.dataset.part);continue;}
+     capabilityCounts.cards+=floatingCardCount(screen,part);capabilityCounts.numbers+=part.numbers.length;capabilityCounts.arrows+=part.arrows.length;
+     capabilityCounts.screenshots+=part.hotspots.filter(h=>h.kind==='screenshot').length;
+     capabilityCounts.card_feedback+=(part.interactive_cards||[]).length+(screen.shape==='card'&&screen.primary_href?1:0);
      const positions=[0];
      for(const key of geometryKeys){const entries=part[key]||[];counts[key]+=entries.length;
       for(const entry of entries){const r=rectOf(entry);if(!Array.isArray(r)||r.length!==4||r.some(n=>!Number.isFinite(n))||r[0]<0||r[1]<0||r[2]<=0||r[3]<=0||r[0]+r[2]>1.002||r[1]+r[3]>1.002){binding=false;issues.push('invalid current motion rectangle: '+host.dataset.part+' '+key);}}
@@ -199,7 +209,7 @@
    const top=doc.querySelector('.back-to-top');
    if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<45&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
    capture();win.scrollTo({top:0,behavior:'instant'});
-   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
+   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,capability_counts:capabilityCounts,effects_capabilities:data.motion_capabilities,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
   }finally{observer.disconnect();}
  }
  async function checkEffects(entry){
@@ -211,6 +221,10 @@
   if(entry.motion_appearance&&checks.some(c=>!equal(c.motion_appearance,entry.motion_appearance)))issues.push('normal runtime uses a different motion appearance');
   const dots=entry.effects_capabilities?.dots;
   if(dots&&(dots.policy!=='current-active-status-v1'||!['present','no_corresponding_element'].includes(dots.status)||(dots.status==='present')!==expected.includes('dots')||(dots.status==='present')!==checks.some(c=>c.geometry_counts.dots>0)))issues.push('current active-status capability does not match the expected effects');
+  for(const name of ['cards','numbers','arrows','screenshots','card_feedback']){const cap=entry.effects_capabilities?.[name];if(!cap){if(checks.some(c=>c.effects_capabilities?.[name]))issues.push('build current layout capability is missing: '+name);continue;}
+   if(cap.policy!=='current-bound-layout-v1'||!['present','no_corresponding_element'].includes(cap.status)||(cap.status==='present')!==expected?.includes(name)||checks.some(c=>!equal(c.effects_capabilities?.[name],cap)||c.capability_counts?.[name]!==cap[c.width<768?'count_v':'count_h']))issues.push('current layout capability does not match normal branch: '+name);
+   for(const c of checks)if(c.capability_counts?.[name]>0&&!c.preserved.includes(name))issues.push('current effect has no normal-branch observation at '+c.width+': '+name);
+  }
   for(const name of expected||[])if(!preserved.includes(name))issues.push('original effect has no normal-branch observation: '+name);
   if(!/^[a-f0-9]{64}$/.test(geometrySha||''))issues.push('current geometry snapshot hash is missing');
   return {status:issues.length?'fail':'pass',expected:expected||[],preserved,issues:unique(issues),evidence:{normal_branch:checks.every(c=>c.normal_branch),new_geometry_bound:checks.every(c=>c.new_geometry_bound),geometry_sha256:geometrySha,geometry_counts:Object.fromEntries(geometryKeys.map(key=>[key,checks.reduce((n,c)=>n+c.geometry_counts[key],0)])),running_animation_count:Math.max(0,...checks.map(c=>c.running_animation_count)),hotspot_css_feedback:checks.every(c=>c.hotspot_css_feedback),native_buttons_bound:checks.every(c=>c.native_buttons_bound),checks}};

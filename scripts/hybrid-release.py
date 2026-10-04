@@ -262,7 +262,7 @@ def load_overlay(path, baseline):
         elif kind == 'runtime_bundle':
             if before is not None or not re.fullmatch(r'_typeset/runtime/app-[0-9a-f]{20}\.js',rel) or Path(rel).stem != 'app-'+after['sha256'][:20]:
                 raise ValueError('Runtime bundle must use its new content hash')
-        else: raise ValueError('Unknown overlay kind: '+str(kind))
+        elif kind != 'integrated_preparation': raise ValueError('Unknown overlay kind: '+str(kind))
     for source, proof in overlay.get('inputs', {}).items():
         source = Path(source)
         if {'sha256':digest(source),'bytes':source.stat().st_size} != proof: raise ValueError('Overlay input changed: '+str(source))
@@ -503,16 +503,39 @@ def retained_audit_topic(output, finding, manifest, baseline_cache):
     before=baseline_cache[rel]
     return before is not None and unchanged_topic_text(before,(output/rel).read_bytes().decode('utf-8-sig'),finding)
 
-def validate_content(output, report):
+def oss_module():
+    spec = importlib.util.spec_from_file_location('oss_content', ROOT/'scripts/prepare-oss-release.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def validate_content(output, report, oss_preparation=None):
     output=output.resolve()
     manifest = verify_release(output)
     asset_prefix = None
+    budget_root = output if manifest.get('oss') else None
+    if oss_preparation is not None:
+        preparation = Path(oss_preparation).resolve()
+        plan = oss_module().verify_local(preparation)
+        split = verify_release(preparation/'github')
+        if plan['release_id'] != split['release_id']:
+            raise ValueError('OSS budget preparation and sealed split identities differ')
+        if manifest.get('oss'):
+            if manifest['release_id'] != split['release_id'] or manifest['files'] != split['files']:
+                raise ValueError('OSS budget preparation belongs to another split')
+        else:
+            source_files = {rel: value for rel, value in plan['source_files'].items() if rel != MANIFEST}
+            if (plan['source_release_id'] != manifest['release_id']
+                    or split['oss']['source_release_id'] != manifest['release_id']
+                    or source_files != manifest['files']):
+                raise ValueError('OSS budget preparation belongs to another source or inventory')
+            budget_root = preparation/'github'
     if manifest.get('oss'):
         # The existing artifact gate needs actual files, including remote JS
         # repository references. Materialize verified bodies in the ignored
         # task/CI cache and run that same gate over the complete release.
-        oss_spec = importlib.util.spec_from_file_location('oss_content', ROOT/'scripts/prepare-oss-release.py')
-        oss = importlib.util.module_from_spec(oss_spec); oss_spec.loader.exec_module(oss)
+        oss = oss_module()
         cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
         cache.mkdir(parents=True, exist_ok=True)
         for rel in list(manifest['files'])+[MANIFEST]:
@@ -550,7 +573,7 @@ def validate_content(output, report):
         # The complete artifact
         # still receives every credential, private-repository and resource check.
         with contextlib.redirect_stdout(io.StringIO()):
-            try: builder.validate(output, report, asset_prefix=asset_prefix)
+            try: builder.validate(output, report, asset_prefix=asset_prefix, budget_root=budget_root)
             except SystemExit: pass
         result = read(report)
         selected = {route_file(x) for x in manifest['accepted_pages']}
@@ -612,6 +635,7 @@ def main():
     prepare.add_argument('--rollback-ref')
     verify = commands.add_parser('verify'); verify.add_argument('--output',type=Path,required=True)
     verify.add_argument('--content-report',type=Path)
+    verify.add_argument('--oss-preparation',type=Path,help='Bind the GitHub deployment budget to this sealed split while checking the complete source')
     verify.add_argument('--public-repos-from-github',action='store_true')
     restore = commands.add_parser('restore'); restore.add_argument('--ref', required=True); restore.add_argument('--output',type=Path,required=True)
     args = parser.parse_args()
@@ -619,7 +643,7 @@ def main():
     if args.command == 'verify':
         manifest = verify_release(args.output)
         if args.public_repos_from_github: builder.load_public_repos()
-        if args.content_report: validate_content(args.output,args.content_report)
+        if args.content_report: validate_content(args.output,args.content_report,args.oss_preparation)
         print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
     approvals = read(args.approvals); states = read(args.status)['pages']; report = read(args.candidate_report); proof = report.get('input',{})
     candidate_files = report.get('output_files')

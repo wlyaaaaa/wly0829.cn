@@ -36,6 +36,58 @@ BLOCK = re.compile(r'<(?P<tag>script|style)\b[^>]*>(?P<body>.*?)</(?P=tag)\s*>',
 CSS_URL = re.compile(r'url\(\s*(?P<q>["\']?)(?P<value>[^)"\']+)(?P=q)\s*\)', re.I)
 
 
+def javascript_literals(text):
+    """Observe quoted literals while skipping comments and regular expressions."""
+    index=0;regex_allowed=True;last_word=None;parentheses=[];jump_pending=False
+    controls={'if','while','for','with','switch','catch'}
+    expression_words={'return','throw','case','delete','typeof','void','new','in','of','yield','await','instanceof','else','do','break','continue','debugger'}
+    while index<len(text):
+        char=text[index]
+        if char.isspace():
+            if char in '\r\n' and jump_pending:regex_allowed=True;last_word=None;jump_pending=False
+            index+=1;continue
+        if text.startswith('//',index):
+            end=text.find('\n',index+2)
+            if end>=0 and jump_pending:regex_allowed=True;last_word=None;jump_pending=False
+            index=len(text) if end<0 else end+1;continue
+        if text.startswith('/*',index):
+            end=text.find('*/',index+2)
+            if jump_pending and '\n' in text[index:end if end>=0 else len(text)]:regex_allowed=True;last_word=None;jump_pending=False
+            index=len(text) if end<0 else end+2;continue
+        if char in '\"\'`':
+            match=STRINGS.match(text,index)
+            if match:
+                yield match
+                index=match.end();regex_allowed=False;last_word=None;continue
+        if char=='/' and regex_allowed:
+            end=index+1;in_class=False
+            while end<len(text) and text[end] not in '\r\n':
+                token=text[end]
+                if token=='\\':end+=2;continue
+                if token=='[':in_class=True
+                elif token==']':in_class=False
+                elif token=='/' and not in_class:break
+                end+=1
+            if end<len(text) and text[end]=='/':
+                index=end+1
+                while index<len(text) and text[index].isalpha():index+=1
+                regex_allowed=False;last_word=None;continue
+        word=re.match(r'[$\w]+',text[index:])
+        if word:
+            last_word=word[0];index+=len(last_word);regex_allowed=last_word in expression_words
+            if last_word in {'break','continue'}:jump_pending=True
+            continue
+        jump_pending=False
+        if char=='(':
+            parentheses.append(last_word in controls);regex_allowed=True
+        elif char==')':regex_allowed=parentheses.pop() if parentheses else False
+        elif char==']':regex_allowed=False
+        elif char in ';,{=:[!&|?+-*%^~<>}':regex_allowed=True
+        elif char=='.':regex_allowed=False
+        elif char=='/':regex_allowed=True
+        last_word=None;index+=1
+
+
 def stamp():
     return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
@@ -152,7 +204,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1):
-        if version not in (1,2):
+        if version not in (1,2,3):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -169,7 +221,10 @@ class Rewriter:
         value = html.unescape(raw)
         if not value or value.startswith(('#', 'data:', 'blob:', 'mailto:', 'tel:')) or '${' in value or '\\' in value:
             return None
-        parts = urlsplit(value)
+        try:parts = urlsplit(value)
+        except ValueError:
+            if self.version>=3 and context in ('js','json'):return None
+            raise
         if parts.scheme or parts.netloc:
             if (parts.scheme + '://' + parts.netloc).rstrip('/') != self.origin:
                 return None
@@ -225,7 +280,8 @@ class Rewriter:
 
     def strings(self, text, owner, context, offset=0):
         edits = []
-        for m in STRINGS.finditer(text):
+        literals=javascript_literals(text) if context=='js' and self.version>=3 else STRINGS.finditer(text)
+        for m in literals:
             new = self.url(m['value'], owner, context)
             if new != m['value']:
                 edits.append((offset + m.start('value'), offset + m.end('value'), new, context + '_url'))
@@ -233,6 +289,7 @@ class Rewriter:
 
     def javascript(self, text, owner, offset=0):
         edits = self.strings(text, owner, 'js', offset)
+        literal_spans={(m.start('value'),m.end('value')) for m in javascript_literals(text)} if self.version>=3 else None
         if '__vite__mapDeps=' in text:
             # Vite's sole preload URL prefix becomes empty because dependency
             # literals are now absolute URLs. No control flow is modified.
@@ -244,10 +301,12 @@ class Rewriter:
                 raise ValueError('Unrecognized Vite preload URL helper: ' + owner)
             if matches:
                 m = matches[0]
-                edits.append((offset + m.start('slash'), offset + m.end('slash'), '', 'vite_preload_url_prefix'))
+                if literal_spans is None or (m.start('slash'),m.end('slash')) in literal_spans:
+                    edits.append((offset + m.start('slash'), offset + m.end('slash'), '', 'vite_preload_url_prefix'))
         # All page-data shot.src literals have become absolute resource URLs.
         # This old concatenation must stop adding assets/ in front of them.
         for m in re.finditer(r"new URL\('(?P<prefix>assets/)'\+shot\.src,location\.href\)", text):
+            if literal_spans is not None and (m.start('prefix'),m.end('prefix')) not in literal_spans:continue
             start = m.start('prefix') - 1
             end = m.end('prefix') + 2
             edits.append((offset + start, offset + end, '', 'screenshot_url_prefix'))
@@ -339,7 +398,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=2):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -351,7 +410,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
-    rewriter = Rewriter(actual, base, prefix, origin, version=2)
+    rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version)
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source)
     objects, github = {}, {}
@@ -379,12 +438,12 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     release_id = release_identifier(source_manifest['release_id'], base, prefix, github, objects)
     new_manifest = {**source_manifest, 'release_id': release_id, 'files': github,
                     'oss': {'schema': 'wly.oss-assets.v1', 'asset_base_url': base, 'prefix': prefix,
-                            'source_release_id': source_manifest['release_id'], 'objects': objects,'rewriter_version':2},
+                            'source_release_id': source_manifest['release_id'], 'objects': objects,'rewriter_version':rewriter_version},
                     'prepared_at_beijing': stamp()}
     write(output / 'github' / MANIFEST, new_manifest)
     github[MANIFEST] = {'bytes': (output/'github'/MANIFEST).stat().st_size, 'sha256': digest(output/'github'/MANIFEST)}
     plan = {'schema': 'wly.oss-release-plan.v1', 'prepared_at_beijing': stamp(), 'release_id': release_id,
-            'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,'rewriter_version':2,
+            'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,'rewriter_version':rewriter_version,
             'asset_base_url': base, 'prefix': prefix, 'html_origin': origin.rstrip('/'), 'test_only': allow_test,
             'github_files': github, 'objects': objects, 'url_changes': rewriter.changes,
             'closure': {k: sorted(v) for k, v in sorted(rewriter.references.items())},
@@ -572,6 +631,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
+    p.add_argument('--rewriter-version',type=int,choices=(2,3),default=2)
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)
@@ -581,7 +641,7 @@ def main():
             p.add_argument('--retry-failed',action='store_true',help='Recheck unresolved same-plan objects; preserve prior full-body proofs')
     args = parser.parse_args()
     if args.command == 'prepare':
-        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback)
+        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version)
         print(json.dumps({'status': 'prepared', 'summary': plan['summary'], 'release_id': plan['release_id']}, ensure_ascii=False))
     elif args.command == 'verify-local':
         plan = verify_local(args.output)

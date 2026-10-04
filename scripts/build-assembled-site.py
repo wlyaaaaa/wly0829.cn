@@ -52,6 +52,9 @@ def write_json(p, data):
 def is_topic_word_exception(text, match):
     if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('正式法律文书仍交 Claude',text)):
         return True
+    if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('网站文案、汇报、方案、法律文书',text)):
+        # This describes the model's writing duties, without case content.
+        return True
     if match[0]=='再审':
         if text[match.start():match.start()+4]=='再审一轮':
             return True
@@ -296,7 +299,12 @@ def resolve_ref(root, owner, ref, asset_prefix=None):
     if path.endswith('/') or target.is_dir(): target /= 'index.html'
     return target
 
-def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None):
+def tar_estimated_bytes(root, entries):
+    return 10240 + sum(1024 + max(512, ((len(p.relative_to(root).as_posix().encode('utf8'))+511)//512)*512)
+                       + (((p.stat().st_size if p.is_file() else 0)+511)//512)*512 for p in entries)
+
+
+def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None, budget_root=None):
     files = sorted(p for p in output.rglob('*') if p.is_file())
     registry_path=ROOT/'config/panel-projects.json'
     registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
@@ -311,8 +319,14 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
     # Conservative bound includes directories and long-path/PAX name records.
     entries = [p for p in output.rglob('*') if p.is_file() or p.is_dir()]
-    tar_bytes = 10240 + sum(1024 + max(512, ((len(p.relative_to(output).as_posix().encode('utf8'))+511)//512)*512)
-                           + (((p.stat().st_size if p.is_file() else 0)+511)//512)*512 for p in entries)
+    tar_bytes = tar_estimated_bytes(output, entries)
+    deployment_bytes, deployment_tar_bytes = total, tar_bytes
+    if budget_root is not None:
+        budget_root = Path(budget_root).resolve()
+        if not budget_root.is_dir(): raise ValueError('Deployment budget root is not a directory')
+        budget_entries = [p for p in budget_root.rglob('*') if p.is_file() or p.is_dir()]
+        deployment_bytes = sum(p.stat().st_size for p in budget_entries if p.is_file())
+        deployment_tar_bytes = tar_estimated_bytes(budget_root, budget_entries)
     groups = {}; html_anchors = {}
     for page in files:
         if page.suffix != '.html': continue
@@ -391,17 +405,21 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     domain = (output/'CNAME').read_text('utf8').strip() if (output/'CNAME').exists() else None
     if domain != 'wly0829.cn': findings.append({'file': 'CNAME', 'type': 'domain_mismatch'})
     if not any(p.suffix == '.js' for p in files): findings.append({'file': '', 'type': 'javascript_missing'})
-    if total > BUDGET or tar_bytes > BUDGET: findings.append({'file': '', 'type': '15_percent_headroom', 'budget': BUDGET})
+    if deployment_bytes > BUDGET or deployment_tar_bytes > BUDGET: findings.append({'file': '', 'type': '15_percent_headroom', 'budget': BUDGET})
     required = [x for x in ('index.html','404.html') if not (output/x).is_file()]
     # B1 diagnostics can be inspected, but never accepted as publishable.
     ready = not findings and not missing and not required
     assets_missing = [x for x in missing if not x['navigation']]
     result = dict(schema='wly.assembled-build.v1',ready_to_publish=ready,status='pass' if ready else 'incomplete' if not findings and not assets_missing else 'block',
                   bytes=total,MB=round(total/1e6,3),MiB=round(total/2**20,3),tar_estimated_bytes=tar_bytes,
-                  limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-tar_bytes,files=len(files),
+                  limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-deployment_tar_bytes,files=len(files),
                   groups=groups,local_references_checked=refs_count,missing_reference_count=len(missing),missing_references=missing,
                   required_missing=required,findings=findings,input=input_stats,
                   output_files={p.relative_to(output).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in files})
+    if budget_root is not None:
+        result.update(full_artifact_bytes=total, full_artifact_tar_estimated_bytes=tar_bytes,
+                      github_deployment_bytes=deployment_bytes, github_deployment_tar_estimated_bytes=deployment_tar_bytes,
+                      budget_root=str(budget_root), budget_scope='Actual GitHub Pages deployment directory')
     write_json(report_path,result)
     summary={k:result[k] for k in ('status','ready_to_publish','MB','files','missing_reference_count','required_missing')}
     summary.update(finding_count=len(findings),findings=findings[:8])

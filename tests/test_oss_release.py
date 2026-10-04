@@ -17,6 +17,31 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_new_javascript_parser_preserves_comments_and_regex_and_maps_actual_assets(self):
+        files={'_shared/comic.js':{},'_shared/scene.png':{}}
+        text=("// painter's note \"/scene.png\" ---- 开场：左边还没\n"
+              "/* quoted `scene.png` stays a comment */\n"
+              "const pattern=/['\"\\/]/g; if(true) /[\\/]/.test('/');\n"
+              "const image='scene.png'; const label='// 版权所有：原样保留';\n").encode('utf8')
+        rewriter=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn',version=3)
+        expected=text.replace(b"const image='scene.png'",b"const image='https://example.oss.invalid/releases/one/_shared/scene.png'")
+        self.assertEqual(rewriter.rewrite(text,'_shared/comic.js'),expected)
+        self.assertEqual(rewriter.references,{'_shared/comic.js':{'_shared/scene.png'}})
+        self.assertFalse(rewriter.missing)
+
+    def test_new_javascript_parser_keeps_else_do_regex_and_helper_comments(self):
+        files={'_shared/comic.js':{},'_shared/scene.png':{}}
+        text=("if(flag) void 0; else /\"scene.png\"/.test(text);\n"
+              "do /\"scene.png\"/.test(text); while(flag);\n"
+              "outer: while(false){break outer\n/\"scene.png\"/.test(\"\");}\n"
+              "outer2: while(false){continue outer2 // comment\n/\"scene.png\"/.test(\"\");}\n"
+              "// new URL('assets/'+shot.src,location.href)\n"
+              "// __vite__mapDeps= x=function(e){return`/`+e}\n"
+              "const image=\"scene.png\";\n").encode()
+        rewriter=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn',version=3)
+        expected=text.replace(b'const image="scene.png"',b'const image="https://example.oss.invalid/releases/one/_shared/scene.png"')
+        self.assertEqual(rewriter.rewrite(text,'_shared/comic.js'),expected)
+
     def test_lazy_picture_and_lazy_css_addresses_are_versioned(self):
         files={'index.html':{},'_shared/a.avif':{},'_shared/b.webp':{}}
         text=b'<source data-lazy-srcset="/_shared/a.avif 640w"><div data-lazy-style="background:url(\'/ _shared/b.webp\')"></div>'.replace(b'/ _shared',b'/_shared')

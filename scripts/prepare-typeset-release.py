@@ -434,6 +434,32 @@ def prepare(args):
                                               'files':automatic_navigation,'status':'pass'}
         except (ValueError,KeyError,OSError,TypeError) as error:
             block('release_overlay',error)
+    elif build.get('creative_preparation'):
+        try:
+            creative=build['creative_preparation']
+            if creative.get('schema')!='wly.creative-replay-result.v1' or creative!=manifest.get('creative_preparation'):
+                raise ValueError('Creative preparation differs from the reviewed final source')
+            bound_file(creative['config']['path'],creative['config'])
+            if [step['name'] for step in creative['steps']]!=['comic','living','album','river','demo','retry']:
+                raise ValueError('Creative preparation does not replay the six actual approved steps')
+            previous=creative['raw_release_id']
+            for step in creative['steps']:
+                if step['before_release_id']!=previous:
+                    raise ValueError('Creative preparation release chain is broken')
+                previous=step['after_release_id']
+            if creative['assembled_release_id']!=release_id:
+                raise ValueError('Creative replay final identity differs from the reviewed files')
+            entries=creative['files']
+            if entries!=manifest.get('release_overlay'):
+                raise ValueError('Creative before/after ledger differs from the final manifest')
+            for relative,entry in entries.items():
+                if entry.get('kind')!='integrated_preparation' or entry.get('before')!=old.get(relative) or entry.get('after')!=manifest['files'].get(relative):
+                    raise ValueError('Creative file is not bound to this production baseline: '+relative)
+            if not manifest.get('home_living_preparation',{}).get('package_bytes_unchanged'):
+                raise ValueError('Creative homepage lacks the exact approved living package')
+            result['creative_preparation']=creative
+        except (ValueError,KeyError,OSError,TypeError) as error:
+            block('creative_preparation',error)
     elif manifest.get('release_overlay'):
         try:
             if not overlay_info: raise ValueError('Build lacks the exact release overlay')
@@ -495,7 +521,8 @@ def prepare(args):
         block("baseline", "Production baseline manifest changed since build")
     if not build.get("baseline_root") or Path(build["baseline_root"]).resolve() != args.baseline.resolve():
         block("baseline", "Build report refers to a different baseline directory")
-    if manifest["files"].get("index.html") != old["index.html"] or digest(release / "index.html") != old["index.html"]["sha256"]:
+    creative_home=result.get('creative_preparation',{}).get('files',{}).get('index.html')
+    if (manifest["files"].get("index.html") != old["index.html"] or digest(release / "index.html") != old["index.html"]["sha256"]) and not creative_home:
         block("homepage", "Production homepage bytes changed")
     for url in manifest.get("accepted_pages", {}):
         if Path(hybrid.route_file(url)).as_posix() == "index.html":
@@ -541,7 +568,7 @@ def prepare(args):
         if rebuilt.get("schema") != "wly.typeset-build.v1":
             block("rebuild", "Rebuild report schema mismatch")
         for field in ("release_id", "inputs", "files", "baseline_root", "baseline_index_sha256",
-                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay"):
+                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation"):
             if rebuilt.get(field) != build.get(field):
                 block("rebuild", "Rebuild changed the reviewed " + field + "; repeat program verification and Claude's publication instruction")
         for page in selected:

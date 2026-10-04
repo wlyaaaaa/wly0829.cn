@@ -59,7 +59,7 @@ LABEL={**LABEL_GEOMETRY,'encoded_edges':{'webp':LABEL_GEOMETRY,'avif':LABEL_GEOM
 SHARED.update(art=ART,components=mapping(COMPONENT,'component'),avif_assets=mapping(S,'url'),
               nav_labels=mapping(LABEL),leaves=array(S),group_leaf={'src':S,'crop':RECT,'source_sha256':S})
 COUNTS = fields('arrows cards depth dots numbers seam update')
-PUBLIC_PAGE = fields('schema page kind family title url repo_url repository_visibility typeset video_prompt')
+PUBLIC_PAGE = fields('schema page kind family title url repo_url repository_visibility typeset video_prompt home_living')
 PUBLIC_PAGE.update(screens=array(SCREEN),shared=SHARED,project=S,page_end={},
                    neighbors={'next':fields('href original_href title'),'previous':fields('href original_href title')},
                    status_binding={**fields('project repo page matched visibility'),'labels':mapping(S),'prefixes':mapping(S)},
@@ -67,7 +67,8 @@ PUBLIC_PAGE.update(screens=array(SCREEN),shared=SHARED,project=S,page_end={},
                    video={**fields('src mask bytes download_timeout_ms intro_fade_seconds playback_rate desktop_video mobile_video mount_allowed'),
                           'compatibility':fields('status reason'),'rect':RECT,'size':RECT},
                    motion_counts={**COUNTS,'h':COUNTS,'v':COUNTS},
-                   motion_capabilities={'dots':fields('policy status label')})
+                   motion_capabilities={**{key:fields('policy status label count_h count_v') for key in ('cards','numbers','arrows','screenshots','card_feedback')},
+                                        'dots':fields('policy status label')})
 PUBLIC_SEARCH={**fields('type group projectSlug title href detail search excerpt text'),'aliases':array(S),'scopes':array(S)}
 
 def public_search_records(value, omitted=None):

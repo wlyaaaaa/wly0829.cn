@@ -11,6 +11,7 @@ param(
     [string]$LegacySite,
     [string]$AssetCache,
     [string]$ReleaseOverlay,
+    [string]$CreativePreparation,
     [string]$RuntimeVerification,
     [string]$ReadingPlan,
     [string]$OssPreparation,
@@ -46,6 +47,7 @@ else {
 }
 if ($Directive) { $Directive = Absolute $Directive }
 if ($ReleaseOverlay) { $ReleaseOverlay = Absolute $ReleaseOverlay }
+if ($CreativePreparation) { $CreativePreparation = Absolute $CreativePreparation }
 if ($RuntimeVerification) { $RuntimeVerification = Absolute $RuntimeVerification }
 if ($ReadingPlan) { $ReadingPlan = Absolute $ReadingPlan }
 foreach ($name in @('OssPreparation','OssQaPlan','OssVerification','OssReading','OssCold','OssRetryProof')) {
@@ -365,6 +367,7 @@ try {
     if ($Pages) { $buildArguments += @('--pages') + $Pages }
     if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
     if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
+    if ($CreativePreparation) { $buildArguments += @('--creative-preparation',$CreativePreparation) }
     if ($RuntimeBaseline) { $buildArguments+=@('--runtime-baseline','--baseline-ref',$state.production_commit) }
     TimedChecked 'python' $buildArguments 'build_seconds'
     $rebuiltProof = ReadJson $rebuiltReport
@@ -381,8 +384,10 @@ try {
     # output hashes must still match every byte of the rebuilt release.
     Prepare $rebuilt (Join-Path $RunRoot 'rebuilt-preparation.json') $rebuiltReport
     HoldPublicationLock
-    Checked 'python' @('scripts/hybrid-release.py','verify','--output',$rebuilt,
+    $contentArguments=@('scripts/hybrid-release.py','verify','--output',$rebuilt,
         '--content-report',(Join-Path $RunRoot 'content-report.json'),'--public-repos-from-github')
+    if ($OssPreparation) { $contentArguments+=@('--oss-preparation',$OssPreparation) }
+    Checked 'python' $contentArguments
     Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rebuilt)
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt

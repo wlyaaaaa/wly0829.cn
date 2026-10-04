@@ -1,0 +1,55 @@
+/* Frozen album rhythm: 655 ms movement, inside the 785 ms navigation budget.
+   This clock deliberately does not divide by the site's --motion-speed. */
+:root { --album-duration: 655ms; }
+@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+::view-transition { background: #fff; }
+::view-transition-group(*) { animation-duration: var(--album-duration); animation-timing-function: cubic-bezier(.22,.72,.18,1); }
+::view-transition-group(root) { animation: none; }
+::view-transition-group(album-art), ::view-transition-group(album-title) { transform-origin: 0 0; }
+::view-transition-group(album-wash) { animation: none; z-index: 2; }
+::view-transition-old(album-wash) { animation: none; opacity: 0; mix-blend-mode: normal; }
+::view-transition-new(album-wash) { animation: album-wash-open var(--album-duration) cubic-bezier(.18,.7,.2,1) both; transform-origin: var(--album-origin,65% 42%); mix-blend-mode: normal; }
+::view-transition-group(album-ink) { z-index: 5; overflow: hidden; transform-origin: 0 0; }
+::view-transition-old(album-ink) { animation: none; opacity: 0; mix-blend-mode: normal; }
+::view-transition-new(album-ink) { animation: album-ink-wipe var(--album-duration) cubic-bezier(.2,.7,.2,1) both; mix-blend-mode: normal; }
+::view-transition-image-pair(*) { isolation: isolate; }
+::view-transition-old(root) { animation: album-page-out var(--album-duration) ease-out both; }
+::view-transition-new(root) { animation: album-water-in var(--album-duration) cubic-bezier(.18,.7,.2,1) both; }
+::view-transition-group(album-art) { z-index: 3; }
+::view-transition-group(album-title) { z-index: 4; }
+::view-transition-old(album-art), ::view-transition-new(album-art) { animation: none; mix-blend-mode: normal; height: 100%; object-fit: contain; }
+::view-transition-old(album-art) { opacity: 0; }
+::view-transition-new(album-art) { opacity: 1; }
+::view-transition-old(album-title) { animation: album-ink-out var(--album-duration) ease-out both; mix-blend-mode: normal; }
+::view-transition-new(album-title) { animation: album-ink-in var(--album-duration) cubic-bezier(.2,.7,.2,1) both; mix-blend-mode: normal; }
+html[data-album-direction="back"]::view-transition-old(root) { animation-name: album-water-out; }
+html[data-album-direction="back"]::view-transition-new(root) { animation-name: album-page-in; }
+html[data-album-direction="back"]::view-transition-new(album-title) { animation-name: album-ink-back; }
+html[data-album-direction="back"]::view-transition-new(album-ink) { animation-name: album-ink-wipe-back; }
+@keyframes album-page-out { 0% { opacity: 1; } 48%,100% { opacity: 0; } }
+@keyframes album-water-in { 0% { opacity: 0; } 32% { opacity: .65; } 78%,100% { opacity: 1; } }
+@keyframes album-wash-open {
+  0% { opacity: 0; transform: scale(1); } 18% { opacity: 1; }
+  32% { transform: scale(5.5,3); } 70% { opacity: 1; }
+  78%,100% { opacity: 0; transform: scale(16,8); }
+}
+@keyframes album-water-out { 0% { opacity: 1; } 65%,100% { opacity: 0; } }
+@keyframes album-page-in { 0% { opacity: 0; transform: scale(1.012); } 75%,100% { opacity: 1; transform: scale(1); } }
+@keyframes album-ink-out { 0% { opacity: 1; } 25%,100% { opacity: 0; } }
+@keyframes album-ink-in { 0%,12% { opacity: 0; } 28%,100% { opacity: 1; } }
+@keyframes album-ink-back { 0%,10% { opacity: 0; } 28%,100% { opacity: 1; } }
+@keyframes album-ink-wipe {
+  0% { opacity: 0; transform: translateX(0); } 12% { opacity: 1; transform: translateX(0); }
+  28% { transform: translateX(22%); } 52% { transform: translateX(62%); }
+  86%,100% { opacity: 1; transform: translateX(100%); }
+}
+@keyframes album-ink-wipe-back {
+  0% { opacity: 0; transform: translateX(0); } 10% { opacity: 1; transform: translateX(0); }
+  28% { transform: translateX(-22%); } 86%,100% { opacity: 1; transform: translateX(-100%); }
+}
+.album-pixel-layer { position: absolute; pointer-events: none; display: block; z-index: 1; }
+.album-pixel-layer svg, .album-wash svg { display: block; width: 100%; height: 100%; }
+.album-wash { position: fixed; inset: 0; pointer-events: none; view-transition-name: album-wash; }
+.album-ink { position: fixed; background: #fff; pointer-events: none; view-transition-name: album-ink; }
+html[data-album-running] .hero-video { visibility: hidden !important; }
