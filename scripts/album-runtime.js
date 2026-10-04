@@ -8,7 +8,7 @@
   const meta = JSON.parse(document.querySelector('#album-page')?.textContent || '{}');
   const budget = 785, nominal = 655;
   let index = {}, generation = 0, clicked = null, revealSeen = false, transition = null;
-  let runtimeLoaded = false, runtimeRequested = false, runtimeStartCount = 0, currentClean = null;
+  let runtimeLoaded = false, runtimeLoading = false, runtimeRequested = false, runtimeStartCount = 0, currentClean = null;
   const heldImages = new Map(), decodedImages = new Set(), warmedRoutes = new Set(), events = [], pausedForAlbum = new Set();
   const path = url => { try { return new URL(url, location.href).pathname.replace(/index\.html$/, ''); } catch { return ''; } };
   const read = name => { try { return JSON.parse(sessionStorage.getItem(name)); } catch { return null; } };
@@ -33,24 +33,33 @@
   }
   function loadRuntime() {
     runtimeRequested = true;
-    if (runtimeLoaded || document.readyState === 'loading') return;
-    runtimeLoaded = true;
+    if (runtimeLoaded || runtimeLoading || document.readyState === 'loading') return;
+    runtimeLoading = true;
     runtimeStartCount++;
     const scripts = [...document.querySelectorAll('script[data-album-runtime]')];
-    // Preserve execution order of classic deferred scripts; modules keep their
-    // existing module semantics. Mark before starting to prevent BFCache repeats.
-    for (const placeholder of scripts) {
-      const replacement = document.createElement('script');
-      for (const attr of placeholder.attributes) if (!attr.name.startsWith('data-album-') && attr.name !== 'data-src') replacement.setAttribute(attr.name, attr.value);
-      replacement.src = placeholder.dataset.src;
-      replacement.async = false;
-      placeholder.replaceWith(replacement);
-    }
+    // Engines and their mounts retain the source order, including module
+    // entries. Mark before starting so BFCache cannot load a second copy.
     event('runtime-start', {scripts: scripts.map(el => el.dataset.src)});
+    (async () => {
+      for (const placeholder of scripts) {
+        const replacement = document.createElement('script');
+        for (const attr of placeholder.attributes) if (!attr.name.startsWith('data-album-') && attr.name !== 'data-src') replacement.setAttribute(attr.name, attr.value);
+        replacement.src = placeholder.dataset.src;
+        replacement.async = false;
+        await new Promise(resolve => {
+          replacement.addEventListener('load', resolve, {once:true});
+          replacement.addEventListener('error', () => { event('runtime-resource-error', {src: replacement.src}); resolve(); }, {once:true});
+          placeholder.replaceWith(replacement);
+        });
+      }
+      runtimeLoaded = true; runtimeLoading = false;
+      event('runtime-ready');
+    })();
   }
   function resolveImage(descriptor) {
     if (descriptor.media && !matchMedia(descriptor.media).matches) return null;
-    if (descriptor.orientation && descriptor.orientation !== (matchMedia('(orientation:portrait)').matches ? 'v' : 'h') && !descriptor.both) return null;
+    const orientation = descriptor.widthBased ? (innerWidth < 768 ? 'v' : 'h') : (matchMedia('(orientation:portrait)').matches ? 'v' : 'h');
+    if (descriptor.orientation && descriptor.orientation !== orientation && !descriptor.both) return null;
     return descriptor;
   }
   function warmImages(images) {
@@ -136,6 +145,7 @@
     if (!visible(owner) || !rectVisible(node, rect)) return null;
     const layer = document.createElement('span');
     layer.className = 'album-pixel-layer'; layer.dataset.albumTemporary = ''; layer.setAttribute('aria-hidden', 'true');
+    layer.dataset.albumOrientation = node.orientation;
     Object.assign(layer.style, {left: rect[0] * 100 + '%', top: rect[1] * 100 + '%', width: rect[2] * 100 + '%', height: rect[3] * 100 + '%', viewTransitionName: name});
     const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'), im = document.createElementNS(ns, 'image');
     svg.setAttribute('viewBox', rect.map((n, i) => n * node.size[i % 2]).join(' '));
@@ -192,7 +202,7 @@
     }
     const videos = [...document.querySelectorAll('.hero-video video, video.hero-video')].filter(v => !v.paused);
     videos.forEach(v => { pausedForAlbum.add(v); v.pause(); });
-    event('decorate', {direction, incoming, artKey: artEl ? artKey : null, title: !!title, participants: participants.map(el => ({name: el.style.viewTransitionName, rect: el.getBoundingClientRect().toJSON()}))});
+    event('decorate', {direction, incoming, artKey: artEl ? artKey : null, title: !!title, participants: participants.map(el => ({name: el.style.viewTransitionName, orientation: el.dataset.albumOrientation, rect: el.getBoundingClientRect().toJSON()}))});
     const clean = () => {
       if (ticket !== generation) return;
       participants.forEach(el => el.remove()); temporary.forEach(el => el.remove());
@@ -207,9 +217,23 @@
   function compositeGroups(vt, ticket) {
     vt.ready.then(() => {
       if (ticket !== generation) return;
+      // BFCache retains the original site's animation listeners. An animation
+      // may enter their 2.5x clock after ready or after the first start event.
+      // Keep only this short native snapshot at its frozen rate until finished.
+      let frame = 0;
+      const keepClock = () => {
+        if (ticket !== generation || !root.hasAttribute('data-album-running')) return;
+        // A synchronous setter also clears a pending 2.5x update. Repeated
+        // updatePlaybackRate(1) calls can leave that older rate visible while
+        // compositor synchronization is pending, especially after BFCache.
+        for (const animation of document.getAnimations()) if (animation.effect?.pseudoElement?.startsWith('::view-transition')) animation.playbackRate = 1;
+        frame = requestAnimationFrame(keepClock);
+      };
+      keepClock();
+      vt.finished.then(() => cancelAnimationFrame(frame), () => cancelAnimationFrame(frame));
       const endpoints = [];
       for (const a of document.getAnimations()) {
-        if (a.effect?.pseudoElement?.startsWith('::view-transition')) a.updatePlaybackRate(1);
+        if (a.effect?.pseudoElement?.startsWith('::view-transition')) a.playbackRate = 1;
         if (!['::view-transition-group(album-art)', '::view-transition-group(album-title)', '::view-transition-group(album-ink)'].includes(a.effect?.pseudoElement)) continue;
         const frames = a.effect.getKeyframes(), first = frames[0], last = frames.at(-1);
         endpoints.push({pseudo: a.effect.pseudoElement, first, last, timing: a.effect.getTiming()});
@@ -227,7 +251,7 @@
     if (!root.hasAttribute('data-album-running')) return;
     queueMicrotask(() => {
       if (!root.hasAttribute('data-album-running')) return;
-      for (const animation of document.getAnimations()) if (animation.effect?.pseudoElement?.startsWith('::view-transition') && animation.playbackRate !== 1) animation.updatePlaybackRate(1);
+      for (const animation of document.getAnimations()) if (animation.effect?.pseudoElement?.startsWith('::view-transition')) animation.playbackRate = 1;
     });
   }
   document.addEventListener('animationstart', keepAlbumClock, true);
@@ -298,7 +322,7 @@
     vt.finished.then(() => { clearTimeout(timer); clean(); }, () => { clearTimeout(timer); clean(); });
     clicked = null;
   });
-  function startAfterDocument() {
+  addEventListener('DOMContentLoaded', () => {
     const pending = recall();
     if (runtimeRequested || !transition && (revealSeen || !('onpagereveal' in window) || !pending || path(pending.to) !== path(location.href))) loadRuntime();
     // If a browser suppresses pagereveal despite exposing its event property,
@@ -306,10 +330,8 @@
     if (!runtimeLoaded && !transition) setTimeout(loadRuntime, Math.max(0, budget - (Date.now() - (pending?.at || 0))));
     const value = (read(positionsKey) || {})[path(pending?.from)];
     if (value && Date.now() - value.at < 3600000) warmImages(value.images);
-  }
-  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', startAfterDocument, {once:true});
-  else startAfterDocument();
+  }, {once:true});
   addEventListener('pageshow', e => { if (e.persisted && !root.hasAttribute('data-album-running')) { loadRuntime(); resumeVideo(); } });
   reduce.addEventListener('change', () => { if (reduce.matches) { transition?.skipTransition(); currentClean?.(); loadRuntime(); } });
-  window.SiteAlbum = {get snapshot() { return {generation, runtimeLoaded, runtimeStartCount, running: root.hasAttribute('data-album-running'), events: [...events], warmedRoutes: [...warmedRoutes], imageCount: heldImages.size, images:[...heldImages].map(([src,im])=>({src,currentSrc:im.currentSrc,crossOrigin:im.crossOrigin,decoded:decodedImages.has(src)}))}; }};
+  window.SiteAlbum = {get snapshot() { return {generation, runtimeLoaded, runtimeLoading, runtimeStartCount, running: root.hasAttribute('data-album-running'), events: [...events], warmedRoutes: [...warmedRoutes], imageCount: heldImages.size, images:[...heldImages].map(([src,im])=>({src,currentSrc:im.currentSrc,crossOrigin:im.crossOrigin,decoded:decodedImages.has(src)}))}; }};
 })();

@@ -49,8 +49,13 @@ def patch_engine(text):
     crlf = '\r\n' in text
     text = text.replace('\r\n', '\n')
     marker = "const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;"
-    if text.count(marker) != 1 or 'home-comic-site-static-v1' in text:
-        raise ValueError('Unsupported or already integrated comic engine')
+    if text.count(marker) != 1:
+        raise ValueError('Unsupported comic engine')
+    if 'home-comic-site-static-v1' in text:
+        if not all(token in text for token in ('function stopForStatic()', "document.addEventListener('site-motion', stopForStatic)",
+                                               'if (stopForStatic() || my !== gen || kindNow() !== kind) return;')):
+            raise ValueError('Incomplete existing comic static integration')
+        return text.replace('\n', '\r\n') if crlf else text
     text = text.replace(marker, marker + "\n// home-comic-site-static-v1: no canvas at all when the page is already static.\nconst siteStatic = () => matchMedia('(prefers-reduced-motion: reduce)').matches || !!window.SiteMotionInsurance?.snapshot.stalled || document.body.classList.contains('motion-stalled');\nif (siteStatic()) return;", 1)
     clear = 'function unitTime(p, now) {'
     if text.count(clear) != 1:
@@ -92,11 +97,12 @@ def validate_home(baseline, package, html):
         original = package / 'img' / name
         if not local.is_file():
             raise ValueError('Prepare against the complete source release with local media bytes: ' + name)
-        if stamp(local) != stamp(original):
+        if original.is_file() and stamp(local) != stamp(original):
             raise ValueError('Bound original media bytes differ from delivered package: ' + name)
         if not stamp(local)['sha256'].startswith(name.rsplit('-', 1)[1].split('.')[0]):
             raise ValueError('Bound illustration filename hash differs from its actual bytes')
-        records.append({'screen': sid, 'kind': kind, 'original': name, 'coordinate_size': [width, height], **stamp(local)})
+        records.append({'screen': sid, 'kind': kind, 'original': name, 'coordinate_size': [width, height],
+                        'package_original_compared': original.is_file(), 'bound_filename_sha256_verified': True, **stamp(local)})
     responsive = []
     for sid in ('home-02', 'home-03'):
         section = re.search(r'<section\b[^>]*\bid="' + sid + r'"[^>]*>.*?</section>', html, re.S)
@@ -137,8 +143,6 @@ def prepare(baseline, package, output, report):
     if baseline_id != manifest['release_id']:
         raise ValueError('Baseline release identity differs from its actual files')
     raw = (baseline / 'index.html').read_bytes(); html = raw.decode('utf8')
-    if 'comic-live.js' in html or manifest.get('home_comic_preparation'):
-        raise ValueError('Comic already integrated; replay from the original complete release')
     originals, responsive = validate_home(baseline, package, html)
     assets = {p.relative_to(package).as_posix(): p.read_bytes() for p in sorted((package / 'assets').glob('*.png'))}
     if len(assets) != 82 or len(list((package / 'assets').iterdir())) != 82:
@@ -151,28 +155,43 @@ def prepare(baseline, package, output, report):
     package_id = hashlib.sha256(json.dumps(package_files, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
     prefix = '_shared/home-comic/' + package_id[:20]
     refs = references(prefix)
-    if raw.count(b'</body>') != 1:
-        raise ValueError('Expected one homepage body closing tag')
-    updated = raw.replace(b'</body>', refs.encode() + b'</body>', 1)
+    existing = manifest.get('home_comic_preparation')
+    mounts = re.findall(r'<script\b[^>]*\bsrc=[\"\x27]([^\"\x27]*comic-(?:data|live)\.js)[\"\x27][^>]*>\s*</script>', html, re.I)
+    already_integrated = bool(existing or mounts)
+    if already_integrated:
+        expected_mounts = ['/' + prefix + '/comic-data.js', '/' + prefix + '/comic-live.js']
+        if mounts != expected_mounts or not existing or existing.get('package_id') != package_id:
+            raise ValueError('Existing comic mount differs from this package; retain the current source and review the two script references instead of duplicating them')
+        for rel, value in package_files.items():
+            if before.get(prefix + '/' + rel) != value:
+                raise ValueError('Existing comic package bytes differ: ' + rel)
+        updated = raw
+    else:
+        if raw.count(b'</body>') != 1:
+            raise ValueError('Expected one homepage body closing tag')
+        updated = raw.replace(b'</body>', refs.encode() + b'</body>', 1)
     shutil.copytree(baseline, output)
     for rel, body in assets.items():
         target = output / prefix / rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(body)
     (output / 'index.html').write_bytes(updated)
     after = inventory(output)
     changed = [rel for rel, value in before.items() if after.get(rel) != value]
-    if changed != ['index.html'] or updated.replace(refs.encode(), b'', 1) != raw:
+    if changed != ([] if already_integrated else ['index.html']) or (not already_integrated and updated.replace(refs.encode(), b'', 1) != raw):
         raise AssertionError('Comic preparation changed an existing file beyond the two homepage references')
     release_id = identity(after, manifest)
-    manifest.update({'files': after, 'release_id': release_id, 'home_comic_preparation': {'status': 'prepared_pending_acceptance', 'baseline_release_id': baseline_id, 'package_id': package_id,
-                     'old_page_evidence_is_not_new_acceptance': True}})
+    manifest.update({'files': after, 'release_id': release_id})
+    if not already_integrated:
+        manifest['home_comic_preparation'] = {'status': 'prepared_pending_acceptance', 'baseline_release_id': baseline_id, 'package_id': package_id,
+                     'old_page_evidence_is_not_new_acceptance': True}
     (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     result = {'schema': 'wly.home-comic-preparation.v1', 'status': 'prepared', 'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
               'baseline': str(baseline), 'baseline_release_id': baseline_id, 'output': str(output), 'release_id': release_id, 'files': len(after), 'html_count': sum(rel.endswith('.html') for rel in after),
-              'changed_existing_files': changed, 'original_files_preserved': True, 'homepage_rollback_byte_exact': True,
+              'changed_existing_files': changed, 'already_integrated': already_integrated, 'original_files_preserved': True, 'homepage_rollback_byte_exact': True,
               'package_source': str(package), 'package_id': package_id, 'package_prefix': prefix, 'package_files': package_files, 'original_package_files': original_files,
               'bound_originals': originals, 'responsive_delivery': responsive, 'page_data_preserved': True, 'runtime_overlay_preserved': manifest.get('runtime_overlay'),
               'integration_change': 'Honor existing SiteMotionInsurance page latch and reduced-motion before canvas creation; clear in-flight overlays on site-motion static transition. No FPS sampler added.',
-              'rollback': {'remove_exact_utf8': refs, 'baseline_index': stamp(baseline / 'index.html')}, 'published': False}
+              'rollback': {'remove_exact_utf8': '' if already_integrated else refs, 'baseline_index': stamp(baseline / 'index.html'),
+                           'existing_package_retained': already_integrated}, 'published': False}
     report = Path(report); report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return result

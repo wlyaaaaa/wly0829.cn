@@ -388,12 +388,13 @@ async function start(snap, intro = true) {
   const turn = ++generation;
   cancelAnimationFrame(raf); raf = 0; clearTimeout(birdTimer);
   if (!snap?.automation || !Number.isFinite(parse(snap.automation.observed_at) || parse(snap.captured_at))) return;
+  const firstDisplay = $('#scroller').hidden;
   $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
   $('#pick').hidden = true; tip.style.opacity = 0;
   fit(); build(snap);
   if (!GL.gl && !stage.classList.contains('nogl')) { glLoading ||= initGL(); await glLoading; }
   if (turn !== generation) return;
-  const sc = $('#scroller'); sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
+  const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
   stage.classList.toggle('still', still || M.stale || reduce);
   if (reduce || still || M.stale) { acts.forEach(f => f(1e9)); draw(1e9); return; }      // 读不到电脑时河停住，不放开场
   clock.done = false; clock.manual = null; clock.t0 = null; clock.skip = !intro; wake();

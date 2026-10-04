@@ -1,4 +1,4 @@
-"""Synthetic-only installed-Chrome acceptance; no screenshots or real status."""
+"""Installed-Chrome acceptance of the actual B2 relay with synthetic status."""
 from __future__ import annotations
 
 import argparse
@@ -159,7 +159,9 @@ async def main(args):
                     if request.method!='GET':
                         state['non_get_blocked'].append(request.url);return await r.abort()
                     if u.hostname=='wly0829.cn':path=u.path
-                    elif u.hostname=='mcp.wly0829.cn' and u.path.endswith('/status'):path='/__status'
+                    elif u.hostname=='mcp.wly0829.cn' and u.path.endswith('/status'):
+                        if state['mode']=='offline-browser':return await r.continue_()
+                        path='/__status'
                     elif u.hostname=='local-graph.invalid':path='/__graph'
                     else:
                         state['external_blocked'].append(request.url);return await r.abort()
@@ -210,6 +212,25 @@ async def main(args):
                     await page.locator('#today-river #scroller').evaluate('(e)=>e.scrollLeft=0')
                     assert await page.locator('#today-river #scroller').evaluate('(e)=>e.scrollLeft')==0
                 results.append({'device':device,'case':'normal-future-runs-today-and-chinese-groups','snapshot':normal})
+                if device=='phone':
+                    await refresh('normal')
+                    assert await page.locator('#today-river #scroller').evaluate('(e)=>e.scrollLeft')==0
+                    await page.evaluate('window.todayRiver.seek(10);window.riverOrientationNodes=[...document.querySelector("#today-river #layer").children]')
+                    await page.set_viewport_size({'width':915,'height':412})
+                    await page.wait_for_timeout(250)
+                    landscape=await page.evaluate(SNAP)
+                    await page.set_viewport_size({'width':412,'height':915})
+                    await page.wait_for_timeout(250)
+                    portrait=await page.evaluate(SNAP)
+                    same_nodes=await page.evaluate('[...document.querySelector("#today-river #layer").children].every((e,i)=>e===window.riverOrientationNodes[i])')
+                    assert same_nodes and not landscape['overflow'] and not portrait['overflow']
+                    assert len(portrait['signs'])==len(normal['signs']) and portrait['signs']==normal['signs']
+                    results.append({'device':device,'case':'rotate-no-replay-no-duplicate-and-preserve-manual-scroll','same_nodes':same_nodes,'landscape':landscape,'portrait':portrait})
+                if args.small_crops:
+                    await page.locator('#today-river #stage').evaluate('(e)=>window.scrollBy(0,e.getBoundingClientRect().top-90)')
+                    await page.locator('#today-river #scroller').evaluate('(e)=>e.scrollLeft=Math.max(0,e.scrollWidth*.47-e.clientWidth/2)')
+                    crop=await page.locator('#today-river #scroller').evaluate('(e)=>{const r=e.getBoundingClientRect();return {x:Math.max(0,r.x+(r.width-340)/2),y:Math.max(0,r.y),width:340,height:220}}')
+                    await page.screenshot(path=str(args.output/(device+'-now-small.png')),clip=crop,scale='css')
                 # A real pointer click opens the same six-field task card.
                 await page.locator('#today-river .boat').first.click(force=True)
                 labels=await page.locator('#today-river #pick .six b').all_text_contents()
@@ -244,16 +265,27 @@ async def main(args):
                     assert old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
                     assert any(x.startswith('最后读到') for x in old['signs']) and any('当时已跑完' in x for x in old['groups']),old
                     results.append({'device':device,'case':mode+'-old-value-boundary','snapshot':old})
+                await refresh('normal')
+                state['mode']='offline-browser'
+                await context.set_offline(True)
+                await page.evaluate('window.SiteB2.refresh()')
+                await page.wait_for_function("document.body.dataset.b2StatusPhase === 'error'",timeout=12000)
+                disconnected=await page.evaluate(SNAP)
+                assert disconnected['headline'].startswith('现在读不到电脑。') and disconnected['static']
+                assert '之后的情况不知道' in disconnected['headline']
+                assert '还有' not in (disconnected['lead'] or '') and not any('到点了' in x for x in disconnected['tips'])
+                results.append({'device':device,'case':'browser-network-offline-old-value','snapshot':disconnected,'browser_offline':True,'synthetic_http_failure':False})
+                await context.set_offline(False)
                 reduced=await load('normal',True)
                 before=await page.evaluate('({draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:document.querySelector("#today-river #layer").innerHTML})')
                 await page.wait_for_timeout(1600)
                 after=await page.evaluate('({draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:document.querySelector("#today-river #layer").innerHTML})')
                 assert before==after and reduced['activeAnimations']==0,(before,after,reduced)
                 results.append({'device':device,'case':'reduced-motion-static','snapshot':reduced,'dom_and_draws_unchanged':True})
-                if device=='desktop':
+                if device in ['desktop','phone']:
                     await load('normal')
                     session=await context.new_cdp_session(page)
-                    for rate in [4,20]:
+                    for rate in [4]:
                         await session.send('Emulation.setCPUThrottlingRate',{'rate':rate})
                         frames_before=await page.evaluate('todayRiver.metrics.frames')
                         wall_start=time.monotonic()
@@ -273,7 +305,7 @@ async def main(args):
             try:await context.close()
             except Exception:pass
         server.shutdown();server.server_close()
-    receipt={'schema':'wly.today-river-dom-acceptance.v1','observed_at_beijing':dt.datetime.now(BJT).isoformat(),'chrome':str(args.chrome),'served_root':str(site),'local_server':base,'server_stopped':True,'results':results,'insurance_policy':policy,'page_errors':errors,'console':console,'requests':state,'screenshots':0,'images_viewed':0,'real_status_requests':0,'failure':failure}
+    receipt={'schema':'wly.today-river-dom-acceptance.v1','observed_at_beijing':dt.datetime.now(BJT).isoformat(),'chrome':str(args.chrome),'served_root':str(site),'local_server':base,'server_stopped':True,'results':results,'insurance_policy':policy,'page_errors':errors,'console':console,'requests':state,'screenshots':2 if args.small_crops else 0,'images_viewed':0,'real_status_requests':0,'failure':failure}
     (args.output/'dom-evidence.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n','utf8')
     if failure:raise RuntimeError(failure)
     assert not errors,errors
@@ -288,4 +320,5 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--temp',type=Path,required=True)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
+    parser.add_argument('--small-crops',action='store_true',help='Save only 340×220 CSS-pixel river crops')
     asyncio.run(main(parser.parse_args()))

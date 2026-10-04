@@ -1,6 +1,10 @@
 /* Frozen album rhythm: 655 ms movement, inside the 785 ms navigation budget.
    This clock deliberately does not divide by the site's --motion-speed. */
 :root { --album-duration: 655ms; }
+/* Match the existing typeset runtime's 768px choice before it starts. This
+   prevents a delayed enhancement from showing/capturing both baked versions. */
+@media (max-width: 767px) { .typeset-part[data-orientation="h"][data-both="false"] { display: none; } }
+@media (min-width: 768px) { .typeset-part[data-orientation="v"][data-both="false"] { display: none; } }
 @media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 ::view-transition { background: #fff; }

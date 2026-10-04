@@ -18,11 +18,13 @@ HERE = Path(__file__).resolve().parent
 BJT = timezone(timedelta(hours=8))
 MODEL_START = '/* Home living actual B2 status model. */'
 MODEL_END = '/* End home living actual B2 status model. */'
+BRIDGE_START = '/* 首页活画只订阅 SiteStatus 的既有读取；不创建 reader、轮询或存储。 */'
 HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活画上层。 */
 #home-01 { position:relative; overflow:hidden; }
 #home-01 > picture, #home-01 > picture > img { display:block; width:100%; height:100%; object-fit:fill; }
 #home-01 > .overlays { z-index:1; }
 #home-01 .hotspot, #home-01 button { z-index:1; }
+#home-01 .hero-live-layer [data-hl="screen"] .more { max-width:620px; white-space:normal; overflow-wrap:anywhere; line-height:1.05; }
 '''
 
 
@@ -57,6 +59,19 @@ def between(text: str, start: str, end: str) -> str:
     return text[text.index(start):text.index(end, text.index(start))]
 
 
+def home_preloads(text: str, horizontal: str, vertical: str) -> str:
+    """Replace only the first-screen AVIF hints with the exact white images."""
+    def replace(match):
+        tag = match[0]
+        if 'rel="preload"' not in tag or 'as="image"' not in tag or 'home-01-' not in tag:
+            return tag
+        portrait = '(orientation:portrait)' in re.sub(r'\s+', '', tag)
+        image = vertical if portrait else horizontal
+        media = '(orientation:portrait)' if portrait else '(orientation:landscape)'
+        return '<link rel="preload" as="image" type="image/webp" media="' + media + '" href="' + image + '" fetchpriority="high">'
+    return re.sub(r'<link\b[^>]*>', replace, text)
+
+
 def cockpit_model(root: Path) -> tuple[str, dict]:
     """Extract the current input's actual B2 rules, never a fixed old fixture."""
     html = (root / 'cockpit/index.html').read_text('utf8')
@@ -65,7 +80,7 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
         raise ValueError('Expected the actual cockpit B2 runtime')
     rel = urlsplit(urljoin('/cockpit/index.html', refs[0])).path.lstrip('/')
     original = (root / rel).read_bytes()
-    text = original.decode('utf8')
+    text = original.decode('utf8').replace('\r\n', '\n').replace('\r', '\n')
     dependencies = between(text, 'const blockTime=', 'const online=')
     summary = between(text, 'function summary(){', 'function rowText(')
     import_ref = re.search(r"from ['\"]([^'\"]*b2-access-model[^'\"]*)['\"]", text)
@@ -73,7 +88,7 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
         raise ValueError('Actual B2 numeric dependency is missing')
     numeric_rel = urlsplit(urljoin('/' + rel, import_ref[1])).path.lstrip('/')
     numeric_bytes = (root / numeric_rel).read_bytes()
-    access_text = numeric_bytes.decode('utf8')
+    access_text = numeric_bytes.decode('utf8').replace('\r\n', '\n').replace('\r', '\n')
     numeric = between(access_text, 'export function reading(', 'export function rate(').replace('export function', 'function')
     adaptation = between(access_text, 'export function adaptStatus(', 'export const errorMessages').replace('export function', 'function')
     clock = between(text, 'const clock=', 'const known=')
@@ -147,8 +162,12 @@ def patch_runtime(text: str, model: str, bridge: str) -> str:
         start = text.index('/* 首页总览规则来自本次完整输入中实际使用的驾驶舱 B2，原函数保持原样。 */')
         end = text.index('\n};', start) + len('\n};')
         text = (text[:start] + text[end:]).lstrip('\n')
-    if text.endswith('\n' + bridge):
-        text = text[:-len('\n' + bridge)]
+    if BRIDGE_START in text:
+        if text.count(BRIDGE_START) != 1:
+            raise ValueError('Homepage bridge markers changed')
+        start = text.index(BRIDGE_START)
+        end = text.index('\n})();', start) + len('\n})();')
+        text = text[:start] + text[end:]
     text = text.rstrip('\n')
     if "snapshot:livingSnapshot" in text:
         return model + '\n' + text + '\n' + bridge
@@ -229,6 +248,9 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
     new_img = new_img.replace('<img ', '<img src="' + horizontal + '" width="2880" height="1621" ', 1)
     new_picture = '<source type="image/webp" media="(orientation:portrait)" srcset="' + vertical + '" width="1280" height="2227">' + new_img
     html = html[:static_picture.start(4)] + new_picture + html[static_picture.end(4):]
+    # The prior AVIF preload is a real download even after its picture is replaced.
+    # Bind the first-paint hints to the same exact white files as the picture.
+    html = home_preloads(html, horizontal, vertical)
     # Layout metadata uses the exact high-resolution white plate dimensions. Links
     # stay normalized and all their fields/alt/equivalent text remain unchanged.
     original_layouts = json.loads(json.dumps(data['screens'][0]['layouts']))
@@ -291,15 +313,72 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
     return result
 
 
+def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = None) -> dict:
+    """Refresh only an already-mounted homepage using the actual cockpit input."""
+    baseline, output, report = map(lambda p: Path(p).resolve(), (baseline, output, report))
+    if output.exists() or output == baseline or output.is_relative_to(baseline) or baseline.is_relative_to(output):
+        raise ValueError('Use a fresh output directory outside the complete input')
+    manifest = json.loads((baseline / 'release-manifest.json').read_text('utf8'))
+    old_files = inventory(baseline)
+    if old_files != manifest.get('files') or identity(old_files, manifest) != manifest.get('release_id'):
+        raise ValueError('Complete baseline bytes do not match the inventory and RID')
+    html = (baseline / 'index.html').read_text('utf8')
+    data_match = re.search(r'(<script\b[^>]*id="page-data"[^>]*>)(.*?)(</script>)', html, re.S)
+    if not data_match:
+        raise ValueError('Homepage page-data is missing')
+    data = json.loads(data_match[2])
+    if data.get('page') != 'home' or data.get('home_living') is not True:
+        raise ValueError('Rebinding requires an already-mounted homepage')
+    refs = re.findall(r'<script\b[^>]*src="([^\"]*home-app-[a-f0-9]+\.js)"', html)
+    if len(refs) != 1:
+        raise ValueError('Expected exactly one existing homepage living runtime')
+    old_ref = refs[0]
+    old_rel = urlsplit(urljoin('/index.html', old_ref)).path.lstrip('/')
+    bridge = (HERE / 'home-living-bind.js').read_text('utf8')
+    model, model_proof = cockpit_model((cockpit or baseline).resolve())
+    body = patch_runtime((baseline / old_rel).read_text('utf8'), model, bridge).encode('utf8')
+    app_rel = '_shared/home-app-' + proof(body)['sha256'][:20] + '.js'
+    data['shared']['script_bundle'] = '/' + app_rel
+    html = html[:data_match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + html[data_match.end(2):]
+    html = replace_once(html, '<script src="' + old_ref + '"', '<script src="/' + app_rel + '"')
+    layouts = data['screens'][0]['layouts']
+    html = home_preloads(html, layouts['h']['viewer']['src'], layouts['v']['viewer']['src'])
+    shutil.copytree(baseline, output)
+    (output / app_rel).write_bytes(body)
+    (output / 'index.html').write_text(html, encoding='utf8', newline='\n')
+    files = inventory(output)
+    manifest.update(files=files, release_id=identity(files, manifest), prepared_at_beijing=datetime.now(BJT).isoformat())
+    manifest['home_living_preparation'].update(actual_b2_rules_sha256=model_proof['rules_sha256'], published=False)
+    (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    result = {'schema': 'wly.home-living-rebind.v1', 'status': 'prepared', 'published': False,
+              'observed_at_beijing': datetime.now(BJT).isoformat(), 'baseline': str(baseline),
+              'output': str(output), 'release_id': manifest['release_id'], 'b2_model': model_proof,
+              'old_home_bundle': old_rel, 'home_bundle': {'path': app_rel, **proof(body)},
+              'changed_existing': [rel for rel, value in old_files.items() if files[rel] != value],
+              'new_files': {rel: value for rel, value in files.items() if rel not in old_files},
+              'cockpit_input': str((cockpit or baseline).resolve()),
+              'external_cockpit_input': cockpit is not None}
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline', type=Path, required=True)
-    parser.add_argument('--package', type=Path, required=True)
+    parser.add_argument('--package', type=Path)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--report', type=Path, required=True)
+    parser.add_argument('--rebind-only', action='store_true', help='Refresh an existing homepage mount after current B2 is applied')
+    parser.add_argument('--cockpit', type=Path, help='Explicit current B2 input for isolated acceptance; omit for the final complete release')
     args = parser.parse_args()
-    result = prepare(args.baseline, args.package, args.output, args.report)
-    print(json.dumps({key: result[key] for key in ['status', 'release_id', 'file_count', 'html_count', 'published']}, ensure_ascii=False))
+    if args.rebind_only:
+        result = rebind(args.baseline, args.output, args.report, args.cockpit)
+    else:
+        if not args.package or args.cockpit:
+            parser.error('Initial preparation requires --package; --cockpit is only for an isolated rebind')
+        result = prepare(args.baseline, args.package, args.output, args.report)
+    print(json.dumps({key: result[key] for key in ['status', 'release_id', 'file_count', 'html_count', 'published'] if key in result}, ensure_ascii=False))
 
 
 if __name__ == '__main__':
