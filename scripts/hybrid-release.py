@@ -195,7 +195,13 @@ def local_reference(root, owner, reference):
 
 def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None, navigation_pages=None):
     # Preserve candidate HTML except href values, including href fields in page-data.
-    pattern = re.compile(r'(\bhref\s*=\s*["\'])([^"\']+)(["\'])|("(?:href|primary_href)"\s*:\s*")([^"\n]+)(")')
+    pattern = re.compile(r'((?<![-\w])href\s*=\s*["\'])([^"\']+)(["\'])|("(?:href|primary_href)"\s*:\s*")([^"\n]+)(")')
+    def original_attribute(match, decoded):
+        if not match[1]: return ''
+        opening = text.rfind('<', 0, match.start())
+        closing = text.find('>', match.end())
+        if opening >= 0 and closing >= 0 and re.search(r'\bdata-original-href\s*=', text[opening:closing]): return ''
+        return ' data-original-href="'+html.escape(decoded,quote=True)+'"'
     def replace(match):
         start, ref, end = match.group(1,2,3) if match[1] else match.group(4,5,6)
         decoded = json.loads('"'+ref+'"') if match[4] else html.unescape(ref)
@@ -206,7 +212,7 @@ def rewrite_links(text, root, owner, available, mappings, preserved_root=None, a
             replacement = nav_repair.resolve_navigation(decoded, navigation_pages)
             if replacement == decoded: return match[0]
             mappings.append({'page': file_route(owner.relative_to(root).as_posix()), 'original_href': decoded, 'temporary_href': replacement})
-            return start+replacement+end + (' data-original-href="'+html.escape(decoded,quote=True)+'"' if match[1] else '')
+            return start+replacement+end + original_attribute(match, decoded)
         if rel in available:
             fragment = unquote(urlsplit(decoded).fragment)
             preserved = preserved_root/rel if preserved_root else None
@@ -228,7 +234,7 @@ def rewrite_links(text, root, owner, available, mappings, preserved_root=None, a
                 if current == Path('.'): raise ValueError('No available parent page')
                 current = current.parent
         mappings.append({'page': file_route(owner.relative_to(root).as_posix()), 'original_href': decoded, 'temporary_href': replacement})
-        return start+replacement+end + (' data-original-href="'+html.escape(decoded,quote=True)+'"' if match[1] else '')
+        return start+replacement+end + original_attribute(match, decoded)
     return pattern.sub(replace, text)
 
 def load_overlay(path, baseline):
