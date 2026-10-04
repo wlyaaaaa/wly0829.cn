@@ -17,6 +17,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT/'scripts') not in sys.path: sys.path.insert(0,str(ROOT/'scripts'))
 from public_page_contract import public_page_data
+import rule_original_contract as rule_contract
 LIMIT = 1_000_000_000
 BUDGET = 850_000_000
 VARIANT = re.compile(r'^(.*)-(828|1280|1920|2880)-([a-f0-9]{12})\.(avif|webp)$')
@@ -185,7 +186,7 @@ class OriginalProse(HTMLParser):
         self.stack.append((tag,classes,active,skip))
         if active and not skip and tag=='a':
             self.parts.append('[href:'+hashlib.sha256(source_link_target(d.get('href','')).encode()).hexdigest()+']')
-        if active and not skip and tag in {'td','th'}:self.parts.append('[cell]')
+        if active and not skip and tag in {'td','th'}:self.parts.append('\n[cell]')
         if active and not skip and tag in {'pre','code'}:
             self.literal_depth+=1
         elif active and not skip and tag in {'p','li','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
@@ -202,7 +203,7 @@ class OriginalProse(HTMLParser):
                         self.literal_depth-=1
                         if not self.literal_depth:
                             self.parts.append('[literal:'+hashlib.sha256(''.join(self.literal).encode()).hexdigest()+']');self.literal=[]
-                    elif tag in {'p','li','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
+                    elif tag in {'p','li','td','th','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
                 del self.stack[i:];break
     def digest(self):
         return hashlib.sha256(' '.join(''.join(self.parts).split()).encode()).hexdigest()
@@ -211,14 +212,110 @@ def prose_digest(text,whole_document=False):
     parser=OriginalProse(whole_document);parser.feed(text);return parser.digest()
 
 def source_link_target(value):
-    path,separator,fragment=value.partition('#');name=Path(path.replace('\\','/')).name
-    if name=='AGENTS.md':return '/rules/charter/'+('#'+fragment if separator else'')
-    if re.fullmatch(r'agents\.[a-z-]+\.md',name):return '/rules/'+name[7:-3]+'/'+('#'+fragment if separator else'')
-    if value.replace('\\','/').lower()=='e:/.agents/tools/find-duplicatecontent.ps1':return '/source-tools/Find-DuplicateContent.ps1'
-    return value
+    return rule_contract.source_link_target(value)
+
+class TypesetOriginal(OriginalProse):
+    def __init__(self):
+        super().__init__();self.original_tags=[]
+    def handle_starttag(self,tag,attrs):
+        data=dict(attrs);classes=set(data.get('class','').split());original_tag=tag
+        if 'ct-source-body' in classes:attrs=[(k,v) for k,v in attrs if k!='class']+[('class',data['class']+' source-prose')]
+        if tag=='a' and 'href' not in data and 'data-href' in data:attrs=attrs+[('href',data['data-href'])]
+        if 'table-label' in classes and 'data-echo' in data:
+            attrs=[(key,value) for key,value in attrs if key!='class']+[('class',data.get('class','')+' source-extra')]
+        if data.get('data-table-header')=='true' and 'data-table-col' in data:tag='th'
+        elif 'data-table-row' in data and 'data-table-col' in data:tag='td'
+        elif tag=='div' and 'ct-heading' in classes:tag='h2'
+        if original_tag not in {'br','hr','img','input','link','meta','source','wbr'}:self.original_tags.append((original_tag,tag))
+        super().handle_starttag(tag,attrs)
+    def handle_endtag(self,tag):
+        for index in range(len(self.original_tags)-1,-1,-1):
+            if self.original_tags[index][0]==tag:
+                tag=self.original_tags[index][1];del self.original_tags[index:];break
+        super().handle_endtag(tag)
+    def feed(self,text):
+        # Only the producer's explicit ordered-list marker is presentation.
+        # A number anywhere else remains part of the source fingerprint.
+        text=re.sub(r'<span\b(?=[^>]*\bclass=["\'][^"\']*\bct-step-number\b)[^>]*>\s*\d+[.)]?\s*</span>', '', text)
+        super().feed(text)
+
+def typeset_prose_digest(text):
+    prose=TypesetOriginal();prose.feed(text);return prose.digest()
+
+def rule_excerpt_pin_findings(output,files,pin):
+    findings=[];seen_documents=set();seen_excerpts=set()
+    expected_excerpts=pin.get('excerpt_contract',{}).get('excerpts',{})
+    for page in files:
+        if page.suffix!='.html' or page.parent==output/'rules' or not page.is_relative_to(output/'rules'):continue
+        text=page.read_text('utf8');rel=page.relative_to(output).as_posix();match=PAGE_DATA.search(text)
+        data=json.loads(match[2]) if match else {}
+        rows=[row for row in data.get('screens',[]) if row.get('render_mode')=='typeset' and row.get('shape')=='source_text']
+        if not rows:findings.append({'file':rel,'type':'pinned_original_missing'});continue
+        page_name='charter' if page.parent.name=='charter' else 'rule-'+page.parent.name
+        for row in rows:
+            meta=row.get('source_meta') or {};document=meta.get('relative_file');expected=pin['documents'].get(document)
+            identity=meta.get('excerpt_id');excerpt=expected_excerpts.get(identity)
+            correct_document=rule_contract.document_for_page(page_name)
+            labels=set(re.findall(r'(?<![A-Za-z0-9])E\d+(?!\d)',html.unescape(row.get('source_version',''))))
+            context={'file':rel,'document':document,'screen':row.get('id')}
+            seen_documents.add(document);seen_excerpts.add(identity)
+            if document!=correct_document:findings.append({**context,'type':'rule_page_source_mismatch','expected_document':correct_document})
+            if meta.get('version')!=pin['version'] or labels!={pin['version']}:
+                findings.append({**context,'type':'rule_version_not_pinned','expected':pin['version']})
+            if not expected or meta.get('source_sha256')!=expected['source_sha256']:
+                findings.append({**context,'type':'rule_source_not_pinned'})
+            if meta.get('excerpt_contract')!=rule_contract.CONTRACT or not excerpt or excerpt.get('page')!=page_name or excerpt.get('screen')!=row.get('id') or excerpt.get('relative_file')!=document:
+                findings.append({**context,'type':'rule_excerpt_contract_mismatch'})
+            try:
+                original=resolve_ref(output,page,meta.get('src',''))
+                asset_sha=sha(original) if original and original.is_file() else None
+            except (OSError,ValueError,TypeError):asset_sha=None
+            public_sha=expected.get('public_source_sha256') if expected else None
+            if not public_sha or meta.get('public_source_sha256')!=public_sha or asset_sha!=public_sha:
+                findings.append({**context,'type':'rule_original_source_evidence_mismatch'})
+            if excerpt and (meta.get('omitted_count')!=excerpt.get('approved_omitted_count') or
+                            typeset_prose_digest(meta.get('original_html',''))!=excerpt['rendered_text_sha256']):
+                findings.append({**context,'type':'rule_original_content_mismatch','expected':pin['version']})
+        required={identity for identity,entry in expected_excerpts.items() if entry['page']==page_name}
+        if len(rows)!=len(required) or required!={row.get('source_meta',{}).get('excerpt_id') for row in rows}:
+            findings.append({'file':rel,'type':'rule_excerpt_coverage_mismatch'})
+    for document in set(pin['documents'])-seen_documents:
+        findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
+    return findings
+
+def canonical_rule_topic_spans(output,page,text,pin):
+    """Only fixed-source verified excerpt fields and their exact transcript lines."""
+    relative=page.relative_to(output).as_posix()
+    if not page.is_relative_to(output/'rules') or page.parent==output/'rules':return []
+    if any(finding['file']==relative for finding in rule_excerpt_pin_findings(output,[page],pin)):return []
+    match=PAGE_DATA.search(text)
+    if not match:return []
+    data=json.loads(match[2]);screens=data.get('screens',[]);spans=[]
+    valid={index:row for index,row in enumerate(screens) if row.get('render_mode')=='typeset' and row.get('shape')=='source_text'}
+    for pointer,value,start,end in rule_contract.json_string_spans(match[2],match.start(2)):
+        if len(pointer)==4 and pointer[0]=='screens' and pointer[1] in valid and pointer[2:]==('source_meta','original_html'):
+            text_nodes,_=rule_contract.source_text_spans(value)
+            spans.extend(rule_contract.encoded_json_spans(text[start:end],value,text_nodes,start))
+    # Transcripts remain attached to the owning verified source screen. Each
+    # original sentence/line is exact; prose added beside it receives no waiver.
+    import importlib.util
+    spec=importlib.util.spec_from_file_location('canonical_rule_transcript',Path(__file__).with_name('audit-page-publication.py'))
+    publication=importlib.util.module_from_spec(spec);spec.loader.exec_module(publication)
+    for row in valid.values():
+        _,original=rule_contract.source_text_spans(row['source_meta']['original_html'])
+        canonical_lines={' '.join(value.split()) for value in publication.rendered_text('<body>'+original+'</body>').splitlines() if value.strip()}
+        pattern=r'<div\b[^>]*\bdata-screen-transcript=["\']'+re.escape(row['id'])+r'["\'][^>]*>(.*?)</div><!-- /screen-equivalent-text -->'
+        for transcript in re.finditer(pattern,text,re.S):
+            for variant in re.finditer(r'<div\b[^>]*\bdata-transcript-orientation=["\'][hv]["\'][^>]*>(.*?)</div>',transcript[1],re.S):
+                origin=transcript.start(1)+variant.start(1)
+                for line in re.finditer(r'[^\n]+',variant[1]):
+                    if ' '.join(html.unescape(line[0]).split()) in canonical_lines:
+                        spans.append((origin+line.start(),origin+line.end()))
+    return spans
 
 def rule_pin_findings(output,files):
     pin=json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))
+    if pin.get('schema')=='wly.assembled-rules-pin.v2':return rule_excerpt_pin_findings(output,files,pin)
     findings=[];seen=set()
     class TypesetOriginal(OriginalProse):
         def handle_starttag(self,tag,attrs):
@@ -315,6 +412,8 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
                         if '/' in entry.get('source',{}).get('repo','')
                         and entry.get('source',{}).get('visibility')=='PRIVATE'}
     findings = rule_pin_findings(output,files); missing = []; refs_count = 0
+    pin=rule_contract.load_pin(ROOT)
+    current_contract=pin.get('schema')=='wly.assembled-rules-pin.v2'
     total = sum(p.stat().st_size for p in files)
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
     # Conservative bound includes directories and long-path/PAX name records.
@@ -355,9 +454,13 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
             for m in re.finditer(pattern, raw, re.I): findings.append({'file': rel, 'type': 'credential', 'pattern': name,'offset':m.start(),'line':raw.count(b'\n',0,m.start())+1})
         if p.suffix not in TEXT_EXT: continue
         text = raw.decode('utf-8-sig')
+        canonical_spans=canonical_rule_topic_spans(output,p,text,pin) if current_contract and p.suffix=='.html' else []
+        resource=pin.get('public_source_resources',{}).get('/'+rel) if current_contract else None
+        canonical_resource=bool(resource and resource.get('public_source_sha256')==hashlib.sha256(raw).hexdigest())
         for name, pattern in [('private_path',PRIVATE),('excluded_topic',EXCLUDED_TOPICS)]:
             for m in pattern.finditer(text):
                 if name=='excluded_topic' and is_topic_word_exception(text,m): continue
+                if name=='excluded_topic' and (canonical_resource or any(start<=m.start() and m.end()<=end for start,end in canonical_spans)):continue
                 line=text.count('\n',0,m.start())+1;column=m.start()-text.rfind('\n',0,m.start())
                 findings.append({'file':rel,'type':name,'line':line,'column':column,'offset':m.start(),'matched':m[0]})
         for repo in PRIVATE_REPOS:
