@@ -12,6 +12,39 @@ from urllib.parse import unquote
 from public_page_contract import omit_local_literals, local_values
 
 CONTRACT = 'e215-original-ranges-v1'
+HTML_VOID_TAGS = frozenset({'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
+                            'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'})
+
+
+def source_node_excluded(attrs):
+    classes = set(attrs.get('class', '').split())
+    return 'source-extra' in classes or ('table-label' in classes and 'data-echo' in attrs)
+
+
+def source_root(tag, attrs, ancestors):
+    """Declared prose, or an explicit table inside a producer source-text page."""
+    classes = set(attrs.get('class', '').split())
+    if classes & {'ct-source-body', 'source-prose'}:
+        return True
+    if tag != 'div' or 'c-table' not in classes or attrs.get('data-comp') != 'table':
+        return False
+    ancestors = list(ancestors)
+    if source_node_excluded(attrs) or any(source_node_excluded(a) for _, a in ancestors):
+        return False
+    # A table elsewhere in the document is presentation, not a source root.
+    body = next((i for i in range(len(ancestors) - 1, -1, -1) if ancestors[i][0] == 'body'), None)
+    return (body is not None and 'shape-source_text' in ancestors[body][1].get('class', '').split()
+            and any(t == 'main' and a.get('id') == 'page' for t, a in ancestors[body + 1:]))
+
+
+def source_root_opening(tag, attrs, opening):
+    """Keep the source meaning of a root after removing its page ancestors."""
+    if set(dict(attrs).get('class', '').split()) & {'ct-source-body', 'source-prose'}:
+        return opening
+    return '<' + tag + ''.join(' ' + k + ('="' + html.escape(v + ' source-prose' if k == 'class' else v, quote=True) + '"'
+                                         if v is not None else '') for k, v in attrs) + '>'
+
+
 OMISSIONS = {
     'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
     'docs/contracts/agents.context-sources.md': [
@@ -257,21 +290,26 @@ def source_text_spans(text):
         def at(self):
             line, column = self.getpos(); return offsets[line - 1] + column
         def handle_starttag(self, tag, attrs):
-            attributes = dict(attrs); classes = set(attributes.get('class', '').split())
-            parent = self.stack[-1] if self.stack else ('', False, False)
-            active = parent[1] or bool(classes & {'ct-source-body', 'source-prose'})
-            skip = parent[2] or 'source-extra' in classes or ('table-label' in classes and 'data-echo' in attributes)
-            if active and not skip: self.markup.append(self.get_starttag_text())
-            if tag not in {'br', 'hr', 'img', 'input', 'link', 'meta', 'source', 'wbr'}:
-                self.stack.append((tag, active, skip))
+            attributes = dict(attrs)
+            parent = self.stack[-1] if self.stack else ('', {}, False, False)
+            active = parent[2] or source_root(tag, attributes, ((t, a) for t, a, _, _ in self.stack))
+            skip = parent[3] or source_node_excluded(attributes)
+            if active and not skip:
+                opening = self.get_starttag_text()
+                self.markup.append(source_root_opening(tag, attrs, opening) if not parent[2] else opening)
+            if tag not in HTML_VOID_TAGS:
+                self.stack.append((tag, attributes, active, skip))
+        def handle_startendtag(self, tag, attrs):
+            self.handle_starttag(tag, attrs)
+            if tag not in HTML_VOID_TAGS: self.handle_endtag(tag)
         def handle_endtag(self, tag):
             for index in range(len(self.stack) - 1, -1, -1):
                 if self.stack[index][0] == tag:
-                    _, active, skip = self.stack[index]
+                    _, _, active, skip = self.stack[index]
                     if active and not skip: self.markup.append('</' + tag + '>')
                     del self.stack[index:]; break
         def node(self, raw):
-            if self.stack and self.stack[-1][1] and not self.stack[-1][2]:
+            if self.stack and self.stack[-1][2] and not self.stack[-1][3]:
                 self.spans.append((self.at(), self.at() + len(raw))); self.markup.append(raw)
         def handle_data(self, value): self.node(value)
         def handle_entityref(self, name): self.node('&' + name + ';')

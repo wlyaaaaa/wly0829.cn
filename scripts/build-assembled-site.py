@@ -180,7 +180,7 @@ class OriginalProse(HTMLParser):
         d=dict(attrs);classes=set(d.get('class','').split())
         active=self.whole or (self.stack[-1][2] if self.stack else False) or 'source-prose' in classes or (tag=='h2' and any('source-heading' in x[1] for x in self.stack))
         skip=(self.stack[-1][3] if self.stack else False) or 'source-extra' in classes
-        if tag in {'br','hr','img','input','link','meta','source'}:
+        if tag in rule_contract.HTML_VOID_TAGS:
             if active and not skip and tag in {'br','hr'}:self.parts.append('\n')
             return
         self.stack.append((tag,classes,active,skip))
@@ -219,14 +219,15 @@ class TypesetOriginal(OriginalProse):
         super().__init__();self.original_tags=[]
     def handle_starttag(self,tag,attrs):
         data=dict(attrs);classes=set(data.get('class','').split());original_tag=tag
-        if 'ct-source-body' in classes:attrs=[(k,v) for k,v in attrs if k!='class']+[('class',data['class']+' source-prose')]
+        if rule_contract.source_root(tag,data,((t,a) for t,_,a in self.original_tags)):
+            attrs=[(k,v) for k,v in attrs if k!='class']+[('class',data.get('class','')+' source-prose')]
         if tag=='a' and 'href' not in data and 'data-href' in data:attrs=attrs+[('href',data['data-href'])]
         if 'table-label' in classes and 'data-echo' in data:
             attrs=[(key,value) for key,value in attrs if key!='class']+[('class',data.get('class','')+' source-extra')]
         if data.get('data-table-header')=='true' and 'data-table-col' in data:tag='th'
         elif 'data-table-row' in data and 'data-table-col' in data:tag='td'
         elif tag=='div' and 'ct-heading' in classes:tag='h2'
-        if original_tag not in {'br','hr','img','input','link','meta','source','wbr'}:self.original_tags.append((original_tag,tag))
+        if original_tag not in rule_contract.HTML_VOID_TAGS:self.original_tags.append((original_tag,tag,data))
         super().handle_starttag(tag,attrs)
     def handle_endtag(self,tag):
         for index in range(len(self.original_tags)-1,-1,-1):

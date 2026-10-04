@@ -12,6 +12,10 @@ sys.path.insert(0,str(ROOT/'scripts'))
 import rule_original_contract as contract
 spec=importlib.util.spec_from_file_location('current_rule_builder',ROOT/'scripts/build-assembled-site.py')
 builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
+spec=importlib.util.spec_from_file_location('standalone_rule_typeset',ROOT/'scripts/build-typeset-site.py')
+typeset=importlib.util.module_from_spec(spec);spec.loader.exec_module(typeset)
+spec=importlib.util.spec_from_file_location('standalone_rule_projection',ROOT/'scripts/prepare-rule-public-projection.py')
+projection=importlib.util.module_from_spec(spec);spec.loader.exec_module(projection)
 spec=importlib.util.spec_from_file_location('current_rule_navigation',ROOT/'scripts/repair-release-navigation.py')
 nav=importlib.util.module_from_spec(spec);spec.loader.exec_module(nav)
 
@@ -99,6 +103,90 @@ class FixedRuleOriginal(unittest.TestCase):
         self.assertEqual(contract.source_link_target('agents.privacy-data.md#公开个人数据分级表'),
                          contract.source_link_target('/rules/privacy-data/#%E5%85%AC%E5%BC%80%E4%B8%AA%E4%BA%BA%E6%95%B0%E6%8D%AE%E5%88%86%E7%BA%A7%E8%A1%A8'))
         self.assertEqual(contract.source_link_target('../../templates/codex-home/AGENTS.md'),'/rule-sources/templates/codex-home/AGENTS.md')
+
+    def standalone_table(self):
+        return ('<div class="c-table" data-comp="table"><div class="table-frame"><table><colgroup>'
+                '<col style="width:40%"><col style="width:60%"/></colgroup><thead><tr>'
+                '<th>条件</th><th>执行</th></tr></thead><tbody><tr><td>法律依据</td>'
+                '<td><code>tool -a -b</code> <a data-href="/rules/privacy-data/#公开个人数据分级表">资料</a></td>'
+                '</tr></tbody></table></div></div>')
+
+    def source_page(self, table):
+        return ('<!doctype html><html><body class="o-h shape-source_text"><main id="page">'
+                '<p>版本标题</p>'+self.body+table+'</main><aside>正文外尾部</aside>'
+                '<script>outside()</script></body></html>')
+
+    def pin_standalone_table(self):
+        markdown=self.public+'\n| 条件 | 执行 |\n|---|---|\n|法律依据|`tool -a -b` [资料](agents.privacy-data.md#公开个人数据分级表)|\n'
+        expected=builder.prose_digest(contract.render_markdown(markdown),True)
+        self.pin['excerpt_contract']['excerpts'][self.identity]['rendered_text_sha256']=expected
+        (self.root/'config/assembled-rules-pin.json').write_text(json.dumps(self.pin),encoding='utf8')
+        return expected
+
+    def test_standalone_table_enters_actual_capture_digest_and_text_spans(self):
+        expected=self.pin_standalone_table();document=self.source_page(self.standalone_table())
+        original=typeset.original_rule_html(document)
+        self.assertIn('class="c-table source-prose"',original)
+        self.assertNotIn('版本标题',original)
+        self.assertFalse(any(value in original for value in ('正文外尾部','outside()','</main>','</body>','</html>')))
+        self.assertEqual(builder.typeset_prose_digest(document),expected)
+        self.assertEqual(builder.typeset_prose_digest(original),expected)
+        spans,substantive=contract.source_text_spans(document)
+        self.assertIn('法律依据',''.join(document[start:end] for start,end in spans))
+        self.assertEqual(builder.typeset_prose_digest(substantive),expected)
+        self.row['source_meta']['original_html']=original
+        self.assertEqual(self.findings(),[])
+        self.assertEqual(self.admitted(self.text(),'法律'),[True,True])
+
+    def test_standalone_table_text_cell_code_and_target_changes_fail_fixed_pin(self):
+        expected=self.pin_standalone_table();original=typeset.original_rule_html(self.source_page(self.standalone_table()))
+        for changed in (original.replace('法律依据','法律例外'),
+                        original.replace('<td>法律依据</td>',''),
+                        original.replace('tool -a -b','tool-a-b'),
+                        original.replace('/rules/privacy-data/','/rules/protected-actions/')):
+            with self.subTest(changed=changed):
+                self.row['source_meta']['original_html']=changed
+                self.assertNotEqual(builder.typeset_prose_digest(changed),expected)
+                self.assertIn('rule_original_content_mismatch',{finding['type'] for finding in self.findings()})
+                self.assertTrue(all(not admitted for admitted in self.admitted(self.text(),'法律')))
+
+    def test_standalone_table_scope_and_added_labels_receive_no_topic_waiver(self):
+        table=self.standalone_table();document=self.source_page(table)
+        outside=document.replace(table,'').replace('</main>','</main>'+table)
+        cases=(document.replace('shape-source_text','shape-summary'),document.replace('id="page"','id="other"'),
+               document.replace('data-comp="table"','data-comp="other"'),document.replace('class="c-table"','class="other"'),
+               document.replace(table,'<div class="source-extra">'+table+'</div>'),outside)
+        for changed in cases:
+            with self.subTest(changed=changed):
+                self.assertEqual(typeset.original_rule_html(changed),self.body)
+                self.assertEqual(builder.typeset_prose_digest(changed),builder.typeset_prose_digest(self.body))
+                spans,_=contract.source_text_spans(changed)
+                self.assertNotIn('法律依据',''.join(changed[start:end] for start,end in spans))
+        # An unqualified table stored beside an original does not gain its waiver.
+        self.row['source_meta']['original_html']=self.body+table
+        self.assertEqual(self.findings(),[])
+        self.assertEqual(self.admitted(self.text(),'法律'),[True,False])
+        self.pin_standalone_table()
+        added=table.replace('法律依据','法律依据<span class="source-extra">诉讼附加</span>'
+                            '<span class="table-label" data-echo="诉讼">诉讼回显</span>')
+        added=added.replace('<td>法律','<td data-note="诉讼">法律')
+        self.row['source_meta']['original_html']=typeset.original_rule_html(self.source_page(added))
+        self.assertEqual(self.findings(),[])
+        self.assertEqual(self.admitted(self.text()),[False,False,False,False])
+
+    def test_standalone_table_public_projection_matches_semantics_and_keeps_outer_values(self):
+        table=self.standalone_table().replace('tool -a -b',r'E:\<wbr>Fixture\&lt;task-id&gt;\child')
+        outside='<div class="c-table" data-comp="table"><table><tr><td>E:\\Outside\\kept</td></tr></table></div>'
+        document=self.source_page(table).replace('</main>','</main>'+outside)
+        projected=projection.project_html(document)
+        self.assertIn(outside,projected)
+        self.assertIn('（本机路径）&lt;task-id&gt;\\child',projected)
+        self.assertNotIn('E:\\Fixture',projected)
+        self.assertNotIn('<wbr>',projected)
+        expected=contract.project_original_html(typeset.original_rule_html(document))
+        actual=contract.project_original_html(typeset.original_rule_html(projected))
+        self.assertEqual(actual,expected)
+        self.assertEqual(builder.typeset_prose_digest(projected),builder.typeset_prose_digest(expected))
 
 
 class ExactLegacyNavigation(unittest.TestCase):

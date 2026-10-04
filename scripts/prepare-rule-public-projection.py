@@ -106,8 +106,8 @@ def project_version_reference(value, old_first, new_first):
 
 
 def project_html(document):
-    # source_text_spans excludes source-extra and attributes. Only literal text
-    # values in declared source nodes are projected; renderer dependencies stay
+    # Use the same declared source roots as source capture, then retain the
+    # existing project_original_html semantics. Renderer dependencies stay
     # as private build inputs, outside the website's public runtime fields.
     result = document
     # Local paths can span zero-width wbr elements; project the contiguous
@@ -120,15 +120,18 @@ def project_html(document):
         def at(self):
             line, column = self.getpos(); return offsets[line - 1] + column
         def handle_starttag(self, tag, attrs):
-            classes = set(dict(attrs).get('class', '').split())
-            selected = bool(classes & {'ct-source-body', 'source-prose'})
-            inherited = self.stack[-1][2] if self.stack else False
-            if tag not in {'br','hr','img','input','link','meta','source','wbr'}:
-                self.stack.append((tag, self.at() if selected and not inherited else None, selected or inherited))
+            data = dict(attrs)
+            selected = contract.source_root(tag, data, ((t, a) for t, a, _, _ in self.stack))
+            inherited = self.stack[-1][3] if self.stack else False
+            if tag not in contract.HTML_VOID_TAGS:
+                self.stack.append((tag, data, self.at() if selected and not inherited else None, selected or inherited))
+        def handle_startendtag(self, tag, attrs):
+            self.handle_starttag(tag, attrs)
+            if tag not in contract.HTML_VOID_TAGS: self.handle_endtag(tag)
         def handle_endtag(self, tag):
             for index in range(len(self.stack) - 1, -1, -1):
                 if self.stack[index][0] == tag:
-                    _, start, _ = self.stack[index]
+                    _, _, start, _ = self.stack[index]
                     if start is not None: self.ranges.append((start, self.at() + len('</' + tag + '>')))
                     del self.stack[index:]; break
     parser = Blocks(); parser.feed(result)

@@ -63,26 +63,38 @@ def json_bound(path):
     return json.loads(text),proof
 
 def original_rule_html(text):
-    """Keep the actual rendered original cards, excluding the version/title wrapper."""
+    """Keep actual rendered source roots, excluding the version/title wrapper."""
     class Cards(HTMLParser):
         def __init__(self):
             super().__init__(convert_charrefs=False)
-            self.depth=0;self.parts=[]
+            self.stack=[];self.parts=[]
         def handle_starttag(self,tag,attrs):
-            classes=set(dict(attrs).get('class','').split())
-            if self.depth or classes & {'ct-source-body','source-prose'}:
-                self.parts.append(self.get_starttag_text())
-                if tag not in {'br','hr','img','input','link','meta','source','wbr'}:self.depth+=1
+            data=dict(attrs)
+            inherited=self.stack[-1][2] if self.stack else False
+            selected=rule_contract.source_root(tag,data,((t,a) for t,a,_ in self.stack))
+            active=inherited or selected
+            if active:
+                opening=self.get_starttag_text()
+                if selected and not inherited:
+                    # The extracted subtree loses its body/main context. Retain
+                    # its explicit source meaning for the existing digest gate.
+                    opening=rule_contract.source_root_opening(tag,attrs,opening)
+                self.parts.append(opening)
+            if tag not in rule_contract.HTML_VOID_TAGS:self.stack.append((tag,data,active))
         def handle_startendtag(self,tag,attrs):
-            if self.depth:self.parts.append(self.get_starttag_text())
+            self.handle_starttag(tag,attrs)
+            if tag not in rule_contract.HTML_VOID_TAGS:self.handle_endtag(tag)
         def handle_endtag(self,tag):
-            if self.depth:self.parts.append('</'+tag+'>');self.depth-=1
+            for index in range(len(self.stack)-1,-1,-1):
+                if self.stack[index][0]==tag:
+                    if self.stack[index][2]:self.parts.append('</'+tag+'>')
+                    del self.stack[index:];break
         def handle_data(self,value):
-            if self.depth:self.parts.append(value)
+            if self.stack and self.stack[-1][2]:self.parts.append(value)
         def handle_entityref(self,name):
-            if self.depth:self.parts.append('&'+name+';')
+            if self.stack and self.stack[-1][2]:self.parts.append('&'+name+';')
         def handle_charref(self,name):
-            if self.depth:self.parts.append('&#'+name+';')
+            if self.stack and self.stack[-1][2]:self.parts.append('&#'+name+';')
     cards=Cards();cards.feed(text)
     return ''.join(cards.parts)
 
