@@ -1,4 +1,4 @@
-"""Package five existing watercolor icons for the live hardware component.
+"""Package existing watercolor icons for hardware and authority status.
 
 No generation or publication. Source files remain unchanged. --output-root is the
 release root; all public paths are /assets/live-hardware/*.webp.
@@ -15,6 +15,9 @@ SOURCES = {
     'storage': 'round3/clean-assets/png/21-外接硬盘-clean.png',
     'network': 'round3/clean-assets/png/46-地球-clean.png',
     'display': 'icons/显示器.png',
+    'personal-data': 'round3/clean-assets/png/04-锁-clean.png',
+    'unrestricted': 'icons/盖章通行证.png',
+    'windows': 'icons/显示器.png',
 }
 
 

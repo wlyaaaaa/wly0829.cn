@@ -6,6 +6,7 @@
 .live-hardware-current strong{font-weight:800}.live-hardware-screen-state{color:var(--hardware-text)}
 .live-hardware-dot{width:9px;height:9px;flex:0 0 9px;background:#8a9690;border-radius:50%}.live-hardware-dot[data-state=ok]{background:var(--hardware-accent)}
 .live-hardware-read-time{font-size:13px;color:#64766f;line-height:1.5}
+.live-hardware-card-time{font-size:11px;line-height:1.5;color:#73837b;margin-top:9px!important}.live-hardware-collection-notice{font-size:13px;color:#64766f;margin-bottom:12px!important}
 .live-hardware-cache-notice{border-left:3px solid #bda45b;padding:5px 10px;margin-bottom:12px!important;background:#fffcf1;color:#826d2c;font-size:14px}
 .live-hardware-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
 .live-hardware-card{position:relative;border:1.5px solid var(--hardware-line);border-radius:14px;background:linear-gradient(165deg,#f2fbf5 0%,var(--cardbg,#fbfefc) 60%,#f7fcf9 100%);box-shadow:0 3px 12px rgb(40 140 80 / 6%);padding:16px}

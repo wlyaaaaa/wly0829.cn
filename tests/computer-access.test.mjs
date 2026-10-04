@@ -227,20 +227,20 @@ test("status reads do not overlap and a late old poll cannot overwrite operation
 
 test("built route preserves the complete static shell and scoped connection policy", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
-  for (const text of ["授权与状态", "存储空间", "Windows可用物理总量", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
+  for (const text of ["授权与状态", "电脑现在", "截止时间读不到", "Windows 锁屏", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
   assert.ok(!html.includes('id="ca-totp"'));
   assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
   assert.match(html, /aria-label="授权与状态"/);
   assert.ok(!html.includes("需要结束访问时"));
   assert.match(html, /aria-label="结束无限制授权"/);
-  assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-hardware-title"'));
-  assert.ok(html.indexOf('id="access-form"') < html.indexOf('id="ca-hardware-title"'));
+  assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-computer-summary-title"'));
+  assert.ok(html.indexOf('id="ca-computer-summary-title"') < html.indexOf('id="access-form"'));
   assert.ok(!html.includes('class="flow-field"'));
   assert.match(html, /href="\/computer-access\/"[^>]*aria-label="授权与状态"/);
   assert.match(html, /connect-src 'self' https:\/\/mcp.wly0829.cn/);
   assert.match(html, /name="referrer" content="no-referrer"/);
-  assert.ok(html.indexOf('id="access-form"') < html.indexOf('class="ca-card ca-network-card"'));
-  assert.ok(html.indexOf('class="ca-card ca-network-card"') > html.indexOf("</aside>"));
+  assert.ok(html.includes('href="/cockpit/#pc"'));
+  assert.ok(!html.includes('class="ca-card ca-network-card"'));
   assert.match(html, /rel="preconnect" href="https:\/\/mcp.wly0829.cn"/);
 });
 

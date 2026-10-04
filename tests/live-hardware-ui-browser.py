@@ -105,6 +105,21 @@ async def run(args):
                 assert '读不到' in unknown['fullText'] and not unknown['overflow'] and '0%' not in unknown['fullText']
                 await page.screenshot(path=str(args.output / (device + '-unknown.png')), full_page=True)
                 result.append({'device': device, 'case': 'source-unknown-stale-and-cache', 'cached': cached, 'unknown': unknown})
+                separated = copy.deepcopy(source)
+                separated.update(observed_at_unix=STAMP, served_at_unix=STAMP, hardware_observed_at_unix=STAMP-600,
+                    display_cache={'collectors': {'authorization': {'state': 'ready', 'observed_at_unix': STAMP}, 'hardware': {'state': 'error', 'observed_at_unix': STAMP-600}}})
+                for group in [separated['hardware']['cpu'], *separated['hardware']['gpus'], separated['hardware']['memory'], *separated['hardware']['volumes'], separated['hardware']['network'], separated['hardware']['display']]:
+                    for source_item in group['sources'].values(): source_item['observed_at_unix'] = STAMP-600
+                separate_result = await render(separated, {'now': STAMP})
+                assert '电脑在线' in separate_result['compactText'] and '上次读到' in separate_result['compactText']
+                assert await page.locator('[data-field=cpu-usage]').get_attribute('data-state') == 'stale'
+                assert await page.locator('#compact [data-field=hardware-screen-state]').get_attribute('data-state') == 'ok', 'hardware cache tainted current Windows observation'
+                assert '09:10:00' in await page.locator('#full [data-row-key=hardware-read-time]').inner_text()
+                assert '09:10:00' in await page.locator('[data-row-key=cpu-read-time]').inner_text()
+                warming = {'observed_at_unix': STAMP, 'served_at_unix': STAMP, 'display_cache': {'collectors': {'hardware': {'state': 'reading', 'observed_at_unix': None}}}, 'hardware': {}}
+                await render(warming)
+                assert await page.locator('#full [data-row-key=hardware-read-time]').inner_text() == '读取时间未知'
+                result.append({'device': device, 'case': 'independent-collectors-cannot-refresh-old-hardware', 'snapshot': separate_result})
                 await render(source)
                 await page.locator('[data-row-key=cpu-details] summary').click()
                 await page.evaluate("window.savedDetails=document.querySelector('[data-row-key=cpu-details]');window.savedCpu=document.querySelector('[data-field=cpu-usage]')")

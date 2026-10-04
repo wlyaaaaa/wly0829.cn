@@ -10,6 +10,21 @@
   const format = (value, digits = 1) => value.toLocaleString('zh-CN', { maximumFractionDigits: digits });
   const beijing = value => value ? new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(new Date(value * 1000)) + ' 北京时间' : '读取时间未知';
 
+  function groupTimes(row = {}) {
+    row = row || {};
+    const fields = new Map(Object.entries(row.sources || {}).map(([field, source]) => [field, source]));
+    for (const [field, item] of Object.entries(row)) if (item && typeof item === 'object' && Object.hasOwn(item, 'value')) fields.set(field, item);
+    const times = [...fields].filter(([field]) => !staticFields.has(field)).map(([, item]) => stamp(item.observed_at_unix)).filter(Boolean);
+    const own = stamp(row.observed_at_unix);
+    return times.length ? times : own ? [own] : [];
+  }
+  function observedAt(status, fallback) {
+    const hardware = status?.hardware || {}, collector = status?.display_cache?.collectors?.hardware;
+    const declared = stamp(status?.hardware_observed_at_unix) || stamp(hardware.observed_at_unix) || stamp(collector?.observed_at_unix);
+    const times = [hardware.cpu, ...(Array.isArray(hardware.gpus) ? hardware.gpus : []), hardware.memory, hardware.network, hardware.display, ...(Array.isArray(hardware.volumes) ? hardware.volumes : [])].flatMap(group => groupTimes(group));
+    return declared || (times.length ? Math.max(...times) : null) || stamp(fallback);
+  }
+
   function metric(row, field, context) {
     row = row || {};
     const key = Object.hasOwn(row, field) ? field : aliases[field];
@@ -37,11 +52,12 @@
   }
   function model(status, options = {}) {
     const now = number(options.now) || Date.now() / 1000;
-    const at = stamp(status?.observed_at_unix) || stamp(options.at);
+    const at = observedAt(status, options.at);
     const maxAge = number(status?.max_age_seconds) || 120;
     const old = !!at && (at > now + 60 || now - at > maxAge);
     const hardware = status?.hardware || {};
-    const context = { now, at, maxAge, cached: !!options.cached, old, unavailable: unavailable.has(hardware.state) };
+    const collectionState = hardware.collection_state || status?.display_cache?.collectors?.hardware?.state;
+    const context = { now, at, maxAge, cached: !!options.cached || collectionState === 'error', old, collectionState, unavailable: unavailable.has(hardware.state) };
     const get = (row, field) => metric(row, field, context);
     const cpu = hardware.cpu || {}, memory = hardware.memory || {}, network = hardware.network || {}, display = hardware.display || {};
     const cpuUsage = get(cpu, 'usage_percent');
@@ -54,8 +70,9 @@
         risk: connected && remaining.value !== null ? remaining.value < 5 ? 'error' : remaining.value < 10 ? 'warn' : 'ok' : 'unknown' };
     });
     const tightest = disks.filter(disk => disk.connected && disk.remaining.value !== null).sort((a, b) => a.remaining.value - b.remaining.value)[0];
-    const screen = metric(status?.host, 'screen_state', { ...context, unavailable: false });
-    const online = !!status && !!at && !context.cached && !old;
+    const screen = metric(status?.host, 'screen_state', { ...context, cached: !!options.cached, old: false, unavailable: false });
+    const served = stamp(status?.served_at_unix);
+    const online = !!status && !options.cached && (served ? served <= now + 60 && now - served <= maxAge : options.online === true || !!at && !old);
     return { context, hardware, get, cpu, cpuUsage, memory, memUsed, memTotal, memUsage: ratio(memUsed, memTotal), gpus, disks, tightest, network, display, screen, online };
   }
 
@@ -111,6 +128,11 @@
       if (icon) { const img = el('img', 'live-hardware-icon', null, key + '-icon'); img.src = (options.assetBase || '/assets/live-hardware/') + icon + '.webp'; img.alt = ''; img.width = 44; img.height = 44; heading.append(img); }
       heading.append(el('h3', '', title, key + '-title')); node.append(heading); return node;
     }
+    function cardTime(node, row, key) {
+      const times = groupTimes(row), at = times.length ? Math.max(...times) : null;
+      const stale = c.cached || c.old || at && (at > c.now + 60 || c.now - at > c.maxAge);
+      node.append(el('p', 'live-hardware-card-time', at ? (stale ? '上次读到 ' : '读取于 ') + beijing(at) : '本项读取时间未知', key + '-read-time'));
+    }
     function top(root) {
       const header = el('div', 'live-hardware-header', null, 'hardware-header');
       const current = el('div', 'live-hardware-current', null, 'hardware-current');
@@ -122,6 +144,7 @@
       header.append(current, el('p', 'live-hardware-read-time', c.at ? (stale ? '上次读到 ' : '读取于 ') + beijing(c.at) : '读取时间未知', 'hardware-read-time'));
       root.append(header);
       if (stale) root.append(el('p', 'live-hardware-cache-notice', '保留上次读数，当前状态尚未确认。', 'hardware-cache-notice'));
+      else if (c.collectionState === 'reading' || c.collectionState === 'refreshing') root.append(el('p', 'live-hardware-collection-notice', c.at ? '硬件正在更新，保留已读到的数值。' : '正在读取硬件。', 'hardware-collection-notice'));
       else if (unavailable.has(m.hardware.state) || !status?.hardware) root.append(el('p', 'live-hardware-cache-notice', '暂时无法读取这台电脑的硬件状态。', 'hardware-missing-notice'));
     }
     const root = el(compact ? 'a' : 'div', 'live-hardware-' + (compact ? 'compact' : 'full'), null, 'live-hardware-' + (compact ? 'compact' : 'full'));
@@ -154,6 +177,7 @@
       if (extra) metrics.append(extra); node.append(metrics);
       const frequency = get(row, 'frequency_mhz'), voltage = get(row, 'voltage_v');
       node.append(details([['频率', frequency, label(frequency, ' MHz', 0), 'frequency'], ['电压', voltage, label(voltage, ' V', 3), 'voltage'], ['读取时刻', usage, beijing(usage.at || c.at), 'time']], key + '-details'));
+      cardTime(node, row, key);
       return node;
     }
     grid.append(computeCard('处理器', 'cpu', 'cpu', m.cpu, m.cpuUsage, pair('核心 / 线程', get(m.cpu, 'cores'), label(get(m.cpu, 'cores'), '', 0) + ' / ' + label(get(m.cpu, 'threads'), '', 0), 'cpu-cores')));
@@ -170,6 +194,7 @@
     memMetrics.append(pair('已用', m.memUsed, capacity(m.memUsed), 'memory-used'), pair('可用总量', m.memTotal, capacity(m.memTotal), 'memory-total'));
     mem.append(memMetrics);
     mem.append(details([['已安装', get(m.memory, 'installed_bytes'), capacity(get(m.memory, 'installed_bytes')), 'installed'], ['剩余', get(m.memory, 'available_bytes'), capacity(get(m.memory, 'available_bytes')), 'available'], ['已提交 / 上限', get(m.memory, 'committed_bytes'), capacity(get(m.memory, 'committed_bytes')) + ' / ' + capacity(get(m.memory, 'commit_limit_bytes')), 'committed'], ['读取时刻', m.memUsed, beijing(m.memUsed.at || c.at), 'time']], 'memory-details'));
+    cardTime(mem, m.memory, 'memory');
     grid.append(mem); root.append(grid);
 
     const storage = card('存储空间', 'storage', 'storage'), disks = el('div', 'live-hardware-disks', null, 'disk-list');
@@ -186,6 +211,7 @@
         if (disk.risk !== 'ok' && disk.risk !== 'unknown') row.append(el('p', 'live-hardware-disk-warning', disk.risk === 'error' ? '剩余不足 5%，请尽快腾空间' : '剩余不足 10%，需要留意', disk.key + '-warning'));
       }
       disks.append(row);
+      cardTime(row, disk.row, disk.key);
     }
     storage.append(disks); root.append(storage);
 
@@ -196,11 +222,13 @@
     const networkMetrics = el('dl', 'live-hardware-metrics', null, 'network-metrics');
     networkMetrics.append(pair('↓ 下载', get(m.network, 'download_bytes_per_second'), rate(get(m.network, 'download_bytes_per_second')), 'network-download'), pair('↑ 上传', get(m.network, 'upload_bytes_per_second'), rate(get(m.network, 'upload_bytes_per_second')), 'network-upload')); network.append(networkMetrics);
     network.append(details([['延迟', get(m.network, 'latency_ms'), label(get(m.network, 'latency_ms'), ' ms'), 'latency'], ['抖动', get(m.network, 'jitter_ms'), label(get(m.network, 'jitter_ms'), ' ms'), 'jitter'], ['丢包', get(m.network, 'packet_loss_percent'), label(get(m.network, 'packet_loss_percent'), '%'), 'loss'], ['读取时刻', get(m.network, 'download_bytes_per_second'), beijing(get(m.network, 'download_bytes_per_second').at || c.at), 'time']], 'network-details'));
+    cardTime(network, m.network, 'network');
     const screen = card('屏幕', 'display', 'display'), width = get(m.display, 'width_px'), height = get(m.display, 'height_px'), refresh = get(m.display, 'refresh_hz');
     const resolution = (numeric(width) === null ? '读不到' : String(numeric(width))) + ' × ' + (numeric(height) === null ? '读不到' : String(numeric(height)));
     screen.append(reading('p', 'live-hardware-model', get(m.display, 'model'), label(get(m.display, 'model')), 'display-model'), reading('strong', 'live-hardware-resolution num', width, resolution, 'display-resolution'));
     const screenMetrics = el('dl', 'live-hardware-metrics', null, 'display-metrics'); screenMetrics.append(pair('刷新率', refresh, label(refresh, ' Hz'), 'display-refresh')); screen.append(screenMetrics);
+    cardTime(screen, m.display, 'display');
     secondary.append(network, screen); root.append(secondary); return root;
   }
-  scope.LiveHardwareUI = Object.freeze({ render });
+  scope.LiveHardwareUI = Object.freeze({ render, observedAt });
 })(typeof window !== 'undefined' ? window : globalThis);
