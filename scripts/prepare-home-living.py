@@ -24,6 +24,7 @@ HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活�
 #home-01 > picture, #home-01 > picture > img { display:block; width:100%; height:100%; object-fit:fill; }
 #home-01 > .overlays { z-index:1; }
 #home-01 .hotspot, #home-01 button { z-index:1; }
+#home-01 .hero-live-layer [data-hl="screen"] .more { max-width:620px; white-space:normal; overflow-wrap:anywhere; line-height:1.05; }
 '''
 
 
