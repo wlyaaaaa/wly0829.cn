@@ -39,6 +39,8 @@ motion_spec.loader.exec_module(motion_prep)
 DATA = re.compile(r'(<script\b[^>]*\bid="page-data"[^>]*>)(.*?)(</script>)', re.S)
 BJT = timezone(timedelta(hours=8))
 ASSET_CACHE = None
+REUSE_ASSET_CACHE = False
+ASSET_CACHE_REUSE = {}
 
 def read(path):
     return json.loads(Path(path).read_text('utf-8-sig'))
@@ -319,7 +321,20 @@ def encode_png(path, effort=80):
     receipt=ASSET_CACHE/(source_hash+'.json')
     if encoded.is_file() and receipt.is_file():
         evidence=read(receipt)
+        if REUSE_ASSET_CACHE:
+            if evidence.get('source_sha256')!=source_hash or evidence.get('encoded_sha256')!=hybrid.digest(encoded) or evidence.get('pixel_equal') is not True:
+                raise ValueError('Existing lossless cache binding differs: '+str(path))
+            with Image.open(io.BytesIO(payload)) as original, Image.open(encoded) as cached:
+                source_pixels=original.convert('RGBA');cached_pixels=cached.convert('RGBA')
+                pixel_hash=hashlib.sha256(source_pixels.tobytes()).hexdigest()
+                if source_pixels.size!=cached_pixels.size or pixel_hash!=evidence.get('decoded_rgba_sha256') or pixel_hash!=hashlib.sha256(cached_pixels.tobytes()).hexdigest():
+                    raise ValueError('Existing lossless cache pixels differ: '+str(path))
+                ASSET_CACHE_REUSE[source_hash]={'delivery':'verified_lossless_cache','size':list(source_pixels.size),'mode':'RGBA'}
+            return encoded
         if evidence.get('source_sha256')==source_hash and evidence.get('encoded_sha256')==hybrid.digest(encoded) and evidence.get('pixel_equal') is True and evidence.get('compression_effort',80)>=effort:return encoded
+    if REUSE_ASSET_CACHE:
+        ASSET_CACHE_REUSE[source_hash]={'delivery':'unchanged_original_png'}
+        return Path(path)
     with Image.open(io.BytesIO(payload)) as image:
         pixels=image.convert('RGBA')
         if max(pixels.size)>16383:return Path(path)
@@ -860,7 +875,7 @@ def build_page(name, records, args, candidate):
             'anchors':sum(len(x['screen_anchors'])for x in data['screens'])}
 
 def main():
-    global ASSET_CACHE
+    global ASSET_CACHE,REUSE_ASSET_CACHE
     started=time.perf_counter()
     ap=argparse.ArgumentParser(description=__doc__)
     for arg in ['typeset-root','inventory','baseline','legacy-site','output','report']:
@@ -869,12 +884,15 @@ def main():
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
+    ap.add_argument('--reuse-asset-cache',action='store_true',help='Verify and reuse existing lossless encodings; retain exact PNG bytes when no cache exists')
     ap.add_argument('--release-overlay',type=Path,help='Exact approved search and runtime-reference updates bound by old/new hashes')
     ap.add_argument('--creative-preparation',type=Path,help='Fixed six-step 2e preparation recipe; replay before final evidence')
     ap.add_argument('--baseline-ref',help='Exact published commit whose OSS source is the complete runtime baseline')
     ap.add_argument('--runtime-baseline',action='store_true',help='Verify the complete local source against that commit without changing its manifest')
     ap.add_argument('--rule-public-projection',type=Path,help='Sealed public rule image generation; defaults to typeset-root/rule-public-projection.json')
+    ap.add_argument('--live-ui-preparation',type=Path,help='Replay the delivered live UI, font and directory assets before assembly')
     args=ap.parse_args()
+    REUSE_ASSET_CACHE=args.reuse_asset_cache
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
     baseline_manifest=read(args.baseline/'release-manifest.json')
     if args.runtime_baseline:
@@ -955,6 +973,17 @@ def main():
                 dest=candidate/hybrid.route_file(url);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source_html,dest)
                 accepted[url]={'preview_support':True,'page':n};support.append(n)
     local_deps(candidate,args.legacy_site,args.baseline)
+    live_ui=None;live_ui_inputs={}
+    if args.live_ui_preparation:
+        ui_spec=importlib.util.spec_from_file_location('typeset_live_ui',HERE/'prepare-live-ui.py')
+        ui_module=importlib.util.module_from_spec(ui_spec);ui_spec.loader.exec_module(ui_module)
+        live_ui,live_ui_inputs=ui_module.prepare_recipe(candidate,args.live_ui_preparation)
+        for missing in live_ui['toc']['missing_labels']:
+            matches=[s for s in states.values()if s.get('url') and hybrid.route_file(s['url'])==missing['page']]
+            if len(matches)!=1:raise ValueError('Live UI missing-label page is outside the exact selected scope: '+missing['page'])
+            state=matches[0];state['status']='blocked'
+            state.setdefault('issues',[]).append('实时界面目录缺字图：'+', '.join(missing['labels']))
+            accepted[state['url']]['build_status']='blocked'
     if args.creative_preparation and (args.release_overlay or args.preview_support):
         raise ValueError('Creative replay uses the complete native five-page source without preview support or another overlay')
     raw_output=args.output.parent/(args.output.name+'-raw') if args.creative_preparation else args.output
@@ -967,6 +996,9 @@ def main():
         creative_module=importlib.util.module_from_spec(creative_spec);creative_spec.loader.exec_module(creative_module)
         manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
             args.output.parent/(args.output.name+'-creative-evidence'))
+    if live_ui:
+        manifest['live_ui_preparation']=live_ui
+        hybrid.write(args.output/hybrid.MANIFEST,manifest)
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -989,6 +1021,11 @@ def main():
     if creative:
         report['creative_preparation']=creative
         report['inputs'].update(creative_inputs)
+    if live_ui:
+        report['live_ui_preparation']=live_ui
+        report['inputs'].update(live_ui_inputs)
+    if args.reuse_asset_cache:
+        report['asset_cache_reuse']={'mode':'verified-existing-or-original-png','sources':ASSET_CACHE_REUSE,'new_encodings':0}
     write(args.report,report)
     print(json.dumps({'built':sum(x['status']=='built'for x in states.values()),'blocked':sum(x['status']=='blocked'for x in states.values()),'missing':sum(x['status']=='missing'for x in states.values()),'home_unchanged':report['home_unchanged'],'release_id':report['release_id']}))
 

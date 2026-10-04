@@ -81,6 +81,10 @@ def prepare(source, baseline, config, output, evidence_root):
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
+            if data.get('scope')=='page-demo-and-retry' and old.get('resource_retry_preparation'):
+                previous_manifest=baseline/hybrid.MANIFEST
+                inputs[str(previous_manifest)]=stamp(previous_manifest)
+                args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
         subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True)
         if name == 'river':
