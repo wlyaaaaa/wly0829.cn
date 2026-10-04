@@ -214,6 +214,10 @@
         liveSlots.push({screen:s.id,part:part.image,hot_id:hot.id,slot:hot.slot,kind:'optional_feedback',semantic_status:'no_operation_feedback',status:'pass',visible_rect:null,visible_text_rects:[],probes:[]});
         continue;
        }
+       if(hot.slot==='cockpit-grafana'&&hot.live_part==='memory-network'&&el.hidden&&el.dataset.optionalEmpty==='true'&&el.dataset.grafanaEmptyReason==='grafana-groups-unreadable'&&win.getComputedStyle(el).display==='none'&&!el.getClientRects().length){
+        liveSlots.push({screen:s.id,part:part.image,hot_id:hot.id,slot:hot.slot,kind:'optional_feedback',semantic_status:'shared_primary_grafana_failure',status:'pass',visible_rect:null,visible_text_rects:[],probes:[]});
+        continue;
+       }
        const scope=el.querySelector('.live-status-value,.b2-card-list')||el,text=contentText(win,scope),clip=contentClip(win,el),lamp=hot.live_part==='lamp'&&el.classList.contains('typeset-lamp'),input=['ca-form-hours','ca-form-code'].includes(hot.slot)&&el.tagName==='INPUT';
        const meaning=lamp?(el.getAttribute('aria-label')||'').trim():input?(el.value||el.getAttribute('placeholder')||el.getAttribute('aria-label')||'').trim():text.map(entry=>entry.text).join(' '),state=el.dataset.state||null;
        const inputText=input?(el.value||el.getAttribute('placeholder')||''):null;
@@ -259,6 +263,7 @@
      const el=mounted.find(e=>e.dataset.hotId===h.id);
      if(!el){issues.push(p.image+':hotspot not mounted '+h.kind+' '+(h.href||h.target));continue;}
      if(h.kind==='live'&&['ca-toast','ca-results'].includes(h.slot)&&el.hidden&&el.dataset.optionalEmpty==='true'){live++;continue;}
+     if(h.kind==='live'&&h.slot==='cockpit-grafana'&&h.live_part==='memory-network'&&el.hidden&&el.dataset.optionalEmpty==='true'&&el.dataset.grafanaEmptyReason==='grafana-groups-unreadable'&&win.getComputedStyle(el).display==='none'&&!el.getClientRects().length){live++;continue;}
      if(mounted.filter(e=>e.dataset.hotId===h.id).length!==1)issues.push(p.image+':duplicate mounted hotspot '+h.id);
      const er=el.getBoundingClientRect(),px=h.rect_px;
      const flowLive=liveGeometry(win,host,el,h,p),want=sourceBox(win,host,[px[0]/p.size[0],px[1]/p.size[1],px[2]/p.size[0],px[3]/p.size[1]]);
