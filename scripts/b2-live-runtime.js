@@ -36,6 +36,23 @@ function grafanaTime(){
  const at=g.public_dashboard_checked_at;
  return typeof at==='string'&&/(?:Z|[+-]\d{2}:\d{2})$/i.test(at)?Date.parse(at)/1000:NaN;
 }
+const grafanaGroupTitles={'cpu-gpu':'处理器和显卡曲线','memory-network':'内存和网络曲线'};
+function grafanaGroupRow(part){
+ const group=(status?.grafana||status?.services?.grafana)?.groups?.[part],stamp=group?.checked_at;
+ const readAt=typeof stamp==='string'&&/(?:Z|[+-]\d{2}:\d{2})$/i.test(stamp)?Date.parse(stamp)/1000:NaN;
+ const maxAge=group&&Object.hasOwn(group,'max_age_seconds')?group.max_age_seconds:300;
+ const row={title:grafanaGroupTitles[part],text:'曲线暂时打不开',state:'unknown',cached:false,readAt};
+ if(online()&&group?.state==='reachable'&&Number.isFinite(maxAge)&&maxAge>0&&Number.isFinite(readAt)&&readAt>0&&readAt<=clock()&&clock()-readAt<=maxAge&&/^https:\/\/grafana\.wly0829\.cn\/public-dashboards\/[a-f0-9]{32}\/?(?:\?theme=(?:light|dark))?$/i.test(group.url||''))return {...row,text:'可查看近24小时曲线',iframe:group.url,state:'ok'};
+ return row;
+}
+function grafanaGroupValue(part){
+ const selected=grafanaGroupRow(part),primary=part==='cpu-gpu'?selected:grafanaGroupRow('cpu-gpu'),secondary=part==='memory-network'?selected:grafanaGroupRow('memory-network');
+ if(!primary.iframe&&!secondary.iframe){
+  if(part==='memory-network')return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
+  return {...selected,title:'近24小时曲线',text:'两组曲线暂时打不开\n处理器和显卡观察：'+time(primary.readAt)+'\n内存和网络观察：'+time(secondary.readAt)};
+ }
+ return selected;
+}
 const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
@@ -485,9 +502,12 @@ function render(){
  for(const el of document.querySelectorAll('[data-b2-slot]')){
 
   const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';
+  const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),displayRow=grouped?grafanaGroupValue(el.dataset.livePart):valueRow;
+  el.dataset.state=displayRow.state||'unknown';
+  if(grouped){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
 
   const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
-  el.hidden=valueRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
+  el.hidden=displayRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
   if(el.hidden){el.replaceChildren();window.TypesetLiveFlow?.request(section);continue;}
 
   if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
@@ -500,24 +520,24 @@ function render(){
 
   if(target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project){const filter=document.createElement('button');filter.type='button';filter.className='b2-filter';filter.textContent='只看：'+target.site_title+' · 看全部';filter.onclick=()=>{target=null;history.replaceState(null,'',location.pathname+location.search+'#tasks');render();};content.append(filter);}
 
-  if(slot==='cockpit-pc'&&window.LiveHardwareUI){const displayed=valueRow.hardwareCached?{...status,hardware:valueRow.hardwareDisplay?.hardware,hardware_observed_at_unix:valueRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:valueRow.hardwareDisplay;content.append(window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:valueRow.hardwareCached===true,at:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)}));}
+  if(slot==='cockpit-pc'&&window.LiveHardwareUI){const displayed=displayRow.hardwareCached?{...status,hardware:displayRow.hardwareDisplay?.hardware,hardware_observed_at_unix:displayRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:displayRow.hardwareDisplay;content.append(window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:displayRow.hardwareCached===true,at:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)}));}
 
-  else if(valueRow.iframe){const note=document.createElement('p');note.className='b2-chart-loading-note';note.textContent='公开曲线会在下方加载，首次打开可能稍慢。';const frame=document.createElement('iframe');frame.src=valueRow.iframe;frame.title='近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(note,frame);}
+  else if(displayRow.iframe){const note=document.createElement('p');note.className='b2-chart-loading-note';note.textContent='公开曲线会在下方加载，首次打开可能稍慢。';const frame=document.createElement('iframe');frame.src=displayRow.iframe;frame.title=grouped?displayRow.title:'近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(note,frame);}
 
-  else if(valueRow.rows)for(const row of valueRow.rows){if(row.children){const group=document.createElement('details');group.dataset.rowKey=row.key||row.text;group.open=row.open===true;const title=document.createElement('summary');title.textContent=row.text;group.append(title);for(const child of row.children){const detail=document.createElement('details');detail.dataset.rowKey=child.key||child.text;detail.open=child.highlight===true;if(child.highlight)detail.dataset.highlight='true';const title=document.createElement('summary');title.textContent=child.text;const p=document.createElement('p');p.textContent=child.detail;detail.append(title,p);group.append(detail);}content.append(group);continue;}const item=document.createElement(row.detail?'details':row.href?'a':'p');item.dataset.rowKey=row.key||row.text;if(row.detail){item.open=row.open===true||row.highlight===true;const summary=document.createElement('summary');summary.textContent=row.text;const description=document.createElement('p');description.textContent=row.detail;item.append(summary,description);}else{item.textContent=row.text;if(row.href)item.href=row.href;}if(row.state)item.dataset.state=row.state;if(row.highlight)item.dataset.highlight='true';content.append(item);}
+  else if(displayRow.rows)for(const row of displayRow.rows){if(row.children){const group=document.createElement('details');group.dataset.rowKey=row.key||row.text;group.open=row.open===true;const title=document.createElement('summary');title.textContent=row.text;group.append(title);for(const child of row.children){const detail=document.createElement('details');detail.dataset.rowKey=child.key||child.text;detail.open=child.highlight===true;if(child.highlight)detail.dataset.highlight='true';const title=document.createElement('summary');title.textContent=child.text;const p=document.createElement('p');p.textContent=child.detail;detail.append(title,p);group.append(detail);}content.append(group);continue;}const item=document.createElement(row.detail?'details':row.href?'a':'p');item.dataset.rowKey=row.key||row.text;if(row.detail){item.open=row.open===true||row.highlight===true;const summary=document.createElement('summary');summary.textContent=row.text;const description=document.createElement('p');description.textContent=row.detail;item.append(summary,description);}else{item.textContent=row.text;if(row.href)item.href=row.href;}if(row.state)item.dataset.state=row.state;if(row.highlight)item.dataset.highlight='true';content.append(item);}
 
-  else if(el.dataset.livePart==='lamp'){el.setAttribute('aria-label',valueRow.text||'状态未知');el.classList.add('typeset-lamp');}else content.textContent=valueRow.text;
+  else if(el.dataset.livePart==='lamp'){el.setAttribute('aria-label',displayRow.text||'状态未知');el.classList.add('typeset-lamp');}else content.textContent=displayRow.text;
 
-  if(valueRow.notice){const notice=document.createElement('p');notice.className='b2-history-notice';notice.textContent=valueRow.notice;content.append(notice);}
+  if(displayRow.notice){const notice=document.createElement('p');notice.className='b2-history-notice';notice.textContent=displayRow.notice;content.append(notice);}
   if(el.classList.contains('b2-ui-slot')&&slot!=='cockpit-pc'&&window.LiveStatusUI){
-   const headline=valueRow.text||valueRow.rows?.[0]?.text||(valueRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
-   const card=window.LiveStatusUI.render(document,{...valueRow,text:headline,readAt:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)},{title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
-   if(valueRow.operation){card.querySelector('.live-status-meta')?.remove();card.title=(liveTitles[slot]||'办理结果')+'：'+headline;}
-   if(valueRow.rows||valueRow.iframe){card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
+   const headline=displayRow.text||displayRow.rows?.[0]?.text||(displayRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
+   const card=window.LiveStatusUI.render(document,{...displayRow,text:headline,readAt:grouped?displayRow.readAt:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)},{title:grouped?displayRow.title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
+   if(displayRow.operation){card.querySelector('.live-status-meta')?.remove();card.title=(liveTitles[slot]||'办理结果')+'：'+headline;}
+   if(displayRow.rows||displayRow.iframe){if(displayRow.rows)card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
    else content.replaceChildren();
    content.replaceChildren(card);
   }
-  syncChildren(el,[...content.childNodes]);el.dataset.cached=String(!!valueRow.cached);
+  syncChildren(el,[...content.childNodes]);el.dataset.cached=String(!!displayRow.cached);
   window.TypesetLiveFlow?.request(section);
  }
 

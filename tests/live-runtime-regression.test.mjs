@@ -34,9 +34,11 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout,clearTimeout};
  sandbox.window.top=sandbox.window;
- vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
+const groupUrls={all:'https://grafana.wly0829.cn/public-dashboards/cccccccccccccccccccccccccccccccc?theme=light','cpu-gpu':'https://grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?theme=light','memory-network':'https://grafana.wly0829.cn/public-dashboards/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb?theme=light'};
+function groupedFixture(){const data=fixture();data.grafana={state:'reachable',checked_at:iso(now),public_dashboard_state:'reachable',public_dashboard_checked_at:iso(now),public_dashboard_url:groupUrls.all,groups:Object.fromEntries(['cpu-gpu','memory-network'].map((part,i)=>[part,{state:'reachable',checked_at:iso(now-(i+1)*60000),url:groupUrls[part],max_age_seconds:300}]))};return data;}
 
 test('authorization result surface distinguishes no request, unknown outcome and an actual receipt, even offline',()=>{
  const app=cockpit();app.set(fixture());assert.equal(app.value('ca-results').empty,true);assert.equal(app.value('ca-toast').empty,true);
@@ -135,6 +137,48 @@ test('legacy Grafana sources without a separate public timestamp retain their or
  data.grafana.checked_at=iso(now-301000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
  data.grafana.checked_at=iso(now+30000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);assert.equal(app.slotTime('cockpit-grafana'),now/1000+30);
  data.grafana.checked_at=iso(now+61000);app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
+});
+test('native Grafana groups select exact independent URLs and observation times while desktop keeps canonical',()=>{
+ const data=groupedFixture(),app=cockpit();app.set(data);
+ for(const [part,age]of [['cpu-gpu',60],['memory-network',120]]){const row=app.grafanaGroupValue(part);assert.equal(row.iframe,groupUrls[part]);assert.equal(row.state,'ok');assert.equal(row.readAt,now/1000-age);assert.equal(row.cached,false);assert.notEqual(row.text,'曲线暂时打不开');}
+ assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+});
+test('group freshness does not inherit canonical, login or the other group clock',()=>{
+ const data=groupedFixture(),app=cockpit();data.grafana.checked_at=iso(now-3600000);data.grafana.public_dashboard_checked_at=iso(now-3600000);app.set(data);
+ assert.equal(app.value('cockpit-grafana').iframe,undefined);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);
+ data.grafana.checked_at=iso(now);data.grafana.public_dashboard_checked_at=iso(now);data.grafana.groups['cpu-gpu'].checked_at=iso(now-301000);app.set(data);
+ const cpu=app.grafanaGroupValue('cpu-gpu');assert.equal(cpu.iframe,undefined);assert.equal(cpu.state,'unknown');assert.equal(cpu.readAt,now/1000-301);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+ data.grafana.groups['cpu-gpu'].checked_at=iso(now-300000);app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);
+});
+test('one failed group leaves the other chart visible; two failures collapse only the duplicate notice and recover',()=>{
+ const data=groupedFixture(),app=cockpit();data.grafana.groups['memory-network']={state:'unavailable',checked_at:iso(now),url:null,max_age_seconds:300};app.set(data);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);let memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,undefined);assert.equal(memory.state,'unknown');assert.notEqual(memory.empty,true);assert.equal(memory.readAt,now/1000);
+ data.grafana.groups['cpu-gpu']={state:'unavailable',checked_at:null,url:null,max_age_seconds:300};app.set(data);
+ assert.notEqual(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.equal(memory.empty,true);assert.equal(memory.emptyReason,'grafana-groups-unreadable');assert.equal(memory.cached,false);
+ app.set(groupedFixture());memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,groupUrls['memory-network']);assert.notEqual(memory.empty,true);
+});
+test('missing, invalid or future group observations never borrow a valid canonical timestamp',()=>{
+ for(const stamp of [undefined,null,'','not-a-date',0,false,{},'2026-10-04T02:00:00',iso(now+1),iso(now+30000)]){
+  const data=groupedFixture(),app=cockpit();data.grafana.groups['cpu-gpu'].checked_at=stamp;app.set(data);const cpu=app.grafanaGroupValue('cpu-gpu');assert.equal(cpu.iframe,undefined);assert.equal(cpu.state,'unknown');assert.equal(cpu.cached,false);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);
+  if(!String(stamp).endsWith('Z'))assert.equal(Number.isNaN(cpu.readAt),true);
+ }
+});
+test('groups accept only this HTTPS public dashboard route and never borrow another URL',()=>{
+ for(const url of [undefined,null,'','http://grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','https://example.invalid/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','https://grafana.wly0829.cn/login','https://grafana.wly0829.cn/api/public/dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','https://grafana.wly0829.cn/public-dashboards/not-a-token','https://user:pass@grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']){
+  const data=groupedFixture(),app=cockpit();data.grafana.groups['cpu-gpu'].url=url;app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);assert.equal(app.grafanaGroupValue('cpu-gpu').state,'unknown');assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);
+ }
+ const data=groupedFixture(),app=cockpit();data.grafana.groups['cpu-gpu'].url=groupUrls['cpu-gpu'].replace('?theme=light','/?theme=dark');app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,data.grafana.groups['cpu-gpu'].url);
+});
+test('groups default to 300 seconds and reject invalid declared windows without a fallback',()=>{
+ const data=groupedFixture(),app=cockpit();delete data.grafana.groups['cpu-gpu'].max_age_seconds;data.grafana.groups['cpu-gpu'].checked_at=iso(now-299000);app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);
+ data.grafana.groups['cpu-gpu'].checked_at=iso(now-301000);app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);
+ for(const age of [null,0,-1,'300',NaN,Infinity]){data.grafana.groups['cpu-gpu'].checked_at=iso(now);data.grafana.groups['cpu-gpu'].max_age_seconds=age;app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);}
+});
+test('legacy sources keep the full desktop chart but cannot impersonate mobile groups or cache their URLs',()=>{
+ const data=groupedFixture(),app=cockpit();delete data.grafana.groups;app.set(data);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);assert.equal(app.grafanaGroupValue('memory-network').iframe,undefined);
+ app.set(groupedFixture());assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);app.set(null,'error',now/1000);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);assert.equal(app.grafanaGroupValue('cpu-gpu').cached,false);assert.equal(app.grafanaGroupValue('memory-network').iframe,undefined);
 });
 test('cached cockpit and shared results keep values across errors and reloads without green lights',()=>{
  const saved=storage();let app=cockpit(saved);app.set(fixture());app.value('cockpit-backups');
