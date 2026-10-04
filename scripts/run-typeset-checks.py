@@ -4,11 +4,93 @@ No screenshot, image inspection, signed-in profile, or publication operation.
 """
 import argparse
 import asyncio
+from datetime import datetime, timedelta, timezone
+import hashlib
 import json
 from pathlib import Path
 import time
+from urllib.parse import unquote, urlsplit, urlunsplit
 import uuid
 from playwright.async_api import async_playwright
+
+
+STATIC_TRANSFER_METHOD='Actual HTTPS route.fetch(max_retries=0), at most one retry after an empty response or HTTP 5xx; reuse only the verified network body within this run'
+STATIC_TRANSFER_SCOPE='Exact manifest-listed HTTPS static GET objects, excluding API paths, non-GET and Range; no local body substitution; not native uninterrupted cold sockets'
+
+
+def static_transfer_handler(manifest, origin, transfers):
+    """The reading probe's bounded fetch, with sealed bodies shared by consumers."""
+    base=manifest['oss']['asset_base_url'].rstrip('/')
+    remote={obj['url']:obj for obj in manifest['oss']['objects'].values()
+            if obj['url'].startswith(base+'/') and urlsplit(obj['url']).scheme=='https'
+            and 'api' not in urlsplit(obj['url']).path.lower().split('/')}
+    parsed_origin=urlsplit(origin);cors_origin=parsed_origin.scheme+'://'+parsed_origin.netloc
+    pending={}
+
+    async def retrieve(route,obj,transfer):
+        request=route.request;began=time.monotonic()
+        try:
+            for number in (1,2):
+                started=time.monotonic();observation={'number':number,'started_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()}
+                transfer['attempts'].append(observation);response=None
+                try:
+                    headers={**request.headers,'Origin':cors_origin,'Accept-Encoding':'identity'}
+                    response=await route.fetch(url=transfer['url'],headers=headers,timeout=30000,max_retries=0,max_redirects=0)
+                    body=await response.body();actual_headers=dict(response.headers)
+                    observation.update(http=response.status,final_url=response.url,bytes=len(body),sha256=hashlib.sha256(body).hexdigest(),
+                        content_type=actual_headers.get('content-type',''),acao=actual_headers.get('access-control-allow-origin'))
+                    if 500<=response.status<600 or not body:
+                        observation['failure']='http_5xx' if 500<=response.status<600 else 'empty_body'
+                        if number==1:
+                            transfer['first_failure']=dict(observation)
+                            continue
+                        raise ValueError('Static response remained '+observation['failure'])
+                    mime=observation['content_type'].split(';',1)[0].strip()
+                    if (response.status!=200 or response.url!=transfer['url'] or len(body)!=obj['bytes']
+                        or observation['sha256']!=obj['sha256'] or mime!=obj['content_type']
+                        or observation['acao'] not in {cors_origin,'*'}):
+                        observation['failure']='sealed_response_mismatch'
+                        raise ValueError('Actual static bytes, SHA, MIME, CORS or final URL differ from the sealed object')
+                    fulfilled={key:value for key,value in actual_headers.items() if key.lower() not in {'content-encoding','transfer-encoding','content-length'}}
+                    fulfilled['content-length']=str(len(body));transfer['status']='pass'
+                    return {'status':response.status,'headers':fulfilled,'body':body}
+                except Exception as error:
+                    observation['error']=type(error).__name__+': '+str(error)
+                    empty_transport=not response and any(value in str(error).lower() for value in ('err_empty_response','socket hang up','econnreset'))
+                    if empty_transport:observation['failure']='empty_transport'
+                    if number==1 and empty_transport:
+                        transfer['first_failure']=dict(observation)
+                        continue
+                    transfer['status']='fail';transfer['error']=observation['error']
+                    if number==1:transfer['first_failure']=dict(observation)
+                    return None
+                finally:
+                    observation['seconds']=round(time.monotonic()-started,6)
+                    if (transfer.get('first_failure')or{}).get('number')==number:
+                        transfer['first_failure']=dict(observation)
+                    if response:await response.dispose()
+        finally:transfer['seconds']=round(time.monotonic()-began,6)
+
+    async def handler(route):
+        request=route.request;parsed=urlsplit(request.url)
+        # Preserve every query component except the product's exact retry marker.
+        query='&'.join(part for part in parsed.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+        canonical=urlunsplit((parsed.scheme,parsed.netloc,parsed.path,query,parsed.fragment))
+        obj=remote.get(canonical)
+        if not obj or request.method!='GET' or any(key.lower()=='range' for key in request.headers):
+            return await route.continue_()
+        reused=canonical in pending
+        if not reused:
+            transfer={'url':canonical,'method':STATIC_TRANSFER_METHOD,'scope':STATIC_TRANSFER_SCOPE,
+                      'cors_origin':cors_origin,'status':'running','attempts':[],'consumers':[],'first_failure':None}
+            transfers.append(transfer)
+            pending[canonical]=(asyncio.create_task(retrieve(route,obj,transfer)),transfer)
+        task,transfer=pending[canonical]
+        transfer['consumers'].append({'url':request.url,'resource_type':request.resource_type,'reused_transfer':reused})
+        payload=await asyncio.shield(task)
+        if payload is None:return await route.abort('failed')
+        await route.fulfill(**payload)
+    return handler
 
 
 async def main():
@@ -21,18 +103,29 @@ async def main():
     parser.add_argument('--timeout',type=int,default=900)
     parser.add_argument('--jobs',type=int,default=3)
     parser.add_argument('--network-output',type=Path,help='Actual failed/static-response transport observations, without response bodies')
+    parser.add_argument('--static-retry-once',action='store_true',help='Use actual sealed HTTPS static bodies with at most one retry; retain first failures and timing')
+    parser.add_argument('--static-manifest',type=Path,help='Exact OSS split release-manifest.json; required with --static-retry-once')
     args=parser.parse_args()
+    if args.static_retry_once and not args.static_manifest:parser.error('--static-retry-once requires --static-manifest')
     profile=args.task_cache.resolve()/('chrome-profile-'+uuid.uuid4().hex)
     profile.mkdir(parents=True)
     print('Temporary profile: '+str(profile),flush=True)
     started=time.monotonic()
-    network={'responses':[],'failed_requests':[]}
+    network={'responses':[],'failed_requests':[],'static_transfers':[],
+             'transport_method':STATIC_TRANSFER_METHOD if args.static_retry_once else 'Native browser transfers without a static route handler',
+             'transport_scope':STATIC_TRANSFER_SCOPE if args.static_retry_once else 'Observed browser requests only'}
+    if args.static_retry_once:
+        manifest_bytes=args.static_manifest.read_bytes();manifest=json.loads(manifest_bytes)
+        parsed_origin=urlsplit(args.url)
+        network.update(release_id=manifest['release_id'],manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),cors_origin=parsed_origin.scheme+'://'+parsed_origin.netloc)
     async with async_playwright() as runtime:
         context=await runtime.chromium.launch_persistent_context(str(profile),executable_path=str(args.chrome),headless=True,
                    viewport={'width':1760,'height':1050},device_scale_factor=1,args=['--hide-scrollbars'])
         if args.network_output:
             context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
             context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
+        if args.static_retry_once:
+            await context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_transfer_handler(manifest,args.url,network['static_transfers']))
         try:
             page=context.pages[0] if context.pages else await context.new_page()
             if args.mode=='geometry':
@@ -73,10 +166,15 @@ async def main():
                         raise TimeoutError('QA deadline reached')
                     finally:await worker.close()
                 await asyncio.gather(*(drive(names[index::jobs],index+1)for index in range(jobs)))
+            if args.static_retry_once and (not network['static_transfers'] or any(row['status']!='pass' for row in network['static_transfers'])):
+                raise RuntimeError('One or more bounded static transfers failed; inspect network output')
         finally:
+            if args.static_retry_once:await context.unroute_all(behavior='wait')
             await context.close()
             if args.network_output:
                 network['seconds']=round(time.monotonic()-started,3)
+                network['checked_at_beijing']=datetime.now(timezone(timedelta(hours=8))).isoformat()
+                network['static_transfer_status']=('pass' if network['static_transfers'] and all(row['status']=='pass' for row in network['static_transfers']) else 'fail') if args.static_retry_once else 'not_requested'
                 args.network_output.parent.mkdir(parents=True,exist_ok=True)
                 args.network_output.write_text(json.dumps(network,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print('Headless DOM run seconds: '+str(round(time.monotonic()-started,3)),flush=True)
