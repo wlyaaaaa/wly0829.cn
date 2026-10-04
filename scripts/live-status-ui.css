@@ -1,0 +1,63 @@
+/* Uses the accepted typeset-proto palette and card treatment. No asset or font dependency. */
+.live-status-card {
+  --live-status-ink: var(--text, #2e4675);
+  --live-status-green: var(--title, #0a7232);
+  --live-status-dot: #188558;
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line, #bfe8cc);
+  border-radius: 14px;
+  background: radial-gradient(circle at 0% 0%, rgba(150, 215, 172, .16), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(170, 225, 190, .14), transparent 40%),
+    linear-gradient(165deg, #f2fbf5 0%, var(--cardbg, #fbfefc) 55%, #f7fcf9 100%);
+  box-shadow: 0 3px 12px rgba(40, 140, 80, .08);
+  color: var(--live-status-ink);
+  font-family: "Sans", "Noto Sans SC", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+.live-status-card *, .live-status-card *::before, .live-status-card *::after { box-sizing: border-box; }
+.live-status-card .live-status-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 9px; min-width: 0; }
+.live-status-card .live-status-icon { display: block; flex: 0 0 36px; width: 36px; height: 36px; object-fit: contain; }
+.live-status-card .live-status-title { color: var(--live-status-green); font-size: 1em; font-weight: 800; }
+.live-status-card .live-status-summary { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.live-status-card .live-status-state { font-size: 1.04em; font-weight: 700; color: var(--live-status-ink); }
+.live-status-card .live-status-dot {
+  display: block; flex: 0 0 9px; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--live-status-dot); box-shadow: 0 0 0 3px color-mix(in srgb, var(--live-status-dot) 10%, transparent);
+}
+.live-status-card[data-tone="failed"] { --live-status-dot: #bd5452; }
+.live-status-card[data-tone="warn"] { --live-status-dot: #bd8c35; }
+.live-status-card[data-tone="waiting"] { --live-status-dot: #b081aa; }
+.live-status-card[data-tone="running"], .live-status-card[data-tone="loading"] { --live-status-dot: #4385a5; }
+.live-status-card[data-tone="neutral"], .live-status-card[data-tone="unknown"], .live-status-card.live-status-history { --live-status-dot: #909b98; }
+.live-status-card .live-status-value { min-width: 0; font-size: .94em; }
+.live-status-card .live-status-list { display: grid; gap: 4px; margin: 0; padding: 0 0 0 1.15em; list-style: disc; }
+.live-status-card .live-status-line { min-width: 0; margin: 0; color: var(--live-status-ink); font-weight: 400; }
+.live-status-card .live-status-line::marker { color: #97b9a8; }
+.live-status-card .live-status-meta { display: flex; flex-wrap: wrap; gap: 3px 12px; min-width: 0; padding-top: 5px; border-top: 1px solid #dcece2; color: #697873; font-size: .8em; }
+.live-status-card .live-status-history-label { margin-left: auto; padding: 1px 7px; border: 1px solid #d8dfda; border-radius: 999px; color: #697873; background: #f6f8f6; font-size: .72em; white-space: nowrap; }
+.live-status-card .live-status-link { color: var(--link, #099136); font-weight: 600; }
+a.live-status-card[href]:hover { border-color: #76ba90; }
+a.live-status-card[href]:focus-visible { outline: 3px solid #6bac86; outline-offset: 3px; }
+.live-status-card.live-status-compact { gap: 4px; padding: 9px 11px; border-radius: 10px; }
+.live-status-card.live-status-compact .live-status-icon { flex-basis: 25px; width: 25px; height: 25px; }
+.typeset-live.live-status-card { height: auto !important; justify-content: stretch; align-items: stretch; min-height: 0; }
+.typeset-live.live-status-card > * { min-width: 0; }
+@media (max-width: 600px) {
+  .live-status-card { font-size: 16px; padding: 12px 13px; }
+  .live-status-card.live-status-compact { padding: 8px 10px; }
+}

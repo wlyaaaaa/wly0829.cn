@@ -1,0 +1,57 @@
+.live-hardware-full,.live-hardware-compact{--hardware-title:var(--title,#0a7232);--hardware-text:var(--text,#2e4675);--hardware-accent:var(--accent,#0a7a33);--hardware-line:var(--line,#bfe8cc);--hardware-soft:var(--soft,#edfbf3);box-sizing:border-box;display:block;width:100%;min-width:0;color:var(--hardware-text);font-family:inherit;font-size:16px;line-height:1.5;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.live-hardware-full *,.live-hardware-compact *{box-sizing:border-box;min-width:0}
+.live-hardware-full p,.live-hardware-full h3,.live-hardware-full dl,.live-hardware-compact p{margin:0}
+.live-hardware-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px 18px;flex-wrap:wrap;margin-bottom:14px}
+.live-hardware-current{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--hardware-title)}
+.live-hardware-current strong{font-weight:800}.live-hardware-screen-state{color:var(--hardware-text)}
+.live-hardware-dot{width:9px;height:9px;flex:0 0 9px;background:#8a9690;border-radius:50%}.live-hardware-dot[data-state=ok]{background:var(--hardware-accent)}
+.live-hardware-read-time{font-size:13px;color:#64766f;line-height:1.5}
+.live-hardware-card-time{font-size:11px;line-height:1.5;color:#73837b;margin-top:9px!important}.live-hardware-collection-notice{font-size:13px;color:#64766f;margin-bottom:12px!important}
+.live-hardware-cache-notice{border-left:3px solid #bda45b;padding:5px 10px;margin-bottom:12px!important;background:#fffcf1;color:#826d2c;font-size:14px}
+.live-hardware-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.live-hardware-card{position:relative;border:1.5px solid var(--hardware-line);border-radius:14px;background:linear-gradient(165deg,#f2fbf5 0%,var(--cardbg,#fbfefc) 60%,#f7fcf9 100%);box-shadow:0 3px 12px rgb(40 140 80 / 6%);padding:16px}
+.live-hardware-card-heading{display:flex;align-items:center;gap:9px;min-height:36px;margin-bottom:7px}
+.live-hardware-card-heading h3{font-size:19px;font-weight:800;color:var(--hardware-title)}
+.live-hardware-icon{width:42px;height:36px;flex:0 0 42px;object-fit:contain}
+.live-hardware-model{font-size:13px;color:#60748c;line-height:1.5;min-height:2.9em;margin-bottom:9px!important}
+.live-hardware-main{display:flex;align-items:baseline;gap:9px;margin-bottom:10px}
+.live-hardware-number{font-size:42px;line-height:1.1;font-weight:800;letter-spacing:-.035em;color:var(--hardware-accent);font-variant-numeric:tabular-nums}
+.live-hardware-number[data-state=unknown]{font-size:28px;letter-spacing:0}
+.live-hardware-main-label{font-size:13px;color:#62768b}
+.live-hardware-meter{height:5px;overflow:hidden;border-radius:10px;background:#dbeee2;width:100%;margin:0 0 13px}
+.live-hardware-meter-fill{display:block;height:100%;border-radius:inherit;background:var(--hardware-accent)}
+.live-hardware-meter[data-state=unknown]{background:repeating-linear-gradient(90deg,#dae2dd 0 9px,#eff3f0 9px 14px)}
+.live-hardware-meter[data-state=stale] .live-hardware-meter-fill{opacity:.55}
+.live-hardware-meter[data-risk=warn] .live-hardware-meter-fill{background:#b98b20}.live-hardware-meter[data-risk=error] .live-hardware-meter-fill{background:#bc514b}
+.live-hardware-metrics{display:flex;flex-direction:column;gap:4px}
+.live-hardware-pair{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.live-hardware-pair dt{font-size:13px;color:#62768b}.live-hardware-pair dd{margin:0;font-weight:650;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;text-align:right}
+.live-hardware-pair>.live-hardware-meter{flex-basis:100%;margin-bottom:2px}
+.live-hardware-full [data-state=unknown],.live-hardware-compact [data-state=unknown]{color:#7b8580}
+.live-hardware-full [data-state=stale],.live-hardware-compact [data-state=stale]{color:#7a704e}
+.live-hardware-field-age{display:block;font-size:11px;font-weight:400;line-height:1.4;letter-spacing:0;color:#8a7950}
+.live-hardware-details{margin-top:12px;padding-top:9px;border-top:1px solid #d9eadf;font-size:13px}
+.live-hardware-details summary{cursor:pointer;color:#55756b;min-height:24px}
+.live-hardware-details dl{display:grid;gap:5px;padding-top:8px}.live-hardware-source-note{font-size:12px;color:#73837b;margin-top:7px!important}
+.live-hardware-disks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
+.live-hardware-disk{padding:8px 0}.live-hardware-disk-heading{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap}
+.live-hardware-disk-heading>strong:first-child{font-size:18px;color:var(--hardware-title)}
+.live-hardware-disk-type{font-size:12px;color:#7a8981}.live-hardware-disk-percent{font-size:13px;margin-left:auto;color:var(--hardware-accent);font-variant-numeric:tabular-nums}
+.live-hardware-disk-capacity{font-size:13px;margin:3px 0 7px!important;color:#546986}.live-hardware-disk .live-hardware-meter{margin-bottom:0}
+.live-hardware-disk[data-risk=warn] .live-hardware-disk-percent,.live-hardware-compact-tile[data-risk=warn] strong{color:#9b751b}
+.live-hardware-disk[data-risk=error] .live-hardware-disk-percent,.live-hardware-compact-tile[data-risk=error] strong{color:#a53e38}
+.live-hardware-disk-warning{font-size:12px;color:#8f6c22;margin-top:5px!important}.live-hardware-disk[data-risk=error] .live-hardware-disk-warning{color:#a53e38}
+.live-hardware-empty{font-size:14px;color:#7b8580;padding:10px 0}
+.live-hardware-secondary-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin-top:14px}
+.live-hardware-network-link{font-size:15px;font-weight:650;color:var(--hardware-title);margin-bottom:12px!important}
+.live-hardware-resolution{display:block;font-size:26px;font-weight:800;color:var(--hardware-accent);font-variant-numeric:tabular-nums;margin-bottom:12px}
+.live-hardware-compact{border:1.5px solid var(--hardware-line);border-radius:12px;background:var(--hardware-soft);padding:13px 15px;color:var(--hardware-text);text-decoration:none;transition:border-color .15s,background .15s}
+.live-hardware-compact:hover{border-color:#61ac7b;background:#f4fcf7}.live-hardware-compact:focus-visible{outline:2px solid var(--hardware-accent);outline-offset:3px}
+.live-hardware-compact .live-hardware-header{margin-bottom:10px;gap:3px 14px}.live-hardware-compact .live-hardware-current{font-size:14px;gap:7px}.live-hardware-compact .live-hardware-screen-state{font-size:13px}.live-hardware-compact .live-hardware-read-time{font-size:12px}
+.live-hardware-compact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.live-hardware-compact-tile{display:flex;flex-direction:column;gap:2px}.live-hardware-compact-label{font-size:12px;color:#62768b}.live-hardware-compact-tile strong{font-size:21px;color:var(--hardware-accent);font-variant-numeric:tabular-nums;font-weight:800}
+.live-hardware-compact-link{display:block;margin-top:9px;font-size:12px;color:var(--hardware-accent);text-align:right}.live-hardware-compact .live-hardware-cache-notice{font-size:12px;margin-bottom:9px!important}
+@media(max-width:850px){.live-hardware-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.live-hardware-grid>.live-hardware-card:last-child:nth-child(odd){grid-column:1/-1}}
+@media(max-width:599.98px){.live-hardware-full{font-size:15px}.live-hardware-header{margin-bottom:12px}.live-hardware-grid,.live-hardware-secondary-grid{gap:10px}.live-hardware-card{padding:13px;border-radius:12px}.live-hardware-card-heading h3{font-size:18px}.live-hardware-icon{width:34px;height:30px;flex-basis:34px}.live-hardware-number{font-size:37px}.live-hardware-model{font-size:12px}.live-hardware-disks{grid-template-columns:1fr;gap:2px}.live-hardware-secondary-grid{grid-template-columns:1fr}.live-hardware-disk-capacity{font-size:14px}.live-hardware-resolution{font-size:28px}.live-hardware-read-time{font-size:12px}.live-hardware-compact-grid{gap:8px}.live-hardware-compact-tile strong{font-size:19px}}
+@media(max-width:359.98px){.live-hardware-grid{grid-template-columns:1fr}.live-hardware-compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.live-hardware-compact{transition:none}}

@@ -42,7 +42,15 @@ def patch_b2_runtime(text: str) -> str:
     spec = importlib.util.spec_from_file_location('cockpit_cache', HERE / 'prepare-cockpit-cache.py')
     cache = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cache)
-    return cache.patch_cockpit_cache(source)
+    source = cache.patch_cockpit_cache(source)
+    relay = '/* Relay only the existing cockpit automation read to todayRiver. */'
+    if relay in text:
+        # Preserve integration-2's existing relay exactly while replacing the
+        # owned renderer. The river continues to receive this same status read.
+        start = text.index(relay)
+        end = text.index('function render(){', start)
+        source = source.replace('function render(){', text[start:end] + 'function render(){\n relayTodayRiver();', 1)
+    return source
 
 
 def update_release(root: Path) -> dict:

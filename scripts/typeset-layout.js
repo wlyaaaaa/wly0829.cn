@@ -158,12 +158,189 @@ document.addEventListener('click',event=>{
 },true);
 for(const event of ['wheel','touchstart'])addEventListener(event,cancelReadingResize,{passive:true});
 addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))cancelReadingResize();});
+/* typeset-live-flow-v1 */
+(function(){
+ const states=new WeakMap(),hosts=new Set();let frame=0;
+ const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
+ const isLamp=cell=>(cell.livePart||cell.live_part||cell.node?.dataset.livePart)==='lamp';
+ function plan(cells,height,obstacles=[]){
+  const entries=cells.filter(cell=>validRect(cell.rect)&&!isLamp(cell)).map(cell=>({...cell,maskRect:validRect(cell.maskRect)?cell.maskRect:cell.rect})).sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);
+  const bands=[];
+  for(const cell of entries){const r=cell.maskRect,large=r[2]>.55&&r[3]*height>=80,padding=large?0:Math.min(.025,Math.max(16/Math.max(1,height),r[3]*.6));bands.push({start:Math.max(0,r[1]-padding),end:Math.min(1,r[1]+r[3]+padding),cells:[cell]});}
+  function merge(){
+   bands.sort((a,b)=>a.start-b.start);
+   for(let i=1;i<bands.length;i++)if(bands[i].start<=bands[i-1].end+.00001){const a=bands[i-1],b=bands[i];a.end=Math.max(a.end,b.end);a.cells.push(...b.cells);bands.splice(i--,1);}
+  }
+  merge();
+  // A static link/button intersecting the cut must remain in one unbroken tile.
+  // Full-screen hit areas do not define a raster text boundary.
+  for(const band of bands){
+   const first=Math.min(...band.cells.map(cell=>cell.maskRect[1])),last=Math.max(...band.cells.map(cell=>cell.maskRect[1]+cell.maskRect[3]));
+   for(const r of obstacles){
+    if(!validRect(r)||r[3]>.4)continue;
+    // Padding must not pull a footer button that originally followed the live
+    // row into its header. Keep source order when inserting the taller cards.
+    if(r[1]>=last&&r[1]<band.end)band.end=r[1];
+    else if(r[1]+r[3]<=first&&r[1]+r[3]>band.start)band.start=r[1]+r[3];
+    else if(r[1]<last&&r[1]+r[3]>first){band.start=Math.min(band.start,r[1]);band.end=Math.max(band.end,r[1]+r[3]);}
+   }
+  }
+  merge();
+  for(const band of bands){band.cells.sort((a,b)=>a.rect[1]-b.rect[1]||a.rect[0]-b.rect[0]);const mask=band.cells[0].maskRect;band.replace=band.cells.length===1&&(band.cells[0].forceOverlay===true||mask[2]>.55&&mask[3]*height>=80);}
+  return bands;
+ }
+ function move(parent,node){
+  if(parent.moveBefore&&parent.isConnected&&node.isConnected)parent.moveBefore(node,null);else parent.append(node);
+ }
+ function sourceRect(node){
+  const values=['left','top','width','height'].map(key=>node.style[key]);
+  if(values.every(value=>value.endsWith('%'))){const rect=values.map(value=>parseFloat(value)/100);if(validRect(rect))return rect;}
+  return validRect(node._card?.rect)?node._card.rect:null;
+ }
+ function remember(state,node){
+  if(state.boxes.has(node))return;
+  const rect=sourceRect(node);if(rect)state.boxes.set(node,{rect,style:node.style.cssText});
+ }
+ function makeTile(state,start,end,masked=[],columns=[0,1]){
+  const document=state.host.ownerDocument,tile=document.createElement('div');tile.className='typeset-live-flow-tile';if(masked.length)tile.classList.add('typeset-live-flow-masked');tile.dataset.sourceStart=String(start);tile.dataset.sourceEnd=String(end);
+  const image=document.createElement('img');image.className='typeset-live-flow-image';image.alt='';image.setAttribute('aria-hidden','true');image.decoding='async';image.draggable=false;image.src=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||state.host._layout.src;
+  const layer=document.createElement('div');layer.className='typeset-live-flow-layer';tile.append(image,layer);
+  tile.dataset.sourceLeft=String(columns[0]);tile.dataset.sourceRight=String(columns[1]);
+  const record={node:tile,image,layer,start,end,masked,columns};state.tiles.push(record);return record;
+ }
+ function mask(tile,width,height){
+  if(!tile.masked.length){tile.image.style.clipPath='';return;}
+  // Even-odd polygons remove only the original live rectangles, retaining all
+  // surrounding raster text and decorations. Every tile uses the same source.
+  const points=[[0,0],[width,0],[width,height],[0,height],[0,0]];
+  for(const cell of tile.masked){const r=cell.maskRect,x=r[0]*width,y=r[1]*height,right=(r[0]+r[2])*width,bottom=(r[1]+r[3])*height;points.push([x,y],[x,bottom],[right,bottom],[right,y],[x,y],[0,0]);}
+  tile.image.style.clipPath='polygon(evenodd,'+points.map(p=>p[0]+'px '+p[1]+'px').join(',')+')';
+ }
+ function update(state){
+  const host=state.host;if(!host.isConnected||host.hidden)return;
+  const width=host.clientWidth,height=width*host._layout.size[1]/host._layout.size[0];host._mediaHeight=height;
+  const sourceURL=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||host._layout.src;
+  for(const tile of state.tiles){
+   if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
+   tile.node.style.height=(tile.end-tile.start)*height+'px';Object.assign(tile.image.style,{width:width+'px',height:height+'px',left:-tile.columns[0]*width+'px',top:-tile.start*height+'px'});mask(tile,width,height);
+  }
+  for(const band of state.bands)if(band.replace&&!band.column&&!band.row){
+   const rect=band.cells[0].maskRect,offset=(rect[1]-band.start)*height;
+   Object.assign(band.cards.style,{marginTop:-((band.end-band.start)*height-offset)+'px',marginLeft:rect[0]*width+'px',width:rect[2]*width+'px',minHeight:(band.end-rect[1])*height+'px'});
+   band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,rect[3]*height)+'px');
+  }
+  for(const band of state.bands)if(band.row)band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,band.cells[0].maskRect[3]*height)+'px');
+  if(state.column)state.column.cell.node.style.setProperty('--typeset-live-min-height',Math.max(94,state.column.rect[3]*height)+'px');
+  const columnDelta=state.column?Math.max(0,state.column.cell.node.offsetHeight-state.column.rect[3]*height):0;
+  const dynamic=new Set(state.cells.filter(cell=>!isLamp(cell)).map(cell=>cell.node));
+  for(const node of [...state.overlay.children])if(!dynamic.has(node)){remember(state,node);}
+  for(const [node,box]of state.boxes){
+   if(!node.isConnected||dynamic.has(node))continue;
+   if(node.classList.contains('typeset-card-feedback')){
+    const a=box.rect,intersects=state.cells.some(cell=>{if(isLamp(cell))return false;const b=validRect(cell.maskRect)?cell.maskRect:cell.rect;return a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1];});
+    // The source tiles already paint this card. Repainting its old full image
+    // would leave a second copy of controls after the live region grows.
+    node.classList.toggle('typeset-live-flow-repaint-suppressed',intersects);
+   }
+   const rect=box.rect,middle=rect[0]+rect[2]/2,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end&&middle>=tile.columns[0]&&middle<tile.columns[1])||state.tiles.at(-1);
+   if(state.column){
+    const r=state.column.rect,overlaps=rect[0]<r[0]+r[2]&&rect[0]+rect[2]>r[0],below=rect[1]>=r[1]+r[3]-.00001;
+    move(state.column.layer,node);Object.assign(node.style,{left:rect[0]*width+'px',top:(rect[1]*height+(overlaps&&below?columnDelta:0))+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});continue;
+   }
+   if(!tile)continue;
+   move(tile.layer,node);Object.assign(node.style,{left:(rect[0]-tile.columns[0])*width+'px',top:(rect[1]-tile.start)*height+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});
+  }
+  host.dataset.liveFlowHeight=String(host.offsetHeight);
+ }
+ function reset(host){
+  const state=states.get(host);if(!state)return;
+  for(const [node,box]of state.boxes)if(node.isConnected){move(state.overlay,node);node.style.cssText=box.style;node.classList.remove('typeset-live-flow-repaint-suppressed');}
+  for(const cell of state.cells)if(cell.node.isConnected){move(state.overlay,cell.node);cell.node.style.removeProperty('--typeset-live-min-height');}
+  state.container.remove();host.classList.remove('typeset-live-flow-ready');delete host.dataset.liveFlowHeight;states.delete(host);hosts.delete(host);
+ }
+ function apply(host,cells){
+  const entries=(cells||[]).filter(cell=>cell.node&&validRect(cell.rect));
+  const dynamic=entries.filter(cell=>!isLamp(cell));
+  if(!dynamic.length){reset(host);return null;}
+  let state=states.get(host);
+  const signature=JSON.stringify(entries.map(cell=>[cell.rect,cell.maskRect||cell.rect,isLamp(cell)]));
+  if(state&&state.signature===signature&&state.cells.length===entries.length&&entries.every((cell,index)=>cell.node===state.cells[index].node)){update(state);return state;}
+  const focus=host.contains(host.ownerDocument.activeElement)?host.ownerDocument.activeElement:null;
+  reset(host);
+  const picture=host.querySelector(':scope > picture'),source=picture?.querySelector('img'),overlay=host.querySelector(':scope > .overlays')||host.querySelector(':scope > .typeset-layer');
+  if(!source||!overlay||!host._layout?.size)return null;
+  const document=host.ownerDocument,container=document.createElement('div');container.className='typeset-live-flow';
+  state={host,source,picture,overlay,container,cells:entries,signature,boxes:new Map(),tiles:[],bands:[]};
+  const dynamicNodes=new Set(dynamic.map(cell=>cell.node));for(const node of [...overlay.children])if(!dynamicNodes.has(node))remember(state,node);
+  for(const cell of entries)if(isLamp(cell))state.boxes.set(cell.node,{rect:cell.rect,style:cell.node.style.cssText});
+  const height=host.clientWidth*host._layout.size[1]/host._layout.size[0],bands=plan(entries,height,[...state.boxes.values()].map(box=>box.rect));
+  host.classList.add('typeset-live-flow-ready');host.append(container);
+  if(bands.length===1&&bands[0].replace){
+   // A large blank beside an illustration is a column replacement. Keeping
+   // the side columns uncut prevents a long static paragraph from being torn
+   // at the blank frame's lower edge when the live card grows.
+   const cell=bands[0].cells[0],r=cell.maskRect,right=r[0]+r[2],bottom=r[1]+r[3];container.classList.add('typeset-live-flow-columns');container.style.gridTemplateColumns=r[0]+'fr '+r[2]+'fr '+Math.max(0,1-right)+'fr';
+   container.append(makeTile(state,0,1,[],[0,r[0]]).node);
+   const center=document.createElement('div');center.className='typeset-live-flow-column typeset-live-flow-replacement';container.append(center);
+   if(r[1]>0)center.append(makeTile(state,0,r[1],[],[r[0],right]).node);
+   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';center.append(cards);move(cards,cell.node);
+   if(bottom<1)center.append(makeTile(state,bottom,1,[],[r[0],right]).node);
+   container.append(makeTile(state,0,1,[],[right,1]).node);
+   const layer=document.createElement('div');layer.className='typeset-live-flow-layer typeset-live-flow-global-layer';container.append(layer);
+   state.column={rect:r,cell,layer};state.bands.push({node:center,cards,start:r[1],end:bottom,cells:[cell],replace:true,column:true});
+  }else{
+   let cursor=0;
+   for(const band of bands){
+   if(band.start>cursor+.00001)container.append(makeTile(state,cursor,band.start).node);
+   if(band.replace){
+    // Multiple forced replacements keep each original button row after its
+    // live field. A negative margin would cover those source pixels.
+    const cell=band.cells[0],r=cell.maskRect,right=r[0]+r[2],bottom=r[1]+r[3];
+    if(r[1]>band.start)container.append(makeTile(state,band.start,r[1]).node);
+    const row=document.createElement('div');row.className='typeset-live-flow-columns typeset-live-flow-row';row.style.gridTemplateColumns=r[0]+'fr '+r[2]+'fr '+Math.max(0,1-right)+'fr';container.append(row);
+    row.append(makeTile(state,r[1],bottom,[],[0,r[0]]).node);
+    const center=document.createElement('div');center.className='typeset-live-flow-column typeset-live-flow-replacement';row.append(center);
+    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';center.append(cards);move(cards,cell.node);
+    row.append(makeTile(state,r[1],bottom,[],[right,1]).node);
+    if(bottom<band.end)container.append(makeTile(state,bottom,band.end).node);
+    state.bands.push({node:row,cards,start:r[1],end:bottom,cells:[cell],replace:true,row:true});cursor=band.end;continue;
+   }
+   const region=document.createElement('div');region.className='typeset-live-flow-region';if(band.replace)region.classList.add('typeset-live-flow-replacement');
+   const raster=makeTile(state,band.start,band.end,band.cells);region.append(raster.node);
+   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);
+   for(const cell of band.cells)move(cards,cell.node);
+   state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:band.replace});cursor=band.end;
+   }
+   if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
+  }
+  states.set(host,state);hosts.add(host);update(state);
+  if(focus?.isConnected&&host.ownerDocument.activeElement!==focus)focus.focus({preventScroll:true});
+  return state;
+ }
+ function request(host){
+  if(host&&!states.has(host))return;
+  if(frame)return;frame=requestAnimationFrame(()=>{frame=0;for(const target of [...hosts]){const state=states.get(target);if(!target.isConnected){hosts.delete(target);continue;}if(state)update(state);}});
+ }
+ window.TypesetLiveFlow={apply,request,reset,plan};
+ document.addEventListener('live-status-layout',()=>request());window.addEventListener('resize',()=>request(),{passive:true});document.fonts?.ready.then(()=>request());
+})();
+/* end-typeset-live-flow-v1 */
 function installTypeset(section,screen){
  const mobile=innerWidth<768,mode=mobile?'v':'h';
  section.style.aspectRatio='auto';section.style.height='';section.dataset.layout=mode;
  const hosts=[...section.querySelectorAll('.typeset-part')];
  for(let i=0;i<screen.parts.length;i++){
   const part=screen.parts[i],host=hosts[i],active=part.both||part.orientation===mode;
+  if(host._typesetInstalled===part&&host.dataset.active===String(active)&&host.classList.contains('typeset-live-flow-ready')){
+   host._mediaHeight=host.clientWidth*part.size[1]/part.size[0];window.TypesetLiveFlow?.request(host);
+   for(const card of host.querySelectorAll('.typeset-card-feedback')){
+    const visual=card.querySelector('.raster-card-visual'),rect=card._card?.rect;
+    if(visual&&rect)Object.assign(visual.style,{backgroundSize:host.clientWidth+'px '+host._mediaHeight+'px',backgroundPosition:-rect[0]*host.clientWidth+'px '+(-rect[1]*host._mediaHeight)+'px'});
+   }
+   for(const wrap of host.querySelectorAll('.typeset-shot-crop'))fitTypesetShot(wrap);
+   continue;
+  }
+  window.TypesetLiveFlow?.reset(host);host._typesetInstalled=part;
   host.hidden=!active;host.dataset.active=String(active);host._layout=part;
   host._mediaHeight=host.clientWidth*part.size[1]/part.size[0];host.dataset.shape=screen.shape;
   const overlay=host.querySelector('.overlays');overlay.replaceChildren();
@@ -201,6 +378,11 @@ function installTypeset(section,screen){
    }
   }
   for(const wrap of overlay.querySelectorAll('.typeset-shot-crop'))fitTypesetShot(wrap);
+  const flowCells=[...overlay.querySelectorAll('.typeset-live')].map(node=>{
+   const hot=part.hotspots.find(hot=>hot.id===node.dataset.hotId),cell=hot||[...(part.live||[]),...(part.native_live||[])].find(cell=>cell.slot===node.dataset.slot);
+   return cell?{node,rect:cell.rect,livePart:cell.live_part||node.dataset.livePart}:null;
+  }).filter(Boolean);
+  if(flowCells.length)window.TypesetLiveFlow?.apply(host,flowCells);
  }
  const active=screen.parts.filter(x=>x.both||x.orientation===mode),first=active[0];
  section._layout={size:[first?.size[0]||1672,active.reduce((sum,x)=>sum+x.size[1],0)],cards:[],numbers:[],live:[],anchors:[],links:[]};

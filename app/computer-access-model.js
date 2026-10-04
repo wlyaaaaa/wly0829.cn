@@ -2,10 +2,37 @@ export const HOST_ORIGIN = "https://mcp.wly0829.cn";
 export const SITE_ORIGIN = "https://wly0829.cn";
 export const API_PATH = "/computer-access/api";
 
+// Contact is a service heartbeat; each displayed block keeps its own sample time.
+export function freshStatus(data, now = Date.now() / 1000) {
+  const maxAge = Number(data?.max_age_seconds) || 120;
+  const fresh = at => Number.isFinite(at) && at > 0 && at <= now + 60 && now - at <= maxAge;
+  if (!fresh(data?.served_at_unix ?? data?.observed_at_unix)) return false;
+  const collectors = Object.values(data?.display_cache?.collectors || {});
+  if (!collectors.length) return fresh(data?.observed_at_unix);
+  const screen = data?.host?.screen_state?.value ?? data?.host?.screen_state;
+  if (['locked','unlocked','no_session'].includes(screen) && fresh(data?.host?.sources?.screen_state?.observed_at_unix)) return true;
+  if (['personal_data','unrestricted'].some(key => ['locked','unlocked','active','inactive','expired','revoked','closing'].includes(data?.[key]?.state) && fresh(data[key].observed_at_unix))) return true;
+  return collectors.some(source => fresh(source.observed_at_unix) || source.observed_at_unix == null && source.state === 'reading' && fresh(source.unavailable_since_unix ?? source.refresh_started_at_unix));
+}
+
+export function screenReadTime(data) {
+  return data?.host?.sources?.screen_state?.observed_at_unix ?? data?.host?.screen_state?.observed_at_unix ?? data?.host?.observed_at_unix ?? (data?.display_cache ? null : data?.observed_at_unix);
+}
+
+export function freshScreen(data, now = Date.now() / 1000) {
+  const at = screenReadTime(data), state = data?.host?.screen_state;
+  const status = state && typeof state === 'object' ? state.state : data?.host?.sources?.screen_state?.status;
+  return Number.isFinite(at) && at > 0 && at <= now + 60 && now - at <= 120 && !['unknown','unavailable','error','failed','stale'].includes(status);
+}
+
 // Only public hardware observations survive a same-tab reload. Authority never does.
 export function hardwareSnapshot(data) {
-  if (!data?.hardware || typeof data.hardware !== "object" || !Number.isFinite(data.observed_at_unix)) return null;
-  return { hardware: data.hardware, observed_at_unix: data.observed_at_unix };
+  if (!data?.hardware || typeof data.hardware !== "object") return null;
+  const at = data.hardware_observed_at_unix ?? data.display_cache?.collectors?.hardware?.observed_at_unix ?? data.hardware.observed_at_unix;
+  const times = [data.hardware.cpu, data.hardware.memory, data.hardware.network, data.hardware.display, ...(data.hardware.gpus || []), ...(data.hardware.volumes || [])].flatMap(group => [group?.observed_at_unix, ...Object.values(group?.sources || {}).map(source => source?.observed_at_unix)]).filter(time => Number.isFinite(time) && time > 0);
+  const observed = Number.isFinite(at) ? at : times.length ? Math.max(...times) : null;
+  if (!observed) return null;
+  return { hardware: data.hardware, hardware_observed_at_unix: observed, observed_at_unix: observed };
 }
 
 export function beijingTime(unix, timeOnly = false) {
@@ -265,7 +292,8 @@ export function adaptStatus(data) {
   function group(raw = {}, aliases = {}) {
     const converted = { ...raw };
     for (const [field, source] of Object.entries(raw.sources || {})) {
-      converted[field] = { value: raw[field], state: source.status, source: source.source, observed_at_unix: source.observed_at_unix, timestamp_basis: source.timestamp_basis, sample_time_known: source.sample_time_known };
+      const original = raw[field];
+      converted[field] = { value: original && typeof original === 'object' && Object.hasOwn(original, 'value') ? original.value : original, state: source.status, source: source.source, observed_at_unix: source.observed_at_unix, timestamp_basis: source.timestamp_basis, sample_time_known: source.sample_time_known };
     }
     for (const [target, source] of Object.entries(aliases)) if (Object.hasOwn(converted, source)) converted[target] = converted[source];
     const staticFields = new Set(["model", "cores", "threads", "installed_bytes", "total_bytes", "vram_total_bytes", "frequency_basis", "basis", "interface_basis", "physical_disks", "type", "letter", "filesystem", "data_rate_mt_s", "module_count", "module_capacity_bytes", "manufacturer", "part_number", "timings", "voltage_basis"]);
@@ -330,7 +358,7 @@ export const errorMessages = {
   disabled: "此操作已由主机停用。",
 };
 
-export async function apiRequest(base, path, { method = "GET", body, csrf, signal, timeout = 10000 } = {}) {
+export async function apiRequest(base, path, { method = "GET", body, csrf, signal, timeout = path.startsWith('/status') ? 8000 : 10000 } = {}) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   signal?.addEventListener("abort", abort, { once: true });
@@ -354,6 +382,7 @@ export async function apiRequest(base, path, { method = "GET", body, csrf, signa
       error.httpStatus = response.status;
       throw error;
     }
+    if(path.startsWith('/status')&&!freshStatus(data))throw new Error('computer_snapshot_expired');
     return data;
   } finally {
     clearTimeout(timer);
@@ -378,7 +407,7 @@ export function createStatusReader(fetchStatus, onSuccess, onFailure, { initialR
         const early = initialRead;
         initialRead = null;
         let result;
-        if (early && !refresh && now() - early.started < 10000) {
+        if (early && !refresh && now() - early.started < 8000) {
           const cancel = () => early.cancel();
           controller.signal.addEventListener("abort", cancel, { once: true });
           try { result = await early.promise; }
