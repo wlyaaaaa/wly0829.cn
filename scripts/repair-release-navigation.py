@@ -32,6 +32,8 @@ PUBLIC_SEARCH_FIELDS = ('type', 'group', 'scopes', 'projectSlug', 'title', 'deta
 _public_spec = importlib.util.spec_from_file_location('public_page_contract', Path(__file__).with_name('public_page_contract.py'))
 public_contract = importlib.util.module_from_spec(_public_spec)
 _public_spec.loader.exec_module(public_contract)
+RULE_MAPPING_PATH=Path(__file__).resolve().parents[1]/'config/rule-navigation-mappings.json'
+RULE_REFERENCE_MAPPINGS=json.loads(RULE_MAPPING_PATH.read_text('utf8')).get('entries',{}) if RULE_MAPPING_PATH.is_file() else {}
 
 
 def public_search_text(value):
@@ -114,6 +116,10 @@ def resolve_navigation(ref, pages):
     if parts is None: return ref
     canonical = normalize_path(parts.path) + ('?' + parts.query if parts.query else '') + ('#' + parts.fragment if parts.fragment else '')
     if target_exists(canonical, pages): return canonical
+    mapping=RULE_REFERENCE_MAPPINGS.get(canonical)
+    if mapping:
+        if target_exists(mapping['target'],pages):return mapping['target']
+        raise ValueError('Mapped rule original screen is unavailable: '+mapping['target'])
     if canonical in HOST_CAPABILITIES and target_exists(HOST_CAPABILITIES[canonical], pages):
         return HOST_CAPABILITIES[canonical]
     alias = ALIASES.get(normalize_path(parts.path))
@@ -136,7 +142,8 @@ def resolve_navigation(ref, pages):
 def visit(value):
     if isinstance(value, dict):
         yield value
-        for child in value.values(): yield from visit(child)
+        for key,child in value.items():
+            if key!='source_meta':yield from visit(child)
     elif isinstance(value, list):
         for child in value: yield from visit(child)
 
@@ -261,20 +268,44 @@ def restore_pending_links(root, pages):
         data = json.loads(match[2]) if match else None
         for node in visit(data):
             source = node.get('original_href')
-            if source and node.get('href') != source and target_exists(source, pages):
-                node['href'] = source; restored = True
+            current=node.get('href')
+            precise_source=bool(source and urlsplit(source).fragment and target_exists(source,pages))
+            mapped_current=RULE_REFERENCE_MAPPINGS.get(current)
+            mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
+            destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current else
+                         resolve_navigation(source,pages) if mapped_source else source)
+            if destination and current != destination and target_exists(destination, pages):
+                node['original_href']=source or current;node['href'] = destination; restored = True
         if restored: text = replace_data(text, data)
-        def restore_anchor(m):
+        def restore_anchor(tag):
             nonlocal restored
-            tag = m[0]
             original = re.search(r'\bdata-original-href=["\']([^"\']+)["\']', tag)
             href = re.search(r'(?<![-\w])href=["\']([^"\']+)["\']', tag)
-            if not original or not href: return tag
-            source = html.unescape(original[1])
-            if source == html.unescape(href[1]) or not target_exists(source, pages): return tag
+            if not href:return tag
+            current=html.unescape(href[1]);source=html.unescape(original[1]) if original else None
+            precise_source=bool(source and urlsplit(source).fragment and target_exists(source,pages))
+            mapped_current=RULE_REFERENCE_MAPPINGS.get(current);mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
+            if not original and not mapped_current:return tag
+            destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current else
+                         resolve_navigation(source,pages) if mapped_source else source)
+            if destination is None:return tag
+            if destination == html.unescape(href[1]) or not target_exists(destination, pages): return tag
             restored = True
-            return tag[:href.start(1)] + html.escape(source, quote=True) + tag[href.end(1):]
-        text = re.sub(r'<a\b[^>]*>', restore_anchor, text)
+            replacement=tag[:href.start(1)] + html.escape(destination, quote=True) + tag[href.end(1):]
+            if not original:replacement=replacement[:-1]+' data-original-href="'+html.escape(current,quote=True)+'">'
+            return replacement
+        # HTMLParser treats script bodies as data. A source_meta.original_html
+        # string, JSON value or script literal can never become a DOM anchor.
+        offsets=[0]+[match.end() for match in re.finditer('\n',text)]
+        class NativeAnchors(HTMLParser):
+            def __init__(self):super().__init__(convert_charrefs=False);self.edits=[]
+            def handle_starttag(self,tag,attrs):
+                if tag!='a':return
+                opening=self.get_starttag_text();replacement=restore_anchor(opening)
+                if replacement!=opening:
+                    line,column=self.getpos();start=offsets[line-1]+column;self.edits.append((start,start+len(opening),replacement))
+        parser=NativeAnchors();parser.feed(text)
+        for start,end,replacement in reversed(parser.edits):text=text[:start]+replacement+text[end:]
         if restored:
             path.write_text(text, encoding='utf8'); changed.append(rel)
     return changed

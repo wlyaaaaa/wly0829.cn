@@ -1,0 +1,947 @@
+{
+  "schema": "wly.rule-navigation-mappings.v1",
+  "version": "E214",
+  "source_report_sha256": "cf85f07a2458d179a9c492e96295fae67985c2f2820cee28e15ebc62e9e8532d",
+  "source_reference_inventory_sha256": "f5c02570966b6d87a8a4b81f387dc2b572c0a6fddba6e3e0614f85a619bfa3af",
+  "pin_sha256": "f2db34d169e757014a82cbd1d1face4589c7b6aeab6f6011e63414672ecc25e6",
+  "reference_count": 94,
+  "unique_target_count": 5,
+  "entries": {
+    "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules": {
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    "/rules/?rule=agents_root_rules#rule-tab-agents_root_rules": {
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    "/rules/?rule=authorization_contract#rule-panel-authorization_contract": {
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    "/rules/?rule=authorization_contract#rule-tab-authorization_contract": {
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    "/rules/?rule=capabilities_runtime_contract#rule-panel-capabilities_runtime_contract": {
+      "target": "/rules/capabilities-runtime/#rule-capabilities-runtime-11",
+      "excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11"
+    },
+    "/rules/?rule=capabilities_runtime_contract#rule-tab-capabilities_runtime_contract": {
+      "target": "/rules/capabilities-runtime/#rule-capabilities-runtime-11",
+      "excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11"
+    },
+    "/rules/?rule=claude_adapter_contract#rule-panel-claude_adapter_contract": {
+      "target": "/rules/claude-adapter/#rule-claude-adapter-11",
+      "excerpt_id": "rule-claude-adapter/rule-claude-adapter-11"
+    },
+    "/rules/?rule=claude_adapter_contract#rule-tab-claude_adapter_contract": {
+      "target": "/rules/claude-adapter/#rule-claude-adapter-11",
+      "excerpt_id": "rule-claude-adapter/rule-claude-adapter-11"
+    },
+    "/rules/?rule=codex_adapter_contract#rule-panel-codex_adapter_contract": {
+      "target": "/rules/codex-adapter/#rule-codex-adapter-05",
+      "excerpt_id": "rule-codex-adapter/rule-codex-adapter-05"
+    },
+    "/rules/?rule=codex_adapter_contract#rule-tab-codex_adapter_contract": {
+      "target": "/rules/codex-adapter/#rule-codex-adapter-05",
+      "excerpt_id": "rule-codex-adapter/rule-codex-adapter-05"
+    },
+    "/rules/?rule=context_sources_contract#rule-panel-context_sources_contract": {
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    "/rules/?rule=context_sources_contract#rule-tab-context_sources_contract": {
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    "/rules/?rule=engineering_delivery_contract#rule-panel-engineering_delivery_contract": {
+      "target": "/rules/engineering-delivery/#rule-engineering-delivery-06",
+      "excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06"
+    },
+    "/rules/?rule=engineering_delivery_contract#rule-tab-engineering_delivery_contract": {
+      "target": "/rules/engineering-delivery/#rule-engineering-delivery-06",
+      "excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06"
+    },
+    "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract": {
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    "/rules/?rule=execution_coordination_contract#rule-tab-execution_coordination_contract": {
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract": {
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    "/rules/?rule=privacy_data_contract#rule-tab-privacy_data_contract": {
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    "/rules/?rule=protected_actions_contract#rule-panel-protected_actions_contract": {
+      "target": "/rules/protected-actions/#rule-protected-actions-07",
+      "excerpt_id": "rule-protected-actions/rule-protected-actions-07"
+    },
+    "/rules/?rule=protected_actions_contract#rule-tab-protected_actions_contract": {
+      "target": "/rules/protected-actions/#rule-protected-actions-07",
+      "excerpt_id": "rule-protected-actions/rule-protected-actions-07"
+    },
+    "/rules/?rule=rule_release_contract#rule-panel-rule_release_contract": {
+      "target": "/rules/rule-release/#rule-rule-release-05",
+      "excerpt_id": "rule-rule-release/rule-rule-release-05"
+    },
+    "/rules/?rule=rule_release_contract#rule-tab-rule_release_contract": {
+      "target": "/rules/rule-release/#rule-rule-release-05",
+      "excerpt_id": "rule-rule-release/rule-rule-release-05"
+    }
+  },
+  "references": [
+    {
+      "index": 1,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 2,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 3,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 4,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 5,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 6,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 7,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 8,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 9,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 10,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 11,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 12,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 13,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 14,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 15,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 16,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 17,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 18,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 19,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 20,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 21,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 22,
+      "file": "cockpit/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 23,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 24,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 25,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 26,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 27,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 28,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 29,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 30,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 31,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 32,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 33,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 34,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 35,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 36,
+      "file": "projects/ai-cli-profile-manager/index.html",
+      "reference": "/rules/?rule=execution_coordination_contract#rule-panel-execution_coordination_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/execution-coordination/#rule-execution-coordination-06",
+      "excerpt_id": "rule-execution-coordination/rule-execution-coordination-06"
+    },
+    {
+      "index": 37,
+      "file": "projects/openclaw/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 38,
+      "file": "projects/openclaw/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 39,
+      "file": "projects/openclaw/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 40,
+      "file": "projects/openclaw/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 41,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 42,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 43,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 44,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 45,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 46,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 47,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 48,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 49,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 50,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 51,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 52,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 53,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 54,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=context_sources_contract#rule-panel-context_sources_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    {
+      "index": 55,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 56,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=context_sources_contract#rule-panel-context_sources_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    {
+      "index": 57,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 58,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=context_sources_contract#rule-panel-context_sources_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    {
+      "index": 59,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 60,
+      "file": "projects/personal-expression/index.html",
+      "reference": "/rules/?rule=context_sources_contract#rule-panel-context_sources_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/context-sources/#rule-context-sources-08",
+      "excerpt_id": "rule-context-sources/rule-context-sources-08"
+    },
+    {
+      "index": 61,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 62,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 63,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 64,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 65,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 66,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 67,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 68,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 69,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 70,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 71,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 72,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 73,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 74,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 75,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 76,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 77,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=privacy_data_contract#rule-panel-privacy_data_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/privacy-data/#rule-privacy-data-07",
+      "excerpt_id": "rule-privacy-data/rule-privacy-data-07"
+    },
+    {
+      "index": 78,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 79,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=authorization_contract#rule-panel-authorization_contract",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/authorization/#rule-authorization-05",
+      "excerpt_id": "rule-authorization/rule-authorization-05"
+    },
+    {
+      "index": 80,
+      "file": "projects/remote-control/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 81,
+      "file": "projects/sunshine-remote-streaming/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 82,
+      "file": "projects/sunshine-remote-streaming/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 83,
+      "file": "projects/sunshine-remote-streaming/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 84,
+      "file": "projects/sunshine-remote-streaming/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 85,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 86,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 87,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 88,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 89,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 90,
+      "file": "projects/wechatdirect/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 91,
+      "file": "skills/browser-control-continuity/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 92,
+      "file": "skills/browser-control-continuity/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 93,
+      "file": "skills/browser-control-continuity/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    },
+    {
+      "index": 94,
+      "file": "skills/browser-control-continuity/index.html",
+      "reference": "/rules/?rule=agents_root_rules#rule-panel-agents_root_rules",
+      "navigation": true,
+      "type": "missing_anchor",
+      "target": "/rules/charter/#charter-02",
+      "excerpt_id": "charter/charter-02"
+    }
+  ]
+}

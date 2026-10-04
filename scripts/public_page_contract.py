@@ -46,7 +46,7 @@ PART = {**LAYOUT,**fields('image src both')}
 PART['hotspots']=array(LINK)
 SCREEN = fields('id title section shape nav_section nav_title render_mode primary_href source_version')
 SCREEN.update(layouts={'h':LAYOUT,'v':LAYOUT},parts=array(PART),screen_anchors=array(S),html_anchors=array(LINK),
-              source_meta=fields('relative_file version omitted_count original_html rendered_input_sha256 source_sha256 src'))
+              source_meta=fields('relative_file version omitted_count original_html rendered_input_sha256 raw_rendered_input_sha256 public_projection_sha256 source_sha256 public_source_sha256 excerpt_contract excerpt_id src'))
 COMPONENT = fields('src')
 COMPONENT.update(size=RECT,links=array(LINK),slots=array(MARK))
 ART = fields('header_signature header_tile menu_icon signature github bilibili x email landscape_wide landscape_ratio landscape_left landscape_right landscape back_to_top easter_bird landscape_done')

@@ -23,6 +23,7 @@ from urllib.parse import urlsplit, unquote
 HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path: sys.path.insert(0,str(HERE))
 from public_page_contract import public_page_data
+import rule_original_contract as rule_contract
 publication_spec=importlib.util.spec_from_file_location('typeset_publication', HERE/'audit-page-publication.py')
 publication=importlib.util.module_from_spec(publication_spec)
 publication_spec.loader.exec_module(publication)
@@ -518,7 +519,55 @@ def build_page(name, records, args, candidate):
                 meta['source_sha256']=original_proof['sha256']
                 if based_on.get('sha256')!=original_proof['sha256']:
                     issues.append(sid+':原文声明SHA与实际来源不符')
-                meta['src']=asset(original_path,candidate,'rule-sources')
+                pin=rule_contract.load_pin(HERE.parent)
+                if pin.get('schema')=='wly.assembled-rules-pin.v2':
+                    projection=getattr(args,'rule_projection_records',{}).get((name,sid,'h'))
+                    if not projection or projection['public_html_sha256']!=render_proof['sha256']:
+                        raise ValueError('原文图片没有绑定完成的独立公开投影代次')
+                    projection_path=args.rule_projection_path
+                    inputs[str(projection_path)]=args.rule_projection_proof
+                    inputs.update(args.rule_projection_inputs)
+                    meta['raw_rendered_input_sha256']=projection['raw_html_sha256']
+                    meta['public_projection_sha256']=args.rule_projection_proof['sha256']
+                    identity=src.get('source_excerpt_id');excerpt=rule_contract.excerpt_entry(pin,identity)
+                    expected_source=pin['documents'].get(meta['relative_file'])
+                    meta.update(excerpt_contract=based_on.get('excerpt_contract'),excerpt_id=identity)
+                    declared=[entry if isinstance(entry,str) else entry.get('text') for entry in src.get('source',{}).get('omit',[])]
+                    meta['omitted_count']=len(declared)
+                    if based_on.get('excerpt_contract')!=rule_contract.CONTRACT or not excerpt or excerpt['screen']!=sid or excerpt['page']!=name:
+                        raise ValueError('原文未绑定固定摘录合同')
+                    if declared!=excerpt['selection']['approved_omissions']:
+                        raise ValueError('本屏批准省略声明与固定来源范围不一致')
+                    if not expected_source or expected_source['source_sha256']!=original_proof['sha256']:
+                        raise ValueError('本屏来源不在固定 E214 全文清单')
+                    meta['original_html']=rule_contract.project_original_html(meta['original_html'])
+                    if hybrid.builder.typeset_prose_digest(meta['original_html'])!=excerpt['rendered_text_sha256']:
+                        raise ValueError('本屏原文与独立固定 E214 摘录全文摘要不符')
+                    public_source=rule_contract.public_markdown(original_path.read_text('utf-8-sig'),meta['relative_file']).encode('utf8')
+                    public_sha=rule_contract.sha_bytes(public_source)
+                    if public_sha!=expected_source['public_source_sha256']:
+                        raise ValueError('公开来源投影与固定来源合同不一致')
+                    meta['public_source_sha256']=public_sha
+                    meta['src']='/_typeset/rule-sources/'+public_sha+'.md'
+                    public_path=candidate/meta['src'].lstrip('/');public_path.parent.mkdir(parents=True,exist_ok=True);public_path.write_bytes(public_source)
+                    model['screen_anchors']=list(dict.fromkeys(model['screen_anchors']+excerpt['heading_aliases']))
+                    if name=='charter':
+                        first,last=excerpt['selection']['articles']
+                        model['screen_anchors']+=['L'+str(number) for number in range(first,last+1)]
+                    release_root=original_path.parents[len(Path(meta['relative_file']).parts)-1]
+                    record=release_root/'release.json';inputs[str(record.resolve())]=stamp(record)
+                    if inputs[str(record.resolve())]['sha256']!=pin['release_record_sha256']:
+                        raise ValueError('原文来源发布记录不在固定 E214 合同')
+                    for resource,proof in pin.get('public_source_resources',{}).items():
+                        if not resource.startswith('/rule-sources/'):continue
+                        resource_source=release_root/proof['relative_file'];resource_proof=stamp(resource_source)
+                        inputs[str(resource_source.resolve())]=resource_proof
+                        if resource_proof['sha256']!=proof['source_sha256']:raise ValueError('公开入口模板原始SHA不符')
+                        resource_bytes=rule_contract.public_markdown(resource_source.read_text('utf-8-sig'),proof['relative_file']).encode('utf8')
+                        if rule_contract.sha_bytes(resource_bytes)!=proof['public_source_sha256']:raise ValueError('公开入口模板投影SHA不符')
+                        target=candidate/resource.lstrip('/');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(resource_bytes)
+                else:
+                    meta['src']=asset(original_path,candidate,'rule-sources')
             except (KeyError,OSError,ValueError) as error:
                 issues.append(sid+':缺少真实原文来源证据：'+str(error))
         whole=next((l for l in old.get('layouts',{}).get('h',{}).get('links',[])if l.get('whole')),None)
@@ -612,8 +661,9 @@ def build_page(name, records, args, candidate):
                         h['action']=action['action']
                         part['native_actions'].append({k:v for k,v in action.items() if k in {'action','text','copy_text'}}|{'rect':h['rect'],'hot_id':h['id']})
                 elif h['kind'] in {'link','button'}:
+                    if shape=='source_text':h['href']=rule_contract.source_link_target(h['href'])
                     h['original_href']=h['href']
-                    known = {x['href'] for x in src.get('links',[])}
+                    known = {rule_contract.source_link_target(x['href']) if shape=='source_text' else x['href'] for x in src.get('links',[])}
                     if h['href'] not in known:
                         issues.append(sid+':链接目标不属于定稿：'+h['href'])
                     part['links'].append(h)
@@ -729,10 +779,25 @@ def main():
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
     ap.add_argument('--release-overlay',type=Path,help='Exact approved search and runtime-reference updates bound by old/new hashes')
+    ap.add_argument('--rule-public-projection',type=Path,help='Sealed public rule image generation; defaults to typeset-root/rule-public-projection.json')
     args=ap.parse_args()
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
     if args.geometry:args.geometry=args.geometry.resolve()
     args.snapshot_path=args.typeset_root.parent/'snapshot.json';args.snapshot_proof=None;args.resource_map={};args.external_inputs={}
+    args.rule_projection_records={};args.rule_projection_inputs={}
+    args.rule_projection_path=(args.rule_public_projection or args.typeset_root/'rule-public-projection.json').resolve()
+    if args.rule_projection_path.is_file():
+        projection_spec=importlib.util.spec_from_file_location('typeset_rule_projection',HERE/'prepare-rule-public-projection.py')
+        projection_module=importlib.util.module_from_spec(projection_spec);projection_spec.loader.exec_module(projection_module)
+        projection=projection_module.verify_projection(args.rule_projection_path.parent)
+        args.rule_projection_proof=stamp(args.rule_projection_path)
+        args.rule_projection_records={(row['page'],row['screen'],row['orientation']):row for row in projection['records']}
+        for entry in projection['projected_pages']:
+            for path_key,sha_key in [('source_file','source_sha256'),('raw_source_file','raw_source_sha256'),('spec_file','spec_sha256'),('raw_spec_file','raw_spec_sha256')]:
+                path=Path(entry[path_key]).resolve();args.rule_projection_inputs[str(path)]={'sha256':entry[sha_key],'bytes':path.stat().st_size}
+        for row in projection['records']:
+            raw=Path(projection['raw_root'])/row['page']/'html'/(row['screen']+'-'+row['orientation']+'.html')
+            args.rule_projection_inputs[str(raw.resolve())]={'sha256':row['raw_html_sha256'],'bytes':raw.stat().st_size}
     if args.snapshot_path.is_file():
         snapshot,args.snapshot_proof=json_bound(args.snapshot_path)
         if snapshot.get('status')!='pass':raise ValueError('Input snapshot is not stable')

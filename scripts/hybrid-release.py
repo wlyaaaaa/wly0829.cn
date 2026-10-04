@@ -535,7 +535,7 @@ def validate_content(output, report):
             objects = {obj['url']: obj for obj in manifest['oss']['objects'].values()}
             rows = json.loads(match[2]).get('screens', []) if match else []
             bound = [row.get('source_meta', {}) for row in rows if row.get('source_meta', {}).get('relative_file') == finding.get('document')]
-            return bool(bound) and all(objects.get(meta.get('src'), {}).get('sha256') == meta.get('source_sha256')
+            return bool(bound) and all(objects.get(meta.get('src'), {}).get('sha256') == meta.get('public_source_sha256',meta.get('source_sha256'))
                                        and objects.get(meta.get('src'), {}).get('byte_preserved') is True for meta in bound)
         return [x for x in findings if x['type'] != 'pinned_rule_page_missing' and not verified_source(x)]
     builder.rule_pin_findings = selected_pin
