@@ -210,6 +210,10 @@
         screenshots.push(record);
        }
       }else{
+       if(['ca-toast','ca-results'].includes(hot.slot)&&el.hidden&&el.dataset.optionalEmpty==='true'&&win.getComputedStyle(el).display==='none'&&!el.getClientRects().length){
+        liveSlots.push({screen:s.id,part:part.image,hot_id:hot.id,slot:hot.slot,kind:'optional_feedback',semantic_status:'no_operation_feedback',status:'pass',visible_rect:null,visible_text_rects:[],probes:[]});
+        continue;
+       }
        const scope=el.querySelector('.live-status-value,.b2-card-list')||el,text=contentText(win,scope),clip=contentClip(win,el),lamp=hot.live_part==='lamp'&&el.classList.contains('typeset-lamp'),input=['ca-form-hours','ca-form-code'].includes(hot.slot)&&el.tagName==='INPUT';
        const meaning=lamp?(el.getAttribute('aria-label')||'').trim():input?(el.value||el.getAttribute('placeholder')||el.getAttribute('aria-label')||'').trim():text.map(entry=>entry.text).join(' '),state=el.dataset.state||null;
        const inputText=input?(el.value||el.getAttribute('placeholder')||''):null;
