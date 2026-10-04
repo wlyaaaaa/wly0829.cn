@@ -1,4 +1,4 @@
-/* Pure presentation of the status reader's public snapshot. No reads or timers. */
+/* Pure presentation of the public status snapshot. No reads or timers. */
 (function (scope) {
   'use strict';
   const hardwareAssets = Object.freeze({
