@@ -10,6 +10,7 @@ from html.parser import HTMLParser
 import importlib.util
 import io
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -241,6 +242,16 @@ def motion_part(geometry, image, size, start, padding):
         for item in geometry.get(key,[]):
             rect=convert(item if isinstance(item,list)else item['rect'])
             if rect:result[key].append(rect if isinstance(item,list)else {**item,'rect':rect})
+    content=geometry.get('content_occupancy',{})
+    if content.get('policy')=='semantic-content-rects-v1' and not content.get('issues'):
+        blocks=[]
+        for item in content.get('blocks',[]):
+            rect=convert(item['rect'])
+            if rect:blocks.append({'kind':item['kind'],'rect':rect})
+        result['content_occupancy']={'policy':content['policy'],'blocks':blocks,
+            'method':content['method'],'source_html_sha256':geometry['html_sha256'],
+            'source_png_sha256':next(entry['sha256'] for entry in geometry['parts'] if entry['image']==image),
+            'measurement_sha256':content['measurement_sha256'],'fit_sha256':geometry['fit_sha256']}
     return result
 
 def bind_card_feedback(part, old, orientation):
@@ -708,6 +719,14 @@ def build_page(name, records, args, candidate):
                         current_html=(args.typeset_root/name/'html'/f'{sid}-{orient}.html').read_text('utf8')
                         if geometry.get('measurement_recipe')!='producer-components-v8' or any(not isinstance(geometry.get(key),list) for key in ['cards','numbers','dots','arrows']):
                             raise ValueError('缺少当前生产DOM的完整 cards/numbers/dots/arrows 数组')
+                        content=geometry.get('content_occupancy',{})
+                        measurement_sha=hashlib.sha256((HERE/'typeset-measure.js').read_text('utf8').encode('utf8')).hexdigest()
+                        if content.get('policy')!='semantic-content-rects-v1' or content.get('issues') or content.get('measurement_sha256')!=measurement_sha or not isinstance(content.get('blocks'),list):
+                            raise ValueError('缺少当前生产DOM的真实内容占用量测')
+                        for block in content['blocks']:
+                            r=block.get('rect')
+                            if block.get('kind') not in {'text','drawing'} or not isinstance(r,list) or len(r)!=4 or any(not isinstance(value,(int,float)) or not math.isfinite(value) for value in r) or r[2]<=0 or r[3]<=0:
+                                raise ValueError('真实内容占用量测包含无效文字/绘画坐标')
                         part['dot_capability']=motion_prep.dot_evidence(geometry,current_html)
                         part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
                         part['motion_measured']=True
@@ -844,6 +863,12 @@ def build_page(name, records, args, candidate):
     refs_parser=hybrid.builder.Refs();refs_parser.feed(probe)
     actual_refs={r for r,_ in refs_parser.refs}|{r for r,_ in hybrid.builder.nested_refs(data)}
     data['shared']['avif_assets']={k:v for k,v in avif_map.items()if k in actual_refs}
+    # Acceptance metadata stays in the bound build report. It is not a new
+    # website runtime payload and does not enlarge every public route.
+    content_occupancy={'policy':'semantic-content-rects-v1','parts':{
+        part['image']:part['content_occupancy'] for screen in data['screens']
+        for part in screen['parts'] if part.get('content_occupancy')}}
+    inputs[str((HERE/'typeset-measure.js').resolve())]=stamp(HERE/'typeset-measure.js')
     data=public_page_data(data)
     text=DATA.sub(lambda m:m[1]+json.dumps(data,ensure_ascii=False).replace('</',r'<\/')+m[3],text,count=1)
     # The exact HTML used for the raster also owns its spoken/text equivalent.
@@ -870,6 +895,7 @@ def build_page(name, records, args, candidate):
             'effects_expected':expected_effects,'effects_expected_legacy':legacy_effects,'effects_expectation_changes':effect_changes,
             'effects_capabilities':data['motion_capabilities'],'motion_appearance':motion_prep.appearance(),'video_expected':video_expected,
             'geometry_sha256':geometry_sha256,'original_video':old_video,
+            'content_occupancy':content_occupancy,
             'toc_binding':toc_binding,
             'screens':screen_count,'images':image_count,'template_shell':templated,'anchor_binding':'owning-screen',
             'anchors':sum(len(x['screen_anchors'])for x in data['screens'])}

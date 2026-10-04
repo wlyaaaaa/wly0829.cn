@@ -24,10 +24,51 @@ function typesetNumberToken(text){
  if(match)return {numeric:match[0],value:Number(match[0].replaceAll(',','')),notation:'decimal'};
  const circled=text.match(/[⓪①-⑳]/);return circled?{numeric:circled[0],value:circled[0]==='⓪'?0:circled[0].codePointAt(0)-0x2460+1,notation:'circled'}:null;
 }
+const TYPESET_CONTENT_POLICY='semantic-content-rects-v1';
+const typesetContentInkCache=new Map();
+function typesetContentRects(win,doc){
+ const page=doc.querySelector('main#page'),groups=new Map(),blocks=[],issues=[];
+ const rect=r=>[r.left,r.top+win.scrollY,r.width,r.height].map(x=>Math.round(x*1000)/1000);
+ const visible=el=>{for(let node=el;node&&node!==doc;node=node.parentElement){const s=win.getComputedStyle(node);if(s.display==='none'||s.visibility==='hidden'||s.visibility==='collapse'||Number(s.opacity)===0)return false;if(node.tagName==='DETAILS'&&!node.open&&node!==el&&!node.querySelector(':scope > summary')?.contains(el))return false;}return true;};
+ const walker=doc.createTreeWalker(page,win.NodeFilter.SHOW_TEXT);
+ while(walker.nextNode()){
+  const node=walker.currentNode,el=node.parentElement;if(!node.textContent.trim()||!visible(el)||el.closest('script,style,[data-hot=live],[data-hot=screenshot]'))continue;
+  const owner=el.closest('.tb,p,li,td,th,blockquote,pre,summary,h1,h2,h3,h4,h5,h6')||el;
+  const range=doc.createRange();range.selectNodeContents(node);
+  const rs=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0);if(!rs.length)continue;
+  const before=groups.get(owner)||[];before.push(...rs.map(rect));groups.set(owner,before);
+ }
+ for(const rs of groups.values()){const left=Math.min(...rs.map(r=>r[0])),top=Math.min(...rs.map(r=>r[1])),right=Math.max(...rs.map(r=>r[0]+r[2])),bottom=Math.max(...rs.map(r=>r[1]+r[3]));blocks.push({kind:'text',rect:[left,top,right-left,bottom-top]});}
+ // Read only the existing raster's numerical ink bounds. No page capture,
+ // bitmap export or card/background-container rectangle enters occupancy.
+ for(const im of page.querySelectorAll('img')){
+  if(!visible(im)||im.closest('[data-hot=live],[data-hot=screenshot]'))continue;
+  if(!im.complete||!im.naturalWidth){issues.push('content image not decoded: '+im.getAttribute('src'));continue;}
+  try{
+   const key=im.currentSrc||im.src,cached=typesetContentInkCache.get(key);
+   let ink=cached;
+   if(!ink){
+   const canvas=doc.createElement('canvas');canvas.width=im.naturalWidth;canvas.height=im.naturalHeight;
+   const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0);const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+   let left=canvas.width,top=canvas.height,right=0,bottom=0,min=[255,255,255],max=[0,0,0];
+   for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){const k=(y*canvas.width+x)*4,a=pixels[k+3]/255,rgb=[255+(pixels[k]-255)*a,255+(pixels[k+1]-255)*a,255+(pixels[k+2]-255)*a];for(let n=0;n<3;n++){min[n]=Math.min(min[n],rgb[n]);max[n]=Math.max(max[n],rgb[n]);}if(Math.min(...rgb)<245){left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+1);bottom=Math.max(bottom,y+1);}}
+   ink={size:[canvas.width,canvas.height],rect:[left,top,right-left,bottom-top],empty:right<=left||bottom<=top||Math.max(...max.map((value,n)=>value-min[n]))<12};typesetContentInkCache.set(key,ink);canvas.width=canvas.height=0;
+   }
+   if(ink.empty)continue;
+   const [nw,nh]=ink.size,[left,top,iw,ih]=ink.rect;
+   const box=im.getBoundingClientRect(),s=win.getComputedStyle(im),contain=s.objectFit==='contain'||s.objectFit==='scale-down',scale=contain?Math.min(box.width/nw,box.height/nh,s.objectFit==='scale-down'?1:Infinity):s.objectFit==='cover'?Math.max(box.width/nw,box.height/nh):s.objectFit==='none'?1:null,w=scale===null?box.width:nw*scale,h=scale===null?box.height:nh*scale;
+   const position=s.objectPosition.split(/\s+/),offset=(value,space)=>value?.endsWith('%')?parseFloat(value)/100*space:parseFloat(value)||0;
+   const x=box.left+offset(position[0],box.width-w),y=box.top+offset(position[1]||position[0],box.height-h)+win.scrollY,l=Math.max(box.left,x+left/nw*w),t=Math.max(box.top+win.scrollY,y+top/nh*h),r=Math.min(box.right,x+(left+iw)/nw*w),b=Math.min(box.bottom+win.scrollY,y+(top+ih)/nh*h);
+   if(r>l&&b>t)blocks.push({kind:'drawing',rect:[l,t,r-l,b-t].map(v=>Math.round(v*1000)/1000),source_size:ink.size,ink_rect:ink.rect});
+  }catch(error){issues.push('content image ink bounds unavailable: '+im.getAttribute('src')+' '+String(error));}
+ }
+ return {policy:TYPESET_CONTENT_POLICY,method:'Same fitted producer DOM: visible text Range paragraph bounds and existing image numerical nonwhite ink bounds; no containers, slot shells or page captures',blocks,issues};
+}
 (async()=>{
  const params=new URLSearchParams(location.search),selection=(params.get('pages')||params.get('page')||'').split(',').filter(Boolean);
  const plan=(await(await fetch('/__typeset/geometry-plan')).json()).filter(item=>!selection.length||selection.includes(item.page)),existing=await(await fetch('/__typeset/geometry-existing')).json(),records=existing.geometry_version===2?existing.records:[];
  const fit=await(await fetch('/__typeset/geometry-fit')).json();
+ const contentMeasurementBytes=await(await fetch('/__typeset/measure.js')).arrayBuffer(),contentMeasurementSha=[...new Uint8Array(await crypto.subtle.digest('SHA-256',contentMeasurementBytes))].map(v=>v.toString(16).padStart(2,'0')).join('');
  const limit=Number(params.get('limit')||100);let measured=0;
  const state=document.querySelector('#state'),frame=document.createElement('iframe');document.body.append(frame);
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -35,7 +76,7 @@ function typesetNumberToken(text){
  async function save(complete){return fetch('/__typeset/geometry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({schema:'wly.typeset-geometry.v1',geometry_version:2,fit_input:fit.input,complete,records,measured_at_beijing:new Date().toLocaleString('sv-SE',{timeZone:'Asia/Shanghai'})+'+08:00',method:'Chrome DOM rectangles at producer viewport height 200 with hidden scrollbars and producer FIT_JS; no screenshot or image viewing'})});}
  for(let i=0;i<plan.length;i++){
   const item=plan[i];state.textContent=`量测 ${i+1}/${plan.length}：${item.screen}-${item.orientation}`;
-  const prior=records.find(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.layout_readiness==='fit-typeset-ready-two-frames-v1'&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length);
+  const prior=records.find(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.layout_readiness==='fit-typeset-ready-two-frames-v1'&&x.content_occupancy?.policy===TYPESET_CONTENT_POLICY&&x.content_occupancy.measurement_sha256===contentMeasurementSha&&!x.content_occupancy.issues?.length&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length);
   if(prior)continue;
   if(measured>=limit)break;
   measured++;
@@ -81,13 +122,14 @@ function typesetNumberToken(text){
     if(valid(r))arrows.push({rect:r,direction:r[3]>r[2]?'v':'h',basis:'computed '+pseudo+' connector in producer DOM'});
    }
    const illustrations=[...doc.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art')].map(im=>({src:im.getAttribute('src'),natural_size:[im.naturalWidth,im.naturalHeight],rect:rect(im)})).filter(x=>valid(x.rect));
-   records.push({...item,measurement_recipe:'producer-components-v8',layout_readiness:'fit-typeset-ready-two-frames-v1',dot_capability:dotCapability,fit_sha256:fit.input.sha256,measured_height:doc.documentElement.scrollHeight,measured_width:doc.documentElement.clientWidth,overflow_width:doc.documentElement.scrollWidth,
-                 cards,numbers,dots,arrows,illustrations,broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:[...dotIssues,...(Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[])]});
+   const contentOccupancy={...typesetContentRects(win,doc),measurement_sha256:contentMeasurementSha,measurement_bytes:contentMeasurementBytes.byteLength,measurement_source:'Actual /__typeset/measure.js UTF-8 response bytes; preview normalizes CRLF to LF'};
+   records.push({...item,measurement_recipe:'producer-components-v8',layout_readiness:'fit-typeset-ready-two-frames-v1',content_occupancy:contentOccupancy,dot_capability:dotCapability,fit_sha256:fit.input.sha256,measured_height:doc.documentElement.scrollHeight,measured_width:doc.documentElement.clientWidth,overflow_width:doc.documentElement.scrollWidth,
+                 cards,numbers,dots,arrows,illustrations,broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:[...dotIssues,...contentOccupancy.issues,...(Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[])]});
   }catch(e){records.push({...item,issues:[String(e)]});}
   if(measured%25===0)await save(false);
  }
  frame.remove();
- const pending=plan.filter(item=>!records.some(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.layout_readiness==='fit-typeset-ready-two-frames-v1'&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length)).length,complete=pending===0;
+ const pending=plan.filter(item=>!records.some(x=>x.screen===item.screen&&x.orientation===item.orientation&&x.measurement_recipe==='producer-components-v8'&&x.layout_readiness==='fit-typeset-ready-two-frames-v1'&&x.content_occupancy?.policy===TYPESET_CONTENT_POLICY&&x.content_occupancy.measurement_sha256===contentMeasurementSha&&!x.content_occupancy.issues?.length&&x.dot_capability?.policy===TYPESET_DOT_POLICY&&JSON.stringify(x.motion_source)===JSON.stringify(item.motion_source)&&x.fit_sha256===fit.input.sha256&&x.html_sha256===item.html_sha256&&JSON.stringify(x.parts)===JSON.stringify(item.parts)&&!x.issues?.length&&!x.broken_images?.length)).length,complete=pending===0;
  const response=await save(complete);
  state.dataset.done='true';state.dataset.complete=String(complete);
  state.dataset.pending=String(pending);
