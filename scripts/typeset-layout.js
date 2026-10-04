@@ -302,8 +302,12 @@ function installTypeset(section,screen){
  const hosts=[...section.querySelectorAll('.typeset-part')];
  for(let i=0;i<screen.parts.length;i++){
   const part=screen.parts[i],host=hosts[i],active=part.both||part.orientation===mode;
-  if(host._typesetInstalled===part&&host.dataset.active===String(active)){
+  if(host._typesetInstalled===part&&host.dataset.active===String(active)&&host.classList.contains('typeset-live-flow-ready')){
    host._mediaHeight=host.clientWidth*part.size[1]/part.size[0];window.TypesetLiveFlow?.request(host);
+   for(const card of host.querySelectorAll('.typeset-card-feedback')){
+    const visual=card.querySelector('.raster-card-visual'),rect=card._card?.rect;
+    if(visual&&rect)Object.assign(visual.style,{backgroundSize:host.clientWidth+'px '+host._mediaHeight+'px',backgroundPosition:-rect[0]*host.clientWidth+'px '+(-rect[1]*host._mediaHeight)+'px'});
+   }
    for(const wrap of host.querySelectorAll('.typeset-shot-crop'))fitTypesetShot(wrap);
    continue;
   }

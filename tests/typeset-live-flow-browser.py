@@ -179,7 +179,7 @@ async def run(args):
             await context.route('**/*', intercept)
             page = context.pages[0]
             page.on('pageerror', lambda error: errors.append(str(error)))
-            for entry in ([] if args.only_large else pages):
+            for entry in ([] if args.only_large else [entry for entry in pages if not args.routes or entry['page'] in args.routes.split(',')]):
                 mode['value'] = 'normal'
                 await page.goto('https://wly0829.cn' + entry['route'], wait_until='domcontentloaded', timeout=45000)
                 await page.wait_for_function("window.SiteStatus && document.body.dataset.statusPhase==='ready'", timeout=20000)
@@ -219,6 +219,8 @@ async def run(args):
                 await page.wait_for_timeout(300)
                 resized = await page.evaluate(SNAPSHOT)
                 assert not resized['overflow'] and all(c['inFlow'] and not c['overflow'] for c in resized['cards']), resized
+                feedback = await page.evaluate("[...document.querySelectorAll('.typeset-live-flow-ready:not([hidden]) .typeset-card-feedback')].map(e=>({size:parseFloat(e.querySelector('.raster-card-visual').style.backgroundSize),width:e.closest('.typeset-part').clientWidth}))")
+                assert all(abs(item['size']-item['width'])<1 for item in feedback), feedback
                 await page.set_viewport_size(options['viewport'])
                 records.append({'device': device, 'entry': entry, 'ready': snapshot, 'offline': cached, 'continuity': continuity, 'details': detail, 'same_orientation_resize': True, 'screenshot': str(screenshot), 'chrome_version': context.browser.version})
                 print(json.dumps({'device': device, 'page': entry['page'], 'cards': len(snapshot['cards']), 'status': 'pass'}, ensure_ascii=False), flush=True)
@@ -273,4 +275,5 @@ if __name__ == '__main__':
     parser.add_argument('--temp', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--only-large', action='store_true')
+    parser.add_argument('--routes')
     asyncio.run(run(parser.parse_args()))
