@@ -6,18 +6,20 @@
 /* typeset-live-flow-v1: source pixels retain their original scale; only live areas grow. */
 .typeset-part.typeset-live-flow-ready{aspect-ratio:auto!important;height:auto!important}
 .typeset-part.typeset-live-flow-ready>picture{display:none!important}
-.typeset-live-flow{position:relative;width:100%;min-width:0}
+.typeset-live-flow{position:relative;width:100%;min-width:0;pointer-events:none}
 .typeset-live-flow-columns{display:grid;align-items:start;gap:0}
 .typeset-live-flow-column{min-width:0}
 .typeset-live-flow-global-layer{width:100%;height:100%}
 .typeset-card-feedback.typeset-live-flow-repaint-suppressed .raster-card-visual{background-image:none!important}
-.typeset-live-flow-tile{position:relative;width:100%;overflow:hidden}
+.typeset-live-flow-tile{position:relative;width:100%;overflow:visible;pointer-events:none}
 .typeset-live-flow-masked{background:#f3fbf6}
 .typeset-live-flow-image{position:absolute;left:0;display:block;max-width:none!important;object-fit:fill;pointer-events:none;user-select:none}
 .typeset-live-flow-layer{position:absolute;inset:0;pointer-events:none;z-index:2}
 .typeset-live-flow-layer>*{position:absolute;box-sizing:border-box;pointer-events:auto}
-.typeset-live-flow-region{position:relative;min-width:0;background:#fff}
-.typeset-live-flow-cards{display:grid;grid-template-columns:repeat(var(--typeset-live-columns,1),minmax(0,1fr));gap:12px;align-items:start;padding:8px 24px 16px;min-width:0}
+.typeset-part .sample-overlay{pointer-events:none!important}
+.typeset-live-flow-cards>.b2-live-group,.typeset-live-flow .b2-live-group-grid,.typeset-live-flow .b2-overview-main{pointer-events:none}
+.typeset-live-flow-region{position:relative;min-width:0;background:#fff;pointer-events:none}
+.typeset-live-flow-cards{position:relative;z-index:3;display:grid;grid-template-columns:repeat(var(--typeset-live-columns,1),minmax(0,1fr));gap:12px;align-items:start;padding:8px 24px 16px;min-width:0;pointer-events:none}
 .typeset-live-flow-cards>*{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;min-width:0!important;min-height:var(--typeset-live-min-height,94px)!important;max-width:none;align-self:start;margin:0;box-sizing:border-box;pointer-events:auto}
 .typeset-live-flow-replacement>.typeset-live-flow-cards{position:relative;z-index:3;padding:0;background:transparent}
 .typeset-live-flow-cards .typeset-live{font-size:16px!important;line-height:1.5!important;overflow:visible!important;text-align:left}

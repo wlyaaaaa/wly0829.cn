@@ -35,8 +35,62 @@
   // Finish that real event before the next independent interaction check.
   await new Promise((resolve,reject)=>{const closed=()=>{clearTimeout(timer);resolve();},timer=setTimeout(()=>{dialog.removeEventListener('close',closed);reject(Error('native dialog close timeout'));},5000);dialog.addEventListener('close',closed,{once:true});button.click();});
  }
+ function sourceBox(win,host,rect){
+  const flow=win.TypesetLiveFlow?.sourceBox?.(host,rect);if(flow)return flow;
+  const image=host.querySelector(':scope > picture > img')?.getBoundingClientRect();if(!image)return null;
+  return {left:image.left+rect[0]*image.width,top:image.top+rect[1]*image.height,width:rect[2]*image.width,height:rect[3]*image.height,image_width:image.width,image_height:image.height};
+ }
+ function baseBox(el){
+  const parent=el.offsetParent?.getBoundingClientRect();return parent?{left:parent.left+el.offsetLeft,top:parent.top+el.offsetTop,width:el.offsetWidth,height:el.offsetHeight}:el.getBoundingClientRect();
+ }
+ function rectError(actual,expected){return !expected?Infinity:Math.max(Math.abs(actual.left-expected.left),Math.abs(actual.top-expected.top),Math.abs(actual.width-expected.width),Math.abs(actual.height-expected.height));}
+ function frozenRect(a,b){return Array.isArray(a)&&Array.isArray(b)&&a.length===4&&b.length===4&&a.every((value,index)=>Number.isFinite(value)&&Math.abs(value-b[index])<=.00001);}
+ function sourceImages(win,host,part){
+  const flow=host.classList.contains('typeset-live-flow-ready'),images=flow?[...host.querySelectorAll('.typeset-live-flow-image')]:[host.querySelector(':scope > picture > img')],issues=[];
+  if(!images.length||images.some(image=>!image))return ['source image missing'];
+  const width=host.clientWidth,height=width*part.size[1]/part.size[0],url=new URL(part.src,win.location.href).href;
+  for(const image of images){
+   const box=image.getBoundingClientRect();
+   if(image.src!==url||image.currentSrc&&image.currentSrc!==url||image.naturalWidth!==part.size[0]||image.naturalHeight!==part.size[1])issues.push('source image identity/dimensions');
+   if(Math.abs(box.width-width)>1||Math.abs(box.height-height)>1)issues.push('source image render scale');
+   if(flow){const tile=image.parentElement,left=Number(tile.dataset.sourceLeft),right=Number(tile.dataset.sourceRight),start=Number(tile.dataset.sourceStart),end=Number(tile.dataset.sourceEnd),frame=tile.getBoundingClientRect();
+    if(![left,right,start,end].every(Number.isFinite)||left<0||right>1||start<0||end>1||right<=left||end<=start||Math.abs(box.left-(frame.left-left*width))>1||Math.abs(box.top-(frame.top-start*height))>1||Math.abs(frame.width-(right-left)*width)>1||Math.abs(frame.height-(end-start)*height)>1)issues.push('source image tile binding');
+    const clip=win.getComputedStyle(image).clipPath||'',coordinates=[...clip.matchAll(/([-+]?\d*\.?\d+(?:e[-+]?\d+)?)(%|px)/gi)];let cropped=false;
+    if(clip.startsWith('inset(')&&coordinates.every(value=>value[2]==='%')){const values=coordinates.map(value=>Number(value[1])/100),expanded=values.length===1?[values[0],values[0],values[0],values[0]]:values.length===2?[...values,...values]:values.length===3?[...values,values[1]]:values;cropped=expanded.length===4&&expanded.every((value,index)=>Math.abs(value-[start,1-right,1-end,left][index])<=.00001);}
+    if(clip.startsWith('polygon(evenodd,')&&coordinates.slice(0,10).every(value=>value[2]==='px')){const outer=[left*width,start*height,right*width,start*height,right*width,end*height,left*width,end*height,left*width,start*height];cropped=coordinates.length>=10&&outer.every((value,index)=>Math.abs(value-Number(coordinates[index][1]))<=1);}
+    if(!cropped)issues.push('source image tile crop');
+   }
+  }
+  return unique(issues);
+ }
+ function liveGeometry(win,host,el,hot,part){
+  const cell=win.TypesetLiveFlow?.liveCell?.(host,el);if(!cell)return null;
+  const frozen=(part.native_live||[]).find(entry=>entry.hot_id===hot.id)||(part.live||[]).find(entry=>entry.slot===hot.slot);
+  const registered=cell.members?.find(member=>member.node===el)||cell;
+  const native=el.dataset.b2Slot,slot=hot.slot||frozen?.slot;
+  if(hot.kind!=='live'||!frozen||native&&native!==slot||!native&&el.dataset.slot!==slot||!frozenRect(frozen.rect,hot.rect)||!frozenRect(registered.rect,frozen.rect)||registered.slot&&registered.slot!==slot)return false;
+  const cards=cell.node.parentElement;if(!cards?.classList.contains('typeset-live-flow-cards'))return false;
+  const area=cards.getBoundingClientRect(),box=el.getBoundingClientRect(),sourceWidth=host.clientWidth;
+  if(box.width<=0||box.height<=0||box.left<area.left-1||box.top<area.top-1||box.right>area.right+1||box.bottom>area.bottom+1)return false;
+  const expectedWidth=cards.closest('.typeset-live-flow-replacement')?(cell.maskRect||cell.rect)[2]*sourceWidth:sourceWidth;
+  if(Math.abs(area.width-expectedWidth)>1.5)return false;
+  if(cell.members){
+   for(const member of cell.members){const binding=(part.native_live||[]).find(entry=>entry.hot_id===member.node.dataset.hotId);if(!binding||binding.slot!==member.slot||!frozenRect(binding.rect,member.rect))return false;}
+   const top=Math.max(0,Math.min(...cell.members.map(member=>member.rect[1]))-cell.groupPadding),bottom=Math.min(1,Math.max(...cell.members.map(member=>member.rect[1]+member.rect[3]))+cell.groupPadding);
+   if(!frozenRect(cell.rect,[.02,top,.96,bottom-top]))return false;
+  }
+  const parent=el.parentElement,style=win.getComputedStyle(parent),parentBox=parent.getBoundingClientRect(),siblings=[...parent.children];
+  if(style.display==='grid'){
+   const tracks=style.gridTemplateColumns.split(/\s+/).map(Number.parseFloat),gap=Number.parseFloat(style.columnGap)||0,index=siblings.indexOf(el),column=index%tracks.length,padding=Number.parseFloat(style.paddingLeft)||0,left=parentBox.left+padding+tracks.slice(0,column).reduce((sum,value)=>sum+value,0)+gap*column;
+   if(!tracks.length||tracks.some(value=>!Number.isFinite(value)||value<=0)||Math.abs(box.left-left)>1.5||Math.abs(box.width-tracks[column])>1.5)return false;
+  }
+  if(frozen.live_part!=='lamp'&&box.height<Math.min(94,frozen.rect[3]*sourceWidth*part.size[1]/part.size[0])-1)return false;
+  const registeredSiblings=siblings.map(node=>cell.members?.find(member=>member.node===node)||win.TypesetLiveFlow?.liveCell?.(host,node)).filter(Boolean);
+  for(let i=1;i<registeredSiblings.length;i++){const before=registeredSiblings[i-1].rect,after=registeredSiblings[i].rect;if(after[1]<before[1]-.00001||Math.abs(after[1]-before[1])<=.00001&&after[0]<before[0]-.00001)return false;}
+  return true;
+ }
  async function check(url,width){
-  const{win,doc}=await load(url,width),issues=[];
+  const{win,doc}=await load(url,width),issues=[],geometryDiagnostics=[];
   const d=JSON.parse(doc.querySelector('#page-data').textContent);
   if(win.innerWidth!==width)issues.push('viewport width '+win.innerWidth);
   if(!d.typeset)issues.push('route did not select typeset page');
@@ -50,16 +104,18 @@
    const s=model.get(section.dataset.screen),active=[...section.querySelectorAll('.typeset-part')].filter(p=>!p.hidden),expected=s.parts.filter(p=>p.both||p.orientation===(width<768?'v':'h'));
    if(active.length!==expected.length)issues.push(s.id+':orientation part count');
    for(let n=0;n<active.length;n++){
-    const host=active[n],p=expected[n],r=host.getBoundingClientRect(),im=host.querySelector('picture img');parts++;
+    const host=active[n],p=expected[n],r=host.getBoundingClientRect(),im=host.querySelector(':scope > picture > img'),image=sourceBox(win,host,[0,0,1,1]);parts++;
     if(im.naturalWidth!==p.size[0]||im.naturalHeight!==p.size[1])issues.push(p.image+':PNG dimensions differ');
-    if(Math.abs(r.height-r.width*p.size[1]/p.size[0])>1)issues.push(p.image+':image aspect ratio');
-    const mounted=[...host.querySelector('.overlays').querySelectorAll('[data-hot-id]')];
+    for(const issue of sourceImages(win,host,p))issues.push(p.image+':'+issue);
+    if(!image||image.image_width<=0||Math.abs(image.image_height-image.image_width*p.size[1]/p.size[0])>1)issues.push(p.image+':image aspect ratio');
+    const mounted=[...host.querySelectorAll('[data-hot-id]')];
     for(const h of p.hotspots){
      const el=mounted.find(e=>e.dataset.hotId===h.id);
      if(!el){issues.push(p.image+':hotspot not mounted '+h.kind+' '+(h.href||h.target));continue;}
+     if(mounted.filter(e=>e.dataset.hotId===h.id).length!==1)issues.push(p.image+':duplicate mounted hotspot '+h.id);
      const er=el.getBoundingClientRect(),px=h.rect_px;
-     const want=[r.left+px[0]*r.width/p.size[0],r.top+px[1]*r.height/p.size[1],px[2]*r.width/p.size[0],px[3]*r.height/p.size[1]];
-     if(Math.max(Math.abs(er.left-want[0]),Math.abs(er.top-want[1]),Math.abs(er.width-want[2]),Math.abs(er.height-want[3]))>1.5)issues.push(p.image+':hotspot geometry '+h.id);
+     const flowLive=liveGeometry(win,host,el,h,p),want=sourceBox(win,host,[px[0]/p.size[0],px[1]/p.size[1],px[2]/p.size[0],px[3]/p.size[1]]);
+     if(flowLive===false||flowLive===null&&rectError(er,want)>1.5){issues.push(p.image+':hotspot geometry '+h.id);geometryDiagnostics.push({screen:s.id,hot_id:h.id,live_binding:flowLive,actual:{left:er.left,top:er.top,width:er.width,height:er.height},expected:want,parent_class:el.parentElement?.className,style:el.style.cssText,source_rect:h.rect});}
      if(er.left<r.left-1||er.top<r.top-1||er.right>r.right+1||er.bottom>r.bottom+1)issues.push(p.image+':hotspot outside image '+h.id);
      if(h.invalid)issues.push(p.image+':unbound target '+(h.href||h.target));
      if(h.kind==='link'||h.kind==='button'){
@@ -77,7 +133,7 @@
      }
     }
     if(s.shape==='card'&&s.primary_href){const main=host.querySelector('[data-synthetic="legacy-card-primary"]');if(!main||main.getAttribute('href')!==s.primary_href)issues.push(p.image+':synthetic card primary target');else{const er=main.getBoundingClientRect();if(Math.max(Math.abs(er.left-r.left),Math.abs(er.top-r.top),Math.abs(er.width-r.width),Math.abs(er.height-r.height))>1.5)issues.push(p.image+':synthetic card primary geometry');targets.push(s.primary_href);}}
-    for(const card of p.interactive_cards||[]){const surface=[...host.querySelectorAll('.typeset-card-feedback')].find(el=>el.dataset.cardId===card.id),main=surface?.querySelector('.raster-card-main');if(!surface||!main||main.getAttribute('href')!==card.href)issues.push(p.image+':new card feedback target '+card.id);else{const er=surface.getBoundingClientRect(),cr=card.rect,want=[r.left+cr[0]*r.width,r.top+cr[1]*r.height,cr[2]*r.width,cr[3]*r.height];if(Math.max(Math.abs(er.left-want[0]),Math.abs(er.top-want[1]),Math.abs(er.width-want[2]),Math.abs(er.height-want[3]))>1.5)issues.push(p.image+':new card feedback geometry '+card.id);targets.push(card.href);}}
+    for(const card of p.interactive_cards||[]){const surface=[...host.querySelectorAll('.typeset-card-feedback')].find(el=>el.dataset.cardId===card.id),main=surface?.querySelector('.raster-card-main');if(!surface||!main||main.getAttribute('href')!==card.href)issues.push(p.image+':new card feedback target '+card.id);else{const er=surface.getBoundingClientRect(),want=sourceBox(win,host,card.rect);if(rectError(er,want)>1.5)issues.push(p.image+':new card feedback geometry '+card.id);targets.push(card.href);}}
    }
   }
   for(const link of doc.querySelectorAll('.toc a[href]'))targets.push(link.getAttribute('href'));
@@ -103,7 +159,7 @@
    const grids=[...doc.querySelectorAll('.typeset-card-grid')].map(g=>{const css=win.getComputedStyle(g),columns=css.gridTemplateColumns.split(' '),gap=parseFloat(css.columnGap)||0,track=(g.clientWidth-(columns.length-1)*gap)/columns.length;return {cards:g.children.length,columns:columns.length,fills_track:[...g.children].every(c=>Math.abs(c.getBoundingClientRect().width-track)<1)};});
    if(d.page==='projects-home'&&(!grids.length||grids.some(g=>g.columns!==(width<768?1:2))))issues.push('project card grid columns');
    if(grids.some(g=>!g.fills_track))issues.push('project card does not fill grid track');
-  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
+  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,geometry_diagnostics:geometryDiagnostics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
  }
  const effectNames=new Set(['cards','numbers','dots','arrows','screen_enter','seam','depth','update','ambient','back_top','footer_signature','navigation','viewer','brief','live','screenshots','compare','card_feedback']);
  const geometryKeys=['cards','numbers','dots','arrows'];
@@ -145,7 +201,7 @@
     if(geometryKeys.includes(kind)){
      const r=el._motionRect,layout=host?._layout,entries=layout?.[kind]||[];
      bound=!!host&&!host.hidden&&Array.isArray(r)&&entries.some(entry=>equal(rectOf(entry),r));
-     if(bound){const h=host._mediaHeight||host.clientHeight,w=host.clientWidth;bound=Math.max(Math.abs(el.offsetLeft-r[0]*w),Math.abs(el.offsetTop-r[1]*h),Math.abs(el.offsetWidth-r[2]*w),Math.abs(el.offsetHeight-r[3]*h))<=2;}
+     if(bound)bound=rectError(baseBox(el),sourceBox(win,host,r))<=2;
      if(kind==='dots'&&data.motion_capabilities?.dots?.policy==='current-active-status-v1'&&!entries.some(entry=>equal(rectOf(entry),r)&&entry.state==='active'&&entry.policy==='current-active-status-v1')){bound=false;issues.push('breathing dot is not a current active status marker');}
      if(kind==='numbers'){
       const number=entries.find(entry=>equal(rectOf(entry),r));
@@ -155,10 +211,10 @@
     }
     if(bound){observed.add(kind);if(kind==='dots')observedDots.add(host.dataset.part+':'+el.dataset.effectKey);}
     const id=kind+':'+(host?.dataset.part||screen?.dataset.screen||'')+':'+(el.dataset.effectKey||JSON.stringify(el._motionRect)||'');
-    if(!sampleIds.has(id)&&samples.length<160){sampleIds.add(id);samples.push({kind,screen:screen?.dataset.screen||null,part:host?.dataset.part||null,rect:el._motionRect||null,layout_bound:bound,running_animations:active.length,animation_name:style.animationName});}
+    if(!sampleIds.has(id)&&samples.length<160){sampleIds.add(id);const diagnostic=!bound&&geometryKeys.includes(kind)?{geometry_actual:baseBox(el),geometry_expected:sourceBox(win,host,el._motionRect),parent_class:el.parentElement?.className}:{};samples.push({kind,screen:screen?.dataset.screen||null,part:host?.dataset.part||null,rect:el._motionRect||null,layout_bound:bound,running_animations:active.length,animation_name:style.animationName,...diagnostic});}
    }
   }
-  const observer=new win.MutationObserver(capture);observer.observe(doc.querySelector('.paper'),{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],characterData:true});
+  const observer=new win.MutationObserver(()=>win.queueMicrotask(capture));observer.observe(doc.querySelector('.paper'),{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],characterData:true});
   try{
    frame.height='1000';win.scrollTo({top:0,behavior:'instant'});await sleep(180);capture();
    const model=new Map(data.screens.map(screen=>[screen.id,screen]));

@@ -193,9 +193,12 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   if(parent.moveBefore&&parent.isConnected&&node.isConnected)parent.moveBefore(node,null);else parent.append(node);
  }
  function sourceRect(node){
+  if(validRect(node._sourceRect))return node._sourceRect;
+  if(validRect(node._motionRect))return node._motionRect;
+  if(validRect(node._card?.rect))return node._card.rect;
   const values=['left','top','width','height'].map(key=>node.style[key]);
   if(values.every(value=>value.endsWith('%'))){const rect=values.map(value=>parseFloat(value)/100);if(validRect(rect))return rect;}
-  return validRect(node._card?.rect)?node._card.rect:null;
+  return null;
  }
  function remember(state,node){
   if(state.boxes.has(node))return;
@@ -209,12 +212,21 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const record={node:tile,image,layer,start,end,masked,columns};state.tiles.push(record);return record;
  }
  function mask(tile,width,height){
-  if(!tile.masked.length){tile.image.style.clipPath='';return;}
+  const [left,right]=tile.columns,top=tile.start,bottom=tile.end,origin=[left*width,top*height];
+  // Crop only source pixels. Links and motion in the sibling layer may span
+  // a cut; clipping the whole tile would make those real targets unreachable.
+  if(!tile.masked.length){tile.image.style.clipPath='inset('+[top,1-right,1-bottom,left].map(value=>value*100+'%').join(' ')+')';return;}
   // Even-odd polygons remove only the original live rectangles, retaining all
   // surrounding raster text and decorations. Every tile uses the same source.
-  const points=[[0,0],[width,0],[width,height],[0,height],[0,0]];
-  for(const cell of tile.masked){const r=cell.maskRect,x=r[0]*width,y=r[1]*height,right=(r[0]+r[2])*width,bottom=(r[1]+r[3])*height;points.push([x,y],[x,bottom],[right,bottom],[right,y],[x,y],[0,0]);}
+  const points=[origin,[right*width,top*height],[right*width,bottom*height],[left*width,bottom*height],origin];
+  for(const cell of tile.masked){const r=cell.maskRect,x=r[0]*width,y=r[1]*height,right=(r[0]+r[2])*width,bottom=(r[1]+r[3])*height;points.push([x,y],[x,bottom],[right,bottom],[right,y],[x,y],origin);}
   tile.image.style.clipPath='polygon(evenodd,'+points.map(p=>p[0]+'px '+p[1]+'px').join(',')+')';
+ }
+ function tileFor(state,rect){
+  const middle=rect[0]+rect[2]/2,epsilon=.00001;
+  // CSSOM rounds percentage styles; boundary points belong to the following
+  // tile whether their source came from the manifest or its rounded style.
+  return state.tiles.find(tile=>rect[1]>=tile.start-epsilon&&rect[1]<tile.end-epsilon&&middle>=tile.columns[0]-epsilon&&middle<tile.columns[1]-epsilon)||state.tiles.at(-1);
  }
  function update(state){
   const host=state.host;if(!host.isConnected||host.hidden)return;
@@ -235,14 +247,15 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const dynamic=new Set(state.cells.filter(cell=>!isLamp(cell)).map(cell=>cell.node));
   for(const node of [...state.overlay.children])if(!dynamic.has(node)){remember(state,node);}
   for(const [node,box]of state.boxes){
-   if(!node.isConnected||dynamic.has(node))continue;
+   if(!node.isConnected){state.boxes.delete(node);continue;}
+   if(dynamic.has(node))continue;
    if(node.classList.contains('typeset-card-feedback')){
     const a=box.rect,intersects=state.cells.some(cell=>{if(isLamp(cell))return false;const b=validRect(cell.maskRect)?cell.maskRect:cell.rect;return a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1];});
     // The source tiles already paint this card. Repainting its old full image
     // would leave a second copy of controls after the live region grows.
     node.classList.toggle('typeset-live-flow-repaint-suppressed',intersects);
    }
-   const rect=box.rect,middle=rect[0]+rect[2]/2,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end&&middle>=tile.columns[0]&&middle<tile.columns[1])||state.tiles.at(-1);
+   const rect=box.rect,tile=state.column?null:tileFor(state,rect);
    if(state.column){
     const r=state.column.rect,overlaps=rect[0]<r[0]+r[2]&&rect[0]+rect[2]>r[0],below=rect[1]>=r[1]+r[3]-.00001;
     move(state.column.layer,node);Object.assign(node.style,{left:rect[0]*width+'px',top:(rect[1]*height+(overlaps&&below?columnDelta:0))+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});continue;
@@ -254,6 +267,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  }
  function reset(host){
   const state=states.get(host);if(!state)return;
+  state.observer?.disconnect();
   for(const [node,box]of state.boxes)if(node.isConnected){move(state.overlay,node);node.style.cssText=box.style;node.classList.remove('typeset-live-flow-repaint-suppressed');}
   for(const cell of state.cells)if(cell.node.isConnected){move(state.overlay,cell.node);cell.node.style.removeProperty('--typeset-live-min-height');}
   state.container.remove();host.classList.remove('typeset-live-flow-ready');delete host.dataset.liveFlowHeight;states.delete(host);hosts.delete(host);
@@ -314,6 +328,10 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
   }
   states.set(host,state);hosts.add(host);update(state);
+  // Normal motion creates source-bound overlays after the live flow is ready.
+  // Place those additions before the next rendering/observation checkpoint.
+  state.observer=new MutationObserver(records=>{if(states.get(host)===state&&records.some(record=>record.addedNodes.length))update(state);});
+  state.observer.observe(overlay,{childList:true});
   if(focus?.isConnected&&host.ownerDocument.activeElement!==focus)focus.focus({preventScroll:true});
   return state;
  }
@@ -321,7 +339,19 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   if(host&&!states.has(host))return;
   if(frame)return;frame=requestAnimationFrame(()=>{frame=0;for(const target of [...hosts]){const state=states.get(target);if(!target.isConnected){hosts.delete(target);continue;}if(state)update(state);}});
  }
- window.TypesetLiveFlow={apply,request,reset,plan};
+ function sourceBox(host,rect){
+  const state=states.get(host);if(!state||!validRect(rect))return null;
+  const tile=state.column?state.tiles[0]:tileFor(state,rect);
+  if(!tile)return null;
+  const image=tile.image.getBoundingClientRect();
+  let delta=0;
+  if(state.column){const live=state.column.rect,overlap=rect[0]<live[0]+live[2]&&rect[0]+rect[2]>live[0];if(overlap&&rect[1]>=live[1]+live[3]-.00001)delta=Math.max(0,state.column.cell.node.getBoundingClientRect().height-live[3]*image.height);}
+  return {left:image.left+rect[0]*image.width,top:image.top+rect[1]*image.height+delta,width:rect[2]*image.width,height:rect[3]*image.height,image_width:image.width,image_height:image.height};
+ }
+ function liveCell(host,node){
+  const state=states.get(host);return state?.cells.find(cell=>!isLamp(cell)&&(cell.node===node||cell.node.contains(node)))||null;
+ }
+ window.TypesetLiveFlow={apply,request,reset,plan,sourceBox,liveCell};
  document.addEventListener('live-status-layout',()=>request());window.addEventListener('resize',()=>request(),{passive:true});document.fonts?.ready.then(()=>request());
 })();
 /* end-typeset-live-flow-v1 */
@@ -371,7 +401,7 @@ function installTypeset(section,screen){
     for(const shot of shots){const wrap=document.createElement('span'),stage=document.createElement('span'),im=new Image();wrap.className='typeset-shot-crop';stage.className='typeset-shot-stage';im.src=shot.src;im.alt=shot.caption;im.decoding='async';im.dataset.role=shot.role;wrap.dataset.crop=JSON.stringify(shot.crop||[0,0,...shot.size]);stage.append(im);wrap.append(stage);el.append(wrap);wrap._shot=shot;if(shots.length>1&&shot.role==='before')wrap.classList.add('compare-before');}
     if(shots.length>1){const range=document.createElement('input');range.type='range';range.min='0';range.max='100';range.value='50';range.setAttribute('aria-label','拖动比较改前改后');range.oninput=()=>{el.style.setProperty('--compare-position',range.value+'%');};el.style.setProperty('--compare-position','50%');const open=document.createElement('button');open.type='button';open.className='typeset-compare-open';open.textContent='查看完整截图';open.onclick=show;el.append(range,open);}else el.onclick=show;
    }
-   if(el){el.dataset.hotId=hot.id;el.dataset.typesetKind=hot.kind;el.dataset.target=hot.target||hot.href;el.dataset.rectPx=JSON.stringify(hot.rect_px);
+   if(el){el._sourceRect=hot.rect;el.dataset.hotId=hot.id;el.dataset.typesetKind=hot.kind;el.dataset.target=hot.target||hot.href;el.dataset.rectPx=JSON.stringify(hot.rect_px);
     const card=(hot.kind==='link'||hot.kind==='button')&&cardHosts.find(c=>{const b=c._card.rect,r=hot.rect;return r[0]>=b[0]-.001&&r[1]>=b[1]-.001&&r[0]+r[2]<=b[0]+b[2]+.001&&r[1]+r[3]<=b[1]+b[3]+.001;});
     if(card){const b=card._card.rect,r=hot.rect;rectStyle(el,[(r[0]-b[0])/b[2],(r[1]-b[1])/b[3],r[2]/b[2],r[3]/b[3]]);if(hot.href!==card._card.href)el.dataset.cardSecondary='true';card.append(el);}
     else{rectStyle(el,hot.rect);overlay.append(el);}

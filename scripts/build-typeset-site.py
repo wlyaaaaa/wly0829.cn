@@ -643,7 +643,7 @@ def build_page(name, records, args, candidate):
                     model['screen_anchors']=list(dict.fromkeys(model['screen_anchors']+excerpt['heading_aliases']))
                     if name=='charter':
                         first,last=excerpt['selection']['articles']
-                        model['screen_anchors']+=['L'+str(number) for number in range(first,last+1)]
+                        model['screen_anchors']=list(dict.fromkeys(model['screen_anchors']+['L'+str(number) for number in range(first,last+1)]))
                     release_root=original_path.parents[len(Path(meta['relative_file']).parts)-1]
                     record=release_root/'release.json';inputs[str(record.resolve())]=stamp(record)
                     if inputs[str(record.resolve())]['sha256']!=pin['release_record_sha256']:
