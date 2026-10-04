@@ -1,4 +1,5 @@
 // Start the same bounded read while the React island downloads. Never persist authority.
+import { freshStatus } from './computer-access-model.js';
 export function startInitialStatusRead() {
   const host = "https://mcp.wly0829.cn";
   const allowed = window.location.origin === host || window.location.origin === "https://wly0829.cn";
@@ -10,7 +11,7 @@ export function startInitialStatusRead() {
       .then(async response => {
         let data;
         try { data = await response.json(); } catch {}
-        if (!response.ok || !data || data.status === "error" || !Number.isFinite(data.observed_at_unix) || Date.now()/1000-data.observed_at_unix>120 || data.observed_at_unix>Date.now()/1000+60) {
+        if (!response.ok || !data || data.status === "error" || !freshStatus(data)) {
           const error = new Error("initial_status_unavailable");
           error.httpStatus = response.status;
           throw error;

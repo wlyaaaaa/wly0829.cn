@@ -280,8 +280,9 @@ test("manual refresh reaches the status fetch without changing singleflight or g
 });
 
 test("reload cache projection strips all authority and request fields", () => {
-  const saved = hardwareSnapshot({ hardware: { cpu: { model: "synthetic", usage_percent: 10 } }, observed_at_unix: 100, personal_data: { state: "unlocked" }, unrestricted: { state: "active" }, state_version: "old", totp: "synthetic", request_id: "old" });
-  assert.deepEqual(Object.keys(saved).sort(), ["hardware", "observed_at_unix"]);
+  const saved = hardwareSnapshot({ hardware: { cpu: { model: "synthetic", usage_percent: 10 } }, hardware_observed_at_unix: 90, observed_at_unix: 100, personal_data: { state: "unlocked" }, unrestricted: { state: "active" }, state_version: "old", totp: "synthetic", request_id: "old" });
+  assert.deepEqual(Object.keys(saved).sort(), ["hardware", "hardware_observed_at_unix", "observed_at_unix"]);
+  assert.equal(saved.observed_at_unix, 90);
   assert.equal(hardwareSnapshot(null), null);
   assert.equal(hardwareSnapshot({ hardware: {} }), null);
 });
