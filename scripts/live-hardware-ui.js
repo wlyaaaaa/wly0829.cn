@@ -101,8 +101,9 @@
       node.append(el('summary', '', '读数与来源', key + '-summary'));
       const list = el('dl', '', null, key + '-list');
       for (const [text, item, value, field] of rows) list.append(pair(text, item, value, key + '-' + field));
-      const time = el('p', 'live-hardware-source-note', '各项保留自己的读取时刻；鼠标停在读数上可查看来源。', key + '-note');
-      node.append(list, time); return node;
+      const sources = [...new Set(rows.map(([, item]) => item.source).filter(Boolean))];
+      const source = el('p', 'live-hardware-source-note', sources.length ? '来源：' + sources.join('；') : '读取来源读不到', key + '-source');
+      node.append(list, source); return node;
     }
     function card(title, key, icon) {
       const node = el('section', 'live-hardware-card', null, key);
@@ -118,10 +119,10 @@
       const screenText = { locked: 'Windows 已锁屏', unlocked: 'Windows 未锁屏', no_session: 'Windows 无交互桌面' }[m.screen.value] || 'Windows 锁屏状态读不到';
       current.append(reading('span', 'live-hardware-screen-state', m.screen, screenText, 'hardware-screen-state'));
       const stale = c.cached || c.old || m.hardware.state === 'stale';
-      header.append(current, el('p', 'live-hardware-read-time', (stale ? '上次读到 ' : '读取于 ') + beijing(c.at), 'hardware-read-time'));
+      header.append(current, el('p', 'live-hardware-read-time', c.at ? (stale ? '上次读到 ' : '读取于 ') + beijing(c.at) : '读取时间未知', 'hardware-read-time'));
       root.append(header);
       if (stale) root.append(el('p', 'live-hardware-cache-notice', '保留上次读数，当前状态尚未确认。', 'hardware-cache-notice'));
-      else if (unavailable.has(m.hardware.state) || !status?.hardware) root.append(el('p', 'live-hardware-cache-notice', '硬件状态读不到；各项不填 0。', 'hardware-missing-notice'));
+      else if (unavailable.has(m.hardware.state) || !status?.hardware) root.append(el('p', 'live-hardware-cache-notice', '暂时无法读取这台电脑的硬件状态。', 'hardware-missing-notice'));
     }
     const root = el(compact ? 'a' : 'div', 'live-hardware-' + (compact ? 'compact' : 'full'), null, 'live-hardware-' + (compact ? 'compact' : 'full'));
     root.dataset.liveHardware = compact ? 'compact' : 'full'; root.dataset.cached = String(c.cached || c.old); top(root);
@@ -196,7 +197,8 @@
     networkMetrics.append(pair('↓ 下载', get(m.network, 'download_bytes_per_second'), rate(get(m.network, 'download_bytes_per_second')), 'network-download'), pair('↑ 上传', get(m.network, 'upload_bytes_per_second'), rate(get(m.network, 'upload_bytes_per_second')), 'network-upload')); network.append(networkMetrics);
     network.append(details([['延迟', get(m.network, 'latency_ms'), label(get(m.network, 'latency_ms'), ' ms'), 'latency'], ['抖动', get(m.network, 'jitter_ms'), label(get(m.network, 'jitter_ms'), ' ms'), 'jitter'], ['丢包', get(m.network, 'packet_loss_percent'), label(get(m.network, 'packet_loss_percent'), '%'), 'loss'], ['读取时刻', get(m.network, 'download_bytes_per_second'), beijing(get(m.network, 'download_bytes_per_second').at || c.at), 'time']], 'network-details'));
     const screen = card('屏幕', 'display', 'display'), width = get(m.display, 'width_px'), height = get(m.display, 'height_px'), refresh = get(m.display, 'refresh_hz');
-    screen.append(reading('p', 'live-hardware-model', get(m.display, 'model'), label(get(m.display, 'model')), 'display-model'), reading('strong', 'live-hardware-resolution num', width, label(width, '', 0) + ' × ' + label(height, '', 0), 'display-resolution'));
+    const resolution = (numeric(width) === null ? '读不到' : String(numeric(width))) + ' × ' + (numeric(height) === null ? '读不到' : String(numeric(height)));
+    screen.append(reading('p', 'live-hardware-model', get(m.display, 'model'), label(get(m.display, 'model')), 'display-model'), reading('strong', 'live-hardware-resolution num', width, resolution, 'display-resolution'));
     const screenMetrics = el('dl', 'live-hardware-metrics', null, 'display-metrics'); screenMetrics.append(pair('刷新率', refresh, label(refresh, ' Hz'), 'display-refresh')); screen.append(screenMetrics);
     secondary.append(network, screen); root.append(secondary); return root;
   }
