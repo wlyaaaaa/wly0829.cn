@@ -100,6 +100,7 @@ SNAP = r"""()=>{
    lead:root.querySelector('.tag.lead')?.textContent,
    groups:[...root.querySelectorAll('.group>summary')].map(e=>e.textContent),
    legend:root.querySelector('#legend').textContent, root:rect(root), stage:rect(stage), scroller:rect(sc),
+   textLayout:[...root.querySelectorAll('h3,.when,.legend>span,.card h4,.group>summary,.group>summary .say')].map(e=>({text:e.textContent,lineHeight:getComputedStyle(e).lineHeight,height:e.getBoundingClientRect().height})),
    scrollLeft:sc.scrollLeft, gateCenter:rect(stage).x+stage.clientWidth*.47, overflow:document.documentElement.scrollWidth>innerWidth+1,
    model:window.todayRiver.model?{state:window.todayRiver.model.A.state,reason:window.todayRiver.model.snap.reason,ran:window.todayRiver.model.tasks.filter(t=>t.ran).length,future:window.todayRiver.model.future.length,guards:window.todayRiver.model.guards.length,fog:window.todayRiver.model.fog.length}:null,
    insurance:window.todayRiver.still,static:window.todayRiver.static,gl:window.todayRiver.gl,metrics:window.todayRiver.metrics,
@@ -202,6 +203,7 @@ async def main(args):
                 assert all('今天跑了 2 个' in x for x in normal['b2']),normal['b2']
                 assert any('合成备份组' in x and '合成维护组' in x for x in normal['b2']),normal['b2']
                 assert not normal['overflow'] and normal['root']['width']>0,normal
+                assert all(float(x['lineHeight'].removesuffix('px'))>0 and x['height']>0 for x in normal['textLayout']),normal['textLayout']
                 assert not normal['riverStorageKeys'],normal
                 assert normal['gl'],normal
                 assert '小样' not in normal['title']
@@ -281,6 +283,7 @@ async def main(args):
                 await page.wait_for_timeout(1600)
                 after=await page.evaluate('({draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:document.querySelector("#today-river #layer").innerHTML})')
                 assert before==after and reduced['activeAnimations']==0,(before,after,reduced)
+                assert all(float(x['lineHeight'].removesuffix('px'))>0 and x['height']>0 for x in reduced['textLayout']),reduced['textLayout']
                 results.append({'device':device,'case':'reduced-motion-static','snapshot':reduced,'dom_and_draws_unchanged':True})
                 if device in ['desktop','phone']:
                     await load('normal')

@@ -3,7 +3,7 @@
     --ok:#17a35e; --warn:#e3a008; --bad:#dc4433; --gray:#9aa5a0; --speed:2.5;
   }
 #today-river * { box-sizing:border-box; }
-#today-river { margin:0; background:#fff; color:var(--text); font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif; line-break:strict; }
+#today-river { margin:0; background:#fff; color:var(--text); font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif; line-height:1.5; line-break:strict; }
 #today-river .wrap { max-width:1480px; margin:0 auto; padding:18px 18px 24px; }
 #today-river .crumb { font-size:13px; color:var(--accent); letter-spacing:.04em; margin:0 0 4px; }
 #today-river h3 { font-size:30px; margin:0 0 6px; color:var(--title); letter-spacing:.03em; }
