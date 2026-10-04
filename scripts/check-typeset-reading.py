@@ -260,6 +260,9 @@ def main():
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self,*a,**kw):super().__init__(*a,directory=str(args.root.resolve()),**kw)
         def log_message(self,*a):pass
+        def end_headers(self):
+            self.send_header('Cache-Control','no-store')
+            super().end_headers()
         def copyfile(self,source,output):
             try:super().copyfile(source,output)
             except (BrokenPipeError,ConnectionAbortedError,ConnectionResetError):pass

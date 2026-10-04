@@ -298,7 +298,7 @@
     vt.finished.then(() => { clearTimeout(timer); clean(); }, () => { clearTimeout(timer); clean(); });
     clicked = null;
   });
-  addEventListener('DOMContentLoaded', () => {
+  function startAfterDocument() {
     const pending = recall();
     if (runtimeRequested || !transition && (revealSeen || !('onpagereveal' in window) || !pending || path(pending.to) !== path(location.href))) loadRuntime();
     // If a browser suppresses pagereveal despite exposing its event property,
@@ -306,7 +306,9 @@
     if (!runtimeLoaded && !transition) setTimeout(loadRuntime, Math.max(0, budget - (Date.now() - (pending?.at || 0))));
     const value = (read(positionsKey) || {})[path(pending?.from)];
     if (value && Date.now() - value.at < 3600000) warmImages(value.images);
-  }, {once:true});
+  }
+  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', startAfterDocument, {once:true});
+  else startAfterDocument();
   addEventListener('pageshow', e => { if (e.persisted && !root.hasAttribute('data-album-running')) { loadRuntime(); resumeVideo(); } });
   reduce.addEventListener('change', () => { if (reduce.matches) { transition?.skipTransition(); currentClean?.(); loadRuntime(); } });
   window.SiteAlbum = {get snapshot() { return {generation, runtimeLoaded, runtimeStartCount, running: root.hasAttribute('data-album-running'), events: [...events], warmedRoutes: [...warmedRoutes], imageCount: heldImages.size, images:[...heldImages].map(([src,im])=>({src,currentSrc:im.currentSrc,crossOrigin:im.crossOrigin,decoded:decodedImages.has(src)}))}; }};

@@ -19,6 +19,22 @@ HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name
 <img id="terminal" src="/fixture/terminal.svg" width="120" height="80"><div style="height:18000px"></div><img id="lazy" src="/fixture/lazy.svg" width="120" height="80" loading="lazy"></body></html>'''.encode()
 
 class SourceTests(unittest.TestCase):
+    def test_initial_capture_is_exactly_bounded_and_preparation_rollback_preserves_source_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)/'raw';fixture_source(root)
+            raw=(root/'index.html').read_bytes().replace(b'<script src="/fixture/static.js" defer>',b'<script onerror="window.originalError=true" src="/fixture/static.js" defer>')
+            raw=raw.replace(b'</head>',b'<script defer src="https://outside.example/unlisted.js"></script></head>')
+            (root/'index.html').write_bytes(raw);files=prep.inventory(root);manifest={'schema':'wly.hybrid-release.v1','files':files};manifest['release_id']=prep.identity(files,manifest)
+            (root/'release-manifest.json').write_text(json.dumps(manifest),encoding='utf8')
+            output=Path(temporary)/'prepared';prepared=prep.prepare(root,output,Path(temporary)/'prepared.json')
+            body=(output/'index.html').read_bytes()
+            self.assertLess(body.index(b'data-resource-retry-capture'),body.index(b'src="/fixture/static.js"'))
+            self.assertEqual(body.count(prep.INITIAL_ATTRIBUTE),1)
+            self.assertIn(b'onerror="window.originalError=true"',body)
+            self.assertNotIn(b'src="https://outside.example/unlisted.js"'+prep.INITIAL_ATTRIBUTE,body)
+            restored=Path(temporary)/'restored';prep.rollback(output,restored,Path(temporary)/'rollback.json')
+            self.assertEqual((restored/'index.html').read_bytes(),raw)
+
     def test_explicit_asset_base_adds_only_its_canonical_https_origin(self):
         base='https://wly0829-assets-shanghai-20261003.oss-cn-shanghai.aliyuncs.com/releases/current/'
         with tempfile.TemporaryDirectory() as temporary:
@@ -299,9 +315,107 @@ async def run_origin_fixture(args):
         (args.output/'origin-browser-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     print(json.dumps({'status':result['status'],'checks':len(result['checks']),'owned_servers_stopped':result['owned_servers_stopped']},ensure_ascii=False))
 
+async def run_initial_script_fixture(args):
+    """Real element load errors before/after listener installation, not timing guesses."""
+    from playwright.async_api import async_playwright
+    args.output.mkdir(parents=True,exist_ok=True);args.cache.mkdir(parents=True,exist_ok=True)
+    for name in ('TEMP','TMP','TMPDIR'):os.environ[name]=str(args.cache.resolve())
+    rows=[];counts={};cases=[];roots={};runtime_paths=set();state={'case':'early-defer'}
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self,*a):pass
+        def do_GET(self):
+            u=urlsplit(self.path);case=u.path.strip('/').split('/')[0];root=roots.get(case);path='/'+'/'.join(u.path.strip('/').split('/')[1:])
+            key=(self.server.server_port,case,path);n=counts.get(key,0)+1;counts[key]=n;status=200;body=b'';mime='text/javascript; charset=utf-8'
+            if self.server is foreign:status=503;body=b'outside-origin-failure'
+            elif path=='/initial.js' and n==1:
+                if case=='late-defer':time.sleep(.8)
+                status=503;body=b'initial-script-load-failure'
+            elif root and path=='/':body=(root/'index.html').read_bytes();mime='text/html; charset=utf-8'
+            elif root:
+                target=root/path.lstrip('/')
+                if target.is_file():
+                    body=target.read_bytes()
+                    if path in runtime_paths and case=='early-defer':time.sleep(.6)
+                else:status=404;body=b'fixture-not-found'
+            else:status=404
+            rows.append({'case':case,'port':self.server.server_port,'path':path,'raw_url':self.path,'status':status,'count':n,'at':time.monotonic(),'body_sha256':hashlib.sha256(body).hexdigest()})
+            self.send_response(status);self.send_header('Content-Type',mime);self.send_header('Content-Length',str(len(body)));self.send_header('Cache-Control','no-store');self.end_headers()
+            try:self.wfile.write(body)
+            except(BrokenPipeError,ConnectionResetError):pass
+    main=ThreadingHTTPServer(('127.0.0.1',0),Handler);foreign=ThreadingHTTPServer(('127.0.0.1',0),Handler)
+    main_origin=f'http://127.0.0.1:{main.server_port}';foreign_origin=f'http://127.0.0.1:{foreign.server_port}'
+    for case in args.initial_cases.split(','):
+        raw=args.cache/(case+'-raw');raw.mkdir(parents=True)
+        initial=b'window.initialExecutions=(window.initialExecutions||0)+1;'
+        throwing=b'window.executionErrorExecutions=(window.executionErrorExecutions||0)+1;throw Error("expected-initial-execution-error");'
+        defer='' if case in ('blocking','album-late') else ' defer'
+        album_data='<script id="album-page" type="application/json">{"outbound":{},"nodes":[],"images":[]}</script>' if case=='album-late' else ''
+        if case=='album-late':initial=(ROOT/'scripts/album-runtime.js').read_bytes()
+        html=(f'<!doctype html><html><head><meta charset="utf-8">{album_data}<script id="critical"{defer} onerror="window.originalLoadErrors=(window.originalLoadErrors||0)+1" onload="window.originalLoads=(window.originalLoads||0)+1" src="/{case}/initial.js"></script>'
+              f'<script defer id="business-error" src="/{case}/execution.js"></script><script defer src="{foreign_origin}/{case}/outside.js"></script></head><body>fixture only</body></html>').encode()
+        if case=='album-late':html=html.replace(b'</head>',f'<script data-album-runtime data-src="/{case}/app.js"></script></head>'.encode())
+        for name,body in {'index.html':html,'initial.js':initial,'execution.js':throwing}.items():(raw/name).write_bytes(body)
+        # The URL includes the case's server route, so the exact manifest list
+        # models a real route-prefixed source rather than granting arbitrary URLs.
+        for name in ('initial.js','execution.js'):
+            (raw/case).mkdir(exist_ok=True);(raw/case/name).write_bytes((raw/name).read_bytes())
+        if case=='album-late':
+            app=b'window.initialExecutions=(window.initialExecutions||0)+1;';(raw/case/'app.js').write_bytes(app);(raw/'app.js').write_bytes(app)
+        files=prep.inventory(raw);manifest={'schema':'wly.hybrid-release.v1','files':files};manifest['release_id']=prep.identity(files,manifest)
+        (raw/'release-manifest.json').write_text(json.dumps(manifest),encoding='utf8')
+        candidate=args.cache/(case+'-candidate');prepared=prep.prepare(raw,candidate,args.output/(case+'-preparation.json'));roots[case]=candidate
+        runtime='/'+prepared['runtime'];runtime_paths.add(runtime)
+        # Only serve URL layout differs; the prepared HTML's runtime asset is
+        # routed inside its case directory without changing its actual bytes.
+    threads=[];result={'schema':'wly.initial-script-retry-browser.v1','status':'failed','expected':args.expect_initial,'source_runtime_sha256':prep.stamp(ROOT/'scripts/resource-retry-runtime.js')['sha256'],
+             'source_preparer_sha256':prep.stamp(ROOT/'scripts/prepare-resource-retry.py')['sha256'],'requests':rows,'cases':cases,'observed_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()}
+    try:
+        for server in (main,foreign):t=threading.Thread(target=server.serve_forever,daemon=True);threads.append(t);t.start()
+        async with async_playwright() as pw:
+            context=await pw.chromium.launch_persistent_context(str(args.cache/'chrome'),executable_path=str(args.chrome),headless=True,viewport={'width':412,'height':915},device_scale_factor=3.5)
+            try:
+                for case in roots:
+                    state['case']=case;page=await context.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
+                    await page.add_init_script("window.initialEvents=[];document.addEventListener('error',e=>initialEvents.push({kind:'error',trusted:e.isTrusted,tag:e.target.tagName,id:e.target.id,src:e.target.src,at:performance.now()}),true);document.addEventListener('load',e=>{if(e.target.tagName==='SCRIPT')initialEvents.push({kind:'load',trusted:e.isTrusted,id:e.target.id,src:e.target.src,at:performance.now()})},true);document.addEventListener('resource-retry',e=>initialEvents.push({kind:'retry-event',...e.detail}));")
+                    async def route(r):
+                        u=urlsplit(r.request.url)
+                        if u.hostname!='127.0.0.1' or u.port not in (main.server_port,foreign.server_port):return await r.abort()
+                        if u.port==main.server_port and u.path.startswith('/_shared/'):
+                            return await r.fulfill(response=await context.request.get(main_origin+'/'+case+u.path,timeout=10000))
+                        await r.continue_()
+                    await page.route('**/*',route)
+                    await page.goto(main_origin+'/'+case+'/',wait_until='load');await page.wait_for_timeout(1400)
+                    sample=await page.evaluate('({initial:window.initialExecutions||0,business:window.executionErrorExecutions||0,originalErrors:window.originalLoadErrors||0,originalLoads:window.originalLoads||0,events:initialEvents,album:window.SiteAlbum?.snapshot,readyState:document.readyState})')
+                    initial_rows=[r for r in rows if r['case']==case and r['port']==main.server_port and r['path']=='/initial.js']
+                    runtime_load=next(e['at'] for e in sample['events'] if e['kind']=='load' and 'resource-retry-' in (e.get('src')or''))
+                    element_error=next(e['at'] for e in sample['events'] if e['kind']=='error' and e.get('id')=='critical' and e['trusted'])
+                    assert (element_error<runtime_load)==(case in ('blocking','album-late')),sample
+                    assert sample['business']==1 and len(errors)==1 and 'expected-initial-execution-error' in errors[0],(errors,sample)
+                    assert counts[(foreign.server_port,case,'/outside.js')]==1
+                    if args.expect_initial=='absent':assert sample['initial']==0 and len(initial_rows)==1,sample
+                    else:
+                        assert sample['initial']==1 and sample['originalErrors']==1 and sample['originalLoads']==1 and len(initial_rows)==2,sample
+                        retry=[e for e in sample['events'] if e.get('state')=='retry' and '/initial.js' in e.get('url','')]
+                        assert len(retry)==1 and .9<=(initial_rows[1]['at']-initial_rows[0]['at'])<3,initial_rows
+                        if case=='album-late':assert sample['readyState']=='complete' and sample['album']['runtimeStartCount']==1 and counts[(main.server_port,case,'/app.js')]==1,sample
+                    cases.append({'case':case,'status':'pass','element_error_before_runtime':element_error<runtime_load,'runtime_loaded_at':runtime_load,'element_error_at':element_error,'sample':sample,'initial_requests':initial_rows,'business_errors':errors})
+                    await page.close()
+            finally:await context.close()
+        result['status']='pass'
+    finally:
+        for server in (main,foreign):server.shutdown();server.server_close()
+        for t in threads:t.join(5)
+        result['servers_stopped']=all(not t.is_alive() for t in threads);(args.output/'initial-browser-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n','utf8')
+    print(json.dumps({'status':result['status'],'expected':args.expect_initial,'cases':len(cases),'servers_stopped':result['servers_stopped']},ensure_ascii=False))
+
 if __name__=='__main__':
     import sys
-    if '--origin-fixture' in sys.argv:
+    if '--initial-script-fixture' in sys.argv:
+        ap=argparse.ArgumentParser();ap.add_argument('--initial-script-fixture',action='store_true')
+        for name in ('output','cache'):ap.add_argument('--'+name,type=Path,required=True)
+        ap.add_argument('--expect-initial',choices=('absent','success'),default='success');ap.add_argument('--initial-cases',default='early-defer,blocking,late-defer')
+        ap.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'));asyncio.run(run_initial_script_fixture(ap.parse_args()))
+    elif '--origin-fixture' in sys.argv:
         ap=argparse.ArgumentParser();ap.add_argument('--origin-fixture',action='store_true')
         for name in ('output','cache'):ap.add_argument('--'+name,type=Path,required=True)
         ap.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'));asyncio.run(run_origin_fixture(ap.parse_args()))

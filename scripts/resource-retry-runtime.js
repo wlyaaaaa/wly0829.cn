@@ -58,18 +58,18 @@ document.addEventListener('error',event=>{
 document.addEventListener('load',event=>{const image=event.target;if(image instanceof HTMLImageElement){const state=imageState.get(image);if(state){clearTimeout(state.timer);state.timer=null;hideButton(state);state.waiting=false;state.reloading=false;if(canonical(selected(image))===state.url)record('image','loaded',state.url,state.auto);}}},true);
 for(const event of ['scroll','resize'])addEventListener(event,()=>{for(const button of buttons)placeButton(button);},{passive:true});
 
-// Parser-created and inline scripts retain their original order and handlers.
-// Only script elements explicitly created by this document's code are retried.
+// Initial entries require a captured real element load error. Dynamic entries
+// keep their existing failure/handler semantics; execution errors are not loads.
 const create=Document.prototype.createElement;
 Document.prototype.createElement=function(name,...args){const element=create.call(this,name,...args);if(this===document&&String(name).toLowerCase()==='script')dynamicScripts.add(element);return element;};
-document.addEventListener('error',event=>{
- const script=event.target;
- if(!(script instanceof HTMLScriptElement)||!dynamicScripts.has(script)||!script.src||!scriptURLs.has(canonical(script.src)))return;
+function recoverScript(script,initial=false){
+ if(!(script instanceof HTMLScriptElement)||!script.src||!scriptURLs.has(canonical(script.src))||forbidden(new URL(script.src,base)))return;
  let state=scriptState.get(script);
- if(state?.relay)return;
- if(state){if(script===state.original)event.stopImmediatePropagation();return;}
- event.stopImmediatePropagation();state={relay:false,original:script,url:canonical(script.src)};scriptState.set(script,state);record('script','waiting',script.src,0);
- setTimeout(()=>{
+ if(state)return;
+ script.removeAttribute('data-resource-retry-failed');
+ state={relay:false,original:script,url:canonical(script.src),initial,timer:null};scriptState.set(script,state);record('script','waiting',script.src,0);
+ state.timer=setTimeout(()=>{
+  state.timer=null;
   if(!script.isConnected||canonical(script.src)!==state.url)return;
   const retry=document.createElement('script');
   for(const attribute of script.attributes)if(!['src','onload','onerror'].includes(attribute.name))retry.setAttribute(attribute.name,attribute.value);
@@ -80,7 +80,18 @@ document.addEventListener('error',event=>{
   retry.addEventListener('error',()=>finish('error'),{once:true});
   script.after(retry);
  },delay);
+}
+document.addEventListener('error',event=>{
+ const script=event.target;
+ if(!(script instanceof HTMLScriptElement)||!script.src||!scriptURLs.has(canonical(script.src)))return;
+ const initial=script.hasAttribute('data-resource-retry-initial')&&script.getAttribute('data-resource-retry-failed')==='1';
+ if(!initial&&!dynamicScripts.has(script))return;
+ const state=scriptState.get(script);if(state?.relay)return;
+ if(dynamicScripts.has(script)&&(!state||script===state.original))event.stopImmediatePropagation();
+ recoverScript(script,initial);
 },true);
+document.addEventListener('load',event=>{const script=event.target,state=scriptState.get(script);if(event.isTrusted&&state?.initial&&script===state.original&&!state.relay){clearTimeout(state.timer);state.timer=null;state.relay=true;record('script','loaded',script.src,0);}},true);
+for(const script of document.querySelectorAll('script[data-resource-retry-initial][data-resource-retry-failed="1"]'))recoverScript(script,true);
 
 const nativeFetch=window.fetch;
 window.fetch=async function(input,options){

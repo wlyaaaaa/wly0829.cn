@@ -2,13 +2,26 @@
 from __future__ import annotations
 import argparse
 from datetime import datetime,timedelta,timezone
-import hashlib,json,re,shutil
+import hashlib,html,json,re,shutil
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import urljoin,urlsplit
 
 HERE=Path(__file__).resolve().parent
 MARKER='data-resource-retry="next-2e"'
+INITIAL_ATTRIBUTE=b' data-resource-retry-initial="1"'
+INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial");document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
+
+def mark_initial_scripts(raw,rel,policy):
+    allowed={urljoin('https://wly0829.cn/',value) for value in policy['scripts']};marked=[]
+    def mark(match):
+        opening=match[0];src=re.search(br'(?<![\w-])src\s*=\s*(["\x27])(.*?)\1',opening,re.I|re.S)
+        if not src:return opening
+        value=html.unescape(src[2].decode('utf8'));resolved=urljoin('https://wly0829.cn/'+rel,value)
+        if resolved not in allowed:return opening
+        if INITIAL_ATTRIBUTE.strip() in opening:raise ValueError('Initial script already marked')
+        marked.append(value);return opening[:-1]+INITIAL_ATTRIBUTE+opening[-1:]
+    return re.sub(br'<script\b[^>]*>',mark,raw,flags=re.I),marked
 def stamp(path):
     body=Path(path).read_bytes();return {'sha256':hashlib.sha256(body).hexdigest(),'bytes':len(body)}
 def inventory(root):
@@ -76,23 +89,26 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None):
     runtime=raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))).encode()
     runtime_rel='_shared/resource-retry-'+hashlib.sha256(runtime).hexdigest()[:20]+'.js'
     addition='\n<script '+MARKER+' src="/'+runtime_rel+'"></script>\n'
-    selected=set(pages or observed['html_resources']);changes={}
+    selected=set(pages or observed['html_resources']);changes={};initial_scripts={}
     if not selected<=set(observed['html_resources']):raise ValueError('Selected page missing from complete source')
     for rel in selected:
         raw=(baseline/rel).read_bytes()
         if MARKER.encode()in raw:raise ValueError('Page already has resource recovery')
         if raw.count(b'</head>')!=1:raise ValueError('Expected one head close: '+rel)
-        # A small blocking resource listener installs before deferred readers.
-        # Existing static/inline scripts and their order stay byte-exact.
-        changes[rel]=raw.replace(b'</head>',addition.encode()+b'</head>',1)
+        marked,initial_scripts[rel]=mark_initial_scripts(raw,rel,policy)
+        if len(re.findall(br'<head\b[^>]*>',marked,re.I))!=1:raise ValueError('Expected one head opening: '+rel)
+        marked=re.sub(br'<head\b[^>]*>',lambda m:m[0]+INITIAL_CAPTURE.encode(),marked,count=1,flags=re.I)
+        # The early inline observer only marks genuine element load errors.
+        # Original script order and existing handlers remain in place.
+        changes[rel]=marked.replace(b'</head>',addition.encode()+b'</head>',1)
     shutil.copytree(baseline,output)
     (output/runtime_rel).parent.mkdir(parents=True,exist_ok=True);(output/runtime_rel).write_bytes(runtime)
     for rel,raw in changes.items():(output/rel).write_bytes(raw)
     after=inventory(output)
     assert all(after[rel]==entry for rel,entry in before.items()if rel not in changes)
-    assert all((output/rel).read_bytes().replace(addition.encode(),b'',1)==(baseline/rel).read_bytes()for rel in changes)
+    assert all((output/rel).read_bytes().replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'')==(baseline/rel).read_bytes()for rel in changes)
     rid=identity(after,manifest);old_rid=manifest['release_id']
-    manifest.update({'files':after,'release_id':rid,'resource_retry_preparation':{'status':'next_2e_prepared_pending_acceptance','baseline_release_id':old_rid,'runtime':runtime_rel,'addition':addition,'changed_html':sorted(changes),'old_page_evidence_is_not_new_acceptance':True}})
+    manifest.update({'files':after,'release_id':rid,'resource_retry_preparation':{'status':'next_2e_prepared_pending_acceptance','baseline_release_id':old_rid,'runtime':runtime_rel,'addition':addition,'initial_capture_addition':INITIAL_CAPTURE,'initial_script_attribute':INITIAL_ATTRIBUTE.decode(),'initial_scripts':initial_scripts,'changed_html':sorted(changes),'old_page_evidence_is_not_new_acceptance':True}})
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(output/runtime_rel),'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
     report=Path(report);report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
@@ -106,7 +122,12 @@ def rollback(baseline,output,report):
     for rel in info['changed_html']:
         body=(baseline/rel).read_bytes()
         if body.count(addition)!=1:raise ValueError('Review newer HTML before rollback')
-        bodies[rel]=body.replace(addition,b'',1)
+        restored=body.replace(addition,b'',1)
+        if info.get('initial_capture_addition'):
+            capture=info['initial_capture_addition'].encode()
+            if restored.count(capture)!=1:raise ValueError('Review newer initial capture before rollback')
+            restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
+        bodies[rel]=restored
     shutil.copytree(baseline,output)
     for rel,body in bodies.items():(output/rel).write_bytes(body)
     after=inventory(output);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
