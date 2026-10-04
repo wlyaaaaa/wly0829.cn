@@ -215,11 +215,12 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
    tile.node.style.height=(tile.end-tile.start)*height+'px';Object.assign(tile.image.style,{width:width+'px',height:height+'px',left:-tile.columns[0]*width+'px',top:-tile.start*height+'px'});mask(tile,width,height);
   }
-  for(const band of state.bands)if(band.replace&&!band.column){
+  for(const band of state.bands)if(band.replace&&!band.column&&!band.row){
    const rect=band.cells[0].maskRect,offset=(rect[1]-band.start)*height;
    Object.assign(band.cards.style,{marginTop:-((band.end-band.start)*height-offset)+'px',marginLeft:rect[0]*width+'px',width:rect[2]*width+'px',minHeight:(band.end-rect[1])*height+'px'});
    band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,rect[3]*height)+'px');
   }
+  for(const band of state.bands)if(band.row)band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,band.cells[0].maskRect[3]*height)+'px');
   if(state.column)state.column.cell.node.style.setProperty('--typeset-live-min-height',Math.max(94,state.column.rect[3]*height)+'px');
   const columnDelta=state.column?Math.max(0,state.column.cell.node.offsetHeight-state.column.rect[3]*height):0;
   const dynamic=new Set(state.cells.filter(cell=>!isLamp(cell)).map(cell=>cell.node));
@@ -232,13 +233,13 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     // would leave a second copy of controls after the live region grows.
     node.classList.toggle('typeset-live-flow-repaint-suppressed',intersects);
    }
-   const rect=box.rect,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end)||state.tiles.at(-1);
+   const rect=box.rect,middle=rect[0]+rect[2]/2,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end&&middle>=tile.columns[0]&&middle<tile.columns[1])||state.tiles.at(-1);
    if(state.column){
     const r=state.column.rect,overlaps=rect[0]<r[0]+r[2]&&rect[0]+rect[2]>r[0],below=rect[1]>=r[1]+r[3]-.00001;
     move(state.column.layer,node);Object.assign(node.style,{left:rect[0]*width+'px',top:(rect[1]*height+(overlaps&&below?columnDelta:0))+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});continue;
    }
    if(!tile)continue;
-   move(tile.layer,node);Object.assign(node.style,{left:rect[0]*width+'px',top:(rect[1]-tile.start)*height+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});
+   move(tile.layer,node);Object.assign(node.style,{left:(rect[0]-tile.columns[0])*width+'px',top:(rect[1]-tile.start)*height+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});
   }
   host.dataset.liveFlowHeight=String(host.offsetHeight);
  }
@@ -282,6 +283,19 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    let cursor=0;
    for(const band of bands){
    if(band.start>cursor+.00001)container.append(makeTile(state,cursor,band.start).node);
+   if(band.replace){
+    // Multiple forced replacements keep each original button row after its
+    // live field. A negative margin would cover those source pixels.
+    const cell=band.cells[0],r=cell.maskRect,right=r[0]+r[2],bottom=r[1]+r[3];
+    if(r[1]>band.start)container.append(makeTile(state,band.start,r[1]).node);
+    const row=document.createElement('div');row.className='typeset-live-flow-columns typeset-live-flow-row';row.style.gridTemplateColumns=r[0]+'fr '+r[2]+'fr '+Math.max(0,1-right)+'fr';container.append(row);
+    row.append(makeTile(state,r[1],bottom,[],[0,r[0]]).node);
+    const center=document.createElement('div');center.className='typeset-live-flow-column typeset-live-flow-replacement';row.append(center);
+    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';center.append(cards);move(cards,cell.node);
+    row.append(makeTile(state,r[1],bottom,[],[right,1]).node);
+    if(bottom<band.end)container.append(makeTile(state,bottom,band.end).node);
+    state.bands.push({node:row,cards,start:r[1],end:bottom,cells:[cell],replace:true,row:true});cursor=band.end;continue;
+   }
    const region=document.createElement('div');region.className='typeset-live-flow-region';if(band.replace)region.classList.add('typeset-live-flow-replacement');
    const raster=makeTile(state,band.start,band.end,band.cells);region.append(raster.node);
    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);

@@ -14,16 +14,12 @@ from playwright.async_api import async_playwright
 
 
 def patch(source, owned):
-    start = owned.index("   if(node.classList.contains('typeset-card-feedback')){")
-    block = owned[start:owned.index('   const rect=box.rect', start)].rstrip()
-    needle = '   if(!node.isConnected||dynamic.has(node))continue;'
-    assert source.count(needle) == 1
-    source = source.replace(needle, needle + '\n' + block)
-    assert source.count('rect[1]<tile.end+.00001') == 1
-    source = source.replace('rect[1]<tile.end+.00001', 'rect[1]<tile.end')
-    before = 'move(state.overlay,node);node.style.cssText=box.style;}'
-    assert source.count(before) == 1
-    return source.replace(before, "move(state.overlay,node);node.style.cssText=box.style;node.classList.remove('typeset-live-flow-repaint-suppressed');}")
+    first='/* typeset-live-flow-v1 */';last='/* end-typeset-live-flow-v1 */'
+    helper=owned[owned.index(first):owned.index(last)+len(last)]
+    # Preserve the root's admitted forceOverlay switch while replacing only
+    # this helper, never B2 or another part of the prepared runtime.
+    helper=helper.replace('band.cells.length===1&&mask[2]>.55&&mask[3]*height>=80', 'band.cells.length===1&&(band.cells[0].forceOverlay===true||mask[2]>.55&&mask[3]*height>=80)')
+    return source[:source.index(first)]+helper+source[source.index(last)+len(last):]
 
 
 def fixture():
@@ -108,7 +104,7 @@ async def run(args):
                     assert affected, snap
                     assert all(item['background'] == 'none' if patched else item['background'] != 'none' for item in affected), snap
                     hits = await page.evaluate('''async()=>{const results=[];for(const button of [...document.querySelectorAll('[data-b2-action]')].filter(e=>e.getClientRects().length&&e.closest('[data-screen="computer-access-01"]'))){button.scrollIntoView({block:'center',behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const b=button.getBoundingClientRect(),hit=document.elementFromPoint(b.left+b.width/2,b.top+b.height/2);results.push({action:button.dataset.b2Action,hit:hit===button||button.contains(hit),disabled:button.disabled,pointer:getComputedStyle(button).pointerEvents,top:hit?.outerHTML?.slice(0,500),box:[b.left,b.top,b.width,b.height]});}return results;}''')
-                    if patched:assert all(item['hit'] for item in hits if not item['disabled']), hits
+                    if patched:assert all(item['hit'] for item in hits), hits
                     await page.evaluate('scrollTo(0,0)')
                     section = page.locator('[data-screen="computer-access-01"]').first
                     height = await section.evaluate('e=>e.getBoundingClientRect().bottom+scrollY')
@@ -129,7 +125,7 @@ async def run(args):
         for phase in ['ready','offline']:
             before=next(r for r in results if r.get('device')==device and r.get('phase')==phase and not r['patched'])
             after=next(r for r in results if r.get('device')==device and r.get('phase')==phase and r['patched'])
-            assert before['snapshot']['fragments']==after['snapshot']['fragments'], 'Source fragments changed'
+            assert {x['src'] for x in before['snapshot']['fragments']}=={x['src'] for x in after['snapshot']['fragments']}, 'Original source image URLs changed'
             assert before['snapshot']['cardNodes']==after['snapshot']['cardNodes'], 'Feedback card nodes changed'
             assert [x['transition'] for x in before['snapshot']['feedback']]==[x['transition'] for x in after['snapshot']['feedback']], 'Card motion changed'
     receipt={'schema':'website.live-repaint-browser.v1','observed_at_beijing':datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(),'site':str(args.site),'fixture_only':True,'results':results,'page_errors':errors,'blocked_writes':writes}
