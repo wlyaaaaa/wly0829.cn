@@ -49,11 +49,11 @@ def prepare(site, library, font=None, sprite=None, label_map=None):
     if font:
         from fontTools.ttLib import TTFont
         import io
-        source = TTFont(font); source.flavor = 'woff2'; out = io.BytesIO(); source.save(out)
+        source = TTFont(font, recalcTimestamp=False); source.flavor = 'woff2'; out = io.BytesIO(); source.save(out)
         font_ref = addressed('live-sans', '.woff2', out.getvalue())
     else:
-        existing_fonts=list((site/'_typeset/runtime').glob('live-sans-*.woff2'))
-        if len(existing_fonts)==1:font_ref='/'+existing_fonts[0].relative_to(site).as_posix()
+        existing_fonts=sorted((site/'_typeset/runtime').glob('live-sans-*.woff2'))
+        if existing_fonts:font_ref='/'+existing_fonts[0].relative_to(site).as_posix()
     if font_ref:
         palette += '@font-face{font-family:"Sans";src:url("' + font_ref + '") format("woff2");font-weight:100 900;font-display:swap}\n'
     css = palette + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
