@@ -143,7 +143,7 @@ def verify_projection(root, *, seal=False):
     root=Path(root).resolve();proof_path=root/'rule-public-projection.json';proof=read(proof_path)
     pin_path=HERE.parent/'config/assembled-rules-pin.json';pin=read(pin_path)
     if proof.get('schema')!='wly.rule-public-projection.v1' or proof.get('contract')!=contract.CONTRACT or proof.get('pin_sha256')!=digest(pin_path):
-        raise ValueError('Public projection is not bound to this fixed E214 pin')
+        raise ValueError('Public projection is not bound to this fixed rule pin')
     if not seal and proof.get('status')!='pass':raise ValueError('Public projection has not completed renderer verification')
     if proof.get('input_snapshot'):
         binding = proof['input_snapshot']; snapshot_path = Path(binding['path'])
@@ -232,7 +232,7 @@ def main():
                 raise ValueError('Source screen does not bind the fixed excerpt: ' + screen['id'])
             raw_source = Path(page['based_on']['file']); original = digest(raw_source)
             if original != expected['source_sha256'] or page['based_on']['sha256'] != original:
-                raise ValueError('Source changed after the E214 fixed excerpt pin')
+                raise ValueError('Source changed after the fixed excerpt pin')
             declared = [item if isinstance(item,str) else item['text'] for item in screen.get('source',{}).get('omit',[])]
             if declared != expected['selection']['approved_omissions']:
                 raise ValueError('Per-screen omission declaration differs from approved source range')

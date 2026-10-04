@@ -12,14 +12,14 @@ if str(HERE) not in sys.path:
 import rule_original_contract as contract
 
 
-def generate(release_root, record_sha256):
+def generate(release_root, record_sha256, verified_release_id):
     release_root = Path(release_root).resolve()
     record_path = release_root / 'release.json'
     if contract.sha_bytes(record_path.read_bytes()) != record_sha256:
         raise ValueError('Release record does not match verified Inspect evidence')
     record = json.loads(record_path.read_text('utf8'))
-    if record.get('release_id') != 'E214' or record.get('remote_main_contains_commit') is not True:
-        raise ValueError('Expected the verified, formally released E214 source')
+    if record.get('release_id') != verified_release_id or record.get('remote_main_contains_commit') is not True:
+        raise ValueError('Expected the verified, formally released ' + verified_release_id + ' source')
     entries = {entry['relative_path']: entry for entry in record['files']}
     spec = importlib.util.spec_from_file_location('independent_rule_builder', HERE / 'build-assembled-site.py')
     builder = importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
@@ -42,7 +42,7 @@ def generate(release_root, record_sha256):
             'complete_rendered_text_sha256': builder.prose_digest(contract.render_markdown(public), True),
             'approved_omitted_count': len(contract.OMISSIONS.get(relative, [])),
             'public_projection': 'approved-source-omissions-and-local-literals-v1',
-            'basis': '独立核验 E214 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文',
+            'basis': '独立核验 ' + verified_release_id + ' 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文',
         }
         resources['/_typeset/rule-sources/' + public_sha + '.md'] = {
             'relative_file': relative, 'source_sha256': entry['sha256'], 'public_source_sha256': public_sha}
@@ -78,9 +78,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--release-root', required=True, type=Path)
     parser.add_argument('--verified-record-sha256', required=True)
+    parser.add_argument('--verified-release-id', required=True, help='Release identity from the same verified Inspect result')
     parser.add_argument('--output', type=Path, default=HERE.parent / 'config/assembled-rules-pin.json')
     args = parser.parse_args()
-    pin = generate(args.release_root, args.verified_record_sha256)
+    pin = generate(args.release_root, args.verified_record_sha256, args.verified_release_id)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(pin, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     print(json.dumps({'status': 'pass', 'version': pin['version'], 'documents': len(pin['documents']),
