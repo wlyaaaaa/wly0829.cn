@@ -11,7 +11,7 @@ from urllib.parse import unquote
 
 from public_page_contract import omit_local_literals, local_values
 
-CONTRACT = 'e214-original-ranges-v1'
+CONTRACT = 'e215-original-ranges-v1'
 OMISSIONS = {
     'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
     'docs/contracts/agents.context-sources.md': [
