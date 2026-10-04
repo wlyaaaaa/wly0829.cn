@@ -120,6 +120,37 @@ def prepare(site, library, font=None, sprite=None, label_map=None):
         toc=module('toc', 'prepare-toc-consistency.py').prepare_toc(site,json.loads(Path(label_map).read_text('utf8')))
     return {'schema':'wly.live-ui-preparation.v1','site':str(site),'changed_pages':changes,'assets':assets,'hardware_icons':hardware_icons,'toc':toc,'external_write':False,'manifest_action':'Rehash the complete candidate after all owner overlays; this preparation is not a publication.'}
 
+
+def prepare_recipe(site, recipe):
+    """Replay the delivered UI before assembly, with every consumed input bound."""
+    recipe = Path(recipe).resolve()
+    config = json.loads(recipe.read_text('utf8'))
+    if config.get('schema') != 'wly.live-ui-recipe.v1':
+        raise ValueError('Unsupported live UI preparation recipe')
+    paths = {key: Path(config[key]).resolve() for key in ('library', 'font', 'sprite', 'label_map')}
+    hardware = module('bound_hardware_assets', 'prepare-live-hardware-assets.py')
+    consumed = [recipe, paths['font'], paths['sprite'], paths['label_map']]
+    consumed += [HERE / name for name in (
+        'prepare-live-ui.py', 'prepare-live-hardware-assets.py', 'update-live-release.py',
+        'site-live-runtime.js', 'typeset-live-display.js', 'b2-live-runtime.js', 'prepare-cockpit-cache.py',
+        'prepare-toc-consistency.py', 'toc-consistency.css', 'toc-consistency.js',
+        'typeset-layout.js', 'typeset-layout.css', 'b2-live.css',
+        'live-hardware-ui.css', 'live-hardware-ui.js', 'live-status-ui.css', 'live-status-ui.js')]
+    consumed += [HERE.parent / 'app/computer-access-model.js']
+    consumed += [paths['library'] / relative for relative in set(hardware.SOURCES.values())]
+    consumed += [paths['library'] / 'icons' / name for name in
+        ('笔记本电脑.png', '硬盘循环.png', '云对勾.png', '打勾清单.png', '日历时钟.png', '工具箱.png')]
+    inputs = {str(path): proof(path.read_bytes()) for path in consumed}
+    result = prepare(site, **paths)
+    result.pop('site')
+    result['status'] = 'prepared' if result['toc']['status'] == 'prepared' else 'needs_assets'
+    for path, expected in inputs.items():
+        if proof(Path(path).read_bytes()) != expected:
+            raise ValueError('Live UI input changed during preparation: ' + path)
+    result['recipe_path'] = str(recipe)
+    result['recipe_sha256'] = inputs[str(recipe)]['sha256']
+    return result, inputs
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--site',type=Path,required=True);p.add_argument('--library',type=Path,required=True);p.add_argument('--font',type=Path);p.add_argument('--sprite',type=Path);p.add_argument('--label-map',type=Path);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args()
     result=prepare(a.site,a.library,a.font,a.sprite,a.label_map);a.receipt.parent.mkdir(parents=True,exist_ok=True);a.receipt.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8')

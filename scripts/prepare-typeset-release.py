@@ -417,6 +417,17 @@ def prepare(args):
         block("geometry", "Build does not identify the exact geometry snapshot supplied to publication")
     if manifest.get("baseline_files") != old:
         block("baseline", "Release is not bound to the supplied production baseline")
+    if build.get('live_ui_preparation'):
+        ui=build['live_ui_preparation'];toc=ui.get('toc',{})
+        if ui.get('schema')!='wly.live-ui-preparation.v1' or ui!=manifest.get('live_ui_preparation'):
+            block('live_ui_preparation','Live UI preparation differs from the exact final manifest')
+        missing={entry['page']for entry in toc.get('missing_labels',[])}
+        recorded={hybrid.route_file(entry['url'])for entry in build.get('pages',{}).values()
+                  if entry.get('url') and entry.get('status')=='blocked' and any(issue.startswith('实时界面目录缺字图：')for issue in entry.get('issues',[]))}
+        if missing!=recorded:
+            block('live_ui_preparation','Missing literal directory assets differ from the blocked page ledger')
+        if ui.get('status')!='prepared' or toc.get('status')!='prepared' or missing:
+            block('live_ui_preparation','Literal directory image assets remain missing; local preview is not publishable')
     overlay_info = build.get('release_overlay')
     automatic_navigation=manifest.get('release_overlay',{})
     if automatic_navigation and not overlay_info and all(entry.get('kind')=='navigation_restoration' for entry in automatic_navigation.values()):
@@ -466,7 +477,16 @@ def prepare(args):
                     restored=restored.replace(addition,b'',1)
                 for key in ('initial_script_attribute','initial_stylesheet_attribute'):
                     if info.get(key):restored=restored.replace(info[key].encode('utf8'),b'')
-                if restored!=(args.baseline.resolve()/'index.html').read_bytes():
+                baseline_home=(args.baseline.resolve()/'index.html').read_bytes()
+                if info.get('previous_manifest'):
+                    previous=info['previous_manifest'];bound_file(previous['path'],previous)
+                    if Path(previous['path']).resolve()!=args.baseline.resolve()/'release-manifest.json':
+                        raise ValueError('Recovery predecessor is not this exact baseline manifest')
+                    retry_spec=importlib.util.spec_from_file_location('typeset_previous_retry',Path(__file__).resolve().parent/'prepare-resource-retry.py')
+                    retry_module=importlib.util.module_from_spec(retry_spec);retry_spec.loader.exec_module(retry_module)
+                    predecessor=read(previous['path'])['resource_retry_preparation']
+                    baseline_home,_=retry_module.remove_previous_recovery(baseline_home,predecessor)
+                if restored!=baseline_home:
                     raise ValueError('Page-only preparation changed the existing homepage beyond exact resource recovery')
                 if any(manifest.get(key) for key in ('home_living_preparation','home_comic_preparation','page_flip_preparation','today_river_preparation')):
                     raise ValueError('The delegated four creative pieces entered the page-only batch')
@@ -583,7 +603,7 @@ def prepare(args):
         if rebuilt.get("schema") != "wly.typeset-build.v1":
             block("rebuild", "Rebuild report schema mismatch")
         for field in ("release_id", "inputs", "files", "baseline_root", "baseline_index_sha256",
-                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation"):
+                      "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation", "live_ui_preparation"):
             if rebuilt.get(field) != build.get(field):
                 block("rebuild", "Rebuild changed the reviewed " + field + "; repeat program verification and Claude's publication instruction")
         for page in selected:

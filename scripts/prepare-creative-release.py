@@ -81,6 +81,10 @@ def prepare(source, baseline, config, output, evidence_root):
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
+            if data.get('scope')=='page-demo-and-retry' and old.get('resource_retry_preparation'):
+                previous_manifest=baseline/hybrid.MANIFEST
+                inputs[str(previous_manifest)]=stamp(previous_manifest)
+                args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
         subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True)
         if name == 'river':
@@ -105,6 +109,9 @@ def prepare(source, baseline, config, output, evidence_root):
         revised=hybrid.rewrite_links(original.decode('utf8'),current,path,set(navigation_pages),navigation_repairs,
                                      current,accepted_files,navigation_pages).encode('utf8')
         if revised!=original:path.write_bytes(revised)
+    # Final assembly performs this same restoration. Bind its actual byte changes
+    # before the reviewed file ledger, so the second assembly is idempotent.
+    pending_link_restorations=hybrid.nav_repair.restore_pending_links(current,navigation_pages)
     files=hybrid.inventory(current)
     changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(current / rel),
                      'before': old['files'].get(rel), 'after': proof}
@@ -129,7 +136,7 @@ def prepare(source, baseline, config, output, evidence_root):
     result = {'schema': 'wly.creative-replay-result.v1', 'config': {'path': str(config), **stamp(config)},
               'raw_release_id': raw['release_id'], 'steps': steps, 'files': public_changes,
               'assembled_release_id':manifest['release_id'],'accepted_html_newline_normalization':sorted(normalization),
-              'navigation_repairs':navigation_repairs}
+              'navigation_repairs':navigation_repairs,'pending_link_restorations':pending_link_restorations}
     if data.get('scope'):result['scope']=data['scope']
     manifest['creative_preparation'] = result
     hybrid.write(output / hybrid.MANIFEST, manifest)

@@ -10,8 +10,11 @@ param(
     [string]$Directive,
     [string]$LegacySite,
     [string]$AssetCache,
+    [switch]$ReuseAssetCache,
     [string]$ReleaseOverlay,
     [string]$CreativePreparation,
+    [string]$LiveUiPreparation,
+    [string]$RulePublicProjection,
     [string]$RuntimeVerification,
     [string]$ReadingPlan,
     [string]$OssPreparation,
@@ -48,6 +51,8 @@ else {
 if ($Directive) { $Directive = Absolute $Directive }
 if ($ReleaseOverlay) { $ReleaseOverlay = Absolute $ReleaseOverlay }
 if ($CreativePreparation) { $CreativePreparation = Absolute $CreativePreparation }
+if ($LiveUiPreparation) { $LiveUiPreparation = Absolute $LiveUiPreparation }
+if ($RulePublicProjection) { $RulePublicProjection = Absolute $RulePublicProjection }
 if ($RuntimeVerification) { $RuntimeVerification = Absolute $RuntimeVerification }
 if ($ReadingPlan) { $ReadingPlan = Absolute $ReadingPlan }
 foreach ($name in @('OssPreparation','OssQaPlan','OssVerification','OssReading','OssCold','OssRetryProof')) {
@@ -366,8 +371,11 @@ try {
         '--baseline',$Baseline,'--legacy-site',$LegacySite,'--output',$rebuilt,'--report',$rebuiltReport)
     if ($Pages) { $buildArguments += @('--pages') + $Pages }
     if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
+    if ($ReuseAssetCache) { $buildArguments += '--reuse-asset-cache' }
     if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
     if ($CreativePreparation) { $buildArguments += @('--creative-preparation',$CreativePreparation) }
+    if ($LiveUiPreparation) { $buildArguments += @('--live-ui-preparation',$LiveUiPreparation) }
+    if ($RulePublicProjection) { $buildArguments += @('--rule-public-projection',$RulePublicProjection) }
     if ($RuntimeBaseline) { $buildArguments+=@('--runtime-baseline','--baseline-ref',$state.production_commit) }
     TimedChecked 'python' $buildArguments 'build_seconds'
     $rebuiltProof = ReadJson $rebuiltReport
