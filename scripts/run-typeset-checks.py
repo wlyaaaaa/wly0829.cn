@@ -11,10 +11,10 @@ from pathlib import Path
 import time
 from urllib.parse import unquote, urlsplit, urlunsplit
 import uuid
-from playwright.async_api import async_playwright
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 
 
-STATIC_TRANSFER_METHOD='Actual HTTPS route.fetch(max_retries=0), at most one retry after an empty response or HTTP 5xx; reuse only the verified network body within this run'
+STATIC_TRANSFER_METHOD='Actual HTTPS route.fetch(max_retries=0), at most one retry after an empty response, transport timeout or HTTP 5xx; reuse only the verified network body within this run'
 STATIC_TRANSFER_SCOPE='Exact manifest-listed HTTPS static GET objects, excluding API paths, non-GET and Range; no local body substitution; not native uninterrupted cold sockets'
 
 
@@ -56,9 +56,11 @@ def static_transfer_handler(manifest, origin, transfers):
                     return {'status':response.status,'headers':fulfilled,'body':body}
                 except Exception as error:
                     observation['error']=type(error).__name__+': '+str(error)
-                    empty_transport=not response and any(value in str(error).lower() for value in ('err_empty_response','socket hang up','econnreset'))
+                    empty_transport=not response and any(value in str(error).lower() for value in ('err_empty_response','socket hang up','econnreset','client network socket disconnected before secure tls connection was established'))
+                    long_transport_timeout=not response and (isinstance(error,PlaywrightTimeoutError) or str(error).startswith('Route.fetch: Timeout '))
                     if empty_transport:observation['failure']='empty_transport'
-                    if number==1 and empty_transport:
+                    if long_transport_timeout:observation['failure']='long_transport_timeout'
+                    if number==1 and (empty_transport or long_transport_timeout):
                         transfer['first_failure']=dict(observation)
                         continue
                     transfer['status']='fail';transfer['error']=observation['error']
@@ -118,6 +120,7 @@ async def main():
         manifest_bytes=args.static_manifest.read_bytes();manifest=json.loads(manifest_bytes)
         parsed_origin=urlsplit(args.url)
         network.update(release_id=manifest['release_id'],manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),cors_origin=parsed_origin.scheme+'://'+parsed_origin.netloc)
+        network['qa_wait_budget_ms']=90000
     async with async_playwright() as runtime:
         context=await runtime.chromium.launch_persistent_context(str(profile),executable_path=str(args.chrome),headless=True,
                    viewport={'width':1760,'height':1050},device_scale_factor=1,args=['--hide-scrollbars'])
@@ -150,7 +153,8 @@ async def main():
                 async def drive(group,index):
                     worker=await context.new_page();last=None;handled=set()
                     try:
-                        await worker.goto(args.url+'/__typeset/qa?native=1&pages='+','.join(group),wait_until='domcontentloaded')
+                        suffix='&static_wait_ms=90000' if args.static_retry_once else ''
+                        await worker.goto(args.url+'/__typeset/qa?native=1&pages='+','.join(group)+suffix,wait_until='domcontentloaded')
                         while time.monotonic()-started<args.timeout:
                             state=await worker.evaluate("({text:document.querySelector('#state')?.textContent, request:window.TypesetQA?.request,phase:window.TypesetQA?.phase,error:window.TypesetQA?.error})")
                             if state.get('text')!=last:

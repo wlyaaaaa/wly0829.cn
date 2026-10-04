@@ -20,6 +20,8 @@ from urllib.parse import urljoin, urlsplit
 from playwright.async_api import async_playwright
 
 HERE = Path(__file__).resolve().parent
+static_spec=importlib.util.spec_from_file_location('reading_static_controller',HERE/'run-typeset-checks.py')
+static_controller=importlib.util.module_from_spec(static_spec);static_spec.loader.exec_module(static_controller)
 POSITION = """() => {
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
  const screens=[...document.querySelectorAll('.screen')];
@@ -83,35 +85,10 @@ async def run(args, base, build):
                         executable_path=str(args.chrome),viewport={'width':390,'height':844},
                         device_scale_factor=1,args=['--hide-scrollbars'])
             if args.static_retry_once:
-                async def static_transfer(route):
-                    request=route.request;obj=remote_objects.get(request.url)
-                    if not obj or request.method!='GET' or 'range' in request.headers:
-                        return await route.continue_()
-                    transfer={'url':request.url,'attempts':[],'method':'Actual HTTPS route.fetch body; no local static fixtures'}
-                    result['static_transfers'].append(transfer)
-                    response=None
-                    for attempt in range(2):
-                        observation={'number':attempt+1}
-                        transfer['attempts'].append(observation)
-                        try:
-                            headers={**request.headers,'Origin':urlsplit(base).scheme+'://'+urlsplit(base).netloc,'Accept-Encoding':'identity'}
-                            response=await route.fetch(headers=headers,timeout=30000,max_retries=0)
-                            observation['http']=response.status
-                            if response.status>=500 and attempt==0:continue
-                            body=await response.body()
-                            observation.update(bytes=len(body),sha256=hashlib.sha256(body).hexdigest())
-                            break
-                        except Exception as error:
-                            observation['transport_error']=str(error)
-                            if attempt:raise
-                    if response.status!=200 or len(body)!=obj['bytes'] or hashlib.sha256(body).hexdigest()!=obj['sha256']:
-                        raise ValueError('Actual static response differs from sealed object: '+request.url)
-                    transfer['status']='pass'
-                    headers={key:value for key,value in response.headers.items() if key.lower() not in {'content-encoding','transfer-encoding','content-length'}}
-                    headers['content-length']=str(len(body))
-                    await route.fulfill(status=response.status,headers=headers,body=body)
-                await context.route(manifest_data['oss']['asset_base_url']+'/**',static_transfer)
-                result['transport_method']='Bounded actual HTTPS route.fetch for public static objects; maximum one retry; browser CORS and execution use actual returned bytes/headers. Native cold sockets remain recorded separately.'
+                await context.route(manifest_data['oss']['asset_base_url'].rstrip('/')+'/**',
+                    static_controller.static_transfer_handler(manifest_data,base,result['static_transfers']))
+                result.update(transport_method=static_controller.STATIC_TRANSFER_METHOD,
+                    transport_scope=static_controller.STATIC_TRANSFER_SCOPE,native_uninterrupted_cold=False)
             browser_page=context.pages[0]
             browser_page.on('response',lambda response:response_tasks.append(asyncio.create_task(capture_response(response))))
             browser_page.on('requestfailed',lambda request:result['failed_requests'].append({'url':request.url,'resource_type':request.resource_type,'error':request.failure}))
@@ -212,6 +189,9 @@ async def run(args, base, build):
             except Exception as observation_error:result['failure_observation_error']=str(observation_error)
         finally:
             if context and args.static_retry_once:await context.unroute_all(behavior='wait')
+            if args.static_retry_once:
+                result['static_transfer_status']='pass' if result['static_transfers'] and all(row['status']=='pass' for row in result['static_transfers']) else 'fail'
+                if result['static_transfer_status']!='pass':result['errors'].append('One or more bounded static transfers failed')
             if response_tasks:await asyncio.gather(*response_tasks)
             result['responses']=responses
             if context:await context.close()

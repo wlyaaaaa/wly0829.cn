@@ -7,6 +7,9 @@
  const state=document.querySelector('#state'),log=document.querySelector('#results');
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const query=new URLSearchParams(location.search),nativeState=document.querySelector('#native-state');
+ const requestedWait=Number(query.get('static_wait_ms'));
+ const routeWait=Number.isFinite(requestedWait)&&requestedWait>0?requestedWait:30000;
+ const decodeWait=Number.isFinite(requestedWait)&&requestedWait>0?requestedWait:25000;
  // Native driver: open /__typeset/qa?native=1 (optionally &pages=name,name).
  // Poll window.TypesetQA.request. For reduced_motion use real browser media
  // emulation. Hidden-document checks navigate an actual playing iframe away
@@ -19,11 +22,11 @@
  async function load(url,width,options={}){
   frame.width=String(width);frame.height=String(options.initialHeight||options.height||1000);
   const target=new URL(url,location.origin);target.searchParams.delete('audit');if(options.audit!==false)target.searchParams.set('audit','1');
-  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('route load timeout')),30000);frame.onload=()=>{clearTimeout(timer);resolve();};frame.src=target.href;});
+  await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('route load timeout')),routeWait);frame.onload=()=>{clearTimeout(timer);resolve();};frame.src=target.href;});
   const win=frame.contentWindow,doc=win.document;
   for(let n=0;n<120&&!win.SiteAudit;n++)await sleep(50);
   if(!win.SiteAudit)throw Error('页面运行件未初始化');
-  await Promise.race([win.SiteAudit.ready(),sleep(25000).then(()=>{throw Error('image decode timeout');})]);
+  await Promise.race([win.SiteAudit.ready(),sleep(decodeWait).then(()=>{throw Error('image decode timeout');})]);
   await sleep(options.audit===false?0:80);return {win,doc};
  }
  async function closeDialog(dialog,button){

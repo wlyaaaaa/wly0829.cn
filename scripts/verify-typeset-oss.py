@@ -2,9 +2,11 @@
 import argparse
 import importlib.util
 import json
+import math
 import re
+from datetime import datetime, timedelta
 from pathlib import Path
-from urllib.parse import urljoin,urlsplit
+from urllib.parse import unquote,urljoin,urlsplit,urlunsplit
 
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location('typeset_oss_release',HERE/'prepare-oss-release.py')
@@ -12,6 +14,96 @@ oss=importlib.util.module_from_spec(spec);spec.loader.exec_module(oss)
 
 def require(condition,message):
     if not condition:raise ValueError(message)
+
+BOUNDED_SCHEMA='wly.oss-bounded-transfer-acceptance.v1'
+EXTENDED_INSTRUCTION='8c5b469a-9178-475c-92aa-b59dd6fa5292'
+
+def elapsed(value):
+    return type(value) in (int,float) and math.isfinite(value) and value>=0
+
+def bounded_report(report,manifest,manifest_sha256,role):
+    """Validate actual per-run bodies; retain observations without another GET."""
+    require(report.get('release_id')==manifest['release_id'] and report.get('manifest_sha256')==manifest_sha256,role+' transfer generation differs')
+    method=report.get('transport_method','');scope=report.get('transport_scope','')
+    require('Actual HTTPS route.fetch(max_retries=0)' in method and 'at most one retry' in method and 'verified network body within this run' in method,role+' transport method is not bounded actual HTTPS')
+    require('Exact manifest-listed HTTPS static GET objects' in scope and 'excluding API paths, non-GET and Range' in scope and 'no local body substitution' in scope and 'not native uninterrupted cold sockets' in scope,role+' transport scope differs')
+    origin=report.get('cors_origin',report.get('html_origin'));parsed_origin=urlsplit(origin or '')
+    require(parsed_origin.scheme in {'http','https'} and parsed_origin.netloc and origin==parsed_origin.scheme+'://'+parsed_origin.netloc,role+' actual CORS origin is missing')
+    require(report.get('static_transfer_status')=='pass' and not report.get('failed_requests') and not report.get('errors') and not report.get('response_failures'),role+' has unresolved resource failures')
+    if role=='reading':require(report.get('status')=='pass', 'Reading capability failed')
+    remote={obj['url']:obj for obj in manifest['oss']['objects'].values()}
+    transfers=report.get('static_transfers',[]);seen=set();first_failures=[];timings=[];gets=0
+    require(transfers,role+' lacks actual static body transfers')
+    for transfer in transfers:
+        url=transfer.get('url');obj=remote.get(url);parsed=urlsplit(url or '')
+        require(obj is not None and url not in seen and parsed.scheme=='https' and 'api' not in parsed.path.lower().split('/'),role+' has duplicate or out-of-scope objects')
+        seen.add(url)
+        require(transfer.get('status')=='pass' and transfer.get('method')==method and transfer.get('scope')==scope and transfer.get('cors_origin')==origin,role+' object transport metadata differs')
+        attempts=transfer.get('attempts',[])
+        require(1<=len(attempts)<=2 and [item.get('number') for item in attempts]==list(range(1,len(attempts)+1)),role+' exceeds the single retry')
+        for attempt in attempts:
+            require(elapsed(attempt.get('seconds')) and isinstance(attempt.get('started_at_beijing'),str),role+' attempt timing missing')
+            require(datetime.fromisoformat(attempt['started_at_beijing']).utcoffset()==timedelta(hours=8),role+' attempt timestamp is not Beijing time')
+        require(elapsed(transfer.get('seconds')) and transfer['seconds']+.000003>=sum(item['seconds'] for item in attempts),role+' total elapsed time is missing or shorter than attempts')
+        final=attempts[-1]
+        require(final.get('http')==200 and final.get('final_url')==url and final.get('bytes')==obj['bytes'] and final.get('sha256')==obj['sha256'] and final.get('content_type','').split(';',1)[0].strip()==obj['content_type'] and final.get('acao') in {origin,'*'} and not final.get('failure') and not final.get('error'),role+' final body/SHA/MIME/CORS/URL differs')
+        require('first_failure' in transfer,role+' first failure field was removed')
+        if len(attempts)==1:
+            require(transfer['first_failure'] is None,role+' invents a first failure')
+        else:
+            first=attempts[0];reason=first.get('failure');error=first.get('error','').lower()
+            allowed=(reason=='http_5xx' and type(first.get('http')) is int and 500<=first['http']<600) or (reason=='empty_body' and first.get('bytes')==0)
+            allowed=allowed or (reason=='empty_transport' and 'http' not in first and any(token in error for token in ('err_empty_response','socket hang up','econnreset','client network socket disconnected before secure tls connection was established')))
+            allowed=allowed or (reason=='long_transport_timeout' and 'http' not in first and 'route.fetch' in error and 'timeout' in error)
+            if any(token in error for token in ('certificate','err_cert_','ssl verification','ssl handshake failed')):allowed=False
+            require(allowed and transfer['first_failure']==first,role+' retry reason or retained first failure differs')
+            first_failures.append({'url':url,'first_failure':first})
+        consumers=transfer.get('consumers',[])
+        require(consumers and all(item.get('reused_transfer') is (number>0) and item.get('resource_type') for number,item in enumerate(consumers)),role+' consumer reuse observations are missing')
+        for consumer in consumers:
+            actual=urlsplit(consumer['url']);query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+            require(urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment))==url,role+' consumer query or object identity differs')
+        gets+=len(attempts);timings.append({'url':url,'seconds':transfer['seconds'],'attempts':[{'number':item['number'],'started_at_beijing':item['started_at_beijing'],'seconds':item['seconds']} for item in attempts]})
+    cold_timings=[]
+    if role=='cold':
+        require(report.get('native_uninterrupted_cold') is False and report.get('static_retry_once') is True and report.get('capability_status')=='pass' and report.get('performance_status')=='not_met' and report.get('status')=='not_met','Controlled transfer must not claim native cold or two-second performance')
+        checks=report.get('checks',[]);routes={'/projects/localocr/','/skills/localocr/'}
+        require(len(checks)==8 and {(row['route'],row['phone'],row['round']) for row in checks}=={(route,phone,number) for route in routes for phone in (False,True) for number in (1,2)},'Controlled cold omits the LocalOCR eight cases')
+        for row in checks:
+            require(row.get('status')=='pass' and row.get('issues')==[] and not row.get('failed_requests') and not row.get('network_failures') and row.get('native_uninterrupted_cold') is False and row.get('transport_method')==method and row.get('transport_scope')==scope,'Controlled cold capability or issues failed')
+            observation=row.get('observation',{});images=observation.get('images',[])
+            require(observation.get('expected_main_images') and observation.get('decoded_main_images')==observation['expected_main_images'] and images and all(image.get('complete') is True and image.get('width',0)>0 and image.get('height',0)>0 for image in images),'Controlled cold current main page parts did not decode')
+            require(observation.get('video_count')==0 and observation.get('hero',{}).get('reason')=='illustration-compatibility','Controlled cold MM01 static illustration gate changed')
+            responses=row.get('oss_responses',[])
+            require(responses and all(item.get('status') in {200,206} and not item.get('disk_cache') and not item.get('service_worker') for item in responses),'Controlled cold lacks actual uncached OSS response observations')
+            require(row.get('static_transfer_urls') and set(row['static_transfer_urls'])<=seen,'Controlled cold case lacks its actual transfer references')
+            require(all(elapsed(row.get(key)) for key in ('seconds','completion_seconds','elapsed_seconds')) and row.get('under_two_seconds') is (row['seconds']<=2),'Controlled cold elapsed observations changed')
+            cold_timings.append({key:row[key] for key in ('route','phone','round','seconds','completion_seconds','elapsed_seconds','under_two_seconds')})
+    return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin}
+
+def bounded_acceptance(manifest,manifest_sha256,instruction,sources):
+    instruction=instruction.resolve();text=instruction.read_text('utf8')
+    require(EXTENDED_INSTRUCTION in text and '2e、2f 和以后各版' in text and '最多重试一次' in text,'Bounded acceptance lacks the actual 14:52 extension')
+    require(set(sources)=={'cold','network','reading'},'Bounded acceptance requires all three actual reports')
+    retained={}
+    for role,path in sources.items():
+        path=Path(path).resolve();report=oss.read(path)
+        retained[role]={'path':str(path),'sha256':oss.digest(path),'release_id':report.get('release_id'),'manifest_sha256':report.get('manifest_sha256'),**bounded_report(report,manifest,manifest_sha256,role)}
+    verification_path=Path(sources['network']).resolve().parent/'verification.json'
+    verification=oss.read(verification_path)
+    require(verification.get('release_id')==manifest['release_id'] and verification.get('summary',{}).get('failed')==0 and verification.get('summary',{}).get('passed')==len(verification.get('pages',{})) and verification.get('pages'),'Bounded full QA source did not pass')
+    for page in verification['pages'].values():
+        require(page.get('status')=='pass' and len(page.get('checks',[]))==2 and {row.get('width') for row in page['checks']}=={1440,390} and all(row.get('status')=='pass' and row.get('issues')==[] for row in page['checks']),'Bounded full QA lacks its desktop/mobile capability')
+    return {'schema':BOUNDED_SCHEMA,'status':'pass','instruction_id':EXTENDED_INSTRUCTION,'instruction_file':str(instruction),'instruction_sha256':oss.digest(instruction),'release_id':manifest['release_id'],'manifest_sha256':manifest_sha256,'max_get_attempts_per_object_per_run':2,'native_uninterrupted_cold':False,'performance_status':'not_met','persistent_settings_changed':False,'new_body_gets_for_proof':0,'sources':retained,'verification':{'path':str(verification_path),'sha256':oss.digest(verification_path)}}
+
+def verify_bounded_acceptance(receipt,manifest,manifest_sha256,cold_path,reading_path,verification_path):
+    sources=receipt.get('sources',{})
+    require(set(sources)=={'cold','network','reading'},'Bounded proof source set differs')
+    require(Path(sources['cold']['path']).resolve()==cold_path.resolve() and Path(sources['reading']['path']).resolve()==reading_path.resolve(),'Bounded proof is not the selected actual cold/reading reports')
+    require(Path(receipt['verification']['path']).resolve()==verification_path.resolve() and oss.digest(verification_path)==receipt['verification']['sha256'],'Bounded proof is not the selected unchanged full QA verification')
+    for role,source in sources.items():require(oss.digest(Path(source['path']))==source['sha256'],'Bounded '+role+' source SHA changed')
+    expected=bounded_acceptance(manifest,manifest_sha256,Path(receipt['instruction_file']),{role:source['path'] for role,source in sources.items()})
+    require(receipt==expected,'Bounded proof instruction, observations or acceptance metadata changed')
 
 def verify(args):
     preparation=args.preparation.resolve()
@@ -75,7 +167,10 @@ def verify(args):
     actual_cases={(row['route'],row['phone'],row['round']) for row in cold['checks']}
     require(len(cold_routes)==2 and len(actual_cases)==8 and actual_cases==expected_cases,'Cold browser case identities are duplicated or incomplete')
     retry_receipt=None
-    if args.retry_proof:
+    if args.retry_proof and oss.read(args.retry_proof).get('schema')==BOUNDED_SCHEMA:
+        retry_receipt=oss.read(args.retry_proof)
+        verify_bounded_acceptance(retry_receipt,manifest,oss.digest(preparation/'github/release-manifest.json'),args.cold,args.reading,args.verification)
+    elif args.retry_proof:
         retry_receipt=oss.read(args.retry_proof)
         extended=retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292'
         require(retry_receipt.get('schema')=='wly.oss-bounded-retry.v1' and (extended or retry_receipt['instruction_id']=='229e1241-e4a0-4f3a-9490-c039d5439019'),'Retry acceptance lacks the actual selected instruction')
@@ -142,7 +237,7 @@ def verify(args):
             'plan_sha256':oss.digest(preparation/'oss-plan.json'),'qa_plan_sha256':oss.digest(args.qa_plan),
             'verification_sha256':oss.digest(args.verification),'reading_sha256':oss.digest(args.reading),
             'cold_sha256':oss.digest(args.cold),'retry_proof_sha256':oss.digest(args.retry_proof) if args.retry_proof else None,
-            'cold_acceptance':('Actual single post-failure body retry under the 14:52 extension to 2e/2f/future versions; first native failures and timing retained' if retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292' else 'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained') if retry_receipt else 'All native cold cases pass under two seconds',
+            'cold_acceptance':('Actual controlled HTTPS bodies with at most one retry per object per run under the 14:52 extension; first failures and elapsed times retained; native cold/two-second performance not claimed' if retry_receipt.get('schema')==BOUNDED_SCHEMA else ('Actual single post-failure body retry under the 14:52 extension to 2e/2f/future versions; first native failures and timing retained' if retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292' else 'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained')) if retry_receipt else 'All native cold cases pass under two seconds',
             'staged':bool(args.staged),'verified_at_beijing':oss.stamp()}
 
 def main():
@@ -153,7 +248,7 @@ def main():
     parser.add_argument('--staged',type=Path)
     parser.add_argument('--preparation-receipt',type=Path)
     parser.add_argument('--rollback-ref')
-    parser.add_argument('--retry-proof',type=Path,help='Actual 08:52 or 14:52 extended bounded retry acceptance; retains original native cold failures and timings')
+    parser.add_argument('--retry-proof',type=Path,help='Actual native bounded retry or controlled 14:52 transfer acceptance; retains source failures and timings')
     args=parser.parse_args()
     if args.staged and (not args.preparation_receipt or not args.rollback_ref):parser.error('Staging needs the real source gate receipt and rollback commit')
     result=verify(args);oss.write(args.output,result)
