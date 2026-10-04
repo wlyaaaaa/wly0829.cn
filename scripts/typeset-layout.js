@@ -421,8 +421,8 @@ function installTypeset(section,screen){
 function fitTypesetShot(wrap){
  // Screenshot evidence uses the complete original at its own aspect ratio.
  // Old source crop hints must not magnify one strip of a window or hide controls.
- const shot=wrap._shot,c=[0,0,...shot.size],stage=wrap.querySelector('.typeset-shot-stage'),im=stage.querySelector('img'),w=c[2]-c[0],h=c[3]-c[1],scale=Math.min(wrap.clientWidth/w,wrap.clientHeight/h,1.25);
- Object.assign(stage.style,{left:(wrap.clientWidth-w*scale)/2+'px',top:(wrap.clientHeight-h*scale)/2+'px',width:w*scale+'px',height:h*scale+'px'});
+ const shot=wrap._shot,c=[0,0,...shot.size],stage=wrap.querySelector('.typeset-shot-stage'),im=stage.querySelector('img'),w=c[2]-c[0],h=c[3]-c[1],bounds=wrap.getBoundingClientRect(),scale=Math.min(bounds.width/w,bounds.height/h,1.25);
+ Object.assign(stage.style,{left:(bounds.width-w*scale)/2+'px',top:(bounds.height-h*scale)/2+'px',width:w*scale+'px',height:h*scale+'px'});
  Object.assign(im.style,{left:-c[0]*scale+'px',top:-c[1]*scale+'px',width:shot.size[0]*scale+'px',height:shot.size[1]*scale+'px'});
 }
 function displayTypesetStatus(payload,phase,parse,data){

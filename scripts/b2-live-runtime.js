@@ -307,10 +307,10 @@ function liveValue(slot){
  if(slot==='cockpit-grafana'){
 
   const g=status.grafana||status.services?.grafana,publicUrl=g?.public_dashboard_url||g?.public_panel_url||g?.public_url;
-  // The current public status provider names its anonymous dashboard public_url.
-  // Keep the separately observed legacy state when present; a reachable root
-  // supplies the current provider's public route without inventing a new state.
-  const currentPublicRoute=g?.public_dashboard_state==null&&g?.state==='reachable'&&/^https:\/\/grafana\.wly0829\.cn\/public-dashboards\/[a-f0-9]+(?:[/?#]|$)/i.test(g?.public_url||'');
+  // PCConfig returns public_url only after the anonymous dashboard API works.
+  // Its state/url describe the separate /login probe, so that probe may fail
+  // while the independently verified public dashboard remains available.
+  const currentPublicRoute=g?.public_dashboard_state==null&&/^https:\/\/grafana\.wly0829\.cn\/public-dashboards\/[a-f0-9]{32}\/?(?:\?theme=(?:light|dark))?$/i.test(g?.public_url||'');
 
   if((g?.public_dashboard_state==='reachable'||currentPublicRoute)&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
 

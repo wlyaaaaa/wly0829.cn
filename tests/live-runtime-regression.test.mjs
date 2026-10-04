@@ -96,6 +96,7 @@ test('the current public status dashboard field mounts the anonymous chart and r
  const data=fixture(),url='https://grafana.wly0829.cn/public-dashboards/51a17a102edc4d859e35ef7934ca5664?theme=light';
  data.grafana={state:'reachable',checked_at:iso(now),url:'https://grafana.wly0829.cn/',public_url:url};
  const app=cockpit();app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);
+ data.grafana.state='unavailable';data.grafana.url=null;data.grafana.collection_state='ready';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,url);assert.equal(app.value('cockpit-grafana').state,'ok');
  data.grafana.checked_at=iso(now-180000);app.set(data);const current=app.value('cockpit-grafana');assert.equal(current.iframe,url);assert.equal(current.state,'ok');assert.notEqual(current.cached,true);
  data.grafana.checked_at=iso(now);
  data.grafana.public_dashboard_state='unavailable';app.set(data);assert.equal(app.value('cockpit-grafana').iframe,undefined);
