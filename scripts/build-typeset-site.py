@@ -993,6 +993,7 @@ def main():
     if args.creative_preparation and (args.release_overlay or args.preview_support):
         raise ValueError('Creative replay uses the complete native five-page source without preview support or another overlay')
     raw_output=args.output.parent/(args.output.name+'-raw') if args.creative_preparation else args.output
+    creative_scope=read(args.creative_preparation).get('scope')if args.creative_preparation else None
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
@@ -1000,8 +1001,17 @@ def main():
     if args.creative_preparation:
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
         creative_module=importlib.util.module_from_spec(creative_spec);creative_spec.loader.exec_module(creative_module)
+        staged_report=None
+        if creative_scope=='full-pages-creative-2f':
+            staged_report=args.output.parent/(args.output.name+'-staged-build-report.json')
+            for state in states.values():
+                if state.get('url'):state['html_sha256']=hybrid.digest(raw_output/hybrid.route_file(state['url']))
+            write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
+                'pages':states,'files':manifest['files'],'baseline_root':str(args.baseline),
+                'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},
+                'geometry_path':str(args.geometry),'geometry_sha256':hybrid.digest(args.geometry)})
         manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
-            args.output.parent/(args.output.name+'-creative-evidence'))
+            args.output.parent/(args.output.name+'-creative-evidence'),staged_build_report=staged_report)
     if live_ui:
         manifest['live_ui_preparation']=live_ui
         hybrid.write(args.output/hybrid.MANIFEST,manifest)

@@ -8,6 +8,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 STEPS = ('comic', 'living', 'album', 'river', 'demo', 'retry')
+FULL_2F_SCOPE='full-pages-creative-2f'
+FULL_2F_STEPS=('river','living','comic','album','demo','retry')
 spec = importlib.util.spec_from_file_location('creative_hybrid', HERE / 'hybrid-release.py')
 hybrid = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hybrid)
@@ -23,10 +25,12 @@ def recipe(path):
     if data.get('schema') != 'wly.creative-replay.v1':
         raise ValueError('Unsupported creative preparation recipe')
     page_only=data.get('scope')=='page-demo-and-retry'
-    if data.get('scope') not in (None,'page-demo-and-retry'):
+    full_2f=data.get('scope')==FULL_2F_SCOPE
+    if data.get('scope') not in (None,'page-demo-and-retry',FULL_2F_SCOPE):
         raise ValueError('Unknown approved preparation scope')
-    required = {'demo_assets','asset_base_url'} if page_only else {'comic_package', 'living_package', 'river_handoff', 'demo_assets', 'geometry', 'asset_base_url'}
-    if not required <= data.keys() or (not page_only and not data['geometry']):
+    required = {'demo_assets','asset_base_url'} if page_only else {'comic_package', 'living_package', 'river_handoff', 'demo_assets', 'asset_base_url'}
+    if not full_2f and not page_only:required.add('geometry')
+    if not required <= data.keys() or (not page_only and not full_2f and not data['geometry']):
         raise ValueError('All six approved preparations need their actual inputs')
     paths = {key: Path(data[key]).resolve() for key in required - {'geometry', 'asset_base_url'}}
     paths['geometry'] = [Path(p).resolve() for p in data.get('geometry',[])]
@@ -42,13 +46,17 @@ def recipe(path):
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
                     'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py'):
         inputs.update({str(p.resolve()): stamp(p) for p in HERE.glob(pattern) if p.is_file()})
+    if full_2f:
+        for name in ('today-river.js','today-river.css'):
+            inputs[str(HERE/name)]=stamp(HERE/name)
+        inputs.update({str(p.resolve()):stamp(p)for p in (HERE/'today-river-assets2').rglob('*')if p.is_file()})
     if data.get('title_cache'):
         paths['title_cache'] = Path(data['title_cache']).resolve()
         inputs[str(paths['title_cache'])] = stamp(paths['title_cache'])
     return data, paths, inputs
 
 
-def prepare(source, baseline, config, output, evidence_root):
+def prepare(source, baseline, config, output, evidence_root, staged_build_report=None):
     source, baseline, config, output, evidence_root = [Path(p).resolve() for p in
                                                      (source, baseline, config, output, evidence_root)]
     if output.exists() or evidence_root.exists():
@@ -58,22 +66,39 @@ def prepare(source, baseline, config, output, evidence_root):
     old = hybrid.verify_release(baseline)
     if raw.get('baseline_files') != old['files']:
         raise ValueError('Raw five-page build has a different complete production baseline')
+    full_2f=data.get('scope')==FULL_2F_SCOPE
+    staged_proof=None
+    if full_2f:
+        if staged_build_report is None:raise ValueError('2f creative replay requires its real native staged build report')
+        staged_build_report=Path(staged_build_report).resolve();staged=hybrid.read(staged_build_report)
+        if (staged.get('schema')!='wly.typeset-build.v1' or staged.get('stage')!='native-before-creative'
+                or staged.get('release_id')!=raw['release_id'] or staged.get('files')!=raw['files']
+                or Path(staged.get('baseline_root','')).resolve()!=baseline or not staged.get('geometry_path')):
+            raise ValueError('Staged build report does not bind this exact native 2f source')
+        if stamp(Path(staged['geometry_path']))['sha256']!=staged.get('geometry_sha256'):
+            raise ValueError('Staged native geometry changed before creative replay')
+        staged_proof={'path':str(staged_build_report),**stamp(staged_build_report)}
+        inputs[str(staged_build_report)]=stamp(staged_build_report)
     evidence_root.mkdir(parents=True)
     current = source
     steps = []
-    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else STEPS):
+    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else FULL_2F_STEPS if full_2f else STEPS):
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
         if name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
             args = ['prepare-home-living.py', '--baseline', current, '--package', paths['living_package'], '--output', dest, '--report', proof]
+            home_data=hybrid.builder.PAGE_DATA.search((current/'index.html').read_text('utf8'))if full_2f else None
+            if full_2f and home_data and json.loads(home_data[2]).get('home_living'):
+                args=['prepare-home-living.py','--baseline',current,'--output',dest,'--report',proof,'--rebind-only']
         elif name == 'album':
             args = ['prepare-page-flip.py', '--source', current, '--out', dest, '--profile', evidence_root / 'album-profile', '--evidence', proof]
             for geometry in paths['geometry']:
                 args += ['--geometry', geometry]
             if paths.get('title_cache'):
                 args += ['--title-cache', paths['title_cache']]
+            if full_2f:args+=['--build-report',staged_build_report]
         elif name == 'river':
             args = ['prepare-today-river.py', '--release', current, '--output', dest, '--handoff', paths['river_handoff']]
         elif name == 'demo':
@@ -81,7 +106,7 @@ def prepare(source, baseline, config, output, evidence_root):
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
-            if data.get('scope')=='page-demo-and-retry' and old.get('resource_retry_preparation'):
+            if (data.get('scope')=='page-demo-and-retry' or full_2f) and old.get('resource_retry_preparation'):
                 previous_manifest=baseline/hybrid.MANIFEST
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
@@ -89,6 +114,11 @@ def prepare(source, baseline, config, output, evidence_root):
         subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True)
         if name == 'river':
             dest = dest / 'site'
+        if name=='album' and full_2f:
+            for report in hybrid.read(dest/hybrid.MANIFEST).get('page_flip_preparation',{}).get('build_reports',[]):
+                report_path=Path(report['path']).resolve();inputs[str(report_path)]=stamp(report_path)
+                for geometry in report.get('geometry',[]):
+                    geometry_path=Path(geometry['path']).resolve();inputs[str(geometry_path)]=stamp(geometry_path)
         after = hybrid.read(dest / hybrid.MANIFEST)['release_id']
         steps.append({'name': name, 'before_release_id': before, 'after_release_id': after})
         current = dest
@@ -138,6 +168,7 @@ def prepare(source, baseline, config, output, evidence_root):
               'assembled_release_id':manifest['release_id'],'accepted_html_newline_normalization':sorted(normalization),
               'navigation_repairs':navigation_repairs,'pending_link_restorations':pending_link_restorations}
     if data.get('scope'):result['scope']=data['scope']
+    if staged_proof:result['staged_build_report']=staged_proof
     manifest['creative_preparation'] = result
     hybrid.write(output / hybrid.MANIFEST, manifest)
     for p, expected in inputs.items():

@@ -432,6 +432,7 @@ def validate_rule_workbench(site_root, pin=None):
     from importlib.util import spec_from_file_location, module_from_spec
     root = Path(site_root); pin = pin or load_pin(Path(__file__).resolve().parents[1])
     result = {'seen_documents': [], 'seen_excerpts': [], 'findings': []}
+    if not (root/'rules/index.html').is_file():return result
     try:
         text = (root / 'rules/index.html').read_text('utf8')
         data = parse_workbench_metadata(text, pin)

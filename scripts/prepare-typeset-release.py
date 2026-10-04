@@ -472,9 +472,15 @@ def prepare(args):
             bound_file(creative['config']['path'],creative['config'],checked_inputs)
             config=read(creative['config']['path'])
             page_only=config.get('scope')=='page-demo-and-retry'
-            expected_steps=['demo','retry'] if page_only else ['comic','living','album','river','demo','retry']
-            if [step['name'] for step in creative['steps']]!=expected_steps or (page_only and creative.get('scope')!='page-demo-and-retry'):
+            full_2f=config.get('scope')=='full-pages-creative-2f'
+            expected_steps=['demo','retry'] if page_only else ['river','living','comic','album','demo','retry']if full_2f else ['comic','living','album','river','demo','retry']
+            if [step['name'] for step in creative['steps']]!=expected_steps or ((page_only or full_2f) and creative.get('scope')!=config.get('scope')):
                 raise ValueError('Preparation does not replay the actual selected scope')
+            if full_2f:
+                staged_proof=creative['staged_build_report'];bound_file(staged_proof['path'],staged_proof,checked_inputs)
+                staged=read(staged_proof['path'])
+                if staged.get('stage')!='native-before-creative' or staged.get('release_id')!=creative['raw_release_id']:
+                    raise ValueError('Album lacks this exact native pre-creative source binding')
             previous=creative['raw_release_id']
             for step in creative['steps']:
                 if step['before_release_id']!=previous:
