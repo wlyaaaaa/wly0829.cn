@@ -290,7 +290,20 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   for(const cell of entries)if(isLamp(cell))state.boxes.set(cell.node,{rect:cell.rect,style:cell.node.style.cssText});
   const height=host.clientWidth*host._layout.size[1]/host._layout.size[0],bands=plan(entries,height,[...state.boxes.values()].map(box=>box.rect));
   host.classList.add('typeset-live-flow-ready');host.append(container);
-  if(bands.length===1&&bands[0].replace){
+  if(dynamic.every(cell=>cell.compactFrame)){
+   // These rectangles are pure chart frames. Keep the source introduction and
+   // footer; replace the reserved blank bands with the actual card height.
+   // An unavailable chart is a short notice, and an iframe grows naturally.
+   let cursor=0;
+   for(const band of bands){
+    if(band.start>cursor+.00001)container.append(makeTile(state,cursor,band.start).node);
+    const region=document.createElement('div');region.className='typeset-live-flow-region typeset-live-flow-compact-frame';
+    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',1);region.append(cards);container.append(region);
+    for(const cell of band.cells)move(cards,cell.node);
+    state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true});cursor=band.end;
+   }
+   if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
+  }else if(bands.length===1&&bands[0].replace){
    // A large blank beside an illustration is a column replacement. Keeping
    // the side columns uncut prevents a long static paragraph from being torn
    // at the blank frame's lower edge when the live card grows.

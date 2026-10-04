@@ -446,7 +446,7 @@ function mount(){
    section.querySelector('.overlays').append(node);
    if(node.tagName!=='INPUT'&&cell.live_part!=='lamp')node.classList.add('b2-ui-slot');
    if(cell.slot==='ca-connection')node.classList.add('b2-connection-chip');
-   liveCells.push({node,rect:cell.rect,maskRect:cell.mask_rect,livePart:cell.live_part,slot:cell.slot,collapseWhenEmpty:['ca-toast','ca-results'].includes(cell.slot)});
+   liveCells.push({node,rect:cell.rect,maskRect:cell.mask_rect,livePart:cell.live_part,slot:cell.slot,collapseWhenEmpty:['ca-toast','ca-results'].includes(cell.slot),compactFrame:cell.slot==='cockpit-grafana'});
 
   }
 
@@ -495,7 +495,7 @@ function render(){
 
   if(slot==='cockpit-pc'&&window.LiveHardwareUI){const displayed=valueRow.hardwareCached?{...status,hardware:valueRow.hardwareDisplay?.hardware,hardware_observed_at_unix:valueRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:valueRow.hardwareDisplay;content.append(window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:valueRow.hardwareCached===true,at:valueRow.cachedAt?valueRow.cachedAt/1000:slotTime(slot)}));}
 
-  else if(valueRow.iframe){const frame=document.createElement('iframe');frame.src=valueRow.iframe;frame.title='近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(frame);}
+  else if(valueRow.iframe){const note=document.createElement('p');note.className='b2-chart-loading-note';note.textContent='公开曲线会在下方加载，首次打开可能稍慢。';const frame=document.createElement('iframe');frame.src=valueRow.iframe;frame.title='近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(note,frame);}
 
   else if(valueRow.rows)for(const row of valueRow.rows){if(row.children){const group=document.createElement('details');group.dataset.rowKey=row.key||row.text;group.open=row.open===true;const title=document.createElement('summary');title.textContent=row.text;group.append(title);for(const child of row.children){const detail=document.createElement('details');detail.dataset.rowKey=child.key||child.text;detail.open=child.highlight===true;if(child.highlight)detail.dataset.highlight='true';const title=document.createElement('summary');title.textContent=child.text;const p=document.createElement('p');p.textContent=child.detail;detail.append(title,p);group.append(detail);}content.append(group);continue;}const item=document.createElement(row.detail?'details':row.href?'a':'p');item.dataset.rowKey=row.key||row.text;if(row.detail){item.open=row.open===true||row.highlight===true;const summary=document.createElement('summary');summary.textContent=row.text;const description=document.createElement('p');description.textContent=row.detail;item.append(summary,description);}else{item.textContent=row.text;if(row.href)item.href=row.href;}if(row.state)item.dataset.state=row.state;if(row.highlight)item.dataset.highlight='true';content.append(item);}
 
