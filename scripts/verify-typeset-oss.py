@@ -1,6 +1,7 @@
 """Bind a sealed OSS split and its actual browser evidence to reviewed source bytes."""
 import argparse
 import importlib.util
+import hashlib
 import json
 import math
 import re
@@ -27,9 +28,14 @@ def bounded_report(report,manifest,manifest_sha256,role):
     method=report.get('transport_method','');scope=report.get('transport_scope','')
     require('Actual HTTPS route.fetch(max_retries=0)' in method and 'at most one retry' in method and 'verified network body within this run' in method,role+' transport method is not bounded actual HTTPS')
     require('Exact manifest-listed HTTPS static GET objects' in scope and 'excluding API paths, non-GET and Range' in scope and 'no local body substitution' in scope and 'not native uninterrupted cold sockets' in scope,role+' transport scope differs')
-    origin=report.get('cors_origin',report.get('html_origin'));parsed_origin=urlsplit(origin or '')
+    origin=report.get('cors_origin',report.get('html_origin'))
+    if origin is None and role=='reading':
+        origins={urlsplit(row['url']).scheme+'://'+urlsplit(row['url']).netloc for row in report.get('responses',[]) if row.get('status')==200 and any(urlsplit(row['url']).path==page.get('url') and row.get('sha256')==page.get('html_sha256') for page in report.get('pages',{}).values())}
+        require(len(origins)==1,'Reading actual HTML responses do not establish one browser origin')
+        origin=next(iter(origins))
+    parsed_origin=urlsplit(origin or '')
     require(parsed_origin.scheme in {'http','https'} and parsed_origin.netloc and origin==parsed_origin.scheme+'://'+parsed_origin.netloc,role+' actual CORS origin is missing')
-    require(report.get('static_transfer_status')=='pass' and not report.get('failed_requests') and not report.get('errors') and not report.get('response_failures'),role+' has unresolved resource failures')
+    require(report.get('static_transfer_status')=='pass' and (role=='network' or not report.get('failed_requests')) and not report.get('errors') and not report.get('response_failures'),role+' has unresolved resource failures')
     if role=='reading':require(report.get('status')=='pass', 'Reading capability failed')
     remote={obj['url']:obj for obj in manifest['oss']['objects'].values()}
     transfers=report.get('static_transfers',[]);seen=set();first_failures=[];timings=[];gets=0
@@ -64,6 +70,15 @@ def bounded_report(report,manifest,manifest_sha256,role):
             actual=urlsplit(consumer['url']);query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
             require(urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment))==url,role+' consumer query or object identity differs')
         gets+=len(attempts);timings.append({'url':url,'seconds':transfer['seconds'],'attempts':[{'number':item['number'],'started_at_beijing':item['started_at_beijing'],'seconds':item['seconds']} for item in attempts]})
+    canceled_consumers=[];raw_failed_requests=report.get('failed_requests',[])
+    require(isinstance(raw_failed_requests,list),role+' failed request observations are malformed')
+    by_url={transfer['url']:transfer for transfer in transfers}
+    for failure in raw_failed_requests:
+        require(role=='network' and failure.get('error')=='net::ERR_ABORTED' and failure.get('resource_type')=='image','Only full QA image consumer cancellations may be retained with a verified body')
+        actual=urlsplit(failure.get('url',''));query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+        canonical=urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment));transfer=by_url.get(canonical)
+        require(transfer is not None and any(consumer['url']==failure['url'] and consumer['resource_type']=='image' for consumer in transfer['consumers']),'Canceled image lacks its exact same-run verified transfer and consumer')
+        canceled_consumers.append({'observation':failure,'canonical_url':canonical,'classification':'image_consumer_aborted_with_same_run_verified_body','verified_body':{key:transfer['attempts'][-1][key] for key in ('http','final_url','bytes','sha256','content_type','acao')},'cancellation_time_and_cause':'not established by network report'})
     cold_timings=[]
     if role=='cold':
         require(report.get('native_uninterrupted_cold') is False and report.get('static_retry_once') is True and report.get('capability_status')=='pass' and report.get('performance_status')=='not_met' and report.get('status')=='not_met','Controlled transfer must not claim native cold or two-second performance')
@@ -79,7 +94,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
             require(row.get('static_transfer_urls') and set(row['static_transfer_urls'])<=seen,'Controlled cold case lacks its actual transfer references')
             require(all(elapsed(row.get(key)) for key in ('seconds','completion_seconds','elapsed_seconds')) and row.get('under_two_seconds') is (row['seconds']<=2),'Controlled cold elapsed observations changed')
             cold_timings.append({key:row[key] for key in ('route','phone','round','seconds','completion_seconds','elapsed_seconds','under_two_seconds')})
-    return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin}
+    return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin,'checked_at_beijing':report.get('checked_at_beijing'),'verified_at_beijing':report.get('verified_at_beijing'),'raw_failed_requests':raw_failed_requests,'raw_failed_requests_sha256':hashlib.sha256(json.dumps(raw_failed_requests,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf8')).hexdigest(),'canceled_consumers':canceled_consumers}
 
 def bounded_acceptance(manifest,manifest_sha256,instruction,sources):
     instruction=instruction.resolve();text=instruction.read_text('utf8')
