@@ -10,6 +10,7 @@
 .typeset-live-flow-columns{display:grid;align-items:start;gap:0}
 .typeset-live-flow-column{min-width:0}
 .typeset-live-flow-global-layer{width:100%;height:100%}
+.typeset-card-feedback.typeset-live-flow-repaint-suppressed .raster-card-visual{background-image:none!important}
 .typeset-live-flow-tile{position:relative;width:100%;overflow:hidden}
 .typeset-live-flow-masked{background:#f3fbf6}
 .typeset-live-flow-image{position:absolute;left:0;display:block;max-width:none!important;object-fit:fill;pointer-events:none;user-select:none}

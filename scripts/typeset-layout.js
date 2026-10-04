@@ -226,7 +226,13 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   for(const node of [...state.overlay.children])if(!dynamic.has(node)){remember(state,node);}
   for(const [node,box]of state.boxes){
    if(!node.isConnected||dynamic.has(node))continue;
-   const rect=box.rect,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end+.00001)||state.tiles.at(-1);
+   if(node.classList.contains('typeset-card-feedback')){
+    const a=box.rect,intersects=state.cells.some(cell=>{if(isLamp(cell))return false;const b=validRect(cell.maskRect)?cell.maskRect:cell.rect;return a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1];});
+    // The source tiles already paint this card. Repainting its old full image
+    // would leave a second copy of controls after the live region grows.
+    node.classList.toggle('typeset-live-flow-repaint-suppressed',intersects);
+   }
+   const rect=box.rect,tile=state.column?null:state.tiles.find(tile=>rect[1]>=tile.start-.00001&&rect[1]<tile.end)||state.tiles.at(-1);
    if(state.column){
     const r=state.column.rect,overlaps=rect[0]<r[0]+r[2]&&rect[0]+rect[2]>r[0],below=rect[1]>=r[1]+r[3]-.00001;
     move(state.column.layer,node);Object.assign(node.style,{left:rect[0]*width+'px',top:(rect[1]*height+(overlaps&&below?columnDelta:0))+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});continue;
@@ -238,7 +244,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  }
  function reset(host){
   const state=states.get(host);if(!state)return;
-  for(const [node,box]of state.boxes)if(node.isConnected){move(state.overlay,node);node.style.cssText=box.style;}
+  for(const [node,box]of state.boxes)if(node.isConnected){move(state.overlay,node);node.style.cssText=box.style;node.classList.remove('typeset-live-flow-repaint-suppressed');}
   for(const cell of state.cells)if(cell.node.isConnected){move(state.overlay,cell.node);cell.node.style.removeProperty('--typeset-live-min-height');}
   state.container.remove();host.classList.remove('typeset-live-flow-ready');delete host.dataset.liveFlowHeight;states.delete(host);hosts.delete(host);
  }
