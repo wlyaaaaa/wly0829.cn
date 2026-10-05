@@ -515,6 +515,8 @@ def local_deps(candidate, legacy, baseline):
 def build_page(name, records, args, candidate):
     source_path = Path(records[0]['source_path'])
     source,source_proof = json_bound(source_path)
+    for screen in source["screens"]:
+        if screen["id"] in source.get("withdrawn_screenshot_screens", []): screen["screenshots"] = []
     url = source.get('url') or source.get('source_url') or ('/404.html' if name == '404' else '/'+name+'/')
     if url == '/' or name == 'home':
         raise ValueError('Homepage is excluded')

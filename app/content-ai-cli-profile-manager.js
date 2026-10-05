@@ -186,7 +186,7 @@ export const aiCliProfileManagerProject = {
   galleryPresentation: {
     kicker: "真实使用画面",
     title: "Qwen3.8 27B 接入 Codex 的桌面版与 CLI",
-    description: "同一条本地模型路线分别进入 Codex 桌面版 harness（运行外壳）和原生 Codex CLI。第一张展示桌面版中的完整任务结果，后两张展示选择 Profile 与规则读取的 CLI 过程。另两张截图含个人内容，已撤下。"
+    description: "截图含个人内容，已撤下。"
   },
   gallery: [
     {
@@ -231,7 +231,7 @@ export const aiCliProfileManagerProject = {
       originalBytes: 262864,
       originalSha256: "53f0a3c3fcb8869dd488c6f5f6d46eef54a8599a488614684292cf80b9032bad"
     }
-  ],
+  ].filter(() => false),
   components: [
     { name: "命令路由与中文帮助", responsibility: "把 setup、profile、start、run、doctor、test、proxy、update 和 uninstall 变成严格可预期的命令。", implementation: "CommandRouter.ps1、HelpService.ps1、ConsoleUi.ps1；未知参数与缺值返回固定退出码，不猜用户意图。" },
     { name: "Manifest、Profile 与秘密存储", responsibility: "分开产品模板、用户选择和明文秘密，阻止同名或损坏对象回退到错误模板。", implementation: "data/providers、schemas、ManifestService.ps1、ProfileService.ps1、JsonStore.ps1、SecretStore.ps1；Profile 指纹绑定最终选择。" },
