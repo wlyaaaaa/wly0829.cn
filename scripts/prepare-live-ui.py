@@ -4,7 +4,7 @@ Run after the typeset build and before the final manifest. The screen artwork,
 river implementation, other owner overlays and existing addressed assets remain.
 """
 from __future__ import annotations
-import argparse, hashlib, importlib.util, json, re
+import argparse, hashlib, html, importlib.util, json, re, shutil
 from pathlib import Path
 from PIL import Image
 
@@ -17,6 +17,89 @@ def module(name, filename):
 
 def proof(payload):
     return {'sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload)}
+
+
+def toc_unify_package(package):
+    """Read the approved 84-page/75-label package without implicit fallbacks."""
+    package = Path(package).resolve()
+    consumed = [package / name for name in (
+        'prepare-toc-unify.py', 'label-map-webp-visible-ink.json',
+        'pages-to-unify.json', 'manifest.json',
+        'runtime/toc-consistency.css', 'runtime/toc-consistency.js')]
+    label_map = json.loads(consumed[1].read_text('utf8'))
+    pages = json.loads(consumed[2].read_text('utf8'))
+    manifest = json.loads(consumed[3].read_text('utf8'))
+    if (len(pages) != 84 or len(set(pages)) != 84 or 'index.html' not in pages
+            or '404.html' not in pages or len(label_map) != 75
+            or manifest.get('expected_labels') != 75 or manifest.get('available_labels') != 75
+            or manifest.get('missing') or len(manifest.get('items', [])) != 75):
+        raise ValueError('TOC unification requires the approved 84 pages and 75 labels')
+    if any(Path(page).as_posix() != page or page.startswith('/') or '..' in Path(page).parts
+           or not page.endswith('.html') for page in pages):
+        raise ValueError('TOC page scope contains an invalid relative HTML path')
+    items = {item['text']: item for item in manifest['items']}
+    if set(items) != set(label_map):
+        raise ValueError('TOC manifest and label map differ')
+    images = []
+    for name, label in label_map.items():
+        item = items[name]
+        relative = item['webp']
+        if (Path(relative).parent.as_posix() != 'images' or Path(relative).suffix != '.webp'
+                or label['src'] != '/_shared/nav-unify-standard/' + Path(relative).name
+                or label['size'] != item['size']):
+            raise ValueError('TOC bitmap path or size differs: ' + name)
+        image = package / relative
+        if proof(image.read_bytes())['sha256'] != item['webp_sha256']:
+            raise ValueError('TOC bitmap changed: ' + str(image))
+        w, h = label['size']
+        ink = [label['ink_left'] * w, label['ink_top'] * h,
+               label['ink_right'] * w, label['ink_bottom'] * h]
+        if any(abs(value - expected) > 1e-6 for value, expected in zip(ink, item['ink_box_alpha16'])):
+            raise ValueError('TOC visible ink differs: ' + name)
+        images.append(image)
+    if len({image.name for image in images}) != 75:
+        raise ValueError('TOC bitmap names are not unique')
+    return package, label_map, pages, images, consumed + images
+
+
+def prepare_toc_recipe(site, recipe):
+    """Refresh the complete site after creative replay using the approved helper."""
+    recipe, site = Path(recipe).resolve(), Path(site).resolve()
+    config = json.loads(recipe.read_text('utf8'))
+    if config.get('schema') != 'wly.live-ui-recipe.v1' or not config.get('toc_unify_package'):
+        raise ValueError('A live UI recipe with the approved TOC package is required')
+    package, label_map, pages, images, consumed = toc_unify_package(config['toc_unify_package'])
+    inputs = {str(path): proof(path.read_bytes()) for path in [recipe, HERE / 'prepare-live-ui.py', *consumed]}
+    # Fail before copying or changing anything if the complete declared scope is absent.
+    for relative in pages:
+        page = site / relative
+        if not page.is_file():
+            raise ValueError('Complete TOC page is missing: ' + relative)
+        text = page.read_text('utf8')
+        nav = re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>', text, re.S)
+        if not nav or not re.search(r'<a\b[^>]*data-section=', nav[0]):
+            raise ValueError('Complete TOC page lacks its original directory: ' + relative)
+        names = {html.unescape(name) for name in re.findall(r'data-label-[hv]="([^"]+)"', nav[0])}
+        if names - label_map.keys():
+            raise ValueError('TOC labels are missing on ' + relative + ': ' + ', '.join(sorted(names - label_map.keys())))
+    target = site / '_shared/nav-unify-standard'
+    target.mkdir(parents=True, exist_ok=True)
+    for image in images:
+        shutil.copyfile(image, target / image.name)
+    spec = importlib.util.spec_from_file_location('approved_toc_unify', package / 'prepare-toc-unify.py')
+    approved = importlib.util.module_from_spec(spec); spec.loader.exec_module(approved)
+    result = approved.prepare_toc(site, label_map, pages)
+    if (result.get('status') != 'prepared' or result.get('page_count') != 84
+            or result.get('missing_labels') or {item['page'] for item in result.get('pages', [])} != set(pages)):
+        raise ValueError('Approved TOC helper did not prepare the complete 84-page scope')
+    for path, expected in inputs.items():
+        if proof(Path(path).read_bytes()) != expected:
+            raise ValueError('TOC input changed during preparation: ' + path)
+    result['recipe_path'] = str(recipe)
+    result['recipe_sha256'] = inputs[str(recipe)]['sha256']
+    result['package_path'] = str(package)
+    result['bitmap_count'] = len(images)
+    return result, inputs
 
 def patch_layout(text):
     # Legacy builds split appearance helpers around their page/motion prelude.
@@ -135,15 +218,24 @@ def prepare_recipe(site, recipe, pages=None):
     config = json.loads(recipe.read_text('utf8'))
     if config.get('schema') != 'wly.live-ui-recipe.v1':
         raise ValueError('Unsupported live UI preparation recipe')
-    paths = {key: Path(config[key]).resolve() for key in ('library', 'font', 'sprite', 'label_map')}
+    unify = config.get('toc_unify_package')
+    paths = {key: Path(config[key]).resolve() for key in
+             (('library', 'font') if unify else ('library', 'font', 'sprite', 'label_map'))}
     hardware = module('bound_hardware_assets', 'prepare-live-hardware-assets.py')
-    consumed = [recipe, paths['font'], paths['sprite'], paths['label_map']]
+    consumed = [recipe, *[path for key, path in paths.items() if key != 'library']]
+    toc_pages = None
+    if unify:
+        _, _, toc_pages, _, toc_inputs = toc_unify_package(unify)
+        if pages is not None and set(pages) not in (set(toc_pages), set(toc_pages) - {'index.html'}):
+            raise ValueError('Live UI page selection differs from the approved TOC scope')
+        consumed += toc_inputs
     consumed += [HERE / name for name in (
         'prepare-live-ui.py', 'prepare-live-hardware-assets.py', 'update-live-release.py',
         'site-live-runtime.js', 'typeset-live-display.js', 'b2-live-runtime.js', 'prepare-cockpit-cache.py',
-        'prepare-toc-consistency.py', 'toc-consistency.css', 'toc-consistency.js',
         'typeset-layout.js', 'typeset-layout.css', 'b2-live.css',
         'live-hardware-ui.css', 'live-hardware-ui.js', 'live-status-ui.css', 'live-status-ui.js')]
+    if not unify:
+        consumed += [HERE / name for name in ('prepare-toc-consistency.py', 'toc-consistency.css', 'toc-consistency.js')]
     consumed += [HERE.parent / 'app/computer-access-model.js']
     consumed += [paths['library'] / relative for relative in set(hardware.SOURCES.values())]
     consumed += [paths['library'] / 'icons' / name for name in
@@ -151,7 +243,14 @@ def prepare_recipe(site, recipe, pages=None):
     inputs = {str(path): proof(path.read_bytes()) for path in consumed}
     result = prepare(site, **paths, pages=pages)
     result.pop('site')
-    result['status'] = 'prepared' if result['toc']['status'] == 'prepared' else 'needs_assets'
+    if unify:
+        # The builder's early candidate has no homepage. The owning builder
+        # finalizes this bound package on the complete site after creative replay.
+        result['toc'] = {'schema': 'wly.toc-unify.v1', 'status': 'pending_complete_site',
+                         'page_count': 0, 'missing_labels': [], 'selected_page_paths': toc_pages}
+        result['status'] = 'prepared_pending_toc'
+    else:
+        result['status'] = 'prepared' if result['toc']['status'] == 'prepared' else 'needs_assets'
     for path, expected in inputs.items():
         if proof(Path(path).read_bytes()) != expected:
             raise ValueError('Live UI input changed during preparation: ' + path)
