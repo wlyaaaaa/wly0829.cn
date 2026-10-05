@@ -26,6 +26,26 @@ BASE = 'https://fixture-bucket.oss-cn-shanghai.aliyuncs.com'
 
 
 class OssCspTests(unittest.TestCase):
+    def test_v5_image_preload_uses_existing_csp_and_referrer_rules(self):
+        text=(b'<html><head><meta http-equiv="Content-Security-Policy" '
+              b'content="default-src \'self\'; img-src \'self\'; script-src \'self\' \'nonce-existing\'; '
+              b'style-src \'self\'; connect-src https://service.example; worker-src \'self\' blob:; '
+              b'base-uri \'self\'; form-action \'self\'">'
+              b'<link rel="preload" as="image" imagesrcset="/shot.avif 1920w" referrerpolicy="no-referrer"></head></html>')
+        files={'shot.avif':{}}
+        legacy=oss.Rewriter(files,BASE,'releases/current','https://wly0829.cn',version=4)
+        current=oss.Rewriter(files,BASE,'releases/current','https://wly0829.cn',version=5)
+        self.assertEqual(legacy.rewrite(text,'index.html'),text)
+        rewritten=current.rewrite(text,'index.html').decode('utf8')
+        policy=self.policies(rewritten)[0]
+        self.assertIn("img-src 'self' "+BASE,policy)
+        for directive in ("script-src 'self' 'nonce-existing'","style-src 'self'",
+                          "connect-src https://service.example","worker-src 'self' blob:",
+                          "base-uri 'self'","form-action 'self'"):
+            self.assertIn(directive,policy)
+        self.assertIn('referrerpolicy="'+oss.OSS_REFERRER_POLICY+'"',rewritten)
+        self.assertIn('<meta name="referrer" content="'+oss.OSS_REFERRER_POLICY+'">',rewritten)
+
     def rewriter(self, files, **kwargs):
         return oss.Rewriter(dict.fromkeys(files, {}), BASE, 'releases/current', 'https://wly0829.cn', version=4, **kwargs)
 
@@ -98,7 +118,8 @@ class OssCspTests(unittest.TestCase):
     def test_native_gate_keeps_all_failed_events_and_resolves_alias_documents(self):
         rows = [{'status':'fail','loading_failed':[{'blockedReason':'csp'},{'errorText':'net::ERR_ABORTED','canceled':True}],
                  'http_failures':[{'http':404}],'page_errors':['execution failed']}]
-        self.assertEqual(network.summarize(rows,BASE), {'routes':1,'passed':0,'csp_blocked':1,'loading_failed':2,'http_failures':1,'oss_http_403':0,'page_errors':1})
+        self.assertEqual(network.summarize(rows,BASE), {'routes':1,'passed':0,'csp_blocked':1,'loading_failed':2,
+            'blocking_loading_failed':2,'expected_navigation_cancellations':0,'http_failures':1,'oss_http_403':0,'page_errors':1})
         self.assertTrue(network.is_csp_failure({'type':'Document','errorText':'net::ERR_BLOCKED_BY_CSP'}))
         self.assertEqual(network.route_file('/how-this-site/'), 'how-this-site/index.html')
         self.assertEqual(network.route_file('/404.html'), '404.html')

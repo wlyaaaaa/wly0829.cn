@@ -101,7 +101,10 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None):
         raise ValueError('Browser network receipt omits manifest routes or aliases')
     for row in rows:
         verify_oss_403(row,plan['asset_base_url'])
-        if row.get('status') != 'pass' or row.get('issues') or row.get('loading_failed') or row.get('page_errors') or row.get('http_failures'):
+        derived = blocking_events(row, compat_contract(root,manifest,documents,row['route']), manifest)
+        if any(row.get(key) != value for key,value in derived.items()):
+            raise ValueError('Blocking-event classification differs from retained browser evidence')
+        if row.get('status') != 'pass' or derived['blocking_issues'] or derived['blocking_loading_failed'] or row.get('page_errors') or row.get('http_failures'):
             raise ValueError('Browser failures remain on ' + row.get('route', '?'))
         observed = row.get('documents', [])
         address = ORIGIN + row['route']
@@ -141,7 +144,9 @@ def verify_oss_403(row, asset_base):
 def summarize(rows, asset_base):
     return {'routes': len(rows), 'passed': sum(row.get('status') == 'pass' for row in rows),
             'csp_blocked': sum(is_csp_failure(event) for row in rows for event in row.get('loading_failed', [])),
-            'loading_failed': sum(len(row.get('loading_failed', [])) for row in rows),
+            'loading_failed': sum(len(row.get('loading_failed', [])) for row in rows),  # Raw, never rewritten to zero.
+            'blocking_loading_failed': sum(len(row.get('blocking_loading_failed',row.get('loading_failed',[]))) for row in rows),
+            'expected_navigation_cancellations': sum(len(row.get('expected_navigation_cancellations',[])) for row in rows),
             'http_failures': sum(len(row.get('http_failures', [])) for row in rows),
             'oss_http_403': sum(oss_403_count(row,asset_base) for row in rows),
             'page_errors': sum(len(row.get('page_errors', [])) for row in rows)}
@@ -150,6 +155,103 @@ def summarize(rows, asset_base):
 def is_csp_failure(event):
     # Some blocked subframe Documents omit blockedReason in Chrome's CDP event.
     return event.get('blockedReason') == 'csp' or event.get('errorText') == 'net::ERR_BLOCKED_BY_CSP'
+
+
+
+def compat_contract(root, manifest, documents, route):
+    """Conservative single-hop zero-second same-origin manifest declaration."""
+    payload = (root/documents[route]).read_text('utf8')
+    refresh = [attrs.get('content','') for tag,attrs,raw,offset in oss.HtmlTags(payload).tags
+               if tag == 'meta' and attrs.get('http-equiv','').lower() == 'refresh']
+    if len(refresh) != 1:
+        return None
+    match = re.fullmatch(r'\s*(0+(?:\.0+)?)\s*;\s*url\s*=\s*(.*?)\s*',refresh[0],re.I)
+    if not match or not match[2]:
+        return None
+    target = urljoin(ORIGIN+route,match[2].strip('"\''))
+    parts = urlsplit(target)
+    if parts.scheme != 'https' or parts.netloc != urlsplit(ORIGIN).netloc or parts.path == route:
+        return None
+    if parts.path not in documents or documents[parts.path] not in manifest['files']:
+        return None
+    target_text = (root/documents[parts.path]).read_text('utf8')
+    if any(tag == 'meta' and attrs.get('http-equiv','').lower() == 'refresh'
+           for tag,attrs,raw,offset in oss.HtmlTags(target_text).tags):
+        return None  # Multi-hop or cyclic declarations receive no exception.
+    title_spec = importlib.util.spec_from_file_location('c09_redirect_navigation',HERE/'repair-release-navigation.py')
+    title_module = importlib.util.module_from_spec(title_spec)
+    title_spec.loader.exec_module(title_module)
+    title = title_module.PageFacts(target_text).title
+    if not title:
+        return None
+    return {'initial_url':ORIGIN+route,'target_url':target,
+            'target_http_url':urlunsplit((parts.scheme,parts.netloc,parts.path,parts.query,'')),
+            'initial_sha256':manifest['files'][documents[route]]['sha256'],
+            'target_sha256':manifest['files'][documents[parts.path]]['sha256'],
+            'target_title':title,'declared_content':refresh[0]}
+
+
+def blocking_events(row, contract, manifest):
+    """Derive allowances from retained events; missing identity always blocks."""
+    result = {'blocking_loading_failed':list(row.get('loading_failed',[])),
+              'blocking_issues':list(row.get('issues',[])),
+              'expected_navigation_cancellations':[]}
+    if not contract:
+        return result
+    actual = row.get('final_document',{})
+    if actual.get('url') != contract['target_url'] or actual.get('title') != contract['target_title']:
+        return result
+    for url,digest in ((contract['initial_url'],contract['initial_sha256']),
+                       (contract['target_http_url'],contract['target_sha256'])):
+        if not any(item.get('url') == url and item.get('http') == 200 and item.get('sha256') == digest
+                   and item.get('verified') is True for item in row.get('documents',[])):
+            return result
+    def unique_document(url):
+        values = [item for item in row.get('requests',[]) if item.get('type') == 'Document'
+                  and item.get('method') == 'GET' and item.get('url') == url]
+        return values[0] if len(values) == 1 else None
+    old = unique_document(contract['initial_url'])
+    target = unique_document(contract['target_http_url'])
+    if not old or not target or not old.get('loader_id') or not old.get('frame_id'):
+        return result
+    if target.get('frame_id') != old['frame_id'] or not target.get('loader_id') or target['loader_id'] == old['loader_id']:
+        return result
+    dcl = [event for event in row.get('lifecycle_events',[]) if event.get('frame_id') == target['frame_id']
+           and event.get('loader_id') == target['loader_id'] and event.get('name') == 'DOMContentLoaded']
+    if len(dcl) != 1: return result
+    low,high = target.get('timestamp'),dcl[0].get('timestamp')
+    if not isinstance(low,(int,float)) or not isinstance(high,(int,float)) or high < low:
+        return result
+    for request,url in ((old,contract['initial_url']),(target,contract['target_url'])):
+        if not any(item.get('frame_id') == request['frame_id'] and item.get('loader_id') == request['loader_id']
+                   and item.get('url') == url and not item.get('parent_id') for item in row.get('frame_navigations',[])):
+            return result
+    if not any(item.get('frame_id') == old['frame_id'] and item.get('url') == contract['target_url']
+               and item.get('reason') == 'metaTagRefresh' for item in row.get('navigation_requests',[])):
+        return result
+    requests = {item.get('request_id'):item for item in row.get('requests',[])}
+    responses = {item.get('request_id'):item for item in row.get('responses',[])}
+    def forbidden_response(identity):
+        return (responses.get(identity,{}).get('http',0) >= 400
+                or any(item.get('request_id') == identity and item.get('http',0) >= 400
+                       for item in row.get('http_response_extra',[])))
+    def belongs_old(identity):
+        item = requests.get(identity,{})
+        stamp = item.get('timestamp')
+        return (item.get('loader_id') == old['loader_id'] and item.get('frame_id') == old['frame_id']
+                and item.get('type') != 'Document' and isinstance(stamp,(int,float)) and stamp <= high)
+    allowed_failures = []
+    for event in row.get('loading_failed',[]):
+        stamp = event.get('timestamp')
+        if (event.get('canceled') is True and event.get('errorText') == 'net::ERR_ABORTED'
+                and not is_csp_failure(event) and belongs_old(event.get('requestId'))
+                and not forbidden_response(event.get('requestId'))
+                and event.get('url') == requests[event['requestId']].get('url')
+                and isinstance(stamp,(int,float)) and low <= stamp <= high):
+            allowed_failures.append(event)
+    result['expected_navigation_cancellations'] = allowed_failures
+    result['blocking_loading_failed'] = [event for event in row.get('loading_failed',[]) if event not in allowed_failures]
+    return result
 
 
 def recycle_profile(profile, allowed_root):
@@ -182,6 +284,9 @@ async def run(args):
               'routes': list(documents), 'pages': [], 'started_at_beijing': oss.stamp()}
     objects = {obj['url']: (rel, obj) for rel, obj in manifest['oss']['objects'].items()}
     url_documents = {ORIGIN+route: rel for route, rel in documents.items()}
+    contracts = {route:compat_contract(root,manifest,documents,route) for route in documents}
+    for contract in contracts.values():
+        if contract: url_documents[contract['target_http_url']] = route_file(urlsplit(contract['target_url']).path)
     async with async_playwright() as runtime:
         context = None
         try:
@@ -201,18 +306,31 @@ async def run(args):
             for route, rel in documents.items():
                 page = await context.new_page()
                 session = await context.new_cdp_session(page)
-                await session.send('Network.enable', {'maxTotalBufferSize':512*1024*1024, 'maxResourceBufferSize':64*1024*1024})
+                await session.send('Page.enable')
+                await session.send('Page.setLifecycleEventsEnabled',{'enabled':True})
+                await session.send('Network.enable', {'maxTotalBufferSize':512*1024*1024, 'maxResourceBufferSize':64*1024*1024, 'enableDurableMessages':True})
                 await session.send('Network.setCacheDisabled', {'cacheDisabled':True})
                 row = {'route':route, 'url':ORIGIN+route, 'status':'fail', 'requests':[], 'responses':[], 'http_response_extra':[],
-                       'documents':[], 'static_bodies':[], 'loading_failed':[], 'http_failures':[], 'page_errors':[], 'issues':[]}
+                       'documents':[], 'static_bodies':[], 'loading_failed':[], 'http_failures':[], 'page_errors':[], 'issues':[],
+                       'frame_navigations':[], 'navigation_requests':[], 'lifecycle_events':[]}
                 row['declared_oss_static']=declared_oss_static((root/rel).read_bytes(),rel,manifest)
                 report['pages'].append(row)
                 requests = {}; responses = {}; pending = set(); body_tasks = set(); request_referrers = {}; last_event = time.monotonic()
+                def frame_navigated(event):
+                    frame = event['frame']
+                    row['frame_navigations'].append({'frame_id':frame['id'],'loader_id':frame.get('loaderId'),
+                        'parent_id':frame.get('parentId'),'url':frame.get('url')})
+                def lifecycle_event(event):
+                    row['lifecycle_events'].append({'frame_id':event['frameId'],'loader_id':event['loaderId'],
+                        'name':event['name'],'timestamp':event['timestamp']})
+                def navigation_requested(event):
+                    row['navigation_requests'].append({'frame_id':event['frameId'],'url':event['url'],'reason':event.get('reason')})
                 def requested(event):
                     nonlocal last_event
                     last_event = time.monotonic(); request = event['request']; identity = event['requestId']
                     item = {'request_id':identity, 'url':request['url'], 'method':request['method'], 'type':event.get('type'),
                             'initiator_type':event.get('initiator',{}).get('type'), 'response_received':False,
+                            'loader_id':event.get('loaderId'),'frame_id':event.get('frameId'),'timestamp':event.get('timestamp'),
                             'referer':request_referrers.get(identity,next((value for key,value in request.get('headers',{}).items() if key.lower()=='referer'),''))}
                     requests[identity] = item; pending.add(identity); row['requests'].append(item)
                     if request['method'] not in ('GET', 'HEAD', 'OPTIONS'): row['issues'].append('Unexpected non-read request: '+request['method']+' '+request['url'])
@@ -275,7 +393,11 @@ async def run(args):
                 def finished(event):
                     nonlocal last_event
                     last_event = time.monotonic(); pending.discard(event['requestId'])
+                    if event['requestId'] in requests: requests[event['requestId']]['finished_timestamp'] = event.get('timestamp')
                     task = asyncio.create_task(record_body(event['requestId'])); body_tasks.add(task); task.add_done_callback(body_tasks.discard)
+                session.on('Page.lifecycleEvent',lifecycle_event)
+                session.on('Page.frameNavigated',frame_navigated)
+                session.on('Page.frameRequestedNavigation',navigation_requested)
                 session.on('Network.requestWillBeSent', requested)
                 session.on('Network.requestWillBeSentExtraInfo', request_headers)
                 session.on('Network.responseReceived', received)
@@ -286,6 +408,9 @@ async def run(args):
                 deadline = time.monotonic()+args.route_timeout
                 try:
                     await page.goto(ORIGIN+route, wait_until='domcontentloaded', timeout=args.route_timeout*1000)
+                    if contracts[route]:
+                        await page.wait_for_url(contracts[route]['target_url'],wait_until='domcontentloaded',
+                            timeout=max(1,int((deadline-time.monotonic())*1000)))
                     # Native scrolling activates the page's actual lazy resources.
                     height = await page.evaluate('document.documentElement.scrollHeight')
                     for position in range(0, height, 850):
@@ -298,6 +423,7 @@ async def run(args):
                         if not pending and not body_tasks and status_sent and time.monotonic()-last_event >= 1: break
                         await asyncio.sleep(.1)
                     else: row['issues'].append('Native network did not settle before deadline; pending: '+str([requests[x]['url'] for x in pending if x in requests]))
+                    row['final_document'] = await page.evaluate('({url:location.href,title:document.title})')
                     if route in ('/computer-access/','/cockpit/') and not any(status_get_succeeded(item) for item in row['requests']):
                         row['issues'].append('Actual service status GET was not sent and answered')
                     if not any(item['url'] == ORIGIN+route and item['verified'] for item in row['documents']):
@@ -316,7 +442,8 @@ async def run(args):
                     try:await asyncio.wait_for(page.close(),timeout=10)
                     except Exception as error:row['issues'].append('Owned page teardown failed: '+str(error))
                     await asyncio.sleep(.05)
-                    row['status'] = 'pass' if not any(row[key] for key in ('issues','loading_failed','http_failures','page_errors')) else 'fail'
+                    row.update(blocking_events(row,contracts[route],manifest))
+                    row['status'] = 'pass' if not any(row[key] for key in ('blocking_issues','blocking_loading_failed','http_failures','page_errors')) else 'fail'
                     row['oss_http_403'] = oss_403_count(row,plan['asset_base_url'])
                 print(route+' '+row['status']+' CSP='+str(sum(is_csp_failure(event) for event in row['loading_failed']))+' OSS403='+str(row['oss_http_403']), flush=True)
         except Exception as error: report['error'] = type(error).__name__+': '+str(error)

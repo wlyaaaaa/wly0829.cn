@@ -1,5 +1,6 @@
 """Strict fixed-source excerpts, public projection and exact canonical topic units."""
 import copy
+import html
 import importlib.util
 import json
 from pathlib import Path
@@ -364,6 +365,86 @@ class ExactLegacyNavigation(unittest.TestCase):
                 self.assertEqual(actual['screens'][0]['parts'][0]['links'][0]['original_href'],original)
                 self.assertEqual(actual['screens'][0]['source_meta']['original_html'],source_markup)
                 self.assertIn('<a href="'+target+'" data-original-href="'+original+'">',page.read_text('utf8'))
+
+
+class WorkbenchTopicOriginal(unittest.TestCase):
+    def setUp(self):
+        self.fixture=FixedRuleOriginal('test_current_excerpt_and_separate_public_source_hash_pass')
+        self.fixture.setUp()
+        f=self.fixture
+        self.previous_contract_file=contract.__file__
+        scripts=f.root/'scripts';scripts.mkdir()
+        for name in ('build-assembled-site.py','audit-page-publication.py'):
+            (scripts/name).write_bytes((ROOT/'scripts'/name).read_bytes())
+        contract.__file__=str(scripts/'rule_original_contract.py')
+        self.page=f.site/'rules/index.html'
+        f.raw=('# 用户授权\n\n法律文书只是规则中说明分工的通用例子，不包含个人案件材料。\n\n'
+               '先核对固定来源和真正适用的规则，再交完整材料给施工者。施工者如实记录已验证的结果，'
+               '保留必要的来源与范围，不把测试通过冒充本人已经可以使用的成品。'
+               '独立复核按照同一份原文清单检查；新增的解释和观点仍需各自判断，不能因为放在原文旁边就当作原文。\n')
+        f.public=contract.public_markdown(f.raw,f.document)
+        f.asset.write_text(f.public,encoding='utf8')
+        f.body='<div class="source-prose">'+contract.render_markdown(f.public)+'</div>'
+        original=contract.sha_bytes(f.raw.encode());public=builder.sha(f.asset)
+        f.pin['documents'][f.document]={'source_sha256':original,'public_source_sha256':public}
+        f.pin['public_source_resources']={'/_typeset/rule-sources/original.md':{'relative_file':f.document,'public_source_sha256':public}}
+        f.pin['excerpt_contract']['excerpts'][f.identity].update(source_sha256=original,
+            rendered_text_sha256=builder.typeset_prose_digest(f.body))
+        pin_path=f.root/'config/assembled-rules-pin.json';pin_path.write_text(json.dumps(f.pin),encoding='utf8')
+        row=copy.deepcopy(f.row);row['source_meta'].update(source_sha256=original,public_source_sha256=public,
+            original_html=f.body,public_projection_sha256='fixture-public-projection')
+        row['parts']=[]
+        for orientation in ('h','v'):
+            path=f.site/('_typeset/rule-sources/original-'+orientation+'.png');path.write_bytes(('fixture '+orientation).encode())
+            row['parts'].append({'src':'/'+path.relative_to(f.site).as_posix(),'sha256':builder.sha(path),'orientation':orientation})
+        spec=importlib.util.spec_from_file_location('workbench_fixture_transcript',ROOT/'scripts/audit-page-publication.py')
+        publication=importlib.util.module_from_spec(spec);spec.loader.exec_module(publication)
+        self.transcript=publication.rendered_text('<body>'+f.body+'</body>')
+        row['transcript_sha256']=contract.sha_bytes(' '.join(self.transcript.split()).encode())
+        self.data={'schema':contract.WORKBENCH_SCHEMA,'version':'E216','pin_sha256':builder.sha(pin_path),
+            'projection_sha256':'fixture-public-projection','topics':[{'relative_file':f.document,'src':row['source_meta']['src'],
+                'public_source_sha256':public,'logical_id':'authorization_contract','page':'rule-authorization'}],'screens':[row]}
+
+    def tearDown(self):
+        contract.__file__=self.previous_contract_file
+        self.fixture.tearDown()
+
+    def text(self,side=''):
+        f=self.fixture
+        value=('<html><body><a href="/_typeset/rule-sources/original.md">完整原文</a>'
+            '<div id="rule-panel-authorization_contract"></div><div id="rule-tab-authorization_contract"></div>'
+            '<article id="rule-authorization-05" data-rule-excerpt="'+f.identity+'">'
+            +''.join('<img src="'+part['src']+'">' for part in self.data['screens'][0]['parts'])
+            +'<pre data-rule-original-text="'+f.identity+'">'+html.escape(self.transcript)+'</pre></article>'
+            +'<script id="rule-workbench-data" type="application/json">'+json.dumps(self.data,ensure_ascii=False)+'</script>'
+            +side+'</body></html>')
+        self.page.write_text(value,encoding='utf8');return value
+
+    def admitted(self,text):
+        spans=builder.canonical_rule_topic_spans(self.fixture.site,self.page,text,self.fixture.pin)
+        return [any(a<=match.start() and match.end()<=b for a,b in spans)
+                for match in builder.EXCLUDED_TOPICS.finditer(text) if match[0]=='法律']
+
+    def test_complete_workbench_admits_only_its_original_transcript_and_metadata(self):
+        text=self.text()
+        self.assertEqual(contract.validate_rule_workbench(self.fixture.site,self.fixture.pin)['findings'],[])
+        self.assertEqual(self.admitted(text),[True,True])
+
+    def test_wrong_source_or_altered_original_body_receive_no_waiver(self):
+        original=copy.deepcopy(self.data)
+        for change in ('source','body'):
+            with self.subTest(change=change):
+                self.data=copy.deepcopy(original);meta=self.data['screens'][0]['source_meta']
+                if change=='source':meta['source_sha256']='0'*64
+                else:meta['original_html']=meta['original_html'].replace('法律文书','法律案件')
+                text=self.text()
+                self.assertTrue(contract.validate_rule_workbench(self.fixture.site,self.fixture.pin)['findings'])
+                self.assertEqual(self.admitted(text),[False,False])
+
+    def test_added_side_prose_still_receives_the_original_topic_gate(self):
+        text=self.text('<p>新增法律主题</p>')
+        self.assertEqual(contract.validate_rule_workbench(self.fixture.site,self.fixture.pin)['findings'],[])
+        self.assertEqual(self.admitted(text),[True,True,False])
 
 
 if __name__=='__main__':unittest.main()

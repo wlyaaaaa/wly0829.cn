@@ -287,9 +287,41 @@ def rule_excerpt_pin_findings(output,files,pin):
         findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
     return findings
 
+def canonical_workbench_topic_spans(output,page,text,pin):
+    """Only complete-contract verified workbench original fields and exact lines."""
+    try:
+        data=rule_contract.parse_workbench_metadata(text,pin)
+        if not data or rule_contract.validate_rule_workbench(output,pin)['findings']:return []
+    except (OSError,ValueError,KeyError,TypeError):return []
+    match=re.search(r'<script\b[^>]*\bid=["\']rule-workbench-data["\'][^>]*>(.*?)</script>',text,re.S)
+    if not match:return []
+    rows=data['screens'];spans=[]
+    for pointer,value,start,end in rule_contract.json_string_spans(match[1],match.start(1)):
+        if (len(pointer)==4 and pointer[0]=='screens' and isinstance(pointer[1],int)
+                and 0<=pointer[1]<len(rows) and pointer[2:]==('source_meta','original_html')):
+            nodes,_=rule_contract.source_text_spans(value)
+            spans.extend(rule_contract.encoded_json_spans(text[start:end],value,nodes,start))
+    import importlib.util
+    spec=importlib.util.spec_from_file_location('workbench_topic_transcript',Path(__file__).with_name('audit-page-publication.py'))
+    publication=importlib.util.module_from_spec(spec);spec.loader.exec_module(publication)
+    for row in rows:
+        _,original=rule_contract.source_text_spans(row['source_meta']['original_html'])
+        expected=publication.rendered_text('<body>'+original+'</body>')
+        lines={' '.join(value.split()) for value in expected.splitlines() if value.strip()}
+        identity=row['source_meta']['excerpt_id']
+        pattern=r'<pre\b[^>]*\bdata-rule-original-text=["\']'+re.escape(identity)+r'["\'][^>]*>(.*?)</pre>'
+        for transcript in re.finditer(pattern,text,re.S):
+            if ' '.join(html.unescape(transcript[1]).split())!=' '.join(expected.split()):continue
+            for line in re.finditer(r'[^\n]+',transcript[1]):
+                if ' '.join(html.unescape(line[0]).split()) in lines:
+                    spans.append((transcript.start(1)+line.start(),transcript.start(1)+line.end()))
+    return spans
+
+
 def canonical_rule_topic_spans(output,page,text,pin):
     """Only fixed-source verified excerpt fields and their exact transcript lines."""
     relative=page.relative_to(output).as_posix()
+    if relative=='rules/index.html':return canonical_workbench_topic_spans(output,page,text,pin)
     if not page.is_relative_to(output/'rules') or page.parent==output/'rules':return []
     if any(finding['file']==relative for finding in rule_excerpt_pin_findings(output,[page],pin)):return []
     match=PAGE_DATA.search(text)

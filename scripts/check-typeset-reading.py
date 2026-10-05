@@ -10,6 +10,7 @@ import hashlib
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -44,6 +45,12 @@ PLACE = """({id,fraction})=>{
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
  scrollTo({top:y+el.offsetHeight*fraction-offset,behavior:'instant'});
 }"""
+
+
+def reading_error_within_two_pixels(value):
+    # Retain the measured delta. Only arithmetic roundoff at the inclusive edge
+    # is equivalent to 2px; any meaningful extra displacement remains a failure.
+    return value is not None and (value <= 2 or math.isclose(value, 2, rel_tol=0, abs_tol=1e-9))
 
 
 async def reading_position(browser_page):
@@ -137,8 +144,8 @@ async def run(args, base, build):
                             delta=abs(after['fraction']-before['fraction'])*after['height'] if after['id']==before['id'] else None
                             result['cases'].append({'page':name,'requested_screen':screen,'requested_fraction':fraction,
                                 'from':start,'to':end,'before':before,'after':after,'error_px':delta,
-                                'pass':delta is not None and delta<=2})
-                            if delta is None or delta>2:
+                                'pass':reading_error_within_two_pixels(delta)})
+                            if not reading_error_within_two_pixels(delta):
                                 result['cases'][-1]['runtime_observation']=await browser_page.evaluate("()=>({tracked:readingPosition,saved:typesetReadingState.saved,revision:typesetReadingState.revision,resizing,padding:getComputedStyle(document.body).paddingBottom,images:[...document.querySelectorAll('.typeset-part:not([hidden]) img')].filter(im=>!im.complete||!im.naturalWidth).map(im=>({src:im.currentSrc||im.src,complete:im.complete,width:im.naturalWidth}))})")
                             await browser_page.set_viewport_size({'width':start[0],'height':start[1]})
                             await browser_page.wait_for_timeout(50)
@@ -157,7 +164,7 @@ async def run(args, base, build):
                 after=await reading_position(browser_page)
                 delta=abs(after['fraction']-before['fraction'])*after['height'] if after['id']==before['id'] else None
                 result['cases'].append({'page':name,'kind':'rapid-resizes','sequence':sequence,
-                    'before':before,'after':after,'error_px':delta,'pass':delta is not None and delta<=2})
+                    'before':before,'after':after,'error_px':delta,'pass':reading_error_within_two_pixels(delta)})
                 # Real click / hash / history paths, including a click during a pending resize.
                 await browser_page.evaluate(PLACE,{'id':chosen[-1],'fraction':.5})
                 await browser_page.wait_for_timeout(50)

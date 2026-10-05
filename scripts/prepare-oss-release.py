@@ -187,7 +187,7 @@ def release_identifier(source, base, prefix, github, objects):
 
 
 def current_home_links(source, version=4):
-    if version not in (1,2,3,4):raise ValueError('Unsupported homepage navigation replay version')
+    if version not in (1,2,3,4,5):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
@@ -256,7 +256,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4):
+        if version not in (1,2,3,4,5):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -306,7 +306,7 @@ class Rewriter:
             if name in ('style', 'data-lazy-style'):
                 for match in CSS_URL.finditer(value): yield match['value'].strip(), 'css'
                 for match in STRINGS.finditer(value): yield match['value'], 'css'
-            elif name in ('srcset', 'data-srcset', 'data-lazy-srcset'):
+            elif name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                 if not value.startswith('data:'):
                     for item in re.findall(r'(?:^|,)\s*([^\s,]+)', value): yield item, 'resource'
             elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
@@ -362,7 +362,7 @@ class Rewriter:
                 if not value: continue
                 if name in ('style', 'data-lazy-style'):
                     dependencies.update(self.literal_dependencies(value, owner, 'css')); continue
-                if name in ('srcset', 'data-srcset', 'data-lazy-srcset'):
+                if name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                     values = re.findall(r'(?:^|,)\s*([^\s,]+)', value) if not value.startswith('data:') else []
                 elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
                     if tag == 'link' and attrs.get('rel') in ('canonical', 'preconnect', 'dns-prefetch'): continue
@@ -516,7 +516,7 @@ class Rewriter:
                 if name == 'style' or self.version>=2 and name=='data-lazy-style':
                     edits += self.css(raw, owner, position)
                     continue
-                if name in ('srcset', 'data-srcset') or self.version>=2 and name=='data-lazy-srcset':
+                if name in ('srcset', 'data-srcset') or self.version>=2 and name=='data-lazy-srcset' or self.version>=5 and name=='imagesrcset':
                     if raw.lstrip().startswith('data:'):
                         continue
                     for s in re.finditer(r'(?:^|,)\s*(?P<url>[^\s,]+)', raw):
@@ -588,7 +588,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=4):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=5):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -821,7 +821,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4),default=4)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5),default=5)
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)

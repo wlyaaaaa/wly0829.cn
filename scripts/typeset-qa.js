@@ -473,6 +473,13 @@
   return {scroll_y:win.scrollY,scroll_top:doc.scrollingElement?.scrollTop??null,scroll_height:doc.documentElement.scrollHeight,viewport_width:win.innerWidth,viewport_height:win.innerHeight,section_rect:r?{top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height}:null,section_visible:!!r&&!!section.getClientRects().length&&r.bottom>0&&r.top<win.innerHeight};
  }
  async function positionVideo(win,doc,section,offscreen){
+  // Expanding the real iframe may still be restoring its previous reading point.
+  // Reuse the normal-effects readiness condition before intentional positioning.
+  const layoutDeadline=performance.now()+decodeWait;
+  while(!win.eval("typeof resizing!=='undefined'&&!resizing&&typeof typesetReadingState!=='undefined'&&typesetReadingState.width===innerWidth&&typesetReadingState.height===innerHeight")){
+   if(performance.now()>layoutDeadline)throw Error('video viewport layout did not settle');
+   await sleep(50);
+  }
   // Resize/layout restoration can run after a fixed timeout, particularly
   // when several QA tabs decode images together. Exercise real scrolling and
   // wait for the requested position and rectangle to stay stable instead.

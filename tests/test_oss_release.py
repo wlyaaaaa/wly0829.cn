@@ -17,6 +17,33 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_image_preload_candidates_are_versioned_and_keep_browser_selection(self):
+        files={'index.html':{},'assets/portrait.avif':{},'assets/wide.avif':{}}
+        text=(b'<head><link rel="preload" as="image" type="image/avif" media="(orientation:landscape)" '
+              b'imagesrcset="assets/portrait.avif 1280w, /assets/wide.avif?quality=full#hero 2880w" '
+              b'imagesizes="(min-width:1648px) 1600px, calc(100vw - 48px)" fetchpriority="high"></head>')
+        old=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn',version=4)
+        current=oss.Rewriter(files,'https://example.oss.invalid','releases/one','https://wly0829.cn',version=5)
+        self.assertEqual(old.rewrite(text,'index.html'),text)
+        rewritten=current.rewrite(text,'index.html')
+        self.assertIn(b'imagesrcset="https://example.oss.invalid/releases/one/assets/portrait.avif 1280w, '
+                      b'https://example.oss.invalid/releases/one/assets/wide.avif?quality=full#hero 2880w"',rewritten)
+        self.assertIn(b'media="(orientation:landscape)"',rewritten)
+        self.assertIn(b'imagesizes="(min-width:1648px) 1600px, calc(100vw - 48px)" fetchpriority="high"',rewritten)
+        self.assertEqual(current.references,{'index.html':{'assets/portrait.avif','assets/wide.avif'}})
+        self.assertFalse(current.missing)
+
+    def test_preload_with_an_unknown_candidate_is_rejected_by_normal_preparation(self):
+        page=self.source/'index.html'
+        page.write_bytes(page.read_bytes()+b'<link rel="preload" as="image" imagesrcset="assets/not-present.avif 1920w">')
+        manifest=oss.read(self.source/oss.MANIFEST)
+        manifest['files']={key:value for key,value in oss.inventory(self.source).items() if key!=oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST,manifest)
+        with self.assertRaisesRegex(ValueError,'Missing local resources'):
+            self.prepare()
+        missing=oss.read(self.root/'output/unresolved-resources.json')
+        self.assertTrue(any(row['url']=='assets/not-present.avif' and row['context']=='resource' for row in missing))
+
     def test_new_javascript_parser_preserves_comments_and_regex_and_maps_actual_assets(self):
         files={'_shared/comic.js':{},'_shared/scene.png':{}}
         text=("// painter's note \"/scene.png\" ---- 开场：左边还没\n"
@@ -355,7 +382,7 @@ class OssReleaseTests(unittest.TestCase):
         manifest=oss.read(self.source/oss.MANIFEST)
         manifest['files']={k:v for k,v in oss.inventory(self.source).items()if k!=oss.MANIFEST};oss.write(self.source/oss.MANIFEST,manifest)
         previous=None
-        for version in (1,2,3,4):
+        for version in (1,2,3,4,5):
             with self.subTest(version=version):
                 prepared,proof=oss.current_home_links(self.source,version)
                 if version<4:

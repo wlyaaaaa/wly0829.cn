@@ -127,7 +127,7 @@ function cancelReadingResize(){
  return revision;
 }
 function resizeLayout(){
- if(!resizing){typesetReadingState.saved=readingPosition;resizing=true;}
+ if(!resizing){rememberReadingPosition();typesetReadingState.saved=readingPosition;resizing=true;}
  const revision=++typesetReadingState.revision,saved=typesetReadingState.saved;
  if(resizeFrame)cancelAnimationFrame(resizeFrame);
  resizeFrame=requestAnimationFrame(()=>{
