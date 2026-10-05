@@ -276,6 +276,12 @@ def inject_runtime(text, js, css, index, model):
             part = text[start:end].replace('loading="lazy"', 'loading="eager"')
             def eager(tag):
                 attrs = dict((k.lower(),v) for k,_,v in ATTR.findall(tag[0]))
+                descriptor = next((d for d in model.get('images', []) if d.get('src') == attrs.get('data-src') and d.get('orientation') and not d.get('both')), None)
+                if tag[0].startswith('<img') and descriptor:
+                    portrait = descriptor['orientation'] == 'v'
+                    media = ('(max-width:767.98px)' if portrait else '(min-width:768px)') if descriptor.get('widthBased') else ('(orientation:portrait)' if portrait else '(orientation:landscape)')
+                    image = re.sub(r'\s+src="[^"]*"', '', tag[0])
+                    return '<source media="'+media+'" srcset="'+html.escape(attrs['data-src'],quote=True)+'">'+image
                 addition = ''.join(' ' + name + '="' + html.escape(attrs['data-'+name],quote=True) + '"' for name in ['src','srcset'] if attrs.get('data-'+name) and not attrs.get(name))
                 return tag[0][:-2] + addition + ' />' if tag[0].endswith('/>') and addition else tag[0][:-1] + addition + '>'
             part = re.sub(r'<(?:img|source)\b[^>]*>', eager, part)
