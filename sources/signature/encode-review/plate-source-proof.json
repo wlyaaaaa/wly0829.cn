@@ -1,0 +1,210 @@
+{
+  "schema": "home-bio.plate-source-proof.v1",
+  "observed_at_beijing": "2026-10-05T06:13:33.744579+08:00",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "pillow": "12.3.0",
+  "libwebp": "1.6.0",
+  "encoder": "Pillow Image.save WEBP / libwebp",
+  "original_parameters": {
+    "quality": 93,
+    "method": 6,
+    "exact": true,
+    "lossless": false,
+    "input_mode": "RGB"
+  },
+  "original_source_and_encoder_records": [
+    {
+      "path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\build.py",
+      "sha256": "08246d2eb6e6b86a350528b2f9b2d482694b9e6f5672c68a7e87b38051b31764"
+    },
+    {
+      "path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\verification\\assets-manifest.json",
+      "sha256": "27169126bbb3e276b76d29de5b7778cbfe7a044bfd4ce02e54f768df497fc4de"
+    },
+    {
+      "path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\dist\\hero-live.config.6a31ab346c.json",
+      "sha256": "6a31ab346cb5d5231ebb06e85a6d26121eb3f40dedaee5bfdff0999152d12954"
+    },
+    {
+      "path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\sprites\\bird-idle.png",
+      "sha256": "5148cf955a9f9709669bf86740b695d59aeeea7d32f53b3758fa9edbccc3019f"
+    }
+  ],
+  "vertical_reconstruction": {
+    "idle_source_path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\sprites\\bird-idle.png",
+    "idle_source_sha256": "5148cf955a9f9709669bf86740b695d59aeeea7d32f53b3758fa9edbccc3019f",
+    "matrix": [
+      3.9416146661659326,
+      0,
+      -858.1831518377622,
+      0,
+      3.9416146661659326,
+      -1707.771295723595
+    ],
+    "place": {
+      "x": 324,
+      "y": 552,
+      "scale": 0.7611170178687652
+    },
+    "sprite": {
+      "src": "assets/bird-idle.eda0cdd28d.webp",
+      "w": 610,
+      "h": 484,
+      "feet": [
+        418.9,
+        468.0
+      ],
+      "scale": 0.33333
+    },
+    "method": "original PNG idle AFFINE BICUBIC + RGBA alpha_composite + RGB"
+  },
+  "items": [
+    {
+      "old_name": "plate-h-white.webp",
+      "source_path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\plates\\plate-white.png",
+      "source_sha256": "89f2f2025ef61d5cded2abf9a98c10267c14425fcc145e2a42ce834080d8e392",
+      "source_sha256_recorded_by_original_pipeline": "89f2f2025ef61d5cded2abf9a98c10267c14425fcc145e2a42ce834080d8e392",
+      "source_sha_matches_original_pipeline": true,
+      "source_is_png_by_signature": true,
+      "source_mode": "RGB",
+      "source_dimensions": [
+        2880,
+        1621
+      ],
+      "rebuilt_from_original_png_inputs": false,
+      "baseline_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\creative-handoff\\home-living\\dist\\assets\\plate-h-white.b070be7ae2.webp",
+      "baseline_bytes": 678230,
+      "baseline_sha256": "b070be7ae22332826481147171e91a5ecfe8af6e40fa2b2f6aa01d75be27efc5",
+      "baseline_sha_matches_original_pipeline": true,
+      "baseline_webp_chunk": "VP8 ",
+      "replayed_bytes": 678230,
+      "replayed_sha256": "b070be7ae22332826481147171e91a5ecfe8af6e40fa2b2f6aa01d75be27efc5",
+      "encoded_sha_equal": true,
+      "encoded_bytes_equal": true,
+      "decoded_replay_vs_baseline": {
+        "equal": true,
+        "changed_pixels": 0,
+        "max_channel_difference": 0,
+        "mean_channel_difference": 0.0
+      },
+      "source_vs_decoded_baseline": {
+        "equal": false,
+        "changed_pixels": 3984747,
+        "max_channel_difference": 56,
+        "mean_channel_difference": 1.3531502044919688
+      },
+      "original_declared_quality": 93
+    },
+    {
+      "old_name": "plate-h-white-nobird.webp",
+      "source_path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1\\plates\\plate-white-nobird.png",
+      "source_sha256": "f50f7eb66f3f430ccbad79b170de212eaf149dd4f81dadb25bd09336091931ad",
+      "source_sha256_recorded_by_original_pipeline": "f50f7eb66f3f430ccbad79b170de212eaf149dd4f81dadb25bd09336091931ad",
+      "source_sha_matches_original_pipeline": true,
+      "source_is_png_by_signature": true,
+      "source_mode": "RGB",
+      "source_dimensions": [
+        2880,
+        1621
+      ],
+      "rebuilt_from_original_png_inputs": false,
+      "baseline_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\creative-handoff\\home-living\\dist\\assets\\plate-h-white-nobird.514d1c2580.webp",
+      "baseline_bytes": 678514,
+      "baseline_sha256": "514d1c2580c655a75ae8b9202c4f60c5f24751ce2f998ed5d2f5abeb9d2b1109",
+      "baseline_sha_matches_original_pipeline": true,
+      "baseline_webp_chunk": "VP8 ",
+      "replayed_bytes": 678514,
+      "replayed_sha256": "514d1c2580c655a75ae8b9202c4f60c5f24751ce2f998ed5d2f5abeb9d2b1109",
+      "encoded_sha_equal": true,
+      "encoded_bytes_equal": true,
+      "decoded_replay_vs_baseline": {
+        "equal": true,
+        "changed_pixels": 0,
+        "max_channel_difference": 0,
+        "mean_channel_difference": 0.0
+      },
+      "source_vs_decoded_baseline": {
+        "equal": false,
+        "changed_pixels": 3983823,
+        "max_channel_difference": 56,
+        "mean_channel_difference": 1.354775144515274
+      },
+      "original_declared_quality": 93
+    },
+    {
+      "old_name": "plate-v-white-nobird.webp",
+      "source_path": "E:\\Cache\\Claude\\Temp\\28482c99\\p1v\\out\\plate-v-white-nobird.png",
+      "source_sha256": "7463e020bbd12b351502977be768ebcd90aabc9001253d7071a2cf910ce696f6",
+      "source_sha256_recorded_by_original_pipeline": "7463e020bbd12b351502977be768ebcd90aabc9001253d7071a2cf910ce696f6",
+      "source_sha_matches_original_pipeline": true,
+      "source_is_png_by_signature": true,
+      "source_mode": "RGB",
+      "source_dimensions": [
+        1280,
+        2227
+      ],
+      "rebuilt_from_original_png_inputs": false,
+      "baseline_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\creative-handoff\\home-living\\dist\\assets\\plate-v-white-nobird.fe751b8e95.webp",
+      "baseline_bytes": 516002,
+      "baseline_sha256": "fe751b8e9546f19394ea761b240615ff3c5c40d4b713976a88922ea64c9adffd",
+      "baseline_sha_matches_original_pipeline": true,
+      "baseline_webp_chunk": "VP8 ",
+      "replayed_bytes": 516002,
+      "replayed_sha256": "fe751b8e9546f19394ea761b240615ff3c5c40d4b713976a88922ea64c9adffd",
+      "encoded_sha_equal": true,
+      "encoded_bytes_equal": true,
+      "decoded_replay_vs_baseline": {
+        "equal": true,
+        "changed_pixels": 0,
+        "max_channel_difference": 0,
+        "mean_channel_difference": 0.0
+      },
+      "source_vs_decoded_baseline": {
+        "equal": false,
+        "changed_pixels": 2219006,
+        "max_channel_difference": 99,
+        "mean_channel_difference": 1.6805778513695555
+      },
+      "original_declared_quality": 93
+    },
+    {
+      "old_name": "plate-v-white.webp",
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode-review\\plate-v-white-static-rebuilt.png",
+      "source_sha256": "d65c841d68793f3c91749ddca33d40d539fca82af97a2ce6e4ff199284a8dd91",
+      "source_sha256_recorded_by_original_pipeline": "d65c841d68793f3c91749ddca33d40d539fca82af97a2ce6e4ff199284a8dd91",
+      "source_sha_matches_original_pipeline": true,
+      "source_is_png_by_signature": true,
+      "source_mode": "RGB",
+      "source_dimensions": [
+        1280,
+        2227
+      ],
+      "rebuilt_from_original_png_inputs": true,
+      "baseline_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\creative-handoff\\home-living\\dist\\assets\\plate-v-white.f7c51f4ae1.webp",
+      "baseline_bytes": 517570,
+      "baseline_sha256": "f7c51f4ae18f319512c41a76500f7bc15c6713392aaf0e3a0c73fdf8c6db0cbf",
+      "baseline_sha_matches_original_pipeline": true,
+      "baseline_webp_chunk": "VP8 ",
+      "replayed_bytes": 517570,
+      "replayed_sha256": "f7c51f4ae18f319512c41a76500f7bc15c6713392aaf0e3a0c73fdf8c6db0cbf",
+      "encoded_sha_equal": true,
+      "encoded_bytes_equal": true,
+      "decoded_replay_vs_baseline": {
+        "equal": true,
+        "changed_pixels": 0,
+        "max_channel_difference": 0,
+        "mean_channel_difference": 0.0
+      },
+      "source_vs_decoded_baseline": {
+        "equal": false,
+        "changed_pixels": 2219411,
+        "max_channel_difference": 98,
+        "mean_channel_difference": 1.6860074277802723
+      },
+      "original_declared_quality": 93
+    }
+  ],
+  "all_baselines_reproduced_sha256": true,
+  "all_baselines_reproduced_decoded_pixels": true,
+  "all_source_png_hashes_match_original_pipeline": true
+}
