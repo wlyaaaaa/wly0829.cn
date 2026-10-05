@@ -28,7 +28,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     outputs:
       pages_artifact_id: ${{ steps.pages_artifact.outputs.artifact_id }}
     steps:
