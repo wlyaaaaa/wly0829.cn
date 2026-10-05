@@ -230,34 +230,6 @@ export const aiCliProfileManagerProject = {
       height: 1737,
       originalBytes: 262864,
       originalSha256: "53f0a3c3fcb8869dd488c6f5f6d46eef54a8599a488614684292cf80b9032bad"
-    },
-    {
-      src: "/media/ai-cli-profile-manager/04-cli-personal-access-check.png",
-      alt: "Qwen3.8 27B 在 Codex CLI 中完成个人数据访问检查",
-      caption: "同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。",
-      evidenceLevel: "E3",
-      evidenceLabel: "真实 CLI 使用画面",
-      proves: "证明该次本地模型任务能够沿现有 Codex 工具与访问流程继续执行多步工作。",
-      doesNotProve: "截图不授予新的访问权限，也不代表其他任务可跳过各自的检查。",
-      observedAt: "2026-09-15",
-      width: 1436,
-      height: 1737,
-      originalBytes: 281515,
-      originalSha256: "f129afcef8686e9a9a7a44699edfd6378b40483d76089eade4852c657651a174"
-    },
-    {
-      src: "/media/ai-cli-profile-manager/05-cli-preference-result.png",
-      alt: "Qwen3.8 27B 在 Codex CLI 中返回中文偏好查询结果",
-      caption: "CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。",
-      evidenceLevel: "E3",
-      evidenceLabel: "真实 CLI 使用画面",
-      proves: "证明该次会话产出了结构清楚的中文结果，并保留了前置工具步骤与来源边界。",
-      doesNotProve: "一次偏好查询不等于所有项目任务、所有上下文长度或长期连续性都已验收。",
-      observedAt: "2026-09-15",
-      width: 1436,
-      height: 1737,
-      originalBytes: 277343,
-      originalSha256: "8e2c0e5a77c7bd64cd2ffa2eaafcb66d4742d74fc10efb04d72d2f14f10168e7"
     }
   ],
   components: [

@@ -1,6 +1,6 @@
 {
   "schema": "wly.hybrid-release.v1",
-  "release_id": "fd576f13b33a3c6d9edeaf8a9713762edcaf93b4cacfb41383f1f67a25f7cbd4",
+  "release_id": "8b980a9e4ba968d925163db5278aa308fe3e51dd39a800cbf703a707deba6891",
   "prepared_at_beijing": "2026-10-04T15:36:21.817446+08:00",
   "rollback_ref": "557250ded315fd33450506e51f8a554ba28f797a",
   "baseline_production_commit": "557250ded315fd33450506e51f8a554ba28f797a",
@@ -10279,8 +10279,8 @@
       "sha256": "1f29d5589ec6e241ea88fd4e652793902f478418f861bf4d7ccd51a99537246b"
     },
     "projects/ai-cli-profile-manager/index.html": {
-      "bytes": 230115,
-      "sha256": "c3ecf0c3b19eef6e78a14700acff1c183e7483332f8b91c1e231bc2718776b82"
+      "bytes": 228912,
+      "sha256": "5d63b552fbb07fe3f1c540dadc9a7881b6879bab8a5aa16dfa1827bdb63e58fd"
     },
     "projects/ai-cli-profile-manager/install-recovery/index.html": {
       "bytes": 73081,
@@ -42805,18 +42805,6 @@
         },
         "byte_preserved": true
       },
-      "_typeset/screenshots/50ac0f83352b3b8788e0-04-cli-personal-access-check.webp": {
-        "bytes": 67454,
-        "sha256": "50ac0f83352b3b8788e0fd61e7e8b5d06f736505b8a839450e48ab58ccd3b18f",
-        "key": "releases/20261004-wave2e-9f960fa4/_typeset/screenshots/50ac0f83352b3b8788e0-04-cli-personal-access-check.webp",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/20261004-wave2e-9f960fa4/_typeset/screenshots/50ac0f83352b3b8788e0-04-cli-personal-access-check.webp",
-        "content_type": "image/webp",
-        "source": {
-          "bytes": 67454,
-          "sha256": "50ac0f83352b3b8788e0fd61e7e8b5d06f736505b8a839450e48ab58ccd3b18f"
-        },
-        "byte_preserved": true
-      },
       "_typeset/screenshots/52e27a29e0206bf48fbf-phone-wallpaper.webp": {
         "bytes": 2353694,
         "sha256": "52e27a29e0206bf48fbff4ab5e4713901bd28b658e5da2424771e5bb883f1db2",
@@ -42958,18 +42946,6 @@
         "source": {
           "bytes": 43630,
           "sha256": "77f53abb2a579f1637f17914b228c43c0f1062f0059729ac94bdaed231761acc"
-        },
-        "byte_preserved": true
-      },
-      "_typeset/screenshots/7c473c6d1383dafbb2cc-05-cli-preference-result.webp": {
-        "bytes": 65314,
-        "sha256": "7c473c6d1383dafbb2cc9f9c213db1674e8a0981527f4de4fa829072b0c87c45",
-        "key": "releases/20261004-wave2e-9f960fa4/_typeset/screenshots/7c473c6d1383dafbb2cc-05-cli-preference-result.webp",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/20261004-wave2e-9f960fa4/_typeset/screenshots/7c473c6d1383dafbb2cc-05-cli-preference-result.webp",
-        "content_type": "image/webp",
-        "source": {
-          "bytes": 65314,
-          "sha256": "7c473c6d1383dafbb2cc9f9c213db1674e8a0981527f4de4fa829072b0c87c45"
         },
         "byte_preserved": true
       },
@@ -49669,30 +49645,6 @@
         },
         "byte_preserved": true
       },
-      "media/ai-cli-profile-manager/04-cli-personal-access-check.png": {
-        "bytes": 281515,
-        "sha256": "f129afcef8686e9a9a7a44699edfd6378b40483d76089eade4852c657651a174",
-        "key": "releases/20261004-wave2e-9f960fa4/media/ai-cli-profile-manager/04-cli-personal-access-check.png",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/20261004-wave2e-9f960fa4/media/ai-cli-profile-manager/04-cli-personal-access-check.png",
-        "content_type": "image/png",
-        "source": {
-          "bytes": 281515,
-          "sha256": "f129afcef8686e9a9a7a44699edfd6378b40483d76089eade4852c657651a174"
-        },
-        "byte_preserved": true
-      },
-      "media/ai-cli-profile-manager/05-cli-preference-result.png": {
-        "bytes": 277343,
-        "sha256": "8e2c0e5a77c7bd64cd2ffa2eaafcb66d4742d74fc10efb04d72d2f14f10168e7",
-        "key": "releases/20261004-wave2e-9f960fa4/media/ai-cli-profile-manager/05-cli-preference-result.png",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/20261004-wave2e-9f960fa4/media/ai-cli-profile-manager/05-cli-preference-result.png",
-        "content_type": "image/png",
-        "source": {
-          "bytes": 277343,
-          "sha256": "8e2c0e5a77c7bd64cd2ffa2eaafcb66d4742d74fc10efb04d72d2f14f10168e7"
-        },
-        "byte_preserved": true
-      },
       "media/brand/wuleyang-logo-full.png": {
         "bytes": 381038,
         "sha256": "1cc3a03f2dde6d95fcc1c3a1b21a25c041a0a2d51ed645ea8d79380cd9f03db5",
@@ -52903,7 +52855,7 @@
       "schema": "wly.oss-remote-verification.v1",
       "verified_at_beijing": "2026-10-04T15:41:55.955508+08:00",
       "plan_sha256": "c787d21a2ba24b449375e55fe4b8ab1d6d22095755650a2c74c5b8732b91fd59",
-      "release_id": "fd576f13b33a3c6d9edeaf8a9713762edcaf93b4cacfb41383f1f67a25f7cbd4",
+      "release_id": "8b980a9e4ba968d925163db5278aa308fe3e51dd39a800cbf703a707deba6891",
       "complete": true,
       "objects": {
         "404/assets/b2-live-596a4d1cf321.css": {
@@ -105606,40 +105558,6 @@
           },
           "attempts": 1
         },
-        "_typeset/screenshots/50ac0f83352b3b8788e0-04-cli-personal-access-check.webp": {
-          "status": "pass",
-          "http": 200,
-          "bytes": 67454,
-          "sha256": "50ac0f83352b3b8788e0fd61e7e8b5d06f736505b8a839450e48ab58ccd3b18f",
-          "content_type": "image/webp",
-          "headers": {
-            "Server": "AliyunOSS",
-            "Date": "Sun, 04 Oct 2026 05:55:08 GMT",
-            "Content-Type": "image/webp",
-            "Content-Length": "67454",
-            "Connection": "close",
-            "x-oss-request-id": "6AC1EA3C14EB5435354FE868",
-            "Vary": "Origin",
-            "Access-Control-Allow-Origin": "https://wly0829.cn",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET, HEAD",
-            "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges, ETag",
-            "Access-Control-Max-Age": "600",
-            "Accept-Ranges": "bytes",
-            "ETag": "\"668EAE895C1973D869D9021486AD3DFA\"",
-            "Last-Modified": "Sun, 04 Oct 2026 05:51:20 GMT",
-            "x-oss-object-type": "Normal",
-            "x-oss-hash-crc64ecma": "13651157704365302556",
-            "x-oss-storage-class": "Standard",
-            "Cache-Control": "public,max-age=31536000,immutable",
-            "x-oss-ec": "0048-00000103",
-            "Content-Disposition": "attachment",
-            "x-oss-force-download": "true",
-            "Content-MD5": "Zo6uiVwZc9hp2QIUhq09+g==",
-            "x-oss-server-time": "8"
-          },
-          "attempts": 1
-        },
         "_typeset/screenshots/52e27a29e0206bf48fbf-phone-wallpaper.webp": {
           "status": "pass",
           "http": 200,
@@ -106045,40 +105963,6 @@
             "x-oss-force-download": "true",
             "Content-MD5": "UWL/7lUSpZ9g7wSPimtxcg==",
             "x-oss-server-time": "20"
-          },
-          "attempts": 1
-        },
-        "_typeset/screenshots/7c473c6d1383dafbb2cc-05-cli-preference-result.webp": {
-          "status": "pass",
-          "http": 200,
-          "bytes": 65314,
-          "sha256": "7c473c6d1383dafbb2cc9f9c213db1674e8a0981527f4de4fa829072b0c87c45",
-          "content_type": "image/webp",
-          "headers": {
-            "Server": "AliyunOSS",
-            "Date": "Sun, 04 Oct 2026 05:55:09 GMT",
-            "Content-Type": "image/webp",
-            "Content-Length": "65314",
-            "Connection": "close",
-            "x-oss-request-id": "6AC1EA3DB3A78A393006BEEF",
-            "Vary": "Origin",
-            "Access-Control-Allow-Origin": "https://wly0829.cn",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET, HEAD",
-            "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges, ETag",
-            "Access-Control-Max-Age": "600",
-            "Accept-Ranges": "bytes",
-            "ETag": "\"8169C64625BA5E748E5E77F1602F8428\"",
-            "Last-Modified": "Sun, 04 Oct 2026 05:51:21 GMT",
-            "x-oss-object-type": "Normal",
-            "x-oss-hash-crc64ecma": "8674115591034053790",
-            "x-oss-storage-class": "Standard",
-            "Cache-Control": "public,max-age=31536000,immutable",
-            "x-oss-ec": "0048-00000103",
-            "Content-Disposition": "attachment",
-            "x-oss-force-download": "true",
-            "Content-MD5": "gWnGRiW6XnSOXnfxYC+EKA==",
-            "x-oss-server-time": "21"
           },
           "attempts": 1
         },
@@ -125060,74 +124944,6 @@
           },
           "attempts": 1
         },
-        "media/ai-cli-profile-manager/04-cli-personal-access-check.png": {
-          "status": "pass",
-          "http": 200,
-          "bytes": 281515,
-          "sha256": "f129afcef8686e9a9a7a44699edfd6378b40483d76089eade4852c657651a174",
-          "content_type": "image/png",
-          "headers": {
-            "Server": "AliyunOSS",
-            "Date": "Sun, 04 Oct 2026 05:56:10 GMT",
-            "Content-Type": "image/png",
-            "Content-Length": "281515",
-            "Connection": "close",
-            "x-oss-request-id": "6AC1EA7A988137323661AA25",
-            "Vary": "Origin",
-            "Access-Control-Allow-Origin": "https://wly0829.cn",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET, HEAD",
-            "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges, ETag",
-            "Access-Control-Max-Age": "600",
-            "Accept-Ranges": "bytes",
-            "ETag": "\"3CFFD9002AE59962FE5E161244F2DEAB\"",
-            "Last-Modified": "Sun, 04 Oct 2026 05:49:06 GMT",
-            "x-oss-object-type": "Normal",
-            "x-oss-hash-crc64ecma": "17724868654778385095",
-            "x-oss-storage-class": "Standard",
-            "Cache-Control": "public,max-age=31536000,immutable",
-            "x-oss-ec": "0048-00000103",
-            "Content-Disposition": "attachment",
-            "x-oss-force-download": "true",
-            "Content-MD5": "PP/ZACrlmWL+XhYSRPLeqw==",
-            "x-oss-server-time": "3"
-          },
-          "attempts": 1
-        },
-        "media/ai-cli-profile-manager/05-cli-preference-result.png": {
-          "status": "pass",
-          "http": 200,
-          "bytes": 277343,
-          "sha256": "8e2c0e5a77c7bd64cd2ffa2eaafcb66d4742d74fc10efb04d72d2f14f10168e7",
-          "content_type": "image/png",
-          "headers": {
-            "Server": "AliyunOSS",
-            "Date": "Sun, 04 Oct 2026 05:56:10 GMT",
-            "Content-Type": "image/png",
-            "Content-Length": "277343",
-            "Connection": "close",
-            "x-oss-request-id": "6AC1EA7A8CAFCC3933FE957B",
-            "Vary": "Origin",
-            "Access-Control-Allow-Origin": "https://wly0829.cn",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET, HEAD",
-            "Access-Control-Expose-Headers": "Content-Length, Content-Range, Accept-Ranges, ETag",
-            "Access-Control-Max-Age": "600",
-            "Accept-Ranges": "bytes",
-            "ETag": "\"69628C12E744A72AE35DEA059121B0CA\"",
-            "Last-Modified": "Sun, 04 Oct 2026 05:49:06 GMT",
-            "x-oss-object-type": "Normal",
-            "x-oss-hash-crc64ecma": "6420531024613534897",
-            "x-oss-storage-class": "Standard",
-            "Cache-Control": "public,max-age=31536000,immutable",
-            "x-oss-ec": "0048-00000103",
-            "Content-Disposition": "attachment",
-            "x-oss-force-download": "true",
-            "Content-MD5": "aWKMEudEpyrjXeoFkSGwyg==",
-            "x-oss-server-time": "13"
-          },
-          "attempts": 1
-        },
         "media/brand/wuleyang-logo-full.png": {
           "status": "pass",
           "http": 200,
@@ -134505,7 +134321,7 @@
       "html_ready": true,
       "method": "anonymous full GET body SHA256 plus MP4 byte range",
       "retried_objects": 1,
-      "retained_pass_objects": 2390,
+      "retained_pass_objects": 2386,
       "previous_receipt_sha256": "bf318c2c33101a0e2fdf5fff0969edd054a2bf5d99ecf82316ef8739aa9c2230",
       "retained_verified_at_beijing": "2026-10-04T13:56:41.080440+08:00"
     }
