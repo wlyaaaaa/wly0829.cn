@@ -8,3 +8,9 @@ site-release/** -text
 src/typeset/** -text
 sources/** -text
 scripts/inventory.py -text
+# Migrated runtime sources and art inputs keep their source byte identities.
+src/runtime/living/** -text
+src/runtime/bird/** -text
+sources/living/** -text
+sources/bird/** -text
+config/build.json -text
