@@ -586,6 +586,92 @@ def layout_acceptance(path, build, build_path, verification, verification_path, 
             "raw_pages": raw_pages, "accepted_issues": actual}
 
 
+def rebuilt_generation(reviewed, rebuilt, final_manifest):
+    """Compare real replay entities, allowing only their generated locations/times."""
+    copies = json.loads(json.dumps([reviewed, rebuilt]))
+    entities = []
+    for build in copies:
+        creative = build['creative_preparation']
+        bound_file(creative['config']['path'], creative['config'])
+        if read(creative['config']['path']).get('scope') != 'full-pages-creative-2f-static-home':
+            raise ValueError('Cross-root rebuild requires the exact static-home recipe')
+        staged = creative['staged_build_report']; bound_file(staged['path'], staged)
+        raw_root = Path(staged['path']).with_name(Path(staged['path']).name.replace('-staged-build-report.json', '-raw'))
+        raw = hybrid.verify_release(raw_root)
+        body = read(staged['path'])
+        if (body.get('stage') != 'native-before-creative' or body.get('files') != raw['files']
+                or body.get('release_id') != raw['release_id'] or raw['release_id'] != creative['raw_release_id']):
+            raise ValueError('Rebuild staged body does not bind its actual raw files')
+        steps = creative['steps']; roots = [Path(s['manifest']['path']).parent for s in steps]
+        if [s['name'] for s in steps] != ['static-home', 'river', 'comic', 'album', 'demo', 'retry']:
+            raise ValueError('Rebuild changed the six-step order')
+        manifests = [raw]
+        previous = raw['release_id']
+        for step, root in zip(steps, roots):
+            bound_file(step['manifest']['path'], step['manifest'])
+            current = hybrid.verify_release(root)
+            if step['before_release_id'] != previous or step['after_release_id'] != current['release_id']:
+                raise ValueError('Rebuild changed a real stage or its release chain')
+            previous = current['release_id']; manifests.append(current)
+        entities.append((staged, raw_root, roots, manifests))
+    if Path(entities[0][0]['path']).read_bytes() != Path(entities[1][0]['path']).read_bytes():
+        raise ValueError('Rebuild changed the complete staged report')
+    normalized = []
+    for build, (staged, raw_root, roots, manifests) in zip(copies, entities):
+        static_time = manifests[1]['home_static_preparation']['observed_at_beijing']
+        final_root = Path(staged['path']).with_name(Path(staged['path']).name.replace('-staged-build-report.json', ''))
+        final = read(final_root / hybrid.MANIFEST) if build is copies[0] else json.loads(json.dumps(final_manifest))
+        if final['files'] != build['files'] or final['release_id'] != build['release_id']:
+            raise ValueError('Final manifest differs from the reviewed build files')
+        for manifest in manifests + [final]:
+            if 'prepared_at_beijing' in manifest:
+                beijing_timestamp(manifest['prepared_at_beijing'], 'prepared_at_beijing')
+                manifest['prepared_at_beijing'] = '<generated-time>'
+            static = manifest.get('home_static_preparation')
+            if static:
+                beijing_timestamp(static['observed_at_beijing'], 'home_static_preparation.observed_at_beijing')
+                if (static['observed_at_beijing'] != static_time or static['baseline'] != str(raw_root)
+                        or static['output'] != str(roots[0])):
+                    raise ValueError('Static preparation does not identify its actual first stage')
+                bound_file(raw_root / hybrid.MANIFEST, static['baseline_manifest'])
+                static.update(baseline='<raw>', output='<static>', observed_at_beijing='<generated-time>',
+                              baseline_manifest='<verified-raw-manifest>')
+            album = manifest.get('page_flip_preparation')
+            if album:
+                if album['source_root'] != str(roots[2]):
+                    raise ValueError('Album source is not the actual comic stage')
+                album['source_root'] = '<comic>'
+                for report in album['build_reports']:
+                    if report['path'] != staged['path'] or report['sha256'] != staged['sha256']:
+                        raise ValueError('Album changed the staged report binding')
+                    report['path'] = '<staged-report>'
+            demo = manifest.get('how_demo_preparation')
+            if demo:
+                speed = demo['speed_source']; path = Path(speed['path'])
+                relative = path.relative_to(roots[3]).as_posix()
+                proof = manifests[4]['files'].get(relative)
+                if not proof or speed['sha256'] != proof['sha256']:
+                    raise ValueError('Demo speed source is not the actual album runtime')
+                bound_file(path, proof); speed['path'] = '<album>/' + relative
+            if manifest.get('creative_preparation'):
+                manifest['creative_preparation'] = '<verified-creative>'
+            normalized.append(manifest)
+    if normalized[:8] != normalized[8:]:
+        raise ValueError('Rebuild changed complete stage manifests beyond generated roles')
+    for build, (staged, _, _, _) in zip(copies, entities):
+        if build['inputs'].pop(staged['path']) != {k: staged[k] for k in ('sha256', 'bytes')}:
+            raise ValueError('Rebuild changed the generated staged input proof')
+        creative = build['creative_preparation']; creative['staged_build_report']['path'] = '<staged-report>'
+        for step in creative['steps']:
+            step['manifest'] = {'path': '<' + step['name'] + '-manifest>'}
+    for field in ('inputs', 'creative_preparation'):
+        if copies[0][field] != copies[1][field]:
+            raise ValueError('Rebuild changed reviewed external inputs or creative ledger')
+    if rebuilt['creative_preparation'] != final_manifest.get('creative_preparation'):
+        raise ValueError('Rebuilt creative report differs from the actual final manifest')
+    return copies
+
+
 def prepare(args):
     checked_inputs={}
     release = args.release.resolve()
@@ -615,6 +701,14 @@ def prepare(args):
         if data.get("schema") != schema and (name != "Claude publication instruction" or directive_present):
             block("evidence", name + " schema mismatch")
     manifest = hybrid.verify_release(release)
+    rebuilt = read(args.rebuilt_report) if args.rebuilt_report else None
+    reviewed_comparable = build
+    comparable = rebuilt
+    if rebuilt and build.get('creative_preparation') and build['creative_preparation'] != manifest.get('creative_preparation'):
+        try:
+            reviewed_comparable, comparable = rebuilt_generation(build, rebuilt, manifest)
+        except (ValueError, KeyError, OSError, TypeError) as error:
+            block('rebuild', error)
     baseline_manifest = read(args.baseline_manifest)
     old, _ = hybrid.verify_baseline(args.baseline.resolve(), baseline_manifest)
     build_hash = digest(args.build_report)
@@ -668,7 +762,7 @@ def prepare(args):
             block('release_overlay',error)
     elif build.get('creative_preparation'):
         try:
-            creative=build['creative_preparation']
+            creative=(rebuilt or build)['creative_preparation']
             if creative.get('schema')!='wly.creative-replay-result.v1' or creative!=manifest.get('creative_preparation'):
                 raise ValueError('Creative preparation differs from the reviewed final source')
             bound_file(creative['config']['path'],creative['config'],checked_inputs)
@@ -862,12 +956,11 @@ def prepare(args):
         except (ValueError, KeyError, OSError, TypeError) as error:
             block('layout_acceptance', error)
     if args.rebuilt_report:
-        rebuilt = read(args.rebuilt_report)
         if rebuilt.get("schema") != "wly.typeset-build.v1":
             block("rebuild", "Rebuild report schema mismatch")
         for field in ("release_id", "inputs", "files", "baseline_root", "baseline_index_sha256",
                       "baseline_manifest_sha256", "geometry_path", "geometry_sha256", "release_overlay", "creative_preparation", "live_ui_preparation", "rule_original_workbench"):
-            if rebuilt.get(field) != build.get(field):
+            if comparable.get(field) != reviewed_comparable.get(field):
                 block("rebuild", "Rebuild changed the reviewed " + field + "; repeat program verification and Claude's publication instruction")
         for page in selected:
             current = rebuilt.get("pages", {}).get(page, {})
