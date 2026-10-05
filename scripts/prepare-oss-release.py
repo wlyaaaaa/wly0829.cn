@@ -802,6 +802,13 @@ def seal_remote(output):
     path = output/'github'/MANIFEST
     manifest = read(path)
     manifest['oss']['verification'] = proof
+    content_path = output/'content-verification.json'
+    if content_path.is_file():
+        content = read(content_path)
+        if content.get('status') != 'pass' or content.get('output_files') != plan['source_files']:
+            raise ValueError('Local content evidence differs from preparation')
+        manifest['oss']['content_verification'] = {key:content[key] for key in ('status','checker_sha256','checked_at_beijing','output_files')}
+        manifest['oss']['content_verification']['sealed_release_id'] = plan['release_id']
     verify_manifest(manifest)
     write(path, manifest)
     plan['github_files'][MANIFEST] = {'bytes': path.stat().st_size, 'sha256': digest(path)}
