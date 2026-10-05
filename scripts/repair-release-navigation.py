@@ -256,7 +256,7 @@ def repair_owned_navigation(text, pages, owner_route=None):
         if data.get('page') == 'home':
             targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/', 'home-03-link-5-0':'/how/', 'home-05-link-3-0':'/how/', 'home-02-link-0-0':'/projects/remote-control/'}
             for node in visit(data):
-                target = targets.get(node.get('id'))
+                target = targets.get(node.get('main_id') or node.get('id'))
                 if target and 'href' in node and target_exists(target, pages):
                     if node['href'] != target:
                         changes.append({'role':node['id'], 'before':node['href'], 'after':target})
