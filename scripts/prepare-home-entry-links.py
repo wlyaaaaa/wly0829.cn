@@ -18,8 +18,6 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
         path=root/rel
         return bool(entry and path.is_file() and path.stat().st_size==entry['bytes'] and sha(path.read_bytes())==entry['sha256'])
     collaboration='/how/'
-    if not published(collaboration) or not published('/cockpit/'):
-        raise ValueError('The complete current package must contain /how/ and /cockpit/; an unrelated project is not the collaboration target')
     targets={'home-01-link-1-0':collaboration,'home-01-link-2-0':'/cockpit/'}
     edits=[];counts=dict.fromkeys(targets,0)
     data=re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>',text,re.S)
@@ -33,6 +31,8 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
             elif isinstance(node,list):
                 for value in node:walk(value)
         walk(model);return
+    if not published(collaboration) or not published('/cockpit/'):
+        raise ValueError('The complete current package must contain /how/ and /cockpit/; an unrelated project is not the collaboration target')
     for obj in re.finditer(r'\{[^{}]*"id"\s*:\s*"(home-01-link-[12]-0)"[^{}]*\}',payload):
         parsed=json.loads(obj[0]);identity=parsed['id']
         link=re.search(r'"href"\s*:\s*("(?:\\.|[^"\\])*")',obj[0])
