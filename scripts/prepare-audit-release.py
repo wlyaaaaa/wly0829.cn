@@ -161,6 +161,13 @@ def verify_input_baseline(baseline, baseline_ref=None, runtime_baseline=False):
                 or (baseline/HOTFIX_DOCUMENT).read_bytes()!=replace_meta_policies((original/HOTFIX_DOCUMENT).read_bytes(),policies)):
             raise ValueError('Runtime baseline is not the exact metadata-only hotfix derivation')
         original_id=original_manifest['release_id']
+    if previous.get('source_kind') == 'offline-cache-with-exact-published-hotfix-document':
+        document = 'projects/ai-cli-profile-manager/index.html'
+        if (previous.get('production_commit') != baseline_ref
+                or (baseline/document).read_bytes() != git_bytes(baseline_ref, document)):
+            raise ValueError('Privacy baseline does not contain the exact published hotfix document')
+        # The retained source hashes and complete production rewrite are checked below.
+        original_id = cloud['source_release_id']
     if original_id!=cloud['source_release_id']:
         raise ValueError('Runtime staging is not the published OSS source version')
     if set(files)!=set(published['files'])|set(cloud['objects']):
