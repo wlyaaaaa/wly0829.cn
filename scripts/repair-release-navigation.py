@@ -270,7 +270,9 @@ def repair_owned_navigation(text, pages, owner_route=None):
             super().__init__(convert_charrefs=True); self.stack = []; self.anchor = None; self.edits = []
         def handle_starttag(self, tag, attrs):
             attrs = dict(attrs)
-            role = ('header' if tag == 'header' else 'footer' if tag == 'footer' else
+            classes = attrs.get('class', '').split()
+            role = ('header' if tag == 'header' and (attrs.get('id') == 'site-header' or 'site-header' in classes) else
+                    'footer' if tag == 'footer' and 'site-footer' in classes else
                     'menu' if tag == 'dialog' and attrs.get('id') == 'menu' else
                     self.stack[-1][1] if self.stack else None)
             if tag == 'a' and role:

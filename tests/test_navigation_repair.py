@@ -111,11 +111,11 @@ class NavigationRepair(unittest.TestCase):
             {'id':'home-01-link-2-0','href':'/'}]}],
               'source_meta':{'original_html':'<a href="/">怎么协作</a>'}}
         anchor='<a class="nav-link" href="/"><span data-label-text="怎么协作"><img alt="怎么协作"></span></a>'
-        text='<header>'+anchor+'</header><dialog id="menu">'+anchor+'</dialog><footer>'+anchor+'</footer>'
-        text+='<main><a href="/">怎么协作</a></main><script id="page-data">'+json.dumps(data)+'</script>'
+        text='<header id="site-header">'+anchor+'</header><dialog id="menu">'+anchor+'</dialog><footer class="site-footer">'+anchor+'</footer>'
+        text+='<main><a href="/">怎么协作</a><header>'+anchor+'</header><footer>'+anchor+'</footer></main><script id="page-data">'+json.dumps(data)+'</script>'
         corrected,changes=nav.repair_owned_navigation(text,nav.page_inventory(self.root),'/')
         self.assertEqual(corrected.count('href="/how/"'),3)
-        self.assertIn('<main><a href="/">怎么协作</a></main>',corrected)
+        self.assertIn('<main><a href="/">怎么协作</a><header>'+anchor+'</header><footer>'+anchor+'</footer></main>',corrected)
         result=json.loads(nav.PAGE_DATA.search(corrected)[2])
         self.assertEqual(result['source_meta'],data['source_meta'])
         self.assertEqual(result['screens'][0]['links'][0]['href'],'/how/')
