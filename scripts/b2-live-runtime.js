@@ -49,6 +49,8 @@ function grafanaGroupValue(part){
  const selected=grafanaGroupRow(part),primary=part==='cpu-gpu'?selected:grafanaGroupRow('cpu-gpu'),secondary=part==='memory-network'?selected:grafanaGroupRow('memory-network');
  if(!primary.iframe&&!secondary.iframe){
   if(part==='memory-network')return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
+  const groups=(status?.grafana||status?.services?.grafana)?.groups;
+  if(online()&&['cpu-gpu','memory-network'].every(key=>groups?.[key]?.state==='unavailable'&&groups[key].url===null&&groups[key].checked_at===null))return {...selected,title:'近24小时曲线',text:'手机版图表稍后上线。',readAt:null,planned:true};
   return {...selected,title:'近24小时曲线',text:'两组曲线暂时打不开\n处理器和显卡观察：'+time(primary.readAt)+'\n内存和网络观察：'+time(secondary.readAt)};
  }
  return selected;
@@ -538,7 +540,7 @@ function render(){
   if(el.classList.contains('b2-ui-slot')&&slot!=='cockpit-pc'&&window.LiveStatusUI){
    const headline=displayRow.text||displayRow.rows?.[0]?.text||(displayRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
    const card=window.LiveStatusUI.render(document,{...displayRow,text:headline,readAt:grouped?displayRow.readAt:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)},{title:grouped?displayRow.title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
-   if(displayRow.operation){card.querySelector('.live-status-meta')?.remove();card.title=(liveTitles[slot]||'办理结果')+'：'+headline;}
+   if(displayRow.operation||displayRow.planned){card.querySelector('.live-status-meta')?.remove();card.title=(grouped?displayRow.title:liveTitles[slot]||'办理结果')+'：'+headline;}
    if(displayRow.rows||displayRow.iframe){if(displayRow.rows)card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
    else content.replaceChildren();
    content.replaceChildren(card);

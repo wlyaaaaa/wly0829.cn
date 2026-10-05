@@ -109,7 +109,7 @@ def panorama_data(args,page):
         if edge['from'] not in ids or edge['to'] not in ids: raise ValueError('Unknown panorama relation endpoint')
         pair=[edge['from'],edge['to']]
         if pair not in edges: edges.append(pair)
-    screen=next(s for s in page['screens'] if s['id']=='how-02');bindings=[];visuals=[]
+    screen=next(s for s in page['screens'] if s['id']=='how-02');bindings=[];visuals=[];destinations={}
     compact=lambda text:re.sub(r'\s+','',text)
     def actor_id(label):
         label=compact(label)
@@ -124,6 +124,10 @@ def panorama_data(args,page):
             for hot in part['hotspots']:
                 node=by_href.get(hot.get('original_href') or hot.get('href'))
                 if node:
+                    target=hot.get('href')
+                    if not target or node in destinations and destinations[node]!=target:
+                        raise ValueError('Panorama project has inconsistent current hotspot destinations: '+node)
+                    destinations[node]=target
                     found.add(node);bindings.append({'hot_id':hot['id'],'node':node})
             for item in part.get('panorama_nodes',[]):
                 node=by_href.get(item.get('original_href') or item.get('href')) if item.get('href') else actor_id(item['text'])
@@ -131,7 +135,7 @@ def panorama_data(args,page):
                 visible.add(node);visuals.append({'part':part['image'],'node':node,'rect':item['rect']})
         if found!=set(by_href.values()): raise ValueError('Panorama project hotspots are incomplete: '+orientation)
         if visible!=set(ids): raise ValueError('Panorama requires measured boxes for all frozen projects and actors: '+orientation)
-    projection={'schema':'wly.how-panorama.v1','nodes':[{'id':n['id'],'href':n.get('href')} for n in nodes],
+    projection={'schema':'wly.how-panorama.v1','nodes':[{'id':n['id'],'href':destinations[n['id']] if n.get('href') else None} for n in nodes],
                 'relations':edges,'hotspots':bindings,'visuals':visuals}
     proof={'path':str(source_path),'sha256':expected_sha,'bytes':expected_bytes,'field':'registry.nodes/relations',
            'project_nodes':len(by_href),'bound_hotspots':len(bindings),'direct_relations':len(edges),'measured_node_boxes':len(visuals)}

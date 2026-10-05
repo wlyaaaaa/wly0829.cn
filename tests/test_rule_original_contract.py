@@ -131,6 +131,35 @@ class CharterArticleBodies(unittest.TestCase):
                     contract.excerpts(invalid,'charter')
 
 
+class SourceExcerptLinks(unittest.TestCase):
+    def setUp(self):
+        self.raw=('# 用户授权\n\n[做错了怎么办](agents.execution-coordination.md#做错了怎么办)\n\n'
+                  '## 子代理和项目规则不扩大授权\n\n[范围外](https://outside.example/)\n\n## 受信任的 AI\n').encode('utf8')
+        self.identity='rule-authorization/rule-authorization-05'
+        text,selection=next((text,selection)for identity,text,selection in contract.excerpts(self.raw.decode(),'rule-authorization')if identity==self.identity)
+        self.pin={'version':'E216','excerpt_contract':{'id':contract.CONTRACT,'excerpts':{self.identity:{
+            'page':'rule-authorization','relative_file':'docs/contracts/agents.authorization.md',
+            'source_sha256':contract.sha_bytes(self.raw),'selection':selection,
+            'markdown_sha256':contract.sha_bytes(contract.public_markdown(text,'docs/contracts/agents.authorization.md',apply_omissions=False).encode('utf8'))}}}}
+
+    def test_only_links_from_the_fixed_selected_source_are_admitted(self):
+        targets=contract.excerpt_link_targets(self.pin,self.identity,self.raw)
+        self.assertEqual(targets,{'/rules/execution-coordination/#做错了怎么办'})
+        self.assertNotIn('https://outside.example/',targets)
+        self.assertNotIn('/rules/execution-coordination/#invented',targets)
+
+    def test_raw_source_selection_display_or_release_mismatch_is_rejected(self):
+        with self.assertRaisesRegex(ValueError,'fixed excerpt source'):
+            contract.excerpt_link_targets(self.pin,self.identity,self.raw.replace('用户'.encode(),'用户假'.encode()))
+        for mutation in ('selection','markdown_sha256'):
+            pin=copy.deepcopy(self.pin);pin['excerpt_contract']['excerpts'][self.identity][mutation]='wrong'
+            with self.subTest(mutation=mutation),self.assertRaisesRegex(ValueError,'selection/display digest'):
+                contract.excerpt_link_targets(pin,self.identity,self.raw)
+        pin=copy.deepcopy(self.pin);pin['excerpt_contract']['id']='e215-original-ranges-v1'
+        with self.assertRaisesRegex(ValueError,'fixed excerpt source'):
+            contract.excerpt_link_targets(pin,self.identity,self.raw)
+
+
 class FixedRuleOriginal(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix='fixed-rule-original-');self.root=Path(self.temp.name)

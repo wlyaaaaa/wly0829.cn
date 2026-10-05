@@ -157,6 +157,18 @@ test('one failed group leaves the other chart visible; two failures collapse onl
  assert.notEqual(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.equal(memory.empty,true);assert.equal(memory.emptyReason,'grafana-groups-unreadable');assert.equal(memory.cached,false);
  app.set(groupedFixture());memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,groupUrls['memory-network']);assert.notEqual(memory.empty,true);
 });
+
+test('only two explicitly unregistered mobile groups show the planned notice without a false clock',()=>{
+ const data=groupedFixture(),app=cockpit();
+ for(const part of ['cpu-gpu','memory-network'])data.grafana.groups[part]={state:'unavailable',url:null,checked_at:null,max_age_seconds:300};
+ app.set(data);let row=app.grafanaGroupValue('cpu-gpu');assert.equal(row.text,'手机版图表稍后上线。');assert.equal(row.planned,true);assert.equal(row.readAt,null);assert.equal(row.state,'unknown');assert.equal(row.cached,false);assert.equal(row.iframe,undefined);assert.equal(app.grafanaGroupValue('memory-network').empty,true);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+ for(const observed of [{state:'unavailable',url:null,checked_at:iso(now-301000)},{state:'error',url:null,checked_at:iso(now)},{state:'reachable',url:'https://grafana.wly0829.cn/login',checked_at:iso(now)}]){
+  const changed=structuredClone(data);changed.grafana.groups['cpu-gpu']=observed;app.set(changed);row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.planned,true);assert.match(row.text,/两组曲线暂时打不开/);
+ }
+ app.set(data,'error');assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
+ const expired=structuredClone(data);expired.observed_at_unix-=121;app.set(expired);assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
+ app.set(groupedFixture());assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
+});
 test('missing, invalid or future group observations never borrow a valid canonical timestamp',()=>{
  for(const stamp of [undefined,null,'','not-a-date',0,false,{},'2026-10-04T02:00:00',iso(now+1),iso(now+30000)]){
   const data=groupedFixture(),app=cockpit();data.grafana.groups['cpu-gpu'].checked_at=stamp;app.set(data);const cpu=app.grafanaGroupValue('cpu-gpu');assert.equal(cpu.iframe,undefined);assert.equal(cpu.state,'unknown');assert.equal(cpu.cached,false);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);

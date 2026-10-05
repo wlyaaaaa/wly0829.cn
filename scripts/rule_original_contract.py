@@ -278,6 +278,26 @@ def excerpt_entry(pin, identity):
     return contract.get('excerpts', {}).get(identity)
 
 
+def excerpt_link_targets(pin, identity, raw_source):
+    """Read real links only from the independently pinned source selection."""
+    entry = excerpt_entry(pin, identity)
+    if not entry or sha_bytes(raw_source) != entry['source_sha256']:
+        raise ValueError('Source links do not bind the fixed excerpt source')
+    selected = next((text, selection) for key, text, selection in
+                    excerpts(raw_source.decode('utf-8-sig'), entry['page']) if key == identity)
+    text, selection = selected
+    projected = public_markdown(text, entry['relative_file'], apply_omissions=False)
+    if selection != entry['selection'] or sha_bytes(projected.encode('utf8')) != entry['markdown_sha256']:
+        raise ValueError('Source links differ from the fixed excerpt selection/display digest')
+    class Links(HTMLParser):
+        def __init__(self): super().__init__(convert_charrefs=True); self.targets = set()
+        def handle_starttag(self, tag, attrs):
+            href = dict(attrs).get('href')
+            if tag == 'a' and href: self.targets.add(source_link_target(href))
+    links = Links(); links.feed(render_markdown(projected))
+    return links.targets
+
+
 def canonical_plain(text):
     class Plain(HTMLParser):
         def __init__(self):

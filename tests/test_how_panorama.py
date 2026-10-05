@@ -53,6 +53,7 @@ class PanoramaBindingTests(unittest.TestCase):
         self.assertEqual([h['node'] for h in graph['hotspots']], ['index', 'media'] * 2)
         self.assertEqual({v['node'] for v in graph['visuals']}, {'index', 'media', 'phone', 'actor'})
         self.assertEqual([n for n in graph['nodes'] if n['id'] == 'phone'], [{'id': 'phone', 'href': None}])
+        self.assertEqual([n for n in graph['nodes'] if n['id'] == 'index'], [{'id': 'index', 'href': '/projects/index/'}])
         self.assertEqual(graph['relations'], [['phone', 'media'], ['media', 'index'], ['index', 'actor']])
         self.assertNotIn(['phone', 'index'], graph['relations'])
         self.assertEqual((proof['bound_hotspots'], proof['measured_node_boxes']), (4, 8))
@@ -82,6 +83,12 @@ class PanoramaBindingTests(unittest.TestCase):
         registry['relations'].append({'from': 'phone', 'to': 'missing'})
         with self.assertRaisesRegex(ValueError, 'Unknown panorama relation endpoint'):
             self.project(registry=registry)
+
+    def test_orientation_destination_disagreement_is_rejected(self):
+        page = deepcopy(self.page)
+        page['screens'][0]['parts'][1]['hotspots'][0]['href'] = '/projects/another-index/'
+        with self.assertRaisesRegex(ValueError, 'inconsistent current hotspot destinations'):
+            self.project(page)
 
 
 if __name__ == '__main__':

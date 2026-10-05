@@ -623,6 +623,7 @@ def build_page(name, records, args, candidate):
         old = original.get(sid,{})
         section = old.get('nav_section') or src.get('nav_section') or src.get('section','top')
         shape=src.get('shape','screen')
+        fixed_source_link_targets=set()
         if grid_open and shape!='card':main.append('</div>');grid_open=False
         model = {'id':sid,'title':src.get('title',''),'section':section,'shape':shape,
                  'render_mode':'typeset','parts':[],'layouts':{'h':{},'v':{}},
@@ -668,7 +669,8 @@ def build_page(name, records, args, candidate):
                         raise ValueError('本屏来源不在固定 E214 全文清单')
                     meta['original_html']=rule_contract.project_original_html(meta['original_html'])
                     if hybrid.builder.typeset_prose_digest(meta['original_html'])!=excerpt['rendered_text_sha256']:
-                        raise ValueError('本屏原文与独立固定 E214 摘录全文摘要不符')
+                        raise ValueError('本屏原文与独立固定 '+pin['version']+' 摘录全文摘要不符')
+                    fixed_source_link_targets=rule_contract.excerpt_link_targets(pin,identity,original_path.read_bytes())
                     public_source=rule_contract.public_markdown(original_path.read_text('utf-8-sig'),meta['relative_file']).encode('utf8')
                     public_sha=rule_contract.sha_bytes(public_source)
                     if public_sha!=expected_source['public_source_sha256']:
@@ -815,6 +817,7 @@ def build_page(name, records, args, candidate):
                     if shape=='source_text':h['href']=rule_contract.source_link_target(h['href'])
                     h['original_href']=h['href']
                     known = {rule_contract.source_link_target(x['href']) if shape=='source_text' else x['href'] for x in src.get('links',[])}
+                    if shape=='source_text':known.update(fixed_source_link_targets)
                     if h['href'] not in known:
                         issues.append(sid+':链接目标不属于定稿：'+h['href'])
                     part['links'].append(h)
