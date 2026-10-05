@@ -314,7 +314,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
     navigation_pages = nav_repair.page_inventory(output)
     for rel in accepted_files:
-        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'))
+        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'),candidate)
     while pending:
         rel = pending.pop()
         if rel in copied: continue

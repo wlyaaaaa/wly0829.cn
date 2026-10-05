@@ -446,5 +446,23 @@ class WorkbenchTopicOriginal(unittest.TestCase):
         self.assertEqual(contract.validate_rule_workbench(self.fixture.site,self.fixture.pin)['findings'],[])
         self.assertEqual(self.admitted(text),[True,True,False])
 
+    def test_manifest_oss_originals_require_registered_paths_and_actual_sha(self):
+        root=self.fixture.site; text=self.text(); objects={}
+        paths=[self.data['topics'][0]['src']]+[p['src'] for p in self.data['screens'][0]['parts']]
+        for path in paths:
+            url='https://oss.example/releases/current'+path
+            objects[path.lstrip('/')]={'url':url,'sha256':builder.sha(root/path.lstrip('/'))}
+            text=text.replace(path,url)
+        (root/'release-manifest.json').write_text(json.dumps({'oss':{'objects':objects}}),encoding='utf8')
+        self.page.write_text(text,encoding='utf8')
+        self.assertEqual(contract.original_site_path(objects[paths[0].lstrip('/')]['url'],root),paths[0])
+        self.assertEqual(contract.validate_rule_workbench(root,self.fixture.pin)['findings'],[])
+        self.assertEqual(self.admitted(text),[True,True])
+        for path in paths:
+            asset=root/path.lstrip('/'); payload=asset.read_bytes(); asset.write_bytes(payload+b'changed')
+            self.assertTrue(contract.validate_rule_workbench(root,self.fixture.pin)['findings']); asset.write_bytes(payload)
+        self.page.write_text(text.replace('https://oss.example/','https://unregistered.example/'),encoding='utf8')
+        self.assertTrue(contract.validate_rule_workbench(root,self.fixture.pin)['findings'])
+
 
 if __name__=='__main__':unittest.main()

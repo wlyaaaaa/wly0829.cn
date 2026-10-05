@@ -268,7 +268,7 @@ def rule_excerpt_pin_findings(output,files,pin):
             if meta.get('excerpt_contract')!=rule_contract.excerpt_contract_id(pin['version']) or not excerpt or excerpt.get('page')!=page_name or excerpt.get('screen')!=row.get('id') or excerpt.get('relative_file')!=document:
                 findings.append({**context,'type':'rule_excerpt_contract_mismatch'})
             try:
-                original=resolve_ref(output,page,meta.get('src',''))
+                original=resolve_ref(output,page,rule_contract.original_site_path(meta.get('src',''),output))
                 asset_sha=sha(original) if original and original.is_file() else None
             except (OSError,ValueError,TypeError):asset_sha=None
             public_sha=expected.get('public_source_sha256') if expected else None
@@ -290,7 +290,7 @@ def rule_excerpt_pin_findings(output,files,pin):
 def canonical_workbench_topic_spans(output,page,text,pin):
     """Only complete-contract verified workbench original fields and exact lines."""
     try:
-        data=rule_contract.parse_workbench_metadata(text,pin)
+        data=rule_contract.parse_workbench_metadata(text,pin,output)
         if not data or rule_contract.validate_rule_workbench(output,pin)['findings']:return []
     except (OSError,ValueError,KeyError,TypeError):return []
     match=re.search(r'<script\b[^>]*\bid=["\']rule-workbench-data["\'][^>]*>(.*?)</script>',text,re.S)
