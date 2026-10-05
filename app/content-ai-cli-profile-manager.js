@@ -230,7 +230,7 @@ export const aiCliProfileManagerProject = {
       height: 1737,
       originalBytes: 262864,
       originalSha256: "53f0a3c3fcb8869dd488c6f5f6d46eef54a8599a488614684292cf80b9032bad"
-    },
+    }
   ],
   components: [
     { name: "命令路由与中文帮助", responsibility: "把 setup、profile、start、run、doctor、test、proxy、update 和 uninstall 变成严格可预期的命令。", implementation: "CommandRouter.ps1、HelpService.ps1、ConsoleUi.ps1；未知参数与缺值返回固定退出码，不猜用户意图。" },
