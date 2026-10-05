@@ -1,6 +1,6 @@
 {
   "schema": "wly.hybrid-release.v1",
-  "release_id": "220c6f16766e028754485f4d662a8f41971d1fbc64b5f7e625239f0d74201a00",
+  "release_id": "fd576f13b33a3c6d9edeaf8a9713762edcaf93b4cacfb41383f1f67a25f7cbd4",
   "prepared_at_beijing": "2026-10-04T15:36:21.817446+08:00",
   "rollback_ref": "557250ded315fd33450506e51f8a554ba28f797a",
   "baseline_production_commit": "557250ded315fd33450506e51f8a554ba28f797a",
@@ -10215,8 +10215,8 @@
       "sha256": "139aeba958bb3cc4bdc2d026d3ad295b796d656e187a834426615a46bf1a43d8"
     },
     "computer-access/index.html": {
-      "bytes": 84805,
-      "sha256": "41985ec1e363e3e1edf49aa2546c2d988afe54bc8809b9c50bc14117ea154d01"
+      "bytes": 86318,
+      "sha256": "8df3903183d90b18b5e655964a9d19a906e8546e103a358b5c60d5225f7ac095"
     },
     "how/index.html": {
       "bytes": 331214,
@@ -52903,7 +52903,7 @@
       "schema": "wly.oss-remote-verification.v1",
       "verified_at_beijing": "2026-10-04T15:41:55.955508+08:00",
       "plan_sha256": "c787d21a2ba24b449375e55fe4b8ab1d6d22095755650a2c74c5b8732b91fd59",
-      "release_id": "220c6f16766e028754485f4d662a8f41971d1fbc64b5f7e625239f0d74201a00",
+      "release_id": "fd576f13b33a3c6d9edeaf8a9713762edcaf93b4cacfb41383f1f67a25f7cbd4",
       "complete": true,
       "objects": {
         "404/assets/b2-live-596a4d1cf321.css": {
