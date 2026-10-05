@@ -1,7 +1,7 @@
 """Restore the bound original homepage plate and unmount inherited living art.
 
 Only the first picture, its image geometry, home video policy and home-only
-runtime references change. All other current home metadata and release bytes
+runtime references and stale named navigation targets change. All other current home metadata and release bytes
 are retained. The reference is an actual pre-living homepage HTML artifact.
 """
 from __future__ import annotations
@@ -164,6 +164,9 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
             raise ValueError('Current baseline no longer contains the bound original static asset: ' + rel)
     original = (baseline / 'index.html').read_bytes()
     html = original.decode('utf8')
+    nav_spec = importlib.util.spec_from_file_location('static_home_navigation', HERE / 'repair-release-navigation.py')
+    nav = importlib.util.module_from_spec(nav_spec); nav_spec.loader.exec_module(nav)
+    html, navigation_changes = nav.repair_owned_navigation(html, nav.page_inventory(baseline), '/')
     match, old_picture = PAGE_DATA.search(html), PICTURE.search(html)
     if not match or not old_picture:
         raise ValueError('Current homepage first picture or page-data is missing')
@@ -185,7 +188,8 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
     if isinstance(data.get('video'), dict):
         data['video']['mount_allowed'] = False
         data['video']['mount_reason'] = '2f-static-home-first-screen'
-    # Preserve all current links, overlays, descriptions and other screens.
+    # Preserve current overlays, descriptions and other screens; the named
+    # navigation roles above now use their real complete-package destinations.
     for orientation in ('h', 'v'):
         for key in GEOMETRY_KEYS:
             data['screens'][0]['layouts'][orientation][key] = reference_layouts[orientation][key]
@@ -249,7 +253,9 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
         'output': str(output), 'reference': {'path': str(reference), **reference_proof},
         'release_id': identity(files, manifest), 'inherited_living_removed': inherited_living,
         'first_picture_sha256': proof(picture.encode('utf8'))['sha256'], 'static_assets': assets,
-        'original_static_bytes_unchanged': True, 'current_home_links_and_other_screens_preserved': True,
+        'original_static_bytes_unchanged': True, 'current_home_links_and_other_screens_preserved': not navigation_changes,
+        'navigation_changes': navigation_changes,
+        'navigation_source': {'path':str(HERE / 'repair-release-navigation.py'), **proof((HERE / 'repair-release-navigation.py').read_bytes())},
         'removed_active_living_tags': removed_tags,
         'old_home_bundle': {'path': old_app_rel, **proof(old_app)},
         'home_bundle': {'path': app_rel, **proof(static_app)},

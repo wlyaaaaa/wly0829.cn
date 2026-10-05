@@ -346,6 +346,9 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
                 continue
             if dep in old and not dependency.is_file(): continue
             pending.append(dep)
+    # Bind every inherited and rebuilt navigation role after the complete
+    # package exists, rather than retaining an earlier partial-release fallback.
+    navigation_pages = nav_repair.page_inventory(output)
     for rel in nav_repair.restore_pending_links(output, navigation_pages):
         if rel not in accepted_files:
             overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),

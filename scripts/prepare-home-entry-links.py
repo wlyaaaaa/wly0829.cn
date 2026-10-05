@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import html
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -16,8 +17,9 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
         entry=manifest['files'].get(rel)
         path=root/rel
         return bool(entry and path.is_file() and path.stat().st_size==entry['bytes'] and sha(path.read_bytes())==entry['sha256'])
-    collaboration='/how/' if published('/how/') else '/projects/agents/'
-    if not published(collaboration) or not published('/cockpit/'):raise ValueError('Real current fallback and cockpit routes are required')
+    collaboration='/how/'
+    if not published(collaboration) or not published('/cockpit/'):
+        raise ValueError('The complete current package must contain /how/ and /cockpit/; an unrelated project is not the collaboration target')
     targets={'home-01-link-1-0':collaboration,'home-01-link-2-0':'/cockpit/'}
     edits=[];counts=dict.fromkeys(targets,0)
     data=re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>',text,re.S)
@@ -59,12 +61,15 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
     for edit in sorted(edits,key=lambda item:item['start'],reverse=True):
         if text[edit['start']:edit['end']]!=edit['old']:raise ValueError('Entry edit preimage differs')
         text=text[:edit['start']]+edit['new']+text[edit['end']:]
+    spec=importlib.util.spec_from_file_location('home_entry_navigation',Path(__file__).with_name('repair-release-navigation.py'))
+    nav=importlib.util.module_from_spec(spec);spec.loader.exec_module(nav)
+    text,native_changes=nav.repair_owned_navigation(text,nav.page_inventory(root),'/')
     corrected=text.encode('utf8')
     if source.read_bytes()!=original:raise ValueError('Home changed during preparation')
     evidence={'schema':'wly.home-entry-links.v1','status':'pass','source':str(source),'before_sha256':sha(original),'after_sha256':sha(corrected),
         'changes':edits,'logical_entry_counts':counts,'top_navigation_counts':nav_counts,'source_unchanged':True,
-        'temporary_href_mappings':[{'page':'/','original_href':'/how/','temporary_href':collaboration,'basis':'Current .agents overview explains the AI collaboration contract; the intended /how/ route is not published'}] if collaboration!='/how/' else [],
-        'restoration_rule':'Re-run from the current site before publication; an existing /how/index.html automatically restores /how/.'}
+        'native_navigation_changes':native_changes,'temporary_href_mappings':[],
+        'restoration_rule':'Bind visible navigation labels against the complete current package; preserve historical inputs unchanged.'}
     if output_home:
         output_home=Path(output_home);output_home.parent.mkdir(parents=True,exist_ok=True);output_home.write_bytes(corrected)
     if evidence_path:

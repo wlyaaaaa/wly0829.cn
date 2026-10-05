@@ -86,6 +86,57 @@ class NavigationRepair(unittest.TestCase):
         self.assertIn('e.target instanceof Element?e.target:e.target?.parentElement',patched)
         self.assertEqual(nav.patch_viewer_runtime(patched),patched)
 
+    def test_project_runtime_dialog_hash_survives_absolute_link_conversion_and_restores_old_fallback(self):
+        route='/projects/example/'
+        data={'kind':'project','url':route,'screens':[{'links':[
+            {'href':route,'original_href':route+'#ai-brief','text':'复制 AI 续作说明'}]}]}
+        page=self.put('projects/example/index.html','<script id="page-data">'+json.dumps(data)+'</script>')
+        self.put('index.html','首页')
+        pages=nav.page_inventory(self.root)
+        self.assertTrue(nav.target_exists(route+'#ai-brief',pages))
+        self.assertEqual(nav.resolve_navigation(route+'#ai-brief',pages),route+'#ai-brief')
+        candidate='<a href="'+route+'#ai-brief">复制 AI 续作说明</a>'
+        self.assertEqual(hybrid.rewrite_links(candidate,self.root,page,set(pages),[],navigation_pages=pages),candidate)
+        nav.restore_pending_links(self.root,pages)
+        corrected=json.loads(nav.PAGE_DATA.search(page.read_text())[2])
+        self.assertEqual(corrected['screens'][0]['links'][0]['href'],route+'#ai-brief')
+        self.put('ordinary/index.html','<script id="page-data">{"kind":"how"}</script>')
+        self.assertFalse(nav.target_exists('/ordinary/#ai-brief',nav.page_inventory(self.root)))
+
+    def test_existing_navigation_labels_correct_all_three_surfaces_without_touching_source_provenance(self):
+        for label,target in nav.SITE_NAVIGATION.items():
+            self.put(nav.route_file(target),'<title>'+label+'</title>')
+        data={'page':'home','url':'/','screens':[{'links':[
+            {'id':'home-01-link-1-0','href':'/projects/agents/','original_href':'/projects/agents/'},
+            {'id':'home-01-link-2-0','href':'/'}]}],
+              'source_meta':{'original_html':'<a href="/">怎么协作</a>'}}
+        anchor='<a class="nav-link" href="/"><span data-label-text="怎么协作"><img alt="怎么协作"></span></a>'
+        text='<header>'+anchor+'</header><dialog id="menu">'+anchor+'</dialog><footer>'+anchor+'</footer>'
+        text+='<main><a href="/">怎么协作</a></main><script id="page-data">'+json.dumps(data)+'</script>'
+        corrected,changes=nav.repair_owned_navigation(text,nav.page_inventory(self.root),'/')
+        self.assertEqual(corrected.count('href="/how/"'),3)
+        self.assertIn('<main><a href="/">怎么协作</a></main>',corrected)
+        result=json.loads(nav.PAGE_DATA.search(corrected)[2])
+        self.assertEqual(result['source_meta'],data['source_meta'])
+        self.assertEqual(result['screens'][0]['links'][0]['href'],'/how/')
+        self.assertEqual(result['screens'][0]['links'][1]['href'],'/cockpit/')
+        self.assertEqual(nav.repair_owned_navigation(corrected,nav.page_inventory(self.root),'/')[0],corrected)
+
+    def test_rule_neighbors_use_one_order_and_every_forward_link_returns_to_its_source(self):
+        for topic in nav.RULE_TOPICS:
+            route='/rules/'+topic+'/'
+            data={'url':route,'title':topic,'neighbors':{'previous':{'href':'/wrong/','title':'wrong'}}}
+            self.put(nav.route_file(route),'<title>'+topic+'</title><script id="page-data">'+json.dumps(data)+'</script>')
+        pages=nav.page_inventory(self.root)
+        for topic in nav.RULE_TOPICS:
+            route='/rules/'+topic+'/'
+            expected=nav.rule_neighbors(route,pages)
+            corrected,_=nav.repair_owned_navigation((self.root/nav.route_file(route)).read_text(),pages,route)
+            self.assertEqual(json.loads(nav.PAGE_DATA.search(corrected)[2])['neighbors'],expected)
+            if expected.get('next'):
+                self.assertEqual(nav.rule_neighbors(expected['next']['href'],pages)['previous']['href'],route)
+        self.assertIn('claude-adapter',nav.RULE_TOPICS)
+
     def test_release_search_serializer_cannot_reintroduce_source_path_or_unknown_fields(self):
         raw={'title':'例子','href':'/projects/example/','detail':'先读 E:\\Fixture\\steps.md。继续说明。',
              'search':'来源 file:///E:/Fixture/picture.png。','aliases':['\\\\fixture\\files\\input.json'],

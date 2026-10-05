@@ -19,6 +19,7 @@ ALIASES = {
 RULE_TOPICS = {
     'charter': 'agents_root_rules', 'authorization': 'authorization_contract',
     'capabilities-runtime': 'capabilities_runtime_contract',
+    'claude-adapter': 'claude_adapter_contract',
     'codex-adapter': 'codex_adapter_contract', 'context-sources': 'context_sources_contract',
     'engineering-delivery': 'engineering_delivery_contract',
     'execution-coordination': 'execution_coordination_contract',
@@ -30,6 +31,10 @@ HOST_CAPABILITIES = {'/#system-node-documents-skill': '/skills/#skill-documents'
                      '/#system-node-pdf-skill': '/skills/#skill-pdf',
                      '/#grafana-status': '/cockpit/#grafana'}
 PUBLIC_SEARCH_FIELDS = ('type', 'group', 'scopes', 'projectSlug', 'title', 'detail', 'href', 'aliases', 'search')
+SITE_NAVIGATION = {'首页':'/', '怎么协作':'/how/', '驾驶舱':'/cockpit/',
+                   '项目':'/projects/', '技能':'/skills/', '规则':'/rules/',
+                   '连接电脑':'/mcp/', '授权与状态':'/computer-access/',
+                   '这个网页是怎么做的':'/how-this-site/'}
 _public_spec = importlib.util.spec_from_file_location('public_page_contract', Path(__file__).with_name('public_page_contract.py'))
 public_contract = importlib.util.module_from_spec(_public_spec)
 _public_spec.loader.exec_module(public_contract)
@@ -73,6 +78,12 @@ class PageFacts(HTMLParser):
         self.stack = []
         self.rule_workbench_metadata=rule_contract.parse_workbench_metadata(text)
         self.feed(text)
+        match = PAGE_DATA.search(text)
+        self.page_data = json.loads(match[2]) if match else {}
+        # The existing app creates this dialog and handles its hash on project
+        # pages. Its runtime target is as real as a statically rendered anchor.
+        if self.page_data.get('kind') in {'project', 'frozen'}:
+            self.ids.add('ai-brief')
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -215,6 +226,87 @@ def replace_data(text, data):
     return text[:match.start(2)] + value + text[match.end(2):]
 
 
+def rule_neighbors(route, pages):
+    """Use one topic order for both directions, with actual page-owned titles."""
+    ordered = ['/rules/' + topic + '/' for topic in RULE_TOPICS
+               if route_file('/rules/' + topic + '/') in pages]
+    if route not in ordered: return None
+    index = ordered.index(route); result = {}
+    for side, offset in (('previous', -1), ('next', 1)):
+        neighbor = index + offset
+        if 0 <= neighbor < len(ordered):
+            href = ordered[neighbor]; facts = pages[route_file(href)]
+            result[side] = {'href': href, 'title': facts.page_data.get('title') or facts.title}
+    return result
+
+
+def repair_owned_navigation(text, pages, owner_route=None):
+    """Bind existing navigation roles; keep artwork, copy and unrelated links exact."""
+    changes = []
+    match = PAGE_DATA.search(text)
+    if match:
+        data = json.loads(match[2]); route = owner_route or data.get('url')
+        if data.get('page') == 'home':
+            targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/'}
+            for node in visit(data):
+                target = targets.get(node.get('id'))
+                if target and 'href' in node and target_exists(target, pages):
+                    if node['href'] != target:
+                        changes.append({'role':node['id'], 'before':node['href'], 'after':target})
+                        node['href'] = target
+                    if 'original_href' in node and node['original_href'] != target:
+                        changes.append({'role':node['id']+':original', 'before':node['original_href'], 'after':target})
+                        node['original_href'] = target
+        neighbors = rule_neighbors(route, pages) if route else None
+        if neighbors is not None and data.get('neighbors') != neighbors:
+            changes.append({'role':'rule-neighbors', 'before':data.get('neighbors'), 'after':neighbors})
+            data['neighbors'] = neighbors
+        if changes: text = replace_data(text, data)
+    else:
+        route = owner_route
+    offsets = [0] + [m.end() for m in re.finditer('\n', text)]
+    class NativeNavigation(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True); self.stack = []; self.anchor = None; self.edits = []
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            role = ('header' if tag == 'header' else 'footer' if tag == 'footer' else
+                    'menu' if tag == 'dialog' and attrs.get('id') == 'menu' else
+                    self.stack[-1][1] if self.stack else None)
+            if tag == 'a' and role:
+                line, column = self.getpos()
+                self.anchor = {'start':offsets[line-1]+column, 'tag':self.get_starttag_text(),
+                               'role':role, 'label':attrs.get('aria-label', ''), 'text':[]}
+            if self.anchor:
+                label = attrs.get('data-label-text') or (attrs.get('alt') if tag == 'img' else None)
+                if label: self.anchor['label'] = label
+            if tag not in rule_contract.HTML_VOID_TAGS: self.stack.append((tag, role))
+        def handle_data(self, value):
+            if self.anchor: self.anchor['text'].append(value)
+        def handle_endtag(self, tag):
+            if tag == 'a' and self.anchor:
+                anchor = self.anchor; self.anchor = None
+                label = anchor['label'] or ''.join(anchor['text']).strip()
+                target = SITE_NAVIGATION.get(label)
+                href = re.search(r'(?<![-\w])href=["\']([^"\']*)["\']', anchor['tag'])
+                if target and href and target_exists(target, pages):
+                    opening = anchor['tag']; before = html.unescape(href[1])
+                    opening = opening[:href.start(1)] + html.escape(target, quote=True) + opening[href.end(1):]
+                    current = re.search(r'\s+aria-current=["\']([^"\']*)["\']', opening)
+                    if current and (route != target or current[1] != 'page'):
+                        opening = opening[:current.start()] + opening[current.end():]
+                    if route == target and not (current and current[1] == 'page'):
+                        opening = opening[:-1] + ' aria-current="page">'
+                    if opening != anchor['tag']:
+                        self.edits.append((anchor['start'], anchor['start']+len(anchor['tag']), opening))
+                        changes.append({'role':anchor['role'], 'label':label, 'before':before, 'after':target})
+            for index in range(len(self.stack)-1, -1, -1):
+                if self.stack[index][0] == tag: del self.stack[index:]; break
+    parser = NativeNavigation(); parser.feed(text)
+    for start, end, opening in reversed(parser.edits): text = text[:start] + opening + text[end:]
+    return text, changes
+
+
 def repair_html(root, pages, manifest):
     changed, resolved, pending = [], [], []
     mappings = manifest.get('temporary_href_mappings', [])
@@ -320,7 +412,8 @@ def restore_pending_links(root, pages):
     for rel in sorted(pages):
         path = root / rel
         text, restored = restore_pending_html(path.read_text('utf-8-sig'), pages)
-        if restored:
+        text, owned = repair_owned_navigation(text, pages, file_route(rel))
+        if restored or owned:
             path.write_text(text, encoding='utf8'); changed.append(rel)
     return changed
 
