@@ -157,7 +157,20 @@ def excerpts(raw, page):
                 for screen, first, last in [(2, 1, 10), (3, 11, 17), (4, 18, 23), (5, 24, 30)]]
     result = []
     relative = document_for_page(page)
-    for screen, start, end in RANGES[page]:
+    ranges = RANGES[page]
+    if page == 'rule-execution-coordination':
+        # E216 renamed this paragraph's opening; retain E215's exact boundary
+        # for historical replay. Both openings in one source are ambiguous.
+        previous = ranges[0][2]
+        current = 'Claude 主持、和 GPT 协作时'
+        present = [marker for marker in (previous, current)
+                   if re.search(r'^' + re.escape(marker), raw, re.M)]
+        if len(present) != 1:
+            raise ValueError('Source excerpt boundary is not unique: ' + previous)
+        ranges = [(screen, present[0] if start == previous else start,
+                   present[0] if end == previous else end)
+                  for screen, start, end in ranges]
+    for screen, start, end in ranges:
         a = marker_offset(raw, start) if start else 0
         b = marker_offset(raw, end) if end else len(raw)
         if b <= a:

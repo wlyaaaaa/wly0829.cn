@@ -18,6 +18,73 @@ spec=importlib.util.spec_from_file_location('standalone_rule_projection',ROOT/'s
 projection=importlib.util.module_from_spec(spec);spec.loader.exec_module(projection)
 spec=importlib.util.spec_from_file_location('current_rule_navigation',ROOT/'scripts/repair-release-navigation.py')
 nav=importlib.util.module_from_spec(spec);spec.loader.exec_module(nav)
+spec=importlib.util.spec_from_file_location('fixed_rule_pin',ROOT/'scripts/prepare-rules-pin.py')
+pin_generator=importlib.util.module_from_spec(spec);spec.loader.exec_module(pin_generator)
+
+
+class SourceExcerptBoundaries(unittest.TestCase):
+    previous='本人让 Claude 与 GPT 协作时'
+    current='Claude 主持、和 GPT 协作时'
+    page='rule-execution-coordination'
+
+    def source(self, marker):
+        first='# 分工与并行施工\n\n## 派子代理的原则\n\n主持的先定目标，再把完整材料交给施工者。'
+        second=marker+'，按约法和模型清单分工。\n\n## 做错了怎么办\n\n保留已经有效的结果，修复真实失败。'
+        return first,second,first+'\n\n'+second+'\n'
+
+    def test_real_old_and_current_openings_preserve_both_complete_ranges(self):
+        for marker in (self.previous,self.current):
+            with self.subTest(marker=marker):
+                first,second,raw=self.source(marker)
+                rows=contract.excerpts(raw,self.page)
+                self.assertEqual([(identity,text) for identity,text,_ in rows],
+                    [(self.page+'/'+self.page+'-06',first),(self.page+'/'+self.page+'-07',second)])
+                self.assertEqual(rows[0][2],{'from':None,'to':marker,'approved_omissions':[]})
+                self.assertEqual(rows[1][2],{'from':marker,'to':None,'approved_omissions':[]})
+                self.assertEqual(rows,contract.excerpts(raw.replace('\n','\r\n'),self.page))
+
+    def test_missing_repeated_or_mixed_openings_remain_rejected(self):
+        for marker in (self.previous,self.current):
+            _,second,raw=self.source(marker)
+            for invalid in (raw.replace(marker,'未知协作段首'),raw+'\n'+second,
+                            raw+'\n'+(self.current if marker==self.previous else self.previous)+'，另一段。\n'):
+                with self.subTest(marker=marker,invalid=invalid):
+                    with self.assertRaisesRegex(ValueError,'boundary is not unique'):
+                        contract.excerpts(invalid,self.page)
+
+    def test_inline_quotations_are_not_a_second_source_boundary(self):
+        for marker in (self.previous,self.current):
+            first,second,raw=self.source(marker)
+            quotation='旧新段首引用：'+self.previous+'；'+self.current+'。'
+            rows=contract.excerpts(raw.replace(first,first+'\n\n'+quotation),self.page)
+            self.assertEqual([text for _,text,_ in rows],[first+'\n\n'+quotation,second])
+
+    def test_other_topic_reversed_boundaries_remain_rejected(self):
+        with self.assertRaisesRegex(ValueError,'reversed boundaries'):
+            contract.excerpts('## 受信任的 AI\n\n## 子代理和项目规则不扩大授权\n','rule-authorization')
+
+
+class PinSourceIntegrity(unittest.TestCase):
+    def test_record_identity_and_same_length_source_tampering_remain_rejected(self):
+        with tempfile.TemporaryDirectory(prefix='rule-pin-integrity-') as temporary:
+            root=Path(temporary);source=b'fixed source bytes\n';(root/'AGENTS.md').write_bytes(source)
+            record={'release_id':'E-fixture','remote_main_contains_commit':True,
+                    'files':[{'relative_path':'AGENTS.md','bytes':len(source),'sha256':contract.sha_bytes(source)}]}
+            record_path=root/'release.json'
+            def write_record(value):
+                payload=json.dumps(value).encode('utf8');record_path.write_bytes(payload)
+                return contract.sha_bytes(payload)
+            digest=write_record(record)
+            with self.assertRaisesRegex(ValueError,'Inspect evidence'):
+                pin_generator.generate(root,'wrong-record-sha','E-fixture')
+            with self.assertRaisesRegex(ValueError,'formally released'):
+                pin_generator.generate(root,digest,'E-other')
+            not_released=copy.deepcopy(record);not_released['remote_main_contains_commit']=False
+            with self.assertRaisesRegex(ValueError,'formally released'):
+                pin_generator.generate(root,write_record(not_released),'E-fixture')
+            digest=write_record(record);(root/'AGENTS.md').write_bytes(source.replace(b'fixed',b'alter'))
+            with self.assertRaisesRegex(ValueError,'release inventory'):
+                pin_generator.generate(root,digest,'E-fixture')
 
 
 class FixedRuleOriginal(unittest.TestCase):
