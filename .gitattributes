@@ -3,3 +3,4 @@ public/media/localocr/sample-table-actual.md -text whitespace=-blank-at-eof
 public/media/localocr/sample-table-actual.json -text
 public/media/vault-tool/synthetic-roundtrip.json -text
 site-release/** -text
+config/assembled-rules-pin.json -text
