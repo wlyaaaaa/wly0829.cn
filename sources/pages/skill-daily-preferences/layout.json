@@ -1,0 +1,346 @@
+[
+ {
+  "screen": "skill-daily-preferences-01",
+  "orientation": "h",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-01-h.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "size": "large",
+    "row": "intro",
+    "width": "60%",
+    "text_ref": "记得我是谁"
+   },
+   {
+    "type": "prose",
+    "row": "intro",
+    "text_ref": "问题的答案取决于我是谁时"
+   },
+   {
+    "type": "illustration",
+    "row": "intro",
+    "width": "40%",
+    "illustration": "outside",
+    "align": "center",
+    "target_width": 358
+   },
+   {
+    "type": "section_heading",
+    "align": "left",
+    "size": "medium",
+    "text_ref": "这样说就行"
+   },
+   {
+    "type": "dialogue",
+    "columns": 4,
+    "columns_v": 1,
+    "row_counts": [
+     4,
+     3
+    ],
+    "icons": "auto",
+    "illustration": "left_inside",
+    "connector": "none",
+    "text_ref": "“结合我的情况",
+    "split_items": true,
+    "avatars": [
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png"
+    ],
+    "avatar_position": "outside-left"
+   }
+  ],
+  "notes": "上部左文右图；下部七个头像对话气泡，上四下三，第二排均匀铺开。定稿句子比原图更新，逐字用定稿。；QA04 修复：按审查第4条首屏左字右图比例改60:40，插画高上限320px，消除首屏右图撑高。；QA04 二次校正：按素材自然比例以target_width限制图片，避免仅限高时被row的100%宽拉扁。"
+ },
+ {
+  "screen": "skill-daily-preferences-01",
+  "orientation": "v",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-01-v.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "记得我是谁"
+   },
+   {
+    "type": "prose",
+    "text_ref": "问题的答案取决于我是谁时"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "align": "center"
+   },
+   {
+    "type": "section_heading",
+    "align": "left",
+    "size": "medium",
+    "text_ref": "这样说就行"
+   },
+   {
+    "type": "dialogue",
+    "columns": 1,
+    "columns_v": 1,
+    "icons": "auto",
+    "illustration": "left_inside",
+    "connector": "none",
+    "text_ref": "“结合我的情况",
+    "split_items": true,
+    "avatars": [
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/本人-通用.png"
+    ],
+    "avatar_position": "outside-left"
+   }
+  ],
+  "notes": "原竖图顺序为标题、说明、整宽插画、小节标题、七气泡单列；不把插画提前到说明前。"
+ },
+ {
+  "screen": "skill-daily-preferences-02",
+  "orientation": "h",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-02-h.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "size": "large",
+    "row": "heading",
+    "width": "84%",
+    "text_ref": "一个完整的例子"
+   },
+   {
+    "type": "tag",
+    "row": "heading",
+    "width": "16%",
+    "text_ref": "示意"
+   },
+   {
+    "type": "dialogue",
+    "columns": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "row": "story",
+    "width": "48%",
+    "text_ref": "我：",
+    "split_paras": true,
+    "sides": [
+     "left",
+     "right"
+    ],
+    "avatars": [
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/AI助手-通用.png"
+    ]
+   },
+   {
+    "type": "section_heading",
+    "align": "left",
+    "size": "medium",
+    "row": "story",
+    "width": "52%",
+    "text_ref": "它背后做了什么"
+   },
+   {
+    "type": "flow",
+    "columns": 1,
+    "columns_v": 1,
+    "connector": "arrow",
+    "illustration": "none",
+    "row": "story",
+    "text_ref": "分清这句话是哪一种",
+    "icons": "none",
+    "direction": "vertical"
+   }
+  ],
+  "notes": "标题旁有“示意”标签，不是整宽独立居中标题。下方两大卡：左侧我/AI 对话上下排；右侧五步纵向箭头，右边索引盒插画，左卡底部另有餐盒手机插画。需要组件支持两幅插画的所属位置。；QA04 修复：按审查第1至3条撤下回落到首屏的重复独立插画，不改任何定稿文字。；QA04 修复：把未消费arrow的核心numbered_steps换为现有flow竖向箭头接口，保持原步骤和全文。"
+ },
+ {
+  "screen": "skill-daily-preferences-02",
+  "orientation": "v",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-02-v.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "size": "large",
+    "row": "heading",
+    "row_v": true,
+    "width": "84%",
+    "text_ref": "一个完整的例子"
+   },
+   {
+    "type": "tag",
+    "row": "heading",
+    "row_v": true,
+    "width": "16%",
+    "text_ref": "示意"
+   },
+   {
+    "type": "dialogue",
+    "columns": 1,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "text_ref": "我：",
+    "split_paras": true,
+    "sides": [
+     "left",
+     "right"
+    ],
+    "avatars": [
+     "_library/avatars/本人-通用.png",
+     "_library/avatars/AI助手-通用.png"
+    ]
+   },
+   {
+    "type": "section_heading",
+    "align": "left",
+    "size": "medium",
+    "text_ref": "它背后做了什么"
+   },
+   {
+    "type": "flow",
+    "columns": 1,
+    "columns_v": 1,
+    "connector": "arrow",
+    "illustration": "none",
+    "text_ref": "分清这句话是哪一种",
+    "icons": "none",
+    "direction": "vertical"
+   }
+  ],
+  "notes": "原图整宽对话大卡在上；五步独立纵向编号卡在下；餐盒、手机、索引盒合成插画在最后。；QA04 修复：按审查第1至3条撤下回落到首屏的重复独立插画，不改任何定稿文字。；QA04 修复：把未消费arrow的核心numbered_steps换为现有flow竖向箭头接口，保持原步骤和全文。"
+ },
+ {
+  "screen": "skill-daily-preferences-03",
+  "orientation": "h",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-03-h.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "size": "large",
+    "row": "banner",
+    "width": "62%",
+    "text_ref": "能做的事"
+   },
+   {
+    "type": "prose",
+    "row": "banner",
+    "text_ref": "它是个人理解库的入口",
+    "size": "large",
+    "link_style": "button"
+   },
+   {
+    "type": "illustration",
+    "row": "banner",
+    "width": "38%",
+    "illustration": "outside",
+    "size": "small",
+    "target_height": 260
+   }
+  ],
+  "notes": "原图左大标题与单行链接说明、右漏斗插画，画面中段对齐、上下留白；本屏不是数字卡或普通卡网格。链接依定稿，不新增独立按钮文字。；QA04 修复：按审查第1条允许保留的小图方案收小03屏插画。"
+ },
+ {
+  "screen": "skill-daily-preferences-03",
+  "orientation": "v",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-03-v.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "能做的事"
+   },
+   {
+    "type": "prose",
+    "text_ref": "它是个人理解库的入口",
+    "size": "large",
+    "link_style": "button"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "align": "center",
+    "size": "small",
+    "target_height": 340
+   }
+  ],
+  "notes": "整宽标题居中、说明在下、漏斗插画再在下，保留横幅的单块节奏。；QA04 修复：按审查第1条允许保留的小图方案收小03屏插画。"
+ },
+ {
+  "screen": "skill-daily-preferences-04",
+  "orientation": "h",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-daily-preferences-04-h.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "边界"
+   },
+   {
+    "type": "points_card",
+    "columns": 1,
+    "icons": "auto",
+    "illustration": "left_inside",
+    "row": "boundaries",
+    "width": "39%",
+    "text_ref": "它管的"
+   },
+   {
+    "type": "points_card",
+    "columns": 1,
+    "icons": "auto",
+    "illustration": "left_inside",
+    "row": "boundaries",
+    "width": "61%",
+    "text_ref": "它不管的"
+   }
+  ],
+  "notes": "source_image 使用 pages-approved 的通过替换图。两大卡左39%右61%，左三条右九条；右下书架盒子插画在卡片外。整屏宽章节标题依统一标准居中；原图位于左上，记录这一标准要求的对齐调整。；QA04 修复：按审查第1至3条撤下回落到首屏的重复独立插画，不改任何定稿文字。"
+ },
+ {
+  "screen": "skill-daily-preferences-04",
+  "orientation": "v",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\img\\skill-daily-preferences-04-v.png",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "边界"
+   },
+   {
+    "type": "points_card",
+    "columns": 1,
+    "columns_v": 1,
+    "icons": "auto",
+    "illustration": "left_inside",
+    "text_ref": "它管的"
+   },
+   {
+    "type": "points_card",
+    "columns": 1,
+    "columns_v": 1,
+    "icons": "auto",
+    "illustration": "left_inside",
+    "text_ref": "它不管的"
+   }
+  ],
+  "notes": "两整宽大卡顺排；书架插画在第二卡下方卡外；每条的小图标留在所属条目左侧。；QA04 修复：按审查第1至3条撤下回落到首屏的重复独立插画，不改任何定稿文字。"
+ }
+]

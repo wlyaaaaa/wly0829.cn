@@ -1,0 +1,1193 @@
+[
+  {
+    "screen": "work-delivery-copilot-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-work-delivery-copilot-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-work-delivery-copilot-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "工作支持与交付",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "50%"
+      },
+      {
+        "type": "tag",
+        "text_ref": "偶尔用",
+        "row": "hero",
+        "shape": "rounded_strip"
+      },
+      {
+        "type": "prose",
+        "text_ref": "工作上的事直接交给 AI 办",
+        "row": "hero",
+        "align": "left"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "50%",
+        "index": 0
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "2–5 份|6 个文件|0.48 秒|2 / 9 条",
+        "columns": 4,
+        "illustration": "top_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "0.48 秒和 2 / 9 条是",
+        "align": "center",
+        "variant": "source_note",
+        "size": "small"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置",
+        "align": "center",
+        "columns": 2
+      }
+    ],
+    "notes": "以 pages-approved 中批准新图为构图源：标题及说明占左半，右侧桌面插画；状态标签横长，四张数字卡一排；底部说明居中，两按钮同排。标题依原图浓度。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "work-delivery-copilot-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "工作支持与交付",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "偶尔用",
+        "shape": "rounded_strip"
+      },
+      {
+        "type": "prose",
+        "text_ref": "工作上的事直接交给 AI 办"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "2–5 份|6 个文件|0.48 秒|2 / 9 条",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "0.48 秒和 2 / 9 条是",
+        "variant": "source_note"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "center"
+      }
+    ],
+    "notes": "已逐张看 v→v2：实际 v2 是四张无图标数字卡各占整宽，按原图记一列，不套 portrait 文案的两列；新定稿补的复制按钮与原按钮同式，逐字保留。整屏标题按统一标准居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "through": "主插画"
+      },
+      {
+        "part": "v2",
+        "from": "2–5 份",
+        "through": "按钮"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "两种用法",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "日常：直接说",
+        "row": "usage",
+        "width": "50%",
+        "columns": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要长期维护的交付：建交付包",
+        "row": "usage",
+        "width": "50%",
+        "columns": 1,
+        "illustration": "top_inside",
+        "illustration_index": 2,
+        "numbering": "circles",
+        "illustration_source": "illustrations"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我本人的背景从哪来",
+        "columns": 1,
+        "illustration": "left_inside",
+        "illustration_index": 3,
+        "illustration_source": "illustrations"
+      },
+      {
+        "type": "prose",
+        "text_ref": "怎么跟 AI 说、一个完整例子",
+        "align": "center"
+      }
+    ],
+    "notes": "两张顶图大卡44/44，中间12%无字分岔路口在卡外；右卡编号条件保留同一卡内。底部整宽左图右文背景卡和居中链接。原图无丝带，只有岔路插画连接。整屏章节标题按标准居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "work-delivery-copilot-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "两种用法",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "日常：直接说",
+        "columns_v": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要长期维护的交付：建交付包",
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "illustration_index": 2,
+        "illustration_source": "illustrations"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我本人的背景从哪来",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "illustration_index": 3,
+        "illustration_source": "illustrations"
+      },
+      {
+        "type": "prose",
+        "text_ref": "怎么跟 AI 说、一个完整例子",
+        "align": "center"
+      }
+    ],
+    "notes": "一张长竖图：日常卡→卡外岔路横插画→建包卡→左图右文背景卡→底链。两条建包条件在右/下大卡内，不能拆成外部步骤。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "work-delivery-copilot-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "建一个交付包，走一遍",
+        "align": "left",
+        "size": "large",
+        "row": "walk",
+        "width": "62%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "例子是仓库自带的合成样例",
+        "row": "walk"
+      },
+      {
+        "type": "flow",
+        "text_ref": "我",
+        "row": "walk",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "highlight_steps": [
+          1,
+          4,
+          7
+        ],
+        "role_icons": {
+          "我": "_library/icons/指向手.png",
+          "AI": "_library/icons/气泡.png",
+          "程序": "_library/icons/齿轮.png"
+        },
+        "ribbon": "curved_vertical",
+        "direction": "vertical",
+        "highlight": [
+          1,
+          4,
+          7
+        ],
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "screenshot",
+        "row": "walk",
+        "width": "38%",
+        "aspect_ratio": "1225/1585",
+        "frame": "blank_white",
+        "screenshot_index": 0,
+        "ratio": "1225:1585",
+        "indices": [
+          0
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "合成样例生成的 Word 需求文档第一页",
+        "row": "walk",
+        "size": "small"
+      }
+    ],
+    "notes": "七步沿左栏弯曲绿丝带从上到下；1/4/7黄底，人/AI/程序徽章在每卡左。右栏上方独立纯白竖截图槽，图注在槽下且不入步骤卡。标题实际只占左栏，依原图左对齐。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；本轮用截图族已支持的ratio=1225:1585、indices=[0]绑定真实空槽，图注留在框下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "work-delivery-copilot-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "建一个交付包，走一遍",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "例子是仓库自带的合成样例"
+      },
+      {
+        "type": "flow",
+        "text_ref": "我",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "highlight_steps": [
+          1,
+          4,
+          7
+        ],
+        "role_icons": {
+          "我": "_library/icons/指向手.png",
+          "AI": "_library/icons/气泡.png",
+          "程序": "_library/icons/齿轮.png"
+        },
+        "direction": "vertical",
+        "highlight": [
+          1,
+          4
+        ],
+        "page_break_after": true,
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+        ]
+      },
+      {
+        "type": "flow",
+        "text_ref": "5程序过一道门：目标、范围、需求、异常、验收五块都有已确",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "highlight_steps": [
+          1,
+          4,
+          7
+        ],
+        "role_icons": {
+          "我": "_library/icons/指向手.png",
+          "AI": "_library/icons/气泡.png",
+          "程序": "_library/icons/齿轮.png"
+        },
+        "direction": "vertical",
+        "highlight": [
+          3
+        ],
+        "page_break_after": false,
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "screenshot",
+        "aspect_ratio": "1225/1585",
+        "frame": "blank_white",
+        "screenshot_index": 0,
+        "after_step": 7,
+        "ratio": "1225:1585",
+        "indices": [
+          0
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "合成样例生成的 Word 需求文档第一页",
+        "size": "small",
+        "outside_card": true
+      }
+    ],
+    "notes": "已看 v/v2 合屏：v有介绍、三纸转需求的插画、步骤1–4；v2严格步骤5→6→7→卡结束→纯白截图→图注。第7步黄卡不包截图和图注；不加无用途假空框。插画上文档名仅可来自定稿，重画/程序覆盖不可产生外字。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；本轮用截图族已支持的ratio=1225:1585、indices=[0]绑定真实空槽，图注留在框下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；实际steps在原第5条前切成两个flow块，首块后显式换张；第二块原5–7后才是独立截图和图注，当前引擎已能消费。；主工程师接管规格（12:02）：按定稿 portrait“v2 不加插画、不补本张没有的插画”撤掉第 2 块额外插画（素材第二轮交接 handoff 第 2 项）。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "steps": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "part": "v2",
+        "steps": [
+          5,
+          6,
+          7
+        ],
+        "screenshot_after": 7,
+        "caption_after": "screenshot"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "资料换了版",
+        "align": "left",
+        "size": "large",
+        "row": "revision",
+        "width": "54%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "另一套合成样例",
+        "row": "revision"
+      },
+      {
+        "type": "table",
+        "text_ref": "事实",
+        "row": "revision",
+        "columns": 2,
+        "column_widths": [
+          "34%",
+          "66%"
+        ],
+        "row_markers": [
+          "yellow",
+          "yellow",
+          "green",
+          "folder"
+        ],
+        "portrait_layout": "table"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我只看这两条",
+        "row": "revision"
+      },
+      {
+        "type": "illustration",
+        "row": "revision",
+        "width": "46%",
+        "index": 0
+      },
+      {
+        "type": "content_card",
+        "text_ref": "什么算“还有效”|现在做不到的",
+        "row": "revision",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "左54%为标题/说明/两列表格四行/收尾，右46%为卡外纸张插画和两张左图右文小卡。表格前两行黄点、第三行绿点、第四行文件夹；状态只给点。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "work-delivery-copilot-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "资料换了版",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "另一套合成样例"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "table",
+        "text_ref": "事实",
+        "columns": 2,
+        "column_widths": [
+          "42%",
+          "58%"
+        ],
+        "portrait_layout": "table",
+        "row_cards": true,
+        "row_markers": [
+          "yellow",
+          "yellow",
+          "green",
+          "folder"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "我只看这两条"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "什么算“还有效”|现在做不到的",
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "实际 v保留事实/结果左右两栏，四行各有圆角框；不是把每个结果移动到事实名下。v2先收尾句，再两张纯文字整宽卡；按原图省卡内图标。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "through": "四行表格"
+      },
+      {
+        "part": "v2",
+        "from": "我只看这两条",
+        "through": "现在做不到的"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出了事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "没有自动提醒。|只出了草稿。|数据库在哪。|资料是 Word 或 PDF。|出文件超过 15 秒。|数据库丢了。",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "现在能不能用",
+        "columns": 1,
+        "illustration": "top_inside",
+        "illustration_index": 0,
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      }
+    ],
+    "notes": "左六张卡2×3顺序逐行，左图右文；右栏单张验收卡从顶部贯穿，顶部大检查表/电脑插画在卡内。章标题只占左栏，左对齐。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "work-delivery-copilot-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出了事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "没有自动提醒。|只出了草稿。|数据库在哪。|资料是 Word 或 PDF。|出文件超过 15 秒。|数据库丢了。",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "现在能不能用",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      }
+    ],
+    "notes": "v前四张小卡，v2后两张及现在卡；均整宽左图右文，现在卡没有顶部大插画。正文和路径保全，不缩字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "cards": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "part": "v2",
+        "cards": [
+          5,
+          6,
+          "现在能不能用"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一件事的资料、事实和文件"
+      },
+      {
+        "type": "flow",
+        "text_ref": "交付包|来源快照|证据片段|事实|决定记录|构建|六个文件",
+        "row": "architecture",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "direction": "vertical",
+        "database_bracket": true,
+        "highlight": [],
+        "width": "60%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "用什么",
+        "align": "left",
+        "row": "architecture",
+        "width": "40%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "模型",
+        "row": "architecture",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "左49%七节点竖链和向下箭头；9%数据库圆柱置链右侧，多条绿箭头汇入；右42%顶部卡外工具插画，用什么毛笔组名，下方六行带图标的小卡。不新增原图 SQLite/SHA-256 图内字，定稿有的用程序覆盖。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "work-delivery-copilot-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一件事的资料、事实和文件"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "role": "数据库圆柱",
+        "size": "small"
+      },
+      {
+        "type": "flow",
+        "text_ref": "交付包|来源快照|证据片段|事实|决定记录|构建|六个文件",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "direction": "vertical",
+        "database_bracket": true,
+        "highlight": []
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "用什么",
+        "size": "large",
+        "align": "left"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "模型",
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "list_layout": "six_row_cards"
+      }
+    ],
+    "notes": "v标题/介绍→小数据库圆柱和横括号→七节点左图右文竖链，卡间下箭头；v2用什么标题和六张纯文字条卡，保留圆点，省右栏工具大图。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "through": "六个文件"
+      },
+      {
+        "part": "v2",
+        "from": "用什么"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "left",
+        "size": "large",
+        "row": "principles",
+        "width": "69%"
+      },
+      {
+        "type": "flow",
+        "text_ref": "只读点名的文件。|位置由程序算，不由人写。|说法打架，不替我定。|金额日期存精确值。|一版一个目录。|小而少。",
+        "row": "principles",
+        "columns": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "direction": "horizontal",
+        "highlight": []
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3,700 行|44 个|14 次",
+        "row": "principles",
+        "width": "31%",
+        "columns": 1,
+        "illustration": "right_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "左69%六条原则2×3，左图右文、无连接；右31%三数字卡竖排，图标在大数字右上/右侧，数字在左。章标题仅左栏左对齐。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "work-delivery-copilot-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "只读点名的文件。|位置由程序算，不由人写。|说法打架，不替我定。|金额日期存精确值。|一版一个目录。|小而少。",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "part_after_steps": [
+          3
+        ],
+        "direction": "vertical",
+        "highlight": []
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3,700 行|44 个|14 次",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "v前三条，v2后三条和三个数字卡；实际数字卡也一行一张、左图右数字和说明，不使用描述里的三卡并排。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "steps": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "part": "v2",
+        "steps": [
+          4,
+          5,
+          6
+        ],
+        "stats": [
+          1,
+          2,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几处设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面这些都只在自动测试"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "两个日期对调，它不会接错。|自己写“已通过”不算数。|没告诉它有这个项目，AI 自己找上门。",
+        "id": "designs",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "illustration_positions": [
+          "none",
+          "none",
+          "none"
+        ],
+        "source_prose": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "还有几处小设计",
+        "size": "medium",
+        "align": "left",
+        "frame": "small-designs"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "请求写错，连库都不建",
+        "id": "small-designs",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+        ],
+        "frame": "small-designs"
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "ERP",
+        "attach_to": "designs",
+        "layout": "illustration_labels",
+        "labels": [
+          "ERP",
+          "CRM",
+          "2026-09-22",
+          "2026-09-23",
+          "ready"
+        ],
+        "echo_repeats": true
+      }
+    ],
+    "notes": "三个顶图大卡横排；底部小设计在同一整宽框内三列，左图右文。最后五个定稿标签只覆盖卡1表格/卡2印章，不能在页面末尾另列，也不能裁带字图直接复用。整屏大标题按统一标准居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；main-closer：尾部五个原para通过prepare_mock_attachments移入designs前两卡的原题后图样，原标签不复制；原label_bindings由该精确节点合同落实。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。"
+  },
+  {
+    "screen": "work-delivery-copilot-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几处设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面这些都只在自动测试"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "两个日期对调，它不会接错。|自己写“已通过”不算数。|没告诉它有这个项目，AI 自己找上门。",
+        "id": "designs",
+        "columns_v": 1,
+        "illustration": "none",
+        "illustration_positions": [
+          "none",
+          "none",
+          "none"
+        ],
+        "icons": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "还有几处小设计",
+        "size": "large",
+        "align": "left"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "请求写错，连库都不建",
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "ERP",
+        "attach_to": "designs",
+        "layout": "illustration_labels",
+        "echo_repeats": true
+      }
+    ],
+    "notes": "v前两卡上图下字；v2第三大卡纯文字无机器人图，下面小设计标题和三张纯文字条卡。最后五标签仍只在前两张插画位程序覆盖。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；main-closer：尾部五个原para通过prepare_mock_attachments移入designs前两卡的原题后图样，原标签不复制；原label_bindings由该精确节点合同落实。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "cards": [
+          1,
+          2
+        ]
+      },
+      {
+        "part": "v2",
+        "cards": [
+          3
+        ],
+        "from_next": "还有几处小设计"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（8 项）",
+        "align": "left",
+        "size": "large",
+        "row": "feature-head",
+        "width": "32%"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用",
+        "row": "feature-head",
+        "width": "68%",
+        "columns": 6
+      },
+      {
+        "type": "prose",
+        "text_ref": "怎么判的",
+        "row": "feature-head"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "日常",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "日常工作支持",
+        "columns": 1,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "建包和核事实",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "明确建包|来源快照|事实审阅",
+        "columns": 3,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出文件",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "同版文件|文件验真",
+        "columns": 2,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "资料换版",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "变更影响|差异续版",
+        "columns": 2,
+        "illustration": "left_inside",
+        "status": "待验收"
+      }
+    ],
+    "notes": "标题左、图例右同排，判定说明在右下；功能按1/3/2/2四组，每排三格；第一组占一格另两格补日常图，末两组各右一格补图，八卡黄点无额外状态文字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "work-delivery-copilot-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（8 项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用",
+        "columns": 3,
+        "columns_v": 3,
+        "portrait_columns": 3
+      },
+      {
+        "type": "notice",
+        "text_ref": "怎么判的",
+        "tone": "green"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "日常",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "日常工作支持",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "建包和核事实",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "明确建包|来源快照|事实审阅",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "出文件",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "同版文件|文件验真",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "status": "待验收"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "资料换版",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "变更影响|差异续版",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "status": "待验收"
+      }
+    ],
+    "notes": "v标题→左2×3图例右检查表插画→判定卡→日常和建包组；v2出文件/资料换版；每卡整宽左图右文右上黄点。与portrait描述不同，实际图例旁有检查表，保留；各组补空图省去。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "portrait_parts": [
+      {
+        "part": "v",
+        "through": "事实审阅"
+      },
+      {
+        "part": "v2",
+        "from": "出文件"
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-work-delivery-copilot-10-h\\round-01\\candidate-2.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-work-delivery-copilot-10-h\\round-01\\candidate-2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 31 日深夜–9 月 1 日凌晨",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "line",
+        "direction": "vertical",
+        "nodes": 8,
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "以 pages-approved 批准新图为准：左59%小号毛笔标题和八节点时间线，节点左图右日期正文；右41%从顶到底整幅书桌/公文包插画。原图章节标题较其他屏小，照此记 small。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。"
+  },
+  {
+    "screen": "work-delivery-copilot-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\img\\work-delivery-copilot-10-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 31 日深夜–9 月 1 日凌晨",
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "line",
+        "direction": "vertical",
+        "nodes": 8,
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "单长图，八日期节点沿左竖线，图标在每节点左侧；末尾整宽书桌/公文包插画，标题中档，按标准居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。"
+  }
+]

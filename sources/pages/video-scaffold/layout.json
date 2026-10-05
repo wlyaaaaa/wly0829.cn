@@ -1,0 +1,1101 @@
+[
+  {
+    "screen": "video-scaffold-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "hero",
+        "width": "48%",
+        "align": "left",
+        "size": "large",
+        "text_ref": "本地视频制作"
+      },
+      {
+        "type": "tag",
+        "row": "hero",
+        "align": "left",
+        "text_ref": "偶尔用 · 只修报错"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "align": "left",
+        "text_ref": "把定好的文案和素材交给 AI"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "52%",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0,
+        "asset": "_library/fix-round-2/video-monitor-labeled.png"
+      },
+      {
+        "type": "stat_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "3840×2160",
+        "columns_v": 1,
+        "rows": [
+          1,
+          3
+        ]
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "数字截至 9 月 28 日"
+      },
+      {
+        "type": "prose",
+        "align": "center",
+        "text_ref": "核心结论",
+        "textless": true
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "align": "left",
+        "text_ref": "在整套系统里的位置 → 怎么协作"
+      }
+    ],
+    "notes": "按原定稿构图：横版左标题/标签/介绍、右显示器主插画，竖版依序整宽；四数字原文与三按钮保留。scene明确单独一行“核心结论”只归显示器画面。fix-round-2按e334bf56引导使用Luna编辑、根Sol核字的显式插画asset，四字只在显示器内出现；对应prose.textless=true经当前scene/唯一原节点/0links校验，不再另排正文。原source.text/links不改，原字号档、字色和motion字段保留。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "本地视频制作"
+      },
+      {
+        "type": "tag",
+        "align": "left",
+        "text_ref": "偶尔用 · 只修报错"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "把定好的文案和素材交给 AI"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0,
+        "asset": "_library/fix-round-2/video-monitor-labeled.png"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "3840×2160",
+        "rows": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "数字截至 9 月 28 日"
+      },
+      {
+        "type": "prose",
+        "align": "center",
+        "text_ref": "核心结论",
+        "textless": true
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "align": "center",
+        "text_ref": "在整套系统里的位置 → 怎么协作"
+      }
+    ],
+    "notes": "按原定稿构图：横版左标题/标签/介绍、右显示器主插画，竖版依序整宽；四数字原文与三按钮保留。scene明确单独一行“核心结论”只归显示器画面。fix-round-2按e334bf56引导使用Luna编辑、根Sol核字的显式插画asset，四字只在显示器内出现；对应prose.textless=true经当前scene/唯一原节点/0links校验，不再另排正文。原source.text/links不改，原字号档、字色和motion字段保留。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "做一期视频，怎么走一遍"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "一段旁白配一个画面"
+      },
+      {
+        "type": "flow",
+        "row": "workflow",
+        "width": "60%",
+        "columns": 1,
+        "direction": "vertical",
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "highlight": [
+          6,
+          8
+        ],
+        "icons": "auto",
+        "text_ref": "我 定题、写好旁白"
+      },
+      {
+        "type": "screenshot",
+        "row": "workflow",
+        "width": "40%",
+        "columns": 1,
+        "align": "center",
+        "ratio": "5:4"
+      },
+      {
+        "type": "prose",
+        "row": "workflow",
+        "align": "left",
+        "text_ref": "有声预览（真实截图"
+      },
+      {
+        "type": "notice",
+        "row": "workflow",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "green",
+        "text_ref": "跟 AI 这样说就行",
+        "icons": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      }
+    ],
+    "notes": "实图左栏八步沿弯曲胶片带竖排，圆形编号、角色小徽章紧贴左侧，每步右端还各有小图；第6、8步浅黄，手掌角色保留。右栏顶部5:4纯白截图槽、外部图注、下方四句便签；无大插画。caption在定稿最后，放回右栏截图下是空间重排。现flow可做竖向ribbon及highlight，但角色徽章、右端小图和双徽章需在组件样张核对，不能用默认上图下文替代。整屏标题依统一标准居中。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "做一期视频，怎么走一遍"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "一段旁白配一个画面"
+      },
+      {
+        "type": "screenshot",
+        "columns": 1,
+        "align": "center",
+        "ratio": "5:4"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "highlight": [
+          6,
+          8
+        ],
+        "icons": "auto",
+        "text_ref": "我 定题、写好旁白"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "green",
+        "text_ref": "跟 AI 这样说就行",
+        "icons": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "有声预览（真实截图"
+      }
+    ],
+    "notes": "原竖版顺序v→v2：v为标题、解释、整宽空白截图、步骤1–6；v2为步骤7、8、四句便签、最下整宽caption卡。实图caption并未紧贴截图，和portrait描述冲突，此规格按实图留在最后；须保留唯一完整caption。第6、8步黄色，步骤7、8的原续图去掉右端插画、用大编号和大角色名，角色语义不丢。按完整步骤拆张，不截卡。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "交出来什么，出了事怎么办"
+      },
+      {
+        "type": "section_heading",
+        "row": "delivery",
+        "width": "52%",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "交出来的东西"
+      },
+      {
+        "type": "content_card",
+        "row": "delivery",
+        "columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文件写作.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "text_ref": "成片"
+      },
+      {
+        "type": "screenshot",
+        "row": "delivery",
+        "columns": 1,
+        "align": "center",
+        "ratio": "16:9",
+        "max_width": 550
+      },
+      {
+        "type": "prose",
+        "row": "delivery",
+        "align": "left",
+        "text_ref": "封面（真实截图"
+      },
+      {
+        "type": "section_heading",
+        "row": "delivery",
+        "width": "48%",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "出了事怎么办"
+      },
+      {
+        "type": "content_card",
+        "row": "delivery",
+        "columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/icons/放大镜.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "没有自动提醒。"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "green",
+        "text_ref": "现在能不能用",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ]
+      }
+    ],
+    "notes": "实图标题右方有独立卡外插画（显示器、封面、字幕、清单），不能漏掉；主体两栏各有浅绿外框。左栏五项是紧凑图标行，同属一栏容器，不宜套五张大卡；截图占实际左栏近全宽、caption在下，和scene约2/3宽有差异，按实图。右栏四个横向小卡、图标在卡内左侧。底部现在能不能用是全宽说明卡，含日期和完整环境段落，不是实时槽。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "交出来什么，出了事怎么办"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "交出来的东西"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文件写作.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "text_ref": "成片"
+      },
+      {
+        "type": "screenshot",
+        "columns": 1,
+        "align": "center",
+        "ratio": "16:9"
+      },
+      {
+        "type": "prose",
+        "align": "center",
+        "text_ref": "封面（真实截图"
+      },
+      {
+        "type": "section_heading",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出了事怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/icons/放大镜.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "没有自动提醒。"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "green",
+        "text_ref": "现在能不能用",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ]
+      }
+    ],
+    "notes": "原竖版v→v2：v含标题、交出来的东西五张左图右字整宽卡、整宽白框和caption；v2从出了事怎么办的大毛笔组名开始，四个无图整宽问答卡，最后现在能不能用大说明卡。横图标题旁插画在竖图省掉；右栏小图标在v2也省掉，不能机械横竖共享。此第二张组名来自定稿group节点，只出现一次。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-03-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-video-scaffold-04-h\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "画面是怎么做出来的"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "direction": "horizontal",
+        "align": "left",
+        "illustration": "top_inside",
+        "connector": "arrow",
+        "icons": [
+          "_library/icons/麦克风.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/画笔调色板.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/相机.png"
+        ],
+        "text_ref": "配音"
+      },
+      {
+        "type": "screenshot",
+        "row": "bottom",
+        "width": "50%",
+        "columns": 1,
+        "align": "center",
+        "ratio": "16:9"
+      },
+      {
+        "type": "prose",
+        "row": "bottom",
+        "align": "left",
+        "text_ref": "成片里的一帧"
+      }
+    ],
+    "notes": "source_image为pages-approved明确批准的替换图，已查看替换图和旧横图；两者布局同构：六卡一排，图在卡内上方，绿色箭头从图高度串联；下面左半唯一纯白截图框＋外部caption、右半无字胶片与四画笔插画。第三图中原有data-cue示例字不是本屏定稿独立节点，复用资产必须去带字；只排定稿写画面段原文，不另造代码条或重加Fish Audio标题。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "画面是怎么做出来的"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/麦克风.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/画笔调色板.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/相机.png"
+        ],
+        "text_ref": "配音",
+        "text_layout": "block",
+        "icon_width": "18%"
+      },
+      {
+        "type": "screenshot",
+        "columns": 1,
+        "align": "center",
+        "ratio": "16:9"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "成片里的一帧"
+      }
+    ],
+    "notes": "已亲眼查看当前04-v；现图确为单张六个整宽横条，无任何左侧大插画、无箭头；编号、粗体名、竖线、正文从同一行开始，长文自然续行。下方唯一平整纯白16:9框，caption在外部下方，无胶片画笔插画。不得按旧左图右文重建。当前源图968×1624，最终输出941×1672的标准9:16并按定稿portrait净正文860、正文36、行高44等约定排；这类同一行短卡需组件样张核对，现flow默认可能把名称和正文拆行。；page-fixer-09（按审页意见）：六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-video-scaffold-05-h\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了什么模型和工具"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "环节"
+      }
+    ],
+    "notes": "source_image为pages-approved批准替换图，已看替换及旧图。下方三列十行整宽表；列宽实际约18%/38%/44%，表头浅绿；每行图标在第一列左侧，Fish鱼标在第二列配音项，GitHub标在第二列最后项。细节完整自然换行，链接按定稿。不把逐行内容拆成横版十张卡。现table自动计算列宽且不读取icons字段，按原构图加行图标、固定比例需接入并出样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了什么模型和工具"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "环节"
+      }
+    ],
+    "notes": "原竖版v→v2：v含标题、前五项（配音、对时间、画面、转场和质感、截帧），各卡左图右文，原环节名在卡头，下面用的什么与细节两条；v2后五项（编码、声音、显卡排队、预览、自动测试）无左图，整宽正文。不增独立表头大条；表头原字只完整出现一次，后续重复列名按data-echo。当前table会额外单排table-header且不放行图标，这与原图不同，需组件调整/样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-05-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "numbered_steps",
+        "row": "design",
+        "width": "67%",
+        "columns": 2,
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "text_ref": "每一帧按时间算出来。"
+      },
+      {
+        "type": "stat_card",
+        "row": "design",
+        "width": "33%",
+        "columns": 1,
+        "align": "left",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "6419 行"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "yellow",
+        "text_ref": "这几招：自测里跑通了",
+        "icons": [
+          "_library/icons/文件齿轮.png"
+        ],
+        "columns": 2
+      }
+    ],
+    "notes": "实图六原则卡两列三行，卡内左图右文，右栏三数字卡竖排，数字在左、插画在右，与普通上图数字卡有差异。下方一张全宽浅黄卡内四条实际按左右两列两行：左上改一场、左下章节少而短、右上动画开头结尾、右下踩点写错；保留定稿顺序语义和唯一原文，不把视觉列读序当改文依据。右上黄色状态点为装饰，不新增状态词。现numbered_steps不完整支持left_inside、stat_card没有右图模式、notice不读取columns且黄底仍回退绿底；需组件样张接入这三处。；page-fixer-09（按审页意见）：提示正文用现已支持columns兑现两列",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "numbered_steps",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "text_ref": "每一帧按时间算出来。"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "6419 行"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "illustration": "none",
+        "tone": "yellow",
+        "text_ref": "这几招：自测里跑通了"
+      }
+    ],
+    "notes": "原竖版v→v2：v是标题和原则1–5（卡内左图右文）；v2原则6是无图整宽卡，然后6419与91两卡一排，37单卡下一排满宽，再是浅黄长卡四条逐行、无图。这与portrait三张数字并排一行有冲突，按实图2＋1满宽。同一steps节点内第6项图标应省，不能全组六图机械套；同一stats节点最后卡跨两列需接入，现columns_v=2只会最后卡半宽。定稿黄色长卡标题完整保留，源图标题措辞与定稿略异以定稿为准。；page-fixer-09（按审页意见）：单张提示移除无效外卡列数字段；手机数字卡每行一张",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-06-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "align": "left",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/illustrations/ill-r3-c02936fda748b204.png",
+          "_library/icons/画笔调色板.png"
+        ],
+        "text_ref": "动画踩着旁白的字。",
+        "icon_size": 360,
+        "image_underlay": [
+          true,
+          false
+        ]
+      },
+      {
+        "type": "annotation",
+        "align": "left",
+        "text_ref": "先说结论 核心结论",
+        "labels_position": "overlay",
+        "target_selector": "[data-comp=\"content_card\"] .card.side:first-child .sideic img",
+        "anchors": [
+          {
+            "unit": 0,
+            "x": 0.255833,
+            "y": 0.58272,
+            "width": 0.378333,
+            "height": 0.238971
+          },
+          {
+            "unit": 1,
+            "x": 0.76,
+            "y": 0.490808,
+            "width": 0.306667,
+            "height": 0.319853
+          }
+        ],
+        "connector": "none"
+      }
+    ],
+    "notes": "实图标题下两张等宽大卡横排；每卡上方大幅插画在卡内，标题及长正文在下。卡1有纸面旁白和显示器，绿色细线把纸面的核心结论连到屏幕同词；卡2声波中留平直停顿、胶片多停一格。末两para节点只在卡1插画里出现：先说结论 核心结论覆纸面（两行），核心结论覆显示器；不得排成独立第三块，不得混入卡2正文。annotation在此负责这两节点的内容归属，实际必须嵌入卡1的上方插画，不是独立调用当前annotation默认左右引线图；这一嵌入当前规格接口未实现，需主工程师接入/样张。两卡插画用大illustration，不用小icon顶图敷衍。\nmain-closer 2026-10-03T20:34:00+08:00：首卡实际无字旁白纸面/显示器采用final-label-geometry底图SHA 1617f2b072f9cbdcf4c846c7fd4f972950d2c9d34399d07771e92499b794c1dc，首卡image_underlay显式声明，末两原节点按原DOM顺序保留，由annotation覆到两实测安全中心及宽度；底图已有绿连线，不再另画，未猜任何新坐标。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/illustrations/ill-r3-c02936fda748b204.png",
+          "_library/icons/画笔调色板.png"
+        ],
+        "text_ref": "动画踩着旁白的字。",
+        "icon_size": 360,
+        "image_underlay": [
+          true,
+          false
+        ]
+      },
+      {
+        "type": "annotation",
+        "align": "left",
+        "text_ref": "先说结论 核心结论",
+        "labels_position": "overlay",
+        "target_selector": "[data-comp=\"content_card\"] .card.side:first-child .sideic img",
+        "anchors": [
+          {
+            "unit": 0,
+            "x": 0.255833,
+            "y": 0.58272,
+            "width": 0.378333,
+            "height": 0.238971
+          },
+          {
+            "unit": 1,
+            "x": 0.76,
+            "y": 0.490808,
+            "width": 0.306667,
+            "height": 0.319853
+          }
+        ],
+        "connector": "none"
+      }
+    ],
+    "notes": "原竖图一张，两大卡上下，每卡插画在卡内上方、标题正文在下；两幅插画宽度接近整卡，不做左大图右窄文。末两节点归卡1插画，纸面与屏幕覆字只出现一次；annotation必须嵌入第一卡上部，不能在第二卡后另排标注块。现引擎只能用text_ref分文字、不能将末尾节点嵌回第一卡，主工程师需接入，未接入前不能报告构图/逐字完成。\nmain-closer 2026-10-03T20:34:00+08:00：首卡实际无字旁白纸面/显示器采用final-label-geometry底图SHA 1617f2b072f9cbdcf4c846c7fd4f972950d2c9d34399d07771e92499b794c1dc，首卡image_underlay显式声明，末两原节点按原DOM顺序保留，由annotation覆到两实测安全中心及宽度；底图已有绿连线，不再另画，未猜任何新坐标。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "heading",
+        "width": "34%",
+        "align": "left",
+        "size": "large",
+        "text_ref": "全部功能（25 项）"
+      },
+      {
+        "type": "status_legend",
+        "row": "heading",
+        "width": "66%",
+        "columns": 6,
+        "align": "left",
+        "size": "small",
+        "text_ref": "● 在用"
+      },
+      {
+        "type": "prose",
+        "row": "heading",
+        "align": "left",
+        "text_ref": "怎么判的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开工"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "新项目准备"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "配音和时间"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "旁白分场"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "画面"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "逐场画面提示"
+      }
+    ],
+    "notes": "实图与scene冲突：每组确实是组名整行，组名下左侧19%一幅卡外插画，右侧81%四张无图卡单排，不是三列两行。按实图columns=4、icons=none，不把左插画放入功能卡，也不加每卡图标。顶行标题约34%左，右66%图例、怎么判的；不是整宽章节标题所以align=left。开工/配音和时间/画面组名毛笔字带横向笔刷线。和09为同一无上下外边框链；状态只画原状态点，定稿状态词为其语义来源，现feature_card还会额外排状态词，需与G1状态表达规则统一。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-08-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（25 项）"
+      },
+      {
+        "type": "status_legend",
+        "columns": 3,
+        "portrait_columns": 3,
+        "align": "left",
+        "text_ref": "● 在用"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "怎么判的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开工"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "新项目准备"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "配音和时间"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "旁白分场"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "画面"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "逐场画面提示"
+      }
+    ],
+    "notes": "原竖版v→v2：v含标题、两行三项图例、怎么判的、开工四卡；v2含配音和时间四卡和画面四卡。各功能卡一行一张，卡内左图右文、状态在右上，省掉横版组外插画。源v尺寸962×1635，最终标准941宽。续图组名保留但不重复全部功能标题/图例。卡状态以定稿为准；功能12完整9月29日新增文字必须保留，不能沿原图小字遗漏。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-08-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-09-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "出片"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "断点渲染",
+        "tail_illustration": {
+          "slot": 1
+        }
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "验收和收尾"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "成片核验",
+        "tail_illustration": {
+          "slot": 2
+        }
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "已停用"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "一键全流程",
+        "tail_illustration": {
+          "slot": 3
+        }
+      }
+    ],
+    "notes": "接08同一链，本屏无章节标题、无图例、无上下外边框。出片5卡三列(3＋2)，胶片插画仅填第二排右侧剩余一格；验收和收尾4卡(3＋1)，第二排最后单卡实际约占44%宽，清单插画填其右方剩余两格；已停用4卡(3＋1)，最后单卡实际约44%宽、旧胶片箱在右边，整组淡灰、状态叉。三个illustration块必须嵌到前一组grid的尾排空格，不能另起整宽行；现引擎无此网格尾格插画接口，notes是准确定位要求，需主工程师接入/样张。；主工程师接管规格：三张组外插画按 comp-hub 接口改为前一个 feature_card 的 tail_illustration.slot 1/2/3（原三个独立 illustration 块移除，免得同图再出整宽行）。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-09-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "出片"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "断点渲染"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "验收和收尾"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "成片核验"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "已停用"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "一键全流程"
+      }
+    ],
+    "notes": "原竖版v→v2：v是出片5卡；v2是验收和收尾4卡、已停用4卡。各卡整宽、图在卡内左侧、状态右上，已停用图/标题/底色淡灰；省掉三幅组外插画。无全部功能章节标题、无重复图例。原竖图功能卡末尾还有状态文字而scene说仅点，按定稿与G1完整显示原词时要和主工程师的状态表达规则统一，不能静默藏字。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-09-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-10-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": "auto",
+        "text_ref": "6 月 26 日",
+        "connector_style": "thin_line"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "top_inside",
+        "index": 0,
+        "size": "small"
+      }
+    ],
+    "notes": "实图左65%八日期节点沿一条直绿色竖线，不是弯胶片；小图在日期卡内左侧、日期和说明在右。右35%独立浅绿边框大插画卡，显示器、麦克风、显卡、胶片由小到大。节点6月27日长文不缩字。parse把全部日期识别为stats节点，timeline支持stats可保全原字，不可错误改成数字统计卡。connector=ribbon在此只借连接机制，实物必须是直线＋圆点，组件需按样张核对。；page-fixer-09（按审页意见）：时间线整宽、末图小号，移除长空右栏",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "video-scaffold-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-10-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "align": "left",
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": "auto",
+        "text_ref": "6 月 26 日",
+        "connector_style": "thin_line"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0,
+        "size": "small"
+      }
+    ],
+    "notes": "原竖版v→v2：v是标题、6月26/27/28三个日期卡、最后整宽卡外大插画；v2是8月15日、8月31日–9月4日、9月18/26/29五个日期卡，左侧直绿线延续、圆点对应卡。插画实际在第3节点后、不是完整八节点后；与portrait插画放最后有冲突，按实图。现全部日期是同一stats节点，单靠text_ref不能把第4项分出来，因此这份timeline+illustration只登记块归属，必须在timeline第3项后嵌插画并续剩余5项；未接入前不可声称已复现。续图原文件名v2，不新增v3。；page-fixer-09（按审页意见）：时间线整宽、末图小号，移除长空右栏",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-10-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  }
+]

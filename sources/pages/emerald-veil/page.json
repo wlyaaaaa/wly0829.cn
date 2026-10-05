@@ -1,0 +1,919 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "emerald-veil",
+  "kind": "project",
+  "title": "屏保与壁纸",
+  "url": "/projects/emerald-veil/",
+  "tagline": "电脑闲 6 分钟，主屏飘起 Windows 自带的泡泡。",
+  "status": "偶尔用",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/emerald-veil",
+  "capability": "闲时护屏、统一壁纸",
+  "based_on": {
+    "commit": "f46e59b0454f58f51d9a63a48387db4be07ded5d",
+    "commit_time": "2026-09-29T02:31:12+08:00"
+  },
+  "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：书桌上的大显示器里，青绿色雨林的雨丝轻轻斜落，右上角探头的黑猫眨一下眼；十来个彩色半透明的玻璃泡泡在屏幕里慢慢飘、轻轻相碰又弹开，泡泡边缘的彩虹光泽随转动流动；桌上的沙漏细沙缓缓流下；快到结尾时鼠标轻轻一动，泡泡一下子淡出，雨林壁纸留在屏上，随后泡泡又一个个浮现，回到第一帧；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，无缝循环。",
+  "screens": [
+    {
+      "id": "emerald-veil-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版画面：左上大标题毛笔艺术字“屏保与壁纸”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：一张书桌，正中一台大显示器，屏幕里是青绿色的雨林和苔石、右上角一只探头的黑猫，雨丝斜落；屏幕上飘着十来个大小不一的彩色半透明玻璃泡泡（像 Windows 自带泡泡屏保，泡泡边缘有彩虹光泽）；桌上一副键盘和鼠标静静放着，旁边一只小沙漏；显示器右侧一台侧透机箱，机箱里的小屏是暗的、没有泡泡。插画里不画任何字。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字），小插画依次是：一只沙漏、三个高亮的键帽（键帽上不画字母）、一台显示器带一个小绿勾、一个小画框里的雨林。数字卡下面一条细长的圆角横条：最左写“现在”，接着小字“常驻程序”和一个留空的浅色圆角小框（约横条宽度的 40%），最右一个按钮〔现在正不正常 → 驾驶舱〕；空框里什么都不画，网页程序会往里填字。横条下面一行放两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔GitHub〕（GitHub 按钮左边画 GitHub 的小猫标志）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、“现在”横条改成竖排两行（“现在”加“常驻程序”一行，空框单独一行占整行宽约 80%），驾驶舱按钮单独一行，最后两个按钮上下各一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "屏保与壁纸\n\n电脑闲 6 分钟，主屏飘起 Windows 自带的泡泡。\n\n桌上的主屏是一块 OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6 分钟没碰键盘鼠标，就在主屏上放 Windows 自带的彩色玻璃泡泡，一动就收；不黑屏、不锁屏，也不停动态壁纸。顺带管桌面和锁屏的图：所有屏统一成一张 4K 的雨林黑猫。泡泡只是让闲着的屏幕动起来，真正防烧屏还得靠显示器自带的像素位移和面板刷新。\n\n**6 分钟**｜没碰键盘鼠标就放泡泡，一动就收\n**Ctrl+Win+E**｜不用等，马上放；双击托盘图标也行\n**1 块屏**｜只放桌上的 OLED 主屏，串流用的虚拟屏和机箱小屏都不放\n**4K**｜雨林黑猫，所有屏的桌面底图和锁屏共用一张\n\n现在　常驻程序　〔现在正不正常 → 驾驶舱〕\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+      "links": [
+        {
+          "text": "现在正不正常 → 驾驶舱",
+          "href": "/cockpit/#emerald-veil"
+        },
+        {
+          "text": "在整套系统里的位置 → 怎么协作",
+          "href": "/how/#emerald-veil"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/emerald-veil"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/emerald-veil/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [
+        "run"
+      ],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-02",
+      "section": "usage",
+      "title": "平时怎么用",
+      "scene": "横版画面：左上标题。左半边一幅水彩插画：一台显示器，屏幕里是雨林和探头黑猫，上面飘着彩色玻璃泡泡；显示器下方把 Windows 任务栏右下角放大画出来：一个绿色圆形小托盘图标，图标上方一个浅色提示小条，写着“Emerald Veil | 实体主屏空闲 6 分钟”；提示条旁边展开一个白底右键菜单，从上到下四行，就是下面“托盘菜单”那四项的原文（菜单里不加别的字）。右半边从上到下三块：“每天”“想马上放”各一段；“跟 AI 说”一张浅绿底小卡片，里面四行对话气泡样式的短句。",
+      "portrait": "竖版：标题；插画（显示器加放大的托盘提示和右键菜单）占整行宽；下面依次是“每天”“想马上放”两段，最后“跟 AI 说”卡片，四句一行一句。",
+      "text": "平时怎么用\n\n**每天**：登录 Windows 后它自己启动，托盘里多一个绿色小图标。6 分钟没碰键盘鼠标，主屏飘起泡泡；动一下鼠标、点一下、滚一下滚轮或按任意键，泡泡马上收起，手上的活接着干。\n\n**想马上放**：按 Ctrl+Win+E，或双击托盘图标，泡泡一直飘到你动为止；松开快捷键那一下不会把刚出来的泡泡赶走。只想看一眼效果，就点托盘菜单里的“预览”，最多 15 秒自己收。\n\n托盘图标提示：Emerald Veil | 实体主屏空闲 6 分钟\n\n托盘菜单：\n- 查看状态与显示范围\n- 立即启动屏保（Ctrl+Win+E，输入即退出）\n- 预览原生泡泡（最多 15 秒）\n- 登录 Windows 时启动\n\n**跟 AI 说**\n- “检查一下屏保”：AI 核对开关、6 分钟设置、常驻程序是不是正好一个、快捷键能不能用。\n- “把屏保停了”／“把屏保开回来”\n- “壁纸被换掉了，装回来”\n- “新电脑，把壁纸和锁屏装回来”",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-03",
+      "section": "usage",
+      "title": "泡泡放在哪块屏",
+      "scene": "横版画面：左上标题，下面一行小字。左边约 55% 宽一幅水彩插画，正面看一张书桌：正中大显示器（屏里雨林和泡泡），右下角一个绿色圆形对勾；左边一个用虚线勾出轮廓、半透明的“幽灵”显示器，里面空白，右下角一个灰色叉；右边一台侧透机箱，机箱侧面一条竖长的小屏、机箱顶部水冷头上一块弯弯的小曲面屏，两块小屏都是暗的，各带一个灰色叉；最右一台小显示器，屏上一个大问号，灰色叉。插画下方再画一个小场景：同一台大显示器被一块黑色幕布整个盖住，幕布前一个暂停符号。插画里不画任何字。右边约 45% 宽：四条带圆形小标记的条目（对勾为绿、叉为灰，就用字里的 ✓ ✕），下面两张浅绿底小卡片：“主屏关着”“主屏盖着黑幕”。",
+      "portrait": "竖版仅03-v：原标题、导语、四屏选择条目与主屏关着/主屏盖黑幕两条完整说明，一项整行上下排，底部两关键说明各整宽，不用半宽小字。保留明确硬件身份、绿对勾/灰叉及关屏待命/遮黑幕暂停两种行为差异。图标仅辅助解释，不为旧横版幽灵显示器站位、每个小屏各画叉或幕布前再画暂停符号的装饰细节本身退回；正文及本项排除标记须清楚准确。",
+      "text": "泡泡放在哪块屏\n\n它按每块屏的硬件身份认，不按“第几号显示器”猜。\n\n✓ **桌上的主屏**：飞利浦 32M2N8800，32 寸 4K QD-OLED。泡泡只放这一块。\n✕ **串流用的虚拟屏**：〔远程电脑串流〕靠它。Windows 自带的泡泡在这块屏上画不稳；宁可不放，也不自己画泡泡、不给系统打补丁。\n✕ **机箱里的两块小屏**：归〔双屏信息中心〕管，泡泡不去。水冷曲面屏在 Windows 里算一块显示器，按身份排除；竖条机箱屏走 USB 串口，本来就不是显示器。\n✕ **认不出身份的屏**：不放。\n\n**主屏关着**：不改放到别的屏，就在后台待命，照样计时。\n\n**主屏盖着黑幕**：远程操作时可以按 Ctrl+Win+R 给主屏盖一层黑（这是〔电脑配置与恢复〕的功能）。盖着的时候泡泡不出来；撤掉黑幕，恢复原来的 6 分钟规则。",
+      "links": [
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        },
+        {
+          "text": "双屏信息中心",
+          "href": "/projects/pc-panel-hub/"
+        },
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/",
+          "locator_text": {
+            "h": "这是电脑配置与恢复"
+          }
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-04",
+      "section": "usage",
+      "title": "桌面和锁屏：雨林黑猫",
+      "scene": "横版画面：左上标题。左边约 52% 宽留一个 16:9 的截图空位（带细浅绿边框），下面一行小字图注（第一句图注）。截图空位右边约 12% 宽留一个竖长截图空位（宽高比约 9:20，带细浅绿边框），下面一行小字图注（第二句图注），图注可以折成三四行。右边约 36% 宽：七条带小水彩图标的短段（图标依次：几块叠放的屏幕、一段胶片、一支画笔和放大镜、一把小扳手、一个小相框、一个行李箱、一部手机）。两个截图空位里什么都不画，拼页时贴真图。 本张已批准横排纠正：唯一电脑壁纸和手机壁纸两真实截图位内部完全空白，由现役编译器贴登记原图，不能画显示器/手机框内的仿作充真实效果。正常contain白边可接受，比例轻差不作为单独重画理由，以1600px实际展示可辨两真实壁纸为准；原七条正文及图注不变。",
+      "portrait": "竖版：标题；电脑壁纸截图空位占整行宽，图注在下；手机壁纸截图空位居中约 45% 宽，图注在下；七条短段一行一条。",
+      "text": "桌面和锁屏：雨林黑猫\n\n雨林黑猫 · 更绿版：生图原图 1672×941；电脑上用的是放大到 3840×2160 的版本\n手机壁纸：生图原图 841×1870；手机上用的 1440×3200 成品原样存在仓库里\n\n- **管哪些地方**：每块屏的 Windows 桌面底图（包括串流用的虚拟屏，和 Windows 还记得的已拔下的屏），加上系统锁屏，统一成这一张。\n- **和动态壁纸的关系**：Wallpaper Engine（动态壁纸软件）开着时，桌面上看到的是它的画面，这张垫在下面；锁屏用的是这张。它不改 Wallpaper Engine 的设置，也不在后台跟它抢。\n- **这张图怎么来的**：照原来那张桌面图（雨林、苔石、右上角探头的黑猫）重新生成，更清楚、更绿；再用 Real-ESRGAN（放大模型 realesrgan-x4plus）放大 4 倍，缩到 3840×2160。不是原生 4K，也不是 HDR。\n- **装和换**：跟 AI 说一声。脚本先把图复制一份到本机用户目录，设成固定图片，再逐块屏回读；已经对的不动，只重设偏了的。\n- **原图留底**：第一次换之前，原桌面图、每块屏的原图和原锁屏都存在本机；想换回去，在“设置 → 个性化”里选。\n- **换新电脑**：拿到仓库跑一条命令就装回来，不要管理员权限，也不依赖原来的盘符和用户名。还没在新电脑上真用过。\n- **手机壁纸**：手机上用的那张也原样存了一份在仓库里，换手机时直接拿。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\emerald-veil\\desktop-wallpaper.webp",
+          "where": "左边约 52% 宽的 16:9 空位，带细浅绿边框",
+          "caption": "雨林黑猫 · 更绿版：生图原图 1672×941；电脑上用的是放大到 3840×2160 的版本"
+        },
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\emerald-veil\\phone-wallpaper.webp",
+          "where": "电脑壁纸空位右边约 12% 宽的竖长空位（宽高比约 9:20），带细浅绿边框",
+          "caption": "手机壁纸：生图原图 841×1870；手机上用的 1440×3200 成品原样存在仓库里"
+        }
+      ],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-05",
+      "section": "usage",
+      "title": "出事怎么办",
+      "scene": "横版画面：左上标题。一张三列表格占上面约五分之四（表头浅绿底，每行左边一个小水彩图标：空空的显示器、一个一闪而过的泡泡、一个键盘按键、一个小齿轮、一个画框、一个开关、一个倒回的箭头）。表格下面一条浅绿底细长卡片放最后一句。",
+      "portrait": "竖版：标题；表格改成一行一条卡片（“看到什么”粗体，下面“它自己会做”和“跟 AI 说”各一行，没有内容的那行省掉）；最后一句的卡片在底部。",
+      "text": "出事怎么办\n\n| 看到什么 | 它自己会做 | 还不行，跟 AI 说 |\n|---|---|---|\n| 6 分钟到了，泡泡没出来 | 主屏关着、盖着黑幕时本来就不放。启动失败就隔 5 秒、再隔 30 秒重试；同一次闲着里失败 3 次就不再试，等你动一下重新算 | “屏保没出来”：AI 看托盘状态里的最近一次失败和目标屏 |\n| 泡泡出来一两秒就自己没了 | 远程软件发来的“原地不动”的鼠标事件不算有人（见亮点） | “泡泡老是自己消失” |\n| Ctrl+Win+E 没反应 | 常驻程序崩溃或卡死后，Windows 会提示重新打开，我点确认才开 | “屏保快捷键失灵”：AI 核对常驻程序是不是正好一个、快捷键能不能用 |\n| Windows 的屏保设置被别的软件改了 | 每 30 秒查一次，只把偏掉的几项改回：等 6 分钟、不锁屏、Windows 设置里的屏保开关保持关 | 一般不用管 |\n| 桌面或锁屏图被换掉了 | 不在后台抢 | “壁纸被换掉了，装回来”：只重设偏了的屏 |\n| 想马上关掉 | 无 | “把屏保停了”：先挡住下一次启动，再收起画面（见“为什么这样设计”） |\n| 想回到装之前 | 无 | “把屏保设置撤回”：恢复第一次开启前存下的原设置；“把屏保卸了”：删掉程序和开机项 |\n\n**坏了不会主动提醒**：托盘菜单“查看状态与显示范围”里能看到开没开、目标屏、已经闲了几秒、最近一次失败。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-06",
+      "section": "tech",
+      "title": "它是怎么搭的",
+      "scene": "横版画面：左上标题。上面约 60% 高一张从左到右的流程图，六个圆角节点卡片（小水彩图标依次：一扇开着的窗户、一只眼睛、一只沙漏、一幅铺开的画、一串彩色泡泡、一只挥动的手），绿色箭头依次连起来，每个节点下面两三行小字。流程图下面左右两张卡片：左“壁纸工具”，右“规模”。",
+      "portrait": "竖版：标题；流程图改成从上到下六个节点，箭头向下；两张卡片上下各一张。",
+      "text": "它是怎么搭的\n\n1. **登录就启动**｜Windows 开机项直接打开一个常驻程序：C# 写的，.NET 10，打包成一个约 173 MB 的单文件；托盘里一个绿图标。没有服务，也没有计划任务。\n2. **盯着有没有人**｜每 50 毫秒读一次 Windows 记的“最后一次输入时间”；键盘鼠标钩子只在内存里判断假动作，不记内容。\n3. **满 6 分钟**｜按硬件身份挑出主屏；主屏关着、盖着黑幕，就不放。\n4. **先铺底图**｜把虚拟屏上 Wallpaper Engine 选的那张铺到主屏，没有就用 Windows 壁纸；这一层鼠标点得穿。\n5. **放泡泡**｜启动 C:\\Windows\\System32\\Bubbles.scr /s，按物理像素摆到主屏最上层、不抢焦点。泡泡启动时对底图拍一次快照，所以泡泡底下是静止的一帧，不是还在动的动态壁纸。\n6. **一动就收**｜先撤底图，再关泡泡。泡泡进程挂在“程序一关就跟着关”的 Windows 作业对象里，常驻程序退出或崩溃都不会留下泡泡。\n\n**壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。\n\n**规模**（9 月 29 日数）：C# 3,266 行 · PowerShell 1,556 行 · 67 个自动测试 · 45 次提交（8 月 11 日–9 月 29 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-07",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版画面：左上标题。七张横向小卡片排成两列四行，最后一张占满整行宽，每张左边一个小水彩图标（一只关掉的闹钟、一个虚线显示器打叉、一个上锁的小笔记本、一枚单独的齿轮、一个圆形的回退箭头带一个 3、一个问号旁边一只停下的手、一个拨到“关”的拨动开关），右边粗体一句加小字。",
+      "portrait": "竖版：标题；七张卡片一行一张。",
+      "text": "为什么这样设计\n\n1. **到点由它自己放，Windows 设置里的屏保开关一直关着。**｜Windows 自己的屏保会铺满所有屏，还可能黑屏、锁屏；由它计时，只在主屏放泡泡，远程连着也不会被锁在外面，两个屏保也不会抢。\n2. **虚拟屏宁可不放。**｜原版泡泡在这台电脑的虚拟屏上画不稳。自己画泡泡、给系统文件打补丁、重置显卡驱动都能“修”，都被否了。\n3. **只看有没有动，不记按了什么。**｜键盘鼠标钩子只在内存里留上一个鼠标位置；不记按键内容、不记坐标轨迹、不写活动日志，也不列远程软件的名单。\n4. **一个程序、一个开机项。**｜没有服务、没有计划任务、没有第二个守护程序；崩溃或卡死后，Windows 自带的“应用重启”会提示重新打开，我点确认才开。托盘里故意没有“退出”：Ctrl+Win+E 靠这个程序接，随手退掉等于悄悄废了快捷键。\n5. **失败不会死循环。**｜泡泡没起来，隔 5 秒、再隔 30 秒重试，第 3 次失败这次闲着就不再试；正常放满 30 秒，失败次数清零。\n6. **拿不准就不放。**｜屏幕认不出身份、输入读不准、主屏盖着黑幕，一律按“不放”处理；屏保停用时，托盘和快捷键也叫不出泡泡。\n7. **停用就是真停，不会关了又冒出来。**｜先把它自己的开关和 Windows 设置里的屏保开关都关掉、挡住下一次启动，再收起这个登录会话里的泡泡；收画面失败，也不会把开关改回“开着”。要停就跟 AI 说“把屏保停了”。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-08",
+      "section": "highlights",
+      "title": "亮点",
+      "scene": "横版画面：和标杆页“亮点”一样的画法，这一屏只有两张大卡片横排（各占一半宽），每张上面一幅小水彩插画，卡片标题用大字，下面一段正文。插画：1 一只鼠标旁边一个若有若无的虚线小箭头，一个泡泡正在破掉；2 一块玻璃泡泡特写，边缘一圈彩虹光泽，旁边一支放下的画笔。插画里不画字。",
+      "portrait": "竖版：两张卡片一行一张，插画在各自卡片顶部。",
+      "text": "**泡泡出来两秒就没了，查到是远程软件的“假动作”。**\n8 月 13–14 日抓到一次：泡泡出现约 2 秒就自己没了，那一刻没人碰键盘鼠标，只有远程软件发来的一次鼠标挪动；它还会发一种“原地不动”的鼠标事件。中途 AI 把另一次消失也算在远程软件头上，本人指出那次是自己在测试，这个结论就作废了。最后的规则很窄：纹丝不动的移动不算；单独一次小挪动先不算，250 毫秒内再来一次才算有人在远程动鼠标；真动鼠标、点击、滚轮、按键，照样一碰就收。\n\n**泡泡是 Windows 原版的，一个都没自己画。**\n本人要的是“像 Windows XP 那样的泡泡屏保”，还“看着不能太丑”。自己画要重做玻璃质感和碰撞，还很难一样好看。它直接启动 Windows 里现成的泡泡屏保：颜色、玻璃、碰撞都是微软原版，项目只管什么时候放、放哪块屏、底下垫什么。有个坑：把泡泡窗口里的黑色抠成透明，半透明的玻璃边会变成一圈圈黑环，所以整块窗口原样摆上去。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-09",
+      "section": "features",
+      "title": "全部功能（一）",
+      "scene": "横版画面：和标杆页“全部功能”一样的画法：每组先一行毛笔字组名（组名在卡片网格上方单独一行，不单独占一整列），下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉），状态文字不画出来，只画圆点。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。这一张放“泡泡屏保”“放在哪块屏”“开关和照看”三组。",
+      "portrait": "竖版：组名一行，卡片一行一张（左图标、中间编号功能名和一句话、右上圆点）；第一张顶上标题和图例。",
+      "text": "全部功能（23 项）\n图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用\n\n**泡泡屏保**\n1. 闲时泡泡｜6 分钟没碰键盘鼠标，主屏飘起 Windows 原版泡泡｜在用\n2. 马上放泡泡｜Ctrl+Win+E、双击托盘图标或托盘菜单，一直飘到你动｜说不准\n3. 预览 15 秒｜托盘菜单里看一眼效果，最多 15 秒自己收｜说不准\n4. 一动就收｜动鼠标、点击、滚轮、按键，泡泡马上收起｜在用\n5. 不理远程假动作｜纹丝不动的鼠标事件不算；单独一次小挪动，250 毫秒内再来一次才算｜在用\n6. 泡泡底下垫壁纸｜先铺虚拟屏上 Wallpaper Engine 选的那张，没有就用 Windows 壁纸；泡泡底下是静止的一帧｜在用\n\n**放在哪块屏**\n7. 只放实体主屏｜按硬件身份挑；虚拟屏、水冷曲面屏、认不出的屏不放；主屏关着就待命｜在用\n8. 黑幕时让路｜主屏盖着黑幕（Ctrl+Win+R）时不放，撤掉后恢复｜说不准\n\n**开关和照看**\n9. 开启｜AI 装好并开启，顺手存下原来的屏保设置｜在用\n10. 登录自启｜托盘里可勾选；崩溃或卡死后，Windows 会提示重新打开，我点确认才开｜在用\n11. 设置自修｜每 30 秒查 Windows 屏保设置，只把偏掉的改回｜在用\n12. 查看状态｜托盘里看开没开、目标屏、闲了几秒、最近一次失败｜说不准\n13. 紧急停用｜先挡住下一次启动，再收画面；开关不会自己弹回｜说不准\n14. 撤回原设置｜把屏保相关设置恢复到第一次开启前｜说不准\n15. 卸载｜删掉程序和开机项｜说不准",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-bubbles",
+          "text": "泡泡屏保"
+        },
+        {
+          "id": "f-idle-bubbles",
+          "text": "闲时泡泡"
+        },
+        {
+          "id": "f-show-now",
+          "text": "马上放泡泡"
+        },
+        {
+          "id": "f-preview",
+          "text": "预览 15 秒"
+        },
+        {
+          "id": "f-dismiss",
+          "text": "一动就收"
+        },
+        {
+          "id": "f-remote-jitter",
+          "text": "不理远程假动作"
+        },
+        {
+          "id": "f-wallpaper-under",
+          "text": "泡泡底下垫壁纸"
+        },
+        {
+          "id": "g-screens",
+          "text": "放在哪块屏"
+        },
+        {
+          "id": "f-physical-only",
+          "text": "只放实体主屏"
+        },
+        {
+          "id": "f-blackout-yield",
+          "text": "黑幕时让路"
+        },
+        {
+          "id": "g-control",
+          "text": "开关和照看"
+        },
+        {
+          "id": "f-enable",
+          "text": "开启"
+        },
+        {
+          "id": "f-autostart",
+          "text": "登录自启"
+        },
+        {
+          "id": "f-self-heal",
+          "text": "设置自修"
+        },
+        {
+          "id": "f-status",
+          "text": "查看状态"
+        },
+        {
+          "id": "f-disable",
+          "text": "紧急停用"
+        },
+        {
+          "id": "f-restore",
+          "text": "撤回原设置"
+        },
+        {
+          "id": "f-remove",
+          "text": "卸载"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "emerald-veil-features",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-10",
+      "section": "features",
+      "title": "全部功能（二）",
+      "scene": "横版画面：和标杆页“全部功能”一样的画法：每组先一行毛笔字组名（组名在卡片网格上方单独一行，不单独占一整列），下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉），状态文字不画出来，只画圆点。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。这一张放“桌面和锁屏”“以后再说和已停的”两组。",
+      "portrait": "竖版：组名一行，卡片一行一张（左图标、中间编号功能名和一句话、右上圆点）；第一张顶上标题和图例。",
+      "text": "**桌面和锁屏**\n16. 雨林黑猫壁纸｜所有屏的桌面底图和锁屏统一成一张 4K 图｜在用\n17. 只检查不改｜逐块屏回读，锁屏按解码后的画面比对｜说不准\n18. 换机装回｜新电脑跑一条命令，不要管理员、不依赖原盘符｜待验收\n19. 原图留底｜第一次换之前存下原桌面图、每块屏原图、原锁屏｜在用\n20. 手机壁纸留底｜手机上用的那张原样存一份在仓库里｜在用\n\n**以后再说和已停的**\n21. 修左边缘错位｜多屏加动态壁纸时，泡泡底图左边可能错开；修法测过，没装上｜待实施\n22. 泡泡稍快一点｜想把原版泡泡调快一点，还没做｜待实施\n23. 会下雨的动态壁纸｜9 月 8 日的实验，猫抠出来毛边走样，本人否掉，已终止；9 月 29 日实验文件删了，只留一页方向记录｜已停用",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-wallpaper",
+          "text": "桌面和锁屏"
+        },
+        {
+          "id": "f-wallpaper",
+          "text": "雨林黑猫壁纸"
+        },
+        {
+          "id": "f-wallpaper-verify",
+          "text": "只检查不改"
+        },
+        {
+          "id": "f-wallpaper-move",
+          "text": "换机装回"
+        },
+        {
+          "id": "f-wallpaper-undo",
+          "text": "原图留底"
+        },
+        {
+          "id": "f-phone-wallpaper",
+          "text": "手机壁纸留底"
+        },
+        {
+          "id": "g-later",
+          "text": "以后再说和已停的"
+        },
+        {
+          "id": "f-edge-fix",
+          "text": "修左边缘错位"
+        },
+        {
+          "id": "f-speed",
+          "text": "泡泡稍快一点"
+        },
+        {
+          "id": "f-rain-experiment",
+          "text": "会下雨的动态壁纸"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "emerald-veil-features",
+      "reuse": ""
+    },
+    {
+      "id": "emerald-veil-11",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版画面：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字。右边留一幅大一点的水彩插画：从上到下依次是一层淡绿色的透明薄纱、一串彩色玻璃泡泡、一幅雨林黑猫的画、一台显示器盖着半块黑幕、一个小小的托盘图标，像一路长出来的样子（插画里不画字）。时间线最下面一行小字放最后一条。",
+      "portrait": "竖版：插画缩小放在最上面；时间线占满宽度从上到下；最后一条单独一行。",
+      "text": "演进\n\n- **8 月 11 日**：建库。起因是主屏是 OLED，本人想要一层护屏：“像 Windows XP 的泡泡屏保”、有透明度、偏纯绿、不能丑。先比过开源的 OLEDShift（它跳过最大化的窗口，不合用），先自己画了一版护屏层，GitHub 上发了 v0.1.0、v0.1.1。\n- **8 月 12–14 日**：改用 Windows 原版泡泡，透明地叠在桌面上，闲 5 分钟出现；查出“泡泡自己消失”的一个原因（远程软件的假动作）并修掉。\n- **8 月 24 日**：改成闲 10 分钟。\n- **9 月 1 日**：改成闲 6 分钟；泡泡底下铺一张选好的壁纸，不再透出当时的桌面。\n- **9 月 6 日**：主屏盖黑幕时泡泡让路。\n- **9 月 8 日**：试做会下雨的动态壁纸和会动的黑猫。猫抠出来毛边变了样，本人否掉，实验终止；本人认可的雨（绿色鲜度 50%、雨量 75%、薄雾 50%）留档。\n- **9 月 8–9 日**：雨林黑猫 4K 版做成所有屏的桌面底图和锁屏，换机一条命令装回；手机壁纸也存了一份。\n- **9 月 18 日**：只放实体主屏，泡泡底图改用虚拟屏上 Wallpaper Engine 选的那张；去掉“暂停”，只留开和关；Ctrl+Win+E 交给常驻程序。左边缘错位、泡泡提速两件先放下。\n- **9 月 26 日**：说明文档压成五句话。\n- **9 月 29 日**：删掉 8 月的两个旧 Release（v0.1.0、v0.1.1，标签和源码历史还在），不再发安装包，改为从源码安装当前版本；雨景实验的文件也删了，只留方向记录和本人认可的雨幕参数。\n\n现在按偶尔用维护：只修报错，不加功能（〔约法 L25〕）。",
+      "links": [
+        {
+          "text": "约法 L25",
+          "href": "/rules/charter/#L25"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-bubbles",
+        "name": "泡泡屏保"
+      },
+      {
+        "id": "g-screens",
+        "name": "放在哪块屏"
+      },
+      {
+        "id": "g-control",
+        "name": "开关和照看"
+      },
+      {
+        "id": "g-wallpaper",
+        "name": "桌面和锁屏"
+      },
+      {
+        "id": "g-later",
+        "name": "以后再说和已停的"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-idle-bubbles",
+        "group": "g-bubbles",
+        "name": "闲时泡泡",
+        "what": "电脑 6 分钟没人碰键盘鼠标，主屏上飘起 Windows 自带的彩色玻璃泡泡",
+        "how": "装好后什么都不用做，等 6 分钟",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "App.xaml.cs:159；product-design.md:13；本人 8 月亲眼看过并反馈（codex-memory 摘要 five_minute_protection Task 2）"
+      },
+      {
+        "id": "f-show-now",
+        "group": "g-bubbles",
+        "name": "马上放泡泡",
+        "what": "不用等 6 分钟，马上放；一直飘到有输入",
+        "how": "按 Ctrl+Win+E，或双击托盘图标，或托盘菜单“立即启动屏保”",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "TrayIconHost.cs:31-32,56；product-design.md:31；不留使用记录"
+      },
+      {
+        "id": "f-preview",
+        "group": "g-bubbles",
+        "name": "预览 15 秒",
+        "what": "看一眼泡泡效果，最多 15 秒自己收，有输入也会提前收",
+        "how": "托盘菜单“预览原生泡泡（最多 15 秒）”",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "TrayIconHost.cs:33-34；product-design.md:29"
+      },
+      {
+        "id": "f-dismiss",
+        "group": "g-bubbles",
+        "name": "一动就收",
+        "what": "真动鼠标、点击、滚轮、按键，泡泡马上收起，先撤底图再关泡泡",
+        "how": "照常用电脑",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "product-design.md:19,25；本人 8 月用过并反馈过消失问题"
+      },
+      {
+        "id": "f-remote-jitter",
+        "group": "g-bubbles",
+        "name": "不理远程假动作",
+        "what": "远程软件发的纹丝不动的鼠标事件不算有人；单独一次小挪动先不算，250 毫秒内再来一次才算",
+        "how": "自动",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "product-design.md:25；InputActivityFilter.cs；提交 55c8694、20b3307；每次放泡泡都在这条路径上"
+      },
+      {
+        "id": "f-wallpaper-under",
+        "group": "g-bubbles",
+        "name": "泡泡底下垫壁纸",
+        "what": "泡泡出现前在主屏铺底图：虚拟屏上 Wallpaper Engine 选的那张，没有就用 Windows 壁纸；泡泡对它拍一次快照；不停也不改 Wallpaper Engine",
+        "how": "自动；继续用现有的 Wallpaper Engine",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "每次放泡泡都在这条路径上；product-design.md:13-15；WallpaperSelection.cs；AGENTS.md:5（底稿“动态壁纸共存”）"
+      },
+      {
+        "id": "f-physical-only",
+        "group": "g-screens",
+        "name": "只放实体主屏",
+        "what": "按硬件身份只放桌上的 OLED 主屏；虚拟屏（MTT1337）、水冷曲面屏（TUR0000）、认不出的屏不放；没有合格屏就待命",
+        "how": "显示器有变化时跟 AI 说“检查一下屏保”",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "每次放泡泡都在这条路径上；DisplayTargetResolver.cs:25-43；DisplayTargetPolicy.cs:10-19；product-design.md:7"
+      },
+      {
+        "id": "f-blackout-yield",
+        "group": "g-screens",
+        "name": "黑幕时让路",
+        "what": "主屏盖着黑幕（电脑配置与恢复的 Ctrl+Win+R）时不放泡泡，撤掉后恢复 6 分钟规则",
+        "how": "自动",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "product-design.md:65-67；PCConfig PrimaryOledBlackout.cs:215；9 月 3 日 AI 实测过，没有本人真实使用记录"
+      },
+      {
+        "id": "f-enable",
+        "group": "g-control",
+        "name": "开启",
+        "what": "装好常驻程序并开启；第一次开启前把原来的屏保设置存档",
+        "how": "跟 AI 说“把屏保开回来”",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "Install-EmeraldVeil.ps1、Set-NativeBubbles.ps1 -Action Enable；本机 NativeBubblesEnabled=1、原设置存档北京 8/12 起"
+      },
+      {
+        "id": "f-autostart",
+        "group": "g-control",
+        "name": "登录自启",
+        "what": "登录 Windows 自动启动；崩溃或卡死后，Windows 会提示重新打开，我点确认才开",
+        "how": "托盘菜单“登录 Windows 时启动”可勾选",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "HKCU Run“Emerald Veil Native Bubbles”；App.xaml.cs:57-62；本机进程北京 9/27 21:30 起在跑"
+      },
+      {
+        "id": "f-self-heal",
+        "group": "g-control",
+        "name": "设置自修",
+        "what": "每 30 秒查 Windows 屏保设置（开关、等待时间、锁屏），只把偏掉的改回",
+        "how": "自动",
+        "status": "在用",
+        "screen": "emerald-veil-09",
+        "source": "product-design.md:61；常驻程序在跑即在执行"
+      },
+      {
+        "id": "f-status",
+        "group": "g-control",
+        "name": "查看状态",
+        "what": "看开没开、范围、目标屏、闲了几秒、状态、最近一次失败",
+        "how": "托盘菜单“查看状态与显示范围”；AI 用 --status 读",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "TrayIconHost.cs:98-111；App.xaml.cs:84-95"
+      },
+      {
+        "id": "f-disable",
+        "group": "g-control",
+        "name": "紧急停用",
+        "what": "先清开关、挡住下一次启动，再收起本会话里的泡泡；清理失败也不回到开着",
+        "how": "跟 AI 说“把屏保停了”",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "product-design.md:44,63；AGENTS.md:8（底稿“启用与停用”拆出）"
+      },
+      {
+        "id": "f-restore",
+        "group": "g-control",
+        "name": "撤回原设置",
+        "what": "把屏保相关的 Windows 设置恢复到第一次开启前存下的样子",
+        "how": "跟 AI 说“把屏保设置撤回”",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "Set-NativeBubbles.ps1 -Action Restore；product-design.md:44,63"
+      },
+      {
+        "id": "f-remove",
+        "group": "g-control",
+        "name": "卸载",
+        "what": "只删自己的开机项和安装的程序",
+        "how": "跟 AI 说“把屏保卸了”",
+        "status": "说不准",
+        "screen": "emerald-veil-09",
+        "source": "Install-EmeraldVeil.ps1 -Action Remove；product-design.md:44,63"
+      },
+      {
+        "id": "f-wallpaper",
+        "group": "g-wallpaper",
+        "name": "雨林黑猫壁纸",
+        "what": "所有屏（含虚拟屏和 Windows 记得的离线屏）的桌面底图和系统锁屏统一成 3840×2160 的雨林黑猫",
+        "how": "跟 AI 说“装壁纸”或“壁纸被换掉了，装回来”",
+        "status": "在用",
+        "screen": "emerald-veil-10",
+        "source": "windows-background.md:3,23；本机 WallPaper 现指向 rain-fa8d1fdc7799…png（北京 9/9 13:34）"
+      },
+      {
+        "id": "f-wallpaper-verify",
+        "group": "g-wallpaper",
+        "name": "只检查不改",
+        "what": "逐块屏核对图片、固定模式和持久副本，锁屏按解码后的画面比对；不锁电脑",
+        "how": "跟 AI 说“检查一下壁纸”",
+        "status": "说不准",
+        "screen": "emerald-veil-10",
+        "source": "windows-background.md:25-31；Set-WindowsBackground.ps1 -Action Verify"
+      },
+      {
+        "id": "f-wallpaper-move",
+        "group": "g-wallpaper",
+        "name": "换机装回",
+        "what": "新电脑克隆仓库跑一条命令装回桌面和锁屏；不要管理员、SDK、Wallpaper Engine、原盘符",
+        "how": "跟 AI 说“新电脑，把壁纸和锁屏装回来”",
+        "status": "待验收",
+        "screen": "emerald-veil-10",
+        "source": "windows-background.md:7-21；PCConfig project_restore_anchors.json:9；还没在第二台电脑用过"
+      },
+      {
+        "id": "f-wallpaper-undo",
+        "group": "g-wallpaper",
+        "name": "原图留底",
+        "what": "第一次换之前把原桌面图、每屏原图、原锁屏和设置存到本机；撤回在“设置 → 个性化”选",
+        "how": "自动；想换回时自己在 Windows 设置里选",
+        "status": "在用",
+        "screen": "emerald-veil-10",
+        "source": "windows-background.md:35；本机 before-first-apply.json、previous-*.jpg（北京 9/8–9/9）"
+      },
+      {
+        "id": "f-phone-wallpaper",
+        "group": "g-wallpaper",
+        "name": "手机壁纸留底",
+        "what": "手机正在用的 1440×3200 壁纸逐字节存进仓库",
+        "how": "换手机时从仓库拿",
+        "status": "在用",
+        "screen": "emerald-veil-10",
+        "source": "assets/mobile-wallpaper/README.md；提交 5a2f8d7"
+      },
+      {
+        "id": "f-edge-fix",
+        "group": "g-later",
+        "name": "修左边缘错位",
+        "what": "多屏加 Wallpaper Engine 时泡泡底图左边可能错位；候选修法测过，没发布、没装、没在实体屏验收",
+        "how": "要做时跟 AI 明确说",
+        "status": "待实施",
+        "screen": "emerald-veil-10",
+        "source": "product-design.md:71"
+      },
+      {
+        "id": "f-speed",
+        "group": "g-later",
+        "name": "泡泡稍快一点",
+        "what": "把原版泡泡调快一点；现在不管速度参数",
+        "how": "要做时跟 AI 明确说",
+        "status": "待实施",
+        "screen": "emerald-veil-10",
+        "source": "product-design.md:73"
+      },
+      {
+        "id": "f-rain-experiment",
+        "group": "g-later",
+        "name": "会下雨的动态壁纸",
+        "what": "照原画做会下雨的动态壁纸和会动的黑猫；猫抠图走样被本人否掉，9 月 8 日终止；9 月 29 日实验文件删了，只留 ART_DIRECTION.md 里的方向记录和认可的雨幕参数",
+        "how": "不再用；只有本人重新明确要才重开",
+        "status": "已停用",
+        "screen": "emerald-veil-10",
+        "source": "experiments/verdant-rain/ART_DIRECTION.md:3-11；AGENTS.md:11；提交 2b08a38（删实验文件和旧原画 assets/emerald-veil-background.jpg）"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-idle",
+        "text": "6 分钟",
+        "meaning": "没有有效输入多久后放泡泡（360 秒）",
+        "as_of": "2026-09-28",
+        "source": "App.xaml.cs:159 默认 6 分钟；本机 HKCU\\Control Panel\\Desktop ScreenSaveTimeOut=360 现读",
+        "screens": [
+          "emerald-veil-01",
+          "emerald-veil-02",
+          "emerald-veil-03",
+          "emerald-veil-06",
+          "emerald-veil-09",
+          "emerald-veil-11"
+        ]
+      },
+      {
+        "id": "n-one-screen",
+        "text": "1 块屏",
+        "meaning": "泡泡只放的实体主屏数",
+        "as_of": "2026-09-28",
+        "source": "DisplayTargetPolicy.cs:10-19 只取一块",
+        "screens": [
+          "emerald-veil-01"
+        ]
+      },
+      {
+        "id": "n-4k",
+        "text": "4K / 3840×2160",
+        "meaning": "电脑桌面和锁屏用图的尺寸",
+        "as_of": "2026-09-28",
+        "source": "assets/windows-background.json:5-6",
+        "screens": [
+          "emerald-veil-01",
+          "emerald-veil-04",
+          "emerald-veil-10"
+        ]
+      },
+      {
+        "id": "n-preview",
+        "text": "15 秒",
+        "meaning": "预览最长时间",
+        "as_of": "2026-09-28",
+        "source": "TrayIconHost.cs:33；product-design.md:29",
+        "screens": [
+          "emerald-veil-02",
+          "emerald-veil-09"
+        ]
+      },
+      {
+        "id": "n-source-size",
+        "text": "1672×941",
+        "meaning": "电脑壁纸生图原图尺寸",
+        "as_of": "2026-09-28",
+        "source": "assets/windows-background.json:10-11",
+        "screens": [
+          "emerald-veil-04"
+        ]
+      },
+      {
+        "id": "n-phone-size",
+        "text": "841×1870 / 1440×3200",
+        "meaning": "手机壁纸生图原图和成品尺寸",
+        "as_of": "2026-09-28",
+        "source": "旧网站 content-emerald-veil.js gallery；assets/mobile-wallpaper/README.md:7",
+        "screens": [
+          "emerald-veil-04"
+        ]
+      },
+      {
+        "id": "n-cooldown",
+        "text": "5 秒、30 秒、第 3 次",
+        "meaning": "启动失败后的两次冷却和本次空闲放弃的次数",
+        "as_of": "2026-09-28",
+        "source": "LaunchRecoveryPolicy.cs:6-7；product-design.md:21",
+        "screens": [
+          "emerald-veil-05",
+          "emerald-veil-07"
+        ]
+      },
+      {
+        "id": "n-selfheal",
+        "text": "每 30 秒",
+        "meaning": "检查 Windows 屏保设置的间隔",
+        "as_of": "2026-09-28",
+        "source": "product-design.md:61",
+        "screens": [
+          "emerald-veil-05",
+          "emerald-veil-09"
+        ]
+      },
+      {
+        "id": "n-stable",
+        "text": "放满 30 秒清零",
+        "meaning": "稳定显示多久后清掉旧失败",
+        "as_of": "2026-09-28",
+        "source": "product-design.md:21",
+        "screens": [
+          "emerald-veil-07"
+        ]
+      },
+      {
+        "id": "n-poll",
+        "text": "50 毫秒",
+        "meaning": "读一次最后输入时间的间隔",
+        "as_of": "2026-09-28",
+        "source": "product-design.md:25",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-jitter",
+        "text": "250 毫秒",
+        "meaning": "第二次远程挪动要在多久内到才算有人",
+        "as_of": "2026-09-28",
+        "source": "product-design.md:25",
+        "screens": [
+          "emerald-veil-08",
+          "emerald-veil-09"
+        ]
+      },
+      {
+        "id": "n-exe",
+        "text": "约 173 MB",
+        "meaning": "安装的单文件常驻程序大小（173,053,596 字节）",
+        "as_of": "2026-09-28",
+        "source": "Get-Item C:\\Users\\10979\\AppData\\Local\\Programs\\EmeraldVeil\\EmeraldVeil.exe",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-cs-lines",
+        "text": "C# 3,266 行",
+        "meaning": "受版本控制的 src 下 C#（App 2,764＋Core 502），不含测试",
+        "as_of": "2026-09-28",
+        "source": "git ls-files 逐个数行，提交 168c200",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-ps-lines",
+        "text": "PowerShell 1,556 行",
+        "meaning": "scripts 下 4 个脚本",
+        "as_of": "2026-09-28",
+        "source": "git ls-files 逐个数行，提交 168c200",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "67 个自动测试",
+        "meaning": "测试方法数（Fact 61、Theory 6）",
+        "as_of": "2026-09-28",
+        "source": "tests/EmeraldVeil.Core.Tests/*.cs 计 [Fact]/[Theory]",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-commits",
+        "text": "45 次提交",
+        "meaning": "8 月 11 日–9 月 29 日（北京）全部提交",
+        "as_of": "2026-09-29",
+        "source": "git rev-list --count HEAD（f46e59b）",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-version",
+        "text": "0.1.39 版",
+        "meaning": "本机安装的版本",
+        "as_of": "2026-09-28",
+        "source": "EmeraldVeil.exe ProductVersion；csproj Version",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      },
+      {
+        "id": "n-ci",
+        "text": "最近 5 次都通过",
+        "meaning": "GitHub Actions 最近 5 次构建测试结果",
+        "as_of": "2026-09-28",
+        "source": "gh run list -R wlyaaaaa/emerald-veil -L 5",
+        "screens": [
+          "emerald-veil-06"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-panel-hub",
+        "with": "pc-panel-hub",
+        "direction": "互不打扰",
+        "flow": "双屏信息中心的水冷曲面屏在 Windows 里身份是 MONITOR\\TUR0000，本项目按身份排除、不放泡泡；机箱竖屏走 USB 串口不是显示器。反过来，双屏信息中心的窗口保护把 Bubbles、EmeraldVeil 列为不搬不最小化",
+        "source": "DisplayTargetResolver.cs:32；TURZX-SideScreen AGENTS.md:9、WindowsDisplayWindowPolicy.ps1:652、TestPowerWatchdog.ps1:132"
+      },
+      {
+        "id": "r-pcconfig-blackout",
+        "with": "pcconfig",
+        "direction": "被暂停",
+        "flow": "电脑配置与恢复的主屏黑幕工具（Ctrl+Win+R）在黑幕期间持有 Local\\EmeraldVeil.ExternalProtectionPause 标记，本项目看到标记就不放泡泡；标记消失恢复",
+        "source": "PCConfig tools/PrimaryOledBlackout/PrimaryOledBlackout.cs:215；docs/recovery/primary_oled_blackout.md:31-35；product-design.md:65-67"
+      },
+      {
+        "id": "r-pcconfig-registry",
+        "with": "pcconfig",
+        "direction": "被登记",
+        "flow": "开机项和程序路径登记在 project_config_keys.json（emerald_veil/startup.entrypoint、app.executable）；壁纸是换机恢复锚点；4K 图在 E、G、H 备份里核对过同一 SHA-256",
+        "source": "PCConfig registries/project_config_keys.json:3988-4080；project_restore_anchors.json:9-17；backup_media_structure.json:243"
+      },
+      {
+        "id": "r-streaming-vdd",
+        "with": "sunshine-remote-streaming",
+        "direction": "互不打扰",
+        "flow": "串流用的虚拟屏（MTT1337）不放泡泡；但泡泡底图取这块虚拟屏上 Wallpaper Engine 选的壁纸，桌面壁纸脚本也给它设底图",
+        "source": "DisplayTargetResolver.cs:36；product-design.md:9,13；windows-background.md:3"
+      },
+      {
+        "id": "r-wallpaper-engine",
+        "with": "Wallpaper Engine",
+        "direction": "读取",
+        "flow": "读它的配置找到虚拟屏选的壁纸和属性（音量设 0），拿来当泡泡底图；从不停止、暂停、重放或改它的设置",
+        "source": "WallpaperSelection.cs:6-37；WallpaperEngineBackground.cs；product-design.md:13"
+      },
+      {
+        "id": "r-windows-bubbles",
+        "with": "Windows Bubbles.scr",
+        "direction": "调用",
+        "flow": "启动系统自带的 C:\\Windows\\System32\\Bubbles.scr /s；写它的每用户参数 Radius、ShowBubbles、MaterialGlass",
+        "source": "product-design.md:13,48-58"
+      },
+      {
+        "id": "r-github",
+        "with": "GitHub",
+        "direction": "发布",
+        "flow": "公开仓库 wlyaaaaa/emerald-veil；每次推送 Actions 构建测试；不发安装包，README 首屏写明从源码安装当前版本；8 月 11 日的 v0.1.0、v0.1.1 两个 Release 9 月 29 日已删（标签和源码历史保留）",
+        "source": "gh run list；gh release list（9/29 为空）；README.md；提交 f46e59b"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-remote-jitter",
+        "title": "泡泡出来两秒就没了，查到是远程软件的“假动作”。",
+        "screen": "emerald-veil-08"
+      },
+      {
+        "id": "h-native-bubbles",
+        "title": "泡泡是 Windows 原版的，一个都没自己画。",
+        "screen": "emerald-veil-08"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/cockpit/#emerald-veil",
+        "screen": "emerald-veil-01",
+        "text": "现在正不正常 → 驾驶舱"
+      },
+      {
+        "target": "/how/#emerald-veil",
+        "screen": "emerald-veil-01",
+        "text": "在整套系统里的位置 → 怎么协作"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "emerald-veil-03",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/projects/pc-panel-hub/",
+        "screen": "emerald-veil-03",
+        "text": "双屏信息中心"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "emerald-veil-03",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/rules/charter/#L25",
+        "screen": "emerald-veil-11",
+        "text": "约法 L25"
+      }
+    ],
+    "live": [
+      {
+        "slot": "run",
+        "meaning": "常驻程序在不在跑、泡泡开没开（例如“待命中”“已停用”“没在运行”“有两个在跑”“暂时读不到”）",
+        "source": "看板接口现在不读，第 2 批要接：进程 EmeraldVeil.exe 是否正好 1 个；HKCU\\Software\\EmeraldVeil 的 NativeBubblesEnabled；或运行 EmeraldVeil.exe --status 读 JSON（enabled、hotKeyAvailable、presentation.lastFailure），它只问已在跑的常驻程序，不会新起一个"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [
+      "底稿“空闲泡泡”→ f-idle-bubbles（闲时泡泡）；“立即启动”→ f-show-now，另把托盘里的 15 秒预览单列 f-preview（代码里是两个入口，行为不同：一个飘到有输入，一个最多 15 秒）。",
+      "底稿“输入退出”→ f-dismiss；其中过滤远程假动作的机制单列 f-remote-jitter，因为它是一个独立修过的问题（亮点一）。",
+      "底稿“实体屏选择”→ f-physical-only；黑幕让路单列 f-blackout-yield（它是和电脑配置与恢复的配合，不是选屏规则本身）。",
+      "底稿“静态壁纸”拆成 f-wallpaper、f-wallpaper-verify、f-wallpaper-move、f-wallpaper-undo：脚本的 Apply、Verify、换机恢复、原图留底是四件本人可能分别关心的事；手机壁纸备份单列 f-phone-wallpaper。",
+      "底稿“动态壁纸共存”→ f-wallpaper-under（泡泡底下垫壁纸）：现役做法是把虚拟屏上 Wallpaper Engine 选的那张铺成底图，名字按实际行为改。",
+      "底稿“启用与停用”拆成 f-enable、f-disable、f-restore、f-remove，另加 f-autostart、f-self-heal、f-status：脚本和托盘里是七个不同入口，本人要看出哪些该退役。",
+      "底稿 future_scope“雨景实验”→ f-rain-experiment，标已停用（实验已终止，9 月 29 日实验文件已删，只留 ART_DIRECTION.md）；产品说明里延后的两项视觉修正列为 f-edge-fix、f-speed（待实施）。"
+    ],
+    "dropped": [
+      "亮点“停用就是真停”撤下（审稿第 1 条，本人定过亮点只收已经在用的做法，停用没有真用过的记录），内容挪到第 7 屏“为什么这样设计”第 7 条，托盘没有“退出”的小巧思并进第 4 条。",
+      "底稿 privacy_note“不放本机屏幕截图或机器设置”没有照办：按全站规矩本机路径、机器名、注册表值属于可公开；页面没有放本机屏幕截图（仓库和旧网站都没有泡泡的真实截图），只放了两张壁纸生图原图（旧网站已公开用过）。",
+      "旧网站写过“托盘 15 秒预览期间不因输入提前结束”，和现役 product-design.md:29（预览可被输入打断）矛盾，以现役为准，没上。",
+      "旧网站“9 月 8 日发现开着但程序已停止”那次事故没上页面：原因没查清，写进 audit.md。",
+      "常驻程序的资源占用（9 月 27–28 日约 24 小时累计 CPU 401 秒、内存约 142 MB）没上页面，写进 audit.md。"
+    ],
+    "unsure": [
+      "泡泡底图为什么取串流虚拟屏上 Wallpaper Engine 选的那张、而不是主屏自己的动态壁纸：仓库文档（product-design.md:13、AGENTS.md:5）和 9 月 18 日提交 61982f5 只写做法、没写原因，Codex 摘要里也没找到。页面照实写做法，没编理由；请 Claude 或本人补一句原因后再加到第 6 屏。",
+      "“设置自修”标“在用”：它在常驻程序里每 30 秒跑一次，程序在跑就算在执行；但没有它真的改回过设置的记录。",
+      "替本人口吻或转述本人的句子（上线前请本人过目）：第 8 屏“本人要的是‘像 Windows XP 那样的泡泡屏保’，还‘看着不能太丑’”，第 11 屏“‘像 Windows XP 的泡泡屏保’、有透明度、偏纯绿、不能丑”（原话来自 Codex 8 月 11 日任务摘要：“看着不能太丑”“我比较喜欢纯绿方向的”“类似于WINDOWS XP的泡泡屏幕保护”“有透明度就行了”）；第 8 屏“本人指出那次是自己在测试”（摘要 input_jitter_fix Task 2）；第 11 屏“猫抠出来毛边变了样，本人否掉”（ART_DIRECTION.md:5）。",
+      "第 4 屏“照原来那张桌面图重新生成”：依据是本机 previous-desktop.jpg 与仓库 emerald-veil-background.jpg 同一 SHA-256、实验把它当“原画”、两张构图一致；选图清单只写“user-selected-generated-illustration”，没写用的哪个生图工具，所以页面不写工具名。（仓库里那张 emerald-veil-background.jpg 9 月 29 日随雨景实验一起删了，Git 历史里还在。）",
+      "第 1 屏“真正防烧屏还得靠显示器自带的像素位移和面板刷新”：依据是 8 月调研飞利浦说明书（摘要）和 product-design.md:81“不保证防 OLED 烧屏”；显示器上这几项现在开没开，没核对。",
+      "第 7 屏“Windows 自己的屏保会铺满所有屏，还可能黑屏、锁屏”：前半句是 Windows 屏保的一般行为（我的常识），后半句依据本人 8 月“不希望 Windows 自己进入黑屏/锁屏”；项目文档只写“防止两个屏保抢”（product-design.md:61）。",
+      "第 11 屏“9 月 1 日泡泡底下铺选好的壁纸，不再透出当时的桌面”：为什么从透明叠加改成铺底图，提交里没写原因（f105b92 只有标题），页面只写做了什么。",
+      "“现在”横条的 run 槽位：这个项目不是计划任务，电脑配置与恢复的计划任务目录里没有它，看板接口现在读不到；第 2 批要按 registry.live 的办法接，接不上时框里会一直是“暂时读不到”。",
+      "水冷曲面屏的身份 TUR0000 是从双屏信息中心的测试和恢复代码里读到的（TestPowerWatchdog.ps1:132 写作 'MONITOR\\TUR0000\\water-screen'），没有现场枚举显示器核对（本会话的命令行看不到完整的显示器列表）。",
+      "第 6 屏“最近 5 次都通过”：9 月 29 日 gh run list 看，最近 5 次（含 9 月 29 日两次推送）都是 success。"
+    ]
+  }
+}

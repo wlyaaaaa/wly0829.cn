@@ -1,0 +1,1899 @@
+[
+  {
+    "screen": "sunshine-remote-streaming-01",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-01-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "illustration",
+      "stat_card",
+      "action_button",
+      "inline_link",
+      "live_strip",
+      "content_card",
+      "icon",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "stat_card",
+      "prose",
+      "action_button",
+      "live_strip",
+      "chapter_title",
+      "inline_link",
+      "content_card",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上毛笔艺术字大标题，下面一段介绍。右上一幅水彩插画：左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：两个小齿轮、两块屏幕之间一个来回箭头、一把锁住的小门、一叠打着对勾的试卷。数字卡下面一个白底描边按钮〔在整套系统里的位置 → 怎么协作〕，按钮下面一行灰色小字（含〔电脑远程控制〕链接）。最下面一条细长圆角横条“现在”：左边“现在”两个字，接着两个留空的浅色圆角框（左框约占横条宽度 30%，右框约 30%，高度和按钮一样，网页程序往里填字，框里不画任何字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：大标题和介绍在上；插画放在介绍下面，占满宽度；四张数字卡两两一行共两行；入口按钮一行；灰色小字一行；最下面“现在”横条：上面“现在”两个字，下面两个空框上下排、各占满宽度，再下面按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上一幅水彩插画",
+        "上面小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上毛笔艺术字大标题，下面一段介绍。右上一幅水彩插画：左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：两个小齿轮、两块屏幕之间一个来回箭头、一把锁住的小门、一叠打着对勾的试卷。数字卡下面一个白底描边按钮〔在整套系统里的位置 → 怎么协作〕，按钮下面一行灰色小字（含〔电脑远程控制〕链接）。最下面一条细长圆角横条“现在”：左边“现在”两个字，接着两个留空的浅色圆角框（左框约占横条宽度 30%，右框约 30%，高度和按钮一样，网页程序往里填字，框里不画任何字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "portrait": "竖版：大标题和介绍在上；插画放在介绍下面，占满宽度；四张数字卡两两一行共两行；入口按钮一行；灰色小字一行；最下面“现在”横条：上面“现在”两个字，下面两个空框上下排、各占满宽度，再下面按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "60%",
+        "text_ref": "大标题：远程电脑串流"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "hero",
+        "width": "40%"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "数字卡片（截至9月29日）："
+      },
+      {
+        "type": "feature_card",
+        "columns": 4,
+        "portrait_columns": 2,
+        "illustration": "left_inside",
+        "text_ref": "12个自动任务：画面切换每3秒看一次，体检每天14:30228次自动换画面：主屏"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让手机或笔记本上的AI直接在电脑上办事，是另一个项目：电脑远程控制"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n四张数字卡原文解析成一组 steps（每项还有定稿编号），stat_card 只消费 stats；当前用 feature_card 保留完整编号和内容。数字/单位与说明拆分并放大数字、顶上独立插画的统计卡接口尚缺。\n横版 now 两框各约30%、竖版标签/两框/按钮顺排：live_strip 当前固定自己的栏宽及竖布局，比例和独立按钮位置未消费。\n清单未登记这些完整原文的逐字一致毛笔标题图：大标题：远程电脑串流；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 2 项，文字盘点预算 4 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "四张数字卡原文解析成一组 steps（每项还有定稿编号），stat_card 只消费 stats；当前用 feature_card 保留完整编号和内容。数字/单位与说明拆分并放大数字、顶上独立插画的统计卡接口尚缺。",
+      "横版 now 两框各约30%、竖版标签/两框/按钮顺排：live_strip 当前固定自己的栏宽及竖布局，比例和独立按钮位置未消费。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：大标题：远程电脑串流；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 2 项，文字盘点预算 4 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 2
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-01",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-01-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "illustration",
+      "stat_card",
+      "action_button",
+      "inline_link",
+      "live_strip",
+      "content_card",
+      "icon",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "stat_card",
+      "prose",
+      "action_button",
+      "live_strip",
+      "chapter_title",
+      "inline_link",
+      "content_card",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上毛笔艺术字大标题，下面一段介绍。右上一幅水彩插画：左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：两个小齿轮、两块屏幕之间一个来回箭头、一把锁住的小门、一叠打着对勾的试卷。数字卡下面一个白底描边按钮〔在整套系统里的位置 → 怎么协作〕，按钮下面一行灰色小字（含〔电脑远程控制〕链接）。最下面一条细长圆角横条“现在”：左边“现在”两个字，接着两个留空的浅色圆角框（左框约占横条宽度 30%，右框约 30%，高度和按钮一样，网页程序往里填字，框里不画任何字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：大标题和介绍在上；插画放在介绍下面，占满宽度；四张数字卡两两一行共两行；入口按钮一行；灰色小字一行；最下面“现在”横条：上面“现在”两个字，下面两个空框上下排、各占满宽度，再下面按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上一幅水彩插画",
+        "上面小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上毛笔艺术字大标题，下面一段介绍。右上一幅水彩插画：左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：两个小齿轮、两块屏幕之间一个来回箭头、一把锁住的小门、一叠打着对勾的试卷。数字卡下面一个白底描边按钮〔在整套系统里的位置 → 怎么协作〕，按钮下面一行灰色小字（含〔电脑远程控制〕链接）。最下面一条细长圆角横条“现在”：左边“现在”两个字，接着两个留空的浅色圆角框（左框约占横条宽度 30%，右框约 30%，高度和按钮一样，网页程序往里填字，框里不画任何字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "portrait": "竖版：大标题和介绍在上；插画放在介绍下面，占满宽度；四张数字卡两两一行共两行；入口按钮一行；灰色小字一行；最下面“现在”横条：上面“现在”两个字，下面两个空框上下排、各占满宽度，再下面按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "大标题：远程电脑串流"
+      },
+      {
+        "type": "prose",
+        "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "数字卡片（截至9月29日）："
+      },
+      {
+        "type": "feature_card",
+        "columns": 4,
+        "portrait_columns": 2,
+        "illustration": "left_inside",
+        "text_ref": "12个自动任务：画面切换每3秒看一次，体检每天14:30228次自动换画面：主屏"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让手机或笔记本上的AI直接在电脑上办事，是另一个项目：电脑远程控制"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n四张数字卡原文解析成一组 steps（每项还有定稿编号），stat_card 只消费 stats；当前用 feature_card 保留完整编号和内容。数字/单位与说明拆分并放大数字、顶上独立插画的统计卡接口尚缺。\n横版 now 两框各约30%、竖版标签/两框/按钮顺排：live_strip 当前固定自己的栏宽及竖布局，比例和独立按钮位置未消费。\n清单未登记这些完整原文的逐字一致毛笔标题图：大标题：远程电脑串流；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 2 项，文字盘点预算 4 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "四张数字卡原文解析成一组 steps（每项还有定稿编号），stat_card 只消费 stats；当前用 feature_card 保留完整编号和内容。数字/单位与说明拆分并放大数字、顶上独立插画的统计卡接口尚缺。",
+      "横版 now 两框各约30%、竖版标签/两框/按钮顺排：live_strip 当前固定自己的栏宽及竖布局，比例和独立按钮位置未消费。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：大标题：远程电脑串流；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 2 项，文字盘点预算 4 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 2
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-02",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-02-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "prose",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "illustration",
+      "content_card",
+      "notice",
+      "chapter_title",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。卡片标题粗体，下面正文。卡片下面一条横跨整屏的浅绿细卡片，左边画一只手按着键盘上高亮的 Ctrl、Win、R 三个键帽，右边一行字（含链接）。",
+      "portrait": "竖版：标题在上；三张场景卡一行一张，插画在每张卡片顶部；浅绿细卡片在最下，键帽插画放在字的上面。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "顶部一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。卡片标题粗体，下面正文。卡片下面一条横跨整屏的浅绿细卡片，左边画一只手按着键盘上高亮的 Ctrl、Win、R 三个键帽，右边一行字（含链接）。",
+    "portrait": "竖版：标题在上；三张场景卡一行一张，插画在每张卡片顶部；浅绿细卡片在最下，键帽插画放在字的上面。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：怎么用"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "row": "use-cards",
+        "width": "33%",
+        "text_ref": "1在公司，接着用家里的主机",
+        "illustration_asset": [
+          "_library/illustrations/电脑远程.png"
+        ],
+        "row_card_notes": true,
+        "row_equal_height": true
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "row": "use-cards",
+        "width": "34%",
+        "text_ref": "2人在外面，手机上看一眼",
+        "illustration_asset": [
+          "_library/illustrations/手机远程.png"
+        ],
+        "row_card_notes": true,
+        "row_equal_height": true
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "row": "use-cards",
+        "width": "33%",
+        "text_ref": "3主屏关着，照样有画面",
+        "illustration_asset": [
+          "_library/illustrations/显示屏切换.png"
+        ],
+        "row_card_notes": true,
+        "row_equal_height": true,
+        "row_note_from": "这一套还在等我实际连一次核对"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "text_ref": "人在家、主屏开着又不想让它亮：按Ctrl+Win+R给主屏盖一层黑幕，串流照样看"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n三张场景卡顶部插画及底部 Ctrl/Win/R 键帽插画必须在卡内；source_text_card 普通模式只有 bottom_inside 已实现，top_inside 字段目前不会输出对应插画，需三张具体插画映射与顶部模式。\n三张卡头是单条 steps 后跟 para，不是 card/group；whole_block 保证每个场景完整放一外卡，但把单步名称提升为独立卡头尚未实现。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：怎么用；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 3 个插画位；缺 3 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "三张场景卡顶部插画及底部 Ctrl/Win/R 键帽插画必须在卡内；source_text_card 普通模式只有 bottom_inside 已实现，top_inside 字段目前不会输出对应插画，需三张具体插画映射与顶部模式。",
+      "三张卡头是单条 steps 后跟 para，不是 card/group；whole_block 保证每个场景完整放一外卡，但把单步名称提升为独立卡头尚未实现。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：怎么用；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 3 个插画位；缺 3 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 3,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-02",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-02-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "prose",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "illustration",
+      "content_card",
+      "notice",
+      "chapter_title",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。卡片标题粗体，下面正文。卡片下面一条横跨整屏的浅绿细卡片，左边画一只手按着键盘上高亮的 Ctrl、Win、R 三个键帽，右边一行字（含链接）。",
+      "portrait": "竖版：标题在上；三张场景卡一行一张，插画在每张卡片顶部；浅绿细卡片在最下，键帽插画放在字的上面。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "顶部一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。卡片标题粗体，下面正文。卡片下面一条横跨整屏的浅绿细卡片，左边画一只手按着键盘上高亮的 Ctrl、Win、R 三个键帽，右边一行字（含链接）。",
+    "portrait": "竖版：标题在上；三张场景卡一行一张，插画在每张卡片顶部；浅绿细卡片在最下，键帽插画放在字的上面。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：怎么用"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "1在公司，接着用家里的主机",
+        "illustration_asset": [
+          "_library/illustrations/电脑远程.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "2人在外面，手机上看一眼",
+        "illustration_asset": [
+          "_library/illustrations/手机远程.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "3主屏关着，照样有画面",
+        "illustration_asset": [
+          "_library/illustrations/显示屏切换.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "text_ref": "人在家、主屏开着又不想让它亮：按Ctrl+Win+R给主屏盖一层黑幕，串流照样看"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n三张场景卡顶部插画及底部 Ctrl/Win/R 键帽插画必须在卡内；source_text_card 普通模式只有 bottom_inside 已实现，top_inside 字段目前不会输出对应插画，需三张具体插画映射与顶部模式。\n三张卡头是单条 steps 后跟 para，不是 card/group；whole_block 保证每个场景完整放一外卡，但把单步名称提升为独立卡头尚未实现。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：怎么用；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 3 个插画位；缺 3 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "三张场景卡顶部插画及底部 Ctrl/Win/R 键帽插画必须在卡内；source_text_card 普通模式只有 bottom_inside 已实现，top_inside 字段目前不会输出对应插画，需三张具体插画映射与顶部模式。",
+      "三张卡头是单条 steps 后跟 para，不是 card/group；whole_block 保证每个场景完整放一外卡，但把单步名称提升为独立卡头尚未实现。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：怎么用；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 3 个插画位；缺 3 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 3,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-03",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-03-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "chapter_title",
+      "icon",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。六张横向圆角卡片排成两列三行，每张左边一个小水彩图标（断开的绿色丝带、一只蜗牛、一块屏幕上一个问号、一个被卡住的小窗口、一个合上的闸门、一只手拿着手机连一下又断开），右边粗体一句加小字。最下面一条横跨整屏的浅灰细卡片，写“不归它管”。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；“不归它管”在最下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。六张横向圆角卡片排成两列三行，每张左边一个小水彩图标（断开的绿色丝带、一只蜗牛、一块屏幕上一个问号、一个被卡住的小窗口、一个合上的闸门、一只手拿着手机连一下又断开），右边粗体一句加小字。最下面一条横跨整屏的浅灰细卡片，写“不归它管”。",
+    "portrait": "竖版：标题在上；六张卡片一行一张；“不归它管”在最下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：出事怎么办"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1连不上电脑关机、睡着或断网时，串流也连不上，得先把电脑弄起来（办法见电脑远程控"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不归它管：Windows远程桌面、ToDesk看门狗，见电脑配置与恢复。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n六卡源语义图标（断带、蜗牛、问号屏、卡住窗口、闸门、手机）须核对，未按现有候选顺序当成事实。灰 notice 当前沿浅绿，源灰底需样张。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 4 项，文字盘点预算 6 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "六卡源语义图标（断带、蜗牛、问号屏、卡住窗口、闸门、手机）须核对，未按现有候选顺序当成事实。灰 notice 当前沿浅绿，源灰底需样张。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 6 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-03",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-03-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "chapter_title",
+      "icon",
+      "notice",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。六张横向圆角卡片排成两列三行，每张左边一个小水彩图标（断开的绿色丝带、一只蜗牛、一块屏幕上一个问号、一个被卡住的小窗口、一个合上的闸门、一只手拿着手机连一下又断开），右边粗体一句加小字。最下面一条横跨整屏的浅灰细卡片，写“不归它管”。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；“不归它管”在最下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。六张横向圆角卡片排成两列三行，每张左边一个小水彩图标（断开的绿色丝带、一只蜗牛、一块屏幕上一个问号、一个被卡住的小窗口、一个合上的闸门、一只手拿着手机连一下又断开），右边粗体一句加小字。最下面一条横跨整屏的浅灰细卡片，写“不归它管”。",
+    "portrait": "竖版：标题在上；六张卡片一行一张；“不归它管”在最下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：出事怎么办"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1连不上电脑关机、睡着或断网时，串流也连不上，得先把电脑弄起来（办法见电脑远程控"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不归它管：Windows远程桌面、ToDesk看门狗，见电脑配置与恢复。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n六卡源语义图标（断带、蜗牛、问号屏、卡住窗口、闸门、手机）须核对，未按现有候选顺序当成事实。灰 notice 当前沿浅绿，源灰底需样张。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 4 项，文字盘点预算 6 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "六卡源语义图标（断带、蜗牛、问号屏、卡住窗口、闸门、手机）须核对，未按现有候选顺序当成事实。灰 notice 当前沿浅绿，源灰底需样张。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 6 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-04",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-04-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "flow",
+      "content_card",
+      "bullet_list",
+      "icon",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "flow",
+      "content_card",
+      "chapter_title",
+      "bullet_list",
+      "icon",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。上半部分一张从左到右的流程图：四个圆角节点（笔记本和手机并排、画 Moonlight 标志；一张绿色网、画 Tailscale 标志；一台机箱、画 Sunshine 标志和一块显卡；两块屏幕，一块实线的物理屏、一块虚线的备用屏），绿色箭头依次连起来，每个节点下面粗体名字加两三行小字。下半部分左边一张卡片“两个自动任务”，画一个小齿轮和一个听诊器；右边一张卡片“模型”，画一个写着 PS 的小方块。",
+      "portrait": "竖版：流程图改成从上往下，四个节点一行一个，箭头朝下；“两个自动任务”卡片和“模型”卡片在下面，一行一张。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "一次连接走的路"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。上半部分一张从左到右的流程图：四个圆角节点（笔记本和手机并排、画 Moonlight 标志；一张绿色网、画 Tailscale 标志；一台机箱、画 Sunshine 标志和一块显卡；两块屏幕，一块实线的物理屏、一块虚线的备用屏），绿色箭头依次连起来，每个节点下面粗体名字加两三行小字。下半部分左边一张卡片“两个自动任务”，画一个小齿轮和一个听诊器；右边一张卡片“模型”，画一个写着 PS 的小方块。",
+    "portrait": "竖版：流程图改成从上往下，四个节点一行一个，箭头朝下；“两个自动任务”卡片和“模型”卡片在下面，一行一张。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "一次连接走的路"
+      },
+      {
+        "type": "flow",
+        "columns": 4,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1客户端笔记本：Moonlight；手机：Moonlight或Artemis。配"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "row": "tasks",
+        "width": "50%",
+        "text_ref": "两个自动任务（后台运行，不弹窗口，约法L28）"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "row": "tasks",
+        "width": "50%",
+        "text_ref": "模型：运行时没有AI模型，守护、体检、修复都是PowerShell脚本（改窗口和"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n下方两卡标题‘两个自动任务’与‘模型’是 para 中原文，panel 保全文字但尚未从 para 拆出卡头。齿轮/听诊器多图组合与 PS 方块须明确 header_icon 映射。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "下方两卡标题‘两个自动任务’与‘模型’是 para 中原文，panel 保全文字但尚未从 para 拆出卡头。齿轮/听诊器多图组合与 PS 方块须明确 header_icon 映射。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-04",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-04-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "flow",
+      "content_card",
+      "bullet_list",
+      "icon",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "flow",
+      "content_card",
+      "chapter_title",
+      "bullet_list",
+      "icon",
+      "inline_link",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。上半部分一张从左到右的流程图：四个圆角节点（笔记本和手机并排、画 Moonlight 标志；一张绿色网、画 Tailscale 标志；一台机箱、画 Sunshine 标志和一块显卡；两块屏幕，一块实线的物理屏、一块虚线的备用屏），绿色箭头依次连起来，每个节点下面粗体名字加两三行小字。下半部分左边一张卡片“两个自动任务”，画一个小齿轮和一个听诊器；右边一张卡片“模型”，画一个写着 PS 的小方块。",
+      "portrait": "竖版：流程图改成从上往下，四个节点一行一个，箭头朝下；“两个自动任务”卡片和“模型”卡片在下面，一行一张。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "一次连接走的路"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。上半部分一张从左到右的流程图：四个圆角节点（笔记本和手机并排、画 Moonlight 标志；一张绿色网、画 Tailscale 标志；一台机箱、画 Sunshine 标志和一块显卡；两块屏幕，一块实线的物理屏、一块虚线的备用屏），绿色箭头依次连起来，每个节点下面粗体名字加两三行小字。下半部分左边一张卡片“两个自动任务”，画一个小齿轮和一个听诊器；右边一张卡片“模型”，画一个写着 PS 的小方块。",
+    "portrait": "竖版：流程图改成从上往下，四个节点一行一个，箭头朝下；“两个自动任务”卡片和“模型”卡片在下面，一行一张。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "一次连接走的路"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1客户端笔记本：Moonlight；手机：Moonlight或Artemis。配"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "两个自动任务（后台运行，不弹窗口，约法L28）"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "模型：运行时没有AI模型，守护、体检、修复都是PowerShell脚本（改窗口和"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n下方两卡标题‘两个自动任务’与‘模型’是 para 中原文，panel 保全文字但尚未从 para 拆出卡头。齿轮/听诊器多图组合与 PS 方块须明确 header_icon 映射。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "下方两卡标题‘两个自动任务’与‘模型’是 para 中原文，panel 保全文字但尚未从 para 拆出卡头。齿轮/听诊器多图组合与 PS 方块须明确 header_icon 映射。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-05",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-05-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "stat_card",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "stat_card",
+      "chapter_title",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行（小水彩图标：一个挂在门把手上的小牌子、一枚指纹、一块被玻璃罩罩住的显示器、一个合上的闸门、一个往回的箭头、一本合上的日志本），每张粗体一句＋两三行小字；右边约三分之一宽，竖着三张大数字卡。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；三张数字卡在最下，一行一张。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之二宽，六张横向小卡片两列三行（小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行（小水彩图标：一个挂在门把手上的小牌子、一枚指纹、一块被玻璃罩罩住的显示器、一个合上的闸门、一个往回的箭头、一本合上的日志本），每张粗体一句＋两三行小字；右边约三分之一宽，竖着三张大数字卡。",
+    "portrait": "竖版：标题在上；六张卡片一行一张；三张数字卡在最下，一行一张。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：为什么这样设计"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1只在没人连着时换屏。换屏要重启Sunshine，连着的人会被踢掉，所以只在没人",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "大数字卡："
+      },
+      {
+        "type": "stat_card",
+        "columns": 3,
+        "columns_v": 1,
+        "icons": "none",
+        "text_ref": "5,614行程序（PowerShell，含内嵌C#；不含空行）1,860行测试（"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n左六卡/右三张数字卡保持 67:33；六张卡的门牌/指纹/玻璃罩屏/闸门/回箭/日志本需要语义素材映射。原‘大数字卡：’节点是正文，不能为版式删掉。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "左六卡/右三张数字卡保持 67:33；六张卡的门牌/指纹/玻璃罩屏/闸门/回箭/日志本需要语义素材映射。原‘大数字卡：’节点是正文，不能为版式删掉。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-05",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-05-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "stat_card",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "stat_card",
+      "chapter_title",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行（小水彩图标：一个挂在门把手上的小牌子、一枚指纹、一块被玻璃罩罩住的显示器、一个合上的闸门、一个往回的箭头、一本合上的日志本），每张粗体一句＋两三行小字；右边约三分之一宽，竖着三张大数字卡。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；三张数字卡在最下，一行一张。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之二宽，六张横向小卡片两列三行（小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行（小水彩图标：一个挂在门把手上的小牌子、一枚指纹、一块被玻璃罩罩住的显示器、一个合上的闸门、一个往回的箭头、一本合上的日志本），每张粗体一句＋两三行小字；右边约三分之一宽，竖着三张大数字卡。",
+    "portrait": "竖版：标题在上；六张卡片一行一张；三张数字卡在最下，一行一张。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：为什么这样设计"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1只在没人连着时换屏。换屏要重启Sunshine，连着的人会被踢掉，所以只在没人"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "大数字卡："
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "text_ref": "5,614行程序（PowerShell，含内嵌C#；不含空行）1,860行测试（"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n左六卡/右三张数字卡保持 67:33；六张卡的门牌/指纹/玻璃罩屏/闸门/回箭/日志本需要语义素材映射。原‘大数字卡：’节点是正文，不能为版式删掉。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "左六卡/右三张数字卡保持 67:33；六张卡的门牌/指纹/玻璃罩屏/闸门/回箭/日志本需要语义素材映射。原‘大数字卡：’节点是正文，不能为版式删掉。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-06",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-06-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "content_card",
+      "illustration",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "illustration",
+      "chapter_title",
+      "prose",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题，标题下一行说明小字。两张竖向大卡片左右并排，每张上面一幅小水彩插画，卡片标题用大字，标题右边一个黄色或浅灰小圆点加状态字，下面一段正文。插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
+      "portrait": "竖版：标题和说明在上；两张卡片上下排，一行一张，插画在每张卡片顶部。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左右并排，每张上面一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题，标题下一行说明小字。两张竖向大卡片左右并排，每张上面一幅小水彩插画，卡片标题用大字，标题右边一个黄色或浅灰小圆点加状态字，下面一段正文。插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
+    "portrait": "竖版：标题和说明在上；两张卡片上下排，一行一张，插画在每张卡片顶部。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：还在等核对的两招"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说明：这两件都做成了，还没在真实使用里验过：换屏要等我实际连一次、断一次；直连要"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "row": "pending",
+        "width": "50%",
+        "text_ref": "1换屏不踢掉正在用的人●待验收",
+        "illustration_asset": [
+          "_library/illustrations/显示屏切换.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "row": "pending",
+        "width": "50%",
+        "text_ref": "2三层地址转换下，给手机打通IPv6这条路●说不准",
+        "illustration_asset": [
+          "_library/illustrations/三层网络墙.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n两张大卡的 top_inside 大插画未由普通 source_text_card 支持；要求暗屏/备用屏/连线门牌及三墙/IPv6丝带/问号两图。\n单条 steps 的功能名/状态标记需提升为卡头同行（待验收黄点、说不准浅灰点加状态字）；source_text_card 不支持步骤卡头提取，先保留所有原字。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：还在等核对的两招；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 2 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "两张大卡的 top_inside 大插画未由普通 source_text_card 支持；要求暗屏/备用屏/连线门牌及三墙/IPv6丝带/问号两图。",
+      "单条 steps 的功能名/状态标记需提升为卡头同行（待验收黄点、说不准浅灰点加状态字）；source_text_card 不支持步骤卡头提取，先保留所有原字。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：还在等核对的两招；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 2 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 2,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-06",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-06-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "content_card",
+      "illustration",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "illustration",
+      "chapter_title",
+      "prose",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题，标题下一行说明小字。两张竖向大卡片左右并排，每张上面一幅小水彩插画，卡片标题用大字，标题右边一个黄色或浅灰小圆点加状态字，下面一段正文。插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
+      "portrait": "竖版：标题和说明在上；两张卡片上下排，一行一张，插画在每张卡片顶部。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左右并排，每张上面一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题，标题下一行说明小字。两张竖向大卡片左右并排，每张上面一幅小水彩插画，卡片标题用大字，标题右边一个黄色或浅灰小圆点加状态字，下面一段正文。插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
+    "portrait": "竖版：标题和说明在上；两张卡片上下排，一行一张，插画在每张卡片顶部。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：还在等核对的两招"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说明：这两件都做成了，还没在真实使用里验过：换屏要等我实际连一次、断一次；直连要"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "1换屏不踢掉正在用的人●待验收",
+        "illustration_asset": [
+          "_library/illustrations/显示屏切换.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "2三层地址转换下，给手机打通IPv6这条路●说不准",
+        "illustration_asset": [
+          "_library/illustrations/三层网络墙.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n两张大卡的 top_inside 大插画未由普通 source_text_card 支持；要求暗屏/备用屏/连线门牌及三墙/IPv6丝带/问号两图。\n单条 steps 的功能名/状态标记需提升为卡头同行（待验收黄点、说不准浅灰点加状态字）；source_text_card 不支持步骤卡头提取，先保留所有原字。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：还在等核对的两招；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 2 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "两张大卡的 top_inside 大插画未由普通 source_text_card 支持；要求暗屏/备用屏/连线门牌及三墙/IPv6丝带/问号两图。",
+      "单条 steps 的功能名/状态标记需提升为卡头同行（待验收黄点、说不准浅灰点加状态字）；source_text_card 不支持步骤卡头提取，先保留所有原字。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：还在等核对的两招；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 2 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 2,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-07",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-07-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "prose"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "content_card",
+      "prose",
+      "chapter_title"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。一张横跨整屏的大卡片：左边约三分之一一幅水彩插画——一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门；右边约三分之二是卡片标题（大字）和正文。",
+      "portrait": "竖版：标题在上；插画在卡片顶部占满宽度，下面卡片标题和正文。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "一份被反复重交的报告，把自动换屏锁了近三周。"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之一一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。一张横跨整屏的大卡片：左边约三分之一一幅水彩插画——一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门；右边约三分之二是卡片标题（大字）和正文。",
+    "portrait": "竖版：标题在上；插画在卡片顶部占满宽度，下面卡片标题和正文。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：亮点"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "text_ref": "一份被反复重交的报告，把自动换屏锁了近三周。",
+        "illustration_asset": [
+          "_library/illustrations/文稿核验通用构图.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n亮点要求一张大外卡、左1/3插画右2/3全文，竖版图在卡顶；普通 source_text_card 目前 only bottom_inside，left_inside/top_inside 没有相应主图实现。需报告纸/开闸钥匙的明确大插画，不能静默认作已复原。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：亮点；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "亮点要求一张大外卡、左1/3插画右2/3全文，竖版图在卡顶；普通 source_text_card 目前 only bottom_inside，left_inside/top_inside 没有相应主图实现。需报告纸/开闸钥匙的明确大插画，不能静默认作已复原。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：亮点；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-07",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-07-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "prose"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "content_card",
+      "prose",
+      "chapter_title"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上标题。一张横跨整屏的大卡片：左边约三分之一一幅水彩插画——一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门；右边约三分之二是卡片标题（大字）和正文。",
+      "portrait": "竖版：标题在上；插画在卡片顶部占满宽度，下面卡片标题和正文。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "一份被反复重交的报告，把自动换屏锁了近三周。"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之一一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上标题。一张横跨整屏的大卡片：左边约三分之一一幅水彩插画——一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门；右边约三分之二是卡片标题（大字）和正文。",
+    "portrait": "竖版：标题在上；插画在卡片顶部占满宽度，下面卡片标题和正文。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：亮点"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "text_ref": "一份被反复重交的报告，把自动换屏锁了近三周。",
+        "illustration_asset": [
+          "_library/illustrations/文稿核验通用构图.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n亮点要求一张大外卡、左1/3插画右2/3全文，竖版图在卡顶；普通 source_text_card 目前 only bottom_inside，left_inside/top_inside 没有相应主图实现。需报告纸/开闸钥匙的明确大插画，不能静默认作已复原。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：亮点；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "亮点要求一张大外卡、左1/3插画右2/3全文，竖版图在卡顶；普通 source_text_card 目前 only bottom_inside，left_inside/top_inside 没有相应主图实现。需报告纸/开闸钥匙的明确大插画，不能静默认作已复原。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：亮点；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {},
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-08",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-08-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "chapter_title",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "连接和画面",
+        "主屏不在时"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+    "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：全部功能（23项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "连接和画面",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1远程桌面笔记本用Moonlight、手机用Moonlight或Artemis连"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "主屏不在时",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "6虚拟备用屏MTT虚拟显示驱动造的一块屏：2880×1800、60Hz、150%"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n状态列已解析为 cols、颜色可识别；源图要求仅圆点，当前 feature_card 仍画原状态文字。需明确 data-text 圆点模式通过逐字关后再落实。\n连续两张拼成同一个无上下边框网格；主引擎没有跨逻辑屏共享网格/省略上下卡边接口。小号毛笔组名的 size 字段 core 不消费。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：全部功能（23项）、连接和画面、主屏不在时；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 5 项，文字盘点预算 11 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "状态列已解析为 cols、颜色可识别；源图要求仅圆点，当前 feature_card 仍画原状态文字。需明确 data-text 圆点模式通过逐字关后再落实。",
+      "连续两张拼成同一个无上下边框网格；主引擎没有跨逻辑屏共享网格/省略上下卡边接口。小号毛笔组名的 size 字段 core 不消费。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：全部功能（23项）、连接和画面、主屏不在时；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 5 项，文字盘点预算 11 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 5
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 11,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-08",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-08-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "chapter_title",
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "chapter_title",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "连接和画面",
+        "主屏不在时"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+    "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：全部功能（23项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "连接和画面",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1远程桌面笔记本用Moonlight、手机用Moonlight或Artemis连"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "主屏不在时",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "6虚拟备用屏MTT虚拟显示驱动造的一块屏：2880×1800、60Hz、150%"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n状态列已解析为 cols、颜色可识别；源图要求仅圆点，当前 feature_card 仍画原状态文字。需明确 data-text 圆点模式通过逐字关后再落实。\n连续两张拼成同一个无上下边框网格；主引擎没有跨逻辑屏共享网格/省略上下卡边接口。小号毛笔组名的 size 字段 core 不消费。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：全部功能（23项）、连接和画面、主屏不在时；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 5 项，文字盘点预算 11 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "状态列已解析为 cols、颜色可识别；源图要求仅圆点，当前 feature_card 仍画原状态文字。需明确 data-text 圆点模式通过逐字关后再落实。",
+      "连续两张拼成同一个无上下边框网格；主引擎没有跨逻辑屏共享网格/省略上下卡边接口。小号毛笔组名的 size 字段 core 不消费。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：全部功能（23项）、连接和画面、主屏不在时；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 5 项，文字盘点预算 11 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 5
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 11,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-09",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-09-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "安全规矩",
+        "体检和修复",
+        "已停用"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+    "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "安全规矩",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "12不碰真显示器连上、断开、换屏，都不关、不停用、不重排物理显示器；水冷屏和机箱",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "体检和修复",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "17每天体检14:30查Tailscale在线、无人值守、编码能力、Funnel",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "已停用",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "22维护小窗开始菜单里的“RAMDisk与远程串流维护”，9月26日按我的决定撤",
+        "fill_last_row": true
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n接前屏不新增大标题/图例；仅状态圆点、跨屏同网格无上下边框和小号毛笔组标题仍缺对应消费接口。当前保留全部原状态文字。\n清单未登记这些完整原文的逐字一致毛笔标题图：安全规矩、体检和修复、已停用；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 9 项，文字盘点预算 12 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "接前屏不新增大标题/图例；仅状态圆点、跨屏同网格无上下边框和小号毛笔组标题仍缺对应消费接口。当前保留全部原状态文字。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：安全规矩、体检和修复、已停用；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 9 项，文字盘点预算 12 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 9
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 12,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-09",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-09-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "安全规矩",
+        "体检和修复",
+        "已停用"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。两张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，第二张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。图例里 6 种都画出来，本页只用到其中 5 种。",
+    "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "安全规矩",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "12不碰真显示器连上、断开、换屏，都不关、不停用、不重排物理显示器；水冷屏和机箱"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "体检和修复",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "17每天体检14:30查Tailscale在线、无人值守、编码能力、Funnel"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "已停用",
+        "heading_style": "sans"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "22维护小窗开始菜单里的“RAMDisk与远程串流维护”，9月26日按我的决定撤"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n接前屏不新增大标题/图例；仅状态圆点、跨屏同网格无上下边框和小号毛笔组标题仍缺对应消费接口。当前保留全部原状态文字。\n清单未登记这些完整原文的逐字一致毛笔标题图：安全规矩、体检和修复、已停用；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 9 项，文字盘点预算 12 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "接前屏不新增大标题/图例；仅状态圆点、跨屏同网格无上下边框和小号毛笔组标题仍缺对应消费接口。当前保留全部原状态文字。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：安全规矩、体检和修复、已停用；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 9 项，文字盘点预算 12 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 9
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 12,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-10",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-10-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "timeline",
+      "icon",
+      "illustration",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "timeline",
+      "illustration",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：一条竖向时间线（左侧），每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子。",
+      "portrait": "竖版：时间线占满宽度，一个节点一段；插画缩小放在标题下面。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左侧），每个节点一个小水彩",
+        "右侧一幅大一点的水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：一条竖向时间线（左侧），每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子。",
+    "portrait": "竖版：时间线占满宽度，一个节点一段；插画缩小放在标题下面。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：演进（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "6月26日：搭起来：Sunshine＋Moonlight＋Tailscale；打",
+        "width": "100%"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n时间线各节点与右侧一幅‘手机到小房子、细线长成丝带、备用屏/听诊器/闸门’大插画需语义素材；不是把首屏串流插画自动拿来替代本屏演进图。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：演进（北京时间）；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 11 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "时间线各节点与右侧一幅‘手机到小房子、细线长成丝带、备用屏/听诊器/闸门’大插画需语义素材；不是把首屏串流插画自动拿来替代本屏演进图。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：演进（北京时间）；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 11 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 11,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "sunshine-remote-streaming-10",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\img\\sunshine-remote-streaming-10-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\sunshine-remote-streaming\\page.json",
+    "source_sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
+    "desktop_component_order": [
+      "timeline",
+      "icon",
+      "illustration",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "timeline",
+      "illustration",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：一条竖向时间线（左侧），每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子。",
+      "portrait": "竖版：时间线占满宽度，一个节点一段；插画缩小放在标题下面。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左侧），每个节点一个小水彩",
+        "右侧一幅大一点的水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：一条竖向时间线（左侧），每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子。",
+    "portrait": "竖版：时间线占满宽度，一个节点一段；插画缩小放在标题下面。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：演进（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "6月26日：搭起来：Sunshine＋Moonlight＋Tailscale；打",
+        "width": "100%"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。\n时间线各节点与右侧一幅‘手机到小房子、细线长成丝带、备用屏/听诊器/闸门’大插画需语义素材；不是把首屏串流插画自动拿来替代本屏演进图。\n清单未登记这些完整原文的逐字一致毛笔标题图：标题：演进（北京时间）；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 11 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿‘大标题：/标题：/说明：/图例：’属于普通 para 的正文，现解析器不把这些词当排版记号；本规格逐字保留，不擅删。合格标题素材需与完整节点逐字匹配。",
+      "时间线各节点与右侧一幅‘手机到小房子、细线长成丝带、备用屏/听诊器/闸门’大插画需语义素材；不是把首屏串流插画自动拿来替代本屏演进图。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：标题：演进（北京时间）；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 11 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 11,
+      "semantic_image_reviewed": false
+    }
+  }
+]

@@ -1,0 +1,720 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "typora-theme-pack",
+  "kind": "project",
+  "title": "Typora 薄荷主题",
+  "url": "/projects/typora-theme-pack/",
+  "tagline": "Typora 用的薄荷主题，外加三种 PDF 样式。",
+  "status": "偶尔用",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/typora-theme-pack",
+  "capability": "把文稿排得好看、按读者导出 PDF",
+  "based_on": {
+    "commit": "f9e1f60d535096524cc5441c4d68cdd4dc7d26af",
+    "commit_time": "2026-09-26T04:23:21-05:00"
+  },
+  "video_prompt": "6 秒无缝循环，白底水彩风格，从开头这屏出发：一片薄荷叶轻轻落在一个打开的写字窗口上，窗口边框和标题下的横条慢慢染成薄荷绿；窗口里飘出三张 A4 纸，依次停在右边排成一排，一张变成石墨灰、一张变成薄荷绿、一张变成墨蓝，每张纸落定时边上亮一下小小的绿色对勾；最后薄荷叶被风带回起点。镜头不动，没有文字，结尾回到起始画面。",
+  "screens": [
+    {
+      "id": "typora-theme-pack-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版：左边约 55% 宽：左上毛笔艺术字大标题，下面一句粗体副标题和一段介绍（介绍里“文稿转 PDF”画成绿色链接样式）。右边约 40% 宽留一个带细浅绿边框、圆角的空位，比例接近正方形（约 1:1），贴 Typora 实拍截图；空位下面一行灰色小字说明；空位后面垫一片淡淡的水彩薄荷叶子，叶子只露出边缘。下半部分一排四张数字卡（上面小水彩插画、大号绿色数字、下面一两行小字）：1 一片薄荷叶盖在一个打开的写字窗口上，2 三张并排的纸（一张灰、一张薄荷绿、一张墨蓝），3 一张打满勾的清单，4 一条短短的绿色时间线上五个小圆点。卡片下面右对齐一行灰色小字“截至……”。最下面一行两个白底细绿边圆角按钮。没有“现在”横条（这个项目没有自动任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：大标题、副标题、介绍从上往下；截图空位占满宽（约 1:1），下面说明小字；四张数字卡两行两列；截至日期；两个按钮上下各占一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "# Typora 薄荷主题\n**写东西时看着舒服，发出去的 PDF 按读者换样子。**\n\n我用 Markdown 写作软件 Typora 写文稿。这个项目给它一套薄荷绿的编辑主题，再配三种 PDF 样式：原版（中性，忠于原文）、个人（把薄荷主题搬进 PDF，字大行宽）、公司（墨蓝克制，不加任何品牌）。同一份 .md 一个字不改，选一种就导出一份，文件名后面分别带“-原版”“-个人”“-公司”。它自己不带 PDF 引擎，转换交给〔文稿转 PDF〕背后的转换器；新 PDF 查过没问题，才替换旧文件。\n\n截图说明：薄荷主题在 Typora 里的样子（8 月 2 日实拍，文稿是仓库里的公开样例）\n\n1 套｜编辑主题，Typora 现在用的就是它（Typora 设置和装好的两个主题文件都核对过）\n3 种｜PDF 样式：原版、个人、公司，用公开样例各导出一份，都是 2 页\n21 项｜自动测试全过（本机重跑；GitHub 每次推送也自动跑）\n6 次｜提交：8 月 12 日公开，9 月 29 日最后一次改（修好个人版表头和导出菜单）\n\n截至 2026 年 9 月 29 日（北京时间）\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕",
+      "links": [
+        {
+          "text": "文稿转 PDF",
+          "href": "/skills/md-to-pdf/"
+        },
+        {
+          "text": "在整套系统里的位置 → 怎么协作",
+          "href": "/how/#typora-theme-pack"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/typora-theme-pack"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/typora-theme-pack/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [
+        {
+          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\typora-live-mint.png",
+          "where": "右边约 40% 宽、接近正方形的空位",
+          "caption": "截图说明：薄荷主题在 Typora 里的样子（8 月 2 日实拍，文稿是仓库里的公开样例）",
+          "crop_h": [
+            576,
+            230,
+            1756,
+            1035
+          ],
+          "crop_v": [
+            585,
+            201,
+            1715,
+            1154
+          ]
+        }
+      ],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-02",
+      "section": "usage",
+      "title": "平时怎么用",
+      "scene": "横版：左上标题。三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。最下面一条横跨整屏的浅黄底便签条，写“实际用得多少”那段。",
+      "portrait": "竖版：标题；三张卡片上下排，每张插画在上、字在下；便签条在最下面。",
+      "text": "## 平时怎么用\n\n**1. 写东西时它一直在**\n打开 Typora 就是薄荷主题：一级标题下面一道绿色渐变条，二级标题、引用和表格都是圆角浅绿卡片，代码块整块一个框。装一次就不用再管，切到别的主题再切回来也行。\n\n**2. 从 Typora 菜单直接导出**\n文件 → 导出，菜单最下面有三项：“原版”“公司”“个人”，是本机 Typora 里配好的三条自定义导出命令。点一项，PDF 生成在文稿旁边，文件名带对应的后缀。9 月 29 日这三项换了新入口，还没在 Typora 里实际点过，待验收。\n\n**3. 跟 AI 说**\n“这份周报用公司版导一份 PDF。”\n“薄荷主题更新一下，旧的留着。”\n“主题菜单里找不到薄荷了，查一下。”\nAI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查〕。\n\n**实际用得多少**｜主题一直是 Typora 的当前主题。PDF 这一半很少用：9 月 28 日查了所有硬盘，没有一个带“-原版”“-个人”“-公司”后缀的 PDF；AI 在 9 月 1–28 日的记录里也没替我导出过一次（更早的记录没留下来）。",
+      "links": [
+        {
+          "text": "PDF 逐页检查",
+          "href": "/skills/pdf-render-safe/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-03",
+      "section": "usage",
+      "title": "三种 PDF 长什么样",
+      "scene": "横版：左上标题，下面一行说明小字。中间三个并排的带细浅绿边框的空位，每个是 A4 竖向比例（约 1:1.41），各占宽度约 30%，贴三张 PDF 第 1 页的截图；每个空位上方一个小标签（原版 / 个人 / 公司，标签旁一个小色点：石墨灰、薄荷绿、墨蓝），下方两行小字说明。空位里什么都不画。最下面一行灰色小字。",
+      "portrait": "竖版分3张，使用默认v、v2、v3顺序，每张仅自己的原文和一张A4真实截图位。第1张typora-theme-pack-03-v.png：原标题、公开样例介绍、原版标签/说明和原版截图。原版A4框在标签下面占卡片整行，以正常左右内边距留800×1133源像素，说明在下；不分左右栏。第2张新增typora-theme-pack-03-v2.png：仅个人标签、个人A4截图与完整个人说明，不重复标题、介绍、原版或公司。空框880×1246源像素，说明在下。第3张新增typora-theme-pack-03-v3.png：仅公司标签、公司A4截图、完整公司说明及原文页尾“图是 PDF 第 1 页按 110 DPI……”小字。空框880×1246源像素，说明在下。三图均保持909:1287真实比例，空框内部全白，现役编译器贴原图。正文参考36源像素、行高44，第一/二/三张测算1545/1526/1526源像素可放进1672高度；不缩为左侧窄框。不增删改写原字、无新标题/新说明/重复文字，不为填满画布增加装饰或空框。连续外白交crop_box。横版scene与原text保持。",
+      "text": "## 三种 PDF 长什么样\n同一份公开样例《春序 · 智能工作台方案简报》，9 月 28 日现场导出三次，每份 2 页，导出前后原文的内容指纹（SHA-256）一样。下面是每份的第 1 页。\n\n**原版**｜石墨黑字、细灰分隔线，像在 GitHub 上看 Markdown，不带任何主题色。适合只要干净排版的时候。\n\n**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头是主题的浅绿（9 月 29 日修好；之前被转换器自带的默认样式盖成了灰色）。\n\n**公司**｜墨蓝标题左边一道竖线、深蓝表头、灰白分区。不加 logo、水印和客户名。给同事看的。\n\n图是 PDF 第 1 页按 110 DPI 转成的图片（用PDF 逐页检查转的）。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [
+        {
+          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-original-p1.png",
+          "where": "左边的 A4 空位",
+          "caption": "**原版**｜石墨黑字、细灰分隔线，像在 GitHub 上看 Markdown，不带任何主题色。适合只要干净排版的时候。"
+        },
+        {
+          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-personal-p1.png",
+          "where": "中间的 A4 空位",
+          "caption": "**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头是主题的浅绿（9 月 29 日修好；之前被转换器自带的默认样式盖成了灰色）。"
+        },
+        {
+          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-company-p1.png",
+          "where": "右边的 A4 空位",
+          "caption": "**公司**｜墨蓝标题左边一道竖线、深蓝表头、灰白分区。不加 logo、水印和客户名。给同事看的。"
+        }
+      ],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-04",
+      "section": "usage",
+      "title": "出事怎么办",
+      "scene": "横版：左上标题，下面一行小字。六张横向小卡片排成两列（每列三张），每张左边一个小水彩图标（一张完好的旧 PDF 被一只手护着、一个问号插头、一张被划了一笔的文稿、空着的主题菜单、贴着时间标签的小纸箱、两台电脑之间一个箭头），右边粗体一句加小字。",
+      "portrait": "竖版：标题、小字；六张卡片一行一张。",
+      "text": "## 出事怎么办\n它没有自动提醒；出了问题直接跟 AI 说，AI 按下面的办法处理。\n\n**导出失败**｜旧 PDF 原样留着，这次生成到一半的临时文件清掉，报出转换器给的原因。不会拿一个坏文件或上次的旧文件冒充这次的成果。\n\n**找不到转换器**｜直接报错，并列出三种配法：命令里写 --converter、设环境变量、或者运行一次 configure_converter.py 记进本机配置。不会自己去找系统里别的打印程序。\n\n**导出时原文被改了**｜导出前后各算一次 .md 的指纹，对不上就不报成功。这只能发现改动，挡不住别的程序去改原文。\n\n**主题菜单里没有薄荷**｜先重启 Typora；还没有，让 AI 核对两个主题文件的指纹，不一致就重装。\n\n**想退回更新前的旧主题**｜旧文件在 Typora 主题文件夹的 old-themes 里，文件名带着时间。脚本没有一键还原，要手动拷回去。\n\n**换电脑**｜〔开发配置备份〕连同 Typora 的设置一起备份，主题文件和三条导出命令都在里面；命令里写着项目在 E 盘的位置，Python 每次按电脑配置里登记的那个找；新电脑上项目放的位置不同，重跑一次菜单配置脚本就行。",
+      "links": [
+        {
+          "text": "开发配置备份",
+          "href": "/projects/devconfig-backup/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-05",
+      "section": "tech",
+      "title": "一次导出经过哪几步",
+      "scene": "横版：左上标题。上半部分一条从左到右的流程图，六个圆角节点（小水彩图标：三个色块的调色盘、一个指纹、两张叠在一起的 CSS 纸片、一个插头连到另一台机器、一台 Edge 浏览器打印出一张 A4 纸、一个盾牌加对勾），绿色箭头依次相连，节点下面两三行小字；第 5 个节点画在一个浅灰虚线框里，框角小字“转换器（不属于本项目）”；第 6 个节点下面多画一条向下的细灰线，通向一个小节点“失败留旧 PDF”。下半部分两张横向卡片并排（左“主题怎么装”，右“文件和代码”），第 2 张里是一张四行小表。",
+      "portrait": "竖版：标题；六个节点从上往下排，箭头向下，第 5 个节点的虚线框照画；“失败留旧 PDF”支线画在第 6 个节点右侧；两张卡片上下排。",
+      "text": "## 一次导出经过哪几步\n\n1. **选样式**｜Typora 菜单或 AI 运行 export_pdf.py，带上样式：original、personal 或 company。\n2. **先记下原文**｜算 .md 的 SHA-256 指纹；在目标文件旁边预约一个短名字的暂存文件。\n3. **备好 CSS**｜原版、公司各用自己的 CSS；个人版＝薄荷主题的两份 CSS 加上个人版的大字号，拼成一份临时 CSS。转换器把正文装进一个和 Typora 编辑区同名的 write 容器，所以薄荷主题的样式不用改就能直接用在 PDF 上。\n4. **找转换器**｜按顺序找：命令参数 → 环境变量 → 本机配置。这台电脑配的是〔文稿转 PDF〕的转换脚本。\n5. **转换**｜Markdown 转成网页、套上 CSS，由 Playwright 驱动本机 Edge 按 A4 打印成 PDF。转换器（不属于本项目）\n6. **查过再换**｜原文指纹没变、PDF 读得开、至少 1 页，才一次替换成正式文件；不过关，旧 PDF 不动\n\n**主题怎么装**｜比较仓库和 Typora 里两个主题文件的指纹 → 不一样的先把旧的复制进 old-themes、文件名加上时间 → 用临时文件整个换上 → 再算一遍指纹，全对才报成功。别的主题、Typora 程序和授权都不碰。\n\n**文件和代码**\n| 部分 | 文件 | 行数 |\n|---|---|---|\n| 编辑主题 | 2 个 CSS | 720 |\n| PDF 样式 | 3 个 CSS | 469 |\n| 工具 | 5 个 Python、1 个 JS、1 个 PowerShell | 1023、43、13 |\n| 测试 | 1 个 Python，21 项 | 438 |",
+      "links": [
+        {
+          "text": "文稿转 PDF",
+          "href": "/skills/md-to-pdf/",
+          "orientations": [
+            "v"
+          ]
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-06",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版：左上标题。五张横向小卡片排成左三右二两列，每张左边一个小水彩图标（一支笔和一张信封分开摆、一个空着的插座、一张原稿外面罩着三层彩色玻璃纸、一个空白的名片、两个贴着薄荷标签的小文件夹），右边粗体一句原则、下面小字。右列第三个位置放一张浅绿底卡片，画一个 GitHub 标志（章鱼猫剪影）和一句小字。",
+      "portrait": "竖版：标题；五张卡片一行一张；GitHub 小卡片在最下面。",
+      "text": "## 为什么这样设计\n\n**编辑和交付分开选。** 自己喜欢的薄荷绿不一定适合发给同事的文件。8 月 2 日我把话说清楚了：原版、个人、公司是 PDF 的样式和文件后缀，不是三个编辑主题。所以 Typora 里只有一个主题，PDF 另外选。\n\n**主题包不带 PDF 引擎。** 它只管样式和把关，转换交给外面的转换器；换转换器只改一处配置。本机配置不进 Git，公开说明里不出现本机路径，有一项测试专门查。\n\n**正文不动，样式从外面套。** 样式用单独的 CSS 文件交给转换器，默认忽略文稿里自带的样式；同一份 .md 出三种样子，不用存三份正文。\n\n**公司版不编造。** 手上没有真的公司品牌材料，就不加 logo、水印、客户名，只用克制的墨蓝和灰白。\n\n**只动自己的两个文件。** 装主题只写 verdant-mint.css 和 verdant/base.css；测试用临时文件夹，不往真正的 Typora 主题文件夹里装。\n\n公开仓库，MIT 许可；不含 Typora 程序、授权和 PDF 引擎。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-07",
+      "section": "tech",
+      "title": "导坏了，旧 PDF 也还在",
+      "scene": "横版：左上标题，下面一张横跨整屏的大卡片。卡片左边约 35% 宽一幅水彩插画：桌上一份装订好的旧 PDF 安安稳稳放着，旁边一张新打印的纸正被一枚放大镜检查，纸边上夹着一张小标签“暂存”；远处一只空的回收筐。卡片右边：“麻烦”“解法”“证据”三段，每段开头两个字用绿色小标签；解法里的三条检查画成一行三个小盾牌图标，每个盾牌下一行字；证据里的四种情况画成四个小方格，每格一个小叉和一行字。",
+      "portrait": "竖版：标题；插画在上占满宽；三段上下排；三个盾牌一行一个，四个小方格两行两列。",
+      "text": "## 导坏了，旧 PDF 也还在\n\n**麻烦**｜有的转换器什么都没生成，也会说“成功”。如果只看目标文件在不在，上次留下的旧 PDF 就会被当成这次的成果；要是直接写目标文件，转到一半出错，旧文件已经被写坏了。\n\n**解法**｜新 PDF 先写到目标旁边的暂存文件里（名字很短，避开超长文件名；和目标在同一个文件夹，替换时不用跨盘搬）。转换器退出后查三样，全过才一次换上：\n- 原文的指纹和导出前一样\n- PDF 读得开，没有损坏\n- 至少有 1 页\n任何一样不过，旧 PDF 原样留着，暂存文件清掉；清理本身出错，也不会盖住真正的失败原因。\n\n**证据**｜8 月 31 日这一版加了 230 行测试，下面四种情况旧 PDF 都没被换掉：\n- 转换器什么都不做\n- 生成一个看着像 PDF 的假文件\n- 生成 0 页的 PDF\n- 转换器报错退出\n9 月 29 日在本机重跑，21 项测试全过。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-08",
+      "section": "highlights",
+      "title": "亮点：两个小巧思",
+      "scene": "横版：左上标题“亮点”，下面两张大卡片横排，每张上面一幅小水彩插画或截图，卡片标题用大字，下面“麻烦”“解法”两段。卡片 1 插画：一个下拉菜单“主题”，里面只有一行“Verdant Mint”带薄荷叶图标，菜单后面一个小文件夹“verdant”半掩着。卡片 2 不画插画，上面留一个带细浅绿边框的空位（约 4:3），贴代码块修复后的截图，空位下一行小字说明。",
+      "portrait": "竖版只画一张9:16，按941×1672预算，正文保持原图清楚字号约34px、行高44px，不缩字。两张卡片上下整宽。标题在y24–96；第一卡y108–568：菜单、薄荷叶和小文件夹收成80px高的紧凑原生水彩示意，不横向拉伸，插画y120–200，卡标题y210–268，麻烦正文y280–412（3行），解法正文y424–556（3行）。第二卡y584–1600：上方截图框外沿y596–1198，净空800×594（贴1240×920原图），只留空框；原图注紧跟y1208–1268（24px字、30px行高，两行），第二卡标题y1282–1340，麻烦正文y1352–1484（3行），解法正文y1496–1584（2行）。截图与原图注同张。各正文区宽800px、整体左右保留正常留白，底部到1672仍有72px，不加新字或编号。横版不动。",
+      "text": "## 亮点\n\n**1. 菜单里只多一项**\n麻烦｜Typora 会把主题文件夹里的每个 .css 都列进主题菜单，公共结构文件也会冒出来，变成一个点了就乱的“主题”。\n解法｜公共结构放进 verdant 子文件夹，菜单里只多出“Verdant Mint”一项；有一项测试守着“只露一个主题”。\n\n**2. 代码块不再每行一张卡片**\n麻烦｜Typora 1.14 把代码块里的每一行都画成一个单独的块，主题给代码块的圆角、底色和绿竖线就被套到了每一行上。\n解法｜主题里把代码块内部每一行的样式清掉，只在整块外面画一次框；有一项测试专门查。\n截图说明：修好后的代码块（浏览器模拟 Typora 1.14 代码块结构的预览样张，8 月 2 日生成），整段一个框，语法颜色照旧",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [
+        {
+          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\code-block-fixed.png",
+          "where": "第 2 张卡片上部的 4:3 空位",
+          "caption": "截图说明：修好后的代码块（浏览器模拟 Typora 1.14 代码块结构的预览样张，8 月 2 日生成），整段一个框，语法颜色照旧",
+          "crop_h": [
+            155,
+            230,
+            732,
+            567
+          ],
+          "crop_v": [
+            155,
+            272,
+            732,
+            466
+          ]
+        }
+      ],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-09",
+      "section": "features",
+      "title": "全部功能",
+      "scene": "横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态。顶上标题，下面一行图例，图例下面一行小字说明。四组一屏排完，不跨屏。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。",
+      "portrait": "竖版：标题、图例和说明在最上面；组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）。",
+      "text": "## 全部功能（16 项）\n图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用\n在用＝真的用过、现在照样能用（测试和写这页时的实跑不算）；说不准＝从 Typora 菜单导出不留记录，AI 的会话记录最早只到 9 月 1 日，查不清用没用过（所有硬盘上也没有一个带这三种后缀的 PDF）。\n\n\n**编辑主题**\n1. 薄荷编辑主题｜Typora 里的薄荷绿阅读和编辑主题，标题、引用、表格、代码都有自己的样子｜在用\n2. 安装和核对主题｜只复制两个主题文件，装完逐个比指纹；也能只核对不装｜在用\n3. 更新前留旧版｜主题文件和仓库不一样时，先把旧的复制进 old-themes，文件名带时间｜在用\n\n**导出 PDF**\n4. 原版 PDF｜中性样式，石墨黑字、细灰线，文件名后缀“-原版”｜说不准\n5. 个人 PDF｜薄荷主题加大字号，文件名后缀“-个人”｜说不准\n6. 公司 PDF｜墨蓝、灰白，不加品牌，文件名后缀“-公司”｜说不准\n7. 从 Typora 菜单导出｜文件 → 导出里的三项自定义命令，点一下就导出；9 月 29 日换了新入口，还没在 Typora 里点过｜待验收\n8. 让 AI 导出｜说哪份、用哪种，AI 运行导出脚本并报结果｜说不准\n9. 指定位置和页数｜可以指定 PDF 存哪、要求正好几页，页数不对就不交｜说不准\n\n**导出保护**\n10. 导坏不丢旧版｜新 PDF 先暂存，查过才替换；不过关旧 PDF 原样留着｜说不准\n11. 原文不被改写｜导出前后比对 .md 的指纹，对不上就不报成功｜说不准\n12. 不用文稿自带的样式｜默认忽略 .md 里写的样式，只用选中的那一种；也可以改成保留或拒绝｜说不准\n13. 不盖掉原文和转换器｜输出路径等于原文或转换器时直接拒绝；输出必须是 .pdf｜说不准\n\n**配置和维护**\n14. 记下用哪个转换器｜转换器路径记进本机配置，不进 Git；按命令参数、环境变量、本机配置的顺序找｜说不准\n15. 效果预览｜用公开样例生成软件概念图、代码块检查图、三种样式的页面图和拼图｜在用\n16. 自动测试｜21 项测试查导出保护、文件名后缀、只露一个主题、代码块样式等；GitHub 每次推送自动跑｜在用",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-theme",
+          "text": "编辑主题"
+        },
+        {
+          "id": "g-export",
+          "text": "导出 PDF"
+        },
+        {
+          "id": "g-guard",
+          "text": "导出保护"
+        },
+        {
+          "id": "g-upkeep",
+          "text": "配置和维护"
+        },
+        {
+          "id": "f-mint-theme",
+          "text": "薄荷编辑主题"
+        },
+        {
+          "id": "f-install",
+          "text": "安装和核对主题"
+        },
+        {
+          "id": "f-keep-old",
+          "text": "更新前留旧版"
+        },
+        {
+          "id": "f-original",
+          "text": "原版 PDF"
+        },
+        {
+          "id": "f-personal",
+          "text": "个人 PDF"
+        },
+        {
+          "id": "f-company",
+          "text": "公司 PDF"
+        },
+        {
+          "id": "f-typora-menu",
+          "text": "从 Typora 菜单导出"
+        },
+        {
+          "id": "f-ai-export",
+          "text": "让 AI 导出"
+        },
+        {
+          "id": "f-output-pages",
+          "text": "指定位置和页数"
+        },
+        {
+          "id": "f-safe-replace",
+          "text": "导坏不丢旧版"
+        },
+        {
+          "id": "f-source-check",
+          "text": "原文不被改写"
+        },
+        {
+          "id": "f-ignore-inline",
+          "text": "不用文稿自带的样式"
+        },
+        {
+          "id": "f-no-overwrite",
+          "text": "不盖掉原文和转换器"
+        },
+        {
+          "id": "f-converter",
+          "text": "记下用哪个转换器"
+        },
+        {
+          "id": "f-preview",
+          "text": "效果预览"
+        },
+        {
+          "id": "f-tests",
+          "text": "自动测试"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "typora-theme-pack-10",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版：左上标题。一条从左到右的水彩绿丝带时间轴，上面八个小旗，每个小旗：日期（粗体绿色）＋一两行字，上下错开不挤；丝带起点画一片薄荷叶，终点画三张并排的小纸（灰、薄荷绿、墨蓝）。时间轴下面一行灰色小字。",
+      "portrait": "竖版：标题；时间轴改成从上往下的竖丝带，小旗一行一个；灰色小字在最下面。",
+      "text": "## 演进（2026 年）\n\n8 月 2 日｜装上薄荷主题；定下“一套编辑主题＋三种 PDF 样式”，PDF 文件名后缀定为 -原版、-个人、-公司；同一天转换改由 Playwright 驱动 Edge\n8 月 12 日｜整理成公开项目，发到 GitHub（32 个文件，8 项测试）\n8 月 30 日｜转换器可以记进本机配置，Typora 菜单导出不用每次指定\n8 月 31 日｜导出改成“先暂存、查过再换”，失败不丢旧 PDF；测试到 20 项\n9 月 8 日｜旧网站用公开样例实拍三种 PDF\n9 月 26 日｜说明改成人话，项目约定写进给 AI 的说明\n9 月 28 日｜写这一页时重跑 20 项测试，现场导出三种样式各一份\n9 月 29 日｜个人版 PDF 表头恢复浅绿；导出菜单改叫原版、公司、个人，改由启动脚本每次按电脑配置找 Python；测试到 21 项\n\n6 次提交，8 月 12 日到 9 月 29 日；8 月 31 日到 9 月 26 日之间只改过说明。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-theme",
+        "name": "编辑主题"
+      },
+      {
+        "id": "g-export",
+        "name": "导出 PDF"
+      },
+      {
+        "id": "g-guard",
+        "name": "导出保护"
+      },
+      {
+        "id": "g-upkeep",
+        "name": "配置和维护"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-mint-theme",
+        "group": "g-theme",
+        "name": "薄荷编辑主题",
+        "what": "Typora 里的薄荷绿阅读和编辑主题，标题、引用、表格、代码都有自己的样子",
+        "how": "在 Typora 主题菜单选 Verdant Mint",
+        "status": "在用",
+        "screen": "typora-theme-pack-09",
+        "source": "themes/verdant-mint.css、themes/verdant/base.css；%APPDATA%\\Typora\\profile.data 里 theme=verdant-mint.css（9 月 27 日 15:19 最后写入）"
+      },
+      {
+        "id": "f-install",
+        "group": "g-theme",
+        "name": "安装和核对主题",
+        "what": "只复制两个主题文件，装完逐个比指纹；也能只核对不装",
+        "how": "跟 AI 说装主题或查主题",
+        "status": "在用",
+        "screen": "typora-theme-pack-09",
+        "source": "tools/install_theme.py；9 月 28 日 verify 两个文件都一致"
+      },
+      {
+        "id": "f-keep-old",
+        "group": "g-theme",
+        "name": "更新前留旧版",
+        "what": "主题文件和仓库不一样时，先把旧的复制进 old-themes，文件名带时间",
+        "how": "跟 AI 说更新主题",
+        "status": "在用",
+        "screen": "typora-theme-pack-09",
+        "source": "install_theme.py 第 60–68 行；old-themes/verdant/base.css.20260801T230219Z.bak（8 月 2 日 07:02 留下的一份）"
+      },
+      {
+        "id": "f-original",
+        "group": "g-export",
+        "name": "原版 PDF",
+        "what": "中性样式，石墨黑字、细灰线，文件名后缀“-原版”",
+        "how": "Typora 菜单“Markdown 原样”，或跟 AI 说用原版",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export-profiles/original.css；export_pdf.py 第 28–33 行"
+      },
+      {
+        "id": "f-personal",
+        "group": "g-export",
+        "name": "个人 PDF",
+        "what": "薄荷主题加大字号，文件名后缀“-个人”",
+        "how": "Typora 菜单“个人”，或跟 AI 说用个人版",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export-profiles/personal.css；render_previews.py 第 119–123 行"
+      },
+      {
+        "id": "f-company",
+        "group": "g-export",
+        "name": "公司 PDF",
+        "what": "墨蓝、灰白，不加品牌，文件名后缀“-公司”",
+        "how": "Typora 菜单“公司”，或跟 AI 说用公司版",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export-profiles/company.css"
+      },
+      {
+        "id": "f-typora-menu",
+        "group": "g-export",
+        "name": "从 Typora 菜单导出",
+        "what": "文件 → 导出里的三项自定义命令，点一下就导出；9 月 29 日换了新入口，还没在 Typora 里点过",
+        "how": "Typora 文件 → 导出",
+        "status": "待验收",
+        "screen": "typora-theme-pack-09",
+        "source": "profile.data 的 export.custom、custom1、custom2；Typora 自己导出不留记录；9 月 29 日 configure_typora_menu.py 把三项改成 typora_export_launcher.ps1（提交 f30ac9c），本机 profile.data 已是新命令"
+      },
+      {
+        "id": "f-ai-export",
+        "group": "g-export",
+        "name": "让 AI 导出",
+        "what": "说哪份、用哪种，AI 运行导出脚本并报结果",
+        "how": "“这份用公司版导一份 PDF”",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "9 月 1–28 日 Codex 记录、9 月 24–28 日 Claude 记录里 0 次；更早的记录不在了"
+      },
+      {
+        "id": "f-output-pages",
+        "group": "g-export",
+        "name": "指定位置和页数",
+        "what": "可以指定 PDF 存哪、要求正好几页，页数不对就不交",
+        "how": "跟 AI 说存哪、要几页",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export_pdf.py 第 229–240 行（--output、--expected-pages）"
+      },
+      {
+        "id": "f-safe-replace",
+        "group": "g-guard",
+        "name": "导坏不丢旧版",
+        "what": "新 PDF 先暂存，查过才替换；不过关旧 PDF 原样留着",
+        "how": "自动",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export_pdf.py 第 270–335 行；tests 里 4 种失败情况"
+      },
+      {
+        "id": "f-source-check",
+        "group": "g-guard",
+        "name": "原文不被改写",
+        "what": "导出前后比对 .md 的指纹，对不上就不报成功",
+        "how": "自动",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export_pdf.py 第 270、308–314 行"
+      },
+      {
+        "id": "f-ignore-inline",
+        "group": "g-guard",
+        "name": "不用文稿自带的样式",
+        "what": "默认忽略 .md 里写的样式，只用选中的那一种；也可以改成保留或拒绝",
+        "how": "自动；特殊文稿跟 AI 说",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export_pdf.py 第 234–239 行（--document-style-policy，默认 ignore）"
+      },
+      {
+        "id": "f-no-overwrite",
+        "group": "g-guard",
+        "name": "不盖掉原文和转换器",
+        "what": "输出路径等于原文或转换器时直接拒绝；输出必须是 .pdf",
+        "how": "自动",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "export_pdf.py 第 251–268 行"
+      },
+      {
+        "id": "f-converter",
+        "group": "g-upkeep",
+        "name": "记下用哪个转换器",
+        "what": "转换器路径记进本机配置，不进 Git；按命令参数、环境变量、本机配置的顺序找",
+        "how": "跟 AI 说配转换器",
+        "status": "说不准",
+        "screen": "typora-theme-pack-09",
+        "source": "configure_converter.py；.typora-theme-pack.local.json（8 月 30 日 17:49 写入）。配置只在导出时起作用，导出用没用过查不清"
+      },
+      {
+        "id": "f-preview",
+        "group": "g-upkeep",
+        "name": "效果预览",
+        "what": "用公开样例生成软件概念图、代码块检查图、三种样式的页面图和拼图",
+        "how": "改完样式让 AI 出预览",
+        "status": "在用",
+        "screen": "typora-theme-pack-09",
+        "source": "render_previews.py main()；仓库 previews/ 下 8 张图是它 8 月 2 日生成的；之后样式没改过，没有再跑的记录"
+      },
+      {
+        "id": "f-tests",
+        "group": "g-upkeep",
+        "name": "自动测试",
+        "what": "21 项测试查导出保护、文件名后缀、只露一个主题、代码块样式等；GitHub 每次推送自动跑",
+        "how": "改代码后自动",
+        "status": "在用",
+        "screen": "typora-theme-pack-09",
+        "source": "tests/test_project.py；.github/workflows/test.yml；9 月 29 日本机重跑 21 项全过"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-theme-count",
+        "text": "1 套",
+        "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
+        "as_of": "2026-09-28",
+        "source": "themes/ 目录；tests test_package_exposes_exactly_one_typora_app_theme；profile.data theme 字段",
+        "screens": [
+          "typora-theme-pack-01"
+        ]
+      },
+      {
+        "id": "n-styles",
+        "text": "3 种",
+        "meaning": "PDF 样式：original、personal、company",
+        "as_of": "2026-09-28",
+        "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
+        "screens": [
+          "typora-theme-pack-01",
+          "typora-theme-pack-03"
+        ]
+      },
+      {
+        "id": "n-sample-pages",
+        "text": "都是 2 页",
+        "meaning": "9 月 28 日用 samples/00-主题预览.md 三种样式各导出一份的页数",
+        "as_of": "2026-09-28",
+        "source": "本页写稿时实跑 export_pdf.py，pdf-render-safe 报告 source_page_count=2（见 facts.md 第四节）",
+        "screens": [
+          "typora-theme-pack-01",
+          "typora-theme-pack-03"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "21 项",
+        "meaning": "tests/test_project.py 的测试数，全部通过",
+        "as_of": "2026-09-29",
+        "source": "9 月 29 日修复汇报：python -m unittest discover -s tests -v，21 项通过（提交 f30ac9c）；本机按 unittest 计数也是 21",
+        "screens": [
+          "typora-theme-pack-01",
+          "typora-theme-pack-05",
+          "typora-theme-pack-07",
+          "typora-theme-pack-09",
+          "typora-theme-pack-10"
+        ]
+      },
+      {
+        "id": "n-commits",
+        "text": "6 次",
+        "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
+        "as_of": "2026-09-29",
+        "source": "git log（北京时间换算）",
+        "screens": [
+          "typora-theme-pack-01",
+          "typora-theme-pack-10"
+        ]
+      },
+      {
+        "id": "n-suffix-pdfs",
+        "text": "没有一个带三种后缀的 PDF",
+        "meaning": "C:\\Users\\10979、D、E、G、H 盘文件名匹配 *-原版.pdf、*-个人.pdf、*-公司.pdf 的个数为 0",
+        "as_of": "2026-09-28",
+        "source": "9 月 28 日 rg --files 全盘按文件名查（见 facts.md 第三节）",
+        "screens": [
+          "typora-theme-pack-02",
+          "typora-theme-pack-09"
+        ]
+      },
+      {
+        "id": "n-ai-exports",
+        "text": "0 次",
+        "meaning": "AI 替我运行 export_pdf.py 导出的次数；Codex 记录 9 月 1–28 日、Claude 记录 9 月 24–28 日，不含本页写稿",
+        "as_of": "2026-09-28",
+        "source": "tmp/usage_scan2.py 扫会话记录里的真实输出（Export profile= … bytes=）",
+        "screens": [
+          "typora-theme-pack-02"
+        ]
+      },
+      {
+        "id": "n-code-lines",
+        "text": "720、469、1023、43、13、438 行",
+        "meaning": "编辑主题 CSS、PDF 样式 CSS、Python 工具、JS、PowerShell、测试的行数",
+        "as_of": "2026-09-29",
+        "source": "wc -l themes/ export-profiles/ tools/ tests/（提交 f30ac9c）",
+        "screens": [
+          "typora-theme-pack-05"
+        ]
+      },
+      {
+        "id": "n-guard-tests",
+        "text": "230 行测试",
+        "meaning": "cf6d710（8 月 31 日）给 tests/test_project.py 加的行数",
+        "as_of": "2026-09-28",
+        "source": "git show --stat cf6d710",
+        "screens": [
+          "typora-theme-pack-07"
+        ]
+      },
+      {
+        "id": "n-features",
+        "text": "16 项",
+        "meaning": "本页 registry.features 条数",
+        "as_of": "2026-09-28",
+        "source": "本文件",
+        "screens": [
+          "typora-theme-pack-09"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-md-pdf-toolkit",
+        "with": "skill:md-to-pdf",
+        "direction": "拿来",
+        "flow": "export_pdf.py 把 Markdown 路径、临时 CSS、暂存输出路径、样式策略、--require-style 和可选页数交给 md-pdf-toolkit 的 build_styled_markdown_pdf.py；拿回 PDF 和一份 JSON 回执",
+        "source": ".typora-theme-pack.local.json；export_pdf.py 第 197–220 行"
+      },
+      {
+        "id": "r-pdf-render-safe",
+        "with": "skill:pdf-render-safe",
+        "direction": "拿来",
+        "flow": "导出的 PDF 要看排版时，AI 用 PDF 逐页检查转成页面图和总览",
+        "source": "md-to-pdf SKILL.md“Verification”一节"
+      },
+      {
+        "id": "r-typora",
+        "with": "外部软件 Typora",
+        "direction": "交出",
+        "flow": "两个主题文件装进 %APPDATA%\\Typora\\themes；三条自定义导出命令写在 Typora 设置里，调用 export_pdf.py",
+        "source": "install_theme.py 第 23–27 行；profile.data export.custom*"
+      },
+      {
+        "id": "r-edge",
+        "with": "外部软件 Microsoft Edge",
+        "direction": "拿来",
+        "flow": "经转换器由 Playwright 驱动本机 Edge 打印 PDF；效果预览也用 Edge 截图",
+        "source": "pdf_export_core.py BROWSER_CANDIDATES；render_previews.py EDGE_CANDIDATES"
+      },
+      {
+        "id": "r-devconfig",
+        "with": "devconfig-backup",
+        "direction": "被备份",
+        "flow": "开发配置备份把 AppData\\Roaming\\Typora 整个备份，里面有主题文件、old-themes 旧版和三条导出命令",
+        "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1 第 61 行"
+      },
+      {
+        "id": "r-github",
+        "with": "外部服务 GitHub",
+        "direction": "交出",
+        "flow": "公开仓库 wlyaaaaa/typora-theme-pack；每次推送 GitHub Actions 在 Ubuntu、Python 3.12 上跑 20 项测试",
+        "source": ".github/workflows/test.yml"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-one-menu-item",
+        "title": "菜单里只多一项",
+        "screen": "typora-theme-pack-08"
+      },
+      {
+        "id": "h-code-fence",
+        "title": "代码块不再每行一张卡片",
+        "screen": "typora-theme-pack-08"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/skills/md-to-pdf/",
+        "screen": "typora-theme-pack-01",
+        "text": "文稿转 PDF"
+      },
+      {
+        "target": "/skills/pdf-render-safe/",
+        "screen": "typora-theme-pack-02",
+        "text": "PDF 逐页检查"
+      },
+      {
+        "target": "/skills/pdf-render-safe/",
+        "screen": "typora-theme-pack-03",
+        "text": "PDF 逐页检查"
+      },
+      {
+        "target": "/projects/devconfig-backup/",
+        "screen": "typora-theme-pack-04",
+        "text": "开发配置备份"
+      },
+      {
+        "target": "/skills/md-to-pdf/",
+        "screen": "typora-theme-pack-05",
+        "text": "文稿转 PDF"
+      }
+    ],
+    "live": []
+  },
+  "notes": {
+    "merged": [
+      "底稿“转换器配置”和代码里的三级查找（参数 → 环境变量 → 本机配置）合成一项“记下用哪个转换器”。",
+      "底稿“安全替换PDF”保留为“导坏不丢旧版”；另把同一段代码里的原文指纹核对、输出不能盖掉原文和转换器拆成两项，因为它们挡的是不同的事。"
+    ],
+    "dropped": [
+      "仓库里被 Git 忽略的 Mint-Typora-Theme.zip（8 月 1 日的打包）和 qa/ 中间文件：不是功能，写进 audit.md。",
+      "render_html_png_playwright.js 单列：它只是效果预览内部用的截图助手，并进“效果预览”。"
+    ],
+    "unsure": [
+      "替本人口吻：第 1 屏“我用 Markdown 写作软件 Typora 写文稿”，第 6 屏“8 月 2 日我把话说清楚了：原版、个人、公司是 PDF 的样式和文件后缀，不是三个编辑主题”。后一句依据是 codex-memory 里 8 月 1 日和 8 月 11 日两份工作摘要（AI 写的摘要，原会话记录已不在），不是逐字原话，上线前请本人过目。",
+      "第 2 屏“点一项，PDF 生成在文稿旁边”：9 月 29 日菜单换成新入口，命令不再带 --output，AI 用样例实跑过一次，生成了带“-个人”后缀的 2 页 PDF；还没在 Typora 里实际点过。以下是改之前的情况：Typora 里配的命令当时带 --output \"${outputPath}\"。代码和测试说明空的输出路径会当作没给、在文稿旁边生成带后缀的文件；但 Typora 实际传进来的是什么没有在真实使用里看过，全盘也没找到带后缀的 PDF。如果 Typora 传的是具体路径，文件名就不带后缀。",
+      "功能状态：三种 PDF 和导出保护都标“说不准”，没标“没用过”。理由：从 Typora 菜单导出不留记录，AI 会话记录只保留到 9 月 1 日（Claude 到 9 月 24 日），文件可能被删或改名。若本人记得没用过，可改成“没用过”。",
+      "8 月 2 日那张 Typora 实拍截图，当时的 Typora 版本按 codex-memory 摘要是 1.9.5，现在是 1.14.8；截图说明没写版本。",
+      "个人版 PDF 表头发灰 9 月 29 日已修好（提交 f30ac9c），第 3 屏改成修好后的说法；但第 3 屏个人版截图还是 9 月 28 日表头发灰的那张，要换成修好后导出的第 1 页。"
+    ]
+  }
+}

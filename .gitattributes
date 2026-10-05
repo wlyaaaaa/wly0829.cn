@@ -3,3 +3,8 @@ public/media/localocr/sample-table-actual.md -text whitespace=-blank-at-eof
 public/media/localocr/sample-table-actual.json -text
 public/media/vault-tool/synthetic-roundtrip.json -text
 site-release/** -text
+
+# Preserve migrated producer and page-source byte identity.
+src/typeset/** -text
+sources/** -text
+scripts/inventory.py -text

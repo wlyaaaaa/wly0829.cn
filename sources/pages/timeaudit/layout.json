@@ -1,0 +1,2753 @@
+[
+  {
+    "screen": "timeaudit-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-timeaudit-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-timeaudit-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "hero",
+        "width": "49%",
+        "text_ref": "电脑使用与性能记录"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "事后查电脑为什么卡，也能看时间花在哪。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "这台电脑从登录起就在后台一直记：每秒一条硬件和游戏帧率，每3"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "51%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "540万秒每秒一条的硬件记录（6月16日–9月28日）2,6"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在记录备份图表网页现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "横版以pages-approved已通过修正图为准：49%左题+副标题+介绍、51%右侧机箱纸带插画，4数字卡一排，带3名称的实时条，页脚3按钮。竖版原图标题/副标题/介绍在插画之前，2×2数字卡；实时条左名称右留空框，驾驶舱按钮独占行。旧图未有复制AI按钮，按定稿补齐；不烘焙实时数值。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n当前live_strip从now节点真实标签自动生成各框，已核对labels/格数；删除旧规格冗余labels/columns描述，要求仍保留在scene及本注释。",
+    "dependencies": [
+      "最新parse已能识别数字卡与带名称实时条，渲染需确认4卡和3个空框前名称逐字完整。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-01-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "电脑使用与性能记录"
+      },
+      {
+        "type": "prose",
+        "text_ref": "事后查电脑为什么卡，也能看时间花在哪。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "这台电脑从登录起就在后台一直记：每秒一条硬件和游戏帧率，每3"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "540万秒每秒一条的硬件记录（6月16日–9月28日）2,6",
+        "portrait_columns": 1
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在记录备份图表网页现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "横版以pages-approved已通过修正图为准：49%左题+副标题+介绍、51%右侧机箱纸带插画，4数字卡一排，带3名称的实时条，页脚3按钮。竖版原图标题/副标题/介绍在插画之前，2×2数字卡；实时条左名称右留空框，驾驶舱按钮独占行。旧图未有复制AI按钮，按定稿补齐；不烘焙实时数值。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n当前live_strip从now节点真实标签自动生成各框，已核对labels/格数；删除旧规格冗余labels/columns描述，要求仍保留在scene及本注释。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "最新parse已能识别数字卡与带名称实时条，渲染需确认4卡和3个空框前名称逐字完整。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-01-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-18",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-timeaudit-18-h\\round-01\\candidate-2.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-timeaudit-18-h\\round-01\\candidate-2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "center",
+        "text_ref": "想查什么，从哪进"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/笔记本电脑.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/人物.png"
+        ],
+        "equal_height": true,
+        "button_align": "bottom_right",
+        "text_ref": "电脑卡了"
+      }
+    ],
+    "notes": "横版以已批准candidate-2为构图来源：整宽章节标题按本次要求居中；下面3张等宽等高卡一排，插画在卡内上方，标题和说明左齐，按钮卡底。竖版没有原图，参照同页07竖版逐卡顺排，左上插画、下方标题正文、卡底按钮；新构图，待样张。问AI/看图的标签只来自定稿，不增加文字。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "3张卡顶插画须单独无字素材；当前本屏未有合格素材。",
+      "paragraph开头问AI/自己看图/看图标签需保持原词逐字且不重复。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-18-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-18",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "center",
+        "text_ref": "想查什么，从哪进"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/笔记本电脑.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/人物.png"
+        ],
+        "equal_height": true,
+        "button_align": "bottom_right",
+        "text_ref": "电脑卡了"
+      }
+    ],
+    "notes": "横版以已批准candidate-2为构图来源：整宽章节标题按本次要求居中；下面3张等宽等高卡一排，插画在卡内上方，标题和说明左齐，按钮卡底。竖版没有原图，参照同页07竖版逐卡顺排，左上插画、下方标题正文、卡底按钮；新构图，待样张。问AI/看图的标签只来自定稿，不增加文字。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "3张卡顶插画须单独无字素材；当前本屏未有合格素材。",
+      "paragraph开头问AI/自己看图/看图标签需保持原词逐字且不重复。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-18-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "reference_screen": "timeaudit-07",
+    "reference_source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-07-v.png",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "catalog",
+        "width": "44%",
+        "text_ref": "六张看板"
+      },
+      {
+        "type": "table",
+        "row": "catalog",
+        "columns": 3,
+        "column_widths": [
+          "38%",
+          "55%",
+          "7%"
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "看板回答什么图整机硬件能效与系统资源大盘电脑热不热、有没有降"
+      },
+      {
+        "type": "prose",
+        "row": "catalog",
+        "text_ref": "每个图分别画什么，见全部功能的“看图”一组。"
+      },
+      {
+        "type": "illustration",
+        "row": "catalog",
+        "width": "56%"
+      },
+      {
+        "type": "screenshot",
+        "row": "catalog",
+        "indices": [
+          0
+        ],
+        "ratio": "4:1",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "row": "catalog",
+        "align": "center",
+        "text_ref": "8月29日的真实看板目录"
+      },
+      {
+        "type": "prose",
+        "text_ref": "打开：本机浏览器开localhost:43000，外面用gr"
+      }
+    ],
+    "notes": "横图真实左表约44%右浏览器插画及留空截图56%，不是scene所写62/38；表内原图缺回答什么列，须补定稿完整3列同时保留左表右截图布局。竖图6行卡依次：左图/看板名/右数字，定稿补充回答什么，不删字；截图及其日期说明后再页底3段说明。浏览器插画在框外上方，截图只留空。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "screenshot须可shot_indices选单槽并按来源框比例输出。",
+      "竖表卡应保留右上图数、左看板名与回答什么说明，不简单左右窄格强塞。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-03-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "六张看板"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "value_align": "top_right",
+        "text_ref": "看板回答什么图整机硬件能效与系统资源大盘电脑热不热、有没有降"
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0
+        ],
+        "ratio": "4:1",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "align": "center",
+        "text_ref": "8月29日的真实看板目录"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每个图分别画什么，见全部功能的“看图”一组。"
+      }
+    ],
+    "notes": "横图真实左表约44%右浏览器插画及留空截图56%，不是scene所写62/38；表内原图缺回答什么列，须补定稿完整3列同时保留左表右截图布局。竖图6行卡依次：左图/看板名/右数字，定稿补充回答什么，不删字；截图及其日期说明后再页底3段说明。浏览器插画在框外上方，截图只留空。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "screenshot须可shot_indices选单槽并按来源框比例输出。",
+      "竖表卡应保留右上图数、左看板名与回答什么说明，不简单左右窄格强塞。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-03-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "illustration",
+        "row": "heading",
+        "width": "18%",
+        "index": 0
+      },
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "left",
+        "row": "heading",
+        "width": "82%",
+        "text_ref": "看板长这样"
+      },
+      {
+        "type": "screenshot",
+        "row": "shots",
+        "width": "50%",
+        "indices": [
+          0
+        ],
+        "ratio": "3840:2146",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "row": "shots",
+        "text_ref": "8月29日的功耗与电费诊断舱：上排是今天的电量、电费和峰谷分"
+      },
+      {
+        "type": "screenshot",
+        "row": "shots",
+        "width": "50%",
+        "indices": [
+          1
+        ],
+        "ratio": "3840:1589",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "row": "shots",
+        "text_ref": "8月29日的系统压力：调度抖动、内存和换页、磁盘最高延迟、网"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "电费怎么算的",
+        "last_full_width": true
+      }
+    ],
+    "notes": "标题旁电表占左，标题在右照原图，不能居中成无插画整宽标题。横版49/51左右截图；左16:9下跟说明，右约2.4:1下跟说明及电费怎么算卡；卡内左计算器插画右4点文字。竖版两槽和各自说明依次，再整宽电费卡。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "dependencies": [
+      "单个screenshot块需只输出指定截图，否则两次调用重复全部截图/热区。",
+      "电表主插画与计算器卡插画须分配不同素材，不能重复主图。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-04-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "illustration",
+        "row": "heading",
+        "row_v": true,
+        "width": "32%",
+        "index": 0
+      },
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "left",
+        "row": "heading",
+        "row_v": true,
+        "width": "68%",
+        "text_ref": "看板长这样"
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0
+        ],
+        "ratio": "3840:2146",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月29日的功耗与电费诊断舱：上排是今天的电量、电费和峰谷分"
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          1
+        ],
+        "ratio": "3840:1589",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月29日的系统压力：调度抖动、内存和换页、磁盘最高延迟、网"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "电费怎么算的",
+        "last_full_width": true
+      }
+    ],
+    "notes": "标题旁电表占左，标题在右照原图，不能居中成无插画整宽标题。横版49/51左右截图；左16:9下跟说明，右约2.4:1下跟说明及电费怎么算卡；卡内左计算器插画右4点文字。竖版两槽和各自说明依次，再整宽电费卡。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "dependencies": [
+      "单个screenshot块需只输出指定截图，否则两次调用重复全部截图/热区。",
+      "电表主插画与计算器卡插画须分配不同素材，不能重复主图。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-04-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "diagnosis-heading",
+        "text_ref": "卡了，问AI",
+        "width": "70%"
+      },
+      {
+        "type": "prose",
+        "row": "diagnosis-heading",
+        "text_ref": "说一句“刚才卡了”，AI用电脑配置与恢复的卡顿总诊断，把这几"
+      },
+      {
+        "type": "illustration",
+        "row": "diagnosis-heading",
+        "width": "30%",
+        "target_width": "100%",
+        "align": "right"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "icons": "auto",
+        "text_ref": "这里的历史摘要：那段时间记录全不全、最长空档多久，温度、功率",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
+        ],
+        "text_ref": "交回什么：结论、出事的时间段、最关键的几个数、哪里没有证据、",
+        "row": "diagnosis-result",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "text_ref": "只给汇总：查卡顿用的这几个入口只回数字，从不返回程序名、窗口",
+        "row": "diagnosis-result",
+        "width": "50%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、一个用真实数字的完整例子：查电脑卡顿技能"
+      }
+    ],
+    "notes": "横图标题/导语/大桌面插画同在左46%，右54%五来源横条+交回什么卡+只给汇总卡+链接卡从顶部依次；插画在卡外，来源小图在卡内左。竖原图是标题→大插画→导语→5来源→交回→只给汇总→链接；导语不是放插画前。原图眼睛下面只看字不在定稿，不能保留带字插画。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "bullets五项需分5张左图右文横条；当前all-lead为False时只成一整组清单。",
+      "交回什么/只给汇总段为para，卡头须从定稿原词识别，不新增字。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-05-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "卡了，问AI"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说一句“刚才卡了”，AI用电脑配置与恢复的卡顿总诊断，把这几"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "text_ref": "这里的历史摘要：那段时间记录全不全、最长空档多久，温度、功率",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
+        ],
+        "text_ref": "交回什么：结论、出事的时间段、最关键的几个数、哪里没有证据、"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "text_ref": "只给汇总：查卡顿用的这几个入口只回数字，从不返回程序名、窗口"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "跟AI怎么说、一个用真实数字的完整例子：查电脑卡顿技能"
+      }
+    ],
+    "notes": "横图标题/导语/大桌面插画同在左46%，右54%五来源横条+交回什么卡+只给汇总卡+链接卡从顶部依次；插画在卡外，来源小图在卡内左。竖原图是标题→大插画→导语→5来源→交回→只给汇总→链接；导语不是放插画前。原图眼睛下面只看字不在定稿，不能保留带字插画。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "bullets五项需分5张左图右文横条；当前all-lead为False时只成一整组清单。",
+      "交回什么/只给汇总段为para，卡头须从定稿原词识别，不新增字。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-05-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "clipboard-heading",
+        "text_ref": "找回复制过的东西",
+        "width": "70%"
+      },
+      {
+        "type": "illustration",
+        "row": "clipboard-heading",
+        "width": "30%",
+        "target_width": "100%",
+        "align": "right"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "怎么记Windows一有新复制就通知它，不轮询、不装键盘钩子"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "link_style": "button",
+        "text_ref": "8月31日记下5,234次复制，9月28日10,344次；不"
+      }
+    ],
+    "notes": "横版39%左标题+剪贴板大图，61%右六条单列图文卡，图在卡内左，最下数字和密码中心链接一条窄卡；竖原图先标题大图，首张含怎么记/不记什么2卡，v2接其余4卡和数字窄卡；续图不重复标题。6条不得合为一张长卡，数字和链接不可重复。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "六条**标题**｜正文是para，每条规格独立卡；须识别卡头但保留原逐字文本。",
+      "notice需原单段链接按钮化，只输出1次。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-06-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "找回复制过的东西"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "怎么记Windows一有新复制就通知它，不轮询、不装键盘钩子"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "不记什么复制时带了“不进剪贴板历史”标记的一律不存，比如从密"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "怎么找开始菜单点“TimeAudit剪贴板历史”，打开的是密"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "疑似密钥看着像API密钥、令牌、恢复码的单独归一类，提醒小心"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "存在哪E盘一个私有的SQLite数据库（带全文搜索），和性能"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "暂停在同一个标签里可以暂停记录，恢复后从当下重新算起。"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "link_style": "button",
+        "text_ref": "8月31日记下5,234次复制，9月28日10,344次；不"
+      }
+    ],
+    "notes": "横版39%左标题+剪贴板大图，61%右六条单列图文卡，图在卡内左，最下数字和密码中心链接一条窄卡；竖原图先标题大图，首张含怎么记/不记什么2卡，v2接其余4卡和数字窄卡；续图不重复标题。6条不得合为一张长卡，数字和链接不可重复。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "六条**标题**｜正文是para，每条规格独立卡；须识别卡头但保留原逐字文本。",
+      "notice需原单段链接按钮化，只输出1次。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-06-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "activity",
+        "width": "49%",
+        "text_ref": "时间花在哪"
+      },
+      {
+        "type": "illustration",
+        "row": "activity"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
+        ],
+        "row": "activity",
+        "width": "51%",
+        "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ],
+        "row": "activity",
+        "text_ref": "问AI：“那天我都用了哪些软件”由个人理解库来答：它按完整时"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "activity",
+        "text_ref": "口径"
+      }
+    ],
+    "notes": "横原图左49%标题和热力格子/椅子耳机大图，右51%看图、问AI、口径3卡纵排，每卡左小图右字；竖原图标题、大图、同3卡依次；口径的4点完整保留。无卡间丝带/箭头。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "看图和问AI为para须识别卡头，口径group+bullets同卡；不能新增看图/问AI重复标签。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-07-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-07-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "时间花在哪"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
+        ],
+        "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ],
+        "text_ref": "问AI：“那天我都用了哪些软件”由个人理解库来答：它按完整时"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "口径"
+      }
+    ],
+    "notes": "横原图左49%标题和热力格子/椅子耳机大图，右51%看图、问AI、口径3卡纵排，每卡左小图右字；竖原图标题、大图、同3卡依次；口径的4点完整保留。无卡间丝带/箭头。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "看图和问AI为para须识别卡头，口径group+bullets同卡；不能新增看图/问AI重复标签。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-07-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "left",
+        "row": "rescue-head",
+        "width": "64%",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "illustration",
+        "row": "rescue-head",
+        "width": "36%"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "columns_v": 1,
+        "variant": "table",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "column_widths": [
+          "38%",
+          "62%"
+        ],
+        "icon_items": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "text_ref": "遇到怎么办看板没有新数据先看右上角时间范围选对没有；再双击项"
+      }
+    ],
+    "notes": "横图标题左上、急救箱图独立右上，下面两列8行表，左列小图与遇到，右怎么办。竖原图标题下面独立故障拼图，第1续图4张左图右文卡，v2其余4张无图卡；按定稿保留全部表头原文一次，不自行重复字段字。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "竖table需前4有图后4无图的逐项方式；当前只有统一show_icons。",
+      "竖主拼图不是横版单急救箱，要有对应方向独立无字素材。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-08-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "column_widths": [
+          "38%",
+          "62%"
+        ],
+        "icon_items": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "text_ref": "遇到怎么办看板没有新数据先看右上角时间范围选对没有；再双击项"
+      }
+    ],
+    "notes": "横图标题左上、急救箱图独立右上，下面两列8行表，左列小图与遇到，右怎么办。竖原图标题下面独立故障拼图，第1续图4张左图右文卡，v2其余4张无图卡；按定稿保留全部表头原文一次，不自行重复字段字。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "竖table需前4有图后4无图的逐项方式；当前只有统一show_icons。",
+      "竖主拼图不是横版单急救箱，要有对应方向独立无字素材。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-08-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "center",
+        "text_ref": "每天在后台发生什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 4,
+        "columns_v": 1,
+        "variant": "day_band",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          4,
+          4
+        ],
+        "band_placement": "between_rows",
+        "text_ref": "登录时计划任务悄悄拉起Docker里的数据库和图表、采集主程"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "illustration": "left_inside",
+        "text_ref": "平时什么都不用管。想看就打开图表；想问就直接跟AI说。",
+        "icons": [
+          "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png"
+        ]
+      }
+    ],
+    "notes": "实看横图是4卡在日程横带上方、4卡在下方，分别上下细线接绿色时间带，顺序前4再后4；末尾整宽提示条。竖图左绿点时间带、右单列8卡，v首3项有左图，v2后5项无图；标题整宽按追加要求居中。不能按scene含糊说明改成8卡同一排。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "timeline需支持8个para作为独立时间卡与4/4挂卡；现节点不是steps/bullets。",
+      "各项名称已在定稿粗体里，不加时间点或编号。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-02-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "medium",
+        "align": "center",
+        "text_ref": "每天在后台发生什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "band_placement": "left",
+        "text_ref": "登录时计划任务悄悄拉起Docker里的数据库和图表、采集主程",
+        "direction": "vertical"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "illustration": "left_inside",
+        "text_ref": "平时什么都不用管。想看就打开图表；想问就直接跟AI说。",
+        "icons": [
+          "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png"
+        ]
+      }
+    ],
+    "notes": "实看横图是4卡在日程横带上方、4卡在下方，分别上下细线接绿色时间带，顺序前4再后4；末尾整宽提示条。竖图左绿点时间带、右单列8卡，v首3项有左图，v2后5项无图；标题整宽按追加要求居中。不能按scene含糊说明改成8卡同一排。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮修正row_counts为八排一项，防止显式分排覆盖竖向单列。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "timeline需支持8个para作为独立时间卡与4/4挂卡；现节点不是steps/bullets。",
+      "各项名称已在定稿粗体里，不加时间点或编号。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-02-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "columns_v": 1,
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "row_counts": [
+          5,
+          1
+        ],
+        "branches": [
+          {
+            "item": 6,
+            "placement": "below",
+            "connector": "dashed_arrow",
+            "targets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
+        ],
+        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "variant": "isolated_dashed",
+        "connector": "none",
+        "text_ref": "剪贴板记录是单独一条：Python小程序写自己的SQLite"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "footer",
+        "width": "68%",
+        "text_ref": "给AI的三个只读入口：现在正不正常（运行健康）、某段时间怎么"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "footer",
+        "width": "32%",
+        "text_ref": "代码、看板设置都在公开的GitHub仓库；数据库、剪贴板和日"
+      }
+    ],
+    "notes": "横图标题居中；上5圆角节点横排有绿实箭头，6看门狗居下方用虚线回接前面；剪贴板独立右下虚线框，绝不能连到主流程。下方给AI入口宽卡68%、GitHub说明32%同排。竖图标题下先无字主流程2排小示意（4上2下＋独立剪贴板），再节点文字单列6卡、剪贴板卡、AI入口卡、仓库说明。所有编号与标签来自定稿；图里不重复写编号/说明。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "flow steps同一节点需内部5+1并带回接箭头；不能拆steps内部text_ref。",
+      "竖版顶部无字概览插画需另素材，不重复带字节点。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-09-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "size": "large",
+        "align": "center",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "illustration",
+        "size": "banner"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "branches": [
+          {
+            "item": 6,
+            "placement": "below",
+            "connector": "dashed_arrow",
+            "targets": [
+              1,
+              2,
+              3,
+              4
+            ]
+          }
+        ],
+        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah",
+        "direction": "vertical"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "variant": "isolated_dashed",
+        "connector": "none",
+        "text_ref": "剪贴板记录是单独一条：Python小程序写自己的SQLite"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "给AI的三个只读入口：现在正不正常（运行健康）、某段时间怎么"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "代码、看板设置都在公开的GitHub仓库；数据库、剪贴板和日"
+      }
+    ],
+    "notes": "横图标题居中；上5圆角节点横排有绿实箭头，6看门狗居下方用虚线回接前面；剪贴板独立右下虚线框，绝不能连到主流程。下方给AI入口宽卡68%、GitHub说明32%同排。竖图标题下先无字主流程2排小示意（4上2下＋独立剪贴板），再节点文字单列6卡、剪贴板卡、AI入口卡、仓库说明。所有编号与标签来自定稿；图里不重复写编号/说明。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。；diagram_overview由现成banner独立总览图层落实。",
+    "dependencies": [
+      "flow steps同一节点需内部5+1并带回接箭头；不能拆steps内部text_ref。",
+      "竖版顶部无字概览插画需另素材，不重复带字节点。"
+    ],
+    "visual_review": {
+      "method": "view_image逐屏横竖及全部续图构图核验",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\timeaudit-09-contact.png",
+      "scope": "前任遗留证据，本轮未看图"
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "timeaudit-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "connector": "none",
+        "row": "storage",
+        "width": "58%",
+        "size": "medium",
+        "illustration": "none",
+        "text_ref": "存多久、占多大"
+      },
+      {
+        "type": "table",
+        "align": "left",
+        "connector": "none",
+        "row": "storage",
+        "columns": 4,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "记录"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "connector": "none",
+        "row": "storage",
+        "illustration": "none",
+        "text_ref": "数字截至"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "connector": "none",
+        "row": "storage",
+        "width": "42%",
+        "index": 0
+      },
+      {
+        "type": "bullet_list",
+        "align": "left",
+        "connector": "none",
+        "row": "storage",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "备份",
+        "item_images": [
+          "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "左栏标题、四列八行表格、数字说明依次纵排；右栏顶部抽屉和G盘插画在卡外，下面整张备份卡，卡头小云在左。原图标题只占左栏，不作为整屏标题居中。表格与备份卡均不得缩字。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "缺合格抽屉/G盘大插画：资产清单 extracted illustration=0。",
+      "表格每行小图标仅提取5/8；备份卡头图标不应挤占正文。"
+    ],
+    "visual_layout": {
+      "columns": [
+        58,
+        42
+      ],
+      "left": [
+        "title",
+        "table 8 rows",
+        "caption"
+      ],
+      "right": [
+        "outside illustration",
+        "backup card"
+      ],
+      "connectors": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 5,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-10-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "存多久、占多大"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "connector": "none",
+        "index": 0
+      },
+      {
+        "type": "table",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "portrait_mode": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "记录",
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "text_ref": "数字截至"
+      },
+      {
+        "type": "bullet_list",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "备份",
+        "columns_v": 1
+      }
+    ],
+    "notes": "实际竖图顺序：居中大标题、卡外抽屉/G盘插画、七张左图标右键值记录卡；续图第八张整个数据库卡+数字说明+备份卡。表格整体仅一个text_ref，不在各行内部拆定位。原表头记录/多少/占多大/留多久仅完整出现一次，逐卡重复表头用data-echo。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "table竖版需保留八个记录、四列语义与每行图标；当前缺插画与3个图标。"
+    ],
+    "visual_layout": {
+      "columns": 1,
+      "portrait_segments": [
+        "title+art+rows 1–7",
+        "row 8+caption+backup"
+      ],
+      "art": "outside top under title"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 5,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "connector": "none",
+        "size": "medium",
+        "illustration": "none",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "两条前台记录不合并。",
+        "last_full_width": true
+      },
+      {
+        "type": "stat_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 4,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "约 2.3 万行"
+      }
+    ],
+    "notes": "实际横图左65%五张横卡单列纵排，右35%四张数字卡纵排；纸带插画从左下卡角探出，右数字栏上方有仪表盘小插画。竖图五张左图标右文字卡单列，四数字卡在末尾2×2，不带插画。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+    "dependencies": [
+      "解析器将“约 2.3 万行”保持为card，其余三数字合为stats；core stat_card只把stats作数字卡，须支持首张数字card，不能把首项降为正文。",
+      "横版纸带/仪表盘两处装饰未独立提取；需要独立装饰槽保持卡外位置。"
+    ],
+    "visual_layout": {
+      "principle_rows": 5,
+      "principle_columns": 1,
+      "stat_rows": 4,
+      "stat_columns": 1
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 8,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-11-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "两条前台记录不合并。",
+        "columns_v": 1
+      },
+      {
+        "type": "stat_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "约 2.3 万行",
+        "columns_v": 1,
+        "portrait_columns": 1
+      }
+    ],
+    "notes": "标题居中大号；五张原则卡各有左内图标、右粗体标题与正文；四数字卡末尾2×2。保留约2.3万行、303个、210次、0.22个核全部数字和解释。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "解析器将“约 2.3 万行”保持为card，其余三数字合为stats；core stat_card只把stats作数字卡，须支持首张数字card，不能把首项降为正文。"
+    ],
+    "visual_layout": {
+      "principle_rows": 5,
+      "principle_columns": 1,
+      "stat_rows": 2,
+      "stat_columns": 2
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 8,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-timeaudit-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-timeaudit-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "medium",
+        "illustration": "none",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "none",
+        "row": "highlights",
+        "width": "49%",
+        "text_ref": "程序活着，不等于还在记。",
+        "illustration_source": "illustration",
+        "illustration_index": 0
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0
+        ],
+        "ratio": "2:1",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "highlights",
+        "width": "49%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月29日的旧版帧率图",
+        "row": "highlights"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "none",
+        "screenshot_index": 0,
+        "media_order": [
+          "screenshot",
+          "caption",
+          "title",
+          "body"
+        ],
+        "row": "highlights",
+        "text_ref": "读不到就留空，不补一个像样的数。"
+      }
+    ],
+    "notes": "横版两张等宽大卡并排，左狗/心跳图在卡内顶部、标题和麻烦/解法在下；右卡2:1截图槽在卡内最上，图注紧跟槽，之后标题/麻烦/解法。章节标题整屏居中（原图左上，以统一明确要求为准）。\n截图绑定已补，当前截图/图注/右侧文字同栏；卡内媒体一体外框尚需组件实现，不能报构图完成。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "content_card当前用小图标而非独立插画，需要亮点卡内/卡外媒体槽。",
+      "第二卡分配含结尾图注节点；视觉上图注提前至截图下，需用视觉重排保持DOM定稿顺序，不能复制图注导致G1重复。",
+      "screenshots元数据所给真实图仅登记热区，此稿不读私人V盘原图；出图画空槽。"
+    ],
+    "visual_layout": {
+      "columns": 2,
+      "row_widths": [
+        49,
+        49
+      ],
+      "media": "first illustration, second screenshot 2:1",
+      "connector": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 8,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-12-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "outside",
+        "icons": "none",
+        "art_role": "illustration",
+        "art_index": 0,
+        "media_order": [
+          "title",
+          "illustration",
+          "body"
+        ],
+        "text_ref": "程序活着，不等于还在记。",
+        "columns_v": 1
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0
+        ],
+        "ratio": "2:1",
+        "columns": 1,
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月29日的旧版帧率图"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "none",
+        "screenshot_index": 0,
+        "media_order": [
+          "screenshot",
+          "caption",
+          "title",
+          "body"
+        ],
+        "text_ref": "读不到就留空，不补一个像样的数。",
+        "columns_v": 1
+      }
+    ],
+    "notes": "竖版第一张：亮点居中标题、第一卡大标题、卡外狗/心跳插画、正文卡。第二张：整张外卡，截图槽在上、图注紧跟、第二卡大标题、麻烦与解法。图注仅出现一次。\n截图绑定已补，当前截图/图注/右侧文字同栏；卡内媒体一体外框尚需组件实现，不能报构图完成。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "content_card当前用小图标而非独立插画，需要亮点卡内/卡外媒体槽。",
+      "第二卡分配含结尾图注节点；视觉上图注提前至截图下，需用视觉重排保持DOM定稿顺序，不能复制图注导致G1重复。",
+      "screenshots元数据所给真实图仅登记热区，此稿不读私人V盘原图；出图画空槽。"
+    ],
+    "visual_layout": {
+      "columns": 1,
+      "row_widths": [
+        100
+      ],
+      "media": "first illustration, second screenshot 2:1",
+      "connector": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 8,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-13-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-13-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "top_inside",
+        "row": "highlights",
+        "width": "49%",
+        "text_ref": "一小时不会算成一个半小时。",
+        "illustration_source": "illustration",
+        "illustration_index": 0
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "top_inside",
+        "row": "highlights",
+        "width": "49%",
+        "text_ref": "明细只留 60 天，一年后的峰值照样查得到。",
+        "illustration_source": "illustration",
+        "illustration_index": 1
+      }
+    ],
+    "notes": "没有亮点章节标题；两张49%大卡并排，各图在卡内顶部，卡标题与麻烦/解法依次在下。左图重叠时间条内部含箭头（属插画，不是卡间connector）；右图周抽屉。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "content_card需支持一个外卡内两张正文内卡及媒体顺序。",
+      "横版需要第二张抽屉插画，资产仅提取1/2；不能以首张时间条重复代替。"
+    ],
+    "visual_layout": {
+      "columns": 2,
+      "nested_cards": false,
+      "second_portrait_art": "none in actual v2"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 6,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-13-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "top_inside",
+        "art_role": "illustration",
+        "art_index": 0,
+        "media_order": [
+          "title",
+          "illustration",
+          "body"
+        ],
+        "text_ref": "一小时不会算成一个半小时。",
+        "columns_v": 1
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "明细只留 60 天，一年后的峰值照样查得到。",
+        "columns_v": 1
+      }
+    ],
+    "notes": "没有新增亮点章节标题。首卡：大标题在图上方，插画在外卡内、麻烦和解法各一张内卡；续图次卡没有抽屉插画，大标题浅绿底，麻烦/解法各一内卡。若恢复定稿scene所述次卡插画应标新构图待样张，不得谎称原竖图有。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "content_card需支持一个外卡内两张正文内卡及媒体顺序。"
+    ],
+    "visual_layout": {
+      "columns": 1,
+      "nested_cards": true,
+      "second_portrait_art": "none in actual v2"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 6,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-14-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-14-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "connector": "none",
+        "size": "medium",
+        "illustration": "none",
+        "row": "header",
+        "width": "48%",
+        "text_ref": "全部功能（35 项）"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "connector": "none",
+        "columns": 5,
+        "illustration": "none",
+        "row": "header",
+        "width": "52%",
+        "text_ref": "● 在用"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "row": "header",
+        "text_ref": "没用过＝"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "记录"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          3,
+          3,
+          1
+        ],
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "整机硬件"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "看图"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          3,
+          3,
+          1
+        ],
+        "statuses": [
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "整机硬件大盘"
+      }
+    ],
+    "notes": "横图标题在左半、五状态图例和定义说明在右半同排；记录7卡、看图7卡各3/3/1且尾卡保持三列标准宽度左对齐。组名独占组上方。三屏功能链条不另加上下框。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "feature_card尚未注册，必须有编号名称/正文分隔、右上状态点，不用numbered_steps圆编号替代。",
+      "图例五状态颜色须按scene顺序映射，所有●不能统一绿。",
+      "14屏仅提取10/14图标；补图前先逐卡确认不能错配。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "feature_rows": [
+        3,
+        3,
+        1,
+        3,
+        3,
+        1
+      ],
+      "group_heading": "above each group",
+      "footer_border": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 7,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-14-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-14-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "medium",
+        "illustration": "none",
+        "text_ref": "全部功能（35 项）"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "connector": "none",
+        "columns": 5,
+        "illustration": "none",
+        "text_ref": "● 在用",
+        "columns_v": 5
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "text_ref": "没用过＝"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "记录"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "整机硬件",
+        "columns_v": 1
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "看图"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "statuses": [
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "pale_gray",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "整机硬件大盘",
+        "columns_v": 1
+      }
+    ],
+    "notes": "标题全宽居中；图例与状态定义说明在同张浅色细框；记录组7卡在v，续图v2看图组7卡，不重复全局标题图例。每卡左内图标、右字、状态点右上。第8–13项按定稿为说不准浅灰，第14项绿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。；AI补充：当前合格102px标题只缩不放大，功能目录改中档，保原毛笔图/笔画；审查要求缩小过大标题，不要求此屏大档。",
+    "dependencies": [
+      "feature_card尚未注册，必须有编号名称/正文分隔、右上状态点，不用numbered_steps圆编号替代。",
+      "图例五状态颜色须按scene顺序映射，所有●不能统一绿。",
+      "14屏仅提取10/14图标；补图前先逐卡确认不能错配。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "feature_rows": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "group_heading": "above each group",
+      "footer_border": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 7,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-15",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-15-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-15-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "问 AI"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          3,
+          2
+        ],
+        "fill_last_row": true,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "pale_gray",
+          "cross_gray"
+        ],
+        "status_position": "top_right",
+        "text_ref": "刚才卡了"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "剪贴板历史"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          3,
+          3,
+          2
+        ],
+        "fill_last_row": true,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "pale_gray",
+          "gray",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "记下复制"
+      }
+    ],
+    "notes": "无章节标题、无重复图例。横版问AI卡3/2，末排18/19各约半屏宽；剪贴板历史卡3/3/2，末排26/27各约半屏宽。各卡图标左内、状态右上。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "feature_card未注册；变宽末排row_counts/fill_last_row需组件内部实现，steps节点不能规格内按18/19或26/27拆节点。",
+      "15屏仅提取10/13图标。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "ask_rows": [
+        3,
+        2
+      ],
+      "clipboard_rows": [
+        3,
+        3,
+        2
+      ],
+      "clipboard_portrait_icons": false
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 4,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-15-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-15-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "问 AI"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "fill_last_row": false,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "pale_gray",
+          "cross_gray"
+        ],
+        "status_position": "top_right",
+        "text_ref": "刚才卡了",
+        "columns_v": 1
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "剪贴板历史"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "fill_last_row": false,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "pale_gray",
+          "gray",
+          "green"
+        ],
+        "status_position": "top_right",
+        "text_ref": "记下复制",
+        "columns_v": 1
+      }
+    ],
+    "notes": "v问AI5卡有左图标，v2剪贴板历史8卡实际无图标；续图组名保留。每卡状态右上。编号15–27连续，不能把一整个steps节点按中间项text_ref拆分。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "feature_card未注册；变宽末排row_counts/fill_last_row需组件内部实现，steps节点不能规格内按18/19或26/27拆节点。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "ask_rows": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "clipboard_rows": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "clipboard_portrait_icons": false
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 4,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-16",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-16-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-16-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "small",
+        "illustration": "none",
+        "text_ref": "保底"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          2,
+          3,
+          3
+        ],
+        "fill_first_row": true,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "yellow",
+          "pale_gray",
+          "pale_gray"
+        ],
+        "status_position": "top_right",
+        "text_ref": "登录自动开始"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "connector": "none",
+        "index": 0,
+        "size": "banner"
+      }
+    ],
+    "notes": "无章节标题、无图例。横图实际保底第一排28/29两张半宽卡，第二排30/31/32三卡，第三排33/34/35三卡；下方整宽纸带/狗/回形针插画在卡外。第32项原图黄，定稿scene明确绿，按定稿标绿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "feature_card未注册；横排2/3/3与竖31后插画需内部布局能力，不能用text_ref定位steps中间项。",
+      "原图第32项为黄与定稿状态冲突，稿已采用定稿绿；不要从图取色覆盖定稿。",
+      "第32图标原图含GitHub品牌标志；定稿功能名点名GitHub而scene没有点名标志，复审时需核对品牌资产是否适用标准，勿自动引入。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "rows": [
+        2,
+        3,
+        3
+      ],
+      "art": "outside bottom",
+      "connector": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 2,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-16",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-16-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-16-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-16-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "保底"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "connector": "none",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "fill_first_row": false,
+        "statuses": [
+          "green",
+          "green",
+          "green",
+          "green",
+          "green",
+          "yellow",
+          "pale_gray",
+          "pale_gray"
+        ],
+        "status_position": "top_right",
+        "text_ref": "登录自动开始",
+        "inline_illustration_after_number": 31,
+        "inline_illustration_index": 0,
+        "columns_v": 1
+      }
+    ],
+    "notes": "v保底标题与28–31四卡，下面卡外纸带/狗/回形针插画；续图v2直接32–35四卡，没有重复保底标题。插画实际在31和32之间，不能挪至35后；整组只有一个steps节点，需组件内部按编号31插入无字图。32状态按定稿scene绿，33黄，34/35浅灰。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
+    "dependencies": [
+      "feature_card未注册；横排2/3/3与竖31后插画需内部布局能力，不能用text_ref定位steps中间项。",
+      "原图第32项为黄与定稿状态冲突，稿已采用定稿绿；不要从图取色覆盖定稿。",
+      "第32图标原图含GitHub品牌标志；定稿功能名点名GitHub而scene没有点名标志，复审时需核对品牌资产是否适用标准，勿自动引入。"
+    ],
+    "visual_layout": {
+      "chain": "timeaudit-features",
+      "rows": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "art": "outside after feature 31",
+      "connector": "none"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 2,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-17",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-17-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-17-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "medium",
+        "illustration": "none",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "align": "left",
+        "connector": "line",
+        "columns": 2,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "column_flow": "top_to_bottom",
+        "items_per_column": 7,
+        "row": "history",
+        "text_ref": "6 月 8 日",
+        "width": "75%"
+      },
+      {
+        "type": "illustration",
+        "align": "right",
+        "connector": "none",
+        "row": "history",
+        "width": "25%",
+        "index": 0,
+        "target_width": "100%"
+      }
+    ],
+    "notes": "横图左66%为标题+两列竖时间线（每列7项，先左列从上到下，再右列从上到下），各列左边竖绿细线/节点点，卡内左图标右日期和正文；右34%一幅纵向演进纸带插画，卡外且顶对齐。时间线有竖细线不画箭头/丝带。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
+    "dependencies": [
+      "解析器把日期bullets识别为stats；timeline支持stats，不可按stat_card输出大数字。",
+      "现有timeline direction=vertical会强制columns=1；横版需支持两列独立竖线、每列7项、列优先阅读顺序，不能用水平两列Z形替代。",
+      "connector只允许ribbon/arrow/none，竖细线是时间线节点轨道；需要组件轨道能力，不用箭头或丝带。",
+      "14节点图标和演进插画须逐项确认资产不缺，短名和日期均由程序排字。"
+    ],
+    "visual_layout": {
+      "timeline_columns": 2,
+      "timeline_items": 14,
+      "reading_order": "column-major",
+      "timeline_line": "thin vertical green with dots",
+      "art": "outside right"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 2,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  },
+  {
+    "screen": "timeaudit-17",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-17-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-17-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\img\\timeaudit-17-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "connector": "none",
+        "size": "large",
+        "illustration": "none",
+        "text_ref": "演进"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "connector": "none",
+        "index": 0
+      },
+      {
+        "type": "timeline",
+        "align": "left",
+        "connector": "line",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "column_flow": "top_to_bottom",
+        "items_per_column": 7,
+        "text_ref": "6 月 8 日",
+        "columns_v": 1
+      }
+    ],
+    "notes": "竖图左对齐小章节标题演进（原图同顶部插画并列，稿建议保持标题左对齐）；插画缩为横长条置顶卡外；14张节点卡单列，v前7项、v2后7项。左侧细绿竖线/节点点跨卡保持，时间按定稿顺序。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。",
+    "dependencies": [
+      "解析器把日期bullets识别为stats；timeline支持stats，不可按stat_card输出大数字。",
+      "现有timeline direction=vertical会强制columns=1；横版需支持两列独立竖线、每列7项、列优先阅读顺序，不能用水平两列Z形替代。",
+      "connector只允许ribbon/arrow/none，竖细线是时间线节点轨道；需要组件轨道能力，不用箭头或丝带。",
+      "14节点图标和演进插画须逐项确认资产不缺，短名和日期均由程序排字。"
+    ],
+    "visual_layout": {
+      "timeline_columns": 1,
+      "timeline_items": 14,
+      "reading_order": "top-to-bottom",
+      "timeline_line": "thin vertical green with dots",
+      "art": "outside top"
+    },
+    "style_status": "依批准样板；样板未出现的表格、功能状态卡、时间线、亮点媒体嵌套均待组件样张",
+    "text_allocation_verified": {
+      "node_count": 2,
+      "each_node_once": true,
+      "warnings": []
+    },
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    },
+    "prior_visual_verified": true
+  }
+]

@@ -1,0 +1,1617 @@
+[
+  {
+    "screen": "ai-cli-profile-manager-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "50%",
+        "text_ref": "AI工具配置管理"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "选好模型，打开原版AI编程工具来用。"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "50%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上大标题毛笔艺术字“AI 工具配置管理”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：一台显示器上开着一个终端窗口和一个 Codex 桌面版窗口，桌面版窗口里展开一个模型下拉菜单，菜单每一行是一个品牌小标志加一条浅灰短线（依次画 OpenAI、智谱 GLM、DeepSeek 小鲸鱼、通义千问、Ollama 小羊驼的标志，短线处不写字）；显示器旁边一个小保险箱，伸出一把绿色小钥匙，只连向其中一个窗口；机箱侧面的显卡亮着绿光。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字）；小插画依次是：一排五个小工具图标、一个下拉菜单、一叠任务卡片、一摞代码纸。数字卡下面一条细长的圆角横条：最左写“现在”，接着是小字“升级观察”、紧跟一行更小的灰字注“（Codex 里按需启动的自动任务，平时停着）”，再是一个留空的浅色圆角小框（约横条宽度的 25%），再是小字“本机模型服务”和同样大小的空框，最右一个按钮〔现在正不正常 → 驾驶舱〕；两个空框里什么都不画，网页程序会往里填字。横条下面一行放两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔GitHub〕（GitHub 按钮左边画 GitHub 的小猫标志）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "AI工具配置管理"
+      },
+      {
+        "type": "prose",
+        "text_ref": "选好模型，打开原版AI编程工具来用。"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑",
+        "portrait_columns": 1
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、“现在”横条改成竖排三行（“现在”一行，“升级观察”加空框一行，“本机模型服务”加空框一行，空框占整行宽约 60%），驾驶舱按钮单独一行，最后两个按钮上下各一行。 那一排按钮里同样有〔复制 AI 续作说明〕。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03 审页修复：首屏手机数字卡改为每排一张，保留全部数字和说明。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么要它"
+      },
+      {
+        "type": "comparison",
+        "layout": "paired",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "count": 4
+          },
+          {
+            "count": 4
+          }
+        ],
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "没有它的时候"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它不是新的AI，也不是新的聊天窗口：只管“用哪个模型、怎"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左右两栏对照：左栏标题“没有它的时候”，底色极淡的灰，三条带小水彩图标的短段（一团乱线缠着的设置齿轮、几张散落的便签上画着钥匙、两个模型标签被一只手偷偷调换）；右栏标题“有了它”，底色极淡的绿，三条短段和左栏一一对齐（一根干净的线只连到一个窗口、一个小保险箱只递出一把钥匙、一张清单上打着对勾）。两栏之间三个绿色小箭头从左指向右。最下面一条横跨整屏的细卡片放最后一句。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么要它"
+      },
+      {
+        "type": "comparison",
+        "layout": "paired",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "count": 4
+          },
+          {
+            "count": 4
+          }
+        ],
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "没有它的时候"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它不是新的AI，也不是新的聊天窗口：只管“用哪个模型、怎"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上；“没有它的时候”三条和“有了它”三条改成三组上下对照（每组先灰后绿，中间一个向下的小箭头）；最后一句放最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "三种用法"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "columns_v": 1,
+        "icon_position": "header_top",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "paragraph_header_prefix": "**1. 在 Codex 桌面版里选模型**（最常用）",
+        "paragraph_bubbles": [
+          "跟 AI 说：不用说，菜单里选。",
+          "跟 AI 说：“用本机 Qwen3.8 27B 开 Codex 做这个项目，先给我看启动计划。”",
+          "跟 AI 说：“用 GLM-5.3 在后台把这件事做了，做完核对结果。”"
+        ],
+        "tag_ref": "最常用",
+        "text_ref": "1.在Codex桌面版里选模型（最常用）"
+      },
+      {
+        "type": "notice",
+        "text_ref": "出问题时跟AI说：“GLM这条为什么用不了？先做不花钱的"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。三张竖向大卡片横排，每张上面一幅小水彩插画（1 一个桌面窗口展开模型菜单；2 一个终端窗口，光标后面画一行 aicli；3 一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟），卡片标题粗体，下面两三行正文，再下面一个浅绿底的对话气泡写“跟 AI 说”。第 1 张右上角贴一个小绿标签“最常用”。最下面一条细卡片放出问题时的那句话。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03现成接口接入：横版三卡用points_card的三条完整原段气泡；最常用仍是卡头字，角签接口未兑现，保留tag_ref未完成。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "三种用法"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "columns_v": 1,
+        "icon_position": "card_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "paragraph_header_prefix": "**1. 在 Codex 桌面版里选模型**（最常用）",
+        "paragraph_bubbles": [
+          "跟 AI 说：不用说，菜单里选。",
+          "跟 AI 说：“用本机 Qwen3.8 27B 开 Codex 做这个项目，先给我看启动计划。”",
+          "跟 AI 说：“用 GLM-5.3 在后台把这件事做了，做完核对结果。”"
+        ],
+        "tag_ref": "最常用",
+        "text_ref": "1.在Codex桌面版里选模型（最常用）"
+      },
+      {
+        "type": "notice",
+        "text_ref": "出问题时跟AI说：“GLM这条为什么用不了？先做不花钱的"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上，三张卡片改成上下三张，每张插画在左、字在右；最下面的细卡片照旧。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；main-closer：手机现成points_card.card_left承接整卡左图右文，三个原气泡/原现在黄框与最常用原括注保全。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "在Codex桌面版里"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "detail",
+        "width": "67%",
+        "text_ref": "菜单里多了8个。本机的Qwen3.827B、Qwen3."
+      },
+      {
+        "type": "screenshot",
+        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "indices": [
+          0
+        ],
+        "row": "detail",
+        "width": "33%",
+        "ratio": "789:1614"
+      },
+      {
+        "type": "prose",
+        "row": "detail",
+        "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 55% 宽，四条带小水彩图标的说明（一个下拉菜单、一个放大镜照着 OpenAI 标志、两张任务卡中间一道分隔线、一个说话的气泡），每条第一句粗体。右边约 45% 宽，留一个带细绿边框的竖长空位放截图（宽高比约 1:2，占右栏大部分高度），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "在Codex桌面版里"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "detail",
+        "width": "55%",
+        "text_ref": "菜单里多了8个。本机的Qwen3.827B、Qwen3."
+      },
+      {
+        "type": "screenshot",
+        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "indices": [
+          0
+        ],
+        "row": "detail",
+        "width": "45%",
+        "ratio": "1:2"
+      },
+      {
+        "type": "prose",
+        "row": "detail",
+        "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上，四条说明一条一行排下来；截图空位放在说明下面，占整行宽，图说在截图下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "在终端里"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "row": "cli",
+        "width": "58%",
+        "text_ref": "1在项目目录敲aicli，列出这次能开的路线，最近用过的"
+      },
+      {
+        "type": "prose",
+        "row": "cli",
+        "page_break_after": false,
+        "text_ref": "QwenCode和OpenCode的3条路线只给程序调用"
+      },
+      {
+        "type": "screenshot",
+        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "indices": [
+          0
+        ],
+        "row": "cli",
+        "width": "42%",
+        "ratio": "1436:1737"
+      },
+      {
+        "type": "prose",
+        "row": "cli",
+        "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 45% 宽，四个编号步骤竖排，每步一个小水彩图标（一个终端提示符、一张清单打勾、一个 Codex 窗口、一扇门）；步骤下面一行灰色小字。右边约 55% 宽，留一个带细绿边框的空位放截图（宽高比约 5:6），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r20\\state\\b1-ai-cli-profile-manager-05-v\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r20\\state\\b1-ai-cli-profile-manager-05-v\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "在终端里"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "row": "cli",
+        "width": "45%",
+        "text_ref": "1在项目目录敲aicli，列出这次能开的路线，最近用过的"
+      },
+      {
+        "type": "prose",
+        "row": "cli",
+        "page_break_after": true,
+        "text_ref": "QwenCode和OpenCode的3条路线只给程序调用"
+      },
+      {
+        "type": "screenshot",
+        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "indices": [
+          0
+        ],
+        "row": "cli",
+        "width": "55%",
+        "ratio": "1436:1737"
+      },
+      {
+        "type": "prose",
+        "row": "cli",
+        "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版分2张，每张使用原生9:16画布，按默认v、v2顺序展示。第1张（ai-cli-profile-manager-05-v.png）：仅原标题“在终端里”、4个步骤及Qwen Code和OpenCode灰色说明。每步整宽上下排，图标缩成标题旁小标；正文参考36源像素、行高44源像素，在941宽显示到370时约14.16px。这张没有截图、截图图注或任何空框，不在步骤里面画假截图框。第2张（新增ai-cli-profile-manager-05-v2.png）：仅唯一真实截图空位和原9月15日图注，不新增标题，不重复步骤或灰色说明。截图空框占正文整行宽，内部完全空白，宽高比1436:1737；参考宽880、高1064源像素，原图注紧跟其下。真实截图由现役编译器完整保比例贴入，不能压扁或缩窄截图塞正文。不增删改写原字、不添装饰或空卡填满画布，连续外白交现役crop_box裁边。横版scene、原text和正确h保持。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "本机模型走完一件真事"
+      },
+      {
+        "type": "prose",
+        "text_ref": "还是9月15日那个终端会话：本机Qwen3.827B在原"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "①这张截图含个人内容，已撤下",
+        "indices": [
+          0,
+          1,
+          2
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratio": "5:6",
+        "connector": "arrow",
+        "caption_mode": "source_order",
+        "number_position": "above",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          }
+        ],
+        "withdrawn_indices": [0,
+          1,
+          2
+        ],
+        "withdrawal_note": "这张截图含个人内容，已撤下"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题，下面一段说明。说明下面三个并排的带细绿边框的截图空位（每个宽高比约 5:6，等宽等高，间距一致），每个空位上方一个绿色圆圈编号①②③，下面一行小字图说。三个空位之间画两个细绿箭头从左指向右。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；已用新截图接口同块三槽、slot_groups=[0,1,2]分别消费三条原图注，原①②③移到槽上，连接箭头不加字。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-06-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-ai-cli-profile-manager-06-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "本机模型走完一件真事"
+      },
+      {
+        "type": "prose",
+        "text_ref": "还是9月15日那个终端会话：本机Qwen3.827B在原"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "①这张截图含个人内容，已撤下",
+        "indices": [
+          0,
+          1,
+          2
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratio": "5:6",
+        "connector": "arrow",
+        "caption_mode": "source_order",
+        "number_position": "above",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          }
+        ],
+        "withdrawn_indices": [0,
+          1,
+          2
+        ],
+        "withdrawal_note": "这张截图含个人内容，已撤下"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题和说明在上；三个截图空位改成上下三个，每个占整行宽，编号在左上角，图说在各自下面，空位之间一个向下的小箭头。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；已用新截图接口同块三槽、slot_groups=[0,1,2]分别消费三条原图注，原①②③移到槽上，连接箭头不加字。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "交给上层AI在后台跑"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "row": "background",
+        "width": "60%",
+        "text_ref": "1上层AI（Claude或Codex）把任务正文从标准输"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "background",
+        "width": "40%",
+        "text_ref": "预算是硬的时间、步数、工具调用次数各有上限，超了就停下整"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 60% 宽，一条竖向流程图，四个编号节点（圆角卡片，小水彩图标：一只手递任务卡、一个对照表打勾、一个望远镜、一根断开又接上的绳子），绿色箭头依次向下连。右边约 40% 宽，竖着三张小卡片（小图标：一个沙漏和一把尺、一把打开的锁、一个日历上 9 月 28 日打勾），第一行粗体。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "交给上层AI在后台跑"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "row": "background",
+        "width": "60%",
+        "text_ref": "1上层AI（Claude或Codex）把任务正文从标准输"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "background",
+        "width": "40%",
+        "text_ref": "预算是硬的时间、步数、工具调用次数各有上限，超了就停下整"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上，四个流程节点一行一个；三张小卡片接在流程下面，一行一张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它不会自己提醒：启动或检查失败时当场显示原因，别的时候出"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。一张两列的水彩风格表格，左列“碰到什么”（每行前一个小警示图标），右列“先做什么”；行与行之间细绿线分隔。表格下面一条细卡片放最后一句。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-08-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它不会自己提醒：启动或检查失败时当场显示原因，别的时候出"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上；表格改成一行一条卡片：粗体写“碰到什么”，下面正文写“先做什么”；最后一句在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "direction": "horizontal",
+        "illustration": "above_card",
+        "icons": "auto",
+        "connector": "arrow",
+        "text_ref": "1路线声明23份随程序发布的数据文件（21条公开路线，另"
+      },
+      {
+        "type": "notice",
+        "width": "100%",
+        "text_ref": "桌面桥：用.NET10写的C#小程序，夹在Codex桌面"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。上半部一张从左到右的流程图，五个节点（圆角卡片，小水彩图标：一叠数据表、一张写着钥匙图案的小卡、一张清单、五个工具小图标、一个放大镜照着对勾），绿色箭头依次连起来，每个节点下面两三行小字。下半部一张横向示意图：左边一个 Codex 桌面版窗口，中间一座小石桥（桌面桥），右边一台小引擎；桥和两边之间各一对来回的细箭头，箭头上画几个小光点；桥上方两个小标签分别指向“合成菜单”和“加帮手工具”这两处动手的地方（标签画小图标，字写在示意图旁的说明段里）。示意图右边是说明段。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03 审页修复：桌面桥说明改为整行 notice，取消未兑现的外置图和位置字段，保留原文。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-ai-cli-profile-manager-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-ai-cli-profile-manager-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "text_ref": "1路线声明23份随程序发布的数据文件（21条公开路线，另"
+      },
+      {
+        "type": "notice",
+        "width": "100%",
+        "text_ref": "桌面桥：用.NET10写的C#小程序，夹在Codex桌面"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上；五个流程节点改成一行一个、从上往下，箭头向下；桥的示意图缩成整行宽，说明段放在示意图下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03 审页修复：桌面桥说明改为整行 notice，取消未兑现的外置图和位置字段，保留原文。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了哪些工具和模型"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "portrait_layout": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tag_columns": [
+          2
+        ],
+        "text_ref": "哪一部分用的什么在哪跑原版工具Codex命令行和桌面版、"
+      },
+      {
+        "type": "prose",
+        "text_ref": "云端每条路线都钉死精确型号（为什么见下一屏）；只有Dee"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。一张三列的水彩风格表格（哪一部分｜用的什么｜在哪跑），每行最左画对应的品牌小标志（原版工具行画 OpenAI、Claude 两个标志；OpenAI 官方行画 OpenAI 标志；智谱行画智谱 GLM 标志；DeepSeek 行画小鲸鱼标志；阿里云行画通义千问标志；本机模型行画一块显卡；模型服务行画 Ollama 小羊驼；桌面桥、后台运行行画一座小桥和一台小引擎）。“在哪跑”一列用绿色小胶囊标“本机”或“云端”。表格下面一行放最后一句。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-10-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了哪些工具和模型"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "portrait_layout": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tag_columns": [
+          2
+        ],
+        "text_ref": "哪一部分用的什么在哪跑原版工具Codex命令行和桌面版、"
+      },
+      {
+        "type": "prose",
+        "text_ref": "云端每条路线都钉死精确型号（为什么见下一屏）；只有Dee"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版分张原字范围保持现有v/v2/v3。仅第3张ai-cli-profile-manager-10-v3：后台运行一条（哪一部分/用的什么/在哪跑）和两段路线说明完整原字；不搬第1/2张的其它工具条目或标题。收紧说明卡高度、正文正常大字，保留本张字段关系；表格或上下卡片以正常370px清楚可读为准，不以旧AI卡片形式本身退回。只有本张正确原字，外部连续白边交现役crop_box，不添空框或新句。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "direction": "horizontal",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "1不另造，只接上。不做新的聊天窗口、全屏界面或自研的智能"
+      },
+      {
+        "type": "notice",
+        "text_ref": "别家模型当主力时能派哪些GPT帮手，归约法L23和分工与"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。六张横向小卡片两列三行（小水彩图标：一个原样的工具箱、一个靶心、一把钥匙和一个小保险箱、三级台阶、一本小账本、一张名牌），每张第一句粗体，后面小字。卡片下面一条横跨整屏的浅绿细卡片放最后一段，段里两个链接画成绿色细下划线。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "1不另造，只接上。不做新的聊天窗口、全屏界面或自研的智能"
+      },
+      {
+        "type": "notice",
+        "text_ref": "别家模型当主力时能派哪些GPT帮手，归约法L23和分工与"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上；六张卡片一行一张；最后一段的细卡片在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "做好了、还在等真实使用的三个设计"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面三件都写完、测过，但还没在真实任务里用上；用上之后再"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "columns_v": 1,
+        "icon_position": "header_top",
+        "header_icon": [
+          "_library/icons/身份盾牌.png",
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+        ],
+        "inset_paras": [
+          "现在："
+        ],
+        "inset_tone": "yellow",
+        "text_ref": "断了能接回同一个会话"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题，下面一行说明。三张竖向卡片横排，每张上面一幅小水彩插画（1 一根绳子断开处被同一个结重新系上，结上挂一张小身份卡；2 一块显卡前排着一只麦克风、一只放大镜和一个小模型方块，模型方块旁一个小沙漏；3 两个小人来回传纸条），卡片标题粗体，下面一段正文，卡片最底一行浅黄底小字写“现在：……”。卡片之间留等宽间距。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03现成接口接入：横版三卡用points_card，三条现在段均在自己的黄色卡内框；手机整卡左图接口缺口仍提请求。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-12-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "做好了、还在等真实使用的三个设计"
+      },
+      {
+        "type": "prose",
+        "text_ref": "下面三件都写完、测过，但还没在真实任务里用上；用上之后再"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "columns_v": 1,
+        "icon_position": "card_left",
+        "header_icon": [
+          "_library/icons/身份盾牌.png",
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+        ],
+        "inset_paras": [
+          "现在："
+        ],
+        "inset_tone": "yellow",
+        "text_ref": "断了能接回同一个会话"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题和说明在上；三张卡片上下排，插画在左、字在右，“现在”那行在各卡片最底。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；main-closer：手机现成points_card.card_left承接整卡左图右文，三个原气泡/原现在黄框与最常用原括注保全。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-13-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-13-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "1.菜单里整份载入，官方新型号自己进来。"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "小巧思"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "text_ref": "勤快汇报不会被“步数上限”掐断"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：上半部和标杆页的“亮点”一样：两张大卡片横排（各占一半宽），每张上面一幅小水彩插画，卡片标题用大字，下面一段正文。插画：1 一个下拉菜单整张从一本厚目录里抽出来，旁边 OpenAI 标志上一颗小星星；2 两块显卡并排，左边那块旁边一只兔子、右边那块旁边一只慢悠悠的乌龟和一个“不动”的小手势。下半部一行毛笔小标题“小巧思”，下面两张横向小卡片并排，每张左边一个小水彩图标（一个计步器旁边一个说话气泡被划在圈外；一张考卷上只写着 PONG 四个字母），右边粗体标题和一段小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-13-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "1.菜单里整份载入，官方新型号自己进来。"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "小巧思"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "text_ref": "勤快汇报不会被“步数上限”掐断"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上；两张大卡片上下排，插画在上、字在下；“小巧思”小标题后两张小卡片一行一张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（38项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在用＝找到过真实使用；待验收＝做好了，只测过；没用过＝用"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "启动和路线",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1选单启动敲aicli不带参数，列出这次能开的路线，最近",
+        "statuses": [
+          "在用",
+          "在用",
+          "在用",
+          "待验收",
+          "说不准",
+          "说不准",
+          "说不准"
+        ],
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "Codex桌面版",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "8菜单里的8个模型本机Qwen4个，云端Qwen3.8M",
+        "statuses": [
+          "在用",
+          "在用",
+          "在用",
+          "在用",
+          "在用"
+        ],
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "请GPT帮手",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "13后台GPT帮手别家模型主持的任务在后台请GPT帮手；",
+        "statuses": [
+          "待验收",
+          "待验收"
+        ],
+        "fill_last_row": true
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片排成三列；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，浅灰＝说不准，灰＝没用过，灰色叉＝已停用）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：同一个网格、同样的卡片宽高和间距，上下边都不画边框。这是第一张：顶上有标题（毛笔艺术字加绿色笔刷线）和图例，图例下一行小字写五种状态的判定。图例五个记号分别画成绿点、黄点、灰点、浅灰点和灰色叉。各卡状态：1 绿；2 绿；3 绿；4 黄；5 浅灰；6 浅灰；7 浅灰；8 绿；9 绿；10 绿；11 绿；12 绿；13 黄；14 黄。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-14-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（38项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在用＝找到过真实使用；待验收＝做好了，只测过；没用过＝用"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "启动和路线",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1选单启动敲aicli不带参数，列出这次能开的路线，最近",
+        "statuses": [
+          "在用",
+          "在用",
+          "在用",
+          "待验收",
+          "说不准",
+          "说不准",
+          "说不准"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "Codex桌面版",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "8菜单里的8个模型本机Qwen4个，云端Qwen3.8M",
+        "statuses": [
+          "在用",
+          "在用",
+          "在用",
+          "在用",
+          "在用"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "请GPT帮手",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "13后台GPT帮手别家模型主持的任务在后台请GPT帮手；",
+        "statuses": [
+          "待验收",
+          "待验收"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。第一张顶上保留标题、图例和判定说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-15",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-15-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-15-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "后台运行",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "15交给后台跑上层AI从标准输入交任务，指定路线和工作目",
+        "statuses": [
+          "在用",
+          "说不准",
+          "待验收",
+          "在用",
+          "在用",
+          "说不准",
+          "说不准",
+          "说不准"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "检查和验收",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "23不花钱的体检查原版工具、路线、钥匙引用、端点、设置层",
+        "statuses": [
+          "说不准",
+          "说不准",
+          "在用",
+          "说不准"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片排成三列；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，浅灰＝说不准，灰＝没用过）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：同一个网格、同样的卡片宽高和间距，上下边都不画边框。这是第二张：没有标题和图例，接着往下排。各卡状态：15 绿；16 浅灰；17 黄；18 绿；19 绿；20 浅灰；21 浅灰；22 浅灰；23 浅灰；24 浅灰；25 绿；26 浅灰。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-15-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-15-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "后台运行",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "15交给后台跑上层AI从标准输入交任务，指定路线和工作目",
+        "statuses": [
+          "在用",
+          "说不准",
+          "待验收",
+          "在用",
+          "在用",
+          "说不准",
+          "说不准",
+          "说不准"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "检查和验收",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "23不花钱的体检查原版工具、路线、钥匙引用、端点、设置层",
+        "statuses": [
+          "说不准",
+          "说不准",
+          "在用",
+          "说不准"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-16",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-16-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-16-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "本机模型",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "27本机模型统一同步一条命令同步桌面版、OpenCode",
+        "statuses": [
+          "在用",
+          "待验收"
+        ],
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "钥匙和转接",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "29按厂商取钥匙Qwen、GLM、DeepSeek各一把",
+        "statuses": [
+          "在用",
+          "说不准",
+          "已停用",
+          "说不准"
+        ],
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "长对话",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "33压缩前先记下别家模型上下文用到90%自动压缩；压缩前",
+        "statuses": [
+          "在用"
+        ],
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "安装和维护",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "34安装和替换先验证临时候选再替换，失败恢复原版本；不用",
+        "statuses": [
+          "在用",
+          "在用",
+          "说不准",
+          "说不准",
+          "说不准"
+        ],
+        "fill_last_row": true
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片排成三列；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，浅灰＝说不准，灰＝没用过，灰色叉＝已停用）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：同一个网格、同样的卡片宽高和间距，上下边都不画边框。这是第三张：没有标题和图例，接着往下排。各卡状态：27 绿；28 黄；29 绿；30 浅灰；31 灰色叉；32 浅灰；33 绿；34 绿；35 绿；36 浅灰；37 浅灰；38 浅灰。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-16",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-16-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-16-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-16-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "本机模型",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "27本机模型统一同步一条命令同步桌面版、OpenCode",
+        "statuses": [
+          "在用",
+          "待验收"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "钥匙和转接",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "29按厂商取钥匙Qwen、GLM、DeepSeek各一把",
+        "statuses": [
+          "在用",
+          "说不准",
+          "已停用",
+          "说不准"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "长对话",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "33压缩前先记下别家模型上下文用到90%自动压缩；压缩前",
+        "statuses": [
+          "在用"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "安装和维护",
+        "heading_font": "brush",
+        "heading_size": "small",
+        "illustration": "none"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "34安装和替换先验证临时候选再替换，失败恢复原版本；不用",
+        "statuses": [
+          "在用",
+          "在用",
+          "说不准",
+          "说不准",
+          "说不准"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；page-fixer-03 审页修复：九个功能分组改用现有 section_heading 的中号组名角色；章节主标题保留。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。；main-closer处理comp-hub-aicli-status-binding：按(screen,原卡名)唯一匹配registry.features的38项真实状态；仅无字点，不按代码存在推测在用，不加新状态词。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-17",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-17-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-17-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "width": "100%",
+        "text_ref": "7月14日：0.1.0首个公开版：一个aicli管Cod"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：一条竖向时间线（左侧约 60% 宽），每个节点一个小水彩图标、粗体日期、一两行字。右侧留一幅大一点的水彩插画：从下往上长出来的一棵小树，树枝上依次挂着一个终端窗口、一个计时沙漏、一根接好的绳结、一个桌面菜单、两个小人传纸条、一把钥匙，像一路长出来的样子。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03 审页修复：撤下重复首屏插画，时间线占满宽度，不再留右栏长空白。"
+  },
+  {
+    "screen": "ai-cli-profile-manager-17",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-17-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-17-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ai-cli-profile-manager\\img\\ai-cli-profile-manager-17-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "7月14日：0.1.0首个公开版：一个aicli管Cod",
+        "width": "100%"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：时间线占整行宽从上往下排；插画缩小放在时间线最上面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；page-fixer-03 审页修复：撤下重复首屏插画，时间线占满宽度，不再留右栏长空白。"
+  }
+]

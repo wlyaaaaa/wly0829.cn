@@ -1,0 +1,571 @@
+[
+  {
+    "screen": "skill-personal-materials-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "找文件原件"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "dialogue",
+        "split_items": true,
+        "columns": 3,
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "这样说就行"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "chapter_title",
+      "illustration",
+      "prose",
+      "tag",
+      "dialogue",
+      "inline_link",
+      "section_heading",
+      "bullet_list"
+    ],
+    "source_layout": "横版：左边大标题，下面两行说明；右边一幅水彩插画：一个半开的木制文件柜抽屉，一只放大镜照着一页纸上一行绿色高亮，纸角挂着一个画着绿色对勾的小标签（纸上文字只画灰色横线）。下半部七个白底圆角对话气泡，前两行各三个、第三行一个加宽的，每个气泡里一句跟 AI 说的话，第七个气泡右下角画一个小的绿色对勾图标，括号里的说明写在这个气泡下面一行小字，“项目页开头”画成绿色链接样式，气泡左上一个小人头像图标；气泡上方一行小标题“这样说就行”。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "这样说就行"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。首屏左题说明、右文件柜放大镜插画；七对白横3+3+1末泡加宽、竖七泡单列。每泡左上头像与第七泡绿色对勾仍是要求，inventory小图预算0须补7人像与勾；dialogue当前无末泡跨列或把括注提到泡下的小字接口，需comp-text，不能把括注当第八泡或丢掉。项目页开头是原链接。"
+  },
+  {
+    "screen": "skill-personal-materials-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "找文件原件"
+      },
+      {
+        "type": "prose",
+        "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "dialogue",
+        "split_items": true,
+        "columns": 1,
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "这样说就行"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "illustration",
+      "dialogue",
+      "prose",
+      "chapter_title",
+      "tag",
+      "inline_link",
+      "section_heading",
+      "bullet_list"
+    ],
+    "source_layout": "竖版 9:16：标题和说明在上；插画缩到整宽放在说明下面；七个对话气泡一行一个上下排。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "这样说就行"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。首屏左题说明、右文件柜放大镜插画；七对白横3+3+1末泡加宽、竖七泡单列。每泡左上头像与第七泡绿色对勾仍是要求，inventory小图预算0须补7人像与勾；dialogue当前无末泡跨列或把括注提到泡下的小字接口，需comp-text，不能把括注当第八泡或丢掉。项目页开头是原链接。"
+  },
+  {
+    "screen": "skill-personal-materials-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整的例子"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "row": "walkthrough",
+        "width": "50%",
+        "text_ref": "我：去年租房签的那份合同，要签字版，讲押金怎么退的是哪一条？"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "row": "walkthrough",
+        "text_ref": "AI：签字版有2份，内容指纹完全相同，是同一份文件的两个副本（只列了带“签字”字样的"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "row": "walkthrough",
+        "text_ref": "我：不用，知道了。"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "none",
+        "row": "walkthrough",
+        "width": "50%",
+        "text_ref": "它背后做了什么",
+        "optional_items": [
+          5
+        ]
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "chapter_title",
+      "comparison",
+      "dialogue",
+      "numbered_steps",
+      "flow"
+    ],
+    "source_layout": "横版：左上标题。下面左右两栏：左栏是一段对话（“我”的绿色气泡在右、“AI”的白色回答卡片在左，回答卡片里一行小字引文用浅绿底框起来）；右栏是一条竖向的五步小流程，每步一个绿色圆圈编号和一句话，步与步之间绿色箭头，第 5 步画成虚线框。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它背后做了什么"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左对话我右/AI左/我右三泡，右五步竖向绿箭头，第5步虚线框；引文第4页原文在AI单para内，需comp-text按现有引文范围加浅绿内框；flow尚无单项虚线边框选择，需comp-diagram仅第5步样式支持。不得新增图标（scene无步图）。\n本轮回读组件已有optional_items，已用于第五步虚线框；先前关于单项虚线不支持的备注已过时。引文内框仍未实现。"
+  },
+  {
+    "screen": "skill-personal-materials-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整的例子"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "text_ref": "我：去年租房签的那份合同，要签字版，讲押金怎么退的是哪一条？"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "text_ref": "AI：签字版有2份，内容指纹完全相同，是同一份文件的两个副本（只列了带“签字”字样的"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "text_ref": "我：不用，知道了。"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "none",
+        "text_ref": "它背后做了什么",
+        "optional_items": [
+          5
+        ]
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "numbered_steps",
+      "flow",
+      "chapter_title",
+      "comparison",
+      "dialogue"
+    ],
+    "source_layout": "竖版 9:16：标题；对话在上（气泡和回答卡片上下排），五步流程在下，一步一行。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它背后做了什么"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。标题→三泡对话→五步纵流程；引文内框和第5虚线框同横待组件实现。全文非新补示例，照既有定稿不改原例子。\n本轮回读组件已有optional_items，已用于第五步虚线框；先前关于单项虚线不支持的备注已过时。引文内框仍未实现。"
+  },
+  {
+    "screen": "skill-personal-materials-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "abilities",
+        "width": "60%",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "row": "abilities",
+        "text_ref": "它是个人材料查找的入口，能做的事见项目页的全部功能。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "abilities",
+        "width": "40%",
+        "size": "medium",
+        "align": "center"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "chapter_title",
+      "inline_link",
+      "action_button",
+      "illustration",
+      "segmented_band"
+    ],
+    "source_layout": "横版：左上标题，下面一句带链接的话单独一行、字稍大，“项目页的全部功能”画成绿色链接样式，右边一个白底细浅绿描边的圆角按钮样式箭头。画面右半一幅较大的水彩插画：一个漏斗，上面几张只画灰线的纸落进去，下面只出来一页带绿色对勾的纸。这一屏字少，整体高度可以比别的屏矮，不硬填内容。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右半一幅较大的水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左标题及稍大链接段、右半漏斗插画；竖题→链接段→整宽漏斗。字少高度按内容，不强填9:16。段里箭头按钮仅是无字装饰，不能另外加项目链接文本；prose内原链接须comp-text提供右侧箭头按钮样式及同目标热区。；本轮审查修复：abilities左右栏改60/40，漏斗用medium并居中，减少右图撑高造成的左半空白。"
+  },
+  {
+    "screen": "skill-personal-materials-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "text_ref": "它是个人材料查找的入口，能做的事见项目页的全部功能。"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "inline_link",
+      "segmented_band",
+      "illustration",
+      "chapter_title",
+      "action_button"
+    ],
+    "source_layout": "竖版 9:16：标题；那句链接的话；漏斗插画整宽放在下面。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右半一幅较大的水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左标题及稍大链接段、右半漏斗插画；竖题→链接段→整宽漏斗。字少高度按内容，不强填9:16。段里箭头按钮仅是无字装饰，不能另外加项目链接文本；prose内原链接须comp-text提供右侧箭头按钮样式及同目标热区。"
+  },
+  {
+    "screen": "skill-personal-materials-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它管的"
+          }
+        ],
+        "layout": "item_rows",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "item_icons": [
+          "skill-personal-materials\\skill-personal-materials-04-icon-01.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-02.png",
+          "_library/fix-round-2/icon-clean-8e9684d17b9e41e0c4fa.png"
+        ],
+        "group_markers": [
+          "check"
+        ],
+        "connector": "none",
+        "text_ref": "它管的",
+        "row": "limits",
+        "width": "50%",
+        "image_mode": "item",
+        "source_prose": true,
+        "align_items": "start"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "limits",
+        "size": "banner",
+        "align": "center"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它不管的"
+          }
+        ],
+        "layout": "item_rows",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "item_icons": [
+          "_library/fix-round-2/icon-clean-7da2567a38794ca6b452.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-a71898bcb8d85f69f314.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-07.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-08.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-09.png"
+        ],
+        "group_markers": [
+          "cross"
+        ],
+        "connector": "none",
+        "text_ref": "它不管的",
+        "row": "limits",
+        "width": "50%",
+        "image_mode": "item",
+        "source_prose": true,
+        "align_items": "start"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "chapter_title",
+      "content_card",
+      "prose",
+      "icon",
+      "illustration",
+      "bullet_list",
+      "inline_link"
+    ],
+    "source_layout": "横版：左上标题“边界”。下面两栏卡片：左栏绿色小勾标题“它管的”，三条；右栏灰色小叉标题“它不管的”，六条；每条一行或两行，左边一个小图标。右下角一小幅水彩插画：一个整齐的小卡片盒，旁边一台没插电的大扫描仪上画一个灰色叉。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它管的",
+        "它不管的"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右下角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横两栏它管的3条/它不管的6条，组头绿勾/灰叉；各行左语义图标，主插画小卡盒与没插电扫描仪在右下卡外，竖最底。comparison已支持item_rows、明确逐项图文件、勾叉，但当前主插画独立底行无法右贴卡边，单块row只有一项不会按width约束，需core提供插画对齐与max_width，不能说右下小图已完成。图标缺02/07-09按对应语义补，不错配剩余5图。；素材登记图标5/9，按源位置的文件号显式请求，缺图不代表可以省略图标。；本轮审查修复：comparison按原分组拆为同排两块，各自只含3/6原条目；无width的扫描仪横带归入左列、置于左卡下方并居中，两卡不再由同一comparison网格拉为等高。不增加文字。\n2026-10-04 空白专查追加（AI实施；本人本轮明确授权重排）：三条管/六条不管是独立原文纵链，明确source_prose保持自然高度，原扫描图在短组后紧接，不再把短组外卡补至长组高度。 定稿和素材原件不改。"
+  },
+  {
+    "screen": "skill-personal-materials-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\img\\skill-personal-materials-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它管的"
+          },
+          {
+            "text_ref": "它不管的"
+          }
+        ],
+        "layout": "item_rows",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "item_icons": [
+          "skill-personal-materials\\skill-personal-materials-04-icon-01.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-02.png",
+          "_library/fix-round-2/icon-clean-8e9684d17b9e41e0c4fa.png",
+          "_library/fix-round-2/icon-clean-7da2567a38794ca6b452.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-a71898bcb8d85f69f314.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-07.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-08.png",
+          "skill-personal-materials\\skill-personal-materials-04-icon-09.png"
+        ],
+        "group_markers": [
+          "check",
+          "cross"
+        ],
+        "connector": "none",
+        "text_ref": "它管的"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner",
+        "align": "center"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+    "source_sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
+    "source_component_order": [
+      "prose",
+      "illustration",
+      "chapter_title",
+      "content_card",
+      "icon",
+      "bullet_list",
+      "inline_link"
+    ],
+    "source_layout": "竖版 9:16：标题；“它管的”一栏在上，“它不管的”一栏在下，每条一行；插画缩小放在最下面。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它管的",
+        "它不管的"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右下角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横两栏它管的3条/它不管的6条，组头绿勾/灰叉；各行左语义图标，主插画小卡盒与没插电扫描仪在右下卡外，竖最底。comparison已支持item_rows、明确逐项图文件、勾叉，但当前主插画独立底行无法右贴卡边，单块row只有一项不会按width约束，需core提供插画对齐与max_width，不能说右下小图已完成。图标缺02/07-09按对应语义补，不错配剩余5图。；素材登记图标5/9，按源位置的文件号显式请求，缺图不代表可以省略图标。；本轮审查修复：手机页尾扫描仪用banner居中，空细框若属裁片污染则由素材共性请求处理。"
+  }
+]

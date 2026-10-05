@@ -198,6 +198,8 @@ class Snapshot:
         self.dependency_namespace = None
         self.current_page = None
         self.producer_root = producer_root
+        repository = Path(__file__).resolve().parents[1]
+        self.asset_root = Path(os.environ.get('TYPESET_ASSET_ROOT', repository/'sources/assets' if producer_root == repository/'src/typeset' else self.pipeline/'typeset-assets'))
 
     def load(self, source):
         source = source.resolve()
@@ -353,8 +355,9 @@ class Snapshot:
             self.rewrite_reference(value, self.producer_root / 'specs' / 'input.json')
             return
         else:
-            source = Path(value)
-            if not source.is_absolute(): source = self.pipeline / 'typeset-assets' / source
+            normalized = value.replace('\\', '/')
+            source = self.producer_root.joinpath(*normalized.split('/typeset-proto/', 1)[1].split('/')) if '/typeset-proto/' in normalized else Path(value)
+            if not source.is_absolute(): source = self.asset_root / source
         try:
             if source.is_file(): self.copy(source, transform=False)
         except OSError:
@@ -362,7 +365,7 @@ class Snapshot:
 
     def freeze_producer(self, screen_ids):
         root = self.producer_root
-        if root.parent != self.typeset_root.parent or any(self.page_inputs.get(page) for page in self.pages):
+        if root != Path(__file__).resolve().parents[1]/'src/typeset' and (root.parent != self.typeset_root.parent or any(self.page_inputs.get(page) for page in self.pages)):
             raise ValueError('Complete producer freeze requires one producer/typeset generation with a shared parent')
         families = {path.name for path in (root / 'components').iterdir()
                     if (path / '__init__.py').is_file()}
@@ -390,13 +393,13 @@ class Snapshot:
                 for item in value: resources(item)
             else: self.producer_resource(value)
         for page in self.pages:
-            path = root / 'specs' / (page + '.json')
-            self.copy(path, Path('typeset-proto/specs') / path.name, transform=False)
+            path = Path(__file__).resolve().parents[1]/'sources/pages'/page/'layout.json' if root == Path(__file__).resolve().parents[1]/'src/typeset' else root/'specs'/(page+'.json')
+            self.copy(path, Path('typeset-proto/specs') / (page + '.json'), transform=False)
             payload, _ = self.load(path); resources(json.loads(decode(payload)))
         # assets.manifest() prefers a verified shared-library map. Keep that
         # branch and row metadata, but only bind selected screens and resources
         # already referenced by their HTML/specs, never the whole asset tree.
-        asset_root = self.pipeline / 'typeset-assets'
+        asset_root = self.asset_root
         marker = asset_root / '_library/REQUESTS-READY.json'
         mapping = asset_root / '_library/asset-map.jsonl'
         library = False
@@ -435,6 +438,11 @@ class Snapshot:
         self.orientation_exceptions = []
         inventory_payload, _ = self.load(self.inventory)
         rows = [json.loads(line) for line in decode(inventory_payload).splitlines() if line.strip()]
+        repository = Path(__file__).resolve().parents[1]
+        if self.inventory == repository/'sources/screens.jsonl':
+            for row in rows:
+                source = repository/'sources/pages'/row['page']/'page.json'
+                row.update(source_path=str(source), source_sha256=digest(self.load(source)[0]))
         grouped = defaultdict(list)
         for row in rows:
             grouped[safe_part(row['page'], 'page')].append(row)
@@ -491,7 +499,7 @@ class Snapshot:
             for row in grouped[page]:
                 frozen_rows.append({**row, 'source_path': str(frozen_source)})
             self.copy(base / 'report.json', transform=False)
-            self.copy(self.pipeline / 'typeset-assets' / page / 'manifest.jsonl', transform=False)
+            self.copy(self.asset_root / page / 'manifest.jsonl', transform=False)
             for screen in manifest['screens']:
                 sid = safe_part(screen['screen'], 'screen')
                 orientations = set()
@@ -513,7 +521,7 @@ class Snapshot:
         if self.producer_root:
             self.freeze_producer(screen_ids)
         else:
-            self.copy(self.pipeline / 'typeset-proto' / 'engine' / 'render.py', transform=False)
+            self.copy(repository/'src/typeset/engine/render.py', Path('typeset-proto/engine/render.py'), transform=False)
         frozen_payload = (''.join(json.dumps(row, ensure_ascii=False, separators=(',', ':')) + '\n'
                                   for row in frozen_rows)).encode('utf8')
         dest = self.output / 'typeset-inventory' / 'screens.jsonl'
@@ -617,8 +625,9 @@ class Snapshot:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ('typeset-root', 'inventory', 'output'):
+    for name in ('typeset-root', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--inventory', type=Path, default=Path(__file__).resolve().parents[1]/'.publish/inventory/screens.jsonl')
     parser.add_argument('--pages', nargs='+', help='Optional pilot subset; default is the complete inventory.')
     parser.add_argument('--page-inputs', type=Path, help='Exact per-page frozen input roots; preserve previously reviewed page bytes.')
     parser.add_argument('--producer-root', type=Path,

@@ -1,0 +1,1251 @@
+[
+  {
+    "screen": "github-local-index-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "GitHub项目总索引",
+        "align": "center",
+        "size": "large",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "找全代码仓库，查清副本和同步情况。",
+        "size": "large",
+        "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在基座体检（10月5–26日每周一次）各项目和Gi",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-01-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-01-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上大标题毛笔艺术字“GitHub 项目总索引”，下面一行一句话（绿色、比正文大一号），再下面介绍段（占左侧约 55% 宽），介绍段里〔AI 规则与技能基座〕〔电脑配置与恢复〕画成链接样式。右上一幅水彩插画：一本摊开的大账本，左页是一行行小卡片（每行一个仓库，卡片左边一个小锁或小地球表示私有或公开，只画图形不画字）；右页几根细细的绿线从小文件夹里长出来（代表 Git 分支），汇到一根粗主干上；账本旁一只放大镜；右上角一个 GitHub 小猫标志（品牌标志照原样画）。中间一排四张数字卡片（照标杆开头的数字卡：上面小插画，大号绿色数字，下面一行小字）；小插画依次是：一摞仓库小卡片、并排的几个小文件夹、一个贴着雪花封条的小盒子、一只放大镜对着一个文件夹。数字卡下面一行灰色小字（截至时间）。再下面一条细长圆角横条：最左写“现在”，接着依次是小字“基座体检（10 月 5–26 日每周一次）”加一个留空的浅色圆角小框、小字“各项目和 GitHub 同步没有”加同样大小的空框（两个空框各约横条宽度的 22%，框里什么都不画，网页程序会往里填字），最右一个按钮〔现在正不正常 → 驾驶舱〕。横条下面一个白底细绿边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。这是私有仓库，不放 GitHub 按钮。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+        "portrait": "竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、截至小字；“现在”横条改成竖排三行（“现在”一行，“基座体检（10 月 5–26 日每周一次）”加空框一行，“各项目和 GitHub 同步没有”加空框一行，空框约占整行宽 70%），驾驶舱按钮单独一行，最后协作按钮一行。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "inline_link",
+        "illustration",
+        "content_card",
+        "stat_card",
+        "icon",
+        "action_button",
+        "live_strip"
+      ],
+      "portrait_component_order": [
+        "prose",
+        "illustration",
+        "stat_card",
+        "live_strip",
+        "action_button",
+        "chapter_title",
+        "inline_link",
+        "content_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": []
+  },
+  {
+    "screen": "github-local-index-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "GitHub项目总索引",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "找全代码仓库，查清副本和同步情况。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
+        "columns": 2,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在基座体检（10月5–26日每周一次）各项目和Gi",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-01-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-01-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上大标题毛笔艺术字“GitHub 项目总索引”，下面一行一句话（绿色、比正文大一号），再下面介绍段（占左侧约 55% 宽），介绍段里〔AI 规则与技能基座〕〔电脑配置与恢复〕画成链接样式。右上一幅水彩插画：一本摊开的大账本，左页是一行行小卡片（每行一个仓库，卡片左边一个小锁或小地球表示私有或公开，只画图形不画字）；右页几根细细的绿线从小文件夹里长出来（代表 Git 分支），汇到一根粗主干上；账本旁一只放大镜；右上角一个 GitHub 小猫标志（品牌标志照原样画）。中间一排四张数字卡片（照标杆开头的数字卡：上面小插画，大号绿色数字，下面一行小字）；小插画依次是：一摞仓库小卡片、并排的几个小文件夹、一个贴着雪花封条的小盒子、一只放大镜对着一个文件夹。数字卡下面一行灰色小字（截至时间）。再下面一条细长圆角横条：最左写“现在”，接着依次是小字“基座体检（10 月 5–26 日每周一次）”加一个留空的浅色圆角小框、小字“各项目和 GitHub 同步没有”加同样大小的空框（两个空框各约横条宽度的 22%，框里什么都不画，网页程序会往里填字），最右一个按钮〔现在正不正常 → 驾驶舱〕。横条下面一个白底细绿边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。这是私有仓库，不放 GitHub 按钮。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+        "portrait": "竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、截至小字；“现在”横条改成竖排三行（“现在”一行，“基座体检（10 月 5–26 日每周一次）”加空框一行，“各项目和 GitHub 同步没有”加空框一行，空框约占整行宽 70%），驾驶舱按钮单独一行，最后协作按钮一行。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "inline_link",
+        "illustration",
+        "content_card",
+        "stat_card",
+        "icon",
+        "action_button",
+        "live_strip"
+      ],
+      "portrait_component_order": [
+        "prose",
+        "illustration",
+        "stat_card",
+        "live_strip",
+        "action_button",
+        "chapter_title",
+        "inline_link",
+        "content_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": []
+  },
+  {
+    "screen": "github-local-index-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我平时不打开它，是AI干活时在用。最常用在这四种时候"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "找项目，认准是哪个仓库",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside"
+      },
+      {
+        "type": "prose",
+        "text_ref": "另外10月5–26日每周一13:00，Codex的自"
+      },
+      {
+        "type": "notice",
+        "text_ref": "跟AI怎么说、完整的例子：见技能project-en"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-02-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-02-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题，下面一行小字导语。四张大卡片两列两行，每张左上一个小水彩图标（依次：放大镜照着一个文件夹和一个 GitHub 小猫；几根细分支线汇向一根主干、末端一个绿勾；一扇半开的门，门外一个小地球、门内一把小锁；一把剪刀旁边一只小盾牌），卡片里粗体标题加正文。卡片下面一行小字（每周基座体检那一句），左边一个小日历图标。最下面一条浅绿底的细横条，放技能链接那一句。",
+        "portrait": "竖版：标题、导语；四张卡片一行一张；然后是日历图标和每周基座体检那一句；最后是浅绿细横条。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "content_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "chapter_title",
+        "prose",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": []
+  },
+  {
+    "screen": "github-local-index-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我平时不打开它，是AI干活时在用。最常用在这四种时候"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "找项目，认准是哪个仓库",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside"
+      },
+      {
+        "type": "prose",
+        "text_ref": "另外10月5–26日每周一13:00，Codex的自"
+      },
+      {
+        "type": "notice",
+        "text_ref": "跟AI怎么说、完整的例子：见技能project-en"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-02-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-02-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题，下面一行小字导语。四张大卡片两列两行，每张左上一个小水彩图标（依次：放大镜照着一个文件夹和一个 GitHub 小猫；几根细分支线汇向一根主干、末端一个绿勾；一扇半开的门，门外一个小地球、门内一把小锁；一把剪刀旁边一只小盾牌），卡片里粗体标题加正文。卡片下面一行小字（每周基座体检那一句），左边一个小日历图标。最下面一条浅绿底的细横条，放技能链接那一句。",
+        "portrait": "竖版：标题、导语；四张卡片一行一张；然后是日历图标和每周基座体检那一句；最后是浅绿细横条。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "content_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "chapter_title",
+        "prose",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": []
+  },
+  {
+    "screen": "github-local-index-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "总表长这样",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一页私有的看板，45个仓库一个不漏。下面五行照9月2"
+      },
+      {
+        "type": "table",
+        "text_ref": "仓库公开本机目录现在的状态下一步ChineseASR",
+        "variant": "row_cards",
+        "illustration": "monitor",
+        "row": "table",
+        "width": "70%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "仍需处理：10个",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "row": "table",
+        "width": "30%",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-03-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-03-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题，下面一行小字。左侧约四分之三宽是一块水彩风格的显示器屏幕插画（浅色底），屏幕里画一张真实的表格：表头和五行完全照下面的字画，“公开”一列里“公开”“私有”用绿色和灰色小标签；PCConfig 那一行和 wly0829.cn 那一行底色淡黄。右侧约四分之一宽竖着两张小卡片：“仍需处理：10 个”（配一个小清单图标）和“有 36 个仓库这次没联网核对”（配一个小硬盘和一朵带问号的云）。",
+        "portrait": "竖版：标题、小字；表格改成一行一张小卡片，每张卡片第一行粗体仓库名，下面四行依次是公开、本机目录、现在的状态、下一步；最后两张说明卡片上下排。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "illustration",
+        "table",
+        "tag",
+        "content_card"
+      ],
+      "portrait_component_order": [
+        "table",
+        "content_card",
+        "chapter_title",
+        "prose",
+        "illustration",
+        "tag"
+      ]
+    },
+    "pending_requirements": [
+      "横版表格须置于显示器水彩框内，PCConfig/网站行淡黄、公开列小标签；现有普通table未消费 monitor 插画外框，需样张。"
+    ]
+  },
+  {
+    "screen": "github-local-index-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "总表长这样",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一页私有的看板，45个仓库一个不漏。下面五行照9月2"
+      },
+      {
+        "type": "table",
+        "text_ref": "仓库公开本机目录现在的状态下一步ChineseASR",
+        "variant": "row_cards",
+        "illustration": "monitor"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "仍需处理：10个",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-03-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-03-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题，下面一行小字。左侧约四分之三宽是一块水彩风格的显示器屏幕插画（浅色底），屏幕里画一张真实的表格：表头和五行完全照下面的字画，“公开”一列里“公开”“私有”用绿色和灰色小标签；PCConfig 那一行和 wly0829.cn 那一行底色淡黄。右侧约四分之一宽竖着两张小卡片：“仍需处理：10 个”（配一个小清单图标）和“有 36 个仓库这次没联网核对”（配一个小硬盘和一朵带问号的云）。",
+        "portrait": "竖版：标题、小字；表格改成一行一张小卡片，每张卡片第一行粗体仓库名，下面四行依次是公开、本机目录、现在的状态、下一步；最后两张说明卡片上下排。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "prose",
+        "illustration",
+        "table",
+        "tag",
+        "content_card"
+      ],
+      "portrait_component_order": [
+        "table",
+        "content_card",
+        "chapter_title",
+        "prose",
+        "illustration",
+        "tag"
+      ]
+    },
+    "pending_requirements": [
+      "横版表格须置于显示器水彩框内，PCConfig/网站行淡黄、公开列小标签；现有普通table未消费 monitor 插画外框，需样张。"
+    ]
+  },
+  {
+    "screen": "github-local-index-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "总表过时了新建、搬家、改名、删库之后，AI顺手完整刷",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "none",
+        "last_full_width": true,
+        "icons": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-04-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-04-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。五张横向圆角小卡片，上面两行各两张、最后一行一张横跨整屏，每张左边一个小水彩图标（依次：一本旧账本和一支笔、两张对不上的小卡片、一朵带叉的云旁边一个问号、一只小盾牌挡在一把剪刀前、一个从云里落下的小箱子），右边粗体一句加小字。",
+        "portrait": "竖版：标题；五张卡片一行一张，图标在左、字在右。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "chapter_title",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "第五卡横版横跨两列：core content_card 不消费 last_full_width，待组件实现。"
+    ]
+  },
+  {
+    "screen": "github-local-index-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "总表过时了新建、搬家、改名、删库之后，AI顺手完整刷",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "last_full_width": true,
+        "icons": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-04-v.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-04-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。五张横向圆角小卡片，上面两行各两张、最后一行一张横跨整屏，每张左边一个小水彩图标（依次：一本旧账本和一支笔、两张对不上的小卡片、一朵带叉的云旁边一个问号、一只小盾牌挡在一把剪刀前、一个从云里落下的小箱子），右边粗体一句加小字。",
+        "portrait": "竖版：标题；五张卡片一行一张，图标在左、字在右。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "chapter_title",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "第五卡横版横跨两列：core content_card 不消费 last_full_width，待组件实现。"
+    ]
+  },
+  {
+    "screen": "github-local-index-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "GitHub用GitHub命令行列出我账号下的仓库（",
+        "layout": "branches",
+        "layers": [
+          {
+            "count": 2,
+            "columns": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          }
+        ],
+        "connector": "arrow",
+        "illustration": "above_card"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "旁边三样",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "新仓库默认放V:\\Personal\\Projects"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "规模工具7,515行，PowerShell7为主，算",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-05-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-05-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。上半部一张从左到右的流程图，圆角卡片节点、绿色箭头：最左两个来源节点上下排（上：GitHub 小猫标志和一朵云；下：一排小硬盘和文件夹），箭头汇到中间“生成器”节点（一个齿轮），再分成两个结果节点上下排（一页看板纸、一份清单），最右“用的时候”节点（放大镜对着一个带 .git 标签的文件夹）。每个节点下面是它那一段字。流程图下面左边一张小卡片“旁边三样”（三行），中间一行小字（新仓库放哪），最下一条横跨整屏的浅绿细卡片放“规模”。",
+        "portrait": "竖版：标题；流程图改成从上到下，五个节点一行一个，箭头向下；然后“旁边三样”卡片、新仓库那行小字、规模卡片。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "flow",
+        "content_card",
+        "prose",
+        "notice",
+        "bullet_list",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "flow",
+        "prose",
+        "content_card",
+        "chapter_title",
+        "notice",
+        "bullet_list",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "原图为双来源汇生成器、双结果再用时的分支图；定稿两份结果为单一card，现有 topology 不能逐边复现合流/分流。"
+    ]
+  },
+  {
+    "screen": "github-local-index-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "GitHub用GitHub命令行列出我账号下的仓库（",
+        "layout": "branches",
+        "layers": [
+          {
+            "count": 2,
+            "columns": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          }
+        ],
+        "connector": "arrow",
+        "illustration": "above_card"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "旁边三样",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "新仓库默认放V:\\Personal\\Projects"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "规模工具7,515行，PowerShell7为主，算",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-05-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-05-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。上半部一张从左到右的流程图，圆角卡片节点、绿色箭头：最左两个来源节点上下排（上：GitHub 小猫标志和一朵云；下：一排小硬盘和文件夹），箭头汇到中间“生成器”节点（一个齿轮），再分成两个结果节点上下排（一页看板纸、一份清单），最右“用的时候”节点（放大镜对着一个带 .git 标签的文件夹）。每个节点下面是它那一段字。流程图下面左边一张小卡片“旁边三样”（三行），中间一行小字（新仓库放哪），最下一条横跨整屏的浅绿细卡片放“规模”。",
+        "portrait": "竖版：标题；流程图改成从上到下，五个节点一行一个，箭头向下；然后“旁边三样”卡片、新仓库那行小字、规模卡片。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "flow",
+        "content_card",
+        "prose",
+        "notice",
+        "bullet_list",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "flow",
+        "prose",
+        "content_card",
+        "chapter_title",
+        "notice",
+        "bullet_list",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "原图为双来源汇生成器、双结果再用时的分支图；定稿两份结果为单一card，现有 topology 不能逐边复现合流/分流。"
+    ]
+  },
+  {
+    "screen": "github-local-index-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "总表只是导航，不是事实。登记会过时。动手前再读一次真",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "none",
+        "last_full_width": true,
+        "icons": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-06-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-06-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。前五张横向小卡片两列排（两行各两张、第三行一张），每张左边一个小水彩图标（依次：一张地图和一个指向真实房子的箭头；三扇并排的小门；一根树干上挂着一个绿勾；一个“1”字形的小书架；一张单独夹好的小卡片），右边粗体一句加小字。最下面第六张卡片横跨整屏、略宽一点，左边插画：一面厚砖墙被搬走，原地立着一块薄薄的指路牌，旁边一把钥匙正放进一只小保险箱；右边粗体一句加一段小字。",
+        "portrait": "竖版：标题；六张卡片一行一张，最后一张插画在上、字在下。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "illustration",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "第六卡整宽大插画，前五卡两列；core 不消费 last_full_width/last_illustration，仍待组件。"
+    ]
+  },
+  {
+    "screen": "github-local-index-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "总表只是导航，不是事实。登记会过时。动手前再读一次真",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "last_full_width": true,
+        "icons": "none"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-06-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-06-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。前五张横向小卡片两列排（两行各两张、第三行一张），每张左边一个小水彩图标（依次：一张地图和一个指向真实房子的箭头；三扇并排的小门；一根树干上挂着一个绿勾；一个“1”字形的小书架；一张单独夹好的小卡片），右边粗体一句加小字。最下面第六张卡片横跨整屏、略宽一点，左边插画：一面厚砖墙被搬走，原地立着一块薄薄的指路牌，旁边一把钥匙正放进一只小保险箱；右边粗体一句加一段小字。",
+        "portrait": "竖版：标题；六张卡片一行一张，最后一张插画在上、字在下。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "illustration",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "第六卡整宽大插画，前五卡两列；core 不消费 last_full_width/last_illustration，仍待组件。"
+    ]
+  },
+  {
+    "screen": "github-local-index-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "一个仓库，九个工作目录",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
+          "_library/icons/放大镜.png"
+        ]
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-07-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-07-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆页的亮点屏：左上标题，两张大卡片横排（各占一半宽），每张上面一幅小水彩插画，卡片标题用大字，下面一段正文。插画：1 一根粗树干（主线）旁伸出九根细枝，其中一根枝头挂着九颗小果子、没接回主干，一只放大镜照着它；2 两块小木牌，一块画问号、一块画叉，中间一道竖线隔开。",
+        "portrait": "竖版：标题；两张卡片上下排，每张插画在上、字在下。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "illustration",
+        "prose"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "prose"
+      ]
+    },
+    "pending_requirements": [
+      "两张亮点卡应逐卡主插画在上，core content_card 当前只领小图标，需illustration绑定。"
+    ]
+  },
+  {
+    "screen": "github-local-index-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "一个仓库，九个工作目录",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
+          "_library/icons/放大镜.png"
+        ]
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-07-v.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-07-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆页的亮点屏：左上标题，两张大卡片横排（各占一半宽），每张上面一幅小水彩插画，卡片标题用大字，下面一段正文。插画：1 一根粗树干（主线）旁伸出九根细枝，其中一根枝头挂着九颗小果子、没接回主干，一只放大镜照着它；2 两块小木牌，一块画问号、一块画叉，中间一道竖线隔开。",
+        "portrait": "竖版：标题；两张卡片上下排，每张插画在上、字在下。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "content_card",
+        "illustration",
+        "prose"
+      ],
+      "portrait_component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "prose"
+      ]
+    },
+    "pending_requirements": [
+      "两张亮点卡应逐卡主插画在上，core content_card 当前只领小图标，需illustration绑定。"
+    ]
+  },
+  {
+    "screen": "github-local-index-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（32项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "找到和认准仓库",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-08-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-08-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第一张：顶上有标题“全部功能（32 项）”和一行图例（图例照上面六种圆点画，圆点后写字）。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。第一张顶上是标题和图例，图例两行三个。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "chapter_title",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（32项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "找到和认准仓库",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-08-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-08-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第一张：顶上有标题“全部功能（32 项）”和一行图例（图例照上面六种圆点画，圆点后写字）。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。第一张顶上是标题和图例，图例两行三个。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "chapter_title",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "公开和分享之前",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only",
+        "fill_last_row": true
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-09-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-09-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第二张：没有标题、没有图例，接着上一张往下排。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。"
+      },
+      "desktop_component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "公开和分享之前",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-09-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-09-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第二张：没有标题、没有图例，接着上一张往下排。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。"
+      },
+      "desktop_component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "仓库大动作",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-10-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-10-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第三张：没有标题、没有图例；“仓库大动作”组名下面先一行小字说明（含一个链接），再排卡片；“已停用”组的卡片整体颜色淡一些。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。"
+      },
+      "desktop_component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "仓库大动作",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "group_heading": "brush",
+        "status_text": "dot_only"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-10-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-10-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：照标杆“全部功能”的画法，但组名不单独占一整列：每组先一行毛笔字组名（横跨整行，左边一个小水彩图标），下面这组的卡片排成三列；每行字按“编号. 功能名｜一句话｜状态”给出，竖线不画：每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，最后的状态词画成右上角一个小圆点（照标杆，状态词不写成字，只画圆点：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉）。一组功能不跨屏。三张图上下拼成一整段，上下边都不画边框。这是第三张：没有标题、没有图例；“仓库大动作”组名下面先一行小字说明（含一个链接），再排卡片；“已停用”组的卡片整体颜色淡一些。",
+        "portrait": "竖版：组名一行，卡片改成一行一张（图标、编号和名字、一句话、右上角圆点），组与组之间留一点空。"
+      },
+      "desktop_component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ],
+      "portrait_component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "pending_requirements": [
+      "毛笔组名与左图标未实现；状态词当前仍显示文字，要求右上圆点独占状态。"
+    ]
+  },
+  {
+    "screen": "github-local-index-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "7月5日建库：一份公开的仓库总表和同步看板，顺带列计",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "width": "100%",
+        "row": "history",
+        "columns": 2,
+        "columns_v": 1
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-11-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-11-h.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。左侧约六成宽一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：一棵小树苗从一本摊开的账本里长出来，越往上枝叶越多，枝上挂着一张张小仓库卡片，树干上挂着一把小锁（代表改成私有），树下几片落叶上画着小叉（代表删掉的功能）。",
+        "portrait": "竖版：标题；时间线一整行宽从上到下；插画缩小放在最后。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "timeline",
+        "icon",
+        "illustration",
+        "content_card"
+      ],
+      "portrait_component_order": [
+        "timeline",
+        "illustration",
+        "chapter_title",
+        "icon",
+        "content_card"
+      ]
+    },
+    "pending_requirements": []
+  },
+  {
+    "screen": "github-local-index-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "7月5日建库：一份公开的仓库总表和同步看板，顺带列计",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-11-v.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\img\\github-local-index-11-v.png",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "layout_requirements": {
+      "source_layout": {
+        "desktop": "横版画面：左上标题。左侧约六成宽一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：一棵小树苗从一本摊开的账本里长出来，越往上枝叶越多，枝上挂着一张张小仓库卡片，树干上挂着一把小锁（代表改成私有），树下几片落叶上画着小叉（代表删掉的功能）。",
+        "portrait": "竖版：标题；时间线一整行宽从上到下；插画缩小放在最后。"
+      },
+      "desktop_component_order": [
+        "chapter_title",
+        "timeline",
+        "icon",
+        "illustration",
+        "content_card"
+      ],
+      "portrait_component_order": [
+        "timeline",
+        "illustration",
+        "chapter_title",
+        "icon",
+        "content_card"
+      ]
+    },
+    "pending_requirements": []
+  }
+]

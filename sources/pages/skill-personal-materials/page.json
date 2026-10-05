@@ -1,0 +1,170 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-personal-materials",
+  "kind": "skill",
+  "title": "找文件原件",
+  "url": "/skills/personal-materials/",
+  "tagline": "说个大概，找出文档原件，翻到要看的那一页。",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "ad55b742899bbc0b51338bb062478815571e391e",
+    "commit_time": "2026-09-27T05:14:09-05:00",
+    "file": "E:\\.agents\\skills\\personal-materials\\SKILL.md",
+    "rules_release": "E187",
+    "project_commit": "ed2fd32c5e796c7f6e69645f88728e82f139f9f4"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-personal-materials-01",
+      "section": "top",
+      "title": "找文件原件",
+      "scene": "横版：左边大标题，下面两行说明；右边一幅水彩插画：一个半开的木制文件柜抽屉，一只放大镜照着一页纸上一行绿色高亮，纸角挂着一个画着绿色对勾的小标签（纸上文字只画灰色横线）。下半部七个白底圆角对话气泡，前两行各三个、第三行一个加宽的，每个气泡里一句跟 AI 说的话，第七个气泡右下角画一个小的绿色对勾图标，括号里的说明写在这个气泡下面一行小字，“项目页开头”画成绿色链接样式，气泡左上一个小人头像图标；气泡上方一行小标题“这样说就行”。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题和说明在上；插画缩到整宽放在说明下面；七个对话气泡一行一个上下排。字和横版完全一样。",
+      "text": "# 找文件原件\n\n不知道一份文档放在哪时，说个大概，AI 找出那一份原件，核对确实是它，再翻到你要看的那一页。照片、视频、录音不归它。\n\n**这样说就行**\n\n- “去年租房签的那份合同放哪了？”\n- “要签字版，不要草稿。”\n- “不是这几个，再找找，应该在下载文件夹里。”\n- “上个月微信里收到的那份报价单。”\n- “这份合同里讲押金怎么退的是第几页？”\n- “打开给我看看。”\n- “这 42 个文件给我看，材料库里已经有了的直接删。”（9 月 25 日真这么说过，结果见〔项目页开头〕）",
+      "links": [
+        {
+          "text": "项目页开头",
+          "href": "/projects/personal-materials/#top"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-personal-materials-02",
+      "section": "examples",
+      "title": "一个完整的例子",
+      "scene": "横版：左上标题。下面左右两栏：左栏是一段对话（“我”的绿色气泡在右、“AI”的白色回答卡片在左，回答卡片里一行小字引文用浅绿底框起来）；右栏是一条竖向的五步小流程，每步一个绿色圆圈编号和一句话，步与步之间绿色箭头，第 5 步画成虚线框。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；对话在上（气泡和回答卡片上下排），五步流程在下，一步一行。字和横版完全一样。",
+      "text": "# 一个完整的例子\n\n**我：**去年租房签的那份合同，要签字版，讲押金怎么退的是哪一条？\n\n**AI：**签字版有 2 份，内容指纹完全相同，是同一份文件的两个副本（只列了带“签字”字样的）。押金在第 4 页：“租期届满且房屋交还后十个工作日内，退还全部押金……”。这份已经核对过，和登记时一模一样。要打开给你看吗？\n\n**我：**不用，知道了。\n\n**它背后做了什么**\n\n1. AI 把你的话整理成“租房合同 签字版”交给它，在登记过的原件里比对标题和已知文字。\n2. 说法里有“签字”，不带“签字”“签署”字样的候选（比如草稿）直接不列；两份指纹相同，说成同一份的副本。\n3. 选中一份，重新算 SHA-256，和登记时的大小、指纹对上。\n4. 只读这一份 PDF 的文字，找到第 4 页，附一小段原文；没弹窗口，你说要看才打开。\n5. 如果它是扫描件：说清哪几页没有文字，只把这一份交给本地文字识别，再对回页码。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-personal-materials-03",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版：左上标题，下面一句带链接的话单独一行、字稍大，“项目页的全部功能”画成绿色链接样式，右边一个白底细浅绿描边的圆角按钮样式箭头。画面右半一幅较大的水彩插画：一个漏斗，上面几张只画灰线的纸落进去，下面只出来一页带绿色对勾的纸。这一屏字少，整体高度可以比别的屏矮，不硬填内容。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；那句链接的话；漏斗插画整宽放在下面。字和横版完全一样。",
+      "text": "# 能做的事\n\n它是个人材料查找的入口，能做的事见〔项目页的全部功能〕。",
+      "links": [
+        {
+          "text": "项目页的全部功能",
+          "href": "/projects/personal-materials/#features"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-personal-materials-04",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版：左上标题“边界”。下面两栏卡片：左栏绿色小勾标题“它管的”，三条；右栏灰色小叉标题“它不管的”，六条；每条一行或两行，左边一个小图标。右下角一小幅水彩插画：一个整齐的小卡片盒，旁边一台没插电的大扫描仪上画一个灰色叉。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+      "portrait": "竖版 9:16：标题；“它管的”一栏在上，“它不管的”一栏在下，每条一行；插画缩小放在最下面。字和横版完全一样。",
+      "text": "# 边界\n\n**它管的**\n\n- 不知道在哪、要在几个地方找，或者原来的位置失效了：找出文档这类非媒体原件。\n- 选中后核对大小和内容指纹，翻到页码、段落或行号。\n- 没找到时说清查过哪些来源、哪些打不开、哪些没查，不说“没有这份”。\n\n**它不管的**\n\n- 知道在哪的文件：AI 直接读，不经过它。\n- 照片、视频、录音，也包括拍成照片的证件和截图：用〔找照片和录音〕。\n- 扫描件认字：交给〔本地文字识别〕，它只把那一份交过去。\n- 这份文件说明了什么、接下来怎么办：归各自的项目。\n- 不扫整台电脑、不在后台跑、不复制或搬动原件，也不记人物、事件、重要程度。\n- 查找时不改登记：去掉删掉的文件只在每天 17:10 的同步里做。",
+      "links": [
+        {
+          "text": "找照片和录音",
+          "href": "/skills/personal-media/",
+          "orientations": [
+            "v"
+          ]
+        },
+        {
+          "text": "本地文字识别",
+          "href": "/skills/localocr/",
+          "orientations": [
+            "v"
+          ]
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "relations": [
+      {
+        "id": "r-project",
+        "with": "personal-materials",
+        "direction": "拿来",
+        "flow": "技能调用个人材料查找的 materials.py（find、discover、inspect、locate-content、open 等），查的是它的登记和文件名清单",
+        "source": "E:\\.agents\\skills\\personal-materials\\SKILL.md 第 25–35 行"
+      },
+      {
+        "id": "r-media",
+        "with": "personal-media",
+        "direction": "分工",
+        "flow": "照片、视频、录音都走找照片和录音，这个技能从不定位或打开媒体",
+        "source": "SKILL.md 第 13、39 行"
+      },
+      {
+        "id": "r-localocr",
+        "with": "localocr",
+        "direction": "交出",
+        "flow": "选中的 PDF 没有文字层时，只把这一份交给本地文字识别，结果对回原 PDF 页码和当前指纹",
+        "source": "SKILL.md 第 23 行"
+      },
+      {
+        "id": "r-agents",
+        "with": "agents",
+        "direction": "拿来",
+        "flow": "规则规定：只有原件位置不明、要跨位置找或定位失效时才用这个技能；知道位置直接读",
+        "source": "E187 agents.capabilities-runtime.md 第 20 行；SKILL.md 第 12–14 行"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/personal-materials/#top",
+        "screen": "skill-personal-materials-01",
+        "text": "项目页开头"
+      },
+      {
+        "target": "/projects/personal-materials/#features",
+        "screen": "skill-personal-materials-03",
+        "text": "项目页的全部功能"
+      },
+      {
+        "target": "/skills/personal-media/",
+        "screen": "skill-personal-materials-04",
+        "text": "找照片和录音"
+      },
+      {
+        "target": "/skills/localocr/",
+        "screen": "skill-personal-materials-04",
+        "text": "本地文字识别"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [
+      "SKILL.md 里的各条命令（find、discover、inspect、locate-content、open、lookup-content 等）是项目功能，家在项目页全部功能，这里只链过去。"
+    ],
+    "dropped": [
+      "SKILL.md 第 15、37、39 行里提到的不上网站的类别和历史画像文件，不写。"
+    ],
+    "unsure": [
+      "例子里的租房合同、押金条款原文、“第 4 页”都是展示用例（本人允许虚构用例），不是某份真实材料；AI 那段回答是替 AI 写的示范，不是某次真实对话。",
+      "页名沿用旧网站技能稿和“找照片和录音”“文件分拣”两页已经在用的“找文件原件”；技能自己的英文名是 personal-materials，项目页叫“个人材料查找”，两者不一样。",
+      "第 1 屏前六句说法是替本人口吻写的展示用例，上线前请本人过目；第七句是本人 9 月 25 日的原话（“42文件现在就给我看，若他们在材料库已经有了，直接删了不用给我看”）稍作整理。"
+    ]
+  }
+}

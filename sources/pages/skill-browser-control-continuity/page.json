@@ -1,0 +1,269 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-browser-control-continuity",
+  "kind": "skill",
+  "title": "网页上的事接着办",
+  "url": "/skills/browser-control-continuity/",
+  "tagline": "网页卡住、要登录时，接着把事办完。",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "1a11589e67917290e03df4d478145889f6796b8c",
+    "commit_time": "2026-09-28T05:00:16+08:00",
+    "file": "E:\\.agents\\skills\\browser-control-continuity\\SKILL.md 及 references\\runtime-recovery.md、scripts\\Invoke-BrowserControlContinuity.ps1"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-browser-control-continuity-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "横版：左上毛笔艺术字大标题，下面一句话和一段说明。右边一幅水彩插画：一个 Chrome 浏览器窗口（画 Chrome 标志），里面一张填了一半的表单；窗口和一只代表 AI 的绿色小机械手之间的连线断成两截，一个小扳手正把两截接回去；窗口上方一排标签页都还开着，其中一个标签页上贴着一枚小小的绿色别针（表示保住不动）。下半部分一张“怎么跟 AI 说”的卡片，五句话做成对话气泡，两列排开。",
+      "portrait": "竖版：标题、一句话、说明在上；插画占满宽度；五个对话气泡一行一个。",
+      "text": "大标题：网页上的事接着办\n\n一句话：AI 在网页上办事，碰到连不上、页面卡住、要登录、要上传时，先保住已开的页面，查清卡在哪一层，修好后回到原来那一步接着办完。\n\n说明：它不是另一个浏览器，是给现有浏览器控制补的一套做法。默认用我的 Chrome（〔约法 L29〕）。Claude 根会话和子代理用不了我已登录的浏览器：要用登录状态默认派 GPT；无需登录可用 Claude 内置浏览器。Codex 仍用我的 Chrome，我另有指定时照办。动手前先想这件事要不要开浏览器：只是生成文件就不开；我没指定要在网页上办时，邮件、云盘这类有直连接口的事走接口。\n\n**怎么跟 AI 说**\n- “网页刚才卡住了，接着把表填完，别刷新。”\n- “在这个网站上把两个附件传上去，传完核对一下。”\n- “用手机号登录，验证码能拿到就自己填。”\n- “这个本地网页在浏览器里打开看看效果。”\n- “Codex 连不上 Chrome 了，查一下断在哪。”",
+      "links": [
+        {
+          "text": "约法 L29",
+          "href": "/rules/charter/#L29"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-browser-control-continuity-02",
+      "section": "examples",
+      "title": "一个完整例子",
+      "scene": "横版：左上标题。左边约三分之二宽，六个编号步骤沿一条弯弯的小路排下来，每步一个小水彩图标（一排标签页、一把钥匙和一部手机、一个文件夹里飞出一张纸、两个一层套一层的下拉框、一张打钩的回执、一段断了又接上的线）和两三行字。右边约三分之一宽，一张米色小回执插画，上面画真实的几行字（见“回执上的字”），回执下面一张小卡片“要注意”。",
+      "portrait": "竖版：标题在上；六个步骤一行一步；回执插画和“要注意”卡在最下。",
+      "text": "标题：一个完整例子：照这套做法，在网站上交一份带两个附件的申请会这样办\n\n假如我说：“在这个网站上把申请交了，附件是桌面上那两个 PDF。”\n\n1. **先看现场**：在我的 Chrome 里先列出已开的标签页，找到那个网站；已经登录着就直接用，填了一半的页面不刷新、不重开。\n2. **要登录时**：要账号密码的，把登录页停在那里等我登；手机号登录的，能填码的 AI（例如 Codex）点“发送验证码”后取码：手机短信经小米妙享转到电脑的通知里，AI 读最近 60 秒的通知，取不到交我填；邮箱验证码交〔邮件、云盘和待办〕去等。登完先读页面，确认真的登录上了。\n3. **上传一个一个来**：工具能直接选文件时，先等上传选框，再交给它完整路径；没有这种能力时，点一次上传，再截屏看选文件窗口是否弹出（页面结构里常常看不到它）。进度到 100% 不算完，要等网页自己的成功标记、读回文件名，再传下一个。\n4. **联动下拉框一层层选**：选了省份，等城市的选项真出来了再选城市，不连着狂点。\n5. **提交前后都核对**：提交前读回关键字段、附件个数和名字；点了提交、页面跳走了也不算成功，要打开生成的那条记录，看填的值和附件真的在。缺了马上说，撤回或重交是另一件要我同意的事。\n6. **中途控制断了**：先分清是整个浏览器连不上，还是只有这一个标签页失控；只是标签页失控，就保住它和没提交的内容，不为了“试试”再点一次提交。\n\n**回执上的字**\n附件 2 / 2 · 网页显示上传成功\n文件名已读回\n已提交 · 记录已打开核对\n\n**要注意**：这是照技能写的做法串起来的例子，不是某一次办事的记录。",
+      "links": [
+        {
+          "text": "邮件、云盘和待办",
+          "href": "/skills/google-workspace-direct/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-browser-control-continuity-03",
+      "section": "examples",
+      "title": "两次真事",
+      "scene": "横版：左上标题。左边一张“麻烦”卡片，配一幅小插画：Codex 标志和 Chrome 标志之间的一根线断开，地上散落三张写着文件名的小纸片。中间一条竖着的时间线，两个节点各一张卡片（9 月 18 日、9 月 28 日），每张卡片里几行字。右边一张米色小账本插画，上面画真实的几行字（见“账本上的字”）。最下面一条细卡片“学到的”。",
+      "portrait": "竖版：标题在上；“麻烦”卡片；两个时间节点上下排；账本插画；最下面“学到的”。",
+      "text": "标题：两次真事：Codex 更新后，AI 控制不了 Chrome\n\n**麻烦**：Codex 桌面版、它的 Chrome 插件和 Chrome 扩展各自升级。升级后 AI 常常突然控制不了 Chrome：报“找不到模块”，或者插件的几个运行文件不见了。以前手补文件，过几天又丢。\n\n**9 月 18 日 13:54**：Codex 更新后，Chrome 扩展连回本机用的配置里，还指着旧版本的 4 个程序路径（Codex 命令行、Node、Node 交互环境、浏览器客户端）。技能自带的修复脚本只改这 4 项，代理、通道和其他字段原样留着；改前存了备份、留了回执，能照回执退回；再跑一次会显示“已是最新”。\n\n**9 月 28 日记进技能的一次排查**：插件的 3 个运行文件一再消失。查下来找到一种会让它们丢的机制：Codex 桌面版部署自带插件时，要从系统保护的加密安装包里复制文件；复制失败时它本有按字节复制的后备办法，但后备只认错误码 6000，这次报的是 -4094，后备没启动，桌面版就接着用旧的登记来源（桌面版登记的插件安装来源）。从这个旧来源重装时，会把手补进去的新版本文件一起清掉，所以手补的文件过几天又没了。同样的文件按字节复制、核对哈希（文件指纹）都成功。改法：先把登记来源恢复完整，再用官方安装命令重装，不再一次次手补那 3 个文件。这个重装做法在隔离的测试安装里验证过；真机上完整安装撑过了重启，但当时浏览器策略加载和桌面版的连接仍然失败，技能自己记作“部分恢复，不算彻底治好”。\n\n**账本上的字**\n浏览器插件 26.924.22138\n383 个文件 · 与官方安装包一致 · 缺 0\n9 月 28 日 20:36 只读检查\n\n**学到的**：修之前先找断在哪一层——调用写错、本机组件缺、插件没初始化、只有一个标签页失控，还是网站本身——一次只改一处，改完重试原来失败的那一步。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-browser-control-continuity-04",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版：左上标题。十一张小卡片排成两列六行（最后一行一张），每张左边一个小水彩图标、粗体名字、两行以内的说明。",
+      "portrait": "竖版：标题在上；十一张卡片一行一张。",
+      "text": "标题：能做的事\n\n1. **先判断要不要开浏览器**｜我明确要看网页、测交互、在网站上办事，就一定办到；只是生成文件不开；我没指定要在网页上办时，有直连接口的事走接口；可开可不开的预览，按值不值得定，没验的地方说清\n2. **用我的 Chrome**｜沿用已登录状态和已开的标签页；连不上时，用同一程序的无窗口模式做独立检查，需要原登录的步骤留待完成\n3. **按证据修**｜分清断在哪一层：调用写错、本机组件、插件初始化、单个标签页、页面、网站操作；用最小的检查把几种可能分开，一次只改一处，改完重试原来那一步\n4. **保住现场**｜已填、已登录、我自己的标签页，先看再动；一个标签页失控就保住它和没提交的内容；控制失败不等于网站出错，重新读页面再下结论\n5. **登录接着办**｜已登录就直接用；要账号密码的，把登录页留给我；手机号登录，能填码的 AI 用〔取短信验证码〕，取不到交我；邮箱验证码交邮件技能；通行密钥、扫码、人机验证停在那一步等我，完成后在同一页接着办\n6. **上传看得见**｜一次传一个；工具能直接选文件时先等选框再给路径，否则截屏处理弹出的窗口；100% 不算完，要等网页成功标记并读回文件名\n7. **表单核对到底**｜联动下拉框一层层等选项出来再选；提交前读回关键字段、附件个数和名字；提交后打开生成的记录核对\n8. **本机网页预览**｜不用 file:// 打开；先用项目已有的预览服务，没有才临时开一个只听本机（127.0.0.1）、端口由系统分配的服务，用完只关自己开的\n9. **修浏览器插件的运行文件**｜只在 Codex 里用：先只读检查（〔浏览器连接检查〕）；配置对不上就只改 4 个路径；缺文件时优先走官方安装或重连，这些办不到、正在用的会话又要一个缺了的文件时，才临时从同一个官方安装包按字节补那几个，不覆盖、核指纹、留回执，用完进回收站\n10. **云端浏览器另算**｜ChatGPT 的云端浏览器是另一套登录，走它自己的安全登录流程，不把本机的密码、Cookie 导给它\n11. **只记验证过的教训**｜只留真出过、真修好的经验和我的明确要求；不留私人信息、截图、完整日志和临时编号",
+      "links": [
+        {
+          "text": "取短信验证码",
+          "href": "/projects/pcconfig/#f-sms-code"
+        },
+        {
+          "text": "浏览器连接检查",
+          "href": "/projects/pcconfig/#f-browser-runtime"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "a-need",
+          "text": "先判断要不要开浏览器"
+        },
+        {
+          "id": "a-chrome",
+          "text": "用我的 Chrome"
+        },
+        {
+          "id": "a-evidence",
+          "text": "按证据修"
+        },
+        {
+          "id": "a-preserve",
+          "text": "保住现场"
+        },
+        {
+          "id": "a-login",
+          "text": "登录接着办"
+        },
+        {
+          "id": "a-upload",
+          "text": "上传看得见"
+        },
+        {
+          "id": "a-form",
+          "text": "表单核对到底"
+        },
+        {
+          "id": "a-preview",
+          "text": "本机网页预览"
+        },
+        {
+          "id": "a-runtime",
+          "text": "修浏览器插件的运行文件"
+        },
+        {
+          "id": "a-cloud",
+          "text": "云端浏览器另算"
+        },
+        {
+          "id": "a-lessons",
+          "text": "只记验证过的教训"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-browser-control-continuity-05",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版：左上标题。左右两栏：左栏“管”画一个打开的工具箱，下面两条；右栏“不管”画一个淡灰色的叉，下面三条。最下面一张宽卡片写“它不会做的事”。",
+      "portrait": "竖版：“管”一栏在上、“不管”一栏在下，一条一行；最下面宽卡片。",
+      "text": "标题：边界\n\n**管**\n- AI 控制浏览器时的断线、登录、标签页、表单、上传和本机网页预览\n- Codex 浏览器插件运行文件的检查和有限修复\n\n**不管**\n- 具体网站的业务：字段什么意思、填什么、交给谁，归各自的项目\n- 不用看网页的事：只生成文件；或我没指定要在网页上办、有直连接口的邮件、云盘\n- 装新浏览器、升级浏览器、改浏览器的策略设置\n\n**它不会做的事**：不填密码、不读密码框、不导出密码库，AI 代填密码已经退役（见〔电脑远程控制〕）；不绕过也不关掉验证码、人机验证和通行密钥；不为了让检查变绿就重启 Chrome、关标签页、清登录或重置浏览器配置；不装常驻服务、计划任务或新的控制层。能修浏览器，不等于能在网站上办事：登录、上传、提交、删除仍按那件事本来的授权。Claude 按自己的内置规则不亲手填验证码和密码，这一步交给 Codex 这类 AI 或我。",
+      "links": [
+        {
+          "text": "电脑远程控制",
+          "href": "/projects/remote-control/#f-browser-fill"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [
+      {
+        "id": "n-cache-files",
+        "text": "383 个文件 · 与官方安装包一致 · 缺 0",
+        "meaning": "Codex 浏览器插件当前版本 26.924.22138 缓存里逐个与官方安装包比对的文件数和缺失数",
+        "as_of": "2026-09-28",
+        "source": "Invoke-BrowserControlContinuity.ps1 -Mode Inspect -Json，observed_utc 2026-09-28T12:36:07Z，closure.current_version_cache.checked_file_count / missing_file_count",
+        "screens": [
+          "skill-browser-control-continuity-03"
+        ]
+      },
+      {
+        "id": "n-host-keys",
+        "text": "4 个程序路径",
+        "meaning": "2026-09-18 修复回执里对不上、被改的配置项数",
+        "as_of": "2026-09-18",
+        "source": "E:\\Data\\PCConfig\\BrowserContinuity\\host-config-repair.json differing_keys",
+        "screens": [
+          "skill-browser-control-continuity-03",
+          "skill-browser-control-continuity-04"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-pcconfig-runtime",
+        "with": "pcconfig",
+        "direction": "用到",
+        "flow": "只读检查时调用 PCConfig 的 Get-BrowserControlRuntime.ps1，找出当前用户装的 Codex 和官方插件资源",
+        "source": "runtime-recovery.md:9；pcconfig f-browser-runtime"
+      },
+      {
+        "id": "r-pcconfig-sms",
+        "with": "pcconfig",
+        "direction": "用到",
+        "flow": "手机号登录时用 Invoke-SmsCode.ps1 从小米妙享转来的通知里取码（待验收，还没真用过）",
+        "source": "SKILL.md:41；E:\\PCConfig\\docs\\runtime\\sms-code.md；pending_acceptance.json sms-code-first-real-login"
+      },
+      {
+        "id": "r-google-code",
+        "with": "skill-google-workspace-direct",
+        "direction": "交给",
+        "flow": "网站发到邮箱的验证码，交邮件技能在最近 10 分钟的邮件里等和取",
+        "source": "SKILL.md:41“Email codes use the existing authorized email route”"
+      },
+      {
+        "id": "r-chrome-providers",
+        "with": "外部：Codex 的 Chrome 插件、Claude in Chrome、AI 桌面版内置浏览器、ChatGPT 云端浏览器",
+        "direction": "补充",
+        "flow": "技能不替代它们，只补续接、恢复和核对的做法；先读所选浏览器工具自己的说明",
+        "source": "SKILL.md:8,19–23,43"
+      },
+      {
+        "id": "r-doctor",
+        "with": "agents（只读体检脚本）",
+        "direction": "被检查",
+        "flow": "只读体检脚本加查运行条件时经 PCConfig Get-SkillRuntimeReadiness.ps1 复用浏览器配置检查，只报配置，不证明活的会话能用",
+        "source": "E:\\.agents\\tools\\Invoke-ControlPlaneDoctor.ps1 第 9–10 行（-CheckRuntime、Get-SkillRuntimeReadiness.ps1）"
+      },
+      {
+        "id": "r-remote-fill",
+        "with": "remote-control",
+        "direction": "指过去",
+        "flow": "AI 代填密码已退役，家在电脑远程控制页 f-browser-fill",
+        "source": "owner-decisions.md 9 月 27 日 00:3x 盲填退役；b1\\remote-control\\page.json f-browser-fill"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/rules/charter/#L29",
+        "screen": "skill-browser-control-continuity-01",
+        "text": "约法 L29"
+      },
+      {
+        "target": "/skills/google-workspace-direct/",
+        "screen": "skill-browser-control-continuity-02",
+        "text": "邮件、云盘和待办"
+      },
+      {
+        "target": "/projects/pcconfig/#f-sms-code",
+        "screen": "skill-browser-control-continuity-04",
+        "text": "取短信验证码"
+      },
+      {
+        "target": "/projects/pcconfig/#f-browser-runtime",
+        "screen": "skill-browser-control-continuity-04",
+        "text": "浏览器连接检查"
+      },
+      {
+        "target": "/projects/remote-control/#f-browser-fill",
+        "screen": "skill-browser-control-continuity-05",
+        "text": "电脑远程控制"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "runtime-recovery.md 里的具体命令、参数名（ExpectedScriptsRoot 等）、回执字段和 Codex 内部接口名（node_repl、browser.tabs.list）不上页面，属于施工细节。",
+      "旧稿 skills.json 的六条细节都已并入第 4 屏；“要验证码的登录，能取到码就自己登完”改写成“能填码的 AI”，因为 Claude 不亲手填码。"
+    ],
+    "unsure": [
+      "页面名沿用旧网站的“网页上的事接着办”（content\\skills.json）。",
+      "第 2 屏是照技能写的做法串起来的假设例子，页面上已写明；第 3 屏两件是真事：9 月 18 日有修复回执，9 月 28 日那次只有技能文档里的记录（提交 1a11589），具体发生在哪天未查清，所以写成“记进技能”。",
+      "9 月 28 日 20:36 只读检查的总体结果是“要注意”：Chrome 里登记的 Codex 扩展宿主仍指向旧版本 26.901.51231 的程序（程序还在），它旁边 9 月 18 日修过的连接配置文件已经不在；插件当前版本的文件齐全。这会不会影响 Codex 现在控制 Chrome，未查清（没有实际去连）；页面只写了文件齐全这一项，详情见 audit.md 第 1 条；按 Claude 转达，这件交最后的产品审计由本人定，不派人修。",
+      "“取短信验证码”在电脑配置与恢复页是“待验收”（还没真用过），本页写成能力而非已用过的事。",
+      "技能总页分组：旧稿把它放在“电脑和账号”；它不是某个项目的入口，请 Claude 定。"
+    ]
+  }
+}

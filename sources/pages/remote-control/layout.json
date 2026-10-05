@@ -1,0 +1,1282 @@
+[
+  {
+    "screen": "remote-control-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "大标题：电脑远程控制",
+        "align": "left",
+        "row": "hero",
+        "width": "55%",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "介绍：手机或网页上的ChatGPT、笔记本上的Codex、主机上的Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "数字卡片（截至9月28日）：",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "12台主机（台式机）和副机（笔记本）各跑一套，同一份源码223个工具：文件、命令、文档、桌面、维护33个入口：主机公网、副机、经副机转到主机",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub（网页部分）复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "text_ref": "操作入口：连接电脑授权与状态"
+      },
+      {
+        "type": "prose",
+        "text_ref": "只想用手机看电脑画面、自己动手操作，是另一个项目：远程电脑串流"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-01",
+      "component_order": [
+        "chapter_title",
+        "prose",
+        "illustration",
+        "stat_card",
+        "action_button",
+        "inline_link",
+        "live_strip",
+        "content_card",
+        "icon",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "大标题：电脑远程控制",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "介绍：手机或网页上的ChatGPT、笔记本上的Codex、主机上的Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "数字卡片（截至9月28日）：",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "12台主机（台式机）和副机（笔记本）各跑一套，同一份源码223个工具：文件、命令、文档、桌面、维护33个入口：主机公网、副机、经副机转到主机",
+        "columns": 2,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub（网页部分）复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "text_ref": "操作入口：连接电脑授权与状态"
+      },
+      {
+        "type": "prose",
+        "text_ref": "只想用手机看电脑画面、自己动手操作，是另一个项目：远程电脑串流"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-01",
+      "component_order": [
+        "illustration",
+        "stat_card",
+        "prose",
+        "action_button",
+        "live_strip",
+        "chapter_title",
+        "inline_link",
+        "content_card",
+        "icon",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：怎么用",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1人在外面，让家里的电脑干活",
+        "whole_block": true,
+        "columns": 1,
+        "row": "scenarios",
+        "width": "33.333%",
+        "row_card_notes": true,
+        "row_equal_height": true,
+        "row_note_from": "问到和我本人有关的事"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2两台电脑互相修",
+        "whole_block": true,
+        "columns": 1,
+        "row": "scenarios",
+        "width": "33.333%",
+        "row_card_notes": true,
+        "row_equal_height": true,
+        "row_note_from": "笔记本上那份",
+        "row_note_row": 3
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3资料锁着时，手机上解开",
+        "whole_block": true,
+        "columns": 1,
+        "row": "scenarios",
+        "width": "33.333%",
+        "row_card_notes": true,
+        "row_equal_height": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "它能碰什么：文件·命令和脚本·文档片段·桌面（截图、点、打字）·我的Chrome·管理员和SYSTEM维护23个工具全部列在“全部功能”",
+        "width": "100%"
+      },
+      {
+        "type": "chart",
+        "text_ref": "最近真用了多少：9月26日16:56至28日15:43，主机收到268次工具调用",
+        "variant": "stacked",
+        "width": "100%",
+        "chart_type": "stacked",
+        "labels_layout": "rows"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 原文堆叠条图无已实现chart_type，保全原文，比例条图未完成。\n页修复10：它能碰什么与用量图上下满宽；图例显式按rows逐项一行。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-02",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "illustration",
+        "stat_card",
+        "prose",
+        "chart",
+        "status_legend",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：怎么用",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1人在外面，让家里的电脑干活",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2两台电脑互相修",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3资料锁着时，手机上解开",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "它能碰什么：文件·命令和脚本·文档片段·桌面（截图、点、打字）·我的Chrome·管理员和SYSTEM维护23个工具全部列在“全部功能”"
+      },
+      {
+        "type": "chart",
+        "text_ref": "最近真用了多少：9月26日16:56至28日15:43，主机收到268次工具调用",
+        "variant": "stacked",
+        "chart_type": "stacked",
+        "labels_layout": "rows"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 原文堆叠条图无已实现chart_type，保全原文，比例条图未完成。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-02",
+      "component_order": [
+        "chart",
+        "chapter_title",
+        "content_card",
+        "icon",
+        "illustration",
+        "stat_card",
+        "prose",
+        "status_legend",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-02-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：出事怎么办",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用地址（副机域名下的/main-compute",
+        "columns": 2,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "direction": "horizontal"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不归它管：用手机看画面、自己动手操作见远程电脑串流；Windows远程桌面、ToDesk守护、手机借电脑上网见电脑配置与恢复。",
+        "tone": "gray"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-03",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "notice",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：出事怎么办",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用地址（副机域名下的/main-compute",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "direction": "vertical"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不归它管：用手机看画面、自己动手操作见远程电脑串流；Windows远程桌面、ToDesk守护、手机借电脑上网见电脑配置与恢复。",
+        "tone": "gray"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-03",
+      "component_order": [
+        "content_card",
+        "chapter_title",
+        "icon",
+        "notice",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-03-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：它是怎么搭的",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "topology",
+        "text_ref": "谁发起：手机或网页上的ChatGPT笔记本上的Codex主机上的Claude、Codex",
+        "layout": "chain",
+        "connector": "none",
+        "width": "100%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "三条路",
+        "width": "100%",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1主机公网入口mcp.wly0829.cn：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用Tailsc",
+        "columns": 1,
+        "direction": "horizontal",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/云.png",
+          "_library/icons/绿叶装饰.png",
+          "_library/icons/笔记本电脑.png"
+        ],
+        "row": "architecture",
+        "width": "60%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "电脑里分两层",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "architecture",
+        "width": "40%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.6（Python、FastMCP），我在外面加了开工核对、读文档片段、"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：谁发起移到三条路上方满宽，三条路标题独立一行，路径与电脑两层保留60/40并排。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-04",
+      "component_order": [
+        "chapter_title",
+        "flow",
+        "content_card",
+        "icon",
+        "topology",
+        "illustration",
+        "notice",
+        "bullet_list",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：它是怎么搭的",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "topology",
+        "text_ref": "谁发起：手机或网页上的ChatGPT笔记本上的Codex主机上的Claude、Codex",
+        "layout": "chain",
+        "connector": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "三条路",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1主机公网入口mcp.wly0829.cn：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用Tailsc",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/云.png",
+          "_library/icons/绿叶装饰.png",
+          "_library/icons/笔记本电脑.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "电脑里分两层",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "notice",
+        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.6（Python、FastMCP），我在外面加了开工核对、读文档片段、"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-04",
+      "component_order": [
+        "flow",
+        "content_card",
+        "chapter_title",
+        "icon",
+        "topology",
+        "illustration",
+        "notice",
+        "bullet_list",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-04-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-05-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：为什么这样设计",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1想在对话里，做在电脑上。推理留在我正在用的对话里，不为一条命令在电脑上另起一个AI任务。2门口和屋里分开。认证和维护放在SYSTEM服务里",
+        "columns": 2,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "main",
+        "width": "67%",
+        "direction": "horizontal"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "大数字卡：",
+        "row": "main",
+        "width": "33%",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "10,747行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）7,508行自动测试，45个测试文",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "main",
+        "icons": "none"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-05",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "stat_card",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：为什么这样设计",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1想在对话里，做在电脑上。推理留在我正在用的对话里，不为一条命令在电脑上另起一个AI任务。2门口和屋里分开。认证和维护放在SYSTEM服务里",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "direction": "vertical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "大数字卡：",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "10,747行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）7,508行自动测试，45个测试文",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-05",
+      "component_order": [
+        "content_card",
+        "stat_card",
+        "chapter_title",
+        "icon",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-05-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：两台电脑对照",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "主机（台式机WLY）副机（笔记本LAPTOP-E48N0DRJ）地址mcp.wly0829.cn/mcp；备用走副机域名下的/main-co",
+        "portrait_mode": "column_cards",
+        "portrait_columns": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "两台用同一个提交的源码，配置、登录凭据、部署和回退各管各的，不互相复制。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-06",
+      "component_order": [
+        "chapter_title",
+        "table",
+        "icon",
+        "prose"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：两台电脑对照",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "主机（台式机WLY）副机（笔记本LAPTOP-E48N0DRJ）地址mcp.wly0829.cn/mcp；备用走副机域名下的/main-co",
+        "portrait_mode": "column_cards",
+        "portrait_columns": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "两台用同一个提交的源码，配置、登录凭据、部署和回退各管各的，不互相复制。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-06",
+      "component_order": [
+        "table",
+        "chapter_title",
+        "icon",
+        "prose"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-06-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：超时和卡死怎么处理",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "notice",
+        "text_ref": "起因：9月27日晚ChatGPT和Claude一起卡死，通过电脑连接排查了50分钟没解决，我强制重启5分钟就好；当时命令到点也不返回，AI也"
+      },
+      {
+        "type": "illustration",
+        "row": "main",
+        "width": "33%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "●每次调用有硬截止（在用）",
+        "whole_block": true,
+        "columns": 1,
+        "row": "main",
+        "width": "67%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "●确认卡死时直接给急救做法（还没在真实使用里验过）",
+        "whole_block": true,
+        "columns": 1,
+        "row": "main"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-07",
+      "component_order": [
+        "chapter_title",
+        "notice",
+        "content_card",
+        "illustration",
+        "status_legend",
+        "prose",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：超时和卡死怎么处理",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "notice",
+        "text_ref": "起因：9月27日晚ChatGPT和Claude一起卡死，通过电脑连接排查了50分钟没解决，我强制重启5分钟就好；当时命令到点也不返回，AI也"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "●每次调用有硬截止（在用）",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "●确认卡死时直接给急救做法（还没在真实使用里验过）",
+        "whole_block": true,
+        "columns": 1
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-07",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "notice",
+        "status_legend",
+        "prose",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-08-h.png",
+    "blocks": [
+      {
+        "type": "source_text_card",
+        "text_ref": "1隧道断了，从笔记本绕进去把它修好。",
+        "whole_block": true,
+        "columns": 1,
+        "row": "features",
+        "width": "50%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2手机上的AI，守的也是同一套规矩。",
+        "whole_block": true,
+        "columns": 1,
+        "row": "features",
+        "width": "50%"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-08",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "prose",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-08-v.png",
+    "blocks": [
+      {
+        "type": "source_text_card",
+        "text_ref": "1隧道断了，从笔记本绕进去把它修好。",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2手机上的AI，守的也是同一套规矩。",
+        "whole_block": true,
+        "columns": 1
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-08",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "prose",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-09-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：全部功能（44项）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "连接入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1主机公网入口mcp.wly0829.cn经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用Tailscale",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "能办的事",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9文件读、写、找、列目录、复制、移动在用10命令和脚本用PowerShell7跑命令、Python、Node、Git和现成管理脚本，拿回输出",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "“别的账号和客户端”怎么配，见连接电脑"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-09",
+      "component_order": [
+        "chapter_title",
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-09-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：全部功能（44项）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "连接入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1主机公网入口mcp.wly0829.cn经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用Tailscale",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "能办的事",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9文件读、写、找、列目录、复制、移动在用10命令和脚本用PowerShell7跑命令、Python、Node、Git和现成管理脚本，拿回输出",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "“别的账号和客户端”怎么配，见连接电脑"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-09",
+      "component_order": [
+        "section_heading",
+        "status_legend",
+        "chapter_title",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-09-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-09-v3.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-10-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "规矩和保护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "18连上就给规则",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "一直在线",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "27没登录也能维护开机就起SYSTEM服务，没登录也能跑维护命令；桌面操作要等登录待验收28挂了自己拉起每10秒探测，连续3次失败就重启；服",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-10",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-10-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "规矩和保护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "18连上就给规则",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "一直在线",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "27没登录也能维护开机就起SYSTEM服务，没登录也能跑维护命令；桌面操作要等登录待验收28挂了自己拉起每10秒探测，连续3次失败就重启；服",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-10",
+      "component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-10-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-11-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "网页上的授权与状态",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "34连接电脑说明三个地址、每台的验收记录、一键复制给AI的配置说明在用35手机接续说明讲手机上的对话怎么借已连接的电脑接着办事说不准36主机",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "已停用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "41Codex远程公网入口手机网页看Codex任务；9月26日决定撤掉已停用42AI浏览器代填入口密码改由我自己从密码中心复制已停用43主机",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "网页那几项怎么办理，见授权与状态；Codex远程为什么停，见Codex远程"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-11",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-11-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "网页上的授权与状态",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "34连接电脑说明三个地址、每台的验收记录、一键复制给AI的配置说明在用35手机接续说明讲手机上的对话怎么借已连接的电脑接着办事说不准36主机",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "已停用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "41Codex远程公网入口手机网页看Codex任务；9月26日决定撤掉已停用42AI浏览器代填入口密码改由我自己从密码中心复制已停用43主机",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "网页那几项怎么办理，见授权与状态；Codex远程为什么停，见Codex远程"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-11",
+      "component_order": [
+        "section_heading",
+        "status_legend",
+        "feature_card",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-11-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-12-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：演进（北京时间）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "illustration",
+        "width": "100%",
+        "align": "center",
+        "size": "small",
+        "target_height": 230
+      },
+      {
+        "type": "timeline",
+        "text_ref": "9月9日：主机的电脑连接上线；连接时自动附上规则；加上管理员和SYSTEM维护；笔记本装上同一套9月10日：开机就启动，没登录也能维护；Ch",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "ribbon",
+        "width": "100%"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：主插画移到标题后居中，最高230px；时间线满宽，不留空的长右栏。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-12",
+      "component_order": [
+        "timeline",
+        "icon",
+        "illustration"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "remote-control-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\remote-control\\img\\remote-control-12-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "标题：演进（北京时间）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "9月9日：主机的电脑连接上线；连接时自动附上规则；加上管理员和SYSTEM维护；笔记本装上同一套9月10日：开机就启动，没登录也能维护；Ch",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "ribbon"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "remote-control-12",
+      "component_order": [
+        "timeline",
+        "illustration",
+        "icon"
+      ]
+    },
+    "portrait_required": true
+  }
+]

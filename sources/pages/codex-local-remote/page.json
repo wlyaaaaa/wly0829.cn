@@ -1,0 +1,801 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-local-remote",
+  "kind": "frozen",
+  "title": "Codex 远程",
+  "url": "/projects/codex-local-remote/",
+  "tagline": "用手机浏览器接着管电脑上正在跑的 Codex 任务",
+  "status": "冻结",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/codex-local-remote",
+  "capability": "用手机接着管电脑上的 Codex 任务（已停用）",
+  "based_on": {
+    "commit": "94f1cfadfbba97d3cfd2b21c73fba0104ccf2cf6",
+    "commit_time": "2026-08-07T11:50:44+08:00",
+    "files": [
+      "codex-local-remote README.md、docs/failure-postmortem-2026-08-03.md、docs/product-design.md、docs/feature-matrix.md、docs/release-notes-v0.1.6.md（94f1cfa）；标签 v0.1.0–v0.1.5",
+      "E:\\.agents\\docs\\owner-decisions.md（WR 节第 1597、1607 行；冻结原因节第 1623 行；第四轮 F3 第 126 行；CP3 第 387 行）",
+      "E:\\.agents 提交 c96dbf1、3d192d5、2ed452e、ad55b74、68a89c6；E187 agents.context-sources.md 第 28 行",
+      "E:\\PCConfig\\registries\\tasks.json、task_purpose_catalog.json；提交 bb0404b5",
+      "旧网站 V:\\Personal\\Projects\\wly0829.cn\\app\\content-codex-remote.js 与 public\\media\\codex-remote\\",
+      "E:\\Projects\\Tools\\sunshine-remote-streaming README.md 与首个提交 35f6a9c"
+    ]
+  },
+  "video_prompt": "5–8 秒无缝循环，白底、纯绿主色的水彩插画风，画面里不出现任何文字。从开头这屏右侧的插画出发：一部竖握的手机，屏幕上绿白配色的任务列表轻轻滚动；一条细细的绿色虚线从手机向家里的台式电脑延伸，电脑屏幕上是 Codex 的标志；虚线走到一半慢慢变淡、断开，手机屏幕也随之变灰。接着同一台电脑的整个桌面化作一束柔和的绿光，投到另一部横握的手机上，那部手机亮起完整的桌面画面；几片绿叶从上方缓缓飘落。最后回到起始画面接上循环。",
+  "screens": [
+    {
+      "id": "codex-local-remote-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版 16:9。左侧约 55% 宽：左上大标题毛笔艺术字“Codex 远程”，标题右边一枚灰绿色圆角小标签“已冻结”；标题下面是介绍段。介绍段下面三张并排的说明卡，卡顶各一个小水彩图标：第一张“为什么不用了”画一台电脑屏幕整块画面投到一部手机上（串流）；第二张“现在用什么”画一部手机，屏幕上是一个缩小的电脑桌面；第三张“停到什么程度”画一个拔下来的网线插头和一个上了封条的纸箱。每张卡第一行粗体小标题，下面两三行正文。右侧约 45%：一幅水彩插画：一部手机，屏幕上是绿白配色的任务列表网页（三行任务卡、顶上一个小绿点，不写字）；一条细绿虚线从手机连向一台家用台式电脑，电脑屏幕上是 Codex（OpenAI）的标志；虚线在半路断开、变淡；画面另一侧，同一台电脑的整个桌面被一束柔和的绿光投到另一部横握的手机上（串流）。画面下部一排四张数字卡片（上面小插画，大号绿色数字，下面一行小字），数字卡整体偏灰淡一点，表示是历史数字：提交画一串小圆点连线，版本画几个叠起来的标签，测试画一张打满勾的清单，接管成功画一个转圈的重启箭头。最下面一行：左边一个白底细浅绿描边的圆角按钮，里面是 GitHub 标志和“GitHub”字样；右边一行小字和链接。不画“现在”横条（项目已冻结，没有在跑的任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版 9:16，从上往下：大标题和“已冻结”标签；右侧那幅插画放到标题下面，占满宽度；介绍段；三张说明卡改成上下三张，每张一整行；四张数字卡改成两行两张；最下面 GitHub 按钮单独一行，下面一行小字和链接。字完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "# Codex 远程\n\n已冻结\n\n原来想在手机浏览器里接着管电脑上 Codex 桌面版正在跑的任务：看进度、批命令、补一句要求、叫停或排好下一句。手机上看到的就是电脑上那个任务，不另开一份聊天；它不传桌面画面，只传任务本身。\n\n**为什么不用了**\n本人的原话：“被远程桌面替代”（指的就是远程电脑串流）。\nAI 补充：在外面要管电脑，把整个桌面串流到手机上操作就行，Codex 桌面版原样能用，不必再为它单独维护一条接管的路；另外按 8 月 3 日的停用复盘，这条路本身也一直没稳下来。〔为什么串流能代替它〕\n\n**现在用什么**\n人在外面，用手机上的 Moonlight 连回电脑桌面：〔远程电脑串流〕。\n\n**停到什么程度**\n8 月 3 日停止修补，电脑上的 Codex 回到原样启动；9 月 12 日列入冻结名单；9 月 26 日撤掉公网入口，控制它的 AI 技能卸载；它的计划任务已停用。源码、测试和截图原样留在公开仓库。\n\n数字卡片（竖线前大字，竖线后小字）：\n1. 65 次｜提交，7 月 26 日到 8 月 7 日\n2. 6 个｜正式版本，7 月 28 日到 8 月 3 日，最后一个是 v0.1.5\n3. 1,771 项｜v0.1.5 发布时的自动测试，全部通过\n4. 约 5 次｜重启成功，前后花了 100 多小时（本人 8 月 3 日的汇总）\n\n〔GitHub〕　冻结的项目，AI 不主动看、不维护：〔约法 L24〕　〔复制 AI 续作说明〕",
+      "links": [
+        {
+          "text": "为什么串流能代替它",
+          "href": "/projects/codex-local-remote/#why-frozen"
+        },
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/codex-local-remote"
+        },
+        {
+          "text": "约法 L24",
+          "href": "/rules/charter/#L24"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-local-remote/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-local-remote-02",
+      "section": "why-frozen",
+      "title": "为什么串流能代替它",
+      "scene": "横版 16:9。左上标题，标题下一行导语。左半边上部：一张三列五行的对照表（表头浅绿底，第一列是项目名，第二列“Codex 远程”一栏整体偏灰，第三列“远程电脑串流”一栏正常绿色），表下一行小字（6 月 26 日那句）。左半边下部：一张横向对照表“现在这些事谁来做”，两列四行。右半边：一张较大的圆角卡“它自己也没稳下来”，卡顶一幅小水彩插画：一台电脑的窗口正在关上，一只拿着扳手的小手和窗口一起被拉进关门的缝里（表示负责重开的程序跟着一起被关掉），旁边一个插头拔不出来的插座（端口被占）；插画下面是正文段和三条带小圆点的列表；卡片最下面一条浅灰底横条写“8 月 3 日决定……”那句。",
+      "portrait": "竖版 9:16：标题、导语在上；“两条路差在哪”对照表改成四张小卡，每张一行问题、下面左右两格分别写 Codex 远程和远程电脑串流的答案；6 月 26 日那句；“它自己也没稳下来”卡片占满宽度，插画在卡顶；8 月 3 日横条；最后“现在这些事谁来做”改成三张小卡，每张上面一行“当初让它做的”、下面一行“现在”。字完全一样。",
+      "text": "# 为什么串流能代替它\n\n本人只说了一句“被远程桌面替代”。下面的对照和经过，是 AI 按仓库里 8 月 3 日的停用复盘和现在的用法补的，不是本人的话。\n\n**两条路差在哪**\n\n| | Codex 远程 | 远程电脑串流 |\n|---|---|---|\n| 手机上看到什么 | 专门做的手机网页，只有 Codex 的任务 | 电脑的整个桌面 |\n| 能管什么 | 只管 Codex 桌面版 | 电脑上所有软件，包括 Codex 桌面版 |\n| 要不要动 Codex | 要：得接管桌面版的启动，让它和手机连同一个任务服务 | 不用：Codex 原样开着 |\n| 手机要装什么 | 只要浏览器 | Moonlight |\n\n远程电脑串流 6 月 26 日就开始搭（仓库第一个提交），比 Codex 远程早一个月。\n\n**它自己也没稳下来**\nCodex 桌面版没有给别的程序接进同一个任务的公开入口。要让手机和电脑共用一个任务，桌面版得接到自己的中转程序上；它平时原样开着、没接上，所以“打开远程”时往往得先关掉它，再连着中转重新打开。这一步在 Windows 上反复出事：负责重开的程序跟着桌面版一起被关掉；旧进程死了还占着端口；高权限下读不到进程信息……每修好一层，又冒出下一层。\n- 7 月 28 日有过一次连接全通（本机和公网都返回正常），但启动过程仍有毛病；本人前后确认过约 5 次重启成功\n- 但成功没法稳定重现。最后一次现场：公网报 502，交接卡在“接上桌面版”这一步，本人只能手动把 Codex 原样打开\n- 本人估计前后投入 100 多小时；最后那个对话里本人发了 192 条消息，80 条在说重启、切换或接管（含重复的短消息）\n\n8 月 3 日决定：停止修补，Codex 回到原样启动，远程入口标成“不可用”。\n\n**现在这些事谁来做**\n\n| 当初让它做的 | 现在 |\n|---|---|\n| 在外面看任务、补要求、批命令 | 用〔远程电脑串流〕连回桌面，直接在 Codex 桌面版里操作 |\n| 在外面管电脑文件 | 同样串流过去，用电脑自己的文件管理器 |\n| 公网入口 | 9 月 26 日撤掉 |",
+      "links": [
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-local-remote-03",
+      "section": "usage",
+      "title": "当初想解决什么、怎么用",
+      "scene": "横版 16:9。左上标题。左侧约 45% 宽：上面“想解决的麻烦”一段（左边配一个小水彩：一个人背着包走出家门，身后电脑屏幕上一个等待中的沙漏）；下面“怎么用”一条从上到下的五步流程，五个节点用粗绿色箭头连起来，节点图标依次：一个说话的气泡、一部手机和一把钥匙、一张任务列表、一只手指点在“允许”按钮上、一个关上的门；节点名粗体、说明一两行小字；最下面“背后怎么连”一条横向小链路图：手机 → 云（Tailscale 标志）→ 小盒子“网页服务”→ 小盒子“本机中转”→ 小盒子“任务服务”，最右一台电脑屏幕上 Codex（OpenAI）标志连回任务服务；链路图下一行小字。右侧约 55%：四个带细浅绿边框的竖长空位，一行并排，每个约占右侧宽度的 23%、高约画面的 70%，比例 9:19 左右（手机截图），拼页时贴真实截图；每个空位下面一行小字说明（照“截图说明”四条写，不带前面的圆点）。",
+      "portrait": "竖版保留已正确03-v原范围/路径/SHA，不重画。原03-v2分为v2/v3，默认v/v2/v3顺序。第2张03-v2仅原“背后怎么连”标题、两段完整链路/本机入口说明、原“截图说明：”、任务列表/工作记录两真实截图及各自原图注。两空框一组并排，真实比例均1440:2800，参考各416×809源像素；图注紧跟本组对应图，图注名称明确对应，不补新编号/标签。新增第3张03-v3仅审批抽屉/文件页两真实截图及各自原图注；一组并排，审批框按412:915参考416×924，文件框按1440:2800参考416×809，保比例不要为等高拉伸；不重复链路、标题、截图说明或新标签。两组真实界面在370宽时各约164px，关键界面/按钮须可辨；GUI微字不逐字要求。说明正文整宽36源像素/行48可行参考，不拿公式称实际成图通过。原text/横scene与所有其他screens保持。\n仅03-v2本轮普通排版恢复：原“背后怎么连”标题、两段完整链路/本机入口说明在上；补原“截图说明：”；之后一组两张纯白矩形真截图框，内白区各416×809，按1440:2800原比例，无刘海、手机机身、阴影内屏或多重嵌套；图注随后整宽逐条，任务列表在先、工作记录在后。不要把长图注放半宽卡里。小链路水彩图云内保原Tailscale九点标志，缩小装饰而不缩正文。既有03-v/03-v3各自原路径/文字/字节保护，绝不新增part或移字。",
+      "text": "# 当初想解决什么、怎么用\n\n**想解决的麻烦**\nCodex 的长任务一跑几个小时。人一离开电脑，它停下来等审批、跑偏了要补一句、做完了要看改了什么，都得回到电脑前。把聊天记录复制到手机不行：手机上那份不是电脑上真在跑的任务。想要的是：手机浏览器打开一个网址、输一个密码，就接着管电脑上同一个任务；手机不装 App，也不装 Tailscale。\n\n**怎么用**\n1. **说“打开远程”**\nAI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程序上\n2. **手机打开网址**\n经 Tailscale Funnel 的公网地址，输密码登录\n3. **看同一个任务**\n任务列表、实时进展、改了哪些文件\n4. **动手**\n批命令、补一句、叫停、排好下一句\n5. **说“关闭远程”**\n关掉公网入口；Codex 用到自然退出，下次原样启动\n\n**背后怎么连**\n手机浏览器 → 公网入口（Tailscale Funnel）→ 网页服务（Sidecar：登录、整理任务事件、管文件）→ 本机中转（Broker）→ 唯一一个 Codex 任务服务（app-server）← Codex 桌面版\n任务服务和中转只在本机听；从公网进来，只能碰到登录后的网页服务。\n\n截图说明：\n- 真机任务列表：电脑在线、3 个任务在跑，顺序和桌面版一样（7 月 28 日）\n- 真机工作记录：公开的思考摘要、跑了几条命令、改了几个文件，底下是“引导正在运行的回复”输入框（7 月 28 日）\n- 审批抽屉：要执行的命令、影响的文件、可选的回答，“允许这一次”或“拒绝”（演示数据）\n- 真机文件页：选一个登记过的项目，按文件夹浏览（7 月 28 日）",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\16-real-task-list.jpg",
+          "where": "右侧第 1 个竖长空位（1440×2800，按宽度缩放）",
+          "caption": "真机任务列表：电脑在线、3 个任务在跑，顺序和桌面版一样（7 月 28 日）",
+          "frame_bindings": {
+            "v": {
+              "C62DDBB43AAAAB0D5ED04ACF900DD7349D4DB7D8E66244358D08F18AE3EA7816": [
+                28,
+                610,
+                463,
+                1336
+              ],
+              "42DCACC636365C377B95BAEF807500FDBE044D1B7901B490CAF9A984CA94958A": [
+                28,
+                2234,
+                463,
+                2960
+              ]
+            },
+            "h": {
+              "65A1EFA8A14521B006A832DBBFE69946136FF856A705D9E43EE7C1F3452B6A37": [
+                1173,
+                49,
+                1316,
+                354
+              ]
+            }
+          }
+        },
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\12-real-live-worklog.jpg",
+          "where": "右侧第 2 个竖长空位（1440×2800）",
+          "caption": "真机工作记录：公开的思考摘要、跑了几条命令、改了几个文件，底下是“引导正在运行的回复”输入框（7 月 28 日）",
+          "frame_bindings": {
+            "v": {
+              "C62DDBB43AAAAB0D5ED04ACF900DD7349D4DB7D8E66244358D08F18AE3EA7816": [
+                478,
+                610,
+                913,
+                1336
+              ],
+              "42DCACC636365C377B95BAEF807500FDBE044D1B7901B490CAF9A984CA94958A": [
+                478,
+                2234,
+                913,
+                2960
+              ]
+            },
+            "h": {
+              "65A1EFA8A14521B006A832DBBFE69946136FF856A705D9E43EE7C1F3452B6A37": [
+                1446,
+                48,
+                1589,
+                353
+              ]
+            }
+          }
+        },
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\04-mobile-approval-zh.jpg",
+          "where": "右侧第 3 个竖长空位（412×915）",
+          "caption": "审批抽屉：要执行的命令、影响的文件、可选的回答，“允许这一次”或“拒绝”（演示数据）",
+          "frame_bindings": {
+            "v": {
+              "0E6B618C39F8CB7C963AEEC4FD43E22C18118FF8C976796DCAED23B2CB9373B7": [
+                52,
+                132,
+                456,
+                1085
+              ],
+              "4A5E0A74E2AA949FA3183EFB854DDD1B4458D15812DA7D1B160317CB58587296": [
+                52,
+                3240,
+                456,
+                4193
+              ],
+              "42DCACC636365C377B95BAEF807500FDBE044D1B7901B490CAF9A984CA94958A": [
+                52,
+                3240,
+                456,
+                4193
+              ]
+            },
+            "h": {
+              "65A1EFA8A14521B006A832DBBFE69946136FF856A705D9E43EE7C1F3452B6A37": [
+                1186,
+                513,
+                1304,
+                766
+              ]
+            }
+          }
+        },
+        {
+          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\15-real-project-files.jpg",
+          "where": "右侧第 4 个竖长空位（1440×2800）",
+          "caption": "真机文件页：选一个登记过的项目，按文件夹浏览（7 月 28 日）",
+          "frame_bindings": {
+            "v": {
+              "0E6B618C39F8CB7C963AEEC4FD43E22C18118FF8C976796DCAED23B2CB9373B7": [
+                488,
+                132,
+                892,
+                1035
+              ],
+              "4A5E0A74E2AA949FA3183EFB854DDD1B4458D15812DA7D1B160317CB58587296": [
+                488,
+                3240,
+                892,
+                4143
+              ],
+              "42DCACC636365C377B95BAEF807500FDBE044D1B7901B490CAF9A984CA94958A": [
+                488,
+                3240,
+                892,
+                4143
+              ]
+            },
+            "h": {
+              "65A1EFA8A14521B006A832DBBFE69946136FF856A705D9E43EE7C1F3452B6A37": [
+                1467,
+                513,
+                1570,
+                759
+              ]
+            }
+          }
+        }
+      ],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-local-remote-04",
+      "section": "features",
+      "title": "全部旧功能",
+      "scene": "横版 16:9，和其他项目页“全部功能”同一种画法，但整屏色调偏灰淡，表示都已停用。左上标题，标题右边图例（只有一种：灰色叉“已停用”）。两组功能从上往下排；每组的组名用毛笔字写在这一组卡片上方的一行（不单独占一整列）；卡片三列排：每张卡左边一个灰调小水彩图标，粗体功能名，下面一两行说明，右上角一个灰色叉。图标：接着同一个任务画一根线两头各拴一部手机和一台电脑；任务列表画一张带图钉的清单；手机开新任务画一部手机和一个加号；实时工作记录画一卷展开的日志纸；进出子任务画一棵有分叉的小树；中英切换画两个重叠的空白对话气泡，一个绿一个灰（气泡里不写字）；补一句画一个插进来的小气泡；叫停画一个停止方块；下一轮排队画三张排队的便签；审批画一个盾牌上一个勾；下一轮的模型和模式画一个小旋钮；额度和上下文画一个绿色圆环仪表。",
+      "portrait": "竖版 9:16：标题和图例在上；每组组名一行，下面卡片改成一行一张（图标在左、字在右、叉在右上）；两组依次往下。字完全一样。",
+      "text": "# 全部旧功能（21 项，全部已停用）\n\n图例：✕ 已停用\n\n**在手机上看同一个任务**\n- **接着同一个任务**：手机和电脑用同一个任务编号；电脑上的 Codex 先接上这个任务，手机的第一句才放行，不会各跑一份 ✕\n- **任务列表**：正在跑、置顶、最近、归档，顺序和桌面版一样；能改名、复制任务编号、归档和恢复 ✕\n- **手机开新任务**：在电脑上登记过的项目里开，或在单独的临时文件夹里开；手机不能随便指定路径 ✕\n- **实时工作记录**：公开的思考摘要、跑过的命令和输出、改动的文件（逐行对比）、图片；模型隐藏的推理不显示；长对话先显示最近的，可逐段展开全部；浏览器标签页标题提示断线、等你处理、运行中、失败 ✕\n- **进出子任务**：看每个子任务在做什么，点进去只读看完整记录，再回主任务补要求；做完的、归档的也在 ✕\n- **中英切换**：默认中文，一键切英文 ✕\n\n**插话、审批和下一轮**\n- **给正在跑的回复补一句**：趁这一轮还没结束，把要求补进去 ✕\n- **叫停**：停掉当前这一轮 ✕\n- **下一轮排队**：先写好下一句，能改、调顺序、删；在电脑上加密存着；断线后说不清发没发出去，就停住不重发 ✕\n- **手机审批和回答提问**：看要执行的命令和影响的文件，再选允许或拒绝；按钮只用 Codex 当时给的选项，不自己编 ✕\n- **下一轮的模型和模式**：换模型、思考档位、速度、权限、计划模式，设任务目标；只对下一轮生效，不中途换 ✕\n- **额度和上下文**：上下文用了多少（绿色圆环）、账号额度和重置时间（北京时间）、上下文压缩到了哪一步；空闲时可手动压缩 ✕",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-task",
+          "text": "在手机上看同一个任务"
+        },
+        {
+          "id": "f-same-task",
+          "text": "接着同一个任务"
+        },
+        {
+          "id": "f-task-list",
+          "text": "任务列表"
+        },
+        {
+          "id": "f-new-task",
+          "text": "手机开新任务"
+        },
+        {
+          "id": "f-worklog",
+          "text": "实时工作记录"
+        },
+        {
+          "id": "f-subagents",
+          "text": "进出子任务"
+        },
+        {
+          "id": "f-language",
+          "text": "中英切换"
+        },
+        {
+          "id": "g-control",
+          "text": "插话、审批和下一轮"
+        },
+        {
+          "id": "f-steer",
+          "text": "给正在跑的回复补一句"
+        },
+        {
+          "id": "f-stop",
+          "text": "叫停"
+        },
+        {
+          "id": "f-queue",
+          "text": "下一轮排队"
+        },
+        {
+          "id": "f-approval",
+          "text": "手机审批和回答提问"
+        },
+        {
+          "id": "f-next-turn",
+          "text": "下一轮的模型和模式"
+        },
+        {
+          "id": "f-usage-context",
+          "text": "额度和上下文"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "features",
+      "reuse": ""
+    },
+    {
+      "id": "codex-local-remote-05",
+      "section": "features",
+      "title": "全部旧功能（续）",
+      "scene": "横版 16:9，接上一屏，同一种画法、同样偏灰淡。左上标题，标题右边同样的图例。三组功能从上往下排，组名用毛笔字写在这一组卡片上方的一行；卡片三列排，每组另起一行；“电脑文件”组只有一张卡，这一行右边空出的位置画一小幅灰调水彩：一个文件夹和一个回收站。图标：电脑文件页画一个打开的文件夹；外网入口画一扇开向云的门（带 Tailscale 标志）；登录和请求保护画一把锁；断线不丢、不重发画一条断开又接上的链子；打开和关闭远程画一个拨动开关；一句话让 AI 开关画一个说话气泡里的开关；能退回的版本画两个叠放的盒子和一个回头箭头；任务不停也能换网页层画一只手在不停转的齿轮旁换一块面板；交给 AI 安装画一张写满字的纸条（不画可读的字）交给一个小机器人。",
+      "portrait": "竖版 9:16：标题和图例在上；每组组名一行，下面卡片改成一行一张（图标在左、字在右、叉在右上）；三组依次往下；文件夹和回收站的小插画放在“电脑文件”那张卡右边缩小。字完全一样。",
+      "text": "# 全部旧功能（续）\n\n图例：✕ 已停用\n\n**电脑文件**\n- **电脑文件页**：浏览和搜索这台电脑检测到的全部磁盘，预览文本、Markdown、图片和 PDF，上传、新建、编辑、改名、复制、移动、下载、删除；删除先进回收站，覆盖和永久删除要再确认一次 ✕\n\n**从外面连回来**\n- **外网入口**：经 Tailscale Funnel 的一个公网地址进来，手机只要浏览器；9 月 26 日撤掉 ✕\n- **登录和请求保护**：一个本机设的密码，只存加盐后的哈希；输错多次临时锁定；改东西的请求必须来自这个网页本身，别的网页借不了登录；任务里的本机文件路径换成短时有效的引用 ✕\n- **断线不丢、不重发**：断线后按事件编号接着收；草稿和排队的话都留着；结果说不清就先核对，不自动再发一遍 ✕\n\n**开关、安装和更新**\n- **打开和关闭远程**：平时 Codex 原样启动；“打开”时才接管，必要时重开一次 Codex；“关闭”只关公网入口、不重开 Codex；网页服务崩了能自己拉起 ✕\n- **一句话让 AI 开关**：跟 AI 说“打开远程”“关闭远程”“远程状态”；8 月 13 日改成只回答“不可用”，9 月 26 日卸载 ✕\n- **能退回的版本**：每个版本按内容算出编号、单独存一份，记着“当前”和“上一个”，出问题退回上一个 ✕\n- **任务不停也能换网页层**：先不接新请求、等手上的做完，再换手机网页和网页服务；新的起不来就换回旧的；底层任务服务不动 ✕\n- **交给 AI 安装**：仓库里有一段现成的提示词，贴给 Codex 桌面版，让它自己装 ✕",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-files",
+          "text": "电脑文件"
+        },
+        {
+          "id": "f-file-manager",
+          "text": "电脑文件页"
+        },
+        {
+          "id": "g-access",
+          "text": "从外面连回来"
+        },
+        {
+          "id": "f-public-entry",
+          "text": "外网入口"
+        },
+        {
+          "id": "f-login-guard",
+          "text": "登录和请求保护"
+        },
+        {
+          "id": "f-reconnect",
+          "text": "断线不丢、不重发"
+        },
+        {
+          "id": "g-ops",
+          "text": "开关、安装和更新"
+        },
+        {
+          "id": "f-open-close",
+          "text": "打开和关闭远程"
+        },
+        {
+          "id": "f-control-skill",
+          "text": "一句话让 AI 开关"
+        },
+        {
+          "id": "f-runtime-versions",
+          "text": "能退回的版本"
+        },
+        {
+          "id": "f-hot-update",
+          "text": "任务不停也能换网页层"
+        },
+        {
+          "id": "f-ai-install",
+          "text": "交给 AI 安装"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "features",
+      "reuse": ""
+    },
+    {
+      "id": "codex-local-remote-06",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版 16:9。左上标题。上半部一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，9 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤。7 月 26 日到 8 月 3 日这一段丝带颜色鲜绿、小旗密；8 月 3 日之后丝带变淡、偏灰，小旗稀疏。丝带尽头画一个上了封条的纸箱，箱子上贴着一个小小的手机网页图标。下半部一块浅绿底圆角区“留下的教训”：四张并排小卡，每张一个小水彩图标（五级台阶，只有最高一级是亮绿色；一台电脑和一个先后顺序的箭头；一台主力电脑旁边一个一次性的纸盒电脑；一个秒表上画着一条红线），卡里粗体标题一行、下面两三行正文。",
+      "portrait": "竖版 9:16：标题；时间轴改成从上到下一条竖丝带，9 个小旗依次往下，日期在左、小字在右；丝带尽头是封条纸箱；“留下的教训”四张小卡改成上下四张。字完全一样。",
+      "text": "# 演进（7 月 26 日—8 月 7 日，65 次提交）\n\n- **7 月 26 日**：第一版提交\n- **7 月 28 日**：发布 v0.1.0、v0.1.1；当天一次冷启动连接全通，启动过程仍有毛病。本人实际用过 v0.1.1，觉得好用\n- **7 月 31 日**：加上 AI 技能，说“打开远程”“关闭远程”就能开关\n- **8 月 2 日**：v0.1.2 把修缺陷扩成大改启动方式：平时原样启动、要用时才接管、版本能退回；当天又发 v0.1.3、v0.1.4\n- **8 月 3 日**：零点发 v0.1.5；上午又补了 9 个接管修复，真机仍没接通；当天写停用复盘，停止修补\n- **8 月 7 日**：最后一次提交，把那 9 个修复标成“未发布候选”\n- **8 月 13 日**：AI 技能改成只回答“不可用”\n- **9 月 12 日**：列入冻结名单\n- **9 月 26 日**：撤掉公网入口，AI 技能卸载（27 日从技能库删掉）\n\n**留下的教训**（复盘里写给以后的）\n- **测试全绿不等于能用**：证据分五层：对话里的说法 → 代码和测试通过 → 新版本装好了 → 真机跑通一次 → 反复恢复都行。说“稳定”要到第五层；v0.1.5 的 1,771 项测试只到第二层\n- **先真机切一次，再发布**：v0.1.5 在这台电脑还没真正换上新版时就先发了，顺序反了\n- **主力电脑不当试验机**：重来要先在一次性的虚拟机里反复试，最后才在主力电脑上接管一次\n- **要有硬止损**：说好“只试一次”却一再接着修，30、50、70 小时时都没停下来重新立项",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-task",
+        "name": "在手机上看同一个任务"
+      },
+      {
+        "id": "g-control",
+        "name": "插话、审批和下一轮"
+      },
+      {
+        "id": "g-files",
+        "name": "电脑文件"
+      },
+      {
+        "id": "g-access",
+        "name": "从外面连回来"
+      },
+      {
+        "id": "g-ops",
+        "name": "开关、安装和更新"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-same-task",
+        "group": "g-task",
+        "name": "接着同一个任务",
+        "what": "手机和电脑共用同一个任务和同一轮，不复制聊天另开一份",
+        "how": "Broker 独占一个 app-server，Desktop 和网页服务都连它；手机首轮要等 Desktop 完成订阅才放行",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 中文介绍；docs/feature-matrix.md 第 9–12 行；旧网站 content-codex-remote.js:409"
+      },
+      {
+        "id": "f-task-list",
+        "group": "g-task",
+        "name": "任务列表",
+        "what": "看运行中、置顶、最近、归档的任务，顺序照桌面版",
+        "how": "首页合并两端全部运行任务；置顶只读镜像；行菜单改名、复制 ID、归档、恢复，提交后回读",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README“可以做什么”第 2–3 条；feature-matrix 第 16–18 行"
+      },
+      {
+        "id": "f-new-task",
+        "group": "g-task",
+        "name": "手机开新任务",
+        "what": "在登记项目里或隔离的无项目目录里开新任务",
+        "how": "选项目或选无项目；工作目录只能是本机登记并核过身份的项目根或安装时配的临时根",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 1 条；feature-matrix“新建任务 cwd”行；docs/product-design.md 第 10–13 行"
+      },
+      {
+        "id": "f-worklog",
+        "group": "g-task",
+        "name": "实时工作记录",
+        "what": "实时看回复、公开进展、命令和输出、文件改动、图片；长对话渐进显示；标签页给简短状态提示",
+        "how": "运行中最新一段默认展开，做完折成摘要可展开；内部 reasoning 不进界面；长对话按最近内容渐进渲染、可逐段展开全部历史；标签页在断线、等待处理、运行、失败时提示，不用装 PWA 或开系统通知",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 4–5 条、第 164–169 行；feature-matrix 第 19–21、29 行"
+      },
+      {
+        "id": "f-subagents",
+        "group": "g-task",
+        "name": "进出子任务",
+        "what": "看子智能体的层级和状态，进子任务只读看记录再回父任务",
+        "how": "父任务里点开缩进列表；补充要求回父任务转交；历史不全时明确提示",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README“查看运行中或已完成的子智能体”；旧网站 :488 subagent-navigation"
+      },
+      {
+        "id": "f-language",
+        "group": "g-task",
+        "name": "中英切换",
+        "what": "界面默认简体中文，可切英文",
+        "how": "右上 EN / 中 按钮；任务内容和运行时给的值照原样",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README“defaults to Simplified Chinese and includes an EN / 中 switch”"
+      },
+      {
+        "id": "f-steer",
+        "group": "g-control",
+        "name": "给正在跑的回复补一句",
+        "what": "在当前轮还在跑时追加要求（steer）",
+        "how": "输入条选“发送到当前回复”；连接和轮次身份要对得上",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 6 条；feature-matrix 第 22 行；旧网站 :575"
+      },
+      {
+        "id": "f-stop",
+        "group": "g-control",
+        "name": "叫停",
+        "what": "停止当前回复",
+        "how": "按停止；连接和轮次身份要对得上，断线时不执行",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "feature-matrix 第 23 行"
+      },
+      {
+        "id": "f-queue",
+        "group": "g-control",
+        "name": "下一轮排队",
+        "what": "先写好下一轮的要求，能编辑、排序、删除、手动发送",
+        "how": "网页服务用当前 Windows 用户的 DPAPI 加密存盘；修订号冲突或结果不明就停住",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "feature-matrix 第 24–25 行；README 安全原则“尚未派发的下一轮正文”"
+      },
+      {
+        "id": "f-approval",
+        "group": "g-control",
+        "name": "手机审批和回答提问",
+        "what": "在手机上处理命令审批和结构化提问",
+        "how": "只显示 app-server 为这次请求给出的选项；缺选项就只显示阻塞原因",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 4 条、“明确不能做什么”；feature-matrix 第 31–32 行；截图 04-mobile-approval-zh.jpg"
+      },
+      {
+        "id": "f-next-turn",
+        "group": "g-control",
+        "name": "下一轮的模型和模式",
+        "what": "选下一轮的模型、思考等级、速度、权限、审批路由、计划模式，设任务目标",
+        "how": "选项从运行时目录读，不写死；不在当前轮热切换",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 7 条；feature-matrix 第 26–30 行"
+      },
+      {
+        "id": "f-usage-context",
+        "group": "g-control",
+        "name": "额度和上下文",
+        "what": "看上下文占比、账号额度窗口和重置时间、上下文压缩状态",
+        "how": "对话右上绿色圆环，点开看 token 和 UTC+8 重置时间；空闲时可手动压缩，按真实事件分“已受理”“已完成”",
+        "status": "已停用",
+        "screen": "codex-local-remote-04",
+        "source": "README 第 9–11 条；feature-matrix 第 33–36 行"
+      },
+      {
+        "id": "f-file-manager",
+        "group": "g-files",
+        "name": "电脑文件页",
+        "what": "按当前 Windows 用户的权限管理全部已检测磁盘上的文件",
+        "how": "独立“电脑文件”页：浏览、搜索，有界预览文本、Markdown、图片、PDF；上传、新建、编辑、改名、复制、移动、下载、删除；删除进回收站，覆盖和永久删除要明确确认",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README 第 12 条；feature-matrix 第 39–40 行；docs/product-design.md 第 15–20 行；截图 15-real-project-files.jpg（早期只读项目文件页）"
+      },
+      {
+        "id": "f-public-entry",
+        "group": "g-access",
+        "name": "外网入口",
+        "what": "在外面用手机浏览器经公网地址连回电脑",
+        "how": "Tailscale Funnel 路径 /codex-remote 转到本机 18790 的网页服务；9 月 26 日按本人决定 F3 撤掉",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README 架构节；owner-decisions.md 第 126 行；PCConfig 提交 bb0404b5"
+      },
+      {
+        "id": "f-login-guard",
+        "group": "g-access",
+        "name": "登录和请求保护",
+        "what": "挡住猜密码、借用登录、跨站写入和公网裸文件链接",
+        "how": "单密码加盐强哈希；Secure/HttpOnly/SameSite=Strict Cookie；失败限速锁定；写请求要同源和 CSRF；本地路径换成短时不透明引用",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README“安全原则”；旧网站术语表 :337–338"
+      },
+      {
+        "id": "f-reconnect",
+        "group": "g-access",
+        "name": "断线不丢、不重发",
+        "what": "断线或刷新后恢复事件流、草稿、滚动位置和子任务导航",
+        "how": "SSE 按事件编号续接，短抖动 3 秒宽限；实时动作断线时失败关闭，不静默重放",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README 第 13 条；旧网站 :351"
+      },
+      {
+        "id": "f-open-close",
+        "group": "g-ops",
+        "name": "打开和关闭远程",
+        "what": "平时 Codex 原生启动，要用时才接管，用完关掉公网入口",
+        "how": "固定控制入口只有 Open、Close、Status；Open 必要时至多一次受控重开 Desktop；计划任务 Codex Local Remote 在租约内看着 Broker、app-server、网页服务，网页服务崩了自动拉起",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README 架构节后半；PCConfig task_purpose_catalog.json 第 1413–1428 行"
+      },
+      {
+        "id": "f-control-skill",
+        "group": "g-ops",
+        "name": "一句话让 AI 开关",
+        "what": "对 AI 说“打开远程”“关闭远程”“远程状态”就执行对应操作",
+        "how": "技能 codex-local-remote-control；8 月 13 日改成冻结标记只答“不可用”；9 月 26 日不再安装，27 日删除",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "E:\\.agents 提交 c96dbf1、3d192d5、2ed452e、ad55b74"
+      },
+      {
+        "id": "f-runtime-versions",
+        "group": "g-ops",
+        "name": "能退回的版本",
+        "what": "每个版本单独存放，能退回上一个",
+        "how": "构建装进 RuntimeVersions/<内容 SHA-256>，manifest 记逐文件哈希；runtime-current.json 原子记当前和上一个",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README 最后两段；旧网站 :30"
+      },
+      {
+        "id": "f-hot-update",
+        "group": "g-ops",
+        "name": "任务不停也能换网页层",
+        "what": "电脑上有任务在跑时也能更新手机网页和网页服务",
+        "how": "租约内先排空已接的写入，再短切换 Web/Sidecar；新网页服务失败就恢复旧的；Broker、app-server 变化要另外交接",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "旧网站 :352；复盘 3.1 节最后一条"
+      },
+      {
+        "id": "f-ai-install",
+        "group": "g-ops",
+        "name": "交给 AI 安装",
+        "what": "把一段提示词贴给 Codex 桌面版，让它自己安装或升级",
+        "how": "docs/ai-install-prompt.md 写明哪一步要停下来等本人输密码、选项目、批 Funnel 或重开桌面版",
+        "status": "已停用",
+        "screen": "codex-local-remote-05",
+        "source": "README“Archived installation prompt”节；docs/ai-install-prompt.md"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-commits",
+        "text": "65 次",
+        "meaning": "仓库全部提交，7 月 26 日到 8 月 7 日（北京时间）",
+        "as_of": "2026-09-28",
+        "source": "git -C V:\\Personal\\Projects\\codex-local-remote rev-list --count HEAD",
+        "screens": [
+          "codex-local-remote-01",
+          "codex-local-remote-06"
+        ]
+      },
+      {
+        "id": "n-releases",
+        "text": "6 个",
+        "meaning": "正式标签 v0.1.0–v0.1.5，7 月 28 日到 8 月 3 日",
+        "as_of": "2026-09-28",
+        "source": "git tag -l 与各标签提交时间",
+        "screens": [
+          "codex-local-remote-01",
+          "codex-local-remote-06"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "1,771 项",
+        "meaning": "v0.1.5 公开 CI 通过的 Vitest 测试（114 个测试文件）",
+        "as_of": "2026-08-03",
+        "source": "docs/failure-postmortem-2026-08-03.md 第 46 行；旧网站第 25 行（CI run 30756063724）",
+        "screens": [
+          "codex-local-remote-01",
+          "codex-local-remote-06"
+        ]
+      },
+      {
+        "id": "n-restarts",
+        "text": "约 5 次｜100 多小时",
+        "meaning": "本人封存前汇总的真机重启成功次数和累计投入，没有独立复核",
+        "as_of": "2026-08-03",
+        "source": "复盘第 65–66、131 行",
+        "screens": [
+          "codex-local-remote-01",
+          "codex-local-remote-02"
+        ]
+      },
+      {
+        "id": "n-messages",
+        "text": "192 条消息，80 条在说重启、切换或接管",
+        "meaning": "最后那个 Codex 对话里的本人消息，自动计数，含重复短消息",
+        "as_of": "2026-08-03",
+        "source": "复盘第 128–129 行",
+        "screens": [
+          "codex-local-remote-02"
+        ]
+      },
+      {
+        "id": "n-unreleased",
+        "text": "9 个接管修复",
+        "meaning": "v0.1.5 之后没发布的修复，只有代码和测试证据",
+        "as_of": "2026-08-03",
+        "source": "复盘第 113–118 行；docs/release-notes-v0.1.6.md",
+        "screens": [
+          "codex-local-remote-06"
+        ]
+      },
+      {
+        "id": "n-features",
+        "text": "21 项",
+        "meaning": "本页列出的旧功能",
+        "as_of": "2026-09-28",
+        "source": "registry.features 计数",
+        "screens": [
+          "codex-local-remote-04"
+        ]
+      },
+      {
+        "id": "n-streaming-start",
+        "text": "6 月 26 日",
+        "meaning": "远程电脑串流仓库第一个提交（开始搭的日子，不证明当天就能用）",
+        "as_of": "2026-06-26",
+        "source": "git -C E:\\Projects\\Tools\\sunshine-remote-streaming log --reverse（35f6a9c）",
+        "screens": [
+          "codex-local-remote-02"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-streaming",
+        "with": "sunshine-remote-streaming",
+        "direction": "被代替",
+        "flow": "在外面管电脑上的 Codex，现在用 Moonlight 把整个桌面串流到手机上操作",
+        "source": "owner-decisions.md 第 1597、1607 行（本人原话“被远程桌面替代”）；CP3 第 387 行"
+      },
+      {
+        "id": "r-agents-skill",
+        "with": "agents",
+        "direction": "登记",
+        "flow": "控制技能 codex-local-remote-control 放在 AI 规则与技能基座里：7 月 31 日加、8 月 13 日改成只答不可用、9 月 26 日卸载、27 日删除；冻结名单也在基座（E187 context-sources 第 28 行）",
+        "source": "E:\\.agents 提交 c96dbf1、3d192d5、2ed452e、ad55b74、68a89c6"
+      },
+      {
+        "id": "r-pcconfig",
+        "with": "pcconfig",
+        "direction": "登记",
+        "flow": "电脑配置登记计划任务 \\Codex Local Remote（已停用、换机不重建）和网页服务的本机端口 18790，记下公网路径已撤",
+        "source": "PCConfig tasks.json、task_purpose_catalog.json 第 1413–1428 行；提交 bb0404b5"
+      },
+      {
+        "id": "r-tailscale",
+        "with": "Tailscale Funnel",
+        "direction": "外部服务",
+        "flow": "公网路径 /codex-remote 转到本机 18790；9 月 26 日删掉，只剩 /computer 等路径",
+        "source": "README 架构节；PCConfig bb0404b5"
+      },
+      {
+        "id": "r-codex-desktop",
+        "with": "Codex 桌面版（OpenAI）",
+        "direction": "外部工具",
+        "flow": "用桌面版自带的 codex.exe 起唯一的 app-server；桌面版通过隐藏的 CODEX_APP_SERVER_WS_URL 接到本机中转，和手机共用任务",
+        "source": "README 架构节“Broker 只使用当前 Codex Desktop 安装中动态发现的 codex.exe”“Windows 兼容层”段"
+      },
+      {
+        "id": "r-github",
+        "with": "GitHub",
+        "direction": "外部服务",
+        "flow": "公开仓库、6 个 Release、GitHub Actions CI 和公开安全扫描",
+        "source": "README 徽章与链接；旧网站第 25 行"
+      },
+      {
+        "id": "r-old-site",
+        "with": "旧网站 wly0829.cn",
+        "direction": "展示",
+        "flow": "旧页 /projects/codex-remote 放过 9 个模块和 20 张截图；本页的截图从那里取",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\content-codex-remote.js；public\\media\\codex-remote\\"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-evidence-layers",
+        "title": "测试全绿不等于能用：证据分五层",
+        "screen": "codex-local-remote-06"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/codex-local-remote/#why-frozen",
+        "screen": "codex-local-remote-01",
+        "text": "为什么串流能代替它"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "codex-local-remote-01",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/rules/charter/#L24",
+        "screen": "codex-local-remote-01",
+        "text": "约法 L24"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "codex-local-remote-02",
+        "text": "远程电脑串流"
+      }
+    ],
+    "live": []
+  },
+  "notes": {
+    "merged": [
+      "底稿 9 个旧模块拆细成 21 项：同一任务→接着同一个任务、任务列表、手机开新任务；子智能体导航→进出子任务；对话控制→补一句、叫停、下一轮排队；审批与上下文→手机审批和回答提问、下一轮的模型和模式、额度和上下文；项目与文件→手机开新任务（项目部分）、电脑文件页；安全接入→外网入口、登录和请求保护；安装与回滚→打开和关闭远程、能退回的版本、任务不停也能换网页层、交给 AI 安装。另从 README 补了实时工作记录、中英切换、断线不丢不重发，从 .agents 补了一句话让 AI 开关。",
+      "底稿“共享架构”不单列功能：写成第 3 屏“背后怎么连”的链路图；它说的是怎么连，本人看到的结果就是“接着同一个任务”。",
+      "计划任务 Codex Local Remote（Desktop 所有者协调器）和网页服务崩溃自愈并进 f-open-close：README 把它们写在同一段显式租约里。",
+      "“回答图片与已查看图片活动”“归档与恢复”“重命名与复制 ID”分别并进实时工作记录和任务列表。",
+      "README 第 164–169 行的“长对话渐进显示、逐段展开”和“浏览器标签页状态提示”并进 f-worklog（实时工作记录）：都是看任务进展时的显示方式。feature-matrix 的“全磁盘搜索”“预览”并进 f-file-manager。"
+    ],
+    "dropped": [
+      "底稿“版本与证据”不作功能：它是旧网站一段“哪些证据证明做成过”的说明。其中最有用的“证据分五层”写进第 6 屏“留下的教训”。",
+      "旧网站和 README 里的实现细节不上：订阅屏障、thread/name/set、Explorer medium-integrity token、owner proof、drain receipt、dispatcher 校验 manifest、幂等键、修订号、2 MiB 置顶解析上限等——项目已冻结，读者用不上；留下的只是能说清“怎么用、为什么难”的几条。",
+      "复盘第 5 节的完整技术故障链只挑三条人话写在第 2 屏（重开程序跟着被关、旧进程占端口、高权限读不到进程信息），模块解析到旧版本、intent/lease 状态过多、多个等待预算不一致等不单列。",
+      "旧网站 20 张截图只放 4 张（3 张真机、1 张演示数据）；其余是同一类画面或含账号额度、会话到期等旧值（13-real-account-session），不上。",
+      "当前 main 最新 CI run 31145586404 失败、0.1.6-unreleased 版本号不写：冻结项目，写“9 个修复标成未发布候选”已够。"
+    ],
+    "unsure": [
+      "冻结原因本人原话是“被远程桌面替代”（manifest 写作“被远程桌面串流替代”，页面引号里只放原话；“指的就是远程电脑串流”写在引号外）。第 1 屏原话后另起“AI 补充”，第 2 屏导语注明“不是本人的话”；两屏都加了“这条路本身也一直没稳下来”和 8 月 3 日停用复盘的经过——这是仓库复盘文档和 AI 技能冻结说明（3d192d5：“frozen after repeated live restart and recovery failures”）里的事实，本人没把它说成冻结原因。请本人确认：这样并列写是否合适，还是只写“被串流替代”。",
+      "第 2 屏“两条路差在哪”对照表和“现在这些事谁来做”是 AI 推断的现状（依据：CP3 平时主要用 Moonlight；串流 README）。“在外面管电脑文件 → 串流过去用电脑自己的文件管理器”没有本人原话。",
+      "替本人口吻或替本人下判断的句子（上线前请本人过目）：第 1 屏“在外面要管电脑，把整个桌面串流到手机上操作就行……不必再为它单独维护一条接管的路”；第 6 屏“本人实际用过 v0.1.1，觉得好用”（出自复盘第 43 行“被用户实际使用并评价为可用”）。",
+      "“约 5 次重启成功”“100 多小时”“192 条里 80 条”都出自复盘，是本人汇总或自动计数，没有独立复核；复盘自己也这样注明。",
+      "“远程电脑串流 6 月 26 日就搭好了”按那个仓库第一个提交的日期；串流是哪天开始日常使用、是不是 8 月 3 日后才成为在外面管 Codex 的主要方式，没有记录。",
+      "首屏没放〔在整套系统里的位置 → 怎么协作〕：照 OpenClaw 冻结页的处理，冻结项目和现役项目已没有来往。第 2 批怎么协作页如果给冻结项目留位置，再补。",
+      "电脑文件页的截图（15-real-project-files）是 7 月 28 日早期版，当时还只读、只看登记项目；后来 README 写的是全部磁盘、可改可删。图下说明写的是“选一个登记过的项目，按文件夹浏览”，和功能卡的全盘说法不矛盾，但读者可能对不上。",
+      "页名沿用 manifest 的“Codex 远程”，没用旧稿新起的“手机接管 Codex 任务”。"
+    ]
+  }
+}

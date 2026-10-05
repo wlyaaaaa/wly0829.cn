@@ -1,0 +1,88 @@
+/* 首链接为卡头的入口图卡；同角色字高、颜色和字体取共享变量。 */
+.c-hub-entry-cards {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--hub-entry-tracks), minmax(0, 1fr));
+  gap: var(--gap-card);
+  color: var(--text);
+  font-family: "Sans", sans-serif;
+  font-size: max(var(--fs-body), var(--hub-entry-min-font));
+  line-height: var(--lh);
+}
+.c-hub-entry-cards .hub-entry-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 16px 18px;
+  border-color: var(--line);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+.c-hub-entry-cards .hub-entry-icon {
+  min-width: 0;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.c-hub-entry-cards .hub-entry-icon img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+}
+.c-hub-entry-cards .hub-entry-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.c-hub-entry-cards .hub-entry-name {
+  min-width: 0;
+  color: var(--accent);
+  font-size: max(var(--fs-name), var(--hub-entry-min-font));
+  font-weight: 700;
+  line-height: var(--lh);
+  overflow-wrap: anywhere;
+}
+.c-hub-entry-cards .hub-entry-body {
+  min-width: 0;
+  color: var(--text);
+  font-size: max(var(--fs-body), var(--hub-entry-min-font));
+  font-weight: 400;
+  line-height: var(--lh);
+  overflow-wrap: anywhere;
+}
+.c-hub-entry-cards[data-align="center"] .hub-entry-copy { text-align: center; }
+.c-hub-entry-cards .hub-entry-card[data-illustration="left_inside"] {
+  display: grid;
+  grid-template-columns: minmax(0, 30fr) minmax(0, 70fr);
+  align-items: center;
+  gap: 12px;
+}
+.c-hub-entry-cards .hub-entry-card[data-illustration="none"] { display: flex; }
+.c-hub-entry-cards .hub-entry-extra { min-width: 0; }
+.c-hub-entry-cards[data-orient="v"] .hub-entry-card { padding: 18px; }
+.c-hub-entry-cards[data-orient="v"] .hub-entry-icon { min-height: 190px; }
+.c-hub-entry-cards[data-orient="v"] .hub-entry-icon img { max-height: 220px; }
+.c-hub-entry-cards .hub-entry-card[data-illustration="left_inside"] .hub-entry-icon {
+  min-height: 120px;
+  width: 100%;
+}
+.c-hub-entry-cards .hub-entry-icon[data-entry-arrow-ref] {
+  flex-direction: column;
+  gap: calc(var(--gap-card) / 3);
+}
+.c-hub-entry-cards .hub-entry-arrow {
+  display: block;
+  flex: none;
+  width: calc(var(--fs-body) * 1.333333);
+  height: calc(var(--fs-body) * .75);
+  color: var(--accent);
+  pointer-events: none;
+}

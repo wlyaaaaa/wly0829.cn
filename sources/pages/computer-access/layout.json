@@ -1,0 +1,1061 @@
+[
+  {
+    "screen": "computer-access-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "授权与状态",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "header",
+        "width": "36fr"
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "header",
+        "width": "22fr",
+        "layout": "connection",
+        "key": "ca-connection",
+        "empty": true,
+        "items_layout": {
+          "height": "6% screen"
+        }
+      },
+      {
+        "type": "button_variants",
+        "text_ref": "［刷新状态］",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "header",
+        "width": "42fr",
+        "variant": "normal",
+        "states": {
+          "刷新状态": {
+            "role": "secondary",
+            "state": "normal"
+          }
+        },
+        "items_layout": {
+          "direction": "horizontal",
+          "order": [
+            "刷新状态",
+            "电脑状态看驾驶舱",
+            "连接电脑"
+          ],
+          "links_as_buttons": true,
+          "keep_same_row": true
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里分别看个人资料",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "hero",
+        "width": "52fr"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "small",
+        "columns": 1,
+        "connector": "none",
+        "row": "hero",
+        "width": "48fr"
+      },
+      {
+        "type": "live_box",
+        "text_ref": "个人资料",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "layout": "cards",
+        "keys": [
+          "ca-personal-data",
+          "ca-unrestricted",
+          "ca-windows"
+        ],
+        "icons": [
+          "computer-access-01-icon-02.png",
+          "_library/icons/盖章通行证.png",
+          "computer-access-01-icon-03.png"
+        ],
+        "items_layout": {
+          "equal_width": true,
+          "equal_height": true,
+          "card_order": [
+            "个人资料",
+            "全局无限制授权",
+            "Windows"
+          ],
+          "icon_position": "left_inside",
+          "icon_subjects": [
+            "挂锁",
+            "盖章通行证",
+            "带锁的窗"
+          ],
+          "body_then_state_then_buttons": true,
+          "state_empty": true,
+          "state_width": "90%",
+          "state_height": "190px",
+          "button_rows": [
+            [
+              "解锁",
+              "锁定"
+            ],
+            [
+              "开启",
+              "结束"
+            ],
+            [
+              "锁定 Windows"
+            ]
+          ],
+          "normal_roles": {
+            "解锁": "primary",
+            "锁定": "danger",
+            "开启": "primary",
+            "结束": "danger",
+            "锁定 Windows": "danger"
+          },
+          "state_alignment": "bottom",
+          "button_alignment": "bottom",
+          "icon_positions": [
+            "left_inside",
+            "left_inside",
+            "left_inside"
+          ],
+          "icon_size": "96px"
+        }
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "绿：开着",
+        "align": "left",
+        "size": "medium",
+        "columns": 5,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "items_layout": {
+          "direction": "horizontal",
+          "columns": 5,
+          "lamp_order": [
+            "green",
+            "gray",
+            "yellow",
+            "red",
+            "hollow_gray"
+          ],
+          "text_from_node": true,
+          "do_not_duplicate_text": true,
+          "legend_panel": true
+        }
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。横图逐张实看：页首标题左、连接框及三按钮在顶行；介绍左、插画右且在卡外；三张卡一排，图标在卡内左侧。正文以定稿为准。header 宽度为 AI 技术换算，需样张复核；动态三卡不是普通 content_card。 有意视觉重排：横图页首按钮早于介绍段，定稿正文顺序相反；按原图在顶行显示按钮，文字只输出一次；引擎可能记录非顺序提醒。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n页修复10：三卡图标统一卡内左上96px；明确原槽2→个人资料、原槽3→Windows，通行证缺槽保留未完成；插画位置改用已实现align/size，图例h五格、v每项一行。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "授权与状态",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里分别看个人资料",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "layout": "connection",
+        "key": "ca-connection",
+        "empty": true,
+        "columns_v": 1
+      },
+      {
+        "type": "button_variants",
+        "text_ref": "［刷新状态］",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "variant": "normal",
+        "states": {
+          "刷新状态": {
+            "role": "secondary",
+            "state": "normal"
+          }
+        },
+        "items_layout": {
+          "direction": "horizontal",
+          "order": [
+            "刷新状态",
+            "电脑状态看驾驶舱",
+            "连接电脑"
+          ],
+          "links_as_buttons": true,
+          "keep_same_row": true
+        },
+        "columns_v": 1
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "banner",
+        "columns": 1,
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "live_box",
+        "text_ref": "个人资料",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "layout": "cards",
+        "keys": [
+          "ca-personal-data",
+          "ca-unrestricted",
+          "ca-windows"
+        ],
+        "icons": [
+          "computer-access-01-icon-02.png",
+          "_library/icons/盖章通行证.png",
+          "computer-access-01-icon-03.png"
+        ],
+        "items_layout": {
+          "equal_width": true,
+          "equal_height": true,
+          "card_order": [
+            "个人资料",
+            "全局无限制授权",
+            "Windows"
+          ],
+          "icon_position": "left_inside",
+          "icon_subjects": [
+            "挂锁",
+            "盖章通行证",
+            "带锁的窗"
+          ],
+          "body_then_state_then_buttons": true,
+          "state_empty": true,
+          "state_width": "100%",
+          "state_height": "360px",
+          "button_rows": [
+            [
+              "解锁",
+              "锁定"
+            ],
+            [
+              "开启",
+              "结束"
+            ],
+            [
+              "锁定 Windows"
+            ]
+          ],
+          "normal_roles": {
+            "解锁": "primary",
+            "锁定": "danger",
+            "开启": "primary",
+            "结束": "danger",
+            "锁定 Windows": "danger"
+          },
+          "state_alignment": "bottom",
+          "button_alignment": "bottom",
+          "source_parts": [
+            {
+              "part": 1,
+              "groups": [
+                "个人资料",
+                "全局无限制授权"
+              ]
+            },
+            {
+              "part": 2,
+              "groups": [
+                "Windows"
+              ]
+            }
+          ],
+          "buttons_parallel_below": true,
+          "icon_positions": [
+            "left_inside",
+            "left_inside",
+            "left_inside"
+          ],
+          "icon_size": "96px"
+        },
+        "columns_v": 1
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "绿：开着",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "items_layout": {
+          "direction": "horizontal",
+          "columns": 1,
+          "lamp_order": [
+            "green",
+            "gray",
+            "yellow",
+            "red",
+            "hollow_gray"
+          ],
+          "text_from_node": true,
+          "do_not_duplicate_text": true,
+          "legend_panel": true,
+          "rows": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "columns_v": 1
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。竖图 v→v2 实看；标题居中；插画带在三卡外；v 内先个人资料和全局无限制授权，v2 为 Windows（卡内顶部插画）与两行图例。旧图按钮带括号、重复锁图和 Windows 卡下沿截切不沿用。分张是原顺序参考，输出应按完整卡安全分张，不把截切复刻为要求。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n页修复10：三卡图标统一卡内左上96px；明确原槽2→个人资料、原槽3→Windows，通行证缺槽保留未完成；插画位置改用已实现align/size，图例h五格、v每项一行。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "办理：验证一次，开一段时间",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "width": "100%"
+      },
+      {
+        "type": "input_field",
+        "text_ref": "在上面的卡片里点",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "arrow",
+        "width": "100%",
+        "fields": [
+          "duration",
+          "totp"
+        ],
+        "field_steps": {
+          "duration": 3,
+          "totp": 4
+        },
+        "place_fields": true,
+        "variant": "normal",
+        "items_layout": {
+          "direction": "vertical",
+          "steps_count": 4,
+          "number_style": "green_circle",
+          "connector": "thin_green_vertical_line",
+          "buttons": "below_copy",
+          "duration": {
+            "after_item": 3,
+            "width": "14% screen",
+            "height": "6% screen",
+            "empty": true
+          },
+          "totp": {
+            "after_item": 4,
+            "width": "20% screen",
+            "height": "7% screen",
+            "empty": true
+          },
+          "submit": {
+            "text": "验证并解锁资料",
+            "role": "primary",
+            "position": "right_of_totp"
+          },
+          "save_default": {
+            "type": "checkbox",
+            "text": "将本次时长设为以后默认"
+          },
+          "step2_buttons": [
+            "个人资料",
+            "全局无限制授权",
+            "同时办理"
+          ],
+          "step3_buttons": [
+            "0.5小时",
+            "2小时",
+            "8小时",
+            "24小时"
+          ],
+          "split_items_into_separate_refs": false
+        }
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "width": "100%",
+        "layout": "single",
+        "key": "ca-form",
+        "part": "preview",
+        "empty": true,
+        "items_layout": {
+          "position": "below_step4",
+          "width": "100%",
+          "height": "6% screen",
+          "full_width": true
+        }
+      },
+      {
+        "type": "points_card",
+        "text_ref": "三件要知道的事",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "width": "100%",
+        "icons": "auto",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 3,
+        "icon_position": "none",
+        "item_images": [
+          "_library/icons/笔记本电脑.png",
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
+          "_library/icons/沙漏.png"
+        ],
+        "motion_icon_arrow": true
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。横图逐张实看：标题属于左约 58% 栏而非满屏；四步骤竖线贯通，不画成四列。右卡上沿约与左标题区对齐，占约 40%。一个完整 steps 节点交 input_field，用 field_steps 放两个空输入框，预览在第 4 步后。内部布局 items_layout 需主工程兑现，现控件可放输入但不等于圆圈竖线/按钮与验证码同行已经完成。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n页修复10：h改为全宽步骤/输入/预览，下方三件说明同外卡内横排三条；两方向按钮用现有below_copy，原字和标点保留。行内按钮句尾问题交组件继续处理。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-computer-access-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "办理：验证一次，开一段时间",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "input_field",
+        "text_ref": "在上面的卡片里点",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "fields": [
+          "duration",
+          "totp"
+        ],
+        "field_steps": {
+          "duration": 3,
+          "totp": 4
+        },
+        "place_fields": true,
+        "variant": "normal",
+        "items_layout": {
+          "direction": "vertical",
+          "steps_count": 4,
+          "number_style": "green_circle",
+          "connector": "none",
+          "buttons": "below_copy",
+          "duration": {
+            "after_item": 3,
+            "width": "100%",
+            "empty": true
+          },
+          "totp": {
+            "after_item": 4,
+            "width": "100%",
+            "empty": true
+          },
+          "submit": {
+            "text": "验证并解锁资料",
+            "position": "below_totp",
+            "role": "primary"
+          },
+          "save_default": {
+            "type": "checkbox",
+            "text": "将本次时长设为以后默认"
+          },
+          "step2_buttons": [
+            "个人资料",
+            "全局无限制授权",
+            "同时办理"
+          ],
+          "step3_buttons": [
+            "0.5小时",
+            "2小时",
+            "8小时",
+            "24小时"
+          ],
+          "split_items_into_separate_refs": false,
+          "card_per_step": true,
+          "step_icon_subjects": [
+            "解锁窗口及手势",
+            "个人资料/全局授权卡",
+            "时钟日历",
+            "验证器手机"
+          ],
+          "step_icon_position": "upper_right_inside",
+          "do_not_repeat_inline_buttons": true
+        },
+        "icons": "auto",
+        "columns_v": 1
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "layout": "single",
+        "key": "ca-form",
+        "part": "preview",
+        "empty": true,
+        "items_layout": {
+          "position": "below_step4_before_notice_card"
+        },
+        "columns_v": 1
+      },
+      {
+        "type": "points_card",
+        "text_ref": "三件要知道的事",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "icons": "auto",
+        "items_layout": {
+          "outer_card": true,
+          "title_from_group": true,
+          "direction": "vertical",
+          "items_count": 3,
+          "separator": "thin_green",
+          "icon_subjects": [
+            "直达电脑的箭头",
+            "手机和回旋箭头",
+            "沙漏"
+          ],
+          "icon_position": "left_of_each_bullet",
+          "body_from_entire_bullets_node": true,
+          "source_part": 2,
+          "full_width": true
+        },
+        "columns_v": 1,
+        "whole_block": true,
+        "item_cards": true,
+        "motion_icon_arrow": true
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。竖图 v 和原 v2、批准替换 v2 均实看；source_images 优先引用 pages-approved.replace_images 的 02-v2。v 最下旧的三列短文与定稿冲突，只取其四步骤卡构图，不再烘入旧短文；三件说明以批准 v2 的三行左图右文为准、末尾满宽。第 3 步遗漏的默认时长保存说明须按定稿完整排入。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n页修复10：h改为全宽步骤/输入/预览，下方三件说明同外卡内横排三条；两方向按钮用现有below_copy，原字和标点保留。行内按钮句尾问题交组件继续处理。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "办完怎么看结果",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次办理、锁定以后",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%"
+      },
+      {
+        "type": "table",
+        "text_ref": "颜色",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "row": "results",
+        "width": "68%",
+        "items_layout": {
+          "column_widths": [
+            "15%",
+            "24%",
+            "61%"
+          ],
+          "header": "pale_green",
+          "border": "thin_pale_green",
+          "lamp_in_first_column": true,
+          "lamp_order": [
+            "green",
+            "green",
+            "yellow",
+            "yellow",
+            "red",
+            "gray"
+          ],
+          "lamp_size": "small",
+          "text_source": "table_node",
+          "do_not_duplicate_text": true
+        },
+        "status_column": 0,
+        "variant": "status_rows"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "灯和字一起变",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "results",
+        "width": "32%",
+        "split_cards": true,
+        "illustrations": [
+          "_library/icons/放大镜.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "icon_position": "none"
+      },
+      {
+        "type": "live_box",
+        "key": "ca-results",
+        "layout": "single",
+        "part": "results",
+        "width": "100%"
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "width": "100%",
+        "key": "ca-toast",
+        "layout": "single",
+        "part": "toast",
+        "empty": true,
+        "items_layout": {
+          "position": "last",
+          "full_width": true,
+          "height": "8% screen"
+        }
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。横图逐张实看：表格左、两卡右、右下空提示框。标题及介绍属于满屏宽标题区，按统一要求章节大标题居中。表格六行状态灯是静态图例，ca-toast 是空实时框；ca-results 为网页按操作结果按钮展开的面板，不另加原图不存在的常驻空牌。表格首列水彩灯、右卡插画/小按钮等当前组件能力需样张核验。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮补齐定稿live键ca-results的留空框，置操作结果卡下、提示框前；不增说明字或调用接口。\n页修复10：h表格68%、结果两卡32%；两方向结果卡复用points_card明确右侧图，去除原core未消费字段和探出叶饰；结果/提示空框放在卡组后满宽。卡底按钮尚无保持原序的现有字段，交组件。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-03-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "办完怎么看结果",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次办理、锁定以后",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1
+      },
+      {
+        "type": "table",
+        "text_ref": "颜色",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "items_layout": {
+          "rows_as_cards": true,
+          "count": 6,
+          "full_width": true,
+          "lamp_order": [
+            "green",
+            "green",
+            "yellow",
+            "yellow",
+            "red",
+            "gray"
+          ],
+          "lamp_position": "left_inside",
+          "situation": "bold_right",
+          "message": "below_situation_right",
+          "header_echo_once": true,
+          "do_not_duplicate_text": true
+        },
+        "columns_v": 1,
+        "status_column": 0,
+        "variant": "status_rows"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "灯和字一起变",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "columns_v": 1,
+        "split_cards": true,
+        "illustrations": [
+          "_library/icons/放大镜.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "icon_position": "none"
+      },
+      {
+        "type": "live_box",
+        "key": "ca-results",
+        "layout": "single",
+        "part": "results"
+      },
+      {
+        "type": "live_box",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "layout": "single",
+        "key": "ca-toast",
+        "part": "toast",
+        "empty": true,
+        "items_layout": {
+          "position": "last",
+          "full_width": true
+        },
+        "columns_v": 1
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。竖图 v→v2→v3 全部实看并保留顺序。v 中六行无字占位不能替代正文；v2 中三列硬排不符合 portrait 的逐行卡要求。定稿六行都完整放入左灯右情况/下文的小卡，末尾依次两卡及空提示框；v3 插画嵌字按钮不直接裁入。可保留安全分张，但不重复烘入两份表格或卡名。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮补齐定稿live键ca-results的留空框，置操作结果卡下、提示框前；不增说明字或调用接口。\n页修复10：h表格68%、结果两卡32%；两方向结果卡复用points_card明确右侧图，去除原core未消费字段和探出叶饰；结果/提示空框放在卡组后满宽。卡底按钮尚无保持原序的现有字段，交组件。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "text_ref": "连不上电脑时",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "how",
+        "width": "49fr",
+        "icons": "auto",
+        "items_layout": {
+          "outer_card": true,
+          "title": "inside_upper_left",
+          "title_size": "medium",
+          "intro_after_heading": true,
+          "icon_subject": "断开的网线插头",
+          "icon_position": "upper_right_inside",
+          "numbered_items": 3,
+          "number_style": "green_circle",
+          "steps_direction": "vertical",
+          "button_first_step": "重新检查连接",
+          "button_role": "secondary",
+          "link_last_step": "救急先看：远程连不上",
+          "link_style": "green_underline",
+          "equal_height": true,
+          "no_duplicate_title": true
+        },
+        "whole_block": true,
+        "illustration_asset": [
+          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png"
+        ],
+        "row_equal_height": true
+      },
+      {
+        "type": "points_card",
+        "text_ref": "这一页怎么工作",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "how",
+        "width": "49fr",
+        "icons": "auto",
+        "items_layout": {
+          "outer_card": true,
+          "title": "inside_upper_left",
+          "title_size": "medium",
+          "icon_subject": "遥控器对着电脑",
+          "icon_position": "upper_right_inside",
+          "bullets_count": 4,
+          "bullet_style": "green_dot",
+          "equal_height": true
+        },
+        "whole_block": true,
+        "illustration_asset": [
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png"
+        ]
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。横图逐张实看：两大卡等宽等高、上沿齐，左标题和断线图在卡内上方，左含介绍及三编号步骤；右标题和遥控器电脑在卡内上方，四绿点条目。旧图左卡重复一次标题不沿用（定稿只一个），不另造整屏标题。两张卡的嵌套 h2/步骤/段落同属单个 content_card，items_layout 的卡内标题与插画仍需引擎支持。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。；16:3x 主工程师接管规格：how 行两卡加 row_equal_height（comp-text QA 第 5 条）。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  },
+  {
+    "screen": "computer-access-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\computer-access\\img\\computer-access-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "text_ref": "连不上电脑时",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "icons": "auto",
+        "items_layout": {
+          "outer_card": true,
+          "title": "inside_upper_left",
+          "title_size": "medium",
+          "intro_after_heading": true,
+          "icon_subject": "断开的网线插头",
+          "icon_position": "upper_right_inside",
+          "numbered_items": 3,
+          "number_style": "green_circle",
+          "steps_direction": "vertical",
+          "button_first_step": "重新检查连接",
+          "button_role": "secondary",
+          "link_last_step": "救急先看：远程连不上",
+          "link_style": "green_underline",
+          "equal_height": false,
+          "no_duplicate_title": true,
+          "full_width": true
+        },
+        "columns_v": 1,
+        "whole_block": true,
+        "illustration_asset": [
+          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "这一页怎么工作",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "right_inside",
+        "connector": "none",
+        "row": "",
+        "width": "100%",
+        "icons": "auto",
+        "items_layout": {
+          "outer_card": true,
+          "title": "inside_upper_left",
+          "title_size": "medium",
+          "icon_subject": "遥控器对着电脑",
+          "icon_position": "upper_right_inside",
+          "bullets_count": 4,
+          "bullet_style": "green_dot",
+          "equal_height": false,
+          "full_width": true
+        },
+        "columns_v": 1,
+        "whole_block": true,
+        "illustration_asset": [
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png"
+        ]
+      }
+    ],
+    "notes": "仅构图草稿，未渲染，未知扩展字段只作布局说明。所有文字逐字取 page.json；［］〔〕作为按钮/链接标记不画括号。输入与实时框一律留空，正常按钮文字及变体取本屏 buttons，不实际调用接口。新构图，待样张：批准样板未覆盖本屏动态控件与专用排法，须先看组件样张。竖图实看：左卡在上、右卡在下满宽；断线与遥控器电脑均在各卡标题右侧。原图将离线介绍置于首卡上方而标题在卡内；当前节点只能以定稿标题→介绍整体分配，intro_position 描述尚需组件把介绍提到首卡上方且保持所有文字各出现一次，未支持前不得声称复刻完成。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n页修复10校正：04v介绍保持原标题之后的定稿顺序，撤掉不匹配原节点顺序的旧intro_position描述；未移动原字。",
+    "composition_basis": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "mode": "text-only",
+      "prior_spec_reused": true
+    }
+  }
+]

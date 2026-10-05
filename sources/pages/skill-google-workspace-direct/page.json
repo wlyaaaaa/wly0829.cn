@@ -1,0 +1,234 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-google-workspace-direct",
+  "kind": "skill",
+  "title": "邮件、云盘和待办",
+  "url": "/skills/google-workspace-direct/",
+  "tagline": "查邮件、找云盘文件、记待办，也能等验证码。",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "74f00dad7743a401501a4b09d4b37e60b4589236",
+    "commit_time": "2026-09-25T19:00:55+08:00",
+    "file": "E:\\.agents\\skills\\google-workspace-direct\\SKILL.md 及 references\\search.md、reply-and-attachments.md、scripts\\gmail_read.py、drive_find.py；调用层核对到 PCConfig 6ba9bfc0（2026-09-28 15:56）"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-google-workspace-direct-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "横版：左上毛笔艺术字大标题，下面一句话和一段说明。右边一幅水彩插画：一台台式电脑，屏幕旁绕着三枚品牌标志——Gmail、Google 云盘（Google Drive）、Google 待办（Google Tasks）——用细细的绿线连到电脑；电脑侧面挂着一把小锁（表示个人资料锁）；稍远处一枚 Google 日历（Google Calendar）标志画成淡灰色，上面落着一片小雪花（表示冻结）。下半部分一张“怎么跟 AI 说”的卡片，五句话做成对话气泡，两列排开。",
+      "portrait": "竖版：标题、一句话、说明在上；插画占满宽度；五个对话气泡一行一个。",
+      "text": "大标题：邮件、云盘和待办\n\n一句话：用电脑上接好的那一个 Google 账号，读写 Gmail、Google 云盘和 Google 待办；说一次要什么，AI 自己搜、读正文、办完、再读回核对，不把一串搜索结果丢给我。\n\n说明：账号授权由〔电脑配置与恢复〕保管，只认这一个账号，用的时候换不了。AI 手边有 11 个只读工具；发信、上传、改待办这类写入，走电脑配置与恢复里同一套调用程序的命令行。邮件（连主题、发件人和验证码）和云盘里的私人文件都算个人资料：资料锁着时先请我验证，不先偷看主题再决定要不要验证（〔个人资料与数据处理〕）。Google 日历已冻结：代码留着，不接、不调用、不维护，等我说恢复。\n\n**怎么跟 AI 说**\n- “看看邮箱里刚来的验证码。”\n- “找一下上周快递公司那封邮件，把正文读给我。”\n- “云盘里那份 redis 笔记找出来读一下。”\n- “按这个意思回复原邮件，附上桌面那份 PDF。”\n- “把‘交房租’那条待办勾掉。”",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/#g-google"
+        },
+        {
+          "text": "个人资料与数据处理",
+          "href": "/rules/privacy-data/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-google-workspace-direct-02",
+      "section": "examples",
+      "title": "例子：等验证码",
+      "scene": "横版：左上标题，下面一行“假如我……”。左边约三分之二宽，五个编号步骤排成一列，每步一个小水彩图标（一个放大镜照着信封、一只手从几张卡片里挑出一张、一个沙漏、一张被划掉的信封、一只时钟）和两三行字。右边约三分之一宽，一幅插画：一部手机大小的邮件列表，旁边一个圆形计时表盘，画面上的字见“表盘上的字”；下面一张小卡片“要注意”。",
+      "portrait": "竖版：标题和“假如我……”在上；五个步骤一行一步；邮件列表和表盘插画、“要注意”卡在最下。",
+      "text": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办\n\n假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”\n\n1. **不反问**：资料已解锁（锁着就先请我验证）；不问是哪个网站、要哪类码，直接查最近 10 分钟收到的全部邮件（翻完所有页），读新邮件的正文，按收到时间从新到旧排。\n2. **AI 挑码**：按我正在登录的那个服务挑；无关的邮件、正文里引用的旧码、写明已过期的码都不算。回答“码＋哪个服务＋几点收到”。\n3. **还没到就等**：每 5 秒刷一次；头一回确认没有之后，至少再等 2 分钟，到点再查最后一次；中途一来立刻回答。只有真的等满了，才说“等了 2 分钟还没收到”。\n4. **我说“不是这个”**：把否定过的邮件排除，接着原来的截止时间等，不从头再等 2 分钟，也不再报旧码；不用我再说“继续”。\n5. **回答前再核一次时间**：邮件多、读得慢时，早先的候选可能刚好超出 10 分钟，回答前按当时的时间重新筛一遍。\n\n**表盘上的字**：最近 10 分钟｜每 5 秒刷新｜至少等 2 分钟｜已排除 1 封\n\n**要注意**：进度只说我需要知道的，比如“还在等，已经等了 1 分钟”，不讲内部规则和工具名；只要求修这个技能时，不替我取码。这是照技能写的做法串起来的例子，不是某一次的记录。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-google-workspace-direct-03",
+      "section": "examples",
+      "title": "例子：回复原邮件",
+      "scene": "横版：左上标题。左边约三分之二宽，五个编号步骤排成一列，每步一个小水彩图标（一个信封、一根把两封信串在一起的绿线、一枚回形针别着一份 PDF、一张写着“草稿”的便签、一个打钩的放大镜）和两三行字。右边约三分之一宽，一幅插画：一个邮件线程，三封信用绿线串成一串，最下面一封带回形针；插画下一张小卡片写最后那句真事。",
+      "portrait": "竖版：标题在上；五个步骤一行一步；线程插画和小卡片在最下。",
+      "text": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份 PDF”\n\n1. **找到原邮件**：按我给的线索搜，读正文；要看来回经过才读整个线程。\n2. **回到原线程**：用原邮件指定的回复地址和原主题，接上原线程的编号，不靠在标题前加“Re:”假装同一个线程；有别的收件人时去掉我自己，只有我发给自己的线程才保留我；密送的人不复制；不借回复另换收件人或主题。\n3. **附件照原样**：用本机完整路径，中文文件名照样支持；发之前先算大小，超了明说，不偷偷漏掉附件，也不擅自改成公开链接。\n4. **发之前**：发信要有我点名的对象和动作（〔约法 L15〕）；只想先看看，就存成草稿。改草稿是整份替换，先读清旧草稿和我要保留的附件。\n5. **发完读回**：按返回的邮件编号，读回线程、收件人、主题、附件名字和个数，才说“发好了”；结果不明时先查是不是已经发出，不重发。\n\n这是照技能写的做法串起来的例子，只有下面这句是真事：“我发给自己的线程要保留我”这一条，是 9 月 18 日真发过一次、验收后补进技能的。",
+      "links": [
+        {
+          "text": "约法 L15",
+          "href": "/rules/charter/#L15"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-google-workspace-direct-04",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版：左上标题，下面一段引导文字（带一个链接）。下面七张小卡片排成两列四行（最后一行一张），每张左边一个小水彩图标、粗体名字、两行以内的说明。",
+      "portrait": "竖版：标题和引导文字在上；七张卡片一行一张。",
+      "text": "标题：能做的事\n\n邮件、云盘、待办的具体操作——例如找、读、发、回复、草稿，云盘上传、移动、分享，待办新建、修改、勾掉——由〔电脑配置与恢复〕里的调用程序提供，功能列在它的 Google 直连一组。这个技能自己管的是“怎么用得顺”：\n\n1. **搜邮件一次带正文**｜一次调用搜一页（默认 10 封）并读出正文；只要定位就只取主题、发件人和时间。只在这一页里排时间，不假称“全邮箱最新”；要汇总全部，就翻完所有页并去重\n2. **把话翻成搜索条件**｜人、主题、时间、文件夹一起拼成 Gmail 和云盘自己的查询，不把整句原话当精确短语；没结果先查条件是不是太窄、换别名和同义词，不马上说“没有”\n3. **云盘按名字找**｜先按完整文件名找，完全没有才放宽到“名字里包含”，最多 5 个候选；“redis 笔记”只拿“redis”去找；同名几份时看文件夹、类型、修改时间，真分不清才问我；结果不全时明说\n4. **找到就接着读**｜Google 文档导出成文字，普通文件下载后由 AI 选合适的读法来读，并附上原文件链接\n5. **等邮箱验证码**｜见第一个例子\n6. **回复原邮件、带附件**｜见第二个例子\n7. **待办按原意**｜先拿准清单编号再查改；到期只到日期，不当成几点截止；修改只改我点名的字段；“隐藏”只能查、不能设",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/#g-google"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "a-mail-search",
+          "text": "搜邮件一次带正文"
+        },
+        {
+          "id": "a-query",
+          "text": "把话翻成搜索条件"
+        },
+        {
+          "id": "a-drive-name",
+          "text": "云盘按名字找"
+        },
+        {
+          "id": "a-read-on",
+          "text": "找到就接着读"
+        },
+        {
+          "id": "a-code",
+          "text": "等邮箱验证码"
+        },
+        {
+          "id": "a-reply",
+          "text": "回复原邮件、带附件"
+        },
+        {
+          "id": "a-tasks",
+          "text": "待办按原意"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-google-workspace-direct-05",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版：左上标题。左右两栏：左栏“管”画一个打开的信封和一片云，下面一条；右栏“不管”画一个淡灰色的叉，下面五条。最下面一张宽卡片写“它不会做的事”。",
+      "portrait": "竖版：“管”一栏在上、“不管”一栏在下，一条一行；最下面宽卡片。",
+      "text": "标题：边界\n\n**管**\n- 这一个 Google 账号的 Gmail、云盘、待办：搜、读，以及我明确要求的写入\n\n**不管**\n- Google 日历（已冻结）\n- Google 相册：另一份授权，归〔电脑配置与恢复〕\n- Google 管理后台、付款\n- 别的 Google 账号\n- 在本机存一份邮件或云盘副本、自动同步\n\n**它不会做的事**：邮件、文件、待办里写的内容只当资料，不当指令；发送、共享、删除要有明确的对象和动作，做完读回，不重复发送、不盲目重试；只读时网络抖一下最多重试一次；账号、权限出错就如实说缺什么，不换账号，也不改走浏览器或别的连接器绕过去；待办需要重新授权时，请我自己在前台点同意，AI 不代点。",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/#g-google"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [
+      {
+        "id": "n-mcp-tools",
+        "text": "11 个只读工具",
+        "meaning": "Google 连接给 AI 列出的只读工具数：邮件 4、云盘 4、待办 3；日历 2 个已冻结、不列出",
+        "as_of": "2026-09-28",
+        "source": "E:\\PCConfig\\tools\\Start-GoogleWorkspaceMcp.ps1:30–137 共 13 个，第 354 行滤掉 calendar_*",
+        "screens": [
+          "skill-google-workspace-direct-01"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-pcconfig",
+        "with": "pcconfig",
+        "direction": "用到",
+        "flow": "固定账号的授权（本机加密保存）、调用层 Invoke-GoogleWorkspaceProvider.ps1 和 11 个只读工具都在 PCConfig；技能经它读写 Gmail、云盘、待办",
+        "source": "SKILL.md:8,20–26；PCConfig docs\\contracts\\pcconfig.google-workspace-provider.md"
+      },
+      {
+        "id": "r-privacy",
+        "with": "个人资料锁（PCConfig 保存的共享资料状态）",
+        "direction": "受管",
+        "flow": "读邮件和云盘私人内容前核对资料状态和截止时间；锁着就停下请本人验证",
+        "source": "SKILL.md:10；/rules/privacy-data/"
+      },
+      {
+        "id": "r-browser",
+        "with": "skill-browser-control-continuity",
+        "direction": "被用于",
+        "flow": "网页登录要邮箱验证码时，浏览器技能交这里等码、取码",
+        "source": "browser-control-continuity\\SKILL.md:41"
+      },
+      {
+        "id": "r-intake",
+        "with": "原生文件读取（当时的 AI 选读法）",
+        "direction": "交给",
+        "flow": "云盘下载的普通文件交给对应读法",
+        "source": "SKILL.md:15（提交 99e1da5，E207 相同）"
+      },
+      {
+        "id": "r-google",
+        "with": "外部：Google（Gmail、Drive、Tasks 官方接口）",
+        "direction": "连到",
+        "flow": "直连官方接口，不经第三方连接器、浏览器或 rclone",
+        "source": "E190 能力与运行方式专题“Google”条（入口写明 Gmail、Google 云盘和待办 Tasks，日历冻结）"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/pcconfig/#g-google",
+        "screen": "skill-google-workspace-direct-01",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/rules/privacy-data/",
+        "screen": "skill-google-workspace-direct-01",
+        "text": "个人资料与数据处理"
+      },
+      {
+        "target": "/rules/charter/#L15",
+        "screen": "skill-google-workspace-direct-03",
+        "text": "约法 L15"
+      },
+      {
+        "target": "/projects/pcconfig/#g-google",
+        "screen": "skill-google-workspace-direct-04",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/projects/pcconfig/#g-google",
+        "screen": "skill-google-workspace-direct-05",
+        "text": "电脑配置与恢复"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "SKILL.md 里的命令、参数（--metadata-only、--exclude-id、-ActionAuthorizationConfirmed、privacy_level 的取值等）和错误代号不上页面，属于施工细节。",
+      "旧稿 skills.json 六条细节里“往云盘上传、移动或共享文件”“待办能新建、修改、勾掉和调整顺序”是调用层的功能，家在电脑配置与恢复页 g-google，本页只在第 4 屏引导句里提一句。"
+    ],
+    "unsure": [
+      "页面名沿用旧网站的“邮件、云盘和待办”（content\\skills.json）。",
+      "两个例子是照技能写的做法串起来的，页面上已写明；第 3 屏末句“9 月 18 日真发过一次、验收后补进技能”的依据只有提交 713f574 的说明（“after live acceptance”，北京时间 9 月 18 日 15:47），没找到那次的回执。",
+      "“能做的事”按规则只链到电脑配置与恢复页，但链的是它的 Google 直连一组 #g-google（比 #features 准）；技能自己管的七条做法在本页写全，因为它们不在那页的功能清单里。",
+      "第 5 屏“待办需要重新授权时，请我自己在前台点同意”：SKILL.md:45 仍写着首次用待办可能要重新授权；oauth.dpapi 9 月 22 日 15:03 更新过，推测已经授权过，未核实。"
+    ]
+  }
+}

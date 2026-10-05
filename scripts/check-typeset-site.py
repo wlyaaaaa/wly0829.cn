@@ -21,8 +21,9 @@ HERE = Path(__file__).resolve().parent
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ('typeset-root', 'inventory', 'baseline', 'legacy-site', 'run-root', 'asset-cache'):
+    for name in ('typeset-root', 'baseline', 'legacy-site', 'run-root', 'asset-cache'):
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--inventory', type=Path, default=HERE.parent/'.publish/inventory/screens.jsonl')
     parser.add_argument('--snapshot', type=Path, help='Reuse an already frozen input snapshot; otherwise capture a fresh one')
     parser.add_argument('--jobs', type=int, default=3)
     parser.add_argument('--pages', nargs='+', help='Only replace and verify the selected page routes')

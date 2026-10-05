@@ -1,0 +1,132 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-vault-workflow",
+  "kind": "skill",
+  "title": "加密库操作",
+  "url": "/skills/vault-workflow/",
+  "tagline": "让 AI 管本地加密库，密码只在本机窗口里输",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "3ed43855d89cf8d9102d05f296d08df62372b1b4",
+    "commit_time": "2026-09-26T17:27:17+08:00",
+    "file": "E:\\.agents\\skills\\vault-workflow\\SKILL.md（含 references 2 份）"
+  },
+  "video_prompt": "5 秒循环，水彩风、白底纯绿：一个 AI 小机器人在一扇半开的窗户外轻轻点头，窗户里一个绿色顶栏的小窗口亮起，一只手在键盘上敲几下；窗里递出一张只画着对勾的小纸条，机器人接过，旁边的绿色信封挂锁“咔”地扣上，亮一圈绿光；不出现可读的字。",
+  "screens": [
+    {
+      "id": "skill-vault-workflow-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "左上标题“加密库操作”，下面一段介绍。右上一幅水彩插画：一个 AI 小机器人站在一扇半开的窗户外，窗户里是一个绿色顶栏写着“VAULT”的小窗口和一只正在键盘上输入的手；窗外机器人手里只拿着一张写着对勾和一串短哈希样式小方块的纸条（不画可读的字）；旁边一个贴着挂锁的绿色信封。下面六个对话气泡两列三行，每个气泡左边一个小图标（听诊器、眼睛、铅笔、封口的信封、钥匙、带锁的云）。最下面一行说明，带两个链接。",
+      "portrait": "竖版：插画在标题下面；六个气泡一行一个；说明放最后。",
+      "text": "加密库操作\n\n让 AI 帮我管本地加密库：检查 vault.enc 坏没坏，在本机窗口里打开看、改几行字，建新库、导出、改密码，把密文备份到私人 Key 仓库。要密码时，AI 只弹出本机窗口让我自己输；回到 AI 手里的只有“成没成、存在哪、几个文件、密文哈希”。\n\n可以这样跟 AI 说：\n- “看看 Key 那份加密库还好不好。”\n- “打开 vault.enc，我要看里面的清单。”\n- “把 vault.enc 里那份笔记的第二段改一下。”\n- “把这个文件夹加密成一个新的 .enc 库。”\n- “改一下 vault.enc 的密码。”\n- “把改好的库备份到 Key，传完核对一下。”\n\n只说“帮我加密这个文件”、没提 vault.enc、Key 或 VAULT03 时，默认交给〔加密文件技能〕，走密码中心那一套。",
+      "links": [
+        {
+          "text": "加密文件技能",
+          "href": "/skills/authorization-file-broker/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-vault-workflow-02",
+      "section": "examples",
+      "title": "一个完整的例子",
+      "scene": "左上标题。一条从左到右的五步流程，每步一个编号圆圈、小水彩图标和两三行字（听诊器照着一个信封、一个绿色顶栏写“VAULT”的小窗口、一支铅笔在一页纸上改一句、一把挂锁重新扣上、一朵带锁的云和一个往回的箭头）。下面一张横卡片“回执里有什么、没有什么”，左右两半。",
+      "portrait": "竖版：五步改成从上到下；回执卡片两半上下排。",
+      "text": "一个完整的例子：“把 vault.enc 里的清单改一句，改完备份到 Key”\n\n1. **先查，不要密码。**　AI 查环境和这个库的结构：格式对不对、要不要密钥文件、Key 是不是私有仓库。有一项不对就停下来说清楚。\n2. **弹出本机窗口。**　顶栏写着“VAULT”；我输密码，要密钥文件就在窗口里选。密码框一拿到光标就断开输入法。\n3. **在窗口里改。**　窗口列出库里的文本文件，选中清单改那一句；不是文本的文件原样保留、不能改。\n4. **保存。**　只重新加密这次打开的那一套内容，另一套一个字节都不动；改完必须装得进原来的空间，装不下就拒绝保存，原库不动。写完读回再解一遍核对。\n5. **先预演，再上传。**　AI 先预演一遍往 Key 上传，确认目标是私有仓库、路径对；再真的上传，从 GitHub 读回比对长度和 SHA-256，两样都对才说“备份好了”。\n\n**回执里有**：成没成、存没存、路径、密文哈希。**没有**：密码、密钥文件、改了哪些字。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-vault-workflow-03",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "左上标题。一张宽卡片，左边一个贴着挂锁的绿色信封小插画，右边一段话和一个链接按钮。",
+      "portrait": "竖版：插画在上，文字和按钮在下。",
+      "text": "能做的事\n\n这个技能是本地加密库的 AI 入口。它能做的，以及只能我自己在终端里做的（往已有的库里加文件用菜单，另做一份新副本用 rebuild 命令），全部列在项目页的“全部功能”里，这里不再抄一遍：\n\n〔本地加密库 · 全部功能〕",
+      "links": [
+        {
+          "text": "本地加密库 · 全部功能",
+          "href": "/projects/vault-tool/#features",
+          "locator_text": {
+            "h": "本地加密库・全部功能",
+            "v": "本地加密库・全部功能"
+          }
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-vault-workflow-04",
+      "section": "limits",
+      "title": "边界",
+      "scene": "左上标题。左右两栏：左栏“管”，带绿色对勾的短句；右栏“不管，交给谁”，带灰色箭头的短句。最下面一条细卡片“守的几条死规矩”。",
+      "portrait": "竖版：两栏上下排；细卡片放最后。",
+      "text": "边界\n\n**管**\n- vault.enc 这类 VAULT03 库（旧的 VAULT01、02 也能读），和私人 Key 仓库\n- 在本机窗口里查看、修改库里的 UTF-8 文本\n- 建新库、导出到指定文件夹、改密码、验一次密码、藏进图片和从图片取回\n- 把密文传到 Key 并读回核对；明确要求时，把 Key 的说明文件换成安全文字\n\n**不管，交给谁**\n- 没点名的“帮我加密这个文件” → 加密文件技能\n- 密码、API key、BitLocker、本人验证方式 → 密码和验证技能\n- 往已有的库里加文件、另做新副本 → 我自己在终端做：加文件用 python vault_tool.py 的菜单，新副本用 python vault_tool.py rebuild --out 新文件\n- 忘了密码、丢了密钥文件 → 谁也找不回\n\n**守的几条死规矩**　密码只在本机窗口里输，不进聊天、命令参数、环境变量和文件；只动点名的那一个库，不去别处找；只读检查不解密；导出只写到点名的文件夹，同名文件不覆盖；建库不删原件；改密码不改算钥匙的参数，另一套内容不碰；只往私有仓库上传，不定时自动传；验一次密码不留授权，下一个操作要再输。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "mentions": [
+      {
+        "target": "/projects/vault-tool/",
+        "text": "本地加密库",
+        "screen": "skill-vault-workflow-01"
+      },
+      {
+        "target": "/skills/authorization-file-broker/",
+        "text": "加密文件技能",
+        "screen": "skill-vault-workflow-01"
+      },
+      {
+        "target": "/projects/vault-tool/#features",
+        "text": "本地加密库 · 全部功能",
+        "screen": "skill-vault-workflow-03"
+      },
+      {
+        "target": "/skills/authorization-file-broker/",
+        "text": "加密文件技能",
+        "screen": "skill-vault-workflow-04"
+      },
+      {
+        "target": "/skills/local-secret-broker/",
+        "text": "密码和验证技能",
+        "screen": "skill-vault-workflow-04"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "15 个模式名（Doctor、LocalEdit、PublishVault 等）和命令示例不上网站，属于施工细节；用人话写进例子和边界。",
+      "“密码中心代码里的 vault session 不是这个 Vault”一条不上：是给 AI 分路由的实现提醒，读者用不着。",
+      "隐写后“原封面进回收站”的处理规则不上：来源没核实（见 unsure），也不是用户会主动说的事。"
+    ],
+    "unsure": [
+      "例子是按技能的真实流程编的示意（Doctor/AssessVault → LocalEdit → PublishVault -WhatIf → PublishVault），不是某一次真实操作的记录；“清单”“笔记”是泛称，不指真实库里的文件。",
+      "SKILL.md“隐写产物保留与清理”写“按本人对 H 盘原始封面图的既定选择，只保留载体图片、原封面进回收站”；决定记录里没搜到这条原话，提交 3ed4385 也只有标题。已写进审计。",
+      "技能页标题“加密库操作”是新起的名字（旧网站叫“打开加密库”）；项目页里链接文字也用“加密库操作技能”，两处要一起改。"
+    ]
+  }
+}

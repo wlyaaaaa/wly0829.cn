@@ -938,8 +938,9 @@ def main():
     global ASSET_CACHE,REUSE_ASSET_CACHE
     started=time.perf_counter()
     ap=argparse.ArgumentParser(description=__doc__)
-    for arg in ['typeset-root','inventory','baseline','legacy-site','output','report']:
+    for arg in ['typeset-root','baseline','legacy-site','output','report']:
         ap.add_argument('--'+arg,type=Path,required=True)
+    ap.add_argument('--inventory',type=Path,default=HERE.parent/'.publish/inventory/screens.jsonl')
     ap.add_argument('--pages',nargs='+')
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
@@ -988,6 +989,8 @@ def main():
     if args.output.exists():raise ValueError('Choose a fresh output directory')
     inventory_text,args.inventory_proof=text_bound(args.inventory)
     rows=[json.loads(x)for x in inventory_text.splitlines()if x.strip()]
+    if args.inventory == (HERE.parent/'sources/screens.jsonl').resolve():
+        for row in rows: row['source_path'] = str(HERE.parent/'sources/pages'/row['page']/'page.json')
     grouped=defaultdict(list)
     for row in rows:grouped[row['page']].append(row)
     names=args.pages or list(grouped)

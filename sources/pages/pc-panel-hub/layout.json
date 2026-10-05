@@ -1,0 +1,1224 @@
+[
+  {
+    "screen": "pc-panel-hub-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "48%",
+        "text_ref": "双屏信息中心"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "抬眼就知道",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "机箱里有两块"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "52%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "card_count": 4,
+        "text_ref": "1 秒一刷"
+      },
+      {
+        "type": "live_strip",
+        "labels": [
+          "看门狗",
+          "机箱屏画面"
+        ],
+        "text_ref": "现在",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "align": "center",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "notes": "横版标题、两段介绍在左，机箱手机大插画右；数字卡一排四张，图标在卡左；竖版介绍后插画，数字2×2，图标仍左；原竖图未画复制按钮，定稿要求补齐第三个按钮；现在条两处真实空框，保留标签。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "每天发生什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 5,
+        "columns_v": 1,
+        "direction": "horizontal",
+        "connector": "ribbon",
+        "illustration": "outside",
+        "card_count": 5,
+        "text_ref": "开机登录"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "两个热键"
+      }
+    ],
+    "notes": "五面绿旗沿丝带连接，横版图标在旗下、说明在图标下且不包卡；竖版丝带左、图标中、说明右；底部两张侧插画卡，横并列竖顺排。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pc-panel-hub-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "row": "detail",
+        "width": "78%",
+        "text_ref": "机箱屏：一整条电脑状态"
+      },
+      {
+        "type": "prose",
+        "row": "detail",
+        "text_ref": "一块 8.8"
+      },
+      {
+        "type": "numbered_steps",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "detail",
+        "text_ref": "1 时钟和天气",
+        "item_layout": "left_inside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "detail",
+        "text_ref": "数据从哪来",
+        "icons": [
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
+        ]
+      },
+      {
+        "type": "numbered_screenshot",
+        "row": "detail",
+        "width": "22%",
+        "ratio": "1:4",
+        "indices": [
+          0
+        ],
+        "number_ref": "1 时钟和天气"
+      },
+      {
+        "type": "prose",
+        "row": "detail",
+        "text_ref": "8 月 30 日发给机箱屏"
+      }
+    ],
+    "notes": "横版左侧九条编号细卡及数据来源卡，截图整屏右侧竖长1:4，各条右端虚线箭头指截图；竖版截图在导语后，九条单列，来源卡和图注在原v2末尾；截图内部留空。原图小标题用中号，保留角色。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。；main-closer：审查第4条的首个合法备选：九项图在左文字在右、压矮单列；九引线用480x1920源renderer实坐标，静态截图仍是合法空槽，原图/源字不改。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r13\\state\\b1-pc-panel-hub-04-h\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r13\\state\\b1-pc-panel-hub-04-h\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "curved",
+        "width": "55%",
+        "text_ref": "曲面屏：只在有事时出现"
+      },
+      {
+        "type": "prose",
+        "row": "curved",
+        "text_ref": "水冷头上那块"
+      },
+      {
+        "type": "screenshot",
+        "row": "curved",
+        "ratio": "2.2:1"
+      },
+      {
+        "type": "prose",
+        "row": "curved",
+        "text_ref": "8 月 30 日曲面屏的真实画面"
+      },
+      {
+        "type": "document_mock",
+        "row": "curved",
+        "width": "45%",
+        "variant": "window",
+        "mock_layout": "curved_oled",
+        "illustration": "outside",
+        "text_ref": "21:30"
+      },
+      {
+        "type": "prose",
+        "row": "curved",
+        "text_ref": "示意：满载时"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "text_ref": "显示什么"
+      }
+    ],
+    "notes": "横版标题导语和横截图在左、满载曲面插画在右，底部三列表格六类；竖版截图→满载示意→六类竖卡。示意内部所有21:30、86%、曲目、游戏、验证码圆点、通知必须由定稿程序排字，不能裁入旧字；真实截图位留空。源节点次序不同，按原图把图注移到对应槽下；curved_oled排法须组件样张。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "text_ref": "手机提醒怎么排",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "45%",
+        "align": "center",
+        "target_height": 300,
+        "target_width": 502
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "最新的永远看得到"
+      }
+    ],
+    "notes": "左标题及通知漏斗大插画占40%，右六张小卡2列3行，卡内图标左；竖版标题居中、插画整行、六卡逐张。漏斗属插画，六条原文仍是内容卡，不能改成六段漏斗。；已逐屏查看横图及全部竖版续图，文字用 page.json。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "portrait": "cards",
+        "illustration": "left_inside",
+        "text_ref": "看到什么"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "自己动手",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "followups",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要等本人验收的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "followups",
+        "width": "50%"
+      }
+    ],
+    "notes": "原横图实际三列表格（描述称四列，文字以三列定稿为准），底部自己动手和待验收两卡左右；竖版七条问题逐卡，前三格标签来自表头，重复表头须data-echo，随后两卡上下。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "connector_targets": [
+          "case",
+          "oled"
+        ],
+        "text_ref": "看门狗",
+        "connector_target_refs": {
+          "case": "机箱屏这一条",
+          "oled": "曲面屏这一条"
+        },
+        "icon_size": 120
+      },
+      {
+        "type": "section_heading",
+        "row": "pipelines",
+        "width": "50%",
+        "size": "medium",
+        "text_ref": "机箱屏这一条"
+      },
+      {
+        "type": "flow",
+        "row": "pipelines",
+        "columns": 2,
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "text_ref": "1 采数据",
+        "item_rows": [
+          2,
+          2,
+          1
+        ]
+      },
+      {
+        "type": "section_heading",
+        "row": "pipelines",
+        "size": "medium",
+        "text_ref": "曲面屏这一条",
+        "width": "50%"
+      },
+      {
+        "type": "flow",
+        "row": "pipelines",
+        "columns": 2,
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "text_ref": "1 来源",
+        "item_rows": [
+          2,
+          1,
+          1
+        ]
+      },
+      {
+        "type": "stat_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "card_count": 3,
+        "text_ref": "38,754 行"
+      }
+    ],
+    "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。；main-closer：看门狗两细线连接两条实际DOM流程，唯一原组名确定目标，不猜底图部位。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "机箱屏怎么做到每秒一刷又不冻住"
+      },
+      {
+        "type": "segmented_band",
+        "variant": "film",
+        "direction": "horizontal",
+        "connector": "none",
+        "illustration": "none",
+        "text_ref": "只发变化",
+        "highlight": [
+          2
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "整帧太慢"
+      }
+    ],
+    "notes": "横版全宽胶片在上、四卡2×2在下；竖版实际为左22%竖胶片、右78%四卡一列，保持并排（row_v）。胶片上只发变化、整帧重画、60/120/180/约15分钟全部来自一条定稿节点，只显示一次，装饰格不得另造字。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "两块屏各管各的"
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "illustration": "left_inside",
+        "text_ref": "曲面屏少放东西不是偷懒",
+        "icons": [
+          "_library/icons/报警灯.png"
+        ]
+      }
+    ],
+    "notes": "六卡横2列3行、竖逐张，插画均卡内左，最后整宽淡绿结语卡。结语中本人终审原话逐字保留，不添加解释。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 3,
+        "illustration": "top_inside",
+        "connector": "none",
+        "size": "large",
+        "text_ref": "程序活着",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      }
+    ],
+    "notes": "无章节标题，三张亮点大卡横排/竖单列，插画在每卡顶内，标题大号粗体。759计数牌若复用必须抠除字再由定稿节点覆盖，不能重复画759。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "legend",
+        "width": "42%",
+        "text_ref": "全部功能（42 项）"
+      },
+      {
+        "type": "status_legend",
+        "row": "legend",
+        "width": "58%",
+        "text_ref": "图例"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          3,
+          1
+        ],
+        "text_ref": "机箱屏显示"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          2
+        ],
+        "text_ref": "机箱屏怎么跑"
+      }
+    ],
+    "notes": "第1张功能续段有标题图例，组名独占网格上方；机箱屏显示10项3+3+3+1、怎么跑5项3+2，原图末排按原宽不补空卡；竖版一项一行。每卡图标左、编号功能名与说明右、状态点右上；状态词显示与G1/scene冲突需工程师统一，规格不删定稿词。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          3
+        ],
+        "text_ref": "曲面屏显示"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          1
+        ],
+        "text_ref": "开机、睡眠和窗口"
+      }
+    ],
+    "notes": "续段不加总标题图例，两组9项和7项；横3列，竖单列，组名在各组上方。沿用11的卡和状态点位置。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-13-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-13-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          2
+        ],
+        "last_row_fill": true,
+        "text_ref": "手动工具和对外",
+        "last_row": "fill"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3
+        ],
+        "text_ref": "已停用"
+      }
+    ],
+    "notes": "续段不加总标题图例。手动工具和对外32/33/34首排三列，35/36次排各半幅铺满，不留第六空位；已停用37–42维持3+3。竖版每项一行，旧竖图上方多余一排无字状态点不额外补文字。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-14-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-14-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "text_ref": "6 月 30 日",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "横版左64%竖向11日期卡时间线，右36%大插画从厂商小窗长出两屏手机并被剪刀修剪；竖版实际演进题在顶部左、缩小插画在右同排，下方全宽日期卡纵排；v2接后5项，不重复题和插画。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "双屏信息中心"
+      },
+      {
+        "type": "prose",
+        "text_ref": "抬眼就知道",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "机箱里有两块"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "left_inside",
+        "card_count": 4,
+        "text_ref": "1 秒一刷"
+      },
+      {
+        "type": "live_strip",
+        "labels": [
+          "看门狗",
+          "机箱屏画面"
+        ],
+        "text_ref": "现在",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "align": "center",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "notes": "横版标题、两段介绍在左，机箱手机大插画右；数字卡一排四张，图标在卡左；竖版介绍后插画，数字2×2，图标仍左；原竖图未画复制按钮，定稿要求补齐第三个按钮；现在条两处真实空框，保留标签。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "每天发生什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "card_count": 5,
+        "text_ref": "开机登录"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "两个热键"
+      }
+    ],
+    "notes": "五面绿旗沿丝带连接，横版图标在旗下、说明在图标下且不包卡；竖版丝带左、图标中、说明右；底部两张侧插画卡，横并列竖顺排。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "机箱屏：一整条电脑状态"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一块 8.8"
+      },
+      {
+        "type": "screenshot",
+        "align": "center",
+        "ratio": "1:4",
+        "max_width_v": "60%"
+      },
+      {
+        "type": "numbered_steps",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "1 时钟和天气"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "数据从哪来",
+        "icons": [
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "8 月 30 日发给机箱屏"
+      }
+    ],
+    "notes": "横版左侧九条编号细卡及数据来源卡，截图整屏右侧竖长1:4，各条右端虚线箭头指截图；竖版截图在导语后，九条单列，来源卡和图注在原v2末尾；截图内部留空。原图小标题用中号，保留角色。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "曲面屏：只在有事时出现"
+      },
+      {
+        "type": "prose",
+        "text_ref": "水冷头上那块"
+      },
+      {
+        "type": "screenshot",
+        "ratio": "2.2:1"
+      },
+      {
+        "type": "prose",
+        "text_ref": "8 月 30 日曲面屏的真实画面"
+      },
+      {
+        "type": "document_mock",
+        "variant": "window",
+        "mock_layout": "curved_oled",
+        "illustration": "outside",
+        "text_ref": "21:30"
+      },
+      {
+        "type": "prose",
+        "text_ref": "示意：满载时"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "portrait": "cards",
+        "text_ref": "显示什么"
+      }
+    ],
+    "notes": "横版标题导语和横截图在左、满载曲面插画在右，底部三列表格六类；竖版截图→满载示意→六类竖卡。示意内部所有21:30、86%、曲目、游戏、验证码圆点、通知必须由定稿程序排字，不能裁入旧字；真实截图位留空。源节点次序不同，按原图把图注移到对应槽下；curved_oled排法须组件样张。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "手机提醒怎么排"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "最新的永远看得到"
+      }
+    ],
+    "notes": "左标题及通知漏斗大插画占40%，右六张小卡2列3行，卡内图标左；竖版标题居中、插画整行、六卡逐张。漏斗属插画，六条原文仍是内容卡，不能改成六段漏斗。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "portrait": "cards",
+        "illustration": "left_inside",
+        "text_ref": "看到什么"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "自己动手",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要等本人验收的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none"
+      }
+    ],
+    "notes": "原横图实际三列表格（描述称四列，文字以三列定稿为准），底部自己动手和待验收两卡左右；竖版七条问题逐卡，前三格标签来自表头，重复表头须data-echo，随后两卡上下。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "看门狗"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "机箱屏这一条"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "1 采数据"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "曲面屏这一条"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "1 来源"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "card_count": 3,
+        "text_ref": "38,754 行"
+      }
+    ],
+    "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-08-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "机箱屏怎么做到每秒一刷又不冻住"
+      },
+      {
+        "type": "segmented_band",
+        "variant": "film",
+        "direction": "vertical",
+        "connector": "none",
+        "illustration": "none",
+        "row": "film",
+        "row_v": true,
+        "width": "22%",
+        "text_ref": "只发变化",
+        "highlight": [
+          2
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "film",
+        "row_v": true,
+        "width": "78%",
+        "text_ref": "整帧太慢"
+      }
+    ],
+    "notes": "横版全宽胶片在上、四卡2×2在下；竖版实际为左22%竖胶片、右78%四卡一列，保持并排（row_v）。胶片上只发变化、整帧重画、60/120/180/约15分钟全部来自一条定稿节点，只显示一次，装饰格不得另造字。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-09-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "两块屏各管各的"
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "illustration": "left_inside",
+        "text_ref": "曲面屏少放东西不是偷懒",
+        "icons": [
+          "_library/icons/报警灯.png"
+        ]
+      }
+    ],
+    "notes": "六卡横2列3行、竖逐张，插画均卡内左，最后整宽淡绿结语卡。结语中本人终审原话逐字保留，不添加解释。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-10-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "size": "large",
+        "text_ref": "程序活着",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      }
+    ],
+    "notes": "无章节标题，三张亮点大卡横排/竖单列，插画在每卡顶内，标题大号粗体。759计数牌若复用必须抠除字再由定稿节点覆盖，不能重复画759。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（42 项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          3,
+          1
+        ],
+        "text_ref": "机箱屏显示"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          2
+        ],
+        "text_ref": "机箱屏怎么跑"
+      }
+    ],
+    "notes": "第1张功能续段有标题图例，组名独占网格上方；机箱屏显示10项3+3+3+1、怎么跑5项3+2，原图末排按原宽不补空卡；竖版一项一行。每卡图标左、编号功能名与说明右、状态点右上；状态词显示与G1/scene冲突需工程师统一，规格不删定稿词。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-12-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          3
+        ],
+        "text_ref": "曲面屏显示"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3,
+          1
+        ],
+        "text_ref": "开机、睡眠和窗口"
+      }
+    ],
+    "notes": "续段不加总标题图例，两组9项和7项；横3列，竖单列，组名在各组上方。沿用11的卡和状态点位置。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-13-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          2
+        ],
+        "last_row_fill": false,
+        "text_ref": "手动工具和对外"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row_counts": [
+          3,
+          3
+        ],
+        "text_ref": "已停用"
+      }
+    ],
+    "notes": "续段不加总标题图例。手动工具和对外32/33/34首排三列，35/36次排各半幅铺满，不留第六空位；已停用37–42维持3+3。竖版每项一行，旧竖图上方多余一排无字状态点不额外补文字。；已逐屏查看横图及全部竖版续图，文字用 page.json。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "pc-panel-hub-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-14-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pc-panel-hub\\img\\pc-panel-hub-14-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "row": "history-top",
+        "row_v": true,
+        "width": "24%",
+        "text_ref": "演进"
+      },
+      {
+        "type": "illustration",
+        "row": "history-top",
+        "row_v": true,
+        "width": "76%",
+        "illustration": "outside"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "text_ref": "6 月 30 日",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "横版左64%竖向11日期卡时间线，右36%大插画从厂商小窗长出两屏手机并被剪刀修剪；竖版实际演进题在顶部左、缩小插画在右同排，下方全宽日期卡纵排；v2接后5项，不重复题和插画。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  }
+]

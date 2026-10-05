@@ -1,0 +1,1379 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "remote-control",
+  "kind": "project",
+  "title": "电脑远程控制",
+  "url": "/projects/remote-control/",
+  "tagline": "手机或笔记本上的 AI，直接在我的电脑上办事。",
+  "status": "常用",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/wly0829.cn",
+  "capability": "在我的真电脑上动手",
+  "based_on": {
+    "commit": "6ba9bfc0be0974ede3995e5d9f297906b5728991",
+    "commit_time": "2026-09-28T15:56:44+08:00"
+  },
+  "video_prompt": "5–8 秒无缝循环，白底水彩风格，从开头这屏的插画出发：手机屏幕上一个对话气泡冒出来，化成一颗绿色光点，沿丝带飞进 Cloudflare 云朵，再顺着隧道落进台式机；台式机屏幕上一个文件夹打开、一页纸被改了一行、出现一个绿色对勾；同时笔记本和台式机之间的虚线上，一把小扳手来回滑动一次；最后光点带着对勾飞回手机，气泡变成“已完成”的样子。背景叶子缓慢飘落，其余画面静止。",
+  "screens": [
+    {
+      "id": "remote-control-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版：左上毛笔艺术字大标题，下面一段介绍。右上一幅水彩插画：中间一台台式机（机箱侧透、显示器亮着），右边一台笔记本，两台之间一条绿色虚线；左边一部手机，屏幕上是对话气泡，右上角画 ChatGPT 标志；笔记本屏幕角上画 Codex 标志，台式机显示器角上画 Claude 标志；台式机上方一朵云，云上画 Cloudflare 标志，云和台式机之间一条绿色丝带（隧道）；笔记本下方一个小网状图形，画 Tailscale 标志。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：两台电脑、一个工具箱、三扇小门、一叠回执。数字卡下面一行三个白底描边按钮：〔在整套系统里的位置 → 怎么协作〕〔GitHub（网页部分）〕，右侧一行小字加两个绿色链接〔连接电脑〕〔授权与状态〕。再下面一行灰色小字（含〔远程电脑串流〕链接）。最下面一条细长圆角横条“现在”：左边“现在”两个字，接着一个留空的浅色圆角长框（约占横条宽度的 55%、高度和按钮一样，网页程序往里填字，框里不画任何字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：大标题和介绍在上；插画放在介绍下面，占满宽度；四张数字卡两两一行共两行；三个入口按钮各占一行；“操作入口”一行、灰色小字一行；最下面“现在”横条：上面“现在”和空框（占满宽度），下面按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "大标题：电脑远程控制\n\n介绍：手机或网页上的 ChatGPT、笔记本上的 Codex、主机上的 Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图点鼠标，必要时用管理员或 SYSTEM（Windows 最高的系统身份）做维护。每次先登录、先拿到规则；我的资料锁着时，不碰私人资料。\n\n数字卡片（截至 9 月 28 日）：\n1. **2 台**｜主机（台式机）和副机（笔记本）各跑一套，同一份源码\n2. **23 个**｜工具：文件、命令、文档、桌面、维护\n3. **3 个**｜入口：主机公网、副机、经副机转到主机的备用\n4. **268 次**｜主机收到的工具调用（9 月 26 日 16:56 至 28 日 15:43）\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub（网页部分）〕　〔复制 AI 续作说明〕\n\n操作入口：〔连接电脑〕　〔授权与状态〕\n\n只想用手机看电脑画面、自己动手操作，是另一个项目：〔远程电脑串流〕\n\n现在　〔现在正不正常 → 驾驶舱〕",
+      "links": [
+        {
+          "text": "在整套系统里的位置 → 怎么协作",
+          "href": "/how/#remote-control"
+        },
+        {
+          "text": "GitHub（网页部分）",
+          "href": "https://github.com/wlyaaaaa/wly0829.cn"
+        },
+        {
+          "text": "连接电脑",
+          "href": "/mcp/"
+        },
+        {
+          "text": "授权与状态",
+          "href": "/computer-access/"
+        },
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        },
+        {
+          "text": "现在正不正常 → 驾驶舱",
+          "href": "/cockpit/#remote-control"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/remote-control/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [
+        "run"
+      ],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-02",
+      "section": "usage",
+      "title": "怎么用",
+      "scene": "横版：左上标题。上半部分三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一只手拿着手机，远处一座房子里的台式机亮着；2 台式机和笔记本面对面，中间一把小扳手来回传；3 一把绿色小锁，手机屏幕上六个数字格子。卡片标题粗体，下面正文。下半部分左边一条横向卡片“它能碰什么”，六个带小图标的词排成一行；右边一张小数据卡“最近真用了多少”，里面画一个横向堆叠条（五段深浅绿，长度按 130、65、50、11、12 的比例），条下写图例文字。",
+      "portrait": "竖版：标题在上；三张场景卡一行一张；“它能碰什么”六个词两行三个；数据卡在最下，堆叠条占满宽度。",
+      "text": "标题：怎么用\n\n1. **人在外面，让家里的电脑干活**\n在手机 ChatGPT 的“我的电脑”项目里直接说，比如“找到电脑上那份方案，读第二节，改好存回去”。ChatGPT 负责想，主机负责做：找文件、读片段、改、再读回核对。问到和我本人有关的事，它经主机读电脑上那份〔个人理解库〕（记着我的背景和偏好），手机上不另存一份。\n\n2. **两台电脑互相修**\n笔记本上的 Codex 连主机，主机上的 Codex 和 Claude 连笔记本。能用管理员或 SYSTEM 身份跑维护命令，所以一台的服务停了，可以从另一台把它启动。笔记本上那份〔约法〕（我给所有 AI 定的总规矩），也是需要时经这条连接从主机取过去的。\n\n3. **资料锁着时，手机上解开**\nAI 要用我的私人资料、资料又锁着，它会停下来，给出〔授权与状态〕的地址。我在手机上打开，输验证器里的 6 位动态码；解开后回到对话，AI 重新读一次状态再接着做。\n\n**它能碰什么**：文件 · 命令和脚本 · 文档片段 · 桌面（截图、点、打字）· 我的 Chrome · 管理员和 SYSTEM 维护　〔23 个工具全部列在“全部功能”〕\n\n**最近真用了多少**：9 月 26 日 16:56 至 28 日 15:43，主机收到 268 次工具调用\n跑命令 130 · 文件 65 · 开工核对 50（每次开工先查是哪台电脑、哪版规则、资料锁开没开）· 截图和读界面 11 · 其他 12\n主机处理一次调用（含执行），一半在 4.6 秒内",
+      "links": [
+        {
+          "text": "个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "约法",
+          "href": "/rules/charter/"
+        },
+        {
+          "text": "授权与状态",
+          "href": "/computer-access/"
+        },
+        {
+          "text": "23 个工具全部列在“全部功能”",
+          "href": "/projects/remote-control/#features"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-03",
+      "section": "usage",
+      "title": "出事怎么办",
+      "scene": "横版：左上标题。六张横向圆角卡片排成两列三行，每张左边一个小水彩图标（断掉的云朵丝带、自己转圈的箭头、沙漏上一个问号、冒汗的电脑、没亮的登录界面、拔掉的插头），右边粗体一句加小字。最下面一条横跨整屏的浅灰细卡片，写“不归它管”。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；“不归它管”在最下。",
+      "text": "标题：出事怎么办\n\n1. **主机入口连不上**｜先确认是主机通往公网的那条通道（Cloudflare 隧道）断了，再把连接改成备用地址（副机域名下的 /main-computer），第一次要单独登录。备用只负责转过去，不会替你重做刚才中断的操作。\n2. **笔记本的公网入口掉了**｜不用管，它会定时自查、自己恢复，次数有上限，不会来回折腾（参数见“全部功能”第 31 项）。\n3. **命令超时了**｜AI 不会自动重交，先查那一步到底做没做；为什么这样，见本页“超时和卡死怎么处理”。\n4. **电脑卡住了**｜照现行急救卡：先保存能保存的，约 2 分钟还不好就正常重启，不必先按蓝屏键；自动现场是否写完要看回执。服务的急救提示还没在真实卡死时验过。怎么判卡死见“超时和卡死怎么处理”，急救卡在〔电脑配置与恢复〕。\n5. **电脑开着但没登录**｜设计上维护命令照样能跑，截图、点击要等我登录；重启后还没登录的情况尚未实测。\n6. **关机、睡着或断网**｜连不上。先用 ToDesk、网易 UU 或小米智能插座把电脑开起来、连上网，再回来重试；别因为连不上就反复断电。\n\n**不归它管**：用手机看画面、自己动手操作见〔远程电脑串流〕；Windows 远程桌面、ToDesk 守护、手机借电脑上网见〔电脑配置与恢复〕。",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-04",
+      "section": "tech",
+      "title": "它是怎么搭的",
+      "scene": "横版：左上标题。一张从左到右的流程图：最左一列三张小卡（手机画 ChatGPT 标志、笔记本画 Codex 标志、台式机画 Claude 和 Codex 标志）；中间三条并排的绿色路线，每条路线上一个小图标（Cloudflare 云、Tailscale 网、一个弯折的中转箭头）和一两行字；最右一幅台式机剖面插画，分成上下两层：上层“门口”画一扇带锁的门和一张规则小卷轴，下层“屋里”画桌面、文件夹和键盘，两层之间一根细管子（命名管道）。流程图下面一条细长卡片写底座和模型。",
+      "portrait": "竖版：流程图改成从上往下：三张发起方卡一行一张 → 三条路线一行一条 → 电脑两层上下排；底座和模型卡片在最下。",
+      "text": "标题：它是怎么搭的\n\n**谁发起**：手机或网页上的 ChatGPT ｜ 笔记本上的 Codex ｜ 主机上的 Claude、Codex\n\n**三条路**\n1. 主机公网入口 mcp.wly0829.cn：Cloudflare 免费隧道，电脑只往外连，不开端口，没买服务器\n2. 副机入口：笔记本用 Tailscale Funnel（把本机服务放到公网的功能）开出自己的地址\n3. 主机备用入口：副机地址下的 /main-computer，经两台电脑的 Tailscale 私网转到主机；和副机入口共用同一个公网域名，所以不算完全独立的第二条路\n\n**电脑里分两层**\n- **门口**：开机就启动的 SYSTEM 服务。核对登录（OAuth，入口密码存在〔密码中心〕），附上规则（见亮点 2），跑管理员和 SYSTEM 维护。\n- **屋里**：我登录后启动的桌面进程，用我的账户读写文件、跑命令、截图点鼠标；门口经本机的命名管道把活递进来。\n\n**底座和模型**：23 个工具里 20 个来自开源的 Windows-MCP 0.8.6（Python、FastMCP），我在外面加了开工核对、读文档片段、维护三个工具，以及规则、资料锁、回收站、超时和卡死保护。服务本身不带模型：怎么想由发起的一方（ChatGPT、Codex、Claude）决定，电脑只负责照做、回报结果。",
+      "links": [
+        {
+          "text": "密码中心",
+          "href": "/projects/password-center/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-05",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版：左上标题。左边约三分之二宽，六张横向小卡片两列三行（小水彩图标＋粗体一句＋一两行小字）；右边约三分之一宽，竖着三张大数字卡。",
+      "portrait": "竖版：标题在上；六张卡片一行一张；三张数字卡在最下，一行一张。",
+      "text": "标题：为什么这样设计\n\n1. **想在对话里，做在电脑上。**｜推理留在我正在用的对话里，不为一条命令在电脑上另起一个 AI 任务。\n2. **门口和屋里分开。**｜认证和维护放在 SYSTEM 服务里，桌面操作只在我登录的会话里做，不拿最高权限代替我的账户。\n3. **规则只存一处。**｜手机那边不存规则副本，连接时由电脑发当前规则；已有完整规则的本机客户端只收入口。核验失败会明说，不拿旧版凑数。\n4. **连上电脑不等于解锁资料。**｜资料只有一份解锁状态，本机、网页、手机共用；登录电脑只证明能连，不算我本人同意。电脑上的 Codex、Claude 做一些重大的事可以免验证，经这个连接进来的 AI 没有这个待遇。见〔个人资料规则〕〔用户授权规则〕\n5. **超时不重来。**｜写操作重来一次可能做两遍，所以只查原结果（见“超时和卡死怎么处理”）。\n6. **入口放公网，靠登录挡人。**｜人在外面就得能从公网进来：这是我知道并决定保留的。只认登记过的客户端，不开放自动注册；不另加审批层（约法〔L14〕）。\n\n大数字卡：\n**10,747 行**｜程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）\n**7,508 行**｜自动测试，45 个测试文件\n**100 次**｜提交（9 月 9 日至 28 日，同样两处加 4 份远程登记）",
+      "links": [
+        {
+          "text": "个人资料规则",
+          "href": "/rules/privacy-data/",
+          "orientations": [
+            "v"
+          ]
+        },
+        {
+          "text": "用户授权规则",
+          "href": "/rules/authorization/",
+          "orientations": [
+            "v"
+          ]
+        },
+        {
+          "text": "L14",
+          "href": "/rules/charter/#L14",
+          "orientations": [
+            "v"
+          ],
+          "locator_instances": {
+            "v": {
+              "input_sha256": "1487a6de01bbfd55eeb5b6a2307a32c39206d4dbc93d6d2e25cf62a7f3e20896",
+              "instances": [
+                {
+                  "context_text": "不另加审批层（约法L14）。",
+                  "context_rect": [
+                    62,
+                    2242,
+                    580,
+                    2286
+                  ],
+                  "expected_rect": [
+                    430,
+                    2251,
+                    528,
+                    2281
+                  ],
+                  "underline_rect": [
+                    430,
+                    2290,
+                    528,
+                    2293
+                  ],
+                  "confirm_region": true
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-06",
+      "section": "tech",
+      "title": "两台电脑对照",
+      "scene": "横版：左上标题。整屏一张水彩边框的对照表，三列：左列项目名（小图标＋粗体），中列主机（表头画一台台式机），右列副机（表头画一台笔记本）。表格下面一行小字。",
+      "portrait": "竖版：表格改成上下两张卡片：先“主机”卡，再“副机”卡，每张卡里按同样的项目一行一条（项目名粗体、冒号后是内容）。",
+      "text": "标题：两台电脑对照\n\n| | 主机（台式机 WLY） | 副机（笔记本 LAPTOP-E48N0DRJ） |\n|---|---|---|\n| 地址 | mcp.wly0829.cn/mcp；备用走副机域名下的 /main-computer/mcp | laptop-e48n0drj.tailbe620b.ts.net/computer/mcp |\n| 公网怎么进 | Cloudflare 隧道 | Tailscale Funnel |\n| 谁能连 | ChatGPT、笔记本上的 Codex | ChatGPT、主机上的 Codex 和 Claude |\n| 规则从哪来 | 每次连接现场核验主机当前生效的版本 | 自己的一份规则文件，约法那段需要时从主机同步，可能暂时落后 |\n| 会不会睡 | 请求保持唤醒 | 不唤醒，睡着就连不上 |\n| 没登录时 | 设计上维护能用、桌面不能用；重启后未登录还没实测 | 同左 |\n| 平时干什么 | 我的工作环境和算力 | 我用 Moonlight 远控主机；主机坏了时，它自己能上网、让 Codex 干活 |\n| 入口密码 | 一个，存在密码中心；走备用入口也用它 | 另一个，也存在密码中心 |\n\n两台用同一个提交的源码，配置、登录凭据、部署和回退各管各的，不互相复制。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-07",
+      "section": "tech",
+      "title": "超时和卡死怎么处理",
+      "scene": "横版：左上标题。标题下一条浅米色细长卡片写“起因”。下面左边约三分之一宽一幅水彩插画：一个沙漏，旁边一张写着“重启”的小便签，便签边上画右 Ctrl 和 Scroll Lock 两个键帽。右边约三分之二宽，两张横向大卡片上下排，每张左上角一个状态圆点（第一张绿色，第二张浅灰色），粗体标题加一段正文。",
+      "portrait": "竖版：标题在上；“起因”卡片；插画缩小居中；两张大卡片一行一张。",
+      "text": "标题：超时和卡死怎么处理\n\n**起因**：9 月 27 日晚 ChatGPT 和 Claude 一起卡死，通过电脑连接排查了 50 分钟没解决，我强制重启 5 分钟就好；当时命令到点也不返回，AI 也没提醒我可以按键留现场。当晚（23:20）就改成下面两条。\n\n● **每次调用有硬截止（在用）**\n超时只说“结果未知，不要自动重复提交”，因为写操作重交可能做两遍；长的维护命令先给一个请求编号，之后凭编号取原结果。卡住的调用占着自己的位置，最多占 4 个，重复请求不会越堆越多。\n\n● **确认卡死时直接给急救做法（还没在真实使用里验过）**\n单次超时不算卡死。只有另一路独立检查也确认电脑卡在“启动新程序”这一步，才判定卡死，现行急救做法是“先保存，约 2 分钟还不好就正常重启”；按键蓝屏只作备用。截至 9 月 28 日，没找到这句提示真正出现过的记录。急救卡在〔电脑配置与恢复〕。",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-08",
+      "section": "highlights",
+      "title": "亮点",
+      "scene": "横版：和照片视频录音管理页的“亮点”一样：两张大卡片横排（各占一半宽），每张上面一幅小水彩插画，卡片标题用大字，下面一段正文。插画：1 一条断开的云朵丝带，旁边笔记本伸出一条绿色小路绕到台式机，台式机上一把扳手；2 手机和笔记本各举着一张同样的卷轴（规则），卷轴上印着同一个小印章。",
+      "portrait": "竖版：两张卡片上下排，一行一张，插画在每张卡片顶部。",
+      "text": "1. **隧道断了，从笔记本绕进去把它修好。**\n9 月 11 日 16:28 故意停掉主机的 Cloudflare 隧道，主入口立刻打不开（Cloudflare 报隧道错误）。改走笔记本那边的备用入口：23 个工具都在，连着三次命令都回报“这是主机、隧道已停”，每次约 3 秒。17:44 又试了一次：从笔记本的入口进去，先用管理员身份确认隧道停着，再用 SYSTEM 身份把它启动，主入口恢复。两次用的都是测试用的连接程序，不是 ChatGPT。\n\n2. **手机上的 AI，守的也是同一套规矩。**\n主机的规则只存在电脑上：每次连接，主机核验当前版本，给手机等客户端附上规则原文；本机已有完整规则的客户端只收短入口，手机上不存副本。笔记本用自己的一份规则文件，约法那段需要时从主机同步，不是自动的，所以可能暂时落后；9 月 28 日 19:47 核对时，它和主机是同一版。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-09",
+      "section": "features",
+      "title": "全部功能（一）",
+      "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。三张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，后两张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。",
+      "text": "标题：全部功能（44 项）\n图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用\n\n**连接入口**\n1. 主机公网入口｜mcp.wly0829.cn 经 Cloudflare 免费隧道进主机，电脑不开端口；要登录｜在用\n2. 副机入口｜笔记本用 Tailscale Funnel 开出自己的地址，单独登录｜在用\n3. 主机备用入口｜隧道断了，改连副机域名下的 /main-computer，经私网转到主机；第一次要单独登录｜在用\n4. ChatGPT 两个连接｜“我的电脑”项目里有“主机 MCP”“副机 MCP”，手机和网页都能用｜在用\n5. 两台 Codex 互连｜笔记本 Codex 连主机，主机 Codex 连笔记本｜在用\n6. 主机 Claude 连副机｜主机上的 Claude 直接操作笔记本｜在用\n7. 别的账号和客户端｜另一个 OpenAI 账号可自己加连接；别的客户端可用应用凭据接入｜说不准\n8. 副机备用连接保温｜笔记本连过一次主机后，一小时内保持连接，下次不用重新建立、响应更快；开始菜单能看能停｜说不准\n\n**能办的事**\n9. 文件｜读、写、找、列目录、复制、移动｜在用\n10. 命令和脚本｜用 PowerShell 7 跑命令、Python、Node、Git 和现成管理脚本，拿回输出和退出码｜在用\n11. 读文档片段｜只读文本某几行、PDF 某页、Word 某段、Excel 某行，不回传整份｜在用\n12. 大文件局部修改｜10 万行的文本只读目标附近，按唯一锚点改一段再回读｜在用\n13. 桌面操作｜截图、读界面元素、点、打字、快捷键、滚动、拖动、开关应用、等某个画面出现｜在用\n14. 操作我的 Chrome｜在原来的 Chrome 里开标签、输入、点链接、截图核对，不动已开的页面｜在用\n15. 填表和上传｜输入、下拉、勾选、选附件、提交；只在本机测试页验过，真网站的登录验证码没测｜说不准\n16. 系统小工具｜进程、注册表、剪贴板、弹通知、显示器清单、抓网页文字｜在用\n17. 管理员和 SYSTEM 维护｜用管理员或 SYSTEM 身份跑命令；长命令先给编号，之后凭编号取结果｜在用\n\n“别的账号和客户端”怎么配，见〔连接电脑〕",
+      "links": [
+        {
+          "text": "连接电脑",
+          "href": "/mcp/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-entry",
+          "text": "连接入口"
+        },
+        {
+          "id": "f-main-entry",
+          "text": "主机公网入口"
+        },
+        {
+          "id": "f-secondary-entry",
+          "text": "副机入口"
+        },
+        {
+          "id": "f-fallback-entry",
+          "text": "主机备用入口"
+        },
+        {
+          "id": "f-chatgpt",
+          "text": "ChatGPT 两个连接"
+        },
+        {
+          "id": "f-codex-peer",
+          "text": "两台 Codex 互连"
+        },
+        {
+          "id": "f-claude-peer",
+          "text": "主机 Claude 连副机"
+        },
+        {
+          "id": "f-other-client",
+          "text": "别的账号和客户端"
+        },
+        {
+          "id": "f-warm-client",
+          "text": "副机备用连接保温"
+        },
+        {
+          "id": "g-tools",
+          "text": "能办的事"
+        },
+        {
+          "id": "f-files",
+          "text": "文件"
+        },
+        {
+          "id": "f-shell",
+          "text": "命令和脚本"
+        },
+        {
+          "id": "f-docs",
+          "text": "读文档片段"
+        },
+        {
+          "id": "f-long-edit",
+          "text": "大文件局部修改"
+        },
+        {
+          "id": "f-desktop",
+          "text": "桌面操作"
+        },
+        {
+          "id": "f-chrome",
+          "text": "操作我的 Chrome"
+        },
+        {
+          "id": "f-forms",
+          "text": "填表和上传"
+        },
+        {
+          "id": "f-system",
+          "text": "系统小工具"
+        },
+        {
+          "id": "f-maintenance",
+          "text": "管理员和 SYSTEM 维护"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "rc-features",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-10",
+      "section": "features",
+      "title": "全部功能（二）",
+      "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。三张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，后两张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。 本轮根确认的AI版式纠正：已有这张独立状态屏中的原有正确图例可以保留，颜色、状态名和含义不变；只允许需要就近读懂状态的独立屏重复，不要求其它屏增画，也不增删改写功能正文或状态数据。此条优先于前文“后两张没有图例”的AI排法。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。 本轮根确认的AI版式纠正：已有这张独立状态屏中的原有正确图例可以保留，颜色、状态名和含义不变；只允许需要就近读懂状态的独立屏重复，不要求其它屏增画，也不增删改写功能正文或状态数据。此条优先于前文“后两张没有图例”的AI排法。",
+      "text": "**规矩和保护**\n18. 连上就给规则｜连接握手提供当前规则；本机已有完整规则的客户端只收入口，笔记本沿用自己那份｜在用\n19. 开工先核对｜先查是哪台电脑、用哪版规则、资料锁开没开、电脑有没有卡住｜在用\n20. 资料锁共用一份｜手机、网页、本机 AI 用同一份资料解锁和截止；连上电脑不算解锁｜在用\n21. 删除和覆盖先进回收站｜删文件、覆盖写入、覆盖复制移动，旧内容先进我账户的回收站；进不去就拒绝｜在用\n22. 超时不重来｜超时只说结果未知，不自动重交；维护命令凭编号查原结果｜在用\n23. 卡死时给急救做法｜独立探测确认卡死时，按现行急救卡先保存、约 2 分钟后正常重启，按键留现场只作备用；提示仍未实测｜说不准\n24. 命令不弹黑窗口｜给上游打补丁，PowerShell 隐藏启动；上游修好后自动跳过｜在用\n25. 无限制授权跟到电脑上｜对话开无限制授权时会拿到一个配对编号，可随命令带到电脑，由密码中心核对；连接本身不算授权｜说不准\n26. 自己的入口密码｜主机、副机各一个入口密码，都存在密码中心；只认登记过的客户端｜在用\n\n**一直在线**\n27. 没登录也能维护｜开机就起 SYSTEM 服务，没登录也能跑维护命令；桌面操作要等登录｜待验收\n28. 挂了自己拉起｜每 10 秒探测，连续 3 次失败就重启；服务本身退出按 5、15、30 秒重启｜在用\n29. 主机不睡｜主机请求保持唤醒；笔记本不唤醒，睡着就连不上｜在用\n30. 隧道查和修｜一条命令查隧道和公网通不通，修复登记过的服务｜在用\n31. 副机公网自动恢复｜每 3 分钟查，连续 3 次不通才恢复，至少隔 30 分钟、一天最多 3 次｜在用\n32. 每周检查升级｜每周查 Windows-MCP 新版，测试通过自动升级，副机先、主机后；笔记本的每周巡检平时暂停｜说不准\n33. 两台同一份源码｜两台用同一个提交，各自配置、登录凭据、部署和回退｜在用",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-guard",
+          "text": "规矩和保护"
+        },
+        {
+          "id": "f-rules-handshake",
+          "text": "连上就给规则"
+        },
+        {
+          "id": "f-context",
+          "text": "开工先核对"
+        },
+        {
+          "id": "f-shared-lock",
+          "text": "资料锁共用一份"
+        },
+        {
+          "id": "f-recycle",
+          "text": "删除和覆盖先进回收站"
+        },
+        {
+          "id": "f-no-replay",
+          "text": "超时不重来"
+        },
+        {
+          "id": "f-freeze-rescue",
+          "text": "卡死时给急救做法"
+        },
+        {
+          "id": "f-no-window",
+          "text": "命令不弹黑窗口"
+        },
+        {
+          "id": "f-owner-ref",
+          "text": "无限制授权跟到电脑上"
+        },
+        {
+          "id": "f-login",
+          "text": "自己的入口密码"
+        },
+        {
+          "id": "g-alive",
+          "text": "一直在线"
+        },
+        {
+          "id": "f-boot",
+          "text": "没登录也能维护"
+        },
+        {
+          "id": "f-self-heal",
+          "text": "挂了自己拉起"
+        },
+        {
+          "id": "f-keep-awake",
+          "text": "主机不睡"
+        },
+        {
+          "id": "f-tunnel",
+          "text": "隧道查和修"
+        },
+        {
+          "id": "f-public-heal",
+          "text": "副机公网自动恢复"
+        },
+        {
+          "id": "f-upgrade",
+          "text": "每周检查升级"
+        },
+        {
+          "id": "f-same-source",
+          "text": "两台同一份源码"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "rc-features",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-11",
+      "section": "features",
+      "title": "全部功能（三）",
+      "scene": "横版：和照片视频录音管理页的“全部功能”一样的画法：组名是卡片区上方一行毛笔小标题（不单独占一整列），每组卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画，状态只画圆点）。三张图上下拼成一整段：同一个网格，第一张顶上有标题和图例，后两张没有标题、没有图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。 本轮根确认的AI版式纠正：已有这张独立状态屏中的原有正确图例可以保留，颜色、状态名和含义不变；只允许需要就近读懂状态的独立屏重复，不要求其它屏增画，也不增删改写功能正文或状态数据。此条优先于前文“后两张没有图例”的AI排法。",
+      "portrait": "竖版：组名一行，卡片一行一张（编号功能名粗体，下面一句话，状态圆点在右上）；图例在第一张顶上排成两行。 本轮根确认的AI版式纠正：已有这张独立状态屏中的原有正确图例可以保留，颜色、状态名和含义不变；只允许需要就近读懂状态的独立屏重复，不要求其它屏增画，也不增删改写功能正文或状态数据。此条优先于前文“后两张没有图例”的AI排法。",
+      "text": "**网页上的授权与状态**\n34. 连接电脑说明｜三个地址、每台的验收记录、一键复制给 AI 的配置说明｜在用\n35. 手机接续说明｜讲手机上的对话怎么借已连接的电脑接着办事｜说不准\n36. 主机状态｜在线没、锁没锁屏、处理器显卡内存、每块盘、网速；连不上时提示怎么远程开机｜待验收\n37. 个人资料授权｜输验证器里的 6 位动态码，办理、延长或结束资料解锁，0.5 到 72 小时｜待验收\n38. 无限制授权｜同一页办理、延长或结束全局无限制授权，和资料授权分别计时｜待验收\n39. 锁资料、锁屏｜一键锁住资料，或只锁 Windows 屏幕；锁屏不影响授权计时｜待验收\n40. 监控入口｜显示监控面板在不在线，点过去看电脑使用记录的图表｜待验收\n\n**已停用**\n41. Codex 远程公网入口｜手机网页看 Codex 任务；9 月 26 日决定撤掉｜已停用\n42. AI 浏览器代填入口密码｜改由我自己从密码中心复制｜已停用\n43. 主机旧 Funnel 入口｜改走 Cloudflare 后停用，只留作退回材料｜已停用\n44. 旧“电脑 MCP”单个连接｜拆成“主机 MCP”“副机 MCP”两个｜已停用\n\n网页那几项怎么办理，见〔授权与状态〕；Codex 远程为什么停，见〔Codex 远程〕",
+      "links": [
+        {
+          "text": "授权与状态",
+          "href": "/computer-access/",
+          "locator_instances": {
+            "v": {
+              "input_sha256": "220cd75457a24d82f85985aefc58814d4126cde134fb9a23fdf5feb6c0708379",
+              "instances": [
+                {
+                  "context_text": "网页那几项怎么办理，见授权与状态；",
+                  "context_rect": [
+                    49,
+                    3103,
+                    742,
+                    3151
+                  ],
+                  "expected_rect": [
+                    485,
+                    3110,
+                    721,
+                    3148
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "Codex 远程",
+          "href": "/projects/codex-local-remote/",
+          "locator_instances": {
+            "v": {
+              "input_sha256": "220cd75457a24d82f85985aefc58814d4126cde134fb9a23fdf5feb6c0708379",
+              "instances": [
+                {
+                  "context_text": "Codex 远程为什么停，见 Codex 远程",
+                  "context_rect": [
+                    49,
+                    3162,
+                    730,
+                    3203
+                  ],
+                  "expected_rect": [
+                    495,
+                    3167,
+                    727,
+                    3203
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-web",
+          "text": "网页上的授权与状态"
+        },
+        {
+          "id": "f-connect-page",
+          "text": "连接电脑说明"
+        },
+        {
+          "id": "f-phone-guide",
+          "text": "手机接续说明"
+        },
+        {
+          "id": "f-status-page",
+          "text": "主机状态"
+        },
+        {
+          "id": "f-personal-grant",
+          "text": "个人资料授权"
+        },
+        {
+          "id": "f-unrestricted-grant",
+          "text": "无限制授权"
+        },
+        {
+          "id": "f-lock",
+          "text": "锁资料、锁屏"
+        },
+        {
+          "id": "f-grafana-entry",
+          "text": "监控入口"
+        },
+      {
+        "id": "g-retired",
+        "text": "已停用",
+        "locator_instances": {
+          "h": {
+            "input_sha256": "90941d1a176e4c47a26d1a01fe80ce9f9623b45146432f887ef923f4ccc81186",
+            "instances": [
+              {
+                "context_text": "已停用",
+                "context_rect": [
+                  51,
+                  567,
+                  172,
+                  619
+                ],
+                "expected_rect": [
+                  51,
+                  567,
+                  172,
+                  619
+                ]
+              }
+            ]
+          }
+        }
+      },
+        {
+          "id": "f-codex-remote",
+          "text": "Codex 远程公网入口"
+        },
+        {
+          "id": "f-browser-fill",
+          "text": "AI 浏览器代填入口密码"
+        },
+        {
+          "id": "f-old-funnel",
+          "text": "主机旧 Funnel 入口"
+        },
+        {
+          "id": "f-old-plugin",
+          "text": "旧“电脑 MCP”单个连接"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "rc-features",
+      "reuse": ""
+    },
+    {
+      "id": "remote-control-12",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版：一条竖向时间线（左侧），每个节点一个小水彩图标、粗体日期、一两行字。右侧一幅大一点的水彩插画：一台台式机先亮起，接着旁边长出一台笔记本，再往上长出一朵云和一条丝带，最后一把小锁挂在丝带上，像一路长出来的样子。",
+      "portrait": "竖版：时间线占满宽度，一个节点一段；插画缩小放在标题下面。",
+      "text": "标题：演进（北京时间）\n\n- **9 月 9 日**：主机的电脑连接上线；连接时自动附上规则；加上管理员和 SYSTEM 维护；笔记本装上同一套\n- **9 月 10 日**：开机就启动，没登录也能维护；ChatGPT 接入笔记本\n- **9 月 11 日**：主机改走 Cloudflare 隧道和自己的域名，加上经笔记本的备用入口，当天停隧道真演练\n- **9 月 14–15 日**：读私人资料前先查资料锁；笔记本公网自动恢复；每周检查升级；监控图表走同一条隧道\n- **9 月 18–19 日**：笔记本备用连接保温；无限制授权接进来\n- **9 月 24–25 日**：网页“授权与状态”上线；主机 Claude 能连笔记本\n- **9 月 26–27 日**：撤掉 Codex 远程公网入口和 AI 代填入口密码\n- **9 月 27–28 日**：卡死那晚加上硬截止和急救提示；删除、覆盖先进回收站；升级到 Windows-MCP 0.8.6",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-entry",
+        "name": "连接入口"
+      },
+      {
+        "id": "g-tools",
+        "name": "能办的事"
+      },
+      {
+        "id": "g-guard",
+        "name": "规矩和保护"
+      },
+      {
+        "id": "g-alive",
+        "name": "一直在线"
+      },
+      {
+        "id": "g-web",
+        "name": "网页上的授权与状态"
+      },
+      {
+        "id": "g-retired",
+        "name": "已停用"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-main-entry",
+        "group": "g-entry",
+        "name": "主机公网入口",
+        "what": "mcp.wly0829.cn 经 Cloudflare 免费隧道进主机，电脑不开端口；要登录",
+        "how": "客户端里填这个地址，用入口密码登录一次",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:76,192；registries\\remote_computer_cloudflare_tunnel.json",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-secondary-entry",
+        "group": "g-entry",
+        "name": "副机入口",
+        "what": "笔记本用 Tailscale Funnel 开出自己的地址，单独登录",
+        "how": "客户端里另加一个连接",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:69；E:\\PCConfig\\tools\\secondary-laptop-access\\README.md:106",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-fallback-entry",
+        "group": "g-entry",
+        "name": "主机备用入口",
+        "what": "隧道断了，改连副机域名下的 /main-computer，经私网转到主机；第一次要单独登录",
+        "how": "确认主入口故障后手动切换；两台都要开机联网",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:70-72,82,92；registries\\remote_computer_mcp_relay.json；真实使用：笔记本上 Codex 的 main_desktop 日常就走这个中转地址连主机（E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:51），9 月 11 日 17:45 全新 Codex 任务经它回读主机",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-chatgpt",
+        "group": "g-entry",
+        "name": "ChatGPT 两个连接",
+        "what": "“我的电脑”项目里有“主机 MCP”“副机 MCP”，手机和网页都能用",
+        "how": "在 ChatGPT 的“我的电脑”项目里说要做的事",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:76,194",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-codex-peer",
+        "group": "g-entry",
+        "name": "两台 Codex 互连",
+        "what": "笔记本 Codex 连主机，主机 Codex 连笔记本",
+        "how": "在 Codex 里直接让它操作另一台",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:45-51",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-claude-peer",
+        "group": "g-entry",
+        "name": "主机 Claude 连副机",
+        "what": "主机上的 Claude 直接操作笔记本",
+        "how": "在 Claude 里直接让它操作笔记本",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:49-51；9 月 28 日 19:47 实测 ComputerContext",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-other-client",
+        "group": "g-entry",
+        "name": "别的账号和客户端",
+        "what": "另一个 OpenAI 账号可自己加连接；别的客户端可用应用凭据接入",
+        "how": "按网站“连接电脑”页的说明配置",
+        "status": "说不准",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:39,202-212；第二账号未测（E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:276）",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-warm-client",
+        "group": "g-entry",
+        "name": "副机备用连接保温",
+        "what": "笔记本连过一次主机后，一小时内保持连接，下次不用重新建立、响应更快；开始菜单能看能停",
+        "how": "自动；开始菜单“MCP 备用连接保温状态”",
+        "status": "说不准",
+        "source": "E:\\PCConfig\\tools\\secondary-laptop-access\\README.md:158-166",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-files",
+        "group": "g-tools",
+        "name": "文件",
+        "what": "读、写、找、列目录、复制、移动",
+        "how": "直接说要找什么、改什么",
+        "status": "在用",
+        "source": "日志 9-26 至 9-28 FileSystem 65 次",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-shell",
+        "group": "g-tools",
+        "name": "命令和脚本",
+        "what": "用 PowerShell 7 跑命令、Python、Node、Git 和现成管理脚本，拿回输出和退出码",
+        "how": "直接说要做的事",
+        "status": "在用",
+        "source": "日志 PowerShell 130 次；E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:243",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-docs",
+        "group": "g-tools",
+        "name": "读文档片段",
+        "what": "只读文本某几行、PDF 某页、Word 某段、Excel 某行，不回传整份",
+        "how": "说清读哪份的哪一段",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:244；server.py read_document",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-long-edit",
+        "group": "g-tools",
+        "name": "大文件局部修改",
+        "what": "10 万行的文本只读目标附近，按唯一锚点改一段再回读",
+        "how": "说清改哪一段",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:245（9 月 11 日补验）",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-desktop",
+        "group": "g-tools",
+        "name": "桌面操作",
+        "what": "截图、读界面元素、点、打字、快捷键、滚动、拖动、开关应用、等某个画面出现",
+        "how": "说清要在哪个软件里做什么；会占用鼠标键盘",
+        "status": "在用",
+        "source": "日志 Screenshot 6、Snapshot 5、App 3、Click 2、Move 1；E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:249",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-chrome",
+        "group": "g-tools",
+        "name": "操作我的 Chrome",
+        "what": "在原来的 Chrome 里开标签、输入、点链接、截图核对，不动已开的页面",
+        "how": "说清要打开哪个网页做什么",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:247",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-forms",
+        "group": "g-tools",
+        "name": "填表和上传",
+        "what": "输入、下拉、勾选、选附件、提交；只在本机测试页验过，真网站的登录验证码没测",
+        "how": "说清填什么；点屏操作我一般自己来",
+        "status": "说不准",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:248；本人 FZ14（owner-decisions.md）",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-system",
+        "group": "g-tools",
+        "name": "系统小工具",
+        "what": "进程、注册表、剪贴板、弹通知、显示器清单、抓网页文字",
+        "how": "直接说要查什么",
+        "status": "在用",
+        "source": "Windows-MCP 上游工具；日志 Process 1、DisplayInventory 1",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-maintenance",
+        "group": "g-tools",
+        "name": "管理员和 SYSTEM 维护",
+        "what": "用管理员或 SYSTEM 身份跑命令；长命令先给编号，之后凭编号取结果",
+        "how": "说清要维护什么；AI 自己选身份",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:122-143；日志 2 次；两个维护任务 9 月 25 日成功",
+        "screen": "remote-control-09"
+      },
+      {
+        "id": "f-rules-handshake",
+        "group": "g-guard",
+        "name": "连上就给规则",
+        "what": "每次连接握手附上规则原文：主机现场核验当前版本，笔记本发自己那份",
+        "how": "自动",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:196-200；server.py:793-812",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-context",
+        "group": "g-guard",
+        "name": "开工先核对",
+        "what": "先查是哪台电脑、用哪版规则、资料锁开没开、电脑有没有卡住",
+        "how": "自动，每条新提示先调一次",
+        "status": "在用",
+        "source": "server.py:48-56；日志 ComputerContext 50 次",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-shared-lock",
+        "group": "g-guard",
+        "name": "资料锁共用一份",
+        "what": "手机、网页、本机 AI 用同一份资料解锁和截止；连上电脑不算解锁",
+        "how": "锁着时 AI 给出授权页地址",
+        "status": "在用",
+        "source": "E:\\.agents\\releases\\E187\\docs\\contracts\\agents.privacy-data.md:9；server.py:58-78",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-recycle",
+        "group": "g-guard",
+        "name": "删除和覆盖先进回收站",
+        "what": "删文件、覆盖写入、覆盖复制移动，旧内容先进我账户的回收站；进不去就拒绝",
+        "how": "自动",
+        "status": "在用",
+        "source": "filesystem_recycle.py:1-12；提交 56f86714（9-28 03:46）",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-no-replay",
+        "group": "g-guard",
+        "name": "超时不重来",
+        "what": "超时只说结果未知，不自动重交；维护命令凭编号查原结果",
+        "how": "自动",
+        "status": "在用",
+        "source": "freeze_guard.py:30；E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:141,158",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-freeze-rescue",
+        "group": "g-guard",
+        "name": "卡死时给急救做法",
+        "what": "独立探测确认卡死时，回复直接写重启或按键留现场；真卡死时还没见它出现过",
+        "how": "自动",
+        "status": "说不准",
+        "source": "bounded_call.py:11；提交 16b5c9d8（9-27 23:20）；9 月 28 日查 E:\\Data\\RemoteComputerMCP 的日志和 state 下卡死状态文件，没找到这句提示触发过的记录（传输日志不记回复内容，所以也不能断定从没触发）",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-no-window",
+        "group": "g-guard",
+        "name": "命令不弹黑窗口",
+        "what": "给上游打补丁，PowerShell 隐藏启动；上游修好后自动跳过",
+        "how": "自动，每次重装时补",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:319",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-owner-ref",
+        "group": "g-guard",
+        "name": "无限制授权跟到电脑上",
+        "what": "对话开无限制授权时会拿到一个配对编号，可随命令带到电脑，由密码中心核对；连接本身不算授权",
+        "how": "自动，只在对话已配对时",
+        "status": "说不准",
+        "source": "owner_takeover.py:1-6；提交 d6feb470（9-25）",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-login",
+        "group": "g-guard",
+        "name": "自己的入口密码",
+        "what": "主机、副机各一个入口密码，都存在密码中心；只认登记过的客户端",
+        "how": "第一次连接时本人从密码中心复制、登录",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:95,210-212",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-boot",
+        "group": "g-alive",
+        "name": "没登录也能维护",
+        "what": "开机就起 SYSTEM 服务，没登录也能跑维护命令；桌面操作要等登录",
+        "how": "自动；重启后未登录的实测还没做",
+        "status": "待验收",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:151-155,184,315",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-self-heal",
+        "group": "g-alive",
+        "name": "挂了自己拉起",
+        "what": "每 10 秒探测，连续 3 次失败就重启；服务本身退出按 5、15、30 秒重启",
+        "how": "自动",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:156-157；logs\\boot-service.log",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-keep-awake",
+        "group": "g-alive",
+        "name": "主机不睡",
+        "what": "主机请求保持唤醒；笔记本不唤醒，睡着就连不上",
+        "how": "自动",
+        "status": "在用",
+        "source": "registries 两份 keep_awake",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-tunnel",
+        "group": "g-alive",
+        "name": "隧道查和修",
+        "what": "一条命令查隧道和公网通不通，修复登记过的服务",
+        "how": "跟 AI 说查一下主机入口",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:88",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-public-heal",
+        "group": "g-alive",
+        "name": "副机公网自动恢复",
+        "what": "每 3 分钟查，连续 3 次不通才恢复，至少隔 30 分钟、一天最多 3 次",
+        "how": "自动；开始菜单“MCP 公网连接健康”能暂停",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\secondary-laptop-access\\README.md:195-205",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-upgrade",
+        "group": "g-alive",
+        "name": "每周检查升级",
+        "what": "每周查 Windows-MCP 新版，测试通过自动升级，副机先、主机后；笔记本的每周巡检平时暂停",
+        "how": "自动，挂在已有的每周治理里",
+        "status": "说不准",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\weekly-governance.md",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-same-source",
+        "group": "g-alive",
+        "name": "两台同一份源码",
+        "what": "两台用同一个提交，各自配置、登录凭据、部署和回退",
+        "how": "跟 AI 说更新两台的远程服务",
+        "status": "在用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:43,107-118",
+        "screen": "remote-control-10"
+      },
+      {
+        "id": "f-connect-page",
+        "group": "g-web",
+        "name": "连接电脑说明",
+        "what": "三个地址、每台的验收记录、一键复制给 AI 的配置说明",
+        "how": "打开网站的“连接电脑”",
+        "status": "在用",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\content-mcp-access.js",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-phone-guide",
+        "group": "g-web",
+        "name": "手机接续说明",
+        "what": "讲手机上的对话怎么借已连接的电脑接着办事",
+        "how": "网站首页“手机用电脑”一段",
+        "status": "说不准",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\system-home-content.js:357",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-status-page",
+        "group": "g-web",
+        "name": "主机状态",
+        "what": "在线没、锁没锁屏、处理器显卡内存、每块盘、网速；连不上时提示怎么远程开机",
+        "how": "打开“授权与状态”，前台每 60 秒读一次",
+        "status": "待验收",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\computer-access.jsx:172；public_access.py:127-150",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-personal-grant",
+        "group": "g-web",
+        "name": "个人资料授权",
+        "what": "输验证器里的 6 位动态码，办理、延长或结束资料解锁，0.5 到 72 小时",
+        "how": "打开“授权与状态”办理",
+        "status": "待验收",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\computer-access.jsx:270；public_access.py:158-168",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-unrestricted-grant",
+        "group": "g-web",
+        "name": "无限制授权",
+        "what": "同一页办理、延长或结束全局无限制授权，和资料授权分别计时",
+        "how": "打开“授权与状态”办理",
+        "status": "待验收",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\computer-access.jsx:345",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-lock",
+        "group": "g-web",
+        "name": "锁资料、锁屏",
+        "what": "一键锁住资料，或只锁 Windows 屏幕；锁屏不影响授权计时",
+        "how": "打开“授权与状态”点按钮",
+        "status": "待验收",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\computer-access.jsx:345；public_access.py:169-187",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-grafana-entry",
+        "group": "g-web",
+        "name": "监控入口",
+        "what": "显示监控面板在不在线，点过去看电脑使用记录的图表",
+        "how": "页头或授权页的 Grafana",
+        "status": "待验收",
+        "source": "V:\\Personal\\Projects\\wly0829.cn\\app\\page.jsx:308",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-codex-remote",
+        "group": "g-retired",
+        "name": "Codex 远程公网入口",
+        "what": "手机网页看 Codex 任务；9 月 26 日决定撤掉",
+        "how": "不再使用",
+        "status": "已停用",
+        "source": "E:\\.agents\\docs\\owner-decisions.md:126",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-browser-fill",
+        "group": "g-retired",
+        "name": "AI 浏览器代填入口密码",
+        "what": "改由我自己从密码中心复制",
+        "how": "不再使用",
+        "status": "已停用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:212；提交 4e88d3b7（9-27 01:36）",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-old-funnel",
+        "group": "g-retired",
+        "name": "主机旧 Funnel 入口",
+        "what": "改走 Cloudflare 后停用，只留作退回材料",
+        "how": "不再使用",
+        "status": "已停用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:74",
+        "screen": "remote-control-11"
+      },
+      {
+        "id": "f-old-plugin",
+        "group": "g-retired",
+        "name": "旧“电脑 MCP”单个连接",
+        "what": "拆成“主机 MCP”“副机 MCP”两个",
+        "how": "不再使用",
+        "status": "已停用",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:76,194",
+        "screen": "remote-control-11"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-computers",
+        "text": "2 台",
+        "meaning": "跑着远程服务的电脑：主机和副机",
+        "as_of": "2026-09-28",
+        "source": "registries\\remote_computer_mcp*.json 两份；主机 Status、副机 ComputerContext 实测",
+        "screens": [
+          "remote-control-01"
+        ]
+      },
+      {
+        "id": "n-tools",
+        "text": "23 个",
+        "meaning": "每台电脑开放的工具数（上游 20 + 自加 3）",
+        "as_of": "2026-09-28",
+        "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:124,228；副机工具目录实测",
+        "screens": [
+          "remote-control-01",
+          "remote-control-02",
+          "remote-control-04",
+          "remote-control-08"
+        ]
+      },
+      {
+        "id": "n-entries",
+        "text": "3 个",
+        "meaning": "入口：主机公网、副机、主机备用",
+        "as_of": "2026-09-28",
+        "source": "content-mcp-access.js；README.md:65-72",
+        "screens": [
+          "remote-control-01"
+        ]
+      },
+      {
+        "id": "n-calls",
+        "text": "268 次",
+        "meaning": "主机收到的工具调用，9 月 26 日 16:56 至 28 日 15:43（北京时间），日志轮换前的全部",
+        "as_of": "2026-09-28",
+        "source": "E:\\Data\\RemoteComputerMCP\\logs\\service*.log 中 rpc=tools/call 行去重计数",
+        "screens": [
+          "remote-control-01",
+          "remote-control-02"
+        ]
+      },
+      {
+        "id": "n-call-split",
+        "text": "跑命令 130 · 文件 65 · 开工核对 50 · 截图和读界面 11 · 其他 12",
+        "meaning": "同一时段按工具分",
+        "as_of": "2026-09-28",
+        "source": "同上按 tool= 分组",
+        "screens": [
+          "remote-control-02"
+        ]
+      },
+      {
+        "id": "n-median",
+        "text": "4.6 秒",
+        "meaning": "同一时段单次调用耗时中位数（含执行）",
+        "as_of": "2026-09-28",
+        "source": "同上 elapsed_ms 中位数 4571；服务端计时，不含 ChatGPT 和网络往返",
+        "screens": [
+          "remote-control-02"
+        ]
+      },
+      {
+        "id": "n-code",
+        "text": "10,747 行",
+        "meaning": "tools/remote-computer-mcp 与 tools/secondary-laptop-access 程序行数（39 个 .py/.ps1），不含驾驶舱看板接口、硬件读数、Codex 体检回执 7 个文件 2,906 行",
+        "as_of": "2026-09-28",
+        "source": "按行计数，排除 test_ 开头文件和上述 7 个文件",
+        "screens": [
+          "remote-control-05"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "7,508 行",
+        "meaning": "同两处 45 个测试文件行数，不含看板和硬件读数的 5 个测试文件",
+        "as_of": "2026-09-28",
+        "source": "按行计数 test_ 开头文件",
+        "screens": [
+          "remote-control-05"
+        ]
+      },
+      {
+        "id": "n-commits",
+        "text": "100 次",
+        "meaning": "远程服务、副机部署和 4 份远程登记的提交，9 月 9 日至 28 日",
+        "as_of": "2026-09-28",
+        "source": "E:\\PCConfig git log 这些路径",
+        "screens": [
+          "remote-control-05"
+        ]
+      },
+      {
+        "id": "n-feature-count",
+        "text": "44 项",
+        "meaning": "全部功能条数",
+        "as_of": "2026-09-28",
+        "source": "本页 registry.features",
+        "screens": [
+          "remote-control-09"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-pcconfig-host",
+        "with": "pcconfig",
+        "direction": "住在",
+        "flow": "服务源码、登记、计划任务都在电脑配置与恢复仓库里；它的恢复顺序、自动任务总账把这套服务当成要重建的核心服务",
+        "source": "registries\\scheduled_task_rebuild_plan.json（PCConfig Remote Computer MCP）"
+      },
+      {
+        "id": "r-pcconfig-freeze",
+        "with": "pcconfig",
+        "direction": "顺带承载",
+        "flow": "同一个服务里跑着“卡死自动留现场”（每 10 秒）和驾驶舱看板接口；两者的家在电脑配置与恢复",
+        "source": "task_purpose_catalog.json mcp-service:freeze-capture；public_access.py:22,132"
+      },
+      {
+        "id": "r-password-center",
+        "with": "password-center",
+        "direction": "用它",
+        "flow": "入口密码存在密码中心；网页授权的 6 位动态码交给密码中心核验；资料锁状态、无限制授权配对由密码中心的 SecretBroker 和本人接管入口给出",
+        "source": "public_access.py:28-38；server.py:42；owner_takeover.py:18"
+      },
+      {
+        "id": "r-agents-rules",
+        "with": "agents",
+        "direction": "拿来",
+        "flow": "握手和 ComputerContext 调用规则基座的核验入口，拿当前生效规则的原文和版本",
+        "source": "server.py:41,505-599"
+      },
+      {
+        "id": "r-website",
+        "with": "_website",
+        "direction": "给出",
+        "flow": "网站的“连接电脑”“授权与状态”页是它的操作界面；授权页经主机 /computer-access/api 读写",
+        "source": "computer-access-model.js:1-3"
+      },
+      {
+        "id": "r-timeaudit",
+        "with": "timeaudit",
+        "direction": "借路给",
+        "flow": "电脑使用记录的 Grafana 图表走同一条 Cloudflare 隧道公开，授权页显示它在不在线",
+        "source": "remote_computer_cloudflare_tunnel.json additional_public_services"
+      },
+      {
+        "id": "r-daily-preferences",
+        "with": "daily-preferences",
+        "direction": "给出",
+        "flow": "手机和云端 AI 经电脑连接用电脑上同一份个人理解库和命令入口",
+        "source": "owner-decisions.md:980-990"
+      },
+      {
+        "id": "r-streaming",
+        "with": "sunshine-remote-streaming",
+        "direction": "分工",
+        "flow": "人用手机看画面、自己操作归串流；AI 调工具办事归这里；笔记本平时用 Moonlight 远控主机",
+        "source": "副机 AGENTS.md 定位条"
+      },
+      {
+        "id": "r-tailscale-skill",
+        "with": "skill:tailscale-safe-exposure",
+        "direction": "用它",
+        "flow": "副机 Funnel 入口、两机私网中转这类 Tailscale 开放，按这个技能的最小开放和分层验收做",
+        "source": "SKILL.md；secondary README:106,143"
+      },
+      {
+        "id": "r-codex-remote",
+        "with": "codex-local-remote",
+        "direction": "取代",
+        "flow": "Codex 远程公网入口 9 月 26 日撤掉（冻结项目）",
+        "source": "owner-decisions.md:126"
+      },
+      {
+        "id": "r-chatgpt",
+        "with": "ext:chatgpt",
+        "direction": "被调用",
+        "flow": "ChatGPT“我的电脑”项目经 OAuth 调主机、副机工具",
+        "source": "README.md:194"
+      },
+      {
+        "id": "r-cloudflare",
+        "with": "ext:cloudflare",
+        "direction": "用它",
+        "flow": "免费隧道把 mcp.wly0829.cn 接到主机本机端口",
+        "source": "remote_computer_cloudflare_tunnel.json"
+      },
+      {
+        "id": "r-tailscale",
+        "with": "ext:tailscale",
+        "direction": "用它",
+        "flow": "副机 Funnel 公网入口、两机私网中转",
+        "source": "remote_computer_mcp_relay.json"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-tunnel-drill",
+        "title": "隧道断了，从笔记本绕进去把它修好",
+        "screen": "remote-control-08"
+      },
+      {
+        "id": "h-same-rules",
+        "title": "手机上的 AI，守的也是同一套规矩",
+        "screen": "remote-control-08"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "remote-control-01",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/mcp/",
+        "screen": "remote-control-01",
+        "text": "连接电脑"
+      },
+      {
+        "target": "/computer-access/",
+        "screen": "remote-control-01",
+        "text": "授权与状态"
+      },
+      {
+        "target": "/computer-access/",
+        "screen": "remote-control-02",
+        "text": "授权与状态"
+      },
+      {
+        "target": "/projects/daily-preferences/",
+        "screen": "remote-control-02",
+        "text": "个人理解库"
+      },
+      {
+        "target": "/rules/charter/",
+        "screen": "remote-control-02",
+        "text": "约法"
+      },
+      {
+        "target": "/rules/authorization/",
+        "screen": "remote-control-05",
+        "text": "用户授权规则"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "remote-control-03",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "remote-control-07",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "remote-control-03",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/projects/password-center/",
+        "screen": "remote-control-04",
+        "text": "密码中心"
+      },
+      {
+        "target": "/rules/privacy-data/",
+        "screen": "remote-control-05",
+        "text": "个人资料规则"
+      },
+      {
+        "target": "/rules/charter/#L14",
+        "screen": "remote-control-05",
+        "text": "L14"
+      },
+      {
+        "target": "/mcp/",
+        "screen": "remote-control-09",
+        "text": "连接电脑"
+      },
+      {
+        "target": "/computer-access/",
+        "screen": "remote-control-11",
+        "text": "授权与状态"
+      },
+      {
+        "target": "/projects/codex-local-remote/",
+        "screen": "remote-control-11",
+        "text": "Codex 远程"
+      }
+    ],
+    "live": [
+      {
+        "slot": "run",
+        "meaning": "这台电脑远程服务的自动任务现在正不正常：远程操作桌面（登录后启动）、远程维护（管理员）、远程维护（系统级）三项里最差的一项，填“运行正常／有任务没按时跑／上次运行失败／暂时读不到”",
+        "source": "驾驶舱看板接口自动任务一栏 group=remote 中 id 为 \\PCConfig Remote Computer MCP、\\PCConfig Remote Computer MCP Maintenance Admin、\\PCConfig Remote Computer MCP Maintenance SYSTEM 的三行（public_dashboard.py）"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [
+      "底稿“锁定桌面”并进 f-lock（和“锁资料”同一块页面）。",
+      "底稿“电脑连接”→ f-connect-page；“手机接续说明”→ f-phone-guide；“主机状态”→ f-status-page；“资料授权”→ f-personal-grant；“无限制授权”→ f-unrestricted-grant；“监控入口”→ f-grafana-entry。"
+    ],
+    "dropped": [
+      "底稿（wly0829-cn.json）里网站本身的 12 项功能不上本页：系统场景、系统分工、自动协作说明、验证边界、项目目录、双层项目说明、站内搜索、项目内搜索、规则阅读、技能目录、续作说明、实践展示。本人定个人网站不写项目页，它们的家是第 2 批“这个网页是怎么做的”。",
+      "卡死自动留现场、驾驶舱看板接口虽然跑在同一个服务里，家在电脑配置与恢复页，本页只在 relations 里记，不列功能。",
+      "ToDesk 登录前守护、Windows 远程桌面只放行两台、借电脑上网三项是人远程或网络能力，家在电脑配置与恢复页，本页出事那屏只放一句入口。"
+    ],
+    "unsure": [
+      "和电脑配置与恢复页的重复：Claude 已定家在本页，那边原第 7 屏和相关功能改成一句话链到这里。",
+      "GitHub 按钮按 Claude 答复保留为“GitHub（网页部分）”；服务代码实际在私有 PCConfig，based_on 用的是 PCConfig 的提交，wly0829.cn 提交写在 facts.md。",
+      "替本人口吻的句子：“超时和卡死怎么处理”一屏“我强制重启 5 分钟就好”；第 5 屏“这是我知道并决定保留的”（来自本人 C8“知道，保持”）；第 6 屏“我用 Moonlight 远控主机”。上线前请本人过目。",
+      "268 次调用只覆盖日志还留着的 9 月 26 日 16:56 至 28 日 15:43；日志不记是 ChatGPT 还是笔记本 Codex 发起的，也不记命令本身成功没有（HTTP 全是 200）。",
+      "“卡死时给急救做法”标说不准：9 月 27 日 23:20 才加上，之后真卡死时回复里有没有出现这句，没查到证据。",
+      "网页上的授权与状态那 5 项沿用底稿的“待验收”（页面、前端和主机接口都在，没实际办理过）。本人是否已在手机上办理过，需要本人确认后改成“在用”。",
+      "“每周检查升级”标说不准：主机挂在“三基座与 GitHub 持续治理”里，笔记本挂的每周巡检平时暂停；最近一次真正按这条流程升级的回执没找到。",
+      "没有真实截图：仓库里授权页的图都标着“示例数据”“设计示意”，是设计稿，没放。若要放，建议第 2 批在真页面上截。"
+    ]
+  }
+}

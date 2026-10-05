@@ -1,0 +1,121 @@
+/* 仅本族；文字和卡片颜色、字号都由统一变量决定。 */
+.c-diagram.dd-annotation,
+.c-diagram.dd-legend,
+.c-diagram.dd-chart { color: var(--text); font-family: "Sans", sans-serif; font-size: var(--fs-body); line-height: var(--lh); min-width: 0; }
+.c-diagram.dd-legend,
+.c-diagram.dd-chart { padding: var(--gap-card); border: 2px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+.c-diagram .dd-annotation-grid { display: grid; grid-template-columns: minmax(0, var(--dd-media-fr)) minmax(0, var(--dd-text-fr)); gap: var(--gap-card) 4%; position: relative; }
+.c-diagram .dd-media { grid-column: 1; grid-row: 1 / span var(--dd-rows); min-width: 0; align-self: center; }
+.c-diagram .dd-image { display: block; width: 100%; height: auto; }
+.c-diagram .dd-shot { position: relative; width: 100%; background: var(--card-bg); border: 2px solid var(--line); border-radius: var(--radius); }
+.c-diagram .dd-shot-preview { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border-radius: inherit; }
+.c-diagram .dd-callout { grid-column: 2; min-width: 0; align-self: center; overflow-wrap: anywhere; position: relative; }
+.c-diagram.dd-media-right .dd-annotation-grid { grid-template-columns: minmax(0, var(--dd-text-fr)) minmax(0, var(--dd-media-fr)); }
+.c-diagram.dd-media-right .dd-media { grid-column: 2; }
+.c-diagram.dd-media-right .dd-callout { grid-column: 1; }
+.c-diagram.dd-no-media .dd-annotation-grid { grid-template-columns: minmax(0, 1fr); }
+.c-diagram.dd-no-media .dd-callout { grid-column: 1; }
+.c-diagram.dd-labels-above .dd-annotation-grid { grid-template-columns: repeat(var(--dd-rows), minmax(0, 1fr)); gap: var(--gap-card); }
+.c-diagram.dd-labels-above .dd-media { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+.c-diagram.dd-labels-above .dd-callout { grid-column: auto; grid-row: 1; align-self: stretch; padding: calc(var(--gap-card) / 2); border: 2px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+.c-diagram .dd-leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.c-diagram .dd-leader { fill: none; stroke: var(--accent); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.c-diagram .dd-dashed { stroke-dasharray: 5 5; }
+.c-diagram .dd-anchor { fill: var(--accent); }
+.o-v .c-diagram.dd-annotation:not(.dd-connected) .dd-annotation-grid { grid-template-columns: minmax(0, 1fr); }
+.o-v .c-diagram.dd-annotation:not(.dd-connected) .dd-media { grid-column: 1; grid-row: auto; width: var(--dd-media-v); justify-self: center; }
+.o-v .c-diagram.dd-annotation:not(.dd-connected) .dd-callout { grid-column: 1; }
+.c-diagram.dd-overlay-host { position: relative; display: grid; grid-template-columns: repeat(var(--dd-label-cols, 1), minmax(0, 1fr)); gap: var(--gap-card); }
+.c-diagram.dd-overlay-ready { height: 0; min-height: 0; }
+.c-diagram.dd-overlay-ready .dd-overlay-label { position: absolute; width: max-content; text-align: center; z-index: 2; }
+.c-diagram.dd-overlay-name .dg-body { color: var(--title); font-size: var(--fs-name); font-weight: 700; }
+.c-diagram.dd-external-host { position: relative; display: grid; grid-template-columns: repeat(var(--dd-label-cols, 1), minmax(0, 1fr)); gap: var(--gap-card); }
+.c-diagram.dd-external-host .dd-external-row { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: .5em; align-items: start; min-width: 0; position: relative; z-index: 1; }
+.c-diagram.dd-external-host .dd-external-number { display: inline-flex; align-items: center; justify-content: center; width: 1.6em; height: 1.6em; border-radius: 50%; color: var(--cardbg); background: var(--accent); font-size: var(--fs-body); line-height: 1; }
+.c-diagram.dd-external-host .dd-external-text { min-width: 0; overflow-wrap: anywhere; }
+.c-diagram.dd-external-host [data-source-fallback] .dd-external-text { grid-column: 1 / -1; }
+.c-diagram.dd-external-host .dd-external-lines { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 0; }
+.c-diagram .dd-label-prefix { display: block; font-size: var(--fs-body); line-height: var(--lh); }
+.c-diagram .dd-arrow-head { fill: var(--accent); }
+.c-diagram.dd-annotation-columns .dd-label-stack { display: grid; grid-column: 2; grid-row: 1; grid-template-columns: repeat(var(--dd-label-cols), minmax(0, 1fr)); gap: var(--gap-card); min-width: 0; }
+.c-diagram.dd-annotation-columns .dd-media { grid-row: 1; }
+.c-diagram.dd-annotation-columns .dd-callout { grid-column: auto; grid-row: auto; }
+.c-diagram.dd-annotation-columns.dd-no-media .dd-label-stack { grid-column: 1; }
+.c-diagram.dd-annotation-columns.dd-labels-above .dd-label-stack { grid-column: 1 / -1; grid-row: 1; }
+.c-diagram.dd-annotation-columns.dd-labels-above .dd-media { grid-column: 1 / -1; grid-row: 2; }
+.c-diagram.dd-labels-below .dd-annotation-grid { grid-template-columns: minmax(0, 1fr); }
+.c-diagram.dd-labels-below .dd-media { grid-column: 1; grid-row: 1; }
+.c-diagram.dd-labels-below .dd-label-stack { grid-column: 1; grid-row: 2; }
+.o-v .c-diagram.dd-annotation-columns:not(.dd-connected) .dd-label-stack { grid-column: 1; grid-row: auto; }
+.c-diagram.dd-legend { display: grid; gap: var(--gap-card); }
+.c-diagram .dd-legend-row { display: grid; grid-template-columns: 4em minmax(0, 1fr); column-gap: var(--gap-card); align-items: center; }
+.c-diagram .dd-legend-text { min-width: 0; overflow-wrap: anywhere; }
+.c-diagram .dd-legend-extra { grid-column: 1 / -1; }
+.c-diagram .dd-sample { display: block; height: 0; position: relative; border-top: 3px solid var(--accent); }
+.c-diagram .dd-sample::after { content: ""; position: absolute; left: 45%; top: -7px; width: 11px; height: 11px; border-radius: 50%; background: var(--line); box-shadow: 0 0 6px var(--line); }
+.c-diagram .dd-sample.dd-dashed { border-top-style: dashed; }
+.c-diagram .dd-sample.dd-dotted { border-top-style: dotted; }
+.c-diagram .dd-sample.dd-double { border-top: 6px double var(--accent); }
+.c-diagram.dd-legend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.o-v .c-diagram.dd-legend-grid { grid-template-columns: minmax(0, 1fr); }
+.c-diagram.dd-legend.dd-legend-columns { grid-template-columns: repeat(var(--dd-legend-cols), minmax(0, 1fr)); }
+.o-v .c-diagram.dd-legend.dd-legend-columns { grid-template-columns: repeat(var(--dd-legend-cols), minmax(0, 1fr)); }
+.c-diagram.dd-chart { display: flex; flex-direction: column; gap: var(--gap-card); }
+.c-diagram .dd-chart-prefix,
+.c-diagram .dd-chart-header { color: var(--title); font-size: var(--fs-name); font-weight: 700; }
+.c-diagram .dd-chart-header { display: flex; flex-wrap: wrap; gap: var(--gap-card); }
+.c-diagram .dd-points { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap-card); }
+.c-diagram .dd-point { position: relative; display: grid; gap: 6px; min-width: 0; }
+.c-diagram .dd-point-labels { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .25em .75em; min-width: 0; }
+.c-diagram .dd-chart-label { overflow-wrap: anywhere; }
+.c-diagram .dd-chart-number { color: var(--accent); font-weight: 700; overflow-wrap: anywhere; }
+.c-diagram .dd-chart-number .dd-chart-note { font-size: var(--fs-body); line-height: var(--lh); font-weight: 400; color: var(--text); }
+.c-diagram .dd-track { width: 100%; height: .7em; border-radius: calc(var(--radius) / 3); background: var(--line); }
+.c-diagram .dd-bar { width: var(--dd-share); height: 100%; border-radius: inherit; background: var(--accent); }
+.c-diagram .dd-separator { justify-self: end; line-height: var(--lh); }
+.c-diagram.dd-chart-bar .dd-points { gap: .25em; }
+.c-diagram.dd-chart-bar .dd-point { grid-template-columns: minmax(0, 34%) minmax(0, 1fr) minmax(0, max-content); column-gap: .45em; align-items: center; }
+.c-diagram.dd-chart-bar .dd-point-labels { display: contents; }
+.c-diagram.dd-chart-bar .dd-chart-label { grid-column: 1; grid-row: 1; }
+.c-diagram.dd-chart-bar .dd-track { grid-column: 2; grid-row: 1; }
+.c-diagram.dd-chart-bar .dd-chart-number { grid-column: 3; grid-row: 1; text-align: right; }
+.c-diagram.dd-chart-bar .dd-separator { grid-column: 4; grid-row: 1; }
+.c-diagram.dd-chart-column .dd-points { grid-template-columns: repeat(var(--dd-count), minmax(0, 1fr)); gap: var(--gap-card); }
+.c-diagram.dd-chart-column .dd-point { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 10em auto; align-items: end; align-content: start; }
+.c-diagram.dd-chart-column .dd-point-labels { display: contents; }
+.c-diagram.dd-chart-column .dd-chart-label { grid-column: 1 / -1; grid-row: 3; justify-self: center; width: max-content; max-width: 100%; text-align: center; }
+.c-diagram.dd-chart-column .dd-chart-number { grid-column: 1 / -1; grid-row: 1; text-align: center; }
+.c-diagram.dd-chart-column .dd-track { grid-column: 1 / -1; grid-row: 2; width: 100%; height: 100%; display: flex; align-items: end; justify-content: center; background: none; border-bottom: 2px solid var(--line); border-radius: 0; }
+.c-diagram.dd-chart-column .dd-bar { width: 65%; height: var(--dd-share); border-radius: calc(var(--radius) / 3) calc(var(--radius) / 3) 0 0; }
+.c-diagram.dd-chart-column .dd-separator { grid-column: 1; grid-row: 3; justify-self: end; }
+.c-diagram .dd-line-chart { display: block; width: 100%; height: auto; }
+.c-diagram .dd-line-path { fill: none; stroke: var(--accent); stroke-width: 4; }
+.c-diagram .dd-line-dot { fill: var(--accent); }
+.c-diagram .dd-donut-chart { display: block; width: min(100%, 12em); height: auto; align-self: center; transform: rotate(-90deg); }
+.c-diagram .dd-donut-arc { fill: none; stroke: var(--accent); stroke-width: 40; }
+.c-diagram .dd-donut-arc:nth-child(2n) { stroke: var(--title); }
+.c-diagram .dd-donut-arc:nth-child(3n) { stroke: var(--line); }
+.c-diagram.dd-chart-segmented .dd-points { grid-template-columns: var(--dd-segments); grid-template-rows: 1em auto auto; gap: 0; align-items: stretch; }
+.c-diagram.dd-chart-segmented .dd-point { display: contents; }
+.c-diagram.dd-chart-segmented .dd-point-labels { grid-column: var(--dd-item); grid-row: 2; padding: .3em .35em 0; flex-direction: column; align-items: flex-start; }
+.c-diagram.dd-chart-segmented .dd-track { grid-column: var(--dd-item); grid-row: 1; height: 1em; border-radius: 0; background: none; }
+.c-diagram.dd-chart-segmented .dd-separator { grid-column: var(--dd-item); grid-row: 3; }
+.c-diagram.dd-chart-segmented .dd-bar { width: 100%; border-radius: 0; background: var(--dd-colour, var(--title)); }
+.c-diagram.dd-chart-segmented .dd-colour-key { display: none; }
+.c-diagram.dd-legend-rows .dd-point-labels { grid-column: 1 / -1; grid-row: var(--dd-label-row); padding: .4em 0 0; flex-direction: row; align-items: flex-start; justify-content: flex-start; }
+.c-diagram.dd-legend-rows .dd-colour-key,
+.o-v .c-diagram.dd-chart-segmented .dd-colour-key { display: inline-block; flex: 0 0 .65em; width: .65em; height: .65em; margin-top: .4em; background: var(--dd-colour, var(--title)); }
+.c-diagram.dd-chart-segmented .dd-point-labels .dd-chart-label,
+.c-diagram.dd-chart-segmented .dd-point-labels .dd-chart-number { min-width: 0; max-width: 100%; }
+.o-v .c-diagram.dd-chart-segmented .dd-point-labels { grid-column: 1 / -1; grid-row: var(--dd-label-row); padding-top: .4em; flex-direction: row; align-items: flex-start; }
+/* 一整条说明只测一个tb；数字与长说明用正常行内流，不能作为两个flex块整段换行。 */
+.c-diagram.dd-chart-segmented .dd-point-labels.dd-label-flow { display: block; grid-column: 1 / -1; grid-row: var(--dd-label-row); padding: .4em 0 0; min-width: 0; overflow-wrap: anywhere; }
+.c-diagram.dd-chart-donut .dd-points { width: max-content; max-width: 100%; align-self: center; gap: .25em; }
+.c-diagram.dd-chart-donut .dd-point-labels.dd-label-flow { display: block; grid-column: 1; grid-row: 1; min-width: 0; overflow-wrap: anywhere; }
+.c-diagram .dd-label-flow .dd-chart-number,
+.c-diagram .dd-label-flow .dd-chart-label,
+.c-diagram .dd-label-flow .dd-separator { display: inline; }
+.c-diagram.dd-chart-segmented .dd-label-flow .dd-colour-key { display: inline-block; width: .65em; height: .65em; margin: 0 .45em 0 0; vertical-align: -.03em; background: var(--dd-colour, var(--title)); }
+.c-diagram .dd-donut-figure { position: relative; width: min(100%, 12em); align-self: center; }
+.c-diagram .dd-donut-figure .dd-donut-chart { width: 100%; }
+.c-diagram .dd-chart-total { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: var(--fs-name); color: var(--accent); font-weight: 700; white-space: nowrap; }

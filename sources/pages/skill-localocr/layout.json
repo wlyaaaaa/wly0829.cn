@@ -1,0 +1,806 @@
+[
+  {
+    "screen": "skill-localocr-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本地文字识别",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "49%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "要逐字准确",
+        "row": "intro"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "intro",
+        "width": "51%",
+        "target_width": "80%",
+        "align": "right"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "可以这样说",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“把这几张截图",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "row": "quotes-1",
+        "width": "50%",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这份扫描件",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "row": "quotes-1",
+        "width": "50%",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这一文件夹",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "row": "quotes-2",
+        "width": "50%",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“描述一下这张照片",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "row": "quotes-2",
+        "width": "50%",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“识别完把显卡",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "row": "quotes-3",
+        "width": "50%",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它背后的项目",
+        "align": "left",
+        "size": "small"
+      }
+    ],
+    "notes": "原图横版顶部为左侧大标题、副标题和介绍，右侧独立分岔路插画；五个示例带左图标、右气泡，横版两列三排，最后一张只占左半。竖版先标题/副标题/介绍，再整宽插画、五张逐行示例、末尾链接。无流程丝带；分岔虚线箭头属于无字主插画。链接只保留定稿链接词，原图额外↗不新增。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10第4条：首屏右图在原栏内缩至80%并靠右，降低首排高度，让示例紧接简介。",
+    "dependencies": [
+      "五个para节点可分为五个dialogue块，但现有dialogue缺左侧小插画/头像位；5个示例图标未提供。",
+      "横版末行单张50%宽需实现，当前row只有单块会直接整宽。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-01-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本地文字识别",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "要逐字准确"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "可以这样说",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“把这几张截图",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这份扫描件",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这一文件夹",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“描述一下这张照片",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“识别完把显卡",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "outside-left"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它背后的项目",
+        "align": "left",
+        "size": "small"
+      }
+    ],
+    "notes": "原图横版顶部为左侧大标题、副标题和介绍，右侧独立分岔路插画；五个示例带左图标、右气泡，横版两列三排，最后一张只占左半。竖版先标题/副标题/介绍，再整宽插画、五张逐行示例、末尾链接。无流程丝带；分岔虚线箭头属于无字主插画。链接只保留定稿链接词，原图额外↗不新增。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。",
+    "dependencies": [
+      "五个para节点可分为五个dialogue块，但现有dialogue缺左侧小插画/头像位；5个示例图标未提供。",
+      "横版末行单张50%宽需实现，当前row只有单块会直接整宽。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-01-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r2\\state\\b1-skill-localocr-02-h\\round-01\\candidate-2.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r2\\state\\b1-skill-localocr-02-h\\round-01\\candidate-2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "left",
+        "size": "large",
+        "row": "example-top",
+        "width": "55%"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：“这份扫描讲义",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "right"
+        ],
+        "row": "example-top"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：“16 页都读完了",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "left"
+        ],
+        "row": "example-top"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "example-top",
+        "width": "45%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后发生了什么",
+        "align": "left",
+        "size": "medium",
+        "frame": "behind"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "AI 看出这是扫描件",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "frame": "behind",
+        "item_cards": false,
+        "bare": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "（9 月 26 日真有",
+        "align": "left",
+        "size": "small",
+        "frame": "behind"
+      }
+    ],
+    "notes": "横版参考采用pages-approved通过的candidate-2；标题和两气泡在左55%栏、讲义放大镜插画在右45%栏。下方一张满宽灰蓝浅卡，组名、四条圆编号紧凑纵排和示意说明同卡；没有箭头/丝带。竖图旧标题不是毛笔，按标准改为同浓度毛笔并居中；对话后整宽插画，再组名和四张左图右文横条，说明在卡外页尾。插画中的TXT/MD/JSON标签未另分配定稿节点，不新增这些字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：横版四条编号改用现有bullet_list，和小节标题/尾注共享frame=behind单外框；竖版item_cards逐条左图卡，原编号/文字完整。",
+    "dependencies": [
+      "横版编号条目需单外框紧凑列表，现numbered_steps是四张独立卡；container_id/variant仅表达构图意图，主程序未支持。",
+      "第2屏标题与独立插画均未抽取；竖版四个步骤图标缺失。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-02-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：“这份扫描讲义",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "right"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：“16 页都读完了",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后发生了什么",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "AI 看出这是扫描件",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ],
+        "item_cards": true,
+        "bare": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "（9 月 26 日真有",
+        "align": "left",
+        "size": "small"
+      }
+    ],
+    "notes": "横版参考采用pages-approved通过的candidate-2；标题和两气泡在左55%栏、讲义放大镜插画在右45%栏。下方一张满宽灰蓝浅卡，组名、四条圆编号紧凑纵排和示意说明同卡；没有箭头/丝带。竖图旧标题不是毛笔，按标准改为同浓度毛笔并居中；对话后整宽插画，再组名和四张左图右文横条，说明在卡外页尾。插画中的TXT/MD/JSON标签未另分配定稿节点，不新增这些字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：横版四条编号改用现有bullet_list，和小节标题/尾注共享frame=behind单外框；竖版item_cards逐条左图卡，原编号/文字完整。",
+    "dependencies": [
+      "横版编号条目需单外框紧凑列表，现numbered_steps是四张独立卡；container_id/variant仅表达构图意图，主程序未支持。",
+      "第2屏标题与独立插画均未抽取；竖版四个步骤图标缺失。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-02-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "又看画面又抄字",
+        "align": "left",
+        "size": "large",
+        "row": "mixed-top",
+        "width": "65%"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：“描述一下这张照片",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "left"
+        ],
+        "row": "mixed-top"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "mixed-top",
+        "width": "35%",
+        "target_width": "100%",
+        "align": "right"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 自己看到的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png"
+        ],
+        "row": "results",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "本地文字识别读出的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/放大镜.png"
+        ],
+        "row": "results",
+        "width": "50%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "AI 回我时分四块",
+        "columns": 1,
+        "columns_v": 1,
+        "tone": "yellow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "横版标题和我说的话占左上，街景照片、眼睛和放大镜插画独立占右上；下方两张50%卡并排，各为左插画/右标题正文，满宽浅黄提醒放最下面。竖版标题居中，其次我气泡、主插画、两张左图右文卡上下排、最下面浅黄提醒。眼睛和放大镜的虚线引箭头在插画中，文字卡之间没有丝带。提醒包括末句本机要求，不另遗漏。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10第1条：对话和插画同排，左文65%、右图35%，两张结果卡紧接首排。 qa-10第2条：两张结果卡明确绑定既有相机、放大镜图标，区分画面观察和逐字识别，不再取通用门图。",
+    "dependencies": [
+      "两张**名称**｜正文为para节点，已用两独立content_card块保证不并成一张；卡内标题需识别粗体名称并提为卡头。",
+      "主插画及两卡/提醒左图缺合格素材；notice当前不支持左图，黄色底也待组件样张。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-03-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "又看画面又抄字",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：“描述一下这张照片",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 自己看到的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "本地文字识别读出的",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/放大镜.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "AI 回我时分四块",
+        "columns": 1,
+        "columns_v": 1,
+        "tone": "yellow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "横版标题和我说的话占左上，街景照片、眼睛和放大镜插画独立占右上；下方两张50%卡并排，各为左插画/右标题正文，满宽浅黄提醒放最下面。竖版标题居中，其次我气泡、主插画、两张左图右文卡上下排、最下面浅黄提醒。眼睛和放大镜的虚线引箭头在插画中，文字卡之间没有丝带。提醒包括末句本机要求，不另遗漏。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10第2条：两张结果卡明确绑定既有相机、放大镜图标，区分画面观察和逐字识别，不再取通用门图。",
+    "dependencies": [
+      "两张**名称**｜正文为para节点，已用两独立content_card块保证不并成一张；卡内标题需识别粗体名称并提为卡头。",
+      "主插画及两卡/提醒左图缺合格素材；notice当前不支持左图，黄色底也待组件样张。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-03-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "illustration",
+        "asset": "skill-localocr/skill-localocr-04-illustration-01.png",
+        "align": "center",
+        "target_width": "100%",
+        "frame": "capability",
+        "row": "capability",
+        "width": "48%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "读字、选模型",
+        "whole_block": true,
+        "variant": "source_note",
+        "inline_button": "看全部功能",
+        "button_placement": "below",
+        "button_align": "left",
+        "align": "left",
+        "frame": "capability",
+        "row": "capability",
+        "width": "52%"
+      }
+    ],
+    "notes": "原图是一张整宽大卡：横版左48%为28圆点清单插画，右侧完整说明、下方独立胶囊描边按钮；竖版同一卡内插画置顶，说明在下，按钮居中。卡右下/页边叶子仅装饰，不增加字。标题原图横版靠左，但本次整屏章节标题按本人追加要求居中，毛笔浓度保持。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：复用frame共同外卡+illustration/notice，横版48%左图52%右文、竖版上图下文；原看全部功能链接由现有inline_button变为原词按钮，手机居中。",
+    "dependencies": [
+      "content_card需让指定illustration素材按半卡宽显示，不能缩成小图标；illustration_width仅表达待接入意图。",
+      "链接嵌在单para中，不能把看全部功能另写text_ref；link_style需仅把原有链接呈为卡内独立按钮且文字只出现一次。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-04-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "illustration",
+        "asset": "skill-localocr/skill-localocr-04-illustration-01.png",
+        "align": "center",
+        "target_width": "100%",
+        "frame": "capability"
+      },
+      {
+        "type": "notice",
+        "text_ref": "读字、选模型",
+        "whole_block": true,
+        "variant": "source_note",
+        "inline_button": "看全部功能",
+        "button_placement": "below",
+        "button_align": "center",
+        "align": "left",
+        "frame": "capability"
+      }
+    ],
+    "notes": "原图是一张整宽大卡：横版左48%为28圆点清单插画，右侧完整说明、下方独立胶囊描边按钮；竖版同一卡内插画置顶，说明在下，按钮居中。卡右下/页边叶子仅装饰，不增加字。标题原图横版靠左，但本次整屏章节标题按本人追加要求居中，毛笔浓度保持。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：复用frame共同外卡+illustration/notice，横版48%左图52%右文、竖版上图下文；原看全部功能链接由现有inline_button变为原词按钮，手机居中。",
+    "dependencies": [
+      "content_card需让指定illustration素材按半卡宽显示，不能缩成小图标；illustration_width仅表达待接入意图。",
+      "链接嵌在单para中，不能把看全部功能另写text_ref；link_style需仅把原有链接呈为卡内独立按钮且文字只出现一次。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-04-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "交给它",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "limits",
+        "width": "50%",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "item_images": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+        ],
+        "icon_position": "none",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不交给它 / 它不做",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "limits",
+        "width": "50%",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "item_images": [
+          "_library/icons/相机.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/身份盾牌.png",
+          "_library/icons/禁止文件.png"
+        ],
+        "icon_position": "none",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "notice",
+        "text_ref": "取消了就不再自动重试",
+        "columns": 1,
+        "columns_v": 1,
+        "tone": "green",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "横版两张组框并排，每框标题下面四张左图右文短句卡；竖版两组上下顺排，四条仍每条一张内卡。底部整宽绿提示左插画右正文，两句话完整。无箭头或丝带。原图正文前后额外装饰绿圆点仅装饰，不应当作语义状态字；标题全屏按追加要求居中。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：边界两组换成现有points_card的逐条内卡与明确item_images左图，保持两组横版并列/竖版顺排；不以未知list_layout字段冒充完成。",
+    "dependencies": [
+      "每组bullets是一个节点，不可用text_ref按条分；content_card需提供bullets逐条内卡与左图能力，list_layout/item_illustration目前未支持。",
+      "8条图标与提示图不足（目前只抽取1个）；边界毛笔标题缺合格抽取。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-05-review.png"
+    }
+  },
+  {
+    "screen": "skill-localocr-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\img\\skill-localocr-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "交给它",
+        "columns": 1,
+        "columns_v": 1,
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "item_images": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+        ],
+        "icon_position": "none",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不交给它 / 它不做",
+        "columns": 1,
+        "columns_v": 1,
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "item_images": [
+          "_library/icons/相机.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/身份盾牌.png",
+          "_library/icons/禁止文件.png"
+        ],
+        "icon_position": "none",
+        "illustration": "left_inside"
+      },
+      {
+        "type": "notice",
+        "text_ref": "取消了就不再自动重试",
+        "columns": 1,
+        "columns_v": 1,
+        "tone": "green",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "横版两张组框并排，每框标题下面四张左图右文短句卡；竖版两组上下顺排，四条仍每条一张内卡。底部整宽绿提示左插画右正文，两句话完整。无箭头或丝带。原图正文前后额外装饰绿圆点仅装饰，不应当作语义状态字；标题全屏按追加要求居中。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：边界两组换成现有points_card的逐条内卡与明确item_images左图，保持两组横版并列/竖版顺排；不以未知list_layout字段冒充完成。",
+    "dependencies": [
+      "每组bullets是一个节点，不可用text_ref按条分；content_card需提供bullets逐条内卡与左图能力，list_layout/item_illustration目前未支持。",
+      "8条图标与提示图不足（目前只抽取1个）；边界毛笔标题缺合格抽取。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-localocr-05-review.png"
+    }
+  }
+]

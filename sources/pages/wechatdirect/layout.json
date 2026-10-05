@@ -1,0 +1,1283 @@
+[
+  {
+    "screen": "wechatdirect-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "微信聊天读取",
+        "align": "left",
+        "row": "hero",
+        "width": "55%",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-01-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechatdirect-01-h.png",
+        "source_box": [
+          30,
+          26,
+          717,
+          197
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "我问AI一件微信里的事，AI就用它直接读这台电脑上微信的本地数据库：只读我点名的那个人或群、够回答问题的那一小段，把谁说的、回的是哪句、附件",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "4份聊天档案，共7934条消息（截至9月28日）839段聊天替理解库读过，共10561条消息（9月8–27日，6次）0次写微信数据库：9月1",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-01",
+      "component_order": [
+        "chapter_title",
+        "prose",
+        "illustration",
+        "stat_card",
+        "action_button",
+        "inline_link",
+        "content_card",
+        "icon"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "微信聊天读取",
+        "align": "center",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-01-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechatdirect-01-h.png",
+        "source_box": [
+          30,
+          26,
+          717,
+          197
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "我问AI一件微信里的事，AI就用它直接读这台电脑上微信的本地数据库：只读我点名的那个人或群、够回答问题的那一小段，把谁说的、回的是哪句、附件"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "4份聊天档案，共7934条消息（截至9月28日）839段聊天替理解库读过，共10561条消息（9月8–27日，6次）0次写微信数据库：9月1",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-01",
+      "component_order": [
+        "illustration",
+        "stat_card",
+        "action_button",
+        "chapter_title",
+        "prose",
+        "inline_link",
+        "content_card",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-01-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么用",
+        "align": "center",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-h.png",
+        "source_box": [
+          38,
+          4,
+          411,
+          175
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "它不在后台跑：没有自动任务，也没有常驻程序，只在我问到微信时由AI调用一次，答完就结束。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1问一段聊天里的事",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-top",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2那句话回的是哪句",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-top",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3听语音、看图片和文件",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-top",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "4给一个人或群建档",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-bottom",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "5看朋友圈",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-bottom",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "6把一段聊天完整存底",
+        "whole_block": true,
+        "columns": 1,
+        "row": "cards-bottom",
+        "width": "33.333%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "用过的几次（都是替个人理解库读：先列出有新消息的聊天，只看列表不读正文，再挑着读）"
+      },
+      {
+        "type": "table",
+        "text_ref": "日期做什么读了多少9月8日个人项目终审，理解库全面核对675段、7502条9月12日理解库更新（两批）44段、513条9月15日认知审计14"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、例子和边界，见技能页。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-02",
+      "component_order": [
+        "chapter_title",
+        "prose",
+        "content_card",
+        "illustration",
+        "tag",
+        "inline_link",
+        "table",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么用",
+        "align": "center",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-h.png",
+        "source_box": [
+          38,
+          4,
+          411,
+          175
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "它不在后台跑：没有自动任务，也没有常驻程序，只在我问到微信时由AI调用一次，答完就结束。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1问一段聊天里的事",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2那句话回的是哪句",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3听语音、看图片和文件",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "4给一个人或群建档",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "5看朋友圈",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "6把一段聊天完整存底",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "用过的几次（都是替个人理解库读：先列出有新消息的聊天，只看列表不读正文，再挑着读）"
+      },
+      {
+        "type": "table",
+        "text_ref": "日期做什么读了多少9月8日个人项目终审，理解库全面核对675段、7502条9月12日理解库更新（两批）44段、513条9月15日认知审计14"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、例子和边界，见技能页。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-02",
+      "component_order": [
+        "content_card",
+        "table",
+        "chapter_title",
+        "prose",
+        "illustration",
+        "tag",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-02-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "读不到或出事的时候",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况它怎么做同一个名字在主号、副号都有，或者有重名停下列出候选让我选，不猜关键词在这一段没搜到说“这一段没有”，给出接着往下读的位置；整个范"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台电脑上没缓存的朋友圈。本机能看到的不等于微信的全部历史。它也不会主动提醒，有问题",
+        "tone": "yellow"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-03",
+      "component_order": [
+        "chapter_title",
+        "table",
+        "icon",
+        "notice",
+        "content_card"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "读不到或出事的时候",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况它怎么做同一个名字在主号、副号都有，或者有重名停下列出候选让我选，不猜关键词在这一段没搜到说“这一段没有”，给出接着往下读的位置；整个范"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它读不到的：本地库里没有的旧聊天、清过缓存的图片和语音、这台电脑上没缓存的朋友圈。本机能看到的不等于微信的全部历史。它也不会主动提醒，有问题",
+        "tone": "yellow"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-03",
+      "component_order": [
+        "table",
+        "content_card",
+        "notice",
+        "chapter_title",
+        "icon"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么读的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1认准账号主号、副号各记一个账号编号的SHA-256指纹，每次读之前先核对，对不上就停，不会读错号2复制快照把要用的数据库复制到临时文件夹再",
+        "columns": 4,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "朋友圈另走一条路：读的是微信的朋友圈缓存库，找某个人时把当前缓存整个扫一遍（347条约0.4秒），只挑这个人的。旧版只翻靠前一截，排在第34"
+      },
+      {
+        "type": "prose",
+        "text_ref": "仓库名WeChatDirect（微信直读）"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-04",
+      "component_order": [
+        "chapter_title",
+        "flow",
+        "prose",
+        "content_card",
+        "icon",
+        "section_heading",
+        "notice",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么读的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1认准账号主号、副号各记一个账号编号的SHA-256指纹，每次读之前先核对，对不上就停，不会读错号2复制快照把要用的数据库复制到临时文件夹再",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "朋友圈另走一条路：读的是微信的朋友圈缓存库，找某个人时把当前缓存整个扫一遍（347条约0.4秒），只挑这个人的。旧版只翻靠前一截，排在第34"
+      },
+      {
+        "type": "prose",
+        "text_ref": "仓库名WeChatDirect（微信直读）"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-04",
+      "component_order": [
+        "flow",
+        "notice",
+        "content_card",
+        "chapter_title",
+        "prose",
+        "icon",
+        "section_heading",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-04-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-05-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "档案怎么存、怎么更新",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "文件夹里有：",
+        "row": "archive",
+        "width": "40%",
+        "align": "left",
+        "variant": "directory",
+        "columns": 1,
+        "header_nodes": 1,
+        "directory_art": "none",
+        "file_icons": [
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/icons/文件夹.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "再跑一次：先核对已有文件的指纹都对得上。微信库没变，只看一眼元数据就结束；有新消息就从上次的位置接着读，多个分库时往回重叠1天防漏，去掉重复",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "archive",
+        "width": "60%",
+        "whole_block": true
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "换新版本：在旁边的临时文件夹里建好、核对完才换上。换的时候要改两次目录名，万一正好卡在中间断电，旧版本还在，恢复命令能撤回或完成。",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "archive",
+        "whole_block": true
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "给AI的只挑一小段：平时只给ai-context.md；更早的事先在整份档案里搜到，再读附近几条。",
+        "columns": 1,
+        "columns_v": 1,
+        "row": "archive",
+        "whole_block": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "实测（8月25日，一个6145条的群）：第一次建档8.2秒；再跑一次、没有新消息0.7秒；给AI的7264字节，整份记录4.49MB。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 独立文字审查后，将七行文件名与原有“文件夹里有”标题交给已有document_mock.directory，维持横版40%/60%与竖版原顺序；真实牛皮纸文件夹素材、实测数字三行仍待补。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-05",
+      "component_order": [
+        "chapter_title",
+        "document_mock",
+        "illustration",
+        "content_card",
+        "icon",
+        "notice",
+        "bullet_list"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "档案怎么存、怎么更新",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "文件夹里有：",
+        "align": "left",
+        "variant": "directory",
+        "columns": 1,
+        "header_nodes": 1,
+        "directory_art": "none",
+        "file_icons": [
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+          "_library/icons/文件夹.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "再跑一次：先核对已有文件的指纹都对得上。微信库没变，只看一眼元数据就结束；有新消息就从上次的位置接着读，多个分库时往回重叠1天防漏，去掉重复",
+        "columns": 1,
+        "columns_v": 1,
+        "whole_block": true
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "换新版本：在旁边的临时文件夹里建好、核对完才换上。换的时候要改两次目录名，万一正好卡在中间断电，旧版本还在，恢复命令能撤回或完成。",
+        "columns": 1,
+        "columns_v": 1,
+        "whole_block": true
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "给AI的只挑一小段：平时只给ai-context.md；更早的事先在整份档案里搜到，再读附近几条。",
+        "columns": 1,
+        "columns_v": 1,
+        "whole_block": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "实测（8月25日，一个6145条的群）：第一次建档8.2秒；再跑一次、没有新消息0.7秒；给AI的7264字节，整份记录4.49MB。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 独立文字审查后，将七行文件名与原有“文件夹里有”标题交给已有document_mock.directory，维持横版40%/60%与竖版原顺序；真实牛皮纸文件夹素材、实测数字三行仍待补。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 右侧三卡改source_text_card，目录暂不自动使用语义未核对的大图候选，避免越界和压字；文件夹插画仍未完成。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-05",
+      "component_order": [
+        "illustration",
+        "content_card",
+        "notice",
+        "chapter_title",
+        "document_mock",
+        "icon",
+        "bullet_list"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-05-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-06-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-v.png",
+        "source_box": [
+          30,
+          90,
+          910,
+          340
+        ]
+      },
+      {
+        "type": "flow",
+        "text_ref": "1只读点名的，不整号同步。问的是一件事，就只该碰那一个人或群的那一段：范围一眼看得清，也不会顺手把整个号的聊天搬出来。整批导出聊天记录，属于",
+        "columns": 2,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "design",
+        "width": "67%",
+        "direction": "horizontal"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3个依赖15个命令31次公开提交（8月30日起）",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "row": "design",
+        "width": "33%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次推送，GitHub上用Windows按两套依赖（固定版本、最新版本）各跑一遍测试。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-06",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "stat_card",
+        "prose",
+        "bullet_list",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large",
+        "asset": "wechatdirect\\wechatdirect-06-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-v.png",
+        "source_box": [
+          30,
+          90,
+          910,
+          340
+        ]
+      },
+      {
+        "type": "flow",
+        "text_ref": "1只读点名的，不整号同步。问的是一件事，就只该碰那一个人或群的那一段：范围一眼看得清，也不会顺手把整个号的聊天搬出来。整批导出聊天记录，属于",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "direction": "vertical"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3个依赖15个命令31次公开提交（8月30日起）",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次推送，GitHub上用Windows按两套依赖（固定版本、最新版本）各跑一遍测试。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 首轮发现基础编号卡正文23px与同页数字卡24px不一致；无连接的编号卡改用现有flow，维持原列数和位置、正文统一共享字号，不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-06",
+      "component_order": [
+        "content_card",
+        "prose",
+        "stat_card",
+        "chapter_title",
+        "icon",
+        "bullet_list",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-06-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1主号副号曾经贴反了。",
+        "whole_block": true,
+        "columns": 1,
+        "row": "highlights",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2文件传输助手的正文读成了乱码。",
+        "whole_block": true,
+        "columns": 1,
+        "row": "highlights",
+        "width": "33.333%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3只读我自己说过的话。",
+        "whole_block": true,
+        "columns": 1,
+        "row": "highlights",
+        "width": "33.333%"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-07",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "illustration",
+        "prose",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "1主号副号曾经贴反了。",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "2文件传输助手的正文读成了乱码。",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "3只读我自己说过的话。",
+        "whole_block": true,
+        "columns": 1
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-07",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "prose",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（25项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●说不准真实数据测过＝9月18日在真实的聊天和朋友圈上从头到尾验收通过"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在用＝AI的会话记录、理解库的微信阅读记录或留下的档案能证明真用过；说不准＝功能在，但查了这些记录（Codex会话9月15日起，理解库阅读9"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "读聊天",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1查一段聊天说哪个人或群、哪天或什么关键词，读够回答的一小段，带时间和谁说的在用2找被回的原话引用回复和它回的原消息一起交回，原消息在这段之",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "账号和会话",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "7分清主号副号每次绑定一个号，同名联系人不跨号串；没说哪个号又两边都有，就列候选在用8看哪些聊天有新消息列出某个时间之后有变化的会话，两个号",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "附件",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "10打开消息的附件只打开这条消息自己的图片、表情、文件、视频，交回类型、大小和指纹；微信特有的WXGF图片转成PNG或GIF在用11语音转成",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-08",
+      "component_order": [
+        "chapter_title",
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "tag"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-08-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（25项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●说不准真实数据测过＝9月18日在真实的聊天和朋友圈上从头到尾验收通过"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在用＝AI的会话记录、理解库的微信阅读记录或留下的档案能证明真用过；说不准＝功能在，但查了这些记录（Codex会话9月15日起，理解库阅读9"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "读聊天",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1查一段聊天说哪个人或群、哪天或什么关键词，读够回答的一小段，带时间和谁说的在用2找被回的原话引用回复和它回的原消息一起交回，原消息在这段之",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "账号和会话",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "7分清主号副号每次绑定一个号，同名联系人不跨号串；没说哪个号又两边都有，就列候选在用8看哪些聊天有新消息列出某个时间之后有变化的会话，两个号",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "附件",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "10打开消息的附件只打开这条消息自己的图片、表情、文件、视频，交回类型、大小和指纹；微信特有的WXGF图片转成PNG或GIF在用11语音转成",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-08",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "tag",
+        "chapter_title",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-08-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-09-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "给AI和别的项目",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "13阅读包把选定的一段连同附件存成一个文件夹：完整",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "聊天档案",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "15建档和补新的点名一个人或群，第一次存下本机能看",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "朋友圈",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "19看朋友圈读某个号缓存着的朋友圈，看某个人的或我",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "完整存底和核对",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "21完整存一段聊天我明确要求时，把一个时间段的聊天",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "安装和维护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "23环境体检检查Python、语音解码、ffmpe",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row": "fill"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 主工程师收窄中点分隔判定后，功能卡text_ref缩为首25字，避开状态附注的中点；实际节点分配再核对。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-09",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon",
+        "tag"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-09-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "给AI和别的项目",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "13阅读包把选定的一段连同附件存成一个文件夹：完整",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "聊天档案",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "15建档和补新的点名一个人或群，第一次存下本机能看",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "朋友圈",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "19看朋友圈读某个号缓存着的朋友圈，看某个人的或我",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "完整存底和核对",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "21完整存一段聊天我明确要求时，把一个时间段的聊天",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "安装和维护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "23环境体检检查Python、语音解码、ffmpe",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 主工程师收窄中点分隔判定后，功能卡text_ref缩为首25字，避开状态附注的中点；实际节点分配再核对。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-09",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "tag",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-09-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-10-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large",
+        "row": "history-head",
+        "width": "78%"
+      },
+      {
+        "type": "illustration",
+        "row": "history-head",
+        "width": "22%",
+        "size": "small",
+        "align": "right",
+        "target_height": 220
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月24–26日：起步。直接读微信4的本地数据库，取代旧项目微信记录交给AI；第一次把一条微信语音交给转写；加上建档和朋友圈；修好文件传输助",
+        "columns": 2,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "width": "100%",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-10",
+      "component_order": [
+        "chapter_title",
+        "timeline",
+        "icon",
+        "illustration",
+        "tag",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "wechatdirect-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\img\\wechatdirect-10-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月24–26日：起步。直接读微信4的本地数据库，取代旧项目微信记录交给AI；第一次把一条微信语音交给转写；加上建档和朋友圈；修好文件传输助",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "wechatdirect-10",
+      "component_order": [
+        "timeline",
+        "illustration",
+        "chapter_title",
+        "icon",
+        "tag",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  }
+]

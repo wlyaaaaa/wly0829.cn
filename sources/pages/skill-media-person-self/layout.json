@@ -1,0 +1,394 @@
+[
+  {
+    "screen": "skill-media-person-self-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "47%",
+        "text_ref": "照片录音里有没有我"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "指定一张照片"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "53%",
+        "index": 0,
+        "illustration": "outside"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "这样说就行"
+      },
+      {
+        "type": "dialogue",
+        "columns": 4,
+        "split_items": true,
+        "illustration": "bottom_inside",
+        "icons": "auto",
+        "text_ref": "“这张照片里有我吗？”",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      }
+    ],
+    "notes": "已查看原横图。标题和介绍占左半，合影、声波及麦克风在右上卡片外。下部四张等宽气泡卡一排；文字气泡在各卡上部，照片/照片组/手机波形/视频插画在下部。无卡间连线。bottom_inside 与 split_items 表达原图要求，现组件接口尚未实现，待组件样张；不可把四条清单合成一个气泡。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "照片录音里有没有我"
+      },
+      {
+        "type": "prose",
+        "text_ref": "指定一张照片"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "illustration": "outside",
+        "bleed": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "这样说就行"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "columns_v": 1,
+        "split_items": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "“这张照片里有我吗？”",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      }
+    ],
+    "notes": "已查看原竖图，单张。整宽大标题居中；介绍在插画前，和批准样板 agents-01-v 的先图后文不同，应照本屏。主插画整宽位于卡外。四张气泡横卡自上而下，左插画右气泡；气泡尾巴朝左。无连接。split_items 与各卡插画待组件接入和样张。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "怎么判断"
+      },
+      {
+        "type": "section_heading",
+        "row": "methods",
+        "width": "49%",
+        "align": "left",
+        "text_ref": "照片"
+      },
+      {
+        "type": "flow",
+        "row": "methods",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "none",
+        "text_ref": "找脸：",
+        "enclosure": "single_card",
+        "open_nodes": true
+      },
+      {
+        "type": "section_heading",
+        "row": "methods",
+        "width": "51%",
+        "align": "left",
+        "text_ref": "录音和视频"
+      },
+      {
+        "type": "flow",
+        "row": "methods",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "none",
+        "text_ref": "先看有没有现成的：",
+        "enclosure": "single_card",
+        "open_nodes": true
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/snow-album-icon.png"
+        ],
+        "text_ref": "一例："
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "text_ref": "“没检出我”不等于"
+      }
+    ],
+    "notes": "已查看原横图。按统一标准整屏大标题居中；下方照片左栏、录音和视频右栏各一张外框大卡，内部均为纵向三步，左侧圆编号和向下箭头，正文在右；每步不是另画一个封闭卡。照片组头旁左置照片组图；右组头上麦克风/胶片/波形图从大卡顶边探出。两栏下方先整宽一例卡，再整宽结论提示条。当前 flow 缺整组三步的大卡外框与组头插画，需组件/主工程师接入；illustration:none 仅表示步骤自身无插画，组头插画不得省略。 本轮 qa12a：照片与录音视频组头统一左对齐。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "怎么判断"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "照片"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "connector": "arrow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": "auto",
+        "text_ref": "找脸：",
+        "enclosure": "single_card",
+        "open_nodes": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "录音和视频"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "connector": "arrow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "right_inside",
+        "icons": "auto",
+        "text_ref": "先看有没有现成的：",
+        "enclosure": "single_card",
+        "open_nodes": true
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/snow-album-icon.png"
+        ],
+        "text_ref": "一例："
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "text_ref": "“没检出我”不等于"
+      }
+    ],
+    "notes": "已查看原竖图，单张。标题左、相册与手机主插画右并排；照片大卡在上，录音视频大卡在下。各大卡左侧三步圆编号向下箭头，步骤文字在中，对应照片比对/录音结果插画在右侧卡内。一例卡左相册右文字；结论条在最下。right_inside 表达原图，不允许退成所有图在左；现组件不支持且真实组头与六步插画资产不足，待样张。 本轮 qa12a：按审页移除复用首屏合照的独立主插画；标题改整宽居中，流程/六功能卡直接接在标题之后。保留各条已有图位，语义图标缺口另交素材，不更改定稿。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "照片里指出哪张脸是我"
+      }
+    ],
+    "notes": "已查看原横图。大标题左上、照片手机笔记本录音机的大幅水彩在右上卡外。六张等宽功能卡两行三列，逐行顺序 1–3、4–6；每张上部左图右粗体标题，下部整宽一行说明，不加定稿没有的状态文字。无连接。需六张语义对应小图标及主插画；当前 manifest 只有一张第二项图标，不能配给第一项。 本轮 qa12a：按审页移除复用首屏合照的独立主插画；标题改整宽居中，流程/六功能卡直接接在标题之后。保留各条已有图位，语义图标缺口另交素材，不更改定稿。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "照片里指出哪张脸是我"
+      }
+    ],
+    "notes": "已查看原竖图，单张。标题左、主插画右并排，非整宽标题。六张横卡按定稿顺序单列；左图右标题及说明，图约卡宽三分之一。无连接。图标与主插画不足须补素材；不因缺图改成全页无图。 本轮 qa12a：按审页移除复用首屏合照的独立主插画；标题改整宽居中，流程/六功能卡直接接在标题之后。保留各条已有图位，语义图标缺口另交素材，不更改定稿。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它管的"
+          }
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "它管的",
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "align_items": "start",
+        "row": "limits",
+        "width": "48%",
+        "source_prose": true,
+        "image_mode": "item",
+        "item_cards": true
+      },
+      {
+        "type": "illustration",
+        "row": "limits",
+        "index": 0,
+        "illustration": "outside",
+        "align": "center",
+        "target_height": 230,
+        "target_width": 246
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它不管的"
+          }
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "它不管的",
+        "item_icons": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/麦克风.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/身份盾牌.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "align_items": "start",
+        "row": "limits",
+        "width": "52%",
+        "source_prose": true,
+        "image_mode": "item",
+        "item_cards": true
+      }
+    ],
+    "notes": "已查看原横图。左大标题，右上照片/手机/录音机整幅插画在卡外。下部两张大卡等宽，左组3条、右组6条，各条白色内行左图右文字，组头各带勾/叉图形。沿统一标准两侧正文均深蓝灰、标题深绿，状态色只用于符号；不沿原图灰黑大标题与整栏改字色。人脸卡小锁插画从右栏右下边探出，不在组内上方。当前 comparison 仅组级一图，逐条图与外置小锁定位待组件/主工程师。 本轮 qa12a：移除末尾孤立带残框的小锁人脸裁片；横版标题/主插画改60/40并限制插画高260px，降低左空白。左右比较卡按内容收高需组件 align-start 接口，已另提请求。\nQA12压小图复核后微调：原标点一并提升卡头、续张编号沿用卡外左侧、长按钮手机单列、边界标题栏居中，均用现有接口，不删原字。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  },
+  {
+    "screen": "skill-media-person-self-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\img\\skill-media-person-self-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "它管的"
+          },
+          {
+            "text_ref": "它不管的"
+          }
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "它管的",
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/麦克风.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/身份盾牌.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "illustration": "outside",
+        "bleed": true
+      }
+    ],
+    "notes": "已查看原竖图，单张。整宽大标题居中；它管的3条大卡在上、它不管的6条大卡在下，内部各行左图右文字。底部主插画在卡外整宽，小锁人脸在右下相邻探出，应组成同一底部画面；现主插画被 manifest 错认成竖图右上小插画，需正确资产。comparison 逐条白色内行和各行图标待组件样张。 本轮 qa12a：移除末尾孤立带残框的小锁人脸裁片；横版标题/主插画改60/40并限制插画高260px，降低左空白。左右比较卡按内容收高需组件 align-start 接口，已另提请求。",
+    "verification_notes": "本轮 qa12a 依据当前审页原文、规格、素材记录和 report 数值修改；没有查看图片，旧 notes 中“已查看原图”仅指上轮记录。最终构图与素材干净程度仍须审页员视觉核对。"
+  }
+]

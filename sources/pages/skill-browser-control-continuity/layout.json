@@ -1,0 +1,574 @@
+[
+  {
+    "screen": "skill-browser-control-continuity-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "text_ref": "大标题：网页上的事接着办",
+        "row": "hero",
+        "width": "49%"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "一句话："
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "49%",
+        "index": 0
+      },
+      {
+        "type": "dialogue",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "items_layout": {
+          "order": "column-major",
+          "rows": [
+            3,
+            2
+          ],
+          "speech_bubble": true,
+          "speaker_side": "left",
+          "keep_quotes": true
+        },
+        "text_ref": "怎么跟 AI 说",
+        "split_items": true,
+        "flow": "column",
+        "rows": 3
+      }
+    ],
+    "notes": "横版左标题介绍、右浏览器修线插画；下面全宽对话卡，五句按左列前三句、右列后两句。竖版先标题和全部介绍，再整宽插画，再五句气泡。定稿大标题/一句话/说明前缀原样交给渲染，不凭原图删字。 2026-10-03 本轮文字核对：已补split_items，横版列优先左3右2；未重新看图。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "大标题：网页上的事接着办"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一句话："
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "items_layout": {
+          "speech_bubble": true,
+          "keep_quotes": true
+        },
+        "text_ref": "怎么跟 AI 说",
+        "split_items": true
+      }
+    ],
+    "notes": "横版左标题介绍、右浏览器修线插画；下面全宽对话卡，五句按左列前三句、右列后两句。竖版先标题和全部介绍，再整宽插画，再五句气泡。定稿大标题/一句话/说明前缀原样交给渲染，不凭原图删字。 2026-10-03 本轮文字核对：已补split_items，横版列优先左3右2；未重新看图。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-browser-control-continuity-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-browser-control-continuity-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：一个完整例子"
+      },
+      {
+        "type": "prose",
+        "text_ref": "假如我说："
+      },
+      {
+        "type": "flow",
+        "row": "body",
+        "width": "65%",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "flow_direction": "vertical",
+        "items_layout": {
+          "count": 6,
+          "card": "horizontal",
+          "icon_side": "left",
+          "path": "curved",
+          "badge_side": "left"
+        },
+        "text_ref": "1先看现场",
+        "direction": "vertical",
+        "text_layout": "inline"
+      },
+      {
+        "type": "document_mock",
+        "row": "body",
+        "width": "33%",
+        "illustration": "top_inside",
+        "paper": "receipt",
+        "render_text": true,
+        "text_ref": "回执上的字"
+      },
+      {
+        "type": "notice",
+        "row": "body",
+        "illustration": "left_inside",
+        "text_ref": "要注意：",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ]
+      }
+    ],
+    "notes": "横版六步一列沿细弯路，右侧米色回执（字用定稿程序覆排）及注意卡。竖原图第1张步骤1–4有左插图，第2张步骤5–6和回执、注意卡不配图；同角色统一字高，原续图合为一屏。标题定稿较长，保留文字并换行，不缩字。 新G3发现基础步骤卡末项叶子压字，改现有flow同列同序承载原步骤；曲线路径仍待接。 本轮 qa12a：标题按 large 章标题档位，完整定稿标题及前缀保留；步骤用现有 text_layout=inline，让原冒号紧接粗体步骤名，不单独挤到正文首行。竖续张恢复同角色左图，图按本屏原序0–3、4–5明确绑定；旧无图续张说明已被本轮审页修正。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-browser-control-continuity-02-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：一个完整例子"
+      },
+      {
+        "type": "prose",
+        "text_ref": "假如我说："
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "items_layout": {
+          "count": 6,
+          "card": "horizontal",
+          "original_split_after": 4
+        },
+        "text_ref": "1先看现场",
+        "direction": "vertical",
+        "page_break_after": true,
+        "text_layout": "inline",
+        "icons": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "5提交前后都核对：提交前读回关键字段、附件个数和名",
+        "direction": "vertical",
+        "icons": [
+          4,
+          5
+        ],
+        "text_layout": "inline"
+      },
+      {
+        "type": "document_mock",
+        "columns": 1,
+        "illustration": "none",
+        "render_text": true,
+        "text_ref": "回执上的字"
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "text_ref": "要注意："
+      }
+    ],
+    "notes": "横版六步一列沿细弯路，右侧米色回执（字用定稿程序覆排）及注意卡。竖原图第1张步骤1–4有左插图，第2张步骤5–6和回执、注意卡不配图；同角色统一字高，原续图合为一屏。标题定稿较长，保留文字并换行，不缩字。 新G3发现基础步骤卡末项叶子压字，改现有flow同列同序承载原步骤；曲线路径仍待接。 已接新核心清单中段切分及page_break_after，按原步骤边界分张；续图无图标要求以none落实，首段缺素材仍列未完成。 本轮 qa12a：标题按 large 章标题档位，完整定稿标题及前缀保留；步骤用现有 text_layout=inline，让原冒号紧接粗体步骤名，不单独挤到正文首行。竖续张恢复同角色左图，图按本屏原序0–3、4–5明确绑定；旧无图续张说明已被本轮审页修正。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：两次真事"
+      },
+      {
+        "type": "points_card",
+        "row": "summary",
+        "width": "56%",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "麻烦：",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "paragraph_header_prefix": "**麻烦**：",
+        "header_icon": [
+          "_library/illustrations/浏览器断线账本.png"
+        ],
+        "header_icon_source": "illustrations"
+      },
+      {
+        "type": "document_mock",
+        "row": "summary",
+        "width": "44%",
+        "illustration": "top_inside",
+        "paper": "ledger",
+        "render_text": true,
+        "text_ref": "账本上的字"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "connector": "line",
+        "flow_direction": "vertical",
+        "illustration": "none",
+        "text_ref": "9 月 18 日 13:54：",
+        "direction": "vertical",
+        "text_layout": "inline"
+      },
+      {
+        "type": "notice",
+        "illustration": "left_inside",
+        "text_ref": "学到的：",
+        "icons": [
+          "_library/icons/断线.png"
+        ]
+      }
+    ],
+    "notes": "横版标题全宽居中；下方左麻烦卡含断线插图、中两日期卡细竖线相连、右账本，底部全宽学到的。竖版原图把断线插画提到麻烦卡之前；第一张到9月18日，第二张9月28日+账本字+学到的。账本上的字是定稿块标识，未获删字授权，程序保留。 本轮使用已有timeline的line字段落实细竖线。 说明卡改已实现points_card原字承载，避免默认叶子压正文；原插画位仍未完成。 本轮 qa12a：timeline 用 text_layout=inline，原冒号留在日期旁；横版麻烦与账本移到时间线上方并排56/44，时间线整宽。麻烦原粗体段首提升卡头，沿现有字段把已绑定图放卡头右侧，原文字各一次。 本轮数值回读发现 upper_right_inside 在 para 段首卡头的前置校验不能消费，改为已支持的 paragraph_header_prefix+header_left 明确卡头图；正文仍整宽，不新增组件缺口。\nQA12压小图复核后微调：原标点一并提升卡头、续张编号沿用卡外左侧、长按钮手机单列、边界标题栏居中，均用现有接口，不删原字。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-browser-control-continuity-03-v\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-browser-control-continuity-03-v\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：两次真事"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "text_ref": "麻烦：",
+        "whole_block": true
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "items_layout": {
+          "count": 2,
+          "original_split_between_nodes": true
+        },
+        "text_ref": "9 月 18 日 13:54：",
+        "page_break_after": true,
+        "direction": "vertical",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "text_layout": "inline"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "text_ref": "9月28日记进技能的一次排查：插件的3个运行文件一",
+        "direction": "vertical",
+        "text_layout": "inline"
+      },
+      {
+        "type": "document_mock",
+        "illustration": "none",
+        "render_text": true,
+        "text_ref": "账本上的字"
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "text_ref": "学到的："
+      }
+    ],
+    "notes": "横版标题全宽居中；下方左麻烦卡含断线插图、中两日期卡细竖线相连、右账本，底部全宽学到的。竖版原图把断线插画提到麻烦卡之前；第一张到9月18日，第二张9月28日+账本字+学到的。账本上的字是定稿块标识，未获删字授权，程序保留。 说明卡改已实现points_card原字承载，避免默认叶子压正文；原插画位仍未完成。 已接新核心page_break_after，在两个真实日期节点之间分张；没有重复日期或标题。 本轮 qa12a：timeline 用 text_layout=inline，原冒号留在日期旁；横版麻烦与账本移到时间线上方并排56/44，时间线整宽。麻烦原粗体段首提升卡头，沿现有字段把已绑定图放卡头右侧，原文字各一次。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：能做的事"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "items_layout": {
+          "count": 11,
+          "row_sizes": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ],
+          "last_card_span": 2,
+          "badge_side": "left",
+          "original_split_after": null
+        },
+        "text_ref": "1先判断要不要开浏览器",
+        "direction": "horizontal",
+        "item_rows": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      }
+    ],
+    "notes": "横版11张左图右文横卡两列六排，最后第11项整宽；竖版一项一行，原图第1张1–6有小图、第2张7–11无小图。顺序按定稿1–11；全宽章节标题居中。卡片最后整宽与竖续图图标差别需要组件支持。 本轮改用已有flow的item_rows，横版末项完整占整行；原竖版指定6项后分张仍未落地。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：能做的事"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "items_layout": {
+          "count": 11,
+          "row_sizes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "last_card_span": 1,
+          "badge_side": "left",
+          "original_split_after": 6
+        },
+        "text_ref": "1先判断要不要开浏览器",
+        "direction": "vertical",
+        "page_break_after": true,
+        "icons": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "7表单核对到底联动下拉框一层层等选项出来再选；提交",
+        "direction": "vertical",
+        "icons": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "number_position": "left_outside"
+      }
+    ],
+    "notes": "横版11张左图右文横卡两列六排，最后第11项整宽；竖版一项一行，原图第1张1–6有小图、第2张7–11无小图。顺序按定稿1–11；全宽章节标题居中。卡片最后整宽与竖续图图标差别需要组件支持。 本轮改用已有flow的item_rows，横版末项完整占整行；原竖版指定6项后分张仍未落地。 已接新核心清单中段切分及page_break_after，按原步骤边界分张；续图无图标要求以none落实，首段缺素材仍列未完成。 本轮 qa12a：续张7–11恢复与1–6相同卡内左图，按原项0–5、6–10绑定，不从首图重用；保留六项后完整换张。旧续张无图说明被本轮审页修正。\nQA12压小图复核后微调：原标点一并提升卡头、续张编号沿用卡外左侧、长按钮手机单列、边界标题栏居中，均用现有接口，不删原字。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "items_layout": {
+          "groups": [
+            "管",
+            "不管"
+          ],
+          "icons": [
+            "toolbox",
+            "gray_cross"
+          ],
+          "heading_side": "left",
+          "icon_side": "right",
+          "bullet_counts": [
+            2,
+            3
+          ]
+        },
+        "text_ref": "管",
+        "group_images": [
+          "_library/icons/工具箱.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "text_ref": "它不会做的事：",
+        "whole_block": true
+      }
+    ],
+    "notes": "横版管/不管两栏，每栏上部组名与大插画并排、下部圆点条目；底部全宽它不会做的事卡左禁止小插画右文字。竖版管、不管上下整卡；底部宽卡保留左小插画。全宽章节标题按标准居中。 说明卡改已实现points_card原字承载，避免默认叶子压正文；原插画位仍未完成。"
+  },
+  {
+    "screen": "skill-browser-control-continuity-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\img\\skill-browser-control-continuity-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "items_layout": {
+          "groups": [
+            "管",
+            "不管"
+          ],
+          "icons": [
+            "toolbox",
+            "gray_cross"
+          ],
+          "heading_side": "left",
+          "icon_side": "right",
+          "bullet_counts": [
+            2,
+            3
+          ]
+        },
+        "text_ref": "管",
+        "group_images": [
+          "_library/icons/工具箱.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "text_ref": "它不会做的事：",
+        "whole_block": true
+      }
+    ],
+    "notes": "横版管/不管两栏，每栏上部组名与大插画并排、下部圆点条目；底部全宽它不会做的事卡左禁止小插画右文字。竖版管、不管上下整卡；底部宽卡保留左小插画。全宽章节标题按标准居中。 说明卡改已实现points_card原字承载，避免默认叶子压正文；原插画位仍未完成。"
+  }
+]

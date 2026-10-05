@@ -1,0 +1,757 @@
+[
+  {
+    "screen": "rule-rule-release-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-01-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "规则发布与恢复",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "哪一版规则算数",
+        "size": "large",
+        "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这个专题管的是",
+        "row": "hero"
+      },
+      {
+        "text_ref": "E186",
+        "type": "document_mock",
+        "variant": "window",
+        "base_asset": "_library/illustrations/ill-r3-ec90efce29ff1bef.png",
+        "label_positions": [
+          {
+            "x": 14.66667,
+            "y": 24.68514,
+            "width": 11.16667,
+            "height": 37.78338,
+            "align": "center"
+          },
+          {
+            "x": 29.5,
+            "y": 25.18892,
+            "width": 10.0,
+            "height": 36.52393,
+            "align": "center"
+          },
+          {
+            "x": 65.16667,
+            "y": 18.6398,
+            "width": 22.83333,
+            "height": 11.33501,
+            "align": "center"
+          },
+          {
+            "x": 64.16667,
+            "y": 51.88917,
+            "width": 23.5,
+            "height": 11.08312,
+            "align": "center"
+          },
+          {
+            "x": 31.0,
+            "y": 80.85642,
+            "width": 38.0,
+            "height": 10.32746,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          }
+        ],
+        "layout": "illustration_labels"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先认几个词",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icon_position": "none",
+        "inner_columns": 2
+      },
+      {
+        "type": "action_button",
+        "text_ref": "跳到：",
+        "columns": 4
+      },
+      {
+        "type": "notice",
+        "text_ref": "发布器怎么做到",
+        "inline_button": true
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 原图要求五词落在书脊和木牌；现有组件未提供图内文字定位，暂完整保留为 DOM 原字，此项未完成。按钮 columns 需按实际 DOM 验收，不把字段当生效。 2026-10-03 page-fixer-09：主插画明确 large/center；五标签保留原字，精确图位仍缺，不删定稿。 第二轮：首屏名词表使用现有points_card保留原词/冒号/释义在同一原项；横版移出hero为全宽同卡两内栏，手机单栏，避免释义行首悬空冒号。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA d9860df278f0ab3dd0631005d8e3c86536fdacd1adeafab43eb8a867f387ecfa。此为AI排版补充，列new-looks待验收。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-02-h.png"
+    ],
+    "portrait_required": true,
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 哪一版算数、怎么读",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "这一页什么时候读",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-601d3d751adb3f913017.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "哪一版算数",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/印章.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "怎么读",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/放大镜.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ]
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-03-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 发布和回退",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "一次发布一批",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/纸箱.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/共享节点.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：四卡显式绑定纸箱、打开门、共享节点、绿色箭头，不沿缺义叶子槽；原例接已有黄实例。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 验证",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "入口跟着版本走",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/盖章信封.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png",
+        "row": "verification-0",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "防随手改",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png",
+        "row": "verification-0",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "发布前后核对什么",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/打勾清单.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png",
+        "row": "verification-1",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "快速发布还是标准发布",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/岔路.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png",
+        "row": "verification-1",
+        "width": "50%"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：按本轮授权标题首块全宽居中，四卡保持原字原相对顺序，横版2×2；卡头显式绑定库内信封、锁、清单、岔路。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-05-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "规则发布与恢复",
+        "whole_block": true,
+        "row": "original",
+        "width": "50%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "读规则",
+        "whole_block": true,
+        "row": "original",
+        "width": "50%"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-06-h.png"
+    ],
+    "portrait_required": true,
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "发布和回退",
+        "columns": 1,
+        "whole_block": true,
+        "body_columns": 1
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 横版原构图要求一个连续 bullets 节点在第4项后跨卡续排；现有分块接口只能按节点开头定位，缺条目级切分，已提 main 请求，不能声称原构图完成。 2026-10-03 page-fixer-09：接 source_text_card 已有精确切口，第4原bullet后拆两外卡，原文保全。；续屏版本标签明确 E214，标签不属于规则正文。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-01-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "规则发布与恢复",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "哪一版规则算数",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "text_ref": "E186",
+        "type": "document_mock",
+        "variant": "window",
+        "base_asset": "_library/illustrations/ill-r3-ec90efce29ff1bef.png",
+        "label_positions": [
+          {
+            "x": 14.66667,
+            "y": 24.68514,
+            "width": 11.16667,
+            "height": 37.78338,
+            "align": "center"
+          },
+          {
+            "x": 29.5,
+            "y": 25.18892,
+            "width": 10.0,
+            "height": 36.52393,
+            "align": "center"
+          },
+          {
+            "x": 65.16667,
+            "y": 18.6398,
+            "width": 22.83333,
+            "height": 11.33501,
+            "align": "center"
+          },
+          {
+            "x": 64.16667,
+            "y": 51.88917,
+            "width": 23.5,
+            "height": 11.08312,
+            "align": "center"
+          },
+          {
+            "x": 31.0,
+            "y": 80.85642,
+            "width": 38.0,
+            "height": 10.32746,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          }
+        ],
+        "layout": "illustration_labels"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这个专题管的是"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先认几个词",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icon_position": "none"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "跳到：",
+        "columns": 2
+      },
+      {
+        "type": "notice",
+        "text_ref": "发布器怎么做到",
+        "inline_button": true
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 原图要求五词落在书脊和木牌；现有组件未提供图内文字定位，暂完整保留为 DOM 原字，此项未完成。按钮 columns 需按实际 DOM 验收，不把字段当生效。 2026-10-03 page-fixer-09：主插画明确 large/center；五标签保留原字，精确图位仍缺，不删定稿。 第二轮：首屏名词表使用现有points_card保留原词/冒号/释义在同一原项；横版移出hero为全宽同卡两内栏，手机单栏，避免释义行首悬空冒号。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA d9860df278f0ab3dd0631005d8e3c86536fdacd1adeafab43eb8a867f387ecfa。此为AI排版补充，列new-looks待验收。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-02-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 哪一版算数、怎么读",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "这一页什么时候读",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-601d3d751adb3f913017.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "哪一版算数",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/印章.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "怎么读",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/放大镜.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ]
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：三卡显式绑定库内册子、印章、放大镜；原例便签接已有黄实例接口。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-03-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 发布和回退",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "一次发布一批",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/纸箱.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/共享节点.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：四卡显式绑定纸箱、打开门、共享节点、绿色箭头，不沿缺义叶子槽；原例接已有黄实例。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-04-v3.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点 · 验证",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "入口跟着版本走",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/盖章信封.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "防随手改",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "发布前后核对什么",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/打勾清单.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "快速发布还是标准发布",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/岔路.png"
+        ],
+        "inset_prefixes": [
+          "例"
+        ],
+        "inset_tone": "yellow",
+        "inset_icon": "_library/icons/放大镜.png"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 2026-10-03 page-fixer-09：按本轮授权标题首块全宽居中，四卡保持原字原相对顺序，横版2×2；卡头显式绑定库内信封、锁、清单、岔路。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-05-v.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "规则发布与恢复",
+        "whole_block": true
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "rule-rule-release-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\img\\rule-rule-release-06-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "发布和回退",
+        "columns": 1,
+        "whole_block": true
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 横版原构图要求一个连续 bullets 节点在第4项后跨卡续排；现有分块接口只能按节点开头定位，缺条目级切分，已提 main 请求，不能声称原构图完成。；续屏版本标签明确 E214，标签不属于规则正文。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-rule-release\\page.json",
+      "source_sha256": "7526bc6f8a8fa17aaf70cb770570720519c4321e9bc63ab5dabe895548e4f4bd",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  }
+]

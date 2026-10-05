@@ -1,0 +1,836 @@
+[
+  {
+    "screen": "skill-pdf-render-safe-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "PDF 逐页检查",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "47%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "把 PDF 一页页摊成图片",
+        "align": "left",
+        "row": "intro"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "intro",
+        "width": "53%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "可以这样说："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这份 PDF",
+        "columns": 2,
+        "split_paras": true,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "PDF 是 Markdown"
+      }
+    ],
+    "notes": "定稿优先，标题笔画保持原浓度。横版介绍左、插画右；对话按 1/2、3/4、5/末尾说明三排摆。竖版标题→副标题说明→插画→五条对话→末尾说明。所有小图均在气泡所属外框内的左侧，主插画在卡片外。无箭头或丝带。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "hero": {
+        "illustration_inside_card": false,
+        "title_alignment": "left",
+        "title_size": "large"
+      },
+      "dialogue": {
+        "rows": 3,
+        "columns": 2,
+        "label_in_first_bubble": true,
+        "left_icon_count": 5,
+        "inner_bubble": true
+      },
+      "footer": {
+        "slot": "third-row-right",
+        "link": "inline_from_final_text",
+        "extra_arrow": false
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "PDF 逐页检查",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "把 PDF 一页页摊成图片",
+        "align": "left"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
+        "type": "prose",
+        "text_ref": "可以这样说："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这份 PDF",
+        "columns": 1,
+        "split_paras": true,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "PDF 是 Markdown"
+      }
+    ],
+    "notes": "定稿优先，标题笔画保持原浓度。横版介绍左、插画右；对话按 1/2、3/4、5/末尾说明三排摆。竖版标题→副标题说明→插画→五条对话→末尾说明。所有小图均在气泡所属外框内的左侧，主插画在卡片外。无箭头或丝带。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "hero": {
+        "illustration_inside_card": false,
+        "title_alignment": "center",
+        "title_size": "large"
+      },
+      "dialogue": {
+        "rows": 5,
+        "columns": 1,
+        "label_in_first_bubble": true,
+        "left_icon_count": 5,
+        "inner_bubble": false
+      },
+      "footer": {
+        "slot": "bottom-full-width",
+        "link": "inline_from_final_text",
+        "extra_arrow": false
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "9 月 28 日写",
+        "align": "left"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图说明：",
+        "row": "example",
+        "width": "45%",
+        "indices": [
+          0
+        ],
+        "ratio": "747:409",
+        "columns": 1,
+        "text_position": "after"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "row": "example",
+        "width": "55%",
+        "columns": 1,
+        "sides": [
+          "right"
+        ],
+        "tail": true,
+        "illustration": "outside"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：",
+        "row": "example",
+        "columns": 1,
+        "sides": [
+          "left"
+        ],
+        "tail": true,
+        "illustration": "outside"
+      },
+      {
+        "type": "monospace",
+        "text_ref": "报告里记了什么",
+        "row": "example",
+        "align": "left"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后发生了什么",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "先把 PDF",
+        "columns": 4,
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "direction": "horizontal"
+      }
+    ],
+    "notes": "整屏章节标题按统一标准居中；来源句完整位于标题下。左45%截图及图注，右55%我/AI气泡和报告；人物在气泡外（我在右、AI在左）。底部同一整宽浅绿外框内，组名上、四步单排，步间仅绿色右箭头，无丝带。截图块定位图注，提前摆到左栏，产生一条非顺序定位提醒是已知的空间排序例外，不得重复图注。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "example": {
+        "left": [
+          "screenshot",
+          "caption"
+        ],
+        "right": [
+          "user_bubble",
+          "ai_bubble",
+          "report_card"
+        ],
+        "speaker_art_outside": true
+      },
+      "steps": {
+        "outer_card": true,
+        "heading_above": true,
+        "rows": 1,
+        "columns": 4,
+        "badge": "above-left-of-icon",
+        "icon_left_of_text": true
+      },
+      "screenshot": {
+        "frame_box_source_px": [
+          32,
+          173,
+          779,
+          582
+        ],
+        "preserve_current_frame": true,
+        "caption_immediately_below": true
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "9 月 28 日写",
+        "align": "left"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图说明：",
+        "indices": [
+          0
+        ],
+        "ratio": "891:503",
+        "columns_v": 1,
+        "text_position": "after"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "right"
+        ],
+        "tail": true,
+        "illustration": "none"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：",
+        "columns": 1,
+        "columns_v": 1,
+        "sides": [
+          "left"
+        ],
+        "tail": true,
+        "illustration": "none"
+      },
+      {
+        "type": "monospace",
+        "text_ref": "报告里记了什么",
+        "align": "left"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后发生了什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "先把 PDF",
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "columns": 1,
+        "direction": "vertical"
+      }
+    ],
+    "notes": "连接02-v与批准02-v2看完整屏。第一张标题→截图空槽→紧下图注→完整来源句→我左上/AI右下气泡→报告；第二张只含居中“背后发生了什么”与四张整宽步骤卡。批准第二张左侧是大编号绿圆和叶子，右侧正文，没有四个实物图标，也没有连接带或箭头。text_ref图注先摆到截图后，定稿切片仍唯一；来源句和图注视觉调序会产生定位提醒。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "parts": {
+        "count": 2,
+        "break_before": "背后发生了什么",
+        "repeat_chapter_title": false,
+        "repeat_source": false
+      },
+      "screenshot": {
+        "frame_box_source_px": [
+          25,
+          185,
+          916,
+          688
+        ],
+        "caption_immediately_below": true,
+        "preserve_current_frame": true
+      },
+      "steps": {
+        "left_number_roundel": true,
+        "left_roundel_fraction": 0.3,
+        "right_text_fraction": 0.65,
+        "rows": 4,
+        "connector": "none",
+        "illustration": "none"
+      }
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-pdf-render-safe-02-v2\\round-01\\candidate-1.png"
+    ]
+  },
+  {
+    "screen": "skill-pdf-render-safe-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时它在干什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "至少 15 次",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none",
+        "row": "usage",
+        "width": "40%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "1–46 页",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none",
+        "row": "usage"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "100–150 DPI",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none",
+        "row": "usage"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "先全看，再挑页",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-3507c76f7b8f1bd14623.png"
+        ],
+        "row": "usage",
+        "width": "60%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要留底时全部保留",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-18b716c35bffea8ccf40.png"
+        ],
+        "row": "usage"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "被查的在哪",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-8ab446b034f90327f28b.png"
+        ],
+        "row": "usage"
+      },
+      {
+        "type": "prose",
+        "text_ref": "会话记录最早只到",
+        "align": "center"
+      }
+    ],
+    "notes": "横版标题与三个数字纵向组成左40%栏，三张横向内容卡纵向组成右60%栏。竖版标题整宽居中，然后三个大数字逐个纵排，再三张整宽卡。数字无外框，置于淡绿笔刷底；内容卡插画在左侧卡内、右侧标题和正文。末尾灰色说明居中，无箭头丝带。定稿数字和卡片写法解析为para，组件须识别这些完整原文节点，不能偷偷改定稿。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "stats": {
+        "rows": 3,
+        "columns": 1,
+        "outer_card": false,
+        "numeric_token_before_fullwidth_pipe": true,
+        "value_size": "large",
+        "caption_below": true
+      },
+      "cards": {
+        "rows": 3,
+        "columns": 1,
+        "icons_left_inside": true,
+        "title_size": "medium"
+      },
+      "footer": {
+        "full_width": true,
+        "gray": true
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时它在干什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "至少 15 次",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "1–46 页",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "100–150 DPI",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none",
+        "illustration": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "先全看，再挑页",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-3507c76f7b8f1bd14623.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "要留底时全部保留",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-18b716c35bffea8ccf40.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "被查的在哪",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-8ab446b034f90327f28b.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "会话记录最早只到",
+        "align": "center"
+      }
+    ],
+    "notes": "横版标题与三个数字纵向组成左40%栏，三张横向内容卡纵向组成右60%栏。竖版标题整宽居中，然后三个大数字逐个纵排，再三张整宽卡。数字无外框，置于淡绿笔刷底；内容卡插画在左侧卡内、右侧标题和正文。末尾灰色说明居中，无箭头丝带。定稿数字和卡片写法解析为para，组件须识别这些完整原文节点，不能偷偷改定稿。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。",
+    "layout_details": {
+      "stats": {
+        "rows": 3,
+        "columns": 1,
+        "outer_card": false,
+        "numeric_token_before_fullwidth_pipe": true,
+        "value_size": "large",
+        "caption_below": true
+      },
+      "cards": {
+        "rows": 3,
+        "columns": 1,
+        "icons_left_inside": true,
+        "title_size": "medium"
+      },
+      "footer": {
+        "full_width": true,
+        "gray": true
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事（12 项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "看页面",
+        "columns": 3,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不弄乱",
+        "columns": 3,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不出乱子",
+        "columns": 3,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      }
+    ],
+    "notes": "横版实际原图三组是单排4/5/3列，不按scene泛称三列套版。标题左47%，图例和说明同卡置右53%；每组组名左对齐压在外框上沿，下方全组一排。竖版01张含总标题、图例说明、看页面1–4；批准v2接不弄乱5–9、不出乱子10–12，无重复总标题图例。所有图标卡内左侧；功能名称中档粗绿；状态圆点与状态词在每卡右上；没有流程连接。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_details": {
+      "groups": {
+        "card_counts": [
+          4,
+          5,
+          3
+        ],
+        "horizontal_columns": [
+          4,
+          5,
+          3
+        ],
+        "vertical_columns": 1,
+        "group_heading_align": "left",
+        "group_heading_size": "medium",
+        "group_frame": true
+      },
+      "features": {
+        "status_top_right": true,
+        "name_and_number_same_line": true,
+        "icon_left_inside": true,
+        "body_below_name": true
+      },
+      "parts": {
+        "count": 1,
+        "break_before": null,
+        "repeat_chapter_title": false,
+        "repeat_legend": false
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事（12 项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "align": "left"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "看页面",
+        "columns": 1,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不弄乱",
+        "columns": 1,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不出乱子",
+        "columns": 1,
+        "portrait_columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "last_row": "fill"
+      }
+    ],
+    "notes": "横版实际原图三组是单排4/5/3列，不按scene泛称三列套版。标题左47%，图例和说明同卡置右53%；每组组名左对齐压在外框上沿，下方全组一排。竖版01张含总标题、图例说明、看页面1–4；批准v2接不弄乱5–9、不出乱子10–12，无重复总标题图例。所有图标卡内左侧；功能名称中档粗绿；状态圆点与状态词在每卡右上；没有流程连接。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_details": {
+      "groups": {
+        "card_counts": [
+          4,
+          5,
+          3
+        ],
+        "horizontal_columns": [
+          4,
+          5,
+          3
+        ],
+        "vertical_columns": 1,
+        "group_heading_align": "left",
+        "group_heading_size": "medium",
+        "group_frame": false
+      },
+      "features": {
+        "status_top_right": true,
+        "name_and_number_same_line": true,
+        "icon_left_inside": true,
+        "body_below_name": true
+      },
+      "parts": {
+        "count": 2,
+        "break_before": "不弄乱",
+        "repeat_chapter_title": false,
+        "repeat_legend": false
+      }
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-pdf-render-safe-04-v2\\round-01\\candidate-1.png"
+    ]
+  },
+  {
+    "screen": "skill-pdf-render-safe-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r2\\state\\b1-skill-pdf-render-safe-05-h\\round-01\\candidate-2.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large",
+        "row_v": true
+      },
+      {
+        "type": "comparison",
+        "text_ref": "交给它",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "交给它"
+          },
+          {
+            "text_ref": "不交给它 / 它不做"
+          }
+        ],
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "image_mode": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "平时交给我的是 PDF 本身",
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      }
+    ],
+    "notes": "05-h使用批准替换图。横竖标题左、主插画右，在两组内容卡外；不能把主插画省掉或塞进卡内。横版交给它左3条、它不做右4条，两组分别有浅绿外框、左上中档毛笔组名；竖版两组上下排，每条独立整宽横卡，左图标、右圆点及正文。底部提示条整宽，左PDF纸页图标、右正文。链接仅出现在右组第3条，不移到底部，也不加定稿没有的箭头。无连接带。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_details": {
+      "header": {
+        "side_by_side_both_orientations": true,
+        "art_outside_card": true,
+        "title_left": true,
+        "illustration_right": true
+      },
+      "comparison": {
+        "columns": 2,
+        "groups_item_counts": [
+          3,
+          4
+        ],
+        "outer_frames": true,
+        "inner_item_cards": true,
+        "icons_per_item": [
+          3,
+          4
+        ],
+        "group_title_align": "left",
+        "group_title_size": "medium"
+      },
+      "notice": {
+        "full_width": true,
+        "icon_left_inside": true,
+        "bold_body": true,
+        "link_location": "right-group-item-3"
+      }
+    }
+  },
+  {
+    "screen": "skill-pdf-render-safe-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\img\\skill-pdf-render-safe-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large",
+        "row_v": true
+      },
+      {
+        "type": "comparison",
+        "text_ref": "交给它",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "交给它"
+          },
+          {
+            "text_ref": "不交给它 / 它不做"
+          }
+        ],
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "image_mode": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "平时交给我的是 PDF 本身",
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      }
+    ],
+    "notes": "05-h使用批准替换图。横竖标题左、主插画右，在两组内容卡外；不能把主插画省掉或塞进卡内。横版交给它左3条、它不做右4条，两组分别有浅绿外框、左上中档毛笔组名；竖版两组上下排，每条独立整宽横卡，左图标、右圆点及正文。底部提示条整宽，左PDF纸页图标、右正文。链接仅出现在右组第3条，不移到底部，也不加定稿没有的箭头。无连接带。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "layout_details": {
+      "header": {
+        "side_by_side_both_orientations": true,
+        "art_outside_card": true,
+        "title_left": true,
+        "illustration_right": true
+      },
+      "comparison": {
+        "columns": 1,
+        "groups_item_counts": [
+          3,
+          4
+        ],
+        "outer_frames": true,
+        "inner_item_cards": true,
+        "icons_per_item": [
+          3,
+          4
+        ],
+        "group_title_align": "left",
+        "group_title_size": "medium"
+      },
+      "notice": {
+        "full_width": true,
+        "icon_left_inside": true,
+        "bold_body": true,
+        "link_location": "right-group-item-3"
+      }
+    }
+  }
+]

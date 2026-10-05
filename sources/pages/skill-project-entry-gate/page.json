@@ -1,0 +1,230 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-project-entry-gate",
+  "kind": "skill",
+  "title": "改项目前先核对",
+  "url": "/skills/project-entry-gate/",
+  "tagline": "动代码之前，先认准仓库、查清同步。",
+  "status": "",
+  "based_on": {
+    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
+    "commit_time": "2026-10-02T01:01:18+08:00",
+    "file": "E:\\.agents\\skills\\project-entry-gate\\SKILL.md；GitHub总索引 56ceea70f4a128955676d828ac45c4a29054bde3 的 tools\\Get-ProjectAdmission.ps1、Get-ProjectPrivateCompanion.ps1"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-project-entry-gate-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "横版画面：左上大标题毛笔艺术字，下面一行小字（技能名那一行，链接画成绿色下划线）。左半边上“它做什么”一段，下面一段浅绿底的小字（不用点名那段）和一行灰色小字（用了多少次那行）。右半边一张大的水彩对话卡片“怎么跟 AI 说”：每句画成一个浅绿色圆角对话气泡，一列排，气泡里的字就是引号里的话（引号也画）。右上角一幅小插画：一扇半开的小门，门口立着一块写着仓库名的木牌，门边一只放大镜照着一根分出两个杈的树枝（像 Git 分支）。",
+      "portrait": "竖版：标题和技能名一行；“它做什么”；插画缩成一行；对话气泡一行一个；浅绿小字和灰色小字在最后。",
+      "text": "改项目前先核对\n\n技能名 project-entry-gate · 〔GitHub 项目总索引〕的入口\n\n**它做什么**\n要改、要推送、要公开一个代码项目，而“是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有没有别的工作目录”这些事可能改变做法时，AI 先用总索引的入口把事实查清，再动手；收尾时把这次真正改过的每个仓库再查一遍。有的仓库在总索引里登记了私有的配套说明，维护时按登记找出来，只读这次用得着的；本机没有指针，不等于没有。\n\n平常改一个已经认准的项目、改动随时能撤回，AI 看一眼 git status、照项目自己的规矩办就够，不走这一套。\n\n**怎么跟 AI 说**\n“改这个项目之前，先看看是哪个仓库、同步没有。”\n“这个文件夹是不是我要改的那个项目？”\n“这次改完真的推上去了吗？几个工作目录都查一下。”\n“这个项目准备公开，先看看有没有该放私有仓库的东西。”\n“维护文字识别之前，把它的私有配套说明找出来。”\n“联网刷新一下，看 GitHub 上它现在是公开还是私有。”\n\n不用点名：说到改哪个项目、同步、推送、公开、换电脑恢复代码，AI 自己会用上它。\n\n9 月 16–28 日，Codex 读这个技能 264 次，Claude 2 次（使用小记录）。",
+      "links": [
+        {
+          "text": "GitHub 项目总索引",
+          "href": "/projects/github-local-index/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-project-entry-gate-02",
+      "section": "examples",
+      "title": "一个完整例子",
+      "scene": "横版画面：左上标题，旁边一枚灰色小标签（例子来历那一行）。左边约三分之二宽画成一段竖向的对话：最上面“我”的气泡（右对齐，浅绿底），下面“AI 做了什么”几步画成一条细竖线串起的小节点（每个节点一个小水彩图标：一本登记簿、一棵分两个杈的小树、一个黄色的注意牌、一只捏着一张纸的手），再下面“AI 交回”画成左对齐的白底气泡。右边约三分之一宽一张竖卡片“另一种问法”，里面一问一答两个气泡。",
+      "portrait": "竖版：标题和标签；对话从上到下：我的气泡、几步、AI 的回复；“另一种问法”卡片放在最后。",
+      "text": "一个完整例子\n\n真事：对规则与技能基座的仓库实际跑了一次，北京时间 9 月 28 日 22:23\n\n我：“要在 .agents 里改点东西，先看看这个仓库现在什么情况。”\n\n**AI 做了什么**\n1. 用总索引的入口查 wlyaaaaa/.agents；默认不联网，GitHub 那边用上次记下的情况，远端分支也不刷新。\n2. 读到：私有；默认分支 main；本机只有 E:\\.agents 这一个工作目录，main 和 GitHub 上的 main 一致；目录里有 1 个 Git 还没管的新文件。\n3. 另外两个本地分支：archive/lockdown-review-notes-20260926 有 1 个提交不在 main 里；codex/threebase-continue-20260927 已经全部并进 main，可以收掉。\n4. 结论是“注意”，建议的提交方式是“先收拾干净，或只挑自己的文件提交”。这个结论只是事实，不是推送许可。\n\n**AI 交回**\n“可以改。仓库是私有的，本机 main 和网上一致（按上次记录，这次没联网）。三件事要注意：\n有 1 个没被 Git 管的新文件，还没查是谁的；提交时只挑自己的改动，不用 git add .，查清之前不动它；\n一个存档分支上有 1 个提交没进 main，先留着；\n一个已经并进 main 的旧分支可以收掉，要收我再单独办。”\n\n**另一种问法**\n我：“文字识别那个公开项目，有没有私下的说明文档？”\nAI：“登记了私有去处：私有仓库 public-project-private-backup，但还没对上具体文件，所以这次没有要读的。以后要往里写，得先联网再确认一次它还是私有。”",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-project-entry-gate-03",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版画面：上方一条横跨整屏的浅绿底圆角横幅，写能做的事那一句，右端一个白底细绿边按钮（〔去看全部功能〕）。下方一张大卡片“用这个技能时，AI 守的规矩”，八条短句两列排，每条前一个小水彩图标（一个小门、一张写着“证据”的纸、一个问号、一朵云和一条虚线、一串三个仓库小方块、一本夹着书签的登记簿、一把锁、一个保险箱）。",
+      "portrait": "竖版：横幅和按钮在上（按钮单独一行）；八条规矩一行一条。",
+      "text": "能做的事\n\n这个技能能做的事，就是 GitHub 项目总索引的“认仓库、查同步、找配套说明、公开前核对”那几组功能。〔去看全部功能〕\n\n**用这个技能时，AI 守的规矩**\n- 只在事实会改变做法时才查：目标不清、有好几个工作目录、恢复或迁移、合并分支、推送、公开。\n- 查出的结论是证据，不是许可：写着“可以推送”也不等于能推送，推送和发布照授权规矩办。\n- Git 没读出来算“不知道”，不算“对不上”；不为这个去改远端地址、放宽 Git 的信任设置。\n- 默认用本机记录、不联网；要最新情况才联网：只问 GitHub 的公开性，或连远端分支一起刷新；准备公开时两样都要。\n- 收尾把这次真正改过的每个仓库都查一遍，经链接改到的配套说明仓库也算；有没提交的改动不等于有人正在写，先看是谁的；提交照常挑文件、推送、读回默认分支。\n- 配套说明按总索引的登记找，只读用得着的；仓库改公开前，先查它登记的私有去处，还没对上具体文件也要查。\n- 只有换电脑、计划任务、端口、本机数据、备份恢复、开机启动、运行环境、快捷方式、共享目录这类要看电脑实际情况的事，才去查电脑配置；看到一个本机路径不算。\n- 放加密文件的 wlyaaaaa/Key 仓库，克隆前先认清放到哪里：只能放进授权的私有位置，里面只有加密包和能公开的说明，不能把解密后的内容、密码和密钥文件带进去。",
+      "links": [
+        {
+          "text": "去看全部功能",
+          "href": "/projects/github-local-index/#features"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-project-entry-gate-04",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版画面：左上标题。左边约三分之一宽一张卡片“管”，一段字；右边约三分之二宽一张两列表格“不管，交给谁”，右列的名字画成链接；表格下面一张卡片“不做”。每块左上一个小水彩图标（一个打钩的小门、一个指路牌、一个禁止小标）。",
+      "portrait": "竖版：“管”卡片在上；表格改成小卡片一行一张（粗体写“这些事”，下面写找谁）；“不做”在最后。",
+      "text": "边界\n\n**管**\n进一个代码项目时，认准是哪个仓库、公开还是私有、本机和 GitHub 同步没有、有几个工作目录和分支；推送、公开前把这些再核一次；找出仓库登记过的私有配套说明、按需读，改公开前查它登记的私有去处；收尾时查每个改过的仓库。\n\n**不管，交给谁**\n| 这些事 | 找谁 |\n|---|---|\n| 删库、改名、改公开范围、转移仓库 | 总索引的〔仓库大动作入口〕；哪些要我验证见〔重大动作与本人验证〕 |\n| 哪些事要我点头 | 〔用户授权〕 |\n| 配套说明怎么读、怎么改、怎么收尾 | 〔工程与交付〕 |\n| 电脑上的计划任务、端口、备份恢复 | 〔电脑配置与恢复〕 |\n| 技能装没装、三个基座的登记坏没坏 | 基座的〔只读体检脚本〕；它说明不了技能好不好用 |\n\n**不做**\n- 不给每一次小改动加一道“准入”手续。\n- 不把“注意”“可以推送”这类结论当成我的同意。\n- 不改远端地址、不放宽 Git 全局信任来绕过读不出的情况。\n- 默认不联网拉远端分支，需要时才刷新。",
+      "links": [
+        {
+          "text": "仓库大动作入口",
+          "href": "/projects/github-local-index/#g-major",
+          "locator_text": {
+            "h": "总索引的【仓库大动作入口】；"
+          }
+        },
+        {
+          "text": "重大动作与本人验证",
+          "href": "/rules/protected-actions/",
+          "locator_text": {
+            "h": "哪些要我验证见【重大动作与本人验证】"
+          },
+          "locator_instances": {
+            "v": {
+              "input_sha256": "bb0b2dad4ff600b306a15190de7e9cf1445e7c47cada6b965add3addf9f85eb5",
+              "instances": [
+                {
+                  "context_text": "总索引的【仓库大动作入口】；哪些要我验证见【重大动作与本人验证】",
+                  "context_rect": [
+                    67,
+                    749,
+                    874,
+                    776
+                  ],
+                  "expected_rect": [
+                    591,
+                    751,
+                    834,
+                    776
+                  ],
+                  "confirm_region": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "用户授权",
+          "href": "/rules/authorization/"
+        },
+        {
+          "text": "工程与交付",
+          "href": "/rules/engineering-delivery/"
+        },
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "只读体检脚本",
+          "href": "/projects/agents/#f-doctor"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [
+      {
+        "id": "n-reads",
+        "text": "Codex 读这个技能 264 次，Claude 2 次",
+        "meaning": "使用小记录里 kind=skill、name=project-entry-gate 的条数",
+        "as_of": "2026-09-28",
+        "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；Codex 9 月 16 日 22:15–28 日 06:47，Claude 9 月 27 日 18:33–19:20（北京）",
+        "screens": [
+          "skill-project-entry-gate-01"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-index",
+        "with": "github-local-index",
+        "direction": "拿来",
+        "flow": "调用总索引的 Get-ProjectAdmission.ps1（仓库身份、公开性、分支、工作目录、同步）和 Get-ProjectPrivateCompanion.ps1（私有配套说明）",
+        "source": "SKILL.md 第 12–23 行（提交 8244785）"
+      },
+      {
+        "id": "r-pcconfig",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "只有迁移、计划任务、端口、本机数据、备份恢复、开机启动、运行环境、快捷方式、共享目录这类决定才去查电脑配置的登记",
+        "source": "SKILL.md 第 25 行"
+      },
+      {
+        "id": "r-rules",
+        "with": "agents",
+        "direction": "拿来",
+        "flow": "配套说明的读改收尾按当前生效的工程与交付专题；内容处理和权限仍按上层的个人资料、用户授权专题，技能里不再逐条写",
+        "source": "SKILL.md 第 22 行；上层活动规则"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/github-local-index/",
+        "screen": "skill-project-entry-gate-01",
+        "text": "GitHub 项目总索引"
+      },
+      {
+        "target": "/projects/github-local-index/#features",
+        "screen": "skill-project-entry-gate-03",
+        "text": "去看全部功能"
+      },
+      {
+        "target": "/projects/github-local-index/#g-major",
+        "screen": "skill-project-entry-gate-04",
+        "text": "仓库大动作入口"
+      },
+      {
+        "target": "/rules/protected-actions/",
+        "screen": "skill-project-entry-gate-04",
+        "text": "重大动作与本人验证"
+      },
+      {
+        "target": "/rules/authorization/",
+        "screen": "skill-project-entry-gate-04",
+        "text": "用户授权"
+      },
+      {
+        "target": "/rules/engineering-delivery/",
+        "screen": "skill-project-entry-gate-04",
+        "text": "工程与交付"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "skill-project-entry-gate-04",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/projects/agents/#f-doctor",
+        "screen": "skill-project-entry-gate-04",
+        "text": "只读体检脚本"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "-LiveMetadata、-RefreshRefs、-ForPublication、-TargetWorktree 等参数名不上页，用人话写成“只问公开性／连远端分支一起刷新／准备公开两样都要”。",
+      "准入结果里的 push_strategy 等字段名不上页。"
+    ],
+    "unsure": [
+      "替本人口吻写的句子：第 1 屏六句“怎么跟 AI 说”；第 2 屏两句“我：……”。",
+      "第 2 屏例子的数据是 9 月 28 日 22:23 对 wlyaaaaa/.agents 实际跑出的结果（缓存模式，fetch 0 次）；“AI 交回”那段话是按结果写的，不是 AI 当时的原话。那个没被 Git 管的新文件是什么没查（与页面无关）。",
+      "“另一种问法”是 9 月 28 日对 wlyaaaaa/LocalOCR 实际跑的配套说明查询（status=registered_unmapped）。页面把 LocalOCR 写成“文字识别那个公开项目”，要和总索引页、文字识别项目页的叫法对齐。",
+      "第 3 屏按规矩只写一句并链到总索引项目页 #features；那句里“认仓库、查同步、找配套说明、公开前核对”是我概括的，总索引页上的组名以那一页为准。",
+      "页上把本技能叫“改项目前先核对”（旧网站的叫法）。第 4 屏原来链到的“技能与基座体检”10 月 2 日退役，改指基座项目的只读体检脚本（/projects/agents/#f-doctor）。"
+    ]
+  }
+}

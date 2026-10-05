@@ -1,0 +1,1400 @@
+[
+  {
+    "screen": "agents-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "asset": "proto:a01-title-h",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-h.png",
+        "source_box": [
+          30,
+          45,
+          748,
+          182
+        ],
+        "row": "top",
+        "width": "47%",
+        "text_ref": "AI 规则与技能基座"
+      },
+      {
+        "type": "prose",
+        "row": "top",
+        "text_ref": "我给 AI 定的规矩"
+      },
+      {
+        "type": "illustration",
+        "row": "top",
+        "width": "53%",
+        "asset": "proto:a01-hero-h"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "icons": [
+          "proto:a01-ic1",
+          "proto:a01-ic2",
+          "proto:a01-ic3",
+          "proto:a01-ic4"
+        ],
+        "text_ref": "118 次"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "首屏：标题和介绍在左、插画在右；四张数字卡；现在横条。示范规格（主工程师写）",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-h.png"
+    ]
+  },
+  {
+    "screen": "agents-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "asset": "proto:a01-title-v",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-v.png",
+        "source_box": [
+          40,
+          100,
+          910,
+          320
+        ],
+        "text_ref": "AI 规则与技能基座"
+      },
+      {
+        "type": "illustration",
+        "asset": "proto:a01-hero-v",
+        "bleed": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "我给 AI 定的规矩"
+      },
+      {
+        "type": "stat_card",
+        "columns_v": 2,
+        "icons": [
+          "proto:a01-ic1",
+          "proto:a01-ic2",
+          "proto:a01-ic3",
+          "proto:a01-ic4"
+        ],
+        "text_ref": "118 次"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在",
+        "frame_mode": "plain"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-01-v2.png"
+    ]
+  },
+  {
+    "screen": "agents-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "asset": "proto:a02-title-h",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-h.png",
+        "source_box": [
+          330,
+          22,
+          1320,
+          140
+        ],
+        "text_ref": "每天：一个 AI"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "connector": "ribbon",
+        "illustration": "above_card",
+        "icons": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic1.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic2.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic3.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic4.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic5.png"
+        ],
+        "text_ref": "读入口|核验|读规则|每条新消息|干活和收尾",
+        "direction": "horizontal"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "proto:a02-sub",
+          "proto:a02-cal"
+        ],
+        "text_ref": "子代理也一样|每周一 13:00"
+      }
+    ],
+    "notes": "原图：标题居中；五站图标在卡外、丝带相连，编号和名称在卡外，卡里只有说明",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-h.png"
+    ]
+  },
+  {
+    "screen": "agents-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "asset": "proto:a02-title-v",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-v.png",
+        "source_box": [
+          25,
+          15,
+          915,
+          165
+        ],
+        "text_ref": "每天：一个 AI"
+      },
+      {
+        "type": "flow",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic1.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic2.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic3.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic4.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a02-ic5.png"
+        ],
+        "text_ref": "读入口",
+        "direction": "vertical"
+      },
+      {
+        "type": "content_card",
+        "illustration": "left_inside",
+        "icons": [
+          "proto:a02-sub",
+          "proto:a02-cal"
+        ],
+        "text_ref": "子代理也一样"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-02-v2.png"
+    ]
+  },
+  {
+    "screen": "agents-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "text_ref": "改规矩"
+      },
+      {
+        "type": "dialogue",
+        "row": "flow",
+        "width": "21%",
+        "text_ref": "我只说一句",
+        "avatars": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-boy.png"
+        ],
+        "avatar_position": "outside-left",
+        "avatar_source": "illustrations"
+      },
+      {
+        "type": "flow",
+        "row": "flow",
+        "width": "79%",
+        "columns": 6,
+        "connector": "ribbon",
+        "illustration": "above_card",
+        "name_in_card": true,
+        "icons": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic1.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic2.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic3.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic4.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic5.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic6.png"
+        ],
+        "text_ref": "改源码",
+        "direction": "horizontal"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "proto:a03-road",
+          "proto:a03-book"
+        ],
+        "text_ref": "两条路"
+      }
+    ],
+    "notes": "原图：标题靠左；左边气泡和小人，右边六站流水线（图标在卡外，编号压在丝带上，名称在卡里）",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-03-h.png"
+    ]
+  },
+  {
+    "screen": "agents-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "text_ref": "改规矩"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我只说一句",
+        "avatars": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-boy.png"
+        ],
+        "avatar_position": "outside-left",
+        "avatar_source": "illustrations"
+      },
+      {
+        "type": "flow",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic1.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic2.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic3.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic4.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic5.png",
+          "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-ic6.png"
+        ],
+        "text_ref": "改源码",
+        "direction": "vertical"
+      },
+      {
+        "type": "content_card",
+        "illustration": "left_inside",
+        "icons": [
+          "proto:a03-road",
+          "proto:a03-book"
+        ],
+        "text_ref": "两条路"
+      }
+    ],
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-03-v.png"
+    ]
+  },
+  {
+    "screen": "agents-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "新规矩把事办坏了跟AI说“退回上一版规则”。发布器把“当前”和“上一版”对调，两份入口文件一起换回，再核验一遍",
+        "columns": 2,
+        "portrait_columns": 1,
+        "flow": "column",
+        "rows": 4,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "新规矩把事办坏了跟AI说“退回上一版规则”。发布器把“当前”和“上一版”对调，两份入口文件一起换回，再核验一遍",
+        "columns": 1,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "规则这一路"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1源码",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "above_card",
+        "icons": "auto"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "技能和钩子",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "footer",
+        "width": "64%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "体量",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "footer",
+        "width": "36%"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "规则这一路"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1源码",
+        "columns": 5,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "技能和钩子",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "体量",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "发布器：不出半截、不互相覆盖",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1只从推上去的提交发布",
+        "columns": 3,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "width": "100%",
+        "row": "steps",
+        "fill_last_row": true
+      },
+      {
+        "type": "content_card",
+        "text_ref": "为什么要这么多道",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/版本循环文件.png"
+        ],
+        "width": "100%",
+        "row": "why"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
+  },
+  {
+    "screen": "agents-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-06-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "发布器：不出半截、不互相覆盖",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1只从推上去的提交发布",
+        "columns": 1,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "为什么要这么多道",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/版本循环文件.png"
+        ]
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "钩子：每条新消息带进来什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "comparison",
+        "text_ref": "Claude",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "Claude"
+          },
+          {
+            "text_ref": "Codex"
+          },
+          {
+            "text_ref": "两边一样的",
+            "span": 2
+          }
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "image_mode": "none"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。"
+  },
+  {
+    "screen": "agents-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "钩子：每条新消息带进来什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "comparison",
+        "text_ref": "Claude",
+        "columns": 2,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "Claude"
+          },
+          {
+            "text_ref": "Codex"
+          },
+          {
+            "text_ref": "两边一样的",
+            "span": 2
+          }
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "image_mode": "none"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。"
+  },
+  {
+    "screen": "agents-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "技能：一份源码，两边共用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "源码",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 5,
+        "connector": "none",
+        "illustration": "above_card",
+        "icons": "auto"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不复制，只链接",
+        "columns": 2,
+        "portrait_columns": 1,
+        "flow": "column",
+        "rows": 3,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "缺的能力真影响结果时"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "技能：一份源码，两边共用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "源码",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 5,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "不复制，只链接",
+        "columns": 1,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "缺的能力真影响结果时"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；末轮接口核实topology可用left_inside，竖流程改卡内左侧小图，保留原箭头待组件G2修复。"
+  },
+  {
+    "screen": "agents-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的决定和AI的经验记在哪",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "决定原话",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/icons/开关.png",
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "规矩本身见"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-09-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的决定和AI的经验记在哪",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "决定原话",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/icons/开关.png",
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "规矩本身见"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1只留两份版本目录",
+        "columns": 3,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "width": "100%",
+        "row": "principles"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "约 5.8 万字",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
+          "_library/icons/日历时钟.png"
+        ],
+        "variant": "lead_value",
+        "width": "100%",
+        "row": "numbers"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。"
+  },
+  {
+    "screen": "agents-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-10-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1只留两份版本目录",
+        "columns": 1,
+        "portrait_columns": 1,
+        "flow": "row",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "约 5.8 万字",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
+          "_library/icons/日历时钟.png"
+        ],
+        "variant": "lead_value"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "comparison",
+        "text_ref": "1随手改不了",
+        "columns": 3,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "随手改不了"
+          },
+          {
+            "text_ref": "改了一半的源码"
+          },
+          {
+            "text_ref": "子代理不会冒领"
+          }
+        ],
+        "illustration": "top_inside",
+        "icons": "auto",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      }
+    ],
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
+  },
+  {
+    "screen": "agents-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "comparison",
+        "text_ref": "1随手改不了",
+        "columns": 3,
+        "columns_v": 1,
+        "groups": [
+          {
+            "text_ref": "随手改不了"
+          },
+          {
+            "text_ref": "改了一半的源码"
+          },
+          {
+            "text_ref": "子代理不会冒领"
+          }
+        ],
+        "illustration": "top_inside",
+        "icons": "auto",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（36项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "规则发布与核验",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "钩子",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-12-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（36项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "规则发布与核验",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "钩子",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-13-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-13-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "技能",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "决定和经验",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-13-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "技能",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "决定和经验",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-14-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-14-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "协作的接线",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "收尾和备份",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "已停用",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-14-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-14-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "协作的接线",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "收尾和备份",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "已停用",
+        "columns": 3,
+        "portrait_columns": 1,
+        "last_row": "fill",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_position": "top_right",
+        "status_text": "dot_only"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-15",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-15-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-15-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "head",
+        "width": "35%",
+        "align": "center"
+      },
+      {
+        "type": "chart",
+        "text_ref": "每月提交",
+        "chart_type": "column",
+        "data": [
+          {
+            "node": 0,
+            "item": 0,
+            "value": 3
+          },
+          {
+            "node": 0,
+            "item": 1,
+            "value": 244
+          },
+          {
+            "node": 0,
+            "item": 2,
+            "value": 330
+          },
+          {
+            "node": 0,
+            "item": 3,
+            "value": 640
+          }
+        ],
+        "width": "65%",
+        "row": "head"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "6 月 30 日",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "width": "100%",
+        "row": "history",
+        "columns": 2,
+        "columns_v": 1
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。；实审二轮：插画与柱图同排置时间线上方；块序按规格调整，G1要求所有原节点完整出现。"
+  },
+  {
+    "screen": "agents-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-15-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-15-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "6 月 30 日",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "chart",
+        "text_ref": "每月提交",
+        "chart_type": "column",
+        "data": [
+          {
+            "node": 0,
+            "item": 0,
+            "value": 3
+          },
+          {
+            "node": 0,
+            "item": 1,
+            "value": 244
+          },
+          {
+            "node": 0,
+            "item": 2,
+            "value": 330
+          },
+          {
+            "node": 0,
+            "item": 3,
+            "value": 640
+          }
+        ]
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  },
+  {
+    "screen": "agents-16",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的AI实践",
+        "align": "center",
+        "size": "large",
+        "width": "100%",
+        "row": "practice-0"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "约 3000 亿 token",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "lead_value",
+        "icons": "none",
+        "width": "100%",
+        "row": "practice-1"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "用过的工具",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "item_images": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/手机电脑连接.png"
+        ],
+        "width": "100%",
+        "row": "practice-2"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图：",
+        "columns": 3,
+        "columns_v": 2,
+        "ratio": 1.1,
+        "caption": "after",
+        "width": "100%",
+        "row": "practice-3"
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。"
+  },
+  {
+    "screen": "agents-16",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的AI实践",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "约 3000 亿 token",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "lead_value",
+        "icons": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "用过的工具",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "item_images": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/手机电脑连接.png"
+        ]
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图：",
+        "columns": 3,
+        "columns_v": 2,
+        "ratio": 1.1,
+        "caption": "after"
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
+  }
+]

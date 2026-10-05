@@ -1,0 +1,662 @@
+[
+  {
+    "screen": "rule-execution-coordination-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "分工与并行施工"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "主持的想和把关，具体活派出去"
+      },
+      {
+        "type": "prose",
+        "text_ref": "主对话管战略、头脑风暴、抽查、QA"
+      },
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/motion-rule-execution-coordination-01-legacy-video.png",
+        "align": "center",
+        "target_width": 720,
+        "target_height": 440
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "portrait_layout": "row_cards",
+        "text_ref": "型号与派法（北京时间2026-10-03）"
+      },
+      {
+        "type": "notice",
+        "row": "host",
+        "width": "50%",
+        "text_ref": "怎么搭配：Sol用ultra，Luna用max"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "host",
+        "width": "50%",
+        "text_ref": "三种宿主怎样派",
+        "header_icon": [
+          "_library/icons/双气泡.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "linkrow_from_para": true,
+        "text_ref": "跳到：要不要派派谁、花多少重大的事独立复核多个任务同时改"
+      },
+      {
+        "type": "prose",
+        "text_ref": "Claude和GPT在整套系统里的搭配：在整套系统里的分"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版16:9，白底绿色。顶上毛笔标题、副标题和一段职责说明。中间主要区域为五行型号表：左列完整型号显示名，右列任务场景及档位；每行铺满，不补空行，所有文字完整清楚。表下左卡“怎么搭配”，右卡“三种宿主怎样派”；职责、条件和三条派法都保留。页底四个跳转按钮与协作链接。用少量绿色细线连接两个小助手的水彩图标，不再画带模型名牌的大插画，不额外写口号。Markdown标记不画，〔〕链接画绿色下划线、小箭头；英文档位用清楚的等宽字体。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-rule-execution-coordination-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "分工与并行施工"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "主持的想和把关，具体活派出去"
+      },
+      {
+        "type": "prose",
+        "text_ref": "主对话管战略、头脑风暴、抽查、QA"
+      },
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/motion-rule-execution-coordination-01-legacy-video.png",
+        "align": "center",
+        "target_width": "100%",
+        "target_height": 560
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "portrait_layout": "row_cards",
+        "text_ref": "型号与派法（北京时间2026-10-03）"
+      },
+      {
+        "type": "notice",
+        "row": "host",
+        "width": "50%",
+        "text_ref": "怎么搭配：Sol用ultra，Luna用max"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "host",
+        "width": "50%",
+        "text_ref": "三种宿主怎样派",
+        "header_icon": [
+          "_library/icons/双气泡.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "linkrow_from_para": true,
+        "text_ref": "跳到：要不要派派谁、花多少重大的事独立复核多个任务同时改"
+      },
+      {
+        "type": "prose",
+        "text_ref": "Claude和GPT在整套系统里的搭配：在整套系统里的分"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版9:16按正文顺序分张：标题和职责在前；型号表改成一张整宽模型卡一条，每条完整显示型号、任务和档位，不能左右挤排；“怎么搭配”和三种宿主说明依次整宽；链接放末尾。完整保留实义，不加空卡、空框，不把横版缩小塞入竖画布。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-execution-coordination-02-h\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-execution-coordination-02-h\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点·派子代理的原则"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "要不要派"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“要不要派”配一只举起又放下的手、“派谁、花多少”配一架小天平一边是齿轮一边是硬币、“重大的事独立复核”配一只放大镜照着一页纸。卡片里每条要点前一个小绿圆点，正文深蓝灰。三张卡排成三列等宽，高度按内容；三张卡底边对齐，卡片下方留一条窄窄的水彩叶子装饰带。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点·派子代理的原则"
+      },
+      {
+        "type": "points_card",
+        "columns": 3,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "要不要派"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：标题在上，三张卡片从上到下一张一条、整宽，卡片内文字和横版完全一样；最下面水彩叶子装饰带。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "width": "50%",
+        "text_ref": "怎么交代、怎么交付",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-2d7996732dca21311fe1.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "text_ref": "全局规则只引用，资料锁着时不凑",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-335cc1ba09973e3c57cd.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "width": "50%",
+        "text_ref": "本人的限制优先",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-f007fef9844a5e7dde84.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "text_ref": "可派模型清单",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-b9fb21fad9f1e0ed18a6.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "row": "cards",
+        "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“怎么交代、怎么交付”配一张写满字的任务卡和一支笔、“全局规则只引用，资料锁着时不凑”配一本合着的规则书上夹一张指路小纸条、“本人的限制优先”配一道小栅栏门、“可派模型清单”配一块挂着几个名牌的小木板。卡片里每条要点前一个小绿圆点，正文深蓝灰。左列上下两张卡“怎么交代、怎么交付”“全局规则只引用，资料锁着时不凑”，占约一半宽；右列上下两张卡“本人的限制优先”“可派模型清单”。“型号与派法”链接和“本网站专用分工”这两段放在右下卡片下面一个浅绿底的小框里，框左边画三个品牌标志：Claude 的橙色星芒、OpenAI 的黑色花结、Codex 的终端小图标。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。；本轮四张独立卡分别按ctx.icons接口的原图顺序显式绑定第1–4图，避免每卡auto都从第1图重取；未新增图内品牌。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-rule-execution-coordination-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-rule-execution-coordination-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-03-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "width": "50%",
+        "text_ref": "怎么交代、怎么交付",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-2d7996732dca21311fe1.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "text_ref": "全局规则只引用，资料锁着时不凑",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-335cc1ba09973e3c57cd.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "width": "50%",
+        "text_ref": "本人的限制优先",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-f007fef9844a5e7dde84.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "row": "cards",
+        "text_ref": "可派模型清单",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-b9fb21fad9f1e0ed18a6.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "row": "cards",
+        "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：本屏没有大标题；四张卡片从上到下一张一条、整宽，“型号与派法”链接和“本网站专用分工”小框放最后，三个品牌标志排在小框上沿。字和横版完全一样。；本轮四张独立卡分别按ctx.icons接口的原图顺序显式绑定第1–4图，避免每卡auto都从第1图重取；未新增图内品牌。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 2,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "主对话的责任"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“主对话的责任”配一个拿着清单打勾的小人、“Claude 和 GPT 一起干时”配 Claude 橙色星芒和 OpenAI 黑色花结两个标志并排握手、“快速模式、故障和额度”配一个电量回满的小电池、“什么时候新开对话”配一个新打开的对话气泡。卡片里每条要点前一个小绿圆点，正文深蓝灰。四张卡排成两行两列：上行左“主对话的责任”、右“Claude 和 GPT 一起干时”（这张最长，可以比左边高）；下行左“快速模式、故障和额度”、右“什么时候新开对话”。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。（g4 补充）“主对话的责任”卡现在多了接力成品、盯到交付、叫停后确认三处，比“Claude 和 GPT 一起干时”还长；两行两列的排法不变，上行两张卡高度按较长的一张，下行“什么时候新开对话”也多了一条满槽的说明，卡高按内容，不留大块空白。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 2,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "主对话的责任"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：四张卡片从上到下一张一条、整宽，顺序同横版（先左后右、先上后下）。字和横版完全一样。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点·多个任务同时改东西"
+      },
+      {
+        "type": "points_card",
+        "columns": 2,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "各用各的工作副本"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“各用各的工作副本”配三张并排的小工作台各摊一份蓝图、“单点动作前加一把短锁”配挂钩上的黄铜钥匙和小沙漏（和开头插画同一把）、“不动别人的东西”配一个贴着别人名牌的小纸箱、“停下时留好接续状态”配一张夹在书里的书签。卡片里每条要点前一个小绿圆点，正文深蓝灰。上行两张大卡：左“各用各的工作副本”、右“单点动作前加一把短锁”；下行两张窄一点的卡：左“不动别人的东西”、右“停下时留好接续状态”。E:\\.agents、E:\\PCConfig、Move-TaskItemToRecycleBin.ps1 -AllowLinkedWorktree、git worktree remove、git add .、finally 这几处用等宽字体、浅绿底小框，其余字照常。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点·多个任务同时改东西"
+      },
+      {
+        "type": "points_card",
+        "columns": 2,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "各用各的工作副本"
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：标题在上，四张卡片从上到下一张一条、整宽，顺序同横版。字和横版完全一样。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+  },
+  {
+    "screen": "rule-execution-coordination-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "分工与并行施工",
+        "row": "original",
+        "width": "50%",
+        "row_equal_height": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "一次交代清楚",
+        "row": "original",
+        "width": "50%",
+        "row_equal_height": true
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E214 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“1.”到“8.”的编号照画；**…** 是粗体，星号不画；`…` 里的路径和命令用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 分工与并行施工”到第 5 条结束；右卡放第 6 条、第 7 条、第 8 条和“根会话负责战略……”那一段。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；E214 对齐：使用真实 source_text_card，按完整编号条目分卡；供网站提取 ct-source-body，保留原顺序与原文链接。；E215新增Luna生图low例外后，原文两栏等高，避免增加同排底边高差；原文和分栏边界不改。"
+  },
+  {
+    "screen": "rule-execution-coordination-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "分工与并行施工"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "一次交代清楚",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "接力做一样成品，要有一个人对整体负责",
+        "page_break_before": true
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样；字多，行距紧一点但不挤。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；E214 对齐：使用真实 source_text_card，按完整编号条目分卡；供网站提取 ct-source-body，保留原顺序与原文链接。"
+  },
+  {
+    "screen": "rule-execution-coordination-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "Claude主持、和GPT协作时",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "原生容量不足与原线程接续",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "一直有人管理到交付",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "新型号怎么调研",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "第三方评测和社区反馈",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "落地和记录",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "改分工的快做法：",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "多个任务同时改东西",
+        "body_columns": 1
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“1.”到“8.”的编号照画；**…** 是粗体，星号不画；`…` 里的路径和命令用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“本人让 Claude 与 GPT 协作时……”“未经本人许可……”“新开一个顶层任务……”三段；右卡放“## 多个任务同时改东西”和它下面的四条。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；E214 整段现行原文含容量接续和新型号调研；真实原文卡按完整段落/编号边界分卡，手机按卡安全分张。；续屏版本标签明确 E214，标签不属于规则正文。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-execution-coordination-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-execution-coordination\\img\\rule-execution-coordination-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "Claude主持、和GPT协作时"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "原生容量不足与原线程接续",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "一直有人管理到交付",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "新型号怎么调研",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "第三方评测和社区反馈",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "落地和记录",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "改分工的快做法：",
+        "page_break_before": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "text_ref": "多个任务同时改东西",
+        "page_break_before": true
+      }
+    ],
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：“原文 · 续”在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；E214 整段现行原文含容量接续和新型号调研；真实原文卡按完整段落/编号边界分卡，手机按卡安全分张。；续屏版本标签明确 E214，标签不属于规则正文。"
+  }
+]

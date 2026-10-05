@@ -1,0 +1,346 @@
+[
+  {
+    "screen": "skill-vault-workflow-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "44%",
+        "text_ref": "加密库操作"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "让 AI 帮我管"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "56%",
+        "illustration": "outside"
+      },
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "可以这样跟"
+      },
+      {
+        "type": "dialogue",
+        "columns": 2,
+        "split_items": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "“看看 Key",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "只说“帮我"
+      }
+    ],
+    "notes": "原图左标题正文右主图，主图卡外。六气泡两列三排按行读取，各左图标在横卡内、右是浅绿气泡。底部说明一行，链接文字严格依定稿（原图额外密码中心链接不保留）。需dialogue拆bullets为六气泡。"
+  },
+  {
+    "screen": "skill-vault-workflow-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "加密库操作"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 帮我管"
+      },
+      {
+        "type": "section_heading",
+        "size": "small",
+        "text_ref": "可以这样跟"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_items": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "“看看 Key",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "只说“帮我"
+      }
+    ],
+    "notes": "主图在标题下、介绍段上、卡片外；六横卡一行一个、左图右气泡；底部整宽说明。图中VAULT文字只按定稿所点名字样处理，其他窗口字不保留。"
+  },
+  {
+    "screen": "skill-vault-workflow-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整的例子："
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "先查，不要密码",
+        "direction": "horizontal"
+      },
+      {
+        "type": "comparison",
+        "columns": 2,
+        "inline_groups": [
+          "回执里有",
+          "没有"
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "回执里有",
+        "inline_icons": [
+          "_library/icons/钥匙.png",
+          "_library/icons/钥匙.png"
+        ]
+      }
+    ],
+    "notes": "标题整屏两行居中；五编号站同排，编号左上、图标卡内顶部、标题正文在下，绿箭头串起。底下一满宽回执横卡左右两半：回执里有/没有，图标左内。回执是一个para节点，inline_groups需组件按原文区间拆左右且不漏字。"
+  },
+  {
+    "screen": "skill-vault-workflow-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整的例子："
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "先查，不要密码",
+        "direction": "vertical"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "inline_groups": [
+          "回执里有",
+          "没有"
+        ],
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "回执里有",
+        "inline_icons": [
+          "_library/icons/钥匙.png",
+          "_library/icons/钥匙.png"
+        ]
+      }
+    ],
+    "notes": "原图五步骤各为一整宽横卡，上下排列、左图右文、编号压左上；相邻卡无显式箭头，以原图为准。回执有/没有两半在底部上下排，各左图右文。标题两行居中。"
+  },
+  {
+    "screen": "skill-vault-workflow-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "button_in_card": true,
+        "illustration_width": "38%",
+        "text_ref": "这个技能是"
+      }
+    ],
+    "notes": "整屏章节标题居中（原图旧标题左对齐，按批准追加要求调整）。下方只有一张满宽卡，锁信封插画在卡内左约38%，正文在右，按钮紧接正文且在同一卡内，不移出卡。"
+  },
+  {
+    "screen": "skill-vault-workflow-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "button_in_card": true,
+        "text_ref": "这个技能是"
+      }
+    ],
+    "notes": "一张满宽卡，锁信封大插画在卡内顶部，文字在下、链接按钮在卡底，全部同一卡内。标题居中大档。"
+  },
+  {
+    "screen": "skill-vault-workflow-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "points_card",
+        "row": "bounds",
+        "width": "50%",
+        "columns": 1,
+        "illustration": "none",
+        "illustration_align": "right",
+        "icons": "auto",
+        "item_icons": "check",
+        "text_ref": "管"
+      },
+      {
+        "type": "points_card",
+        "row": "bounds",
+        "width": "50%",
+        "columns": 1,
+        "illustration": "none",
+        "illustration_align": "right",
+        "icons": "auto",
+        "item_icons": "arrow",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "text_ref": "守的几条死规矩"
+      }
+    ],
+    "notes": "整屏章节标题居中（原图旧左对齐，按批准追加要求调整）。左右各半宽两栏大卡；管卡对勾条目左、笔记本插画在右卡内，不管卡灰箭头条目、路牌在右下卡内；底下细满宽卡左检查单图右规则段。right_inside为所需组件扩展，禁止改成左内图。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。"
+  },
+  {
+    "screen": "skill-vault-workflow-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\img\\skill-vault-workflow-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-vault-workflow-04-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "row_v": true,
+        "width": "38%",
+        "text_ref": "边界"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "row_v": true,
+        "width": "62%",
+        "illustration": "outside"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "item_cards": true,
+        "item_icons": "check",
+        "illustration": "none",
+        "text_ref": "管"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "item_cards": true,
+        "item_icons": "arrow",
+        "illustration": "none",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_clauses": true,
+        "item_cards": true,
+        "illustration": "none",
+        "text_ref": "守的几条死规矩"
+      }
+    ],
+    "notes": "原v标题左盾牌主图右卡外；管与不管各整宽大卡上下顺排、内含四条独立小卡。续v2采用approved新图，守的几条死规矩一大卡内有按原分号分成八段小卡；不得改字，split_clauses只切原文边界并保留标点。盾牌素材不得错用首屏机器人。"
+  }
+]
