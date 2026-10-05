@@ -69,7 +69,7 @@ def generate(release_root, record_sha256, verified_release_id):
         'schema': 'wly.assembled-rules-pin.v2', 'version': record['release_id'],
         'release_commit': record['git_commit'], 'release_record_sha256': record_sha256,
         'ruleset_sha256': record['ruleset_sha256'], 'documents': documents,
-        'excerpt_contract': {'id': contract.CONTRACT, 'excerpts': selected},
+        'excerpt_contract': {'id': contract.excerpt_contract_id(verified_release_id), 'excerpts': selected},
         'public_source_resources': resources,
     }
 

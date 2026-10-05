@@ -135,7 +135,7 @@ def prepare(site_root, projection_manifest):
             record = records[(identity, 'h')]
             meta = {'relative_file': relative, 'version': pin['version'], 'source_sha256': expected['source_sha256'],
                     'public_source_sha256': public_sha, 'src': public_src, 'excerpt_id': identity,
-                    'excerpt_contract': contract.CONTRACT, 'original_html': body,
+                    'excerpt_contract': contract.excerpt_contract_id(pin['version']), 'original_html': body,
                     'omitted_count': excerpt['approved_omitted_count'], 'rendered_input_sha256': record['public_html_sha256'],
                     'raw_rendered_input_sha256': record['raw_html_sha256'], 'public_projection_sha256': inputs[str(manifest)]['sha256']}
             rows.append({'id': sid, 'render_mode': 'typeset', 'shape': 'source_text', 'title': src.get('title', ''),

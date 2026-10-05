@@ -142,13 +142,13 @@ class FixedRuleOriginal(unittest.TestCase):
         self.body='<div class="source-prose">'+contract.render_markdown(self.public)+'</div>'
         self.asset=self.site/'_typeset/rule-sources/original.md';self.asset.parent.mkdir(parents=True);self.asset.write_text(self.public,encoding='utf8')
         original=contract.sha_bytes(self.raw.encode());public=builder.sha(self.asset)
-        self.pin={'schema':'wly.assembled-rules-pin.v2','version':'E214','documents':{self.document:{'source_sha256':original,'public_source_sha256':public}},
+        self.pin={'schema':'wly.assembled-rules-pin.v2','version':'E216','documents':{self.document:{'source_sha256':original,'public_source_sha256':public}},
                   'excerpt_contract':{'id':contract.CONTRACT,'excerpts':{self.identity:{'page':'rule-authorization','screen':'rule-authorization-05',
                     'relative_file':self.document,'source_sha256':original,'approved_omitted_count':0,
                     'rendered_text_sha256':builder.prose_digest(contract.render_markdown(self.public),True)}}}}
         config=self.root/'config';config.mkdir();(config/'assembled-rules-pin.json').write_text(json.dumps(self.pin),encoding='utf8')
-        self.row={'id':'rule-authorization-05','shape':'source_text','render_mode':'typeset','source_version':'原文 · E214 版',
-                  'source_meta':{'relative_file':self.document,'source_sha256':original,'public_source_sha256':public,'version':'E214',
+        self.row={'id':'rule-authorization-05','shape':'source_text','render_mode':'typeset','source_version':'原文 · E216 版',
+                  'source_meta':{'relative_file':self.document,'source_sha256':original,'public_source_sha256':public,'version':'E216',
                                  'excerpt_contract':contract.CONTRACT,'excerpt_id':self.identity,'omitted_count':0,
                                  'src':'/_typeset/rule-sources/original.md','original_html':self.body}}
 

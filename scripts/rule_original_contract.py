@@ -11,7 +11,16 @@ from urllib.parse import unquote
 
 from public_page_contract import omit_local_literals, local_values
 
-CONTRACT = 'e215-original-ranges-v1'
+CONTRACT = 'e216-original-ranges-v1'
+
+
+def excerpt_contract_id(version):
+    """Use the release's actual contract while retaining exact E215 replay."""
+    if version == 'E215':
+        return 'e215-original-ranges-v1'
+    if version == 'E216':
+        return CONTRACT
+    raise ValueError('Unsupported fixed source excerpt release: ' + str(version))
 HTML_VOID_TAGS = frozenset({'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
                             'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'})
 
@@ -264,7 +273,7 @@ def load_pin(root):
 
 def excerpt_entry(pin, identity):
     contract = pin.get('excerpt_contract', {})
-    if contract.get('id') != CONTRACT:
+    if contract.get('id') != excerpt_contract_id(pin.get('version')):
         return None
     return contract.get('excerpts', {}).get(identity)
 
@@ -443,7 +452,7 @@ def parse_workbench_metadata(text, pin=None):
                 or meta.get('source_sha256') != excerpt['source_sha256']
                 or meta.get('src') != topic['src'] or meta.get('public_source_sha256') != topic['public_source_sha256']
                 or meta.get('public_projection_sha256') != data.get('projection_sha256')
-                or meta.get('excerpt_contract') != CONTRACT or not spans or len(canonical_plain(substantive)) < 100
+                or meta.get('excerpt_contract') != excerpt_contract_id(pin['version']) or not spans or len(canonical_plain(substantive)) < 100
                 or meta.get('omitted_count') != excerpt['approved_omitted_count']
                 or builder.typeset_prose_digest(original) != excerpt['rendered_text_sha256']
                 or not actual or actual['id'] != row['id'] or not actual['transcript']

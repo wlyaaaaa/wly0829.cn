@@ -265,7 +265,7 @@ def rule_excerpt_pin_findings(output,files,pin):
                 findings.append({**context,'type':'rule_version_not_pinned','expected':pin['version']})
             if not expected or meta.get('source_sha256')!=expected['source_sha256']:
                 findings.append({**context,'type':'rule_source_not_pinned'})
-            if meta.get('excerpt_contract')!=rule_contract.CONTRACT or not excerpt or excerpt.get('page')!=page_name or excerpt.get('screen')!=row.get('id') or excerpt.get('relative_file')!=document:
+            if meta.get('excerpt_contract')!=rule_contract.excerpt_contract_id(pin['version']) or not excerpt or excerpt.get('page')!=page_name or excerpt.get('screen')!=row.get('id') or excerpt.get('relative_file')!=document:
                 findings.append({**context,'type':'rule_excerpt_contract_mismatch'})
             try:
                 original=resolve_ref(output,page,meta.get('src',''))

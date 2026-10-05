@@ -145,7 +145,7 @@ def project_html(document):
 def verify_projection(root, *, seal=False):
     root=Path(root).resolve();proof_path=root/'rule-public-projection.json';proof=read(proof_path)
     pin_path=HERE.parent/'config/assembled-rules-pin.json';pin=read(pin_path)
-    if proof.get('schema')!='wly.rule-public-projection.v1' or proof.get('contract')!=contract.CONTRACT or proof.get('pin_sha256')!=digest(pin_path):
+    if proof.get('schema')!='wly.rule-public-projection.v1' or proof.get('contract')!=contract.excerpt_contract_id(pin['version']) or proof.get('pin_sha256')!=digest(pin_path):
         raise ValueError('Public projection is not bound to this fixed rule pin')
     if not seal and proof.get('status')!='pass':raise ValueError('Public projection has not completed renderer verification')
     if proof.get('input_snapshot'):
@@ -285,7 +285,7 @@ def main():
         exported.append({'page':name,'source_file':str(source_target),'source_sha256':digest(source_target),
                          'raw_source_file':str(source),'raw_source_sha256':digest(source),'spec_file':str(spec_target),'spec_sha256':digest(spec_target),
                          'raw_spec_file':str(original_spec),'raw_spec_sha256':digest(original_spec),'screens':sorted(selected)})
-    proof = {'schema': 'wly.rule-public-projection.v1', 'contract': contract.CONTRACT,
+    proof = {'schema': 'wly.rule-public-projection.v1', 'contract': contract.excerpt_contract_id(pin['version']),
              'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
              'pin_sha256': digest(pin_path), 'raw_root': str(args.typeset_root),
              'engine_root': str(args.engine_root),

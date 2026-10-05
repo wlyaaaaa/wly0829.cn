@@ -660,7 +660,7 @@ def build_page(name, records, args, candidate):
                     meta.update(excerpt_contract=based_on.get('excerpt_contract'),excerpt_id=identity)
                     declared=[entry if isinstance(entry,str) else entry.get('text') for entry in src.get('source',{}).get('omit',[])]
                     meta['omitted_count']=len(declared)
-                    if based_on.get('excerpt_contract')!=rule_contract.CONTRACT or not excerpt or excerpt['screen']!=sid or excerpt['page']!=name:
+                    if based_on.get('excerpt_contract')!=rule_contract.excerpt_contract_id(pin['version']) or not excerpt or excerpt['screen']!=sid or excerpt['page']!=name:
                         raise ValueError('原文未绑定固定摘录合同')
                     if declared!=excerpt['selection']['approved_omissions']:
                         raise ValueError('本屏批准省略声明与固定来源范围不一致')
