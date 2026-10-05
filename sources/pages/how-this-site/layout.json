@@ -739,7 +739,19 @@
         "type": "chapter_title",
         "text_ref": "一本会动的水彩画册",
         "align": "center",
-        "size": "large"
+        "size": "large",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/main-video-scaffold.png",
+        "illustration": "outside",
+        "align": "center",
+        "size": "medium",
+        "target_height": 370,
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "content_card",
@@ -750,19 +762,7 @@
         "icons": [
           "_library/icons/浏览器标签页.png",
           "_library/icons/画笔调色板.png"
-        ],
-        "row": "motion",
-        "width": "62fr"
-      },
-      {
-        "type": "illustration",
-        "asset": "_library/illustrations/main-video-scaffold.png",
-        "illustration": "outside",
-        "align": "center",
-        "size": "medium",
-        "row": "motion",
-        "width": "36fr",
-        "target_height": 370
+        ]
       },
       {
         "type": "content_card",
@@ -931,31 +931,9 @@
         "type": "chapter_title",
         "text_ref": "出了岔子怎么修",
         "align": "center",
-        "size": "large"
-      },
-      {
-        "type": "content_card",
-        "text_ref": "流量暴涨",
-        "columns": 1,
-        "columns_v": 1,
-        "illustration": "none",
-        "icons": "none",
-        "row": "traffic-repair",
-        "width": "62fr"
-      },
-      {
-        "type": "content_card",
-        "text_ref": "Claude 一更新",
-        "columns": 1,
-        "columns_v": 1,
-        "illustration": "left_inside",
-        "icons": [
-          "_library/icons/齿轮.png",
-          "_library/round3/clean-assets/png/12-文件核验-clean.png",
-          "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
-        ],
-        "equal_height": false,
-        "row": "traffic-repair"
+        "size": "large",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
@@ -979,8 +957,29 @@
         ],
         "panel_asset_sha256": "5170487289e90cefcdedb2387d320da6613f00412a5bab89d2a249083982e94d",
         "connector": "arrow",
-        "row": "traffic-repair",
-        "width": "36fr"
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "流量暴涨",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "Claude 一更新",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/齿轮.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
+        ],
+        "equal_height": false
       },
       {
         "type": "prose",

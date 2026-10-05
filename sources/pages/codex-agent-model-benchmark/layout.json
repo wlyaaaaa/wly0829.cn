@@ -253,40 +253,38 @@
         "type": "points_card",
         "whole_block": true,
         "connector": "arrow",
-        "row": "flow",
-        "width": "20%",
+        "row": "balanced-pair-1",
+        "width": "50%",
         "text_ref": "1定题"
       },
       {
         "type": "points_card",
         "whole_block": true,
         "connector": "arrow",
-        "row": "flow",
-        "width": "20%",
+        "row": "balanced-pair-1",
+        "width": "50%",
         "text_ref": "2分开作答"
       },
       {
         "type": "points_card",
         "whole_block": true,
         "connector": "arrow",
-        "row": "flow",
-        "width": "20%",
+        "row": "balanced-pair-2",
+        "width": "50%",
         "text_ref": "3程序检查"
       },
       {
         "type": "points_card",
         "whole_block": true,
         "connector": "arrow",
-        "row": "flow",
-        "width": "20%",
+        "row": "balanced-pair-2",
+        "width": "50%",
         "text_ref": "4蒙眼评审"
       },
       {
         "type": "points_card",
         "whole_block": true,
         "connector": "arrow",
-        "row": "flow",
-        "width": "20%",
         "text_ref": "5出报告"
       },
       {

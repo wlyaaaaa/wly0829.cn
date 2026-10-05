@@ -109,7 +109,7 @@
       },
       {
         "type": "content_card",
-        "columns": 2,
+        "columns": 1,
         "illustration": "left_inside",
         "icons": [
           "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -669,16 +669,13 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "放进去和取出来",
-        "row": "feature_groups",
-        "width": "66%"
+        "text_ref": "放进去和取出来"
       },
       {
         "type": "feature_card",
         "columns": 2,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "feature_groups",
         "flow": "column",
         "rows": 4,
         "text_ref": "1加密建库把选中的文件和文件夹锁进一个vault.enc"
@@ -687,16 +684,13 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "密码和钥匙",
-        "row": "feature_groups",
-        "width": "34%"
+        "text_ref": "密码和钥匙"
       },
       {
         "type": "feature_card",
         "columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "feature_groups",
         "text_ref": "9密钥文件除了密码，再要一个文件才能打开说不准10换用A"
       },
       {
@@ -889,7 +883,7 @@
       },
       {
         "type": "timeline",
-        "columns": 2,
+        "columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "ribbon",

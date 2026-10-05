@@ -1011,7 +1011,15 @@
         "type": "chapter_title",
         "align": "center",
         "size": "medium",
-        "text_ref": "演进（6 月 19 日—9 月 28 日，65 次提交）"
+        "text_ref": "演进（6 月 19 日—9 月 28 日，65 次提交）",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "timeline",
@@ -1020,20 +1028,12 @@
         "connector": "ribbon",
         "illustration": "outside",
         "icons": "none",
-        "row": "history",
-        "width": "85%",
         "item_rows": [
           4,
           4,
           3
         ],
         "text_ref": "6 月 19 日"
-      },
-      {
-        "type": "illustration",
-        "illustration": "outside",
-        "row": "history",
-        "width": "15%"
       }
     ],
     "notes": "构图来源：定稿 scene/portrait。11个日期节点原序保留，横版用6+5两排旗头和蜿蜒丝带，末端睡着的小龙虾在右；竖版一条向下丝带，日期左说明右，最下方小龙虾。末端的灰淡仅用于丝带/装饰，不降低毛笔标题浓度。\n页修复10：h时间线每排四项，三排4/4/3，原字和日期顺序保留。",

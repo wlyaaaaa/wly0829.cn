@@ -547,11 +547,12 @@
       {
         "type": "content_card",
         "text_ref": "打开和关闭远程：平时Codex原样启动；“打开”时才接管，必要时重开一次Codex；“关闭”只关公网入口、不重开Code",
-        "columns": 3,
+        "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "tone": "historical"
+        "tone": "historical",
+        "last_full_width": true
       }
     ],
     "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。；最终视觉补验电脑文件仅一张卡，改为单列通栏，保留全部源字。",

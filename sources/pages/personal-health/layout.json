@@ -74,8 +74,8 @@
       },
       {
         "type": "stat_card",
-        "columns": 2,
-        "columns_v": 2,
+        "columns": 1,
+        "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
         "text_ref": "1 台"
@@ -405,13 +405,11 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": "auto",
-        "row": "原则与数字",
-        "width": "65%",
         "text_ref": "整理一次，以后直接用。"
       },
       {
         "type": "stat_card",
-        "columns": 1,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "right_inside",
         "icons": [
@@ -419,8 +417,6 @@
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
-        "row": "原则与数字",
-        "width": "34%",
         "text_ref": "8454 行"
       }
     ],
@@ -681,7 +677,7 @@
       },
       {
         "type": "timeline",
-        "columns": 2,
+        "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
         "connector": "ribbon",

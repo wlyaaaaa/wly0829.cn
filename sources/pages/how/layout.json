@@ -1088,7 +1088,7 @@
       {
         "type": "content_card",
         "text_ref": "⑤ 共享端口",
-        "columns": 2,
+        "columns": 1,
         "columns_v": 1,
         "align": "left",
         "connector": "none",
@@ -1751,7 +1751,7 @@
       {
         "type": "directory_tile",
         "text_ref": "电脑远程控制",
-        "columns": 3,
+        "columns": 2,
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": [
@@ -1775,7 +1775,7 @@
       {
         "type": "directory_tile",
         "text_ref": "双屏信息中心",
-        "columns": 3,
+        "columns": 1,
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": [

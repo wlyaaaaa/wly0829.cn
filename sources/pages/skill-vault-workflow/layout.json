@@ -11,20 +11,19 @@
         "type": "chapter_title",
         "align": "left",
         "size": "large",
-        "row": "hero",
-        "width": "44%",
-        "text_ref": "加密库操作"
-      },
-      {
-        "type": "prose",
-        "row": "hero",
-        "text_ref": "让 AI 帮我管"
+        "text_ref": "加密库操作",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
-        "row": "hero",
-        "width": "56%",
-        "illustration": "outside"
+        "illustration": "outside",
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 帮我管"
       },
       {
         "type": "section_heading",

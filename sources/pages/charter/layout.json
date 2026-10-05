@@ -397,8 +397,6 @@
         "size": "medium",
         "card_header": "pale_green_band",
         "header_navigation": "inline_right",
-        "row": "body",
-        "width": "33.333%",
         "text_ref": "五、我的个人资料",
         "row_equal_height": true
       },
@@ -412,8 +410,6 @@
         "size": "medium",
         "card_header": "pale_green_band",
         "header_navigation": "inline_right",
-        "row": "body",
-        "width": "33.333%",
         "text_ref": "六、我的数据与备份",
         "illustration_description": "两块SSD以绿色箭头相连，右后方空白台历；无SSD字样",
         "illustration_asset": [
@@ -430,8 +426,6 @@
         "size": "medium",
         "card_header": "pale_green_band",
         "header_navigation": "inline_right",
-        "row": "body",
-        "width": "33.333%",
         "text_ref": "七、AI 怎么分工和花钱",
         "whole_block": true
       }

@@ -431,7 +431,15 @@
         "columns_v": 2,
         "illustration": "left_inside",
         "connector": "none",
-        "text_ref": "两块屏各管各的"
+        "text_ref": "两块屏各管各的",
+        "illustration_positions": [
+          "left_inside",
+          "left_inside",
+          "left_inside",
+          "top_inside",
+          "left_inside",
+          "left_inside"
+        ]
       },
       {
         "type": "notice",
@@ -657,8 +665,8 @@
       },
       {
         "type": "stat_card",
-        "columns": 2,
-        "columns_v": 2,
+        "columns": 1,
+        "columns_v": 1,
         "illustration": "left_inside",
         "card_count": 4,
         "text_ref": "1 秒一刷"
@@ -972,9 +980,6 @@
         "direction": "vertical",
         "connector": "none",
         "illustration": "none",
-        "row": "film",
-        "row_v": true,
-        "width": "22%",
         "text_ref": "只发变化",
         "highlight": [
           2
@@ -986,9 +991,6 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "connector": "none",
-        "row": "film",
-        "row_v": true,
-        "width": "78%",
         "text_ref": "整帧太慢"
       }
     ],

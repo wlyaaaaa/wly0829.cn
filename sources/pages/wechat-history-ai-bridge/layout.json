@@ -51,7 +51,7 @@
         "icons": "none",
         "text_ref": "为什么不用了",
         "row": "summary",
-        "width": "33.333%"
+        "width": "50%"
       },
       {
         "type": "content_card",
@@ -60,16 +60,14 @@
         "icons": "none",
         "text_ref": "现在怎么读微信",
         "row": "summary",
-        "width": "33.333%"
+        "width": "50%"
       },
       {
         "type": "content_card",
         "columns": 1,
         "illustration": "none",
         "icons": "none",
-        "text_ref": "停到什么程度",
-        "row": "summary",
-        "width": "33.333%"
+        "text_ref": "停到什么程度"
       },
       {
         "type": "prose",
@@ -292,8 +290,6 @@
       },
       {
         "type": "content_card",
-        "row": "problem-flow",
-        "width": "36%",
         "columns": 1,
         "illustration": "top_inside",
         "icons": "auto",
@@ -301,9 +297,7 @@
       },
       {
         "type": "flow",
-        "row": "problem-flow",
-        "width": "64%",
-        "columns": 5,
+        "columns": 2,
         "connector": "arrow",
         "illustration": "top_inside",
         "icons": [

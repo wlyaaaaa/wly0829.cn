@@ -135,9 +135,7 @@
           "right"
         ],
         "tail": true,
-        "illustration": "none",
-        "row": "example",
-        "width": "65%"
+        "illustration": "none"
       },
       {
         "type": "timeline",
@@ -146,16 +144,14 @@
         "columns": 1,
         "connector": "line",
         "illustration": "left_inside",
-        "icons": "auto",
-        "row": "example"
+        "icons": "auto"
       },
       {
         "type": "dialogue",
         "text_ref": "AI 交回",
         "split_paras": true,
         "tail": true,
-        "illustration": "none",
-        "row": "example"
+        "illustration": "none"
       },
       {
         "type": "dialogue",
@@ -163,9 +159,7 @@
         "columns": 1,
         "split_paras": true,
         "tail": true,
-        "illustration": "none",
-        "row": "example",
-        "width": "33%"
+        "illustration": "none"
       }
     ],
     "notes": "构图依据typeset-inventory/screens.jsonl的source_layout及本屏定稿scene/portrait；不读取图。整宽章节标题居中，首屏左栏标题依原构图左对齐。所有可读字取定稿，示意图只可抽象笔迹，不新增怪字。"
@@ -347,7 +341,7 @@
       {
         "type": "comparison",
         "text_ref": "查",
-        "columns": 3,
+        "columns": 1,
         "columns_v": 1,
         "groups": [
           {

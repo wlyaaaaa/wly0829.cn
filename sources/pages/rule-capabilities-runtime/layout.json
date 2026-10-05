@@ -301,8 +301,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "50%",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "本机小工具",
@@ -314,7 +312,6 @@
       },
       {
         "type": "notice",
-        "row": "points",
         "icons": [
           "_library/icons/打勾清单.png"
         ],
@@ -323,8 +320,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "50%",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "生成图片和设计画面",
@@ -447,7 +442,7 @@
       },
       {
         "type": "points_card",
-        "columns": 2,
+        "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
@@ -887,8 +882,6 @@
     "blocks": [
       {
         "type": "points_card",
-        "row": "points",
-        "width": "55%",
         "icons": "auto",
         "illustration": "top_inside",
         "text_ref": "配置和密钥",
@@ -900,8 +893,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "45%",
         "columns": 1,
         "icons": "auto",
         "illustration": "top_inside",

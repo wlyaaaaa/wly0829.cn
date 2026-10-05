@@ -202,43 +202,42 @@
         "type": "chapter_title",
         "text_ref": "通知、声明和打印版",
         "align": "center",
-        "size": "medium"
-      },
-      {
-        "type": "prose",
-        "text_ref": "通知和声明",
-        "row": "notice",
+        "size": "medium",
+        "row": "notice-heading",
         "width": "90%"
       },
       {
         "type": "document_mock",
         "variant": "paper",
         "mock_layout": "unsigned_notice",
-        "row": "notice",
-        "width": "10%",
         "size": "small",
-        "align": "right"
+        "align": "right",
+        "row": "notice-heading",
+        "width": "10%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "通知和声明"
       },
       {
         "type": "section_heading",
         "text_ref": "电子版和打印版",
-        "row": "versions",
-        "width": "80%"
-      },
-      {
-        "type": "table",
-        "text_ref": "电子版（默认）",
-        "portrait_variant": "column_cards",
-        "row": "versions"
+        "row": "balanced-heading",
+        "width": "85%"
       },
       {
         "type": "illustration",
         "index": 0,
-        "row": "versions",
-        "width": "20%",
         "target_height": 180,
         "target_width": 343,
-        "align": "center"
+        "align": "center",
+        "row": "balanced-heading",
+        "width": "15%"
+      },
+      {
+        "type": "table",
+        "text_ref": "电子版（默认）",
+        "portrait_variant": "column_cards"
       }
     ],
     "portrait_required": true,
@@ -430,22 +429,22 @@
         "type": "chapter_title",
         "text_ref": "出了岔子怎么办",
         "align": "center",
-        "size": "medium"
-      },
-      {
-        "type": "table",
-        "text_ref": "情况",
-        "icons": "auto",
-        "row": "failures",
-        "width": "75%"
+        "size": "medium",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
         "index": 0,
-        "row": "failures",
-        "width": "25%",
         "align": "center",
-        "target_width": "100%"
+        "target_width": "100%",
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况",
+        "icons": "auto"
       }
     ],
     "portrait_required": true,
@@ -591,28 +590,24 @@
       {
         "type": "feature_card",
         "text_ref": "一份内容，两种文件",
-        "columns": 2,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "reasons",
-        "width": "67%",
         "flow": "column",
-        "rows": 5,
+        "rows": 3,
         "portrait_columns": 1
       },
       {
         "type": "stat_card",
         "text_ref": "1,839行",
-        "columns": 1,
+        "columns": 3,
         "columns_v": 3,
         "icons": [
           "_library/icons/代码窗口.png",
           "_library/icons/打勾清单.png",
           "_library/icons/打勾清单.png"
-        ],
-        "row": "reasons",
-        "width": "33%"
+        ]
       },
       {
         "type": "notice",

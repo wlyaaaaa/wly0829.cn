@@ -581,7 +581,9 @@
         "type": "chapter_title",
         "text_ref": "能做的事",
         "align": "center",
-        "size": "large"
+        "size": "large",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
@@ -589,8 +591,8 @@
         "align": "center",
         "target_width": "100%",
         "frame": "capability",
-        "row": "capability",
-        "width": "48%"
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "notice",
@@ -601,9 +603,7 @@
         "button_placement": "below",
         "button_align": "left",
         "align": "left",
-        "frame": "capability",
-        "row": "capability",
-        "width": "52%"
+        "frame": "capability"
       }
     ],
     "notes": "原图是一张整宽大卡：横版左48%为28圆点清单插画，右侧完整说明、下方独立胶囊描边按钮；竖版同一卡内插画置顶，说明在下，按钮居中。卡右下/页边叶子仅装饰，不增加字。标题原图横版靠左，但本次整屏章节标题按本人追加要求居中，毛笔浓度保持。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。 qa-10质量关修复：复用frame共同外卡+illustration/notice，横版48%左图52%右文、竖版上图下文；原看全部功能链接由现有inline_button变为原词按钮，手机居中。",

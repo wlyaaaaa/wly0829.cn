@@ -214,9 +214,89 @@ globalThis.TypesetApply = () => {
       receipt.cards.push({kind:'compound_main_cards',count:cards.length,min_height:height});
     }
   }
-  keepLatinWords();applyLabels();
+  function balanceRows() {
+    // 并排栏按实测高度均衡：先在原宽 0.6～1.6 倍内挪栏宽让各栏一样高；
+    // 仍不齐时依次试①②挪一张独立说明卡、③长栏后段绕到短栏下方用整宽。不删字、不改字号、不改画风。
+    for (const row of root.querySelectorAll('.row')) {
+      const cols=[...row.children];
+      if (cols.length<2 || cols.some(c=>!c.matches('.col')) || row.matches('.card-notes') ||
+          row.closest('.c-diagram') || row.querySelector('[data-comp="chapter_title"],.title-wrap,[data-flow],.feature-masonry-grid')) continue;
+      const prior=row.style.alignItems;row.style.alignItems='start';
+      const hs=()=>cols.map(c=>c.getBoundingClientRect().height);
+      let h=hs(),w=cols.map(c=>c.getBoundingClientRect().width);
+      const H0=Math.max(...h),total=w.reduce((a,b)=>a+b,0);
+      if (H0-Math.min(...h)<Math.max(80,H0*.12)) {row.style.alignItems=prior;continue;}
+      const w0=[...w],set=v=>{row.style.gridTemplateColumns=v.map(x=>`minmax(0,${x.toFixed(1)}fr)`).join(' ');};
+      const cost=(hh,ww)=>{const H=Math.max(...hh);return hh.reduce((a,x,i)=>a+ww[i]*(H-x),0)+total*.3*Math.max(0,H-H0);};
+      const widths=()=>{
+        // 正文块不许挤到一行不足 12 个字（短标签按自身字数；原本就更窄的不比原来更窄）。
+        const texts=cols.map(c=>[...c.querySelectorAll('.tb,p,li')].filter(e=>/\S/.test(e.textContent)).map(e=>[e,Math.min(e.clientWidth,Math.min(12,e.textContent.trim().length)*parseFloat(getComputedStyle(e).fontSize))]));
+        const narrow=i=>texts[i].some(([e,min])=>e.clientWidth<min-1);
+        const lo=w0.map(x=>x*.6),hi=w0.map(x=>x*1.6);
+        let best=cost(h,w),step=total*.025;
+        for (let it=0;it<40;it++) {
+          const t=h.indexOf(Math.max(...h)),m=h.indexOf(Math.min(...h));
+          let ok=false;
+          for (const [a,b] of [[t,m],[m,t]]) {
+            const v=[...w];v[a]+=step;v[b]-=step;
+            if (v[a]>hi[a] || v[b]<lo[b]) continue;
+            set(v);const vh=hs(),c=cost(vh,v);
+            if (c<best-1 && !narrow(b)) {w=v;h=vh;best=c;ok=true;break;}
+          }
+          if (!ok) {if (step<total*.006) break;step/=2;}
+        }
+        set(w);h=hs();
+      };
+      const before=h.map(Math.round);
+      // 栏宽之外的补救：①最高栏末尾有一张别的栏没有对应位置的“多出来的”独立说明卡，先把它挪到这一行下面占整宽；
+      // ②挪宽后短栏下仍空一大截，把紧跟这一行的独立说明卡挪进最短栏底部。只挪卡片/要点/提示/清单/正文段，
+      // 挪后再均衡一次；空白没减半就撤回。各栏块数一样时是上下两排的构图，不拆。
+      const solo='[data-comp="content_card"],[data-comp="points_card"],[data-comp="notice"],[data-comp="bullet_list"],[data-comp="prose"]';
+      let moved='';
+      const attempt=(name,go,undo)=>{
+        const H1=Math.max(...h),gap1=H1-Math.min(...h),keep=[...w];
+        if (moved || gap1<=Math.max(120,H1*.2) || !go()) return;
+        h=hs();widths();
+        if (Math.max(...h)<=H1*1.1 && Math.max(...h)-Math.min(...h)<gap1*.5) moved=name;
+        else {undo();w=keep;set(w);h=hs();}
+      };
+      const tc=cols[h.indexOf(Math.max(...h))],tail=tc.lastElementChild;
+      attempt('push',()=>{if (tc.children.length<2 || !tail.matches(solo) || cols.some(c=>c!==tc && c.children.length>=tc.children.length)) return false;row.after(tail);return true;},()=>tc.append(tail));
+      if (!moved) widths();
+      const nx=row.nextElementSibling;
+      attempt('pull',()=>{if (!nx?.matches(solo)) return false;cols[h.indexOf(Math.min(...h))].append(nx);return true;},()=>row.after(nx));
+      if (!moved && cost(h,w)>cost(before,w0)*.65) {w=w0;set(w);h=hs();}  // 省不到三成空白就保持原构图
+      // ③两栏仍一长一短：短栏只占长栏前 k 块的高度，长栏第 k 块以后跨两栏用整宽（DOM 顺序不变，只改网格位置）。
+      const sI=h.indexOf(Math.min(...h)),lc=cols[1-sI],kids=cols.length===2?[...lc.children].filter(c=>getComputedStyle(c).display!=='none'):[];
+      if (!moved && kids.length>=2 && Math.max(...h)-h[sI]>Math.max(120,Math.max(...h)*.2)) {
+        w=w0;set(w);h=hs();
+        const top=lc.getBoundingClientRect().top,k=kids.findIndex(c=>c.getBoundingClientRect().bottom-top>=h[sI]-1)+1;
+        if (k>0 && k<kids.length) {
+          row.style.rowGap=(parseFloat(getComputedStyle(lc).rowGap)||12)+'px';lc.style.display='contents';
+          Object.assign(cols[sI].style,{gridColumn:String(sI+1),gridRow:`1 / span ${k}`});
+          kids.forEach((c,i)=>Object.assign(c.style,{gridColumn:i<k?String(2-sI):'1 / -1',gridRow:String(i+1)}));
+          moved='wrap';h=[row.getBoundingClientRect().height];
+        }
+      }
+      row.style.alignItems=prior;
+      receipt.balance.push({kind:'widths',before,after:h.map(Math.round),moved,widths:w.map(x=>Math.round(x/total*100))});
+    }
+  }
+  function fillPage() {
+    // 电脑整屏有最小高度（16:9 等）时，内容不够高的余量平均分到各块之间，不在底部留一条白带。
+    if (!document.body.classList.contains('o-h') || !parseFloat(root.style.minHeight)) return;
+    const top=root.getBoundingClientRect().top,pad=parseFloat(getComputedStyle(root).paddingBottom)||0;
+    const used=Math.max(...[...root.children].map(e=>e.getBoundingClientRect().bottom-top))+pad;
+    const spare=parseFloat(root.style.minHeight)-used;
+    if (spare>parseFloat(root.style.minHeight)*.03) {
+      if ([...root.children].filter(e=>e.getBoundingClientRect().height>0).length===1) root.style.minHeight=used+'px';
+      root.style.justifyContent='space-evenly';receipt.page_fill=Math.round(spare);
+    }
+  }
+  receipt.balance=[];
+  keepLatinWords();balanceRows();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
-  applyText();equalCompoundCards();equalCards();
+  applyText();equalCompoundCards();equalCards();fillPage();
   C.collectTextBlocks(root);
   receipt.after=C.check({root});
   globalThis.TypesetApplyReceipt=receipt;

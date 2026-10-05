@@ -55,8 +55,6 @@
           "_library/icons/打勾清单.png"
         ],
         "connector": "none",
-        "row": "summary",
-        "width": "48%",
         "text_ref": "26 个技能",
         "row_equal_height": true
       },
@@ -69,8 +67,6 @@
           "_library/icons/门.png"
         ],
         "connector": "none",
-        "row": "summary",
-        "width": "52%",
         "text_ref": "卡片右下角带"
       },
       {
@@ -218,7 +214,7 @@
       },
       {
         "type": "directory_tile",
-        "columns": 3,
+        "columns": 1,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
@@ -496,7 +492,7 @@
       },
       {
         "type": "directory_tile",
-        "columns": 5,
+        "columns": 1,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",

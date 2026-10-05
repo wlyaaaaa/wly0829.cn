@@ -405,9 +405,7 @@
           "_library/icons/云.png",
           "_library/icons/绿叶装饰.png",
           "_library/icons/笔记本电脑.png"
-        ],
-        "row": "architecture",
-        "width": "60%"
+        ]
       },
       {
         "type": "points_card",
@@ -416,9 +414,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "architecture",
-        "width": "40%"
+        "icon_position": "header_left"
       },
       {
         "type": "notice",

@@ -209,8 +209,6 @@
       },
       {
         "type": "dialogue",
-        "row": "flow",
-        "width": "21%",
         "text_ref": "我只说一句",
         "avatars": [
           "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-proto\\assets\\a03-boy.png"
@@ -220,9 +218,7 @@
       },
       {
         "type": "flow",
-        "row": "flow",
-        "width": "79%",
-        "columns": 6,
+        "columns": 3,
         "connector": "ribbon",
         "illustration": "above_card",
         "name_in_card": true,
@@ -380,11 +376,16 @@
       {
         "type": "flow",
         "text_ref": "1源码",
-        "columns": 5,
+        "columns": 2,
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "above_card",
-        "icons": "auto"
+        "icons": "auto",
+        "item_rows": [
+          1,
+          2,
+          2
+        ]
       },
       {
         "type": "points_card",

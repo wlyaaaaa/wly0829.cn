@@ -150,7 +150,7 @@
       },
       {
         "type": "points_card",
-        "columns": 3,
+        "columns": 1,
         "split_cards": false,
         "illustration": "left_inside",
         "icon_position": "header_left",
@@ -202,8 +202,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
-        "width": "50%",
         "text_ref": "怎么交代、怎么交付",
         "header_icon": [
           "_library/fix-round-2/icon-clean-2d7996732dca21311fe1.png"
@@ -216,7 +214,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
         "text_ref": "全局规则只引用，资料锁着时不凑",
         "header_icon": [
           "_library/fix-round-2/icon-clean-335cc1ba09973e3c57cd.png"
@@ -229,8 +226,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
-        "width": "50%",
         "text_ref": "本人的限制优先",
         "header_icon": [
           "_library/fix-round-2/icon-clean-f007fef9844a5e7dde84.png"
@@ -243,7 +238,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
         "text_ref": "可派模型清单",
         "header_icon": [
           "_library/fix-round-2/icon-clean-b9fb21fad9f1e0ed18a6.png"
@@ -251,7 +245,6 @@
       },
       {
         "type": "notice",
-        "row": "cards",
         "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派"
       }
     ],

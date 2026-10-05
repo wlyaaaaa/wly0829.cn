@@ -900,9 +900,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-top",
-        "width": "33.333%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -911,9 +909,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-top",
-        "width": "33.333%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -922,9 +918,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-top",
-        "width": "33.333%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -933,9 +927,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-bottom",
-        "width": "25%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -944,9 +936,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-bottom",
-        "width": "40%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -955,9 +945,7 @@
         "whole_block": true,
         "illustration": "left_inside",
         "icons": "auto",
-        "icon_position": "header_left",
-        "row": "cards-bottom",
-        "width": "35%"
+        "icon_position": "header_left"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 定稿有“浏览器”第六卡，scene仍写五卡；在原两行基础上补入第六卡，3+3待审。",

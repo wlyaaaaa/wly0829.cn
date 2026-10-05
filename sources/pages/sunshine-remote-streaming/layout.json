@@ -190,7 +190,7 @@
       {
         "type": "feature_card",
         "columns": 4,
-        "portrait_columns": 2,
+        "portrait_columns": 1,
         "illustration": "left_inside",
         "text_ref": "12个自动任务：画面切换每3秒看一次，体检每天14:30228次自动换画面：主屏"
       },

@@ -1034,9 +1034,7 @@
         "size": "large",
         "columns": 1,
         "illustration": "none",
-        "connector": "none",
-        "row": "body",
-        "width": "48%"
+        "connector": "none"
       },
       {
         "type": "topology",
@@ -1046,7 +1044,6 @@
         "columns": 1,
         "illustration": "left_inside",
         "connector": "none",
-        "row": "body",
         "layout": "layers",
         "layers": [
           {
@@ -1066,9 +1063,7 @@
         "size": "medium",
         "columns": 1,
         "illustration": "none",
-        "connector": "none",
-        "row": "body",
-        "width": "52%"
+        "connector": "none"
       },
       {
         "type": "content_card",
@@ -1077,7 +1072,6 @@
         "columns": 1,
         "illustration": "left_inside",
         "connector": "none",
-        "row": "body",
         "icons": [
           "_library/icons/代码窗口.png"
         ]

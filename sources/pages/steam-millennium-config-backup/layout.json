@@ -419,9 +419,7 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "text_ref": "平时怎么用",
-        "row": "usage",
-        "width": "52%"
+        "text_ref": "平时怎么用"
       },
       {
         "type": "content_card",
@@ -432,8 +430,8 @@
         "connector": "none",
         "text_ref": "平时不用管",
         "icons": "auto",
-        "row": "usage",
-        "item_count": 3
+        "item_count": 3,
+        "last_full_width": true
       },
       {
         "type": "chapter_title",
@@ -442,9 +440,7 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "text_ref": "出事怎么办",
-        "row": "usage",
-        "width": "48%"
+        "text_ref": "出事怎么办"
       },
       {
         "type": "content_card",
@@ -460,7 +456,6 @@
           "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/打勾清单.png"
         ],
-        "row": "usage",
         "item_count": 4
       }
     ],
@@ -616,7 +611,7 @@
         "type": "flow",
         "align": "left",
         "size": "medium",
-        "columns": 4,
+        "columns": 2,
         "illustration": "above_card",
         "connector": "ribbon",
         "text_ref": "先装软件",
@@ -762,9 +757,7 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "text_ref": "三处各存在哪",
-        "row": "foot",
-        "width": "61%"
+        "text_ref": "三处各存在哪"
       },
       {
         "type": "table",
@@ -774,7 +767,6 @@
         "illustration": "none",
         "connector": "none",
         "text_ref": "位置",
-        "row": "foot",
         "portrait_layout": "preserve_three_columns",
         "column_widths": [
           "18%",
@@ -786,13 +778,11 @@
         "type": "content_card",
         "align": "left",
         "size": "medium",
-        "columns": 1,
+        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "text_ref": "代码",
-        "icons": "auto",
-        "row": "foot",
-        "width": "39%"
+        "icons": "auto"
       }
     ],
     "notes": "实查 05-h。六节点2×3，图左字右；1→2→3后从右外侧向下绕回第4，再4→5→6；下部左61%表格、右39%代码卡带右侧电脑插画。flow 主体可接完整 steps，精确3→4回折、每项左右图位置需样张；竖第6去图、节点间分张目前不支持。table 竖默认逐行卡，preserve_three_columns为构图意图且字号不准缩；若组件不能实现需正式适配。代码卡 right_inside 现core无此变体。流程和表格属新样式，待样张。"
@@ -1181,8 +1171,6 @@
         "illustration": "top_inside",
         "connector": "none",
         "text_ref": "存一份",
-        "row": "save",
-        "width": "18%",
         "icons": "auto",
         "heading_icon": "_library/icons/文稿堆.png"
       },
@@ -1194,8 +1182,6 @@
         "illustration": "left_inside",
         "connector": "none",
         "text_ref": "核心设置",
-        "row": "save",
-        "width": "82%",
         "icons": "auto",
         "status_position": "bottom_right",
         "item_count": 9
@@ -1208,8 +1194,6 @@
         "illustration": "top_inside",
         "connector": "none",
         "text_ref": "多存几处",
-        "row": "copies",
-        "width": "18%",
         "icons": "auto",
         "heading_icon": "_library/icons/followup-r3-steam08-three-drives.png"
       },
@@ -1221,8 +1205,6 @@
         "illustration": "left_inside",
         "connector": "none",
         "text_ref": "留最近几代",
-        "row": "copies",
-        "width": "82%",
         "icons": "auto",
         "status_position": "bottom_right",
         "item_count": 5,
@@ -1367,8 +1349,6 @@
         "illustration": "top_inside",
         "connector": "none",
         "text_ref": "查和管",
-        "row": "inspect",
-        "width": "18%",
         "icons": "auto"
       },
       {
@@ -1379,8 +1359,6 @@
         "illustration": "none",
         "connector": "none",
         "text_ref": "备份状态",
-        "row": "inspect",
-        "width": "82%",
         "icons": "none",
         "item_count": 5,
         "row_counts": [
@@ -1401,8 +1379,6 @@
         "illustration": "top_inside",
         "connector": "none",
         "text_ref": "装回",
-        "row": "restore",
-        "width": "18%",
         "icons": "auto"
       },
       {
@@ -1413,8 +1389,6 @@
         "illustration": "none",
         "connector": "none",
         "text_ref": "装回前预览",
-        "row": "restore",
-        "width": "82%",
         "icons": "none",
         "item_count": 4,
         "status_position": "bottom_right"
@@ -1427,8 +1401,6 @@
         "illustration": "top_inside",
         "connector": "none",
         "text_ref": "兼容",
-        "row": "compat",
-        "width": "18%",
         "icons": "auto"
       },
       {
@@ -1439,8 +1411,6 @@
         "illustration": "none",
         "connector": "none",
         "text_ref": "旧入口照样能用",
-        "row": "compat",
-        "width": "82%",
         "icons": "none",
         "item_count": 1,
         "status_position": "bottom_right"

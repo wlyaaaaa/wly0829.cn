@@ -313,7 +313,7 @@
     "type": "illustration",
     "index": 0,
     "row": "project",
-    "width": "40%",
+    "width": "32%",
     "row_equal_height": true,
     "row_valign": "center"
    },
@@ -321,7 +321,7 @@
     "type": "section_heading",
     "text_ref": "PC-Panel-Hub",
     "row": "project",
-    "width": "60%"
+    "width": "68%"
    },
    {
     "type": "prose",

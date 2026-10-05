@@ -659,7 +659,7 @@
       },
       {
         "type": "comparison",
-        "columns": 2,
+        "columns": 1,
         "columns_v": 1,
         "groups": [
           {

@@ -1219,7 +1219,7 @@
       {
         "type": "timeline",
         "text_ref": "8月24–26日：起步。直接读微信4的本地数据库，取代旧项目微信记录交给AI；第一次把一条微信语音交给转写；加上建档和朋友圈；修好文件传输助",
-        "columns": 2,
+        "columns": 1,
         "direction": "vertical",
         "connector": "ribbon",
         "illustration": "left_inside",

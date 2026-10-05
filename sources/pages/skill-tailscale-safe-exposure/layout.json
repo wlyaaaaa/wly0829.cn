@@ -116,8 +116,6 @@
         "columns": 1,
         "connector": "ribbon",
         "illustration": "left_inside",
-        "row": "body",
-        "width": "65%",
         "text_ref": "1先摸底",
         "illustration_inside": false
       },
@@ -126,8 +124,6 @@
         "columns": 1,
         "illustration": "none",
         "variant": "paper",
-        "row": "body",
-        "width": "35%",
         "text_ref": "账本上的字",
         "appearance": "notebook"
       },
@@ -135,7 +131,6 @@
         "type": "notice",
         "columns": 1,
         "illustration": "left_inside",
-        "row": "body",
         "text_ref": "要注意：",
         "icons": [
           "_library/icons/文件齿轮.png"

@@ -433,7 +433,7 @@ def _render_page(page, page_name, src, screens, orients, do_compare, outdir, bro
                   const r = await window.__typesetReady;
                   await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
                   return {version:r.version,labels:r.labels.length,tails:r.tails.length,widths:r.widths.length,
-                          cards:r.cards.length,unresolved:r.unresolved,
+                          cards:r.cards.length,unresolved:r.unresolved,balance:r.balance||[],page_fill:r.page_fill||0,
                           short_labels:{tags:r.extra_labels.tags.length,terms:r.extra_labels.terms.length,
                             live:r.extra_labels.live.length,buttons:r.extra_labels.buttons.length,
                             unresolved:r.extra_labels.unresolved}};

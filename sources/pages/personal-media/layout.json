@@ -721,13 +721,18 @@
       {
         "type": "flow",
         "text_ref": "连上手机",
-        "columns": 4,
+        "columns": 3,
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "top_inside",
         "icons": "auto",
         "z_order": true,
-        "loop_at": 8
+        "loop_at": 8,
+        "item_rows": [
+          3,
+          1,
+          4
+        ]
       }
     ],
     "portrait_required": true,
@@ -758,13 +763,14 @@
       {
         "type": "flow",
         "text_ref": "连上手机",
-        "columns": 2,
+        "columns": 1,
         "direction": "horizontal",
         "connector": "arrow",
         "illustration": "top_inside",
         "icons": "auto",
         "z_order": true,
-        "loop_at": 8
+        "loop_at": 8,
+        "columns_v": 1
       }
     ],
     "portrait_required": true,
