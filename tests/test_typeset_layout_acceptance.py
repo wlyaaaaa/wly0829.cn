@@ -35,30 +35,31 @@ class LayoutAcceptanceTests(unittest.TestCase):
             def fixture(name):
                 base = root / name; raw = base / 'dist-raw'; raw.mkdir(parents=True)
                 files = {'app.js': {'sha256': 'a' * 64, 'bytes': 1}}
-                raw_manifest = {'release_id': 'raw', 'files': files}
+                rid = p.hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
+                raw_manifest = {'release_id': rid, 'files': files}
                 p.write(raw / p.hybrid.MANIFEST, raw_manifest)
                 staged = base / 'dist-staged-build-report.json'
                 p.write(staged, {'stage': 'native-before-creative', **raw_manifest})
                 names = ['static-home', 'river', 'comic', 'album', 'demo', 'retry']
                 roots = [base / (n + '-site') for n in names]
-                creative = {'config': proof(config), 'raw_release_id': 'raw', 'steps': [],
+                creative = {'config': proof(config), 'raw_release_id': rid, 'steps': [],
                             'staged_build_report': proof(staged)}
                 for i, stage in enumerate(roots):
-                    manifest = {'release_id': names[i], 'files': files,
+                    manifest = {'release_id': rid, 'files': files,
                         'prepared_at_beijing': '2026-10-05T20:00:00+08:00',
                         'home_static_preparation': {'baseline': str(raw), 'output': str(roots[0]),
                             'baseline_manifest': proof(raw / p.hybrid.MANIFEST),
                             'observed_at_beijing': '2026-10-05T20:00:00+08:00'}}
                     p.write(stage / p.hybrid.MANIFEST, manifest)
-                    creative['steps'].append({'name': names[i], 'before_release_id': names[i-1] if i else 'raw',
-                        'after_release_id': names[i], 'manifest': proof(stage / p.hybrid.MANIFEST)})
-                build = {'release_id': 'retry', 'files': files, 'inputs': {str(config): {k: proof(config)[k] for k in ('sha256', 'bytes')},
+                    creative['steps'].append({'name': names[i], 'before_release_id': rid,
+                        'after_release_id': rid, 'manifest': proof(stage / p.hybrid.MANIFEST)})
+                build = {'release_id': rid, 'files': files, 'inputs': {str(config): {k: proof(config)[k] for k in ('sha256', 'bytes')},
                     str(staged): {k: proof(staged)[k] for k in ('sha256', 'bytes')}}, 'creative_preparation': creative}
                 final = {**manifest, 'creative_preparation': creative}
                 p.write(base / 'dist' / p.hybrid.MANIFEST, final)
                 return build, final
             old, _ = fixture('reviewed'); new, final = fixture('rebuilt')
-            with patch.object(p.hybrid, 'verify_release', lambda path: p.read(path / p.hybrid.MANIFEST)):
+            with patch.object(p.hybrid, 'verify_release', lambda path: p.read(path / p.hybrid.MANIFEST)), patch.object(p.hybrid, 'inventory', lambda path: p.read(path / p.hybrid.MANIFEST)['files']):
                 self.assertEqual(*p.rebuilt_generation(old, new, final))
                 changed = copy.deepcopy(new); changed['inputs'][str(config)]['sha256'] = 'b' * 64
                 with self.assertRaises(ValueError):

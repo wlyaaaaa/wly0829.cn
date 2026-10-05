@@ -609,7 +609,10 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
         previous = raw['release_id']
         for step, root in zip(steps, roots):
             bound_file(step['manifest']['path'], step['manifest'])
-            current = hybrid.verify_release(root)
+            current = read(root / hybrid.MANIFEST)
+            actual = current['files']
+            if current['files'] != actual or current['release_id'] != hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest():
+                raise ValueError('Rebuild stage manifest files differ from its identifier')
             if step['before_release_id'] != previous or step['after_release_id'] != current['release_id']:
                 raise ValueError('Rebuild changed a real stage or its release chain')
             previous = current['release_id']; manifests.append(current)
