@@ -1,0 +1,6 @@
+/* 活画层：盖在首屏整屏图的插画框上。整层不接收点击，自成一层，不会跑到页面链接和热区上面。 */
+.living-layer{position:absolute;z-index:0;pointer-events:none;overflow:visible;contain:layout style}
+.living-layer>canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;visibility:hidden}
+.living-layer.is-live>canvas{visibility:visible}
+.living-layer>.living-bird{position:absolute;inset:0;overflow:visible}
+@media (prefers-reduced-motion:reduce){.living-layer>canvas{display:none}}

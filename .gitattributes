@@ -3,3 +3,10 @@ public/media/localocr/sample-table-actual.md -text whitespace=-blank-at-eof
 public/media/localocr/sample-table-actual.json -text
 public/media/vault-tool/synthetic-roundtrip.json -text
 site-release/** -text
+
+# Migrated runtime sources and art inputs keep their source byte identities.
+src/runtime/living/** -text
+src/runtime/bird/** -text
+sources/living/** -text
+sources/bird/** -text
+config/build.json -text

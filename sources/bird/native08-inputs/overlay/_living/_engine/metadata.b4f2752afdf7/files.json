@@ -1,0 +1,20 @@
+{
+  "engine": "living.ad848d4e47.js",
+  "style": "living.211dfd0c4c.css",
+  "bird": "bird.d929c4d5aa/",
+  "engine_source_sha256": "58b9ff6a0ff7d35fe2302243b607f09e84ba7b6b0669006201baa0d5c68619a7",
+  "files": {
+    "bird.d929c4d5aa/bird.js": 28759,
+    "bird.d929c4d5aa/bird-atlas.webp": 3304704,
+    "living.211dfd0c4c.css": 399,
+    "living.ad848d4e47.js": 52652
+  },
+  "sizes": {
+    "engine_total": 53051,
+    "bird_js": 28759,
+    "bird_atlas": 3304704
+  },
+  "built_at_beijing": "2026-10-05 19:15",
+  "atlas_identical_to": "bird.a886a7c866/bird-atlas.webp",
+  "bird_resolution_reason": "保留原1.0姿态无损鸟图集与既有采样密度；本次只更换冻结living.js及实际BIRD_DIR绑定。"
+}

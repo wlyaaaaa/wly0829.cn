@@ -1,0 +1,220 @@
+{
+ "typeset-assets/_library/illustrations/ill-d7dab5d4550a1d.png": [
+  "404"
+ ],
+ "typeset-proto/assets/a01-hero-h.png": [
+  "agents"
+ ],
+ "typeset-assets/_library/illustrations/main-ai-cli-profile-manager.png": [
+  "ai-cli-profile-manager"
+ ],
+ "typeset-assets/charter/charter-01-illustration-01.png": [
+  "charter"
+ ],
+ "typeset-assets/_library/illustrations/main-chinese-asr.png": [
+  "chinese-asr",
+  "skill-chinese-asr"
+ ],
+ "typeset-assets/_library/illustrations/ill-53b8c5c622e8b9.png": [
+  "cockpit"
+ ],
+ "typeset-assets/_library/illustrations/main-codex-agent-model-benchmark.png": [
+  "codex-agent-model-benchmark"
+ ],
+ "typeset-assets/_library/illustrations/main-codex-local-remote.png": [
+  "codex-local-remote"
+ ],
+ "typeset-assets/_library/illustrations/main-codex-memory.png": [
+  "codex-memory"
+ ],
+ "typeset-assets/_library/illustrations/main-password-center.png": [
+  "computer-access",
+  "password-center",
+  "skill-authorization-file-broker",
+  "skill-local-secret-broker"
+ ],
+ "typeset-assets/_library/illustrations/main-daily-preferences.png": [
+  "daily-preferences",
+  "skill-daily-preferences"
+ ],
+ "typeset-assets/_library/illustrations/main-devconfig-backup.png": [
+  "devconfig-backup"
+ ],
+ "typeset-assets/_library/illustrations/main-emerald-veil.png": [
+  "emerald-veil"
+ ],
+ "typeset-assets/_library/illustrations/main-github-local-index.png": [
+  "github-local-index"
+ ],
+ "typeset-assets/_library/illustrations/桌面设备.png": [
+  "github-profile",
+  "mcp"
+ ],
+ "typeset-assets/_library/illustrations/系统群岛.png": [
+  "how"
+ ],
+ "typeset-assets/how-this-site/how-this-site-01-illustration-01.png": [
+  "how-this-site"
+ ],
+ "typeset-assets/_library/round3/clean-assets/png/39-main-learning-clean.png": [
+  "learning",
+  "skill-learning"
+ ],
+ "typeset-assets/_library/illustrations/main-localocr.png": [
+  "localocr",
+  "skill-localocr"
+ ],
+ "typeset-assets/_library/illustrations/双机互传.png": [
+  "meshclip-kit"
+ ],
+ "typeset-assets/_library/illustrations/main-openclaw.png": [
+  "openclaw"
+ ],
+ "typeset-assets/_library/illustrations/main-pc-panel-hub.png": [
+  "pc-panel-hub"
+ ],
+ "typeset-assets/_library/illustrations/main-pcconfig.png": [
+  "pcconfig"
+ ],
+ "typeset-assets/_library/round3/clean-assets/png/48-main-personal-expression-clean.png": [
+  "personal-expression",
+  "skill-reply-as-me"
+ ],
+ "typeset-assets/_library/illustrations/main-personal-formal-documents.png": [
+  "personal-formal-documents",
+  "skill-personal-formal-documents"
+ ],
+ "typeset-assets/_library/illustrations/main-personal-health.png": [
+  "personal-health",
+  "skill-personal-health"
+ ],
+ "typeset-assets/_library/round3/clean-assets/png/40-main-personal-materials-clean.png": [
+  "personal-materials",
+  "skill-personal-materials"
+ ],
+ "typeset-assets/_library/illustrations/main-personal-media.png": [
+  "personal-media",
+  "skill-personal-media"
+ ],
+ "typeset-assets/_library/illustrations/项目桌面盆栽.png": [
+  "projects-home"
+ ],
+ "typeset-assets/_library/illustrations/main-proxyclean.png": [
+  "proxyclean"
+ ],
+ "typeset-assets/_library/illustrations/main-ramdisk-guardian.png": [
+  "ramdisk-guardian"
+ ],
+ "typeset-assets/_library/illustrations/手机远程.png": [
+  "remote-control"
+ ],
+ "typeset-assets/_library/illustrations/ill-9a8ad6f966959d.png": [
+  "rescue"
+ ],
+ "typeset-assets/_library/illustrations/授权通行路径.png": [
+  "rule-authorization"
+ ],
+ "typeset-assets/_library/illustrations/助手工具板三牌位.png": [
+  "rule-capabilities-runtime"
+ ],
+ "typeset-assets/_library/illustrations/ill-7655d12c662841.png": [
+  "rule-claude-adapter"
+ ],
+ "typeset-assets/_library/illustrations/main-agents.png": [
+  "rule-codex-adapter"
+ ],
+ "typeset-assets/_library/illustrations/事实来源五牌.png": [
+  "rule-context-sources"
+ ],
+ "typeset-assets/_library/illustrations/工程交付路径.png": [
+  "rule-engineering-delivery"
+ ],
+ "typeset-assets/_library/illustrations/motion-rule-execution-coordination-01-legacy-video.png": [
+  "rule-execution-coordination"
+ ],
+ "typeset-assets/_library/illustrations/ill-r3-313baf1d2fe281cb.png": [
+  "rule-privacy-data"
+ ],
+ "typeset-assets/_library/illustrations/验证关卡托盘.png": [
+  "rule-protected-actions"
+ ],
+ "typeset-assets/_library/illustrations/ill-r3-ec90efce29ff1bef.png": [
+  "rule-rule-release"
+ ],
+ "typeset-assets/_library/illustrations/ill-4bce9731581bc2.png": [
+  "rules-home"
+ ],
+ "typeset-assets/_library/illustrations/电脑故障.png": [
+  "skill-browser-control-continuity"
+ ],
+ "typeset-assets/_library/illustrations/云端审稿.png": [
+  "skill-cloud-asset-channel"
+ ],
+ "typeset-assets/_library/round3/clean-assets/png/42-听诊器检查-clean.png": [
+  "skill-control-plane-doctor"
+ ],
+ "typeset-assets/_library/round3/late-clean-review/funnel-ear-bottom-frame-clean.png": [
+  "skill-explain-to-me"
+ ],
+ "typeset-assets/_library/illustrations/文件收纳通用构图.png": [
+  "skill-file-intake-router"
+ ],
+ "typeset-assets/_library/illustrations/工作区连接电脑.png": [
+  "skill-google-workspace-direct"
+ ],
+ "typeset-assets/_library/illustrations/打印文稿.png": [
+  "skill-md-to-pdf"
+ ],
+ "typeset-assets/_library/illustrations/手机照片通用构图.png": [
+  "skill-media-person-self"
+ ],
+ "typeset-assets/_library/illustrations/乱码修复通用构图.png": [
+  "skill-mojibake-doctor"
+ ],
+ "typeset-assets/_library/illustrations/页面扇形网格核验.png": [
+  "skill-pdf-render-safe"
+ ],
+ "typeset-assets/_library/illustrations/仓库入口分支.png": [
+  "skill-project-entry-gate"
+ ],
+ "typeset-assets/_library/illustrations/generic-report-page-dashboard.png": [
+  "skill-report-page"
+ ],
+ "typeset-assets/_library/illustrations/网络篱笆.png": [
+  "skill-tailscale-safe-exposure"
+ ],
+ "typeset-assets/_library/illustrations/main-timeaudit.png": [
+  "skill-timeaudit-diagnostics",
+  "timeaudit"
+ ],
+ "typeset-assets/_library/illustrations/密封文件钥匙.png": [
+  "skill-vault-workflow",
+  "vault-tool"
+ ],
+ "typeset-assets/_library/illustrations/main-wechatdirect.png": [
+  "skill-wechat-direct",
+  "wechatdirect"
+ ],
+ "typeset-assets/_library/round3/clean-assets/png/41-main-work-delivery-copilot-clean.png": [
+  "skill-work-delivery",
+  "work-delivery-copilot"
+ ],
+ "typeset-assets/_library/illustrations/册子阅读通用构图.png": [
+  "skills-home"
+ ],
+ "typeset-assets/steam-millennium-config-backup/steam-millennium-config-backup-01-icon-03.png": [
+  "steam-millennium-config-backup"
+ ],
+ "typeset-assets/_library/illustrations/远程主备显示屏.png": [
+  "sunshine-remote-streaming"
+ ],
+ "(无)typora-theme-pack": [
+  "typora-theme-pack"
+ ],
+ "typeset-assets/_library/illustrations/main-video-scaffold.png": [
+  "video-scaffold"
+ ],
+ "typeset-assets/_library/illustrations/main-wechat-history-ai-bridge.png": [
+  "wechat-history-ai-bridge"
+ ]
+}
