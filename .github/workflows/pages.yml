@@ -97,6 +97,13 @@ jobs:
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/hybrid-release.py verify --output dist --content-report hybrid-content-report.json --public-repos-from-github
 
+      - name: Upload failed hybrid content report
+        if: failure() && steps.source.outputs.site == 'hybrid'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hybrid-content-report
+          path: hybrid-content-report.json
+
       - name: Reverify final generated artifact
         run: npm run verify:public
 

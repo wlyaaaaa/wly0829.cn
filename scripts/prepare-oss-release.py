@@ -31,6 +31,9 @@ PLAN = 'oss-plan.json'
 # the sitemap to OSS would change crawler behavior; CNAME/.nojekyll are Pages
 # controls. The release manifest remains the existing online recovery entry.
 HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml'}
+def is_pages_file(rel):
+    return rel.endswith('.html') or rel in HOST_CONTROLS or (rel.startswith('_typeset/rule-sources/') and rel.endswith('.md'))
+
 TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)
@@ -209,12 +212,12 @@ def verify_manifest(manifest, require_remote=True):
     files, objects = manifest['files'], oss['objects']
     if not objects or not any(x.endswith(('.js', '.mjs')) for x in objects):
         raise ValueError('OSS release lacks runtime objects')
-    if any(not (rel.endswith('.html') or rel in HOST_CONTROLS) for rel in files):
+    if any(not is_pages_file(rel) for rel in files):
         raise ValueError('Unexpected asset retained in HTML-host inventory')
     for rel, obj in objects.items():
         if rel.startswith('/') or '\\' in rel or any(x in ('', '.', '..') for x in rel.split('/')):
             raise ValueError('Invalid OSS object path: ' + rel)
-        if rel in files or rel.endswith('.html') or rel in HOST_CONTROLS:
+        if rel in files or is_pages_file(rel):
             raise ValueError('OSS object overlaps HTML-host inventory: ' + rel)
         url = base + '/' + prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
         if obj.get('key') != prefix + '/' + rel or obj.get('url') != url or obj.get('content_type') != content_type(rel):
@@ -259,7 +262,7 @@ class Rewriter:
         if version not in (1,2,3,4,5):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
-        self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
+        self.assets = {rel for rel in files if not is_pages_file(rel)}
         self.base, self.prefix, self.origin = base, prefix, origin.rstrip('/')
         self.changes = {}
         self.references = {}
@@ -605,7 +608,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     home_bytes,home_proof=current_home_links(source,version=rewriter_version)
     objects, github = {}, {}
     for rel in actual:
-        host = rel.endswith('.html') or rel in HOST_CONTROLS
+        host = is_pages_file(rel)
         destination = output / ('github' if host else 'oss') / rel
         destination.parent.mkdir(parents=True, exist_ok=True)
         if rel == MANIFEST:
