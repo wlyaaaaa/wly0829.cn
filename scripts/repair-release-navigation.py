@@ -72,12 +72,15 @@ class PageFacts(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.ids = set()
         self.title = ''
+        self._document_title_seen = False
+        self._document_title_active = False
         self.description = ''
         self.transcripts = {}
         self.headings = []
         self.stack = []
         self.rule_workbench_metadata=rule_contract.parse_workbench_metadata(text)
         self.feed(text)
+        self.title = re.sub(r'[\t\n\f\r ]+', ' ', self.title).strip(' \t\n\f\r')
         match = PAGE_DATA.search(text)
         self.page_data = json.loads(match[2]) if match else {}
         # The existing app creates this dialog and handles its hash on project
@@ -87,20 +90,24 @@ class PageFacts(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == 'title' and self.stack and self.stack[-1][0] == 'head' and not self._document_title_seen:
+            self._document_title_seen = self._document_title_active = True
         if a.get('id'): self.ids.add(a['id'])
         if tag == 'meta' and a.get('name') == 'description': self.description = a.get('content', '')
         if tag in {'meta', 'link', 'img', 'br', 'hr', 'input', 'source', 'wbr'}: return
         self.stack.append((tag, a))
 
     def handle_endtag(self, tag):
+        if tag == 'title' and self._document_title_active:
+            self._document_title_active = False
         for i in range(len(self.stack) - 1, -1, -1):
             if self.stack[i][0] == tag:
                 del self.stack[i:]
                 break
 
     def handle_data(self, data):
+        if self._document_title_active: self.title += data
         if not data.strip(): return
-        if any(t == 'title' for t, _ in self.stack): self.title += data
         for _, a in self.stack:
             if a.get('data-screen-transcript'):
                 self.transcripts.setdefault(a['data-screen-transcript'], []).append(data)

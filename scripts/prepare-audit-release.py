@@ -166,7 +166,7 @@ def verify_input_baseline(baseline, baseline_ref=None, runtime_baseline=False):
     if set(files)!=set(published['files'])|set(cloud['objects']):
         raise ValueError('Runtime staging must contain every published HTML and source asset')
     rewrite=oss.Rewriter(files,cloud['asset_base_url'],cloud['prefix'],'https://wly0829.cn',version=cloud.get('rewriter_version',1),source_root=baseline)
-    home,_=oss.current_home_links(baseline)
+    home,_=oss.current_home_links(baseline,version=cloud.get('rewriter_version',1))
     for relative,proof in files.items():
         if relative in cloud['objects']:
             if proof!=cloud['objects'][relative].get('source'):

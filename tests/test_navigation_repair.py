@@ -86,6 +86,13 @@ class NavigationRepair(unittest.TestCase):
         self.assertIn('e.target instanceof Element?e.target:e.target?.parentElement',patched)
         self.assertEqual(nav.patch_viewer_runtime(patched),patched)
 
+    def test_document_title_uses_first_head_title_and_preserves_svg_accessible_names(self):
+        text='<html><head><title>  搜索\n｜\t吴乐阳 &amp; 项目  </title><title>unused duplicate</title></head><body><svg><title>Grafana</title></svg><svg><title>GitHub</title></svg><svg><title>哔哩哔哩</title></svg><svg><title>X</title></svg></body></html>'
+        self.assertEqual(nav.PageFacts(text).title,'搜索 ｜ 吴乐阳 & 项目')
+        self.put('search/index.html',text)
+        self.assertEqual(nav.page_inventory(self.root)['search/index.html'].title,'搜索 ｜ 吴乐阳 & 项目')
+        self.assertEqual((self.root/'search/index.html').read_text(),text)
+
     def test_project_runtime_dialog_hash_survives_absolute_link_conversion_and_restores_old_fallback(self):
         route='/projects/example/'
         data={'kind':'project','url':route,'screens':[{'links':[

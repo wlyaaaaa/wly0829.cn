@@ -315,7 +315,7 @@ class OssReleaseTests(unittest.TestCase):
                     if case=='repository':self.assertTrue(any(row['type']=='repository_not_public' for row in result['findings']))
                     else:self.assertTrue(any('assets/missing.js' in row['reference'] for row in result['missing_references']))
 
-    def test_each_asset_preparation_restores_home_when_target_is_published(self):
+    def test_historical_asset_preparation_restores_only_named_home_entries(self):
         records=[{'id':identity,'href':'/'} for _ in range(2)
                  for identity in ('home-01-link-1-0','home-01-link-2-0')]
         home=('<header><a class="nav-link" href="/"><span data-label-text="怎么协作"></span></a>'
@@ -332,12 +332,46 @@ class OssReleaseTests(unittest.TestCase):
             manifest['files']={k:v for k,v in oss.inventory(self.source).items() if k!=oss.MANIFEST}
             oss.write(self.source/oss.MANIFEST,manifest)
             output=self.root/case
-            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output)
+            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=3)
             proof=plan['home_entry_overlay']
             self.assertEqual(len(proof['changes']),6)
             self.assertEqual(proof['changes'][0]['target_href'],target)
+            self.assertNotIn('native_navigation_changes',proof)
             self.assertEqual((self.source/'index.html').read_bytes(),home)
             oss.verify_local(output)
+
+    def test_home_preparation_version_selects_exact_legacy_or_complete_current_navigation(self):
+        records=[{'id':identity,'href':'/'} for _ in range(2)
+                 for identity in ('home-01-link-1-0','home-01-link-2-0')]
+        anchor=lambda label:'<a class="nav-link" href="/"><span data-label-text="'+label+'"></span></a>'
+        home=('<header id="site-header">'+anchor('怎么协作')+anchor('驾驶舱')+'</header>'
+              '<dialog id="menu">'+anchor('怎么协作')+anchor('驾驶舱')+'</dialog>'
+              '<footer class="site-footer">'+anchor('怎么协作')+anchor('驾驶舱')+anchor('这个网页是怎么做的')+'</footer>'
+              '<script id="page-data">'+json.dumps({'page':'home','url':'/','records':records},ensure_ascii=False)+'</script>'
+              '<script src="/assets/main.js"></script>').encode()
+        (self.source/'index.html').write_bytes(home)
+        for route in ('how','cockpit','how-this-site','projects/agents'):
+            path=self.source/route/'index.html';path.parent.mkdir(parents=True);path.write_bytes(('<title>'+route+'</title>').encode())
+        manifest=oss.read(self.source/oss.MANIFEST)
+        manifest['files']={k:v for k,v in oss.inventory(self.source).items()if k!=oss.MANIFEST};oss.write(self.source/oss.MANIFEST,manifest)
+        previous=None
+        for version in (1,2,3,4):
+            with self.subTest(version=version):
+                prepared,proof=oss.current_home_links(self.source,version)
+                if version<4:
+                    self.assertEqual(prepared.count(b'href="/"'),5)
+                    self.assertNotIn('native_navigation_changes',proof)
+                    if previous:self.assertEqual((prepared,proof),previous)
+                    previous=(prepared,proof)
+                else:
+                    self.assertEqual(prepared.count(b'href="/"'),0)
+                    self.assertEqual(len(proof['native_navigation_changes']),5)
+                    self.assertIn(b'href="/how-this-site/"',prepared)
+                output=self.root/('version-'+str(version))
+                plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=version)
+                self.assertEqual(plan['home_entry_overlay'],proof)
+                self.assertEqual(oss.verify_local(output)['rewriter_version'],version)
+        self.assertEqual((self.source/'index.html').read_bytes(),home)
 
 
 if __name__ == '__main__':

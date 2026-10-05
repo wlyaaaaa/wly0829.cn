@@ -186,13 +186,14 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def current_home_links(source):
+def current_home_links(source, version=4):
+    if version not in (1,2,3,4):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
     spec=importlib.util.spec_from_file_location('home_entry_links',Path(__file__).with_name('prepare-home-entry-links.py'))
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.prepare_links(source,return_bytes=True)
+    return module.prepare_links(source,return_bytes=True,legacy=version<4)
 
 
 def verify_manifest(manifest, require_remote=True):
@@ -601,7 +602,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
     output.mkdir(parents=True)
-    home_bytes,home_proof=current_home_links(source)
+    home_bytes,home_proof=current_home_links(source,version=rewriter_version)
     objects, github = {}, {}
     for rel in actual:
         host = rel.endswith('.html') or rel in HOST_CONTROLS
@@ -670,7 +671,7 @@ def verify_local(output):
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
     rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
-    home_bytes,home_proof=current_home_links(source)
+    home_bytes,home_proof=current_home_links(source,version=plan.get('rewriter_version',1))
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
         raise ValueError('Home entry restoration evidence is not reproducible')
