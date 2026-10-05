@@ -122,6 +122,16 @@ class NavigationRepair(unittest.TestCase):
         self.assertEqual(result['screens'][0]['links'][1]['href'],'/cockpit/')
         self.assertEqual(nav.repair_owned_navigation(corrected,nav.page_inventory(self.root),'/')[0],corrected)
 
+    def test_runtime_dialog_hash_survives_registered_project_alias_restoration(self):
+        canonical='/projects/codex-remote/';original='/projects/codex-local-remote/#ai-brief'
+        data={'kind':'project','url':canonical,'screens':[{'links':[{'href':canonical,'original_href':original}]}]}
+        text='<a href="'+canonical+'" data-original-href="'+original+'">复制 AI 续作说明</a><script id="page-data">'+json.dumps(data)+'</script>'
+        self.put(nav.route_file(canonical),text)
+        corrected,restored=nav.restore_pending_html(text,nav.page_inventory(self.root))
+        self.assertTrue(restored)
+        self.assertIn('href="'+canonical+'#ai-brief"',corrected)
+        self.assertEqual(json.loads(nav.PAGE_DATA.search(corrected)[2])['screens'][0]['links'][0]['href'],canonical+'#ai-brief')
+
     def test_rule_neighbors_use_one_order_and_every_forward_link_returns_to_its_source(self):
         for topic in nav.RULE_TOPICS:
             route='/rules/'+topic+'/'

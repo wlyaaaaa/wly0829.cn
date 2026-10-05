@@ -370,7 +370,8 @@ def restore_pending_html(text, pages):
         mapped_current=RULE_REFERENCE_MAPPINGS.get(current)
         mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
         destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and (target_exists(mapped_current['target'],pages)or rule_contract.rule_original_fallback(current,mapped_current,pages)) else
-                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else source)
+                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else
+                     resolve_navigation(source,pages) if source and normalize_path(urlsplit(source).path) in ALIASES else source)
         if destination and current != destination and target_exists(destination, pages):
             node['original_href']=source or current;node['href'] = destination; restored = True
     if restored: text = replace_data(text, data)
@@ -384,7 +385,8 @@ def restore_pending_html(text, pages):
         mapped_current=RULE_REFERENCE_MAPPINGS.get(current);mapped_source=RULE_REFERENCE_MAPPINGS.get(source)
         if not original and not mapped_current:return tag
         destination=(source if precise_source else resolve_navigation(current,pages) if mapped_current and (target_exists(mapped_current['target'],pages)or rule_contract.rule_original_fallback(current,mapped_current,pages)) else
-                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else source)
+                     resolve_navigation(source,pages) if mapped_source and (target_exists(mapped_source['target'],pages)or rule_contract.rule_original_fallback(source,mapped_source,pages)) else
+                     resolve_navigation(source,pages) if source and normalize_path(urlsplit(source).path) in ALIASES else source)
         if destination is None:return tag
         if destination == html.unescape(href[1]) or not target_exists(destination, pages): return tag
         restored = True
