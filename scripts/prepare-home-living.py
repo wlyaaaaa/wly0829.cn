@@ -363,15 +363,30 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     return result
 
 
+def prepare_native_home(baseline, fixed_packet, support, output, source_script):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('native_home_delivery', source_script)
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    module.HERE, module.HOME_CSS = HERE, HOME_CSS
+    module.cockpit_model, module.patch_runtime = cockpit_model, patch_runtime
+    return module.prepare_native_home(baseline, fixed_packet, support, output)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline', type=Path, required=True)
     parser.add_argument('--package', type=Path)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--report', type=Path, required=True)
+    parser.add_argument('--native-home-support', type=Path)
+    parser.add_argument('--native-home-script', type=Path)
     parser.add_argument('--rebind-only', action='store_true', help='Refresh an existing homepage mount after current B2 is applied')
     parser.add_argument('--cockpit', type=Path, help='Explicit current B2 input for isolated acceptance; omit for the final complete release')
     args = parser.parse_args()
+    if args.native_home_support:
+        result = prepare_native_home(args.baseline, args.package, args.native_home_support, args.output, args.native_home_script)
+        args.report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+        return
     if args.rebind_only:
         result = rebind(args.baseline, args.output, args.report, args.cockpit)
     else:

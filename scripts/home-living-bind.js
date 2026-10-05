@@ -6,10 +6,11 @@
   const container = document.querySelector('#home-01');
   const image = container?.querySelector('picture img');
   if (!container || !image || !window.HeroLive) return;
+  image.__heroNativePlates = {landscape: page.screens[0].layouts.h.viewer.avif, portrait: page.screens[0].layouts.v.viewer.avif};
   const initial = {state: 'off', title: '暂时读不到电脑', detail: '还没读到电脑状态'};
-  const hero = window.HeroLive.mount(container, {plateImage: image, status: initial});
-  // 原包转方向会重建 scene。首层按原编排开场，后续层只沿用原包
-  // “点画面跳过开场”的入口，不启用会改变正式文案的 preview 模式。
+  const hero = window.HeroLive.mount(container, {plateImage: image, status: initial, intro: false});
+  // 原图已经完整显示，初次接管和转方向都保持文字、按钮完整。
+  // 新方向仍等待实际画层就绪再显示，不开启改变正式文案的 preview 模式。
   let visibleLayer = null, pendingLayer = null, orientationSkips = 0, waitFrame = 0, showFrame = 0, showingLayer = null;
   const revealLayer = layer => {
     if (showFrame && showingLayer === layer) return;
@@ -33,10 +34,8 @@
       if (!waitFrame) waitFrame = requestAnimationFrame(() => { waitFrame = 0; continueScene(); });
       return;
     }
-    // 事件目标是本件容器，坐标位于画外；不会命中链接或鸟。
-    container.dispatchEvent(new MouseEvent('click', {clientX: -10000, clientY: -10000}));
     visibleLayer = layer; pendingLayer = null; orientationSkips++;
-    // 引擎已先安排下一帧；等它画出开场后的状态，再显示这个新层。
+    // 引擎接管后的画面已完整；下一帧显示新方向的图层。
     revealLayer(layer);
   };
   const scenes = new MutationObserver(continueScene);

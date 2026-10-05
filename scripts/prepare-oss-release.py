@@ -309,7 +309,7 @@ class Rewriter:
             elif name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                 if not value.startswith('data:'):
                     for item in re.findall(r'(?:^|,)\s*([^\s,]+)', value): yield item, 'resource'
-            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
+            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'href' and tag == 'link':
                 if tag == 'link' and attrs.get('rel') in ('canonical','preconnect','dns-prefetch'): continue
                 yield value, 'resource'
             elif name.startswith('data-') and value.startswith(('{','[')):
@@ -364,7 +364,7 @@ class Rewriter:
                     dependencies.update(self.literal_dependencies(value, owner, 'css')); continue
                 if name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                     values = re.findall(r'(?:^|,)\s*([^\s,]+)', value) if not value.startswith('data:') else []
-                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
+                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'href' and tag == 'link':
                     if tag == 'link' and attrs.get('rel') in ('canonical', 'preconnect', 'dns-prefetch'): continue
                     values = [value]
                 elif name.startswith('data-') and value.startswith(('{', '[')):
@@ -490,6 +490,10 @@ class Rewriter:
                 m = matches[0]
                 if literal_spans is None or (m.start('slash'),m.end('slash')) in literal_spans:
                     edits.append((offset + m.start('slash'), offset + m.end('slash'), '', 'vite_preload_url_prefix'))
+        if Path(owner).name == 'bird.js' and owner.startswith('_living/_engine/bird.'):
+            for m in re.finditer(r'([A-Za-z_$][\w$]*)\+([A-Za-z_$][\w$]*)\.image', text):
+                edits.append((offset+m.start(), offset+m.end(), 'new URL('+m[2]+'.image,'+m[1]+').href', 'bird_atlas_url_base'))
+
         # All page-data shot.src literals have become absolute resource URLs.
         # This old concatenation must stop adding assets/ in front of them.
         for m in re.finditer(r"new URL\('(?P<prefix>assets/)'\+shot\.src,location\.href\)", text):
@@ -524,7 +528,7 @@ class Rewriter:
                         if new != s['url']:
                             edits.append((position + s.start('url'), position + s.end('url'), new, 'html_srcset'))
                     continue
-                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'content' and meta_image:
+                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'content' and meta_image:
                     context = 'resource' if name != 'href' or tag.lower().startswith('<link') else 'navigation'
                     new = self.url(raw, owner, context)
                     if new != raw:
