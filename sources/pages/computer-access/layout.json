@@ -120,7 +120,7 @@
           "body_then_state_then_buttons": true,
           "state_empty": true,
           "state_width": "90%",
-          "state_height": "190px",
+          "state_height": "220px",
           "button_rows": [
             [
               "解锁",
@@ -308,7 +308,7 @@
           "body_then_state_then_buttons": true,
           "state_empty": true,
           "state_width": "100%",
-          "state_height": "360px",
+          "state_height": "420px",
           "button_rows": [
             [
               "解锁",

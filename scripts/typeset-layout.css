@@ -23,6 +23,8 @@
 .typeset-live-flow-cards{position:relative;z-index:3;display:grid;grid-template-columns:repeat(var(--typeset-live-columns,1),minmax(0,1fr));gap:12px;align-items:start;padding:8px 24px 16px;min-width:0;pointer-events:none}
 .typeset-live-flow-cards>*{position:relative!important;inset:auto!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;min-width:0!important;min-height:var(--typeset-live-min-height,94px)!important;max-width:none;align-self:start;margin:0;box-sizing:border-box;pointer-events:auto}
 .typeset-live-flow-replacement>.typeset-live-flow-cards{position:relative;z-index:3;padding:0;background:transparent}
+#computer-access-01 .typeset-live-flow-replacement>.typeset-live-flow-cards{padding:0 6px 12px}
+#computer-access-01 .typeset-live-flow-cards>.b2-live-group{min-height:max(94px,calc(var(--typeset-live-min-height,94px) - 12px))!important}
 .typeset-live-flow-cards .typeset-live{font-size:16px!important;line-height:1.5!important;overflow:visible!important;text-align:left}
 .typeset-live-flow-cards .live-status-card{padding:12px 14px;border-radius:12px}
 @media(max-width:767.98px){.typeset-live-flow-cards{grid-template-columns:minmax(0,1fr);gap:10px;padding:6px 12px 12px}.typeset-live-flow-cards .typeset-live{font-size:16px!important}.typeset-live-flow-cards .live-status-card{padding:11px 12px}}
