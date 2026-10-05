@@ -97,10 +97,28 @@ function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
     $arguments=@('scripts/verify-typeset-oss.py','--preparation',$OssPreparation,'--build-report',$BuildReport,
         '--qa-plan',$OssQaPlan,'--verification',$OssVerification,'--reading',$OssReading,'--cold',$OssCold,'--output',$Receipt)
     if ($RebuiltSource) { $arguments+=@('--rebuilt-source',$RebuiltSource) }
-    if ($Staged) { $arguments+=@('--staged',$Staged,'--preparation-receipt',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$state.rollback_ref) }
+    if ($Staged) { $arguments+=@('--staged',$Staged,'--preparation-receipt',(Join-Path $RunRoot 'rebuilt-preparation.json'),'--rollback-ref',$state.rollback_ref,
+        '--require-browser-network','--browser-network',(Join-Path $RunRoot 'oss-browser-candidate.json')) }
     if ($OssRetryProof) { $arguments+=@('--retry-proof',$OssRetryProof) }
     if ($LayoutAcceptance) { $arguments+=@('--layout-acceptance',$LayoutAcceptance) }
     Checked 'python' $arguments
+}
+function OssBrowserNetwork([string]$Mode, [string]$Staged) {
+    $output=Join-Path $RunRoot "oss-browser-$Mode.json"
+    $arguments=@('scripts/verify-oss-browser-network.py','--preparation',$OssPreparation,'--release',$Staged,
+        '--mode',$Mode,'--output',$output,'--task-cache',(Join-Path $RunRoot 'browser-network-temp'))
+    & python @arguments
+    $code=$LASTEXITCODE
+    $state["oss_browser_$Mode"]=[ordered]@{ exit=$code; report=$output; status=$(if($code -eq 0){'pass'}else{'fail'}) }
+    SaveState
+    if($code -ne 0){
+        if($Mode -eq 'live') {
+            $state.status='online_native_network_failed'
+            $script:confirmedPublicationFailure='Mandatory final-origin public Chrome network gate failed; restore this publication through the exact existing rollback path.'
+            SaveState
+        }
+        throw "Mandatory OSS $Mode browser network gate failed. Actual events: $output"
+    }
 }
 $prepared = Join-Path $RunRoot 'preparation.json'
 Write-Output "Local release evidence: $prepared"
@@ -437,6 +455,9 @@ try {
     # The baseline may itself be site-release. Its old bytes have now been
     # deliberately replaced; producer checks are bound to rebuilt-preparation.
     if ($OssPreparation) {
+        # Remote object bodies have already passed VerifyOss. Test the exact
+        # staged document generation at its final origin before any HTML push.
+        OssBrowserNetwork 'candidate' (Join-Path $repoRoot 'site-release')
         VerifyOss (Join-Path $RunRoot 'staged-preparation.json') '' (Join-Path $repoRoot 'site-release')
     } else {
         $stageArguments = @('scripts/prepare-typeset-release.py','stage-check',
@@ -492,6 +513,7 @@ try {
         $state.status = 'readback_unconfirmed'
         throw "The public result is unknown: $($readback.reason) See $($readback.report). Keep this state for Claude's follow-up; no blind rollback was performed."
     }
+    if ($OssPreparation) { OssBrowserNetwork 'live' (Join-Path $repoRoot 'site-release') }
     $onlineDom = ConfirmOnlineDom 'online-dom'
     $state.online_dom = $onlineDom
     if ($onlineDom.status -eq 'confirmed_failure') {

@@ -1,7 +1,8 @@
 """Split a verified static release into GitHub HTML and versioned OSS resources.
 
 This script never changes the source, uploads objects, or publishes HTML. Only
-recorded URL spans may change in HTML/JS/CSS; other resource bytes are copied.
+recorded URL spans and effective meta CSP fetch sources may change; other
+resource bytes are copied. Versions 1-3 retain their historical URL-only replay.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ import sys
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from html.parser import HTMLParser
 from urllib.parse import quote, unquote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
@@ -32,8 +34,55 @@ TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)
 ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?P<q>["\'])(?P<value>.*?)(?P=q)', re.S)
+ALL_ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?:(?P<q>["\'])(?P<quoted>.*?)(?P=q)|(?P<unquoted>[^\s>]+))', re.S)
 BLOCK = re.compile(r'<(?P<tag>script|style)\b[^>]*>(?P<body>.*?)</(?P=tag)\s*>', re.I | re.S)
 CSS_URL = re.compile(r'url\(\s*(?P<q>["\']?)(?P<value>[^)"\']+)(?P=q)\s*\)', re.I)
+
+
+class HtmlTags(HTMLParser):
+    """Parse actual start tags, keeping offsets for byte-preserving edits."""
+    def __init__(self, text):
+        super().__init__(convert_charrefs=False)
+        self.tags = []
+        self.lines = [0] + [m.end() for m in re.finditer('\n', text)]
+        self.feed(text)
+
+    def handle_starttag(self, tag, attrs):
+        line, column = self.getpos()
+        self.tags.append((tag, dict(attrs), self.get_starttag_text(), self.lines[line-1] + column))
+
+    handle_startendtag = handle_starttag
+
+
+def csp_with_sources(policy, requirements):
+    """Extend only effective fetch directives; preserve unrelated policy text."""
+    segments = policy.split(';')
+    effective = {}
+    for index, segment in enumerate(segments):
+        words = segment.split()
+        if words: effective.setdefault(words[0].lower(), (index, words[1:]))
+    for kind, origins in sorted(requirements.items()):
+        directive = kind + '-src'
+        # Element-specific directives override script/style-src when present.
+        target = directive + '-elem' if kind in ('script', 'style') and directive + '-elem' in effective else directive
+        fallback = effective.get(target) or effective.get(directive) or effective.get('default-src')
+        if not fallback: continue  # No restriction to relax.
+        index, sources = fallback
+        additions = sorted(origin for origin in set(origins) if origin not in sources
+                           and '*' not in sources and urlsplit(origin).scheme+':' not in sources)
+        if not additions: continue
+        updated = [source for source in sources if source.lower() != "'none'"] + additions
+        if target in effective:
+            current = segments[index]
+            leading = current[:len(current)-len(current.lstrip())]
+            trailing = current[len(current.rstrip()):]
+            segments[index] = leading + target + ' ' + ' '.join(updated) + trailing
+        else:
+            # Copy the fallback's restrictions rather than widening default-src.
+            index = len(segments)
+            segments.append(' ' + target + ' ' + ' '.join(updated))
+        effective[target] = (index, updated)
+    return ';'.join(segments)
 
 
 def javascript_literals(text):
@@ -203,8 +252,8 @@ def verify_manifest(manifest, require_remote=True):
 
 
 class Rewriter:
-    def __init__(self, files, base, prefix, origin, version=1):
-        if version not in (1,2,3):
+    def __init__(self, files, base, prefix, origin, version=1, source_root=None):
+        if version not in (1,2,3,4):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -213,6 +262,82 @@ class Rewriter:
         self.references = {}
         self.missing = []
         self.version = version
+        self.source_root = Path(source_root) if source_root else None
+        self._dependencies = {}
+
+    @staticmethod
+    def resource_kind(rel):
+        mime = content_type(rel)
+        if mime == 'text/css': return 'style'
+        if mime in ('application/javascript', 'text/javascript'): return 'script'
+        if mime.startswith('image/'): return 'img'
+        if mime.startswith('font/') or Path(rel).suffix in ('.ttf', '.otf'): return 'font'
+        if mime.startswith(('audio/', 'video/')): return 'media'
+        return 'connect'
+
+    def literal_dependencies(self, text, owner, context):
+        literals = javascript_literals(text) if context == 'js' else STRINGS.finditer(text)
+        for match in literals:
+            found = self.resolve(match['value'], owner, context)
+            if found:
+                kind = self.resource_kind(found[0])
+                if context == 'js' and re.search(r'\bfetch\s*\(\s*$', text[:match.start()]): kind = 'connect'
+                yield found[0], kind
+        if context == 'css':
+            for match in CSS_URL.finditer(text):
+                found = self.resolve(match['value'].strip(), owner, context)
+                if found: yield found[0], self.resource_kind(found[0])
+
+    def csp_edits(self, text, owner):
+        parsed = HtmlTags(text)
+        metas = [(raw, offset) for tag, attrs, raw, offset in parsed.tags
+                 if tag == 'meta' and (attrs.get('http-equiv') or '').strip().lower() == 'content-security-policy']
+        if not metas: return []
+        dependencies = set()
+        for tag, attrs, raw, offset in parsed.tags:
+            if tag in ('a', 'meta', 'base'): continue
+            for name, value in attrs.items():
+                if not value: continue
+                if name in ('style', 'data-lazy-style'):
+                    dependencies.update(self.literal_dependencies(value, owner, 'css')); continue
+                if name in ('srcset', 'data-srcset', 'data-lazy-srcset'):
+                    values = re.findall(r'(?:^|,)\s*([^\s,]+)', value) if not value.startswith('data:') else []
+                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
+                    if tag == 'link' and attrs.get('rel') in ('canonical', 'preconnect', 'dns-prefetch'): continue
+                    values = [value]
+                elif name.startswith('data-') and value.startswith(('{', '[')):
+                    dependencies.update(self.literal_dependencies(value, owner, 'json')); continue
+                else: continue
+                for value in values:
+                    found = self.resolve(value, owner, 'resource')
+                    if found: dependencies.add((found[0], self.resource_kind(found[0])))
+        for match in BLOCK.finditer(text):
+            context = 'css' if match['tag'].lower() == 'style' else 'json' if re.search(r'type=["\']application/(?:ld\+)?json', match.group(0).split('>',1)[0], re.I) else 'js'
+            dependencies.update(self.literal_dependencies(match['body'], owner, context))
+        pending = list(dependencies); seen = set(); kinds = set()
+        while pending:
+            rel, kind = pending.pop(); kinds.add(kind)
+            if rel in seen: continue
+            seen.add(rel)
+            if self.source_root and Path(rel).suffix in TEXT_ASSETS:
+                if rel not in self._dependencies:
+                    context = 'css' if rel.endswith('.css') else 'js' if rel.endswith(('.js','.mjs')) else 'json'
+                    self._dependencies[rel] = list(self.literal_dependencies((self.source_root/rel).read_text('utf8'), rel, context))
+                pending.extend(self._dependencies[rel])
+        requirements = {kind: {self.base} for kind in kinds}
+        edits = []
+        for raw, offset in metas:
+            for attr in ALL_ATTR.finditer(raw):
+                if attr['name'].lower() != 'content': continue
+                field = 'quoted' if attr['q'] else 'unquoted'
+                before = html.unescape(attr[field])
+                after = csp_with_sources(before, requirements)
+                if after != before:
+                    encoded = html.escape(after, quote=True)
+                    if attr['q'] == '"': encoded = encoded.replace('&#x27;', "'")
+                    if not attr['q']: encoded = '"' + encoded + '"'
+                    edits.append((offset+attr.start(field), offset+attr.end(field), encoded, 'html_csp_sources'))
+        return edits
 
     def target(self, rel):
         return self.base + '/' + self.prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
@@ -358,6 +483,7 @@ class Rewriter:
                 edits += self.strings(body, owner, 'json', start)
             else:
                 edits += self.javascript(body, owner, start)
+        if self.version >= 4: edits += self.csp_edits(text, owner)
         return edits
 
     def rewrite_strings_value(self, text, owner):
@@ -398,7 +524,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=2):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=4):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -410,7 +536,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
-    rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version)
+    rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source)
     objects, github = {}, {}
@@ -480,7 +606,7 @@ def verify_local(output):
     expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items()}
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
-    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1))
+    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
     home_bytes,home_proof=current_home_links(source)
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
@@ -631,7 +757,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3),default=2)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4),default=4)
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)

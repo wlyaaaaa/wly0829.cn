@@ -39,7 +39,7 @@ def verify_input_baseline(baseline, baseline_ref=None, runtime_baseline=False):
         raise ValueError('Runtime staging is not the published OSS source version')
     if set(files)!=set(published['files'])|set(cloud['objects']):
         raise ValueError('Runtime staging must contain every published HTML and source asset')
-    rewrite=oss.Rewriter(files,cloud['asset_base_url'],cloud['prefix'],'https://wly0829.cn',version=cloud.get('rewriter_version',1))
+    rewrite=oss.Rewriter(files,cloud['asset_base_url'],cloud['prefix'],'https://wly0829.cn',version=cloud.get('rewriter_version',1),source_root=baseline)
     home,_=oss.current_home_links(baseline)
     for relative,proof in files.items():
         if relative in cloud['objects']:

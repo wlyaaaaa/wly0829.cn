@@ -280,6 +280,12 @@ def verify(args):
             'cold_acceptance':('Actual controlled HTTPS bodies with at most one retry per object per run under the 14:52 extension; first failures and elapsed times retained; native cold/two-second performance not claimed' if retry_receipt.get('schema')==BOUNDED_SCHEMA else ('Actual single post-failure body retry under the 14:52 extension to 2e/2f/future versions; first native failures and timing retained' if retry_receipt.get('instruction_id')=='8c5b469a-9178-475c-92aa-b59dd6fa5292' else 'Actual single post-failure body retry under 08:52 instruction; first native failures and timing retained')) if retry_receipt else 'All native cold cases pass under two seconds',
             'staged':bool(args.staged),'verified_at_beijing':oss.stamp()}
     result['raw_dom_verification']={'summary':verification.get('summary'),'verification_sha256':oss.digest(args.verification)}
+    browser_network=getattr(args,'browser_network',None)
+    require(not getattr(args,'require_browser_network',False) or browser_network,'Publication requires the final-origin native Chrome network gate')
+    if browser_network:
+        spec=importlib.util.spec_from_file_location('oss_native_network_gate',HERE/'verify-oss-browser-network.py')
+        network_gate=importlib.util.module_from_spec(spec);spec.loader.exec_module(network_gate)
+        result['browser_network']=network_gate.validate_receipt(preparation,browser_network,'candidate',args.staged)
     if accepted_layout:
         require(accepted_layout['sha256']==oss.digest(acceptance_path) and accepted_layout['verification_sha256']==oss.digest(args.verification)
             and qa_plan['source_build_report_sha256']==oss.digest(args.build_report),'Layout evidence changed during OSS checking')
@@ -296,6 +302,8 @@ def main():
     parser.add_argument('--rollback-ref')
     parser.add_argument('--retry-proof',type=Path,help='Actual native bounded retry or controlled 14:52 transfer acceptance; retains source failures and timings')
     parser.add_argument('--layout-acceptance',type=Path,help='Same precise source/OSS layout acceptance supplied to the source publication gate')
+    parser.add_argument('--browser-network',type=Path,help='Exact final-origin candidate native Chrome network gate receipt')
+    parser.add_argument('--require-browser-network',action='store_true',help='Mandatory before HTML publication; earlier preparation checks may precede this run')
     args=parser.parse_args()
     if args.staged and (not args.preparation_receipt or not args.rollback_ref):parser.error('Staging needs the real source gate receipt and rollback commit')
     result=verify(args);oss.write(args.output,result)
