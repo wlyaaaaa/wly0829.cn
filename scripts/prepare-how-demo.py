@@ -88,6 +88,56 @@ def source_speed(root,text):
     return speed,{'path':str(path),'sha256':digest(path),'field':'SiteMotionAppearance.speed_multiplier'}
 
 
+def panorama_data(args,page):
+    source_path=getattr(args,'panorama_source',None)
+    if not source_path:
+        if getattr(args,'panorama_source_sha256',None) or getattr(args,'panorama_source_bytes',None) is not None:
+            raise ValueError('Panorama binding requires the actual frozen source path')
+        return None,None
+    expected_sha=getattr(args,'panorama_source_sha256',None)
+    expected_bytes=getattr(args,'panorama_source_bytes',None)
+    source_path=source_path.resolve()
+    if not expected_sha or expected_bytes is None or digest(source_path)!=expected_sha or source_path.stat().st_size!=expected_bytes:
+        raise ValueError('Frozen panorama source does not match the staged SHA256 and bytes')
+    registry=read(source_path)['registry']
+    nodes=registry['nodes'];ids=[n['id'] for n in nodes]
+    if len(set(ids))!=len(ids): raise ValueError('Duplicate panorama node id')
+    by_href={n['href']:n['id'] for n in nodes if n.get('href')}
+    if len(by_href)!=sum(bool(n.get('href')) for n in nodes): raise ValueError('Duplicate panorama node href')
+    edges=[]
+    for edge in registry['relations']:
+        if edge['from'] not in ids or edge['to'] not in ids: raise ValueError('Unknown panorama relation endpoint')
+        pair=[edge['from'],edge['to']]
+        if pair not in edges: edges.append(pair)
+    screen=next(s for s in page['screens'] if s['id']=='how-02');bindings=[];visuals=[]
+    compact=lambda text:re.sub(r'\s+','',text)
+    def actor_id(label):
+        label=compact(label)
+        matches=[n['id'] for n in nodes if not n.get('href') and
+                 (label==compact(n['name']) or label.startswith(compact(n['name'].split('（')[0])+'（'))]
+        if len(matches)!=1: raise ValueError('Panorama actor has no unique frozen name: '+label)
+        return matches[0]
+    for orientation in ['h','v']:
+        found=set();visible=set()
+        for part in screen['parts']:
+            if part['orientation']!=orientation and not part.get('both'): continue
+            for hot in part['hotspots']:
+                node=by_href.get(hot.get('original_href') or hot.get('href'))
+                if node:
+                    found.add(node);bindings.append({'hot_id':hot['id'],'node':node})
+            for item in part.get('panorama_nodes',[]):
+                node=by_href.get(item.get('original_href') or item.get('href')) if item.get('href') else actor_id(item['text'])
+                if not node: raise ValueError('Unknown measured panorama project: '+item['text'])
+                visible.add(node);visuals.append({'part':part['image'],'node':node,'rect':item['rect']})
+        if found!=set(by_href.values()): raise ValueError('Panorama project hotspots are incomplete: '+orientation)
+        if visible!=set(ids): raise ValueError('Panorama requires measured boxes for all frozen projects and actors: '+orientation)
+    projection={'schema':'wly.how-panorama.v1','nodes':[{'id':n['id'],'href':n.get('href')} for n in nodes],
+                'relations':edges,'hotspots':bindings,'visuals':visuals}
+    proof={'path':str(source_path),'sha256':expected_sha,'bytes':expected_bytes,'field':'registry.nodes/relations',
+           'project_nodes':len(by_href),'bound_hotspots':len(bindings),'direct_relations':len(edges),'measured_node_boxes':len(visuals)}
+    return projection,proof
+
+
 def render(data,speed):
     ui=data['ui'];esc=lambda value:html.escape(value,quote=True)
     encoded=json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
@@ -95,7 +145,7 @@ def render(data,speed):
 <h2 class="how-demo-title" id="how-demo-title">{esc(ui['title'])}</h2><p class="how-demo-sub">{esc(ui['intro'])}</p>
 <div class="app" id="how-demo-app"><svg id="how-demo-wires" aria-hidden="true"></svg><div id="how-demo-fly" aria-hidden="true"></div><img class="leaf" src="{esc(data['assets']['leaf-r']['src'])}" alt="">
 <aside class="side"><h2>{esc(ui['asideTitle'])}</h2><div class="pick" id="how-demo-pick"></div><div class="ill" id="how-demo-ill"></div><p class="note">{esc(ui['note'])}</p><div class="legend" id="how-demo-legend"></div></aside>
-<section class="stage" id="how-demo-stage" aria-live="polite"><div class="slotrow"><div class="slot" id="how-demo-slot" data-tip="{esc(ui['slotTip'])}" tabindex="0"><span class="who" id="how-demo-who"></span><span class="txt" id="how-demo-slottxt">&#160;</span></div></div><div class="grid" id="how-demo-grid"></div><div class="result" id="how-demo-result"></div></section></div>
+<section class="stage" id="how-demo-stage" aria-live="polite"><div class="slotrow"><span class="who" id="how-demo-who"></span><div class="slot" id="how-demo-slot" data-tip="{esc(ui['slotTip'])}" tabindex="0"><span class="txt" id="how-demo-slottxt">&#160;</span></div></div><div class="grid" id="how-demo-grid"></div><div class="result" id="how-demo-result"></div></section></div>
 <div id="how-demo-tip" role="tooltip"></div><div class="how-demo-transcript" data-screen-transcript="how-demo-v3">{esc(transcript(data))}</div>
 <script type="application/json" data-how-demo-data>{encoded}</script></section>'''+MARKER_END
 
@@ -112,6 +162,7 @@ def prepare(args):
     source_data_match=re.search(r'<script[^>]*id="page-data"[^>]*>(.*?)</script>',before,re.S)
     source_page_data=source_data_match[0] if source_data_match else None
     speed,speed_proof=source_speed(source,before)
+    panorama,panorama_proof=panorama_data(args,json.loads(source_data_match[1]))
     data=deepcopy(canonical_data());specs=data.pop('assetSpecifications');assets={};proofs=[]
     by_hash={}
     for rel,meta in original.items():
@@ -138,6 +189,15 @@ def prepare(args):
     album='data-album-runtime' in text
     starter=(f'<script data-album-runtime data-src="{js}" data-how-demo-bundle></script>' if album else f'<script src="{js}" defer data-how-demo-bundle></script>')
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}" data-how-demo-bundle>'+starter+'</head>')
+    if panorama:
+        text=re.sub(r'<script\b[^>]*data-how-panorama-data[^>]*>[\s\S]*?</script>','',text)
+        encoded=json.dumps(panorama,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
+        panorama_css=bundle('how-demo-panorama',(HERE/'how-demo-panorama.css').read_bytes(),'.css')
+        panorama_js=bundle('how-demo-panorama',(HERE/'how-demo-panorama.js').read_bytes(),'.js')
+        text=text.replace('</head>',f'<link rel="stylesheet" href="{panorama_css}" data-how-demo-bundle>'+
+                          (f'<script data-album-runtime data-src="{panorama_js}" data-how-demo-bundle></script>' if album else
+                           f'<script src="{panorama_js}" defer data-how-demo-bundle></script>')+'</head>')
+        text=text.replace('</body>',f'<script type="application/json" data-how-panorama-data>{encoded}</script></body>')
     if source_page_data and source_page_data not in text: raise AssertionError('Existing 15-screen page-data changed')
     (out/'how/index.html').write_bytes(text.encode('utf8'))
     search_original=(source/'search-index.js').read_bytes().decode('utf8');prefix='window.__WLY_SEARCH_INDEX__='
@@ -155,8 +215,11 @@ def prepare(args):
     if any(files.get(k)!=v for k,v in original.items() if not k.endswith('.html')): raise AssertionError('Original assets changed')
     rid=hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()
     manifest['release_id']=rid;manifest['files']=files;manifest['how_demo_preparation']={'schema':'wly.how-demo-preparation.v1','status':'prepared_pending_root_acceptance','baseline_release_id':read(source/'release-manifest.json')['release_id'],'screen':SCREEN,'source_data_sha256':digest(HERE/'how-demo-data.json'),'speed':speed,'speed_source':speed_proof,'bundle':[js,css,search],'source_assets':proofs,'original_page_data_preserved':True,'anchors':['case-trip','case-restore','case-away']}
+    if panorama:
+        manifest['how_demo_preparation']['panorama']={'source':panorama_proof,'bundle':[panorama_js,panorama_css]}
     (out/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n','utf8')
     report={'status':'prepared','release_id':rid,'source_release_id':manifest['how_demo_preparation']['baseline_release_id'],'source':str(source),'candidate':str(out),'files':len(files),'original_how_screen_count':len(json.loads(source_data_match[1])['screens']),'original_page_data_preserved':True,'all_original_asset_bytes_preserved':True,'raw_asset_proofs':proofs,'search_html_references_updated':updated,'projected_search_entries':projected,'source_data_sha256':digest(HERE/'how-demo-data.json'),'speed':speed,'speed_source':speed_proof,'album_runtime_queue':album,'prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()}
+    if panorama: report['panorama_source']=panorama_proof
     evidence.parent.mkdir(parents=True,exist_ok=True);evidence.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n','utf8')
     print(json.dumps({k:report[k] for k in ['status','release_id','files','original_how_screen_count','original_page_data_preserved','all_original_asset_bytes_preserved']},ensure_ascii=False))
 
@@ -165,4 +228,5 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source',type=Path,required=True);parser.add_argument('--out',type=Path,required=True)
     parser.add_argument('--assets-dir',type=Path);parser.add_argument('--evidence',type=Path,required=True)
+    parser.add_argument('--panorama-source',type=Path);parser.add_argument('--panorama-source-sha256');parser.add_argument('--panorama-source-bytes',type=int)
     prepare(parser.parse_args())

@@ -122,9 +122,10 @@ function typesetContentRects(win,doc){
     if(valid(r))arrows.push({rect:r,direction:r[3]>r[2]?'v':'h',basis:'computed '+pseudo+' connector in producer DOM'});
    }
    const illustrations=[...doc.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art')].map(im=>({src:im.getAttribute('src'),natural_size:[im.naturalWidth,im.naturalHeight],rect:rect(im)})).filter(x=>valid(x.rect));
+   const mapNodes=item.page==='how'&&item.screen==='how-02'?[...doc.querySelectorAll('.hub-grouped-item[data-map-sign]')].map(el=>({text:el.textContent.trim(),href:el.querySelector('[data-href]')?.dataset.href||null,rect:rect(el)})).filter(x=>valid(x.rect)):null;
    const contentOccupancy={...typesetContentRects(win,doc),measurement_sha256:contentMeasurementSha,measurement_bytes:contentMeasurementBytes.byteLength,measurement_source:'Actual /__typeset/measure.js UTF-8 response bytes; preview normalizes CRLF to LF'};
    records.push({...item,measurement_recipe:'producer-components-v8',layout_readiness:'fit-typeset-ready-two-frames-v1',content_occupancy:contentOccupancy,dot_capability:dotCapability,fit_sha256:fit.input.sha256,measured_height:doc.documentElement.scrollHeight,measured_width:doc.documentElement.clientWidth,overflow_width:doc.documentElement.scrollWidth,
-                 cards,numbers,dots,arrows,illustrations,broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:[...dotIssues,...contentOccupancy.issues,...(Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[])]});
+                 cards,numbers,dots,arrows,illustrations,...(mapNodes?{map_nodes:mapNodes}:{}),broken_images:[...doc.images].filter(im=>!im.complete||!im.naturalWidth).map(im=>im.src),issues:[...dotIssues,...contentOccupancy.issues,...(Math.abs(doc.documentElement.scrollHeight-item.source_height)>2?['rendered DOM height differs from PNG generation']:[])]});
   }catch(e){records.push({...item,issues:[String(e)]});}
   if(measured%25===0)await save(false);
  }

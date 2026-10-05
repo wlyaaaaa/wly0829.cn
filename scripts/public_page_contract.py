@@ -44,6 +44,7 @@ LAYOUT.update(size=RECT,source_size=RECT,crop=RECT,title_rect=RECT,viewer=VIEWER
               card_uncertain=array(CARD),card_arrow_pending=array(MARK))
 PART = {**LAYOUT,**fields('image src both compact_live')}
 PART['hotspots']=array(LINK)
+PART['panorama_nodes']=array({'text':S,'href':S,'original_href':S,'rect':RECT})
 SCREEN = fields('id title section shape nav_section nav_title render_mode primary_href source_version')
 SCREEN.update(layouts={'h':LAYOUT,'v':LAYOUT},parts=array(PART),screen_anchors=array(S),html_anchors=array(LINK),
               source_meta=fields('relative_file version omitted_count original_html rendered_input_sha256 raw_rendered_input_sha256 public_projection_sha256 source_sha256 public_source_sha256 excerpt_contract excerpt_id src'))

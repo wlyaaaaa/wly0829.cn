@@ -259,6 +259,14 @@ def motion_part(geometry, image, size, start, padding):
         for item in geometry.get(key,[]):
             rect=convert(item if isinstance(item,list)else item['rect'])
             if rect:result[key].append(rect if isinstance(item,list)else {**item,'rect':rect})
+    if 'map_nodes' in geometry:
+        result['panorama_nodes']=[]
+        for item in geometry['map_nodes']:
+            r=item.get('rect')
+            if not isinstance(item.get('text'),str) or not isinstance(r,list) or len(r)!=4 or any(not isinstance(v,(int,float)) or not math.isfinite(v) for v in r) or r[2]<=0 or r[3]<=0:
+                raise ValueError('全景节点没有真实有效的生产DOM坐标')
+            rect=convert(r)
+            if rect:result['panorama_nodes'].append({'text':item['text'],'href':item.get('href'),'original_href':item.get('href'),'rect':rect})
     content=geometry.get('content_occupancy',{})
     if content.get('policy')=='semantic-content-rects-v1' and not content.get('issues'):
         blocks=[]

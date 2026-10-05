@@ -1,0 +1,9 @@
+#how-02 .how-panorama-node{transition:background-color .15s,box-shadow .15s;transform:none}
+#how-02 .how-panorama-node:hover,#how-02 .how-panorama-node:focus{transform:none}
+#how-02 .how-panorama-node.how-panorama-dim{opacity:.3;background-color:transparent;box-shadow:none}
+#how-02 .how-panorama-visual{display:block;pointer-events:none!important;z-index:2;transition:background-color .15s,box-shadow .15s}
+#how-02 .how-panorama-dim{background-color:rgba(255,255,255,.7);box-shadow:none}
+#how-02 .how-panorama-related{background-color:transparent;box-shadow:0 0 0 1px #70ba8b}
+#how-02 .how-panorama-current{box-shadow:0 0 0 2px #13803d}
+@media(prefers-reduced-motion:reduce){#how-02 .how-panorama-node,#how-02 .how-panorama-visual{transition:none;animation:none}}
+.motion-off #how-02 .how-panorama-node,.motion-off #how-02 .how-panorama-visual{transition:none;animation:none}
