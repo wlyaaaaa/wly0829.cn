@@ -1060,6 +1060,33 @@ def main():
                 'geometry_path':str(args.geometry),'geometry_sha256':hybrid.digest(args.geometry)})
         manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
             args.output.parent/(args.output.name+'-creative-evidence'),staged_build_report=staged_report)
+    if live_ui and read(args.live_ui_preparation).get('toc_unify_package'):
+        # Refresh only the approved directory on the complete, creatively
+        # prepared site; the original six-step release chain stays intact.
+        before_toc_files=manifest['files']
+        toc,toc_inputs=ui_module.prepare_toc_recipe(args.output,args.live_ui_preparation)
+        for path,expected in toc_inputs.items():
+            if path in live_ui_inputs and live_ui_inputs[path]!=expected:
+                raise ValueError('TOC input changed after early UI preparation: '+path)
+        live_ui_inputs.update(toc_inputs)
+        live_ui.update(toc=toc,status='prepared')
+        files=hybrid.inventory(args.output)
+        accepted_files={hybrid.route_file(url)for url in manifest['accepted_pages']}
+        ledger=manifest.setdefault('release_overlay',{})
+        for relative,entry in ledger.items():
+            if entry.get('before')!=manifest['baseline_files'].get(relative):
+                raise ValueError('TOC predecessor ledger differs from the baseline: '+relative)
+            entry['after']=files[relative]
+        for relative,proof in files.items():
+            if relative not in accepted_files and proof!=before_toc_files.get(relative) and relative not in ledger:
+                ledger[relative]={'kind':'integrated_preparation',
+                                  'before':manifest['baseline_files'].get(relative),'after':proof}
+        manifest['files']=files
+        manifest['release_id']=hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()
+        if creative:
+            creative['files']=ledger
+            creative['assembled_release_id']=manifest['release_id']
+            manifest['creative_preparation']=creative
     if live_ui:
         manifest['live_ui_preparation']=live_ui
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
