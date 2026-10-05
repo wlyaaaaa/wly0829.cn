@@ -2,7 +2,8 @@
 
 This script never changes the source, uploads objects, or publishes HTML. Only
 recorded URL spans and effective meta CSP fetch sources may change; other
-resource bytes are copied. Versions 1-3 retain their historical URL-only replay.
+resource bytes are copied. OSS consumers also use an origin-only cross-origin
+referrer policy. Versions 1-3 retain their historical URL-only replay.
 """
 from __future__ import annotations
 
@@ -37,6 +38,7 @@ ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?P<q>["\'])(?P<value>.*?)(?P=q)'
 ALL_ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?:(?P<q>["\'])(?P<quoted>.*?)(?P=q)|(?P<unquoted>[^\s>]+))', re.S)
 BLOCK = re.compile(r'<(?P<tag>script|style)\b[^>]*>(?P<body>.*?)</(?P=tag)\s*>', re.I | re.S)
 CSS_URL = re.compile(r'url\(\s*(?P<q>["\']?)(?P<value>[^)"\']+)(?P=q)\s*\)', re.I)
+OSS_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 
 class HtmlTags(HTMLParser):
@@ -288,6 +290,65 @@ class Rewriter:
                 found = self.resolve(match['value'].strip(), owner, context)
                 if found: yield found[0], self.resource_kind(found[0])
 
+    def is_oss_resource(self, value, owner, context):
+        if self.resolve(value, owner, context): return True
+        try: parts = urlsplit(html.unescape(value))
+        except ValueError: return False
+        return parts.scheme == 'https' and bool(re.fullmatch(
+            r'[a-z0-9-]+\.oss-cn-(?:beijing|shanghai)\.aliyuncs\.com', parts.hostname or ''))
+
+    def resource_values(self, tag, attrs):
+        """Resource-bearing values; navigation and share metadata do not load."""
+        if tag in ('a', 'meta', 'base'): return
+        for name, value in attrs.items():
+            if not value: continue
+            if name in ('style', 'data-lazy-style'):
+                for match in CSS_URL.finditer(value): yield match['value'].strip(), 'css'
+                for match in STRINGS.finditer(value): yield match['value'], 'css'
+            elif name in ('srcset', 'data-srcset', 'data-lazy-srcset'):
+                if not value.startswith('data:'):
+                    for item in re.findall(r'(?:^|,)\s*([^\s,]+)', value): yield item, 'resource'
+            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'href' and tag == 'link':
+                if tag == 'link' and attrs.get('rel') in ('canonical','preconnect','dns-prefetch'): continue
+                yield value, 'resource'
+            elif name.startswith('data-') and value.startswith(('{','[')):
+                for match in STRINGS.finditer(value): yield match['value'], 'json'
+
+    def referrer_edits(self, text, owner):
+        parsed = HtmlTags(text)
+        consumers = [(raw,offset) for tag,attrs,raw,offset in parsed.tags
+                     if any(self.is_oss_resource(value,owner,context) for value,context in self.resource_values(tag,attrs))]
+        consumes_oss = bool(consumers)
+        if not consumes_oss:
+            for match in BLOCK.finditer(text):
+                context = 'css' if match['tag'].lower() == 'style' else 'json' if re.search(r'type=["\']application/(?:ld\+)?json',match.group(0).split('>',1)[0],re.I) else 'js'
+                literals = javascript_literals(match['body']) if context == 'js' else STRINGS.finditer(match['body'])
+                values = [item['value'] for item in literals]
+                if context == 'css': values += [item['value'].strip() for item in CSS_URL.finditer(match['body'])]
+                if any(self.is_oss_resource(value,owner,context) for value in values): consumes_oss = True; break
+        if not consumes_oss: return []
+        edits = []
+        metas = [(raw,offset) for tag,attrs,raw,offset in parsed.tags
+                 if tag == 'meta' and (attrs.get('name') or '').strip().lower() == 'referrer']
+        for raw,offset in metas + consumers:
+            is_meta = (raw,offset) in metas
+            field_name = 'content' if is_meta else 'referrerpolicy'
+            matched = False
+            for attr in ALL_ATTR.finditer(raw):
+                if attr['name'].lower() != field_name: continue
+                matched = True
+                field = 'quoted' if attr['q'] else 'unquoted'
+                if html.unescape(attr[field]).strip().lower() != OSS_REFERRER_POLICY:
+                    edits.append((offset+attr.start(field),offset+attr.end(field),OSS_REFERRER_POLICY,'html_oss_referrer_policy'))
+            if is_meta and not matched:
+                position = offset+len(raw)-(2 if raw.endswith('/>') else 1)
+                edits.append((position,position,' content="'+OSS_REFERRER_POLICY+'"','html_oss_referrer_policy'))
+        if not metas:
+            head = next(((raw,offset) for tag,attrs,raw,offset in parsed.tags if tag == 'head'),None)
+            position = head[1]+len(head[0]) if head else 0
+            edits.append((position,position,'<meta name="referrer" content="'+OSS_REFERRER_POLICY+'">','html_oss_referrer_meta'))
+        return edits
+
     def csp_edits(self, text, owner):
         parsed = HtmlTags(text)
         metas = [(raw, offset) for tag, attrs, raw, offset in parsed.tags
@@ -483,7 +544,9 @@ class Rewriter:
                 edits += self.strings(body, owner, 'json', start)
             else:
                 edits += self.javascript(body, owner, start)
-        if self.version >= 4: edits += self.csp_edits(text, owner)
+        if self.version >= 4:
+            edits += self.csp_edits(text, owner)
+            edits += self.referrer_edits(text, owner)
         return edits
 
     def rewrite_strings_value(self, text, owner):

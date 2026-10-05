@@ -46,6 +46,17 @@ def canonical_object(url):
     return urlunsplit((parts.scheme, parts.netloc, parts.path, query, ''))
 
 
+def declared_oss_static(payload, owner, manifest):
+    rewriter=oss.Rewriter({},manifest['oss']['asset_base_url'],manifest['oss']['prefix'],ORIGIN,version=4)
+    return any(rewriter.is_oss_resource(value,owner,context) for tag,attrs,raw,offset in oss.HtmlTags(payload.decode('utf8')).tags
+               for value,context in rewriter.resource_values(tag,attrs))
+
+
+def status_get_succeeded(item):
+    return (item.get('method')=='GET' and canonical_object(item.get('url',''))==STATUS_URL
+            and item.get('response_http')==200 and canonical_object(item.get('response_url',''))==STATUS_URL)
+
+
 def artifact(preparation, release=None):
     preparation = Path(preparation).resolve()
     plan = oss.verify_local(preparation)
@@ -77,6 +88,7 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None):
     plan, manifest, root, documents = artifact(preparation, release)
     report = oss.read(receipt_path)
     expected = {'schema': SCHEMA, 'mode': mode, 'method': METHOD, 'origin': ORIGIN,
+                'oss_asset_base_url':plan['asset_base_url'],
                 'release_id': manifest['release_id'], 'source_release_id': plan['source_release_id'],
                 'plan_sha256': oss.digest(Path(preparation)/oss.PLAN),
                 'manifest_sha256': oss.digest(root/oss.MANIFEST), 'routes': list(documents)}
@@ -88,33 +100,50 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None):
     if len(rows) != len(documents) or [row.get('route') for row in rows] != list(documents):
         raise ValueError('Browser network receipt omits manifest routes or aliases')
     for row in rows:
+        verify_oss_403(row,plan['asset_base_url'])
         if row.get('status') != 'pass' or row.get('issues') or row.get('loading_failed') or row.get('page_errors') or row.get('http_failures'):
             raise ValueError('Browser failures remain on ' + row.get('route', '?'))
         observed = row.get('documents', [])
         address = ORIGIN + row['route']
         if not any(item.get('url') == address and item.get('http') == 200 and item.get('sha256') == manifest['files'][documents[row['route']]]['sha256'] for item in observed):
             raise ValueError('Browser lacks actual route document bytes: ' + row['route'])
-        if row['route'] in ('/computer-access/', '/cockpit/') and not any(
-                item.get('method') == 'GET' and canonical_object(item.get('url', '')) == STATUS_URL and item.get('response_received')
-                for item in row.get('requests', [])):
+        if row['route'] in ('/computer-access/', '/cockpit/') and not any(status_get_succeeded(item) for item in row.get('requests', [])):
             raise ValueError('Actual service status GET was not sent: ' + row['route'])
-        if not row.get('static_bodies'): raise ValueError('No native sealed OSS response bodies: '+row['route'])
+        expected_static=declared_oss_static((root/documents[row['route']]).read_bytes(),documents[row['route']],manifest)
+        if row.get('declared_oss_static') is not expected_static:raise ValueError('Declared static dependency evidence differs from the actual document')
+        if expected_static and not row.get('static_bodies'): raise ValueError('No native sealed OSS response bodies for the actual declared dependencies: '+row['route'])
         for body in row['static_bodies']:
             obj = next((obj for obj in manifest['oss']['objects'].values() if obj['url'] == body.get('canonical_url')), None)
             if not obj or body.get('verified') is not True or not body.get('sha256'):
                 raise ValueError('Browser body is not a sealed OSS object')
             if body.get('http') == 200 and (body.get('sha256') != obj['sha256'] or body.get('bytes') != obj['bytes']):
                 raise ValueError('Browser full body SHA differs from sealed OSS object')
-    if report.get('summary') != summarize(rows): raise ValueError('Browser network summary does not match retained events')
+    if report.get('summary') != summarize(rows,plan['asset_base_url']): raise ValueError('Browser network summary does not match retained events')
     return {**expected, 'status': 'pass', 'receipt_path': str(Path(receipt_path).resolve()),
             'receipt_sha256': oss.digest(receipt_path), 'summary': report['summary']}
 
 
-def summarize(rows):
+def oss_403_count(row, asset_base):
+    # ExtraInfo still contains the actual HTTP status when CORS prevents the
+    # renderer from receiving Network.responseReceived. Count a response once.
+    return len({(item.get('request_id'),item.get('url')) for item in
+                row.get('responses',[])+row.get('http_response_extra',[])
+                if item.get('http') == 403 and item.get('url','').startswith(asset_base.rstrip('/')+'/')})
+
+
+def verify_oss_403(row, asset_base):
+    actual = oss_403_count(row,asset_base)
+    if type(row.get('oss_http_403')) is not int or row['oss_http_403'] != actual:
+        raise ValueError('OSS HTTP 403 counter differs from actual browser responses')
+    if actual: raise ValueError('Actual OSS HTTP 403 responses remain on '+row.get('route','?'))
+
+
+def summarize(rows, asset_base):
     return {'routes': len(rows), 'passed': sum(row.get('status') == 'pass' for row in rows),
             'csp_blocked': sum(is_csp_failure(event) for row in rows for event in row.get('loading_failed', [])),
             'loading_failed': sum(len(row.get('loading_failed', [])) for row in rows),
             'http_failures': sum(len(row.get('http_failures', [])) for row in rows),
+            'oss_http_403': sum(oss_403_count(row,asset_base) for row in rows),
             'page_errors': sum(len(row.get('page_errors', [])) for row in rows)}
 
 
@@ -147,6 +176,7 @@ async def run(args):
     for name in prior_temp: os.environ[name] = str(cache)
     profile = cache/('chrome-network-'+uuid.uuid4().hex)
     report = {'schema': SCHEMA, 'status': 'fail', 'mode': args.mode, 'method': METHOD, 'origin': ORIGIN,
+              'oss_asset_base_url':plan['asset_base_url'],
               'release_id': manifest['release_id'], 'source_release_id': plan['source_release_id'],
               'plan_sha256': oss.digest(args.preparation/oss.PLAN), 'manifest_sha256': oss.digest(root/oss.MANIFEST),
               'routes': list(documents), 'pages': [], 'started_at_beijing': oss.stamp()}
@@ -173,27 +203,40 @@ async def run(args):
                 session = await context.new_cdp_session(page)
                 await session.send('Network.enable', {'maxTotalBufferSize':512*1024*1024, 'maxResourceBufferSize':64*1024*1024})
                 await session.send('Network.setCacheDisabled', {'cacheDisabled':True})
-                row = {'route':route, 'url':ORIGIN+route, 'status':'fail', 'requests':[], 'responses':[],
+                row = {'route':route, 'url':ORIGIN+route, 'status':'fail', 'requests':[], 'responses':[], 'http_response_extra':[],
                        'documents':[], 'static_bodies':[], 'loading_failed':[], 'http_failures':[], 'page_errors':[], 'issues':[]}
+                row['declared_oss_static']=declared_oss_static((root/rel).read_bytes(),rel,manifest)
                 report['pages'].append(row)
-                requests = {}; responses = {}; pending = set(); body_tasks = set(); last_event = time.monotonic()
+                requests = {}; responses = {}; pending = set(); body_tasks = set(); request_referrers = {}; last_event = time.monotonic()
                 def requested(event):
                     nonlocal last_event
                     last_event = time.monotonic(); request = event['request']; identity = event['requestId']
                     item = {'request_id':identity, 'url':request['url'], 'method':request['method'], 'type':event.get('type'),
-                            'initiator_type':event.get('initiator',{}).get('type'), 'response_received':False}
+                            'initiator_type':event.get('initiator',{}).get('type'), 'response_received':False,
+                            'referer':request_referrers.get(identity,next((value for key,value in request.get('headers',{}).items() if key.lower()=='referer'),''))}
                     requests[identity] = item; pending.add(identity); row['requests'].append(item)
                     if request['method'] not in ('GET', 'HEAD', 'OPTIONS'): row['issues'].append('Unexpected non-read request: '+request['method']+' '+request['url'])
+                def request_headers(event):
+                    identity = event['requestId']
+                    referer = next((value for key,value in event.get('headers',{}).items() if key.lower()=='referer'),'')
+                    request_referrers[identity] = referer
+                    if identity in requests: requests[identity]['referer'] = referer
                 def received(event):
                     nonlocal last_event
                     last_event = time.monotonic(); response = event['response']; identity = event['requestId']
-                    if identity in requests: requests[identity]['response_received'] = True
+                    if identity in requests: requests[identity].update(response_received=True,response_http=response['status'],response_url=response['url'])
                     item = {'request_id':identity, 'url':response['url'], 'http':response['status'], 'type':event.get('type'),
                             'headers':{key.lower():value for key,value in response.get('headers',{}).items()
                                        if key.lower() in ('content-type','content-range','content-length','access-control-allow-origin')},
                             'disk_cache':response.get('fromDiskCache',False), 'service_worker':response.get('fromServiceWorker',False)}
                     responses[identity] = item; row['responses'].append(item)
                     if response['status'] >= 400: row['http_failures'].append({key:item[key] for key in ('url','http','type')})
+                def response_headers(event):
+                    identity = event['requestId']
+                    item = {'request_id':identity,'url':requests.get(identity,{}).get('url',''),'http':event['statusCode']}
+                    row['http_response_extra'].append(item)
+                    if item['http'] == 403 and item['url'].startswith(plan['asset_base_url']+'/'):
+                        row['issues'].append('Actual OSS HTTP 403: '+item['url'])
                 def failed(event):
                     nonlocal last_event
                     last_event = time.monotonic(); pending.discard(event['requestId'])
@@ -208,7 +251,7 @@ async def run(args):
                             row['issues'].append('Static browser resource did not use sealed OSS: '+url)
                         return  # Never read or retain service response payloads.
                     try:
-                        value = await session.send('Network.getResponseBody', {'requestId':identity})
+                        value = await asyncio.wait_for(session.send('Network.getResponseBody', {'requestId':identity}),timeout=10)
                         body = base64.b64decode(value['body']) if value.get('base64Encoded') else value['body'].encode('utf8')
                         result = {'url':url, 'http':item['http'], 'bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest()}
                         if is_document:
@@ -234,7 +277,9 @@ async def run(args):
                     last_event = time.monotonic(); pending.discard(event['requestId'])
                     task = asyncio.create_task(record_body(event['requestId'])); body_tasks.add(task); task.add_done_callback(body_tasks.discard)
                 session.on('Network.requestWillBeSent', requested)
+                session.on('Network.requestWillBeSentExtraInfo', request_headers)
                 session.on('Network.responseReceived', received)
+                session.on('Network.responseReceivedExtraInfo', response_headers)
                 session.on('Network.loadingFailed', failed)
                 session.on('Network.loadingFinished', finished)
                 page.on('pageerror', lambda error: row['page_errors'].append(str(error)))
@@ -249,24 +294,31 @@ async def run(args):
                         await asyncio.sleep(.12)
                     await page.evaluate('scrollTo(0,0)')
                     while time.monotonic() < deadline:
-                        status_sent = route not in ('/computer-access/','/cockpit/') or any(
-                            item['method'] == 'GET' and canonical_object(item['url']) == STATUS_URL and item['response_received'] for item in row['requests'])
+                        status_sent = route not in ('/computer-access/','/cockpit/') or any(status_get_succeeded(item) for item in row['requests'])
                         if not pending and not body_tasks and status_sent and time.monotonic()-last_event >= 1: break
                         await asyncio.sleep(.1)
                     else: row['issues'].append('Native network did not settle before deadline; pending: '+str([requests[x]['url'] for x in pending if x in requests]))
-                    if route in ('/computer-access/','/cockpit/') and not any(
-                        item['method'] == 'GET' and canonical_object(item['url']) == STATUS_URL and item['response_received'] for item in row['requests']):
+                    if route in ('/computer-access/','/cockpit/') and not any(status_get_succeeded(item) for item in row['requests']):
                         row['issues'].append('Actual service status GET was not sent and answered')
                     if not any(item['url'] == ORIGIN+route and item['verified'] for item in row['documents']):
                         row['issues'].append('Initial route document body was not verified')
-                    if not row['static_bodies']: row['issues'].append('No native OSS response bodies were observed')
+                    if row['declared_oss_static'] and not row['static_bodies']: row['issues'].append('No native OSS response bodies for the actual declared dependencies')
                 except Exception as error: row['issues'].append(type(error).__name__+': '+str(error))
                 finally:
-                    if body_tasks: await asyncio.gather(*list(body_tasks), return_exceptions=True)
+                    if body_tasks:
+                        active=list(body_tasks)
+                        done,unresolved=await asyncio.wait(active,timeout=10)
+                        if unresolved:
+                            row['issues'].append('Native body capture exceeded its bounded teardown wait')
+                            for task in unresolved:task.cancel()
+                            await asyncio.gather(*unresolved,return_exceptions=True)
                     # Capture cancellation events from owned page teardown as well.
-                    await page.close(); await asyncio.sleep(.05)
+                    try:await asyncio.wait_for(page.close(),timeout=10)
+                    except Exception as error:row['issues'].append('Owned page teardown failed: '+str(error))
+                    await asyncio.sleep(.05)
                     row['status'] = 'pass' if not any(row[key] for key in ('issues','loading_failed','http_failures','page_errors')) else 'fail'
-                print(route+' '+row['status']+' CSP='+str(sum(is_csp_failure(event) for event in row['loading_failed'])), flush=True)
+                    row['oss_http_403'] = oss_403_count(row,plan['asset_base_url'])
+                print(route+' '+row['status']+' CSP='+str(sum(is_csp_failure(event) for event in row['loading_failed']))+' OSS403='+str(row['oss_http_403']), flush=True)
         except Exception as error: report['error'] = type(error).__name__+': '+str(error)
         finally:
             if context: await context.close()
@@ -274,7 +326,7 @@ async def run(args):
             for name,value in prior_temp.items():
                 if value is None: os.environ.pop(name,None)
                 else: os.environ[name] = value
-    report['summary'] = summarize(report['pages'])
+    report['summary'] = summarize(report['pages'],plan['asset_base_url'])
     report['status'] = 'pass' if len(report['pages']) == len(documents) and report['summary']['passed'] == len(documents) and not report.get('error') and report['profile_cleanup']['verified'] else 'fail'
     report['completed_at_beijing'] = oss.stamp(); report['seconds'] = round(time.monotonic()-started,3)
     args.output.parent.mkdir(parents=True,exist_ok=True); oss.write(args.output, report)
