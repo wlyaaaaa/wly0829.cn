@@ -129,17 +129,34 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         target.write_bytes(payload); assets.append({'path': rel, **proof(payload)})
         return '/' + rel
     palette = ':root{--title:#0a7232;--text:#2e4675;--accent:#0a7a33;--link:rgb(9,145,54);--line:#bfe8cc;--cardbg:#fbfefc;--soft:#edfbf3;--badge:#13803d}\n'
-    font_ref = None
+    if not font:
+        existing_fonts=sorted((site/'_typeset/runtime').glob('live-sans-[0-9a-f]*.woff2'))
+        font = existing_fonts[0] if existing_fonts else None
+        if not font:
+            from fontTools.ttLib import TTFont
+            for part in sorted((site/'_typeset/runtime').glob('live-sans-part-*.woff2')):
+                with TTFont(part) as face:ranges=','.join('U+'+format(cp,'X') for cp in sorted(face.getBestCmap()))
+                palette += '@font-face{font-family:"Sans";src:url("/'+part.relative_to(site).as_posix()+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
     if font:
         from fontTools.ttLib import TTFont
+        from fontTools import subset
         import io
-        source = TTFont(font, recalcTimestamp=False); source.flavor = 'woff2'; out = io.BytesIO(); source.save(out)
-        font_ref = addressed('live-sans', '.woff2', out.getvalue())
-    else:
-        existing_fonts=sorted((site/'_typeset/runtime').glob('live-sans-*.woff2'))
-        if existing_fonts:font_ref='/'+existing_fonts[0].relative_to(site).as_posix()
-    if font_ref:
-        palette += '@font-face{font-family:"Sans";src:url("' + font_ref + '") format("woff2");font-weight:100 900;font-display:swap}\n'
+        source_bytes = Path(font).read_bytes()
+        source = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+        groups = {}
+        for codepoint in sorted(source.getBestCmap()):
+            groups.setdefault(codepoint // 128, []).append(codepoint)
+        supported = set(source.getBestCmap())
+        runtime_points = {ord(c) for name in ('b2-live-runtime.js','site-live-runtime.js','live-hardware-ui.js','live-status-ui.js') for c in (HERE/name).read_text('utf8')}
+        source.close()
+        options = subset.Options(); options.layout_features = ['*']; options.notdef_outline = True
+        for block, codepoints in groups.items():
+            face = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+            cutter = subset.Subsetter(options=options); cutter.populate(unicodes=codepoints); cutter.subset(face)
+            face.flavor = 'woff2'; out = io.BytesIO(); face.save(out); face.close()
+            ref = addressed('live-sans-part-'+format(block, 'x'), '.woff2', out.getvalue())
+            ranges = ','.join('U+'+format(cp, 'X') for cp in codepoints)
+            palette += '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
     css = palette + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
     ui_css = addressed('live-ui', '.css', css.encode('utf8'))
     ui_js = addressed('live-ui', '.js', ((HERE/'live-hardware-ui.js').read_text('utf8') + '\n' + (HERE/'live-status-ui.js').read_text('utf8')).encode('utf8'))
@@ -171,6 +188,15 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         if not data_match: continue
         data = json.loads(data_match[1]); has_live = any(part.get('native_live') or part.get('live') for s in data.get('screens',[]) for part in [*s.get('parts',[]), *s.get('layouts',{}).values()])
         if not has_live: continue
+        if font:
+            points = sorted((set(map(ord, text)) | runtime_points) & supported)
+            face = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+            cutter = subset.Subsetter(options=options); cutter.populate(unicodes=points); cutter.subset(face)
+            face.flavor = 'woff2'; out = io.BytesIO(); face.save(out); face.close()
+            ref = addressed('live-sans-page', '.woff2', out.getvalue())
+            ranges = ','.join('U+'+format(cp, 'X') for cp in points)
+            page_face = '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
+            ui_css = addressed('live-ui-page', '.css', (css+'\n'+page_face).encode('utf8'))
         for old in set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text)):
             path = resolve(page, old)
             if not path or not re.fullmatch(r'(?:app-[0-9a-f]+|b2-(?:live|typeset)-[0-9a-f]+)\.js',path.name): continue
