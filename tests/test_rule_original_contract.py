@@ -87,6 +87,50 @@ class PinSourceIntegrity(unittest.TestCase):
                 pin_generator.generate(root,digest,'E-fixture')
 
 
+class CharterArticleBodies(unittest.TestCase):
+    def articles(self):
+        return {number:f'**L{number} 条款标题。** 第{number}条正文。' for number in range(1,31)}
+
+    def source(self, articles, between=None):
+        body=''.join('- '+articles[number]+'\n'+(between or {}).get(number,'') for number in range(1,31))
+        return '# 根规则\n\n## 我的 AI 约法\n\n### 第一章\n\n'+body+'\n## 每次都要做的几件事\n\n  - 后续导航。\n'
+
+    def assert_articles(self, raw, articles):
+        rows=contract.excerpts(raw,'charter')
+        for identity,text,selection in rows:
+            first,last=selection['articles']
+            self.assertEqual(text,'\n\n'.join(articles[number] for number in range(first,last+1)),identity)
+            self.assertEqual(selection,{'articles':[first,last],'approved_omissions':[]})
+
+    def test_single_line_articles_keep_the_existing_exact_output(self):
+        articles=self.articles();self.assert_articles(self.source(articles),articles)
+
+    def test_indented_paragraphs_children_blank_lines_and_links_are_preserved(self):
+        articles=self.articles()
+        articles[4]+='  \n  这是缩进续行，保留 Markdown 硬换行。\n\n  - 第一子项 [资料](agents.privacy-data.md#公开个人数据分级表)。  \n  \n  - 第二子项。\n    更深的续行仍属于第二子项。'
+        articles[22]+='\n  - 一个子项。\n  - 另一个子项，条数由原文决定。'
+        raw=self.source(articles)
+        self.assert_articles(raw,articles)
+        self.assertEqual(contract.excerpts(raw,'charter'),contract.excerpts(raw.replace('\n','\r\n'),'charter'))
+
+    def test_next_articles_chapter_explanations_and_navigation_are_not_appended(self):
+        articles=self.articles();articles[10]+='\n  - 本条子项。'
+        between={10:'\n### 下一章\n\n章节说明，不是上一条正文。\n  - 章节导航。\n\n',
+                 17:'\n顶层说明，不属于上一条。\n  - 说明的缩进内容。\n\n'}
+        self.assert_articles(self.source(articles,between),articles)
+
+    def test_final_multiline_article_stops_before_the_following_section(self):
+        articles=self.articles();articles[30]+='\n  - 最后条款的子项。\n    保留其完整续行。'
+        self.assert_articles(self.source(articles),articles)
+
+    def test_missing_and_duplicate_article_numbers_still_fail(self):
+        raw=self.source(self.articles())
+        for invalid in (raw.replace('- **L12 ','- **条款12 '),raw.replace('- **L12 ','- **L11 ')):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(ValueError,'30 unique articles'):
+                    contract.excerpts(invalid,'charter')
+
+
 class FixedRuleOriginal(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix='fixed-rule-original-');self.root=Path(self.temp.name)

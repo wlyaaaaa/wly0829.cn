@@ -148,10 +148,21 @@ def excerpts(raw, page):
     raw = raw.replace('\r\n', '\n').replace('\r', '\n')
     if page == 'charter':
         matches = list(re.finditer(r'^- (\*\*L(\d+)\b[^\n]*)(?:\n|$)', raw, re.M))
-        articles = {int(m[2]): m[1] for m in matches}
         # L numbers are selectors, not a fixed wording or word-count assertion.
-        if len(matches) != 30 or set(articles) != set(range(1, 31)):
+        if len(matches) != 30 or {int(m[2]) for m in matches} != set(range(1, 31)):
             raise ValueError('Charter source does not contain all 30 unique articles')
+        articles = {}
+        for match in matches:
+            # An article includes its indented body and intervening blank lines,
+            # but stops at the next top-level item, heading or explanation.
+            end = match.end(1); cursor = match.end()
+            for line in raw[cursor:].split('\n'):
+                if line.strip():
+                    if not line.startswith((' ', '\t')):
+                        break
+                    end = cursor + len(line)
+                cursor += len(line) + 1
+            articles[int(match[2])] = raw[match.start(1):end]
         return [(f'charter/charter-{screen:02}', '\n\n'.join(articles[i] for i in range(first, last + 1)),
                  {'articles': [first, last], 'approved_omissions': []})
                 for screen, first, last in [(2, 1, 10), (3, 11, 17), (4, 18, 23), (5, 24, 30)]]
