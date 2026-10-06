@@ -40,18 +40,22 @@
     // Engines and their mounts retain the source order, including module
     // entries. Mark before starting so BFCache cannot load a second copy.
     event('runtime-start', {scripts: scripts.map(el => el.dataset.src)});
-    (async () => {
-      for (const placeholder of scripts) {
+    const loadEntry = placeholder => {
         const replacement = document.createElement('script');
         for (const attr of placeholder.attributes) if (!attr.name.startsWith('data-album-') && attr.name !== 'data-src') replacement.setAttribute(attr.name, attr.value);
         replacement.src = placeholder.dataset.src;
         replacement.async = false;
-        await new Promise(resolve => {
+        return new Promise(resolve => {
           replacement.addEventListener('load', resolve, {once:true});
           replacement.addEventListener('error', () => { event('runtime-resource-error', {src: replacement.src}); resolve(); }, {once:true});
           placeholder.replaceWith(replacement);
         });
-      }
+    };
+    (async () => {
+      const primary = scripts.find(el => /b2-(?:typeset|live)-/.test(el.dataset.src));
+      const firstRead = primary ? loadEntry(primary) : Promise.resolve();
+      for (const placeholder of scripts) if (placeholder !== primary) await loadEntry(placeholder);
+      await firstRead;
       runtimeLoaded = true; runtimeLoading = false;
       event('runtime-ready');
     })();

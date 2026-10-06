@@ -160,7 +160,7 @@ for(const event of ['wheel','touchstart'])addEventListener(event,cancelReadingRe
 addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))cancelReadingResize();});
 /* typeset-live-flow-v1 */
 (function(){
- const states=new WeakMap(),hosts=new Set();let frame=0;
+ const states=new WeakMap(),hosts=new Set(),pending=new Set();let frame=0;
  const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
  const isLamp=cell=>(cell.livePart||cell.live_part||cell.node?.dataset.livePart)==='lamp';
  function plan(cells,height,obstacles=[]){
@@ -190,6 +190,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   return bands;
  }
  function move(parent,node){
+  if(node.parentNode===parent)return;
   if(parent.moveBefore&&parent.isConnected&&node.isConnected)parent.moveBefore(node,null);else parent.append(node);
  }
  function sourceRect(node){
@@ -235,9 +236,14 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   // tile whether their source came from the manifest or its rounded style.
   return state.tiles.find(tile=>rect[1]>=tile.start-epsilon&&rect[1]<tile.end-epsilon&&middle>=tile.columns[0]-epsilon&&middle<tile.columns[1]-epsilon)||state.tiles.at(-1);
  }
- function update(state){
+ function measure(state){
+  const host=state.host;if(!host.isConnected||host.hidden)return null;
+  return {width:host.clientWidth,columnHeight:state.column?.cell.node.offsetHeight||0,hostHeight:host.offsetHeight};
+ }
+ function update(state,box=measure(state)){
   const host=state.host;if(!host.isConnected||host.hidden)return;
-  const width=host.clientWidth,height=width*host._layout.size[1]/host._layout.size[0];host._mediaHeight=height;
+  if(!box)return;
+  const width=box.width,height=width*host._layout.size[1]/host._layout.size[0];host._mediaHeight=height;
   const sourceURL=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||host._layout.src;
   for(const tile of state.tiles){
    if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
@@ -251,7 +257,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   }
   for(const band of state.bands)if(band.row)band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,band.cells[0].maskRect[3]*height)+'px');
   if(state.column)state.column.cell.node.style.setProperty('--typeset-live-min-height',Math.max(94,state.column.rect[3]*height)+'px');
-  const columnDelta=state.column?Math.max(0,state.column.cell.node.offsetHeight-state.column.rect[3]*height):0;
+  const columnDelta=state.column?Math.max(0,box.columnHeight-state.column.rect[3]*height):0;
   const dynamic=new Set(state.cells.filter(cell=>!isLamp(cell)).map(cell=>cell.node));
   for(const node of [...state.overlay.children])if(!dynamic.has(node)){remember(state,node);}
   for(const [node,box]of state.boxes){
@@ -271,7 +277,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    if(!tile)continue;
    move(tile.layer,node);Object.assign(node.style,{left:(rect[0]-tile.columns[0])*width+'px',top:(rect[1]-tile.start)*height+'px',width:rect[2]*width+'px',height:rect[3]*height+'px'});
   }
-  host.dataset.liveFlowHeight=String(host.offsetHeight);
+  if(host.dataset.liveFlowHeight!==String(box.hostHeight))host.dataset.liveFlowHeight=String(box.hostHeight);
  }
  function reset(host){
   const state=states.get(host);if(!state)return;
@@ -363,7 +369,9 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  }
  function request(host){
   if(host&&!states.has(host))return;
-  if(frame)return;frame=requestAnimationFrame(()=>{frame=0;for(const target of [...hosts]){const state=states.get(target);if(!target.isConnected){hosts.delete(target);continue;}if(state)update(state);}});
+  for(const target of hosts)if(!target.isConnected){hosts.delete(target);pending.delete(target);}
+  for(const target of host?[host]:hosts)pending.add(target);
+  if(frame)return;frame=requestAnimationFrame(()=>{frame=0;const batch=[...pending].map(target=>states.get(target)).filter(Boolean).map(state=>[state,measure(state)]);pending.clear();for(const [state,box]of batch)update(state,box);});
  }
  function sourceBox(host,rect){
   const state=states.get(host);if(!state||!validRect(rect))return null;

@@ -21,7 +21,8 @@ let target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1))
 
 const clock=()=>Date.now()/1000;
 
-const time=t=>{if(!Number.isFinite(t)||t<=0)return '时间未知';const parts=d=>Object.fromEntries(new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t*1000),now=parts(Date.now());return (d.year===now.year&&d.month===now.month&&d.day===now.day?'今天':(d.year===now.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;};
+const timeFormatter=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+const time=t=>{if(!Number.isFinite(t)||t<=0)return '时间未知';const parts=d=>Object.fromEntries(timeFormatter.formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t*1000),now=parts(Date.now());return (d.year===now.year&&d.month===now.month&&d.day===now.day?'今天':(d.year===now.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;};
 
 const known=v=>v===null||v===undefined?'读不到':String(v);
 
@@ -505,16 +506,21 @@ function mount(){
 
 function render(){
 
- if(typeof globalToast!=='undefined'){globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
+ if(typeof globalToast!=='undefined'&&globalToast._rendered!==JSON.stringify([toast,toastState])){globalToast._rendered=JSON.stringify([toast,toastState]);globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
+ const widths=new Map([...document.querySelectorAll('[data-b2-slot]')].map(el=>el.closest('.typeset-part')||el.closest('.screen')).filter(Boolean).map(section=>[section,section.clientWidth]));
 
  for(const el of document.querySelectorAll('[data-b2-slot]')){
 
-  const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';
+  const slot=el.dataset.b2Slot,valueRow=value(slot);
   const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),displayRow=grouped?grafanaGroupValue(el.dataset.livePart):valueRow;
+  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,widths.get(section)/layout.size[0]*30));
+  const signature=JSON.stringify([displayRow,slotTime(slot),font,target?.id,online(),phase,lastContact()]);
+  if(el.tagName!=='INPUT'&&el._rendered===signature)continue;
+  el._rendered=signature;
   el.dataset.state=displayRow.state||'unknown';
   if(grouped){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
 
-  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
+  el.style.fontSize=font+'px';
   el.hidden=displayRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
   if(el.hidden){el.replaceChildren();window.TypesetLiveFlow?.request(section);continue;}
 
@@ -568,9 +574,9 @@ function render(){
  const hardwareSummary=document.querySelector('[data-b2-hardware-summary]');if(hardwareSummary&&window.LiveHardwareUI){const old=value('cockpit-pc'),displayed=old.hardwareCached?{...status,hardware:old.hardwareDisplay?.hardware,hardware_observed_at_unix:old.hardwareDisplay?.hardware_observed_at_unix}:online()?status:old.hardwareDisplay;syncChildren(hardwareSummary,[window.LiveHardwareUI.render(document,displayed,{mode:'compact',cached:!online(),hardwareCached:old.hardwareCached===true,at:old.cachedAt?old.cachedAt/1000:slotTime('cockpit-pc')})]);}
  let connectionNotice=document.querySelector('[data-b2-connection-notice]');if(!online()){
   if(!connectionNotice){connectionNotice=document.createElement('aside');connectionNotice.dataset.b2ConnectionNotice='true';connectionNotice.className='b2-connection-notice';connectionNotice.setAttribute('role','status');document.querySelector('main')?.prepend(connectionNotice);}
-  connectionNotice.textContent=offline(lastContact());const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);connectionNotice.hidden=false;
- }else if(connectionNotice)connectionNotice.hidden=true;
- document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
+  const text=offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
+ }else if(connectionNotice&&!connectionNotice.hidden)connectionNotice.hidden=true;
+ if(document.body.dataset.b2StatusPhase!==phase)document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
 
 }
 

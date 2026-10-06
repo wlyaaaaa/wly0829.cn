@@ -4,8 +4,9 @@ Call prepare_toc(site_root) after the other release overlays and before hashing
 release-manifest.json. It changes no source screen, top navigation or live card.
 """
 from __future__ import annotations
-import argparse,hashlib,html,json,re
+import argparse,hashlib,html,io,json,math,re
 from pathlib import Path
+from PIL import Image
 HERE=Path(__file__).resolve().parent
 MARKER='data-toc-consistency="uniform-v1"'
 def prepare_toc(site_root, label_map=None, pages=None):
@@ -20,15 +21,32 @@ def prepare_toc(site_root, label_map=None, pages=None):
   if page_scope is not None and path.relative_to(root).as_posix()not in page_scope:continue
   before=path.read_bytes();text=before.decode('utf8');nav=re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>',text,re.S)
   if not nav:continue
-  if MARKER in nav[0]:continue
   model_match=re.search(r'<script[^>]*id="page-data"[^>]*>(.*?)</script>',text,re.S)
   model=json.loads(model_match[1]) if model_match else {}
-  labels_map={**model.get('shared',{}).get('nav_labels',{}),**(label_map or {})}
+  previous=re.search(r'<script[^>]*id="toc-label-data"[^>]*>(.*?)</script>',text,re.S)
+  labels_map={**model.get('shared',{}).get('nav_labels',{}),**(json.loads(previous[1]) if previous else {}),**(label_map or {})}
   names=[html.unescape(x)for x in re.findall(r'data-label-[hv]="([^"]+)"',nav[0])]
   absent=sorted(set(names)-set(labels_map))
   originally_mixed=any(name not in model.get('shared',{}).get('nav_labels',{})for name in names)
-  if not originally_mixed:continue
+  if not originally_mixed and not any('sprite' in labels_map.get(name,{}).get('src','') for name in names):continue
   if absent:missing.append({'page':str(path.relative_to(root)).replace('\\','/'),'labels':absent});continue
+  for src in {labels_map[name]['src'] for name in names if 'sprite' in labels_map[name]['src']}:
+   source=root/src.lstrip('/') if src.startswith('/') else path.parent/src
+   selected=[name for name in set(names) if labels_map[name]['src']==src];out=io.BytesIO()
+   with Image.open(source) as image:
+    atlas=Image.new('RGBA',image.size);w,h=image.size
+    for name in selected:
+     item=labels_map[name];left=max(0,math.floor(item['ink_left']*w)-8);top=max(0,math.floor(item['ink_top']*h)-8)
+     right=min(w,math.ceil(item['ink_right']*w)+8);bottom=min(h,math.ceil(item['ink_bottom']*h)+8)
+     atlas.paste(image.crop((left,top,right,bottom)),(left,top))
+    atlas.save(out,'WEBP',lossless=True,exact=True,icc_profile=image.info.get('icc_profile',b''))
+   payload=out.getvalue();rel='_shared/nav-page/'+hashlib.sha256(payload).hexdigest()[:20]+'.webp'
+   target=root/rel;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(payload)
+   for name in selected:labels_map[name]={**labels_map[name],'src':'/'+rel}
+  if model_match:
+   model.setdefault('shared',{}).setdefault('nav_labels',{}).update({name:labels_map[name] for name in names if 'sprite' in model.get('shared',{}).get('nav_labels',{}).get(name,{}).get('src','')})
+   text=text[:model_match.start(1)]+json.dumps(model,ensure_ascii=False).replace('<','\\u003c')+text[model_match.end(1):]
+   nav=re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>',text,re.S)
   ids=set(re.findall(r'\bid="([^"]+)"',text));labels=[]
   def anchor(m):
    tag,body=m[1],m[2];section=re.search(r'\bdata-section="([^"]+)"',tag);label=re.search(r'\bdata-label-h="([^"]+)"',tag)
@@ -42,7 +60,10 @@ def prepare_toc(site_root, label_map=None, pages=None):
    return '<a'+tag+'><span class="nav-label" data-indicator="image-label" data-label-text="'+html.escape(name,quote=True)+'" style="'+style+'"><picture class="asset-picture"><img class="image-label" src="'+html.escape(item['src'],quote=True)+'" alt="'+html.escape(name,quote=True)+'"></picture></span></a>'
   updated=re.sub(r'<a([^>]*)>(.*?)</a>',anchor,nav[0],flags=re.S)
   if not labels:continue
-  updated=updated.replace('<nav ','<nav '+MARKER+' ',1);text=text[:nav.start()]+updated+text[nav.end():]
+  if MARKER not in updated:updated=updated.replace('<nav ','<nav '+MARKER+' ',1)
+  text=text[:nav.start()]+updated+text[nav.end():]
+  text=re.sub(r'<script[^>]*id="toc-label-data"[^>]*>.*?</script>','',text,flags=re.S)
+  text=re.sub(r'<(?:link|script)\b[^>]*(?:href|src)="[^"]*toc-consistency-[^"]+"[^>]*>(?:</script>)?','',text)
   links='<script type="application/json" id="toc-label-data">'+json.dumps({name:labels_map[name]for name in names},ensure_ascii=False).replace('<','\\u003c')+'</script><link rel="stylesheet" href="'+assets['.css']+'"><script defer src="'+assets['.js']+'"></script>'
   text=text.replace('</head>',links+'</head>',1);path.write_bytes(text.encode('utf8'))
   changes.append({'page':str(path.relative_to(root)).replace('\\','/'),'labels':labels,'before_sha256':hashlib.sha256(before).hexdigest(),'after_sha256':hashlib.sha256(text.encode()).hexdigest()})

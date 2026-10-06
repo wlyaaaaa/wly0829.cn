@@ -82,8 +82,8 @@ def patch_cockpit_cache(text: str) -> str:
     if MARKER in text:
         return text
     text = replace_once(text, 'function value(slot){', CACHE_RUNTIME + '\nfunction currentValue(slot){')
-    text = replace_once(text, "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';",
-        "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';el.dataset.cached=String(valueRow.cached===true);if(valueRow.cachedAt)el.dataset.lastReadAt=String(valueRow.cachedAt);else delete el.dataset.lastReadAt;")
+    anchor = 'el._rendered=signature;' if 'el._rendered=signature;' in text else "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';"
+    text = replace_once(text, anchor, anchor + "el.dataset.cached=String(valueRow.cached===true);if(valueRow.cachedAt)el.dataset.lastReadAt=String(valueRow.cachedAt);else delete el.dataset.lastReadAt;")
     text = replace_once(text, "if(target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project)",
         "if(!valueRow.cached&&target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project)")
     text = replace_once(text, "phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';",
