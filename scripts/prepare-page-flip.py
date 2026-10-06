@@ -461,7 +461,7 @@ def main():
     ap.add_argument('--geometry', type=Path, action='append', default=[])
     ap.add_argument('--build-report', type=Path, action='append', default=[], help='Read hash-bound geometry from actual page inputs, including named baseline build reports')
     ap.add_argument('--asset-baseurl', default='', help='Configured new asset base; omitted for the later OSS mapping stage')
-    ap.add_argument('--chrome', type=Path, default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
+    ap.add_argument('--chrome', type=Path, default=Path(__import__('os').environ.get('WLY_RENDER_CHROME', 'C:/Program Files/Google/Chrome/Application/chrome.exe')))
     ap.add_argument('--profile', type=Path, required=True)
     ap.add_argument('--evidence', type=Path, required=True)
     ap.add_argument('--title-cache', type=Path, help='Reuse same-generation, hash-bound producer DOM observations')

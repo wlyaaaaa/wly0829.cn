@@ -656,7 +656,7 @@ def build_page(name, records, args, candidate):
                     inputs[str(projection_path)]=args.rule_projection_proof
                     inputs.update(args.rule_projection_inputs)
                     meta['raw_rendered_input_sha256']=projection['raw_html_sha256']
-                    meta['public_projection_sha256']=args.rule_projection_proof['sha256']
+                    meta['public_projection_sha256']=args.rule_projection_id
                     identity=src.get('source_excerpt_id');excerpt=rule_contract.excerpt_entry(pin,identity)
                     expected_source=pin['documents'].get(meta['relative_file'])
                     meta.update(excerpt_contract=based_on.get('excerpt_contract'),excerpt_id=identity)
@@ -972,6 +972,7 @@ def main():
         projection_module=importlib.util.module_from_spec(projection_spec);projection_spec.loader.exec_module(projection_module)
         projection=projection_module.verify_projection(args.rule_projection_path.parent)
         args.rule_projection_proof=stamp(args.rule_projection_path)
+        args.rule_projection_id=projection_module.projection_digest(projection)
         args.rule_projection_records={(row['page'],row['screen'],row['orientation']):row for row in projection['records']}
         for entry in projection['projected_pages']:
             for path_key,sha_key in [('source_file','source_sha256'),('raw_source_file','raw_source_sha256'),('spec_file','spec_sha256'),('raw_spec_file','raw_spec_sha256')]:
@@ -1060,6 +1061,8 @@ def main():
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
+    if manifest['files'].get('index.html')==baseline_manifest['files'].get('index.html'):
+        manifest.update({key:baseline_manifest[key] for key in ('home_static_preparation','home_comic_preparation') if key in baseline_manifest});hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     creative=None;creative_inputs={}
     if args.creative_preparation:
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
@@ -1069,6 +1072,8 @@ def main():
             staged_report=args.output.parent/(args.output.name+'-staged-build-report.json')
             for state in states.values():
                 if state.get('url'):state['html_sha256']=hybrid.digest(raw_output/hybrid.route_file(state['url']))
+            how_source=next((Path(row['source_path']) for row in rows if row['page']=='how'),None)
+            if how_source: args.external_inputs[str(how_source)]=stamp(how_source)
             write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
                 'pages':states,'files':manifest['files'],'baseline_root':str(args.baseline),
                 'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},
