@@ -680,7 +680,9 @@ function schedule(){clearTimeout(pollTimer);if(formal&&!document.hidden)pollTime
 
 document.addEventListener('visibilitychange',()=>{clearTimeout(pollTimer);if(document.hidden)reader.invalidate();else{if(!busy)readStatus({replace:true});schedule();}});
 
-document.addEventListener('site-layout',mount);mount();if(!document.hidden)readStatus();if(formal&&validRequest(linkedRequest))query();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
+addEventListener('site-live-ready',()=>{if(!document.hidden&&phase!=='ready')readStatus({replace:true});},{once:true});
+setTimeout(()=>{if(!document.hidden&&phase==='loading')readStatus();},8000);
+document.addEventListener('site-layout',mount);mount();if(!document.hidden&&window.SiteLiveRuntime)readStatus();if(formal&&validRequest(linkedRequest))query();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
 
 addEventListener('hashchange',()=>{target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1)))||null;render();});
 

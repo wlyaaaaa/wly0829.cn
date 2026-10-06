@@ -93,6 +93,7 @@ function offlineResult(c,now=Date.now()){return c?{text:'读不到电脑 · 当�
 const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs,retryStatus,readStatus};
 if(typeof module!=='undefined'&&module.exports){module.exports=helpers;return;}
 window.SiteLiveRuntime=helpers;
+window.dispatchEvent?.(new Event('site-live-ready'));
 const page=JSON.parse(document.querySelector('#page-data').textContent),loading={text:'读取中',state:'loading'};
 let last=null,busy=false,controller=null,phase='loading',offline=false,cancelledForVisibility=false;const history=[];let started=0;
 const lastValues=new Map();
