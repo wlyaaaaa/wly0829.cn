@@ -1,6 +1,12 @@
 (function(){'use strict';
 const unknown={text:'暂时读不到',state:'unknown'};
 const readTimeoutMs=8000;
+async function retryStatus(read,signal){
+ for(let attempt=0;;attempt++)try{return await read();}catch(error){
+  if(attempt===2||signal?.aborted||error.httpStatus>=400&&error.httpStatus<500||/^HTTP_4/.test(error.message||''))throw error;
+  await new Promise((resolve,reject)=>{const abort=()=>{clearTimeout(timer);reject(error);};const timer=setTimeout(()=>{signal?.removeEventListener('abort',abort);resolve();},500*(attempt+1));signal?.addEventListener('abort',abort,{once:true});});
+ }
+}
 function freshStatus(data,now=Date.now()){
  const maxAge=(Number(data?.max_age_seconds)||120)*1000,fresh=t=>Number.isFinite(t)&&t>0&&t*1000<=now+60000&&now-t*1000<=maxAge;
  if(!fresh(data?.served_at_unix??data?.observed_at_unix))return false;
@@ -67,11 +73,12 @@ function cacheKey(page,slot){return `site-live:v1:${page}:${slot}`;}
 function readLast(storage,page,slot,project,now=Date.now()){try{const c=JSON.parse(storage.getItem(cacheKey(page,slot)));return c&&c.project===project&&typeof c.result?.text==='string'&&c.result.state!=='unknown'&&Number.isFinite(c.at)&&c.at<=now+60000?c:null;}catch{return null;}}
 function readCache(storage,page,slot,project,now=Date.now()){const c=readLast(storage,page,slot,project,now);return c&&now-c.at<86400000?c:null;}
 function offlineResult(c,now=Date.now()){return c?{text:'读不到电脑 · 当时：'+c.result.text+' · 上次读到 '+formatTime(new Date(c.at).toISOString(),now)+(now-c.at>=86400000?'（已超过24小时）':'')+' · 当前状态未知',state:'offline',cached:true,readAt:c.at/1000}: {text:'读不到电脑 · 还没读到过',state:'offline',cached:false};}
-const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs};
+const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs,retryStatus};
 if(typeof module!=='undefined'&&module.exports){module.exports=helpers;return;}
 window.SiteLiveRuntime=helpers;
 const page=JSON.parse(document.querySelector('#page-data').textContent),loading={text:'读取中',state:'loading'};
 let last=null,busy=false,controller=null,phase='loading',offline=false,cancelledForVisibility=false;const history=[];let started=0;
+const lastValues=new Map();
 function resetOfflineLayout(){
  for(const section of document.querySelectorAll('.offline-expanded')){section.classList.remove('offline-expanded');section.style.height='';section.style.aspectRatio=section._layout.size.join('/');section.querySelector('picture').style.clipPath='';for(const [el,style]of section._offlineStyles||[])if(el.isConnected)el.style.cssText=style;section._offlineStyles=null;section.querySelectorAll('.offline-tail,.offline-notice').forEach(e=>e.remove());}
 }
@@ -87,7 +94,8 @@ function currentResult(slot){
  const block=slot==='grafana'?'grafana':['config','wechat','backup'].includes(slot)?'backups':['image'].includes(slot)?'today':['watch','cloud','health','capture'].includes(slot)?'automation':'projects';
  const source=last?.[block],readAt=Number(source?.observed_at_unix)||Date.parse(source?.observed_at||source?.checked_at)/1000;
  if(result.state!=='unknown')return {...result,readAt:Number.isFinite(readAt)?readAt:undefined};
- let cached;try{cached=readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project);}catch{}
+ let cached=lastValues.get(slot);try{cached ||= readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project);}catch{}
+ if(last&&phase!=='ready'&&cached)return {...cached.result,text:cached.result.text+' · '+Math.max(0,Math.floor((Date.now()-cached.at)/60000))+' 分钟前读到',state:'unknown',cached:true,retained:true,readAt:cached.at/1000};
  if(connected&&source?.collection_state==='reading')return cached?{...offlineResult(cached),text:'此项正在读取 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:{text:'正在读取这一项 · 还没读到过',state:'loading',readAt:undefined};
  if(connected)return cached?{...offlineResult(cached),text:'此项当前读不到 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:unknown;
  return offlineResult(cached);
@@ -96,7 +104,7 @@ function display(){
  resetOfflineLayout();
  for(const strip of document.querySelectorAll('.live-strip')){
   const cells=[...strip.querySelectorAll('[data-slot]')],results=cells.map(cell=>currentResult(cell.dataset.slot));
-  const readable=results.length>0&&results.every(result=>result.state!=='unknown');strip.hidden=!readable;
+  const readable=results.length>0&&results.every(result=>result.state!=='unknown'||result.retained);strip.hidden=!readable;
   cells.forEach((cell,i)=>{const result=results[i],prefix=page.status_binding?.prefixes?.[cell.dataset.slot],text=readable?(prefix?prefix+'：':'')+result.text:'';cell.querySelector('span').textContent=text;cell.title=text;cell.dataset.state=readable?result.state:'unknown';cell.dataset.cached=String(!!result.cached);
    if(readable&&result.href){cell.href=result.href;cell.setAttribute('role','link');cell.target='_blank';cell.rel='noopener';}else{cell.removeAttribute('href');cell.setAttribute('role','status');}
   });
@@ -108,7 +116,7 @@ function display(){
   if(!notice){notice=document.createElement('aside');notice.dataset.computerReadNotice='true';notice.setAttribute('role','status');notice.style.cssText='margin:12px 24px;padding:12px 16px;border:1px solid #d4ddd7;border-radius:8px;background:white;color:#68766f;line-height:1.5';document.querySelector('main')?.prepend(notice);}
   const times=[...document.querySelectorAll('[data-slot]')].map(cell=>currentResult(cell.dataset.slot).readAt).filter(Number.isFinite);let saved=0;try{saved=Number(localStorage.getItem('computer-last-read-v1'))||0;}catch{}
   const at=Number(last?.observed_at_unix)|| (times.length?Math.max(...times):saved);
-  notice.textContent=connectionText(at,waiting)+'旧数只表示当时的状态。';
+  notice.textContent=(last&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((Date.now()/1000-at)/60))+' 分钟前读到的数据。':connectionText(at,waiting))+'旧数只表示当时的状态。';
   const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口';notice.append(' ',link);notice.hidden=false;
  }else if(notice)notice.hidden=true;
  document.body.dataset.statusPhase=phase;
@@ -116,15 +124,14 @@ function display(){
 }
 async function refresh(){
  if(busy||document.hidden||!document.querySelector('[data-slot]'))return;
- busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();const timer=setTimeout(()=>controller.abort(),readTimeoutMs);
+ busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();
  try{
   const local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname);
-  const response=await fetch(local?'/__status':'https://mcp.wly0829.cn/computer-access/api/status',{credentials:'include',cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP_'+response.status);
-  last=await response.json();phase=freshStatus(last)?'ready':'error';document.body.dataset.statusError=phase==='ready'?'':'expired_snapshot';
+  last=await retryStatus(async()=>{const signal=typeof AbortSignal==='function'&&AbortSignal.any?AbortSignal.any([controller.signal,AbortSignal.timeout(readTimeoutMs)]):controller.signal;const response=await fetch(local?'/__status':'https://mcp.wly0829.cn/computer-access/api/status',{credentials:'include',cache:'no-store',signal});if(!response.ok)throw Error('HTTP_'+response.status);const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');return next;},controller.signal);phase='ready';document.body.dataset.statusError='';
   if(phase==='ready')try{localStorage.setItem('computer-last-read-v1',String(Date.now()/1000));}catch{}
-  if(phase==='ready')for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=currentResult(slot);if(!['unknown','loading'].includes(result.state))try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify({project:page.project,result,at:Number.isFinite(result.readAt)?result.readAt*1000:Date.now()}));}catch{}}
- }catch(e){last=null;phase=cancelledForVisibility?'loading':'error';offline=!cancelledForVisibility&&(e.name==='AbortError'||e.name==='TypeError'||/^HTTP_5/.test(e.message||''));document.body.dataset.statusError=e.name==='AbortError'?'timeout':e.message;}
- finally{clearTimeout(timer);busy=false;display();}
+  if(phase==='ready')for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=currentResult(slot);if(!['unknown','loading'].includes(result.state)){const saved={project:page.project,result,at:Number.isFinite(result.readAt)?result.readAt*1000:Date.now()};lastValues.set(slot,saved);try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify(saved));}catch{}}}
+ }catch(e){phase=cancelledForVisibility?'loading':'error';offline=!cancelledForVisibility&&(e.name==='AbortError'||e.name==='TypeError'||/^HTTP_5/.test(e.message||''));document.body.dataset.statusError=e.name==='AbortError'?'timeout':e.message;}
+ finally{busy=false;display();}
 }
 document.addEventListener('site-layout',()=>{display();if(phase==='loading'&&!started&&!last&&!busy)refresh();});addEventListener('resize',display);
 document.fonts?.ready.then(display);
