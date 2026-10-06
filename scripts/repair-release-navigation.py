@@ -254,11 +254,12 @@ def repair_owned_navigation(text, pages, owner_route=None):
     if match:
         data = json.loads(match[2]); route = owner_route or data.get('url')
         if data.get('page') == 'home':
-            if data['screens'][1]['id'] != 'home-04': changes.append({'role':'home-reading-order'})
-            data['screens'].sort(key=lambda s: ['home-01', 'home-04', 'home-02', 'home-03', 'home-05'].index(s['id']))
-            outcomes = re.search(r'<section\b[^>]*id="home-04"[^>]*>[\s\S]*?</section>', text)[0]
-            text = text.replace(outcomes, '', 1)
-            text = re.sub(r'(<section\b[^>]*id="home-01"[^>]*>[\s\S]*?</section>)', lambda m: m[0] + outcomes, text, count=1)
+            if len(data.get('screens',[]))>1 and re.search(r'<section\b[^>]*id="home-04"',text):
+                if data['screens'][1]['id'] != 'home-04': changes.append({'role':'home-reading-order'})
+                data['screens'].sort(key=lambda s: ['home-01', 'home-04', 'home-02', 'home-03', 'home-05'].index(s['id']))
+                outcomes = re.search(r'<section\b[^>]*id="home-04"[^>]*>[\s\S]*?</section>', text)[0]
+                text = text.replace(outcomes, '', 1)
+                text = re.sub(r'(<section\b[^>]*id="home-01"[^>]*>[\s\S]*?</section>)', lambda m: m[0] + outcomes, text, count=1)
             targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/', 'home-03-link-5-0':'/how/', 'home-05-link-3-0':'/how/', 'home-02-link-0-0':'/projects/remote-control/'}
             targets.update({'home-05-link-4-0':'/cockpit/', 'home-05-link-5-0':'/how-this-site/', 'home-05-link-6-0':'/rescue/'})
             for node in visit(data):

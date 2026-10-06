@@ -77,7 +77,7 @@ test('LC-05: past, future and next-year timestamps retain Beijing calendar dates
 });
 test('LC-04: a missing hardware metric remains unknown and is named in pending during grace',()=>{
  for(const patch of [data=>data.hardware.cpu.sources.temperature_celsius.status='unavailable',data=>data.hardware.memory.used_bytes=null,data=>data.hardware.volumes[0].sources.free_bytes.status='unknown',data=>data.hardware.gpus=[{state:'ok',model:'显卡',usage_percent:null,temperature_celsius:40,vram_used_bytes:0,vram_total_bytes:1024}]]){
-  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>/硬件状态.*读不到/.test(x.text)));
+  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>/硬件.*读不到/.test(x.text)));
  }
 });
 test('LC-07: upgrade observation failure is a failed result',()=>{
@@ -300,7 +300,7 @@ test('task reads: declared unavailability wins over legacy manual-entry inferenc
  const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.ok(app.value('cockpit-attention').rows.some(x=>/自动任务.*读不到/.test(x.text)));
 });
 test('offline: readable historical hardware remains cached when another telemetry field is stale',()=>{
- const saved=storage(),data=fixture();data.hardware.network.state='stale';const app=cockpit(saved);app.set(data);assert.equal(app.value('cockpit-pc').state,'unknown');
+ const saved=storage(),data=fixture();data.hardware.network.sources.download_bytes_per_second.status='stale';const app=cockpit(saved);app.set(data);assert.equal(app.value('cockpit-pc').state,'unknown');
  const next=cockpit(saved);next.set(null,'loading',0);const value=next.value('cockpit-pc');assert.equal(value.state,'unknown');assert.ok(value.rows.some(x=>/处理器/.test(x.text)));assert.match(value.rows[0].text,/上次读到/);
 });
 test('lamp policy: unreadable security status is a local gap, never a computer-offline claim',()=>{

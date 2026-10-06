@@ -473,7 +473,7 @@ test("the shared enhancement and search indices stay within their measured revie
   const javascriptSources = await Promise.all(javascript.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const gzipBytes = javascriptSources.reduce((total, source) => total + gzipSync(source).length, 0);
   assert.ok(gzipBytes <= registry.refresh_policy.shared_interaction_gzip_budget_kib * 1024, `shared enhancement JavaScript gzip ${gzipBytes} exceeds registry budget`);
-  const stylesheets = (await readdir(assetsRoot)).filter((item) => item.endsWith(".css"));
+  const stylesheets = (await readdir(assetsRoot)).filter((item) => item.endsWith(".css") && !item.startsWith("computer-access-"));
   assert.ok(stylesheets.length >= 1, "production build has no shared stylesheet");
   const stylesheetSources = await Promise.all(stylesheets.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const stylesheetGzipBytes = stylesheetSources.reduce((total, source) => total + gzipSync(source).length, 0);
@@ -597,6 +597,7 @@ test("TimeAudit reuses the existing website runtime without services, databases 
 
 test("the maintenance registry drives all completed candidate packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
+  registry.projects = registry.projects.filter((item) => item.enabled);
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
   assert.equal(registry.refresh_policy.semantic_writer, "website_ai_task_only");

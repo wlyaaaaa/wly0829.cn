@@ -1067,6 +1067,11 @@ def main():
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
     if manifest['files'].get('index.html')==baseline_manifest['files'].get('index.html'):
         manifest.update({key:baseline_manifest[key] for key in ('home_static_preparation','home_comic_preparation') if key in baseline_manifest});hybrid.write(raw_output/hybrid.MANIFEST,manifest)
+    static_home=baseline_manifest.get('home_static_preparation',{})
+    original_app=static_home.get('home_bundle',{})
+    if original_app and manifest['files'].get(original_app['path'])=={key:original_app[key] for key in ('sha256','bytes')}:
+        manifest['home_static_preparation']=static_home
+        hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     creative=None;creative_inputs={}
     if args.creative_preparation:
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
