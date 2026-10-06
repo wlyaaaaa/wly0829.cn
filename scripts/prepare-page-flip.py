@@ -225,6 +225,13 @@ async def titles(records, chrome, profiles, evidence, ownership):
                 await page.evaluate('document.fonts.ready')
                 await page.evaluate('Promise.all([...document.images].map(i=>i.decode().catch(()=>{})))')
                 await page.evaluate('(' + record['_fit'] + ')()')
+                await page.evaluate("""async()=>{
+                    await window.__typesetReady;
+                    const size=()=>JSON.stringify([document.documentElement.scrollHeight,...[...document.querySelectorAll('[data-comp=chapter_title] img,.title-wrap.title-img img')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height];})]);
+                    let previous=size(),stable=0;
+                    for(let n=0;n<120&&stable<2;n++){await new Promise(requestAnimationFrame);const current=size();stable=current===previous?stable+1:0;previous=current;}
+                    if(stable<2)throw Error('Album title layout did not settle');
+                }""")
                 measured = await page.evaluate("""()=>({width:document.documentElement.clientWidth,height:document.documentElement.scrollHeight,
                     titles:[...document.querySelectorAll('[data-comp=chapter_title] img,.title-wrap.title-img img')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return {rect:[r.x,r.y+scrollY,r.width,r.height],src:e.getAttribute('src')};}),
                     illustrations:[...document.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art,svg.illustration-panel')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y+scrollY,r.width,r.height];}),

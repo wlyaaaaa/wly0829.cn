@@ -27,7 +27,7 @@ def load_state(path): return json.loads(path.read_text('utf8')) if path.is_file(
 def fingerprints(lock):
     shared = [p for folder in ('src', 'scripts', 'config', 'sources/creative', 'sources/bird',
               'sources/living', 'sources/navigation', 'sources/rules', 'sources/signature', 'sources/assets/_library/icons')
-              for p in (ROOT / folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts]
+              for p in (ROOT / folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.name != 'quality-baseline.json']
     shared += list((ROOT/'sources/assets').glob('*.json'))
     assets._manifest = None
     for row in [lock['chrome'], *lock['fonts']]:
@@ -242,7 +242,8 @@ def main():
                         '--timeout', '1800', '--jobs', str(args.jobs), *selection])
                 proof = json.loads(verification.read_text('utf8'))
                 if proof['summary']['failed'] or proof['summary']['unverified']: raise ValueError('Browser verification failed')
-                execute('hybrid-release.py', ['verify', '--output', work/'dist', '--content-report', run/'content-report.json'])
+                budget=work/'oss-budget';execute('prepare-oss-release.py', ['prepare', '--source', work/'dist', '--asset-base-url', json.loads((ROOT/'config/build.json').read_text('utf8'))['asset_base_url'], '--prefix', 'releases/'+proof['release_id'], '--output', budget])
+                execute('hybrid-release.py', ['verify', '--output', work/'dist', '--content-report', run/'content-report.json', '--oss-preparation', budget])
         with phase('publication', [run/'publisher/publication-state.json'] if args.publish else []) as active:
             if active and args.publish:
                 options = json.loads((ROOT/'.publish/publication-options.json').read_text('utf8'))

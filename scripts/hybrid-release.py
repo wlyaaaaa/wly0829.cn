@@ -528,7 +528,7 @@ def validate_content(output, report, oss_preparation=None):
     if oss_preparation is not None:
         preparation = Path(oss_preparation).resolve()
         plan = oss_module().verify_local(preparation)
-        split = verify_release(preparation/'github')
+        split = read(preparation/'github'/MANIFEST);oss_module().verify_manifest(split,require_remote=False)
         if plan['release_id'] != split['release_id']:
             raise ValueError('OSS budget preparation and sealed split identities differ')
         if manifest.get('oss'):

@@ -173,7 +173,11 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
-        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
+        if name=='river' and 'data-today-river' in (current/'cockpit/index.html').read_text('utf8'):
+            import shutil
+            shutil.copytree(current,dest/'site')
+        else:
+            subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'bird-first':
             engine=(dest/refs['engine_url'].lstrip('/')).read_text('utf8'); needle='M=A.getBoundingClientRect(),k=Math.round(M.width)'
             assert engine.count(needle)==1

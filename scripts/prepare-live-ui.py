@@ -171,7 +171,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         if not data_match: continue
         data = json.loads(data_match[1]); has_live = any(part.get('native_live') or part.get('live') for s in data.get('screens',[]) for part in [*s.get('parts',[]), *s.get('layouts',{}).values()])
         if not has_live: continue
-        for old in set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text)):
+        for old in sorted(set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text))):
             path = resolve(page, old)
             if not path or not re.fullmatch(r'(?:app-[0-9a-f]+|b2-(?:live|typeset)-[0-9a-f]+)\.js',path.name): continue
             if path not in changed_refs:

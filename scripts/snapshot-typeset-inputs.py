@@ -241,6 +241,8 @@ class Snapshot:
             return Path('typeset-proto') / source.relative_to(self.producer_root)
         try:
             relative = source.relative_to(self.pipeline)
+            if source.is_relative_to(self.typeset_root):
+                relative = Path('typeset-out') / source.relative_to(self.typeset_root)
             if self.dependency_namespace and not (len(relative.parts)>1 and relative.parts[0] in {'typeset-out','typeset-assets'} and relative.parts[1]==self.current_page):
                 return Path('resources/frozen-input')/self.dependency_namespace/relative
             return relative
