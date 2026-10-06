@@ -135,9 +135,7 @@
           "right"
         ],
         "tail": true,
-        "illustration": "none",
-        "row": "example",
-        "width": "65%"
+        "illustration": "none"
       },
       {
         "type": "timeline",
@@ -146,16 +144,14 @@
         "columns": 1,
         "connector": "line",
         "illustration": "left_inside",
-        "icons": "auto",
-        "row": "example"
+        "icons": "auto"
       },
       {
         "type": "dialogue",
         "text_ref": "AI 交回",
         "split_paras": true,
         "tail": true,
-        "illustration": "none",
-        "row": "example"
+        "illustration": "none"
       },
       {
         "type": "dialogue",
@@ -163,9 +159,7 @@
         "columns": 1,
         "split_paras": true,
         "tail": true,
-        "illustration": "none",
-        "row": "example",
-        "width": "33%"
+        "illustration": "none"
       }
     ],
     "notes": "构图依据typeset-inventory/screens.jsonl的source_layout及本屏定稿scene/portrait；不读取图。整宽章节标题居中，首屏左栏标题依原构图左对齐。所有可读字取定稿，示意图只可抽象笔迹，不新增怪字。"
@@ -377,7 +371,7 @@
         "text_ref": "没用过："
       }
     ],
-    "notes": "构图依据typeset-inventory/screens.jsonl的source_layout及本屏定稿scene/portrait；不读取图。整宽章节标题居中，首屏左栏标题依原构图左对齐。所有可读字取定稿，示意图只可抽象笔迹，不新增怪字。 查/修/守三外卡及状态点按scene；inventory只估1图标而scene指定3个，按3个素材位记录缺口。状态词前灰/浅灰圆点尚需组件，不修改定稿词。 三外卡只在组头各一图，不给11条另造图标；状态点需按原词组接口，仍列未完成。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。"
+    "notes": "构图依据typeset-inventory/screens.jsonl的source_layout及本屏定稿scene/portrait；不读取图。整宽章节标题居中，首屏左栏标题依原构图左对齐。所有可读字取定稿，示意图只可抽象笔迹，不新增怪字。 查/修/守三外卡及状态点按scene；inventory只估1图标而scene指定3个，按3个素材位记录缺口。状态词前灰/浅灰圆点尚需组件，不修改定稿词。 三外卡只在组头各一图，不给11条另造图标；状态点需按原词组接口，仍列未完成。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。"
   },
   {
     "screen": "skill-mojibake-doctor-04",

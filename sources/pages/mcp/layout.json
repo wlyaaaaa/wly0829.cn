@@ -394,8 +394,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "entries",
-        "width": "33.33%",
         "icons": "none",
         "address_style": "monospace",
         "button_columns": 2,
@@ -409,8 +407,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "entries",
-        "width": "33.33%",
         "icons": "none",
         "address_style": "monospace",
         "button_columns": 2,
@@ -424,8 +420,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "entries",
-        "width": "33.34%",
         "icons": "none",
         "address_style": "monospace",
         "button_columns": 2,
@@ -543,8 +537,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "body",
-        "width": "62%",
         "text_ref": "ChatGPT 怎么接"
       },
       {
@@ -554,7 +546,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "body",
         "text_ref": "账号要能用"
       },
       {
@@ -564,7 +555,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "line",
-        "row": "body",
         "icons": "none",
         "container": "steps_card",
         "text_ref": "在电脑上打开",
@@ -577,7 +567,6 @@
         "columns": 2,
         "illustration": "none",
         "connector": "none",
-        "row": "body",
         "container": "steps_card",
         "nested_under_step": 3,
         "text_ref": "项目"
@@ -589,7 +578,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "line",
-        "row": "body",
         "icons": "none",
         "container": "steps_card",
         "text_ref": "点连接",
@@ -602,8 +590,6 @@
         "columns": 1,
         "illustration": "bottom_inside",
         "connector": "none",
-        "row": "body",
-        "width": "38%",
         "icons": "auto",
         "text_ref": "在手机上用"
       },
@@ -614,7 +600,6 @@
         "columns": 1,
         "illustration": "none",
         "connector": "none",
-        "row": "body",
         "icons": "none",
         "text_ref": "授权弹窗一直转圈"
       }

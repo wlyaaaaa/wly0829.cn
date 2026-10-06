@@ -1226,9 +1226,22 @@
         "icons": "auto",
         "width": "100%",
         "text_layout": "inline"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "9 月 25–26 日",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          6
+        ],
+        "width": "100%",
+        "text_layout": "inline"
       }
     ],
-    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。",
     "layout_reference": {
       "inventory": "typeset-inventory/screens.jsonl",
       "screen_id": "wechatdirect-10",

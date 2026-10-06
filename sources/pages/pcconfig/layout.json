@@ -705,22 +705,16 @@
         "type": "table",
         "text_ref": "盘放什么谁往里写、什么时候怎么核对坏了怎么办C盘59",
         "variant": "disk_cards",
-        "row_icons": "auto",
-        "row": "disk",
-        "width": "100%"
+        "row_icons": "auto"
       },
       {
         "type": "chart",
         "text_ref": "G盘里都放了什么（GiB，9月28日）",
-        "chart_type": "bar",
-        "row": "usage",
-        "width": "70%"
+        "chart_type": "bar"
       },
       {
         "type": "notice",
-        "text_ref": "C、E同在一块盘上：这块盘坏了，靠G、H上的镜像和备",
-        "row": "usage",
-        "width": "30%"
+        "text_ref": "C、E同在一块盘上：这块盘坏了，靠G、H上的镜像和备"
       }
     ],
     "source_images": [
@@ -1095,7 +1089,7 @@
       {
         "type": "content_card",
         "text_ref": "没登录也能连开机停在登录界面时，ToDesk也能连上",
-        "columns": 4,
+        "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
@@ -1982,20 +1976,15 @@
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/日历时钟.png"
         ],
-        "row": "highlights",
-        "width": "56%",
         "icon_size": 160
       },
       {
         "type": "screenshot",
-        "row": "highlights",
-        "width": "44%",
         "ratio": "784:405"
       },
       {
         "type": "prose",
-        "text_ref": "密码中心里输入手机验证器6位动态码的窗口（9月24日",
-        "row": "highlights"
+        "text_ref": "密码中心里输入手机验证器6位动态码的窗口（9月24日"
       }
     ],
     "source_images": [
@@ -2122,7 +2111,9 @@
         "item_spans": {
           "11": 3,
           "16": 3,
-          "55": 3
+          "55": 3,
+          "7": 2,
+          "8": 3
         },
         "status_text": "dot_only"
       }
@@ -2239,7 +2230,11 @@
         "illustration": "left_inside",
         "icons": "auto",
         "group_heading": "brush",
-        "item_spans": {},
+        "item_spans": {
+          "12": 3,
+          "13": 3,
+          "18": 2
+        },
         "status_text": "dot_only"
       }
     ],
@@ -2349,7 +2344,9 @@
         "item_spans": {
           "11": 3,
           "16": 3,
-          "55": 3
+          "55": 3,
+          "22": 3,
+          "24": 2
         },
         "status_text": "dot_only"
       }

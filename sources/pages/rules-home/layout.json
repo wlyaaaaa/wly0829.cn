@@ -11,15 +11,21 @@
         "type": "chapter_title",
         "align": "left",
         "size": "large",
-        "row": "top",
-        "width": "52%",
-        "text_ref": "规则"
+        "text_ref": "规则",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "row": "top",
         "text_ref": "Codex、Claude"
       },
       {
@@ -29,19 +35,11 @@
         "variant": "stack",
         "connector": "arrow",
         "illustration": "none",
-        "row": "top",
         "text_ref": "约法：上层"
       },
       {
         "type": "prose",
-        "row": "top",
         "text_ref": "我当下明确说的话"
-      },
-      {
-        "type": "illustration",
-        "row": "top",
-        "illustration": "outside",
-        "index": 0
       },
       {
         "type": "comparison",
@@ -53,8 +51,6 @@
         "layout": "single_panel",
         "inner_link_columns": 2,
         "inner_link_order": "column_major",
-        "row": "top",
-        "width": "48%",
         "text_ref": "约法"
       },
       {
@@ -307,7 +303,16 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "碰到一件事"
+        "text_ref": "碰到一件事",
+        "row": "balanced-heading",
+        "width": "92%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "illustration": "outside",
+        "row": "balanced-heading",
+        "width": "8%"
       },
       {
         "type": "prose",
@@ -334,16 +339,7 @@
           58
         ],
         "illustration": "left_inside",
-        "row": "decision",
-        "width": "86%",
         "text_ref": "① 要用本人的私人资料吗"
-      },
-      {
-        "type": "illustration",
-        "index": 0,
-        "illustration": "outside",
-        "row": "decision",
-        "width": "14%"
       },
       {
         "type": "notice",

@@ -175,8 +175,6 @@
           "right"
         ],
         "columns": 1,
-        "row": "example",
-        "width": "67%",
         "text_ref": "我：“修乱码这个技能装好了吗？能用吗？”"
       },
       {
@@ -191,7 +189,6 @@
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-03.png",
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-04.png"
         ],
-        "row": "example",
         "text_ref": "AI 做了什么"
       },
       {
@@ -200,7 +197,6 @@
           "left"
         ],
         "columns": 1,
-        "row": "example",
         "text_ref": "AI 交回"
       },
       {
@@ -211,8 +207,6 @@
           "left"
         ],
         "columns": 1,
-        "row": "example",
-        "width": "33%",
         "text_ref": "另一种问法"
       }
     ],

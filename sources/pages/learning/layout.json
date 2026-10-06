@@ -147,8 +147,6 @@
         "columns": 1,
         "illustration": "left_inside",
         "connector": "line",
-        "row": "day",
-        "width": "64%",
         "text_ref": "课前",
         "illustration_inside": false,
         "open_nodes": true
@@ -157,16 +155,17 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "right_inside",
-        "row": "day",
-        "width": "34%",
-        "text_ref": "Java 每日一页"
+        "text_ref": "Java 每日一页",
+        "row": "balanced-notes",
+        "width": "50%"
       },
       {
         "type": "content_card",
         "columns": 1,
         "illustration": "right_inside",
-        "row": "day",
-        "text_ref": "每周抽问"
+        "text_ref": "每周抽问",
+        "row": "balanced-notes",
+        "width": "50%"
       },
       {
         "type": "notice",
@@ -269,16 +268,12 @@
       {
         "type": "bullet_list",
         "columns": 1,
-        "row": "learn",
-        "width": "51%",
         "text_ref": "学完要能讲清"
       },
       {
         "type": "content_card",
         "columns": 1,
         "illustration": "bottom_inside",
-        "row": "learn",
-        "width": "47%",
         "text_ref": "先从调接口"
       },
       {

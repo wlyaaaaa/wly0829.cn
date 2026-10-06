@@ -130,15 +130,12 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "row": "example",
-        "width": "53%",
         "align": "left",
         "size": "large",
         "text_ref": "一个完整的例子"
       },
       {
         "type": "dialogue",
-        "row": "example",
         "sides": [
           "right"
         ],
@@ -152,7 +149,6 @@
       },
       {
         "type": "dialogue",
-        "row": "example",
         "sides": [
           "left"
         ],
@@ -163,15 +159,12 @@
       },
       {
         "type": "section_heading",
-        "row": "example",
-        "width": "47%",
         "align": "left",
         "size": "medium",
         "text_ref": "它背后做了什么"
       },
       {
         "type": "flow",
-        "row": "example",
         "columns": 1,
         "columns_v": 1,
         "connector": "arrow",
@@ -367,7 +360,6 @@
       },
       {
         "type": "content_card",
-        "row": "limits",
         "columns": 1,
         "illustration": "none",
         "icons": "none",
@@ -377,13 +369,10 @@
           "_library/fix-round-2/icon-clean-b3ca5198804d6b7dcf9c.png"
         ],
         "item_illustration": "left_inside",
-        "text_ref": "它管的",
-        "width": "50%"
+        "text_ref": "它管的"
       },
       {
         "type": "content_card",
-        "row": "limits",
-        "width": "50%",
         "columns": 1,
         "illustration": "none",
         "icons": "none",

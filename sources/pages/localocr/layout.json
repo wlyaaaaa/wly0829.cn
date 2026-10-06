@@ -643,16 +643,18 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "跑在哪、怎么不打架"
+        "text_ref": "跑在哪、怎么不打架",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
-        "row": "runtime",
-        "width": "30%",
         "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-localocr.png",
         "target_height": 430,
         "target_width": 523,
-        "align": "center"
+        "align": "center",
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "content_card",
@@ -663,8 +665,6 @@
           "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
           "_library/icons/公文包清单.png"
         ],
-        "row": "runtime",
-        "width": "70%",
         "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
       },
       {
@@ -1143,16 +1143,27 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "演进（2026年）"
+        "text_ref": "演进（2026年）",
+        "row": "balanced-heading",
+        "width": "70%"
       },
       {
         "type": "illustration",
         "index": 0,
         "size": "small",
         "align": "left",
-        "row": "axis",
-        "width": "14%",
-        "description": "丝带起点显卡"
+        "description": "丝带起点显卡",
+        "row": "balanced-heading",
+        "width": "15%"
+      },
+      {
+        "type": "illustration",
+        "index": 1,
+        "size": "small",
+        "align": "right",
+        "description": "丝带终点验收纸",
+        "row": "balanced-heading",
+        "width": "15%"
       },
       {
         "type": "timeline",
@@ -1162,18 +1173,7 @@
         "illustration": "outside",
         "icons": "none",
         "paragraph_items": true,
-        "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（",
-        "row": "axis",
-        "width": "72%"
-      },
-      {
-        "type": "illustration",
-        "index": 1,
-        "size": "small",
-        "align": "right",
-        "row": "axis",
-        "width": "14%",
-        "description": "丝带终点验收纸"
+        "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（"
       },
       {
         "type": "prose",

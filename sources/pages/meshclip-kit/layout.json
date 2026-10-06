@@ -332,9 +332,7 @@
         "columns": 1,
         "portrait_columns": 1,
         "illustration": "left_inside",
-        "icons": "auto",
-        "row": "trouble",
-        "width": "38%"
+        "icons": "auto"
       },
       {
         "type": "feature_card",
@@ -342,20 +340,15 @@
         "columns": 1,
         "portrait_columns": 1,
         "illustration": "left_inside",
-        "icons": "auto",
-        "row": "trouble",
-        "width": "37%"
+        "icons": "auto"
       },
       {
         "type": "screenshot",
-        "row": "trouble",
-        "width": "25%",
         "ratio": "1223:964"
       },
       {
         "type": "prose",
-        "text_ref": "控制中心（9月28日21:52截图）：上面一排是暂停",
-        "row": "trouble"
+        "text_ref": "控制中心（9月28日21:52截图）：上面一排是暂停"
       },
       {
         "type": "points_card",

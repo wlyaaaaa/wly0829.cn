@@ -549,7 +549,8 @@
         "columns_v": 1,
         "icons": "auto",
         "text_ref": "这里的历史摘要：那段时间记录全不全、最长空档多久，温度、功率",
-        "illustration": "left_inside"
+        "illustration": "left_inside",
+        "last_full_width": true
       },
       {
         "type": "content_card",
@@ -825,13 +826,14 @@
         "type": "chapter_title",
         "size": "large",
         "align": "left",
-        "row": "activity",
-        "width": "49%",
-        "text_ref": "时间花在哪"
+        "text_ref": "时间花在哪",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
-        "row": "activity"
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "content_card",
@@ -841,8 +843,6 @@
         "icons": [
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
         ],
-        "row": "activity",
-        "width": "51%",
         "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
       },
       {
@@ -853,7 +853,6 @@
         "icons": [
           "_library/icons/文稿堆.png"
         ],
-        "row": "activity",
         "text_ref": "问AI：“那天我都用了哪些软件”由个人理解库来答：它按完整时"
       },
       {
@@ -862,7 +861,6 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "activity",
         "text_ref": "口径"
       }
     ],
@@ -1191,15 +1189,11 @@
       },
       {
         "type": "flow",
-        "columns": 5,
+        "columns": 1,
         "columns_v": 1,
         "connector": "arrow",
         "illustration": "top_inside",
         "icons": "auto",
-        "row_counts": [
-          5,
-          1
-        ],
         "branches": [
           {
             "item": 6,
@@ -1213,7 +1207,8 @@
             ]
           }
         ],
-        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah"
+        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah",
+        "direction": "vertical"
       },
       {
         "type": "content_card",
@@ -2633,7 +2628,18 @@
         "connector": "none",
         "size": "medium",
         "illustration": "none",
-        "text_ref": "演进"
+        "text_ref": "演进",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "align": "right",
+        "connector": "none",
+        "index": 0,
+        "target_width": "100%",
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "timeline",
@@ -2645,18 +2651,7 @@
         "icons": "auto",
         "column_flow": "top_to_bottom",
         "items_per_column": 7,
-        "row": "history",
-        "text_ref": "6 月 8 日",
-        "width": "75%"
-      },
-      {
-        "type": "illustration",
-        "align": "right",
-        "connector": "none",
-        "row": "history",
-        "width": "25%",
-        "index": 0,
-        "target_width": "100%"
+        "text_ref": "6 月 8 日"
       }
     ],
     "notes": "横图左66%为标题+两列竖时间线（每列7项，先左列从上到下，再右列从上到下），各列左边竖绿细线/节点点，卡内左图标右日期和正文；右34%一幅纵向演进纸带插画，卡外且顶对齐。时间线有竖细线不画箭头/丝带。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",

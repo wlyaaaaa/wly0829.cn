@@ -334,8 +334,6 @@
       {
         "type": "table",
         "text_ref": "查的地方",
-        "row": "checks",
-        "width": "58%",
         "columns": 3,
         "illustration": "left_inside",
         "icons": "auto"
@@ -345,14 +343,11 @@
         "text_ref": "什么算失效",
         "columns": 1,
         "illustration": "none",
-        "icons": "none",
-        "row": "checks"
+        "icons": "none"
       },
       {
         "type": "screenshot",
         "text_ref": "检查详情（9 月 22 日截图）",
-        "row": "checks",
-        "width": "38%",
         "ratio": "1122:936",
         "columns": 1,
         "columns_v": 1
@@ -753,8 +748,6 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "legacy-shot",
-        "width": "66%",
         "portrait_columns": 1
       },
       {
@@ -762,8 +755,6 @@
         "text_ref": "维护工具（9 月 22 日截图）",
         "ratio": "1208:979",
         "columns_v": 1,
-        "row": "legacy-shot",
-        "width": "34%",
         "columns": 1
       }
     ],

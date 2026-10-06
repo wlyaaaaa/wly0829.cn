@@ -108,8 +108,6 @@
       },
       {
         "type": "flow",
-        "row": "body",
-        "width": "65%",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -128,8 +126,6 @@
       },
       {
         "type": "document_mock",
-        "row": "body",
-        "width": "33%",
         "illustration": "top_inside",
         "paper": "receipt",
         "render_text": true,
@@ -137,7 +133,6 @@
       },
       {
         "type": "notice",
-        "row": "body",
         "illustration": "left_inside",
         "text_ref": "要注意：",
         "icons": [
@@ -233,8 +228,6 @@
       },
       {
         "type": "points_card",
-        "row": "summary",
-        "width": "56%",
         "columns": 1,
         "illustration": "none",
         "text_ref": "麻烦：",
@@ -248,8 +241,6 @@
       },
       {
         "type": "document_mock",
-        "row": "summary",
-        "width": "44%",
         "illustration": "top_inside",
         "paper": "ledger",
         "render_text": true,

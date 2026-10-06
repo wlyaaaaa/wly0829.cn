@@ -109,7 +109,7 @@
       },
       {
         "type": "content_card",
-        "columns": 2,
+        "columns": 1,
         "illustration": "left_inside",
         "icons": [
           "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
@@ -669,16 +669,13 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "放进去和取出来",
-        "row": "feature_groups",
-        "width": "66%"
+        "text_ref": "放进去和取出来"
       },
       {
         "type": "feature_card",
         "columns": 2,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "feature_groups",
         "flow": "column",
         "rows": 4,
         "text_ref": "1加密建库把选中的文件和文件夹锁进一个vault.enc"
@@ -687,16 +684,13 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "text_ref": "密码和钥匙",
-        "row": "feature_groups",
-        "width": "34%"
+        "text_ref": "密码和钥匙"
       },
       {
         "type": "feature_card",
         "columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "feature_groups",
         "text_ref": "9密钥文件除了密码，再要一个文件才能打开说不准10换用A"
       },
       {
@@ -896,7 +890,19 @@
         "text_ref": "6 月 23 日",
         "direction": "vertical",
         "connector_style": "thin_line",
-        "split_at": 5
+        "split_at": 4
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          8
+        ],
+        "connector": "ribbon",
+        "text_ref": "9 月 29 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
       },
       {
         "type": "notice",
@@ -904,7 +910,7 @@
         "text_ref": "截至 9 月 29 日"
       }
     ],
-    "notes": "左侧竖向时间线九节点，细绿实线/空心圆在卡片左外，卡内图标在左、日期粗体。右侧主插画在卡片外，从单层信封发展成锁信封再到锁云，绿色箭头连接，底下提交数浅条；章节标题只占左栏，靠左。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+    "notes": "左侧竖向时间线九节点，细绿实线/空心圆在卡片左外，卡内图标在左、日期粗体。右侧主插画在卡片外，从单层信封发展成锁信封再到锁云，绿色箭头连接，底下提交数浅条；章节标题只占左栏，靠左。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。"
   },
   {
     "screen": "vault-tool-11",

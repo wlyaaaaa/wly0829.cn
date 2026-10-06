@@ -149,8 +149,6 @@
       },
       {
         "type": "flow",
-        "row": "workflow",
-        "width": "60%",
         "columns": 1,
         "direction": "vertical",
         "align": "left",
@@ -165,28 +163,29 @@
       },
       {
         "type": "screenshot",
-        "row": "workflow",
-        "width": "40%",
         "columns": 1,
         "align": "center",
-        "ratio": "5:4"
+        "ratio": "5:4",
+        "row": "balanced-preview",
+        "width": "35%"
       },
       {
         "type": "prose",
-        "row": "workflow",
         "align": "left",
-        "text_ref": "有声预览（真实截图"
+        "text_ref": "有声预览（真实截图",
+        "row": "balanced-preview",
+        "width": "65%"
       },
       {
         "type": "notice",
-        "row": "workflow",
         "align": "left",
         "illustration": "left_inside",
         "tone": "green",
         "text_ref": "跟 AI 这样说就行",
         "icons": [
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
-        ]
+        ],
+        "row": "balanced-preview"
       }
     ],
     "notes": "实图左栏八步沿弯曲胶片带竖排，圆形编号、角色小徽章紧贴左侧，每步右端还各有小图；第6、8步浅黄，手掌角色保留。右栏顶部5:4纯白截图槽、外部图注、下方四句便签；无大插画。caption在定稿最后，放回右栏截图下是空间重排。现flow可做竖向ribbon及highlight，但角色徽章、右端小图和双徽章需在组件样张核对，不能用默认上图下文替代。整屏标题依统一标准居中。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
@@ -264,15 +263,12 @@
       },
       {
         "type": "section_heading",
-        "row": "delivery",
-        "width": "52%",
         "align": "left",
         "size": "medium",
         "text_ref": "交出来的东西"
       },
       {
         "type": "content_card",
-        "row": "delivery",
         "columns": 1,
         "align": "left",
         "illustration": "left_inside",
@@ -287,7 +283,6 @@
       },
       {
         "type": "screenshot",
-        "row": "delivery",
         "columns": 1,
         "align": "center",
         "ratio": "16:9",
@@ -295,22 +290,18 @@
       },
       {
         "type": "prose",
-        "row": "delivery",
         "align": "left",
         "text_ref": "封面（真实截图"
       },
       {
         "type": "section_heading",
-        "row": "delivery",
-        "width": "48%",
         "align": "left",
         "size": "medium",
         "text_ref": "出了事怎么办"
       },
       {
         "type": "content_card",
-        "row": "delivery",
-        "columns": 1,
+        "columns": 2,
         "align": "left",
         "illustration": "left_inside",
         "icons": [

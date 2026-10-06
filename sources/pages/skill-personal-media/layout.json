@@ -152,9 +152,7 @@
         "columns": 1,
         "sides": [
           "left"
-        ],
-        "row": "example",
-        "width": "54%"
+        ]
       },
       {
         "type": "dialogue",
@@ -162,8 +160,7 @@
         "columns": 1,
         "sides": [
           "right"
-        ],
-        "row": "example"
+        ]
       },
       {
         "type": "dialogue",
@@ -171,8 +168,7 @@
         "columns": 1,
         "sides": [
           "left"
-        ],
-        "row": "example"
+        ]
       },
       {
         "type": "dialogue",
@@ -180,16 +176,13 @@
         "columns": 1,
         "sides": [
           "right"
-        ],
-        "row": "example"
+        ]
       },
       {
         "type": "section_heading",
         "text_ref": "它背后做了什么",
         "align": "left",
-        "size": "medium",
-        "row": "example",
-        "width": "46%"
+        "size": "medium"
       },
       {
         "type": "flow",
@@ -204,8 +197,7 @@
           "_library/icons/文稿堆.png",
           "_library/icons/文件夹链接.png",
           "_library/icons/文稿堆.png"
-        ],
-        "row": "example"
+        ]
       }
     ],
     "notes": "原图横版左54%是一张对话组框，四次我/AI对话分别成气泡，头像在我左侧、机器人在AI右侧；右46%为组框内小节标题和四张左图右文卡，圆编号在各卡左上，三支向下绿箭头卡间连接。竖版标题居中，上方对话组框、下方同样向下四步。照片日期与原件路径小结果清单不在定稿，不新增那些可读字；仅允许无字照片装饰，不生成假数据。标题原图横版靠左，本次全屏按追加要求居中。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。",

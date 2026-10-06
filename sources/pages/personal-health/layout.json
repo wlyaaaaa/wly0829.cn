@@ -74,8 +74,8 @@
       },
       {
         "type": "stat_card",
-        "columns": 2,
-        "columns_v": 2,
+        "columns": 1,
+        "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
         "text_ref": "1 台"
@@ -405,13 +405,11 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": "auto",
-        "row": "原则与数字",
-        "width": "65%",
         "text_ref": "整理一次，以后直接用。"
       },
       {
         "type": "stat_card",
-        "columns": 1,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "right_inside",
         "icons": [
@@ -419,8 +417,6 @@
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
-        "row": "原则与数字",
-        "width": "34%",
         "text_ref": "8454 行"
       }
     ],
@@ -691,10 +687,24 @@
         "text_ref": "8 月 25 日",
         "direction": "vertical",
         "connector_style": "thin_line",
-        "split_at": 5
+        "split_at": 4
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "icons": [
+          8
+        ],
+        "width": "100%",
+        "text_ref": "9 月 27 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
       }
     ],
-    "notes": "原标题与9节点时间线共在左约47%，右约52%独立大插画自下向上贯通。时间线节点卡内左图标、右日期及正文；左外一条绿色竖线与9圆点相连。整屏标题按新标准居中；左右构图依原图。插画藤蔓由左下纸张向右上设备及电脑生长；不另加文字。；QA04：按审查时间线整宽双列竖排，固定5+4分界，取消同行手表独立插画。",
+    "notes": "原标题与9节点时间线共在左约47%，右约52%独立大插画自下向上贯通。时间线节点卡内左图标、右日期及正文；左外一条绿色竖线与9圆点相连。整屏标题按新标准居中；左右构图依原图。插画藤蔓由左下纸张向右上设备及电脑生长；不另加文字。；QA04：按审查时间线整宽双列竖排，固定5+4分界，取消同行手表独立插画。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-health\\img\\personal-health-08-h.png"
     ],

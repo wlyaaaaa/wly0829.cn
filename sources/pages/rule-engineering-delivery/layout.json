@@ -374,8 +374,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icon_position": "header_left",
-        "inner_columns": 2,
-        "split_after": "客观的接口用程序测"
+        "inner_columns": 1
       }
     ],
     "source_images": [
@@ -1129,7 +1128,7 @@
         "whole_block": true,
         "illustration": "none",
         "column_split_after_item": 4,
-        "body_columns": 2
+        "body_columns": 1
       }
     ],
     "source_images": [

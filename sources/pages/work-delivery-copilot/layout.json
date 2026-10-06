@@ -136,16 +136,12 @@
       {
         "type": "content_card",
         "text_ref": "日常：直接说",
-        "row": "usage",
-        "width": "50%",
         "columns": 1,
         "illustration": "none"
       },
       {
         "type": "content_card",
         "text_ref": "要长期维护的交付：建交付包",
-        "row": "usage",
-        "width": "50%",
         "columns": 1,
         "illustration": "top_inside",
         "illustration_index": 2,
@@ -224,19 +220,15 @@
         "type": "chapter_title",
         "text_ref": "建一个交付包，走一遍",
         "align": "left",
-        "size": "large",
-        "row": "walk",
-        "width": "62%"
+        "size": "large"
       },
       {
         "type": "prose",
-        "text_ref": "例子是仓库自带的合成样例",
-        "row": "walk"
+        "text_ref": "例子是仓库自带的合成样例"
       },
       {
         "type": "flow",
         "text_ref": "我",
-        "row": "walk",
         "columns": 1,
         "illustration": "left_inside",
         "connector": "ribbon",
@@ -269,8 +261,6 @@
       },
       {
         "type": "screenshot",
-        "row": "walk",
-        "width": "38%",
         "aspect_ratio": "1225/1585",
         "frame": "blank_white",
         "screenshot_index": 0,
@@ -282,7 +272,6 @@
       {
         "type": "prose",
         "text_ref": "合成样例生成的 Word 需求文档第一页",
-        "row": "walk",
         "size": "small"
       }
     ],
@@ -417,18 +406,22 @@
         "text_ref": "资料换了版",
         "align": "left",
         "size": "large",
-        "row": "revision",
-        "width": "54%"
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "prose",
-        "text_ref": "另一套合成样例",
-        "row": "revision"
+        "text_ref": "另一套合成样例"
       },
       {
         "type": "table",
         "text_ref": "事实",
-        "row": "revision",
         "columns": 2,
         "column_widths": [
           "34%",
@@ -444,19 +437,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "我只看这两条",
-        "row": "revision"
-      },
-      {
-        "type": "illustration",
-        "row": "revision",
-        "width": "46%",
-        "index": 0
+        "text_ref": "我只看这两条"
       },
       {
         "type": "content_card",
         "text_ref": "什么算“还有效”|现在做不到的",
-        "row": "revision",
         "columns": 1,
         "illustration": "left_inside",
         "icons": "auto"
@@ -638,27 +623,22 @@
       {
         "type": "flow",
         "text_ref": "交付包|来源快照|证据片段|事实|决定记录|构建|六个文件",
-        "row": "architecture",
         "columns": 1,
         "illustration": "left_inside",
         "connector": "arrow",
         "direction": "vertical",
         "database_bracket": true,
-        "highlight": [],
-        "width": "60%"
+        "highlight": []
       },
       {
         "type": "section_heading",
         "text_ref": "用什么",
-        "align": "left",
-        "row": "architecture",
-        "width": "40%"
+        "align": "left"
       },
       {
         "type": "content_card",
         "text_ref": "模型",
-        "row": "architecture",
-        "columns": 1,
+        "columns": 2,
         "illustration": "left_inside",
         "icons": "auto"
       }
@@ -739,14 +719,11 @@
         "type": "chapter_title",
         "text_ref": "为什么这样设计",
         "align": "left",
-        "size": "large",
-        "row": "principles",
-        "width": "69%"
+        "size": "large"
       },
       {
         "type": "flow",
         "text_ref": "只读点名的文件。|位置由程序算，不由人写。|说法打架，不替我定。|金额日期存精确值。|一版一个目录。|小而少。",
-        "row": "principles",
         "columns": 2,
         "illustration": "left_inside",
         "connector": "none",
@@ -756,9 +733,7 @@
       {
         "type": "stat_card",
         "text_ref": "3,700 行|44 个|14 次",
-        "row": "principles",
-        "width": "31%",
-        "columns": 1,
+        "columns": 3,
         "illustration": "right_inside",
         "icons": "auto"
       }

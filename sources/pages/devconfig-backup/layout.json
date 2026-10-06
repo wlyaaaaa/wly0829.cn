@@ -526,21 +526,21 @@
         "type": "chapter_title",
         "align": "left",
         "size": "medium",
-        "text_ref": "微信"
+        "text_ref": "微信",
+        "row": "balanced-heading",
+        "width": "88%"
       },
       {
         "type": "illustration",
         "index": 1,
-        "row": "wechat-detail",
-        "width": "30%",
         "target_width": "100%",
-        "align": "center"
+        "align": "center",
+        "row": "balanced-heading",
+        "width": "12%"
       },
       {
         "type": "prose",
-        "text_ref": "E:\\Documents\\xwechat_files整个原样复制：数据库连同它的",
-        "row": "wechat-detail",
-        "width": "70%"
+        "text_ref": "E:\\Documents\\xwechat_files整个原样复制：数据库连同它的"
       }
     ],
     "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n开发配置五条需排到打开纸箱的分层标签旁，右栏微信文件夹需数据库/图片/视频/文件及划掉缓存组合图；现有 bullet_list 与 illustration 没有逐标签覆盖布局接口，先保留明确 60:40 文字栏和对应插画位。\n灰垃圾桶图标、五标签与微信目录图标未有经核对的语义映射。黄色/灰色 notice 当前沿批准浅绿视觉，原源构图指定的黄色提醒与灰色说明须样张裁定。\n清单未登记这些完整原文的逐字一致毛笔标题图：备份里有什么，没有什么、开发配置包（9月29日凌晨起的清单：66个来源）；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 illustration 仅 1 项，文字盘点需要 2 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
@@ -743,8 +743,6 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
-        "row": "recovery",
-        "width": "60%",
         "text_ref": "电脑坏了或重装"
       },
       {
@@ -754,22 +752,18 @@
         "connector": "arrow",
         "illustration": "left_inside",
         "icons": "auto",
-        "row": "recovery",
         "text_ref": "1先装好基础工具照电脑配置与恢复的换机指南装PowerShell、Git、7-Z"
       },
       {
         "type": "points_card",
         "columns": 1,
         "whole_block": true,
-        "row": "recovery",
-        "width": "40%",
         "text_ref": "备份失败了"
       },
       {
         "type": "points_card",
         "columns": 1,
         "whole_block": true,
-        "row": "recovery",
         "text_ref": "还没真做过的"
       }
     ],
