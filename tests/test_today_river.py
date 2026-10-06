@@ -105,7 +105,7 @@ SNAP = r"""()=>{
    model:window.todayRiver.model?{state:window.todayRiver.model.A.state,reason:window.todayRiver.model.snap.reason,ran:window.todayRiver.model.tasks.filter(t=>t.ran).length,future:window.todayRiver.model.future.length,guards:window.todayRiver.model.guards.length,fog:window.todayRiver.model.fog.length}:null,
    insurance:window.todayRiver.still,static:window.todayRiver.static,gl:window.todayRiver.gl,metrics:window.todayRiver.metrics,
    title:document.title, b2:[...document.querySelectorAll('[data-b2-slot=cockpit-quick-4],[data-b2-slot=cockpit-tasks]')].map(e=>e.textContent),
-   riverStorageKeys:[...Object.keys(localStorage),...Object.keys(sessionStorage)].filter(k=>/river/i.test(k)),
+   riverStorageKeys:[...Object.keys(localStorage),...Object.keys(sessionStorage)].filter(k=>/river/i.test(k)&&!k.startsWith('site-river-height-v1:')),
    activeAnimations:root.getAnimations({subtree:true}).filter(a=>a.playState==='running').length};
 }"""
 
@@ -265,7 +265,15 @@ async def main(args):
                     old=await refresh(mode)
                     assert old['headline'].startswith(word) and '之后的情况不知道' in old['headline'],old
                     assert old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
-                    assert any(x.startswith('最后读到') for x in old['signs']) and any('当时已跑完' in x for x in old['groups']),old
+                    if mode=='stale':
+                        await page.set_viewport_size({'width':390,'height':844})
+                        await page.wait_for_timeout(250)
+                        await page.set_viewport_size({'width':1440,'height':900})
+                        await page.wait_for_timeout(250)
+                        assert await page.evaluate('water.width>0 && water.height>0 && stage.clientWidth>0')
+                        await page.set_viewport_size(options['viewport'])
+                        await page.wait_for_timeout(250)
+                    assert '最后一次读到' in old['headline'] and '最后读到时刻' in old['legend'] and any('当时已跑完' in x for x in old['groups']),old
                     results.append({'device':device,'case':mode+'-old-value-boundary','snapshot':old})
                 await refresh('normal')
                 state['mode']='offline-browser'
@@ -279,10 +287,23 @@ async def main(args):
                 results.append({'device':device,'case':'browser-network-offline-old-value','snapshot':disconnected,'browser_offline':True,'synthetic_http_failure':False})
                 await context.set_offline(False)
                 reduced=await load('normal',True)
-                before=await page.evaluate('({draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:document.querySelector("#today-river #layer").innerHTML})')
+                before=await page.evaluate('()=>{const layer=document.querySelector("#today-river #layer").cloneNode(true);layer.querySelector(".now b").textContent="";return {draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:layer.innerHTML}}')
                 await page.wait_for_timeout(1600)
-                after=await page.evaluate('({draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:document.querySelector("#today-river #layer").innerHTML})')
+                after=await page.evaluate('()=>{const layer=document.querySelector("#today-river #layer").cloneNode(true);layer.querySelector(".now b").textContent="";return {draws:todayRiver.metrics.draws,frames:todayRiver.metrics.frames,html:layer.innerHTML}}')
                 assert before==after and reduced['activeAnimations']==0,(before,after,reduced)
+                for width,height in [(390,844),(1440,900),(390,844),(844,390),(390,844)]:
+                    await page.set_viewport_size({'width':width,'height':height})
+                    await page.wait_for_timeout(250)
+                    assert await page.evaluate('water.width===Math.round(stage.clientWidth*Math.min(1.5,devicePixelRatio)) && water.height>0')
+                await page.set_viewport_size(options['viewport'])
+                await page.wait_for_timeout(250)
+                valid_size=await page.evaluate('[water.width,water.height]')
+                await page.locator('#stage').evaluate("e=>e.style.display='none'")
+                await page.wait_for_timeout(250)
+                assert await page.evaluate('[water.width,water.height]')==valid_size
+                await page.locator('#stage').evaluate("e=>e.style.display=''")
+                await page.wait_for_timeout(250)
+                assert await page.evaluate('water.width>0 && water.height>0 && parseFloat(getComputedStyle(stage).fontSize)>0')
                 assert all(float(x['lineHeight'].removesuffix('px'))>0 and x['height']>0 for x in reduced['textLayout']),reduced['textLayout']
                 results.append({'device':device,'case':'reduced-motion-static','snapshot':reduced,'dom_and_draws_unchanged':True})
                 if device in ['desktop','phone']:

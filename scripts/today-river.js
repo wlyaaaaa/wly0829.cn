@@ -354,6 +354,7 @@ const boatBuf = new Float32Array(56);
 function draw(tb) {
   if (!GL.ok) return; const gl = GL.gl, u = GL.u;
   const w = Math.round(stage.clientWidth * Math.min(1.5, devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
+  if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
   boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
   gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uT, Math.min(tb, 1e6) % 4000); gl.uniform1f(u.uA, GEOM.aspect); gl.uniform1f(u.uReveal, clamp(tb / I.reveal));
@@ -363,7 +364,7 @@ function draw(tb) {
 
 // ---------- 时间和循环 ----------
 const clock = { t0: null, skip: false, manual: null, done: false };
-const fit = () => { stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
+const fit = () => { if (stage.clientWidth) stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
 let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
 const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
 function step(tb) { if (!clock.done || clock.manual != null) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
@@ -383,7 +384,13 @@ document.addEventListener('visibilitychange', wake);
 setInterval(()=>{const label=$('.now b');if(label&&!document.hidden)label.textContent=hm(Date.now());},1000);
 new IntersectionObserver(es => { seen = es[0].isIntersecting; stage.classList.toggle('out-of-view', !seen); if (seen) wake(); }).observe(stage);
 addEventListener('scroll', () => { last = 0; since = 0; gaps = []; }, true);
-addEventListener('resize', () => { fit(); if (M && (reduce || still || M.stale)) draw(1e9); });
+const redraw = () => {
+  if (!M || !stage.clientWidth) return;
+  fit();
+  draw(reduce || still || M.stale ? 1e9 : clock.manual ?? (clock.t0 == null ? 0 : (performance.now() - clock.t0) / 1000 * SPEED));
+};
+addEventListener('resize', redraw);
+new ResizeObserver(redraw).observe(stage);
 
 async function start(snap, intro = true) {
   const turn = ++generation;
