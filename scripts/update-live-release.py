@@ -62,14 +62,18 @@ def update_release(root: Path) -> dict:
             if '?' in url or '#' in url or '://' in url:
                 continue
             path = root / url.lstrip('/') if url.startswith('/') else page.parent / url
-            if re.fullmatch(r'(?:app-[0-9a-f]+\.js|b2-(?:typeset|live)-[0-9a-f]+\.(?:js|css))', path.name) and path.is_file():
+            if re.fullmatch(r'(?:app-(?:loading-)?[0-9a-f]+\.js|b2-(?:typeset|layout|live)-[0-9a-f]+\.(?:js|css))', path.name) and path.is_file():
                 assets.add(path.resolve())
     replacements = {}
     for asset in sorted(assets):
         original = asset.read_text('utf8')
         if asset.name.startswith('app-'):
             patched = patch_shared_runtime(original)
-            stem, length = 'app-', len(asset.stem.removeprefix('app-'))
+            stem, length = asset.stem.rsplit('-', 1)[0] + '-', len(asset.stem.rsplit('-', 1)[1])
+        elif asset.name.startswith('b2-layout-'):
+            patched = original if 'window.SiteLiveRuntime.readStatus(' in original else original.replace("window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal)", "data.kind==='cockpit'?window.SiteLiveRuntime.readStatus(signal,refresh):window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal)")
+            if "(data.kind==='cockpit'&&['localhost'" not in patched: patched = patched.replace('formal=isAccessOrigin(location.origin,window.top===window)', "formal=isAccessOrigin(location.origin,window.top===window)||(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname))")
+            stem, length = 'b2-layout-', 20
         elif asset.suffix == '.css':
             patched = (HERE / 'b2-live.css').read_text('utf8')
             stem, length = 'b2-live-', 12
@@ -83,7 +87,7 @@ def update_release(root: Path) -> dict:
         replacements[asset] = target
     changed_pages = []
     for page, text in html.items():
-        updated = text
+        updated = re.sub(r'(connect-src\s+[^;"<>]*)', lambda m: m[0] if 'https://live.wly0829.cn' in m[0].split() else m[0] + ' https://live.wly0829.cn', text)
         for before, after in replacements.items():
             old_absolute = '/' + before.relative_to(root).as_posix()
             new_absolute = '/' + after.relative_to(root).as_posix()
