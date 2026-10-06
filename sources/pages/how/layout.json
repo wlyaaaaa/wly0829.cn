@@ -13,7 +13,7 @@
         "align": "left",
         "size": "large",
         "row": "top",
-        "width": "100%"
+        "width": "53%"
       },
       {
         "type": "prose",
@@ -26,6 +26,15 @@
         "row": "top",
         "layout": "rows",
         "columns": 1
+      },
+      {
+        "type": "illustration",
+        "row": "top",
+        "width": "47%",
+        "illustration": "outside",
+        "index": 0,
+        "size": "large",
+        "target_width": "100%"
       },
       {
         "type": "action_button",
