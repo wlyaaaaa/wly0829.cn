@@ -18,7 +18,6 @@ from urllib.request import urlopen
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-INJECTION_INPUTS = {HERE/name for name in ('resource-retry-runtime.js','album-runtime.js','album-runtime.css','site-live-runtime.js','typeset-live-display.js','b2-live-runtime.js','live-hardware-ui.js','live-hardware-ui.css','live-status-ui.js','live-status-ui.css')}
 sys.path.insert(0, str(ROOT / 'src/typeset'))
 from engine import render as renderer, assets
 
@@ -34,10 +33,8 @@ def fingerprints(lock):
     for row in [lock['chrome'], *lock['fonts']]:
         if digest(row['path']) != row['sha256']:
             raise ValueError('Locked rendering dependency changed: ' + row['path'])
-    shared = [p for p in shared if p not in INJECTION_INPUTS]
     shared_hash = hashlib.sha256(''.join(str(p)+digest(p) for p in sorted(shared)).encode()).hexdigest()
     library = assets.manifest(); hashed = {}; result = {'home': shared_hash}
-    result['__injection__'] = hashlib.sha256(''.join(str(p)+digest(p) for p in sorted(INJECTION_INPUTS)).encode()).hexdigest()
     for name, source in renderer.page_sources().items():
         page = json.loads(Path(source).read_text('utf8'))
         if not page.get('url') and name != '404': continue
@@ -76,20 +73,18 @@ def main():
     lock = json.loads((ROOT/'config/render.lock.json').read_text('utf8'))
     current = fingerprints(lock); state_path = run/'publication-state.json'; ledger_path = run/'page-fingerprints.json'
     previous = load_state(ledger_path)
-    injection = current.pop('__injection__'); injection_changed = previous.pop('__injection__',None) != injection
     state = load_state(state_path) if args.resume else {}
     selected = args.pages or (sorted(current) if args.all or set(previous)-current.keys() else [p for p in current if previous.get(p) != current[p]])
     rule_pages = {r['page'] for r in json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))['excerpt_contract']['excerpts'].values()} | {'rules-home'}
     if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
     if state: selected = sorted(set(state['selected_pages']) | set(selected))
     if set(selected) - current.keys(): parser.error('Unknown site pages: ' + ', '.join(set(selected)-current.keys()))
-    if not selected and not injection_changed and state_path.is_file():
+    if not selected and state_path.is_file():
         last = json.loads(state_path.read_text('utf8'))
         outputs = [run/'generation'/name for name in ('dist','build-report.json','motion-geometry.json','typeset-out')] + [args.typeset_root, Path(last['baseline']), args.legacy_site]
         if last['stages']['generation'].get('outputs') != file_proofs(outputs): selected = sorted(current)
-    if not selected and not injection_changed: print('No page inputs changed; no generation or publication.', flush=True); return 0
+    if not selected: print('No page inputs changed; no generation or publication.', flush=True); return 0
     invalid = state.get('fingerprints') != current
-    invalid |= injection_changed
     state.update(schema='wly.typeset-publication.v1', selected_pages=selected, status='running', fingerprints=current)
     state.setdefault('stages', {name: {'status': 'pending'} for name in ('inputs', 'generation', 'checks', 'publication', 'readback')})
     def save():
@@ -127,7 +122,6 @@ def main():
     stages = []
     started = time.monotonic()
     native = [p for p in selected if p != 'home'] or ['how']; selection = ['--pages', *native]
-    if not selected:native=[];selection=['--pages']
     snapshot = work / 'input-snapshot'
     project = bool(set(native) & rule_pages)
     inventory = work/'projection/projected-inventory.jsonl' if project else snapshot/'typeset-inventory/screens.jsonl'
@@ -233,21 +227,19 @@ def main():
                 shutil.copytree(snapshot/'typeset-proto', work/'typeset-proto')
                 shutil.copytree(snapshot/'typeset-inventory', work/'typeset-inventory'); shutil.copyfile(inventory, work/'typeset-inventory/screens.jsonl')
                 if (run/'current-geometry.json').is_file(): shutil.copyfile(run/'current-geometry.json', geometry)
-                if native:
-                    with preview(baseline, 'geometry') as address:
-                        execute('run-typeset-checks.py', ['--mode', 'geometry', '--url', address,
-                            '--task-cache', cache, '--timeout', '1200', *selection])
-                elif not geometry.is_file():shutil.copyfile(baseline.parent/'motion-geometry.json',geometry)
+                with preview(baseline, 'geometry') as address:
+                    execute('run-typeset-checks.py', ['--mode', 'geometry', '--url', address,
+                        '--task-cache', cache, '--timeout', '1200', *selection])
                 execute('build-typeset-site.py', ['--typeset-root', work/'typeset-out', '--inventory', inventory,
                     '--geometry', geometry, '--baseline', baseline, '--legacy-site', args.legacy_site.resolve(), '--asset-cache', args.asset_cache.resolve(),
                     '--reuse-asset-cache', '--output', work/'dist', '--report', report, '--creative-preparation', ROOT/'config/build.json',
                     '--live-ui-preparation', ROOT/'config/live-ui.json', *selection] + (['--rule-public-projection', work/'typeset-out/rule-public-projection.json'] if project else []))
-                if fingerprints(lock) != {**current,'__injection__':injection}: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
+                if fingerprints(lock) != current: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
         with phase('checks', [verification, run/'content-report.json']) as active:
             if active:
                 with preview(work/'dist', 'qa') as address:
                     execute('run-typeset-checks.py', ['--mode', 'qa', '--url', address, '--task-cache', cache,
-                        '--timeout', '1800', '--jobs', str(args.jobs), *(selection if native else [])])
+                        '--timeout', '1800', '--jobs', str(args.jobs), *selection])
                 proof = json.loads(verification.read_text('utf8'))
                 if proof['summary']['failed'] or proof['summary']['unverified']: raise ValueError('Browser verification failed')
                 budget=work/'oss-budget';execute('prepare-oss-release.py', ['prepare', '--source', work/'dist', '--asset-base-url', json.loads((ROOT/'config/build.json').read_text('utf8'))['asset_base_url'], '--prefix', 'releases/'+proof['release_id'], '--output', budget])
@@ -274,7 +266,6 @@ def main():
         if (run/'current-site').exists(): shutil.move(run/'current-site', run/('retained-site-'+str(time.time_ns())))
         shutil.copytree(work/'dist', run/'current-site'); shutil.copyfile(geometry, run/'current-geometry.json')
         previous.update({p: current[p] for p in selected})
-        previous['__injection__'] = injection
         temp = ledger_path.with_suffix('.tmp'); temp.write_text(json.dumps(previous, sort_keys=True), encoding='utf8'); temp.replace(ledger_path)
         state['status'] = result['status'] = 'pass'; save()
     except Exception as error:

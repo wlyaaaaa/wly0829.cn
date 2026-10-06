@@ -76,7 +76,6 @@ class FinalTocRefresh(unittest.TestCase):
     def execute(self, config):
         self.recipe.write_text(json.dumps(config), encoding='utf8')
         context = {'live_ui': self.live_ui, 'live_ui_inputs': dict(self.inputs), 'manifest': self.manifest,
-                   'names': list(self.states),
                    'creative': self.creative, 'workbench': None, 'states': self.states,
                    'args': SimpleNamespace(output=self.site, live_ui_preparation=self.recipe),
                    'read': lambda path: json.loads(path.read_text('utf8')),

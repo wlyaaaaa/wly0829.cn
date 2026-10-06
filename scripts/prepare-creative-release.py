@@ -244,6 +244,11 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     # Final assembly performs this same restoration. Bind its actual byte changes
     # before the reviewed file ledger, so the second assembly is idempotent.
     pending_link_restorations=hybrid.nav_repair.restore_pending_links(current,navigation_pages)
+    requested=json.loads(os.environ.get('WLY_RENDER_PAGES','null'))
+    if requested is not None:
+        for rel in old['files']:
+            if rel.endswith('.html') and rel not in accepted_files and not (rel=='index.html' and 'home' in requested):
+                (current/rel).write_bytes((baseline/rel).read_bytes())
     files=hybrid.inventory(current)
     changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(current / rel),
                      'before': old['files'].get(rel), 'after': proof}
