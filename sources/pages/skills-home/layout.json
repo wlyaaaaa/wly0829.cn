@@ -235,13 +235,13 @@
       },
       {
         "type": "directory_tile",
-        "columns": 1,
+        "columns": 2,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔PDF 逐页检查〕",
+        "text_ref": "〔文稿转 PDF〕",
         "icon_map": {
           "找照片和录音": "_library/icons/波形照片.png",
           "找文件原件": "_library/icons/文稿堆.png",
