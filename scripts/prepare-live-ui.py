@@ -209,7 +209,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
             ranges = ','.join('U+'+format(cp, 'X') for cp in points)
             page_face = '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
             ui_css = addressed('live-ui-page', '.css', (css+'\n'+page_face).encode('utf8'))
-        for old in set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text)):
+        for old in sorted(set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text))):
             path = resolve(page, old)
             if not path or not re.fullmatch(r'(?:app-[0-9a-f]+|b2-(?:live|typeset)-[0-9a-f]+)\.js',path.name): continue
             if path not in changed_refs:
@@ -256,6 +256,7 @@ def prepare_recipe(site, recipe, pages=None):
     config = json.loads(recipe.read_text('utf8'))
     if config.get('schema') != 'wly.live-ui-recipe.v1':
         raise ValueError('Unsupported live UI preparation recipe')
+    config = {key: str((HERE.parent/Path(value)).resolve()) if key in {'library','font','sprite','label_map','toc_unify_package'} else value for key,value in config.items()}
     unify = config.get('toc_unify_package')
     paths = {key: Path(config[key]).resolve() for key in
              (('library', 'font') if unify else ('library', 'font', 'sprite', 'label_map'))}
@@ -264,7 +265,7 @@ def prepare_recipe(site, recipe, pages=None):
     toc_pages = None
     if unify:
         _, _, toc_pages, _, toc_inputs = toc_unify_package(unify)
-        if pages is not None and set(pages) not in (set(toc_pages), set(toc_pages) - {'index.html'}):
+        if pages is not None and not set(pages) <= set(toc_pages):
             raise ValueError('Live UI page selection differs from the approved TOC scope')
         consumed += toc_inputs
     consumed += [HERE / name for name in (

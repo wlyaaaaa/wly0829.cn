@@ -531,6 +531,8 @@ try {
         throw 'Local HEAD or remote main changed during readback; verify the current deployment before reporting completion.'
     }
     $state.status = 'published'
+    Checked 'python' @('scripts/run-typeset-checks.py','--mode','baseline','--verification',$Verification,
+        '--baseline-output',(Join-Path $repoRoot '.publish/quality-baseline.json'),'--production-commit',$commit,'--task-cache',$RunRoot)
     $state.completed_at_beijing = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
     SaveState
     Write-Output "Published commit $commit; Pages run $($deploymentResult.run); all public HTML and asset hashes passed."
