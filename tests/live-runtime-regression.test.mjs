@@ -32,7 +32,7 @@ function cockpit(saved=storage()) {
  const source=compiledB2.replace(/^import[^\n]*\n/,'');
  const pure=source.slice(0,source.indexOf('function rectStyle('));
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
- const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout,clearTimeout};
+ const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout:(...args)=>setTimeout(...args).unref(),clearTimeout};
  sandbox.window.top=sandbox.window;
  vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
@@ -312,11 +312,11 @@ test('legacy home without typed display boots, updates ordinary live strips and 
  const strip={hidden:true,querySelectorAll:()=>[cell]};
  const document={hidden:false,body:{dataset:{}},fonts:{ready:Promise.resolve()},addEventListener(){},querySelector:selector=>selector==='#page-data'?{textContent:JSON.stringify({kind:'home',page:'home',project:'示例项目'})}:selector==='[data-slot]'?cell:null,querySelectorAll:selector=>selector==='.live-strip'?[strip]:selector==='[data-slot]'?[cell]:[]};
  let fail=false;
- const sandbox={Date:TestDate,Intl,Object,Number,Map,Set,AbortController,performance,document,window:{},location:{hostname:'wly0829.cn'},localStorage:saved,addEventListener(){},setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,fetch:async()=>{if(fail)throw new TypeError('local simulated failure');return {ok:true,json:async()=>fixture()};}};
+ const sandbox={Date:TestDate,Intl,Object,Number,Map,Set,AbortController,performance,document,window:{},location:{hostname:'wly0829.cn'},localStorage:saved,addEventListener(){},setTimeout:(callback,delay)=>{if(delay<=1000)queueMicrotask(callback);return 0;},clearTimeout(){},setInterval:()=>0,fetch:async()=>{if(fail)throw new TypeError('local simulated failure');return {ok:true,json:async()=>fixture()};}};
  assert.equal(sandbox.displayTypesetStatus,undefined);
  vm.runInNewContext(sharedSource,sandbox);
  await new Promise(resolve=>setImmediate(resolve));
  assert.equal(document.body.dataset.statusPhase,'ready');assert.equal(strip.hidden,false);assert.equal(span.textContent,'运行正常');assert.equal(cell.dataset.state,'ok');
  fail=true;await sandbox.window.SiteStatus.refresh();
- assert.equal(document.body.dataset.statusPhase,'error');assert.equal(strip.hidden,false);assert.match(span.textContent,/运行正常.*上次读到/);assert.notEqual(cell.dataset.state,'ok');
+ assert.equal(document.body.dataset.statusPhase,'error');assert.equal(strip.hidden,false);assert.match(span.textContent,/运行正常.*\d+ 分钟前读到/);assert.notEqual(cell.dataset.state,'ok');
 });
