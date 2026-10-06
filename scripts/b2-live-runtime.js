@@ -7,7 +7,7 @@ const data=JSON.parse(document.querySelector('#page-data').textContent);
 
 if(!['cockpit','computer-access','mcp'].includes(data.kind))throw Error('B2运行件只接选定页面');
 
-const currentHost=location.origin===HOST_ORIGIN,formal=isAccessOrigin(location.origin,window.top===window),base=currentHost?'':HOST_ORIGIN;
+const currentHost=location.origin===HOST_ORIGIN,formal=isAccessOrigin(location.origin,window.top===window)||(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname)),base=currentHost?'':HOST_ORIGIN;
 
 let status=null,phase='loading',lastRead=0,problem='',purpose='personal_data',combined=false,saveDefault=false,hours='',hoursTouched=false,code='',busy=false,grant=null,attempt=null,actions=[],result=null,toast='',toastState='unknown',toastTimer=null;
 
@@ -670,7 +670,7 @@ function action(key){
 
 }
 
-const reader=createStatusReader((signal,{refresh})=>window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
+const reader=createStatusReader((signal,{refresh})=>data.kind==='cockpit'?window.SiteLiveRuntime.readStatus(signal,refresh):window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
 
 function readStatus(options){if(!formal){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 
