@@ -20,6 +20,10 @@
 #one-sentence .legend .how-demo-icon{ width:20px; height:20px; object-fit:contain; flex:none; }
 #one-sentence .legend .small{ font-size:12.5px; color:var(--muted,#5d6f8f); line-height:1.6; }
 #one-sentence .stage{ display:flex; flex-direction:column; gap:12px; min-width:0; }
+#one-sentence .node,#one-sentence .node .in,#one-sentence .slot .txt,#one-sentence .who,#one-sentence .result .box,#one-sentence .result .chip,#one-sentence .result .go,#one-sentence .stamp{opacity:1!important;filter:none!important}
+#one-sentence .card{transform:none!important}
+#one-sentence .reveal,#one-sentence .act{clip-path:none!important}
+#one-sentence .fly{display:none!important}
 #one-sentence .slotrow{ display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-width:0; }
 #one-sentence .slot{ position:relative; display:block; min-width:0; max-width:min(640px,100%); height:auto; min-height:48px; padding:12px 18px 11px 40px; border-radius:18px 18px 18px 6px; font-size:15.5px; line-height:1.5; white-space:normal; overflow-wrap:anywhere;
           color:#1f3a5f; background:#fff; border:2px dashed #c3ead0; }

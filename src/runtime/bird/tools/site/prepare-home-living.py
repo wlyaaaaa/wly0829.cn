@@ -180,7 +180,7 @@ def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, outpu
     data['shared']['script_bundle'] = '/' + app_rel
     html = original[:match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + original[match.end(2):]
     old_tag = app_match[0]
-    new_tag = old_tag.replace(app_match[1], '/' + app_rel)
+    new_tag = old_tag.replace(app_match[1], '/' + app_rel).replace('<script ', '<script type="module" ')
     engine_tag = '<script data-album-runtime data-src="' + home['engine_url'] + '"></script>'
     html = replace_once(html, old_tag, engine_tag + new_tag)
     html = replace_once(html, '</head>', '<link rel="stylesheet" href="/' + css_rel + '"></head>')

@@ -51,12 +51,9 @@ function grafanaGroupRow(part){
 function grafanaGroupValue(part){
  const selected=grafanaGroupRow(part),primary=part==='cpu-gpu'?selected:grafanaGroupRow('cpu-gpu'),secondary=part==='memory-network'?selected:grafanaGroupRow('memory-network');
  if(!primary.iframe&&!secondary.iframe){
-  if(part==='memory-network')return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
-  const groups=(status?.grafana||status?.services?.grafana)?.groups;
-  if(online()&&['cpu-gpu','memory-network'].every(key=>groups?.[key]?.state==='unavailable'&&groups[key].url===null&&groups[key].checked_at===null))return {...selected,title:'近24小时曲线',text:'手机版图表稍后上线。',readAt:null,planned:true};
-  return {...selected,title:'近24小时曲线',text:'两组曲线暂时打不开\n处理器和显卡观察：'+time(primary.readAt)+'\n内存和网络观察：'+time(secondary.readAt)};
+  return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
  }
- return selected;
+ return selected.iframe?selected:{...selected,empty:true,emptyReason:'grafana-group-unreadable'};
 }
 const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter','connection_type']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
@@ -303,7 +300,7 @@ function liveValue(slot){
 
  if(slot==='mcp-secondary'){const peer=list('remote_network')?.find(x=>x.id==='secondary_laptop');return {text:peer?.state==='online'?'副机在线':peer?.state==='offline'?'副机不在线':'副机状态读不到',state:peer?.state==='online'?'ok':peer?.state==='offline'?'closed':'unknown'};}
 
- const taskBrief=`今天跑了 ${todayTasks.length} 个，出错 ${failed.length} 个`+(next?'；下一个 '+name(next)+' '+time(Date.parse(next.next_run_at)/1000):'；下次运行暂时未知');
+ const taskBrief=`今天跑了 ${todayTasks.length} 个（含常驻和高频任务），出错 ${failed.length} 个`+(next?'；下一个 '+name(next)+' '+time(Date.parse(next.next_run_at)/1000):'；下次运行暂时未知');
 
  if(slot==='cockpit-overall')return summary();
 
@@ -315,7 +312,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-quick-4')return {text:list('automation')?taskBrief:'自动任务暂时读不到',state:rowState(list('automation'))};
 
- if(slot==='cockpit-quick-5')return {text:lastBackup?name(lastBackup)+' 最近成功 '+time(Date.parse(lastBackup.last_success_at)/1000):'最近成功的备份暂时未知',state:rowState(list('backups'))};
+ if(slot==='cockpit-quick-5')return {text:(lastBackup?name(lastBackup)+' 最近成功 '+time(Date.parse(lastBackup.last_success_at)/1000):'最近成功的备份暂时未知')+backups.filter(x=>x.enabled!==false&&['warn','stale','overdue','failed','error'].includes(x.state)).map(x=>'；'+name(x)+'：'+(x.status_note||x.plain?.status_note||x.reason||stateText(x.state))).join(''),state:rowState(list('backups'))};
 
  if(slot==='ca-windows'||slot==='cockpit-security-windows'){if(!windowsFresh())return {text:'锁屏状态读不到',state:'unknown'};return {text:(({locked:'已锁屏',unlocked:'未锁屏',no_session:'没人登录'})[host.screen_state]||'读不到'),state:host.screen_state==='unlocked'?'ok':['locked','no_session'].includes(host.screen_state)?'closed':'unknown'};}
 
@@ -340,9 +337,7 @@ function liveValue(slot){
 
   if((g?.public_dashboard_state==='reachable'||currentPublicRoute)&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
 
-  if(g?.state==='reachable'&&g.url==='https://grafana.wly0829.cn/')return {text:'监控网页已响应 · 打开图表网页',href:g.url,state:'ok'};
-
-  return {text:'曲线暂时打不开',state:'unknown'};
+  return {text:'曲线暂时打不开',state:'unknown',empty:true};
 
  }
 
@@ -413,7 +408,7 @@ function value(slot){
  const health=slotHealth(slot);
  // Grafana has a 300-second check interval; the general dashboard blocks use
  // 120 seconds. Do not turn a still-current live iframe into historical data.
- if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false};
+ if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false,empty:true};
  if((health==='stale'&&slot!=='cockpit-pc'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
   if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};
@@ -494,6 +489,8 @@ function mount(){
   else if(screenId==='mcp-01'&&flowCells.length){if(layout.compact_live===true){for(const cell of flowCells)cell.compactFrame=true;}else flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
   else if(screenId==='computer-access-01'){
    const grants=flowCells.filter(cell=>['ca-personal-data','ca-unrestricted','ca-windows'].includes(cell.slot));
+   const entrance=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('b2-card-enter');entrance.unobserve(entry.target);}});
+   grants.forEach((cell,index)=>{cell.node.style.setProperty('--b2-enter-delay',index*80+'ms');entrance.observe(cell.node);});
    if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));const group=liveGroup(section,grants,'b2-authority-group');group.flowRow=true;flowCells.push(group);}
    else for(const cell of grants){cell.forceOverlay=true;cell.flowRow=true;}
   }
@@ -510,6 +507,7 @@ function mount(){
 }
 
 function render(){
+ const restoreReading=window.TypesetLiveFlow?.preserveReader?.();
  if(online())for(const key of Object.keys(grafanaGroupTitles)){const row=grafanaGroupRow(key);if(row.iframe)lastGrafanaGroups.set(key,row);}
 
  if(typeof globalToast!=='undefined'&&globalToast._rendered!==JSON.stringify([toast,toastState])){globalToast._rendered=JSON.stringify([toast,toastState]);globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
@@ -553,13 +551,15 @@ function render(){
    const headline=displayRow.text||displayRow.rows?.[0]?.text||(displayRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
    const card=window.LiveStatusUI.render(document,{...displayRow,text:headline,readAt:grouped?displayRow.readAt:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)},{title:grouped?displayRow.title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
    if(displayRow.operation||displayRow.planned){card.querySelector('.live-status-meta')?.remove();card.title=(grouped?displayRow.title:liveTitles[slot]||'办理结果')+'：'+headline;}
-   if(displayRow.rows||displayRow.iframe){if(displayRow.rows)card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
+   if(displayRow.rows||displayRow.iframe){if(displayRow.rows){card.querySelector('.live-status-value')?.remove();slot==='cockpit-today'&&headline==='今天还没有动态'&&content.firstChild?.textContent===headline&&content.firstChild.remove();}const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
    else content.replaceChildren();
    content.replaceChildren(card);
   }
   syncChildren(el,[...content.childNodes]);el.dataset.cached=String(!!displayRow.cached);
   window.TypesetLiveFlow?.request(section);
  }
+ const chartScreen=document.querySelector('[data-screen="cockpit-04"]');
+ if(chartScreen)chartScreen.hidden=[...chartScreen.querySelectorAll('.typeset-part:not([hidden]) [data-b2-slot="cockpit-grafana"]')].every(node=>node.hidden);
 
  for(const b of document.querySelectorAll('[data-b2-action]')){
 
@@ -583,6 +583,8 @@ function render(){
   const text=lastRead&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到的数据。':offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
  }else if(connectionNotice&&!connectionNotice.hidden)connectionNotice.hidden=true;
  if(document.body.dataset.b2StatusPhase!==phase)document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
+ if(todayRiverHost)try{const key='site-river-height-v1:'+innerWidth;todayRiverHost.style.minHeight=phase==='loading'?(Number(localStorage.getItem(key))||Math.min(1200,innerHeight*1.2))+'px':'';if(phase==='ready')localStorage.setItem(key,String(todayRiverHost.offsetHeight));}catch{}
+ restoreReading?.();
 
 }
 
