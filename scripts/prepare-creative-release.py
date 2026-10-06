@@ -206,6 +206,28 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     files = hybrid.inventory(current)
     if files != prepared['files']:
         raise ValueError('Prepared inventory changed during replay')
+    if static_2f:
+        import html, re
+        app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')]
+        inputs.update({str(path): stamp(path) for path in app_inputs})
+        status = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
+            "import {skills} from './app/content-skills.js'; console.log(JSON.stringify(skills.find(s=>s.slug==='native-economy-routing').readerStatus))"], cwd=ROOT).decode('utf8'))
+        status_page = current / 'skills/native-economy-routing/index.html'
+        body = status_page.read_text('utf8')
+        matches = re.findall(r'<span class="status-pill status-mixed">([^<]*按任务需要决定是否分工[^<]*)</span>', body)
+        if len(matches) != 1: raise ValueError('Legacy routing status is missing or ambiguous')
+        status_page.write_text(body.replace(matches[0], html.escape(status)), encoding='utf8')
+        source_css = (ROOT / 'app/style.css').read_text('utf8')
+        rules = re.findall(r'\.back-to-top \{[^}]+\}', source_css)
+        header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)
+        if len(rules) != 2 or not header: raise ValueError('Legacy header styles are missing or ambiguous')
+        css = (rules[0] + '\n.back-to-top{bottom:auto}\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}').encode('utf8')
+        css_url = '/_typeset/runtime/legacy-header-' + hybrid.hashlib.sha256(css).hexdigest()[:20] + '.css'
+        (current / css_url.lstrip('/')).write_bytes(css)
+        for page in current.rglob('*.html'):
+            original = page.read_text('utf8')
+            if 'id="page-data"' not in original and 'back-to-top' in original:
+                page.write_text(original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1), encoding='utf8')
     accepted = raw['accepted_pages']
     accepted_files = {hybrid.route_file(url) for url in accepted}
     # These published legacy links lost their old anchors in the reviewed 27-page
