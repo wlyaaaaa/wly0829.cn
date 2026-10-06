@@ -221,6 +221,13 @@ globalThis.TypesetApply = () => {
       const cols=[...row.children];
       if (cols.length<2 || cols.some(c=>!c.matches('.col')) || row.matches('.card-notes') ||
           row.closest('.c-diagram') || row.querySelector('[data-comp="chapter_title"],.title-wrap,[data-flow],.feature-masonry-grid')) continue;
+      // 横版短卡和侧栏保留审定分栏，不能为齐高移到整宽或绕成通栏。
+      const text=C.collectTextBlocks(row).map(block=>C.measureTextBlock(block));
+      const compact=text.length && text.every(block=>block.lines.every(line=>line.chars<=40));
+      const cards=[...row.querySelectorAll('.card')].filter(card=>!card.closest('[data-comp="flow"],[data-comp="screenshot"],.c-diagram'));
+      const shortCards=cards.length>=3 && cards.every(card=>card.textContent.trim().length<=160);
+      const preserveCompact=document.body.classList.contains('o-h') && compact &&
+          (shortCards || row.querySelector('[data-comp="document_mock"],[data-comp="notice"],[data-comp="comparison"]'));
       const prior=row.style.alignItems;row.style.alignItems='start';
       const hs=()=>cols.map(c=>c.getBoundingClientRect().height);
       let h=hs(),w=cols.map(c=>c.getBoundingClientRect().width);
@@ -255,7 +262,7 @@ globalThis.TypesetApply = () => {
       let moved='';
       const attempt=(name,go,undo)=>{
         const H1=Math.max(...h),gap1=H1-Math.min(...h),keep=[...w];
-        if (moved || gap1<=Math.max(120,H1*.2) || !go()) return;
+        if (preserveCompact || moved || gap1<=Math.max(120,H1*.2) || !go()) return;
         h=hs();widths();
         if (Math.max(...h)<=H1*1.1 && Math.max(...h)-Math.min(...h)<gap1*.5) moved=name;
         else {undo();w=keep;set(w);h=hs();}
@@ -264,11 +271,11 @@ globalThis.TypesetApply = () => {
       attempt('push',()=>{if (tc.children.length<2 || !tail.matches(solo) || cols.some(c=>c!==tc && c.children.length>=tc.children.length)) return false;row.after(tail);return true;},()=>tc.append(tail));
       if (!moved) widths();
       const nx=row.nextElementSibling;
-      attempt('pull',()=>{if (!nx?.matches(solo)) return false;cols[h.indexOf(Math.min(...h))].append(nx);return true;},()=>row.after(nx));
+      attempt('pull',()=>{if (!nx?.matches(solo) || nx.textContent.trim().length>160) return false;cols[h.indexOf(Math.min(...h))].append(nx);return true;},()=>row.after(nx));
       if (!moved && cost(h,w)>cost(before,w0)*.65) {w=w0;set(w);h=hs();}  // 省不到三成空白就保持原构图
       // ③两栏仍一长一短：短栏只占长栏前 k 块的高度，长栏第 k 块以后跨两栏用整宽（DOM 顺序不变，只改网格位置）。
       const sI=h.indexOf(Math.min(...h)),lc=cols[1-sI],kids=cols.length===2?[...lc.children].filter(c=>getComputedStyle(c).display!=='none'):[];
-      if (!moved && kids.length>=2 && Math.max(...h)-h[sI]>Math.max(120,Math.max(...h)*.2)) {
+      if (!preserveCompact && !moved && kids.length>=2 && Math.max(...h)-h[sI]>Math.max(120,Math.max(...h)*.2)) {
         w=w0;set(w);h=hs();
         const top=lc.getBoundingClientRect().top,k=kids.findIndex(c=>c.getBoundingClientRect().bottom-top>=h[sI]-1)+1;
         if (k>0 && k<kids.length) {

@@ -1751,7 +1751,7 @@
       {
         "type": "directory_tile",
         "text_ref": "电脑远程控制",
-        "columns": 2,
+        "columns": 3,
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": [
@@ -1775,7 +1775,7 @@
       {
         "type": "directory_tile",
         "text_ref": "双屏信息中心",
-        "columns": 1,
+        "columns": 3,
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": [

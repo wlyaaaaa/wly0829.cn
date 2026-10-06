@@ -263,12 +263,15 @@
       },
       {
         "type": "section_heading",
+        "row": "delivery",
+        "width": "52%",
         "align": "left",
         "size": "medium",
         "text_ref": "交出来的东西"
       },
       {
         "type": "content_card",
+        "row": "delivery",
         "columns": 1,
         "align": "left",
         "illustration": "left_inside",
@@ -283,6 +286,7 @@
       },
       {
         "type": "screenshot",
+        "row": "delivery",
         "columns": 1,
         "align": "center",
         "ratio": "16:9",
@@ -290,18 +294,22 @@
       },
       {
         "type": "prose",
+        "row": "delivery",
         "align": "left",
         "text_ref": "封面（真实截图"
       },
       {
         "type": "section_heading",
+        "row": "delivery",
+        "width": "48%",
         "align": "left",
         "size": "medium",
         "text_ref": "出了事怎么办"
       },
       {
         "type": "content_card",
-        "columns": 2,
+        "row": "delivery",
+        "columns": 1,
         "align": "left",
         "illustration": "left_inside",
         "icons": [

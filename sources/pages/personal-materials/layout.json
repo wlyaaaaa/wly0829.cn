@@ -455,29 +455,37 @@
         "type": "chapter_title",
         "text_ref": "每天17:10，自动",
         "align": "left",
+        "row": "routine",
+        "width": "33%",
         "size": "medium"
       },
       {
         "type": "prose",
-        "text_ref": "电脑配置与恢复每天备份个人资料，复制到备份硬盘之前先跑这一步："
+        "text_ref": "电脑配置与恢复每天备份个人资料，复制到备份硬盘之前先跑这一步：",
+        "row": "routine"
       },
       {
         "type": "bullet_list",
-        "text_ref": "逐条看登记过的原件还在不在；我删掉的，去掉那一条，连同只属于它的文字（为什么这样定，见亮点）刷新微信收到的文件和下载文件夹的文件名清单做完，"
+        "text_ref": "逐条看登记过的原件还在不在；我删掉的，去掉那一条，连同只属于它的文字（为什么这样定，见亮点）刷新微信收到的文件和下载文件夹的文件名清单做完，",
+        "row": "routine"
       },
       {
         "type": "prose",
-        "text_ref": "除此之外没有后台程序，不扫整台电脑。"
+        "text_ref": "除此之外没有后台程序，不扫整台电脑。",
+        "row": "routine"
       },
       {
         "type": "chapter_title",
         "text_ref": "出事怎么办",
         "align": "left",
+        "row": "routine",
+        "width": "67%",
         "size": "medium"
       },
       {
         "type": "table",
-        "text_ref": "情况它怎么做没找到列出实际查过哪些来源、哪些打不开、哪些没查，不说“没有这份”；你换个说法或说出大概在哪，它在同样的范围里接着找选中的文件变"
+        "text_ref": "情况它怎么做没找到列出实际查过哪些来源、哪些打不开、哪些没查，不说“没有这份”；你换个说法或说出大概在哪，它在同样的范围里接着找选中的文件变",
+        "row": "routine"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第3项：同排两个章节标题均声明 medium，删除重复头图的独立插画。标题图实际尺寸仍不受 size 控制，见 requests/main/page-fixer-05-qa-common.md。",
