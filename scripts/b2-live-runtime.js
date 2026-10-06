@@ -14,6 +14,8 @@ let status=null,phase='loading',lastRead=0,problem='',purpose='personal_data',co
 const grantKey='site-b2-access-request-v1',actionsKey='site-b2-access-actions-v1';
 
 const elements=new Map();
+const todayRiverHost=document.querySelector('[data-today-river]');
+const lastGrafanaGroups=new Map();
 
 const liveAnchors=data.b2_live_anchors||[];
 
@@ -332,7 +334,7 @@ function liveValue(slot){
   const rows=list('remote_network');if(!rows)return {text:status?.remote_network?.collection_state==='reading'?'正在读取远程和网络':'远程和网络读不到',state:'unknown'};
   const labels={tailscale:'远程网络',secondary_laptop:'副机',sunshine:'串流服务',system_proxy:'系统代理',internet:'互联网连接',windows_update_restart:'Windows重启'};
   const states={online:'在线',offline:'不在线',running:'在运行',stopped:'已停止',enabled:'已开启',disabled:'已关闭',ok:'连接正常',not_pending:'没有待重启',pending:'需要重启',unknown:'读不到',unavailable:'读不到',stale:'读数已过期'};
-  return {rows:[{text:'电脑连接服务：在线',state:'ok'},...rows.map(x=>({key:x.id,text:(labels[x.id]||name(x))+'：'+(states[x.state]||'状态读不到'),state:['unknown','unavailable','stale'].includes(x.state)?'unknown':['offline','stopped','pending'].includes(x.state)?'warn':'ok',detail:'北京时间 '+time(timestamp(x.observed_at))+' 读的',highlight:target?.id==='sunshine-remote-streaming'&&x.id==='sunshine'}))],state:rows.some(x=>['unknown','unavailable','stale'].includes(x.state))?'unknown':rows.some(x=>['offline','stopped','pending'].includes(x.state))?'warn':'ok'};
+  return {text:'电脑连接服务：在线',rows:rows.map(x=>({key:x.id,text:(labels[x.id]||name(x))+'：'+(states[x.state]||'状态读不到'),state:['unknown','unavailable','stale'].includes(x.state)?'unknown':['offline','stopped','pending'].includes(x.state)?'warn':'ok',detail:'北京时间 '+time(timestamp(x.observed_at))+' 读的',highlight:target?.id==='sunshine-remote-streaming'&&x.id==='sunshine'})),state:rows.some(x=>['unknown','unavailable','stale'].includes(x.state))?'unknown':rows.some(x=>['offline','stopped','pending'].includes(x.state))?'warn':'ok'};
  }
 
  if(slot==='cockpit-grafana'){
@@ -451,6 +453,7 @@ function liveGroup(section,cells,className,padding=.012){
 }
 
 function mount(){
+ if(todayRiverHost)document.querySelector('[data-screen="cockpit-01"]')?.after(todayRiverHost);
 
  for(const section of document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')){
 
@@ -502,9 +505,12 @@ function mount(){
 
  render();
 
+ if(todayRiverHost){document.querySelector('.b2-overview-main')?.after(todayRiverHost);todayRiverHost.style.pointerEvents='auto';}
+
 }
 
 function render(){
+ if(online())for(const key of Object.keys(grafanaGroupTitles)){const row=grafanaGroupRow(key);if(row.iframe)lastGrafanaGroups.set(key,row);}
 
  if(typeof globalToast!=='undefined'&&globalToast._rendered!==JSON.stringify([toast,toastState])){globalToast._rendered=JSON.stringify([toast,toastState]);globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
  const widths=new Map([...document.querySelectorAll('[data-b2-slot]')].map(el=>el.closest('.typeset-part')||el.closest('.screen')).filter(Boolean).map(section=>[section,section.clientWidth]));
@@ -512,13 +518,13 @@ function render(){
  for(const el of document.querySelectorAll('[data-b2-slot]')){
 
   const slot=el.dataset.b2Slot,valueRow=value(slot);
-  const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),displayRow=grouped?grafanaGroupValue(el.dataset.livePart):valueRow;
+  const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),cachedGroup=lastGrafanaGroups.get(el.dataset.livePart),displayRow=grouped?(phase==='error'&&cachedGroup?{...cachedGroup,state:'unknown',cached:true,retained:true,notice:Math.max(0,Math.floor((clock()-cachedGroup.readAt)/60))+' 分钟前读到 · 当前状态未知',cachedAt:cachedGroup.readAt*1000}:grafanaGroupValue(el.dataset.livePart)):valueRow;
   const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,widths.get(section)/layout.size[0]*30));
   const signature=JSON.stringify([displayRow,slotTime(slot),font,target?.id,online(),phase,lastContact()]);
   if(el.tagName!=='INPUT'&&el._rendered===signature)continue;
   el._rendered=signature;
   el.dataset.state=displayRow.state||'unknown';
-  if(grouped){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
+  if(grouped&&!displayRow.retained){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
 
   el.style.fontSize=font+'px';
   el.hidden=displayRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
@@ -527,7 +533,7 @@ function render(){
   if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||!status?.state_version||status?.factor?.available!==true||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
 
   if(slot==='ca-connection'){
-   const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':'读不到电脑';stamp.textContent=lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;
+   const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':lastRead?'连接暂时中断':'读不到电脑';stamp.textContent=lastRead&&phase==='error'?Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到':lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;
   }
 
   const content=document.createElement('div');
@@ -574,7 +580,7 @@ function render(){
  const hardwareSummary=document.querySelector('[data-b2-hardware-summary]');if(hardwareSummary&&window.LiveHardwareUI){const old=value('cockpit-pc'),displayed=old.hardwareCached?{...status,hardware:old.hardwareDisplay?.hardware,hardware_observed_at_unix:old.hardwareDisplay?.hardware_observed_at_unix}:online()?status:old.hardwareDisplay;syncChildren(hardwareSummary,[window.LiveHardwareUI.render(document,displayed,{mode:'compact',cached:!online(),hardwareCached:old.hardwareCached===true,at:old.cachedAt?old.cachedAt/1000:slotTime('cockpit-pc')})]);}
  let connectionNotice=document.querySelector('[data-b2-connection-notice]');if(!online()){
   if(!connectionNotice){connectionNotice=document.createElement('aside');connectionNotice.dataset.b2ConnectionNotice='true';connectionNotice.className='b2-connection-notice';connectionNotice.setAttribute('role','status');document.querySelector('main')?.prepend(connectionNotice);}
-  const text=offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
+  const text=lastRead&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到的数据。':offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
  }else if(connectionNotice&&!connectionNotice.hidden)connectionNotice.hidden=true;
  if(document.body.dataset.b2StatusPhase!==phase)document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
 
@@ -664,7 +670,7 @@ function action(key){
 
 }
 
-const reader=createStatusReader((signal,{refresh})=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime?.readTimeoutMs||8000}),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
+const reader=createStatusReader((signal,{refresh})=>window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
 
 function readStatus(options){if(!formal){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 

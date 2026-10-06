@@ -252,12 +252,14 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   for(const band of state.bands)if(band.optional)band.node.hidden=band.cells.every(cell=>cell.node.hidden);
   for(const band of state.bands)if(band.replace&&!band.column&&!band.row){
    const rect=band.cells[0].maskRect,offset=(rect[1]-band.start)*height;
-   Object.assign(band.cards.style,{marginTop:-((band.end-band.start)*height-offset)+'px',marginLeft:rect[0]*width+'px',width:rect[2]*width+'px',minHeight:(band.end-rect[1])*height+'px'});
-   band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,rect[3]*height)+'px');
+   Object.assign(band.cards.style,{marginTop:-((band.end-band.start)*height-offset)+'px',marginLeft:rect[0]*width+'px',width:rect[2]*width+'px',minHeight:'0px'});
+   band.cells[0].node.style.setProperty('--typeset-live-min-height','0px');
   }
-  for(const band of state.bands)if(band.row)band.cells[0].node.style.setProperty('--typeset-live-min-height',Math.max(94,band.cells[0].maskRect[3]*height)+'px');
-  if(state.column)state.column.cell.node.style.setProperty('--typeset-live-min-height',Math.max(94,state.column.rect[3]*height)+'px');
-  const columnDelta=state.column?Math.max(0,box.columnHeight-state.column.rect[3]*height):0;
+  for(const band of state.bands)if(band.row)band.cells[0].node.style.setProperty('--typeset-live-min-height','0px');
+  if(state.column)state.column.cell.node.style.setProperty('--typeset-live-min-height','0px');
+  for(const band of state.bands)if(band.row&&band.cells[0].maskRect[2]>.9)for(const tile of state.tiles)if(tile.node.parentNode===band.node)tile.node.style.height=Math.min((tile.end-tile.start)*height,band.cards.offsetHeight)+'px';
+  if(state.column?.rect[2]>.9)for(const tile of [state.tiles[0],state.tiles.at(-1)])tile.node.style.height=Math.min(height,state.column.cell.node.parentElement.parentElement.offsetHeight)+'px';
+  const columnDelta=state.column?box.columnHeight-state.column.rect[3]*height:0;
   const dynamic=new Set(state.cells.filter(cell=>!isLamp(cell)).map(cell=>cell.node));
   for(const node of [...state.overlay.children])if(!dynamic.has(node)){remember(state,node);}
   for(const [node,box]of state.boxes){
@@ -379,7 +381,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   if(!tile)return null;
   const image=tile.image.getBoundingClientRect();
   let delta=0;
-  if(state.column){const live=state.column.rect,overlap=rect[0]<live[0]+live[2]&&rect[0]+rect[2]>live[0];if(overlap&&rect[1]>=live[1]+live[3]-.00001)delta=Math.max(0,state.column.cell.node.getBoundingClientRect().height-live[3]*image.height);}
+  if(state.column){const live=state.column.rect,overlap=rect[0]<live[0]+live[2]&&rect[0]+rect[2]>live[0];if(overlap&&rect[1]>=live[1]+live[3]-.00001)delta=state.column.cell.node.getBoundingClientRect().height-live[3]*image.height;}
   return {left:image.left+rect[0]*image.width,top:image.top+rect[1]*image.height+delta,width:rect[2]*image.width,height:rect[3]*image.height,image_width:image.width,image_height:image.height};
  }
  function liveCell(host,node){

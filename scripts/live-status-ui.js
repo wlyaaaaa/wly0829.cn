@@ -61,7 +61,8 @@
     const history = cached || sourceState === 'stale' || input.source?.status === 'stale';
     const unavailable = !text(input.text) || ['unknown', 'offline', 'unavailable', 'stale'].includes(sourceState)
       || ['unknown', 'unavailable', 'offline', 'stale'].includes(input.source?.status);
-    const state = history && !unavailable ? 'offline' : unavailable ? (sourceState === 'offline' ? 'offline' : 'unknown') : sourceState;
+    const retained = input.retained === true;
+    const state = history && !unavailable && !retained ? 'offline' : unavailable ? (sourceState === 'offline' ? 'offline' : 'unknown') : sourceState;
     const [tone, status] = states[state] || states.unknown;
     const title = text(options.title) || text(options.prefix) || labels[options.slot] || '当前状态';
     const body = text(input.text) || '暂时读不到';
@@ -69,7 +70,7 @@
     const readAt = options.readAt === undefined ? input.readAt : options.readAt;
     const time = beijingTime(readAt, history);
     return {
-      title, body, lines, state, sourceState, tone, status, history, cached,
+      title, body, lines, state, sourceState, tone, status, history, cached, retained,
       time, timeLabel: time ? '北京时间 ' + time.label + (history ? ' 读到' : ' 读取') : '读取时间：读不到',
       href: safeURL(input.href), icon: safeURL(options.icon || options.icons?.[options.slot] || options.icons?.status)
     };
@@ -110,7 +111,7 @@
     const summary = node(document, 'div', 'live-status-summary');
     const dot = node(document, 'i', 'live-status-dot');
     dot.setAttribute('aria-hidden', 'true');
-    const summaryText = model.history ? model.status : model.lines[0];
+    const summaryText = model.history && !model.retained ? model.status : model.lines[0];
     summary.append(dot, node(document, 'strong', 'live-status-state', summaryText));
 
     const value = node(document, 'div', 'live-status-value');
@@ -125,10 +126,10 @@
     const time = node(document, model.time ? 'time' : 'span', 'live-status-time', model.timeLabel);
     if (model.time) time.dateTime = model.time.iso;
     footer.append(time);
-    if (model.history) footer.append(node(document, 'span', 'live-status-current-unknown', '当前状态读不到'));
+    if (model.history) footer.append(node(document, 'span', 'live-status-current-unknown', model.retained ? '显示上一次读数' : '当前状态读不到'));
     if (model.href && element.tagName === 'A') footer.append(node(document, 'span', 'live-status-link', '查看详情 ↗'));
     element.replaceChildren(heading, summary, ...(details.length ? [value] : []), footer);
-    element.title = model.title + '：' + model.body + '；' + model.timeLabel + (model.history ? '；历史记录，当前状态读不到' : '');
+    element.title = model.title + '：' + model.body + '；' + model.timeLabel + (model.history ? model.retained ? '；显示上一次读数' : '；历史记录，当前状态读不到' : '');
 
     if (element.tagName === 'A') {
       if (model.href) {
