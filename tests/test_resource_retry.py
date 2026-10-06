@@ -19,6 +19,15 @@ HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name
 <img id="terminal" src="/fixture/terminal.svg" width="120" height="80"><div style="height:18000px"></div><img id="lazy" src="/fixture/lazy.svg" width="120" height="80" loading="lazy"></body></html>'''.encode()
 
 class SourceTests(unittest.TestCase):
+    def test_mixed_predecessor_requires_exact_bound_page_addition(self):
+        old='\n<script '+prep.MARKER+' src="/old.js"></script>\n'
+        info={'addition':old.replace('/old.js','/current.js'),'initial_capture_addition':prep.INITIAL_CAPTURE}
+        raw=(prep.INITIAL_CAPTURE+'<body>unchanged</body>'+old).encode()
+        clean,ledger=prep.remove_previous_recovery(raw,info,[{'text':old}])
+        self.assertEqual(clean,b'<body>unchanged</body>')
+        self.assertEqual(prep.restore_previous_recovery(clean,ledger),raw)
+        with self.assertRaises(ValueError):prep.remove_previous_recovery(raw,info)
+        with self.assertRaises(ValueError):prep.remove_previous_recovery(raw.replace(b'/old.js',b'/unbound.js'),info,[{'text':old}])
     def test_stylesheet_marker_preserves_handlers_and_rollback_exact_original_bytes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)

@@ -599,6 +599,10 @@ def validate_content(output, report, oss_preparation=None):
                 # evidence for the actual external JavaScript inventory.
                 continue
             unchanged_record=unchanged_search_finding(output/finding['file'],finding,manifest.get('release_overlay',{}).get(finding['file']))
+            previous=manifest.get('resource_retry_preparation',{}).get('previous_manifest')
+            if previous and finding['file'] in changed_content-selected and finding['type']=='excluded_topic':
+                original=Path(previous['path']).parent/finding['file']
+                unchanged_record |= original.is_file() and digest(original)==manifest['baseline_files'][finding['file']]['sha256'] and unchanged_topic_text(original.read_bytes().decode('utf-8-sig'),(output/finding['file']).read_bytes().decode('utf-8-sig'),finding)
             audit_retained=retained_audit_topic(output,finding,manifest,baseline_cache)
             if audit_retained: audit_topics.append(finding)
             if unchanged_record or audit_retained or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
