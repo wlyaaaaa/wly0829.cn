@@ -1072,6 +1072,11 @@ def main():
     if original_app and manifest['files'].get(original_app['path'])=={key:original_app[key] for key in ('sha256','bytes')}:
         manifest['home_static_preparation']=static_home
         hybrid.write(raw_output/hybrid.MANIFEST,manifest)
+    comic_home=baseline_manifest.get('home_comic_preparation',{})
+    comic_files=[rel for rel in baseline_manifest['files'] if rel.startswith('_shared/home-comic/'+comic_home.get('package_id','')[:20]+'/')]
+    if comic_home and comic_files and all(manifest['files'].get(rel)==baseline_manifest['files'][rel] for rel in comic_files):
+        manifest['home_comic_preparation']=comic_home
+        hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     creative=None;creative_inputs={}
     if args.creative_preparation:
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
