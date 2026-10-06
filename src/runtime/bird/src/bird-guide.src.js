@@ -1,11 +1,11 @@
 /* 小鸟带路（LivingBird.guide）：读者往下翻，画快翻出去时，鸟先在画里起飞、从画的上沿飞出去；读者停下约 1.5 秒，
- * 鸟从吸顶栏下面飞进眼前，落在那一节的小标题或卡片上沿。往回翻、画重新露出来时反过来：鸟从眼前往上飞走，
+ * 鸟从目标旁的留白飞进眼前，贴着那一节的小标题或卡片上沿落下。开始往回翻时立即收起页面鸟，等画重新露出来，
  * 读者停下后再从画的上沿落回原来的落脚点。夜里鸟在画里睡、不跟；系统设了减少动态时整块不启用；标签页隐藏时不做决定。
  *
  * 用法：var g = LivingBird.guide(bird, { data: 配置.guide[方向], params: 配置.guide.params });  // 没有可用落点时返回 null
  *       g.state() 读最近一次决定；g.destroy() 拆掉（鸟 destroy 时自动拆）。
- * 落点由 scripts/bird_guide_perches.py 离线从分片原图算好（不压字、不挡链接、不站角尖），这里只按读者位置挑一个。
- * 性能：滚动监听是 passive；回调里只记时间，并且每 0.1 秒最多用缓存的画框位置和 scrollY 比一次（不读版面）；
+ * 落点相对当前卡片框或章节顶部，读取本次重出的页面几何，只按读者位置挑一个。
+ * 性能：滚动监听是 passive；向下滚动每 0.1 秒最多用缓存画框和 scrollY 比一次，回顶立即收起；
  *       停下后才一次性读位置、再交给鸟去写；只有鸟在飞或在做小动作时才跑动画帧。
  */
 (function (G) {
@@ -23,13 +23,10 @@
     phonePageMin: 28,    // 手机
     departLine: 0.35,    // 往下翻：家的落点被翻到吸顶栏以下可视高度的上 35% 以内时起飞……
     departFrac: 0.55,    // ……或者画只剩 55% 还露在吸顶栏下面时起飞（两者先到为准；落点得还看得见）
-    returnFrac: 0.12,    // 往回翻：画的下沿露出到吸顶栏下 12% 可视高度时，鸟先从眼前飞走……
-    leaveLow: 0.85,      // ……或者鸟的落点被翻到屏幕 85% 以下、快掉出眼前时，就先往上飞走（不被读者甩在后面）
-    fastScroll: 2.5,     // 翻得比这快（像素/毫秒，例如点“回到顶部”）就不演飞走，直接收起
     readLine: 0.3,       // 读者眼睛所在的那条线：吸顶栏以下可视高度的 30%
     bandBottom: 0.58,    // 候选落点最低到可视高度的 58%（再低就不算“眼前”）
     stayBottom: 0.8,     // 鸟当前落点还在吸顶栏下到 80% 之间，就不挪
-    far: 1.25,           // 新落点离鸟超过 1.25 个屏高：不长途飞，从屏幕上沿或下沿飞进来（电脑）
+    far: 1.25,           // 新落点离鸟超过 1.25 个屏高：不长途飞，从目标旁的留白靠近（电脑）
     phoneFar: 0.9,       // 手机更短
     pace: 720,           // 飞行速度（像素/秒，电脑）
     phonePace: 520,      // 手机慢一点、距离也短
@@ -47,22 +44,28 @@
     if (o.params) for (k in o.params) if (k in DEFAULTS) P[k] = o.params[k];
 
     var dead = false, timer = 0, lastScroll = 0, lastWatch = 0, lastY = G.scrollY || 0, lastVisit = -1e9, inflight = false, started = false;
-    var current = null, parts = [], resizeTimer = 0, fromPainting = false, geo = null;
+    var current = null, parts = [], resizeTimer = 0, fromPainting = false, geo = null, returning = false, lastEventY = lastY;
     var why = 'waiting', decisions = 0, flights = 0, homes = 0, departs = 0, leaves = 0, scan = null;
 
     function phone() { return (document.documentElement.clientWidth || G.innerWidth) < P.phoneWidth; }
-    function base(src) { try { return new URL(src, document.baseURI).pathname.split('/').pop(); } catch (e) { return ''; } }
     function where(st) { return st.mode === 'page' ? 'page' : st.vis ? 'home' : 'away'; }
 
-    // 页面数据里的分片 → 当前页面上的元素；原图换过（文件名不同）的分片整块跳过，免得落点对不上
+    // 按章节、方向和卡片索引取当前页面元素几何，不绑定旧分片文件名或整页高度。
     function resolve() {
       parts = [];
       data.parts.forEach(function (d) {
         var sec = document.getElementById(d.s);
-        if (!sec) return;
-        var list = sec.querySelectorAll('.typeset-part[data-orientation="' + (d.o || o.orient || 'h') + '"]'), el = list[d.i || 0];
-        var im = el && el.querySelector('picture img');
-        if (!im || base(im.getAttribute('data-src') || im.getAttribute('src') || im.currentSrc) !== d.img) return;
+        var host = sec && sec.querySelectorAll('.typeset-part[data-orientation="' + (d.o || o.orient || 'h') + '"]')[d.i || 0];
+        if (!host) return;
+        var el = { getBoundingClientRect: function () {
+          var layout = host._layout, rect = d.card == null ? [0, 0, 1, 1 / (layout?.size[1] || 1)] : layout?.cards[d.card];
+          if (!rect || !host.getClientRects().length) return { width: 0, height: 0 };
+          var image = host.querySelector('picture img'), r = image.getBoundingClientRect();
+          var box = G.TypesetLiveFlow?.sourceBox(host, rect);
+          if (!box && !r.height) return { width: 0, height: 0 };
+          box = box || { left: r.left + rect[0] * r.width, top: r.top + rect[1] * r.height, width: rect[2] * r.width, height: rect[3] * r.height };
+          return { left: box.left, top: box.top, width: box.width, height: box.width, bottom: box.top + Math.max(box.height, box.width * Math.max(0.1, ...d.perches.map(q => q[2]))) };
+        } };
         parts.push({ el: el, d: d });
       });
       bird.setPageSize(phone() ? P.phonePageMin : P.pageMin);
@@ -88,10 +91,11 @@
       return (phone() ? P.phoneDwell : P.dwell) * 1000;
     }
     function onScroll() {
-      var now = performance.now();
+      var now = performance.now(), y = G.scrollY || 0, up = y < lastEventY;
+      lastEventY = y;
       lastScroll = now;
       if (!timer) timer = setTimeout(tick, need());
-      if (now - lastWatch > 100) { lastWatch = now; watch(); }
+      if (up || now - lastWatch > 100) { lastWatch = now; watch(up); }
     }
     function tick() {
       timer = 0;
@@ -102,15 +106,14 @@
     }
     function later(ms) { if (!timer && !dead) timer = setTimeout(tick, Math.max(50, ms)); }
 
-    var lastWatchY = 0;
-    function watch() {
-      var y = G.scrollY || 0, down = y > lastY + 1, up = y < lastY - 1, now = performance.now();
-      var speed = Math.abs(y - lastY) / Math.max(16, now - lastWatchY);
-      lastY = y; lastWatchY = now;
+    function watch(back) {
+      var y = G.scrollY || 0, down = !back && y > lastY + 1, up = back || y < lastY - 1;
+      lastY = y;
       if (dead || inflight || document.hidden) return;
       if (o.refreshNight) o.refreshNight();
       var st = bird.state();
       if (!st || !st.loaded || st.reduced || st.night) return;
+      if (down) returning = false;
       if (!started) { if (st.vis && !st.busy) started = true; else return; }
       if (!geo) { var i0 = bird.info(); if (!i0) return; measureGeo(i0, chromeBottom(G.innerHeight)); }   // 只在第一次和窗口变化后读一次版面
       var w = where(st), hdr = geo.hdr, vh = G.innerHeight;
@@ -122,10 +125,11 @@
           inflight = true; why = 'depart';
           bird.away({ pace: phone() ? P.phonePace : P.pace }).then(function () { inflight = false; departs++; fromPainting = true; });
         }
-      } else if (w === 'page' && up && !st.flying && ((current && current.docY - y > vh - (1 - P.leaveLow) * (vh - hdr)) || geo.bottom - y > hdr + P.returnFrac * (vh - hdr))) {
-        // 往回翻：落点快掉出眼前、或画重新露出来时，鸟先从眼前往上飞走；翻得太快或落点已不在眼前就直接收起
+      } else if (w === 'page' && up && !st.flying) {
+        // 第一条回顶滚动就收起，避免页面移动或离场路线压到正文；停在途中也不重新落卡片
+        returning = true;
         inflight = true; why = 'leave-page';
-        bird.away({ edge: { top: hdr }, pace: phone() ? P.phonePace : P.pace, instant: speed > P.fastScroll }).then(function () {
+        bird.away({ edge: { top: hdr }, instant: true }).then(function () {
           inflight = false; leaves++; current = null; fromPainting = false;
         });
       }
@@ -168,10 +172,11 @@
         inflight = true; why = 'return-home';
         var first = w === 'page' ? bird.away({ edge: edge, pace: pace }) : Promise.resolve();
         first.then(function () { return bird.arrive({ from: 'top' }); }).then(function () {
-          inflight = false; current = null; homes++; fromPainting = false;
+          inflight = false; current = null; homes++; fromPainting = false; returning = false;
         });
         return;
       }
+      if (returning) { why = 'returning'; return; }
       // 家的落点已经翻到吸顶栏下面、鸟还在家：读者看不见它，当作已经离开画
       if (w === 'home') fromPainting = true;
       // 2) 节制：离开画后的第一次只等停顿；之后在页面上挪地方至少隔一会儿；鸟就在眼前合适的位置就不挪
@@ -183,7 +188,7 @@
       var line = hdr + P.readLine * use, best = null, bestScore = Infinity;
       scan = { parts: 0, perches: 0, tooBig: 0, outOfBand: 0, same: 0, band: [Math.round(hdr + b + 8), Math.round(hdr + P.bandBottom * use)] };
       for (var n = 0; n < parts.length; n++) {
-        var pr = parts[n], r = pr.el.getBoundingClientRect();
+        var pr = parts[n], fragment = pr.el, r = fragment.getBoundingClientRect();
         if (!r.height || r.bottom < hdr || r.top > vh) continue;
         var rel = b / r.width, ps = pr.d.perches;
         scan.parts++;
@@ -193,14 +198,14 @@
           if (rel > q[4]) { scan.tooBig++; continue; }
           var y = r.top + q[2] * r.height, x = r.left + q[1] * r.width;
           if (y < hdr + b + 8 || y > hdr + P.bandBottom * use) { scan.outOfBand++; continue; }
-          if (current && current.el === pr.el && current.q === q) { scan.same++; continue; }
+          if (current && current.el === fragment && current.q === q) { scan.same++; continue; }
           var s = Math.abs(y - line) / use - (q[0] === 'title' ? P.titleBonus : 0);
-          if (s < bestScore) { bestScore = s; best = { el: pr.el, q: q, x: x, y: y, s: pr.d.s, docY: y + (G.scrollY || 0) }; }
+          if (s < bestScore) { bestScore = s; best = { el: fragment, q: q, x: x, y: y, s: pr.d.s, docY: y + (G.scrollY || 0) }; }
         }
       }
       if (!best) { why = 'no-target'; return; }                             // 找不到合适的就不飞
 
-      // 4) 不在眼前、或远了：不长途飞，从吸顶栏下面（或屏幕下沿）飞进来
+      // 4) 不在眼前、或远了：标记为入场，由鸟统一沿目标外侧留白靠近
       var from = null;
       if (!visible || Math.abs(best.y - i.y) > far) from = w !== 'page' || i.y < best.y ? 'top' : 'bottom';
       inflight = true; why = from ? 'fly-enter-' + from : 'fly';

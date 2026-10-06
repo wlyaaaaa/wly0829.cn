@@ -179,12 +179,6 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         else:
             subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'bird-first':
-            engine=(dest/refs['engine_url'].lstrip('/')).read_text('utf8'); needle='M=A.getBoundingClientRect(),k=Math.round(M.width)'
-            assert engine.count(needle)==1
-            engine=engine.replace(needle,'M=(()=>{const f=window.TypesetLiveFlow?.sourceBox(e,x);return f?{left:f.left-x[0]*f.image_width,top:f.top-x[1]*f.image_height,width:f.image_width,height:f.image_height}:A.getBoundingClientRect()})(),k=Math.round(M.width)').replace('ge.className="living-layer",','ge.className="living-layer",ge.style.zIndex="1",')
-            rel='_living/_engine/living.'+hybrid.hashlib.sha256(engine.encode()).hexdigest()[:10]+'.js'; (dest/rel).write_text(engine,encoding='utf8')
-            for row in refs['mounted']:
-                p=dest/row['route']; p.write_text(p.read_text('utf8').replace(refs['engine_url'],'/'+rel),encoding='utf8')
             updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
         if name == 'native-living':
             import shutil
