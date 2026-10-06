@@ -214,7 +214,7 @@
       },
       {
         "type": "directory_tile",
-        "columns": 1,
+        "columns": 3,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
@@ -232,9 +232,30 @@
           "文稿转 PDF": "_library/icons/文稿堆.png",
           "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
         }
+      },
+      {
+        "type": "directory_tile",
+        "columns": 1,
+        "align": "left",
+        "size": "medium",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "〔PDF 逐页检查〕",
+        "icon_map": {
+          "找照片和录音": "_library/icons/波形照片.png",
+          "找文件原件": "_library/icons/文稿堆.png",
+          "照片录音里有没有我": "_library/icons/人物照片.png",
+          "看微信聊天": "_library/icons/微信标志.png",
+          "中文语音转写技能": "_library/icons/麦克风.png",
+          "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "修乱码": "_library/icons/梳理乱线.png",
+          "文稿转 PDF": "_library/icons/文稿堆.png",
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+        }
       }
     ],
-    "notes": "亲眼查看横图：第一组4列，图标位于各卡上方内侧，名称和正文在其下，属于标签右下；第二组旧图3列两行、图标在卡内左侧。旧图第二组含当前定稿已删除的一堆文件一起看，删后按实图3列保留5项，3+2排列，末排靠左且不拉宽，不画空牌。scene和components.md写第二组4+1，与实图3列冲突，留作Claude裁定。旧图第二组说明多有一堆杂文件一词，按当前定稿逐字替换。组名为Noto Sans SC粗体深绿、左对齐，与组说明同一行；组间淡绿笔刷线，右上角叶簇。目录块内含组名、说明及所有卡片，勿另画屏标题。；page-fixer-03 审页修复：各组独立用同一中号深绿粗体 section_heading，说明使用正文角色；手机每组从标题前换张，撤销标题/首卡间的旧切点。目录卡仍沿用原列数和图位。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。"
+    "notes": "亲眼查看横图：第一组4列，图标位于各卡上方内侧，名称和正文在其下，属于标签右下；第二组旧图3列两行、图标在卡内左侧。旧图第二组含当前定稿已删除的一堆文件一起看，删后按实图3列保留5项，3+2排列，末排靠左且不拉宽，不画空牌。scene和components.md写第二组4+1，与实图3列冲突，留作Claude裁定。旧图第二组说明多有一堆杂文件一词，按当前定稿逐字替换。组名为Noto Sans SC粗体深绿、左对齐，与组说明同一行；组间淡绿笔刷线，右上角叶簇。目录块内含组名、说明及所有卡片，勿另画屏标题。；page-fixer-03 审页修复：各组独立用同一中号深绿粗体 section_heading，说明使用正文角色；手机每组从标题前换张，撤销标题/首卡间的旧切点。目录卡仍沿用原列数和图位。；page-fixer-03响应接入：main14:44标题图小档已消费，独立组名恢复同套小毛笔图，说明与手机组前换张保留。\n2026-10-06 Astra复核退回：恢复第二组原三栏，仅将最后一张PDF逐页检查目录卡独立成整行；其余卡片保留原栏数。"
   },
   {
     "screen": "skills-home-02",

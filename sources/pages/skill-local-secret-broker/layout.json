@@ -113,17 +113,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "medium",
-        "text_ref": "一个完整的例子",
-        "row": "balanced-heading",
-        "width": "88%"
-      },
-      {
-        "type": "illustration",
-        "illustration": "outside",
-        "size": "small",
-        "align": "center",
-        "row": "balanced-heading",
-        "width": "12%"
+        "text_ref": "一个完整的例子"
       },
       {
         "type": "flow",
@@ -136,7 +126,17 @@
           "_library/icons/钥匙.png"
         ],
         "connector": "none",
+        "row": "example",
+        "width": "58%",
         "text_ref": "1只搜名称"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "small",
+        "row": "example",
+        "width": "42%",
+        "align": "center"
       },
       {
         "type": "flow",
@@ -164,17 +164,21 @@
           "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
         ],
         "connector": "none",
-        "text_ref": "5本机弹窗"
+        "text_ref": "5本机弹窗",
+        "row": "receipt",
+        "width": "50%"
       },
       {
         "type": "content_card",
         "columns": 1,
         "illustration": "none",
         "icons": "none",
-        "text_ref": "AI 收到的只有"
+        "text_ref": "AI 收到的只有",
+        "row": "receipt",
+        "width": "50%"
       }
     ],
-    "notes": "原横图顶端整屏宽示例标题，左侧 1—3 步三个横卡顺排，右上为笔记本/猫/书/杯子大插画；第 4 步跨左侧约 68% 宽，右侧是两支小卡并以绿色细线接第 4 步；最下一行左为第 5 步、右为 AI 收到的只有。步骤图标在卡内左侧，编号圆在更左；主链不画丝带。现 row 排法表达左步骤右插画/说明，精确跨行第 4/5 步及分支需 flow 支持；分支的还在有效期里/没有有效期不在定稿独立标签中，不自行增字。 2026-10-03 page-fixer-09：首三步左列、small插画右列；后两步及原AI回执交flow满宽，已有branch_refs接第四步原文两支，末排两卡。 第二轮：原回执仍用独立无图卡，避免flow把五步骤+回执误算六图；五步明确绑定现有搜索、双气泡、钥匙、身份盾牌、显示器，原字和编号不变。"
+    "notes": "原横图顶端整屏宽示例标题，左侧 1—3 步三个横卡顺排，右上为笔记本/猫/书/杯子大插画；第 4 步跨左侧约 68% 宽，右侧是两支小卡并以绿色细线接第 4 步；最下一行左为第 5 步、右为 AI 收到的只有。步骤图标在卡内左侧，编号圆在更左；主链不画丝带。现 row 排法表达左步骤右插画/说明，精确跨行第 4/5 步及分支需 flow 支持；分支的还在有效期里/没有有效期不在定稿独立标签中，不自行增字。 2026-10-03 page-fixer-09：首三步左列、small插画右列；后两步及原AI回执交flow满宽，已有branch_refs接第四步原文两支，末排两卡。 第二轮：原回执仍用独立无图卡，避免flow把五步骤+回执误算六图；五步明确绑定现有搜索、双气泡、钥匙、身份盾牌、显示器，原字和编号不变。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。"
   },
   {
     "screen": "skill-local-secret-broker-02",

@@ -202,42 +202,43 @@
         "type": "chapter_title",
         "text_ref": "通知、声明和打印版",
         "align": "center",
-        "size": "medium",
-        "row": "notice-heading",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "通知和声明",
+        "row": "notice",
         "width": "90%"
       },
       {
         "type": "document_mock",
         "variant": "paper",
         "mock_layout": "unsigned_notice",
+        "row": "notice",
+        "width": "10%",
         "size": "small",
-        "align": "right",
-        "row": "notice-heading",
-        "width": "10%"
-      },
-      {
-        "type": "prose",
-        "text_ref": "通知和声明"
+        "align": "right"
       },
       {
         "type": "section_heading",
         "text_ref": "电子版和打印版",
-        "row": "balanced-heading",
-        "width": "85%"
-      },
-      {
-        "type": "illustration",
-        "index": 0,
-        "target_height": 180,
-        "target_width": 343,
-        "align": "center",
-        "row": "balanced-heading",
-        "width": "15%"
+        "row": "versions",
+        "width": "80%"
       },
       {
         "type": "table",
         "text_ref": "电子版（默认）",
-        "portrait_variant": "column_cards"
+        "portrait_variant": "column_cards",
+        "row": "versions"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "versions",
+        "width": "20%",
+        "target_height": 180,
+        "target_width": 343,
+        "align": "center"
       }
     ],
     "portrait_required": true,
@@ -249,7 +250,7 @@
     "pending_requirements": [
       "通知无字样张的三小节与签名/日期线，及三段逐项图标需补齐；竖版原表要求按电子版/打印版两列转两卡，现 table 按数据行转卡。"
     ],
-    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；page-fixer-03 审页修复：通知正文/无字纸样张改为60%/40%，纸样张用组件已实现的小档控制留白。；page-fixer-03第二轮：首轮纸样张仍高，正文/样张改80%/20%，按缩小样张路线让无字纸面随栏宽缩小，保原文及字号。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：无字通知纸张栏由20%收为10%，文字栏扩为90%；打印插画等比限高180，避免短说明旁纸张撑出一整段空白。 仅更改单页排版规格，不改定稿字句和素材文件。\n插画实际复验：target_height与target_width按素材完整自然比例成对设置，不把单独max-height压成扁图；原图字节不变。",
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；page-fixer-03 审页修复：通知正文/无字纸样张改为60%/40%，纸样张用组件已实现的小档控制留白。；page-fixer-03第二轮：首轮纸样张仍高，正文/样张改80%/20%，按缩小样张路线让无字纸面随栏宽缩小，保原文及字号。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：无字通知纸张栏由20%收为10%，文字栏扩为90%；打印插画等比限高180，避免短说明旁纸张撑出一整段空白。 仅更改单页排版规格，不改定稿字句和素材文件。\n插画实际复验：target_height与target_width按素材完整自然比例成对设置，不把单独max-height压成扁图；原图字节不变。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-formal-documents\\img\\personal-formal-documents-03-h.png"
   },
   {
