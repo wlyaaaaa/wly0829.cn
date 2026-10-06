@@ -14,3 +14,4 @@ src/runtime/bird/** -text
 sources/living/** -text
 sources/bird/** -text
 config/build.json -text
+config/assembled-rules-pin.json -text

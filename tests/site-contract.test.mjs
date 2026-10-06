@@ -4029,7 +4029,7 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /GitHub fine-grained token/);
   assert.match(verifier, /const secretPatterns/);
   assert.doesNotMatch(verifier, /forbiddenTerms|forbidden_public_term/);
-  assert.doesNotMatch(verifier, /textExtensions/);
+  assert.match(verifier, /production_remote_content_evidence_reused_count/);
   assert.match(verifier, /core\.quotepath=false/);
   assert.match(verifier, /"-z"/);
   assert.match(verifier, /split\("\\0"\)/);

@@ -315,7 +315,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
     navigation_pages = nav_repair.page_inventory(output)
     for rel in accepted_files:
-        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'))
+        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'),candidate)
     while pending:
         rel = pending.pop()
         if rel in copied: continue
@@ -374,7 +374,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     verify_release(output)
     return manifest
 
-def verify_release(output):
+def verify_release(output, require_remote=True):
     manifest = read(output/MANIFEST)
     if manifest.get('schema') != 'wly.hybrid-release.v1' or inventory(output) != manifest['files']:
         raise ValueError('Release bytes differ from manifest')
@@ -382,7 +382,7 @@ def verify_release(output):
         oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
         oss = importlib.util.module_from_spec(oss_spec)
         oss_spec.loader.exec_module(oss)
-        oss.verify_manifest(manifest)
+        oss.verify_manifest(manifest, require_remote=require_remote)
         for route in manifest['routes']:
             if route_file(route) not in manifest['files']:
                 raise ValueError('Missing protected route: '+route)
@@ -520,15 +520,22 @@ def oss_module():
     return module
 
 
+def checker_version():
+    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py',
+             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json']
+    return hashlib.sha256(json.dumps({p: (builder.ROOT/p).read_text('utf-8-sig') for p in paths}, sort_keys=True).encode()).hexdigest()
+
+
 def validate_content(output, report, oss_preparation=None):
     output=output.resolve()
     manifest = verify_release(output)
     asset_prefix = None
+    verified_files = {}
     budget_root = output if manifest.get('oss') else None
     if oss_preparation is not None:
         preparation = Path(oss_preparation).resolve()
         plan = oss_module().verify_local(preparation)
-        split = verify_release(preparation/'github')
+        split = verify_release(preparation/'github', require_remote=False)
         if plan['release_id'] != split['release_id']:
             raise ValueError('OSS budget preparation and sealed split identities differ')
         if manifest.get('oss'):
@@ -542,10 +549,20 @@ def validate_content(output, report, oss_preparation=None):
                 raise ValueError('OSS budget preparation belongs to another source or inventory')
             budget_root = preparation/'github'
     if manifest.get('oss'):
-        # The existing artifact gate needs actual files, including remote JS
-        # repository references. Materialize verified bodies in the ignored
-        # task/CI cache and run that same gate over the complete release.
         oss = oss_module()
+        workbench = builder.rule_contract.parse_workbench_metadata((output/'rules/index.html').read_text('utf8'), site_root=output) if 'rules/index.html' in manifest['files'] else None
+        required_bodies = {part['src'] for row in (workbench or {}).get('screens', []) for part in row.get('parts', [])}
+        evidence = manifest['oss'].get('content_verification')
+        if evidence is not None:
+            coverage = evidence.get('output_files', {})
+            source_files = {rel: entry for rel, entry in coverage.items() if rel != MANIFEST}
+            if (evidence.get('status') != 'pass' or evidence.get('sealed_release_id') != manifest['release_id']
+                    or set(coverage) != set(manifest['files']) | set(manifest['oss']['objects']) | {MANIFEST}
+                    or hashlib.sha256(json.dumps(source_files, sort_keys=True).encode()).hexdigest() != manifest['oss']['source_release_id']
+                    or any(coverage.get(rel) != obj['source'] for rel, obj in manifest['oss']['objects'].items())):
+                write(report, {'status':'block', 'reason':'OSS content evidence differs from manifest'})
+                raise ValueError('OSS content evidence differs from manifest')
+            if evidence.get('checker_sha256') != checker_version(): evidence = None
         cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
         cache.mkdir(parents=True, exist_ok=True)
         for rel in list(manifest['files'])+[MANIFEST]:
@@ -553,10 +570,27 @@ def validate_content(output, report, oss_preparation=None):
             shutil.copyfile(output/rel,target)
         def materialize(item):
             rel,obj=item
-            return rel,oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60,download_to=cache/rel)
-        with ThreadPoolExecutor(max_workers=4) as pool:
+            previous = manifest['oss']['verification']['objects'][rel]
+            old_headers = {k.lower(): v for k, v in previous['headers'].items()}
+            unchanged = False
+            try:
+                request = oss.Request(obj['url'], method='HEAD', headers={'Origin':'https://wly0829.cn', 'Referer':'https://wly0829.cn/', 'Accept-Encoding':'identity'})
+                with oss.urlopen(request, timeout=20) as response:
+                    headers = {k.lower(): v for k, v in response.headers.items()}
+                    unchanged = (response.status == 200 and int(headers.get('content-length', -1)) == obj['bytes']
+                                 and bool(old_headers.get('etag')) and headers.get('etag') == old_headers['etag']
+                                 and all(headers.get(k) == old_headers.get(k) for k in ('content-type', 'access-control-allow-origin', 'content-encoding')))
+            except (OSError, ValueError): pass
+            if evidence and unchanged and obj['byte_preserved'] and obj['url'] not in required_bodies and Path(rel).suffix not in builder.TEXT_EXT | oss.TEXT_ASSETS:
+                return rel, {'method':'HEAD', 'bytes':obj['bytes'], 'etag':headers['etag']}
+            target = cache/rel
+            if unchanged and target.is_file() and target.stat().st_size == obj['bytes'] and digest(target) == obj['sha256']:
+                return rel, {**previous, 'method':'cached full body SHA256'}
+            return rel, {**oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60,download_to=target), 'method':'GET'}
+        with ThreadPoolExecutor(max_workers=16) as pool:
             rows=dict(pool.map(materialize,manifest['oss']['objects'].items()))
-        write(cache.parent/'actual-get.json',{'release_id':manifest['release_id'],'objects':rows,
+        verified_files = {rel: manifest['oss']['objects'][rel] for rel, row in rows.items() if row['method'] == 'HEAD'}
+        write(cache.parent/'object-checks.json',{'release_id':manifest['release_id'],'objects':rows,'checker_sha256':checker_version(),
                                              'checked_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()})
         output=cache
         asset_prefix=manifest['oss']['asset_base_url']+'/'+manifest['oss']['prefix']+'/'
@@ -583,7 +617,7 @@ def validate_content(output, report, oss_preparation=None):
         # The complete artifact
         # still receives every credential, private-repository and resource check.
         with contextlib.redirect_stdout(io.StringIO()):
-            try: builder.validate(output, report, asset_prefix=asset_prefix, budget_root=budget_root)
+            try: builder.validate(output, report, asset_prefix=asset_prefix, budget_root=budget_root, verified_files=verified_files)
             except SystemExit: pass
         result = read(report)
         selected = {route_file(x) for x in manifest['accepted_pages']}
@@ -615,6 +649,7 @@ def validate_content(output, report, oss_preparation=None):
         result['content_gate_scope']='Current accepted pages and their assets; direct navigation resolves against all preserved production routes. Exact baseline bytes remain verified separately.'
         result['ready_to_publish'] = not kept and not result['missing_references'] and not result['required_missing']
         result['status'] = 'pass' if result['ready_to_publish'] else 'block'
+        result.update(checker_sha256=checker_version(), checked_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat(), reused_binary_objects=len(verified_files))
         write(report, result)
         print(json.dumps({'status':result['status'],'findings':len(kept),'preserved_baseline_topic_findings':len(retained_topics),'missing_references':len(result['missing_references'])}))
         if not result['ready_to_publish']: raise ValueError('Hybrid content gate failed; inspect '+str(report))

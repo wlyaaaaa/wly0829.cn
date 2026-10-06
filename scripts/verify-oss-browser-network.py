@@ -181,7 +181,7 @@ def compat_contract(root, manifest, documents, route):
     title_spec = importlib.util.spec_from_file_location('c09_redirect_navigation',HERE/'repair-release-navigation.py')
     title_module = importlib.util.module_from_spec(title_spec)
     title_spec.loader.exec_module(title_module)
-    title = title_module.PageFacts(target_text).title
+    title = title_module.PageFacts(target_text,root).title
     if not title:
         return None
     return {'initial_url':ORIGIN+route,'target_url':target,

@@ -28,24 +28,34 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     outputs:
       pages_artifact_id: ${{ steps.pages_artifact.outputs.artifact_id }}
     steps:
       - name: Check out source
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-
+          fetch-depth: 1
       - name: Restore exact static release
         if: inputs.site == 'rollback'
         env:
           RESTORE_REF: ${{ inputs.restore_ref }}
         run: |
           test -n "$RESTORE_REF" || { echo 'restore_ref is required'; exit 1; }
+          git fetch --depth=1 origin "$RESTORE_REF"
           python3 scripts/hybrid-release.py restore --ref "$RESTORE_REF" --output restored-release
           if [ -d site-release ]; then mv site-release before-restore-release; fi
           mv restored-release site-release
+
+      - name: Fetch only the baseline needed by content validation
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          path = Path('site-release/release-manifest.json')
+          baseline = json.loads(path.read_text('utf8')).get('baseline_production_commit') if path.is_file() else None
+          if baseline: subprocess.run(['git','fetch','--depth=1','origin',baseline],check=True)
+          PY
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -96,6 +106,13 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_oss_release.py'
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/hybrid-release.py verify --output dist --content-report hybrid-content-report.json --public-repos-from-github
+
+      - name: Upload failed hybrid content report
+        if: failure() && steps.source.outputs.site == 'hybrid'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hybrid-content-report
+          path: hybrid-content-report.json
 
       - name: Reverify final generated artifact
         run: npm run verify:public

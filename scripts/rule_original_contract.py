@@ -436,7 +436,16 @@ def _workbench_dom(text):
     return parser
 
 
-def parse_workbench_metadata(text, pin=None):
+def original_site_path(source, site_root=None):
+    """Resolve only exact OSS URLs registered in this release's manifest."""
+    if not source.startswith(('https://', 'http://')): return source
+    manifest = json.loads((Path(site_root) / 'release-manifest.json').read_text('utf8')) if site_root else {}
+    for relative, entry in manifest.get('oss', {}).get('objects', {}).items():
+        if entry.get('url') == source: return '/' + relative
+    raise ValueError('Rule original URL is absent from release manifest: ' + source)
+
+
+def parse_workbench_metadata(text, pin=None, site_root=None):
     """Return only complete, substantive source bindings present in the real DOM."""
     match = re.search(r'<script\b[^>]*\bid=["\']rule-workbench-data["\'][^>]*>(.*?)</script>', text, re.S)
     if not match: return None
@@ -457,7 +466,7 @@ def parse_workbench_metadata(text, pin=None):
         document = pin['documents'][topic['relative_file']]
         source = topic.get('src')
         if (source not in dom.hrefs or topic.get('public_source_sha256') != document['public_source_sha256']
-                or pin['public_source_resources'].get(source, {}).get('relative_file') != topic['relative_file']
+                or pin['public_source_resources'].get(original_site_path(source, site_root), {}).get('relative_file') != topic['relative_file']
                 or 'rule-panel-' + topic['logical_id'] not in dom.ids
                 or 'rule-tab-' + topic['logical_id'] not in dom.ids):
             raise ValueError('Rule topic lacks its actual full-source reading link: ' + topic['page'])
@@ -526,7 +535,7 @@ def validate_rule_workbench(site_root, pin=None):
     if not (root/'rules/index.html').is_file():return result
     try:
         text = (root / 'rules/index.html').read_text('utf8')
-        data = parse_workbench_metadata(text, pin)
+        data = parse_workbench_metadata(text, pin, root)
         if not data: return result
         if data.get('pin_sha256') != sha_bytes((Path(__file__).resolve().parents[1] / 'config/assembled-rules-pin.json').read_bytes()):
             raise ValueError('Workbench fixed source pin SHA differs')
@@ -536,7 +545,7 @@ def validate_rule_workbench(site_root, pin=None):
         spec = spec_from_file_location('workbench_transcript_gate', Path(__file__).with_name('audit-page-publication.py'))
         publication = module_from_spec(spec); spec.loader.exec_module(publication)
         for topic in data['topics']:
-            source = root / topic['src'].lstrip('/')
+            source = root / original_site_path(topic['src'], root).lstrip('/')
             if not source.is_file() or sha_bytes(source.read_bytes()) != topic['public_source_sha256']:
                 raise ValueError('Workbench complete public source SHA differs: ' + topic['page'])
         for row in data['screens']:
@@ -549,7 +558,7 @@ def validate_rule_workbench(site_root, pin=None):
             if actual != expected_text:
                 raise ValueError('Workbench DOM text is not its pinned substantive original: ' + meta['excerpt_id'])
             for part in row['parts']:
-                resource = root / part['src'].lstrip('/')
+                resource = root / original_site_path(part['src'], root).lstrip('/')
                 if not resource.is_file() or sha_bytes(resource.read_bytes()) != part['sha256']:
                     raise ValueError('Workbench original image SHA differs: ' + part['src'])
         result.update(seen_documents=[t['relative_file'] for t in data['topics']],
