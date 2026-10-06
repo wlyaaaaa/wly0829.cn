@@ -230,11 +230,11 @@ def verify_manifest(manifest, require_remote=True):
     proof = oss.get('verification', {})
     if (proof.get('schema') != 'wly.oss-remote-verification.v1' or proof.get('release_id') != expected
             or proof.get('complete') is not True or proof.get('html_ready') is not True
-            or proof.get('method') not in ('anonymous full GET body SHA256 plus MP4 byte range', 'anonymous HEAD size and MD5/ETag plus sampled GET')
+            or proof.get('method') not in ('anonymous full GET body SHA256 plus MP4 byte range', 'anonymous HEAD CRC64/MD5 plus sampled GET')
             or not proof.get('verified_at_beijing') or proof.get('failed') != []
             or set(proof.get('objects', {})) != set(objects)):
         raise ValueError('OSS full GET evidence is missing, incomplete or belongs to another release')
-    head_only = proof.get('method') == 'anonymous HEAD size and MD5/ETag plus sampled GET'
+    head_only = proof.get('method') == 'anonymous HEAD CRC64/MD5 plus sampled GET'
     for rel, obj in objects.items():
         row = proof['objects'][rel]
         headers = {key.lower(): value for key, value in row.get('headers', {}).items()}
@@ -246,6 +246,8 @@ def verify_manifest(manifest, require_remote=True):
                 or headers.get('access-control-allow-origin') not in ('*', 'https://wly0829.cn')
                 or headers.get('content-encoding', 'identity') != 'identity'):
             raise ValueError('OSS full GET evidence differs from object: ' + rel)
+        if head_only and (not row.get('local_crc64') or headers.get('x-oss-hash-crc64ecma') != row['local_crc64']):
+            raise ValueError('OSS HEAD CRC64 differs from object: ' + rel)
         if head_only and (not re.fullmatch(r'[a-f0-9]{32}', row.get('local_md5', '')) or not (headers.get('etag', '').strip(chr(34)).lower() == row['local_md5'] or headers.get('content-md5') == base64.b64encode(bytes.fromhex(row['local_md5'])).decode())):
             raise ValueError('OSS HEAD MD5 evidence differs from object: ' + rel)
         if rel.endswith('.mp4') and not head_only:

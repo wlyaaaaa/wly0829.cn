@@ -87,7 +87,6 @@ if (distFiles.includes(manifestPath)) {
           const [relative, object] = entries[cursor++];
           if (checks.release_id === manifest.release_id && checks.checker_sha256 === manifest.oss.content_verification?.checker_sha256 && checks.objects?.[relative]?.method === "HEAD") {
             remoteEvidenceCount++;
-            if ([".js", ".mjs"].includes(path.extname(relative))) remoteJavaScriptCount++;
             continue;
           }
           try {
