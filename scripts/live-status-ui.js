@@ -71,7 +71,7 @@
     const time = beijingTime(readAt, history);
     return {
       title, body, lines, state, sourceState, tone, status, history, cached, retained,
-      time, timeLabel: time ? '北京时间 ' + time.label + (history ? ' 读到' : ' 读取') : '读取时间：读不到',
+      time, timeLabel: time ? '北京时间 ' + time.label + (history ? ' 读到' : ' 读取') : sourceState==='loading'?'正在读取，尚无成功读数':'尚无成功读数',
       href: safeURL(input.href), icon: safeURL(options.icon || options.icons?.[options.slot] || options.icons?.status)
     };
   }

@@ -48,14 +48,15 @@ function showButton(image,state){
  button._image=image;state.button=button;buttons.add(button);document.body.append(button);placeButton(button);
  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();retryImage(image,state,true);});
 }
-document.addEventListener('error',event=>{
- const image=event.target;
+function imageError(image){
  if(!(image instanceof HTMLImageElement)||!imageAllowed(selected(image)))return;
  const url=canonical(selected(image));let state=imageState.get(image);
  if(!state||state.url!==url){clearTimeout(state?.timer);hideButton(state||{});state={url,auto:0,manual:0,waiting:false,timer:null,button:null};imageState.set(image,state);}
  if(!state.auto){state.auto=1;state.waiting=true;record('image','waiting',url,0);state.timer=setTimeout(()=>{state.timer=null;if(state.waiting)retryImage(image,state);},delay);}
  else{state.reloading=false;record('image','failed',url,1);showButton(image,state);}
-},true);
+}
+document.addEventListener('error',event=>imageError(event.target),true);
+for(const image of document.querySelectorAll('img[data-resource-retry-failed="1"]'))imageError(image);
 document.addEventListener('load',event=>{const image=event.target;if(image instanceof HTMLImageElement){const state=imageState.get(image);if(state){clearTimeout(state.timer);state.timer=null;hideButton(state);state.waiting=false;state.reloading=false;if(canonical(selected(image))===state.url)record('image','loaded',state.url,state.auto);}}},true);
 for(const event of ['scroll','resize'])addEventListener(event,()=>{for(const button of buttons)placeButton(button);},{passive:true});
 

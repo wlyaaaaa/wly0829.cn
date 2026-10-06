@@ -207,7 +207,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  }
  function makeTile(state,start,end,masked=[],columns=[0,1]){
   const document=state.host.ownerDocument,tile=document.createElement('div');tile.className='typeset-live-flow-tile';if(masked.length)tile.classList.add('typeset-live-flow-masked');tile.dataset.sourceStart=String(start);tile.dataset.sourceEnd=String(end);
-  const image=document.createElement('img');image.className='typeset-live-flow-image';image.alt='';image.setAttribute('aria-hidden','true');image.decoding='async';image.draggable=false;image.src=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||state.host._layout.src;
+  const image=document.createElement('img');image.className='typeset-live-flow-image';image.alt='';image.setAttribute('aria-hidden','true');image.decoding='async';image.loading='lazy';image.fetchPriority='low';image.draggable=false;image.src=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||state.host._layout.src;
   const layer=document.createElement('div');layer.className='typeset-live-flow-layer';tile.append(image,layer);
   tile.dataset.sourceLeft=String(columns[0]);tile.dataset.sourceRight=String(columns[1]);
   const record={node:tile,image,layer,start,end,masked,columns,state};state.tiles.push(record);return record;
@@ -434,7 +434,7 @@ function installTypeset(section,screen){
     el=document.createElement(hot.shots?.length>1?'div':'button');if(el.tagName==='BUTTON')el.type='button';el.className='typeset-screenshot';el.setAttribute('aria-label','查看截图：'+(hot.shots?.[0]?.caption||screen.title));
     const shots=hot.shots||[];el.dataset.compare=String(shots.length>1);
     const show=()=>window.SiteImageViewer?.openGallery(shots.map(s=>({src:new URL(s.full||s.src,location.href).href,title:s.caption})),0,el);
-    for(const shot of shots){const wrap=document.createElement('span'),stage=document.createElement('span'),im=new Image();wrap.className='typeset-shot-crop';stage.className='typeset-shot-stage';im.src=shot.src;im.alt=shot.caption;im.decoding='async';im.dataset.role=shot.role;wrap.dataset.crop=JSON.stringify([0,0,...shot.size]);stage.append(im);wrap.append(stage);el.append(wrap);wrap._shot=shot;if(shots.length>1&&shot.role==='before')wrap.classList.add('compare-before');}
+    for(const shot of shots){const wrap=document.createElement('span'),stage=document.createElement('span'),im=new Image();wrap.className='typeset-shot-crop';stage.className='typeset-shot-stage';im.loading='lazy';im.fetchPriority='low';im.src=shot.src;im.alt=shot.caption;im.decoding='async';im.dataset.role=shot.role;wrap.dataset.crop=JSON.stringify([0,0,...shot.size]);stage.append(im);wrap.append(stage);el.append(wrap);wrap._shot=shot;if(shots.length>1&&shot.role==='before')wrap.classList.add('compare-before');}
     if(shots.length>1){const range=document.createElement('input');range.type='range';range.min='0';range.max='100';range.value='50';range.setAttribute('aria-label','拖动比较改前改后');range.oninput=()=>{el.style.setProperty('--compare-position',range.value+'%');};el.style.setProperty('--compare-position','50%');const open=document.createElement('button');open.type='button';open.className='typeset-compare-open';open.textContent='查看完整截图';open.onclick=show;el.append(range,open);}else el.onclick=show;
    }
    if(el){el._sourceRect=hot.rect;el.dataset.hotId=hot.id;el.dataset.typesetKind=hot.kind;el.dataset.target=hot.target||hot.href;el.dataset.rectPx=JSON.stringify(hot.rect_px);
