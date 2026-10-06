@@ -42,7 +42,7 @@ def main():
     from playwright.sync_api import sync_playwright
     summary = []
     with sync_playwright() as p:
-        br = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else EDGE, headless=True)
+        br = p.chromium.launch(executable_path=CHROME if os.path.exists(CHROME) else EDGE, headless=True, args=["--disable-gpu", "--disable-lcd-text"])
         for name in pages:
             try:
                 r = render_page(name, a.screens, tuple(a.orient), not a.no_compare, out, br, a.spec_file, a.source_file)

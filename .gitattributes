@@ -6,6 +6,7 @@ site-release/** -text
 
 # Preserve migrated producer and page-source byte identity.
 src/typeset/** -text
+src/typeset/render_page.py whitespace=cr-at-eol
 sources/** -text
 scripts/inventory.py -text
 # Migrated runtime sources and art inputs keep their source byte identities.
