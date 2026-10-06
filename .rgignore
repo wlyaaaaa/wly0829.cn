@@ -1,0 +1,32 @@
+# BEGIN eagent-search-ignore (source: E:/.agents/templates/project/.rgignore)
+# Generated block; project-specific entries and exceptions go below it.
+.git
+node_modules/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+[Cc]ache/
+.tmp/
+[Tt]mp/
+[Tt]emp/
+[Ll]ogs/
+dist*/
+build/
+site-release/
+.publish/
+releases/
+[Aa]rchive/
+[Aa]rchives/
+old-versions/
+[Ss]napshots/
+[Bb]ackups/
+output/
+outputs/
+[Ww]orktrees/
+_worktrees/
+gpt-children/
+# END eagent-search-ignore
