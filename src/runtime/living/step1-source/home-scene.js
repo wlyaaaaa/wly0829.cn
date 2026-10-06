@@ -120,10 +120,11 @@ toneFilter.append(toneTransfer);toneSvg.append(toneFilter);root.append(toneSvg);
 const originalPlateFilter = ink.style.filter || '';
 let lastGamma = '';
 function syncStaticTone(params) {
-  const gamma=params.i.map(v=>Math.max(.5,Math.min(4,1-Math.log(Math.max(.05,v))/Math.LN2)));
-  const key=gamma.map(v=>v.toFixed(6)).join(',');
-  if(key!==lastGamma) {lastGamma=key;toneFuncs.forEach((f,i)=>f.setAttribute('exponent',gamma[i].toFixed(7)));
+  const gamma=[1,1,1];
+  const key=gamma.map(v=>v.toFixed(6)).join(',')+','+params.n.toFixed(6);
+  if(key!==lastGamma) {lastGamma=key;toneFuncs.forEach((f,i)=>{f.setAttribute('exponent',(1-0.22*params.n).toFixed(7));f.setAttribute('amplitude',(1+([0.22,0.28,0.40][i]-1)*params.n).toFixed(7));});
     ink.style.filter=gamma.every(v=>Math.abs(v-1)<.00001)?originalPlateFilter:[originalPlateFilter,'url(#'+toneId+')'].filter(Boolean).join(' ');}
+  fxc.style.filter=params.n>0?'url(#'+toneId+')':'';
   return gamma;
 }
 function buildPreserveMask(image) {
@@ -177,6 +178,16 @@ const gpool = `vec2(${gu((G.scr[2][0] + G.scr[3][0]) / 2)},${gv((G.scr[2][1] + G
 
 // ---------- 画面：WebGL（仍是一遍画完） ----------
 const VS =`attribute vec2 a; varying vec2 v_uv; void main(){ v_uv = vec2(a.x*0.5+0.5, 0.5-a.y*0.5); gl_Position = vec4(a,0.0,1.0); }`;
+const phoneScreen = portrait
+  ? [[310,675],[365,670],[389,796],[332,805]]
+  : [[1476,964],[1580,964],[1580,1166],[1476,1166]];
+const sceneQuad = points => points.map(p => `vec2(${gu(p[0])},${gv(p[1])})`).join(', ');
+const phoneQuad = sceneQuad(phoneScreen);
+const imagePoint = p => `vec2(${(p[0]/PW).toFixed(6)},${(p[1]/PH).toFixed(6)})`;
+const imageQuad = points => points.map(imagePoint).join(', ');
+const scrWide = G.scr[1][0]-G.scr[0][0], scrTop = Math.min(...G.scr.map(p=>p[1])).toFixed(1);
+const scrCenter = `vec2(${(G.scr.reduce((a,p)=>a+p[0],0)/4).toFixed(1)},${(G.scr.reduce((a,p)=>a+p[1],0)/4+0.2*scrWide).toFixed(1)})`;
+const scrReach = `vec2(${(scrWide*0.95).toFixed(1)},${(scrWide*0.55).toFixed(1)})`;
 let FS = `precision highp float;
 varying vec2 v_uv;
 uniform sampler2D u_tex, u_preserve;
@@ -329,7 +340,7 @@ void main(){
   col *= 1.0 + mCur*bil*0.075*cos(cph)*u_motion;                   // 窗帘鼓起来的地方明暗跟着变
 
   // ---- 天上的云：柔边、慢慢飘 ----
-  float sky = mWin * smoothstep(0.66,0.86,lum0) * (1.0-green0) * (1.0-smoothstep(0.26,0.33,uv.y));
+  float sky = mWin * smoothstep(0.66,0.86,lum0) * (1.0-green0) * (1.0-smoothstep(0.26,0.33,uv.y)) * (1.0-u_night);
   float cloud = 0.0;
   if (sky > 0.001) {
     // 成朵的云：边缘清楚，上面亮、底下灰蓝，大约 15 秒飘过一扇窗（原来的云太淡，和画里的白云混在一起看不出）
@@ -381,7 +392,7 @@ void main(){
   vec3 outc = col*u_outTint + u_outLift*smoothstep(0.55,0.9,lum);
   // 同一环境色用于原img与GPU；白纸保持白，墨迹与头像随夜景变暗。
   vec3 inc = pow(max(col,vec3(0.0)),u_ambientGamma);
-  col = mix(inc, outc, outMask*max(inMask,outMask));
+  col = mix(inc, outc, outMask*max(inMask,outMask)*(1.0-u_night));
 
   // ---- 夜里：星星、月亮（云会遮住） ----
   float skyN = mWin * smoothstep(0.70,0.88,lum0) * (1.0-green0) * (1.0-smoothstep(0.27,0.32,uv.y));
@@ -405,7 +416,7 @@ void main(){
   col += u_glint*gl*1.35;
 
   // ---- 会发光的东西：显示器、手机、机箱 ----
-  float phone = quad(uv, vec2(0.5125,0.5947), vec2(0.5486,0.5947), vec2(0.5486,0.7193), vec2(0.5125,0.7193), 0.0015);
+  float phone = quad(uv, ${phoneQuad}, 0.0015);
   col = mix(col, raw*(1.0+0.05*u_night), scr*u_scrOn);
   col = mix(col, raw*vec3(0.17,0.19,0.23)+vec3(0.02), scr*(1.0-u_scrOn));
   col = mix(col, raw, phone*0.85);
@@ -475,9 +486,33 @@ void main(){
     col *= 1.0 - 0.34*ring*pig;                                     // 水彩边上颜料积起来的那圈深色
     col = mix(vec3(1.0), col, bl);
   }
+  float nightReach = 0.0;
+  if (u_night > 0.0) {
+    vec2 Q = v_uv*PX;
+    float wob = 70.0*(fbm(Q*0.004)-0.5) + 8.0*(noise(Q*0.04)-0.5);
+    float inner = ${portrait ? '1100.0-Q.y' : 'Q.x-1000.0-150.0*smoothstep(850.0,1000.0,Q.y)-290.0*smoothstep(1100.0,1300.0,Q.y)'} + 1.6*wob;
+    float rim = ${portrait ? 'min(Q.y,min(Q.x,PX.x-Q.x))' : 'min(Q.y,min(PX.x-Q.x,PX.y-Q.y))'} + wob;
+    vec3 ink0 = texture2D(u_tex,v_uv).rgb;
+    // 屏幕上沿以下的桌面、窗台先压平亮部，画死的阳光光斑不再透出来。
+    vec3 shade = col*(1.0-0.5*smoothstep(0.35,0.9,dot(col,vec3(0.299,0.587,0.114)))*smoothstep(${scrTop},${scrTop}+120.0,Q.y));
+    vec3 night = pow(max(shade,vec3(0.0)),vec3(0.78))*vec3(0.22,0.28,0.40);
+    // 屏幕向桌面、键盘和墙投一点光，照出物件本来的颜色。
+    vec2 sd = (Q-${scrCenter})/${scrReach};
+    night = mix(night, shade*vec3(0.62,0.86,0.80), 0.5*exp(-dot(sd,sd))*u_scrOn);
+    // 主体外只有颜料入夜，白纸仍是白纸；卡片四边收成水彩干边。
+    float core = smoothstep(-60.0,60.0,inner), edge = min(inner, rim-34.0);
+    night = mix(mix(vec3(0.995), night, smoothstep(0.05,0.5,1.0-min(ink0.r,min(ink0.g,ink0.b)))), night, core);
+    night *= 1.0 - 0.15*smoothstep(-10.0,10.0,edge)*(1.0-smoothstep(10.0,70.0,edge));
+    night = mix(vec3(0.995), night, smoothstep(18.0,44.0,rim));
+    float glow = max(quad(v_uv, ${imageQuad(G.scr)}, 0.0015)*u_scrOn, quad(v_uv, ${imageQuad(phoneScreen)}, 0.0015));
+    float lamp = box(v_uv, ${imagePoint([G.pc[0],G.pc[1]])}, ${imagePoint([G.pc[2],G.pc[3]])}, 0.004);
+    glow = max(glow, lamp*smoothstep(0.08,0.20,max(ink0.g,ink0.b)-ink0.r)*smoothstep(0.42,0.70,max(ink0.g,ink0.b)));
+    nightReach = smoothstep(-300.0,-160.0,inner)*u_night;
+    col = mix(col, mix(night, col, glow), nightReach);
+  }
   vec3 originalColor=pow(texture2D(u_tex,v_uv).rgb,u_ambientGamma);
   float preserve=texture2D(u_preserve,v_uv).r;
-  col=mix(col,originalColor,preserve);
+  col=mix(col,originalColor,preserve*(1.0-nightReach));
 gl_FragColor = vec4(clamp(col,0.0,1.0), 1.0);
 }`;
 
