@@ -54,7 +54,7 @@
     (async () => {
       const primary = scripts.find(el => /b2-(?:typeset|live)-/.test(el.dataset.src));
       const firstRead = primary ? loadEntry(primary) : Promise.resolve();
-      for (const placeholder of scripts) if (placeholder !== primary) await loadEntry(placeholder);
+      await Promise.all(scripts.filter(placeholder => placeholder !== primary).map(loadEntry));
       await firstRead;
       runtimeLoaded = true; runtimeLoading = false;
       event('runtime-ready');
@@ -335,6 +335,7 @@
     const value = (read(positionsKey) || {})[path(pending?.from)];
     if (value && Date.now() - value.at < 3600000) warmImages(value.images);
   }, {once:true});
+  if (performance.getEntriesByType('navigation')[0]?.domContentLoadedEventStart) loadRuntime();
   addEventListener('pageshow', e => { if (e.persisted && !root.hasAttribute('data-album-running')) { loadRuntime(); resumeVideo(); } });
   reduce.addEventListener('change', () => { if (reduce.matches) { transition?.skipTransition(); currentClean?.(); loadRuntime(); } });
   window.SiteAlbum = {get snapshot() { return {generation, runtimeLoaded, runtimeLoading, runtimeStartCount, running: root.hasAttribute('data-album-running'), events: [...events], warmedRoutes: [...warmedRoutes], imageCount: heldImages.size, images:[...heldImages].map(([src,im])=>({src,currentSrc:im.currentSrc,crossOrigin:im.crossOrigin,decoded:decodedImages.has(src)}))}; }};

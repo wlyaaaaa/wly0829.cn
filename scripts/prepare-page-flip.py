@@ -261,7 +261,7 @@ def inject_runtime(text, js, css, index, model):
     serialized = json.dumps(model, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
     head = '<script id="album-page" type="application/json">' + serialized + '</script>'
     head += '<link rel="preload" as="fetch" href="' + index + '" crossorigin="anonymous" id="album-route-index">'
-    head += '<link rel="stylesheet" href="' + css + '"><script src="' + js + '"></script>'
+    head += '<link rel="stylesheet" href="' + css + '"><script data-album-inline>' + (HERE/'album-runtime.js').read_text('utf8').replace('</script', '<\\/script') + '</script>'
     # Before deferred enhancement entries, and before first reveal registration.
     charset = re.search(r'<meta\b[^>]*charset=[^>]*>', text, re.I)
     if charset:
@@ -286,6 +286,8 @@ def inject_runtime(text, js, css, index, model):
                 return tag[0][:-2] + addition + ' />' if tag[0].endswith('/>') and addition else tag[0][:-1] + addition + '>'
             part = re.sub(r'<(?:img|source)\b[^>]*>', eager, part)
             text = text[:start] + part + text[end:]
+    loading=(HERE/'image-loading-runtime.js').read_text('utf8')
+    text=re.sub(r'(<main\b[^>]*>)',lambda m:m[1]+'<script data-image-loading>'+loading+'</script>',text,count=1)
     return text, delayed, removed_hints
 
 

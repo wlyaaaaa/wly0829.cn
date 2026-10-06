@@ -169,7 +169,8 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
             ref = addressed('live-sans-part-'+format(block, 'x'), '.woff2', out.getvalue())
             ranges = ','.join('U+'+format(cp, 'X') for cp in codepoints)
             palette += '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
-    css = palette + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
+    font_css = addressed('live-fonts', '.css', palette.encode('utf8'))
+    css = palette.split('@font-face',1)[0] + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
     ui_css = addressed('live-ui', '.css', css.encode('utf8'))
     ui_js = addressed('live-ui', '.js', ((HERE/'live-hardware-ui.js').read_text('utf8') + '\n' + (HERE/'live-status-ui.js').read_text('utf8')).encode('utf8'))
     model_ref = addressed('b2-access-model', '.js', (HERE.parent/'app/computer-access-model.js').read_bytes())
@@ -237,7 +238,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         # Older releases merged layout CSS into motion-* rather than linking a
         # typeset-layout asset. Always load this current sheet explicitly.
         text=text.replace('<head>','<head><script data-live-ui defer src="'+ui_js+'"></script>',1)
-        tags='<link data-live-ui rel="stylesheet" href="'+layout_css+'"><link data-live-ui rel="stylesheet" href="'+ui_css+'">'
+        tags='<link data-live-ui data-live-fonts rel="stylesheet" media="print" href="'+font_css+'"><link data-live-ui rel="stylesheet" href="'+layout_css+'"><link data-live-ui rel="stylesheet" href="'+ui_css+'">'
         text=text.replace('</head>',tags+'</head>',1)
         after=text.encode('utf8')
         if after!=before: page.write_bytes(after); changes.append({'path':page.relative_to(site).as_posix(),'before':proof(before),'after':proof(after)})
