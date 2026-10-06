@@ -2,7 +2,7 @@
 import argparse
 import importlib.util
 import json
-import subprocess
+import subprocess, time
 import sys
 from pathlib import Path
 
@@ -127,6 +127,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     if data.get('bird_first_packet'): selected_steps.append('native-living')
     if data.get('living_pages_packet'): selected_steps.append('bird-first')
     for name in selected_steps:
+        step_started = time.perf_counter()
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
         if name == 'static-home':
@@ -139,6 +140,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             import shutil
             packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest)
             for rel,src in refs['object_sources'].items():
+                if rel.endswith('/config.json'): continue
                 target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(packet_path(packet,src),target)
             args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
         elif name == 'comic':
@@ -198,6 +200,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         step={'name': name, 'before_release_id': before, 'after_release_id': after}
         if static_2f:step['manifest']={'path':str(dest/hybrid.MANIFEST),**stamp(dest/hybrid.MANIFEST)}
         steps.append(step)
+        step['seconds'] = round(time.perf_counter() - step_started, 3)
         current = dest
     prepared = hybrid.read(current / hybrid.MANIFEST)
     files = hybrid.inventory(current)

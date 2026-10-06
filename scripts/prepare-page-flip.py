@@ -227,7 +227,7 @@ async def titles(records, chrome, profiles, evidence, ownership):
                 await page.evaluate('(' + record['_fit'] + ')()')
                 measured = await page.evaluate("""()=>({width:document.documentElement.clientWidth,height:document.documentElement.scrollHeight,
                     titles:[...document.querySelectorAll('[data-comp=chapter_title] img,.title-wrap.title-img img')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return {rect:[r.x,r.y+scrollY,r.width,r.height],src:e.getAttribute('src')};}),
-                    illustrations:[...document.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y+scrollY,r.width,r.height];}),
+                    illustrations:[...document.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art,svg.illustration-panel')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y+scrollY,r.width,r.height];}),
                     broken:[...document.images].filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src)})""")
                 valid = measured['width'] == width and abs(measured['height'] - record['measured_height']) <= 2 and not measured['broken']
                 expected = [a['rect'] for a in record.get('illustrations', [])]
