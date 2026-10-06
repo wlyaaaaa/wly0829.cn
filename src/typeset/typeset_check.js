@@ -187,7 +187,8 @@
     const peers=component?[component,...component.querySelectorAll(CARDS)].filter(e=>e.matches(CARDS) && componentOf(e)===component && shellRole(e)===role):outerCards.filter(e=>shellRole(e)===role);
     const cardIndex=peers.indexOf(card);
     const nested=!!card.parentElement.closest(CARDS)?.closest('.col')?.isSameNode(col);
-    return {component:comp,principal,role,module_index:moduleIndex,card_index:cardIndex,nested};
+    return {component:comp,principal,role,module_index:moduleIndex,card_index:cardIndex,
+            module_count:modules.length,card_count:peers.length,nested};
   }
   function classifyPeerRow(row,root=document.querySelector('#page') || document.body) {
     const parent=row.element || (row.selector?root.querySelector(row.selector):null);
@@ -219,6 +220,7 @@
       if (profiles.some(p=>p.nested)) return {...result,...independent('nested_column_card_shells')};
       if (profiles.some(p=>p.principal!==p.component)) return {...result,...independent('auxiliary_column_components')};
       if (profiles.some(p=>p.component!==first.component || p.role!==first.role || p.principal!==first.principal)) return {...result,...independent('different_column_roles')};
+      if (profiles.some(p=>p.module_count!==first.module_count || p.card_count!==first.card_count)) return {...result,...independent('independent_column_card_stacks')};
       if (profiles.some(p=>p.module_index!==first.module_index || p.card_index!==first.card_index || p.card_index<0)) return {...result,...independent('different_column_card_indices')};
       return {...result,logical_peer:true,reason:'matching_column_card_indices'};
     }

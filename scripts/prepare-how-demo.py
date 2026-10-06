@@ -190,7 +190,8 @@ def prepare(args):
     text=re.sub(r'<link\b[^>]*data-how-demo-bundle[^>]*>|<script\b[^>]*data-how-demo-bundle[^>]*>[\s\S]*?</script>','',text)
     insertion=text.index('</section>',text.index('id="how-01"'))+len('</section>')
     text=text[:insertion]+render(data,speed)+text[insertion:]
-    text=re.sub(r'(?:<p class="how-demo-jump">[\s\S]*?</p>)?(?=<section\b[^>]*\bid="how-01")', '<p class="how-demo-jump"><a href="#one-sentence">点一句话，看它怎么被办成 →</a></p>', text, count=1)
+    text=re.sub(r'<p class="how-demo-jump">[\s\S]*?</p>', '', text)
+    text=re.sub(r'(<section\b[^>]*\bid="how-01"[^>]*>)', r'\1<p class="how-demo-jump"><a href="#one-sentence">点一句话，看它怎么被办成 →</a></p>', text, count=1)
     album='data-album-runtime' in text
     starter=(f'<script data-album-runtime data-src="{js}" data-how-demo-bundle></script>' if album else f'<script src="{js}" defer data-how-demo-bundle></script>')
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}" data-how-demo-bundle>'+starter+'</head>')

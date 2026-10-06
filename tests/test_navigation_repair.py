@@ -13,6 +13,18 @@ hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
 
 
 class NavigationRepair(unittest.TestCase):
+    def test_home_comic_and_highlights_anchor_follow_the_same_reading_order(self):
+        order = ['home-01', 'home-04', 'home-02', 'home-03', 'home-05']
+        data = {'page': 'home', 'screens': [{'id': sid, 'section': 'highlights' if sid == 'home-04' else None} for sid in order]}
+        body = ''.join('<section id="' + sid + '"></section>' + ('<div class="section-anchor" id="highlights"></div>' if sid == 'home-04' else '') for sid in order)
+        text = '<main data-home-compact>' + body + '</main><script id="page-data">' + json.dumps(data) + '</script>'
+        result, _ = nav.repair_owned_navigation(text, {}, '/')
+        expected = ['home-01', 'home-02', 'home-03', 'home-04', 'home-05']
+        self.assertEqual([s['id'] for s in json.loads(nav.PAGE_DATA.search(result)[2])['screens']], expected)
+        self.assertLess(result.index('id="home-03"'), result.index('id="highlights"'))
+        self.assertLess(result.index('id="highlights"'), result.index('id="home-04"'))
+        self.assertEqual(nav.repair_owned_navigation(result, {}, '/')[0], result)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='navigation-fixture-')
         self.root = Path(self.temp.name)

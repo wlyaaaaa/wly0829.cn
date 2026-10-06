@@ -311,7 +311,9 @@
       {
         "type": "points_card",
         "whole_block": true,
-        "text_ref": "触发盘里缓存不超过8GiB，同时有下面任何一种证据："
+        "text_ref": "触发盘里缓存不超过8GiB，同时有下面任何一种证据：",
+        "row": "gates",
+        "width": "35%"
       },
       {
         "type": "flow",
@@ -319,6 +321,8 @@
         "direction": "vertical",
         "connector": "arrow",
         "illustration": "above_card",
+        "row": "gates",
+        "width": "40%",
         "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
         "icons": [
           "_library/icons/秒表.png",
@@ -330,6 +334,8 @@
       {
         "type": "points_card",
         "columns": 1,
+        "row": "gates",
+        "width": "25%",
         "text_ref": "动手用Primo的命令把这块盘清空重建→回读卷标→补文件夹、说明和就绪标记→把空盘存回镜像→再读一次内存"
       },
       {

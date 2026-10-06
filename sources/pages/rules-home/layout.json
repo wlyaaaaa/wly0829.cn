@@ -11,21 +11,15 @@
         "type": "chapter_title",
         "align": "left",
         "size": "large",
-        "text_ref": "规则",
-        "row": "balanced-heading",
-        "width": "88%"
-      },
-      {
-        "type": "illustration",
-        "illustration": "outside",
-        "index": 0,
-        "row": "balanced-heading",
-        "width": "12%"
+        "row": "top",
+        "width": "52%",
+        "text_ref": "规则"
       },
       {
         "type": "section_heading",
         "align": "left",
         "size": "small",
+        "row": "top",
         "text_ref": "Codex、Claude"
       },
       {
@@ -35,11 +29,19 @@
         "variant": "stack",
         "connector": "arrow",
         "illustration": "none",
+        "row": "top",
         "text_ref": "约法：上层"
       },
       {
         "type": "prose",
+        "row": "top",
         "text_ref": "我当下明确说的话"
+      },
+      {
+        "type": "illustration",
+        "row": "top",
+        "illustration": "outside",
+        "index": 0
       },
       {
         "type": "comparison",
@@ -51,6 +53,8 @@
         "layout": "single_panel",
         "inner_link_columns": 2,
         "inner_link_order": "column_major",
+        "row": "top",
+        "width": "48%",
         "text_ref": "约法"
       },
       {

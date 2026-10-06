@@ -728,6 +728,8 @@
         "inset_prefixes": [
           "实例："
         ],
+        "row": "major-cards",
+        "width": "40%",
         "text_ref": "哪些算重大的事"
       },
       {
@@ -741,6 +743,8 @@
         "inset_prefixes": [
           "实例："
         ],
+        "row": "major-cards",
+        "width": "60%",
         "text_ref": "什么时候请本人验证"
       },
       {
@@ -754,6 +758,7 @@
         "inset_prefixes": [
           "实例："
         ],
+        "row": "major-cards",
         "text_ref": "这份清单怎么来的"
       }
     ],
