@@ -1,6 +1,6 @@
 # BEGIN eagent-search-ignore (source: E:/.agents/templates/project/.rgignore)
 # Generated block; project-specific entries and exceptions go below it.
-.git/
+.git
 node_modules/
 .venv/
 venv/
@@ -19,7 +19,7 @@ build/
 site-release/
 .publish/
 releases/
-**/docs/archive/
+[Aa]rchive/
 [Aa]rchives/
 old-versions/
 [Ss]napshots/
