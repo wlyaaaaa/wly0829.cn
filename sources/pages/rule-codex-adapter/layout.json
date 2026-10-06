@@ -37,8 +37,8 @@
         "target_width": 386
       },
       {
-        "type": "document_mock",
-        "variant": "paper",
+        "type": "prose",
+        "textless": true,
         "text_ref": "AGENTS.md",
         "illustration": "none",
         "base_asset": "none",
@@ -55,7 +55,7 @@
         "text_ref": "Codex 在整套系统里干什么"
       }
     ],
-    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 文书样张采用现有 paper 小文书卡，保留 AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原段一次，不再请求样张重复主插画。横版文书卡接在右栏主插画下；五个跳到按钮单独整行五列，字号保持共享正文角色。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+    "notes": "主插画采用无字素材；AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原散词段按 scene 的插画归属启用 textless，不另排文字框。词条解释及全部链接、按钮保留。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-h.png"
     ],
@@ -100,8 +100,8 @@
         "text_ref": "跳到："
       },
       {
-        "type": "document_mock",
-        "variant": "paper",
+        "type": "prose",
+        "textless": true,
         "text_ref": "AGENTS.md",
         "illustration": "none",
         "base_asset": "none",
@@ -113,7 +113,7 @@
         "text_ref": "Codex 在整套系统里干什么"
       }
     ],
-    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 文书样张采用现有 paper 小文书卡，保留 AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原段一次，不再请求样张重复主插画。竖版保留单列五个整宽按钮及一次主插画。",
+    "notes": "主插画采用无字素材；AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原散词段按 scene 的插画归属启用 textless，不另排文字框。词条解释及全部链接、按钮保留。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-v.png",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-v2.png"

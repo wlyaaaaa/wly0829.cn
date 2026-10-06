@@ -92,6 +92,18 @@ def prepare_toc_recipe(site, recipe):
     if (result.get('status') != 'prepared' or result.get('page_count') != 84
             or result.get('missing_labels') or {item['page'] for item in result.get('pages', [])} != set(pages)):
         raise ValueError('Approved TOC helper did not prepare the complete 84-page scope')
+    stylesheet = HERE / 'toc-consistency.css'
+    inputs[str(stylesheet)] = proof(stylesheet.read_bytes())
+    css_url = '/_typeset/runtime/toc-consistency-' + inputs[str(stylesheet)]['sha256'][:20] + '.css'
+    (site / css_url.lstrip('/')).write_bytes(stylesheet.read_bytes())
+    for row in result['pages']:
+        target_page = site / row['page']
+        body = target_page.read_bytes().replace(result['assets']['.css'].encode(), css_url.encode())
+        target_page.write_bytes(body)
+        row['after_sha256'] = proof(body)['sha256']
+        row['changed'] = row['after_sha256'] != row['before_sha256']
+    result['assets']['.css'] = css_url
+    result['changed_page_count'] = sum(row['changed'] for row in result['pages'])
     for path, expected in inputs.items():
         if proof(Path(path).read_bytes()) != expected:
             raise ValueError('TOC input changed during preparation: ' + path)

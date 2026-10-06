@@ -698,6 +698,7 @@ def build_page(name, records, args, candidate):
                 else:
                     meta['src']=asset(original_path,candidate,'rule-sources')
             except (KeyError,OSError,ValueError) as error:
+                meta.pop('original_html', None)
                 issues.append(sid+':缺少真实原文来源证据：'+str(error))
         whole=next((l for l in old.get('layouts',{}).get('h',{}).get('links',[])if l.get('whole')),None)
         if whole:model['primary_href']=whole['href']
