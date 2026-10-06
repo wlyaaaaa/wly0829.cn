@@ -72,6 +72,11 @@
         "text_ref": "我、Claude、GPT、三个底座"
       },
       {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
         "type": "line_legend",
         "text_ref": "线上传的东西分四种",
         "layout": "rows",
