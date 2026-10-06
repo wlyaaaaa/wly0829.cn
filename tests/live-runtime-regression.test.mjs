@@ -150,20 +150,20 @@ test('group freshness does not inherit canonical, login or the other group clock
  const cpu=app.grafanaGroupValue('cpu-gpu');assert.equal(cpu.iframe,undefined);assert.equal(cpu.state,'unknown');assert.equal(cpu.readAt,now/1000-301);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
  data.grafana.groups['cpu-gpu'].checked_at=iso(now-300000);app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);
 });
-test('one failed group leaves the other chart visible; two failures collapse only the duplicate notice and recover',()=>{
+test('one failed group leaves the other chart visible; unavailable groups are hidden and recover',()=>{
  const data=groupedFixture(),app=cockpit();data.grafana.groups['memory-network']={state:'unavailable',checked_at:iso(now),url:null,max_age_seconds:300};app.set(data);
- assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);let memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,undefined);assert.equal(memory.state,'unknown');assert.notEqual(memory.empty,true);assert.equal(memory.readAt,now/1000);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);let memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,undefined);assert.equal(memory.state,'unknown');assert.equal(memory.empty,true);assert.equal(memory.readAt,now/1000);
  data.grafana.groups['cpu-gpu']={state:'unavailable',checked_at:null,url:null,max_age_seconds:300};app.set(data);
- assert.notEqual(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.equal(memory.empty,true);assert.equal(memory.emptyReason,'grafana-groups-unreadable');assert.equal(memory.cached,false);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.equal(memory.empty,true);assert.equal(memory.emptyReason,'grafana-groups-unreadable');assert.equal(memory.cached,false);
  app.set(groupedFixture());memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,groupUrls['memory-network']);assert.notEqual(memory.empty,true);
 });
 
-test('only two explicitly unregistered mobile groups show the planned notice without a false clock',()=>{
+test('unregistered or failed mobile groups are hidden without a promised launch',()=>{
  const data=groupedFixture(),app=cockpit();
  for(const part of ['cpu-gpu','memory-network'])data.grafana.groups[part]={state:'unavailable',url:null,checked_at:null,max_age_seconds:300};
- app.set(data);let row=app.grafanaGroupValue('cpu-gpu');assert.equal(row.text,'手机版图表稍后上线。');assert.equal(row.planned,true);assert.equal(row.readAt,null);assert.equal(row.state,'unknown');assert.equal(row.cached,false);assert.equal(row.iframe,undefined);assert.equal(app.grafanaGroupValue('memory-network').empty,true);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+ app.set(data);let row=app.grafanaGroupValue('cpu-gpu');assert.equal(row.empty,true);assert.equal(row.planned,undefined);assert.equal(Number.isFinite(row.readAt),false);assert.equal(row.state,'unknown');assert.equal(row.cached,false);assert.equal(row.iframe,undefined);assert.equal(app.grafanaGroupValue('memory-network').empty,true);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
  for(const observed of [{state:'unavailable',url:null,checked_at:iso(now-301000)},{state:'error',url:null,checked_at:iso(now)},{state:'reachable',url:'https://grafana.wly0829.cn/login',checked_at:iso(now)}]){
-  const changed=structuredClone(data);changed.grafana.groups['cpu-gpu']=observed;app.set(changed);row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.planned,true);assert.match(row.text,/两组曲线暂时打不开/);
+  const changed=structuredClone(data);changed.grafana.groups['cpu-gpu']=observed;app.set(changed);row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.planned,true);assert.equal(row.empty,true);
  }
  app.set(data,'error');assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
  const expired=structuredClone(data);expired.observed_at_unix-=121;app.set(expired);assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
@@ -319,4 +319,10 @@ test('legacy home without typed display boots, updates ordinary live strips and 
  assert.equal(document.body.dataset.statusPhase,'ready');assert.equal(strip.hidden,false);assert.equal(span.textContent,'运行正常');assert.equal(cell.dataset.state,'ok');
  fail=true;await sandbox.window.SiteStatus.refresh();
  assert.equal(document.body.dataset.statusPhase,'error');assert.equal(strip.hidden,false);assert.match(span.textContent,/运行正常.*\d+ 分钟前读到/);assert.notEqual(cell.dataset.state,'ok');
+});
+
+test('expired project metrics can retain genuine old values; unsupported fields remain absent',()=>{
+ const data=fixture();data.projects=block([{project:'学习方法',state:'stale',metrics:{lessons:{done:3,total:28}}}]);data.projects.state='stale';data.projects.observed_at=iso(now-86400000);
+ assert.equal(live.parse(data,'lessons','学习方法',now).state,'unknown');assert.equal(live.parse(data,'lessons','学习方法',now,true).text,'已学 3/28 课');assert.equal(live.parse(data,'panel','双屏信息中心',now).state,'unknown');
+ const app=cockpit();data.backups.items[0].state='warn';app.set(data);assert.match(app.value('cockpit-quick-5').text,/需要留意/);
 });

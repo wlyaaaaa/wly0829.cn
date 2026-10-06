@@ -160,7 +160,16 @@ for(const event of ['wheel','touchstart'])addEventListener(event,cancelReadingRe
 addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))cancelReadingResize();});
 /* typeset-live-flow-v1 */
 (function(){
- const states=new WeakMap(),hosts=new Set(),pending=new Set();let frame=0;
+ const states=new WeakMap(),hosts=new Set(),pending=new Set();let frame=0,readerInput=0;
+ for(const type of ['wheel','touchmove','keydown'])window.addEventListener(type,()=>readerInput++,{passive:true});
+ function preserveReader(){
+  const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
+  const node=hit?.closest('.typeset-part,#today-river')||[...document.querySelectorAll('.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
+  if(!node)return ()=>{};
+  const top=node.getBoundingClientRect().top,input=readerInput;
+  const place=()=>{if(input===readerInput&&node.isConnected){const delta=node.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
+  return ()=>{requestAnimationFrame(()=>requestAnimationFrame(place));setTimeout(place,800);};
+ }
  const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
  const isLamp=cell=>(cell.livePart||cell.live_part||cell.node?.dataset.livePart)==='lamp';
  function plan(cells,height,obstacles=[]){
@@ -215,6 +224,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function mask(tile,width,height){
   const [left,right]=tile.columns,top=tile.start,bottom=tile.end,origin=[left*width,top*height];
   const removed=tile.masked.map(cell=>cell.maskRect);
+  for(const cell of tile.state.cells)if(cell.node.hidden){const r=cell.rect,pad=56/tile.state.host._layout.size[1],x=Math.max(left,r[0]),y=Math.max(top,r[1]-pad),w=Math.min(right,r[0]+r[2])-x,h=Math.min(bottom,r[1]+r[3])-y;if(w>0&&h>0)removed.push([x,y,w,h]);}
   // Opaque native controls replace their bitmap button/input, including its
   // antialiased outline. Retaining it produces a second border at the corners.
   for(const [node,box]of tile.state.boxes)if(node.isConnected&&node.matches('.b2-image-action:disabled,.b2-image-action[data-label-changing=true],.b2-image-action[data-b2-action=submit],input.b2-slot')){
@@ -244,10 +254,16 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const host=state.host;if(!host.isConnected||host.hidden)return;
   if(!box)return;
   const width=box.width,height=width*host._layout.size[1]/host._layout.size[0];host._mediaHeight=height;
+  const cockpit=host.closest('[data-screen^="cockpit-"]'),heightKey='site-layout-height-v1:'+location.pathname+':'+cockpit?.dataset.screen+':'+host._layout.orientation+':'+width;
+  if(cockpit)try{host.style.minHeight=document.body.dataset.b2StatusPhase==='loading'?(Number(localStorage.getItem(heightKey))||height)+'px':'';if(document.body.dataset.b2StatusPhase==='ready')localStorage.setItem(heightKey,String(host.offsetHeight));}catch{}
   const sourceURL=state.source.currentSrc||state.source.getAttribute('src')||state.source.dataset.src||host._layout.src;
+  const emptyStrip=host._layout.compact_live===true&&state.cells.every(cell=>cell.node.hidden);
+  const firstLive=Math.min(...state.cells.map(cell=>cell.rect[1])),lastLive=Math.max(...state.cells.map(cell=>cell.rect[1]+cell.rect[3]));
   for(const tile of state.tiles){
    if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
    tile.node.style.height=(tile.end-tile.start)*height+'px';Object.assign(tile.image.style,{width:width+'px',height:height+'px',left:-tile.columns[0]*width+'px',top:-tile.start*height+'px'});mask(tile,width,height);
+   tile.node.hidden=emptyStrip&&tile.start>=firstLive-.00001&&tile.end<=lastLive+.00001;
+   if(emptyStrip&&tile.start===0){const end=Math.max(0,firstLive-120/host._layout.size[1]);tile.node.style.height=end*height+'px';tile.image.style.clipPath='inset(0 0 '+(1-end)*100+'% 0)';}
   }
   for(const band of state.bands)if(band.optional)band.node.hidden=band.cells.every(cell=>cell.node.hidden);
   for(const band of state.bands)if(band.replace&&!band.column&&!band.row){
@@ -316,7 +332,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     const region=document.createElement('div');region.className='typeset-live-flow-region typeset-live-flow-compact-frame';
     const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);
     for(const cell of band.cells)move(cards,cell.node);
-    state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true});cursor=band.end;
+    state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true,optional:true});cursor=band.end;
    }
    if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
   }else if(bands.length===1&&bands[0].replace&&!bands[0].cells[0].flowRow){
@@ -387,7 +403,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function liveCell(host,node){
   const state=states.get(host);return state?.cells.find(cell=>!isLamp(cell)&&(cell.node===node||cell.node.contains(node)))||null;
  }
- window.TypesetLiveFlow={apply,request,reset,plan,sourceBox,liveCell};
+ window.TypesetLiveFlow={apply,request,reset,plan,sourceBox,liveCell,preserveReader};
  document.addEventListener('live-status-layout',()=>request());window.addEventListener('resize',()=>request(),{passive:true});document.fonts?.ready.then(()=>request());
 })();
 /* end-typeset-live-flow-v1 */
@@ -446,7 +462,7 @@ function installTypeset(section,screen){
   for(const wrap of overlay.querySelectorAll('.typeset-shot-crop'))fitTypesetShot(wrap);
   const flowCells=[...overlay.querySelectorAll('.typeset-live')].map(node=>{
    const hot=part.hotspots.find(hot=>hot.id===node.dataset.hotId),cell=hot||[...(part.live||[]),...(part.native_live||[])].find(cell=>cell.slot===node.dataset.slot);
-   return cell?{node,rect:cell.rect,livePart:cell.live_part||node.dataset.livePart,compactFrame:part.compact_live===true}:null;
+   return cell?{node,rect:cell.rect,livePart:cell.live_part||node.dataset.livePart,compactFrame:part.compact_live===true,collapseWhenEmpty:true}:null;
   }).filter(Boolean);
   if(flowCells.length)window.TypesetLiveFlow?.apply(host,flowCells);
  }

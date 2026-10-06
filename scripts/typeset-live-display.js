@@ -2,6 +2,8 @@ function displayTypesetStatus(payload,phase,parse,data){
  for(const el of document.querySelectorAll('.typeset-live')){
   const result=parse(payload,el.dataset.slot,data.project);
   const slot=el.dataset.slot,part=el.closest('.typeset-part');
+  el.hidden=result.empty===true;
+  if(el.hidden){el.replaceChildren();continue;}
   const title=data.status_binding?.prefixes?.[slot]||data.status_binding?.labels?.[slot];
   if(window.LiveStatusUI){
    window.LiveStatusUI.decorate(el,result,{slot,project:data.project,title,readAt:result.readAt,cached:result.cached,compact:true,icons:data.shared?.live_status_icons});

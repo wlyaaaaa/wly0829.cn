@@ -171,6 +171,8 @@ async def run(args):
                 initial_reads = state['status_reads']
                 first = await load(cross=True)
                 assert first['status']['overall']['state'] == 'ok', first
+                assert first['phase'] == 'ready' and '暂时读不到电脑' not in first['screenText'], first
+                if args.status_only:results.append({'device':device,'case':'homepage-live-status-regression','snapshot':first});await context.close();continue
                 assert state['status_reads'] == initial_reads+1, state
                 assert first['diagnostics']['phase'] == 'live', first
                 expected = [2880, 1621] if device == 'desktop' else [1280, 2227]
@@ -288,7 +290,7 @@ async def run(args):
     assert not errors, errors
     assert not state['writes'] and not state['mp4'], state
     assert not state['missing'], state['missing']
-    assert not any('/assets/home-01-' in url for url in state['requests']), 'Old dark plate was requested'
+    if not args.status_only:assert not any('/assets/home-01-' in url for url in state['requests']), 'Old dark plate was requested'
     assert all(item['exit_code'] == 0 for item in cleanup), cleanup
     print(json.dumps({'cases': len(results), 'page_errors': len(errors), 'mp4_requests': len(state['mp4']), 'servers_stopped': receipt['servers_stopped']}, ensure_ascii=False))
 
@@ -299,4 +301,5 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--chrome', type=Path, default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     parser.add_argument('--device', choices=['desktop', 'xiaomi'])
+    parser.add_argument('--status-only',action='store_true',help='Only regress the shared status model on the current homepage')
     asyncio.run(run(parser.parse_args()))

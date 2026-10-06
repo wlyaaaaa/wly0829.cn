@@ -115,7 +115,7 @@
     summary.append(dot, node(document, 'strong', 'live-status-state', summaryText));
 
     const value = node(document, 'div', 'live-status-value');
-    const details = model.history ? model.lines.filter(line => line !== model.status) : model.lines.slice(1);
+    const details = model.history && !model.retained ? model.lines.filter(line => line !== model.status) : model.lines.slice(1);
     if (details.length > 1) {
       const list = node(document, 'ul', 'live-status-list');
       for (const line of details) list.append(node(document, 'li', 'live-status-line', line));
