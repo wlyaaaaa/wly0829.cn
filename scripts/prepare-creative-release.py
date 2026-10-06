@@ -7,6 +7,9 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+def input_path(value): return (ROOT / value).resolve()
+def packet_path(packet, value): return ROOT / value if value.startswith('sources/') else packet.parent.parent / value
 STEPS = ('comic', 'living', 'album', 'river', 'demo', 'retry')
 FULL_2F_SCOPE='full-pages-creative-2f'
 FULL_2F_STEPS=('river','living','comic','album','demo','retry')
@@ -38,16 +41,27 @@ def recipe(path):
     if not full_2f and not page_only:required.add('geometry')
     if not required <= data.keys() or (not page_only and not full_2f and not data['geometry']):
         raise ValueError('All six approved preparations need their actual inputs')
-    paths = {key: Path(data[key]).resolve() for key in required - {'geometry', 'asset_base_url'}}
-    paths['geometry'] = [Path(p).resolve() for p in data.get('geometry',[])]
+    if data.get('home_bio'): required.add('home_bio_script')
+    if data.get('bird_first_packet'): required |= {'bird_first_packet','native_home_support','native_home_script'}
+    if data.get('living_pages_packet'): required.add('living_pages_packet')
+    paths = {key: input_path(data[key]) for key in required - {'geometry', 'asset_base_url'}}
+    paths['geometry'] = [input_path(p) for p in data.get('geometry',[])]
     inputs = {str(path): stamp(path)}
     # Bind the actual approved packages and implementation used by this fixed replay.
-    for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference')]:
+    for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference','home_bio_script','native_home_script')]:
         if not root.is_dir():
             raise ValueError('Missing preparation package: ' + str(root))
-        inputs.update({str(p.resolve()): stamp(p) for p in root.rglob('*') if p.is_file()})
+        files = [root/'river2.template.html'] if root == paths.get('river_handoff') else root.rglob('*')
+        inputs.update({str(p.resolve()): stamp(p) for p in files if p.is_file()})
     for p in paths['geometry']:
         inputs[str(p)] = stamp(p)
+    if data.get('home_bio'): inputs[str(paths['home_bio_script'])] = stamp(paths['home_bio_script'])
+    if data.get('bird_first_packet'):
+        inputs[str(paths['native_home_script'])] = stamp(paths['native_home_script'])
+        inputs[str(paths['native_home_script'].parent/'build_bird_guide.py')] = stamp(paths['native_home_script'].parent/'build_bird_guide.py')
+    if data.get('living_pages_packet'):
+        packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); inputs.update({str(packet_path(packet,rel)):stamp(packet_path(packet,rel)) for rel in refs['object_sources'].values()})
+        inputs[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py')]=stamp(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py')
     if static_2f:
         reference=paths['static_home_reference']
         inputs[str(reference)]=stamp(reference)
@@ -65,7 +79,7 @@ def recipe(path):
             inputs[str(HERE/name)]=stamp(HERE/name)
         inputs.update({str(p.resolve()):stamp(p)for p in (HERE/'today-river-assets2').rglob('*')if p.is_file()})
     if data.get('title_cache'):
-        paths['title_cache'] = Path(data['title_cache']).resolve()
+        paths['title_cache'] = input_path(data['title_cache'])
         inputs[str(paths['title_cache'])] = stamp(paths['title_cache'])
     return data, paths, inputs
 
@@ -97,7 +111,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         inputs[str(staged_build_report)]=stamp(staged_build_report)
         if static_2f:
             matches=[(Path(p).resolve(),expected) for p,expected in staged.get('inputs',{}).items()
-                     if p.replace('\\','/').endswith('/input-snapshot/sources/how.json')]
+                     if p.replace('\\','/').endswith(('/input-snapshot/sources/how.json','/sources/pages/how/page.json'))]
             if len(matches)!=1 or stamp(matches[0][0])!=matches[0][1]:
                 raise ValueError('Static 2f replay requires the exact staged frozen how Source JSON')
             panorama_source=matches[0][0]
@@ -105,11 +119,28 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     evidence_root.mkdir(parents=True)
     current = source
     steps = []
-    for name in (('demo','retry') if data.get('scope')=='page-demo-and-retry' else STATIC_2F_STEPS if static_2f else FULL_2F_STEPS if full_2f else STEPS):
+    import os
+    environment=os.environ.copy()
+    if data.get('native_home_script'): environment['PYTHONPATH']=str(paths['native_home_script'].parent)+os.pathsep+environment.get('PYTHONPATH','')
+    selected_steps=list(('demo','retry') if data.get('scope')=='page-demo-and-retry' else STATIC_2F_STEPS if static_2f else FULL_2F_STEPS if full_2f else STEPS)
+    if data.get('home_bio'): selected_steps.append('bio')
+    if data.get('bird_first_packet'): selected_steps.append('native-living')
+    if data.get('living_pages_packet'): selected_steps.append('bird-first')
+    for name in selected_steps:
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
         if name == 'static-home':
             args=['prepare-static-home.py','--baseline',current,'--reference',paths['static_home_reference'],'--output',dest,'--report',proof]
+        elif name == 'native-living':
+            args=['prepare-home-living.py','--baseline',current,'--package',paths['bird_first_packet'],'--native-home-support',paths['native_home_support'],'--native-home-script',paths['native_home_script'],'--output',dest,'--report',proof]
+        elif name == 'bio':
+            args=[str(paths['home_bio_script']),'--baseline',current,'--output',dest,'--report',proof]
+        elif name == 'bird-first':
+            import shutil
+            packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest)
+            for rel,src in refs['object_sources'].items():
+                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(packet_path(packet,src),target)
+            args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
         elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
@@ -140,7 +171,22 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
-        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True)
+        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
+        if name == 'bird-first':
+            engine=(dest/refs['engine_url'].lstrip('/')).read_text('utf8'); needle='M=A.getBoundingClientRect(),k=Math.round(M.width)'
+            assert engine.count(needle)==1
+            engine=engine.replace(needle,'M=(()=>{const f=window.TypesetLiveFlow?.sourceBox(e,x);return f?{left:f.left-x[0]*f.image_width,top:f.top-x[1]*f.image_height,width:f.image_width,height:f.image_height}:A.getBoundingClientRect()})(),k=Math.round(M.width)').replace('ge.className="living-layer",','ge.className="living-layer",ge.style.zIndex="1",')
+            rel='_living/_engine/living.'+hybrid.hashlib.sha256(engine.encode()).hexdigest()[:10]+'.js'; (dest/rel).write_text(engine,encoding='utf8')
+            for row in refs['mounted']:
+                p=dest/row['route']; p.write_text(p.read_text('utf8').replace(refs['engine_url'],'/'+rel),encoding='utf8')
+            updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
+        if name == 'native-living':
+            import shutil
+            site=dest/'site'; shutil.copytree(current,site)
+            for group in ('assets','pages'):
+                for p in (dest/group).rglob('*'):
+                    if p.is_file(): target=site/p.relative_to(dest/group); target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(p,target)
+            dest=site; updated=hybrid.read(site/hybrid.MANIFEST); updated['files']=hybrid.inventory(site); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(site/hybrid.MANIFEST,updated)
         if name == 'river':
             dest = dest / 'site'
         if name=='album' and full_2f:
@@ -189,7 +235,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             raise ValueError('Hybrid assembly changed approved prepared content: '+rel)
         normalization.append(rel)
     for key in ('home_living_preparation', 'home_static_preparation', 'home_comic_preparation', 'page_flip_preparation',
-                'today_river_preparation', 'how_demo_preparation', 'resource_retry_preparation'):
+                'today_river_preparation', 'how_demo_preparation', 'resource_retry_preparation', 'home_bio_preparation'):
         if key in prepared:
             manifest[key] = prepared[key]
     public_changes = {rel: {k: v for k, v in entry.items() if k != 'source_path'}

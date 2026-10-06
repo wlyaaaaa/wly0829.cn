@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 OUT=Path(__file__).resolve().parent
-REG=Path('E:/Cache/Claude/Temp/4bd59299/b1/shared/nav-labels')
+REG=OUT/'registry'
 IMAGES=OUT/'images';IMAGES.mkdir(exist_ok=True)
 labels=(OUT/'inventory/labels-toc-75.txt').read_text('utf8').splitlines()
 wanted=json.loads((OUT/'wanted-labels.json').read_text('utf8'))

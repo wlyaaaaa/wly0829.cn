@@ -11,7 +11,7 @@
   "capability": "",
   "based_on": {
     "release": "E216",
-    "file": "E:\\.agents\\releases\\E216\\docs\\contracts\\agents.rule-release.md",
+    "file": "sources/rules/docs/contracts/agents.rule-release.md",
     "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
     "commit": "bfc153667f276df5a3c7d343a8ef2b7b3a60e175",
     "commit_time": "2026-10-05T07:58:19+08:00",

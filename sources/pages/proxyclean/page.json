@@ -54,7 +54,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\brand-scrub\\assets\\proxyclean-home-generic.png",
+          "file": "sources/assets/_references/09dbb7f83989655361ebb01f0e473d35f55de5001b08f7bad01bcd7bf290598b.png",
           "where": "右侧约 40% 宽的细边框空位，比例 1092:876",
           "caption": "首页（9 月 22 日截图）：当前代理是手动开的那个代理程序，没发现失效设置",
           "crop_h": [
@@ -99,7 +99,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\proxyclean\\inspection-details.png",
+          "file": "sources/assets/_references/ef31359cc1f89d37144196b5f9a5cf90ec1ae397826b7dfd1e2028b6fa2cbf97.png",
           "where": "右侧约 38% 宽的细边框空位，比例 1122:936",
           "caption": "检查详情（9 月 22 日截图）：8 层都查过，7892 端口正在运行，隧道路线保留",
           "frame_bindings": {
@@ -284,7 +284,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\proxyclean\\maintenance.png",
+          "file": "sources/assets/_references/0578a570cb624aecd8bd0c14b9c028eb02e1d3668b9310d36357a12573e8a34c.png",
           "where": "右下角细边框空位，比例 1208:979",
           "caption": "维护工具（9 月 22 日截图）：代理设置、结束占用端口的程序、网卡与连接三组",
           "crop_v": [

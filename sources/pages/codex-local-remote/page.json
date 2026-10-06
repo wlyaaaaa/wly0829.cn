@@ -89,7 +89,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\16-real-task-list.jpg",
+          "file": "sources/assets/_references/ca02320ce02904644c379cb2ca95141471ef4ba09b545941e28e2249f79ec097.jpg",
           "where": "右侧第 1 个竖长空位（1440×2800，按宽度缩放）",
           "caption": "真机任务列表：电脑在线、3 个任务在跑，顺序和桌面版一样（7 月 28 日）",
           "frame_bindings": {
@@ -118,7 +118,7 @@
           }
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\12-real-live-worklog.jpg",
+          "file": "sources/assets/_references/03c7fb81ebe181ba023fefde2e5680970c57074299da5d09c5c30dc1457a9a78.jpg",
           "where": "右侧第 2 个竖长空位（1440×2800）",
           "caption": "真机工作记录：公开的思考摘要、跑了几条命令、改了几个文件，底下是“引导正在运行的回复”输入框（7 月 28 日）",
           "frame_bindings": {
@@ -147,7 +147,7 @@
           }
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\04-mobile-approval-zh.jpg",
+          "file": "sources/assets/_references/0397be5a186ab5994d182130671c295f596b96ada3959b3934f07fa2e5114ab6.jpg",
           "where": "右侧第 3 个竖长空位（412×915）",
           "caption": "审批抽屉：要执行的命令、影响的文件、可选的回答，“允许这一次”或“拒绝”（演示数据）",
           "frame_bindings": {
@@ -182,7 +182,7 @@
           }
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\codex-remote\\15-real-project-files.jpg",
+          "file": "sources/assets/_references/c6d39bc20e7fa8709e2edd3641d969217c482a0aeb98802e08869a41b0a42b5a.jpg",
           "where": "右侧第 4 个竖长空位（1440×2800）",
           "caption": "真机文件页：选一个登记过的项目，按文件夹浏览（7 月 28 日）",
           "frame_bindings": {

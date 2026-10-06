@@ -11,7 +11,7 @@
   "capability": "",
   "based_on": {
     "release": "E216",
-    "file": "E:\\.agents\\releases\\E216\\docs\\contracts\\agents.authorization.md",
+    "file": "sources/rules/docs/contracts/agents.authorization.md",
     "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
     "commit": "bfc153667f276df5a3c7d343a8ef2b7b3a60e175",
     "commit_time": "2026-10-05T07:58:19+08:00",

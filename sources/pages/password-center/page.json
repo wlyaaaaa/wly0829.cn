@@ -74,7 +74,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\pcconfig\\06-access-duration.png",
+          "file": "sources/assets/_references/f0af38bf0e97f2fdd9ebeb82b5f2330f1010035cbf4258a82e1ab520289904dd.png",
           "where": "右侧约三分之一宽、插画下面的 3:2 细边框空位；竖版在第三张卡片后撑满宽度",
           "caption": "开资料解锁期的窗口：填小时数、可同时开无限制授权（9 月 24 日截图）",
           "crop_h": [
@@ -111,7 +111,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\pcconfig\\01-api-catalog.png",
+          "file": "sources/assets/_references/49f22ccc0f8bfadfe26abe5ee17c7ac47f01e954031736f98269aa4ec85c87ea.png",
           "where": "左边约六成宽的细边框空位；竖版在最上面撑满宽度",
           "caption": "真实窗口（9 月 24 日截图）：当时库里 331 条，这里筛的是 API 密钥；只显示名称，没有展开任何值",
           "crop_h": [
@@ -152,7 +152,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\pcconfig\\07-factor-picker.png",
+          "file": "sources/assets/_references/731e7cc8d9b6642b226658d6f59f2e9739338a911a6068afe5ba1da641b64778.png",
           "where": "表格右边约三成宽的 8:5 细边框空位；竖版在表格前撑满宽度",
           "caption": "四选一窗口（9 月 24 日截图）",
           "crop_h": [
@@ -184,7 +184,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\password-center\\03-phone-bindings-masked.png",
+          "file": "sources/assets/_references/6aae6c27829991092f7696c072feaaa087c15450a84a9600f9600235d3523236.png",
           "where": "左边手机插画下面的 8:5 细边框空位；竖版在“撤销”卡片后撑满宽度",
           "caption": "电脑上的“手机”窗口：绑定码（已遮住）、手机型号、状态三列（9 月 24 日截图）",
           "frame_bindings": {

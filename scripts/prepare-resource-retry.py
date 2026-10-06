@@ -135,7 +135,8 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
     policy,observed=policy_and_observation(baseline,before,asset_base_url)
     raw_runtime=(HERE/'resource-retry-runtime.js').read_text('utf8')
     if raw_runtime.count('__RESOURCE_RETRY_POLICY__')!=1:raise ValueError('Runtime policy marker differs')
-    runtime=raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))).encode()
+    from build_bird_guide import minify
+    runtime=minify(raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))),'js','es2019')
     runtime_rel='_shared/resource-retry-'+hashlib.sha256(runtime).hexdigest()[:20]+'.js'
     addition='\n<script '+MARKER+' src="/'+runtime_rel+'"></script>\n'
     selected=set(pages or observed['html_resources']);changes={};initial_scripts={};initial_stylesheets={}

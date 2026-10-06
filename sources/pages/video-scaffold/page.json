@@ -58,7 +58,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\preview-page.png",
+          "file": "sources/assets/_references/5600d0cbabf061be9dc1f1d70e3727f9ef43ccb02bb6e6778872c1ec7e80f4de.png",
           "where": "右栏上半，宽高比 5:4 的细浅绿边框空位（竖版在标题下面占满宽度）",
           "caption": "有声预览（真实截图，画面是用合成声音做的测试样片；最底下那行“使用真实配音”是预览页固定的提示）：左边选场，下面点词跳到那一秒；展开后能改某个动画跟第几次出现的词、提前或推后几秒，导出新的画面文件，不改原件",
           "portrait_locator_text": "定题、写好旁白，连同图片素材交给 AI。",
@@ -91,7 +91,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\smoke-cover.png",
+          "file": "sources/assets/_references/f63d478b4550f44b34d54887cf5d3807c341d1ee7c443ca2c3f20371752a3f40.png",
           "where": "左栏下方，16:9 细浅绿边框空位，约左栏宽度的三分之二（竖版占满宽度）",
           "caption": "封面（真实截图，测试样片生成的，标题是测试名）",
           "crop_h": [
@@ -128,7 +128,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\smoke-frame.png",
+          "file": "sources/assets/_references/1eca69a57c1985645dd89fc8cbfa4d8620fec58d0c14ed6c818c0fccad610b9e.png",
           "where": "下半屏左边，16:9 细浅绿边框空位，约屏幕宽度的一半（竖版占满宽度）",
           "caption": "成片里的一帧（测试样片，CPU 编码）：字叠在循环的玻璃背景上",
           "crop_h": [

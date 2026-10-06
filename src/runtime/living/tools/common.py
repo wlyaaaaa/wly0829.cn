@@ -21,14 +21,15 @@ from functools import lru_cache
 from PIL import Image
 
 ENGINE = pathlib.Path(__file__).resolve().parents[1]
-P2 = ENGINE.parent
-GATE = next((p for p in ENGINE.parents if (p / "creative-handoff" / "living-contract" / "first-screens.json").is_file()), None)
-if GATE is None:
-    raise FileNotFoundError("找不到同一工作副本的 creative-handoff/living-contract/first-screens.json")
-CONTRACT = GATE / "creative-handoff" / "living-contract" / "first-screens.json"
-ASSET_CACHE = P2 / "asset-cache"
-ART = pathlib.Path(os.environ.get("LIVING_ART_ROOT", ENGINE / "art"))
-DIST = pathlib.Path(os.environ.get("LIVING_DIST_ROOT", ENGINE / "dist"))
+GATE = ENGINE.parents[2]
+P2 = GATE / "sources/living"
+CONTRACT = P2 / "first-screens.json"
+_PATHS = {row["old_path"].replace("\\", "/").split("/claude-gate-1001/", 1)[-1]: row["new_path"]
+          for row in json.loads((GATE / "docs/migration-a3-path-map.json").read_text("utf8"))["files"]}
+def local_input(value): return GATE / _PATHS[value.replace("\\", "/").split("/claude-gate-1001/", 1)[-1]]
+ASSET_CACHE = GATE / ".publish/living/asset-cache"
+ART = pathlib.Path(os.environ.get("LIVING_ART_ROOT", P2 / "art"))
+DIST = pathlib.Path(os.environ.get("LIVING_DIST_ROOT", GATE / ".publish/living/dist"))
 SRC = pathlib.Path(os.environ.get("LIVING_SRC_ROOT", ENGINE / "src"))
 FONT = "C:/Windows/Fonts/msyh.ttc"
 
@@ -36,7 +37,7 @@ FONT = "C:/Windows/Fonts/msyh.ttc"
 @lru_cache(maxsize=1)
 def contract() -> dict:
     data = json.loads(CONTRACT.read_text(encoding="utf-8"))
-    override_path = ENGINE / 'contract-overrides.json'
+    override_path = P2 / 'contract-overrides.json'
     if override_path.exists():
         overrides = json.loads(override_path.read_text(encoding='utf-8'))['first_screens']
         keyed = {(e['page'], e['orientation']): e for e in overrides}
@@ -69,7 +70,7 @@ def screen_image_path(page: str, orient: str) -> pathlib.Path:
     e = screen(page, orient)
     if not e["image"] or not e["image"].get("path"):
         raise FileNotFoundError(f"{page}/{orient} 没有整屏图")
-    return GATE / e["image"]["path"]
+    return local_input(e["image"]["path"])
 
 
 def box_px(page: str, orient: str) -> list[float]:
@@ -110,7 +111,7 @@ def art_table() -> "OrderedDict[str, dict]":
         groups.setdefault(src, [])
         if e["page"] not in groups[src]:
             groups[src].append(e["page"])
-    order_file = P2 / "contract-sheets" / "unique-sources.json"
+    order_file = P2 / "unique-sources.json"
     order = list(json.loads(order_file.read_text(encoding="utf-8")).keys()) if order_file.exists() else []
     rank = {s: i + 1 for i, s in enumerate(order)}
     # 同一页横竖可能是两幅原图。按共同页合并成一个页组，保留每个方向，不能用字典键覆盖。
@@ -149,7 +150,7 @@ def art_of_page(page: str) -> str | None:
 
 def source_path(art: str, orient: str | None = None) -> pathlib.Path:
     info = art_table()[art]
-    return GATE / (info["sources"].get(orient) or info["source"])
+    return local_input(info["sources"].get(orient) or info["source"])
 
 
 def open_rgb(path) -> Image.Image:

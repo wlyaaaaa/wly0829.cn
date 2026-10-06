@@ -104,12 +104,12 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\emerald-veil\\desktop-wallpaper.webp",
+          "file": "sources/assets/_references/2fa41f65be290d419b42f7a99c955d6f80724a1ea7c4d6abaddd75bffdf0ae7a.webp",
           "where": "左边约 52% 宽的 16:9 空位，带细浅绿边框",
           "caption": "雨林黑猫 · 更绿版：生图原图 1672×941；电脑上用的是放大到 3840×2160 的版本"
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\emerald-veil\\phone-wallpaper.webp",
+          "file": "sources/assets/_references/63f6417a9b7dde53b7d0262c55d42466e0503ba5f1703392637a731ce16c05a8.webp",
           "where": "电脑壁纸空位右边约 12% 宽的竖长空位（宽高比约 9:20），带细浅绿边框",
           "caption": "手机壁纸：生图原图 841×1870；手机上用的 1440×3200 成品原样存在仓库里"
         }

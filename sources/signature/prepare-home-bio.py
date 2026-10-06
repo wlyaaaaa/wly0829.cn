@@ -14,8 +14,8 @@ import re
 import shutil
 from urllib.parse import urlsplit
 
-ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / 'public/media/home-bio-20261005/assets-manifest.json'
+ROOT = Path(__file__).resolve().parent
+ASSETS = ROOT / 'assets-manifest.json'
 OLD = 'Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。'
 NEW = 'Java 出身，正在把自己的电脑和日常，一点点交给 AI 打理。'
 BJT = timezone(timedelta(hours=8))
@@ -69,8 +69,8 @@ def prepare(baseline, output, report, assets_manifest=ASSETS):
     # Asset source is derived from the repository, never an untrusted manifest path.
     payloads = {}
     for item in assets['items']:
-        source = (ROOT / item['repository_path']).resolve()
-        if not source.is_relative_to(ROOT / 'public/media/home-bio-20261005'):
+        source = (ROOT / 'delivery' / item['new_name']).resolve()
+        if not source.is_relative_to(ROOT / 'delivery'):
             raise ValueError('Asset path is outside this package')
         payload = source.read_bytes()
         if proof(payload) != {'sha256': item['sha256'], 'bytes': item['bytes']}:

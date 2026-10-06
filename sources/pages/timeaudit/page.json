@@ -99,7 +99,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\timeaudit\\dashboard-catalog.webp",
+          "file": "sources/assets/_references/d7e90c337e9509efc5b9c5f18ecf14cbcc3cfaaaeb2a3f2ae63c65325b82984c.webp",
           "where": "右半边中部的细边框截图位",
           "caption": "8 月 29 日的真实看板目录",
           "crop_h": [
@@ -125,12 +125,12 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\timeaudit\\power-cost.webp",
+          "file": "sources/assets/_references/a496ee151170e7a4f8eeab030c57a6ccc7143afb1ae7bd1dfbfb6a78af37b83f.webp",
           "where": "左半边的细边框截图位（约 16:9）",
           "caption": "8 月 29 日的功耗与电费诊断舱：上排是今天的电量、电费和峰谷分布，中间是整机功耗曲线，下面是最费电的程序榜。"
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\timeaudit\\system-pressure.webp",
+          "file": "sources/assets/_references/ab139fae52d022c9eb9e4224a8c7590d22537213c159ec02b3c95de25e5f6d14.webp",
           "where": "右半边上部的细边框截图位（约 2.4:1）",
           "caption": "8 月 29 日的系统压力：调度抖动、内存和换页、磁盘最高延迟、网络延迟画在同一条时间轴上，一眼看出是不是同一刻一起变坏。"
         }
@@ -300,7 +300,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\timeaudit\\fps-stutter.webp",
+          "file": "sources/assets/_references/29428e91beed03c45a9632296ba260c5a74da36336f5bd77a1fd2ea80a974c5d.webp",
           "where": "第二张卡片插画位的细边框截图位（约 2:1）",
           "caption": "8 月 29 日的旧版帧率图：上到几千 fps 的点都是坏数据"
         }

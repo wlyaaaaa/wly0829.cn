@@ -11,7 +11,7 @@
   "capability": "",
   "based_on": {
     "release": "E216",
-    "file": "E:\\.agents\\releases\\E216\\AGENTS.md",
+    "file": "sources/rules/AGENTS.md",
     "lines": "L13–L76（## 我的 AI 约法 一节；L1–L30完整条文）",
     "sha256": "927fe09d81bb113ef39bef7dd0e234637a4f4159960c731a68da618bdf48bddf",
     "commit": "bfc153667f276df5a3c7d343a8ef2b7b3a60e175",

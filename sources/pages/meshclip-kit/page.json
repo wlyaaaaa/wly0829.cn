@@ -92,7 +92,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\meshclip-kit\\control-center.png",
+          "file": "sources/assets/_references/ea4f08c6059e94037efde44a3670b8c046f9ba4afd2ce669c54533ea5270328a.png",
           "where": "右栏上半，宽高比约 5:4 的细浅绿边框空位（竖版在“出事怎么办”下面占满宽度）",
           "caption": "控制中心（9 月 28 日 21:52 截图）：上面一排是暂停、诊断和验收的按钮，下面是原样的状态——守护开着、心跳新鲜、看门狗 1 个、没有待恢复的操作；最后几行写着文字同步和传文件都还没验收（这是前一晚的状态，第二天已测通双向文字）",
           "portrait_locator_text": "控制中心（9 月 28 日 21:52 截图）：上面一排是暂停、诊断"

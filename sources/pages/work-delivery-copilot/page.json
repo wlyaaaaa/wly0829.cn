@@ -114,7 +114,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\shots\\prd-docx-page1.png",
+          "file": "sources/assets/_references/a60801d0b533c41d7c42d1c8d9def8d65ed9df5312159588326fb063091d781f.png",
           "where": "右栏，带细浅绿边框的竖向空位（宽:高约 1:1.3），占满右栏宽度、约屏幕高度的四分之三",
           "caption": "合成样例生成的 Word 需求文档第一页（9 月 28 日重跑，用 LibreOffice 渲染成图）：表格最右一列就是这条事实在立项说明里的位置",
           "frame_bindings": {

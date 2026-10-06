@@ -44,7 +44,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\typora-live-mint.png",
+          "file": "sources/assets/_references/7e7646c37cb6cbf5c55b1921773ef4288a4d4554aa9daf0c06d54cc5ede08013.png",
           "where": "右边约 40% 宽、接近正方形的空位",
           "caption": "截图说明：薄荷主题在 Typora 里的样子（8 月 2 日实拍，文稿是仓库里的公开样例）",
           "crop_h": [
@@ -95,17 +95,17 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-original-p1.png",
+          "file": "sources/assets/_references/428038d35c01c94f7cf12cc99576af3a1988d0388620ceceecbd39ad478495ec.png",
           "where": "左边的 A4 空位",
           "caption": "**原版**｜石墨黑字、细灰分隔线，像在 GitHub 上看 Markdown，不带任何主题色。适合只要干净排版的时候。"
         },
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-personal-p1.png",
+          "file": "sources/assets/_references/e80a2f0adde1274bc5f1916e77ee46c97052d2cb40b71141a59dbfa7d14c13eb.png",
           "where": "中间的 A4 空位",
           "caption": "**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头是主题的浅绿（9 月 29 日修好；之前被转换器自带的默认样式盖成了灰色）。"
         },
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\pdf-company-p1.png",
+          "file": "sources/assets/_references/7507d9c083ad445aa46e496f3a6bc7aa9defbcc7797ec260083faede711b4830.png",
           "where": "右边的 A4 空位",
           "caption": "**公司**｜墨蓝标题左边一道竖线、深蓝表头、灰白分区。不加 logo、水印和客户名。给同事看的。"
         }
@@ -194,7 +194,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\shots\\code-block-fixed.png",
+          "file": "sources/assets/_references/24b6a0e77dfa3b2ef9c878f95f38c100bbaa69337c18e038366348d8c32c5911.png",
           "where": "第 2 张卡片上部的 4:3 空位",
           "caption": "截图说明：修好后的代码块（浏览器模拟 Typora 1.14 代码块结构的预览样张，8 月 2 日生成），整段一个框，语法颜色照旧",
           "crop_h": [

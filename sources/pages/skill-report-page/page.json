@@ -58,7 +58,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\img\\rp-top.png",
+          "file": "sources/assets/_references/c6f816fe118db865d676f152851de608e3c8c3550b0ced08e99315d7c34d50e1.png",
           "where": "左边大空位",
           "caption": "演示页截图（页首）：用技能自带的演示内容在 1280 像素宽生成，9 月 28 日",
           "frame_bindings": {
@@ -79,7 +79,7 @@
           }
         },
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\img\\rp-cards.png",
+          "file": "sources/assets/_references/cd5210793ba48a95117515c3e8ef704ed6d471e980b918836ec99b1d201ae599.png",
           "where": "右边竖长空位",
           "caption": "演示页截图（卡片）：卡片里的照片和文档路径是示例，所以显示“看不到”的占位",
           "frame_bindings": {
@@ -132,7 +132,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\img\\rp-charts.png",
+          "file": "sources/assets/_references/d40e5cb08bcead69457cabaf7c00f348bc927eaa465ef8b587b57c71eee18418.png",
           "where": "右边竖长空位",
           "caption": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据",
           "frame_bindings": {

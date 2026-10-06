@@ -52,7 +52,7 @@ def _library():
             continue
         if r.get("status") != "ready" or not r.get("asset"):
             continue
-        r["path"] = r.get("path") or os.path.join(ASSET_ROOT, r["asset"])
+        r["path"] = os.path.join(ASSET_ROOT, r["asset"])
         if not os.path.exists(r["path"]):
             continue
         r.setdefault("title_exact_match", r.get("text_verified"))
@@ -124,7 +124,8 @@ def local_path(path):
     normalized = str(path).replace("\\", "/")
     if "/typeset-proto/" in normalized:
         return os.path.join(os.path.dirname(PROTO_ASSETS), *normalized.split("/typeset-proto/", 1)[1].split("/"))
-    return path
+    reference = os.path.join(ASSET_ROOT, "_references", hashlib.sha256(normalized.encode()).hexdigest() + os.path.splitext(normalized)[1])
+    return reference if os.path.isfile(reference) else path
 
 def url(path):
     return "file:///" + os.path.abspath(local_path(path)).replace("\\", "/")

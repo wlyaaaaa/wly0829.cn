@@ -93,7 +93,7 @@ def _title(text, sp, ctx):
         path = ctx.resolve(sp["asset"])
         al = sp.get("align", "center")
         box = sp.get("source_box")
-        attr = (f' data-title-src="{E(sp["source_image"])}" data-title-box="{",".join(map(str, box))}"'
+        attr = (f' data-title-src="{E(A.local_path(sp["source_image"]))}" data-title-box="{",".join(map(str, box))}"'
                 if sp.get("source_image") and box else "")
         if not attr:
             ctx.warn("标题图没给原图位置，G4 取色没做")
@@ -108,7 +108,7 @@ def _title(text, sp, ctx):
                 if r.get("title_exact_match") and _canon(r.get("title_text") or "") == _canon(text)]
     if rows:
         r = rows[0]
-        box, srcimg = r.get("source_box"), r.get("source_image") or ""
+        box, srcimg = r.get("source_box"), A.local_path(r.get("source_image") or "")
         # 共用库写明 g4_target_reference_available=false 的（原图那块已判不合格、只剩位置）：只借位置定对齐，不拿来做 G4 取色
         g4ok = r.get("g4_target_reference_available") is not False and str(r.get("g4_target_reference_available")) != "False"
         if box and srcimg:

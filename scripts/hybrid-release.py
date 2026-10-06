@@ -178,7 +178,8 @@ def references(path, content=None):
         parser = builder.Refs(); parser.feed(text); refs += parser.refs
         for m in builder.PAGE_DATA.finditer(text): refs += list(builder.nested_refs(json.loads(m.group(2))))
     if path.suffix == '.json':
-        refs += list(builder.nested_refs(json.loads(text)))
+        value=json.loads(text)
+        refs += [(ref,nav) for ref,nav in builder.nested_refs(value) if not (isinstance(value,dict) and value.get('schema')=='living-art/1' and re.fullmatch(r'm\d+\.[rgba]',ref))]
     if path.suffix in {'.html', '.css'}:
         refs += [(m[1], False) for m in re.finditer(r'url\(["\']?([^\s)"\']+)', text)]
         refs += [(m[1], False) for m in re.finditer(r'@import\s+["\']([^"\']+)', text)]

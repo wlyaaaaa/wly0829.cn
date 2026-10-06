@@ -160,7 +160,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\integration\\wave2f-integration-worktree\\public\\media\\pcconfig\\02-bitlocker-records-types-only.png",
+          "file": "sources/assets/_references/68d3a8284ed952021ddba1fdb0b97f566e28d40d478789f2ef63f0eb79ef6b6a.png",
           "where": "右边约 30% 宽、表格右侧上方，带 1px 浅灰细边框的 3:2 空位",
           "caption": "只显示条目类型",
           "crop_h": [
@@ -327,7 +327,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\pcconfig\\09-totp.png",
+          "file": "sources/assets/_references/dbcb6e09c475d189f267c271e96ff05c578d802da530cc1fff8a17d93d5ed429.png",
           "where": "第一张卡片正下方的截图位，宽约屏宽 26%，高宽比 2:1，1px 浅灰细边框",
           "caption": "密码中心里输入手机验证器 6 位动态码的窗口（9 月 24 日在主机上截图）",
           "crop_h": [

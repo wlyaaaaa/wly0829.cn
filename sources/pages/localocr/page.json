@@ -105,7 +105,7 @@
       "live": [],
       "screenshots": [
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\dist\\media\\localocr\\sample-table-original.webp",
+          "file": "sources/assets/_references/4fbf3d65137840ceecba3c516856412760303c96230389ae5bcc63f5c6caf4fe.webp",
           "where": "上半部分左边的空位",
           "caption": "原图：项目自带的合成采购单（900×600），有标题、六列表格、五条商品和合计。",
           "frame_bindings": {
@@ -134,7 +134,7 @@
           ]
         },
         {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\dist\\media\\localocr\\sample-table-output.webp",
+          "file": "sources/assets/_references/c0efe539bcea67b32b891321fdb3f0c531600a3d728c30d6e2072277338719c5.webp",
           "where": "上半部分右边的空位",
           "caption": "9 月 3 日本机实际输出（结构还原路线）：六列、五行和合计都对；原图标题没进正文，原始文字行把标题里的编号 PO-2026-0712 读成了 P0-2026-0712。如实保留，不修饰成全对。",
           "frame_bindings": {

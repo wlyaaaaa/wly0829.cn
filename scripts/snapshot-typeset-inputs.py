@@ -118,7 +118,7 @@ class ResourceHTML(HTMLParser):
             name = match[1].lower()
             group = next((i for i in (3, 4, 5) if match[i] is not None), None)
             value = html.unescape(match[group])
-            if name in {'src', 'href', 'poster'}:
+            if name in {'src', 'href', 'poster', 'data-ct-dot-source'}:
                 new = self.rewrite(value, self.owner)
             elif name == 'style':
                 new = rewrite_css(value, self.owner, self.rewrite)
@@ -357,6 +357,8 @@ class Snapshot:
         else:
             normalized = value.replace('\\', '/')
             source = self.producer_root.joinpath(*normalized.split('/typeset-proto/', 1)[1].split('/')) if '/typeset-proto/' in normalized else Path(value)
+            reference = self.asset_root / '_references' / (hashlib.sha256(normalized.encode()).hexdigest() + source.suffix)
+            if reference.is_file(): source = reference
             if not source.is_absolute(): source = self.asset_root / source
         try:
             if source.is_file(): self.copy(source, transform=False)
@@ -395,7 +397,8 @@ class Snapshot:
         for page in self.pages:
             path = Path(__file__).resolve().parents[1]/'sources/pages'/page/'layout.json' if root == Path(__file__).resolve().parents[1]/'src/typeset' else root/'specs'/(page+'.json')
             self.copy(path, Path('typeset-proto/specs') / (page + '.json'), transform=False)
-            payload, _ = self.load(path); resources(json.loads(decode(payload)))
+            payload, _ = self.load(path)
+            for row in json.loads(decode(payload)): resources(row.get('blocks', []))
         # assets.manifest() prefers a verified shared-library map. Keep that
         # branch and row metadata, but only bind selected screens and resources
         # already referenced by their HTML/specs, never the whole asset tree.
@@ -416,7 +419,7 @@ class Snapshot:
             if not line.strip(): continue
             row = json.loads(line)
             if library and (row.get('status') != 'ready' or not row.get('asset')): continue
-            original = Path(row.get('path') or asset_root / row['asset']).resolve() if library else (asset_root / row['asset']).resolve()
+            original = (asset_root / row['asset']).resolve()
             if row.get('screen_id') not in screen_ids and str(original) not in bound: continue
             if not original.is_file(): continue  # Same availability rule as assets.manifest().
             frozen = self.copy(original, transform=False)
@@ -490,6 +493,7 @@ class Snapshot:
             # Source JSON must stay byte-identical. Freeze its real screenshot
             # resources too; consumers use snapshot.json's original-to-copy map.
             for screen in source.get('screens', []):
+                if screen.get('id') in source.get('withdrawn_screenshot_screens', []): continue
                 for screenshot in screen.get('screenshots', []):
                     for field in ('file', 'full'):
                         if screenshot.get(field):
