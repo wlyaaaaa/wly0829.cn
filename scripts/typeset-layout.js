@@ -166,9 +166,9 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
   const node=hit?.closest('.typeset-part,#today-river')||[...document.querySelectorAll('.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
   if(!node)return ()=>{};
-  const top=node.getBoundingClientRect().top,input=readerInput;
+  const top=node.getBoundingClientRect().top,input=readerInput,at=performance.now();
   const place=()=>{if(input===readerInput&&node.isConnected){const delta=node.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
-  return ()=>{requestAnimationFrame(()=>requestAnimationFrame(place));setTimeout(place,800);};
+  return ()=>{requestAnimationFrame(()=>requestAnimationFrame(place));setTimeout(()=>{place();requestAnimationFrame(()=>requestAnimationFrame(place));},Math.max(0,800-(performance.now()-at)));};
  }
  const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
  const isLamp=cell=>(cell.livePart||cell.live_part||cell.node?.dataset.livePart)==='lamp';

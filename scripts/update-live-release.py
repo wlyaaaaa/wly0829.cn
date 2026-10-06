@@ -49,7 +49,8 @@ def patch_b2_runtime(text: str) -> str:
         # owned renderer. The river continues to receive this same status read.
         start = text.index(relay)
         end = text.index('function render(){', start)
-        source = source.replace('function render(){', text[start:end] + 'function render(){\n relayTodayRiver();', 1)
+        render_start = 'function render(){\n const restoreReading=window.TypesetLiveFlow?.preserveReader?.();'
+        source = source.replace(render_start, text[start:end] + render_start + '\n relayTodayRiver();', 1)
     return source
 
 

@@ -171,6 +171,11 @@ def patch_runtime(text: str, model: str, bridge: str) -> str:
         end = text.index('\n})();', start) + len('\n})();')
         text = text[:start] + text[end:]
     text = text.rstrip('\n')
+    minified_reader = re.search(r'\(function\(\)\{"use strict";(?:var [^;]+;)?const \w+=\{text:"暂时读不到",state:"unknown"\};', text)
+    if minified_reader:
+        reader_end = text.index('window.SiteStatus={', minified_reader.start())
+        reader_end = text.index('})()', reader_end) + len('})()')
+        text = text[:minified_reader.start()] + (HERE/'site-live-runtime.js').read_text('utf8').rstrip().removesuffix(';') + text[reader_end:]
     if 'snapshot:livingSnapshot' not in text and re.search(r'window\.SiteStatus=\{[^}]*snapshot:', text):
         bridge_start = text.rfind('(()=>{"use strict"', 0, text.find('__heroNativePlates')) if '__heroNativePlates' in text else len(text)
         return model + '\n' + text[:bridge_start] + '\n' + bridge
