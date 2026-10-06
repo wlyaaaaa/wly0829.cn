@@ -145,13 +145,16 @@
       if (S.vis) return;                                                    // 已经在画里
       var hi = Math.min(p3[1], 1.1 * b);                                  // 脚不高过这里，整只鸟就还在画里（落脚点靠上时改成平着飞进来）
       if (fr === 'top') {
-        dir = P.f; p0 = [p3[0] - dir * Math.min(0.3 * W, 6 * b), -1.7 * b]; p1 = [p0[0] + dir * 0.4 * Math.abs(p3[0] - p0[0]), Math.max(p0[1] + 0.32 * H, hi)];
+        var margin = Math.min(1.4 * b, W / 2);                              // 归巢从画内上沿靠近，给展开的翅膀留左右余量
+        dir = P.f; p0 = [clamp(p3[0] - dir * Math.min(0.3 * W, 6 * b), margin, W - margin), Math.min(1.4 * b, H / 2)];
+        p1 = [p0[0] + (p3[0] - p0[0]) * 0.4, Math.max(p0[1] + 0.32 * H, hi)];
       } else {
         dir = fr === 'left' ? 1 : -1;
         var sy = clamp(p3[1] - Math.max(0.3 * H, 2.6 * b), hi, p3[1]);
         p0 = [dir > 0 ? -1.5 * b : W + 1.5 * b, sy]; p1 = [p0[0] + (p3[0] - p0[0]) * 0.45, Math.max(sy - 0.07 * H, hi)];
       }
       var p = [p0, p1, [p3[0] - dir * 1.1 * b, Math.max(p3[1] - 2.2 * b, hi)], p3];
+      if (fr === 'top') p[2][0] = clamp(p[2][0], margin, W - margin);
       S.x = p0[0] / W; S.y = p0[1] / H; S.flip = dir;
       flight(p, 1.0 + 0.3 * clamp(len(p) / (0.9 * W), 0, 1), 'land', 0);
     }
@@ -244,7 +247,8 @@
       if (v.instant) { S.x = v.x; S.y = v.y; S.flip = pagePerch.f; S.act = null; S.rot = 0; S.sx = S.sy = 1; S.gs = 1; S.vis = true; settle(visitP); return; }
       var start = v.from ? v.from : [S.x, S.y];
       if (v.from) { S.x = start[0]; S.y = start[1]; S.gs = 0; S.act = null; }  // 从屏边进来：先是画里的大小，越飞越近、越大
-      var p = arc(start, [v.x, v.y], b, v.f > 0 ? -1 : 1), L = len(p);
+      // 入场沿落点旁的留白平缓靠近，末段贴着卡片上沿；页面内挪动仍走原来的弧线。
+      var p = v.from ? [start, [start[0], start[1]], [v.x + 0.25 * (start[0] - v.x), v.y - 0.12 * b], [v.x, v.y]] : arc(start, [v.x, v.y], b, v.f > 0 ? -1 : 1), L = len(p);
       flight(p, clamp(0.55 + L / (v.pace || 700), 0.9, 2.3), 'smooth', PAGE, !v.from && S.vis, true, 1);
       if (v.from) S.flip = v.x >= start[0] ? 1 : -1;
     }
@@ -584,14 +588,14 @@
       arrive: function (t) { return promise(arriveP, 'arrive', t && t.from); },
       leave: function () { return promise(leaveP, 'leave'); },
       setNight: function (v) { if (S.night !== !!v) act('night', !!v); },
-      // 带路：t = { x, y（脚的视口坐标）, facing（'left'|'right'|±1）, from（null｜'top'|'bottom'）, edge（屏边：{top, bottom}）, pace, instant }
+      // 带路：t = { x, y（脚的视口坐标）, facing（'left'|'right'|±1）, from（null｜'top'|'bottom' 标记从目标外侧留白入场）, edge（屏边：{top, bottom}）, pace, instant }
       visit: function (t) {
         if (dead || failed || reduced) return Promise.resolve(false);
         var p = toLayer(t.x, t.y), v = { x: p[0], y: p[1], f: t.facing === 'left' || t.facing < 0 ? -1 : 1, pace: t.pace, instant: !!t.instant, from: null };
-        if (t.from) {                                                       // 远了不长途飞：从眼前屏幕的上沿（吸顶栏下面）或下沿飞进来
-          var e = t.edge || {}, b = pageH(), side = t.side || (p[0] > (document.documentElement.clientWidth || G.innerWidth) / 2 ? -1 : 1);
-          var sy = t.from === 'top' ? toLayer(0, (e.top || 0) - 0.2 * b)[1] : toLayer(0, (e.bottom || G.innerHeight) + 1.3 * b)[1];
-          v.from = [p[0] + side * Math.min(3.2 * b, 0.3 * (document.documentElement.clientWidth || G.innerWidth)), sy];
+        if (t.from) {                                                       // 远了不长途飞：从目标外侧的留白入场，避开上方正文和按钮
+          var e = t.edge || {}, b = pageH(), vw = document.documentElement.clientWidth || G.innerWidth, side = t.side || (t.x > vw / 2 ? 1 : -1);
+          var sx = clamp(t.x + side * Math.min(3.2 * b, 0.3 * vw), 1.4 * b, vw - 1.4 * b);
+          v.from = toLayer(sx, Math.max((e.top || 0) + b, t.y - 0.35 * b));
         }
         return promise(visitP, 'visit', v).then(function () { return mode === 'page'; });
       },

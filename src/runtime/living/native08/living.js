@@ -439,7 +439,7 @@ function createScene(part, orient, cfg, shared, opts) {
   const img = opts.image || part.querySelector('img');
   let originalPresented = !!(img && img.complete && img.naturalWidth && img.getClientRects().length);
   let introEnabled = false, introReason = 'loading';
-  const root = document.createElement('div'); root.className = 'living-layer'; root.setAttribute('aria-hidden', 'true');
+  const root = document.createElement('div'); root.className = 'living-layer'; root.style.zIndex = '1'; root.setAttribute('aria-hidden', 'true');
   Object.assign(root.style, { left: box[0] * 100 + '%', top: box[1] * 100 + '%', width: box[2] * 100 + '%', height: box[3] * 100 + '%' });
   const canvas = document.createElement('canvas'); root.append(canvas);
   const overlays = part.querySelector(':scope > .overlays');
@@ -911,7 +911,11 @@ function createScene(part, orient, cfg, shared, opts) {
   let frameBox = [boxPx[0], boxPx[1], 0, 0];
   function layout() {
     const P = part.getBoundingClientRect(); if (!P.width || !P.height) return;
-    const dA = global.devicePixelRatio || 1, I = img.getBoundingClientRect();
+    const projected = global.TypesetLiveFlow?.sourceBox(part, box);
+    const visibleImage = img.getClientRects().length ? img : part.querySelector('.typeset-live-flow-image') || img;
+    const dA = global.devicePixelRatio || 1, I = projected
+      ? { left: projected.left - box[0] * projected.image_width, top: projected.top - box[1] * projected.image_height, width: projected.image_width, height: projected.image_height }
+      : visibleImage.getBoundingClientRect();
     const iw = Math.round(I.width), ih = Math.round(I.height);
     const L = Math.round(I.left) + box[0] * iw + (global.scrollX || 0), T = Math.round(I.top) + box[1] * ih + (global.scrollY || 0);
     const rw = box[2] * iw, rh = box[3] * ih;
