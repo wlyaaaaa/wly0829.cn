@@ -323,7 +323,7 @@ def main():
     summaries = []
     with sync_playwright() as playwright:
         context = playwright.chromium.launch_persistent_context(str(args.output / 'chrome-profile'), executable_path=str(chrome),
-                    headless=True, device_scale_factor=1, viewport={'width':941, 'height':200})
+                    headless=True, device_scale_factor=1, viewport={'width':941, 'height':200}, args=['--disable-gpu', '--disable-lcd-text'])
         try:
             for name in names:
                 entry=next(item for item in exported if item['page']==name)
