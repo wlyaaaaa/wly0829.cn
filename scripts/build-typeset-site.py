@@ -945,7 +945,7 @@ def main():
     for arg in ['typeset-root','baseline','legacy-site','output','report']:
         ap.add_argument('--'+arg,type=Path,required=True)
     ap.add_argument('--inventory',type=Path,default=HERE.parent/'.publish/inventory/screens.jsonl')
-    ap.add_argument('--pages',nargs='+')
+    ap.add_argument('--pages',nargs='*')
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
@@ -998,7 +998,7 @@ def main():
         for row in rows: row['source_path'] = str(HERE.parent/'sources/pages'/row['page']/'page.json')
     grouped=defaultdict(list)
     for row in rows:grouped[row['page']].append(row)
-    names=args.pages or list(grouped)
+    names=args.pages if args.pages is not None else list(grouped)
     ASSET_CACHE=args.asset_cache.resolve()if args.asset_cache else args.typeset_root.parent/'integration'/'asset-cache'
     ASSET_CACHE.mkdir(parents=True,exist_ok=True)
     to_encode=[]
@@ -1049,9 +1049,11 @@ def main():
         workbench_inputs=workbench.pop('inputs')
     live_ui=None;live_ui_inputs={}
     if args.live_ui_preparation:
+        shutil.copytree(args.baseline,candidate,dirs_exist_ok=True,copy_function=lambda source,target:target if Path(target).is_file() else shutil.copyfile(source,target))
         ui_spec=importlib.util.spec_from_file_location('typeset_live_ui',HERE/'prepare-live-ui.py')
         ui_module=importlib.util.module_from_spec(ui_spec);ui_spec.loader.exec_module(ui_module)
-        live_ui,live_ui_inputs=ui_module.prepare_recipe(candidate,args.live_ui_preparation,pages=[hybrid.route_file(url)for url in accepted])
+        live_ui,live_ui_inputs=ui_module.prepare_recipe(candidate,args.live_ui_preparation)
+        overlay={'files':{**(overlay or {}).get('files',{}),**{row['path']:{'kind':'integrated_preparation','source_path':str(candidate/row['path']),'before':baseline_manifest['files'][row['path']],'after':row['after']} for row in live_ui['changed_pages'] if row['path'] not in {hybrid.route_file(url) for url in accepted}}}}
         for missing in live_ui['toc']['missing_labels']:
             matches=[s for s in states.values()if s.get('url') and hybrid.route_file(s['url'])==missing['page']]
             if len(matches)!=1:raise ValueError('Live UI missing-label page is outside the exact selected scope: '+missing['page'])
@@ -1127,6 +1129,8 @@ def main():
     if workbench:
         manifest['rule_original_workbench']=workbench
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
+    if not names:states={name:state for bound in reversed(manifest['page_flip_preparation']['build_reports']) for name,state in read(Path(bound['path'])).get('pages',{}).items()}
+    if not names and set(states)!=set(grouped):raise ValueError('Inherited build evidence is incomplete')
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -1140,7 +1144,7 @@ def main():
             'asset_cache':str(ASSET_CACHE),'input_snapshot':{'path':str(args.snapshot_path),**args.snapshot_proof}if args.snapshot_proof else None,
             'seconds':round(time.perf_counter()-started,3),
             'output_root':str(args.output),'candidate_root':str(candidate)}
-    if overlay:
+    if args.release_overlay:
         report['release_overlay']={'path':str(args.release_overlay.resolve()),**stamp(args.release_overlay.resolve()),'files':overlay['files']}
         report['inputs'].update({str(args.release_overlay.resolve()):stamp(args.release_overlay.resolve()),**overlay.get('inputs',{}),**{entry['source_path']:entry['after'] for entry in overlay['files'].values()}})
     if args.runtime_baseline:

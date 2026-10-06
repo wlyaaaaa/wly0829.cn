@@ -249,6 +249,7 @@ async def titles(records, chrome, profiles, evidence, ownership):
 
 
 def inject_runtime(text, js, css, index, model):
+    text = re.sub(r'<script\b[^>]*(?:\bid="album-page"|src="[^"]*/_album/album-[0-9a-f]+\.js")[^>]*>.*?</script>|<link\b[^>]*(?:\bid="album-route-index"|href="[^"]*/_album/album-[0-9a-f]+\.css")[^>]*>', '', text, flags=re.S)
     text, removed_hints = remove_document_hints(text)
     delayed = []
     def delay(match):

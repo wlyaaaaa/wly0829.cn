@@ -93,13 +93,14 @@ def policy_and_observation(baseline,files,asset_base_url=None):
     policy['origins']=sorted(origins)
     return policy,{'html_resources':pages,'js_loading_sites':dynamic,'public_static_json_files':policy['data'],'public_static_scripts':len(policy['scripts']),'public_static_stylesheets':policy['stylesheets']}
 def baseline_manifest_objects(root):return json.loads((root/'release-manifest.json').read_text('utf8')).get('oss',{}).get('objects',{}).values()
-def remove_previous_recovery(raw,info):
+def remove_previous_recovery(raw,info,ledger=()):
     """Remove only exact, bound predecessor additions, retaining byte restoration."""
     if MARKER.encode() not in raw:return raw,[]
     spans=[]
     for key in ('addition','initial_capture_addition'):
         addition=info[key].encode('utf8')
         serializations={addition,addition.replace(b'\n',b'\r\n')}
+        serializations.update(body for entry in ledger if (MARKER if key=='addition' else 'data-resource-retry-capture=') in entry['text'] for body in (entry['text'].encode('utf8'),entry['text'].replace('\n','\r\n').encode('utf8')))
         matches=[value for value in serializations if raw.count(value)==1]
         if len(matches)!=1:raise ValueError('Existing recovery does not match the bound predecessor: '+key)
         matched=matches[0];start=raw.index(matched);spans.append((start,start+len(matched)))
@@ -145,7 +146,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
         raw=(baseline/rel).read_bytes()
         if MARKER.encode()in raw:
             if not previous:raise ValueError('Page already has resource recovery')
-            raw,previous_restore[rel]=remove_previous_recovery(raw,previous)
+            raw,previous_restore[rel]=remove_previous_recovery(raw,previous,previous.get('previous_html_restore',{}).get(rel,[]))
         if raw.count(b'</head>')!=1:raise ValueError('Expected one head close: '+rel)
         marked,initial_scripts[rel]=mark_initial_scripts(raw,rel,policy)
         marked,initial_stylesheets[rel]=mark_initial_stylesheets(marked,rel,policy)
