@@ -398,7 +398,7 @@
         "card_header": "pale_green_band",
         "header_navigation": "inline_right",
         "text_ref": "五、我的个人资料",
-        "row_equal_height": true
+        "row_equal_height": false
       },
       {
         "type": "source_text_card",

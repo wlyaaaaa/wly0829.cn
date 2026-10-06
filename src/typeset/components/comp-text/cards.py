@@ -190,7 +190,7 @@ def _shell(component, block, ctx, render_group, groups=None):
     if size in ("small", "large"):
         content = content.replace('data-role="name"', f'data-role="card_title_{size}"')
     page_break = ' data-page-break-after="true"' if spec.get("page_break_after") else ""
-    return f'<div class="{classes}" data-comp="{escape(component, quote=True)}"{style}{page_break}>{content}</div>'
+    return f'<div class="{classes}" data-comp="{escape(component, quote=True)}"{' data-flow="independent_columns"' if component == 'source_text_card' else ''}{style}{page_break}>{content}</div>'
 
 
 def _headed(group, ctx, component, glossary=False):

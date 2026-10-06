@@ -1,4 +1,5 @@
 {
+  "reading_order": ["emerald-veil-01", "emerald-veil-04"],
   "schema": "site-b1.page.v1",
   "page": "emerald-veil",
   "kind": "project",

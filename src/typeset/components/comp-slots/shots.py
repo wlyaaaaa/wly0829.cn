@@ -370,7 +370,7 @@ def render_screenshot(block, ctx):
             if spec["withdrawal_note"] not in caption:
                 raise ValueError('撤下截图位的定稿节点与声明的中性说明不一致。')
             frame = (f'<div class="slot-shot-frame slot-shot-frame-{frame_style}" role="note" '
-                     f'data-withdrawn-shot-index="{index}" style="aspect-ratio:{ratio:.8f};'
+                     f'data-withdrawn-shot-index="{index}" style="'
                      f'display:grid;place-items:center;padding:16px;box-sizing:border-box;'
                      f'background:#fff;color:#53665c;pointer-events:none">{caption}</div>')
             caption_html = ''
