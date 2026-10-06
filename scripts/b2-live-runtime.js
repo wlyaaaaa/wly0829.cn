@@ -58,7 +58,7 @@ function grafanaGroupValue(part){
  }
  return selected;
 }
-const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
+const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter','connection_type']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
 let historical=false;
@@ -67,19 +67,23 @@ const name=x=>x?.plain?.name||x?.name||x?.plain_title||x?.project||'名称暂未
 const stateText=s=>({success:'正常',failed:'失败',error:'出错',warn:'需要留意',stale:'已过期',overdue:'没按时完成',running:'正在运行',disabled:'已停用',unknown:'状态未知',never:'还没运行',unavailable:'暂时读不到'})[s]||'状态未知';
 const cadenceText=s=>({daily:'每天',weekly:'每周',monthly:'每月',hourly:'每小时',manual:'手动运行',on_change:'变更时',on_login:'登录时',on_startup:'开机时'})[s]||'周期说明暂未提供';
 const rowState=rows=>rows?.some(x=>x.enabled!==false&&['failed','error'].includes(x.state))?'error':rows?.some(x=>x.enabled!==false&&['warn','stale','overdue'].includes(x.state))?'warn':!rows||rows.some(x=>x.enabled!==false&&(!['success','running','disabled','never'].includes(x.state)||x.state==='success'&&!Number.isFinite(Date.parse(x.last_success_at||x.last_run_at))))?'unknown':'ok';
-function hardwareHealth(){
- const hw=status?.hardware;if(!hw||['unknown','unavailable'].includes(hw.state))return 'unknown';
+function hardwareReadGaps(){
+ const hw=status?.hardware;if(!hw||['unknown','unavailable','error','failed'].includes(hw.state))return [{key:'hardware',label:'硬件状态',source:hw,health:'unknown'}];
  const unwrapped=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
- const groups=[{row:hw.cpu,fields:['model','usage_percent','temperature_celsius','power_watts']},{row:hw.memory,fields:['used_bytes','total_bytes']},{row:hw.network,fields:['connected','download_bytes_per_second','upload_bytes_per_second']},{row:hw.display,fields:['width_px','height_px','refresh_hz']},...(hw.gpus||[]).map(row=>({row,fields:['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']})),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>({row,fields:['letter','free_bytes','total_bytes']}))];
- let unknown=false,stale=hw.state==='stale';
- for(const {row,fields} of groups){
-  if(!row||['unknown','unavailable','error','failed'].includes(row.state)){unknown=true;continue;}
-  if(row.state==='stale')stale=true;
-  for(const field of fields){const metric=row[field],source=row.sources?.[field],actual=unwrapped(metric);if(actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||['unknown','unavailable','error','failed'].includes(metric?.state)||['unknown','unavailable','error','failed'].includes(source?.status))unknown=true;if(metric?.state==='stale'||source?.status==='stale')stale=true;const sampled=metric?.observed_at_unix??source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sampled)&&(sampled>clock()+60||clock()-sampled>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;}
-  const at=blockTime(row);if(Number.isFinite(at)&&(at>clock()+60||clock()-at>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;
+ const groups=[['cpu','处理器',hw.cpu,['model','usage_percent','temperature_celsius','power_watts']],['memory','内存',hw.memory,['used_bytes','total_bytes']],['network','网络',hw.network,[Object.hasOwn(hw.network||{},'connected')?'connected':'connection_type','download_bytes_per_second','upload_bytes_per_second',...['latency_ms','jitter_ms','packet_loss_percent'].filter(f=>Object.hasOwn(hw.network||{},f))]],['display','屏幕',hw.display,['width_px','height_px','refresh_hz']],...(hw.gpus||[]).map((row,i)=>['gpu'+i,'显卡'+(i+1),row,['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']]),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>['disk'+unwrapped(row.letter),unwrapped(row.letter)+'磁盘',row,['letter','free_bytes','total_bytes']])];
+ const labels={model:'型号',usage_percent:'占用率',temperature_celsius:'温度',power_watts:'功耗',used_bytes:'已用容量',total_bytes:'总容量',connected:'连接状态',connection_type:'连接类型',download_bytes_per_second:'下载速度',upload_bytes_per_second:'上传速度',latency_ms:'延迟',jitter_ms:'抖动',packet_loss_percent:'丢包率',width_px:'宽度',height_px:'高度',refresh_hz:'刷新率',vram_used_bytes:'已用显存',vram_total_bytes:'总显存',letter:'盘符',free_bytes:'剩余空间'},gaps=[];
+ const collector=status?.display_cache?.collectors?.hardware,hardwareAt=hardwareSnapshot(status)?.observed_at_unix;
+ for(const [id,label,row,fields] of groups)for(const field of fields){
+  const metric=row?.[field],source=row?.sources?.[field],actual=unwrapped(metric),sampled=metric?.observed_at_unix??source?.observed_at_unix??blockTime(row),maxAge=Number(row?.max_age_seconds||hw.max_age_seconds)||120;
+  const missing=!row||actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||[row.state,metric?.state,source?.status].some(s=>['unknown','unavailable','error','failed'].includes(s));
+  const old=Number.isFinite(hardwareAt)&&(hardwareAt>clock()+60||clock()-hardwareAt>maxAge)||!staticHardwareFields.has(field)&&Number.isFinite(sampled)&&(sampled>clock()+60||clock()-sampled>maxAge);
+  const stale=old||collector?.state==='error'||[metric?.state,source?.status].includes('stale')||!metric?.state&&!source?.status&&row?.state==='stale';
+  const expiredAt=Math.min(...[hardwareAt,staticHardwareFields.has(field)?NaN:sampled].filter(t=>Number.isFinite(t)&&clock()-t>maxAge).map(t=>t+maxAge));
+  if(missing||stale)gaps.push({key:'hardware:'+id+':'+field,label:'硬件：'+label+'的'+labels[field]+'当前读数',source:source||metric,expiredAt,health:stale?'stale':'unknown'});
  }
- return stale?'stale':unknown?'unknown':'ok';
+ return gaps;
 }
+function hardwareHealth(){const gaps=hardwareReadGaps();return gaps.some(x=>x.health==='stale')?'stale':gaps.length?'unknown':'ok';}
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
 
 const online=()=>phase==='ready'&&freshStatus(status,clock());
@@ -158,18 +162,7 @@ function readGaps(){
    for(const group of rows)for(const x of (group.items||[]).filter(x=>taskInLamp(x)&&x.role!=='original'))if(['unknown','unavailable'].includes(x.protection)||x.destination_state==='unregistered'||['unknown','unavailable'].includes(x.freshness))add(key+':'+x.id,'“'+group.name+'”里的备份“'+name(x)+'”的副本证据',x);
   }
  }
- if(hardwareHealth()!=='ok'){
-  const hw=status?.hardware,rows=[hw?.cpu,hw?.memory,hw?.network,hw?.display,...(hw?.gpus||[]),...(hw?.volumes||[])];
-  const expired=[];
-  for(const row of rows.filter(Boolean)){
-   const maxAge=Number(row.max_age_seconds||hw?.max_age_seconds)||120,at=blockTime(row);
-   if(Number.isFinite(at)&&clock()-at>maxAge)expired.push(at+maxAge);
-   for(const [field,source]of Object.entries(row.sources||{})){const sample=source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sample)&&clock()-sample>maxAge)expired.push(sample+maxAge);}
-  }
-  const collector=status?.display_cache?.collectors?.hardware,hardwareAt=status?.hardware_observed_at_unix??collector?.observed_at_unix;
-  if(Number.isFinite(hardwareAt)&&clock()-hardwareAt>(Number(hw?.max_age_seconds)||120))expired.push(hardwareAt+(Number(hw?.max_age_seconds)||120));
-  add('hardware','硬件状态',collector||hw,expired.length?Math.min(...expired):undefined);
- }
+ for(const gap of hardwareReadGaps())add(gap.key,gap.label,gap.source,gap.expiredAt);
  const authoritySource=status?.display_cache?.collectors?.authorization;
  for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']]){const g=status?.[key],at=authorizationTime(g),expired=Number.isFinite(at)&&clock()-at>120?at+120:undefined;if(!authorizationFresh(g)||!g?.state||['unknown','unavailable'].includes(g.state))add(key,label,Number.isFinite(g?.observed_at_unix)?g:authoritySource||g,expired);}
  const screenAt=windowsTime();if(!windowsFresh()||!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host?.sources?.screen_state||status?.host,Number.isFinite(screenAt)&&clock()-screenAt>120?screenAt+120:undefined);
@@ -381,9 +374,16 @@ function liveValue(slot){
 
   if(!list('today'))return {text:'今天动态暂时读不到',state:'unknown'};
 
-  const seen=new Set(),labels={system_backup_started:'系统镜像备份开始',system_backup_completed:'系统镜像备份完成',computer_reboot_completed:'电脑重启完成',stutter_captured:'电脑卡住，已自动留下现场'};
+  const seen=new Set(),labels={system_backup_started:'系统镜像备份开始',system_backup_completed:'系统镜像备份完成',computer_reboot_completed:'电脑重启完成',computer_restarted:'电脑重启完成',stutter_captured:'电脑卡住，已自动留下现场',freeze_captured:'电脑卡住，已自动留下现场'};
 
-  const rows=(list('today')||[]).filter(x=>x.id&&!seen.has(x.id)&&seen.add(x.id)).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)).map(x=>({text:time(Date.parse(x.at)/1000)+' · '+(labels[x.type]||(x.type==='task_completed'?(tasks.find(t=>t.id===x.task_id)?.plain?.name||'任务')+'完成':x.type==='task_failed'?(tasks.find(t=>t.id===x.task_id)?.plain?.name||'任务')+'出错':x.type==='acceptance_checked'?'核对了 '+known(x.count)+' 项，'+(x.passed===x.count?'都通过':'通过 '+known(x.passed)+' 项'):x.plain_title||'事件详情暂未提供'))}));
+  let background=0;const actions={task_completed:'完成',backup_completed:'备份完成',task_failed:'出错',automation_failed:'出错'},named=[...(list('automation')||[]),...backups];
+  const rows=(list('today')||[]).filter(x=>x.id&&!seen.has(x.id)&&seen.add(x.id)).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)).flatMap(x=>{
+   const task=named.find(t=>t.id===x.task_id),taskName=task?.plain?.name||task?.name||x.plain_title?.trim();
+   const reviewed=['acceptance_checked','acceptance_reviewed'].includes(x.type)&&Number.isInteger(x.count)&&x.count>=0&&Number.isInteger(x.passed)&&x.passed>=0&&x.passed<=x.count;
+   const title=labels[x.type]||(reviewed?'核对了 '+x.count+' 项，'+(x.passed===x.count?'都通过':'通过 '+x.passed+' 项'):actions[x.type]&&taskName?taskName+' · '+actions[x.type]:x.plain_title?.trim());
+   if(!title){background++;return [];}return [{text:time(Date.parse(x.at)/1000)+' · '+title}];
+  });
+  if(background)rows.push({text:'另有 '+background+' 条后台事件'});
 
   return {rows:rowText(rows,'今天还没有动态'),state:'ok'};
 
@@ -414,7 +414,7 @@ function value(slot){
  // Grafana has a 300-second check interval; the general dashboard blocks use
  // 120 seconds. Do not turn a still-current live iframe into historical data.
  if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false};
- if((health==='stale'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
+ if((health==='stale'&&slot!=='cockpit-pc'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
   if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};
  }
