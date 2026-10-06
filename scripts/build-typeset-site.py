@@ -591,6 +591,9 @@ def build_page(name, records, args, candidate):
     video_asset_manifest=args.typeset_root.parent/'typeset-assets'/name/'manifest.jsonl'
     if old_video and video_asset_manifest.exists():inputs[str(video_asset_manifest.resolve())]=stamp(video_asset_manifest)
     expected = [s for s in source['screens'] if not s.get('hidden')]
+    order = source.get('reading_order', [])
+    expected.sort(key=lambda s: order.index(s['id']) if s['id'] in order else len(order))
+    manifest['screens'].sort(key=lambda s: order.index(s['screen']) if s['screen'] in order else len(order))
     if [s['id'] for s in expected] != [s['screen'] for s in manifest['screens']]:
         issues.append('清单屏顺序/完整性与当前定稿不一致')
     qpath = args.typeset_root/name/'report.json'
