@@ -583,6 +583,8 @@ def validate_content(output, report, oss_preparation=None):
             except (OSError, ValueError): pass
             if evidence and unchanged and (manifest['oss']['verification'].get('method') == 'anonymous HEAD size and MD5/ETag plus sampled GET' or obj['byte_preserved'] and obj['url'] not in required_bodies and Path(rel).suffix not in builder.TEXT_EXT | oss.TEXT_ASSETS):
                 return rel, {'method':'HEAD', 'bytes':obj['bytes'], 'etag':headers['etag']}
+            if manifest['oss']['verification'].get('method') == 'anonymous HEAD size and MD5/ETag plus sampled GET':
+                raise ValueError('HEAD attestation changed or unavailable: ' + rel)
             target = cache/rel
             if unchanged and target.is_file() and target.stat().st_size == obj['bytes'] and digest(target) == obj['sha256']:
                 return rel, {**previous, 'method':'cached full body SHA256'}
