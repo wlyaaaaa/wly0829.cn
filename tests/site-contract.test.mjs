@@ -2440,7 +2440,7 @@ test("daily-preferences shares correctable personal understanding while domain d
     /免费.*0\.5/s,
     /AppID.*多账号|多账号.*AppID/s,
     /历史取得方式.*(?:Unknown|未知)|(?:Unknown|未知).*历史取得方式/s,
-    /PersonalOS.*一次性.*(?:不恢复|不依赖)/s,
+    /不恢复退役.*现行依赖.*旧资料.*一次性线索/s,
     /1,287.*192.*32/s,
     /12.*acquired_verified.*95.*snapshot_only/s,
     /conversation.on.demand|对话内按需|新对话.*同步刷新/s,
