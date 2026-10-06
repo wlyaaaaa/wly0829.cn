@@ -58,6 +58,8 @@ def recipe(path):
     if data.get('home_bio'): inputs[str(paths['home_bio_script'])] = stamp(paths['home_bio_script'])
     if data.get('bird_first_packet'):
         inputs[str(paths['native_home_script'])] = stamp(paths['native_home_script'])
+        scene = paths['native_home_script'].parents[3] / 'living/step1-source/home-scene.js'
+        inputs[str(scene)] = stamp(scene)
         inputs[str(paths['native_home_script'].parent/'build_bird_guide.py')] = stamp(paths['native_home_script'].parent/'build_bird_guide.py')
     if data.get('living_pages_packet'):
         packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); inputs.update({str(packet_path(packet,rel)):stamp(packet_path(packet,rel)) for rel in refs['object_sources'].values()})

@@ -132,7 +132,8 @@ def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, outpu
     import subprocess
     from build_bird_guide import minify, esbuild_path
     home = json.loads((fixed_packet / 'references.json').read_text('utf8'))['home']
-    engine_source = (fixed_packet / 'assets' / home['engine_url'].lstrip('/')).read_text('utf8')
+    engine_source = (Path(__file__).resolve().parents[3] / 'living/step1-source/home-scene.js').read_text('utf8')
+    engine_source = replace_once(engine_source, 'hero-live.config.b07cbbaf8c.json', Path(home['config_url']).name)
     texture_patch = r'''    let nativeTexture = loaded[0];
     if (hasBird && shared.plateImage) {
       const src = shared.plateImage.__heroNativePlates?.[portrait ? 'portrait' : 'landscape'] || await basePlateURL();
