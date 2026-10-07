@@ -532,6 +532,8 @@ def build_page(name, records, args, candidate):
         url=alias
     rel = hybrid.route_file(url)
     base_html = args.legacy_site/authored_rel
+    if not base_html.exists() and alias:
+        base_html = args.legacy_site/rel
     preview_only = name == 'github-profile'
     if not base_html.exists() and preview_only:
         base_html = args.legacy_site/'how-this-site/index.html'
@@ -558,6 +560,9 @@ def build_page(name, records, args, candidate):
     original = {s['id']:s for s in data['screens']}
     data.update({'page':name,'kind':source.get('kind',data['kind']),'title':source['title'],
                  'url':url,'typeset':True,'video':None,'screens':[]})
+    if old_video and old_video.get('mount_allowed') is False:
+        data['video']=old_video
+        video_binding={'status':'insufficient_evidence','original_geometry_retained':True}
     # The current shared renderer uses native header/menu/footer and generic page navigation.
     # Retired raster component payloads are not inputs to a manifest-driven page.
     data['shared']['components']={}
@@ -788,7 +793,7 @@ def build_page(name, records, args, candidate):
                         part.update(motion_part(geometry,ip.name,size,source_offsets[orient],padding))
                         part['motion_measured']=True
                     except ValueError as error:issues.append(sid+'/'+orient+':状态点量测证据不完整：'+str(error))
-                if old_video and len(data['screens'])==0 and orient=='h' and part_indices[orient]==0 and not issues:
+                if old_video and data['video'] is None and len(data['screens'])==0 and orient=='h' and part_indices[orient]==0 and not issues:
                     try:
                         box,video_binding=video_position(old_video,old,geometry.get('illustrations',[]),name,args)
                         if box[0]<0 or box[1]<0 or box[0]+box[2]>size[0]+1 or box[1]+box[3]>size[1]+1:raise ValueError('视频定位越出首屏图片：'+name)

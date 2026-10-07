@@ -97,11 +97,10 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
     for name in ['river.webp', 'mask.png', *[f'boat{i}.webp' for i in range(4)], *[f'bird-{pose}.webp' for pose in ['idle','look','tilt','sing','sleep']]]:
         additions['cockpit/assets/today-river-assets2/' + name] = (assets / name).read_bytes()
     html = once(html, old_ref, new_ref)
-    if installed:
-        for pattern in [r'<script\b[^>]*(?:data-)?src="[^"]*today-river-[a-f0-9]+\.js"[^>]*>\s*</script>', r'<link\b[^>]*href="[^"]*today-river-[a-f0-9]+\.css"[^>]*>']:
-            html, count = re.subn(pattern, '', html)
-            if not count:
-                raise ValueError('Installed river is missing its script or stylesheet')
+    for pattern in [r'<script\b[^>]*(?:data-)?src="[^"]*today-river-[a-f0-9]+\.js"[^>]*>\s*</script>', r'<link\b[^>]*href="[^"]*today-river-[a-f0-9]+\.css"[^>]*>']:
+        html, count = re.subn(pattern, '', html)
+        if installed and not count:
+            raise ValueError('Installed river is missing its script or stylesheet')
     html = once(html, '</head>', f'<link rel="stylesheet" href="{css_ref}"><script type="module" src="{js_ref}"></script></head>')
     if not installed:
         anchor = '<div class="screen-equivalent-text" id="cockpit-01-equivalent-text"'

@@ -778,6 +778,7 @@ def prepare(args):
             static_2f=config.get('scope')=='full-pages-creative-2f-static-home'
             full_2f=config.get('scope') in ('full-pages-creative-2f','full-pages-creative-2f-static-home')
             expected_steps=['demo','retry'] if page_only else ['static-home','river','comic','album','demo','retry']if static_2f else ['river','living','comic','album','demo','retry']if full_2f else ['comic','living','album','river','demo','retry']
+            expected_steps += [step for key,step in [('home_bio','bio'),('bird_first_packet','native-living'),('living_pages_packet','bird-first')] if config.get(key)]
             if [step['name'] for step in creative['steps']]!=expected_steps or ((page_only or full_2f) and creative.get('scope')!=config.get('scope')):
                 raise ValueError('Preparation does not replay the actual selected scope')
             if full_2f:
