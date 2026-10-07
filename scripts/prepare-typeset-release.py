@@ -20,7 +20,7 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://wly0829.cn"
-EXPECTED_PAGE_COUNT = 84
+EXPECTED_PAGE_COUNT = 85
 EFFECT_NAMES = {"cards", "numbers", "dots", "arrows", "screen_enter", "seam", "depth", "update", "ambient",
                 "back_top", "footer_signature", "navigation", "viewer", "brief", "live", "screenshots", "compare", "card_feedback"}
 LAYOUT_INSTRUCTION_ID = "55089fc0-3194-4f5c-8c02-c0eb5f92d220"

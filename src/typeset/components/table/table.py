@@ -1,6 +1,8 @@
 """表格组件：COMPONENTS-API V2，横版内容列宽、竖版逐行卡片。"""
 
 import math
+import html
+import os
 import re
 import unicodedata
 
@@ -48,6 +50,15 @@ def _table(node, ctx, spec):
     if any(len(row) != count for row in cells):
         ctx.warn("表格列数不齐：保留所有原字，缺列只留空；请检查原文解析")
     align = node.get("align") or []
+    icons = None
+    if "icons" in spec and spec["icons"] != "none":
+        declared = spec["icons"]
+        if isinstance(declared, list) and len(declared) == len(rows) and all(isinstance(path, str) for path in declared):
+            icons = ctx.take_icons(len(rows), spec)
+            if len(icons) != len(rows) or any(not os.path.isfile(ctx.resolve(path)) for path in declared):
+                icons = None
+        if icons is None:
+            ctx.incomplete("table icons 需要每行一个存在的素材；保留全部表格原文", "asset")
 
     def cell(text, tag, col, row=None):
         alignment = align[col] if col < len(align) else "left"
@@ -57,7 +68,12 @@ def _table(node, ctx, spec):
         attrs += ' data-table-header="true"' if row is None else f' data-table-row="{row}"'
         if tag == "th":
             attrs += ' scope="col"'
-        return f'<{tag} {attrs}>{ctx.inline(text)}</{tag}>'
+        content = ctx.inline(text)
+        if icons and row is not None and col == 0:
+            content = (f'<span class="table-row-icon-text"><img class="table-row-icon" '
+                       f'src="{html.escape(icons[row], quote=True)}" alt=""><span class="table-row-icon-label">'
+                       f'{content}</span></span>')
+        return f'<{tag} {attrs}>{content}</{tag}>'
 
     parts = [f'<div class="c-table" data-comp="table" data-orient="{ctx.orient}" '
              f'style="--table-min-font:{float(ctx.min_font):g}px">']

@@ -5,7 +5,7 @@
   "gen_requests": "gen-requests.jsonl",
   "gen_requests_sha256": "51c10c46a58e5f92a2ecc6ca391517fb69995c21c3fc12fa5f9bfa18332d18ec",
   "asset_map": "asset-map.jsonl",
-  "asset_map_sha256": "d9b154537c09d602b257ba179756f3365fd3ad6cf888a2ee773b29d73df4b6ed",
+  "asset_map_sha256": "a8ec13f4f59b3921cf4d8d9c46e58bfe25145e48ab0a00991fdae23fd781c2df",
   "summary": "summary.json",
   "requests_count": 714,
   "generation_required_count": 4,
@@ -16,5 +16,12 @@
     "key": "rules-e216-how-05-title",
     "added_at_beijing": "2026-10-05T13:13:12.719035+08:00",
     "scope": "仅添加现行分工标题；保留全部旧记录和其他ready字段"
+  },
+  "website_project_addition": {
+    "page": "wly0829-cn",
+    "title_count": 18,
+    "new_title_count": 11,
+    "illustration_count": 1,
+    "reviewed_at_beijing": "2026-10-07T18:27:13.671605+08:00"
   }
 }

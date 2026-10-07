@@ -530,6 +530,9 @@ def build_page(name, records, args, candidate):
     if not base_html.exists() and preview_only:
         base_html = args.legacy_site/'how-this-site/index.html'
     templated=False
+    new_project=not base_html.exists() and source.get('kind')=='project'
+    if new_project:
+        base_html=args.legacy_site/'projects/agents/index.html';templated=True
     if base_html.exists():
         initial_text,initial_proof=text_bound(base_html)
         if DATA.search(initial_text) is None and source.get('kind')=='skill':
@@ -555,7 +558,13 @@ def build_page(name, records, args, candidate):
     data['shared'].get('art',{}).pop('source_frames',None)
     if preview_only or templated:
         data['neighbors'] = {}; data['project'] = None; data['family'] = 'projects'
-        if templated:data['family']='skills'
+        if templated and not new_project:data['family']='skills'
+    if new_project:
+        data['project']=name
+        data['repo_url']=source.get('repo_url')
+        data['repository_visibility']='PUBLIC' if source.get('public') else 'PRIVATE'
+        data['status_binding']={'project':name,'repo':(source.get('repo_url') or '').removeprefix('https://github.com/'),
+                               'visibility':data['repository_visibility'],'matched':bool(source.get('repo_url'))}
     manifest_path = args.typeset_root/name/'page-manifest.json'
     manifest,manifest_proof = json_bound(manifest_path)
     inputs = {str(args.inventory.resolve()):args.inventory_proof,str(source_path.resolve()):source_proof,
@@ -863,7 +872,7 @@ def build_page(name, records, args, candidate):
         text=re.sub(r'<title>.*?</title>','<title>'+html.escape(source['title'])+'</title>',text,flags=re.S)
         text=re.sub(r'(<link[^>]*rel="canonical"[^>]*href=")[^"]*',r'\g<1>https://wly0829.cn'+url,text)
         sections={}
-        for s in data['screens']:sections.setdefault(s['section'],s['title'])
+        for s in data['screens']:sections.setdefault(s['section'],source_map[s['id']].get('nav_title') or s['title'])
         toc='<nav class="toc" aria-label="本页目录"><div class="toc-inner toc-text">'+''.join('<a class="nav-link" href="#'+html.escape(k,quote=True)+'" data-section="'+html.escape(k,quote=True)+'" data-label-h="'+html.escape(v,quote=True)+'" data-label-v="'+html.escape(v,quote=True)+'">'+html.escape(v)+'</a>'for k,v in sections.items())+'</div></nav>'
         text=re.sub(r'<nav class="toc".*?</nav>',lambda _:toc,text,flags=re.S)
     text = re.sub(r'(<main\b[^>]*>).*?(</main>)',lambda m:m[1]+''.join(main)+m[2],text,count=1,flags=re.S)

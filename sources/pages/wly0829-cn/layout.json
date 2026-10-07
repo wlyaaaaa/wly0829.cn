@@ -1,0 +1,1334 @@
+[
+  {
+    "screen": "wly0829-cn-01",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人网站（总看板）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
+        "align": "left",
+        "row": "hero",
+        "width": "56fr"
+      },
+      {
+        "type": "illustration",
+        "asset": "wly0829-cn/wly0829-cn-12-overview-illustration-v1.png",
+        "illustration": "outside",
+        "align": "center",
+        "size": "medium",
+        "row": "hero",
+        "width": "42fr",
+        "target_height": 390
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "1 分钟",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/沙漏.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "text_ref": "现在正不正常 → 驾驶舱",
+        "columns": 4,
+        "columns_v": 2
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-01",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人网站（总看板）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
+        "align": "left"
+      },
+      {
+        "type": "illustration",
+        "asset": "wly0829-cn/wly0829-cn-12-overview-illustration-v1.png",
+        "illustration": "outside",
+        "align": "center",
+        "size": "medium",
+        "target_height": 470
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "1 分钟",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/沙漏.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "text_ref": "现在正不正常 → 驾驶舱",
+        "columns": 2,
+        "columns_v": 2
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-02",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它替我看三件事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "有没有事",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/报警灯.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/手机电脑连接.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "为什么只要一个看板",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "none"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-02",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它替我看三件事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "有没有事",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/报警灯.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/手机电脑连接.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "为什么只要一个看板",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "none"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-03",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每一页管什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "页面 | 管什么 | 我什么时候去",
+        "width": "100%",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/上锁仓库箱.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/书签册.png",
+          "_library/icons/工具箱.png",
+          "_library/illustrations/双人传稿.png",
+          "_library/illustrations/电脑故障.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/画笔调色板.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "驾驶舱只显示",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-03",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每一页管什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "页面 | 管什么 | 我什么时候去",
+        "width": "100%",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/上锁仓库箱.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/书签册.png",
+          "_library/icons/工具箱.png",
+          "_library/illustrations/双人传稿.png",
+          "_library/illustrations/电脑故障.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/画笔调色板.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "驾驶舱只显示",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-04",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "打开首页",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 6,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "above_card",
+        "icons": [
+          "_library/icons/太阳工具.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/铃铛.png",
+          "_library/icons/钥匙.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/手机.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-04",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "打开首页",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 6,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "above_card",
+        "icons": [
+          "_library/icons/太阳工具.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/铃铛.png",
+          "_library/icons/钥匙.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/手机.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-05",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "现在做到哪了",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "已经在用",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/盾牌对勾.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "今天在接入",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/齿轮.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "还没做到",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/沙漏.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-05",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "现在做到哪了",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "已经在用",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/盾牌对勾.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "今天在接入",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/齿轮.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "还没做到",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/沙漏.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-06",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "看到什么 | AI 自己会做 | 还不行，我怎么办",
+        "width": "100%",
+        "icons": [
+          "_library/icons/气泡灯泡.png",
+          "_library/icons/显示器.png",
+          "_library/icons/断链.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/报警灯.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "恢复和根治分开说",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "none"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-06",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "看到什么 | AI 自己会做 | 还不行，我怎么办",
+        "width": "100%",
+        "icons": [
+          "_library/icons/气泡灯泡.png",
+          "_library/icons/显示器.png",
+          "_library/icons/断链.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/报警灯.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "恢复和根治分开说",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "none"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-07",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "AI 怎么维护它",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "按需更新",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/版本循环文件.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "细节和数字见",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-07",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "AI 怎么维护它",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "按需更新",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/版本循环文件.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "细节和数字见",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-08",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "定稿文字",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 6,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "above_card",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/尺子.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/云.png",
+          "_library/icons/数据库.png",
+          "_library/icons/代码窗口.png"
+        ]
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "8 月 7 日",
+        "columns": 3,
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/云.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "当前状态从",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-08",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "定稿文字",
+        "layout": "chain",
+        "split_arrows": true,
+        "columns": 6,
+        "columns_v": 1,
+        "connector": "none",
+        "illustration": "above_card",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/尺子.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/云.png",
+          "_library/icons/数据库.png",
+          "_library/icons/代码窗口.png"
+        ]
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "8 月 7 日",
+        "columns": 3,
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/云.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "当前状态从",
+        "align": "left"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-09",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "只看一处",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/illustrations/项目桌面盆栽.png",
+          "_library/icons/气泡灯泡.png",
+          "_library/icons/相机.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/显示器.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-09",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "只看一处",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/illustrations/项目桌面盆栽.png",
+          "_library/icons/气泡灯泡.png",
+          "_library/icons/相机.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/显示器.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-10",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "唯一总看板：待验收事项和预警集中查看。",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/版本循环文件.png",
+          "_library/illustrations/账本.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-10",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "唯一总看板：待验收事项和预警集中查看。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/icons/版本循环文件.png",
+          "_library/illustrations/账本.png"
+        ]
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-11",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（39 项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "columns": 6
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "首页和驾驶舱",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/太阳工具.png",
+          "_library/icons/手机点桌面.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/气泡.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/秒表.png",
+          "_library/icons/云对勾.png",
+          "_library/icons/文件夹.png",
+          "_library/illustrations/水流汇合.png",
+          "_library/illustrations/账本.png",
+          "_library/icons/波形照片.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-11",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（39 项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "columns": 3
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "首页和驾驶舱",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/太阳工具.png",
+          "_library/icons/手机点桌面.png",
+          "_library/icons/报警灯.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/气泡.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/秒表.png",
+          "_library/icons/云对勾.png",
+          "_library/icons/文件夹.png",
+          "_library/illustrations/水流汇合.png",
+          "_library/illustrations/账本.png",
+          "_library/icons/波形照片.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-12",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "资料锁和授权",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/上锁仓库箱.png",
+          "_library/icons/双授权卡严格两张.png",
+          "_library/icons/开关.png",
+          "_library/icons/解锁窗口手势.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "读懂整套东西",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/工具箱.png",
+          "_library/icons/双气泡.png",
+          "_library/illustrations/电脑故障.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/文件写作.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "AI 怎么维护",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/秒表.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/云对勾.png",
+          "_library/illustrations/电脑后台闹钟.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-12",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "资料锁和授权",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/上锁仓库箱.png",
+          "_library/icons/双授权卡严格两张.png",
+          "_library/icons/开关.png",
+          "_library/icons/解锁窗口手势.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "读懂整套东西",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/工具箱.png",
+          "_library/icons/双气泡.png",
+          "_library/illustrations/电脑故障.png",
+          "_library/icons/手机电脑连接.png",
+          "_library/icons/文件写作.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "AI 怎么维护",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/秒表.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/云对勾.png",
+          "_library/illustrations/电脑后台闹钟.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-13",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "画和动效",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/画笔调色板.png",
+          "../bird/poses/sample/sprites/bird-idle.png",
+          "_library/icons/小放映机.png",
+          "_library/icons/手机.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "已停用",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png",
+          "_library/icons/小放映机.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-13",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "画和动效",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/画笔调色板.png",
+          "../bird/poses/sample/sprites/bird-idle.png",
+          "_library/icons/小放映机.png",
+          "_library/icons/手机.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "已停用",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/相机.png",
+          "_library/icons/小放映机.png"
+        ],
+        "status_position": "top_right",
+        "status_text": "dot_only",
+        "last_row": "fill",
+        "group_heading_style": "brush",
+        "heading_size": "small"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-14",
+    "orientation": "h",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进（北京时间）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 7–8 日",
+        "direction": "vertical",
+        "columns": 2,
+        "columns_v": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/钥匙.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/文件齿轮.png",
+          "../bird/poses/sample/sprites/bird-idle.png",
+          "_library/icons/报警灯.png"
+        ],
+        "width": "100%"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  },
+  {
+    "screen": "wly0829-cn-14",
+    "orientation": "v",
+    "source_image": null,
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进（北京时间）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 7–8 日",
+        "direction": "vertical",
+        "columns": 1,
+        "columns_v": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/浏览器标签页.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/钥匙.png",
+          "_library/icons/画笔调色板.png",
+          "_library/icons/文件齿轮.png",
+          "../bird/poses/sample/sprites/bird-idle.png",
+          "_library/icons/报警灯.png"
+        ],
+        "width": "100%"
+      }
+    ],
+    "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
+    "provenance": {
+      "text": "sources/pages/wly0829-cn/page.json",
+      "source_sha256": "fc7c9b852c2d468d89f54e0bd48314e9525e2f5a8f863e5a057ce986ca488a83",
+      "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
+      "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
+      "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
+    }
+  }
+]

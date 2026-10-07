@@ -51,13 +51,14 @@ test("the approved value order places personal-expression after daily-preference
     "steam-millennium-config-backup",
     "ramdisk-guardian",
     "cacb",
-    "codex-remote"
+    "codex-remote",
+    "wly0829-cn"
   ]);
 });
 
 test("the final project plan fixes one complete value order without placeholder projects", () => {
   assert.equal(plan.schema, "wly.personal-panel-final-project-order.v1");
-  assert.equal(plan.target_project_count, 33);
+  assert.equal(plan.target_project_count, 34);
   assert.match(plan.ranking_basis, /consensus total net value for a broad rational audience/);
   assert.match(plan.ranking_rules.join("\n"), /do not add points for the owner's current usage frequency/);
   assert.match(plan.display_rule, /consecutive visible card numbers from 1.*missing internal ranks never create placeholder cards or routes/);
@@ -68,13 +69,13 @@ test("the final project plan fixes one complete value order without placeholder 
   assert.doesNotMatch(plan.construction_rule, /construction_hold|held project|removes the hold/);
   assert.equal(plan.ranking_rules.length, 4);
 
-  assert.equal(plan.projects.length, 33);
-  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 34 }, (_, index) => index + 1).filter((rank) => rank !== 15));
-  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 33);
+  assert.equal(plan.projects.length, 34);
+  assert.deepEqual(plan.projects.map((item) => item.final_rank), Array.from({ length: 35 }, (_, index) => index + 1).filter((rank) => rank !== 15));
+  assert.equal(new Set(plan.projects.map((item) => item.id)).size, 34);
 
   const published = plan.projects.filter((item) => item.state === "published");
   const planned = plan.projects.filter((item) => item.state === "planned");
-  assert.equal(published.length, 33);
+  assert.equal(published.length, 34);
   assert.equal(planned.length, 0);
   assert.equal(plan.projects.find((item) => item.id === "emerald-veil").state, "published");
   assert.equal(plan.projects.find((item) => item.id === "personal-expression").state, "published");
@@ -107,9 +108,13 @@ test("the final project plan fixes one complete value order without placeholder 
 
   const planById = new Map(plan.projects.map((item) => [item.id, item]));
   const enabled = registry.projects.filter((item) => item.enabled).sort((left, right) => left.order - right.order);
-  assert.deepEqual(enabled.map((item) => item.order), published.map((item) => item.final_rank));
-  assert.deepEqual(enabled.map((item) => item.id), published.map((item) => item.id));
-  assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), published.map((item) => item.id));
+  const legacyPublished = published.filter((item) => item.content_format !== "typeset");
+  assert.deepEqual(enabled.map((item) => item.order), legacyPublished.map((item) => item.final_rank));
+  assert.deepEqual(enabled.map((item) => item.id), legacyPublished.map((item) => item.id));
+  assert.deepEqual(projectCatalog.map((entry) => entry.registration.id), legacyPublished.map((item) => item.id));
+  for (const item of published.filter((item) => item.content_format === "typeset")) {
+    assert.ok(item.content_path.startsWith("sources/pages/"));
+  }
   for (const registration of enabled) {
     assert.equal(registration.order, planById.get(registration.id)?.final_rank, `${registration.id} drifted from its fixed final rank`);
   }
@@ -128,8 +133,8 @@ test("the final project plan fixes one complete value order without placeholder 
 });
 
 test("non-card explanations keep only real remaining work and private exclusions stay non-public", () => {
-  assert.equal(plan.non_card_explanations.length, 12);
-  assert.equal(plan.non_card_explanations.filter((item) => item.status === "done").length, 12);
+  assert.equal(plan.non_card_explanations.length, 11);
+  assert.equal(plan.non_card_explanations.filter((item) => item.status === "done").length, 11);
   assert.equal(plan.non_card_explanations.filter((item) => item.status === "todo").length, 0);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "md-triple-tactics-ledger-asset" && item.status === "done"), true);
   assert.equal(plan.non_card_explanations.some((item) => item.id === "wechat-pre-public-private-archive" && item.status === "done"), true);

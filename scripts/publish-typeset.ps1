@@ -134,7 +134,7 @@ if (-not $Publish) {
 }
 if (-not $LegacySite) { throw '-Publish requires -LegacySite for the exact reviewed build command.' }
 if (-not $LockHolder -or $LockHolder -notmatch '^(Claude|Codex)/.+$') { throw '-Publish requires -LockHolder containing the actual harness and real task id, for example Claude/<real-task-id>.' }
-if (-not (Test-Path -LiteralPath $ShortLockTool -PathType Leaf)) { throw 'The registered website-publication short-lock entrypoint is unavailable.' }
+if (-not (Test-Path -LiteralPath $ShortLockTool -PathType Leaf)) { throw 'The registered wly0829-publication short-lock entrypoint is unavailable.' }
 $remote = (& git remote get-url origin).Trim()
 if ($LASTEXITCODE -ne 0 -or $remote -notin @('https://github.com/wlyaaaaa/wly0829.cn.git','git@github.com:wlyaaaaa/wly0829.cn.git')) { throw 'Unexpected origin.' }
 $branch = (& git branch --show-current).Trim()
@@ -160,15 +160,15 @@ function TimedChecked([string]$Program, [string[]]$Arguments, [string]$Field) {
 $script:publicationLockAcquired = $false
 $script:confirmedPublicationFailure = $null
 function HoldPublicationLock {
-    $view = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Inspect -Name website-publication -Json
-    if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect the website-publication short lock.' }
+    $view = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Inspect -Name wly0829-publication -Json
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect the wly0829-publication short lock.' }
     $inspection = $view | ConvertFrom-Json -DateKind String
     $other = @($inspection.locks | Where-Object { $_.active -and $_.holder -cne $LockHolder })
-    if ($other.Count) { throw "website-publication is held by $($other[0].holder); no lock was stolen or publication attempted." }
-    $claim = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Acquire -Name website-publication -Holder $LockHolder -Minutes 30 -Reason 'Publish or exactly restore the reviewed typeset website batch' -Json
-    if ($LASTEXITCODE -ne 0) { throw 'Cannot acquire or renew the website-publication short lock.' }
+    if ($other.Count) { throw "wly0829-publication is held by $($other[0].holder); no lock was stolen or publication attempted." }
+    $claim = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Acquire -Name wly0829-publication -Holder $LockHolder -Minutes 30 -Reason 'Publish or exactly restore the reviewed typeset website batch' -Json
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot acquire or renew the wly0829-publication short lock.' }
     $claimed = $claim | ConvertFrom-Json -DateKind String
-    if ($claimed.status -notin @('acquired','renewed')) { throw 'The website-publication lock was not acquired.' }
+    if ($claimed.status -notin @('acquired','renewed')) { throw 'The wly0829-publication lock was not acquired.' }
     $script:publicationLockAcquired = $true
 }
 function RemoteMain {
@@ -572,7 +572,7 @@ try {
     $env:GIT_TERMINAL_PROMPT = $oldPrompt
     $env:GCM_INTERACTIVE = $oldInteractive
     if ($script:publicationLockAcquired) {
-        $releaseLock = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Release -Name website-publication -Holder $LockHolder -Json
+        $releaseLock = & pwsh -NoProfile -ExecutionPolicy Bypass -File $ShortLockTool -Mode Release -Name wly0829-publication -Holder $LockHolder -Json
         if ($LASTEXITCODE -ne 0) { $state.lock_release_error = 'The publication short lock was not confirmed released.' }
         else { $state.lock_release_result = $releaseLock | ConvertFrom-Json -DateKind String }
         SaveState

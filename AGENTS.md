@@ -40,8 +40,8 @@ personal AI collaboration workspace; public presentation is secondary.
   the owner as `curated_packaging` may use packaging copy or exclusions. A
   curated project may also be `manual_owner_only`: only an explicit owner request
   can refresh it; source, rule and Skill events never create a website task.
-- The website source project is infrastructure for the presentation layer and
-  never appears as one of the projects being presented.
+- The owner selected the website itself as “个人网站（总看板）” on 2026-10-07.
+  It owns the single personal dashboard and appears as a normal project card.
 - The site's overall identity stays platform-neutral: no one assistant product,
   runtime wrapper or compatibility layer defines the whole panel. This is not
   permission to euphemize a selected project's real identity. Name the actual

@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
-  "finalized_at": "2026-09-22",
-  "target_project_count": 33,
+  "finalized_at": "2026-10-07",
+  "target_project_count": 34,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -222,15 +222,18 @@
       "id": "codex-remote",
       "title": "Codex Remote",
       "state": "published"
+    },
+    {
+      "final_rank": 35,
+      "id": "wly0829-cn",
+      "title": "个人网站（总看板）",
+      "state": "published",
+      "source": "wlyaaaaa/wly0829.cn",
+      "content_format": "typeset",
+      "content_path": "sources/pages/wly0829-cn/page.json"
     }
   ],
   "non_card_explanations": [
-    {
-      "id": "website-presentation-infrastructure",
-      "owner_surface": "system",
-      "status": "done",
-      "evidence": "app/system-home-content.js#wly0829-cn"
-    },
     {
       "id": "github-profile-discovery-entry",
       "owner_surface": "system",

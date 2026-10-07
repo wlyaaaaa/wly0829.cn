@@ -1841,54 +1841,93 @@
   {
     "screen": "projects-home-20",
     "orientation": "h",
-    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\projects-home\\img\\projects-home-20.png",
-    "source_kind": "original_image",
-    "source_size": [
-      1586,
-      992
-    ],
-    "source_sha256": "2b51399430e35659322c53e83edca6e72567df52ec4b8b19feaf9e6c424a1f4b",
+    "source_image": null,
+    "source_kind": "current_project_card",
     "shape": "card",
     "blocks": [
       {
-        "type": "chapter_title",
+        "type": "project_tile",
+        "text_ref": "个人网站（总看板）",
         "align": "left",
-        "size": "large",
-        "text_ref": "这个网站",
-        "title_style": "brush",
-        "link_style": true
-      },
-      {
-        "type": "prose",
-        "align": "left",
-        "text_ref": "我真实在用的看板",
-        "weight": "bold",
-        "width": "100%"
-      },
-      {
-        "type": "illustration",
-        "align": "center",
-        "illustration": "outside",
+        "columns": 4,
+        "illustration": "right_inside",
         "connector": "none",
-        "size": "large",
-        "position": "below_tagline_center_lower_half"
+        "icons": "none",
+        "size": "medium",
+        "number_rows": [
+          4
+        ],
+        "stat_columns": 4,
+        "stat_count": 4,
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "badge_position": "top_right",
+        "illustration_position": "right_inside_above_stats",
+        "tagline_position": "left_inside_below_title",
+        "stats_position": "full_width_below_hero",
+        "stat_alignment": "center",
+        "stat_style": "rounded_thin_border",
+        "number_label_position": "below",
+        "date_position": "below_stats",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": true,
+        "frozen": false,
+        "source_regions": {
+          "title": "upper_left",
+          "tagline": "middle_left",
+          "illustration": "upper_right",
+          "stats": "below_illustration",
+          "date": "below_stats",
+          "retirement": null
+        },
+        "separator_after_date": true
       }
     ],
-    "portrait_required": false,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已实际看原图。特殊独立卡：窄白边、细绿圆角外框；左上大毛笔链接标题和笔刷线，下面整宽一句话，浏览器窗页水彩插画居中占下半卡。无状态、徽章、数字、日期、直达，无箭头连接。文字以当前定稿为准，原图装饰↗定稿没有的不加。当前定稿hidden=true，保留此构图规格供接续，不出图、不解除隐藏；portrait明确不画竖版。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。",
-    "hidden": true,
-    "container": {
-      "type": "project_tile",
-      "border": "rounded_thin_green",
-      "padding": "narrow",
-      "background": "white",
-      "show_status": false,
-      "show_badge": false,
-      "show_stats": false,
-      "show_date": false,
-      "show_footer": false
-    },
+    "portrait_required": true,
+    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。",
     "aspect": "1672:1045"
+  },
+  {
+    "screen": "projects-home-20",
+    "orientation": "v",
+    "source_image": null,
+    "source_kind": "current_project_card",
+    "shape": "card",
+    "blocks": [
+      {
+        "type": "project_tile",
+        "text_ref": "个人网站（总看板）",
+        "align": "left",
+        "columns": 4,
+        "illustration": "right_inside",
+        "connector": "none",
+        "icons": "none",
+        "size": "medium",
+        "stat_columns": 4,
+        "stat_count": 4,
+        "title_style": "sans_bold",
+        "title_position": "top_left",
+        "status_position": "after_title",
+        "stats_position": "full_width_below_hero",
+        "stat_alignment": "center",
+        "stat_style": "rounded_thin_border",
+        "number_label_position": "below",
+        "date_position": "below_stats",
+        "footer_position": "bottom_left",
+        "link_layout": "auto",
+        "show_badge": true,
+        "frozen": false,
+        "separator_after_date": true,
+        "portrait_columns": 2,
+        "number_rows": [
+          4
+        ]
+      }
+    ],
+    "portrait_required": true,
+    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。"
   },
   {
     "screen": "projects-home-21",

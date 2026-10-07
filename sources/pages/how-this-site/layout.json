@@ -50,13 +50,18 @@
       {
         "type": "action_button",
         "text_ref": "看分工 ↓",
-        "align": "left"
+        "align": "left",
+        "link_style": "button",
+        "promote_links": [
+          "看分工 ↓",
+          "看数字口径 ↓"
+        ]
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -109,13 +114,20 @@
       {
         "type": "action_button",
         "text_ref": "看分工 ↓",
-        "align": "left"
+        "align": "left",
+        "link_style": "button",
+        "promote_links": [
+          "看分工 ↓",
+          "看数字口径 ↓"
+        ],
+        "columns": 2,
+        "columns_v": 2
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -743,16 +755,27 @@
       },
       {
         "type": "content_card",
-        "text_ref": "已经上线的基础动效",
+        "text_ref": "已经上线",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": [
-          "_library/icons/浏览器标签页.png",
-          "_library/icons/画笔调色板.png"
-        ],
-        "row": "motion",
-        "width": "62fr"
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "还有基础动效",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "卡了就停",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
       },
       {
         "type": "illustration",
@@ -760,32 +783,21 @@
         "illustration": "outside",
         "align": "center",
         "size": "medium",
-        "row": "motion",
-        "width": "36fr",
         "target_height": 370
       },
       {
         "type": "content_card",
-        "text_ref": "还在做的",
-        "columns": 2,
+        "text_ref": "视频留作退路",
+        "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": [
-          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
-          "_library/icons/小放映机.png"
-        ],
-        "equal_height": true
-      },
-      {
-        "type": "prose",
-        "text_ref": "以后按接入",
-        "align": "left"
+        "icons": "auto"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -805,14 +817,27 @@
       },
       {
         "type": "content_card",
-        "text_ref": "已经上线的基础动效",
+        "text_ref": "已经上线",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": [
-          "_library/icons/浏览器标签页.png",
-          "_library/icons/画笔调色板.png"
-        ]
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "还有基础动效",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "卡了就停",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
       },
       {
         "type": "illustration",
@@ -824,26 +849,17 @@
       },
       {
         "type": "content_card",
-        "text_ref": "还在做的",
-        "columns": 2,
+        "text_ref": "视频留作退路",
+        "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": [
-          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
-          "_library/icons/小放映机.png"
-        ],
-        "equal_height": true
-      },
-      {
-        "type": "prose",
-        "text_ref": "以后按接入",
-        "align": "left"
+        "icons": "auto"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -876,10 +892,10 @@
         "equal_height": true
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -912,10 +928,10 @@
         "equal_height": true
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -931,9 +947,7 @@
         "type": "chapter_title",
         "text_ref": "出了岔子怎么修",
         "align": "center",
-        "size": "large",
-        "row": "balanced-heading",
-        "width": "88%"
+        "size": "large"
       },
       {
         "type": "illustration",
@@ -963,21 +977,14 @@
       {
         "type": "content_card",
         "text_ref": "流量暴涨",
-        "columns": 1,
-        "columns_v": 1,
-        "illustration": "none",
-        "icons": "none"
-      },
-      {
-        "type": "content_card",
-        "text_ref": "Claude 一更新",
-        "columns": 1,
+        "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": [
-          "_library/icons/齿轮.png",
-          "_library/round3/clean-assets/png/12-文件核验-clean.png",
-          "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
+        "icons": "auto",
+        "row_counts": [
+          2,
+          2,
+          2
         ],
         "equal_height": false
       },
@@ -987,10 +994,10 @@
         "align": "left"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -1011,10 +1018,16 @@
       {
         "type": "content_card",
         "text_ref": "流量暴涨",
-        "columns": 1,
+        "columns": 2,
         "columns_v": 1,
-        "illustration": "none",
-        "icons": "none"
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row_counts": [
+          2,
+          2,
+          2
+        ],
+        "equal_height": false
       },
       {
         "type": "illustration",
@@ -1040,28 +1053,15 @@
         "connector": "arrow"
       },
       {
-        "type": "content_card",
-        "text_ref": "Claude 一更新",
-        "columns": 1,
-        "columns_v": 1,
-        "illustration": "left_inside",
-        "icons": [
-          "_library/icons/齿轮.png",
-          "_library/round3/clean-assets/png/12-文件核验-clean.png",
-          "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
-        ],
-        "equal_height": false
-      },
-      {
         "type": "prose",
         "text_ref": "能变成规则和工具",
         "align": "left"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -1158,20 +1158,25 @@
         "text_ref": "定稿改好",
         "layout": "chain",
         "split_arrows": true,
-        "columns": 6,
+        "columns": 7,
         "columns_v": 1,
         "connector": "none",
         "illustration": "above_card",
         "icons": "none"
       },
       {
-        "type": "prose",
-        "text_ref": "目标是普通按需更新",
-        "align": "left"
+        "type": "content_card",
+        "text_ref": "按需，不定时改",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
       },
       {
         "type": "section_heading",
-        "text_ref": "数字口径"
+        "text_ref": "数字口径",
+        "align": "left",
+        "size": "medium"
       },
       {
         "type": "content_card",
@@ -1188,10 +1193,10 @@
         "align": "left"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -1214,20 +1219,25 @@
         "text_ref": "定稿改好",
         "layout": "chain",
         "split_arrows": true,
-        "columns": 6,
+        "columns": 7,
         "columns_v": 1,
         "connector": "none",
         "illustration": "above_card",
         "icons": "none"
       },
       {
-        "type": "prose",
-        "text_ref": "目标是普通按需更新",
-        "align": "left"
+        "type": "content_card",
+        "text_ref": "按需，不定时改",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
       },
       {
         "type": "section_heading",
-        "text_ref": "数字口径"
+        "text_ref": "数字口径",
+        "align": "left",
+        "size": "medium"
       },
       {
         "type": "content_card",
@@ -1244,10 +1254,10 @@
         "align": "left"
       }
     ],
-    "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
+    "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
     "provenance": {
-      "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "text": "sources/pages/how-this-site/page.json",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"

@@ -58,6 +58,10 @@
 }
 .c-table .table-field > .table-cell:only-child { grid-column: 1 / -1; }
 .c-table .table-label, .c-table .table-caption { color: var(--accent); font-weight: 700; }
+.c-table .table-row-icon-text { display: flex; align-items: flex-start; gap: 8px; }
+.c-table .table-row-icon-label { min-width: 0; flex: 1; }
+.c-table .table-row-icon { width: 32px; height: 32px; flex: 0 0 32px; object-fit: contain; }
+.c-table[data-orient="v"] .table-row-icon { width: 48px; height: 48px; flex-basis: 48px; }
 .c-table[data-orient="v"] .table-label, .c-table[data-orient="v"] .table-label * {
   white-space: nowrap; overflow-wrap: normal; word-break: normal;
 }

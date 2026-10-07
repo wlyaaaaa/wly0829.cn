@@ -3,3 +3,4 @@
 from .table import render_table
 
 COMPONENTS = {"table": render_table}
+SPEC_FIELDS = {"table": ("icons",)}
