@@ -104,6 +104,9 @@ def remove_previous_recovery(raw,info):
     for key in ('addition','initial_capture_addition'):
         addition=info[key].encode('utf8')
         serializations={addition,addition.replace(b'\n',b'\r\n')}
+        if key=='addition':
+            album=addition.replace(b'<script defer ',b'<script  ',1).replace(b' src="',b'  data-album-runtime data-src="',1)
+            serializations.update((album,album.replace(b'\n',b'\r\n')))
         matches=[value for value in serializations if raw.count(value)==1]
         if len(matches)!=1:raise ValueError('Existing recovery does not match the bound predecessor: '+key)
         matched=matches[0];start=raw.index(matched);spans.append((start,start+len(matched)))
@@ -134,8 +137,11 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
     previous=None;previous_proof=None;previous_restore={}
     if previous_manifest:
         previous_manifest=Path(previous_manifest).resolve();previous_proof={'path':str(previous_manifest),**stamp(previous_manifest)}
-        previous=json.loads(previous_manifest.read_text('utf8')).get('resource_retry_preparation')
+        predecessor=json.loads(previous_manifest.read_text('utf8'));previous=predecessor.get('resource_retry_preparation')
         if not previous:raise ValueError('Previous manifest lacks exact resource-recovery preparation')
+        bound_runtime=predecessor['files'].get(previous['runtime'])
+        if not bound_runtime or before.get(previous['runtime'])!=bound_runtime:
+            raise ValueError('Existing recovery runtime differs from the bound predecessor')
     policy,observed=policy_and_observation(baseline,before,asset_base_url)
     raw_runtime=(HERE/'resource-retry-runtime.js').read_text('utf8')
     if raw_runtime.count('__RESOURCE_RETRY_POLICY__')!=1:raise ValueError('Runtime policy marker differs')
