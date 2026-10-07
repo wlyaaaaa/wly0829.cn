@@ -646,7 +646,7 @@ personal AI collaboration workspace; public presentation is secondary.
 - Before the first fully accepted baseline release, omissions, riddle copy and
   blind-reader product defects are construction defects, not incremental drift;
   repair them from owning sources before publication instead of deferring them
-  to the weekly review.
+  to a later requested refresh.
 - After that baseline, an incremental refresh merges the affected new truth into
   current owning content. It must not replace richer valid prose with a shorter,
   older or generated snapshot; unaffected content stays byte-identical, and
@@ -656,18 +656,16 @@ personal AI collaboration workspace; public presentation is secondary.
   Unknowns, followed by the affected Project, Rules, Skills and System surfaces.
   This is an AI-authored conclusion with Owner evidence, not hidden reasoning and
   not a deterministic content gate. Git paths and hashes only locate candidates.
-- This is a continuously maintainable panel with on-demand AI refreshes plus
-  one owner-authorized weekly material-drift review. The weekly task reads
-  current project, Rule and Skill evidence after governance, remains a no-op
-  when the page would stay truthful, and updates only the affected snapshot
-  when a real change would alter reader understanding. It is not continuous
-  synchronization and does not justify a watcher, daemon or duplicate writer.
-- The weekly review closes Project, Rules and Skills pages through their own
+- The website updates only when the owner asks to update it. There is no
+  automatic weekly review or source-event refresh. If AI notices stale website
+  content while doing other work, it mentions that fact in its report to the
+  owner without handing off or creating a website task.
+- An owner-requested refresh closes Project, Rules and Skills pages through their own
   Owners first, then derives whether System still tells the truth. Git history,
   diffs and changed paths identify candidates only. When roles, use, boundaries,
   entry points and reader decisions are unchanged, System remains byte-identical.
   A `manual_owner_only` page without a fresh explicit owner request keeps its
-  last verified published snapshot; weekly review does not manufacture newer facts.
+  last verified published snapshot; another task does not manufacture newer facts.
 - An unchanged source commit does not establish an unchanged snapshot. For each
   reviewed project, distinguish published implementation, local uncommitted
   changes and decision-relevant non-Git state such as inventories, indexed-text
@@ -680,10 +678,10 @@ personal AI collaboration workspace; public presentation is secondary.
   or a fresh unchanged conclusion. Do not create a new collector, polling
   service or business-data mutation merely to obtain a website snapshot.
 - The published site represents the last verified and released state. E release
-  identity is the rule-version boundary; the weekly review does not make every
+  identity is the rule-version boundary; an on-demand refresh does not make every
   displayed fact live, and the site must not claim background freshness beyond
   the evidence and observation time it actually read back.
-- Every owner-requested and weekly refresh ends with a plain-language report of
+- Every owner-requested refresh ends with a plain-language report of
   the concrete changes: affected project or page, what changed in use or state,
   repairs, publication result and unresolved gaps. A no-op reports the checked
   scope and why no update was needed. Counts and passing tests do not replace
@@ -710,20 +708,12 @@ personal AI collaboration workspace; public presentation is secondary.
   blocker or justify another website service/state layer.
 - Do not add a daemon, watcher, scheduled task, polling service or public live
   dependency merely to keep the panel current.
-- Cross-project refresh is event-driven and thresholded. A matching changed path
-  is only an impact candidate; route website work only when the source task has
-  determined that a displayed fact, explanation, boundary, maturity or user
-  decision would otherwise become materially wrong. If one active website
-  release Owner already exists, send that Owner one bounded follow-up with the
-  newer source read-back and merge the delta into its pending release; only when
-  no active website release Owner exists may the source create one fresh
-  independent projectless website task. Small
-  refactors, timestamps, formatting, blocked candidates and hash-only drift may
-  wait for the next material refresh.
-- Each source event resolves to exactly one corresponding registered snapshot
-  plus only the directly derived Project, Rules, Skills or System surfaces that
-  would otherwise become wrong. It must not enumerate unrelated projects, run
-  `refresh:ai -- --all` or turn the event into the scheduled whole-site review.
+- Source changes do not dispatch website work. Changed paths only identify
+  candidates for the next owner-requested refresh; a source task may mention
+  material stale content in its report to the owner. Within the requested scope,
+  update the corresponding registered snapshot and only its directly affected
+  Project, Rules, Skills or System surfaces. A targeted request does not permit
+  enumerating unrelated projects or running `refresh:ai -- --all`.
 - Bind each accepted source delta to source identity, published read-back commit,
   changed paths, observation time and active generation. Reuse evidence only
   while its source inputs, E identity, Registry revision and owned surface still
@@ -741,36 +731,13 @@ personal AI collaboration workspace; public presentation is secondary.
   development or preview server in a controllable background session with a
   bounded readiness deadline, and stop only its owned process/session on success,
   failure or timeout; never await it as an ordinary foreground command.
-- An enabled project with `ai_refresh.mode=manual_owner_only` is outside the
-  event-driven handoff set. `assess-panel-impact` must always return no website
-  task for it, even when paths or commits change and even when a source caller
-  claims materiality. It enters a targeted or full refresh only when the owner
-  explicitly asks to update it; the refresh plan and result must carry that
-  manual-owner-request fact. This rule creates no Skill, watcher or Source hook.
-- The owner has standing-authorized one necessary website handoff for registered
-  rule, Skill and project sources: reuse the current active website release Owner
-  when one exists, otherwise create one fresh website task. Once the material
-  threshold, duplicate check and live Owner resolution pass, do not ask again
-  whether the bounded follow-up or new conversation may be sent. This
-  authorization does not cover non-material changes, duplicate tasks,
-  unregistered sources or broader website work.
-- Resolve reuse from the live task list immediately before dispatch. A reusable
-  website publisher must have task status exactly `active` and a current Owner
-  scope covering the `wly0829.cn` publication transaction. Title similarity,
-  recency, an old handoff, a historical binding or the source conversation is
-  insufficient; `notLoaded`, idle, archived, completed, interrupted, failed,
-  unavailable and every other non-active state do not count. The qualifying
-  publisher may have been created by another source or already be refreshing a
-  different registered panel project.
-- An existing-Owner handoff contains only the source identity, formal read-back
-  commit, changed paths, assessor reasons, materiality rationale and affected
-  public surfaces. Delivery acceptance does not prove that Owner read, merged or
-  completed it; the source reports the handoff result and never waits or polls.
-  A failed send must not create a competing website task. When no active Owner
-  exists, creation follows the active global projectless default unless the
-  owner explicitly selected a project; a returned task id is the creation receipt,
-  and a creation error is reported without blind retry.
-- A newly created website task is projectless unless the owner explicitly selected a project.
+- An enabled project with `ai_refresh.mode=manual_owner_only` enters a targeted
+  or full refresh only when the owner explicitly asks to update it; the plan
+  and result must carry that manual-owner-request fact. Source, Rule and Skill
+  changes do not authorize a handoff or a new website task for any project.
+- An owner-requested website update has one publisher. Any in-scope source
+  evidence needed for that request stays with the same task; receiving evidence
+  does not establish that the update has been read, merged or published.
 - Default is no website change. AI updates a project only when leaving the page
   unchanged would make a displayed capability, boundary, current state, usage
   or user decision materially wrong. Small source updates never trigger a

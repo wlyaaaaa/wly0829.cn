@@ -1240,7 +1240,7 @@
         "id": "r-phone-upload",
         "with": "手机（FolderSync、GPSLogger、应用使用记录）",
         "direction": "拿来",
-        "flow": "小米 15 Pro 上 FolderSync 每小时单向上传 PersonalOS 日志（短信、通话、定位、亮屏、应用使用）到电脑",
+        "flow": "小米 15 Pro 上 FolderSync 每小时单向上传手机日志（短信、通话、定位、亮屏、应用使用）到电脑",
         "source": "DOMAIN_CONTRACT.md:19；SOURCE_RHYTHMS"
       },
       {
