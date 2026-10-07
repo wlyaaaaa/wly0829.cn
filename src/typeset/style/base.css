@@ -1,0 +1,448 @@
+/* 全站共用的排版规格只写这一处：颜色、字体、字号、卡片样式、间距。
+   第二版：密度向原图看齐（行距、标点挤压、内边距、间距收紧；字号不低于下限）。 */
+@font-face { font-family: "Sans"; src: url("file:///C:/Windows/Fonts/NotoSansSC-VF.ttf"); font-weight: 100 900; }
+
+:root {
+  --title: #0a7232;      /* 标题深绿 */
+  --text: #2e4675;       /* 正文深蓝灰：原图 01/03 屏正文实测均值约 RGB 53,70,106（含抗锯齿），字芯取更饱和的蓝灰 */
+  --accent: #0a7a33;     /* 数字、卡片标题 */
+  --link: rgb(9, 145, 54);
+  --line: #bfe8cc;       /* 细浅绿描边 */
+  --cardbg: #fbfefc;
+  --soft: #edfbf3;       /* 实时框浅底 */
+  --badge: #13803d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #fff; }
+/* 标点不压缩（试过 palt 比例挤压，标点挤得发闷）；行首不出现标点（strict 避头尾） */
+body { font-family: "Sans", sans-serif; color: var(--text); font-weight: 400; line-break: strict; }
+#page { padding: var(--pad-y) var(--pad-x) var(--pad-y); display: flex; flex-direction: column; gap: var(--gap); }
+/* 浏览器先避孤行；保留各组件已有的换行方式与原文代码的空白规则。 */
+#page { text-wrap-style: pretty; }
+b { font-weight: 700; color: var(--accent); }
+.lk { color: var(--link); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.16em; }
+
+/* 毛笔大标题：模型画好的标题图（含笔刷线）；透明文字只为逐字自检 */
+.title-wrap { position: relative; align-self: flex-start; max-width: 100%; }
+.title-img img { display: block; max-width: 100%; height: auto; margin-left: -10px; }
+.title-img .ghost { position: absolute; left: 0; top: 0; width: 100%; color: transparent; pointer-events: none; line-height: 1.2; }
+
+/* 卡片 */
+.card { position: relative; border: 2px solid #c3ead0; border-radius: 16px;
+  background: radial-gradient(circle at 0% 0%, rgba(150, 215, 172, .16), transparent 42%),
+              radial-gradient(circle at 100% 100%, rgba(170, 225, 190, .14), transparent 40%),
+              linear-gradient(165deg, #f2fbf5 0%, #fbfefc 55%, #f7fcf9 100%);
+  box-shadow: 0 3px 12px rgba(40, 140, 80, .08); }
+/* 叶子从部分卡片角上探出来（裁自原图水彩叶） */
+.stat:nth-child(odd)::after, .side:first-child::after, .step:last-child::after {
+  content: ""; position: absolute; width: 66px; height: 125px; top: -50px; right: 2px; z-index: 3; pointer-events: none;
+  background: url("../assets/leaf-r.png") no-repeat center / contain; }
+.side:first-child::after { top: auto; right: auto; bottom: -26px; left: 4px; background-image: url("../assets/leaf-l.png"); }
+.nowbar { position: relative; }
+
+.grid { display: grid; gap: var(--gap-card); align-items: stretch; }
+.core-illustration-gallery figure { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.core-illustration-gallery img { display: block; width: 100%; height: auto; }
+.core-illustration-gallery figcaption { text-align: center; }
+.ic { display: block; object-fit: contain; }
+.name { font-weight: 800; color: var(--accent); }
+
+/* 按钮：白底细绿边，绿字；放得下就并排，放不下各占一行 */
+.btnrow { display: flex; flex-wrap: wrap; gap: 14px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: 2px solid #2f9e5a; border-radius: 12px;
+  background: #fff; color: var(--link); font-weight: 700; white-space: nowrap; }
+
+/* “现在”横条 */
+.nowbar { display: flex; align-items: center; border: 2px solid #c3ead0; border-radius: 16px; background: linear-gradient(165deg, #f2fbf5, #fbfefc 60%); box-shadow: 0 3px 12px rgba(40, 140, 80, .08); }
+.nowlabel { font-weight: 800; color: var(--title); }
+.livebox { background: var(--soft); border: 2px solid #d6f2e0; border-radius: 10px; }
+
+/* 流程丝带、编号 */
+.steps { position: relative; }
+.step { position: relative; z-index: 1; }
+.stepic { position: relative; }
+.stepic .badge { position: absolute; left: 0; top: 0; z-index: 2; box-shadow: 0 0 0 3px #fff; }
+.badge { flex: none; border-radius: 50%; background: var(--badge); color: #fff; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; line-height: 1; }
+
+/* ===== 横版 1672（原图实测：正文行距约 1.45，卡片内边距约 18，卡片间距约 16） ===== */
+.o-h { --pad-x: 36px; --pad-y: 26px; --gap: 18px; --gap-card: 16px; font-size: 24px; line-height: 1.45; }
+.o-h .title-img .ghost { font-size: 22px; }
+.o-h .top { display: grid; grid-template-columns: 47% 1fr; gap: 20px; align-items: start; }
+.o-h .topleft { display: flex; flex-direction: column; gap: 12px; }
+.o-h .hero img { width: 100%; display: block; }
+.o-h .btn { font-size: 24px; padding: 6px 20px; min-width: 300px; }
+.o-h .stats { grid-template-columns: repeat(4, 1fr); }
+.o-h .stat { padding: 10px 18px 14px; }
+.o-h .stat .ic { height: 140px; max-width: 100%; }
+.o-h .num { font-size: 64px; font-weight: 800; color: var(--accent); line-height: 1.05; margin: 2px 0 6px; }
+.o-h .stat .body { font-size: 24px; line-height: 1.4; }
+.o-h .nowbar { padding: 8px 14px; gap: 14px; }
+.o-h .nowlabel { font-size: 34px; padding: 0 10px; }
+.o-h .livebox { flex: 0 0 33%; height: 50px; }
+.o-h .nowbtn { margin-left: auto; font-size: 24px; padding: 6px 20px; }
+
+.o-h .flowrow { display: grid; grid-template-columns: 21% 1fr; gap: var(--gap-card); align-items: stretch; }
+.o-h .steps.n5 { grid-template-columns: repeat(5, 1fr); }
+.o-h .steps.n6 { grid-template-columns: repeat(6, 1fr); }
+.o-h .steps::before { content: ""; position: absolute; left: 2%; right: 2%; top: 84px; height: 14px; border-radius: 7px;
+  background: linear-gradient(90deg, #8fd8a4, #4cb873 50%, #8fd8a4); z-index: 0; }
+.o-h .step { padding: 8px 14px 12px; display: flex; flex-direction: column; gap: 4px; }
+.o-h .stepic { height: 160px; display: flex; align-items: center; justify-content: center; }
+.o-h .stepic .ic { max-height: 160px; max-width: 100%; }
+.o-h .steps.n6 .stepic { height: 132px; }
+.o-h .steps.n6 .stepic .ic { max-height: 132px; }
+.o-h .steps.n6 .step { padding: 8px 12px 12px; }
+.o-h .badge { width: 44px; height: 44px; font-size: 27px; }
+.o-h .stephead { white-space: nowrap; }
+.o-h .step .name { font-size: 30px; line-height: 1.25; }
+.o-h .step .body { font-size: 23px; line-height: 1.45; overflow-wrap: break-word; }
+.o-h .sides { grid-template-columns: repeat(2, 1fr); }
+.o-h .side { display: flex; gap: 16px; padding: 10px 20px 12px 12px; align-items: center; }
+.o-h .sideic { flex: 0 0 240px; }
+.o-h .sideic .ic { width: 240px; }
+.o-h .side .name { font-size: 32px; line-height: 1.3; margin-bottom: 4px; }
+.o-h .side .body { font-size: 24px; line-height: 1.45; }
+.o-h .bubblecol { display: flex; flex-direction: column; gap: 4px; }
+.o-h .bubble { position: relative; border: 3px solid #39a862; border-radius: 30px; background: #f4fcf6; padding: 18px 22px;
+  font-size: 30px; line-height: 1.45; }
+.o-h .bubble::after { content: ""; position: absolute; left: 62%; bottom: -22px; width: 30px; height: 30px; background: #f4fcf6;
+  border-right: 3px solid #39a862; border-bottom: 3px solid #39a862; transform: skewX(-25deg) rotate(45deg); }
+.o-h .speaker { width: 100%; margin-top: 12px; }
+
+/* ===== 竖版 941（原图实测：正文行距约 1.5，数字卡图标约占卡宽 2/3、大数字约 95px，卡片间距约 24） ===== */
+.o-v { --pad-x: 28px; --pad-y: 26px; --gap: 22px; --gap-card: 18px; font-size: 36px; line-height: 1.45; }
+.o-v .title-img .ghost { font-size: 36px; }
+.o-v .hero { margin: 0 calc(-1 * var(--pad-x)); }
+.o-v .hero img { width: 100%; display: block; }
+.o-v .btn { font-size: 36px; padding: 8px 22px; flex: 1 1 auto; }
+.o-v .stats { grid-template-columns: repeat(2, 1fr); }
+.o-v .stat { padding: 10px 20px 18px; }
+.o-v .stat .ic { width: 100%; height: 210px; object-position: left center; }
+.o-v .num { font-size: 92px; font-weight: 800; color: var(--accent); line-height: 1.02; margin: 4px 0 8px; letter-spacing: -0.01em; }
+.o-v .stat .body { font-size: 36px; line-height: 1.38; }
+.o-v .nowbar { flex-wrap: wrap; padding: 12px 16px; gap: 12px; }
+.o-v .nowlabel { font-size: 42px; flex: 0 0 auto; }
+.o-v .nowbtn { margin-left: auto; font-size: 36px; padding: 6px 20px; }
+.o-v .livebox { flex: 1 1 100%; height: 64px; }
+
+.o-v .flowrow { display: flex; flex-direction: column; gap: var(--gap); }
+.o-v .steps { grid-template-columns: 1fr; }
+.o-v .steps::before { content: ""; position: absolute; top: 2%; bottom: 2%; left: 120px; width: 14px; border-radius: 7px;
+  background: linear-gradient(180deg, #8fd8a4, #4cb873 50%, #8fd8a4); z-index: 0; }
+.o-v .step { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 2px; padding: 12px 20px 16px 10px; }
+.o-v .stepic { grid-row: 1 / span 2; display: flex; align-items: flex-start; justify-content: center; }
+.o-v .stepic .ic { width: 220px; }
+.o-v .badge { width: 58px; height: 58px; font-size: 36px; }
+.o-v .stephead { display: flex; align-items: center; }
+.o-v .step .name { font-size: 42px; line-height: 1.25; }
+.o-v .step .body { font-size: 36px; line-height: 1.42; overflow-wrap: break-word; }
+.o-v .sides { grid-template-columns: 1fr; }
+.o-v .side { display: grid; grid-template-columns: 220px 1fr; column-gap: 16px; padding: 12px 20px 16px 10px; align-items: start; }
+.o-v .sideic .ic { width: 220px; }
+.o-v .side .name { font-size: 42px; line-height: 1.25; margin-bottom: 2px; }
+.o-v .side .body { font-size: 36px; line-height: 1.42; }
+.o-v .bubblecol { display: grid; grid-template-columns: 220px 1fr; gap: 26px; align-items: center; }
+.o-v .bubblecol .speaker { order: -1; width: 220px; }
+.o-v .bubble { position: relative; border: 3px solid #39a862; border-radius: 32px; background: #f4fcf6; padding: 16px 24px;
+  font-size: 38px; line-height: 1.42; }
+.o-v .bubble::after { content: ""; position: absolute; left: -20px; top: 50%; width: 30px; height: 30px; background: #f4fcf6;
+  border-left: 3px solid #39a862; border-bottom: 3px solid #39a862; transform: translateY(-50%) rotate(45deg); }
+/* 长路径在格子里也能断行：格子最小宽度为 0，配合 overflow-wrap: break-word */
+.grid > *, .step > *, .side > *, .sidetext { min-width: 0; }
+.o-v .step { grid-template-columns: 220px minmax(0, 1fr); }
+
+/* ===== 第三版：标题照原图（白底原图 multiply 贴、原分辨率、居中或靠左照原图）；流程照原图构图 ===== */
+.title-img { align-self: stretch; max-width: none; }
+.title-img img { mix-blend-mode: multiply; margin: 0; max-width: 100%; width: auto; height: auto; }
+.title-img.al-center img { margin: 0 auto; }
+.title-img.al-left img { margin-left: -12px; }
+/* 开放式流程（横版）：图标、丝带在卡外，卡只装文字 */
+.o-h .steps.m-open-name, .o-h .steps.m-open { align-items: stretch; }
+.o-h .step.open { display: flex; flex-direction: column; gap: 6px; padding: 0; background: none; border: 0; box-shadow: none; }
+.o-h .step.open .stepic { height: 170px; }
+.o-h .step.open .stepic .ic { max-height: 170px; }
+.o-h .steps.n6 .step.open .stepic { height: 150px; }
+.o-h .steps.n6 .step.open .stepic .ic { max-height: 150px; }
+.o-h .steps.m-open-name::before, .o-h .steps.m-open::before { top: 92px; height: 18px; opacity: .85; }
+.o-h .steps.m-open::before { top: 166px; }
+.o-h .step.open .stephead { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+.o-h .step.open .stephead .badge { position: static; box-shadow: none; }
+.o-h .stepbody { flex: 1; padding: 10px 14px 14px; }
+.o-h .badgerow { display: flex; justify-content: center; margin: -4px 0 -2px; position: relative; }
+.o-h .badgerow .badge { position: static; width: 48px; height: 48px; font-size: 28px; box-shadow: 0 0 0 4px #fff; }
+.o-h .step.open .stepbody .stephead { padding: 0; margin-bottom: 4px; }
+
+/* ======================================================================
+   正式程序追加（base.css 起点 = 第三版样板 style.css；以下是框架通用件）
+   ====================================================================== */
+@font-face { font-family: "Brush"; src: url("file:///C:/Windows/Fonts/STXINGKA.TTF"); unicode-range: U+2E80-9FFF, U+FF00-FFEF, U+3000-303F; }
+@font-face { font-family: "Brush"; src: url("file:///C:/Windows/Fonts/FZSTK.TTF"); unicode-range: U+0020-024F; }
+:root { --card-bg: linear-gradient(165deg, #f2fbf5 0%, #fbfefc 55%, #f7fcf9 100%); --card-shadow: 0 3px 12px rgba(40,140,80,.08); --radius: 16px; }
+.o-h { --fs-body: 24px; --fs-name: 30px; --lh: 1.45; }
+.o-v { --fs-body: 36px; --fs-name: 42px; --lh: 1.42; }
+/* 并排行 */
+.row { display: grid; gap: 22px; align-items: start; }
+.row > .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.row .ill img, .row .hero img { width: 100%; }
+/* 正文段 */
+.c-prose { display: flex; flex-direction: column; gap: 10px; }
+.prose { font-size: var(--fs-body); line-height: var(--lh); }
+/* 字体兜底标题 */
+.title-font .brushfont { font-family: "Brush", serif; color: var(--title); -webkit-text-stroke: 3px var(--title); font-size: 80px; line-height: 1.2; }
+.o-v .title-font .brushfont { font-size: 72px; }
+.title-font .brushline { height: 16px; margin-top: 2px; border-radius: 8px; background: linear-gradient(90deg, #9ddcae, #bfe8cc 70%, transparent); }
+.title-font.al-center { align-self: center; text-align: center; }
+/* 小节标题 */
+.sechead { font-weight: 800; color: var(--title); font-size: 34px; line-height: 1.3; padding-bottom: 6px; border-bottom: 3px solid #cdeedb; }
+.o-v .sechead { font-size: 44px; }
+/* 插画 */
+.ill img { display: block; max-width: 100%; }
+.ill.banner { display: flex; justify-content: center; }
+.ill.banner img { max-height: 320px; width: auto; }
+.o-v .ill.banner img { max-height: 420px; }
+/* 截图位、实时框：留空浅色框 */
+.shot { background: var(--soft); border: 2px dashed #bfe8cc; border-radius: 14px; width: 100%; }
+/* 清单 */
+.c-blist.pad { padding: 14px 22px; }
+.blist { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.blist li { position: relative; padding-left: 1.1em; font-size: var(--fs-body); line-height: var(--lh); }
+.blist li::before { content: ""; position: absolute; left: .2em; top: .6em; width: .38em; height: .38em; border-radius: 50%; background: #3fae68; }
+/* 状态圆点、图例 */
+.dot { font-weight: 700; }
+.dot-on { color: #22a052; } .dot-ring { color: #22a052; } .dot-x { color: #8a948f; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 26px; font-size: var(--fs-body); }
+/* 等宽 */
+.mono { font-family: "Cascadia Mono", Consolas, "Sans", monospace; background: #eef7f1; border-radius: 6px; padding: 0 .25em; font-size: 1em; overflow-wrap: anywhere; }
+.codeblock { padding: 14px 20px; }
+.codeblock pre { font-family: Consolas, "Sans", monospace; font-size: var(--fs-body); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.4; }
+/* 表格兜底 */
+.c-tablefb { padding: 6px 14px; }
+.c-tablefb table { border-collapse: collapse; width: 100%; font-size: var(--fs-body); line-height: var(--lh); }
+.c-tablefb th { text-align: left; color: var(--title); font-weight: 800; background: #e6f6ec; padding: 8px 12px; }
+.c-tablefb td { padding: 8px 12px; border-top: 1px solid #d6f0df; vertical-align: top; overflow-wrap: anywhere; }
+/* 卡片通用补充 */
+.card.side.noic { padding: 12px 20px 14px; }
+.card.side .sidetext { flex: 1; min-width: 0; }
+.o-v .card.side.noic { display: block; }
+.step.noic { padding: 12px 18px 14px; }
+.step.noic .stephead { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; }
+.step.noic .badge { position: static; box-shadow: none; }
+.o-v .step.noic { display: block; }
+.steps.conn-none::before { display: none; }
+.card.side.isolated-dashed { border-style: dashed; }
+.card-number-row { display: flex; align-items: flex-start; gap: 12px; margin: 8px 0; }
+.card-number-row .body { flex: 1; min-width: 0; }
+.card-paragraph-tag { display: inline-block; padding: 0 .35em; margin-right: .35em; border-radius: .7em; background: var(--soft); color: var(--title); }
+.card-plugin-row, .card-item-row { display: flex; gap: 12px; align-items: flex-start; margin: 8px 0; }
+.card-plugin-row { padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; }
+.plugin-symbol { flex: none; width: 1em; height: 1em; border: 2px solid var(--accent); border-radius: 50%; margin-top: .25em; }
+.plugin-symbol.active { background: var(--accent); }
+.card-item-row > img { flex: none; width: calc(var(--fs-body)*1.7); height: calc(var(--fs-body)*1.7); object-fit: contain; }
+.card-item-row .item-text { min-width: 0; flex: 1; border: 0; background: none; box-shadow: none; padding: 0; }
+.manual-action { width: calc(var(--fs-body)*1.5); height: calc(var(--fs-body)*1.5); object-fit: contain; margin-left: auto; flex: none; }
+.o-v .step.step-top { display: flex; flex-direction: column; }
+.o-v .step.step-top .stepic { align-self: center; }
+.illustration-panels { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.illustration-panel { display: block; flex: none; }
+.panel-down-arrow { display: block; flex: none; align-self: center; width: 30px; height: 42px; background: var(--accent); clip-path: polygon(32% 0,68% 0,68% 62%,100% 62%,50% 100%,0 62%,32% 62%); }
+.grouped-items { padding: 0; }
+.card.side.group-item { border: 0; border-radius: 0; box-shadow: none; background: none; }
+.card.side.group-item + .group-item { border-top: 1px solid var(--line); }
+.core-connection-lines { position: absolute; overflow: visible; pointer-events: none; z-index: 1; }
+.o-h .steps.m-side .step { display: grid; grid-template-columns: 96px minmax(0,1fr); grid-template-rows: auto 1fr; gap: 2px 16px; align-items: start; }
+.o-h .steps.m-side .stepic { grid-row: 1 / span 2; height: auto; margin: 0; }
+.o-h .steps.m-side .stepic .ic { width: 96px; max-height: 100px; }
+.o-h .steps.m-side .stephead { display: flex; align-items: center; gap: 10px; }
+/* 竖版插画整宽出血 */
+.o-v .ill.bleed { margin: 0 calc(-1 * var(--pad-x)); }
+.o-v .ill.bleed img { width: 100%; }
+/* 05:0x 组件工程师请求的共享变量 */
+:root {
+  --status-on: #22a052;        /* 在用 */
+  --status-pending: #e0b400;   /* 待验收 */
+  --status-todo: #22a052;      /* 待实施（空心圈） */
+  --status-unused: #9aa3a0;    /* 没用过 */
+  --status-uncertain: #c9cfcc; /* 说不准 */
+  --status-off: #8a948f;       /* 已停用（叉） */
+  --slot-compare-line: #c9cfcc;  /* 截图对比位灰边 */
+  --slot-danger-line: #b9c0bd;   /* 危险按钮灰边 */
+  --notice-green-bg: #eefaf2; --notice-yellow-bg: #fff8dc; --notice-yellow-line: #f0dc8c;
+  --notice-gray-bg: #f3f5f4; --notice-gray-line: #d9dedb;   /* 黄便签、灰说明条：新样式，需进样张给本人看 */
+}
+/* 独立卡、横条画布：窄边距 */
+.shape-card #page, .shape-strip #page { --pad-x: 20px; --pad-y: 16px; }
+/* 实时项：小字名 + 留空框 */
+.liveslot { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
+.liveslot .livebox { flex: 1 1 auto; }
+.livename { font-size: var(--fs-body); color: var(--text); white-space: nowrap; }
+.o-v .liveslot { flex: 1 1 100%; }
+/* 长英文、路径在格子里能断行 */
+.tb { overflow-wrap: anywhere; }
+
+/* ======================================================================
+   07:4x 北京时间 主工程师（接任）修：G6 同角色字号、流程标题断行、叶子不盖字、卡内上/右图、新变量
+   ====================================================================== */
+:root {
+  --surface: #fff;               /* 白底（按钮、卡内白块；批准样板本来就是白） */
+  --muted-bg: #f3f5f4; --muted: #7d8783; --muted-line: #d9dedb;   /* 冻结条/冻结卡中性灰：新样式，需进样张给本人看 */
+}
+/* G6：同角色一个字号——步骤正文和卡片正文都用 --fs-body，步骤名和卡片名都用 --fs-name */
+.o-h .step .body { font-size: var(--fs-body); }
+.o-h .side .name { font-size: var(--fs-name); }
+/* 流程标题：名字太长时在卡内换行，不横向溢出（不缩字） */
+.o-h .stephead { white-space: normal; }
+.stephead { min-width: 0; }
+.stephead > .name { min-width: 0; overflow-wrap: anywhere; }
+.o-h .step.open .stephead > .name, .step.noic .stephead > .name, .o-v .stephead > .name { flex: 1 1 auto; }
+/* 叶子：从第一张侧卡左下角探出，大半在卡外（左 22px、下 16px 不超过块间距），不盖卡内文字 */
+.side:first-child::after { width: 44px; height: 84px; bottom: -16px; left: -22px; }
+/* “现在”条：留空框在放不下时缩，不把按钮挤出画面 */
+.o-h .nowbar > .livebox { flex: 0 1 33%; min-width: 0; }
+.nowbar .nowbtn { flex: none; }
+/* 卡内左图：图栏最多占卡宽 38%，窄卡也不撑破 */
+.o-h .sideic { flex: 0 1 240px; max-width: 38%; }
+.o-h .sideic .ic { width: 100%; max-width: 240px; }
+/* 卡内上图（illustration: top_inside）：图在上、字在下 */
+.card.side.itop { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.card.side.itop .sideic { flex: none; max-width: none; width: 100%; display: flex; justify-content: center; }
+.card.side.itop .sideic .ic { width: auto; max-width: 100%; max-height: 160px; }
+.o-v .card.side.itop .sideic .ic { max-height: 220px; }
+/* 卡内右图（illustration: right_inside） */
+.o-h .card.side.iright { flex-direction: row-reverse; }
+.o-v .card.side.iright { grid-template-columns: minmax(0, 1fr) 220px; }
+.o-v .card.side.iright .sideic { order: 2; }
+/* 标题档位（字体兜底时生效；标题图保持原图尺寸） */
+.title-font.size-medium .brushfont { font-size: 64px; }
+.title-font.size-small .brushfont { font-size: 50px; }
+.o-v .title-font.size-medium .brushfont { font-size: 58px; }
+.o-v .title-font.size-small .brushfont { font-size: 48px; }
+/* 插画档位与对齐 */
+.ill.al-left, .ill.al-center, .ill.al-right { display: flex; }
+.ill.al-center { justify-content: center; }
+.ill.al-right { justify-content: flex-end; }
+.ill.sz-small img { max-width: 30%; }
+.ill.sz-medium img { max-width: 55%; }
+.ill.sz-large img { width: 100%; }
+/* 同 row 只有一块：照 width 占宽、靠左 */
+.row1 { align-self: flex-start; max-width: 100%; display: flex; flex-direction: column; gap: 12px; }
+/* 共享外框：frame 同名的几块装进一张大卡 */
+.card.frame { padding: 16px 22px 18px; display: flex; flex-direction: column; gap: var(--gap); }
+.card.frame > .row { gap: 22px; }
+/* 分张标记不占位 */
+.pgbreak { height: 0; margin: 0; padding: 0; }
+/* 独立卡画布：最后一块撑满 8:5 的高 */
+.shape-card #page > :last-child { flex-grow: 1; }
+/* 右上角叶子（数字卡、流程末卡）：缩小、大半探出卡外；向上只探 16px（不超过块间距，不压上一块的字） */
+.stat:nth-child(odd)::after, .step:last-child::after { width: 44px; height: 84px; top: -16px; right: 0; }
+.side:first-child::after { left: -30px; }
+/* 实时项名太长（如带括注的“升级观察（…）”）时在自己栏里换行，不顶出画面、不压留空框 */
+.livename { white-space: normal; flex: 0 1 auto; min-width: 0; max-width: 62%; overflow-wrap: anywhere; }
+.liveslot .livebox { flex: 1 1 120px; min-width: 96px; }
+/* 08:1x 全站冒烟后：没有图标的数字卡、流程卡顶上直接是字，右上角叶子会压字——只在有图标的卡上探叶子；
+   侧卡叶子向下只探 8px，不碰下一块的标题 */
+.stat:not(:has(> .ic))::after, .step.noic::after { display: none; }
+.side:first-child::after { bottom: -8px; }
+/* 08:24 comp-hub 请求：数字卡大数字字号变量（与 core .num 一致） */
+.o-h { --fs-num: 64px; }
+.o-v { --fs-num: 92px; }
+/* 08:5x Claude 转交：兜底毛笔字（华文行楷）字形比字框窄，默认字距看着很宽——收紧字距；不折行，长标题由出图程序按可用宽度缩字号 */
+.title-font .brushfont { letter-spacing: -0.06em; white-space: nowrap; }
+.title-font { max-width: 100%; }
+/* 代码、地址、报告条的共享等宽字体族（沿用原 .mono 的字体） */
+:root { --font-mono: "Cascadia Mono", Consolas, "Sans", monospace; }
+.mono, .codeblock pre { font-family: var(--font-mono); }
+/* 09:25 comp-hub 请求：出错红点（新颜色，进样张给本人看） */
+:root { --status-error: #d64545; }
+/* 10:1x 竖版流程卡是“左图右文”，右上角就是文字——竖版流程卡不探叶子 */
+.o-v .step:last-child::after { display: none; }
+/* 10:24 comp-text 请求：浅橙警告段（新颜色，进样张给本人看）；小叉用 --status-error */
+:root { --notice-orange-bg: #fff3e6; --notice-orange-line: #f2c79a; --notice-orange-text: #8a4b12; }
+/* 10:54 comp-diagram 请求：反例连线橙色（只给 SVG 线和箭头用；新颜色，进样张） */
+:root { --diagram-counter: #e08a2e; }
+/* 11:42 正文里的行内按钮（［…］）不套大按钮的 300px 最小宽、可在窄卡里换行（computer-access-03 横向溢出） */
+.btn.inline-btn { min-width: 0; max-width: 100%; white-space: normal; }
+/* 14:0x 长标题拆出的副标题（13:50 裁定第 4 条）：粗黑体一行，紧贴主标题下 */
+.title-sub { font-weight: 800; color: var(--title); font-size: var(--fs-name); line-height: 1.3; margin-top: -4px; }
+.title-sub.al-center { text-align: center; }
+
+/* 英文名字和单词整词换行；只影响换行，不改变字号、颜色或动效定位。 */
+[data-typeset-word] { white-space: nowrap; overflow-wrap: normal; word-break: normal; }
+
+/* 紧凑实时区：头、槽、尾独立排；真实卡片由集成运行件填入原live热区。 */
+.nowbar.live-plain { display: grid; grid-template-columns: minmax(0, 1fr); border: 0; border-radius: 0; background: none; box-shadow: none; padding: 0; }
+.nowbar.live-plain .live-plain-slots { display: grid; grid-template-columns: repeat(var(--live-plain-columns, 2), minmax(0, 1fr)); gap: 14px; min-width: 0; }
+.o-v .nowbar.live-plain .live-plain-slots { grid-template-columns: minmax(0, 1fr); }
+.nowbar.live-plain .livebox { border: 0; border-radius: 0; background: none; box-shadow: none; }
+.nowbar.live-plain .livename { max-width: none; width: 100%; }
+.nowbar.live-plain .livebox { min-width: 0; max-width: none; width: 100%; }
+.o-h .nowbar.live-plain .liveslot { display: contents; }
+.o-h .nowbar.live-plain .livename { grid-row: 1; align-self: start; }
+.o-h .nowbar.live-plain .liveslot .livebox { grid-row: 2; align-self: stretch; }
+.o-v .nowbar.live-plain .liveslot { flex-direction: column; align-items: stretch; gap: 4px; }
+.nowbar.live-plain .live-plain-actions { display: flex; min-width: 0; }
+.nowbar.live-plain .nowbtn { margin-left: 0; }
+/* ===== 14:4x 页修复员请求批量（DECISIONS-1350 之后） ===== */
+/* 内容卡角叶子默认不画（审页多处说压字或探出卡外）；规格 decor:"leaf" 再开 */
+.side:first-child::after { display: none; }
+.side.leaf:first-child::after { display: block; }
+/* 卡内居中 */
+.card.side.al-center .sidetext { text-align: center; }
+.card.side.al-center.itop .sideic { justify-content: center; }
+/* 色调：黄提示卡、历史/冻结灰卡、浅橙、浅绿（新样式，统一进验收页） */
+.card.tone-yellow { background: var(--notice-yellow-bg); border-color: var(--notice-yellow-line); }
+.card.tone-muted { background: var(--muted-bg); border-color: var(--muted-line); }
+.card.tone-muted .name { color: var(--muted); }
+.card.tone-orange { background: var(--notice-orange-bg); border-color: var(--notice-orange-line); }
+.card.tone-green { background: var(--notice-green-bg); }
+/* 卡内下图（bottom_inside）：字在上、图在下 */
+.card.side.ibottom { display: flex; flex-direction: column-reverse; align-items: stretch; gap: 8px; }
+.card.side.ibottom .sideic { flex: none; max-width: none; width: 100%; display: flex; justify-content: center; }
+.card.side.ibottom .sideic .ic { width: auto; max-width: 100%; max-height: 160px; }
+.o-v .card.side.ibottom .sideic .ic { max-height: 220px; }
+/* 按钮贴卡底（button_align） */
+.card.side.btn-bottom-right .sidetext, .card.side.btn-bottom .sidetext, .card.side.btn-bottom-left .sidetext { display: flex; flex-direction: column; height: 100%; }
+.card.side.btn-bottom-right .sidetext > .btnrow, .card.side.btn-bottom .sidetext > .btnrow, .card.side.btn-bottom-left .sidetext > .btnrow { margin-top: auto; }
+.card.side.btn-bottom-right .sidetext > .btnrow { justify-content: flex-end; }
+.card.side.btn-bottom .sidetext > .btnrow { justify-content: center; }
+/* 同组卡等高（equal_height）：网格行拉齐，卡内字顶对齐 */
+.grid.sides.eqh { align-items: stretch; }
+.grid.sides.eqh > .card.side { align-items: flex-start; }
+/* 卡内图位统一尺寸（icon_size）：图在固定框里等比放，不裁 */
+.grid.sides.sz-icon .sideic { flex: 0 0 var(--card-icon); max-width: var(--card-icon); }
+.grid.sides.sz-icon .sideic .ic { width: 100%; height: var(--card-icon); object-fit: contain; }
+.grid.sides.sz-icon .itop .sideic, .grid.sides.sz-icon .ibottom .sideic { max-width: none; width: 100%; height: var(--card-icon); }
+.grid.sides.sz-icon .itop .sideic .ic, .grid.sides.sz-icon .ibottom .sideic .ic { width: auto; height: var(--card-icon); max-height: none; }
+/* “现在”条：标签不折行；标签在框上（label_layout: above_frame） */
+.nowlabel { flex: none; white-space: nowrap; }
+.nowbar.lbl-above .liveslot { flex-direction: column; align-items: stretch; gap: 4px; }
+.nowbar.lbl-above .livename { max-width: none; }
+/* 竖版有图步骤：编号在步骤名前 */
+.o-v .step .stephead .badge { position: static; box-shadow: none; margin-right: 10px; }
+/* 行：等高（row_equal_height）与居中（row_align） */
+.row.eqh { align-items: stretch; }
+.row.eqh > .col > :last-child { flex-grow: 1; }
+.row.eqh > .col > :last-child > .card:only-child, .row.eqh > .col > .card:last-child { height: 100%; }
+.row.mid { align-items: center; }
+.row.card-notes { align-items: stretch; }
+.row.card-notes > .col, .row.card-notes > .col > .ct-source_text_card { display: contents; }
+.row.card-notes .ct-source-card { grid-row: 1; grid-column: var(--row-card-column); height: 100%; }
+.row.card-notes .ct-row-note { grid-row: 2; grid-column: 1 / -1; min-width: 0; }
+.row1.center { align-self: center; }
+.row1.right { align-self: flex-end; }
+/* 17:0x 卡内图在卡名后（illustration_order: after_heading） */
+.card.side .sideic.mid { display: flex; justify-content: center; margin: 6px 0; max-width: none; }
+.card.side .sideic.mid .ic { width: auto; max-width: 100%; max-height: 160px; }
+.o-v .card.side .sideic.mid .ic { max-height: 220px; }
+/* 卡角无字符号（corner_symbol，新样式进验收页）：画的形状，不是字 */
+.card.side { position: relative; }
+.corner-sym { position: absolute; top: 10px; right: 12px; width: 30px; height: 30px; border-radius: 50%; }
+.corner-check { background: var(--status-on) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path d='M8 15.5l5 5 9-10' stroke='white' stroke-width='3.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/100% no-repeat; }
+.corner-cross { background: var(--status-off) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path d='M10 10l10 10M20 10l-10 10' stroke='white' stroke-width='3.4' stroke-linecap='round'/></svg>") center/100% no-repeat; }
+.corner-pause { background: var(--status-unused) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path d='M12 9v12M18 9v12' stroke='white' stroke-width='3.4' stroke-linecap='round'/></svg>") center/100% no-repeat; }
+.o-v .corner-sym { width: 42px; height: 42px; }
+.grid.sides.w-icon .sideic { flex: 0 0 var(--card-icon-w); max-width: var(--card-icon-w); }
+.grid.sides.w-icon .sideic .ic { width: 100%; max-width: none; }
+.nowbar.btn-below { flex-wrap: wrap; }
+.nowbar.btn-below .nowbtn { flex: 1 1 100%; margin-left: 0; }
+.card.side.ibottom.img-right .sideic { justify-content: flex-end; }

@@ -1,0 +1,1918 @@
+[
+  {
+    "screen": "devconfig-backup-01",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-01-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "action_button",
+      "icon",
+      "stat_card",
+      "content_card",
+      "illustration",
+      "live_strip",
+      "monospace",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "action_button",
+      "illustration",
+      "stat_card",
+      "content_card",
+      "live_strip",
+      "monospace",
+      "chapter_title",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边约 45% 一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "开发配置备份"
+      },
+      {
+        "type": "action_button",
+        "row": "hero",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "重装系统或电脑坏了，最难重建的是各种开发软件和AI工具的设置，还有微信里的聊天记"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "none",
+        "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至9月28日"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+    "unsupported_requirements": [
+      "标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。",
+      "定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。",
+      "日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-01",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-01-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "action_button",
+      "icon",
+      "stat_card",
+      "content_card",
+      "illustration",
+      "live_strip",
+      "monospace",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "action_button",
+      "illustration",
+      "stat_card",
+      "content_card",
+      "live_strip",
+      "monospace",
+      "chapter_title",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边约 45% 一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "开发配置备份"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      },
+      {
+        "type": "prose",
+        "text_ref": "重装系统或电脑坏了，最难重建的是各种开发软件和AI工具的设置，还有微信里的聊天记"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "columns_v": 2,
+        "icons": "none",
+        "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "text_ref": "截至9月28日"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。",
+    "unsupported_requirements": [
+      "标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。",
+      "定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。",
+      "日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。",
+      "资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-02",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-02-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "timeline",
+      "bullet_list",
+      "content_card",
+      "action_button",
+      "icon",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "timeline",
+      "content_card",
+      "chapter_title",
+      "bullet_list",
+      "action_button",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：上半屏是一条横向时间轴（淡绿色水彩长条，从左到右 09:30 → 11:00（只在周一）→ 12:05 → 13:00 → 14:15 → 14:30，每个时间点一个小圆点，圆点下面是对应的那条字；周一那个点画成空心，旁边一个小日历图标；14:15、14:30 两个点用灰绿色，表示是别的项目做的）。下半屏三张并排的卡片，标题“它和两个项目怎么分工”横跨在三张卡片上方：左卡“本项目”画一个纸箱加对勾；中卡画机箱连着外接硬盘，按钮〔电脑配置与恢复〕；右卡画一只微信气泡旁边一个放大镜，按钮〔微信聊天读取〕。卡片之间留一致的间距。",
+      "portrait": "竖版：标题；时间轴改成从上到下的竖线，每个时间点一行（左边时间、右边一句话），周一那一行带小日历图标；下面“它和两个项目怎么分工”三张卡片上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：上半屏是一条横向时间轴（淡绿色水彩长条，从左到右 09:30 → 11:00（只在周一）→ 12:05 → 13:00 → 14:15 → 14:30，每个时间点一个小圆点，圆点下面是对应的那条字；周一那个点画成空心，旁边一个小日历图标；14:15、14:30 两个点用灰绿色，表示是别的项目做的）。下半屏三张并排的卡片，标题“它和两个项目怎么分工”横跨在三张卡片上方：左卡“本项目”画一个纸箱加对勾；中卡画机箱连着外接硬盘，按钮〔电脑配置与恢复〕；右卡画一只微信气泡旁边一个放大镜，按钮〔微信聊天读取〕。卡片之间留一致的间距。",
+    "portrait": "竖版：标题；时间轴改成从上到下的竖线，每个时间点一行（左边时间、右边一句话），周一那一行带小日历图标；下面“它和两个项目怎么分工”三张卡片上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "每天发生什么（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "columns": 6,
+        "direction": "horizontal",
+        "connector": "ribbon",
+        "illustration": "none",
+        "text_ref": "09:30微信：先给E盘拍一张卷影快照，从快照把微信原始文件复制成G上新的一份，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。失败了自动重试3次：存G的隔10"
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它和两个项目怎么分工"
+      },
+      {
+        "type": "comparison",
+        "columns": 3,
+        "columns_v": 1,
+        "groups": [
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          }
+        ],
+        "illustration": "left_inside",
+        "item_cards": true,
+        "text_ref": "本项目选备份哪些东西、复制、打包、核对，写本机、G和云盘；恢复时把配置包解到单独"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n时间线周一空心点、09:30/11:00 等六种节点样式、14:15/14:30 灰绿点及周一小日历未由 timeline 的通用字段实现；不得把所有节点画成同样状态。\n下方三卡中第二、第三张原开头是链接 para，comparison 依显式 count 分组三张；对应纸箱/机箱硬盘/微信放大镜需要逐卡语义图标映射，未按候选序号猜配。\n清单未登记这些完整原文的逐字一致毛笔标题图：每天发生什么（北京时间）；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 3 项，文字盘点预算 4 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "时间线周一空心点、09:30/11:00 等六种节点样式、14:15/14:30 灰绿点及周一小日历未由 timeline 的通用字段实现；不得把所有节点画成同样状态。",
+      "下方三卡中第二、第三张原开头是链接 para，comparison 依显式 count 分组三张；对应纸箱/机箱硬盘/微信放大镜需要逐卡语义图标映射，未按候选序号猜配。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：每天发生什么（北京时间）；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 4 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-02",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-02-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "timeline",
+      "bullet_list",
+      "content_card",
+      "action_button",
+      "icon",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "timeline",
+      "content_card",
+      "chapter_title",
+      "bullet_list",
+      "action_button",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：上半屏是一条横向时间轴（淡绿色水彩长条，从左到右 09:30 → 11:00（只在周一）→ 12:05 → 13:00 → 14:15 → 14:30，每个时间点一个小圆点，圆点下面是对应的那条字；周一那个点画成空心，旁边一个小日历图标；14:15、14:30 两个点用灰绿色，表示是别的项目做的）。下半屏三张并排的卡片，标题“它和两个项目怎么分工”横跨在三张卡片上方：左卡“本项目”画一个纸箱加对勾；中卡画机箱连着外接硬盘，按钮〔电脑配置与恢复〕；右卡画一只微信气泡旁边一个放大镜，按钮〔微信聊天读取〕。卡片之间留一致的间距。",
+      "portrait": "竖版：标题；时间轴改成从上到下的竖线，每个时间点一行（左边时间、右边一句话），周一那一行带小日历图标；下面“它和两个项目怎么分工”三张卡片上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：上半屏是一条横向时间轴（淡绿色水彩长条，从左到右 09:30 → 11:00（只在周一）→ 12:05 → 13:00 → 14:15 → 14:30，每个时间点一个小圆点，圆点下面是对应的那条字；周一那个点画成空心，旁边一个小日历图标；14:15、14:30 两个点用灰绿色，表示是别的项目做的）。下半屏三张并排的卡片，标题“它和两个项目怎么分工”横跨在三张卡片上方：左卡“本项目”画一个纸箱加对勾；中卡画机箱连着外接硬盘，按钮〔电脑配置与恢复〕；右卡画一只微信气泡旁边一个放大镜，按钮〔微信聊天读取〕。卡片之间留一致的间距。",
+    "portrait": "竖版：标题；时间轴改成从上到下的竖线，每个时间点一行（左边时间、右边一句话），周一那一行带小日历图标；下面“它和两个项目怎么分工”三张卡片上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "每天发生什么（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "none",
+        "text_ref": "09:30微信：先给E盘拍一张卷影快照，从快照把微信原始文件复制成G上新的一份，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "关机错过了，开机后补跑；上云的两个任务有网才跑。失败了自动重试3次：存G的隔10"
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它和两个项目怎么分工"
+      },
+      {
+        "type": "comparison",
+        "columns": 3,
+        "columns_v": 1,
+        "groups": [
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          },
+          {
+            "count": 1
+          }
+        ],
+        "illustration": "left_inside",
+        "item_cards": true,
+        "text_ref": "本项目选备份哪些东西、复制、打包、核对，写本机、G和云盘；恢复时把配置包解到单独"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n时间线周一空心点、09:30/11:00 等六种节点样式、14:15/14:30 灰绿点及周一小日历未由 timeline 的通用字段实现；不得把所有节点画成同样状态。\n下方三卡中第二、第三张原开头是链接 para，comparison 依显式 count 分组三张；对应纸箱/机箱硬盘/微信放大镜需要逐卡语义图标映射，未按候选序号猜配。\n清单未登记这些完整原文的逐字一致毛笔标题图：每天发生什么（北京时间）；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 3 项，文字盘点预算 4 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "时间线周一空心点、09:30/11:00 等六种节点样式、14:15/14:30 灰绿点及周一小日历未由 timeline 的通用字段实现；不得把所有节点画成同样状态。",
+      "下方三卡中第二、第三张原开头是链接 para，comparison 依显式 count 分组三张；对应纸箱/机箱硬盘/微信放大镜需要逐卡语义图标映射，未按候选序号猜配。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：每天发生什么（北京时间）；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 4 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 4,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-03",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "comparison",
+      "tag",
+      "notice",
+      "icon",
+      "bullet_list",
+      "content_card",
+      "illustration",
+      "inline_link",
+      "prose"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "prose",
+      "notice",
+      "chapter_title",
+      "comparison",
+      "tag",
+      "icon",
+      "bullet_list",
+      "content_card",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左右两栏。左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
+      "portrait": "竖版：标题；先“开发配置包”：纸箱插画缩小放在上面，五条内容一行一条往下排，接着“不进包的”、黄色提醒条；再往下是“微信”：文件夹插画和那段字。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左右两栏。左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
+    "portrait": "竖版：标题；先“开发配置包”：纸箱插画缩小放在上面，五条内容一行一条往下排，接着“不进包的”、黄色提醒条；再往下是“微信”：文件夹插画和那段字。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "备份里有什么，没有什么"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "target_width": 240,
+        "align": "center"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "text_ref": "用户目录19个文件夹：Claude、Codex、Antigravity、Curs"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "AI工具这一块只有它在备。Codex的配置和记忆（记忆开关虽关着，旧的84个记忆"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不进包的缓存、插件本体、node_modules、日志、浏览器Cookie和历史"
+      },
+      {
+        "type": "notice",
+        "tone": "yellow",
+        "text_ref": "包里仍可能有密码和密钥（Wi-Fi配置、GPG钥匙、Xshell会话、AI工具的"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "微信",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "index": 1,
+        "target_width": "100%",
+        "align": "center",
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "E:\\Documents\\xwechat_files整个原样复制：数据库连同它的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n开发配置五条需排到打开纸箱的分层标签旁，右栏微信文件夹需数据库/图片/视频/文件及划掉缓存组合图；现有 bullet_list 与 illustration 没有逐标签覆盖布局接口，先保留明确 60:40 文字栏和对应插画位。\n灰垃圾桶图标、五标签与微信目录图标未有经核对的语义映射。黄色/灰色 notice 当前沿批准浅绿视觉，原源构图指定的黄色提醒与灰色说明须样张裁定。\n清单未登记这些完整原文的逐字一致毛笔标题图：备份里有什么，没有什么、开发配置包（9月29日凌晨起的清单：66个来源）；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 illustration 仅 1 项，文字盘点需要 2 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "unsupported_requirements": [
+      "开发配置五条需排到打开纸箱的分层标签旁，右栏微信文件夹需数据库/图片/视频/文件及划掉缓存组合图；现有 bullet_list 与 illustration 没有逐标签覆盖布局接口，先保留明确 60:40 文字栏和对应插画位。",
+      "灰垃圾桶图标、五标签与微信目录图标未有经核对的语义映射。黄色/灰色 notice 当前沿批准浅绿视觉，原源构图指定的黄色提醒与灰色说明须样张裁定。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：备份里有什么，没有什么、开发配置包（9月29日凌晨起的清单：66个来源）；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 illustration 仅 1 项，文字盘点需要 2 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 2,
+      "inventory_icon_slots": 1,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-03",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-03-v3.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "comparison",
+      "tag",
+      "notice",
+      "icon",
+      "bullet_list",
+      "content_card",
+      "illustration",
+      "inline_link",
+      "prose"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "prose",
+      "notice",
+      "chapter_title",
+      "comparison",
+      "tag",
+      "icon",
+      "bullet_list",
+      "content_card",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左右两栏。左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
+      "portrait": "竖版：标题；先“开发配置包”：纸箱插画缩小放在上面，五条内容一行一条往下排，接着“不进包的”、黄色提醒条；再往下是“微信”：文件夹插画和那段字。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左右两栏。左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
+    "portrait": "竖版：标题；先“开发配置包”：纸箱插画缩小放在上面，五条内容一行一条往下排，接着“不进包的”、黄色提醒条；再往下是“微信”：文件夹插画和那段字。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "备份里有什么，没有什么"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "target_width": 360,
+        "align": "center"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "text_ref": "用户目录19个文件夹：Claude、Codex、Antigravity、Curs"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "AI工具这一块只有它在备。Codex的配置和记忆（记忆开关虽关着，旧的84个记忆"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不进包的缓存、插件本体、node_modules、日志、浏览器Cookie和历史"
+      },
+      {
+        "type": "notice",
+        "tone": "yellow",
+        "text_ref": "包里仍可能有密码和密钥（Wi-Fi配置、GPG钥匙、Xshell会话、AI工具的"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "微信"
+      },
+      {
+        "type": "illustration",
+        "index": 1,
+        "target_width": "60%",
+        "align": "center"
+      },
+      {
+        "type": "prose",
+        "text_ref": "E:\\Documents\\xwechat_files整个原样复制：数据库连同它的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n开发配置五条需排到打开纸箱的分层标签旁，右栏微信文件夹需数据库/图片/视频/文件及划掉缓存组合图；现有 bullet_list 与 illustration 没有逐标签覆盖布局接口，先保留明确 60:40 文字栏和对应插画位。\n灰垃圾桶图标、五标签与微信目录图标未有经核对的语义映射。黄色/灰色 notice 当前沿批准浅绿视觉，原源构图指定的黄色提醒与灰色说明须样张裁定。\n清单未登记这些完整原文的逐字一致毛笔标题图：备份里有什么，没有什么、开发配置包（9月29日凌晨起的清单：66个来源）；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 illustration 仅 1 项，文字盘点需要 2 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "unsupported_requirements": [
+      "开发配置五条需排到打开纸箱的分层标签旁，右栏微信文件夹需数据库/图片/视频/文件及划掉缓存组合图；现有 bullet_list 与 illustration 没有逐标签覆盖布局接口，先保留明确 60:40 文字栏和对应插画位。",
+      "灰垃圾桶图标、五标签与微信目录图标未有经核对的语义映射。黄色/灰色 notice 当前沿批准浅绿视觉，原源构图指定的黄色提醒与灰色说明须样张裁定。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：备份里有什么，没有什么、开发配置包（9月29日凌晨起的清单：66个来源）；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 illustration 仅 1 项，文字盘点需要 2 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 2,
+      "inventory_icon_slots": 1,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-04",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-04-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "numbered_steps",
+      "flow",
+      "icon",
+      "content_card",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "numbered_steps",
+      "flow",
+      "content_card",
+      "chapter_title",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左边约 60% 是“电脑坏了或重装”的四步竖向流程：每步一个圆形编号、左边一个小水彩图标（1 工具箱、2 纸箱和放大镜、3 微信气泡和手、4 云），步骤之间向下的细绿箭头。右边约 40% 上下两张卡：上卡“备份失败了”画一盏黄色小灯和一个窗口小图；下卡“还没真做过的”画一个空白的勾选框。",
+      "portrait": "竖版：标题；四步流程从上到下、满宽；下面“备份失败了”“还没真做过的”两张卡片上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左边约 60% 是“电脑坏了或重装”的四步竖向流程：每步一个圆形编号、左边一个小水彩图标（1 工具箱、2 纸箱和放大镜、3 微信气泡和手、4 云），步骤之间向下的细绿箭头。右边约 40% 上下两张卡：上卡“备份失败了”画一盏黄色小灯和一个窗口小图；下卡“还没真做过的”画一个空白的勾选框。",
+    "portrait": "竖版：标题；四步流程从上到下、满宽；下面“备份失败了”“还没真做过的”两张卡片上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "电脑坏了或重装"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1先装好基础工具照电脑配置与恢复的换机指南装PowerShell、Git、7-Z"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "备份失败了"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "还没真做过的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n右侧两卡需黄色小灯/窗口、空勾选框卡头图；points_card 必须有 header_left 和明确 header_icon 才出图，当前没有语义核对结果，未用 auto 假装已映射。\n清单未登记这些完整原文的逐字一致毛笔标题图：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "右侧两卡需黄色小灯/窗口、空勾选框卡头图；points_card 必须有 header_left 和明确 header_icon 才出图，当前没有语义核对结果，未用 auto 假装已映射。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "title": 3
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-04",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-04-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "numbered_steps",
+      "flow",
+      "icon",
+      "content_card",
+      "inline_link"
+    ],
+    "portrait_component_order": [
+      "numbered_steps",
+      "flow",
+      "content_card",
+      "chapter_title",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": {
+      "desktop": "横版：左边约 60% 是“电脑坏了或重装”的四步竖向流程：每步一个圆形编号、左边一个小水彩图标（1 工具箱、2 纸箱和放大镜、3 微信气泡和手、4 云），步骤之间向下的细绿箭头。右边约 40% 上下两张卡：上卡“备份失败了”画一盏黄色小灯和一个窗口小图；下卡“还没真做过的”画一个空白的勾选框。",
+      "portrait": "竖版：标题；四步流程从上到下、满宽；下面“备份失败了”“还没真做过的”两张卡片上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左边约 60% 是“电脑坏了或重装”的四步竖向流程：每步一个圆形编号、左边一个小水彩图标（1 工具箱、2 纸箱和放大镜、3 微信气泡和手、4 云），步骤之间向下的细绿箭头。右边约 40% 上下两张卡：上卡“备份失败了”画一盏黄色小灯和一个窗口小图；下卡“还没真做过的”画一个空白的勾选框。",
+    "portrait": "竖版：标题；四步流程从上到下、满宽；下面“备份失败了”“还没真做过的”两张卡片上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "电脑坏了或重装"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1先装好基础工具照电脑配置与恢复的换机指南装PowerShell、Git、7-Z"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "备份失败了"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "还没真做过的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n右侧两卡需黄色小灯/窗口、空勾选框卡头图；points_card 必须有 header_left 和明确 header_icon 才出图，当前没有语义核对结果，未用 auto 假装已映射。\n清单未登记这些完整原文的逐字一致毛笔标题图：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "右侧两卡需黄色小灯/窗口、空勾选框卡头图；points_card 必须有 header_left 和明确 header_icon 才出图，当前没有语义核对结果，未用 auto 假装已映射。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：出事怎么办；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 0 项，文字盘点预算 6 个图标位；差 6 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "title": 3
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-05",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-05-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "flow",
+      "icon",
+      "content_card",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "flow",
+      "content_card",
+      "chapter_title",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：上下两条横向流水线，每条是一串圆角节点、节点之间细绿箭头，节点左边小水彩图标、右边字。上面一条标“开发配置”（节点：来源→逐个复制→再扫一遍→打包→三道核对→本机→G→云盘）；下面一条标“微信”（节点：卷影快照→复制新一份→整份核对→换上→每周一：查回执→上云）。两条线下面一排三张小卡：“用到的工具”（画 PowerShell、7-Zip、rclone、Google 云盘的小标志）、“回执”（画一张带对勾的小票）、“规模”（画一叠代码纸）。",
+      "portrait": "竖版：标题；“开发配置”流水线改成从上到下的竖流程，接着“微信”竖流程；最下面三张小卡上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：上下两条横向流水线，每条是一串圆角节点、节点之间细绿箭头，节点左边小水彩图标、右边字。上面一条标“开发配置”（节点：来源→逐个复制→再扫一遍→打包→三道核对→本机→G→云盘）；下面一条标“微信”（节点：卷影快照→复制新一份→整份核对→换上→每周一：查回执→上云）。两条线下面一排三张小卡：“用到的工具”（画 PowerShell、7-Zip、rclone、Google 云盘的小标志）、“回执”（画一张带对勾的小票）、“规模”（画一叠代码纸）。",
+    "portrait": "竖版：标题；“开发配置”流水线改成从上到下的竖流程，接着“微信”竖流程；最下面三张小卡上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开发配置"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1按清单找来源"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "微信"
+      },
+      {
+        "type": "flow",
+        "columns": 4,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1拍快照用Windows卷影快照（VSS）定格E盘那一刻，微信照常写也不影响2复"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "用到的工具PowerShell7（没有就退回5.1）、7-Zip、rclone（"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源横版开发配置流水线要求八个细节点、微信六个细节点，定稿实际是五步/四步两个不可分 steps 节点；现有 flow 每个 step 只成一个节点，本规格保留五步/四步全部原文并记录八/六节点要求，尚无步骤内部拆成子节点的接口。\n工具小卡中多个品牌小标与回执/代码纸分别需要语义图标组，自动候选列表不能证明这些对象已正确。\n清单未登记这些完整原文的逐字一致毛笔标题图：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 4 项，文字盘点预算 17 个图标位；差 13 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "源横版开发配置流水线要求八个细节点、微信六个细节点，定稿实际是五步/四步两个不可分 steps 节点；现有 flow 每个 step 只成一个节点，本规格保留五步/四步全部原文并记录八/六节点要求，尚无步骤内部拆成子节点的接口。",
+      "工具小卡中多个品牌小标与回执/代码纸分别需要语义图标组，自动候选列表不能证明这些对象已正确。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 17 个图标位；差 13 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 17,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-05",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-05-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "flow",
+      "icon",
+      "content_card",
+      "numbered_steps"
+    ],
+    "portrait_component_order": [
+      "flow",
+      "content_card",
+      "chapter_title",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": {
+      "desktop": "横版：上下两条横向流水线，每条是一串圆角节点、节点之间细绿箭头，节点左边小水彩图标、右边字。上面一条标“开发配置”（节点：来源→逐个复制→再扫一遍→打包→三道核对→本机→G→云盘）；下面一条标“微信”（节点：卷影快照→复制新一份→整份核对→换上→每周一：查回执→上云）。两条线下面一排三张小卡：“用到的工具”（画 PowerShell、7-Zip、rclone、Google 云盘的小标志）、“回执”（画一张带对勾的小票）、“规模”（画一叠代码纸）。",
+      "portrait": "竖版：标题；“开发配置”流水线改成从上到下的竖流程，接着“微信”竖流程；最下面三张小卡上下排、满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：上下两条横向流水线，每条是一串圆角节点、节点之间细绿箭头，节点左边小水彩图标、右边字。上面一条标“开发配置”（节点：来源→逐个复制→再扫一遍→打包→三道核对→本机→G→云盘）；下面一条标“微信”（节点：卷影快照→复制新一份→整份核对→换上→每周一：查回执→上云）。两条线下面一排三张小卡：“用到的工具”（画 PowerShell、7-Zip、rclone、Google 云盘的小标志）、“回执”（画一张带对勾的小票）、“规模”（画一叠代码纸）。",
+    "portrait": "竖版：标题；“开发配置”流水线改成从上到下的竖流程，接着“微信”竖流程；最下面三张小卡上下排、满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "开发配置"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1按清单找来源"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "微信"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1拍快照用Windows卷影快照（VSS）定格E盘那一刻，微信照常写也不影响2复"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "用到的工具PowerShell7（没有就退回5.1）、7-Zip、rclone（"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源横版开发配置流水线要求八个细节点、微信六个细节点，定稿实际是五步/四步两个不可分 steps 节点；现有 flow 每个 step 只成一个节点，本规格保留五步/四步全部原文并记录八/六节点要求，尚无步骤内部拆成子节点的接口。\n工具小卡中多个品牌小标与回执/代码纸分别需要语义图标组，自动候选列表不能证明这些对象已正确。\n清单未登记这些完整原文的逐字一致毛笔标题图：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 4 项，文字盘点预算 17 个图标位；差 13 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "源横版开发配置流水线要求八个细节点、微信六个细节点，定稿实际是五步/四步两个不可分 steps 节点；现有 flow 每个 step 只成一个节点，本规格保留五步/四步全部原文并记录八/六节点要求，尚无步骤内部拆成子节点的接口。",
+      "工具小卡中多个品牌小标与回执/代码纸分别需要语义图标组，自动候选列表不能证明这些对象已正确。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 17 个图标位；差 13 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 17,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-06",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-06-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "monospace",
+      "bullet_list"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "chapter_title",
+      "icon",
+      "monospace",
+      "bullet_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：两列三行共六张卡片（最后一行两张），每张卡片左上一个小水彩图标（盾牌、相机、两条分开的路、钥匙、外接硬盘、剪刀），粗体标题一句，下面两三行字。卡片等宽等高、间距一致。",
+      "portrait": "竖版：标题；六张卡片一行一张、满宽，左图标右文字。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：两列三行共六张卡片（最后一行两张），每张卡片左上一个小水彩图标（盾牌、相机、两条分开的路、钥匙、外接硬盘、剪刀），粗体标题一句，下面两三行字。卡片等宽等高、间距一致。",
+    "portrait": "竖版：标题；六张卡片一行一张、满宽，左图标右文字。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "失败不覆盖成功的。新包、新的一份先在旁边做好、核对完才换上；中途失败，上一个好的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源图六枚语义图标（盾牌、相机、分开的路、钥匙、外接硬盘、剪刀）需素材核对；本轮未看图，auto 只表示原清单顺序。\n清单未登记这些完整原文的逐字一致毛笔标题图：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 5 项，文字盘点预算 6 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "源图六枚语义图标（盾牌、相机、分开的路、钥匙、外接硬盘、剪刀）需素材核对；本轮未看图，auto 只表示原清单顺序。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 5 项，文字盘点预算 6 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 5
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-06",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-06-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "icon",
+      "monospace",
+      "bullet_list"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "chapter_title",
+      "icon",
+      "monospace",
+      "bullet_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：两列三行共六张卡片（最后一行两张），每张卡片左上一个小水彩图标（盾牌、相机、两条分开的路、钥匙、外接硬盘、剪刀），粗体标题一句，下面两三行字。卡片等宽等高、间距一致。",
+      "portrait": "竖版：标题；六张卡片一行一张、满宽，左图标右文字。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：两列三行共六张卡片（最后一行两张），每张卡片左上一个小水彩图标（盾牌、相机、两条分开的路、钥匙、外接硬盘、剪刀），粗体标题一句，下面两三行字。卡片等宽等高、间距一致。",
+    "portrait": "竖版：标题；六张卡片一行一张、满宽，左图标右文字。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "失败不覆盖成功的。新包、新的一份先在旁边做好、核对完才换上；中途失败，上一个好的"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源图六枚语义图标（盾牌、相机、分开的路、钥匙、外接硬盘、剪刀）需素材核对；本轮未看图，auto 只表示原清单顺序。\n清单未登记这些完整原文的逐字一致毛笔标题图：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 5 项，文字盘点预算 6 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "源图六枚语义图标（盾牌、相机、分开的路、钥匙、外接硬盘、剪刀）需素材核对；本轮未看图，auto 只表示原清单顺序。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：为什么这样设计；现 core 会用字体兜底，不能称标题素材通过。",
+      "资产清单的 icon 仅 5 项，文字盘点预算 6 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 5
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-07",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-07-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "flow",
+      "monospace"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "illustration",
+      "chapter_title",
+      "flow",
+      "monospace"
+    ],
+    "source_layout": {
+      "desktop": "横版：三张竖向大卡片并排，每张上部一幅小水彩插画、下部字。卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。卡片等宽，字多的卡片可略高。",
+      "portrait": "竖版：标题；三张卡片上下排、满宽，每张插画在上、字在下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "微信上云：从“核对不上”到 146,300 个文件一次传对。",
+        "一个 0 字节的小文件，让配置备份两天多没出新包。",
+        "配置包从 2.72 GiB 缩到 0.88 GiB。"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "上部一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：三张竖向大卡片并排，每张上部一幅小水彩插画、下部字。卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。卡片等宽，字多的卡片可略高。",
+    "portrait": "竖版：标题；三张卡片上下排、满宽，每张插画在上、字在下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/云图片.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/文件齿轮.png"
+        ],
+        "text_ref": "微信上云：从“核对不上”到146,300个文件一次传对。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n三张大卡顶部要求较大的微信快照云/零字节锁/大箱变小箱插画，content_card 只领取 icons 小图，不能把单幅 ctx.illustrations 当成三张卡的明确大图。缺逐卡大插画映射和大图尺寸接口。\n资产清单的 illustration 仅 1 项，文字盘点需要 3 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "三张大卡顶部要求较大的微信快照云/零字节锁/大箱变小箱插画，content_card 只领取 icons 小图，不能把单幅 ctx.illustrations 当成三张卡的明确大图。缺逐卡大插画映射和大图尺寸接口。",
+      "资产清单的 illustration 仅 1 项，文字盘点需要 3 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 3,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-07",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-07-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "flow",
+      "monospace"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "illustration",
+      "chapter_title",
+      "flow",
+      "monospace"
+    ],
+    "source_layout": {
+      "desktop": "横版：三张竖向大卡片并排，每张上部一幅小水彩插画、下部字。卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。卡片等宽，字多的卡片可略高。",
+      "portrait": "竖版：标题；三张卡片上下排、满宽，每张插画在上、字在下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "微信上云：从“核对不上”到 146,300 个文件一次传对。",
+        "一个 0 字节的小文件，让配置备份两天多没出新包。",
+        "配置包从 2.72 GiB 缩到 0.88 GiB。"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "上部一幅小水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：三张竖向大卡片并排，每张上部一幅小水彩插画、下部字。卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。卡片等宽，字多的卡片可略高。",
+    "portrait": "竖版：标题；三张卡片上下排、满宽，每张插画在上、字在下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/云图片.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/文件齿轮.png"
+        ],
+        "text_ref": "微信上云：从“核对不上”到146,300个文件一次传对。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n三张大卡顶部要求较大的微信快照云/零字节锁/大箱变小箱插画，content_card 只领取 icons 小图，不能把单幅 ctx.illustrations 当成三张卡的明确大图。缺逐卡大插画映射和大图尺寸接口。\n资产清单的 illustration 仅 1 项，文字盘点需要 3 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。",
+    "unsupported_requirements": [
+      "三张大卡顶部要求较大的微信快照云/零字节锁/大箱变小箱插画，content_card 只领取 icons 小图，不能把单幅 ctx.illustrations 当成三张卡的明确大图。缺逐卡大插画映射和大图尺寸接口。",
+      "资产清单的 illustration 仅 1 项，文字盘点需要 3 个插画位；缺 2 个候选位，且已有候选未做图像语义验收。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 3,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-08",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-08-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "status_legend",
+      "section_heading",
+      "chapter_title",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：“全部功能”的第 1 张，顶上大标题和一行图例（图例画成六个圆点加文字）。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏只有“开发配置备份”一组 9 张卡片。",
+      "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "开发配置备份"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩",
+        "左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：“全部功能”的第 1 张，顶上大标题和一行图例（图例画成六个圆点加文字）。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏只有“开发配置备份”一组 9 张卡片。",
+    "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（23项）"
+      },
+      {
+        "type": "status_legend",
+        "columns": 6,
+        "portrait_columns": 3,
+        "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "开发配置备份"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1按清单收集配置66个来源：用户目录19个文件夹、17个单文件，AppData2",
+        "fill_last_row": true
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿本屏是 10 个功能条目（编号 1–10），scene 末句仍写‘9 张’；按定稿完整保留十项，不删第 10 项。\nfeature_status._status 不能识别正文尾部 〈状态〉，本屏十张卡状态均未识别；源图要求仅状态圆点，当前必须保留原状态文字以守逐字关。需要由主工程明确状态文本计入 G1 的圆点接口。\n组名横条要求左侧语义小图和下方浅绿细线，现 chapter_title 的 small 字段未消费且没有组头图标接口。\n清单未登记这些完整原文的逐字一致毛笔标题图：全部功能（23项）、开发配置备份；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 2 项，文字盘点预算 10 个图标位；差 8 个候选位（预算为盘点估计，不作已核实语义结论）。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "unsupported_requirements": [
+      "定稿本屏是 10 个功能条目（编号 1–10），scene 末句仍写‘9 张’；按定稿完整保留十项，不删第 10 项。",
+      "feature_status._status 不能识别正文尾部 〈状态〉，本屏十张卡状态均未识别；源图要求仅状态圆点，当前必须保留原状态文字以守逐字关。需要由主工程明确状态文本计入 G1 的圆点接口。",
+      "组名横条要求左侧语义小图和下方浅绿细线，现 chapter_title 的 small 字段未消费且没有组头图标接口。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：全部功能（23项）、开发配置备份；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 2 项，文字盘点预算 10 个图标位；差 8 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 2
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 10,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-08",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-08-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "status_legend",
+      "section_heading",
+      "chapter_title",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：“全部功能”的第 1 张，顶上大标题和一行图例（图例画成六个圆点加文字）。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏只有“开发配置备份”一组 9 张卡片。",
+      "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "开发配置备份"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩",
+        "左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：“全部功能”的第 1 张，顶上大标题和一行图例（图例画成六个圆点加文字）。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏只有“开发配置备份”一组 9 张卡片。",
+    "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（23项）"
+      },
+      {
+        "type": "status_legend",
+        "columns": 6,
+        "portrait_columns": 3,
+        "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "开发配置备份"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "1按清单收集配置66个来源：用户目录19个文件夹、17个单文件，AppData2"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿本屏是 10 个功能条目（编号 1–10），scene 末句仍写‘9 张’；按定稿完整保留十项，不删第 10 项。\nfeature_status._status 不能识别正文尾部 〈状态〉，本屏十张卡状态均未识别；源图要求仅状态圆点，当前必须保留原状态文字以守逐字关。需要由主工程明确状态文本计入 G1 的圆点接口。\n组名横条要求左侧语义小图和下方浅绿细线，现 chapter_title 的 small 字段未消费且没有组头图标接口。\n清单未登记这些完整原文的逐字一致毛笔标题图：全部功能（23项）、开发配置备份；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 2 项，文字盘点预算 10 个图标位；差 8 个候选位（预算为盘点估计，不作已核实语义结论）。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "unsupported_requirements": [
+      "定稿本屏是 10 个功能条目（编号 1–10），scene 末句仍写‘9 张’；按定稿完整保留十项，不删第 10 项。",
+      "feature_status._status 不能识别正文尾部 〈状态〉，本屏十张卡状态均未识别；源图要求仅状态圆点，当前必须保留原状态文字以守逐字关。需要由主工程明确状态文本计入 G1 的圆点接口。",
+      "组名横条要求左侧语义小图和下方浅绿细线，现 chapter_title 的 small 字段未消费且没有组头图标接口。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：全部功能（23项）、开发配置备份；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 2 项，文字盘点预算 10 个图标位；差 8 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 2
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 10,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-09",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-09-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：“全部功能”的第 2 张，接着上一张画，不再画大标题和图例。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏三组：“微信备份”6 张、“恢复”3 张、“看状态和维护”4 张。",
+      "portrait": "竖版：竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "微信备份",
+        "恢复",
+        "看状态和维护"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩",
+        "左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：“全部功能”的第 2 张，接着上一张画，不再画大标题和图例。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏三组：“微信备份”6 张、“恢复”3 张、“看状态和维护”4 张。",
+    "portrait": "竖版：竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "微信备份"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "11每天快照备份到G09:30先给E盘拍卷影快照，从快照把微信原始文件复制成G上"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "恢复"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "17配置包解到单独文件夹先只读核对包，你同意后解到单独的文件夹并逐个核对；目标不"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "看状态和维护"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "20回执每次运行写一份：成功、失败、跳过了哪些、出错的是哪个文件（只写路径）；驾"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n接前屏，不新增大标题或图例；三组卡数按定稿分别 6/3/4。\nfeature_status._status 不能识别正文尾部 〈状态〉，13 项状态未识别；源图要求仅圆点，当前保持状态文字，不假报完成。\n三条组名横条要求左侧语义图标及浅绿下沿线，chapter_title.small 和组头图标未实现。\n清单未登记这些完整原文的逐字一致毛笔标题图：微信备份、恢复、看状态和维护；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 3 项，文字盘点预算 13 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "unsupported_requirements": [
+      "接前屏，不新增大标题或图例；三组卡数按定稿分别 6/3/4。",
+      "feature_status._status 不能识别正文尾部 〈状态〉，13 项状态未识别；源图要求仅圆点，当前保持状态文字，不假报完成。",
+      "三条组名横条要求左侧语义图标及浅绿下沿线，chapter_title.small 和组头图标未实现。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：微信备份、恢复、看状态和维护；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 13 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 13,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-09",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-09-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "status_legend",
+      "section_heading",
+      "feature_card",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "status_legend",
+      "feature_card",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：“全部功能”的第 2 张，接着上一张画，不再画大标题和图例。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏三组：“微信备份”6 张、“恢复”3 张、“看状态和维护”4 张。",
+      "portrait": "竖版：竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "微信备份",
+        "恢复",
+        "看状态和维护"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边小水彩",
+        "左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：“全部功能”的第 2 张，接着上一张画，不再画大标题和图例。和电脑配置与恢复页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），组名不单独占左边一整列：每组先画一条横跨整屏的组名横条（左边小水彩图标、毛笔字组名，下沿一条浅绿细线），横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，间距一致，不留大块空白。本屏三组：“微信备份”6 张、“恢复”3 张、“看状态和维护”4 张。",
+    "portrait": "竖版：竖版：每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排，组与组之间留一点距离。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "微信备份"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "11每天快照备份到G09:30先给E盘拍卷影快照，从快照把微信原始文件复制成G上"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "恢复"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "17配置包解到单独文件夹先只读核对包，你同意后解到单独的文件夹并逐个核对；目标不"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "text_ref": "看状态和维护"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "text_ref": "20回执每次运行写一份：成功、失败、跳过了哪些、出错的是哪个文件（只写路径）；驾"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n接前屏，不新增大标题或图例；三组卡数按定稿分别 6/3/4。\nfeature_status._status 不能识别正文尾部 〈状态〉，13 项状态未识别；源图要求仅圆点，当前保持状态文字，不假报完成。\n三条组名横条要求左侧语义图标及浅绿下沿线，chapter_title.small 和组头图标未实现。\n清单未登记这些完整原文的逐字一致毛笔标题图：微信备份、恢复、看状态和维护；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 3 项，文字盘点预算 13 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
+    "unsupported_requirements": [
+      "接前屏，不新增大标题或图例；三组卡数按定稿分别 6/3/4。",
+      "feature_status._status 不能识别正文尾部 〈状态〉，13 项状态未识别；源图要求仅圆点，当前保持状态文字，不假报完成。",
+      "三条组名横条要求左侧语义图标及浅绿下沿线，chapter_title.small 和组头图标未实现。",
+      "清单未登记这些完整原文的逐字一致毛笔标题图：微信备份、恢复、看状态和维护；现 core 会用字体兜底，不能称标题素材通过。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 13 个图标位；差 10 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 13,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-10",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-10-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "icon",
+      "timeline"
+    ],
+    "portrait_component_order": [
+      "chapter_title",
+      "icon",
+      "timeline"
+    ],
+    "source_layout": {
+      "desktop": "横版：一条从左上往右下蜿蜒的水彩小路，路边依次立着十一个小木牌，每个木牌上一个日期和一句话（就是 text 里的各条）；9 月 21 日那块木牌画成歪倒、旁边一个小红叉，9 月 28 日那块木牌上挂一片新绿叶。路的起点画一个 U 盘，终点画一朵带对勾的云。",
+      "portrait": "竖版：标题；小路改成从上到下的竖线，十一条一行一条（左边日期、右边一句话）；起点 U 盘在最上、终点云在最下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：一条从左上往右下蜿蜒的水彩小路，路边依次立着十一个小木牌，每个木牌上一个日期和一句话（就是 text 里的各条）；9 月 21 日那块木牌画成歪倒、旁边一个小红叉，9 月 28 日那块木牌上挂一片新绿叶。路的起点画一个 U 盘，终点画一朵带对勾的云。",
+    "portrait": "竖版：标题；小路改成从上到下的竖线，十一条一行一条（左边日期、右边一句话）；起点 U 盘在最上、终点云在最下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "none",
+        "text_ref": "6月23日建库：开发配置三级备份（本机、U盘、Google云盘），当天加上微信每"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n横版要求从左上到右下蜿蜒水彩小路/十一木牌，不是直线卡片时间线；竖版才用直线。现 timeline 没有蜿蜒路径、木牌底图及九月21日歪牌/红叉、九月28日绿叶、首尾 U盘/云的节点装饰接口，已在 source_layout 原样保留。\n资产清单的 icon 仅 1 项，文字盘点预算 2 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "横版要求从左上到右下蜿蜒水彩小路/十一木牌，不是直线卡片时间线；竖版才用直线。现 timeline 没有蜿蜒路径、木牌底图及九月21日歪牌/红叉、九月28日绿叶、首尾 U盘/云的节点装饰接口，已在 source_layout 原样保留。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 2 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 2,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "devconfig-backup-10",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\img\\devconfig-backup-10-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\devconfig-backup\\page.json",
+    "source_sha256": "ae7e56291cb9303a19c59cf0c4785e6b23cece609f2becb350dd1ac29a7bae40",
+    "desktop_component_order": [
+      "chapter_title",
+      "icon",
+      "timeline"
+    ],
+    "portrait_component_order": [
+      "chapter_title",
+      "icon",
+      "timeline"
+    ],
+    "source_layout": {
+      "desktop": "横版：一条从左上往右下蜿蜒的水彩小路，路边依次立着十一个小木牌，每个木牌上一个日期和一句话（就是 text 里的各条）；9 月 21 日那块木牌画成歪倒、旁边一个小红叉，9 月 28 日那块木牌上挂一片新绿叶。路的起点画一个 U 盘，终点画一朵带对勾的云。",
+      "portrait": "竖版：标题；小路改成从上到下的竖线，十一条一行一条（左边日期、右边一句话）；起点 U 盘在最上、终点云在最下。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：一条从左上往右下蜿蜒的水彩小路，路边依次立着十一个小木牌，每个木牌上一个日期和一句话（就是 text 里的各条）；9 月 21 日那块木牌画成歪倒、旁边一个小红叉，9 月 28 日那块木牌上挂一片新绿叶。路的起点画一个 U 盘，终点画一朵带对勾的云。",
+    "portrait": "竖版：标题；小路改成从上到下的竖线，十一条一行一条（左边日期、右边一句话）；起点 U 盘在最上、终点云在最下。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "none",
+        "text_ref": "6月23日建库：开发配置三级备份（本机、U盘、Google云盘），当天加上微信每"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n横版要求从左上到右下蜿蜒水彩小路/十一木牌，不是直线卡片时间线；竖版才用直线。现 timeline 没有蜿蜒路径、木牌底图及九月21日歪牌/红叉、九月28日绿叶、首尾 U盘/云的节点装饰接口，已在 source_layout 原样保留。\n资产清单的 icon 仅 1 项，文字盘点预算 2 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "横版要求从左上到右下蜿蜒水彩小路/十一木牌，不是直线卡片时间线；竖版才用直线。现 timeline 没有蜿蜒路径、木牌底图及九月21日歪牌/红叉、九月28日绿叶、首尾 U盘/云的节点装饰接口，已在 source_layout 原样保留。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 2 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 2,
+      "semantic_image_reviewed": false
+    }
+  }
+]

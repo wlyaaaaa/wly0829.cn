@@ -1,0 +1,100 @@
+{
+ "dir": "E:\\Cache\\Claude\\Temp\\28482c99\\sample\\sprites",
+ "place": {
+  "x": 1447,
+  "y": 812,
+  "scale": 1
+ },
+ "sprites": {
+  "idle": {
+   "file": "bird-idle.png",
+   "width": 610,
+   "height": 484,
+   "feet": [
+    418.9,
+    468.0
+   ],
+   "scale": 0.33333
+  },
+  "look": {
+   "file": "bird-look.png",
+   "width": 586,
+   "height": 484,
+   "feet": [
+    427.7,
+    466.9
+   ],
+   "scale": 0.33333
+  },
+  "tilt": {
+   "file": "bird-tilt.png",
+   "width": 624,
+   "height": 463,
+   "feet": [
+    421.4,
+    445.5
+   ],
+   "scale": 0.33333
+  },
+  "preen": {
+   "file": "bird-preen.png",
+   "width": 559,
+   "height": 459,
+   "feet": [
+    391.6,
+    445.6
+   ],
+   "scale": 0.33333
+  },
+  "crouch": {
+   "file": "bird-crouch.png",
+   "width": 701,
+   "height": 315,
+   "feet": [
+    458.3,
+    300.6
+   ],
+   "scale": 0.33333
+  },
+  "hop": {
+   "file": "bird-hop.png",
+   "width": 700,
+   "height": 475,
+   "feet": [
+    463.4,
+    461.0
+   ],
+   "scale": 0.33333
+  },
+  "hop2": {
+   "file": "bird-hop2.png",
+   "width": 684,
+   "height": 579,
+   "feet": [
+    446.0,
+    559.8
+   ],
+   "scale": 0.33333
+  },
+  "sing": {
+   "file": "bird-sing.png",
+   "width": 615,
+   "height": 541,
+   "feet": [
+    429.5,
+    523.7
+   ],
+   "scale": 0.33333
+  },
+  "sleep": {
+   "file": "bird-sleep.png",
+   "width": 579,
+   "height": 389,
+   "feet": [
+    402.8,
+    376.1
+   ],
+   "scale": 0.33333
+  }
+ }
+}

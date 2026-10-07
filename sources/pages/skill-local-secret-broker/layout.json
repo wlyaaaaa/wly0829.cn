@@ -1,0 +1,376 @@
+[
+  {
+    "screen": "skill-local-secret-broker-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "53%",
+        "text_ref": "密码和本人验证"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "row": "hero",
+        "text_ref": "这是 AI 用"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "illustration": "inside",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "row": "hero",
+        "width": "47%",
+        "text_ref": "可以这样跟 AI 说"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "hero",
+        "text_ref": "“B 站账号是哪个",
+        "split_items": true,
+        "avatar_position": "left_inside",
+        "avatar_source": "icons",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      }
+    ],
+    "notes": "原图左 53% 为标题、介绍、人物/机器人/保险柜大插画，右 47% 为组名与六张竖排气泡横卡；小图标位于每张气泡卡左侧。左栏插画在独立细边框中，非右侧气泡内。右卡顺序为放大镜、硬盘、沙漏、锁、皇冠、表格。原图插画内的问句、已显示及底部重复密码中心链接不在本屏逐字定稿独立节点中，不另补字；保留定稿介绍里的密码中心链接。需 dialogue 支持 bullets 每项独立气泡和对应小图标。 本轮启用现有 split_items 接口，按六条真实 bullets 拆为六张气泡，保留原列数与原字；不再合成一张列表泡，缺对应图标照报告补。"
+  },
+  {
+    "screen": "skill-local-secret-broker-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "密码和本人验证"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "这是 AI 用"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "可以这样跟 AI 说"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "“B 站账号是哪个",
+        "split_items": true,
+        "avatar_position": "left_inside",
+        "avatar_source": "icons",
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      }
+    ],
+    "notes": "原竖图顺序为标题、介绍、人物/机器人/保险柜大插画、组名、六张左小图标右气泡的整宽横卡。整屏宽大标题按 STANDARDS 居中；介绍在插画前。插画内和页尾定稿没有的重复文字不补，链接保留介绍内唯一一处。气泡不合成一个列表大框。 本轮启用现有 split_items 接口，按六条真实 bullets 拆为六张气泡，保留原列数与原字；不再合成一张列表泡，缺对应图标照报告补。"
+  },
+  {
+    "screen": "skill-local-secret-broker-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "一个完整的例子"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/钥匙.png"
+        ],
+        "connector": "none",
+        "row": "example",
+        "width": "58%",
+        "text_ref": "1只搜名称"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "small",
+        "row": "example",
+        "width": "42%",
+        "align": "center"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/身份盾牌.png"
+        ],
+        "connector": "none",
+        "text_ref": "4看要不要验证",
+        "branch_refs": {
+          "1": [
+            "资料解锁期",
+            "没有，"
+          ]
+        }
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+        ],
+        "connector": "none",
+        "text_ref": "5本机弹窗",
+        "row": "receipt",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "AI 收到的只有",
+        "row": "receipt",
+        "width": "50%"
+      }
+    ],
+    "notes": "原横图顶端整屏宽示例标题，左侧 1—3 步三个横卡顺排，右上为笔记本/猫/书/杯子大插画；第 4 步跨左侧约 68% 宽，右侧是两支小卡并以绿色细线接第 4 步；最下一行左为第 5 步、右为 AI 收到的只有。步骤图标在卡内左侧，编号圆在更左；主链不画丝带。现 row 排法表达左步骤右插画/说明，精确跨行第 4/5 步及分支需 flow 支持；分支的还在有效期里/没有有效期不在定稿独立标签中，不自行增字。 2026-10-03 page-fixer-09：首三步左列、small插画右列；后两步及原AI回执交flow满宽，已有branch_refs接第四步原文两支，末排两卡。 第二轮：原回执仍用独立无图卡，避免flow把五步骤+回执误算六图；五步明确绑定现有搜索、双气泡、钥匙、身份盾牌、显示器，原字和编号不变。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。"
+  },
+  {
+    "screen": "skill-local-secret-broker-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "一个完整的例子"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/钥匙.png",
+          "_library/icons/身份盾牌.png",
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+        ],
+        "connector": "none",
+        "text_ref": "1只搜名称",
+        "branch_refs": {
+          "4": [
+            "资料解锁期",
+            "没有，"
+          ]
+        }
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "AI 收到的只有"
+      }
+    ],
+    "notes": "竖图无横版右上大插画；标题两行居中，五步骤整宽逐卡顺排，小图标卡内左、正文右，编号圆最左。第 4 步卡比其他卡高，原图两个分支在其下内部上下排并有绿色细分支线，第 5 步随后；AI 收到的只有为最后独立横卡。分支标签不在定稿，不增字；需保持第四步与分支对应的视觉结构，待组件样张。 2026-10-03 page-fixer-09：整段flow接已有branch_refs，第四步两支上下排，AI回执最后，原字完整一次。 第二轮：原回执仍用独立无图卡，避免flow把五步骤+回执误算六图；五步明确绑定现有搜索、双气泡、钥匙、身份盾牌、显示器，原字和编号不变。"
+  },
+  {
+    "screen": "skill-local-secret-broker-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "illustration",
+        "illustration": "left_inside",
+        "size": "medium",
+        "row": "abilities",
+        "width": "41%",
+        "frame": "abilities",
+        "align": "center"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "row": "abilities",
+        "width": "59%",
+        "text_ref": "这个技能是密码中心的入口",
+        "frame": "abilities"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "center",
+        "row": "abilities",
+        "text_ref": "密码库日常",
+        "frame": "abilities"
+      }
+    ],
+    "notes": "原图标题在左上，依 STANDARDS 整屏宽章节大标题居中。标题下仅一张贯通全宽的大卡：保险柜插画在卡内左侧约 41%，右侧上为说明段、下为六按钮 3×2。所有按钮等宽齐列，白底细绿边、链接绿字下划线。本排 illustration+prose+action_button 应共享一张大卡外框，不能拆成多张独立卡；共享壳待主工程师支持。 2026-10-03 page-fixer-09：用frame abilities共一张外卡；保险柜改medium并居中，正文按钮保留原列数及字。"
+  },
+  {
+    "screen": "skill-local-secret-broker-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "illustration",
+        "illustration": "top_inside",
+        "size": "medium",
+        "frame": "abilities",
+        "align": "center"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "这个技能是密码中心的入口",
+        "frame": "abilities"
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "center",
+        "text_ref": "密码库日常",
+        "frame": "abilities"
+      }
+    ],
+    "notes": "竖图标题下一个整宽大卡包住全部内容：保险柜大插画卡内顶部居中，说明段随后，六按钮一行一个，按定稿顺序。需整屏共享卡壳；大标题按 STANDARDS 居中，卡内正文左对齐。 2026-10-03 page-fixer-09：用frame abilities共一张外卡；保险柜改medium并居中，正文按钮保留原列数及字。"
+  },
+  {
+    "screen": "skill-local-secret-broker-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 2,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "管",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/共享节点.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/版本循环文件.png"
+        ],
+        "text_ref": "守的几条死规矩"
+      }
+    ],
+    "notes": "原图标题下等宽左右两大卡：左管含六条对勾清单，右不管，交给谁含五条灰箭头清单；各卡顶部小图标在组名左，条目右侧绿字链接。两卡下整宽细卡，左清单图标和标题约 36%，右正文约 64%，中间竖分隔线。标题按 STANDARDS 整屏居中；条目前符号为装饰图形不添加定稿外可读字。"
+  },
+  {
+    "screen": "skill-local-secret-broker-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\img\\skill-local-secret-broker-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "管",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/icons/共享节点.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/版本循环文件.png"
+        ],
+        "text_ref": "守的几条死规矩"
+      }
+    ],
+    "notes": "原竖图顶端边界标题左约三分之一、笔记本/白板插画右约三分之二（旁有大插画，保留左对齐）。以下管、不管，交给谁、守的几条死规矩三张整宽卡依次排。管卡左侧约 27% 为组名和锁文件夹插画、右为六条；不管卡组名先整宽，下部左路牌插画右五条；末卡左清单盾牌插画右标题正文。各组内小图标在左卡内，不能按横版两栏压缩为竖版双列。 2026-10-03 page-fixer-09：删去无定稿原字的重复主插画块，标题全宽居中。标题图样式仍交core/main核实。"
+  }
+]

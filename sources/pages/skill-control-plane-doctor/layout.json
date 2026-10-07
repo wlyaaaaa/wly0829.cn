@@ -1,0 +1,616 @@
+[
+  {
+    "screen": "skill-control-plane-doctor-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "55%",
+        "text_ref": "技能与基座体检"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "旧技能入口已退役"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "row": "intro",
+        "text_ref": "不用点名：问技能装没装好、能不能用"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "9月21–28日，AI读这个技能11次，跑检查命令3次（使用小记录）。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "intro",
+        "width": "45%"
+      },
+      {
+        "type": "dialogue",
+        "columns": 2,
+        "split_paras": true,
+        "text_ref": "怎么跟 AI 说"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "inline_link",
+      "dialogue",
+      "content_card",
+      "illustration"
+    ],
+    "source_layout": "横版画面：左上大标题毛笔艺术字，下面一行小字（技能名那一行，链接画成绿色下划线）。左半边上“它做什么”一段，下面一段浅绿底的小字（不用点名那段）和一行灰色小字（用了多少次那行）。右半边一张大的水彩对话卡片“怎么跟 AI 说”：每句画成一个浅绿色圆角对话气泡，一列排，气泡里的字就是引号里的话（引号也画）。右上角一幅小插画：一只听诊器搭在三块叠起来的积木上（三块积木分别画一本规则书、一台电脑、一只 GitHub 章鱼猫标志），旁边一张体检单上画三行打钩和两个问号。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它做什么",
+        "怎么跟 AI 说"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一幅小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 横版 title/它做什么/不用点名/使用记录仍同属 intro 左55%栏，主插画右45%栏；怎么跟 AI 说移到 intro 行之后独占全宽，六个原气泡按两列排，不再使右栏在左栏结束后单独延伸。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左55%题、技能链接、它做什么、三个基座说明、浅绿不用点名条及使用记录；右45%听诊器积木小插画及六泡对话大卡。不用点名和记录源在对话后，按视觉左右栏有意重排整节点；主插画在对话卡外右上，不拿主插画做头像。；素材登记插画0/1，必须补齐场景要求，不能删除插画位。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "技能与基座体检"
+      },
+      {
+        "type": "prose",
+        "text_ref": "旧技能入口已退役"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "large",
+        "target_width": "70%"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "text_ref": "怎么跟 AI 说"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名：问技能装没装好、能不能用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "9月21–28日，AI读这个技能11次，跑检查命令3次（使用小记录）。"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "prose",
+      "illustration",
+      "dialogue",
+      "chapter_title",
+      "inline_link",
+      "content_card"
+    ],
+    "source_layout": "竖版：标题和技能名一行；“它做什么”；插画缩成一行；对话气泡一行一个；浅绿小字和灰色小字在最后。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "它做什么",
+        "怎么跟 AI 说"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一幅小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 竖版主插画指定居中、banner 和100%可用宽；原顺序仍为题/技能名/它做什么/插画/对话/不用点名/记录。绿色框残边是否烘焙在素材中需主会话与素材负责人复核；未宣称裁框已修。；page-fixer-03第二轮：主图居中70%宽，撤banner的420px高上限，保自然纵横比，修首轮压扁。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。题、技能名、它做什么和三个基座解释→整宽插画→六泡→不用点名→使用记录。六个para各成一泡，group一次共享卡头，不将记录画成第七泡。；素材登记插画0/1，必须补齐场景要求，不能删除插画位。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "text_ref": "真事：北京时间9月28日22:22–22:23实际跑的两次检查"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "columns": 1,
+        "text_ref": "我：“修乱码这个技能装好了吗？能用吗？”"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "line",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/放大镜.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-03.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-04.png"
+        ],
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "columns": 1,
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "columns": 1,
+        "text_ref": "另一种问法"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "chapter_title",
+      "tag",
+      "dialogue",
+      "icon",
+      "content_card",
+      "numbered_steps"
+    ],
+    "source_layout": "横版画面：左上标题，旁边一枚灰色小标签（例子来历那一行）。左边约三分之二宽画成一段竖向的对话：最上面“我”的气泡（右对齐，浅绿底），下面“AI 做了什么”几步画成一条细竖线串起的小节点（每个节点一个小水彩图标：一张清单、一只放大镜、三个问号、一只指向前方的手），再下面“AI 交回”画成左对齐的白底气泡。右边约三分之一宽一张竖卡片“另一种问法”，里面一问一答两个气泡。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "AI 做了什么",
+        "AI 交回",
+        "另一种问法"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文及素材库文本登记，未出图、未看图。AI做了什么前两步骤显式改用ready的打勾清单与放大镜，完整图标路径均存在；后三、四槽仍按当前显式映射保留。显示尺寸、完整外框和G1–G7待主会话渲染复核，未把文件存在视为图已修。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左2/3我泡→四图节点细竖线→AI交回泡；右1/3另一种问法一张外卡含两泡。来源灰标签只显示原文。timeline会保编号，但scene不说要删定稿编号故保；四图素材缺，不得拿两图复用四节点。右外卡用split_paras保持两个问答泡。；素材登记图标2/4，按源位置的文件号显式请求，缺图不代表可以省略图标。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "text_ref": "真事：北京时间9月28日22:22–22:23实际跑的两次检查"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "columns": 1,
+        "text_ref": "我：“修乱码这个技能装好了吗？能用吗？”"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "line",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/放大镜.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-03.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-04.png"
+        ],
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "columns": 1,
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "columns": 1,
+        "text_ref": "另一种问法"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "tag",
+      "content_card",
+      "chapter_title",
+      "dialogue",
+      "icon",
+      "numbered_steps"
+    ],
+    "source_layout": "竖版：标题和标签；对话从上到下：我的气泡、几步、AI 的回复；“另一种问法”卡片放在最后。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "AI 做了什么",
+        "AI 交回",
+        "另一种问法"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文及素材库文本登记，未出图、未看图。AI做了什么前两步骤显式改用ready的打勾清单与放大镜，完整图标路径均存在；后三、四槽仍按当前显式映射保留。显示尺寸、完整外框和G1–G7待主会话渲染复核，未把文件存在视为图已修。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。标题和来源标签→我泡→四步骤竖线节点→AI交回→另一种问法双泡整卡；顺序逐字保留，不重复我/AI角色。；素材登记图标2/4，按源位置的文件号显式请求，缺图不代表可以省略图标。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "notice",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 2,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-03.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-04.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-05.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-06.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-07.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-08.png"
+        ],
+        "text_ref": "用这个技能时，AI 守的规矩"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "现在答不了的"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "notice",
+      "action_button",
+      "content_card",
+      "bullet_list",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": "横版画面：上方一条横跨整屏的浅绿底圆角横幅，写能做的事那一句，右端一个白底细绿边按钮（〔去看全部功能〕）。横幅下一张大卡片“用这个技能时，AI 守的规矩”，八条短句两列排，每条前一个小水彩图标（一个日历上的圆点、两个分开的天平盘、一张零字的纸、一把倒放的扳手、一个问号、一个用户小人、一只蛇形 Python 标志加问号、一个指向别处的箭头）。最下面一条灰底细横幅写“现在答不了的”那段。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "用这个技能时，AI 守的规矩"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文及素材库文本登记，未出图、未看图。AI守的规矩前两条显式改用ready的日历与天平，路径均存在；其余六条映射及同组左图右文排法保留。实际图标显示及同组一致性待主会话渲染复核，不新增已具备图标的重复素材请求。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。顶部整宽浅绿能做的事横幅含原功能链接，下面一张规矩大卡内部八条横2列/竖1列，每条左图；末灰说明条。notice保前两para及原链接，不自动制造按钮文字；原〔去看全部功能〕需comp-text在横幅右侧显示按钮热区。points_card已有item_cards/inner_columns，图示仅登记2/8需补。灰底新外观先样张。；素材登记图标2/8，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "notice",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-03.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-04.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-05.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-06.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-07.png",
+          "skill-control-plane-doctor/skill-control-plane-doctor-03-icon-08.png"
+        ],
+        "text_ref": "用这个技能时，AI 守的规矩"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "现在答不了的"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "notice",
+      "action_button",
+      "content_card",
+      "bullet_list",
+      "icon",
+      "inline_link"
+    ],
+    "source_layout": "竖版：横幅和按钮在上；八条规矩一行一条；灰底横幅在最后。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "用这个技能时，AI 守的规矩"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "本轮依据审查原文及素材库文本登记，未出图、未看图。AI守的规矩前两条显式改用ready的日历与天平，路径均存在；其余六条映射及同组左图右文排法保留。实际图标显示及同组一致性待主会话渲染复核，不新增已具备图标的重复素材请求。",
+    "prior_round_notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。顶部整宽浅绿能做的事横幅含原功能链接，下面一张规矩大卡内部八条横2列/竖1列，每条左图；末灰说明条。notice保前两para及原链接，不自动制造按钮文字；原〔去看全部功能〕需comp-text在横幅右侧显示按钮热区。points_card已有item_cards/inner_columns，图示仅登记2/8需补。灰底新外观先样张。；素材登记图标2/8，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "skill-control-plane-doctor\\skill-control-plane-doctor-04-icon-01.png"
+        ],
+        "inset_prefixes": [],
+        "row": "boundaries",
+        "width": "33%",
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "row": "boundaries",
+        "width": "67%",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/钥匙.png"
+        ],
+        "inset_prefixes": [],
+        "row": "boundaries",
+        "text_ref": "不做"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "chapter_title",
+      "content_card",
+      "table",
+      "inline_link",
+      "icon",
+      "bullet_list",
+      "prose"
+    ],
+    "source_layout": "横版画面：左上标题。左边约三分之一宽一张卡片“管”，一段字；右边约三分之二宽一张两列表格“不管，交给谁”，右列的名字画成链接；表格下面一张卡片“不做”。每块左上一个小水彩图标（一个打钩的听诊器、一个指路牌、一个禁止小标）。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "管",
+        "不管，交给谁",
+        "不做"
+      ],
+      "table_shapes": [
+        {
+          "start_line": 7,
+          "columns": 2,
+          "data_rows": 4
+        }
+      ],
+      "illustration_position_mentions": [
+        "左上一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左1/3管卡，右2/3两列表格及下方不做卡；三处左上图标听诊器、指路牌、禁止标均scene要求，inventory图标计1不足3。table组名会作表题，但卡内左上图标接口未支持，需table族；不做卡图明确03不存在则补，不用01重复冒充。"
+  },
+  {
+    "screen": "skill-control-plane-doctor-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\img\\skill-control-plane-doctor-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "skill-control-plane-doctor\\skill-control-plane-doctor-04-icon-01.png"
+        ],
+        "inset_prefixes": [],
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/钥匙.png"
+        ],
+        "inset_prefixes": [],
+        "text_ref": "不做"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-control-plane-doctor\\page.json",
+    "source_sha256": "f1c0276874df7d8ab3659937525d78337a93a443cc02f863c9503b2c6d3c5832",
+    "source_component_order": [
+      "content_card",
+      "table",
+      "chapter_title",
+      "inline_link",
+      "icon",
+      "bullet_list",
+      "prose"
+    ],
+    "source_layout": "竖版：“管”卡片在上；表格改成小卡片一行一张（粗体写“这些事”，下面写找谁）；“不做”在最后。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [
+        "管",
+        "不管，交给谁",
+        "不做"
+      ],
+      "table_shapes": [
+        {
+          "start_line": 7,
+          "columns": 2,
+          "data_rows": 4
+        }
+      ],
+      "illustration_position_mentions": [
+        "左上一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。管卡→不管表格四张行卡（这些事粗头、找谁正文与链接）→不做卡；表头原字只一次、其余重复标签交data-echo。三图要求不因库存1而取消。"
+  }
+]

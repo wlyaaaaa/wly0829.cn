@@ -1,0 +1,588 @@
+[
+  {
+    "screen": "wechat-history-ai-bridge-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechat-history-ai-bridge-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechat-history-ai-bridge-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "hero",
+        "width": "50%",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "微信记录交给 AI"
+      },
+      {
+        "type": "tag",
+        "row": "hero",
+        "align": "left",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "align": "left",
+        "text_ref": "原来想让 AI"
+      },
+      {
+        "type": "notice",
+        "row": "hero",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "align": "left",
+        "text_ref": "一个例子"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "50%",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "为什么不用了",
+        "row": "summary",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "现在怎么读微信",
+        "row": "summary",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "停到什么程度"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "illustration": "none",
+        "icons": "none",
+        "align": "center",
+        "text_ref": "135次提交，6月20日—9月8日28,448次默认那份"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "align": "left",
+        "text_ref": "GitHub",
+        "promote_links": [
+          "GitHub",
+          "复制 AI 续作说明"
+        ]
+      }
+    ],
+    "notes": "以 pages-approved 的 01-h 替换图为构图来源。上半屏实际左右约各 50%：左列依次标题、标签、导语、例子横条；右列无字大桥插画跨左列整段高度。已冻结标签应贴标题右侧，同一行，不能因为独立 tag 块而另起大段。下半屏三张说明卡占左半，四张数字卡占右半，不按 scene 改成整宽数字卡。卡顶图在卡内。最后 GitHub 与复制 AI 续作说明两个按钮在左，冻结说明和约法链接在右。末行在定稿中是一个 para，组件需保留其完整字句和两个按钮，不能用内部子串造第二个起点；视图位置照替换图。数字卡片（竖线前大字，竖线后小字）：这一句是定稿独立 para，已纳入数字块，当前逐字基准也计入，不能默默丢掉。第 4 卡木牌上的版本数字必须去掉图中文字再由程序排字，不能与主数值重复。；本轮实测原定三卡占半屏时，core top_inside 小图宽140px而sideic固定150px，实际卡内宽少于150px，G3溢出。保持已记录构图，提交组件适配请求；未缩字号或改变列数。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第1/3条：简介卡改为整宽横3列/竖1列、取消卡内插图；四数字卡独占整宽横4列/竖2列且无图标。第2条内部说明属于定稿，未获改定稿权限，保留并交回。第4条仅将GitHub和复制提升为按钮，约法L24保持行内链接；跨中间正文合成两按钮行的缺口另交comp-text。；简介三卡以相邻同row的三块分别排33.333%，由现有row align-items:start保证卡高按内容走，不用grid整排拉高短卡。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "微信记录交给 AI"
+      },
+      {
+        "type": "tag",
+        "align": "center",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "原来想让 AI"
+      },
+      {
+        "type": "notice",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "align": "left",
+        "text_ref": "一个例子"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "为什么不用了|现在怎么读微信|停到什么程度"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "align": "center",
+        "text_ref": "135次提交，6月20日—9月8日28,448次默认那份",
+        "columns_v": 2
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "align": "center",
+        "text_ref": "GitHub",
+        "promote_links": [
+          "GitHub",
+          "复制 AI 续作说明"
+        ]
+      }
+    ],
+    "notes": "已看 v、v2。整宽标题居中，冻结标签贴标题右侧。v 原图标题为粗体字，按统一标准仍需用合格毛笔标题图。大桥插画整宽在标题下；介绍后例子块是浅绿图标＋标题横条，下接白底正文，不把整段例子正文塞进窄横条。v2 三张说明卡各占一整行，插画在左、文字在右；数字卡 2×2，最后按钮与说明居中。原 v2 缺复制 AI 续作说明，但定稿已有，按同样按钮样式补齐。定稿数字引导句的 G1 问题同 h。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第1/3条：简介卡改为整宽横3列/竖1列、取消卡内插图；四数字卡独占整宽横4列/竖2列且无图标。第2条内部说明属于定稿，未获改定稿权限，保留并交回。第4条仅将GitHub和复制提升为按钮，约法L24保持行内链接；跨中间正文合成两按钮行的缺口另交comp-text。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "header",
+        "width": "66%",
+        "align": "left",
+        "size": "large",
+        "text_ref": "两条路差在哪"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "本人只说了一句",
+        "row": "header"
+      },
+      {
+        "type": "illustration",
+        "row": "header",
+        "width": "34%",
+        "align": "center",
+        "size": "small",
+        "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-wechat-history-ai-bridge.png",
+        "target_height": 220,
+        "target_width": "90%"
+      },
+      {
+        "type": "table",
+        "columns": 3,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "旧：微信记录交给 AI"
+      },
+      {
+        "type": "content_card",
+        "row": "lower",
+        "width": "56%",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "看门狗这 3 个多月"
+      },
+      {
+        "type": "content_card",
+        "row": "lower",
+        "width": "44%",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "text_ref": "停下以后还留着的"
+      }
+    ],
+    "notes": "实际图标题占左半、右半是大桥与亮路两幅相接插画，须保留标题旁插画；导语在下一整行。三列表第一列约 16%、旧约 43%、新约 41%，表头小桥和小路图在各列名字左侧；不能另写表头副本 text_ref。下部看门狗卡在左，左侧狗＋钟，右侧说明及两条数字条，8,448 与 212 大号强调，8,236 仍在第一条原文中；细水平健康比例条置于第一条数字下，不加新标签。右侧保留内容卡三条，GitHub、双微信、暂停开关图分别在条目前。样式按批准 v2 深蓝灰正文和淡绿卡，仅状态点带状态色，不因历史页把正文变淡。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第5条：导语并入标题左栏，左66%/右34%，右图高上限220px，清除标题下空白。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "两条路差在哪"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "本人只说了一句"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "旧：微信记录交给 AI"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "看门狗这 3 个多月"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "停下以后还留着的"
+      }
+    ],
+    "notes": "已看 v、v2。v 四张对照行卡整宽顺排：表头仅上方一行旧／新双栏；每卡上方行名，下面旧内容浅灰条、新内容浅绿条，各条左侧是桥／路小图，不能把横表直接缩窄。v2 看门狗标题独立一行，下有日志范围说明，再是两个整宽数字说明卡；原图没有狗钟或比例条，不按 scene 另加。停下以后还留着的标题一行、三个整宽文字卡无插画。看门狗段标题和后面的括号说明在定稿是单一 para，交同一 content_card 保留全文；不可用括号内子串另起块。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "当初想解决什么、怎么用"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "想解决的麻烦"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/微信标志.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/文件齿轮.png",
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+        ],
+        "align": "center",
+        "text_ref": "微信|WeFlow|这个项目|AI|回答",
+        "direction": "horizontal",
+        "attach_following_para": true,
+        "enclosure": "single_card"
+      },
+      {
+        "type": "section_heading",
+        "row": "examples-rules",
+        "width": "50%",
+        "text_ref": "两个例子",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "section_heading",
+        "row": "examples-rules",
+        "width": "50%",
+        "text_ref": "后来补上的两条规矩",
+        "align": "left",
+        "size": "small"
+      }
+    ],
+    "notes": "标题占整宽，按追加要求居中。上排问题卡约 36%、流程约 64%。问题卡标题在左上、聊天放大镜图在卡内右上，正文绕下，不放在卡外。五站流程共在一个圆角容器内，每节点插画在上、编号名在下、说明再下，绿色粗箭头穿过图像间空隙；flow 接收 5 个 steps 与交替的 5 个 para，需把紧随步骤的 para 当该步骤正文，不把步骤名与正文拆散。下排两张等宽大卡，每张两条，图标在条目左侧，右边粗体开头和正文；两规矩行首绿勾。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第6条：例子和规矩改为section_heading承接原标题及清单，不再生成灯泡空标题卡。流程五图明确对应微信/接口窗口/约定文件/AI机器人/回答气泡钢笔，复用现有语义素材。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "当初想解决什么、怎么用"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "想解决的麻烦"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/微信标志.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/文件齿轮.png",
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+        ],
+        "align": "left",
+        "text_ref": "微信|WeFlow|这个项目|AI|回答",
+        "direction": "vertical",
+        "attach_following_para": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "两个例子",
+        "align": "left",
+        "size": "small"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "后来补上的两条规矩",
+        "align": "left",
+        "size": "small"
+      }
+    ],
+    "notes": "已看 v、v2。v 整宽问题卡的放大镜聊天图位于卡内右上，左侧标题与正文；五站各为独立整宽圆角卡，左图右文，卡与卡之间向下绿色粗箭头。v2 两个整宽大卡：两个例子、后来补上的两条规矩；各卡两条绿点，原续图没有每条水彩插画，不从横版复制进来。flow 的步骤／紧随说明 para 接续同 h。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第6条：例子和规矩改为section_heading承接原标题及清单，不再生成灯泡空标题卡。流程五图明确对应微信/接口窗口/约定文件/AI机器人/回答气泡钢笔，复用现有语义素材。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "header",
+        "width": "84%",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部旧功能"
+      },
+      {
+        "type": "status_legend",
+        "row": "header",
+        "width": "16%",
+        "size": "small",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "给 AI 取微信"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "取数约定"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "让 WeFlow 一直在线"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "看门狗",
+        "row_counts": [
+          3,
+          2
+        ],
+        "last_row_fill": true,
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "检查和交接"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "接口自检"
+      }
+    ],
+    "notes": "整宽章节标题区域居中，灰叉图例在右。三个组名照原图左置，整宽章节大标题居中。实际卡组：第一组 3 张一行；中间组上排 3 张，下排登录后打开微信与开机自动登录 Windows 两张各半宽，须由 feature_card 在同一个含 5 items 的 bullets 节点内做 3+2，不能以第 4 条子串作为 text_ref；最后组 3 张。插画都在卡内左、字在右、灰叉在右上，卡仍按批准淡绿风格，标题和正文不可淡化。图例定稿是 para（含图例：），status_legend 必须全文保留，不能只渲染叉和已停用。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；qa-10第7条：三个功能组名改用小号Sans粗体section_heading，取消大尺寸毛笔素材造成的层级倒置。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部旧功能"
+      },
+      {
+        "type": "status_legend",
+        "size": "small",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "给 AI 取微信"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "取数约定"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "让 WeFlow 一直在线"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "看门狗"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "检查和交接"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "align": "left",
+        "text_ref": "接口自检"
+      }
+    ],
+    "notes": "已看 v、v2。v：整宽大标题、图例、第一组名、三张整宽图文卡。v2 从第二组名接起，五张整宽图文卡，第三组名，再三张整宽图文卡。续张不重复章标题和图例。各卡左图约 35%、右文约 65%，叉贴右上；组标题照原图左置。最后一张必须完整展示定稿，原图底边极紧，渲染分张不得截断正文。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；qa-10第7条：三个功能组名改用小号Sans粗体section_heading，取消大尺寸毛笔素材造成的层级倒置。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（6 月 20 日"
+      },
+      {
+        "type": "timeline",
+        "columns": 6,
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "align": "left",
+        "text_ref": "6 月 20 日",
+        "direction": "horizontal",
+        "path": "z_order",
+        "rows": [
+          6,
+          6
+        ]
+      }
+    ],
+    "notes": "整宽标题居中。timeline 接收包含 12 项的单一 stats 节点；日期当时间，不得当 12 张数字卡。构图是两排蛇形水彩丝带：上排 6 月 20 日至 8 月 5–7 日，左至右；下排 8 月 16 日至 9 月 26 日，右至左；每项旗帜日期在上、正文浅绿描边框在下，旗杆和丝带相接。8 月 22–25 日节点旁亮绿支线朝右上伸出，支线没有新增字；主丝带向结束变淡灰。右下冻桥与睡狗在卡外。日期和正文仍按定稿一次完整出现，不因视觉蛇形把取数顺序反转。timeline 的旗帜／丝带／分支为批准样板未出现外观，待组件样张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第8条：日期两排均从左至右（z_order），取消连接与支线，保留12项源顺序。"
+  },
+  {
+    "screen": "wechat-history-ai-bridge-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（6 月 20 日"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "align": "left",
+        "text_ref": "6 月 20 日",
+        "direction": "vertical"
+      }
+    ],
+    "notes": "已看 v、v2。不能仅按 scene 做 12 项同一种竖丝带：v 实际前 5 项（至 7 月 28 日）左侧绿叶竖线＋圆点旗帜日期，右侧正文圆角框；这 5 项下面有一幅整宽冻桥睡狗插画。v2 实际后 7 项（8 月 5–7 日至 9 月 26 日）改成整宽横卡，左约 44% 为各自的溪流／桥／路插画，细绿竖分隔线，右侧日期和说明，续图没有丝带、旗杆、分支或睡狗结尾。两段都属于同一 stats 节点，因此不能在 8 月 5–7 日处另造 text_ref；timeline 组件需内部按 item 索引 0–4 与 5–11 两种排法，装饰桥放第 5 项之后，分张边界亦在这里。这是现图明确的构图分段，当前 API 没有 item 分段参数，已记入 notes，不能兜底成同样 12 卡声称保真。旗帜和多段时间线样式待组件样张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；用新text_ref内条目切分，把前5旗帜、其后主插画/换张、后7左图右文无连接卡分成实际块；是否复现竖旗日期左右位置仍需审页，缺素材继续报未完成。；qa-10第9条：取消中插画和后7项不同图文卡，将12项合成同一种无图竖时间线，不重复日期或说明。"
+  }
+]

@@ -1,0 +1,1260 @@
+[
+  {
+    "screen": "personal-media-01",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "照片视频录音管理",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "手机和电脑里的",
+        "row": "intro",
+        "width": "70%"
+      },
+      {
+        "type": "quote",
+        "text_ref": "比如9月26日",
+        "variant": "left_line",
+        "row": "intro"
+      },
+      {
+        "type": "prose",
+        "text_ref": "清手机只删",
+        "row": "intro"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "intro",
+        "width": "30%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "19851",
+        "columns": 4,
+        "columns_v": 1,
+        "icons": "none",
+        "variant": "header_value_table",
+        "label_position": "below",
+        "portrait_columns": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026",
+        "align": "right"
+      },
+      {
+        "type": "live_box",
+        "text_ref": "现在",
+        "layout": "maintenance_pair",
+        "keys": [
+          "run",
+          "cloud"
+        ],
+        "width": "100%"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版第 1 屏 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-01-desktop.png 为底，版式、插画、四张数字卡和介绍段落都不动，只加四样：⓪介绍段落下面紧跟一段小一号的例子（“比如 9 月 26 日早上……逐个核对都在。”），左边一条细绿竖线，和介绍段落同宽；①四张数字卡下面右对齐一行小字“截至 2026 年 9 月 28 日”；②数字卡下方横跨整屏一条细长的圆角横条，最左边绿色粗体“现在”，右边并排两组：每组先写小字标签（“每天 17:10 维护”“云端维护”），标签右边各留一个白底细浅绿描边的圆角空框，约宽 260、高 40 像素（按 1672 宽的画面算），框里什么都不画，网页程序往里填状态字；③横条下面左对齐两个白底细浅绿描边的圆角按钮，绿色字：“在整套系统里的位置 → 怎么协作”“现在正不正常 → 驾驶舱”。为放下这四样，插画可以略缩、四张数字卡可以略矮，数字卡里的字一个不改。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。 另加一样：④例子段落下面紧跟一行和例子同样大小的提示字（“清手机只删手机上的……结果各不一样，见〔不同的“不要”，结果不一样〕。”），左边不画竖线，〔〕里的字画成绿色链接字；为放下这一行，插画可以再略缩。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 4
+    },
+    "pending_requirements": [
+      "例子左细竖线、四个数字卡图标与两个标签逐项绑定实时空框尚未实现；两个真实 live 键仍各有空框。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；09:5x 主工程师接管规格：按 comp-slots 接口把两个 single 实时框合成一个 maintenance_pair 块（run/cloud），不复制标签。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：首屏横版介绍70%/插画30%；手机版数字卡改单列；空图标高度继续查实际DOM。\n本轮观感复核后：四数字卡的header_value_table图标实际不显，按审查允许的“去掉空白”选项明确关闭图标与图槽，保留数字/说明和手机单列；原图标DOM不显的组件缺陷仍单独交回。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-01-h.png"
+  },
+  {
+    "screen": "personal-media-01",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "照片视频录音管理",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "prose",
+        "text_ref": "手机和电脑里的"
+      },
+      {
+        "type": "quote",
+        "text_ref": "比如9月26日",
+        "variant": "left_line"
+      },
+      {
+        "type": "prose",
+        "text_ref": "清手机只删"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "19851",
+        "columns": 4,
+        "columns_v": 1,
+        "icons": "none",
+        "variant": "header_value_table",
+        "label_position": "below",
+        "portrait_columns": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026",
+        "align": "right"
+      },
+      {
+        "type": "live_box",
+        "text_ref": "现在",
+        "layout": "maintenance_pair",
+        "keys": [
+          "run",
+          "cloud"
+        ],
+        "width": "100%"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16，从上到下：大标题；右上那幅插画缩到整宽放在标题下；介绍段落；例子段落（左边细绿竖线）；四张数字卡改成两行两列；“截至 2026 年 9 月 28 日”一行；“现在”横条改成上下两行（每行一个标签加一个空框，空框约宽 60%、高 5%）；最下面两个按钮上下叠放、各占整宽。字和横版完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。 例子段落下面紧跟那行提示，链接字绿色。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 4
+    },
+    "pending_requirements": [
+      "例子左细竖线、四个数字卡图标与两个标签逐项绑定实时空框尚未实现；两个真实 live 键仍各有空框。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；09:5x 主工程师接管规格：按 comp-slots 接口把两个 single 实时框合成一个 maintenance_pair 块（run/cloud），不复制标签。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：首屏横版介绍70%/插画30%；手机版数字卡改单列；空图标高度继续查实际DOM。\n本轮观感复核后：四数字卡的header_value_table图标实际不显，按审查允许的“去掉空白”选项明确关闭图标与图槽，保留数字/说明和手机单列；原图标DOM不显的组件缺陷仍单独交回。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-01-v.png"
+  },
+  {
+    "screen": "personal-media-02",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "插上手机之后",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "①第一次连上",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "illustration_source": "illustrations",
+        "approval_mock": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-02-desktop.png 为底，用局部修改只改卡片①标题下那行括号里的字：“（上次：1913 个新文件，17 分钟）”改成“（9 月 26 日那次：1913 个新文件，17 分钟）”，其余一律不动。三张并排大卡片，各有一幅插画：①手机连电脑，②电脑上整理（卡片下部一个审批页小样：缩略图和“保留”“不留”两个按钮），③精选放回手机。 这次再局部改两处：卡片②里“照片视频按下一屏的办法定去留”改成“照片视频按“它怎么决定留不留”那屏的办法定去留”；卡片③最后加一行绿色小字“清手机、撤下、真的不要，各删到哪一步，看紧接着的对照表。”，字多了可以把卡片③的插画略压扁。",
+    "asset_requirements": {
+      "illustrations": 3,
+      "icons": 0
+    },
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 main-closer3依据requests/comp-slots/claude-2235-media02-decision.md：独立原行审批页/保留/不留属于正文，approval_mock由core在第②卡两个正文para后的完整原para位置调用document_mock variant:approval一次；两按钮是静态样式、无新链接热区，手机居中；旧原裁片等待及源字归属冲突已被此裁定取代。程序实际验证另回读，新外观进最后验收。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-02-h.png"
+  },
+  {
+    "screen": "personal-media-02",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "插上手机之后",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "①第一次连上",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "illustration_source": "illustrations",
+        "approval_mock": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题在上；三张卡片改成上下叠放，每张卡片里插画在上、字在下，插画压扁到卡片宽度的一半高；卡片②的审批页小样放在它两段字下面、居中。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 3,
+      "icons": 0
+    },
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 main-closer3依据requests/comp-slots/claude-2235-media02-decision.md：独立原行审批页/保留/不留属于正文，approval_mock由core在第②卡两个正文para后的完整原para位置调用document_mock variant:approval一次；两按钮是静态样式、无新链接热区，手机居中；旧原裁片等待及源字归属冲突已被此裁定取代。程序实际验证另回读，新外观进最后验收。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-02-v.png"
+  },
+  {
+    "screen": "personal-media-06",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "不同的“不要”",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况",
+        "result_tones": [
+          "green",
+          "yellow",
+          "gray",
+          "red",
+          "gray"
+        ],
+        "row": "discard",
+        "width": "74%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "discard",
+        "width": "22%"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "已通过，横版沿用原图。两列五行对照表，结果格按浅绿、浅黄、浅灰、浅红、浅灰上色；右边一幅绿色回收桶插画。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "结果格五种浅底色的 result_tones 尚未被 table 消费；新状态底色需组件样张确认。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：表格列宽74%，回收桶插画列保持22%，按比例网格留出栏间距。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-06-h.png"
+  },
+  {
+    "screen": "personal-media-06",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-06-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "不同的“不要”",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况",
+        "result_tones": [
+          "green",
+          "yellow",
+          "gray",
+          "red",
+          "gray"
+        ]
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；表格改成一行一条的五张卡片，每张上面是“情况”（深色字），下面是“结果”（带原来的底色）；回收桶插画缩小放在最下面。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "结果格五种浅底色的 result_tones 尚未被 table 消费；新状态底色需组件样张确认。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-06-v.png"
+  },
+  {
+    "screen": "personal-media-03",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它怎么决定留不留",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "segmented_band",
+        "text_ref": "第一层",
+        "variant": "funnel",
+        "direction": "vertical",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "留下的每一件",
+        "tone": "yellow"
+      },
+      {
+        "type": "notice",
+        "text_ref": "视频"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "已通过，横版沿用原图。左边从宽到窄的三层漏斗卡片加一条视频长条，右边一张钉着的黄色便签。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 4
+    },
+    "pending_requirements": [
+      "前三层是普通 para，segmented_band 没将其组成三段漏斗；黄色钉便签横版应右侧、竖版标题下，现 notice 无该构图。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-03-h.png"
+  },
+  {
+    "screen": "personal-media-03",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它怎么决定留不留",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "segmented_band",
+        "text_ref": "第一层",
+        "variant": "funnel",
+        "direction": "vertical",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "留下的每一件",
+        "tone": "yellow"
+      },
+      {
+        "type": "notice",
+        "text_ref": "视频"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；黄色便签缩小放在标题下右侧；三层卡片上下叠放、宽度逐层略收，保留漏斗感，每层插画缩成左侧小图标；最下面视频那条。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 4
+    },
+    "pending_requirements": [
+      "前三层是普通 para，segmented_band 没将其组成三段漏斗；黄色钉便签横版应右侧、竖版标题下，现 notice 无该构图。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-03-v.png"
+  },
+  {
+    "screen": "personal-media-05",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "东西最后在哪",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "prose",
+        "text_ref": "主硬盘"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "电脑的三块硬盘",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版第 5 屏原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-04-desktop.png 为底：上半部标题和电脑、三块硬盘、手机、两朵云的插画、三个硬盘标签一律不动。下半部原来是上两张、下三张说明卡，改成两行、每行三张同样大小的卡片：第一行“电脑的三块硬盘”“手机”“手机上的文档”（新加，图标画一叠文档和一个文件夹），第二行“Google 相册”“Google Drive”“PSD 设计稿”。原有五张卡的字一个不改。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 6
+    },
+    "pending_requirements": [
+      "三个硬盘文字标签目前独立正文，尚未绑定到插画对应硬盘。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-05-h.png"
+  },
+  {
+    "screen": "personal-media-05",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "东西最后在哪",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "prose",
+        "text_ref": "主硬盘"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "电脑的三块硬盘",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；插画改成上下排：电脑在中间，三块硬盘在电脑下面一排、箭头照旧，手机在左下、两朵云在右下；下面六张说明卡一行一张，顺序同横版。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 6
+    },
+    "pending_requirements": [
+      "三个硬盘文字标签目前独立正文，尚未绑定到插画对应硬盘。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-05-v.png"
+  },
+  {
+    "screen": "personal-media-07",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "找东西",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "找1月下雪",
+        "avatars": "auto",
+        "avatar_source": "illustrations",
+        "avatar_position": "outside-left",
+        "right_images": [
+          1
+        ],
+        "right_image_source": "illustrations"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "4秒找出"
+      },
+      {
+        "type": "illustration",
+        "text_ref": "1月21日",
+        "gallery_assets": [
+          "_library/illustrations/personal-media-07-snow-01.png",
+          "_library/illustrations/personal-media-07-snow-02.png",
+          "_library/illustrations/personal-media-07-snow-03.png",
+          "_library/illustrations/personal-media-07-snow-04.png"
+        ],
+        "columns": 4,
+        "columns_v": 2,
+        "caption_count": 4
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "可以按哪天",
+        "columns": 3
+      },
+      {
+        "type": "notice",
+        "text_ref": "怎么跟AI说",
+        "inline_button": "去技能页看 →"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-06-desktop.png 为底，用局部修改只改三处：大字“几秒找出那天的 20 张。”改成“4 秒找出那天的 140 张。”；四张结果图下的“1 月　洞山公园”都改成“1 月 21 日　洞山公园”；第一张说明卡里“（照片自带的 GPS）”改成“（照片自带的 GPS，或我确认过的地点）”，字多了可以多一行。其余一律不动。画面：左上一个戴眼镜的人拿手机说话，对话气泡；右上机器人拿放大镜，雪中公园石碑；中间四张雪景结果图；下面三张说明卡；最底一条“怎么跟 AI 说”和右边的按钮。",
+    "asset_requirements": {
+      "illustrations": 6,
+      "icons": 3
+    },
+    "pending_requirements": [
+      "main-closer2-brief.md Claude 第2条：四张无字雪景水彩插画等待 asset-round3；各下方原图注按真实源顺序一次输出，h一行四张、v两行两列；不绑定照片/截图、不用占位通过。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 main-closer2 Claude 第2条接线：中間四张结果图是无字插画，gallery_assets仅接四个明确新素材路径；人物/机器人原槽不挪位；缺图保持asset incomplete。四段图注来自原para，截图热区为0。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-07-h.png"
+  },
+  {
+    "screen": "personal-media-07",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-07-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "找东西",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "找1月下雪",
+        "avatars": "auto",
+        "avatar_source": "illustrations",
+        "avatar_position": "outside-left",
+        "right_images": [
+          1
+        ],
+        "right_image_source": "illustrations"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "4秒找出"
+      },
+      {
+        "type": "illustration",
+        "text_ref": "1月21日",
+        "gallery_assets": [
+          "_library/illustrations/personal-media-07-snow-01.png",
+          "_library/illustrations/personal-media-07-snow-02.png",
+          "_library/illustrations/personal-media-07-snow-03.png",
+          "_library/illustrations/personal-media-07-snow-04.png"
+        ],
+        "columns": 4,
+        "columns_v": 2,
+        "caption_count": 4
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "可以按哪天",
+        "columns": 3
+      },
+      {
+        "type": "notice",
+        "text_ref": "怎么跟AI说",
+        "inline_button": "去技能页看 →"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：人物和气泡在上，“4 秒找出那天的 140 张。”跟在下面，机器人和石碑缩小放在右侧；四张结果图改成两行两列；三张说明卡一行一张；最底那条保留，按钮换到这条字下面、右对齐。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 6,
+      "icons": 3
+    },
+    "pending_requirements": [
+      "main-closer2-brief.md Claude 第2条：四张无字雪景水彩插画等待 asset-round3；各下方原图注按真实源顺序一次输出，h一行四张、v两行两列；不绑定照片/截图、不用占位通过。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 main-closer2 Claude 第2条接线：中間四张结果图是无字插画，gallery_assets仅接四个明确新素材路径；人物/机器人原槽不挪位；缺图保持asset incomplete。四段图注来自原para，截图热区为0。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-07-v.png"
+  },
+  {
+    "screen": "personal-media-04",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "画廊",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我自己拍的10张"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "1沿着石墙",
+        "columns": 5,
+        "columns_v": 2,
+        "ratios": [
+          "4:3",
+          "4:3",
+          "3:4",
+          "4:3",
+          "4:3",
+          "4:3",
+          "3:4",
+          "4:3",
+          "4:3",
+          "4:3"
+        ],
+        "caption_per_slot": true,
+        "equal_row_height": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "横版：左上毛笔艺术字标题“画廊”加绿色笔刷线，右上角几枝水彩绿叶；标题下一行说明。下面两行、每行五个照片空位（白底、细浅绿描边、圆角，里面什么都不画），同一行的空位一样高：第 3 张（灯笼）和第 7 张（金色中庭）是竖图，这两格画成竖向 3:4，其余八格横向 4:3，每行按实际宽度排开、左右对齐。空位下面一行小字说明（第 4 张说明较长，可折成三行，其余一行）。拼页程序往格子里贴旧网站已压好的缩略图（横图 720×540、竖图 405×540，按原比例完整放进、不裁），点开再显示原图（design\\v3\\preview\\photos 下那张，只压缩一次）。版面参照 E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round02\\source-snapshots\\personal-media\\3cc14c94409aec87-screen-11-desktop.png 右半边的画廊，但占满整屏宽，左边不再放演进。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "照片空框下逐格图注与横竖混合比例同排等高，screenshot 当前只画网格后集中输出十条图注。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-h.png"
+  },
+  {
+    "screen": "personal-media-04",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "画廊",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我自己拍的10张"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "1沿着石墙",
+        "columns": 5,
+        "columns_v": 2,
+        "ratios": [
+          "4:3",
+          "4:3",
+          "3:4",
+          "4:3",
+          "4:3",
+          "4:3",
+          "3:4",
+          "4:3",
+          "4:3",
+          "4:3"
+        ],
+        "caption_per_slot": true,
+        "equal_row_height": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题和说明在上；照片空位改成两列五行，第 3、7 张竖向 3:4、其余横向 4:3，同一行一样高，说明在各自空位下面。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "照片空框下逐格图注与横竖混合比例同排等高，screenshot 当前只画网格后集中输出十条图注。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-v.png"
+  },
+  {
+    "screen": "personal-media-08",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么跑的",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "连上手机",
+        "columns": 3,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "z_order": true,
+        "loop_at": 8,
+        "item_rows": [
+          3,
+          1,
+          4
+        ]
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-08-desktop.png 为底，用局部修改只改两个节点的小字：第 4 个节点改成下面第 4 条的样子（多了“交给正在干活的 Codex 或 Claude 看（缩略图会发到云端，原件不发）”，字多可以四五行，卡片可略加高，两个链接仍画成链接样式）；第 8 个节点改成下面第 8 条的样子（多了“再启动云端维护”一句，放不下可以三行）；其余六个节点、标题、箭头一律不动。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 8
+    },
+    "pending_requirements": [
+      "第八节点循环箭头以及竖版两列四行 Z 字跨行箭头需核对补齐。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-08-h.png"
+  },
+  {
+    "screen": "personal-media-08",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-08-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么跑的",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "连上手机",
+        "columns": 1,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "z_order": true,
+        "loop_at": 8,
+        "columns_v": 1
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；八个节点改成两列四行（1 2 / 3 4 / 5 6 / 7 8），按 Z 字走向用绿色箭头连起来；第 8 个节点旁的循环小箭头保留。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 8
+    },
+    "pending_requirements": [
+      "第八节点循环箭头以及竖版两列四行 Z 字跨行箭头需核对补齐。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-08-v.png"
+  },
+  {
+    "screen": "personal-media-09",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "认内容，不认文件名",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "reasons",
+        "width": "68%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "16439行",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "row": "reasons",
+        "width": "32%",
+        "portrait_columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "它和理解库"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-09-desktop.png 为底重画：版式、六张原则卡和三张大数字卡的位置、插画都照它。改四处：①右上大数字 16304 改成 16439，下面小字改成“Python 正式代码（6 个文件）”；②中间大数字 443 改成 455；③第三张原则卡（显卡插画那张）的小字换成下面的新句子，字多了可以四行，卡片略加高；④最下面那条的链接字从“怎么运转”改成“怎么协作”。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 6
+    },
+    "pending_requirements": [],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：手机版三个数字卡改为单列，避免数字在窄列内拆开；横版原列数保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-09-h.png"
+  },
+  {
+    "screen": "personal-media-09",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-09-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "16439行",
+        "columns": 3,
+        "columns_v": 1,
+        "icons": "auto",
+        "portrait_columns": 1
+      },
+      {
+        "type": "content_card",
+        "text_ref": "认内容，不认文件名",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/云.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/icons/GitHub标志.png",
+          "_library/icons/云.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/icons/版本循环文件.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "它和理解库"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；三张大数字卡改成一行三个小方块放在标题下；六张原则卡一行一张；最下面那条链接。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 6
+    },
+    "pending_requirements": [],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：手机版三个数字卡改为单列，避免数字在窄列内拆开；横版原列数保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-09-v.png"
+  },
+  {
+    "screen": "personal-media-10",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我只回答了24件",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "illustration_source": "illustrations"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "已通过，横版沿用原图。三张横向大卡片，左边插画，右边大字标题加三行说明。",
+    "asset_requirements": {
+      "illustrations": 3,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "三张横向大卡应左侧/顶部主插画；content_card 当前只消费小图标，未按每卡主插画绑定。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-10-h.png"
+  },
+  {
+    "screen": "personal-media-10",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-10-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我只回答了24件",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "illustration_source": "illustrations"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；三张卡片上下叠放，每张插画在上、标题和说明在下。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 3,
+      "icons": 0
+    },
+    "pending_requirements": [
+      "三张横向大卡应左侧/顶部主插画；content_card 当前只消费小图标，未按每卡主插画绑定。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-10-v.png"
+  },
+  {
+    "screen": "personal-media-11",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（35项）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "找东西",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "横版，全部功能一共三张，上下拼成一整段，三张用同一套网格：每组先是一行组名（毛笔字，比大标题小一号，左对齐，后面跟一道短绿色笔刷线），组名下面是这一组的功能卡，每行三张、同宽同高；组名不单独占一整列，卡片从左边距一直排到右边距。一组不跨屏。每张功能卡：左边一个小水彩图标，粗体“编号. 功能名”，下面一句话；右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）；标了“只修报错”的在卡片右下角加一个小标签“只修报错”。下面每行“编号. 功能名｜一句话｜状态”：“｜”只是分隔符不画，状态不写字，画成圆点和标签；〔〕是链接画法。这一张顶上是标题（毛笔艺术字加绿色笔刷线）和紧跟在标题右边的一行图例（四个圆点依次画成绿、黄、灰、浅灰）。“找东西”这组三张卡片下面，左对齐加一行小字“找到后想知道里面有没有我：见照片录音里有没有我”，其中“照片录音里有没有我”画成链接样式。第一张底部不画边框或分隔线。已通过的旧版 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-10-desktop.png 的卡片画法、图标可以参考，但版面按这里的新规矩重排（原来左边的组名列去掉）。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 14
+    },
+    "pending_requirements": [
+      "绿/黄字状态需要映射为右上圆点，保留“只修报错”标签；现 feature_card 没有绿黄映射，组名毛笔图也未渲染。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-11-h.png"
+  },
+  {
+    "screen": "personal-media-11",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（35项）",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "找东西",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：同样一组一段，组名一行，下面功能卡改成每行两张；标题在最上，图例在标题下换行成两行；卡片里的字、圆点和标签和横版完全一样。三张竖版也上下拼成一段。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 14
+    },
+    "pending_requirements": [
+      "绿/黄字状态需要映射为右上圆点，保留“只修报错”标签；现 feature_card 没有绿黄映射，组名毛笔图也未渲染。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-11-v.png"
+  },
+  {
+    "screen": "personal-media-12",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "收进来、改信息",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush",
+        "fill_last_row": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "横版，全部功能一共三张，上下拼成一整段，三张用同一套网格：每组先是一行组名（毛笔字，比大标题小一号，左对齐，后面跟一道短绿色笔刷线），组名下面是这一组的功能卡，每行三张、同宽同高；组名不单独占一整列，卡片从左边距一直排到右边距。一组不跨屏。每张功能卡：左边一个小水彩图标，粗体“编号. 功能名”，下面一句话；右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）；标了“只修报错”的在卡片右下角加一个小标签“只修报错”。下面每行“编号. 功能名｜一句话｜状态”：“｜”只是分隔符不画，状态不写字，画成圆点和标签；〔〕是链接画法。这一张没有标题、没有图例，直接接着上一张往下排；顶部和底部都不画边框或分隔线，拼起来看不出是几张。先拿第一张当参考图画。已通过的旧版 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-10-desktop.png 的卡片画法、图标可以参考，但版面按这里的新规矩重排（原来左边的组名列去掉）。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 13
+    },
+    "pending_requirements": [
+      "绿/灰/黄字状态需只显示对应圆点与只修报错标签，组名需毛笔图；当前组件未实现。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-12-h.png"
+  },
+  {
+    "screen": "personal-media-12",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-12-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "收进来、改信息",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：同样一组一段，组名一行，下面功能卡改成每行两张；没有标题和图例；卡片里的字、圆点和标签和横版完全一样。三张竖版也上下拼成一段。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 13
+    },
+    "pending_requirements": [
+      "绿/灰/黄字状态需只显示对应圆点与只修报错标签，组名需毛笔图；当前组件未实现。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-12-v.png"
+  },
+  {
+    "screen": "personal-media-13",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-13-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "每天自动和日常维护",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush",
+        "fill_last_row": true
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "横版，全部功能一共三张，上下拼成一整段，三张用同一套网格：每组先是一行组名（毛笔字，比大标题小一号，左对齐，后面跟一道短绿色笔刷线），组名下面是这一组的功能卡，每行三张、同宽同高；组名不单独占一整列，卡片从左边距一直排到右边距。一组不跨屏。每张功能卡：左边一个小水彩图标，粗体“编号. 功能名”，下面一句话；右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）；标了“只修报错”的在卡片右下角加一个小标签“只修报错”。下面每行“编号. 功能名｜一句话｜状态”：“｜”只是分隔符不画，状态不写字，画成圆点和标签；〔〕是链接画法。这一张没有标题、没有图例，直接接着上一张往下排；顶部和底部都不画边框或分隔线，拼起来看不出是几张。先拿第一张当参考图画。已通过的旧版 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-10-desktop.png 的卡片画法、图标可以参考，但版面按这里的新规矩重排（原来左边的组名列去掉）。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 9
+    },
+    "pending_requirements": [
+      "绿/灰字状态需只显示对应圆点，组名需毛笔图；当前组件未实现。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-13-h.png"
+  },
+  {
+    "screen": "personal-media-13",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-13-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "feature_card",
+        "text_ref": "每天自动和日常维护",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "status_display": "dot",
+        "group_heading_style": "brush"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：同样一组一段，组名一行，下面功能卡改成每行两张；没有标题和图例；卡片里的字、圆点和标签和横版完全一样。三张竖版也上下拼成一段。",
+    "asset_requirements": {
+      "illustrations": 0,
+      "icons": 9
+    },
+    "pending_requirements": [
+      "绿/灰字状态需只显示对应圆点，组名需毛笔图；当前组件未实现。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：全部功能的手机版卡片改每行一张，完整原字和编号保持。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-13-v.png"
+  },
+  {
+    "screen": "personal-media-14",
+    "orientation": "h",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-14-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "medium",
+        "row": "history-title",
+        "width": "80%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "right",
+        "row": "history-title",
+        "width": "20%"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月下旬",
+        "columns": 7,
+        "direction": "horizontal",
+        "connector": "line",
+        "illustration": "outside",
+        "icons": "auto",
+        "alternating": true,
+        "last_marker": "pending"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "横版：左上毛笔艺术字标题“演进”加绿色笔刷线。下面一条从左到右的横向时间线（绿色细线加七个绿色圆点），七个节点在线上下交错排开，每个节点一个小水彩图标（笔记本电脑、一叠照片、上传的云、相册、打勾的清单、手机打勾、云加循环箭头），粗体日期，下面一两行小字。最后一个节点的小字末尾是“（待验收）”，这个节点的圆点画成黄色，其余绿色。右下角一小幅水彩插画：一台电脑、三块叠放的黑色硬盘和一朵云。旧版演进参照 E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round02\\source-snapshots\\personal-media\\3cc14c94409aec87-screen-11-desktop.png 左半边的画法。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 7
+    },
+    "pending_requirements": [
+      "横版七节点上下交错、末节点黄圆点、右下主插画定位，需组件消费 alternating/last_marker 与精确插画位。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：时间线后的主插画靠右、图宽25%，缩到右下角，不占满下半屏。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-14-h.png"
+  },
+  {
+    "screen": "personal-media-14",
+    "orientation": "v",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-14-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月下旬",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "line",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "alternating": true,
+        "last_marker": "pending"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "right",
+        "target_width": "25%"
+      }
+    ],
+    "portrait_required": true,
+    "source_layout": "竖版 9:16：标题；时间线改成竖向，从上到下七个节点，图标在线左边、日期和小字在线右边；右下角插画缩小放在最下面。字和横版完全一样。",
+    "asset_requirements": {
+      "illustrations": 1,
+      "icons": 7
+    },
+    "pending_requirements": [
+      "横版七节点上下交错、末节点黄圆点、右下主插画定位，需组件消费 alternating/last_marker 与精确插画位。"
+    ],
+    "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：时间线后的主插画靠右、图宽25%，缩到右下角，不占满下半屏。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-14-v.png"
+  }
+]

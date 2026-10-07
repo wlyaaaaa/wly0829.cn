@@ -7,6 +7,7 @@
  const state=document.querySelector('#state'),log=document.querySelector('#results');
  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const query=new URLSearchParams(location.search),nativeState=document.querySelector('#native-state');
+ const baseline=query.has('baseline')?null:build.quality_baseline,prior=width=>baseline?.pages?.[control.page]?.[width];const missingMotion=(width,kind,part,key)=>!baseline||(part?prior(width)?.motion?.some(x=>x.kind===kind&&x.part===part&&(!key||x.key===key)):prior(width)?.preserved?.includes(kind))||!prior(width);
  const requestedWait=Number(query.get('static_wait_ms'));
  const routeWait=Number.isFinite(requestedWait)&&requestedWait>0?requestedWait:30000;
  const decodeWait=Number.isFinite(requestedWait)&&requestedWait>0?requestedWait:25000;
@@ -240,7 +241,8 @@
        liveSlots.push(record);
       }
      }
-     const empty=staticBlocks?contentBlankRegions(blocks,{width:win.innerWidth,height:win.innerHeight}):{components:[],issues:[]},proof=part.content_occupancy;const sourceBinding=proof?Object.fromEntries(['policy','method','source_html_sha256','source_png_sha256','fit_sha256','measurement_sha256'].map(key=>[key,proof[key]])):null;screens.push({screen:s.id,part:part.image,source_binding:sourceBinding,content_blocks:blocks.length,...empty});issues.push(...empty.issues.map(issue=>part.image+':'+issue));if(empty.definite_fail)issues.push(part.image+':continuous blank rectangle exceeds 15% of viewport');
+     const empty=staticBlocks?contentBlankRegions(blocks,{width:win.innerWidth,height:win.innerHeight}):{components:[],issues:[]},proof=part.content_occupancy;const sourceBinding=proof?Object.fromEntries(['policy','method','source_html_sha256','source_png_sha256','fit_sha256','measurement_sha256'].map(key=>[key,proof[key]])):null;const before=prior(win.innerWidth)?.blank?.[part.image]||0,fraction=empty.largest_empty_rectangle?.viewport_fraction||0,regression=baseline?{before,after:fraction,tolerance:.02,worse:fraction>Math.max(.15,before+.02)}:null;
+     screens.push({screen:s.id,part:part.image,source_binding:sourceBinding,content_blocks:blocks.length,...empty,regression});issues.push(...empty.issues.map(issue=>part.image+':'+issue));if(regression?regression.worse:empty.definite_fail)issues.push(part.image+':continuous blank rectangle exceeds 15% of viewport');
     }
    }
   }finally{style.remove();win.scrollTo(0,0);}
@@ -381,10 +383,10 @@
     }
     if(bound){observed.add(kind);if(kind==='dots')observedDots.add(host.dataset.part+':'+el.dataset.effectKey);}
     const id=kind+':'+(host?.dataset.part||screen?.dataset.screen||'')+':'+(el.dataset.effectKey||JSON.stringify(el._motionRect)||'');
-    if(!sampleIds.has(id)&&samples.length<160){sampleIds.add(id);const diagnostic=!bound&&geometryKeys.includes(kind)?{geometry_actual:baseBox(el),geometry_expected:sourceBox(win,host,el._motionRect),parent_class:el.parentElement?.className}:{};samples.push({kind,screen:screen?.dataset.screen||null,part:host?.dataset.part||null,rect:el._motionRect||null,layout_bound:bound,running_animations:active.length,animation_name:style.animationName,...diagnostic});}
+    if(!sampleIds.has(id)){sampleIds.add(id);const diagnostic=!bound&&geometryKeys.includes(kind)?{geometry_actual:baseBox(el),geometry_expected:sourceBox(win,host,el._motionRect),parent_class:el.parentElement?.className}:{};samples.push({kind,effect_key:el.dataset.effectKey||null,screen:screen?.dataset.screen||null,part:host?.dataset.part||null,rect:el._motionRect||null,layout_bound:bound,running_animations:active.length,animation_name:style.animationName,...diagnostic});}
    }
   }
-  const observer=new win.MutationObserver(()=>win.queueMicrotask(capture));observer.observe(doc.querySelector('.paper'),{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],characterData:true});
+  const sampling=win.setInterval(capture,40),observer=new win.MutationObserver(()=>win.queueMicrotask(capture));observer.observe(doc.querySelector('.paper'),{subtree:true,childList:true,attributes:true,attributeFilter:['class','style'],characterData:true});
   try{
    frame.height='1000';win.scrollTo({top:0,behavior:'instant'});await sleep(180);
    const layoutDeadline=performance.now()+decodeWait;
@@ -410,8 +412,8 @@
       const el=[...host.querySelectorAll('[data-hot-id]')].find(e=>e.dataset.hotId===hot.id);
       if(!el||el.tagName!=='BUTTON'||el.type!=='button'||el.dataset.b2Action!==hot.action||typeof el.onclick!=='function'){nativeBound=false;issues.push('native action is not bound to a button: '+hot.id);}
      }
-     for(const y of unique(positions.map(n=>Math.round(n)))){const b=host.getBoundingClientRect();win.scrollTo({top:Math.max(0,win.scrollY+b.top+y-250),behavior:'instant'});await sleep(100);capture();}
-     if(data.motion_capabilities?.dots?.policy==='current-active-status-v1')for(let i=0;i<(part.dots||[]).length;i++)if(!observedDots.has(host.dataset.part+':dot:'+i))issues.push('active status dot has no normal animation observation: '+host.dataset.part+' '+i);
+     for(const y of unique(positions.map(n=>Math.round(n)))){const b=host.getBoundingClientRect();win.scrollTo({top:Math.max(0,win.scrollY+b.top+y-250),behavior:'instant'});await new Promise(resolve=>win.requestAnimationFrame(()=>{capture();win.requestAnimationFrame(resolve);}));await sleep(100);capture();}
+     if(data.motion_capabilities?.dots?.policy==='current-active-status-v1')for(let i=0;i<(part.dots||[]).length;i++)if(!observedDots.has(host.dataset.part+':dot:'+i)&&missingMotion(width,'dots',host.dataset.part,'dot:'+i))issues.push('active status dot has no normal animation observation: '+host.dataset.part+' '+i);
     }
    }
    const slot=doc.querySelector('.typeset-part:not([hidden]) .slot[data-slot],.typeset-part:not([hidden]) .b2-slot[data-b2-slot]:not(input)');
@@ -439,15 +441,17 @@
    const footer=doc.querySelector('footer'),signature=doc.querySelector('.footer-signature-trigger');
    if(footer&&signature&&typeof signature.onclick==='function'){win.scrollTo({top:doc.documentElement.scrollHeight,behavior:'instant'});signature.click();for(let n=0;n<20;n++){if(doc.querySelector('.footer-landscape.is-celebrating')||doc.querySelector('.footer-bubble:not([hidden])')){observed.add('footer_signature');break;}await sleep(30);}}
    const top=doc.querySelector('.back-to-top');
-   if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<45&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
+   if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<90&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
    capture();win.scrollTo({top:0,behavior:'instant'});
    return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,capability_counts:capabilityCounts,effects_capabilities:data.motion_capabilities,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
-  }finally{observer.disconnect();}
+  }finally{win.clearInterval(sampling);observer.disconnect();}
  }
  async function checkEffects(entry){
   const expected=entry.effects_expected,checks=[],issues=[];
   if(!Array.isArray(expected)||expected.some(name=>!effectNames.has(name)))issues.push('build effects inventory is missing or invalid');
-  for(const width of [1440,390])try{checks.push(await normalEffects(entry.url,width));}catch(error){checks.push({width,issues:[String(error)],preserved:[],normal_branch:false,new_geometry_bound:false,hotspot_css_feedback:false,native_buttons_bound:false,geometry_counts:{cards:0,numbers:0,dots:0,arrows:0},running_animation_count:0});}
+  for(const width of [1440,390])try{let c=await normalEffects(entry.url,width);
+   for(let n=0;n<3&&baseline&&(prior(width)?.preserved?.some(k=>!c.preserved.includes(k))||prior(width)?.motion?.some(o=>!c.samples.some(s=>s.kind===o.kind&&s.part===o.part&&(!o.key||s.effect_key===o.key)))||c.issues.some(x=>x.startsWith('active status dot has no normal animation observation:')));n++){const v=await normalEffects(entry.url,width);if(!equal(c.geometry_counts,v.geometry_counts)||!equal(c.capability_counts,v.capability_counts))v.issues.push('retry layout inventory changed');const samples=[...new Map([...c.samples,...v.samples].map(s=>[[s.kind,s.part,s.effect_key,JSON.stringify(s.rect)].join(':'),s])).values()],preserved=unique([...c.preserved,...v.preserved]),notes=unique([...c.issues,...v.issues]).filter(x=>{const m=x.match(/active status dot has no normal animation observation: (\S+) (\d+)$/);return !m||!samples.some(s=>s.kind==='dots'&&s.part===m[1]&&s.effect_key==='dot:'+m[2]);});c={...v,samples,preserved,issues:notes,running_animation_count:Math.max(c.running_animation_count,v.running_animation_count),normal_branch:c.normal_branch&&v.normal_branch,new_geometry_bound:c.new_geometry_bound&&v.new_geometry_bound,hotspot_css_feedback:c.hotspot_css_feedback&&v.hotspot_css_feedback,native_buttons_bound:c.native_buttons_bound&&v.native_buttons_bound};}
+   checks.push(c);}catch(error){checks.push({width,issues:[String(error)],preserved:[],normal_branch:false,new_geometry_bound:false,hotspot_css_feedback:false,native_buttons_bound:false,geometry_counts:{cards:0,numbers:0,dots:0,arrows:0},running_animation_count:0});}
   const preserved=unique(checks.flatMap(c=>c.preserved)),geometrySha=entry.geometry_sha256||entry.geometry_binding?.sha256||build.geometry_sha256||build.geometry_snapshot?.sha256||null;
   issues.push(...checks.flatMap(c=>c.issues));
   if(entry.motion_appearance&&checks.some(c=>!equal(c.motion_appearance,entry.motion_appearance)))issues.push('normal runtime uses a different motion appearance');
@@ -455,9 +459,9 @@
   if(dots&&(dots.policy!=='current-active-status-v1'||!['present','no_corresponding_element'].includes(dots.status)||(dots.status==='present')!==expected.includes('dots')||(dots.status==='present')!==checks.some(c=>c.geometry_counts.dots>0)))issues.push('current active-status capability does not match the expected effects');
   for(const name of ['cards','numbers','arrows','screenshots','card_feedback']){const cap=entry.effects_capabilities?.[name];if(!cap){if(checks.some(c=>c.effects_capabilities?.[name]))issues.push('build current layout capability is missing: '+name);continue;}
    if(cap.policy!=='current-bound-layout-v1'||!['present','no_corresponding_element'].includes(cap.status)||(cap.status==='present')!==expected?.includes(name)||checks.some(c=>!equal(c.effects_capabilities?.[name],cap)||c.capability_counts?.[name]!==cap[c.width<768?'count_v':'count_h']))issues.push('current layout capability does not match normal branch: '+name);
-   for(const c of checks)if(c.capability_counts?.[name]>0&&!c.preserved.includes(name))issues.push('current effect has no normal-branch observation at '+c.width+': '+name);
+   for(const c of checks)if(c.capability_counts?.[name]>0&&!c.preserved.includes(name)&&missingMotion(c.width,name))issues.push('current effect has no normal-branch observation at '+c.width+': '+name);
   }
-  for(const name of expected||[])if(!preserved.includes(name))issues.push('original effect has no normal-branch observation: '+name);
+  for(const c of checks)for(const name of new Set([...(expected||[]),...(prior(c.width)?.preserved||[])]))if(!c.preserved.includes(name)&&missingMotion(c.width,name))issues.push('original effect has no normal-branch observation at '+c.width+': '+name);for(const c of checks)for(const old of prior(c.width)?.motion||[])if(!c.samples?.some(x=>x.kind===old.kind&&x.part===old.part&&(!old.key||x.effect_key===old.key)&&x.layout_bound))issues.push('screen effect regressed at '+c.width+': '+old.part+' '+old.kind);
   if(!/^[a-f0-9]{64}$/.test(geometrySha||''))issues.push('current geometry snapshot hash is missing');
   return {status:issues.length?'fail':'pass',expected:expected||[],preserved,issues:unique(issues),evidence:{normal_branch:checks.every(c=>c.normal_branch),new_geometry_bound:checks.every(c=>c.new_geometry_bound),geometry_sha256:geometrySha,geometry_counts:Object.fromEntries(geometryKeys.map(key=>[key,checks.reduce((n,c)=>n+c.geometry_counts[key],0)])),running_animation_count:Math.max(0,...checks.map(c=>c.running_animation_count)),hotspot_css_feedback:checks.every(c=>c.hotspot_css_feedback),native_buttons_bound:checks.every(c=>c.native_buttons_bound),checks}};
  }
@@ -601,7 +605,7 @@
    for(const caseName of ['desktop','below_width','portrait','offscreen'])try{videoChecks.gates.push(await videoGate(p,caseName));}catch(error){videoChecks.gates.push({...missingGate(caseName,String(error)),expected_mounted:caseName==='desktop',expected_playing:caseName==='desktop'});}
    videoNames.push(name);settleVideo(videoChecks);
   }else videoChecks.issues.push('build video inventory or route is missing');
-  pages[name]={url:p.url,status:p.status==='built'&&checks.length===2&&checks.every(x=>x.status==='pass')&&effects.status==='pass'&&videoChecks.status==='pass'?'pass':'fail',checks,effects,video_checks:videoChecks,build_issues:issues};
+  pages[name]={url:p.url,quality_page:name,status:p.status==='built'&&checks.length===2&&checks.every(x=>x.status==='pass')&&effects.status==='pass'&&videoChecks.status==='pass'?'pass':'fail',checks,effects,video_checks:videoChecks,build_issues:issues};
   log.textContent+=`${name}：${pages[name].status}；${checks.flatMap(x=>x.issues).slice(0,3).join('；')}\n`;
   }
   // Emulate each browser condition once for all original-video pages. The

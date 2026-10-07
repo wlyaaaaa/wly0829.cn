@@ -1,0 +1,248 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-tailscale-safe-exposure",
+  "kind": "skill",
+  "title": "远程只让自己连",
+  "url": "/skills/tailscale-safe-exposure/",
+  "tagline": "开个服务给自己的设备用，外人连不上。",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "b1f4a5cbd95ab74a9741ade4dfc603f41593e300",
+    "commit_time": "2026-09-18T14:42:34+08:00",
+    "file": "E:\\.agents\\skills\\tailscale-safe-exposure\\SKILL.md"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-tailscale-safe-exposure-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "横版：左上毛笔艺术字大标题，下面一句话和一段说明。右边一幅水彩插画：一台台式机，外面围着一圈淡绿色的篱笆，篱笆上只开了一扇小门，门口站着一部手机和一台笔记本（各画 Tailscale 标志的小徽章），篱笆外一个模糊的人影被挡在外面。下半部分一张“怎么跟 AI 说”的卡片，四句话做成对话气泡。",
+      "portrait": "竖版：标题、一句话、说明在上；插画占满宽度；四个对话气泡一行一个。",
+      "text": "大标题：远程只让自己连\n\n一句话：把电脑上的一个服务开给我自己的手机或笔记本用，外人连不上。\n\n说明：它只管 Tailscale（只连我自己设备的私人网络）里的开放。Tailscale 有两种开法：Serve＝只给自己私网里的设备开；Funnel＝把服务放到公网上，谁都能访问。它的做法是：先把现状记下来，只开一个端口、只放行指定的设备，改完从对面设备真连一次；默认不对公网公开，要公开得我单独同意。\n\n**怎么跟 AI 说**\n- “只让我的手机能连上电脑上这个服务，别对外开。”\n- “看看远程桌面现在是不是只放行笔记本和手机。”\n- “串流有点卡，查一下手机到电脑走的是直连还是中转。”\n- “这个端口要给笔记本用，改之前先把原样记下来。”",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-tailscale-safe-exposure-02",
+      "section": "examples",
+      "title": "一个完整例子",
+      "scene": "横版：左上标题。左边约三分之二宽，五个编号步骤沿一条弯弯的小路排下来，每步一个小水彩图标（放大镜照着一张清单、一个端口插头、一面只开小窗的墙、一部手机和笔记本连向电脑的两条线、一个退回箭头）和一两行字。右边约三分之一宽，一张米色小账本插画，上面画真实的几行字（见“账本上的字”），账本下面一张小卡片“要注意”。",
+      "portrait": "竖版：标题在上；五个步骤一行一步；账本插画和“要注意”卡在最下。",
+      "text": "标题：一个完整例子：照这套做法，“远程桌面只让笔记本和手机连”会这样办\n\n假如我说：“远程桌面只让我的笔记本和手机连。”\n\n1. **先摸底**：记下 Tailscale 里这台电脑、笔记本、手机各是谁；查 3389 端口谁在监听；读出所有影响它的防火墙规则，而不只看规则名字。\n2. **发现问题先停**：Windows 自带的两条远程桌面规则放行范围太宽，应当先停下来告诉我，不在上面再叠一条规则掩盖它。\n3. **等我同意，再一次只改一处**：关掉那两条宽规则，另建两条只认 Tailscale 网卡、只认笔记本和手机两台设备的规则（TCP、UDP 各一条）；改之前存好原样和退回办法。\n4. **不碰别人的**：同一台电脑上另外三个已开的入口和 ToDesk 都不动。\n5. **分开验收**：规则在不在、服务活没活、端口听在哪、从笔记本真连一次，四样分开报；从笔记本 ping 一次，写清是直连还是中转、延迟多少。\n\n**账本上的字**\n远程桌面 3389 · TCP / UDP\n放行：笔记本、手机（Tailscale）\n已关：两条系统自带宽规则\n不动：另外三个入口 · ToDesk\n\n**要注意**：账本上的配置归〔电脑配置与恢复〕管，当前状态以最新检查为准；当初是不是经这个技能做的，没有找到记录。“只有这两台能连”还要看 Tailscale 的访问策略，读不到就只说不知道。",
+      "links": [
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-tailscale-safe-exposure-03",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版：左上标题。十张小卡片排成两列五行，每张左边一个小水彩图标、粗体名字、一句话。最下面一行小字带三个链接。",
+      "portrait": "竖版：标题在上；十张卡片一行一张；最下面一行小字。",
+      "text": "标题：能做的事\n\n1. **先摸底**｜记下本机和对面设备的身份、端口谁在监听、Serve 和 Funnel 现状、相关防火墙规则；从对面 ping 一次留底\n2. **选最小的开法**｜只听本机的服务用 Tailscale Serve 开一个端口；服务自己监听的，用一条只认 Tailscale 网卡和指定设备的防火墙规则\n3. **默认不上公网**｜不用 Funnel；要公开，得我单独同意公开什么、开哪个端口\n4. **改前留原样、坏了退回**｜一次只改一个端口的一种做法；改完核对，不对就按存好的原样退回，再核对一次\n5. **分层验收**｜配置、服务、监听、对面设备真连，四样分开报；写清是直连，还是经 Tailscale 的公共中转服务器或自己的一台设备中转，以及延迟\n6. **查访问策略**｜读 Tailscale 策略，并实测允许设备能连、被禁设备被拒；先排除离线和服务故障，读不到或测不了就标“不知道”，不宣称\n7. **串流线路体检**｜Sunshine、Moonlight 只查网络走哪条路，跑串流项目自己的只读体检；不改分辨率、HDR、刷新率\n8. **中断了接着收拾**｜按存好的原样对比；别的程序改过的地方不动，没收拾完就留着“还没做完”的记号，下次先处理它\n9. **对外报告不露底**｜给网站、公开报告的结果不写设备身份、地址、账号和整份访问策略\n10. **双机剪贴板排障**｜先用双机剪贴板项目自己的诊断和恢复入口\n\n用在哪：〔电脑远程控制〕的笔记本公网入口和两机私网中转、〔远程电脑串流〕的线路体检、〔双机剪贴板〕",
+      "links": [
+        {
+          "text": "电脑远程控制",
+          "href": "/projects/remote-control/"
+        },
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/",
+          "locator_instances": {
+            "v": {
+              "input_sha256": "a27a2dcbd3072e60039c2cbc3ccb283cd32bc770a35d8923c32e048efba67a96",
+              "instances": [
+                {
+                  "context_text": "远程电脑串流的线路体检、双机剪贴板。",
+                  "context_rect": [
+                    173,
+                    3139,
+                    811,
+                    3176
+                  ],
+                  "expected_rect": [
+                    175,
+                    3139,
+                    399,
+                    3175
+                  ],
+                  "confirm_region": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "双机剪贴板",
+          "href": "/projects/meshclip-kit/",
+          "locator_instances": {
+            "v": {
+              "input_sha256": "a27a2dcbd3072e60039c2cbc3ccb283cd32bc770a35d8923c32e048efba67a96",
+              "instances": [
+                {
+                  "context_text": "远程电脑串流的线路体检、双机剪贴板。",
+                  "context_rect": [
+                    173,
+                    3139,
+                    811,
+                    3176
+                  ],
+                  "expected_rect": [
+                    595,
+                    3143,
+                    744,
+                    3173
+                  ],
+                  "confirm_region": true
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "anchors": [
+        {
+          "id": "a-baseline",
+          "text": "先摸底"
+        },
+        {
+          "id": "a-minimal",
+          "text": "选最小的开法"
+        },
+        {
+          "id": "a-no-public",
+          "text": "默认不上公网"
+        },
+        {
+          "id": "a-rollback",
+          "text": "改前留原样、坏了退回"
+        },
+        {
+          "id": "a-layers",
+          "text": "分层验收"
+        },
+        {
+          "id": "a-policy",
+          "text": "查访问策略"
+        },
+        {
+          "id": "a-streaming",
+          "text": "串流线路体检"
+        },
+        {
+          "id": "a-resume",
+          "text": "中断了接着收拾"
+        },
+        {
+          "id": "a-redact",
+          "text": "对外报告不露底"
+        },
+        {
+          "id": "a-meshclip",
+          "text": "双机剪贴板排障"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-tailscale-safe-exposure-04",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版：左上标题。左右两栏：左栏“管”画一个打开的工具箱，下面四条；右栏“不管”画一个淡灰色的叉，下面五条。最下面一条细卡片写“它不会做的事”。",
+      "portrait": "竖版：“管”一栏在上、“不管”一栏在下，一条一行；最下面细卡片。",
+      "text": "标题：边界\n\n**管**\n- Tailscale 私网里单个服务的开放和收回\n- 相关的 Windows 防火墙规则（读实际生效的那份）\n- Tailscale Serve、Funnel 的逐端口核对\n- 经我单独同意的 Funnel 公开\n- 远程串流、双机剪贴板的网络线路检查\n\n**不管**\n- 普通局域网、Wi-Fi、公司 VPN、上网代理节点\n- Sunshine 的画面设置和串流本身好不好用\n- 各项目自己的业务（照项目自己的规则办）\n- 登录密码、令牌这类凭据\n- 个人网站（wly0829.cn）的发布\n\n**它不会做的事**：不重置整份 Serve 或 Funnel 配置；不建“任何地址都放行”的规则；不因为 ping 通、服务在跑就说“连上了”；不为了验收通过放宽检查。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [],
+    "relations": [
+      {
+        "id": "r-remote-control",
+        "with": "remote-control",
+        "direction": "被用于",
+        "flow": "副机 Funnel 公网入口（本人单独授权的公开）和两机私网中转",
+        "source": "E:\\PCConfig\\tools\\secondary-laptop-access\\README.md:106,143"
+      },
+      {
+        "id": "r-streaming",
+        "with": "sunshine-remote-streaming",
+        "direction": "被用于",
+        "flow": "只读线路体检：Get-SunshineHealth.ps1、verify-path-lite.ps1",
+        "source": "SKILL.md“Sunshine 现行只读入口”节"
+      },
+      {
+        "id": "r-pcconfig",
+        "with": "pcconfig",
+        "direction": "被用于",
+        "flow": "远程桌面只放行两台（Invoke-RdpTailscaleExposure.ps1、registries\\rdp_tailscale_exposure.json）、7892 和 18091 两个私网代理入口",
+        "source": "E:\\PCConfig\\registries\\rdp_tailscale_exposure.json"
+      },
+      {
+        "id": "r-meshclip",
+        "with": "meshclip-kit",
+        "direction": "指过去",
+        "flow": "双机剪贴板排障先用它的 doctor.ps1、recover.ps1",
+        "source": "SKILL.md 最后一段"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "skill-tailscale-safe-exposure-02",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/projects/remote-control/",
+        "screen": "skill-tailscale-safe-exposure-03",
+        "text": "电脑远程控制"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "skill-tailscale-safe-exposure-03",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/projects/meshclip-kit/",
+        "screen": "skill-tailscale-safe-exposure-03",
+        "text": "双机剪贴板"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "SKILL.md 里的具体命令参数（tailscale status --json 等）和证据字段名不上页面，属于施工细节。"
+    ],
+    "unsure": [
+      "这个技能不是“电脑远程控制”一个项目的入口（它还管串流、远程桌面、双机剪贴板），所以“能做的事”在本页写全，没有只链到项目页 #features。",
+      "第 2 屏按审稿意见改成假设语气（照这套做法会这样办）；账本上的结果是这台电脑现在的真实设置（rdp_tailscale_exposure.json），当初是否经本技能完成没有记录。",
+      "页面名沿用旧网站的“远程只让自己连”（content\\skills.json）。",
+      "manifest 把本技能挂在“电脑远程控制”下；旧稿 skills.json 挂在 pcconfig 下。技能总页按哪一个分组请 Claude 定。"
+    ]
+  }
+}

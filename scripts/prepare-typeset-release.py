@@ -224,7 +224,11 @@ def effects_evidence(entry, dom, snapshot_hash):
         raise ValueError("Effects verification lacks expected and preserved capabilities")
     if any(not isinstance(name, str) or name not in EFFECT_NAMES for name in actual_expected + preserved):
         raise ValueError("Effects evidence contains an unknown capability name")
-    if set(actual_expected) != set(expected) or not set(expected).issubset(preserved):
+    baseline_path=ROOT/'.publish/quality-baseline.json'
+    if not baseline_path.is_file():baseline_path=ROOT/'config/quality-baseline.json'
+    baseline=read(baseline_path) if baseline_path.is_file() else None;before=next((p for name,p in (baseline or {}).get('pages',{}).items() if name==dom.get('quality_page')),None)
+    required=set(expected) if before is None else set().union(*(set(p['preserved']) for p in before.values()))
+    if set(actual_expected) != set(expected) or not required.issubset(preserved):
         raise ValueError("Effects evidence omits or changes an original-site capability")
     evidence = proof.get("evidence")
     if not isinstance(evidence, dict):

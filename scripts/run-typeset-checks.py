@@ -97,7 +97,9 @@ def static_transfer_handler(manifest, origin, transfers):
 
 async def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode',choices=['geometry','qa'],required=True)
+    parser.add_argument('--mode',choices=['geometry','qa','baseline'],required=True)
+    parser.add_argument('--verification',type=Path);parser.add_argument('--baseline-output',type=Path)
+    parser.add_argument('--production-commit');parser.add_argument('--collect-baseline',action='store_true')
     parser.add_argument('--url',default='http://127.0.0.1:63415')
     parser.add_argument('--task-cache',type=Path,required=True)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
@@ -108,6 +110,14 @@ async def main():
     parser.add_argument('--static-retry-once',action='store_true',help='Use actual sealed HTTPS static bodies with at most one retry; retain first failures and timing')
     parser.add_argument('--static-manifest',type=Path,help='Exact OSS split release-manifest.json; required with --static-retry-once')
     args=parser.parse_args()
+    if args.mode=='baseline':
+        proof=json.loads(args.verification.read_text('utf8'))
+        if proof['summary'].get('unverified'):raise ValueError('Incomplete baseline observations')
+        pages=next((json.loads(p.read_text('utf8'))['pages'] for p in (args.baseline_output,Path(__file__).resolve().parent.parent/'config/quality-baseline.json') if p.is_file()),{})
+        for name,page in proof['pages'].items():
+            pages[name]={str(check['width']):{'blank':{s['part']:s['largest_empty_rectangle']['viewport_fraction'] for s in check['content_acceptance']['screens']},'preserved':next(c['preserved'] for c in page['effects']['evidence']['checks'] if c['width']==check['width']),'motion':[{'part':s['part'],'kind':s['kind'],'key':s.get('effect_key')} for s in next(c['samples'] for c in page['effects']['evidence']['checks'] if c['width']==check['width']) if s['part'] and s['layout_bound']]} for check in page['checks']}
+        args.baseline_output.write_text(json.dumps({'schema':'wly.typeset-quality-baseline.v1','release_id':proof['release_id'],'production_commit':args.production_commit,'verification_sha256':hashlib.sha256(args.verification.read_bytes()).hexdigest(),'pages':pages},ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+        return
     if args.static_retry_once and not args.static_manifest:parser.error('--static-retry-once requires --static-manifest')
     profile=args.task_cache.resolve()/('chrome-profile-'+uuid.uuid4().hex)
     profile.mkdir(parents=True)
@@ -128,7 +138,8 @@ async def main():
             context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
             context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
         if args.static_retry_once:
-            await context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_transfer_handler(manifest,args.url,network['static_transfers']))
+            static_handler=static_transfer_handler(manifest,args.url,network['static_transfers'])
+            await context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_handler)
         try:
             page=context.pages[0] if context.pages else await context.new_page()
             if args.mode=='geometry':
@@ -151,9 +162,15 @@ async def main():
                 names=args.pages or list(build['pages']);jobs=max(1,min(4,args.jobs,len(names)))
                 await page.close()
                 async def drive(group,index):
-                    worker=await context.new_page();last=None;handled=set()
+                    worker_context=await runtime.chromium.launch_persistent_context(str(profile/('worker-'+str(index))),executable_path=str(args.chrome),headless=True,viewport={'width':1760,'height':1050},args=['--hide-scrollbars'])
+                    worker=worker_context.pages[0];last=None;handled=set();page_errors=[]
+                    worker.on('pageerror',lambda error:page_errors.append(str(error)))
+                    if args.network_output:
+                        worker_context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
+                        worker_context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
+                    if args.static_retry_once:await worker_context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_handler)
                     try:
-                        suffix='&static_wait_ms=90000' if args.static_retry_once else ''
+                        suffix=('&static_wait_ms=90000' if args.static_retry_once else '')+('&baseline=1' if args.collect_baseline else '')
                         await worker.goto(args.url+'/__typeset/qa?native=1&pages='+','.join(group)+suffix,wait_until='domcontentloaded')
                         while time.monotonic()-started<args.timeout:
                             state=await worker.evaluate("({text:document.querySelector('#state')?.textContent, request:window.TypesetQA?.request,phase:window.TypesetQA?.phase,error:window.TypesetQA?.error})")
@@ -165,10 +182,13 @@ async def main():
                             if state.get('phase')in{'complete','save_failed','error'}:
                                 proof=await worker.evaluate('window.TypesetQA.result');print('Worker '+str(index)+' QA result: '+str(proof.get('summary')if proof else state),flush=True)
                                 if state['phase']!='complete':raise RuntimeError('QA did not complete: '+str(state))
+                                if page_errors:raise RuntimeError('Page JavaScript errors: '+str(page_errors))
                                 return
                             await asyncio.sleep(.5)
                         raise TimeoutError('QA deadline reached')
-                    finally:await worker.close()
+                    finally:
+                        if args.static_retry_once:await worker_context.unroute_all(behavior='wait')
+                        await worker_context.close()
                 await asyncio.gather(*(drive(names[index::jobs],index+1)for index in range(jobs)))
             if args.static_retry_once and (not network['static_transfers'] or any(row['status']!='pass' for row in network['static_transfers'])):
                 raise RuntimeError('One or more bounded static transfers failed; inspect network output')

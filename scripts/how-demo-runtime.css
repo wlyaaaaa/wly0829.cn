@@ -1,4 +1,5 @@
 #one-sentence{position:relative;container-type:inline-size;container-name:howdemo;max-width:1360px;margin:0 auto 24px;padding:16px 16px 32px;background:#fff;color:var(--text,#2e4675);font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif;line-height:1.7;line-break:strict;scroll-margin-top:140px}#one-sentence,#one-sentence *{box-sizing:border-box}#one-sentence .how-demo-icon{display:block;width:100%;height:100%}#one-sentence .how-demo-title{font-size:24px;margin:2px 0 4px;color:var(--title,#0a7232);letter-spacing:.02em}#one-sentence .how-demo-sub{font-size:14.5px;margin:0 0 14px;line-height:1.7;max-width:900px}#one-sentence .how-demo-transcript{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:pre-wrap}#one-sentence .ill img{visibility:visible}#one-sentence [data-tip]:focus-visible{outline:2px solid var(--accent,#0a7a33);outline-offset:2px}
+#how-01 .how-demo-jump{position:relative;z-index:5;margin:12px 24px}#how-01 .how-demo-jump a{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:2px solid #c3ead0;border-radius:14px;background:#f2fbf5;color:#0a7232;font-size:16px;line-height:1.5;text-decoration:none}#how-01 .how-demo-jump a:hover{background:#e5f6eb}#how-01 .how-demo-jump a:focus-visible{outline:2px solid #0a7232;outline-offset:3px}
 #one-sentence h1{ font-size:24px; margin:2px 0 4px; color:var(--title,#0a7232); letter-spacing:.02em; }
 #one-sentence .sub{ color:var(--text,#2e4675); font-size:14.5px; margin:0 0 14px; line-height:1.7; max-width:900px; }
 #one-sentence .app{ position:relative; display:grid; grid-template-columns:286px 1fr; gap:18px; padding:16px; background:#fff; overflow-x:clip; }
@@ -20,6 +21,10 @@
 #one-sentence .legend .how-demo-icon{ width:20px; height:20px; object-fit:contain; flex:none; }
 #one-sentence .legend .small{ font-size:12.5px; color:var(--muted,#5d6f8f); line-height:1.6; }
 #one-sentence .stage{ display:flex; flex-direction:column; gap:12px; min-width:0; }
+#one-sentence .node,#one-sentence .node .in,#one-sentence .slot .txt,#one-sentence .who,#one-sentence .result .box,#one-sentence .result .chip,#one-sentence .result .go,#one-sentence .stamp{opacity:1!important;filter:none!important}
+#one-sentence .card{transform:none!important}
+#one-sentence .reveal,#one-sentence .act{clip-path:none!important}
+#one-sentence .fly{display:none!important}
 #one-sentence .slotrow{ display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-width:0; }
 #one-sentence .slot{ position:relative; display:block; min-width:0; max-width:min(640px,100%); height:auto; min-height:48px; padding:12px 18px 11px 40px; border-radius:18px 18px 18px 6px; font-size:15.5px; line-height:1.5; white-space:normal; overflow-wrap:anywhere;
           color:#1f3a5f; background:#fff; border:2px dashed #c3ead0; }

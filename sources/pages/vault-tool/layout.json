@@ -1,0 +1,956 @@
+[
+  {
+    "screen": "vault-tool-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "47%",
+        "text_ref": "本地加密库"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "把我选中的文件"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "row": "hero",
+        "text_ref": "在整套系统里的位置"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "53%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "1"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "text_ref": "偶尔用"
+      }
+    ],
+    "notes": "原图左文右插画，文字栏内标题—介绍—按钮竖排。原图横版只有两按钮，第三按钮以定稿补齐同样式。四张数字卡一行；底部两句在同一整宽浅条内。插画信封到云用绿色虚线箭头；没有实时横条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "vault-tool-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-vault-tool-01-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "本地加密库"
+      },
+      {
+        "type": "prose",
+        "text_ref": "把我选中的文件"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "text_ref": "在整套系统里的位置",
+        "columns_v": 2
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "1",
+        "columns_v": 2
+      },
+      {
+        "type": "notice",
+        "text_ref": "偶尔用"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它和"
+      }
+    ],
+    "notes": "竖版主图在按钮之后、数字卡之前；四数字卡两列两行；两个底部说明分别整宽。v2 按已批准替换图。第三按钮依定稿补齐并折到第二行，不缩字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "vault-tool-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/文件夹.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
+        ],
+        "text_ref": "放进去"
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "常用",
+        "variant": "terminal"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在终端里运行"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟 AI 具体怎么说"
+      }
+    ],
+    "notes": "五张用法卡竖排左栏；右侧终端/电脑插画，在屏内右侧，卡片外。真实菜单用定稿文字绘制 document_mock，禁止继续使用带菜单字的位图；图注置菜单下。若 document_mock 尚缺，应提请求。整屏章节标题按批准要求居中，原图旧标题靠左。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。"
+  },
+  {
+    "screen": "vault-tool-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/文件夹.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
+        ],
+        "text_ref": "放进去",
+        "columns_v": 1
+      },
+      {
+        "type": "document_mock",
+        "text_ref": "常用",
+        "variant": "terminal"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在终端里运行"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟 AI 具体怎么说"
+      }
+    ],
+    "notes": "按实际原图而非 portrait 描述：顶部是人操作电脑的大插画，接五张单列用法卡，菜单在备份卡之后，再图注和链接。原 v 第一张前三卡，v2 后两卡和菜单。五卡的小图左侧在卡内；v2 原图后两卡没有小图，统一图标方式需父代理权衡原图与 G6。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。"
+  },
+  {
+    "screen": "vault-tool-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "忘了密码"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png"
+        ],
+        "text_ref": "会留下什么记录"
+      }
+    ],
+    "notes": "六问题卡两列三行，按行读取；第七条记录说明是一张单独整宽卡。原图每张图标在卡内左侧，无连接。正文按定稿保全平台依赖。整屏标题按批准要求居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "忘了密码",
+        "columns_v": 1
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png"
+        ],
+        "text_ref": "会留下什么记录",
+        "columns_v": 1
+      }
+    ],
+    "notes": "七张单列卡，左图右文；第一张竖图含前两卡，续图含第 3–7 卡。无连接，不重复标题。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "connector": "arrow",
+        "illustration": "none",
+        "icons": "none",
+        "optional_items": [
+          6
+        ],
+        "text_ref": "选中的文件"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "用了什么"
+      }
+    ],
+    "notes": "六步横向一行：图标在顶部方框内、名称和说明在图标下；绿色箭头逐步向右，第六图框虚线表示可选。底部两等宽卡，左卡用了什么、右卡 AI 在哪一边，卡内插画左文右。整屏标题居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r20\\state\\b1-vault-tool-04-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "none",
+        "icons": "none",
+        "optional_items": [
+          6
+        ],
+        "text_ref": "选中的文件",
+        "columns_v": 1
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "用了什么",
+        "columns_v": 1
+      }
+    ],
+    "notes": "前六步单列下箭头，左图右文；v2 是已批准替换图，两张整宽卡上下排，毛笔卡头在左上、插画在卡内右上/右侧，正文在左并自然环绕右图。illustration_align=right 是所需扩展；标准枚举不能完整表达，请父代理向组件族说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "钥匙和容器"
+      },
+      {
+        "type": "segmented_band",
+        "columns": 3,
+        "layout": "horizontal",
+        "segment_proportions": [
+          18,
+          34,
+          48
+        ],
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "vault.enc 里面分三段",
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "ruler": true,
+        "text_ref": "总大小只看第一层"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/icons/钥匙.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "text_ref": "钥匙怎么算"
+      }
+    ],
+    "notes": "横向文件剖面三段：文件头窄、第一层中、尾部宽；段名在上、说明在下，尺子贯穿剖面下方，尺子下放总大小说明。底部三等宽小卡一行，无卡间箭头。segmented_band 标题保留中档毛笔字。需要组件样张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "vault-tool-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "钥匙和容器"
+      },
+      {
+        "type": "segmented_band",
+        "columns": 1,
+        "layout": "vertical",
+        "segment_proportions": [
+          1,
+          1,
+          1
+        ],
+        "illustration": "outside",
+        "annotation_side": "right",
+        "connector": "none",
+        "text_ref": "vault.enc 里面分三段",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "text_ref": "总大小只看第一层",
+        "columns_v": 1
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/icons/钥匙.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ],
+        "text_ref": "钥匙怎么算",
+        "columns_v": 1
+      }
+    ],
+    "notes": "顶部段名为无毛笔正文粗体居中；三段剖面竖条在左，三张段说明卡在右，用绿色虚线引线连接。总大小说明是左图右文整宽卡。续图三个单列大卡毛笔标题左上、插画卡内右侧。组件需支持 annotation_side/right 与 illustration_align/right；不能简单三卡横排缩窄。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "row": "principles",
+        "width": "73%",
+        "text_ref": "原件默认不删"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "row": "principles",
+        "width": "27%",
+        "text_ref": "3595 行"
+      }
+    ],
+    "notes": "六张编号原则卡左侧两列三行，按行读取；右栏三张数字卡竖排。原图右侧数字从标题同高起，本草案整屏标题按批准要求居中后再开双栏。无连接。统计段是三个独立 para 而非 stats 节点，stat_card 需保全竖线后文字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。"
+  },
+  {
+    "screen": "vault-tool-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "text_ref": "原件默认不删",
+        "columns_v": 1
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "text_ref": "3595 行",
+        "columns_v": 1
+      }
+    ],
+    "notes": "六单列左图右文原则卡，数字卡在最后一行三个，图在卡内顶部、大数字下接说明；原 v 第一图含前四卡，续图第 5、6 卡和数字卡。正文不缩字，必要时数字卡依 portrait 允许单列。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。"
+  },
+  {
+    "screen": "vault-tool-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "还没在真实使用里验过的几道保护"
+      },
+      {
+        "type": "prose",
+        "text_ref": "代码里都有"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "status": "待验收",
+        "status_position": "top_right",
+        "text_ref": "加文件不丢旧内容",
+        "direction": "horizontal",
+        "highlight": []
+      }
+    ],
+    "notes": "八编号保护卡两列四行，黄色状态圆点卡内右上，左图右文，无连接。章节标题整宽中档（长句），说明紧接标题，保全定稿比原图更长的细节。size medium 表示原图长标题中档，实际标题排单行或合理折行，不缩正文。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "还没在真实使用里验过的几道保护"
+      },
+      {
+        "type": "prose",
+        "text_ref": "代码里都有"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "status": "待验收",
+        "status_position": "top_right",
+        "text_ref": "加文件不丢旧内容",
+        "columns_v": 1,
+        "direction": "vertical",
+        "highlight": []
+      }
+    ],
+    "notes": "章节标题居中两行，灰色小说明随后；八卡整宽单列，图在卡内左侧，黄色状态点右上；原 v 前四卡、续图后四卡。；本轮将原 numbered_steps 接到现有 flow，同原有列数和连接方式；flow 支持所需左图右文，并避免 core 步骤23/30与同页侧卡24/32字号冲突。高亮/角色图标与固定分张需求仍须按报告逐项核对。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "highlight",
+        "width": "47%",
+        "text_ref": "亮点：AI 帮我改了私人仓库"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "私人 Key 仓库的说明文件"
+      },
+      {
+        "type": "illustration",
+        "row": "highlight",
+        "width": "53%"
+      }
+    ],
+    "notes": "按实际原图：整屏白底左侧大毛笔两行标题和两段正文，右侧一幅占约半屏的主插画，插画在文字卡外；没有可见大卡边框，不能因 scene 写宽大亮点卡就套卡。主插画包含窗外机器人、窗口密码框、锁云，图片中 AI/安全说明 文字须依 G7 去除，非定稿字不保留。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "vault-tool-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-08-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点：AI 帮我改了私人仓库"
+      },
+      {
+        "type": "prose",
+        "text_ref": "私人 Key 仓库的说明文件"
+      }
+    ],
+    "notes": "主插画置整屏最上，毛笔大标题在插画下两行，正文接在标题下；原图无卡边框。章节标题整宽居中；图中文字按 G7 去除。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "vault-tool-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "feature_header",
+        "width": "43%",
+        "text_ref": "全部功能（26 项）"
+      },
+      {
+        "type": "status_legend",
+        "row": "feature_header",
+        "width": "57%",
+        "text_ref": "图例"
+      },
+      {
+        "type": "prose",
+        "row": "feature_header",
+        "text_ref": "在用＝有真实使用的记录"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "放进去和取出来",
+        "row": "feature_groups",
+        "width": "66%"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "feature_groups",
+        "flow": "column",
+        "rows": 4,
+        "text_ref": "1加密建库把选中的文件和文件夹锁进一个vault.enc"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "密码和钥匙",
+        "row": "feature_groups",
+        "width": "34%"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "feature_groups",
+        "text_ref": "9密钥文件除了密码，再要一个文件才能打开说不准10换用A"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "进阶"
+      },
+      {
+        "type": "feature_card",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "14两套内容两个密码另一个密码打开另一套内容，从文件上看"
+      }
+    ],
+    "notes": "实际原图标题左、图例和说明在右同高，故标题不是整屏独占行。上方放进去组占左 2/3 两列，编号 1–4 左列、5–8 中列；密码组在右 1/3 单列 9–13；下方进阶两卡等宽整行。组名在本组卡片上方左对齐小档。功能卡图标左内、状态右上；原图与 scene 三列同组描述冲突，以图为准。column-major 需组件支持。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（26 项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在用＝有真实使用的记录"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "放进去和取出来"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1加密建库把选中的文件和文件夹锁进一个vault.enc",
+        "columns_v": 1
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "密码和钥匙"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "9密钥文件除了密码，再要一个文件才能打开说不准10换用A",
+        "columns_v": 1
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "进阶"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "14两套内容两个密码另一个密码打开另一套内容，从文件上看",
+        "columns_v": 1
+      }
+    ],
+    "notes": "章节标题居中；图例两行、说明下面。1–8 单列左内图标，v2 原图 9–15 单列无图标，状态右上。组名毛笔中档且在组上方。原图没有第二次章节标题；建议父代理在样张验收时明确 G6 图标一致与实际原图优先的处理，不自行加图。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。"
+  },
+  {
+    "screen": "vault-tool-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "检查和维护"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "item_spans": {
+          "23": 2
+        },
+        "text_ref": "16不开库看结构不用密码看格式、参数、要不要密钥文件、结"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "备份到私人仓库"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "24密文传到Key把vault.enc原样传到私人Key"
+      }
+    ],
+    "notes": "续屏没有全部功能章节标题、没有图例。检查维护八卡 3+3+2 排列，其中最后一张 23 横跨后两列、22 占第一列；下面备份组三卡一行。组名毛笔中档在组上方；图标卡内左，状态右上。item_spans=23:2 需要组件扩展，不能假称 columns=3 已完全表达。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-10-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "检查和维护"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "16不开库看结构不用密码看格式、参数、要不要密钥文件、结",
+        "columns_v": 1
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "备份到私人仓库"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "24密文传到Key把vault.enc原样传到私人Key",
+        "columns_v": 1
+      }
+    ],
+    "notes": "所有功能卡整宽单列左图右文；v 第 16–21 卡，v2 第 22、23 卡和备份组。v2 原图顶上重复检查维护组名，定稿只出现一次，重排连续屏不重复定稿文字；如分页必须回显须 data-echo。没有图例。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "vault-tool-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "history-header",
+        "width": "58%",
+        "text_ref": "演进"
+      },
+      {
+        "type": "illustration",
+        "row": "history-header",
+        "width": "42%",
+        "size": "small",
+        "target_height": 280,
+        "align": "right"
+      },
+      {
+        "type": "timeline",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "ribbon",
+        "text_ref": "6 月 23 日",
+        "direction": "vertical",
+        "connector_style": "thin_line",
+        "split_at": 4
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          8
+        ],
+        "connector": "ribbon",
+        "text_ref": "9 月 29 日",
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "text_ref": "截至 9 月 29 日"
+      }
+    ],
+    "notes": "左侧竖向时间线九节点，细绿实线/空心圆在卡片左外，卡内图标在左、日期粗体。右侧主插画在卡片外，从单层信封发展成锁信封再到锁云，绿色箭头连接，底下提交数浅条；章节标题只占左栏，靠左。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。"
+  },
+  {
+    "screen": "vault-tool-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\img\\vault-tool-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "ribbon",
+        "illustration_after_item": 4,
+        "text_ref": "6 月 23 日",
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector_style": "thin_line"
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "text_ref": "截至 9 月 29 日"
+      }
+    ],
+    "notes": "以实际原图为准：前四时间节点后，主插画横向一行位于第 4（7月23–27）和第 5（8月31–9月3）之间；续图再五节点和提交数浅条。portrait 所写插画最后与原图冲突。本屏 bullets 为单一节点，现 text_ref 不能切到第5条，需 timeline 组件按 illustration_after_item=4 插入资产；未支持前不能声称构图还原。时间线细绿线在卡片左外，卡内左图右文，标题原图小左档。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  }
+]

@@ -1,0 +1,556 @@
+[
+  {
+    "screen": "rule-codex-adapter-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "text_ref": "Codex 适配"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "只对 Codex 有用的细则"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这个专题只补"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词",
+        "row": "terms-art",
+        "width": "64%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "terms-art",
+        "width": "36%",
+        "align": "center",
+        "target_height": 320,
+        "target_width": 386
+      },
+      {
+        "type": "prose",
+        "textless": true,
+        "text_ref": "AGENTS.md",
+        "illustration": "none",
+        "base_asset": "none",
+        "columns": 1,
+        "row": "terms-art"
+      },
+      {
+        "type": "action_button",
+        "columns": 5,
+        "text_ref": "跳到："
+      },
+      {
+        "type": "notice",
+        "text_ref": "Codex 在整套系统里干什么"
+      }
+    ],
+    "notes": "主插画采用无字素材；AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原散词段按 scene 的插画归属启用 textless，不另排文字框。词条解释及全部链接、按钮保留。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-h.png",
+    "prior_round_notes": "亲看原图：左55%是左对齐浓绿大题、粗副题、介绍、六词词条卡及五按钮横排；右45%卡外电脑、牌位、铃铛、厚书、双机器人及工牌。底部说明按钮条全宽。图内四处牌位文字来自末段AGENTS.md Hook GPT-6.1 Sol·GPT-6 Luna codex-root，现以document_mock保全定稿节点，必须由组件排入对应图内牌位；不能删或重复。暂无文字与插画结合能力，不把图下额外文字称构图已过；词条胶囊卡头及底栏均待组件样张。仅插画内部连线。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "Codex 适配"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "只对 Codex 有用的细则"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
+        "type": "prose",
+        "text_ref": "这个专题只补"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词"
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "text_ref": "跳到："
+      },
+      {
+        "type": "prose",
+        "textless": true,
+        "text_ref": "AGENTS.md",
+        "illustration": "none",
+        "base_asset": "none",
+        "columns": 1
+      },
+      {
+        "type": "notice",
+        "align": "center",
+        "text_ref": "Codex 在整套系统里干什么"
+      }
+    ],
+    "notes": "主插画采用无字素材；AGENTS.md / Hook / GPT-6.1 Sol · GPT-6 Luna / codex-root 原散词段按 scene 的插画归属启用 textless，不另排文字框。词条解释及全部链接、按钮保留。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-01-v.png",
+    "prior_round_notes": "亲看v/v2：第1张整宽居中毛笔大题→三行粗副题→卡外大插画→介绍；第2张六词词条卡，卡头胶囊探出→跳到标签→一列五个整宽按钮→末说明链接卡。实际按钮一列优于portrait的2/2/1。图内牌位末段文字必须映射到前部插画且G1只出现一次；本规格先保源节点顺序，appearance为未实现要求，待主工程师接入空间定位。按两张观感分张，不缩字。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 入口和无限制授权"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "cards",
+        "width": "47%",
+        "text_ref": "入口和新消息",
+        "inset_prefixes": [
+          "实例：",
+          "Codex 的自动记忆关着："
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "cards",
+        "width": "50%",
+        "text_ref": "无限制授权",
+        "inset_prefixes": [
+          "实例：",
+          "Codex 的自动记忆关着："
+        ]
+      }
+    ],
+    "notes": "亲看横图：整宽章节题按本人标准居中；左入口47%右授权50%长卡。图标卡内左上叠浅绿卡头，正文在下整宽；左第6条自动记忆小框、右第2条实例浅绿内框均不拆内部节点。无卡间箭头。图标和实例框待组件样张；额外Codex图标字不加。 本轮只依据文字核对，未重新看图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-02-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-02-h.png",
+    "prior_round_notes": "亲看横图：整宽章节题按本人标准居中；左入口47%右授权50%长卡。图标卡内左上叠浅绿卡头，正文在下整宽；左第6条自动记忆小框、右第2条实例浅绿内框均不拆内部节点。无卡间箭头。图标和实例框待组件样张；额外Codex图标字不加。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 入口和无限制授权"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "page_break_after": true,
+        "text_ref": "入口和新消息",
+        "inset_prefixes": [
+          "实例：",
+          "Codex 的自动记忆关着："
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "无限制授权",
+        "inset_prefixes": [
+          "实例：",
+          "Codex 的自动记忆关着："
+        ]
+      }
+    ],
+    "notes": "亲看批准02-v和原v2：第1张浓绿毛笔题及笔刷线，入口六条整宽卡，卡头左无字指路牌；第2张只有授权七条，卡头无图，实例为第2条浅绿嵌框。标题不重复。page_break_after是保原两张分配要求，待分页层支持。 本轮只依据文字核对，未重新看图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-codex-adapter-02-v\\round-01\\candidate-2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-02-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-codex-adapter-02-v\\round-01\\candidate-2.png",
+    "prior_round_notes": "亲看批准02-v和原v2：第1张浓绿毛笔题及笔刷线，入口六条整宽卡，卡头左无字指路牌；第2张只有授权七条，卡头无图，实例为第2条浅绿嵌框。标题不重复。page_break_after是保原两张分配要求，待分页层支持。",
+    "pending_requirements": [
+      "原竖版分张切口仍未落实，核心不消费page_break_after/item_pages；不能以总高度未超自动分张阈值称已按原图分张。"
+    ]
+  },
+  {
+    "screen": "rule-codex-adapter-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "width": "100%",
+        "text_ref": "人话要点 · 派子代理：Codex 的不同处"
+      },
+      {
+        "type": "notice",
+        "text_ref": "先说派谁"
+      },
+      {
+        "type": "prose",
+        "text_ref": "桌面子代理名额真满了"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "top",
+        "width": "48%",
+        "text_ref": "主对话是 GPT 时"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "top",
+        "width": "48%",
+        "text_ref": "主对话是别家模型时"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "bottom",
+        "width": "48%",
+        "text_ref": "重大动作前的把关"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "bottom",
+        "width": "48%",
+        "text_ref": "新开一个顶层对话"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。03 横版移除重复绿书主插画，章节标题整行居中，卡片紧随标题与导语排列。卡内原小图标仍保留；不另提已被规格撤掉的主插画需求。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-03-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-03-h.png",
+    "prior_round_notes": "亲看h：大题左63%，右机器人小桥大插画卡外；导语在四卡前；四卡2×2上高下矮，图标卡内左，右卡头及正文。只保图标内部细连线，不加卡间连接或旧图Agents字。新构图，待样张：最新定稿有先说派谁提示及更长包装器导语，原图为旧短文，依定稿补全后高度待验。",
+    "pending_requirements": [
+      "新提示和更长包装器导语属于规格中新构图，待样张审定。"
+    ]
+  },
+  {
+    "screen": "rule-codex-adapter-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "人话要点 · 派子代理：Codex 的不同处"
+      },
+      {
+        "type": "notice",
+        "text_ref": "先说派谁"
+      },
+      {
+        "type": "prose",
+        "page_break_after": true,
+        "text_ref": "桌面子代理名额真满了"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "主对话是 GPT 时"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "主对话是别家模型时",
+        "page_break_before": true,
+        "page_break_after": true
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "text_ref": "重大动作前的把关"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "text_ref": "新开一个顶层对话"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。03 竖版移除主对话是别家模型时的 item_pages:[2,2]，该卡整卡另起一张、末尾整卡换张，四条在同一外卡完整出现。导语及其余卡仍按原顺序保留；不按条目切成无标题续框。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-rule-codex-adapter-03-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-03-v.png",
+    "prior_round_notes": "亲看原v与批准v2/v3：旧v有重复旧正文，按最新定稿只排一次。新构图，待样张：第1张新题及提示长导语；第2张GPT两条、别家前两条，无语义图标仅右上叶；第3张别家后两条无题续卡、把关左指路牌、新顶层左电脑。portrait残留两张与新增批准v3冲突，交Claude定。连续bullets不能内部text_ref，item_pages及分张需分页支持，不宣称已实现。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "width": "100%",
+        "text_ref": "人话要点 · 状态和升级"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "cards",
+        "width": "48%",
+        "text_ref": "新消息里的状态",
+        "inset_prefixes": [
+          "实例："
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "row": "cards",
+        "width": "48%",
+        "text_ref": "官方升级",
+        "inset_prefixes": [
+          "实例："
+        ]
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。04 横版移除重复绿书主插画，章节标题整行居中，卡片紧随标题与导语排列。卡内原小图标仍保留；不另提已被规格撤掉的主插画需求。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-04-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-04-h.png",
+    "prior_round_notes": "亲看h：题在左半屏，右半卡外电脑桌面大图；下面两卡等宽。左铃铛纸条、右软件包箭头工牌，均左上叠卡头，正文整宽在下。升级第3条实例浅绿嵌框，卡间无连接。当前points_card图标及实例样式须组件支持并审样。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 状态和升级"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "page_break_after": true,
+        "text_ref": "新消息里的状态",
+        "inset_prefixes": [
+          "实例："
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "官方升级",
+        "inset_prefixes": [
+          "实例："
+        ]
+      }
+    ],
+    "notes": "亲看v/v2：第1张居中毛笔题和状态整宽卡，铃铛左上探过卡顶及卡头，六条整宽；第2张只有无图居中卡头升级卡，七条及第3条例框。不加横版电脑桌面装饰，不添加原铃铛上未点名的品牌标志。分张要求待支持。 本轮只依据文字核对，未重新看图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-04-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-04-v.png",
+    "prior_round_notes": "亲看v/v2：第1张居中毛笔题和状态整宽卡，铃铛左上探过卡顶及卡头，六条整宽；第2张只有无图居中卡头升级卡，七条及第3条例框。不加横版电脑桌面装饰，不添加原铃铛上未点名的品牌标志。分张要求待支持。",
+    "pending_requirements": [
+      "原竖版分张切口仍未落实，核心不消费page_break_after/item_pages；不能以总高度未超自动分张阈值称已按原图分张。"
+    ]
+  },
+  {
+    "screen": "rule-codex-adapter-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文 · E216 版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "row": "original",
+        "width": "48%",
+        "text_ref": "Codex 适配"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "row": "original",
+        "width": "48%",
+        "text_ref": "无限制授权"
+      }
+    ],
+    "notes": "亲看h：外部小版本提示左上，下方两等宽长卡；左卡含普通Codex题、owner、入口全部，右授权整张卡。无毛笔题、笔刷线、图标或连线。内部命令浅绿等宽框按原定稿，不用活动E208替换E187正文。whole_block当前已由组件实现并待样张。 本轮只依据文字核对，未重新看图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-05-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-05-h.png",
+    "prior_round_notes": "亲看h：外部小版本提示左上，下方两等宽长卡；左卡含普通Codex题、owner、入口全部，右授权整张卡。无毛笔题、笔刷线、图标或连线。内部命令浅绿等宽框按原定稿，不用活动E208替换E187正文。whole_block要求同卡多个h1/h2，当前组件分组须修复，原文卡待样张。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文 · E216 版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "Codex 适配"
+      }
+    ],
+    "notes": "亲看v：一张整宽外卡含普通Codex题、入口、授权多个标题，外部版本提示在顶。不能机械按横版拆两卡，不加毛笔题、插画或笔刷。whole_block当前已实现，命令框可换行，正文不缩。 本轮只依据文字核对，未重新看图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-05-v.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-05-v.png",
+    "prior_round_notes": "亲看v：一张整宽外卡含普通Codex题、入口、授权多个标题，外部版本提示在顶。不能机械按横版拆两卡，不加毛笔题、插画或笔刷。whole_block当前未实现，命令框可换行，正文不缩。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "派子代理：Codex 的不同处",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "新消息里的状态",
+        "body_columns": 1
+      }
+    ],
+    "notes": "亲看h：外部小原文续提示，下方等宽两卡。左派子代理及五条，右同一张卡含状态和升级两节，普通小标题浅绿横条。无毛笔题、笔刷、插画或连接。长命令及High保原定稿。whole_block已支持右卡，保持同卡两节。 本轮只依据文字核对，未重新看图。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-06-h.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-06-h.png",
+    "prior_round_notes": "亲看h：外部小原文续提示，下方等宽两卡。左派子代理及五条，右同一张卡含状态和升级两节，普通小标题浅绿横条。无毛笔题、笔刷、插画或连接。长命令及High保原定稿。whole_block须支持右卡，不得拆成两外卡。",
+    "pending_requirements": []
+  },
+  {
+    "screen": "rule-codex-adapter-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "text_ref": "派子代理：Codex 的不同处",
+        "page_break_after": true
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "新消息里的状态"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "whole_block": true,
+        "text_ref": "官方升级"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。06 竖版派子代理原文卡移除 item_pages:[4,1]，整卡另起并整卡结束换张；撤掉卡内重复绿书插画。原文各条一次保留，行内代码字号问题交 comp-text 请求，未视为已修。；page-fixer-03第二轮：派子代理首完整卡撤前换张，原文续标题与首卡同页，后换张保留。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-06-v2.png"
+    ],
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-06-v.png",
+    "prior_round_notes": "亲看v/v2：第1张原文续、派子代理导语前四条，卡底确有手机、媒体、硬盘、云朵和虚线箭头大插画；inventory误写零。第2张最上无题续卡接第5条，随后状态和升级各整宽卡。均普通标题，不加毛笔。插画manifest缺失要补素材；bottom_inside、item_pages为真实构图要求，连续bullets不可内部text_ref，需组件分页支持并样张。",
+    "pending_requirements": []
+  }
+]

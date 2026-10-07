@@ -17,6 +17,31 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_bird_atlas_literal_stays_relative_to_its_migrated_sprites_directory(self):
+        owner='_living/_engine/bird.fixture/bird.js'
+        text=b'const atlas={image:"bird-atlas.webp"}; img.src=base+atlas.image;'
+        current=oss.Rewriter({owner:{},'_living/_engine/bird.fixture/bird-atlas.webp':{}},'https://example.oss.invalid','releases/one','https://wly0829.cn',version=6)
+        self.assertEqual(current.rewrite(text,owner),text)
+
+    def test_living_config_attribute_migrates_with_connect_csp_and_keeps_old_replay(self):
+        config='_living/cockpit/bird-source.fixture/config.json'
+        files={'cockpit/index.html':{},config:{}}
+        base='https://example.oss.invalid'
+        text=(b'<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; connect-src \'self\'"></head>'
+              b'<div data-living-config="/_living/cockpit/bird-source.fixture/config.json?v=abc#first" data-living-first="h"></div>')
+        old=oss.Rewriter(files,base,'releases/one','https://wly0829.cn',version=5)
+        current=oss.Rewriter(files,base,'releases/one','https://wly0829.cn',version=6)
+        self.assertEqual(old.rewrite(text,'cockpit/index.html'),text)
+        rewritten=current.rewrite(text,'cockpit/index.html')
+        self.assertIn(('data-living-config="'+base+'/releases/one/'+config+'?v=abc#first"').encode(),rewritten)
+        self.assertIn(('connect-src \'self\' '+base).encode(),rewritten)
+        self.assertIn(b'data-living-first="h"',rewritten)
+        self.assertEqual(current.references,{'cockpit/index.html':{config}})
+        self.assertFalse(current.missing)
+        absent=oss.Rewriter({'cockpit/index.html':{}},base,'releases/one','https://wly0829.cn',version=6)
+        absent.rewrite(text,'cockpit/index.html')
+        self.assertTrue(any(row['url'].startswith('/_living/') and row['context']=='resource' for row in absent.missing))
+
     def test_image_preload_candidates_are_versioned_and_keep_browser_selection(self):
         files={'index.html':{},'assets/portrait.avif':{},'assets/wide.avif':{}}
         text=(b'<head><link rel="preload" as="image" type="image/avif" media="(orientation:landscape)" '
@@ -297,6 +322,8 @@ class OssReleaseTests(unittest.TestCase):
         from email.message import Message
         from unittest.mock import patch
         (self.source/'404.html').write_bytes(b'<!doctype html><title>missing</title>')
+        page=self.source/'projects/demo/index.html'
+        page.write_bytes(page.read_bytes().replace(b'"src":"image.webp"',b'"src":"assets/image.webp"'))
         source_manifest = oss.read(self.source/oss.MANIFEST)
         source_manifest.update({'accepted_pages':['/', '/projects/demo/'], 'baseline_files':{}, 'release_overlay':{}})
         spec = importlib.util.spec_from_file_location('test_remote_content', ROOT/'scripts/hybrid-release.py')
@@ -311,6 +338,7 @@ class OssReleaseTests(unittest.TestCase):
                     ('import "'+base+('assets/missing.js' if case=='missing_import' else 'assets/mod.js')+'";').encode())
             (self.source/'assets/main.js').write_bytes(body)
             source_manifest['files'] = {k:v for k,v in oss.inventory(self.source).items() if k!=oss.MANIFEST}
+            source_manifest['release_id'] = oss.hashlib.sha256(json.dumps(source_manifest['files'], sort_keys=True).encode()).hexdigest()
             oss.write(self.source/oss.MANIFEST, source_manifest)
             output = self.root/case
             plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output)
@@ -320,6 +348,8 @@ class OssReleaseTests(unittest.TestCase):
                     rel = addresses[request.full_url]; obj = plan['objects'][rel]
                     self.headers = Message(); self.headers['Content-Type']=obj['content_type']
                     self.headers['Access-Control-Allow-Origin']='https://wly0829.cn'
+                    self.headers['Content-Length']=str(obj['bytes'])
+                    self.headers['ETag']='"opaque-'+obj['sha256'][:8]+'"'
                     self.body=(output/'oss'/rel).read_bytes();self.offset=0
                     self.status=206 if request.has_header('Range') else 200
                     if self.status==206:
@@ -332,8 +362,16 @@ class OssReleaseTests(unittest.TestCase):
             serve=lambda request,timeout:Response(request)
             report=self.root/(case+'-gate.json')
             with self.subTest(case=case), patch.object(oss,'urlopen',side_effect=serve), patch('urllib.request.urlopen',side_effect=serve), patch.object(hybrid.builder,'PUBLIC_REPOS',{'wlyaaaaa/known-public'}):
-                oss.verify_remote(output,workers=2);oss.seal_remote(output)
+                oss.verify_remote(output,workers=2)
+                if case=='valid_import': hybrid.validate_content(self.source, output/'content-verification.json', output)
+                sealed=oss.seal_remote(output)
                 if case=='valid_import':
+                    result=hybrid.validate_content(output/'github',report)
+                    self.assertEqual(result['reused_binary_objects'],4)
+                    bad=copy.deepcopy(sealed);bad['oss']['content_verification']['output_files']['projects/demo/assets/image.webp']['bytes']+=1
+                    oss.write(output/'github'/oss.MANIFEST,bad)
+                    with self.assertRaisesRegex(ValueError,'content evidence differs'):hybrid.validate_content(output/'github',report)
+                    sealed['oss'].pop('content_verification');oss.write(output/'github'/oss.MANIFEST,sealed)
                     self.assertEqual(hybrid.validate_content(output/'github',report)['status'],'pass')
                 else:
                     with self.assertRaisesRegex(ValueError,'Hybrid content gate failed'):

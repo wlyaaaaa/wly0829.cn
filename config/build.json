@@ -1,0 +1,15 @@
+{
+  "schema": "wly.creative-replay.v1",
+  "scope": "full-pages-creative-2f-static-home",
+  "static_home_reference": "sources/creative/static-home/index.html",
+  "comic_package": "sources/creative/comic",
+  "river_handoff": "sources/creative/today-river",
+  "demo_assets": "sources/creative/demo/assets/src",
+  "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
+  "home_bio": true,
+  "home_bio_script": "sources/signature/prepare-home-bio.py",
+  "bird_first_packet": "sources/bird/prepared/home-packet-2g",
+  "native_home_support": "sources/living/home-support",
+  "native_home_script": "src/runtime/bird/tools/site/prepare-home-living.py",
+  "living_pages_packet": "sources/bird/prepared/bird-first-only-native08"
+}

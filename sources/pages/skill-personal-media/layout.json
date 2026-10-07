@@ -1,0 +1,547 @@
+[
+  {
+    "screen": "skill-personal-media-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "找照片和录音",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "66%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说个大概",
+        "row": "intro"
+      },
+      {
+        "type": "illustration",
+        "row": "intro",
+        "width": "34%",
+        "align": "center",
+        "target_width": 290,
+        "target_height": 240
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "这样说就行",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“找 1 月下雪",
+        "columns": 3,
+        "columns_v": 5,
+        "split_items": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left",
+          "left",
+          "left",
+          "left",
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ],
+        "row_counts": [
+          3,
+          2
+        ]
+      }
+    ],
+    "notes": "横版左标题说明、右独立显示器放大镜插画；下面组名和五张等宽气泡一排，每张左侧头像，文字在右气泡。竖版标题居中、说明、整宽插画、组名、五张左头像右气泡依次整宽。无连接箭头和丝带。引号完全照定稿，原图省略引号不沿用。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 本轮按审查第3项：横版介绍行左60%右40%，压低右侧插画占比，文字原字与顺序不变。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
+    "dependencies": [
+      "五句话同属一个bullets节点，dialogue需split_items逐条气泡+头像；现组件只会同一气泡内列表，split_items尚未支持。",
+      "5个头像不是当前清单抽取的icon资产，需补足无字头像位。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-01-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "找照片和录音",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说个大概"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "这样说就行",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“找 1 月下雪",
+        "columns": 1,
+        "split_items": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "sides": [
+          "left",
+          "left",
+          "left",
+          "left",
+          "left"
+        ],
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ]
+      }
+    ],
+    "notes": "横版左标题说明、右独立显示器放大镜插画；下面组名和五张等宽气泡一排，每张左侧头像，文字在右气泡。竖版标题居中、说明、整宽插画、组名、五张左头像右气泡依次整宽。无连接箭头和丝带。引号完全照定稿，原图省略引号不沿用。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。",
+    "dependencies": [
+      "五句话同属一个bullets节点，dialogue需split_items逐条气泡+头像；现组件只会同一气泡内列表，split_items尚未支持。",
+      "5个头像不是当前清单抽取的icon资产，需补足无字头像位。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-01-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整的例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：找 1 月下雪",
+        "columns": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：（几秒）先给 8 张",
+        "columns": 1,
+        "sides": [
+          "right"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：要全部",
+        "columns": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：一共 140 张",
+        "columns": 1,
+        "sides": [
+          "right"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它背后做了什么",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "把我的话拆成条件",
+        "columns": 1,
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/文件夹链接.png",
+          "_library/icons/文稿堆.png"
+        ]
+      }
+    ],
+    "notes": "原图横版左54%是一张对话组框，四次我/AI对话分别成气泡，头像在我左侧、机器人在AI右侧；右46%为组框内小节标题和四张左图右文卡，圆编号在各卡左上，三支向下绿箭头卡间连接。竖版标题居中，上方对话组框、下方同样向下四步。照片日期与原件路径小结果清单不在定稿，不新增那些可读字；仅允许无字照片装饰，不生成假数据。标题原图横版靠左，本次全屏按追加要求居中。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。",
+    "dependencies": [
+      "dialogue四块文字能精确定位，但组框、左右头像需支持。",
+      "流程需要4个小插画，当前本屏未抽取icon；flow应只分steps，不能从组名开始以免头部被排到步骤后。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-02-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整的例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：找 1 月下雪",
+        "columns": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：（几秒）先给 8 张",
+        "columns": 1,
+        "sides": [
+          "right"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：要全部",
+        "columns": 1,
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI：一共 140 张",
+        "columns": 1,
+        "sides": [
+          "right"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它背后做了什么",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "flow",
+        "text_ref": "把我的话拆成条件",
+        "columns": 1,
+        "columns_v": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/文件夹链接.png",
+          "_library/icons/文稿堆.png"
+        ]
+      }
+    ],
+    "notes": "原图横版左54%是一张对话组框，四次我/AI对话分别成气泡，头像在我左侧、机器人在AI右侧；右46%为组框内小节标题和四张左图右文卡，圆编号在各卡左上，三支向下绿箭头卡间连接。竖版标题居中，上方对话组框、下方同样向下四步。照片日期与原件路径小结果清单不在定稿，不新增那些可读字；仅允许无字照片装饰，不生成假数据。标题原图横版靠左，本次全屏按追加要求居中。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。",
+    "dependencies": [
+      "dialogue四块文字能精确定位，但组框、左右头像需支持。",
+      "流程需要4个小插画，当前本屏未抽取icon；flow应只分steps，不能从组名开始以免头部被排到步骤后。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-02-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "68%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它是照片视频录音管理",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "32%",
+        "align": "center",
+        "target_width": 378,
+        "target_height": 140
+      },
+      {
+        "type": "table",
+        "text_ref": "你说的 → 它怎么查",
+        "columns": 2,
+        "columns_v": 2,
+        "variant": "table"
+      }
+    ],
+    "notes": "横版左63%上方章节标题和带链接说明，下面浅绿外框内组名和2列表格4行；右37%独立漏斗插画，整幅与左文字+表对齐。竖图章节标题居中，说明为左头像右气泡，组名在下；四张行卡纵排，每卡左边你说的/例句+图，中间箭头，右边它查的/机器人+条件，两个字段保留左右关系；漏斗插画在四卡下方。table只分真实table节点；重复表头需data-echo，不能自行加冒号。漏斗采用无字气泡，不额外重复原图上4句文字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮按审查第2项：横版左栏75%右图25%；table 不另加 width，保留同 row 无 width 合入左栏的真实父布局，避免创建第三栏。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
+    "dependencies": [
+      "竖版paired_rows不等于现table的上下字段卡，需左右字段+中心箭头+左右插画行卡，variant/row_cards_columns是待接入意图。",
+      "仅1幅无字漏斗素材存在，竖卡所需人像/机器人与四主题小图未抽取。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-03-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "illustration",
+        "size": "large",
+        "align": "center",
+        "target_width": "100%"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "它是照片视频录音管理",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "avatars": [
+          "_library/avatars/本人-通用.png"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "你说的 → 它怎么查",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "你说的",
+        "columns": 2,
+        "columns_v": 2,
+        "variant": "paired_rows",
+        "row_cards_columns": 1,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "横版左63%上方章节标题和带链接说明，下面浅绿外框内组名和2列表格4行；右37%独立漏斗插画，整幅与左文字+表对齐。竖图章节标题居中，说明为左头像右气泡，组名在下；四张行卡纵排，每卡左边你说的/例句+图，中间箭头，右边它查的/机器人+条件，两个字段保留左右关系；漏斗插画在四卡下方。table只分真实table节点；重复表头需data-echo，不能自行加冒号。漏斗采用无字气泡，不额外重复原图上4句文字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮按审查第2项：竖版漏斗插画移到章节标题后整宽独立展示；后续说明、组名、四行表格保持原序，图不嵌入表格。",
+    "dependencies": [
+      "竖版paired_rows不等于现table的上下字段卡，需左右字段+中心箭头+左右插画行卡，variant/row_cards_columns是待接入意图。",
+      "仅1幅无字漏斗素材存在，竖卡所需人像/机器人与四主题小图未抽取。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-03-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "comparison",
+        "text_ref": "它管的",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "row": "limits",
+        "width": "47%",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "group_markers": [
+          "check"
+        ],
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "image_mode": "item",
+        "source_prose": true,
+        "align_items": "start"
+      },
+      {
+        "type": "illustration",
+        "size": "small",
+        "align": "center",
+        "row": "limits",
+        "target_width": 235,
+        "target_height": 210
+      },
+      {
+        "type": "comparison",
+        "text_ref": "它不管的",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "row": "limits",
+        "width": "53%",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "group_markers": [
+          "cross"
+        ],
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/文稿堆.png"
+        ],
+        "image_mode": "item",
+        "source_prose": true,
+        "align_items": "start"
+      }
+    ],
+    "notes": "横版左47%它管的外框，组头绿勾，内含4张左图右文卡；右53%它不管的外框，组头灰叉，内含6张更密的左图右文卡。书架插画独立在右下，贴近右卡底角但不遮字。竖版两组先4条后6条上下排，书架在最底右侧。所有链接完整保留定稿词，原图额外↗不新增。原图书架照片/录音标签不另生成字。标题整屏按追加要求居中；组头灰只给叉圆点，文字统一深绿。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；本轮已改为现有 comparison 的逐条内行与勾叉接口；条目语义图标未绑定，继续列未完成。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮：使用真实 comparison.item_cards/image_mode:item/illustration:left_inside/group_markers/item_icons 实现原逐条白内卡、左图和组头勾叉，移除重复旧别名；不取消构图要求。；按审查第4项：横版书架置于两组之后居中，使用 core 真正消费的 target_width:25%，不写无 row 时不生效的 width。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
+    "dependencies": [
+      "content_card需bullets每条内卡、逐条小图和组头勾叉支持，现只会一张组卡里列普通清单。",
+      "目前只抽取4/10图标，书架与边界标题未抽取合格素材；小插画右贴定位placement尚未支持。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-04-review.png"
+    }
+  },
+  {
+    "screen": "skill-personal-media-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\img\\skill-personal-media-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "comparison",
+        "text_ref": "它管的",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "group_markers": [
+          "check"
+        ],
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "image_mode": "item"
+      },
+      {
+        "type": "comparison",
+        "text_ref": "它不管的",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "item_cards": true,
+        "illustration": "left_inside",
+        "group_markers": [
+          "cross"
+        ],
+        "item_icons": [
+          "_library/icons/波形照片.png",
+          "_library/icons/波形照片.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/icons/文稿堆.png"
+        ],
+        "image_mode": "item"
+      },
+      {
+        "type": "illustration",
+        "size": "small",
+        "align": "right"
+      }
+    ],
+    "notes": "横版左47%它管的外框，组头绿勾，内含4张左图右文卡；右53%它不管的外框，组头灰叉，内含6张更密的左图右文卡。书架插画独立在右下，贴近右卡底角但不遮字。竖版两组先4条后6条上下排，书架在最底右侧。所有链接完整保留定稿词，原图额外↗不新增。原图书架照片/录音标签不另生成字。标题整屏按追加要求居中；组头灰只给叉圆点，文字统一深绿。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；本轮已改为现有 comparison 的逐条内行与勾叉接口；条目语义图标未绑定，继续列未完成。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮：使用真实 comparison.item_cards/image_mode:item/illustration:left_inside/group_markers/item_icons 实现原逐条白内卡、左图和组头勾叉，移除重复旧别名；不取消构图要求。",
+    "dependencies": [
+      "content_card需bullets每条内卡、逐条小图和组头勾叉支持，现只会一张组卡里列普通清单。",
+      "目前只抽取4/10图标，书架与边界标题未抽取合格素材；小插画右贴定位placement尚未支持。"
+    ],
+    "visual_review": {
+      "method": "view_image 实际查看横竖并排缩略图；本屏两方向均已查看",
+      "evidence_image": "E:\\Cache\\Codex\\Temp\\01a0fe5a-8517-7651-8beb-230970450899\\skill-personal-media-04-review.png"
+    }
+  }
+]

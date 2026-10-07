@@ -186,8 +186,8 @@ function build(snap) {
   });
 
   // 木牌和钟
-  const nowSign = sign(GATE, 11.5, `${M.stale ? '最后读到' : '现在'} <b>${hm(now)}</b>`, null, 'now'), nowB = nowSign.querySelector('b');
-  acts.push(tb => { const u = clamp((tb - I.clock[0]) / (I.clock[1] - I.clock[0])); nowB.textContent = hm(dayStart + (now - dayStart) * u); });
+  const nowSign = sign(GATE, 11.5, `现在 <b>${hm(Date.now())}</b>`, null, 'now'), nowB = nowSign.querySelector('b');
+  acts.push(() => { nowB.textContent = hm(Date.now()); });
   perch(nowSign);
   const ranToday = M.past.filter(p => p.t.ran).length;
   const signs = [nowSign, sign(13, 10.5, `${M.stale ? '当时' : '今天'}已跑完 <b>${ranToday}</b> 个`, 'past'), sign(74, 9.5, `常驻和高频 <b>${nG}</b> 个`, 'guard'),
@@ -230,7 +230,7 @@ function texts(ranToday, nShore) {
   const lead = nBad || nWarn ? [nBad ? `<span class="bad">有 ${nBad} 个任务出错</span>` : '', nWarn ? `<span class="warn">${nBad ? '' : '有 '}${nWarn} 个${nBad ? '' : '任务'}要留意</span>` : ''].filter(Boolean).join('、') + '，详情见下面。' : M.fog.length ? `读到结果的任务都没有出错，也没有要留意的；${M.fog.length} 个这次没读到结果。` : '没有出错的，也没有要留意的。';
   const unavailable = ({offline:'现在读不到电脑。', unreadable:'自动任务暂时读不到。', stale:'自动任务的记录没有及时更新。'})[M.snap.reason || (M.A.state === 'stale' ? 'stale' : 'unreadable')];
   $('#headline').innerHTML = M.stale ? `<span class="warn">${unavailable}</span>下面是 ${obs} 最后一次读到的样子，之后的情况不知道。` : M.A.state === 'empty' ? '电脑上现在没有登记的自动任务。' : lead +
-    `今天已经跑完 <b>${ranToday}</b> 个，还有 <b>${M.future.length}</b> 个要跑；常驻和高频任务 <b>${M.guards.length}</b> 个，${nGuardAlert ? `其中 ${nGuardAlert} 个有问题` : '都正常'}。另有 ${nShore} 个今天没有安排或已停用${(nBad || nWarn) && M.fog.length ? `，${M.fog.length} 个这次没读到结果` : ''}。`;
+    `今天定时任务已经跑完 <b>${ranToday}</b> 个，还有 <b>${M.future.length}</b> 个要跑；常驻和高频任务 <b>${M.guards.length}</b> 个，${nGuardAlert ? `其中 ${nGuardAlert} 个有问题` : '都正常'}。另有 ${nShore} 个今天没有安排或已停用${(nBad || nWarn) && M.fog.length ? `，${M.fog.length} 个这次没读到结果` : ''}。`;
   $('#when').textContent = `读到电脑的时间：${obs}（北京时间）· 一共 ${M.tasks.length} 个自动任务`;
   const al = $('#alerts'); al.textContent = '';
   M.alerts.forEach(t => { const e = mk('button', 'alert ' + t.flag, al, `<b>${esc(t.name)}</b>${stateOf(t)[1]}${t.note ? '：' + esc(t.note) : ''}${t.last > 0 ? `（上次运行：${esc(whenText(M, t.last))}）` : ''}`); e.type = 'button'; e.onclick = () => pick(t, true); });
@@ -354,6 +354,7 @@ const boatBuf = new Float32Array(56);
 function draw(tb) {
   if (!GL.ok) return; const gl = GL.gl, u = GL.u;
   const w = Math.round(stage.clientWidth * Math.min(1.5, devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
+  if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
   boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
   gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uT, Math.min(tb, 1e6) % 4000); gl.uniform1f(u.uA, GEOM.aspect); gl.uniform1f(u.uReveal, clamp(tb / I.reveal));
@@ -363,7 +364,7 @@ function draw(tb) {
 
 // ---------- 时间和循环 ----------
 const clock = { t0: null, skip: false, manual: null, done: false };
-const fit = () => { stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
+const fit = () => { if (stage.clientWidth) stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
 let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
 const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
 function step(tb) { if (!clock.done || clock.manual != null) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
@@ -380,9 +381,16 @@ function frame(ts) {
 function freeze(why) { still = true; metrics.freezeReason = why; clearTimeout(birdTimer); stage.classList.add('still'); acts.forEach(f => f(1e9)); draw(1e9); console.info('[今天的河] 这一次改成静止画面：' + why); }
 const wake = () => { last = 0; since = 0; gaps = []; metrics.medianFPS = null; if (M && seen && !document.hidden && !raf && !still && !reduce && !M.stale) raf = requestAnimationFrame(frame); };
 document.addEventListener('visibilitychange', wake);
+setInterval(()=>{const label=$('.now b');if(label&&!document.hidden)label.textContent=hm(Date.now());},1000);
 new IntersectionObserver(es => { seen = es[0].isIntersecting; stage.classList.toggle('out-of-view', !seen); if (seen) wake(); }).observe(stage);
 addEventListener('scroll', () => { last = 0; since = 0; gaps = []; }, true);
-addEventListener('resize', () => { fit(); if (M && (reduce || still || M.stale)) draw(1e9); });
+const redraw = () => {
+  if (!M || !stage.clientWidth) return;
+  fit();
+  draw(reduce || still || M.stale ? 1e9 : clock.manual ?? (clock.t0 == null ? 0 : (performance.now() - clock.t0) / 1000 * SPEED));
+};
+addEventListener('resize', redraw);
+new ResizeObserver(redraw).observe(stage);
 
 async function start(snap, intro = true) {
   const turn = ++generation;

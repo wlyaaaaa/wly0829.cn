@@ -1,0 +1,531 @@
+[
+  {
+    "screen": "skill-learning-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "学习方法技能",
+        "align": "center",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "学习方法",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么",
+        "row": "body",
+        "width": "42%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我说要上课",
+        "row": "body"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名",
+        "row": "body"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "body",
+        "width": "58%",
+        "align": "center"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "align": "left",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "paragraph_bubbles": true,
+        "container": "conversation_card",
+        "tail": true,
+        "sides": [
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left",
+          "left"
+        ],
+        "bubble_columns": 3,
+        "split_paras": true
+      }
+    ],
+    "notes": "已实看原图：上左浓毛笔标题和入口链接、上右书本问号大插画；下左它做什么说明卡、末段不用点名在卡内浅绿提示；下右怎么跟AI说整张大卡，十二气泡按定稿顺序两列六排，无箭头或丝带。notice_ref/paragraph_bubbles/container 为待组件承接的真实构图；现组件会把十二句并成一个气泡。提示嵌卡与两列气泡未出现在批准样板，待组件样张。 页代理一轮回修：外层只有一张对话卡，columns=1；卡内气泡分栏由bubble_columns记录横2竖1，避免当前组件把唯一大卡压到半栏。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "学习方法技能",
+        "align": "center",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "学习方法",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我说要上课"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "align": "center"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "columns_v": 1,
+        "paragraph_bubbles": true,
+        "container": "conversation_card",
+        "tail": true,
+        "bubble_columns": 1,
+        "split_paras": true
+      }
+    ],
+    "notes": "已实看原竖图：标题、入口链接、书本大插画、它做什么卡（含不用点名浅绿提示）、怎么跟AI说卡，十二气泡逐条单列。插画在卡外，气泡无连线。整屏大标题按本人追加要求居中，原图左起位置不作为取消居中的依据。现对话组件逐句气泡与卡内提示待承接样张。 页代理一轮回修：外层只有一张对话卡，columns=1；卡内气泡分栏由bubble_columns记录横2竖1，避免当前组件把唯一大卡压到半栏。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "example",
+        "width": "65%",
+        "size": "large",
+        "inline_row": "example-title",
+        "inline_width": "58%"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例：",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "example",
+        "tone": "gray",
+        "inline_row": "example-title",
+        "inline_width": "42%"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "example",
+        "sides": [
+          "right"
+        ],
+        "tail": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "AI 做了什么",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "example",
+        "size": "medium"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "1先读学习项目",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "row": "example",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
+          "_library/icons/双气泡.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ],
+        "container": "example_main",
+        "direction": "vertical"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "example",
+        "sides": [
+          "left"
+        ],
+        "tail": true
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "另一种问法",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "paragraph_bubbles": true,
+        "container": "alternative_card",
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration_index": 0,
+        "split_paras": true
+      }
+    ],
+    "notes": "已实看原横图：左约65%主对话整卡，右约35%另一种问法整卡从顶到底；标题与灰示例标签在左栏顶部旁排。我的气泡右齐；AI做了什么四步单列，细竖线串起左侧图标，正文右侧圆角卡；AI交回白底左气泡。右卡问答两气泡，书本插画在底部卡内。当前row只能两栏堆叠，placement/container/段落气泡/卡底插画及单列步骤左图右文待组件支持。该气泡与竖流程组合需样张。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。；主布局接任：章标题与原灰示例标签通过inline_row同高旁排；另一种问法继续位于AI交回后通栏，不恢复右侧短栏。"
+  },
+  {
+    "screen": "skill-learning-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-learning-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例：",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "tone": "gray"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "sides": [
+          "right"
+        ],
+        "speaker_position": "right_outside"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "AI 做了什么",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "medium"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "1先读学习项目",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
+          "_library/icons/双气泡.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ],
+        "direction": "vertical"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "sides": [
+          "left"
+        ],
+        "tail": true
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "另一种问法",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "paragraph_bubbles": true,
+        "container": "alternative_card",
+        "sides": [
+          "right",
+          "left"
+        ],
+        "tail": true,
+        "split_paras": true
+      }
+    ],
+    "notes": "已实看v和pages-approved替换v2：首张标题/灰示例条、右侧人物与我的气泡、四个左图右文整宽步骤，左侧细竖线；续张AI交回在上、另一种问法在下，两个粗体绿小标题，问答整宽气泡，无书本大插画。续张标题改粗体，按替换图不恢复旧毛笔。整屏章节标题居中。当前dialogue无法逐段问答分泡，numbered_steps左图右文与人物外置待组件样张；正文不缩字。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-skill-learning-03-h\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "notice",
+        "text_ref": "能做的事",
+        "align": "left",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "size": "medium",
+        "layout": "inline_title_prose_button",
+        "button_align": "right",
+        "inline_button": true
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "item_layout": "individual_cards",
+        "item_columns": 2,
+        "column_fill": "column",
+        "column_counts": [
+          4,
+          3
+        ],
+        "container": "rules_card",
+        "card_title_size": "medium",
+        "item_cards": true,
+        "inner_columns": 2
+      }
+    ],
+    "notes": "已实看批准横图：顶部浅绿整宽横幅，左为中档毛笔能做的事，中间介绍段，最右去看全部功能按钮；下方整张规则卡，大绿卡头下七条小卡左四右三，按列顺序，每条小图标在左、正文在右。不能改成Z字两列或七条裸清单。title_strip 当前仅竖向输出节点；item_columns/column_fill/column_counts 记录构图但现points_card未实现逐项图标小卡。此横幅和内嵌七小卡需组件样张。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-03-v.png",
+    "blocks": [
+      {
+        "type": "notice",
+        "text_ref": "能做的事",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "medium",
+        "layout": "stack_title_prose_button",
+        "button_align": "center",
+        "button_outside": true,
+        "inline_button": true
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none",
+        "item_layout": "individual_cards",
+        "item_columns": 1,
+        "container": "rules_card",
+        "card_title_size": "medium",
+        "item_cards": true,
+        "inner_columns": 1
+      }
+    ],
+    "notes": "已实看原竖图：上方整宽浅绿介绍横幅，能做的事标题居左且属于横幅，按钮在横幅外独立居中一行；下方整张规矩卡，卡头下七条左图右文小卡单列。嵌在para中的链接仍只出现一次，不从定稿另造按钮字。button_outside 与逐项小卡当前未消费，待组件样张。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "limits",
+        "width": "50%",
+        "icons": "auto",
+        "item_layout": "individual_cards",
+        "heading_icon": "check",
+        "inline_links": "button",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/代码窗口.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不管",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "row": "limits",
+        "width": "50%",
+        "icons": "auto",
+        "item_layout": "individual_cards",
+        "heading_icon": "cross",
+        "inline_links": "button",
+        "icon_position": "header_left",
+        "header_icon": [
+          1
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "老师只读",
+        "align": "center",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "已实看原横图：全宽章节标题按本人追加要求居中；下方管/不管各50%整卡，两卡组名居中，旁有对勾/灰叉；各三条左图右文小卡、绿点。右卡两技能链接为白底细绿边小按钮；底部满宽浅绿提醒，乌龟在左。heading_icon/item_layout/inline_links 图形与按钮只改变已定文字呈现，不加字。现points_card未支持内嵌条卡/图标/链接按钮，notice未支持左图；需样张。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  },
+  {
+    "screen": "skill-learning-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\img\\skill-learning-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "item_layout": "individual_cards",
+        "heading_icon": "check",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/代码窗口.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不管",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "item_layout": "individual_cards",
+        "heading_icon": "cross",
+        "inline_links": "button",
+        "icon_position": "header_left",
+        "header_icon": [
+          1
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "老师只读",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/禁止文件.png"
+        ]
+      }
+    ],
+    "notes": "已实看原竖图：标题、管整宽卡、不管整宽卡、最下浅绿提醒；每组内部三条单列左图右文卡，对勾/灰叉在卡头，技能按钮在各条内；末句乌龟在左。整屏章节标题按本人要求居中。没有流程线；嵌卡/卡头图标/内联小按钮/乌龟提示条待组件样张。；本轮仅文字续审：对话逐段拆泡、横2列竖1列，示例4步改纵向timeline，规则逐条两列，图标按实际映射核验。"
+  }
+]

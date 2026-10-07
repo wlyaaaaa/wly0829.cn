@@ -1,0 +1,1070 @@
+[
+ {
+  "screen": "typora-theme-pack-01",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-01-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "Typora薄荷主题",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "写东西时看着舒服",
+    "size": "large",
+    "bold": true
+   },
+   {
+    "type": "prose",
+    "text_ref": "我用Markdown"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "截图说明",
+    "indices": [
+     0
+    ],
+    "ratio": "1938:1950",
+    "columns": 1,
+    "columns_v": 1,
+    "row": "media-stats",
+    "width": "60%"
+   },
+   {
+    "type": "stat_card",
+    "text_ref": "1套",
+    "columns": 2,
+    "columns_v": 2,
+    "variant": "para_fields",
+    "icons": "auto",
+    "row": "media-stats",
+    "width": "40%"
+   },
+   {
+    "type": "prose",
+    "text_ref": "截至2026",
+    "align": "right"
+   },
+   {
+    "type": "action_button",
+    "text_ref": "在整套系统里的位置"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左边约 55% 宽：左上毛笔艺术字大标题，下面一句粗体副标题和一段介绍（介绍里“文稿转 PDF”画成绿色链接样式）。右边约 40% 宽留一个带细浅绿边框、圆角的空位，比例接近正方形（约 1:1），贴 Typora 实拍截图；空位下面一行灰色小字说明；空位后面垫一片淡淡的水彩薄荷叶子，叶子只露出边缘。下半部分一排四张数字卡（上面小水彩插画、大号绿色数字、下面一两行小字）：1 一片薄荷叶盖在一个打开的写字窗口上，2 三张并排的纸（一张灰、一张薄荷绿、一张墨蓝），3 一张打满勾的清单，4 一条短短的绿色时间线上五个小圆点。卡片下面右对齐一行灰色小字“截至……”。最下面一行两个白底细绿边圆角按钮。没有“现在”横条（这个项目没有自动任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 4
+  },
+  "pending_requirements": [
+   "四条“数量｜说明”解析为 para，stat_card 不消费 para_fields，数字卡/逐卡图标尚未生成；截图后垫叶未接入。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-01-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-01",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-01-v.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-01-v2.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "Typora薄荷主题",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "写东西时看着舒服",
+    "size": "large",
+    "bold": true
+   },
+   {
+    "type": "prose",
+    "text_ref": "我用Markdown"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "截图说明",
+    "indices": [
+     0
+    ],
+    "ratio": "1:1",
+    "columns": 1,
+    "columns_v": 1
+   },
+   {
+    "type": "stat_card",
+    "text_ref": "1套",
+    "columns": 4,
+    "columns_v": 2,
+    "variant": "para_fields",
+    "icons": "auto"
+   },
+   {
+    "type": "prose",
+    "text_ref": "截至2026",
+    "align": "right"
+   },
+   {
+    "type": "action_button",
+    "text_ref": "在整套系统里的位置"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：大标题、副标题、介绍从上往下；截图空位占满宽（约 1:1），下面说明小字；四张数字卡两行两列；截至日期；两个按钮上下各占一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 4
+  },
+  "pending_requirements": [
+   "四条“数量｜说明”解析为 para，stat_card 不消费 para_fields，数字卡/逐卡图标尚未生成；截图后垫叶未接入。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-01-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-02",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-02-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "平时怎么用",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "1.写东西时",
+    "columns": 3,
+    "columns_v": 1,
+    "illustration": "top_inside",
+    "icons": "auto",
+    "illustration_source": "illustrations"
+   },
+   {
+    "type": "notice",
+    "text_ref": "实际用得多少",
+    "tone": "yellow"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题。三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。最下面一条横跨整屏的浅黄底便签条，写“实际用得多少”那段。",
+  "asset_requirements": {
+   "illustrations": 3,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "三张卡顶部主插画当前 content_card 仅取 icon；底部黄色便签条暂未获得黄色外观。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-02-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-02",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-02-v.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "平时怎么用",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "1.写东西时",
+    "columns": 3,
+    "columns_v": 1,
+    "illustration": "top_inside",
+    "icons": "auto",
+    "illustration_source": "illustrations"
+   },
+   {
+    "type": "notice",
+    "text_ref": "实际用得多少",
+    "tone": "yellow"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题；三张卡片上下排，每张插画在上、字在下；便签条在最下面。",
+  "asset_requirements": {
+   "illustrations": 3,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "三张卡顶部主插画当前 content_card 仅取 icon；底部黄色便签条暂未获得黄色外观。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-02-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-03",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "三种PDF长什么样",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "同一份公开样例"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "原版",
+    "indices": [
+     0
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 800,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": false,
+    "row": "pdf",
+    "width": "33.333%"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "个人",
+    "indices": [
+     1
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 880,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": false,
+    "row": "pdf",
+    "width": "33.333%"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "公司",
+    "indices": [
+     2
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 880,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": false,
+    "row": "pdf",
+    "width": "33.333%"
+   },
+   {
+    "type": "prose",
+    "text_ref": "图是PDF"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题，下面一行说明小字。中间三个并排的带细浅绿边框的空位，每个是 A4 竖向比例（约 1:1.41），各占宽度约 30%，贴三张 PDF 第 1 页的截图；每个空位上方一个小标签（原版 / 个人 / 公司，标签旁一个小色点：石墨灰、薄荷绿、墨蓝），下方两行小字说明。空位里什么都不画。最下面一行灰色小字。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "每槽标签应在框上、说明在下；当前 screenshot 将卡头和说明一起置后。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-03",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-v.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-v2.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-v3.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "三种PDF长什么样",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "同一份公开样例"
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "原版",
+    "indices": [
+     0
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 800,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": true
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "个人",
+    "indices": [
+     1
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 880,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": true
+   },
+   {
+    "type": "screenshot",
+    "text_ref": "公司",
+    "indices": [
+     2
+    ],
+    "ratio": "909:1287",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 880,
+    "text_position": "after",
+    "label_above": true,
+    "page_break_after": false
+   },
+   {
+    "type": "prose",
+    "text_ref": "图是PDF"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版分3张，使用默认v、v2、v3顺序，每张仅自己的原文和一张A4真实截图位。第1张typora-theme-pack-03-v.png：原标题、公开样例介绍、原版标签/说明和原版截图。原版A4框在标签下面占卡片整行，以正常左右内边距留800×1133源像素，说明在下；不分左右栏。第2张新增typora-theme-pack-03-v2.png：仅个人标签、个人A4截图与完整个人说明，不重复标题、介绍、原版或公司。空框880×1246源像素，说明在下。第3张新增typora-theme-pack-03-v3.png：仅公司标签、公司A4截图、完整公司说明及原文页尾“图是 PDF 第 1 页按 110 DPI……”小字。空框880×1246源像素，说明在下。三图均保持909:1287真实比例，空框内部全白，现役编译器贴原图。正文参考36源像素、行高44，第一/二/三张测算1545/1526/1526源像素可放进1672高度；不缩为左侧窄框。不增删改写原字、无新标题/新说明/重复文字，不为填满画布增加装饰或空框。连续外白交crop_box。横版scene与原text保持。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "每槽标签应在框上、说明在下；当前 screenshot 将卡头和说明一起置后。",
+   "定稿强制 v/v2/v3 三张、每张只一张 A4 框；主分张阈值高于1672且不消费 page_break_after，880框也受页正常内边距限制。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复 07（北京时间 2026-10-03）：按既有 comp-slots/t09-shot-response，公司槽后取消末断点，页尾图示说明随第三张，不多生成仅页尾一句的第四张。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-03-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-04",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-04-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "出事怎么办",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "它没有自动提醒"
+   },
+   {
+    "type": "feature_card",
+    "text_ref": "导出失败",
+    "columns": 2,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "flow": "column",
+    "rows": 3,
+    "portrait_columns": 1
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题，下面一行小字。六张横向小卡片排成两列（每列三张），每张左边一个小水彩图标（一张完好的旧 PDF 被一只手护着、一个问号插头、一张被划了一笔的文稿、空着的主题菜单、贴着时间标签的小纸箱、两台电脑之间一个箭头），右边粗体一句加小字。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 6
+  },
+  "pending_requirements": [],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-04-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-04",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-04-v.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-04-v2.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "出事怎么办",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "prose",
+    "text_ref": "它没有自动提醒"
+   },
+   {
+    "type": "feature_card",
+    "text_ref": "导出失败",
+    "columns": 2,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "flow": "row",
+    "rows": 3,
+    "portrait_columns": 1
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题、小字；六张卡片一行一张。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 6
+  },
+  "pending_requirements": [],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-04-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-05",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-05-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "一次导出经过哪几步",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "flow",
+    "text_ref": "选样式",
+    "columns": 3,
+    "direction": "horizontal",
+    "connector": "arrow",
+    "illustration": "top_inside",
+    "icons": "auto",
+    "optional_items": [
+     5
+    ],
+    "branch_refs": {
+     "6": [
+      "不过关，旧 PDF 不动"
+     ]
+    },
+    "path": "serpentine"
+   },
+   {
+    "type": "points_card",
+    "text_ref": "主题怎么装",
+    "whole_block": true,
+    "row": "details",
+    "width": "50%"
+   },
+   {
+    "type": "points_card",
+    "text_ref": "文件和代码",
+    "whole_block": true,
+    "row": "details",
+    "width": "50%"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题。上半部分一条从左到右的流程图，六个圆角节点（小水彩图标：三个色块的调色盘、一个指纹、两张叠在一起的 CSS 纸片、一个插头连到另一台机器、一台 Edge 浏览器打印出一张 A4 纸、一个盾牌加对勾），绿色箭头依次相连，节点下面两三行小字；第 5 个节点画在一个浅灰虚线框里，框角小字“转换器（不属于本项目）”；第 6 个节点下面多画一条向下的细灰线，通向一个小节点“失败留旧 PDF”。下半部分两张横向卡片并排（左“主题怎么装”，右“文件和代码”），第 2 张里是一张四行小表。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 6
+  },
+  "pending_requirements": [
+   "第五节点已用 optional_items:[5] 形成虚线卡，第六节点已按原文分出不过关支线；但独立支线的右侧/向下位置及转换器范围小字的框角定位仍需组件完善，不能新增定稿外“失败留旧 PDF”文字。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第6条电脑六步改三列两行；移除与原 branch_refs 相同的冗余 failure_branch 字段，原第6步失败原句及分支绑定仍保留，不删任何正文。第6步嵌套小框交 comp-diagram 修普通主正文与单独失败支线。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-05-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-05",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-05-v.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-05-v2.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "一次导出经过哪几步",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "flow",
+    "text_ref": "选样式",
+    "columns": 1,
+    "direction": "vertical",
+    "connector": "arrow",
+    "illustration": "left_inside",
+    "icons": "auto",
+    "optional_items": [
+     5
+    ],
+    "branch_refs": {
+     "6": [
+      "不过关，旧 PDF 不动"
+     ]
+    }
+   },
+   {
+    "type": "points_card",
+    "text_ref": "主题怎么装",
+    "whole_block": true
+   },
+   {
+    "type": "points_card",
+    "text_ref": "文件和代码",
+    "whole_block": true
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题；六个节点从上往下排，箭头向下，第 5 个节点的虚线框照画；“失败留旧 PDF”支线画在第 6 个节点右侧；两张卡片上下排。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 6
+  },
+  "pending_requirements": [
+   "第五节点已用 optional_items:[5] 形成虚线卡，第六节点已按原文分出不过关支线；但独立支线的右侧/向下位置及转换器范围小字的框角定位仍需组件完善，不能新增定稿外“失败留旧 PDF”文字。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第6条电脑六步改三列两行；移除与原 branch_refs 相同的冗余 failure_branch 字段，原第6步失败原句及分支绑定仍保留，不删任何正文。第6步嵌套小框交 comp-diagram 修普通主正文与单独失败支线。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-05-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-06",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-06-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "为什么这样设计",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "编辑和交付分开选",
+    "columns": 1,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "row": "principles",
+    "width": "50%"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "公司版不编造",
+    "columns": 1,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "row": "principles",
+    "width": "50%"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "公开仓库",
+    "row": "principles",
+    "columns": 1,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": [
+     "_library/icons/GitHub标志.png"
+    ]
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题。五张横向小卡片排成左三右二两列，每张左边一个小水彩图标（一支笔和一张信封分开摆、一个空着的插座、一张原稿外面罩着三层彩色玻璃纸、一个空白的名片、两个贴着薄荷标签的小文件夹），右边粗体一句原则、下面小字。右列第三个位置放一张浅绿底卡片，画一个 GitHub 标志（章鱼猫剪影）和一句小字。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 5
+  },
+  "pending_requirements": [
+   "五卡左三右二与右列第三格小卡已通过 row 分两列；GitHub 标志素材未接入，品牌图字段尚未消费。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复07报告回读（北京时间2026-10-03 13:48）：末尾原公开仓库段改为已有content_card，显式GitHub标志左图；横继续右列第3位，竖末尾整宽。移除未执行的points_card.brand/grid_position，不删除原段或指定品牌图。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-06-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-06",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-06-v.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "为什么这样设计",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "编辑和交付分开选",
+    "columns": 2,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": "auto"
+   },
+   {
+    "type": "content_card",
+    "text_ref": "公开仓库",
+    "columns": 1,
+    "columns_v": 1,
+    "illustration": "left_inside",
+    "icons": [
+     "_library/icons/GitHub标志.png"
+    ]
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题；五张卡片一行一张；GitHub 小卡片在最下面。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 5
+  },
+  "pending_requirements": [
+   "五卡左三右二＋右列第三格 GitHub 小卡，目前尾卡独立整宽，未消费 grid_position/brand。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复07报告回读（北京时间2026-10-03 13:48）：末尾原公开仓库段改为已有content_card，显式GitHub标志左图；横继续右列第3位，竖末尾整宽。移除未执行的points_card.brand/grid_position，不删除原段或指定品牌图。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-06-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-07",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-07-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "导坏了",
+    "align": "center",
+    "size": "medium",
+    "row": "balanced-heading",
+    "width": "88%"
+   },
+   {
+    "type": "illustration",
+    "index": 0,
+    "align": "center",
+    "target_height": 320,
+    "target_width": 480,
+    "row": "balanced-heading",
+    "width": "12%"
+   },
+   {
+    "type": "points_card",
+    "text_ref": "麻烦",
+    "whole_block": true,
+    "last_full_width": true
+   },
+   {
+    "type": "points_card",
+    "text_ref": "解法",
+    "whole_block": true,
+    "item_cards": true,
+    "inner_columns": 3,
+    "last_full_width": true
+   },
+   {
+    "type": "points_card",
+    "text_ref": "证据",
+    "whole_block": true,
+    "item_cards": true,
+    "inner_columns": 4,
+    "last_full_width": true
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题，下面一张横跨整屏的大卡片。卡片左边约 35% 宽一幅水彩插画：桌上一份装订好的旧 PDF 安安稳稳放着，旁边一张新打印的纸正被一枚放大镜检查，纸边上夹着一张小标签“暂存”；远处一只空的回收筐。卡片右边：“麻烦”“解法”“证据”三段，每段开头两个字用绿色小标签；解法里的三条检查画成一行三个小盾牌图标，每个盾牌下一行字；证据里的四种情况画成四个小方格，每格一个小叉和一行字。",
+  "asset_requirements": {
+   "illustrations": 1,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "右侧三段应处于同一大外卡、解法三盾牌和证据四个带叉方格（竖两列）须专门布局；现 points_card 不足以完成。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-07-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-07",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-07-v.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "导坏了",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "illustration",
+    "index": 0
+   },
+   {
+    "type": "points_card",
+    "text_ref": "麻烦",
+    "whole_block": true
+   },
+   {
+    "type": "points_card",
+    "text_ref": "解法",
+    "whole_block": true,
+    "item_cards": true,
+    "inner_columns": 3
+   },
+   {
+    "type": "points_card",
+    "text_ref": "证据",
+    "whole_block": true,
+    "item_cards": true,
+    "inner_columns": 4
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题；插画在上占满宽；三段上下排；三个盾牌一行一个，四个小方格两行两列。",
+  "asset_requirements": {
+   "illustrations": 1,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "右侧三段应处于同一大外卡、解法三盾牌和证据四个带叉方格（竖两列）须专门布局；现 points_card 不足以完成。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-07-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-08",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-08-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "亮点",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "illustration",
+    "index": 0,
+    "row": "highlights",
+    "width": "50%"
+   },
+   {
+    "type": "points_card",
+    "text_ref": "1.菜单里只多一项",
+    "whole_block": true,
+    "row": "highlights"
+   },
+   {
+    "type": "screenshot",
+    "indices": [
+     0
+    ],
+    "ratio": "1240:920",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 800,
+    "row": "highlights",
+    "width": "50%",
+    "text_ref": "截图说明：修好后的代码块",
+    "caption_per_slot": true,
+    "slot_groups": [
+     {
+      "index": 0,
+      "node_indices": [
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "type": "points_card",
+    "text_ref": "2.代码块",
+    "whole_block": true,
+    "row": "highlights"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题“亮点”，下面两张大卡片横排，每张上面一幅小水彩插画或截图，卡片标题用大字，下面“麻烦”“解法”两段。卡片 1 插画：一个下拉菜单“主题”，里面只有一行“Verdant Mint”带薄荷叶图标，菜单后面一个小文件夹“verdant”半掩着。卡片 2 不画插画，上面留一个带细浅绿边框的空位（约 4:3），贴代码块修复后的截图，空位下一行小字说明。",
+  "asset_requirements": {
+   "illustrations": 1,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "两大卡应把图/框与各自正文装进同一卡，图注位于第二框下紧接；现独立 blocks 无共享卡壳。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/t09-shot-response：原截图说明只由截图块消费一次，在截图下、第二卡正文上；原两卡正文与插画均保留。截图仍按标准留空供网页填充。；主布局接任：截图块唯一原图注节点用现有slot_groups明确绑到槽0，避免说明前缀规范化与元caption差异；不复制图注。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-08-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-08",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-08-v.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "亮点",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "illustration",
+    "index": 0
+   },
+   {
+    "type": "points_card",
+    "text_ref": "1.菜单里只多一项",
+    "whole_block": true
+   },
+   {
+    "type": "screenshot",
+    "indices": [
+     0
+    ],
+    "ratio": "1240:920",
+    "columns": 1,
+    "columns_v": 1,
+    "max_width_v": 800,
+    "text_ref": "截图说明：修好后的代码块",
+    "caption_per_slot": true,
+    "slot_groups": [
+     {
+      "index": 0,
+      "node_indices": [
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "type": "points_card",
+    "text_ref": "2.代码块",
+    "whole_block": true
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版只画一张9:16，按941×1672预算，正文保持原图清楚字号约34px、行高44px，不缩字。两张卡片上下整宽。标题在y24–96；第一卡y108–568：菜单、薄荷叶和小文件夹收成80px高的紧凑原生水彩示意，不横向拉伸，插画y120–200，卡标题y210–268，麻烦正文y280–412（3行），解法正文y424–556（3行）。第二卡y584–1600：上方截图框外沿y596–1198，净空800×594（贴1240×920原图），只留空框；原图注紧跟y1208–1268（24px字、30px行高，两行），第二卡标题y1282–1340，麻烦正文y1352–1484（3行），解法正文y1496–1584（2行）。截图与原图注同张。各正文区宽800px、整体左右保留正常留白，底部到1672仍有72px，不加新字或编号。横版不动。",
+  "asset_requirements": {
+   "illustrations": 1,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "两大卡应把图/框与各自正文装进同一卡，图注位于第二框下紧接；现独立 blocks 无共享卡壳。",
+   "定稿要求单张941×1672及明确 y 区间，现引擎只有流式布局，卡/框高度与顺序尚不符合。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/t09-shot-response：原截图说明只由截图块消费一次，在截图下、第二卡正文上；原两卡正文与插画均保留。截图仍按标准留空供网页填充。；主布局接任：截图块唯一原图注节点用现有slot_groups明确绑到槽0，避免说明前缀规范化与元caption差异；不复制图注。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-08-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-09",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-09-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "全部功能（16项）",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "status_legend",
+    "text_ref": "图例"
+   },
+   {
+    "type": "prose",
+    "text_ref": "在用＝真的用过"
+   },
+   {
+    "type": "feature_card",
+    "text_ref": "编辑主题",
+    "columns": 3,
+    "columns_v": 1,
+    "portrait_columns": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "status_display": "dot",
+    "group_heading_style": "brush"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态。顶上标题，下面一行图例，图例下面一行小字说明。四组一屏排完，不跨屏。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 16
+  },
+  "pending_requirements": [
+   "四组组名要求毛笔图、状态仅用圆点；当前组名普通粗体、原状态词仍画出。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-09-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-09",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-09-v.png",
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-09-v2.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "全部功能（16项）",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "status_legend",
+    "text_ref": "图例"
+   },
+   {
+    "type": "prose",
+    "text_ref": "在用＝真的用过"
+   },
+   {
+    "type": "feature_card",
+    "text_ref": "编辑主题",
+    "columns": 3,
+    "columns_v": 1,
+    "portrait_columns": 1,
+    "illustration": "left_inside",
+    "icons": "auto",
+    "status_display": "dot",
+    "group_heading_style": "brush"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题、图例和说明在最上面；组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 16
+  },
+  "pending_requirements": [
+   "四组组名要求毛笔图、状态仅用圆点；当前组名普通粗体、原状态词仍画出。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-09-v.png"
+ },
+ {
+  "screen": "typora-theme-pack-10",
+  "orientation": "h",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-10-h.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "演进（2026年）",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "timeline",
+    "text_ref": "8月2日",
+    "columns": 3,
+    "direction": "horizontal",
+    "connector": "ribbon",
+    "illustration": "none",
+    "alternating": true
+   },
+   {
+    "type": "prose",
+    "text_ref": "6次提交"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "横版：左上标题。一条从左到右的水彩绿丝带时间轴，上面八个小旗，每个小旗：日期（粗体绿色）＋一两行字，上下错开不挤；丝带起点画一片薄荷叶，终点画三张并排的小纸（灰、薄荷绿、墨蓝）。时间轴下面一行灰色小字。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "八条日期为普通 para，timeline 尚未生成八面小旗与丝带、起点薄荷叶和终点三纸。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-10-h.png"
+ },
+ {
+  "screen": "typora-theme-pack-10",
+  "orientation": "v",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-10-v.png"
+  ],
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "text_ref": "演进（2026年）",
+    "align": "center",
+    "size": "medium"
+   },
+   {
+    "type": "timeline",
+    "text_ref": "8月2日",
+    "columns": 1,
+    "direction": "vertical",
+    "connector": "ribbon",
+    "illustration": "none",
+    "alternating": true
+   },
+   {
+    "type": "prose",
+    "text_ref": "6次提交"
+   }
+  ],
+  "portrait_required": true,
+  "source_layout": "竖版：标题；时间轴改成从上往下的竖丝带，小旗一行一个；灰色小字在最下面。",
+  "asset_requirements": {
+   "illustrations": 0,
+   "icons": 0
+  },
+  "pending_requirements": [
+   "八条日期为普通 para，timeline 尚未生成八面小旗与丝带、起点薄荷叶和终点三纸。"
+  ],
+  "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-10-v.png"
+ }
+]

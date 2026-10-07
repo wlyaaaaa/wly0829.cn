@@ -1,0 +1,541 @@
+[
+  {
+    "screen": "skill-file-intake-router-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "row": "hero",
+        "width": "43%",
+        "align": "left",
+        "size": "large",
+        "text_ref": "大标题：一堆文件一起看"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "align": "left",
+        "text_ref": "一句话：文件夹"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "57%",
+        "illustration": "outside"
+      },
+      {
+        "type": "dialogue",
+        "columns": 2,
+        "columns_v": 1,
+        "bubble_per_item": true,
+        "illustration": "left_inside",
+        "secondary_illustration": "right_inside",
+        "connector": "none",
+        "text_ref": "怎么跟 AI 说",
+        "split_paras": true,
+        "split_items": true,
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "left_inside",
+        "tail": true,
+        "right_images": [
+          "_library/icons/文件夹.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/icons/放大镜.png"
+        ],
+        "right_image_source": "icons"
+      }
+    ],
+    "notes": "已核对原图。上半左标题及两段介绍，右独立文件分拣插画，插画约57%宽；下半四条对话为2×2卡，人像在左、气泡居中、文件小图在右，均在卡片内，无卡间连接。定稿中的大标题/一句话/说明是原文标记，原图没有这些标签；应由主工程师统一解析，不改定稿。四条连续清单是一个定稿节点，bubble_per_item 为每条一气泡的构图要求，待组件支持。 本轮文字核对：四句为四个气泡，使用当前组件真实split_paras字段，不只声明列数。 本轮将原组名分给同一dialogue外卡，四个气泡共享卡头；右小图与左人像使用不同素材索引，实际语义映射仍待素材库补齐核对。；2026-10-03 本轮：独立插画的位置按现有 row/width 和块序落实，去掉重复的 placement 字段；02 筐内覆字字段仍未接入，原意及未完成状态保留。"
+  },
+  {
+    "screen": "skill-file-intake-router-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "大标题：一堆文件一起看"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "一句话：文件夹"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "bleed": true
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "columns_v": 1,
+        "bubble_per_item": true,
+        "illustration": "left_inside",
+        "secondary_illustration": "right_inside",
+        "connector": "none",
+        "text_ref": "怎么跟 AI 说",
+        "split_paras": true,
+        "split_items": true,
+        "avatars": [
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png",
+          "_library/avatars/本人-通用.png"
+        ],
+        "avatar_source": "icons",
+        "avatar_position": "left_inside",
+        "tail": true,
+        "right_images": [
+          "_library/icons/文件夹.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/icons/放大镜.png"
+        ],
+        "right_image_source": "icons"
+      }
+    ],
+    "notes": "已核对原图。标题和两段正文在上、满宽独立插画在其下、怎么跟AI说组名、四条横向对话卡逐条竖排。卡内人像左、气泡中、文件小图右。大标题/一句话/说明为不应上画面的编辑标记；保留定稿原文件，请主工程师统一解析。 本轮文字核对：四句为四个气泡，使用当前组件真实split_paras字段，不只声明列数。 本轮将原组名分给同一dialogue外卡，四个气泡共享卡头；右小图与左人像使用不同素材索引，实际语义映射仍待素材库补齐核对。；2026-10-03 本轮：独立插画的位置按现有 row/width 和块序落实，去掉重复的 placement 字段；02 筐内覆字字段仍未接入，原意及未完成状态保留。"
+  },
+  {
+    "screen": "skill-file-intake-router-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：一个完整例子",
+        "subtitle_from": "：照这套做法",
+        "asset": "skill-md-to-pdf/skill-md-to-pdf-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-md-to-pdf\\img\\skill-md-to-pdf-02-h.png",
+        "source_box": [
+          47,
+          17,
+          756,
+          182
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "假如我说"
+      },
+      {
+        "type": "flow",
+        "columns": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "1先看清单再分组",
+        "direction": "horizontal",
+        "icons": "auto",
+        "row": "example",
+        "width": "60%"
+      },
+      {
+        "type": "document_mock",
+        "layout": "illustration_labels",
+        "label_text_ref": "筐上的字",
+        "label_columns": 3,
+        "label_rows": 2,
+        "labels": [
+          "文档",
+          "表格",
+          "扫描件",
+          "图片",
+          "录音",
+          "压缩包"
+        ],
+        "label_positions": [
+          {
+            "x": 9.296148738379815,
+            "y": 30.843116328708643,
+            "width": 14.940239043824702,
+            "height": 8.964781216648879,
+            "align": "center"
+          },
+          {
+            "x": 42.76228419654714,
+            "y": 30.843116328708643,
+            "width": 14.873837981407704,
+            "height": 8.964781216648879,
+            "align": "center"
+          },
+          {
+            "x": 76.62682602921646,
+            "y": 30.843116328708643,
+            "width": 14.608233731739709,
+            "height": 8.964781216648879,
+            "align": "center"
+          },
+          {
+            "x": 9.229747675962816,
+            "y": 82.92422625400214,
+            "width": 14.873837981407704,
+            "height": 8.858057630736393,
+            "align": "center"
+          },
+          {
+            "x": 42.76228419654714,
+            "y": 82.92422625400214,
+            "width": 14.741035856573706,
+            "height": 8.858057630736393,
+            "align": "center"
+          },
+          {
+            "x": 76.82602921646746,
+            "y": 82.92422625400214,
+            "width": 14.342629482071715,
+            "height": 8.858057630736393,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          },
+          {
+            "label_index": 5,
+            "position_index": 5
+          }
+        ],
+        "base_asset": "_library/illustrations/followup-r3-intake-six-baskets-h.png",
+        "text_ref": "筐上的字",
+        "variant": "window",
+        "size": "large",
+        "row": "example",
+        "width": "40%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "要注意",
+        "row": "example"
+      }
+    ],
+    "notes": "已核对原图。整宽长标题原左对齐，按本人追加要求改居中，使用中档而非缩小正文；介绍横贯整宽。下方左约55%为六条编号横卡，编号最左、图标在卡内左、字在右，无步骤丝带；右约45%独立竹筐插画3×2，底部同栏提示卡。筐标签必须由定稿程序覆字，禁止带字素材加重复标签；label_text_ref/label_columns/label_rows 为构图要求，待组件接入。 本轮复用此前原图核对记录，保留55/45与竖版插画在步骤前；用flow统一实际正文24/36字号并保留六行左图右文。；2026-10-03 本轮：独立插画的位置按现有 row/width 和块序落实，去掉重复的 placement 字段；02 筐内覆字字段仍未接入，原意及未完成状态保留。\nmain-closer3：以document_mock既有真实合同一次消费六筐原标签；h保持原右45%栏3×2，v完整等比2×3，标签24/36px，不再保留不被core消费的覆字字段。\nmain-closer4：按明确裁定将02主标题拆为“一个完整例子”，原冒号及全部后半句按既有subtitle_from接口作副标题，原字原序一次；电脑版同步。复用素材库已ready/已核字同字毛笔图及其真实原图取色合同，large只缩不放大；不改核字/ready记录。\n2026-10-04 大空白专查最终排法（AI实施，本人本轮授权重排）：六个无连接线原步骤在左60%按两列三行，完整六篮图/原标签/末说明在右40%。真实源宽与Noto字体复验后，两列步骤将长链收为三排，六篮不再在下方单独撑出右侧大白；定稿原字和原序不变。\n2026-10-06 Astra复核退回：恢复721f9c5的本屏横版构图、插画大小和位置。"
+  },
+  {
+    "screen": "skill-file-intake-router-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：一个完整例子",
+        "subtitle_from": "：照这套做法",
+        "asset": "skill-md-to-pdf/skill-md-to-pdf-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-md-to-pdf\\img\\skill-md-to-pdf-02-h.png",
+        "source_box": [
+          47,
+          17,
+          756,
+          182
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "假如我说"
+      },
+      {
+        "type": "document_mock",
+        "layout": "illustration_labels",
+        "label_text_ref": "筐上的字",
+        "label_columns": 2,
+        "label_rows": 3,
+        "labels": [
+          "文档",
+          "表格",
+          "扫描件",
+          "图片",
+          "录音",
+          "压缩包"
+        ],
+        "label_positions": [
+          {
+            "x": 12.079831932773109,
+            "y": 22.001471670345843,
+            "width": 25.945378151260506,
+            "height": 4.856512141280353,
+            "align": "center"
+          },
+          {
+            "x": 61.65966386554622,
+            "y": 22.001471670345843,
+            "width": 25.10504201680672,
+            "height": 4.856512141280353,
+            "align": "center"
+          },
+          {
+            "x": 12.394957983193278,
+            "y": 56.5121412803532,
+            "width": 25.42016806722689,
+            "height": 4.7093451066961,
+            "align": "center"
+          },
+          {
+            "x": 61.86974789915966,
+            "y": 56.5121412803532,
+            "width": 24.68487394957983,
+            "height": 4.7093451066961,
+            "align": "center"
+          },
+          {
+            "x": 12.184873949579831,
+            "y": 90.50772626931567,
+            "width": 25.630252100840334,
+            "height": 4.5621780721118474,
+            "align": "center"
+          },
+          {
+            "x": 61.86974789915966,
+            "y": 90.50772626931567,
+            "width": 25.0,
+            "height": 4.5621780721118474,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          },
+          {
+            "label_index": 5,
+            "position_index": 5
+          }
+        ],
+        "base_asset": "_library/illustrations/followup-r3-intake-six-baskets-v.png",
+        "text_ref": "筐上的字",
+        "variant": "window",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "1先看清单再分组",
+        "direction": "vertical",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "要注意"
+      }
+    ],
+    "notes": "已核对v及v2，两张是一屏。原图第一张标题、假如我说、竹筐插画2列3行，第二张六条步骤整宽竖排、筐上的字横条、要注意横条。遵循实际原图插画在步骤前，与旧portrait文字的插画放最下不同；正文用定稿。每条编号与图标均在卡内左边，无连接。标签图内若仍有旧字必须以无字素材及程序文字覆盖处理，不能另加一份文字来凑逐字关。 本轮复用此前原图核对记录，保留55/45与竖版插画在步骤前；用flow统一实际正文24/36字号并保留六行左图右文。；2026-10-03 本轮：独立插画的位置按现有 row/width 和块序落实，去掉重复的 placement 字段；02 筐内覆字字段仍未接入，原意及未完成状态保留。\nmain-closer3：以document_mock既有真实合同一次消费六筐原标签；h保持原右45%栏3×2，v完整等比2×3，标签24/36px，不再保留不被core消费的覆字字段。\nmain-closer4：按明确裁定将02主标题拆为“一个完整例子”，原冒号及全部后半句按既有subtitle_from接口作副标题，原字原序一次；电脑版同步。复用素材库已ready/已核字同字毛笔图及其真实原图取色合同，large只缩不放大；不改核字/ready记录。"
+  },
+  {
+    "screen": "skill-file-intake-router-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：能做的事",
+        "row": "routing",
+        "width": "58%"
+      },
+      {
+        "type": "table",
+        "row": "routing",
+        "columns": 2,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "文件",
+        "column_widths": [
+          52,
+          48
+        ]
+      },
+      {
+        "type": "content_card",
+        "row": "routing",
+        "width": "42%",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "文件夹只取需要的"
+      }
+    ],
+    "notes": "已核对原图。左58%标题和双列表，12项路由逐行，图标在每行左侧；右42%三张说明卡竖排，图标左、文字右。标题在左栏内居中。第三卡较长可占较高，不缩字。table column_widths/每行图标为构图要求；定稿12行完整保留，不能照portrait旧11项遗漏SVG行。"
+  },
+  {
+    "screen": "skill-file-intake-router-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "标题：能做的事"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "portrait_mode": "paired_rows",
+        "echo_headers": false,
+        "text_ref": "文件"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "text_ref": "文件夹只取需要的"
+      }
+    ],
+    "notes": "已核对v及v2，两张一屏：标题、12项文件→读法上下配对卡、3张说明卡。前11项在v、第12项SVG在v2顶部，之后说明卡无图标、满宽正文。第一张行卡小图标左、文件类型在上、读法在下，表头不用每卡重复；定稿表头可只出现一次。不按旧portrait“11项”删掉定稿第12项。paired_rows/echo_headers 为需表格组件接入的构图要求。"
+  },
+  {
+    "screen": "skill-file-intake-router-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "标题：边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "groups": [
+          {
+            "text_ref": "管"
+          },
+          {
+            "text_ref": "不管"
+          }
+        ],
+        "text_ref": "管",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "它不会做的事",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ]
+      }
+    ],
+    "notes": "已核对原图。整宽章节标题按本人要求居中。下方管/不管两栏同高，栏内左有组名和插画、右有条目；没有箭头连接，不管只用状态叉的灰，不将整段正文染灰。最下满宽说明卡，盾牌图标左、它不会做的事和正文右，卡底分隔线下居中原定稿链接行。定稿原文件不改。；2026-10-03 本轮：章节标题改 medium；现有标题图不受 size 控制，真实尺寸待 main 提供图像档位，未删“标题：”原字。"
+  },
+  {
+    "screen": "skill-file-intake-router-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-file-intake-router\\img\\skill-file-intake-router-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "标题：边界"
+      },
+      {
+        "type": "comparison",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "groups": [
+          {
+            "text_ref": "管"
+          },
+          {
+            "text_ref": "不管"
+          }
+        ],
+        "text_ref": "管",
+        "group_images": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "它不会做的事",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ]
+      }
+    ],
+    "notes": "已核对原图。标题、管满宽卡、不管满宽卡、它不会做的事满宽卡上下排。前两卡插画和组名在左、条目在右，最后一张盾牌图标在左上、卡名在右上，长正文在下面满宽，链接在最底。没有卡间连接。最后卡内上部图标/标题并排与正文贯通为原图构图，若core统一左图右字使正文过窄，应由组件修正。；2026-10-03 本轮：章节标题改 medium；现有标题图不受 size 控制，真实尺寸待 main 提供图像档位，未删“标题：”原字。"
+  }
+]

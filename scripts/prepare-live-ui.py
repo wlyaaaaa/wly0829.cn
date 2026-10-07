@@ -92,6 +92,18 @@ def prepare_toc_recipe(site, recipe):
     if (result.get('status') != 'prepared' or result.get('page_count') != 84
             or result.get('missing_labels') or {item['page'] for item in result.get('pages', [])} != set(pages)):
         raise ValueError('Approved TOC helper did not prepare the complete 84-page scope')
+    stylesheet = HERE / 'toc-consistency.css'
+    inputs[str(stylesheet)] = proof(stylesheet.read_bytes())
+    css_url = '/_typeset/runtime/toc-consistency-' + inputs[str(stylesheet)]['sha256'][:20] + '.css'
+    (site / css_url.lstrip('/')).write_bytes(stylesheet.read_bytes())
+    for row in result['pages']:
+        target_page = site / row['page']
+        body = target_page.read_bytes().replace(result['assets']['.css'].encode(), css_url.encode())
+        target_page.write_bytes(body)
+        row['after_sha256'] = proof(body)['sha256']
+        row['changed'] = row['after_sha256'] != row['before_sha256']
+    result['assets']['.css'] = css_url
+    result['changed_page_count'] = sum(row['changed'] for row in result['pages'])
     for path, expected in inputs.items():
         if proof(Path(path).read_bytes()) != expected:
             raise ValueError('TOC input changed during preparation: ' + path)
@@ -129,18 +141,36 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         target.write_bytes(payload); assets.append({'path': rel, **proof(payload)})
         return '/' + rel
     palette = ':root{--title:#0a7232;--text:#2e4675;--accent:#0a7a33;--link:rgb(9,145,54);--line:#bfe8cc;--cardbg:#fbfefc;--soft:#edfbf3;--badge:#13803d}\n'
-    font_ref = None
+    if not font:
+        existing_fonts=sorted((site/'_typeset/runtime').glob('live-sans-[0-9a-f]*.woff2'))
+        font = existing_fonts[0] if existing_fonts else None
+        if not font:
+            from fontTools.ttLib import TTFont
+            for part in sorted((site/'_typeset/runtime').glob('live-sans-part-*.woff2')):
+                with TTFont(part) as face:ranges=','.join('U+'+format(cp,'X') for cp in sorted(face.getBestCmap()))
+                palette += '@font-face{font-family:"Sans";src:url("/'+part.relative_to(site).as_posix()+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
     if font:
         from fontTools.ttLib import TTFont
+        from fontTools import subset
         import io
-        source = TTFont(font, recalcTimestamp=False); source.flavor = 'woff2'; out = io.BytesIO(); source.save(out)
-        font_ref = addressed('live-sans', '.woff2', out.getvalue())
-    else:
-        existing_fonts=sorted((site/'_typeset/runtime').glob('live-sans-*.woff2'))
-        if existing_fonts:font_ref='/'+existing_fonts[0].relative_to(site).as_posix()
-    if font_ref:
-        palette += '@font-face{font-family:"Sans";src:url("' + font_ref + '") format("woff2");font-weight:100 900;font-display:swap}\n'
-    css = palette + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
+        source_bytes = Path(font).read_bytes()
+        source = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+        groups = {}
+        for codepoint in sorted(source.getBestCmap()):
+            groups.setdefault(codepoint // 128, []).append(codepoint)
+        supported = set(source.getBestCmap())
+        runtime_points = {ord(c) for name in ('b2-live-runtime.js','site-live-runtime.js','live-hardware-ui.js','live-status-ui.js') for c in (HERE/name).read_text('utf8')}
+        source.close()
+        options = subset.Options(); options.layout_features = ['*']; options.notdef_outline = True
+        for block, codepoints in groups.items():
+            face = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+            cutter = subset.Subsetter(options=options); cutter.populate(unicodes=codepoints); cutter.subset(face)
+            face.flavor = 'woff2'; out = io.BytesIO(); face.save(out); face.close()
+            ref = addressed('live-sans-part-'+format(block, 'x'), '.woff2', out.getvalue())
+            ranges = ','.join('U+'+format(cp, 'X') for cp in codepoints)
+            palette += '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
+    font_css = addressed('live-fonts', '.css', palette.encode('utf8'))
+    css = palette.split('@font-face',1)[0] + (HERE/'live-hardware-ui.css').read_text('utf8') + '\n' + (HERE/'live-status-ui.css').read_text('utf8')
     ui_css = addressed('live-ui', '.css', css.encode('utf8'))
     ui_js = addressed('live-ui', '.js', ((HERE/'live-hardware-ui.js').read_text('utf8') + '\n' + (HERE/'live-status-ui.js').read_text('utf8')).encode('utf8'))
     model_ref = addressed('b2-access-model', '.js', (HERE.parent/'app/computer-access-model.js').read_bytes())
@@ -171,7 +201,16 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         if not data_match: continue
         data = json.loads(data_match[1]); has_live = any(part.get('native_live') or part.get('live') for s in data.get('screens',[]) for part in [*s.get('parts',[]), *s.get('layouts',{}).values()])
         if not has_live: continue
-        for old in set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text)):
+        if font:
+            points = sorted((set(map(ord, text)) | runtime_points) & supported)
+            face = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)
+            cutter = subset.Subsetter(options=options); cutter.populate(unicodes=points); cutter.subset(face)
+            face.flavor = 'woff2'; out = io.BytesIO(); face.save(out); face.close()
+            ref = addressed('live-sans-page', '.woff2', out.getvalue())
+            ranges = ','.join('U+'+format(cp, 'X') for cp in points)
+            page_face = '@font-face{font-family:"Sans";src:url("'+ref+'") format("woff2");font-weight:100 900;font-display:swap;unicode-range:'+ranges+'}\n'
+            ui_css = addressed('live-ui-page', '.css', (css+'\n'+page_face).encode('utf8'))
+        for old in sorted(set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text))):
             path = resolve(page, old)
             if not path or not re.fullmatch(r'(?:app-[0-9a-f]+|b2-(?:live|typeset)-[0-9a-f]+)\.js',path.name): continue
             if path not in changed_refs:
@@ -199,7 +238,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         # Older releases merged layout CSS into motion-* rather than linking a
         # typeset-layout asset. Always load this current sheet explicitly.
         text=text.replace('<head>','<head><script data-live-ui defer src="'+ui_js+'"></script>',1)
-        tags='<link data-live-ui rel="stylesheet" href="'+layout_css+'"><link data-live-ui rel="stylesheet" href="'+ui_css+'">'
+        tags='<link data-live-ui data-live-fonts rel="stylesheet" media="print" href="'+font_css+'"><link data-live-ui rel="stylesheet" href="'+layout_css+'"><link data-live-ui rel="stylesheet" href="'+ui_css+'">'
         text=text.replace('</head>',tags+'</head>',1)
         after=text.encode('utf8')
         if after!=before: page.write_bytes(after); changes.append({'path':page.relative_to(site).as_posix(),'before':proof(before),'after':proof(after)})
@@ -218,6 +257,7 @@ def prepare_recipe(site, recipe, pages=None):
     config = json.loads(recipe.read_text('utf8'))
     if config.get('schema') != 'wly.live-ui-recipe.v1':
         raise ValueError('Unsupported live UI preparation recipe')
+    config = {key: str((HERE.parent/Path(value)).resolve()) if key in {'library','font','sprite','label_map','toc_unify_package'} else value for key,value in config.items()}
     unify = config.get('toc_unify_package')
     paths = {key: Path(config[key]).resolve() for key in
              (('library', 'font') if unify else ('library', 'font', 'sprite', 'label_map'))}
@@ -226,7 +266,7 @@ def prepare_recipe(site, recipe, pages=None):
     toc_pages = None
     if unify:
         _, _, toc_pages, _, toc_inputs = toc_unify_package(unify)
-        if pages is not None and set(pages) not in (set(toc_pages), set(toc_pages) - {'index.html'}):
+        if pages is not None and not set(pages) <= set(toc_pages):
             raise ValueError('Live UI page selection differs from the approved TOC scope')
         consumed += toc_inputs
     consumed += [HERE / name for name in (

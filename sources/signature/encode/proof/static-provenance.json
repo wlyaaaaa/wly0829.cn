@@ -1,0 +1,217 @@
+{
+  "pillow": "12.3.0",
+  "libwebp": "1.6.0",
+  "libavif": "1.4.2",
+  "items": [
+    {
+      "old_name": "home-01-h-1920-e0eb3ea434d7.avif",
+      "master_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round04\\cache\\lossy-v1\\masters\\fe4ee534f74da779d5e2e59e174df43ec9aefb5ef655e6252688332e3073b2aa.png",
+      "master_sha256": "46a1676303e16beb6c0bcc012d5c641e6a022ef4f3e2965ab734b1b8f44ab740",
+      "master_size": [
+        1672,
+        941
+      ],
+      "master_equals_lossless_source_crop": true,
+      "build_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\assembly\\backups\\home\\20261003-061552-0cc7bb\\build.json",
+      "build_sha256": "3c7cfffdc6400d1e4b131a7d5652f3c977fd80aa57771e3478eff91694e1f6aa",
+      "reproduction_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode\\proof\\home-01-h-1920-e0eb3ea434d7.avif",
+      "reproduction_sha256": "e0eb3ea434d7b17b5574add40b269b683b55c41ba0831642a2b1536ade967fc8",
+      "original_sha256": "e0eb3ea434d7b17b5574add40b269b683b55c41ba0831642a2b1536ade967fc8",
+      "sha256_equal": true,
+      "decoded_pixels_equal": true,
+      "original_bytes": 185176,
+      "encoding_steps": [
+        {
+          "input": "lossless_master",
+          "resize": [
+            1920,
+            1081
+          ],
+          "resampling": "LANCZOS",
+          "format": "AVIF",
+          "parameters": {
+            "quality": 60,
+            "speed": 6,
+            "subsampling": "4:4:4",
+            "max_threads": 2
+          }
+        }
+      ],
+      "eligible_without_lossy_intermediate": true
+    },
+    {
+      "old_name": "home-01-h-2880-9442e7824a16.avif",
+      "master_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round04\\cache\\lossy-v1\\masters\\fe4ee534f74da779d5e2e59e174df43ec9aefb5ef655e6252688332e3073b2aa.png",
+      "master_sha256": "46a1676303e16beb6c0bcc012d5c641e6a022ef4f3e2965ab734b1b8f44ab740",
+      "master_size": [
+        1672,
+        941
+      ],
+      "master_equals_lossless_source_crop": true,
+      "build_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\assembly\\backups\\home\\20261003-061552-0cc7bb\\build.json",
+      "build_sha256": "3c7cfffdc6400d1e4b131a7d5652f3c977fd80aa57771e3478eff91694e1f6aa",
+      "reproduction_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode\\proof\\home-01-h-2880-9442e7824a16.avif",
+      "reproduction_sha256": "9442e7824a16e7bea9602d2686020cdd958e3b0fed6fa5a8d862111e1e19bf78",
+      "original_sha256": "9442e7824a16e7bea9602d2686020cdd958e3b0fed6fa5a8d862111e1e19bf78",
+      "sha256_equal": true,
+      "decoded_pixels_equal": true,
+      "original_bytes": 293299,
+      "encoding_steps": [
+        {
+          "input": "lossless_master",
+          "resize": [
+            2880,
+            1621
+          ],
+          "resampling": "LANCZOS",
+          "format": "AVIF",
+          "parameters": {
+            "quality": 60,
+            "speed": 6,
+            "subsampling": "4:4:4",
+            "max_threads": 2
+          }
+        }
+      ],
+      "eligible_without_lossy_intermediate": true
+    },
+    {
+      "old_name": "home-01-h-fallback640-cc8b2ccf8653.webp",
+      "master_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round04\\cache\\lossy-v1\\masters\\fe4ee534f74da779d5e2e59e174df43ec9aefb5ef655e6252688332e3073b2aa.png",
+      "master_sha256": "46a1676303e16beb6c0bcc012d5c641e6a022ef4f3e2965ab734b1b8f44ab740",
+      "master_size": [
+        1672,
+        941
+      ],
+      "master_equals_lossless_source_crop": true,
+      "build_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\assembly\\backups\\home\\20261003-061552-0cc7bb\\build.json",
+      "build_sha256": "3c7cfffdc6400d1e4b131a7d5652f3c977fd80aa57771e3478eff91694e1f6aa",
+      "reproduction_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode\\proof\\home-01-h-fallback640-cc8b2ccf8653.webp",
+      "reproduction_sha256": "cc8b2ccf8653f3d8768198485e45bf5e2b992eb26457286203825c6bbbea1015",
+      "original_sha256": "cc8b2ccf8653f3d8768198485e45bf5e2b992eb26457286203825c6bbbea1015",
+      "sha256_equal": true,
+      "decoded_pixels_equal": true,
+      "original_bytes": 62106,
+      "encoding_steps": [
+        {
+          "input": "lossless_master",
+          "resize": [
+            1280,
+            720
+          ],
+          "resampling": "LANCZOS",
+          "format": "WEBP",
+          "parameters": {
+            "lossless": false,
+            "quality": 85,
+            "method": 6,
+            "alpha_quality": 100,
+            "exact": true
+          },
+          "sha256": "3571f1fb444c5ebfab3607e9f97d77ba85def7951a40b3f1927539837627065f"
+        },
+        {
+          "input": "decoded_lossy_webp",
+          "resize": [
+            640,
+            360
+          ],
+          "resampling": "LANCZOS",
+          "format": "WEBP",
+          "parameters": {
+            "quality": 85,
+            "method": 2
+          }
+        }
+      ],
+      "eligible_without_lossy_intermediate": false
+    },
+    {
+      "old_name": "home-01-v-1280-fae12132939e.avif",
+      "master_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round04\\cache\\lossy-v1\\masters\\5e2368229f5322e54e288b002234ec2cb648754b3ee262a922d7ccc68985b4af.png",
+      "master_sha256": "8aba897bd5f56fd2f79f705244622a805764ab441099e9a162ea0d6d74420a11",
+      "master_size": [
+        941,
+        1637
+      ],
+      "master_equals_lossless_source_crop": true,
+      "build_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\assembly\\backups\\home\\20261003-061552-0cc7bb\\build.json",
+      "build_sha256": "3c7cfffdc6400d1e4b131a7d5652f3c977fd80aa57771e3478eff91694e1f6aa",
+      "reproduction_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode\\proof\\home-01-v-1280-fae12132939e.avif",
+      "reproduction_sha256": "fae12132939ebbb287a31238e7d1fafa39ec21c302b307617d8204d13c352d80",
+      "original_sha256": "fae12132939ebbb287a31238e7d1fafa39ec21c302b307617d8204d13c352d80",
+      "sha256_equal": true,
+      "decoded_pixels_equal": true,
+      "original_bytes": 225482,
+      "encoding_steps": [
+        {
+          "input": "lossless_master",
+          "resize": [
+            1280,
+            2227
+          ],
+          "resampling": "LANCZOS",
+          "format": "AVIF",
+          "parameters": {
+            "quality": 60,
+            "speed": 6,
+            "subsampling": "4:4:4",
+            "max_threads": 2
+          }
+        }
+      ],
+      "eligible_without_lossy_intermediate": true
+    },
+    {
+      "old_name": "home-01-v-fallback640-3727d61a3805.webp",
+      "master_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round04\\cache\\lossy-v1\\masters\\5598f0f1e59541dd1c5ace1afe5f29e994b883f2a1e35891561ff06104cb7e63.png",
+      "master_sha256": "8be3841956ed9176ccdc46c92e4e4d836be0a8c27eca19d1149e9dca8a391022",
+      "master_size": [
+        941,
+        1637
+      ],
+      "master_equals_lossless_source_crop": true,
+      "build_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\assembly\\backups\\home\\20261002-173705-8b61c7\\build.json",
+      "build_sha256": "09bf7aa91caa0a85eeeec849326eec8af701f4984c02e322bcc7cdf44b8141c9",
+      "reproduction_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\home-bio\\encode\\proof\\home-01-v-fallback640-3727d61a3805.webp",
+      "reproduction_sha256": "3727d61a3805e66b82e06ba691d471ea04f8c635451f8b30b6f26f4f22b4de83",
+      "original_sha256": "3727d61a3805e66b82e06ba691d471ea04f8c635451f8b30b6f26f4f22b4de83",
+      "sha256_equal": true,
+      "decoded_pixels_equal": true,
+      "original_bytes": 149542,
+      "encoding_steps": [
+        {
+          "input": "lossless_master",
+          "resize": [
+            828,
+            1440
+          ],
+          "resampling": "LANCZOS",
+          "format": "WEBP",
+          "parameters": {
+            "lossless": false,
+            "quality": 85,
+            "method": 6,
+            "alpha_quality": 100,
+            "exact": true
+          },
+          "sha256": "a2a4f9f8ffaa6e73a2bc29dbfa536c56cf72ed4b0fb698f695ccc760527b99df"
+        },
+        {
+          "input": "decoded_lossy_webp",
+          "resize": [
+            640,
+            1113
+          ],
+          "resampling": "LANCZOS",
+          "format": "WEBP",
+          "parameters": {
+            "quality": 85,
+            "method": 2
+          }
+        }
+      ],
+      "eligible_without_lossy_intermediate": false
+    }
+  ]
+}

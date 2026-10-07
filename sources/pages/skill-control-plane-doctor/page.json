@@ -1,0 +1,222 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-control-plane-doctor",
+  "kind": "skill",
+  "title": "技能与基座体检",
+  "url": "/skills/control-plane-doctor/",
+  "tagline": "只读查技能装好没有，规则、配置、仓库登记坏没坏。",
+  "status": "",
+  "based_on": {
+    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
+    "commit_time": "2026-09-28T19:28:54+08:00",
+    "file": "E:\\.agents\\skills\\control-plane-doctor\\SKILL.md；tools\\Invoke-ControlPlaneDoctor.ps1（646 行）、tools\\Test-PersonalSkillSupply.ps1（772 行）"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-control-plane-doctor-01",
+      "section": "top",
+      "title": "做什么、怎么说",
+      "scene": "横版画面：左上大标题毛笔艺术字，下面一行小字（技能名那一行，链接画成绿色下划线）。左半边上“它做什么”一段，下面一段浅绿底的小字（不用点名那段）和一行灰色小字（用了多少次那行）。右半边一张大的水彩对话卡片“怎么跟 AI 说”：每句画成一个浅绿色圆角对话气泡，一列排，气泡里的字就是引号里的话（引号也画）。右上角一幅小插画：一只听诊器搭在三块叠起来的积木上（三块积木分别画一本规则书、一台电脑、一只 GitHub 章鱼猫标志），旁边一张体检单上画三行打钩和两个问号。",
+      "portrait": "竖版：标题和技能名一行；“它做什么”；插画缩成一行；对话气泡一行一个；浅绿小字和灰色小字在最后。",
+      "text": "技能与基座体检\n\n旧技能入口已退役 · 检查改用〔AI 规则与技能基座〕的只读命令\n\n**它做什么**\n问“这个技能装好了没有、在这台电脑上能不能用”，或者“三个基座哪里坏了”，AI 直接用基座命令做一次只读检查：技能的源码和安装、这台电脑上的运行条件、规则与技能基座登记的 Google 工具清单和电脑配置里实际启动 Google 工具的那份对不对得上、规则与技能基座、电脑配置与恢复、GitHub 项目总索引这三个仓库的状态。它只查不修，结果里把“坏没坏”和“这几个仓库现在能不能把各处的改动合进主线、推上 GitHub”分开说，查不到的就写“不知道”。这些检查只说明装好没有、条件够不够，不代表这个技能真用过、做成过。\n\n这三个仓库就是“三个基座”：AI 的规则和技能、电脑配置、代码仓库登记。\n\n**怎么跟 AI 说**\n“修乱码这个技能装好了吗？”\n“谷歌那个技能现在在这台电脑上能用吗？”\n“查查三个基座哪里坏了。”\n“只查 GitHub 项目总索引那一块。”\n“Google 那边的配置接口改了，两边还对得上吗？”\n“联网刷新一下再查 Git。”\n\n不用点名：问技能装没装好、能不能用，或者基座有没有走样，AI 自己会运行基座的只读检查命令。\n\n9 月 21–28 日，AI 读这个技能 11 次，跑检查命令 3 次（使用小记录）。",
+      "links": [
+        {
+          "text": "AI 规则与技能基座",
+          "href": "/projects/agents/",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "0f6bc8f50851ee77d8e55a6a6ddb0778211f00ab001faef02bec631888f2b96a",
+              "instances": [
+                {
+                  "expected_rect": [
+                    410,
+                    204,
+                    605,
+                    228
+                  ],
+                  "confirm_region": true,
+                  "underline_rect": [
+                    410,
+                    230,
+                    605,
+                    232
+                  ],
+                  "context_text": "技能名 control-plane-doctor·Al 规则与技能基座'的检查入口",
+                  "context_rect": [
+                    40,
+                    197,
+                    760,
+                    230
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-control-plane-doctor-02",
+      "section": "examples",
+      "title": "一个完整例子",
+      "scene": "横版画面：左上标题，旁边一枚灰色小标签（例子来历那一行）。左边约三分之二宽画成一段竖向的对话：最上面“我”的气泡（右对齐，浅绿底），下面“AI 做了什么”几步画成一条细竖线串起的小节点（每个节点一个小水彩图标：一张清单、一只放大镜、三个问号、一只指向前方的手），再下面“AI 交回”画成左对齐的白底气泡。右边约三分之一宽一张竖卡片“另一种问法”，里面一问一答两个气泡。",
+      "portrait": "竖版：标题和标签；对话从上到下：我的气泡、几步、AI 的回复；“另一种问法”卡片放在最后。",
+      "text": "一个完整例子\n\n真事：北京时间 9 月 28 日 22:22–22:23 实际跑的两次检查\n\n我：“修乱码这个技能装好了吗？能用吗？”\n\n**AI 做了什么**\n1. 只点这一个技能，只跑“技能供应”这一项；用本机记录，不写任何东西，1.5 秒跑完。\n2. 源码：通过。安装：通过，技能目录里是指向源码的链接，不是一份拷贝。清单里现在 29 个技能在用，2 个是退役留下的记号。\n3. 这次对话用成过没有、新开的对话会不会自己用上、真实场景做成过没有：三样都是“不知道”。\n4. 它给的下一步：拿一件真实的小事让这个技能正常做一次，读回结果。\n\n**AI 交回**\n“装得好好的，源码和链接都没问题。有没有真用成过，体检答不了；要真修一个乱码文件看结果，才算知道能用。”\n\n**另一种问法**\n我：“谷歌那个技能现在能用吗？”\nAI：“连这台电脑的运行条件一起查了：配置在，也对得上；但没验证登录授权还有没有效，也没真去读邮件、文件和任务，日历本来就冻结着。所以只能说配置没问题，要查一封真邮件才算能用。”",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-control-plane-doctor-03",
+      "section": "abilities",
+      "title": "能做的事",
+      "scene": "横版画面：上方一条横跨整屏的浅绿底圆角横幅，写能做的事那一句，右端一个白底细绿边按钮（〔去看全部功能〕）。横幅下一张大卡片“用这个技能时，AI 守的规矩”，八条短句两列排，每条前一个小水彩图标（一个日历上的圆点、两个分开的天平盘、一张零字的纸、一把倒放的扳手、一个问号、一个用户小人、一只蛇形 Python 标志加问号、一个指向别处的箭头）。最下面一条灰底细横幅写“现在答不了的”那段。",
+      "portrait": "竖版：横幅和按钮在上；八条规矩一行一条；灰底横幅在最后。",
+      "text": "能做的事\n\n现行检查由规则与技能基座的只读命令完成：核对技能安装和三个基座登记，实际好不好用另行验证。〔去看全部功能〕\n\n**用这个技能时，AI 守的规矩**\n- 按需才跑，不是每件事前的关卡；一般问一句只跑相关的一项。\n- “坏没坏”和“仓库现在能不能合进主线、推上 GitHub”分开说；只有真坏了才报错退出。\n- 默认用本机记录、零写入；要联网刷新 Git，会更新本地 .git 里的远端记录，结果里写明。\n- 只查不修：不装链接、不改文件、不改计划任务、不提交推送；要修，去那个仓库里修。\n- “不知道”不升成“通过”，装好不等于能用。\n- 用系统账户跑时，按清单登记的用户目录查，不冒充用户、不改环境变量、不为消掉报警再装一份。\n- 缺 Python 或验证器，算没验证，不算源码坏了。\n- 真要办的事交给那件事的技能，不拿体检代替。\n\n**现在答不了的**　“这次对话、新对话、真实场景有没有用成过”这三样，体检一律不回答，结果里写“未核验（本检查不记录实际使用）”：它只核对源码和安装，不读使用小记录；别处存的“通过”没有宿主回执也一律当“不知道”。要知道，就拿一件真事让那个技能做一次。",
+      "links": [
+        {
+          "text": "去看全部功能",
+          "href": "/projects/agents/#features"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skill-control-plane-doctor-04",
+      "section": "limits",
+      "title": "边界",
+      "scene": "横版画面：左上标题。左边约三分之一宽一张卡片“管”，一段字；右边约三分之二宽一张两列表格“不管，交给谁”，右列的名字画成链接；表格下面一张卡片“不做”。每块左上一个小水彩图标（一个打钩的听诊器、一个指路牌、一个禁止小标）。",
+      "portrait": "竖版：“管”卡片在上；表格改成小卡片一行一张（粗体写“这些事”，下面写找谁）；“不做”在最后。",
+      "text": "边界\n\n**管**\n按需、只读地查：某个技能的源码和安装、它在这台电脑上的运行条件，Google 配置接口对账，三个基座仓库的状态；把“坏没坏”和“能不能合进主线、推上 GitHub”分开交代。\n\n**不管，交给谁**\n| 这些事 | 找谁 |\n|---|---|\n| 修：重装技能链接、改文件、改计划任务 | 到对应仓库里办；技能装换停见〔AI 规则与技能基座〕 |\n| 一个代码项目的同步、推送、公开前核对 | 〔改项目前先核对〕 |\n| 电脑的备份恢复是否正常 | 〔电脑配置与恢复〕自己的检查入口 |\n| 真要办的事，比如真去读一封邮件 | 那件事自己的技能 |\n\n**不做**\n- 不在后台定时跑，也不在每件事前拦一道。\n- 不为了让“用成过”变绿，去跑无关的私人任务或另建回执平台。\n- 不读邮件、文件和密钥；Google 那项只比两份配置清单。",
+      "links": [
+        {
+          "text": "AI 规则与技能基座",
+          "href": "/projects/agents/"
+        },
+        {
+          "text": "改项目前先核对",
+          "href": "/skills/project-entry-gate/"
+        },
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [
+      {
+        "id": "n-usage",
+        "text": "读这个技能 11 次，跑检查命令 3 次",
+        "meaning": "使用小记录：kind=skill 的 control-plane-doctor（Codex 8、Claude 3），name=Invoke-ControlPlaneDoctor.ps1 的命令（Codex 2、Claude 1）",
+        "as_of": "2026-09-28",
+        "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；9 月 21 日 00:29–28 日 04:14（北京）",
+        "screens": [
+          "skill-control-plane-doctor-01"
+        ]
+      },
+      {
+        "id": "n-skills",
+        "text": "29 个技能在用，2 个是退役留下的记号",
+        "meaning": "技能供应清单 catalog_counts：active 29、tombstone 2",
+        "as_of": "2026-09-28",
+        "source": "9 月 28 日 22:22 实跑 -SkillName mojibake-doctor 的结果",
+        "screens": [
+          "skill-control-plane-doctor-02"
+        ]
+      },
+      {
+        "id": "n-time",
+        "text": "1.5 秒",
+        "meaning": "单个技能的供应检查从启动到出结果",
+        "as_of": "2026-09-28",
+        "source": "同上，time 计时 1.519 秒",
+        "screens": [
+          "skill-control-plane-doctor-02"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-index",
+        "with": "github-local-index",
+        "direction": "拿来",
+        "flow": "三个仓库的状态由总索引的 Get-ProjectAdmission.ps1 提供，默认缓存、零写入",
+        "source": "SKILL.md；Invoke-ControlPlaneDoctor.ps1 106–108 行"
+      },
+      {
+        "id": "r-pcconfig",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "技能运行条件由 PCConfig 的 Get-SkillRuntimeReadiness.ps1 提供（浏览器配置、Google 零联网校验、Tailscale 状态）；Google 配置接口对账用 PCConfig 的启动脚本",
+        "source": "SKILL.md Scoped runtime readiness；实跑结果 evidence.provider_path"
+      },
+      {
+        "id": "r-agents",
+        "with": "agents",
+        "direction": "拿来",
+        "flow": "技能供应检查是基座的 Test-PersonalSkillSupply.ps1，读技能清单和安装链接",
+        "source": "SKILL.md"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/projects/agents/",
+        "screen": "skill-control-plane-doctor-01",
+        "text": "AI 规则与技能基座"
+      },
+      {
+        "target": "/projects/agents/#features",
+        "screen": "skill-control-plane-doctor-03",
+        "text": "去看全部功能"
+      },
+      {
+        "target": "/projects/agents/",
+        "screen": "skill-control-plane-doctor-04",
+        "text": "AI 规则与技能基座"
+      },
+      {
+        "target": "/skills/project-entry-gate/",
+        "screen": "skill-control-plane-doctor-04",
+        "text": "改项目前先核对"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "skill-control-plane-doctor-04",
+        "text": "电脑配置与恢复"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "-Owner、-CheckId、-Freshness、-ObservedUserProfile 等参数和 status／convergence_status 字段名不上页，用人话写。"
+    ],
+    "unsure": [
+      "替本人口吻写的句子：第 1 屏六句“怎么跟 AI 说”；第 2 屏两句“我：……”。 9 月 29 日第一句删掉了“真用过没有？”（体检不回答），“GitHub 总索引”改成统一显示名“GitHub 项目总索引”。",
+      "第 2 屏两次检查是 9 月 28 日 22:22（-SkillName mojibake-doctor）和 22:23（-SkillName google-workspace-direct -CheckRuntime）实际跑的；“AI 交回”是按结果写的话。",
+      "第 3 屏“现在答不了的”：Test-PersonalSkillSupply.ps1 93–99 行把外部证据里的“通过”一律降成“不知道”，而体检入口也不传证据路径（Invoke-ControlPlaneDoctor.ps1 里没有 EvidencePath）。基座项目页第 8 屏写的是“后三样没有记录就写不知道”，比实际宽松，建议基座页改成“现在总是不知道”。见 audit.md 第 1 条。 9 月 29 日：技能说明已改成只核对源码和安装、不回答是否真用过（提交 32d9314），输出改写“未核验（本检查不记录实际使用）”；第 3 屏和基座页第 8、13 屏已跟着改。",
+      "“三个基座”这个说法是本人和规则里用的；第 1 屏补了一句解释。",
+      "第 3 屏按规矩只留一句加链接，原来列的“能查的六项”删了。基座项目页 f-doctor 写的是“只读查技能供应、GitHub 总索引的项目准入和几项电脑配置接口”，实际六项是：技能供应、技能运行条件、Google 配置接口对账、.agents／PCConfig／github-local-index 三个仓库的准入（Invoke-ControlPlaneDoctor.ps1 50–55 行），漏了两个仓库；请基座页作者按这个补全（那里是家）。"
+    ]
+  }
+}

@@ -1,0 +1,1004 @@
+[
+  {
+    "screen": "rescue-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "救急先看",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "60%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑出事时先看这一页。它不连电脑、不读任何实时数据，电脑关着、网络慢的时候，手机也能打开。按症状找到那一条，照着做最短的",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "size": "medium",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "40%",
+        "align": "center"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先分清两件事：手机能看步骤，不等于手机能修好。每条都写了“手机上”能不能做：",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "按症状找",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "卡死远程连不上代理坏了借电脑上网不行Win+H没反应",
+        "columns": 5,
+        "columns_v": 2,
+        "portrait_last_center": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "步骤出自各项目"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 qa-11 修复：首屏插画改 medium；横版标题/插画占比 60/40，保留导语与原文。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rescue-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "救急先看",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑出事时先看这一页。它不连电脑、不读任何实时数据，电脑关着、网络慢的时候，手机也能打开。按症状找到那一条，照着做最短的"
+      },
+      {
+        "type": "illustration",
+        "size": "medium",
+        "illustration": "outside",
+        "align": "center"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先分清两件事：手机能看步骤，不等于手机能修好。每条都写了“手机上”能不能做：",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "按症状找",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "卡死远程连不上代理坏了借电脑上网不行Win+H没反应",
+        "columns": 2,
+        "columns_v": 2,
+        "portrait_last_center": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "步骤出自各项目"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 qa-11 修复：首屏插画改 medium；横版标题/插画占比 60/40，保留导语与原文。"
+  },
+  {
+    "screen": "rescue-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "卡死和远程连不上",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两个AI一起卡住，关掉也打不开",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "远程连不上，还不确定是不是卡死",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rescue-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "卡死和远程连不上",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两个AI一起卡住，关掉也打不开",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "远程连不上，还不确定是不是卡死",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  },
+  {
+    "screen": "rescue-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "代理和上网",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "代理坏了，上不了网",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "58%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "手机、副机借电脑上网不行",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "40%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "rescue-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-03-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "代理和上网",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "代理坏了，上不了网",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "手机、副机借电脑上网不行",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  },
+  {
+    "screen": "rescue-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "听写",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "Win+H没反应",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "听写小窗出来了，却不出字",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rescue-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-04-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "听写",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "Win+H没反应",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "听写小窗出来了，却不出字",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  },
+  {
+    "screen": "rescue-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "串流和主屏",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "串流连上了，却没画面或画面不对",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "60%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "主屏全黑，远程却正常",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "38%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "rescue-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "串流和主屏",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "串流连上了，却没画面或画面不对",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "主屏全黑，远程却正常",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  },
+  {
+    "screen": "rescue-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "机箱小屏和水冷屏",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "两块屏修法不一样，先认清是哪一块。"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "机箱小屏（TURZX）不刷新",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "水冷头曲面屏（HS2）不亮，只剩原生模式",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "rescue-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-06-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "机箱小屏和水冷屏",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "两块屏修法不一样，先认清是哪一块。"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "机箱小屏（TURZX）不刷新",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "水冷头曲面屏（HS2）不亮，只剩原生模式",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  },
+  {
+    "screen": "rescue-10",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "整台电脑坏了，要换一台",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "电脑坏了、进不了系统，要换一台",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "要准备",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "row": "recovery-notes",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "测过和没演练的",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "row": "recovery-notes",
+        "icon_position": "header_left",
+        "width": "50%"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n最终复核：主办理卡整宽在前，两张补充说明下方均分一排，避免一列1卡另一列2卡被首卡等高撑空。原三图标/三卡原字保留。"
+  },
+  {
+    "screen": "rescue-10",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "整台电脑坏了，要换一台",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "电脑坏了、进不了系统，要换一台",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "要准备",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "测过和没演练的",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。"
+  },
+  {
+    "screen": "rescue-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "密码中心打不开",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "密码中心打不开（电脑坏了、换电脑）",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "没有后门",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "row": "recovery-notes",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "手机上",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "row": "recovery-notes",
+        "icon_position": "header_left",
+        "width": "50%"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n最终复核：主办理卡整宽在前，两张补充说明下方均分一排，避免一列1卡另一列2卡被首卡等高撑空。原三图标/三卡原字保留。"
+  },
+  {
+    "screen": "rescue-07",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "密码中心打不开",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "密码中心打不开（电脑坏了、换电脑）",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "没有后门",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "手机上",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。"
+  },
+  {
+    "screen": "rescue-08",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Codex对话要恢复",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "Codex桌面一直转圈，对话多半还在",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "真要从备份里取回对话",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "rescue-08",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Codex对话要恢复",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "Codex桌面一直转圈，对话多半还在",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "真要从备份里取回对话",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。"
+  },
+  {
+    "screen": "rescue-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "其他",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两台电脑的剪贴板不同步",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "row": "symptoms",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "rescue-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\rescue\\img\\rescue-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "其他",
+        "align": "center",
+        "size": "medium"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两台电脑的剪贴板不同步",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "ChatGPT添加副机连接时，授权一直转圈",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "status_tag": "shape_only",
+        "commands": "monospace",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。"
+  }
+]

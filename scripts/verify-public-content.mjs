@@ -63,6 +63,7 @@ let remoteJavaScriptCount = 0;
 let remoteArtifactCount = 0;
 let remoteTextCount = 0;
 let remoteCachedCount = 0;
+let remoteEvidenceCount = 0;
 const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
 const manifestPath = path.join(distRoot, "release-manifest.json");
 if (distFiles.includes(manifestPath)) {
@@ -74,10 +75,20 @@ if (distFiles.includes(manifestPath)) {
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
       const entries = Object.entries(manifest.oss.objects);
+      let checks = {};
+      try {
+        checks = JSON.parse(await readFile(path.join(projectRoot, ".publish", "oss-gate", manifest.release_id, "object-checks.json"), "utf8"));
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
       let cursor = 0;
       await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
         while (cursor < entries.length) {
           const [relative, object] = entries[cursor++];
+          if (checks.release_id === manifest.release_id && checks.checker_sha256 === manifest.oss.content_verification?.checker_sha256 && checks.objects?.[relative]?.method === "HEAD") {
+            remoteEvidenceCount++;
+            continue;
+          }
           try {
             let bytes;
             let response;
@@ -149,6 +160,7 @@ const report = {
   production_remote_text_scanned_count: remoteTextCount,
   production_remote_artifact_scanned_count: remoteArtifactCount,
   production_remote_verified_cache_used_count: remoteCachedCount,
+  production_remote_content_evidence_reused_count: remoteEvidenceCount,
   scanned_file_count: files.length + remoteArtifactCount,
   finding_count: findings.length,
   findings

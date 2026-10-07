@@ -24,7 +24,7 @@ HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活�
 #home-01 > picture, #home-01 > picture > img { display:block; width:100%; height:100%; object-fit:fill; }
 #home-01 > .overlays { z-index:1; }
 #home-01 .hotspot, #home-01 button { z-index:1; }
-#home-01 .hero-live-layer [data-hl="screen"] .more { max-width:620px; white-space:normal; overflow-wrap:anywhere; line-height:1.05; }
+#home-01 .hero-live-layer [data-hl="screen"] .more { max-width:620px; font-size:48px; white-space:normal; overflow-wrap:anywhere; line-height:1.2; }
 '''
 
 
@@ -107,7 +107,7 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
         extra = (between(text, 'const online=', 'const offline=')
                  + between(text, 'const offline=', 'const stateLabel='))
     rules = numeric + adaptation + clock + dependencies + extra + summary
-    body = MODEL_START + r'''
+    body = MODEL_START + "\nimport {hardwareSnapshot} from '/" + numeric_rel + "';\n" + r'''
 /* 首页总览规则来自本次完整输入中实际使用的驾驶舱 B2，原函数保持原样。 */
 window.HomeLivingStatusModel = (() => {
  let status=null,phase='loading',lastRead=0;
@@ -156,6 +156,8 @@ def patch_runtime(text: str, model: str, bridge: str) -> str:
         end = text.index(MODEL_END, start) + len(MODEL_END)
         text = text[:start] + text[end:]
         text = text.lstrip('\n')
+    elif text.startswith('window.HomeLivingStatusModel=(()=>'):
+        text = text[text.index(',window.SiteMotionAppearance=') + 1:]
     elif 'window.HomeLivingStatusModel = (raw, phase) => {' in text:
         # The previously shipped extractor placed this known legacy wrapper
         # before the shared app. Its source-owned reader and bridge stay intact.
@@ -169,6 +171,14 @@ def patch_runtime(text: str, model: str, bridge: str) -> str:
         end = text.index('\n})();', start) + len('\n})();')
         text = text[:start] + text[end:]
     text = text.rstrip('\n')
+    minified_reader = re.search(r'\(function\(\)\{"use strict";(?:var [^;]+;)?const \w+=\{text:"暂时读不到",state:"unknown"\};', text)
+    if minified_reader:
+        reader_end = text.index('window.SiteStatus={', minified_reader.start())
+        reader_end = text.index('})()', reader_end) + len('})()')
+        text = text[:minified_reader.start()] + (HERE/'site-live-runtime.js').read_text('utf8').rstrip().removesuffix(';') + text[reader_end:]
+    if 'snapshot:livingSnapshot' not in text and re.search(r'window\.SiteStatus=\{[^}]*snapshot:', text):
+        bridge_start = text.rfind('(()=>{"use strict"', 0, text.find('__heroNativePlates')) if '__heroNativePlates' in text else len(text)
+        return model + '\n' + text[:bridge_start] + '\n' + bridge
     if "snapshot:livingSnapshot" in text:
         return model + '\n' + text + '\n' + bridge
     text = replace_once(text, "if(busy||document.hidden||!document.querySelector('[data-slot]'))return;",
@@ -273,7 +283,7 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
     css = HOME_CSS.encode('utf8')
     css_rel = '_shared/home-living-bind-' + proof(css)['sha256'][:20] + '.css'
     html = replace_once(html, '</head>', '<link rel="stylesheet" href="' + prefix + package_manifest['style'] + '">\n<link rel="stylesheet" href="/' + css_rel + '">\n</head>')
-    html = replace_once(html, '<script src="/' + app_rel + '"', '<script src="' + prefix + package_manifest['engine'] + '" defer></script>\n<script src="/' + app_rel + '"')
+    html = replace_once(html, '<script src="/' + app_rel + '"', '<script src="' + prefix + package_manifest['engine'] + '" defer></script>\n<script type="module" src="/' + app_rel + '"')
     # The first paint uses the same exact dimensions before deferred layout runs.
     html = re.sub(r'(<section\b[^>]*id="home-01"[^>]*style=")[^"]*', r'\g<1>aspect-ratio:2880/1621;--grid-index:0', html, count=1)
     css += b'@media (orientation:portrait) { #home-01 { aspect-ratio:1280/2227 !important; } }\n'
@@ -340,7 +350,8 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     app_rel = '_shared/home-app-' + proof(body)['sha256'][:20] + '.js'
     data['shared']['script_bundle'] = '/' + app_rel
     html = html[:data_match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + html[data_match.end(2):]
-    html = replace_once(html, '<script src="' + old_ref + '"', '<script src="/' + app_rel + '"')
+    html = html.replace(old_ref, '/' + app_rel)
+    html = re.sub(r'<script\b(?![^>]*\btype=)(?=[^>]*(?:src|data-src)="/' + app_rel + '")', '<script type="module"', html)
     layouts = data['screens'][0]['layouts']
     html = home_preloads(html, layouts['h']['viewer']['src'], layouts['v']['viewer']['src'])
     shutil.copytree(baseline, output)

@@ -1,0 +1,1871 @@
+[
+  {
+    "screen": "how-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么协作",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "53%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我、Claude、GPT、三个底座",
+        "row": "top"
+      },
+      {
+        "type": "line_legend",
+        "text_ref": "线上传的东西分四种",
+        "row": "top",
+        "layout": "rows",
+        "columns": 1
+      },
+      {
+        "type": "illustration",
+        "row": "top",
+        "width": "47%",
+        "illustration": "outside",
+        "index": 0,
+        "size": "large",
+        "target_width": "100%"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "全景图",
+        "columns": 4,
+        "row_counts": [
+          4,
+          4
+        ],
+        "align": "left",
+        "entry_arrow_refs": [
+          "例二：电脑坏了换一台"
+        ]
+      }
+    ],
+    "notes": "横版左上标题、介绍、四行线型图例、按钮 3/3/2，右侧卡外地图占约 47%；竖版顺序为标题、介绍、整宽地图、四行图例、两列四排大入口卡，插画在入口卡内顶部。图例标题和项目名只取定稿，不添字；竖版末尾全部八个入口文字来自三条 linkrow，需目录组件按独立链接拆卡。 qa04 修正：导航移到两栏下方全宽4列2行；保留8项原链接全名。右栏插画使用large并占满本栏可用宽。"
+  },
+  {
+    "screen": "how-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么协作",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我、Claude、GPT、三个底座"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
+        "type": "line_legend",
+        "text_ref": "线上传的东西分四种",
+        "layout": "rows",
+        "columns": 1
+      },
+      {
+        "type": "link_grid",
+        "text_ref": "全景图",
+        "columns": 2,
+        "portrait_columns": 2,
+        "illustration": "none",
+        "icons": "none",
+        "rows": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "variant": "entry_cards"
+      }
+    ],
+    "notes": "横版左上标题、介绍、四行线型图例、按钮 3/3/2，右侧卡外地图占约 47%；竖版顺序为标题、介绍、整宽地图、四行图例、两列四排大入口卡，插画在入口卡内顶部。图例标题和项目名只取定稿，不添字；竖版末尾全部八个入口文字来自三条 linkrow，需目录组件按独立链接拆卡。 本轮修正：directory_tile 把三条 linkrow 当成三张卡，造成入口字重叠；改用已注册 link_grid 将八个原链接逐项分格，两列四行。入口配图和最终样式仍列未完成。 qa04 修正：八项手机入口统一无图标，保留原链接文字、两列四行；依据审查第11项允许全去图标。"
+  },
+  {
+    "screen": "how-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全景图",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑上把鼠标移到一个项目上"
+      },
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/系统群岛.png",
+        "size": "large",
+        "align": "center",
+        "target_width": 760
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "中间",
+        "variant": "grouped_list",
+        "columns": 3,
+        "portrait_columns": 1
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "电脑日常",
+        "variant": "grouped_list",
+        "columns": 2,
+        "portrait_columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "三个底座给所有项目的",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不在图上的",
+        "align": "left"
+      }
+    ],
+    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "how-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-02-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3c\\state\\b2-how-02-v2b\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-02-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全景图",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑上把鼠标移到一个项目上"
+      },
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/系统群岛.png",
+        "size": "large",
+        "align": "center",
+        "target_width": 885
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "中间",
+        "variant": "grouped_list",
+        "columns": 1,
+        "portrait_columns": 1
+      },
+      {
+        "type": "notice",
+        "text_ref": "三个底座给所有项目的",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不在图上的",
+        "align": "left"
+      }
+    ],
+    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。"
+  },
+  {
+    "screen": "how-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "派谁：每个型号干什么",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "58%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "先能胜任，再快，再省额度",
+        "row": "intro"
+      },
+      {
+        "type": "illustration",
+        "row": "intro",
+        "width": "42%",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "GPT-6 Luna",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "Claude Fable",
+        "tone": "gray"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "这个网站就是这样分的",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "text_ref": "每类活用哪一档",
+        "columns": 2,
+        "align": "center"
+      }
+    ],
+    "notes": "横版标题与原则在左、路牌和电脑大插画在卡外右，六张角色卡两排三列，每卡插画在左；下面依次整宽灰说明条、网站分工卡、两个按钮。竖版标题原则下整宽卡外路牌插画，六卡单列左图右文，再说明条、网站分工卡和单列按钮；原竖版分张中大块空白无需照抄。"
+  },
+  {
+    "screen": "how-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-05-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "派谁：每个型号干什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "先能胜任，再快，再省额度"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "GPT-6 Luna",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "Claude Fable",
+        "tone": "gray"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "这个网站就是这样分的",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "action_button",
+        "text_ref": "每类活用哪一档",
+        "columns": 1,
+        "align": "center"
+      }
+    ],
+    "notes": "横版标题与原则在左、路牌和电脑大插画在卡外右，六张角色卡两排三列，每卡插画在左；下面依次整宽灰说明条、网站分工卡、两个按钮。竖版标题原则下整宽卡外路牌插画，六卡单列左图右文，再说明条、网站分工卡和单列按钮；原竖版分张中大块空白无需照抄。"
+  },
+  {
+    "screen": "how-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我、Claude 和 GPT 怎么分工",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "图里：",
+        "row": "body",
+        "width": "50%",
+        "layout": "branches",
+        "connector": "arrow",
+        "illustration": "outside",
+        "topology_layout": "我在上；Claude 左/Codex 右；两者任务文件右向与报告左向；手机在下连主机",
+        "icons": [
+          "_library/icons/人物.png",
+          {
+            "asset": "_library/icons/显示器.png",
+            "badge": "_library/icons/Claude标志.png"
+          },
+          {
+            "asset": "_library/icons/显示器.png",
+            "badge": "_library/icons/OpenAI标志.png"
+          },
+          "_library/icons/白纸.png",
+          "_library/icons/白纸.png",
+          "_library/icons/手机.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我　提要求、拍板",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "row": "body",
+        "width": "50%",
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/手机上四卡单列左图右文。竖版关系图在标题后、四卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+  },
+  {
+    "screen": "how-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b2-how-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我、Claude 和 GPT 怎么分工",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "topology",
+        "text_ref": "图里：",
+        "layout": "branches",
+        "connector": "arrow",
+        "illustration": "outside",
+        "topology_layout": "同横版关系图置顶，一次呈现定稿全部图内标签",
+        "icons": [
+          "_library/icons/人物.png",
+          {
+            "asset": "_library/icons/显示器.png",
+            "badge": "_library/icons/Claude标志.png"
+          },
+          {
+            "asset": "_library/icons/显示器.png",
+            "badge": "_library/icons/OpenAI标志.png"
+          },
+          "_library/icons/白纸.png",
+          "_library/icons/白纸.png",
+          "_library/icons/手机.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "我　提要求、拍板",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/手机上四卡单列左图右文。竖版关系图在标题后、四卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+  },
+  {
+    "screen": "how-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how\\img\\how-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "例一：一句话",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "这是一个设想"
+      },
+      {
+        "type": "prose",
+        "text_ref": "假设从黄山"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 路上",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ],
+        "motion_text": [
+          {
+            "kind": "number",
+            "text": "①"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "② 到家",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "③ 收素材",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "motion_icon_arrow": true
+      },
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 4,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      }
+    ],
+    "notes": "横版左 30% 为这一例用到项目的小地图，右 70% 标题、设想提示与介绍、三张编号卡；卡内插画在左，说明在右，顶右另有高铁握手机卡外场景插画。竖版现有 v/v2 仅显示标题介绍、第①和第②卡，两卡标题后为整宽卡内插画，再谁做/传什么/注意；第③卡和项目名单未有对应源分张，沿同屏卡样补齐，待样张。编号已在 group 原文中，不再增加编号。 qa04 修正：正文、步骤卡改全宽，清单移到底部4列紧凑牌。第二屏清单也是定稿原文，仍完整保留；不按删重建议删字。 qa04 修正：③收素材明确照片堆图标，避免auto重复手机。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。"
+  },
+  {
+    "screen": "how-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-09-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "例一：一句话",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "这是一个设想"
+      },
+      {
+        "type": "prose",
+        "text_ref": "假设从黄山"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 路上",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ],
+        "motion_text": [
+          {
+            "kind": "number",
+            "text": "①"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "② 到家",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "③ 收素材",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "motion_icon_arrow": true
+      },
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 2,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      }
+    ],
+    "notes": "横版左 30% 为这一例用到项目的小地图，右 70% 标题、设想提示与介绍、三张编号卡；卡内插画在左，说明在右，顶右另有高铁握手机卡外场景插画。竖版现有 v/v2 仅显示标题介绍、第①和第②卡，两卡标题后为整宽卡内插画，再谁做/传什么/注意；第③卡和项目名单未有对应源分张，沿同屏卡样补齐，待样张。编号已在 group 原文中，不再增加编号。 qa04 修正：手机清单明确2列，原句中点保留在牌内末尾，不生成独立圆点格。 qa04 修正：③收素材明确照片堆图标，避免auto重复手机。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。"
+  },
+  {
+    "screen": "how-10",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "接着上面的设想"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "④ 听录音",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/麦克风.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 写旁白",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/云图片.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑥ 交片",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png"
+        ]
+      },
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 4,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-09。续接例一，不添加定稿没有的章节标题；④⑤⑥各独立卡，插画横版在左、竖版在标题下卡内顶部；保持谁做/传什么/注意层次和全部文字。 qa04 修正：正文、步骤卡改全宽，清单移到底部4列紧凑牌。第二屏清单也是定稿原文，仍完整保留；不按删重建议删字。 qa04 修正：⑥交片存好明确外接硬盘图标，避免重复麦克风。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。",
+    "reference_screen": "how-09"
+  },
+  {
+    "screen": "how-10",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "接着上面的设想"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "④ 听录音",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/麦克风.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 写旁白",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/云图片.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑥ 交片",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png"
+        ]
+      },
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 2,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-09。续接例一，不添加定稿没有的章节标题；④⑤⑥各独立卡，插画横版在左、竖版在标题下卡内顶部；保持谁做/传什么/注意层次和全部文字。 qa04 修正：手机清单明确2列，原句中点保留在牌内末尾，不生成独立圆点格。 qa04 修正：⑥交片存好明确外接硬盘图标，避免重复麦克风。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。",
+    "reference_screen": "how-09"
+  },
+  {
+    "screen": "how-11",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 4,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      },
+      {
+        "type": "chapter_title",
+        "text_ref": "例二：电脑坏了",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "要我在场"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "真做过",
+        "legend_items": [
+          {
+            "kind": "done",
+            "text_ref": "真做过"
+          },
+          {
+            "kind": "unverified",
+            "text_ref": "还没做过"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 接上",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "row": "example-steps-0",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "② 取回",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "row": "example-steps-0",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "③ 解开",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "row": "example-steps-1",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "④ 三个",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none",
+        "row": "example-steps-1",
+        "width": "50%"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-09。竖版全宽居中毛笔标题和介绍后，绿实心/灰空心真做过图例；恢复①②③为整宽文字卡，仅卡角叶子，无主体插画。现有两分张缺④和项目名单，按已有单列文字卡补齐，待样张；不得把真做过/还没做过换成新增文字。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+    "reference_screen": "how-09"
+  },
+  {
+    "screen": "how-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-11-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "例二：电脑坏了",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "要我在场"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "真做过",
+        "legend_items": [
+          {
+            "kind": "done",
+            "text_ref": "真做过"
+          },
+          {
+            "kind": "unverified",
+            "text_ref": "还没做过"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 接上",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "② 取回",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "③ 解开",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "④ 三个",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "text_ref": "这一例用到",
+        "type": "tag",
+        "separator": "·",
+        "separator_layout": "attached_next",
+        "columns": 2,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
+      }
+    ],
+    "notes": "竖版全宽居中毛笔标题和介绍后，绿实心/灰空心真做过图例；恢复①②③为整宽文字卡，仅卡角叶子，无主体插画。现有两分张缺④和项目名单，按已有单列文字卡补齐，待样张；不得把真做过/还没做过换成新增文字。 qa04 修正：手机清单明确2列，原句中点保留在牌内末尾，不生成独立圆点格。\nmain-closer 2026-10-03T20:29:23+08:00：按审页第3/4条明确允许的紧凑标签改用现有tag；所有项目、原中点和重复名单完整保留，原中点附下一标签，不再索要不属于标签清单的岛屿锚点。此为现有组件等效排版，列new-looks。"
+  },
+  {
+    "screen": "how-12",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 开发工具",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件齿轮.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/打勾清单.png"
+        ]
+      },
+      {
+        "type": "comparison",
+        "text_ref": "能恢复的",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每天的镜像"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-09。现有竖图只有⑤：标题居中、下面谁做/传什么/最新包/还没做过四张整宽卡，左文右插画，插画在卡内右侧；不缩字。⑥⑦与能恢复/不保证、末尾驾驶舱链接缺原图，沿同页恢复卡补齐，待样张。right_inside 是构图事实，若 core 不支持须请求组件扩展。",
+    "reference_screen": "how-09"
+  },
+  {
+    "screen": "how-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-12-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 开发工具",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件齿轮.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑥ AI 的对话",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/双气泡.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑦ 重新登录",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      },
+      {
+        "type": "comparison",
+        "text_ref": "能恢复的",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每天的镜像"
+      }
+    ],
+    "notes": "现有竖图只有⑤：标题居中、下面谁做/传什么/最新包/还没做过四张整宽卡，左文右插画，插画在卡内右侧；不缩字。⑥⑦与能恢复/不保证、末尾驾驶舱链接缺原图，沿同页恢复卡补齐，待样张。right_inside 是构图事实，若 core 不支持须请求组件扩展。 qa04 修正：⑤标题、谁做/传什么/最新包/未实测四段合为一张完整卡，左侧一个文件齿轮；⑥明确双气泡。"
+  },
+  {
+    "screen": "how-13",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "例三：人不在电脑前",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "两种用法要分清"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 想看",
+        "columns": 2,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-05。竖版①②③④均为整宽淡绿长文字卡、上下角叶子，主体插画不放卡内；①③的链接副标题紧接原卡题；④标题在卡外、正文为一张卡。 横版为新构图：按同页 how-05 卡片组两列自适应，上下顺序按定稿。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
+    "reference_screen": "how-05"
+  },
+  {
+    "screen": "how-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-13-v2\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-13-v3\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "例三：人不在电脑前",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "两种用法要分清"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "① 想看",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "② Moonlight",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "③ 想让",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "④ 人在外面",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "竖版①②③④均为整宽淡绿长文字卡、上下角叶子，主体插画不放卡内；①③的链接副标题紧接原卡题；④标题在卡外、正文为一张卡。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。"
+  },
+  {
+    "screen": "how-14",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "副机和主机",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "副机就是"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 共享端口",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-05。参照 how-13 单列场景卡，五项各独立卡，不增全景图。 横版为新构图：按同页 how-05 卡片组两列自适应，上下顺序按定稿。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
+    "reference_screen": "how-05"
+  },
+  {
+    "screen": "how-14",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "副机和主机",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "副机就是"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑤ 共享端口",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑥ 两台互相修",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑦ 复制粘贴",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑧ 临时接力",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑨ 主机坏了",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-13。参照 how-13 单列场景卡，五项各独立卡，不增全景图。 qa04 清理：原能做/前提/限制文字全部由正文输出；移除core未消费的copy_labels，不删原字、不改变当前可见结构。",
+    "reference_screen": "how-13"
+  },
+  {
+    "screen": "how-15",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "看进度、让电脑自己盯着",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑩ 看进度",
+        "columns": 2,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/沙漏.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "什么时候都办不了",
+        "align": "left"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-05。现有原图只有 v2 的⑬⑭，两张整宽卡左文右插画、标题在卡顶；其余⑩⑪⑫⑮及末尾说明缺原图，沿这两张卡构图补齐，待样张。 横版为新构图：按同页 how-05 卡片组两列自适应，上下顺序按定稿。 qa04 修正：横竖⑩至⑮均使用显式同序图标；⑩以显示器替代灰底装饰叶；⑬日历时钟、⑮沙漏。原能做/前提/限制文字本就由正文输出，移除core不消费的copy_labels字段，不删字。",
+    "reference_screen": "how-05"
+  },
+  {
+    "screen": "how-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-15-v2\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-15-v2\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "看进度、让电脑自己盯着",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑩ 看进度",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑪ 开锁",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑫ 出事先看",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑬ 按点自动跑",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/日历时钟.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑭ 盯一件事",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑮ 等验证码",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "right_inside",
+        "icons": [
+          "_library/icons/沙漏.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "什么时候都办不了",
+        "align": "left"
+      }
+    ],
+    "notes": "现有原图只有 v2 的⑬⑭，两张整宽卡左文右插画、标题在卡顶；其余⑩⑪⑫⑮及末尾说明缺原图，沿这两张卡构图补齐，待样张。 qa04 修正：横竖⑩至⑮均使用显式同序图标；⑩以显示器替代灰底装饰叶；⑬日历时钟、⑮沙漏。原能做/前提/限制文字本就由正文输出，移除core不消费的copy_labels字段，不删字。"
+  },
+  {
+    "screen": "how-03",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "三个底座怎么配合",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "整套系统最底下"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 规则与技能基座",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不算底座的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一样东西只存一处"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-05。竖版现有图在标题介绍后两列高卡：卡名和路径、卡内大插画、管/给/拿正文。只见前两个底座，第三个及末尾提示缺分张，按同样卡样补齐，待样张；第三卡在下一排靠左，文字和路径不缩。",
+    "reference_screen": "how-05"
+  },
+  {
+    "screen": "how-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\b2-surgery\\b2-how-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "三个底座怎么配合",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "整套系统最底下"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "AI 规则与技能基座",
+        "columns": 2,
+        "columns_v": 2,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "last_full_width": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "不算底座的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "一样东西只存一处"
+      }
+    ],
+    "notes": "竖版现有图在标题介绍后两列高卡：卡名和路径、卡内大插画、管/给/拿正文。只见前两个底座，第三个及末尾提示缺分张，按同样卡样补齐，待样张；第三卡在下一排靠左，文字和路径不缩。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+  },
+  {
+    "screen": "how-06",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（一）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "括号里是传的东西"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "安全",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "密码中心",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/保险箱.png",
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "了解我",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "个人理解库",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/人物.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+          "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
+          "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我的资料",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "照片视频录音管理",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/微信标志.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+    "reference_screen": "how-07"
+  },
+  {
+    "screen": "how-06",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（一）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "括号里是传的东西"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "安全",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "密码中心",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/保险箱.png",
+          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "了解我",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "个人理解库",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/人物.png",
+          "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+          "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
+          "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "我的资料",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "照片视频录音管理",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/微信标志.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。",
+    "reference_screen": "how-07"
+  },
+  {
+    "screen": "how-07",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（二）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "看和听",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "中文语音转写",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/麦克风.png",
+          "_library/icons/放大镜.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "做成品",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "本地视频制作",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/剪刀.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "_library/icons/公文包清单.png",
+          "_library/fix-round-2/icon-clean-73f4eb97ce030aeedfb6.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "备份",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "AI 备份",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/数据库循环.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/齿轮.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+    "reference_screen": "how-07"
+  },
+  {
+    "screen": "how-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b2-how-07-v-r2p1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b2-how-07-v-r2p1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-07-v1b-r2p2\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b2-r3d\\state\\b2-how-07-v3\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（二）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "看和听",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "中文语音转写",
+        "columns": 2,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/麦克风.png",
+          "_library/icons/放大镜.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "做成品",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "本地视频制作",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/剪刀.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "_library/icons/公文包清单.png",
+          "_library/fix-round-2/icon-clean-73f4eb97ce030aeedfb6.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "备份",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "AI 备份",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/数据库循环.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/齿轮.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      }
+    ],
+    "notes": "目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。"
+  },
+  {
+    "screen": "how-08",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（三）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "远程",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "电脑远程控制",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/手机电脑连接.png",
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/icons/地球.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "电脑日常",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "双屏信息中心",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/双模型窗口.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/数据库.png",
+          "_library/icons/月亮.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "三个底座见上面"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。",
+    "reference_screen": "how-07"
+  },
+  {
+    "screen": "how-08",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每个项目从谁拿、给谁（三）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "远程",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "电脑远程控制",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/手机电脑连接.png",
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/icons/地球.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "电脑日常",
+        "size": "medium",
+        "align": "left"
+      },
+      {
+        "type": "directory_tile",
+        "text_ref": "双屏信息中心",
+        "columns": 3,
+        "portrait_columns": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/双模型窗口.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/数据库.png",
+          "_library/icons/月亮.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "connector": "none",
+        "copy_labels": [
+          "拿",
+          "给"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "三个底座见上面"
+      }
+    ],
+    "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。",
+    "reference_screen": "how-07"
+  }
+]

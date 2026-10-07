@@ -1,0 +1,1636 @@
+[
+  {
+    "screen": "steam-millennium-config-backup-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-01-h.png",
+    "blocks": [
+      {
+        "type": "illustration",
+        "asset": "steam-millennium-config-backup/steam-millennium-config-backup-01-icon-03.png",
+        "size": "small",
+        "align": "left",
+        "target_width": 72,
+        "target_height": 72,
+        "row": "hero",
+        "width": "55%",
+        "inline_row": "steam-brand-title",
+        "inline_width": "72px"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "Steam 外观备份",
+        "row": "hero",
+        "inline_row": "steam-brand-title",
+        "inline_width": "1fr"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "调好的 Steam 皮肤",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "我的 Steam 用 Millennium",
+        "row": "hero"
+      },
+      {
+        "type": "screenshot",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "row": "hero",
+        "width": "45%",
+        "aspect_ratio": "16:9",
+        "decoration": "leaf_edges"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "截图说明：",
+        "row": "hero"
+      },
+      {
+        "type": "stat_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 4,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "20 个文件",
+        "icons": "auto",
+        "item_count": 4
+      },
+      {
+        "type": "prose",
+        "align": "right",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "截至 2026 年"
+      },
+      {
+        "type": "live_strip",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "现在",
+        "empty_slots": 1,
+        "slot_width": "55%",
+        "button_position": "right",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "notes": "实查 01-h。左侧标题/副标题/介绍，右侧叶子探边截图槽和图注；四张数字卡横排，图在卡内上方；截至日期右齐；底部一条现在槽和三按钮。标题与截图同排，故标题左齐。Steam 标志为定稿 scene 点名。截图槽内留空。stat_card 现仅支持 stats 节点，本页四条数字是 para；需组件适配逐行｜，不能当前兜底当已表达。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-01-v.png",
+    "blocks": [
+      {
+        "type": "illustration",
+        "asset": "steam-millennium-config-backup/steam-millennium-config-backup-01-icon-03.png",
+        "size": "small",
+        "align": "left",
+        "target_width": 72,
+        "target_height": 72,
+        "row": "steam-brand-title",
+        "width": "100%",
+        "inline_row": "steam-brand-title",
+        "inline_width": "72px",
+        "row_v": true
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "Steam 外观备份",
+        "inline_row": "steam-brand-title",
+        "inline_width": "1fr",
+        "row": "steam-brand-title",
+        "row_v": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "调好的 Steam 皮肤"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "我的 Steam 用 Millennium"
+      },
+      {
+        "type": "screenshot",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "aspect_ratio": "16:9",
+        "decoration": "leaf_edges"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "截图说明："
+      },
+      {
+        "type": "stat_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "20 个文件",
+        "columns_v": 1,
+        "icons": "none",
+        "item_count": 4
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "截至 2026 年"
+      },
+      {
+        "type": "live_strip",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "现在",
+        "empty_slots": 1,
+        "button_position": "below",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "在整套系统里的位置"
+      }
+    ],
+    "notes": "实查 01-v/v2。首张是标题/副标题/介绍→整宽截图槽/图注→2×2纯插画，续张四张整宽数字说明卡无插画，再截至日期、现在槽、驾驶舱链接和按钮。按实际图，不将数字文本塞回首张插画格。续张缺复制 AI 续作说明按钮，按定稿补齐，沿已批准按钮风格。现 illustration 无四图格支持，stat_card 无 para 数字卡支持；这些结构字段是待实现的构图意图。分张边界在20个文件之前，插画不带字。；QA04：01v孤立苗由独立four_stat_art_only插画块产生，块无text_ref/定稿节点；按审查取消该额外装饰，统计原字全部保留。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-01-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "存了什么、没存什么",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "一份备份 20 个文件",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "asset_role": "monitor_checklist",
+        "row": "hero",
+        "width": "45%",
+        "target_height": 230,
+        "target_width": 362
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "能装回的：2 个文件",
+        "icons": [
+          "_library/icons/绿叶装饰.png",
+          "_library/icons/开关.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "grouped_items": true,
+        "last_full_width": true,
+        "row": "contents",
+        "width": "40%",
+        "icon_size": 96
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "只记清单：18 个文件",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "list_layout": "seven_plugin_theme_rows",
+        "active_icon_rows": [
+          1,
+          2,
+          3,
+          6
+        ],
+        "last_full_width": true,
+        "row": "contents",
+        "width": "60%",
+        "icon_size": 96
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "不碰的",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "tone": "gray",
+        "last_full_width": true,
+        "icon_size": 96
+      }
+    ],
+    "notes": "实查 02-h。横版顶部标题介绍左、显示器清单插画右；三卡等高，左卡图在卡内上方，中央七行插件主题图标清单，右卡灰面、划掉的图标组合在上。原图章标题前 Steam 标志未在该屏 scene 点名，不额外保留。列表的实心/空心插件图标、七行插件主题小卡、两段小标题｜与主体嵌套，现 content_card 仅能保留文字，不能表达全部细节；需组件样张。带菜单字的插画必须先做无字资产。；QA04：只记清单图标置于卡顶，避免中部悬图。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "存了什么、没存什么"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "一份备份 20 个文件"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "能装回的：2 个文件",
+        "icons": [
+          "_library/icons/绿叶装饰.png",
+          "_library/icons/开关.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "illustration_order": "before_heading"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "只记清单：18 个文件",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "list_layout": "seven_plugin_theme_rows",
+        "active_icon_rows": [
+          1,
+          2,
+          3,
+          6
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "不碰的",
+        "icons": "auto",
+        "illustration_order": "after_heading",
+        "tone": "gray"
+      }
+    ],
+    "notes": "实查 02-v/v2。首张标题介绍、整宽能装回卡，卡内先显示器放大镜插画再卡头和两段；续张只记清单七行全宽小卡，再不碰的无插画灰卡。列表的实心/空心插件图标、七行插件主题小卡、两段小标题｜与主体嵌套，现 content_card 仅能保留文字，不能表达全部细节；需组件样张。带菜单字的插画必须先做无字资产。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-02-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "平时不用管",
+        "icons": "auto",
+        "item_count": 3,
+        "last_full_width": true
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "读不全",
+        "icons": [
+          "_library/icons/绿叶装饰.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/icons/打勾清单.png"
+        ],
+        "item_count": 4
+      }
+    ],
+    "notes": "实查 03-h。两个半屏章节左齐，中间浅绿细竖线；左列三张横卡，左图右字，第一第三卡较高；右侧四卡2×2，图在卡内上部。两标题共排，均非整屏独占。当前parser已将粗体标题｜说明识别为card，左3/右4卡可分配；右侧2×2可由columns表达。中央浅绿分隔线尚无规格字段支持。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "平时不用管",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "想马上存一份",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "想知道备份好不好",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "读不全",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "G 盘没接上或认不出",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "存到一半断电",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "好久没存上",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ]
+      }
+    ],
+    "notes": "实查 03-v/v2。首张标题→大卡（电脑闹钟图上、字下）→马上存的左图右字卡；续张先想知道备份好不好纯文字卡，再出事怎么办容器内四张无图整宽小卡。四卡外层容器与内卡双层边框需样张。分张边界在想知道备份好不好之前。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-03-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "换电脑怎么装回",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "装回只动两样",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "row": "hero",
+        "width": "55%",
+        "asset_role": "new_computer_path",
+        "textless": true
+      },
+      {
+        "type": "flow",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "above_card",
+        "connector": "ribbon",
+        "text_ref": "先装软件",
+        "columns_v": 1,
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/指向手.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "name_in_card": true,
+        "item_illustration_v": [
+          "left_inside",
+          "top_inside",
+          "left_inside",
+          "none"
+        ],
+        "human_action_items": [
+          3,
+          4
+        ],
+        "page_break_after_item": null,
+        "direction": "horizontal",
+        "open_nodes": true
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "实际用过多少",
+        "tone": "yellow",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "实查 04-h。横版标题介绍左、电脑小路插画右；四步一行，小图在文字卡外上方，编号圆徽卡外，卡头在文字卡内；3/4步手势在卡角，弯曲小路连图；底部满宽黄便签。steps 是完整节点，text_ref 只定位第一步；不得将第4步另写 ref。item_illustration_v、page_break_after_item、人手指示与小路弯曲连接是现 numbered_steps 未支持的精确构图字段。电脑路标若裁切不能保留定稿外“新电脑”字。notice 黄色便签属于批准三图未覆盖的新样式，待样张。 本轮按实测 G3 横向溢出，将四步交给同族 flow 组件保持四列与图在卡外；不缩字，仍须核验编号卡外、手势、小路细节。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "换电脑怎么装回"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "装回只动两样"
+      },
+      {
+        "type": "flow",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "text_ref": "先装软件",
+        "columns_v": 1,
+        "icons": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "_library/icons/指向手.png",
+          "_library/icons/代码窗口.png"
+        ],
+        "name_in_card": true,
+        "item_illustration_v": [
+          "left_inside",
+          "top_inside",
+          "left_inside",
+          "none"
+        ],
+        "human_action_items": [
+          3,
+          4
+        ],
+        "page_break_after_item": 3,
+        "direction": "vertical"
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "实际用过多少",
+        "tone": "yellow"
+      }
+    ],
+    "notes": "实查 04-v/批准替换04-v2。首张标题介绍和1/2/3步，依次左图/上图/左图；弯曲丝带向下连。续张第4步为无插画整宽文字卡，下面是整宽黄卡。steps 是完整节点，text_ref 只定位第一步；不得将第4步另写 ref。item_illustration_v、page_break_after_item、人手指示与小路弯曲连接是现 numbered_steps 未支持的精确构图字段。电脑路标若裁切不能保留定稿外“新电脑”字。notice 黄色便签属于批准三图未覆盖的新样式，待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-steam-millennium-config-backup-04-v2\\round-01\\candidate-1.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-05-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "一次备份经过哪几步"
+      },
+      {
+        "type": "flow",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "text_ref": "找到目录",
+        "direction": "horizontal",
+        "icons": "auto",
+        "page_break_after_item": null,
+        "last_item_illustration": "left_inside",
+        "row_order": "1-2-3 / 4-5-6"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "三处各存在哪"
+      },
+      {
+        "type": "table",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "位置",
+        "portrait_layout": "preserve_three_columns",
+        "column_widths": [
+          "18%",
+          "51%",
+          "31%"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "right_inside",
+        "connector": "none",
+        "text_ref": "代码",
+        "icons": "auto"
+      }
+    ],
+    "notes": "实查 05-h。六节点2×3，图左字右；1→2→3后从右外侧向下绕回第4，再4→5→6；下部左61%表格、右39%代码卡带右侧电脑插画。flow 主体可接完整 steps，精确3→4回折、每项左右图位置需样张；竖第6去图、节点间分张目前不支持。table 竖默认逐行卡，preserve_three_columns为构图意图且字号不准缩；若组件不能实现需正式适配。代码卡 right_inside 现core无此变体。流程和表格属新样式，待样张。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "一次备份经过哪几步"
+      },
+      {
+        "type": "flow",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "text_ref": "找到目录",
+        "direction": "vertical",
+        "icons": "auto",
+        "page_break_after_item": 5,
+        "last_item_illustration": "left_inside",
+        "row_order": "1-2-3 / 4-5-6"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "三处各存在哪"
+      },
+      {
+        "type": "table",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "位置",
+        "portrait_layout": "preserve_three_columns",
+        "column_widths": [
+          "18%",
+          "51%",
+          "31%"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "代码",
+        "icons": "auto"
+      }
+    ],
+    "notes": "实查 05-v/v2。首张1–5节点左图右字整宽，向下绿箭头；续张第6纯字卡，下面三列四行表，底部无图代码卡。按实际原图保留窄三列表，不凭scene变逐行卡。flow 主体可接完整 steps，精确3→4回折、每项左右图位置需样张；竖第6去图、节点间分张目前不支持。table 竖默认逐行卡，preserve_three_columns为构图意图且字号不准缩；若组件不能实现需正式适配。代码卡 right_inside 现core无此变体。流程和表格属新样式，待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-05-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "不自动推到 GitHub",
+        "icons": "auto",
+        "row": "cards-1",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "一把锁",
+        "icons": "auto",
+        "row": "cards-1",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "装回要带预览编号",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "row": "cards-2",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "Python 只用标准库",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ],
+        "row": "cards-2",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "这台电脑的事归电脑配置管",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png"
+        ],
+        "row": "cards-3",
+        "width": "100%"
+      }
+    ],
+    "notes": "实查 06-h。五张左图右字横卡按先左后右2/2/1排列，右下卡外叶子补白。与正文顺序一致：不自动推、一把锁、预览号、Python、电脑配置。小票内001/002/003、门上“忙”等字不在本屏逐字定稿，不可直接裁切进插画。；QA04：按审查移除末行独立大绿苗装饰，末张内容卡通栏。；QA04：预览编号与Python两卡改用现有已发布文件核验、代码窗口图标，不再自动领取重复绿苗。；QA04：末卡也显式绑定外接硬盘，避免前两卡显式图标令auto游标移位。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "不自动推到 GitHub",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "一把锁",
+        "icons": "auto"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "装回要带预览编号",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "Python 只用标准库",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "这台电脑的事归电脑配置管",
+        "icons": [
+          "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png"
+        ]
+      }
+    ],
+    "notes": "实查 06-v。五卡整宽单列，均左小图右字；上右角及下边叶子不挤正文。小票内001/002/003、门上“忙”等字不在本屏逐字定稿，不可直接裁切进插画。；QA04：预览编号与Python两卡改用现有已发布文件核验、代码窗口图标，不再自动领取重复绿苗。；QA04：末卡也显式绑定外接硬盘，避免前两卡显式图标令auto游标移位。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "公开仓库，也不漏私事",
+        "icons": [
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png"
+        ],
+        "row": "highlights",
+        "width": "33.333%",
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "读不全，不算删了",
+        "icons": [
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png"
+        ],
+        "row": "highlights",
+        "width": "33.333%",
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "软件升级也记一笔",
+        "icons": "auto",
+        "row": "highlights",
+        "width": "33.333%",
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      }
+    ],
+    "notes": "实查 07-h。三张等宽长卡并排，卡内插画在上，粗体卡头下两段麻烦/解法；绿色小标签位于各段左边，不能补重复字。group 节点可定位完整各卡；绿色麻烦/解法标签目前content_card无精确字段支持，须组件样张。第二竖图卡内书架/空文件夹与横图碎纸机不同，资产按方向指定；第三竖插画内3.4.1/3.5.0只能由定稿程序覆盖不能裁字复用。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "公开仓库，也不漏私事",
+        "icons": [
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png"
+        ],
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "读不全，不算删了",
+        "icons": [
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png"
+        ],
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      },
+      {
+        "type": "content_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "软件升级也记一笔",
+        "icons": "auto",
+        "paragraph_labels": "麻烦/解法",
+        "label_style": "green_tag"
+      }
+    ],
+    "notes": "实查 07-v/v2。首张只有第一亮点长卡，续张第二、第三卡上下；每卡上插画下正文，续张标签浅绿胶囊。分张边界在读不全，不算删了之前。group 节点可定位完整各卡；绿色麻烦/解法标签目前content_card无精确字段支持，须组件样张。第二竖图卡内书架/空文件夹与横图碎纸机不同，资产按方向指定；第三竖插画内3.4.1/3.5.0只能由定稿程序覆盖不能裁字复用。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-07-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "全部功能",
+        "row": "head",
+        "width": "34%"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "图例：",
+        "row": "head",
+        "width": "66%"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "存一份",
+        "icons": "auto",
+        "heading_icon": "_library/icons/文稿堆.png"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "核心设置",
+        "icons": "auto",
+        "status_position": "bottom_right",
+        "item_count": 9
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "多存几处",
+        "icons": "auto",
+        "heading_icon": "_library/icons/followup-r3-steam08-three-drives.png"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "留最近几代",
+        "icons": "auto",
+        "status_position": "bottom_right",
+        "item_count": 5,
+        "row_counts": [
+          3,
+          2
+        ],
+        "last_row_widths": [
+          "34%",
+          "66%"
+        ]
+      }
+    ],
+    "notes": "实查08-h。标题左、完整六状态图例右，共占一行；实际组名占左侧图文窄栏，不按scene改成上方跨行。存一份右侧3×3卡；多存几处上行3卡、下行2卡（接管旧备份较宽）。卡内图左、字右、状态右下。现feature_card不把含｜para当功能卡；status_legend不将括号颜色说明替换成符号，G1与图例隐去括号要求需组件契约统一。状态色只能赋给状态符号。功能卡/图例属于新样式，待样张。；QA04：所有功能组统一标签18%、功能卡82%，保持上下列起点一致。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-08-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "全部功能"
+      },
+      {
+        "type": "status_legend",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "存一份",
+        "icons": "auto",
+        "heading_icon": "_library/icons/文稿堆.png"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "核心设置",
+        "portrait_columns": 1,
+        "icons": [
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/文件齿轮.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
+        "item_count": 8,
+        "status_position": "right"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "卸载跟着删",
+        "portrait_columns": 1,
+        "icons": [
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png"
+        ],
+        "item_count": 1,
+        "status_position": "bottom_right",
+        "page_break_before": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "多存几处"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "留最近几代",
+        "portrait_columns": 1,
+        "icons": [
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+          "_library/icons/followup-r3-steam08-three-drives.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
+        "item_count": 5,
+        "status_position": "bottom_right"
+      }
+    ],
+    "notes": "实查08-v/v2。首张仅原标题、完整六项图例、存一份组标题及8项核心设置至公开前过滤；小图在左，字在右，状态右端。续张先卸载跟着删（无组名重复），再多存几处标题及5卡，均无插画、整宽、状态右下。08-v没有卸载跟着删重复，定稿portrait明确不补卡、新字和装饰。page_break_before引擎目前未执行；需确保分张正好一次。功能普通para的｜拆卡及状态定位当前未支持；待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-08-v2.png"
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-09-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "全部功能（续）"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "查和管",
+        "icons": "auto"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "备份状态",
+        "icons": "none",
+        "item_count": 5,
+        "row_counts": [
+          3,
+          2
+        ],
+        "last_row_widths": [
+          "65%",
+          "35%"
+        ],
+        "status_position": "bottom_right"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "装回",
+        "icons": "auto"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 4,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "装回前预览",
+        "icons": "none",
+        "item_count": 4,
+        "status_position": "bottom_right"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "text_ref": "兼容",
+        "icons": "auto"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "旧入口照样能用",
+        "icons": "none",
+        "item_count": 1,
+        "status_position": "bottom_right"
+      }
+    ],
+    "notes": "实查09-h。整屏章节标题按追加要求居中；三组均组插画左栏、功能卡右栏。查和管3+2卡，第二行装好和自查任务约占2/3；装回实际一排4卡；兼容1整宽卡。按原图，不统一套三列。无单卡插画、状态在右下。section_heading带组图和feature_card普通para拆卡/非等宽最后行目前未表达，待组件样张。；QA04：所有功能组统一标签18%、功能卡82%，保持上下列起点一致。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-09-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "全部功能（续）"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "查和管",
+        "background": "pale_green"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "备份状态",
+        "portrait_columns": 1,
+        "icons": "none",
+        "item_count": 5,
+        "status_position": "top_right",
+        "status_style": "pill"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "装回",
+        "background": "pale_green"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "装回前预览",
+        "portrait_columns": 1,
+        "icons": "none",
+        "item_count": 4,
+        "status_position": "top_right",
+        "status_style": "pill"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "兼容",
+        "background": "pale_green"
+      },
+      {
+        "type": "feature_card",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "旧入口照样能用",
+        "portrait_columns": 1,
+        "icons": "none",
+        "item_count": 1,
+        "status_position": "top_right",
+        "status_style": "pill"
+      }
+    ],
+    "notes": "实查09-v，仅一张。三组10项全宽单列，绿色整宽组名条，卡内名称与说明充满宽，右上清楚状态胶囊；没有组或卡的大插画。原标题普通粗体现已批准手机结构，但新程序毛笔章节字仍须合格标题图，不能拿字体兜底冒充通过。定稿portrait已确认36源像素正文/44行高/总1534源像素参考，以实际370px可读为准。状态词与含义保留；不为圆点胶囊本身重画。现feature_card对para不拆功能卡，status_style等未执行；待接入。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "演进（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "align": "left",
+        "size": "medium",
+        "columns": 5,
+        "illustration": "below_card",
+        "connector": "ribbon",
+        "text_ref": "6 月 20 日",
+        "direction": "horizontal",
+        "icons": [
+          "_library/icons/文件齿轮.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/版本循环文件.png",
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
+          "_library/icons/日历时钟.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "item_count": 9,
+        "stagger": true,
+        "emphasis_item": 6,
+        "emphasis_badge": "2.0",
+        "row_counts": [
+          5,
+          4
+        ]
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "text_ref": "现在",
+        "icons": [
+          "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png"
+        ]
+      }
+    ],
+    "notes": "实查10-h。九旗一行上下错落，日期旗文字上、插画在旗脚外，下方连续绿丝带；9月18日大旗突出2.0；底部满宽现在细卡，左边纸张对勾小图，右端叶子。章节独占整屏按追加要求居中。当前parser将九个日期识别成一个完整stats节点，timeline可接整节点；below_card、错落旗、变宽重点旗/2.0徽章均无现有精确支持。2.0是9月18日正文已有片段，徽章不得重复生成可计文字。旗式时间线是新样式，待样张。；QA04：按审查将九列改为两排5+4，不缩字号、不改原文。"
+  },
+  {
+    "screen": "steam-millennium-config-backup-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "演进（北京时间）"
+      },
+      {
+        "type": "timeline",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "ribbon",
+        "text_ref": "6 月 20 日",
+        "direction": "vertical",
+        "icons": "none",
+        "item_count": 9,
+        "item_variants": [
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected",
+          "flags_connected"
+        ],
+        "item_connectors": [
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon",
+          "ribbon"
+        ],
+        "emphasis_item": 6,
+        "emphasis_badge": "2.0",
+        "page_break_after_item": 5
+      },
+      {
+        "type": "notice",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "text_ref": "现在",
+        "date_flag": true
+      }
+    ],
+    "notes": "实查10-v/v2。首张电脑/日历/闹钟插画在章标题之前，下面前5日期单列旗卡，左外有竖丝带圆节点；续张剩4日期每卡日期竖旗在左、说明右，无外连线；最后现在也用左旗卡样式。分张边界9月18日前，不能重复标题或日期。当前parser将九个日期合并成完整stats节点，必须只以6月20日定位整个节点；不能拿9月18日另定位stats内项。每项变体/连接/分张字段表达目标，当前组件未执行，待样张；只有无字插画可复用。；QA04：按审查移除标题前错放的独立电脑/游戏机插画块。；main-closer3：按wave2b复查要求，九日期全部统一flags_connected/ribbon，仍由同一组件实例在第5项后切片，原字与编号不变。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-v2.png"
+    ]
+  }
+]

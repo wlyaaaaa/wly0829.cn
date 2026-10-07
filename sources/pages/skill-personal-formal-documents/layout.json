@@ -1,0 +1,702 @@
+[
+  {
+    "screen": "skill-personal-formal-documents-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "个人正式文书技能"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "hero",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "row": "hero",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%",
+        "illustration": "outside"
+      },
+      {
+        "type": "dialogue",
+        "columns": 2,
+        "split_paras": true,
+        "flow": "column",
+        "rows": 4,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "怎么跟 AI 说"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 横版将它做什么 content_card 与不用点名 notice 直接并入 hero 左55%栏，紧随标题和技能名；主插画与原4+3双列对话同属右45%栏。保留所有定稿节点与链接一次，不缩字号、不改定稿。；page-fixer-03第二轮：主图下的长对话退出hero窄右栏，独占下一整宽行，保留原双列按列读与所有气泡；避免左下大片空白。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-personal-formal-documents-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:个人正式文书技能].text_ref"
+        ],
+        "requirement": "标题“个人正式文书技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:个人正式文书技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "prior_round_notes": "构图来源：定稿 scene/portrait，库存 source_layout；横版标题和技能名在左上、主插画右上卡外，下方左栏说明卡和浅绿提示、右栏一张对话大卡；7 个原话段各一气泡，横版两列按列读取，竖版按定稿单列。引号原样保留。竖版插画在说明和提示之后、问法之前。"
+  },
+  {
+    "screen": "skill-personal-formal-documents-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "个人正式文书技能"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "banner"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "flow": "column",
+        "rows": 7,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "怎么跟 AI 说"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait，库存 source_layout；横版标题和技能名在左上、主插画右上卡外，下方左栏说明卡和浅绿提示、右栏一张对话大卡；7 个原话段各一气泡，横版两列按列读取，竖版按定稿单列。引号原样保留。竖版插画在说明和提示之后、问法之前。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-personal-formal-documents-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:个人正式文书技能].text_ref"
+        ],
+        "requirement": "标题“个人正式文书技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:个人正式文书技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-personal-formal-documents-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "head",
+        "width": "38%",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "row": "head",
+        "width": "62%",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "row": "example",
+        "width": "67%",
+        "text_ref": "我："
+      },
+      {
+        "type": "notice",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ],
+        "illustration": "left_inside",
+        "row": "example",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "row": "example",
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "row": "example",
+        "width": "33%",
+        "text_ref": "过几天"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与示例小标签相邻；横版左约2/3是我、AI做事、AI交回的竖对话，右约1/3是一张外卡内的我/AI两气泡；竖版主对话在前，后续外卡整宽放最后。做事段为一条细浅绿横条，五小图标在横条左端；不把这一段改成编号步骤。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:示例：].tone"
+        ],
+        "requirement": "示例为灰色小标签；tag 当前不消费 tone，须样张确认并实现该灰色标签，不能据字段声称已变灰。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene；components/comp-text/primitives.py:render_tag"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:AI 做了什么].icons",
+          "blocks[notice:AI 做了什么].illustration"
+        ],
+        "requirement": "AI 做了什么是细浅绿横条，左端五个小图标按文件夹、问号、放大镜、本人签名/对方留空、核对缩略图排成一排；notice 当前不消费图标字段。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene；components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[notice:AI 做了什么].icons"
+        ],
+        "requirement": "icon 需要 5 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene 明确五图；库存 assets 将本屏图标误计为 0，需一并校正素材登记"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-personal-formal-documents-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-02-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "我："
+      },
+      {
+        "type": "notice",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "过几天"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与示例小标签相邻；横版左约2/3是我、AI做事、AI交回的竖对话，右约1/3是一张外卡内的我/AI两气泡；竖版主对话在前，后续外卡整宽放最后。做事段为一条细浅绿横条，五小图标在横条左端；不把这一段改成编号步骤。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:示例：].tone"
+        ],
+        "requirement": "示例为灰色小标签；tag 当前不消费 tone，须样张确认并实现该灰色标签，不能据字段声称已变灰。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene；components/comp-text/primitives.py:render_tag"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:AI 做了什么].icons",
+          "blocks[notice:AI 做了什么].illustration"
+        ],
+        "requirement": "AI 做了什么是细浅绿横条，左端五个小图标按文件夹、问号、放大镜、本人签名/对方留空、核对缩略图排成一排；notice 当前不消费图标字段。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene；components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[notice:AI 做了什么].icons"
+        ],
+        "requirement": "icon 需要 5 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-personal-formal-documents-02.scene 明确五图；库存 assets 将本屏图标误计为 0，需一并校正素材登记"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-personal-formal-documents-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "notice",
+        "inline_button": "去看全部功能",
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 2,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。整屏章节大标题居中；浅绿满宽横幅右端是原文“去看全部功能”按钮，竖版按钮单独一行；下方一张规矩大卡含卡头及 7 个左图右文内条目，横版两列、竖版一列。没有 scene 外的主插画。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 7 个，当前有效总 manifest 有 3 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-personal-formal-documents-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-personal-formal-documents-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "notice",
+        "inline_button": "去看全部功能",
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。整屏章节大标题居中；浅绿满宽横幅右端是原文“去看全部功能”按钮，竖版按钮单独一行；下方一张规矩大卡含卡头及 7 个左图右文内条目，横版两列、竖版一列。没有 scene 外的主插画。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 7 个，当前有效总 manifest 有 3 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-personal-formal-documents-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-personal-formal-documents-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "limits",
+        "text_ref": "管",
+        "width": "33%"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "heading_size": "medium",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "row": "limits",
+        "width": "67%",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "limits",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。04 边界标题单独整行居中；管卡插画由 top_inside 改 left_inside，与不做卡均为左图右文。横版管卡保留左33%，右67%仍为不管表格及不做卡。管卡当前绿叶兜底图另交素材请求；卡角叶子和标题笔刷残底交对应 owner，不把请求当已修。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "表格/行卡的路牌图标及卡头大小必须按源构图，table 当前只渲染标题与表体，不读取这三个字段。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene；components/table/table.py:render_table"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "三个块分别需要已核对的管、路牌、禁止图标映射；当前每屏只有 icon-01 且没有语义标注，不得多个块用 auto 重复同一物件。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene 明确每块一个、共三个图标；库存 assets 只估 1 个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "prior_round_notes": "构图来源：定稿 scene/portrait。横版左约1/3为标题及管卡，右约2/3上表格下不做卡，无连线。竖版依次为管、3 张表格行卡、不做；行卡上方“这些事”、下方“找谁”和原链接。三块各自的小图标放块内左上，禁止跨块复用一个图标。"
+  },
+  {
+    "screen": "skill-personal-formal-documents-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\img\\skill-personal-formal-documents-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "heading_size": "medium",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。04 边界标题单独整行居中；管卡插画由 top_inside 改 left_inside，与不做卡均为左图右文。横版管卡保留左33%，右67%仍为不管表格及不做卡。管卡当前绿叶兜底图另交素材请求；卡角叶子和标题笔刷残底交对应 owner，不把请求当已修。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "表格/行卡的路牌图标及卡头大小必须按源构图，table 当前只渲染标题与表体，不读取这三个字段。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene；components/table/table.py:render_table"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "三个块分别需要已核对的管、路牌、禁止图标映射；当前每屏只有 icon-01 且没有语义标注，不得多个块用 auto 重复同一物件。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-personal-formal-documents-04.scene 明确每块一个、共三个图标；库存 assets 只估 1 个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json:skill-personal-formal-documents-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "prior_round_notes": "构图来源：定稿 scene/portrait。横版左约1/3为标题及管卡，右约2/3上表格下不做卡，无连线。竖版依次为管、3 张表格行卡、不做；行卡上方“这些事”、下方“找谁”和原链接。三块各自的小图标放块内左上，禁止跨块复用一个图标。"
+  }
+]

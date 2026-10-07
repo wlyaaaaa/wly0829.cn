@@ -8,6 +8,7 @@ referrer policy. Versions 1-3 retain their historical URL-only replay.
 from __future__ import annotations
 
 import argparse
+import base64
 import concurrent.futures
 import hashlib
 import html
@@ -187,7 +188,7 @@ def release_identifier(source, base, prefix, github, objects):
 
 
 def current_home_links(source, version=4):
-    if version not in (1,2,3,4,5):raise ValueError('Unsupported homepage navigation replay version')
+    if version not in (1,2,3,4,5,6):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
@@ -229,10 +230,11 @@ def verify_manifest(manifest, require_remote=True):
     proof = oss.get('verification', {})
     if (proof.get('schema') != 'wly.oss-remote-verification.v1' or proof.get('release_id') != expected
             or proof.get('complete') is not True or proof.get('html_ready') is not True
-            or proof.get('method') != 'anonymous full GET body SHA256 plus MP4 byte range'
+            or proof.get('method') not in ('anonymous full GET body SHA256 plus MP4 byte range', 'anonymous HEAD CRC64/MD5 plus sampled GET')
             or not proof.get('verified_at_beijing') or proof.get('failed') != []
             or set(proof.get('objects', {})) != set(objects)):
         raise ValueError('OSS full GET evidence is missing, incomplete or belongs to another release')
+    head_only = proof.get('method') == 'anonymous HEAD CRC64/MD5 plus sampled GET'
     for rel, obj in objects.items():
         row = proof['objects'][rel]
         headers = {key.lower(): value for key, value in row.get('headers', {}).items()}
@@ -240,11 +242,15 @@ def verify_manifest(manifest, require_remote=True):
         if obj['content_type'] == 'application/javascript':
             types.add('text/javascript')
         if (row.get('status') != 'pass' or row.get('http') != 200 or row.get('bytes') != obj['bytes']
-                or row.get('sha256') != obj['sha256'] or row.get('content_type') not in types
+                or row.get('local_sha256' if head_only else 'sha256') != obj['sha256'] or row.get('content_type') not in types
                 or headers.get('access-control-allow-origin') not in ('*', 'https://wly0829.cn')
                 or headers.get('content-encoding', 'identity') != 'identity'):
             raise ValueError('OSS full GET evidence differs from object: ' + rel)
-        if rel.endswith('.mp4'):
+        if head_only and (not row.get('local_crc64') or headers.get('x-oss-hash-crc64ecma') != row['local_crc64']):
+            raise ValueError('OSS HEAD CRC64 differs from object: ' + rel)
+        if head_only and (not re.fullmatch(r'[a-f0-9]{32}', row.get('local_md5', '')) or not (headers.get('etag', '').strip(chr(34)).lower() == row['local_md5'] or headers.get('content-md5') == base64.b64encode(bytes.fromhex(row['local_md5'])).decode())):
+            raise ValueError('OSS HEAD MD5 evidence differs from object: ' + rel)
+        if rel.endswith('.mp4') and not head_only:
             length = min(obj['bytes'], 32)
             part = row.get('range', {})
             if (part.get('http') != 206 or part.get('bytes') != length
@@ -256,7 +262,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5):
+        if version not in (1,2,3,4,5,6):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -309,7 +315,7 @@ class Rewriter:
             elif name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                 if not value.startswith('data:'):
                     for item in re.findall(r'(?:^|,)\s*([^\s,]+)', value): yield item, 'resource'
-            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'href' and tag == 'link':
+            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
                 if tag == 'link' and attrs.get('rel') in ('canonical','preconnect','dns-prefetch'): continue
                 yield value, 'resource'
             elif name.startswith('data-') and value.startswith(('{','[')):
@@ -364,7 +370,7 @@ class Rewriter:
                     dependencies.update(self.literal_dependencies(value, owner, 'css')); continue
                 if name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                     values = re.findall(r'(?:^|,)\s*([^\s,]+)', value) if not value.startswith('data:') else []
-                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'href' and tag == 'link':
+                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
                     if tag == 'link' and attrs.get('rel') in ('canonical', 'preconnect', 'dns-prefetch'): continue
                     values = [value]
                 elif name.startswith('data-') and value.startswith(('{', '[')):
@@ -469,7 +475,7 @@ class Rewriter:
         edits = []
         literals=javascript_literals(text) if context=='js' and self.version>=3 else STRINGS.finditer(text)
         for m in literals:
-            new = self.url(m['value'], owner, context)
+            new = m['value'] if self.version>=6 and context=='js' and owner.endswith('/bird.js') and m['value']=='bird-atlas.webp' else self.url(m['value'], owner, context)
             if new != m['value']:
                 edits.append((offset + m.start('value'), offset + m.end('value'), new, context + '_url'))
         return edits
@@ -490,10 +496,6 @@ class Rewriter:
                 m = matches[0]
                 if literal_spans is None or (m.start('slash'),m.end('slash')) in literal_spans:
                     edits.append((offset + m.start('slash'), offset + m.end('slash'), '', 'vite_preload_url_prefix'))
-        if Path(owner).name == 'bird.js' and owner.startswith('_living/_engine/bird.'):
-            for m in re.finditer(r'([A-Za-z_$][\w$]*)\+([A-Za-z_$][\w$]*)\.image', text):
-                edits.append((offset+m.start(), offset+m.end(), 'new URL('+m[2]+'.image,'+m[1]+').href', 'bird_atlas_url_base'))
-
         # All page-data shot.src literals have become absolute resource URLs.
         # This old concatenation must stop adding assets/ in front of them.
         for m in re.finditer(r"new URL\('(?P<prefix>assets/)'\+shot\.src,location\.href\)", text):
@@ -528,7 +530,7 @@ class Rewriter:
                         if new != s['url']:
                             edits.append((position + s.start('url'), position + s.end('url'), new, 'html_srcset'))
                     continue
-                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src', 'data-living-config') or name == 'content' and meta_image:
+                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'content' and meta_image:
                     context = 'resource' if name != 'href' or tag.lower().startswith('<link') else 'navigation'
                     new = self.url(raw, owner, context)
                     if new != raw:
@@ -592,7 +594,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=5):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -806,6 +808,13 @@ def seal_remote(output):
     path = output/'github'/MANIFEST
     manifest = read(path)
     manifest['oss']['verification'] = proof
+    content_path = output/'content-verification.json'
+    if content_path.is_file():
+        content = read(content_path)
+        if content.get('status') != 'pass' or content.get('output_files') != plan['source_files']:
+            raise ValueError('Local content evidence differs from preparation')
+        manifest['oss']['content_verification'] = {key:content[key] for key in ('status','checker_sha256','checked_at_beijing','output_files')}
+        manifest['oss']['content_verification']['sealed_release_id'] = plan['release_id']
     verify_manifest(manifest)
     write(path, manifest)
     plan['github_files'][MANIFEST] = {'bytes': path.stat().st_size, 'sha256': digest(path)}
@@ -825,7 +834,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5),default=5)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6),default=6)
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)

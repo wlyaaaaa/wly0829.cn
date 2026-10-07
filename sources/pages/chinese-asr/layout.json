@@ -1,0 +1,1263 @@
+[
+  {
+    "screen": "chinese-asr-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "52%",
+        "text_ref": "中文语音转写"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "row": "intro",
+        "text_ref": "把中文录音和口述变成能逐句核对的文字。"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "intro",
+        "width": "48%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto",
+        "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上大标题毛笔艺术字“中文语音转写”，下面一行一句话（绿色、比正文大一号），再下面介绍段。右上一幅水彩插画：一只夹在衣领上的小麦克风，声波一圈圈荡开，化成一行行浅灰短线落到一张纸上，纸上有两处淡黄色的小标记（纸上只画短线和黄标记，不画任何字）；纸旁一块显卡侧面亮着绿光；右下角浮着一个白底绿色的小胶囊（听写小窗：一个绿色麦克风图标、一个小下拉箭头、一个小叉，麦克风右上角一颗绿色小圆点）。中间一排四张数字卡片（和标杆页开头的数字卡一样：上面小插画，大号绿色数字，下面一行小字）；小插画依次是：一叠录音文件、一只麦克风带秒表、一排三个小方块代表模型、一朵云。数字卡下面一条细长的圆角横条：最左写“现在”，接着是小字“听写”和一个留空的浅色圆角小框（约横条宽度的 30%），再是小字“云端复核”和同样大小的空框，最右一个按钮〔现在正不正常 → 驾驶舱〕；两个空框里什么都不画，网页程序会往里填字。横条下面一行放两个白底细绿边的圆角按钮：〔在整套系统里的位置 → 怎么协作〕、〔GitHub〕（GitHub 按钮左边画 GitHub 的小猫标志）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-chinese-asr-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-chinese-asr-01-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "中文语音转写"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "把中文录音和口述变成能逐句核对的文字。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "icons": "auto",
+        "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
+      },
+      {
+        "type": "live_strip",
+        "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
+        "frame_mode": "plain"
+      },
+      {
+        "type": "action_button",
+        "columns": 1,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：从上到下依次是大标题、一句话、介绍段、插画（缩成一整行宽）、四张数字卡改成两行两张、“现在”横条改成竖排三行（“现在”一行，“听写”加空框一行，“云端复核”加空框一行，空框占整行宽约 70%），驾驶舱按钮单独一行，最后两个按钮上下各一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-01-v.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "选哪条路"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "想要怎么转交回什么边说边打字桌面听写：Win+H，只用Qwen3-ASR一个模型停顿约0.6秒就打进光标"
+      },
+      {
+        "type": "prose",
+        "text_ref": "云端什么时候传、怎么停、花不花钱：疑难的，再请云端听一遍"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。一张水彩风格的大表格，三列十一行，表头浅绿底；每行最左边一个小水彩图标（一只麦克风压在键盘上、兔子、普通录音、带星的录音、一朵云下面一把放大镜、很长的磁带、文件夹、两个说话气泡、一只指着自己的手、一张写满字的纸加时钟、一只回形针夹着旧纸）。行与行之间细浅绿分隔线。表格右上角画一支小小的分岔路路牌。表格下面一行字，末尾〔疑难的，再请云端听一遍〕画成白底细浅绿描边的圆角按钮。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-chinese-asr-05-h\\round-01\\candidate-2.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-chinese-asr-05-h\\round-01\\candidate-2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "选哪条路"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "想要怎么转交回什么边说边打字桌面听写：Win+H，只用Qwen3-ASR一个模型停顿约0.6秒就打进光标"
+      },
+      {
+        "type": "prose",
+        "text_ref": "云端什么时候传、怎么停、花不花钱：疑难的，再请云端听一遍"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；表格改成十一张小卡片一行一张：卡片粗体写“想要”那一格，下面两行分别是“怎么转：…”“交回什么：…”（这两个前缀是竖版卡片里的小标签，横版不画）；图标放卡片左上；最下面那行字和按钮单独一行，按钮右对齐。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1a\\state\\b1-chinese-asr-05-v\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1a\\state\\b1-chinese-asr-05-v\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-05-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "两种用法"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/麦克风.png"
+        ],
+        "text_ref": "口述：按Win+H就说"
+      },
+      {
+        "type": "notice",
+        "text_ref": "听写要快，所以只用一个模型；录音要准，所以两个模型、慢一点，但会指出哪里可能错。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、有哪些说法：中文语音转写技能"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。下面左右两张大圆角卡片，各占一半宽。左卡上方一幅小水彩插画：一张书桌，显示器上一个聊天输入框，右下角浮着白绿小胶囊听写窗，一只手在键盘上按着 Win 键（输入框里只画浅灰短线，不画字）；右卡上方一幅小水彩插画：左边一部手机显示一个语音气泡、一个录音文件图标，一支绿色箭头指向一张纸，纸上两处淡黄标记（只画短线）。卡片里粗体小标题，下面四条带小圆点的短句。两张卡下面横跨整屏一行浅绿底的小结（字比正文略大）；最下面一行放链接。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-02-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "两种用法"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/麦克风.png"
+        ],
+        "text_ref": "口述：按Win+H就说"
+      },
+      {
+        "type": "notice",
+        "text_ref": "听写要快，所以只用一个模型；录音要准，所以两个模型、慢一点，但会指出哪里可能错。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、有哪些说法：中文语音转写技能"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；左卡整张在上、右卡整张在下，各自插画在卡片顶部；小结一行；链接一行。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-02-v.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一段录音交给AI之后"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "above_card",
+        "text_ref": "1提交AI把录音交给本机转写服务（只在本机监听），最多等15秒，没完就先拿任务编号。2统一格式转成16k"
+      },
+      {
+        "type": "document_mock",
+        "variant": "paper",
+        "columns": 2,
+        "section_starts": [
+          0,
+          3
+        ],
+        "heading_refs": [
+          "正文",
+          "疑点清单"
+        ],
+        "header_nodes": 1,
+        "highlights": [
+          "[疑似]"
+        ],
+        "status_prefixes": [
+          "P0",
+          "P1",
+          "P2"
+        ],
+        "text_ref": "交回来的样子（示例，内容是编的）"
+      },
+      {
+        "type": "prose",
+        "text_ref": "正文保持干净，只在拿不准的地方写[疑似]；两个模型都听不清的写[听不清]。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。上半部分一条从左到右的流程，五个圆角节点，每个节点一个小水彩图标（一只递出录音文件的手、一个波形变成整齐的波形并带一枚指纹、两只耳朵、放大镜照着两行字、一叠三张纸加一枚指纹印章），绿色箭头相连，节点里粗体小标题加一两行小字。下半部分画成一张摊开的水彩纸（示例结果）：左半是“正文”，两行字，其中“[疑似]”用淡黄底；右半是“疑点清单”，三行，每行前面一个小色块（P0 深橙、P1 橙、P2 浅黄）。纸的左上角一枚小小的斜体灰字标签（“交回来的样子”那一行）。最下面一行小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r2\\state\\b1-chinese-asr-04-h\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r2\\state\\b1-chinese-asr-04-h\\round-01\\candidate-1.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一段录音交给AI之后"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "1提交AI把录音交给本机转写服务（只在本机监听），最多等15秒，没完就先拿任务编号。2统一格式转成16k"
+      },
+      {
+        "type": "document_mock",
+        "variant": "paper",
+        "columns": 1,
+        "section_starts": [
+          0,
+          3
+        ],
+        "heading_refs": [
+          "正文",
+          "疑点清单"
+        ],
+        "header_nodes": 1,
+        "highlights": [
+          "[疑似]"
+        ],
+        "status_prefixes": [
+          "P0",
+          "P1",
+          "P2"
+        ],
+        "text_ref": "交回来的样子（示例，内容是编的）"
+      },
+      {
+        "type": "prose",
+        "text_ref": "正文保持干净，只在拿不准的地方写[疑似]；两个模型都听不清的写[听不清]。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；五个流程节点改成从上到下排，箭头向下；示例纸张在下，“正文”和“疑点清单”上下排；最后一行小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-04-v.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "疑难的，再请云端听一遍"
+      },
+      {
+        "type": "flow",
+        "direction": "horizontal",
+        "columns": 4,
+        "connector": "arrow",
+        "illustration": "above_card",
+        "segment_refs": [
+          "本地稿先存好",
+          "本机服务",
+          "处理这段录音的 AI",
+          "云端"
+        ],
+        "text_ref": "本地稿先存好→本机服务只记一笔“等AI接手”，自己从不上传→处理这段录音的AI把它送到阿里云百炼（Qwe"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-0",
+        "width": "50%",
+        "text_ref": "什么算疑难：两个模型对不上、正文里有[疑似]、有一个模型失败、复核说要回听，或者这段被标成重要。"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-0",
+        "width": "50%",
+        "text_ref": "什么不上传：普通清楚的录音和桌面听写，一律不上传。"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-1",
+        "width": "50%",
+        "text_ref": "怎么传：短的走HTTPS，每段不超过120秒，能顺便分说话人；长的走实时WebSocket，本地先切成不"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-1",
+        "width": "50%",
+        "text_ref": "免费期内自动：两款3.1模型的免费期记到北京时间12月21日00:00（日期是我记下的，没在阿里云控制台"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-2",
+        "width": "50%",
+        "text_ref": "出错就停，也能手动停：阿里云报额度用完、欠费、余额不足、没权限或模型下线，就记下原因、停掉以后的自动上传"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "facts-2",
+        "width": "50%",
+        "text_ref": "费用：阿里云“免费额度用完即停”的开关没开，本地也不算用量，所以免费额度用完到阿里云报错之间可能产生欠费"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "钥匙不经手：阿里云的key由密码中心直接送出去，这里只准备好请求；key不进命令行、文件和日志。"
+      },
+      {
+        "type": "notice",
+        "text_ref": "8月1日–9月28日全部云端调用（含点名上云和9月26日以前的旧模型）：尝试68次，成功54次，涉及51"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核；免费期过了还想传，或者不经本地转写直接把整段送上"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。标题下一条横向流程（四个小节点：一张存好的纸、一台电脑上方一个写着沙漏的小便签、一只手把一小段波形递向一朵云、云下两张并排的纸中间一个小不等号），绿色箭头相连，流程那段字分成四段写在节点下。中间七张小横卡片两列排（最后一张占满一行），每张左边一个小水彩图标（问号放大镜、一把锁、两条不同粗细的管道、日历、暂停按钮、一枚硬币、一把钥匙），右边粗体小标题加正文。下方一条浅绿底细长卡片放数字那句；最下面一行灰色小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-06-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "疑难的，再请云端听一遍"
+      },
+      {
+        "type": "flow",
+        "direction": "vertical",
+        "columns": 4,
+        "connector": "arrow",
+        "illustration": "above_card",
+        "segment_refs": [
+          "本地稿先存好",
+          "本机服务",
+          "处理这段录音的 AI",
+          "云端"
+        ],
+        "text_ref": "本地稿先存好→本机服务只记一笔“等AI接手”，自己从不上传→处理这段录音的AI把它送到阿里云百炼（Qwe"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "什么算疑难：两个模型对不上、正文里有[疑似]、有一个模型失败、复核说要回听，或者这段被标成重要。"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "什么不上传：普通清楚的录音和桌面听写，一律不上传。"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "怎么传：短的走HTTPS，每段不超过120秒，能顺便分说话人；长的走实时WebSocket，本地先切成不"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "免费期内自动：两款3.1模型的免费期记到北京时间12月21日00:00（日期是我记下的，没在阿里云控制台"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "出错就停，也能手动停：阿里云报额度用完、欠费、余额不足、没权限或模型下线，就记下原因、停掉以后的自动上传"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "费用：阿里云“免费额度用完即停”的开关没开，本地也不算用量，所以免费额度用完到阿里云报错之间可能产生欠费"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "钥匙不经手：阿里云的key由密码中心直接送出去，这里只准备好请求；key不进命令行、文件和日志。"
+      },
+      {
+        "type": "notice",
+        "text_ref": "8月1日–9月28日全部云端调用（含点名上云和9月26日以前的旧模型）：尝试68次，成功54次，涉及51"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本地转写时标成重要的录音也算疑难，免费期内照样自动复核；免费期过了还想传，或者不经本地转写直接把整段送上"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；流程四个节点改成上下排；七张卡片一行一张；数字卡片；灰色小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-chinese-asr-06-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "听写小窗"
+      },
+      {
+        "type": "annotation",
+        "media_width": 55,
+        "anchors": [
+          {
+            "unit": 0,
+            "x": 0.119167,
+            "y": 0.507092,
+            "width": 0.155,
+            "height": 0.659574
+          },
+          {
+            "unit": 1,
+            "x": 0.2525,
+            "y": 0.524823,
+            "width": 0.051667,
+            "height": 0.170213
+          },
+          {
+            "unit": 2,
+            "x": 0.89,
+            "y": 0.514184,
+            "width": 0.07,
+            "height": 0.304965
+          },
+          {
+            "unit": 3,
+            "x": 0.208333,
+            "y": 0.258865,
+            "width": 0.04,
+            "height": 0.177305
+          }
+        ],
+        "illustration": "outside",
+        "text_ref": "麦克风：点一下录音（图标变绿就在收音），再点暂停",
+        "row": "panel",
+        "width": "52%",
+        "asset": "_library/illustrations/听写胶囊四部位.png"
+      },
+      {
+        "type": "document_mock",
+        "variant": "menu",
+        "text_ref": "设备菜单：DJIMicMiniWindows默认麦克风刷新麦克风复制最近文字",
+        "row": "panel"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "icons": "auto",
+        "row": "panel",
+        "width": "48%",
+        "text_ref": "几个细节"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。左半边一幅放大的水彩插画：白底绿边的小胶囊听写窗（真实尺寸 200×75 像素，这里放大画）：左边一个绿色麦克风按钮，麦克风右上角一颗小圆点，旁边一个小下拉箭头，最右一个小叉。从麦克风、小箭头、叉、圆点各引一条细线到旁边的标注文字（插画标注那四行）。小箭头下方展开一个小下拉菜单，里面四行字（设备菜单那一行的四项，第一项前面一个小对勾）。三色圆点图例画成三颗小圆点：绿、黄、红，各跟一句话。右半边一张浅绿边框的卡片“几个细节”，七条短句，每条前一个小水彩图标（两块屏幕、Esc 键、两个窗口、拔掉的麦克风、内存条、托盘小菜单、开始菜单）。右下角画一个 Windows 托盘右键小菜单，三行字（托盘那一行的三项）。小窗和菜单里的字只画这里给的。\nmain-closer：2026-10-03T20:34:00+08:00 北京时间接听写四真实部位几何，完整图SHA 229bcb8f2ae1b1689f1d723853716b51ff59ce709753ec2e36c09d169b8db564；普通annotation自有媒体，引线坐标来自final-label-geometry，未猜坐标。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-03-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "听写小窗"
+      },
+      {
+        "type": "annotation",
+        "media_width": 100,
+        "anchors": [
+          {
+            "unit": 0,
+            "x": 0.119167,
+            "y": 0.507092,
+            "width": 0.155,
+            "height": 0.659574
+          },
+          {
+            "unit": 1,
+            "x": 0.2525,
+            "y": 0.524823,
+            "width": 0.051667,
+            "height": 0.170213
+          },
+          {
+            "unit": 2,
+            "x": 0.89,
+            "y": 0.514184,
+            "width": 0.07,
+            "height": 0.304965
+          },
+          {
+            "unit": 3,
+            "x": 0.208333,
+            "y": 0.258865,
+            "width": 0.04,
+            "height": 0.177305
+          }
+        ],
+        "illustration": "outside",
+        "text_ref": "麦克风：点一下录音（图标变绿就在收音），再点暂停",
+        "asset": "_library/illustrations/听写胶囊四部位.png"
+      },
+      {
+        "type": "document_mock",
+        "variant": "menu",
+        "text_ref": "设备菜单：DJIMicMiniWindows默认麦克风刷新麦克风复制最近文字"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "icons": "auto",
+        "text_ref": "几个细节"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；放大的小胶囊插画和标注在上（标注改到插画下方逐行排列）；设备菜单和三色圆点紧跟其后；“几个细节”卡片在下，七条一行一条；托盘小菜单放在最后。\nmain-closer：2026-10-03T20:34:00+08:00 北京时间接听写四真实部位几何，完整图SHA 229bcb8f2ae1b1689f1d723853716b51ff59ce709753ec2e36c09d169b8db564；普通annotation自有媒体，引线坐标来自final-label-geometry，未猜坐标。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-03-v.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "遇到怎么办按Win+H没反应看托盘里有没有中文听写：没有就从开始菜单点“中文听写”；有的话看快捷键是不是"
+      },
+      {
+        "type": "prose",
+        "text_ref": "AI排查听写时分开看三样：听写状态、技术日志、显卡排队服务的状态，不把“等显卡”当成“模型坏了”。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。一张两列九行的水彩表格（左列“遇到”，右列“怎么办”），左列每格前一个小水彩图标（没反应的键盘、黄色圆点、红色圆点、空输入框、排队的显卡、问号、断开的胶片、暂停的云、两台电脑）。表格下面一条浅绿底的小结。右上角画一只小急救箱。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-chinese-asr-07-h\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-chinese-asr-07-h\\round-01\\candidate-1.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "遇到怎么办按Win+H没反应看托盘里有没有中文听写：没有就从开始菜单点“中文听写”；有的话看快捷键是不是"
+      },
+      {
+        "type": "prose",
+        "text_ref": "AI排查听写时分开看三样：听写状态、技术日志、显卡排队服务的状态，不把“等显卡”当成“模型坏了”。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；表格改成九张小卡片一行一张：卡片粗体写“遇到”那一格，下面一段写“怎么办”；小结在最后。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-07-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "above_card",
+        "text_ref": "1入口AI调asr-smart脚本提交录音；桌面听写是另一条路，登录时由计划任务“ChineseASRD"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_paras": true,
+        "text_ref": "显卡怎么分：转写和文字识别可以同时跑，同类任务排队，本地大模型和这两者不同时用。听写的模型平时在内存里，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次推到GitHub，都在一台干净的Windows机器上把测试跑一遍（不带显卡，不下载模型）。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。上半部分一张从左到右的流程图，六个圆角节点（小水彩图标依次：一个写着 AI 的对话气泡和一个小胶囊、一台小服务器、排着队的三张小显卡加一张号牌、一个带齿轮的小盒子、一本登记册、一叠纸加指纹印章），绿色箭头依次连起来；“入口”节点下方分出一条虚线小箭头指向小胶囊，表示听写是另一条路。每个节点里粗体小标题，下面一两行小字。下半部分左右两张卡片：左“显卡怎么分”（画三个彩色小方块代表转写、文字识别、本地大模型，前两个并排，第三个和它们之间隔一道小栅栏），右“这台电脑”（画一张侧面发绿光的显卡）。最下面一行小字，左边画 GitHub 小猫标志。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-08-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "它是怎么搭的"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "1入口AI调asr-smart脚本提交录音；桌面听写是另一条路，登录时由计划任务“ChineseASRD"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_paras": true,
+        "text_ref": "显卡怎么分：转写和文字识别可以同时跑，同类任务排队，本地大模型和这两者不同时用。听写的模型平时在内存里，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次推到GitHub，都在一台干净的Windows机器上把测试跑一遍（不带显卡，不下载模型）。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；六个节点改成从上到下排，箭头向下，听写那条虚线分支画在第一个节点右侧；两张卡片上下排；最后一行小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-08-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了哪些模型"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "做什么模型在哪跑为什么选它日常主听Qwen3-ASR-1.7B（阿里通义千问，17亿参数）本机显卡按公开"
+      },
+      {
+        "type": "prose",
+        "text_ref": "9个本机模型共28.5GiB，都不进GitHub。Whisper-large-v3只在配置里登记着，没有"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。一张四列十一行的水彩表格，表头浅绿底；“在哪跑”一列用小图标区分：本机显卡画一张小显卡，本机画一台小电脑，云端画一朵小云。在“疑难复核”那一行最左边画阿里云的橙色标志。表格下面一行小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-09-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用了哪些模型"
+      },
+      {
+        "type": "table",
+        "icons": "auto",
+        "text_ref": "做什么模型在哪跑为什么选它日常主听Qwen3-ASR-1.7B（阿里通义千问，17亿参数）本机显卡按公开"
+      },
+      {
+        "type": "prose",
+        "text_ref": "9个本机模型共28.5GiB，都不进GitHub。Whisper-large-v3只在配置里登记着，没有"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；表格改成十一张小卡片一行一张：粗体写“做什么”，下面依次三行“模型…”“在哪跑…”“为什么…”（竖版卡片内用小灰字标签区分这三行，横版不画标签）；最后一行小字。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-chinese-asr-09-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投",
+        "row": "design",
+        "width": "68%"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 3,
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "row": "design",
+        "width": "32%",
+        "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。左边约三分之二宽，六张横向小卡片两列三行，每张左边一个小水彩图标（两只耳朵中间一个不投票的叉、一叠纸加封条、一把小锁挂在模型盒上、一架天平、一只手指着一个文件、一个关着的小开关），右边粗体一句加一两行小字。右边约三分之一宽，竖着三张大数字卡（大号绿色数字，下面一行小字）。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-10-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "为什么这样设计"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "不投票，也不让AI改写。主听的原话留着，对照模型只负责指出分歧，分歧处标[疑似]交给人听。让第三个模型投"
+      },
+      {
+        "type": "stat_card",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png"
+        ],
+        "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；六张卡片一行一张；三张大数字卡改成一行三张小卡放在最后。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-10-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/气泡.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+        ],
+        "text_ref": "它会指出哪里可能错。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“亮点”一样：三张大卡片横排，每张上面一幅小水彩插画，卡片标题用大字，下面“麻烦”“解法”两段正文（“麻烦：”“解法：”四个字用绿色粗体）。插画：1 两只耳朵各听一条波形，波形下两张纸，中间一个放大镜照着一处“三百/三千”的差别（放大镜里只画两个小色块，不画字）；2 一段平直的波形旁边四个小格子，其中一个亮起；3 白绿小胶囊听写窗，麦克风是绿的，旁边一个小内存条托着一团声波，远处一张显卡。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-11-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/日历时钟.png",
+          "_library/icons/气泡.png",
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+        ],
+        "text_ref": "它会指出哪里可能错。"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；三张卡片上下排，每张插画在上、字在下。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-11-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（38项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●没用过●说不准"
+      },
+      {
+        "type": "prose",
+        "text_ref": "没用过＝每用一次都会留下文件，现在一件也找不到；说不准＝用了不一定留痕，记录里没找到"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "听写"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "录音转文字"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片按本组张数排满每一行：听写第 1–9 项排成 3+3+3；录音转文字第 10–17 项排成 4+4；行内卡片等高等距，不留空卡位；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第一张：顶上有标题（毛笔艺术字加绿色笔刷线）和图例，图例下一行小字说明两种状态的判定。图例四个圆点分别画成绿、黄、灰、浅灰。各卡状态：1 绿；2 绿；3 黄；4 绿；5 绿；6 绿；7 浅灰；8 浅灰；9 浅灰；10 绿；11 浅灰；12 绿；13 绿；14 绿；15 浅灰；16 浅灰；17 绿。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-12-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（38项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "●在用●待验收●没用过●说不准"
+      },
+      {
+        "type": "prose",
+        "text_ref": "没用过＝每用一次都会留下文件，现在一件也找不到；说不准＝用了不一定留痕，记录里没找到"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "听写"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "录音转文字"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。第一张顶上保留标题、图例和说明。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-12-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "找出要回听的地方"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "云端复核"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片按本组张数排满每一行：找出要回听的地方第 18–22 项排成 2+3；云端复核第 23–27 项排成 2+3；行内卡片等高等距，不留空卡位；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第二张：没有标题、没有图例，直接接着排。各卡状态：18 绿；19 绿；20 绿；21 绿；22 灰；23 绿；24 绿；25 灰；26 黄；27 浅灰。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-13-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-13-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "找出要回听的地方"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "云端复核"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-13-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-13-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "时间和说话人"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "维护和装机"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：和标杆页“全部功能”同一种卡片，但组名不单独占一列：每组先一行毛笔小标题（组名），下面该组的功能卡片按本组张数排满每一行：时间和说话人第 28–31 项排成 2+2；维护和装机第 32–38 项排成 3+4；行内卡片等高等距，不留空卡位；每张卡片左边一个小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（绿＝在用，黄＝待验收，灰＝没用过，浅灰＝说不准）。“｜”只是功能名和那句话的分隔，不画。三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第三张：没有标题、没有图例，接着排；所有卡片排满后，在段尾另画一幅浅浅的水彩小插画（一只麦克风和一张写满浅灰短线的纸，不画字），不要画边框。各卡状态：28 绿；29 绿；30 浅灰；31 绿；32 绿；33 绿；34 灰；35 浅灰；36 灰；37 绿；38 黄。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-14-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-14-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "时间和说话人"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "维护和装机"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：同样的字，卡片改成一行一张，组名小标题照旧在每组上方；圆点仍在卡片右上角。三张竖图同样上下拼成一段。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-14-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-14-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "text_ref": "演进",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "text_ref": "7月7日：一天搭起骨架：两个模型严格转写、幻觉风险规则、按轻重排的回听队列、本机转写服务、长录音断点续跑",
+        "columns": 1,
+        "width": "100%"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边留一幅大一点的水彩插画：从上到下依次长出一张写满短线的纸、两只耳朵、一张显卡、一个白绿小胶囊听写窗、一朵云和一把钥匙，像一路长出来的样子（插画里不画字）。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-15-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-15-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "chinese-asr-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "text_ref": "7月7日：一天搭起骨架：两个模型严格转写、幻觉风险规则、按轻重排的回听队列、本机转写服务、长录音断点续跑",
+        "columns": 1,
+        "width": "100%"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：时间线占满宽度从上到下；插画缩小放在最上面。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-15-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\img\\chinese-asr-15-v2.png"
+    ],
+    "portrait_required": true
+  }
+]

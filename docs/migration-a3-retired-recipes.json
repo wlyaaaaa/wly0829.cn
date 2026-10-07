@@ -1,0 +1,41 @@
+{
+  "schema": "wly.migration-a3.retired-recipes.v1",
+  "recipes": [
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/integration/wave2e-creative-recipe.json",
+      "sha256": "c27a6eff6ae3319164309feae2c88d71b351b21fd80021e00cbcc2698943ef72",
+      "bytes": 1020,
+      "disposition": "not-copied-old-batch-recipe"
+    },
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/integration/wave2e-page-only-recipe.json",
+      "sha256": "5afd9bfd508999ff7798a86655fd68dd52b5631501a150d3218196eced9235bd",
+      "bytes": 277,
+      "disposition": "not-copied-old-batch-recipe"
+    },
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/integration/wave2f-full-creative-recipe.json",
+      "sha256": "e238b3e3d76210a8954b1dca11beef030e1cc7c3f0b0ebc6b2c36c1615451900",
+      "bytes": 664,
+      "disposition": "not-copied-old-batch-recipe"
+    },
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/integration/wave2f-live-ui-recipe.json",
+      "sha256": "4bbd9e356e6836f40d31e0ec7f6b9cb691a24589c3aa49e1139443943838894c",
+      "bytes": 436,
+      "disposition": "not-copied-old-batch-recipe"
+    },
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/nav-unify/live-ui-recipe-unify.json",
+      "sha256": "ef5aed6d6821c8e0d3ad07d837ec70549f67d546d457b9f619312b51957d23b3",
+      "bytes": 274,
+      "disposition": "not-copied-old-batch-recipe"
+    },
+    {
+      "old_path": "E:/Cache/Claude/Temp/4bd59299/b1/pipe/claude-gate-1001/integration/wave2f-static-home-replay/static-home-recipe.json",
+      "sha256": "02a5d2e38f5e537897e15dfd148c11d300034f1f41f2aca5811d817b6d36e35f",
+      "bytes": 657,
+      "disposition": "not-copied-old-batch-recipe"
+    }
+  ]
+}

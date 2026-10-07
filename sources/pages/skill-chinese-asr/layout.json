@@ -1,0 +1,830 @@
+[
+  {
+    "screen": "skill-chinese-asr-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "70%",
+        "text_ref": "中文语音转写技能"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "30%",
+        "illustration": "outside",
+        "size": "banner",
+        "target_width": 259,
+        "align": "right"
+      },
+      {
+        "type": "content_card",
+        "row": "intro-cards",
+        "width": "50%",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "row": "intro-cards",
+        "text_ref": "不用点名",
+        "width": "50%"
+      },
+      {
+        "type": "dialogue",
+        "columns": 3,
+        "split_paras": true,
+        "flow": "column",
+        "rows": 5,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "怎么跟 AI 说"
+      }
+    ],
+    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-chinese-asr-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:中文语音转写技能].text_ref"
+        ],
+        "requirement": "标题“中文语音转写技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:中文语音转写技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "中文语音转写技能"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "怎么跟 AI 说",
+        "size": "large"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“把这段录音转成文字。”",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段挺重要，拿不准的地方给我",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段用高质量转一遍，我要能逐",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这个文件夹里的录音都转一下。",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这是两个人打电话，分清谁说了",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段录音里有几个人在说话？”",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段里哪几句是我说的？”",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这是配音文案和音频，给每个词",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段录音以前转过吗？把带时间",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“这段可以传到云端再听一遍。”",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“云端自动复核先暂停一下。”",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“Win+H 按了没反应，帮我",
+        "sides": [
+          "left"
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“云端复核是不是停了？恢复吧。",
+        "sides": [
+          "left"
+        ]
+      }
+    ],
+    "notes": "原v第一张是标题、技能名、说明卡、浅绿提示和外置主插画；v2 是十三问法单列气泡，按定稿不重复标题。十三独立气泡已按定稿逐段定位。；手机十三气泡已按真实定稿逐段独立块拆出，可直接用现组件，不依赖split_paras扩展。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-chinese-asr-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:中文语音转写技能].text_ref"
+        ],
+        "requirement": "标题“中文语音转写技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:中文语音转写技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "head",
+        "width": "38%",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "notice",
+        "row": "head",
+        "width": "62%",
+        "tone": "gray",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "icons": "none",
+        "text_ref": "我："
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icon_side": "left",
+        "icons": "auto",
+        "text_ref": "说了“重要”",
+        "direction": "vertical",
+        "connector_style": "thin_line",
+        "illustration_inside": false
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "icons": "none",
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "另一种问法"
+      }
+    ],
+    "notes": "标题左侧、示例灰条同高右侧。主对话约2/3宽，用户气泡右对齐；四步绿细竖线及圆节点连接，图标在卡外左；AI交回白气泡置其下。另一种问法整张竖卡在右1/3，内部我/AI两气泡，底端主插画在卡内。不得将四步排成横向或2×2。 文字审查校正：另一种问法以已支持的 split_paras 组成一张外卡内两泡；AI交回不领取四步骤图标，避免把步骤物件误当头像。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[timeline:说了“重要”].icons"
+        ],
+        "requirement": "四个可用图标目前只有顺序文件名，没有物件语义标注；须核对其与剪波形、号码牌、疑点清单、云端对照四步的一一对应。旧规格 notes 另有右卡底主插画，清单没有该 illustration，需图审确认后补素材/位置，不靠文字臆定。",
+        "evidence": "定稿 skill-chinese-asr-02.scene；旧规格 notes；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:示例：].tone"
+        ],
+        "requirement": "示例原构图为灰条，notice tone=gray 仍沿批准浅绿底；新底色要组件样张确认。",
+        "evidence": "components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "text_ref": "我："
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icon_side": "left",
+        "icons": "auto",
+        "text_ref": "说了“重要”",
+        "direction": "vertical",
+        "connector_style": "thin_line",
+        "illustration_inside": false
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "text_ref": "AI 交回",
+        "icons": "none"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "另一种问法"
+      }
+    ],
+    "notes": "原v前四步，v2 AI交回与另一种问法。两组上下顺排；四步左外图、细竖线连接。AI交回五段是一气泡，另一问法我/AI分别两气泡。组名不能凭空复制成章节文字。 文字审查校正：另一种问法以已支持的 split_paras 组成一张外卡内两泡；AI交回不领取四步骤图标，避免把步骤物件误当头像。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[timeline:说了“重要”].icons"
+        ],
+        "requirement": "四个可用图标目前只有顺序文件名，没有物件语义标注；须核对其与剪波形、号码牌、疑点清单、云端对照四步的一一对应。旧规格 notes 另有右卡底主插画，清单没有该 illustration，需图审确认后补素材/位置，不靠文字臆定。",
+        "evidence": "定稿 skill-chinese-asr-02.scene；旧规格 notes；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:示例：].tone"
+        ],
+        "requirement": "示例原构图为灰条，notice tone=gray 仍沿批准浅绿底；新底色要组件样张确认。",
+        "evidence": "components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "70%",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "30%",
+        "illustration": "outside",
+        "size": "banner",
+        "target_width": 246,
+        "align": "right"
+      },
+      {
+        "type": "notice",
+        "inline_button": true,
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 2,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 8 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-chinese-asr-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "旧规格保留标题旁卡外主插画；当前总manifest无该 illustration；scene 未另列，须由页图审核对旧构图来源后补齐"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "row_v": true,
+        "width": "45%",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "row_v": true,
+        "width": "55%",
+        "illustration": "outside"
+      },
+      {
+        "type": "notice",
+        "inline_button": true,
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "原图主插画在标题右侧、卡外；下方说明横幅及按钮单独一行。八规矩各一横卡、左图右文，包含在整宽大卡内，一列八排。不把手机标题变成无插画的满宽标题。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 8 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-chinese-asr-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "旧规格保留标题旁卡外主插画；当前总manifest无该 illustration；scene 未另列，须由页图审核对旧构图来源后补齐"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "heading_size": "medium",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "原图标题占左栏，管竖卡左约1/3，麦克风打钩插画卡内上方；右约2/3不管五行二列表格，路牌插画在卡内右上、卡头左上。右栏下不做横卡，禁止小标在左内，四短句右侧；无连线。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "原表卡/行卡的路牌位置和卡头大小必须保留；table 当前不消费这三个字段。",
+        "evidence": "旧规格 notes；components/table/table.py:render_table"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:不做].illustration",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "不做卡有禁止物件在卡内左侧（横）/顶部（竖）；普通 points_card 在未启用 item_cards/header_left 时忽略图标，现规格的四条仍为普通清单，需按原图落实整卡插画。",
+        "evidence": "旧规格 notes；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-chinese-asr-04.scene 每块一个、共三个，库存只估1个；总manifest仅1个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-chinese-asr-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\img\\skill-chinese-asr-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-chinese-asr-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "row_v": true,
+        "width": "38%",
+        "text_ref": "边界"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "row_v": true,
+        "width": "62%",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "heading_size": "large",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "原v标题左、路牌主图右卡外；管卡在上，麦克风图在卡内顶部。五表行改单列五卡、这些事粗体置上找谁和链接置下；v2采用approved替换，最后不做四条整宽排列。原v与v2末两表行有重叠，按同一屏定稿只显示一次。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "原表卡/行卡的路牌位置和卡头大小必须保留；table 当前不消费这三个字段。",
+        "evidence": "旧规格 notes；components/table/table.py:render_table"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:不做].illustration",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "不做卡有禁止物件在卡内左侧（横）/顶部（竖）；普通 points_card 在未启用 item_cards/header_left 时忽略图标，现规格的四条仍为普通清单，需按原图落实整卡插画。",
+        "evidence": "旧规格 notes；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-chinese-asr-04.scene 每块一个、共三个，库存只估1个；总manifest仅1个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "旧规格保留竖版标题旁外置路牌主图；当前总manifest没有 illustration"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json:skill-chinese-asr-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  }
+]
