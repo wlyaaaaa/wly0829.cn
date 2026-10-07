@@ -19,7 +19,7 @@ class ApprovedTocInputs(unittest.TestCase):
         self.package = self.root / 'package'
         (self.package / 'images').mkdir(parents=True)
         (self.package / 'runtime').mkdir()
-        self.pages = ['index.html', '404.html', *[f'pages/{i}/index.html' for i in range(82)]]
+        self.pages = ['index.html', '404.html', *[f'pages/{i}/index.html' for i in range(83)]]
         self.labels = {}
         items = []
         for i in range(75):
@@ -60,7 +60,7 @@ class ApprovedTocInputs(unittest.TestCase):
             ui.toc_unify_package(self.package)
         image.write_bytes(original)
         self.write('pages-to-unify.json', self.pages[:-1])
-        with self.assertRaisesRegex(ValueError, '84 pages and 75 labels'):
+        with self.assertRaisesRegex(ValueError, '85 pages and 75 labels'):
             ui.toc_unify_package(self.package)
 
     def test_missing_complete_site_page_fails_without_changing_site(self):

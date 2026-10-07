@@ -20,7 +20,7 @@ def proof(payload):
 
 
 def toc_unify_package(package):
-    """Read the approved 84-page/75-label package without implicit fallbacks."""
+    """Read the approved 85-page/75-label package without implicit fallbacks."""
     package = Path(package).resolve()
     consumed = [package / name for name in (
         'prepare-toc-unify.py', 'label-map-webp-visible-ink.json',
@@ -29,11 +29,11 @@ def toc_unify_package(package):
     label_map = json.loads(consumed[1].read_text('utf8'))
     pages = json.loads(consumed[2].read_text('utf8'))
     manifest = json.loads(consumed[3].read_text('utf8'))
-    if (len(pages) != 84 or len(set(pages)) != 84 or 'index.html' not in pages
+    if (len(pages) != 85 or len(set(pages)) != 85 or 'index.html' not in pages
             or '404.html' not in pages or len(label_map) != 75
             or manifest.get('expected_labels') != 75 or manifest.get('available_labels') != 75
             or manifest.get('missing') or len(manifest.get('items', [])) != 75):
-        raise ValueError('TOC unification requires the approved 84 pages and 75 labels')
+        raise ValueError('TOC unification requires the approved 85 pages and 75 labels')
     if any(Path(page).as_posix() != page or page.startswith('/') or '..' in Path(page).parts
            or not page.endswith('.html') for page in pages):
         raise ValueError('TOC page scope contains an invalid relative HTML path')
@@ -90,9 +90,9 @@ def prepare_toc_recipe(site, recipe):
     spec = importlib.util.spec_from_file_location('approved_toc_unify', package / 'prepare-toc-unify.py')
     approved = importlib.util.module_from_spec(spec); spec.loader.exec_module(approved)
     result = approved.prepare_toc(site, label_map, pages)
-    if (result.get('status') != 'prepared' or result.get('page_count') != 84
+    if (result.get('status') != 'prepared' or result.get('page_count') != len(pages)
             or result.get('missing_labels') or {item['page'] for item in result.get('pages', [])} != set(pages)):
-        raise ValueError('Approved TOC helper did not prepare the complete 84-page scope')
+        raise ValueError('Approved TOC helper did not prepare the complete registered page scope')
     stylesheet = HERE / 'toc-consistency.css'
     inputs[str(stylesheet)] = proof(stylesheet.read_bytes())
     css_url = '/_typeset/runtime/toc-consistency-' + inputs[str(stylesheet)]['sha256'][:20] + '.css'
