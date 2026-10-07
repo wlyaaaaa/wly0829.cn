@@ -1,6 +1,7 @@
 ﻿param(
     [Parameter(Mandatory)][string]$Source,
     [string]$PrivateIndex = 'E:\GitHub总索引\config\repository-paths.json',
+    [switch]$UiFull,
     [switch]$Stage,
     [switch]$Publish
 )
@@ -30,6 +31,8 @@ if (-not (Test-Path -LiteralPath $PrivateIndex -PathType Leaf)) { throw 'The reg
 Checked 'python' @('scripts/build-assembled-site.py','--source',$Source,'--output',$outputFolder,'--report',(Join-Path $runFolder 'size-report.json'),'--private-index',$PrivateIndex)
 # Existing credential checks scan source and the final output on every run.
 Checked 'node' @('scripts/verify-public-content.mjs','--dist',$outputFolder)
+$uiArguments = @('scripts/check-site-ui.py','--root',$outputFolder,'--output',(Join-Path $runFolder 'ui-check.json'),'--full')
+Checked 'python' $uiArguments
 if ($Stage -or $Publish) {
     $releaseTarget = Join-Path $repoRoot 'site-release'
     if (Test-Path -LiteralPath $releaseTarget) {

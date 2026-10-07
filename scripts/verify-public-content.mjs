@@ -141,3 +141,12 @@ const report = {
 };
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 if (findings.length) process.exitCode = 1;
+if (process.env.GITHUB_ACTIONS === "true" && !findings.length) {
+  const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, "utf8")) : {};
+  let files = [], before = event.before;
+  if (/^[\da-f]{40}$/.test(before || "") && !/^0+$/.test(before)) { execFileSync("git", ["fetch", "--depth=1", "origin", before], {cwd: projectRoot}); files = execFileSync("git", ["diff", "--name-only", before, "HEAD", "--", "site-release"], {cwd: projectRoot}).toString("utf8").trim().split("\n").filter(Boolean); }
+  const pages = files.filter(file => /\/index\.html$|^site-release\/404\.html$/.test(file)).map(file => "/" + file.slice("site-release/".length).replace(/index\.html$/, ""));
+  const full = process.env.SITE_UI_FULL === "1" || !pages.length || files.some(file => !/\.html$|release-manifest\.json$/.test(file));
+  execFileSync("python3", ["-m", "pip", "install", "--disable-pip-version-check", "playwright"], {stdio: "inherit"});
+  execFileSync("python3", [path.join(scriptDirectory, "check-site-ui.py"), "--root", distRoot, "--output", path.join(projectRoot, ".publish/ui-check.json"), "--chrome", process.env.CHROME_BIN || "/usr/bin/google-chrome", ...(full ? ["--full"] : ["--pages", ...pages])], {cwd: projectRoot, stdio: "inherit"});
+}

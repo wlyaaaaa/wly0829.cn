@@ -26,6 +26,7 @@ param(
     [string]$OssRetryProof,
     [switch]$RuntimeBaseline,
     [string[]]$Pages,
+    [switch]$UiFull,
     [string]$RunRoot,
     [string]$LockHolder,
     [string]$ShortLockTool = 'E:\.agents\tools\Invoke-ShortLock.ps1',
@@ -419,6 +420,10 @@ try {
     if ($OssPreparation) { $contentArguments+=@('--oss-preparation',$OssPreparation) }
     Checked 'python' $contentArguments
     Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rebuilt)
+    $uiRoot = if ($OssPreparation) { Join-Path $OssPreparation 'github' } else { $rebuilt }
+    $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'))
+    if ($UiFull -or -not $Pages) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
+    Checked 'python' $uiArguments
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt
         $rollbackRef=$state.production_commit

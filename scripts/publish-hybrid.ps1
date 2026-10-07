@@ -9,6 +9,7 @@ param(
     [Parameter(Mandatory)][string]$VerificationRoot,
     [Parameter(Mandatory)][string[]]$Pages,
     [string]$Output,
+    [switch]$UiFull,
     [switch]$Stage,
     [switch]$Publish
 )
@@ -31,6 +32,9 @@ Checked 'python' $prepareArgs
 Checked 'python' @('scripts/hybrid-release.py','verify','--output',$Output,'--content-report',(Join-Path $runRoot 'content-report.json'),'--public-repos-from-github')
 Checked 'node' @('scripts/verify-public-content.mjs','--dist',$Output)
 Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rollbackOutput)
+$uiArguments = @('scripts/check-site-ui.py','--root',$Output,'--output',(Join-Path $runRoot 'ui-check.json'))
+if ($UiFull) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
+Checked 'python' $uiArguments
 Write-Output "Prepared release: $Output"
 Write-Output "Exact previous production: $rollbackOutput"
 if (-not ($Stage -or $Publish)) { return }
