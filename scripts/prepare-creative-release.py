@@ -86,7 +86,7 @@ def recipe(path):
     return data, paths, inputs
 
 
-def prepare(source, baseline, config, output, evidence_root, staged_build_report=None):
+def prepare(source, baseline, config, output, evidence_root, staged_build_report=None, retry_predecessor_manifest=None):
     source, baseline, config, output, evidence_root = [Path(p).resolve() for p in
                                                      (source, baseline, config, output, evidence_root)]
     if output.exists() or evidence_root.exists():
@@ -170,8 +170,12 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
-            if (data.get('scope')=='page-demo-and-retry' or full_2f) and old.get('resource_retry_preparation'):
-                previous_manifest=baseline/hybrid.MANIFEST
+            if data.get('scope')=='page-demo-and-retry' or full_2f:
+                previous_manifest=baseline/hybrid.MANIFEST if old.get('resource_retry_preparation') else retry_predecessor_manifest
+            else:previous_manifest=None
+            if previous_manifest and not hybrid.read(Path(previous_manifest)).get('resource_retry_preparation'):previous_manifest=None
+            if previous_manifest:
+                previous_manifest=Path(previous_manifest).resolve()
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']

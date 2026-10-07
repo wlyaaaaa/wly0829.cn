@@ -1098,6 +1098,10 @@ def main():
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
+    inherited_retry=baseline_manifest.get('resource_retry_preparation',{})
+    if not args.creative_preparation and inherited_retry.get('runtime') in manifest['files'] and manifest['files'][inherited_retry['runtime']]==baseline_manifest['files'].get(inherited_retry['runtime']):
+        manifest['resource_retry_preparation']=inherited_retry
+        hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     if manifest['files'].get('index.html')==baseline_manifest['files'].get('index.html'):
         manifest.update({key:baseline_manifest[key] for key in ('home_static_preparation','home_comic_preparation') if key in baseline_manifest});hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     static_home=baseline_manifest.get('home_static_preparation',{})
@@ -1126,7 +1130,8 @@ def main():
                 'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},
                 'geometry_path':str(args.geometry),'geometry_sha256':hybrid.digest(args.geometry)})
         manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
-            args.output.parent/(args.output.name+'-creative-evidence'),staged_build_report=staged_report)
+            args.output.parent/(args.output.name+'-creative-evidence'),staged_build_report=staged_report,
+            retry_predecessor_manifest=args.legacy_site/hybrid.MANIFEST)
     if live_ui and read(args.live_ui_preparation).get('toc_unify_package'):
         # Refresh only the approved directory on the complete, creatively
         # prepared site; the original six-step release chain stays intact.
