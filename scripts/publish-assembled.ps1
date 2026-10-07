@@ -1,7 +1,6 @@
 ﻿param(
     [Parameter(Mandatory)][string]$Source,
     [string]$PrivateIndex = 'E:\GitHub总索引\config\repository-paths.json',
-    [switch]$UiFull,
     [switch]$Stage,
     [switch]$Publish
 )

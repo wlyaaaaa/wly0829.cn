@@ -64,11 +64,13 @@ let remoteArtifactCount = 0;
 let remoteTextCount = 0;
 let remoteCachedCount = 0;
 let remoteEvidenceCount = 0;
+let hasOssManifest = false;
 const utf8Decoder = new TextDecoder("utf-8", { fatal: true });
 const manifestPath = path.join(distRoot, "release-manifest.json");
 if (distFiles.includes(manifestPath)) {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
   if (manifest.oss) {
+    hasOssManifest = true;
     try {
       execFileSync(process.platform === "win32" ? "python" : "python3", [
         path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot, "--check-sealed-content"
@@ -135,13 +137,14 @@ const report = {
   production_remote_artifact_scanned_count: remoteArtifactCount,
   production_remote_verified_cache_used_count: remoteCachedCount,
   production_remote_content_evidence_reused_count: remoteEvidenceCount,
+  ui_gate: process.env.GITHUB_ACTIONS === "true" && hasOssManifest && distRoot === path.join(projectRoot, "dist") ? { status: "warning", measurement: "not_performed", reason: "UI measurement lacks local OSS asset bodies in this CI checkout; this is not a pass" } : null,
   scanned_file_count: files.length + remoteArtifactCount,
   finding_count: findings.length,
   findings
 };
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 if (findings.length) process.exitCode = 1;
-if (process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_WORKSPACE && path.resolve(process.env.GITHUB_WORKSPACE) === projectRoot && distRoot === path.join(projectRoot, "dist") && !findings.length) {
+if (process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_WORKSPACE && path.resolve(process.env.GITHUB_WORKSPACE) === projectRoot && distRoot === path.join(projectRoot, "dist") && !hasOssManifest && !findings.length) {
   const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, "utf8")) : {};
   let files = [], before = event.before;
   if (/^[\da-f]{40}$/.test(before || "") && !/^0+$/.test(before)) { execFileSync("git", ["fetch", "--depth=1", "origin", before], {cwd: projectRoot}); files = execFileSync("git", ["diff", "--name-only", before, "HEAD", "--", "site-release"], {cwd: projectRoot}).toString("utf8").trim().split("\n").filter(Boolean); }

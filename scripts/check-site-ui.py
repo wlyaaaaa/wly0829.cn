@@ -1,8 +1,8 @@
-"""Chrome DOM/interaction publication gate. --pages selects page-data ids; --full audits every route."""
-import argparse, asyncio, json, os, re, subprocess, tempfile, time
+"""Chrome UI gate: local assets by default; online needs --pages, --online-full explicitly enables all routes. Only --ink-assets images use online GET; others use HEAD. Estimates cover both widths."""
+import argparse, asyncio, hashlib, json, os, re, subprocess, tempfile, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 from playwright.async_api import async_playwright
 HERE = Path(__file__).resolve().parent
 INTERNAL = ['AI 待验收', '以后再做', '运行结果未确认', '等第一次运行']
@@ -35,7 +35,7 @@ def inventory(root, pages=None):
         if not matches: raise ValueError('Unknown affected page: '+name)
         chosen.update(matches)
     return sorted(chosen)
-async def review(page, base, route, width, dom):
+async def review(page, base, route, width, dom, blocked=None):
     issues, checks = [], {'reloads': [], 'phases': []}
     fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
@@ -43,11 +43,13 @@ async def review(page, base, route, width, dom):
     await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
     await page.evaluate("async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));}await new Promise(r=>setTimeout(r,500));scrollTo({top:0,behavior:'instant'})}")
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
+    if blocked is not None: await page.evaluate('values=>window.__uiBlockedImages=values',blocked.get(page,{}))
     measured = await page.evaluate(dom); issues.extend(measured['issues']); checks.update(measured['counts'], measurements=measured.get('measurements',[]))
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
     for link in {x['href']: x for x in links}.values():
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
         if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']): fail('anchor-target-missing',link['href'],{}); continue
+        if link.get('action') and await target.count() and not await target.is_enabled(): fail('anchor-unavailable-review',link['href'],{'reason':'control-disabled'}); continue
         try: await target.click(timeout=5000)
         except Exception as error: fail('anchor-click-failed', link['href'], str(error)); continue
         positions = await page.evaluate("async()=>{const p=[];for(let i=0;i<12;i++){await new Promise(r=>setTimeout(r,250));p.push(scrollY)}return p}")
@@ -69,10 +71,9 @@ async def review(page, base, route, width, dom):
                 control = page.get_by_role('button', name=label, exact=True)
                 if not await control.count(): fail('phase-control-missing', label, {'count':0}); continue
                 state = lambda: control.evaluate("e=>JSON.stringify([e.getAttribute('aria-pressed'),e.getAttribute('aria-selected'),e.className,document.body.dataset])")
-                selected = await state(); color = await page.evaluate(COLOR, selector); before = await page.evaluate(MOTION, selector); await control.click(); await page.wait_for_timeout(800)
-                after = await page.evaluate(MOTION, selector); checks['phases'].append({'label': label, 'before': before, 'after': after})
-                after_color = await page.evaluate(COLOR,selector); changed = any(a and b and max(abs(x-y) for x,y in zip(a,b))>2 for a,b in zip(color,after_color))
-                if selected == await state() or not changed: fail('phase-control-inert', label, {'colors': [color,after_color], 'selection_changed': selected != await state()})
+                selected = await state(); color = await page.evaluate(COLOR, selector); await control.click(); await page.wait_for_timeout(800)
+                after_color = await page.evaluate(COLOR,selector); record = {'label':label,'colors':[color,after_color],'selection_changed':selected!=await state()}; checks['phases'].append(record)
+                if not record['selection_changed'] or not any(a and b and max(abs(x-y) for x,y in zip(a,b))>2 for a,b in zip(color,after_color)): fail('phase-control-inert',label,record)
     samples = [await page.evaluate(VIDEOS)]; animation = [await page.evaluate(MOTION, selector)] if route in ('/','/cockpit/') else []
     if samples[0] or animation:
         for _ in range(30):
@@ -101,36 +102,68 @@ async def review(page, base, route, width, dom):
         if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', '.rule-original-panel pre', {'visible_characters': checks['rule_visible_characters']})
     return dict(route=route, width=width, final_url=page.url, issues=issues, checks=checks)
 async def run(args):
-    started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full else args.pages)
+    if args.base_url and (args.full or not args.pages) and not args.online_full: raise ValueError('Online all-route checks require --online-full; use local --root --full by default')
+    started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full or args.online_full else args.pages)
+    preparation = args.oss_preparation or (args.root.parent if (args.root.parent/'oss-plan.json').is_file() else None)
+    objects = json.loads((preparation/'oss-plan.json').read_text('utf8'))['objects'] if preparation else {}
+    assets = {urlsplit(obj['url'])._replace(query='',fragment='').geturl():(preparation/'oss'/rel,obj) for rel,obj in objects.items()}
+    policy = dict(mode='online-full' if args.online_full else 'online-selected' if args.base_url else 'local-candidate',estimated_MiB=args.estimate_mb or len(routes)*6 if args.base_url else 0,local_asset_responses=0,online_image_gets=0,image_heads={},blocked_resources={})
+    print('Resource policy / 预计流量: '+json.dumps(policy,ensure_ascii=False),flush=True)
     args.output.parent.mkdir(parents=True, exist_ok=True); temp = Path(tempfile.mkdtemp(prefix='site-ui-', dir=args.output.parent)).resolve()
     os.environ['TEMP'] = os.environ['TMP'] = os.environ['TMPDIR'] = str(temp)
-    base = args.base_url.rstrip('/') if args.base_url else 'https://wly0829.cn'; records = []; dom = (HERE/'site-ui-dom.js').read_text('utf8')
+    base = args.base_url.rstrip('/') if args.base_url else 'https://wly0829.cn'; records = []; blocked = {}; dom = (HERE/'site-ui-dom.js').read_text('utf8')
     async with async_playwright() as pw:
-        context = await pw.chromium.launch_persistent_context(str(temp/'profile'), executable_path=str(args.chrome), headless=True, reduced_motion='no-preference')
+        context = await pw.chromium.launch_persistent_context(str(temp/'profile'), executable_path=str(args.chrome), headless=True, reduced_motion='no-preference',service_workers='block')
         await context.add_init_script(PROBE)
         if args.geometry:
             glyphs = [{'src':r['parts'][0]['image'],'sha256':r['parts'][0]['sha256'],'boxes':r.get('content_occupancy',{}).get('blocks',[])} for r in json.loads(args.geometry.read_text('utf8'))['records'] if len(r.get('parts',[]))==1]
             await context.add_init_script('window.__uiGlyphs='+json.dumps(glyphs))
-        if not args.base_url:
-            async def candidate(handler):
-                file = (args.root.resolve()/urlsplit(handler.request.url).path.lstrip('/')).resolve()
+        async def resources(handler):
+            request = handler.request; parsed = urlsplit(request.url); key = parsed._replace(query='',fragment='').geturl()
+            image = request.resource_type=='image' or bool(re.search(r'\.(png|webp|jpe?g|gif|svg|avif)$',parsed.path,re.I))
+            if not args.base_url and parsed.netloc==urlsplit(base).netloc:
+                file = (args.root.resolve()/unquote(parsed.path).lstrip('/')).resolve()
                 if file.is_dir(): file = file/'index.html'
                 if not file.is_relative_to(args.root.resolve()) or not file.is_file(): return await handler.fulfill(status=404,body='candidate route missing')
-                await handler.fulfill(path=str(file))
-            await context.route('https://wly0829.cn/**',candidate)
+                return await handler.fulfill(path=str(file))
+            if not args.base_url:
+                if key in assets:
+                    file,obj = assets[key]
+                    if file.is_file() and file.stat().st_size==obj['bytes'] and hashlib.sha256(file.read_bytes()).hexdigest()==obj['sha256']:
+                        policy['local_asset_responses']+=1
+                        return await handler.fulfill(path=str(file),content_type=obj.get('content_type'),headers={'Access-Control-Allow-Origin':'*'})
+                policy['blocked_resources'][key]='local-unavailable'
+            elif image and key not in {urlsplit(url)._replace(query='',fragment='').geturl() for url in args.ink_assets}:
+                if key not in policy['image_heads']:
+                    try: response = await context.request.head(key,timeout=8000); policy['image_heads'][key]=response.status; await response.dispose()
+                    except Exception: policy['image_heads'][key]=0
+                policy['blocked_resources'][key]=policy['image_heads'][key]
+            else:
+                if image: policy['online_image_gets']+=1
+                return await handler.continue_()
+            blocked.setdefault(request.frame.page,{})[key]=policy['blocked_resources'][key]
+            return await handler.abort('blockedbyclient')
+        await context.route('**/*',resources)
         semaphore = asyncio.Semaphore(4)
         async def check(route, width):
             async with semaphore:
                 page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
-                try: record = await review(page,base,route,width,dom)
+                try:
+                    record = await review(page,base,route,width,dom,blocked)
+                    if not args.base_url:
+                        gaps = [key for key in blocked.get(page,{}) if re.search(r'\.(js|css|woff2?|mp4|webm)$',urlsplit(key).path,re.I)]
+                        if gaps: record['issues'].append(dict(kind='local-assets-unavailable-review',element=route,evidence={'assets':gaps})); record['dependency_unavailable']=True
                 except Exception as error: record = dict(route=route,width=width,issues=[dict(kind='check-error',element=route,evidence=str(error))])
                 finally: await page.close()
                 records.append(record); print(f'{len(records)}/{len(routes)*2} {width} {route} issues={len(record["issues"])}', flush=True)
         await asyncio.gather(*(check(route,width) for route in routes for width in (390,1440)))
         version = context.browser.version; await context.close()
     receipt = dict(schema='website.ui-gate.v1',observed_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat(),base_url=base,candidate_root=str(args.root.resolve()) if not args.base_url else None,chrome=str(args.chrome),chrome_version=version,temp=str(temp),seconds=round(time.monotonic()-started,2),records=sorted(records,key=lambda r:(r['route'],r['width'])))
-    findings = [i for r in records for i in r['issues']]; warnings = [i for i in findings if 'review' in i['kind'] or 'unmeasurable' in i['kind'] or i['kind']=='check-error']
-    receipt.update(issue_count=len(findings),warning_count=len(warnings),blocker_count=len(findings)-len(warnings),status='fail' if len(findings)>len(warnings) else 'partial' if warnings else 'pass')
+    receipt['resource_policy']=policy
+    baseline = json.loads((HERE/'site-ui-baseline.json').read_text('utf8')); keys = {(i['route'],i['width'],i['kind'],i['element']) for i in baseline['issues']}
+    for r,i in ((r,i) for r in records for i in r['issues']): i['known'] = (r['route'],r['width'],i['kind'],i['element']) in keys
+    findings = [i for r in records for i in r['issues']]; warnings = [i for r in records for i in r['issues'] if r.get('dependency_unavailable') or 'review' in i['kind'] or 'unmeasurable' in i['kind'] or i['kind']=='check-error']; novel = [i for i in findings if i not in warnings and not i['known']]
+    receipt.update(issue_count=len(findings),warning_count=len(warnings),known_count=sum(i['known'] for i in findings),blocker_count=len(novel),baseline=baseline['version'],status='fail' if novel else 'partial' if findings else 'pass')
     if os.name == 'nt':
         cleanup = subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(temp),'-AllowedRoot',str(args.output.parent.resolve()),'-Json'],capture_output=True,text=True,encoding='utf8',creationflags=subprocess.CREATE_NO_WINDOW)
         receipt['temp_cleanup'] = json.loads(cleanup.stdout.lstrip('\ufeff')) if cleanup.returncode==0 else {'status':'failed','error':cleanup.stderr}
@@ -140,5 +173,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--base-url'); parser.add_argument('--pages',nargs='+'); parser.add_argument('--full',action='store_true'); parser.add_argument('--geometry',type=Path)
+    parser.add_argument('--oss-preparation',type=Path); parser.add_argument('--ink-assets',nargs='*',default=[]); parser.add_argument('--online-full',action='store_true'); parser.add_argument('--estimate-mb',type=int)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     raise SystemExit(asyncio.run(run(parser.parse_args())))

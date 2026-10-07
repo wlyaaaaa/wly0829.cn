@@ -434,6 +434,7 @@ try {
     $uiRoot = if ($OssPreparation) { Join-Path $OssPreparation 'github' } else { $rebuilt }
     $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'),'--geometry',$Geometry)
     if ($UiFull -or -not $Pages) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
+    if ($OssPreparation) { $uiArguments += @('--oss-preparation',$OssPreparation) }
     Checked 'python' $uiArguments
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt

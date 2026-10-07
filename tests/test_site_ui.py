@@ -129,8 +129,8 @@ class SiteUiTests(unittest.TestCase):
 const block=fs.readFileSync(0,'utf8');
 async function check(changes,fail=false) { const calls=[]; let error=null;
   const exec=(cmd,args)=>{calls.push([cmd,args]);if(cmd==='git'&&args[0]==='diff')return Buffer.from(changes.join('\n'));if(args[0].endsWith('check-site-ui.py')&&fail)throw Error('gate failed');return Buffer.alloc(0);};
-  const run=new AsyncFunction('execFileSync','readFile','path','process','findings','projectRoot','scriptDirectory','distRoot',block);
-  try {await run(exec,async()=>JSON.stringify({before:'a'.repeat(40)}),{join:(...p)=>p.join('/'),resolve:p=>p},{env:{GITHUB_ACTIONS:'true',GITHUB_EVENT_PATH:'event.json',GITHUB_WORKSPACE:'/project'}},[],'/project','/project/scripts','/project/dist');}
+  const run=new AsyncFunction('execFileSync','readFile','path','process','findings','projectRoot','scriptDirectory','distRoot','hasOssManifest',block);
+  try {await run(exec,async()=>JSON.stringify({before:'a'.repeat(40)}),{join:(...p)=>p.join('/'),resolve:p=>p},{env:{GITHUB_ACTIONS:'true',GITHUB_EVENT_PATH:'event.json',GITHUB_WORKSPACE:'/project'}},[],'/project','/project/scripts','/project/dist',false);}
   catch(e){error=e.message;}
   return {args:calls.find(c=>c[1][0].endsWith('check-site-ui.py'))?.[1],error}; }
 const html='site-release/computer-access/index.html';
