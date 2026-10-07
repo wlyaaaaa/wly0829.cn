@@ -5,6 +5,7 @@ hotspots, all other existing files and the delivered package remain unchanged.
 This command prepares local bytes; it does not publish or call status APIs.
 """
 from __future__ import annotations
+import importlib.util
 import argparse
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -14,6 +15,9 @@ from pathlib import Path
 import re
 import shutil
 from urllib.parse import urlsplit
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 
 BINDINGS = {
@@ -170,9 +174,13 @@ def prepare(baseline, package, output, report):
         if raw.count(b'</body>') != 1:
             raise ValueError('Expected one homepage body closing tag')
         updated = raw.replace(b'</body>', refs.encode() + b'</body>', 1)
-    shutil.copytree(baseline, output)
+    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
     for rel, body in assets.items():
-        target = output / prefix / rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(body)
+        target = output / prefix / rel; target.parent.mkdir(parents=True, exist_ok=True)
+        if target.suffix.lower() in builder.RELEASE_BINARY_EXT:
+            builder.copy_release_asset(package/rel, target)
+        else:
+            target.write_bytes(body)
     (output / 'index.html').write_bytes(updated)
     after = inventory(output)
     changed = [rel for rel, value in before.items() if after.get(rel) != value]
@@ -213,7 +221,7 @@ def rollback(candidate, output, report):
     raw = (candidate / 'index.html').read_bytes()
     if raw.count(refs) != 1:
         raise ValueError('Homepage comic references differ; review the newer homepage first')
-    shutil.copytree(candidate, output)
+    shutil.copytree(candidate, output, copy_function=builder.copy_release_asset)
     (output / 'index.html').write_bytes(raw.replace(refs, b'', 1))
     after = inventory(output); new_id = identity(after, manifest)
     manifest.pop('home_comic_preparation')

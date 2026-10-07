@@ -140,10 +140,10 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             args=[str(paths['home_bio_script']),'--baseline',current,'--output',dest,'--report',proof]
         elif name == 'bird-first':
             import shutil
-            packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest)
+            packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest,copy_function=hybrid.builder.copy_release_asset)
             for rel,src in refs['object_sources'].items():
                 if rel.endswith('/config.json'): continue
-                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(packet_path(packet,src),target)
+                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); hybrid.builder.copy_release_asset(packet_path(packet,src),target)
             args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
         elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
@@ -177,17 +177,17 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
         if name=='river' and 'data-today-river' in (current/'cockpit/index.html').read_text('utf8'):
             import shutil
-            shutil.copytree(current,dest/'site')
+            shutil.copytree(current,dest/'site',copy_function=hybrid.builder.copy_release_asset)
         else:
             subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'bird-first':
             updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
         if name == 'native-living':
             import shutil
-            site=dest/'site'; shutil.copytree(current,site)
+            site=dest/'site'; shutil.copytree(current,site,copy_function=hybrid.builder.copy_release_asset)
             for group in ('assets','pages'):
                 for p in (dest/group).rglob('*'):
-                    if p.is_file(): target=site/p.relative_to(dest/group); target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(p,target)
+                    if p.is_file(): target=site/p.relative_to(dest/group); target.parent.mkdir(parents=True,exist_ok=True); hybrid.builder.copy_release_asset(p,target)
             dest=site; updated=hybrid.read(site/hybrid.MANIFEST); updated['files']=hybrid.inventory(site); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(site/hybrid.MANIFEST,updated)
         if name == 'river':
             dest = dest / 'site'

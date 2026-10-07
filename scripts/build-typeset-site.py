@@ -399,7 +399,7 @@ def asset(path, candidate, category='images'):
     dest = candidate/rel
     dest.parent.mkdir(parents=True, exist_ok=True)
     if not dest.exists():
-        shutil.copyfile(actual,dest)
+        hybrid.builder.copy_release_asset(actual,dest)
     return '/'+rel.as_posix()
 
 def bundle(text, candidate, label, suffix):
@@ -508,7 +508,7 @@ def local_deps(candidate, legacy, baseline):
                 if not original.is_file():
                     raise ValueError('Referenced asset unavailable: '+str(target.relative_to(candidate)))
                 target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(original,target)
+                hybrid.builder.copy_release_asset(original,target)
             if target.suffix in {'.js','.css','.html','.mjs'}:
                 pending.append(target)
 
@@ -1016,7 +1016,7 @@ def main():
     overlay = hybrid.load_overlay(args.release_overlay.resolve(), args.baseline) if args.release_overlay else None
     if overlay:
         for rel,entry in overlay['files'].items():
-            dest = candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(entry['source_path'],dest)
+            dest = candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);hybrid.builder.copy_release_asset(entry['source_path'],dest)
     states={}
     for n in names:
         try:

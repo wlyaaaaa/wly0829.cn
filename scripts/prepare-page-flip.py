@@ -5,6 +5,7 @@ Producer coordinates are accepted only after their HTML, PNG, and transported
 release image pixels agree. Missing subjects retain the native body/title effect.
 """
 from __future__ import annotations
+import importlib.util
 import argparse
 import ast
 import asyncio
@@ -18,6 +19,9 @@ import shutil
 import subprocess
 from datetime import datetime, timedelta, timezone
 from urllib.parse import unquote, urljoin, urlsplit
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 HERE = Path(__file__).resolve().parent
 DATA = re.compile(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>', re.S)
@@ -434,7 +438,7 @@ async def prepare(args, ownership):
     js_bytes, css_bytes = (HERE/'album-runtime.js').read_bytes(), (HERE/'album-runtime.css').read_bytes()
     js_rel = '_album/album-' + hashlib.sha256(js_bytes).hexdigest()[:20] + '.js'
     css_rel = '_album/album-' + hashlib.sha256(css_bytes).hexdigest()[:20] + '.css'
-    shutil.copytree(source, out)
+    shutil.copytree(source, out, copy_function=builder.copy_release_asset)
     legacy_changes = patch_legacy_pointer_intent(out, original)
     (out/'_album').mkdir(exist_ok=True)
     for rel, payload in [(index_rel,index_bytes),(js_rel,js_bytes),(css_rel,css_bytes)]:

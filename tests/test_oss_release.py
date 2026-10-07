@@ -111,6 +111,9 @@ class OssReleaseTests(unittest.TestCase):
     def setUp(self):
         # Kept under the task TEMP for the existing recycle-bin closeout tool.
         self.root = Path(os.environ.get('TEMP', ROOT/'.test-tmp')) / ('oss-test-' + uuid.uuid4().hex)
+        cache_patch = patch.dict(os.environ, WLY_RELEASE_ASSET_CACHE=str(self.root/'asset-cache'))
+        cache_patch.start()
+        self.addCleanup(cache_patch.stop)
         self.source = self.root/'source'
         self.source.mkdir(parents=True)
         files = {

@@ -106,6 +106,8 @@ Dirty/unreleased source 不冒充 current E release；Source、Test、Install、
 
 ## 发布
 
+Windows 发布二进制通过 SHA256 缓存 `E:\Cache\wly0829\release-assets` 在同卷输出间共享；文本和 `live-hardware` 保持独立，资源替换使用原子写入。
+`WLY_RELEASE_ASSET_CACHE` 可指定隔离测试缓存；跨卷输出会明确警告并独立复制，不节省该输出的空间，同卷硬链接失败和损坏缓存直接报错。
 项目使用 React、Vite 和 GitHub Pages。完成要求：
 
 - 本地 build/test/public gate 通过；

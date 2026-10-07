@@ -5,6 +5,7 @@ cockpit HTML. The cockpit B2 asset is patched from its actual current bytes, so
 cache and motion preparations are preserved. Old addressed assets stay intact.
 """
 from __future__ import annotations
+import importlib.util
 
 import argparse
 from datetime import datetime, timedelta, timezone
@@ -13,6 +14,9 @@ import json
 from pathlib import Path
 import re
 import shutil
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 ROOT = Path(__file__).resolve().parents[1]
 BJT = timezone(timedelta(hours=8))
@@ -100,7 +104,7 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
     additions[html_rel] = html.encode('utf8')
     site = output / 'site'
     output.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(release, site)
+    shutil.copytree(release, site, copy_function=builder.copy_release_asset)
     changes = {}
     for rel, payload in additions.items():
         path = site / rel

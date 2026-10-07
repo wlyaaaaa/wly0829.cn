@@ -232,18 +232,7 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
     if any(token in html.split('</head>')[0] for token in ('home-living/', 'home-living-bind-')):
         raise ValueError('Living resource remains active in the homepage head')
     new_files = {'index.html': html.encode('utf8'), app_rel: static_app}
-    # Hard-link only immutable inherited bytes. Every changed target is copied
-    # before writing, so no original or sibling release inode is overwritten.
-    def copy_immutable(source, destination):
-        rel = Path(source).relative_to(baseline).as_posix()
-        if rel in new_files or rel == 'release-manifest.json':
-            return shutil.copy2(source, destination)
-        try:
-            os.link(source, destination)
-        except OSError:
-            shutil.copy2(source, destination)
-        return destination
-    shutil.copytree(baseline, output, copy_function=copy_immutable)
+    shutil.copytree(baseline, output, copy_function=living.builder.copy_release_asset)
     for rel, body in new_files.items():
         target = output / rel
         target.parent.mkdir(parents=True, exist_ok=True)

@@ -84,8 +84,9 @@ def prepare_toc_recipe(site, recipe):
             raise ValueError('TOC labels are missing on ' + relative + ': ' + ', '.join(sorted(names - label_map.keys())))
     target = site / '_shared/nav-unify-standard'
     target.mkdir(parents=True, exist_ok=True)
+    builder = module('live_ui_asset_builder', 'build-assembled-site.py')
     for image in images:
-        shutil.copyfile(image, target / image.name)
+        builder.copy_release_asset(image, target / image.name)
     spec = importlib.util.spec_from_file_location('approved_toc_unify', package / 'prepare-toc-unify.py')
     approved = importlib.util.module_from_spec(spec); spec.loader.exec_module(approved)
     result = approved.prepare_toc(site, label_map, pages)
@@ -138,7 +139,8 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         rel = '_typeset/runtime/' + stem + '-' + proof(payload)['sha256'][:20] + suffix
         target = site / rel; target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists() and target.read_bytes() != payload: raise ValueError('Addressed asset differs: ' + rel)
-        target.write_bytes(payload); assets.append({'path': rel, **proof(payload)})
+        if not target.exists(): target.write_bytes(payload)
+        assets.append({'path': rel, **proof(payload)})
         return '/' + rel
     palette = ':root{--title:#0a7232;--text:#2e4675;--accent:#0a7a33;--link:rgb(9,145,54);--line:#bfe8cc;--cardbg:#fbfefc;--soft:#edfbf3;--badge:#13803d}\n'
     if not font:
@@ -244,7 +246,7 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         if after!=before: page.write_bytes(after); changes.append({'path':page.relative_to(site).as_posix(),'before':proof(before),'after':proof(after)})
     toc = None
     if sprite and label_map:
-        target=site/'_shared'/Path(sprite).name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(Path(sprite).read_bytes())
+        target=site/'_shared'/Path(sprite).name;target.parent.mkdir(parents=True,exist_ok=True);module('live_ui_asset_builder', 'build-assembled-site.py').copy_release_asset(sprite,target)
         toc=module('toc', 'prepare-toc-consistency.py').prepare_toc(site,json.loads(Path(label_map).read_text('utf8')),pages=page_scope)
     result={'schema':'wly.live-ui-preparation.v1','site':str(site),'changed_pages':changes,'assets':assets,'hardware_icons':hardware_icons,'toc':toc,'external_write':False,'manifest_action':'Rehash the complete candidate after all owner overlays; this preparation is not a publication.'}
     if page_scope is not None:result['selected_page_paths']=sorted(page_scope)

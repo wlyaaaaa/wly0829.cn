@@ -4,6 +4,7 @@ Uses locked headless Chrome; publication is explicit and failed evidence retaine
 """
 import argparse
 import hashlib
+import importlib.util
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 import json
@@ -18,6 +19,9 @@ from urllib.request import urlopen
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+spec = importlib.util.spec_from_file_location('release_asset_builder', HERE/'build-assembled-site.py')
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 sys.path.insert(0, str(ROOT / 'src/typeset'))
 from engine import render as renderer, assets
 
@@ -264,7 +268,7 @@ def main():
         if not args.publish:
             for name in ('publication','readback'): state['stages'][name].update(status='skipped', reason='Publication not requested')
         if (run/'current-site').exists(): shutil.move(run/'current-site', run/('retained-site-'+str(time.time_ns())))
-        shutil.copytree(work/'dist', run/'current-site'); shutil.copyfile(geometry, run/'current-geometry.json')
+        shutil.copytree(work/'dist', run/'current-site', copy_function=builder.copy_release_asset); shutil.copyfile(geometry, run/'current-geometry.json')
         previous.update({p: current[p] for p in selected})
         temp = ledger_path.with_suffix('.tmp'); temp.write_text(json.dumps(previous, sort_keys=True), encoding='utf8'); temp.replace(ledger_path)
         state['status'] = result['status'] = 'pass'; save()

@@ -4,6 +4,7 @@ Only index.html, a new home-only app/CSS and new original package files change.
 No producer, original runtime/media, account, CORS or publication is mutated.
 """
 from __future__ import annotations
+import importlib.util
 
 import argparse
 from datetime import datetime, timedelta, timezone
@@ -13,6 +14,9 @@ from pathlib import Path
 import re
 import shutil
 from urllib.parse import urljoin, urlsplit
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 HERE = Path(__file__).resolve().parent
 BJT = timezone(timedelta(hours=8))
@@ -294,11 +298,14 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
     for rel, body in new_files.items():
         if rel != 'index.html' and rel in old_files and old_files[rel] != proof(body):
             raise ValueError('Refusing to replace any old asset: ' + rel)
-    shutil.copytree(baseline, output)
+    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
     for rel, body in new_files.items():
         target = output / rel
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(body)
+        if target.suffix.lower() in builder.RELEASE_BINARY_EXT:
+            builder.copy_release_asset(package/rel.removeprefix('_shared/home-living/'), target)
+        else:
+            target.write_bytes(body)
     files = inventory(output)
     manifest.update({'files': files, 'release_id': identity(files, manifest), 'prepared_at_beijing': datetime.now(BJT).isoformat()})
     manifest['home_living_preparation'] = {'schema': 'wly.home-living.v1', 'status': 'prepared_pending_browser_acceptance',
@@ -354,7 +361,7 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     html = re.sub(r'<script\b(?![^>]*\btype=)(?=[^>]*(?:src|data-src)="/' + app_rel + '")', '<script type="module"', html)
     layouts = data['screens'][0]['layouts']
     html = home_preloads(html, layouts['h']['viewer']['src'], layouts['v']['viewer']['src'])
-    shutil.copytree(baseline, output)
+    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
     (output / app_rel).write_bytes(body)
     (output / 'index.html').write_text(html, encoding='utf8', newline='\n')
     files = inventory(output)

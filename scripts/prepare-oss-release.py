@@ -599,6 +599,9 @@ class Rewriter:
 
 
 def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None):
+    spec = importlib.util.spec_from_file_location('oss_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -634,7 +637,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
             destination.write_bytes(rewriter.rewrite(payload, rel))
         else:
-            shutil.copyfile(source / rel, destination)
+            builder.copy_release_asset(source / rel, destination)
         value = {'bytes': destination.stat().st_size, 'sha256': digest(destination)}
         if host:
             github[rel] = value

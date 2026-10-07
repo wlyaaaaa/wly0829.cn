@@ -308,7 +308,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
     accepted_files = {route_file(x) for x in accepted}
     available = {x for x in old if x.endswith('.html')} | accepted_files
-    shutil.copytree(baseline, output)
+    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
     # HTTP snapshots do not expose Pages' domain configuration file.
     # Adding that deployment metadata preserves every captured HTTP byte.
     if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
@@ -336,7 +336,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         elif rel in old and rel not in overlays:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)
-        if text is None: shutil.copyfile(path, target)
+        if text is None: builder.copy_release_asset(path, target)
         else: target.write_text(text, encoding='utf8')
         copied.add(rel)
         for ref, navigation in references(path, text):
@@ -595,7 +595,7 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
                 source = Path(local_assets)/rel if rel in objects else output/rel
                 if rel in objects and (source.stat().st_size != objects[rel]['bytes'] or digest(source) != objects[rel]['sha256']):
                     raise ValueError('Local content body differs from sealed object: '+rel)
-                target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+                target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True);builder.copy_release_asset(source,target)
             output=cache
         else:
             gate = evidence or {}

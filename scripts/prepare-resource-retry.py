@@ -1,11 +1,15 @@
 """Prepare resource recovery for the next release, preserving all original bytes."""
 from __future__ import annotations
+import importlib.util
 import argparse
 from datetime import datetime,timedelta,timezone
 import hashlib,html,json,re,shutil
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlsplit
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 HERE=Path(__file__).resolve().parent
 MARKER='data-resource-retry="next-2e"'
@@ -154,7 +158,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
         # The early inline observer only marks genuine element load errors.
         # Original script order and existing handlers remain in place.
         changes[rel]=marked.replace(b'</head>',addition.encode()+b'</head>',1)
-    shutil.copytree(baseline,output)
+    shutil.copytree(baseline,output,copy_function=builder.copy_release_asset)
     (output/runtime_rel).parent.mkdir(parents=True,exist_ok=True);(output/runtime_rel).write_bytes(runtime)
     for rel,raw in changes.items():(output/rel).write_bytes(raw)
     after=inventory(output)
@@ -185,7 +189,7 @@ def rollback(baseline,output,report):
             restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
             if info.get('initial_stylesheet_attribute'):restored=restored.replace(info['initial_stylesheet_attribute'].encode(),b'')
         bodies[rel]=restore_previous_recovery(restored,info.get('previous_html_restore',{}).get(rel,[]))
-    shutil.copytree(baseline,output)
+    shutil.copytree(baseline,output,copy_function=builder.copy_release_asset)
     for rel,body in bodies.items():(output/rel).write_bytes(body)
     after=inventory(output);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')

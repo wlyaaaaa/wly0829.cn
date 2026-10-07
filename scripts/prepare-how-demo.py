@@ -4,6 +4,7 @@ Only one new screen and its generated search projection are introduced. Existing
 how PNGs, typography, hotspots and page-data stay unchanged. No publishing.
 """
 from __future__ import annotations
+import importlib.util
 import argparse
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
@@ -14,6 +15,9 @@ from pathlib import Path
 import re
 import shutil
 from urllib.parse import unquote, urljoin, urlsplit
+spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+builder = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(builder)
 
 HERE=Path(__file__).resolve().parent
 SCREEN='one-sentence'
@@ -171,7 +175,7 @@ def prepare(args):
     by_hash={}
     for rel,meta in original.items():
         if Path(rel).suffix.lower()=='.png': by_hash.setdefault(meta['sha256'],rel)
-    shutil.copytree(source,out)
+    shutil.copytree(source,out,copy_function=builder.copy_release_asset)
     (out/'_how-demo/assets').mkdir(parents=True,exist_ok=True)
     for name,spec in specs.items():
         rel=by_hash.get(spec['sha256'])
@@ -179,7 +183,7 @@ def prepare(args):
             src=args.assets_dir/spec['file'] if args.assets_dir else None
             if not src or not src.is_file() or digest(src)!=spec['sha256'] or src.stat().st_size!=spec['bytes']:
                 raise ValueError('Missing unchanged approved source asset: '+spec['file']+'; pass --assets-dir assets/src')
-            rel='_how-demo/assets/'+spec['sha256'][:20]+'-'+spec['file'];shutil.copyfile(src,out/rel)
+            rel='_how-demo/assets/'+spec['sha256'][:20]+'-'+spec['file'];builder.copy_release_asset(src,out/rel)
         assets[name]={'src':'/'+rel,'size':spec['size'],**({'crop':spec['crop']} if spec.get('crop') else {})}
         proofs.append({'asset':name,'file':rel,'sha256':spec['sha256'],'bytes':spec['bytes'],'unchanged_original_byte':True})
     data['assets']=assets

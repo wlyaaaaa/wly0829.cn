@@ -10,6 +10,7 @@ import shutil
 import sys
 import os
 import uuid
+import warnings
 import subprocess
 from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
@@ -33,6 +34,7 @@ PAGE_DATA = re.compile(r'(<script\b[^>]*\bid="page-data"[^>]*>)(.*?)(</script>)'
 ATTR = re.compile(r'\b((?:data-(?:lazy-)?)?(?:srcset|imagesrcset))="([^"]*)"')
 TEXT_EXT = {'.html', '.css', '.js', '.json', '.md', '.ps1', '.txt', '.xml'}
 ASSET_EXT = {'.css', '.js', '.avif', '.webp', '.png', '.jpg', '.jpeg', '.svg', '.gif', '.mp4', '.webm', '.mp3', '.wav', '.woff', '.woff2', '.ico', '.ps1', '.md', '.txt', '.xml'}
+RELEASE_BINARY_EXT = {'.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.ico', '.woff', '.woff2', '.mp4', '.webm', '.mp3', '.wav'}
 SECRETS = [
     ('OpenAI-style key', rb'\bsk-[A-Za-z0-9_-]{20,}'),
     ('GitHub token', rb'gh[pousr]_[A-Za-z0-9]{20,}'),
@@ -45,6 +47,51 @@ SECRETS = [
 def sha(p):
     with p.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+def copy_release_asset(source, destination):
+    source, destination = Path(source), Path(destination)
+    temporary = destination.with_name(destination.name+'.'+uuid.uuid4().hex+'.writing')
+    try:
+        if source.suffix.lower() in RELEASE_BINARY_EXT and 'live-hardware' not in {part.lower() for part in source.parts + destination.parts}:
+            default = (r'E:\Cache\wly0829\release-assets' if os.name == 'nt' else
+                       str(Path(os.environ.get('TMPDIR', '/tmp'))/'wly-release-assets'))
+            cache = Path(os.environ.get('WLY_RELEASE_ASSET_CACHE', default))
+            cache.mkdir(parents=True, exist_ok=True)
+            if cache.stat().st_dev != destination.parent.stat().st_dev:
+                warnings.warn('Release assets are on another volume; using independent copies without deduplication.', RuntimeWarning)
+                shutil.copy2(source, temporary)
+                os.replace(temporary, destination)
+                return str(destination)
+            expected = sha(source)
+            blob = cache/expected
+            if not blob.exists():
+                shutil.copy2(source, temporary)
+                if sha(temporary) != expected:
+                    raise ValueError('Source changed during asset snapshot: '+str(source))
+                try:
+                    os.link(temporary, blob)
+                except FileExistsError:
+                    pass
+            if sha(blob) != expected:
+                raise ValueError('Release asset cache is corrupt: '+str(blob))
+            if temporary.exists() and not os.path.samefile(temporary, blob):
+                os.replace(temporary, destination)
+            if not temporary.exists():
+                if destination.exists() and os.path.samefile(destination, blob):
+                    return str(destination)
+                os.link(blob, temporary)
+        else:
+            shutil.copy2(source, temporary)
+        os.replace(temporary, destination)
+        return str(destination)
+    finally:
+        if temporary.exists():
+            if os.name == 'nt':
+                subprocess.run(['pwsh', '-NoProfile', '-File', r'E:\.agents\tools\Move-TaskItemToRecycleBin.ps1',
+                                '-LiteralPath', str(temporary.resolve()), '-AllowedRoot', str(destination.parent.resolve()), '-Json'],
+                               check=True, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            else:
+                warnings.warn('Release copy temporary retained for recycling: '+str(temporary), RuntimeWarning)
 
 def write_json(p, data):
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -585,7 +632,7 @@ def build(source, output, report_path, incomplete):
     snapshot.mkdir(parents=True)
     for p in public_inputs:
         target=snapshot/p.relative_to(source);target.parent.mkdir(parents=True,exist_ok=True)
-        shutil.copy2(p,target)
+        copy_release_asset(p,target)
         if sha(p)!=sha(target): raise ValueError('Source changed during snapshot: '+str(p.relative_to(source)))
     after={p.relative_to(source).as_posix():(p.stat().st_size,p.stat().st_mtime_ns) for p in source.rglob('*') if p.is_file() and not any(x.startswith('.') for x in p.relative_to(source).parts)}
     if signature!=after: raise ValueError('Source changed during snapshot; retry after assembly finishes')
@@ -626,13 +673,14 @@ def build(source, output, report_path, incomplete):
                     cached=json.loads(cache_receipt.read_text('utf8'))
                     cache_hit=cached.get('source_sha256')==source_sha and cached.get('sha256')==sha(cache_blob)
                 except (OSError,ValueError):pass
-            if cache_hit:shutil.copy2(cache_blob,target)
+            if cache_hit:copy_release_asset(cache_blob,target)
             else:
                 with Image.open(fallback) as image:
                     if image.width > 640: image=image.resize((640,round(image.height*640/image.width)),Image.Resampling.LANCZOS)
                     image.save(target,'WEBP',quality=85,method=2)
                 temp_cache=cache_root/(cache_key+'.'+uuid.uuid4().hex+'.writing');shutil.copy2(target,temp_cache);temp_cache.replace(cache_blob)
                 cache_receipt.write_text(json.dumps({'source_sha256':source_sha,'sha256':sha(cache_blob),'algorithm':'640:LANCZOS:webp:q85:method2'}),encoding='utf8')
+                copy_release_asset(target,target)
             digest=sha(target);fallback_name=stem+'-fallback640-'+digest[:12]+'.webp'
             target.rename(target.with_name(fallback_name))
             fallbacks.append({'file':(target.with_name(fallback_name)).relative_to(output).as_posix(),'sha256':digest,'bytes':target.with_name(fallback_name).stat().st_size,'cache_hit':cache_hit})
@@ -701,7 +749,7 @@ def build(source, output, report_path, incomplete):
             script_renames['/'+rel.as_posix()]='/'+target.relative_to(output).as_posix()
             changed_scripts.append({'old':rel.as_posix(),'new':target.relative_to(output).as_posix(),'reason':'neutral project key label'})
         else:
-            shutil.copy2(p,target);copied[rel.as_posix()]=sha(p)
+            copy_release_asset(p,target);copied[rel.as_posix()]=sha(p)
             if sha(target)!=copied[rel.as_posix()]: raise ValueError('Copy changed bytes: '+str(rel))
     # 404 排在 _shared 之前，不能依赖文件遍历顺序才拿到共享JS的新名字。
     for rel in rewritten:
