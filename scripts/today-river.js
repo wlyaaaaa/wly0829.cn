@@ -400,6 +400,7 @@ async function start(snap, intro = true) {
   const turn = ++generation;
   if (M && (snap.reason || ['unknown', 'unavailable', 'stale'].includes(snap.automation?.state))) {
     M.stale = true; M.snap = {...M.snap, reason:snap.reason || (snap.automation?.state === 'stale' ? 'stale' : 'unreadable')};
+    if (clock.t0 == null && !clock.done) { acts.forEach(f => f(1e9)); clock.done = true; clock.skip = true; }
     stage.classList.add('stale'); $('.now').firstChild.textContent = '最后读到 '; $('.now b').textContent = hm(M.now);
     host.querySelectorAll('.boat .tag i').forEach(e => e.remove());
     host.querySelectorAll('.boat[data-tip]').forEach(e => e.dataset.tip = e.dataset.tip.replace(/ · (还有.*|到点了.*)$/, ''));

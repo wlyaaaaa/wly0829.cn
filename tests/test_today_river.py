@@ -290,6 +290,12 @@ async def main(args):
                     assert held['at']==last['at'] and held['boats']==last['boats'] and held['filter']=='none' and held['frames']>old['metrics']['frames'],(last,held)
                     assert held['sign']=='最后读到 '+dt.datetime.fromtimestamp(last['at']/1000,BJT).strftime('%H:%M'),held
                     if mode=='stale':
+                        await page.locator('#today-river').evaluate("e=>e.style.marginTop='2000px'")
+                        await page.wait_for_timeout(250)
+                        await refresh('normal'); await refresh('stale')
+                        await page.locator('#today-river #stage').scroll_into_view_if_needed()
+                        assert await page.locator('#today-river .now').evaluate("e=>e.classList.contains('in')")
+                        await page.locator('#today-river').evaluate("e=>e.style.marginTop=''")
                         await page.set_viewport_size({'width':390,'height':844})
                         await page.wait_for_timeout(250)
                         await page.set_viewport_size({'width':1440,'height':900})
